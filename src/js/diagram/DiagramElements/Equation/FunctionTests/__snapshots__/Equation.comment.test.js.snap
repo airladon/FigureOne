@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Equation Functions - Bar Bottom Comment 1`] = `
+Array [
+  0.7,
+  0,
+  0,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Bar Bottom Comment 2`] = `
+Array [
+  0.028,
+  0,
+  0,
+  0,
+  0.028,
+  -0.02324,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Bar Top Comment 1`] = `
+Array [
+  0.7,
+  0,
+  0,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Bar Top Comment 2`] = `
+Array [
+  0.42,
+  0,
+  0.0056,
+  0,
+  0.42,
+  0.07181,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Bar Top Comment 3`] = `
+Array [
+  0.028,
+  0,
+  0,
+  0,
+  0.028,
+  0.0476,
+  0,
+  0,
+  1,
+]
+`;

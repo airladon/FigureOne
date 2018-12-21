@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Equation Functions - Annotations Nested Annotations 1`] = `
+Array [
+  0.7,
+  0,
+  0.014,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Annotations Nested Annotations 2`] = `
+Array [
+  0.35,
+  0,
+  0.042,
+  0,
+  0.35,
+  -0.02184,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Annotations Nested Annotations 3`] = `
+Array [
+  0.21,
+  0,
+  0.0448,
+  0,
+  0.21,
+  -0.03094,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Annotations Nested Annotations 4`] = `
+Array [
+  0.35,
+  0,
+  0,
+  0,
+  0.35,
+  0.02772,
+  0,
+  0,
+  1,
+]
+`;

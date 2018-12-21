@@ -1,0 +1,281 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Diagram Equations From Object Equation Creation Equation with all options 1`] = `
+Array [
+  0.85,
+  0,
+  1.9269,
+  0,
+  0.85,
+  1.96345,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Equation with all options 2`] = `
+Array [
+  0.85,
+  0,
+  1.9269,
+  0,
+  0.85,
+  1.82813,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Equation with all options 3`] = `
+Array [
+  0.85,
+  0,
+  1.966,
+  0,
+  0.85,
+  1.85873,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Equation with all options 4`] = `
+Array [
+  0.0442,
+  0,
+  1.9218,
+  0,
+  0.0085,
+  1.91823,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Navigator with all options 1`] = `
+Array [
+  0.7,
+  0,
+  0.0042,
+  0,
+  0.7,
+  0.08624,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Navigator with all options 2`] = `
+Array [
+  0.7,
+  0,
+  0.0042,
+  0,
+  0.7,
+  -0.0252,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Navigator with all options 3`] = `
+Array [
+  0.7,
+  0,
+  0.0364,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Navigator with all options 4`] = `
+Array [
+  0.0364,
+  0,
+  0,
+  0,
+  0.008,
+  0.049,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Navigator without equation Split 1`] = `
+Array [
+  0.7,
+  0,
+  0.0042,
+  0,
+  0.7,
+  0.08624,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Navigator without equation Split 2`] = `
+Array [
+  0.7,
+  0,
+  0.0042,
+  0,
+  0.7,
+  -0.0252,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Navigator without equation Split 3`] = `
+Array [
+  0.7,
+  0,
+  0.0364,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Navigator without equation Split 4`] = `
+Array [
+  0.0364,
+  0,
+  0,
+  0,
+  0.008,
+  0.049,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Navigator without equation all in one object 1`] = `
+Array [
+  0.7,
+  0,
+  0.0042,
+  0,
+  0.7,
+  0.08624,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Navigator without equation all in one object 2`] = `
+Array [
+  0.7,
+  0,
+  0.0042,
+  0,
+  0.7,
+  -0.0252,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Navigator without equation all in one object 3`] = `
+Array [
+  0.7,
+  0,
+  0.0364,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Navigator without equation all in one object 4`] = `
+Array [
+  0.0364,
+  0,
+  0,
+  0,
+  0.008,
+  0.049,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Simple 1`] = `
+Array [
+  0.7,
+  0,
+  0.0042,
+  0,
+  0.7,
+  0.08624,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Simple 2`] = `
+Array [
+  0.7,
+  0,
+  0.0042,
+  0,
+  0.7,
+  -0.0252,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Simple 3`] = `
+Array [
+  0.7,
+  0,
+  0.0364,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Diagram Equations From Object Equation Creation Simple 4`] = `
+Array [
+  0.0364,
+  0,
+  0,
+  0,
+  0.008,
+  0.049,
+  0,
+  0,
+  1,
+]
+`;

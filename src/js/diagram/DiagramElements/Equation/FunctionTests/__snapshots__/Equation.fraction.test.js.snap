@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Equation Functions - Fraction Nested Fractions 1`] = `
+Array [
+  0.35,
+  0,
+  0.0112,
+  0,
+  0.35,
+  0.15162,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Fraction Nested Fractions 2`] = `
+Array [
+  0.35,
+  0,
+  0.0112,
+  0,
+  0.35,
+  0.0959,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Fraction Nested Fractions 3`] = `
+Array [
+  0.7,
+  0,
+  0.0042,
+  0,
+  0.7,
+  -0.0126,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Fraction Nested Fractions 4`] = `
+Array [
+  0.0182,
+  0,
+  0.0091,
+  0,
+  0.008,
+  0.133,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Fraction Nested Fractions 5`] = `
+Array [
+  0.0364,
+  0,
+  0,
+  0,
+  0.008,
+  0.049,
+  0,
+  0,
+  1,
+]
+`;

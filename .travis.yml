@@ -1,0 +1,27 @@
+sudo: required
+
+services:
+  - docker
+
+branches:
+  only:
+    - master
+    - release-candidate
+    - travis
+
+language: python
+
+python:
+  - 3.6.5
+
+before_script:
+  # this install.sh script requires sudo
+  - wget -qO- https://toolbelt.heroku.com/install.sh | sh
+
+script:
+  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH;
+    else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - export IN_TRAVIS=1
+  - export HEROKU_API_KEY=$HEROKU_TOKEN
+  - ./build.sh prod deploy
+

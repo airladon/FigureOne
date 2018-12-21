@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Equation Functions - Bar Bottom Strike 1`] = `
+Array [
+  0.7,
+  0,
+  0,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Bar Bottom Strike 2`] = `
+Array [
+  0.35,
+  0,
+  0.007,
+  0,
+  0.35,
+  -0.12184,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Bar Bottom Strike 3`] = `
+Array [
+  0.04944,
+  -0.009,
+  -0.01072,
+  0.04153,
+  0.01072,
+  -0.01124,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Bar Top Strike 1`] = `
+Array [
+  0.7,
+  0,
+  0,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Bar Top Strike 2`] = `
+Array [
+  0.35,
+  0,
+  0.007,
+  0,
+  0.35,
+  0.12772,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Bar Top Strike 3`] = `
+Array [
+  0.04944,
+  -0.009,
+  -0.01072,
+  0.04153,
+  0.01072,
+  -0.01124,
+  0,
+  0,
+  1,
+]
+`;

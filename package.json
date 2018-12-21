@@ -1,0 +1,68 @@
+{
+  "name": "figureone",
+  "version": "0.0.17",
+  "description": "Interactive Diagram Builder",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/airladon/figureone.git"
+  },
+  "scripts": {
+    "webpack": "webpack",
+    "flow": "flow",
+    "jest": "jest",
+    "lint": "eslint src",
+    "css": "stylelint src/css",
+    "flowcopysource": "flow-copy-source src package"
+  },
+  "keywords": [
+    "interactive",
+    "diagram",
+    "webgl",
+    "equations"
+  ],
+  "author": "airladon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/airladon/figureone/issues"
+  },
+  "homepage": "https://github.com/airladon/figureone#readme",
+  "devDependencies": {
+    "autoprefixer": "^9.3.1",
+    "@babel/core": "^7.1.6",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/preset-flow": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^23.6.0",
+    "babel-loader": "^8.0.4",
+    "clean-webpack-plugin": "^1.0.0",
+    "copy-webpack-plugin": "^4.6.0",
+    "css-loader": "^1.0.1",
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-flowtype": "^3.2.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jest": "^22.1.0",
+    "eslint-plugin-react": "^7.11.1",
+    "flow-bin": "^0.86.0",
+    "flow-copy-source": "^2.0.2",
+    "jest": "^23.6.0",
+    "mini-css-extract-plugin": "^0.4.5",
+    "node-sass": "^4.10.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "postcss": "^7.0.6",
+    "postcss-loader": "^3.0.0",
+    "regenerator-runtime": "^0.13.1",
+    "sass-loader": "^7.1.0",
+    "stylelint": "^9.8.0",
+    "stylelint-config-standard": "^18.2.0",
+    "stylelint-scss": "^3.4.0",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "webpack": "^4.26.1",
+    "webpack-cli": "^3.1.2",
+    "whatwg-fetch": "^3.0.0"
+  }
+}
