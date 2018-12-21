@@ -3,6 +3,8 @@ import {
   DiagramElementCollection,
   // AnimationPhase,
 } from './Element';
+
+import * as tools from '../tools/tools';
 import Diagram from './Diagram';
 import {
   Point, Transform, TransformLimit, Rect,
@@ -14,7 +16,8 @@ import VertexPolygon from './DrawingObjects/VertexObject/VertexPolygon';
 jest.mock('./Gesture');
 jest.mock('./webgl/webgl');
 jest.mock('./DrawContext2D');
-jest.mock('../tools/tools');
+jest.unmock('../tools/tools');
+tools.isTouchDevice = jest.fn();
 
 describe('Diagram', () => {
   let diagrams;

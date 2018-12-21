@@ -215,6 +215,7 @@ function joinObjects(...objects: Array<Object>): Object {
       assignObjectFromTo(o, out);
     }
   }
+  console.log('out', out);
   return out;
 }
 
