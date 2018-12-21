@@ -116,8 +116,7 @@ class Diagram {
       vertexShader: 'simple',
       fragmentShader: 'simple',
     };
-    let optionsToUse = defaultOptions;
-    optionsToUse = joinObjects(defaultOptions, options);
+    const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
       layout, htmlId, backgroundColor, limits, vertexShader, fragmentShader,
     } = optionsToUse;
