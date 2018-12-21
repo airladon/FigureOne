@@ -8,6 +8,7 @@ Interactive diagrams for js.
 `./start_env dev` starts a dev container. Use commands: `flow`, `jest`, `npm lint` or `npm css` to run various linters and tests.
 
 
+
 # Building
 
 `./build.sh` to lint, test and package.
