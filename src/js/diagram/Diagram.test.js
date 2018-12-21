@@ -120,7 +120,7 @@ describe('Diagram', () => {
         offsetWidth: 100,
       };
       const { limits } = definition;
-      const diagram = new Diagram('c', limits);
+      const diagram = new Diagram({ htmlId: 'c', limits });
       diagram.webglLow = webgl;
       diagram.webglHigh = webgl;
       diagram.canvasLow = canvasMock;
@@ -172,7 +172,7 @@ describe('Diagram', () => {
     expect(d.limits).toEqual(new Rect(-1, -1, 2, 2));
   });
   test('Diagram API', () => {
-    const d = new Diagram('c', 0, 0, 4, 4);
+    const d = new Diagram({ htmlId: 'c', limits: new Rect(0, 0, 4, 4) });
     d.webglLow = webgl;      // needed for mocking only
     const squareVertices = new VertexPolygon(
       d.webglLow,            // gl instance

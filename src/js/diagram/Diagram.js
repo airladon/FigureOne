@@ -6,7 +6,7 @@ import {
   Rect, Point, Transform,
   spaceToSpaceTransform, minAngleDiff,
 } from '../tools/g2';
-import { isTouchDevice } from '../tools/tools';
+import { isTouchDevice, joinObjects } from '../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimative,
 } from './Element';
@@ -91,42 +91,60 @@ class Diagram {
 
   constructor(
     // canvas: HTMLCanvasElement,
-    containerIdOrWebGLContextOrOptions: string | {
-      htmlId: string,
-      limits: Rect,
-      backgroundColor: Array<number>,
-      layout: Object: {},
-      vertexShader: string,
-      fragmentShader: string,
-    } = 'DiagramContainer',
-    limitsOrxMin: number | Rect = new Rect(-1, -1, 2, 2),
-    yMin: number = -1,
-    width: number = 2,
-    height: number = 2,
-    backgroundColor: Array<number> = [1, 1, 1, 1],
-    layout: Object = {},
-    vertexShader: string = 'simple',
-    fragmentShader: string = 'simple',
+    options: {
+      htmlId?: string,
+      limits?: Rect,
+      backgroundColor?: Array<number>,
+      layout?: {},
+      vertexShader?: string,
+      fragmentShader?: string,
+    },
+    // limitsOrxMin: number | Rect = new Rect(-1, -1, 2, 2),
+    // yMin: number = -1,
+    // width: number = 2,
+    // height: number = 2,
+    // backgroundColor: Array<number> = [1, 1, 1, 1],
+    // layout: Object = {},
+    // vertexShader: string = 'simple',
+    // fragmentShader: string = 'simple',
   ) {
     const defaultOptions = {
       htmlId: 'id_figureone_canvases',
       limits: new Rect(-1, -1, 2, 2),
-      backgroundColor: Array<number> = [1, 1, 1, 1],
+      backgroundColor: [1, 1, 1, 1],
       layout: {},
       vertexShader: 'simple',
       fragmentShader: 'simple',
     };
-    optionsToUse = defaultOptions;
-    if (!(typeof containerIdOrWebGLContextOrOptions === 'string') {
-      optionsToUse = joinObjects(
-        defaultOptions, containerIdOrWebGLContextOrOptions,
-      );
-    } else {
-      optionsToUse.htmlId
-    }
+    let optionsToUse = defaultOptions;
+    optionsToUse = joinObjects(defaultOptions, options);
+    const {
+      layout, htmlId, backgroundColor, limits, vertexShader, fragmentShader,
+    } = optionsToUse;
+    // if (typeof containerIdOrOptions !== 'string') {
+    //   optionsToUse = joinObjects(
+    //     defaultOptions, containerIdOrOptions,
+    //   );
+    // } else {
+    //   optionsToUse.htmlId = containerIdOrOptions;
+    //   if (typeof limitsOrxMin === 'number') {
+    //     optionsToUse.limits = new Rect(
+    //       limitsOrxMin,
+    //       yMin,
+    //       width,
+    //       height,
+    //     );
+    //   } else {
+    //     optionsToUse.limits = limitsOrxMin;
+    //   }
+    //   optionsToUse.backgroundColor = backgroundColor;
+    //   optionsToUse.layout = layout;
+    //   optionsToUse.vertexShader = vertexShader;
+    //   optionsToUse.fragmentShader = fragmentShader;
+    // }
     this.layout = layout;
-    if (typeof containerIdOrWebGLContext === 'string') {
-      const container = document.getElementById(containerIdOrWebGLContext);
+    if (typeof htmlId === 'string') {
+      const container = document.getElementById(htmlId);
       if (container instanceof HTMLElement) {
         const { children } = container;
         for (let i = 0; i < children.length; i += 1) {
@@ -180,9 +198,6 @@ class Diagram {
         this.draw2DHigh = new DrawContext2D(this.textCanvasHigh);
       }
     }
-    if (containerIdOrWebGLContext instanceof WebGLInstance) {
-      this.webglLow = containerIdOrWebGLContext;
-    }
     // if (this.textCanvas instanceof HTMLCanvasElement) {
     //   this.draw2D = new DrawContext2D(this.textCanvas);
     // }
@@ -191,13 +206,13 @@ class Diagram {
     }
 
     this.fontScale = 1;
-    let limits;
-    if (limitsOrxMin instanceof Rect) {
-      const r = limitsOrxMin;
-      limits = new Rect(r.left, r.bottom, r.width, r.height);
-    } else {
-      limits = new Rect(limitsOrxMin, yMin, width, height);
-    }
+    // let limits;
+    // if (limitsOrxMin instanceof Rect) {
+    //   const r = limitsOrxMin;
+    //   limits = new Rect(r.left, r.bottom, r.width, r.height);
+    // } else {
+    //   limits = new Rect(limitsOrxMin, yMin, width, height);
+    // }
     this.updateLimits(limits);
     this.drawQueued = false;
     this.inTransition = false;
