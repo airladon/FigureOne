@@ -71,7 +71,7 @@ export default function makeDiagram() {
     appendChild: () => {},
   };
   const { limits } = definition;
-  const diagram = new Diagram('c', limits);
+  const diagram = new Diagram({ htmlId: 'c', limits });
   diagram.webglLow = webgl;
   diagram.webglHigh = webgl;
   diagram.webgl = webgl;
