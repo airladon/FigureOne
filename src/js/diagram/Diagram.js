@@ -91,7 +91,14 @@ class Diagram {
 
   constructor(
     // canvas: HTMLCanvasElement,
-    containerIdOrWebGLContext: string | WebGLInstance = 'DiagramContainer',
+    containerIdOrWebGLContextOrOptions: string | {
+      htmlId: string,
+      limits: Rect,
+      backgroundColor: Array<number>,
+      layout: Object: {},
+      vertexShader: string,
+      fragmentShader: string,
+    } = 'DiagramContainer',
     limitsOrxMin: number | Rect = new Rect(-1, -1, 2, 2),
     yMin: number = -1,
     width: number = 2,
@@ -101,6 +108,22 @@ class Diagram {
     vertexShader: string = 'simple',
     fragmentShader: string = 'simple',
   ) {
+    const defaultOptions = {
+      htmlId: 'id_figureone_canvases',
+      limits: new Rect(-1, -1, 2, 2),
+      backgroundColor: Array<number> = [1, 1, 1, 1],
+      layout: {},
+      vertexShader: 'simple',
+      fragmentShader: 'simple',
+    };
+    optionsToUse = defaultOptions;
+    if (!(typeof containerIdOrWebGLContextOrOptions === 'string') {
+      optionsToUse = joinObjects(
+        defaultOptions, containerIdOrWebGLContextOrOptions,
+      );
+    } else {
+      optionsToUse.htmlId
+    }
     this.layout = layout;
     if (typeof containerIdOrWebGLContext === 'string') {
       const container = document.getElementById(containerIdOrWebGLContext);
