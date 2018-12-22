@@ -38,12 +38,13 @@ import type {
 import type {
   TypeAngleLabelOrientation, TypeAngleOptions,
 } from './js/diagram/DiagramObjects/Angle';
+import type { TypeDiagramOptions } from './js/diagram/Diagram';
 
 export type {
   TypeRotationDirection,
   TypeLineLabelLocation, TypeLineLabelSubLocation, TypeLineLabelOrientation,
   TypeLineVertexOrigin, TypeLineVertexSpaceStart, TypeLineOptions,
-  TypeAngleLabelOrientation, TypeAngleOptions,
+  TypeAngleLabelOrientation, TypeAngleOptions, TypeDiagramOptions,
 };
 
 const tools = {
