@@ -19,6 +19,16 @@ import DiagramEquation from './DiagramEquation/DiagramEquation';
 import DiagramObjects from './DiagramObjects/DiagramObjects';
 import addElements from './DiagramAddElements/addElements';
 import type { TypeAddElementObject } from './DiagramAddElements/addElements';
+
+export type TypeDiagramOptions = {
+  htmlId?: string,
+  limits?: Rect,
+  backgroundColor?: Array<number>,
+  vertexShader?: string,
+  fragmentShader?: string,
+  fontScale?: number,
+}
+
 // There are several coordinate spaces that need to be considered for a
 // diagram.
 //
@@ -75,7 +85,7 @@ class Diagram {
 
   backgroundColor: Array<number>;
   fontScale: number;
-  layout: Object;
+  // layout: Object;
 
   glToDiagramSpaceTransform: Transform;
   diagramToGLSpaceTransform: Transform;
@@ -91,14 +101,7 @@ class Diagram {
 
   constructor(
     // canvas: HTMLCanvasElement,
-    options: {
-      htmlId?: string,
-      limits?: Rect,
-      backgroundColor?: Array<number>,
-      layout?: {},
-      vertexShader?: string,
-      fragmentShader?: string,
-    },
+    options: TypeDiagramOptions,
     // limitsOrxMin: number | Rect = new Rect(-1, -1, 2, 2),
     // yMin: number = -1,
     // width: number = 2,
@@ -112,13 +115,14 @@ class Diagram {
       htmlId: 'id_figureone_canvases',
       limits: new Rect(-1, -1, 2, 2),
       backgroundColor: [1, 1, 1, 1],
-      layout: {},
+      // layout: {},
       vertexShader: 'simple',
       fragmentShader: 'simple',
+      fontScale: 1,
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
-      layout, htmlId, backgroundColor, limits, vertexShader, fragmentShader,
+      htmlId, backgroundColor, limits, vertexShader, fragmentShader,
     } = optionsToUse;
     // if (typeof containerIdOrOptions !== 'string') {
     //   optionsToUse = joinObjects(
@@ -141,7 +145,7 @@ class Diagram {
     //   optionsToUse.vertexShader = vertexShader;
     //   optionsToUse.fragmentShader = fragmentShader;
     // }
-    this.layout = layout;
+    // this.layout = layout;
     if (typeof htmlId === 'string') {
       const container = document.getElementById(htmlId);
       if (container instanceof HTMLElement) {
@@ -204,7 +208,7 @@ class Diagram {
       this.gesture = new Gesture(this);
     }
 
-    this.fontScale = 1;
+    this.fontScale = optionsToUse.fontScale;
     // let limits;
     // if (limitsOrxMin instanceof Rect) {
     //   const r = limitsOrxMin;
@@ -402,6 +406,9 @@ class Diagram {
   }
 
   resize() {
+    if (this.elements != null) {
+      this.elements.updateLimits(this.limits);
+    }
     this.webglLow.resize();
     this.webglHigh.resize();
     this.draw2DLow.resize();
