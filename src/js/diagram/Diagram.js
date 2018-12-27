@@ -55,7 +55,7 @@ class Diagram {
   webglLow: WebGLInstance;
   webglHigh: WebGLInstance;
 
-  +elements: DiagramElementCollection;
+  elements: DiagramElementCollection;
   globalAnimation: GlobalAnimation;
   gesture: Gesture;
   inTransition: boolean;
