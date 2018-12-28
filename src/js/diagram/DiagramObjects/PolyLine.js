@@ -40,7 +40,8 @@ export type TypePolyLineOptions = {
   sideLabel?: {
     //                             null is show real length
     text?: string | Array<string | null> | Array<Equation | null>,
-    offset?: number | Array<number>,
+    labelOffset?: number | Array<number>,
+    lineOffset?: number | Array<number>,
     location?: TypeLineLabelLocation | Array<TypeLineLabelLocation>,
     subLocation?: TypeLineLabelSubLocation | Array<TypeLineLabelSubLocation>,
     orientation?: TypeLineLabelOrientation | Array<TypeLineLabelOrientation>,
@@ -127,7 +128,8 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     };
     const defaultSideLabelOptions = {
       text: 'a',
-      offset: 0.1,
+      lineOffset: 0,
+      labelOffset: 0.1,
       location: 'outside',
       subLocation: 'top',
       orientation: 'horizontal',
@@ -174,7 +176,8 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         pCount += 1;
       }
       const textArray = makeArray(sideLabel.text, pCount);
-      const offsetArray = makeArray(sideLabel.offset, pCount);
+      const lineOffsetArray = makeArray(sideLabel.lineOffset, pCount);
+      const labelOffsetArray = makeArray(sideLabel.labelOffset, pCount);
       const locationArray = makeArray(sideLabel.location, pCount);
       const subLocationArray = makeArray(sideLabel.subLocation, pCount);
       const orientationArray = makeArray(sideLabel.orientation, pCount);
@@ -198,9 +201,10 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
           color: colorArray[i],
           width: widthArray[i],
           arrows: arrowsArray[i],
+          offset: lineOffsetArray[i],
           label: {
             text,
-            offset: offsetArray[i],
+            offset: labelOffsetArray[i],
             location: locationArray[i],
             subLocation: subLocationArray[i],
             orientation: orientationArray[i],
