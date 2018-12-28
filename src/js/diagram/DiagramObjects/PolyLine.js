@@ -2,34 +2,32 @@
 
 // import Diagram from '../Diagram';
 import {
-  Transform, Point, Line, polarToRect,
-  threePointAngle,
+  Transform, Point,
+  // threePointAngle,
 } from '../../tools/g2';
-import {
-  roundNum,
-} from '../../tools/math';
+// import {
+//   roundNum,
+// } from '../../tools/math';
 import { joinObjects } from '../../tools/tools';
 import {
-  DiagramElementCollection, DiagramElementPrimative,
+  DiagramElementCollection,
 } from '../Element';
-import EquationLabel from './EquationLabel';
-import type { TypeLabelEquationOptions } from './EquationLabel';
-import { Equation } from '../DiagramElements/Equation/GLEquation';
+// import EquationLabel from './EquationLabel';
+// import type { TypeLabelEquationOptions } from './EquationLabel';
+// import { Equation } from '../DiagramElements/Equation/GLEquation';
 import type {
   TypePolyLineBorderToPoint,
 } from '../DiagramElements/PolyLine';
 import type {
-  TypeLineLabelLocation, TypeLineLabelSubLocation, TypeLineLabelOrientation,
   TypeLineLabelOptions, TypeLineOptions,
 } from './Line';
+import type {
+  TypeAngleOptions, TypeAngleLabelOptions,
+} from './Angle';
 import DiagramPrimatives from '../DiagramPrimatives/DiagramPrimatives';
 import DiagramObjects from './DiagramObjects';
 import DiagramEquation from '../DiagramEquation/DiagramEquation';
 
-type arrowOptions = {
-  width?: number,
-  height?: number,
-} | boolean;
 export type TypePolyLineOptions = {
   position?: Point,
   points?: Array<Point>,
@@ -38,22 +36,24 @@ export type TypePolyLineOptions = {
   color?: Array<number>,
   borderToPoint?: TypePolyLineBorderToPoint,
   width?: number,
-  sideLabel?: {
-    //                             null is show real length
-    text?: string | Array<string | null> | Array<Equation | null>,
-    labelOffset?: number | Array<number>,
-    lineOffset?: number | Array<number>,
-    location?: TypeLineLabelLocation | Array<TypeLineLabelLocation>,
-    subLocation?: TypeLineLabelSubLocation | Array<TypeLineLabelSubLocation>,
-    orientation?: TypeLineLabelOrientation | Array<TypeLineLabelOrientation>,
-    linePosition?: number | Array<number>,
-    showLine?: boolean | Array<boolean>,
-    width?: number | Array<number>,
-    arrows?: arrowOptions | Array<arrowOptions>,
-    color?: Array<number> | Array<Array<number>>,
-    textScale?: number | Array<number>,
-  };
+  angle?: TypeAngleOptions | Array<TypeAngleOptions>,
+  // sideLabel?: {
+  //   //                             null is show real length
+  //   text?: string | Array<string | null> | Array<Equation | null>,
+  //   labelOffset?: number | Array<number>,
+  //   lineOffset?: number | Array<number>,
+  //   location?: TypeLineLabelLocation | Array<TypeLineLabelLocation>,
+  //   subLocation?: TypeLineLabelSubLocation | Array<TypeLineLabelSubLocation>,
+  //   orientation?: TypeLineLabelOrientation | Array<TypeLineLabelOrientation>,
+  //   linePosition?: number | Array<number>,
+  //   showLine?: boolean | Array<boolean>,
+  //   width?: number | Array<number>,
+  //   arrows?: arrowOptions | Array<arrowOptions>,
+  //   color?: Array<number> | Array<Array<number>>,
+  //   textScale?: number | Array<number>,
+  // };
   side?: TypeLineOptions | Array<TypeLineOptions>,
+
   // angleLabel?: {
   //   //                             null is show real length
   //   text?: string | Array<string | null> | Array<Equation | null>,
@@ -143,7 +143,15 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       subLocation: 'top',
       orientation: 'horizontal',
       linePosition: 0.5,
-      textScale: 0.7,
+      scale: 0.7,
+    };
+    const defaultAngleOptions: TypeAngleOptions = {
+      color: options.color == null ? [0, 1, 0, 1] : options.color,
+      curve: {},
+      autoRightAngle: true,
+    };
+    const defaultAngleLabelOptions: TypeAngleLabelOptions = {
+      text: null,
     };
 
     if (options.side != null) {
@@ -153,14 +161,25 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         defaultOptions.side.label = defaultSideLabelOptions;
       }
     }
+
+    if (options.angle != null) {
+      defaultOptions.angle = defaultAngleOptions;
+      // $FlowFixMe
+      if (options.angle.label != null) {
+        defaultOptions.angle.label = defaultAngleLabelOptions;
+      }
+    }
+
     const optionsToUse = joinObjects({}, defaultOptions, options);
+
     if (Array.isArray(options.side)) {
       optionsToUse.side = options.side.map(side => joinObjects({}, defaultOptions.side, side));
     }
-    // console.log(optionsToUse)
-    // console.log(optionsToUse.side[0].label)
-    // console.log(optionsToUse.side[1].label)
-    // console.log(optionsToUse.side[2].label)
+
+    if (Array.isArray(options.angle)) {
+      optionsToUse.angle = options.angle.map(angle => joinObjects({}, defaultOptions.angle, angle));
+    }
+
     super(new Transform('PolyLine')
       .scale(1, 1)
       .rotate(0)
@@ -176,6 +195,8 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
 
     this.position = optionsToUse.position;
     this.transform.updateTranslation(this.position);
+
+    // Add Line
     if (optionsToUse.showLine) {
       const line = this.shapes.polyLine({
         points: optionsToUse.points,
@@ -186,6 +207,8 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       });
       this.add('line', line);
     }
+
+    // Add Sides
     if (optionsToUse.side) {
       const { side } = optionsToUse;
       let pCount = optionsToUse.points.length - 1;
@@ -203,116 +226,41 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
           p1: optionsToUse.points[i],
           p2: optionsToUse.points[j],
         }, sideArray[i]);
-        // if (sideOptions.label) {
-        //   if (sideOptions.label.text === null) {
-        //     sideOptions.label.text = '';
-        //     sideOptions.label.showRealLength = true;
-        //   }
-        // }
         const sideLine = this.objects.line(sideOptions);
         this.add(name, sideLine);
       }
     }
-    // if (optionsToUse.sideLabel) {
-    //   const { sideLabel } = optionsToUse;
-    //   let pCount = optionsToUse.points.length - 1;
-    //   if (optionsToUse.close) {
-    //     pCount += 1;
-    //   }
-    //   const textArray = makeArray(sideLabel.text, pCount);
-    //   const lineOffsetArray = makeArray(sideLabel.lineOffset, pCount);
-    //   const labelOffsetArray = makeArray(sideLabel.labelOffset, pCount);
-    //   const locationArray = makeArray(sideLabel.location, pCount);
-    //   const subLocationArray = makeArray(sideLabel.subLocation, pCount);
-    //   const orientationArray = makeArray(sideLabel.orientation, pCount);
-    //   const linePositionArray = makeArray(sideLabel.linePosition, pCount);
-    //   const colorArray = makeColorArray(sideLabel.color, pCount);
-    //   const showLineArray = makeArray(sideLabel.showLine, pCount);
-    //   const widthArray = makeArray(sideLabel.width, pCount);
-    //   const arrowsArray = makeArray(sideLabel.arrows, pCount);
-    //   const textScaleArray = makeArray(sideLabel.textScale, pCount);
-    //   for (let i = 0; i < pCount; i += 1) {
-    //     let j = i + 1;
-    //     if (i === pCount - 1 && optionsToUse.close) {
-    //       j = 0;
-    //     }
-    //     const name = `side${i}${j}`;
-    //     const text = textArray[i] == null ? '' : textArray[i];
-    //     const label = this.objects.line({
-    //       p1: optionsToUse.points[i],
-    //       p2: optionsToUse.points[j],
-    //       showLine: showLineArray[i],
-    //       color: colorArray[i],
-    //       width: widthArray[i],
-    //       arrows: arrowsArray[i],
-    //       offset: lineOffsetArray[i],
-    //       label: {
-    //         text,
-    //         offset: labelOffsetArray[i],
-    //         location: locationArray[i],
-    //         subLocation: subLocationArray[i],
-    //         orientation: orientationArray[i],
-    //         linePosition: linePositionArray[i],
-    //         textScale: textScaleArray[i],
-    //       },
-    //     });
-    //     if (textArray[i] === null) {
-    //       label.showRealLength = true;
-    //       label.updateLabel();
-    //     }
-    //     this.add(name, label);
-    //   }
-    // }
 
-    // if (optionsToUse.angleLabel) {
-    //   const { angleLabel } = optionsToUse;
-    //   let pCount = optionsToUse.points.length;
-    //   if (optionsToUse.close === false) {
-    //     pCount -= 2;
-    //   }
-    //   const textArray = makeArray(sideLabel.text, pCount);
-    //   const lineOffsetArray = makeArray(sideLabel.lineOffset, pCount);
-    //   const labelOffsetArray = makeArray(sideLabel.labelOffset, pCount);
-    //   const locationArray = makeArray(sideLabel.location, pCount);
-    //   const subLocationArray = makeArray(sideLabel.subLocation, pCount);
-    //   const orientationArray = makeArray(sideLabel.orientation, pCount);
-    //   const linePositionArray = makeArray(sideLabel.linePosition, pCount);
-    //   const colorArray = makeColorArray(sideLabel.color, pCount);
-    //   const showLineArray = makeArray(sideLabel.showLine, pCount);
-    //   const widthArray = makeArray(sideLabel.width, pCount);
-    //   const arrowsArray = makeArray(sideLabel.arrows, pCount);
-    //   const textScaleArray = makeArray(sideLabel.textScale, pCount);
-    //   for (let i = 0; i < pCount; i += 1) {
-    //     let j = i + 1;
-    //     if (i === pCount - 1 && optionsToUse.close) {
-    //       j = 0;
-    //     }
-    //     const name = `side${i}${j}`;
-    //     const text = textArray[i] == null ? '' : textArray[i];
-    //     const label = this.objects.line({
-    //       p1: optionsToUse.points[i],
-    //       p2: optionsToUse.points[j],
-    //       showLine: showLineArray[i],
-    //       color: colorArray[i],
-    //       width: widthArray[i],
-    //       arrows: arrowsArray[i],
-    //       offset: lineOffsetArray[i],
-    //       label: {
-    //         text,
-    //         offset: labelOffsetArray[i],
-    //         location: locationArray[i],
-    //         subLocation: subLocationArray[i],
-    //         orientation: orientationArray[i],
-    //         linePosition: linePositionArray[i],
-    //         textScale: textScaleArray[i],
-    //       },
-    //     });
-    //     if (textArray[i] === null) {
-    //       label.showRealLength = true;
-    //       label.updateLabel();
-    //     }
-    //     this.add(name, label);
-    //   }
-    // }
+    // Add Angles
+    if (optionsToUse.angle) {
+      const { angle } = optionsToUse;
+      let pCount = optionsToUse.points.length;
+      if (optionsToUse.close === false) {
+        pCount -= 2;
+      }
+      const angleArray = makeArray(angle, pCount);
+      let firstIndex = 0;
+      if (optionsToUse.close === false) {
+        firstIndex = 1;
+      }
+      for (let i = firstIndex; i < pCount + firstIndex; i += 1) {
+        let j = i + 1;
+        let k = i - 1;
+        if (i === pCount - 1 && optionsToUse.close) {
+          j = 0;
+        }
+        if (i === 0 && optionsToUse.close) {
+          k = pCount - 1;
+        }
+        const name = `angle${i}`;
+        const angleOptions = joinObjects({}, {
+          p1: optionsToUse.points[k],
+          p2: optionsToUse.points[i],
+          p3: optionsToUse.points[j],
+        }, angleArray[i]);
+        const angleAnnotation = this.objects.angle(angleOptions);
+        this.add(name, angleAnnotation);
+      }
+    }
   }
 }

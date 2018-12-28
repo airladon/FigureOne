@@ -99,6 +99,33 @@ describe('Diagram Objects PolyLine', () => {
         close: true,
         side: { label: { text: null } },
       }),
+      AngleLabelsClose: () => diagram.objects.polyLine({
+        points,
+        close: true,
+        angle: {
+          label: {
+            text: 'a',
+          },
+        },
+      }),
+      AngleLabelsOpen: () => diagram.objects.polyLine({
+        points,
+        close: false,
+        angle: {
+          label: {
+            text: 'a',
+          },
+        },
+      }),
+      AngleLabelsFullDefine: () => diagram.objects.polyLine({
+        points,
+        close: true,
+        angle: [
+          { label: { text: 'a' } },
+          { label: { text: 'b' } },
+          { label: { text: null } },
+        ],
+      }),
     };
   });
   test('Number of points in line close', () => {
@@ -180,6 +207,41 @@ describe('Diagram Objects PolyLine', () => {
       expect(base01.drawingObject.text[0].text).toBe('1');
       expect(base12.drawingObject.text[0].text).toBe('1');
       expect(base20.drawingObject.text[0].text).toBe('1.41');
+    });
+  });
+  describe('Angle Labels', () => {
+    test('Close', () => {
+      const poly = ways.AngleLabelsClose();
+      expect(Object.keys(poly.elements)).toHaveLength(4);
+      expect(Object.keys(poly.elements))
+        .toEqual(['line', 'angle0', 'angle1', 'angle2']);
+      // expect(poly.elements.angle0.p1).toEqual(points[1]);
+      // expect(poly.elements.angle0.p2).toEqual(points[0]);
+      // expect(poly.elements.angle0.p3).toEqual(points[2]);
+      // expect(poly.elements.side01.p2).toEqual(points[1]);
+      // expect(poly.elements.side12.p1).toEqual(points[1]);
+      // expect(poly.elements.side12.p2).toEqual(points[2]);
+      // expect(poly.elements.side20.p1).toEqual(points[2]);
+      // expect(poly.elements.side20.p2.round()).toEqual(points[0]);
+    });
+    test('Open', () => {
+      const poly = ways.AngleLabelsOpen();
+      expect(Object.keys(poly.elements)).toHaveLength(2);
+      expect(Object.keys(poly.elements))
+        .toEqual(['line', 'angle1']);
+      // expect(poly.elements.side01.p1).toEqual(points[0]);
+      // expect(poly.elements.side01.p2).toEqual(points[1]);
+      // expect(poly.elements.side12.p1).toEqual(points[1]);
+      // expect(poly.elements.side12.p2).toEqual(points[2]);
+    });
+    test('Full Define', () => {
+      const poly = ways.AngleLabelsFullDefine();
+      const base01 = poly.elements.angle0.label.eqn.collection._base;
+      const base12 = poly.elements.angle1.label.eqn.collection._base;
+      const base20 = poly.elements.angle2.label.eqn.collection._base;
+      expect(base01.drawingObject.text[0].text).toBe('a');
+      expect(base12.drawingObject.text[0].text).toBe('b');
+      expect(base20.drawingObject.text[0].text).toBe('45º');
     });
   });
 });
