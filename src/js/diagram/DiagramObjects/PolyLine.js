@@ -70,6 +70,28 @@ function makeArray<T>(
   // return [...Array(count)].map(() => possibleArray);
 }
 
+function makeColorArray(
+  possibleArray: Array<number> | Array<Array<number>>,
+  count: number,
+): Array<Array<number>> {
+  if (Array.isArray(possibleArray[0])) {
+    if (count === possibleArray.length) {
+      return possibleArray;
+    }
+    const outArray = [];
+    for (let i = 0; i < count; i += 1) {
+      outArray.push(possibleArray[i % possibleArray.length].slice());
+    }
+    return outArray;
+  }
+  const outArray = [];
+  for (let i = 0; i < count; i += 1) {
+    outArray.push(possibleArray.slice());
+  }
+  return outArray;
+  // return [...Array(count)].map(() => possibleArray);
+}
+
 export default class DiagramObjectPolyLine extends DiagramElementCollection {
   shapes: DiagramPrimatives;
   equation: DiagramEquation;
@@ -104,6 +126,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       subLocation: 'top',
       orientation: 'horizontal',
       linePosition: 0.5,
+      color: options.color == null ? [0, 1, 0, 1] : options.color,
     };
     if (options.sideLabel) {        // $FlowFixMe
       defaultOptions.sideLabel = defaultSideLabelOptions;
@@ -147,6 +170,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       const subLocationArray = makeArray(sideLabel.subLocation, pCount);
       const orientationArray = makeArray(sideLabel.orientation, pCount);
       const linePositionArray = makeArray(sideLabel.linePosition, pCount);
+      const colorArray = makeColorArray(sideLabel.color, pCount);
       for (let i = 0; i < pCount; i += 1) {
         let j = i + 1;
         if (i === pCount - 1 && optionsToUse.close) {
@@ -158,6 +182,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
           p1: optionsToUse.points[i],
           p2: optionsToUse.points[j],
           showLine: false,
+          color: colorArray[i],
           label: {
             text,
             offset: offsetArray[i],
