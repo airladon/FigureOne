@@ -25,6 +25,10 @@ import DiagramPrimatives from '../DiagramPrimatives/DiagramPrimatives';
 import DiagramObjects from './DiagramObjects';
 import DiagramEquation from '../DiagramEquation/DiagramEquation';
 
+type arrowOptions = {
+  width?: number,
+  height?: number,
+};
 export type TypePolyLineOptions = {
   position?: Point,
   points?: Array<Point>,
@@ -41,6 +45,10 @@ export type TypePolyLineOptions = {
     subLocation?: TypeLineLabelSubLocation | Array<TypeLineLabelSubLocation>,
     orientation?: TypeLineLabelOrientation | Array<TypeLineLabelOrientation>,
     linePosition?: number | Array<number>,
+    showLine?: boolean | Array<boolean>,
+    width?: number | Array<number>,
+    arrows?: arrowOptions | Array<arrowOptions>,
+    textScale?: number | Array<number>,
   };
   angleLabel?: {
     //                             null is show real length
@@ -67,19 +75,18 @@ function makeArray<T>(
     outArray.push(possibleArray);
   }
   return outArray;
-  // return [...Array(count)].map(() => possibleArray);
 }
 
 function makeColorArray(
-  possibleArray: Array<number> | Array<Array<number>>,
+  possibleArray: Array<Array<number> | number>,
   count: number,
 ): Array<Array<number>> {
   if (Array.isArray(possibleArray[0])) {
-    if (count === possibleArray.length) {
+    if (count === possibleArray.length) {                   // $FlowFixMe
       return possibleArray;
     }
     const outArray = [];
-    for (let i = 0; i < count; i += 1) {
+    for (let i = 0; i < count; i += 1) {                    // $FlowFixMe
       outArray.push(possibleArray[i % possibleArray.length].slice());
     }
     return outArray;
@@ -87,9 +94,8 @@ function makeColorArray(
   const outArray = [];
   for (let i = 0; i < count; i += 1) {
     outArray.push(possibleArray.slice());
-  }
+  }                                                         // $FlowFixMe
   return outArray;
-  // return [...Array(count)].map(() => possibleArray);
 }
 
 export default class DiagramObjectPolyLine extends DiagramElementCollection {
@@ -126,7 +132,10 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       subLocation: 'top',
       orientation: 'horizontal',
       linePosition: 0.5,
+      showLine: false,
+      width: 0.01,
       color: options.color == null ? [0, 1, 0, 1] : options.color,
+      textScale: 0.7,
     };
     if (options.sideLabel) {        // $FlowFixMe
       defaultOptions.sideLabel = defaultSideLabelOptions;
@@ -171,6 +180,10 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       const orientationArray = makeArray(sideLabel.orientation, pCount);
       const linePositionArray = makeArray(sideLabel.linePosition, pCount);
       const colorArray = makeColorArray(sideLabel.color, pCount);
+      const showLineArray = makeArray(sideLabel.showLine, pCount);
+      const widthArray = makeArray(sideLabel.width, pCount);
+      const arrowsArray = makeArray(sideLabel.arrows, pCount);
+      const textScaleArray = makeArray(sideLabel.textScale, pCount);
       for (let i = 0; i < pCount; i += 1) {
         let j = i + 1;
         if (i === pCount - 1 && optionsToUse.close) {
@@ -181,8 +194,10 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         const label = this.objects.line({
           p1: optionsToUse.points[i],
           p2: optionsToUse.points[j],
-          showLine: false,
+          showLine: showLineArray[i],
           color: colorArray[i],
+          width: widthArray[i],
+          arrows: arrowsArray[i],
           label: {
             text,
             offset: offsetArray[i],
@@ -190,6 +205,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
             subLocation: subLocationArray[i],
             orientation: orientationArray[i],
             linePosition: linePositionArray[i],
+            textScale: textScaleArray[i],
           },
         });
         if (textArray[i] === null) {
