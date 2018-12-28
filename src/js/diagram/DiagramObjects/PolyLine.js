@@ -169,6 +169,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         });
         if (textArray[i] === null) {
           label.showRealLength = true;
+          label.updateLabel();
         }
         this.add(name, label);
       }
