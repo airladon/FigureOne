@@ -48,7 +48,7 @@ export type TypeLineLabelOptions = {
   subLocation?: TypeLineLabelSubLocation,
   orientation?: TypeLineLabelOrientation,
   linePosition?: number,
-  textScale?: number,
+  scale?: number,
   color?: Array<number>,
 };
 
@@ -453,7 +453,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       subLocation: 'left',
       orientation: 'horizontal',
       linePosition: 0.5,
-      textScale: 0.7,
+      scale: 0.7,
       color: optionsToUse.color,
     };
     if (optionsToUse.label) {
@@ -469,7 +469,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         labelOptions.subLocation,
         labelOptions.orientation,
         labelOptions.linePosition,
-        labelOptions.textScale,
+        labelOptions.scale,
         labelOptions.color,
       );
     }
@@ -654,12 +654,12 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     subLocation: TypeLineLabelSubLocation = 'left',
     orientation: TypeLineLabelOrientation = 'horizontal',
     linePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
-    textScale: number = 0.7,
+    scale: number = 0.7,
     color: Array<number>,
   ) {
     this.label = new LineLabel(
       this.equation, labelText, color,
-      offset, location, subLocation, orientation, linePosition, textScale,
+      offset, location, subLocation, orientation, linePosition, scale,
     );
     if (this.label != null) {
       this.add('label', this.label.eqn.collection);
