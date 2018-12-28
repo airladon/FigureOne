@@ -27,6 +27,7 @@ export type TypeDiagramOptions = {
   vertexShader?: string,
   fragmentShader?: string,
   fontScale?: number,
+  elements?: DiagramElementCollection;
 }
 
 // There are several coordinate spaces that need to be considered for a
@@ -246,6 +247,11 @@ class Diagram {
     this.initialize();
     this.isTouchDevice = isTouchDevice();
     this.animateNextFrame();
+    if (optionsToUse.elements) {
+      // eslint-disable-next-line new-cap
+      this.elements = new optionsToUse.elements(this);
+      this.elements.diagramLimits = this.limits;
+    }
   }
 
   addElements(
