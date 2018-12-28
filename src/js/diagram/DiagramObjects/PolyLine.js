@@ -21,6 +21,9 @@ import type {
 import type {
   TypeLineLabelLocation, TypeLineLabelSubLocation, TypeLineLabelOrientation,
 } from './Line';
+import DiagramPrimatives from '../DiagramPrimatives/DiagramPrimatives';
+import DiagramObjects from './DiagramObjects';
+import DiagramEquation from '../DiagramEquation/DiagramEquation';
 
 export type TypePolyLineOptions = {
   position?: Point,
@@ -45,17 +48,41 @@ export type TypePolyLineOptions = {
   },
 };
 
+function makeArray<T>(
+  possibleArray: T | Array<T>,
+  count: number,
+): Array<T> {
+  if (Array.isArray(possibleArray)) {
+    if (count === possibleArray.length) {
+      return possibleArray;
+    }
+    const outArray = [];
+    for (let i = 0; i < count; i += 1) {
+      outArray.push(possibleArray[i % possibleArray.length]);
+    }
+    return outArray;
+  }
+  const outArray = [];
+  for (let i = 0; i < count; i += 1) {
+    outArray.push(possibleArray);
+  }
+  return outArray;
+  // return [...Array(count)].map(() => possibleArray);
+}
+
 export default class DiagramObjectPolyLine extends DiagramElementCollection {
-  shapes: Object;
-  equation: Object;
+  shapes: DiagramPrimatives;
+  equation: DiagramEquation;
+  objects: DiagramObjects;
   animateNextFrame: void => void;
   isTouchDevice: boolean;
   largerTouchBorder: boolean;
   position: Point;
 
   constructor(
-    shapes: Object,
-    equation: Object,
+    shapes: DiagramPrimatives,
+    equation: DiagramEquation,
+    objects: DiagramObjects,
     isTouchDevice: boolean,
     animateNextFrame: void => void,
     options: TypePolyLineOptions = {},
@@ -68,15 +95,20 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       showLine: true,
       borderToPoint: 'never',
       width: 0.01,
-      sideLabel: {
-        text: 'a',
-        offset: 0.1,
-        location: 'outside',
-        subLocation: 'top',
-        orientation: 'horizontal',
-        linePosition: 0.5,
-      },
+      sideLabel: null,
     };
+    const defaultSideLabelOptions = {
+      text: 'a',
+      offset: 0.1,
+      location: 'outside',
+      subLocation: 'top',
+      orientation: 'horizontal',
+      linePosition: 0.5,
+    };
+    if (options.sideLabel) {        // $FlowFixMe
+      defaultOptions.sideLabel = defaultSideLabelOptions;
+    }
+
     const optionsToUse = joinObjects({}, defaultOptions, options);
     super(new Transform('PolyLine')
       .scale(1, 1)
@@ -86,6 +118,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
 
     this.shapes = shapes;
     this.equation = equation;
+    this.objects = objects;
     this.largerTouchBorder = optionsToUse.largerTouchBorder;
     this.isTouchDevice = isTouchDevice;
     this.animateNextFrame = animateNextFrame;
@@ -102,6 +135,43 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       });
       this.add('line', line);
     }
+    if (optionsToUse.sideLabel) {
+      const { sideLabel } = optionsToUse;
+      let pCount = optionsToUse.points.length - 1;
+      if (optionsToUse.close) {
+        pCount += 1;
+      }
+      const textArray = makeArray(sideLabel.text, pCount);
+      const offsetArray = makeArray(sideLabel.offset, pCount);
+      const locationArray = makeArray(sideLabel.location, pCount);
+      const subLocationArray = makeArray(sideLabel.subLocation, pCount);
+      const orientationArray = makeArray(sideLabel.orientation, pCount);
+      const linePositionArray = makeArray(sideLabel.linePosition, pCount);
+      for (let i = 0; i < pCount; i += 1) {
+        let j = i + 1;
+        if (i === pCount - 1) {
+          j = 0;
+        }
+        const name = `side${i}${j}`;
+        const text = textArray[i] == null ? '' : textArray[i];
+        const label = this.objects.line({
+          p1: optionsToUse.points[i],
+          p2: optionsToUse.points[j],
+          showLine: false,
+          label: {
+            text,
+            offset: offsetArray[i],
+            location: locationArray[i],
+            subLocation: subLocationArray[i],
+            orientation: orientationArray[i],
+            linePosition: linePositionArray[i],
+          },
+        });
+        if (textArray[i] === null) {
+          label.showRealLength = true;
+        }
+        this.add(name, label);
+      }
+    }
   }
-
 }
