@@ -41,6 +41,16 @@ export type TypeLineLabelOrientation = 'horizontal' | 'baseToLine' | 'baseAway'
 export type TypeLineVertexOrigin = 'start' | 'end' | 'center' | number | Point;
 export type TypeLineVertexSpaceStart = 'start' | 'end' | 'center' | number | Point;
 
+export type TypeLineLabelOptions = {
+  text: null | string | Array<string> | Equation | TypeLabelEquationOptions,
+  offset?: number,
+  location?: TypeLineLabelLocation,
+  subLocation?: TypeLineLabelSubLocation,
+  orientation?: TypeLineLabelOrientation,
+  linePosition?: number,
+  textScale?: number,
+};
+
 export type TypeLineOptions = {
   position?: Point,
   length?: number,
@@ -65,15 +75,7 @@ export type TypeLineOptions = {
     width?: number,
     height?: number,
   } | boolean,
-  label?: {
-    text: string | Array<string> | Equation | TypeLabelEquationOptions,
-    offset?: number,
-    location?: TypeLineLabelLocation,
-    subLocation?: TypeLineLabelSubLocation,
-    orientation?: TypeLineLabelOrientation,
-    linePosition?: number,
-    textScale?: number,
-  },
+  label?: TypeLineLabelOptions,
   dashStyle?: {
     style: Array<number>,
     maxLength?: number,
@@ -411,9 +413,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
 
     // Label related properties
     this.label = null;
-    this.showRealLength = false;
     this._label = null;
-
+    this.showRealLength = false;
     this.setLength(this.length);
 
     if (optionsToUse.p1 != null && optionsToUse.p2 != null) {
@@ -445,7 +446,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     }
 
     const defaultLabelOptions = {
-      text: '',
+      text: null,
       offset: 0,
       location: 'top',
       subLocation: 'left',
@@ -455,6 +456,10 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     };
     if (optionsToUse.label) {
       const labelOptions = Object.assign({}, defaultLabelOptions, optionsToUse.label);
+      if (labelOptions.text === null) {
+        labelOptions.text = '';
+        this.showRealLength = true;
+      }
       this.addLabel(
         labelOptions.text,
         labelOptions.offset,
