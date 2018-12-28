@@ -62,7 +62,7 @@ describe('Diagram Objects PolyLine', () => {
         points,
         close: true,
         sideLabel: {
-          text: ['a', 'b', 'c'],
+          text: ['a', 'b', null],
         },
       }),
       SideLabelsUnderDefine: () => diagram.objects.polyLine({
@@ -84,6 +84,13 @@ describe('Diagram Objects PolyLine', () => {
         close: true,
         sideLabel: {
           text: 'a',
+        },
+      }),
+      SideLabelsActualLength: () => diagram.objects.polyLine({
+        points,
+        close: true,
+        sideLabel: {
+          text: null,
         },
       }),
     };
@@ -130,7 +137,7 @@ describe('Diagram Objects PolyLine', () => {
       const base20 = poly.elements.side20.label.eqn.collection._base;
       expect(base01.drawingObject.text[0].text).toBe('a');
       expect(base12.drawingObject.text[0].text).toBe('b');
-      expect(base20.drawingObject.text[0].text).toBe('c');
+      expect(base20.drawingObject.text[0].text).toBe('1.41');
     });
     test('Under Define', () => {
       const poly = ways.SideLabelsUnderDefine();
@@ -158,6 +165,15 @@ describe('Diagram Objects PolyLine', () => {
       expect(base01.drawingObject.text[0].text).toBe('a');
       expect(base12.drawingObject.text[0].text).toBe('a');
       expect(base20.drawingObject.text[0].text).toBe('a');
+    });
+    test('Actual Length', () => {
+      const poly = ways.SideLabelsActualLength();
+      const base01 = poly.elements.side01.label.eqn.collection._base;
+      const base12 = poly.elements.side12.label.eqn.collection._base;
+      const base20 = poly.elements.side20.label.eqn.collection._base;
+      expect(base01.drawingObject.text[0].text).toBe('1');
+      expect(base12.drawingObject.text[0].text).toBe('1');
+      expect(base20.drawingObject.text[0].text).toBe('1.41');
     });
   });
 });
