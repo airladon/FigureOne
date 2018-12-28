@@ -47,51 +47,57 @@ describe('Diagram Objects PolyLine', () => {
       SideLabelsClose: () => diagram.objects.polyLine({
         points,
         close: true,
-        sideLabel: {
-          text: 'a',
+        side: {
+          label: {
+            text: 'a',
+          },
         },
       }),
       SideLabelsOpen: () => diagram.objects.polyLine({
         points,
         close: false,
-        sideLabel: {
-          text: 'a',
+        side: {
+          label: {
+            text: 'a',
+          },
         },
       }),
       SideLabelsFullDefine: () => diagram.objects.polyLine({
         points,
         close: true,
-        sideLabel: {
-          text: ['a', 'b', null],
-        },
+        side: [
+          { label: { text: 'a' } },
+          { label: { text: 'b' } },
+          { label: { text: null } },
+        ],
       }),
       SideLabelsUnderDefine: () => diagram.objects.polyLine({
         points,
         close: true,
-        sideLabel: {
-          text: ['a', 'b'],
-        },
+        side: [
+          { label: { text: 'a' } },
+          { label: { text: 'b' } },
+        ],
       }),
       SideLabelsOverDefine: () => diagram.objects.polyLine({
         points,
         close: true,
-        sideLabel: {
-          text: ['a', 'b', 'c', 'd'],
-        },
+        side: [
+          { label: { text: 'a' } },
+          { label: { text: 'b' } },
+          { label: { text: 'c' } },
+          { label: { text: 'd' } },
+        ],
       }),
       SideLabelsSingleDefine: () => diagram.objects.polyLine({
         points,
         close: true,
-        sideLabel: {
-          text: 'a',
-        },
+        side: { label: { text: 'a' } },
       }),
       SideLabelsActualLength: () => diagram.objects.polyLine({
         points,
         close: true,
-        sideLabel: {
-          text: null,
-        },
+        side: { label: { text: null } },
       }),
     };
   });

@@ -34,6 +34,7 @@ import type { TypeRotationDirection } from './js/tools/g2';
 import type {
   TypeLineLabelLocation, TypeLineLabelSubLocation, TypeLineLabelOrientation,
   TypeLineVertexOrigin, TypeLineVertexSpaceStart, TypeLineOptions,
+  TypeLineLabelOptions,
 } from './js/diagram/DiagramObjects/Line';
 import type {
   TypeAngleLabelOrientation, TypeAngleOptions,
@@ -45,6 +46,7 @@ export type {
   TypeLineLabelLocation, TypeLineLabelSubLocation, TypeLineLabelOrientation,
   TypeLineVertexOrigin, TypeLineVertexSpaceStart, TypeLineOptions,
   TypeAngleLabelOrientation, TypeAngleOptions, TypeDiagramOptions,
+  TypeLineLabelOptions,
 };
 
 const tools = {
