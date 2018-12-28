@@ -149,7 +149,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       const linePositionArray = makeArray(sideLabel.linePosition, pCount);
       for (let i = 0; i < pCount; i += 1) {
         let j = i + 1;
-        if (i === pCount - 1) {
+        if (i === pCount - 1 && optionsToUse.close) {
           j = 0;
         }
         const name = `side${i}${j}`;
