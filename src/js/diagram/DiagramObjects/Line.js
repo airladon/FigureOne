@@ -49,6 +49,7 @@ export type TypeLineLabelOptions = {
   orientation?: TypeLineLabelOrientation,
   linePosition?: number,
   textScale?: number,
+  color?: Array<number>,
 };
 
 export type TypeLineOptions = {
@@ -272,7 +273,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   addLabel: (string | Equation | Array<string> | TypeLabelEquationOptions,
              number, ?TypeLineLabelLocation,
              ?TypeLineLabelSubLocation, ?TypeLineLabelOrientation, ?number,
-             ?number,
+             ?number, ?Array<number>,
             ) => void;
 
   multiMove: {
@@ -453,6 +454,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       orientation: 'horizontal',
       linePosition: 0.5,
       textScale: 0.7,
+      color: optionsToUse.color,
     };
     if (optionsToUse.label) {
       const labelOptions = Object.assign({}, defaultLabelOptions, optionsToUse.label);
@@ -468,6 +470,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         labelOptions.orientation,
         labelOptions.linePosition,
         labelOptions.textScale,
+        labelOptions.color,
       );
     }
   }
@@ -652,9 +655,10 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     orientation: TypeLineLabelOrientation = 'horizontal',
     linePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
     textScale: number = 0.7,
+    color: Array<number>,
   ) {
     this.label = new LineLabel(
-      this.equation, labelText, this.color,
+      this.equation, labelText, color,
       offset, location, subLocation, orientation, linePosition, textScale,
     );
     if (this.label != null) {
