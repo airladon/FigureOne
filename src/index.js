@@ -37,7 +37,7 @@ import type {
   TypeLineLabelOptions,
 } from './js/diagram/DiagramObjects/Line';
 import type {
-  TypeAngleLabelOrientation, TypeAngleOptions,
+  TypeAngleLabelOrientation, TypeAngleOptions, TypeAngleLabelOptions,
 } from './js/diagram/DiagramObjects/Angle';
 import type { TypeDiagramOptions } from './js/diagram/Diagram';
 
@@ -46,7 +46,7 @@ export type {
   TypeLineLabelLocation, TypeLineLabelSubLocation, TypeLineLabelOrientation,
   TypeLineVertexOrigin, TypeLineVertexSpaceStart, TypeLineOptions,
   TypeAngleLabelOrientation, TypeAngleOptions, TypeDiagramOptions,
-  TypeLineLabelOptions,
+  TypeLineLabelOptions, TypeAngleLabelOptions,
 };
 
 const tools = {
