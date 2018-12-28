@@ -72,6 +72,7 @@ export type TypeLineOptions = {
     subLocation?: TypeLineLabelSubLocation,
     orientation?: TypeLineLabelOrientation,
     linePosition?: number,
+    textScale?: number,
   },
   dashStyle?: {
     style: Array<number>,
@@ -129,8 +130,9 @@ class LineLabel extends EquationLabel {
     subLocation: TypeLineLabelSubLocation = 'left',
     orientation: TypeLineLabelOrientation = 'horizontal',
     linePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
+    scale: number = 0.7,
   ) {
-    super(equation, { label: labelText, color });
+    super(equation, { label: labelText, color, scale });
     this.offset = offset;
     this.location = location;
     this.subLocation = subLocation;
@@ -267,7 +269,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   updateLabel: (?number) => {};
   addLabel: (string | Equation | Array<string> | TypeLabelEquationOptions,
              number, ?TypeLineLabelLocation,
-             ?TypeLineLabelSubLocation, ?TypeLineLabelOrientation, ?number
+             ?TypeLineLabelSubLocation, ?TypeLineLabelOrientation, ?number,
+             ?number,
             ) => void;
 
   multiMove: {
@@ -448,6 +451,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       subLocation: 'left',
       orientation: 'horizontal',
       linePosition: 0.5,
+      textScale: 0.7,
     };
     if (optionsToUse.label) {
       const labelOptions = Object.assign({}, defaultLabelOptions, optionsToUse.label);
@@ -458,6 +462,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         labelOptions.subLocation,
         labelOptions.orientation,
         labelOptions.linePosition,
+        labelOptions.textScale,
       );
     }
   }
@@ -641,10 +646,11 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     subLocation: TypeLineLabelSubLocation = 'left',
     orientation: TypeLineLabelOrientation = 'horizontal',
     linePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
+    textScale: number = 0.7,
   ) {
     this.label = new LineLabel(
       this.equation, labelText, this.color,
-      offset, location, subLocation, orientation, linePosition,
+      offset, location, subLocation, orientation, linePosition, textScale,
     );
     if (this.label != null) {
       this.add('label', this.label.eqn.collection);
