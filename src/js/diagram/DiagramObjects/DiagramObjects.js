@@ -12,9 +12,11 @@ import EquationNavigator from './EquationNavigator';
 import { Equation } from '../DiagramElements/Equation/GLEquation';
 import DiagramObjectLine from './Line';
 import DiagramObjectAngle from './Angle';
+import DiagramObjectPolyLine from './PolyLine';
 import type { TypeLineOptions } from './Line';
 import type { TypeAngleOptions } from './Angle';
 import type { TypeLabelOptions } from './EquationLabel';
+import type { TypePolyLineOptions } from './PolyLine';
 import EquationLabel from './EquationLabel';
 
 export default class DiagramObjects {
@@ -79,6 +81,14 @@ export default class DiagramObjects {
     const optionsToUse = joinObjects({}, ...options);
     return new EquationLabel(
       this.equation, optionsToUse,
+    );
+  }
+
+  polyLine(...options: Array<TypePolyLineOptions>) {
+    const optionsToUse = joinObjects({}, ...options);
+    return new DiagramObjectPolyLine(
+      this.shapes, this.equation, this.isTouchDevice, this.animateNextFrame,
+      optionsToUse,
     );
   }
 
