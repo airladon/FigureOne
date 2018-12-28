@@ -18,6 +18,9 @@ import { Equation } from '../DiagramElements/Equation/GLEquation';
 import type {
   TypePolyLineBorderToPoint,
 } from '../DiagramElements/PolyLine';
+import type {
+  TypeLineLabelLocation, TypeLineLabelSubLocation, TypeLineLabelOrientation,
+} from './Line';
 
 export type TypePolyLineOptions = {
   position?: Point,
@@ -25,6 +28,8 @@ export type TypePolyLineOptions = {
   close?: boolean,
   showLine?: boolean,
   color?: Array<number>,
+  borderToPoint?: TypePolyLineBorderToPoint,
+  width?: number,
   sideLabel?: {
     //                             null is show real length
     text?: string | Array<string | null> | Array<Equation | null>,
@@ -40,7 +45,14 @@ export type TypePolyLineOptions = {
   },
 };
 
-class DiagramObjectsPolyLine extends DiagramElementCollection {
+export default class DiagramObjectPolyLine extends DiagramElementCollection {
+  shapes: Object;
+  equation: Object;
+  animateNextFrame: void => void;
+  isTouchDevice: boolean;
+  largerTouchBorder: boolean;
+  position: Point;
+
   constructor(
     shapes: Object,
     equation: Object,
@@ -55,6 +67,7 @@ class DiagramObjectsPolyLine extends DiagramElementCollection {
       close: false,
       showLine: true,
       borderToPoint: 'never',
+      width: 0.01,
       sideLabel: {
         text: 'a',
         offset: 0.1,
@@ -62,7 +75,7 @@ class DiagramObjectsPolyLine extends DiagramElementCollection {
         subLocation: 'top',
         orientation: 'horizontal',
         linePosition: 0.5,
-      }
+      },
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
     super(new Transform('PolyLine')
@@ -79,15 +92,16 @@ class DiagramObjectsPolyLine extends DiagramElementCollection {
 
     this.position = optionsToUse.position;
     this.transform.updateTranslation(this.position);
-    if (showLine) {
+    if (optionsToUse.showLine) {
       const line = this.shapes.polyLine({
         points: optionsToUse.points,
         color: optionsToUse.color,
         close: optionsToUse.close,
         borderToPoint: optionsToUse.borderToPoint,
-      })
+        width: optionsToUse.width,
+      });
+      this.add('line', line);
     }
   }
 
-  updatePoints()
 }
