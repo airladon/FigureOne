@@ -1,20 +1,12 @@
 // @flow
 
-// import Diagram from '../Diagram';
 import {
   Transform, Point,
-  // threePointAngle,
 } from '../../tools/g2';
-// import {
-//   roundNum,
-// } from '../../tools/math';
 import { joinObjects } from '../../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimative,
 } from '../Element';
-// import EquationLabel from './EquationLabel';
-// import type { TypeLabelEquationOptions } from './EquationLabel';
-// import { Equation } from '../DiagramElements/Equation/GLEquation';
 import type {
   TypePolyLineBorderToPoint,
 } from '../DiagramElements/PolyLine';
@@ -102,7 +94,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
   points: Array<Point>;
   close: boolean;
   _line: ?DiagramElementPrimative;
-  options: ?TypePolyLineOptions;
+  options: TypePolyLineOptions;
 
   constructor(
     shapes: DiagramPrimatives,

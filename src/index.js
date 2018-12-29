@@ -40,6 +40,9 @@ import type {
   TypeAngleLabelOrientation, TypeAngleOptions, TypeAngleLabelOptions,
 } from './js/diagram/DiagramObjects/Angle';
 import type { TypeDiagramOptions } from './js/diagram/Diagram';
+import type {
+  TypePolyLineOptions, TypePadOptions,
+} from './js/diagram/DiagramObjects/PolyLine';
 
 export type {
   TypeRotationDirection,
@@ -47,6 +50,7 @@ export type {
   TypeLineVertexOrigin, TypeLineVertexSpaceStart, TypeLineOptions,
   TypeAngleLabelOrientation, TypeAngleOptions, TypeDiagramOptions,
   TypeLineLabelOptions, TypeAngleLabelOptions,
+  TypePolyLineOptions, TypePadOptions,
 };
 
 const tools = {
