@@ -28,6 +28,12 @@ import DiagramPrimatives from '../DiagramPrimatives/DiagramPrimatives';
 import DiagramObjects from './DiagramObjects';
 import DiagramEquation from '../DiagramEquation/DiagramEquation';
 
+export type TypePadOptions = {
+  color?: Array<number>,
+  radius?: number,
+  sides?: number,
+  fill?: boolean,
+};
 export type TypePolyLineOptions = {
   position?: Point,
   points?: Array<Point>,
@@ -38,6 +44,7 @@ export type TypePolyLineOptions = {
   width?: number,
   angle?: TypeAngleOptions | Array<TypeAngleOptions>,
   side?: TypeLineOptions | Array<TypeLineOptions>,
+  pad?: TypePadOptions | Array<TypePadOptions>,
 };
 
 function makeArray<T>(
@@ -93,6 +100,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
   points: Array<Point>;
   close: boolean;
   _line: ?DiagramElementPrimative;
+  options: ?TypePolyLineOptions;
 
   constructor(
     shapes: DiagramPrimatives,
@@ -134,6 +142,12 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     const defaultAngleLabelOptions: TypeAngleLabelOptions = {
       text: null,
     };
+    const defaultPadOptions: TypePadOptions = {
+      sides: 20,
+      radius: 0.1,
+      color: options.color == null ? [0, 1, 0, 1] : options.color,
+      fill: true,
+    };
 
     if (options.side != null) {
       defaultOptions.side = defaultSideOptions;
@@ -149,6 +163,10 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       if (options.angle.label != null) {
         defaultOptions.angle.label = defaultAngleLabelOptions;
       }
+    }
+
+    if (options.pad != null) {
+      defaultOptions.pad = defaultPadOptions;
     }
 
     const optionsToUse = joinObjects({}, defaultOptions, options);
@@ -177,6 +195,24 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     this.position = optionsToUse.position;
     this.transform.updateTranslation(this.position);
     this.close = optionsToUse.close;
+    this.options = optionsToUse;
+
+    this.points = optionsToUse.points;
+
+    // Add Pads
+    if (optionsToUse.pad) {
+      const { pad } = optionsToUse;
+      const pCount = optionsToUse.points.length;
+      const padArray = makeArray(pad, pCount);
+      for (let i = 0; i < pCount; i += 1) {
+        const name = `pad${i}`;
+        const padOptions = joinObjects({}, {
+          transform: new Transform().translate(optionsToUse.points[i]),
+        }, padArray[i]);
+        const padShape = this.shapes.polygon(padOptions);
+        this.add(name, padShape);
+      }
+    }
 
     // Add Line
     if (optionsToUse.showLine) {
@@ -189,7 +225,6 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       });
       this.add('line', line);
     }
-    this.points = optionsToUse.points;
 
     // Add Sides
     if (optionsToUse.side) {
@@ -252,45 +287,59 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       this._line.drawingObject.change(newPoints);
     }
 
-    let pCount = this.points.length - 1;
-    if (this.close) {
-      pCount += 1;
-    }
-    for (let i = 0; i < pCount; i += 1) {
-      let j = i + 1;
-      if (i === pCount - 1 && this.close) {
-        j = 0;
+    // Add Pads
+    let pCount = this.points.length;
+    if (this.options.pad) {
+      for (let i = 0; i < pCount; i += 1) {
+        const name = `pad${i}`;
+        if (this.elements[name]) {
+          this.elements[name].setPosition(newPoints[i]);
+        }
       }
-      const name = `side${i}${j}`;
-      if (this.elements[name] != null) {
-        this.elements[name].setEndPoints(newPoints[i], newPoints[j]);
+    }
+    if (this.options.side != null) {
+      pCount = this.points.length - 1;
+      if (this.close) {
+        pCount += 1;
+      }
+      for (let i = 0; i < pCount; i += 1) {
+        let j = i + 1;
+        if (i === pCount - 1 && this.close) {
+          j = 0;
+        }
+        const name = `side${i}${j}`;
+        if (this.elements[name] != null) {
+          this.elements[name].setEndPoints(newPoints[i], newPoints[j]);
+        }
       }
     }
 
-    pCount = this.points.length;
-    if (this.close === false) {
-      pCount -= 2;
-    }
-    let firstIndex = 0;
-    if (this.close === false) {
-      firstIndex = 1;
-    }
-    for (let i = firstIndex; i < pCount + firstIndex; i += 1) {
-      let j = i + 1;
-      let k = i - 1;
-      if (i === pCount - 1 && this.close) {
-        j = 0;
+    if (this.options.angle != null) {
+      pCount = this.points.length;
+      if (this.close === false) {
+        pCount -= 2;
       }
-      if (i === 0 && this.close) {
-        k = pCount - 1;
+      let firstIndex = 0;
+      if (this.close === false) {
+        firstIndex = 1;
       }
-      const name = `angle${i}`;
-      if (this.elements[name] != null) {
-        this.elements[name].setAngle({
-          p1: newPoints[k],
-          p2: newPoints[i],
-          p3: newPoints[j],
-        });
+      for (let i = firstIndex; i < pCount + firstIndex; i += 1) {
+        let j = i + 1;
+        let k = i - 1;
+        if (i === pCount - 1 && this.close) {
+          j = 0;
+        }
+        if (i === 0 && this.close) {
+          k = pCount - 1;
+        }
+        const name = `angle${i}`;
+        if (this.elements[name] != null) {
+          this.elements[name].setAngle({
+            p1: newPoints[k],
+            p2: newPoints[i],
+            p3: newPoints[j],
+          });
+        }
       }
     }
   }
