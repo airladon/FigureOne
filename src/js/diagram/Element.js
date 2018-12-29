@@ -2155,6 +2155,31 @@ class DiagramElementPrimative extends DiagramElement {
   getRelativeVertexSpaceBoundingRect(): Rect {
     return this.drawingObject.getRelativeVertexSpaceBoundingRect();
   }
+
+  increaseBorderSize(
+    xMultiplierOrPoint: number | Point = 1,
+    yMultiplier: number | null = null,
+  ) {
+    let xMulToUse;
+    let yMulToUse;
+    if (xMultiplierOrPoint instanceof Point) {
+      xMulToUse = xMultiplierOrPoint.x;
+      yMulToUse = xMultiplierOrPoint.y;
+    } else {
+      xMulToUse = xMultiplierOrPoint;
+      if (yMultiplier == null) {
+        yMulToUse = xMulToUse;
+      } else {
+        yMulToUse = yMultiplier;
+      }
+    }
+    if (this.drawingObject instanceof VertexObject) {
+      for (let i = 0; i < this.drawingObject.border[0].length; i += 1) {
+        this.drawingObject.border[0][i].x *= xMulToUse;
+        this.drawingObject.border[0][i].y *= yMulToUse;
+      }
+    }
+  }
 }
 
 // ***************************************************************
