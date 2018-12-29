@@ -41,6 +41,17 @@ export type TypeLineLabelOrientation = 'horizontal' | 'baseToLine' | 'baseAway'
 export type TypeLineVertexOrigin = 'start' | 'end' | 'center' | number | Point;
 export type TypeLineVertexSpaceStart = 'start' | 'end' | 'center' | number | Point;
 
+export type TypeLineLabelOptions = {
+  text: null | string | Array<string> | Equation | TypeLabelEquationOptions,
+  offset?: number,
+  location?: TypeLineLabelLocation,
+  subLocation?: TypeLineLabelSubLocation,
+  orientation?: TypeLineLabelOrientation,
+  linePosition?: number,
+  scale?: number,
+  color?: Array<number>,
+};
+
 export type TypeLineOptions = {
   position?: Point,
   length?: number,
@@ -65,18 +76,12 @@ export type TypeLineOptions = {
     width?: number,
     height?: number,
   } | boolean,
-  label?: {
-    text: string | Array<string> | Equation | TypeLabelEquationOptions,
-    offset?: number,
-    location?: TypeLineLabelLocation,
-    subLocation?: TypeLineLabelSubLocation,
-    orientation?: TypeLineLabelOrientation,
-    linePosition?: number,
-  },
+  label?: TypeLineLabelOptions,
   dashStyle?: {
     style: Array<number>,
     maxLength?: number,
-  }
+  },
+  mods?: {},
 };
 
 // Line is a class that manages:
@@ -129,8 +134,9 @@ class LineLabel extends EquationLabel {
     subLocation: TypeLineLabelSubLocation = 'left',
     orientation: TypeLineLabelOrientation = 'horizontal',
     linePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
+    scale: number = 0.7,
   ) {
-    super(equation, { label: labelText, color });
+    super(equation, { label: labelText, color, scale });
     this.offset = offset;
     this.location = location;
     this.subLocation = subLocation;
@@ -267,7 +273,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   updateLabel: (?number) => {};
   addLabel: (string | Equation | Array<string> | TypeLabelEquationOptions,
              number, ?TypeLineLabelLocation,
-             ?TypeLineLabelSubLocation, ?TypeLineLabelOrientation, ?number
+             ?TypeLineLabelSubLocation, ?TypeLineLabelOrientation, ?number,
+             ?number, ?Array<number>,
             ) => void;
 
   multiMove: {
@@ -317,6 +324,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       largerTouchBorder: true,
       offset: 0,
       dashStyle: null,
+      mods: {},
     };
     const optionsToUse = Object.assign({}, defaultOptions, options);
     let { dashStyle } = optionsToUse;
@@ -408,9 +416,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
 
     // Label related properties
     this.label = null;
-    this.showRealLength = false;
     this._label = null;
-
+    this.showRealLength = false;
     this.setLength(this.length);
 
     if (optionsToUse.p1 != null && optionsToUse.p2 != null) {
@@ -442,15 +449,21 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     }
 
     const defaultLabelOptions = {
-      text: '',
+      text: null,
       offset: 0,
       location: 'top',
       subLocation: 'left',
       orientation: 'horizontal',
       linePosition: 0.5,
+      scale: 0.7,
+      color: optionsToUse.color,
     };
     if (optionsToUse.label) {
       const labelOptions = Object.assign({}, defaultLabelOptions, optionsToUse.label);
+      if (labelOptions.text === null) {
+        labelOptions.text = '';
+        this.showRealLength = true;
+      }
       this.addLabel(
         labelOptions.text,
         labelOptions.offset,
@@ -458,7 +471,12 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         labelOptions.subLocation,
         labelOptions.orientation,
         labelOptions.linePosition,
+        labelOptions.scale,
+        labelOptions.color,
       );
+    }
+    if (optionsToUse.mods != null && optionsToUse.mods !== {}) {
+      this.setProperties(optionsToUse.mods);
     }
   }
 
@@ -641,10 +659,12 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     subLocation: TypeLineLabelSubLocation = 'left',
     orientation: TypeLineLabelOrientation = 'horizontal',
     linePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
+    scale: number = 0.7,
+    color: Array<number>,
   ) {
     this.label = new LineLabel(
-      this.equation, labelText, this.color,
-      offset, location, subLocation, orientation, linePosition,
+      this.equation, labelText, color,
+      offset, location, subLocation, orientation, linePosition, scale,
     );
     if (this.label != null) {
       this.add('label', this.label.eqn.collection);

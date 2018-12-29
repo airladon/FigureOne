@@ -17,6 +17,19 @@ import type { TypeLabelEquationOptions } from './EquationLabel';
 import { Equation } from '../DiagramElements/Equation/GLEquation';
 
 export type TypeAngleLabelOrientation = 'horizontal' | 'tangent';
+export type TypeAngleLabelOptions = {
+  text: null | string | Array<string> | Equation | TypeLabelEquationOptions, // String goes to eqn,
+                                  // Array<string> into eqn forms
+  radius?: number,                // Label radius
+  curvePosition?: number,         // Label position along curve in %
+  showRealAngle?: boolean,        // Use angle as label
+  realAngleDecimals?: number,     // Num decimal places if using angle label
+  orientation?: TypeAngleLabelOrientation,  // horiztonal or tangent
+  autoHide?: number,              // Auto hide label at this threshold
+  textScale?: number,             // Text scale
+  color?: Array<number>,          // Text color can be different to curve
+};
+
 export type TypeAngleOptions = {
   position?: Point,         // Position of angle vertex
   angle?: number,           // Angle measure
@@ -56,17 +69,7 @@ export type TypeAngleOptions = {
   } | boolean,
   //
   // Label
-  label?: {                         // Angle label
-    text: string | Array<string> | Equation | TypeLabelEquationOptions, // String goes to eqn,
-                                    // Array<string> into eqn forms
-    radius?: number,                // Label radius
-    curvePosition?: number,         // Label position along curve in %
-    showRealAngle?: boolean,        // Use angle as label
-    realAngleDecimals?: number,     // Num decimal places if using angle label
-    orientation?: TypeAngleLabelOrientation,  // horiztonal or tangent
-    autoHide?: number,              // Auto hide label at this threshold
-    textScale?: number,             // Text scale
-  },
+  label?: TypeAngleLabelOptions,
   //
   // Sides
   side1?: {                 // Define side line at start of angle
@@ -84,6 +87,7 @@ export type TypeAngleOptions = {
     width?: number,
     color?: Array<number>,
   },
+  mods?: {};
 };
 
 // Angle is a class that manages:
@@ -239,6 +243,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       p1: null,       // if p1, p2 and p3 are defined, position, angle and
       p2: null,       // rotation will be overridden
       p3: null,
+      mods: {},
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
 
@@ -340,6 +345,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
       this.addSide(2, sideOptions.length, sideOptions.width, sideOptions.color);
     }
     this.update();
+    if (optionsToUse.mods != null && optionsToUse.mods !== {}) {
+      this.setProperties(optionsToUse.mods);
+    }
   }
 
   setAngle(options: {
@@ -399,7 +407,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     textScale?: number,
   } = {}) {
     const defaultLabelOptions = {
-      text: '',
+      text: null,
       radius: 0.4,
       curvePosition: 0.5,
       showRealAngle: false,
@@ -407,16 +415,21 @@ class DiagramObjectAngle extends DiagramElementCollection {
       orientation: 'horizontal',
       autoHide: -1,
       textScale: 0.7,
+      color: this.color,
     };
     if (this.curve) {
       defaultLabelOptions.radius = this.curve.radius;
     }
     // console.log(options)
     const optionsToUse = joinObjects({}, defaultLabelOptions, options);
+    if (optionsToUse.text === null) {
+      optionsToUse.text = '';
+      optionsToUse.showRealAngle = true;
+    }
     this.label = new AngleLabel(
       this.equation,
       optionsToUse.text,
-      this.color,
+      optionsToUse.color,
       optionsToUse.radius,
       optionsToUse.curvePosition,
       optionsToUse.showRealAngle,
