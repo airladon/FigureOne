@@ -10,7 +10,7 @@ import {
 // } from '../../tools/math';
 import { joinObjects } from '../../tools/tools';
 import {
-  DiagramElementCollection,
+  DiagramElementCollection, DiagramElementPrimative,
 } from '../Element';
 // import EquationLabel from './EquationLabel';
 // import type { TypeLabelEquationOptions } from './EquationLabel';
@@ -37,29 +37,7 @@ export type TypePolyLineOptions = {
   borderToPoint?: TypePolyLineBorderToPoint,
   width?: number,
   angle?: TypeAngleOptions | Array<TypeAngleOptions>,
-  // sideLabel?: {
-  //   //                             null is show real length
-  //   text?: string | Array<string | null> | Array<Equation | null>,
-  //   labelOffset?: number | Array<number>,
-  //   lineOffset?: number | Array<number>,
-  //   location?: TypeLineLabelLocation | Array<TypeLineLabelLocation>,
-  //   subLocation?: TypeLineLabelSubLocation | Array<TypeLineLabelSubLocation>,
-  //   orientation?: TypeLineLabelOrientation | Array<TypeLineLabelOrientation>,
-  //   linePosition?: number | Array<number>,
-  //   showLine?: boolean | Array<boolean>,
-  //   width?: number | Array<number>,
-  //   arrows?: arrowOptions | Array<arrowOptions>,
-  //   color?: Array<number> | Array<Array<number>>,
-  //   textScale?: number | Array<number>,
-  // };
   side?: TypeLineOptions | Array<TypeLineOptions>,
-
-  // angleLabel?: {
-  //   //                             null is show real length
-  //   text?: string | Array<string | null> | Array<Equation | null>,
-  //   color?: Array<number> | Array<Array<number>>,
-
-  // },
 };
 
 function makeArray<T>(
@@ -112,6 +90,8 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
   isTouchDevice: boolean;
   largerTouchBorder: boolean;
   position: Point;
+  points: Array<Point>;
+  _line: ?DiagramElementPrimative;
 
   constructor(
     shapes: DiagramPrimatives,
@@ -207,6 +187,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       });
       this.add('line', line);
     }
+    this.points = optionsToUse.points;
 
     // Add Sides
     if (optionsToUse.side) {
@@ -261,6 +242,24 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         const angleAnnotation = this.objects.angle(angleOptions);
         this.add(name, angleAnnotation);
       }
+    }
+  }
+
+  updatePoints(newPoints: Array<Point>) {
+    if (this._line != null) {
+      this._line.drawingObject.change(newPoints);
+    }
+    for (let i = 0; i < newPoints.length; i += 1) {
+      let j = i + 1;
+      let k = i - 1;
+      if (k < 0) {
+        k = newPoints.length - 1;
+      }
+      if (j > newPoints.length - 1) {
+        j = 0;
+      }
+      const angle = `angle${i}`;
+      const side = `side${i}${j}`;
     }
   }
 }
