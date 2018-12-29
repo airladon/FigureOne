@@ -33,6 +33,7 @@ export type TypePadOptions = {
   radius?: number,
   sides?: number,
   fill?: boolean,
+  isMovable?: boolean,
 };
 export type TypePolyLineOptions = {
   position?: Point,
@@ -147,6 +148,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       radius: 0.1,
       color: options.color == null ? [0, 1, 0, 1] : options.color,
       fill: true,
+      isMovable: false,
     };
 
     if (options.side != null) {
@@ -210,6 +212,20 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
           transform: new Transform().translate(optionsToUse.points[i]),
         }, padArray[i]);
         const padShape = this.shapes.polygon(padOptions);
+        if (padArray[i].isMovable) {
+          padShape.isMovable = true;
+          padShape.isTouchable = true;
+          padShape.limitToDiagram = true;
+          padShape.setFirstTransform();
+          padShape.setTransformCallback = (transform) => {
+            const index = parseInt(padShape.name.slice(3), 10);
+            const translation = transform.t();
+            if (translation != null) {
+              this.points[index] = translation._dup();
+              this.updatePoints(this.points);
+            }
+          };
+        }
         this.add(name, padShape);
       }
     }
@@ -293,7 +309,9 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       for (let i = 0; i < pCount; i += 1) {
         const name = `pad${i}`;
         if (this.elements[name]) {
-          this.elements[name].setPosition(newPoints[i]);
+          // if (this.elements[name].isMovable === false) {
+          this.elements[name].transform.updateTranslation(newPoints[i]);
+          // }
         }
       }
     }
@@ -342,5 +360,6 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         }
       }
     }
+    this.points = newPoints;
   }
 }
