@@ -47,6 +47,7 @@ export type TypePolygonOptions = {
   location?: Point,
   textureLocation?: string,
   textureCoords?: Rect,
+  mods?: {},
 };
 
 export default class DiagramPrimatives {
@@ -375,6 +376,7 @@ export default class DiagramPrimatives {
       point: null,
       textureLocation: '',
       textureCoords: new Rect(0, 0, 1, 1),
+      mods: {},
     };
     const optionsToUse = Object.assign({}, defaultOptions, ...options);
     const o = optionsToUse;
@@ -391,8 +393,9 @@ export default class DiagramPrimatives {
     if (o.clockwise) {
       direction = -1;
     }
+    let element;
     if (o.fill) {
-      return PolygonFilled(
+      element = PolygonFilled(
         this.webgl,
         o.sides,
         o.radius,
@@ -404,19 +407,24 @@ export default class DiagramPrimatives {
         o.textureLocation,
         o.textureCoords,
       );
+    } else {
+      element = Polygon(
+        this.webgl,
+        o.sides,
+        o.radius,
+        o.width,
+        o.rotation,
+        direction,
+        o.sidesToDraw,
+        o.color,
+        transform,
+        this.limits,
+      );
     }
-    return Polygon(
-      this.webgl,
-      o.sides,
-      o.radius,
-      o.width,
-      o.rotation,
-      direction,
-      o.sidesToDraw,
-      o.color,
-      transform,
-      this.limits,
-    );
+    if (optionsToUse.mods != null && optionsToUse.mods !== {}) {
+      element.setProperties(optionsToUse.mods);
+    }
+    return element;
   }
 
   polygonLine(

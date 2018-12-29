@@ -80,7 +80,8 @@ export type TypeLineOptions = {
   dashStyle?: {
     style: Array<number>,
     maxLength?: number,
-  }
+  },
+  mods?: {},
 };
 
 // Line is a class that manages:
@@ -323,6 +324,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       largerTouchBorder: true,
       offset: 0,
       dashStyle: null,
+      mods: {},
     };
     const optionsToUse = Object.assign({}, defaultOptions, options);
     let { dashStyle } = optionsToUse;
@@ -472,6 +474,9 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         labelOptions.scale,
         labelOptions.color,
       );
+    }
+    if (optionsToUse.mods != null && optionsToUse.mods !== {}) {
+      this.setProperties(optionsToUse.mods);
     }
   }
 

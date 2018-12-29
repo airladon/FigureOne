@@ -87,6 +87,7 @@ export type TypeAngleOptions = {
     width?: number,
     color?: Array<number>,
   },
+  mods?: {};
 };
 
 // Angle is a class that manages:
@@ -242,6 +243,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       p1: null,       // if p1, p2 and p3 are defined, position, angle and
       p2: null,       // rotation will be overridden
       p3: null,
+      mods: {},
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
 
@@ -343,6 +345,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
       this.addSide(2, sideOptions.length, sideOptions.width, sideOptions.color);
     }
     this.update();
+    if (optionsToUse.mods != null && optionsToUse.mods !== {}) {
+      this.setProperties(optionsToUse.mods);
+    }
   }
 
   setAngle(options: {
