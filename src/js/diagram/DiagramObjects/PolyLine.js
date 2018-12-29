@@ -91,6 +91,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
   largerTouchBorder: boolean;
   position: Point;
   points: Array<Point>;
+  close: boolean;
   _line: ?DiagramElementPrimative;
 
   constructor(
@@ -175,6 +176,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
 
     this.position = optionsToUse.position;
     this.transform.updateTranslation(this.position);
+    this.close = optionsToUse.close;
 
     // Add Line
     if (optionsToUse.showLine) {
@@ -249,17 +251,47 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     if (this._line != null) {
       this._line.drawingObject.change(newPoints);
     }
-    for (let i = 0; i < newPoints.length; i += 1) {
+
+    let pCount = this.points.length - 1;
+    if (this.close) {
+      pCount += 1;
+    }
+    for (let i = 0; i < pCount; i += 1) {
       let j = i + 1;
-      let k = i - 1;
-      if (k < 0) {
-        k = newPoints.length - 1;
-      }
-      if (j > newPoints.length - 1) {
+      if (i === pCount - 1 && this.close) {
         j = 0;
       }
-      const angle = `angle${i}`;
-      const side = `side${i}${j}`;
+      const name = `side${i}${j}`;
+      if (this.elements[name] != null) {
+        this.elements[name].setEndPoints(newPoints[i], newPoints[j]);
+      }
+    }
+
+    pCount = this.points.length;
+    if (this.close === false) {
+      pCount -= 2;
+    }
+    let firstIndex = 0;
+    if (this.close === false) {
+      firstIndex = 1;
+    }
+    for (let i = firstIndex; i < pCount + firstIndex; i += 1) {
+      let j = i + 1;
+      let k = i - 1;
+      if (i === pCount - 1 && this.close) {
+        j = 0;
+      }
+      if (i === 0 && this.close) {
+        k = pCount - 1;
+      }
+      const name = `angle${i}`;
+      if (this.elements[name] != null) {
+        this.elements[name].setAngle({
+          p1: newPoints[k],
+          p2: newPoints[i],
+          p3: newPoints[j],
+        });
+      }
     }
   }
 }
