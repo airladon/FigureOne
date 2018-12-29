@@ -34,6 +34,7 @@ export type TypePadOptions = {
   sides?: number,
   fill?: boolean,
   isMovable?: boolean,
+  touchRadius?: number,
 };
 export type TypePolyLineOptions = {
   position?: Point,
@@ -173,11 +174,11 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
 
     const optionsToUse = joinObjects({}, defaultOptions, options);
 
-    if (Array.isArray(options.side)) {
+    if (Array.isArray(options.side)) {      // $FlowFixMe
       optionsToUse.side = options.side.map(side => joinObjects({}, defaultOptions.side, side));
     }
 
-    if (Array.isArray(options.angle)) {
+    if (Array.isArray(options.angle)) {      // $FlowFixMe
       optionsToUse.angle = options.angle.map(angle => joinObjects({}, defaultOptions.angle, angle));
     }
 
@@ -225,6 +226,10 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
               this.updatePoints(this.points);
             }
           };
+          if (padArray[i].touchRadius != null) {
+            const multiplier = padArray[i].touchRadius / padArray[i].radius;
+            padShape.increaseBorderSize(multiplier);
+          }
         }
         this.add(name, padShape);
       }

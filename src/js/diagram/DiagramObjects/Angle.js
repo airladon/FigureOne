@@ -27,7 +27,7 @@ export type TypeAngleLabelOptions = {
   orientation?: TypeAngleLabelOrientation,  // horiztonal or tangent
   autoHide?: number,              // Auto hide label at this threshold
   textScale?: number,             // Text scale
-  color: Array<number>,           // Text color can be different to curve
+  color?: Array<number>,          // Text color can be different to curve
 };
 
 export type TypeAngleOptions = {
