@@ -34,17 +34,23 @@ import type { TypeRotationDirection } from './js/tools/g2';
 import type {
   TypeLineLabelLocation, TypeLineLabelSubLocation, TypeLineLabelOrientation,
   TypeLineVertexOrigin, TypeLineVertexSpaceStart, TypeLineOptions,
+  TypeLineLabelOptions,
 } from './js/diagram/DiagramObjects/Line';
 import type {
-  TypeAngleLabelOrientation, TypeAngleOptions,
+  TypeAngleLabelOrientation, TypeAngleOptions, TypeAngleLabelOptions,
 } from './js/diagram/DiagramObjects/Angle';
 import type { TypeDiagramOptions } from './js/diagram/Diagram';
+import type {
+  TypePolyLineOptions, TypePadOptions,
+} from './js/diagram/DiagramObjects/PolyLine';
 
 export type {
   TypeRotationDirection,
   TypeLineLabelLocation, TypeLineLabelSubLocation, TypeLineLabelOrientation,
   TypeLineVertexOrigin, TypeLineVertexSpaceStart, TypeLineOptions,
   TypeAngleLabelOrientation, TypeAngleOptions, TypeDiagramOptions,
+  TypeLineLabelOptions, TypeAngleLabelOptions,
+  TypePolyLineOptions, TypePadOptions,
 };
 
 const tools = {
