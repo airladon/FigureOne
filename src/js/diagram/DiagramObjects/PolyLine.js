@@ -215,8 +215,8 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         if (padArray[i].isMovable) {
           padShape.isMovable = true;
           padShape.isTouchable = true;
-          padShape.limitToDiagram = true;
-          padShape.setFirstTransform();
+          padShape.move.limitToDiagram = true;
+          padShape.setMoveBoundaryToDiagram();
           padShape.setTransformCallback = (transform) => {
             const index = parseInt(padShape.name.slice(3), 10);
             const translation = transform.t();
