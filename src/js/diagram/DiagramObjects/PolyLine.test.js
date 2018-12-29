@@ -126,6 +126,50 @@ describe('Diagram Objects PolyLine', () => {
           { label: { text: null } },
         ],
       }),
+      Misc: () => diagram.objects.polyLine({
+        points,
+        close: true,
+        color: [1, 0, 0, 1],
+        side: {
+          color: [1, 0, 0, 1],
+          offset: 0.25,
+          showLine: true,
+          arrows: true,
+          width: 0.015,
+          label: {
+            text: null,
+            location: 'outside',
+            scale: 0.5,
+            color: [0, 1, 0, 1],
+          },
+          mods: {
+            isMovable: true,
+            isTouchable: true,
+          },
+        },
+        angle: {
+          label: {
+            text: null,
+            radius: 0.25,
+            textScale: 0.5,
+            color: [1, 0, 1, 1],
+          },
+          curve: {
+            radius: 0.3,
+            sides: 50,
+          },
+          mods: {
+            isMovable: true,
+            isTouchable: true,
+          },
+        },
+        pad: {
+          color: [1, 0.5, 0.5, 1],
+          radius: 0.2,
+          isMovable: true,
+          touchRadius: 0.4,
+        },
+      }),
     };
   });
   test('Number of points in line close', () => {
@@ -139,6 +183,10 @@ describe('Diagram Objects PolyLine', () => {
     const poly = ways.numPointsOpen();
     expect(poly._line.drawingObject.points).toHaveLength((points.length - 1) * 12);
     expect(Object.keys(poly.elements)).toHaveLength(1);
+  });
+  test('Misc options', () => {
+    const poly = ways.Misc();
+    expect(tools.cleanUIDs(poly)).toMatchSnapshot();
   });
   describe('Side Labels', () => {
     test('Close', () => {

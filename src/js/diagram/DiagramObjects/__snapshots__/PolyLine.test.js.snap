@@ -1,3 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Diagram Objects PolyLine Misc options 1`] = `undefined`;
+
 exports[`Diagram Objects PolyLine Number of points in line close 1`] = `undefined`;
