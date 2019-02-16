@@ -110,6 +110,7 @@ DiagramElementPrimative {
       "x": 0,
       "y": 0,
     },
+    "onLoad": null,
     "scalingFactor": 499.99999999999994,
     "text": Array [
       DiagramText {
