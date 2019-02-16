@@ -660,7 +660,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     orientation: TypeLineLabelOrientation = 'horizontal',
     linePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
     scale: number = 0.7,
-    color: Array<number>,
+    color: Array<number> = this.color,
   ) {
     this.label = new LineLabel(
       this.equation, labelText, color,

@@ -1,27 +1,34 @@
 // @flow
 import { colorArrayToRGBA } from './color';
 
-function centerV(text: string | Array<string> = '') {
+function convertTextArrayToParagraphs(text: string | Array<string>) {
   let textToUse = '';
   if (Array.isArray(text)) {
     textToUse = `<p>${text.join('</p><p>')}</p>`;
   } else {
     textToUse = text;
   }
+  return textToUse;
+}
+
+function centerV(text: string | Array<string> = '') {
+  const textToUse = convertTextArrayToParagraphs(text);
   return `<div style="display: table; height: 100%;">
         <div style="display: table-cell; vertical-align: middle">
         ${textToUse}</div></div>`;
 }
 
 function centerVH(text: string = '') {
+  const textToUse = convertTextArrayToParagraphs(text);
   return `<div style="display: table; height: 100%; text-align:center; width:100%">
         <div style="display: table-cell; vertical-align: middle">
-        ${text}</div></div>`;
+        ${textToUse}</div></div>`;
 }
 
 function centerH(text: string = '') {
+  const textToUse = convertTextArrayToParagraphs(text);
   return `<div style="text-align:center;">
-        ${text}</div>`;
+        ${textToUse}</div>`;
 }
 
 function itemSelector(
