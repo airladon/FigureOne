@@ -279,6 +279,7 @@ class Diagram {
     return new DiagramPrimatives(
       webgl, draw2D,
       this.htmlCanvas, this.limits,
+      this.animateNextFrame.bind(this),
     );
   }
 

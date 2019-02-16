@@ -91,6 +91,9 @@ class VertexObject extends DrawingObject {
           this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
           this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
         }
+        if (this.onLoad != null) {
+          this.onLoad();
+        }
       });
     }
 
