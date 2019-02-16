@@ -26,7 +26,8 @@ class DrawingObject {
   location: Point;
   holeBorder: Array<Array<Point>>;  // Border of any holes inside of main border
   +change: (any, any) => void;
-  onLoad: Function | null;
+  onLoad: Function | null;   // Only used for drawing objects with asynchronous
+  //                            loading (like textures)
 
   constructor() {
     // this.numPoints = 0;

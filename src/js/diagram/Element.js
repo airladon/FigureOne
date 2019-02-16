@@ -28,6 +28,13 @@ function checkCallback(callback: ?(boolean) => void): (boolean) => void {
   return callbackToUse;
 }
 
+export type TypeScenario = {
+  position?: Point,
+  rotation?: number,
+  scale?: Point | number,
+};
+
+
 // A diagram is composed of multiple diagram elements.
 //
 // A diagram element can either be a:
@@ -132,6 +139,10 @@ class DiagramElement {
     type: 'rotation' | 'translation' | 'scaleX' | 'scaleY' | 'scale';
     // eslint-disable-next-line no-use-before-define
     element: DiagramElementCollection | DiagramElementPrimative | null;
+  };
+
+  scenarios: {
+    [scenarioName: string]: TypeScenario;
   };
 
   pulse: {
@@ -251,6 +262,8 @@ class DiagramElement {
       element: null,
       limitLine: null,
     };
+
+    this.scenarios = {};
 
     this.pulse = {
       time: 1,
@@ -692,6 +705,71 @@ class DiagramElement {
 
   setColor(color: Array<number>) {
     this.color = color.slice();
+  }
+
+  getScenarioTarget(
+    scenarioName: string,
+  ) {
+    const target = this.transform._dup();
+    if (scenarioName in this.scenarios) {
+      const scenario = this.scenarios[scenarioName];
+      if (scenario.position != null) {
+        target.updateTranslation(scenario.position);
+      }
+
+      if (scenario.rotation != null) {
+        target.updateRotation(scenario.rotation);
+      }
+      if (scenario.scale != null) {
+        if (scenario.scale instanceof Point) {
+          target.updateScale(scenario.scale);
+        } else {
+          target.updateScale(scenario.scale, scenario.scale);
+        }
+      }
+    }
+    return target;
+  }
+
+  setScenario(scenarioName: string) {
+    const target = this.getScenarioTarget(scenarioName);
+    this.setTransform(target._dup());
+  }
+
+  getTimeToMoveToScenario(
+    scenarioName: string,
+    rotDirection: -1 | 1 | 0 | 2 = 0,
+  ) {
+    const target = this.getScenarioTarget(scenarioName);
+    const velocity = this.transform.constant(0);
+    velocity.updateTranslation(new Point(1 / 2, 1 / 2));
+    velocity.updateRotation(2 * Math.PI / 6);
+    velocity.updateScale(1, 1);
+    const time = getMaxTimeFromVelocity(this.transform._dup(), target, velocity, rotDirection);
+    return time;
+  }
+
+  moveToScenario(
+    scenarioName: string,
+    animationTimeOrVelocity: ?number = null,    // null uses velocity
+    callback: ?() => void = null,
+    rotDirection: -1 | 1 | 0 | 2 = 0,
+  ) {
+    this.stop();
+    const target = this.getScenarioTarget(scenarioName);
+    let time = 1;
+    const estimatedTime = this.getTimeToMoveToScenario(scenarioName, rotDirection);
+    if (animationTimeOrVelocity == null) {
+      time = estimatedTime;
+    } else {
+      time = animationTimeOrVelocity;
+    }
+    if (time > 0 && estimatedTime !== 0) {
+      this.animateTo(target, time, 0, rotDirection, callback);
+    } else if (callback != null) {
+      callback();
+    }
+    return time;
   }
 
   // Decelerate over some time when moving freely to get a new element
