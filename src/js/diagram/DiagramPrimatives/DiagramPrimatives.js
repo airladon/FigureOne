@@ -47,6 +47,7 @@ export type TypePolygonOptions = {
   location?: Point,
   textureLocation?: string,
   textureCoords?: Rect,
+  onLoad?: Function,
   mods?: {},
 };
 
@@ -55,18 +56,20 @@ export default class DiagramPrimatives {
   draw2D: DrawContext2D;
   htmlCanvas: HTMLElement;
   limits: Rect;
+  animateNextFrame: Function;
 
   constructor(
     webgl: WebGLInstance,
     draw2D: DrawContext2D,
     htmlCanvas: HTMLElement,
     limits: Rect,
-
+    animateNextFrame: Function,
   ) {
     this.webgl = webgl;
     this.draw2D = draw2D;
     this.htmlCanvas = htmlCanvas;
     this.limits = limits;
+    this.animateNextFrame = animateNextFrame;
   }
 
   polyLineLegacy(
@@ -376,6 +379,7 @@ export default class DiagramPrimatives {
       point: null,
       textureLocation: '',
       textureCoords: new Rect(0, 0, 1, 1),
+      onLoad: this.animateNextFrame,
       mods: {},
     };
     const optionsToUse = Object.assign({}, defaultOptions, ...options);
@@ -406,6 +410,7 @@ export default class DiagramPrimatives {
         this.limits,
         o.textureLocation,
         o.textureCoords,
+        o.onLoad,
       );
     } else {
       element = Polygon(

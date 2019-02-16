@@ -26,12 +26,14 @@ class DrawingObject {
   location: Point;
   holeBorder: Array<Array<Point>>;  // Border of any holes inside of main border
   +change: (any, any) => void;
+  onLoad: Function | null;
 
   constructor() {
     // this.numPoints = 0;
     this.location = new Point(0, 0);
     this.border = [[]];
     this.holeBorder = [[]];
+    this.onLoad = null;
   }
 
   _dup() {
