@@ -71,7 +71,7 @@ FAIL=0
 # # Package
 # echo "${bold}${cyan}==================== Packaging =====================${reset}"
 
-DEV_PATH=../itiget
+DEV_PATH=../thisiget
 DEV_FIGUREONE=$DEV_PATH/src/figureone
 DEV_STATIC=$DEV_PATH/app/app/static
 docker_run "Dev Packaging" npm run webpack
