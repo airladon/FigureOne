@@ -377,8 +377,8 @@ export default class DiagramPrimatives {
       fill: false,
       transform: null,
       point: null,
-      textureLocation: '',
-      textureCoords: new Rect(0, 0, 1, 1),
+      textureLocation: '',        // If including a texture, make sure to use
+      textureCoords: new Rect(0, 0, 1, 1),  // correct shader in diagram
       onLoad: this.animateNextFrame,
       mods: {},
     };
