@@ -78,6 +78,8 @@ class DiagramElement {
   // lastDrawPulseTransform: Transform;
   lastDrawElementTransformPosition: {parentCount: number, elementCount: number};
 
+  parent: DiagramElement | null;
+
   isShown: boolean;                  // True if should be shown in diagram
   name: string;                   // Used to reference element in a collection
 
@@ -202,6 +204,7 @@ class DiagramElement {
     // scale: Point = Point.Unity(),
     transform: Transform = new Transform(),
     diagramLimits: Rect = new Rect(-1, -1, 2, 2),
+    parent: DiagramElement | null = null,
   ) {
     this.name = ''; // This is updated when an element is added to a collection
     this.uid = (Math.random() * 1e18).toString(36);
@@ -219,6 +222,7 @@ class DiagramElement {
       parentCount: 0,
       elementCount: 0,
     };
+    this.parent = parent;
     this.drawPriority = 1;
     this.noRotationFromParent = false;
     this.animate = {
@@ -1888,6 +1892,11 @@ class DiagramElement {
 
   show(): void {
     this.isShown = true;
+    if (this.parent != null) {
+      if (!this.parent.isShown) {
+        this.parent.show();
+      }
+    }
   }
 
   showAll(): void {
@@ -1968,8 +1977,9 @@ class DiagramElementPrimative extends DiagramElement {
     transform: Transform = new Transform(),
     color: Array<number> = [0.5, 0.5, 0.5, 1],
     diagramLimits: Rect = new Rect(-1, -1, 2, 2),
+    parent: DiagramElement | null = null,
   ) {
-    super(transform, diagramLimits);
+    super(transform, diagramLimits, parent);
     this.drawingObject = drawingObject;
     this.color = color.slice();
     this.pointsToDraw = -1;
@@ -2020,7 +2030,7 @@ class DiagramElementPrimative extends DiagramElement {
     // primative.pointsToDraw = this.pointsToDraw;
     // primative.angleToDraw = this.angleToDraw;
     // primative.copyFrom(this);
-    duplicateFromTo(this, primative);
+    duplicateFromTo(this, primative, 'parent');
     if (transform != null) {
       primative.transform = transform._dup();
     }
@@ -2273,8 +2283,9 @@ class DiagramElementCollection extends DiagramElement {
   constructor(
     transform: Transform = new Transform(),
     diagramLimits: Rect = new Rect(-1, 1, 2, 2),
+    parent: DiagramElement | null = null,
   ): void {
-    super(transform, diagramLimits);
+    super(transform, diagramLimits, parent);
     this.elements = {};
     this.drawOrder = [];
     this.touchInBoundingRect = false;
@@ -2289,7 +2300,7 @@ class DiagramElementCollection extends DiagramElement {
     // collection.touchInBoundingRect = this.touchInBoundingRect;
     // collection.copyFrom(this);
     const doNotDuplicate = this.drawOrder.map(e => `_${e}`);
-    duplicateFromTo(this, collection, ['elements', 'drawOrder', ...doNotDuplicate]);
+    duplicateFromTo(this, collection, ['elements', 'drawOrder', 'parent', ...doNotDuplicate]);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const name = this.drawOrder[i];
       collection.add(name, this.elements[name]._dup());
@@ -2328,6 +2339,8 @@ class DiagramElementCollection extends DiagramElement {
     diagramElement: DiagramElementPrimative | DiagramElementCollection,
     index: number = -1,
   ) {
+    // eslint-disable-next-line no-param-reassign
+    diagramElement.parent = this;
     this.elements[name] = diagramElement;
     this.elements[name].name = name;
     // $FlowFixMe
