@@ -9,17 +9,6 @@ import type { pathOptionsType } from '../tools/g2';
 // eslint-disable-next-line import/no-cycle
 import { DiagramElement } from './Element';
 
-export AnimationPhaseBase {
-
-  start() {
-
-  }
-
-  finish() {
-
-  }
-  
-}
 
 // Planned Animation
 export class AnimationPhase {
@@ -43,6 +32,8 @@ export class AnimationPhase {
 
   callback: ?(boolean) => void;
   finishOnCancel: boolean;
+
+  type: string;
 
   constructor(
     startTransform: Transform | null = null,
@@ -74,7 +65,7 @@ export class AnimationPhase {
     this.translationOptions = translationOptions;
     this.callback = callback;
     this.finishOnCancel = finishOnCancel;
-
+    this.type = 'transform';
     this.startTime = -1;
     // this.startTransform = new Transform();
     this.deltaTransform = new Transform();
@@ -159,6 +150,26 @@ export class AnimationPhase {
       this.callback(cancelled);
     }
   }
+
+  setNext(elapsedTime: number) {
+    // This flow error cannot happen as start is un-nulled in the phase start
+    // $FlowFixMe
+    const start = this.startTransform._dup();
+    const delta = this.deltaTransform._dup();
+    const percentTime = elapsedTime / this.time;
+    const percentComplete = this.animationStyle(percentTime);
+
+    const p = percentComplete;
+
+    const next = start.toDelta(
+      delta, p,
+      this.translationStyle,
+      this.translationOptions,
+    );
+
+    this.element.setTranform(next);
+    return next;
+  }
 }
 
 // Planned Animation
@@ -176,6 +187,8 @@ export class ColorAnimationPhase {
 
   callback: ?(boolean) => void;
   endColor: Array<number>;
+
+  type: string;
 
   constructor(
     startColor: Array<number> | null = null,
@@ -202,6 +215,7 @@ export class ColorAnimationPhase {
     this.startColor = startColor;
     this.deltaColor = [0, 0, 0, 1];
     this.callback = callback;
+    this.type = 'color';
   }
 
   _dup() {
@@ -274,6 +288,7 @@ export class CustomAnimationPhase {
   callback: ?(boolean) => void;
   finishOnCancel: boolean;
   startPercent: number;
+  type: string;
 
   constructor(
     animationCallback: (number) => void,
@@ -291,6 +306,7 @@ export class CustomAnimationPhase {
     this.plannedStartTime = animationStyle(startPercent, true) * time;
     this.callback = callback;
     this.finishOnCancel = finishOnCancel;
+    this.type = 'custom';
   }
 
   _dup() {
