@@ -9,6 +9,115 @@ import type { pathOptionsType } from '../tools/g2';
 // eslint-disable-next-line import/no-cycle
 import { DiagramElement } from './Element';
 
+type TypeColor = [number, number, number, number];
+
+type TypeAnimationPhaseOptions = {
+  element?: DiagramElement;
+  type?: 'transform' | 'color' | 'custom'; // default is transform
+  velocityStyle?: 'linear' | 'easeinout' | 'easein' | 'easeout'; // default is dependent on type
+  onFinish?: ?(boolean) => void;
+  onCancel?: ?(boolean) => void;  // Default is onFinish
+  duration?: number;    // Either duration or velocity must be defined
+  velocity?: number | Transform | TypeColor;  // velocity overrides duration
+  transform?: {
+    start?: Transform;      // default is element transform
+    target?: Transform;     // Either target or delta must be defined
+    delta?: Transform;      // delta overrides target if both are defined
+    translationStyle?: 'linear' | 'curved'; // default is linear
+    translationOptions?: pathOptionsType;
+  };
+  color?: {
+    start?: TypeColor;      // default is element color
+    target?: TypeColor;     // Either target, delta or disolve must be defined
+    delta?: TypeColor;      // delta overrides target if both are defined
+    disolve?: 'in' | 'out' | null;
+  };
+  custom?: {
+    start?: number;       // default is 0
+    target?: number;      // default is 1
+    delta?: number;       // overrides target
+  }
+};
+
+export class AnimationUnit {
+  type: 'transform' | 'color' | 'custom';
+
+  time: {
+    start: number;
+    plannedStartTime: number;
+    duration: number;
+  };
+
+  targetTime: number;
+  startTime: number;
+
+  transform: {
+    start: Transform;
+    delta: Transform;
+    target: Transform;
+    rotDirection: 'clockwise' | 'counterClockWise' | 'shortest' | 'notThroughZero';
+    translationStyle: 'linear' | 'curved';
+    translationOptions: pathOptionsType;
+  } | null;
+
+  color: {
+    start: TypeColor;
+    delta: TypeColor;
+    target: TypeColor;
+    disolve: 'in' | 'out' | null;
+  } | null;
+
+  custom: {
+    start: number;
+    delta: number;
+    target: number;
+    plannedStartTime: number;
+  } | null;
+
+  onFinish: ?(boolean) => void;
+  onCancel: ?(boolean) => void;
+  // finishOnCancel: boolean;
+  style: 'linear' | 'easeinout' | 'easein' | 'easeout';
+
+  constructor(options: TypeAnimationPhaseOptions) {
+    let defaultStartColor = null;
+    let defaultStartTransform = null;
+    let defaultVelocityStyle = 'linear';
+    if (options.element != null) {
+      defaultStartColor = options.element.color.slice();
+      defaultStartTransform = options.element.transform._dup()
+    }
+    if (options.type === 'transform') {
+      defaultVelocityStyle = 'easeinout';
+    }
+    const defaultOptions = {
+      element: null,
+      type: 'custom',
+      onFinish: null,
+      onCancel: this.onFinish,
+      duration: 1,
+      transform: {
+        start: defaultStartTransform,
+        translationStyle: 'linear',
+        translationOptions: {
+          rot: 1,
+          magnitude: 0.5,
+          offset: 0.5,
+          controlPoint: null,
+          direction: ''
+        },
+      },
+      color: {
+        start: defaultStartColor,
+        disolve: null,
+      },
+      custom: {
+        start: 0,
+        target: 1,
+      }
+    };
+  }
+}
 
 // Planned Animation
 export class AnimationPhase {
@@ -149,26 +258,6 @@ export class AnimationPhase {
     if (this.callback != null) {
       this.callback(cancelled);
     }
-  }
-
-  setNext(elapsedTime: number) {
-    // This flow error cannot happen as start is un-nulled in the phase start
-    // $FlowFixMe
-    const start = this.startTransform._dup();
-    const delta = this.deltaTransform._dup();
-    const percentTime = elapsedTime / this.time;
-    const percentComplete = this.animationStyle(percentTime);
-
-    const p = percentComplete;
-
-    const next = start.toDelta(
-      delta, p,
-      this.translationStyle,
-      this.translationOptions,
-    );
-
-    this.element.setTranform(next);
-    return next;
   }
 }
 
