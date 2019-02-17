@@ -726,13 +726,13 @@ class DiagramElement {
   setNextAnimation(now: number): void {
     // If animation is happening
     if (this.state.isAnimatingParallel) {
-      for (let i = 0; i < this.state.parallelAnimation.currentPhaseIndex.length; i += 1) {
+      for (let i = 0; i < this.animate.parallel.plan.length; i += 1) {
         const { parallelAnimation } = this.state;
         const phaseIndex = parallelAnimation.currentPhaseIndex[i];
-        const phase = parallelAnimation.currentPhase[i];
+        // const phase = parallelAnimation.currentPhase[i];
 
         if (phaseIndex > -1) {
-          const phase = this.state.colorAnimation.currentPhase;
+          const phase = parallelAnimation.currentPhase[i];
 
           // If an animation hasn't yet started, the start time will be -1.
           // If this is so, then set the start time to the current time and
@@ -752,7 +752,7 @@ class DiagramElement {
             // If there are more animation phases in the plan:
             //   - set the current transform to be the end of the current phase
             //   - start the next phase
-            if (phaseIndex < this.animate.color.plan[i].length - 1) {
+            if (phaseIndex < this.animate.parallel.plan[i].length - 1) {
               // Set current transform to the end of the current phase
               // this.setColor(this.calcNextAnimationColor(phase.time));
               // Phase callback
@@ -761,11 +761,14 @@ class DiagramElement {
               const nextPhaseDeltaTime = deltaTime - phase.time;
 
               // Start the next animation phase
-              this.state.colorAnimation.currentPhaseIndex += 1;
-              this.animateColorPhase(this.state.colorAnimation.currentPhaseIndex);
-              this.state.colorAnimation.currentPhase.startTime =
+              parallelAnimation.currentPhaseIndex[i] += 1;
+              this.animateParallelPhase(
+                i,
+                parallelAnimation.currentPhaseIndex[i],
+              );
+              parallelAnimation.currentPhase[i].startTime =
                 now - nextPhaseDeltaTime;
-              this.setNextColor(now);
+              this.setNextAnimation(now);
               return;
             }
             // This needs to go before StopAnimating, as stopAnimating clears
@@ -774,55 +777,22 @@ class DiagramElement {
             // const endColor = this.calcNextAnimationColor(phase.time);
             // this.setColor(endColor);
             // phase.finish(this);
-            this.stopAnimatingColor(false);
+            this.stopAnimatingParallel(i, false);
             return;
           }
           // If we are here, that means the time elapsed is not more than the
           // current animation phase plan time, so calculate the next transform.
-          this.setColor(this.calcNextAnimationColor(deltaTime));
+          this.setParallel(i, deltaTime);
           // if(this.name === 'times') {
           //   console.log(now, this.color[3])
           // }
         }
       }
-      // If this time delta is larger than the phase's planned time, then
-      // either progress to the next animation phase, or end animation.
-      if (deltaTime > phase.time) {
-        // If there are more animation phases in the plan:
-        //   - set the current transform to be the end of the current phase
-        //   - start the next phase
-        if (this.state.colorAnimation.currentPhaseIndex < this.animate.color.plan.length - 1) {
-          // Set current transform to the end of the current phase
-          // this.setColor(this.calcNextAnimationColor(phase.time));
-          // Phase callback
-          phase.finish(this);
-          // Get the amount of time that has elapsed in the next phase
-          const nextPhaseDeltaTime = deltaTime - phase.time;
-
-          // Start the next animation phase
-          this.state.colorAnimation.currentPhaseIndex += 1;
-          this.animateColorPhase(this.state.colorAnimation.currentPhaseIndex);
-          this.state.colorAnimation.currentPhase.startTime =
-            now - nextPhaseDeltaTime;
-          this.setNextColor(now);
-          return;
-        }
-        // This needs to go before StopAnimating, as stopAnimating clears
-        // the animation plan (incase a callback is used to start another
-        // animation)
-        // const endColor = this.calcNextAnimationColor(phase.time);
-        // this.setColor(endColor);
-        // phase.finish(this);
-        this.stopAnimatingColor(false);
-        return;
-      }
-      // If we are here, that means the time elapsed is not more than the
-      // current animation phase plan time, so calculate the next transform.
-      this.setColor(this.calcNextAnimationColor(deltaTime));
-      // if(this.name === 'times') {
-      //   console.log(now, this.color[3])
-      // }
     }
+  }
+
+  setParallel(parallelIndex: number, deltaTime: number) {
+
   }
 
   setColor(color: Array<number>) {
