@@ -9,6 +9,18 @@ import type { pathOptionsType } from '../tools/g2';
 // eslint-disable-next-line import/no-cycle
 import { DiagramElement } from './Element';
 
+export AnimationPhaseBase {
+
+  start() {
+
+  }
+
+  finish() {
+
+  }
+  
+}
+
 // Planned Animation
 export class AnimationPhase {
   targetTransform: Transform;            // The target transform to animate to
