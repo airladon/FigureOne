@@ -748,7 +748,7 @@ class DiagramElement {
 
           // If we have got here, that means the animation has already started,
           // so calculate the time delta between now and the startTime
-          const deltaTime = now - phase.startTime;
+          const deltaTime = now - phase.plannedStartTime;
 
           // If this time delta is larger than the phase's planned time, then
           // either progress to the next animation phase, or end animation.
