@@ -41,18 +41,22 @@ type TypeAnimationUnitOptions = {
   }
 };
 
+
+
+type TypeTransformAnimationStepInputOptions = {
+
+} & TypeAnimationStepInputOptions;
+
 export class AnimationUnit {
   element: DiagramElement;
   type: 'transform' | 'color' | 'custom';
 
-  time: {
-    start: number;
-    plannedStartTime: number;
-    duration: number;
-  };
-
-  targetTime: number;
   startTime: number;
+  plannedStartTime: number;
+  duration: number;
+
+  // targetTime: number;
+  // startTime: number;
 
   transform: {
     start: Transform;
@@ -100,11 +104,9 @@ export class AnimationUnit {
       progression: defaultProgression,
       onFinish: null,
       onCancel: this.onFinish,
-      time: {
-        start: -1,
-        plannedStartTime: -1,
-        duration: 1,
-      },
+      startTime: -1,
+      plannedStartTime: -1,
+      duration: 1,
       transform: {
         start: defaultStartTransform,
         target: defaultStartTransform,
@@ -134,7 +136,7 @@ export class AnimationUnit {
     this.progression = optionsToUse.progression;
     this.onFinish = optionsToUse.onFinish;
     this.onCancel = optionsToUse.onCancel;
-    this.time.duration = optionsToUse.duration;
+    this.duration = optionsToUse.duration;
     this.transform = optionsToUse.transform;
     this.color = optionsToUse.color;
     this.custom = optionsToUse.custom;
@@ -172,10 +174,265 @@ export class AnimationUnit {
     } else if (optionsToUse.type === 'color') {
 
     } else if (optionsToUse.type === 'custom') {
-      
+
     }
   }
 }
+
+export class NewAnimationUnit {
+  element: DiagramElement;
+  type: 'transform' | 'color' | 'custom';
+  duration: number;
+  onFinish: ?(boolean) => void;
+  onCancel: ?(boolean) => void;
+  progression: 'linear' | 'easeinout' | 'easein' | 'easeout';
+
+  constructor(options: TypeAnimationUnitOptions) {
+    let defaultStartColor = null;
+    let defaultStartTransform = null;
+    let defaultProgression = 'linear';
+    const { element } = options;
+    if (element != null) {
+      defaultStartColor = element.color.slice();
+      defaultStartTransform = element.transform._dup();
+    }
+    if (options.type === 'transform') {
+      defaultProgression = 'easeinout';
+    }
+    const defaultOptions = {
+      element: null,
+      type: 'custom',
+      progression: defaultProgression,
+      onFinish: null,
+      onCancel: this.onFinish,
+      startTime: -1,
+      plannedStartTime: -1,
+      duration: 1,
+      transform: {
+        start: defaultStartTransform,
+        target: defaultStartTransform,
+        translationStyle: 'linear',
+        rotDirection: 0,
+        translationOptions: {
+          rot: 1,
+          magnitude: 0.5,
+          offset: 0.5,
+          controlPoint: null,
+          direction: '',
+        },
+      },
+      color: {
+        start: defaultStartColor,
+        disolve: null,
+      },
+      custom: {
+        start: 0,
+        target: 1,
+      },
+    };
+
+    const optionsToUse = joinObjects({}, defaultOptions, options);
+    this.element = optionsToUse.element;
+    this.type = optionsToUse.Type;
+    this.progression = optionsToUse.progression;
+    this.onFinish = optionsToUse.onFinish;
+    this.onCancel = optionsToUse.onCancel;
+    this.duration = optionsToUse.duration;
+    this.transform = optionsToUse.transform;
+    this.color = optionsToUse.color;
+    this.custom = optionsToUse.custom;
+
+    if (optionsToUse.type === 'transform') {
+      this.transform.rotDirection = optionsToUse.rotDirection;
+      let delta = optionsToUse.transform.start.zero();
+      if (optionsToUse.transform.delta != null) {
+        ({ delta } = optionsToUse.transform);
+        this.transform.target = optionsToUse.transform.start.add(delta);
+      } else if (optionsToUse.transform.target != null) {
+        delta = optionsToUse.transform.target.sub(optionsToUse.transform.start);
+      }
+      this.transform.delta = delta;
+      if (optionsToUse.velocity != null) {
+        this.time.duration = getMaxTimeFromVelocity(
+          optionsToUse.transform.start,
+          optionsToUse.transform.target,
+          optionsToUse.velocity,
+          optionsToUse.rotDirection,
+        );
+      }
+
+      this.transform.delta.order.forEach((del, index) => {
+        const start = this.transform.start.order[index];
+        const target = this.transform.target.order[index];
+        if (del instanceof Rotation
+          && start instanceof Rotation
+          && target instanceof Rotation) {
+          const rotDiff = getDeltaAngle(start.r, target.r, this.transform.rotDirection);
+          // eslint-disable-next-line no-param-reassign
+          del.r = rotDiff;
+        }
+      });
+    } else if (optionsToUse.type === 'color') {
+
+    } else if (optionsToUse.type === 'custom') {
+
+    }
+  }
+}
+
+type TypeAnimationStepInputOptions = {
+    animations: AnimationUnit | Array<AnimationUnit | AnimationStep>,
+    onFinish: ?() => void;
+    onCancel: ?() => void;
+};
+
+export class AnimationStep {
+  startTime: number;
+  duration: number;
+  animations: Array<AnimationUnit | AnimationStep>;
+  onFinish: ?() => void;
+  onCancel: ?() => void;
+  finish: () => void;
+
+  constructor(optionsIn: TypeAnimationStepInputOptions) {
+    const defaultOptions = {
+      onFinish: null,
+      onCancel: null,
+    };
+    const options = joinObjects({}, defaultOptions, optionsIn);
+    // joinObjects(this, defaultOptions, optionsIn);
+    // this.duration = options.duration;
+    if (!Array.isArray(options.animations)) {
+      this.duration = options.animations.duration;
+      this.animations = [options.animations];
+    } else {
+      this.animations = options.animations;
+    }
+    this.calcDuration();
+    this.animations = options.animations;
+    this.onFinish = options.onFinish;
+    this.onCancel = options.onCancel;
+    this.startTime = -1;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  calcDuration() {
+  }
+
+  // returns remaining time if this step completes
+  // Return of 0 means this step is still going
+  nextFrame(now: number) {
+    if (this.startTime < 0) {
+      this.startTime = now;
+      return 0;
+    }
+    let remainingTime = 0;
+    let deltaTime = now - this.startTime;
+    if (deltaTime > this.duration) {
+      remainingTime = deltaTime - this.duration;
+      deltaTime = this.duration;
+    }
+    this.setFrame(deltaTime);
+    if (remainingTime > 0) {
+      this.finish();
+    }
+    return remainingTime;
+  }
+
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  setFrame(deltaTime: number) {
+  }
+
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  start() {
+    this.startTime = -1;
+  }
+
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  finish() {
+  }
+}
+
+// Animations get started from a parent, but finish themselves
+export class AnimationParallel extends AnimationStep {
+
+  // constructor(optionsIn: TypeAnimationStepInputOptions) {
+  //   super(optionsIn);
+  //   this.index = 0;
+  // }
+
+  calcDuration() {
+    let duration = 0;
+    this.animations.forEach((animationStep) => {
+      if (animationStep.duration > duration) {
+        ({ duration } = animationStep);
+      }
+    });
+    this.duration = duration;
+  }
+
+  nextFrame(now: number) {
+    let remaining = 0;
+    this.animations.forEach((animationStep) => {
+      const stepRemaining = animationStep.nextFrame(now);
+      if (stepRemaining < remaining) {
+        remaining = stepRemaining;
+      }
+    });
+    if (remaining > 0) {
+      this.finish();
+    }
+    return remaining;
+  }
+
+  start() {
+    this.animations.forEach((animationStep) => {
+      animationStep.start();
+    });
+  }
+}
+
+export class AnimationSerial extends AnimationStep {
+  index: number;
+
+  constructor(optionsIn: TypeAnimationStepInputOptions) {
+    super(optionsIn);
+    this.index = 0;
+  }
+
+  calcDuration() {
+    let duration = 0;
+    this.animations.forEach((animation) => {
+      duration += animation.duration;
+    });
+    this.duration = duration;
+  }
+
+  start() {
+    this.index = 0;
+    this.animations[0].start();
+  }
+
+  nextFrame(now: number) {
+    const remaining = this.animations[this.index].nextFrame(now);
+    if (remaining > 0) {
+      if (this.index === this.animations.length - 1) {
+        this.finish();
+        return remaining;
+      }
+      this.index += 1;
+      this.animations[this.index].start();
+      this.animations[this.index].startTime = now - remaining;
+    }
+    return 0;
+  }
+}
+
+// export class AnimationPlan {
+//   constructor(plan: Array<AnimationSequence) {
+
+//   }
+// } 
 
 // Planned Animation
 export class AnimationPhase {
