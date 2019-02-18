@@ -12,6 +12,173 @@ import { joinObjects } from '../tools/tools';
 
 type TypeColor = [number, number, number, number];
 
+// type TypeAnimationUnitOptions = {
+//   element?: DiagramElement;
+//   type?: 'transform' | 'color' | 'custom'; // default is transform
+//   progression?: 'linear' | 'easeinout' | 'easein' | 'easeout'; // default is dependent on type
+//   onFinish?: ?(boolean) => void;
+//   onCancel?: ?(boolean) => void;  // Default is onFinish
+//   duration?: number;    // Either duration or velocity must be defined
+//   velocity?: number | Transform | TypeColor;  // velocity overrides duration
+//   transform?: {
+//     start?: Transform;      // default is element transform
+//     target?: Transform;     // Either target or delta must be defined
+//     delta?: Transform;      // delta overrides target if both are defined
+//     translationStyle?: 'linear' | 'curved'; // default is linear
+//     translationOptions?: pathOptionsType;
+//     rotDirection: 0 | 1 | -1 | 2;
+//   };
+//   color?: {
+//     start?: TypeColor;      // default is element color
+//     target?: TypeColor;     // Either target, delta or disolve must be defined
+//     delta?: TypeColor;      // delta overrides target if both are defined
+//     disolve?: 'in' | 'out' | null;
+//   };
+//   custom?: {
+//     start?: number;       // default is 0
+//     target?: number;      // default is 1
+//     delta?: number;       // overrides target
+//   }
+// };
+
+
+
+// type TypeTransformAnimationStepInputOptions = {
+
+// } & TypeAnimationStepInputOptions;
+
+// export class AnimationUnit {
+//   element: DiagramElement;
+//   type: 'transform' | 'color' | 'custom';
+
+//   startTime: number;
+//   plannedStartTime: number;
+//   duration: number;
+
+//   // targetTime: number;
+//   // startTime: number;
+
+//   transform: {
+//     start: Transform;
+//     delta: Transform;
+//     target: Transform;
+//     rotDirection: 0 | 1 | -1 | 2;
+//     translationStyle: 'linear' | 'curved';
+//     translationOptions: pathOptionsType;
+//   } | null;
+
+//   color: {
+//     start: TypeColor;
+//     delta: TypeColor;
+//     target: TypeColor;
+//     disolve: 'in' | 'out' | null;
+//   } | null;
+
+//   custom: {
+//     start: number;
+//     delta: number;
+//     target: number;
+//     plannedStartTime: number;
+//   } | null;
+
+//   onFinish: ?(boolean) => void;
+//   onCancel: ?(boolean) => void;
+//   // finishOnCancel: boolean;
+//   progression: 'linear' | 'easeinout' | 'easein' | 'easeout';
+
+//   constructor(options: TypeAnimationUnitOptions) {
+//     let defaultStartColor = null;
+//     let defaultStartTransform = null;
+//     let defaultProgression = 'linear';
+//     const { element } = options;
+//     if (element != null) {
+//       defaultStartColor = element.color.slice();
+//       defaultStartTransform = element.transform._dup();
+//     }
+//     if (options.type === 'transform') {
+//       defaultProgression = 'easeinout';
+//     }
+//     const defaultOptions = {
+//       element: null,
+//       type: 'custom',
+//       progression: defaultProgression,
+//       onFinish: null,
+//       onCancel: this.onFinish,
+//       startTime: -1,
+//       plannedStartTime: -1,
+//       duration: 1,
+//       transform: {
+//         start: defaultStartTransform,
+//         target: defaultStartTransform,
+//         translationStyle: 'linear',
+//         rotDirection: 0,
+//         translationOptions: {
+//           rot: 1,
+//           magnitude: 0.5,
+//           offset: 0.5,
+//           controlPoint: null,
+//           direction: '',
+//         },
+//       },
+//       color: {
+//         start: defaultStartColor,
+//         disolve: null,
+//       },
+//       custom: {
+//         start: 0,
+//         target: 1,
+//       },
+//     };
+
+//     const optionsToUse = joinObjects({}, defaultOptions, options);
+//     this.element = optionsToUse.element;
+//     this.type = optionsToUse.Type;
+//     this.progression = optionsToUse.progression;
+//     this.onFinish = optionsToUse.onFinish;
+//     this.onCancel = optionsToUse.onCancel;
+//     this.duration = optionsToUse.duration;
+//     this.transform = optionsToUse.transform;
+//     this.color = optionsToUse.color;
+//     this.custom = optionsToUse.custom;
+
+//     if (optionsToUse.type === 'transform') {
+//       this.transform.rotDirection = optionsToUse.rotDirection;
+//       let delta = optionsToUse.transform.start.zero();
+//       if (optionsToUse.transform.delta != null) {
+//         ({ delta } = optionsToUse.transform);
+//         this.transform.target = optionsToUse.transform.start.add(delta);
+//       } else if (optionsToUse.transform.target != null) {
+//         delta = optionsToUse.transform.target.sub(optionsToUse.transform.start);
+//       }
+//       this.transform.delta = delta;
+//       if (optionsToUse.velocity != null) {
+//         this.time.duration = getMaxTimeFromVelocity(
+//           optionsToUse.transform.start,
+//           optionsToUse.transform.target,
+//           optionsToUse.velocity,
+//           optionsToUse.rotDirection,
+//         );
+//       }
+
+//       this.transform.delta.order.forEach((del, index) => {
+//         const start = this.transform.start.order[index];
+//         const target = this.transform.target.order[index];
+//         if (del instanceof Rotation
+//           && start instanceof Rotation
+//           && target instanceof Rotation) {
+//           const rotDiff = getDeltaAngle(start.r, target.r, this.transform.rotDirection);
+//           // eslint-disable-next-line no-param-reassign
+//           del.r = rotDiff;
+//         }
+//       });
+//     } else if (optionsToUse.type === 'color') {
+
+//     } else if (optionsToUse.type === 'custom') {
+
+//     }
+//   }
+// }
+
 type TypeAnimationUnitOptions = {
   element?: DiagramElement;
   type?: 'transform' | 'color' | 'custom'; // default is transform
@@ -19,8 +186,56 @@ type TypeAnimationUnitOptions = {
   onFinish?: ?(boolean) => void;
   onCancel?: ?(boolean) => void;  // Default is onFinish
   duration?: number;    // Either duration or velocity must be defined
-  velocity?: number | Transform | TypeColor;  // velocity overrides duration
-  transform?: {
+  // velocity?: number | Transform | TypeColor;  // velocity overrides duration
+};
+
+export class AnimationUnit {
+  element: ?DiagramElement;
+  type: 'transform' | 'color' | 'custom';
+  duration: number;
+  onFinish: ?(boolean) => void;
+  onCancel: ?(boolean) => void;
+  progression: 'linear' | 'easeinout' | 'easein' | 'easeout';
+
+  constructor(optionsIn: TypeAnimationUnitOptions) {
+    let defaultProgression = 'linear';
+    if (optionsIn.type === 'transform') {
+      defaultProgression = 'easeinout';
+    }
+    const defaultOptions = {
+      element: null,
+      type: 'custom',
+      progression: defaultProgression,
+      onFinish: null,
+      onCancel: this.onFinish,
+      duration: 1,
+    };
+
+    const options = joinObjects({}, defaultOptions, optionsIn);
+    this.element = options.element;
+    this.type = options.Type;
+    this.progression = options.progression;
+    this.onFinish = options.onFinish;
+    this.onCancel = options.onCancel;
+    this.duration = options.duration;
+  }
+
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  _dup() {
+
+  }
+
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  start(){
+  }
+
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  finish(){
+  }
+}
+
+type TypeTransformAnimationUnitInputOptions = {
+  transform: {
     start?: Transform;      // default is element transform
     target?: Transform;     // Either target or delta must be defined
     delta?: Transform;      // delta overrides target if both are defined
@@ -28,262 +243,157 @@ type TypeAnimationUnitOptions = {
     translationOptions?: pathOptionsType;
     rotDirection: 0 | 1 | -1 | 2;
   };
-  color?: {
-    start?: TypeColor;      // default is element color
-    target?: TypeColor;     // Either target, delta or disolve must be defined
-    delta?: TypeColor;      // delta overrides target if both are defined
-    disolve?: 'in' | 'out' | null;
-  };
-  custom?: {
-    start?: number;       // default is 0
-    target?: number;      // default is 1
-    delta?: number;       // overrides target
-  }
-};
+} & TypeAnimationUnitOptions;
 
-
-
-type TypeTransformAnimationStepInputOptions = {
-
-} & TypeAnimationStepInputOptions;
-
-export class AnimationUnit {
-  element: DiagramElement;
-  type: 'transform' | 'color' | 'custom';
-
-  startTime: number;
-  plannedStartTime: number;
-  duration: number;
-
-  // targetTime: number;
-  // startTime: number;
-
+// A transform animation unit manages a transform animation on an element.
+//
+// The start transform can either be defined initially, or null. Null means
+// the start transform is whatever the current element transform is when the
+// unit is started with start().
+//
+// The transform target is defined with either the target or delta properties.
+// Target is used to predefine the target.
+// Delta is used to calculate the target when the unit is started with start()
+//
+export class TransformAnimationUnit extends AnimationUnit {
   transform: {
-    start: Transform;
+    start: Transform;  // null means use element transform when unit is started
     delta: Transform;
     target: Transform;
     rotDirection: 0 | 1 | -1 | 2;
     translationStyle: 'linear' | 'curved';
     translationOptions: pathOptionsType;
-  } | null;
+  };
 
-  color: {
-    start: TypeColor;
-    delta: TypeColor;
-    target: TypeColor;
-    disolve: 'in' | 'out' | null;
-  } | null;
-
-  custom: {
-    start: number;
-    delta: number;
-    target: number;
-    plannedStartTime: number;
-  } | null;
-
-  onFinish: ?(boolean) => void;
-  onCancel: ?(boolean) => void;
-  // finishOnCancel: boolean;
-  progression: 'linear' | 'easeinout' | 'easein' | 'easeout';
-
-  constructor(options: TypeAnimationUnitOptions) {
-    let defaultStartColor = null;
-    let defaultStartTransform = null;
-    let defaultProgression = 'linear';
-    const { element } = options;
-    if (element != null) {
-      defaultStartColor = element.color.slice();
-      defaultStartTransform = element.transform._dup();
-    }
-    if (options.type === 'transform') {
-      defaultProgression = 'easeinout';
-    }
-    const defaultOptions = {
-      element: null,
-      type: 'custom',
-      progression: defaultProgression,
-      onFinish: null,
-      onCancel: this.onFinish,
-      startTime: -1,
-      plannedStartTime: -1,
-      duration: 1,
-      transform: {
-        start: defaultStartTransform,
-        target: defaultStartTransform,
-        translationStyle: 'linear',
-        rotDirection: 0,
-        translationOptions: {
-          rot: 1,
-          magnitude: 0.5,
-          offset: 0.5,
-          controlPoint: null,
-          direction: '',
-        },
-      },
-      color: {
-        start: defaultStartColor,
-        disolve: null,
-      },
-      custom: {
-        start: 0,
-        target: 1,
+  constructor(optionsIn: TypeTransformAnimationUnitInputOptions) {
+    super(joinObjects({}, optionsIn, { type: 'transform' }));
+    // let defaultStartTransform = null;
+    // const { element } = optionsIn;
+    // if (element != null) {
+    //   defaultStartTransform = element.transform._dup();
+    // }
+    const defaultTransformOptions = {
+      start: null,
+      target: null,
+      delta: null,
+      translationStyle: 'linear',
+      rotDirection: 0,
+      translationOptions: {
+        rot: 1,
+        magnitude: 0.5,
+        offset: 0.5,
+        controlPoint: null,
+        direction: '',
       },
     };
+    let options = defaultTransformOptions;
+    if (optionsIn.transform != null) {
+      options = joinObjects({}, optionsIn.transform, defaultTransformOptions);
+    }
+    // $FlowFixMe
+    this.transform = {};
+    this.transform.rotDirection = options.rotDirection;
+    this.transform.start = options.start;
+    this.transform.target = options.target;
+    this.transform.delta = options.delta;
+    this.transform.translationStyle = options.translationStyle;
+    this.transform.translationOptions = options.translationOptions;
 
-    const optionsToUse = joinObjects({}, defaultOptions, options);
-    this.element = optionsToUse.element;
-    this.type = optionsToUse.Type;
-    this.progression = optionsToUse.progression;
-    this.onFinish = optionsToUse.onFinish;
-    this.onCancel = optionsToUse.onCancel;
-    this.duration = optionsToUse.duration;
-    this.transform = optionsToUse.transform;
-    this.color = optionsToUse.color;
-    this.custom = optionsToUse.custom;
+    const { start, target } = options;
+    if (start != null && target != null) {
+      this.transform.start = start;
+      this.transform.target = target;
 
-    if (optionsToUse.type === 'transform') {
-      this.transform.rotDirection = optionsToUse.rotDirection;
-      let delta = optionsToUse.transform.start.zero();
-      if (optionsToUse.transform.delta != null) {
-        ({ delta } = optionsToUse.transform);
-        this.transform.target = optionsToUse.transform.start.add(delta);
-      } else if (optionsToUse.transform.target != null) {
-        delta = optionsToUse.transform.target.sub(optionsToUse.transform.start);
-      }
-      this.transform.delta = delta;
-      if (optionsToUse.velocity != null) {
-        this.time.duration = getMaxTimeFromVelocity(
-          optionsToUse.transform.start,
-          optionsToUse.transform.target,
-          optionsToUse.velocity,
-          optionsToUse.rotDirection,
-        );
-      }
-
-      this.transform.delta.order.forEach((del, index) => {
-        const start = this.transform.start.order[index];
-        const target = this.transform.target.order[index];
-        if (del instanceof Rotation
-          && start instanceof Rotation
-          && target instanceof Rotation) {
-          const rotDiff = getDeltaAngle(start.r, target.r, this.transform.rotDirection);
+      // If delta is not supplied, then calculate it
+      // If delta is supplied, then use it to calculate target
+      let delta = target.sub(start);
+      delta.order.forEach((deltaStep, index) => {
+        const startStep = start.order[index];
+        const targetStep = target.order[index];
+        if (deltaStep instanceof Rotation
+          && startStep instanceof Rotation
+          && targetStep instanceof Rotation) {
+          const rotDiff = getDeltaAngle(
+            startStep.r,
+            targetStep.r,
+            this.transform.rotDirection,
+          );
           // eslint-disable-next-line no-param-reassign
-          del.r = rotDiff;
+          deltaStep.r = rotDiff;
         }
       });
-    } else if (optionsToUse.type === 'color') {
+      if (options.delta != null) {
+        ({ delta } = options);
+        this.transform.target = start.add(delta);
+      }
+      this.transform.delta = delta;
 
-    } else if (optionsToUse.type === 'custom') {
-
+      // If Velocity is defined, then use it to calculate duration
+      this.duration = 0;
+      if (options.velocity != null) {
+        this.duration = getMaxTimeFromVelocity(
+          this.transform.start,
+          this.transform.target,
+          options.velocity,
+          this.transform.rotDirection,
+        );
+      } else if (options.duration != null) {
+        this.duration = options.duration;
+      }
     }
   }
-}
 
-export class NewAnimationUnit {
-  element: DiagramElement;
-  type: 'transform' | 'color' | 'custom';
-  duration: number;
-  onFinish: ?(boolean) => void;
-  onCancel: ?(boolean) => void;
-  progression: 'linear' | 'easeinout' | 'easein' | 'easeout';
-
-  constructor(options: TypeAnimationUnitOptions) {
-    let defaultStartColor = null;
-    let defaultStartTransform = null;
-    let defaultProgression = 'linear';
-    const { element } = options;
-    if (element != null) {
-      defaultStartColor = element.color.slice();
-      defaultStartTransform = element.transform._dup();
-    }
-    if (options.type === 'transform') {
-      defaultProgression = 'easeinout';
-    }
-    const defaultOptions = {
-      element: null,
-      type: 'custom',
-      progression: defaultProgression,
-      onFinish: null,
-      onCancel: this.onFinish,
-      startTime: -1,
-      plannedStartTime: -1,
-      duration: 1,
-      transform: {
-        start: defaultStartTransform,
-        target: defaultStartTransform,
-        translationStyle: 'linear',
-        rotDirection: 0,
-        translationOptions: {
-          rot: 1,
-          magnitude: 0.5,
-          offset: 0.5,
-          controlPoint: null,
-          direction: '',
-        },
-      },
-      color: {
-        start: defaultStartColor,
-        disolve: null,
-      },
-      custom: {
-        start: 0,
-        target: 1,
-      },
-    };
-
-    const optionsToUse = joinObjects({}, defaultOptions, options);
-    this.element = optionsToUse.element;
-    this.type = optionsToUse.Type;
-    this.progression = optionsToUse.progression;
-    this.onFinish = optionsToUse.onFinish;
-    this.onCancel = optionsToUse.onCancel;
-    this.duration = optionsToUse.duration;
-    this.transform = optionsToUse.transform;
-    this.color = optionsToUse.color;
-    this.custom = optionsToUse.custom;
-
-    if (optionsToUse.type === 'transform') {
-      this.transform.rotDirection = optionsToUse.rotDirection;
-      let delta = optionsToUse.transform.start.zero();
-      if (optionsToUse.transform.delta != null) {
-        ({ delta } = optionsToUse.transform);
-        this.transform.target = optionsToUse.transform.start.add(delta);
-      } else if (optionsToUse.transform.target != null) {
-        delta = optionsToUse.transform.target.sub(optionsToUse.transform.start);
+  start() {
+    if (this.start === null) {
+      if (this.element != null) {
+        this.transform.start = this.element.transform._dup();
+      } else {
+        this.duration = 0;
+        return;
       }
-      this.transform.delta = delta;
-      if (optionsToUse.velocity != null) {
-        this.time.duration = getMaxTimeFromVelocity(
-          optionsToUse.transform.start,
-          optionsToUse.transform.target,
-          optionsToUse.velocity,
-          optionsToUse.rotDirection,
-        );
-      }
-
-      this.transform.delta.order.forEach((del, index) => {
-        const start = this.transform.start.order[index];
-        const target = this.transform.target.order[index];
-        if (del instanceof Rotation
-          && start instanceof Rotation
-          && target instanceof Rotation) {
-          const rotDiff = getDeltaAngle(start.r, target.r, this.transform.rotDirection);
+    }
+    // if delta is null, then calculate it from start and target
+    if (this.transform.delta == null && this.transform.target != null) {
+      let delta = this.transform.target.sub(this.transform.start);
+      delta.order.forEach((deltaStep, index) => {
+        const startStep = this.transform.start.order[index];
+        const targetStep = this.transform.target.order[index];
+        if (deltaStep instanceof Rotation
+          && startStep instanceof Rotation
+          && targetStep instanceof Rotation) {
+          const rotDiff = getDeltaAngle(
+            startStep.r,
+            targetStep.r,
+            this.transform.rotDirection,
+          );
           // eslint-disable-next-line no-param-reassign
-          del.r = rotDiff;
+          deltaStep.r = rotDiff;
         }
       });
-    } else if (optionsToUse.type === 'color') {
-
-    } else if (optionsToUse.type === 'custom') {
-
+      this.transform.delta = delta;
+    } else if (this.transform.delta != null) {
+      this.transform.target = this.transform.start.add(this.transform.delta);
+    } else {
+      this.duration = 0;
+      return;
     }
+
+  }
+
+  nextFrame() {
+
+  }
+
+  finish() {
+
   }
 }
 
 type TypeAnimationStepInputOptions = {
-    animations: AnimationUnit | Array<AnimationUnit | AnimationStep>,
-    onFinish: ?() => void;
-    onCancel: ?() => void;
+  // eslint-disable-next-line no-use-before-define
+  animations: AnimationUnit | Array<AnimationUnit | AnimationStep>,
+  onFinish: ?() => void;
+  onCancel: ?() => void;
 };
 
 export class AnimationStep {
@@ -361,15 +471,15 @@ export class AnimationParallel extends AnimationStep {
   //   this.index = 0;
   // }
 
-  calcDuration() {
-    let duration = 0;
-    this.animations.forEach((animationStep) => {
-      if (animationStep.duration > duration) {
-        ({ duration } = animationStep);
-      }
-    });
-    this.duration = duration;
-  }
+  // calcDuration() {
+  //   let duration = 0;
+  //   this.animations.forEach((animationStep) => {
+  //     if (animationStep.duration > duration) {
+  //       ({ duration } = animationStep);
+  //     }
+  //   });
+  //   this.duration = duration;
+  // }
 
   nextFrame(now: number) {
     let remaining = 0;
@@ -400,13 +510,13 @@ export class AnimationSerial extends AnimationStep {
     this.index = 0;
   }
 
-  calcDuration() {
-    let duration = 0;
-    this.animations.forEach((animation) => {
-      duration += animation.duration;
-    });
-    this.duration = duration;
-  }
+  // calcDuration() {
+  //   let duration = 0;
+  //   this.animations.forEach((animation) => {
+  //     duration += animation.duration;
+  //   });
+  //   this.duration = duration;
+  // }
 
   start() {
     this.index = 0;
