@@ -13,6 +13,10 @@ DiagramElementPrimative {
       "callback": null,
       "plan": Array [],
     },
+    "parallel": Object {
+      "callback": null,
+      "plan": Array [],
+    },
     "transform": Object {
       "callback": null,
       "plan": Array [],
@@ -292,6 +296,10 @@ DiagramElementPrimative {
           "toDisolve": "",
         },
         "custom": Object {
+          "callback": null,
+          "plan": Array [],
+        },
+        "parallel": Object {
           "callback": null,
           "plan": Array [],
         },
@@ -679,6 +687,7 @@ DiagramElementPrimative {
         "isAnimating": false,
         "isAnimatingColor": false,
         "isAnimatingCustom": false,
+        "isAnimatingParallel": false,
         "isBeingMoved": false,
         "isMovingFreely": false,
         "isPulsing": false,
@@ -739,6 +748,10 @@ DiagramElementPrimative {
             ],
           },
         },
+        "parallelAnimation": Object {
+          "currentPhase": Array [],
+          "currentPhaseIndex": Array [],
+        },
         "pulse": Object {
           "startTime": -1,
         },
@@ -782,6 +795,10 @@ DiagramElementPrimative {
           "toDisolve": "",
         },
         "custom": Object {
+          "callback": null,
+          "plan": Array [],
+        },
+        "parallel": Object {
           "callback": null,
           "plan": Array [],
         },
@@ -1169,6 +1186,7 @@ DiagramElementPrimative {
         "isAnimating": false,
         "isAnimatingColor": false,
         "isAnimatingCustom": false,
+        "isAnimatingParallel": false,
         "isBeingMoved": false,
         "isMovingFreely": false,
         "isPulsing": false,
@@ -1229,6 +1247,10 @@ DiagramElementPrimative {
             ],
           },
         },
+        "parallelAnimation": Object {
+          "currentPhase": Array [],
+          "currentPhaseIndex": Array [],
+        },
         "pulse": Object {
           "startTime": -1,
         },
@@ -1271,6 +1293,10 @@ DiagramElementPrimative {
           "toDisolve": "",
         },
         "custom": Object {
+          "callback": null,
+          "plan": Array [],
+        },
+        "parallel": Object {
           "callback": null,
           "plan": Array [],
         },
@@ -1658,6 +1684,7 @@ DiagramElementPrimative {
         "isAnimating": false,
         "isAnimatingColor": false,
         "isAnimatingCustom": false,
+        "isAnimatingParallel": false,
         "isBeingMoved": false,
         "isMovingFreely": false,
         "isPulsing": false,
@@ -1718,6 +1745,10 @@ DiagramElementPrimative {
             ],
           },
         },
+        "parallelAnimation": Object {
+          "currentPhase": Array [],
+          "currentPhaseIndex": Array [],
+        },
         "pulse": Object {
           "startTime": -1,
         },
@@ -1760,6 +1791,10 @@ DiagramElementPrimative {
           "toDisolve": "",
         },
         "custom": Object {
+          "callback": null,
+          "plan": Array [],
+        },
+        "parallel": Object {
           "callback": null,
           "plan": Array [],
         },
@@ -2147,6 +2182,7 @@ DiagramElementPrimative {
         "isAnimating": false,
         "isAnimatingColor": false,
         "isAnimatingCustom": false,
+        "isAnimatingParallel": false,
         "isBeingMoved": false,
         "isMovingFreely": false,
         "isPulsing": false,
@@ -2207,6 +2243,10 @@ DiagramElementPrimative {
             ],
           },
         },
+        "parallelAnimation": Object {
+          "currentPhase": Array [],
+          "currentPhaseIndex": Array [],
+        },
         "pulse": Object {
           "startTime": -1,
         },
@@ -2247,6 +2287,10 @@ DiagramElementPrimative {
         "toDisolve": "",
       },
       "custom": Object {
+        "callback": null,
+        "plan": Array [],
+      },
+      "parallel": Object {
         "callback": null,
         "plan": Array [],
       },
@@ -2297,6 +2341,10 @@ DiagramElementPrimative {
             "toDisolve": "",
           },
           "custom": Object {
+            "callback": null,
+            "plan": Array [],
+          },
+          "parallel": Object {
             "callback": null,
             "plan": Array [],
           },
@@ -2684,6 +2732,7 @@ DiagramElementPrimative {
           "isAnimating": false,
           "isAnimatingColor": false,
           "isAnimatingCustom": false,
+          "isAnimatingParallel": false,
           "isBeingMoved": false,
           "isMovingFreely": false,
           "isPulsing": false,
@@ -2744,6 +2793,10 @@ DiagramElementPrimative {
               ],
             },
           },
+          "parallelAnimation": Object {
+            "currentPhase": Array [],
+            "currentPhaseIndex": Array [],
+          },
           "pulse": Object {
             "startTime": -1,
           },
@@ -2787,6 +2840,10 @@ DiagramElementPrimative {
             "toDisolve": "",
           },
           "custom": Object {
+            "callback": null,
+            "plan": Array [],
+          },
+          "parallel": Object {
             "callback": null,
             "plan": Array [],
           },
@@ -3174,6 +3231,7 @@ DiagramElementPrimative {
           "isAnimating": false,
           "isAnimatingColor": false,
           "isAnimatingCustom": false,
+          "isAnimatingParallel": false,
           "isBeingMoved": false,
           "isMovingFreely": false,
           "isPulsing": false,
@@ -3234,6 +3292,10 @@ DiagramElementPrimative {
               ],
             },
           },
+          "parallelAnimation": Object {
+            "currentPhase": Array [],
+            "currentPhaseIndex": Array [],
+          },
           "pulse": Object {
             "startTime": -1,
           },
@@ -3276,6 +3338,10 @@ DiagramElementPrimative {
             "toDisolve": "",
           },
           "custom": Object {
+            "callback": null,
+            "plan": Array [],
+          },
+          "parallel": Object {
             "callback": null,
             "plan": Array [],
           },
@@ -3663,6 +3729,7 @@ DiagramElementPrimative {
           "isAnimating": false,
           "isAnimatingColor": false,
           "isAnimatingCustom": false,
+          "isAnimatingParallel": false,
           "isBeingMoved": false,
           "isMovingFreely": false,
           "isPulsing": false,
@@ -3723,6 +3790,10 @@ DiagramElementPrimative {
               ],
             },
           },
+          "parallelAnimation": Object {
+            "currentPhase": Array [],
+            "currentPhaseIndex": Array [],
+          },
           "pulse": Object {
             "startTime": -1,
           },
@@ -3765,6 +3836,10 @@ DiagramElementPrimative {
             "toDisolve": "",
           },
           "custom": Object {
+            "callback": null,
+            "plan": Array [],
+          },
+          "parallel": Object {
             "callback": null,
             "plan": Array [],
           },
@@ -4152,6 +4227,7 @@ DiagramElementPrimative {
           "isAnimating": false,
           "isAnimatingColor": false,
           "isAnimatingCustom": false,
+          "isAnimatingParallel": false,
           "isBeingMoved": false,
           "isMovingFreely": false,
           "isPulsing": false,
@@ -4211,6 +4287,10 @@ DiagramElementPrimative {
                 },
               ],
             },
+          },
+          "parallelAnimation": Object {
+            "currentPhase": Array [],
+            "currentPhaseIndex": Array [],
           },
           "pulse": Object {
             "startTime": -1,
@@ -4326,6 +4406,10 @@ DiagramElementPrimative {
                           "toDisolve": "",
                         },
                         "custom": Object {
+                          "callback": null,
+                          "plan": Array [],
+                        },
+                        "parallel": Object {
                           "callback": null,
                           "plan": Array [],
                         },
@@ -4713,6 +4797,7 @@ DiagramElementPrimative {
                         "isAnimating": false,
                         "isAnimatingColor": false,
                         "isAnimatingCustom": false,
+                        "isAnimatingParallel": false,
                         "isBeingMoved": false,
                         "isMovingFreely": false,
                         "isPulsing": false,
@@ -4773,6 +4858,10 @@ DiagramElementPrimative {
                             ],
                           },
                         },
+                        "parallelAnimation": Object {
+                          "currentPhase": Array [],
+                          "currentPhaseIndex": Array [],
+                        },
                         "pulse": Object {
                           "startTime": -1,
                         },
@@ -4826,6 +4915,10 @@ DiagramElementPrimative {
                           "toDisolve": "",
                         },
                         "custom": Object {
+                          "callback": null,
+                          "plan": Array [],
+                        },
+                        "parallel": Object {
                           "callback": null,
                           "plan": Array [],
                         },
@@ -5213,6 +5306,7 @@ DiagramElementPrimative {
                         "isAnimating": false,
                         "isAnimatingColor": false,
                         "isAnimatingCustom": false,
+                        "isAnimatingParallel": false,
                         "isBeingMoved": false,
                         "isMovingFreely": false,
                         "isPulsing": false,
@@ -5272,6 +5366,10 @@ DiagramElementPrimative {
                               },
                             ],
                           },
+                        },
+                        "parallelAnimation": Object {
+                          "currentPhase": Array [],
+                          "currentPhaseIndex": Array [],
                         },
                         "pulse": Object {
                           "startTime": -1,
@@ -5338,6 +5436,10 @@ DiagramElementPrimative {
                     "toDisolve": "",
                   },
                   "custom": Object {
+                    "callback": null,
+                    "plan": Array [],
+                  },
+                  "parallel": Object {
                     "callback": null,
                     "plan": Array [],
                   },
@@ -5725,6 +5827,7 @@ DiagramElementPrimative {
                   "isAnimating": false,
                   "isAnimatingColor": false,
                   "isAnimatingCustom": false,
+                  "isAnimatingParallel": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -5785,6 +5888,10 @@ DiagramElementPrimative {
                       ],
                     },
                   },
+                  "parallelAnimation": Object {
+                    "currentPhase": Array [],
+                    "currentPhaseIndex": Array [],
+                  },
                   "pulse": Object {
                     "startTime": -1,
                   },
@@ -5828,6 +5935,10 @@ DiagramElementPrimative {
                     "toDisolve": "",
                   },
                   "custom": Object {
+                    "callback": null,
+                    "plan": Array [],
+                  },
+                  "parallel": Object {
                     "callback": null,
                     "plan": Array [],
                   },
@@ -6215,6 +6326,7 @@ DiagramElementPrimative {
                   "isAnimating": false,
                   "isAnimatingColor": false,
                   "isAnimatingCustom": false,
+                  "isAnimatingParallel": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -6275,6 +6387,10 @@ DiagramElementPrimative {
                       ],
                     },
                   },
+                  "parallelAnimation": Object {
+                    "currentPhase": Array [],
+                    "currentPhaseIndex": Array [],
+                  },
                   "pulse": Object {
                     "startTime": -1,
                   },
@@ -6317,6 +6433,10 @@ DiagramElementPrimative {
                     "toDisolve": "",
                   },
                   "custom": Object {
+                    "callback": null,
+                    "plan": Array [],
+                  },
+                  "parallel": Object {
                     "callback": null,
                     "plan": Array [],
                   },
@@ -6704,6 +6824,7 @@ DiagramElementPrimative {
                   "isAnimating": false,
                   "isAnimatingColor": false,
                   "isAnimatingCustom": false,
+                  "isAnimatingParallel": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -6764,6 +6885,10 @@ DiagramElementPrimative {
                       ],
                     },
                   },
+                  "parallelAnimation": Object {
+                    "currentPhase": Array [],
+                    "currentPhaseIndex": Array [],
+                  },
                   "pulse": Object {
                     "startTime": -1,
                   },
@@ -6806,6 +6931,10 @@ DiagramElementPrimative {
                     "toDisolve": "",
                   },
                   "custom": Object {
+                    "callback": null,
+                    "plan": Array [],
+                  },
+                  "parallel": Object {
                     "callback": null,
                     "plan": Array [],
                   },
@@ -7193,6 +7322,7 @@ DiagramElementPrimative {
                   "isAnimating": false,
                   "isAnimatingColor": false,
                   "isAnimatingCustom": false,
+                  "isAnimatingParallel": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -7252,6 +7382,10 @@ DiagramElementPrimative {
                         },
                       ],
                     },
+                  },
+                  "parallelAnimation": Object {
+                    "currentPhase": Array [],
+                    "currentPhaseIndex": Array [],
                   },
                   "pulse": Object {
                     "startTime": -1,
@@ -7358,6 +7492,10 @@ DiagramElementPrimative {
                                   "toDisolve": "",
                                 },
                                 "custom": Object {
+                                  "callback": null,
+                                  "plan": Array [],
+                                },
+                                "parallel": Object {
                                   "callback": null,
                                   "plan": Array [],
                                 },
@@ -7745,6 +7883,7 @@ DiagramElementPrimative {
                                 "isAnimating": false,
                                 "isAnimatingColor": false,
                                 "isAnimatingCustom": false,
+                                "isAnimatingParallel": false,
                                 "isBeingMoved": false,
                                 "isMovingFreely": false,
                                 "isPulsing": false,
@@ -7804,6 +7943,10 @@ DiagramElementPrimative {
                                       },
                                     ],
                                   },
+                                },
+                                "parallelAnimation": Object {
+                                  "currentPhase": Array [],
+                                  "currentPhaseIndex": Array [],
                                 },
                                 "pulse": Object {
                                   "startTime": -1,
@@ -7867,6 +8010,10 @@ DiagramElementPrimative {
                               "toDisolve": "",
                             },
                             "custom": Object {
+                              "callback": null,
+                              "plan": Array [],
+                            },
+                            "parallel": Object {
                               "callback": null,
                               "plan": Array [],
                             },
@@ -8254,6 +8401,7 @@ DiagramElementPrimative {
                             "isAnimating": false,
                             "isAnimatingColor": false,
                             "isAnimatingCustom": false,
+                            "isAnimatingParallel": false,
                             "isBeingMoved": false,
                             "isMovingFreely": false,
                             "isPulsing": false,
@@ -8314,6 +8462,10 @@ DiagramElementPrimative {
                                 ],
                               },
                             },
+                            "parallelAnimation": Object {
+                              "currentPhase": Array [],
+                              "currentPhaseIndex": Array [],
+                            },
                             "pulse": Object {
                               "startTime": -1,
                             },
@@ -8370,6 +8522,10 @@ DiagramElementPrimative {
                                 "toDisolve": "",
                               },
                               "custom": Object {
+                                "callback": null,
+                                "plan": Array [],
+                              },
+                              "parallel": Object {
                                 "callback": null,
                                 "plan": Array [],
                               },
@@ -8757,6 +8913,7 @@ DiagramElementPrimative {
                               "isAnimating": false,
                               "isAnimatingColor": false,
                               "isAnimatingCustom": false,
+                              "isAnimatingParallel": false,
                               "isBeingMoved": false,
                               "isMovingFreely": false,
                               "isPulsing": false,
@@ -8816,6 +8973,10 @@ DiagramElementPrimative {
                                     },
                                   ],
                                 },
+                              },
+                              "parallelAnimation": Object {
+                                "currentPhase": Array [],
+                                "currentPhaseIndex": Array [],
                               },
                               "pulse": Object {
                                 "startTime": -1,
@@ -8912,6 +9073,10 @@ DiagramElementPrimative {
                           "toDisolve": "",
                         },
                         "custom": Object {
+                          "callback": null,
+                          "plan": Array [],
+                        },
+                        "parallel": Object {
                           "callback": null,
                           "plan": Array [],
                         },
@@ -9299,6 +9464,7 @@ DiagramElementPrimative {
                         "isAnimating": false,
                         "isAnimatingColor": false,
                         "isAnimatingCustom": false,
+                        "isAnimatingParallel": false,
                         "isBeingMoved": false,
                         "isMovingFreely": false,
                         "isPulsing": false,
@@ -9359,6 +9525,10 @@ DiagramElementPrimative {
                             ],
                           },
                         },
+                        "parallelAnimation": Object {
+                          "currentPhase": Array [],
+                          "currentPhaseIndex": Array [],
+                        },
                         "pulse": Object {
                           "startTime": -1,
                         },
@@ -9413,6 +9583,10 @@ DiagramElementPrimative {
                           "toDisolve": "",
                         },
                         "custom": Object {
+                          "callback": null,
+                          "plan": Array [],
+                        },
+                        "parallel": Object {
                           "callback": null,
                           "plan": Array [],
                         },
@@ -9800,6 +9974,7 @@ DiagramElementPrimative {
                         "isAnimating": false,
                         "isAnimatingColor": false,
                         "isAnimatingCustom": false,
+                        "isAnimatingParallel": false,
                         "isBeingMoved": false,
                         "isMovingFreely": false,
                         "isPulsing": false,
@@ -9859,6 +10034,10 @@ DiagramElementPrimative {
                               },
                             ],
                           },
+                        },
+                        "parallelAnimation": Object {
+                          "currentPhase": Array [],
+                          "currentPhaseIndex": Array [],
                         },
                         "pulse": Object {
                           "startTime": -1,
@@ -9925,6 +10104,10 @@ DiagramElementPrimative {
                     "toDisolve": "",
                   },
                   "custom": Object {
+                    "callback": null,
+                    "plan": Array [],
+                  },
+                  "parallel": Object {
                     "callback": null,
                     "plan": Array [],
                   },
@@ -10312,6 +10495,7 @@ DiagramElementPrimative {
                   "isAnimating": false,
                   "isAnimatingColor": false,
                   "isAnimatingCustom": false,
+                  "isAnimatingParallel": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -10372,6 +10556,10 @@ DiagramElementPrimative {
                       ],
                     },
                   },
+                  "parallelAnimation": Object {
+                    "currentPhase": Array [],
+                    "currentPhaseIndex": Array [],
+                  },
                   "pulse": Object {
                     "startTime": -1,
                   },
@@ -10415,6 +10603,10 @@ DiagramElementPrimative {
                     "toDisolve": "",
                   },
                   "custom": Object {
+                    "callback": null,
+                    "plan": Array [],
+                  },
+                  "parallel": Object {
                     "callback": null,
                     "plan": Array [],
                   },
@@ -10802,6 +10994,7 @@ DiagramElementPrimative {
                   "isAnimating": false,
                   "isAnimatingColor": false,
                   "isAnimatingCustom": false,
+                  "isAnimatingParallel": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -10862,6 +11055,10 @@ DiagramElementPrimative {
                       ],
                     },
                   },
+                  "parallelAnimation": Object {
+                    "currentPhase": Array [],
+                    "currentPhaseIndex": Array [],
+                  },
                   "pulse": Object {
                     "startTime": -1,
                   },
@@ -10904,6 +11101,10 @@ DiagramElementPrimative {
                     "toDisolve": "",
                   },
                   "custom": Object {
+                    "callback": null,
+                    "plan": Array [],
+                  },
+                  "parallel": Object {
                     "callback": null,
                     "plan": Array [],
                   },
@@ -11291,6 +11492,7 @@ DiagramElementPrimative {
                   "isAnimating": false,
                   "isAnimatingColor": false,
                   "isAnimatingCustom": false,
+                  "isAnimatingParallel": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -11351,6 +11553,10 @@ DiagramElementPrimative {
                       ],
                     },
                   },
+                  "parallelAnimation": Object {
+                    "currentPhase": Array [],
+                    "currentPhaseIndex": Array [],
+                  },
                   "pulse": Object {
                     "startTime": -1,
                   },
@@ -11393,6 +11599,10 @@ DiagramElementPrimative {
                     "toDisolve": "",
                   },
                   "custom": Object {
+                    "callback": null,
+                    "plan": Array [],
+                  },
+                  "parallel": Object {
                     "callback": null,
                     "plan": Array [],
                   },
@@ -11780,6 +11990,7 @@ DiagramElementPrimative {
                   "isAnimating": false,
                   "isAnimatingColor": false,
                   "isAnimatingCustom": false,
+                  "isAnimatingParallel": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -11840,6 +12051,10 @@ DiagramElementPrimative {
                       ],
                     },
                   },
+                  "parallelAnimation": Object {
+                    "currentPhase": Array [],
+                    "currentPhaseIndex": Array [],
+                  },
                   "pulse": Object {
                     "startTime": -1,
                   },
@@ -11899,6 +12114,10 @@ DiagramElementPrimative {
                 "toDisolve": "",
               },
               "custom": Object {
+                "callback": null,
+                "plan": Array [],
+              },
+              "parallel": Object {
                 "callback": null,
                 "plan": Array [],
               },
@@ -12286,6 +12505,7 @@ DiagramElementPrimative {
               "isAnimating": false,
               "isAnimatingColor": false,
               "isAnimatingCustom": false,
+              "isAnimatingParallel": false,
               "isBeingMoved": false,
               "isMovingFreely": false,
               "isPulsing": false,
@@ -12346,6 +12566,10 @@ DiagramElementPrimative {
                   ],
                 },
               },
+              "parallelAnimation": Object {
+                "currentPhase": Array [],
+                "currentPhaseIndex": Array [],
+              },
               "pulse": Object {
                 "startTime": -1,
               },
@@ -12389,6 +12613,10 @@ DiagramElementPrimative {
                 "toDisolve": "",
               },
               "custom": Object {
+                "callback": null,
+                "plan": Array [],
+              },
+              "parallel": Object {
                 "callback": null,
                 "plan": Array [],
               },
@@ -12776,6 +13004,7 @@ DiagramElementPrimative {
               "isAnimating": false,
               "isAnimatingColor": false,
               "isAnimatingCustom": false,
+              "isAnimatingParallel": false,
               "isBeingMoved": false,
               "isMovingFreely": false,
               "isPulsing": false,
@@ -12836,6 +13065,10 @@ DiagramElementPrimative {
                   ],
                 },
               },
+              "parallelAnimation": Object {
+                "currentPhase": Array [],
+                "currentPhaseIndex": Array [],
+              },
               "pulse": Object {
                 "startTime": -1,
               },
@@ -12878,6 +13111,10 @@ DiagramElementPrimative {
                 "toDisolve": "",
               },
               "custom": Object {
+                "callback": null,
+                "plan": Array [],
+              },
+              "parallel": Object {
                 "callback": null,
                 "plan": Array [],
               },
@@ -13265,6 +13502,7 @@ DiagramElementPrimative {
               "isAnimating": false,
               "isAnimatingColor": false,
               "isAnimatingCustom": false,
+              "isAnimatingParallel": false,
               "isBeingMoved": false,
               "isMovingFreely": false,
               "isPulsing": false,
@@ -13325,6 +13563,10 @@ DiagramElementPrimative {
                   ],
                 },
               },
+              "parallelAnimation": Object {
+                "currentPhase": Array [],
+                "currentPhaseIndex": Array [],
+              },
               "pulse": Object {
                 "startTime": -1,
               },
@@ -13367,6 +13609,10 @@ DiagramElementPrimative {
                 "toDisolve": "",
               },
               "custom": Object {
+                "callback": null,
+                "plan": Array [],
+              },
+              "parallel": Object {
                 "callback": null,
                 "plan": Array [],
               },
@@ -13754,6 +14000,7 @@ DiagramElementPrimative {
               "isAnimating": false,
               "isAnimatingColor": false,
               "isAnimatingCustom": false,
+              "isAnimatingParallel": false,
               "isBeingMoved": false,
               "isMovingFreely": false,
               "isPulsing": false,
@@ -13813,6 +14060,10 @@ DiagramElementPrimative {
                     },
                   ],
                 },
+              },
+              "parallelAnimation": Object {
+                "currentPhase": Array [],
+                "currentPhaseIndex": Array [],
               },
               "pulse": Object {
                 "startTime": -1,
@@ -13875,6 +14126,10 @@ DiagramElementPrimative {
                         "toDisolve": "",
                       },
                       "custom": Object {
+                        "callback": null,
+                        "plan": Array [],
+                      },
+                      "parallel": Object {
                         "callback": null,
                         "plan": Array [],
                       },
@@ -14234,6 +14489,7 @@ DiagramElementPrimative {
                       "isAnimating": false,
                       "isAnimatingColor": false,
                       "isAnimatingCustom": false,
+                      "isAnimatingParallel": false,
                       "isBeingMoved": false,
                       "isMovingFreely": false,
                       "isPulsing": false,
@@ -14293,6 +14549,10 @@ DiagramElementPrimative {
                             },
                           ],
                         },
+                      },
+                      "parallelAnimation": Object {
+                        "currentPhase": Array [],
+                        "currentPhaseIndex": Array [],
                       },
                       "pulse": Object {
                         "startTime": -1,
@@ -14359,6 +14619,10 @@ DiagramElementPrimative {
                   "toDisolve": "",
                 },
                 "custom": Object {
+                  "callback": null,
+                  "plan": Array [],
+                },
+                "parallel": Object {
                   "callback": null,
                   "plan": Array [],
                 },
@@ -14718,6 +14982,7 @@ DiagramElementPrimative {
                 "isAnimating": false,
                 "isAnimatingColor": false,
                 "isAnimatingCustom": false,
+                "isAnimatingParallel": false,
                 "isBeingMoved": false,
                 "isMovingFreely": false,
                 "isPulsing": false,
@@ -14777,6 +15042,10 @@ DiagramElementPrimative {
                       },
                     ],
                   },
+                },
+                "parallelAnimation": Object {
+                  "currentPhase": Array [],
+                  "currentPhaseIndex": Array [],
                 },
                 "pulse": Object {
                   "startTime": -1,
@@ -15255,6 +15524,7 @@ DiagramElementPrimative {
       "isAnimating": false,
       "isAnimatingColor": false,
       "isAnimatingCustom": false,
+      "isAnimatingParallel": false,
       "isBeingMoved": false,
       "isMovingFreely": false,
       "isPulsing": false,
@@ -15322,6 +15592,10 @@ DiagramElementPrimative {
             },
           ],
         },
+      },
+      "parallelAnimation": Object {
+        "currentPhase": Array [],
+        "currentPhaseIndex": Array [],
       },
       "pulse": Object {
         "startTime": -1,
@@ -15475,6 +15749,7 @@ DiagramElementPrimative {
     "isAnimating": false,
     "isAnimatingColor": false,
     "isAnimatingCustom": false,
+    "isAnimatingParallel": false,
     "isBeingMoved": false,
     "isMovingFreely": false,
     "isPulsing": false,
@@ -15534,6 +15809,10 @@ DiagramElementPrimative {
           },
         ],
       },
+    },
+    "parallelAnimation": Object {
+      "currentPhase": Array [],
+      "currentPhaseIndex": Array [],
     },
     "pulse": Object {
       "startTime": -1,
