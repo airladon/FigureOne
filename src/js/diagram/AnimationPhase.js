@@ -14,7 +14,7 @@ type TypeColor = [number, number, number, number];
 
 type TypeAnimationStepInputOptions = {
   // eslint-disable-next-line no-use-before-define
-  animations: AnimationStep | Array<AnimationStep>,
+  // animations: AnimationStep | Array<AnimationStep>,
   onFinish: ?(boolean) => void;
   finishOnCancel: boolean;
 };
@@ -22,7 +22,7 @@ type TypeAnimationStepInputOptions = {
 export class AnimationStep {
   startTime: number;
   duration: number;
-  animations: Array<AnimationStep>;
+  // animations: Array<AnimationStep>;
   onFinish: ?(boolean) => void;
   finishOnCancel: boolean;
 
@@ -32,12 +32,12 @@ export class AnimationStep {
       finishOnCancel: true,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
-    if (!Array.isArray(options.animations)) {
-      this.duration = options.animations.duration;
-      this.animations = [options.animations];
-    } else {
-      this.animations = options.animations;
-    }
+    // if (!Array.isArray(options.animations)) {
+    //   this.duration = options.animations.duration;
+    //   this.animations = [options.animations];
+    // } else {
+    //   this.animations = options.animations;
+    // }
     // this.calcDuration();
     // this.animations = options.animations;
     this.onFinish = options.onFinish;
@@ -55,7 +55,6 @@ export class AnimationStep {
   nextFrame(now: number) {
     if (this.startTime < 0) {
       this.startTime = now;
-      return 0;
     }
     let remainingTime = 0;
     let deltaTime = now - this.startTime;
@@ -116,7 +115,7 @@ export class AnimationUnit extends AnimationStep {
 
     const options = joinObjects({}, defaultOptions, optionsIn);
     this.element = options.element;
-    this.type = options.Type;
+    this.type = options.type;
     this.onFinish = options.onFinish;
     this.duration = options.duration;
     if (options.progression === 'linear') {
@@ -197,7 +196,7 @@ export class TransformAnimationUnit extends AnimationUnit {
     };
     let options = defaultTransformOptions;
     if (optionsIn.transform != null) {
-      options = joinObjects({}, optionsIn.transform, defaultTransformOptions);
+      options = joinObjects({}, defaultTransformOptions, optionsIn.transform);
     }
     // $FlowFixMe
     this.transform = {};
@@ -215,7 +214,7 @@ export class TransformAnimationUnit extends AnimationUnit {
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
   start() {
-    if (this.start === null) {
+    if (this.transform.start === null) {
       if (this.element != null) {
         this.transform.start = this.element.transform._dup();
       } else {
@@ -299,9 +298,13 @@ export class TransformAnimationUnit extends AnimationUnit {
   }
 }
 
+type TypeAnimationParallelInputOptions = {
+  animations: Array<AnimationStep> | AnimationStep;
+} & TypeAnimationStepInputOptions;
 
 // Animations get started from a parent, but finish themselves
 export class AnimationParallel extends AnimationStep {
+  animations: Array<AnimationStep>;
   // constructor(optionsIn: TypeAnimationStepInputOptions) {
   //   super(optionsIn);
   //   this.index = 0;
@@ -316,6 +319,17 @@ export class AnimationParallel extends AnimationStep {
   //   });
   //   this.duration = duration;
   // }
+  constructor(optionsIn: TypeAnimationParallelInputOptions) {
+    super(optionsIn);
+    const defaultOptions = {};
+    const options = joinObjects({}, defaultOptions, optionsIn);
+    if (!Array.isArray(options.animations)) {
+      this.duration = options.animations.duration;
+      this.animations = [options.animations];
+    } else {
+      this.animations = options.animations;
+    }
+  }
 
   nextFrame(now: number) {
     let remaining = 0;
@@ -338,12 +352,25 @@ export class AnimationParallel extends AnimationStep {
   }
 }
 
+type TypeAnimationSerialInputOptions = {
+  animations: Array<AnimationStep> | AnimationStep;
+} & TypeAnimationStepInputOptions;
+
 export class AnimationSerial extends AnimationStep {
+  animations: Array<AnimationStep>;
   index: number;
 
-  constructor(optionsIn: TypeAnimationStepInputOptions) {
+  constructor(optionsIn: TypeAnimationSerialInputOptions) {
     super(optionsIn);
     this.index = 0;
+    const defaultOptions = {};
+    const options = joinObjects({}, defaultOptions, optionsIn);
+    if (!Array.isArray(options.animations)) {
+      this.duration = options.animations.duration;
+      this.animations = [options.animations];
+    } else {
+      this.animations = options.animations;
+    }
   }
 
   // calcDuration() {
