@@ -8,13 +8,14 @@ import * as tools from '../tools/math';
 import type { pathOptionsType } from '../tools/g2';
 // eslint-disable-next-line import/no-cycle
 import { DiagramElement } from './Element';
+import { joinObjects } from '../tools/tools';
 
 type TypeColor = [number, number, number, number];
 
-type TypeAnimationPhaseOptions = {
+type TypeAnimationUnitOptions = {
   element?: DiagramElement;
   type?: 'transform' | 'color' | 'custom'; // default is transform
-  velocityStyle?: 'linear' | 'easeinout' | 'easein' | 'easeout'; // default is dependent on type
+  progression?: 'linear' | 'easeinout' | 'easein' | 'easeout'; // default is dependent on type
   onFinish?: ?(boolean) => void;
   onCancel?: ?(boolean) => void;  // Default is onFinish
   duration?: number;    // Either duration or velocity must be defined
@@ -25,6 +26,7 @@ type TypeAnimationPhaseOptions = {
     delta?: Transform;      // delta overrides target if both are defined
     translationStyle?: 'linear' | 'curved'; // default is linear
     translationOptions?: pathOptionsType;
+    rotDirection: 0 | 1 | -1 | 2;
   };
   color?: {
     start?: TypeColor;      // default is element color
@@ -40,6 +42,7 @@ type TypeAnimationPhaseOptions = {
 };
 
 export class AnimationUnit {
+  element: DiagramElement;
   type: 'transform' | 'color' | 'custom';
 
   time: {
@@ -55,7 +58,7 @@ export class AnimationUnit {
     start: Transform;
     delta: Transform;
     target: Transform;
-    rotDirection: 'clockwise' | 'counterClockWise' | 'shortest' | 'notThroughZero';
+    rotDirection: 0 | 1 | -1 | 2;
     translationStyle: 'linear' | 'curved';
     translationOptions: pathOptionsType;
   } | null;
@@ -77,34 +80,42 @@ export class AnimationUnit {
   onFinish: ?(boolean) => void;
   onCancel: ?(boolean) => void;
   // finishOnCancel: boolean;
-  style: 'linear' | 'easeinout' | 'easein' | 'easeout';
+  progression: 'linear' | 'easeinout' | 'easein' | 'easeout';
 
-  constructor(options: TypeAnimationPhaseOptions) {
+  constructor(options: TypeAnimationUnitOptions) {
     let defaultStartColor = null;
     let defaultStartTransform = null;
-    let defaultVelocityStyle = 'linear';
-    if (options.element != null) {
-      defaultStartColor = options.element.color.slice();
-      defaultStartTransform = options.element.transform._dup()
+    let defaultProgression = 'linear';
+    const { element } = options;
+    if (element != null) {
+      defaultStartColor = element.color.slice();
+      defaultStartTransform = element.transform._dup();
     }
     if (options.type === 'transform') {
-      defaultVelocityStyle = 'easeinout';
+      defaultProgression = 'easeinout';
     }
     const defaultOptions = {
       element: null,
       type: 'custom',
+      progression: defaultProgression,
       onFinish: null,
       onCancel: this.onFinish,
-      duration: 1,
+      time: {
+        start: -1,
+        plannedStartTime: -1,
+        duration: 1,
+      },
       transform: {
         start: defaultStartTransform,
+        target: defaultStartTransform,
         translationStyle: 'linear',
+        rotDirection: 0,
         translationOptions: {
           rot: 1,
           magnitude: 0.5,
           offset: 0.5,
           controlPoint: null,
-          direction: ''
+          direction: '',
         },
       },
       color: {
@@ -114,8 +125,55 @@ export class AnimationUnit {
       custom: {
         start: 0,
         target: 1,
-      }
+      },
     };
+
+    const optionsToUse = joinObjects({}, defaultOptions, options);
+    this.element = optionsToUse.element;
+    this.type = optionsToUse.Type;
+    this.progression = optionsToUse.progression;
+    this.onFinish = optionsToUse.onFinish;
+    this.onCancel = optionsToUse.onCancel;
+    this.time.duration = optionsToUse.duration;
+    this.transform = optionsToUse.transform;
+    this.color = optionsToUse.color;
+    this.custom = optionsToUse.custom;
+
+    if (optionsToUse.type === 'transform') {
+      this.transform.rotDirection = optionsToUse.rotDirection;
+      let delta = optionsToUse.transform.start.zero();
+      if (optionsToUse.transform.delta != null) {
+        ({ delta } = optionsToUse.transform);
+        this.transform.target = optionsToUse.transform.start.add(delta);
+      } else if (optionsToUse.transform.target != null) {
+        delta = optionsToUse.transform.target.sub(optionsToUse.transform.start);
+      }
+      this.transform.delta = delta;
+      if (optionsToUse.velocity != null) {
+        this.time.duration = getMaxTimeFromVelocity(
+          optionsToUse.transform.start,
+          optionsToUse.transform.target,
+          optionsToUse.velocity,
+          optionsToUse.rotDirection,
+        );
+      }
+
+      this.transform.delta.order.forEach((del, index) => {
+        const start = this.transform.start.order[index];
+        const target = this.transform.target.order[index];
+        if (del instanceof Rotation
+          && start instanceof Rotation
+          && target instanceof Rotation) {
+          const rotDiff = getDeltaAngle(start.r, target.r, this.transform.rotDirection);
+          // eslint-disable-next-line no-param-reassign
+          del.r = rotDiff;
+        }
+      });
+    } else if (optionsToUse.type === 'color') {
+
+    } else if (optionsToUse.type === 'custom') {
+      
+    }
   }
 }
 
