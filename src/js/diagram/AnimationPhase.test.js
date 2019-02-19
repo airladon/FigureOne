@@ -356,6 +356,51 @@ describe('Serial Animation', () => {
       expect(serialCallbackFlag).toBe(1);
       expect(element.transform.round()).toEqual(target3);
     });
+    // Testing to make target remains at current
+    test('Complete on cancel = true, force noComplete', () => {
+      step1.completeOnCancel = true;
+      step2.completeOnCancel = true;
+      step3.completeOnCancel = true;
+      serial.start();
+      serial.nextFrame(100);
+      serial.nextFrame(101.1);
+      serial.finish(true, 'noComplete');
+      expect(step1CallbackFlag).toBe(1);
+      expect(step2CallbackFlag).toBe(1);
+      expect(step3CallbackFlag).toBe(1);
+      expect(serialCallbackFlag).toBe(1);
+      expect(element.transform.round()).toEqual(target2.constant(1.1));
+    });
+    // Testing to make sure non completion works
+    test('Complete on cancel = false, no forcing', () => {
+      step1.completeOnCancel = false;
+      step2.completeOnCancel = false;
+      step3.completeOnCancel = false;
+      serial.start();
+      serial.nextFrame(100);
+      serial.nextFrame(101.1);
+      serial.finish(true);
+      expect(step1CallbackFlag).toBe(1);
+      expect(step2CallbackFlag).toBe(1);
+      expect(step3CallbackFlag).toBe(1);
+      expect(serialCallbackFlag).toBe(1);
+      expect(element.transform.round()).toEqual(target2.constant(1.1));
+    });
+    // Testing to make sure complete override works
+    test('Complete on cancel = false, force complete', () => {
+      step1.completeOnCancel = false;
+      step2.completeOnCancel = false;
+      step3.completeOnCancel = false;
+      serial.start();
+      serial.nextFrame(100);
+      serial.nextFrame(101.1);
+      serial.finish(true, 'complete');
+      expect(step1CallbackFlag).toBe(1);
+      expect(step2CallbackFlag).toBe(1);
+      expect(step3CallbackFlag).toBe(1);
+      expect(serialCallbackFlag).toBe(1);
+      expect(element.transform.round()).toEqual(target3);
+    });
   });
 });
 describe('Parallel Animation', () => {
