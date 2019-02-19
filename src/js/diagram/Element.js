@@ -15,6 +15,13 @@ import { TextObject } from './DrawingObjects/TextObject/TextObject';
 import { duplicateFromTo, joinObjects } from '../tools/tools';
 import { colorArrayToRGBA } from '../tools/color';
 
+import type {
+  TypePositionAnimationStepInputOptions,
+} from './Animation/Animation';
+// import Animator from './Animation/Animator';
+// import PositionAnimationStep from './Animation/AnimationStep/ElementAnimationStep/PositionAnimationStep';
+
+
 // eslint-disable-next-line import/no-cycle
 import {
   AnimationPhase, ColorAnimationPhase, CustomAnimationPhase,

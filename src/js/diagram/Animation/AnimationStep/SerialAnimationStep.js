@@ -6,7 +6,7 @@ import AnimationStep from '../AnimationStep';
 import { joinObjects } from '../../../tools/tools';
 
 export type TypeSerialAnimationStepInputOptions = {
-  steps: Array<AnimationStep> | AnimationStep;
+  steps?: Array<AnimationStep> | AnimationStep;
 } & TypeAnimationStepInputOptions;
 
 export default class SerialAnimationStep extends AnimationStep {
