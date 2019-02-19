@@ -295,6 +295,106 @@ class Point {
       angle: Math.atan2(this.y, this.x),
     };
   }
+
+  toDelta(
+    delta: Point,
+    percent: number,
+    translationStyle: 'linear' | 'curved',
+    // eslint-disable-next-line no-use-before-define
+    translationOptions: pathOptionsType,
+  ) {                 // eslint-disable-next-line no-use-before-define
+    const pathPoint = translationPath(
+      translationStyle,
+      this._dup(), delta, percent,
+      translationOptions,
+    );
+    return pathPoint;
+  }
+}
+
+function linearPath(
+  start: Point,
+  delta: Point,
+  percent: number,
+) {
+  return start.add(delta.x * percent, delta.y * percent);
+}
+
+type linearPathOptionsType = {
+};
+type curvedPathOptionsType = {
+  // path: '(Point, Point, number) => Point';
+  rot: number;
+  magnitude: number;
+  offset: number;
+  controlPoint: Point | null;
+  direction: '' | 'up' | 'left' | 'down' | 'right';
+};
+export type pathOptionsType = curvedPathOptionsType & linearPathOptionsType;
+
+function curvedPath(
+  start: Point,
+  delta: Point,
+  percent: number,
+  options: pathOptionsType,
+) {
+  const o = options;
+  const angle = Math.atan2(delta.y, delta.x);
+  const midPoint = start.add(new Point(delta.x * o.offset, delta.y * o.offset));
+  const dist = delta.toPolar().mag * o.magnitude;
+  let { controlPoint } = options;
+  if (controlPoint == null) {
+    const { direction } = options;
+    let xDelta = Math.cos(angle + o.rot * Math.PI / 2);
+    let yDelta = Math.sin(angle + o.rot * Math.PI / 2);
+    if (direction === 'up') {
+      if (yDelta < 0) {
+        yDelta = Math.sin(angle + o.rot * Math.PI / 2 + Math.PI);
+      }
+    } else if (direction === 'down') {
+      if (yDelta > 0) {
+        yDelta = Math.sin(angle + o.rot * Math.PI / 2 + Math.PI);
+      }
+    } else if (direction === 'left') {
+      if (xDelta > 0) {
+        xDelta = Math.cos(angle + o.rot * Math.PI / 2 + Math.PI);
+      }
+    } else if (direction === 'right') {
+      if (xDelta < 0) {
+        xDelta = Math.cos(angle + o.rot * Math.PI / 2 + Math.PI);
+      }
+    }
+
+    controlPoint = new Point(
+      midPoint.x + dist * xDelta,
+      midPoint.y + dist * yDelta,
+    );
+  }
+
+  const p0 = start;
+  const p1 = controlPoint;
+  const p2 = start.add(delta);
+  const t = percent;
+  const bx = quadraticBezier(p0.x, p1.x, p2.x, t);
+  const by = quadraticBezier(p0.y, p1.y, p2.y, t);
+  return new Point(bx, by);
+}
+
+
+function translationPath(
+  pathType: 'linear' | 'curved' = 'linear',
+  start: Point,
+  delta: Point,
+  percent: number,
+  options: pathOptionsType,
+) {
+  if (pathType === 'linear') {
+    return linearPath(start, delta, percent);
+  }
+  if (pathType === 'curved') {
+    return curvedPath(start, delta, percent, options);
+  }
+  return new Point(0, 0);
 }
 
 function point(x: number, y: number) {
@@ -942,90 +1042,6 @@ class Scale extends Point {
 }
 
 
-function linearPath(
-  start: Point,
-  delta: Point,
-  percent: number,
-) {
-  return start.add(delta.x * percent, delta.y * percent);
-}
-
-type linearPathOptionsType = {
-};
-type curvedPathOptionsType = {
-  // path: '(Point, Point, number) => Point';
-  rot: number;
-  magnitude: number;
-  offset: number;
-  controlPoint: Point | null;
-  direction: '' | 'up' | 'left' | 'down' | 'right';
-};
-export type pathOptionsType = curvedPathOptionsType & linearPathOptionsType;
-
-function curvedPath(
-  start: Point,
-  delta: Point,
-  percent: number,
-  options: pathOptionsType,
-) {
-  const o = options;
-  const angle = Math.atan2(delta.y, delta.x);
-  const midPoint = start.add(new Point(delta.x * o.offset, delta.y * o.offset));
-  const dist = delta.toPolar().mag * o.magnitude;
-  let { controlPoint } = options;
-  if (controlPoint == null) {
-    const { direction } = options;
-    let xDelta = Math.cos(angle + o.rot * Math.PI / 2);
-    let yDelta = Math.sin(angle + o.rot * Math.PI / 2);
-    if (direction === 'up') {
-      if (yDelta < 0) {
-        yDelta = Math.sin(angle + o.rot * Math.PI / 2 + Math.PI);
-      }
-    } else if (direction === 'down') {
-      if (yDelta > 0) {
-        yDelta = Math.sin(angle + o.rot * Math.PI / 2 + Math.PI);
-      }
-    } else if (direction === 'left') {
-      if (xDelta > 0) {
-        xDelta = Math.cos(angle + o.rot * Math.PI / 2 + Math.PI);
-      }
-    } else if (direction === 'right') {
-      if (xDelta < 0) {
-        xDelta = Math.cos(angle + o.rot * Math.PI / 2 + Math.PI);
-      }
-    }
-
-    controlPoint = new Point(
-      midPoint.x + dist * xDelta,
-      midPoint.y + dist * yDelta,
-    );
-  }
-
-  const p0 = start;
-  const p1 = controlPoint;
-  const p2 = start.add(delta);
-  const t = percent;
-  const bx = quadraticBezier(p0.x, p1.x, p2.x, t);
-  const by = quadraticBezier(p0.y, p1.y, p2.y, t);
-  return new Point(bx, by);
-}
-
-
-function translationPath(
-  pathType: 'linear' | 'curved' = 'linear',
-  start: Point,
-  delta: Point,
-  percent: number,
-  options: pathOptionsType,
-) {
-  if (pathType === 'linear') {
-    return linearPath(start, delta, percent);
-  }
-  if (pathType === 'curved') {
-    return curvedPath(start, delta, percent, options);
-  }
-  return new Point(0, 0);
-}
 
 
 class TransformLimit {
@@ -1718,7 +1734,7 @@ function getMaxTimeFromVelocity(
   startTransform: Transform,
   stopTransform: Transform,
   velocityTransform: Transform,
-  rotDirection: 0 | 1 | -1 | 2,
+  rotDirection: 0 | 1 | -1 | 2 = 0,
 ) {
   const deltaTransform = stopTransform.sub(startTransform);
   let time = 0;
