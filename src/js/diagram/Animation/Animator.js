@@ -9,7 +9,7 @@ import PositionAnimationStep from './AnimationStep/ElementAnimationStep/Position
 import SerialAnimationStep from './AnimationStep/SerialAnimationStep';
 import { joinObjects } from '../../tools/tools';
 
-type TypeAnimatorInputOptions = {
+export type TypeAnimatorInputOptions = {
   element: DiagramElement;
 } & TypeSerialAnimationStepInputOptions;
 

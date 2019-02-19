@@ -11,8 +11,8 @@ import { joinObjects } from '../../tools/tools';
 
 
 export type TypeAnimationStepInputOptions = {
-  onFinish: ?(boolean) => void;
-  finishOnCancel: boolean;
+  onFinish?: ?(boolean) => void;
+  completeOnCancel?: boolean;
 };
 
 export default class AnimationStep {
