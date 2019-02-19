@@ -288,7 +288,7 @@ export class TransformAnimationUnit extends AnimationUnit {
     if (cancelled && force === 'complete') {
       setToEnd();
     }
-    if (cancelled && force == null && this.completeOnCancel) {
+    if (cancelled && force == null && this.completeOnCancel === true) {
       setToEnd();
     }
     if (cancelled === false) {
@@ -308,20 +308,7 @@ type TypeAnimationParallelInputOptions = {
 // Animations get started from a parent, but finish themselves
 export class AnimationParallel extends AnimationStep {
   animations: Array<AnimationStep>;
-  // constructor(optionsIn: TypeAnimationStepInputOptions) {
-  //   super(optionsIn);
-  //   this.index = 0;
-  // }
 
-  // calcDuration() {
-  //   let duration = 0;
-  //   this.animations.forEach((animationStep) => {
-  //     if (animationStep.duration > duration) {
-  //       ({ duration } = animationStep);
-  //     }
-  //   });
-  //   this.duration = duration;
-  // }
   constructor(optionsIn: TypeAnimationParallelInputOptions) {
     super(optionsIn);
     const defaultOptions = {};
