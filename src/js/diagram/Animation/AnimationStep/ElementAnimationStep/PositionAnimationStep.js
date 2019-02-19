@@ -9,15 +9,30 @@ import type {
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 
+function deleteKeys(obj: Object, keys: Array<string>) {
+  keys.forEach((key) => {
+    if (obj[key] !== undefined) {
+      // eslint-disable-next-line no-param-reassign
+      delete obj[key];
+    }
+  });
+}
+
+function copyKeys(source: Object, destination: Object, keys: Array<string>) {
+  keys.forEach((key) => {
+    if (source[key] !== undefined) {
+      // eslint-disable-next-line no-param-reassign
+      destination[key] = source[key];
+    }
+  });
+}
 
 export type TypePositionAnimationStepInputOptions = {
-  position: {
-    start?: Point;      // default is element transform
-    target?: Point;     // Either target or delta must be defined
-    delta?: Point;      // delta overrides target if both are defined
-    translationStyle?: 'linear' | 'curved'; // default is linear
-    translationOptions?: pathOptionsType;
-  }
+  start?: Point;      // default is element transform
+  target?: Point;     // Either target or delta must be defined
+  delta?: Point;      // delta overrides target if both are defined
+  translationStyle?: 'linear' | 'curved'; // default is linear
+  translationOptions?: pathOptionsType;
 } & TypeElementAnimationStepInputOptions;
 
 export default class PositionAnimationStep extends ElementAnimationStep {
@@ -32,7 +47,14 @@ export default class PositionAnimationStep extends ElementAnimationStep {
   };
 
   constructor(optionsIn: TypePositionAnimationStepInputOptions) {
-    super(joinObjects({}, optionsIn, { type: 'position' }));
+    const ElementAnimationStepOptionsIn =
+      joinObjects({}, optionsIn, { type: 'position' });
+    deleteKeys(ElementAnimationStepOptionsIn, [
+      'start', 'delta', 'target', 'translationStyle', 'translationOptions',
+      'velocity',
+    ]);
+    super(ElementAnimationStepOptionsIn);
+
     const defaultPositionOptions = {
       start: null,
       target: null,
@@ -47,18 +69,19 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       },
       velocity: null,
     };
-    let options = defaultPositionOptions;
-    if (optionsIn.position != null) {
-      options = joinObjects({}, defaultPositionOptions, optionsIn.position);
-    }
+    const options = joinObjects({}, defaultPositionOptions, optionsIn);
     // $FlowFixMe
     this.position = {};
-    this.position.start = options.start;
-    this.position.target = options.target;
-    this.position.delta = options.delta;
-    this.position.translationStyle = options.translationStyle;
-    this.position.translationOptions = options.translationOptions;
-    this.position.velocity = options.velocity;
+    copyKeys(options, this.position, [
+      'start', 'delta', 'target', 'translationStyle', 'translationOptions',
+      'velocity',
+    ]);
+    // this.position.start = options.start;
+    // this.position.target = options.target;
+    // this.position.delta = options.delta;
+    // this.position.translationStyle = options.translationStyle;
+    // this.position.translationOptions = options.translationOptions;
+    // this.position.velocity = options.velocity;
   }
 
   // On start, calculate the duration, target and delta if not already present.
