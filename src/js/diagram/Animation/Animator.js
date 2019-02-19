@@ -4,6 +4,7 @@ import { DiagramElement } from '../Element';
 import type { TypeSerialAnimationStepInputOptions } from './AnimationStep/SerialAnimationStep';
 import type {
   TypePositionAnimationStepInputOptions, TypeParallelAnimationStepInputOptions,
+  TypeDelayStepInputOptions,
 } from './Animation';
 // import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
 // import SerialAnimationStep from './AnimationStep/SerialAnimationStep';
@@ -34,6 +35,15 @@ export default class Animator extends animation.SerialAnimationStep {
     return this;
   }
 
+  delay(...args: Array<number | TypeDelayStepInputOptions>) {
+    let options = {};
+    if (typeof args[0] === 'number') {
+      options = joinObjects({}, { duration: args[0] }, ...(args.slice(1)));
+    }
+    this.then(new animation.DelayStep(options));
+    return this;
+  }
+
   inParallel(
     stepsOrOptionsIn: Array<animation.AnimationStep> | TypeParallelAnimationStepInputOptions,
     optionsIn: TypeParallelAnimationStepInputOptions = {},
@@ -50,7 +60,6 @@ export default class Animator extends animation.SerialAnimationStep {
 
   // When an animator stops, it is reset
   finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
-    console.log(this.completeOnCancel, cancelled)
     super.finish(cancelled, force);
     this.steps = [];
   }

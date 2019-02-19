@@ -742,6 +742,11 @@ class DiagramElement {
     return new animations.PositionAnimationStep(options);
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  delay(...args) {
+    return new animations.DelayStep(args);
+  }
+
   setColor(color: Array<number>) {
     this.color = color.slice();
   }
