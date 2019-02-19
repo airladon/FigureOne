@@ -6,28 +6,29 @@ import AnimationStep from '../AnimationStep';
 import { joinObjects } from '../../../tools/tools';
 
 
-type TypeParallelAnimationStepInputOptions = {
-  animations: Array<AnimationStep> | AnimationStep;
+export type TypeParallelAnimationStepInputOptions = {
+  steps: Array<AnimationStep> | AnimationStep;
 } & TypeAnimationStepInputOptions;
 
 // Animations get started from a parent, but finish themselves
 export default class ParallelAnimationStep extends AnimationStep {
-  animationSteps: Array<AnimationStep>;
+  steps: Array<AnimationStep>;
 
   constructor(optionsIn: TypeParallelAnimationStepInputOptions) {
     super(optionsIn);
     const defaultOptions = {};
     const options = joinObjects({}, defaultOptions, optionsIn);
-    if (!Array.isArray(options.animations)) {
-      this.animationSteps = [options.animations];
-    } else {
-      this.animationSteps = options.animations;
+    this.steps = [];
+    if (!Array.isArray(options.steps) && options.steps != null) {
+      this.steps = [options.steps];
+    } else if (options.steps != null) {
+      this.steps = options.steps;
     }
   }
 
   nextFrame(now: number) {
     let remaining = -1;
-    this.animationSteps.forEach((step) => {
+    this.steps.forEach((step) => {
       const stepRemaining = step.nextFrame(now);
       if (remaining === -1) {
         remaining = stepRemaining;
@@ -44,7 +45,7 @@ export default class ParallelAnimationStep extends AnimationStep {
 
   startWaiting() {
     super.startWaiting();
-    this.animationSteps.forEach((step) => {
+    this.steps.forEach((step) => {
       step.startWaiting();
     });
   }
@@ -52,7 +53,7 @@ export default class ParallelAnimationStep extends AnimationStep {
   start() {
     this.startWaiting();
     super.start();
-    this.animationSteps.forEach((step) => {
+    this.steps.forEach((step) => {
       step.start();
     });
   }
@@ -62,7 +63,7 @@ export default class ParallelAnimationStep extends AnimationStep {
       return;
     }
     super.finish(cancelled, force);
-    this.animationSteps.forEach((step) => {
+    this.steps.forEach((step) => {
       if (step.state !== 'idle') {
         step.finish(cancelled, force);
       }
