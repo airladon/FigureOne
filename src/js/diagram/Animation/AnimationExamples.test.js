@@ -19,6 +19,8 @@ describe('Animator API', () => {
   let examples;
   let p1;
   let p2;
+  let callbackFlag;
+  let callback;
   beforeEach(() => {
     const diagram = makeDiagram();
     elem1 = diagram.objects.line();
@@ -27,6 +29,8 @@ describe('Animator API', () => {
     elem2.transform = elem2.transform.zero();
     p1 = new Point(1, 1);
     p2 = new Point(2, 2);
+    callbackFlag = 0;
+    callback = () => { callbackFlag = 1; };
     examples = {
       moveElementSimple: () => {
         elem1.animator
@@ -54,6 +58,22 @@ describe('Animator API', () => {
             elem2.moveTo({ target: p1, duration: 1, progression: 'linear' }),
           ], { completeOnCancel: false })
           .moveTo({ target: p2, duration: 1, progression: 'linear' })
+          .start();
+      },
+      animatorCallbackStop: () => {
+        elem1.animator
+          .moveTo({ target: p1, duration: 1, progression: 'linear' })
+          .moveTo({ target: p2, duration: 1, progression: 'linear' })
+          .whenFinished(callback)
+          .ifCanceledThenStop()
+          .start();
+      },
+      animatorCallbackComplete: () => {
+        elem1.animator
+          .moveTo({ target: p1, duration: 1, progression: 'linear' })
+          .moveTo({ target: p2, duration: 1, progression: 'linear' })
+          .whenFinished(callback)
+          .ifCanceledThenComplete()
           .start();
       },
     };
@@ -106,5 +126,17 @@ describe('Animator API', () => {
     expect(elem1.getPosition().round()).toEqual(point(2));
     expect(elem2.getPosition().round()).toEqual(point(1));
     expect(math.round(remaining)).toBe(0.1);
+  });
+  test('Cancel, check callback and stop', () => {
+    examples.animatorCallbackStop();
+    // console.log(elem1.animator)
+    elem1.animator.nextFrame(100);
+    elem1.animator.nextFrame(100.1);
+    expect(elem1.getPosition().round()).toEqual(point(0.1));
+    expect(callbackFlag).toBe(0);
+
+    elem1.animator.cancel();
+    expect(callbackFlag).toBe(1);
+    expect(elem1.getPosition().round()).toEqual(point(0.1));
   });
 });

@@ -50,6 +50,7 @@ export default class Animator extends animation.SerialAnimationStep {
 
   // When an animator stops, it is reset
   finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+    console.log(this.completeOnCancel, cancelled)
     super.finish(cancelled, force);
     this.steps = [];
   }

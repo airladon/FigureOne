@@ -68,9 +68,19 @@ export default class SerialAnimationStep extends AnimationStep {
       return;
     }
     super.finish(cancelled, force);
+    let forceToUse = null;
+    if (this.completeOnCancel === true) {
+      forceToUse = 'complete';
+    }
+    if (this.completeOnCancel === false) {
+      forceToUse = 'noComplete';
+    }
+    if (force != null) {
+      forceToUse = force;
+    }
     this.steps.forEach((step) => {
       if (step.state !== 'idle') {
-        step.finish(cancelled, force);
+        step.finish(cancelled, forceToUse);
       }
     });
     if (this.onFinish != null) {

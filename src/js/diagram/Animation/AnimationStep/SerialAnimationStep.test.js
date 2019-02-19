@@ -144,6 +144,50 @@ describe('Serial Animation', () => {
     expect(dup).not.toBe(serial);
   });
   describe('Cancelling', () => {
+    test('Serial Complete on cancel = true forces all steps to cancel', () => {
+      step1.completeOnCancel = false;
+      step2.completeOnCancel = false;
+      step3.completeOnCancel = false;
+      serial.completeOnCancel = true;
+      serial.start();
+      serial.nextFrame(100);
+      serial.nextFrame(100.1);
+      serial.cancel();
+      expect(element.transform.round()).toEqual(target3);
+    });
+    test('Serial Complete on cancel = false forces all steps to cancel', () => {
+      step1.completeOnCancel = true;
+      step2.completeOnCancel = true;
+      step3.completeOnCancel = true;
+      serial.completeOnCancel = false;
+      serial.start();
+      serial.nextFrame(100);
+      serial.nextFrame(100.1);
+      serial.cancel();
+      expect(element.transform.round()).toEqual(target1.constant(0.1));
+    });
+    test('Serial Complete on cancel = false overridden by force', () => {
+      step1.completeOnCancel = true;
+      step2.completeOnCancel = true;
+      step3.completeOnCancel = true;
+      serial.completeOnCancel = false;
+      serial.start();
+      serial.nextFrame(100);
+      serial.nextFrame(100.1);
+      serial.cancel('complete');
+      expect(element.transform.round()).toEqual(target3);
+    });
+    test('Serial Complete on cancel = true overriden by cancel', () => {
+      step1.completeOnCancel = false;
+      step2.completeOnCancel = false;
+      step3.completeOnCancel = false;
+      serial.completeOnCancel = true;
+      serial.start();
+      serial.nextFrame(100);
+      serial.nextFrame(100.1);
+      serial.cancel('noComplete');
+      expect(element.transform.round()).toEqual(target1.constant(0.1));
+    });
     test('Complete on cancel = true, no forcing', () => {
       step1.completeOnCancel = true;
       step2.completeOnCancel = true;

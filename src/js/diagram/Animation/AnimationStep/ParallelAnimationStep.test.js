@@ -129,6 +129,75 @@ describe('Parallel Animation', () => {
     expect(dup).not.toBe(parallel);
   });
   describe('Cancelling', () => {
+    test('Parallel complete on cancel = true forces all steps to complete', () => {
+      step1.completeOnCancel = false;
+      step2.completeOnCancel = false;
+      step3.completeOnCancel = false;
+      parallel.completeOnCancel = true;
+      parallel.start();
+      parallel.nextFrame(100);
+      parallel.nextFrame(100.1);
+      parallel.finish(true);
+      expect(step1CallbackFlag).toBe(1);
+      expect(step2CallbackFlag).toBe(1);
+      expect(step3CallbackFlag).toBe(1);
+      expect(parallelCallbackFlag).toBe(1);
+      expect(element1.transform.round()).toEqual(target1);
+      expect(element2.transform.round()).toEqual(target2);
+      expect(element3.transform.round()).toEqual(target3);
+    });
+    // checking override of step completeOnCancel
+    test('Complete on cancel = false forces all steps to stop', () => {
+      step1.completeOnCancel = true;
+      step2.completeOnCancel = true;
+      step3.completeOnCancel = true;
+      parallel.completeOnCancel = false;
+      parallel.start();
+      parallel.nextFrame(100);
+      parallel.nextFrame(100.1);
+      parallel.finish(true);
+      expect(step1CallbackFlag).toBe(1);
+      expect(step2CallbackFlag).toBe(1);
+      expect(step3CallbackFlag).toBe(1);
+      expect(parallelCallbackFlag).toBe(1);
+      expect(element1.transform.round()).toEqual(target1.constant(0.1));
+      expect(element2.transform.round()).toEqual(target2.constant(0.1));
+      expect(element3.transform.round()).toEqual(target3.constant(0.1));
+    });
+    test('Parallel complete on cancel = true with force noComplete', () => {
+      step1.completeOnCancel = true;
+      step2.completeOnCancel = true;
+      step3.completeOnCancel = false;
+      parallel.completeOnCancel = true;
+      parallel.start();
+      parallel.nextFrame(100);
+      parallel.nextFrame(100.1);
+      parallel.cancel('noComplete');
+      expect(step1CallbackFlag).toBe(1);
+      expect(step2CallbackFlag).toBe(1);
+      expect(step3CallbackFlag).toBe(1);
+      expect(parallelCallbackFlag).toBe(1);
+      expect(element1.transform.round()).toEqual(target1.constant(0.1));
+      expect(element2.transform.round()).toEqual(target2.constant(0.1));
+      expect(element3.transform.round()).toEqual(target3.constant(0.1));
+    });
+    test('Complete on cancel = false forces with force complete', () => {
+      step1.completeOnCancel = true;
+      step2.completeOnCancel = true;
+      step3.completeOnCancel = false;
+      parallel.completeOnCancel = false;
+      parallel.start();
+      parallel.nextFrame(100);
+      parallel.nextFrame(100.1);
+      parallel.finish(true, 'complete');
+      expect(step1CallbackFlag).toBe(1);
+      expect(step2CallbackFlag).toBe(1);
+      expect(step3CallbackFlag).toBe(1);
+      expect(parallelCallbackFlag).toBe(1);
+      expect(element1.transform.round()).toEqual(target1);
+      expect(element2.transform.round()).toEqual(target2);
+      expect(element3.transform.round()).toEqual(target3);
+    });
     test('Complete on cancel = true, no forcing', () => {
       step1.completeOnCancel = true;
       step2.completeOnCancel = true;
