@@ -24,12 +24,12 @@ export class AnimationStep {
   duration: number;
   // animations: Array<AnimationStep>;
   onFinish: ?(boolean) => void;
-  finishOnCancel: boolean;
+  completeOnCancel: boolean;
 
   constructor(optionsIn: TypeAnimationStepInputOptions) {
     const defaultOptions = {
       onFinish: null,
-      finishOnCancel: true,
+      completeOnCancel: true,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     // if (!Array.isArray(options.animations)) {
@@ -42,7 +42,7 @@ export class AnimationStep {
     // this.animations = options.animations;
     this.onFinish = options.onFinish;
     // this.onCancel = options.onCancel;
-    this.finishOnCancel = options.finishOnCancel;
+    this.completeOnCancel = options.completeOnCancel;
     this.startTime = -1;
   }
 
@@ -286,7 +286,7 @@ export class TransformAnimationUnit extends AnimationUnit {
     if (cancelled && force === 'complete') {
       setToEnd();
     }
-    if (cancelled && force == null && this.finishOnCancel) {
+    if (cancelled && force == null && this.completeOnCancel) {
       setToEnd();
     }
     if (cancelled === false) {
@@ -412,6 +412,15 @@ export class AnimationSerial extends AnimationStep {
       this.nextFrame(now);
     }
     return 0;
+  }
+
+  finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+    this.animations.forEach((animationStep) => {
+      animationStep.finish(cancelled, force);
+    });
+    if (this.onFinish != null) {
+      this.onFinish(cancelled);
+    }
   }
 }
 

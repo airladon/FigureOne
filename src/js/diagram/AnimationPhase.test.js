@@ -133,28 +133,90 @@ describe('Transfrom Animation Unit', () => {
     expect(unit.element.transform.round()).toEqual(target);
     expect(math.round(remainingTime)).toBe(0.1);
   });
-  test('Finish on Cancel', () => {
-    const start = element.transform.zero();
-    const target = element.transform.constant(1);
-    let finishFlag = 0;
-    const step = new TransformAnimationUnit({
-      element,
-      duration: 1,
-      progression: 'linear',
-      type: 'transform',
-      transform: { start, target },
-      finishOnCancel: true,
-      onFinish: () => { finishFlag = 1; },
+  describe('Cancelling', () => {
+    let step;
+    let callbackFlag = 0;
+    let start;
+    let target;
+    beforeEach(() => {
+      start = element.transform.zero();
+      target = element.transform.constant(1);
+      step = new TransformAnimationUnit({
+        element,
+        duration: 1,
+        progression: 'linear',
+        type: 'transform',
+        transform: { start, target },
+        onFinish: () => { callbackFlag = 1; },
+      });
     });
-    step.start();
-    step.nextFrame(0);
-    step.nextFrame(0.5);
-    expect(element.transform.round()).toEqual(start.constant(0.5));
+    test('CompleteOnCancel = true, Default Force', () => {
+      step.completeOnCancel = true;
+      step.start();
+      step.nextFrame(0);
+      step.nextFrame(0.5);
+      expect(element.transform.round()).toEqual(start.constant(0.5));
 
-    step.finish(true);
-    expect(element.transform.round()).toEqual(target);
-    expect(finishFlag).toBe(1);
+      step.finish(true);
+      expect(element.transform.round()).toEqual(target);
+      expect(callbackFlag).toBe(1);
+    });
+    test('CompleteOnCancel = false, Default Force', () => {
+      step.completeOnCancel = false;
+      step.start();
+      step.nextFrame(0);
+      step.nextFrame(0.5);
+      expect(element.transform.round()).toEqual(start.constant(0.5));
+
+      step.finish(true);
+      expect(element.transform.round()).toEqual(start.constant(0.5));
+      expect(callbackFlag).toBe(1);
+    });
+    test('CompleteOnCancel = true, Force no complete', () => {
+      step.completeOnCancel = true;
+      step.start();
+      step.nextFrame(0);
+      step.nextFrame(0.5);
+      expect(element.transform.round()).toEqual(start.constant(0.5));
+
+      step.finish(true, 'noComplete');
+      expect(element.transform.round()).toEqual(start.constant(0.5));
+      expect(callbackFlag).toBe(1);
+    });
+    test('CompleteOnCancel = false, Force complete', () => {
+      step.completeOnCancel = false;
+      step.start();
+      step.nextFrame(0);
+      step.nextFrame(0.5);
+      expect(element.transform.round()).toEqual(start.constant(0.5));
+
+      step.finish(true, 'complete');
+      expect(element.transform.round()).toEqual(target);
+      expect(callbackFlag).toBe(1);
+    });
   });
+  // test('Finish on Cancel', () => {
+  //   const start = element.transform.zero();
+  //   const target = element.transform.constant(1);
+  //   let finishFlag = 0;
+  //   const step = new TransformAnimationUnit({
+  //     element,
+  //     duration: 1,
+  //     progression: 'linear',
+  //     type: 'transform',
+  //     transform: { start, target },
+  //     finishOnCancel: true,
+  //     onFinish: () => { finishFlag = 1; },
+  //   });
+  //   step.start();
+  //   step.nextFrame(0);
+  //   step.nextFrame(0.5);
+  //   expect(element.transform.round()).toEqual(start.constant(0.5));
+
+  //   step.finish(true);
+  //   expect(element.transform.round()).toEqual(target);
+  //   expect(finishFlag).toBe(1);
+  // });
 });
 describe('Serial Animation', () => {
   let element;
