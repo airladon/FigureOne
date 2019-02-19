@@ -1,18 +1,18 @@
 // @flow
 import * as tools from '../../../tools/math';
-import { DiagramElement } from '../../Element';
+// import { DiagramElement } from '../../Element';
 import type { TypeAnimationStepInputOptions } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
 import { joinObjects } from '../../../tools/tools';
 
 export type TypeElementAnimationStepInputOptions = {
-  element?: DiagramElement;
+  element?: Object; // Can't use DiagramElement as importing it makes a loop
   type?: 'transform' | 'color' | 'custom' | 'position' | 'rotation' | 'scale';
   progression?: 'linear' | 'easeinout' | 'easein' | 'easeout' | (number) => number; // default is easeinout except color and custom which is linear
 } & TypeAnimationStepInputOptions;
 
 export default class ElementAnimationStep extends AnimationStep {
-  element: ?DiagramElement;
+  element: ?Object;
   type: 'transform' | 'color' | 'custom';
   duration: number;
   progression: (number) => number;

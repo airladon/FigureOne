@@ -18,6 +18,7 @@ import { colorArrayToRGBA } from '../tools/color';
 import type {
   TypePositionAnimationStepInputOptions,
 } from './Animation/Animation';
+import * as animations from './Animation/Animation';
 // import Animator from './Animation/Animator';
 // import PositionAnimationStep from './Animation/AnimationStep/ElementAnimationStep/PositionAnimationStep';
 
@@ -212,6 +213,8 @@ class DiagramElement {
     },
   };
 
+  animator: animations.Animator;
+
   pulse: Object;                  // Pulse animation state
 
   uid: string;
@@ -339,7 +342,7 @@ class DiagramElement {
       },
     };
     this.interactiveLocation = new Point(0, 0);
-
+    this.animator = new animations.Animator({ element: this });
     // this.presetTransforms = {};
   }
 
@@ -734,76 +737,9 @@ class DiagramElement {
     }
   }
 
-  setNextAnimation(now: number): void {
-    // If animation is happening
-    if (this.state.isAnimatingParallel) {
-      for (let i = 0; i < this.animate.parallel.plan.length; i += 1) {
-        const { parallelAnimation } = this.state;
-        const phaseIndex = parallelAnimation.currentPhaseIndex[i];
-        // const phase = parallelAnimation.currentPhase[i];
-
-        if (phaseIndex > -1) {
-          const phase = parallelAnimation.currentPhase[i];
-
-          // If an animation hasn't yet started, the start time will be -1.
-          // If this is so, then set the start time to the current time and
-          // return the current transform.
-          if (phase.startTime < 0) {
-            phase.startTime = now;
-            return;
-          }
-
-          // If we have got here, that means the animation has already started,
-          // so calculate the time delta between now and the startTime
-          const deltaTime = now - phase.plannedStartTime;
-
-          // If this time delta is larger than the phase's planned time, then
-          // either progress to the next animation phase, or end animation.
-          if (deltaTime > phase.time) {
-            // If there are more animation phases in the plan:
-            //   - set the current transform to be the end of the current phase
-            //   - start the next phase
-            if (phaseIndex < this.animate.parallel.plan[i].length - 1) {
-              // Set current transform to the end of the current phase
-              // this.setColor(this.calcNextAnimationColor(phase.time));
-              // Phase callback
-              phase.finish(this);
-              // Get the amount of time that has elapsed in the next phase
-              const nextPhaseDeltaTime = deltaTime - phase.time;
-
-              // Start the next animation phase
-              parallelAnimation.currentPhaseIndex[i] += 1;
-              this.animateParallelPhase(
-                i,
-                parallelAnimation.currentPhaseIndex[i],
-              );
-              parallelAnimation.currentPhase[i].startTime =
-                now - nextPhaseDeltaTime;
-              this.setNextAnimation(now);
-              return;
-            }
-            // This needs to go before StopAnimating, as stopAnimating clears
-            // the animation plan (incase a callback is used to start another
-            // animation)
-            // const endColor = this.calcNextAnimationColor(phase.time);
-            // this.setColor(endColor);
-            // phase.finish(this);
-            this.stopAnimatingParallel(i, false);
-            return;
-          }
-          // If we are here, that means the time elapsed is not more than the
-          // current animation phase plan time, so calculate the next transform.
-          this.setParallel(i, deltaTime);
-          // if(this.name === 'times') {
-          //   console.log(now, this.color[3])
-          // }
-        }
-      }
-    }
-  }
-
-  setParallel(parallelIndex: number, deltaTime: number) {
-
+  moveTo(optionsIn: TypePositionAnimationStepInputOptions) {
+    const options = joinObjects({}, optionsIn, { element: this });
+    return new animations.PositionAnimationStep(options);
   }
 
   setColor(color: Array<number>) {
@@ -2167,7 +2103,7 @@ class DiagramElementPrimative extends DiagramElement {
     // primative.pointsToDraw = this.pointsToDraw;
     // primative.angleToDraw = this.angleToDraw;
     // primative.copyFrom(this);
-    duplicateFromTo(this, primative, 'parent');
+    duplicateFromTo(this, primative, ['parent', 'animator']);
     if (transform != null) {
       primative.transform = transform._dup();
     }
@@ -2437,7 +2373,7 @@ class DiagramElementCollection extends DiagramElement {
     // collection.touchInBoundingRect = this.touchInBoundingRect;
     // collection.copyFrom(this);
     const doNotDuplicate = this.drawOrder.map(e => `_${e}`);
-    duplicateFromTo(this, collection, ['elements', 'drawOrder', 'parent', ...doNotDuplicate]);
+    duplicateFromTo(this, collection, ['animator', 'elements', 'drawOrder', 'parent', ...doNotDuplicate]);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const name = this.drawOrder[i];
       collection.add(name, this.elements[name]._dup());

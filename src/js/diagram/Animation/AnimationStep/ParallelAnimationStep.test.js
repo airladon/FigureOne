@@ -76,7 +76,7 @@ describe('Parallel Animation', () => {
     });
 
     parallel = new ParallelAnimationStep({
-      animations: [step1, step2, step3],
+      steps: [step1, step2, step3],
       onFinish: parallelCallback,
     });
   });
