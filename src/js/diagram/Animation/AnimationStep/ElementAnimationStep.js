@@ -3,7 +3,7 @@ import * as tools from '../../../tools/math';
 // import { DiagramElement } from '../../Element';
 import type { TypeAnimationStepInputOptions } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
-import { joinObjects } from '../../../tools/tools';
+import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 
 export type TypeElementAnimationStepInputOptions = {
   element?: Object; // Can't use DiagramElement as importing it makes a loop
@@ -17,7 +17,7 @@ export default class ElementAnimationStep extends AnimationStep {
   duration: number;
   progression: (number) => number;
 
-  constructor(optionsIn: TypeElementAnimationStepInputOptions) {
+  constructor(optionsIn: TypeElementAnimationStepInputOptions = {}) {
     super(optionsIn);
     let defaultProgression = 'easeinout';
     if (optionsIn.type === 'color' || optionsIn.type === 'custom') {
@@ -46,5 +46,12 @@ export default class ElementAnimationStep extends AnimationStep {
     } else {
       this.progression = options.progression;
     }
+  }
+
+  _dup() {
+    const step = new ElementAnimationStep();
+    duplicateFromTo(this, step, ['element']);
+    step.element = this.element;
+    return step;
   }
 }

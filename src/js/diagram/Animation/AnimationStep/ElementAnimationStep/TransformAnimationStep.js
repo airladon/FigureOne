@@ -4,14 +4,14 @@ import {
   Rotation, getDeltaAngle, getMaxTimeFromVelocity,
 } from '../../../../tools/g2';
 import type { pathOptionsType } from '../../../../tools/g2';
-import { joinObjects } from '../../../../tools/tools';
+import { joinObjects, duplicateFromTo } from '../../../../tools/tools';
 import type {
   TypeElementAnimationStepInputOptions,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 
 export type TypeTransformAnimationStepInputOptions = {
-  transform: {
+  transform?: {
     start?: Transform;      // default is element transform
     target?: Transform;     // Either target or delta must be defined
     delta?: Transform;      // delta overrides target if both are defined
@@ -42,7 +42,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     velocity: ?Transform;
   };
 
-  constructor(optionsIn: TypeTransformAnimationStepInputOptions) {
+  constructor(optionsIn: TypeTransformAnimationStepInputOptions = {}) {
     super(joinObjects({}, optionsIn, { type: 'transform' }));
     const defaultTransformOptions = {
       start: null,
@@ -166,5 +166,12 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     if (this.onFinish != null) {
       this.onFinish(cancelled);
     }
+  }
+
+  _dup() {
+    const step = new TransformAnimationStep();
+    duplicateFromTo(this, step, ['element']);
+    step.element = this.element;
+    return step;
   }
 }

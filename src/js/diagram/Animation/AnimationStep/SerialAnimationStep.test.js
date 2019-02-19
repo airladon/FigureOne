@@ -138,6 +138,11 @@ describe('Serial Animation', () => {
     expect(step3.state).toBe('idle');
     expect(serial.state).toBe('idle');
   });
+  test('Duplication', () => {
+    const dup = serial._dup();
+    expect(dup).toEqual(serial);
+    expect(dup).not.toBe(serial);
+  });
   describe('Cancelling', () => {
     test('Complete on cancel = true, no forcing', () => {
       step1.completeOnCancel = true;

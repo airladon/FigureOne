@@ -3,7 +3,7 @@ import {
   Transform, Point, getMaxTimeFromVelocity,
 } from '../../../../tools/g2';
 import type { pathOptionsType } from '../../../../tools/g2';
-import { joinObjects } from '../../../../tools/tools';
+import { joinObjects, duplicateFromTo } from '../../../../tools/tools';
 import type {
   TypeElementAnimationStepInputOptions,
 } from '../ElementAnimationStep';
@@ -46,7 +46,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     velocity: ?Point | number;
   };
 
-  constructor(optionsIn: TypePositionAnimationStepInputOptions) {
+  constructor(optionsIn: TypePositionAnimationStepInputOptions = {}) {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, optionsIn, { type: 'position' });
     deleteKeys(ElementAnimationStepOptionsIn, [
@@ -164,5 +164,12 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     if (this.onFinish != null) {
       this.onFinish(cancelled);
     }
+  }
+
+  _dup() {
+    const step = new PositionAnimationStep();
+    duplicateFromTo(this, step, ['element']);
+    step.element = this.element;
+    return step;
   }
 }

@@ -3,7 +3,7 @@
 // import { DiagramElement } from '../Element';
 import type { TypeAnimationStepInputOptions } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
-import { joinObjects } from '../../../tools/tools';
+import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 
 export type TypeSerialAnimationStepInputOptions = {
   steps?: Array<AnimationStep> | AnimationStep;
@@ -13,7 +13,7 @@ export default class SerialAnimationStep extends AnimationStep {
   steps: Array<AnimationStep>;
   index: number;
 
-  constructor(optionsIn: TypeSerialAnimationStepInputOptions) {
+  constructor(optionsIn: TypeSerialAnimationStepInputOptions = {}) {
     super(optionsIn);
     this.index = 0;
     const defaultOptions = {};
@@ -76,5 +76,11 @@ export default class SerialAnimationStep extends AnimationStep {
     if (this.onFinish != null) {
       this.onFinish(cancelled);
     }
+  }
+
+  _dup() {
+    const step = new SerialAnimationStep();
+    duplicateFromTo(this, step);
+    return step;
   }
 }

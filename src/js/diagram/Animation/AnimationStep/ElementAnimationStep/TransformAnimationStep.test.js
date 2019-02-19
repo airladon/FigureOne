@@ -128,6 +128,23 @@ describe('Transfrom Animation Unit', () => {
     expect(step.element.transform.round()).toEqual(target);
     expect(math.round(remainingTime)).toBe(0.1);
   });
+  test('Duplication', () => {
+    const start = element.transform.zero();
+    const target = element.transform.constant(1);
+    const step = new TransformAnimationStep({
+      element,
+      duration: 1,
+      progression: 'linear',
+      transform: {
+        start,
+        target,
+      },
+    });
+    const dup = step._dup();
+    expect(dup).toEqual(step);
+    expect(dup).not.toBe(step);
+    expect(dup.element).toBe(step.element);
+  });
   describe('Cancelling', () => {
     let step;
     let callbackFlag = 0;
