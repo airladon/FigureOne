@@ -139,4 +139,16 @@ describe('Animator API', () => {
     expect(callbackFlag).toBe(1);
     expect(elem1.getPosition().round()).toEqual(point(0.1));
   });
+  test('Cancel, check callback and complete', () => {
+    examples.animatorCallbackComplete();
+    // console.log(elem1.animator)
+    elem1.animator.nextFrame(100);
+    elem1.animator.nextFrame(100.1);
+    expect(elem1.getPosition().round()).toEqual(point(0.1));
+    expect(callbackFlag).toBe(0);
+
+    elem1.animator.cancel();
+    expect(callbackFlag).toBe(1);
+    expect(elem1.getPosition().round()).toEqual(point(2));
+  });
 });
