@@ -1,7 +1,11 @@
-import { TransformAnimationUnit } from './AnimationPhase';
 import {
-  Transform,
-} from '../tools/g2';
+  TransformAnimationUnit,
+  AnimationSerial,
+  AnimationParallel,
+} from './AnimationPhase';
+// import {
+//   Transform,
+// } from '../tools/g2';
 import * as tools from '../tools/tools';
 import * as math from '../tools/math';
 import makeDiagram from '../__mocks__/makeDiagram';
@@ -17,7 +21,7 @@ describe('Transfrom Animation Unit', () => {
   let element;
   beforeEach(() => {
     const diagram = makeDiagram();
-    element = diagram.objects.line(new Transform().scale(1, 1).rotate(0).translate(0, 0));
+    element = diagram.objects.line();
   });
   test('Instantiation', () => {
     const onFinish = () => {};
@@ -95,7 +99,7 @@ describe('Transfrom Animation Unit', () => {
     unit.start();
     expect(unit.duration).toBe(6);
   });
-  test.only('Animation flow', () => {
+  test('Animation flow', () => {
     const start = element.transform.zero();
     const target = element.transform.constant(1);
     const unit = new TransformAnimationUnit({
@@ -128,5 +132,222 @@ describe('Transfrom Animation Unit', () => {
     remainingTime = unit.nextFrame(101.1);
     expect(unit.element.transform.round()).toEqual(target);
     expect(math.round(remainingTime)).toBe(0.1);
+  });
+  test('Finish on Cancel', () => {
+    const start = element.transform.zero();
+    const target = element.transform.constant(1);
+    let finishFlag = 0;
+    const step = new TransformAnimationUnit({
+      element,
+      duration: 1,
+      progression: 'linear',
+      type: 'transform',
+      transform: { start, target },
+      finishOnCancel: true,
+      onFinish: () => { finishFlag = 1; },
+    });
+    step.start();
+    step.nextFrame(0);
+    step.nextFrame(0.5);
+    expect(element.transform.round()).toEqual(start.constant(0.5));
+
+    step.finish(true);
+    expect(element.transform.round()).toEqual(target);
+    expect(finishFlag).toBe(1);
+  });
+});
+describe('Serial Animation', () => {
+  let element;
+  beforeEach(() => {
+    const diagram = makeDiagram();
+    element = diagram.objects.line();
+  });
+  test('3 step animation on same element', () => {
+    const target1 = element.transform.constant(1);
+    const target2 = element.transform.constant(2);
+    const target3 = element.transform.constant(3);
+    const step1 = new TransformAnimationUnit({
+      element,
+      duration: 1,
+      progression: 'linear',
+      type: 'transform',
+      transform: {
+        start: element.transform.zero(),
+        target: target1,
+      },
+    });
+    const step2 = new TransformAnimationUnit({
+      element,
+      duration: 1,
+      progression: 'linear',
+      type: 'transform',
+      transform: { target: target2 },
+    });
+    const step3 = new TransformAnimationUnit({
+      element,
+      duration: 1,
+      progression: 'linear',
+      type: 'transform',
+      transform: { target: target3 },
+    });
+    const serial = new AnimationSerial({
+      animations: [step1, step2, step3],
+    });
+
+    let remainingTime;
+
+    serial.start();
+    serial.nextFrame(100);
+    expect(serial.index).toBe(0);
+    expect(element.transform.round()).toEqual(element.transform.constant(0));
+
+    serial.nextFrame(100.1);
+    expect(serial.index).toBe(0);
+    expect(element.transform.round()).toEqual(element.transform.constant(0.1));
+
+    serial.nextFrame(100.9);
+    expect(serial.index).toBe(0);
+    expect(element.transform.round()).toEqual(element.transform.constant(0.9));
+
+    serial.nextFrame(101);
+    expect(serial.index).toBe(0);
+    expect(element.transform.round()).toEqual(element.transform.constant(1));
+
+    serial.nextFrame(101.01);
+    expect(serial.index).toBe(1);
+    expect(element.transform.round()).toEqual(element.transform.constant(1.01));
+
+    serial.nextFrame(101.5);
+    expect(serial.index).toBe(1);
+    expect(element.transform.round()).toEqual(element.transform.constant(1.5));
+
+    serial.nextFrame(102.5);
+    expect(serial.index).toBe(2);
+    expect(element.transform.round()).toEqual(element.transform.constant(2.5));
+
+    remainingTime = serial.nextFrame(103);
+    expect(serial.index).toBe(2);
+    expect(element.transform.round()).toEqual(element.transform.constant(3));
+    expect(math.round(remainingTime)).toBe(0);
+
+    remainingTime = serial.nextFrame(103.1);
+    expect(serial.index).toBe(2);
+    expect(element.transform.round()).toEqual(element.transform.constant(3));
+    expect(math.round(remainingTime)).toBe(0.1);
+  });
+});
+describe('Parallel Animation', () => {
+  let element1;
+  let element2;
+  let element3;
+  beforeEach(() => {
+    const diagram = makeDiagram();
+    element1 = diagram.objects.line();
+    element2 = diagram.objects.line();
+    element3 = diagram.objects.line();
+  });
+  test('3 element animation', () => {
+    const target1 = element1.transform.constant(1);
+    const target2 = element2.transform.constant(2);
+    const target3 = element3.transform.constant(3);
+    const duration1 = 1;
+    const duration2 = 2;
+    const duration3 = 3;
+    const step1 = new TransformAnimationUnit({
+      element: element1,
+      duration: duration1,
+      progression: 'linear',
+      type: 'transform',
+      transform: { target: target1 },
+    });
+    const step2 = new TransformAnimationUnit({
+      element: element2,
+      duration: duration2,
+      progression: 'linear',
+      type: 'transform',
+      transform: { target: target2 },
+    });
+    const step3 = new TransformAnimationUnit({
+      element: element3,
+      duration: duration3,
+      progression: 'linear',
+      type: 'transform',
+      transform: { target: target3 },
+    });
+
+    const parallel = new AnimationParallel({
+      animations: [step1, step2, step3],
+    });
+
+    let remainingTime;
+    element1.transform = element1.transform.zero();
+    element2.transform = element2.transform.zero();
+    element3.transform = element3.transform.zero();
+    const t1 = element1.transform;
+    const t2 = element2.transform;
+    const t3 = element3.transform;
+
+    parallel.start();
+    remainingTime = parallel.nextFrame(100);
+    expect(element1.transform.round()).toEqual(element1.transform.constant(0));
+    expect(element2.transform.round()).toEqual(element2.transform.constant(0));
+    expect(element3.transform.round()).toEqual(element3.transform.constant(0));
+    expect(math.round(remainingTime)).toBe(0);
+
+    remainingTime = parallel.nextFrame(100.5);
+    expect(element1.transform.round()).toEqual(t1.constant(0.5));
+    expect(element2.transform).toEqual(t2.constant(0.5));
+    expect(element3.transform).toEqual(t3.constant(0.5));
+    expect(math.round(remainingTime)).toBe(0);
+
+    remainingTime = parallel.nextFrame(101.5);
+    expect(element1.transform.round()).toEqual(t1.constant(1));
+    expect(element2.transform).toEqual(t2.constant(1.5));
+    expect(element3.transform).toEqual(t3.constant(1.5));
+    expect(math.round(remainingTime)).toBe(0);
+
+    remainingTime = parallel.nextFrame(102.5);
+    expect(element1.transform.round()).toEqual(t1.constant(1));
+    expect(element2.transform).toEqual(t2.constant(2));
+    expect(element3.transform).toEqual(t3.constant(2.5));
+    expect(math.round(remainingTime)).toBe(0);
+
+    remainingTime = parallel.nextFrame(103);
+    expect(element1.transform.round()).toEqual(t1.constant(1));
+    expect(element2.transform).toEqual(t2.constant(2));
+    expect(element3.transform).toEqual(t3.constant(3));
+    expect(math.round(remainingTime)).toBe(0);
+
+    remainingTime = parallel.nextFrame(103.1);
+    expect(element1.transform.round()).toEqual(t1.constant(1));
+    expect(element2.transform).toEqual(t2.constant(2));
+    expect(element3.transform).toEqual(t3.constant(3));
+    expect(math.round(remainingTime)).toBe(0.1);
+
+    // parallel.nextFrame(100.1);
+    // expect(element.transform.round()).toEqual(element.transform.constant(0.1));
+
+    // parallel.nextFrame(100.9);
+    // expect(element.transform.round()).toEqual(element.transform.constant(0.9));
+
+    // parallel.nextFrame(101);
+    // expect(element.transform.round()).toEqual(element.transform.constant(1));
+
+    // parallel.nextFrame(101.01);
+    // expect(element.transform.round()).toEqual(element.transform.constant(1.01));
+
+    // parallel.nextFrame(101.5);
+    // expect(element.transform.round()).toEqual(element.transform.constant(1.5));
+
+    // parallel.nextFrame(102.5);
+    // expect(element.transform.round()).toEqual(element.transform.constant(2.5));
+
+    // remainingTime = parallel.nextFrame(103);
+    // expect(element.transform.round()).toEqual(element.transform.constant(3));
+    // expect(math.round(remainingTime)).toBe(0);
+
+    // remainingTime = parallel.nextFrame(103.1);
+    // expect(element.transform.round()).toEqual(element.transform.constant(3));
+    // expect(math.round(remainingTime)).toBe(0.1);
   });
 });
