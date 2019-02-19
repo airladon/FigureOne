@@ -65,7 +65,7 @@ describe('Serial Animation', () => {
       onFinish: step3Callback,
     });
     serial = new SerialAnimationStep({
-      animations: [step1, step2, step3],
+      steps: [step1, step2, step3],
       onFinish: serialCallback,
     });
   });
