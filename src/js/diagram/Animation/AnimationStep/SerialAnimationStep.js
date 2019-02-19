@@ -6,11 +6,11 @@ import AnimationStep from '../AnimationStep';
 import { joinObjects } from '../../../tools/tools';
 
 export type TypeSerialAnimationStepInputOptions = {
-  animations: Array<AnimationStep> | AnimationStep;
+  steps: Array<AnimationStep> | AnimationStep;
 } & TypeAnimationStepInputOptions;
 
 export default class SerialAnimationStep extends AnimationStep {
-  animations: Array<AnimationStep>;
+  animationSteps: Array<AnimationStep>;
   index: number;
 
   constructor(optionsIn: TypeSerialAnimationStepInputOptions) {
@@ -18,22 +18,23 @@ export default class SerialAnimationStep extends AnimationStep {
     this.index = 0;
     const defaultOptions = {};
     const options = joinObjects({}, defaultOptions, optionsIn);
-    if (!Array.isArray(options.animations)) {
-      this.animations = [options.animations];
-    } else {
-      this.animations = options.animations;
+    this.animationSteps = [];
+    if (!Array.isArray(options.steps)) {
+      this.animationSteps = [options.steps];
+    } else if (options.steps != null) {
+      this.animationSteps = options.steps;
     }
     return this;
   }
 
   then(step: AnimationStep) {
-    this.animations.push(step);
+    this.animationSteps.push(step);
     return this;
   }
 
   startWaiting() {
     super.startWaiting();
-    this.animations.forEach((animationStep) => {
+    this.animationSteps.forEach((animationStep) => {
       animationStep.startWaiting();
     });
   }
@@ -42,21 +43,21 @@ export default class SerialAnimationStep extends AnimationStep {
     this.startWaiting();
     super.start();
     this.index = 0;
-    if (this.animations.length > 0) {
-      this.animations[0].start();
+    if (this.animationSteps.length > 0) {
+      this.animationSteps[0].start();
     }
   }
 
   nextFrame(now: number) {
-    const remaining = this.animations[this.index].nextFrame(now);
+    const remaining = this.animationSteps[this.index].nextFrame(now);
     if (remaining > 0) {
-      if (this.index === this.animations.length - 1) {
+      if (this.index === this.animationSteps.length - 1) {
         this.finish();
         return remaining;
       }
       this.index += 1;
-      this.animations[this.index].start();
-      this.animations[this.index].startTime = now - remaining;
+      this.animationSteps[this.index].start();
+      this.animationSteps[this.index].startTime = now - remaining;
       this.nextFrame(now);
     }
     return 0;
@@ -67,7 +68,7 @@ export default class SerialAnimationStep extends AnimationStep {
       return;
     }
     super.finish(cancelled, force);
-    this.animations.forEach((animationStep) => {
+    this.animationSteps.forEach((animationStep) => {
       if (animationStep.state !== 'idle') {
         animationStep.finish(cancelled, force);
       }
