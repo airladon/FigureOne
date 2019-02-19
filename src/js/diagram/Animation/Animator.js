@@ -34,8 +34,17 @@ export default class Animator extends animation.SerialAnimationStep {
     return this;
   }
 
-  inParallel(optionsIn: TypeParallelAnimationStepInputOptions) {
-    this.then(new animation.ParallelAnimationStep(optionsIn));
+  inParallel(
+    stepsOrOptionsIn: Array<animation.AnimationStep> | TypeParallelAnimationStepInputOptions,
+    optionsIn: TypeParallelAnimationStepInputOptions = {},
+  ) {
+    if (Array.isArray(stepsOrOptionsIn)) {
+      const options = optionsIn;
+      options.steps = stepsOrOptionsIn;
+      this.then(new animation.ParallelAnimationStep(options));
+    } else {
+      this.then(new animation.ParallelAnimationStep(stepsOrOptionsIn));
+    }
     return this;
   }
 
