@@ -12,7 +12,7 @@ import { joinObjects, duplicateFromTo } from '../../tools/tools';
 
 export type TypeAnimationStepInputOptions = {
   onFinish?: ?(boolean) => void;
-  completeOnCancel?: boolean;
+  completeOnCancel?: ?boolean;    // true: yes, false: no, null: no preference
 };
 
 export default class AnimationStep {
@@ -20,19 +20,20 @@ export default class AnimationStep {
   duration: number;
   // animations: Array<AnimationStep>;
   onFinish: ?(boolean) => void;
-  completeOnCancel: boolean;
+  completeOnCancel: ?boolean;
   state: 'animating' | 'waitingToStart' | 'idle';
 
   constructor(optionsIn: TypeAnimationStepInputOptions = {}) {
     const defaultOptions = {
       onFinish: null,
-      completeOnCancel: true,
+      completeOnCancel: null,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     this.onFinish = options.onFinish;
     this.completeOnCancel = options.completeOnCancel;
     this.startTime = -1;
     this.state = 'idle';
+    return this;
   }
 
   // returns remaining time if this step completes
@@ -83,5 +84,20 @@ export default class AnimationStep {
     const step = new AnimationStep();
     duplicateFromTo(this, step);
     return step;
+  }
+
+  whenFinished(callback: (boolean) => void) {
+    this.onFinish = callback;
+    return this;
+  }
+
+  ifCanceledThenComplete() {
+    this.completeOnCancel = true;
+    return this;
+  }
+
+  ifCanceledThenStop() {
+    this.completeOnCancel = false;
+    return this;
   }
 }

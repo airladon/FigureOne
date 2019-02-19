@@ -33,7 +33,7 @@ DiagramElementPrimative {
     },
   },
   "animator": Animator {
-    "completeOnCancel": true,
+    "completeOnCancel": null,
     "element": [Circular],
     "index": 0,
     "onFinish": null,
@@ -328,7 +328,7 @@ DiagramElementPrimative {
         },
       },
       "animator": Animator {
-        "completeOnCancel": true,
+        "completeOnCancel": null,
         "element": [Circular],
         "index": 0,
         "onFinish": null,
@@ -836,7 +836,7 @@ DiagramElementPrimative {
         },
       },
       "animator": Animator {
-        "completeOnCancel": true,
+        "completeOnCancel": null,
         "element": [Circular],
         "index": 0,
         "onFinish": null,
@@ -1343,7 +1343,7 @@ DiagramElementPrimative {
         },
       },
       "animator": Animator {
-        "completeOnCancel": true,
+        "completeOnCancel": null,
         "element": [Circular],
         "index": 0,
         "onFinish": null,
@@ -1850,7 +1850,7 @@ DiagramElementPrimative {
         },
       },
       "animator": Animator {
-        "completeOnCancel": true,
+        "completeOnCancel": null,
         "element": [Circular],
         "index": 0,
         "onFinish": null,
@@ -2355,7 +2355,7 @@ DiagramElementPrimative {
       },
     },
     "animator": Animator {
-      "completeOnCancel": true,
+      "completeOnCancel": null,
       "element": [Circular],
       "index": 0,
       "onFinish": null,
@@ -2418,7 +2418,7 @@ DiagramElementPrimative {
           },
         },
         "animator": Animator {
-          "completeOnCancel": true,
+          "completeOnCancel": null,
           "element": [Circular],
           "index": 0,
           "onFinish": null,
@@ -2926,7 +2926,7 @@ DiagramElementPrimative {
           },
         },
         "animator": Animator {
-          "completeOnCancel": true,
+          "completeOnCancel": null,
           "element": [Circular],
           "index": 0,
           "onFinish": null,
@@ -3433,7 +3433,7 @@ DiagramElementPrimative {
           },
         },
         "animator": Animator {
-          "completeOnCancel": true,
+          "completeOnCancel": null,
           "element": [Circular],
           "index": 0,
           "onFinish": null,
@@ -3940,7 +3940,7 @@ DiagramElementPrimative {
           },
         },
         "animator": Animator {
-          "completeOnCancel": true,
+          "completeOnCancel": null,
           "element": [Circular],
           "index": 0,
           "onFinish": null,
@@ -4519,7 +4519,7 @@ DiagramElementPrimative {
                         },
                       },
                       "animator": Animator {
-                        "completeOnCancel": true,
+                        "completeOnCancel": null,
                         "element": [Circular],
                         "index": 0,
                         "onFinish": null,
@@ -5037,7 +5037,7 @@ DiagramElementPrimative {
                         },
                       },
                       "animator": Animator {
-                        "completeOnCancel": true,
+                        "completeOnCancel": null,
                         "element": [Circular],
                         "index": 0,
                         "onFinish": null,
@@ -5567,7 +5567,7 @@ DiagramElementPrimative {
                   },
                 },
                 "animator": Animator {
-                  "completeOnCancel": true,
+                  "completeOnCancel": null,
                   "element": [Circular],
                   "index": 0,
                   "onFinish": null,
@@ -6075,7 +6075,7 @@ DiagramElementPrimative {
                   },
                 },
                 "animator": Animator {
-                  "completeOnCancel": true,
+                  "completeOnCancel": null,
                   "element": [Circular],
                   "index": 0,
                   "onFinish": null,
@@ -6582,7 +6582,7 @@ DiagramElementPrimative {
                   },
                 },
                 "animator": Animator {
-                  "completeOnCancel": true,
+                  "completeOnCancel": null,
                   "element": [Circular],
                   "index": 0,
                   "onFinish": null,
@@ -7089,7 +7089,7 @@ DiagramElementPrimative {
                   },
                 },
                 "animator": Animator {
-                  "completeOnCancel": true,
+                  "completeOnCancel": null,
                   "element": [Circular],
                   "index": 0,
                   "onFinish": null,
@@ -7659,7 +7659,7 @@ DiagramElementPrimative {
                                 },
                               },
                               "animator": Animator {
-                                "completeOnCancel": true,
+                                "completeOnCancel": null,
                                 "element": [Circular],
                                 "index": 0,
                                 "onFinish": null,
@@ -8186,7 +8186,7 @@ DiagramElementPrimative {
                             },
                           },
                           "animator": Animator {
-                            "completeOnCancel": true,
+                            "completeOnCancel": null,
                             "element": [Circular],
                             "index": 0,
                             "onFinish": null,
@@ -8707,7 +8707,7 @@ DiagramElementPrimative {
                               },
                             },
                             "animator": Animator {
-                              "completeOnCancel": true,
+                              "completeOnCancel": null,
                               "element": [Circular],
                               "index": 0,
                               "onFinish": null,
@@ -9267,7 +9267,7 @@ DiagramElementPrimative {
                         },
                       },
                       "animator": Animator {
-                        "completeOnCancel": true,
+                        "completeOnCancel": null,
                         "element": [Circular],
                         "index": 0,
                         "onFinish": null,
@@ -9786,7 +9786,7 @@ DiagramElementPrimative {
                         },
                       },
                       "animator": Animator {
-                        "completeOnCancel": true,
+                        "completeOnCancel": null,
                         "element": [Circular],
                         "index": 0,
                         "onFinish": null,
@@ -10316,7 +10316,7 @@ DiagramElementPrimative {
                   },
                 },
                 "animator": Animator {
-                  "completeOnCancel": true,
+                  "completeOnCancel": null,
                   "element": [Circular],
                   "index": 0,
                   "onFinish": null,
@@ -10824,7 +10824,7 @@ DiagramElementPrimative {
                   },
                 },
                 "animator": Animator {
-                  "completeOnCancel": true,
+                  "completeOnCancel": null,
                   "element": [Circular],
                   "index": 0,
                   "onFinish": null,
@@ -11331,7 +11331,7 @@ DiagramElementPrimative {
                   },
                 },
                 "animator": Animator {
-                  "completeOnCancel": true,
+                  "completeOnCancel": null,
                   "element": [Circular],
                   "index": 0,
                   "onFinish": null,
@@ -11838,7 +11838,7 @@ DiagramElementPrimative {
                   },
                 },
                 "animator": Animator {
-                  "completeOnCancel": true,
+                  "completeOnCancel": null,
                   "element": [Circular],
                   "index": 0,
                   "onFinish": null,
@@ -12362,7 +12362,7 @@ DiagramElementPrimative {
               },
             },
             "animator": Animator {
-              "completeOnCancel": true,
+              "completeOnCancel": null,
               "element": [Circular],
               "index": 0,
               "onFinish": null,
@@ -12870,7 +12870,7 @@ DiagramElementPrimative {
               },
             },
             "animator": Animator {
-              "completeOnCancel": true,
+              "completeOnCancel": null,
               "element": [Circular],
               "index": 0,
               "onFinish": null,
@@ -13377,7 +13377,7 @@ DiagramElementPrimative {
               },
             },
             "animator": Animator {
-              "completeOnCancel": true,
+              "completeOnCancel": null,
               "element": [Circular],
               "index": 0,
               "onFinish": null,
@@ -13884,7 +13884,7 @@ DiagramElementPrimative {
               },
             },
             "animator": Animator {
-              "completeOnCancel": true,
+              "completeOnCancel": null,
               "element": [Circular],
               "index": 0,
               "onFinish": null,
@@ -14410,7 +14410,7 @@ DiagramElementPrimative {
                       },
                     },
                     "animator": Animator {
-                      "completeOnCancel": true,
+                      "completeOnCancel": null,
                       "element": [Circular],
                       "index": 0,
                       "onFinish": null,
@@ -14912,7 +14912,7 @@ DiagramElementPrimative {
                 },
               },
               "animator": Animator {
-                "completeOnCancel": true,
+                "completeOnCancel": null,
                 "element": [Circular],
                 "index": 0,
                 "onFinish": null,
