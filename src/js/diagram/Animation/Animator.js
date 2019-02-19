@@ -8,16 +8,16 @@ import type {
 // import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
 // import SerialAnimationStep from './AnimationStep/SerialAnimationStep';
 import * as animation from './Animation';
-import { joinObjects } from '../../tools/tools';
+import { joinObjects, duplicateFromTo } from '../../tools/tools';
 
 export type TypeAnimatorInputOptions = {
-  element: DiagramElement;
+  element?: DiagramElement;
 } & TypeSerialAnimationStepInputOptions;
 
 export default class Animator extends animation.SerialAnimationStep {
-  element: DiagramElement;
+  element: ?DiagramElement;
 
-  constructor(optionsIn: TypeAnimatorInputOptions) {
+  constructor(optionsIn: TypeAnimatorInputOptions = {}) {
     super(optionsIn);
     const defaultOptions = {};
     const options = joinObjects({}, defaultOptions, optionsIn);
@@ -26,9 +26,11 @@ export default class Animator extends animation.SerialAnimationStep {
   }
 
   moveTo(optionsIn: TypePositionAnimationStepInputOptions) {
-    const defaultOptions = { element: this.element };
-    const options = joinObjects({}, defaultOptions, optionsIn);
-    this.then(new animation.PositionAnimationStep(options));
+    if (this.element != null) {
+      const defaultOptions = { element: this.element };
+      const options = joinObjects({}, defaultOptions, optionsIn);
+      this.then(new animation.PositionAnimationStep(options));
+    }
     return this;
   }
 
@@ -46,5 +48,12 @@ export default class Animator extends animation.SerialAnimationStep {
   reset() {
     this.steps = [];
     this.state = 'idle';
+  }
+
+  _dup() {
+    const animator = new Animator();
+    duplicateFromTo(this, animator, ['element']);
+    animator.element = this.element;
+    return animator;
   }
 }

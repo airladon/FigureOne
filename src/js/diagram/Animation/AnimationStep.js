@@ -7,7 +7,7 @@
 // import type { pathOptionsType } from '../tools/g2';
 // eslint-disable-next-line import/no-cycle
 // import { DiagramElement } from './Element';
-import { joinObjects } from '../../tools/tools';
+import { joinObjects, duplicateFromTo } from '../../tools/tools';
 
 
 export type TypeAnimationStepInputOptions = {
@@ -23,7 +23,7 @@ export default class AnimationStep {
   completeOnCancel: boolean;
   state: 'animating' | 'waitingToStart' | 'idle';
 
-  constructor(optionsIn: TypeAnimationStepInputOptions) {
+  constructor(optionsIn: TypeAnimationStepInputOptions = {}) {
     const defaultOptions = {
       onFinish: null,
       completeOnCancel: true,
@@ -77,5 +77,11 @@ export default class AnimationStep {
 
   cancel(force: ?'complete' | 'noComplete' = null) {
     this.finish(true, force);
+  }
+
+  _dup() {
+    const step = new AnimationStep();
+    duplicateFromTo(this, step);
+    return step;
   }
 }

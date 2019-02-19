@@ -3,18 +3,18 @@
 // import { DiagramElement } from '../Element';
 import type { TypeAnimationStepInputOptions } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
-import { joinObjects } from '../../../tools/tools';
+import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 
 
 export type TypeParallelAnimationStepInputOptions = {
-  steps: Array<AnimationStep> | AnimationStep;
+  steps?: Array<AnimationStep> | AnimationStep;
 } & TypeAnimationStepInputOptions;
 
 // Animations get started from a parent, but finish themselves
 export default class ParallelAnimationStep extends AnimationStep {
   steps: Array<AnimationStep>;
 
-  constructor(optionsIn: TypeParallelAnimationStepInputOptions) {
+  constructor(optionsIn: TypeParallelAnimationStepInputOptions = {}) {
     super(optionsIn);
     const defaultOptions = {};
     const options = joinObjects({}, defaultOptions, optionsIn);
@@ -71,5 +71,11 @@ export default class ParallelAnimationStep extends AnimationStep {
     if (this.onFinish != null) {
       this.onFinish(cancelled);
     }
+  }
+
+  _dup() {
+    const step = new ParallelAnimationStep();
+    duplicateFromTo(this, step);
+    return step;
   }
 }

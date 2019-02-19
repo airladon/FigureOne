@@ -2103,7 +2103,7 @@ class DiagramElementPrimative extends DiagramElement {
     // primative.pointsToDraw = this.pointsToDraw;
     // primative.angleToDraw = this.angleToDraw;
     // primative.copyFrom(this);
-    duplicateFromTo(this, primative, ['parent', 'animator']);
+    duplicateFromTo(this, primative, ['parent']);
     if (transform != null) {
       primative.transform = transform._dup();
     }
@@ -2373,7 +2373,7 @@ class DiagramElementCollection extends DiagramElement {
     // collection.touchInBoundingRect = this.touchInBoundingRect;
     // collection.copyFrom(this);
     const doNotDuplicate = this.drawOrder.map(e => `_${e}`);
-    duplicateFromTo(this, collection, ['animator', 'elements', 'drawOrder', 'parent', ...doNotDuplicate]);
+    duplicateFromTo(this, collection, ['elements', 'drawOrder', 'parent', ...doNotDuplicate]);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const name = this.drawOrder[i];
       collection.add(name, this.elements[name]._dup());

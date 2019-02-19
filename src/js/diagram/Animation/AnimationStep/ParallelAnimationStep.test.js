@@ -123,6 +123,11 @@ describe('Parallel Animation', () => {
     expect(element3.transform).toEqual(t3.constant(3));
     expect(math.round(remainingTime)).toBe(0.1);
   });
+  test('Duplication', () => {
+    const dup = parallel._dup();
+    expect(dup).toEqual(parallel);
+    expect(dup).not.toBe(parallel);
+  });
   describe('Cancelling', () => {
     test('Complete on cancel = true, no forcing', () => {
       step1.completeOnCancel = true;

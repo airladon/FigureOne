@@ -41,4 +41,16 @@ describe('Animator API', () => {
     expect(element.getPosition().round()).toEqual(point(2));
     expect(math.round(remaining)).toBe(0.1);
   });
+  test('Duplicate', () => {
+    const animator = new Animator({ element });
+    const p1 = new Point(1, 1);
+    const p2 = new Point(2, 2);
+    animator
+      .moveTo({ target: p1, duration: 1, progression: 'linear' })
+      .moveTo({ target: p2, duration: 1, progression: 'linear' });
+    const dup = animator._dup();
+    expect(dup).not.toBe(animator);
+    expect(dup).toEqual(animator);
+    expect(dup.element).toBe(animator.element);
+  });
 });
