@@ -79,7 +79,7 @@ export class AnimationStep {
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  finish() {
+  finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
     // this.onFinish(false);
   }
 }
@@ -277,18 +277,19 @@ export class TransformAnimationUnit extends AnimationUnit {
     }
   }
 
-  finish(cancelled: boolean = false) {
-    // console.log('finished', this.callback)
+  finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null)  {
     const setToEnd = () => {
       if (this.element != null) {
         this.element.setTransform(this.transform.target);
       }
     };
-    if (cancelled) {
-      if (this.finishOnCancel) {
-        setToEnd();
-      }
-    } else {
+    if (cancelled && force === 'complete') {
+      setToEnd();
+    }
+    if (cancelled && force == null && this.finishOnCancel) {
+      setToEnd();
+    }
+    if (cancelled === false) {
       setToEnd();
     }
 
@@ -332,9 +333,12 @@ export class AnimationParallel extends AnimationStep {
   }
 
   nextFrame(now: number) {
-    let remaining = 0;
+    let remaining = -1;
     this.animations.forEach((animationStep) => {
       const stepRemaining = animationStep.nextFrame(now);
+      if (remaining === -1) {
+        remaining = stepRemaining;
+      }
       if (stepRemaining < remaining) {
         remaining = stepRemaining;
       }
@@ -349,6 +353,15 @@ export class AnimationParallel extends AnimationStep {
     this.animations.forEach((animationStep) => {
       animationStep.start();
     });
+  }
+
+  finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+    this.animations.forEach((animationStep) => {
+      animationStep.finish(cancelled, force);
+    });
+    if (this.onFinish != null) {
+      this.onFinish(cancelled);
+    }
   }
 }
 
@@ -396,11 +409,11 @@ export class AnimationSerial extends AnimationStep {
       this.index += 1;
       this.animations[this.index].start();
       this.animations[this.index].startTime = now - remaining;
+      this.nextFrame(now);
     }
     return 0;
   }
 }
- 
 
 // Planned Animation
 export class AnimationPhase {
