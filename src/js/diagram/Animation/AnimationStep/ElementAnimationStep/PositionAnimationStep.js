@@ -1,13 +1,13 @@
 // @flow
 import {
   Transform, Point, getMaxTimeFromVelocity,
-} from '../../tools/g2';
-import type { pathOptionsType } from '../../tools/g2';
-import { joinObjects } from '../../tools/tools';
+} from '../../../../tools/g2';
+import type { pathOptionsType } from '../../../../tools/g2';
+import { joinObjects } from '../../../../tools/tools';
 import type {
   TypeElementAnimationStepInputOptions,
-} from './ElementAnimationStep';
-import ElementAnimationStep from './ElementAnimationStep';
+} from '../ElementAnimationStep';
+import ElementAnimationStep from '../ElementAnimationStep';
 
 
 export type TypePositionAnimationStepInputOptions = {

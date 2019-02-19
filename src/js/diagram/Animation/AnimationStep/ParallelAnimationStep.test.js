@@ -1,14 +1,14 @@
 import ParallelAnimationStep from './ParallelAnimationStep';
-import TransformAnimationStep from './TransformAnimationStep';
-import * as tools from '../../tools/tools';
-import * as math from '../../tools/math';
-import makeDiagram from '../../__mocks__/makeDiagram';
+import TransformAnimationStep from './ElementAnimationStep/TransformAnimationStep';
+import * as tools from '../../../tools/tools';
+import * as math from '../../../tools/math';
+import makeDiagram from '../../../__mocks__/makeDiagram';
 
 tools.isTouchDevice = jest.fn();
 
-jest.mock('../Gesture');
-jest.mock('../webgl/webgl');
-jest.mock('../DrawContext2D');
+jest.mock('../../Gesture');
+jest.mock('../../webgl/webgl');
+jest.mock('../../DrawContext2D');
 
 describe('Parallel Animation', () => {
   let element1;

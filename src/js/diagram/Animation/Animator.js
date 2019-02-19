@@ -1,12 +1,12 @@
 // @flow
 // import * as tools from '../../tools/math';
 import { DiagramElement } from '../Element';
-import type { TypeSerialAnimationStepInputOptions } from './SerialAnimationStep';
+import type { TypeSerialAnimationStepInputOptions } from './AnimationStep/SerialAnimationStep';
 import type {
   TypePositionAnimationStepInputOptions,
-} from './PositionAnimationStep';
-import PositionAnimationStep from './PositionAnimationStep';
-import SerialAnimationStep from './SerialAnimationStep';
+} from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
+import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
+import SerialAnimationStep from './AnimationStep/SerialAnimationStep';
 import { joinObjects } from '../../tools/tools';
 
 type TypeAnimatorInputOptions = {
