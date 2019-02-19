@@ -1,7 +1,7 @@
 // @flow
 
 import {
-  Transform,
+  Transform, Point,
   Rotation, getDeltaAngle, getMaxTimeFromVelocity,
 } from '../tools/g2';
 import * as tools from '../tools/math';
@@ -300,6 +300,23 @@ export class TransformAnimationUnit extends AnimationUnit {
   }
 }
 
+type TypeMoveToAnimationUnitInputOptions = {
+  position: {
+    start?: Point;      // default is element transform
+    target?: Point;     // Either target or delta must be defined
+    delta?: Point;      // delta overrides target if both are defined
+    translationStyle?: 'linear' | 'curved'; // default is linear
+    translationOptions?: pathOptionsType;
+  };
+} & TypeAnimationUnitInputOptions;
+
+export class MoveToAnimationUnit {
+  constructor(optionsIn: TypeMoveToAnimationUnitInputOptions) {
+    const transformOptions = joinObjects({}, optionsIn);
+    
+  }
+}
+
 type TypeAnimationParallelInputOptions = {
   animations: Array<AnimationStep> | AnimationStep;
 } & TypeAnimationStepInputOptions;
@@ -440,6 +457,30 @@ export class AnimationSerial extends AnimationStep {
     }
   }
 }
+
+type TypeAnimatorInputOptions = {
+  element: DiagramElement;
+} & TypeAnimationSerialInputOptions;
+
+export class Animator extends AnimationSerial {
+  element: DiagramElement;
+
+  constructor(optionsIn: TypeAnimatorInputOptions) {
+    super(optionsIn);
+    const defaultOptions = {};
+    const options = joinObjects({}, defaultOptions, optionsIn);
+    this.element = options.element;
+    return this;
+  }
+
+  moveTo(optionsIn: TypeTransformAnimationUnitInputOptions) {
+    const defaultOptions = { element: this.element };
+    const options = joinObjects({}, defaultOptions, optionsIn);
+    this.then(new TransformAnimationUnit(options));
+    return this;
+  }
+}
+
 
 // Planned Animation
 export class AnimationPhase {
