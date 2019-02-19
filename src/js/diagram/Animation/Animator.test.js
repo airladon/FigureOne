@@ -1,7 +1,7 @@
 import Animator from './Animator';
-// import {
-//   Transform,
-// } from '../tools/g2';
+import {
+  Point,
+} from '../tools/g2';
 import * as tools from '../../tools/tools';
 // import * as math from '../../tools/math';
 import makeDiagram from '../../__mocks__/makeDiagram';
@@ -21,6 +21,12 @@ describe('Animator API', () => {
   });
   test('Basic', () => {
     const animator = new Animator(element);
-    // animator.moveTo({ position: { target: element.transform.one() } })
+    const p1 = new Point(1, 1);
+    const p2 = new Point(2, 2);
+    animator
+      .moveTo({ target: p1, duration: 1 })
+      .moveTo({ target: p2, duration: 1 })
+      .start();
+    animator.nextFrame(100);
   });
 });
