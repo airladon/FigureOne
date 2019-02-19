@@ -19,6 +19,10 @@ import type {
 } from './AnimationStep/SerialAnimationStep';
 import SerialAnimationStep from './AnimationStep/SerialAnimationStep';
 
+import type {
+  TypeAnimationStepInputOptions,
+} from './AnimationStep';
+import AnimationStep from './AnimationStep';
 
 import type { TypeAnimatorInputOptions } from './Animator';
 import Animator from './Animator';
@@ -26,9 +30,9 @@ import Animator from './Animator';
 export type {
   TypePositionAnimationStepInputOptions, TypeAnimatorInputOptions,
   TypeParallelAnimationStepInputOptions, TypeSerialAnimationStepInputOptions,
-  TypeTransformAnimationStepInputOptions,
+  TypeTransformAnimationStepInputOptions, TypeAnimationStepInputOptions,
 };
 export {
   PositionAnimationStep, Animator, ParallelAnimationStep, SerialAnimationStep,
-  TransformAnimationStep,
+  TransformAnimationStep, AnimationStep,
 };
