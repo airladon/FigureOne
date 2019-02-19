@@ -1,9 +1,9 @@
 // @flow
-import * as tools from '../../tools/math';
-import { DiagramElement } from '../Element';
-import type { TypeAnimationStepInputOptions } from './AnimationStep';
-import AnimationStep from './AnimationStep';
-import { joinObjects } from '../../tools/tools';
+import * as tools from '../../../tools/math';
+import { DiagramElement } from '../../Element';
+import type { TypeAnimationStepInputOptions } from '../AnimationStep';
+import AnimationStep from '../AnimationStep';
+import { joinObjects } from '../../../tools/tools';
 
 export type TypeElementAnimationStepInputOptions = {
   element?: DiagramElement;
