@@ -195,40 +195,35 @@ describe('Transfrom Animation Unit', () => {
       expect(callbackFlag).toBe(1);
     });
   });
-  // test('Finish on Cancel', () => {
-  //   const start = element.transform.zero();
-  //   const target = element.transform.constant(1);
-  //   let finishFlag = 0;
-  //   const step = new TransformAnimationUnit({
-  //     element,
-  //     duration: 1,
-  //     progression: 'linear',
-  //     type: 'transform',
-  //     transform: { start, target },
-  //     finishOnCancel: true,
-  //     onFinish: () => { finishFlag = 1; },
-  //   });
-  //   step.start();
-  //   step.nextFrame(0);
-  //   step.nextFrame(0.5);
-  //   expect(element.transform.round()).toEqual(start.constant(0.5));
-
-  //   step.finish(true);
-  //   expect(element.transform.round()).toEqual(target);
-  //   expect(finishFlag).toBe(1);
-  // });
 });
 describe('Serial Animation', () => {
   let element;
+  let step1;
+  let step2;
+  let step3;
+  let target1;
+  let target2;
+  let target3;
+  let serial;
+  let step1CallbackFlag;
+  let step2CallbackFlag;
+  let step3CallbackFlag;
+  let serialCallbackFlag;
+  const step1Callback = () => { step1CallbackFlag += 1; };
+  const step2Callback = () => { step2CallbackFlag += 1; };
+  const step3Callback = () => { step3CallbackFlag += 1; };
+  const serialCallback = () => { serialCallbackFlag += 1; };
   beforeEach(() => {
     const diagram = makeDiagram();
+    step1CallbackFlag = 0;
+    step2CallbackFlag = 0;
+    step3CallbackFlag = 0;
+    serialCallbackFlag = 0;
     element = diagram.objects.line();
-  });
-  test('3 step animation on same element', () => {
-    const target1 = element.transform.constant(1);
-    const target2 = element.transform.constant(2);
-    const target3 = element.transform.constant(3);
-    const step1 = new TransformAnimationUnit({
+    target1 = element.transform.constant(1);
+    target2 = element.transform.constant(2);
+    target3 = element.transform.constant(3);
+    step1 = new TransformAnimationUnit({
       element,
       duration: 1,
       progression: 'linear',
@@ -237,27 +232,31 @@ describe('Serial Animation', () => {
         start: element.transform.zero(),
         target: target1,
       },
+      onFinish: step1Callback,
     });
-    const step2 = new TransformAnimationUnit({
+    step2 = new TransformAnimationUnit({
       element,
       duration: 1,
       progression: 'linear',
       type: 'transform',
       transform: { target: target2 },
+      onFinish: step2Callback,
     });
-    const step3 = new TransformAnimationUnit({
+    step3 = new TransformAnimationUnit({
       element,
       duration: 1,
       progression: 'linear',
       type: 'transform',
       transform: { target: target3 },
+      onFinish: step3Callback,
     });
-    const serial = new AnimationSerial({
+    serial = new AnimationSerial({
       animations: [step1, step2, step3],
+      onFinish: serialCallback,
     });
-
+  });
+  test('3 step animation on same element', () => {
     let remainingTime;
-
     serial.start();
     serial.nextFrame(100);
     expect(serial.index).toBe(0);
@@ -296,6 +295,67 @@ describe('Serial Animation', () => {
     expect(serial.index).toBe(2);
     expect(element.transform.round()).toEqual(element.transform.constant(3));
     expect(math.round(remainingTime)).toBe(0.1);
+  });
+  describe('Cancelling', () => {
+    test('Complete on cancel = true, no forcing', () => {
+      step1.completeOnCancel = true;
+      step2.completeOnCancel = true;
+      step3.completeOnCancel = true;
+      serial.start();
+      serial.nextFrame(100);
+      serial.nextFrame(100.1);
+      serial.finish(true);
+      expect(step1CallbackFlag).toBe(1);
+      expect(step2CallbackFlag).toBe(1);
+      expect(step3CallbackFlag).toBe(1);
+      expect(serialCallbackFlag).toBe(1);
+      expect(element.transform.round()).toEqual(target3);
+    });
+    // Testing to make sure we still end at the target of step3
+    test('Complete on cancel = true except middle step, no forcing', () => {
+      step1.completeOnCancel = true;
+      step2.completeOnCancel = false;
+      step3.completeOnCancel = true;
+      serial.start();
+      serial.nextFrame(100);
+      serial.nextFrame(100.1);
+      serial.finish(true);
+      expect(step1CallbackFlag).toBe(1);
+      expect(step2CallbackFlag).toBe(1);
+      expect(step3CallbackFlag).toBe(1);
+      expect(serialCallbackFlag).toBe(1);
+      expect(element.transform.round()).toEqual(target3);
+    });
+    // Testing to make sure we end at the target of step 2
+    test('Complete on cancel = true except end step, no forcing', () => {
+      step1.completeOnCancel = true;
+      step2.completeOnCancel = true;
+      step3.completeOnCancel = false;
+      serial.start();
+      serial.nextFrame(100);
+      serial.nextFrame(100.1);
+      serial.finish(true);
+      expect(step1CallbackFlag).toBe(1);
+      expect(step2CallbackFlag).toBe(1);
+      expect(step3CallbackFlag).toBe(1);
+      expect(serialCallbackFlag).toBe(1);
+      expect(element.transform.round()).toEqual(target2);
+    });
+    // Testing to make sure only one callback for 1st step is called
+    test('Complete on cancel = true after 1st step complete, no forcing', () => {
+      step1.completeOnCancel = true;
+      step2.completeOnCancel = true;
+      step3.completeOnCancel = true;
+      serial.start();
+      serial.nextFrame(100);
+      serial.nextFrame(101.1);
+      serial.finish(true);
+      expect(step1CallbackFlag).toBe(1);
+      expect(step2CallbackFlag).toBe(1);
+      expect(step3CallbackFlag).toBe(1);
+      expect(serialCallbackFlag).toBe(1);
+      expect(element.transform.round()).toEqual(target3);
+    });
   });
 });
 describe('Parallel Animation', () => {
