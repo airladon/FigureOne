@@ -53,7 +53,7 @@ export class AnimationStep {
   // returns remaining time if this step completes
   // Return of 0 means this step is still going
   nextFrame(now: number) {
-    if (this.startTime < 0) {
+    if (this.startTime === -1) {
       this.startTime = now;
     }
     let remainingTime = 0;
@@ -80,6 +80,7 @@ export class AnimationStep {
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
   finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+    this.startTime = -2;
     // this.onFinish(false);
   }
 }
@@ -277,7 +278,8 @@ export class TransformAnimationUnit extends AnimationUnit {
     }
   }
 
-  finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null)  {
+  finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+    super.finish(cancelled, force);
     const setToEnd = () => {
       if (this.element != null) {
         this.element.setTransform(this.transform.target);
@@ -356,8 +358,11 @@ export class AnimationParallel extends AnimationStep {
   }
 
   finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+    super.finish(cancelled, force);
     this.animations.forEach((animationStep) => {
-      animationStep.finish(cancelled, force);
+      if (animationStep.startTime !== -2) {
+        animationStep.finish(cancelled, force);
+      }
     });
     if (this.onFinish != null) {
       this.onFinish(cancelled);
@@ -415,8 +420,11 @@ export class AnimationSerial extends AnimationStep {
   }
 
   finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+    super.finish(cancelled, force);
     this.animations.forEach((animationStep) => {
-      animationStep.finish(cancelled, force);
+      if (animationStep.startTime !== -2) {
+        animationStep.finish(cancelled, force);
+      }
     });
     if (this.onFinish != null) {
       this.onFinish(cancelled);
