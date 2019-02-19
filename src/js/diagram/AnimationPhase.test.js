@@ -63,7 +63,9 @@ describe('Transfrom Animation Unit', () => {
       },
     });
     expect(unit.transform.delta).toBe(null);
+    expect(unit.state).toBe('idle');
     unit.start();
+    expect(unit.state).toBe('animating');
     expect(unit.transform.delta).toEqual(target);
     expect(unit.startTime).toBe(-1);
   });
@@ -257,14 +259,26 @@ describe('Serial Animation', () => {
   });
   test('3 step animation on same element', () => {
     let remainingTime;
+    expect(step1.state).toBe('idle');
+    expect(step2.state).toBe('idle');
+    expect(step3.state).toBe('idle');
+    expect(serial.state).toBe('idle');
     serial.start();
     serial.nextFrame(100);
     expect(serial.index).toBe(0);
     expect(element.transform.round()).toEqual(element.transform.constant(0));
+    expect(step1.state).toBe('animating');
+    expect(step2.state).toBe('waitingToStart');
+    expect(step3.state).toBe('waitingToStart');
+    expect(serial.state).toBe('animating');
 
     serial.nextFrame(100.1);
     expect(serial.index).toBe(0);
     expect(element.transform.round()).toEqual(element.transform.constant(0.1));
+    expect(step1.state).toBe('animating');
+    expect(step2.state).toBe('waitingToStart');
+    expect(step3.state).toBe('waitingToStart');
+    expect(serial.state).toBe('animating');
 
     serial.nextFrame(100.9);
     expect(serial.index).toBe(0);
@@ -273,10 +287,18 @@ describe('Serial Animation', () => {
     serial.nextFrame(101);
     expect(serial.index).toBe(0);
     expect(element.transform.round()).toEqual(element.transform.constant(1));
+    expect(step1.state).toBe('animating');
+    expect(step2.state).toBe('waitingToStart');
+    expect(step3.state).toBe('waitingToStart');
+    expect(serial.state).toBe('animating');
 
     serial.nextFrame(101.01);
     expect(serial.index).toBe(1);
     expect(element.transform.round()).toEqual(element.transform.constant(1.01));
+    expect(step1.state).toBe('idle');
+    expect(step2.state).toBe('animating');
+    expect(step3.state).toBe('waitingToStart');
+    expect(serial.state).toBe('animating');
 
     serial.nextFrame(101.5);
     expect(serial.index).toBe(1);
@@ -285,6 +307,10 @@ describe('Serial Animation', () => {
     serial.nextFrame(102.5);
     expect(serial.index).toBe(2);
     expect(element.transform.round()).toEqual(element.transform.constant(2.5));
+    expect(step1.state).toBe('idle');
+    expect(step2.state).toBe('idle');
+    expect(step3.state).toBe('animating');
+    expect(serial.state).toBe('animating');
 
     remainingTime = serial.nextFrame(103);
     expect(serial.index).toBe(2);
@@ -295,6 +321,10 @@ describe('Serial Animation', () => {
     expect(serial.index).toBe(2);
     expect(element.transform.round()).toEqual(element.transform.constant(3));
     expect(math.round(remainingTime)).toBe(0.1);
+    expect(step1.state).toBe('idle');
+    expect(step2.state).toBe('idle');
+    expect(step3.state).toBe('idle');
+    expect(serial.state).toBe('idle');
   });
   describe('Cancelling', () => {
     test('Complete on cancel = true, no forcing', () => {

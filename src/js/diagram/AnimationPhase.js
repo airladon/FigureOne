@@ -25,6 +25,7 @@ export class AnimationStep {
   // animations: Array<AnimationStep>;
   onFinish: ?(boolean) => void;
   completeOnCancel: boolean;
+  state: 'animating' | 'waitingToStart' | 'idle';
 
   constructor(optionsIn: TypeAnimationStepInputOptions) {
     const defaultOptions = {
@@ -44,6 +45,7 @@ export class AnimationStep {
     // this.onCancel = options.onCancel;
     this.completeOnCancel = options.completeOnCancel;
     this.startTime = -1;
+    this.state = 'idle';
   }
 
   // // eslint-disable-next-line class-methods-use-this
@@ -73,14 +75,20 @@ export class AnimationStep {
   setFrame(deltaTime: number) {
   }
 
+  startWaiting() {
+    this.state = 'waitingToStart';
+  }
+
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
   start() {
     this.startTime = -1;
+    this.state = 'animating';
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
   finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
-    this.startTime = -2;
+    // this.startTime = -2;
+    this.state = 'idle';
     // this.onFinish(false);
   }
 }
@@ -131,19 +139,6 @@ export class AnimationUnit extends AnimationStep {
       this.progression = options.progression;
     }
   }
-
-  // // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  // _dup() {
-
-  // }
-
-  // // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  // start() {
-  // }
-
-  // // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  // finish() {
-  // }
 }
 
 type TypeTransformAnimationUnitInputOptions = {
@@ -215,6 +210,7 @@ export class TransformAnimationUnit extends AnimationUnit {
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
   start() {
+    super.start();
     if (this.transform.start === null) {
       if (this.element != null) {
         this.transform.start = this.element.transform._dup();
@@ -279,6 +275,9 @@ export class TransformAnimationUnit extends AnimationUnit {
   }
 
   finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+    if (this.state === 'idle') {
+      return;
+    }
     super.finish(cancelled, force);
     const setToEnd = () => {
       if (this.element != null) {
@@ -338,16 +337,28 @@ export class AnimationParallel extends AnimationStep {
     return remaining;
   }
 
+  startWaiting() {
+    super.startWaiting();
+    this.animations.forEach((animationStep) => {
+      animationStep.startWaiting();
+    });
+  }
+
   start() {
+    this.startWaiting();
+    super.start();
     this.animations.forEach((animationStep) => {
       animationStep.start();
     });
   }
 
   finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+    if (this.state === 'idle') {
+      return;
+    }
     super.finish(cancelled, force);
     this.animations.forEach((animationStep) => {
-      if (animationStep.startTime !== -2) {
+      if (animationStep.state !== 'idle') {
         animationStep.finish(cancelled, force);
       }
     });
@@ -371,24 +382,32 @@ export class AnimationSerial extends AnimationStep {
     const defaultOptions = {};
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (!Array.isArray(options.animations)) {
-      this.duration = options.animations.duration;
       this.animations = [options.animations];
     } else {
       this.animations = options.animations;
     }
+    return this;
   }
 
-  // calcDuration() {
-  //   let duration = 0;
-  //   this.animations.forEach((animation) => {
-  //     duration += animation.duration;
-  //   });
-  //   this.duration = duration;
-  // }
+  then(step: AnimationStep) {
+    this.animations.push(step);
+    return this;
+  }
+
+  startWaiting() {
+    super.startWaiting();
+    this.animations.forEach((animationStep) => {
+      animationStep.startWaiting();
+    });
+  }
 
   start() {
+    this.startWaiting();
+    super.start();
     this.index = 0;
-    this.animations[0].start();
+    if (this.animations.length > 0) {
+      this.animations[0].start();
+    }
   }
 
   nextFrame(now: number) {
@@ -407,9 +426,12 @@ export class AnimationSerial extends AnimationStep {
   }
 
   finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+    if (this.state === 'idle') {
+      return;
+    }
     super.finish(cancelled, force);
     this.animations.forEach((animationStep) => {
-      if (animationStep.startTime !== -2) {
+      if (animationStep.state !== 'idle') {
         animationStep.finish(cancelled, force);
       }
     });
