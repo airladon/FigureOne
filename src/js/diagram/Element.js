@@ -17,8 +17,7 @@ import { colorArrayToRGBA } from '../tools/color';
 
 import type {
   TypePositionAnimationStepInputOptions, TypeAnimatorInputOptions,
-  TypeDelayStepInputOptions, TypeSerialAnimationStepInputOptions,
-  TypeParallelAnimationStepInputOptions, TypeTriggerStepInputOptions,
+  TypeColorAnimationStepInputOptions,
 } from './Animation/Animation';
 import * as animations from './Animation/Animation';
 
@@ -742,7 +741,33 @@ class DiagramElement {
     return new animations.PositionAnimationStep(options);
   }
 
-  // disolve()
+  dissolveIn(
+    timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
+    ...args: Array<TypeColorAnimationStepInputOptions>
+  ) {
+    const defaultOptions = { element: this };
+    let options;
+    if (typeof timeOrOptionsIn === 'number') {
+      options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+    } else {
+      options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+    }
+    return new animations.DissolveInAnimationStep(options);
+  }
+
+  dissolveOut(
+    timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
+    ...args: Array<TypeColorAnimationStepInputOptions>
+  ) {
+    const defaultOptions = { element: this };
+    let options;
+    if (typeof timeOrOptionsIn === 'number') {
+      options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+    } else {
+      options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+    }
+    return new animations.DissolveOutAnimationStep(options);
+  }
 
   sequence(...optionsIn: Array<TypeAnimatorInputOptions>) {
     return new animations.Animator(this, ...optionsIn);
