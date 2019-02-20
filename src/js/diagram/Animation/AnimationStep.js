@@ -64,8 +64,8 @@ export default class AnimationStep {
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  start() {
-    this.startTime = -1;
+  start(startTime: number = -1) {
+    this.startTime = startTime;
     this.state = 'animating';
   }
 

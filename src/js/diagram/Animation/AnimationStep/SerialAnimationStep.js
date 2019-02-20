@@ -6,26 +6,48 @@ import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 
 export type TypeSerialAnimationStepInputOptions = {
-  steps?: Array<AnimationStep> | AnimationStep;
+  steps?: Array<AnimationStep>;
 } & TypeAnimationStepInputOptions;
 
 export default class SerialAnimationStep extends AnimationStep {
   steps: Array<AnimationStep>;
   index: number;
 
-  constructor(optionsIn: TypeSerialAnimationStepInputOptions = {}) {
-    super(optionsIn);
+  constructor(
+    stepsOrOptionsIn: Array<AnimationStep> | TypeSerialAnimationStepInputOptions = {},
+    ...optionsIn: Array<TypeSerialAnimationStepInputOptions>
+  ) {
+    const defaultOptions = { steps: [] };
+    let options;
+    if (Array.isArray(stepsOrOptionsIn)) {
+      options = joinObjects({}, defaultOptions, ...optionsIn);
+      options.steps = stepsOrOptionsIn;
+    } else {
+      options = joinObjects({}, defaultOptions, stepsOrOptionsIn, ...optionsIn);
+    }
+    super(options);
     this.index = 0;
-    const defaultOptions = {};
-    const options = joinObjects({}, defaultOptions, optionsIn);
     this.steps = [];
     if (!Array.isArray(options.steps) && options.steps != null) {
       this.steps = [options.steps];
     } else if (options.steps != null) {
       this.steps = options.steps;
     }
-    return this;
   }
+
+  // constructor(optionsIn: TypeSerialAnimationStepInputOptions = {}) {
+  //   super(optionsIn);
+  //   this.index = 0;
+  //   const defaultOptions = {};
+  //   const options = joinObjects({}, defaultOptions, optionsIn);
+  //   this.steps = [];
+  //   if (!Array.isArray(options.steps) && options.steps != null) {
+  //     this.steps = [options.steps];
+  //   } else if (options.steps != null) {
+  //     this.steps = options.steps;
+  //   }
+  //   return this;
+  // }
 
   then(step: AnimationStep) {
     this.steps.push(step);
@@ -39,12 +61,12 @@ export default class SerialAnimationStep extends AnimationStep {
     });
   }
 
-  start() {
+  start(startTime?: number) {
     this.startWaiting();
-    super.start();
+    super.start(startTime);
     this.index = 0;
     if (this.steps.length > 0) {
-      this.steps[0].start();
+      this.steps[0].start(startTime);
     }
   }
 
@@ -56,8 +78,7 @@ export default class SerialAnimationStep extends AnimationStep {
         return remaining;
       }
       this.index += 1;
-      this.steps[this.index].start();
-      this.steps[this.index].startTime = now - remaining;
+      this.steps[this.index].start(now - remaining);
       this.nextFrame(now);
     }
     return 0;

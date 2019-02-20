@@ -7,7 +7,7 @@ import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 
 
 export type TypeParallelAnimationStepInputOptions = {
-  steps?: Array<AnimationStep> | AnimationStep;
+  steps?: Array<AnimationStep>;
 } & TypeAnimationStepInputOptions;
 
 // Animations get started from a parent, but finish themselves
@@ -35,22 +35,11 @@ export default class ParallelAnimationStep extends AnimationStep {
     }
   }
 
-  // constructor(optionsIn: TypeParallelAnimationStepInputOptions = {}) {
-  //   super(optionsIn);
-  //   const defaultOptions = {};
-  //   const options = joinObjects({}, defaultOptions, optionsIn);
-  //   this.steps = [];
-  //   if (!Array.isArray(options.steps) && options.steps != null) {
-  //     this.steps = [options.steps];
-  //   } else if (options.steps != null) {
-  //     this.steps = options.steps;
-  //   }
-  // }
-
   nextFrame(now: number) {
     let remaining = -1;
     this.steps.forEach((step) => {
       const stepRemaining = step.nextFrame(now);
+      // console.log(step.element.uid, stepRemaining)
       if (remaining === -1) {
         remaining = stepRemaining;
       }
@@ -71,11 +60,11 @@ export default class ParallelAnimationStep extends AnimationStep {
     });
   }
 
-  start() {
+  start(startTime?: number) {
     this.startWaiting();
-    super.start();
+    super.start(startTime);
     this.steps.forEach((step) => {
-      step.start();
+      step.start(startTime);
     });
   }
 
