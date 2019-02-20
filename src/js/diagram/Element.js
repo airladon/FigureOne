@@ -742,15 +742,6 @@ class DiagramElement {
     return new animations.PositionAnimationStep(options);
   }
 
-  // // Deprecate - should be accessed from animation generic
-  // // eslint-disable-next-line class-methods-use-this
-  // delay(
-  //   numOrOptionsIn: number | TypeDelayStepInputOptions = {},
-  //   ...args: Array<TypeDelayStepInputOptions>
-  // ) {
-  //   return new animations.DelayStep(numOrOptionsIn, ...args);
-  // }
-
   sequence(...optionsIn: Array<TypeAnimatorInputOptions>) {
     return new animations.Animator(this, ...optionsIn);
   }
