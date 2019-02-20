@@ -4,6 +4,7 @@ import {
 import * as tools from '../../tools/tools';
 // import * as math from '../../tools/math';
 import makeDiagram from '../../__mocks__/makeDiagram';
+import { inSerial, delay } from './Animation';
 
 tools.isTouchDevice = jest.fn();
 
@@ -52,11 +53,11 @@ describe('Animator API', () => {
       timeSkipNested: () => {
         elem1.animator
           .inParallel([
-            elem1.inSerial([
-              elem1.moveTo(target1), elem1.delay(1), elem1.moveTo(target2),
+            inSerial([
+              elem1.moveTo(target1), delay(1), elem1.moveTo(target2),
             ]),
-            elem2.inSerial([
-              elem2.moveTo(target1), elem2.delay(1), elem2.moveTo(target2),
+            inSerial([
+              elem2.moveTo(target1), delay(1), elem2.moveTo(target2),
             ]),
           ])
           .start();
@@ -83,12 +84,12 @@ describe('Animator API', () => {
           ])
           // both e1 and e2 move to p1
           .inParallel([
-            elem1.inSerial([
+            inSerial([
               elem1.moveTo({ target: p1, duration: 1, progression: 'linear' }),
-              elem2.delay(1),
+              delay(1),
             ]),
-            elem2.inSerial([
-              elem1.delay(1),
+            inSerial([
+              delay(1),
               elem2.moveTo({ target: p1, duration: 1, progression: 'linear' }),
             ]),
           ])

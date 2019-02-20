@@ -9,7 +9,7 @@ export type TypeTriggerStepInputOptions = {
   trigger?: Function;      // default is element transform
 } & TypeAnimationStepInputOptions;
 
-export default class TriggerStep extends AnimationStep {
+export class TriggerStep extends AnimationStep {
   trigger: ?Function;
 
   constructor(
@@ -40,4 +40,11 @@ export default class TriggerStep extends AnimationStep {
     duplicateFromTo(this, step, ['element']);
     return step;
   }
+}
+
+export function trigger(
+  triggerOrOptionsIn: Function | TypeTriggerStepInputOptions = {},
+  ...optionsIn: Array<TypeTriggerStepInputOptions>
+) {
+  return new TriggerStep(triggerOrOptionsIn, ...optionsIn);
 }

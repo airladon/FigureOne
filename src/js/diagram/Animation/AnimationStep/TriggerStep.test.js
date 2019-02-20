@@ -1,4 +1,4 @@
-import TriggerStep from './TriggerStep';
+import { TriggerStep } from './TriggerStep';
 import * as tools from '../../../tools/tools';
 import makeDiagram from '../../../__mocks__/makeDiagram';
 import {

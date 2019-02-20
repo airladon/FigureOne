@@ -1,4 +1,4 @@
-import ParallelAnimationStep from './ParallelAnimationStep';
+import { ParallelAnimationStep } from './ParallelAnimationStep';
 import TransformAnimationStep from './ElementAnimationStep/TransformAnimationStep';
 import * as tools from '../../../tools/tools';
 import * as math from '../../../tools/math';

@@ -1,4 +1,4 @@
-import SerialAnimationStep from './SerialAnimationStep';
+import { SerialAnimationStep } from './SerialAnimationStep';
 import TransformAnimationStep from './ElementAnimationStep/TransformAnimationStep';
 import * as tools from '../../../tools/tools';
 import * as math from '../../../tools/math';

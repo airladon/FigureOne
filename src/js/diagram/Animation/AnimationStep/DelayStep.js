@@ -11,7 +11,7 @@ export type TypeDelayStepInputOptions = {
 } & TypeAnimationStepInputOptions;
 
 // Animations get started from a parent, but finish themselves
-export default class DelayStep extends AnimationStep {
+export class DelayStep extends AnimationStep {
   constructor(
     numOrOptionsIn: number | TypeDelayStepInputOptions = {},
     ...args: Array<TypeDelayStepInputOptions>
@@ -28,8 +28,15 @@ export default class DelayStep extends AnimationStep {
   }
 
   _dup() {
-    const delay = new DelayStep();
-    duplicateFromTo(this, delay);
-    return delay;
+    const dup = new DelayStep();
+    duplicateFromTo(this, dup);
+    return dup;
   }
+}
+
+export function delay(
+  numOrOptionsIn: number | TypeDelayStepInputOptions = {},
+  ...args: Array<TypeDelayStepInputOptions>
+) {
+  return new DelayStep(numOrOptionsIn, ...args);
 }

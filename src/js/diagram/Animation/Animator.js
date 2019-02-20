@@ -48,7 +48,7 @@ export default class Animator extends animation.SerialAnimationStep {
     numOrOptionsIn: number | TypeDelayStepInputOptions = {},
     ...args: Array<TypeDelayStepInputOptions>
   ) {
-    this.then(new animation.DelayStep(numOrOptionsIn, ...args));
+    this.then(animation.delay(numOrOptionsIn, ...args));
     return this;
   }
 
@@ -56,7 +56,7 @@ export default class Animator extends animation.SerialAnimationStep {
     triggerOrOptionsIn: Function | TypeTriggerStepInputOptions = {},
     ...optionsIn: Array<TypeTriggerStepInputOptions>
   ) {
-    this.then(new animation.TriggerStep(triggerOrOptionsIn, ...optionsIn));
+    this.then(animation.trigger(triggerOrOptionsIn, ...optionsIn));
     return this;
   }
 
@@ -64,15 +64,15 @@ export default class Animator extends animation.SerialAnimationStep {
     stepsOrOptionsIn: Array<animation.AnimationStep> | TypeParallelAnimationStepInputOptions = {},
     ...optionsIn: Array<TypeParallelAnimationStepInputOptions>
   ) {
-    this.then(new animation.ParallelAnimationStep(stepsOrOptionsIn, ...optionsIn));
+    this.then(animation.inParallel(stepsOrOptionsIn, ...optionsIn));
     return this;
   }
 
-  inSeries(
+  inSerial(
     stepsOrOptionsIn: Array<animation.AnimationStep> | TypeSerialAnimationStepInputOptions = {},
     ...optionsIn: Array<TypeSerialAnimationStepInputOptions>
   ) {
-    this.then(new animation.SerialAnimationStep(stepsOrOptionsIn, ...optionsIn));
+    this.then(animation.inSerial(stepsOrOptionsIn, ...optionsIn));
     return this;
   }
 
