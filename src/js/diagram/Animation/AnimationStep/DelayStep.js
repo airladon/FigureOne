@@ -12,10 +12,18 @@ export type TypeDelayStepInputOptions = {
 
 // Animations get started from a parent, but finish themselves
 export default class DelayStep extends AnimationStep {
-  constructor(optionsIn: TypeDelayStepInputOptions = {}) {
-    super(optionsIn);
+  constructor(
+    numOrOptionsIn: number | TypeDelayStepInputOptions = {},
+    ...args: Array<TypeDelayStepInputOptions>
+  ) {
+    let options = {};
     const defaultOptions = { duration: 0 };
-    const options = joinObjects({}, defaultOptions, optionsIn);
+    if (typeof numOrOptionsIn === 'number') {
+      options = joinObjects({}, defaultOptions, { duration: numOrOptionsIn }, ...args);
+    } else {
+      options = joinObjects({}, defaultOptions, numOrOptionsIn, ...args);
+    }
+    super(options);
     this.duration = options.duration;
   }
 

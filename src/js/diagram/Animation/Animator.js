@@ -35,28 +35,26 @@ export default class Animator extends animation.SerialAnimationStep {
     return this;
   }
 
-  delay(...args: Array<number | TypeDelayStepInputOptions>) {
-    let options = {};
-    if (typeof args[0] === 'number') {
-      options = joinObjects({}, { duration: args[0] }, ...(args.slice(1)));
-    }
-    this.then(new animation.DelayStep(options));
+  delay(
+    numOrOptionsIn: number | TypeDelayStepInputOptions = {},
+    ...args: Array<TypeDelayStepInputOptions>
+  ) {
+    this.then(new animation.DelayStep(numOrOptionsIn, ...args));
     return this;
   }
 
   inParallel(
-    stepsOrOptionsIn: Array<animation.AnimationStep> | TypeParallelAnimationStepInputOptions,
-    optionsIn: TypeParallelAnimationStepInputOptions = {},
+    stepsOrOptionsIn: Array<animation.AnimationStep> | TypeParallelAnimationStepInputOptions = {},
+    ...optionsIn: Array<TypeParallelAnimationStepInputOptions>
   ) {
-    if (Array.isArray(stepsOrOptionsIn)) {
-      const options = optionsIn;
-      options.steps = stepsOrOptionsIn;
-      this.then(new animation.ParallelAnimationStep(options));
-    } else {
-      this.then(new animation.ParallelAnimationStep(stepsOrOptionsIn));
-    }
+    this.then(new animation.ParallelAnimationStep(stepsOrOptionsIn, ...optionsIn));
     return this;
   }
+
+  // inSeries(optionsIn: TypeAnimatorInputOptions) {
+  //   const options = joinObjects({}, optionsIn, { element: this });
+  //   return new animations.Animator(options);
+  // }
 
   // When an animator stops, it is reset
   finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {

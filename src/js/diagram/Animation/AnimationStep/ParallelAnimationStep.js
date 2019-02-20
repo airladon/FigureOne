@@ -14,10 +14,19 @@ export type TypeParallelAnimationStepInputOptions = {
 export default class ParallelAnimationStep extends AnimationStep {
   steps: Array<AnimationStep>;
 
-  constructor(optionsIn: TypeParallelAnimationStepInputOptions = {}) {
-    super(optionsIn);
-    const defaultOptions = {};
-    const options = joinObjects({}, defaultOptions, optionsIn);
+  constructor(
+    stepsOrOptionsIn: Array<AnimationStep> | TypeParallelAnimationStepInputOptions = {},
+    ...optionsIn: Array<TypeParallelAnimationStepInputOptions>
+  ) {
+    const defaultOptions = { steps: [] };
+    let options;
+    if (Array.isArray(stepsOrOptionsIn)) {
+      options = joinObjects({}, defaultOptions, ...optionsIn);
+      options.steps = stepsOrOptionsIn;
+    } else {
+      options = joinObjects({}, defaultOptions, stepsOrOptionsIn, ...optionsIn);
+    }
+    super(options);
     this.steps = [];
     if (!Array.isArray(options.steps) && options.steps != null) {
       this.steps = [options.steps];
@@ -25,6 +34,18 @@ export default class ParallelAnimationStep extends AnimationStep {
       this.steps = options.steps;
     }
   }
+
+  // constructor(optionsIn: TypeParallelAnimationStepInputOptions = {}) {
+  //   super(optionsIn);
+  //   const defaultOptions = {};
+  //   const options = joinObjects({}, defaultOptions, optionsIn);
+  //   this.steps = [];
+  //   if (!Array.isArray(options.steps) && options.steps != null) {
+  //     this.steps = [options.steps];
+  //   } else if (options.steps != null) {
+  //     this.steps = options.steps;
+  //   }
+  // }
 
   nextFrame(now: number) {
     let remaining = -1;
