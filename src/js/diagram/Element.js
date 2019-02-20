@@ -742,6 +742,8 @@ class DiagramElement {
     return new animations.PositionAnimationStep(options);
   }
 
+  // disolve()
+
   sequence(...optionsIn: Array<TypeAnimatorInputOptions>) {
     return new animations.Animator(this, ...optionsIn);
   }

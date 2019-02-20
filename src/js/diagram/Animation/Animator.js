@@ -5,6 +5,7 @@ import type { TypeSerialAnimationStepInputOptions } from './AnimationStep/Serial
 import type {
   TypePositionAnimationStepInputOptions, TypeParallelAnimationStepInputOptions,
   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
+  TypeColorAnimationStepInputOptions,
 } from './Animation';
 // import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
 // import SerialAnimationStep from './AnimationStep/SerialAnimationStep';
@@ -50,6 +51,45 @@ export default class Animator extends animation.SerialAnimationStep {
       const options = joinObjects({}, defaultOptions, optionsIn);
       this.then(new animation.PositionAnimationStep(options));
     }
+    return this;
+  }
+
+  colorTo(...optionsIn: TypeColorAnimationStepInputOptions) {
+    if (this.element != null) {
+      const defaultOptions = { element: this.element };
+      const options = joinObjects({}, defaultOptions, optionsIn);
+      this.then(new animation.ColorAnimationStep(options));
+    }
+    return this;
+  }
+
+  dissolveOut(
+    timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
+    ...args: Array<TypeColorAnimationStepInputOptions>
+  ) {
+    const defaultOptions = { element: this.element };
+    let options;
+    if (typeof timeOrOptionsIn === 'number') {
+      options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+    } else {
+      options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+    }
+    this.then(animation.dissolveOut(options));
+    return this;
+  }
+
+  dissolveIn(
+    timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
+    ...args: Array<TypeColorAnimationStepInputOptions>
+  ) {
+    const defaultOptions = { element: this.element };
+    let options;
+    if (typeof timeOrOptionsIn === 'number') {
+      options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+    } else {
+      options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+    }
+    this.then(animation.dissolveIn(options));
     return this;
   }
 
