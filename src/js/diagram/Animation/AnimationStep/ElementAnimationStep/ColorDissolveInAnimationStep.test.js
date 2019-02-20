@@ -76,4 +76,49 @@ describe('Disolve In Animation', () => {
     expect(math.round(elem1.color)).toEqual([0.5, 0.5, 0.5, 1]);
     expect(callback.mock.calls.length).toBe(1);
   });
+  test('Cancel dissolve: completeOnCancel = false, force = null', () => {
+    elem1.animator
+      .dissolveIn(1).whenFinished(callback).ifCanceledThenStop().start();
+    elem1.animator.nextFrame(0);
+    elem1.animator.nextFrame(0.5);
+    elem1.animator.cancel();
+    expect(math.round(elem1.color, 2)).toEqual([0.5, 0.5, 0.5, 0.5]);
+    expect(callback.mock.calls.length).toBe(1);
+  });
+  test('Cancel dissolve: completeOnCancel = false, force = complete', () => {
+    elem1.animator
+      .dissolveIn(1).whenFinished(callback).ifCanceledThenStop().start();
+    elem1.animator.nextFrame(0);
+    elem1.animator.nextFrame(0.5);
+    elem1.animator.cancel('complete');
+    expect(math.round(elem1.color, 2)).toEqual([0.5, 0.5, 0.5, 1]);
+    expect(callback.mock.calls.length).toBe(1);
+  });
+  test('Cancel dissolve: completeOnCancel = false, force = noComplete', () => {
+    elem1.animator
+      .dissolveIn(1).whenFinished(callback).ifCanceledThenStop().start();
+    elem1.animator.nextFrame(0);
+    elem1.animator.nextFrame(0.5);
+    elem1.animator.cancel('noComplete');
+    expect(math.round(elem1.color, 2)).toEqual([0.5, 0.5, 0.5, 0.5]);
+    expect(callback.mock.calls.length).toBe(1);
+  });
+  test('Cancel dissolve: completeOnCancel = true, force = complete', () => {
+    elem1.animator
+      .dissolveIn(1).whenFinished(callback).ifCanceledThenComplete().start();
+    elem1.animator.nextFrame(0);
+    elem1.animator.nextFrame(0.5);
+    elem1.animator.cancel('complete');
+    expect(math.round(elem1.color, 2)).toEqual([0.5, 0.5, 0.5, 1]);
+    expect(callback.mock.calls.length).toBe(1);
+  });
+  test('Cancel dissolve: completeOnCancel = true, force = noComplete', () => {
+    elem1.animator
+      .dissolveIn(1).whenFinished(callback).ifCanceledThenComplete().start();
+    elem1.animator.nextFrame(0);
+    elem1.animator.nextFrame(0.5);
+    elem1.animator.cancel('noComplete');
+    expect(math.round(elem1.color, 2)).toEqual([0.5, 0.5, 0.5, 0.5]);
+    expect(callback.mock.calls.length).toBe(1);
+  });
 });
