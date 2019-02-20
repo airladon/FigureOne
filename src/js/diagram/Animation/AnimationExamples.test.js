@@ -109,7 +109,7 @@ describe('Animator API', () => {
     expect(elem2.getPosition().round()).toEqual(point(1));
     expect(math.round(remaining)).toBe(0.1);
   });
-  test('Parallel Step Simple', () => {
+  test.only('Parallel Step Simple', () => {
     examples.moveElementsInParallelSimply();
     expect(elem1.animator.steps[0].completeOnCancel).toBe(false);
     elem1.animator.nextFrame(100);

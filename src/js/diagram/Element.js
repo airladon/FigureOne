@@ -16,7 +16,8 @@ import { duplicateFromTo, joinObjects } from '../tools/tools';
 import { colorArrayToRGBA } from '../tools/color';
 
 import type {
-  TypePositionAnimationStepInputOptions,
+  TypePositionAnimationStepInputOptions, TypeAnimatorInputOptions,
+  TypeDelayStepInputOptions,
 } from './Animation/Animation';
 import * as animations from './Animation/Animation';
 // import Animator from './Animation/Animator';
@@ -743,8 +744,16 @@ class DiagramElement {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  delay(...args) {
-    return new animations.DelayStep(args);
+  delay(
+    numOrOptionsIn: number | TypeDelayStepInputOptions = {},
+    ...args: Array<TypeDelayStepInputOptions>
+  ) {
+    return new animations.DelayStep(numOrOptionsIn, ...args);
+  }
+
+  sequence(optionsIn: TypeAnimatorInputOptions) {
+    const options = joinObjects({}, optionsIn, { element: this });
+    return new animations.Animator(options);
   }
 
   setColor(color: Array<number>) {

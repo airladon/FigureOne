@@ -81,7 +81,9 @@ describe('Transfrom Animation Unit', () => {
     expect(math.round(remaining)).toBe(0.1);
   });
   // test('Delay separate elem1 in parallel method', () => {
-
+  //   elem1.animator
+  //     .moveTo({ target: new Point(1, 1), duration: 1, progression: 'linear' })
+  //     .inSeries
   // });
   // test('Target calculation with start transform not defined', () => {
   //   const delta = new Point(1, 1);
