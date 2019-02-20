@@ -10,6 +10,12 @@ import type {
 import TransformAnimationStep from './AnimationStep/ElementAnimationStep/TransformAnimationStep';
 
 import type {
+  TypeTriggerStepInputOptions,
+} from './AnimationStep/TriggerStep';
+import TriggerStep from './AnimationStep/TriggerStep';
+
+
+import type {
   TypeParallelAnimationStepInputOptions,
 } from './AnimationStep/ParallelAnimationStep';
 import ParallelAnimationStep from './AnimationStep/ParallelAnimationStep';
@@ -36,9 +42,9 @@ export type {
   TypePositionAnimationStepInputOptions, TypeAnimatorInputOptions,
   TypeParallelAnimationStepInputOptions, TypeSerialAnimationStepInputOptions,
   TypeTransformAnimationStepInputOptions, TypeAnimationStepInputOptions,
-  TypeDelayStepInputOptions,
+  TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
 };
 export {
   PositionAnimationStep, Animator, ParallelAnimationStep, SerialAnimationStep,
-  TransformAnimationStep, AnimationStep, DelayStep,
+  TransformAnimationStep, AnimationStep, DelayStep, TriggerStep,
 };

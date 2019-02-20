@@ -18,7 +18,7 @@ import { colorArrayToRGBA } from '../tools/color';
 import type {
   TypePositionAnimationStepInputOptions, TypeAnimatorInputOptions,
   TypeDelayStepInputOptions, TypeSerialAnimationStepInputOptions,
-  TypeParallelAnimationStepInputOptions,
+  TypeParallelAnimationStepInputOptions, TypeTriggerStepInputOptions,
 } from './Animation/Animation';
 import * as animations from './Animation/Animation';
 
@@ -742,6 +742,7 @@ class DiagramElement {
     return new animations.PositionAnimationStep(options);
   }
 
+  // Deprecate - should be accessed from animation generic
   // eslint-disable-next-line class-methods-use-this
   delay(
     numOrOptionsIn: number | TypeDelayStepInputOptions = {},
@@ -754,6 +755,7 @@ class DiagramElement {
     return new animations.Animator(this, ...optionsIn);
   }
 
+  // Deprecate
   // eslint-disable-next-line class-methods-use-this
   inSerial(
     stepsOrOptionsIn: Array<animations.AnimationStep> | TypeSerialAnimationStepInputOptions = {},
@@ -762,12 +764,22 @@ class DiagramElement {
     return new animations.SerialAnimationStep(stepsOrOptionsIn, ...optionsIn);
   }
 
+  // Deprecate
   // eslint-disable-next-line class-methods-use-this
   inParallel(
     stepsOrOptionsIn: Array<animations.AnimationStep> | TypeParallelAnimationStepInputOptions = {},
     ...optionsIn: Array<TypeParallelAnimationStepInputOptions>
   ) {
     return new animations.ParallelAnimationStep(stepsOrOptionsIn, ...optionsIn);
+  }
+
+  // Deprecate
+  // eslint-disable-next-line class-methods-use-this
+  trigger(
+    triggerOrOptionsIn: Function | TypeTriggerStepInputOptions = {},
+    ...optionsIn: Array<TypeTriggerStepInputOptions>
+  ) {
+    return new animations.TriggerStep(triggerOrOptionsIn, ...optionsIn);
   }
 
   setColor(color: Array<number>) {

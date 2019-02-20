@@ -2,7 +2,7 @@ import {
   Point,
 } from '../../tools/g2';
 import * as tools from '../../tools/tools';
-import * as math from '../../tools/math';
+// import * as math from '../../tools/math';
 import makeDiagram from '../../__mocks__/makeDiagram';
 
 tools.isTouchDevice = jest.fn();

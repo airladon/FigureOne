@@ -4,7 +4,7 @@ import { DiagramElement } from '../Element';
 import type { TypeSerialAnimationStepInputOptions } from './AnimationStep/SerialAnimationStep';
 import type {
   TypePositionAnimationStepInputOptions, TypeParallelAnimationStepInputOptions,
-  TypeDelayStepInputOptions,
+  TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
 } from './Animation';
 // import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
 // import SerialAnimationStep from './AnimationStep/SerialAnimationStep';
@@ -49,6 +49,14 @@ export default class Animator extends animation.SerialAnimationStep {
     ...args: Array<TypeDelayStepInputOptions>
   ) {
     this.then(new animation.DelayStep(numOrOptionsIn, ...args));
+    return this;
+  }
+
+  trigger(
+    triggerOrOptionsIn: Function | TypeTriggerStepInputOptions = {},
+    ...optionsIn: Array<TypeTriggerStepInputOptions>
+  ) {
+    this.then(new animation.TriggerStep(triggerOrOptionsIn, ...optionsIn));
     return this;
   }
 

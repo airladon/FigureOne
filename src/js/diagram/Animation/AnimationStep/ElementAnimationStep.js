@@ -13,7 +13,7 @@ export type TypeElementAnimationStepInputOptions = {
 
 export default class ElementAnimationStep extends AnimationStep {
   element: ?Object;
-  type: 'transform' | 'color' | 'custom';
+  type: 'transform' | 'color' | 'custom' | 'position' | 'setPosition';
   duration: number;
   progression: (number) => number;
 
