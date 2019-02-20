@@ -7,12 +7,15 @@
 // import type { pathOptionsType } from '../tools/g2';
 // eslint-disable-next-line import/no-cycle
 // import { DiagramElement } from './Element';
-import { joinObjects, duplicateFromTo } from '../../tools/tools';
-
+import {
+  joinObjects, duplicateFromTo, generateRandomString,
+} from '../../tools/tools';
 
 export type TypeAnimationStepInputOptions = {
   onFinish?: ?(boolean) => void;
   completeOnCancel?: ?boolean;    // true: yes, false: no, null: no preference
+  removeOnFinish?: boolean;
+  name?: string;
 };
 
 export default class AnimationStep {
@@ -21,19 +24,26 @@ export default class AnimationStep {
   // animations: Array<AnimationStep>;
   onFinish: ?(boolean) => void;
   completeOnCancel: ?boolean;
-  state: 'animating' | 'waitingToStart' | 'idle';
+  state: 'animating' | 'waitingToStart' | 'idle' | 'finished';
   startTimeOffset: number;
+  removeOnFinish: boolean;
+  name: string;
 
   constructor(optionsIn: TypeAnimationStepInputOptions = {}) {
     const defaultOptions = {
       onFinish: null,
       completeOnCancel: null,
+      removeOnFinish: true,
+      name: generateRandomString(),
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     this.onFinish = options.onFinish;
     this.completeOnCancel = options.completeOnCancel;
     this.startTime = -1;
     this.state = 'idle';
+    this.name = options.name;
+    // This is only for it this step is a primary path in an Animation Manager
+    this.removeOnFinish = options.removeOnFinish;
     // Each animation frame will typically calculate a percent complete,
     // which is based on the duration, and from the percent complete calculate
     // the position of the current animation.
@@ -82,7 +92,7 @@ export default class AnimationStep {
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
   finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
     // this.startTime = -2;
-    this.state = 'idle';
+    this.state = 'finished';
     // this.onFinish(false);
   }
 

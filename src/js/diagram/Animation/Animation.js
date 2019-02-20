@@ -59,6 +59,11 @@ import type {
 } from './AnimationStep';
 import AnimationStep from './AnimationStep';
 
+import type {
+  TypeAnimationManagerInputOptions,
+} from './AnimationManager';
+import AnimationManager from './AnimationManager';
+
 import type { TypeAnimatorInputOptions } from './Animator';
 import Animator from './Animator';
 
@@ -68,11 +73,12 @@ export type {
   TypeTransformAnimationStepInputOptions, TypeAnimationStepInputOptions,
   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
   TypeColorAnimationStepInputOptions, TypeCustomAnimationStepInputOptions,
+  TypeAnimationManagerInputOptions,
 };
 export {
   PositionAnimationStep, Animator, ParallelAnimationStep, SerialAnimationStep,
   TransformAnimationStep, AnimationStep, DelayStep, TriggerStep,
   inParallel, inSerial, trigger, delay, ColorAnimationStep,
   DissolveInAnimationStep, dissolveIn, DissolveOutAnimationStep, dissolveOut,
-  CustomAnimationStep, custom,
+  CustomAnimationStep, custom, AnimationManager,
 };
