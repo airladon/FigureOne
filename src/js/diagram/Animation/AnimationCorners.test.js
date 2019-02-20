@@ -118,10 +118,6 @@ describe('Animator API', () => {
   test('Time skip 2 parrallel nests', () => {
     examples.timeSkipComplexNest();
     elem1.animator.nextFrame(0);
-    // elem1.animator.nextFrame(1.5);
-    // elem1.animator.nextFrame(2.5);
-    // elem1.animator.nextFrame(3.5);
-    // elem1.animator.nextFrame(4.5);
     elem1.animator.nextFrame(5.5);
     expect(elem1.getPosition().round()).toEqual(point(1.5));
     expect(elem2.getPosition().round()).toEqual(point(2));
