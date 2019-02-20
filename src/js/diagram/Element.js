@@ -27,8 +27,6 @@ import {
   AnimationPhase, ColorAnimationPhase, CustomAnimationPhase,
 } from './AnimationPhase';
 
-type TypeParallelAnimationPhase = AnimationPhase | ColorAnimationPhase | CustomAnimationPhase;
-
 function checkCallback(callback: ?(boolean) => void): (boolean) => void {
   let callbackToUse = () => {};
   if (typeof callback === 'function') {
@@ -131,10 +129,6 @@ class DiagramElement {
       plan: Array<ColorAnimationPhase>;
       callback: ?(boolean) => void;
     };
-    parallel: {
-      plan: Array<Array<TypeParallelAnimationPhase>>;
-      callback: ?(boolean) => void;
-    }
   }
 
   move: {
@@ -179,7 +173,6 @@ class DiagramElement {
     isAnimating: boolean,
     isAnimatingColor: boolean,
     isAnimatingCustom: boolean,
-    isAnimatingParallel: boolean,
     disolving: '' | 'in' | 'out',
     animation: {
       currentPhaseIndex: number,
@@ -192,10 +185,6 @@ class DiagramElement {
     customAnimation: {
       currentPhaseIndex: number,
       currentPhase: CustomAnimationPhase,
-    },
-    parallelAnimation: {
-      currentPhaseIndex: Array<number>,
-      currentPhase: Array<TypeParallelAnimationPhase>,
     },
     isBeingMoved: boolean,
     isMovingFreely: boolean,
@@ -269,10 +258,6 @@ class DiagramElement {
         plan: [],
         callback: null,
       },
-      parallel: {
-        plan: [],
-        callback: null,
-      },
     };
     this.diagramLimits = diagramLimits;
     this.move = {
@@ -309,7 +294,6 @@ class DiagramElement {
       isAnimating: false,
       isAnimatingColor: false,
       isAnimatingCustom: false,
-      isAnimatingParallel: false,
       disolving: '',
       animation: {
         currentPhaseIndex: 0,         // current animation phase index in plan
@@ -322,10 +306,6 @@ class DiagramElement {
       customAnimation: {
         currentPhaseIndex: 0,         // current animation phase index in plan
         currentPhase: new CustomAnimationPhase(() => {}),  // current animation phase
-      },
-      parallelAnimation: {
-        currentPhaseIndex: [],
-        currentPhase: [],
       },
       isBeingMoved: false,
       isMovingFreely: false,
@@ -343,6 +323,11 @@ class DiagramElement {
     this.interactiveLocation = new Point(0, 0);
     this.animator = new animations.Animator(this);
     // this.presetTransforms = {};
+  }
+
+  anim() {
+    this.animator = new animations.Animator(this);
+    return this.animator;
   }
 
   setProperties(properties: Object) {
@@ -924,38 +909,6 @@ class DiagramElement {
   }
 
   // Start an animation plan of phases ending in a callback
-  // 2D Matrix where each item in a row is a sequential step
-  // and each row is a parallel animation effort
-  animateParallelPlan(
-    parallelPlans: Array<Array<TypeParallelAnimationPhase>>,
-    callback: ?(boolean) => void = null,
-    cancelled: boolean = true,
-    forceToEnd: boolean = true,
-  ): void {
-    this.stop(cancelled, forceToEnd);
-    const numParallelPlans = parallelPlans.length;
-    this.animate.parallel.plan = parallelPlans;
-
-    if (numParallelPlans > 0) {
-      this.state.isAnimatingParallel = true;
-      this.state.parallelAnimation.currentPhaseIndex = [];
-      for (let i = 0; i < numParallelPlans; i += 1) {
-        this.state.parallelAnimation.currentPhaseIndex.push(0);
-        this.animateParallelPhase(i, 0);
-      }
-      this.animate.parallel.callback = callback;
-    }
-    // if (this.animate.transform.plan.length > 0) {
-    //   if (callback) {
-    //     this.animate.transform.callback = callback;
-    //   }
-    //   this.state.isAnimating = true;
-    //   this.state.animation.currentPhaseIndex = 0;
-    //   this.animatePhase(this.state.animation.currentPhaseIndex);
-    // }
-  }
-
-  // Start an animation plan of phases ending in a callback
   animatePlan(
     phases: Array<AnimationPhase>,
     callback: ?(boolean) => void = null,
@@ -1025,11 +978,6 @@ class DiagramElement {
     this.state.animation.currentPhase.start(this.transform._dup());
   }
 
-  animateParallelPhase(parallelIndex: number, phaseIndex: number): void {
-    this.state.parallelAnimation.currentPhase[parallelIndex] =
-      this.animate.parallel.plan[parallelIndex][phaseIndex];
-    this.state.parallelAnimation.currentPhase.start(this);
-  }
 
   animateColorPhase(index: number): void {
     this.state.colorAnimation.currentPhase = this.animate.color.plan[index];
@@ -2203,6 +2151,9 @@ class DiagramElementPrimative extends DiagramElement {
 
   draw(parentTransform: Transform = new Transform(), now: number = 0) {
     if (this.isShown) {
+      if (this.animator.state !== 'idle') {
+        this.animator.nextFrame(now);
+      }
       this.setNextTransform(now);
       this.setNextColor(now);
       // set next color can end up hiding an element when disolving out
@@ -2463,6 +2414,9 @@ class DiagramElementCollection extends DiagramElement {
 
   draw(parentTransform: Transform = new Transform(), now: number = 0) {
     if (this.isShown) {
+      if (this.animator.state !== 'idle') {
+        this.animator.nextFrame(now);
+      }
       this.setNextTransform(now);
       this.setNextColor(now);
       // set next color can end up hiding an element when disolving out
