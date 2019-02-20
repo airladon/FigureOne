@@ -22,6 +22,7 @@ export default class AnimationStep {
   onFinish: ?(boolean) => void;
   completeOnCancel: ?boolean;
   state: 'animating' | 'waitingToStart' | 'idle';
+  startTimeOffset: number;
 
   constructor(optionsIn: TypeAnimationStepInputOptions = {}) {
     const defaultOptions = {
@@ -33,6 +34,15 @@ export default class AnimationStep {
     this.completeOnCancel = options.completeOnCancel;
     this.startTime = -1;
     this.state = 'idle';
+    // Each animation frame will typically calculate a percent complete,
+    // which is based on the duration, and from the percent complete calculate
+    // the position of the current animation.
+    // However, if you want to start an animation not from 0 percent, then this
+    // value can be used. When startTimeOffset != 0, then the first frame
+    // will be calculated at this.progression(startTimeOffset). The animation
+    // will still go to 1, but will be reduced in duration by startTimeOffset.
+    // When progressions aren't linear, then this time is non-trival.
+    this.startTimeOffset = 0;
     return this;
   }
 
@@ -40,7 +50,7 @@ export default class AnimationStep {
   // Return of 0 means this step is still going
   nextFrame(now: number) {
     if (this.startTime === -1) {
-      this.startTime = now;
+      this.startTime = now - this.startTimeOffset;
     }
     let remainingTime = 0;
     let deltaTime = now - this.startTime;

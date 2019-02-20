@@ -25,6 +25,13 @@ import {
   TriggerStep, trigger,
 } from './AnimationStep/TriggerStep';
 
+import type {
+  TypeCustomAnimationStepInputOptions,
+} from './AnimationStep/CustomStep';
+import {
+  CustomAnimationStep, custom,
+} from './AnimationStep/CustomStep';
+
 
 import type {
   TypeParallelAnimationStepInputOptions,
@@ -60,11 +67,12 @@ export type {
   TypeParallelAnimationStepInputOptions, TypeSerialAnimationStepInputOptions,
   TypeTransformAnimationStepInputOptions, TypeAnimationStepInputOptions,
   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
-  TypeColorAnimationStepInputOptions,
+  TypeColorAnimationStepInputOptions, TypeCustomAnimationStepInputOptions,
 };
 export {
   PositionAnimationStep, Animator, ParallelAnimationStep, SerialAnimationStep,
   TransformAnimationStep, AnimationStep, DelayStep, TriggerStep,
   inParallel, inSerial, trigger, delay, ColorAnimationStep,
   DissolveInAnimationStep, dissolveIn, DissolveOutAnimationStep, dissolveOut,
+  CustomAnimationStep, custom,
 };

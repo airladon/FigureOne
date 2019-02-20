@@ -5,7 +5,7 @@ import type { TypeSerialAnimationStepInputOptions } from './AnimationStep/Serial
 import type {
   TypePositionAnimationStepInputOptions, TypeParallelAnimationStepInputOptions,
   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
-  TypeColorAnimationStepInputOptions,
+  TypeColorAnimationStepInputOptions, TypeCustomAnimationStepInputOptions,
 } from './Animation';
 // import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
 // import SerialAnimationStep from './AnimationStep/SerialAnimationStep';
@@ -33,6 +33,11 @@ export default class Animator extends animation.SerialAnimationStep {
     }
     super(options);
     this.element = options.element;
+    return this;
+  }
+
+  custom(...optionsIn: Array<TypeCustomAnimationStepInputOptions>) {
+    this.then(new animation.CustomAnimationStep(...optionsIn));
     return this;
   }
 
