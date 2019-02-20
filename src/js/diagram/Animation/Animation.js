@@ -5,6 +5,15 @@ import type {
 import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
 
 import type {
+  TypeColorAnimationStepInputOptions,
+} from './AnimationStep/ElementAnimationStep/ColorAnimationStep';
+import {
+  ColorAnimationStep, DissolveInAnimationStep, dissolveIn,
+  DissolveOutAnimationStep, dissolveOut,
+} from './AnimationStep/ElementAnimationStep/ColorAnimationStep';
+
+
+import type {
   TypeTransformAnimationStepInputOptions,
 } from './AnimationStep/ElementAnimationStep/TransformAnimationStep';
 import TransformAnimationStep from './AnimationStep/ElementAnimationStep/TransformAnimationStep';
@@ -51,9 +60,11 @@ export type {
   TypeParallelAnimationStepInputOptions, TypeSerialAnimationStepInputOptions,
   TypeTransformAnimationStepInputOptions, TypeAnimationStepInputOptions,
   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
+  TypeColorAnimationStepInputOptions,
 };
 export {
   PositionAnimationStep, Animator, ParallelAnimationStep, SerialAnimationStep,
   TransformAnimationStep, AnimationStep, DelayStep, TriggerStep,
-  inParallel, inSerial, trigger, delay,
+  inParallel, inSerial, trigger, delay, ColorAnimationStep,
+  DissolveInAnimationStep, dissolveIn, DissolveOutAnimationStep, dissolveOut,
 };

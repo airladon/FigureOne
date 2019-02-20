@@ -15,27 +15,27 @@ export type TypeColorAnimationStepInputOptions = {
   start?: TypeColor;      // default is element transform
   target?: TypeColor;     // Either target or delta must be defined
   delta?: TypeColor;      // delta overrides target if both are defined
-  disolve?: 'in' | 'out' | null
+  dissolve?: 'in' | 'out' | null
 } & TypeElementAnimationStepInputOptions;
 
 const addColors = (color1, color2) => color1.map((c, index) => Math.min(c + color2[index], 1));
 
-const subtractColors = (color1, color2) => color1.map((c, index) => Math.max(c - color2[index], 0));
+const subtractColors = (color1, color2) => color1.map((c, index) => c - color2[index]);
 
-export default class ColorAnimationStep extends ElementAnimationStep {
+export class ColorAnimationStep extends ElementAnimationStep {
   color: {
     start: TypeColor;     // null means use element color
     delta: TypeColor;
     target: TypeColor;
     whenComplete: TypeColor;  // Color after dissolving
-    disolve?: 'in' | 'out' | null;
+    dissolve?: 'in' | 'out' | null;
   };
 
   constructor(optionsIn: TypeColorAnimationStepInputOptions = {}) {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, optionsIn, { type: 'color' });
     deleteKeys(ElementAnimationStepOptionsIn, [
-      'start', 'delta', 'target', 'disolve',
+      'start', 'delta', 'target', 'dissolve',
     ]);
     super(ElementAnimationStepOptionsIn);
 
@@ -43,14 +43,13 @@ export default class ColorAnimationStep extends ElementAnimationStep {
       start: null,
       target: null,
       delta: null,
-      disolve: null,
+      dissolve: null,
     };
     const options = joinObjects({}, defaultPositionOptions, optionsIn);
     // $FlowFixMe
-    this.position = {};
+    this.color = {};
     copyKeysFromTo(options, this.color, [
-      'start', 'delta', 'target', 'translationStyle', 'translationOptions',
-      'velocity',
+      'start', 'delta', 'target', 'dissolve',
     ]);
   }
 
@@ -72,11 +71,11 @@ export default class ColorAnimationStep extends ElementAnimationStep {
       }
       this.color.whenComplete = this.color.target.slice();
 
-      if (this.color.disolve === 'out') {
-        this.color.target[3] = 0.01;
+      if (this.color.dissolve === 'out') {
+        this.color.target[3] = 0.001;
       }
-      if (this.color.disolve === 'in') {
-        this.color.start[3] = 0.01;
+      if (this.color.dissolve === 'in') {
+        this.color.start[3] = 0.001;
         element.setColor(this.color.start);
         element.showAll();
       }
@@ -105,7 +104,7 @@ export default class ColorAnimationStep extends ElementAnimationStep {
       const { element } = this;
       if (element != null) {
         element.setColor(this.color.whenComplete);
-        if (this.color.disolve === 'out') {
+        if (this.color.dissolve === 'out') {
           element.hide();
         }
       }
@@ -132,3 +131,50 @@ export default class ColorAnimationStep extends ElementAnimationStep {
     return step;
   }
 }
+
+export class DissolveInAnimationStep extends ColorAnimationStep {
+  constructor(
+    timeOrOptionsIn: number | TypeElementAnimationStepInputOptions = {},
+    ...args: Array<TypeElementAnimationStepInputOptions>
+  ) {
+    let options = {};
+    const defaultOptions = { duration: 1, dissolve: 'in', completeOnCancel: true };
+    if (typeof timeOrOptionsIn === 'number') {
+      options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+    } else {
+      options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+    }
+    super(options);
+  }
+}
+
+export function dissolveIn(
+  timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
+  ...args: Array<TypeColorAnimationStepInputOptions>
+) {
+  return new DissolveInAnimationStep(timeOrOptionsIn, ...args);
+}
+
+export class DissolveOutAnimationStep extends ColorAnimationStep {
+  constructor(
+    timeOrOptionsIn: number | TypeElementAnimationStepInputOptions = {},
+    ...args: Array<TypeElementAnimationStepInputOptions>
+  ) {
+    let options = {};
+    const defaultOptions = { duration: 1, dissolve: 'out', completeOnCancel: true };
+    if (typeof timeOrOptionsIn === 'number') {
+      options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+    } else {
+      options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+    }
+    super(options);
+  }
+}
+
+export function dissolveOut(
+  timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
+  ...args: Array<TypeColorAnimationStepInputOptions>
+) {
+  return new DissolveOutAnimationStep(timeOrOptionsIn, ...args);
+}
+
