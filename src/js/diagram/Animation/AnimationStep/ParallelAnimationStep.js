@@ -11,7 +11,7 @@ export type TypeParallelAnimationStepInputOptions = {
 } & TypeAnimationStepInputOptions;
 
 // Animations get started from a parent, but finish themselves
-export default class ParallelAnimationStep extends AnimationStep {
+export class ParallelAnimationStep extends AnimationStep {
   steps: Array<AnimationStep>;
 
   constructor(
@@ -98,4 +98,11 @@ export default class ParallelAnimationStep extends AnimationStep {
     duplicateFromTo(this, step);
     return step;
   }
+}
+
+export function inParallel(
+  stepsOrOptionsIn: Array<AnimationStep> | TypeParallelAnimationStepInputOptions = {},
+  ...optionsIn: Array<TypeParallelAnimationStepInputOptions>
+) {
+  return new ParallelAnimationStep(stepsOrOptionsIn, ...optionsIn);
 }

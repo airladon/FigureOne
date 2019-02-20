@@ -9,7 +9,7 @@ export type TypeSerialAnimationStepInputOptions = {
   steps?: Array<AnimationStep>;
 } & TypeAnimationStepInputOptions;
 
-export default class SerialAnimationStep extends AnimationStep {
+export class SerialAnimationStep extends AnimationStep {
   steps: Array<AnimationStep>;
   index: number;
 
@@ -115,3 +115,11 @@ export default class SerialAnimationStep extends AnimationStep {
     return step;
   }
 }
+
+export function inSerial(
+  stepsOrOptionsIn: Array<AnimationStep> | TypeSerialAnimationStepInputOptions = {},
+  ...optionsIn: Array<TypeSerialAnimationStepInputOptions>
+) {
+  return new SerialAnimationStep(stepsOrOptionsIn, ...optionsIn);
+}
+
