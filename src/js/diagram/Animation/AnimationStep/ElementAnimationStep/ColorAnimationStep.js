@@ -31,21 +31,20 @@ export class ColorAnimationStep extends ElementAnimationStep {
     dissolve?: 'in' | 'out' | null;
   };
 
-  constructor(optionsIn: TypeColorAnimationStepInputOptions = {}) {
+  constructor(...optionsIn: Array<TypeColorAnimationStepInputOptions>) {
     const ElementAnimationStepOptionsIn =
-      joinObjects({}, optionsIn, { type: 'color' });
+      joinObjects({}, ...optionsIn, { type: 'color' });
     deleteKeys(ElementAnimationStepOptionsIn, [
       'start', 'delta', 'target', 'dissolve',
     ]);
     super(ElementAnimationStepOptionsIn);
-
     const defaultPositionOptions = {
       start: null,
       target: null,
       delta: null,
       dissolve: null,
     };
-    const options = joinObjects({}, defaultPositionOptions, optionsIn);
+    const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
     // $FlowFixMe
     this.color = {};
     copyKeysFromTo(options, this.color, [
@@ -89,7 +88,16 @@ export class ColorAnimationStep extends ElementAnimationStep {
     const percentTime = deltaTime / this.duration;
     const percentComplete = this.progression(percentTime);
     const p = percentComplete;
-    const next = this.color.start.map((c, index) => c + this.color.delta[index] * p);
+    const next = this.color.start.map((c, index) => {
+      let newColor = c + this.color.delta[index] * p;
+      if (newColor > 1) {
+        newColor = 1;
+      }
+      if (newColor < 0) {
+        newColor = 0;
+      }
+      return newColor;
+    });
     if (this.element != null) {
       this.element.setColor(next);
     }

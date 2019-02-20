@@ -54,10 +54,10 @@ export default class Animator extends animation.SerialAnimationStep {
     return this;
   }
 
-  colorTo(...optionsIn: TypeColorAnimationStepInputOptions) {
+  colorTo(...optionsIn: Array<TypeColorAnimationStepInputOptions>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
-      const options = joinObjects({}, defaultOptions, optionsIn);
+      const options = joinObjects({}, defaultOptions, ...optionsIn);
       this.then(new animation.ColorAnimationStep(options));
     }
     return this;
