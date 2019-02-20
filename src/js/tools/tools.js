@@ -342,9 +342,28 @@ const cleanUIDs = (objectToClean: Object) => {
   }
 };
 
+function deleteKeys(obj: Object, keys: Array<string>) {
+  keys.forEach((key) => {
+    if (obj[key] !== undefined) {
+      // eslint-disable-next-line no-param-reassign
+      delete obj[key];
+    }
+  });
+}
+
+function copyKeys(source: Object, destination: Object, keys: Array<string>) {
+  keys.forEach((key) => {
+    if (source[key] !== undefined) {
+      // eslint-disable-next-line no-param-reassign
+      destination[key] = source[key];
+    }
+  });
+}
+
 export {
   divide, mulToString, add, Console,
   classify, extractFrom, ObjectKeyPointer, getElement,
   addToObject, duplicateFromTo, isTouchDevice,
   generateUniqueId, joinObjects, cleanUIDs, loadRemote, loadRemoteCSS,
+  deleteKeys, copyKeys,
 };

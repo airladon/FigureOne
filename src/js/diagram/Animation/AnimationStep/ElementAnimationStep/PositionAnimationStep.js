@@ -3,29 +3,13 @@ import {
   Transform, Point, getMaxTimeFromVelocity,
 } from '../../../../tools/g2';
 import type { pathOptionsType } from '../../../../tools/g2';
-import { joinObjects, duplicateFromTo } from '../../../../tools/tools';
+import {
+  joinObjects, duplicateFromTo, deleteKeys, copyKeys,
+} from '../../../../tools/tools';
 import type {
   TypeElementAnimationStepInputOptions,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
-
-function deleteKeys(obj: Object, keys: Array<string>) {
-  keys.forEach((key) => {
-    if (obj[key] !== undefined) {
-      // eslint-disable-next-line no-param-reassign
-      delete obj[key];
-    }
-  });
-}
-
-function copyKeys(source: Object, destination: Object, keys: Array<string>) {
-  keys.forEach((key) => {
-    if (source[key] !== undefined) {
-      // eslint-disable-next-line no-param-reassign
-      destination[key] = source[key];
-    }
-  });
-}
 
 export type TypePositionAnimationStepInputOptions = {
   start?: Point;      // default is element transform
@@ -76,12 +60,6 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       'start', 'delta', 'target', 'translationStyle', 'translationOptions',
       'velocity',
     ]);
-    // this.position.start = options.start;
-    // this.position.target = options.target;
-    // this.position.delta = options.delta;
-    // this.position.translationStyle = options.translationStyle;
-    // this.position.translationOptions = options.translationOptions;
-    // this.position.velocity = options.velocity;
   }
 
   // On start, calculate the duration, target and delta if not already present.
