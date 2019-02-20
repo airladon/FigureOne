@@ -351,7 +351,7 @@ function deleteKeys(obj: Object, keys: Array<string>) {
   });
 }
 
-function copyKeys(source: Object, destination: Object, keys: Array<string>) {
+function copyKeysFromTo(source: Object, destination: Object, keys: Array<string>) {
   keys.forEach((key) => {
     if (source[key] !== undefined) {
       // eslint-disable-next-line no-param-reassign
@@ -365,5 +365,5 @@ export {
   classify, extractFrom, ObjectKeyPointer, getElement,
   addToObject, duplicateFromTo, isTouchDevice,
   generateUniqueId, joinObjects, cleanUIDs, loadRemote, loadRemoteCSS,
-  deleteKeys, copyKeys,
+  deleteKeys, copyKeysFromTo,
 };

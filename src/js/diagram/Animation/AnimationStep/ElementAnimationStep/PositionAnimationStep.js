@@ -4,7 +4,7 @@ import {
 } from '../../../../tools/g2';
 import type { pathOptionsType } from '../../../../tools/g2';
 import {
-  joinObjects, duplicateFromTo, deleteKeys, copyKeys,
+  joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
 import type {
   TypeElementAnimationStepInputOptions,
@@ -56,7 +56,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     const options = joinObjects({}, defaultPositionOptions, optionsIn);
     // $FlowFixMe
     this.position = {};
-    copyKeys(options, this.position, [
+    copyKeysFromTo(options, this.position, [
       'start', 'delta', 'target', 'translationStyle', 'translationOptions',
       'velocity',
     ]);
