@@ -187,6 +187,7 @@ describe('Animator API', () => {
     examples.nesting();
     elem1.animator.nextFrame(0);
     elem1.animator.nextFrame(0.5);
+
     expect(elem1.getPosition().round()).toEqual(point(0.5));
     expect(elem2.getPosition().round()).toEqual(point(0));
 
@@ -210,8 +211,21 @@ describe('Animator API', () => {
     expect(elem1.getPosition().round()).toEqual(point(1.9));
     expect(elem2.getPosition().round()).toEqual(point(2));
 
+    elem1.animator.nextFrame(5);
+    expect(elem1.getPosition().round()).toEqual(point(2));
+    expect(elem2.getPosition().round()).toEqual(point(2));
+
     elem1.animator.nextFrame(5.5);
     expect(elem1.getPosition().round()).toEqual(point(1.5));
+    expect(elem2.getPosition().round()).toEqual(point(2));
+
+    elem1.animator.nextFrame(6.5);
+    expect(elem1.getPosition().round()).toEqual(point(1));
     expect(elem2.getPosition().round()).toEqual(point(1.5));
+
+    const remaining = elem1.animator.nextFrame(7.5);
+    expect(elem1.getPosition().round()).toEqual(point(1));
+    expect(elem2.getPosition().round()).toEqual(point(1));
+    expect(math.round(remaining)).toBe(remaining);
   });
 });
