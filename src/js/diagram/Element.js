@@ -17,11 +17,10 @@ import { colorArrayToRGBA } from '../tools/color';
 
 import type {
   TypePositionAnimationStepInputOptions, TypeAnimatorInputOptions,
-  TypeDelayStepInputOptions,
+  TypeDelayStepInputOptions, TypeSerialAnimationStepInputOptions,
+  TypeParallelAnimationStepInputOptions,
 } from './Animation/Animation';
 import * as animations from './Animation/Animation';
-// import Animator from './Animation/Animator';
-// import PositionAnimationStep from './Animation/AnimationStep/ElementAnimationStep/PositionAnimationStep';
 
 
 // eslint-disable-next-line import/no-cycle
@@ -343,7 +342,7 @@ class DiagramElement {
       },
     };
     this.interactiveLocation = new Point(0, 0);
-    this.animator = new animations.Animator({ element: this });
+    this.animator = new animations.Animator(this);
     // this.presetTransforms = {};
   }
 
@@ -751,9 +750,24 @@ class DiagramElement {
     return new animations.DelayStep(numOrOptionsIn, ...args);
   }
 
-  sequence(optionsIn: TypeAnimatorInputOptions) {
-    const options = joinObjects({}, optionsIn, { element: this });
-    return new animations.Animator(options);
+  sequence(...optionsIn: Array<TypeAnimatorInputOptions>) {
+    return new animations.Animator(this, ...optionsIn);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  inSeries(
+    stepsOrOptionsIn: Array<animations.AnimationStep> | TypeSerialAnimationStepInputOptions = {},
+    ...optionsIn: Array<TypeSerialAnimationStepInputOptions>
+  ) {
+    return new animations.SerialAnimationStep(stepsOrOptionsIn, ...optionsIn);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  inParallel(
+    stepsOrOptionsIn: Array<animations.AnimationStep> | TypeParallelAnimationStepInputOptions = {},
+    ...optionsIn: Array<TypeParallelAnimationStepInputOptions>
+  ) {
+    return new animations.ParallelAnimationStep(stepsOrOptionsIn, ...optionsIn);
   }
 
   setColor(color: Array<number>) {

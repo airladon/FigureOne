@@ -20,6 +20,8 @@ describe('Transfrom Animation Unit', () => {
     const diagram = makeDiagram();
     elem1 = diagram.objects.line();
     elem1.setPosition(new Point(0, 0));
+    elem2 = diagram.objects.line();
+    elem2.setPosition(new Point(0, 0));
   });
   test('Instantiation', () => {
     const onFinish = () => {};
@@ -80,11 +82,40 @@ describe('Transfrom Animation Unit', () => {
     expect(elem1.getPosition().round()).toEqual(new Point(2, 2));
     expect(math.round(remaining)).toBe(0.1);
   });
-  // test('Delay separate elem1 in parallel method', () => {
-  //   elem1.animator
-  //     .moveTo({ target: new Point(1, 1), duration: 1, progression: 'linear' })
-  //     .inSeries
-  // });
+  test('Delay separate elem1 in parallel method', () => {
+    elem1.animator
+      .moveTo({ target: new Point(1, 1), duration: 1, progression: 'linear' })
+      .inParallel([
+        elem1.sequence()
+          .delay(1)
+          .moveTo({ target: new Point(2, 2), duration: 1, progression: 'linear' }),
+        elem2.moveTo({ target: new Point(1, 1), duration: 1, progression: 'linear' }),
+      ])
+      .start();
+    // console.log(elem1.animator)
+    // console.log(elem1.animator.steps[1])
+    // console.log(elem1.animator.steps[1].steps)
+    let remaining;
+    remaining = elem1.animator.nextFrame(0);
+    remaining = elem1.animator.nextFrame(0.5);
+    expect(elem1.getPosition().round()).toEqual(new Point(0.5, 0.5));
+    expect(elem2.getPosition().round()).toEqual(new Point(0, 0));
+    expect(remaining).toBe(0);
+
+    remaining = elem1.animator.nextFrame(1.5);
+    expect(elem1.getPosition().round()).toEqual(new Point(1, 1));
+    expect(elem2.getPosition().round()).toEqual(new Point(0.5, 0.5));
+
+    remaining = elem1.animator.nextFrame(2.5);
+    expect(elem1.getPosition().round()).toEqual(new Point(1.5, 1.5));
+    expect(elem2.getPosition().round()).toEqual(new Point(1, 1));
+    expect(remaining).toBe(0);
+
+    remaining = elem1.animator.nextFrame(3.5);
+    expect(elem1.getPosition().round()).toEqual(new Point(2, 2));
+    expect(elem2.getPosition().round()).toEqual(new Point(1, 1));
+    expect(math.round(remaining)).toBe(0.5);
+  });
   // test('Target calculation with start transform not defined', () => {
   //   const delta = new Point(1, 1);
   //   const step = new PositionAnimationStep({

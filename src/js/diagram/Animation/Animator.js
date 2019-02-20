@@ -18,10 +18,19 @@ export type TypeAnimatorInputOptions = {
 export default class Animator extends animation.SerialAnimationStep {
   element: ?DiagramElement;
 
-  constructor(optionsIn: TypeAnimatorInputOptions = {}) {
-    super(optionsIn);
+  constructor(
+    elementOrOptionsIn: DiagramElement | TypeAnimatorInputOptions = {},
+    ...optionsIn: Array<TypeAnimatorInputOptions>
+  ) {
     const defaultOptions = {};
-    const options = joinObjects({}, defaultOptions, optionsIn);
+    let options;
+    if (elementOrOptionsIn instanceof DiagramElement) {
+      options = joinObjects({}, defaultOptions, ...optionsIn);
+      options.element = elementOrOptionsIn;
+    } else {
+      options = joinObjects({}, defaultOptions, elementOrOptionsIn, ...optionsIn);
+    }
+    super(options);
     this.element = options.element;
     return this;
   }
@@ -51,10 +60,13 @@ export default class Animator extends animation.SerialAnimationStep {
     return this;
   }
 
-  // inSeries(optionsIn: TypeAnimatorInputOptions) {
-  //   const options = joinObjects({}, optionsIn, { element: this });
-  //   return new animations.Animator(options);
-  // }
+  inSeries(
+    stepsOrOptionsIn: Array<animation.AnimationStep> | TypeSerialAnimationStepInputOptions = {},
+    ...optionsIn: Array<TypeSerialAnimationStepInputOptions>
+  ) {
+    this.then(new animation.SerialAnimationStep(stepsOrOptionsIn, ...optionsIn));
+    return this;
+  }
 
   // When an animator stops, it is reset
   finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
