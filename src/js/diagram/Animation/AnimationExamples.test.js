@@ -76,6 +76,38 @@ describe('Animator API', () => {
           .ifCanceledThenComplete()
           .start();
       },
+      nesting: () => {
+        elem1.animator
+          // Only e1 moves to p1
+          .moveTo({ target: p1, duration: 1, progression: 'linear' })
+          // e1 moves to p2
+          // e2 moves to p1
+          .inParallel([
+            elem1.moveTo({ target: p2, duration: 1, progression: 'linear' }),
+            elem2.moveTo({ target: p1, duration: 1, progression: 'linear' }),
+          ])
+          // e1 moves to p1, delays 1, moves to p2
+          // e2 moves to p2
+          .inParallel([
+            elem1.sequence()
+              .moveTo({ target: p1, duration: 1, progression: 'linear' })
+              .delay(1)
+              .moveTo({ target: p2, duration: 1, progression: 'linear' }),
+            elem2.moveTo({ target: p2, duration: 1, progression: 'linear' }),
+          ])
+          // both e1 and e2 move to p1
+          .inParallel([
+            elem1.inSeries([
+              elem1.moveTo({ target: p1, duration: 1, progression: 'linear' }),
+              elem2.delay(1),
+            ]),
+            elem2.inSeries([
+              elem1.delay(1),
+              elem2.moveTo({ target: p1, duration: 1, progression: 'linear' }),
+            ]),
+          ])
+          .start();
+      },
     };
   });
   test('Move Element Simple', () => {
@@ -109,7 +141,7 @@ describe('Animator API', () => {
     expect(elem2.getPosition().round()).toEqual(point(1));
     expect(math.round(remaining)).toBe(0.1);
   });
-  test.only('Parallel Step Simple', () => {
+  test('Parallel Step Simple', () => {
     examples.moveElementsInParallelSimply();
     expect(elem1.animator.steps[0].completeOnCancel).toBe(false);
     elem1.animator.nextFrame(100);
@@ -150,5 +182,36 @@ describe('Animator API', () => {
     elem1.animator.cancel();
     expect(callbackFlag).toBe(1);
     expect(elem1.getPosition().round()).toEqual(point(2));
+  });
+  test('Nesting', () => {
+    examples.nesting();
+    elem1.animator.nextFrame(0);
+    elem1.animator.nextFrame(0.5);
+    expect(elem1.getPosition().round()).toEqual(point(0.5));
+    expect(elem2.getPosition().round()).toEqual(point(0));
+
+    elem1.animator.nextFrame(1.5);
+    expect(elem1.getPosition().round()).toEqual(point(1.5));
+    expect(elem2.getPosition().round()).toEqual(point(0.5));
+
+    elem1.animator.nextFrame(2.4);
+    expect(elem1.getPosition().round()).toEqual(point(1.6));
+    expect(elem2.getPosition().round()).toEqual(point(1.4));
+
+    elem1.animator.nextFrame(3.5);
+    expect(elem1.getPosition().round()).toEqual(point(1));
+    expect(elem2.getPosition().round()).toEqual(point(2));
+
+    elem1.animator.nextFrame(4.5);
+    expect(elem1.getPosition().round()).toEqual(point(1.5));
+    expect(elem2.getPosition().round()).toEqual(point(2));
+
+    elem1.animator.nextFrame(4.9);
+    expect(elem1.getPosition().round()).toEqual(point(1.9));
+    expect(elem2.getPosition().round()).toEqual(point(2));
+
+    elem1.animator.nextFrame(5.5);
+    expect(elem1.getPosition().round()).toEqual(point(1.5));
+    expect(elem2.getPosition().round()).toEqual(point(1.5));
   });
 });
