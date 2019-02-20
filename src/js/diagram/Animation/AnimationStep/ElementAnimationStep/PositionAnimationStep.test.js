@@ -13,7 +13,7 @@ jest.mock('../../../webgl/webgl');
 jest.mock('../../../DrawContext2D');
 
 
-describe('Transfrom Animation Unit', () => {
+describe('Position Animation', () => {
   let element;
   beforeEach(() => {
     const diagram = makeDiagram();

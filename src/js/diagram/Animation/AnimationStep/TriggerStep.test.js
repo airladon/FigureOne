@@ -12,7 +12,7 @@ jest.mock('../../webgl/webgl');
 jest.mock('../../DrawContext2D');
 
 
-describe('Transfrom Animation Unit', () => {
+describe('Animation Trigger', () => {
   let elem1;
   let elem2;
   let trigger1;
