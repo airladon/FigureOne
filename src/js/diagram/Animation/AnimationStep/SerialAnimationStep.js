@@ -79,7 +79,7 @@ export default class SerialAnimationStep extends AnimationStep {
       }
       this.index += 1;
       this.steps[this.index].start(now - remaining);
-      this.nextFrame(now);
+      return this.nextFrame(now);
     }
     return 0;
   }

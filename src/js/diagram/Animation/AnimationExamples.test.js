@@ -97,11 +97,11 @@ describe('Animator API', () => {
           ])
           // both e1 and e2 move to p1
           .inParallel([
-            elem1.inSeries([
+            elem1.inSerial([
               elem1.moveTo({ target: p1, duration: 1, progression: 'linear' }),
               elem2.delay(1),
             ]),
-            elem2.inSeries([
+            elem2.inSerial([
               elem1.delay(1),
               elem2.moveTo({ target: p1, duration: 1, progression: 'linear' }),
             ]),

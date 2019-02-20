@@ -755,7 +755,7 @@ class DiagramElement {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  inSeries(
+  inSerial(
     stepsOrOptionsIn: Array<animations.AnimationStep> | TypeSerialAnimationStepInputOptions = {},
     ...optionsIn: Array<TypeSerialAnimationStepInputOptions>
   ) {
