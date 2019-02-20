@@ -107,7 +107,7 @@ describe('Serial Animation', () => {
     serial.nextFrame(101.01);
     expect(serial.index).toBe(1);
     expect(element.transform.round()).toEqual(element.transform.constant(1.01));
-    expect(step1.state).toBe('idle');
+    expect(step1.state).toBe('finished');
     expect(step2.state).toBe('animating');
     expect(step3.state).toBe('waitingToStart');
     expect(serial.state).toBe('animating');
@@ -119,8 +119,8 @@ describe('Serial Animation', () => {
     serial.nextFrame(102.5);
     expect(serial.index).toBe(2);
     expect(element.transform.round()).toEqual(element.transform.constant(2.5));
-    expect(step1.state).toBe('idle');
-    expect(step2.state).toBe('idle');
+    expect(step1.state).toBe('finished');
+    expect(step2.state).toBe('finished');
     expect(step3.state).toBe('animating');
     expect(serial.state).toBe('animating');
 
@@ -133,10 +133,10 @@ describe('Serial Animation', () => {
     expect(serial.index).toBe(2);
     expect(element.transform.round()).toEqual(element.transform.constant(3));
     expect(math.round(remainingTime)).toBe(0.1);
-    expect(step1.state).toBe('idle');
-    expect(step2.state).toBe('idle');
-    expect(step3.state).toBe('idle');
-    expect(serial.state).toBe('idle');
+    expect(step1.state).toBe('finished');
+    expect(step2.state).toBe('finished');
+    expect(step3.state).toBe('finished');
+    expect(serial.state).toBe('finished');
   });
   test('Duplication', () => {
     const dup = serial._dup();

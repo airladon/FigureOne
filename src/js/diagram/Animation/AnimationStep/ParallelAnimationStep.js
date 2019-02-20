@@ -69,7 +69,7 @@ export class ParallelAnimationStep extends AnimationStep {
   }
 
   finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
-    if (this.state === 'idle') {
+    if (this.state === 'idle' || this.state === 'finished') {
       return;
     }
     super.finish(cancelled, force);
@@ -84,7 +84,7 @@ export class ParallelAnimationStep extends AnimationStep {
       forceToUse = force;
     }
     this.steps.forEach((step) => {
-      if (step.state !== 'idle') {
+      if (step.state !== 'idle' && step.state !== 'finished') {
         step.finish(cancelled, forceToUse);
       }
     });

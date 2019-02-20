@@ -360,10 +360,14 @@ function copyKeysFromTo(source: Object, destination: Object, keys: Array<string>
   });
 }
 
+function generateRandomString() {
+  return (Math.random() * 1e18).toString(36);
+}
+
 export {
   divide, mulToString, add, Console,
   classify, extractFrom, ObjectKeyPointer, getElement,
   addToObject, duplicateFromTo, isTouchDevice,
   generateUniqueId, joinObjects, cleanUIDs, loadRemote, loadRemoteCSS,
-  deleteKeys, copyKeysFromTo,
+  deleteKeys, copyKeysFromTo, generateRandomString,
 };

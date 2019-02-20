@@ -19,6 +19,9 @@ jest.mock('../diagram/webgl/webgl');
 jest.mock('../diagram/DrawContext2D');
 jest.mock('../diagram/DrawingObjects/HTMLObject/HTMLObject');
 
+const generateRandomStringMock = jest.spyOn(tools, 'generateRandomString');
+generateRandomStringMock.mockImplementation(() => '000000');
+
 export default function makeDiagram() {
   document.body.innerHTML =
     '<div id="c">'

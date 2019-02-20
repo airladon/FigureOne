@@ -14,6 +14,8 @@ import { joinObjects, duplicateFromTo } from '../../tools/tools';
 
 export type TypeAnimatorInputOptions = {
   element?: DiagramElement;
+  name?: ?string;
+  resetOnFinish?: boolean;
 } & TypeSerialAnimationStepInputOptions;
 
 export default class Animator extends animation.SerialAnimationStep {
@@ -133,7 +135,9 @@ export default class Animator extends animation.SerialAnimationStep {
   // When an animator stops, it is reset
   finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
     super.finish(cancelled, force);
-    this.steps = [];
+    // if (this.resetOnFinish) {
+    //   this.steps = [];
+    // }
   }
 
   reset() {

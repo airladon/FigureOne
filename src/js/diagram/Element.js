@@ -322,12 +322,8 @@ class DiagramElement {
     };
     this.interactiveLocation = new Point(0, 0);
     this.animator = new animations.Animator(this);
+    this.anim = new animations.AnimationManager(this);
     // this.presetTransforms = {};
-  }
-
-  anim() {
-    this.animator = new animations.Animator(this);
-    return this.animator;
   }
 
   setProperties(properties: Object) {
@@ -2151,7 +2147,7 @@ class DiagramElementPrimative extends DiagramElement {
 
   draw(parentTransform: Transform = new Transform(), now: number = 0) {
     if (this.isShown) {
-      if (this.animator.state !== 'idle') {
+      if (this.animator.state === 'waitingToStart' || this.animator.state === 'animating') {
         this.animator.nextFrame(now);
       }
       this.setNextTransform(now);
@@ -2414,7 +2410,7 @@ class DiagramElementCollection extends DiagramElement {
 
   draw(parentTransform: Transform = new Transform(), now: number = 0) {
     if (this.isShown) {
-      if (this.animator.state !== 'idle') {
+      if (this.animator.state === 'waitingToStart' || this.animator.state === 'animating') {
         this.animator.nextFrame(now);
       }
       this.setNextTransform(now);

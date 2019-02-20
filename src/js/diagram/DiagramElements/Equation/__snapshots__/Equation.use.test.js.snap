@@ -3,6 +3,10 @@
 exports[`Different ways to make an equation All Text in constructor with all options 1`] = `
 DiagramElementPrimative {
   "angleToDraw": -1,
+  "anim": AnimationManager {
+    "element": [Circular],
+    "sequences": Array [],
+  },
   "animate": Object {
     "color": Object {
       "callback": null,
@@ -10,10 +14,6 @@ DiagramElementPrimative {
       "toDisolve": "",
     },
     "custom": Object {
-      "callback": null,
-      "plan": Array [],
-    },
-    "parallel": Object {
       "callback": null,
       "plan": Array [],
     },
@@ -36,7 +36,9 @@ DiagramElementPrimative {
     "completeOnCancel": null,
     "element": [Circular],
     "index": 0,
+    "name": "000000",
     "onFinish": null,
+    "removeOnFinish": true,
     "startTime": -1,
     "startTimeOffset": 0,
     "state": "idle",
@@ -299,6 +301,10 @@ DiagramElementPrimative {
   "parent": EquationNew {
     "__2": DiagramElementPrimative {
       "angleToDraw": -1,
+      "anim": AnimationManager {
+        "element": [Circular],
+        "sequences": Array [],
+      },
       "animate": Object {
         "color": Object {
           "callback": null,
@@ -306,10 +312,6 @@ DiagramElementPrimative {
           "toDisolve": "",
         },
         "custom": Object {
-          "callback": null,
-          "plan": Array [],
-        },
-        "parallel": Object {
           "callback": null,
           "plan": Array [],
         },
@@ -332,7 +334,9 @@ DiagramElementPrimative {
         "completeOnCancel": null,
         "element": [Circular],
         "index": 0,
+        "name": "000000",
         "onFinish": null,
+        "removeOnFinish": true,
         "startTime": -1,
         "startTimeOffset": 0,
         "state": "idle",
@@ -707,7 +711,6 @@ DiagramElementPrimative {
         "isAnimating": false,
         "isAnimatingColor": false,
         "isAnimatingCustom": false,
-        "isAnimatingParallel": false,
         "isBeingMoved": false,
         "isMovingFreely": false,
         "isPulsing": false,
@@ -768,10 +771,6 @@ DiagramElementPrimative {
             ],
           },
         },
-        "parallelAnimation": Object {
-          "currentPhase": Array [],
-          "currentPhaseIndex": Array [],
-        },
         "pulse": Object {
           "startTime": -1,
         },
@@ -808,6 +807,10 @@ DiagramElementPrimative {
     "_a": [Circular],
     "_b": DiagramElementPrimative {
       "angleToDraw": -1,
+      "anim": AnimationManager {
+        "element": [Circular],
+        "sequences": Array [],
+      },
       "animate": Object {
         "color": Object {
           "callback": null,
@@ -815,10 +818,6 @@ DiagramElementPrimative {
           "toDisolve": "",
         },
         "custom": Object {
-          "callback": null,
-          "plan": Array [],
-        },
-        "parallel": Object {
           "callback": null,
           "plan": Array [],
         },
@@ -841,7 +840,9 @@ DiagramElementPrimative {
         "completeOnCancel": null,
         "element": [Circular],
         "index": 0,
+        "name": "000000",
         "onFinish": null,
+        "removeOnFinish": true,
         "startTime": -1,
         "startTimeOffset": 0,
         "state": "idle",
@@ -1216,7 +1217,6 @@ DiagramElementPrimative {
         "isAnimating": false,
         "isAnimatingColor": false,
         "isAnimatingCustom": false,
-        "isAnimatingParallel": false,
         "isBeingMoved": false,
         "isMovingFreely": false,
         "isPulsing": false,
@@ -1277,10 +1277,6 @@ DiagramElementPrimative {
             ],
           },
         },
-        "parallelAnimation": Object {
-          "currentPhase": Array [],
-          "currentPhaseIndex": Array [],
-        },
         "pulse": Object {
           "startTime": -1,
         },
@@ -1316,6 +1312,10 @@ DiagramElementPrimative {
     },
     "_c": DiagramElementPrimative {
       "angleToDraw": -1,
+      "anim": AnimationManager {
+        "element": [Circular],
+        "sequences": Array [],
+      },
       "animate": Object {
         "color": Object {
           "callback": null,
@@ -1323,10 +1323,6 @@ DiagramElementPrimative {
           "toDisolve": "",
         },
         "custom": Object {
-          "callback": null,
-          "plan": Array [],
-        },
-        "parallel": Object {
           "callback": null,
           "plan": Array [],
         },
@@ -1349,7 +1345,9 @@ DiagramElementPrimative {
         "completeOnCancel": null,
         "element": [Circular],
         "index": 0,
+        "name": "000000",
         "onFinish": null,
+        "removeOnFinish": true,
         "startTime": -1,
         "startTimeOffset": 0,
         "state": "idle",
@@ -1724,7 +1722,6 @@ DiagramElementPrimative {
         "isAnimating": false,
         "isAnimatingColor": false,
         "isAnimatingCustom": false,
-        "isAnimatingParallel": false,
         "isBeingMoved": false,
         "isMovingFreely": false,
         "isPulsing": false,
@@ -1785,10 +1782,6 @@ DiagramElementPrimative {
             ],
           },
         },
-        "parallelAnimation": Object {
-          "currentPhase": Array [],
-          "currentPhaseIndex": Array [],
-        },
         "pulse": Object {
           "startTime": -1,
         },
@@ -1824,6 +1817,10 @@ DiagramElementPrimative {
     },
     "_v": DiagramElementPrimative {
       "angleToDraw": -1,
+      "anim": AnimationManager {
+        "element": [Circular],
+        "sequences": Array [],
+      },
       "animate": Object {
         "color": Object {
           "callback": null,
@@ -1831,10 +1828,6 @@ DiagramElementPrimative {
           "toDisolve": "",
         },
         "custom": Object {
-          "callback": null,
-          "plan": Array [],
-        },
-        "parallel": Object {
           "callback": null,
           "plan": Array [],
         },
@@ -1857,7 +1850,9 @@ DiagramElementPrimative {
         "completeOnCancel": null,
         "element": [Circular],
         "index": 0,
+        "name": "000000",
         "onFinish": null,
+        "removeOnFinish": true,
         "startTime": -1,
         "startTimeOffset": 0,
         "state": "idle",
@@ -2232,7 +2227,6 @@ DiagramElementPrimative {
         "isAnimating": false,
         "isAnimatingColor": false,
         "isAnimatingCustom": false,
-        "isAnimatingParallel": false,
         "isBeingMoved": false,
         "isMovingFreely": false,
         "isPulsing": false,
@@ -2293,10 +2287,6 @@ DiagramElementPrimative {
             ],
           },
         },
-        "parallelAnimation": Object {
-          "currentPhase": Array [],
-          "currentPhaseIndex": Array [],
-        },
         "pulse": Object {
           "startTime": -1,
         },
@@ -2330,6 +2320,10 @@ DiagramElementPrimative {
       },
       "uid": "0000000000",
     },
+    "anim": AnimationManager {
+      "element": [Circular],
+      "sequences": Array [],
+    },
     "animate": Object {
       "color": Object {
         "callback": null,
@@ -2337,10 +2331,6 @@ DiagramElementPrimative {
         "toDisolve": "",
       },
       "custom": Object {
-        "callback": null,
-        "plan": Array [],
-      },
-      "parallel": Object {
         "callback": null,
         "plan": Array [],
       },
@@ -2363,7 +2353,9 @@ DiagramElementPrimative {
       "completeOnCancel": null,
       "element": [Circular],
       "index": 0,
+      "name": "000000",
       "onFinish": null,
+      "removeOnFinish": true,
       "startTime": -1,
       "startTimeOffset": 0,
       "state": "idle",
@@ -2394,6 +2386,10 @@ DiagramElementPrimative {
     "elements": Object {
       "_2": DiagramElementPrimative {
         "angleToDraw": -1,
+        "anim": AnimationManager {
+          "element": [Circular],
+          "sequences": Array [],
+        },
         "animate": Object {
           "color": Object {
             "callback": null,
@@ -2401,10 +2397,6 @@ DiagramElementPrimative {
             "toDisolve": "",
           },
           "custom": Object {
-            "callback": null,
-            "plan": Array [],
-          },
-          "parallel": Object {
             "callback": null,
             "plan": Array [],
           },
@@ -2427,7 +2419,9 @@ DiagramElementPrimative {
           "completeOnCancel": null,
           "element": [Circular],
           "index": 0,
+          "name": "000000",
           "onFinish": null,
+          "removeOnFinish": true,
           "startTime": -1,
           "startTimeOffset": 0,
           "state": "idle",
@@ -2802,7 +2796,6 @@ DiagramElementPrimative {
           "isAnimating": false,
           "isAnimatingColor": false,
           "isAnimatingCustom": false,
-          "isAnimatingParallel": false,
           "isBeingMoved": false,
           "isMovingFreely": false,
           "isPulsing": false,
@@ -2863,10 +2856,6 @@ DiagramElementPrimative {
               ],
             },
           },
-          "parallelAnimation": Object {
-            "currentPhase": Array [],
-            "currentPhaseIndex": Array [],
-          },
           "pulse": Object {
             "startTime": -1,
           },
@@ -2903,6 +2892,10 @@ DiagramElementPrimative {
       "a": [Circular],
       "b": DiagramElementPrimative {
         "angleToDraw": -1,
+        "anim": AnimationManager {
+          "element": [Circular],
+          "sequences": Array [],
+        },
         "animate": Object {
           "color": Object {
             "callback": null,
@@ -2910,10 +2903,6 @@ DiagramElementPrimative {
             "toDisolve": "",
           },
           "custom": Object {
-            "callback": null,
-            "plan": Array [],
-          },
-          "parallel": Object {
             "callback": null,
             "plan": Array [],
           },
@@ -2936,7 +2925,9 @@ DiagramElementPrimative {
           "completeOnCancel": null,
           "element": [Circular],
           "index": 0,
+          "name": "000000",
           "onFinish": null,
+          "removeOnFinish": true,
           "startTime": -1,
           "startTimeOffset": 0,
           "state": "idle",
@@ -3311,7 +3302,6 @@ DiagramElementPrimative {
           "isAnimating": false,
           "isAnimatingColor": false,
           "isAnimatingCustom": false,
-          "isAnimatingParallel": false,
           "isBeingMoved": false,
           "isMovingFreely": false,
           "isPulsing": false,
@@ -3372,10 +3362,6 @@ DiagramElementPrimative {
               ],
             },
           },
-          "parallelAnimation": Object {
-            "currentPhase": Array [],
-            "currentPhaseIndex": Array [],
-          },
           "pulse": Object {
             "startTime": -1,
           },
@@ -3411,6 +3397,10 @@ DiagramElementPrimative {
       },
       "c": DiagramElementPrimative {
         "angleToDraw": -1,
+        "anim": AnimationManager {
+          "element": [Circular],
+          "sequences": Array [],
+        },
         "animate": Object {
           "color": Object {
             "callback": null,
@@ -3418,10 +3408,6 @@ DiagramElementPrimative {
             "toDisolve": "",
           },
           "custom": Object {
-            "callback": null,
-            "plan": Array [],
-          },
-          "parallel": Object {
             "callback": null,
             "plan": Array [],
           },
@@ -3444,7 +3430,9 @@ DiagramElementPrimative {
           "completeOnCancel": null,
           "element": [Circular],
           "index": 0,
+          "name": "000000",
           "onFinish": null,
+          "removeOnFinish": true,
           "startTime": -1,
           "startTimeOffset": 0,
           "state": "idle",
@@ -3819,7 +3807,6 @@ DiagramElementPrimative {
           "isAnimating": false,
           "isAnimatingColor": false,
           "isAnimatingCustom": false,
-          "isAnimatingParallel": false,
           "isBeingMoved": false,
           "isMovingFreely": false,
           "isPulsing": false,
@@ -3880,10 +3867,6 @@ DiagramElementPrimative {
               ],
             },
           },
-          "parallelAnimation": Object {
-            "currentPhase": Array [],
-            "currentPhaseIndex": Array [],
-          },
           "pulse": Object {
             "startTime": -1,
           },
@@ -3919,6 +3902,10 @@ DiagramElementPrimative {
       },
       "v": DiagramElementPrimative {
         "angleToDraw": -1,
+        "anim": AnimationManager {
+          "element": [Circular],
+          "sequences": Array [],
+        },
         "animate": Object {
           "color": Object {
             "callback": null,
@@ -3926,10 +3913,6 @@ DiagramElementPrimative {
             "toDisolve": "",
           },
           "custom": Object {
-            "callback": null,
-            "plan": Array [],
-          },
-          "parallel": Object {
             "callback": null,
             "plan": Array [],
           },
@@ -3952,7 +3935,9 @@ DiagramElementPrimative {
           "completeOnCancel": null,
           "element": [Circular],
           "index": 0,
+          "name": "000000",
           "onFinish": null,
+          "removeOnFinish": true,
           "startTime": -1,
           "startTimeOffset": 0,
           "state": "idle",
@@ -4327,7 +4312,6 @@ DiagramElementPrimative {
           "isAnimating": false,
           "isAnimatingColor": false,
           "isAnimatingCustom": false,
-          "isAnimatingParallel": false,
           "isBeingMoved": false,
           "isMovingFreely": false,
           "isPulsing": false,
@@ -4387,10 +4371,6 @@ DiagramElementPrimative {
                 },
               ],
             },
-          },
-          "parallelAnimation": Object {
-            "currentPhase": Array [],
-            "currentPhaseIndex": Array [],
           },
           "pulse": Object {
             "startTime": -1,
@@ -4499,6 +4479,10 @@ DiagramElementPrimative {
                     "ascent": 0.025200000000000004,
                     "content": DiagramElementPrimative {
                       "angleToDraw": -1,
+                      "anim": AnimationManager {
+                        "element": [Circular],
+                        "sequences": Array [],
+                      },
                       "animate": Object {
                         "color": Object {
                           "callback": null,
@@ -4506,10 +4490,6 @@ DiagramElementPrimative {
                           "toDisolve": "",
                         },
                         "custom": Object {
-                          "callback": null,
-                          "plan": Array [],
-                        },
-                        "parallel": Object {
                           "callback": null,
                           "plan": Array [],
                         },
@@ -4532,7 +4512,9 @@ DiagramElementPrimative {
                         "completeOnCancel": null,
                         "element": [Circular],
                         "index": 0,
+                        "name": "000000",
                         "onFinish": null,
+                        "removeOnFinish": true,
                         "startTime": -1,
                         "startTimeOffset": 0,
                         "state": "idle",
@@ -4907,7 +4889,6 @@ DiagramElementPrimative {
                         "isAnimating": false,
                         "isAnimatingColor": false,
                         "isAnimatingCustom": false,
-                        "isAnimatingParallel": false,
                         "isBeingMoved": false,
                         "isMovingFreely": false,
                         "isPulsing": false,
@@ -4968,10 +4949,6 @@ DiagramElementPrimative {
                             ],
                           },
                         },
-                        "parallelAnimation": Object {
-                          "currentPhase": Array [],
-                          "currentPhaseIndex": Array [],
-                        },
                         "pulse": Object {
                           "startTime": -1,
                         },
@@ -5018,6 +4995,10 @@ DiagramElementPrimative {
                     "ascent": 0.017100000000000004,
                     "content": DiagramElementPrimative {
                       "angleToDraw": -1,
+                      "anim": AnimationManager {
+                        "element": [Circular],
+                        "sequences": Array [],
+                      },
                       "animate": Object {
                         "color": Object {
                           "callback": null,
@@ -5025,10 +5006,6 @@ DiagramElementPrimative {
                           "toDisolve": "",
                         },
                         "custom": Object {
-                          "callback": null,
-                          "plan": Array [],
-                        },
-                        "parallel": Object {
                           "callback": null,
                           "plan": Array [],
                         },
@@ -5051,7 +5028,9 @@ DiagramElementPrimative {
                         "completeOnCancel": null,
                         "element": [Circular],
                         "index": 0,
+                        "name": "000000",
                         "onFinish": null,
+                        "removeOnFinish": true,
                         "startTime": -1,
                         "startTimeOffset": 0,
                         "state": "idle",
@@ -5426,7 +5405,6 @@ DiagramElementPrimative {
                         "isAnimating": false,
                         "isAnimatingColor": false,
                         "isAnimatingCustom": false,
-                        "isAnimatingParallel": false,
                         "isBeingMoved": false,
                         "isMovingFreely": false,
                         "isPulsing": false,
@@ -5487,10 +5465,6 @@ DiagramElementPrimative {
                             ],
                           },
                         },
-                        "parallelAnimation": Object {
-                          "currentPhase": Array [],
-                          "currentPhaseIndex": Array [],
-                        },
                         "pulse": Object {
                           "startTime": -1,
                         },
@@ -5549,6 +5523,10 @@ DiagramElementPrimative {
             "elements": Object {
               "_2": DiagramElementPrimative {
                 "angleToDraw": -1,
+                "anim": AnimationManager {
+                  "element": [Circular],
+                  "sequences": Array [],
+                },
                 "animate": Object {
                   "color": Object {
                     "callback": null,
@@ -5556,10 +5534,6 @@ DiagramElementPrimative {
                     "toDisolve": "",
                   },
                   "custom": Object {
-                    "callback": null,
-                    "plan": Array [],
-                  },
-                  "parallel": Object {
                     "callback": null,
                     "plan": Array [],
                   },
@@ -5582,7 +5556,9 @@ DiagramElementPrimative {
                   "completeOnCancel": null,
                   "element": [Circular],
                   "index": 0,
+                  "name": "000000",
                   "onFinish": null,
+                  "removeOnFinish": true,
                   "startTime": -1,
                   "startTimeOffset": 0,
                   "state": "idle",
@@ -5957,7 +5933,6 @@ DiagramElementPrimative {
                   "isAnimating": false,
                   "isAnimatingColor": false,
                   "isAnimatingCustom": false,
-                  "isAnimatingParallel": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -6018,10 +5993,6 @@ DiagramElementPrimative {
                       ],
                     },
                   },
-                  "parallelAnimation": Object {
-                    "currentPhase": Array [],
-                    "currentPhaseIndex": Array [],
-                  },
                   "pulse": Object {
                     "startTime": -1,
                   },
@@ -6058,6 +6029,10 @@ DiagramElementPrimative {
               "a": [Circular],
               "b": DiagramElementPrimative {
                 "angleToDraw": -1,
+                "anim": AnimationManager {
+                  "element": [Circular],
+                  "sequences": Array [],
+                },
                 "animate": Object {
                   "color": Object {
                     "callback": null,
@@ -6065,10 +6040,6 @@ DiagramElementPrimative {
                     "toDisolve": "",
                   },
                   "custom": Object {
-                    "callback": null,
-                    "plan": Array [],
-                  },
-                  "parallel": Object {
                     "callback": null,
                     "plan": Array [],
                   },
@@ -6091,7 +6062,9 @@ DiagramElementPrimative {
                   "completeOnCancel": null,
                   "element": [Circular],
                   "index": 0,
+                  "name": "000000",
                   "onFinish": null,
+                  "removeOnFinish": true,
                   "startTime": -1,
                   "startTimeOffset": 0,
                   "state": "idle",
@@ -6466,7 +6439,6 @@ DiagramElementPrimative {
                   "isAnimating": false,
                   "isAnimatingColor": false,
                   "isAnimatingCustom": false,
-                  "isAnimatingParallel": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -6527,10 +6499,6 @@ DiagramElementPrimative {
                       ],
                     },
                   },
-                  "parallelAnimation": Object {
-                    "currentPhase": Array [],
-                    "currentPhaseIndex": Array [],
-                  },
                   "pulse": Object {
                     "startTime": -1,
                   },
@@ -6566,6 +6534,10 @@ DiagramElementPrimative {
               },
               "c": DiagramElementPrimative {
                 "angleToDraw": -1,
+                "anim": AnimationManager {
+                  "element": [Circular],
+                  "sequences": Array [],
+                },
                 "animate": Object {
                   "color": Object {
                     "callback": null,
@@ -6573,10 +6545,6 @@ DiagramElementPrimative {
                     "toDisolve": "",
                   },
                   "custom": Object {
-                    "callback": null,
-                    "plan": Array [],
-                  },
-                  "parallel": Object {
                     "callback": null,
                     "plan": Array [],
                   },
@@ -6599,7 +6567,9 @@ DiagramElementPrimative {
                   "completeOnCancel": null,
                   "element": [Circular],
                   "index": 0,
+                  "name": "000000",
                   "onFinish": null,
+                  "removeOnFinish": true,
                   "startTime": -1,
                   "startTimeOffset": 0,
                   "state": "idle",
@@ -6974,7 +6944,6 @@ DiagramElementPrimative {
                   "isAnimating": false,
                   "isAnimatingColor": false,
                   "isAnimatingCustom": false,
-                  "isAnimatingParallel": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -7035,10 +7004,6 @@ DiagramElementPrimative {
                       ],
                     },
                   },
-                  "parallelAnimation": Object {
-                    "currentPhase": Array [],
-                    "currentPhaseIndex": Array [],
-                  },
                   "pulse": Object {
                     "startTime": -1,
                   },
@@ -7074,6 +7039,10 @@ DiagramElementPrimative {
               },
               "v": DiagramElementPrimative {
                 "angleToDraw": -1,
+                "anim": AnimationManager {
+                  "element": [Circular],
+                  "sequences": Array [],
+                },
                 "animate": Object {
                   "color": Object {
                     "callback": null,
@@ -7081,10 +7050,6 @@ DiagramElementPrimative {
                     "toDisolve": "",
                   },
                   "custom": Object {
-                    "callback": null,
-                    "plan": Array [],
-                  },
-                  "parallel": Object {
                     "callback": null,
                     "plan": Array [],
                   },
@@ -7107,7 +7072,9 @@ DiagramElementPrimative {
                   "completeOnCancel": null,
                   "element": [Circular],
                   "index": 0,
+                  "name": "000000",
                   "onFinish": null,
+                  "removeOnFinish": true,
                   "startTime": -1,
                   "startTimeOffset": 0,
                   "state": "idle",
@@ -7482,7 +7449,6 @@ DiagramElementPrimative {
                   "isAnimating": false,
                   "isAnimatingColor": false,
                   "isAnimatingCustom": false,
-                  "isAnimatingParallel": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -7542,10 +7508,6 @@ DiagramElementPrimative {
                         },
                       ],
                     },
-                  },
-                  "parallelAnimation": Object {
-                    "currentPhase": Array [],
-                    "currentPhaseIndex": Array [],
                   },
                   "pulse": Object {
                     "startTime": -1,
@@ -7645,6 +7607,10 @@ DiagramElementPrimative {
                             "ascent": 0.025200000000000004,
                             "content": DiagramElementPrimative {
                               "angleToDraw": -1,
+                              "anim": AnimationManager {
+                                "element": [Circular],
+                                "sequences": Array [],
+                              },
                               "animate": Object {
                                 "color": Object {
                                   "callback": null,
@@ -7652,10 +7618,6 @@ DiagramElementPrimative {
                                   "toDisolve": "",
                                 },
                                 "custom": Object {
-                                  "callback": null,
-                                  "plan": Array [],
-                                },
-                                "parallel": Object {
                                   "callback": null,
                                   "plan": Array [],
                                 },
@@ -7678,7 +7640,9 @@ DiagramElementPrimative {
                                 "completeOnCancel": null,
                                 "element": [Circular],
                                 "index": 0,
+                                "name": "000000",
                                 "onFinish": null,
+                                "removeOnFinish": true,
                                 "startTime": -1,
                                 "startTimeOffset": 0,
                                 "state": "idle",
@@ -8053,7 +8017,6 @@ DiagramElementPrimative {
                                 "isAnimating": false,
                                 "isAnimatingColor": false,
                                 "isAnimatingCustom": false,
-                                "isAnimatingParallel": false,
                                 "isBeingMoved": false,
                                 "isMovingFreely": false,
                                 "isPulsing": false,
@@ -8114,10 +8077,6 @@ DiagramElementPrimative {
                                     ],
                                   },
                                 },
-                                "parallelAnimation": Object {
-                                  "currentPhase": Array [],
-                                  "currentPhaseIndex": Array [],
-                                },
                                 "pulse": Object {
                                   "startTime": -1,
                                 },
@@ -8173,6 +8132,10 @@ DiagramElementPrimative {
                         "ascent": 0,
                         "content": DiagramElementPrimative {
                           "angleToDraw": -1,
+                          "anim": AnimationManager {
+                            "element": [Circular],
+                            "sequences": Array [],
+                          },
                           "animate": Object {
                             "color": Object {
                               "callback": null,
@@ -8180,10 +8143,6 @@ DiagramElementPrimative {
                               "toDisolve": "",
                             },
                             "custom": Object {
-                              "callback": null,
-                              "plan": Array [],
-                            },
-                            "parallel": Object {
                               "callback": null,
                               "plan": Array [],
                             },
@@ -8206,7 +8165,9 @@ DiagramElementPrimative {
                             "completeOnCancel": null,
                             "element": [Circular],
                             "index": 0,
+                            "name": "000000",
                             "onFinish": null,
+                            "removeOnFinish": true,
                             "startTime": -1,
                             "startTimeOffset": 0,
                             "state": "idle",
@@ -8581,7 +8542,6 @@ DiagramElementPrimative {
                             "isAnimating": false,
                             "isAnimatingColor": false,
                             "isAnimatingCustom": false,
-                            "isAnimatingParallel": false,
                             "isBeingMoved": false,
                             "isMovingFreely": false,
                             "isPulsing": false,
@@ -8642,10 +8602,6 @@ DiagramElementPrimative {
                                 ],
                               },
                             },
-                            "parallelAnimation": Object {
-                              "currentPhase": Array [],
-                              "currentPhaseIndex": Array [],
-                            },
                             "pulse": Object {
                               "startTime": -1,
                             },
@@ -8695,6 +8651,10 @@ DiagramElementPrimative {
                           "ascent": 0.025200000000000004,
                           "content": DiagramElementPrimative {
                             "angleToDraw": -1,
+                            "anim": AnimationManager {
+                              "element": [Circular],
+                              "sequences": Array [],
+                            },
                             "animate": Object {
                               "color": Object {
                                 "callback": null,
@@ -8702,10 +8662,6 @@ DiagramElementPrimative {
                                 "toDisolve": "",
                               },
                               "custom": Object {
-                                "callback": null,
-                                "plan": Array [],
-                              },
-                              "parallel": Object {
                                 "callback": null,
                                 "plan": Array [],
                               },
@@ -8728,7 +8684,9 @@ DiagramElementPrimative {
                               "completeOnCancel": null,
                               "element": [Circular],
                               "index": 0,
+                              "name": "000000",
                               "onFinish": null,
+                              "removeOnFinish": true,
                               "startTime": -1,
                               "startTimeOffset": 0,
                               "state": "idle",
@@ -9103,7 +9061,6 @@ DiagramElementPrimative {
                               "isAnimating": false,
                               "isAnimatingColor": false,
                               "isAnimatingCustom": false,
-                              "isAnimatingParallel": false,
                               "isBeingMoved": false,
                               "isMovingFreely": false,
                               "isPulsing": false,
@@ -9163,10 +9120,6 @@ DiagramElementPrimative {
                                     },
                                   ],
                                 },
-                              },
-                              "parallelAnimation": Object {
-                                "currentPhase": Array [],
-                                "currentPhaseIndex": Array [],
                               },
                               "pulse": Object {
                                 "startTime": -1,
@@ -9256,6 +9209,10 @@ DiagramElementPrimative {
                     "vSpaceNum": 0.022500000000000003,
                     "vinculum": DiagramElementPrimative {
                       "angleToDraw": -1,
+                      "anim": AnimationManager {
+                        "element": [Circular],
+                        "sequences": Array [],
+                      },
                       "animate": Object {
                         "color": Object {
                           "callback": null,
@@ -9263,10 +9220,6 @@ DiagramElementPrimative {
                           "toDisolve": "",
                         },
                         "custom": Object {
-                          "callback": null,
-                          "plan": Array [],
-                        },
-                        "parallel": Object {
                           "callback": null,
                           "plan": Array [],
                         },
@@ -9289,7 +9242,9 @@ DiagramElementPrimative {
                         "completeOnCancel": null,
                         "element": [Circular],
                         "index": 0,
+                        "name": "000000",
                         "onFinish": null,
+                        "removeOnFinish": true,
                         "startTime": -1,
                         "startTimeOffset": 0,
                         "state": "idle",
@@ -9664,7 +9619,6 @@ DiagramElementPrimative {
                         "isAnimating": false,
                         "isAnimatingColor": false,
                         "isAnimatingCustom": false,
-                        "isAnimatingParallel": false,
                         "isBeingMoved": false,
                         "isMovingFreely": false,
                         "isPulsing": false,
@@ -9725,10 +9679,6 @@ DiagramElementPrimative {
                             ],
                           },
                         },
-                        "parallelAnimation": Object {
-                          "currentPhase": Array [],
-                          "currentPhaseIndex": Array [],
-                        },
                         "pulse": Object {
                           "startTime": -1,
                         },
@@ -9776,6 +9726,10 @@ DiagramElementPrimative {
                     "ascent": 0.017100000000000004,
                     "content": DiagramElementPrimative {
                       "angleToDraw": -1,
+                      "anim": AnimationManager {
+                        "element": [Circular],
+                        "sequences": Array [],
+                      },
                       "animate": Object {
                         "color": Object {
                           "callback": null,
@@ -9783,10 +9737,6 @@ DiagramElementPrimative {
                           "toDisolve": "",
                         },
                         "custom": Object {
-                          "callback": null,
-                          "plan": Array [],
-                        },
-                        "parallel": Object {
                           "callback": null,
                           "plan": Array [],
                         },
@@ -9809,7 +9759,9 @@ DiagramElementPrimative {
                         "completeOnCancel": null,
                         "element": [Circular],
                         "index": 0,
+                        "name": "000000",
                         "onFinish": null,
+                        "removeOnFinish": true,
                         "startTime": -1,
                         "startTimeOffset": 0,
                         "state": "idle",
@@ -10184,7 +10136,6 @@ DiagramElementPrimative {
                         "isAnimating": false,
                         "isAnimatingColor": false,
                         "isAnimatingCustom": false,
-                        "isAnimatingParallel": false,
                         "isBeingMoved": false,
                         "isMovingFreely": false,
                         "isPulsing": false,
@@ -10245,10 +10196,6 @@ DiagramElementPrimative {
                             ],
                           },
                         },
-                        "parallelAnimation": Object {
-                          "currentPhase": Array [],
-                          "currentPhaseIndex": Array [],
-                        },
                         "pulse": Object {
                           "startTime": -1,
                         },
@@ -10307,6 +10254,10 @@ DiagramElementPrimative {
             "elements": Object {
               "_2": DiagramElementPrimative {
                 "angleToDraw": -1,
+                "anim": AnimationManager {
+                  "element": [Circular],
+                  "sequences": Array [],
+                },
                 "animate": Object {
                   "color": Object {
                     "callback": null,
@@ -10314,10 +10265,6 @@ DiagramElementPrimative {
                     "toDisolve": "",
                   },
                   "custom": Object {
-                    "callback": null,
-                    "plan": Array [],
-                  },
-                  "parallel": Object {
                     "callback": null,
                     "plan": Array [],
                   },
@@ -10340,7 +10287,9 @@ DiagramElementPrimative {
                   "completeOnCancel": null,
                   "element": [Circular],
                   "index": 0,
+                  "name": "000000",
                   "onFinish": null,
+                  "removeOnFinish": true,
                   "startTime": -1,
                   "startTimeOffset": 0,
                   "state": "idle",
@@ -10715,7 +10664,6 @@ DiagramElementPrimative {
                   "isAnimating": false,
                   "isAnimatingColor": false,
                   "isAnimatingCustom": false,
-                  "isAnimatingParallel": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -10776,10 +10724,6 @@ DiagramElementPrimative {
                       ],
                     },
                   },
-                  "parallelAnimation": Object {
-                    "currentPhase": Array [],
-                    "currentPhaseIndex": Array [],
-                  },
                   "pulse": Object {
                     "startTime": -1,
                   },
@@ -10816,6 +10760,10 @@ DiagramElementPrimative {
               "a": [Circular],
               "b": DiagramElementPrimative {
                 "angleToDraw": -1,
+                "anim": AnimationManager {
+                  "element": [Circular],
+                  "sequences": Array [],
+                },
                 "animate": Object {
                   "color": Object {
                     "callback": null,
@@ -10823,10 +10771,6 @@ DiagramElementPrimative {
                     "toDisolve": "",
                   },
                   "custom": Object {
-                    "callback": null,
-                    "plan": Array [],
-                  },
-                  "parallel": Object {
                     "callback": null,
                     "plan": Array [],
                   },
@@ -10849,7 +10793,9 @@ DiagramElementPrimative {
                   "completeOnCancel": null,
                   "element": [Circular],
                   "index": 0,
+                  "name": "000000",
                   "onFinish": null,
+                  "removeOnFinish": true,
                   "startTime": -1,
                   "startTimeOffset": 0,
                   "state": "idle",
@@ -11224,7 +11170,6 @@ DiagramElementPrimative {
                   "isAnimating": false,
                   "isAnimatingColor": false,
                   "isAnimatingCustom": false,
-                  "isAnimatingParallel": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -11285,10 +11230,6 @@ DiagramElementPrimative {
                       ],
                     },
                   },
-                  "parallelAnimation": Object {
-                    "currentPhase": Array [],
-                    "currentPhaseIndex": Array [],
-                  },
                   "pulse": Object {
                     "startTime": -1,
                   },
@@ -11324,6 +11265,10 @@ DiagramElementPrimative {
               },
               "c": DiagramElementPrimative {
                 "angleToDraw": -1,
+                "anim": AnimationManager {
+                  "element": [Circular],
+                  "sequences": Array [],
+                },
                 "animate": Object {
                   "color": Object {
                     "callback": null,
@@ -11331,10 +11276,6 @@ DiagramElementPrimative {
                     "toDisolve": "",
                   },
                   "custom": Object {
-                    "callback": null,
-                    "plan": Array [],
-                  },
-                  "parallel": Object {
                     "callback": null,
                     "plan": Array [],
                   },
@@ -11357,7 +11298,9 @@ DiagramElementPrimative {
                   "completeOnCancel": null,
                   "element": [Circular],
                   "index": 0,
+                  "name": "000000",
                   "onFinish": null,
+                  "removeOnFinish": true,
                   "startTime": -1,
                   "startTimeOffset": 0,
                   "state": "idle",
@@ -11732,7 +11675,6 @@ DiagramElementPrimative {
                   "isAnimating": false,
                   "isAnimatingColor": false,
                   "isAnimatingCustom": false,
-                  "isAnimatingParallel": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -11793,10 +11735,6 @@ DiagramElementPrimative {
                       ],
                     },
                   },
-                  "parallelAnimation": Object {
-                    "currentPhase": Array [],
-                    "currentPhaseIndex": Array [],
-                  },
                   "pulse": Object {
                     "startTime": -1,
                   },
@@ -11832,6 +11770,10 @@ DiagramElementPrimative {
               },
               "v": DiagramElementPrimative {
                 "angleToDraw": -1,
+                "anim": AnimationManager {
+                  "element": [Circular],
+                  "sequences": Array [],
+                },
                 "animate": Object {
                   "color": Object {
                     "callback": null,
@@ -11839,10 +11781,6 @@ DiagramElementPrimative {
                     "toDisolve": "",
                   },
                   "custom": Object {
-                    "callback": null,
-                    "plan": Array [],
-                  },
-                  "parallel": Object {
                     "callback": null,
                     "plan": Array [],
                   },
@@ -11865,7 +11803,9 @@ DiagramElementPrimative {
                   "completeOnCancel": null,
                   "element": [Circular],
                   "index": 0,
+                  "name": "000000",
                   "onFinish": null,
+                  "removeOnFinish": true,
                   "startTime": -1,
                   "startTimeOffset": 0,
                   "state": "idle",
@@ -12240,7 +12180,6 @@ DiagramElementPrimative {
                   "isAnimating": false,
                   "isAnimatingColor": false,
                   "isAnimatingCustom": false,
-                  "isAnimatingParallel": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -12301,10 +12240,6 @@ DiagramElementPrimative {
                       ],
                     },
                   },
-                  "parallelAnimation": Object {
-                    "currentPhase": Array [],
-                    "currentPhaseIndex": Array [],
-                  },
                   "pulse": Object {
                     "startTime": -1,
                   },
@@ -12357,6 +12292,10 @@ DiagramElementPrimative {
         "elements": Object {
           "_2": DiagramElementPrimative {
             "angleToDraw": -1,
+            "anim": AnimationManager {
+              "element": [Circular],
+              "sequences": Array [],
+            },
             "animate": Object {
               "color": Object {
                 "callback": null,
@@ -12364,10 +12303,6 @@ DiagramElementPrimative {
                 "toDisolve": "",
               },
               "custom": Object {
-                "callback": null,
-                "plan": Array [],
-              },
-              "parallel": Object {
                 "callback": null,
                 "plan": Array [],
               },
@@ -12390,7 +12325,9 @@ DiagramElementPrimative {
               "completeOnCancel": null,
               "element": [Circular],
               "index": 0,
+              "name": "000000",
               "onFinish": null,
+              "removeOnFinish": true,
               "startTime": -1,
               "startTimeOffset": 0,
               "state": "idle",
@@ -12765,7 +12702,6 @@ DiagramElementPrimative {
               "isAnimating": false,
               "isAnimatingColor": false,
               "isAnimatingCustom": false,
-              "isAnimatingParallel": false,
               "isBeingMoved": false,
               "isMovingFreely": false,
               "isPulsing": false,
@@ -12826,10 +12762,6 @@ DiagramElementPrimative {
                   ],
                 },
               },
-              "parallelAnimation": Object {
-                "currentPhase": Array [],
-                "currentPhaseIndex": Array [],
-              },
               "pulse": Object {
                 "startTime": -1,
               },
@@ -12866,6 +12798,10 @@ DiagramElementPrimative {
           "a": [Circular],
           "b": DiagramElementPrimative {
             "angleToDraw": -1,
+            "anim": AnimationManager {
+              "element": [Circular],
+              "sequences": Array [],
+            },
             "animate": Object {
               "color": Object {
                 "callback": null,
@@ -12873,10 +12809,6 @@ DiagramElementPrimative {
                 "toDisolve": "",
               },
               "custom": Object {
-                "callback": null,
-                "plan": Array [],
-              },
-              "parallel": Object {
                 "callback": null,
                 "plan": Array [],
               },
@@ -12899,7 +12831,9 @@ DiagramElementPrimative {
               "completeOnCancel": null,
               "element": [Circular],
               "index": 0,
+              "name": "000000",
               "onFinish": null,
+              "removeOnFinish": true,
               "startTime": -1,
               "startTimeOffset": 0,
               "state": "idle",
@@ -13274,7 +13208,6 @@ DiagramElementPrimative {
               "isAnimating": false,
               "isAnimatingColor": false,
               "isAnimatingCustom": false,
-              "isAnimatingParallel": false,
               "isBeingMoved": false,
               "isMovingFreely": false,
               "isPulsing": false,
@@ -13335,10 +13268,6 @@ DiagramElementPrimative {
                   ],
                 },
               },
-              "parallelAnimation": Object {
-                "currentPhase": Array [],
-                "currentPhaseIndex": Array [],
-              },
               "pulse": Object {
                 "startTime": -1,
               },
@@ -13374,6 +13303,10 @@ DiagramElementPrimative {
           },
           "c": DiagramElementPrimative {
             "angleToDraw": -1,
+            "anim": AnimationManager {
+              "element": [Circular],
+              "sequences": Array [],
+            },
             "animate": Object {
               "color": Object {
                 "callback": null,
@@ -13381,10 +13314,6 @@ DiagramElementPrimative {
                 "toDisolve": "",
               },
               "custom": Object {
-                "callback": null,
-                "plan": Array [],
-              },
-              "parallel": Object {
                 "callback": null,
                 "plan": Array [],
               },
@@ -13407,7 +13336,9 @@ DiagramElementPrimative {
               "completeOnCancel": null,
               "element": [Circular],
               "index": 0,
+              "name": "000000",
               "onFinish": null,
+              "removeOnFinish": true,
               "startTime": -1,
               "startTimeOffset": 0,
               "state": "idle",
@@ -13782,7 +13713,6 @@ DiagramElementPrimative {
               "isAnimating": false,
               "isAnimatingColor": false,
               "isAnimatingCustom": false,
-              "isAnimatingParallel": false,
               "isBeingMoved": false,
               "isMovingFreely": false,
               "isPulsing": false,
@@ -13843,10 +13773,6 @@ DiagramElementPrimative {
                   ],
                 },
               },
-              "parallelAnimation": Object {
-                "currentPhase": Array [],
-                "currentPhaseIndex": Array [],
-              },
               "pulse": Object {
                 "startTime": -1,
               },
@@ -13882,6 +13808,10 @@ DiagramElementPrimative {
           },
           "v": DiagramElementPrimative {
             "angleToDraw": -1,
+            "anim": AnimationManager {
+              "element": [Circular],
+              "sequences": Array [],
+            },
             "animate": Object {
               "color": Object {
                 "callback": null,
@@ -13889,10 +13819,6 @@ DiagramElementPrimative {
                 "toDisolve": "",
               },
               "custom": Object {
-                "callback": null,
-                "plan": Array [],
-              },
-              "parallel": Object {
                 "callback": null,
                 "plan": Array [],
               },
@@ -13915,7 +13841,9 @@ DiagramElementPrimative {
               "completeOnCancel": null,
               "element": [Circular],
               "index": 0,
+              "name": "000000",
               "onFinish": null,
+              "removeOnFinish": true,
               "startTime": -1,
               "startTimeOffset": 0,
               "state": "idle",
@@ -14290,7 +14218,6 @@ DiagramElementPrimative {
               "isAnimating": false,
               "isAnimatingColor": false,
               "isAnimatingCustom": false,
-              "isAnimatingParallel": false,
               "isBeingMoved": false,
               "isMovingFreely": false,
               "isPulsing": false,
@@ -14351,10 +14278,6 @@ DiagramElementPrimative {
                   ],
                 },
               },
-              "parallelAnimation": Object {
-                "currentPhase": Array [],
-                "currentPhaseIndex": Array [],
-              },
               "pulse": Object {
                 "startTime": -1,
               },
@@ -14409,6 +14332,10 @@ DiagramElementPrimative {
                   "ascent": 0.025200000000000004,
                   "content": DiagramElementPrimative {
                     "angleToDraw": -1,
+                    "anim": AnimationManager {
+                      "element": [Circular],
+                      "sequences": Array [],
+                    },
                     "animate": Object {
                       "color": Object {
                         "callback": null,
@@ -14416,10 +14343,6 @@ DiagramElementPrimative {
                         "toDisolve": "",
                       },
                       "custom": Object {
-                        "callback": null,
-                        "plan": Array [],
-                      },
-                      "parallel": Object {
                         "callback": null,
                         "plan": Array [],
                       },
@@ -14442,7 +14365,9 @@ DiagramElementPrimative {
                       "completeOnCancel": null,
                       "element": [Circular],
                       "index": 0,
+                      "name": "000000",
                       "onFinish": null,
+                      "removeOnFinish": true,
                       "startTime": -1,
                       "startTimeOffset": 0,
                       "state": "idle",
@@ -14789,7 +14714,6 @@ DiagramElementPrimative {
                       "isAnimating": false,
                       "isAnimatingColor": false,
                       "isAnimatingCustom": false,
-                      "isAnimatingParallel": false,
                       "isBeingMoved": false,
                       "isMovingFreely": false,
                       "isPulsing": false,
@@ -14850,10 +14774,6 @@ DiagramElementPrimative {
                           ],
                         },
                       },
-                      "parallelAnimation": Object {
-                        "currentPhase": Array [],
-                        "currentPhaseIndex": Array [],
-                      },
                       "pulse": Object {
                         "startTime": -1,
                       },
@@ -14912,6 +14832,10 @@ DiagramElementPrimative {
           "elements": Object {
             "elem": DiagramElementPrimative {
               "angleToDraw": -1,
+              "anim": AnimationManager {
+                "element": [Circular],
+                "sequences": Array [],
+              },
               "animate": Object {
                 "color": Object {
                   "callback": null,
@@ -14919,10 +14843,6 @@ DiagramElementPrimative {
                   "toDisolve": "",
                 },
                 "custom": Object {
-                  "callback": null,
-                  "plan": Array [],
-                },
-                "parallel": Object {
                   "callback": null,
                   "plan": Array [],
                 },
@@ -14945,7 +14865,9 @@ DiagramElementPrimative {
                 "completeOnCancel": null,
                 "element": [Circular],
                 "index": 0,
+                "name": "000000",
                 "onFinish": null,
+                "removeOnFinish": true,
                 "startTime": -1,
                 "startTimeOffset": 0,
                 "state": "idle",
@@ -15292,7 +15214,6 @@ DiagramElementPrimative {
                 "isAnimating": false,
                 "isAnimatingColor": false,
                 "isAnimatingCustom": false,
-                "isAnimatingParallel": false,
                 "isBeingMoved": false,
                 "isMovingFreely": false,
                 "isPulsing": false,
@@ -15352,10 +15273,6 @@ DiagramElementPrimative {
                       },
                     ],
                   },
-                },
-                "parallelAnimation": Object {
-                  "currentPhase": Array [],
-                  "currentPhaseIndex": Array [],
                 },
                 "pulse": Object {
                   "startTime": -1,
@@ -15834,7 +15751,6 @@ DiagramElementPrimative {
       "isAnimating": false,
       "isAnimatingColor": false,
       "isAnimatingCustom": false,
-      "isAnimatingParallel": false,
       "isBeingMoved": false,
       "isMovingFreely": false,
       "isPulsing": false,
@@ -15902,10 +15818,6 @@ DiagramElementPrimative {
             },
           ],
         },
-      },
-      "parallelAnimation": Object {
-        "currentPhase": Array [],
-        "currentPhaseIndex": Array [],
       },
       "pulse": Object {
         "startTime": -1,
@@ -16059,7 +15971,6 @@ DiagramElementPrimative {
     "isAnimating": false,
     "isAnimatingColor": false,
     "isAnimatingCustom": false,
-    "isAnimatingParallel": false,
     "isBeingMoved": false,
     "isMovingFreely": false,
     "isPulsing": false,
@@ -16119,10 +16030,6 @@ DiagramElementPrimative {
           },
         ],
       },
-    },
-    "parallelAnimation": Object {
-      "currentPhase": Array [],
-      "currentPhaseIndex": Array [],
     },
     "pulse": Object {
       "startTime": -1,
