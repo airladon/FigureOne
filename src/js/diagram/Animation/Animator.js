@@ -44,6 +44,15 @@ export default class Animator extends animation.SerialAnimationStep {
     return this;
   }
 
+  move(optionsIn: TypePositionAnimationStepInputOptions) {
+    if (this.element != null) {
+      const defaultOptions = { element: this.element };
+      const options = joinObjects({}, defaultOptions, optionsIn);
+      this.then(new animation.PositionAnimationStep(options));
+    }
+    return this;
+  }
+
   delay(
     numOrOptionsIn: number | TypeDelayStepInputOptions = {},
     ...args: Array<TypeDelayStepInputOptions>

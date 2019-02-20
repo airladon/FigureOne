@@ -36,7 +36,7 @@ describe('Animator API', () => {
         elem1.animator
           .moveTo({ target: p1, duration: 1, progression: 'linear' })
           .delay(1)
-          .moveTo({
+          .move({
             element: elem2, target: p1, duration: 1, progression: 'linear',
           })
           .whenFinished(animatorCallback)
