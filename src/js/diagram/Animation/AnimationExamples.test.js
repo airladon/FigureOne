@@ -55,6 +55,18 @@ describe('Animation Examples', () => {
             .moveToScenario({ target: 'scenario2', duration: 1 })
             .start();
         },
+        separateTransformElementsSeparateStart: () => {
+          elem1.animations.new()
+            .moveTo({ target: p1, duration: 1 })
+            .moveTo({ target: p2, duration: 1 });
+          elem1.animations.new()
+            .scaleTo({ target: s1, duration: 1 })
+            .scaleTo({ target: s2, duration: 1 });
+          elem1.animations.new()
+            .rotateTo({ target: r1, duration: 1 })
+            .rotateTo({ target: r2, duration: 1 });
+          elem1.animations.start();
+        },
         separateTransformElements: () => {
           elem1.animations.new()
             .moveTo({ target: p1, duration: 1 })
@@ -318,11 +330,15 @@ describe('Animation Examples', () => {
       examples.moveToPossibilities.separateTransformElements();
       tester();
     });
+    test('Separate Transform Elements with separate start', () => {
+      examples.moveToPossibilities.separateTransformElementsSeparateStart();
+      tester();
+    });
     test('Scenarios', () => {
       examples.moveToPossibilities.scenarios();
       tester();
     });
-    test('Scenarios', () => {
+    test('Parallel and Serial', () => {
       examples.moveToPossibilities.asParallelAndSerial();
       tester();
     });
