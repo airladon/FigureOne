@@ -884,8 +884,6 @@ class DiagramElement {
     return time;
   }
 
-  
-
   // Decelerate over some time when moving freely to get a new element
   // transform and movement velocity
   decelerate(deltaTime: number): Object {
