@@ -201,7 +201,7 @@ class DiagramElement {
     },
   };
 
-  anim: animations.AnimationManager;
+  animations: animations.AnimationManager;
 
   pulse: Object;                  // Pulse animation state
 
