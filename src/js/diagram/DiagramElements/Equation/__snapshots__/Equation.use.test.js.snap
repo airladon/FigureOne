@@ -4,8 +4,8 @@ exports[`Different ways to make an equation All Text in constructor with all opt
 DiagramElementPrimative {
   "angleToDraw": -1,
   "anim": AnimationManager {
+    "animations": Array [],
     "element": [Circular],
-    "sequences": Array [],
   },
   "animate": Object {
     "color": Object {
@@ -290,8 +290,8 @@ DiagramElementPrimative {
     "__2": DiagramElementPrimative {
       "angleToDraw": -1,
       "anim": AnimationManager {
+        "animations": Array [],
         "element": [Circular],
-        "sequences": Array [],
       },
       "animate": Object {
         "color": Object {
@@ -784,8 +784,8 @@ DiagramElementPrimative {
     "_b": DiagramElementPrimative {
       "angleToDraw": -1,
       "anim": AnimationManager {
+        "animations": Array [],
         "element": [Circular],
-        "sequences": Array [],
       },
       "animate": Object {
         "color": Object {
@@ -1277,8 +1277,8 @@ DiagramElementPrimative {
     "_c": DiagramElementPrimative {
       "angleToDraw": -1,
       "anim": AnimationManager {
+        "animations": Array [],
         "element": [Circular],
-        "sequences": Array [],
       },
       "animate": Object {
         "color": Object {
@@ -1770,8 +1770,8 @@ DiagramElementPrimative {
     "_v": DiagramElementPrimative {
       "angleToDraw": -1,
       "anim": AnimationManager {
+        "animations": Array [],
         "element": [Circular],
-        "sequences": Array [],
       },
       "animate": Object {
         "color": Object {
@@ -2261,8 +2261,8 @@ DiagramElementPrimative {
       "uid": "0000000000",
     },
     "anim": AnimationManager {
+      "animations": Array [],
       "element": [Circular],
-      "sequences": Array [],
     },
     "animate": Object {
       "color": Object {
@@ -2315,8 +2315,8 @@ DiagramElementPrimative {
       "_2": DiagramElementPrimative {
         "angleToDraw": -1,
         "anim": AnimationManager {
+          "animations": Array [],
           "element": [Circular],
-          "sequences": Array [],
         },
         "animate": Object {
           "color": Object {
@@ -2809,8 +2809,8 @@ DiagramElementPrimative {
       "b": DiagramElementPrimative {
         "angleToDraw": -1,
         "anim": AnimationManager {
+          "animations": Array [],
           "element": [Circular],
-          "sequences": Array [],
         },
         "animate": Object {
           "color": Object {
@@ -3302,8 +3302,8 @@ DiagramElementPrimative {
       "c": DiagramElementPrimative {
         "angleToDraw": -1,
         "anim": AnimationManager {
+          "animations": Array [],
           "element": [Circular],
-          "sequences": Array [],
         },
         "animate": Object {
           "color": Object {
@@ -3795,8 +3795,8 @@ DiagramElementPrimative {
       "v": DiagramElementPrimative {
         "angleToDraw": -1,
         "anim": AnimationManager {
+          "animations": Array [],
           "element": [Circular],
-          "sequences": Array [],
         },
         "animate": Object {
           "color": Object {
@@ -4360,8 +4360,8 @@ DiagramElementPrimative {
                     "content": DiagramElementPrimative {
                       "angleToDraw": -1,
                       "anim": AnimationManager {
+                        "animations": Array [],
                         "element": [Circular],
-                        "sequences": Array [],
                       },
                       "animate": Object {
                         "color": Object {
@@ -4864,8 +4864,8 @@ DiagramElementPrimative {
                     "content": DiagramElementPrimative {
                       "angleToDraw": -1,
                       "anim": AnimationManager {
+                        "animations": Array [],
                         "element": [Circular],
-                        "sequences": Array [],
                       },
                       "animate": Object {
                         "color": Object {
@@ -5380,8 +5380,8 @@ DiagramElementPrimative {
               "_2": DiagramElementPrimative {
                 "angleToDraw": -1,
                 "anim": AnimationManager {
+                  "animations": Array [],
                   "element": [Circular],
-                  "sequences": Array [],
                 },
                 "animate": Object {
                   "color": Object {
@@ -5874,8 +5874,8 @@ DiagramElementPrimative {
               "b": DiagramElementPrimative {
                 "angleToDraw": -1,
                 "anim": AnimationManager {
+                  "animations": Array [],
                   "element": [Circular],
-                  "sequences": Array [],
                 },
                 "animate": Object {
                   "color": Object {
@@ -6367,8 +6367,8 @@ DiagramElementPrimative {
               "c": DiagramElementPrimative {
                 "angleToDraw": -1,
                 "anim": AnimationManager {
+                  "animations": Array [],
                   "element": [Circular],
-                  "sequences": Array [],
                 },
                 "animate": Object {
                   "color": Object {
@@ -6860,8 +6860,8 @@ DiagramElementPrimative {
               "v": DiagramElementPrimative {
                 "angleToDraw": -1,
                 "anim": AnimationManager {
+                  "animations": Array [],
                   "element": [Circular],
-                  "sequences": Array [],
                 },
                 "animate": Object {
                   "color": Object {
@@ -7416,8 +7416,8 @@ DiagramElementPrimative {
                             "content": DiagramElementPrimative {
                               "angleToDraw": -1,
                               "anim": AnimationManager {
+                                "animations": Array [],
                                 "element": [Circular],
-                                "sequences": Array [],
                               },
                               "animate": Object {
                                 "color": Object {
@@ -7929,8 +7929,8 @@ DiagramElementPrimative {
                         "content": DiagramElementPrimative {
                           "angleToDraw": -1,
                           "anim": AnimationManager {
+                            "animations": Array [],
                             "element": [Circular],
-                            "sequences": Array [],
                           },
                           "animate": Object {
                             "color": Object {
@@ -8436,8 +8436,8 @@ DiagramElementPrimative {
                           "content": DiagramElementPrimative {
                             "angleToDraw": -1,
                             "anim": AnimationManager {
+                              "animations": Array [],
                               "element": [Circular],
-                              "sequences": Array [],
                             },
                             "animate": Object {
                               "color": Object {
@@ -8982,8 +8982,8 @@ DiagramElementPrimative {
                     "vinculum": DiagramElementPrimative {
                       "angleToDraw": -1,
                       "anim": AnimationManager {
+                        "animations": Array [],
                         "element": [Circular],
-                        "sequences": Array [],
                       },
                       "animate": Object {
                         "color": Object {
@@ -9487,8 +9487,8 @@ DiagramElementPrimative {
                     "content": DiagramElementPrimative {
                       "angleToDraw": -1,
                       "anim": AnimationManager {
+                        "animations": Array [],
                         "element": [Circular],
-                        "sequences": Array [],
                       },
                       "animate": Object {
                         "color": Object {
@@ -10003,8 +10003,8 @@ DiagramElementPrimative {
               "_2": DiagramElementPrimative {
                 "angleToDraw": -1,
                 "anim": AnimationManager {
+                  "animations": Array [],
                   "element": [Circular],
-                  "sequences": Array [],
                 },
                 "animate": Object {
                   "color": Object {
@@ -10497,8 +10497,8 @@ DiagramElementPrimative {
               "b": DiagramElementPrimative {
                 "angleToDraw": -1,
                 "anim": AnimationManager {
+                  "animations": Array [],
                   "element": [Circular],
-                  "sequences": Array [],
                 },
                 "animate": Object {
                   "color": Object {
@@ -10990,8 +10990,8 @@ DiagramElementPrimative {
               "c": DiagramElementPrimative {
                 "angleToDraw": -1,
                 "anim": AnimationManager {
+                  "animations": Array [],
                   "element": [Circular],
-                  "sequences": Array [],
                 },
                 "animate": Object {
                   "color": Object {
@@ -11483,8 +11483,8 @@ DiagramElementPrimative {
               "v": DiagramElementPrimative {
                 "angleToDraw": -1,
                 "anim": AnimationManager {
+                  "animations": Array [],
                   "element": [Circular],
-                  "sequences": Array [],
                 },
                 "animate": Object {
                   "color": Object {
@@ -11993,8 +11993,8 @@ DiagramElementPrimative {
           "_2": DiagramElementPrimative {
             "angleToDraw": -1,
             "anim": AnimationManager {
+              "animations": Array [],
               "element": [Circular],
-              "sequences": Array [],
             },
             "animate": Object {
               "color": Object {
@@ -12487,8 +12487,8 @@ DiagramElementPrimative {
           "b": DiagramElementPrimative {
             "angleToDraw": -1,
             "anim": AnimationManager {
+              "animations": Array [],
               "element": [Circular],
-              "sequences": Array [],
             },
             "animate": Object {
               "color": Object {
@@ -12980,8 +12980,8 @@ DiagramElementPrimative {
           "c": DiagramElementPrimative {
             "angleToDraw": -1,
             "anim": AnimationManager {
+              "animations": Array [],
               "element": [Circular],
-              "sequences": Array [],
             },
             "animate": Object {
               "color": Object {
@@ -13473,8 +13473,8 @@ DiagramElementPrimative {
           "v": DiagramElementPrimative {
             "angleToDraw": -1,
             "anim": AnimationManager {
+              "animations": Array [],
               "element": [Circular],
-              "sequences": Array [],
             },
             "animate": Object {
               "color": Object {
@@ -13985,8 +13985,8 @@ DiagramElementPrimative {
                   "content": DiagramElementPrimative {
                     "angleToDraw": -1,
                     "anim": AnimationManager {
+                      "animations": Array [],
                       "element": [Circular],
-                      "sequences": Array [],
                     },
                     "animate": Object {
                       "color": Object {
@@ -14473,8 +14473,8 @@ DiagramElementPrimative {
             "elem": DiagramElementPrimative {
               "angleToDraw": -1,
               "anim": AnimationManager {
+                "animations": Array [],
                 "element": [Circular],
-                "sequences": Array [],
               },
               "animate": Object {
                 "color": Object {

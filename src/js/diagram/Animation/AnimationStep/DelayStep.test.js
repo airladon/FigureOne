@@ -86,7 +86,7 @@ describe('Transfrom Animation Unit', () => {
     elem1.anim.new()
       .moveTo({ target: new Point(1, 1), duration: 1, progression: 'linear' })
       .inParallel([
-        elem1.sequence()
+        elem1.animationBuilder()
           .delay(1)
           .moveTo({ target: new Point(2, 2), duration: 1, progression: 'linear' }),
         elem2.moveTo({ target: new Point(1, 1), duration: 1, progression: 'linear' }),

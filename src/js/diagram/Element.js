@@ -749,10 +749,9 @@ class DiagramElement {
     return new animations.DissolveOutAnimationStep(options);
   }
 
-  sequence(...optionsIn: Array<TypeAnimationBuilderInputOptions>) {
+  animationBuilder(...optionsIn: Array<TypeAnimationBuilderInputOptions>) {
     return new animations.AnimationBuilder(this, ...optionsIn);
   }
-
 
   setColor(color: Array<number>) {
     this.color = color.slice();

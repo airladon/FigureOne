@@ -42,7 +42,7 @@ describe('Two Element Animation Examples', () => {
           .whenFinished(animationCallback)
           .ifCanceledThenComplete()
           .start();
-        ([animation] = elem1.anim.sequences);
+        ([animation] = elem1.anim.animations);
       },
       complete: () => {
         // Single element move, complete
