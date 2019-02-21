@@ -1042,8 +1042,6 @@ class Scale extends Point {
 }
 
 
-
-
 class TransformLimit {
   rotation: number | null;
   translation: number | null;

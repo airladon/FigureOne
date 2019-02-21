@@ -1,4 +1,3 @@
-import AnimationManager from './AnimationManager';
 import {
   Point,
 } from '../../tools/g2';
