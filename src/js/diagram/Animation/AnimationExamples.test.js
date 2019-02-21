@@ -15,24 +15,79 @@ jest.mock('../DrawContext2D');
 const point = value => new Point(value, value);
 
 describe('Animation Examples', () => {
+  let diagram;
   let elem1;
   let elem2;
   let examples;
   let p1;
   let p2;
+  let r1;
+  let r2;
+  let s1;
+  let s2;
   let callbackFlag;
   let callback;
   beforeEach(() => {
-    const diagram = makeDiagram();
-    elem1 = diagram.objects.line();
-    elem2 = diagram.objects.line();
-    elem1.transform = elem1.transform.zero();
-    elem2.transform = elem2.transform.zero();
     p1 = new Point(1, 1);
     p2 = new Point(2, 2);
+    r1 = 1;
+    r2 = 2;
+    s1 = new Point(1, 1);
+    s2 = new Point(2, 2);
+    diagram = makeDiagram();
+    elem1 = diagram.objects.line();
+    elem2 = diagram.objects.line();
+    diagram.elements.add('elem1', elem1);
+    diagram.elements.add('elem2', elem2);
+    elem1.transform = elem1.transform.zero();
+    elem2.transform = elem2.transform.zero();
+    elem1.scenarios = {
+      scenario1: { position: p1, rotation: r1, scale: s1 },
+      scenario2: { position: p2, rotation: r2, scale: s2 },
+    };
     callbackFlag = 0;
     callback = () => { callbackFlag = 1; };
     examples = {
+      moveToPossibilities: {
+        scenarios: () => {
+          elem1.animations.new()
+            .moveToScenario({ target: 'scenario1', duration: 1 })
+            .moveToScenario({ target: 'scenario2', duration: 1 })
+            .start();
+        },
+        separateTransformElements: () => {
+          elem1.animations.new()
+            .moveTo({ target: p1, duration: 1 })
+            .moveTo({ target: p2, duration: 1 })
+            .start();
+          elem1.animations.new()
+            .scaleTo({ target: s1, duration: 1 })
+            .scaleTo({ target: s2, duration: 1 })
+            .start();
+          elem1.animations.new()
+            .rotateTo({ target: r1, duration: 1 })
+            .rotateTo({ target: r2, duration: 1 })
+            .start();
+        },
+        asParallelAndSerial: () => {
+          elem1.animations.new()
+            .inParallel([
+              inSerial([
+                elem1.moveTo({ target: p1, duration: 1 }),
+                elem1.moveTo({ target: p2, duration: 1 }),
+              ]),
+              inSerial([
+                elem1.scaleTo({ target: s1, duration: 1 }),
+                elem1.scaleTo({ target: s2, duration: 1 }),
+              ]),
+              inSerial([
+                elem1.rotateTo({ target: r1, duration: 1 }),
+                elem1.rotateTo({ target: r2, duration: 1 }),
+              ]),
+            ])
+            .start();
+        },
+      },
       moveElementSimple: () => {
         elem1.animations.new()
           .moveTo({ target: p1, duration: 1, progression: 'linear' })
@@ -228,5 +283,48 @@ describe('Animation Examples', () => {
     expect(elem1.getPosition().round()).toEqual(point(1));
     expect(elem2.getPosition().round()).toEqual(point(1));
     expect(math.round(remaining)).toBe(remaining);
+  });
+  describe('All moveto possibilities', () => {
+    let tester;
+    beforeEach(() => {
+      tester = () => {
+        diagram.draw(0);
+        expect(elem1.getPosition().round()).toEqual(point(0));
+        expect(elem1.getScale().round()).toEqual(point(0));
+        expect(math.round(elem1.getRotation(), 2)).toEqual(0);
+        diagram.draw(0.5);
+        expect(elem1.getPosition().round()).toEqual(point(0.5));
+        expect(elem1.getScale().round()).toEqual(point(0.5));
+        expect(math.round(elem1.getRotation(), 2)).toEqual(0.5);
+        diagram.draw(1);
+        expect(elem1.getPosition().round()).toEqual(point(1));
+        expect(elem1.getScale().round()).toEqual(point(1));
+        expect(math.round(elem1.getRotation(), 2)).toEqual(1);
+        diagram.draw(1.5);
+        expect(elem1.getPosition().round()).toEqual(point(1.5));
+        expect(elem1.getScale().round()).toEqual(point(1.5));
+        expect(math.round(elem1.getRotation(), 2)).toEqual(1.5);
+        diagram.draw(2);
+        expect(elem1.getPosition().round()).toEqual(point(2));
+        expect(elem1.getScale().round()).toEqual(point(2));
+        expect(math.round(elem1.getRotation(), 2)).toEqual(2);
+        diagram.draw(2.5);
+        expect(elem1.getPosition().round()).toEqual(point(2));
+        expect(elem1.getScale().round()).toEqual(point(2));
+        expect(math.round(elem1.getRotation(), 2)).toEqual(2);
+      };
+    });
+    test('Separate Transform Elements', () => {
+      examples.moveToPossibilities.separateTransformElements();
+      tester();
+    });
+    test('Scenarios', () => {
+      examples.moveToPossibilities.scenarios();
+      tester();
+    });
+    test('Scenarios', () => {
+      examples.moveToPossibilities.asParallelAndSerial();
+      tester();
+    });
   });
 });
