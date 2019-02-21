@@ -74,11 +74,15 @@ export default class AnimationManager {
 
   // Cancel all primary animations with the name
   // animations will be cleaned up on next frame
-  cancel(name: string, force: ?'complete' | 'noComplete' = null) {
-    for (let i = 0; i < this.animations.length; i += 1) {
-      const animation = this.animations[i];
-      if (animation.name === name) {
-        animation.cancel(force);
+  cancel(name: ?string, force: ?'complete' | 'noComplete' = null) {
+    if (name == null) {
+      this.cancelAll(force);
+    } else {
+      for (let i = 0; i < this.animations.length; i += 1) {
+        const animation = this.animations[i];
+        if (animation.name === name) {
+          animation.cancel(force);
+        }
       }
     }
   }
@@ -89,12 +93,23 @@ export default class AnimationManager {
     }
   }
 
-  // Cancel all primary animations with the name
-  // animations will be cleaned up on next frame
-  start(name: string) {
+  start(name?: string) {
+    if (name == null) {
+      this.startAll();
+    } else {
+      for (let i = 0; i < this.animations.length; i += 1) {
+        const animation = this.animations[i];
+        if (animation.name === name) {
+          animation.start();
+        }
+      }
+    }
+  }
+
+  startAll() {
     for (let i = 0; i < this.animations.length; i += 1) {
       const animation = this.animations[i];
-      if (animation.name === name) {
+      if (animation.state === 'idle' || animation.state === 'finished') {
         animation.start();
       }
     }
