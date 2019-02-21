@@ -3,10 +3,6 @@
 exports[`Different ways to make an equation All Text in constructor with all options 1`] = `
 DiagramElementPrimative {
   "angleToDraw": -1,
-  "anim": AnimationManager {
-    "animations": Array [],
-    "element": [Circular],
-  },
   "animate": Object {
     "color": Object {
       "callback": null,
@@ -31,6 +27,10 @@ DiagramElementPrimative {
         "style": "linear",
       },
     },
+  },
+  "animations": AnimationManager {
+    "animations": Array [],
+    "element": [Circular],
   },
   "cannotTouchHole": false,
   "color": Array [
@@ -289,10 +289,6 @@ DiagramElementPrimative {
   "parent": EquationNew {
     "__2": DiagramElementPrimative {
       "angleToDraw": -1,
-      "anim": AnimationManager {
-        "animations": Array [],
-        "element": [Circular],
-      },
       "animate": Object {
         "color": Object {
           "callback": null,
@@ -317,6 +313,10 @@ DiagramElementPrimative {
             "style": "linear",
           },
         },
+      },
+      "animations": AnimationManager {
+        "animations": Array [],
+        "element": [Circular],
       },
       "cannotTouchHole": false,
       "color": Array [
@@ -783,10 +783,6 @@ DiagramElementPrimative {
     "_a": [Circular],
     "_b": DiagramElementPrimative {
       "angleToDraw": -1,
-      "anim": AnimationManager {
-        "animations": Array [],
-        "element": [Circular],
-      },
       "animate": Object {
         "color": Object {
           "callback": null,
@@ -811,6 +807,10 @@ DiagramElementPrimative {
             "style": "linear",
           },
         },
+      },
+      "animations": AnimationManager {
+        "animations": Array [],
+        "element": [Circular],
       },
       "cannotTouchHole": false,
       "color": Array [
@@ -1276,10 +1276,6 @@ DiagramElementPrimative {
     },
     "_c": DiagramElementPrimative {
       "angleToDraw": -1,
-      "anim": AnimationManager {
-        "animations": Array [],
-        "element": [Circular],
-      },
       "animate": Object {
         "color": Object {
           "callback": null,
@@ -1304,6 +1300,10 @@ DiagramElementPrimative {
             "style": "linear",
           },
         },
+      },
+      "animations": AnimationManager {
+        "animations": Array [],
+        "element": [Circular],
       },
       "cannotTouchHole": false,
       "color": Array [
@@ -1769,10 +1769,6 @@ DiagramElementPrimative {
     },
     "_v": DiagramElementPrimative {
       "angleToDraw": -1,
-      "anim": AnimationManager {
-        "animations": Array [],
-        "element": [Circular],
-      },
       "animate": Object {
         "color": Object {
           "callback": null,
@@ -1797,6 +1793,10 @@ DiagramElementPrimative {
             "style": "linear",
           },
         },
+      },
+      "animations": AnimationManager {
+        "animations": Array [],
+        "element": [Circular],
       },
       "cannotTouchHole": false,
       "color": Array [
@@ -2260,10 +2260,6 @@ DiagramElementPrimative {
       },
       "uid": "0000000000",
     },
-    "anim": AnimationManager {
-      "animations": Array [],
-      "element": [Circular],
-    },
     "animate": Object {
       "color": Object {
         "callback": null,
@@ -2288,6 +2284,10 @@ DiagramElementPrimative {
           "style": "linear",
         },
       },
+    },
+    "animations": AnimationManager {
+      "animations": Array [],
+      "element": [Circular],
     },
     "color": Array [
       0.95,
@@ -2314,10 +2314,6 @@ DiagramElementPrimative {
     "elements": Object {
       "_2": DiagramElementPrimative {
         "angleToDraw": -1,
-        "anim": AnimationManager {
-          "animations": Array [],
-          "element": [Circular],
-        },
         "animate": Object {
           "color": Object {
             "callback": null,
@@ -2342,6 +2338,10 @@ DiagramElementPrimative {
               "style": "linear",
             },
           },
+        },
+        "animations": AnimationManager {
+          "animations": Array [],
+          "element": [Circular],
         },
         "cannotTouchHole": false,
         "color": Array [
@@ -2808,10 +2808,6 @@ DiagramElementPrimative {
       "a": [Circular],
       "b": DiagramElementPrimative {
         "angleToDraw": -1,
-        "anim": AnimationManager {
-          "animations": Array [],
-          "element": [Circular],
-        },
         "animate": Object {
           "color": Object {
             "callback": null,
@@ -2836,6 +2832,10 @@ DiagramElementPrimative {
               "style": "linear",
             },
           },
+        },
+        "animations": AnimationManager {
+          "animations": Array [],
+          "element": [Circular],
         },
         "cannotTouchHole": false,
         "color": Array [
@@ -3301,10 +3301,6 @@ DiagramElementPrimative {
       },
       "c": DiagramElementPrimative {
         "angleToDraw": -1,
-        "anim": AnimationManager {
-          "animations": Array [],
-          "element": [Circular],
-        },
         "animate": Object {
           "color": Object {
             "callback": null,
@@ -3329,6 +3325,10 @@ DiagramElementPrimative {
               "style": "linear",
             },
           },
+        },
+        "animations": AnimationManager {
+          "animations": Array [],
+          "element": [Circular],
         },
         "cannotTouchHole": false,
         "color": Array [
@@ -3794,10 +3794,6 @@ DiagramElementPrimative {
       },
       "v": DiagramElementPrimative {
         "angleToDraw": -1,
-        "anim": AnimationManager {
-          "animations": Array [],
-          "element": [Circular],
-        },
         "animate": Object {
           "color": Object {
             "callback": null,
@@ -3822,6 +3818,10 @@ DiagramElementPrimative {
               "style": "linear",
             },
           },
+        },
+        "animations": AnimationManager {
+          "animations": Array [],
+          "element": [Circular],
         },
         "cannotTouchHole": false,
         "color": Array [
@@ -4359,10 +4359,6 @@ DiagramElementPrimative {
                     "ascent": 0.025200000000000004,
                     "content": DiagramElementPrimative {
                       "angleToDraw": -1,
-                      "anim": AnimationManager {
-                        "animations": Array [],
-                        "element": [Circular],
-                      },
                       "animate": Object {
                         "color": Object {
                           "callback": null,
@@ -4387,6 +4383,10 @@ DiagramElementPrimative {
                             "style": "linear",
                           },
                         },
+                      },
+                      "animations": AnimationManager {
+                        "animations": Array [],
+                        "element": [Circular],
                       },
                       "cannotTouchHole": false,
                       "color": Array [
@@ -4863,10 +4863,6 @@ DiagramElementPrimative {
                     "ascent": 0.017100000000000004,
                     "content": DiagramElementPrimative {
                       "angleToDraw": -1,
-                      "anim": AnimationManager {
-                        "animations": Array [],
-                        "element": [Circular],
-                      },
                       "animate": Object {
                         "color": Object {
                           "callback": null,
@@ -4891,6 +4887,10 @@ DiagramElementPrimative {
                             "style": "linear",
                           },
                         },
+                      },
+                      "animations": AnimationManager {
+                        "animations": Array [],
+                        "element": [Circular],
                       },
                       "cannotTouchHole": false,
                       "color": Array [
@@ -5379,10 +5379,6 @@ DiagramElementPrimative {
             "elements": Object {
               "_2": DiagramElementPrimative {
                 "angleToDraw": -1,
-                "anim": AnimationManager {
-                  "animations": Array [],
-                  "element": [Circular],
-                },
                 "animate": Object {
                   "color": Object {
                     "callback": null,
@@ -5407,6 +5403,10 @@ DiagramElementPrimative {
                       "style": "linear",
                     },
                   },
+                },
+                "animations": AnimationManager {
+                  "animations": Array [],
+                  "element": [Circular],
                 },
                 "cannotTouchHole": false,
                 "color": Array [
@@ -5873,10 +5873,6 @@ DiagramElementPrimative {
               "a": [Circular],
               "b": DiagramElementPrimative {
                 "angleToDraw": -1,
-                "anim": AnimationManager {
-                  "animations": Array [],
-                  "element": [Circular],
-                },
                 "animate": Object {
                   "color": Object {
                     "callback": null,
@@ -5901,6 +5897,10 @@ DiagramElementPrimative {
                       "style": "linear",
                     },
                   },
+                },
+                "animations": AnimationManager {
+                  "animations": Array [],
+                  "element": [Circular],
                 },
                 "cannotTouchHole": false,
                 "color": Array [
@@ -6366,10 +6366,6 @@ DiagramElementPrimative {
               },
               "c": DiagramElementPrimative {
                 "angleToDraw": -1,
-                "anim": AnimationManager {
-                  "animations": Array [],
-                  "element": [Circular],
-                },
                 "animate": Object {
                   "color": Object {
                     "callback": null,
@@ -6394,6 +6390,10 @@ DiagramElementPrimative {
                       "style": "linear",
                     },
                   },
+                },
+                "animations": AnimationManager {
+                  "animations": Array [],
+                  "element": [Circular],
                 },
                 "cannotTouchHole": false,
                 "color": Array [
@@ -6859,10 +6859,6 @@ DiagramElementPrimative {
               },
               "v": DiagramElementPrimative {
                 "angleToDraw": -1,
-                "anim": AnimationManager {
-                  "animations": Array [],
-                  "element": [Circular],
-                },
                 "animate": Object {
                   "color": Object {
                     "callback": null,
@@ -6887,6 +6883,10 @@ DiagramElementPrimative {
                       "style": "linear",
                     },
                   },
+                },
+                "animations": AnimationManager {
+                  "animations": Array [],
+                  "element": [Circular],
                 },
                 "cannotTouchHole": false,
                 "color": Array [
@@ -7415,10 +7415,6 @@ DiagramElementPrimative {
                             "ascent": 0.025200000000000004,
                             "content": DiagramElementPrimative {
                               "angleToDraw": -1,
-                              "anim": AnimationManager {
-                                "animations": Array [],
-                                "element": [Circular],
-                              },
                               "animate": Object {
                                 "color": Object {
                                   "callback": null,
@@ -7443,6 +7439,10 @@ DiagramElementPrimative {
                                     "style": "linear",
                                   },
                                 },
+                              },
+                              "animations": AnimationManager {
+                                "animations": Array [],
+                                "element": [Circular],
                               },
                               "cannotTouchHole": false,
                               "color": Array [
@@ -7928,10 +7928,6 @@ DiagramElementPrimative {
                         "ascent": 0,
                         "content": DiagramElementPrimative {
                           "angleToDraw": -1,
-                          "anim": AnimationManager {
-                            "animations": Array [],
-                            "element": [Circular],
-                          },
                           "animate": Object {
                             "color": Object {
                               "callback": null,
@@ -7956,6 +7952,10 @@ DiagramElementPrimative {
                                 "style": "linear",
                               },
                             },
+                          },
+                          "animations": AnimationManager {
+                            "animations": Array [],
+                            "element": [Circular],
                           },
                           "cannotTouchHole": false,
                           "color": Array [
@@ -8435,10 +8435,6 @@ DiagramElementPrimative {
                           "ascent": 0.025200000000000004,
                           "content": DiagramElementPrimative {
                             "angleToDraw": -1,
-                            "anim": AnimationManager {
-                              "animations": Array [],
-                              "element": [Circular],
-                            },
                             "animate": Object {
                               "color": Object {
                                 "callback": null,
@@ -8463,6 +8459,10 @@ DiagramElementPrimative {
                                   "style": "linear",
                                 },
                               },
+                            },
+                            "animations": AnimationManager {
+                              "animations": Array [],
+                              "element": [Circular],
                             },
                             "cannotTouchHole": false,
                             "color": Array [
@@ -8981,10 +8981,6 @@ DiagramElementPrimative {
                     "vSpaceNum": 0.022500000000000003,
                     "vinculum": DiagramElementPrimative {
                       "angleToDraw": -1,
-                      "anim": AnimationManager {
-                        "animations": Array [],
-                        "element": [Circular],
-                      },
                       "animate": Object {
                         "color": Object {
                           "callback": null,
@@ -9009,6 +9005,10 @@ DiagramElementPrimative {
                             "style": "linear",
                           },
                         },
+                      },
+                      "animations": AnimationManager {
+                        "animations": Array [],
+                        "element": [Circular],
                       },
                       "cannotTouchHole": false,
                       "color": Array [
@@ -9486,10 +9486,6 @@ DiagramElementPrimative {
                     "ascent": 0.017100000000000004,
                     "content": DiagramElementPrimative {
                       "angleToDraw": -1,
-                      "anim": AnimationManager {
-                        "animations": Array [],
-                        "element": [Circular],
-                      },
                       "animate": Object {
                         "color": Object {
                           "callback": null,
@@ -9514,6 +9510,10 @@ DiagramElementPrimative {
                             "style": "linear",
                           },
                         },
+                      },
+                      "animations": AnimationManager {
+                        "animations": Array [],
+                        "element": [Circular],
                       },
                       "cannotTouchHole": false,
                       "color": Array [
@@ -10002,10 +10002,6 @@ DiagramElementPrimative {
             "elements": Object {
               "_2": DiagramElementPrimative {
                 "angleToDraw": -1,
-                "anim": AnimationManager {
-                  "animations": Array [],
-                  "element": [Circular],
-                },
                 "animate": Object {
                   "color": Object {
                     "callback": null,
@@ -10030,6 +10026,10 @@ DiagramElementPrimative {
                       "style": "linear",
                     },
                   },
+                },
+                "animations": AnimationManager {
+                  "animations": Array [],
+                  "element": [Circular],
                 },
                 "cannotTouchHole": false,
                 "color": Array [
@@ -10496,10 +10496,6 @@ DiagramElementPrimative {
               "a": [Circular],
               "b": DiagramElementPrimative {
                 "angleToDraw": -1,
-                "anim": AnimationManager {
-                  "animations": Array [],
-                  "element": [Circular],
-                },
                 "animate": Object {
                   "color": Object {
                     "callback": null,
@@ -10524,6 +10520,10 @@ DiagramElementPrimative {
                       "style": "linear",
                     },
                   },
+                },
+                "animations": AnimationManager {
+                  "animations": Array [],
+                  "element": [Circular],
                 },
                 "cannotTouchHole": false,
                 "color": Array [
@@ -10989,10 +10989,6 @@ DiagramElementPrimative {
               },
               "c": DiagramElementPrimative {
                 "angleToDraw": -1,
-                "anim": AnimationManager {
-                  "animations": Array [],
-                  "element": [Circular],
-                },
                 "animate": Object {
                   "color": Object {
                     "callback": null,
@@ -11017,6 +11013,10 @@ DiagramElementPrimative {
                       "style": "linear",
                     },
                   },
+                },
+                "animations": AnimationManager {
+                  "animations": Array [],
+                  "element": [Circular],
                 },
                 "cannotTouchHole": false,
                 "color": Array [
@@ -11482,10 +11482,6 @@ DiagramElementPrimative {
               },
               "v": DiagramElementPrimative {
                 "angleToDraw": -1,
-                "anim": AnimationManager {
-                  "animations": Array [],
-                  "element": [Circular],
-                },
                 "animate": Object {
                   "color": Object {
                     "callback": null,
@@ -11510,6 +11506,10 @@ DiagramElementPrimative {
                       "style": "linear",
                     },
                   },
+                },
+                "animations": AnimationManager {
+                  "animations": Array [],
+                  "element": [Circular],
                 },
                 "cannotTouchHole": false,
                 "color": Array [
@@ -11992,10 +11992,6 @@ DiagramElementPrimative {
         "elements": Object {
           "_2": DiagramElementPrimative {
             "angleToDraw": -1,
-            "anim": AnimationManager {
-              "animations": Array [],
-              "element": [Circular],
-            },
             "animate": Object {
               "color": Object {
                 "callback": null,
@@ -12020,6 +12016,10 @@ DiagramElementPrimative {
                   "style": "linear",
                 },
               },
+            },
+            "animations": AnimationManager {
+              "animations": Array [],
+              "element": [Circular],
             },
             "cannotTouchHole": false,
             "color": Array [
@@ -12486,10 +12486,6 @@ DiagramElementPrimative {
           "a": [Circular],
           "b": DiagramElementPrimative {
             "angleToDraw": -1,
-            "anim": AnimationManager {
-              "animations": Array [],
-              "element": [Circular],
-            },
             "animate": Object {
               "color": Object {
                 "callback": null,
@@ -12514,6 +12510,10 @@ DiagramElementPrimative {
                   "style": "linear",
                 },
               },
+            },
+            "animations": AnimationManager {
+              "animations": Array [],
+              "element": [Circular],
             },
             "cannotTouchHole": false,
             "color": Array [
@@ -12979,10 +12979,6 @@ DiagramElementPrimative {
           },
           "c": DiagramElementPrimative {
             "angleToDraw": -1,
-            "anim": AnimationManager {
-              "animations": Array [],
-              "element": [Circular],
-            },
             "animate": Object {
               "color": Object {
                 "callback": null,
@@ -13007,6 +13003,10 @@ DiagramElementPrimative {
                   "style": "linear",
                 },
               },
+            },
+            "animations": AnimationManager {
+              "animations": Array [],
+              "element": [Circular],
             },
             "cannotTouchHole": false,
             "color": Array [
@@ -13472,10 +13472,6 @@ DiagramElementPrimative {
           },
           "v": DiagramElementPrimative {
             "angleToDraw": -1,
-            "anim": AnimationManager {
-              "animations": Array [],
-              "element": [Circular],
-            },
             "animate": Object {
               "color": Object {
                 "callback": null,
@@ -13500,6 +13496,10 @@ DiagramElementPrimative {
                   "style": "linear",
                 },
               },
+            },
+            "animations": AnimationManager {
+              "animations": Array [],
+              "element": [Circular],
             },
             "cannotTouchHole": false,
             "color": Array [
@@ -13984,10 +13984,6 @@ DiagramElementPrimative {
                   "ascent": 0.025200000000000004,
                   "content": DiagramElementPrimative {
                     "angleToDraw": -1,
-                    "anim": AnimationManager {
-                      "animations": Array [],
-                      "element": [Circular],
-                    },
                     "animate": Object {
                       "color": Object {
                         "callback": null,
@@ -14012,6 +14008,10 @@ DiagramElementPrimative {
                           "style": "linear",
                         },
                       },
+                    },
+                    "animations": AnimationManager {
+                      "animations": Array [],
+                      "element": [Circular],
                     },
                     "cannotTouchHole": false,
                     "color": Array [
@@ -14472,10 +14472,6 @@ DiagramElementPrimative {
           "elements": Object {
             "elem": DiagramElementPrimative {
               "angleToDraw": -1,
-              "anim": AnimationManager {
-                "animations": Array [],
-                "element": [Circular],
-              },
               "animate": Object {
                 "color": Object {
                   "callback": null,
@@ -14500,6 +14496,10 @@ DiagramElementPrimative {
                     "style": "linear",
                   },
                 },
+              },
+              "animations": AnimationManager {
+                "animations": Array [],
+                "element": [Circular],
               },
               "cannotTouchHole": false,
               "color": Array [

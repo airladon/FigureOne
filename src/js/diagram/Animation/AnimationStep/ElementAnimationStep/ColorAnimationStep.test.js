@@ -21,46 +21,46 @@ describe('Color Animation', () => {
     callback = jest.fn(() => {});
   });
   test('Simple color change', () => {
-    elem1.anim.new()
+    elem1.animations.new()
       .colorTo({ target: [0.2, 0.2, 0.2, 0.2], duration: 1 })
       .whenFinished(callback)
       .start();
 
     expect(math.round(elem1.color)).toEqual([0.1, 0.1, 0.1, 0.1]);
 
-    elem1.anim.nextFrame(0);
+    elem1.animations.nextFrame(0);
     expect(math.round(elem1.color)).toEqual([0.1, 0.1, 0.1, 0.1]);
 
-    elem1.anim.nextFrame(0.5);
+    elem1.animations.nextFrame(0.5);
     expect(math.round(elem1.color)).toEqual([0.15, 0.15, 0.15, 0.15]);
 
-    elem1.anim.nextFrame(1.0);
+    elem1.animations.nextFrame(1.0);
     expect(math.round(elem1.color)).toEqual([0.2, 0.2, 0.2, 0.2]);
     expect(callback.mock.calls.length).toBe(0);
 
-    elem1.anim.nextFrame(1.01);
+    elem1.animations.nextFrame(1.01);
     expect(math.round(elem1.color)).toEqual([0.2, 0.2, 0.2, 0.2]);
     expect(callback.mock.calls.length).toBe(1);
   });
   test('Color change defined by delta color change', () => {
-    elem1.anim.new()
+    elem1.animations.new()
       .colorTo({ delta: [-0.1, -0.1, -0.1, -0.1], duration: 1 })
       .whenFinished(callback)
       .start();
 
     expect(math.round(elem1.color)).toEqual([0.1, 0.1, 0.1, 0.1]);
 
-    elem1.anim.nextFrame(0);
+    elem1.animations.nextFrame(0);
     expect(math.round(elem1.color)).toEqual([0.1, 0.1, 0.1, 0.1]);
 
-    elem1.anim.nextFrame(0.5);
+    elem1.animations.nextFrame(0.5);
     expect(math.round(elem1.color)).toEqual([0.05, 0.05, 0.05, 0.05]);
 
-    elem1.anim.nextFrame(1.0);
+    elem1.animations.nextFrame(1.0);
     expect(math.round(elem1.color)).toEqual([0, 0, 0, 0]);
     expect(callback.mock.calls.length).toBe(0);
 
-    elem1.anim.nextFrame(1.01);
+    elem1.animations.nextFrame(1.01);
     expect(math.round(elem1.color)).toEqual([0, 0, 0, 0]);
     expect(callback.mock.calls.length).toBe(1);
   });
