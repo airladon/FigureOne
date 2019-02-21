@@ -1,5 +1,5 @@
 import {
-  Point,
+  Point, Transform,
 } from '../../tools/g2';
 import * as tools from '../../tools/tools';
 import * as math from '../../tools/math';
@@ -97,6 +97,14 @@ describe('Animation Examples', () => {
                 elem1.rotateTo({ target: r2, duration: 1 }),
               ]),
             ])
+            .start();
+        },
+        asTransforms: () => {
+          const t1 = new Transform().scale(s1).rotate(r1).translate(p1);
+          const t2 = new Transform().scale(s2).rotate(r2).translate(p2);
+          elem1.animations.new()
+            .moveToTransform({ target: t1, duration: 1 })
+            .moveToTransform({ target: t2, duration: 1 })
             .start();
         },
       },
@@ -340,6 +348,10 @@ describe('Animation Examples', () => {
     });
     test('Parallel and Serial', () => {
       examples.moveToPossibilities.asParallelAndSerial();
+      tester();
+    });
+    test('Transforms', () => {
+      examples.moveToPossibilities.asTransforms();
       tester();
     });
   });
