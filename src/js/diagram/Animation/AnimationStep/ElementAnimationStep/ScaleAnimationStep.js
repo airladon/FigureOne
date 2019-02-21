@@ -2,7 +2,6 @@
 import {
   Transform, Point, getMaxTimeFromVelocity,
 } from '../../../../tools/g2';
-import type { pathOptionsType } from '../../../../tools/g2';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
@@ -11,56 +10,50 @@ import type {
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 
-export type TypePositionAnimationStepInputOptions = {
-  start?: Point;      // default is element transform
-  target?: Point;     // Either target or delta must be defined
-  delta?: Point;      // delta overrides target if both are defined
-  translationStyle?: 'linear' | 'curved'; // default is linear
-  translationOptions?: pathOptionsType;
-  velocity?: Point;
+export type TypeScaleAnimationStepInputOptions = {
+  start?: Point | number;      // default is element transform
+  target?: Point | number;     // Either target or delta must be defined
+  delta?: Point | number;      // delta overrides target if both are defined
+  velocity?: Point | number;
 } & TypeElementAnimationStepInputOptions;
 
-export default class PositionAnimationStep extends ElementAnimationStep {
-  position: {
+export default class ScaleAnimationStep extends ElementAnimationStep {
+  scale: {
     start: ?Point;  // null means use element transform when unit is started
     delta: ?Point;
     target: ?Point;
-    rotDirection: 0 | 1 | -1 | 2;
-    translationStyle: 'linear' | 'curved';
-    translationOptions: pathOptionsType;
-    velocity: ?Point | number;
+    velocity: ?Point;
   };
 
-  constructor(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
+  constructor(...optionsIn: Array<TypeScaleAnimationStepInputOptions>) {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, { type: 'position' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
-      'start', 'delta', 'target', 'translationStyle', 'translationOptions',
-      'velocity',
+      'start', 'delta', 'target', 'velocity',
     ]);
     super(ElementAnimationStepOptionsIn);
     const defaultPositionOptions = {
       start: null,
       target: null,
       delta: null,
-      translationStyle: 'linear',
-      translationOptions: {
-        rot: 1,
-        magnitude: 0.5,
-        offset: 0.5,
-        controlPoint: null,
-        direction: '',
-      },
       velocity: null,
     };
     const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
     // $FlowFixMe
-    this.position = { translationOptions: {} };
-    copyKeysFromTo(options, this.position, [
+    this.scale = {};
+    if (typeof options.start === 'number') {
+      options.start = new Point(options.start, options.start);
+    }
+    if (typeof options.target === 'number') {
+      options.target = new Point(options.start, options.start);
+    }
+    if (typeof options.delta === 'number') {
+      options.delta = new Point(options.start, options.start);
+    }
+    copyKeysFromTo(options, this.scale, [
       'start', 'delta', 'target', 'translationStyle',
       'velocity',
     ]);
-    duplicateFromTo(options.translationOptions, this.position.translationOptions);
   }
 
   // On start, calculate the duration, target and delta if not already present.
@@ -69,40 +62,40 @@ export default class PositionAnimationStep extends ElementAnimationStep {
   // Setting a duration to 0 will effectively skip this animation step
   start(startTime?: number) {
     super.start(startTime);
-    if (this.position.start === null) {
+    if (this.scale.start === null) {
       if (this.element != null) {
-        this.position.start = this.element.getPosition();
+        this.scale.start = this.element.getScale();
       } else {
         this.duration = 0;
         return;
       }
     }
     // if delta is null, then calculate it from start and target
-    if (this.position.delta == null
-      && this.position.target != null
-      && this.position.start != null
+    if (this.scale.delta == null
+      && this.scale.target != null
+      && this.scale.start != null
     ) {
-      const delta = this.position.target.sub(this.position.start);
-      this.position.delta = delta;
-    } else if (this.position.delta != null && this.position.start != null) {
-      this.position.target = this.position.start.add(this.position.delta);
+      const delta = this.scale.target.sub(this.scale.start);
+      this.scale.delta = delta;
+    } else if (this.scale.delta != null && this.scale.start != null) {
+      this.scale.target = this.scale.start.add(this.scale.delta);
     } else {
       this.duration = 0;
     }
 
     // If Velocity is defined, then use it to calculate duration
-    if (this.position.velocity != null
-      && this.position.start != null
-      && this.position.target != null
+    if (this.scale.velocity != null
+      && this.scale.target != null
+      && this.scale.start != null
     ) {
-      let { velocity } = this.position;
+      let { velocity } = this.scale;
       if (typeof velocity === 'number') {
         velocity = new Point(velocity, velocity);
       }
       this.duration = getMaxTimeFromVelocity(
-        new Transform().translate(this.position.start),
-        new Transform().translate(this.position.target),
-        new Transform().translate(velocity),
+        new Transform().scale(this.scale.start),
+        new Transform().scale(this.scale.target),
+        new Transform().scale(velocity),
       );
     }
   }
@@ -116,12 +109,8 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     // let next = delta._dup().constant(p);
 
     // next = start.add(delta.mul(next));
-    if (this.position.delta != null && this.position.start != null) {
-      const next = this.position.start.toDelta(
-        this.position.delta, p,
-        this.position.translationStyle,
-        this.position.translationOptions,
-      );
+    if (this.scale.start != null && this.scale.delta != null) {
+      const next = this.scale.start.toDelta(this.scale.delta, p);
       if (this.element != null) {
         this.element.setPosition(next);
       }
@@ -130,7 +119,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
 
   setToEnd() {
     if (this.element != null) {
-      this.element.setPosition(this.position.target);
+      this.element.setPosition(this.scale.target);
     }
   }
   // finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
@@ -159,7 +148,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
   // }
 
   _dup() {
-    const step = new PositionAnimationStep();
+    const step = new ScaleAnimationStep();
     duplicateFromTo(this, step, ['element']);
     step.element = this.element;
     return step;

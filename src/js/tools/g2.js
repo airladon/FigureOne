@@ -323,9 +323,15 @@ class Point {
   toDelta(
     delta: Point,
     percent: number,
-    translationStyle: 'linear' | 'curved',
+    translationStyle: 'linear' | 'curved' = 'linear',
     // eslint-disable-next-line no-use-before-define
-    translationOptions: pathOptionsType,
+    translationOptions: pathOptionsType = {
+      rot: 1,
+      magnitude: 0.5,
+      offset: 0.5,
+      controlPoint: null,
+      direction: '',
+    },
   ) {                 // eslint-disable-next-line no-use-before-define
     const pathPoint = translationPath(
       translationStyle,
