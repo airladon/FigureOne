@@ -60,6 +60,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
+  // Deprecate - move into moveTo
+  // allow scenarios in moveTo, MoveTransformTo, and MoveColor To?
   moveToScenario(
     ...optionsIn: Array<TypeTransformAnimationStepInputOptions & { scenario: string }>
   ) {
