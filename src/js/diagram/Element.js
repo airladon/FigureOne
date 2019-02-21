@@ -2211,6 +2211,7 @@ class DiagramElementPrimative extends DiagramElement {
       || this.state.isPulsing
       || this.state.isAnimatingColor
       || this.state.isAnimatingCustom
+      || this.animations.state === 'animating'
     ) {
       return true;
     }

@@ -16,24 +16,31 @@ const point = value => new Point(value, value);
 describe('Animation Manager', () => {
   let elem;
   let p1;
+  let diagram;
   beforeEach(() => {
-    const diagram = makeDiagram();
+    diagram = makeDiagram();
     elem = diagram.objects.line();
+    diagram.elements.add('elem', elem);
+    diagram.elements.show();
     elem.setPosition(new Point(0, 0));
     elem.setColor([1, 0, 0, 1]);
     p1 = new Point(1, 1);
   });
   test('Basic', () => {
+    // console.log(diagram.elements)
     elem.animations.new()
       .moveTo({ target: p1, duration: 1, progression: 'linear' })
       .start();
-    elem.animations.nextFrame(0);
+    diagram.draw(0);
+    // elem.animations.nextFrame(0);
     expect(elem.getPosition().round()).toEqual(point(0));
 
-    elem.animations.nextFrame(0.5);
+    // elem.animations.nextFrame(0.5);
+    diagram.draw(0.5);
     expect(elem.getPosition().round()).toEqual(point(0.5));
 
-    elem.animations.nextFrame(1.1);
+    // elem.animations.nextFrame(1.1);
+    diagram.draw(1.1);
     expect(elem.getPosition().round()).toEqual(point(1));
     expect(elem.animations.animations).toHaveLength(0);
   });

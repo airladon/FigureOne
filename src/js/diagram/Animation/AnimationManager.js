@@ -17,6 +17,7 @@ export type TypeAnimationManagerInputOptions = {
 export default class AnimationManager {
   element: ?DiagramElement;
   animations: Array<anim.AnimationStep>;
+  state: 'animating' | 'idle';
 
   constructor(
     elementOrOptionsIn: DiagramElement | TypeAnimationManagerInputOptions = {},
@@ -32,13 +33,16 @@ export default class AnimationManager {
     }
     this.element = options.element;
     this.animations = [];
+    this.state = 'idle';
     return this;
   }
 
   nextFrame(now: number) {
     const animationsToRemove = [];
     let remaining = -1;
+    let isAnimating = false;
     this.animations.forEach((animation, index) => {
+      let animationIsAnimating = false;
       if (animation.state === 'waitingToStart' || animation.state === 'animating') {
         const stepRemaining = animation.nextFrame(now);
         if (remaining === -1) {
@@ -47,11 +51,21 @@ export default class AnimationManager {
         if (stepRemaining < remaining) {
           remaining = stepRemaining;
         }
+        animationIsAnimating = true;
       }
       if (animation.state === 'finished' && animation.removeOnFinish) {
+        animationIsAnimating = false;
         animationsToRemove.push(index);
       }
+      if (animationIsAnimating) {
+        isAnimating = true;
+      }
     });
+    if (isAnimating) {
+      this.state = 'animating';
+    } else {
+      this.state = 'idle';
+    }
     for (let i = animationsToRemove.length - 1; i >= 0; i -= 1) {
       this.animations.splice(animationsToRemove[i], 1);
     }
