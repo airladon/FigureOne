@@ -87,6 +87,24 @@ describe('Transfrom Animation Unit', () => {
     step.start();
     expect(step.duration).toBe(6);
   });
+  test('Clip Rotation', () => {
+    const start = element.transform.zero();
+    const target = element.transform.constant(6.28);
+    const step = new TransformAnimationStep({
+      element,
+      type: 'transform',
+      start,
+      target,
+      clipRotationTo: '-180to180',
+      rotDirection: 1,
+      progression: 'linear',
+      duration: 1,
+    });
+    step.start();
+    step.nextFrame(0);
+    step.nextFrame(0.75);
+    expect(math.round(element.getRotation(), 2)).toBe(-3.14 / 2);
+  });
   test('Animation flow', () => {
     const start = element.transform.zero();
     const target = element.transform.constant(1);

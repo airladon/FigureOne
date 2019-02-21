@@ -53,7 +53,7 @@ describe('Animation Trigger', () => {
   test('Rotate counter clock wise', () => {
     elem1.animations.new()
       .rotateTo({
-        start: 1, target: 0, rotDirection: 1, duration: 1,
+        start: 1, target: 0, direction: 1, duration: 1,
       })
       .start();
 
@@ -64,7 +64,7 @@ describe('Animation Trigger', () => {
     expect(math.round(elem1.getRotation(), 2)).toBe(3.64);
 
     elem1.animations.nextFrame(1.0);
-    expect(math.round(elem1.getRotation(), 2)).toBe(0);
+    expect(math.round(elem1.getRotation(), 2)).toBe(6.28);
 
     elem1.animations.nextFrame(1.1);
     expect(math.round(elem1.getRotation(), 2)).toBe(0);
@@ -87,7 +87,7 @@ describe('Animation Trigger', () => {
   test('Rotate clip to -180to180', () => {
     elem1.animations.new()
       .rotateTo({
-        start: 0, target: 6.28, clipTo: '-180to180', duration: 1, rotDirection: 1, progression: 'linear',
+        start: 0, target: 6.28, clipTo: '-180to180', duration: 1, direction: 1, progression: 'linear',
       })
       .start();
     elem1.animations.nextFrame(0);

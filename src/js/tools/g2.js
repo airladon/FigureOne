@@ -40,6 +40,30 @@ function quadraticBezier(P0: number, P1: number, P2: number, t: number) {
   return (1 - t) * ((1 - t) * P0 + t * P1) + t * ((1 - t) * P1 + t * P2);
 }
 
+function clipAngle(
+  angleToClip: number,
+  clipTo: '0to360' | '-180to180' | null,
+) {
+  let angle = angleToClip;
+  if (clipTo === '0to360') {
+    if (angle < 0) {
+      angle += Math.PI * 2;
+    }
+    if (angle >= Math.PI * 2) {
+      angle -= Math.PI * 2;
+    }
+  }
+  if (clipTo === '-180to180') {
+    if (angle < -Math.PI) {
+      angle += Math.PI * 2;
+    }
+    if (angle >= Math.PI) {
+      angle -= Math.PI * 2;
+    }
+  }
+  return angle;
+}
+
 class Rect {
   left: number;
   top: number;
@@ -1158,6 +1182,14 @@ class Transform {
     return null;
   }
 
+  clipRotation(clipTo: '0to360' | '-180to180' | null) {
+    for (let i = 0; i < this.order.length; i += 1) {
+      if (this.order[i] instanceof Rotation) {
+        this.order[i].r = clipAngle(this.order[i].r, clipTo);
+      }
+    }
+  }
+
   updateTranslation(x: number | Point, yOrIndex: number = 0, index: number = 0) {
     let count = 0;
     let actualIndex = index;
@@ -1876,4 +1908,5 @@ export {
   getMaxTimeFromVelocity,
   getMoveTime,
   parsePoint,
+  clipAngle,
 };
