@@ -19,6 +19,7 @@ export type TypeTransformAnimationStepInputOptions = {
   translationStyle?: 'linear' | 'curved'; // default is linear
   translationOptions?: pathOptionsType;
   rotDirection: 0 | 1 | -1 | 2;
+  clipRotationTo: '0to360' | '-180to180' | null;
 } & TypeElementAnimationStepInputOptions;
 
 // A transform animation unit manages a transform animation on an element.
@@ -40,6 +41,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     translationStyle: 'linear' | 'curved';
     translationOptions: pathOptionsType;
     velocity: ?Transform;
+    clipRotationTo: '0to360' | '-180to180' | null;
   };
 
   constructor(...optionsIn: Array<TypeTransformAnimationStepInputOptions>) {
@@ -47,7 +49,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
       joinObjects({}, { type: 'transform' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
       'start', 'delta', 'target', 'rotDirection', 'translationStyle',
-      'translationOptions', 'velocity',
+      'translationOptions', 'velocity', 'clipRotationTo',
     ]);
     super(ElementAnimationStepOptionsIn);
     const defaultTransformOptions = {
@@ -64,13 +66,14 @@ export default class TransformAnimationStep extends ElementAnimationStep {
         direction: '',
       },
       velocity: null,
+      clipRotationTo: null,
     };
     const options = joinObjects({}, defaultTransformOptions, ...optionsIn);
     // $FlowFixMe
     this.transform = { translationOptions: {} };
     copyKeysFromTo(options, this.transform, [
       'start', 'delta', 'target', 'translationStyle',
-      'velocity', 'rotDirection',
+      'velocity', 'rotDirection', 'clipRotationTo',
     ]);
     duplicateFromTo(options.translationOptions, this.transform.translationOptions);
   }
@@ -139,6 +142,9 @@ export default class TransformAnimationStep extends ElementAnimationStep {
       this.transform.translationStyle,
       this.transform.translationOptions,
     );
+    if (this.transform.clipRotationTo !== null) {
+      next.clipRotation(this.transform.clipRotationTo);
+    }
     if (this.element != null) {
       this.element.setTransform(next);
     }
