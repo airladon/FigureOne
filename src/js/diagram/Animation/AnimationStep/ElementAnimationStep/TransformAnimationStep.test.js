@@ -30,10 +30,8 @@ describe('Transfrom Animation Unit', () => {
       type,
       progression,
       duration,
-      transform: {
-        start,
-        target,
-      },
+      start,
+      target,
       element,
     });
     expect(step.onFinish).toBe(onFinish);
@@ -49,11 +47,8 @@ describe('Transfrom Animation Unit', () => {
     const target = element.transform.constant(1);
     const step = new TransformAnimationStep({
       element,
-      type: 'transform',
-      transform: {
-        start,
-        target,
-      },
+      start,
+      target,
     });
     expect(step.transform.delta).toBe(null);
     expect(step.state).toBe('idle');
@@ -67,9 +62,7 @@ describe('Transfrom Animation Unit', () => {
     const step = new TransformAnimationStep({
       element,
       type: 'transform',
-      transform: {
-        delta,
-      },
+      delta,
     });
     expect(step.transform.start).toBe(null);
     expect(step.transform.target).toBe(null);
@@ -87,9 +80,9 @@ describe('Transfrom Animation Unit', () => {
     const step = new TransformAnimationStep({
       element,
       type: 'transform',
-      transform: {
-        start, target, velocity,
-      },
+      start,
+      target,
+      velocity,
     });
     step.start();
     expect(step.duration).toBe(6);
@@ -102,7 +95,8 @@ describe('Transfrom Animation Unit', () => {
       duration: 1,
       progression: 'linear',
       type: 'transform',
-      transform: { start, target },
+      start,
+      target,
     });
     step.start();
     expect(step.startTime).toBe(-1);
@@ -135,10 +129,8 @@ describe('Transfrom Animation Unit', () => {
       element,
       duration: 1,
       progression: 'linear',
-      transform: {
-        start,
-        target,
-      },
+      start,
+      target,
     });
     const dup = step._dup();
     expect(dup).toEqual(step);
@@ -158,7 +150,8 @@ describe('Transfrom Animation Unit', () => {
         duration: 1,
         progression: 'linear',
         type: 'transform',
-        transform: { start, target },
+        start,
+        target,
         onFinish: () => { callbackFlag = 1; },
       });
     });

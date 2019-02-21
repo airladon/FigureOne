@@ -4,21 +4,21 @@ import {
   Rotation, getDeltaAngle, getMaxTimeFromVelocity,
 } from '../../../../tools/g2';
 import type { pathOptionsType } from '../../../../tools/g2';
-import { joinObjects, duplicateFromTo } from '../../../../tools/tools';
+import {
+  joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
+} from '../../../../tools/tools';
 import type {
   TypeElementAnimationStepInputOptions,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 
 export type TypeTransformAnimationStepInputOptions = {
-  transform?: {
-    start?: Transform;      // default is element transform
-    target?: Transform;     // Either target or delta must be defined
-    delta?: Transform;      // delta overrides target if both are defined
-    translationStyle?: 'linear' | 'curved'; // default is linear
-    translationOptions?: pathOptionsType;
-    rotDirection: 0 | 1 | -1 | 2;
-  };
+  start?: Transform;      // default is element transform
+  target?: Transform;     // Either target or delta must be defined
+  delta?: Transform;      // delta overrides target if both are defined
+  translationStyle?: 'linear' | 'curved'; // default is linear
+  translationOptions?: pathOptionsType;
+  rotDirection: 0 | 1 | -1 | 2;
 } & TypeElementAnimationStepInputOptions;
 
 // A transform animation unit manages a transform animation on an element.
@@ -42,8 +42,14 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     velocity: ?Transform;
   };
 
-  constructor(optionsIn: TypeTransformAnimationStepInputOptions = {}) {
-    super(joinObjects({}, optionsIn, { type: 'transform' }));
+  constructor(...optionsIn: Array<TypeTransformAnimationStepInputOptions>) {
+    const ElementAnimationStepOptionsIn =
+      joinObjects({}, { type: 'transform' }, ...optionsIn);
+    deleteKeys(ElementAnimationStepOptionsIn, [
+      'start', 'delta', 'target', 'rotDirection', 'translationStyle',
+      'translationOptions', 'velocity',
+    ]);
+    super(joinObjects({}, { type: 'transform' }, ...optionsIn));
     const defaultTransformOptions = {
       start: null,
       target: null,
@@ -59,19 +65,14 @@ export default class TransformAnimationStep extends ElementAnimationStep {
       },
       velocity: null,
     };
-    let options = defaultTransformOptions;
-    if (optionsIn.transform != null) {
-      options = joinObjects({}, defaultTransformOptions, optionsIn.transform);
-    }
+    const options = joinObjects({}, defaultTransformOptions, ...optionsIn);
     // $FlowFixMe
-    this.transform = {};
-    this.transform.rotDirection = options.rotDirection;
-    this.transform.start = options.start;
-    this.transform.target = options.target;
-    this.transform.delta = options.delta;
-    this.transform.translationStyle = options.translationStyle;
-    this.transform.translationOptions = options.translationOptions;
-    this.transform.velocity = options.velocity;
+    this.transform = { translationOptions: {} };
+    copyKeysFromTo(options, this.transform, [
+      'start', 'delta', 'target', 'translationStyle',
+      'velocity', 'rotDirection',
+    ]);
+    duplicateFromTo(options.translationOptions, this.transform.translationOptions);
   }
 
   // On start, calculate the duration, target and delta if not already present.
