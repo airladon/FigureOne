@@ -1190,8 +1190,9 @@ class Transform {
 
   clipRotation(clipTo: '0to360' | '-180to180' | null) {
     for (let i = 0; i < this.order.length; i += 1) {
-      if (this.order[i] instanceof Rotation) {
-        this.order[i].r = clipAngle(this.order[i].r, clipTo);
+      const transformStep = this.order[i];
+      if (transformStep instanceof Rotation) {
+        transformStep.r = clipAngle(transformStep.r, clipTo);
       }
     }
   }

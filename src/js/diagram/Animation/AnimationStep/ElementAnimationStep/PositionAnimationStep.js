@@ -91,18 +91,16 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     }
 
     // If Velocity is defined, then use it to calculate duration
-    if (this.position.velocity != null
-      && this.position.start != null
-      && this.position.target != null
-    ) {
-      let { velocity } = this.position;
+    const { target, start, velocity } = this.position;
+    if (velocity != null && start != null && target != null) {
+      let velocityToUse = velocity
       if (typeof velocity === 'number') {
-        velocity = new Point(velocity, velocity);
+        velocityToUse = new Point(velocity, velocity);
       }
       this.duration = getMaxTimeFromVelocity(
-        new Transform().translate(this.position.start),
-        new Transform().translate(this.position.target),
-        new Transform().translate(velocity),
+        new Transform().translate(start),
+        new Transform().translate(target),
+        new Transform().translate(velocityToUse),
       );
     }
   }
