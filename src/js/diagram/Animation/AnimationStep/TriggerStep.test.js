@@ -43,7 +43,7 @@ describe('Animation Trigger', () => {
     expect(step.completeOnCancel).toBe(completeOnCancel);
   });
   test('Delay then move', () => {
-    elem1.anim.new()
+    elem1.animations.new()
       .delay(1)
       .trigger(trigger1)
       .moveTo({ target: new Point(1, 1), duration: 1, progression: 'linear' })
@@ -51,19 +51,19 @@ describe('Animation Trigger', () => {
       .delay(1)
       .start();
 
-    elem1.anim.nextFrame(0);
+    elem1.animations.nextFrame(0);
     expect(triggerFlag1).toBe(0);
     expect(triggerFlag2).toBe(0);
 
-    elem1.anim.nextFrame(0.5);
+    elem1.animations.nextFrame(0.5);
     expect(triggerFlag1).toBe(0);
     expect(triggerFlag2).toBe(0);
 
-    elem1.anim.nextFrame(1);
+    elem1.animations.nextFrame(1);
     expect(triggerFlag1).toBe(0);
     expect(triggerFlag2).toBe(0);
 
-    elem1.anim.nextFrame(1.01);
+    elem1.animations.nextFrame(1.01);
     expect(triggerFlag1).toBe(1);
     expect(triggerFlag2).toBe(0);
   });

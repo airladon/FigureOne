@@ -34,7 +34,7 @@ describe('Animation Examples', () => {
     callback = () => { callbackFlag = 1; };
     examples = {
       moveElementSimple: () => {
-        elem1.anim.new()
+        elem1.animations.new()
           .moveTo({ target: p1, duration: 1, progression: 'linear' })
           .moveTo({ target: p2, duration: 1, progression: 'linear' })
           .start();
@@ -42,7 +42,7 @@ describe('Animation Examples', () => {
       // Elements 1 and 2 move together in parallel for first second
       // Then just element 1 moves onward for another second
       moveElementsInParallel: () => {
-        elem1.anim.new()
+        elem1.animations.new()
           .inParallel({
             steps: [
               elem1.moveTo({ target: p1, duration: 1, progression: 'linear' }),
@@ -53,7 +53,7 @@ describe('Animation Examples', () => {
           .start();
       },
       moveElementsInParallelSimply: () => {
-        elem1.anim.new()
+        elem1.animations.new()
           .inParallel([
             elem1.moveTo({ target: p1, duration: 1, progression: 'linear' }),
             elem2.moveTo({ target: p1, duration: 1, progression: 'linear' }),
@@ -62,7 +62,7 @@ describe('Animation Examples', () => {
           .start();
       },
       animationCallbackStop: () => {
-        elem1.anim.new()
+        elem1.animations.new()
           .moveTo({ target: p1, duration: 1, progression: 'linear' })
           .moveTo({ target: p2, duration: 1, progression: 'linear' })
           .whenFinished(callback)
@@ -70,7 +70,7 @@ describe('Animation Examples', () => {
           .start();
       },
       animationCallbackComplete: () => {
-        elem1.anim.new()
+        elem1.animations.new()
           .moveTo({ target: p1, duration: 1, progression: 'linear' })
           .moveTo({ target: p2, duration: 1, progression: 'linear' })
           .whenFinished(callback)
@@ -78,7 +78,7 @@ describe('Animation Examples', () => {
           .start();
       },
       nesting: () => {
-        elem1.anim.new()
+        elem1.animations.new()
           // Only e1 moves to p1
           .moveTo({ target: p1, duration: 1, progression: 'linear' })
           // e1 moves to p2
@@ -113,49 +113,49 @@ describe('Animation Examples', () => {
   });
   test('Move Element Simple', () => {
     examples.moveElementSimple();
-    elem1.anim.nextFrame(100);
-    elem1.anim.nextFrame(100.1);
+    elem1.animations.nextFrame(100);
+    elem1.animations.nextFrame(100.1);
     expect(elem1.getPosition().round()).toEqual(point(0.1));
 
-    let remaining = elem1.anim.nextFrame(101.1);
+    let remaining = elem1.animations.nextFrame(101.1);
     expect(elem1.getPosition().round()).toEqual(point(1.1));
     expect(math.round(remaining)).toBe(0);
 
-    remaining = elem1.anim.nextFrame(102.1);
+    remaining = elem1.animations.nextFrame(102.1);
     expect(elem1.getPosition().round()).toEqual(point(2));
     expect(math.round(remaining)).toBe(0.1);
   });
   test('Parallel Step', () => {
     examples.moveElementsInParallel();
-    elem1.anim.nextFrame(100);
-    elem1.anim.nextFrame(100.1);
+    elem1.animations.nextFrame(100);
+    elem1.animations.nextFrame(100.1);
     expect(elem1.getPosition().round()).toEqual(point(0.1));
     expect(elem2.getPosition().round()).toEqual(point(0.1));
 
-    let remaining = elem1.anim.nextFrame(101.1);
+    let remaining = elem1.animations.nextFrame(101.1);
     expect(elem1.getPosition().round()).toEqual(point(1.1));
     expect(elem2.getPosition().round()).toEqual(point(1));
     expect(math.round(remaining)).toBe(0);
 
-    remaining = elem1.anim.nextFrame(102.1);
+    remaining = elem1.animations.nextFrame(102.1);
     expect(elem1.getPosition().round()).toEqual(point(2));
     expect(elem2.getPosition().round()).toEqual(point(1));
     expect(math.round(remaining)).toBe(0.1);
   });
   test('Parallel Step Simple', () => {
     examples.moveElementsInParallelSimply();
-    expect(elem1.anim.animations[0].steps[0].completeOnCancel).toBe(false);
-    elem1.anim.nextFrame(100);
-    elem1.anim.nextFrame(100.1);
+    expect(elem1.animations.animations[0].steps[0].completeOnCancel).toBe(false);
+    elem1.animations.nextFrame(100);
+    elem1.animations.nextFrame(100.1);
     expect(elem1.getPosition().round()).toEqual(point(0.1));
     expect(elem2.getPosition().round()).toEqual(point(0.1));
 
-    let remaining = elem1.anim.nextFrame(101.1);
+    let remaining = elem1.animations.nextFrame(101.1);
     expect(elem1.getPosition().round()).toEqual(point(1.1));
     expect(elem2.getPosition().round()).toEqual(point(1));
     expect(math.round(remaining)).toBe(0);
 
-    remaining = elem1.anim.nextFrame(102.1);
+    remaining = elem1.animations.nextFrame(102.1);
     expect(elem1.getPosition().round()).toEqual(point(2));
     expect(elem2.getPosition().round()).toEqual(point(1));
     expect(math.round(remaining)).toBe(0.1);
@@ -163,68 +163,68 @@ describe('Animation Examples', () => {
   test('Cancel, check callback and stop', () => {
     examples.animationCallbackStop();
     // console.log(elem1.animator)
-    elem1.anim.nextFrame(100);
-    elem1.anim.nextFrame(100.1);
+    elem1.animations.nextFrame(100);
+    elem1.animations.nextFrame(100.1);
     expect(elem1.getPosition().round()).toEqual(point(0.1));
     expect(callbackFlag).toBe(0);
 
-    elem1.anim.cancelAll();
+    elem1.animations.cancelAll();
     expect(callbackFlag).toBe(1);
     expect(elem1.getPosition().round()).toEqual(point(0.1));
   });
   test('Cancel, check callback and complete', () => {
     examples.animationCallbackComplete();
     // console.log(elem1.animator)
-    elem1.anim.nextFrame(100);
-    elem1.anim.nextFrame(100.1);
+    elem1.animations.nextFrame(100);
+    elem1.animations.nextFrame(100.1);
     expect(elem1.getPosition().round()).toEqual(point(0.1));
     expect(callbackFlag).toBe(0);
 
-    elem1.anim.cancelAll();
+    elem1.animations.cancelAll();
     expect(callbackFlag).toBe(1);
     expect(elem1.getPosition().round()).toEqual(point(2));
   });
   test('Nesting', () => {
     examples.nesting();
-    elem1.anim.nextFrame(0);
-    elem1.anim.nextFrame(0.5);
+    elem1.animations.nextFrame(0);
+    elem1.animations.nextFrame(0.5);
 
     expect(elem1.getPosition().round()).toEqual(point(0.5));
     expect(elem2.getPosition().round()).toEqual(point(0));
 
-    elem1.anim.nextFrame(1.5);
+    elem1.animations.nextFrame(1.5);
     expect(elem1.getPosition().round()).toEqual(point(1.5));
     expect(elem2.getPosition().round()).toEqual(point(0.5));
 
-    elem1.anim.nextFrame(2.4);
+    elem1.animations.nextFrame(2.4);
     expect(elem1.getPosition().round()).toEqual(point(1.6));
     expect(elem2.getPosition().round()).toEqual(point(1.4));
 
-    elem1.anim.nextFrame(3.5);
+    elem1.animations.nextFrame(3.5);
     expect(elem1.getPosition().round()).toEqual(point(1));
     expect(elem2.getPosition().round()).toEqual(point(2));
 
-    elem1.anim.nextFrame(4.5);
+    elem1.animations.nextFrame(4.5);
     expect(elem1.getPosition().round()).toEqual(point(1.5));
     expect(elem2.getPosition().round()).toEqual(point(2));
 
-    elem1.anim.nextFrame(4.9);
+    elem1.animations.nextFrame(4.9);
     expect(elem1.getPosition().round()).toEqual(point(1.9));
     expect(elem2.getPosition().round()).toEqual(point(2));
 
-    elem1.anim.nextFrame(5);
+    elem1.animations.nextFrame(5);
     expect(elem1.getPosition().round()).toEqual(point(2));
     expect(elem2.getPosition().round()).toEqual(point(2));
 
-    elem1.anim.nextFrame(5.5);
+    elem1.animations.nextFrame(5.5);
     expect(elem1.getPosition().round()).toEqual(point(1.5));
     expect(elem2.getPosition().round()).toEqual(point(2));
 
-    elem1.anim.nextFrame(6.5);
+    elem1.animations.nextFrame(6.5);
     expect(elem1.getPosition().round()).toEqual(point(1));
     expect(elem2.getPosition().round()).toEqual(point(1.5));
 
-    const remaining = elem1.anim.nextFrame(7.5);
+    const remaining = elem1.animations.nextFrame(7.5);
     expect(elem1.getPosition().round()).toEqual(point(1));
     expect(elem2.getPosition().round()).toEqual(point(1));
     expect(math.round(remaining)).toBe(remaining);

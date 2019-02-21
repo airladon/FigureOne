@@ -321,7 +321,7 @@ class DiagramElement {
       },
     };
     this.interactiveLocation = new Point(0, 0);
-    this.anim = new animations.AnimationManager(this);
+    this.animations = new animations.AnimationManager(this);
     // this.presetTransforms = {};
   }
 
@@ -2145,7 +2145,7 @@ class DiagramElementPrimative extends DiagramElement {
 
   draw(parentTransform: Transform = new Transform(), now: number = 0) {
     if (this.isShown) {
-      this.anim.nextFrame(now);
+      this.animations.nextFrame(now);
       this.setNextTransform(now);
       this.setNextColor(now);
       // set next color can end up hiding an element when disolving out
@@ -2406,7 +2406,7 @@ class DiagramElementCollection extends DiagramElement {
 
   draw(parentTransform: Transform = new Transform(), now: number = 0) {
     if (this.isShown) {
-      this.anim.nextFrame(now);
+      this.animations.nextFrame(now);
       this.setNextTransform(now);
       this.setNextColor(now);
       // set next color can end up hiding an element when disolving out

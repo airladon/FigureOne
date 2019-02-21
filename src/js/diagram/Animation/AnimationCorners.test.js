@@ -44,14 +44,14 @@ describe('Animation Corners', () => {
     // callback = () => { callbackFlag = 1; };
     examples = {
       timeSkipSimple: () => {
-        elem1.anim.new()
+        elem1.animations.new()
           .moveTo({ target: p1, duration: 1, progression: 'linear' })
           .moveTo({ target: p2, duration: 1, progression: 'linear' })
           .moveTo({ target: p1, duration: 1, progression: 'linear' })
           .start();
       },
       timeSkipNested: () => {
-        elem1.anim.new()
+        elem1.animations.new()
           .inParallel([
             inSerial([
               elem1.moveTo(target1), delay(1), elem1.moveTo(target2),
@@ -63,7 +63,7 @@ describe('Animation Corners', () => {
           .start();
       },
       timeSkipComplexNest: () => {
-        elem1.anim.new()
+        elem1.animations.new()
           // Only e1 moves to p1
           .moveTo({ target: p1, duration: 1, progression: 'linear' })
           // e1 moves to p2
@@ -99,27 +99,27 @@ describe('Animation Corners', () => {
   });
   test('Time skip 1 step', () => {
     examples.timeSkipSimple();
-    elem1.anim.nextFrame(0);
-    elem1.anim.nextFrame(1.5);
+    elem1.animations.nextFrame(0);
+    elem1.animations.nextFrame(1.5);
     expect(elem1.getPosition().round()).toEqual(point(1.5));
   });
   test('Time skip 2 steps', () => {
     examples.timeSkipSimple();
-    elem1.anim.nextFrame(0);
-    elem1.anim.nextFrame(2.4);
+    elem1.animations.nextFrame(0);
+    elem1.animations.nextFrame(2.4);
     expect(elem1.getPosition().round()).toEqual(point(1.6));
   });
   test('Time skip 2 steps in nest', () => {
     examples.timeSkipNested();
-    elem1.anim.nextFrame(0);
-    elem1.anim.nextFrame(2.4);
+    elem1.animations.nextFrame(0);
+    elem1.animations.nextFrame(2.4);
     expect(elem1.getPosition().round()).toEqual(point(1.4));
     expect(elem2.getPosition().round()).toEqual(point(1.4));
   });
   test('Time skip 2 parrallel nests', () => {
     examples.timeSkipComplexNest();
-    elem1.anim.nextFrame(0);
-    elem1.anim.nextFrame(5.5);
+    elem1.animations.nextFrame(0);
+    elem1.animations.nextFrame(5.5);
     expect(elem1.getPosition().round()).toEqual(point(1.5));
     expect(elem2.getPosition().round()).toEqual(point(2));
     expect(elem3.getPosition().round()).toEqual(point(1));

@@ -33,7 +33,7 @@ describe('Two Element Animation Examples', () => {
     animationCallback = jest.fn(() => {});
     examples = {
       simple: () => {
-        elem1.anim.new()
+        elem1.animations.new()
           .moveTo({ target: p1, duration: 1, progression: 'linear' })
           .delay(1)
           .move({
@@ -42,7 +42,7 @@ describe('Two Element Animation Examples', () => {
           .whenFinished(animationCallback)
           .ifCanceledThenComplete()
           .start();
-        ([animation] = elem1.anim.animations);
+        ([animation] = elem1.animations.animations);
       },
       complete: () => {
         // Single element move, complete
