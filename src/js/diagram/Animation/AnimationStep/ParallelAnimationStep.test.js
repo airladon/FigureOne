@@ -55,7 +55,7 @@ describe('Parallel Animation', () => {
       duration: duration1,
       progression: 'linear',
       type: 'transform',
-      transform: { target: target1 },
+      target: target1,
       onFinish: step1Callback,
     });
     step2 = new TransformAnimationStep({
@@ -63,7 +63,7 @@ describe('Parallel Animation', () => {
       duration: duration2,
       progression: 'linear',
       type: 'transform',
-      transform: { target: target2 },
+      target: target2,
       onFinish: step2Callback,
     });
     step3 = new TransformAnimationStep({
@@ -71,7 +71,7 @@ describe('Parallel Animation', () => {
       duration: duration3,
       progression: 'linear',
       type: 'transform',
-      transform: { target: target3 },
+      target: target3,
       onFinish: step3Callback,
     });
 

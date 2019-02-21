@@ -42,10 +42,8 @@ describe('Serial Animation', () => {
       duration: 1,
       progression: 'linear',
       type: 'transform',
-      transform: {
-        start: element.transform.zero(),
-        target: target1,
-      },
+      start: element.transform.zero(),
+      target: target1,
       onFinish: step1Callback,
     });
     step2 = new TransformAnimationStep({
@@ -53,7 +51,7 @@ describe('Serial Animation', () => {
       duration: 1,
       progression: 'linear',
       type: 'transform',
-      transform: { target: target2 },
+      target: target2,
       onFinish: step2Callback,
     });
     step3 = new TransformAnimationStep({
@@ -61,7 +59,7 @@ describe('Serial Animation', () => {
       duration: 1,
       progression: 'linear',
       type: 'transform',
-      transform: { target: target3 },
+      target: target3,
       onFinish: step3Callback,
     });
     serial = new SerialAnimationStep({

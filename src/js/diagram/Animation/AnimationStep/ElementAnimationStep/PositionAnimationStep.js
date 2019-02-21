@@ -54,11 +54,12 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     };
     const options = joinObjects({}, defaultPositionOptions, optionsIn);
     // $FlowFixMe
-    this.position = {};
+    this.position = { translationOptions: {} };
     copyKeysFromTo(options, this.position, [
-      'start', 'delta', 'target', 'translationStyle', 'translationOptions',
+      'start', 'delta', 'target', 'translationStyle',
       'velocity',
     ]);
+    duplicateFromTo(options.translationOptions, this.position.translationOptions);
   }
 
   // On start, calculate the duration, target and delta if not already present.

@@ -17,7 +17,7 @@ import { colorArrayToRGBA } from '../tools/color';
 
 import type {
   TypePositionAnimationStepInputOptions, TypeAnimationBuilderInputOptions,
-  TypeColorAnimationStepInputOptions,
+  TypeColorAnimationStepInputOptions, TypeTransformAnimationStepInputOptions,
 } from './Animation/Animation';
 import * as animations from './Animation/Animation';
 
@@ -721,6 +721,11 @@ class DiagramElement {
     return new animations.PositionAnimationStep(options);
   }
 
+  moveToTransform(...optionsIn: Array<TypeTransformAnimationStepInputOptions>) {
+    const options = joinObjects({}, { element: this }, ...optionsIn);
+    return new animations.TransformAnimationStep(options);
+  }
+
   dissolveIn(
     timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
     ...args: Array<TypeColorAnimationStepInputOptions>
@@ -751,6 +756,44 @@ class DiagramElement {
 
   animationBuilder(...optionsIn: Array<TypeAnimationBuilderInputOptions>) {
     return new animations.AnimationBuilder(this, ...optionsIn);
+  }
+
+  moveToScenario(
+    ...optionsIn: Array<TypeTransformAnimationStepInputOptions & { scenario: string }>
+  ) {
+    const defaultOptions = { element: this };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    if (options.scenario != null
+      && options.scenario in options.element.scenarios
+    ) {
+      const target = options.element.getScenarioTarget(options.scenario);
+      options.target = target;
+      options.delta = null;
+    }
+    return new animations.TransformAnimationStep(options);
+  }
+
+  moveToScenario_old(
+    scenarioName: string,
+    animationTimeOrVelocity: ?number = null,    // null uses velocity
+    callback: ?() => void = null,
+    rotDirection: -1 | 1 | 0 | 2 = 0,
+  ) {
+    this.stop();
+    const target = this.getScenarioTarget(scenarioName);
+    let time = 1;
+    const estimatedTime = this.getTimeToMoveToScenario(scenarioName, rotDirection);
+    if (animationTimeOrVelocity == null) {
+      time = estimatedTime;
+    } else {
+      time = animationTimeOrVelocity;
+    }
+    if (time > 0 && estimatedTime !== 0) {
+      this.animateTo(target, time, 0, rotDirection, callback);
+    } else if (callback != null) {
+      callback();
+    }
+    return time;
   }
 
   setColor(color: Array<number>) {
@@ -799,28 +842,7 @@ class DiagramElement {
     return time;
   }
 
-  moveToScenario(
-    scenarioName: string,
-    animationTimeOrVelocity: ?number = null,    // null uses velocity
-    callback: ?() => void = null,
-    rotDirection: -1 | 1 | 0 | 2 = 0,
-  ) {
-    this.stop();
-    const target = this.getScenarioTarget(scenarioName);
-    let time = 1;
-    const estimatedTime = this.getTimeToMoveToScenario(scenarioName, rotDirection);
-    if (animationTimeOrVelocity == null) {
-      time = estimatedTime;
-    } else {
-      time = animationTimeOrVelocity;
-    }
-    if (time > 0 && estimatedTime !== 0) {
-      this.animateTo(target, time, 0, rotDirection, callback);
-    } else if (callback != null) {
-      callback();
-    }
-    return time;
-  }
+  
 
   // Decelerate over some time when moving freely to get a new element
   // transform and movement velocity
