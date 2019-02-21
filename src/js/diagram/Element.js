@@ -716,8 +716,12 @@ class DiagramElement {
     }
   }
 
-  moveTo(optionsIn: TypePositionAnimationStepInputOptions) {
-    const options = joinObjects({}, optionsIn, { element: this });
+  moveTo(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
+    return this.moveToPosition(...optionsIn);
+  }
+
+  moveToPosition(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
+    const options = joinObjects({}, { element: this }, ...optionsIn);
     return new animations.PositionAnimationStep(options);
   }
 
@@ -763,38 +767,49 @@ class DiagramElement {
   ) {
     const defaultOptions = { element: this };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
-    if (options.scenario != null
-      && options.scenario in options.element.scenarios
+    if (options.target != null
+      && options.target in options.element.scenarios
     ) {
-      const target = options.element.getScenarioTarget(options.scenario);
+      const target = options.element.getScenarioTarget(options.target);
       options.target = target;
-      options.delta = null;
+    }
+    if (options.start != null
+      && options.start in options.element.scenarios
+    ) {
+      const start = options.element.getScenarioTarget(options.start);
+      options.start = start;
+    }
+    if (options.delta != null
+      && options.delta in options.element.scenarios
+    ) {
+      const delta = options.element.getScenarioTarget(options.delta);
+      options.delta = delta;
     }
     return new animations.TransformAnimationStep(options);
   }
 
-  moveToScenario_old(
-    scenarioName: string,
-    animationTimeOrVelocity: ?number = null,    // null uses velocity
-    callback: ?() => void = null,
-    rotDirection: -1 | 1 | 0 | 2 = 0,
-  ) {
-    this.stop();
-    const target = this.getScenarioTarget(scenarioName);
-    let time = 1;
-    const estimatedTime = this.getTimeToMoveToScenario(scenarioName, rotDirection);
-    if (animationTimeOrVelocity == null) {
-      time = estimatedTime;
-    } else {
-      time = animationTimeOrVelocity;
-    }
-    if (time > 0 && estimatedTime !== 0) {
-      this.animateTo(target, time, 0, rotDirection, callback);
-    } else if (callback != null) {
-      callback();
-    }
-    return time;
-  }
+  // moveToScenario_old(
+  //   scenarioName: string,
+  //   animationTimeOrVelocity: ?number = null,    // null uses velocity
+  //   callback: ?() => void = null,
+  //   rotDirection: -1 | 1 | 0 | 2 = 0,
+  // ) {
+  //   this.stop();
+  //   const target = this.getScenarioTarget(scenarioName);
+  //   let time = 1;
+  //   const estimatedTime = this.getTimeToMoveToScenario(scenarioName, rotDirection);
+  //   if (animationTimeOrVelocity == null) {
+  //     time = estimatedTime;
+  //   } else {
+  //     time = animationTimeOrVelocity;
+  //   }
+  //   if (time > 0 && estimatedTime !== 0) {
+  //     this.animateTo(target, time, 0, rotDirection, callback);
+  //   } else if (callback != null) {
+  //     callback();
+  //   }
+  //   return time;
+  // }
 
   setColor(color: Array<number>) {
     this.color = color.slice();

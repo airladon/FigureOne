@@ -93,10 +93,31 @@ export default class AnimationStep {
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  setToEnd() {
+  }
+
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
   finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
     // this.startTime = -2;
-    this.state = 'finished';
     // this.onFinish(false);
+    if (this.state === 'idle' || this.state === 'finished') {
+      return;
+    }
+    this.state = 'finished';
+
+    if (cancelled && force === 'complete') {
+      this.setToEnd();
+    }
+    if (cancelled && force == null && this.completeOnCancel === true) {
+      this.setToEnd();
+    }
+    if (cancelled === false) {
+      this.setToEnd();
+    }
+
+    if (this.onFinish != null) {
+      this.onFinish(cancelled);
+    }
   }
 
   cancel(force: ?'complete' | 'noComplete' = null) {

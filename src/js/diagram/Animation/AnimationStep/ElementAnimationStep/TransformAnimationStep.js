@@ -49,7 +49,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
       'start', 'delta', 'target', 'rotDirection', 'translationStyle',
       'translationOptions', 'velocity',
     ]);
-    super(joinObjects({}, { type: 'transform' }, ...optionsIn));
+    super(ElementAnimationStepOptionsIn);
     const defaultTransformOptions = {
       start: null,
       target: null,
@@ -144,30 +144,35 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     }
   }
 
-  finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
-    if (this.state === 'idle') {
-      return;
-    }
-    super.finish(cancelled, force);
-    const setToEnd = () => {
-      if (this.element != null) {
-        this.element.setTransform(this.transform.target);
-      }
-    };
-    if (cancelled && force === 'complete') {
-      setToEnd();
-    }
-    if (cancelled && force == null && this.completeOnCancel === true) {
-      setToEnd();
-    }
-    if (cancelled === false) {
-      setToEnd();
-    }
-
-    if (this.onFinish != null) {
-      this.onFinish(cancelled);
+  setToEnd() {
+    if (this.element != null) {
+      this.element.setTransform(this.transform.target);
     }
   }
+  // finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+  //   if (this.state === 'idle') {
+  //     return;
+  //   }
+  //   super.finish(cancelled, force);
+  //   const setToEnd = () => {
+  //     if (this.element != null) {
+  //       this.element.setTransform(this.transform.target);
+  //     }
+  //   };
+  //   if (cancelled && force === 'complete') {
+  //     setToEnd();
+  //   }
+  //   if (cancelled && force == null && this.completeOnCancel === true) {
+  //     setToEnd();
+  //   }
+  //   if (cancelled === false) {
+  //     setToEnd();
+  //   }
+
+  //   if (this.onFinish != null) {
+  //     this.onFinish(cancelled);
+  //   }
+  // }
 
   _dup() {
     const step = new TransformAnimationStep();

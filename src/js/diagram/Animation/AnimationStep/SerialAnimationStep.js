@@ -88,7 +88,8 @@ export class SerialAnimationStep extends AnimationStep {
     if (this.state === 'idle' || this.state === 'finished') {
       return;
     }
-    super.finish(cancelled, force);
+    // super.finish(cancelled, force);
+    this.state = 'finished';
     let forceToUse = null;
     if (this.completeOnCancel === true) {
       forceToUse = 'complete';

@@ -42,13 +42,17 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  moveTo(optionsIn: TypePositionAnimationStepInputOptions) {
+  moveToPosition(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
-      const options = joinObjects({}, defaultOptions, optionsIn);
+      const options = joinObjects({}, defaultOptions, ...optionsIn);
       this.then(new animation.PositionAnimationStep(options));
     }
     return this;
+  }
+
+  moveTo(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
+    return this.moveToPosition(...optionsIn);
   }
 
   moveToTransform(...optionsIn: Array<TypeTransformAnimationStepInputOptions>) {
@@ -60,8 +64,6 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  // Deprecate - move into moveTo
-  // allow scenarios in moveTo, MoveTransformTo, and MoveColor To?
   moveToScenario(
     ...optionsIn: Array<TypeTransformAnimationStepInputOptions & { scenario: string }>
   ) {
@@ -69,15 +71,6 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
       this.then(options.element.moveToScenario(options));
-    }
-    return this;
-  }
-
-  move(optionsIn: TypePositionAnimationStepInputOptions) {
-    if (this.element != null) {
-      const defaultOptions = { element: this.element };
-      const options = joinObjects({}, defaultOptions, optionsIn);
-      this.then(new animation.PositionAnimationStep(options));
     }
     return this;
   }

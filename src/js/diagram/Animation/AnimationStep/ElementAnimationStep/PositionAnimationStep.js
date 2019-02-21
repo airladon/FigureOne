@@ -30,9 +30,9 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     velocity: ?Point | number;
   };
 
-  constructor(optionsIn: TypePositionAnimationStepInputOptions = {}) {
+  constructor(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
     const ElementAnimationStepOptionsIn =
-      joinObjects({}, optionsIn, { type: 'position' });
+      joinObjects({}, { type: 'position' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
       'start', 'delta', 'target', 'translationStyle', 'translationOptions',
       'velocity',
@@ -52,7 +52,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       },
       velocity: null,
     };
-    const options = joinObjects({}, defaultPositionOptions, optionsIn);
+    const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
     // $FlowFixMe
     this.position = { translationOptions: {} };
     copyKeysFromTo(options, this.position, [
@@ -119,30 +119,35 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     }
   }
 
-  finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
-    if (this.state === 'idle') {
-      return;
-    }
-    super.finish(cancelled, force);
-    const setToEnd = () => {
-      if (this.element != null) {
-        this.element.setPosition(this.position.target);
-      }
-    };
-    if (cancelled && force === 'complete') {
-      setToEnd();
-    }
-    if (cancelled && force == null && this.completeOnCancel === true) {
-      setToEnd();
-    }
-    if (cancelled === false) {
-      setToEnd();
-    }
-
-    if (this.onFinish != null) {
-      this.onFinish(cancelled);
+  setToEnd() {
+    if (this.element != null) {
+      this.element.setPosition(this.position.target);
     }
   }
+  // finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+  //   if (this.state === 'idle') {
+  //     return;
+  //   }
+  //   super.finish(cancelled, force);
+  //   const setToEnd = () => {
+  //     if (this.element != null) {
+  //       this.element.setPosition(this.position.target);
+  //     }
+  //   };
+  //   if (cancelled && force === 'complete') {
+  //     setToEnd();
+  //   }
+  //   if (cancelled && force == null && this.completeOnCancel === true) {
+  //     setToEnd();
+  //   }
+  //   if (cancelled === false) {
+  //     setToEnd();
+  //   }
+
+  //   if (this.onFinish != null) {
+  //     this.onFinish(cancelled);
+  //   }
+  // }
 
   _dup() {
     const step = new PositionAnimationStep();
