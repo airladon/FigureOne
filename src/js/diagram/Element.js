@@ -16,7 +16,7 @@ import { duplicateFromTo, joinObjects } from '../tools/tools';
 import { colorArrayToRGBA } from '../tools/color';
 
 import type {
-  TypePositionAnimationStepInputOptions, TypeAnimatorInputOptions,
+  TypePositionAnimationStepInputOptions, TypeAnimationBuilderInputOptions,
   TypeColorAnimationStepInputOptions,
 } from './Animation/Animation';
 import * as animations from './Animation/Animation';
@@ -201,7 +201,6 @@ class DiagramElement {
     },
   };
 
-  // animator: animations.Animator;
   anim: animations.AnimationManager;
 
   pulse: Object;                  // Pulse animation state
@@ -322,7 +321,6 @@ class DiagramElement {
       },
     };
     this.interactiveLocation = new Point(0, 0);
-    // this.animator = new animations.Animator(this);
     this.anim = new animations.AnimationManager(this);
     // this.presetTransforms = {};
   }
@@ -751,8 +749,8 @@ class DiagramElement {
     return new animations.DissolveOutAnimationStep(options);
   }
 
-  sequence(...optionsIn: Array<TypeAnimatorInputOptions>) {
-    return new animations.Animator(this, ...optionsIn);
+  sequence(...optionsIn: Array<TypeAnimationBuilderInputOptions>) {
+    return new animations.AnimationBuilder(this, ...optionsIn);
   }
 
 

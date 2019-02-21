@@ -12,18 +12,16 @@ import type {
 import * as animation from './Animation';
 import { joinObjects, duplicateFromTo } from '../../tools/tools';
 
-export type TypeAnimatorInputOptions = {
+export type TypeAnimationBuilderInputOptions = {
   element?: DiagramElement;
-  name?: ?string;
-  resetOnFinish?: boolean;
 } & TypeSerialAnimationStepInputOptions;
 
-export default class Animator extends animation.SerialAnimationStep {
+export default class AnimationBuilder extends animation.SerialAnimationStep {
   element: ?DiagramElement;
 
   constructor(
-    elementOrOptionsIn: DiagramElement | TypeAnimatorInputOptions = {},
-    ...optionsIn: Array<TypeAnimatorInputOptions>
+    elementOrOptionsIn: DiagramElement | TypeAnimationBuilderInputOptions = {},
+    ...optionsIn: Array<TypeAnimationBuilderInputOptions>
   ) {
     const defaultOptions = {};
     let options;
@@ -132,13 +130,6 @@ export default class Animator extends animation.SerialAnimationStep {
     return this;
   }
 
-  // When an animator stops, it is reset
-  finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
-    super.finish(cancelled, force);
-    // if (this.resetOnFinish) {
-    //   this.steps = [];
-    // }
-  }
 
   reset() {
     this.steps = [];
@@ -146,9 +137,9 @@ export default class Animator extends animation.SerialAnimationStep {
   }
 
   _dup() {
-    const animator = new Animator();
-    duplicateFromTo(this, animator, ['element']);
-    animator.element = this.element;
-    return animator;
+    const newBuilder = new AnimationBuilder();
+    duplicateFromTo(this, newBuilder, ['element']);
+    newBuilder.element = this.element;
+    return newBuilder;
   }
 }
