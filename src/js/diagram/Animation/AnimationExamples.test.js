@@ -4,7 +4,7 @@ import {
 import * as tools from '../../tools/tools';
 import * as math from '../../tools/math';
 import makeDiagram from '../../__mocks__/makeDiagram';
-import { inSerial, delay }from './Animation';
+import { inSerial, delay } from './Animation';
 
 tools.isTouchDevice = jest.fn();
 
