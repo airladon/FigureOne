@@ -1,9 +1,7 @@
 // @flow
 import {
-  Transform,
-  Rotation, getDeltaAngle, getMaxTimeFromVelocity,
+  Transform, getDeltaAngle, getMaxTimeFromVelocity,
 } from '../../../../tools/g2';
-import type { pathOptionsType } from '../../../../tools/g2';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
@@ -16,7 +14,9 @@ export type TypeRotationAnimationStepInputOptions = {
   start?: number;      // default is element transform
   target?: number;     // Either target or delta must be defined
   delta?: number;      // delta overrides target if both are defined
+  // 1 is CCW, -1 is CW, 0 is fastest, 2 is not through 0
   rotDirection: 0 | 1 | -1 | 2;
+  clipTo: '0to360' | '-180to180' | null;
 } & TypeElementAnimationStepInputOptions;
 
 // A transform animation unit manages a transform animation on an element.
@@ -36,13 +36,14 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     target: number;
     rotDirection: 0 | 1 | -1 | 2;
     velocity: ?number;
+    clipTo: '360' | 'plusMinus180' | null;
   };
 
   constructor(...optionsIn: Array<TypeRotationAnimationStepInputOptions>) {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, { type: 'rotation' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
-      'start', 'delta', 'target', 'rotDirection', 'velocity',
+      'start', 'delta', 'target', 'rotDirection', 'velocity', 'clipTo',
     ]);
     super(ElementAnimationStepOptionsIn);
     const defaultTransformOptions = {
@@ -51,12 +52,13 @@ export default class RotationAnimationStep extends ElementAnimationStep {
       delta: null,
       rotDirection: 0,
       velocity: null,
+      clipTo: '0to360',
     };
     const options = joinObjects({}, defaultTransformOptions, ...optionsIn);
     // $FlowFixMe
     this.rotation = {};
     copyKeysFromTo(options, this.rotation, [
-      'start', 'delta', 'target', 'velocity', 'rotDirection',
+      'start', 'delta', 'target', 'velocity', 'rotDirection', 'clipTo'
     ]);
   }
 
@@ -100,27 +102,44 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     }
   }
 
+  clipRotation(r: number) {
+    let rotation = r;
+    if (this.rotation.clipTo === '0to360') {
+      if (rotation < 0) {
+        rotation += Math.PI * 2;
+      }
+      if (rotation >= Math.PI * 2) {
+        rotation -= Math.PI * 2;
+      }
+    }
+    if (this.rotation.clipTo === '-180to180') {
+      if (rotation < -Math.PI) {
+        rotation += Math.PI * 2;
+      }
+      if (rotation >= Math.PI) {
+        rotation -= Math.PI * 2;
+      }
+    }
+    return rotation;
+  }
+
   setFrame(deltaTime: number) {
-    // const start = phase.startTransform._dup();
-    // const delta = phase.deltaTransform._dup();
     const percentTime = deltaTime / this.duration;
     const percentComplete = this.progression(percentTime);
     const p = percentComplete;
-    // let next = delta._dup().constant(p);
 
-    // next = start.add(delta.mul(next));
-    const nextR = this.rotation.start + this.rotation.delta * p;
+    let nextR = this.rotation.start + this.rotation.delta * p;
+    nextR = this.clipRotation(nextR);
     const { element } = this;
     if (element != null) {
-      element.transform.updateRotation(nextR);
-      element.setTransformCallback(element.transform);
+      element.setRotation(nextR);
     }
   }
 
   setToEnd() {
     const { element } = this;
     if (element != null) {
-      element.transform.updateRotation(this.rotation.target);
+      element.transform.updateRotation(this.clipRotation(this.rotation.target));
       element.setTransformCallback(element.transform);
     }
   }
