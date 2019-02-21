@@ -93,7 +93,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     // If Velocity is defined, then use it to calculate duration
     const { target, start, velocity } = this.position;
     if (velocity != null && start != null && target != null) {
-      let velocityToUse = velocity
+      let velocityToUse = velocity;
       if (typeof velocity === 'number') {
         velocityToUse = new Point(velocity, velocity);
       }
@@ -106,14 +106,10 @@ export default class PositionAnimationStep extends ElementAnimationStep {
   }
 
   setFrame(deltaTime: number) {
-    // const start = phase.startTransform._dup();
-    // const delta = phase.deltaTransform._dup();
     const percentTime = deltaTime / this.duration;
     const percentComplete = this.progression(percentTime);
     const p = percentComplete;
-    // let next = delta._dup().constant(p);
 
-    // next = start.add(delta.mul(next));
     if (this.position.delta != null && this.position.start != null) {
       const next = this.position.start.toDelta(
         this.position.delta, p,
@@ -131,30 +127,6 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       this.element.setPosition(this.position.target);
     }
   }
-  // finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
-  //   if (this.state === 'idle') {
-  //     return;
-  //   }
-  //   super.finish(cancelled, force);
-  //   const setToEnd = () => {
-  //     if (this.element != null) {
-  //       this.element.setPosition(this.position.target);
-  //     }
-  //   };
-  //   if (cancelled && force === 'complete') {
-  //     setToEnd();
-  //   }
-  //   if (cancelled && force == null && this.completeOnCancel === true) {
-  //     setToEnd();
-  //   }
-  //   if (cancelled === false) {
-  //     setToEnd();
-  //   }
-
-  //   if (this.onFinish != null) {
-  //     this.onFinish(cancelled);
-  //   }
-  // }
 
   _dup() {
     const step = new PositionAnimationStep();
