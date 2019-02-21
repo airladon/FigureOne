@@ -18,6 +18,7 @@ import { colorArrayToRGBA } from '../tools/color';
 import type {
   TypePositionAnimationStepInputOptions, TypeAnimationBuilderInputOptions,
   TypeColorAnimationStepInputOptions, TypeTransformAnimationStepInputOptions,
+  TypeRotationAnimationStepInputOptions,
 } from './Animation/Animation';
 import * as animations from './Animation/Animation';
 
@@ -491,6 +492,18 @@ class DiagramElement {
     this.setTransform(currentTransform);
   }
 
+  setRotation(rotation: number) {
+    const currentTransform = this.transform._dup();
+    currentTransform.updateRotation(rotation);
+    this.setTransform(currentTransform);
+  }
+
+  setScale(scale: number) {
+    const currentTransform = this.transform._dup();
+    currentTransform.updateScale(scale);
+    this.setTransform(currentTransform);
+  }
+
   // Use this method to set the element's transform in case a callback has been
   // connected that is tied to an update of the transform.
   setTransform(transform: Transform): void {
@@ -714,6 +727,11 @@ class DiagramElement {
       //   console.log(now, this.color[3])
       // }
     }
+  }
+
+  rotateTo(...optionsIn: Array<TypeRotationAnimationStepInputOptions>) {
+    const options = joinObjects({}, { element: this }, ...optionsIn);
+    return new animations.RotationAnimationStep(options);
   }
 
   moveTo(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
@@ -1838,6 +1856,24 @@ class DiagramElement {
       position = t._dup();
     }
     return position;
+  }
+
+  getScale() {
+    const s = this.transform.s();
+    let scale = new Point(0, 0);
+    if (s != null) {
+      scale = s._dup();
+    }
+    return scale;
+  }
+
+  getRotation() {
+    const r = this.transform.r();
+    let rotation = 0;
+    if (r != null) {
+      rotation = r;
+    }
+    return rotation;
   }
 
   getVertexSpaceDiagramPosition(vertexSpacePoint: Point) {
