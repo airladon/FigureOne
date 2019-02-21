@@ -90,7 +90,7 @@ describe('Animation Examples', () => {
           // e1 moves to p1, delays 1, moves to p2
           // e2 moves to p2
           .inParallel([
-            elem1.sequence()
+            elem1.animationBuilder()
               .moveTo({ target: p1, duration: 1, progression: 'linear' })
               .delay(1)
               .moveTo({ target: p2, duration: 1, progression: 'linear' }),
@@ -144,7 +144,7 @@ describe('Animation Examples', () => {
   });
   test('Parallel Step Simple', () => {
     examples.moveElementsInParallelSimply();
-    expect(elem1.anim.sequences[0].steps[0].completeOnCancel).toBe(false);
+    expect(elem1.anim.animations[0].steps[0].completeOnCancel).toBe(false);
     elem1.anim.nextFrame(100);
     elem1.anim.nextFrame(100.1);
     expect(elem1.getPosition().round()).toEqual(point(0.1));

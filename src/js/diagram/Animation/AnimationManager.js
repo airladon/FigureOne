@@ -7,7 +7,7 @@ import { DiagramElement } from '../Element';
 //   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
 //   TypeColorAnimationStepInputOptions, TypeCustomAnimationStepInputOptions,
 // } from './Animation';
-import * as animation from './Animation';
+import * as anim from './Animation';
 import { joinObjects, duplicateFromTo } from '../../tools/tools';
 
 export type TypeAnimationManagerInputOptions = {
@@ -16,7 +16,7 @@ export type TypeAnimationManagerInputOptions = {
 
 export default class AnimationManager {
   element: ?DiagramElement;
-  sequences: Array<animation.AnimationStep>;
+  animations: Array<anim.AnimationStep>;
 
   constructor(
     elementOrOptionsIn: DiagramElement | TypeAnimationManagerInputOptions = {},
@@ -31,16 +31,16 @@ export default class AnimationManager {
       options = joinObjects({}, defaultOptions, elementOrOptionsIn, ...optionsIn);
     }
     this.element = options.element;
-    this.sequences = [];
+    this.animations = [];
     return this;
   }
 
   nextFrame(now: number) {
-    const sequencesToRemove = [];
+    const animationsToRemove = [];
     let remaining = -1;
-    this.sequences.forEach((sequence, index) => {
-      if (sequence.state === 'waitingToStart' || sequence.state === 'animating') {
-        const stepRemaining = sequence.nextFrame(now);
+    this.animations.forEach((animation, index) => {
+      if (animation.state === 'waitingToStart' || animation.state === 'animating') {
+        const stepRemaining = animation.nextFrame(now);
         if (remaining === -1) {
           remaining = stepRemaining;
         }
@@ -48,45 +48,45 @@ export default class AnimationManager {
           remaining = stepRemaining;
         }
       }
-      if (sequence.state === 'finished' && sequence.removeOnFinish) {
-        sequencesToRemove.push(index);
+      if (animation.state === 'finished' && animation.removeOnFinish) {
+        animationsToRemove.push(index);
       }
     });
-    for (let i = sequencesToRemove.length - 1; i >= 0; i -= 1) {
-      this.sequences.splice(sequencesToRemove[i], 1);
+    for (let i = animationsToRemove.length - 1; i >= 0; i -= 1) {
+      this.animations.splice(animationsToRemove[i], 1);
     }
     return remaining;
   }
 
-  // Cancel all primary sequences with the name
-  // Sequences will be cleaned up on next frame
+  // Cancel all primary animations with the name
+  // animations will be cleaned up on next frame
   cancel(name: string, force: ?'complete' | 'noComplete' = null) {
-    for (let i = 0; i < this.sequences.length; i += 1) {
-      const sequence = this.sequences[i];
-      if (sequence.name === name) {
-        sequence.cancel(force);
+    for (let i = 0; i < this.animations.length; i += 1) {
+      const animation = this.animations[i];
+      if (animation.name === name) {
+        animation.cancel(force);
       }
     }
   }
 
   cancelAll(force: ?'complete' | 'noComplete' = null) {
-    for (let i = 0; i < this.sequences.length; i += 1) {
-      this.sequences[i].cancel(force);
+    for (let i = 0; i < this.animations.length; i += 1) {
+      this.animations[i].cancel(force);
     }
   }
 
-  // Cancel all primary sequences with the name
-  // Sequences will be cleaned up on next frame
+  // Cancel all primary animations with the name
+  // animations will be cleaned up on next frame
   start(name: string) {
-    for (let i = 0; i < this.sequences.length; i += 1) {
-      const sequence = this.sequences[i];
-      if (sequence.name === name) {
-        sequence.start();
+    for (let i = 0; i < this.animations.length; i += 1) {
+      const animation = this.animations[i];
+      if (animation.name === name) {
+        animation.start();
       }
     }
   }
 
-  new(nameOrStep: ?string | animation.AnimationStep) {
+  new(nameOrStep: ?string | anim.AnimationStep) {
     if (typeof nameOrStep === 'string' || nameOrStep == null) {
       const options = {};
       if (this.element != null) {
@@ -95,12 +95,12 @@ export default class AnimationManager {
       if (nameOrStep != null) {
         options.name = nameOrStep;
       }
-      const sequence = new animation.AnimationBuilder(options);
-      this.sequences.push(sequence);
-      return sequence;
+      const animation = new anim.AnimationBuilder(options);
+      this.animations.push(animation);
+      return animation;
     }
     if (nameOrStep != null) {
-      this.sequences.push(nameOrStep);
+      this.animations.push(nameOrStep);
     }
     return nameOrStep;
   }

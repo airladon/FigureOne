@@ -36,7 +36,7 @@ describe('Animation Manager', () => {
 
     elem.anim.nextFrame(1.1);
     expect(elem.getPosition().round()).toEqual(point(1));
-    expect(elem.anim.sequences).toHaveLength(0);
+    expect(elem.anim.animations).toHaveLength(0);
   });
   test('Two parallel animations', () => {
     elem.anim.new()
@@ -53,18 +53,18 @@ describe('Animation Manager', () => {
     expect(elem.getPosition().round()).toEqual(point(0.5));
     expect(math.round(elem.color, 2)).toEqual([1, 0, 0, 0.75]);
     expect(elem.isShown).toBe(true);
-    expect(elem.anim.sequences).toHaveLength(2);
+    expect(elem.anim.animations).toHaveLength(2);
 
     elem.anim.nextFrame(1.5);
     expect(elem.getPosition().round()).toEqual(point(1));
     expect(math.round(elem.color, 2)).toEqual([1, 0, 0, 0.25]);
-    expect(elem.anim.sequences).toHaveLength(1);
+    expect(elem.anim.animations).toHaveLength(1);
 
     elem.anim.nextFrame(2.1);
     expect(elem.getPosition().round()).toEqual(point(1));
     expect(math.round(elem.color, 2)).toEqual([1, 0, 0, 1]);
     expect(elem.isShown).toBe(false);
-    expect(elem.anim.sequences).toHaveLength(0);
+    expect(elem.anim.animations).toHaveLength(0);
   });
   test('Two parallel animations with one not a sequence', () => {
     elem.anim.new()
@@ -81,17 +81,17 @@ describe('Animation Manager', () => {
     expect(elem.getPosition().round()).toEqual(point(0.5));
     expect(math.round(elem.color, 2)).toEqual([1, 0, 0, 0.75]);
     expect(elem.isShown).toBe(true);
-    expect(elem.anim.sequences).toHaveLength(2);
+    expect(elem.anim.animations).toHaveLength(2);
 
     elem.anim.nextFrame(1.5);
     expect(elem.getPosition().round()).toEqual(point(1));
     expect(math.round(elem.color, 2)).toEqual([1, 0, 0, 0.25]);
-    expect(elem.anim.sequences).toHaveLength(1);
+    expect(elem.anim.animations).toHaveLength(1);
 
     elem.anim.nextFrame(2.1);
     expect(elem.getPosition().round()).toEqual(point(1));
     expect(math.round(elem.color, 2)).toEqual([1, 0, 0, 1]);
     expect(elem.isShown).toBe(false);
-    expect(elem.anim.sequences).toHaveLength(0);
+    expect(elem.anim.animations).toHaveLength(0);
   });
 });
