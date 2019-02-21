@@ -33,7 +33,7 @@ describe('Animator API', () => {
     animatorCallback = jest.fn(() => {});
     examples = {
       simple: () => {
-        elem1.animator
+        elem1.anim.new()
           .moveTo({ target: p1, duration: 1, progression: 'linear' })
           .delay(1)
           .move({
@@ -42,6 +42,7 @@ describe('Animator API', () => {
           .whenFinished(animatorCallback)
           .ifCanceledThenComplete()
           .start();
+        ([animator] = elem1.anim.sequences);
       },
       complete: () => {
         // Single element move, complete
@@ -71,7 +72,6 @@ describe('Animator API', () => {
       },
     };
     tester = () => {
-      examples.complete();
       expect(animatorCallback.mock.calls.length).toBe(0);
       expect(elem1.getPosition().round()).toEqual(p0);
       expect(elem2.getPosition().round()).toEqual(p0);

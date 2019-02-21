@@ -201,7 +201,8 @@ class DiagramElement {
     },
   };
 
-  animator: animations.Animator;
+  // animator: animations.Animator;
+  anim: animations.AnimationManager;
 
   pulse: Object;                  // Pulse animation state
 
@@ -321,7 +322,7 @@ class DiagramElement {
       },
     };
     this.interactiveLocation = new Point(0, 0);
-    this.animator = new animations.Animator(this);
+    // this.animator = new animations.Animator(this);
     this.anim = new animations.AnimationManager(this);
     // this.presetTransforms = {};
   }
@@ -2147,9 +2148,7 @@ class DiagramElementPrimative extends DiagramElement {
 
   draw(parentTransform: Transform = new Transform(), now: number = 0) {
     if (this.isShown) {
-      if (this.animator.state === 'waitingToStart' || this.animator.state === 'animating') {
-        this.animator.nextFrame(now);
-      }
+      this.anim.nextFrame(now);
       this.setNextTransform(now);
       this.setNextColor(now);
       // set next color can end up hiding an element when disolving out
@@ -2410,9 +2409,7 @@ class DiagramElementCollection extends DiagramElement {
 
   draw(parentTransform: Transform = new Transform(), now: number = 0) {
     if (this.isShown) {
-      if (this.animator.state === 'waitingToStart' || this.animator.state === 'animating') {
-        this.animator.nextFrame(now);
-      }
+      this.anim.nextFrame(now);
       this.setNextTransform(now);
       this.setNextColor(now);
       // set next color can end up hiding an element when disolving out
