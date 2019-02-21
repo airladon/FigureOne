@@ -84,18 +84,19 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
     }
 
     // If Velocity is defined, then use it to calculate duration
-    if (this.scale.velocity != null
-      && this.scale.target != null
-      && this.scale.start != null
+    const { target, start, velocity } = this.scale;
+    if (velocity != null
+      && target != null
+      && start != null
     ) {
-      let { velocity } = this.scale;
+      let velocityToUse = velocity;
       if (typeof velocity === 'number') {
-        velocity = new Point(velocity, velocity);
+        velocityToUse = new Point(velocity, velocity);
       }
       this.duration = getMaxTimeFromVelocity(
-        new Transform().scale(this.scale.start),
-        new Transform().scale(this.scale.target),
-        new Transform().scale(velocity),
+        new Transform().scale(start),
+        new Transform().scale(target),
+        new Transform().scale(velocityToUse),
       );
     }
   }
