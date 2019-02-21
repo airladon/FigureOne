@@ -79,6 +79,6 @@ docker_run "Dev Flow Packaging" npm run flowcopysource
 
 echo "${bold}${cyan}================= Copying Files to Dev ===================${reset}"
 rm -rf $DEV_FIGUREONE/*
-cp -r package/* $DEV_FIGUREONE/
+cp -r package $DEV_FIGUREONE/
 cp package/index.js $DEV_STATIC/
 cp package/index.js.map $DEV_STATIC/
