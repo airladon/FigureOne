@@ -24,7 +24,7 @@ export class DelayStep extends AnimationStep {
       options = joinObjects({}, defaultOptions, numOrOptionsIn, ...args);
     }
     super(options);
-    this.duration = options.duration;
+    // this.duration = options.duration;
   }
 
   _dup() {
