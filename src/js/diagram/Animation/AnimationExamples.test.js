@@ -14,7 +14,7 @@ jest.mock('../DrawContext2D');
 
 const point = value => new Point(value, value);
 
-describe('Animator API', () => {
+describe('Animation Examples', () => {
   let elem1;
   let elem2;
   let examples;
@@ -61,7 +61,7 @@ describe('Animator API', () => {
           .moveTo({ target: p2, duration: 1, progression: 'linear' })
           .start();
       },
-      animatorCallbackStop: () => {
+      animationCallbackStop: () => {
         elem1.anim.new()
           .moveTo({ target: p1, duration: 1, progression: 'linear' })
           .moveTo({ target: p2, duration: 1, progression: 'linear' })
@@ -69,7 +69,7 @@ describe('Animator API', () => {
           .ifCanceledThenStop()
           .start();
       },
-      animatorCallbackComplete: () => {
+      animationCallbackComplete: () => {
         elem1.anim.new()
           .moveTo({ target: p1, duration: 1, progression: 'linear' })
           .moveTo({ target: p2, duration: 1, progression: 'linear' })
@@ -161,7 +161,7 @@ describe('Animator API', () => {
     expect(math.round(remaining)).toBe(0.1);
   });
   test('Cancel, check callback and stop', () => {
-    examples.animatorCallbackStop();
+    examples.animationCallbackStop();
     // console.log(elem1.animator)
     elem1.anim.nextFrame(100);
     elem1.anim.nextFrame(100.1);
@@ -173,7 +173,7 @@ describe('Animator API', () => {
     expect(elem1.getPosition().round()).toEqual(point(0.1));
   });
   test('Cancel, check callback and complete', () => {
-    examples.animatorCallbackComplete();
+    examples.animationCallbackComplete();
     // console.log(elem1.animator)
     elem1.anim.nextFrame(100);
     elem1.anim.nextFrame(100.1);

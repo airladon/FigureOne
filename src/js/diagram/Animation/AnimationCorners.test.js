@@ -14,7 +14,7 @@ jest.mock('../DrawContext2D');
 
 const point = value => new Point(value, value);
 
-describe('Animator API', () => {
+describe('Animation Corners', () => {
   let elem1;
   let elem2;
   let elem3;

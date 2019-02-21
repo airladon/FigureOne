@@ -64,11 +64,11 @@ import type {
 } from './AnimationManager';
 import AnimationManager from './AnimationManager';
 
-import type { TypeAnimatorInputOptions } from './Animator';
-import Animator from './Animator';
+import type { TypeAnimationBuilderInputOptions } from './AnimationBuilder';
+import AnimationBuilder from './AnimationBuilder';
 
 export type {
-  TypePositionAnimationStepInputOptions, TypeAnimatorInputOptions,
+  TypePositionAnimationStepInputOptions, TypeAnimationBuilderInputOptions,
   TypeParallelAnimationStepInputOptions, TypeSerialAnimationStepInputOptions,
   TypeTransformAnimationStepInputOptions, TypeAnimationStepInputOptions,
   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
@@ -76,7 +76,7 @@ export type {
   TypeAnimationManagerInputOptions,
 };
 export {
-  PositionAnimationStep, Animator, ParallelAnimationStep, SerialAnimationStep,
+  PositionAnimationStep, AnimationBuilder, ParallelAnimationStep, SerialAnimationStep,
   TransformAnimationStep, AnimationStep, DelayStep, TriggerStep,
   inParallel, inSerial, trigger, delay, ColorAnimationStep,
   DissolveInAnimationStep, dissolveIn, DissolveOutAnimationStep, dissolveOut,

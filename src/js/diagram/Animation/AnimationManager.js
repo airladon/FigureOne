@@ -95,7 +95,7 @@ export default class AnimationManager {
       if (nameOrStep != null) {
         options.name = nameOrStep;
       }
-      const sequence = new animation.Animator(options);
+      const sequence = new animation.AnimationBuilder(options);
       this.sequences.push(sequence);
       return sequence;
     }

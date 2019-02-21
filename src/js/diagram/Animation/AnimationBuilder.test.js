@@ -1,4 +1,4 @@
-import Animator from './Animator';
+import AnimationBuilder from './AnimationBuilder';
 import {
   Point,
 } from '../../tools/g2';
@@ -14,7 +14,7 @@ jest.mock('../DrawContext2D');
 
 const point = value => new Point(value, value);
 
-describe('Animator API', () => {
+describe('AnimationBuilder API', () => {
   let element;
   beforeEach(() => {
     const diagram = makeDiagram();
@@ -22,35 +22,35 @@ describe('Animator API', () => {
     element.transform = element.transform.zero();
   });
   test('Basic', () => {
-    const animator = new Animator({ element });
+    const builder = new AnimationBuilder({ element });
     const p1 = new Point(1, 1);
     const p2 = new Point(2, 2);
-    animator
+    builder
       .moveTo({ target: p1, duration: 1, progression: 'linear' })
       .moveTo({ target: p2, duration: 1, progression: 'linear' })
       .start();
-    animator.nextFrame(100);
-    animator.nextFrame(100.1);
+    builder.nextFrame(100);
+    builder.nextFrame(100.1);
     expect(element.getPosition().round()).toEqual(point(0.1));
 
-    let remaining = animator.nextFrame(101.1);
+    let remaining = builder.nextFrame(101.1);
     expect(element.getPosition().round()).toEqual(point(1.1));
     expect(math.round(remaining)).toBe(0);
 
-    remaining = animator.nextFrame(102.1);
+    remaining = builder.nextFrame(102.1);
     expect(element.getPosition().round()).toEqual(point(2));
     expect(math.round(remaining)).toBe(0.1);
   });
   test('Duplicate', () => {
-    const animator = new Animator({ element });
+    const builder = new AnimationBuilder({ element });
     const p1 = new Point(1, 1);
     const p2 = new Point(2, 2);
-    animator
+    builder
       .moveTo({ target: p1, duration: 1, progression: 'linear' })
       .moveTo({ target: p2, duration: 1, progression: 'linear' });
-    const dup = animator._dup();
-    expect(dup).not.toBe(animator);
-    expect(dup).toEqual(animator);
-    expect(dup.element).toBe(animator.element);
+    const dup = builder._dup();
+    expect(dup).not.toBe(builder);
+    expect(dup).toEqual(builder);
+    expect(dup.element).toBe(builder.element);
   });
 });
