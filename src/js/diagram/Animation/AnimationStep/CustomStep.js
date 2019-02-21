@@ -55,30 +55,35 @@ export class CustomAnimationStep extends AnimationStep {
     }
   }
 
-  finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
-    if (this.state === 'idle') {
-      return;
-    }
-    super.finish(cancelled, force);
-    const setToEnd = () => {
-      if (this.callback != null) {
-        this.callback(1);
-      }
-    };
-    if (cancelled && force === 'complete') {
-      setToEnd();
-    }
-    if (cancelled && force == null && this.completeOnCancel === true) {
-      setToEnd();
-    }
-    if (cancelled === false) {
-      setToEnd();
-    }
-
-    if (this.onFinish != null) {
-      this.onFinish(cancelled);
+  setToEnd() {
+    if (this.callback != null) {
+      this.callback(1);
     }
   }
+  // finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+  //   if (this.state === 'idle') {
+  //     return;
+  //   }
+  //   super.finish(cancelled, force);
+  //   const setToEnd = () => {
+  //     if (this.callback != null) {
+  //       this.callback(1);
+  //     }
+  //   };
+  //   if (cancelled && force === 'complete') {
+  //     setToEnd();
+  //   }
+  //   if (cancelled && force == null && this.completeOnCancel === true) {
+  //     setToEnd();
+  //   }
+  //   if (cancelled === false) {
+  //     setToEnd();
+  //   }
+
+  //   if (this.onFinish != null) {
+  //     this.onFinish(cancelled);
+  //   }
+  // }
 
   _dup() {
     const step = new CustomAnimationStep();

@@ -103,34 +103,44 @@ export class ColorAnimationStep extends ElementAnimationStep {
     }
   }
 
-  finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
-    if (this.state === 'idle') {
-      return;
-    }
-    super.finish(cancelled, force);
-    const setToEnd = () => {
-      const { element } = this;
-      if (element != null) {
-        element.setColor(this.color.whenComplete);
-        if (this.color.dissolve === 'out') {
-          element.hide();
-        }
+  setToEnd() {
+    const { element } = this;
+    if (element != null) {
+      element.setColor(this.color.whenComplete);
+      if (this.color.dissolve === 'out') {
+        element.hide();
       }
-    };
-    if (cancelled && force === 'complete') {
-      setToEnd();
-    }
-    if (cancelled && force == null && this.completeOnCancel === true) {
-      setToEnd();
-    }
-    if (cancelled === false) {
-      setToEnd();
-    }
-
-    if (this.onFinish != null) {
-      this.onFinish(cancelled);
     }
   }
+
+  // finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+  //   if (this.state === 'idle') {
+  //     return;
+  //   }
+  //   super.finish(cancelled, force);
+  //   const setToEnd = () => {
+  //     const { element } = this;
+  //     if (element != null) {
+  //       element.setColor(this.color.whenComplete);
+  //       if (this.color.dissolve === 'out') {
+  //         element.hide();
+  //       }
+  //     }
+  //   };
+  //   if (cancelled && force === 'complete') {
+  //     setToEnd();
+  //   }
+  //   if (cancelled && force == null && this.completeOnCancel === true) {
+  //     setToEnd();
+  //   }
+  //   if (cancelled === false) {
+  //     setToEnd();
+  //   }
+
+  //   if (this.onFinish != null) {
+  //     this.onFinish(cancelled);
+  //   }
+  // }
 
   _dup() {
     const step = new ColorAnimationStep();

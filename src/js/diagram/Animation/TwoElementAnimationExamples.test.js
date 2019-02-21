@@ -36,7 +36,7 @@ describe('Two Element Animation Examples', () => {
         elem1.animations.new()
           .moveTo({ target: p1, duration: 1, progression: 'linear' })
           .delay(1)
-          .move({
+          .moveTo({
             element: elem2, target: p1, duration: 1, progression: 'linear',
           })
           .whenFinished(animationCallback)
