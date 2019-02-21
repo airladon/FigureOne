@@ -37,9 +37,16 @@ export default class AnimationManager {
 
   nextFrame(now: number) {
     const sequencesToRemove = [];
+    let remaining = -1;
     this.sequences.forEach((sequence, index) => {
       if (sequence.state === 'waitingToStart' || sequence.state === 'animating') {
-        sequence.nextFrame(now);
+        const stepRemaining = sequence.nextFrame(now);
+        if (remaining === -1) {
+          remaining = stepRemaining;
+        }
+        if (stepRemaining < remaining) {
+          remaining = stepRemaining;
+        }
       }
       if (sequence.state === 'finished' && sequence.removeOnFinish) {
         sequencesToRemove.push(index);
@@ -48,6 +55,7 @@ export default class AnimationManager {
     for (let i = sequencesToRemove.length - 1; i >= 0; i -= 1) {
       this.sequences.splice(sequencesToRemove[i], 1);
     }
+    return remaining;
   }
 
   // Cancel all primary sequences with the name
@@ -61,7 +69,7 @@ export default class AnimationManager {
     }
   }
 
-  cancellAll(force: ?'complete' | 'noComplete' = null) {
+  cancelAll(force: ?'complete' | 'noComplete' = null) {
     for (let i = 0; i < this.sequences.length; i += 1) {
       this.sequences[i].cancel(force);
     }

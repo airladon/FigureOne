@@ -21,91 +21,96 @@ describe('Dissolve Out Aniamtion', () => {
     callback = jest.fn(() => {});
   });
   test('Simple dissolve out', () => {
-    elem1.animator
+    elem1.anim.new()
       .dissolveOut(1)
       .whenFinished(callback)
       .start();
     expect(elem1.color).toEqual(color);
     expect(elem1.isShown).toBe(true);
-    elem1.animator.nextFrame(0);
+    elem1.anim.nextFrame(0);
     expect(elem1.color).toEqual(color);
 
-    elem1.animator.nextFrame(0.5);
+    elem1.anim.nextFrame(0.5);
     expect(math.round(elem1.color, 2)).toEqual([0.5, 0.5, 0.5, 0.5]);
 
-    elem1.animator.nextFrame(0.9);
+    elem1.anim.nextFrame(0.9);
     expect(math.round(elem1.color, 2)).toEqual([0.5, 0.5, 0.5, 0.1]);
 
-    elem1.animator.nextFrame(1.0);
+    elem1.anim.nextFrame(1.0);
     expect(math.round(elem1.color)).toEqual([0.5, 0.5, 0.5, 0.001]);
     expect(callback.mock.calls.length).toBe(0);
 
-    elem1.animator.nextFrame(1.01);
+    elem1.anim.nextFrame(1.01);
     expect(math.round(elem1.color)).toEqual([0.5, 0.5, 0.5, 1]);
     expect(callback.mock.calls.length).toBe(1);
     expect(elem1.isShown).toBe(false);
   });
   test('Simple dissolve when cancelled', () => {
-    elem1.animator
+    elem1.anim.new()
       .dissolveOut(1)
       .whenFinished(callback)
       .start();
     expect(elem1.color).toEqual(color);
 
-    elem1.animator.nextFrame(0);
-    elem1.animator.nextFrame(0.5);
+    elem1.anim.nextFrame(0);
+    elem1.anim.nextFrame(0.5);
     expect(math.round(elem1.color, 2)).toEqual([0.5, 0.5, 0.5, 0.5]);
-    elem1.animator.cancel();
+    elem1.anim.cancelAll();
     expect(math.round(elem1.color)).toEqual([0.5, 0.5, 0.5, 1]);
     expect(callback.mock.calls.length).toBe(1);
     expect(elem1.isShown).toBe(false);
   });
   test('Cancel dissolve: completeOnCancel = false, force = null', () => {
-    elem1.animator
-      .dissolveOut(1).whenFinished(callback).ifCanceledThenStop().start();
-    elem1.animator.nextFrame(0);
-    elem1.animator.nextFrame(0.5);
-    elem1.animator.cancel();
+    elem1.anim.new()
+      .dissolveOut(1).whenFinished(callback).ifCanceledThenStop()
+      .start();
+    elem1.anim.nextFrame(0);
+    elem1.anim.nextFrame(0.5);
+    elem1.anim.cancelAll();
     expect(math.round(elem1.color, 2)).toEqual([0.5, 0.5, 0.5, 0.5]);
     expect(callback.mock.calls.length).toBe(1);
     expect(elem1.isShown).toBe(true);
   });
   test('Cancel dissolve: completeOnCancel = false, force = complete', () => {
-    elem1.animator
-      .dissolveOut(1).whenFinished(callback).ifCanceledThenStop().start();
-    elem1.animator.nextFrame(0);
-    elem1.animator.nextFrame(0.5);
-    elem1.animator.cancel('complete');
+    elem1.anim.new()
+      .dissolveOut(1).whenFinished(callback).ifCanceledThenStop()
+      .start();
+    elem1.anim.nextFrame(0);
+    elem1.anim.nextFrame(0.5);
+    elem1.anim.cancelAll('complete');
     expect(math.round(elem1.color, 2)).toEqual([0.5, 0.5, 0.5, 1]);
     expect(callback.mock.calls.length).toBe(1);
     expect(elem1.isShown).toBe(false);
   });
   test('Cancel dissolve: completeOnCancel = false, force = noComplete', () => {
-    elem1.animator
-      .dissolveOut(1).whenFinished(callback).ifCanceledThenStop().start();
-    elem1.animator.nextFrame(0);
-    elem1.animator.nextFrame(0.5);
-    elem1.animator.cancel('noComplete');
+    elem1.anim.new()
+      .dissolveOut(1).whenFinished(callback).ifCanceledThenStop()
+      .start();
+    elem1.anim.nextFrame(0);
+    elem1.anim.nextFrame(0.5);
+    elem1.anim.cancelAll('noComplete');
     expect(math.round(elem1.color, 2)).toEqual([0.5, 0.5, 0.5, 0.5]);
     expect(callback.mock.calls.length).toBe(1);
     expect(elem1.isShown).toBe(true);
   });
   test('Cancel dissolve: completeOnCancel = true, force = complete', () => {
-    elem1.animator
-      .dissolveOut(1).whenFinished(callback).ifCanceledThenComplete().start();
-    elem1.animator.nextFrame(0);
-    elem1.animator.nextFrame(0.5);
-    elem1.animator.cancel('complete');
+    elem1.anim.new()
+      .dissolveOut(1).whenFinished(callback).ifCanceledThenComplete()
+      .start();
+    elem1.anim.nextFrame(0);
+    elem1.anim.nextFrame(0.5);
+    elem1.anim.cancelAll('complete');
     expect(math.round(elem1.color, 2)).toEqual([0.5, 0.5, 0.5, 1]);
     expect(callback.mock.calls.length).toBe(1);
     expect(elem1.isShown).toBe(false);
   });
   test('Cancel dissolve: completeOnCancel = true, force = noComplete', () => {
-    elem1.animator
-      .dissolveOut(1).whenFinished(callback).ifCanceledThenComplete().start();
-    elem1.animator.nextFrame(0);
-    elem1.animator.nextFrame(0.5);
-    elem1.animator.cancel('noComplete');
+    elem1.anim.new()
+      .dissolveOut(1).whenFinished(callback).ifCanceledThenComplete()
+      .start();
+    elem1.anim.nextFrame(0);
+    elem1.anim.nextFrame(0.5);
+    elem1.anim.cancelAll('noComplete');
     expect(math.round(elem1.color, 2)).toEqual([0.5, 0.5, 0.5, 0.5]);
     expect(callback.mock.calls.length).toBe(1);
     expect(elem1.isShown).toBe(true);
