@@ -38,7 +38,6 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       'velocity',
     ]);
     super(ElementAnimationStepOptionsIn);
-
     const defaultPositionOptions = {
       start: null,
       target: null,
@@ -109,7 +108,6 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     // let next = delta._dup().constant(p);
 
     // next = start.add(delta.mul(next));
-    console.log(p, this.position.start, this.position.delta)
     const next = this.position.start.toDelta(
       this.position.delta, p,
       this.position.translationStyle,

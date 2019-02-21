@@ -16,6 +16,7 @@ export type TypeAnimationStepInputOptions = {
   completeOnCancel?: ?boolean;    // true: yes, false: no, null: no preference
   removeOnFinish?: boolean;
   name?: string;
+  duration?: number;
 };
 
 export default class AnimationStep {
@@ -35,10 +36,12 @@ export default class AnimationStep {
       completeOnCancel: null,
       removeOnFinish: true,
       name: generateRandomString(),
+      duration: 0,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     this.onFinish = options.onFinish;
     this.completeOnCancel = options.completeOnCancel;
+    this.duration = options.duration;
     this.startTime = -1;
     this.state = 'idle';
     this.name = options.name;
