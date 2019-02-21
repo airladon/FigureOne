@@ -45,10 +45,10 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
       options.start = new Point(options.start, options.start);
     }
     if (typeof options.target === 'number') {
-      options.target = new Point(options.start, options.start);
+      options.target = new Point(options.target, options.target);
     }
     if (typeof options.delta === 'number') {
-      options.delta = new Point(options.start, options.start);
+      options.delta = new Point(options.delta, options.delta);
     }
     copyKeysFromTo(options, this.scale, [
       'start', 'delta', 'target', 'translationStyle',
@@ -101,51 +101,23 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
   }
 
   setFrame(deltaTime: number) {
-    // const start = phase.startTransform._dup();
-    // const delta = phase.deltaTransform._dup();
     const percentTime = deltaTime / this.duration;
     const percentComplete = this.progression(percentTime);
     const p = percentComplete;
-    // let next = delta._dup().constant(p);
 
-    // next = start.add(delta.mul(next));
     if (this.scale.start != null && this.scale.delta != null) {
       const next = this.scale.start.toDelta(this.scale.delta, p);
       if (this.element != null) {
-        this.element.setPosition(next);
+        this.element.setScale(next);
       }
     }
   }
 
   setToEnd() {
     if (this.element != null) {
-      this.element.setPosition(this.scale.target);
+      this.element.setScale(this.scale.target);
     }
   }
-  // finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
-  //   if (this.state === 'idle') {
-  //     return;
-  //   }
-  //   super.finish(cancelled, force);
-  //   const setToEnd = () => {
-  //     if (this.element != null) {
-  //       this.element.setPosition(this.position.target);
-  //     }
-  //   };
-  //   if (cancelled && force === 'complete') {
-  //     setToEnd();
-  //   }
-  //   if (cancelled && force == null && this.completeOnCancel === true) {
-  //     setToEnd();
-  //   }
-  //   if (cancelled === false) {
-  //     setToEnd();
-  //   }
-
-  //   if (this.onFinish != null) {
-  //     this.onFinish(cancelled);
-  //   }
-  // }
 
   _dup() {
     const step = new ScaleAnimationStep();

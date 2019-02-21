@@ -7,7 +7,7 @@ import type {
   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
   TypeColorAnimationStepInputOptions, TypeCustomAnimationStepInputOptions,
   TypeTransformAnimationStepInputOptions,
-  TypeRotationAnimationStepInputOptions,
+  TypeRotationAnimationStepInputOptions, TypeScaleAnimationStepInputOptions,
 } from './Animation';
 // import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
 // import SerialAnimationStep from './AnimationStep/SerialAnimationStep';
@@ -57,6 +57,15 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
       this.then(new animation.PositionAnimationStep(options));
+    }
+    return this;
+  }
+
+  scaleTo(...optionsIn: Array<TypeScaleAnimationStepInputOptions>) {
+    if (this.element != null) {
+      const defaultOptions = { element: this.element };
+      const options = joinObjects({}, defaultOptions, ...optionsIn);
+      this.then(new animation.ScaleAnimationStep(options));
     }
     return this;
   }

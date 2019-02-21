@@ -18,7 +18,7 @@ import { colorArrayToRGBA } from '../tools/color';
 import type {
   TypePositionAnimationStepInputOptions, TypeAnimationBuilderInputOptions,
   TypeColorAnimationStepInputOptions, TypeTransformAnimationStepInputOptions,
-  TypeRotationAnimationStepInputOptions,
+  TypeRotationAnimationStepInputOptions, TypeScaleAnimationStepInputOptions,
 } from './Animation/Animation';
 import * as animations from './Animation/Animation';
 
@@ -498,7 +498,11 @@ class DiagramElement {
     this.setTransform(currentTransform);
   }
 
-  setScale(scale: number) {
+  setScale(scaleOrX: Point | number, y: number = 0) {
+    let scale = scaleOrX;
+    if (typeof scaleOrX === 'number') {
+      scale = new Point(scaleOrX, y);
+    }
     const currentTransform = this.transform._dup();
     currentTransform.updateScale(scale);
     this.setTransform(currentTransform);
@@ -732,6 +736,11 @@ class DiagramElement {
   rotateTo(...optionsIn: Array<TypeRotationAnimationStepInputOptions>) {
     const options = joinObjects({}, { element: this }, ...optionsIn);
     return new animations.RotationAnimationStep(options);
+  }
+
+  scaleTo(...optionsIn: Array<TypeScaleAnimationStepInputOptions>) {
+    const options = joinObjects({}, { element: this }, ...optionsIn);
+    return new animations.ScaleAnimationStep(options);
   }
 
   moveTo(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {

@@ -9,7 +9,7 @@ jest.mock('../../../webgl/webgl');
 jest.mock('../../../DrawContext2D');
 
 
-describe('Animation Trigger', () => {
+describe('Rotation Animation Step', () => {
   let elem1;
   beforeEach(() => {
     const diagram = makeDiagram();
