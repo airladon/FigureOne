@@ -2501,7 +2501,7 @@ class DiagramElementCollection extends DiagramElement {
       this.setNextTransform(now);
       // Deprecate
       this.setNextColor(now);
-      
+
       // set next color can end up hiding an element when disolving out
       if (!this.isShown) {
         return;
