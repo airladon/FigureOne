@@ -74,6 +74,10 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this.moveToPosition(...optionsIn);
   }
 
+  positionTo(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
+    return this.moveToPosition(...optionsIn);
+  }
+
   moveToTransform(...optionsIn: Array<TypeTransformAnimationStepInputOptions>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
