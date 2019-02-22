@@ -5,9 +5,9 @@ import {
   round,
 } from '../../../tools/math';
 import * as tools from '../../../tools/tools';
-import * as colorTools from '../../../tools/color';
+// import * as colorTools from '../../../tools/color';
 import makeDiagram from '../../../__mocks__/makeDiagram';
-import { EquationNew } from './Equation';
+// import { EquationNew } from './Equation';
 // import EquationForm from './EquationForm';
 import { Elements } from './Elements/Element';
 // import Fraction from './Elements/Fraction';
@@ -18,40 +18,7 @@ jest.mock('../../Gesture');
 jest.mock('../../webgl/webgl');
 jest.mock('../../DrawContext2D');
 
-/* eslint-disable no-param-reassign */
-const cleanElements = (elements) => {
-  const r = 8;
-  elements.ascent = round(elements.ascent, r);
-  elements.descent = round(elements.descent, r);
-  elements.width = round(elements.width, r);
-  elements.height = round(elements.height, r);
-  if (elements.location) {
-    elements.location = elements.location.round(r);
-  }
-  if (Array.isArray(elements.content)) {
-    elements.content.forEach((c) => {
-      cleanElements(c);
-    });
-    // elements.content = elements.content.map(c => cleanElements(c));
-  } else if (
-    elements.content instanceof Elements
-    || elements.content instanceof Element
-  ) {
-    cleanElements(elements.content);
-  } else {
-    elements.content = [];
-  }
-};
-
-function cleanForm(form) {
-  form.collectionMethods = {};
-  form.elements = {};
-  form.name = 'name';
-  cleanElements(form);
-}
-/* eslint-enable no-param-reassign */
-
-const col = (c: number) => [1, 0, 0, c];
+const col = (c) => [1, 0, 0, c];
 
 describe('Equation Animation', () => {
   let diagram;
@@ -277,18 +244,6 @@ describe('Equation Animation', () => {
     expect(b.animations.animations).toHaveLength(0);
     expect(c.animations.animations).toHaveLength(0);
 
-    // // Next Frame
-    // diagram.draw(1.201);
-    // expect(a.isShown).toBe(false);
-    // expect(b.isShown).toBe(true);
-    // expect(c.isShown).toBe(true);
-    // expect(a.color).toEqual(col(1));
-    // expect(b.color).toEqual(col(1));
-    // expect(round(c.color, 4)).toEqual(col(1));
-    // expect(a.animations.animations).toHaveLength(0);
-    // expect(b.animations.animations).toHaveLength(0);
-    // expect(c.animations.animations).toHaveLength(0);    // stopped
-
     // nothing has happened
     diagram.draw(2);
     expect(a.isShown).toBe(false);
@@ -344,18 +299,5 @@ describe('Equation Animation', () => {
     expect(a.animations.animations).toHaveLength(0);
     expect(b.animations.animations).toHaveLength(0);
     expect(c.animations.animations).toHaveLength(0);
-
-    // Next Frame
-    // diagram.draw(1.201);
-    // expect(a.isShown).toBe(true);
-    // expect(b.isShown).toBe(true);
-    // expect(c.isShown).toBe(false);
-    // expect(a.color).toEqual(col(1));
-    // expect(b.color).toEqual(col(1));
-    // expect(c.color).toEqual(col(1));
-    // expect(b.getPosition().round()).toEqual(new Point(0.028, 0));
-    // expect(a.animations.animations).toHaveLength(0);
-    // expect(b.animations.animations).toHaveLength(0);
-    // expect(c.animations.animations).toHaveLength(0);
   });
 });
