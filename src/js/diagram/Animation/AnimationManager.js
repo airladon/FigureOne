@@ -73,6 +73,27 @@ export default class AnimationManager {
     return remaining;
   }
 
+  cleanAnimations() {
+    const animationsToRemove = [];
+    let isAnimating = false;
+    for (let i = 0; i < this.animations.length; i += 1) {
+      const animation = this.animations[i];
+      if (animation.state === 'finished' && animation.removeOnFinish) {
+        animationsToRemove.push(i);
+      } else {
+        isAnimating = true;
+      }
+    }
+    for (let i = animationsToRemove.length - 1; i >= 0; i -= 1) {
+      this.animations.splice(animationsToRemove[i], 1);
+    }
+    if (isAnimating) {
+      this.state = 'animating';
+    } else {
+      this.state = 'idle';
+    }
+  }
+
   // Cancel all primary animations with the name
   // animations will be cleaned up on next frame
   cancel(name: ?string, force: ?'complete' | 'noComplete' = null) {
@@ -85,6 +106,7 @@ export default class AnimationManager {
           animation.cancel(force);
         }
       }
+      this.cleanAnimations();
     }
   }
 
@@ -92,6 +114,7 @@ export default class AnimationManager {
     for (let i = 0; i < this.animations.length; i += 1) {
       this.animations[i].cancel(force);
     }
+    this.cleanAnimations();
   }
 
   start(name?: string) {

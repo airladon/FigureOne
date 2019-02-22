@@ -700,7 +700,7 @@ export class EquationNew extends DiagramElementCollection {
     callback: null | () => void = null,
   ) {
     if (this.eqn.isAnimating) {
-      this.stop(true, true);
+      // this.stop(true, true);
       this.stop(true, true);
       // this.animations.cancel('complete');
       // this.animations.cancel('complete');
@@ -713,7 +713,7 @@ export class EquationNew extends DiagramElementCollection {
     }
     // this.animations.cancel();
     // this.animations.cancel();
-    this.stop();
+    // this.stop();
     this.stop();
     this.eqn.isAnimating = false;
 
