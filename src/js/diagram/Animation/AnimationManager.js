@@ -100,7 +100,7 @@ export default class AnimationManager {
       for (let i = 0; i < this.animations.length; i += 1) {
         const animation = this.animations[i];
         if (animation.name === name) {
-          if (animation.state === 'idle' || animation.state === 'finished') {
+          if (animation.state !== 'animating') {
             animation.start();
           }
         }
@@ -111,7 +111,7 @@ export default class AnimationManager {
   startAll() {
     for (let i = 0; i < this.animations.length; i += 1) {
       const animation = this.animations[i];
-      if (animation.state === 'idle' || animation.state === 'finished') {
+      if (animation.state !== 'animating') {
         animation.start();
       }
     }
