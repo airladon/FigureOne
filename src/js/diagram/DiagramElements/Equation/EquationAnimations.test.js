@@ -55,7 +55,10 @@ const col = (c: number) => [1, 0, 0, c];
 
 describe('Equation Animation', () => {
   let diagram;
-  // let eqn;
+  let eqn;
+  let a;
+  let b;
+  let c;
   // let color1;
   let ways;
   // let clean;
@@ -86,15 +89,15 @@ describe('Equation Animation', () => {
             formSeries: ['0', '1', '2'],
           },
         }]);
+        eqn = diagram.elements._eqnAEqn;
+        a = diagram.elements._eqnAEqn._a;
+        b = diagram.elements._eqnAEqn._b;
+        c = diagram.elements._eqnAEqn._c;
       },
     };
   });
-  test('All Text in constructor', () => {
+  test('Next Form without interruption', () => {
     ways.simple();
-    const eqn = diagram.elements._eqnAEqn;
-    const a = diagram.elements._eqnAEqn._a;
-    const b = diagram.elements._eqnAEqn._b;
-    const c = diagram.elements._eqnAEqn._c;
     expect(diagram.elements).toHaveProperty('_eqnAEqn');
     expect(diagram.elements).toHaveProperty('_eqnANav');
 
@@ -233,21 +236,126 @@ describe('Equation Animation', () => {
     expect(a.animations.animations).toHaveLength(0);
     expect(b.animations.animations).toHaveLength(0);
     expect(c.animations.animations).toHaveLength(0);
+  });
+  test('Interruption on fade in', () => {
+    ways.simple();
+    expect(diagram.elements).toHaveProperty('_eqnAEqn');
+    expect(diagram.elements).toHaveProperty('_eqnANav');
 
-    // console.log(diagram.elements._eqnAEqn._a)
-    // expect(eq).toHavePropert('_a');
-    // expect(eqn).toHaveProperty('_a');
-    // expect(eqn).toHaveProperty('_b');
-    // expect(eqn).toHaveProperty('_c');
-    // expect(eqn).toHaveProperty('__2');
-    // expect(eqn).toHaveProperty('_v');
+    // only b is shown
+    eqn.showForm('0');
+    diagram.draw(0);
+    expect(a.isShown).toBe(false);
+    expect(b.isShown).toBe(true);
+    expect(c.isShown).toBe(false);
+    expect(a.color).toEqual(col(1));
+    expect(b.color).toEqual(col(1));
+    expect(c.color).toEqual(col(1));
 
-    // // Check color
-    // expect(eqn._a.drawingObject.text[0].font.color)
-    //   .toBe(colorTools.colorArrayToRGBA(color1));
+    eqn.nextForm(1);
+    diagram.draw(1);
+    diagram.draw(1.2);
+    // 'c' fades in over 0.4s
+    expect(a.isShown).toBe(false);
+    expect(b.isShown).toBe(true);
+    expect(c.isShown).toBe(true);
+    expect(a.color).toEqual(col(1));
+    expect(b.color).toEqual(col(1));
+    expect(round(c.color, 4)).toEqual(col(0.5005));
 
-    // // Check math vs number style
-    // expect(eqn._a.drawingObject.text[0].font.style).toBe('italic');
-    // expect(eqn.__2.drawingObject.text[0].font.style).toBe('normal');
+    // Interrupt by moving to next form while previous was animating
+    // 'c' skips to be fully shown
+    // 'c' animation is just waiting for next frame before it stops
+    eqn.nextForm(1);
+    expect(a.isShown).toBe(false);
+    expect(b.isShown).toBe(true);
+    expect(c.isShown).toBe(true);
+    expect(a.color).toEqual(col(1));
+    expect(b.color).toEqual(col(1));
+    expect(round(c.color, 4)).toEqual(col(1));
+    expect(a.animations.animations).toHaveLength(0);
+    expect(b.animations.animations).toHaveLength(0);
+    expect(c.animations.animations).toHaveLength(0);
+
+    // // Next Frame
+    // diagram.draw(1.201);
+    // expect(a.isShown).toBe(false);
+    // expect(b.isShown).toBe(true);
+    // expect(c.isShown).toBe(true);
+    // expect(a.color).toEqual(col(1));
+    // expect(b.color).toEqual(col(1));
+    // expect(round(c.color, 4)).toEqual(col(1));
+    // expect(a.animations.animations).toHaveLength(0);
+    // expect(b.animations.animations).toHaveLength(0);
+    // expect(c.animations.animations).toHaveLength(0);    // stopped
+
+    // nothing has happened
+    diagram.draw(2);
+    expect(a.isShown).toBe(false);
+    expect(b.isShown).toBe(true);
+    expect(c.isShown).toBe(true);
+    expect(a.color).toEqual(col(1));
+    expect(b.color).toEqual(col(1));
+    expect(round(c.color, 4)).toEqual(col(1));
+    expect(a.animations.animations).toHaveLength(0);
+    expect(b.animations.animations).toHaveLength(0);
+    expect(c.animations.animations).toHaveLength(0);
+  });
+
+  test('Interruption on fade out', () => {
+    ways.simple();
+    expect(diagram.elements).toHaveProperty('_eqnAEqn');
+    expect(diagram.elements).toHaveProperty('_eqnANav');
+
+    // 'b' and 'c' is shown
+    eqn.showForm('1');
+    diagram.draw(0);
+    expect(a.isShown).toBe(false);
+    expect(b.isShown).toBe(true);
+    expect(c.isShown).toBe(true);
+    expect(a.color).toEqual(col(1));
+    expect(b.color).toEqual(col(1));
+    expect(c.color).toEqual(col(1));
+
+    // 'c' will fade out, 'b' will move, then 'a' will fade in
+    eqn.nextForm(1);
+    diagram.draw(1);
+    diagram.draw(1.2);
+    expect(a.isShown).toBe(true);
+    expect(b.isShown).toBe(true);
+    expect(c.isShown).toBe(true);
+    expect(round(a.color)).toEqual(col(0.001));
+    expect(b.color).toEqual(col(1));
+    expect(round(c.color, 2)).toEqual(col(0.5));
+    expect(b.getPosition()).toEqual(new Point(0, 0));
+    expect(a.animations.animations).toHaveLength(1);
+    expect(b.animations.animations).toHaveLength(1);
+    expect(c.animations.animations).toHaveLength(1);
+
+    // Interrupt while fading out
+    eqn.nextForm(1);
+    expect(a.isShown).toBe(true);
+    expect(b.isShown).toBe(true);
+    expect(c.isShown).toBe(false);
+    expect(a.color).toEqual(col(1));
+    expect(b.color).toEqual(col(1));
+    expect(c.color).toEqual(col(1));
+    expect(b.getPosition().round()).toEqual(new Point(0.028, 0));
+    expect(a.animations.animations).toHaveLength(0);
+    expect(b.animations.animations).toHaveLength(0);
+    expect(c.animations.animations).toHaveLength(0);
+
+    // Next Frame
+    // diagram.draw(1.201);
+    // expect(a.isShown).toBe(true);
+    // expect(b.isShown).toBe(true);
+    // expect(c.isShown).toBe(false);
+    // expect(a.color).toEqual(col(1));
+    // expect(b.color).toEqual(col(1));
+    // expect(c.color).toEqual(col(1));
+    // expect(b.getPosition().round()).toEqual(new Point(0.028, 0));
+    // expect(a.animations.animations).toHaveLength(0);
+    // expect(b.animations.animations).toHaveLength(0);
+    // expect(c.animations.animations).toHaveLength(0);
   });
 });

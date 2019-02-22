@@ -1799,11 +1799,11 @@ class DiagramElement {
 
   stop(cancelled?: boolean = true, forceSetToEndOfPlan?: ?boolean = false) {
     if (forceSetToEndOfPlan === true) {
-      this.animations.cancel('complete');
+      this.animations.cancelAll('complete');
     } else if (forceSetToEndOfPlan === false) {
-      this.animations.cancel('noComplete');
+      this.animations.cancelAll('noComplete');
     } else {
-      this.animations.cancel(null);
+      this.animations.cancelAll(null);
     }
     this.stopAnimating(cancelled, forceSetToEndOfPlan);
     this.stopAnimatingColor(cancelled, forceSetToEndOfPlan);

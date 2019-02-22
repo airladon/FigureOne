@@ -106,6 +106,7 @@ export class ColorAnimationStep extends ElementAnimationStep {
   setToEnd() {
     const { element } = this;
     if (element != null) {
+      // console.log(this.name, this.color.whenComplete)
       element.setColor(this.color.whenComplete);
       if (this.color.dissolve === 'out') {
         element.hide();
