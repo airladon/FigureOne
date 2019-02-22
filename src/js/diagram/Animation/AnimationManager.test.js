@@ -100,4 +100,38 @@ describe('Animation Manager', () => {
     expect(elem.isShown).toBe(false);
     expect(elem.animations.animations).toHaveLength(0);
   });
+  test.only('Add to existing animation', () => {
+    elem.animations.new('test')
+      .moveTo({ target: p1, duration: 1, progression: 'linear' })
+      .start();
+
+    elem.animations.nextFrame(0);
+    expect(elem.getPosition().round()).toEqual(point(0));
+    expect(math.round(elem.color, 2)).toEqual([1, 0, 0, 1]);
+    expect(elem.animations.animations).toHaveLength(1);
+    expect(elem.animations.animations[0].steps).toHaveLength(1);
+
+    elem.animations.nextFrame(0.5);
+    expect(elem.getPosition().round()).toEqual(point(0.5));
+    elem.animations.addTo('test')
+      .dissolveOut(1)
+      .start();
+    expect(elem.animations.animations).toHaveLength(1);
+    expect(elem.animations.animations[0].steps).toHaveLength(2);
+    // console.log(elem.animations.animations[0].steps)
+
+    elem.animations.nextFrame(0.6);
+    expect(elem.getPosition().round()).toEqual(point(0.6));
+    expect(math.round(elem.color, 2)).toEqual([1, 0, 0, 1]);
+
+    elem.animations.nextFrame(1.5);
+    expect(elem.getPosition().round()).toEqual(point(1));
+    expect(math.round(elem.color, 2)).toEqual([1, 0, 0, 0.5]);
+    expect(elem.isShown).toBe(true);
+
+    elem.animations.nextFrame(2.1);
+    expect(elem.getPosition().round()).toEqual(point(1));
+    expect(math.round(elem.color, 2)).toEqual([1, 0, 0, 1]);
+    expect(elem.isShown).toBe(false);
+  });
 });
