@@ -18,7 +18,7 @@ describe('Rotation Animation Step', () => {
   });
   test('Simple rotate', () => {
     elem1.animations.new()
-      .rotateTo({ target: 1, duration: 1 })
+      .rotation({ target: 1, duration: 1 })
       .start();
 
     elem1.animations.nextFrame(0);
@@ -35,7 +35,7 @@ describe('Rotation Animation Step', () => {
   });
   test('Simple rotate to delta', () => {
     elem1.animations.new()
-      .rotateTo({ delta: 1, duration: 1 })
+      .rotation({ delta: 1, duration: 1 })
       .start();
 
     elem1.animations.nextFrame(0);
@@ -52,7 +52,7 @@ describe('Rotation Animation Step', () => {
   });
   test('Rotate counter clock wise', () => {
     elem1.animations.new()
-      .rotateTo({
+      .rotation({
         start: 1, target: 0, direction: 1, duration: 1,
       })
       .start();
@@ -71,7 +71,7 @@ describe('Rotation Animation Step', () => {
   });
   test('Rotate clip to 0to360', () => {
     elem1.animations.new()
-      .rotateTo({
+      .rotation({
         start: -1, target: 0, clipTo: '0to360', duration: 1,
       })
       .start();
@@ -86,7 +86,7 @@ describe('Rotation Animation Step', () => {
   });
   test('Rotate clip to -180to180', () => {
     elem1.animations.new()
-      .rotateTo({
+      .rotation({
         start: 0, target: 6.28, clipTo: '-180to180', duration: 1, direction: 1, progression: 'linear',
       })
       .start();

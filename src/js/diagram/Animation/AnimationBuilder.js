@@ -43,7 +43,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  rotateTo(...optionsIn: Array<TypeRotationAnimationStepInputOptions>) {
+  rotation(...optionsIn: Array<TypeRotationAnimationStepInputOptions>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
