@@ -52,6 +52,24 @@ describe('Transfrom Animation Unit', () => {
     elem1.animations.nextFrame(1.1);
     expect(elem1.getPosition().round()).toEqual(new Point(0.1, 0.1));
   });
+
+  test('Delay 0 then move', () => {
+    elem1.animations.new()
+      .delay(0)
+      .moveTo({ target: new Point(1, 1), duration: 1, progression: 'linear' })
+      .start();
+
+    elem1.animations.nextFrame(0);
+    elem1.animations.nextFrame(0.1);
+    expect(elem1.getPosition().round()).toEqual(new Point(0.1, 0.1));
+
+    elem1.animations.nextFrame(0.9);
+    expect(elem1.getPosition().round()).toEqual(new Point(0.9, 0.9));
+
+    elem1.animations.nextFrame(1.1);
+    expect(elem1.getPosition().round()).toEqual(new Point(1, 1));
+  });
+
   test('Move, Delay, Move', () => {
     elem1.animations.new()
       .moveTo({ target: new Point(1, 1), duration: 1, progression: 'linear' })

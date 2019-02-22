@@ -38,6 +38,7 @@ export default class AnimationManager {
   }
 
   nextFrame(now: number) {
+    // console.log('animation manager', now)
     const animationsToRemove = [];
     let remaining = -1;
     let isAnimating = false;

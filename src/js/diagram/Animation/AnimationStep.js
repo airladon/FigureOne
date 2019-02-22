@@ -17,6 +17,7 @@ export type TypeAnimationStepInputOptions = {
   removeOnFinish?: boolean;
   name?: string;
   duration?: number;
+  delay?: number;
 };
 
 export default class AnimationStep {
@@ -29,6 +30,7 @@ export default class AnimationStep {
   startTimeOffset: number;
   removeOnFinish: boolean;
   name: string;
+  startDelay: number;
 
   constructor(optionsIn: TypeAnimationStepInputOptions = {}) {
     const defaultOptions = {
@@ -37,6 +39,7 @@ export default class AnimationStep {
       removeOnFinish: true,
       name: generateRandomString(),
       duration: 0,
+      delay: 0,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     this.onFinish = options.onFinish;
@@ -45,6 +48,7 @@ export default class AnimationStep {
     this.startTime = -1;
     this.state = 'idle';
     this.name = options.name;
+    this.startDelay = options.delay;
     // This is only for it this step is a primary path in an Animation Manager
     this.removeOnFinish = options.removeOnFinish;
     // Each animation frame will typically calculate a percent complete,
@@ -66,14 +70,17 @@ export default class AnimationStep {
       this.startTime = now - this.startTimeOffset;
     }
     let remainingTime = 0;
-    let deltaTime = now - this.startTime;
-    if (deltaTime > this.duration) {
-      remainingTime = deltaTime - this.duration;
-      deltaTime = this.duration;
-    }
-    this.setFrame(deltaTime);
-    if (remainingTime > 0) {
-      this.finish();
+    const deltaTime = now - this.startTime;
+    if (deltaTime >= this.startDelay) {
+      let deltaTimeAfterDelay = deltaTime - this.startDelay;
+      if (deltaTimeAfterDelay > this.duration) {
+        remainingTime = deltaTimeAfterDelay - this.duration;
+        deltaTimeAfterDelay = this.duration;
+      }
+      this.setFrame(deltaTimeAfterDelay);
+      if (remainingTime > 0) {
+        this.finish();
+      }
     }
     return remainingTime;
   }
