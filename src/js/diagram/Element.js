@@ -208,6 +208,8 @@ class DiagramElement {
 
   uid: string;
 
+  anim: Object;
+
   constructor(
     // translation: Point = Point.zero(),
     // rotation: number = 0,
@@ -235,6 +237,72 @@ class DiagramElement {
     this.parent = parent;
     this.drawPriority = 1;
     this.noRotationFromParent = false;
+    this.anim = {
+      rotation: (...optionsIn: Array<TypeRotationAnimationStepInputOptions>) => {
+        const options = joinObjects({}, { element: this }, ...optionsIn);
+        return new animations.RotationAnimationStep(options);
+      },
+      scale: (...optionsIn: Array<TypeScaleAnimationStepInputOptions>) => {
+        const options = joinObjects({}, { element: this }, ...optionsIn);
+        return new animations.ScaleAnimationStep(options);
+      },
+      position: (...optionsIn: Array<TypePositionAnimationStepInputOptions>) => {
+        const options = joinObjects({}, { element: this }, ...optionsIn);
+        return new animations.PositionAnimationStep(options);
+      },
+      transform: (...optionsIn: Array<TypeTransformAnimationStepInputOptions>) => {
+        const options = joinObjects({}, { element: this }, ...optionsIn);
+        return new animations.TransformAnimationStep(options);
+      },
+      // eslint-disable-next-line max-len
+      dissolveIn: (timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {}, ...args: Array<TypeColorAnimationStepInputOptions>) => {
+        const defaultOptions = { element: this };
+        let options;
+        if (typeof timeOrOptionsIn === 'number') {
+          options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+        } else {
+          options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+        }
+        return new animations.DissolveInAnimationStep(options);
+      },
+      // eslint-disable-next-line max-len
+      dissolveOut: (timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {}, ...args: Array<TypeColorAnimationStepInputOptions>) => {
+        const defaultOptions = { element: this };
+        let options;
+        if (typeof timeOrOptionsIn === 'number') {
+          options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+        } else {
+          options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+        }
+        return new animations.DissolveOutAnimationStep(options);
+      },
+      // eslint-disable-next-line max-len
+      builder: (...optionsIn: Array<TypeAnimationBuilderInputOptions>) => new animations.AnimationBuilder(this, ...optionsIn),
+      // eslint-disable-next-line max-len
+      scenario: (...optionsIn: Array<TypeTransformAnimationStepInputOptions & { scenario: string }>) => {
+        const defaultOptions = { element: this };
+        const options = joinObjects({}, defaultOptions, ...optionsIn);
+        if (options.target != null
+          && options.target in options.element.scenarios
+        ) {
+          const target = options.element.getScenarioTarget(options.target);
+          options.target = target;
+        }
+        if (options.start != null
+          && options.start in options.element.scenarios
+        ) {
+          const start = options.element.getScenarioTarget(options.start);
+          options.start = start;
+        }
+        if (options.delta != null
+          && options.delta in options.element.scenarios
+        ) {
+          const delta = options.element.getScenarioTarget(options.delta);
+          options.delta = delta;
+        }
+        return new animations.TransformAnimationStep(options);
+      },
+    }
     this.animate = {
       color: {
         plan: [],
@@ -521,6 +589,7 @@ class DiagramElement {
     }
   }
 
+  // Deprecate
   // Set the next transform (and velocity if moving freely) for the next
   // animation frame.
   //
@@ -609,6 +678,7 @@ class DiagramElement {
     }
   }
 
+  // Deprecate
   setNextCustomAnimation(now: number): void {
     // If animation is happening
     // if (this.name === 'diameterDimension') {
@@ -677,6 +747,7 @@ class DiagramElement {
     // }
   }
 
+  // Deprecate
   setNextColor(now: number): void {
     // If animation is happening
     if (this.state.isAnimatingColor) {
@@ -733,6 +804,7 @@ class DiagramElement {
     }
   }
 
+  /////////////////// Deprecate Start
   rotateTo(...optionsIn: Array<TypeRotationAnimationStepInputOptions>) {
     const options = joinObjects({}, { element: this }, ...optionsIn);
     return new animations.RotationAnimationStep(options);
@@ -814,6 +886,7 @@ class DiagramElement {
     }
     return new animations.TransformAnimationStep(options);
   }
+  ////////////// Deprecate End
 
   // moveToScenario_old(
   //   scenarioName: string,
