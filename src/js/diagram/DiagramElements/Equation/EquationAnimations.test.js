@@ -9,7 +9,7 @@ import * as tools from '../../../tools/tools';
 import makeDiagram from '../../../__mocks__/makeDiagram';
 // import { EquationNew } from './Equation';
 // import EquationForm from './EquationForm';
-import { Elements } from './Elements/Element';
+// import { Elements } from './Elements/Element';
 // import Fraction from './Elements/Fraction';
 
 tools.isTouchDevice = jest.fn();
@@ -18,7 +18,7 @@ jest.mock('../../Gesture');
 jest.mock('../../webgl/webgl');
 jest.mock('../../DrawContext2D');
 
-const col = (c) => [1, 0, 0, c];
+const col = c => [1, 0, 0, c];
 
 describe('Equation Animation', () => {
   let diagram;
