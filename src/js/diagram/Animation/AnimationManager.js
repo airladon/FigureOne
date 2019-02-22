@@ -115,6 +115,16 @@ export default class AnimationManager {
     }
   }
 
+  addTo(name: string) {
+    for (let i = 0; i < this.animations.length; i += 1) {
+      const animation = this.animations[i];
+      if (animation.name === name) {
+        return animation;
+      }
+    }
+    return this.new(name);
+  }
+
   new(nameOrStep: ?string | anim.AnimationStep) {
     if (typeof nameOrStep === 'string' || nameOrStep == null) {
       const options = {};
