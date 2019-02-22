@@ -702,6 +702,8 @@ export class EquationNew extends DiagramElementCollection {
     if (this.eqn.isAnimating) {
       this.stop(true, true);
       this.stop(true, true);
+      // this.animations.cancel('complete');
+      // this.animations.cancel('complete');
       this.eqn.isAnimating = false;
       const currentForm = this.getCurrentForm();
       if (currentForm != null) {
@@ -709,6 +711,8 @@ export class EquationNew extends DiagramElementCollection {
       }
       return;
     }
+    // this.animations.cancel();
+    // this.animations.cancel();
     this.stop();
     this.stop();
     this.eqn.isAnimating = false;
@@ -769,8 +773,10 @@ export class EquationNew extends DiagramElementCollection {
           if (nextSubForm.time != null && nextSubForm.time[fromWhere] != null) {
             timeToUse = nextSubForm.time[fromWhere];
           }
+          // console.log('******************* animate')
           nextSubForm.animatePositionsTo(delay, 0.4, timeToUse, 0.4, end);
         } else {
+          // console.log('******************* hideshow')
           nextSubForm.allHideShow(delay, 0.5, 0.2, 0.5, end);
         }
         this.setCurrentForm(nextSubForm);
@@ -824,6 +830,8 @@ export class EquationNew extends DiagramElementCollection {
     if (this.eqn.isAnimating) {
       this.stop(true, true);
       this.stop(true, true);
+      // this.animations.cancel('complete');
+      // this.animations.cancel('complete');
       this.eqn.isAnimating = false;
       const currentForm = this.getCurrentForm();
       if (currentForm != null) {
@@ -831,6 +839,8 @@ export class EquationNew extends DiagramElementCollection {
       }
       return;
     }
+    // this.animations.cancel();
+    // this.animations.cancel();
     this.stop();
     this.stop();
     this.eqn.isAnimating = false;
@@ -844,10 +854,12 @@ export class EquationNew extends DiagramElementCollection {
     delay: number = 0,
     callback: null | () => void = null,
   ) {
-    this.stopAnimatingColor(true, true);
-    this.stopAnimatingColor(true, true);
+    // this.stopAnimatingColor(true, true);
+    // this.stopAnimatingColor(true, true);
     this.stop();
     this.stop();
+    // this.animations.cancel();
+    // this.animations.cancel();
     const form = this.getForm(name);
     if (form != null) {
       form.animatePositionsTo(delay, 0.4, time, 0.4, callback);

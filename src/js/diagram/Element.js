@@ -1797,11 +1797,13 @@ class DiagramElement {
     }
   }
 
-  stop(cancelled?: boolean = true, forceSetToEndOfPlan?: boolean = false) {
-    if (forceSetToEndOfPlan) {
+  stop(cancelled?: boolean = true, forceSetToEndOfPlan?: ?boolean = false) {
+    if (forceSetToEndOfPlan === true) {
       this.animations.cancel('complete');
-    } else {
+    } else if (forceSetToEndOfPlan === false) {
       this.animations.cancel('noComplete');
+    } else {
+      this.animations.cancel(null);
     }
     this.stopAnimating(cancelled, forceSetToEndOfPlan);
     this.stopAnimatingColor(cancelled, forceSetToEndOfPlan);
@@ -2491,6 +2493,7 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   draw(parentTransform: Transform = new Transform(), now: number = 0) {
+    // console.log('draw collection', now, this.name)
     if (this.isShown) {
       this.animations.nextFrame(now);
       this.setNextTransform(now);
@@ -2738,11 +2741,12 @@ class DiagramElementCollection extends DiagramElement {
     return touched;
   }
 
-  stop(cancelled: boolean = true, forceSetToEndOfPlan: boolean = false) {
+  stop(cancelled: boolean = true, forceSetToEndOfPlan: ?boolean = false) {
     super.stop(cancelled, forceSetToEndOfPlan);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       element.stop(cancelled, forceSetToEndOfPlan);
+      // element.cancel(forceSetToEndOfPlan);
     }
   }
 
@@ -2812,24 +2816,24 @@ class DiagramElementCollection extends DiagramElement {
       if (element.name in elementTransforms) {
         if (element.isShown) {
           if (!elementTransforms[element.name].isEqualTo(element.transform)) {
-            // element.animations.new()
-            //   .delay(delay)
-            //   .moveToTransform({
-            //     target: elementTransforms[element.name],
-            //     duration: time,
-            //     rotDirection,
-            //     progression: easeFunction,
-            //     onFinish: callbackMethod,
-            //   })
-            //   .start();
-            element.animateTo(
-              elementTransforms[element.name],
-              time,
-              delay,
-              rotDirection,
-              callbackMethod,
-              easeFunction,
-            );
+            element.animations.new()
+              .delay(delay)
+              .moveToTransform({
+                target: elementTransforms[element.name],
+                duration: time,
+                rotDirection,
+                progression: easeFunction,
+                onFinish: callbackMethod,
+              })
+              .start();
+            // element.animateTo(
+            //   elementTransforms[element.name],
+            //   time,
+            //   delay,
+            //   rotDirection,
+            //   callbackMethod,
+            //   easeFunction,
+            // );
             // only want to send callback once
             callbackMethod = null;
             timeToAnimate = time + delay;

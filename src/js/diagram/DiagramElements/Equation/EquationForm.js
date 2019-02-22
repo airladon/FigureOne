@@ -256,6 +256,7 @@ export default class EquationForm extends Elements {
     time: number = 1,
     callback: ?(boolean) => void = null,
   ) {
+    // console.log('dissolve', dissolve, elements.length, elements[0].name)
     if (elements.length === 0) {
       if (callback) {
         callback(false);
@@ -273,9 +274,12 @@ export default class EquationForm extends Elements {
       }
     };
     elements.forEach((e) => {
-      e.animations.addTo('Equation Element Dissolver')
-        .delay(delay)
-        .colorTo({ dissolve, onFinish, duration: time })
+      // e.show();
+      e.animations.addTo('Equation Color')
+        // .delay(delay)
+        .colorTo({
+          dissolve, onFinish, duration: time, delay,
+        })
         .start();
       // e.disolveWithDelay(delay, time, dissolve, onFinish);
     });
@@ -406,16 +410,20 @@ export default class EquationForm extends Elements {
       }
     };
     elementsToDelayShowing.forEach((e) => {
-      e.animations.addTo('Equation Element Dissolver')
-        .delay(cumTime + blankTime)
-        .dissolveIn({ duration: showTime, onFinish })
+      e.animations.addTo('Equation Color')
+        // .delay(cumTime + blankTime)
+        .dissolveIn({
+          duration: showTime, onFinish, delay: cumTime + blankTime,
+        })
         .start();
       // e.disolveWithDelay(cumTime + blankTime, showTime, 'in', end);
     });
     elementsToShowAfterDisolve.forEach((e) => {
-      e.animations.addTo('Equation Element Dissolver')
-        .delay(blankTime)
-        .dissolveIn({ duration: showTime, onFinish })
+      e.animations.addTo('Equation Color')
+        // .delay(blankTime)
+        .dissolveIn({
+          duration: showTime, onFinish, delay: blankTime,
+        })
         .start();
       // e.disolveWithDelay(blankTime, showTime, 'in', end);
     });
@@ -493,7 +501,13 @@ export default class EquationForm extends Elements {
       } = mods;
       if (element != null) {
         if (color != null) {
-          element.animateColorToWithDelay(color, cumTime, moveTimeToUse);
+          element.addTo('Equation Color')
+            // .delay(cumTime)
+            .colorTo({
+              target: color, duration: moveTimeToUse, delay: cumTime,
+            })
+            .start();
+          // element.animateColorToWithDelay(color, cumTime, moveTimeToUse);
         }
         if (style != null) {
           element.animate.transform.translation.style = style;
