@@ -1803,7 +1803,6 @@ class DiagramElement {
     } else {
       this.animations.cancel('noComplete');
     }
-    
     this.stopAnimating(cancelled, forceSetToEndOfPlan);
     this.stopAnimatingColor(cancelled, forceSetToEndOfPlan);
     this.stopAnimatingCustom(cancelled, forceSetToEndOfPlan);

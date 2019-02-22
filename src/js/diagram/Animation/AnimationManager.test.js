@@ -100,7 +100,7 @@ describe('Animation Manager', () => {
     expect(elem.isShown).toBe(false);
     expect(elem.animations.animations).toHaveLength(0);
   });
-  test.only('Add to existing animation', () => {
+  test('Add to existing animation', () => {
     elem.animations.new('test')
       .moveTo({ target: p1, duration: 1, progression: 'linear' })
       .start();
