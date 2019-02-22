@@ -1798,6 +1798,12 @@ class DiagramElement {
   }
 
   stop(cancelled?: boolean = true, forceSetToEndOfPlan?: boolean = false) {
+    if (forceSetToEndOfPlan) {
+      this.animations.cancel('complete');
+    } else {
+      this.animations.cancel('noComplete');
+    }
+    
     this.stopAnimating(cancelled, forceSetToEndOfPlan);
     this.stopAnimatingColor(cancelled, forceSetToEndOfPlan);
     this.stopAnimatingCustom(cancelled, forceSetToEndOfPlan);
@@ -2807,6 +2813,16 @@ class DiagramElementCollection extends DiagramElement {
       if (element.name in elementTransforms) {
         if (element.isShown) {
           if (!elementTransforms[element.name].isEqualTo(element.transform)) {
+            // element.animations.new()
+            //   .delay(delay)
+            //   .moveToTransform({
+            //     target: elementTransforms[element.name],
+            //     duration: time,
+            //     rotDirection,
+            //     progression: easeFunction,
+            //     onFinish: callbackMethod,
+            //   })
+            //   .start();
             element.animateTo(
               elementTransforms[element.name],
               time,

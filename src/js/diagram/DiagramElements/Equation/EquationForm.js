@@ -251,7 +251,7 @@ export default class EquationForm extends Elements {
   // eslint-disable-next-line class-methods-use-this
   dissolveElements(
     elements: Array<DiagramElementPrimative | DiagramElementCollection>,
-    disolve: 'in' | 'out' = 'in',
+    dissolve: 'in' | 'out' = 'in',
     delay: number = 0.01,
     time: number = 1,
     callback: ?(boolean) => void = null,
@@ -264,7 +264,7 @@ export default class EquationForm extends Elements {
     }
     const count = elements.length;
     let completed = 0;
-    const end = (cancelled: boolean) => {
+    const onFinish = (cancelled: boolean) => {
       completed += 1;
       if (completed === count) {
         if (callback) {
@@ -273,7 +273,11 @@ export default class EquationForm extends Elements {
       }
     };
     elements.forEach((e) => {
-      e.disolveWithDelay(delay, time, disolve, end);
+      e.animations.addTo('Equation Element Dissolver')
+        .delay(delay)
+        .colorTo({ dissolve, onFinish, duration: time })
+        .start();
+      // e.disolveWithDelay(delay, time, dissolve, onFinish);
     });
   }
 
@@ -393,7 +397,7 @@ export default class EquationForm extends Elements {
 
     const count = elementsToShow.length;
     let completed = 0;
-    const end = (cancelled: boolean) => {
+    const onFinish = (cancelled: boolean) => {
       completed += 1;
       if (completed === count - 1) {
         if (callback) {
@@ -402,10 +406,18 @@ export default class EquationForm extends Elements {
       }
     };
     elementsToDelayShowing.forEach((e) => {
-      e.disolveWithDelay(cumTime + blankTime, showTime, 'in', end);
+      e.animations.addTo('Equation Element Dissolver')
+        .delay(cumTime + blankTime)
+        .dissolveIn({ duration: showTime, onFinish })
+        .start();
+      // e.disolveWithDelay(cumTime + blankTime, showTime, 'in', end);
     });
     elementsToShowAfterDisolve.forEach((e) => {
-      e.disolveWithDelay(blankTime, showTime, 'in', end);
+      e.animations.addTo('Equation Element Dissolver')
+        .delay(blankTime)
+        .dissolveIn({ duration: showTime, onFinish })
+        .start();
+      // e.disolveWithDelay(blankTime, showTime, 'in', end);
     });
   }
 
