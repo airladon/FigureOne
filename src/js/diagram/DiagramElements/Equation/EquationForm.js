@@ -256,7 +256,6 @@ export default class EquationForm extends Elements {
     time: number = 1,
     callback: ?(boolean) => void = null,
   ) {
-    // console.log('dissolve', dissolve, elements.length, elements[0].name)
     if (elements.length === 0) {
       if (callback) {
         callback(false);
@@ -274,14 +273,11 @@ export default class EquationForm extends Elements {
       }
     };
     elements.forEach((e) => {
-      // e.show();
       e.animations.addTo('Equation Color')
-        // .delay(delay)
         .colorTo({
           dissolve, onFinish, duration: time, delay,
         })
         .start();
-      // e.disolveWithDelay(delay, time, dissolve, onFinish);
     });
   }
 
@@ -365,7 +361,7 @@ export default class EquationForm extends Elements {
     const elementsShown = allElements.filter(e => e.isShown);
     const elementsToShow = this.getAllElements();
     const elementsToDelayShowing = elementsToShow.filter(e => !e.isShown);
-    const elementsToShowAfterDisolve = elementsToShow.filter(e => e.isShown);
+    const elementsToShowAfterDissolve = elementsToShow.filter(e => e.isShown);
     let cumTime = delay;
 
     if (elementsToShow.length === 0 && elementsShown.length === 0) {
@@ -374,15 +370,12 @@ export default class EquationForm extends Elements {
         return;
       }
     }
-    // disolve out
-    // set positions
-    // disolve in
 
-    let disolveOutCallback = () => {
+    let dissolveOutCallback = () => {
       this.setPositions();
     };
     if (elementsToShow.length === 0) {
-      disolveOutCallback = (cancelled: boolean) => {
+      dissolveOutCallback = (cancelled: boolean) => {
         this.setPositions();
         if (callback != null) {
           callback(cancelled);
@@ -392,7 +385,7 @@ export default class EquationForm extends Elements {
 
     if (elementsShown.length > 0) {
       this.dissolveElements(
-        elementsShown, 'out', delay, hideTime, disolveOutCallback,
+        elementsShown, 'out', delay, hideTime, dissolveOutCallback,
       );
       cumTime += hideTime;
     } else {
@@ -411,29 +404,25 @@ export default class EquationForm extends Elements {
     };
     elementsToDelayShowing.forEach((e) => {
       e.animations.addTo('Equation Color')
-        // .delay(cumTime + blankTime)
         .dissolveIn({
           duration: showTime, onFinish, delay: cumTime + blankTime,
         })
         .start();
-      // e.disolveWithDelay(cumTime + blankTime, showTime, 'in', end);
     });
-    elementsToShowAfterDisolve.forEach((e) => {
+    elementsToShowAfterDissolve.forEach((e) => {
       e.animations.addTo('Equation Color')
-        // .delay(blankTime)
         .dissolveIn({
           duration: showTime, onFinish, delay: blankTime,
         })
         .start();
-      // e.disolveWithDelay(blankTime, showTime, 'in', end);
     });
   }
 
   animatePositionsTo(
     delay: number,
-    disolveOutTime: number,
+    dissolveOutTime: number,
     moveTime: number | null,
-    disolveInTime: number,
+    dissolveInTime: number,
     callback: ?(?mixed) => void = null,
   ) {
     const allElements = this.collectionMethods.getAllElements();
@@ -478,20 +467,20 @@ export default class EquationForm extends Elements {
     let cumTime = delay;
 
     let moveCallback = null;
-    let disolveInCallback = null;
-    let disolveOutCallback = null;
+    let dissolveInCallback = null;
+    let dissolveOutCallback = null;
 
     if (elementsToMove.length === 0 && elementsToShow.length === 0) {
-      disolveOutCallback = callback;
+      dissolveOutCallback = callback;
     } else if (elementsToShow.length === 0) {
       moveCallback = callback;
     } else {
-      disolveInCallback = callback;
+      dissolveInCallback = callback;
     }
 
     if (elementsToHide.length > 0) {
-      this.dissolveElements(elementsToHide, 'out', delay, disolveOutTime, disolveOutCallback);
-      cumTime += disolveOutTime;
+      this.dissolveElements(elementsToHide, 'out', delay, dissolveOutTime, dissolveOutCallback);
+      cumTime += dissolveOutTime;
     }
 
     Object.keys(this.elementMods).forEach((elementName) => {
@@ -532,8 +521,8 @@ export default class EquationForm extends Elements {
     }
 
     if (elementsToShow.length > 0) {
-      this.dissolveElements(elementsToShow, 'in', cumTime, disolveInTime, disolveInCallback);
-      cumTime += disolveInTime + 0.001;
+      this.dissolveElements(elementsToShow, 'in', cumTime, dissolveInTime, dissolveInCallback);
+      cumTime += dissolveInTime + 0.001;
     }
     return cumTime;
   }

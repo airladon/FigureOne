@@ -1156,6 +1156,7 @@ class DiagramElement {
   // **************************************************************
   // **************************************************************
   // Helper functions for quicker animation plans
+  // Deprecate
   animateTo(
     transform: Transform,
     timeOrVelocity: number | Transform = 1,
@@ -1170,6 +1171,7 @@ class DiagramElement {
     );
   }
 
+  // Deprecate
   animateFrom(
     transform: Transform,
     timeOrVelocity: number | Transform = 1,
@@ -1184,6 +1186,7 @@ class DiagramElement {
     );
   }
 
+  // Deprecate
   animateColorTo(
     color: Array<number>,
     time: number = 1,
@@ -1196,6 +1199,7 @@ class DiagramElement {
     );
   }
 
+  // Deprecate
   animateTransformToWithDelay(
     targetTransform: Transform,
     delay: number = 0,
@@ -1270,6 +1274,7 @@ class DiagramElement {
     }
   }
 
+  // Deprecate
   animateColorToWithDelay(
     color: Array<number>,
     delay: number,
@@ -1336,6 +1341,7 @@ class DiagramElement {
     }
   }
 
+  // Deprecate
   disolveOutWithDelay(
     delay: number = 1,
     time: number = 1,
@@ -1346,6 +1352,7 @@ class DiagramElement {
     );
   }
 
+  // Deprecate
   disolveInWithDelay(
     delay: number = 1,
     time: number = 1,
@@ -1356,6 +1363,7 @@ class DiagramElement {
     );
   }
 
+  // Deprecate
   disolveWithDelay(
     delay: number = 1,
     time: number = 1,
@@ -1368,6 +1376,7 @@ class DiagramElement {
     );
   }
 
+  // Deprecate
   animateCustomTo(
     phaseCallback: (number) => void,
     time: number = 1,
@@ -1381,6 +1390,7 @@ class DiagramElement {
     );
   }
 
+  // Deprecate
   animateCustomToWithDelay(
     delay: number,
     phaseCallback: (number) => void,
@@ -1434,32 +1444,9 @@ class DiagramElement {
         this.animateCustomPlan(phases);
       }
     }
-
-    // if (delay === 0 && time === 0) {
-    //   if (callback != null) {
-    //     callback();
-    //   }
-    //   return;
-    // }
-    // let timeToUse = time;
-    // if (time === 0) {
-    //   timeToUse = 0.0001;
-    // }
-
-    // const phaseDelay = new CustomAnimationPhase(() => {}, delay, 0, easeFunction);
-
-    // const phaseMove = new CustomAnimationPhase(
-    //   phaseCallback, timeToUse,
-    //   startPercent, easeFunction,
-    // );
-
-    // if (delay === 0) {
-    //   this.animateCustomPlan([phaseMove], checkCallback(callback));
-    // } else {
-    //   this.animateCustomPlan([phaseDelay, phaseMove], checkCallback(callback));
-    // }
   }
 
+  // Deprecate
   disolveIn(
     time: number = 1,
     callback: ?(boolean) => void = null,
@@ -1467,6 +1454,7 @@ class DiagramElement {
     this.disolveInWithDelay(0, time, callback);
   }
 
+  // Deprecate
   disolveOut(
     time: number = 1,
     callback: ?(boolean) => void = null,
@@ -1475,6 +1463,7 @@ class DiagramElement {
   }
 
   // With update only first instace of translation in the transform order
+  // Deprecate
   animateTranslationTo(
     translation: Point,
     time: number = 1,
@@ -1491,6 +1480,7 @@ class DiagramElement {
   }
 
   // With update only first instace of translation in the transform order
+  // Deprecate
   animateScaleTo(
     scale: Point,
     time: number = 1,
@@ -1507,6 +1497,7 @@ class DiagramElement {
   }
 
   // Will update only first instace of translation in the transform order
+  // Deprecate
   animateTranslationFrom(
     translation: Point,
     timeOrVelocity: number | Transform = 1,
@@ -1522,6 +1513,7 @@ class DiagramElement {
     // this.animateTo(target, timeOrVelocity, 0, 0, callback, easeFunction);
   }
 
+  // Deprecate
   animateTranslationToWithDelay(
     translation: Point,
     delay: number = 1,
@@ -1538,6 +1530,7 @@ class DiagramElement {
   }
 
   // With update only first instace of rotation in the transform order
+  // Deprecate
   animateRotationTo(
     rotation: number,
     rotDirection: TypeRotationDirection,
@@ -1554,6 +1547,7 @@ class DiagramElement {
   }
 
   // With update only first instace of rotation in the transform order
+  // Deprecate
   animateTranslationAndRotationTo(
     translation: Point,
     rotation: number,
@@ -1571,6 +1565,7 @@ class DiagramElement {
     );
   }
 
+  // Deprecate
   animateTranslationAndScaleTo(
     translation: Point,
     scale: Point | number,
@@ -1805,8 +1800,11 @@ class DiagramElement {
     } else {
       this.animations.cancelAll(null);
     }
+    // Deprecate
     this.stopAnimating(cancelled, forceSetToEndOfPlan);
+    // Deprecate
     this.stopAnimatingColor(cancelled, forceSetToEndOfPlan);
+    // Deprecate
     this.stopAnimatingCustom(cancelled, forceSetToEndOfPlan);
     this.stopMovingFreely(cancelled);
     this.stopBeingMoved();
@@ -2233,12 +2231,15 @@ class DiagramElementPrimative extends DiagramElement {
   draw(parentTransform: Transform = new Transform(), now: number = 0) {
     if (this.isShown) {
       this.animations.nextFrame(now);
+      // Deprecate
       this.setNextTransform(now);
+      // Deprecate
       this.setNextColor(now);
       // set next color can end up hiding an element when disolving out
       if (!this.isShown) {
         return;
       }
+      // Deprecate
       this.setNextCustomAnimation(now);
       // this.lastDrawParentTransform = parentTransform._dup();
       this.lastDrawElementTransformPosition = {
@@ -2496,12 +2497,16 @@ class DiagramElementCollection extends DiagramElement {
     // console.log('draw collection', now, this.name)
     if (this.isShown) {
       this.animations.nextFrame(now);
+      // Deprecate
       this.setNextTransform(now);
+      // Deprecate
       this.setNextColor(now);
+      
       // set next color can end up hiding an element when disolving out
       if (!this.isShown) {
         return;
       }
+      // Deprecate
       this.setNextCustomAnimation(now);
       // this.lastDrawParentTransform = parentTransform._dup();
       // this.lastDrawElementTransform = this.transform._dup();
@@ -2826,14 +2831,6 @@ class DiagramElementCollection extends DiagramElement {
                 onFinish: callbackMethod,
               })
               .start();
-            // element.animateTo(
-            //   elementTransforms[element.name],
-            //   time,
-            //   delay,
-            //   rotDirection,
-            //   callbackMethod,
-            //   easeFunction,
-            // );
             // only want to send callback once
             callbackMethod = null;
             timeToAnimate = time + delay;
