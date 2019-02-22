@@ -48,6 +48,18 @@ describe('Animation Examples', () => {
     callbackFlag = 0;
     callback = () => { callbackFlag = 1; };
     examples = {
+      simpleMovePossibilities: {
+        animations: () => {
+          elem1.animations.new()
+            .moveTo({ target: p1, duration: 1 })
+            .start();
+        },
+        element: () => {
+          elem1.animations.new(
+            elem1.anim.position({ target: p1, duration: 1 }),
+          ).start();
+        },
+      },
       moveToPossibilities: {
         scenarios: () => {
           elem1.animations.new()
@@ -63,8 +75,8 @@ describe('Animation Examples', () => {
             .scaleTo({ target: s1, duration: 1 })
             .scaleTo({ target: s2, duration: 1 });
           elem1.animations.new()
-            .rotateTo({ target: r1, duration: 1 })
-            .rotateTo({ target: r2, duration: 1 });
+            .rotation({ target: r1, duration: 1 })
+            .rotation({ target: r2, duration: 1 });
           elem1.animations.start();
         },
         separateTransformElements: () => {
@@ -77,24 +89,24 @@ describe('Animation Examples', () => {
             .scaleTo({ target: s2, duration: 1 })
             .start();
           elem1.animations.new()
-            .rotateTo({ target: r1, duration: 1 })
-            .rotateTo({ target: r2, duration: 1 })
+            .rotation({ target: r1, duration: 1 })
+            .rotation({ target: r2, duration: 1 })
             .start();
         },
         asParallelAndSerial: () => {
           elem1.animations.new()
             .inParallel([
               inSerial([
-                elem1.moveTo({ target: p1, duration: 1 }),
-                elem1.moveTo({ target: p2, duration: 1 }),
+                elem1.anim.position({ target: p1, duration: 1 }),
+                elem1.anim.position({ target: p2, duration: 1 }),
               ]),
               inSerial([
-                elem1.scaleTo({ target: s1, duration: 1 }),
-                elem1.scaleTo({ target: s2, duration: 1 }),
+                elem1.anim.scale({ target: s1, duration: 1 }),
+                elem1.anim.scale({ target: s2, duration: 1 }),
               ]),
               inSerial([
-                elem1.rotateTo({ target: r1, duration: 1 }),
-                elem1.rotateTo({ target: r2, duration: 1 }),
+                elem1.anim.rotation({ target: r1, duration: 1 }),
+                elem1.anim.rotation({ target: r2, duration: 1 }),
               ]),
             ])
             .start();
@@ -108,6 +120,33 @@ describe('Animation Examples', () => {
             .start();
         },
       },
+      // allStepsInBuilder: () => {
+      //   elem1.animations.new()
+      //     .moveTo({ target: p1, duration: 1 })
+      //     .positionTo({ target: p1, duration: 1 })
+      //     .rotateTo({ target: r1, duration: 1 })
+      //     .scaleTo({ target: s1, duration: 1 })
+      //     .transformTo({ target: t1, duration: 1})
+      //     .delay(1)
+      //     .position({ target: p1, duration: 1 })
+      //     .scale({ target: s1, duration: 1 })
+      //     .rotation({ target: r1, duration: 1 })
+      //     .transform({ target: t1, duration: 1 })
+      //     .scenario({ scenario: 'scenario1', duration: 1})
+      //     .color({ target: c1, duration: 1})
+      //     .dissolveIn(1)
+      //     .dissolveOut(2)
+      //     .trigger(t1)
+      //     .custom(c1)
+      //     .inParallel()
+      //     .inSerial()
+      //     .reset()
+      //     .
+      //     .delay(1)
+      //     .dissolveOut(1)
+      //     .dissolveIn(1)
+      //     .colorTo({ target: [0, 1, 0, 1], duration: 1 })
+      // }
       moveElementSimple: () => {
         elem1.animations.new()
           .moveTo({ target: p1, duration: 1, progression: 'linear' })
@@ -303,6 +342,29 @@ describe('Animation Examples', () => {
     expect(elem1.getPosition().round()).toEqual(point(1));
     expect(elem2.getPosition().round()).toEqual(point(1));
     expect(math.round(remaining)).toBe(remaining);
+  });
+  describe('Simple moveto possibilities', () => {
+    let tester;
+    beforeEach(() => {
+      tester = () => {
+        diagram.draw(0);
+        expect(elem1.getPosition().round()).toEqual(point(0));
+        diagram.draw(0.5);
+        expect(elem1.getPosition().round()).toEqual(point(0.5));
+        diagram.draw(1);
+        expect(elem1.getPosition().round()).toEqual(point(1));
+        diagram.draw(1.5);
+        expect(elem1.getPosition().round()).toEqual(point(1));
+      };
+    });
+    test('Separate Transform Elements', () => {
+      examples.simpleMovePossibilities.animations();
+      tester();
+    });
+    test('Separate Transform Elements with separate start', () => {
+      examples.simpleMovePossibilities.element();
+      tester();
+    });
   });
   describe('All moveto possibilities', () => {
     let tester;

@@ -208,6 +208,7 @@ class DiagramElement {
 
   uid: string;
 
+  // Rename to animate in future
   anim: Object;
 
   constructor(
@@ -237,6 +238,7 @@ class DiagramElement {
     this.parent = parent;
     this.drawPriority = 1;
     this.noRotationFromParent = false;
+    // Rename to animate in future
     this.anim = {
       rotation: (...optionsIn: Array<TypeRotationAnimationStepInputOptions>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
