@@ -62,11 +62,13 @@ export class SerialAnimationStep extends AnimationStep {
   }
 
   start(startTime?: number) {
-    this.startWaiting();
-    super.start(startTime);
-    this.index = 0;
-    if (this.steps.length > 0) {
-      this.steps[0].start(startTime);
+    if (this.state === 'idle' || this.state === 'finished') {
+      this.startWaiting();
+      super.start(startTime);
+      this.index = 0;
+      if (this.steps.length > 0) {
+        this.steps[0].start(startTime);
+      }
     }
   }
 
