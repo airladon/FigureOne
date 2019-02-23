@@ -133,6 +133,8 @@ describe('Animation Examples', () => {
           .transform({ target: t1, duration: 1 })
           .scenario({ target: 'scenario1', duration: 1 })
           .color({ target: [1, 0, 1, 1], duration: 1 })
+          .pulse({ scale: 2, duration: 1 })
+          .pulse({ scale: 2, numLines: 3, duration: 1 })
           .dissolveIn(1)
           .dissolveOut(1)
           .trigger(callback)

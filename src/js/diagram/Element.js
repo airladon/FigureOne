@@ -258,7 +258,7 @@ class DiagramElement {
         return new animations.TransformAnimationStep(options);
       },
       pulse(...optionsIn: Array<TypePulseAnimationStepInputOptions>) {
-        return new animation.PulseAnimationStep(...optionsIn));
+        return new animation.PulseAnimationStep(...optionsIn);
       },
       // eslint-disable-next-line max-len
       dissolveIn: (timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {}, ...args: Array<TypeColorAnimationStepInputOptions>) => {
