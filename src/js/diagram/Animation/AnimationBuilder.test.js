@@ -16,8 +16,9 @@ const point = value => new Point(value, value);
 
 describe('AnimationBuilder API', () => {
   let element;
+  let diagram;
   beforeEach(() => {
-    const diagram = makeDiagram();
+    diagram = makeDiagram();
     element = diagram.objects.line();
     element.transform = element.transform.zero();
   });
@@ -40,6 +41,16 @@ describe('AnimationBuilder API', () => {
     remaining = builder.nextFrame(102.1);
     expect(element.getPosition().round()).toEqual(point(2));
     expect(math.round(remaining)).toBe(0.1);
+  });
+  test('Diagram', () => {
+    diagram.elements.add('e', element);
+    element.animations.new()
+      .position({ target: point(1), duration: 1, progression: 'linear' })
+      .whenFinished(() => {})
+      .start();
+    diagram.draw(0);
+    diagram.draw(0.5);
+    expect(element.getPosition().round()).toEqual(point(0.5));
   });
   test('Duplicate', () => {
     const builder = new AnimationBuilder({ element });

@@ -893,7 +893,14 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         callback();
       }
     };
-    this.animateCustomTo(func, time, 0, done);
+    this.animations.new('Line Length')
+      .custom({ callback: func, duration: time })
+      .whenFinished(done)
+      .start();
+    // this.animations.start();
+    this.animateNextFrame();
+    // console.log(this)
+    // this.animateCustomTo(func, time, 0, done);
   }
 
   grow(

@@ -126,6 +126,7 @@ export default class AnimationManager {
         if (animation.name === name) {
           if (animation.state !== 'animating') {
             animation.start();
+            this.state = 'animating';
           }
         }
       }
@@ -137,6 +138,7 @@ export default class AnimationManager {
       const animation = this.animations[i];
       if (animation.state !== 'animating') {
         animation.start();
+        this.state = 'animating';
       }
     }
   }
