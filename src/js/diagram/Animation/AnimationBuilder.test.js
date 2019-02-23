@@ -26,8 +26,8 @@ describe('AnimationBuilder API', () => {
     const p1 = new Point(1, 1);
     const p2 = new Point(2, 2);
     builder
-      .moveTo({ target: p1, duration: 1, progression: 'linear' })
-      .moveTo({ target: p2, duration: 1, progression: 'linear' })
+      .position({ target: p1, duration: 1, progression: 'linear' })
+      .position({ target: p2, duration: 1, progression: 'linear' })
       .start();
     builder.nextFrame(100);
     builder.nextFrame(100.1);
@@ -46,8 +46,8 @@ describe('AnimationBuilder API', () => {
     const p1 = new Point(1, 1);
     const p2 = new Point(2, 2);
     builder
-      .moveTo({ target: p1, duration: 1, progression: 'linear' })
-      .moveTo({ target: p2, duration: 1, progression: 'linear' });
+      .position({ target: p1, duration: 1, progression: 'linear' })
+      .position({ target: p2, duration: 1, progression: 'linear' });
     const dup = builder._dup();
     expect(dup).not.toBe(builder);
     expect(dup).toEqual(builder);

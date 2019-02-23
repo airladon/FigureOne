@@ -46,7 +46,7 @@ describe('Animation Trigger', () => {
     elem1.animations.new()
       .delay(1)
       .trigger(trigger1)
-      .moveTo({ target: new Point(1, 1), duration: 1, progression: 'linear' })
+      .position({ target: new Point(1, 1), duration: 1, progression: 'linear' })
       .trigger(trigger2)
       .delay(1)
       .start();

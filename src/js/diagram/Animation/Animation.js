@@ -29,6 +29,11 @@ import type {
 import ScaleAnimationStep from './AnimationStep/ElementAnimationStep/ScaleAnimationStep';
 
 import type {
+  TypePulseAnimationStepInputOptions,
+} from './AnimationStep/ElementAnimationStep/PulseAnimationStep';
+import PulseAnimationStep from './AnimationStep/ElementAnimationStep/PulseAnimationStep';
+
+import type {
   TypeTriggerStepInputOptions,
 } from './AnimationStep/TriggerStep';
 import {
@@ -84,7 +89,7 @@ export type {
   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
   TypeColorAnimationStepInputOptions, TypeCustomAnimationStepInputOptions,
   TypeAnimationManagerInputOptions, TypeRotationAnimationStepInputOptions,
-  TypeScaleAnimationStepInputOptions,
+  TypeScaleAnimationStepInputOptions, TypePulseAnimationStepInputOptions,
 };
 export {
   PositionAnimationStep, AnimationBuilder, ParallelAnimationStep, SerialAnimationStep,
@@ -92,5 +97,5 @@ export {
   inParallel, inSerial, trigger, delay, ColorAnimationStep,
   DissolveInAnimationStep, dissolveIn, DissolveOutAnimationStep, dissolveOut,
   CustomAnimationStep, custom, AnimationManager, RotationAnimationStep,
-  ScaleAnimationStep,
+  ScaleAnimationStep, PulseAnimationStep,
 };

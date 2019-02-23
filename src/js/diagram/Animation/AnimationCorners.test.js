@@ -45,19 +45,19 @@ describe('Animation Corners', () => {
     examples = {
       timeSkipSimple: () => {
         elem1.animations.new()
-          .moveTo({ target: p1, duration: 1, progression: 'linear' })
-          .moveTo({ target: p2, duration: 1, progression: 'linear' })
-          .moveTo({ target: p1, duration: 1, progression: 'linear' })
+          .position({ target: p1, duration: 1, progression: 'linear' })
+          .position({ target: p2, duration: 1, progression: 'linear' })
+          .position({ target: p1, duration: 1, progression: 'linear' })
           .start();
       },
       timeSkipNested: () => {
         elem1.animations.new()
           .inParallel([
             inSerial([
-              elem1.moveTo(target1), delay(1), elem1.moveTo(target2),
+              elem1.anim.position(target1), delay(1), elem1.anim.position(target2),
             ]),
             inSerial([
-              elem2.moveTo(target1), delay(1), elem2.moveTo(target2),
+              elem2.anim.position(target1), delay(1), elem2.anim.position(target2),
             ]),
           ])
           .start();
@@ -65,32 +65,32 @@ describe('Animation Corners', () => {
       timeSkipComplexNest: () => {
         elem1.animations.new()
           // Only e1 moves to p1
-          .moveTo({ target: p1, duration: 1, progression: 'linear' })
+          .position({ target: p1, duration: 1, progression: 'linear' })
           // e1 moves to p2
           // e2 moves to p1
           .inParallel([
-            elem1.moveTo({ target: p2, duration: 1, progression: 'linear' }),
-            elem2.moveTo({ target: p1, duration: 1, progression: 'linear' }),
+            elem1.anim.position({ target: p2, duration: 1, progression: 'linear' }),
+            elem2.anim.position({ target: p1, duration: 1, progression: 'linear' }),
           ])
           // e1 moves to p1, delays 1, moves to p2
           // e2 moves to p2
           .inParallel([
-            elem1.animationBuilder()
-              .moveTo({ target: p1, duration: 1, progression: 'linear' })
+            elem1.anim.builder()
+              .position({ target: p1, duration: 1, progression: 'linear' })
               .delay(1)
-              .moveTo({ target: p2, duration: 1, progression: 'linear' }),
-            elem2.moveTo({ target: p2, duration: 1, progression: 'linear' }),
-            elem3.moveTo({ target: p1, duration: 1, progression: 'linear' }),
+              .position({ target: p2, duration: 1, progression: 'linear' }),
+            elem2.anim.position({ target: p2, duration: 1, progression: 'linear' }),
+            elem3.anim.position({ target: p1, duration: 1, progression: 'linear' }),
           ])
           // both e1 and e2 move to p1
           .inParallel([
             inSerial([
-              elem1.moveTo({ target: p1, duration: 1, progression: 'linear' }),
+              elem1.anim.position({ target: p1, duration: 1, progression: 'linear' }),
               delay(1),
             ]),
             inSerial([
               delay(1),
-              elem2.moveTo({ target: p1, duration: 1, progression: 'linear' }),
+              elem2.anim.position({ target: p1, duration: 1, progression: 'linear' }),
             ]),
           ])
           .start();

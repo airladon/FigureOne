@@ -29,7 +29,7 @@ describe('Animation Manager', () => {
   test('Basic', () => {
     // console.log(diagram.elements)
     elem.animations.new()
-      .moveTo({ target: p1, duration: 1, progression: 'linear' })
+      .position({ target: p1, duration: 1, progression: 'linear' })
       .start();
     diagram.draw(0);
     // elem.animations.nextFrame(0);
@@ -46,7 +46,7 @@ describe('Animation Manager', () => {
   });
   test('Two parallel animations', () => {
     elem.animations.new()
-      .moveTo({ target: p1, duration: 1, progression: 'linear' })
+      .position({ target: p1, duration: 1, progression: 'linear' })
       .start();
     elem.animations.new()
       .dissolveOut(2)
@@ -74,9 +74,9 @@ describe('Animation Manager', () => {
   });
   test('Two parallel animations with one not a sequence', () => {
     elem.animations.new()
-      .moveTo({ target: p1, duration: 1, progression: 'linear' })
+      .position({ target: p1, duration: 1, progression: 'linear' })
       .start();
-    elem.animations.new(elem.dissolveOut(2))
+    elem.animations.new(elem.anim.dissolveOut(2))
       .start();
 
     elem.animations.nextFrame(0);
@@ -102,7 +102,7 @@ describe('Animation Manager', () => {
   });
   test('Add to existing animation', () => {
     elem.animations.new('test')
-      .moveTo({ target: p1, duration: 1, progression: 'linear' })
+      .position({ target: p1, duration: 1, progression: 'linear' })
       .start();
 
     elem.animations.nextFrame(0);
