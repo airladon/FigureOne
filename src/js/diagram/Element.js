@@ -573,10 +573,14 @@ class DiagramElement {
     this.setTransform(currentTransform);
   }
 
-  setScale(scaleOrX: Point | number, y: number = 0) {
+  setScale(scaleOrX: Point | number, y: ?number = null) {
     let scale = scaleOrX;
     if (typeof scaleOrX === 'number') {
-      scale = new Point(scaleOrX, y);
+      if (y == null) {
+        scale = new Point(scaleOrX, scaleOrX);
+      } else {
+        scale = new Point(scaleOrX, y);
+      }
     }
     const currentTransform = this.transform._dup();
     currentTransform.updateScale(scale);
@@ -2536,7 +2540,8 @@ class DiagramElementCollection extends DiagramElement {
         || this.state.isAnimatingColor
         || this.state.isMovingFreely
         || this.state.isBeingMoved
-        || this.state.isPulsing) {
+        || this.state.isPulsing
+        || this.animations.state === 'animating') {
       return true;
     }
     for (let i = 0; i < this.drawOrder.length; i += 1) {

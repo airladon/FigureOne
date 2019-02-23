@@ -17,9 +17,11 @@ describe('Transfrom Animation Unit', () => {
   let custom;
   let percentComplete;
   let callback;
+  let diagram;
   beforeEach(() => {
-    const diagram = makeDiagram();
+    diagram = makeDiagram();
     elem1 = diagram.objects.line();
+    diagram.elements.add('elem1', elem1);
     elem1.setPosition(new Point(0, 0));
     percentComplete = 0;
     custom = jest.fn((p) => { percentComplete = p; });
@@ -39,6 +41,16 @@ describe('Transfrom Animation Unit', () => {
     expect(percentComplete).toBe(1);
     elem1.animations.nextFrame(1.1);
     expect(percentComplete).toBe(1);
+  });
+  test('Simple from diagram', () => {
+    elem1.animations.new()
+      .custom({ duration: 1, callback: custom })
+      .start();
+    diagram.draw(0);
+    diagram.draw(0.1);
+    expect(percentComplete).toBe(0.1);
+    diagram.draw(0.2);
+    expect(percentComplete).toBe(0.2);
   });
   // A 25% start offset for 1 second duration will result in a start time
   // offset of 0.366s, and duration of 0.634.

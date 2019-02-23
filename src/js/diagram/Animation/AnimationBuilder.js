@@ -182,6 +182,11 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     this.state = 'idle';
   }
 
+  // whenFinished(callback: (boolean) => void) {
+  //   super.whenFinished(callback);
+  //   return this;
+  // }
+
   _dup() {
     const newBuilder = new AnimationBuilder();
     duplicateFromTo(this, newBuilder, ['element']);
