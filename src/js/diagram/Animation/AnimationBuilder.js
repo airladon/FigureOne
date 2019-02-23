@@ -171,7 +171,9 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   }
 
   pulse(...optionsIn: Array<TypePulseAnimationStepInputOptions>) {
-    this.then(new animation.PulseAnimationStep(...optionsIn));
+    const defaultOptions = { element: this.element };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    this.then(new animation.PulseAnimationStep(options));
     return this;
   }
 

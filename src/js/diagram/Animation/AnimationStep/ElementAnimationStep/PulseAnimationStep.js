@@ -34,6 +34,7 @@ export default class PulseAnimationStep extends ElementAnimationStep {
     this.scale = options.scale;
     this.numLines = options.numLines;
     this.duration = options.duration;
+    this.frequency = options.frequency;
   }
 
   // On start, calculate the duration, target and delta if not already present.
