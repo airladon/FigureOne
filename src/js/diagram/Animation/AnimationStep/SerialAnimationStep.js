@@ -73,18 +73,21 @@ export class SerialAnimationStep extends AnimationStep {
   }
 
   nextFrame(now: number) {
-    const remaining = this.steps[this.index].nextFrame(now);
-    // console.log('serial', now, this.index, remaining)
-    if (remaining > 0) {
-      if (this.index === this.steps.length - 1) {
-        this.finish();
-        return remaining;
+    let remaining = -1;
+    if (this.index <= this.steps.length - 1) {
+      remaining = this.steps[this.index].nextFrame(now);
+      // console.log('serial', now, this.index, remaining)
+      if (remaining > 0) {
+        if (this.index === this.steps.length - 1) {
+          this.finish();
+          return remaining;
+        }
+        this.index += 1;
+        this.steps[this.index].start(now - remaining);
+        return this.nextFrame(now);
       }
-      this.index += 1;
-      this.steps[this.index].start(now - remaining);
-      return this.nextFrame(now);
     }
-    return 0;
+    return remaining;
   }
 
   finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {

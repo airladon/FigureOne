@@ -34,9 +34,9 @@ describe('Two Element Animation Examples', () => {
     examples = {
       simple: () => {
         elem1.animations.new()
-          .moveTo({ target: p1, duration: 1, progression: 'linear' })
+          .position({ target: p1, duration: 1, progression: 'linear' })
           .delay(1)
-          .moveTo({
+          .position({
             element: elem2, target: p1, duration: 1, progression: 'linear',
           })
           .whenFinished(animationCallback)

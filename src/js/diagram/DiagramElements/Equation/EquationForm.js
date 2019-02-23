@@ -274,7 +274,7 @@ export default class EquationForm extends Elements {
     };
     elements.forEach((e) => {
       e.animations.addTo('Equation Color')
-        .colorTo({
+        .color({
           dissolve, onFinish, duration: time, delay,
         })
         .start();
@@ -492,7 +492,7 @@ export default class EquationForm extends Elements {
         if (color != null) {
           element.addTo('Equation Color')
             // .delay(cumTime)
-            .colorTo({
+            .color({
               target: color, duration: moveTimeToUse, delay: cumTime,
             })
             .start();

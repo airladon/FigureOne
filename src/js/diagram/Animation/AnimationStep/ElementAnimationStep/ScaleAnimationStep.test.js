@@ -30,24 +30,24 @@ describe('Scale Animation Step', () => {
   });
   test('Simple scale', () => {
     elem1.animations.new()
-      .scaleTo({ target: 2, duration: 1 })
+      .scale({ target: 2, duration: 1 })
       .start();
     tester();
   });
   test('Simple scale with element creater', () => {
-    elem1.animations.new(elem1.scaleTo({ target: 2, duration: 1 }))
+    elem1.animations.new(elem1.anim.scale({ target: 2, duration: 1 }))
       .start();
     tester();
   });
   test('Simple scale to delta', () => {
     elem1.animations.new()
-      .scaleTo({ delta: 1, duration: 1 })
+      .scale({ delta: 1, duration: 1 })
       .start();
     tester();
   });
   test('Simple scale with point', () => {
     elem1.animations.new()
-      .scaleTo({ target: new Point(2, 2), duration: 1, progression: 'linear' })
+      .scale({ target: new Point(2, 2), duration: 1, progression: 'linear' })
       .start();
     tester();
   });

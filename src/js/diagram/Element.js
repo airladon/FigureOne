@@ -19,6 +19,7 @@ import type {
   TypePositionAnimationStepInputOptions, TypeAnimationBuilderInputOptions,
   TypeColorAnimationStepInputOptions, TypeTransformAnimationStepInputOptions,
   TypeRotationAnimationStepInputOptions, TypeScaleAnimationStepInputOptions,
+  TypePulseAnimationStepInputOptions,
 } from './Animation/Animation';
 import * as animations from './Animation/Animation';
 
@@ -256,6 +257,9 @@ class DiagramElement {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.TransformAnimationStep(options);
       },
+      pulse(...optionsIn: Array<TypePulseAnimationStepInputOptions>) {
+        return new animation.PulseAnimationStep(...optionsIn));
+      },
       // eslint-disable-next-line max-len
       dissolveIn: (timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {}, ...args: Array<TypeColorAnimationStepInputOptions>) => {
         const defaultOptions = { element: this };
@@ -304,7 +308,7 @@ class DiagramElement {
         }
         return new animations.TransformAnimationStep(options);
       },
-    }
+    };
     this.animate = {
       color: {
         plan: [],
@@ -806,89 +810,90 @@ class DiagramElement {
     }
   }
 
-  /////////////////// Deprecate Start
-  rotateTo(...optionsIn: Array<TypeRotationAnimationStepInputOptions>) {
-    const options = joinObjects({}, { element: this }, ...optionsIn);
-    return new animations.RotationAnimationStep(options);
-  }
+  // ///////////////// Deprecate Start
+  // rotateTo(...optionsIn: Array<TypeRotationAnimationStepInputOptions>) {
+  //   const options = joinObjects({}, { element: this }, ...optionsIn);
+  //   return new animations.RotationAnimationStep(options);
+  // }
 
-  scaleTo(...optionsIn: Array<TypeScaleAnimationStepInputOptions>) {
-    const options = joinObjects({}, { element: this }, ...optionsIn);
-    return new animations.ScaleAnimationStep(options);
-  }
+  // scaleTo(...optionsIn: Array<TypeScaleAnimationStepInputOptions>) {
+  //   const options = joinObjects({}, { element: this }, ...optionsIn);
+  //   return new animations.ScaleAnimationStep(options);
+  // }
 
-  moveTo(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
-    return this.moveToPosition(...optionsIn);
-  }
+  // moveTo(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
+  //   return this.moveToPosition(...optionsIn);
+  // }
 
-  moveToPosition(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
-    const options = joinObjects({}, { element: this }, ...optionsIn);
-    return new animations.PositionAnimationStep(options);
-  }
+  // moveToPosition(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
+  //   const options = joinObjects({}, { element: this }, ...optionsIn);
+  //   return new animations.PositionAnimationStep(options);
+  // }
 
-  moveToTransform(...optionsIn: Array<TypeTransformAnimationStepInputOptions>) {
-    const options = joinObjects({}, { element: this }, ...optionsIn);
-    return new animations.TransformAnimationStep(options);
-  }
+  // moveToTransform(...optionsIn: Array<TypeTransformAnimationStepInputOptions>) {
+  //   const options = joinObjects({}, { element: this }, ...optionsIn);
+  //   return new animations.TransformAnimationStep(options);
+  // }
 
-  dissolveIn(
-    timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
-    ...args: Array<TypeColorAnimationStepInputOptions>
-  ) {
-    const defaultOptions = { element: this };
-    let options;
-    if (typeof timeOrOptionsIn === 'number') {
-      options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
-    } else {
-      options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
-    }
-    return new animations.DissolveInAnimationStep(options);
-  }
+  // dissolveIn(
+  //   timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
+  //   ...args: Array<TypeColorAnimationStepInputOptions>
+  // ) {
+  //   const defaultOptions = { element: this };
+  //   let options;
+  //   if (typeof timeOrOptionsIn === 'number') {
+  //     options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+  //   } else {
+  //     options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+  //   }
+  //   return new animations.DissolveInAnimationStep(options);
+  // }
 
-  dissolveOut(
-    timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
-    ...args: Array<TypeColorAnimationStepInputOptions>
-  ) {
-    const defaultOptions = { element: this };
-    let options;
-    if (typeof timeOrOptionsIn === 'number') {
-      options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
-    } else {
-      options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
-    }
-    return new animations.DissolveOutAnimationStep(options);
-  }
+  // dissolveOut(
+  //   timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
+  //   ...args: Array<TypeColorAnimationStepInputOptions>
+  // ) {
+  //   const defaultOptions = { element: this };
+  //   let options;
+  //   if (typeof timeOrOptionsIn === 'number') {
+  //     options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+  //   } else {
+  //     options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+  //   }
+  //   return new animations.DissolveOutAnimationStep(options);
+  // }
 
-  animationBuilder(...optionsIn: Array<TypeAnimationBuilderInputOptions>) {
-    return new animations.AnimationBuilder(this, ...optionsIn);
-  }
+  // animationBuilder(...optionsIn: Array<TypeAnimationBuilderInputOptions>) {
+  //   return new animations.AnimationBuilder(this, ...optionsIn);
+  // }
 
-  moveToScenario(
-    ...optionsIn: Array<TypeTransformAnimationStepInputOptions & { scenario: string }>
-  ) {
-    const defaultOptions = { element: this };
-    const options = joinObjects({}, defaultOptions, ...optionsIn);
-    if (options.target != null
-      && options.target in options.element.scenarios
-    ) {
-      const target = options.element.getScenarioTarget(options.target);
-      options.target = target;
-    }
-    if (options.start != null
-      && options.start in options.element.scenarios
-    ) {
-      const start = options.element.getScenarioTarget(options.start);
-      options.start = start;
-    }
-    if (options.delta != null
-      && options.delta in options.element.scenarios
-    ) {
-      const delta = options.element.getScenarioTarget(options.delta);
-      options.delta = delta;
-    }
-    return new animations.TransformAnimationStep(options);
-  }
-  ////////////// Deprecate End
+  // Deprecate
+  // moveToScenario(
+  //   ...optionsIn: Array<TypeTransformAnimationStepInputOptions & { scenario: string }>
+  // ) {
+  //   const defaultOptions = { element: this };
+  //   const options = joinObjects({}, defaultOptions, ...optionsIn);
+  //   if (options.target != null
+  //     && options.target in options.element.scenarios
+  //   ) {
+  //     const target = options.element.getScenarioTarget(options.target);
+  //     options.target = target;
+  //   }
+  //   if (options.start != null
+  //     && options.start in options.element.scenarios
+  //   ) {
+  //     const start = options.element.getScenarioTarget(options.start);
+  //     options.start = start;
+  //   }
+  //   if (options.delta != null
+  //     && options.delta in options.element.scenarios
+  //   ) {
+  //     const delta = options.element.getScenarioTarget(options.delta);
+  //     options.delta = delta;
+  //   }
+  //   return new animations.TransformAnimationStep(options);
+  // }
+  // //////////// Deprecate End
 
   // moveToScenario_old(
   //   scenarioName: string,
@@ -2898,7 +2903,7 @@ class DiagramElementCollection extends DiagramElement {
           if (!elementTransforms[element.name].isEqualTo(element.transform)) {
             element.animations.new()
               .delay(delay)
-              .moveToTransform({
+              .transform({
                 target: elementTransforms[element.name],
                 duration: time,
                 rotDirection,

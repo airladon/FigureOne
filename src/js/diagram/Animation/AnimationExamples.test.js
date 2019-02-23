@@ -27,6 +27,9 @@ describe('Animation Examples', () => {
   let s2;
   let callbackFlag;
   let callback;
+  let t1;
+  let t2;
+  let customFunction;
   beforeEach(() => {
     p1 = new Point(1, 1);
     p2 = new Point(2, 2);
@@ -34,6 +37,9 @@ describe('Animation Examples', () => {
     r2 = 2;
     s1 = new Point(1, 1);
     s2 = new Point(2, 2);
+    t1 = new Transform().scale(s1).rotate(r1).translate(p1);
+    t2 = new Transform().scale(s2).rotate(r2).translate(p2);
+    customFunction = () => {};
     diagram = makeDiagram();
     elem1 = diagram.objects.line();
     elem2 = diagram.objects.line();
@@ -51,7 +57,7 @@ describe('Animation Examples', () => {
       simpleMovePossibilities: {
         animations: () => {
           elem1.animations.new()
-            .moveTo({ target: p1, duration: 1 })
+            .position({ target: p1, duration: 1 })
             .start();
         },
         element: () => {
@@ -63,17 +69,17 @@ describe('Animation Examples', () => {
       moveToPossibilities: {
         scenarios: () => {
           elem1.animations.new()
-            .moveToScenario({ target: 'scenario1', duration: 1 })
-            .moveToScenario({ target: 'scenario2', duration: 1 })
+            .scenario({ target: 'scenario1', duration: 1 })
+            .scenario({ target: 'scenario2', duration: 1 })
             .start();
         },
         separateTransformElementsSeparateStart: () => {
           elem1.animations.new()
-            .moveTo({ target: p1, duration: 1 })
-            .moveTo({ target: p2, duration: 1 });
+            .position({ target: p1, duration: 1 })
+            .position({ target: p2, duration: 1 });
           elem1.animations.new()
-            .scaleTo({ target: s1, duration: 1 })
-            .scaleTo({ target: s2, duration: 1 });
+            .scale({ target: s1, duration: 1 })
+            .scale({ target: s2, duration: 1 });
           elem1.animations.new()
             .rotation({ target: r1, duration: 1 })
             .rotation({ target: r2, duration: 1 });
@@ -81,12 +87,12 @@ describe('Animation Examples', () => {
         },
         separateTransformElements: () => {
           elem1.animations.new()
-            .moveTo({ target: p1, duration: 1 })
-            .moveTo({ target: p2, duration: 1 })
+            .position({ target: p1, duration: 1 })
+            .position({ target: p2, duration: 1 })
             .start();
           elem1.animations.new()
-            .scaleTo({ target: s1, duration: 1 })
-            .scaleTo({ target: s2, duration: 1 })
+            .scale({ target: s1, duration: 1 })
+            .scale({ target: s2, duration: 1 })
             .start();
           elem1.animations.new()
             .rotation({ target: r1, duration: 1 })
@@ -112,45 +118,33 @@ describe('Animation Examples', () => {
             .start();
         },
         asTransforms: () => {
-          const t1 = new Transform().scale(s1).rotate(r1).translate(p1);
-          const t2 = new Transform().scale(s2).rotate(r2).translate(p2);
           elem1.animations.new()
-            .moveToTransform({ target: t1, duration: 1 })
-            .moveToTransform({ target: t2, duration: 1 })
+            .transform({ target: t1, duration: 1 })
+            .transform({ target: t2, duration: 1 })
             .start();
         },
       },
-      // allStepsInBuilder: () => {
-      //   elem1.animations.new()
-      //     .moveTo({ target: p1, duration: 1 })
-      //     .positionTo({ target: p1, duration: 1 })
-      //     .rotateTo({ target: r1, duration: 1 })
-      //     .scaleTo({ target: s1, duration: 1 })
-      //     .transformTo({ target: t1, duration: 1})
-      //     .delay(1)
-      //     .position({ target: p1, duration: 1 })
-      //     .scale({ target: s1, duration: 1 })
-      //     .rotation({ target: r1, duration: 1 })
-      //     .transform({ target: t1, duration: 1 })
-      //     .scenario({ scenario: 'scenario1', duration: 1})
-      //     .color({ target: c1, duration: 1})
-      //     .dissolveIn(1)
-      //     .dissolveOut(2)
-      //     .trigger(t1)
-      //     .custom(c1)
-      //     .inParallel()
-      //     .inSerial()
-      //     .reset()
-      //     .
-      //     .delay(1)
-      //     .dissolveOut(1)
-      //     .dissolveIn(1)
-      //     .colorTo({ target: [0, 1, 0, 1], duration: 1 })
-      // }
+      allStepsInBuilder: () => {
+        elem1.animations.new()
+          .delay(1)
+          .position({ target: p2, duration: 1 })
+          .scale({ target: s2, duration: 1 })
+          .rotation({ target: r2, duration: 1 })
+          .transform({ target: t1, duration: 1 })
+          .scenario({ target: 'scenario1', duration: 1 })
+          .color({ target: [1, 0, 1, 1], duration: 1 })
+          .dissolveIn(1)
+          .dissolveOut(1)
+          .trigger(callback)
+          .custom(customFunction)
+          .inParallel()
+          .inSerial()
+          .start();
+      },
       moveElementSimple: () => {
         elem1.animations.new()
-          .moveTo({ target: p1, duration: 1, progression: 'linear' })
-          .moveTo({ target: p2, duration: 1, progression: 'linear' })
+          .position({ target: p1, duration: 1, progression: 'linear' })
+          .position({ target: p2, duration: 1, progression: 'linear' })
           .start();
       },
       // Elements 1 and 2 move together in parallel for first second
@@ -159,34 +153,34 @@ describe('Animation Examples', () => {
         elem1.animations.new()
           .inParallel({
             steps: [
-              elem1.moveTo({ target: p1, duration: 1, progression: 'linear' }),
-              elem2.moveTo({ target: p1, duration: 1, progression: 'linear' }),
+              elem1.anim.position({ target: p1, duration: 1, progression: 'linear' }),
+              elem2.anim.position({ target: p1, duration: 1, progression: 'linear' }),
             ],
           })
-          .moveTo({ target: p2, duration: 1, progression: 'linear' })
+          .position({ target: p2, duration: 1, progression: 'linear' })
           .start();
       },
       moveElementsInParallelSimply: () => {
         elem1.animations.new()
           .inParallel([
-            elem1.moveTo({ target: p1, duration: 1, progression: 'linear' }),
-            elem2.moveTo({ target: p1, duration: 1, progression: 'linear' }),
+            elem1.anim.position({ target: p1, duration: 1, progression: 'linear' }),
+            elem2.anim.position({ target: p1, duration: 1, progression: 'linear' }),
           ], { completeOnCancel: false })
-          .moveTo({ target: p2, duration: 1, progression: 'linear' })
+          .position({ target: p2, duration: 1, progression: 'linear' })
           .start();
       },
       animationCallbackStop: () => {
         elem1.animations.new()
-          .moveTo({ target: p1, duration: 1, progression: 'linear' })
-          .moveTo({ target: p2, duration: 1, progression: 'linear' })
+          .position({ target: p1, duration: 1, progression: 'linear' })
+          .position({ target: p2, duration: 1, progression: 'linear' })
           .whenFinished(callback)
           .ifCanceledThenStop()
           .start();
       },
       animationCallbackComplete: () => {
         elem1.animations.new()
-          .moveTo({ target: p1, duration: 1, progression: 'linear' })
-          .moveTo({ target: p2, duration: 1, progression: 'linear' })
+          .position({ target: p1, duration: 1, progression: 'linear' })
+          .position({ target: p2, duration: 1, progression: 'linear' })
           .whenFinished(callback)
           .ifCanceledThenComplete()
           .start();
@@ -194,36 +188,44 @@ describe('Animation Examples', () => {
       nesting: () => {
         elem1.animations.new()
           // Only e1 moves to p1
-          .moveTo({ target: p1, duration: 1, progression: 'linear' })
+          .position({ target: p1, duration: 1, progression: 'linear' })
           // e1 moves to p2
           // e2 moves to p1
           .inParallel([
-            elem1.moveTo({ target: p2, duration: 1, progression: 'linear' }),
-            elem2.moveTo({ target: p1, duration: 1, progression: 'linear' }),
+            elem1.anim.position({ target: p2, duration: 1, progression: 'linear' }),
+            elem2.anim.position({ target: p1, duration: 1, progression: 'linear' }),
           ])
           // e1 moves to p1, delays 1, moves to p2
           // e2 moves to p2
           .inParallel([
-            elem1.animationBuilder()
-              .moveTo({ target: p1, duration: 1, progression: 'linear' })
+            elem1.anim.builder()
+              .position({ target: p1, duration: 1, progression: 'linear' })
               .delay(1)
-              .moveTo({ target: p2, duration: 1, progression: 'linear' }),
-            elem2.moveTo({ target: p2, duration: 1, progression: 'linear' }),
+              .position({ target: p2, duration: 1, progression: 'linear' }),
+            elem2.anim.position({ target: p2, duration: 1, progression: 'linear' }),
           ])
           // both e1 and e2 move to p1
           .inParallel([
             inSerial([
-              elem1.moveTo({ target: p1, duration: 1, progression: 'linear' }),
+              elem1.anim.position({ target: p1, duration: 1, progression: 'linear' }),
               delay(1),
             ]),
             inSerial([
               delay(1),
-              elem2.moveTo({ target: p1, duration: 1, progression: 'linear' }),
+              elem2.anim.position({ target: p1, duration: 1, progression: 'linear' }),
             ]),
           ])
           .start();
       },
     };
+  });
+  test('All Builder Methods', () => {
+    examples.allStepsInBuilder();
+    elem1.animations.nextFrame(100);
+    elem1.animations.nextFrame(200);
+    expect(elem1.getPosition().round()).toEqual(p1);
+    expect(elem1.getScale().round()).toEqual(s1);
+    expect(elem1.getRotation()).toEqual(r1);
   });
   test('Move Element Simple', () => {
     examples.moveElementSimple();

@@ -7,16 +7,20 @@ import AnimationStep from '../AnimationStep';
 
 export type TypeTriggerStepInputOptions = {
   trigger?: Function;      // default is element transform
+  payload?: Object;
 } & TypeAnimationStepInputOptions;
 
 export class TriggerStep extends AnimationStep {
   trigger: ?Function;
+  payload: ?Object;
 
   constructor(
     triggerOrOptionsIn: Function | TypeTriggerStepInputOptions = {},
     ...optionsIn: Array<TypeTriggerStepInputOptions>
   ) {
-    const defaultOptions = {};
+    const defaultOptions = {
+      payload: null,
+    };
     let options;
     if (typeof triggerOrOptionsIn === 'function') {
       options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -26,12 +30,13 @@ export class TriggerStep extends AnimationStep {
     }
     super(options);
     this.trigger = options.trigger;
+    this.payload = options.payload;
     this.duration = 0;
   }
 
   setFrame() {
     if (this.trigger != null) {
-      this.trigger(this.startTime);
+      this.trigger(this.payload);
     }
   }
 

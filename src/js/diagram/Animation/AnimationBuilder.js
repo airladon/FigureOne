@@ -8,6 +8,7 @@ import type {
   TypeColorAnimationStepInputOptions, TypeCustomAnimationStepInputOptions,
   TypeTransformAnimationStepInputOptions,
   TypeRotationAnimationStepInputOptions, TypeScaleAnimationStepInputOptions,
+  TypePulseAnimationStepInputOptions,
 } from './Animation';
 // import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
 // import SerialAnimationStep from './AnimationStep/SerialAnimationStep';
@@ -52,7 +53,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  moveToPosition(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
+  position(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -61,7 +62,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  scaleTo(...optionsIn: Array<TypeScaleAnimationStepInputOptions>) {
+  scale(...optionsIn: Array<TypeScaleAnimationStepInputOptions>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -70,15 +71,15 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  moveTo(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
-    return this.moveToPosition(...optionsIn);
-  }
+  // moveTo(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
+  //   return this.moveToPosition(...optionsIn);
+  // }
 
-  positionTo(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
-    return this.moveToPosition(...optionsIn);
-  }
+  // positionTo(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
+  //   return this.moveToPosition(...optionsIn);
+  // }
 
-  moveToTransform(...optionsIn: Array<TypeTransformAnimationStepInputOptions>) {
+  transform(...optionsIn: Array<TypeTransformAnimationStepInputOptions>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -87,18 +88,18 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  moveToScenario(
+  scenario(
     ...optionsIn: Array<TypeTransformAnimationStepInputOptions & { scenario: string }>
   ) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
-      this.then(options.element.moveToScenario(options));
+      this.then(options.element.anim.scenario(options));
     }
     return this;
   }
 
-  colorTo(...optionsIn: Array<TypeColorAnimationStepInputOptions>) {
+  color(...optionsIn: Array<TypeColorAnimationStepInputOptions>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -169,6 +170,10 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
+  pulse(...optionsIn: Array<TypePulseAnimationStepInputOptions>) {
+    this.then(new animation.PulseAnimationStep(...optionsIn));
+    return this;
+  }
 
   reset() {
     this.steps = [];

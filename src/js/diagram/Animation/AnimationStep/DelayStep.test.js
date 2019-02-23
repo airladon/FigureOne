@@ -39,7 +39,7 @@ describe('Transfrom Animation Unit', () => {
   test('Delay then move', () => {
     elem1.animations.new()
       .delay(1)
-      .moveTo({ target: new Point(1, 1), duration: 1, progression: 'linear' })
+      .position({ target: new Point(1, 1), duration: 1, progression: 'linear' })
       .start();
 
     elem1.animations.nextFrame(0);
@@ -56,7 +56,7 @@ describe('Transfrom Animation Unit', () => {
   test('Delay 0 then move', () => {
     elem1.animations.new()
       .delay(0)
-      .moveTo({ target: new Point(1, 1), duration: 1, progression: 'linear' })
+      .position({ target: new Point(1, 1), duration: 1, progression: 'linear' })
       .start();
 
     elem1.animations.nextFrame(0);
@@ -72,9 +72,9 @@ describe('Transfrom Animation Unit', () => {
 
   test('Move, Delay, Move', () => {
     elem1.animations.new()
-      .moveTo({ target: new Point(1, 1), duration: 1, progression: 'linear' })
+      .position({ target: new Point(1, 1), duration: 1, progression: 'linear' })
       .delay(1)
-      .moveTo({ target: new Point(2, 2), duration: 1, progression: 'linear' })
+      .position({ target: new Point(2, 2), duration: 1, progression: 'linear' })
       .delay(1)
       .start();
     elem1.animations.nextFrame(0);
@@ -102,12 +102,12 @@ describe('Transfrom Animation Unit', () => {
   });
   test('Delay separate elem1 in parallel method', () => {
     elem1.animations.new()
-      .moveTo({ target: new Point(1, 1), duration: 1, progression: 'linear' })
+      .position({ target: new Point(1, 1), duration: 1, progression: 'linear' })
       .inParallel([
-        elem1.animationBuilder()
+        elem1.anim.builder()
           .delay(1)
-          .moveTo({ target: new Point(2, 2), duration: 1, progression: 'linear' }),
-        elem2.moveTo({ target: new Point(1, 1), duration: 1, progression: 'linear' }),
+          .position({ target: new Point(2, 2), duration: 1, progression: 'linear' }),
+        elem2.anim.position({ target: new Point(1, 1), duration: 1, progression: 'linear' }),
       ])
       .start();
     let remaining;

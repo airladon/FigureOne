@@ -22,7 +22,7 @@ describe('Color Animation', () => {
   });
   test('Simple color change', () => {
     elem1.animations.new()
-      .colorTo({ target: [0.2, 0.2, 0.2, 0.2], duration: 1 })
+      .color({ target: [0.2, 0.2, 0.2, 0.2], duration: 1 })
       .whenFinished(callback)
       .start();
 
@@ -44,7 +44,7 @@ describe('Color Animation', () => {
   });
   test('Color change defined by delta color change', () => {
     elem1.animations.new()
-      .colorTo({ delta: [-0.1, -0.1, -0.1, -0.1], duration: 1 })
+      .color({ delta: [-0.1, -0.1, -0.1, -0.1], duration: 1 })
       .whenFinished(callback)
       .start();
 
