@@ -256,7 +256,7 @@ export class EquationNew extends DiagramElementCollection {
       }
       const p = this.shapes.txt(
         options.text,
-        { location: new Point(0, 0), font: fontToUse },
+        { position: new Point(0, 0), font: fontToUse },
       );
       if (options.color != null) {
         p.setColor(options.color);

@@ -519,7 +519,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     if (index === 2) {
       r = Math.PI / 2 * 3;
     }
-    const a = this.shapes.arrow(
+    const a = this.shapes.arrowLegacy(
       width, 0, height, 0,
       this.color, new Transform().translate(this.vertexSpaceStart.x, 0), new Point(0, 0), r,
     );
