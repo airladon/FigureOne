@@ -39,6 +39,8 @@ function addElements(
       collection: shapes.collection.bind(shapes),
       polyLine: shapes.polyLine.bind(shapes),
       polygon: shapes.polygon.bind(shapes),
+      arrow: shapes.arrow.bind(shapes),
+      text: shapes.txt.bind(shapes),
       //
       line: objects.line.bind(objects),
       angle: objects.angle.bind(objects),

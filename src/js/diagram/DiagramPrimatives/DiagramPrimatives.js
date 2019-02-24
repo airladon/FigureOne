@@ -51,6 +51,20 @@ export type TypePolygonOptions = {
   mods?: {},
 };
 
+export type TypeTextOptions = {
+  text?: string;
+  position?: Point;
+  offset?: Point;
+  font?: DiagramFont;
+  family?: string;
+  style?: string;
+  size?: number;
+  weight?: string;
+  hAlign?: string;
+  vAlign?: string;
+  color?: Array<number>;
+}
+
 export default class DiagramPrimatives {
   webgl: WebGLInstance;
   draw2D: DrawContext2D;
@@ -156,19 +170,10 @@ export default class DiagramPrimatives {
   //   );
   // }
 
-  txt(text: string, ...options: Array<{
-    location?: Point;
-    font?: DiagramFont;
-    family?: string;
-    style?: string;
-    size?: number;
-    weight?: string;
-    hAlign?: string;
-    vAlign?: string;
-    color?: Array<number>;
-  }>) {
+  txt(textOrOptions: string | TypeTextOptions, ...optionsIn: Array<TypeTextOptions>) {
     const defaultOptions = {
-      location: new Point(0, 0),
+      text: '',
+      position: new Point(0, 0),
       font: null,
       family: 'Times New Roman',
       style: 'italic',
@@ -176,23 +181,76 @@ export default class DiagramPrimatives {
       weight: '200',
       hAlign: 'center',
       vAlign: 'middle',
+      offset: new Point(0, 0),    // vertex space offset
       color: [1, 0, 0, 1],
     };
-    const optionsToUse = joinObjects(defaultOptions, ...options);
-    const o = optionsToUse;
+    let options;
+    if (typeof textOrOptions === 'string') {
+      options = joinObjects(
+        {}, defaultOptions, { text: textOrOptions }, ...optionsIn,
+      );
+    } else {
+      options = joinObjects({}, defaultOptions, textOrOptions, ...optionsIn);
+    }
+    // const optionsToUse = joinObjects(defaultOptions, ...options);
+    const o = options;
+    const { text } = o;
     let fontToUse = o.font;
     if (fontToUse === null) {
       fontToUse = new DiagramFont(
         o.family, o.style, o.size, o.weight, o.hAlign, o.vAlign, o.color,
       );
     }
-    const dT = new DiagramText(new Point(0, 0), text, fontToUse);
+    const dT = new DiagramText(o.offset, text, fontToUse);
     const to = new TextObject(this.draw2D, [dT]);
     return new DiagramElementPrimative(
       to,
-      new Transform().scale(1, 1).translate(o.location.x, o.location.y),
-      [1, 0, 0, 1],
+      new Transform().scale(1, 1).translate(o.position.x, o.position.y),
+      o.color,
       this.limits,
+    );
+  }
+
+  arrow(...optionsIn: Array<{
+    width: ?number;
+    legWidth: ?number;
+    height: ?number;
+    legHeight: ?number;
+    color: ?Array<number>;
+    transform: ?Transform;
+    tip: ?Point;
+    rotation: ?number;
+  }>) {
+    const defaultOptions = {
+      width: 1,
+      legWidth: 1,
+      height: 1,
+      legHeight: 1,
+      color: [1, 0, 0, 1],
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
+      tip: new Point(0, 0),
+      rotation: 0,
+    };
+    const o = joinObjects(defaultOptions, ...optionsIn);
+    return Arrow(
+      this.webgl, o.width, o.legWidth, o.height, o.legHeight,
+      o.tip, o.rotation, o.color, o.transform, this.limits,
+    );
+  }
+
+  arrowLegacy(
+    width: number = 1,
+    legWidth: number = 0.5,
+    height: number = 1,
+    legHeight: number = 0.5,
+    color: Array<number>,
+    transform: Transform | Point = new Transform(),
+    tip: Point = new Point(0, 0),
+    rotation: number = 0,
+  ) {
+    return Arrow(
+      this.webgl, width, legWidth, height, legHeight,
+      tip, rotation, color, transform, this.limits,
     );
   }
 
@@ -271,21 +329,6 @@ export default class DiagramPrimatives {
     return this.htmlElement(inside, id, classes, location, alignV, alignH);
   }
 
-  arrow(
-    width: number = 1,
-    legWidth: number = 0.5,
-    height: number = 1,
-    legHeight: number = 0.5,
-    color: Array<number>,
-    transform: Transform | Point = new Transform(),
-    tip: Point = new Point(0, 0),
-    rotation: number = 0,
-  ) {
-    return Arrow(
-      this.webgl, width, legWidth, height, legHeight,
-      tip, rotation, color, transform, this.limits,
-    );
-  }
 
   lines(
     linePairs: Array<Array<Point>>,
