@@ -19,7 +19,7 @@ import type {
   TypePositionAnimationStepInputOptions, TypeAnimationBuilderInputOptions,
   TypeColorAnimationStepInputOptions, TypeTransformAnimationStepInputOptions,
   TypeRotationAnimationStepInputOptions, TypeScaleAnimationStepInputOptions,
-  TypePulseAnimationStepInputOptions,
+  TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
 } from './Animation/Animation';
 import * as animations from './Animation/Animation';
 
@@ -253,6 +253,10 @@ class DiagramElement {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.PositionAnimationStep(options);
       },
+      color: (...optionsIn: Array<TypeColorAnimationStepInputOptions>) => {
+        const options = joinObjects({}, { elements: this }, ...optionsIn);
+        return new animations.ColorAnimationStep(options);
+      },
       transform: (...optionsIn: Array<TypeTransformAnimationStepInputOptions>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.TransformAnimationStep(options);
@@ -262,7 +266,7 @@ class DiagramElement {
         return new animations.PulseAnimationStep(options);
       },
       // eslint-disable-next-line max-len
-      dissolveIn: (timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {}, ...args: Array<TypeColorAnimationStepInputOptions>) => {
+      dissolveIn: (timeOrOptionsIn: number | TypeOpacityAnimationStepInputOptions = {}, ...args: Array<TypeOpacityAnimationStepInputOptions>) => {
         const defaultOptions = { element: this };
         let options;
         if (typeof timeOrOptionsIn === 'number') {
@@ -273,7 +277,7 @@ class DiagramElement {
         return new animations.DissolveInAnimationStep(options);
       },
       // eslint-disable-next-line max-len
-      dissolveOut: (timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {}, ...args: Array<TypeColorAnimationStepInputOptions>) => {
+      dissolveOut: (timeOrOptionsIn: number | TypeOpacityAnimationStepInputOptions = {}, ...args: Array<TypeOpacityAnimationStepInputOptions>) => {
         const defaultOptions = { element: this };
         let options;
         if (typeof timeOrOptionsIn === 'number') {
@@ -925,6 +929,10 @@ class DiagramElement {
 
   setColor(color: Array<number>) {
     this.color = color.slice();
+  }
+
+  setOpacity(opacity: number) {
+    this.color[3] = opacity;
   }
 
   getScenarioTarget(
@@ -2267,6 +2275,20 @@ class DiagramElementPrimative extends DiagramElement {
     }
   }
 
+  setOpacity(opacity: number) {
+    this.color[3] = opacity;
+    if (this instanceof DiagramElementPrimative) {
+      if (this.drawingObject instanceof TextObject) {
+        this.drawingObject.setColor(this.color);
+      }
+      if (this.drawingObject instanceof HTMLObject) {
+        // $FlowFixMe
+        this.drawingObject.element.style.color =
+          colorArrayToRGBA([...this.color.slice(0, 2), opacity]);
+      }
+    }
+  }
+
   show() {
     super.show();
     if (this.drawingObject instanceof HTMLObject) {
@@ -2854,6 +2876,14 @@ class DiagramElementCollection extends DiagramElement {
       element.setColor(color);
     }
     this.color = color.slice();
+  }
+
+  setOpacity(opacity: number) {
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.setOpacity(opacity);
+    }
+    this.color[3] = opacity;
   }
 
   getElementTransforms() {
