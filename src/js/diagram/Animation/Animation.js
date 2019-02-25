@@ -8,9 +8,17 @@ import type {
   TypeColorAnimationStepInputOptions,
 } from './AnimationStep/ElementAnimationStep/ColorAnimationStep';
 import {
-  ColorAnimationStep, DissolveInAnimationStep, dissolveIn,
-  DissolveOutAnimationStep, dissolveOut,
+  ColorAnimationStep,
 } from './AnimationStep/ElementAnimationStep/ColorAnimationStep';
+
+
+import type {
+  TypeOpacityAnimationStepInputOptions,
+} from './AnimationStep/ElementAnimationStep/OpacityAnimationStep';
+import {
+  OpacityAnimationStep, DissolveInAnimationStep, dissolveIn,
+  DissolveOutAnimationStep, dissolveOut,
+} from './AnimationStep/ElementAnimationStep/OpacityAnimationStep';
 
 
 import type {
@@ -90,6 +98,7 @@ export type {
   TypeColorAnimationStepInputOptions, TypeCustomAnimationStepInputOptions,
   TypeAnimationManagerInputOptions, TypeRotationAnimationStepInputOptions,
   TypeScaleAnimationStepInputOptions, TypePulseAnimationStepInputOptions,
+  TypeOpacityAnimationStepInputOptions,
 };
 export {
   PositionAnimationStep, AnimationBuilder, ParallelAnimationStep, SerialAnimationStep,
@@ -97,5 +106,5 @@ export {
   inParallel, inSerial, trigger, delay, ColorAnimationStep,
   DissolveInAnimationStep, dissolveIn, DissolveOutAnimationStep, dissolveOut,
   CustomAnimationStep, custom, AnimationManager, RotationAnimationStep,
-  ScaleAnimationStep, PulseAnimationStep,
+  ScaleAnimationStep, PulseAnimationStep, OpacityAnimationStep,
 };

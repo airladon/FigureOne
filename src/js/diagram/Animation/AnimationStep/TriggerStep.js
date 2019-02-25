@@ -20,6 +20,7 @@ export class TriggerStep extends AnimationStep {
   ) {
     const defaultOptions = {
       payload: null,
+      duration: 0,
     };
     let options;
     if (typeof triggerOrOptionsIn === 'function') {
@@ -31,7 +32,7 @@ export class TriggerStep extends AnimationStep {
     super(options);
     this.trigger = options.trigger;
     this.payload = options.payload;
-    this.duration = 0;
+    this.duration = options.duration;
   }
 
   setFrame() {

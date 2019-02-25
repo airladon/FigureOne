@@ -5,6 +5,7 @@ DiagramElementPrimative {
   "angleToDraw": -1,
   "anim": Object {
     "builder": [Function],
+    "color": [Function],
     "dissolveIn": [Function],
     "dissolveOut": [Function],
     "position": [Function],
@@ -303,6 +304,7 @@ DiagramElementPrimative {
       "angleToDraw": -1,
       "anim": Object {
         "builder": [Function],
+        "color": [Function],
         "dissolveIn": [Function],
         "dissolveOut": [Function],
         "position": [Function],
@@ -809,6 +811,7 @@ DiagramElementPrimative {
       "angleToDraw": -1,
       "anim": Object {
         "builder": [Function],
+        "color": [Function],
         "dissolveIn": [Function],
         "dissolveOut": [Function],
         "position": [Function],
@@ -1314,6 +1317,7 @@ DiagramElementPrimative {
       "angleToDraw": -1,
       "anim": Object {
         "builder": [Function],
+        "color": [Function],
         "dissolveIn": [Function],
         "dissolveOut": [Function],
         "position": [Function],
@@ -1819,6 +1823,7 @@ DiagramElementPrimative {
       "angleToDraw": -1,
       "anim": Object {
         "builder": [Function],
+        "color": [Function],
         "dissolveIn": [Function],
         "dissolveOut": [Function],
         "position": [Function],
@@ -2322,6 +2327,7 @@ DiagramElementPrimative {
     },
     "anim": Object {
       "builder": [Function],
+      "color": [Function],
       "dissolveIn": [Function],
       "dissolveOut": [Function],
       "position": [Function],
@@ -2388,6 +2394,7 @@ DiagramElementPrimative {
         "angleToDraw": -1,
         "anim": Object {
           "builder": [Function],
+          "color": [Function],
           "dissolveIn": [Function],
           "dissolveOut": [Function],
           "position": [Function],
@@ -2894,6 +2901,7 @@ DiagramElementPrimative {
         "angleToDraw": -1,
         "anim": Object {
           "builder": [Function],
+          "color": [Function],
           "dissolveIn": [Function],
           "dissolveOut": [Function],
           "position": [Function],
@@ -3399,6 +3407,7 @@ DiagramElementPrimative {
         "angleToDraw": -1,
         "anim": Object {
           "builder": [Function],
+          "color": [Function],
           "dissolveIn": [Function],
           "dissolveOut": [Function],
           "position": [Function],
@@ -3904,6 +3913,7 @@ DiagramElementPrimative {
         "angleToDraw": -1,
         "anim": Object {
           "builder": [Function],
+          "color": [Function],
           "dissolveIn": [Function],
           "dissolveOut": [Function],
           "position": [Function],
@@ -4481,6 +4491,7 @@ DiagramElementPrimative {
                       "angleToDraw": -1,
                       "anim": Object {
                         "builder": [Function],
+                        "color": [Function],
                         "dissolveIn": [Function],
                         "dissolveOut": [Function],
                         "position": [Function],
@@ -4997,6 +5008,7 @@ DiagramElementPrimative {
                       "angleToDraw": -1,
                       "anim": Object {
                         "builder": [Function],
+                        "color": [Function],
                         "dissolveIn": [Function],
                         "dissolveOut": [Function],
                         "position": [Function],
@@ -5525,6 +5537,7 @@ DiagramElementPrimative {
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
+                  "color": [Function],
                   "dissolveIn": [Function],
                   "dissolveOut": [Function],
                   "position": [Function],
@@ -6031,6 +6044,7 @@ DiagramElementPrimative {
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
+                  "color": [Function],
                   "dissolveIn": [Function],
                   "dissolveOut": [Function],
                   "position": [Function],
@@ -6536,6 +6550,7 @@ DiagramElementPrimative {
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
+                  "color": [Function],
                   "dissolveIn": [Function],
                   "dissolveOut": [Function],
                   "position": [Function],
@@ -7041,6 +7056,7 @@ DiagramElementPrimative {
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
+                  "color": [Function],
                   "dissolveIn": [Function],
                   "dissolveOut": [Function],
                   "position": [Function],
@@ -7609,6 +7625,7 @@ DiagramElementPrimative {
                               "angleToDraw": -1,
                               "anim": Object {
                                 "builder": [Function],
+                                "color": [Function],
                                 "dissolveIn": [Function],
                                 "dissolveOut": [Function],
                                 "position": [Function],
@@ -8134,6 +8151,7 @@ DiagramElementPrimative {
                           "angleToDraw": -1,
                           "anim": Object {
                             "builder": [Function],
+                            "color": [Function],
                             "dissolveIn": [Function],
                             "dissolveOut": [Function],
                             "position": [Function],
@@ -8653,6 +8671,7 @@ DiagramElementPrimative {
                             "angleToDraw": -1,
                             "anim": Object {
                               "builder": [Function],
+                              "color": [Function],
                               "dissolveIn": [Function],
                               "dissolveOut": [Function],
                               "position": [Function],
@@ -9211,6 +9230,7 @@ DiagramElementPrimative {
                       "angleToDraw": -1,
                       "anim": Object {
                         "builder": [Function],
+                        "color": [Function],
                         "dissolveIn": [Function],
                         "dissolveOut": [Function],
                         "position": [Function],
@@ -9728,6 +9748,7 @@ DiagramElementPrimative {
                       "angleToDraw": -1,
                       "anim": Object {
                         "builder": [Function],
+                        "color": [Function],
                         "dissolveIn": [Function],
                         "dissolveOut": [Function],
                         "position": [Function],
@@ -10256,6 +10277,7 @@ DiagramElementPrimative {
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
+                  "color": [Function],
                   "dissolveIn": [Function],
                   "dissolveOut": [Function],
                   "position": [Function],
@@ -10762,6 +10784,7 @@ DiagramElementPrimative {
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
+                  "color": [Function],
                   "dissolveIn": [Function],
                   "dissolveOut": [Function],
                   "position": [Function],
@@ -11267,6 +11290,7 @@ DiagramElementPrimative {
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
+                  "color": [Function],
                   "dissolveIn": [Function],
                   "dissolveOut": [Function],
                   "position": [Function],
@@ -11772,6 +11796,7 @@ DiagramElementPrimative {
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
+                  "color": [Function],
                   "dissolveIn": [Function],
                   "dissolveOut": [Function],
                   "position": [Function],
@@ -12294,6 +12319,7 @@ DiagramElementPrimative {
             "angleToDraw": -1,
             "anim": Object {
               "builder": [Function],
+              "color": [Function],
               "dissolveIn": [Function],
               "dissolveOut": [Function],
               "position": [Function],
@@ -12800,6 +12826,7 @@ DiagramElementPrimative {
             "angleToDraw": -1,
             "anim": Object {
               "builder": [Function],
+              "color": [Function],
               "dissolveIn": [Function],
               "dissolveOut": [Function],
               "position": [Function],
@@ -13305,6 +13332,7 @@ DiagramElementPrimative {
             "angleToDraw": -1,
             "anim": Object {
               "builder": [Function],
+              "color": [Function],
               "dissolveIn": [Function],
               "dissolveOut": [Function],
               "position": [Function],
@@ -13810,6 +13838,7 @@ DiagramElementPrimative {
             "angleToDraw": -1,
             "anim": Object {
               "builder": [Function],
+              "color": [Function],
               "dissolveIn": [Function],
               "dissolveOut": [Function],
               "position": [Function],
@@ -14334,6 +14363,7 @@ DiagramElementPrimative {
                     "angleToDraw": -1,
                     "anim": Object {
                       "builder": [Function],
+                      "color": [Function],
                       "dissolveIn": [Function],
                       "dissolveOut": [Function],
                       "position": [Function],
@@ -14834,6 +14864,7 @@ DiagramElementPrimative {
               "angleToDraw": -1,
               "anim": Object {
                 "builder": [Function],
+                "color": [Function],
                 "dissolveIn": [Function],
                 "dissolveOut": [Function],
                 "position": [Function],
