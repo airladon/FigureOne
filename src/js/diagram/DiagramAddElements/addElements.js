@@ -123,7 +123,10 @@ function addElements(
       }
 
       if (methodPath.slice(-1)[0].startsWith('add')) {
-        method(collectionPath, nameToUse, optionsToUse);
+        const element = method(collectionPath, nameToUse, optionsToUse);
+        if (elementModsToUse != null && elementModsToUse !== {}) {
+          element.setProperties(elementModsToUse);
+        }
       } else {
         let element;
         if (Array.isArray(optionsToUse)) {
