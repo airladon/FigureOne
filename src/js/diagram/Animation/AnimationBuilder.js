@@ -8,7 +8,7 @@ import type {
   TypeColorAnimationStepInputOptions, TypeCustomAnimationStepInputOptions,
   TypeTransformAnimationStepInputOptions,
   TypeRotationAnimationStepInputOptions, TypeScaleAnimationStepInputOptions,
-  TypePulseAnimationStepInputOptions,
+  TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
 } from './Animation';
 // import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
 // import SerialAnimationStep from './AnimationStep/SerialAnimationStep';
@@ -104,6 +104,15 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
       this.then(new animation.ColorAnimationStep(options));
+    }
+    return this;
+  }
+
+  opacity(...optionsIn: Array<TypeOpacityAnimationStepInputOptions>) {
+    if (this.element != null) {
+      const defaultOptions = { element: this.element };
+      const options = joinObjects({}, defaultOptions, ...optionsIn);
+      this.then(new animation.OpacityAnimationStep(options));
     }
     return this;
   }
