@@ -36,10 +36,10 @@ describe('Animation Trigger', () => {
     const step = new TriggerStep({
       onFinish,
       completeOnCancel,
-      trigger: trigger1,
+      callback: trigger1,
     });
     expect(step.onFinish).toBe(onFinish);
-    expect(step.trigger).toBe(trigger1);
+    expect(step.callback).toBe(trigger1);
     expect(step.completeOnCancel).toBe(completeOnCancel);
   });
   test('Delay then move', () => {

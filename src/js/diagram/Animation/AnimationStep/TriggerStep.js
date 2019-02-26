@@ -6,12 +6,12 @@ import type {
 import AnimationStep from '../AnimationStep';
 
 export type TypeTriggerStepInputOptions = {
-  trigger?: Function;      // default is element transform
+  callback?: Function;      // default is element transform
   payload?: Object;
 } & TypeAnimationStepInputOptions;
 
 export class TriggerStep extends AnimationStep {
-  trigger: ?Function;
+  callback: ?Function;
   payload: ?Object;
 
   constructor(
@@ -25,19 +25,20 @@ export class TriggerStep extends AnimationStep {
     let options;
     if (typeof triggerOrOptionsIn === 'function') {
       options = joinObjects({}, defaultOptions, ...optionsIn);
-      options.trigger = triggerOrOptionsIn;
+      options.callback = triggerOrOptionsIn;
     } else {
       options = joinObjects({}, defaultOptions, triggerOrOptionsIn, ...optionsIn);
     }
     super(options);
-    this.trigger = options.trigger;
+    this.callback = options.callback;
     this.payload = options.payload;
     this.duration = options.duration;
   }
 
   setFrame() {
-    if (this.trigger != null) {
-      this.trigger(this.payload);
+    if (this.callback != null) {
+      this.callback(this.payload);
+      this.callback = null;
     }
   }
 
