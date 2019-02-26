@@ -257,6 +257,10 @@ class DiagramElement {
         const options = joinObjects({}, { elements: this }, ...optionsIn);
         return new animations.ColorAnimationStep(options);
       },
+      opacity: (...optionsIn: Array<TypeOpacityAnimationStepInputOptions>) => {
+        const options = joinObjects({}, { elements: this }, ...optionsIn);
+        return new animations.OpacityAnimationStep(options);
+      },
       transform: (...optionsIn: Array<TypeTransformAnimationStepInputOptions>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.TransformAnimationStep(options);
