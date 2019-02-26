@@ -13,8 +13,9 @@ describe('Disolve In Animation', () => {
   let elem1;
   let callback;
   let color;
+  let diagram;
   beforeEach(() => {
-    const diagram = makeDiagram();
+    diagram = makeDiagram();
     elem1 = diagram.objects.line();
     color = [0.5, 0.5, 0.5, 1];
     elem1.setColor(color);
@@ -75,6 +76,18 @@ describe('Disolve In Animation', () => {
     elem1.animations.cancelAll();
     expect(math.round(elem1.color)).toEqual([0.5, 0.5, 0.5, 1]);
     expect(callback.mock.calls.length).toBe(1);
+  });
+  test('Parallel dissolve in cancel', () => {
+    diagram.elements.animations.new()
+      .inParallel([
+        elem1.anim.dissolveIn(1),
+      ])
+      .start();
+    diagram.elements.animations.nextFrame(0);
+    diagram.elements.animations.nextFrame(0.5);
+    expect(math.round(elem1.color, 2)).toEqual([0.5, 0.5, 0.5, 0.5]);
+    diagram.elements.animations.cancelAll();
+    expect(math.round(elem1.color, 2)).toEqual([0.5, 0.5, 0.5, 1]);
   });
   test('Cancel dissolve: completeOnCancel = false, force = null', () => {
     elem1.animations.new()
