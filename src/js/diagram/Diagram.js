@@ -404,6 +404,10 @@ class Diagram {
 
   initialize() {
     // this.setSpaceTransforms();
+    this.setFirstTransform();
+  }
+
+  setFirstTransform() {
     this.elements.setFirstTransform(this.diagramToGLSpaceTransform);
   }
 
@@ -681,6 +685,11 @@ class Diagram {
     diagramElement: DiagramElementPrimative | DiagramElementCollection,
   ) {
     this.elements.add(name, diagramElement);
+  }
+
+  setElementsToCollection(collection: DiagramElementCollection) {
+    this.elements = collection;
+    this.setFirstTransform();
   }
 
   clearContext() {
