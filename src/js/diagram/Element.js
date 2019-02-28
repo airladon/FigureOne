@@ -565,7 +565,11 @@ class DiagramElement {
       const width = bottomRight.x - topLeft.x;
       const height = topLeft.y - bottomRight.y;
       const center = topLeft.add(new Point(width / 2, -height / 2));
-      this.setPosition(center);
+      // this.setDiagramPosition(new Point(
+      //   center.x + this.diagramLimits.left + this.diagramLimits.width / 2,
+      //   center.y + this.diagramLimits.bottom + this.diagramLimits.height / 2,
+      // ));
+      // this.setPosition(center);
 
       const containerAspectRatio =
         container.offsetWidth / container.offsetHeight;
@@ -576,63 +580,57 @@ class DiagramElement {
 
       const scaleString = this.tieToHTMLElementScale.trim().toLowerCase();
 
+      let scaleX = 1;
+      let scaleY = 1;
       if (scaleString.endsWith('em')) {
         const scale = parseFloat(scaleString);
         const em = parseFloat(getComputedStyle(element).fontSize);
         // 0.2 is default font size in diagram units
         const defaultFontScale = this.diagramLimits.width / 0.2;
-        this.setScale(
-          scale * em * defaultFontScale / container.offsetWidth,
-          scale * em * defaultFontScale / diagramAspectRatio / container.offsetHeight,
-        );
+        scaleX = scale * em * defaultFontScale / container.offsetWidth;
+        scaleY = scale * em * defaultFontScale / diagramAspectRatio / container.offsetHeight;
       } else if (scaleString.endsWith('px')) {
         const maxPixels = parseFloat(scaleString);
         if (this.diagramLimits.width > this.diagramLimits.height) {
           const scale = maxPixels / container.offsetWidth;
-          this.setScale(
-            scale,
-            scale * containerAspectRatio / diagramAspectRatio,
-          );
-          // )
+          scaleX = scale;
+          scaleY = scale * containerAspectRatio / diagramAspectRatio;
         } else {
           const scale = maxPixels / container.offsetHeight;
-          this.setScale(
-            scale / containerAspectRatio * diagramAspectRatio,
-            scale,
-          );
+          scaleX = scale / containerAspectRatio * diagramAspectRatio;
+          scaleY = scale;
         }
         // this.setScale(
         //   scale / container.offsetWidth,
         //   scale / container.offsetHeight,
         // );
       } else if (scaleString === 'stretch') {
-        this.setScale(
-          element.offsetWidth / container.offsetWidth,
-          element.offsetHeight / container.offsetHeight,
-        );
+        scaleX = element.offsetWidth / container.offsetWidth;
+        scaleY = element.offsetHeight / container.offsetHeight;
       } else if (scaleString === 'max') {
         if (element.offsetWidth > element.offsetHeight) {
           const scale = element.offsetWidth / container.offsetWidth;
-          this.setScale(
-            scale, scale * containerAspectRatio / diagramAspectRatio,
-          );
+          scaleX = scale;
+          scaleY = scale * containerAspectRatio / diagramAspectRatio;
         } else {
           const scale = element.offsetHeight / container.offsetHeight;
-          this.setScale(
-            scale / containerAspectRatio * diagramAspectRatio, scale,
-          );
+          scaleX = scale / containerAspectRatio * diagramAspectRatio;
+          scaleY = scale;
         }
       } else if (elementAspectRatio < diagramAspectRatio) {
         const scale = element.offsetWidth / container.offsetWidth;
-        this.setScale(
-          scale, scale * containerAspectRatio / diagramAspectRatio,
-        );
+        scaleX = scale;
+        scaleY = scale * containerAspectRatio / diagramAspectRatio;
       } else {
         const scale = element.offsetHeight / container.offsetHeight;
-        this.setScale(
-          scale / containerAspectRatio * diagramAspectRatio, scale,
-        );
+        scaleX = scale / containerAspectRatio * diagramAspectRatio;
+        scaleY = scale;
       }
+      this.setScale(scaleX, scaleY);
+      this.setPosition(
+        center.x - scaleX * (this.diagramLimits.left + this.diagramLimits.width / 2),
+        center.y - scaleY * (this.diagramLimits.bottom + this.diagramLimits.height / 2),
+      );
     }
   }
 
