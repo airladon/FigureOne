@@ -212,6 +212,8 @@ class DiagramElement {
   // Rename to animate in future
   anim: Object;
 
+  tieToHTMLElement: string | null | HTMLElement;
+
   constructor(
     // translation: Point = Point.zero(),
     // rotation: number = 0,
@@ -406,6 +408,7 @@ class DiagramElement {
     };
     this.interactiveLocation = new Point(0, 0);
     this.animations = new animations.AnimationManager(this);
+    this.tieToHTMLElement = null;
     // this.presetTransforms = {};
   }
 
@@ -520,6 +523,47 @@ class DiagramElement {
   //   const transform = new Transform().scale(scaleX, scaleY).translate(biasX, biasY);
   //   return vertex.transformBy(transform.matrix());
   // }
+
+  updateHTMLElementTie(
+    pixelSpaceToDiagramSpaceTransform: Transform,
+    container: HTMLElement,
+  ) {
+    let element;
+    if (typeof this.tieToHTMLElement === 'string') {
+      element = document.getElementById(this.tieToHTMLElement);
+    } else if (this.tieToHTMLElement instanceof HTMLElement) {
+      element = this.tieToHTMLElement;
+    }
+    if (element != null) {
+      const topLeftPixels = new Point(element.offsetLeft, element.offsetTop);
+      const bottomRightPixels = topLeftPixels.add(new Point(
+        element.offsetWidth, element.offsetHeight,
+      ));
+      const topLeft = topLeftPixels
+        .transformBy(pixelSpaceToDiagramSpaceTransform.m());
+      const bottomRight = bottomRightPixels
+        .transformBy(pixelSpaceToDiagramSpaceTransform.m());
+      const width = bottomRight.x - topLeft.x;
+      const height = topLeft.y - bottomRight.y;
+      const center = topLeft.add(new Point(width / 2, -height / 2));
+      this.setPosition(center);
+      if (element.offsetWidth > element.offsetHeight) {
+        const scale = element.offsetWidth / container.offsetWidth;
+        this.setScale(
+          scale, scale * container.offsetWidth / container.offsetHeight,
+        );
+      } else {
+        const scale = element.offsetHeight / container.offsetHeight;
+        this.setScale(
+          scale * container.offsetHeight / container.offsetWidth, scale,
+        );
+      }
+      // this.setScale(
+      //   element.offsetWidth / container.offsetWidth,
+      //   element.offsetHeight / container.offsetHeight,
+      // );
+    }
+  }
 
   // Calculate the next transform due to a progressing animation
   calcNextAnimationTransform(elapsedTime: number): Transform {
@@ -2821,6 +2865,16 @@ class DiagramElementCollection extends DiagramElement {
       element.updateLimits(limits);
     }
     this.diagramLimits = limits;
+  }
+
+  updateHTMLElementTie(
+    pixelSpaceToDiagramSpaceTransform: Transform,
+    container: HTMLElement,
+  ) {
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.updateHTMLElementTie(pixelSpaceToDiagramSpaceTransform, container);
+    }
   }
 
   // Returns an array of touched elements.
