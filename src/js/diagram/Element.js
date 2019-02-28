@@ -559,7 +559,7 @@ class DiagramElement {
       const scaleString = this.tieToHTMLElementScale.trim().toLowerCase();
 
       if (scaleString.endsWith('em')) {
-        const scale = parseInt(scaleString, 10);
+        const scale = parseFloat(scaleString);
         const em = parseFloat(getComputedStyle(element).fontSize);
         // 0.2 is default font size in diagram units
         const defaultFontScale = this.diagramLimits.width / 0.2;
@@ -576,7 +576,7 @@ class DiagramElement {
       } else if (scaleString === 'stretch') {
         this.setScale(
           element.offsetWidth / container.offsetWidth,
-          element.offsetHeight / container.offsetHeight
+          element.offsetHeight / container.offsetHeight,
         );
       } else if (element.offsetWidth > element.offsetHeight) {
         const scale = element.offsetWidth / container.offsetWidth;
@@ -589,10 +589,6 @@ class DiagramElement {
           scale * container.offsetHeight / container.offsetWidth, scale,
         );
       }
-      // this.setScale(
-      //   element.offsetWidth / container.offsetWidth,
-      //   element.offsetHeight / container.offsetHeight,
-      // );
     }
   }
 
