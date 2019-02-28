@@ -213,7 +213,16 @@ class DiagramElement {
   anim: Object;
 
   tieToHTMLElement: string | null | HTMLElement;
-  // Can be 1em, 100px, stretch or '' (which is scale to max dimension while
+  // Can be:
+  //  1em: -1 to 1 diagram units will be scaled so 0.2 diagram units (default
+  //       font size) looks like 1em of the element font size in pixels
+  //  100px: -1 to 1 diagram units will be scaled to the number of pixels
+  //  stretch: -1 to 1 diagram units be stretched to element dimensions
+  //           independently in x and y
+  //  max: -1 to 1 diagram units will be scaled to max dimension of element
+  //  fit: -1 to 1 diagram units will be scaled to minimum dimension of
+  //       element container
+  //  '': defaults to fit
   // keeping aspect ratio.
   tieToHTMLElementScale: string;
 
@@ -412,7 +421,7 @@ class DiagramElement {
     this.interactiveLocation = new Point(0, 0);
     this.animations = new animations.AnimationManager(this);
     this.tieToHTMLElement = null;
-    this.tieToHTMLElementScale = 'maxDimension';
+    this.tieToHTMLElementScale = 'fit';
     // this.presetTransforms = {};
   }
 
@@ -578,7 +587,19 @@ class DiagramElement {
           element.offsetWidth / container.offsetWidth,
           element.offsetHeight / container.offsetHeight,
         );
-      } else if (element.offsetWidth > element.offsetHeight) {
+      } else if (scaleString === 'max') {
+        if (element.offsetWidth > element.offsetHeight) {
+          const scale = element.offsetWidth / container.offsetWidth;
+          this.setScale(
+            scale, scale * container.offsetWidth / container.offsetHeight,
+          );
+        } else {
+          const scale = element.offsetHeight / container.offsetHeight;
+          this.setScale(
+            scale * container.offsetHeight / container.offsetWidth, scale,
+          );
+        }
+      } else if (element.offsetWidth < element.offsetHeight) {
         const scale = element.offsetWidth / container.offsetWidth;
         this.setScale(
           scale, scale * container.offsetWidth / container.offsetHeight,
