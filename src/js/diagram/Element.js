@@ -214,14 +214,15 @@ class DiagramElement {
 
   tieToHTMLElement: string | null | HTMLElement;
   // Can be:
-  //  1em: -1 to 1 diagram units will be scaled so 0.2 diagram units (default
+  //  1em: diagram units will be scaled so 0.2 diagram units (default
   //       font size) looks like 1em of the element font size in pixels
-  //  100px: -1 to 1 diagram units will be scaled to the number of pixels
-  //  stretch: -1 to 1 diagram units be stretched to element dimensions
-  //           independently in x and y
+  //  100px: diagram units will be scaled so that the max diagram limit
+  //         with be the pixel count
+  //  stretch: diagram units be stretched so diagram limits extend to
+  //           element dimensions independently in x and y
   //  max: -1 to 1 diagram units will be scaled to max dimension of element
-  //  fit: -1 to 1 diagram units will be scaled to minimum dimension of
-  //       element container
+  //  fit: diagram units will be scaled so that diagram limits aspect ratio
+  //       fits within the element aspect ratio
   //  '': defaults to fit
   // keeping aspect ratio.
   tieToHTMLElementScale: string;
@@ -565,6 +566,14 @@ class DiagramElement {
       const height = topLeft.y - bottomRight.y;
       const center = topLeft.add(new Point(width / 2, -height / 2));
       this.setPosition(center);
+
+      const containerAspectRatio =
+        container.offsetWidth / container.offsetHeight;
+      const diagramAspectRatio =
+        this.diagramLimits.width / this.diagramLimits.height;
+      const elementAspectRatio =
+        element.offsetWidth / element.offsetHeight;
+
       const scaleString = this.tieToHTMLElementScale.trim().toLowerCase();
 
       if (scaleString.endsWith('em')) {
@@ -574,14 +583,28 @@ class DiagramElement {
         const defaultFontScale = this.diagramLimits.width / 0.2;
         this.setScale(
           scale * em * defaultFontScale / container.offsetWidth,
-          scale * em * defaultFontScale / container.offsetHeight,
+          scale * em * defaultFontScale / diagramAspectRatio / container.offsetHeight,
         );
       } else if (scaleString.endsWith('px')) {
-        const scale = parseInt(scaleString, 10);
-        this.setScale(
-          scale / container.offsetWidth,
-          scale / container.offsetHeight,
-        );
+        const maxPixels = parseFloat(scaleString);
+        if (this.diagramLimits.width > this.diagramLimits.height) {
+          const scale = maxPixels / container.offsetWidth;
+          this.setScale(
+            scale,
+            scale * containerAspectRatio / diagramAspectRatio,
+          );
+          // )
+        } else {
+          const scale = maxPixels / container.offsetHeight;
+          this.setScale(
+            scale / containerAspectRatio * diagramAspectRatio,
+            scale,
+          );
+        }
+        // this.setScale(
+        //   scale / container.offsetWidth,
+        //   scale / container.offsetHeight,
+        // );
       } else if (scaleString === 'stretch') {
         this.setScale(
           element.offsetWidth / container.offsetWidth,
@@ -591,23 +614,23 @@ class DiagramElement {
         if (element.offsetWidth > element.offsetHeight) {
           const scale = element.offsetWidth / container.offsetWidth;
           this.setScale(
-            scale, scale * container.offsetWidth / container.offsetHeight,
+            scale, scale * containerAspectRatio / diagramAspectRatio,
           );
         } else {
           const scale = element.offsetHeight / container.offsetHeight;
           this.setScale(
-            scale * container.offsetHeight / container.offsetWidth, scale,
+            scale / containerAspectRatio * diagramAspectRatio, scale,
           );
         }
-      } else if (element.offsetWidth < element.offsetHeight) {
+      } else if (elementAspectRatio < diagramAspectRatio) {
         const scale = element.offsetWidth / container.offsetWidth;
         this.setScale(
-          scale, scale * container.offsetWidth / container.offsetHeight,
+          scale, scale * containerAspectRatio / diagramAspectRatio,
         );
       } else {
         const scale = element.offsetHeight / container.offsetHeight;
         this.setScale(
-          scale * container.offsetHeight / container.offsetWidth, scale,
+          scale / containerAspectRatio * diagramAspectRatio, scale,
         );
       }
     }
