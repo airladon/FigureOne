@@ -213,6 +213,8 @@ class DiagramElement {
   anim: Object;
 
   tieToHTMLElement: string | null | HTMLElement;
+  // Can be 1em, 100px, stretch or '' (which is scale to max dimension while
+  // keeping aspect ratio.
   tieToHTMLElementScale: string;
 
   constructor(
@@ -410,7 +412,7 @@ class DiagramElement {
     this.interactiveLocation = new Point(0, 0);
     this.animations = new animations.AnimationManager(this);
     this.tieToHTMLElement = null;
-    this.tieToHTMLElementScale = '';
+    this.tieToHTMLElementScale = 'maxDimension';
     // this.presetTransforms = {};
   }
 
@@ -555,18 +557,26 @@ class DiagramElement {
       const center = topLeft.add(new Point(width / 2, -height / 2));
       this.setPosition(center);
       const scaleString = this.tieToHTMLElementScale.trim().toLowerCase();
+
       if (scaleString.endsWith('em')) {
         const scale = parseInt(scaleString, 10);
         const em = parseFloat(getComputedStyle(element).fontSize);
+        // 0.2 is default font size in diagram units
+        const defaultFontScale = this.diagramLimits.width / 0.2;
         this.setScale(
-          scale * em / container.offsetWidth,
-          scale * em / container.offsetHeight,
+          scale * em * defaultFontScale / container.offsetWidth,
+          scale * em * defaultFontScale / container.offsetHeight,
         );
       } else if (scaleString.endsWith('px')) {
         const scale = parseInt(scaleString, 10);
         this.setScale(
           scale / container.offsetWidth,
           scale / container.offsetHeight,
+        );
+      } else if (scaleString === 'stretch') {
+        this.setScale(
+          element.offsetWidth / container.offsetWidth,
+          element.offsetHeight / container.offsetHeight
         );
       } else if (element.offsetWidth > element.offsetHeight) {
         const scale = element.offsetWidth / container.offsetWidth;
