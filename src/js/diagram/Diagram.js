@@ -427,6 +427,9 @@ class Diagram {
     this.setSpaceTransforms();
     this.sizeHtmlText();
     this.elements.resizeHtmlObject();
+    if (this.elements != null) {
+      this.elements.updateHTMLElementTie(this.pixelToDiagramSpaceTransform, this.canvasLow);
+    }
     this.animateNextFrame();
   }
 
