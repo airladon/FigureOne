@@ -213,6 +213,7 @@ class DiagramElement {
   anim: Object;
 
   tieToHTMLElement: string | null | HTMLElement;
+  tieToHTMLElementScale: string;
 
   constructor(
     // translation: Point = Point.zero(),
@@ -409,6 +410,7 @@ class DiagramElement {
     this.interactiveLocation = new Point(0, 0);
     this.animations = new animations.AnimationManager(this);
     this.tieToHTMLElement = null;
+    this.tieToHTMLElementScale = '';
     // this.presetTransforms = {};
   }
 
@@ -547,7 +549,21 @@ class DiagramElement {
       const height = topLeft.y - bottomRight.y;
       const center = topLeft.add(new Point(width / 2, -height / 2));
       this.setPosition(center);
-      if (element.offsetWidth > element.offsetHeight) {
+      const scaleString = this.tieToHTMLElementScale.trim().toLowerCase();
+      if (scaleString.endsWith('em')) {
+        const scale = parseInt(scaleString, 10);
+        const em = parseFloat(getComputedStyle(element).fontSize);
+        this.setScale(
+          scale * em / container.offsetWidth,
+          scale * em / container.offsetHeight,
+        );
+      } else if (scaleString.endsWith('px')) {
+        const scale = parseInt(scaleString, 10);
+        this.setScale(
+          scale / container.offsetWidth,
+          scale / container.offsetHeight,
+        );
+      } else if (element.offsetWidth > element.offsetHeight) {
         const scale = element.offsetWidth / container.offsetWidth;
         this.setScale(
           scale, scale * container.offsetWidth / container.offsetHeight,
