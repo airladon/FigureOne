@@ -212,6 +212,9 @@ class DiagramElement {
   // Rename to animate in future
   anim: Object;
 
+  // This will scale and position this element such that the center of the
+  // diagram limits will will look like it is centered on a html element
+  // when this figurone element is drawn.
   tieToHTMLElement: string | null | HTMLElement;
   // Can be:
   //  1em: diagram units will be scaled so 0.2 diagram units (default
@@ -545,6 +548,9 @@ class DiagramElement {
     let element;
     if (typeof this.tieToHTMLElement === 'string') {
       element = document.getElementById(this.tieToHTMLElement);
+      if (element != null) {
+        this.tieToHTMLElement = element;
+      }
     } else if (this.tieToHTMLElement instanceof HTMLElement) {
       element = this.tieToHTMLElement;
     }
