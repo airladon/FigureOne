@@ -537,9 +537,14 @@ class DiagramElement {
       element = this.tieToHTMLElement;
     }
     if (element != null) {
-      const topLeftPixels = new Point(element.offsetLeft, element.offsetTop);
+      const elementRect = element.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      const topLeftPixels = new Point(
+        elementRect.left - containerRect.left,
+        elementRect.top - containerRect.top,
+      );
       const bottomRightPixels = topLeftPixels.add(new Point(
-        element.offsetWidth, element.offsetHeight,
+        elementRect.width, elementRect.height,
       ));
       const topLeft = topLeftPixels
         .transformBy(pixelSpaceToDiagramSpaceTransform.m());
