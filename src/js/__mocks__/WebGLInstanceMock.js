@@ -19,6 +19,7 @@ const webgl = {
     clearColor: () => {},
     clear: () => {},
   },
+  resize: () => {},
 };
 
 export default webgl;

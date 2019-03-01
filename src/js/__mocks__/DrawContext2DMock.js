@@ -12,6 +12,7 @@ class DrawContext2D {
         height: `${height}px`,
       },
     };
+    this.resize = () => {};
     this.ctx = {
       save: () => {},
       restore: () => {},

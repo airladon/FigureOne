@@ -779,8 +779,18 @@ DiagramElementPrimative {
           "startTime": -1,
         },
       },
-      "tieToHTMLElement": null,
-      "tieToHTMLElementScale": "fit",
+      "tieToHTML": Object {
+        "element": null,
+        "scale": "fit",
+        "window": Rect {
+          "bottom": -1,
+          "height": 2,
+          "left": -1,
+          "right": 1,
+          "top": 1,
+          "width": 2,
+        },
+      },
       "transform": Transform {
         "index": 2,
         "mat": Array [
@@ -1289,8 +1299,18 @@ DiagramElementPrimative {
           "startTime": -1,
         },
       },
-      "tieToHTMLElement": null,
-      "tieToHTMLElementScale": "fit",
+      "tieToHTML": Object {
+        "element": null,
+        "scale": "fit",
+        "window": Rect {
+          "bottom": -1,
+          "height": 2,
+          "left": -1,
+          "right": 1,
+          "top": 1,
+          "width": 2,
+        },
+      },
       "transform": Transform {
         "index": 2,
         "mat": Array [
@@ -1798,8 +1818,18 @@ DiagramElementPrimative {
           "startTime": -1,
         },
       },
-      "tieToHTMLElement": null,
-      "tieToHTMLElementScale": "fit",
+      "tieToHTML": Object {
+        "element": null,
+        "scale": "fit",
+        "window": Rect {
+          "bottom": -1,
+          "height": 2,
+          "left": -1,
+          "right": 1,
+          "top": 1,
+          "width": 2,
+        },
+      },
       "transform": Transform {
         "index": 2,
         "mat": Array [
@@ -2307,8 +2337,18 @@ DiagramElementPrimative {
           "startTime": -1,
         },
       },
-      "tieToHTMLElement": null,
-      "tieToHTMLElementScale": "fit",
+      "tieToHTML": Object {
+        "element": null,
+        "scale": "fit",
+        "window": Rect {
+          "bottom": -1,
+          "height": 2,
+          "left": -1,
+          "right": 1,
+          "top": 1,
+          "width": 2,
+        },
+      },
       "transform": Transform {
         "index": 2,
         "mat": Array [
@@ -2882,8 +2922,18 @@ DiagramElementPrimative {
             "startTime": -1,
           },
         },
-        "tieToHTMLElement": null,
-        "tieToHTMLElementScale": "fit",
+        "tieToHTML": Object {
+          "element": null,
+          "scale": "fit",
+          "window": Rect {
+            "bottom": -1,
+            "height": 2,
+            "left": -1,
+            "right": 1,
+            "top": 1,
+            "width": 2,
+          },
+        },
         "transform": Transform {
           "index": 2,
           "mat": Array [
@@ -3392,8 +3442,18 @@ DiagramElementPrimative {
             "startTime": -1,
           },
         },
-        "tieToHTMLElement": null,
-        "tieToHTMLElementScale": "fit",
+        "tieToHTML": Object {
+          "element": null,
+          "scale": "fit",
+          "window": Rect {
+            "bottom": -1,
+            "height": 2,
+            "left": -1,
+            "right": 1,
+            "top": 1,
+            "width": 2,
+          },
+        },
         "transform": Transform {
           "index": 2,
           "mat": Array [
@@ -3901,8 +3961,18 @@ DiagramElementPrimative {
             "startTime": -1,
           },
         },
-        "tieToHTMLElement": null,
-        "tieToHTMLElementScale": "fit",
+        "tieToHTML": Object {
+          "element": null,
+          "scale": "fit",
+          "window": Rect {
+            "bottom": -1,
+            "height": 2,
+            "left": -1,
+            "right": 1,
+            "top": 1,
+            "width": 2,
+          },
+        },
         "transform": Transform {
           "index": 2,
           "mat": Array [
@@ -4410,8 +4480,18 @@ DiagramElementPrimative {
             "startTime": -1,
           },
         },
-        "tieToHTMLElement": null,
-        "tieToHTMLElementScale": "fit",
+        "tieToHTML": Object {
+          "element": null,
+          "scale": "fit",
+          "window": Rect {
+            "bottom": -1,
+            "height": 2,
+            "left": -1,
+            "right": 1,
+            "top": 1,
+            "width": 2,
+          },
+        },
         "transform": Transform {
           "index": 2,
           "mat": Array [
@@ -4991,8 +5071,18 @@ DiagramElementPrimative {
                           "startTime": -1,
                         },
                       },
-                      "tieToHTMLElement": null,
-                      "tieToHTMLElementScale": "fit",
+                      "tieToHTML": Object {
+                        "element": null,
+                        "scale": "fit",
+                        "window": Rect {
+                          "bottom": -1,
+                          "height": 2,
+                          "left": -1,
+                          "right": 1,
+                          "top": 1,
+                          "width": 2,
+                        },
+                      },
                       "transform": Transform {
                         "index": 2,
                         "mat": Array [
@@ -5511,8 +5601,18 @@ DiagramElementPrimative {
                           "startTime": -1,
                         },
                       },
-                      "tieToHTMLElement": null,
-                      "tieToHTMLElementScale": "fit",
+                      "tieToHTML": Object {
+                        "element": null,
+                        "scale": "fit",
+                        "window": Rect {
+                          "bottom": -1,
+                          "height": 2,
+                          "left": -1,
+                          "right": 1,
+                          "top": 1,
+                          "width": 2,
+                        },
+                      },
                       "transform": Transform {
                         "index": 2,
                         "mat": Array [
@@ -6043,8 +6143,18 @@ DiagramElementPrimative {
                     "startTime": -1,
                   },
                 },
-                "tieToHTMLElement": null,
-                "tieToHTMLElementScale": "fit",
+                "tieToHTML": Object {
+                  "element": null,
+                  "scale": "fit",
+                  "window": Rect {
+                    "bottom": -1,
+                    "height": 2,
+                    "left": -1,
+                    "right": 1,
+                    "top": 1,
+                    "width": 2,
+                  },
+                },
                 "transform": Transform {
                   "index": 2,
                   "mat": Array [
@@ -6553,8 +6663,18 @@ DiagramElementPrimative {
                     "startTime": -1,
                   },
                 },
-                "tieToHTMLElement": null,
-                "tieToHTMLElementScale": "fit",
+                "tieToHTML": Object {
+                  "element": null,
+                  "scale": "fit",
+                  "window": Rect {
+                    "bottom": -1,
+                    "height": 2,
+                    "left": -1,
+                    "right": 1,
+                    "top": 1,
+                    "width": 2,
+                  },
+                },
                 "transform": Transform {
                   "index": 2,
                   "mat": Array [
@@ -7062,8 +7182,18 @@ DiagramElementPrimative {
                     "startTime": -1,
                   },
                 },
-                "tieToHTMLElement": null,
-                "tieToHTMLElementScale": "fit",
+                "tieToHTML": Object {
+                  "element": null,
+                  "scale": "fit",
+                  "window": Rect {
+                    "bottom": -1,
+                    "height": 2,
+                    "left": -1,
+                    "right": 1,
+                    "top": 1,
+                    "width": 2,
+                  },
+                },
                 "transform": Transform {
                   "index": 2,
                   "mat": Array [
@@ -7571,8 +7701,18 @@ DiagramElementPrimative {
                     "startTime": -1,
                   },
                 },
-                "tieToHTMLElement": null,
-                "tieToHTMLElementScale": "fit",
+                "tieToHTML": Object {
+                  "element": null,
+                  "scale": "fit",
+                  "window": Rect {
+                    "bottom": -1,
+                    "height": 2,
+                    "left": -1,
+                    "right": 1,
+                    "top": 1,
+                    "width": 2,
+                  },
+                },
                 "transform": Transform {
                   "index": 2,
                   "mat": Array [
@@ -8143,8 +8283,18 @@ DiagramElementPrimative {
                                   "startTime": -1,
                                 },
                               },
-                              "tieToHTMLElement": null,
-                              "tieToHTMLElementScale": "fit",
+                              "tieToHTML": Object {
+                                "element": null,
+                                "scale": "fit",
+                                "window": Rect {
+                                  "bottom": -1,
+                                  "height": 2,
+                                  "left": -1,
+                                  "right": 1,
+                                  "top": 1,
+                                  "width": 2,
+                                },
+                              },
                               "transform": Transform {
                                 "index": 2,
                                 "mat": Array [
@@ -8672,8 +8822,18 @@ DiagramElementPrimative {
                               "startTime": -1,
                             },
                           },
-                          "tieToHTMLElement": null,
-                          "tieToHTMLElementScale": "fit",
+                          "tieToHTML": Object {
+                            "element": null,
+                            "scale": "fit",
+                            "window": Rect {
+                              "bottom": -1,
+                              "height": 2,
+                              "left": -1,
+                              "right": 1,
+                              "top": 1,
+                              "width": 2,
+                            },
+                          },
                           "transform": Transform {
                             "index": 2,
                             "mat": Array [
@@ -9195,8 +9355,18 @@ DiagramElementPrimative {
                                 "startTime": -1,
                               },
                             },
-                            "tieToHTMLElement": null,
-                            "tieToHTMLElementScale": "fit",
+                            "tieToHTML": Object {
+                              "element": null,
+                              "scale": "fit",
+                              "window": Rect {
+                                "bottom": -1,
+                                "height": 2,
+                                "left": -1,
+                                "right": 1,
+                                "top": 1,
+                                "width": 2,
+                              },
+                            },
                             "transform": Transform {
                               "index": 2,
                               "mat": Array [
@@ -9757,8 +9927,18 @@ DiagramElementPrimative {
                           "startTime": -1,
                         },
                       },
-                      "tieToHTMLElement": null,
-                      "tieToHTMLElementScale": "fit",
+                      "tieToHTML": Object {
+                        "element": null,
+                        "scale": "fit",
+                        "window": Rect {
+                          "bottom": -1,
+                          "height": 2,
+                          "left": -1,
+                          "right": 1,
+                          "top": 1,
+                          "width": 2,
+                        },
+                      },
                       "transform": Transform {
                         "index": 2,
                         "mat": Array [
@@ -10278,8 +10458,18 @@ DiagramElementPrimative {
                           "startTime": -1,
                         },
                       },
-                      "tieToHTMLElement": null,
-                      "tieToHTMLElementScale": "fit",
+                      "tieToHTML": Object {
+                        "element": null,
+                        "scale": "fit",
+                        "window": Rect {
+                          "bottom": -1,
+                          "height": 2,
+                          "left": -1,
+                          "right": 1,
+                          "top": 1,
+                          "width": 2,
+                        },
+                      },
                       "transform": Transform {
                         "index": 2,
                         "mat": Array [
@@ -10810,8 +11000,18 @@ DiagramElementPrimative {
                     "startTime": -1,
                   },
                 },
-                "tieToHTMLElement": null,
-                "tieToHTMLElementScale": "fit",
+                "tieToHTML": Object {
+                  "element": null,
+                  "scale": "fit",
+                  "window": Rect {
+                    "bottom": -1,
+                    "height": 2,
+                    "left": -1,
+                    "right": 1,
+                    "top": 1,
+                    "width": 2,
+                  },
+                },
                 "transform": Transform {
                   "index": 2,
                   "mat": Array [
@@ -11320,8 +11520,18 @@ DiagramElementPrimative {
                     "startTime": -1,
                   },
                 },
-                "tieToHTMLElement": null,
-                "tieToHTMLElementScale": "fit",
+                "tieToHTML": Object {
+                  "element": null,
+                  "scale": "fit",
+                  "window": Rect {
+                    "bottom": -1,
+                    "height": 2,
+                    "left": -1,
+                    "right": 1,
+                    "top": 1,
+                    "width": 2,
+                  },
+                },
                 "transform": Transform {
                   "index": 2,
                   "mat": Array [
@@ -11829,8 +12039,18 @@ DiagramElementPrimative {
                     "startTime": -1,
                   },
                 },
-                "tieToHTMLElement": null,
-                "tieToHTMLElementScale": "fit",
+                "tieToHTML": Object {
+                  "element": null,
+                  "scale": "fit",
+                  "window": Rect {
+                    "bottom": -1,
+                    "height": 2,
+                    "left": -1,
+                    "right": 1,
+                    "top": 1,
+                    "width": 2,
+                  },
+                },
                 "transform": Transform {
                   "index": 2,
                   "mat": Array [
@@ -12338,8 +12558,18 @@ DiagramElementPrimative {
                     "startTime": -1,
                   },
                 },
-                "tieToHTMLElement": null,
-                "tieToHTMLElementScale": "fit",
+                "tieToHTML": Object {
+                  "element": null,
+                  "scale": "fit",
+                  "window": Rect {
+                    "bottom": -1,
+                    "height": 2,
+                    "left": -1,
+                    "right": 1,
+                    "top": 1,
+                    "width": 2,
+                  },
+                },
                 "transform": Transform {
                   "index": 2,
                   "mat": Array [
@@ -12864,8 +13094,18 @@ DiagramElementPrimative {
                 "startTime": -1,
               },
             },
-            "tieToHTMLElement": null,
-            "tieToHTMLElementScale": "fit",
+            "tieToHTML": Object {
+              "element": null,
+              "scale": "fit",
+              "window": Rect {
+                "bottom": -1,
+                "height": 2,
+                "left": -1,
+                "right": 1,
+                "top": 1,
+                "width": 2,
+              },
+            },
             "transform": Transform {
               "index": 2,
               "mat": Array [
@@ -13374,8 +13614,18 @@ DiagramElementPrimative {
                 "startTime": -1,
               },
             },
-            "tieToHTMLElement": null,
-            "tieToHTMLElementScale": "fit",
+            "tieToHTML": Object {
+              "element": null,
+              "scale": "fit",
+              "window": Rect {
+                "bottom": -1,
+                "height": 2,
+                "left": -1,
+                "right": 1,
+                "top": 1,
+                "width": 2,
+              },
+            },
             "transform": Transform {
               "index": 2,
               "mat": Array [
@@ -13883,8 +14133,18 @@ DiagramElementPrimative {
                 "startTime": -1,
               },
             },
-            "tieToHTMLElement": null,
-            "tieToHTMLElementScale": "fit",
+            "tieToHTML": Object {
+              "element": null,
+              "scale": "fit",
+              "window": Rect {
+                "bottom": -1,
+                "height": 2,
+                "left": -1,
+                "right": 1,
+                "top": 1,
+                "width": 2,
+              },
+            },
             "transform": Transform {
               "index": 2,
               "mat": Array [
@@ -14392,8 +14652,18 @@ DiagramElementPrimative {
                 "startTime": -1,
               },
             },
-            "tieToHTMLElement": null,
-            "tieToHTMLElementScale": "fit",
+            "tieToHTML": Object {
+              "element": null,
+              "scale": "fit",
+              "window": Rect {
+                "bottom": -1,
+                "height": 2,
+                "left": -1,
+                "right": 1,
+                "top": 1,
+                "width": 2,
+              },
+            },
             "transform": Transform {
               "index": 2,
               "mat": Array [
@@ -14892,8 +15162,18 @@ DiagramElementPrimative {
                         "startTime": -1,
                       },
                     },
-                    "tieToHTMLElement": null,
-                    "tieToHTMLElementScale": "fit",
+                    "tieToHTML": Object {
+                      "element": null,
+                      "scale": "fit",
+                      "window": Rect {
+                        "bottom": -1,
+                        "height": 2,
+                        "left": -1,
+                        "right": 1,
+                        "top": 1,
+                        "width": 2,
+                      },
+                    },
                     "transform": Transform {
                       "index": 2,
                       "mat": Array [
@@ -15396,8 +15676,18 @@ DiagramElementPrimative {
                   "startTime": -1,
                 },
               },
-              "tieToHTMLElement": null,
-              "tieToHTMLElementScale": "fit",
+              "tieToHTML": Object {
+                "element": null,
+                "scale": "fit",
+                "window": Rect {
+                  "bottom": -1,
+                  "height": 2,
+                  "left": -1,
+                  "right": 1,
+                  "top": 1,
+                  "width": 2,
+                },
+              },
               "transform": Transform {
                 "index": 2,
                 "mat": Array [
@@ -15943,8 +16233,18 @@ DiagramElementPrimative {
         "startTime": -1,
       },
     },
-    "tieToHTMLElement": null,
-    "tieToHTMLElementScale": "fit",
+    "tieToHTML": Object {
+      "element": null,
+      "scale": "fit",
+      "window": Rect {
+        "bottom": -1,
+        "height": 2,
+        "left": -1,
+        "right": 1,
+        "top": 1,
+        "width": 2,
+      },
+    },
     "touchInBoundingRect": false,
     "transform": Transform {
       "index": 3,
@@ -16157,8 +16457,18 @@ DiagramElementPrimative {
       "startTime": -1,
     },
   },
-  "tieToHTMLElement": null,
-  "tieToHTMLElementScale": "fit",
+  "tieToHTML": Object {
+    "element": null,
+    "scale": "fit",
+    "window": Rect {
+      "bottom": -1,
+      "height": 2,
+      "left": -1,
+      "right": 1,
+      "top": 1,
+      "width": 2,
+    },
+  },
   "transform": Transform {
     "index": 2,
     "mat": Array [
