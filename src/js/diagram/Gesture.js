@@ -47,7 +47,7 @@ class Gesture {
   }
 
   addEvent(event: string, method: Object, flag: boolean) {
-    this.diagram.htmlCanvas.addEventListener(
+    this.diagram.gestureCanvas.addEventListener(
       event,
       method.bind(this),
       flag,
@@ -55,7 +55,7 @@ class Gesture {
   }
 
   removeEvent(event: string, method: Object, flag: boolean) {
-    this.diagram.htmlCanvas.removeEventListener(
+    this.diagram.gestureCanvas.removeEventListener(
       event,
       method.bind(this),
       flag,
