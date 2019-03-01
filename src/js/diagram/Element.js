@@ -215,8 +215,7 @@ class DiagramElement {
   // This will scale and position this element such that the center of the
   // diagram limits will will look like it is centered on a html element
   // when this figurone element is drawn.
-  tieToHTMLElement: string | null | HTMLElement;
-  // Can be:
+  // Scale can be:
   //  1em: diagram units will be scaled so 0.2 diagram units (default
   //       font size) looks like 1em of the element font size in pixels
   //  100px: diagram units will be scaled so that the max diagram limit
@@ -226,10 +225,28 @@ class DiagramElement {
   //  max: -1 to 1 diagram units will be scaled to max dimension of element
   //  fit: diagram units will be scaled so that diagram limits aspect ratio
   //       fits within the element aspect ratio
-  //  '': defaults to fit
-  // keeping aspect ratio.
-  tieToHTMLElementScale: string;
-  tieToHTMLElementScaleLimits: Rect;
+  //  '': defaults to fit keeping aspect ratio.
+  tieToHTML: {
+    element: string | null | HTMLElement;
+    scale: string;   // 1em, 100px, stretch, max, fit
+    window: Rect;
+  };
+
+  // tieToHTMLElement: string | null | HTMLElement;
+  // // Can be:
+  // //  1em: diagram units will be scaled so 0.2 diagram units (default
+  // //       font size) looks like 1em of the element font size in pixels
+  // //  100px: diagram units will be scaled so that the max diagram limit
+  // //         with be the pixel count
+  // //  stretch: diagram units be stretched so diagram limits extend to
+  // //           element dimensions independently in x and y
+  // //  max: -1 to 1 diagram units will be scaled to max dimension of element
+  // //  fit: diagram units will be scaled so that diagram limits aspect ratio
+  // //       fits within the element aspect ratio
+  // //  '': defaults to fit
+  // // keeping aspect ratio.
+  // tieToHTMLElementScale: string;
+  // tieToHTMLElementScaleLimits: Rect;
 
   constructor(
     // translation: Point = Point.zero(),
@@ -425,9 +442,14 @@ class DiagramElement {
     };
     this.interactiveLocation = new Point(0, 0);
     this.animations = new animations.AnimationManager(this);
-    this.tieToHTMLElement = null;
-    this.tieToHTMLElementScale = 'fit';
-    this.tieToHTMLElementScaleLimits = this.diagramLimits;
+    this.tieToHTML = {
+      element: null,
+      scale: 'fit',
+      window: this.diagramLimits,
+    };
+    // this.tieToHTMLElement = null;
+    // this.tieToHTMLElementScale = 'fit';
+    // this.tieToHTMLElementScaleLimits = this.diagramLimits;
     // this.presetTransforms = {};
   }
 
@@ -548,13 +570,10 @@ class DiagramElement {
     container: HTMLElement,
   ) {
     let element;
-    if (typeof this.tieToHTMLElement === 'string') {
-      element = document.getElementById(this.tieToHTMLElement);
-      // if (element != null) {
-      //   this.tieToHTMLElement = element;
-      // }
-    } else if (this.tieToHTMLElement instanceof HTMLElement) {
-      element = this.tieToHTMLElement;
+    if (typeof this.tieToHTML.element === 'string') {
+      element = document.getElementById(this.tieToHTML.element);
+    } else if (this.tieToHTML.element instanceof HTMLElement) {
+      ({ element } = this.tieToHTML);
     }
     if (element != null) {
       const elementRect = element.getBoundingClientRect();
@@ -573,11 +592,6 @@ class DiagramElement {
       const width = bottomRight.x - topLeft.x;
       const height = topLeft.y - bottomRight.y;
       const center = topLeft.add(new Point(width / 2, -height / 2));
-      // this.setDiagramPosition(new Point(
-      //   center.x + this.diagramLimits.left + this.diagramLimits.width / 2,
-      //   center.y + this.diagramLimits.bottom + this.diagramLimits.height / 2,
-      // ));
-      // this.setPosition(center);
 
       const containerAspectRatio =
         container.offsetWidth / container.offsetHeight;
@@ -586,15 +600,15 @@ class DiagramElement {
       const elementAspectRatio =
         element.offsetWidth / element.offsetHeight;
 
-      const scaleString = this.tieToHTMLElementScale.trim().toLowerCase();
+      const scaleString = this.tieToHTML.scale.trim().toLowerCase();
 
       let scaleX = 1;
       let scaleY = 1;
-      const scaleLimitsX = this.diagramLimits.width / this.tieToHTMLElementScaleLimits.width;
-      const scaleLimitsY = this.diagramLimits.height / this.tieToHTMLElementScaleLimits.height;
-      const scaleLimits = Math.min(scaleLimitsX, scaleLimitsY);
+      const scaleLimitsX = this.diagramLimits.width / this.tieToHTML.window.width;
+      const scaleLimitsY = this.diagramLimits.height / this.tieToHTML.window.height;
+      // const scaleLimits = Math.min(scaleLimitsX, scaleLimitsY);
       const scaleLimitsAspectRatio =
-        this.tieToHTMLElementScaleLimits.width / this.tieToHTMLElementScaleLimits.height;
+        this.tieToHTML.window.width / this.tieToHTML.window.height;
       if (scaleString.endsWith('em')) {
         const scale = parseFloat(scaleString);
         const em = parseFloat(getComputedStyle(element).fontSize);
@@ -641,8 +655,8 @@ class DiagramElement {
       }
       this.setScale(scaleX, scaleY);
       this.setPosition(
-        center.x - scaleX * (this.tieToHTMLElementScaleLimits.left + this.tieToHTMLElementScaleLimits.width / 2),
-        center.y - scaleY * (this.tieToHTMLElementScaleLimits.bottom + this.tieToHTMLElementScaleLimits.height / 2),
+        center.x - scaleX * (this.tieToHTML.window.left + this.tieToHTML.window.width / 2),
+        center.y - scaleY * (this.tieToHTML.window.bottom + this.tieToHTML.window.height / 2),
       );
     }
   }
