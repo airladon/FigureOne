@@ -779,6 +779,8 @@ DiagramElementPrimative {
           "startTime": -1,
         },
       },
+      "tieToHTMLElement": null,
+      "tieToHTMLElementScale": "fit",
       "transform": Transform {
         "index": 2,
         "mat": Array [
@@ -1287,6 +1289,8 @@ DiagramElementPrimative {
           "startTime": -1,
         },
       },
+      "tieToHTMLElement": null,
+      "tieToHTMLElementScale": "fit",
       "transform": Transform {
         "index": 2,
         "mat": Array [
@@ -1794,6 +1798,8 @@ DiagramElementPrimative {
           "startTime": -1,
         },
       },
+      "tieToHTMLElement": null,
+      "tieToHTMLElementScale": "fit",
       "transform": Transform {
         "index": 2,
         "mat": Array [
@@ -2301,6 +2307,8 @@ DiagramElementPrimative {
           "startTime": -1,
         },
       },
+      "tieToHTMLElement": null,
+      "tieToHTMLElementScale": "fit",
       "transform": Transform {
         "index": 2,
         "mat": Array [
@@ -2874,6 +2882,8 @@ DiagramElementPrimative {
             "startTime": -1,
           },
         },
+        "tieToHTMLElement": null,
+        "tieToHTMLElementScale": "fit",
         "transform": Transform {
           "index": 2,
           "mat": Array [
@@ -3382,6 +3392,8 @@ DiagramElementPrimative {
             "startTime": -1,
           },
         },
+        "tieToHTMLElement": null,
+        "tieToHTMLElementScale": "fit",
         "transform": Transform {
           "index": 2,
           "mat": Array [
@@ -3889,6 +3901,8 @@ DiagramElementPrimative {
             "startTime": -1,
           },
         },
+        "tieToHTMLElement": null,
+        "tieToHTMLElementScale": "fit",
         "transform": Transform {
           "index": 2,
           "mat": Array [
@@ -4396,6 +4410,8 @@ DiagramElementPrimative {
             "startTime": -1,
           },
         },
+        "tieToHTMLElement": null,
+        "tieToHTMLElementScale": "fit",
         "transform": Transform {
           "index": 2,
           "mat": Array [
@@ -4975,6 +4991,8 @@ DiagramElementPrimative {
                           "startTime": -1,
                         },
                       },
+                      "tieToHTMLElement": null,
+                      "tieToHTMLElementScale": "fit",
                       "transform": Transform {
                         "index": 2,
                         "mat": Array [
@@ -5493,6 +5511,8 @@ DiagramElementPrimative {
                           "startTime": -1,
                         },
                       },
+                      "tieToHTMLElement": null,
+                      "tieToHTMLElementScale": "fit",
                       "transform": Transform {
                         "index": 2,
                         "mat": Array [
@@ -6023,6 +6043,8 @@ DiagramElementPrimative {
                     "startTime": -1,
                   },
                 },
+                "tieToHTMLElement": null,
+                "tieToHTMLElementScale": "fit",
                 "transform": Transform {
                   "index": 2,
                   "mat": Array [
@@ -6531,6 +6553,8 @@ DiagramElementPrimative {
                     "startTime": -1,
                   },
                 },
+                "tieToHTMLElement": null,
+                "tieToHTMLElementScale": "fit",
                 "transform": Transform {
                   "index": 2,
                   "mat": Array [
@@ -7038,6 +7062,8 @@ DiagramElementPrimative {
                     "startTime": -1,
                   },
                 },
+                "tieToHTMLElement": null,
+                "tieToHTMLElementScale": "fit",
                 "transform": Transform {
                   "index": 2,
                   "mat": Array [
@@ -7545,6 +7571,8 @@ DiagramElementPrimative {
                     "startTime": -1,
                   },
                 },
+                "tieToHTMLElement": null,
+                "tieToHTMLElementScale": "fit",
                 "transform": Transform {
                   "index": 2,
                   "mat": Array [
@@ -8115,6 +8143,8 @@ DiagramElementPrimative {
                                   "startTime": -1,
                                 },
                               },
+                              "tieToHTMLElement": null,
+                              "tieToHTMLElementScale": "fit",
                               "transform": Transform {
                                 "index": 2,
                                 "mat": Array [
@@ -8642,6 +8672,8 @@ DiagramElementPrimative {
                               "startTime": -1,
                             },
                           },
+                          "tieToHTMLElement": null,
+                          "tieToHTMLElementScale": "fit",
                           "transform": Transform {
                             "index": 2,
                             "mat": Array [
@@ -9163,6 +9195,8 @@ DiagramElementPrimative {
                                 "startTime": -1,
                               },
                             },
+                            "tieToHTMLElement": null,
+                            "tieToHTMLElementScale": "fit",
                             "transform": Transform {
                               "index": 2,
                               "mat": Array [
@@ -9723,6 +9757,8 @@ DiagramElementPrimative {
                           "startTime": -1,
                         },
                       },
+                      "tieToHTMLElement": null,
+                      "tieToHTMLElementScale": "fit",
                       "transform": Transform {
                         "index": 2,
                         "mat": Array [
@@ -10242,6 +10278,8 @@ DiagramElementPrimative {
                           "startTime": -1,
                         },
                       },
+                      "tieToHTMLElement": null,
+                      "tieToHTMLElementScale": "fit",
                       "transform": Transform {
                         "index": 2,
                         "mat": Array [
@@ -10772,6 +10810,8 @@ DiagramElementPrimative {
                     "startTime": -1,
                   },
                 },
+                "tieToHTMLElement": null,
+                "tieToHTMLElementScale": "fit",
                 "transform": Transform {
                   "index": 2,
                   "mat": Array [
@@ -11280,6 +11320,8 @@ DiagramElementPrimative {
                     "startTime": -1,
                   },
                 },
+                "tieToHTMLElement": null,
+                "tieToHTMLElementScale": "fit",
                 "transform": Transform {
                   "index": 2,
                   "mat": Array [
@@ -11787,6 +11829,8 @@ DiagramElementPrimative {
                     "startTime": -1,
                   },
                 },
+                "tieToHTMLElement": null,
+                "tieToHTMLElementScale": "fit",
                 "transform": Transform {
                   "index": 2,
                   "mat": Array [
@@ -12294,6 +12338,8 @@ DiagramElementPrimative {
                     "startTime": -1,
                   },
                 },
+                "tieToHTMLElement": null,
+                "tieToHTMLElementScale": "fit",
                 "transform": Transform {
                   "index": 2,
                   "mat": Array [
@@ -12818,6 +12864,8 @@ DiagramElementPrimative {
                 "startTime": -1,
               },
             },
+            "tieToHTMLElement": null,
+            "tieToHTMLElementScale": "fit",
             "transform": Transform {
               "index": 2,
               "mat": Array [
@@ -13326,6 +13374,8 @@ DiagramElementPrimative {
                 "startTime": -1,
               },
             },
+            "tieToHTMLElement": null,
+            "tieToHTMLElementScale": "fit",
             "transform": Transform {
               "index": 2,
               "mat": Array [
@@ -13833,6 +13883,8 @@ DiagramElementPrimative {
                 "startTime": -1,
               },
             },
+            "tieToHTMLElement": null,
+            "tieToHTMLElementScale": "fit",
             "transform": Transform {
               "index": 2,
               "mat": Array [
@@ -14340,6 +14392,8 @@ DiagramElementPrimative {
                 "startTime": -1,
               },
             },
+            "tieToHTMLElement": null,
+            "tieToHTMLElementScale": "fit",
             "transform": Transform {
               "index": 2,
               "mat": Array [
@@ -14838,6 +14892,8 @@ DiagramElementPrimative {
                         "startTime": -1,
                       },
                     },
+                    "tieToHTMLElement": null,
+                    "tieToHTMLElementScale": "fit",
                     "transform": Transform {
                       "index": 2,
                       "mat": Array [
@@ -15340,6 +15396,8 @@ DiagramElementPrimative {
                   "startTime": -1,
                 },
               },
+              "tieToHTMLElement": null,
+              "tieToHTMLElementScale": "fit",
               "transform": Transform {
                 "index": 2,
                 "mat": Array [
@@ -15885,6 +15943,8 @@ DiagramElementPrimative {
         "startTime": -1,
       },
     },
+    "tieToHTMLElement": null,
+    "tieToHTMLElementScale": "fit",
     "touchInBoundingRect": false,
     "transform": Transform {
       "index": 3,
@@ -16097,6 +16157,8 @@ DiagramElementPrimative {
       "startTime": -1,
     },
   },
+  "tieToHTMLElement": null,
+  "tieToHTMLElementScale": "fit",
   "transform": Transform {
     "index": 2,
     "mat": Array [
