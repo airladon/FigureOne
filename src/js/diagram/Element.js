@@ -2148,25 +2148,35 @@ class DiagramElement {
   }
 
   getDiagramPositionInVertexSpace(diagramPosition: Point) {
-    const glSpace = {
-      x: { bottomLeft: -1, width: 2 },
-      y: { bottomLeft: -1, height: 2 },
-    };
-    const diagramSpace = {
-      x: {
-        bottomLeft: this.diagramLimits.left,
-        width: this.diagramLimits.width,
-      },
-      y: {
-        bottomLeft: this.diagramLimits.bottom,
-        height: this.diagramLimits.height,
-      },
-    };
-    const diagramToGLSpace = spaceToSpaceTransform(diagramSpace, glSpace);
-    const glLocation = diagramPosition.transformBy(diagramToGLSpace.matrix());
-    const t = new Transform(this.lastDrawTransform.order.slice(2));
-    const newLocation = glLocation.transformBy(m2.inverse(t.matrix()));
-    return newLocation;
+    // const glSpace = {
+    //   x: { bottomLeft: -1, width: 2 },
+    //   y: { bottomLeft: -1, height: 2 },
+    // };
+    // const diagramSpace = {
+    //   x: {
+    //     bottomLeft: this.diagramLimits.left,
+    //     width: this.diagramLimits.width,
+    //   },
+    //   y: {
+    //     bottomLeft: this.diagramLimits.bottom,
+    //     height: this.diagramLimits.height,
+    //   },
+    // };
+    // const diagramToGLSpace = spaceToSpaceTransform(diagramSpace, glSpace);
+    // const glLocation = diagramPosition.transformBy(diagramToGLSpace.matrix());
+    // const t = new Transform(this.lastDrawTransform.order.slice(2));
+    // const newLocation = glLocation.transformBy(m2.inverse(t.matrix()));
+    // console.log(newLocation, diagramPosition.transformBy(this.diagramSpaceToVertexSpaceTransformMatrix()));
+    return diagramPosition.transformBy(this.diagramSpaceToVertexSpaceTransformMatrix());
+  }
+
+  diagramSpaceToVertexSpaceTransformMatrix() {
+    // Diagram transform will always be two
+    const t = new Transform(this.lastDrawTransform.order.slice(
+      this.lastDrawElementTransformPosition.elementCount,
+      this.lastDrawTransform.order.length - 2,
+    ));
+    return m2.inverse(t.matrix());
   }
 
   setDiagramPosition(diagramPosition: Point) {
