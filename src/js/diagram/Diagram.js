@@ -567,7 +567,7 @@ class Diagram {
 
     const currentVertexSpacePoint = currentDiagramPoint.transformBy(m);
     const previousVertexSpacePoint = previousDiagramPoint.transformBy(m);
-    const delta = currentDiagramPoint.sub(previousDiagramPoint);
+    // const delta = currentDiagramPoint.sub(previousDiagramPoint);
     const elementSpaceDelta = currentVertexSpacePoint.sub(previousVertexSpacePoint);
     // console.log(delta, elementSpaceDelta)
     const currentTransform = element.transform._dup();
@@ -588,14 +588,20 @@ class Diagram {
     const previousPixelPoint = this.clientToPixel(previousClientPoint);
     const currentPixelPoint = this.clientToPixel(currentClientPoint);
 
-    const previousDiagramPoint =
-      previousPixelPoint.transformBy(this.pixelToDiagramSpaceTransform.matrix());
-    const currentDiagramPoint =
-      currentPixelPoint.transformBy(this.pixelToDiagramSpaceTransform.matrix());
+    // const previousDiagramPoint =
+    //   previousPixelPoint.transformBy(this.pixelToDiagramSpaceTransform.matrix());
+    // const currentDiagramPoint =
+    //   currentPixelPoint.transformBy(this.pixelToDiagramSpaceTransform.matrix());
 
-    const center = element.getDiagramPosition();
-    const previousMag = previousDiagramPoint.sub(center).distance();
-    const currentMag = currentDiagramPoint.sub(center).distance();
+    // const center = element.getDiagramPosition();
+    // const previousMag = previousDiagramPoint.sub(center).distance();
+    // const currentMag = currentDiagramPoint.sub(center).distance();
+    const center = element.getDiagramPosition()
+      .transformBy(this.diagramToPixelSpaceTransform.matrix());
+    const previousMag = previousPixelPoint.sub(center).distance();
+    const currentMag = currentPixelPoint.sub(center).distance();
+
+
     const currentScale = element.transform.s();
     if (currentScale != null) {
       const currentTransform = element.transform._dup();
