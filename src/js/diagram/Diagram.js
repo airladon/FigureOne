@@ -512,26 +512,36 @@ class Diagram {
     previousClientPoint: Point,
     currentClientPoint: Point,
   ) {
-    let center = element.getDiagramPosition();
-    if (center == null) {
-      center = new Point(0, 0);
+    let centerDiagramSpace = element.getDiagramPosition();
+    if (centerDiagramSpace == null) {
+      centerDiagramSpace = new Point(0, 0);
     }
+    const center = centerDiagramSpace
+      .transformBy(this.diagramToPixelSpaceTransform.matrix());
     const previousPixelPoint = this.clientToPixel(previousClientPoint);
     const currentPixelPoint = this.clientToPixel(currentClientPoint);
 
-    const previousDiagramPoint =
-      previousPixelPoint.transformBy(this.pixelToDiagramSpaceTransform.matrix());
-    const currentDiagramPoint =
-      currentPixelPoint.transformBy(this.pixelToDiagramSpaceTransform.matrix());
+    // const previousDiagramPoint =
+    //   previousPixelPoint.transformBy(this.pixelToDiagramSpaceTransform.matrix());
+    // const currentDiagramPoint =
+    //   currentPixelPoint.transformBy(this.pixelToDiagramSpaceTransform.matrix());
+    // const currentAngle = Math.atan2(
+    //   currentDiagramPoint.y - center.y,
+    //   currentDiagramPoint.x - center.x,
+    // );
+    // const previousAngle = Math.atan2(
+    //   previousDiagramPoint.y - center.y,
+    //   previousDiagramPoint.x - center.x,
+    // );
     const currentAngle = Math.atan2(
-      currentDiagramPoint.y - center.y,
-      currentDiagramPoint.x - center.x,
+      currentPixelPoint.y - center.y,
+      currentPixelPoint.x - center.x,
     );
     const previousAngle = Math.atan2(
-      previousDiagramPoint.y - center.y,
-      previousDiagramPoint.x - center.x,
+      previousPixelPoint.y - center.y,
+      previousPixelPoint.x - center.x,
     );
-    const diffAngle = minAngleDiff(previousAngle, currentAngle);
+    const diffAngle = -minAngleDiff(previousAngle, currentAngle);
     const transform = element.transform._dup();
     let rot = transform.r();
     if (rot == null) {
