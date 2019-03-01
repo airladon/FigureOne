@@ -96,7 +96,10 @@ class Gesture {
   }
 
   mouseDownHandler(event: MouseEvent) {
-    this.startHandler(new Point(event.clientX, event.clientY));
+    const disableEvent = this.startHandler(new Point(event.clientX, event.clientY));
+    if (disableEvent) {
+      event.preventDefault();
+    }
   }
 
   touchMoveHandler(event: TouchEvent) {
