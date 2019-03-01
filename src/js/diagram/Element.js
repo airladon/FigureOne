@@ -548,9 +548,9 @@ class DiagramElement {
     let element;
     if (typeof this.tieToHTMLElement === 'string') {
       element = document.getElementById(this.tieToHTMLElement);
-      if (element != null) {
-        this.tieToHTMLElement = element;
-      }
+      // if (element != null) {
+      //   this.tieToHTMLElement = element;
+      // }
     } else if (this.tieToHTMLElement instanceof HTMLElement) {
       element = this.tieToHTMLElement;
     }
