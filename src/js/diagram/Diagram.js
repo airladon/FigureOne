@@ -572,9 +572,6 @@ class Diagram {
       currentPixelPoint.transformBy(this.pixelToDiagramSpaceTransform.matrix());
     const m = element.diagramSpaceToVertexSpaceTransformMatrix();
 
-    // const currentVertexSpacePoint = element.getDiagramPositionInVertexSpace(currentDiagramPoint);
-    // const previousVertexSpacePoint = element.getDiagramPositionInVertexSpace(previousDiagramPoint)
-
     const currentVertexSpacePoint = currentDiagramPoint.transformBy(m);
     const previousVertexSpacePoint = previousDiagramPoint.transformBy(m);
     // const delta = currentDiagramPoint.sub(previousDiagramPoint);
