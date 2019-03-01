@@ -577,24 +577,23 @@ class DiagramElement {
       tieToElement = this.tieToHTML.element;
     }
     if (tieToElement != null) {
-      const elementRect = tieToElement.getBoundingClientRect();
-      const canvasRect = diagramCanvas.getBoundingClientRect();
-      const eWidth = elementRect.width;
-      const eHeight = elementRect.height;
-      const cWidth = canvasRect.width;
-      const cHeight = canvasRect.height;
-      const dWidth = this.diagramLimits.width;
-      const dHeight = this.diagramLimits.height;
-      const windowWidth = this.tieToHTML.window.width;
-      const windowHeight = this.tieToHTML.window.height;
+      const tie = tieToElement.getBoundingClientRect();
+      const canvas = diagramCanvas.getBoundingClientRect();
+      const diagram = this.diagramLimits;
+      const dWindow = this.tieToHTML.window;
+      const cAspectRatio = canvas.width / canvas.height;
+      const dAspectRatio = diagram.width / diagram.height;
+      const tAspectRatio = tie.width / tie.height;
+      const wAspectRatio = dWindow.width / dWindow.height;
 
       const topLeftPixels = new Point(
-        elementRect.left - canvasRect.left,
-        elementRect.top - canvasRect.top,
+        tie.left - canvas.left,
+        tie.top - canvas.top,
       );
       const bottomRightPixels = topLeftPixels.add(new Point(
-        eWidth, eHeight,
+        tie.width, tie.height,
       ));
+
       const topLeft = topLeftPixels
         .transformBy(pixelSpaceToDiagramSpaceTransform.m());
       const bottomRight = bottomRightPixels
@@ -603,63 +602,71 @@ class DiagramElement {
       const height = topLeft.y - bottomRight.y;
       const center = topLeft.add(new Point(width / 2, -height / 2));
 
-      const cAspectRatio = cWidth / cHeight;
-      const dAspectRatio = dWidth / dHeight;
-      const eAspectRatio = eWidth / eHeight;
-
       const scaleString = this.tieToHTML.scale.trim().toLowerCase();
 
       let scaleX = 1;
       let scaleY = 1;
-      const scaleLimitsX = dWidth / windowWidth;
-      const scaleLimitsY = dHeight / windowHeight;
-      const wAspectRatio = windowWidth / windowHeight;
+      const diagramToWindowScaleX = diagram.width / dWindow.width;
+      const diagramToWindowScaleY = diagram.height / dWindow.height;
 
+      // Window has no scaling impact on em, it only has impact on translation
       if (scaleString.endsWith('em')) {
         const scale = parseFloat(scaleString);
         const em = parseFloat(getComputedStyle(tieToElement).fontSize);
         // 0.2 is default font size in diagram units
-        const defaultFontScale = dWidth / 0.2;
-        scaleX = scale * em * defaultFontScale / cWidth;
-        scaleY = scale * em * defaultFontScale / dAspectRatio / cHeight;
-      } else if (scaleString.endsWith('px')) {
-        const maxPixels = parseFloat(scaleString);
-        if (dWidth > dHeight) {
-          const scale = maxPixels / cWidth;
-          scaleX = scale;
-          scaleY = scale * cAspectRatio / dAspectRatio;
-        } else {
-          const scale = maxPixels / canvasRect.height;
-          scaleX = scale / cAspectRatio * dAspectRatio;
-          scaleY = scale;
-        }
-        // this.setScale(
-        //   scale / container.offsetWidth,
-        //   scale / container.offsetHeight,
-        // );
-      } else if (scaleString === 'stretch') {
-        scaleX = eWidth / canvasRect.width;
-        scaleY = eHeight / canvasRect.height;
-      } else if (scaleString === 'max') {
-        if (eAspectRatio > wAspectRatio) {
-          const scale = eWidth / cWidth;
-          scaleX = scale * scaleLimitsX;
-          scaleY = scale * cAspectRatio / dAspectRatio * scaleLimitsX;
-        } else {
-          const scale = eHeight / cHeight;
-          scaleX = scale / cAspectRatio * dAspectRatio * scaleLimitsY;
-          scaleY = scale * scaleLimitsY;
-        }
-      } else if (eAspectRatio < wAspectRatio) {
-        const scale = eWidth / cWidth;
-        scaleX = scale * scaleLimitsX;
-        scaleY = scale * cAspectRatio / dAspectRatio * scaleLimitsX;
-      } else {
-        const scale = eHeight / cHeight;
-        scaleX = scale / cAspectRatio * dAspectRatio * scaleLimitsY;
-        scaleY = scale * scaleLimitsY;
+        const defaultFontScale = diagram.width / 0.2;
+        scaleX = scale * em * defaultFontScale / canvas.width;
+        scaleY = scale * em * defaultFontScale / dAspectRatio / canvas.height;
       }
+
+      // Scale the maximum dimension of the window to the pixel value
+      if (scaleString.endsWith('px')) {
+        const maxPixels = parseFloat(scaleString);
+        if (wAspectRatio > 1) {
+          const scale = maxPixels / canvas.width;
+          scaleX = scale * diagramToWindowScaleX;
+          scaleY = scale * cAspectRatio / dAspectRatio * diagramToWindowScaleX;
+        } else {
+          const scale = maxPixels / canvas.height;
+          scaleX = scale / cAspectRatio * dAspectRatio * diagramToWindowScaleY;
+          scaleY = scale * diagramToWindowScaleY;
+        }
+      }
+
+      // Scale the window x to tie x, and window y to tie y
+      if (scaleString === 'stretch') {
+        scaleX = tie.width / canvas.width * diagramToWindowScaleX;
+        scaleY = tie.height / canvas.height * diagramToWindowScaleY;
+      }
+
+      // Scale so window either fits within the tie element, or fits only
+      // within the max dimension of the tie element
+      if (scaleString === 'max' || scaleString === 'fit') {
+        const fitHeightScale = new Point(
+          tie.height / canvas.height / cAspectRatio * dAspectRatio * diagramToWindowScaleY,
+          tie.height / canvas.height * diagramToWindowScaleY,
+        );
+
+        const fitWidthScale = new Point(
+          tie.width / canvas.width * diagramToWindowScaleX,
+          tie.width / canvas.width * cAspectRatio / dAspectRatio * diagramToWindowScaleX,
+        );
+
+        if (
+          (scaleString === 'max' && tAspectRatio > wAspectRatio)
+          || (scaleString === 'fit' && tAspectRatio < wAspectRatio)
+        ) {
+          scaleX = fitWidthScale.x;
+          scaleY = fitWidthScale.y;
+        } else {
+          scaleX = fitHeightScale.x;
+          scaleY = fitHeightScale.y;
+        }
+      }
+
       this.setScale(scaleX, scaleY);
+
+      // Offset the element relative to the tie
       this.setPosition(
         center.x - scaleX * (this.tieToHTML.window.left + this.tieToHTML.window.width / 2),
         center.y - scaleY * (this.tieToHTML.window.bottom + this.tieToHTML.window.height / 2),

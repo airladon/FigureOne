@@ -120,6 +120,7 @@ DiagramElementPrimative {
         ],
       },
       "ratio": 2,
+      "resize": [Function],
     },
     "holeBorder": Array [
       Array [],
@@ -420,6 +421,7 @@ DiagramElementPrimative {
             ],
           },
           "ratio": 2,
+          "resize": [Function],
         },
         "holeBorder": Array [
           Array [],
@@ -940,6 +942,7 @@ DiagramElementPrimative {
             ],
           },
           "ratio": 2,
+          "resize": [Function],
         },
         "holeBorder": Array [
           Array [],
@@ -1459,6 +1462,7 @@ DiagramElementPrimative {
             ],
           },
           "ratio": 2,
+          "resize": [Function],
         },
         "holeBorder": Array [
           Array [],
@@ -2004,6 +2008,7 @@ DiagramElementPrimative {
           "locations": Object {
             "a_position": "",
           },
+          "resize": [Function],
         },
         "z": 0,
       },
@@ -2563,6 +2568,7 @@ DiagramElementPrimative {
               ],
             },
             "ratio": 2,
+            "resize": [Function],
           },
           "holeBorder": Array [
             Array [],
@@ -3083,6 +3089,7 @@ DiagramElementPrimative {
               ],
             },
             "ratio": 2,
+            "resize": [Function],
           },
           "holeBorder": Array [
             Array [],
@@ -3602,6 +3609,7 @@ DiagramElementPrimative {
               ],
             },
             "ratio": 2,
+            "resize": [Function],
           },
           "holeBorder": Array [
             Array [],
@@ -4147,6 +4155,7 @@ DiagramElementPrimative {
             "locations": Object {
               "a_position": "",
             },
+            "resize": [Function],
           },
           "z": 0,
         },
@@ -4712,6 +4721,7 @@ DiagramElementPrimative {
                             ],
                           },
                           "ratio": 2,
+                          "resize": [Function],
                         },
                         "holeBorder": Array [
                           Array [],
@@ -5242,6 +5252,7 @@ DiagramElementPrimative {
                             ],
                           },
                           "ratio": 2,
+                          "resize": [Function],
                         },
                         "holeBorder": Array [
                           Array [],
@@ -5784,6 +5795,7 @@ DiagramElementPrimative {
                       ],
                     },
                     "ratio": 2,
+                    "resize": [Function],
                   },
                   "holeBorder": Array [
                     Array [],
@@ -6304,6 +6316,7 @@ DiagramElementPrimative {
                       ],
                     },
                     "ratio": 2,
+                    "resize": [Function],
                   },
                   "holeBorder": Array [
                     Array [],
@@ -6823,6 +6836,7 @@ DiagramElementPrimative {
                       ],
                     },
                     "ratio": 2,
+                    "resize": [Function],
                   },
                   "holeBorder": Array [
                     Array [],
@@ -7368,6 +7382,7 @@ DiagramElementPrimative {
                     "locations": Object {
                       "a_position": "",
                     },
+                    "resize": [Function],
                   },
                   "z": 0,
                 },
@@ -7924,6 +7939,7 @@ DiagramElementPrimative {
                                     ],
                                   },
                                   "ratio": 2,
+                                  "resize": [Function],
                                 },
                                 "holeBorder": Array [
                                   Array [],
@@ -8489,6 +8505,7 @@ DiagramElementPrimative {
                               "locations": Object {
                                 "a_position": "",
                               },
+                              "resize": [Function],
                             },
                             "z": 0,
                           },
@@ -8996,6 +9013,7 @@ DiagramElementPrimative {
                                   ],
                                 },
                                 "ratio": 2,
+                                "resize": [Function],
                               },
                               "holeBorder": Array [
                                 Array [],
@@ -9594,6 +9612,7 @@ DiagramElementPrimative {
                           "locations": Object {
                             "a_position": "",
                           },
+                          "resize": [Function],
                         },
                         "z": 0,
                       },
@@ -10099,6 +10118,7 @@ DiagramElementPrimative {
                             ],
                           },
                           "ratio": 2,
+                          "resize": [Function],
                         },
                         "holeBorder": Array [
                           Array [],
@@ -10641,6 +10661,7 @@ DiagramElementPrimative {
                       ],
                     },
                     "ratio": 2,
+                    "resize": [Function],
                   },
                   "holeBorder": Array [
                     Array [],
@@ -11161,6 +11182,7 @@ DiagramElementPrimative {
                       ],
                     },
                     "ratio": 2,
+                    "resize": [Function],
                   },
                   "holeBorder": Array [
                     Array [],
@@ -11680,6 +11702,7 @@ DiagramElementPrimative {
                       ],
                     },
                     "ratio": 2,
+                    "resize": [Function],
                   },
                   "holeBorder": Array [
                     Array [],
@@ -12225,6 +12248,7 @@ DiagramElementPrimative {
                     "locations": Object {
                       "a_position": "",
                     },
+                    "resize": [Function],
                   },
                   "z": 0,
                 },
@@ -12735,6 +12759,7 @@ DiagramElementPrimative {
                   ],
                 },
                 "ratio": 2,
+                "resize": [Function],
               },
               "holeBorder": Array [
                 Array [],
@@ -13255,6 +13280,7 @@ DiagramElementPrimative {
                   ],
                 },
                 "ratio": 2,
+                "resize": [Function],
               },
               "holeBorder": Array [
                 Array [],
@@ -13774,6 +13800,7 @@ DiagramElementPrimative {
                   ],
                 },
                 "ratio": 2,
+                "resize": [Function],
               },
               "holeBorder": Array [
                 Array [],
@@ -14319,6 +14346,7 @@ DiagramElementPrimative {
                 "locations": Object {
                   "a_position": "",
                 },
+                "resize": [Function],
               },
               "z": 0,
             },
@@ -14831,6 +14859,7 @@ DiagramElementPrimative {
                           ],
                         },
                         "ratio": 2,
+                        "resize": [Function],
                       },
                       "holeBorder": Array [
                         Array [],
@@ -15345,6 +15374,7 @@ DiagramElementPrimative {
                     ],
                   },
                   "ratio": 2,
+                  "resize": [Function],
                 },
                 "holeBorder": Array [
                   Array [],
@@ -15781,6 +15811,7 @@ DiagramElementPrimative {
               ],
             },
             "ratio": 2,
+            "resize": [Function],
           },
           "htmlCanvas": Object {
             "appendChild": [Function],
@@ -15817,6 +15848,7 @@ DiagramElementPrimative {
             "locations": Object {
               "a_position": "",
             },
+            "resize": [Function],
           },
         },
       },
@@ -16023,6 +16055,7 @@ DiagramElementPrimative {
           ],
         },
         "ratio": 2,
+        "resize": [Function],
       },
       "htmlCanvas": Object {
         "appendChild": [Function],
@@ -16059,6 +16092,7 @@ DiagramElementPrimative {
         "locations": Object {
           "a_position": "",
         },
+        "resize": [Function],
       },
     },
     "state": Object {
