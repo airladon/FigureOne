@@ -22,7 +22,10 @@ jest.mock('../diagram/DrawingObjects/HTMLObject/HTMLObject');
 const generateRandomStringMock = jest.spyOn(tools, 'generateRandomString');
 generateRandomStringMock.mockImplementation(() => '000000');
 
-export default function makeDiagram() {
+export default function makeDiagram(
+  inputCanvas = new Rect(100, -300, 1000, 500),
+  inputLimits = new Rect(-1, -1, 2, 2),
+) {
   document.body.innerHTML =
     '<div id="c">'
     + '  <canvas class="diagram__gl" id="id_diagram__gl__low">'
@@ -38,18 +41,18 @@ export default function makeDiagram() {
     + '</div>';
   // canvas = document.getElementById('c');
   const definition = {
-    width: 1000,
-    height: 500,
-    limits: new Rect(-1, -1, 2, 2),
+    width: inputCanvas.width,
+    height: inputCanvas.height,
+    limits: inputLimits,
   };
 
   const canvasMock = {
     width: definition.width,
     height: definition.height,
     // offsetLeft: 100,
-    left: 100,
+    left: inputCanvas.left,
     // offsetTop: 200,
-    top: 200,
+    top: inputCanvas.top,
     // width: definition.width,
     // height: definition.height,
     offsetWidth: definition.width,
@@ -59,8 +62,8 @@ export default function makeDiagram() {
     // eslint-disable-next-line arrow-body-style
     getBoundingClientRect: () => {
       return {
-        left: 100,
-        top: 200,
+        left: inputCanvas.left,
+        top: inputCanvas.top,
         width: definition.width,
         height: definition.height,
       };
