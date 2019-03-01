@@ -14,7 +14,7 @@ jest.mock('./Gesture');
 jest.mock('./webgl/webgl');
 jest.mock('./DrawContext2D');
 
-// const point = value => new Point(value, value);
+const point = value => new Point(value, value);
 
 // function updateHTMLElement(
 //   element,
@@ -40,40 +40,56 @@ const makeHTMLElement = (clientRect = new Rect(0, -100, 100, 100)) => {
   return element;
 };
 
+const pixelRect = (left, top, width, height) => {
+  return new Rect(left, top-height, width, height);
+}
 
 describe('Diagram html element tie', () => {
   let square;
   let htmlElement;
   let diagram;
+  let htmlElementRect;
+  let diagramRect;
+  let diagramLimits;
+  let windowLimits;
+  let scenarios;
+  let scaleType;
   beforeEach(() => {
-    htmlElement = makeHTMLElement();
-    diagram = makeDiagram(
-      new Rect(0, -1000, 1000, 1000),
-      new Rect(-1, -1, 2, 2),
-    );
-    square = diagram.shapes.polygon({
-      sides: 4,
-      radius: 1,
-      transform: new Transform().scale(1, 1).translate(0, 0),
-    });
-    square.tieToHTML = {
-      element: htmlElement,
-      scale: 'fit',
-      window: square.diagramLimits,
+    const createScenario = () => {
+      htmlElement = makeHTMLElement();
+      diagram = makeDiagram(
+        new Rect(0, -1000, 1000, 1000),
+        new Rect(-1, -1, 2, 2),
+      );
+      square = diagram.shapes.polygon({
+        sides: 4,
+        radius: 1,
+        transform: new Transform().scale(1, 1).translate(0, 0),
+      });
+      square.tieToHTML = {
+        element: htmlElement,
+        scale: scaleType,
+        window: windowLimits,
+      };
+      diagram.elements.add('square', square);
     };
-    diagram.elements.add('square', square);
+    scenarios = {
+      simple: () => {
+        htmlElementRect = pixelRect(0, 0, 100, 100);
+        diagramRect = pixelRect(0, 0, 1000, 1000);
+        diagramLimits = new Rect(-1, -1, 2, 2);
+        scaleType = 'fit';
+        windowLimits = diagramLimits._dup();
+        createScenario();
+      },
+    };
   });
   test('Basic', () => {
-    console.log(htmlElement.getBoundingClientRect())
-    console.log(htmlElement instanceof HTMLElement)
-    // console.log(htmlElement.style)
-    
-    console.log(square.transform)
+    scenarios.simple();
+    expect(square.getScale()).toEqual(new Point(1, 1));
+    expect(square.getPosition()).toEqual(new Point(0, 0));
     diagram.resize();
-    console.log(square.transform)
-    // console.log(diagram);
-    // console.log(square);
-    // console.log(htmlElement);
-    // console.log(htmlElement.getBoundingClientRect())
+    expect(square.getScale()).toEqual(new Point(0.1, 0.1));
+    expect(square.getPosition()).toEqual(new Point(-0.9, 0.9));
   });
 });

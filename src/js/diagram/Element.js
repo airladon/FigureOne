@@ -575,9 +575,7 @@ class DiagramElement {
     } else if (this.tieToHTML.element instanceof HTMLElement) {
       ({ element } = this.tieToHTML);
     }
-    console.log(this.tieToHTML.element instanceof HTMLElement)
     if (element != null) {
-
       const elementRect = element.getBoundingClientRect();
       const containerRect = container.getBoundingClientRect();
       const eWidth = elementRect.width;
