@@ -567,29 +567,30 @@ class DiagramElement {
 
   updateHTMLElementTie(
     pixelSpaceToDiagramSpaceTransform: Transform,
-    container: HTMLElement,
+    diagramCanvas: HTMLElement,
   ) {
-    let element;
+    // First get the HTML element
+    let tieToElement;
     if (typeof this.tieToHTML.element === 'string') {
-      element = document.getElementById(this.tieToHTML.element);
+      tieToElement = document.getElementById(this.tieToHTML.element);
     } else if (this.tieToHTML.element instanceof HTMLElement) {
-      ({ element } = this.tieToHTML);
+      tieToElement = this.tieToHTML.element;
     }
-    if (element != null) {
-      const elementRect = element.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
+    if (tieToElement != null) {
+      const elementRect = tieToElement.getBoundingClientRect();
+      const canvasRect = diagramCanvas.getBoundingClientRect();
       const eWidth = elementRect.width;
       const eHeight = elementRect.height;
-      const cWidth = containerRect.width;
-      const cHeight = containerRect.height;
+      const cWidth = canvasRect.width;
+      const cHeight = canvasRect.height;
       const dWidth = this.diagramLimits.width;
       const dHeight = this.diagramLimits.height;
       const windowWidth = this.tieToHTML.window.width;
       const windowHeight = this.tieToHTML.window.height;
 
       const topLeftPixels = new Point(
-        elementRect.left - containerRect.left,
-        elementRect.top - containerRect.top,
+        elementRect.left - canvasRect.left,
+        elementRect.top - canvasRect.top,
       );
       const bottomRightPixels = topLeftPixels.add(new Point(
         eWidth, eHeight,
@@ -612,10 +613,11 @@ class DiagramElement {
       let scaleY = 1;
       const scaleLimitsX = dWidth / windowWidth;
       const scaleLimitsY = dHeight / windowHeight;
-      const scaleLimitsAspectRatio = windowWidth / windowHeight;
+      const wAspectRatio = windowWidth / windowHeight;
+
       if (scaleString.endsWith('em')) {
         const scale = parseFloat(scaleString);
-        const em = parseFloat(getComputedStyle(element).fontSize);
+        const em = parseFloat(getComputedStyle(tieToElement).fontSize);
         // 0.2 is default font size in diagram units
         const defaultFontScale = dWidth / 0.2;
         scaleX = scale * em * defaultFontScale / cWidth;
@@ -627,7 +629,7 @@ class DiagramElement {
           scaleX = scale;
           scaleY = scale * cAspectRatio / dAspectRatio;
         } else {
-          const scale = maxPixels / container.offsetHeight;
+          const scale = maxPixels / canvasRect.height;
           scaleX = scale / cAspectRatio * dAspectRatio;
           scaleY = scale;
         }
@@ -636,19 +638,19 @@ class DiagramElement {
         //   scale / container.offsetHeight,
         // );
       } else if (scaleString === 'stretch') {
-        scaleX = eWidth / container.offsetWidth;
-        scaleY = element.offsetHeight / container.offsetHeight;
+        scaleX = eWidth / canvasRect.width;
+        scaleY = eHeight / canvasRect.height;
       } else if (scaleString === 'max') {
-        if (eWidth > element.offsetHeight) {
+        if (eAspectRatio > wAspectRatio) {
           const scale = eWidth / cWidth;
-          scaleX = scale;
-          scaleY = scale * cAspectRatio / dAspectRatio;
+          scaleX = scale * scaleLimitsX;
+          scaleY = scale * cAspectRatio / dAspectRatio * scaleLimitsX;
         } else {
           const scale = eHeight / cHeight;
-          scaleX = scale / cAspectRatio * dAspectRatio;
-          scaleY = scale;
+          scaleX = scale / cAspectRatio * dAspectRatio * scaleLimitsY;
+          scaleY = scale * scaleLimitsY;
         }
-      } else if (eAspectRatio < scaleLimitsAspectRatio) {
+      } else if (eAspectRatio < wAspectRatio) {
         const scale = eWidth / cWidth;
         scaleX = scale * scaleLimitsX;
         scaleY = scale * cAspectRatio / dAspectRatio * scaleLimitsX;
