@@ -42,7 +42,7 @@ const makeHTMLElement = (clientRect = new Rect(0, -100, 100, 100)) => {
 
 const pixelRect = (left, top, width, height) => {
   return new Rect(left, top - height, width, height);
-}
+};
 
 describe('Diagram html element tie', () => {
   let square;
@@ -72,14 +72,14 @@ describe('Diagram html element tie', () => {
     };
     scenarios = {
       simple: () => {
-        htmlElementRect = pixelRect(0, 0, 100, 100);
         diagramRect = pixelRect(0, 0, 1000, 1000);
+        htmlElementRect = pixelRect(0, 0, 100, 100);
         diagramLimits = new Rect(-1, -1, 2, 2);
         scaleType = 'fit';
         windowLimits = diagramLimits._dup();
         createScenario();
       },
-      inverseAspectRatios: () => {
+      diagramPortraitElementLandscapeFit: () => {
         htmlElementRect = pixelRect(0, 0, 200, 100);
         diagramRect = pixelRect(0, 0, 1000, 2000);
         diagramLimits = new Rect(-1, -1, 2, 2);
@@ -87,11 +87,35 @@ describe('Diagram html element tie', () => {
         windowLimits = diagramLimits._dup();
         createScenario();
       },
-      inverseAspectRatios2: () => {
+      diagramLandscapeElementPortraitFit: () => {
         htmlElementRect = pixelRect(0, 0, 100, 200);
         diagramRect = pixelRect(0, 0, 2000, 1000);
         diagramLimits = new Rect(-1, -1, 2, 2);
         scaleType = 'fit';
+        windowLimits = diagramLimits._dup();
+        createScenario();
+      },
+      diagramPortraitElementLandscapeWindowWiderLandscapeFit: () => {
+        diagramRect = pixelRect(0, 0, 1000, 2000);
+        htmlElementRect = pixelRect(0, 0, 200, 100);
+        diagramLimits = new Rect(-1, -1, 2, 2);
+        scaleType = 'fit';
+        windowLimits = new Rect(-1, -0.1, 2, 0.2);
+        createScenario();
+      },
+      diagramPortraitElementLandscapeMax: () => {
+        htmlElementRect = pixelRect(0, 0, 200, 100);
+        diagramRect = pixelRect(0, 0, 1000, 2000);
+        diagramLimits = new Rect(-1, -1, 2, 2);
+        scaleType = 'max';
+        windowLimits = diagramLimits._dup();
+        createScenario();
+      },
+      diagramLandscapeElementPortraitMax: () => {
+        htmlElementRect = pixelRect(0, 0, 100, 200);
+        diagramRect = pixelRect(0, 0, 2000, 1000);
+        diagramLimits = new Rect(-1, -1, 2, 2);
+        scaleType = 'max';
         windowLimits = diagramLimits._dup();
         createScenario();
       },
@@ -113,16 +137,34 @@ describe('Diagram html element tie', () => {
     expect(square.getScale()).toEqual(new Point(0.1, 0.1));
     expect(square.getPosition()).toEqual(new Point(-0.9, 0.9));
   });
-  test('Inverse Aspect Ratios', () => {
-    scenarios.inverseAspectRatios();
+  test('Diagram portrait, element landscape, fit, no window', () => {
+    scenarios.diagramPortraitElementLandscapeFit();
     diagram.resize();
     expect(square.getScale()).toEqual(new Point(0.1, 0.05));
     expect(square.getPosition()).toEqual(new Point(1 / 5 - 1, 1 - 1 / 20));
   });
-  test('Inverse Aspect Ratios 2', () => {
-    scenarios.inverseAspectRatios2();
+  test('Diagram landscape, element portrait, fit, no window', () => {
+    scenarios.diagramLandscapeElementPortraitFit();
     diagram.resize();
     expect(square.getScale()).toEqual(new Point(0.05, 0.1));
+    expect(square.getPosition()).toEqual(new Point(-0.95, 0.8));
+  });
+  test('Diagram portrait, element landscape, window wider landscape, fit', () => {
+    scenarios.diagramPortraitElementLandscapeWindowWiderLandscapeFit();
+    diagram.resize();
+    expect(square.getScale()).toEqual(new Point(0.2, 0.1));
+    expect(square.getPosition()).toEqual(new Point(-0.8, 0.95));
+  });
+  test('Diagram portrait, element landscape, max, no window', () => {
+    scenarios.diagramPortraitElementLandscapeMax();
+    diagram.resize();
+    expect(square.getScale()).toEqual(new Point(0.2, 0.1));
+    expect(square.getPosition()).toEqual(new Point(1 / 5 - 1, 1 - 1 / 20));
+  });
+  test('Diagram landscape, element portrait, max, no window', () => {
+    scenarios.diagramLandscapeElementPortraitMax();
+    diagram.resize();
+    expect(square.getScale()).toEqual(new Point(0.1, 0.2));
     expect(square.getPosition()).toEqual(new Point(-0.95, 0.8));
   });
   test('Complex', () => {
