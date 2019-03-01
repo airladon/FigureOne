@@ -41,7 +41,7 @@ const makeHTMLElement = (clientRect = new Rect(0, -100, 100, 100)) => {
 };
 
 const pixelRect = (left, top, width, height) => {
-  return new Rect(left, top-height, width, height);
+  return new Rect(left, top - height, width, height);
 }
 
 describe('Diagram html element tie', () => {
@@ -56,11 +56,8 @@ describe('Diagram html element tie', () => {
   let scaleType;
   beforeEach(() => {
     const createScenario = () => {
-      htmlElement = makeHTMLElement();
-      diagram = makeDiagram(
-        new Rect(0, -1000, 1000, 1000),
-        new Rect(-1, -1, 2, 2),
-      );
+      htmlElement = makeHTMLElement(htmlElementRect);
+      diagram = makeDiagram(diagramRect, diagramLimits);
       square = diagram.shapes.polygon({
         sides: 4,
         radius: 1,
@@ -82,6 +79,30 @@ describe('Diagram html element tie', () => {
         windowLimits = diagramLimits._dup();
         createScenario();
       },
+      inverseAspectRatios: () => {
+        htmlElementRect = pixelRect(0, 0, 200, 100);
+        diagramRect = pixelRect(0, 0, 1000, 2000);
+        diagramLimits = new Rect(-1, -1, 2, 2);
+        scaleType = 'fit';
+        windowLimits = diagramLimits._dup();
+        createScenario();
+      },
+      inverseAspectRatios2: () => {
+        htmlElementRect = pixelRect(0, 0, 100, 200);
+        diagramRect = pixelRect(0, 0, 2000, 1000);
+        diagramLimits = new Rect(-1, -1, 2, 2);
+        scaleType = 'fit';
+        windowLimits = diagramLimits._dup();
+        createScenario();
+      },
+      complex: () => {
+        htmlElementRect = pixelRect(20, 20, 200, 100);
+        diagramRect = pixelRect(10, 10, 1000, 2000);
+        diagramLimits = new Rect(-2, -1, 4, 2);
+        scaleType = 'fit';
+        windowLimits = diagramLimits._dup();
+        createScenario();
+      },
     };
   });
   test('Basic', () => {
@@ -91,5 +112,23 @@ describe('Diagram html element tie', () => {
     diagram.resize();
     expect(square.getScale()).toEqual(new Point(0.1, 0.1));
     expect(square.getPosition()).toEqual(new Point(-0.9, 0.9));
+  });
+  test('Inverse Aspect Ratios', () => {
+    scenarios.inverseAspectRatios();
+    diagram.resize();
+    expect(square.getScale()).toEqual(new Point(0.1, 0.05));
+    expect(square.getPosition()).toEqual(new Point(1 / 5 - 1, 1 - 1 / 20));
+  });
+  test('Inverse Aspect Ratios 2', () => {
+    scenarios.inverseAspectRatios2();
+    diagram.resize();
+    expect(square.getScale()).toEqual(new Point(0.05, 0.1));
+    expect(square.getPosition()).toEqual(new Point(-0.95, 0.8));
+  });
+  test('Complex', () => {
+    scenarios.complex();
+    diagram.resize();
+    expect(square.getScale()).toEqual(new Point(0.2, 0.05));
+    expect(square.getPosition()).toEqual(new Point(-1.56, 0.94));
   });
 });
