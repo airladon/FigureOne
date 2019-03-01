@@ -229,6 +229,7 @@ class DiagramElement {
   //  '': defaults to fit
   // keeping aspect ratio.
   tieToHTMLElementScale: string;
+  tieToHTMLElementScaleLimits: Rect;
 
   constructor(
     // translation: Point = Point.zero(),
@@ -426,6 +427,7 @@ class DiagramElement {
     this.animations = new animations.AnimationManager(this);
     this.tieToHTMLElement = null;
     this.tieToHTMLElementScale = 'fit';
+    this.tieToHTMLElementScaleLimits = this.diagramLimits;
     // this.presetTransforms = {};
   }
 
@@ -588,6 +590,11 @@ class DiagramElement {
 
       let scaleX = 1;
       let scaleY = 1;
+      const scaleLimitsX = this.diagramLimits.width / this.tieToHTMLElementScaleLimits.width;
+      const scaleLimitsY = this.diagramLimits.height / this.tieToHTMLElementScaleLimits.height;
+      const scaleLimits = Math.min(scaleLimitsX, scaleLimitsY);
+      const scaleLimitsAspectRatio =
+        this.tieToHTMLElementScaleLimits.width / this.tieToHTMLElementScaleLimits.height;
       if (scaleString.endsWith('em')) {
         const scale = parseFloat(scaleString);
         const em = parseFloat(getComputedStyle(element).fontSize);
@@ -623,14 +630,14 @@ class DiagramElement {
           scaleX = scale / containerAspectRatio * diagramAspectRatio;
           scaleY = scale;
         }
-      } else if (elementAspectRatio < diagramAspectRatio) {
+      } else if (elementAspectRatio < scaleLimitsAspectRatio) {
         const scale = element.offsetWidth / container.offsetWidth;
-        scaleX = scale;
-        scaleY = scale * containerAspectRatio / diagramAspectRatio;
+        scaleX = scale * scaleLimitsX;
+        scaleY = scale * containerAspectRatio / diagramAspectRatio * scaleLimitsX;
       } else {
         const scale = element.offsetHeight / container.offsetHeight;
-        scaleX = scale / containerAspectRatio * diagramAspectRatio;
-        scaleY = scale;
+        scaleX = scale / containerAspectRatio * diagramAspectRatio * scaleLimitsY;
+        scaleY = scale * scaleLimitsY;
       }
       this.setScale(scaleX, scaleY);
       this.setPosition(
