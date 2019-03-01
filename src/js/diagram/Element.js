@@ -641,8 +641,8 @@ class DiagramElement {
       }
       this.setScale(scaleX, scaleY);
       this.setPosition(
-        center.x - scaleX * (this.diagramLimits.left + this.diagramLimits.width / 2),
-        center.y - scaleY * (this.diagramLimits.bottom + this.diagramLimits.height / 2),
+        center.x - scaleX * (this.tieToHTMLElementScaleLimits.left + this.tieToHTMLElementScaleLimits.width / 2),
+        center.y - scaleY * (this.tieToHTMLElementScaleLimits.bottom + this.tieToHTMLElementScaleLimits.height / 2),
       );
     }
   }
