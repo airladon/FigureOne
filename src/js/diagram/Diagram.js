@@ -55,6 +55,7 @@ class Diagram {
   htmlCanvas: HTMLElement;
   webglLow: WebGLInstance;
   webglHigh: WebGLInstance;
+  gestureCanvas: HTMLElement;
 
   elements: DiagramElementCollection;
   globalAnimation: GlobalAnimation;
@@ -201,6 +202,15 @@ class Diagram {
         this.draw2DLow = new DrawContext2D(this.textCanvasLow);
         this.draw2DHigh = new DrawContext2D(this.textCanvasHigh);
       }
+    }
+    if (optionsToUse.gestureCanvas != null) {
+      const gestureCanvas = document.getElementById(optionsToUse.gestureCanvas);
+      if (gestureCanvas != null) {
+        this.gestureCanvas = gestureCanvas;
+      }
+    }
+    if (this.gestureCanvas == null) {
+      this.gestureCanvas = this.htmlCanvas;
     }
     // if (this.textCanvas instanceof HTMLCanvasElement) {
     //   this.draw2D = new DrawContext2D(this.textCanvas);
