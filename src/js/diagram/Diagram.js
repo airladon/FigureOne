@@ -561,11 +561,15 @@ class Diagram {
     const currentDiagramPoint =
       currentPixelPoint.transformBy(this.pixelToDiagramSpaceTransform.matrix());
 
+    const currentVertexSpacePoint = element.getDiagramPositionInVertexSpace(currentDiagramPoint);
+    const previousVertexSpacePoint = element.getDiagramPositionInVertexSpace(previousDiagramPoint)
     const delta = currentDiagramPoint.sub(previousDiagramPoint);
+    const elementSpaceDelta =currentVertexSpacePoint.sub(previousVertexSpacePoint);
+    // console.log(delta, elementSpaceDelta)
     const currentTransform = element.transform._dup();
     const currentTranslation = currentTransform.t();
     if (currentTranslation != null) {
-      const newTranslation = currentTranslation.add(delta);
+      const newTranslation = currentTranslation.add(elementSpaceDelta);
       currentTransform.updateTranslation(newTranslation);
       element.moved(currentTransform);
     }

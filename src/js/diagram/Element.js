@@ -2147,6 +2147,28 @@ class DiagramElement {
     // return location.transformBy(glToDiagramSpace.matrix());
   }
 
+  getDiagramPositionInVertexSpace(diagramPosition: Point) {
+    const glSpace = {
+      x: { bottomLeft: -1, width: 2 },
+      y: { bottomLeft: -1, height: 2 },
+    };
+    const diagramSpace = {
+      x: {
+        bottomLeft: this.diagramLimits.left,
+        width: this.diagramLimits.width,
+      },
+      y: {
+        bottomLeft: this.diagramLimits.bottom,
+        height: this.diagramLimits.height,
+      },
+    };
+    const diagramToGLSpace = spaceToSpaceTransform(diagramSpace, glSpace);
+    const glLocation = diagramPosition.transformBy(diagramToGLSpace.matrix());
+    const t = new Transform(this.lastDrawTransform.order.slice(2));
+    const newLocation = glLocation.transformBy(m2.inverse(t.matrix()));
+    return newLocation;
+  }
+
   setDiagramPosition(diagramPosition: Point) {
     const glSpace = {
       x: { bottomLeft: -1, width: 2 },
