@@ -14,6 +14,7 @@ import VertexObject from './DrawingObjects/VertexObject/VertexObject';
 import { TextObject } from './DrawingObjects/TextObject/TextObject';
 import { duplicateFromTo, joinObjects } from '../tools/tools';
 import { colorArrayToRGBA } from '../tools/color';
+// import GlobalAnimation from './webgl/GlobalAnimation';
 
 import type {
   TypePositionAnimationStepInputOptions, TypeAnimationBuilderInputOptions,
@@ -2773,6 +2774,16 @@ class DiagramElementCollection extends DiagramElement {
 
   draw(parentTransform: Transform = new Transform(), now: number = 0) {
     // console.log('draw collection', now, this.name)
+    // if (this.name === 'fig3') {
+    //   const ga = new GlobalAnimation();
+    //   const deltaTime = new Date().getTime() - ga.diagramDrawStart;
+    //   // console.log(this.name, deltaTime)
+    // }
+    // if (this.name === 'circumference') {
+    //   const ga = new GlobalAnimation();
+    //   const deltaTime = new Date().getTime() - ga.diagramDrawStart;
+    //   // console.log(this.name, deltaTime)
+    // }
     if (this.isShown) {
       this.animations.nextFrame(now);
       // Deprecate

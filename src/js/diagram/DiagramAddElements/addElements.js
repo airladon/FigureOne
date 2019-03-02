@@ -14,6 +14,7 @@ export type TypeAddElementObject = {
   options?: {},
   addElements?: Array<TypeAddElementObject>,
   mods?: {},
+  scenario: string,
 };
 
 function addElements(
@@ -75,12 +76,13 @@ function addElements(
       let optionsToUse;
       let elementModsToUse;
       let addElementsToUse;
+      let firstScenario;
 
       // Extract the parameters from the layout object
       if (Array.isArray(elementDefinition)) {
         [
           pathToUse, nameToUse, methodPathToUse, optionsToUse,
-          elementModsToUse, addElementsToUse,
+          elementModsToUse, addElementsToUse, firstScenario,
         ] = elementDefinition;
       } else {
         nameToUse = elementDefinition.name;
@@ -89,6 +91,7 @@ function addElements(
         addElementsToUse = elementDefinition[addElementsKey];
         methodPathToUse = elementDefinition.method;
         elementModsToUse = elementDefinition.mods;
+        firstScenario = elementDefinition.scenario;
       }
 
       let collectionPath;
@@ -127,6 +130,9 @@ function addElements(
         if (elementModsToUse != null && elementModsToUse !== {}) {
           element.setProperties(elementModsToUse);
         }
+        if (firstScenario != null && firstScenario in element.scenarios) {
+          element.setScenario(firstScenario);
+        }
       } else {
         let element;
         if (Array.isArray(optionsToUse)) {
@@ -143,7 +149,11 @@ function addElements(
         if (collectionPath instanceof DiagramElementCollection) {
           collectionPath.add(nameToUse, element);
         }
+        if (firstScenario != null && firstScenario in element.scenarios) {
+          element.setScenario(firstScenario);
+        }
       }
+
       if (`_${nameToUse}` in rootCollection
           && (addElementsToUse != null && addElementsToUse !== {})
       ) {
