@@ -640,7 +640,6 @@ class Diagram {
     if (this.beingMovedElements.length === 0) {
       return false;
     }
-
     const previousPixelPoint = this.clientToPixel(previousClientPoint);
     // const currentPixelPoint = this.clientToPixel(currentClientPoint);
 
@@ -749,8 +748,17 @@ class Diagram {
   }
 
   draw(now: number): void {
+    // if (this.globalAnimation.previousNow == null) {
+    //   this.globalAnimation.previousNow = now
+    // }
+    // const t = new Date().getTime();
+    // console.log('time since last draw:', t - this.globalAnimation.diagramDrawStart)
+    // this.globalAnimation.diagramDrawStart = t;
+
     this.drawQueued = false;
     this.clearContext();
+
+    // console.log(now - this.globalAnimation.previousNow)
     // This transform converts standard gl clip space, to diagram clip space
     // defined in limits.
     // const normWidth = 2 / this.limits.width;
@@ -767,11 +775,13 @@ class Diagram {
       now,
     );
 
+
     if (this.elements.isMoving()) {
       this.animateNextFrame();
     }
     // console.log(performance.now() - t1)
     // console.log(Date.now() - measure)
+    // console.log('draw end', new Date().getTime() - this.globalAnimation.diagramDrawStart);
   }
 
   animateNextFrame() {
