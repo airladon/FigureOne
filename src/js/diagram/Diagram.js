@@ -437,10 +437,14 @@ class Diagram {
     this.setSpaceTransforms();
     this.sizeHtmlText();
     this.elements.resizeHtmlObject();
+    this.updateHTMLElementTie();
+    this.animateNextFrame();
+  }
+
+  updateHTMLElementTie() {
     if (this.elements != null) {
       this.elements.updateHTMLElementTie(this.pixelToDiagramSpaceTransform, this.canvasLow);
     }
-    this.animateNextFrame();
   }
 
   // Handle touch down, or mouse click events within the canvas.
