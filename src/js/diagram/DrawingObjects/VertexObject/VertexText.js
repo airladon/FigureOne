@@ -35,12 +35,14 @@ class VertexText extends VertexObject {
     const center = new Point(0, 0);
 
     this.points = [
-      0, 0,
-      0, 1,
+      -1, -1,
+      -1, 1,
       1, 1,
-      1, 0,
+      1, -1,
     ];
-    this.textureLocation = this.makeTextCanvas('Hello!', 100, 26);
+    this.texture = {};
+    this.texture.image = this.makeTextCanvas('Hello!', 100, 26);
+    this.texture.id = 'texture_text';
     this.setupBuffer();
   }
 

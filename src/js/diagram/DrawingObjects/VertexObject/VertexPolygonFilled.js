@@ -68,16 +68,21 @@ class PolygonFilled extends VertexObject {
     if (sidesToDraw < sides) {
       this.border[0].push(center._dup());
     }
-    this.textureLocation = textureLocation;
 
-    this.createTextureMap(
-      -this.radius * 1.01 + center.x,
-      this.radius * 1.01 + center.x,
-      -this.radius * 1.01 + center.y,
-      this.radius * 1.01 + center.y,
-      textureCoords.left, textureCoords.right,
-      textureCoords.bottom, textureCoords.top,
-    );
+    if (textureLocation) {
+      this.texture = {};
+      this.texture.src = textureLocation;
+      this.texture.id = 'texture_image';
+
+      this.createTextureMap(
+        -this.radius * 1.01 + center.x,
+        this.radius * 1.01 + center.x,
+        -this.radius * 1.01 + center.y,
+        this.radius * 1.01 + center.y,
+        textureCoords.left, textureCoords.right,
+        textureCoords.bottom, textureCoords.top,
+      );
+    }
 
     this.setupBuffer();
   }

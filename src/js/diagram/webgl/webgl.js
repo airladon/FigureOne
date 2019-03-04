@@ -106,12 +106,27 @@ class WebGLInstance {
   program: WebGLProgram;
   // locations: Object;
   lastUsedProgram: ?WebGLProgram;
+  textures: {
+    [name: string]: {
+      texture: WebGLTexture;
+      index: number;
+    };
+  };
   programs: Array<{
     vertexShader: string,
     fragmentShader: string,
     locations: Object,
     program: WebGLProgram;
   }>;
+
+  addTexture(id: string, texture: WebGLTexture) {
+    const nextIndex = Object.keys(this.textures).length;
+    this.textures[id] = {
+      texture,
+      index: nextIndex,
+    };
+    return nextIndex;
+  }
 
   getProgram(
     vertexShader: string,
@@ -158,10 +173,12 @@ class WebGLInstance {
   backgroundColor: Array<number>,
 ) {
     const gl = canvas.getContext('webgl', { antialias: true });
+    this.programs = [];
+    this.lastUsedProgram = null;
+    this.textures = {};
     if (gl instanceof WebGLRenderingContext) {
       this.gl = gl;
-      this.programs = [];
-      this.lastUsedProgram = null;
+      
       // this.program = createProgramFromScripts(
       //   this.gl,
       //   vertexSource,
