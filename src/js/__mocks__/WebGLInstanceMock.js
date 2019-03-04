@@ -20,6 +20,10 @@ const webgl = {
     clear: () => {},
   },
   resize: () => {},
+  getProgram: () => {},
+  useProgram: () => { return {
+    a_position: '',
+  }},
 };
 
 export default webgl;

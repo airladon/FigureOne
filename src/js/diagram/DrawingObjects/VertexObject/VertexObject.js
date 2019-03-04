@@ -27,8 +27,13 @@ class VertexObject extends DrawingObject {
   textureLocation: string;
   texturePoints: Array<number>;
   +change: (Array<g2.Point>) => void;
+  programIndex: number;
 
-  constructor(webgl: WebGLInstance) {
+  constructor(
+    webgl: WebGLInstance,
+    vertexShader: string = 'simple',
+    fragmentShader: string = 'simple',
+  ) {
     super();
     this.numPoints = 0;
     this.gl = webgl.gl;
@@ -38,6 +43,7 @@ class VertexObject extends DrawingObject {
     this.z = 0;
     this.textureLocation = '';
     this.texturePoints = [];
+    this.programIndex = webgl.getProgram(vertexShader, fragmentShader);
   }
 
   setupBuffer(numPoints: number = 0) {
@@ -215,27 +221,29 @@ class VertexObject extends DrawingObject {
     const stride = 0;
     const offset = 0;       // start at the beginning of the buffer
 
+    const locations = this.webgl.useProgram(this.programIndex);
+
     // Turn on the attribute
-    this.gl.enableVertexAttribArray(this.webgl.locations.a_position);
+    this.gl.enableVertexAttribArray(locations.a_position);
 
     // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffer);
     // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
     this.gl.vertexAttribPointer(
-      this.webgl.locations.a_position,
+      locations.a_position,
       size, type, normalize, stride, offset,
     );
 
     this.gl.uniformMatrix3fv(
-      this.webgl.locations.u_matrix,
+      locations.u_matrix,
       false,
       m2.t(transformMatrix),
     );  // Translate
 
-    this.gl.uniform1f(this.webgl.locations.u_z, this.z);
+    this.gl.uniform1f(locations.u_z, this.z);
 
     this.gl.uniform4f(
-      this.webgl.locations.u_color,
+      locations.u_color,
       color[0], color[1], color[2], color[3],
     );  // Translate
 
@@ -250,23 +258,23 @@ class VertexObject extends DrawingObject {
       // the next position
       const texOffset = 0;        // start at the beginning of the buffer
 
-      this.gl.enableVertexAttribArray(this.webgl.locations.a_texcoord);
+      this.gl.enableVertexAttribArray(locations.a_texcoord);
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
       this.gl.vertexAttribPointer(
-        this.webgl.locations.a_texcoord, texSize, texType,
+        locations.a_texcoord, texSize, texType,
         texNormalize, texStride, texOffset,
       );
     }
     if (this.textureLocation) {
-      this.gl.uniform1i(this.webgl.locations.u_use_texture, 1);
+      this.gl.uniform1i(locations.u_use_texture, 1);
     } else {
-      this.gl.uniform1i(this.webgl.locations.u_use_texture, 0);
+      this.gl.uniform1i(locations.u_use_texture, 0);
     }
 
     this.gl.drawArrays(this.glPrimative, offset, count);
 
     if (this.textureLocation) {
-      this.gl.disableVertexAttribArray(this.webgl.locations.a_texcoord);
+      this.gl.disableVertexAttribArray(locations.a_texcoord);
     }
   }
 

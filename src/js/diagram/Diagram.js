@@ -181,19 +181,19 @@ class Diagram {
           // }
         }
         this.backgroundColor = backgroundColor;
-        const shaders = getShaders(vertexShader, fragmentShader);
+        // const shaders = getShaders(vertexShader, fragmentShader);
         const webglLow = new WebGLInstance(
           this.canvasLow,
-          shaders.vertexSource,
-          shaders.fragmentSource,
-          shaders.varNames,
+          // shaders.vertexSource,
+          // shaders.fragmentSource,
+          // shaders.varNames,
           this.backgroundColor,
         );
         const webglHigh = new WebGLInstance(
           this.canvasHigh,
-          shaders.vertexSource,
-          shaders.fragmentSource,
-          shaders.varNames,
+          // shaders.vertexSource,
+          // shaders.fragmentSource,
+          // shaders.varNames,
           this.backgroundColor,
         );
         this.webglLow = webglLow;
