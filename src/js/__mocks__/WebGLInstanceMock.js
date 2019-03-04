@@ -21,9 +21,9 @@ const webgl = {
   },
   resize: () => {},
   getProgram: () => {},
-  useProgram: () => { return {
+  useProgram: () => ({
     a_position: '',
-  }},
+  }),
 };
 
 export default webgl;
