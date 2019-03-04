@@ -171,12 +171,11 @@ export default class DiagramPrimatives {
   //   );
   // }
 
-  textNew() {
+  textNew(options: Object) {
     return Text(
       this.webgl,
-      [1, 0, 0, 1],
-      new Transform().scale(1, 1).rotate(0).translate(0, 0),
       this.limits,
+      options,
     );
   }
 
