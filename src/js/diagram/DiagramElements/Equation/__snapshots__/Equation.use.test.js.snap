@@ -15886,6 +15886,10 @@ DiagramElementPrimative {
         ],
         "shapes": DiagramPrimatives {
           "animateNextFrame": [Function],
+          "diagramToPixelSpaceScale": Point {
+            "x": 0,
+            "y": -0,
+          },
           "draw2D": DrawContext2D {
             "canvas": Object {
               "height": 1000,
@@ -16141,6 +16145,10 @@ DiagramElementPrimative {
     "setTransformCallback": [Function],
     "shapes": DiagramPrimatives {
       "animateNextFrame": [Function],
+      "diagramToPixelSpaceScale": Point {
+        "x": 0,
+        "y": -0,
+      },
       "draw2D": DrawContext2D {
         "canvas": Object {
           "height": 1000,

@@ -26,6 +26,7 @@ type TypeTextInputOptions = {
 function Text(
   webgl: WebGLInstance,
   diagramLimits: Rect,
+  diagramToPixelSpaceScale: Point,
   optionsIn: TypeTextInputOptions,
 ) {
   const defaultOptions = {
@@ -44,6 +45,7 @@ function Text(
 
   const vertexText = new VertexText(
     webgl,
+    diagramToPixelSpaceScale,
     options,
   );
   // let transform = new Transform();

@@ -1679,6 +1679,21 @@ function spaceToSpaceTransform(
   return t;
 }
 
+function spaceToSpaceScale(
+  s1: {
+    x: {bottomLeft: number, width: number},
+    y: {bottomLeft: number, height: number}
+  },
+  s2: {
+    x: {bottomLeft: number, width: number},
+    y: {bottomLeft: number, height: number}
+  },
+) {
+  const xScale = s2.x.width / s1.x.width;
+  const yScale = s2.y.height / s1.y.height;
+  return new Point(xScale, yScale);
+}
+
 function comparePoints(
   p: Point,
   currentMin: Point,
@@ -1916,4 +1931,5 @@ export {
   getMoveTime,
   parsePoint,
   clipAngle,
+  spaceToSpaceScale,
 };

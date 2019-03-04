@@ -4,7 +4,7 @@ import getShaders from './webgl/shaders';
 
 import {
   Rect, Point, Transform,
-  spaceToSpaceTransform, minAngleDiff,
+  spaceToSpaceTransform, minAngleDiff, spaceToSpaceScale,
 } from '../tools/g2';
 import { isTouchDevice, joinObjects } from '../tools/tools';
 import {
@@ -96,6 +96,13 @@ class Diagram {
   pixelToGLSpaceTransform: Transform;
   glToPixelSpaceTransform: Transform;
   diagramToCSSPercentSpaceTransform: Transform;
+
+  glToDiagramSpaceScale: Point;
+  diagramToGLSpaceScale: Point;
+  pixelToDiagramSpaceScale: Point;
+  diagramToPixelSpaceScale: Point;
+  glToPixelSpaceScale: Point;
+  pixelToGLSpaceScale: Point;
 
   drawQueued: boolean;
 
@@ -289,6 +296,7 @@ class Diagram {
     return new DiagramPrimatives(
       webgl, draw2D,
       this.htmlCanvas, this.limits,
+      this.diagramToPixelSpaceScale,
       this.animateNextFrame.bind(this),
     );
   }
@@ -410,6 +418,13 @@ class Diagram {
 
     this.diagramToCSSPercentSpaceTransform =
       spaceToSpaceTransform(diagramSpace, percentSpace);
+
+    this.diagramToGLSpaceScale = spaceToSpaceScale(diagramSpace, glSpace);
+    this.glToDiagramSpaceScale = spaceToSpaceScale(glSpace, diagramSpace);
+    this.diagramToPixelSpaceScale = spaceToSpaceScale(diagramSpace, pixelSpace);
+    this.pixelToDiagramSpaceScale = spaceToSpaceScale(pixelSpace, diagramSpace);
+    this.pixelToGLSpaceScale = spaceToSpaceScale(pixelSpace, glSpace);
+    this.glToPixelSpaceScale = spaceToSpaceScale(glSpace, pixelSpace);
   }
 
   initialize() {
