@@ -18,12 +18,21 @@ const webgl = {
     drawArrays: () => {},
     clearColor: () => {},
     clear: () => {},
+    createTexture: () => {},
+    activeTexture: () => {},
+    bindTexture: () => {},
+    pixelStorei: () => {},
+    texImage2D: () => {},
   },
   resize: () => {},
   getProgram: () => {},
   useProgram: () => ({
     a_position: '',
   }),
+  programs: [],
+  lastUsedProgram: null,
+  textures: {},
+  addTexture: () => {},
 };
 
 export default webgl;

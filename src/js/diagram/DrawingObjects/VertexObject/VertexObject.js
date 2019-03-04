@@ -18,14 +18,23 @@ class VertexObject extends DrawingObject {
   webgl: WebGLInstance;         // webgl instance for a html canvas
   glPrimative: number;          // primitive tyle (e.g. TRIANGLE_STRIP)
   buffer: WebGLBuffer;          // Vertex buffer
-  textureBuffer: WebGLBuffer;
+  // textureBuffer: WebGLBuffer;
 
   points: Array<number>;        // Primative vertices of shape
   numPoints: number;            // Number of primative vertices
   border: Array<Array<g2.Point>>; // Border vertices
   z: number;
-  textureLocation: string | Object;
-  texturePoints: Array<number>;
+  texture: ?{
+    id: string;
+    src: string;
+    glTexture: Object;
+    image: Object;
+    points: Array<number>;
+    buffer: WebGLBuffer;
+    index: number;
+  }
+  // textureLocation: string | Object;
+  // texturePoints: Array<number>;
   +change: (Array<g2.Point>) => void;
   programIndex: number;
 
@@ -41,8 +50,9 @@ class VertexObject extends DrawingObject {
     this.glPrimative = webgl.gl.TRIANGLES;
     this.points = [];
     this.z = 0;
-    this.textureLocation = '';
-    this.texturePoints = [];
+    // this.textureLocation = '';
+    // this.texturePoints = [];
+    this.texture = null;
     this.programIndex = webgl.getProgram(vertexShader, fragmentShader);
   }
 
@@ -51,6 +61,7 @@ class VertexObject extends DrawingObject {
     image, // image data
   ) {
     console.log(image)
+    this.gl.activeTexture(this.gl.TEXTURE0 + this.texture.index);
     this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
     this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, 1);
     this.gl.texImage2D(
@@ -80,62 +91,103 @@ class VertexObject extends DrawingObject {
       this.numPoints = numPoints;
     }
 
-    if (this.texturePoints.length === 0 && this.textureLocation) {
-      this.createTextureMap();
-    }
+    // if (this.texture && this.texture.points == null) {
+    //   this.texture.points = [];
+    //   this.createTextureMap();
+    // }
 
-    if (this.textureLocation) {
-      this.textureBuffer = this.gl.createBuffer();
-      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+    const { texture } = this;
+    if (texture != null) {
+      if (texture.points == null) {
+        texture.points = [];
+      }
+      if (texture.points.length === 0) {
+        this.createTextureMap();
+      }
+
+      texture.buffer = this.gl.createBuffer();
+      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, texture.buffer);
       this.gl.bufferData(
         this.gl.ARRAY_BUFFER,
-        new Float32Array(this.texturePoints),
+        new Float32Array(texture.points),
         this.gl.STATIC_DRAW,
       );
-      // Create a texture.
-      const texture = this.gl.createTexture();
-      this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
 
-      if (typeof this.textureLocation === 'string') {
-        // Fill the texture with a 1x1 blue pixel.
-        this.gl.texImage2D(
-          this.gl.TEXTURE_2D, 0, this.gl.RGBA, 1, 1, 0,
-          this.gl.RGBA, this.gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 255, 100]),
-        );
-        const image = new Image();
-        image.src = this.textureLocation;
-        image.addEventListener('load', () => {
-          // Now that the image has loaded make copy it to the texture.
-          this.addTextureToBuffer(texture, image);
-          // this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
-          // this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, 1);
-          // this.gl.texImage2D(
-          //   this.gl.TEXTURE_2D, 0, this.gl.RGBA,
-          //   this.gl.RGBA, this.gl.UNSIGNED_BYTE, image,
-          // );
-          // function isPowerOf2(value) {
-          //   // eslint-disable-next-line no-bitwise
-          //   return (value & (value - 1)) === 0;
-          // }
-          // // Check if the image is a power of 2 in both dimensions.
-          // if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
-          //   // Yes, it's a power of 2. Generate mips.
-          //   this.gl.generateMipmap(this.gl.TEXTURE_2D);
-          // } else {
-          //   // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
-          //   this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
-          //   this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
-          //   this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
-          // }
-          if (this.onLoad != null) {
-            this.onLoad();
-          }
-        });
+      if (texture.id in this.webgl.textures) {
+        texture.index = this.webgl.textures[texture.id].index;
       } else {
-        console.log('creating text')
-        this.addTextureToBuffer(texture, this.textureLocation);
+        const glTexture = this.gl.createTexture();
+        texture.index = this.webgl.addTexture(texture.id, glTexture);
+        this.gl.activeTexture(this.gl.TEXTURE0 + texture.index);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, glTexture);
+        if (texture.src) {
+          // const texture = this.gl.createTexture();
+          // this.webgl.addTexture(this.texture.id, texture);
+          // this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+
+          // Fill the texture with a 1x1 blue pixel.
+          this.gl.texImage2D(
+            this.gl.TEXTURE_2D, 0, this.gl.RGBA, 1, 1, 0,
+            this.gl.RGBA, this.gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 255, 100]),
+          );
+          const image = new Image();
+          image.src = texture.src;
+          image.addEventListener('load', () => {
+            // Now that the image has loaded make copy it to the texture.
+            this.addTextureToBuffer(glTexture, image);
+            if (this.onLoad != null) {
+              this.onLoad();
+            }
+          });
+        } else {
+          this.addTextureToBuffer(glTexture, texture.image);
+        }
       }
     }
+    // if (typeof this.texture.src === 'string') {
+    //   if (this.textureLocation )
+    //   // Create a texture.
+    //   const texture = this.gl.createTexture();
+    //   this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+    //   // Fill the texture with a 1x1 blue pixel.
+    //   this.gl.texImage2D(
+    //     this.gl.TEXTURE_2D, 0, this.gl.RGBA, 1, 1, 0,
+    //     this.gl.RGBA, this.gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 255, 100]),
+    //   );
+    //   const image = new Image();
+    //   image.src = this.textureLocation;
+    //   image.addEventListener('load', () => {
+    //     // Now that the image has loaded make copy it to the texture.
+    //     this.addTextureToBuffer(texture, image);
+    //     // this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+    //     // this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, 1);
+    //     // this.gl.texImage2D(
+    //     //   this.gl.TEXTURE_2D, 0, this.gl.RGBA,
+    //     //   this.gl.RGBA, this.gl.UNSIGNED_BYTE, image,
+    //     // );
+    //     // function isPowerOf2(value) {
+    //     //   // eslint-disable-next-line no-bitwise
+    //     //   return (value & (value - 1)) === 0;
+    //     // }
+    //     // // Check if the image is a power of 2 in both dimensions.
+    //     // if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+    //     //   // Yes, it's a power of 2. Generate mips.
+    //     //   this.gl.generateMipmap(this.gl.TEXTURE_2D);
+    //     // } else {
+    //     //   // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
+    //     //   this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
+    //     //   this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
+    //     //   this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
+    //     // }
+    //     if (this.onLoad != null) {
+    //       this.onLoad();
+    //     }
+    //   });
+    // } else {
+    //   console.log('creating text')
+    //   this.addTextureToBuffer(texture, this.texture.image);
+    // }
+    // }
 
     // this.buffer = createBuffer(this.gl, this.vertices);
     this.buffer = this.gl.createBuffer();
@@ -144,9 +196,11 @@ class VertexObject extends DrawingObject {
   }
 
   resetBuffer(numPoints: number = 0) {
-    if (this.textureLocation) {
+    const { texture } = this;
+    if (texture) {
+      this.gl.activeTexture(this.gl.TEXTURE0 + texture.index);
       this.gl.bindTexture(this.gl.TEXTURE_2D, null);
-      this.gl.deleteTexture(this.textureBuffer);
+      this.gl.deleteTexture(texture.buffer);
     }
     // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
     this.gl.deleteBuffer(this.buffer);
@@ -217,14 +271,14 @@ class VertexObject extends DrawingObject {
     const glHeight = yMaxGL - yMinGL;
     const texWidth = xMaxTex - xMinTex;
     const texHeight = yMaxTex - yMinTex;
-    this.texturePoints = [];
+    this.texture.points = [];
     for (let i = 0; i < this.points.length; i += 2) {
       const x = this.points[i];
       const y = this.points[i + 1];
       const texNormX = (x - xMinGL) / glWidth;
       const texNormY = (y - yMinGL) / glHeight;
-      this.texturePoints.push(texNormX * texWidth + xMinTex);
-      this.texturePoints.push(texNormY * texHeight + yMinTex);
+      this.texture.points.push(texNormX * texWidth + xMinTex);
+      this.texture.points.push(texNormY * texHeight + yMinTex);
     }
   }
 
@@ -281,7 +335,8 @@ class VertexObject extends DrawingObject {
       color[0], color[1], color[2], color[3],
     );  // Translate
 
-    if (this.textureLocation) {
+    const { texture } = this;
+    if (texture != null) {
       // Textures
       // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
       const texSize = 2;          // 2 components per iteration
@@ -293,21 +348,22 @@ class VertexObject extends DrawingObject {
       const texOffset = 0;        // start at the beginning of the buffer
 
       this.gl.enableVertexAttribArray(locations.a_texcoord);
-      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, texture.buffer);
       this.gl.vertexAttribPointer(
         locations.a_texcoord, texSize, texType,
         texNormalize, texStride, texOffset,
       );
     }
-    if (this.textureLocation) {
+    if (texture) {
       this.gl.uniform1i(locations.u_use_texture, 1);
+      this.gl.uniform1i(locations.u_texture, texture.index);
     } else {
       this.gl.uniform1i(locations.u_use_texture, 0);
     }
 
     this.gl.drawArrays(this.glPrimative, offset, count);
 
-    if (this.textureLocation) {
+    if (texture) {
       this.gl.disableVertexAttribArray(locations.a_texcoord);
     }
   }
