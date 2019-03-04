@@ -24,7 +24,7 @@ class VertexObject extends DrawingObject {
   numPoints: number;            // Number of primative vertices
   border: Array<Array<g2.Point>>; // Border vertices
   z: number;
-  textureLocation: string;
+  textureLocation: string | Object;
   texturePoints: Array<number>;
   +change: (Array<g2.Point>) => void;
   programIndex: number;
@@ -44,6 +44,33 @@ class VertexObject extends DrawingObject {
     this.textureLocation = '';
     this.texturePoints = [];
     this.programIndex = webgl.getProgram(vertexShader, fragmentShader);
+  }
+
+  addTextureToBuffer(
+    texture, //: WebGLTextureBuffer
+    image, // image data
+  ) {
+    console.log(image)
+    this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+    this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, 1);
+    this.gl.texImage2D(
+      this.gl.TEXTURE_2D, 0, this.gl.RGBA,
+      this.gl.RGBA, this.gl.UNSIGNED_BYTE, image,
+    );
+    function isPowerOf2(value) {
+      // eslint-disable-next-line no-bitwise
+      return (value & (value - 1)) === 0;
+    }
+    // Check if the image is a power of 2 in both dimensions.
+    if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+      // Yes, it's a power of 2. Generate mips.
+      this.gl.generateMipmap(this.gl.TEXTURE_2D);
+    } else {
+      // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
+      this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
+      this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
+      this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
+    }
   }
 
   setupBuffer(numPoints: number = 0) {
@@ -68,39 +95,46 @@ class VertexObject extends DrawingObject {
       // Create a texture.
       const texture = this.gl.createTexture();
       this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
-      // Fill the texture with a 1x1 blue pixel.
-      this.gl.texImage2D(
-        this.gl.TEXTURE_2D, 0, this.gl.RGBA, 1, 1, 0,
-        this.gl.RGBA, this.gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 255, 100]),
-      );
-      const image = new Image();
-      image.src = this.textureLocation;
-      image.addEventListener('load', () => {
-        // Now that the image has loaded make copy it to the texture.
-        this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
-        this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, 1);
+
+      if (typeof this.textureLocation === 'string') {
+        // Fill the texture with a 1x1 blue pixel.
         this.gl.texImage2D(
-          this.gl.TEXTURE_2D, 0, this.gl.RGBA,
-          this.gl.RGBA, this.gl.UNSIGNED_BYTE, image,
+          this.gl.TEXTURE_2D, 0, this.gl.RGBA, 1, 1, 0,
+          this.gl.RGBA, this.gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 255, 100]),
         );
-        function isPowerOf2(value) {
-          // eslint-disable-next-line no-bitwise
-          return (value & (value - 1)) === 0;
-        }
-        // Check if the image is a power of 2 in both dimensions.
-        if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
-          // Yes, it's a power of 2. Generate mips.
-          this.gl.generateMipmap(this.gl.TEXTURE_2D);
-        } else {
-          // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
-          this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
-          this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
-          this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
-        }
-        if (this.onLoad != null) {
-          this.onLoad();
-        }
-      });
+        const image = new Image();
+        image.src = this.textureLocation;
+        image.addEventListener('load', () => {
+          // Now that the image has loaded make copy it to the texture.
+          this.addTextureToBuffer(texture, image);
+          // this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+          // this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, 1);
+          // this.gl.texImage2D(
+          //   this.gl.TEXTURE_2D, 0, this.gl.RGBA,
+          //   this.gl.RGBA, this.gl.UNSIGNED_BYTE, image,
+          // );
+          // function isPowerOf2(value) {
+          //   // eslint-disable-next-line no-bitwise
+          //   return (value & (value - 1)) === 0;
+          // }
+          // // Check if the image is a power of 2 in both dimensions.
+          // if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+          //   // Yes, it's a power of 2. Generate mips.
+          //   this.gl.generateMipmap(this.gl.TEXTURE_2D);
+          // } else {
+          //   // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
+          //   this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
+          //   this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
+          //   this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
+          // }
+          if (this.onLoad != null) {
+            this.onLoad();
+          }
+        });
+      } else {
+        console.log('creating text')
+        this.addTextureToBuffer(texture, this.textureLocation);
+      }
     }
 
     // this.buffer = createBuffer(this.gl, this.vertices);

@@ -42,6 +42,7 @@ function addElements(
       polygon: shapes.polygon.bind(shapes),
       arrow: shapes.arrow.bind(shapes),
       text: shapes.txt.bind(shapes),
+      textNew: shapes.textNew.bind(shapes),
       //
       line: objects.line.bind(objects),
       angle: objects.angle.bind(objects),

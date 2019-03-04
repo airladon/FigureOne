@@ -29,6 +29,7 @@ import Lines from '../DiagramElements/Lines';
 import Arrow from '../DiagramElements/Arrow';
 import { AxisProperties } from '../DiagramElements/Plot/AxisProperties';
 import Axis from '../DiagramElements/Plot/Axis';
+import Text from '../DiagramElements/Text';
 import {
   DiagramText, DiagramFont, TextObject,
 } from '../DrawingObjects/TextObject/TextObject';
@@ -169,6 +170,15 @@ export default class DiagramPrimatives {
   //     color, transform, this.limits,
   //   );
   // }
+
+  textNew() {
+    return Text(
+      this.webgl,
+      [1, 0, 0, 1],
+      new Transform().scale(1, 1).rotate(0).translate(0, 0),
+      this.limits,
+    );
+  }
 
   txt(textOrOptions: string | TypeTextOptions, ...optionsIn: Array<TypeTextOptions>) {
     const defaultOptions = {
