@@ -41,7 +41,7 @@ class VertexText extends VertexObject {
       1, -1,
     ];
     this.texture = {};
-    this.texture.image = this.makeTextCanvas('Hello!', 100, 26);
+    this.texture.image = this.makeTextCanvas('Hello!', 200, 200);
     this.texture.id = 'texture_text';
     this.setupBuffer();
   }
@@ -50,7 +50,7 @@ class VertexText extends VertexObject {
   makeTextCanvas(text: string, width: number, height: number) {
     this.ctx.canvas.width = width;
     this.ctx.canvas.height = height;
-    this.ctx.font = '20px monospace';
+    this.ctx.font = '25px Times New Roman';
     this.ctx.textAlign = 'center';
     this.ctx.textBaseline = 'middle';
     this.ctx.fillStyle = 'black';
