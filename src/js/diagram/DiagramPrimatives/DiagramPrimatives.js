@@ -71,6 +71,7 @@ export default class DiagramPrimatives {
   draw2D: DrawContext2D;
   htmlCanvas: HTMLElement;
   limits: Rect;
+  diagramToPixelSpaceScale: Point;
   animateNextFrame: Function;
 
   constructor(
@@ -78,6 +79,7 @@ export default class DiagramPrimatives {
     draw2D: DrawContext2D,
     htmlCanvas: HTMLElement,
     limits: Rect,
+    diagramToPixelSpaceScale: Point,
     animateNextFrame: Function,
   ) {
     this.webgl = webgl;
@@ -85,6 +87,7 @@ export default class DiagramPrimatives {
     this.htmlCanvas = htmlCanvas;
     this.limits = limits;
     this.animateNextFrame = animateNextFrame;
+    this.diagramToPixelSpaceScale = diagramToPixelSpaceScale;
   }
 
   polyLineLegacy(
@@ -175,6 +178,7 @@ export default class DiagramPrimatives {
     return Text(
       this.webgl,
       this.limits,
+      this.diagramToPixelSpaceScale,
       options,
     );
   }
