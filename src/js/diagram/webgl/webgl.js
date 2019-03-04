@@ -1,5 +1,7 @@
 // @flow
 
+import getShaders from './shaders';
+
 function createProgram(
   gl: WebGLRenderingContext,
   vertexShader: WebGLShader,
@@ -102,25 +104,71 @@ function autoResize(event) {
 class WebGLInstance {
   gl: WebGLRenderingContext;
   program: WebGLProgram;
-  locations: Object;
+  // locations: Object;
+  lastUsedProgram: ?WebGLProgram;
+  programs: Array<{
+    vertexShader: string,
+    fragmentShader: string,
+    locations: Object,
+    program: WebGLProgram;
+  }>;
+
+  getProgram(
+    vertexShader: string,
+    fragmentShader: string,
+  ) {
+    this.programs.forEach((program) => {
+      if (program.vertexShader === vertexShader
+        && program.fragmentShader === fragmentShader
+      ) {
+        return program.program;
+      }
+    });
+
+    const shaders = getShaders(vertexShader, fragmentShader);
+    const newProgram = createProgramFromScripts(
+      this.gl,
+      shaders.vertexSource,
+      shaders.fragmentSource,
+    );
+    const programDetails = {
+      vertexShader,
+      fragmentShader,
+      program: newProgram,
+      locations: getGLLocations(this.gl, newProgram, shaders.varNames),
+    };
+    this.programs.push(programDetails);
+    return this.programs.length - 1;
+  }
+
+  useProgram(programIndex: number) {
+    const program = this.programs[programIndex];
+    if (this.lastUsedProgram !== program) {
+      this.gl.useProgram(program.program);
+      this.lastUsedProgram = program.program;
+    }
+    return program.locations;
+  }
 
   constructor(
   canvas: HTMLCanvasElement,
-  vertexSource: string,
-  fragmentSource: string,
-  shaderLocations: Array<string>,
+  // vertexSource: string,
+  // fragmentSource: string,
+  // shaderLocations: Array<string>,
   backgroundColor: Array<number>,
 ) {
     const gl = canvas.getContext('webgl', { antialias: true });
     if (gl instanceof WebGLRenderingContext) {
       this.gl = gl;
-      this.program = createProgramFromScripts(
-        this.gl,
-        vertexSource,
-        fragmentSource,
-      );
+      this.programs = [];
+      this.lastUsedProgram = null;
+      // this.program = createProgramFromScripts(
+      //   this.gl,
+      //   vertexSource,
+      //   fragmentSource,
+      // );
 
-      this.locations = getGLLocations(this.gl, this.program, shaderLocations);
+      // this.locations = getGLLocations(this.gl, this.program, shaderLocations);
 
       // Prep canvas
       // resizeCanvasToDisplaySize(this.gl.canvas);
@@ -141,7 +189,7 @@ class WebGLInstance {
       this.gl.disable(this.gl.DEPTH_TEST);
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
       gl.enable(gl.BLEND);
-      this.gl.useProgram(this.program);
+      // this.gl.useProgram(this.program);
 
       // window.addEventListener('resize', autoResize.bind(this, event));
     }

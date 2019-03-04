@@ -22,7 +22,11 @@ class PolygonFilled extends VertexObject {
     textureLocation: string = '',
     textureCoords: Rect = new Rect(0, 0, 1, 1),
   ) {
-    super(webgl);
+    if (textureLocation !== '') {
+      super(webgl, 'withTexture', 'withTexture');
+    } else {
+      super(webgl);
+    }
     this.glPrimative = webgl.gl.TRIANGLE_FAN;
 
     // Check potential errors in constructor input

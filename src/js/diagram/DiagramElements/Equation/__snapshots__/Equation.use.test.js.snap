@@ -1986,9 +1986,11 @@ DiagramElementPrimative {
           1,
           0.5,
         ],
+        "programIndex": undefined,
         "textureLocation": "",
         "texturePoints": Array [],
         "webgl": Object {
+          "getProgram": [Function],
           "gl": Object {
             "TRIANGLES": 1,
             "TRIANGLE_STRIP": 2,
@@ -2009,6 +2011,7 @@ DiagramElementPrimative {
             "a_position": "",
           },
           "resize": [Function],
+          "useProgram": [Function],
         },
         "z": 0,
       },
@@ -4133,9 +4136,11 @@ DiagramElementPrimative {
             1,
             0.5,
           ],
+          "programIndex": undefined,
           "textureLocation": "",
           "texturePoints": Array [],
           "webgl": Object {
+            "getProgram": [Function],
             "gl": Object {
               "TRIANGLES": 1,
               "TRIANGLE_STRIP": 2,
@@ -4156,6 +4161,7 @@ DiagramElementPrimative {
               "a_position": "",
             },
             "resize": [Function],
+            "useProgram": [Function],
           },
           "z": 0,
         },
@@ -7360,9 +7366,11 @@ DiagramElementPrimative {
                     1,
                     0.5,
                   ],
+                  "programIndex": undefined,
                   "textureLocation": "",
                   "texturePoints": Array [],
                   "webgl": Object {
+                    "getProgram": [Function],
                     "gl": Object {
                       "TRIANGLES": 1,
                       "TRIANGLE_STRIP": 2,
@@ -7383,6 +7391,7 @@ DiagramElementPrimative {
                       "a_position": "",
                     },
                     "resize": [Function],
+                    "useProgram": [Function],
                   },
                   "z": 0,
                 },
@@ -8483,9 +8492,11 @@ DiagramElementPrimative {
                               1,
                               0.5,
                             ],
+                            "programIndex": undefined,
                             "textureLocation": "",
                             "texturePoints": Array [],
                             "webgl": Object {
+                              "getProgram": [Function],
                               "gl": Object {
                                 "TRIANGLES": 1,
                                 "TRIANGLE_STRIP": 2,
@@ -8506,6 +8517,7 @@ DiagramElementPrimative {
                                 "a_position": "",
                               },
                               "resize": [Function],
+                              "useProgram": [Function],
                             },
                             "z": 0,
                           },
@@ -9590,9 +9602,11 @@ DiagramElementPrimative {
                           1,
                           0.5,
                         ],
+                        "programIndex": undefined,
                         "textureLocation": "",
                         "texturePoints": Array [],
                         "webgl": Object {
+                          "getProgram": [Function],
                           "gl": Object {
                             "TRIANGLES": 1,
                             "TRIANGLE_STRIP": 2,
@@ -9613,6 +9627,7 @@ DiagramElementPrimative {
                             "a_position": "",
                           },
                           "resize": [Function],
+                          "useProgram": [Function],
                         },
                         "z": 0,
                       },
@@ -12226,9 +12241,11 @@ DiagramElementPrimative {
                     1,
                     0.5,
                   ],
+                  "programIndex": undefined,
                   "textureLocation": "",
                   "texturePoints": Array [],
                   "webgl": Object {
+                    "getProgram": [Function],
                     "gl": Object {
                       "TRIANGLES": 1,
                       "TRIANGLE_STRIP": 2,
@@ -12249,6 +12266,7 @@ DiagramElementPrimative {
                       "a_position": "",
                     },
                     "resize": [Function],
+                    "useProgram": [Function],
                   },
                   "z": 0,
                 },
@@ -14324,9 +14342,11 @@ DiagramElementPrimative {
                 1,
                 0.5,
               ],
+              "programIndex": undefined,
               "textureLocation": "",
               "texturePoints": Array [],
               "webgl": Object {
+                "getProgram": [Function],
                 "gl": Object {
                   "TRIANGLES": 1,
                   "TRIANGLE_STRIP": 2,
@@ -14347,6 +14367,7 @@ DiagramElementPrimative {
                   "a_position": "",
                 },
                 "resize": [Function],
+                "useProgram": [Function],
               },
               "z": 0,
             },
@@ -15829,6 +15850,7 @@ DiagramElementPrimative {
             "width": 2,
           },
           "webgl": Object {
+            "getProgram": [Function],
             "gl": Object {
               "TRIANGLES": 1,
               "TRIANGLE_STRIP": 2,
@@ -15849,6 +15871,7 @@ DiagramElementPrimative {
               "a_position": "",
             },
             "resize": [Function],
+            "useProgram": [Function],
           },
         },
       },
@@ -16073,6 +16096,7 @@ DiagramElementPrimative {
         "width": 2,
       },
       "webgl": Object {
+        "getProgram": [Function],
         "gl": Object {
           "TRIANGLES": 1,
           "TRIANGLE_STRIP": 2,
@@ -16093,6 +16117,7 @@ DiagramElementPrimative {
           "a_position": "",
         },
         "resize": [Function],
+        "useProgram": [Function],
       },
     },
     "state": Object {
