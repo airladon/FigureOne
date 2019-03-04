@@ -99,18 +99,24 @@ class VertexText extends VertexObject {
   }
 
   drawTextIntoBuffer() {
-    // size is the width of an m in diagram space
-    const scale = this.diagramToPixelSpaceScale;
-    const width = this.text.length * this.size * scale.x;
-    const height = this.size * Math.abs(scale.y) * 1.5;
+    // size is the width of an M in diagram space
+    // Font size relative to M width will vary by font family so start by
+    // assuming: M width = font size, and then measure it, and find a scaling
+    // correction factor to apply
+    const d2pSale = this.diagramToPixelSpaceScale;
+    const width = this.text.length * this.size * d2pSale.x * 1.2;
+    const height = this.size * Math.abs(d2pSale.y) * 1.5;
     this.canvas.width = width;
     this.canvas.height = height;
 
     this.ctx.clearRect(0, 0, width, height);
-    this.ctx.font = `${this.style} ${this.weight} ${this.size * scale.x}px ${this.family}`;
-    console.log(this.ctx.font)
-    console.log(scale)
-    console.log(this.size)
+    this.ctx.font = `${this.style} ${this.weight} ${this.size * d2pSale.x}px ${this.family}`;
+
+    const mWidth = this.ctx.measureText('M');
+    const scaleCorrection = (this.size * d2pSale.x) / mWidth.width;
+    this.ctx.font = `${this.style} ${this.weight} ${this.size * d2pSale.x * scaleCorrection}px ${this.family}`;
+
+
     this.ctx.textAlign = this.alignH;
     this.ctx.textBaseline = this.alignV;
     this.ctx.fillStyle = 'black';
