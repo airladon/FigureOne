@@ -575,16 +575,20 @@ class DiagramElement {
     diagramCanvas: HTMLElement,
   ) {
     // Maybe not needed
-    // const { drawingObject } = this;
+    const { drawingObject } = this;
     // if (this.name === 'c') {
     //   console.log("enter tie up", this.name)
     // }
-    // if (drawingObject != null) {
-    //   if (drawingObject.type === 'vertexText') {
-    //     console.log("udpate draw text")
-    //     drawingObject.drawTextIntoBuffer();
-    //   }
-    // }
+    if (drawingObject != null) {
+      if (drawingObject.type === 'vertexText') {
+        console.log("udpate draw text")
+        const pixelToVertexScale = this.getPixelToVertexSpaceScale();
+        drawingObject.resizeText(
+          new Point(pixelToVertexScale.x, Math.abs(pixelToVertexScale.y)),
+          this.lastDrawTransform.m(),
+        );
+      }
+    }
 
     // First get the HTML element
     let tieToElement;
@@ -2196,6 +2200,14 @@ class DiagramElement {
     // };
     // const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
     // return location.transformBy(glToDiagramSpace.matrix());
+  }
+
+  getPixelToVertexSpaceScale() {
+    const pixelToDiagram = this.diagramTransforms.pixelToDiagram.matrix();
+    const diagramToVertex = this.diagramSpaceToVertexSpaceTransformMatrix();
+    const scaleX = pixelToDiagram[0] * diagramToVertex[0];
+    const scaleY = pixelToDiagram[4] * diagramToVertex[4];
+    return new Point(scaleX, scaleY);
   }
 
   getDiagramPositionInVertexSpace(diagramPosition: Point) {
