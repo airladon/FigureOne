@@ -575,19 +575,7 @@ class DiagramElement {
     diagramCanvas: HTMLElement,
   ) {
     // Maybe not needed
-    const { drawingObject } = this;
-    // if (this.name === 'c') {
-    //   console.log("enter tie up", this.name)
-    // }
-    if (drawingObject != null) {
-      if (drawingObject.type === 'vertexText') {
-        console.log("udpate draw text")
-        const pixelToVertexScale = this.getPixelToVertexSpaceScale();
-        drawingObject.resizeText(
-          new Point(pixelToVertexScale.x, Math.abs(pixelToVertexScale.y)),
-        );
-      }
-    }
+    
 
     // First get the HTML element
     let tieToElement;
@@ -690,6 +678,22 @@ class DiagramElement {
         center.x - scaleX * (this.tieToHTML.window.left + this.tieToHTML.window.width / 2),
         center.y - scaleY * (this.tieToHTML.window.bottom + this.tieToHTML.window.height / 2),
       );
+    }
+
+    const { drawingObject } = this;
+    // if (this.name === 'c') {
+    //   console.log("enter tie up", this.name)
+    // }
+    if (drawingObject != null) {
+      if (drawingObject.type === 'vertexText') {
+        console.log("udpate draw text")
+        const pixelToVertexScale = this.getPixelToVertexSpaceScale();
+        drawingObject.drawTextIntoBuffer(
+          this.diagramTransforms.diagramToPixel.m()[0],
+          new Point(pixelToVertexScale.x, Math.abs(pixelToVertexScale.y)),
+          // new Point(pixelToVertexScale.x * this.getScale().x, Math.abs(pixelToVertexScale.y * this.getScale().y)),
+        );
+      }
     }
   }
 
