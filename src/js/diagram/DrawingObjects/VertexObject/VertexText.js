@@ -87,11 +87,24 @@ class VertexText extends VertexObject {
   ) {
     const width = this.canvas.width * pixelToVertexSpaceScale.x;
     const height = this.canvas.height * pixelToVertexSpaceScale.y;
+
+    const start = new Point(0, 0);
+    if (this.alignH === 'center') {
+      start.x = -width / 2;
+    } else if (this.alignH === 'right') {
+      start.x = -width;
+    }
+    if (this.alignV === 'baseline') {
+      start.y = -height * 0.25;
+    } else if (this.alignV === 'top') {
+      start.y = -height;
+    }
+
     const points = [
-      new Point(0, 0),
-      new Point(0, height),
-      new Point(width, height),
-      new Point(width, 0),
+      start,
+      new Point(start.x, start.y + height),
+      new Point(start.x + width, start.y + height),
+      new Point(start.x + width, start.y),
     ];
 
     this.points = [];
