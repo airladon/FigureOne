@@ -26,15 +26,13 @@ class VertexObject extends DrawingObject {
   z: number;
   texture: ?{
     id: string;
-    src: string;
-    // glTexture: ?WebGLTexture;
-    image: Object;
+    src?: ?string;
+    data?: ?Object;
     points: Array<number>;
-    buffer: ?WebGLBuffer;
-    // index: number;
-  }
-  // textureLocation: string | Object;
-  // texturePoints: Array<number>;
+    buffer?: ?WebGLBuffer;
+    type: 'canvasText' | 'image';
+  };
+
   +change: (Array<g2.Point>) => void;
   programIndex: number;
   type: string;
@@ -127,35 +125,30 @@ class VertexObject extends DrawingObject {
         )
       ) {
         const glTexture = this.gl.createTexture();
-        // if (glTexture != null) {
-        //   texture.glTexture = glTexture;
-        // }
-        this.webgl.addTexture(texture.id, glTexture);
+        this.webgl.addTexture(texture.id, glTexture, texture.type);
         this.gl.activeTexture(
           this.gl.TEXTURE0 + this.webgl.textures[texture.id].index,
         );
         this.gl.bindTexture(this.gl.TEXTURE_2D, glTexture);
-        if (texture.src) {
-          // const texture = this.gl.createTexture();
-          // this.webgl.addTexture(this.texture.id, texture);
-          // this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
-
+        const { src } = texture;
+        if (src) {
           // Fill the texture with a 1x1 blue pixel.
           this.gl.texImage2D(
             this.gl.TEXTURE_2D, 0, this.gl.RGBA, 1, 1, 0,
             this.gl.RGBA, this.gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 255, 100]),
           );
           const image = new Image();
-          image.src = texture.src;
+          image.src = src;
           image.addEventListener('load', () => {
             // Now that the image has loaded make copy it to the texture.
-            this.addTextureToBuffer(glTexture, image);
+            texture.data = image;
+            this.addTextureToBuffer(glTexture, texture.data);
             if (this.onLoad != null) {
               this.onLoad();
             }
           });
-        } else {
-          this.addTextureToBuffer(glTexture, texture.image);
+        } else if (texture.data != null) {
+          this.addTextureToBuffer(glTexture, texture.data);
         }
       }
     }
@@ -300,7 +293,10 @@ class VertexObject extends DrawingObject {
 
     const locations = this.webgl.useProgram(this.programIndex);
 
-    if (this.texture && this.texture.image) {
+    if (
+      this.texture
+      && this.webgl.textures[this.texture.id].type === 'canvasText'
+    ) {
       this.gl.pixelStorei(this.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
       this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA);
     } else {
