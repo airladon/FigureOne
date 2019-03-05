@@ -7,6 +7,7 @@ import WebGLInstance from '../../webgl/webgl';
 import VertexObject from './VertexObject';
 import { generateUniqueId, joinObjects } from '../../../tools/tools';
 import { round } from '../../../tools/math';
+import { identity } from '../../../tools/m2';
 
 type TypeVertexInputTextOptions = {
   text: ?string;
@@ -101,10 +102,55 @@ class VertexText extends VertexObject {
   }
 
   resizeText(
-    screenSize: number,     // in pixels
     pixelToVertexSpaceScale: Point,
+    vertexToGLMatrix: Point,
   ) {
+    const width = this.canvas.width * pixelToVertexSpaceScale.x;
+    const height = this.canvas.height * pixelToVertexSpaceScale.y;
+    // const width = this.canvas.width;
+    // const height = this.canvas.height;
+    console.log(width, height)
+    const points = [
+      new Point(0, 0),
+      new Point(0, height),
+      new Point(width, height),
+      new Point(width, 0),
+    ];
 
+    this.points = [];
+    points.forEach((point) => {
+      this.points.push(point.x);
+      this.points.push(point.y);
+    });
+    console.log(points);
+
+    const glLowerLeft = points[0].transformBy(vertexToGLMatrix);
+    const glTopRight = points[2].transformBy(vertexToGLMatrix);
+    // this.createTextureMap(
+    //   // glLowerLeft.x, glTopRight.x,
+    //   // glLowerLeft.y, glTopRight.y,
+    //   -1, 1,
+    //   -1, 1,
+    // );
+
+    const { texture } = this;
+    if (texture != null) {
+      texture.points = [
+        0, 0,
+        0, 1,
+        1, 1,
+        1, 0,
+      ];
+      texture.image = this.ctx.canvas;
+      if (texture.buffer) {
+        console.log('resetting buffer');
+        this.resetBuffer();
+        console.log(texture.image)
+      } else {
+        console.log('setting up buffer');
+        this.setupBuffer();
+      }
+    }
   }
 
   drawTextIntoBuffer() {
@@ -122,42 +168,43 @@ class VertexText extends VertexObject {
     this.ctx.textAlign = 'left';
     this.ctx.textBaseline = 'alphabetic';
     this.ctx.fillStyle = 'white';
-    this.ctx.fillStyle = 'black';   // debug only
+    this.ctx.fillStyle = 'red';   // debug only
 
     const startX = pixelFontSize * hBuffer / 2;
     const baselineHeightFromBottom = 0.25;
     const startY = this.canvas.height * (1 - baselineHeightFromBottom);
     this.ctx.fillText(this.text, startX, startY);
 
-    const points = [
-      new Point(0, 0),
-      new Point(0, this.canvas.height),
-      new Point(this.canvas.width, this.canvas.height),
-      new Point(this.canvas.width, 0),
-    ];
+    this.resizeText(new Point(1, 1), identity());
+    // const points = [
+    //   new Point(0, 0),
+    //   new Point(0, this.canvas.height),
+    //   new Point(this.canvas.width, this.canvas.height),
+    //   new Point(this.canvas.width, 0),
+    // ];
 
-    this.points = [];
-    points.forEach((point) => {
-      this.points.push(point.x);
-      this.points.push(point.y);
-    });
+    // this.points = [];
+    // points.forEach((point) => {
+    //   this.points.push(point.x);
+    //   this.points.push(point.y);
+    // });
 
-    this.createTextureMap(
-      points[0].x, points[2].x,
-      points[0].y, points[2].y,
-    );
+    // this.createTextureMap(
+    //   points[0].x, points[2].x,
+    //   points[0].y, points[2].y,
+    // );
 
-    const { texture } = this;
-    if (texture != null) {
-      texture.image = this.ctx.canvas;
-      if (texture.buffer) {
-        console.log('resetting buffer');
-        this.resetBuffer();
-      } else {
-        console.log('setting up buffer');
-        this.setupBuffer();
-      }
-    }
+    // const { texture } = this;
+    // if (texture != null) {
+    //   texture.image = this.ctx.canvas;
+    //   if (texture.buffer) {
+    //     console.log('resetting buffer');
+    //     this.resetBuffer();
+    //   } else {
+    //     console.log('setting up buffer');
+    //     this.setupBuffer();
+    //   }
+    // }
   }
 
   // drawTextIntoBufferLegacy() {

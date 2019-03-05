@@ -27,10 +27,10 @@ class VertexObject extends DrawingObject {
   texture: ?{
     id: string;
     src: string;
-    glTexture: Object;
+    glTexture: ?WebGLTexture;
     image: Object;
     points: Array<number>;
-    buffer: WebGLBuffer;
+    buffer: ?WebGLBuffer;
     index: number;
   }
   // textureLocation: string | Object;
@@ -119,8 +119,11 @@ class VertexObject extends DrawingObject {
         texture.index = this.webgl.textures[texture.id].index;
       } else {
         const glTexture = this.gl.createTexture();
-        texture.glTexture = glTexture;
+        if (glTexture != null) {
+          texture.glTexture = glTexture;
+        }
         texture.index = this.webgl.addTexture(texture.id, glTexture);
+        console.log(this.webgl.textures)
         this.gl.activeTexture(this.gl.TEXTURE0 + texture.index);
         this.gl.bindTexture(this.gl.TEXTURE_2D, glTexture);
         if (texture.src) {
@@ -156,10 +159,12 @@ class VertexObject extends DrawingObject {
   resetBuffer(numPoints: number = 0) {
     const { texture } = this;
     if (texture) {
-      this.gl.activeTexture(this.gl.TEXTURE0 + texture.index);
-      this.gl.bindTexture(this.gl.TEXTURE_2D, null);
-      this.gl.deleteTexture(texture.glTexture);
+      // this.gl.activeTexture(this.gl.TEXTURE0 + texture.index);
+      // this.gl.bindTexture(this.gl.TEXTURE_2D, null);
+      // this.gl.deleteTexture(texture.glTexture);
       this.gl.deleteBuffer(texture.buffer);
+      texture.glTexture = null;
+      texture.buffer = null;
     }
     // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
     this.gl.deleteBuffer(this.buffer);
