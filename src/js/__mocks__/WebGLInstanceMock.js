@@ -23,6 +23,7 @@ const webgl = {
     bindTexture: () => {},
     pixelStorei: () => {},
     texImage2D: () => {},
+    blendFunc: () => {},
   },
   resize: () => {},
   getProgram: () => {},

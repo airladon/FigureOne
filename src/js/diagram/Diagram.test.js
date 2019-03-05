@@ -158,12 +158,12 @@ describe('Diagram', () => {
       diagram.moveTopElementOnly = false;
       diagram.elements = collection;
       diagram.dToGL = (x, y) => new Point(x, y)
-        .transformBy(diagram.diagramToGLSpaceTransform.matrix());
+        .transformBy(diagram.spaceTransforms.diagramToGL.matrix());
       // diagram.dToP = (x, y) => new Point(x, y)
       //   .transformBy(diagram.diagramToPixelSpaceTransform.matrix());
       diagram.dToP = (p) => {
         const pixel = p
-          .transformBy(diagram.diagramToPixelSpaceTransform.matrix());
+          .transformBy(diagram.spaceTransforms.diagramToPixel.matrix());
         return pixel.add(new Point(diagram.canvasLow.left, diagram.canvasLow.top));
       };
       diagrams[key] = diagram;

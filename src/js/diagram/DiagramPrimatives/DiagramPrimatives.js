@@ -34,6 +34,7 @@ import {
   DiagramText, DiagramFont, TextObject,
 } from '../DrawingObjects/TextObject/TextObject';
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
+import type { TypeSpaceTransforms } from '../Diagram';
 
 export type TypePolygonOptions = {
   sides?: number,
@@ -71,8 +72,7 @@ export default class DiagramPrimatives {
   draw2D: DrawContext2D;
   htmlCanvas: HTMLElement;
   limits: Rect;
-  diagramToPixelSpaceScale: Point;
-  diagramToGLSpaceTransformMatrix: Array<number>;
+  spaceTransforms: TypeSpaceTransforms;
   animateNextFrame: Function;
 
   constructor(
@@ -80,8 +80,7 @@ export default class DiagramPrimatives {
     draw2D: DrawContext2D,
     htmlCanvas: HTMLElement,
     limits: Rect,
-    diagramToPixelSpaceScale: Point,
-    diagramToGLSpaceTransformMatrix: Array<number>,
+    spaceTransforms: TypeSpaceTransforms,
     animateNextFrame: Function,
   ) {
     this.webgl = webgl;
@@ -89,8 +88,7 @@ export default class DiagramPrimatives {
     this.htmlCanvas = htmlCanvas;
     this.limits = limits;
     this.animateNextFrame = animateNextFrame;
-    this.diagramToPixelSpaceScale = diagramToPixelSpaceScale;
-    this.diagramToGLSpaceTransformMatrix = diagramToGLSpaceTransformMatrix;
+    this.spaceTransforms = spaceTransforms;
   }
 
   polyLineLegacy(
@@ -181,8 +179,6 @@ export default class DiagramPrimatives {
     return Text(
       this.webgl,
       this.limits,
-      this.diagramToPixelSpaceScale,
-      this.diagramToGLSpaceTransformMatrix,
       options,
     );
   }

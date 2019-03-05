@@ -16,6 +16,7 @@ import { duplicateFromTo, joinObjects } from '../tools/tools';
 import { colorArrayToRGBA } from '../tools/color';
 // import GlobalAnimation from './webgl/GlobalAnimation';
 
+import type { TypeSpaceTransforms } from './Diagram';
 import type {
   TypePositionAnimationStepInputOptions, TypeAnimationBuilderInputOptions,
   TypeColorAnimationStepInputOptions, TypeTransformAnimationStepInputOptions,
@@ -170,6 +171,7 @@ class DiagramElement {
   };
 
   diagramLimits: Rect;
+  diagramTransforms: TypeSpaceTransforms;
 
   // Current animation/movement state of element
   state: {
@@ -567,19 +569,22 @@ class DiagramElement {
   // }
 
   updateHTMLElementTie(
-    pixelSpaceToDiagramSpaceTransform: Transform,
-    diagramToPixelSpaceScale: Point,
-    diagramToGLSpaceTransformMatrix: Array<number>,
+    // pixelSpaceToDiagramSpaceTransform: Transform,
+    // diagramToPixelSpaceScale: Point,
+    // diagramToGLSpaceTransformMatrix: Array<number>,
     diagramCanvas: HTMLElement,
   ) {
     // Maybe not needed
-    const { drawingObject } = this;
-    if (drawingObject != null) {
-      if (drawingObject.type === 'vertexText') {
-        drawingObject.diagramToPixelSpaceScale = diagramToPixelSpaceScale;
-        drawingObject.diagramToGLSpaceTransformMatrix = diagramToGLSpaceTransformMatrix;
-      }
-    }
+    // const { drawingObject } = this;
+    // if (this.name === 'c') {
+    //   console.log("enter tie up", this.name)
+    // }
+    // if (drawingObject != null) {
+    //   if (drawingObject.type === 'vertexText') {
+    //     console.log("udpate draw text")
+    //     drawingObject.drawTextIntoBuffer();
+    //   }
+    // }
 
     // First get the HTML element
     let tieToElement;
@@ -606,10 +611,9 @@ class DiagramElement {
         tie.width, tie.height,
       ));
 
-      const topLeft = topLeftPixels
-        .transformBy(pixelSpaceToDiagramSpaceTransform.m());
-      const bottomRight = bottomRightPixels
-        .transformBy(pixelSpaceToDiagramSpaceTransform.m());
+      const { pixelToDiagram } = this.diagramTransforms;
+      const topLeft = topLeftPixels.transformBy(pixelToDiagram.m());
+      const bottomRight = bottomRightPixels.transformBy(pixelToDiagram.m());
       const width = bottomRight.x - topLeft.x;
       const height = topLeft.y - bottomRight.y;
       const center = topLeft.add(new Point(width / 2, -height / 2));
@@ -2073,8 +2077,9 @@ class DiagramElement {
     this.stopPulsing(cancelled);
   }
 
-  updateLimits(limits: Rect) {
+  updateLimits(limits: Rect, transforms: TypeSpaceTransforms) {
     this.diagramLimits = limits;
+    this.diagramTransforms = transforms;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -3003,32 +3008,33 @@ class DiagramElementCollection extends DiagramElement {
     );
   }
 
-  updateLimits(limits: Rect) {
+  updateLimits(limits: Rect, transforms: TypeSpaceTransforms) {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.updateLimits(limits);
+      element.updateLimits(limits, transforms);
     }
     this.diagramLimits = limits;
+    this.diagramTransforms = transforms;
   }
 
   updateHTMLElementTie(
-    pixelSpaceToDiagramSpaceTransform: Transform,
-    diagramToPixelSpaceScale: Point,
-    diagramToGLSpaceTransformMatrix: Array<number>,
+    // pixelSpaceToDiagramSpaceTransform: Transform,
+    // diagramToPixelSpaceScale: Point,
+    // diagramToGLSpaceTransformMatrix: Array<number>,
     container: HTMLElement,
   ) {
     super.updateHTMLElementTie(
-      pixelSpaceToDiagramSpaceTransform,
-      diagramToPixelSpaceScale,
-      diagramToGLSpaceTransformMatrix,
+      // pixelSpaceToDiagramSpaceTransform,
+      // diagramToPixelSpaceScale,
+      // diagramToGLSpaceTransformMatrix,
       container,
     );
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       element.updateHTMLElementTie(
-        pixelSpaceToDiagramSpaceTransform,
-        diagramToPixelSpaceScale,
-        diagramToGLSpaceTransformMatrix,
+        // pixelSpaceToDiagramSpaceTransform,
+        // diagramToPixelSpaceScale,
+        // diagramToGLSpaceTransformMatrix,
         container,
       );
     }
