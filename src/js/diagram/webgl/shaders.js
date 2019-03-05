@@ -52,6 +52,17 @@ const fragment = {
       + '}',
     varNames: ['u_color', 'u_use_texture', 'u_texture'],
   },
+  text: {
+    source:
+      'precision mediump float;'
+      + 'uniform vec4 u_color;'
+      + 'uniform sampler2D u_texture;'
+      + 'varying vec2 v_texcoord;'
+      + 'void main() {'
+        + 'gl_FragColor = texture2D(u_texture, v_texcoord) * u_color;'
+      + '}',
+    varNames: ['u_color', 'u_texture'],
+  },
 };
 
 const getShaders = (vName: string = 'simple', fName: string = 'simple') => {
