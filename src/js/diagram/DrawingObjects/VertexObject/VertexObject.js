@@ -119,6 +119,7 @@ class VertexObject extends DrawingObject {
         texture.index = this.webgl.textures[texture.id].index;
       } else {
         const glTexture = this.gl.createTexture();
+        texture.glTexture = glTexture;
         texture.index = this.webgl.addTexture(texture.id, glTexture);
         this.gl.activeTexture(this.gl.TEXTURE0 + texture.index);
         this.gl.bindTexture(this.gl.TEXTURE_2D, glTexture);
@@ -157,7 +158,8 @@ class VertexObject extends DrawingObject {
     if (texture) {
       this.gl.activeTexture(this.gl.TEXTURE0 + texture.index);
       this.gl.bindTexture(this.gl.TEXTURE_2D, null);
-      this.gl.deleteTexture(texture.buffer);
+      this.gl.deleteTexture(texture.glTexture);
+      this.gl.deleteBuffer(texture.buffer);
     }
     // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
     this.gl.deleteBuffer(this.buffer);

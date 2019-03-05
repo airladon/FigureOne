@@ -1,10 +1,10 @@
 // @flow
 import WebGLInstance from './webgl/webgl';
-import getShaders from './webgl/shaders';
+// import getShaders from './webgl/shaders';
 
 import {
   Rect, Point, Transform,
-  spaceToSpaceTransform, minAngleDiff, spaceToSpaceScale,
+  spaceToSpaceTransform, minAngleDiff,
 } from '../tools/g2';
 import { isTouchDevice, joinObjects } from '../tools/tools';
 import {
@@ -24,12 +24,21 @@ export type TypeDiagramOptions = {
   htmlId?: string,
   limits?: Rect,
   backgroundColor?: Array<number>,
-  vertexShader?: string,
-  fragmentShader?: string,
+  // vertexShader?: string,
+  // fragmentShader?: string,
   fontScale?: number,
   elements?: DiagramElementCollection;
-}
+};
 
+export type TypeSpaceTransforms = {
+  glToDiagram: Transform;
+  diagramToGL: Transform;
+  pixelToDiagram: Transform;
+  diagramToPixel: Transform;
+  pixelToGL: Transform;
+  glToPixel: Transform;
+  diagramToCSSPercent: Transform;
+};
 // There are several coordinate spaces that need to be considered for a
 // diagram.
 //
@@ -89,20 +98,30 @@ class Diagram {
   fontScale: number;
   // layout: Object;
 
-  glToDiagramSpaceTransform: Transform;
-  diagramToGLSpaceTransform: Transform;
-  pixelToDiagramSpaceTransform: Transform;
-  diagramToPixelSpaceTransform: Transform;
-  pixelToGLSpaceTransform: Transform;
-  glToPixelSpaceTransform: Transform;
-  diagramToCSSPercentSpaceTransform: Transform;
+  spaceTransforms: {
+    glToDiagram: Transform;
+    diagramToGL: Transform;
+    pixelToDiagram: Transform;
+    diagramToPixel: Transform;
+    pixelToGL: Transform;
+    glToPixel: Transform;
+    diagramToCSSPercent: Transform;
+  };
 
-  glToDiagramSpaceScale: Point;
-  diagramToGLSpaceScale: Point;
-  pixelToDiagramSpaceScale: Point;
-  diagramToPixelSpaceScale: Point;
-  glToPixelSpaceScale: Point;
-  pixelToGLSpaceScale: Point;
+  // glToDiagramSpaceTransform: Transform;
+  // diagramToGLSpaceTransform: Transform;
+  // pixelToDiagramSpaceTransform: Transform;
+  // diagramToPixelSpaceTransform: Transform;
+  // pixelToGLSpaceTransform: Transform;
+  // glToPixelSpaceTransform: Transform;
+  // diagramToCSSPercentSpaceTransform: Transform;
+
+  // glToDiagramSpaceScale: Point;
+  // diagramToGLSpaceScale: Point;
+  // pixelToDiagramSpaceScale: Point;
+  // diagramToPixelSpaceScale: Point;
+  // glToPixelSpaceScale: Point;
+  // pixelToGLSpaceScale: Point;
 
   drawQueued: boolean;
 
@@ -125,13 +144,13 @@ class Diagram {
       limits: new Rect(-1, -1, 2, 2),
       backgroundColor: [1, 1, 1, 1],
       // layout: {},
-      vertexShader: 'simple',
-      fragmentShader: 'simple',
+      // vertexShader: 'simple',
+      // fragmentShader: 'simple',
       fontScale: 1,
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
-      htmlId, backgroundColor, limits, vertexShader, fragmentShader,
+      htmlId, backgroundColor, limits,
     } = optionsToUse;
     // if (typeof containerIdOrOptions !== 'string') {
     //   optionsToUse = joinObjects(
@@ -295,9 +314,9 @@ class Diagram {
     }
     return new DiagramPrimatives(
       webgl, draw2D,
-      this.htmlCanvas, this.limits,
-      this.diagramToPixelSpaceScale,
-      this.diagramToGLSpaceTransform.m(),
+      this.htmlCanvas,
+      this.limits,
+      this.spaceTransforms,
       this.animateNextFrame.bind(this),
     );
   }
@@ -399,33 +418,15 @@ class Diagram {
       y: { bottomLeft: 1, height: -1 },
     };
 
-    this.diagramToGLSpaceTransform =
-      spaceToSpaceTransform(diagramSpace, glSpace, 'Diagram');
-
-    this.glToDiagramSpaceTransform =
-      spaceToSpaceTransform(glSpace, diagramSpace);
-
-    this.pixelToDiagramSpaceTransform =
-      spaceToSpaceTransform(pixelSpace, diagramSpace);
-
-    this.diagramToPixelSpaceTransform =
-      spaceToSpaceTransform(diagramSpace, pixelSpace);
-
-    this.pixelToGLSpaceTransform =
-      spaceToSpaceTransform(pixelSpace, glSpace);
-
-    this.glToPixelSpaceTransform =
-      spaceToSpaceTransform(glSpace, pixelSpace);
-
-    this.diagramToCSSPercentSpaceTransform =
-      spaceToSpaceTransform(diagramSpace, percentSpace);
-
-    this.diagramToGLSpaceScale = spaceToSpaceScale(diagramSpace, glSpace);
-    this.glToDiagramSpaceScale = spaceToSpaceScale(glSpace, diagramSpace);
-    this.diagramToPixelSpaceScale = spaceToSpaceScale(diagramSpace, pixelSpace);
-    this.pixelToDiagramSpaceScale = spaceToSpaceScale(pixelSpace, diagramSpace);
-    this.pixelToGLSpaceScale = spaceToSpaceScale(pixelSpace, glSpace);
-    this.glToPixelSpaceScale = spaceToSpaceScale(glSpace, pixelSpace);
+    this.spaceTransforms = {
+      diagramToGL: spaceToSpaceTransform(diagramSpace, glSpace, 'Diagram'),
+      glToDiagram: spaceToSpaceTransform(glSpace, diagramSpace),
+      pixelToDiagram: spaceToSpaceTransform(pixelSpace, diagramSpace),
+      diagramToPixel: spaceToSpaceTransform(diagramSpace, pixelSpace),
+      pixelToGL: spaceToSpaceTransform(pixelSpace, glSpace),
+      glToPixel: spaceToSpaceTransform(glSpace, pixelSpace),
+      diagramToCSSPercent: spaceToSpaceTransform(diagramSpace, percentSpace),
+    };
   }
 
   initialize() {
@@ -434,7 +435,7 @@ class Diagram {
   }
 
   setFirstTransform() {
-    this.elements.setFirstTransform(this.diagramToGLSpaceTransform);
+    this.elements.setFirstTransform(this.spaceTransforms.diagramToGL);
   }
 
   updateLimits(limits: Rect) {
@@ -444,7 +445,7 @@ class Diagram {
 
   resize() {
     if (this.elements != null) {
-      this.elements.updateLimits(this.limits);
+      this.elements.updateLimits(this.limits, this.spaceTransforms);
     }
     this.webglLow.resize();
     this.webglHigh.resize();
@@ -460,9 +461,9 @@ class Diagram {
   updateHTMLElementTie() {
     if (this.elements != null) {
       this.elements.updateHTMLElementTie(
-        this.pixelToDiagramSpaceTransform,
-        this.diagramToPixelSpaceScale,
-        this.diagramToGLSpaceTransform.m(),
+        // this.pixelToDiagramSpaceTransform,
+        // this.diagramToPixelSpaceScale,
+        // this.diagramToGLSpaceTransform.m(),
         this.canvasLow,
       );
     }
@@ -480,7 +481,7 @@ class Diagram {
     // Get the touched point in clip space
     const pixelPoint = this.clientToPixel(clientPoint);
     // console.log(pixelPoint)
-    const glPoint = pixelPoint.transformBy(this.pixelToGLSpaceTransform.matrix());
+    const glPoint = pixelPoint.transformBy(this.spaceTransforms.pixelToGL.matrix());
     // console.log(glPoint.transformBy(this.glToDiagramSpaceTransform.matrix()))
     // const clipPoint = this.clientToClip(clientPoint);
 
@@ -542,7 +543,7 @@ class Diagram {
       centerDiagramSpace = new Point(0, 0);
     }
     const center = centerDiagramSpace
-      .transformBy(this.diagramToPixelSpaceTransform.matrix());
+      .transformBy(this.spaceTransforms.diagramToPixel.matrix());
     const previousPixelPoint = this.clientToPixel(previousClientPoint);
     const currentPixelPoint = this.clientToPixel(currentClientPoint);
 
@@ -592,9 +593,9 @@ class Diagram {
     const currentPixelPoint = this.clientToPixel(currentClientPoint);
 
     const previousDiagramPoint =
-      previousPixelPoint.transformBy(this.pixelToDiagramSpaceTransform.matrix());
+      previousPixelPoint.transformBy(this.spaceTransforms.pixelToDiagram.matrix());
     const currentDiagramPoint =
-      currentPixelPoint.transformBy(this.pixelToDiagramSpaceTransform.matrix());
+      currentPixelPoint.transformBy(this.spaceTransforms.pixelToDiagram.matrix());
     const m = element.diagramSpaceToVertexSpaceTransformMatrix();
 
     const currentVertexSpacePoint = currentDiagramPoint.transformBy(m);
@@ -629,7 +630,7 @@ class Diagram {
     // const previousMag = previousDiagramPoint.sub(center).distance();
     // const currentMag = currentDiagramPoint.sub(center).distance();
     const center = element.getDiagramPosition()
-      .transformBy(this.diagramToPixelSpaceTransform.matrix());
+      .transformBy(this.spaceTransforms.diagramToPixel.matrix());
     const previousMag = previousPixelPoint.sub(center).distance();
     const currentMag = currentPixelPoint.sub(center).distance();
 
@@ -669,7 +670,7 @@ class Diagram {
     // const currentPixelPoint = this.clientToPixel(currentClientPoint);
 
     const previousGLPoint =
-      previousPixelPoint.transformBy(this.pixelToGLSpaceTransform.matrix());
+      previousPixelPoint.transformBy(this.spaceTransforms.pixelToGL.matrix());
     // Go through each element being moved, get the current translation
     for (let i = 0; i < this.beingMovedElements.length; i += 1) {
       const element = this.beingMovedElements[i];
@@ -796,7 +797,7 @@ class Diagram {
     //   );
     // const t1 = performance.now();
     this.elements.draw(
-      this.diagramToGLSpaceTransform,
+      this.spaceTransforms.diagramToGL,
       now,
     );
 
