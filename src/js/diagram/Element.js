@@ -585,7 +585,6 @@ class DiagramElement {
         const pixelToVertexScale = this.getPixelToVertexSpaceScale();
         drawingObject.resizeText(
           new Point(pixelToVertexScale.x, Math.abs(pixelToVertexScale.y)),
-          this.lastDrawTransform.m(),
         );
       }
     }

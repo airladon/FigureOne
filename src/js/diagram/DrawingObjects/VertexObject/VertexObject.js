@@ -27,11 +27,11 @@ class VertexObject extends DrawingObject {
   texture: ?{
     id: string;
     src: string;
-    glTexture: ?WebGLTexture;
+    // glTexture: ?WebGLTexture;
     image: Object;
     points: Array<number>;
     buffer: ?WebGLBuffer;
-    index: number;
+    // index: number;
   }
   // textureLocation: string | Object;
   // texturePoints: Array<number>;
@@ -55,34 +55,38 @@ class VertexObject extends DrawingObject {
     // this.texturePoints = [];
     this.texture = null;
     this.programIndex = webgl.getProgram(vertexShader, fragmentShader);
-    this.type = 'vertexPrimative'
+    this.type = 'vertexPrimative';
   }
 
   addTextureToBuffer(
-    texture, //: WebGLTextureBuffer
-    image, // image data
+    glTexture: WebGLTexture,
+    image: Object, // image data
   ) {
-    console.log(image)
-    this.gl.activeTexture(this.gl.TEXTURE0 + this.texture.index);
-    this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
-    this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, 1);
-    this.gl.texImage2D(
-      this.gl.TEXTURE_2D, 0, this.gl.RGBA,
-      this.gl.RGBA, this.gl.UNSIGNED_BYTE, image,
-    );
     function isPowerOf2(value) {
       // eslint-disable-next-line no-bitwise
       return (value & (value - 1)) === 0;
     }
-    // Check if the image is a power of 2 in both dimensions.
-    if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
-      // Yes, it's a power of 2. Generate mips.
-      this.gl.generateMipmap(this.gl.TEXTURE_2D);
-    } else {
-      // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
-      this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
-      this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
-      this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
+    const { texture } = this;
+    if (texture != null) {
+      const { index } = this.webgl.textures[texture.id];
+      this.gl.activeTexture(this.gl.TEXTURE0 + index);
+      this.gl.bindTexture(this.gl.TEXTURE_2D, glTexture);
+      this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, 1);
+      this.gl.texImage2D(
+        this.gl.TEXTURE_2D, 0, this.gl.RGBA,
+        this.gl.RGBA, this.gl.UNSIGNED_BYTE, image,
+      );
+
+      // Check if the image is a power of 2 in both dimensions.
+      if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+        // Yes, it's a power of 2. Generate mips.
+        this.gl.generateMipmap(this.gl.TEXTURE_2D);
+      } else {
+        // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
+      }
     }
   }
 
@@ -116,19 +120,20 @@ class VertexObject extends DrawingObject {
       );
 
       if (
-        texture.id in this.webgl.textures
-        && this.webgl.textures[texture.id].texture != null
+        !(texture.id in this.webgl.textures)
+        || (
+          texture.id in this.webgl.textures
+          && this.webgl.textures[texture.id].glTexture == null
+        )
       ) {
-        texture.index = this.webgl.textures[texture.id].index;
-        texture.glTexture = this.webgl.textures[texture.id].texture;
-      } else {
         const glTexture = this.gl.createTexture();
-        if (glTexture != null) {
-          texture.glTexture = glTexture;
-        }
-        texture.index = this.webgl.addTexture(texture.id, glTexture);
-        console.log(this.webgl.textures)
-        this.gl.activeTexture(this.gl.TEXTURE0 + texture.index);
+        // if (glTexture != null) {
+        //   texture.glTexture = glTexture;
+        // }
+        this.webgl.addTexture(texture.id, glTexture);
+        this.gl.activeTexture(
+          this.gl.TEXTURE0 + this.webgl.textures[texture.id].index,
+        );
         this.gl.bindTexture(this.gl.TEXTURE_2D, glTexture);
         if (texture.src) {
           // const texture = this.gl.createTexture();
@@ -163,14 +168,15 @@ class VertexObject extends DrawingObject {
   resetBuffer(numPoints: number = 0) {
     const { texture } = this;
     if (texture) {
-      console.log('deleting', this.type)
       // this.gl.activeTexture(this.gl.TEXTURE0 + texture.index);
       // this.gl.bindTexture(this.gl.TEXTURE_2D, null);
-      this.gl.deleteTexture(texture.glTexture);
+      if (this.webgl.textures[texture.id].glTexture != null) {
+        this.gl.deleteTexture(this.webgl.textures[texture.id].glTexture);
+        this.webgl.textures[texture.id].glTexture = null;
+      }
       this.gl.deleteBuffer(texture.buffer);
-      texture.glTexture = null;
+      // texture.glTexture = null;
       texture.buffer = null;
-      this.webgl.textures[texture.id].texture = null;
     }
     // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
     this.gl.deleteBuffer(this.buffer);
@@ -227,6 +233,16 @@ class VertexObject extends DrawingObject {
     return this.numPoints;
   }
 
+  // A texture map is a texture coords point that lines up with the texture
+  // vertex point. So, if the vertex shape is rectangular, centered at the
+  // origin and wants to incorporate the entire texture, then the map would
+  // be:
+  // vertex space            texture space
+  // this.points         this.texture.points
+  //    -1,  -1,                  0,  0
+  //    -1,   1,                  0,  1
+  //     1,   1,                  1,  1
+  //     1,  -1,                  1,  0
   createTextureMap(
     xMinGL: number = -1,
     xMaxGL: number = 1,
@@ -241,14 +257,17 @@ class VertexObject extends DrawingObject {
     const glHeight = yMaxGL - yMinGL;
     const texWidth = xMaxTex - xMinTex;
     const texHeight = yMaxTex - yMinTex;
-    this.texture.points = [];
-    for (let i = 0; i < this.points.length; i += 2) {
-      const x = this.points[i];
-      const y = this.points[i + 1];
-      const texNormX = (x - xMinGL) / glWidth;
-      const texNormY = (y - yMinGL) / glHeight;
-      this.texture.points.push(texNormX * texWidth + xMinTex);
-      this.texture.points.push(texNormY * texHeight + yMinTex);
+    const { texture } = this;
+    if (texture != null) {
+      texture.points = [];
+      for (let i = 0; i < this.points.length; i += 2) {
+        const x = this.points[i];
+        const y = this.points[i + 1];
+        const texNormX = (x - xMinGL) / glWidth;
+        const texNormY = (y - yMinGL) / glHeight;
+        texture.points.push(texNormX * texWidth + xMinTex);
+        texture.points.push(texNormY * texHeight + yMinTex);
+      }
     }
   }
 
@@ -333,7 +352,8 @@ class VertexObject extends DrawingObject {
     }
     if (texture) {
       this.gl.uniform1i(locations.u_use_texture, 1);
-      this.gl.uniform1i(locations.u_texture, texture.index);
+      const { index } = this.webgl.textures[texture.id];
+      this.gl.uniform1i(locations.u_texture, index);
     } else {
       this.gl.uniform1i(locations.u_use_texture, 0);
     }

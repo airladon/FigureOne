@@ -108,7 +108,7 @@ class WebGLInstance {
   lastUsedProgram: ?WebGLProgram;
   textures: {
     [name: string]: {
-      texture: WebGLTexture;
+      glTexture: WebGLTexture;
       index: number;
     };
   };
@@ -119,10 +119,10 @@ class WebGLInstance {
     program: WebGLProgram;
   }>;
 
-  addTexture(id: string, texture: WebGLTexture) {
+  addTexture(id: string, glTexture: WebGLTexture) {
     const nextIndex = Object.keys(this.textures).length;
     this.textures[id] = {
-      texture,
+      glTexture,
       index: nextIndex,
     };
     return nextIndex;
