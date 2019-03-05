@@ -7,6 +7,7 @@ import WebGLInstance from '../../webgl/webgl';
 import VertexObject from './VertexObject';
 import { generateUniqueId, joinObjects } from '../../../tools/tools';
 import { round } from '../../../tools/math';
+import { identity } from '../../../tools/m2';
 
 type TypeVertexInputTextOptions = {
   text: ?string;
@@ -84,7 +85,10 @@ class VertexText extends VertexObject {
 
   resizeText(
     pixelToVertexSpaceScale: Point = new Point(1, 1),
+    vertexSpaceScale: Point = new Point(1, 1),
   ) {
+    // const width = this.canvas.width * pixelToVertexSpaceScale.x * vertexSpaceScale.x;
+    // const height = this.canvas.height * pixelToVertexSpaceScale.y * vertexSpaceScale.y;
     const width = this.canvas.width * pixelToVertexSpaceScale.x;
     const height = this.canvas.height * pixelToVertexSpaceScale.y;
 
@@ -136,11 +140,28 @@ class VertexText extends VertexObject {
   }
 
   drawTextIntoBuffer(
+    diagramToPixelSpaceXScale: number = 1,
     pixelToVertexSpaceScale: Point = new Point(1, 1),
+    vertexSpaceScale: Point = new Point(1, 1),
   ) {
-    const pixelFontSize = parseInt(this.size, 10);
-    this.ctx.font = `${this.style} ${this.weight} ${pixelFontSize}px ${this.family}`;
+    let pixelFontSize = 20;
+    if (typeof this.size === 'string' && this.size.endsWith('px')) {
+      pixelFontSize = parseInt(this.size, 10);
+    } else {
+      let diagramFontSize;
+      if (typeof this.size === 'string') {
+        diagramFontSize = parseFloat(this.size);
+      } else {
+        diagramFontSize = this.size;
+      }
+      pixelFontSize = round(diagramFontSize * diagramToPixelSpaceXScale * vertexSpaceScale.x, 0);
+    }
 
+    if (pixelFontSize < 1) {
+      pixelFontSize = 1;
+    }
+    console.log(pixelFontSize, this.size, diagramToPixelSpaceXScale, vertexSpaceScale)
+    this.ctx.font = `${this.style} ${this.weight} ${pixelFontSize}px ${this.family}`;
     const hBuffer = 0.3;
     const width = this.ctx.measureText(this.text).width
                   + pixelFontSize * hBuffer;
@@ -159,7 +180,7 @@ class VertexText extends VertexObject {
     const startY = this.canvas.height * (1 - baselineHeightFromBottom);
     this.ctx.fillText(this.text, startX, startY);
 
-    this.resizeText(pixelToVertexSpaceScale);
+    this.resizeText(pixelToVertexSpaceScale, vertexSpaceScale);
   }
 }
 

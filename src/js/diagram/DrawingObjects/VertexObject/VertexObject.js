@@ -66,6 +66,7 @@ class VertexObject extends DrawingObject {
     }
     const { texture } = this;
     if (texture != null) {
+      console.log(texture)
       const { index } = this.webgl.textures[texture.id];
       this.gl.activeTexture(this.gl.TEXTURE0 + index);
       this.gl.bindTexture(this.gl.TEXTURE_2D, glTexture);
