@@ -115,8 +115,12 @@ class VertexObject extends DrawingObject {
         this.gl.STATIC_DRAW,
       );
 
-      if (texture.id in this.webgl.textures) {
+      if (
+        texture.id in this.webgl.textures
+        && this.webgl.textures[texture.id].texture != null
+      ) {
         texture.index = this.webgl.textures[texture.id].index;
+        texture.glTexture = this.webgl.textures[texture.id].texture;
       } else {
         const glTexture = this.gl.createTexture();
         if (glTexture != null) {
@@ -159,12 +163,14 @@ class VertexObject extends DrawingObject {
   resetBuffer(numPoints: number = 0) {
     const { texture } = this;
     if (texture) {
+      console.log('deleting', this.type)
       // this.gl.activeTexture(this.gl.TEXTURE0 + texture.index);
       // this.gl.bindTexture(this.gl.TEXTURE_2D, null);
-      // this.gl.deleteTexture(texture.glTexture);
+      this.gl.deleteTexture(texture.glTexture);
       this.gl.deleteBuffer(texture.buffer);
       texture.glTexture = null;
       texture.buffer = null;
+      this.webgl.textures[texture.id].texture = null;
     }
     // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
     this.gl.deleteBuffer(this.buffer);
