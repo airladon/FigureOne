@@ -6,6 +6,7 @@ import {
 import WebGLInstance from '../../webgl/webgl';
 import VertexObject from './VertexObject';
 import { generateUniqueId, joinObjects } from '../../../tools/tools';
+import { round } from '../../../tools/math';
 
 type TypeVertexInputTextOptions = {
   text: ?string;
@@ -34,6 +35,7 @@ class VertexText extends VertexObject {
   dAngle: number;       // angle between adjacent verteces to center lines
   ctx: Object;
   diagramToPixelSpaceScale: Point;
+  diagramToGLSpaceTransformMatrix: Array<number>;
   text: string;
   size: number;
   family: string;
@@ -46,15 +48,17 @@ class VertexText extends VertexObject {
   constructor(
     webgl: WebGLInstance,
     diagramToPixelSpaceScale: Point,
+    diagramToGLSpaceTransformMatrix: Array<number>,
     textOptions: TypeVertexInputTextOptions,
   ) {
     super(webgl, 'withTexture', 'withTexture');
     this.glPrimative = webgl.gl.TRIANGLE_FAN;
     this.diagramToPixelSpaceScale = diagramToPixelSpaceScale;
+    this.diagramToGLSpaceTransformMatrix = diagramToGLSpaceTransformMatrix;
 
     const defaultTextOptions = {
       text: 'DEFAULT_TEXT',
-      size: '20',             // pixels
+      size: 20,             // pixels
       family: 'Helvetica',
       style: 'normal',
       weight: 400,
@@ -99,51 +103,90 @@ class VertexText extends VertexObject {
   }
 
   drawTextIntoBuffer() {
-    // size is the width of an M in diagram space
+    // Font is in diagram space units.
     // Font size relative to M width will vary by font family so start by
     // assuming: M width = font size, and then measure it, and find a scaling
     // correction factor to apply
-    const d2pSale = this.diagramToPixelSpaceScale;
-    const width = this.text.length * this.size * d2pSale.x * 1.2;
-    const height = this.size * Math.abs(d2pSale.y) * 1.5;
-    this.canvas.width = width;
-    this.canvas.height = height;
+    const d2pScale = this.diagramToPixelSpaceScale;
+    const width = this.text.length * this.size * d2pScale.x;
+    const height = this.size * Math.abs(d2pScale.y) * 1.15;
 
+    const pixelFontSize = round(this.size * Math.abs(d2pScale.y), 0);
+    console.log(pixelFontSize, this.size * d2pScale.y, d2pScale, this.size);
     this.ctx.clearRect(0, 0, width, height);
-    this.ctx.font = `${this.style} ${this.weight} ${this.size * d2pSale.x}px ${this.family}`;
+    this.ctx.font = `${this.style} ${this.weight} ${pixelFontSize}px ${this.family}`;
+    // this.ctx.save();
+    // this.ctx.font = 'normal 400 12px Helvetica';
+    // console.log(this.ctx.measureText(this.text).width)
+    // this.ctx.font = 'normal 400 69px Helvetica';
+    // console.log(this.ctx.measureText(this.text).width)
+    // console.log(this.ctx.font)
+    // const mWidth = this.ctx.measureText('M');
+    // const scaleCorrection = (pixelFontSize) / mWidth.width;
 
-    const mWidth = this.ctx.measureText('M');
-    const scaleCorrection = (this.size * d2pSale.x) / mWidth.width;
-    this.ctx.font = `${this.style} ${this.weight} ${this.size * d2pSale.x * scaleCorrection}px ${this.family}`;
+    // this.ctx.font = `${this.style} ${this.weight} ${this.size * d2pScale.x * scaleCorrection}px ${this.family}`;
 
-
-    this.ctx.textAlign = this.alignH;
-    this.ctx.textBaseline = this.alignV;
+    const totalWidth = this.ctx.measureText(this.text);
+    console.log(totalWidth.width, width)
+    // this.canvas.width = totalWidth.width;
+    this.canvas.width = totalWidth.width;
+    this.canvas.height = height;
+    // this.ctx.restore();
+    this.ctx.font = `${this.style} ${this.weight} ${pixelFontSize}px ${this.family}`;
+    this.ctx.textAlign = 'left';
+    this.ctx.textBaseline = 'alphabetic';
     this.ctx.fillStyle = 'black';
-    let startX = 0;
-    if (this.alignH === 'center') {
-      startX = width / 2;
-    } else if (this.alignH === 'right') {
-      startX = width;
-    }
-    const startY = height / 2;
+    const startX = 0;
+    // if (this.alignH === 'center') {
+    //   startX = this.canvas.width / 2;
+    // } else if (this.alignH === 'right') {
+    //   startX = this.canvas.width;
+    // }
+    const startY = this.canvas.height * 0.75;
+    // this.ctx.font = "40px Helvetica";
     this.ctx.fillText(this.text, startX, startY);
 
-    const aspectRatio = width / height;
-    this.points = [
-      -1, -1 / aspectRatio,
-      -1, 1 / aspectRatio,
-      1, 1 / aspectRatio,
-      1, -1 / aspectRatio,
+    const aspectRatio = this.canvas.width / this.canvas.height;
+    const diagramWidth = this.canvas.width / d2pScale.x;
+    const diagramHeight = this.canvas.height / Math.abs(d2pScale.y);
+    const points = [
+      new Point(0, 0),
+      new Point(0, diagramHeight),
+      new Point(diagramWidth, diagramHeight),
+      new Point(diagramWidth, 0),
     ];
-
-    this.createTextureMap(-1, 1, -1 / aspectRatio, 1 / aspectRatio);
+    if (this.alignH === 'center') {
+      points.forEach((point) => {
+        point.x -= diagramWidth / 2;
+      });
+    }
+    if (this.alignH === 'right') {
+      points.forEach((point) => {
+        point.x -= diagramWidth;
+      });
+    }
+    this.points = [];
+    points.forEach((point) => {
+      this.points.push(point.x);
+      this.points.push(point.y);
+    });
+    // this.points = [
+    //   0, 0,
+    //   0, diagramHeight,
+    //   diagramWidth, diagramHeight,
+    //   diagramWidth, 0,
+    // ];
+    console.log("points", points)
+    const glBottomLeft = points[0].transformBy(this.diagramToGLSpaceTransformMatrix);
+    const glTopRight = points[2].transformBy(this.diagramToGLSpaceTransformMatrix);
+    this.createTextureMap(glBottomLeft.x, glTopRight.x, glBottomLeft.y, glTopRight.y);
+    console.log(this.texture)
 
     const { texture } = this;
     if (texture != null) {
       texture.image = this.ctx.canvas;
       console.log(texture.image)
-      if (this.texture.buffer) {
+      if (texture.buffer) {
         console.log('resetting buffer')
         this.resetBuffer();
       } else {

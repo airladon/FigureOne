@@ -27,6 +27,7 @@ function Text(
   webgl: WebGLInstance,
   diagramLimits: Rect,
   diagramToPixelSpaceScale: Point,
+  diagramToGLSpaceTransformMatrix: Array<number>,
   optionsIn: TypeTextInputOptions,
 ) {
   const defaultOptions = {
@@ -46,6 +47,7 @@ function Text(
   const vertexText = new VertexText(
     webgl,
     diagramToPixelSpaceScale,
+    diagramToGLSpaceTransformMatrix,
     options,
   );
   // let transform = new Transform();

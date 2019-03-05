@@ -297,6 +297,7 @@ class Diagram {
       webgl, draw2D,
       this.htmlCanvas, this.limits,
       this.diagramToPixelSpaceScale,
+      this.diagramToGLSpaceTransform.m(),
       this.animateNextFrame.bind(this),
     );
   }
