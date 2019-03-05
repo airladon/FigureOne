@@ -17,7 +17,7 @@ type TypeTextInputOptions = {
   weight: ?number;
   style: ?'normal' | 'italic',
   alignH: ?'left' | 'center' | 'right',
-  alignV: ?'top' | 'bottom' | 'middle' | 'alphabetic',
+  alignV: ?'top' | 'bottom' | 'middle' | 'baseline',
   color: ?Array<number>,
   transform: ?Transform,
   position: ?Point,

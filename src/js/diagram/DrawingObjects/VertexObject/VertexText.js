@@ -15,7 +15,7 @@ type TypeVertexInputTextOptions = {
   weight: ?number;
   style: ?'normal' | 'italic',
   alignH: ?'left' | 'center' | 'right',
-  alignV: ?'top' | 'bottom' | 'middle' | 'alphabetic',
+  alignV: ?'top' | 'bottom' | 'middle' | 'baseline',
 };
 
 type TypeTextOptions = {
@@ -25,7 +25,7 @@ type TypeTextOptions = {
   weight: number;
   style: 'normal' | 'italic',
   alignH: 'left' | 'center' | 'right',
-  alignV: 'top' | 'bottom' | 'middle' | 'alphabetic',
+  alignV: 'top' | 'bottom' | 'middle' | 'baseline',
 };
 
 class VertexText extends VertexObject {
@@ -42,7 +42,7 @@ class VertexText extends VertexObject {
   weight: number;
   style: 'normal' | 'italic';
   alignH: 'left' | 'center' | 'right';
-  alignV: 'top' | 'bottom' | 'middle' | 'alphabetic';
+  alignV: 'top' | 'bottom' | 'middle' | 'baseline';
   canvas: HTMLCanvasElement;
 
   constructor(
@@ -108,45 +108,37 @@ class VertexText extends VertexObject {
     // assuming: M width = font size, and then measure it, and find a scaling
     // correction factor to apply
     const d2pScale = this.diagramToPixelSpaceScale;
-    const width = this.text.length * this.size * d2pScale.x;
-    const height = this.size * Math.abs(d2pScale.y) * 1.15;
+    // const width = this.text.length * this.size * d2pScale.x;
+    // const height = this.size * Math.abs(d2pScale.y) * 1.15;
+    let pixelFontSize = 10;
+    if (typeof this.size === 'string' && this.size.endsWith('px')) {
+      pixelFontSize = parseInt(this.size, 10);
+    } else {
+      if (typeof this.size === 'string') {
+        this.size = parseFloat(this.size);
+      }
+      pixelFontSize = round(this.size * Math.abs(d2pScale.y), 0);
+    }
 
-    const pixelFontSize = round(this.size * Math.abs(d2pScale.y), 0);
-    console.log(pixelFontSize, this.size * d2pScale.y, d2pScale, this.size);
-    this.ctx.clearRect(0, 0, width, height);
     this.ctx.font = `${this.style} ${this.weight} ${pixelFontSize}px ${this.family}`;
-    // this.ctx.save();
-    // this.ctx.font = 'normal 400 12px Helvetica';
-    // console.log(this.ctx.measureText(this.text).width)
-    // this.ctx.font = 'normal 400 69px Helvetica';
-    // console.log(this.ctx.measureText(this.text).width)
-    // console.log(this.ctx.font)
-    // const mWidth = this.ctx.measureText('M');
-    // const scaleCorrection = (pixelFontSize) / mWidth.width;
 
-    // this.ctx.font = `${this.style} ${this.weight} ${this.size * d2pScale.x * scaleCorrection}px ${this.family}`;
+    // +1 pixel for each side so total width is 2 pixels larger
+    const totalWidth = this.ctx.measureText(this.text).width + 2;
 
-    const totalWidth = this.ctx.measureText(this.text);
-    console.log(totalWidth.width, width)
-    // this.canvas.width = totalWidth.width;
-    this.canvas.width = totalWidth.width;
-    this.canvas.height = height;
+    this.canvas.width = totalWidth;
+    this.canvas.height = pixelFontSize * 1.15;
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     // this.ctx.restore();
     this.ctx.font = `${this.style} ${this.weight} ${pixelFontSize}px ${this.family}`;
     this.ctx.textAlign = 'left';
     this.ctx.textBaseline = 'alphabetic';
     this.ctx.fillStyle = 'black';
-    const startX = 0;
-    // if (this.alignH === 'center') {
-    //   startX = this.canvas.width / 2;
-    // } else if (this.alignH === 'right') {
-    //   startX = this.canvas.width;
-    // }
-    const startY = this.canvas.height * 0.75;
-    // this.ctx.font = "40px Helvetica";
+    const startX = 1;
+    const baselineHeightFromBottom = 0.25;
+    const startY = this.canvas.height * (1 - baselineHeightFromBottom);
     this.ctx.fillText(this.text, startX, startY);
 
-    const aspectRatio = this.canvas.width / this.canvas.height;
+    // const aspectRatio = this.canvas.width / this.canvas.height;
     const diagramWidth = this.canvas.width / d2pScale.x;
     const diagramHeight = this.canvas.height / Math.abs(d2pScale.y);
     const points = [
@@ -163,6 +155,16 @@ class VertexText extends VertexObject {
     if (this.alignH === 'right') {
       points.forEach((point) => {
         point.x -= diagramWidth;
+      });
+    }
+    if (this.alignV === 'baseline') {
+      points.forEach((point) => {
+        point.y -= diagramHeight * baselineHeightFromBottom;
+      });
+    }
+    if (this.alignV === 'top') {
+      points.forEach((point) => {
+        point.y -= diagramHeight;
       });
     }
     this.points = [];
