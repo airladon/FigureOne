@@ -98,7 +98,10 @@ class VertexText extends VertexObject {
       start.y = -height * 0.25;
     } else if (this.alignV === 'top') {
       start.y = -height;
+    } else if (this.alignV === 'middle') {
+      start.y = -height / 2;
     }
+
 
     const points = [
       start,
@@ -108,9 +111,11 @@ class VertexText extends VertexObject {
     ];
 
     this.points = [];
+    this.border = [[]];
     points.forEach((point) => {
       this.points.push(point.x);
       this.points.push(point.y);
+      this.border[0].push(point);
     });
 
     const { texture } = this;
