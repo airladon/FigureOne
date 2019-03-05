@@ -568,8 +568,19 @@ class DiagramElement {
 
   updateHTMLElementTie(
     pixelSpaceToDiagramSpaceTransform: Transform,
+    diagramToPixelSpaceScale: Point,
+    diagramToGLSpaceTransformMatrix: Array<number>,
     diagramCanvas: HTMLElement,
   ) {
+    // Maybe not needed
+    const { drawingObject } = this;
+    if (drawingObject != null) {
+      if (drawingObject.type === 'vertexText') {
+        drawingObject.diagramToPixelSpaceScale = diagramToPixelSpaceScale;
+        drawingObject.diagramToGLSpaceTransformMatrix = diagramToGLSpaceTransformMatrix;
+      }
+    }
+
     // First get the HTML element
     let tieToElement;
     if (typeof this.tieToHTML.element === 'string') {
@@ -3002,12 +3013,24 @@ class DiagramElementCollection extends DiagramElement {
 
   updateHTMLElementTie(
     pixelSpaceToDiagramSpaceTransform: Transform,
+    diagramToPixelSpaceScale: Point,
+    diagramToGLSpaceTransformMatrix: Array<number>,
     container: HTMLElement,
   ) {
-    super.updateHTMLElementTie(pixelSpaceToDiagramSpaceTransform, container);
+    super.updateHTMLElementTie(
+      pixelSpaceToDiagramSpaceTransform,
+      diagramToPixelSpaceScale,
+      diagramToGLSpaceTransformMatrix,
+      container,
+    );
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.updateHTMLElementTie(pixelSpaceToDiagramSpaceTransform, container);
+      element.updateHTMLElementTie(
+        pixelSpaceToDiagramSpaceTransform,
+        diagramToPixelSpaceScale,
+        diagramToGLSpaceTransformMatrix,
+        container,
+      );
     }
   }
 

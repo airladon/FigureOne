@@ -51,7 +51,7 @@ class VertexText extends VertexObject {
     diagramToGLSpaceTransformMatrix: Array<number>,
     textOptions: TypeVertexInputTextOptions,
   ) {
-    super(webgl, 'withTexture', 'withTexture');
+    super(webgl, 'withTexture', 'text');
     this.glPrimative = webgl.gl.TRIANGLE_FAN;
     this.diagramToPixelSpaceScale = diagramToPixelSpaceScale;
     this.diagramToGLSpaceTransformMatrix = diagramToGLSpaceTransformMatrix;
@@ -81,6 +81,8 @@ class VertexText extends VertexObject {
 
     this.texture = {};
     this.texture.id = 'texture_text';
+
+    this.type = 'vertextText';
 
     // const width = options.size * options.text.length * 0.7;
     // const height = options.size * 1.5;
@@ -132,15 +134,21 @@ class VertexText extends VertexObject {
     this.ctx.font = `${this.style} ${this.weight} ${pixelFontSize}px ${this.family}`;
     this.ctx.textAlign = 'left';
     this.ctx.textBaseline = 'alphabetic';
-    this.ctx.fillStyle = 'black';
+    this.ctx.fillStyle = 'white';
+    // Debug:
+    // this.ctx.fillStyle = 'black';
     const startX = 1;
     const baselineHeightFromBottom = 0.25;
     const startY = this.canvas.height * (1 - baselineHeightFromBottom);
     this.ctx.fillText(this.text, startX, startY);
 
     // const aspectRatio = this.canvas.width / this.canvas.height;
-    const diagramWidth = this.canvas.width / d2pScale.x;
-    const diagramHeight = this.canvas.height / Math.abs(d2pScale.y);
+    let diagramWidth = this.canvas.width / d2pScale.x;
+    let diagramHeight = this.canvas.height / Math.abs(d2pScale.y);
+    if (typeof this.size === 'string' && this.size.endsWith('px')) {
+      diagramWidth = this.canvas.width / d2pScale.x;
+      diagramHeight = this.canvas.height / Math.abs(d2pScale.y);
+    }
     const points = [
       new Point(0, 0),
       new Point(0, diagramHeight),

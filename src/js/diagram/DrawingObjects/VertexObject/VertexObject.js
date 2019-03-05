@@ -37,6 +37,7 @@ class VertexObject extends DrawingObject {
   // texturePoints: Array<number>;
   +change: (Array<g2.Point>) => void;
   programIndex: number;
+  type: string;
 
   constructor(
     webgl: WebGLInstance,
@@ -54,6 +55,7 @@ class VertexObject extends DrawingObject {
     // this.texturePoints = [];
     this.texture = null;
     this.programIndex = webgl.getProgram(vertexShader, fragmentShader);
+    this.type = 'vertexPrimative'
   }
 
   addTextureToBuffer(
@@ -266,6 +268,13 @@ class VertexObject extends DrawingObject {
 
     const locations = this.webgl.useProgram(this.programIndex);
 
+    if (this.texture && this.texture.image) {
+      this.gl.pixelStorei(this.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
+      this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA);
+    } else {
+      this.gl.pixelStorei(this.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
+      this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+    }
     // Turn on the attribute
     this.gl.enableVertexAttribArray(locations.a_position);
 

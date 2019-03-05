@@ -459,7 +459,12 @@ class Diagram {
 
   updateHTMLElementTie() {
     if (this.elements != null) {
-      this.elements.updateHTMLElementTie(this.pixelToDiagramSpaceTransform, this.canvasLow);
+      this.elements.updateHTMLElementTie(
+        this.pixelToDiagramSpaceTransform,
+        this.diagramToPixelSpaceScale,
+        this.diagramToGLSpaceTransform.m(),
+        this.canvasLow,
+      );
     }
   }
 
