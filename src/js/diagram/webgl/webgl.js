@@ -110,6 +110,7 @@ class WebGLInstance {
     [name: string]: {
       glTexture: WebGLTexture;
       index: number;
+      type: 'image' | 'canvasText';
     };
   };
   programs: Array<{
@@ -119,11 +120,16 @@ class WebGLInstance {
     program: WebGLProgram;
   }>;
 
-  addTexture(id: string, glTexture: WebGLTexture) {
+  addTexture(
+    id: string,
+    glTexture: WebGLTexture,
+    type: 'image' | 'canvasText',
+  ) {
     const nextIndex = Object.keys(this.textures).length;
     this.textures[id] = {
       glTexture,
       index: nextIndex,
+      type,
     };
     return nextIndex;
   }

@@ -70,9 +70,12 @@ class PolygonFilled extends VertexObject {
     }
 
     if (textureLocation) {
-      this.texture = {};
-      this.texture.src = textureLocation;
-      this.texture.id = textureLocation;
+      this.texture = {
+        id: textureLocation,
+        src: textureLocation,
+        type: 'image',
+        points: [],
+      };
 
       this.createTextureMap(
         -this.radius * 1.01 + center.x,
