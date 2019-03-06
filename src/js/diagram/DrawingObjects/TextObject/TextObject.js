@@ -222,7 +222,6 @@ class TextObject extends DrawingObject {
       ${Math.floor(color[1] * 255)},
       ${Math.floor(color[2] * 255)},
       ${Math.floor(color[3] * 255)})`;
-
     ctx.save();
 
     // First convert pixel space to a zoomed in pixel space with the same

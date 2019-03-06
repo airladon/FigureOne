@@ -175,7 +175,7 @@ export default class DiagramPrimatives {
   //   );
   // }
 
-  textNew(options: Object) {
+  textGL(options: Object) {
     return Text(
       this.webgl,
       this.limits,
