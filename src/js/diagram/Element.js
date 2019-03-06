@@ -585,6 +585,7 @@ class DiagramElement {
       tieToElement = this.tieToHTML.element;
     }
     if (tieToElement != null) {
+      console.log('tieing', this.name)
       const tie = tieToElement.getBoundingClientRect();
       const canvas = diagramCanvas.getBoundingClientRect();
       const diagram = this.diagramLimits;
@@ -678,23 +679,12 @@ class DiagramElement {
         center.x - scaleX * (this.tieToHTML.window.left + this.tieToHTML.window.width / 2),
         center.y - scaleY * (this.tieToHTML.window.bottom + this.tieToHTML.window.height / 2),
       );
-    }
 
-    const { drawingObject } = this;
-    // if (this.name === 'c') {
-    //   console.log("enter tie up", this.name)
-    // }
-    if (drawingObject != null) {
-      if (drawingObject.type === 'vertexText') {
-        console.log("udpate draw text")
-        const pixelToVertexScale = this.getPixelToVertexSpaceScale();
-        drawingObject.drawTextIntoBuffer(
-          this.diagramTransforms.diagramToPixel.m()[0],
-          new Point(pixelToVertexScale.x, Math.abs(pixelToVertexScale.y)),
-          // new Point(pixelToVertexScale.x * this.getScale().x, Math.abs(pixelToVertexScale.y * this.getScale().y)),
-        );
-      }
+      this.setFirstTransform(this.getParentLastDrawTransform());
     }
+  }
+
+  setFirstTransform() {
   }
 
   // Calculate the next transform due to a progressing animation
@@ -2213,6 +2203,14 @@ class DiagramElement {
     return new Point(scaleX, scaleY);
   }
 
+  getVertexToPixelSpaceScale() {
+    const pixelToVertexSpaceScale = this.getPixelToVertexSpaceScale();
+    return new Point(
+      1 / pixelToVertexSpaceScale.x,
+      1 / pixelToVertexSpaceScale.y,
+    );
+  }
+
   getDiagramPositionInVertexSpace(diagramPosition: Point) {
     return diagramPosition.transformBy(this.diagramSpaceToVertexSpaceTransformMatrix());
   }
@@ -2224,6 +2222,14 @@ class DiagramElement {
       this.lastDrawTransform.order.length - 2,
     ));
     return m2.inverse(t.matrix());
+  }
+
+  vertexToDiagramSpaceTransformMatrix() {
+    const t = new Transform(this.lastDrawTransform.order.slice(
+      0,
+      this.lastDrawTransform.order.length - 2,
+    ));
+    return t.matrix();
   }
 
   setDiagramPosition(diagramPosition: Point) {
@@ -2462,6 +2468,26 @@ class DiagramElementPrimative extends DiagramElement {
       primative.transform = transform._dup();
     }
     return primative;
+  }
+
+  resize() {
+    if (this.drawingObject.type === 'vertexText') {
+      console.log("udpate draw text")
+      const pixelToVertexScale = this.getPixelToVertexSpaceScale();
+      console.log(
+        this.name,
+        this.transform,
+        this.lastDrawTransform,
+      );
+      const diagramSpaceToVertexSpaceXScale = this.diagramSpaceToVertexSpaceTransformMatrix()[0];
+      console.log(diagramSpaceToVertexSpaceXScale)
+      this.drawingObject.drawTextIntoBuffer(
+        this.diagramTransforms.diagramToPixel.m()[0],
+        new Point(pixelToVertexScale.x, Math.abs(pixelToVertexScale.y)),
+        this.vertexToDiagramSpaceTransformMatrix()[0],
+        // this.lastDrawTransform.m()[0],
+      );
+    }
   }
 
   setColor(color: Array<number>) {
@@ -2948,6 +2974,13 @@ class DiagramElementCollection extends DiagramElement {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       element.resizeHtmlObject();
+    }
+  }
+
+  resize() {
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.resize();
     }
   }
 
