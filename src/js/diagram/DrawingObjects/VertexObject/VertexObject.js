@@ -348,6 +348,7 @@ class VertexObject extends DrawingObject {
     if (texture) {
       this.gl.uniform1i(locations.u_use_texture, 1);
       const { index } = this.webgl.textures[texture.id];
+      // console.log(texture.id, index, this.webgl.textures)
       this.gl.uniform1i(locations.u_texture, index);
     } else {
       this.gl.uniform1i(locations.u_use_texture, 0);

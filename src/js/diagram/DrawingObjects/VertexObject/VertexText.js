@@ -7,7 +7,7 @@ import WebGLInstance from '../../webgl/webgl';
 import VertexObject from './VertexObject';
 import { generateUniqueId, joinObjects } from '../../../tools/tools';
 import { round } from '../../../tools/math';
-import { identity } from '../../../tools/m2';
+// import { identity } from '../../../tools/m2';
 
 type TypeVertexInputTextOptions = {
   text: ?string;
@@ -19,15 +19,15 @@ type TypeVertexInputTextOptions = {
   alignV: ?'top' | 'bottom' | 'middle' | 'baseline',
 };
 
-type TypeTextOptions = {
-  text: string;
-  size: number;
-  family: string;
-  weight: number;
-  style: 'normal' | 'italic',
-  alignH: 'left' | 'center' | 'right',
-  alignV: 'top' | 'bottom' | 'middle' | 'baseline',
-};
+// type TypeTextOptions = {
+//   text: string;
+//   size: number;
+//   family: string;
+//   weight: number;
+//   style: 'normal' | 'italic',
+//   alignH: 'left' | 'center' | 'right',
+//   alignV: 'top' | 'bottom' | 'middle' | 'baseline',
+// };
 
 class VertexText extends VertexObject {
   glPrimitive: number;  // WebGL primitive used
@@ -76,7 +76,7 @@ class VertexText extends VertexObject {
     this.style = options.style;
     this.weight = options.weight;
     this.canvas = document.createElement('canvas');
-    this.canvas.id = 'asdf';
+    this.canvas.id = options.id;
     this.ctx = this.canvas.getContext('2d');
     this.texture = {
       id: options.id,
@@ -123,11 +123,11 @@ class VertexText extends VertexObject {
     this.calcAscentDescent();
 
     this.points = [];
-    // this.border = [[]];
+    this.border = [[]];
     points.forEach((point) => {
       this.points.push(point.x);
       this.points.push(point.y);
-      // this.border[0].push(point);
+      this.border[0].push(point);
     });
 
     const { texture } = this;
@@ -228,7 +228,7 @@ class VertexText extends VertexObject {
     this.ctx.textAlign = 'left';
     this.ctx.textBaseline = 'alphabetic';
     this.ctx.fillStyle = 'white';
-    this.ctx.fillStyle = 'red';   // debug only
+    this.ctx.fillStyle = 'rgba(200,200,200,255)';   // debug only
 
     const startX = pixelFontSize * hBuffer / 2;
     const baselineHeightFromBottom = 0.25;

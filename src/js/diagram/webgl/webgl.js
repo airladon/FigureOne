@@ -125,13 +125,21 @@ class WebGLInstance {
     glTexture: WebGLTexture,
     type: 'image' | 'canvasText',
   ) {
-    const nextIndex = Object.keys(this.textures).length;
+    if (this.textures[id] && this.textures[id].glTexture != null) {
+      return this.textures[id].index;
+    }
+    let index = 0;
+    if (this.textures[id]) {
+      index = this.textures[id].index;
+    } else {
+      index = Object.keys(this.textures).length;
+    }
     this.textures[id] = {
       glTexture,
-      index: nextIndex,
+      index,
       type,
     };
-    return nextIndex;
+    return index;
   }
 
   getProgram(
