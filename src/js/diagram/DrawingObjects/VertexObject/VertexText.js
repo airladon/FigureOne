@@ -123,12 +123,17 @@ class VertexText extends VertexObject {
     this.calcAscentDescent();
 
     this.points = [];
-    this.border = [[]];
     points.forEach((point) => {
       this.points.push(point.x);
       this.points.push(point.y);
-      this.border[0].push(point);
     });
+
+    this.border = [[
+      new Point(start.x, -this.descent),
+      new Point(start.x, this.ascent),
+      new Point(start.x + width, this.ascent),
+      new Point(start.x + width, -this.descent),
+    ]];
 
     const { texture } = this;
     if (texture != null) {
@@ -228,7 +233,8 @@ class VertexText extends VertexObject {
     this.ctx.textAlign = 'left';
     this.ctx.textBaseline = 'alphabetic';
     this.ctx.fillStyle = 'white';
-    this.ctx.fillStyle = 'rgba(200,200,200,255)';   // debug only
+    // this.ctx.fillStyle = 'rgba(200,200,200,255)';   // debug only
+    this.ctx.fillStyle = 'red';
 
     const startX = pixelFontSize * hBuffer / 2;
     const baselineHeightFromBottom = 0.25;
