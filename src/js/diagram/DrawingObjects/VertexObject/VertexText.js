@@ -38,7 +38,7 @@ class VertexText extends VertexObject {
   diagramToPixelSpaceScale: Point;
   diagramToGLSpaceTransformMatrix: Array<number>;
   text: string;
-  size: number;
+  size: number | string;
   family: string;
   weight: number;
   style: 'normal' | 'italic';
@@ -55,7 +55,7 @@ class VertexText extends VertexObject {
 
     const defaultTextOptions = {
       text: 'DEFAULT_TEXT',
-      size: 20,             // pixels
+      size: '20px',               // Text in pixels, or in vertex space units.
       family: 'Helvetica',
       style: 'normal',
       weight: 400,
@@ -86,8 +86,6 @@ class VertexText extends VertexObject {
   resizeText(
     pixelToVertexSpaceScale: Point = new Point(1, 1),
   ) {
-    // const width = this.canvas.width * pixelToVertexSpaceScale.x * vertexSpaceScale.x;
-    // const height = this.canvas.height * pixelToVertexSpaceScale.y * vertexSpaceScale.y;
     const width = this.canvas.width * pixelToVertexSpaceScale.x;
     const height = this.canvas.height * pixelToVertexSpaceScale.y;
 
@@ -138,12 +136,13 @@ class VertexText extends VertexObject {
     }
   }
 
+  // If font size is defined in pixels, then the size will always be the size
+  // in pixels independent of how the diagram window or scaling changes
+  // If the font size is defined in vertex space units, then the font size
+  // will always be scaled to look like the vertex space size, but a new canvas
+  // will be drawn each time to minimize aliasing.
   drawTextIntoBuffer(
-    diagramToPixelSpaceXScale: number = 1,
     pixelToVertexSpaceScale: Point = new Point(1, 1),
-    // vertexSpaceXScale: number = 1,
-    diagramToVertexSpaceXScale: number = 1,
-    vertexToPixelSpaceScale: Point = new Point(1, 1),
   ) {
     let pixelFontSize = 20;
     if (typeof this.size === 'string' && this.size.endsWith('px')) {
@@ -155,13 +154,13 @@ class VertexText extends VertexObject {
       } else {
         diagramFontSize = this.size;
       }
-      pixelFontSize = round(diagramFontSize * diagramToPixelSpaceXScale * diagramToVertexSpaceXScale, 0);
+      pixelFontSize = round(diagramFontSize / pixelToVertexSpaceScale.x, 0);
     }
 
     if (pixelFontSize < 1) {
       pixelFontSize = 1;
     }
-    console.log(pixelFontSize, this.size, diagramToPixelSpaceXScale, diagramToVertexSpaceXScale)
+
     this.ctx.font = `${this.style} ${this.weight} ${pixelFontSize}px ${this.family}`;
     const hBuffer = 0.3;
     const width = this.ctx.measureText(this.text).width
