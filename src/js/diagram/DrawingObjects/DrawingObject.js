@@ -28,6 +28,7 @@ class DrawingObject {
   +change: (any, any) => void;
   onLoad: Function | null;   // Only used for drawing objects with asynchronous
   //                            loading (like textures)
+  type: string;
 
   constructor() {
     // this.numPoints = 0;
@@ -35,6 +36,7 @@ class DrawingObject {
     this.border = [[]];
     this.holeBorder = [[]];
     this.onLoad = null;
+    this.type = 'drawingObject';
   }
 
   _dup() {

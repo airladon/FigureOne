@@ -455,6 +455,7 @@ class Diagram {
     this.sizeHtmlText();
     this.elements.resizeHtmlObject();
     this.updateHTMLElementTie();
+    this.elements.resize();
     this.animateNextFrame();
   }
 
