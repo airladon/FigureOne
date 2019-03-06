@@ -569,14 +569,8 @@ class DiagramElement {
   // }
 
   updateHTMLElementTie(
-    // pixelSpaceToDiagramSpaceTransform: Transform,
-    // diagramToPixelSpaceScale: Point,
-    // diagramToGLSpaceTransformMatrix: Array<number>,
     diagramCanvas: HTMLElement,
   ) {
-    // Maybe not needed
-    
-
     // First get the HTML element
     let tieToElement;
     if (typeof this.tieToHTML.element === 'string') {
@@ -585,7 +579,6 @@ class DiagramElement {
       tieToElement = this.tieToHTML.element;
     }
     if (tieToElement != null) {
-      console.log('tieing', this.name)
       const tie = tieToElement.getBoundingClientRect();
       const canvas = diagramCanvas.getBoundingClientRect();
       const diagram = this.diagramLimits;
@@ -684,7 +677,8 @@ class DiagramElement {
     }
   }
 
-  setFirstTransform() {
+  // eslint-disable-next-line no-unused-vars, class-methods-use-this
+  setFirstTransform(parentTransform: Transform) {
   }
 
   // Calculate the next transform due to a progressing animation
