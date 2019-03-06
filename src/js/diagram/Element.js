@@ -2470,22 +2470,14 @@ class DiagramElementPrimative extends DiagramElement {
     return primative;
   }
 
+  // use this for any gl canvas resize events
   resize() {
+    // If gl canvas is resized, webgl text will need to be updated.
     if (this.drawingObject.type === 'vertexText') {
-      console.log("udpate draw text")
       const pixelToVertexScale = this.getPixelToVertexSpaceScale();
-      console.log(
-        this.name,
-        this.transform,
-        this.lastDrawTransform,
-      );
-      const diagramSpaceToVertexSpaceXScale = this.diagramSpaceToVertexSpaceTransformMatrix()[0];
-      console.log(diagramSpaceToVertexSpaceXScale)
+      // $FlowFixMe
       this.drawingObject.drawTextIntoBuffer(
-        this.diagramTransforms.diagramToPixel.m()[0],
         new Point(pixelToVertexScale.x, Math.abs(pixelToVertexScale.y)),
-        this.vertexToDiagramSpaceTransformMatrix()[0],
-        // this.lastDrawTransform.m()[0],
       );
     }
   }
