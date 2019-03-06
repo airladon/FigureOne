@@ -156,16 +156,24 @@ export class EquationNew extends DiagramElementCollection {
     }
     const defaultOptions = {
       color,
-      fontMath: new DiagramFont(
-        'Times New Roman',
-        'normal',
-        0.2, '200', 'left', 'alphabetic', color,
-      ),
-      fontText: new DiagramFont(
-        'Times New Roman',
-        'italic',
-        0.2, '200', 'left', 'alphabetic', color,
-      ),
+      fontMath: {
+        family: 'Times New Roman',
+        style: 'normal',
+        size: 0.2,
+        weight: 200,
+        alignH: 'left',
+        alignV: 'baseline',
+        color,
+      },
+      fontText: {
+        family: 'Times New Roman',
+        style: 'italic',
+        size: 0.2,
+        weight: '200',
+        alignH: 'left',
+        alignV: 'baseline',
+        color,
+      },
       position: new Point(0, 0),
       scale: 0.7,
       defaultFormAlignment: {
@@ -239,7 +247,7 @@ export class EquationNew extends DiagramElementCollection {
       //  2. font
       //  3. style
       //  4. fontMath or fontText based on actual text
-      let fontToUse: DiagramFont = this.eqn.fontMath;
+      let fontToUse = this.eqn.fontMath;
       if (options.text.match(/[A-Z,a-z]/)) {
         fontToUse = this.eqn.fontText;
       }
@@ -254,15 +262,27 @@ export class EquationNew extends DiagramElementCollection {
       if (options.font != null) {
         fontToUse = options.font;
       }
-      const p = this.shapes.txt(
-        options.text,
-        { position: new Point(0, 0), font: fontToUse },
+      const p = this.shapes.textNew(
+        {
+          text: options.text,
+          position: new Point(0, 0),
+          family: fontToUse.family,
+          style: fontToUse.style,
+          weight: fontToUse.weight,
+          size: fontToUse.size,
+          alignV: fontToUse.alignV,
+          alignH: fontToUse.alignH,
+          color: fontToUse.color,
+        },
+        {
+          color: options.color,
+        },
       );
-      if (options.color != null) {
-        p.setColor(options.color);
-      } else {
-        p.setColor(RGBToArray(p.drawingObject.text[0].font.color));
-      }
+      // if (options.color != null) {
+      //   p.setColor(options.color);
+      // } else {
+      //   p.setColor(RGBToArray(p.drawingObject.text[0].font.color));
+      // }
       return p;
     };
 
