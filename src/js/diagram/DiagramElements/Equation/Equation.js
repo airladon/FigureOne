@@ -273,6 +273,7 @@ export class EquationNew extends DiagramElementCollection {
           alignV: fontToUse.alignV,
           alignH: fontToUse.alignH,
           color: fontToUse.color,
+          transform: new Transform('equation element').scale(1, 1).translate(0, 0),
         },
         {
           color: options.color,
