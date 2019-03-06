@@ -102,12 +102,13 @@ class TextObject extends DrawingObject {
   border: Array<Array<Point>>;
   text: Array<DiagramText>;
   scalingFactor: number;
-  lastDraw: ?{
-    transform: Array<number>,
-    location: Point,
+  lastDrawTransform: Array<number>;
+  lastDraw: Array<{
+    x: number,
+    y: number,
     width: number,
     height: number,
-  };
+  }>;
 
   constructor(
     drawContext2D: DrawContext2D,
@@ -117,7 +118,8 @@ class TextObject extends DrawingObject {
     this.drawContext2D = drawContext2D;
     this.text = text;
     this.scalingFactor = 1;
-    this.lastDraw = null;
+    this.lastDraw = [];
+    this.lastDrawTransform = [];
     if (text.length > 0) {
       let minSize = this.text[0].font.size;
       this.text.forEach((t) => {
@@ -259,6 +261,7 @@ class TextObject extends DrawingObject {
     const totalT = m2.mul([sx, 0, tx, 0, sy, ty, 0, 0, 1], t);
     ctx.transform(totalT[0], totalT[3], totalT[1], totalT[4], totalT[2], totalT[5]);
 
+    this.lastDrawTransform = totalT.slice();
     // Fill in all the text
     this.text.forEach((diagramText) => {
       diagramText.font.set(ctx, scalingFactor);
@@ -267,21 +270,20 @@ class TextObject extends DrawingObject {
       } else {
         ctx.fillStyle = parentColor;
       }
-      const w = ctx.measureText(diagramText.text).width;
-      this.lastDraw = {
-        transform: totalT.slice(),
-        width: w * 2,
-        height: w * 2,
-        location: new Point(
-          diagramText.location.x * scalingFactor - w,
-          diagramText.location.y * -scalingFactor - w,
-        ),
-      };
-      // ctx.clearRect(
-      //   diagramText.location.x * scalingFactor - w,
-      //   diagramText.location.y * -scalingFactor - w,
-      //   w * 2, w * 2,
-      // );
+      // const w = ctx.measureText(diagramText.text).width;
+      // this.lastDraw.push({
+      //   width: w * 2,
+      //   height: w * 2,
+      //   x: diagramText.location.x * scalingFactor - w,
+      //   y: diagramText.location.y * -scalingFactor - w,
+      // });
+      this.recordLastDraw(
+        ctx,
+        diagramText,
+        scalingFactor,
+        diagramText.location.x * scalingFactor,
+        diagramText.location.y * -scalingFactor,
+      );
       ctx.fillText(
         diagramText.text,
         diagramText.location.x * scalingFactor,
@@ -291,21 +293,58 @@ class TextObject extends DrawingObject {
     ctx.restore();
   }
 
+  recordLastDraw(
+    ctx: CanvasRenderingContext2D,
+    diagramText: DiagramText,
+    scalingFactor: number,
+    x: number,
+    y: number,
+  ) {
+    const width = ctx.measureText(diagramText.text).width * 1.2;
+    const height = diagramText.font.size * scalingFactor * 1.2;
+    let bottom = y + height * 0.1;
+    let left = x - width * 0.1;
+    if (diagramText.font.alignV === 'baseline') {
+      bottom = y + height * 0.2;
+    } else if (diagramText.font.alignV === 'top') {
+      bottom = y + height;
+    } else if (diagramText.font.alignV === 'middle') {
+      bottom = y + height / 2;
+    }
+
+    if (diagramText.font.alignH === 'center') {
+      left -= width / 2;
+    } else if (diagramText.font.alignH === 'right') {
+      left -= width;
+    }
+
+    this.lastDraw.push({
+      width,
+      height: -height,
+      x: left,
+      y: bottom,
+    });
+    // console.log(this.lastDraw)
+  }
+
   clear() {
     const { lastDraw } = this;
-    if (lastDraw != null) {
+    if (lastDraw.length > 0) {
       const { ctx } = this.drawContext2D;
-      const t = lastDraw.transform;
+      const t = this.lastDrawTransform;
       ctx.save();
       ctx.transform(t[0], t[3], t[1], t[4], t[2], t[5]);
-      ctx.clearRect(
-        lastDraw.location.x,
-        lastDraw.location.y,
-        lastDraw.width,
-        lastDraw.height,
-      );
+      lastDraw.forEach((draw) => {
+        ctx.clearRect(
+          draw.x,
+          draw.y,
+          draw.width,
+          draw.height,
+        );
+      });
       ctx.restore();
     }
+    this.lastDraw = [];
   }
 
   getGLBoundaries(lastDrawTransformMatrix: Array<number>): Array<Array<Point>> {

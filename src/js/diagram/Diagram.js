@@ -760,31 +760,16 @@ class Diagram {
     this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
     this.webglHigh.gl.clearColor(0, 0, 0, 0);
     this.webglHigh.gl.clear(this.webglHigh.gl.COLOR_BUFFER_BIT);
+    const t = new Date().getTime();
     this.elements.clear();
+
     // if (this.draw2DLow) {
     //   this.draw2DLow.ctx.clearRect(
     //     0, 0, this.draw2DLow.ctx.canvas.width,
     //     this.draw2DLow.ctx.canvas.height,
     //   );
     // }
-    // if (this.draw2DLow) {
-    //   this.draw2DLow.ctx.clearRect(
-    //     0, 0, this.draw2DLow.ctx.canvas.width,
-    //     500,
-    //   );
-    //   this.draw2DLow.ctx.clearRect(
-    //     0, 500, this.draw2DLow.ctx.canvas.width,
-    //     1000,
-    //   );
-    //   this.draw2DLow.ctx.clearRect(
-    //     0, 1000, this.draw2DLow.ctx.canvas.width,
-    //     1500,
-    //   );
-    //   this.draw2DLow.ctx.clearRect(
-    //     0, 1500, this.draw2DLow.ctx.canvas.width,
-    //     2000,
-    //   );
-    // }
+    console.log('clear time', new Date().getTime() - t);
     // if (this.draw2DHigh) {
     //   this.draw2DHigh.ctx.clearRect(
     //     0, 0, this.draw2DHigh.ctx.canvas.width,
