@@ -232,9 +232,10 @@ class VertexText extends VertexObject {
     this.ctx.font = `${this.style} ${this.weight} ${pixelFontSize}px ${this.family}`;
     this.ctx.textAlign = 'left';
     this.ctx.textBaseline = 'alphabetic';
-    this.ctx.fillStyle = 'white';
+    // this.ctx.fillStyle = 'white';
+    this.ctx.fillStyle = 'black';
     // this.ctx.fillStyle = 'rgba(200,200,200,255)';   // debug only
-    this.ctx.fillStyle = 'red';
+    // this.ctx.fillStyle = 'blue';
 
     const startX = pixelFontSize * hBuffer / 2;
     const baselineHeightFromBottom = 0.25;

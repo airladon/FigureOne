@@ -59,7 +59,13 @@ const fragment = {
       + 'uniform sampler2D u_texture;'
       + 'varying vec2 v_texcoord;'
       + 'void main() {'
-        + 'gl_FragColor = texture2D(u_texture, v_texcoord) * u_color;'
+        + 'float a = texture2D(u_texture, v_texcoord).a;'
+        // + 'if ( a < 0.2 ) {'
+        //   + 'a = a / 1.2;'
+        // + '}'
+        // + 'gl_FragColor = vec4(u_color.rgb, min(a * 1.2, 1.0) * u_color.a);'
+        // + '}'
+        + 'gl_FragColor = a * u_color;'
       + '}',
     varNames: ['u_color', 'u_texture'],
   },

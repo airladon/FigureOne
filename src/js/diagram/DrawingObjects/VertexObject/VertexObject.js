@@ -296,10 +296,19 @@ class VertexObject extends DrawingObject {
       this.texture
       && this.webgl.textures[this.texture.id].type === 'canvasText'
     ) {
-      this.gl.pixelStorei(this.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
-      this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA);
-    } else {
+      // console.log('canvasText', this.webgl.textures[this.texture.id].glTexture)
+    console.log('not canvasText', this.texture.src)
+      // this.gl.pixelStorei(this.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+      // this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA);
       this.gl.pixelStorei(this.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
+      this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+    } else {
+      if (this.texture) {
+        console.log('not canvasText', this.texture.src)
+      } else {
+        console.log('not canvasText')
+      }
+      this.gl.pixelStorei(this.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
       this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
     }
     // Turn on the attribute
