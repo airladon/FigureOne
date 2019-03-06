@@ -233,7 +233,7 @@ class VertexText extends VertexObject {
     this.ctx.textAlign = 'left';
     this.ctx.textBaseline = 'alphabetic';
     // this.ctx.fillStyle = 'white';
-    this.ctx.fillStyle = 'black';
+    this.ctx.fillStyle = 'white';
     // this.ctx.fillStyle = 'rgba(200,200,200,255)';   // debug only
     // this.ctx.fillStyle = 'blue';
 

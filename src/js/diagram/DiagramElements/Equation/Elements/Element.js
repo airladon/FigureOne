@@ -67,7 +67,6 @@ class Element {
       // const t = content.lastDrawTransform._dup();
       // content.lastDrawTransform = content.transform._dup();
       const r = content.getRelativeVertexSpaceBoundingRect();
-      console.log(r, content.drawingObject.border, content.name)
       // content.lastDrawTransform = t;
       this.location = location._dup();
       this.scale = scale;

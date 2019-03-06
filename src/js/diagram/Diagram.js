@@ -760,27 +760,45 @@ class Diagram {
     this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
     this.webglHigh.gl.clearColor(0, 0, 0, 0);
     this.webglHigh.gl.clear(this.webglHigh.gl.COLOR_BUFFER_BIT);
-    if (this.draw2DLow) {
-      this.draw2DLow.ctx.clearRect(
-        0, 0, this.draw2DLow.ctx.canvas.width,
-        this.draw2DLow.ctx.canvas.height,
-      );
-    }
-    if (this.draw2DHigh) {
-      this.draw2DHigh.ctx.clearRect(
-        0, 0, this.draw2DHigh.ctx.canvas.width,
-        this.draw2DHigh.ctx.canvas.height,
-      );
-    }
+    // if (this.draw2DLow) {
+    //   this.draw2DLow.ctx.clearRect(
+    //     0, 0, this.draw2DLow.ctx.canvas.width,
+    //     this.draw2DLow.ctx.canvas.height,
+    //   );
+    // }
+    // if (this.draw2DLow) {
+    //   this.draw2DLow.ctx.clearRect(
+    //     0, 0, this.draw2DLow.ctx.canvas.width,
+    //     500,
+    //   );
+    //   this.draw2DLow.ctx.clearRect(
+    //     0, 500, this.draw2DLow.ctx.canvas.width,
+    //     1000,
+    //   );
+    //   this.draw2DLow.ctx.clearRect(
+    //     0, 1000, this.draw2DLow.ctx.canvas.width,
+    //     1500,
+    //   );
+    //   this.draw2DLow.ctx.clearRect(
+    //     0, 1500, this.draw2DLow.ctx.canvas.width,
+    //     2000,
+    //   );
+    // }
+    // if (this.draw2DHigh) {
+    //   this.draw2DHigh.ctx.clearRect(
+    //     0, 0, this.draw2DHigh.ctx.canvas.width,
+    //     this.draw2DHigh.ctx.canvas.height,
+    //   );
+    // }
   }
 
   draw(now: number): void {
     // if (this.globalAnimation.previousNow == null) {
     //   this.globalAnimation.previousNow = now
     // }
-    // const t = new Date().getTime();
-    // console.log('time since last draw:', t - this.globalAnimation.diagramDrawStart)
-    // this.globalAnimation.diagramDrawStart = t;
+    const t = new Date().getTime();
+    console.log('time since last draw:', t - this.globalAnimation.diagramDrawStart)
+    this.globalAnimation.diagramDrawStart = t;
 
     this.drawQueued = false;
     this.clearContext();
@@ -808,7 +826,7 @@ class Diagram {
     }
     // console.log(performance.now() - t1)
     // console.log(Date.now() - measure)
-    // console.log('draw end', new Date().getTime() - this.globalAnimation.diagramDrawStart);
+    console.log('draw end', new Date().getTime() - this.globalAnimation.diagramDrawStart);
   }
 
   animateNextFrame() {

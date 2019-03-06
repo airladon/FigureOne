@@ -156,24 +156,16 @@ export class EquationNew extends DiagramElementCollection {
     }
     const defaultOptions = {
       color,
-      fontMath: {
-        family: 'Times New Roman',
-        style: 'normal',
-        size: 0.2,
-        weight: 700,
-        alignH: 'left',
-        alignV: 'baseline',
-        color,
-      },
-      fontText: {
-        family: 'Times New Roman',
-        style: 'italic',
-        size: 0.2,
-        weight: 700,
-        alignH: 'left',
-        alignV: 'baseline',
-        color,
-      },
+      fontMath: new DiagramFont(
+        'Times New Roman',
+        'normal',
+        0.2, '200', 'left', 'alphabetic', color,
+      ),
+      fontText: new DiagramFont(
+        'Times New Roman',
+        'italic',
+        0.2, '200', 'left', 'alphabetic', color,
+      ),
       position: new Point(0, 0),
       scale: 0.7,
       defaultFormAlignment: {
@@ -247,7 +239,7 @@ export class EquationNew extends DiagramElementCollection {
       //  2. font
       //  3. style
       //  4. fontMath or fontText based on actual text
-      let fontToUse = this.eqn.fontMath;
+      let fontToUse: DiagramFont = this.eqn.fontMath;
       if (options.text.match(/[A-Z,a-z]/)) {
         fontToUse = this.eqn.fontText;
       }
@@ -262,22 +254,9 @@ export class EquationNew extends DiagramElementCollection {
       if (options.font != null) {
         fontToUse = options.font;
       }
-      const p = this.shapes.textNew(
-        {
-          text: options.text,
-          position: new Point(0, 0),
-          family: fontToUse.family,
-          style: fontToUse.style,
-          weight: fontToUse.weight,
-          size: fontToUse.size,
-          alignV: fontToUse.alignV,
-          alignH: fontToUse.alignH,
-          color: fontToUse.color,
-          transform: new Transform('equation element').scale(1, 1).translate(0, 0),
-        },
-        {
-          color: options.color,
-        },
+      const p = this.shapes.txt(
+        options.text,
+        { position: new Point(0, 0), font: fontToUse },
       );
       // if (options.color != null) {
       //   p.setColor(options.color);
