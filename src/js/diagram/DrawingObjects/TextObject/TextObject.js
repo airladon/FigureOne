@@ -102,6 +102,12 @@ class TextObject extends DrawingObject {
   border: Array<Array<Point>>;
   text: Array<DiagramText>;
   scalingFactor: number;
+  lastDraw: ?{
+    transform: Array<number>,
+    location: Point,
+    width: number,
+    height: number,
+  };
 
   constructor(
     drawContext2D: DrawContext2D,
@@ -111,6 +117,7 @@ class TextObject extends DrawingObject {
     this.drawContext2D = drawContext2D;
     this.text = text;
     this.scalingFactor = 1;
+    this.lastDraw = null;
     if (text.length > 0) {
       let minSize = this.text[0].font.size;
       this.text.forEach((t) => {
@@ -255,13 +262,26 @@ class TextObject extends DrawingObject {
     // Fill in all the text
     this.text.forEach((diagramText) => {
       diagramText.font.set(ctx, scalingFactor);
-
       if (diagramText.font.color) {
         ctx.fillStyle = diagramText.font.color;
       } else {
         ctx.fillStyle = parentColor;
       }
-
+      const w = ctx.measureText(diagramText.text).width;
+      this.lastDraw = {
+        transform: totalT.slice(),
+        width: w * 2,
+        height: w * 2,
+        location: new Point(
+          diagramText.location.x * scalingFactor - w,
+          diagramText.location.y * -scalingFactor - w,
+        ),
+      };
+      // ctx.clearRect(
+      //   diagramText.location.x * scalingFactor - w,
+      //   diagramText.location.y * -scalingFactor - w,
+      //   w * 2, w * 2,
+      // );
       ctx.fillText(
         diagramText.text,
         diagramText.location.x * scalingFactor,
@@ -269,6 +289,23 @@ class TextObject extends DrawingObject {
       );
     });
     ctx.restore();
+  }
+
+  clear() {
+    const { lastDraw } = this;
+    if (lastDraw != null) {
+      const { ctx } = this.drawContext2D;
+      const t = lastDraw.transform;
+      ctx.save();
+      ctx.transform(t[0], t[3], t[1], t[4], t[2], t[5]);
+      ctx.clearRect(
+        lastDraw.location.x,
+        lastDraw.location.y,
+        lastDraw.width,
+        lastDraw.height,
+      );
+      ctx.restore();
+    }
   }
 
   getGLBoundaries(lastDrawTransformMatrix: Array<number>): Array<Array<Point>> {
