@@ -1091,6 +1091,10 @@ class DiagramElement {
   //   return time;
   // }
 
+  // Used only to clear 2D context
+  clear() {
+  }
+
   setColor(color: Array<number>) {
     this.color = color.slice();
   }
@@ -2464,6 +2468,12 @@ class DiagramElementPrimative extends DiagramElement {
     return primative;
   }
 
+  clear() {
+    if (this.drawingObject instanceof TextObject) {
+      this.drawingObject.clear();
+    }
+  }
+
   // use this for any gl canvas resize events
   resize() {
     // If gl canvas is resized, webgl text will need to be updated.
@@ -2967,6 +2977,13 @@ class DiagramElementCollection extends DiagramElement {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       element.resize();
+    }
+  }
+
+  clear() {
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.clear();
     }
   }
 

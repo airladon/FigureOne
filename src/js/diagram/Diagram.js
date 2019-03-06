@@ -760,6 +760,7 @@ class Diagram {
     this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
     this.webglHigh.gl.clearColor(0, 0, 0, 0);
     this.webglHigh.gl.clear(this.webglHigh.gl.COLOR_BUFFER_BIT);
+    this.elements.clear();
     // if (this.draw2DLow) {
     //   this.draw2DLow.ctx.clearRect(
     //     0, 0, this.draw2DLow.ctx.canvas.width,
