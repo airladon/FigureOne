@@ -54,6 +54,26 @@ export type TypeSpaceTransforms = {
 // It is then transformed by the element colleciton
 // It is then transformed by the diagram
 // it is then transformed into GL Space
+//
+// Diagram elements can also be rendered to an image in a HTML 2D canvas
+// element. To do so, pass in:
+//    - Diagram Element (primative or collection) to render
+//    - HTML element (which is a 2D canvas)
+//    - Window of diagram to render
+//    - Window scaling (how does the window fit within the HTML Element)
+//      - fit: diagram units will be scaled so that diagram window limits
+//             aspect ratio fits within the element aspect ratio
+//      - 1em: diagram units will be scaled so 0.2 diagram units (default font
+//             size) looks like 1em of the html element font size in pixels
+//      - 10px: diagram units will be scaled so that the max diagram window
+//              limit will be the pixel count
+//      - strech: diagram units will be scaled so that the diagram window
+//                limits will be stretched to fit the html element width
+//                and height
+// Then the process is:
+//    - html element size in pixels and aspect ratio found
+//    - html element size in gl coordinates found
+//    - 
 class Diagram {
   canvasLow: HTMLCanvasElement;
   canvasHigh: HTMLCanvasElement;
@@ -108,6 +128,8 @@ class Diagram {
     diagramToCSSPercent: Transform;
   };
 
+  scrolled: boolean;
+  oldScrollY: number;
   // draw2DFigures: Object;
 
   // glToDiagramSpaceTransform: Transform;
@@ -150,6 +172,8 @@ class Diagram {
       // fragmentShader: 'simple',
       fontScale: 1,
     };
+    this.scrolled = false;
+    this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
       htmlId, backgroundColor, limits,
@@ -810,6 +834,27 @@ class Diagram {
     // if (this.globalAnimation.previousNow == null) {
     //   this.globalAnimation.previousNow = now
     // }
+    // console.log(this.scrolled)
+    if (this.scrolled) {
+      if (Math.abs(window.pageYOffset - this.oldScrollY) > this.webglLow.gl.canvas.clientHeight / 8) {
+        let newTop = window.pageYOffset - this.webglLow.gl.canvas.clientHeight / 8;
+        if (newTop < 0) {
+          newTop = 0;
+        }
+        console.log('***********************************RESIZING***********************************')
+        this.webglLow.gl.canvas.style.top = `${newTop}px`;
+        this.draw2DLow.canvas.style.top = `${newTop}px`;
+        this.resize();
+        this.oldScrollY = window.pageYOffset;
+      }
+      // this.resize();
+      
+      // console.log(this.webgl)
+      this.scrolled = false;
+    }
+    if (this.drawQueued === false) {
+      return;
+    }
     const t = new Date().getTime();
     console.log('time since last draw:', t - this.globalAnimation.diagramDrawStart)
     this.globalAnimation.diagramDrawStart = t;
@@ -843,9 +888,11 @@ class Diagram {
     console.log('draw end', new Date().getTime() - this.globalAnimation.diagramDrawStart);
   }
 
-  animateNextFrame() {
+  animateNextFrame(draw: boolean = true) {
     if (!this.drawQueued) {
-      this.drawQueued = true;
+      if (draw) {
+        this.drawQueued = true;
+      }
       this.globalAnimation.queueNextFrame(this.draw.bind(this));
     }
   }
