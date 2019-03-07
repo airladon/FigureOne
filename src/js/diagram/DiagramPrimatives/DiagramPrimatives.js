@@ -65,7 +65,7 @@ export type TypeTextOptions = {
   hAlign?: string;
   vAlign?: string;
   color?: Array<number>;
-}
+};
 
 export default class DiagramPrimatives {
   webgl: WebGLInstance;
@@ -74,10 +74,12 @@ export default class DiagramPrimatives {
   limits: Rect;
   spaceTransforms: TypeSpaceTransforms;
   animateNextFrame: Function;
+  draw2DFigures: Object;
 
   constructor(
     webgl: WebGLInstance,
     draw2D: DrawContext2D,
+    // draw2DFigures: Object,
     htmlCanvas: HTMLElement,
     limits: Rect,
     spaceTransforms: TypeSpaceTransforms,
@@ -89,6 +91,7 @@ export default class DiagramPrimatives {
     this.limits = limits;
     this.animateNextFrame = animateNextFrame;
     this.spaceTransforms = spaceTransforms;
+    // this.draw2DFigures = draw2DFigures;
   }
 
   polyLineLegacy(
@@ -196,6 +199,7 @@ export default class DiagramPrimatives {
       vAlign: 'middle',
       offset: new Point(0, 0),    // vertex space offset
       color: [1, 0, 0, 1],
+      // draw2D: this.draw2D,
     };
     let options;
     if (typeof textOrOptions === 'string') {
@@ -205,6 +209,12 @@ export default class DiagramPrimatives {
     } else {
       options = joinObjects({}, defaultOptions, textOrOptions, ...optionsIn);
     }
+
+    // if (typeof options.draw2D === 'string') {
+    //   if (options.draw2D in this.draw2DFigures) {
+    //     options.draw2D = this.draw2DFigures[options.draw2D];
+    //   }
+    // }
     // const optionsToUse = joinObjects(defaultOptions, ...options);
     const o = options;
     const { text } = o;
