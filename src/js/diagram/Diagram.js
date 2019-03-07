@@ -108,6 +108,8 @@ class Diagram {
     diagramToCSSPercent: Transform;
   };
 
+  // draw2DFigures: Object;
+
   // glToDiagramSpaceTransform: Transform;
   // diagramToGLSpaceTransform: Transform;
   // pixelToDiagramSpaceTransform: Transform;
@@ -229,6 +231,16 @@ class Diagram {
         this.draw2DHigh = new DrawContext2D(this.textCanvasHigh);
       }
     }
+
+    // for (let i = 0; i < canvas2Ds.length; i += 1) {
+    //   const canvas = canvas2Ds[i];
+    //   console.log(i, canvas)
+    //   if (canvas instanceof HTMLCanvasElement) {
+    //     const draw2D = new DrawContext2D(canvas);
+    //     const { id } = canvas;
+    //     this.draw2DFigures[id] = draw2D;
+    //   }
+    // }
     if (optionsToUse.gestureCanvas != null) {
       const gestureCanvas = document.getElementById(optionsToUse.gestureCanvas);
       if (gestureCanvas != null) {
@@ -290,6 +302,21 @@ class Diagram {
     }
   }
 
+  // getFigureCanvases() {
+  //   const canvas2Ds = document.getElementsByClassName('single_page_lesson__figure');
+  //   console.log(canvas2Ds, canvas2Ds.length)
+  //   this.draw2DFigures = {};
+  //   // var list= document.getElementsByClassName("events");
+  //   [].forEach.call(canvas2Ds, (canvas) => {
+  //     console.log(canvas)
+  //     if (canvas instanceof HTMLCanvasElement) {
+  //       const draw2D = new DrawContext2D(canvas);
+  //       const { id } = canvas;
+  //       this.draw2DFigures[id] = draw2D;
+  //     }
+  //   });
+  // }
+
   addElements(
     rootCollection: DiagramElementCollection,
     layout: Array<TypeAddElementObject>,
@@ -314,6 +341,7 @@ class Diagram {
     }
     return new DiagramPrimatives(
       webgl, draw2D,
+      // this.draw2DFigures,
       this.htmlCanvas,
       this.limits,
       this.spaceTransforms,

@@ -1,7 +1,7 @@
 // @flow
 
 import * as m2 from '../../../tools/m2';
-import { Point } from '../../../tools/g2';
+import { Point, Rect } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
 import DrawContext2D from '../../DrawContext2D';
 import { duplicateFromTo } from '../../../tools/tools';
@@ -120,6 +120,7 @@ class TextObject extends DrawingObject {
     this.scalingFactor = 1;
     this.lastDraw = [];
     this.lastDrawTransform = [];
+    this.glRect = new Rect(-1, -1, 2, 2);
     if (text.length > 0) {
       let minSize = this.text[0].font.size;
       this.text.forEach((t) => {
