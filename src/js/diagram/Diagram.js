@@ -497,12 +497,12 @@ class Diagram {
     this.setSpaceTransforms();
   }
 
-  renderToCanvas(canvas: HTMLCanvasElement) {
+  renderToCanvas(canvas: HTMLCanvasElement, x, y, width, height) {
     this.draw(-1);
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(this.webglLow.gl.canvas, 0, 0);
-    ctx.drawImage(this.draw2DLow.canvas, 0, 0);
+    ctx.drawImage(this.webglLow.gl.canvas, x, y, width, height, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(this.draw2DLow.canvas, x, y, width, height, 0, 0, canvas.width, canvas.height);
   }
 
   resize() {
