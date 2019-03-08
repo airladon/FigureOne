@@ -130,6 +130,7 @@ class Diagram {
 
   scrolled: boolean;
   oldScrollY: number;
+  lastDrawTime: number;
   // draw2DFigures: Object;
 
   // glToDiagramSpaceTransform: Transform;
@@ -291,6 +292,7 @@ class Diagram {
     // }
     this.updateLimits(limits);
     this.drawQueued = false;
+    this.lastDrawTime = 0;
     this.inTransition = false;
     // console.log(this.limits)
     this.beingMovedElements = [];
@@ -493,6 +495,14 @@ class Diagram {
   updateLimits(limits: Rect) {
     this.limits = limits._dup();
     this.setSpaceTransforms();
+  }
+
+  renderToCanvas(canvas: HTMLCanvasElement) {
+    this.draw(-1);
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(this.webglLow.gl.canvas, 0, 0);
+    ctx.drawImage(this.draw2DLow.canvas, 0, 0);
   }
 
   resize() {
@@ -812,16 +822,16 @@ class Diagram {
     this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
     this.webglHigh.gl.clearColor(0, 0, 0, 0);
     this.webglHigh.gl.clear(this.webglHigh.gl.COLOR_BUFFER_BIT);
-    const t = new Date().getTime();
+    // const t = new Date().getTime();
     this.elements.clear();
-
+    // console.log('clear time', new Date().getTime() - t);
     // if (this.draw2DLow) {
     //   this.draw2DLow.ctx.clearRect(
     //     0, 0, this.draw2DLow.ctx.canvas.width,
     //     this.draw2DLow.ctx.canvas.height,
     //   );
     // }
-    console.log('clear time', new Date().getTime() - t);
+    
     // if (this.draw2DHigh) {
     //   this.draw2DHigh.ctx.clearRect(
     //     0, 0, this.draw2DHigh.ctx.canvas.width,
@@ -831,21 +841,54 @@ class Diagram {
   }
 
   draw(now: number): void {
+    if (now === -1) {
+      now = this.lastDrawTime;
+    } else {
+      this.lastDrawTime = now;
+    }
+
     // if (this.globalAnimation.previousNow == null) {
     //   this.globalAnimation.previousNow = now
     // }
     // console.log(this.scrolled)
+    // if (this.webglLow.gl.canvas.style.display === 'none') {
+    //   this.webglLow.gl.canvas.style.display = 'block';
+    //   this.draw2DLow.canvas.style.display = 'block';
+    //   this.resize();
+    //   console.log('unhide')
+    // }
+    
+    
     if (this.scrolled) {
       if (Math.abs(window.pageYOffset - this.oldScrollY) > this.webglLow.gl.canvas.clientHeight / 8) {
-        let newTop = window.pageYOffset - this.webglLow.gl.canvas.clientHeight / 8;
+        const viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        let newTop = window.pageYOffset + viewPortHeight / 2 - this.webglLow.gl.canvas.clientHeight / 2;
+
+        // console.log('viewport', viewPortHeight)
+        // console.log('gl canvas height', this.webglLow.gl.canvas.clientHeight)
+        // console.log('old scroll', this.oldScrollY)
+        // console.log('gl canvas position', this.webglLow.gl.canvas.getBoundingClientRect().top)
+        // console.log('pageY Offset', window.pageYOffset)
+
+        // console.log(newTop), window.pageYOffset, viewPortHeight, this.webglLow.gl.canvas.clientHeight)
         if (newTop < 0) {
           newTop = 0;
         }
-        console.log('***********************************RESIZING***********************************')
+        const oldTop = this.webglLow.gl.canvas.style.top;
+        this.newTop = `${newTop}px`;
+        // this.webglLow.gl.canvas.style.opacity = '0';
+        // this.draw2DLow.canvas.style.opacity = '0';
+        // this.clearContext();
         this.webglLow.gl.canvas.style.top = `${newTop}px`;
         this.draw2DLow.canvas.style.top = `${newTop}px`;
         this.resize();
+        // this.webglLow.gl.canvas.style.top = oldTop;
+        // this.draw2DLow.canvas.style.top = oldTop;
+        // this.webglLow.gl.canvas.style.opacity = '1';
         this.oldScrollY = window.pageYOffset;
+        this.drawQueued = true;
+        this.changeTop = 1;
+        console.log('hide4')
       }
       // this.resize();
       
@@ -855,9 +898,9 @@ class Diagram {
     if (this.drawQueued === false) {
       return;
     }
-    const t = new Date().getTime();
-    console.log('time since last draw:', t - this.globalAnimation.diagramDrawStart)
-    this.globalAnimation.diagramDrawStart = t;
+    // const t = new Date().getTime();
+    // console.log('time since last draw:', t - this.globalAnimation.diagramDrawStart)
+    // this.globalAnimation.diagramDrawStart = t;
 
     this.drawQueued = false;
     this.clearContext();
@@ -883,9 +926,18 @@ class Diagram {
     if (this.elements.isMoving()) {
       this.animateNextFrame();
     }
-    // console.log(performance.now() - t1)
-    // console.log(Date.now() - measure)
-    console.log('draw end', new Date().getTime() - this.globalAnimation.diagramDrawStart);
+    
+    if (this.changeTop > 1) {
+      this.changeTop -= 1;
+    } else if (this.changeTop === 1) {
+      // this.webglLow.gl.canvas.style.opacity = '1';
+      // this.draw2DLow.canvas.style.opacity = '1';
+      // this.webglLow.gl.canvas.style.top = `${this.newTop}px`;
+      // this.draw2DLow.canvas.style.top = `${this.newTop}px`;
+      console.log('show4')
+      this.changeTop = 0;
+    }
+    // console.log('draw end', new Date().getTime() - this.globalAnimation.diagramDrawStart);
   }
 
   animateNextFrame(draw: boolean = true) {
