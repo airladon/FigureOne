@@ -500,10 +500,12 @@ class Diagram {
   renderToCanvas(
     canvas: HTMLCanvasElement,
     diagramWindow: Rect,
-    x,
-    y,
-    width,
-    height,
+    sx,
+    sy,
+    swidth,
+    sheight,
+    canvasWidth,
+    canvasHeight,
   ) {
     const glSpace = {
       x: { bottomLeft: -1, width: 2 },
@@ -517,9 +519,12 @@ class Diagram {
     this.draw(-1, windowToGL);
 
     const ctx = canvas.getContext('2d');
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(this.webglLow.gl.canvas, x, y, width, height, 0, 0, canvas.width, canvas.height);
-    ctx.drawImage(this.draw2DLow.canvas, x, y, width, height, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(this.webglLow.gl.canvas, sx, sy, swidth, sheight, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(this.draw2DLow.canvas, sx, sy, swidth, sheight, 0, 0, canvas.width*2, canvas.height*2);
+    console.log(canvas.width, canvas.height)
   }
 
   resize() {
