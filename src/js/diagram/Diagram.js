@@ -497,10 +497,59 @@ class Diagram {
     this.setSpaceTransforms();
   }
 
+  // Renders all tied elements in the top level of diagram.elements.
+  renderElementToTiedCanvas(elementName: string) {
+    // record visibility of top level elements
+    const currentVisibility = {};
+    Object.keys(this.elements.elements).forEach((name) => {
+      const element = this.elements.elements[name];
+      currentVisibility[name] = element.isShown;
+    });
+    console.log(currentVisibility)
+
+    // Hide all elements
+    Object.keys(this.elements.elements).forEach((name) => {
+      this.elements.elements[name].hide();
+    });
+
+    // Show the element to render
+    const elementToRender = this.elements.elements[elementName];
+    elementToRender.show();
+
+    // Move it to the origin and render
+    const oldPosition = elementToRender.getPosition();
+    elementToRender.setPosition(0, 0);
+    this.renderToCanvas(elementToRender.tieToHTML.element);
+
+    // reset its position
+    elementToRender.setPosition(oldPosition);
+    elementToRender.hide();
+
+    // show all elements that were shown previously (except element that was just rendered)
+    Object.keys(this.elements.elements).forEach((name) => {
+      const element = this.elements.elements[name];
+      if (name !== elementName && currentVisibility[name] === true) {
+        console.log('showing', name)
+        element.show();
+      } else {
+        element.hide();
+      }
+    });
+  }
+
   renderToCanvas(
-    // diagramElement: element;
-    htmlCanvas: HTMLCanvasElement,
+    htmlCanvasElementOrId: HTMLCanvasElement | string,
   ) {
+    let htmlCanvas = htmlCanvasElementOrId;
+    if (typeof htmlCanvasElementOrId === 'string') {
+      htmlCanvas = document.getElementById(htmlCanvasElementOrId);
+    }
+
+    if (!(htmlCanvas instanceof HTMLCanvasElement)) {
+      return;
+    }
+
+    this.drawQueued = true;
     this.draw(-1);
 
     const { ctx } = new DrawContext2D(htmlCanvas);
