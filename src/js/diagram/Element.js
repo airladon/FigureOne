@@ -3263,6 +3263,20 @@ class DiagramElementCollection extends DiagramElement {
     return elements;
   }
 
+  // getAllTiedElements() {
+  //   let elements = [];
+  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     if (element.tieToHTML.element != null) {
+  //       elements.push(element);
+  //     }
+  //     if (element instanceof DiagramElementCollection) {
+  //       elements = [...elements, ...element.getAllTiedElements()];
+  //     }
+  //   }
+  //   return elements;
+  // }
+
   // Get all ineractive elemnts, but only go as deep as a
   // DiagramElementColleciton if it is touchable or movable
   getAllCurrentlyInteractiveElements() {
