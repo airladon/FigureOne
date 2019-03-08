@@ -539,22 +539,32 @@ class Diagram {
 
     const canvasWidth = canvas.clientWidth / this.webglLow.gl.canvas.clientWidth * glWidth;
     const canvasHeight = canvas.clientHeight / this.webglLow.gl.canvas.clientHeight * glHeight;
-    const sx = glWidth / 2 - canvasWidth / 2;
-    const sy = glHeight / 2 - canvasHeight / 2;
-    const swidth = canvasWidth;
-    const sheight = canvasHeight;
+    const glx = glWidth / 2 - canvasWidth / 2;
+    const gly = glHeight / 2 - canvasHeight / 2;
+    const glwidth = canvasWidth;
+    const glheight = canvasHeight;
+
+    const tWidth = this.draw2DLow.canvas.width;
+    const tHeight = this.draw2DLow.canvas.height;
+
+    const tcanvasWidth = canvas.clientWidth / this.draw2DLow.canvas.clientWidth * tWidth;
+    const tcanvasHeight = canvas.clientHeight / this.draw2DLow.canvas.clientHeight * tHeight;
+    const tx = tWidth / 2 - tcanvasWidth / 2;
+    const ty = tHeight / 2 - tcanvasHeight / 2;
+    const twidth = tcanvasWidth;
+    const theight = tcanvasHeight;
 
     // canvas.width = canvasWidth;
     // canvas.height = canvasHeight;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(this.webglLow.gl.canvas, sx, sy, swidth, sheight, 0, 0, canvas.clientWidth, canvas.clientHeight);
-    ctx.drawImage(this.draw2DLow.canvas, sx, sy, swidth, sheight, 0, 0, canvas.clientWidth, canvas.clientHeight);
+    ctx.drawImage(this.webglLow.gl.canvas, glx, gly, glwidth, glheight, 0, 0, canvas.clientWidth, canvas.clientHeight);
+    ctx.drawImage(this.draw2DLow.canvas, tx, ty, twidth, theight, 0, 0, canvas.clientWidth, canvas.clientHeight);
     console.log(canvas.width, canvas.height)
     console.log(canvas.clientWidth, canvas.clientHeight)
     console.log(this.webglLow.gl.canvas.width, this.webglLow.gl.canvas.height)
     console.log(this.webglLow.gl.canvas.clientWidth, this.webglLow.gl.canvas.clientHeight)
     console.log(canvasWidth, canvasHeight)
-    console.log(sx, sy)
+    // console.log(sx, sy)
   }
 
   resize() {
