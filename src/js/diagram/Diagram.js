@@ -498,73 +498,55 @@ class Diagram {
   }
 
   renderToCanvas(
-    canvas: HTMLCanvasElement,
-    // diagramWindow: Rect,
-    // sx,
-    // sy,
-    // swidth,
-    // sheight,
-    // canvasWidth,
-    // canvasHeight,
+    // diagramElement: element;
+    htmlCanvas: HTMLCanvasElement,
   ) {
-    // const glSpace = {
-    //   x: { bottomLeft: -1, width: 2 },
-    //   y: { bottomLeft: -1, height: 2 },
-    // };
-    // const windowSpace = {
-    //   x: { bottomLeft: diagramWindow.left, width: diagramWindow.width },
-    //   y: { bottomLeft: diagramWindow.bottom, height: diagramWindow.height },
-    // };
-    // const windowToGL = spaceToSpaceTransform(windowSpace, glSpace);
     this.draw(-1);
 
-    // const elementCanvas = document.getElementById('id_figure1_asdf')
-    // const glCanvas = d.webglLow.gl.canvas;
-    // const width = elementCanvas.clientWidth * 3;
-    // const height = elementCanvas.clientHeight * 3;
-    // console.log(glCanvas.height, height)
-    // d.renderToCanvas(document.getElementById('id_figure1_asdf'),
-    //   new Rect(-5, -1, 10, 2),
-    //   glCanvas.width / 2 - width / 2,
-    //   glCanvas.height / 2 - height / 2,
-    //   width, height,
-    //   width, height,
-    // );
+    const { ctx } = new DrawContext2D(htmlCanvas);
 
-    const draw2D = new DrawContext2D(canvas);
-    // const ctx = canvas.getContext('2d');
-    const { ctx } = draw2D;
-    const glWidth = this.webglLow.gl.canvas.width;
-    const glHeight = this.webglLow.gl.canvas.height;
+    const getCanvasDimensions = c => ({
+      width: c.width,
+      height: c.height,
+      clientWidth: c.clientWidth,
+      clientHeight: c.clientHeight,
+    });
 
-    const canvasWidth = canvas.clientWidth / this.webglLow.gl.canvas.clientWidth * glWidth;
-    const canvasHeight = canvas.clientHeight / this.webglLow.gl.canvas.clientHeight * glHeight;
-    const glx = glWidth / 2 - canvasWidth / 2;
-    const gly = glHeight / 2 - canvasHeight / 2;
-    const glwidth = canvasWidth;
-    const glheight = canvasHeight;
+    const canvas = getCanvasDimensions(htmlCanvas);
+    const gl = getCanvasDimensions(this.webglLow.gl.canvas);
+    const text = getCanvasDimensions(this.draw2DLow.canvas);
 
-    const tWidth = this.draw2DLow.canvas.width;
-    const tHeight = this.draw2DLow.canvas.height;
+    const glWidthOfCanvas = canvas.clientWidth / gl.clientWidth * gl.width;
+    const glHeightOfCanvas = canvas.clientHeight / gl.clientHeight * gl.height;
+    const glStartOfCanavas = new Point(
+      gl.width / 2 - glWidthOfCanvas / 2,
+      gl.height / 2 - glHeightOfCanvas / 2,
+    );
 
-    const tcanvasWidth = canvas.clientWidth / this.draw2DLow.canvas.clientWidth * tWidth;
-    const tcanvasHeight = canvas.clientHeight / this.draw2DLow.canvas.clientHeight * tHeight;
-    const tx = tWidth / 2 - tcanvasWidth / 2;
-    const ty = tHeight / 2 - tcanvasHeight / 2;
-    const twidth = tcanvasWidth;
-    const theight = tcanvasHeight;
+    const textWidthOfCanvas = canvas.clientWidth / text.clientWidth
+                              * text.width;
+    const textHeightOfCanvas = canvas.clientHeight / text.clientHeight
+                               * text.height;
+    const textStartOfCanvas = new Point(
+      text.width / 2 - textWidthOfCanvas / 2,
+      text.height / 2 - textHeightOfCanvas / 2,
+    );
 
-    // canvas.width = canvasWidth;
-    // canvas.height = canvasHeight;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(this.webglLow.gl.canvas, glx, gly, glwidth, glheight, 0, 0, canvas.clientWidth, canvas.clientHeight);
-    ctx.drawImage(this.draw2DLow.canvas, tx, ty, twidth, theight, 0, 0, canvas.clientWidth, canvas.clientHeight);
-    console.log(canvas.width, canvas.height)
-    console.log(canvas.clientWidth, canvas.clientHeight)
-    console.log(this.webglLow.gl.canvas.width, this.webglLow.gl.canvas.height)
-    console.log(this.webglLow.gl.canvas.clientWidth, this.webglLow.gl.canvas.clientHeight)
-    console.log(canvasWidth, canvasHeight)
-    // console.log(sx, sy)
+    ctx.drawImage(
+      this.webglLow.gl.canvas,
+      glStartOfCanavas.x, glStartOfCanavas.y,
+      glWidthOfCanvas, glHeightOfCanvas,
+      0, 0,
+      canvas.clientWidth, canvas.clientHeight,
+    );
+    ctx.drawImage(
+      this.draw2DLow.canvas,
+      textStartOfCanvas.x, textStartOfCanvas.y,
+      textWidthOfCanvas, textHeightOfCanvas,
+      0, 0,
+      canvas.clientWidth, canvas.clientHeight,
+    );
   }
 
   resize() {
