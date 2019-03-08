@@ -497,8 +497,25 @@ class Diagram {
     this.setSpaceTransforms();
   }
 
-  renderToCanvas(canvas: HTMLCanvasElement, x, y, width, height) {
-    this.draw(-1);
+  renderToCanvas(
+    canvas: HTMLCanvasElement,
+    diagramWindow: Rect,
+    x,
+    y,
+    width,
+    height,
+  ) {
+    const glSpace = {
+      x: { bottomLeft: -1, width: 2 },
+      y: { bottomLeft: -1, height: 2 },
+    };
+    const windowSpace = {
+      x: { bottomLeft: diagramWindow.left, width: diagramWindow.width },
+      y: { bottomLeft: diagramWindow.bottom, height: diagramWindow.height },
+    };
+    const windowToGL = spaceToSpaceTransform(windowSpace, glSpace);
+    this.draw(-1, windowToGL);
+
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(this.webglLow.gl.canvas, x, y, width, height, 0, 0, canvas.width, canvas.height);
@@ -840,7 +857,7 @@ class Diagram {
     // }
   }
 
-  draw(now: number): void {
+  draw(now: number, diagramTransform: Transform = this.spaceTransforms.diagramToGL): void {
     if (now === -1) {
       now = this.lastDrawTime;
     } else {
@@ -888,7 +905,7 @@ class Diagram {
         this.oldScrollY = window.pageYOffset;
         this.drawQueued = true;
         this.changeTop = 1;
-        console.log('hide4')
+        // console.log('hide4')
       }
       // this.resize();
       
@@ -918,7 +935,7 @@ class Diagram {
     //   );
     // const t1 = performance.now();
     this.elements.draw(
-      this.spaceTransforms.diagramToGL,
+      diagramTransform,
       now,
     );
 
@@ -934,7 +951,7 @@ class Diagram {
       // this.draw2DLow.canvas.style.opacity = '1';
       // this.webglLow.gl.canvas.style.top = `${this.newTop}px`;
       // this.draw2DLow.canvas.style.top = `${this.newTop}px`;
-      console.log('show4')
+      // console.log('show4')
       this.changeTop = 0;
     }
     // console.log('draw end', new Date().getTime() - this.globalAnimation.diagramDrawStart);
