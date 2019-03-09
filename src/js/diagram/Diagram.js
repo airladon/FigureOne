@@ -964,24 +964,20 @@ class Diagram {
       this.scrolled = false;
       this.renderAllElementsToTiedCanvases();
       if (Math.abs(window.pageYOffset - this.oldScrollY)
-          > this.webglLow.gl.canvas.clientHeight / 8) {
-        const viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-        let newTop = window.pageYOffset + viewPortHeight / 2
-                     - this.webglLow.gl.canvas.clientHeight / 2;
-        if (newTop < 0) {
-          newTop = 0;
-        }
-        this.webglLow.gl.canvas.style.top = `${newTop}px`;
-        this.draw2DLow.canvas.style.top = `${newTop}px`;
-        this.resize();
+          > this.webglLow.gl.canvas.clientHeight / 4) {
+        this.centerDrawingLens();
         this.oldScrollY = window.pageYOffset;
       }
+      this.scrollingFast = true;
+      if (this.scrollTimeoutId) {
+        clearTimeout(this.scrollTimeoutId);
+      }
+      this.scrollTimeoutId = setTimeout(this.centerDrawingLens.bind(this, true), 100);
     }
     if (this.drawQueued === false) {
       return;
     }
     this.drawQueued = false;
-    // this.drawQueued = false;
     this.clearContext();
 
     this.elements.draw(
@@ -992,6 +988,29 @@ class Diagram {
 
     if (this.elements.isMoving()) {
       this.animateNextFrame();
+    }
+  }
+
+  centerDrawingLens(fromTimeOut: boolean = false) {
+    if (fromTimeOut) {
+      console.log('Timeout')
+      // console.log(this.scrollTimeoutId)
+      this.scrollingFast = false;
+    }
+    const viewPortHeight = Math.max(
+      document.documentElement.clientHeight,
+      window.innerHeight || 0,
+    );
+    let newTop = window.pageYOffset + viewPortHeight / 2
+                 - this.webglLow.gl.canvas.clientHeight / 2;
+    if (newTop < 0) {
+      newTop = 0;
+    }
+    const newTopInPx = `${newTop}px`;
+    if (this.webglLow.gl.canvas.style.top !== newTopInPx) {
+      this.webglLow.gl.canvas.style.top = `${newTop}px`;
+      this.draw2DLow.canvas.style.top = `${newTop}px`;
+      this.resize();
     }
   }
 
