@@ -236,6 +236,8 @@ class DiagramElement {
     window: Rect;
   };
 
+  isRenderedAsImage: boolean;
+
   // tieToHTMLElement: string | null | HTMLElement;
   // // Can be:
   // //  1em: diagram units will be scaled so 0.2 diagram units (default
@@ -451,6 +453,7 @@ class DiagramElement {
       scale: 'fit',
       window: this.diagramLimits,
     };
+    this.isRenderedAsImage = false;
     // this.tieToHTMLElement = null;
     // this.tieToHTMLElementScale = 'fit';
     // this.tieToHTMLElementScaleLimits = this.diagramLimits;
@@ -1094,6 +1097,13 @@ class DiagramElement {
 
   // Used only to clear 2D context
   clear() {
+  }
+
+  willStartAnimating() {
+    if (this.animations.willStartAnimating()) {
+      return true;
+    }
+    return false;
   }
 
   setColor(color: Array<number>) {
@@ -1860,6 +1870,7 @@ class DiagramElement {
     this.state.movement.previousTransform = this.transform._dup();
     this.state.movement.previousTime = Date.now() / 1000;
     this.state.isBeingMoved = true;
+    this.unrender();
   }
 
   moved(newTransform: Transform): void {
@@ -2331,6 +2342,25 @@ class DiagramElement {
     }
   }
 
+  unrender(): void {
+    if (this.isRenderedAsImage) {
+      let tieToElement;
+      if (typeof this.tieToHTML.element === 'string') {
+        tieToElement = document.getElementById(this.tieToHTML.element);
+      } else if (this.tieToHTML.element instanceof HTMLElement) {
+        tieToElement = this.tieToHTML.element;
+      }
+      if (tieToElement instanceof HTMLCanvasElement) {
+        const ctx = tieToElement.getContext('2d');
+        ctx.clearRect(0, 0, tieToElement.width, tieToElement.height);
+      }
+      this.isRenderedAsImage = false;
+    }
+    if (this.parent != null) {
+      this.parent.unrender();
+    }
+  }
+
   showAll(): void {
     this.show();
   }
@@ -2568,6 +2598,13 @@ class DiagramElementPrimative extends DiagramElement {
 
   draw(parentTransform: Transform = new Transform(), now: number = 0) {
     if (this.isShown) {
+      if (this.isRenderedAsImage === true) {
+        if (this.willStartAnimating()) {
+          this.unrender();
+        } else {
+          return;
+        }
+      }
       this.animations.nextFrame(now);
       // Deprecate
       this.setNextTransform(now);
@@ -2832,6 +2869,16 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
+  willStartAnimating() {
+    super.willStartAnimating();
+    for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+      if (this.elements[this.drawOrder[i]].willStartAnimating()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   draw(parentTransform: Transform = new Transform(), now: number = 0) {
     // console.log('draw collection', now, this.name)
     // if (this.name === 'fig3') {
@@ -2845,6 +2892,13 @@ class DiagramElementCollection extends DiagramElement {
     //   // console.log(this.name, deltaTime)
     // }
     if (this.isShown) {
+      if (this.isRenderedAsImage === true) {
+        if (this.willStartAnimating()) {
+          this.unrender();
+        } else {
+          return;
+        }
+      }
       this.animations.nextFrame(now);
       // Deprecate
       this.setNextTransform(now);

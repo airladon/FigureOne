@@ -505,7 +505,6 @@ class Diagram {
       const element = this.elements.elements[name];
       currentVisibility[name] = element.isShown;
     });
-    console.log(currentVisibility)
 
     // Hide all elements
     Object.keys(this.elements.elements).forEach((name) => {
@@ -519,17 +518,17 @@ class Diagram {
     // Move it to the origin and render
     const oldPosition = elementToRender.getPosition();
     elementToRender.setPosition(0, 0);
+    elementToRender.isRenderedAsImage = false;
     this.renderToCanvas(elementToRender.tieToHTML.element);
-
+    elementToRender.isRenderedAsImage = true;
     // reset its position
     elementToRender.setPosition(oldPosition);
-    elementToRender.hide();
+    // elementToRender.hide();
 
     // show all elements that were shown previously (except element that was just rendered)
     Object.keys(this.elements.elements).forEach((name) => {
       const element = this.elements.elements[name];
-      if (name !== elementName && currentVisibility[name] === true) {
-        console.log('showing', name)
+      if (currentVisibility[name] === true) {
         element.show();
       } else {
         element.hide();
