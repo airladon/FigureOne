@@ -37,6 +37,20 @@ export default class AnimationManager {
     return this;
   }
 
+  willStartAnimating() {
+    if (this.state === 'animating') {
+      return true;
+    }
+
+    let isAnimating = false;
+    this.animations.forEach((animation) => {
+      if (animation.state === 'waitingToStart' || animation.state === 'animating') {
+        isAnimating = true;
+      }
+    });
+    return isAnimating;
+  }
+
   nextFrame(now: number) {
     // console.log('animation manager', now)
     const animationsToRemove = [];
@@ -70,6 +84,11 @@ export default class AnimationManager {
     for (let i = animationsToRemove.length - 1; i >= 0; i -= 1) {
       this.animations.splice(animationsToRemove[i], 1);
     }
+    // if (initialState !== 'animating' && this.state === 'animating') {
+    //   if (this.element != null) {
+    //     this.element.unrender();
+    //   }
+    // }
     return remaining;
   }
 
