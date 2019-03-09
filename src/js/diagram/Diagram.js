@@ -515,7 +515,8 @@ class Diagram {
       this.drawQueued = true;
       this.startTime = new Date().getTime();
       console.log('clearing', this.webglLow.gl.canvas.style.top)
-      this.draw(-1, 'clear after render');
+      this.fromWhere = 'clear after render';
+      this.draw(-1);
     }
   }
 
@@ -546,6 +547,8 @@ class Diagram {
     elementToRender.isRenderedAsImage = true;
     // reset its position
     elementToRender.setPosition(oldPosition);
+    // this.fromWhere = 'reset Position';
+    // this.draw(-1);
     // elementToRender.hide();
 
     // show all elements that were shown previously (except element that was just rendered)
@@ -572,7 +575,8 @@ class Diagram {
     }
 
     this.drawQueued = true;
-    this.draw(-1, 'RenderToCanvas');
+    this.fromWhere = 'RenderToCanvas';
+    this.draw(-1);
 
     const { ctx } = new DrawContext2D(htmlCanvas);
 
@@ -618,6 +622,7 @@ class Diagram {
       0, 0,
       canvas.clientWidth, canvas.clientHeight,
     );
+    this.clearContext();
   }
 
   resize() {
@@ -957,6 +962,7 @@ class Diagram {
 
   draw(now: number): void {
     console.log('draw', this.fromWhere, now, this.scrolled, this.drawQueued, new Date().getTime() - this.startTime, this.webglLow.gl.canvas.style.top)
+    this.fromWhere = '';
     if (now === -1) {
       now = this.lastDrawTime;
     } else {
