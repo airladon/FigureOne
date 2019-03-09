@@ -953,85 +953,39 @@ class Diagram {
     // }
   }
 
-  draw(now: number, diagramTransform: Transform = this.spaceTransforms.diagramToGL): void {
+  draw(now: number): void {
     if (now === -1) {
       now = this.lastDrawTime;
     } else {
       this.lastDrawTime = now;
     }
 
-    // if (this.globalAnimation.previousNow == null) {
-    //   this.globalAnimation.previousNow = now
-    // }
-    // console.log(this.scrolled)
-    // if (this.webglLow.gl.canvas.style.display === 'none') {
-    //   this.webglLow.gl.canvas.style.display = 'block';
-    //   this.draw2DLow.canvas.style.display = 'block';
-    //   this.resize();
-    //   console.log('unhide')
-    // }
-    
-    
-    if (this.scrolled) {
+    if (this.scrolled === true) {
       this.scrolled = false;
       this.renderAllElementsToTiedCanvases();
-      if (Math.abs(window.pageYOffset - this.oldScrollY) > this.webglLow.gl.canvas.clientHeight / 8) {
+      if (Math.abs(window.pageYOffset - this.oldScrollY)
+          > this.webglLow.gl.canvas.clientHeight / 8) {
         const viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-        let newTop = window.pageYOffset + viewPortHeight / 2 - this.webglLow.gl.canvas.clientHeight / 2;
-
-        // console.log('viewport', viewPortHeight)
-        // console.log('gl canvas height', this.webglLow.gl.canvas.clientHeight)
-        // console.log('old scroll', this.oldScrollY)
-        // console.log('gl canvas position', this.webglLow.gl.canvas.getBoundingClientRect().top)
-        // console.log('pageY Offset', window.pageYOffset)
-
-        // console.log(newTop), window.pageYOffset, viewPortHeight, this.webglLow.gl.canvas.clientHeight)
+        let newTop = window.pageYOffset + viewPortHeight / 2
+                     - this.webglLow.gl.canvas.clientHeight / 2;
         if (newTop < 0) {
           newTop = 0;
         }
-        const oldTop = this.webglLow.gl.canvas.style.top;
-        this.newTop = `${newTop}px`;
-        // this.webglLow.gl.canvas.style.opacity = '0';
-        // this.draw2DLow.canvas.style.opacity = '0';
-        // this.clearContext();
         this.webglLow.gl.canvas.style.top = `${newTop}px`;
         this.draw2DLow.canvas.style.top = `${newTop}px`;
         this.resize();
-        // this.webglLow.gl.canvas.style.top = oldTop;
-        // this.draw2DLow.canvas.style.top = oldTop;
-        // this.webglLow.gl.canvas.style.opacity = '1';
         this.oldScrollY = window.pageYOffset;
-        this.drawQueued = true;
-        console.log('hide4')
       }
-
-      // console.log(this.webgl)
-      // this.scrolled = false;
     }
     if (this.drawQueued === false) {
       return;
     }
-    // const t = new Date().getTime();
-    // console.log('time since last draw:', t - this.globalAnimation.diagramDrawStart)
-    // this.globalAnimation.diagramDrawStart = t;
-
     this.drawQueued = false;
+    // this.drawQueued = false;
     this.clearContext();
 
-    // console.log(now - this.globalAnimation.previousNow)
-    // This transform converts standard gl clip space, to diagram clip space
-    // defined in limits.
-    // const normWidth = 2 / this.limits.width;
-    // const normHeight = 2 / this.limits.height;
-    // const clipTransform = new Transform()
-    //   .scale(normWidth, normHeight)
-    //   .translate(
-    //     (-this.limits.width / 2 - this.limits.left) * normWidth,
-    //     (this.limits.height / 2 - this.limits.top) * normHeight,
-    //   );
-    // const t1 = performance.now();
     this.elements.draw(
-      diagramTransform,
+      this.spaceTransforms.diagramToGL,
       now,
     );
 
