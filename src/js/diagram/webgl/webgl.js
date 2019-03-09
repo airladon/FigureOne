@@ -146,13 +146,15 @@ class WebGLInstance {
     vertexShader: string,
     fragmentShader: string,
   ) {
-    this.programs.forEach((program) => {
+    console.log(vertexShader, fragmentShader, this.programs)
+    for (let i = 0; i < this.programs.length; i += 1) {
+      const program = this.programs[i];
       if (program.vertexShader === vertexShader
         && program.fragmentShader === fragmentShader
       ) {
-        return program.program;
+        return i;
       }
-    });
+    }
 
     const shaders = getShaders(vertexShader, fragmentShader);
     const newProgram = createProgramFromScripts(
