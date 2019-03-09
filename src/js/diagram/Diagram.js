@@ -498,6 +498,7 @@ class Diagram {
   }
 
   renderAllElementsToTiedCanvases() {
+    let needClear = false;
     Object.keys(this.elements.elements).forEach((name) => {
       const element = this.elements.elements[name];
       if (
@@ -507,10 +508,13 @@ class Diagram {
       ) {
         element.isRenderedAsImage = true;
         this.renderElementToTiedCanvas(name);
+        needClear = true;
       }
     });
-    this.drawQueued = true;
-    this.draw(-1);
+    if (needClear) {
+      this.drawQueued = true;
+      this.draw(-1);
+    }
   }
 
   // Renders all tied elements in the top level of diagram.elements.
@@ -998,7 +1002,7 @@ class Diagram {
         // this.webglLow.gl.canvas.style.opacity = '1';
         this.oldScrollY = window.pageYOffset;
         this.drawQueued = true;
-        // console.log('hide4')
+        console.log('hide4')
       }
 
       // console.log(this.webgl)
