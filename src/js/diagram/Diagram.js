@@ -998,11 +998,9 @@ class Diagram {
         // this.webglLow.gl.canvas.style.opacity = '1';
         this.oldScrollY = window.pageYOffset;
         this.drawQueued = true;
-        this.changeTop = 1;
         // console.log('hide4')
       }
-      // this.resize();
-      
+
       // console.log(this.webgl)
       // this.scrolled = false;
     }
@@ -1037,18 +1035,6 @@ class Diagram {
     if (this.elements.isMoving()) {
       this.animateNextFrame();
     }
-    
-    if (this.changeTop > 1) {
-      this.changeTop -= 1;
-    } else if (this.changeTop === 1) {
-      // this.webglLow.gl.canvas.style.opacity = '1';
-      // this.draw2DLow.canvas.style.opacity = '1';
-      // this.webglLow.gl.canvas.style.top = `${this.newTop}px`;
-      // this.draw2DLow.canvas.style.top = `${this.newTop}px`;
-      // console.log('show4')
-      this.changeTop = 0;
-    }
-    // console.log('draw end', new Date().getTime() - this.globalAnimation.diagramDrawStart);
   }
 
   animateNextFrame(draw: boolean = true) {
