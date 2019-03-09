@@ -965,8 +965,10 @@ class Diagram {
       this.renderAllElementsToTiedCanvases();
       if (Math.abs(window.pageYOffset - this.oldScrollY)
           > this.webglLow.gl.canvas.clientHeight / 4) {
-        this.centerDrawingLens();
-        this.oldScrollY = window.pageYOffset;
+        if (this.scrollingFast === true) {
+          this.centerDrawingLens();
+          this.oldScrollY = window.pageYOffset;
+        }
       }
       this.scrollingFast = true;
       if (this.scrollTimeoutId) {
@@ -993,7 +995,7 @@ class Diagram {
 
   centerDrawingLens(fromTimeOut: boolean = false) {
     if (fromTimeOut) {
-      console.log('Timeout')
+      // console.log('Timeout')
       // console.log(this.scrollTimeoutId)
       this.scrollingFast = false;
     }
