@@ -507,9 +507,10 @@ class Diagram {
       ) {
         element.isRenderedAsImage = true;
         this.renderElementToTiedCanvas(name);
-        console.log('rendering', name, element.isRenderedAsImage);
       }
     });
+    this.drawQueued = true;
+    this.draw(-1);
   }
 
   // Renders all tied elements in the top level of diagram.elements.
