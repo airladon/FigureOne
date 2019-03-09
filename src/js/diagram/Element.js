@@ -237,6 +237,7 @@ class DiagramElement {
   };
 
   isRenderedAsImage: boolean;
+  unrenderNextDraw: boolean;
 
   // tieToHTMLElement: string | null | HTMLElement;
   // // Can be:
@@ -454,6 +455,7 @@ class DiagramElement {
       window: this.diagramLimits,
     };
     this.isRenderedAsImage = false;
+    this.unrenderNextDraw = false;
     // this.tieToHTMLElement = null;
     // this.tieToHTMLElementScale = 'fit';
     // this.tieToHTMLElementScaleLimits = this.diagramLimits;
@@ -2054,6 +2056,7 @@ class DiagramElement {
   pulseNow() {
     this.state.isPulsing = true;
     this.state.pulse.startTime = -1;
+    this.unrender();
   }
 
   stopPulsing(result: ?mixed) {
@@ -2342,18 +2345,22 @@ class DiagramElement {
     }
   }
 
+  clearRender() {
+    let tieToElement;
+    if (typeof this.tieToHTML.element === 'string') {
+      tieToElement = document.getElementById(this.tieToHTML.element);
+    } else if (this.tieToHTML.element instanceof HTMLElement) {
+      tieToElement = this.tieToHTML.element;
+    }
+    if (tieToElement instanceof HTMLCanvasElement) {
+      const ctx = tieToElement.getContext('2d');
+      ctx.clearRect(0, 0, tieToElement.width, tieToElement.height);
+    }
+  }
+
   unrender(): void {
     if (this.isRenderedAsImage) {
-      let tieToElement;
-      if (typeof this.tieToHTML.element === 'string') {
-        tieToElement = document.getElementById(this.tieToHTML.element);
-      } else if (this.tieToHTML.element instanceof HTMLElement) {
-        tieToElement = this.tieToHTML.element;
-      }
-      if (tieToElement instanceof HTMLCanvasElement) {
-        const ctx = tieToElement.getContext('2d');
-        ctx.clearRect(0, 0, tieToElement.width, tieToElement.height);
-      }
+      this.unrenderNextDraw = true;
       this.isRenderedAsImage = false;
     }
     if (this.parent != null) {
@@ -2649,6 +2656,10 @@ class DiagramElementPrimative extends DiagramElement {
       pulseTransforms.forEach((t) => {
         this.drawingObject.drawWithTransformMatrix(t.matrix(), this.color, pointCount);
       });
+      if (this.unrenderNextDraw) {
+        this.clearRender();
+        this.unrenderNextDraw = false;
+      }
     }
   }
 
@@ -2929,6 +2940,10 @@ class DiagramElementCollection extends DiagramElement {
         for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
           this.elements[this.drawOrder[i]].draw(pulseTransforms[k], now);
         }
+      }
+      if (this.unrenderNextDraw) {
+        this.clearRender();
+        this.unrenderNextDraw = false;
       }
     }
   }

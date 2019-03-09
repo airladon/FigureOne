@@ -497,6 +497,21 @@ class Diagram {
     this.setSpaceTransforms();
   }
 
+  renderAllElementsToTiedCanvases() {
+    Object.keys(this.elements.elements).forEach((name) => {
+      const element = this.elements.elements[name];
+      if (
+        element.isShown
+        && element.isRenderedAsImage === false
+        && element.tieToHTML.element != null
+      ) {
+        element.isRenderedAsImage = true;
+        this.renderElementToTiedCanvas(name);
+        console.log('rendering', name, element.isRenderedAsImage);
+      }
+    });
+  }
+
   // Renders all tied elements in the top level of diagram.elements.
   renderElementToTiedCanvas(elementName: string) {
     // record visibility of top level elements
@@ -519,6 +534,7 @@ class Diagram {
     const oldPosition = elementToRender.getPosition();
     elementToRender.setPosition(0, 0);
     elementToRender.isRenderedAsImage = false;
+    elementToRender.stop(true, true);
     this.renderToCanvas(elementToRender.tieToHTML.element);
     elementToRender.isRenderedAsImage = true;
     // reset its position
@@ -952,6 +968,8 @@ class Diagram {
     
     
     if (this.scrolled) {
+      this.scrolled = false;
+      this.renderAllElementsToTiedCanvases();
       if (Math.abs(window.pageYOffset - this.oldScrollY) > this.webglLow.gl.canvas.clientHeight / 8) {
         const viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
         let newTop = window.pageYOffset + viewPortHeight / 2 - this.webglLow.gl.canvas.clientHeight / 2;
@@ -985,7 +1003,7 @@ class Diagram {
       // this.resize();
       
       // console.log(this.webgl)
-      this.scrolled = false;
+      // this.scrolled = false;
     }
     if (this.drawQueued === false) {
       return;
