@@ -320,7 +320,7 @@ class Diagram {
     this.sizeHtmlText();
     this.initialize();
     this.isTouchDevice = isTouchDevice();
-    this.animateNextFrame();
+    this.animateNextFrame(true, 'first frame');
     if (optionsToUse.elements) {
       // eslint-disable-next-line new-cap
       this.elements = new optionsToUse.elements(this);
@@ -371,7 +371,7 @@ class Diagram {
       this.htmlCanvas,
       this.limits,
       this.spaceTransforms,
-      this.animateNextFrame.bind(this),
+      this.animateNextFrame.bind(this, true, 'getShapes'),
     );
   }
 
@@ -380,7 +380,7 @@ class Diagram {
     if (high) {
       shapes = this.shapesHigh;
     }
-    return new DiagramEquation(shapes, this.animateNextFrame.bind(this));
+    return new DiagramEquation(shapes, this.animateNextFrame.bind(this, true, 'equations'));
   }
 
   getObjects(high: boolean = false) {
@@ -394,7 +394,7 @@ class Diagram {
       shapes,
       equation,
       this.isTouchDevice,
-      this.animateNextFrame.bind(this),
+      this.animateNextFrame.bind(this, true, 'objects'),
     );
   }
 
@@ -513,7 +513,9 @@ class Diagram {
     });
     if (needClear) {
       this.drawQueued = true;
-      this.draw(-1);
+      this.startTime = new Date().getTime();
+      console.log('clearing', this.webglLow.gl.canvas.style.top)
+      this.draw(-1, 'clear after render');
     }
   }
 
@@ -570,7 +572,7 @@ class Diagram {
     }
 
     this.drawQueued = true;
-    this.draw(-1);
+    this.draw(-1, 'RenderToCanvas');
 
     const { ctx } = new DrawContext2D(htmlCanvas);
 
@@ -631,7 +633,7 @@ class Diagram {
     this.elements.resizeHtmlObject();
     this.updateHTMLElementTie();
     this.elements.resize();
-    this.animateNextFrame();
+    this.animateNextFrame(true, 'resize');
   }
 
   updateHTMLElementTie() {
@@ -683,7 +685,7 @@ class Diagram {
       }
     }
     if (this.beingMovedElements.length > 0) {
-      this.animateNextFrame();
+      this.animateNextFrame(true, 'touch down handler');
     }
     if (this.beingTouchedElements.length > 0) {
       return true;
@@ -899,7 +901,7 @@ class Diagram {
         i = this.beingMovedElements.length;
       }
     }
-    this.animateNextFrame();
+    this.animateNextFrame(true, 'touch move handler');
     return true;
   }
 
@@ -954,6 +956,7 @@ class Diagram {
   }
 
   draw(now: number): void {
+    console.log('draw', this.fromWhere, now, this.scrolled, this.drawQueued, new Date().getTime() - this.startTime, this.webglLow.gl.canvas.style.top)
     if (now === -1) {
       now = this.lastDrawTime;
     } else {
@@ -963,13 +966,13 @@ class Diagram {
     if (this.scrolled === true) {
       this.scrolled = false;
       this.renderAllElementsToTiedCanvases();
-      if (Math.abs(window.pageYOffset - this.oldScrollY)
-          > this.webglLow.gl.canvas.clientHeight / 4) {
-        if (this.scrollingFast === true) {
-          this.centerDrawingLens();
-          this.oldScrollY = window.pageYOffset;
-        }
-      }
+      // if (Math.abs(window.pageYOffset - this.oldScrollY)
+      //     > this.webglLow.gl.canvas.clientHeight / 4) {
+      //   if (this.scrollingFast === true) {
+      //     this.centerDrawingLens();
+      //     this.oldScrollY = window.pageYOffset;
+      //   }
+      // }
       this.scrollingFast = true;
       if (this.scrollTimeoutId) {
         clearTimeout(this.scrollTimeoutId);
@@ -989,7 +992,7 @@ class Diagram {
 
 
     if (this.elements.isMoving()) {
-      this.animateNextFrame();
+      this.animateNextFrame(true, 'is moving');
     }
   }
 
@@ -1010,13 +1013,15 @@ class Diagram {
     }
     const newTopInPx = `${newTop}px`;
     if (this.webglLow.gl.canvas.style.top !== newTopInPx) {
+      console.log('centering', new Date().getTime() - this.startTime)
       this.webglLow.gl.canvas.style.top = `${newTop}px`;
       this.draw2DLow.canvas.style.top = `${newTop}px`;
       this.resize();
     }
   }
 
-  animateNextFrame(draw: boolean = true) {
+  animateNextFrame(draw: boolean = true, fromWhere: string = '') {
+    this.fromWhere = fromWhere;
     if (!this.drawQueued) {
       if (draw) {
         this.drawQueued = true;
