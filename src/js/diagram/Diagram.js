@@ -326,6 +326,7 @@ class Diagram {
       this.elements = new optionsToUse.elements(this);
       this.elements.diagramLimits = this.limits;
     }
+    this.waitForFrame = 0;
   }
 
   // getFigureCanvases() {
@@ -540,6 +541,7 @@ class Diagram {
 
     // Move it to the origin and render
     const oldPosition = elementToRender.getPosition();
+    
     elementToRender.setPosition(0, 0);
     elementToRender.isRenderedAsImage = false;
     elementToRender.stop(true, true);
@@ -547,6 +549,8 @@ class Diagram {
     elementToRender.isRenderedAsImage = true;
     // reset its position
     elementToRender.setPosition(oldPosition);
+    // this.draw(-1);
+    // this.webglLow.gl.canvas.style.visibility = 'visible';
     // this.fromWhere = 'reset Position';
     // this.draw(-1);
     // elementToRender.hide();
@@ -961,7 +965,7 @@ class Diagram {
   }
 
   draw(now: number): void {
-    console.log('draw', this.fromWhere, now, this.scrolled, this.drawQueued, new Date().getTime() - this.startTime, this.webglLow.gl.canvas.style.top)
+    // console.log('draw1', this.fromWhere, now, this.scrolled, this.drawQueued, new Date().getTime() - this.startTime, this.webglLow.gl.canvas.style.top)
     this.fromWhere = '';
     if (now === -1) {
       now = this.lastDrawTime;
@@ -971,7 +975,18 @@ class Diagram {
 
     if (this.scrolled === true) {
       this.scrolled = false;
-      this.renderAllElementsToTiedCanvases();
+      if (this.webglLow.gl.canvas.style.visibility !== 'hidden') {
+        this.webglLow.gl.canvas.style.visibility = 'hidden';
+        this.waitForFrame = 1;
+      }
+      if (this.waitForFrame > 0) {
+        this.waitForFrame -= 1;
+      } else {
+        this.renderAllElementsToTiedCanvases();
+      }
+      
+      // this.webglLow.gl.canvas.style.top = '-10000px';
+      
       // if (Math.abs(window.pageYOffset - this.oldScrollY)
       //     > this.webglLow.gl.canvas.clientHeight / 4) {
       //   if (this.scrollingFast === true) {
@@ -1024,6 +1039,7 @@ class Diagram {
       this.draw2DLow.canvas.style.top = `${newTop}px`;
       this.resize();
     }
+    this.webglLow.gl.canvas.style.visibility = 'visible';
   }
 
   animateNextFrame(draw: boolean = true, fromWhere: string = '') {
