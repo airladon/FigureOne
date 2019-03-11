@@ -939,33 +939,14 @@ class Diagram {
   }
 
   clearContext() {
-    // const bc = this.backgroundColor;
-    // this.webgl.gl.clearColor(bc[0], bc[1], bc[2], bc[3]);
-
     this.webglLow.gl.clearColor(0, 0, 0, 0);
     this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
     this.webglHigh.gl.clearColor(0, 0, 0, 0);
     this.webglHigh.gl.clear(this.webglHigh.gl.COLOR_BUFFER_BIT);
-    // const t = new Date().getTime();
     this.elements.clear();
-    // console.log('clear time', new Date().getTime() - t);
-    // if (this.draw2DLow) {
-    //   this.draw2DLow.ctx.clearRect(
-    //     0, 0, this.draw2DLow.ctx.canvas.width,
-    //     this.draw2DLow.ctx.canvas.height,
-    //   );
-    // }
-    
-    // if (this.draw2DHigh) {
-    //   this.draw2DHigh.ctx.clearRect(
-    //     0, 0, this.draw2DHigh.ctx.canvas.width,
-    //     this.draw2DHigh.ctx.canvas.height,
-    //   );
-    // }
   }
 
   draw(now: number): void {
-    // console.log('draw1', this.fromWhere, now, this.scrolled, this.drawQueued, new Date().getTime() - this.startTime, this.webglLow.gl.canvas.style.top)
     this.fromWhere = '';
     if (now === -1) {
       now = this.lastDrawTime;
@@ -976,10 +957,6 @@ class Diagram {
 
     if (this.scrolled === true) {
       this.scrolled = false;
-      // if (this.webglLow.gl.canvas.style.visibility !== 'hidden') {
-      //   this.webglLow.gl.canvas.style.visibility = 'hidden';
-      //   this.waitForFrame = 1;
-      // }
       if (this.webglLow.gl.canvas.style.top !== '-10000px') {
         this.webglLow.gl.canvas.style.top = '-10000px';
         this.waitForFrame = 1;
@@ -989,16 +966,6 @@ class Diagram {
       } else {
         this.renderAllElementsToTiedCanvases();
       }
-      
-      // this.webglLow.gl.canvas.style.top = '-10000px';
-      
-      // if (Math.abs(window.pageYOffset - this.oldScrollY)
-      //     > this.webglLow.gl.canvas.clientHeight / 4) {
-      //   if (this.scrollingFast === true) {
-      //     this.centerDrawingLens();
-      //     this.oldScrollY = window.pageYOffset;
-      //   }
-      // }
       this.scrollingFast = true;
       if (this.scrollTimeoutId) {
         clearTimeout(this.scrollTimeoutId);
@@ -1024,8 +991,6 @@ class Diagram {
 
   centerDrawingLens(fromTimeOut: boolean = false) {
     if (fromTimeOut) {
-      // console.log('Timeout')
-      // console.log(this.scrollTimeoutId)
       this.scrollingFast = false;
     }
     const viewPortHeight = Math.max(
@@ -1044,7 +1009,6 @@ class Diagram {
       this.draw2DLow.canvas.style.top = `${newTop}px`;
       this.resize();
     }
-    // this.webglLow.gl.canvas.style.visibility = 'visible';
   }
 
   animateNextFrame(draw: boolean = true, fromWhere: string = '') {
