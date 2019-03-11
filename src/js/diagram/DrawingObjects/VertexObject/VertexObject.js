@@ -269,18 +269,20 @@ class VertexObject extends DrawingObject {
     scale: g2.Point,
     count: number,
     color: Array<number>,
+    webGLInstance: WebGLInstance = this.webgl,
   ) {
     let transformation = m2.identity();
     transformation = m2.translate(transformation, translation.x, translation.y);
     transformation = m2.rotate(transformation, rotation);
     transformation = m2.scale(transformation, scale.x, scale.y);
-    this.drawWithTransformMatrix(m2.t(transformation), color, count);
+    this.drawWithTransformMatrix(m2.t(transformation), color, count, webGLInstance);
   }
 
   drawWithTransformMatrix(
     transformMatrix: Array<number>,
     color: Array<number>,
     count: number,
+    webglInstance: WebGLInstance = this.webgl,
   ) {
     const size = 2;         // 2 components per iteration
     const type = this.gl.FLOAT;   // the data is 32bit floats
@@ -290,11 +292,11 @@ class VertexObject extends DrawingObject {
     const stride = 0;
     const offset = 0;       // start at the beginning of the buffer
 
-    const locations = this.webgl.useProgram(this.programIndex);
+    const locations = webglInstance.useProgram(this.programIndex);
 
     if (
       this.texture
-      && this.webgl.textures[this.texture.id].type === 'canvasText'
+      && webglInstance.textures[this.texture.id].type === 'canvasText'
     ) {
       // this.gl.pixelStorei(this.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
       // this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA);
@@ -349,8 +351,8 @@ class VertexObject extends DrawingObject {
     }
     if (texture) {
       this.gl.uniform1i(locations.u_use_texture, 1);
-      const { index } = this.webgl.textures[texture.id];
-      // console.log(texture.id, index, this.webgl.textures)
+      const { index } = webglInstance.textures[texture.id];
+      // console.log(texture.id, index, webglInstance.textures)
       this.gl.uniform1i(locations.u_texture, index);
     } else {
       this.gl.uniform1i(locations.u_use_texture, 0);
