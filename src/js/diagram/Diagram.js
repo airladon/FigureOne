@@ -123,14 +123,13 @@ class Diagram {
     diagramToCSSPercent: Transform;
   };
 
-  
   // oldScrollY: number;
   lastDrawTime: number;
   drawQueued: boolean;
   waitForFrames: number;
   scrolled: boolean;
   scrollingFast: boolean;
-  scrollTimeoutId: ?number;
+  scrollTimeoutId: ?TimeoutID;
 
   isTouchDevice: boolean;
 
@@ -256,6 +255,27 @@ class Diagram {
     this.waitForFrames = 0;
     this.scrollingFast = false;
     this.scrollTimeoutId = null;
+  }
+
+  scrollEvent() {
+    this.scrolled = true;
+    this.animateNextFrame(false, 'scroll event');
+  }
+
+  enableScrolling() {
+    document.addEventListener(
+      'scroll',
+      this.scrollEvent.bind(this),
+      false,
+    );
+  }
+
+  disableScrolling() {
+    document.removeEventListener(
+      'scroll',
+      this.scrollEvent.bind(this),
+      false,
+    );
   }
 
   addElements(
@@ -823,6 +843,19 @@ class Diagram {
     this.elements.clear();
   }
 
+  // scroll() {
+  //   if (this.scrollingFast === false) {
+  //     this.webglLow.gl.canvas.style.top = '-10000px';
+  //     this.renderAllElementsToTiedCanvases();
+  //     this.scrollingFast = true;
+  //     if (this.scrollTimeoutId) {
+  //       clearTimeout(this.scrollTimeoutId);
+  //       this.scrollTimeoutId = null;
+  //     }
+  //     this.scrollTimeoutId = setTimeout(this.centerDrawingLens.bind(this, true), 100);
+  //   }
+  // }
+
   draw(nowIn: number): void {
     let now = nowIn;
     if (nowIn === -1) {
@@ -890,7 +923,7 @@ class Diagram {
   }
 
   animateNextFrame(draw: boolean = true, fromWhere: string = '') {
-    this.fromWhere = fromWhere;
+    // this.fromWhere = fromWhere;
     if (!this.drawQueued) {
       if (draw) {
         this.drawQueued = true;
