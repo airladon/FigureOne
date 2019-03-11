@@ -25,7 +25,7 @@ import type {
   TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
 } from './Animation/Animation';
 import * as animations from './Animation/Animation';
-
+import WebGLInstance from './webgl/webgl';
 
 // eslint-disable-next-line import/no-cycle
 import {
@@ -2692,6 +2692,28 @@ class DiagramElementPrimative extends DiagramElement {
     return false;
   }
 
+  setupWebGLBuffers(newWebgl: WebGLInstance) {
+    const { drawingObject } = this;
+    if (drawingObject instanceof VertexObject) {
+      const oldWebgl = drawingObject.webgl;
+      drawingObject.webgl = newWebgl;
+      drawingObject.gl = newWebgl.gl;
+      drawingObject.setupBuffer();
+      drawingObject.webgl = oldWebgl;
+      drawingObject.gl = oldWebgl.gl;
+    }
+  }
+
+  changeWebGLInstance(newWebgl: WebGLInstance) {
+    let oldWebgl;
+    const { drawingObject } = this;
+    if (drawingObject instanceof VertexObject) {
+      oldWebgl = drawingObject.webgl;
+      drawingObject.webgl = newWebgl;
+      drawingObject.gl = newWebgl.gl;
+    }
+    return oldWebgl;
+  }
   // // Update the translation move boundary for the element's transform.
   // // This will limit the first translation part of the transform to only
   // // translations within the max/min limit.
@@ -3445,6 +3467,22 @@ class DiagramElementCollection extends DiagramElement {
       const element = this.elements[this.drawOrder[i]];
       element.updateContext(context);
     }
+  }
+
+  setupWebGLBuffers(newWebgl: WebGLInstance) {
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.setupWebGLBuffers(newWebgl);
+    }
+  }
+
+  changeWebGLInstance(newWebgl: WebGLInstance) {
+    let oldInstance;
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      oldInstance = element.changeWebGLInstance(newWebgl);
+    }
+    return oldInstance;
   }
 }
 
