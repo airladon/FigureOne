@@ -24,8 +24,6 @@ export type TypeDiagramOptions = {
   htmlId?: string,
   limits?: Rect,
   backgroundColor?: Array<number>,
-  // vertexShader?: string,
-  // fragmentShader?: string,
   fontScale?: number,
   elements?: DiagramElementCollection;
 };
@@ -110,9 +108,6 @@ class Diagram {
   objects: DiagramObjects;
   objectsLow: DiagramObjects;
   objectsHigh: DiagramObjects;
-  // addElements: DiagramAddElements;
-  // addElementsLow: DiagramAddElements;
-  // addElementsHigh: DiagramAddElements;
 
   backgroundColor: Array<number>;
   fontScale: number;
@@ -131,46 +126,17 @@ class Diagram {
   scrolled: boolean;
   oldScrollY: number;
   lastDrawTime: number;
-  // draw2DFigures: Object;
-
-  // glToDiagramSpaceTransform: Transform;
-  // diagramToGLSpaceTransform: Transform;
-  // pixelToDiagramSpaceTransform: Transform;
-  // diagramToPixelSpaceTransform: Transform;
-  // pixelToGLSpaceTransform: Transform;
-  // glToPixelSpaceTransform: Transform;
-  // diagramToCSSPercentSpaceTransform: Transform;
-
-  // glToDiagramSpaceScale: Point;
-  // diagramToGLSpaceScale: Point;
-  // pixelToDiagramSpaceScale: Point;
-  // diagramToPixelSpaceScale: Point;
-  // glToPixelSpaceScale: Point;
-  // pixelToGLSpaceScale: Point;
-
   drawQueued: boolean;
 
   isTouchDevice: boolean;
 
   constructor(
-    // canvas: HTMLCanvasElement,
     options: TypeDiagramOptions,
-    // limitsOrxMin: number | Rect = new Rect(-1, -1, 2, 2),
-    // yMin: number = -1,
-    // width: number = 2,
-    // height: number = 2,
-    // backgroundColor: Array<number> = [1, 1, 1, 1],
-    // layout: Object = {},
-    // vertexShader: string = 'simple',
-    // fragmentShader: string = 'simple',
   ) {
     const defaultOptions = {
       htmlId: 'id_figureone_canvases',
       limits: new Rect(-1, -1, 2, 2),
       backgroundColor: [1, 1, 1, 1],
-      // layout: {},
-      // vertexShader: 'simple',
-      // fragmentShader: 'simple',
       fontScale: 1,
     };
     this.scrolled = false;
@@ -179,27 +145,6 @@ class Diagram {
     const {
       htmlId, backgroundColor, limits,
     } = optionsToUse;
-    // if (typeof containerIdOrOptions !== 'string') {
-    //   optionsToUse = joinObjects(
-    //     defaultOptions, containerIdOrOptions,
-    //   );
-    // } else {
-    //   optionsToUse.htmlId = containerIdOrOptions;
-    //   if (typeof limitsOrxMin === 'number') {
-    //     optionsToUse.limits = new Rect(
-    //       limitsOrxMin,
-    //       yMin,
-    //       width,
-    //       height,
-    //     );
-    //   } else {
-    //     optionsToUse.limits = limitsOrxMin;
-    //   }
-    //   optionsToUse.backgroundColor = backgroundColor;
-    //   optionsToUse.layout = layout;
-    //   optionsToUse.vertexShader = vertexShader;
-    //   optionsToUse.fragmentShader = fragmentShader;
-    // }
     // this.layout = layout;
     if (typeof htmlId === 'string') {
       const container = document.getElementById(htmlId);
@@ -257,15 +202,6 @@ class Diagram {
       }
     }
 
-    // for (let i = 0; i < canvas2Ds.length; i += 1) {
-    //   const canvas = canvas2Ds[i];
-    //   console.log(i, canvas)
-    //   if (canvas instanceof HTMLCanvasElement) {
-    //     const draw2D = new DrawContext2D(canvas);
-    //     const { id } = canvas;
-    //     this.draw2DFigures[id] = draw2D;
-    //   }
-    // }
     if (optionsToUse.gestureCanvas != null) {
       const gestureCanvas = document.getElementById(optionsToUse.gestureCanvas);
       if (gestureCanvas != null) {
@@ -275,26 +211,16 @@ class Diagram {
     if (this.gestureCanvas == null) {
       this.gestureCanvas = this.htmlCanvas;
     }
-    // if (this.textCanvas instanceof HTMLCanvasElement) {
-    //   this.draw2D = new DrawContext2D(this.textCanvas);
-    // }
+
     if (this instanceof Diagram) {
       this.gesture = new Gesture(this);
     }
 
     this.fontScale = optionsToUse.fontScale;
-    // let limits;
-    // if (limitsOrxMin instanceof Rect) {
-    //   const r = limitsOrxMin;
-    //   limits = new Rect(r.left, r.bottom, r.width, r.height);
-    // } else {
-    //   limits = new Rect(limitsOrxMin, yMin, width, height);
-    // }
     this.updateLimits(limits);
     this.drawQueued = false;
     this.lastDrawTime = 0;
     this.inTransition = false;
-    // console.log(this.limits)
     this.beingMovedElements = [];
     this.beingTouchedElements = [];
     this.moveTopElementOnly = true;
@@ -308,9 +234,6 @@ class Diagram {
     this.objectsLow = this.getObjects(false);
     this.objectsHigh = this.getObjects(true);
     this.objects = this.objectsLow;
-    // this.addElementsLow = this.getAddElements(false);
-    // this.addElementsHigh = this.getAddElements(true);
-    // this.addElements = this.getAddElements();
     this.createDiagramElements();
     if (this.elements.name === '') {
       this.elements.name = 'diagramRoot';
@@ -328,21 +251,6 @@ class Diagram {
     }
     this.waitForFrame = 0;
   }
-
-  // getFigureCanvases() {
-  //   const canvas2Ds = document.getElementsByClassName('single_page_lesson__figure');
-  //   console.log(canvas2Ds, canvas2Ds.length)
-  //   this.draw2DFigures = {};
-  //   // var list= document.getElementsByClassName("events");
-  //   [].forEach.call(canvas2Ds, (canvas) => {
-  //     console.log(canvas)
-  //     if (canvas instanceof HTMLCanvasElement) {
-  //       const draw2D = new DrawContext2D(canvas);
-  //       const { id } = canvas;
-  //       this.draw2DFigures[id] = draw2D;
-  //     }
-  //   });
-  // }
 
   addElements(
     rootCollection: DiagramElementCollection,
@@ -399,22 +307,6 @@ class Diagram {
     );
   }
 
-  // getAddElements(high: boolean = false) {
-  //   let shapes = this.shapesLow;
-  //   let objects = this.objectsLow;
-  //   let equation = this.equationLow;
-  //   if (high) {
-  //     shapes = this.shapesHigh;
-  //     objects = this.objectsHigh;
-  //     equation = this.equationHigh;
-  //   }
-  //   return new DiagramAddElements(
-  //     shapes,
-  //     objects,
-  //     equation,
-  //   );
-  // }
-
   sizeHtmlText() {
     const scale = this.fontScale * 1 / 35;
     const size = this.htmlCanvas.offsetWidth * scale - 1;
@@ -435,22 +327,6 @@ class Diagram {
     this.webglLow.gl.getExtension('WEBGL_lose_context').loseContext();
     this.webglHigh.gl.getExtension('WEBGL_lose_context').loseContext();
   }
-
-  // setGLDiagramSpaceTransforms() {
-  //   const glSpace = {
-  //     x: { bottomLeft: -1, width: 2 },
-  //     y: { bottomLeft: -1, height: 2 },
-  //   };
-  //   const diagramSpace = {
-  //     x: { bottomLeft: this.limits.left, width: this.limits.width },
-  //     y: { bottomLeft: this.limits.bottom, height: this.limits.height },
-  //   };
-
-  //   this.diagramToGLSpaceTransformMatrix =
-  //     spaceToSpaceTransformMatrix(glSpace, diagramSpace);
-  //   this.glToDiagramSpaceTransformMatrix =
-  //     spaceToSpaceTransformMatrix(diagramSpace, glSpace);
-  // }
 
   setSpaceTransforms() {
     const glSpace = {
@@ -498,6 +374,7 @@ class Diagram {
     this.setSpaceTransforms();
   }
 
+  // Renders all tied elements in the first level of diagram elements
   renderAllElementsToTiedCanvases() {
     let needClear = false;
     Object.keys(this.elements.elements).forEach((name) => {
@@ -515,15 +392,13 @@ class Diagram {
     if (needClear) {
       this.drawQueued = true;
       this.startTime = new Date().getTime();
-      console.log('clearing', this.webglLow.gl.canvas.style.top)
-      this.fromWhere = 'clear after render';
       this.draw(-1);
     }
   }
 
-  // Renders all tied elements in the top level of diagram.elements.
+  
   renderElementToTiedCanvas(elementName: string) {
-    // record visibility of top level elements
+    // record visibility of top level elements in diagram
     const currentVisibility = {};
     Object.keys(this.elements.elements).forEach((name) => {
       const element = this.elements.elements[name];
@@ -539,20 +414,19 @@ class Diagram {
     const elementToRender = this.elements.elements[elementName];
     elementToRender.show();
 
-    // Move it to the origin and render
+    // Move it to the origin to render
     const oldPosition = elementToRender.getPosition();
-    
     elementToRender.setPosition(0, 0);
+    // Stop animations and render
     elementToRender.isRenderedAsImage = false;
     elementToRender.stop(true, true);
     this.renderToCanvas(elementToRender.tieToHTML.element);
     elementToRender.isRenderedAsImage = true;
-    // reset its position
+    // reset position
     elementToRender.setPosition(oldPosition);
+
     // this.draw(-1);
-    // this.webglLow.gl.canvas.style.visibility = 'visible';
     // this.fromWhere = 'reset Position';
-    // this.draw(-1);
     // elementToRender.hide();
 
     // show all elements that were shown previously (except element that was just rendered)
@@ -566,6 +440,7 @@ class Diagram {
     });
   }
 
+  // This method will render the gl and 2d contexts to a canvas
   renderToCanvas(
     htmlCanvasElementOrId: HTMLCanvasElement | string,
   ) {
@@ -629,6 +504,7 @@ class Diagram {
     this.clearContext();
   }
 
+  // resize should only be called if the viewport size has changed.
   resize() {
     if (this.elements != null) {
       this.elements.updateLimits(this.limits, this.spaceTransforms);
@@ -648,9 +524,6 @@ class Diagram {
   updateHTMLElementTie() {
     if (this.elements != null) {
       this.elements.updateHTMLElementTie(
-        // this.pixelToDiagramSpaceTransform,
-        // this.diagramToPixelSpaceScale,
-        // this.diagramToGLSpaceTransform.m(),
         this.canvasLow,
       );
     }
@@ -1004,10 +877,9 @@ class Diagram {
     }
     const newTopInPx = `${newTop}px`;
     if (this.webglLow.gl.canvas.style.top !== newTopInPx) {
-      console.log('centering', new Date().getTime() - this.startTime)
       this.webglLow.gl.canvas.style.top = `${newTop}px`;
       this.draw2DLow.canvas.style.top = `${newTop}px`;
-      this.resize();
+      this.updateHTMLElementTie();
     }
   }
 
