@@ -71,7 +71,7 @@ export type TypeSpaceTransforms = {
 // Then the process is:
 //    - html element size in pixels and aspect ratio found
 //    - html element size in gl coordinates found
-//    - 
+
 class Diagram {
   canvasLow: HTMLCanvasElement;
   canvasHigh: HTMLCanvasElement;
@@ -123,10 +123,14 @@ class Diagram {
     diagramToCSSPercent: Transform;
   };
 
-  scrolled: boolean;
-  oldScrollY: number;
+  
+  // oldScrollY: number;
   lastDrawTime: number;
   drawQueued: boolean;
+  waitForFrames: number;
+  scrolled: boolean;
+  scrollingFast: boolean;
+  scrollTimeoutId: ?number;
 
   isTouchDevice: boolean;
 
@@ -140,7 +144,7 @@ class Diagram {
       fontScale: 1,
     };
     this.scrolled = false;
-    this.oldScrollY = 0;
+    // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
       htmlId, backgroundColor, limits,
@@ -249,7 +253,9 @@ class Diagram {
       this.elements = new optionsToUse.elements(this);
       this.elements.diagramLimits = this.limits;
     }
-    this.waitForFrame = 0;
+    this.waitForFrames = 0;
+    this.scrollingFast = false;
+    this.scrollTimeoutId = null;
   }
 
   addElements(
@@ -391,12 +397,10 @@ class Diagram {
     });
     if (needClear) {
       this.drawQueued = true;
-      this.startTime = new Date().getTime();
       this.draw(-1);
     }
   }
 
-  
   renderElementToTiedCanvas(elementName: string) {
     // record visibility of top level elements in diagram
     const currentVisibility = {};
@@ -454,7 +458,7 @@ class Diagram {
     }
 
     this.drawQueued = true;
-    this.fromWhere = 'RenderToCanvas';
+    // this.fromWhere = 'RenderToCanvas';
     this.draw(-1);
 
     const { ctx } = new DrawContext2D(htmlCanvas);
@@ -819,32 +823,34 @@ class Diagram {
     this.elements.clear();
   }
 
-  draw(now: number): void {
-    this.fromWhere = '';
-    if (now === -1) {
+  draw(nowIn: number): void {
+    let now = nowIn;
+    if (nowIn === -1) {
       now = this.lastDrawTime;
-    } else {
-      // console.log((now - this.lastDrawTime) * 1000);
-      this.lastDrawTime = now;
     }
+    // console.log((now - this.lastDrawTime) * 1000);
+    this.lastDrawTime = now;
 
     if (this.scrolled === true) {
       this.scrolled = false;
       if (this.webglLow.gl.canvas.style.top !== '-10000px') {
         this.webglLow.gl.canvas.style.top = '-10000px';
-        this.waitForFrame = 1;
+        this.waitForFrames = 1;
       }
-      if (this.waitForFrame > 0) {
-        this.waitForFrame -= 1;
+      if (this.waitForFrames > 0) {
+        this.waitForFrames -= 1;
       } else {
         this.renderAllElementsToTiedCanvases();
       }
       this.scrollingFast = true;
       if (this.scrollTimeoutId) {
         clearTimeout(this.scrollTimeoutId);
+        this.scrollTimeoutId = null;
       }
       this.scrollTimeoutId = setTimeout(this.centerDrawingLens.bind(this, true), 100);
     }
+
+    // If only a scroll event called draw, then quit before drawing
     if (this.drawQueued === false) {
       return;
     }
