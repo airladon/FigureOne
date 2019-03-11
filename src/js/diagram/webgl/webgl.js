@@ -146,7 +146,6 @@ class WebGLInstance {
     vertexShader: string,
     fragmentShader: string,
   ) {
-    console.log(vertexShader, fragmentShader, this.programs)
     for (let i = 0; i < this.programs.length; i += 1) {
       const program = this.programs[i];
       if (program.vertexShader === vertexShader
