@@ -970,13 +970,18 @@ class Diagram {
     if (now === -1) {
       now = this.lastDrawTime;
     } else {
+      // console.log((now - this.lastDrawTime) * 1000);
       this.lastDrawTime = now;
     }
 
     if (this.scrolled === true) {
       this.scrolled = false;
-      if (this.webglLow.gl.canvas.style.visibility !== 'hidden') {
-        this.webglLow.gl.canvas.style.visibility = 'hidden';
+      // if (this.webglLow.gl.canvas.style.visibility !== 'hidden') {
+      //   this.webglLow.gl.canvas.style.visibility = 'hidden';
+      //   this.waitForFrame = 1;
+      // }
+      if (this.webglLow.gl.canvas.style.top !== '-10000px') {
+        this.webglLow.gl.canvas.style.top = '-10000px';
         this.waitForFrame = 1;
       }
       if (this.waitForFrame > 0) {
@@ -1039,7 +1044,7 @@ class Diagram {
       this.draw2DLow.canvas.style.top = `${newTop}px`;
       this.resize();
     }
-    this.webglLow.gl.canvas.style.visibility = 'visible';
+    // this.webglLow.gl.canvas.style.visibility = 'visible';
   }
 
   animateNextFrame(draw: boolean = true, fromWhere: string = '') {
