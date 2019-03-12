@@ -142,17 +142,28 @@ class VertexObject extends DrawingObject {
           const image = new Image();
           image.src = src;
           this.state = 'loading';
+          this.webgl.textures[texture.id].state = 'loading';
+          this.webgl.textures[texture.id].onLoad.push(this.executeOnLoad.bind(this));
           image.addEventListener('load', () => {
             // Now that the image has loaded make copy it to the texture.
             texture.data = image;
             this.addTextureToBuffer(glTexture, texture.data);
-            if (this.onLoad != null) {
-              this.onLoad();
-            }
+            // if (this.onLoad != null) {
+            this.webgl.onLoad(texture.id);
+            // this.onLoad();
+            // }
             this.state = 'loaded';
+            this.webgl.textures[texture.id].state = 'loaded';
           });
         } else if (texture.data != null) {
           this.addTextureToBuffer(glTexture, texture.data);
+        }
+      } else if (texture.id in this.webgl.textures) {
+        if (this.webgl.textures[texture.id].state === 'loading') {
+          this.state = 'loading';
+          this.webgl.textures[texture.id].onLoad.push(this.executeOnLoad.bind(this));
+        } else {
+          this.state = 'loaded';
         }
       }
     }
@@ -160,6 +171,12 @@ class VertexObject extends DrawingObject {
     this.buffer = this.gl.createBuffer();
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffer);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.points), this.gl.STATIC_DRAW);
+  }
+
+  executeOnLoad() {
+    if (this.onLoad != null) {
+      this.onLoad();
+    }
   }
 
   resetBuffer(numPoints: number = 0) {
