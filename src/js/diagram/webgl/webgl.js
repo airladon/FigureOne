@@ -111,6 +111,8 @@ class WebGLInstance {
       glTexture: WebGLTexture;
       index: number;
       type: 'image' | 'canvasText';
+      state: 'loading' | 'loaded';
+      onLoad: Array<() => void>
     };
   };
   programs: Array<{
@@ -138,8 +140,15 @@ class WebGLInstance {
       glTexture,
       index,
       type,
+      state: 'loaded',
+      onLoad: [],
     };
     return index;
+  }
+
+  onLoad(textureId: string) {
+    this.textures[textureId].onLoad.forEach(f => f());
+    this.textures[textureId].onLoad = [];
   }
 
   getProgram(
