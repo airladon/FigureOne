@@ -29,6 +29,7 @@ class DrawingObject {
   onLoad: Function | null;   // Only used for drawing objects with asynchronous
   //                            loading (like textures)
   type: string;
+  state: 'loading' | 'loaded';
 
   constructor() {
     // this.numPoints = 0;
@@ -37,6 +38,7 @@ class DrawingObject {
     this.holeBorder = [[]];
     this.onLoad = null;
     this.type = 'drawingObject';
+    this.state = 'loading';
   }
 
   _dup() {

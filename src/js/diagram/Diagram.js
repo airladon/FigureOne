@@ -177,29 +177,18 @@ class Diagram {
           ) {
             this.htmlCanvas = child;
           }
-          // if (child.classList.contains('diagram__gesture')) {
-          //   this.gestureElement = child;
-          // }
         }
         this.backgroundColor = backgroundColor;
-        // const shaders = getShaders(vertexShader, fragmentShader);
         const webglLow = new WebGLInstance(
           this.canvasLow,
-          // shaders.vertexSource,
-          // shaders.fragmentSource,
-          // shaders.varNames,
           this.backgroundColor,
         );
         const webglHigh = new WebGLInstance(
           this.canvasHigh,
-          // shaders.vertexSource,
-          // shaders.fragmentSource,
-          // shaders.varNames,
           this.backgroundColor,
         );
         this.webglLow = webglLow;
         this.webglHigh = webglHigh;
-        // const draw2D = this.textCanvas.getContext('2d');
         this.draw2DLow = new DrawContext2D(this.textCanvasLow);
         this.draw2DHigh = new DrawContext2D(this.textCanvasHigh);
       }

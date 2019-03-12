@@ -3484,6 +3484,21 @@ class DiagramElementCollection extends DiagramElement {
     }
     return oldInstance;
   }
+
+  getLoadingElements() {
+    let elems = [];
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element instanceof DiagramElementPrimative) {
+        if (element.drawingObject.state === 'loading') {
+          elems.push(element);
+        }
+      } else {
+        elems = [...elems, ...element.getLoadingElements()];
+      }
+    }
+    return elems;
+  }
 }
 
 export {

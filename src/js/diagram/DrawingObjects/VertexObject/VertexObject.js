@@ -33,6 +33,8 @@ class VertexObject extends DrawingObject {
     type: 'canvasText' | 'image';
   };
 
+  state: 'loading' | 'loaded';
+
   +change: (Array<g2.Point>) => void;
   programIndex: number;
 
@@ -88,6 +90,7 @@ class VertexObject extends DrawingObject {
   }
 
   setupBuffer(numPoints: number = 0) {
+    this.state = 'loaded';
     if (numPoints === 0) {
       this.numPoints = this.points.length / 2.0;
     } else {
@@ -138,6 +141,7 @@ class VertexObject extends DrawingObject {
           );
           const image = new Image();
           image.src = src;
+          this.state = 'loading';
           image.addEventListener('load', () => {
             // Now that the image has loaded make copy it to the texture.
             texture.data = image;
@@ -145,6 +149,7 @@ class VertexObject extends DrawingObject {
             if (this.onLoad != null) {
               this.onLoad();
             }
+            this.state = 'loaded';
           });
         } else if (texture.data != null) {
           this.addTextureToBuffer(glTexture, texture.data);
