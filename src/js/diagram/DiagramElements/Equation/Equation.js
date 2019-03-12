@@ -258,9 +258,6 @@ export class EquationNew extends DiagramElementCollection {
         options.text,
         { position: new Point(0, 0), font: fontToUse },
       );
-      // if (options.color == null) {
-      //   p.setColor(this.color);
-      // }
       if (options.color != null) {
         p.setColor(options.color);
       } else {
