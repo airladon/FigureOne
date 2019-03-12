@@ -532,7 +532,16 @@ class Diagram {
     if (this.elements != null) {
       this.elements.updateLimits(this.limits, this.spaceTransforms);
     }
-    this.elements.unrenderAll();
+    // if (this.count == null) {
+    //   this.count = 0;
+    // } else {
+    //   this.count += 1
+    // }
+    // console.log('resize')
+    // if (this.count > 2) {
+    //   console.log('unrender')
+    //   this.elements.unrenderAll();
+    // }
     this.webglLow.resize();
     this.webglHigh.resize();
     this.draw2DLow.resize();
