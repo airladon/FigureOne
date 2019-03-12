@@ -130,6 +130,7 @@ class Diagram {
   scrolled: boolean;
   scrollingFast: boolean;
   scrollTimeoutId: ?TimeoutID;
+  oldScroll: number;
 
   isTouchDevice: boolean;
 
@@ -244,6 +245,7 @@ class Diagram {
     this.waitForFrames = 0;
     this.scrollingFast = false;
     this.scrollTimeoutId = null;
+    this.oldScroll = window.pageYOffset;
   }
 
   scrollEvent() {
@@ -855,21 +857,25 @@ class Diagram {
 
     if (this.scrolled === true) {
       this.scrolled = false;
-      if (this.webglLow.gl.canvas.style.top !== '-10000px') {
-        this.webglLow.gl.canvas.style.top = '-10000px';
-        this.waitForFrames = 1;
+      if (Math.abs(window.pageYOffset - this.oldScroll)
+          > this.webglLow.gl.canvas.clientHeight / 4
+      ) {
+        if (this.webglLow.gl.canvas.style.top !== '-10000px') {
+          this.webglLow.gl.canvas.style.top = '-10000px';
+          this.waitForFrames = 1;
+        }
+        if (this.waitForFrames > 0) {
+          this.waitForFrames -= 1;
+        } else {
+          this.renderAllElementsToTiedCanvases();
+        }
+        this.scrollingFast = true;
+        if (this.scrollTimeoutId) {
+          clearTimeout(this.scrollTimeoutId);
+          this.scrollTimeoutId = null;
+        }
+        this.scrollTimeoutId = setTimeout(this.centerDrawingLens.bind(this, true), 100);
       }
-      if (this.waitForFrames > 0) {
-        this.waitForFrames -= 1;
-      } else {
-        this.renderAllElementsToTiedCanvases();
-      }
-      this.scrollingFast = true;
-      if (this.scrollTimeoutId) {
-        clearTimeout(this.scrollTimeoutId);
-        this.scrollTimeoutId = null;
-      }
-      this.scrollTimeoutId = setTimeout(this.centerDrawingLens.bind(this, true), 100);
     }
 
     // If only a scroll event called draw, then quit before drawing
@@ -909,6 +915,7 @@ class Diagram {
       this.draw2DLow.canvas.style.top = `${newTop}px`;
       this.updateHTMLElementTie();
     }
+    this.oldScroll = window.pageYOffset;
   }
 
   animateNextFrame(draw: boolean = true, fromWhere: string = '') {
