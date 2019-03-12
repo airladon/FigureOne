@@ -125,12 +125,15 @@ DiagramElementPrimative {
     "holeBorder": Array [
       Array [],
     ],
+    "lastDraw": Array [],
+    "lastDrawTransform": Array [],
     "location": Point {
       "x": 0,
       "y": 0,
     },
     "onLoad": null,
     "scalingFactor": 499.99999999999994,
+    "state": "loaded",
     "text": Array [
       DiagramText {
         "font": DiagramFont {
@@ -149,6 +152,7 @@ DiagramElementPrimative {
         "text": "a",
       },
     ],
+    "type": "drawingObject",
   },
   "hasTouchableElements": false,
   "interactiveLocation": Point {
@@ -157,6 +161,7 @@ DiagramElementPrimative {
   },
   "isInteractive": false,
   "isMovable": false,
+  "isRenderedAsImage": false,
   "isShown": true,
   "isTouchable": false,
   "lastDrawElementTransformPosition": Object {
@@ -426,12 +431,15 @@ DiagramElementPrimative {
         "holeBorder": Array [
           Array [],
         ],
+        "lastDraw": Array [],
+        "lastDrawTransform": Array [],
         "location": Point {
           "x": 0,
           "y": 0,
         },
         "onLoad": null,
         "scalingFactor": 499.99999999999994,
+        "state": "loaded",
         "text": Array [
           DiagramText {
             "font": DiagramFont {
@@ -450,6 +458,7 @@ DiagramElementPrimative {
             "text": "2",
           },
         ],
+        "type": "drawingObject",
       },
       "hasTouchableElements": false,
       "interactiveLocation": Point {
@@ -458,6 +467,7 @@ DiagramElementPrimative {
       },
       "isInteractive": false,
       "isMovable": false,
+      "isRenderedAsImage": false,
       "isShown": true,
       "isTouchable": false,
       "lastDrawElementTransformPosition": Object {
@@ -821,6 +831,7 @@ DiagramElementPrimative {
         ],
       },
       "uid": "0000000000",
+      "unrenderNextDraw": false,
     },
     "_a": [Circular],
     "_b": DiagramElementPrimative {
@@ -947,12 +958,15 @@ DiagramElementPrimative {
         "holeBorder": Array [
           Array [],
         ],
+        "lastDraw": Array [],
+        "lastDrawTransform": Array [],
         "location": Point {
           "x": 0,
           "y": 0,
         },
         "onLoad": null,
         "scalingFactor": 499.99999999999994,
+        "state": "loaded",
         "text": Array [
           DiagramText {
             "font": DiagramFont {
@@ -971,6 +985,7 @@ DiagramElementPrimative {
             "text": "b",
           },
         ],
+        "type": "drawingObject",
       },
       "hasTouchableElements": false,
       "interactiveLocation": Point {
@@ -979,6 +994,7 @@ DiagramElementPrimative {
       },
       "isInteractive": false,
       "isMovable": false,
+      "isRenderedAsImage": false,
       "isShown": true,
       "isTouchable": false,
       "lastDrawElementTransformPosition": Object {
@@ -1342,6 +1358,7 @@ DiagramElementPrimative {
         ],
       },
       "uid": "0000000000",
+      "unrenderNextDraw": false,
     },
     "_c": DiagramElementPrimative {
       "angleToDraw": -1,
@@ -1467,12 +1484,15 @@ DiagramElementPrimative {
         "holeBorder": Array [
           Array [],
         ],
+        "lastDraw": Array [],
+        "lastDrawTransform": Array [],
         "location": Point {
           "x": 0,
           "y": 0,
         },
         "onLoad": null,
         "scalingFactor": 499.99999999999994,
+        "state": "loaded",
         "text": Array [
           DiagramText {
             "font": DiagramFont {
@@ -1491,6 +1511,7 @@ DiagramElementPrimative {
             "text": "c",
           },
         ],
+        "type": "drawingObject",
       },
       "hasTouchableElements": false,
       "interactiveLocation": Point {
@@ -1499,6 +1520,7 @@ DiagramElementPrimative {
       },
       "isInteractive": false,
       "isMovable": false,
+      "isRenderedAsImage": false,
       "isShown": true,
       "isTouchable": false,
       "lastDrawElementTransformPosition": Object {
@@ -1862,6 +1884,7 @@ DiagramElementPrimative {
         ],
       },
       "uid": "0000000000",
+      "unrenderNextDraw": false,
     },
     "_v": DiagramElementPrimative {
       "angleToDraw": -1,
@@ -1993,6 +2016,7 @@ DiagramElementPrimative {
           0.5,
         ],
         "programIndex": undefined,
+        "state": "loaded",
         "texture": null,
         "type": "vertexPrimative",
         "webgl": Object {
@@ -2038,6 +2062,7 @@ DiagramElementPrimative {
       },
       "isInteractive": false,
       "isMovable": false,
+      "isRenderedAsImage": false,
       "isShown": true,
       "isTouchable": false,
       "lastDrawElementTransformPosition": Object {
@@ -2401,6 +2426,7 @@ DiagramElementPrimative {
         ],
       },
       "uid": "0000000000",
+      "unrenderNextDraw": false,
     },
     "anim": Object {
       "builder": [Function],
@@ -2592,12 +2618,15 @@ DiagramElementPrimative {
           "holeBorder": Array [
             Array [],
           ],
+          "lastDraw": Array [],
+          "lastDrawTransform": Array [],
           "location": Point {
             "x": 0,
             "y": 0,
           },
           "onLoad": null,
           "scalingFactor": 499.99999999999994,
+          "state": "loaded",
           "text": Array [
             DiagramText {
               "font": DiagramFont {
@@ -2616,6 +2645,7 @@ DiagramElementPrimative {
               "text": "2",
             },
           ],
+          "type": "drawingObject",
         },
         "hasTouchableElements": false,
         "interactiveLocation": Point {
@@ -2624,6 +2654,7 @@ DiagramElementPrimative {
         },
         "isInteractive": false,
         "isMovable": false,
+        "isRenderedAsImage": false,
         "isShown": true,
         "isTouchable": false,
         "lastDrawElementTransformPosition": Object {
@@ -2987,6 +3018,7 @@ DiagramElementPrimative {
           ],
         },
         "uid": "0000000000",
+        "unrenderNextDraw": false,
       },
       "a": [Circular],
       "b": DiagramElementPrimative {
@@ -3113,12 +3145,15 @@ DiagramElementPrimative {
           "holeBorder": Array [
             Array [],
           ],
+          "lastDraw": Array [],
+          "lastDrawTransform": Array [],
           "location": Point {
             "x": 0,
             "y": 0,
           },
           "onLoad": null,
           "scalingFactor": 499.99999999999994,
+          "state": "loaded",
           "text": Array [
             DiagramText {
               "font": DiagramFont {
@@ -3137,6 +3172,7 @@ DiagramElementPrimative {
               "text": "b",
             },
           ],
+          "type": "drawingObject",
         },
         "hasTouchableElements": false,
         "interactiveLocation": Point {
@@ -3145,6 +3181,7 @@ DiagramElementPrimative {
         },
         "isInteractive": false,
         "isMovable": false,
+        "isRenderedAsImage": false,
         "isShown": true,
         "isTouchable": false,
         "lastDrawElementTransformPosition": Object {
@@ -3508,6 +3545,7 @@ DiagramElementPrimative {
           ],
         },
         "uid": "0000000000",
+        "unrenderNextDraw": false,
       },
       "c": DiagramElementPrimative {
         "angleToDraw": -1,
@@ -3633,12 +3671,15 @@ DiagramElementPrimative {
           "holeBorder": Array [
             Array [],
           ],
+          "lastDraw": Array [],
+          "lastDrawTransform": Array [],
           "location": Point {
             "x": 0,
             "y": 0,
           },
           "onLoad": null,
           "scalingFactor": 499.99999999999994,
+          "state": "loaded",
           "text": Array [
             DiagramText {
               "font": DiagramFont {
@@ -3657,6 +3698,7 @@ DiagramElementPrimative {
               "text": "c",
             },
           ],
+          "type": "drawingObject",
         },
         "hasTouchableElements": false,
         "interactiveLocation": Point {
@@ -3665,6 +3707,7 @@ DiagramElementPrimative {
         },
         "isInteractive": false,
         "isMovable": false,
+        "isRenderedAsImage": false,
         "isShown": true,
         "isTouchable": false,
         "lastDrawElementTransformPosition": Object {
@@ -4028,6 +4071,7 @@ DiagramElementPrimative {
           ],
         },
         "uid": "0000000000",
+        "unrenderNextDraw": false,
       },
       "v": DiagramElementPrimative {
         "angleToDraw": -1,
@@ -4159,6 +4203,7 @@ DiagramElementPrimative {
             0.5,
           ],
           "programIndex": undefined,
+          "state": "loaded",
           "texture": null,
           "type": "vertexPrimative",
           "webgl": Object {
@@ -4204,6 +4249,7 @@ DiagramElementPrimative {
         },
         "isInteractive": false,
         "isMovable": false,
+        "isRenderedAsImage": false,
         "isShown": true,
         "isTouchable": false,
         "lastDrawElementTransformPosition": Object {
@@ -4567,6 +4613,7 @@ DiagramElementPrimative {
           ],
         },
         "uid": "0000000000",
+        "unrenderNextDraw": false,
       },
     },
     "eqn": Object {
@@ -4764,12 +4811,15 @@ DiagramElementPrimative {
                         "holeBorder": Array [
                           Array [],
                         ],
+                        "lastDraw": Array [],
+                        "lastDrawTransform": Array [],
                         "location": Point {
                           "x": 0,
                           "y": 0,
                         },
                         "onLoad": null,
                         "scalingFactor": 499.99999999999994,
+                        "state": "loaded",
                         "text": Array [
                           DiagramText {
                             "font": DiagramFont {
@@ -4788,6 +4838,7 @@ DiagramElementPrimative {
                             "text": "b",
                           },
                         ],
+                        "type": "drawingObject",
                       },
                       "hasTouchableElements": false,
                       "interactiveLocation": Point {
@@ -4796,6 +4847,7 @@ DiagramElementPrimative {
                       },
                       "isInteractive": false,
                       "isMovable": false,
+                      "isRenderedAsImage": false,
                       "isShown": true,
                       "isTouchable": false,
                       "lastDrawElementTransformPosition": Object {
@@ -5159,6 +5211,7 @@ DiagramElementPrimative {
                         ],
                       },
                       "uid": "0000000000",
+                      "unrenderNextDraw": false,
                     },
                     "descent": 0.0014400000000000003,
                     "height": 0.026640000000000004,
@@ -5295,12 +5348,15 @@ DiagramElementPrimative {
                         "holeBorder": Array [
                           Array [],
                         ],
+                        "lastDraw": Array [],
+                        "lastDrawTransform": Array [],
                         "location": Point {
                           "x": 0,
                           "y": 0,
                         },
                         "onLoad": null,
                         "scalingFactor": 499.99999999999994,
+                        "state": "loaded",
                         "text": Array [
                           DiagramText {
                             "font": DiagramFont {
@@ -5319,6 +5375,7 @@ DiagramElementPrimative {
                             "text": "c",
                           },
                         ],
+                        "type": "drawingObject",
                       },
                       "hasTouchableElements": false,
                       "interactiveLocation": Point {
@@ -5327,6 +5384,7 @@ DiagramElementPrimative {
                       },
                       "isInteractive": false,
                       "isMovable": false,
+                      "isRenderedAsImage": false,
                       "isShown": true,
                       "isTouchable": false,
                       "lastDrawElementTransformPosition": Object {
@@ -5690,6 +5748,7 @@ DiagramElementPrimative {
                         ],
                       },
                       "uid": "0000000000",
+                      "unrenderNextDraw": false,
                     },
                     "descent": 0.0014400000000000003,
                     "height": 0.018540000000000004,
@@ -5838,12 +5897,15 @@ DiagramElementPrimative {
                   "holeBorder": Array [
                     Array [],
                   ],
+                  "lastDraw": Array [],
+                  "lastDrawTransform": Array [],
                   "location": Point {
                     "x": 0,
                     "y": 0,
                   },
                   "onLoad": null,
                   "scalingFactor": 499.99999999999994,
+                  "state": "loaded",
                   "text": Array [
                     DiagramText {
                       "font": DiagramFont {
@@ -5862,6 +5924,7 @@ DiagramElementPrimative {
                       "text": "2",
                     },
                   ],
+                  "type": "drawingObject",
                 },
                 "hasTouchableElements": false,
                 "interactiveLocation": Point {
@@ -5870,6 +5933,7 @@ DiagramElementPrimative {
                 },
                 "isInteractive": false,
                 "isMovable": false,
+                "isRenderedAsImage": false,
                 "isShown": true,
                 "isTouchable": false,
                 "lastDrawElementTransformPosition": Object {
@@ -6233,6 +6297,7 @@ DiagramElementPrimative {
                   ],
                 },
                 "uid": "0000000000",
+                "unrenderNextDraw": false,
               },
               "a": [Circular],
               "b": DiagramElementPrimative {
@@ -6359,12 +6424,15 @@ DiagramElementPrimative {
                   "holeBorder": Array [
                     Array [],
                   ],
+                  "lastDraw": Array [],
+                  "lastDrawTransform": Array [],
                   "location": Point {
                     "x": 0,
                     "y": 0,
                   },
                   "onLoad": null,
                   "scalingFactor": 499.99999999999994,
+                  "state": "loaded",
                   "text": Array [
                     DiagramText {
                       "font": DiagramFont {
@@ -6383,6 +6451,7 @@ DiagramElementPrimative {
                       "text": "b",
                     },
                   ],
+                  "type": "drawingObject",
                 },
                 "hasTouchableElements": false,
                 "interactiveLocation": Point {
@@ -6391,6 +6460,7 @@ DiagramElementPrimative {
                 },
                 "isInteractive": false,
                 "isMovable": false,
+                "isRenderedAsImage": false,
                 "isShown": true,
                 "isTouchable": false,
                 "lastDrawElementTransformPosition": Object {
@@ -6754,6 +6824,7 @@ DiagramElementPrimative {
                   ],
                 },
                 "uid": "0000000000",
+                "unrenderNextDraw": false,
               },
               "c": DiagramElementPrimative {
                 "angleToDraw": -1,
@@ -6879,12 +6950,15 @@ DiagramElementPrimative {
                   "holeBorder": Array [
                     Array [],
                   ],
+                  "lastDraw": Array [],
+                  "lastDrawTransform": Array [],
                   "location": Point {
                     "x": 0,
                     "y": 0,
                   },
                   "onLoad": null,
                   "scalingFactor": 499.99999999999994,
+                  "state": "loaded",
                   "text": Array [
                     DiagramText {
                       "font": DiagramFont {
@@ -6903,6 +6977,7 @@ DiagramElementPrimative {
                       "text": "c",
                     },
                   ],
+                  "type": "drawingObject",
                 },
                 "hasTouchableElements": false,
                 "interactiveLocation": Point {
@@ -6911,6 +6986,7 @@ DiagramElementPrimative {
                 },
                 "isInteractive": false,
                 "isMovable": false,
+                "isRenderedAsImage": false,
                 "isShown": true,
                 "isTouchable": false,
                 "lastDrawElementTransformPosition": Object {
@@ -7274,6 +7350,7 @@ DiagramElementPrimative {
                   ],
                 },
                 "uid": "0000000000",
+                "unrenderNextDraw": false,
               },
               "v": DiagramElementPrimative {
                 "angleToDraw": -1,
@@ -7405,6 +7482,7 @@ DiagramElementPrimative {
                     0.5,
                   ],
                   "programIndex": undefined,
+                  "state": "loaded",
                   "texture": null,
                   "type": "vertexPrimative",
                   "webgl": Object {
@@ -7450,6 +7528,7 @@ DiagramElementPrimative {
                 },
                 "isInteractive": false,
                 "isMovable": false,
+                "isRenderedAsImage": false,
                 "isShown": true,
                 "isTouchable": false,
                 "lastDrawElementTransformPosition": Object {
@@ -7813,6 +7892,7 @@ DiagramElementPrimative {
                   ],
                 },
                 "uid": "0000000000",
+                "unrenderNextDraw": false,
               },
             },
             "height": 0.026640000000000004,
@@ -8001,12 +8081,15 @@ DiagramElementPrimative {
                                 "holeBorder": Array [
                                   Array [],
                                 ],
+                                "lastDraw": Array [],
+                                "lastDrawTransform": Array [],
                                 "location": Point {
                                   "x": 0,
                                   "y": 0,
                                 },
                                 "onLoad": null,
                                 "scalingFactor": 499.99999999999994,
+                                "state": "loaded",
                                 "text": Array [
                                   DiagramText {
                                     "font": DiagramFont {
@@ -8025,6 +8108,7 @@ DiagramElementPrimative {
                                     "text": "2",
                                   },
                                 ],
+                                "type": "drawingObject",
                               },
                               "hasTouchableElements": false,
                               "interactiveLocation": Point {
@@ -8033,6 +8117,7 @@ DiagramElementPrimative {
                               },
                               "isInteractive": false,
                               "isMovable": false,
+                              "isRenderedAsImage": false,
                               "isShown": true,
                               "isTouchable": false,
                               "lastDrawElementTransformPosition": Object {
@@ -8396,6 +8481,7 @@ DiagramElementPrimative {
                                 ],
                               },
                               "uid": "0000000000",
+                              "unrenderNextDraw": false,
                             },
                             "descent": 0.0014400000000000003,
                             "height": 0.026640000000000004,
@@ -8547,6 +8633,7 @@ DiagramElementPrimative {
                               0.5,
                             ],
                             "programIndex": undefined,
+                            "state": "loaded",
                             "texture": null,
                             "type": "vertexPrimative",
                             "webgl": Object {
@@ -8592,6 +8679,7 @@ DiagramElementPrimative {
                           },
                           "isInteractive": false,
                           "isMovable": false,
+                          "isRenderedAsImage": false,
                           "isShown": true,
                           "isTouchable": false,
                           "lastDrawElementTransformPosition": Object {
@@ -8955,6 +9043,7 @@ DiagramElementPrimative {
                             ],
                           },
                           "uid": "0000000000",
+                          "unrenderNextDraw": false,
                         },
                         "descent": 0,
                         "height": 0,
@@ -9094,12 +9183,15 @@ DiagramElementPrimative {
                               "holeBorder": Array [
                                 Array [],
                               ],
+                              "lastDraw": Array [],
+                              "lastDrawTransform": Array [],
                               "location": Point {
                                 "x": 0,
                                 "y": 0,
                               },
                               "onLoad": null,
                               "scalingFactor": 499.99999999999994,
+                              "state": "loaded",
                               "text": Array [
                                 DiagramText {
                                   "font": DiagramFont {
@@ -9118,6 +9210,7 @@ DiagramElementPrimative {
                                   "text": "2",
                                 },
                               ],
+                              "type": "drawingObject",
                             },
                             "hasTouchableElements": false,
                             "interactiveLocation": Point {
@@ -9126,6 +9219,7 @@ DiagramElementPrimative {
                             },
                             "isInteractive": false,
                             "isMovable": false,
+                            "isRenderedAsImage": false,
                             "isShown": true,
                             "isTouchable": false,
                             "lastDrawElementTransformPosition": Object {
@@ -9489,6 +9583,7 @@ DiagramElementPrimative {
                               ],
                             },
                             "uid": "0000000000",
+                            "unrenderNextDraw": false,
                           },
                           "descent": 0.0014400000000000003,
                           "height": 0.026640000000000004,
@@ -9673,6 +9768,7 @@ DiagramElementPrimative {
                           0.5,
                         ],
                         "programIndex": undefined,
+                        "state": "loaded",
                         "texture": null,
                         "type": "vertexPrimative",
                         "webgl": Object {
@@ -9718,6 +9814,7 @@ DiagramElementPrimative {
                       },
                       "isInteractive": false,
                       "isMovable": false,
+                      "isRenderedAsImage": false,
                       "isShown": true,
                       "isTouchable": false,
                       "lastDrawElementTransformPosition": Object {
@@ -10081,6 +10178,7 @@ DiagramElementPrimative {
                         ],
                       },
                       "uid": "0000000000",
+                      "unrenderNextDraw": false,
                     },
                     "vinculumPosition": Point {
                       "x": 1.9586,
@@ -10218,12 +10316,15 @@ DiagramElementPrimative {
                         "holeBorder": Array [
                           Array [],
                         ],
+                        "lastDraw": Array [],
+                        "lastDrawTransform": Array [],
                         "location": Point {
                           "x": 0,
                           "y": 0,
                         },
                         "onLoad": null,
                         "scalingFactor": 499.99999999999994,
+                        "state": "loaded",
                         "text": Array [
                           DiagramText {
                             "font": DiagramFont {
@@ -10242,6 +10343,7 @@ DiagramElementPrimative {
                             "text": "c",
                           },
                         ],
+                        "type": "drawingObject",
                       },
                       "hasTouchableElements": false,
                       "interactiveLocation": Point {
@@ -10250,6 +10352,7 @@ DiagramElementPrimative {
                       },
                       "isInteractive": false,
                       "isMovable": false,
+                      "isRenderedAsImage": false,
                       "isShown": true,
                       "isTouchable": false,
                       "lastDrawElementTransformPosition": Object {
@@ -10613,6 +10716,7 @@ DiagramElementPrimative {
                         ],
                       },
                       "uid": "0000000000",
+                      "unrenderNextDraw": false,
                     },
                     "descent": 0.0014400000000000003,
                     "height": 0.018540000000000004,
@@ -10761,12 +10865,15 @@ DiagramElementPrimative {
                   "holeBorder": Array [
                     Array [],
                   ],
+                  "lastDraw": Array [],
+                  "lastDrawTransform": Array [],
                   "location": Point {
                     "x": 0,
                     "y": 0,
                   },
                   "onLoad": null,
                   "scalingFactor": 499.99999999999994,
+                  "state": "loaded",
                   "text": Array [
                     DiagramText {
                       "font": DiagramFont {
@@ -10785,6 +10892,7 @@ DiagramElementPrimative {
                       "text": "2",
                     },
                   ],
+                  "type": "drawingObject",
                 },
                 "hasTouchableElements": false,
                 "interactiveLocation": Point {
@@ -10793,6 +10901,7 @@ DiagramElementPrimative {
                 },
                 "isInteractive": false,
                 "isMovable": false,
+                "isRenderedAsImage": false,
                 "isShown": true,
                 "isTouchable": false,
                 "lastDrawElementTransformPosition": Object {
@@ -11156,6 +11265,7 @@ DiagramElementPrimative {
                   ],
                 },
                 "uid": "0000000000",
+                "unrenderNextDraw": false,
               },
               "a": [Circular],
               "b": DiagramElementPrimative {
@@ -11282,12 +11392,15 @@ DiagramElementPrimative {
                   "holeBorder": Array [
                     Array [],
                   ],
+                  "lastDraw": Array [],
+                  "lastDrawTransform": Array [],
                   "location": Point {
                     "x": 0,
                     "y": 0,
                   },
                   "onLoad": null,
                   "scalingFactor": 499.99999999999994,
+                  "state": "loaded",
                   "text": Array [
                     DiagramText {
                       "font": DiagramFont {
@@ -11306,6 +11419,7 @@ DiagramElementPrimative {
                       "text": "b",
                     },
                   ],
+                  "type": "drawingObject",
                 },
                 "hasTouchableElements": false,
                 "interactiveLocation": Point {
@@ -11314,6 +11428,7 @@ DiagramElementPrimative {
                 },
                 "isInteractive": false,
                 "isMovable": false,
+                "isRenderedAsImage": false,
                 "isShown": true,
                 "isTouchable": false,
                 "lastDrawElementTransformPosition": Object {
@@ -11677,6 +11792,7 @@ DiagramElementPrimative {
                   ],
                 },
                 "uid": "0000000000",
+                "unrenderNextDraw": false,
               },
               "c": DiagramElementPrimative {
                 "angleToDraw": -1,
@@ -11802,12 +11918,15 @@ DiagramElementPrimative {
                   "holeBorder": Array [
                     Array [],
                   ],
+                  "lastDraw": Array [],
+                  "lastDrawTransform": Array [],
                   "location": Point {
                     "x": 0,
                     "y": 0,
                   },
                   "onLoad": null,
                   "scalingFactor": 499.99999999999994,
+                  "state": "loaded",
                   "text": Array [
                     DiagramText {
                       "font": DiagramFont {
@@ -11826,6 +11945,7 @@ DiagramElementPrimative {
                       "text": "c",
                     },
                   ],
+                  "type": "drawingObject",
                 },
                 "hasTouchableElements": false,
                 "interactiveLocation": Point {
@@ -11834,6 +11954,7 @@ DiagramElementPrimative {
                 },
                 "isInteractive": false,
                 "isMovable": false,
+                "isRenderedAsImage": false,
                 "isShown": true,
                 "isTouchable": false,
                 "lastDrawElementTransformPosition": Object {
@@ -12197,6 +12318,7 @@ DiagramElementPrimative {
                   ],
                 },
                 "uid": "0000000000",
+                "unrenderNextDraw": false,
               },
               "v": DiagramElementPrimative {
                 "angleToDraw": -1,
@@ -12328,6 +12450,7 @@ DiagramElementPrimative {
                     0.5,
                   ],
                   "programIndex": undefined,
+                  "state": "loaded",
                   "texture": null,
                   "type": "vertexPrimative",
                   "webgl": Object {
@@ -12373,6 +12496,7 @@ DiagramElementPrimative {
                 },
                 "isInteractive": false,
                 "isMovable": false,
+                "isRenderedAsImage": false,
                 "isShown": true,
                 "isTouchable": false,
                 "lastDrawElementTransformPosition": Object {
@@ -12736,6 +12860,7 @@ DiagramElementPrimative {
                   ],
                 },
                 "uid": "0000000000",
+                "unrenderNextDraw": false,
               },
             },
             "height": 0.09818000000000002,
@@ -12878,12 +13003,15 @@ DiagramElementPrimative {
               "holeBorder": Array [
                 Array [],
               ],
+              "lastDraw": Array [],
+              "lastDrawTransform": Array [],
               "location": Point {
                 "x": 0,
                 "y": 0,
               },
               "onLoad": null,
               "scalingFactor": 499.99999999999994,
+              "state": "loaded",
               "text": Array [
                 DiagramText {
                   "font": DiagramFont {
@@ -12902,6 +13030,7 @@ DiagramElementPrimative {
                   "text": "2",
                 },
               ],
+              "type": "drawingObject",
             },
             "hasTouchableElements": false,
             "interactiveLocation": Point {
@@ -12910,6 +13039,7 @@ DiagramElementPrimative {
             },
             "isInteractive": false,
             "isMovable": false,
+            "isRenderedAsImage": false,
             "isShown": true,
             "isTouchable": false,
             "lastDrawElementTransformPosition": Object {
@@ -13273,6 +13403,7 @@ DiagramElementPrimative {
               ],
             },
             "uid": "0000000000",
+            "unrenderNextDraw": false,
           },
           "a": [Circular],
           "b": DiagramElementPrimative {
@@ -13399,12 +13530,15 @@ DiagramElementPrimative {
               "holeBorder": Array [
                 Array [],
               ],
+              "lastDraw": Array [],
+              "lastDrawTransform": Array [],
               "location": Point {
                 "x": 0,
                 "y": 0,
               },
               "onLoad": null,
               "scalingFactor": 499.99999999999994,
+              "state": "loaded",
               "text": Array [
                 DiagramText {
                   "font": DiagramFont {
@@ -13423,6 +13557,7 @@ DiagramElementPrimative {
                   "text": "b",
                 },
               ],
+              "type": "drawingObject",
             },
             "hasTouchableElements": false,
             "interactiveLocation": Point {
@@ -13431,6 +13566,7 @@ DiagramElementPrimative {
             },
             "isInteractive": false,
             "isMovable": false,
+            "isRenderedAsImage": false,
             "isShown": true,
             "isTouchable": false,
             "lastDrawElementTransformPosition": Object {
@@ -13794,6 +13930,7 @@ DiagramElementPrimative {
               ],
             },
             "uid": "0000000000",
+            "unrenderNextDraw": false,
           },
           "c": DiagramElementPrimative {
             "angleToDraw": -1,
@@ -13919,12 +14056,15 @@ DiagramElementPrimative {
               "holeBorder": Array [
                 Array [],
               ],
+              "lastDraw": Array [],
+              "lastDrawTransform": Array [],
               "location": Point {
                 "x": 0,
                 "y": 0,
               },
               "onLoad": null,
               "scalingFactor": 499.99999999999994,
+              "state": "loaded",
               "text": Array [
                 DiagramText {
                   "font": DiagramFont {
@@ -13943,6 +14083,7 @@ DiagramElementPrimative {
                   "text": "c",
                 },
               ],
+              "type": "drawingObject",
             },
             "hasTouchableElements": false,
             "interactiveLocation": Point {
@@ -13951,6 +14092,7 @@ DiagramElementPrimative {
             },
             "isInteractive": false,
             "isMovable": false,
+            "isRenderedAsImage": false,
             "isShown": true,
             "isTouchable": false,
             "lastDrawElementTransformPosition": Object {
@@ -14314,6 +14456,7 @@ DiagramElementPrimative {
               ],
             },
             "uid": "0000000000",
+            "unrenderNextDraw": false,
           },
           "v": DiagramElementPrimative {
             "angleToDraw": -1,
@@ -14445,6 +14588,7 @@ DiagramElementPrimative {
                 0.5,
               ],
               "programIndex": undefined,
+              "state": "loaded",
               "texture": null,
               "type": "vertexPrimative",
               "webgl": Object {
@@ -14490,6 +14634,7 @@ DiagramElementPrimative {
             },
             "isInteractive": false,
             "isMovable": false,
+            "isRenderedAsImage": false,
             "isShown": true,
             "isTouchable": false,
             "lastDrawElementTransformPosition": Object {
@@ -14853,6 +14998,7 @@ DiagramElementPrimative {
               ],
             },
             "uid": "0000000000",
+            "unrenderNextDraw": false,
           },
         },
         "fullLineHeight": EquationForm {
@@ -14997,12 +15143,15 @@ DiagramElementPrimative {
                       "holeBorder": Array [
                         Array [],
                       ],
+                      "lastDraw": Array [],
+                      "lastDrawTransform": Array [],
                       "location": Point {
                         "x": 0,
                         "y": 0,
                       },
                       "onLoad": null,
                       "scalingFactor": 499.99999999999994,
+                      "state": "loaded",
                       "text": Array [
                         DiagramText {
                           "font": DiagramFont {
@@ -15021,6 +15170,7 @@ DiagramElementPrimative {
                           "text": "gh",
                         },
                       ],
+                      "type": "drawingObject",
                     },
                     "hasTouchableElements": false,
                     "interactiveLocation": Point {
@@ -15029,6 +15179,7 @@ DiagramElementPrimative {
                     },
                     "isInteractive": false,
                     "isMovable": false,
+                    "isRenderedAsImage": false,
                     "isShown": true,
                     "isTouchable": false,
                     "lastDrawElementTransformPosition": Object {
@@ -15364,6 +15515,7 @@ DiagramElementPrimative {
                       ],
                     },
                     "uid": "0000000000",
+                    "unrenderNextDraw": false,
                   },
                   "descent": 0.009000000000000003,
                   "height": 0.03420000000000001,
@@ -15512,12 +15664,15 @@ DiagramElementPrimative {
                 "holeBorder": Array [
                   Array [],
                 ],
+                "lastDraw": Array [],
+                "lastDrawTransform": Array [],
                 "location": Point {
                   "x": 0,
                   "y": 0,
                 },
                 "onLoad": null,
                 "scalingFactor": 499.99999999999994,
+                "state": "loaded",
                 "text": Array [
                   DiagramText {
                     "font": DiagramFont {
@@ -15536,6 +15691,7 @@ DiagramElementPrimative {
                     "text": "gh",
                   },
                 ],
+                "type": "drawingObject",
               },
               "hasTouchableElements": false,
               "interactiveLocation": Point {
@@ -15544,6 +15700,7 @@ DiagramElementPrimative {
               },
               "isInteractive": false,
               "isMovable": false,
+              "isRenderedAsImage": false,
               "isShown": true,
               "isTouchable": false,
               "lastDrawElementTransformPosition": Object {
@@ -15879,6 +16036,7 @@ DiagramElementPrimative {
                 ],
               },
               "uid": "0000000000",
+              "unrenderNextDraw": false,
             },
           },
           "height": 0.03420000000000001,
@@ -16197,6 +16355,7 @@ DiagramElementPrimative {
     },
     "isInteractive": false,
     "isMovable": false,
+    "isRenderedAsImage": false,
     "isShown": true,
     "isTouchable": false,
     "lastDrawElementTransformPosition": Object {
@@ -16851,6 +17010,7 @@ DiagramElementPrimative {
       ],
     },
     "uid": "0000000000",
+    "unrenderNextDraw": false,
   },
   "pointsToDraw": -1,
   "pulse": Object {
@@ -17070,6 +17230,7 @@ DiagramElementPrimative {
     ],
   },
   "uid": "0000000000",
+  "unrenderNextDraw": false,
 }
 `;
 
