@@ -857,6 +857,11 @@ class Diagram {
   //   }
   // }
 
+  drawNow(time: number = -1) {
+    this.drawQueued = true;
+    this.draw(time);
+  }
+
   draw(nowIn: number): void {
     let now = nowIn;
     if (nowIn === -1) {

@@ -70,7 +70,7 @@ describe('Equation Animation', () => {
 
     // only b is shown
     eqn.showForm('0');
-    diagram.draw(0);
+    diagram.drawNow(0);
     expect(a.isShown).toBe(false);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(false);
@@ -79,8 +79,8 @@ describe('Equation Animation', () => {
     expect(c.color).toEqual(col(1));
 
     eqn.nextForm(1);
-    diagram.draw(1);
-    diagram.draw(1.2);
+    diagram.drawNow(1);
+    diagram.drawNow(1.2);
     // 'c' fades in over 0.4s
     expect(a.isShown).toBe(false);
     expect(b.isShown).toBe(true);
@@ -90,7 +90,7 @@ describe('Equation Animation', () => {
     expect(round(c.color, 2)).toEqual(col(0.5));
 
     // 'c' is now fully in
-    diagram.draw(1.5);
+    diagram.drawNow(1.5);
     expect(a.isShown).toBe(false);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(true);
@@ -100,8 +100,8 @@ describe('Equation Animation', () => {
 
     // 'c' fades out, 'a' is waiting to fade in till after move
     eqn.nextForm(1);
-    diagram.draw(2);
-    diagram.draw(2.2);
+    diagram.drawNow(2);
+    diagram.drawNow(2.2);
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(true);
@@ -114,7 +114,7 @@ describe('Equation Animation', () => {
     expect(c.animations.animations).toHaveLength(1);
 
     // 'c' is fully out, but not hidden, 'a' is still waiting
-    diagram.draw(2.4);
+    diagram.drawNow(2.4);
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(true);
@@ -127,7 +127,7 @@ describe('Equation Animation', () => {
     expect(c.animations.animations).toHaveLength(1);
 
     // 'c' is now hidden, 'b' starts to move, a' is still waiting
-    diagram.draw(2.41);
+    diagram.drawNow(2.41);
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(false);
@@ -140,7 +140,7 @@ describe('Equation Animation', () => {
     expect(c.animations.animations).toHaveLength(0);
 
     // 'b' is in the middle of its movement, 'a' is still waiting
-    diagram.draw(2.9);
+    diagram.drawNow(2.9);
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(false);
@@ -153,7 +153,7 @@ describe('Equation Animation', () => {
     expect(c.animations.animations).toHaveLength(0);
 
     // 'b' finished, 'a' is just about to start
-    diagram.draw(3.4);
+    diagram.drawNow(3.4);
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(false);
@@ -166,7 +166,7 @@ describe('Equation Animation', () => {
     expect(c.animations.animations).toHaveLength(0);
 
     // 'a' is half way through appearing
-    diagram.draw(3.6);
+    diagram.drawNow(3.6);
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(false);
@@ -179,7 +179,7 @@ describe('Equation Animation', () => {
     expect(c.animations.animations).toHaveLength(0);
 
     // 'a' is finished appearing
-    diagram.draw(3.8);
+    diagram.drawNow(3.8);
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(false);
@@ -192,7 +192,7 @@ describe('Equation Animation', () => {
     expect(c.animations.animations).toHaveLength(0);
 
     // Everything is done
-    diagram.draw(3.81);
+    diagram.drawNow(3.81);
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(false);
@@ -211,7 +211,7 @@ describe('Equation Animation', () => {
 
     // only b is shown
     eqn.showForm('0');
-    diagram.draw(0);
+    diagram.drawNow(0);
     expect(a.isShown).toBe(false);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(false);
@@ -220,8 +220,8 @@ describe('Equation Animation', () => {
     expect(c.color).toEqual(col(1));
 
     eqn.nextForm(1);
-    diagram.draw(1);
-    diagram.draw(1.2);
+    diagram.drawNow(1);
+    diagram.drawNow(1.2);
     // 'c' fades in over 0.4s
     expect(a.isShown).toBe(false);
     expect(b.isShown).toBe(true);
@@ -245,7 +245,7 @@ describe('Equation Animation', () => {
     expect(c.animations.animations).toHaveLength(0);
 
     // nothing has happened
-    diagram.draw(2);
+    diagram.drawNow(2);
     expect(a.isShown).toBe(false);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(true);
@@ -264,7 +264,7 @@ describe('Equation Animation', () => {
 
     // 'b' and 'c' is shown
     eqn.showForm('1');
-    diagram.draw(0);
+    diagram.drawNow(0);
     expect(a.isShown).toBe(false);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(true);
@@ -274,8 +274,8 @@ describe('Equation Animation', () => {
 
     // 'c' will fade out, 'b' will move, then 'a' will fade in
     eqn.nextForm(1);
-    diagram.draw(1);
-    diagram.draw(1.2);
+    diagram.drawNow(1);
+    diagram.drawNow(1.2);
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(true);
