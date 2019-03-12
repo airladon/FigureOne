@@ -2903,7 +2903,10 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   willStartAnimating() {
-    super.willStartAnimating();
+    const result = super.willStartAnimating();
+    if (result) {
+      return true;
+    }
     for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
       if (this.elements[this.drawOrder[i]].willStartAnimating()) {
         return true;
@@ -2926,6 +2929,8 @@ class DiagramElementCollection extends DiagramElement {
     // }
     if (this.isShown) {
       if (this.isRenderedAsImage === true) {
+        // if (this.willStartAnimating()) {
+        //   console.log(this.name, this.willStartAnimating())
         if (this.willStartAnimating()) {
           this.unrender();
         } else {
