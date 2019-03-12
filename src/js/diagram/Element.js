@@ -3504,6 +3504,20 @@ class DiagramElementCollection extends DiagramElement {
     }
     return elems;
   }
+
+  unrenderAll() {
+    let elems = [];
+    this.unrender();
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element instanceof DiagramElementPrimative) {
+        element.unrender();
+      } else {
+        element.unrenderAll();
+      }
+    }
+    return elems;
+  }
 }
 
 export {

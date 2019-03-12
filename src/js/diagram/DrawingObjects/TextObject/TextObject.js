@@ -340,8 +340,8 @@ class TextObject extends DrawingObject {
         ctx.clearRect(
           draw.x,
           draw.y,
-          draw.width,
-          draw.height,
+          draw.width * 1.1,
+          draw.height * 1.1,
         );
       });
       ctx.restore();

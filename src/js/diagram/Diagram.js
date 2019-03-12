@@ -392,13 +392,13 @@ class Diagram {
   }
 
   // Renders all tied elements in the first level of diagram elements
-  renderAllElementsToTiedCanvases() {
+  renderAllElementsToTiedCanvases(force: boolean = false) {
     let needClear = false;
     Object.keys(this.elements.elements).forEach((name) => {
       const element = this.elements.elements[name];
       if (
         element.isShown
-        && element.isRenderedAsImage === false
+        && (element.isRenderedAsImage === false || force)
         && element.tieToHTML.element != null
       ) {
         element.isRenderedAsImage = true;
@@ -519,11 +519,19 @@ class Diagram {
     this.clearContext();
   }
 
+  // unrenderAll() {
+  //   for (let i = 0; i < this.elements.elements.length; i += 1) {
+  //     const element = this.elements.elements[i];
+  //     element.unrender();
+  //   }
+  // }
+
   // resize should only be called if the viewport size has changed.
   resize() {
     if (this.elements != null) {
       this.elements.updateLimits(this.limits, this.spaceTransforms);
     }
+    this.elements.unrenderAll();
     this.webglLow.resize();
     this.webglHigh.resize();
     this.draw2DLow.resize();
@@ -534,6 +542,7 @@ class Diagram {
     this.updateHTMLElementTie();
     this.elements.resize();
     this.animateNextFrame(true, 'resize');
+    // this.renderAllElementsToTiedCanvases(true);
   }
 
   updateHTMLElementTie() {
