@@ -258,11 +258,14 @@ export class EquationNew extends DiagramElementCollection {
         options.text,
         { position: new Point(0, 0), font: fontToUse },
       );
-      // if (options.color != null) {
-      //   p.setColor(options.color);
-      // } else {
-      //   p.setColor(RGBToArray(p.drawingObject.text[0].font.color));
+      // if (options.color == null) {
+      //   p.setColor(this.color);
       // }
+      if (options.color != null) {
+        p.setColor(options.color);
+      } else {
+        p.setColor(RGBToArray(p.drawingObject.text[0].font.color));
+      }
       return p;
     };
 
