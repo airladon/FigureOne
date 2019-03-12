@@ -137,6 +137,7 @@ class TextObject extends DrawingObject {
       }
     }
     this.setBorder();
+    this.state = 'loaded';
   }
 
   setText(text: string, index: number = 0) {
