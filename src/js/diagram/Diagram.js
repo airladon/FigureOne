@@ -131,6 +131,7 @@ class Diagram {
   scrollingFast: boolean;
   scrollTimeoutId: ?TimeoutID;
   oldScroll: number;
+  fromWhere: string;      // used for drawing debug only
 
   isTouchDevice: boolean;
 
@@ -909,10 +910,13 @@ class Diagram {
     if (fromTimeOut) {
       this.scrollingFast = false;
     }
-    const viewPortHeight = Math.max(
-      document.documentElement.clientHeight,
-      window.innerHeight || 0,
-    );
+    let viewPortHeight = window.innerHeight || 0;
+    if (document.documentElement != null) {
+      viewPortHeight = Math.max(
+        document.documentElement.clientHeight,
+        window.innerHeight || 0,
+      );
+    }
     let newTop = window.pageYOffset + viewPortHeight / 2
                  - this.webglLow.gl.canvas.clientHeight / 2;
     if (newTop < 0) {
@@ -928,7 +932,7 @@ class Diagram {
   }
 
   animateNextFrame(draw: boolean = true, fromWhere: string = '') {
-    // this.fromWhere = fromWhere;
+    this.fromWhere = fromWhere;
     if (!this.drawQueued) {
       if (draw) {
         this.drawQueued = true;

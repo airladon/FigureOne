@@ -120,7 +120,7 @@ class TextObject extends DrawingObject {
     this.scalingFactor = 1;
     this.lastDraw = [];
     this.lastDrawTransform = [];
-    this.glRect = new Rect(-1, -1, 2, 2);
+    // this.glRect = new Rect(-1, -1, 2, 2);
     if (text.length > 0) {
       let minSize = this.text[0].font.size;
       this.text.forEach((t) => {
