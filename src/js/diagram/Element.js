@@ -1098,6 +1098,7 @@ class DiagramElement {
   // }
 
   // Used only to clear 2D context
+  // eslint-disable-next-line class-methods-use-this
   clear() {
   }
 
@@ -3506,7 +3507,6 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   unrenderAll() {
-    let elems = [];
     this.unrender();
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
@@ -3516,7 +3516,6 @@ class DiagramElementCollection extends DiagramElement {
         element.unrenderAll();
       }
     }
-    return elems;
   }
 }
 
