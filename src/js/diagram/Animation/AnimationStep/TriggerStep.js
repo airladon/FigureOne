@@ -42,6 +42,13 @@ export class TriggerStep extends AnimationStep {
     }
   }
 
+  setToEnd() {
+    if (this.callback != null) {
+      this.callback(this.payload);
+      this.callback = null;
+    }
+  }
+
   _dup() {
     const step = new TriggerStep();
     duplicateFromTo(this, step, ['element']);
