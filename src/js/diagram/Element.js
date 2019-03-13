@@ -2462,7 +2462,7 @@ class DiagramElement {
       w.style.visibility = 'hidden';
       const d = document.getElementById(`${this.tieToHTML.element}_2d`);
       // d.src = '';
-      w.style.visibility = 'hidden';
+      d.style.visibility = 'hidden';
     }
   }
 
