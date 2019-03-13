@@ -432,7 +432,9 @@ class Diagram {
 
     // Move it to the origin to render
     const oldPosition = elementToRender.getPosition();
+    const oldScale = elementToRender.getScale();
     elementToRender.setPosition(0, 0);
+    elementToRender.updateHTMLElementTieScale();
     // Stop animations and render
     elementToRender.isRenderedAsImage = false;
     elementToRender.stop(true, true);
@@ -440,6 +442,7 @@ class Diagram {
     elementToRender.isRenderedAsImage = true;
     // reset position
     elementToRender.setPosition(oldPosition);
+    elementToRender.setScale(oldScale);
 
     // this.draw(-1);
     // this.fromWhere = 'reset Position';
@@ -505,36 +508,37 @@ class Diagram {
     // ctx.clearRect(0, 0, canvas.width, canvas.height);
     // console.log(htmlCanvas)
 
-    const offscreenCanvas = document.getElementById('hidden_offscreen');
-    console.log(htmlCanvas.clientWidth, htmlCanvas.clientHeight)
-    const ctx = offscreenCanvas.getContext('2d');
-    offscreenCanvas.width = glWidthOfCanvas;
-    offscreenCanvas.height = glHeightOfCanvas;
-    ctx.scale(glWidthOfCanvas / offscreenCanvas.clientWidth, glHeightOfCanvas / offscreenCanvas.clientHeight);
-    offscreenCanvas.getContext('2d').drawImage(
-      this.webglLow.gl.canvas,
-      glStartOfCanavas.x, glStartOfCanavas.y,
-      glWidthOfCanvas, glHeightOfCanvas,
-      0, 0,
-      offscreenCanvas.clientWidth, offscreenCanvas.clientHeight,
-    );
+    // const offscreenCanvas = document.getElementById('hidden_offscreen');
+    // console.log(htmlCanvas.clientWidth, htmlCanvas.clientHeight)
+    // const ctx = offscreenCanvas.getContext('2d');
+    // offscreenCanvas.width = glWidthOfCanvas;
+    // offscreenCanvas.height = glHeightOfCanvas;
+    // ctx.scale(glWidthOfCanvas / offscreenCanvas.clientWidth, glHeightOfCanvas / offscreenCanvas.clientHeight);
+    // offscreenCanvas.getContext('2d').drawImage(
+    //   this.webglLow.gl.canvas,
+    //   glStartOfCanavas.x, glStartOfCanavas.y,
+    //   glWidthOfCanvas, glHeightOfCanvas,
+    //   0, 0,
+    //   offscreenCanvas.clientWidth, offscreenCanvas.clientHeight,
+    // );
     const w = document.getElementById(`${htmlCanvasElementOrId}_webgl`);
     if (w) {
-      // w.src = this.webglLow.gl.canvas.toDataURL();
-      w.src = offscreenCanvas.toDataURL();
+      w.src = this.webglLow.gl.canvas.toDataURL();
+      // w.src = offscreenCanvas.toDataURL();
       w.style.visibility = 'visible';
     }
 
-    offscreenCanvas.getContext('2d').clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
+    // offscreenCanvas.width = 1;
+    // offscreenCanvas.height = 1;
 
 
-    // const d = document.getElementById(`${htmlCanvasElementOrId}_2d`);
-    // // console.log(`${htmlCanvasElementOrId}_2d`)
-    // // console.log(d)
-    // if (d) {
-    //   d.src = this.draw2DLow.canvas.toDataURL();
-    //   d.style.visibility = 'visible';
-    // }
+    const d = document.getElementById(`${htmlCanvasElementOrId}_2d`);
+    // console.log(`${htmlCanvasElementOrId}_2d`)
+    // console.log(d)
+    if (d) {
+      d.src = this.draw2DLow.canvas.toDataURL();
+      d.style.visibility = 'visible';
+    }
 
     // htmlCanvas2 = docuemnt.getElementById(`${htmlCanvasElementOrId}2D`);
 

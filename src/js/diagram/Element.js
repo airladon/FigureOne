@@ -574,6 +574,17 @@ class DiagramElement {
   //   return vertex.transformBy(transform.matrix());
   // }
 
+  updateHTMLElementTieScale() {
+    if (this.tieToHTML.element != null) {
+      const dWindow = this.tieToHTML.window;
+      const diagram = this.diagramLimits;
+      const dAspectRatio = diagram.width / diagram.height;
+      const scaleX = diagram.width / dWindow.width;
+      const scaleY = diagram.height / dWindow.height;
+      this.setScale(scaleX, scaleY);
+    }
+  }
+
   updateHTMLElementTie(
     diagramCanvas: HTMLElement,
   ) {
@@ -3199,6 +3210,14 @@ class DiagramElementCollection extends DiagramElement {
         // diagramToGLSpaceTransformMatrix,
         container,
       );
+    }
+  }
+
+  updateHTMLElementTieScale() {
+    super.updateHTMLElementTieScale();
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.updateHTMLElementTieScale();
     }
   }
 
