@@ -465,15 +465,15 @@ class Diagram {
       htmlCanvas = document.getElementById(htmlCanvasElementOrId);
     }
 
-    if (!(htmlCanvas instanceof HTMLCanvasElement)) {
-      return;
-    }
+    // if (!(htmlCanvas instanceof HTMLImageElement)) {
+    //   return;
+    // }
 
     this.drawQueued = true;
     // this.fromWhere = 'RenderToCanvas';
     this.draw(-1);
 
-    const { ctx } = new DrawContext2D(htmlCanvas);
+    // const { ctx } = new DrawContext2D(htmlCanvas);
 
     const getCanvasDimensions = c => ({
       width: c.width,
@@ -502,21 +502,38 @@ class Diagram {
       text.height / 2 - textHeightOfCanvas / 2,
     );
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(
-      this.webglLow.gl.canvas,
-      glStartOfCanavas.x, glStartOfCanavas.y,
-      glWidthOfCanvas, glHeightOfCanvas,
-      0, 0,
-      canvas.clientWidth, canvas.clientHeight,
-    );
-    ctx.drawImage(
-      this.draw2DLow.canvas,
-      textStartOfCanvas.x, textStartOfCanvas.y,
-      textWidthOfCanvas, textHeightOfCanvas,
-      0, 0,
-      canvas.clientWidth, canvas.clientHeight,
-    );
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // console.log(htmlCanvas)
+    const w = document.getElementById(`${htmlCanvasElementOrId}_webgl`);
+    // console.log(`${htmlCanvasElementOrId}_webgl`)
+    // console.log(w)
+    if (w) {
+      w.src = this.webglLow.gl.canvas.toDataURL();
+    }
+
+    const d = document.getElementById(`${htmlCanvasElementOrId}_2d`);
+    // console.log(`${htmlCanvasElementOrId}_2d`)
+    // console.log(d)
+    if (d) {
+      d.src = this.draw2DLow.canvas.toDataURL();
+    }
+
+    // htmlCanvas2 = docuemnt.getElementById(`${htmlCanvasElementOrId}2D`);
+
+    // ctx.drawImage(
+    //   this.webglLow.gl.canvas,
+    //   glStartOfCanavas.x, glStartOfCanavas.y,
+    //   glWidthOfCanvas, glHeightOfCanvas,
+    //   0, 0,
+    //   canvas.clientWidth, canvas.clientHeight,
+    // );
+    // ctx.drawImage(
+    //   this.draw2DLow.canvas,
+    //   textStartOfCanvas.x, textStartOfCanvas.y,
+    //   textWidthOfCanvas, textHeightOfCanvas,
+    //   0, 0,
+    //   canvas.clientWidth, canvas.clientHeight,
+    // );
     this.clearContext();
   }
 
