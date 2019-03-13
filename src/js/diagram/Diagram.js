@@ -434,7 +434,7 @@ class Diagram {
     const oldPosition = elementToRender.getPosition();
     const oldScale = elementToRender.getScale();
     elementToRender.setPosition(0, 0);
-    elementToRender.updateHTMLElementTieScale();
+    elementToRender.updateHTMLElementTieScale(this.canvasLow);
     // Stop animations and render
     elementToRender.isRenderedAsImage = false;
     elementToRender.stop(true, true);
