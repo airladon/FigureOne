@@ -132,6 +132,9 @@ class Diagram {
   scrollTimeoutId: ?TimeoutID;
   oldScroll: number;
   fromWhere: string;      // used for drawing debug only
+  oldWidth: number;
+
+  drawAnimationFrames: number;
 
   isTouchDevice: boolean;
 
@@ -247,6 +250,7 @@ class Diagram {
     this.scrollingFast = false;
     this.scrollTimeoutId = null;
     this.oldScroll = window.pageYOffset;
+    this.drawAnimationFrames = 0;
   }
 
   scrollEvent() {
@@ -563,9 +567,11 @@ class Diagram {
   }
 
   unrenderAll() {
-    for (let i = 0; i < this.elements.elements.length; i += 1) {
-      const element = this.elements.elements[i];
+    // console.log('unrender all', Object.keys(this.elements.drawOrder).length)
+    for (let i = 0; i < this.elements.drawOrder.length; i += 1) {
+      const element = this.elements.elements[this.elements.drawOrder[i]];
       element.unrender();
+      console.log('unrendering', element.name)
     }
   }
 
@@ -593,8 +599,13 @@ class Diagram {
     this.elements.resizeHtmlObject();
     this.updateHTMLElementTie();
     this.elements.resize();
+    if (this.oldWidth !== this.canvasLow.clientWidth) {
+      // this.unrenderAll();
+      this.renderAllElementsToTiedCanvases(true)
+      this.oldWidth = this.canvasLow.clientWidth;
+    }
     this.animateNextFrame(true, 'resize');
-    this.unrenderAll();
+    this.drawAnimationFrames = 2;
     // this.renderAllElementsToTiedCanvases(true);
   }
 
@@ -960,6 +971,11 @@ class Diagram {
 
     if (this.elements.isMoving()) {
       this.animateNextFrame(true, 'is moving');
+    }
+
+    if (this.drawAnimationFrames > 0) {
+      this.drawAnimationFrames -= 1;
+      this.animateNextFrame(true, 'queued frames');
     }
   }
 
