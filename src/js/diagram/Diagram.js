@@ -509,6 +509,7 @@ class Diagram {
     // console.log(w)
     if (w) {
       w.src = this.webglLow.gl.canvas.toDataURL();
+      w.style.visibility = 'visible';
     }
 
     const d = document.getElementById(`${htmlCanvasElementOrId}_2d`);
@@ -516,6 +517,7 @@ class Diagram {
     // console.log(d)
     if (d) {
       d.src = this.draw2DLow.canvas.toDataURL();
+      d.style.visibility = 'visible';
     }
 
     // htmlCanvas2 = docuemnt.getElementById(`${htmlCanvasElementOrId}2D`);
@@ -537,12 +539,12 @@ class Diagram {
     this.clearContext();
   }
 
-  // unrenderAll() {
-  //   for (let i = 0; i < this.elements.elements.length; i += 1) {
-  //     const element = this.elements.elements[i];
-  //     element.unrender();
-  //   }
-  // }
+  unrenderAll() {
+    for (let i = 0; i < this.elements.elements.length; i += 1) {
+      const element = this.elements.elements[i];
+      element.unrender();
+    }
+  }
 
   // resize should only be called if the viewport size has changed.
   resize() {
@@ -569,6 +571,7 @@ class Diagram {
     this.updateHTMLElementTie();
     this.elements.resize();
     this.animateNextFrame(true, 'resize');
+    this.unrenderAll();
     // this.renderAllElementsToTiedCanvases(true);
   }
 
