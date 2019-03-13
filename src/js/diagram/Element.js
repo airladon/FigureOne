@@ -2353,9 +2353,16 @@ class DiagramElement {
     } else if (this.tieToHTML.element instanceof HTMLElement) {
       tieToElement = this.tieToHTML.element;
     }
-    if (tieToElement instanceof HTMLCanvasElement) {
-      const ctx = tieToElement.getContext('2d');
-      ctx.clearRect(0, 0, tieToElement.width, tieToElement.height);
+    if (tieToElement) {
+      // const ctx = tieToElement.getContext('2d');
+      // ctx.clearRect(0, 0, tieToElement.width, tieToElement.height);
+      const w = document.getElementById(`${this.tieToHTML.element}_webgl`);
+      // console.log(w)
+      // w.src = '';
+      w.style.visibility = 'hidden';
+      const d = document.getElementById(`${this.tieToHTML.element}_2d`);
+      // d.src = '';
+      w.style.visibility = 'hidden';
     }
   }
 
