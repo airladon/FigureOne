@@ -434,7 +434,7 @@ class Diagram {
     const oldPosition = elementToRender.getPosition();
     const oldScale = elementToRender.getScale();
     elementToRender.setPosition(0, 0);
-    elementToRender.updateHTMLElementTieScale(this.canvasLow);
+    // elementToRender.updateHTMLElementTieScale(this.canvasLow);
     // Stop animations and render
     elementToRender.isRenderedAsImage = false;
     elementToRender.stop(true, true);
@@ -526,6 +526,8 @@ class Diagram {
       w.src = this.webglLow.gl.canvas.toDataURL();
       // w.src = offscreenCanvas.toDataURL();
       w.style.visibility = 'visible';
+      w.style.transform = `scale(${gl.clientWidth / canvas.clientWidth},${gl.clientHeight / canvas.clientHeight})`;
+      // w.style.marginLeft = `${1 - (glStartOfCanvas.x / glWidthOfCanvas)}%`;
     }
 
     // offscreenCanvas.width = 1;
@@ -538,6 +540,7 @@ class Diagram {
     if (d) {
       d.src = this.draw2DLow.canvas.toDataURL();
       d.style.visibility = 'visible';
+      d.style.transform = `scale(${text.clientWidth / canvas.clientWidth},${text.clientHeight / canvas.clientHeight})`;
     }
 
     // htmlCanvas2 = docuemnt.getElementById(`${htmlCanvasElementOrId}2D`);
