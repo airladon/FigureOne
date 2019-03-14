@@ -14,7 +14,7 @@ export type TypeAddElementObject = {
   options?: {},
   addElements?: Array<TypeAddElementObject>,
   mods?: {},
-  scenario: string,
+  scenario?: string,
 };
 
 function addElements(
