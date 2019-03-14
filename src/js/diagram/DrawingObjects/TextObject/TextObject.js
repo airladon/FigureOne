@@ -337,11 +337,15 @@ class TextObject extends DrawingObject {
       ctx.save();
       ctx.transform(t[0], t[3], t[1], t[4], t[2], t[5]);
       lastDraw.forEach((draw) => {
+        // const x = Math.max(0, draw.x - draw.width * 0.5);
+        // const y = Math.max(0, draw.y - draw.height * 0.5);
+        const x = draw.x - draw.width;
+        const y = draw.y - draw.height;
         ctx.clearRect(
-          draw.x,
-          draw.y,
-          draw.width * 1.1,
-          draw.height * 1.1,
+          x,
+          y,
+          draw.width * 3,
+          draw.height * 3,
         );
       });
       ctx.restore();
