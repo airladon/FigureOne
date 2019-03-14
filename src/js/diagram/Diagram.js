@@ -74,14 +74,15 @@ export type TypeSpaceTransforms = {
 
 class Diagram {
   canvasLow: HTMLCanvasElement;
-  canvasHigh: HTMLCanvasElement;
+  // canvasHigh: HTMLCanvasElement;
   textCanvasLow: HTMLCanvasElement;
-  textCanvasHigh: HTMLCanvasElement;
+  container: HTMLElement;
+  // textCanvasHigh: HTMLCanvasElement;
   draw2DLow: DrawContext2D;
-  draw2DHigh: DrawContext2D;
+  // draw2DHigh: DrawContext2D;
   htmlCanvas: HTMLElement;
   webglLow: WebGLInstance;
-  webglHigh: WebGLInstance;
+  // webglHigh: WebGLInstance;
   gestureCanvas: HTMLElement;
 
   elements: DiagramElementCollection;
@@ -101,13 +102,13 @@ class Diagram {
   // gestureElement: HTMLElement;
   shapes: Object;
   shapesLow: Object;
-  shapesHigh: Object;
+  // shapesHigh: Object;
   equation: Object;
   equationLow: Object;
-  equationHigh: Object;
+  // equationHigh: Object;
   objects: DiagramObjects;
   objectsLow: DiagramObjects;
-  objectsHigh: DiagramObjects;
+  // objectsHigh: DiagramObjects;
 
   backgroundColor: Array<number>;
   fontScale: number;
@@ -157,26 +158,27 @@ class Diagram {
     if (typeof htmlId === 'string') {
       const container = document.getElementById(htmlId);
       if (container instanceof HTMLElement) {
+        this.container = container;
         const { children } = container;
         for (let i = 0; i < children.length; i += 1) {
           const child = children[i];
           if (child instanceof HTMLCanvasElement
             && child.classList.contains('diagram__gl')) {
-            if (child.id === 'id_diagram__gl__low') {
-              this.canvasLow = child;
-            }
-            if (child.id === 'id_diagram__gl__high') {
-              this.canvasHigh = child;
-            }
+            // if (child.id === 'id_diagram__gl__low') {
+            this.canvasLow = child;
+            // }
+            // if (child.id === 'id_diagram__gl__high') {
+            //   this.canvasHigh = child;
+            // }
           }
           if (child instanceof HTMLCanvasElement
             && child.classList.contains('diagram__text')) {
-            if (child.id === 'id_diagram__text__low') {
-              this.textCanvasLow = child;
-            }
-            if (child.id === 'id_diagram__text__high') {
-              this.textCanvasHigh = child;
-            }
+            // if (child.id === 'id_diagram__text__low') {
+            this.textCanvasLow = child;
+            // }
+            // if (child.id === 'id_diagram__text__high') {
+            //   this.textCanvasHigh = child;
+            // }
           }
           if (child.classList.contains('diagram__html')
           ) {
@@ -188,14 +190,14 @@ class Diagram {
           this.canvasLow,
           this.backgroundColor,
         );
-        const webglHigh = new WebGLInstance(
-          this.canvasHigh,
-          this.backgroundColor,
-        );
+        // const webglHigh = new WebGLInstance(
+        //   this.canvasHigh,
+        //   this.backgroundColor,
+        // );
         this.webglLow = webglLow;
-        this.webglHigh = webglHigh;
+        // this.webglHigh = webglHigh;
         this.draw2DLow = new DrawContext2D(this.textCanvasLow);
-        this.draw2DHigh = new DrawContext2D(this.textCanvasHigh);
+        // this.draw2DHigh = new DrawContext2D(this.textCanvasHigh);
       }
     }
 
@@ -223,13 +225,13 @@ class Diagram {
     this.moveTopElementOnly = true;
     this.globalAnimation = new GlobalAnimation();
     this.shapesLow = this.getShapes(false);
-    this.shapesHigh = this.getShapes(true);
+    // this.shapesHigh = this.getShapes(true);
     this.shapes = this.shapesLow;
     this.equationLow = this.getEquations(false);
-    this.equationHigh = this.getEquations(true);
+    // this.equationHigh = this.getEquations(true);
     this.equation = this.equationLow;
     this.objectsLow = this.getObjects(false);
-    this.objectsHigh = this.getObjects(true);
+    // this.objectsHigh = this.getObjects(true);
     this.objects = this.objectsLow;
     this.createDiagramElements();
     if (this.elements.name === '') {
@@ -290,12 +292,12 @@ class Diagram {
   }
 
   getShapes(high: boolean = false) {
-    let webgl = this.webglLow;
-    let draw2D = this.draw2DLow;
-    if (high) {
-      webgl = this.webglHigh;
-      draw2D = this.draw2DHigh;
-    }
+    const webgl = this.webglLow;
+    const draw2D = this.draw2DLow;
+    // if (high) {
+    //   webgl = this.webglHigh;
+    //   draw2D = this.draw2DHigh;
+    // }
     return new DiagramPrimatives(
       webgl, draw2D,
       // this.draw2DFigures,
@@ -308,19 +310,19 @@ class Diagram {
 
   getEquations(high: boolean = false) {
     let shapes = this.shapesLow;
-    if (high) {
-      shapes = this.shapesHigh;
-    }
+    // if (high) {
+    //   shapes = this.shapesHigh;
+    // }
     return new DiagramEquation(shapes, this.animateNextFrame.bind(this, true, 'equations'));
   }
 
   getObjects(high: boolean = false) {
     let shapes = this.shapesLow;
     let equation = this.equationLow;
-    if (high) {
-      shapes = this.shapesHigh;
-      equation = this.equationHigh;
-    }
+    // if (high) {
+    //   shapes = this.shapesHigh;
+    //   equation = this.equationHigh;
+    // }
     return new DiagramObjects(
       shapes,
       equation,
@@ -347,7 +349,7 @@ class Diagram {
   destroy() {
     this.gesture.destroy();
     this.webglLow.gl.getExtension('WEBGL_lose_context').loseContext();
-    this.webglHigh.gl.getExtension('WEBGL_lose_context').loseContext();
+    // this.webglHigh.gl.getExtension('WEBGL_lose_context').loseContext();
   }
 
   setSpaceTransforms() {
@@ -591,9 +593,9 @@ class Diagram {
     //   this.elements.unrenderAll();
     // }
     this.webglLow.resize();
-    this.webglHigh.resize();
+    // this.webglHigh.resize();
     this.draw2DLow.resize();
-    this.draw2DHigh.resize();
+    // this.draw2DHigh.resize();
     this.setSpaceTransforms();
     this.sizeHtmlText();
     this.elements.resizeHtmlObject();
@@ -902,8 +904,8 @@ class Diagram {
   clearContext() {
     this.webglLow.gl.clearColor(0, 0, 0, 0);
     this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
-    this.webglHigh.gl.clearColor(0, 0, 0, 0);
-    this.webglHigh.gl.clear(this.webglHigh.gl.COLOR_BUFFER_BIT);
+    // this.webglHigh.gl.clearColor(0, 0, 0, 0);
+    // this.webglHigh.gl.clear(this.webglHigh.gl.COLOR_BUFFER_BIT);
     this.elements.clear();
   }
 
