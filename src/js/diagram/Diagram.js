@@ -527,7 +527,7 @@ class Diagram {
     // );
     const w = document.getElementById(`${htmlCanvasElementOrId}_webgl`);
     if (w) {
-      w.src = this.webglLow.gl.canvas.toDataURL();
+      w.src = this.webglLow.gl.canvas.toDataURL('image/png', 0.5);
       // w.src = offscreenCanvas.toDataURL();
       w.style.visibility = 'visible';
       w.style.transform = `scale(${gl.clientWidth / canvas.clientWidth},${gl.clientHeight / canvas.clientHeight})`;
@@ -542,7 +542,7 @@ class Diagram {
     // console.log(`${htmlCanvasElementOrId}_2d`)
     // console.log(d)
     if (d) {
-      d.src = this.draw2DLow.canvas.toDataURL();
+      d.src = this.draw2DLow.canvas.toDataURL('image/png', 0.5);
       d.style.visibility = 'visible';
       d.style.transform = `scale(${text.clientWidth / canvas.clientWidth},${text.clientHeight / canvas.clientHeight})`;
     }
@@ -601,7 +601,7 @@ class Diagram {
     this.elements.resize();
     if (this.oldWidth !== this.canvasLow.clientWidth) {
       // this.unrenderAll();
-      this.renderAllElementsToTiedCanvases(true)
+      this.renderAllElementsToTiedCanvases(true);
       this.oldWidth = this.canvasLow.clientWidth;
     }
     this.animateNextFrame(true, 'resize');
