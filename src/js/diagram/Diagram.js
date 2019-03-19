@@ -579,9 +579,9 @@ class Diagram {
 
   // resize should only be called if the viewport size has changed.
   resize() {
-    if (this.elements != null) {
-      this.elements.updateLimits(this.limits, this.spaceTransforms);
-    }
+    // if (this.elements != null) {
+    //   this.elements.updateLimits(this.limits, this.spaceTransforms);
+    // }
     // if (this.count == null) {
     //   this.count = 0;
     // } else {
@@ -597,6 +597,9 @@ class Diagram {
     this.draw2DLow.resize();
     // this.draw2DHigh.resize();
     this.setSpaceTransforms();
+    if (this.elements != null) {
+      this.elements.updateLimits(this.limits, this.spaceTransforms);
+    }
     this.sizeHtmlText();
     this.elements.resizeHtmlObject();
     this.updateHTMLElementTie();
