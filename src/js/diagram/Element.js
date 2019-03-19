@@ -234,6 +234,7 @@ class DiagramElement {
     element: string | null | HTMLElement;
     scale: string;   // 1em, 100px, stretch, max, fit
     window: Rect;
+    updateOnResize: boolean;
   };
 
   isRenderedAsImage: boolean;
@@ -453,6 +454,7 @@ class DiagramElement {
       element: null,
       scale: 'fit',
       window: this.diagramLimits,
+      updateOnResize: true,
     };
     this.isRenderedAsImage = false;
     this.unrenderNextDraw = false;
@@ -2193,6 +2195,14 @@ class DiagramElement {
     this.diagramTransforms = transforms;
   }
 
+
+  resize(diagramHTMLElement: ?HTMLElement = null) {
+    this.resizeHtmlObject();
+    if (diagramHTMLElement && this.tieToHTML.updateOnResize) {
+      this.updateHTMLElementTie(diagramHTMLElement);
+    }
+  }
+
   // eslint-disable-next-line class-methods-use-this
   getGLBoundingRect() {
     return new Rect(0, 0, 1, 1);
@@ -2626,8 +2636,8 @@ class DiagramElementPrimative extends DiagramElement {
     }
   }
 
-  // use this for any gl canvas resize events
-  resize() {
+  resize(diagramHTMLElement: ?HTMLElement = null) {
+    super.resize(diagramHTMLElement);
     // If gl canvas is resized, webgl text will need to be updated.
     if (this.drawingObject.type === 'vertexText') {
       const pixelToVertexScale = this.getPixelToVertexSpaceScale();
@@ -3184,10 +3194,11 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  resize() {
+  resize(diagramHTMLElement: ?HTMLElement = null) {
+    super.resize(diagramHTMLElement);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.resize();
+      element.resize(diagramHTMLElement);
     }
   }
 
