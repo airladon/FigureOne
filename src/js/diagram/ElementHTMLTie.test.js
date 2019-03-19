@@ -49,6 +49,7 @@ describe('Diagram html element tie', () => {
         element: htmlElement,
         scale: scaleType,
         window: windowLimits,
+        updateOnResize: true,
       };
       diagram.elements.add('square', square);
     };

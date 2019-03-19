@@ -238,7 +238,7 @@ class Diagram {
       this.elements.name = 'diagramRoot';
     }
 
-    window.addEventListener('resize', this.resize.bind(this));
+    window.addEventListener('resize', this.resize.bind(this, false));
     this.sizeHtmlText();
     this.initialize();
     this.isTouchDevice = isTouchDevice();
@@ -578,7 +578,7 @@ class Diagram {
   }
 
   // resize should only be called if the viewport size has changed.
-  resize() {
+  resize(skipHTMLTie: boolean = false) {
     // if (this.elements != null) {
     //   this.elements.updateLimits(this.limits, this.spaceTransforms);
     // }
@@ -601,9 +601,13 @@ class Diagram {
       this.elements.updateLimits(this.limits, this.spaceTransforms);
     }
     this.sizeHtmlText();
-    this.elements.resizeHtmlObject();
-    this.updateHTMLElementTie();
-    this.elements.resize();
+    // this.elements.resizeHtmlObject();
+    // this.updateHTMLElementTie();
+    if (skipHTMLTie) {
+      this.elements.resize();
+    } else {
+      this.elements.resize(this.canvasLow);
+    }
     if (this.oldWidth !== this.canvasLow.clientWidth) {
       // this.unrenderAll();
       this.renderAllElementsToTiedCanvases(true);
