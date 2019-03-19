@@ -224,13 +224,13 @@ class Diagram {
     this.beingTouchedElements = [];
     this.moveTopElementOnly = true;
     this.globalAnimation = new GlobalAnimation();
-    this.shapesLow = this.getShapes(false);
+    this.shapesLow = this.getShapes();
     // this.shapesHigh = this.getShapes(true);
     this.shapes = this.shapesLow;
-    this.equationLow = this.getEquations(false);
+    this.equationLow = this.getEquations();
     // this.equationHigh = this.getEquations(true);
     this.equation = this.equationLow;
-    this.objectsLow = this.getObjects(false);
+    this.objectsLow = this.getObjects();
     // this.objectsHigh = this.getObjects(true);
     this.objects = this.objectsLow;
     this.createDiagramElements();
@@ -291,7 +291,7 @@ class Diagram {
     );
   }
 
-  getShapes(high: boolean = false) {
+  getShapes() {
     const webgl = this.webglLow;
     const draw2D = this.draw2DLow;
     // if (high) {
@@ -308,17 +308,17 @@ class Diagram {
     );
   }
 
-  getEquations(high: boolean = false) {
-    let shapes = this.shapesLow;
+  getEquations() {
+    const shapes = this.shapesLow;
     // if (high) {
     //   shapes = this.shapesHigh;
     // }
     return new DiagramEquation(shapes, this.animateNextFrame.bind(this, true, 'equations'));
   }
 
-  getObjects(high: boolean = false) {
-    let shapes = this.shapesLow;
-    let equation = this.equationLow;
+  getObjects() {
+    const shapes = this.shapesLow;
+    const equation = this.equationLow;
     // if (high) {
     //   shapes = this.shapesHigh;
     //   equation = this.equationHigh;
@@ -467,11 +467,15 @@ class Diagram {
 
   // This method will render the gl and 2d contexts to a canvas
   renderToCanvas(
-    htmlCanvasElementOrId: HTMLCanvasElement | string,
+    htmlCanvasElementOrId: string = '',
   ) {
     let htmlCanvas = htmlCanvasElementOrId;
     if (typeof htmlCanvasElementOrId === 'string') {
       htmlCanvas = document.getElementById(htmlCanvasElementOrId);
+    }
+
+    if (!(htmlCanvas instanceof HTMLElement)) {
+      return;
     }
 
     // if (!(htmlCanvas instanceof HTMLImageElement)) {
@@ -484,87 +488,48 @@ class Diagram {
 
     // const { ctx } = new DrawContext2D(htmlCanvas);
 
-    const getCanvasDimensions = c => ({
-      width: c.width,
-      height: c.height,
+    const getDimensions = (c: HTMLElement) => ({
+      // width: c.width,
+      // height: c.height,
       clientWidth: c.clientWidth,
       clientHeight: c.clientHeight,
     });
 
-    const canvas = getCanvasDimensions(htmlCanvas);
-    const gl = getCanvasDimensions(this.webglLow.gl.canvas);
-    const text = getCanvasDimensions(this.draw2DLow.canvas);
+    const canvas = getDimensions(htmlCanvas);
+    const gl = getDimensions(this.webglLow.gl.canvas);
+    const text = getDimensions(this.draw2DLow.canvas);
 
-    const glWidthOfCanvas = canvas.clientWidth / gl.clientWidth * gl.width;
-    const glHeightOfCanvas = canvas.clientHeight / gl.clientHeight * gl.height;
-    const glStartOfCanavas = new Point(
-      gl.width / 2 - glWidthOfCanvas / 2,
-      gl.height / 2 - glHeightOfCanvas / 2,
-    );
-
-    const textWidthOfCanvas = canvas.clientWidth / text.clientWidth
-                              * text.width;
-    const textHeightOfCanvas = canvas.clientHeight / text.clientHeight
-                               * text.height;
-    const textStartOfCanvas = new Point(
-      text.width / 2 - textWidthOfCanvas / 2,
-      text.height / 2 - textHeightOfCanvas / 2,
-    );
-
-    // ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // console.log(htmlCanvas)
-
-    // const offscreenCanvas = document.getElementById('hidden_offscreen');
-    // console.log(htmlCanvas.clientWidth, htmlCanvas.clientHeight)
-    // const ctx = offscreenCanvas.getContext('2d');
-    // offscreenCanvas.width = glWidthOfCanvas;
-    // offscreenCanvas.height = glHeightOfCanvas;
-    // ctx.scale(glWidthOfCanvas / offscreenCanvas.clientWidth, glHeightOfCanvas / offscreenCanvas.clientHeight);
-    // offscreenCanvas.getContext('2d').drawImage(
-    //   this.webglLow.gl.canvas,
-    //   glStartOfCanavas.x, glStartOfCanavas.y,
-    //   glWidthOfCanvas, glHeightOfCanvas,
-    //   0, 0,
-    //   offscreenCanvas.clientWidth, offscreenCanvas.clientHeight,
+    // const glWidthOfCanvas = canvas.clientWidth / gl.clientWidth * gl.width;
+    // const glHeightOfCanvas = canvas.clientHeight / gl.clientHeight * gl.height;
+    // const glStartOfCanavas = new Point(
+    //   gl.width / 2 - glWidthOfCanvas / 2,
+    //   gl.height / 2 - glHeightOfCanvas / 2,
     // );
+
+    // const textWidthOfCanvas = canvas.clientWidth / text.clientWidth
+    //                           * text.width;
+    // const textHeightOfCanvas = canvas.clientHeight / text.clientHeight
+    //                            * text.height;
+    // const textStartOfCanvas = new Point(
+    //   text.width / 2 - textWidthOfCanvas / 2,
+    //   text.height / 2 - textHeightOfCanvas / 2,
+    // );
+
     const w = document.getElementById(`${htmlCanvasElementOrId}_webgl`);
-    if (w) {
+    if (w instanceof HTMLImageElement) {
       w.src = this.webglLow.gl.canvas.toDataURL('image/png', 0.5);
       // w.src = offscreenCanvas.toDataURL();
       w.style.visibility = 'visible';
       w.style.transform = `scale(${gl.clientWidth / canvas.clientWidth},${gl.clientHeight / canvas.clientHeight})`;
-      // w.style.marginLeft = `${1 - (glStartOfCanvas.x / glWidthOfCanvas)}%`;
     }
-
-    // offscreenCanvas.width = 1;
-    // offscreenCanvas.height = 1;
 
 
     const d = document.getElementById(`${htmlCanvasElementOrId}_2d`);
-    // console.log(`${htmlCanvasElementOrId}_2d`)
-    // console.log(d)
-    if (d) {
+    if (d instanceof HTMLImageElement) {
       d.src = this.draw2DLow.canvas.toDataURL('image/png', 0.5);
       d.style.visibility = 'visible';
       d.style.transform = `scale(${text.clientWidth / canvas.clientWidth},${text.clientHeight / canvas.clientHeight})`;
     }
-
-    // htmlCanvas2 = docuemnt.getElementById(`${htmlCanvasElementOrId}2D`);
-
-    // ctx.drawImage(
-    //   this.webglLow.gl.canvas,
-    //   glStartOfCanavas.x, glStartOfCanavas.y,
-    //   glWidthOfCanvas, glHeightOfCanvas,
-    //   0, 0,
-    //   canvas.clientWidth, canvas.clientHeight,
-    // );
-    // ctx.drawImage(
-    //   this.draw2DLow.canvas,
-    //   textStartOfCanvas.x, textStartOfCanvas.y,
-    //   textWidthOfCanvas, textHeightOfCanvas,
-    //   0, 0,
-    //   canvas.clientWidth, canvas.clientHeight,
-    // );
     this.clearContext();
   }
 
@@ -573,7 +538,6 @@ class Diagram {
     for (let i = 0; i < this.elements.drawOrder.length; i += 1) {
       const element = this.elements.elements[this.elements.drawOrder[i]];
       element.unrender();
-      console.log('unrendering', element.name)
     }
   }
 

@@ -231,7 +231,7 @@ class DiagramElement {
   //       fits within the element aspect ratio
   //  '': defaults to fit keeping aspect ratio.
   tieToHTML: {
-    element: string | null | HTMLElement;
+    element: string | null;
     scale: string;   // 1em, 100px, stretch, max, fit
     window: Rect;
     updateOnResize: boolean;
@@ -684,8 +684,6 @@ class DiagramElement {
     let tieToElement;
     if (typeof this.tieToHTML.element === 'string') {
       tieToElement = document.getElementById(this.tieToHTML.element);
-    } else if (this.tieToHTML.element instanceof HTMLElement) {
-      tieToElement = this.tieToHTML.element;
     }
     if (tieToElement != null) {
       const tie = tieToElement.getBoundingClientRect();
@@ -2198,7 +2196,6 @@ class DiagramElement {
 
 
   resize(diagramHTMLElement: ?HTMLElement = null) {
-    this.resizeHtmlObject();
     if (diagramHTMLElement && this.tieToHTML.updateOnResize) {
       this.updateHTMLElementTie(diagramHTMLElement);
     }
@@ -2459,21 +2456,21 @@ class DiagramElement {
 
   clearRender() {
     let tieToElement;
+    let elementId = '';
     if (typeof this.tieToHTML.element === 'string') {
+      elementId = this.tieToHTML.element;
       tieToElement = document.getElementById(this.tieToHTML.element);
-    } else if (this.tieToHTML.element instanceof HTMLElement) {
-      tieToElement = this.tieToHTML.element;
     }
+
     if (tieToElement) {
-      // const ctx = tieToElement.getContext('2d');
-      // ctx.clearRect(0, 0, tieToElement.width, tieToElement.height);
-      const w = document.getElementById(`${this.tieToHTML.element}_webgl`);
-      // console.log(w)
-      // w.src = '';
-      w.style.visibility = 'hidden';
-      const d = document.getElementById(`${this.tieToHTML.element}_2d`);
-      // d.src = '';
-      d.style.visibility = 'hidden';
+      const w = document.getElementById(`${elementId}_webgl`);
+      if (w != null) {
+        w.style.visibility = 'hidden';
+      }
+      const d = document.getElementById(`${elementId}_2d`);
+      if (d != null) {
+        d.style.visibility = 'hidden';
+      }
     }
   }
 
@@ -2638,6 +2635,7 @@ class DiagramElementPrimative extends DiagramElement {
   }
 
   resize(diagramHTMLElement: ?HTMLElement = null) {
+    this.resizeHtmlObject();
     super.resize(diagramHTMLElement);
     // If gl canvas is resized, webgl text will need to be updated.
     if (this.drawingObject.type === 'vertexText') {
