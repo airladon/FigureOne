@@ -2189,7 +2189,10 @@ class DiagramElement {
     this.stopPulsing(cancelled);
   }
 
-  updateLimits(limits: Rect, transforms: TypeSpaceTransforms) {
+  updateLimits(
+    limits: Rect,
+    transforms: TypeSpaceTransforms = this.diagramTransforms,
+  ) {
     this.diagramLimits = limits;
     this.diagramTransforms = transforms;
   }
@@ -3280,7 +3283,10 @@ class DiagramElementCollection extends DiagramElement {
     );
   }
 
-  updateLimits(limits: Rect, transforms: TypeSpaceTransforms) {
+  updateLimits(
+    limits: Rect,
+    transforms: TypeSpaceTransforms = this.diagramTransforms,
+  ) {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       element.updateLimits(limits, transforms);
