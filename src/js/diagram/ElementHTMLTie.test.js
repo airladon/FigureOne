@@ -39,14 +39,16 @@ describe('Diagram html element tie', () => {
   beforeEach(() => {
     const createScenario = () => {
       htmlElement = makeHTMLElement(htmlElementRect);
+      htmlElement.id = 'htmlElementId';
       diagram = makeDiagram(diagramRect, diagramLimits);
+      document.body.appendChild(htmlElement);
       square = diagram.shapes.polygon({
         sides: 4,
         radius: 1,
         transform: new Transform().scale(1, 1).translate(0, 0),
       });
       square.tieToHTML = {
-        element: htmlElement,
+        element: 'htmlElementId',
         scale: scaleType,
         window: windowLimits,
         updateOnResize: true,
