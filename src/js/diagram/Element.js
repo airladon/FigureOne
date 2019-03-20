@@ -2589,9 +2589,6 @@ class DiagramElementPrimative extends DiagramElement {
       this.drawingObject.getGLBoundaryHoles(this.lastDrawTransform.matrix());
     for (let i = 0; i < boundaries.length; i += 1) {
       const boundary = boundaries[i];
-      if (this.name === 'activator') {
-        console.log(this.lastDrawTransform.matrix())
-      }
       if (glLocation.isInPolygon(boundary)) {
         let isTouched = true;
         if (this.cannotTouchHole) {

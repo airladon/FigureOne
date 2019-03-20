@@ -610,7 +610,6 @@ class Diagram {
     // Get all the diagram elements that were touched at this point (element
     // must have isTouchable = true to be considered)
     this.beingTouchedElements = this.elements.getTouched(glPoint);
-    console.log(clientPoint, glPoint, this.beingTouchedElements)
     if (this.moveTopElementOnly) {
       if (this.beingTouchedElements.length > 0) {
         this.beingTouchedElements[0].click();
