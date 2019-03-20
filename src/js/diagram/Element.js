@@ -680,7 +680,6 @@ class DiagramElement {
   updateHTMLElementTie(
     diagramCanvas: HTMLElement,
   ) {
-    // First get the HTML element
     let tieToElement;
     if (typeof this.tieToHTML.element === 'string') {
       tieToElement = document.getElementById(this.tieToHTML.element);
@@ -779,7 +778,6 @@ class DiagramElement {
         center.x - scaleX * (this.tieToHTML.window.left + this.tieToHTML.window.width / 2),
         center.y - scaleY * (this.tieToHTML.window.bottom + this.tieToHTML.window.height / 2),
       );
-
       this.setFirstTransform(this.getParentLastDrawTransform());
     }
   }
@@ -2577,6 +2575,10 @@ class DiagramElementPrimative extends DiagramElement {
     // this.setMoveBoundaryToDiagram();
   }
 
+  setAngleToDraw(intputAngle: number = -1) {
+    this.angleToDraw = intputAngle;
+  }
+
   isBeingTouched(glLocation: Point): boolean {
     if (!this.isTouchable) {
       return false;
@@ -2587,6 +2589,9 @@ class DiagramElementPrimative extends DiagramElement {
       this.drawingObject.getGLBoundaryHoles(this.lastDrawTransform.matrix());
     for (let i = 0; i < boundaries.length; i += 1) {
       const boundary = boundaries[i];
+      if (this.name === 'activator') {
+        console.log(this.lastDrawTransform.matrix())
+      }
       if (glLocation.isInPolygon(boundary)) {
         let isTouched = true;
         if (this.cannotTouchHole) {
@@ -3301,6 +3306,7 @@ class DiagramElementCollection extends DiagramElement {
     // diagramToGLSpaceTransformMatrix: Array<number>,
     container: HTMLElement,
   ) {
+    // console.log('collection', this.name)
     super.updateHTMLElementTie(
       // pixelSpaceToDiagramSpaceTransform,
       // diagramToPixelSpaceScale,
