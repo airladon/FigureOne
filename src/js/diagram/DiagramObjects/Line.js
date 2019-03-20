@@ -13,6 +13,7 @@ import {
 import EquationLabel from './EquationLabel';
 import type { TypeLabelEquationOptions } from './EquationLabel';
 import { Equation } from '../DiagramElements/Equation/GLEquation';
+import { joinObjects } from '../../tools/tools';
 
 // top - text is on top of line (except when line is vertical)
 // bottom - text is on bottom of line (except when line is vertical)
@@ -82,6 +83,11 @@ export type TypeLineOptions = {
     maxLength?: number,
   },
   mods?: {},
+  move?: {
+    type?: 'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale';
+    middleLengthPercent?: number;
+    translationBounds?: Rect;
+  }
 };
 
 // Line is a class that manages:
@@ -475,6 +481,22 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         labelOptions.color,
       );
     }
+
+    const defaultMoveOptions = {
+      type: 'rotation',
+      middleLengthPercent: 0.22,
+      translationbounds: this.diagramLimits,
+    };
+    if (optionsToUse.move) {
+      const moveOptions = joinObjects({}, defaultMoveOptions, optionsToUse.move);
+      this.setMovable(
+        true,
+        moveOptions.type,
+        moveOptions.middleLengthPercent,
+        moveOptions.translationbounds,
+      );
+    }
+
     if (optionsToUse.mods != null && optionsToUse.mods !== {}) {
       this.setProperties(optionsToUse.mods);
     }
