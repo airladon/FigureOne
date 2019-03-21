@@ -2456,6 +2456,17 @@ class DiagramElement {
     }
   }
 
+  makeTouchable(makeThisElementTouchable: boolean = true): void {
+    if (makeThisElementTouchable) {
+      this.isTouchable = true;
+    } else {
+      this.hasTouchableElements = true;
+    }
+    if (this.parent != null) {
+      this.parent.makeTouchable(false);
+    }
+  }
+
   clearRender() {
     let tieToElement;
     let elementId = '';
