@@ -43,6 +43,7 @@ function addElements(
       arrow: shapes.arrow.bind(shapes),
       text: shapes.txt.bind(shapes),
       textGL: shapes.textGL.bind(shapes),
+      axes: shapes.axes.bind(shapes),
       //
       line: objects.line.bind(objects),
       angle: objects.angle.bind(objects),
