@@ -1967,6 +1967,7 @@ class DiagramElement {
   // Being Moved
   startBeingMoved(): void {
     this.stopAnimating();
+    this.animations.cancelAll('noComplete');
     this.stopMovingFreely();
     this.state.movement.velocity = this.transform.zero();
     this.state.movement.previousTransform = this.transform._dup();
