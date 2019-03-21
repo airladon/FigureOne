@@ -668,7 +668,163 @@ export default class DiagramPrimatives {
     return copy;
   }
 
-  axes(
+  axes(...optionsIn: Array<{
+    width?: number,
+    height?: number,
+    limits?: Rect,
+    yAxisLocation?: number,
+    xAxisLocation?: number,
+    stepX?: number,
+    stepY?: number,
+    fontSize?: number,
+    showGrid?: boolean,
+    color?: Array<number>,
+    gridColor?: Array<number>,
+    location?: Transform | Point,
+    decimalPlaces?: number,
+    lineWidth?: number,
+  }>) {
+    const defaultOptions = {
+      width: 1,
+      height: 1,
+      limits: new Rect(-1, -1, 2, 2),
+      yAxisLocation: 0,
+      xAxisLocation: 0,
+      stepX: 0.1,
+      stepY: 0.1,
+      fontSize: 0.13,
+      showGrid: true,
+      color: [1, 1, 1, 0],
+      gridColor: [1, 1, 1, 0],
+      location: new Transform(),
+      decimalPlaces: 1,
+      lineWidth: 0.01,
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+
+    const {
+      width, lineWidth, limits, color, stepX, decimalPlaces,
+      yAxisLocation, xAxisLocation, fontSize, height, stepY,
+      location, showGrid, gridColor,
+    } = options;
+
+    const xProps = new AxisProperties('x', 0);
+
+    xProps.minorTicks.mode = 'off';
+    xProps.minorGrid.mode = 'off';
+    xProps.majorGrid.mode = 'off';
+
+    xProps.length = width;
+    xProps.width = lineWidth;
+    xProps.limits = { min: limits.left, max: limits.right };
+    xProps.color = color.slice();
+    xProps.title = '';
+
+    xProps.majorTicks.start = limits.left;
+    xProps.majorTicks.step = stepX;
+    xProps.majorTicks.length = lineWidth * 5;
+    xProps.majorTicks.offset = -xProps.majorTicks.length / 2;
+    xProps.majorTicks.width = lineWidth * 2;
+    xProps.majorTicks.labelMode = 'off';
+    xProps.majorTicks.labels = tools.range(
+      xProps.limits.min,
+      xProps.limits.max,
+      stepX,
+    ).map(v => v.toFixed(decimalPlaces)).map((v) => {
+      if (v === yAxisLocation.toString() && yAxisLocation === xAxisLocation) {
+        return `${v}     `;
+      }
+      return v;
+    });
+
+    // xProps.majorTicks.labels[xProps.majorTicks.labels / 2] = '   0';
+    xProps.majorTicks.labelOffset = new Point(
+      0,
+      xProps.majorTicks.offset - fontSize * 0.1,
+    );
+    xProps.majorTicks.labelsHAlign = 'center';
+    xProps.majorTicks.labelsVAlign = 'top';
+    xProps.majorTicks.fontColor = color.slice();
+    xProps.majorTicks.fontSize = fontSize;
+    xProps.majorTicks.fontWeight = '400';
+
+    const xAxis = new Axis(
+      this.webgl, this.draw2D, xProps,
+      new Transform().scale(1, 1).rotate(0)
+        .translate(0, xAxisLocation - limits.bottom * height / 2),
+      this.limits,
+    );
+
+    const yProps = new AxisProperties('x', 0);
+    yProps.minorTicks.mode = 'off';
+    yProps.minorGrid.mode = 'off';
+    yProps.majorGrid.mode = 'off';
+
+    yProps.length = height;
+    yProps.width = xProps.width;
+    yProps.limits = { min: limits.bottom, max: limits.top };
+    yProps.color = xProps.color;
+    yProps.title = '';
+    yProps.rotation = Math.PI / 2;
+
+    yProps.majorTicks.step = stepY;
+    yProps.majorTicks.start = limits.bottom;
+    yProps.majorTicks.length = xProps.majorTicks.length;
+    yProps.majorTicks.offset = -yProps.majorTicks.length / 2;
+    yProps.majorTicks.width = xProps.majorTicks.width;
+    yProps.majorTicks.labelMode = 'off';
+    yProps.majorTicks.labels = tools.range(
+      yProps.limits.min,
+      yProps.limits.max,
+      stepY,
+    ).map(v => v.toFixed(decimalPlaces)).map((v) => {
+      if (v === xAxisLocation.toString() && yAxisLocation === xAxisLocation) {
+        return '';
+      }
+      return v;
+    });
+
+    // yProps.majorTicks.labels[3] = '';
+    yProps.majorTicks.labelOffset = new Point(
+      yProps.majorTicks.offset - fontSize * 0.2,
+      0,
+    );
+    yProps.majorTicks.labelsHAlign = 'right';
+    yProps.majorTicks.labelsVAlign = 'middle';
+    yProps.majorTicks.fontColor = xProps.majorTicks.fontColor;
+    yProps.majorTicks.fontSize = fontSize;
+    yProps.majorTicks.fontWeight = xProps.majorTicks.fontWeight;
+
+    const yAxis = new Axis(
+      this.webgl, this.draw2D, yProps,
+      new Transform().scale(1, 1).rotate(0)
+        .translate(yAxisLocation - limits.left * width / 2, 0),
+      this.limits,
+    );
+
+    let transform = new Transform();
+    if (location instanceof Point) {
+      transform = transform.translate(location.x, location.y);
+    } else {
+      transform = location._dup();
+    }
+    const xy = this.collection(transform);
+    if (showGrid) {
+      const gridLines = this.grid(
+        new Rect(0, 0, width, height),
+        tools.roundNum(stepX * width / limits.width, 8),
+        tools.roundNum(stepY * height / limits.height, 8),
+        1,
+        gridColor, new Transform().scale(1, 1).rotate(0).translate(0, 0),
+      );
+      xy.add('grid', gridLines);
+    }
+    xy.add('y', yAxis);
+    xy.add('x', xAxis);
+    return xy;
+  }
+
+  axesLegacy(
     width: number = 1,
     height: number = 1,
     limits: Rect = new Rect(-1, -1, 2, 2),
