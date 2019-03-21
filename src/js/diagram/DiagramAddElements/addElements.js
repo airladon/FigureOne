@@ -87,6 +87,9 @@ function addElements(
           elementModsToUse, addElementsToUse, firstScenario,
         ] = elementDefinition;
       } else {
+        if (elementDefinition == null) {
+          throw Error(`Add elements index ${index} does not exist in layout`);
+        }
         nameToUse = elementDefinition.name;
         pathToUse = elementDefinition.path;
         optionsToUse = elementDefinition.options;
