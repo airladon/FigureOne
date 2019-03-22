@@ -451,10 +451,11 @@ export default class DiagramPrimatives {
     const optionsToUse = Object.assign({}, defaultOptions, ...options);
     const o = optionsToUse;
     let { transform } = o;
-    if (transform == null && o.point != null) {
-      transform = new Transform('polygon').translate(o.point);
-    } else if (transform == null) {
-      transform = new Transform('polygon');
+    if (transform == null) {
+      transform = new Transform('polygon').scale(1, 1).rotate(0).translate(0, 0);
+    }
+    if (o.point != null) {
+      transform.updateTranslation(o.point);
     }
     if (o.sidesToDraw == null) {
       o.sidesToDraw = o.sides;
@@ -576,27 +577,24 @@ export default class DiagramPrimatives {
     transformOrPointOrOptions: Transform | Point | {
       transform?: Transform,
       position?: Point,
-    } = { transform: new Transform() },
+    } = {},
     ...moreOptions: Array<{
       transform?: Transform,
       position?: Point,
     }>
   ) {
-    let transform = new Transform();
+    let transform = new Transform('collection').scale(1, 1).rotate(0).translate(0, 0);
     if (transformOrPointOrOptions instanceof Point) {
-      transform = transform.translate(transformOrPointOrOptions.x, transformOrPointOrOptions.y);
+      transform.updateTranslation(transformOrPointOrOptions);
     } else if (transformOrPointOrOptions instanceof Transform) {
       transform = transformOrPointOrOptions._dup();
     } else {
       const optionsToUse = joinObjects(transformOrPointOrOptions, ...moreOptions);
-      if (optionsToUse.position != null) {
-        transform = transform.translate(
-          optionsToUse.position.x,
-          optionsToUse.position.y,
-        );
-      }
       if (optionsToUse.transform != null) {
         ({ transform } = optionsToUse);
+      }
+      if (optionsToUse.position != null) {
+        transform.updateTranslation(optionsToUse.position);
       }
     }
     return new DiagramElementCollection(transform, this.limits);
