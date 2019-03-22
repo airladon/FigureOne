@@ -3,7 +3,7 @@
 import {
   Transform, Point, TransformLimit, Rect,
   Translation, spaceToSpaceTransform, getBoundingRect,
-  Scale, Rotation, Line, getMaxTimeFromVelocity,
+  Scale, Rotation, Line, getMaxTimeFromVelocity, clipAngle,
 } from '../tools/g2';
 import * as m2 from '../tools/m2';
 import type { pathOptionsType, TypeRotationDirection } from '../tools/g2';
@@ -2267,11 +2267,14 @@ class DiagramElement {
     return scale;
   }
 
-  getRotation() {
+  getRotation(normalize: '0to360' | '-180to180' | '') {
     const r = this.transform.r();
     let rotation = 0;
     if (r != null) {
       rotation = r;
+    }
+    if (normalize !== '' && r != null) {
+      rotation = clipAngle(r, normalize);
     }
     return rotation;
   }
