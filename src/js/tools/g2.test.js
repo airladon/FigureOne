@@ -2,7 +2,7 @@ import {
   Point, Transform, Line, minAngleDiff, normAngle,
   TransformLimit, spaceToSpaceTransform, Rect,
   getBoundingRect, polarToRect, rectToPolar, getDeltaAngle,
-  normAngleTo90, deg, curvedPath,
+  normAngleTo90, deg, curvedPath, parsePoint,
 } from './g2';
 import { round } from './math';
 
@@ -912,9 +912,9 @@ describe('g2 tests', () => {
         .translate(0, 0).scale(2, 2).rotate(1)
         .translate(1, 1)
         .rotate(2);
-      expect(t.t()).toEqual({ x: 0, y: 0 });
-      expect(t.t(0)).toEqual({ x: 0, y: 0 });
-      expect(t.t(1)).toEqual({ x: 1, y: 1 });
+      expect(t.t()).toEqual({ x: 0, y: 0, _type: 'point' });
+      expect(t.t(0)).toEqual({ x: 0, y: 0, _type: 'point' });
+      expect(t.t(1)).toEqual({ x: 1, y: 1, _type: 'point' });
       expect(t.t(2)).toEqual(null);
     });
     test('Update translation', () => {
@@ -923,29 +923,29 @@ describe('g2 tests', () => {
         .translate(1, 1)
         .rotate(2);
       t.updateTranslation(new Point(2, 2));
-      expect(t.t()).toEqual({ x: 2, y: 2 });
+      expect(t.t()).toEqual({ x: 2, y: 2, _type: 'point' });
 
       t.updateTranslation(3, 3);
-      expect(t.t()).toEqual({ x: 3, y: 3 });
+      expect(t.t()).toEqual({ x: 3, y: 3, _type: 'point' });
 
       t.updateTranslation(4, 4, 0);
-      expect(t.t()).toEqual({ x: 4, y: 4 });
+      expect(t.t()).toEqual({ x: 4, y: 4, _type: 'point' });
 
       t.updateTranslation(5, 5, 1);
-      expect(t.t(1)).toEqual({ x: 5, y: 5 });
+      expect(t.t(1)).toEqual({ x: 5, y: 5, _type: 'point' });
 
       t.updateTranslation(5, 5, 2);
-      expect(t.t(0)).toEqual({ x: 4, y: 4 });
-      expect(t.t(1)).toEqual({ x: 5, y: 5 });
+      expect(t.t(0)).toEqual({ x: 4, y: 4, _type: 'point' });
+      expect(t.t(1)).toEqual({ x: 5, y: 5, _type: 'point' });
     });
     test('Get Scale', () => {
       const t = new Transform()
         .scale(0, 0).translate(2, 2).rotate(1)
         .scale(1, 1)
         .rotate(2);
-      expect(t.s()).toEqual({ x: 0, y: 0 });
-      expect(t.s(0)).toEqual({ x: 0, y: 0 });
-      expect(t.s(1)).toEqual({ x: 1, y: 1 });
+      expect(t.s()).toEqual({ x: 0, y: 0, _type: 'point' });
+      expect(t.s(0)).toEqual({ x: 0, y: 0, _type: 'point' });
+      expect(t.s(1)).toEqual({ x: 1, y: 1, _type: 'point' });
       expect(t.s(2)).toEqual(null);
     });
     test('isEqualTo', () => {
@@ -973,20 +973,20 @@ describe('g2 tests', () => {
         .scale(1, 1)
         .rotate(2);
       t.updateScale(new Point(2, 2));
-      expect(t.s()).toEqual({ x: 2, y: 2 });
+      expect(t.s()).toEqual({ x: 2, y: 2, _type: 'point' });
 
       t.updateScale(3, 3);
-      expect(t.s()).toEqual({ x: 3, y: 3 });
+      expect(t.s()).toEqual({ x: 3, y: 3, _type: 'point' });
 
       t.updateScale(4, 4, 0);
-      expect(t.s()).toEqual({ x: 4, y: 4 });
+      expect(t.s()).toEqual({ x: 4, y: 4, _type: 'point' });
 
       t.updateScale(5, 5, 1);
-      expect(t.s(1)).toEqual({ x: 5, y: 5 });
+      expect(t.s(1)).toEqual({ x: 5, y: 5, _type: 'point' });
 
       t.updateScale(5, 5, 2);
-      expect(t.s(0)).toEqual({ x: 4, y: 4 });
-      expect(t.s(1)).toEqual({ x: 5, y: 5 });
+      expect(t.s(0)).toEqual({ x: 4, y: 4, _type: 'point' });
+      expect(t.s(1)).toEqual({ x: 5, y: 5, _type: 'point' });
     });
     test('is Similar to - single transform in order', () => {
       const t1 = new Transform().scale(1, 1);
@@ -1844,6 +1844,20 @@ describe('g2 tests', () => {
       expect(curvedPath(start, stop, 0, options)).toEqual(start);
       expect(curvedPath(start, stop, 0.5, options)).toEqual(new Point(1, 0.5));
       expect(curvedPath(start, stop, 1, options)).toEqual(stop);
+    });
+  });
+  describe('Parse point', () => {
+    test('Array', () => {
+      expect(parsePoint([1, 1], new Point(0, 0))).toEqual(new Point(1, 1));
+    });
+    test('Object', () => {
+      expect(parsePoint({ x: 1, y: 1 }, new Point(0, 0))).toEqual(new Point(1, 1));
+    });
+    test('Point', () => {
+      expect(parsePoint(new Point(1, 1), new Point(0, 0))).toEqual(new Point(1, 1));
+    });
+    test('Fail', () => {
+      expect(parsePoint(1, new Point(0, 0))).toEqual(new Point(0, 0));
     });
   });
   // describe('Three point angle', () => {

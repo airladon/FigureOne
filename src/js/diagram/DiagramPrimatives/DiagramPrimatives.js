@@ -1,6 +1,6 @@
 // @flow
 import {
-  Rect, Point, Transform,
+  Rect, Point, Transform, getPoint,
 } from '../../tools/g2';
 import {
   DiagramElementCollection, DiagramElementPrimative,
@@ -46,7 +46,7 @@ export type TypePolygonOptions = {
   color?: Array<number>,
   fill?: boolean,
   transform?: Transform,
-  location?: Point,
+  position?: Point,
   textureLocation?: string,
   textureCoords?: Rect,
   onLoad?: Function,
@@ -55,6 +55,7 @@ export type TypePolygonOptions = {
 
 export type TypeTextOptions = {
   text?: string;
+  transform?: Transform;
   position?: Point;
   offset?: Point;
   font?: DiagramFont;
@@ -65,6 +66,7 @@ export type TypeTextOptions = {
   hAlign?: string;
   vAlign?: string;
   color?: Array<number>;
+  mods?: {},
 };
 
 export default class DiagramPrimatives {
@@ -108,7 +110,7 @@ export default class DiagramPrimatives {
     );
   }
 
-  polyLine(...options: Array<{
+  polyLine(...optionsIn: Array<{
       points: Array<Point>,
       color?: Array<number>,
       close?: boolean,
@@ -116,67 +118,80 @@ export default class DiagramPrimatives {
       borderToPoint?: TypePolyLineBorderToPoint,
       position?: Point,
       transform?: Transform,
+      mods?: {},
     }>) {
     const defaultOptions = {
       color: [1, 0, 0, 1],
       close: true,
       width: 0.01,
       borderToPoint: 'never',
-      position: null,
-      transform: null,
+      transform: new Transform('polyLine').standard(),
     };
-    const optionsToUse = Object.assign({}, defaultOptions, ...options);
-    const o = optionsToUse;
-    let { transform } = o;
-    if (transform == null && o.position != null) {
-      transform = new Transform('polyLine').translate(o.position);
-    } else if (transform == null) {
-      transform = new Transform('polyLine');
+
+    const options = Object.assign({}, defaultOptions, ...optionsIn);
+
+    if (options.position != null) {
+      const p = getPoint(options.position);
+      options.transform.updateTranslation(p);
     }
-    return PolyLine(
+
+    let points = [];
+    if (options.points) {
+      points = options.points.map(p => getPoint(p));
+    }
+
+    const element = PolyLine(
       this.webgl,
-      o.points,
-      o.close,
-      o.width,
-      o.color,
-      o.borderToPoint,
-      transform,
+      points,
+      options.close,
+      options.width,
+      options.color,
+      options.borderToPoint,
+      options.transform,
       this.limits,
     );
+
+    if (options.mods != null && options.mods !== {}) {
+      element.setProperties(options.mods);
+    }
+
+    return element;
   }
 
-  fan(...options: Array<{
+  fan(...optionsIn: Array<{
     points?: Array<Point>,
     color?: Array<number>,
-    transform?: Transform | null,
-    position?: Point | null,
+    transform?: Transform,
+    position?: Point,
+    mods?: {},
   }>) {
     const defaultOptions = {
       points: [],
       color: [1, 0, 0, 1],
-      transform: null,
+      transform: new Transform('fan').standard(),
       position: null,
     };
-    const optionsToUse = Object.assign({}, defaultOptions, ...options);
-    const o = optionsToUse;
-    let { transform } = o;
-    if (transform == null && o.position != null) {
-      transform = new Transform('fan').translate(o.position);
-    } else if (transform == null) {
-      transform = new Transform('fan');
+    const options = Object.assign({}, defaultOptions, ...optionsIn);
+
+    if (options.position != null) {
+      const p = getPoint(options.position);
+      options.transform.updateTranslation(p);
     }
-    return Fan(this.webgl, o.points, o.color, transform, this.limits);
+
+    const element = Fan(
+      this.webgl,
+      options.points,
+      options.color,
+      options.transform,
+      this.limits,
+    );
+
+    if (options.mods != null && options.mods !== {}) {
+      element.setProperties(options.mods);
+    }
+
+    return element;
   }
-  // fan(
-  //   points: Array<Point>,
-  //   color: Array<number>,
-  //   transform: Transform | Point = new Transform(),
-  // ) {
-  //   return Fan(
-  //     this.webgl, points,
-  //     color, transform, this.limits,
-  //   );
-  // }
 
   textGL(options: Object) {
     return Text(
@@ -189,7 +204,7 @@ export default class DiagramPrimatives {
   txt(textOrOptions: string | TypeTextOptions, ...optionsIn: Array<TypeTextOptions>) {
     const defaultOptions = {
       text: '',
-      position: new Point(0, 0),
+      // position: new Point(0, 0),
       font: null,
       family: 'Times New Roman',
       style: 'italic',
@@ -199,6 +214,7 @@ export default class DiagramPrimatives {
       vAlign: 'middle',
       offset: new Point(0, 0),    // vertex space offset
       color: [1, 0, 0, 1],
+      transform: new Transform('text').standard(),
       // draw2D: this.draw2D,
     };
     let options;
@@ -210,12 +226,11 @@ export default class DiagramPrimatives {
       options = joinObjects({}, defaultOptions, textOrOptions, ...optionsIn);
     }
 
-    // if (typeof options.draw2D === 'string') {
-    //   if (options.draw2D in this.draw2DFigures) {
-    //     options.draw2D = this.draw2DFigures[options.draw2D];
-    //   }
-    // }
-    // const optionsToUse = joinObjects(defaultOptions, ...options);
+    if (options.position != null) {
+      const p = getPoint(options.position);
+      options.transform.updateTranslation(p);
+    }
+
     const o = options;
     const { text } = o;
     let fontToUse = o.font;
@@ -226,23 +241,31 @@ export default class DiagramPrimatives {
     }
     const dT = new DiagramText(o.offset, text, fontToUse);
     const to = new TextObject(this.draw2D, [dT]);
-    return new DiagramElementPrimative(
+    const element = new DiagramElementPrimative(
       to,
-      new Transform().scale(1, 1).translate(o.position.x, o.position.y),
+      o.transform,
       o.color,
       this.limits,
     );
+
+    if (options.mods != null && options.mods !== {}) {
+      element.setProperties(options.mods);
+    }
+
+    return element;
   }
 
   arrow(...optionsIn: Array<{
-    width: ?number;
-    legWidth: ?number;
-    height: ?number;
-    legHeight: ?number;
-    color: ?Array<number>;
-    transform: ?Transform;
-    tip: ?Point;
-    rotation: ?number;
+    width?: number;
+    legWidth?: number;
+    height?: number;
+    legHeight?: number;
+    color?: Array<number>;
+    transform?: Transform;
+    position?: Point;
+    tip?: Point;
+    rotation?: number;
+    mods?: {},
   }>) {
     const defaultOptions = {
       width: 1,
@@ -250,15 +273,34 @@ export default class DiagramPrimatives {
       height: 1,
       legHeight: 1,
       color: [1, 0, 0, 1],
-      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
+      transform: new Transform('arrow').standard(),
       tip: new Point(0, 0),
       rotation: 0,
     };
-    const o = joinObjects(defaultOptions, ...optionsIn);
-    return Arrow(
-      this.webgl, o.width, o.legWidth, o.height, o.legHeight,
-      o.tip, o.rotation, o.color, o.transform, this.limits,
+    const options = Object.assign({}, defaultOptions, ...optionsIn);
+
+    if (options.position != null) {
+      const p = getPoint(options.position);
+      options.transform.updateTranslation(p);
+    }
+    const element = new Arrow(
+      this.webgl,
+      options.width,
+      options.legWidth,
+      options.height,
+      options.legHeight,
+      getPoint(options.tip),
+      options.rotation,
+      options.color,
+      options.transform,
+      this.limits,
     );
+
+    if (options.mods != null && options.mods !== {}) {
+      element.setProperties(options.mods);
+    }
+
+    return element;
   }
 
   arrowLegacy(
@@ -431,7 +473,7 @@ export default class DiagramPrimatives {
   //   );
   // }
 
-  polygon(...options: Array<TypePolygonOptions>) {
+  polygon(...optionsIn: Array<TypePolygonOptions>) {
     const defaultOptions = {
       sides: 4,
       radius: 1,
@@ -441,60 +483,62 @@ export default class DiagramPrimatives {
       sidesToDraw: null,
       color: [1, 0, 0, 1],
       fill: false,
-      transform: null,
-      point: null,
       textureLocation: '',        // If including a texture, make sure to use
       textureCoords: new Rect(0, 0, 1, 1),  // correct shader in diagram
       onLoad: this.animateNextFrame,
       mods: {},
+      transform: new Transform('polygon').standard(),
+      position: null,
+      offset: new Point(0, 0),
     };
-    const optionsToUse = Object.assign({}, defaultOptions, ...options);
-    const o = optionsToUse;
-    let { transform } = o;
-    if (transform == null) {
-      transform = new Transform('polygon').scale(1, 1).rotate(0).translate(0, 0);
+    const options = Object.assign({}, defaultOptions, ...optionsIn);
+    // const o = optionsToUse;
+    // let { transform } = options;
+    // if (transform == null) {
+    //   transform = new Transform('polygon').scale(1, 1).rotate(0).translate(0, 0);
+    // }
+    if (options.point != null) {
+      const point = getPoint(options.point);
+      options.transform.updateTranslation(point);
     }
-    if (o.point != null) {
-      transform.updateTranslation(o.point);
-    }
-    if (o.sidesToDraw == null) {
-      o.sidesToDraw = o.sides;
+    if (options.sidesToDraw == null) {
+      options.sidesToDraw = options.sides;
     }
     let direction = 1;
-    if (o.clockwise) {
+    if (options.clockwise) {
       direction = -1;
     }
     let element;
-    if (o.fill) {
+    if (options.fill) {
       element = PolygonFilled(
         this.webgl,
-        o.sides,
-        o.radius,
-        o.rotation,
-        o.sidesToDraw,
-        o.color,
-        transform,
+        options.sides,
+        options.radius,
+        options.rotation,
+        options.sidesToDraw,
+        options.color,
+        options.transform,
         this.limits,
-        o.textureLocation,
-        o.textureCoords,
-        o.onLoad,
+        options.textureLocation,
+        options.textureCoords,
+        options.onLoad,
       );
     } else {
       element = Polygon(
         this.webgl,
-        o.sides,
-        o.radius,
-        o.width,
-        o.rotation,
+        options.sides,
+        options.radius,
+        options.width,
+        options.rotation,
         direction,
-        o.sidesToDraw,
-        o.color,
-        transform,
+        options.sidesToDraw,
+        options.color,
+        options.transform,
         this.limits,
       );
     }
-    if (optionsToUse.mods != null && optionsToUse.mods !== {}) {
-      element.setProperties(optionsToUse.mods);
+    if (options.mods != null && options.mods !== {}) {
+      element.setProperties(options.mods);
     }
     return element;
   }
