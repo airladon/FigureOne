@@ -90,6 +90,7 @@ class Rect {
 class Point {
   x: number;
   y: number;
+  _type: 'point';
 
   static zero() {
     return new Point(0, 0);
@@ -99,9 +100,19 @@ class Point {
     return new Point(1, 1);
   }
 
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
+  constructor(x: number | Array<number> | { x: number, y: number } | Point, y: number) {
+    if (typeof x === 'number') {
+      this.x = x;
+      this.y = y;
+    } else if (Array.isArray(x)) {
+      const [xToUse, yToUse] = x;
+      this.x = xToUse;
+      this.y = yToUse;
+    } else {
+      this.x = x.x;
+      this.y = x.y;
+    }
+    this._type = 'point';
   }
 
   _dup() {
