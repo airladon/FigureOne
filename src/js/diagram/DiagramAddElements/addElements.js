@@ -39,6 +39,7 @@ function addElements(
     const methods = {
       collection: shapes.collection.bind(shapes),
       polyLine: shapes.polyLine.bind(shapes),
+      polyLineCorners: shapes.polyLineCorners.bind(shapes),
       polygon: shapes.polygon.bind(shapes),
       arrow: shapes.arrow.bind(shapes),
       text: shapes.txt.bind(shapes),
