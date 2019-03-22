@@ -484,8 +484,6 @@ export default class DiagramPrimatives {
     return this.lines(linePairs, numLinesThick, color, transform);
   }
 
-  
-
   // polygon(
   //   numSides: number,
   //   radius: number,
