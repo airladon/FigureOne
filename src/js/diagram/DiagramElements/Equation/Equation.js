@@ -177,6 +177,7 @@ export class EquationNew extends DiagramElementCollection {
       forms: {},
       formSeries: [],
     };
+
     const optionsToUse = joinObjects({}, defaultOptions, options);
     optionsToUse.position = parsePoint(
       optionsToUse.position, new Point(0, 0),

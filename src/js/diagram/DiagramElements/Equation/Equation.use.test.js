@@ -314,7 +314,7 @@ describe('Different ways to make an equation', () => {
     expect(eqn._a.drawingObject.text[0].font.style).toBe('italic');
     expect(eqn.__2.drawingObject.text[0].font.style).toBe('normal');
   });
-  test('All Text in constructor with all options', () => {
+  test.only('All Text in constructor with all options', () => {
     ways.allTextInConstructorAllOptions();
     expect(eqn).toHaveProperty('_a');
     expect(eqn).toHaveProperty('_b');

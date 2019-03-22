@@ -86,6 +86,7 @@ class Rect {
   }
 }
 
+
 /* eslint-disable comma-dangle */
 class Point {
   x: number;
@@ -100,18 +101,9 @@ class Point {
     return new Point(1, 1);
   }
 
-  constructor(x: number | Array<number> | { x: number, y: number } | Point, y: number) {
-    if (typeof x === 'number') {
-      this.x = x;
-      this.y = y;
-    } else if (Array.isArray(x)) {
-      const [xToUse, yToUse] = x;
-      this.x = xToUse;
-      this.y = yToUse;
-    } else {
-      this.x = x.x;
-      this.y = x.y;
-    }
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
     this._type = 'point';
   }
 
@@ -1107,6 +1099,7 @@ class Transform {
   mat: Array<number>;
   index: number;
   name: string;
+  _type: 'transform';
 
   constructor(orderOrName: Array<Translation | Rotation | Scale> | string = [], name: string = '') {
     if (typeof orderOrName === 'string') {
@@ -1118,7 +1111,12 @@ class Transform {
     }
     // this.order = order.slice();
     this.index = this.order.length;
+    this._type = 'transform';
     this.calcMatrix();
+  }
+
+  standard() {
+    return this.scale(1, 1).rotate(0).translate(0, 0);
   }
 
   translate(x: number | Point, y: number = 0) {
@@ -1911,6 +1909,14 @@ function parsePoint<T>(p: TypeParsablePoint, onFail: T): Point | T | null {
   return onFailToUse;
 }
 
+function getPoint(p: TypeParsablePoint): Point {
+  let parsedPoint = parsePoint(p);
+  if (parsedPoint == null) {
+    parsedPoint = new Point(0, 0);
+  }
+  return parsedPoint;
+}
+
 export {
   point,
   Point,
@@ -1943,4 +1949,5 @@ export {
   parsePoint,
   clipAngle,
   spaceToSpaceScale,
+  getPoint,
 };
