@@ -110,6 +110,63 @@ export default class DiagramPrimatives {
     );
   }
 
+  polyLineCornersLegacy(
+    points: Array<Point>,
+    close: boolean,
+    cornerLength: number,
+    lineWidth: number,
+    color: Array<number>,
+    transform: Transform | Point = new Transform(),
+  ) {
+    return PolyLineCorners(
+      this.webgl, points, close,
+      cornerLength, lineWidth, color, transform, this.limits,
+    );
+  }
+
+  polyLineCorners(...optionsIn: Array<{
+    points: Array<Point>,
+    color?: Array<number>,
+    close?: boolean,
+    cornerLength?: number,
+    width?: number,
+    transform?: Transform,
+    position?: Point,
+    }>) {
+    const defaultOptions = {
+      color: [1, 0, 0, 1],
+      close: true,
+      width: 0.01,
+      cornerLength: 0.1,
+      transform: new Transform('polyLineCorners').standard(),
+    };
+
+    const options = Object.assign({}, defaultOptions, ...optionsIn);
+
+    if (options.position != null) {
+      const p = getPoint(options.position);
+      options.transform.updateTranslation(p);
+    }
+
+    let points = [];
+    if (options.points) {
+      points = options.points.map(p => getPoint(p));
+    }
+
+    const element = PolyLineCorners(
+      this.webgl, points, options.close,
+      options.cornerLength, options.width,
+      options.color, options.transform, this.limits,
+    );
+
+    if (options.mods != null && options.mods !== {}) {
+      element.setProperties(options.mods);
+    }
+
+    return element;
+  }
+
+  // borderToPoint options: 'alwaysOn' | 'onSharpAnglesOnly' | 'never'
   polyLine(...optionsIn: Array<{
       points: Array<Point>,
       color?: Array<number>,
@@ -427,19 +484,7 @@ export default class DiagramPrimatives {
     return this.lines(linePairs, numLinesThick, color, transform);
   }
 
-  polyLineCorners(
-    points: Array<Point>,
-    close: boolean,
-    cornerLength: number,
-    lineWidth: number,
-    color: Array<number>,
-    transform: Transform | Point = new Transform(),
-  ) {
-    return PolyLineCorners(
-      this.webgl, points, close,
-      cornerLength, lineWidth, color, transform, this.limits,
-    );
-  }
+  
 
   // polygon(
   //   numSides: number,
@@ -489,7 +534,7 @@ export default class DiagramPrimatives {
       mods: {},
       transform: new Transform('polygon').standard(),
       position: null,
-      offset: new Point(0, 0),
+      center: new Point(0, 0),
     };
     const options = Object.assign({}, defaultOptions, ...optionsIn);
     // const o = optionsToUse;
@@ -500,6 +545,9 @@ export default class DiagramPrimatives {
     if (options.point != null) {
       const point = getPoint(options.point);
       options.transform.updateTranslation(point);
+    }
+    if (options.center != null) {
+      options.center = getPoint(options.center);
     }
     if (options.sidesToDraw == null) {
       options.sidesToDraw = options.sides;
@@ -516,6 +564,7 @@ export default class DiagramPrimatives {
         options.radius,
         options.rotation,
         options.sidesToDraw,
+        options.center,
         options.color,
         options.transform,
         this.limits,
@@ -532,6 +581,7 @@ export default class DiagramPrimatives {
         options.rotation,
         direction,
         options.sidesToDraw,
+        options.center,
         options.color,
         options.transform,
         this.limits,
@@ -638,10 +688,11 @@ export default class DiagramPrimatives {
         ({ transform } = optionsToUse);
       }
       if (optionsToUse.position != null) {
-        transform.updateTranslation(optionsToUse.position);
+        transform.updateTranslation(getPoint(optionsToUse.position));
       }
     }
-    return new DiagramElementCollection(transform, this.limits);
+    const element = new DiagramElementCollection(transform, this.limits);
+    return element;
   }
 
   repeatPattern(

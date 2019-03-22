@@ -11,6 +11,11 @@ function convertTextArrayToParagraphs(text: string | Array<string>) {
   return textToUse;
 }
 
+function withClass(text: string | Array<string> = '', classText: string) {
+  const textToUse = convertTextArrayToParagraphs(text);
+  return `<div class="${classText}">${textToUse}</div>`;
+}
+
 function centerV(text: string | Array<string> = '') {
   const textToUse = convertTextArrayToParagraphs(text);
   return `<div style="display: table; height: 100%;">
@@ -316,5 +321,5 @@ export {
   actionWord, click, highlight, addClass, addId,
   onClickId, highlightWord, centerV, centerH, centerVH, toHTML,
   clickWord, itemSelector, unit, applyModifiers,
-  setOnClicks, setHTML,
+  setOnClicks, setHTML, withClass,
 };
