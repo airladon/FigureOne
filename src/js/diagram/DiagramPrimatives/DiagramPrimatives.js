@@ -540,8 +540,8 @@ export default class DiagramPrimatives {
     // if (transform == null) {
     //   transform = new Transform('polygon').scale(1, 1).rotate(0).translate(0, 0);
     // }
-    if (options.point != null) {
-      const point = getPoint(options.point);
+    if (options.position != null) {
+      const point = getPoint(options.position);
       options.transform.updateTranslation(point);
     }
     if (options.center != null) {
@@ -651,7 +651,34 @@ export default class DiagramPrimatives {
     );
   }
 
-  radialLines(
+  radialLines(...optionsIn: Array<{
+    innerRadius?: number,
+    outerRadius?: number,
+    width?: number,
+    dAngle?: number,
+    color?: Array<number>,
+    transform?: Transform,
+    position?: Point,
+  }>) {
+    const defaultOptions = {
+      innerRadius: 0,
+      outerRadius: 1,
+      width: 0.05,
+      dAngle: Math.PI / 4,
+      transform: new Transform().standard(),
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    if (options.position != null) {
+      options.transform.updateTranslation(getPoint(options.position));
+    }
+    return RadialLines(
+      this.webgl, options.innerRadius, options.outerRadius,
+      options.width, options.dAngle, options.color,
+      options.transform, this.limits,
+    );
+  }
+
+  radialLinesLegacy(
     innerRadius: number = 0,
     outerRadius: number = 1,
     width: number = 0.05,

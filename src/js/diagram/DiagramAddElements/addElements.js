@@ -45,6 +45,7 @@ function addElements(
       text: shapes.txt.bind(shapes),
       textGL: shapes.textGL.bind(shapes),
       axes: shapes.axes.bind(shapes),
+      radialLines: shapes.radialLines.bind(shapes),
       //
       line: objects.line.bind(objects),
       angle: objects.angle.bind(objects),
