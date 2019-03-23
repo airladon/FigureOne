@@ -1774,11 +1774,27 @@ function getBoundingRect(pointArrays: Array<Point> | Array<Array<Point>>) {
   );
 }
 
-function threePointAngle(p2: Point, p1: Point, p3: Point) {
+// Finds the min angle between three points
+function threePointAngleMin(p2: Point, p1: Point, p3: Point) {
   const p12 = distance(p1, p2);
   const p13 = distance(p1, p3);
   const p23 = distance(p2, p3);
   return Math.acos((p12 ** 2 + p13 ** 2 - p23 ** 2) / (2 * p12 * p13));
+}
+
+// Finds the angle between three points for p12 to p13
+function threePointAngle(p2: Point, p1: Point, p3: Point) {
+  const r12 = p2.sub(p1);
+  const r13 = p3.sub(p1);
+  // const p12 = distance(p1, p2);
+  // const p13 = distance(p1, p3);
+  // const p23 = distance(p2, p3);
+  // const minAngle = Math.acos((p12 ** 2 + p13 ** 2 - p23 ** 2) / (2 * p12 * p13));
+  let angle12 = r12.toPolar().angle;
+  let angle13 = r13.toPolar().angle;
+  angle13 -= angle12;
+  angle12 = 0;
+  return clipAngle(angle13, '0to360');
 }
 
 function randomPoint(withinRect: Rect) {
@@ -1943,6 +1959,7 @@ export {
   getDeltaAngle,
   normAngleTo90,
   threePointAngle,
+  threePointAngleMin,
   randomPoint,
   getMaxTimeFromVelocity,
   getMoveTime,

@@ -3,7 +3,7 @@
 // import Diagram from '../Diagram';
 import {
   Transform, Point, Line, polarToRect,
-  threePointAngle,
+  threePointAngle, getPoint,
 } from '../../tools/g2';
 import {
   roundNum,
@@ -291,11 +291,13 @@ class DiagramObjectAngle extends DiagramElementCollection {
       && optionsToUse.p3 != null
     ) {
       const { position, rotation, angle } = this.calculateFromP1P2P3(
-        optionsToUse.p1, optionsToUse.p2, optionsToUse.p3,
+        getPoint(optionsToUse.p1),
+        getPoint(optionsToUse.p2),
+        getPoint(optionsToUse.p3),
       );
       this.angle = angle;
       this.rotation = rotation;
-      this.position = position;
+      this.position = getPoint(position);
     }
     this.transform.updateTranslation(this.position);
     this.transform.updateRotation(this.rotation);
@@ -389,11 +391,13 @@ class DiagramObjectAngle extends DiagramElementCollection {
       && options.p3 != null
     ) {
       const { position, rotation, angle } = this.calculateFromP1P2P3(
-        options.p1, options.p2, options.p3,
+        getPoint(options.p1),
+        getPoint(options.p2),
+        getPoint(options.p3),
       );
       this.angle = angle;
       this.rotation = rotation;
-      this.position = position;
+      this.position = getPoint(position);
     }
     this.update();
   }
