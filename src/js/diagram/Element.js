@@ -2267,7 +2267,7 @@ class DiagramElement {
     return scale;
   }
 
-  getRotation(normalize: '0to360' | '-180to180' | '') {
+  getRotation(normalize: '0to360' | '-180to180' | '' = '') {
     const r = this.transform.r();
     let rotation = 0;
     if (r != null) {
