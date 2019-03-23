@@ -2,7 +2,8 @@ import {
   Point, Transform, Line, minAngleDiff, normAngle,
   TransformLimit, spaceToSpaceTransform, Rect,
   getBoundingRect, polarToRect, rectToPolar, getDeltaAngle,
-  normAngleTo90, deg, curvedPath, parsePoint,
+  normAngleTo90, deg, curvedPath, parsePoint, threePointAngle,
+  threePointAngleMin,
 } from './g2';
 import { round } from './math';
 
@@ -1860,10 +1861,28 @@ describe('g2 tests', () => {
       expect(parsePoint(1, new Point(0, 0))).toEqual(new Point(0, 0));
     });
   });
-  // describe('Three point angle', () => {
-  //   test('right angle at origin', () => {
-  //     const points = [new Point(1, 0), new Point(0, 0), new Point(0, 1)];
-  //     expect(roundNum(threePointAngle(...points))).toBe(roundNum(Math.PI / 2))
-  //   });
-  // })
+  describe('Three point angle', () => {
+    test('right angle at origin', () => {
+      const points = [new Point(1, 0), new Point(0, 0), new Point(0, 1)];
+      const angle = threePointAngle(points[0], points[1], points[2]);
+      expect(round(angle)).toBe(round(Math.PI / 2));
+    });
+    test('right angle at origin other way', () => {
+      const points = [new Point(0, 1), new Point(0, 0), new Point(1, 0)];
+      const angle = threePointAngle(points[0], points[1], points[2]);
+      expect(round(angle)).toBe(round(3 * Math.PI / 2));
+    });
+  });
+  describe('Three point angle Min', () => {
+    test('right angle at origin', () => {
+      const points = [new Point(1, 0), new Point(0, 0), new Point(0, 1)];
+      const angle = threePointAngleMin(points[0], points[1], points[2]);
+      expect(round(angle)).toBe(round(Math.PI / 2));
+    });
+    test('right angle at origin other way', () => {
+      const points = [new Point(0, 1), new Point(0, 0), new Point(1, 0)];
+      const angle = threePointAngleMin(points[0], points[1], points[2]);
+      expect(round(angle)).toBe(round(Math.PI / 2));
+    });
+  });
 });
