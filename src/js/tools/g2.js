@@ -1782,7 +1782,8 @@ function threePointAngleMin(p2: Point, p1: Point, p3: Point) {
   return Math.acos((p12 ** 2 + p13 ** 2 - p23 ** 2) / (2 * p12 * p13));
 }
 
-// Finds the angle between three points for p12 to p13
+// Finds the angle between three points for p12 to p13 in the positive
+// angle direction
 function threePointAngle(p2: Point, p1: Point, p3: Point) {
   const r12 = p2.sub(p1);
   const r13 = p3.sub(p1);

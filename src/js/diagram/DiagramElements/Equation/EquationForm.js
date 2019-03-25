@@ -484,10 +484,10 @@ export default class EquationForm extends Elements {
     }
 
     Object.keys(this.elementMods).forEach((elementName) => {
-      const mods = this.elementMods[elementName];
+      const elementMods = this.elementMods[elementName];
       const {
-        element, color, style, direction, mag,
-      } = mods;
+        element, color, style, direction, mag, mods,
+      } = elementMods;
       if (element != null) {
         if (color != null) {
           element.addTo('Equation Color')
@@ -499,13 +499,20 @@ export default class EquationForm extends Elements {
           // element.animateColorToWithDelay(color, cumTime, moveTimeToUse);
         }
         if (style != null) {
-          element.animate.transform.translation.style = style;
+          // element.animate.transform.translation.style = style;
+          element.animations.options.translation.style = style;
         }
         if (direction != null) {
-          element.animate.transform.translation.options.direction = direction;
+          element.animations.options.translation.direction = direction;
+
+          // element.animate.transform.translation.options.direction = direction;
         }
         if (mag != null) {
-          element.animate.transform.translation.options.magnitude = mag;
+          element.animations.options.translation.magnitude = mag;
+          // element.animate.transform.translation.options.magnitude = mag;
+        }
+        if (mods != null) {
+          element.setProperties(mods);
         }
       }
     });

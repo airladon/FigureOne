@@ -36,7 +36,7 @@ type TypeEquationElement = string | {
     side?: 'top' | 'left' | 'bottom' | 'right';
     // Both Text and Symbol
     color?: Array<number>;
-    elementOptions?: {};
+    mods?: {};
   } | DiagramElementPrimative | DiagramElementCollection;
 
 export type TypeEquationElements = {
@@ -60,7 +60,7 @@ type TypeEquationFormObject = {
     [elementName: string]: {
       color?: Array<number>,
       direction: 'fromPrev' | 'fromNext' | 'fromAny' | null,
-      elementOptions?: {},
+      mods?: {},
     }
   },
   subForm?: string,
@@ -306,8 +306,8 @@ export class EquationNew extends DiagramElementCollection {
           diagramElem = makeTextElem(elem);
         }
         if (diagramElem != null) {
-          if (elem.elementOptions != null) {
-            diagramElem.setProperties(elem.elementOptions);
+          if (elem.mods != null) {
+            diagramElem.setProperties(elem.mods);
           }
           this.add(key, diagramElem);
         }
@@ -562,18 +562,18 @@ export class EquationNew extends DiagramElementCollection {
       const diagramElement = getDiagramElement(this, elementName);
       if (diagramElement) {
         let color;
-        let elementOptions;
+        let mods;
         if (Array.isArray(elementMods[elementName])) {
-          [color, elementOptions] = elementMods[elementName];
+          [color, mods] = elementMods[elementName];
         } else {
           ({
-            color, elementOptions,
+            color, mods,
           } = elementMods[elementName]);
         }
         form[subForm].elementMods[elementName] = {
           element: diagramElement,
           color,
-          elementOptions,
+          mods,
         };
       }
     });

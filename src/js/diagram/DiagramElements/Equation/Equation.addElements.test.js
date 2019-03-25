@@ -100,14 +100,14 @@ describe('Diagram Equations From Object', () => {
         b: {
           text: 'b',
           color: color1,
-          elementOptions: {
+          mods: {
             isTouchable: true,
           },
         },
         v: {
           symbol: 'vinculum',
           color: color1,
-          elementOptions: {
+          mods: {
             isTouchable: true,
           },
         },

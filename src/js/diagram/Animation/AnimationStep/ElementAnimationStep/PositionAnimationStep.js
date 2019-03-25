@@ -53,6 +53,13 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       },
       velocity: null,
     };
+    if (this.element && this.element.animations.options.tranlsation) {
+      const translationOptions = this.element.animations.options.tranlsation;
+      if (translationOptions.style != null) {
+        defaultPositionOptions.style = translationOptions.style;
+      }
+      joinObjects(defaultPositionOptions.translationOptions, translationOptions);
+    }
     const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
     // $FlowFixMe
     this.position = { translationOptions: {} };
