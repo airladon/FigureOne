@@ -3,7 +3,7 @@
 // import Diagram from '../Diagram';
 import {
   Transform, Point, Line, polarToRect,
-  threePointAngle, getPoint,
+  threePointAngle, getPoint, clipAngle,
 } from '../../tools/g2';
 import {
   roundNum,
@@ -45,6 +45,7 @@ export type TypeAngleOptions = {
   p1?: Point,               // Can define angle with p1, p2, p3
   p2?: Point,               // p2 is angle vertex
   p3?: Point,               // Curve goes from P21 to P23 anticlockwise
+  direction?: 1 | -1;       // Direction (from P21 to P23, or for angle)
   autoRightAngle?: boolean, // Right angle curve displayed when angle = π/2
   rightAngleRange?: number, // Range around π/2 for right angle curve display
   //
@@ -194,6 +195,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
   p1: Point;
   p2: Point;
   p3: Point;
+  direction: -1 | 1;
   lastLabelRotationOffset: number;
   autoRightAngle: boolean;
   rightAngleRange: number;
@@ -225,12 +227,22 @@ class DiagramObjectAngle extends DiagramElementCollection {
     p1: Point,
     p2: Point,
     p3: Point,
+    direction: 1 | -1 = 1,
   ) {
     const position = p2._dup();
-    const L21 = new Line(p2, p1);
-    const rotation = L21.angle();
     const angle = threePointAngle(p1, p2, p3);
-    return { position, rotation, angle };
+    if (direction === 1) {
+      const L21 = new Line(p2, p1);
+      const rotation = L21.angle();
+      return { position, rotation, angle };
+    }
+    const L23 = new Line(p2, p1);
+    const rotation = L23.angle();
+    return {
+      position,
+      rotation,
+      angle: clipAngle(Math.PI * 2 - angle, '0to360'),
+    };
   }
 
   constructor(
@@ -247,6 +259,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       // radius: 0.1,
       color: [0, 1, 0, 1],
       // clockwise: false,
+      direction: 1,
       autoRightAngle: false,
       rightAngleRange: 0.001,
       curve: null,
@@ -279,6 +292,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     // Calculate and store the angle geometry
     this.position = optionsToUse.position;
     this.rotation = optionsToUse.rotation;
+    this.direction = optionsToUse.direction;
     this.angle = optionsToUse.angle;
     this.lastLabelRotationOffset = 0;
     this.autoRightAngle = optionsToUse.autoRightAngle;
@@ -294,6 +308,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
         getPoint(optionsToUse.p1),
         getPoint(optionsToUse.p2),
         getPoint(optionsToUse.p3),
+        this.direction,
       );
       this.angle = angle;
       this.rotation = rotation;
@@ -386,14 +401,16 @@ class DiagramObjectAngle extends DiagramElementCollection {
     if (options.angle != null) {
       this.angle = options.angle;
     }
-    if (options.p1 != null
-      && options.p2 != null
-      && options.p3 != null
+    const { p1, p2, p3 } = options;
+    if (p1 != null
+      && p2 != null
+      && p3 != null
     ) {
       const { position, rotation, angle } = this.calculateFromP1P2P3(
-        getPoint(options.p1),
-        getPoint(options.p2),
-        getPoint(options.p3),
+        getPoint(p1),
+        getPoint(p2),
+        getPoint(p3),
+        this.direction,
       );
       this.angle = angle;
       this.rotation = rotation;
