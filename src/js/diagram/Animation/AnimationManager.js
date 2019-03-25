@@ -18,6 +18,16 @@ export default class AnimationManager {
   element: ?DiagramElement;
   animations: Array<anim.AnimationStep>;
   state: 'animating' | 'idle';
+  options: {
+    translation: {
+      style: 'curve' | 'linear',
+      rot: number,
+      magnitude: number,
+      offset: number,
+      controlPoint: number | null,
+      direction: '' | 'up' | 'down' | 'left' | 'right',
+    }
+  }
 
   constructor(
     elementOrOptionsIn: DiagramElement | TypeAnimationManagerInputOptions = {},
@@ -34,6 +44,7 @@ export default class AnimationManager {
     this.element = options.element;
     this.animations = [];
     this.state = 'idle';
+    this.options = {};
     return this;
   }
 

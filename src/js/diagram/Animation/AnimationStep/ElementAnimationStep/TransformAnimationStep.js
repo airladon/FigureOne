@@ -68,6 +68,13 @@ export default class TransformAnimationStep extends ElementAnimationStep {
       velocity: null,
       clipRotationTo: null,
     };
+    if (this.element && this.element.animations.options.translation) {
+      const translationOptions = this.element.animations.options.translation;
+      if (translationOptions.style != null) {
+        defaultTransformOptions.translationStyle = translationOptions.style;
+      }
+      joinObjects(defaultTransformOptions.translationOptions, translationOptions);
+    }
     const options = joinObjects({}, defaultTransformOptions, ...optionsIn);
     // $FlowFixMe
     this.transform = { translationOptions: {} };

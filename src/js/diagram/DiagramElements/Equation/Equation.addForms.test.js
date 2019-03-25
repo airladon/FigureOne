@@ -193,7 +193,7 @@ describe('Diagram Equations From Object', () => {
           elementMods: {
             b: {
               color: color1,
-              elementOptions: {
+              mods: {
                 isTouchable: true,
                 animate: { transform: { translation: { options: { magnitude: 2 } } } },
               },
@@ -373,7 +373,7 @@ describe('Diagram Equations From Object', () => {
       b: {
         color: color1,
         element: eqn._b,
-        elementOptions: {
+        mods: {
           isTouchable: true,
           animate: { transform: { translation: { options: { magnitude: 2 } } } },
         },
