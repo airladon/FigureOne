@@ -881,6 +881,7 @@ export class EquationFunctions {
     contSpace: number | null = null,
     comSpace: number | null = null,
     comScale: number | null = null,
+    includeInSizeCalc: boolean | null = null,
   ) {
     let content;
     let comment;
@@ -888,11 +889,13 @@ export class EquationFunctions {
     let contentSpace;
     let commentSpace;
     let scale;
+    let includeInSize;
     if (!(commentString == null
       && sym == null
       && contSpace == null
       && comSpace == null
-      && comScale == null)
+      && comScale == null
+      && includeInSizeCalc == null)
     ) {
       content = optionsOrContent;
       comment = commentString;
@@ -900,11 +903,13 @@ export class EquationFunctions {
       contentSpace = contSpace;
       commentSpace = comSpace;
       scale = comScale;
+      includeInSize = includeInSizeCalc;
     } else if (Array.isArray(optionsOrContent)) {             // $FlowFixMe
-      [content, comment, symbol, contentSpace, commentSpace, scale] = optionsOrContent;
+      [content, comment, symbol, contentSpace, commentSpace, scale, includeInSize,
+      ] = optionsOrContent;
     } else {
       ({                                                      // $FlowFixMe
-        content, comment, symbol, contentSpace, commentSpace, scale,
+        content, comment, symbol, contentSpace, commentSpace, scale, includeInSize,
       } = optionsOrContent);
     }
     let contentSpaceToUse = 0.03;
@@ -919,9 +924,13 @@ export class EquationFunctions {
     if (scale != null) {
       scaleToUse = scale;
     }
+    let includeInSizeToUse = true;
+    if (includeInSize != null) {
+      includeInSizeToUse = includeInSize;
+    }
     return [
       content, comment, symbol,
-      contentSpaceToUse, commentSpaceToUse, scaleToUse,
+      contentSpaceToUse, commentSpaceToUse, scaleToUse, includeInSizeToUse,
     ];
   }
 
@@ -930,6 +939,7 @@ export class EquationFunctions {
     const [
       content, comment, symbol,
       contentSpaceToUse, commentSpaceToUse, scaleToUse,
+      includeInSize,
     ] = this.processComment(...args);
     let contentToUse;
     if (symbol) {
@@ -954,7 +964,8 @@ export class EquationFunctions {
           relativeToAnnotation: ['center', 'top'],
           scale: scaleToUse,
         }),
-      ],
+      ],                                                    // $FlowFixMe
+      includeAnnotationInSize: includeInSize,
     });
   }
 
@@ -963,6 +974,7 @@ export class EquationFunctions {
     const [
       content, comment, symbol,
       contentSpaceToUse, commentSpaceToUse, scaleToUse,
+      includeInSize,
     ] = this.processComment(...args);
     let contentToUse;
     if (symbol) {
@@ -987,7 +999,8 @@ export class EquationFunctions {
           relativeToAnnotation: ['center', 'bottom'],
           scale: scaleToUse,
         }),
-      ],
+      ],                                                    // $FlowFixMe
+      includeAnnotationInSize: includeInSize,
     });
   }
 
