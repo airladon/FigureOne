@@ -288,7 +288,7 @@ export class EquationNew extends DiagramElementCollection {
       // const [key, elem] = entry;
       const elem = elems[key];
       if (typeof elem === 'string') {
-        if (!key.startsWith('space')) {
+        if (!(key.startsWith('space') && key.startsWith(' '))) {
           this.add(key, makeTextElem({ text: elem }));
         }
       } else if (elem instanceof DiagramElementPrimative) {

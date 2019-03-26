@@ -283,6 +283,10 @@ export class EquationFunctions {
       const spaceNum = parseFloat(content.replace(/space[_]*/, '')) || 0.03;
       return new Element(new BlankElement(spaceNum));
     }
+    if (content.startsWith(' ')) {
+      const spaceNum = content.length * 0.03;
+      return new Element(new BlankElement(spaceNum));
+    }
     const diagramElement = getDiagramElement(this.elements, content);
     if (diagramElement) {
       return new Element(diagramElement);
