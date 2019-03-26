@@ -118,6 +118,9 @@ export default class EquationForm extends Elements {
         if (c.startsWith('space')) {
           const spaceNum = parseFloat(c.replace(/space[_]*/, '')) || 0.03;
           elements.push(new Element(new BlankElement(spaceNum)));
+        } else if (c.startsWith(' ')) {
+          const spaceNum = c.length * 0.03;
+          elements.push(new Element(new BlankElement(spaceNum)));
         } else {
           const diagramElement = getDiagramElement(this.elements, c);
           if (diagramElement) {

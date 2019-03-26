@@ -289,7 +289,7 @@ describe('Diagram Objects PolyLine', () => {
       const base20 = poly.elements.angle2.label.eqn.collection._base;
       expect(base01.drawingObject.text[0].text).toBe('a');
       expect(base12.drawingObject.text[0].text).toBe('b');
-      expect(base20.drawingObject.text[0].text).toBe('45º');
+      expect(base20.drawingObject.text[0].text).toBe('315º');
     });
   });
 });
