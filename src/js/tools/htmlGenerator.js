@@ -1,5 +1,6 @@
 // @flow
 import { colorArrayToRGBA } from './color';
+import { generateUniqueId } from './tools';
 
 function convertTextArrayToParagraphs(text: string | Array<string>) {
   let textToUse = '';
@@ -202,7 +203,7 @@ function click(
   bind: Array<mixed>,
   classesOrColor: string | Array<number> | null = null,
   interactive: boolean = true,
-  id: string = '',
+  id: string = generateUniqueId(),
 ) {
   let classStr = 'action_word';
   if (interactive) {
@@ -226,7 +227,7 @@ function click(
 
 function actionWord(
   text: string,
-  id: string = '',
+  id: string = generateUniqueId,
   classesOrColor: string | Array<number> | null = null,
   interactive: boolean = true,
 ) {
