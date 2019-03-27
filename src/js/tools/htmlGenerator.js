@@ -16,6 +16,54 @@ function withClass(text: string | Array<string> = '', classText: string) {
   return `<div class="${classText}">${textToUse}</div>`;
 }
 
+function style(
+  options: number | {
+    left: number,
+    top: number,
+    right: number,
+    size: number,
+    className: string,
+  } = 0,
+  text: string | Array<string> = '',
+) {
+  let marginLeft = '';
+  let marginRight = '';
+  let marginTop = '';
+  let size = '';
+  let className = '';
+  if (typeof options === 'number') {
+    marginTop = `margin-top:${options}%`;
+  } else {
+    if (options.left != null) {
+      marginLeft = `margin-left:${options.left}%;`;
+    }
+    if (options.right != null) {
+      marginRight = `margin-right:${options.right}%;`;
+    }
+    if (options.top != null) {
+      marginTop = `margin-top:${options.top}%;`;
+    }
+    if (options.size != null) {
+      size = `font-size:${options.size}em`;
+    }
+    if (options.className) {
+      className = `class="${options.className}"`;
+    }
+  }
+
+  const p = `<p style="${marginLeft}${marginRight}${size}"${className}>`;
+  const pFirst = `<p style="${marginLeft}${marginRight}${marginTop}${size}"${className}>`;
+
+  let textToUse;
+  if (Array.isArray(text)) {
+    textToUse = text.join(`</p>${p}`);
+  } else {
+    textToUse = text;
+  }
+  textToUse = `${pFirst}${textToUse}</p>`;
+  return textToUse;
+}
+
 function centerV(text: string | Array<string> = '') {
   const textToUse = convertTextArrayToParagraphs(text);
   return `<div style="display: table; height: 100%;">
@@ -321,5 +369,5 @@ export {
   actionWord, click, highlight, addClass, addId,
   onClickId, highlightWord, centerV, centerH, centerVH, toHTML,
   clickWord, itemSelector, unit, applyModifiers,
-  setOnClicks, setHTML, withClass,
+  setOnClicks, setHTML, withClass, style,
 };
