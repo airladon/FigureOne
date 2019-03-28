@@ -548,8 +548,8 @@ class Diagram {
   }
 
   // resize should only be called if the viewport size has changed.
-  resize(skipHTMLTie: boolean = false, fromWgere, event) {
-    console.log('resize', fromWgere, event)
+  resize(skipHTMLTie: boolean = false) {
+    // console.log('resize', fromWgere, event)
     // if (this.elements != null) {
     //   this.elements.updateLimits(this.limits, this.spaceTransforms);
     // }

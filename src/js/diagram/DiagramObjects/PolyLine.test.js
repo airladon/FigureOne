@@ -218,7 +218,7 @@ describe('Diagram Objects PolyLine', () => {
       const base20 = poly.elements.side20.label.eqn.collection._base;
       expect(base01.drawingObject.text[0].text).toBe('a');
       expect(base12.drawingObject.text[0].text).toBe('b');
-      expect(base20.drawingObject.text[0].text).toBe('1.41');
+      expect(base20.drawingObject.text[0].text).toBe('1.4');
     });
     test('Under Define', () => {
       const poly = ways.SideLabelsUnderDefine();
@@ -252,9 +252,9 @@ describe('Diagram Objects PolyLine', () => {
       const base01 = poly.elements.side01.label.eqn.collection._base;
       const base12 = poly.elements.side12.label.eqn.collection._base;
       const base20 = poly.elements.side20.label.eqn.collection._base;
-      expect(base01.drawingObject.text[0].text).toBe('1');
-      expect(base12.drawingObject.text[0].text).toBe('1');
-      expect(base20.drawingObject.text[0].text).toBe('1.41');
+      expect(base01.drawingObject.text[0].text).toBe('1.0');
+      expect(base12.drawingObject.text[0].text).toBe('1.0');
+      expect(base20.drawingObject.text[0].text).toBe('1.4');
     });
   });
   describe('Angle Labels', () => {
