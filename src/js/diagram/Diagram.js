@@ -136,6 +136,7 @@ class Diagram {
   oldWidth: number;
 
   drawAnimationFrames: number;
+  updateFontSize: boolean;
 
   isTouchDevice: boolean;
 
@@ -238,7 +239,9 @@ class Diagram {
       this.elements.name = 'diagramRoot';
     }
 
-    window.addEventListener('resize', this.resize.bind(this, false));
+    this.updateFontSize = true;
+
+    window.addEventListener('resize', this.resize.bind(this, false, htmlId));
     this.sizeHtmlText();
     this.initialize();
     this.isTouchDevice = isTouchDevice();
@@ -333,15 +336,18 @@ class Diagram {
 
   sizeHtmlText() {
     const scale = this.fontScale * 1 / 35;
-    const size = this.htmlCanvas.offsetWidth * scale - 1;
+    const size = this.htmlCanvas.clientWidth * scale;
+    // console.log(size, this.htmlCanvas.clientWidth, this.htmlCanvas.clientHeight, this.htmlCanvas.clientWidth / this.htmlCanvas.clientHeight)
     this.htmlCanvas.style.fontSize = `${size}px`;
-
-    const style = window.getComputedStyle(document.documentElement);
-    if (style) {
-      const prop = '--lesson__diagram-font-size';
-      const docElem = document.documentElement;
-      if (docElem) {
-        docElem.style.setProperty(prop, `${size}px`);
+    // this.container.style.fontSize = `${size}px`
+    if (this.updateFontSize) {
+      const style = window.getComputedStyle(document.documentElement);
+      if (style) {
+        const prop = '--lesson__diagram-font-size';
+        const docElem = document.documentElement;
+        if (docElem) {
+          docElem.style.setProperty(prop, `${size}px`);
+        }
       }
     }
   }
@@ -542,7 +548,8 @@ class Diagram {
   }
 
   // resize should only be called if the viewport size has changed.
-  resize(skipHTMLTie: boolean = false) {
+  resize(skipHTMLTie: boolean = false, fromWgere, event) {
+    console.log('resize', fromWgere, event)
     // if (this.elements != null) {
     //   this.elements.updateLimits(this.limits, this.spaceTransforms);
     // }
