@@ -225,9 +225,21 @@ function click(
   };
 }
 
+function clickId(
+  id: string = '',
+  actionMethod: Function,
+  bind: Array<mixed>,
+) {
+  return {
+    id: () => id,
+    actionMethod,
+    bind,
+  };
+}
+
 function actionWord(
   text: string,
-  id: string = generateUniqueId,
+  id: string = generateUniqueId(),
   classesOrColor: string | Array<number> | null = null,
   interactive: boolean = true,
 ) {
@@ -328,7 +340,9 @@ function applyModifiers(
   let outText = text;
   Object.keys(modifiers).forEach((key) => {
     const mod = modifiers[key];
-    outText = modifyText(outText, key, mod);
+    if (mod.replacementText != null) {
+      outText = modifyText(outText, key, mod);
+    }
   });
   const r = RegExp(/\|([^|]*)\|/, 'gi');
   outText = outText.replace(r, `<span class="${highlightClass}">$1</span>`);
@@ -370,5 +384,5 @@ export {
   actionWord, click, highlight, addClass, addId,
   onClickId, highlightWord, centerV, centerH, centerVH, toHTML,
   clickWord, itemSelector, unit, applyModifiers,
-  setOnClicks, setHTML, withClass, style,
+  setOnClicks, setHTML, withClass, style, clickId,
 };
