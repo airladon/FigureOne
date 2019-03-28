@@ -44,6 +44,7 @@ export type TypeLineVertexSpaceStart = 'start' | 'end' | 'center' | number | Poi
 
 export type TypeLineLabelOptions = {
   text: null | string | Array<string> | Equation | TypeLabelEquationOptions,
+  precision?: number,
   offset?: number,
   location?: TypeLineLabelLocation,
   subLocation?: TypeLineLabelSubLocation,
@@ -130,6 +131,7 @@ class LineLabel extends EquationLabel {
   subLocation: TypeLineLabelSubLocation;
   orientation: TypeLineLabelOrientation;
   linePosition: number;
+  precision: number;
 
   constructor(
     equation: Object,
@@ -141,6 +143,7 @@ class LineLabel extends EquationLabel {
     orientation: TypeLineLabelOrientation = 'horizontal',
     linePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
     scale: number = 0.7,
+    precision: number = 1,
   ) {
     super(equation, { label: labelText, color, scale });
     this.offset = offset;
@@ -148,6 +151,7 @@ class LineLabel extends EquationLabel {
     this.subLocation = subLocation;
     this.orientation = orientation;
     this.linePosition = linePosition;
+    this.precision = precision;
   }
 }
 
@@ -280,7 +284,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   addLabel: (string | Equation | Array<string> | TypeLabelEquationOptions,
              number, ?TypeLineLabelLocation,
              ?TypeLineLabelSubLocation, ?TypeLineLabelOrientation, ?number,
-             ?number, ?Array<number>,
+             ?number, ?Array<number>, ?number,
             ) => void;
 
   multiMove: {
@@ -463,6 +467,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       linePosition: 0.5,
       scale: 0.7,
       color: optionsToUse.color,
+      precision: 1,
     };
     if (optionsToUse.label) {
       const labelOptions = Object.assign({}, defaultLabelOptions, optionsToUse.label);
@@ -479,6 +484,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         labelOptions.linePosition,
         labelOptions.scale,
         labelOptions.color,
+        labelOptions.precision,
       );
     }
 
@@ -693,10 +699,12 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     linePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
     scale: number = 0.7,
     color: Array<number> = this.color,
+    precision: number = 1,
   ) {
     this.label = new LineLabel(
       this.equation, labelText, color,
       offset, location, subLocation, orientation, linePosition, scale,
+      precision,
     );
     if (this.label != null) {
       this.add('label', this.label.eqn.collection);
@@ -712,7 +720,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     const lineAngle = normAngle(this.transform.r() || 0);
     let labelAngle = 0;
     if (this.showRealLength && this._label) {
-      this._label._base.drawingObject.setText(roundNum(this.currentLength, 2).toString());
+      this._label._base.drawingObject.setText(roundNum(this.currentLength, 2)
+        .toFixed(label.precision));
       label.eqn.reArrangeCurrentForm();
     }
     const labelPosition = new Point(

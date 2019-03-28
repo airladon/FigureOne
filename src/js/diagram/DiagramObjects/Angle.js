@@ -23,7 +23,8 @@ export type TypeAngleLabelOptions = {
   radius?: number,                // Label radius
   curvePosition?: number,         // Label position along curve in %
   showRealAngle?: boolean,        // Use angle as label
-  realAngleDecimals?: number,     // Num decimal places if using angle label
+  units?: 'degrees' | 'radians';  // Real angle units
+  precision?: number,     // Num decimal places if using angle label
   orientation?: TypeAngleLabelOrientation,  // horiztonal or tangent
   autoHide?: number,              // Auto hide label at this threshold
   textScale?: number,             // Text scale
@@ -121,7 +122,8 @@ class AngleLabel extends EquationLabel {
   curvePosition: number;
   showRealAngle: boolean;
   orientation: TypeAngleLabelOrientation;
-  realAngleDecimals: number;
+  precision: number;
+  units: 'degrees' | 'radians';
   autoHide: number;
 
   constructor(
@@ -131,7 +133,8 @@ class AngleLabel extends EquationLabel {
     radius: number,
     curvePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
     showRealAngle: boolean = false,
-    realAngleDecimals: number = 0,
+    units: 'degrees' | 'radians' = 'degrees',
+    precision: number = 0,
     autoHide: number = -1,
     orientation: TypeAngleLabelOrientation = 'horizontal',
     scale: number = 0.7,
@@ -140,8 +143,9 @@ class AngleLabel extends EquationLabel {
     this.radius = radius;
     this.curvePosition = curvePosition;
     this.showRealAngle = showRealAngle;
+    this.units = units;
     this.orientation = orientation;
-    this.realAngleDecimals = realAngleDecimals;
+    this.precision = precision;
     this.autoHide = autoHide;
   }
 }
@@ -439,7 +443,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
     radius?: number,
     curvePosition?: number,
     showRealAngle?: boolean,
-    realAngleDecimals?: number,
+    units?: 'degrees' | 'radians',
+    precision?: number,
     orientation?: TypeAngleLabelOrientation,
     autoHide?: number,
     textScale?: number,
@@ -449,7 +454,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
       radius: 0.4,
       curvePosition: 0.5,
       showRealAngle: false,
-      realAngleDecimals: 0,
+      units: 'degrees',
+      precision: 0,
       orientation: 'horizontal',
       autoHide: -1,
       textScale: 0.7,
@@ -471,7 +477,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
       optionsToUse.radius,
       optionsToUse.curvePosition,
       optionsToUse.showRealAngle,
-      optionsToUse.realAngleDecimals,
+      optionsToUse.units,
+      optionsToUse.precision,
       optionsToUse.autoHide,
       optionsToUse.orientation,
       optionsToUse.textScale,
@@ -756,11 +763,16 @@ class DiagramObjectAngle extends DiagramElementCollection {
       } else {
         _label.show();
         if (label.showRealAngle) {
-          const angleText = roundNum(
-            this.angle * 180 / Math.PI,
-            label.realAngleDecimals,
-          ).toString();
-          _label._base.drawingObject.setText(`${angleText}º`);
+          let angleText = roundNum(this.angle, label.precision)
+            .toFixed(label.precision);
+          if (label.units === 'degrees') {
+            angleText = roundNum(
+              this.angle * 180 / Math.PI,
+              label.precision,
+            ).toFixed(label.precision);
+            angleText = `${angleText}º`;
+          }
+          _label._base.drawingObject.setText(`${angleText}`);
           label.eqn.reArrangeCurrentForm();
         }
         const labelPosition = polarToRect(label.radius, this.angle * label.curvePosition);
