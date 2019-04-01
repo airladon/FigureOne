@@ -242,7 +242,7 @@ class Diagram {
     this.updateFontSize = true;
 
     window.addEventListener('resize', this.resize.bind(this, false, htmlId));
-    this.sizeHtmlText();
+    // this.sizeHtmlText();
     this.initialize();
     this.isTouchDevice = isTouchDevice();
     this.animateNextFrame(true, 'first frame');
@@ -334,23 +334,23 @@ class Diagram {
     );
   }
 
-  sizeHtmlText() {
-    const scale = this.fontScale * 1 / 35;
-    const size = this.htmlCanvas.clientWidth * scale;
-    // console.log(size, this.htmlCanvas.clientWidth, this.htmlCanvas.clientHeight, this.htmlCanvas.clientWidth / this.htmlCanvas.clientHeight)
-    this.htmlCanvas.style.fontSize = `${size}px`;
-    // this.container.style.fontSize = `${size}px`
-    if (this.updateFontSize) {
-      const style = window.getComputedStyle(document.documentElement);
-      if (style) {
-        const prop = '--lesson__diagram-font-size';
-        const docElem = document.documentElement;
-        if (docElem) {
-          docElem.style.setProperty(prop, `${size}px`);
-        }
-      }
-    }
-  }
+  // sizeHtmlText() {
+  //   // const scale = this.fontScale * 1 / 35;
+  //   // const size = this.htmlCanvas.clientWidth * scale;
+  //   // // console.log(size, this.htmlCanvas.clientWidth, this.htmlCanvas.clientHeight, this.htmlCanvas.clientWidth / this.htmlCanvas.clientHeight)
+  //   // this.htmlCanvas.style.fontSize = `${size}px`;
+  //   // // this.container.style.fontSize = `${size}px`
+  //   // if (this.updateFontSize) {
+  //   //   const style = window.getComputedStyle(document.documentElement);
+  //   //   if (style) {
+  //   //     const prop = '--lesson__diagram-font-size';
+  //   //     const docElem = document.documentElement;
+  //   //     if (docElem) {
+  //   //       docElem.style.setProperty(prop, `${size}px`);
+  //   //     }
+  //   //   }
+  //   // }
+  // }
 
   destroy() {
     this.gesture.destroy();
@@ -571,7 +571,7 @@ class Diagram {
     if (this.elements != null) {
       this.elements.updateLimits(this.limits, this.spaceTransforms);
     }
-    this.sizeHtmlText();
+    // this.sizeHtmlText();
     // this.elements.resizeHtmlObject();
     // this.updateHTMLElementTie();
     if (skipHTMLTie) {
