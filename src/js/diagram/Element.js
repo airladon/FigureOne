@@ -2296,13 +2296,15 @@ class DiagramElement {
       },
     };
     const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
+    // console.log(location, glToDiagramSpace)
     return location.transformBy(glToDiagramSpace.matrix());
   }
 
   getDiagramPosition() {
+    return this.getVertexSpaceDiagramPosition(new Point(0, 0));
     // console.log(this.name, this.getVertexSpaceDiagramPosition(new Point(0, 0)))
     // console.log(this.transform, this.lastDrawTransform)
-    return this.getVertexSpaceDiagramPosition(new Point(0, 0));
+    // return this.getVertexSpaceDiagramPosition(new Point(0, 0));
     // const location = new Point(0, 0).transformBy(this.lastDrawTransform.matrix());
     // const glSpace = {
     //   x: { bottomLeft: -1, width: 2 },
@@ -2376,7 +2378,7 @@ class DiagramElement {
     };
     const diagramToGLSpace = spaceToSpaceTransform(diagramSpace, glSpace);
     const glLocation = diagramPosition.transformBy(diagramToGLSpace.matrix());
-    const t = new Transform(this.lastDrawTransform.order.slice(2));
+    const t = new Transform(this.lastDrawTransform.order.slice(this.transform.order.length));
     const newLocation = glLocation.transformBy(m2.inverse(t.matrix()));
     this.setPosition(newLocation._dup());
   }
