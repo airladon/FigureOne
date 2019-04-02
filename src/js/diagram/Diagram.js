@@ -136,7 +136,7 @@ class Diagram {
   oldWidth: number;
 
   drawAnimationFrames: number;
-  updateFontSize: boolean;
+  // updateFontSize: boolean;
 
   isTouchDevice: boolean;
 
@@ -239,7 +239,7 @@ class Diagram {
       this.elements.name = 'diagramRoot';
     }
 
-    this.updateFontSize = true;
+    // this.updateFontSize = true;
 
     window.addEventListener('resize', this.resize.bind(this, false, htmlId));
     // this.sizeHtmlText();

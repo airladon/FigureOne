@@ -2,10 +2,14 @@
 import { colorArrayToRGBA } from './color';
 import { generateUniqueId } from './tools';
 
-function convertTextArrayToParagraphs(text: string | Array<string>) {
+function convertTextArrayToParagraphs(text: string | Array<string>, firstParagraphMargin: number | null = null) {
   let textToUse = '';
+  let style = '';
+  if (firstParagraphMargin != null) {
+    style = ` style="margin-top:${firstParagraphMargin}%"`;
+  }
   if (Array.isArray(text)) {
-    textToUse = `<p>${text.join('</p><p>')}</p>`;
+    textToUse = `<p${style}>${text.join('</p><p>')}</p>`;
   } else {
     textToUse = text;
   }
@@ -66,14 +70,14 @@ function style(
 }
 
 function centerV(text: string | Array<string> = '') {
-  const textToUse = convertTextArrayToParagraphs(text);
+  const textToUse = convertTextArrayToParagraphs(text, 0);
   return `<div style="display: table; height: 100%;">
         <div style="display: table-cell; vertical-align: middle">
         ${textToUse}</div></div>`;
 }
 
 function centerVH(text: string | Array<string> = '') {
-  const textToUse = convertTextArrayToParagraphs(text);
+  const textToUse = convertTextArrayToParagraphs(text, 0);
   return `<div style="display: table; height: 100%; text-align:center; width:100%">
         <div style="display: table-cell; vertical-align: middle">
         ${textToUse}</div></div>`;
