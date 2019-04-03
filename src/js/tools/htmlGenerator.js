@@ -28,6 +28,7 @@ function style(
     right: number,
     size: number,
     className: string,
+    color: Array<number>,
   } = 0,
   text: string | Array<string> = '',
 ) {
@@ -36,6 +37,7 @@ function style(
   let marginTop = '';
   let size = '';
   let className = '';
+  let color = '';
   if (typeof options === 'number') {
     marginTop = `margin-top:${options}%`;
   } else {
@@ -49,15 +51,18 @@ function style(
       marginTop = `margin-top:${options.top}%;`;
     }
     if (options.size != null) {
-      size = `font-size:${options.size}em`;
+      size = `font-size:${options.size}em;`;
     }
     if (options.className) {
       className = `class="${options.className}"`;
     }
+    if (options.color) {
+      color = `color:${colorArrayToRGBA(options.color)};`;
+    }
   }
 
-  const p = `<p style="${marginLeft}${marginRight}${size}"${className}>`;
-  const pFirst = `<p style="${marginLeft}${marginRight}${marginTop}${size}"${className}>`;
+  const p = `<p style="${marginLeft}${marginRight}${size}${color}"${className}>`;
+  const pFirst = `<p style="${marginLeft}${marginRight}${marginTop}${size}${color}"${className}>`;
 
   let textToUse;
   if (Array.isArray(text)) {
