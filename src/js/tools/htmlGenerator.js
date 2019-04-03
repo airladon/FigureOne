@@ -3,7 +3,10 @@ import { colorArrayToRGBA } from './color';
 import { generateUniqueId } from './tools';
 
 
-function convertTextArrayToParagraphs(text: string | Array<string>, firstParagraphMargin: number | null = null) {
+function convertTextArrayToParagraphs(
+  text: string | Array<string>,
+  firstParagraphMargin: number | null = null,
+) {
   let textToUse = '';
   let firstPStyle = '';
   if (firstParagraphMargin != null) {
@@ -40,7 +43,7 @@ function centerV(text: string | Array<string> = '') {
 
 function centerVH(text: string | Array<string> = '') {
   const textToUse = convertTextArrayToParagraphs(text, 0);
-  return `<div style="display: table; height: 100% text-align:center; width:100%">
+  return `<div style="display: table; height: 100%; text-align:center; width:100%;">
         <div style="display: table-cell; vertical-align: middle; height: 100%; width: 100%;">
         ${textToUse}</div></div>`;
 }
@@ -241,7 +244,7 @@ function click(
   }
   const idToUse = () => id;
   return {
-    replacementText: (text: string) => toHTML(text, idToUse(text), classStr, color),
+    replacementText: (text: string) => toHTML(text, idToUse(), classStr, color),
     id: idToUse,
     actionMethod,
     bind,

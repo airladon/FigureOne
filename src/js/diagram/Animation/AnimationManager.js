@@ -19,7 +19,7 @@ export default class AnimationManager {
   animations: Array<anim.AnimationStep>;
   state: 'animating' | 'idle';
   options: {
-    translation: {
+    translation?: {
       style: 'curve' | 'linear',
       rot: number,
       magnitude: number,

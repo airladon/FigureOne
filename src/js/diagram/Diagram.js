@@ -241,7 +241,7 @@ class Diagram {
 
     this.updateFontSize = true;
 
-    window.addEventListener('resize', this.resize.bind(this, false, htmlId));
+    window.addEventListener('resize', this.resize.bind(this));
     this.sizeHtmlText();
     this.initialize();
     this.isTouchDevice = isTouchDevice();
@@ -341,21 +341,6 @@ class Diagram {
         this.htmlCanvas.style.fontSize = style.getPropertyValue('--lesson__diagram-font-size');
       }
     }
-  //   // const scale = this.fontScale * 1 / 35;
-  //   // const size = this.htmlCanvas.clientWidth * scale;
-  //   // // console.log(size, this.htmlCanvas.clientWidth, this.htmlCanvas.clientHeight, this.htmlCanvas.clientWidth / this.htmlCanvas.clientHeight)
-  //   // this.htmlCanvas.style.fontSize = `${size}px`;
-  //   // // this.container.style.fontSize = `${size}px`
-  //   // if (this.updateFontSize) {
-  //   //   const style = window.getComputedStyle(document.documentElement);
-  //   //   if (style) {
-  //   //     const prop = '--lesson__diagram-font-size';
-  //   //     const docElem = document.documentElement;
-  //   //     if (docElem) {
-  //   //       docElem.style.setProperty(prop, `${size}px`);
-  //   //     }
-  //   //   }
-  //   // }
   }
 
   destroy() {
