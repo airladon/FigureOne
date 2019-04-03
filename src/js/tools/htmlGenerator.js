@@ -9,7 +9,16 @@ function convertTextArrayToParagraphs(text: string | Array<string>, firstParagra
     style = ` style="margin-top:${firstParagraphMargin}%"`;
   }
   if (Array.isArray(text)) {
-    textToUse = `<p${style}>${text.join('</p><p>')}</p>`;
+    text.forEach((t, index) => {
+      if (t.startsWith('<')) {
+        textToUse += t;
+      } else if (index === 0) {
+        textToUse += `<p style="margin-top:${firstParagraphMargin}">${t}</p>`;
+      } else {
+        textToUse += `<p>${t}</p>`;
+      }
+    });
+    // textToUse = `<p${style}>${text.join('</p><p>')}</p>`;
   } else {
     textToUse = text;
   }
