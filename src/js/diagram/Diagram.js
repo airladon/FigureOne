@@ -338,7 +338,6 @@ class Diagram {
     if (this.updateFontSize) {
       const style = window.getComputedStyle(document.documentElement);
       if (style) {
-        console.log(style.getPropertyValue('--lesson__diagram-font-size'));
         this.htmlCanvas.style.fontSize = style.getPropertyValue('--lesson__diagram-font-size');
       }
     }
