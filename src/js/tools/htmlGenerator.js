@@ -2,18 +2,19 @@
 import { colorArrayToRGBA } from './color';
 import { generateUniqueId } from './tools';
 
+
 function convertTextArrayToParagraphs(text: string | Array<string>, firstParagraphMargin: number | null = null) {
   let textToUse = '';
-  let style = '';
+  let firstPStyle = '';
   if (firstParagraphMargin != null) {
-    style = ` style="margin-top:${firstParagraphMargin}%"`;
+    firstPStyle = ` style="margin-top:${firstParagraphMargin}%"`;
   }
   if (Array.isArray(text)) {
     text.forEach((t, index) => {
       if (t.startsWith('<')) {
         textToUse += t;
       } else if (index === 0) {
-        textToUse += `<p style="margin-top:${firstParagraphMargin}">${t}</p>`;
+        textToUse += `<p style="margin-top:${firstPStyle}">${t}</p>`;
       } else {
         textToUse += `<p>${t}</p>`;
       }
@@ -85,15 +86,15 @@ function style(
 
 function centerV(text: string | Array<string> = '') {
   const textToUse = convertTextArrayToParagraphs(text, 0);
-  return `<div style="display: table; height: 100%;">
-        <div style="display: table-cell; vertical-align: middle; height: 100%">
+  return `<div style="display: table; height: 100%; width: 100%;">
+        <div style="display: table-cell; vertical-align: middle; height: 100%; width: 100%;">
         ${textToUse}</div></div>`;
 }
 
 function centerVH(text: string | Array<string> = '') {
   const textToUse = convertTextArrayToParagraphs(text, 0);
-  return `<div style="display: table; height: 100%; text-align:center; width:100%">
-        <div style="display: table-cell; vertical-align: middle">
+  return `<div style="display: table; height: 100% text-align:center; width:100%">
+        <div style="display: table-cell; vertical-align: middle; height: 100%; width: 100%;">
         ${textToUse}</div></div>`;
 }
 
