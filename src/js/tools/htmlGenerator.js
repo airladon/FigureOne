@@ -86,7 +86,7 @@ function style(
 function centerV(text: string | Array<string> = '') {
   const textToUse = convertTextArrayToParagraphs(text, 0);
   return `<div style="display: table; height: 100%;">
-        <div style="display: table-cell; vertical-align: middle">
+        <div style="display: table-cell; vertical-align: middle; height: 100%">
         ${textToUse}</div></div>`;
 }
 
