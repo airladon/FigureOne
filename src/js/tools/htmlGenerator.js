@@ -31,6 +31,26 @@ function withClass(text: string | Array<string> = '', classText: string) {
   return `<div class="${classText}">${textToUse}</div>`;
 }
 
+function centerV(text: string | Array<string> = '') {
+  const textToUse = convertTextArrayToParagraphs(text, 0);
+  return `<div style="display: table; height: 100%; width: 100%;">
+        <div style="display: table-cell; vertical-align: middle; height: 100%; width: 100%;">
+        ${textToUse}</div></div>`;
+}
+
+function centerVH(text: string | Array<string> = '') {
+  const textToUse = convertTextArrayToParagraphs(text, 0);
+  return `<div style="display: table; height: 100% text-align:center; width:100%">
+        <div style="display: table-cell; vertical-align: middle; height: 100%; width: 100%;">
+        ${textToUse}</div></div>`;
+}
+
+function centerH(text: string | Array<string> = '') {
+  const textToUse = convertTextArrayToParagraphs(text);
+  return `<div style="text-align:center;">
+        ${textToUse}</div>`;
+}
+
 function style(
   options: number | {
     left: number,
@@ -39,6 +59,7 @@ function style(
     size: number,
     className: string,
     color: Array<number>,
+    centerV: boolean,
   } = 0,
   text: string | Array<string> = '',
 ) {
@@ -81,27 +102,10 @@ function style(
     textToUse = text;
   }
   textToUse = `${pFirst}${textToUse}</p>`;
+  if (options.centerV) {
+    textToUse = centerV(textToUse);
+  }
   return textToUse;
-}
-
-function centerV(text: string | Array<string> = '') {
-  const textToUse = convertTextArrayToParagraphs(text, 0);
-  return `<div style="display: table; height: 100%; width: 100%;">
-        <div style="display: table-cell; vertical-align: middle; height: 100%; width: 100%;">
-        ${textToUse}</div></div>`;
-}
-
-function centerVH(text: string | Array<string> = '') {
-  const textToUse = convertTextArrayToParagraphs(text, 0);
-  return `<div style="display: table; height: 100% text-align:center; width:100%">
-        <div style="display: table-cell; vertical-align: middle; height: 100%; width: 100%;">
-        ${textToUse}</div></div>`;
-}
-
-function centerH(text: string | Array<string> = '') {
-  const textToUse = convertTextArrayToParagraphs(text);
-  return `<div style="text-align:center;">
-        ${textToUse}</div>`;
 }
 
 function itemSelector(
@@ -222,7 +226,7 @@ function click(
   bind: Array<mixed>,
   classesOrColor: string | Array<number> | null = null,
   interactive: boolean = true,
-  id: string = generateUniqueId(),
+  id: string = `lesson__id_${generateUniqueId()}`,
 ) {
   let classStr = 'action_word';
   if (interactive) {
@@ -235,7 +239,7 @@ function click(
   if (Array.isArray(classesOrColor)) {
     color = classesOrColor;
   }
-  const idToUse = (text: string) => `lesson__id_${text}${id}`;
+  const idToUse = () => id;
   return {
     replacementText: (text: string) => toHTML(text, idToUse(text), classStr, color),
     id: idToUse,
