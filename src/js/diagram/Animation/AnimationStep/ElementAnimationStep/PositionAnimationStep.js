@@ -56,6 +56,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     if (this.element && this.element.animations.options.tranlsation) {
       const translationOptions = this.element.animations.options.tranlsation;
       if (translationOptions.style != null) {
+        // $FlowFixMe - this is messy, but deal with it
         defaultPositionOptions.style = translationOptions.style;
       }
       joinObjects(defaultPositionOptions.translationOptions, translationOptions);
