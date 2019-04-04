@@ -194,6 +194,35 @@ function addId(id: string = '') {
   };
 }
 
+function clickW(
+  textToUse: string,
+  actionMethod: Function,
+  bind: Array<mixed>,
+  classesOrColor: string | Array<number> | null = null,
+  interactive: boolean = true,
+  id: string = `lesson__id_${generateUniqueId()}`,
+) {
+  let classStr = 'action_word';
+  if (interactive) {
+    classStr = `${classStr} interactive_word`;
+  }
+  if (typeof classesOrColor === 'string') {
+    classStr = `${classesOrColor} ${classStr}`;
+  }
+  let color = null;
+  if (Array.isArray(classesOrColor)) {
+    color = classesOrColor;
+  }
+  const idToUse = () => id;
+  // const id = `lesson__id_${textToUse}`;
+  return {
+    replacementText: () => toHTML(textToUse, idToUse(), classStr, color),
+    id: idToUse,
+    actionMethod,
+    bind,
+  };
+}
+
 function clickWord(
   textToUse: string,
   id: string,
@@ -410,5 +439,5 @@ export {
   actionWord, click, highlight, addClass, addId,
   onClickId, highlightWord, centerV, centerH, centerVH, toHTML,
   clickWord, itemSelector, unit, applyModifiers,
-  setOnClicks, setHTML, withClass, style, clickId,
+  setOnClicks, setHTML, withClass, style, clickId, clickW,
 };
