@@ -395,6 +395,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       p1?: Point,
       p2?: Point,
       p3?: Point,
+      rotationOffset?: number,
     } = {}) {
     if (options.position != null) {
       this.position = options.position;
@@ -420,7 +421,11 @@ class DiagramObjectAngle extends DiagramElementCollection {
       this.rotation = rotation;
       this.position = getPoint(position);
     }
-    this.update();
+    if (options.rotationOffset != null) {
+      this.update(options.rotationOffset);
+    } else {
+      this.update();
+    }
   }
 
   addSide(

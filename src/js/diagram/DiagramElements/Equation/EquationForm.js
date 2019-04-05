@@ -64,12 +64,52 @@ export default class EquationForm extends Elements {
   elements: { [string: string]: DiagramElementCollection | DiagramElementPrimative };
   collectionMethods: TypeCollectionMethods;
   name: string;
-  type: string;   // deprecate
+  elementMods: {
+    [elementName: string]: {
+      element: element: DiagramElementPrimative | DiagramElementCollection;
+      mods: Object;
+    }
+  };
+
+  // These properties are just saved in the form and not used by this class
+  // They are used by external classes using this form
   description: string | null;
   modifiers: Object;
-  elementMods: Object;
-  time: number | null | { fromPrev: number, fromNext: number, fromAny: number };
   subForm: string;
+  duration: ?number;
+  translation: {
+    [elementName: string]: {
+      element: DiagramElementPrimative | DiagramElementCollection;
+      direction?: 'up' | 'down',
+      style: 'curved' | 'linear',
+      mag: number,
+    },
+  };
+
+  fromNext: {
+    translation?: {
+      [elementName: string]: {
+        element: DiagramElementPrimative | DiagramElementCollection;
+        direction?: 'up' | 'down',
+        style: 'curved' | 'linear',
+        mag: number,
+      },
+    },
+    duration: ?number;
+  };
+
+  fromPrev: {
+    translation?: {
+      [elementName: string]: {
+        element: DiagramElementPrimative | DiagramElementCollection;
+        direction?: 'up' | 'down',
+        style: 'curved' | 'linear',
+        mag: number,
+      },
+    },
+    duration: ?number;
+  };
+
 
   constructor(
     elements: TypeElements,
@@ -81,7 +121,8 @@ export default class EquationForm extends Elements {
     this.description = null;
     this.modifiers = {};
     this.elementMods = {};
-    this.time = null;
+    this.duration = null;
+    this.translation = {};
     this.subForm = '';
   }
 
@@ -395,6 +436,8 @@ export default class EquationForm extends Elements {
       this.setPositions();
     }
 
+    this.applyElementMods();
+
     const count = elementsToShow.length;
     let completed = 0;
     const onFinish = (cancelled: boolean) => {
@@ -421,12 +464,22 @@ export default class EquationForm extends Elements {
     });
   }
 
+  applyElementMods() {
+    Object.values(this.elementMods).forEach((elementMods) => {
+      const { element, mods } = elementMods;
+      if (element != null && mods != null) {
+        element.setProperties(mods);
+      }
+    });
+  }
+
   animatePositionsTo(
     delay: number,
     dissolveOutTime: number,
     moveTime: number | null,
     dissolveInTime: number,
     callback: ?(?mixed) => void = null,
+    fromWhere: ?'fromPrev' | 'fromNext';
   ) {
     const allElements = this.collectionMethods.getAllElements();
     this.collectionMethods.stop();
@@ -486,39 +539,61 @@ export default class EquationForm extends Elements {
       cumTime += dissolveOutTime;
     }
 
-    Object.keys(this.elementMods).forEach((elementName) => {
-      const elementMods = this.elementMods[elementName];
-      const {
-        element, color, style, direction, mag, mods,
-      } = elementMods;
-      if (element != null) {
-        if (color != null) {
-          element.addTo('Equation Color')
-            // .delay(cumTime)
-            .color({
-              target: color, duration: moveTimeToUse, delay: cumTime,
-            })
-            .start();
-          // element.animateColorToWithDelay(color, cumTime, moveTimeToUse);
-        }
+    this.applyElementMods();
+    // Object.values(this.elementMods).forEach((elementMods) => {
+    //   const { element, mods } = elementMods;
+    //   if (element != null && mods != null) {
+    //     element.setProperties(mods);
+    //   }
+    //   //   element, mods, // color, style, direction, mag, mods,
+    //   // } = elementMods;
+    //   // if (element != null && mods != null) {
+    //   //   // if (color != null) {
+    //   //   //   element.animations.addTo('Equation Color')
+    //   //   //     .color({
+    //   //   //       target: color, duration: moveTimeToUse, delay: cumTime,
+    //   //   //     })
+    //   //   //     .start();
+    //   //   // }
+    //   //   // if (style != null) {
+    //   //   //   element.animations.options.translation.style = style;
+    //   //   // }
+    //   //   // if (direction != null) {
+    //   //   //   element.animations.options.translation.direction = direction;
+    //   //   // }
+    //   //   // if (mag != null) {
+    //   //   //   element.animations.options.translation.magnitude = mag;
+    //   //   // }
+    //   //   // if (mods != null) {
+    //   //   element.setProperties(mods);
+    //   //   // }
+    //   // }
+    // });
+
+    let translationToUse = {};
+    if (fromWhere === 'fromPrev' && this.fromPrev != null) {
+      translationToUse = joinObjects({}, this.translation, this.fromWhere);
+    } else if (fromWhere === 'fromNext' && this.fromNext != null) {
+      translationToUse = joinObjects({}, this.translation, this.fromNext);
+    } else {
+      translationToUse = joinObjects({}, this.translation);
+    }
+
+    Object.values(translationToUse).forEach([mods] => {
+      const { element, style, direction, mag } = mods;
+      if (element) {
         if (style != null) {
-          // element.animate.transform.translation.style = style;
           element.animations.options.translation.style = style;
         }
         if (direction != null) {
           element.animations.options.translation.direction = direction;
-
-          // element.animate.transform.translation.options.direction = direction;
         }
         if (mag != null) {
           element.animations.options.translation.magnitude = mag;
-          // element.animate.transform.translation.options.magnitude = mag;
-        }
-        if (mods != null) {
-          element.setProperties(mods);
         }
       }
     });
+
     const t = this.collectionMethods.animateToTransforms(
       animateToTransforms,
       moveTimeToUse,
