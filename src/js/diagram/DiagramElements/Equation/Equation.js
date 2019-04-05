@@ -464,13 +464,14 @@ export class EquationNew extends DiagramElementCollection {
         // $FlowFixMe
         subForm, elementMods, duration, alignment, scale,
         // $FlowFixMe
-        description, modifiers, fromPrev, fromNext, // $FlowFixMe
+        description, modifiers, fromPrev, fromNext, translation, // $FlowFixMe
       } = form;
       const options = {
         subForm,
         // addToSeries,
         elementMods,
         duration,
+        translation,
         alignment,
         scale,
         description,
@@ -650,43 +651,51 @@ export class EquationNew extends DiagramElementCollection {
     // Populate translation mods
     if (optionsToUse.fromPrev != null) {
       form[subForm].fromPrev = {};
-      form[subForm].fromPrev.duration = optionsToUse.fromPrev.duration;
+      if (optionsToUse.fromPrev.duration !== undefined) {
+        form[subForm].fromPrev.duration = optionsToUse.fromPrev.duration;
+      }
       form[subForm].fromPrev.translation = {};
-      Object.entries(optionsToUse.fromPrev.translation).forEach(([elementName, mods]) => {
-        const diagramElement = getDiagramElement(this, elementName);
-        let direction;
-        let style;
-        let mag;
-        if (Array.isArray(mods)) {
-          [style, direction, mag] = mods;
-        } else {
-          ({ style, direction, mag } = mods);
-        }
-        form[subForm].fromPrev.translation[elementName] = {
-          element: diagramElement, style, direction, mag,
-        };
-      });
+      if (optionsToUse.fromPrev.translation != null) {
+        Object.entries(optionsToUse.fromPrev.translation).forEach(([elementName, mods]) => {
+          const diagramElement = getDiagramElement(this, elementName);
+          let direction;
+          let style;
+          let mag;
+          if (Array.isArray(mods)) {
+            [style, direction, mag] = mods;
+          } else {
+            ({ style, direction, mag } = mods);
+          }
+          form[subForm].fromPrev.translation[elementName] = {
+            element: diagramElement, style, direction, mag,
+          };
+        });
+      }
     }
 
     // Populate translation mods
     if (optionsToUse.fromNext != null) {
       form[subForm].fromNext = {};
-      form[subForm].fromNext.duration = optionsToUse.fromNext.duration;
+      if (optionsToUse.fromNext.duration !== undefined) {
+        form[subForm].fromNext.duration = optionsToUse.fromNext.duration;
+      }
       form[subForm].fromNext.translation = {};
-      Object.entries(optionsToUse.fromNext.translation).forEach(([elementName, mods]) => {
-        const diagramElement = getDiagramElement(this, elementName);
-        let direction;
-        let style;
-        let mag;
-        if (Array.isArray(mods)) {
-          [style, direction, mag] = mods;
-        } else {
-          ({ style, direction, mag } = mods);
-        }
-        form[subForm].fromNext.translation[elementName] = {
-          element: diagramElement, style, direction, mag,
-        };
-      });
+      if (optionsToUse.fromNext.translation != null) {
+        Object.entries(optionsToUse.fromNext.translation).forEach(([elementName, mods]) => {
+          const diagramElement = getDiagramElement(this, elementName);
+          let direction;
+          let style;
+          let mag;
+          if (Array.isArray(mods)) {
+            [style, direction, mag] = mods;
+          } else {
+            ({ style, direction, mag } = mods);
+          }
+          form[subForm].fromNext.translation[elementName] = {
+            element: diagramElement, style, direction, mag,
+          };
+        });
+      }
     }
 
     optionsToUse.alignment.fixTo = this.checkFixTo(optionsToUse.alignment.fixTo);

@@ -1,6 +1,6 @@
-// import {
-//   Point, // Rect,
-// } from '../../../tools/g2';
+import {
+  Point, // Rect,
+} from '../../../tools/g2';
 
 import * as tools from '../../../tools/tools';
 import makeDiagram from '../../../__mocks__/makeDiagram';
@@ -56,6 +56,52 @@ describe('Diagram Equations From Object', () => {
     // Forms can be created after creating the equation
     // This also shows all the different ways forms can be defined
     addForms = {
+      // Full form options
+      allFormOptions: {
+        0: {
+          content: ['a', 'b', 'c'],
+          subForm: 'deg',
+          scale: 1.2,
+          alignment: {
+            fixTo: 'b',
+            alignH: 'center',
+            alignV: 'bottom',
+          },
+          description: '|Form| 1 |description|',
+          modifiers: {
+            Form: html.highlight([1, 0, 0, 0]),
+          },
+          elementMods: {
+            a: {
+              color: color1,
+              isTouchable: true,
+            },
+          },
+          duration: 1,
+          translation: {
+            a: {
+              style: 'curved',
+              direction: 'up',
+              mag: 0.95,
+            },
+            b: ['curved', 'down', 0.45],
+          },
+          fromPrev: {
+            duration: null,
+            translation: {
+              a: ['curved', 'down', 0.2],
+              b: ['curved', 'down', 0.2],
+            },
+          },
+          fromNext: {
+            duration: 2,
+            translation: {
+              a: ['curved', 'down', 0.2],
+              b: ['curved', 'down', 0.2],
+            },
+          },
+        },
+      },
       // A form can be defined just as the text element
       textOnly: {
         0: 'a',
@@ -171,15 +217,24 @@ describe('Diagram Equations From Object', () => {
         },
         1: {
           content: ['b', 'a', 'c'],
-          time: 10,
+          duration: 10,
         },
         2: {
           content: ['b', 'a', 'c'],
-          time: { fromPrev: 20, fromNext: 30, fromAny: 40 },
+          duration: 40,
+          fromPrev: {
+            duration: 20,
+          },
+          fromNext: {
+            duration: 30,
+          },
+          // time: { fromPrev: 20, fromNext: 30, fromAny: 40 },
         },
         3: {
           content: ['b', 'a', 'c'],
-          time: { fromPrev: 20 },
+          fromPrev: {
+            duration: 20,
+          },
         },
       },
       // ElementMods can be used to modify the DiagramElement properties
@@ -193,10 +248,8 @@ describe('Diagram Equations From Object', () => {
           elementMods: {
             b: {
               color: color1,
-              mods: {
-                isTouchable: true,
-                animate: { transform: { translation: { options: { magnitude: 2 } } } },
-              },
+              isTouchable: true,
+              animate: { transform: { translation: { options: { magnitude: 2 } } } },
             },
           },
         },
@@ -229,6 +282,7 @@ describe('Diagram Equations From Object', () => {
           },
         },
       },
+      
     };
     ({ forms } = eqn.eqn);
   });
@@ -319,7 +373,10 @@ describe('Diagram Equations From Object', () => {
     expect(deg[0].content.drawingObject.text[0].text).toBe('b');
     expect(deg[1].content.drawingObject.text[0].text).toBe('a');
     expect(deg[2].content.drawingObject.text[0].text).toBe('c');
-    expect(forms['0'].deg.elementMods.b.color).toEqual(color1);
+    expect(forms['0'].deg.elementMods.b.mods.color).toEqual(color1);
+    expect(eqn._b.color).toEqual([0.5, 0.5, 0.5, 1]);
+    eqn.showForm('0');
+    expect(eqn._b.color).toEqual([0.95, 0, 0, 1]);
   });
   test('Sub form Object', () => {
     eqn.addForms(addForms.subFormObject);
@@ -337,7 +394,7 @@ describe('Diagram Equations From Object', () => {
     expect(rad[0].content.drawingObject.text[0].text).toBe('b');
     expect(rad[1].content.drawingObject.text[0].text).toBe('a');
     expect(rad[2].content.drawingObject.text[0].text).toBe('c');
-    expect(forms['0'].rad.elementMods.b.color).toEqual(color1);
+    expect(forms['0'].rad.elementMods.b.mods.color).toEqual(color1);
 
     const method = forms['0'].method.content[0].content[0];
     expect(method).toBeInstanceOf(Fraction);
@@ -353,27 +410,31 @@ describe('Diagram Equations From Object', () => {
     const forms1 = eqn1.eqn.forms;
     expect(forms1['0'].base.content[0].content[0].content).toBe(eqn1._a);
     expect(forms1['1'].base.content[0].content[0].content).toBe(eqn1._b);
-    expect(eqn1.eqn.formSeries).toEqual(['0', '1']);
+    expect(eqn1.eqn.formSeries.base).toEqual(['0', '1']);
   });
   test('Time', () => {
     eqn.addForms(addForms.time);
-    const time0 = forms['0'].base.time;
-    const time1 = forms['1'].base.time;
-    const time2 = forms['2'].base.time;
-    const time3 = forms['3'].base.time;
-    expect(time0).toBe(null);
-    expect(time1).toEqual({ fromPrev: 10, fromNext: 10, fromAny: 10 });
-    expect(time2).toEqual({ fromPrev: 20, fromNext: 30, fromAny: 40 });
-    expect(time3).toEqual({ fromPrev: 20, fromNext: null, fromAny: null });
+    expect(forms['0'].base.duration).toBe(null);
+    expect(forms['0'].base.fromPrev).toBe(undefined);
+    expect(forms['0'].base.fromNext).toBe(undefined);
+    expect(forms['1'].base.duration).toBe(10);
+    expect(forms['1'].base.fromPrev).toBe(undefined);
+    expect(forms['1'].base.fromNext).toBe(undefined);
+    expect(forms['2'].base.duration).toBe(40);
+    expect(forms['2'].base.fromPrev.duration).toBe(20);
+    expect(forms['2'].base.fromNext.duration).toBe(30);
+    expect(forms['3'].base.duration).toBe(null);
+    expect(forms['3'].base.fromPrev.duration).toBe(20);
+    expect(forms['3'].base.fromNext).toBe(undefined);
   });
   test('Element Modifications', () => {
     eqn.addForms(addForms.elementMods);
     expect(forms['0'].base.elementMods).toEqual({});
     expect(forms['1'].base.elementMods).toEqual({
       b: {
-        color: color1,
         element: eqn._b,
         mods: {
+          color: color1,
           isTouchable: true,
           animate: { transform: { translation: { options: { magnitude: 2 } } } },
         },
@@ -382,19 +443,41 @@ describe('Diagram Equations From Object', () => {
   });
   test('Descriptions', () => {
     eqn.addForms(addForms.descriptions);
-    // console.log(forms['0'].base.description)
-    // console.log(forms['1'].base.description)
-    // console.log(eqn.getDescription('1'))
     expect(forms['0'].base.description).toBe('Form 0 description');
     expect(forms['1'].base.description).toBe('|Form| 1 |description|');
     expect(eqn.getDescription('1')).toBe('<span class="highlight_word"" style="color:rgba(255,0,0,0);">Form</span> 1 <span class="highlight_word">description</span>');
-    // const time0 = forms['0'].base.time;
-    // const time1 = forms['1'].base.time;
-    // const time2 = forms['2'].base.time;
-    // const time3 = forms['3'].base.time;
-    // expect(time0).toBe(null);
-    // expect(time1).toEqual({ fromPrev: 10, fromNext: 10, fromAny: 10 });
-    // expect(time2).toEqual({ fromPrev: 20, fromNext: 30, fromAny: 40 });
-    // expect(time3).toEqual({ fromPrev: 20, fromNext: null, fromAny: null });
+  });
+  test('All form options', () => {
+    expect(eqn._a.getPosition().round(3)).toEqual(new Point(0, 0));
+    expect(eqn._a.getScale().round(3)).toEqual(new Point(1, 1));
+
+    eqn.addForms(addForms.allFormOptions);
+    expect(forms['0'].deg.description).toBe('|Form| 1 |description|');
+    expect(eqn.getDescription('0', 'deg')).toBe('<span class="highlight_word"" style="color:rgba(255,0,0,0);">Form</span> 1 <span class="highlight_word">description</span>');
+    const form = forms['0'].deg;
+    expect(form.elementMods.a.mods.color).toEqual(color1);
+    expect(form.elementMods.a.mods.isTouchable).toEqual(true);
+    expect(form.duration).toEqual(1);
+    // console.log(form.translation)
+    expect(form.translation.a.style).toBe('curved');
+    expect(form.translation.a.direction).toBe('up');
+    expect(form.translation.a.mag).toBe(0.95);
+    expect(form.translation.b.style).toBe('curved');
+    expect(form.translation.b.direction).toBe('down');
+    expect(form.translation.b.mag).toBe(0.45);
+
+    expect(form.fromPrev.duration).toBe(null);
+    expect(form.fromPrev.translation.a.style).toBe('curved');
+    expect(form.fromPrev.translation.a.direction).toBe('down');
+    expect(form.fromPrev.translation.a.mag).toBe(0.2);
+
+    expect(form.fromNext.duration).toBe(2);
+    expect(form.fromNext.translation.a.style).toBe('curved');
+    expect(form.fromNext.translation.a.direction).toBe('down');
+    expect(form.fromNext.translation.a.mag).toBe(0.2);
+
+    eqn.showForm('0');
+    expect(eqn._a.getPosition().round(3)).toEqual(new Point(-0.072, 0.004));
+    expect(eqn._a.getScale().round(3)).toEqual(new Point(1.2, 1.2));
   });
 });
