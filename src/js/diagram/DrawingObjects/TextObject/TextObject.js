@@ -21,7 +21,8 @@ class DiagramFont {
   family: string;
   alignH: 'left' | 'center' | 'right';
   alignV: 'top' | 'bottom' | 'middle' | 'alphabetic';
-  color: string | null;
+  color: Array<number> | null;
+  opacity: number;
 
   constructor(
     family: string = 'Helvetica Neue',
@@ -30,7 +31,7 @@ class DiagramFont {
     weight: string = '200',
     alignH: 'left' | 'center' | 'right' = 'center',
     alignV: 'top' | 'bottom' | 'middle' | 'alphabetic' = 'middle',
-    color: Array<number> | null | string = null,
+    color: Array<number> | null = null,
   ) {
     this.family = family;
     this.style = style;
@@ -46,12 +47,13 @@ class DiagramFont {
     // }
   }
 
-  setColor(color: Array<number> | null | string = null) {
-    if (Array.isArray(color)) {
-      this.color = colorArrayToString(color);
-    } else {
-      this.color = color;
-    }
+  setColor(color: Array<number> | null = null) {
+    // if (Array.isArray(color)) {
+    //   this.color = colorArrayToString(color);
+    // } else {
+    //   this.color = color;
+    // }
+    this.color = color;
   }
 
   set(ctx: CanvasRenderingContext2D, scalingFactor: number = 1) {
@@ -160,11 +162,17 @@ class TextObject extends DrawingObject {
     this.setBorder();
   }
 
+  setOpacity(opacity: number) {
+    for (let i = 0; i < this.text.length; i += 1) {
+      this.text[i].font.opacity = opacity;
+    }
+  }
+
   setColor(color: Array<number>) {
-    const c = colorArrayToString(color);
+    // const c = colorArrayToString(color);
 
     for (let i = 0; i < this.text.length; i += 1) {
-      this.text[i].font.color = c;
+      this.text[i].font.color = color;
     }
   }
 
@@ -267,8 +275,12 @@ class TextObject extends DrawingObject {
     // Fill in all the text
     this.text.forEach((diagramText) => {
       diagramText.font.set(ctx, scalingFactor);
-      if (diagramText.font.color) {
-        ctx.fillStyle = diagramText.font.color;
+      if (diagramText.font.color != null) {
+        const c = [
+          ...diagramText.font.color.slice(0, 3),
+          diagramText.font.color[3] * diagramText.font.opacity,
+        ];
+        ctx.fillStyle = colorArrayToString(c);
       } else {
         ctx.fillStyle = parentColor;
       }

@@ -107,6 +107,7 @@ class DiagramElement {
   setTransformCallback: (Transform) => void; // element.transform is updated
 
   color: Array<number>;           // For the future when collections use color
+  opacity: number;
   noRotationFromParent: boolean;
 
   interactiveLocation: Point;   // this is in vertex space
@@ -273,6 +274,7 @@ class DiagramElement {
     this.isInteractive = false;
     this.hasTouchableElements = false;
     this.color = [1, 1, 1, 1];
+    this.opacity = 1;
     this.setTransformCallback = () => {};
     this.lastDrawTransform = this.transform._dup();
     this.onClick = null;
@@ -1213,7 +1215,8 @@ class DiagramElement {
   }
 
   setOpacity(opacity: number) {
-    this.color[3] = opacity;
+    // this.color[3] = opacity;
+    this.opacity = opacity;
   }
 
   getScenarioTarget(
@@ -2436,6 +2439,7 @@ class DiagramElement {
 
   show(): void {
     this.isShown = true;
+    this.setOpacity(1);
     if (this.parent != null) {
       if (!this.parent.isShown) {
         this.parent.show();
@@ -2552,6 +2556,7 @@ class DiagramElement {
 class DiagramElementPrimative extends DiagramElement {
   drawingObject: DrawingObject;
   color: Array<number>;
+  opacity: number;
   pointsToDraw: number;
   angleToDraw: number;
   lengthToDraw: number;
@@ -2665,15 +2670,17 @@ class DiagramElementPrimative extends DiagramElement {
   }
 
   setOpacity(opacity: number) {
-    this.color[3] = opacity;
+    // this.color[3] = opacity;
+    this.opacity = opacity;
     if (this instanceof DiagramElementPrimative) {
       if (this.drawingObject instanceof TextObject) {
         this.drawingObject.setColor(this.color);
       }
       if (this.drawingObject instanceof HTMLObject) {
         // $FlowFixMe
-        this.drawingObject.element.style.color =
-          colorArrayToRGBA([...this.color.slice(0, 2), opacity]);
+        // this.drawingObject.element.style.color =
+        // colorArrayToRGBA([...this.color.slice(0, 2), opacity]);
+        this.drawingObject.element.style.opacity = `${opacity}`;
       }
     }
   }
@@ -2774,8 +2781,9 @@ class DiagramElementPrimative extends DiagramElement {
           pointCount = this.pointsToDraw;
         }
       }
+      const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity];
       pulseTransforms.forEach((t) => {
-        this.drawingObject.drawWithTransformMatrix(t.matrix(), this.color, pointCount);
+        this.drawingObject.drawWithTransformMatrix(t.matrix(), colorToUse, pointCount);
       });
       if (this.unrenderNextDraw) {
         this.clearRender();
@@ -3392,7 +3400,8 @@ class DiagramElementCollection extends DiagramElement {
       const element = this.elements[this.drawOrder[i]];
       element.setOpacity(opacity);
     }
-    this.color[3] = opacity;
+    // this.color[3] = opacity;
+    this.opacity = opacity;
   }
 
   getElementTransforms() {
