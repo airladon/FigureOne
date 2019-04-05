@@ -7,9 +7,7 @@ import PositionAnimationStep from './AnimationStep/ElementAnimationStep/Position
 import type {
   TypeColorAnimationStepInputOptions,
 } from './AnimationStep/ElementAnimationStep/ColorAnimationStep';
-import {
-  ColorAnimationStep,
-} from './AnimationStep/ElementAnimationStep/ColorAnimationStep';
+import ColorAnimationStep from './AnimationStep/ElementAnimationStep/ColorAnimationStep';
 
 
 import type {

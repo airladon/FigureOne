@@ -37,7 +37,7 @@ describe('Diagram Text Object', () => {
       expect(df).toEqual(expected);
     });
     test('Color', () => {
-      expect(font.color).toBe('rgba(255,0,0,1)');
+      expect(font.color).toEqual([1, 0, 0, 1]);
     });
     test('Set', () => {
       const ctx = {};
