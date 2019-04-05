@@ -469,6 +469,12 @@ export default class EquationForm extends Elements {
       const { element, mods } = elementMods;
       if (element != null && mods != null) {
         element.setProperties(mods);
+        if (mods.color != null) {
+          element.setColor(mods.color);
+        }
+        if (mods.opacity != null) {
+          element.setOpacity(mods.opacity);
+        }
       }
     });
   }
