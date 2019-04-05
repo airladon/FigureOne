@@ -414,7 +414,7 @@ describe('Diagram Equations From Object', () => {
   });
   test('Time', () => {
     eqn.addForms(addForms.time);
-    expect(forms['0'].base.duration).toBe(null);
+    expect(forms['0'].base.duration).toBe(undefined);
     expect(forms['0'].base.fromPrev).toBe(undefined);
     expect(forms['0'].base.fromNext).toBe(undefined);
     expect(forms['1'].base.duration).toBe(10);
@@ -423,7 +423,7 @@ describe('Diagram Equations From Object', () => {
     expect(forms['2'].base.duration).toBe(40);
     expect(forms['2'].base.fromPrev.duration).toBe(20);
     expect(forms['2'].base.fromNext.duration).toBe(30);
-    expect(forms['3'].base.duration).toBe(null);
+    expect(forms['3'].base.duration).toBe(undefined);
     expect(forms['3'].base.fromPrev.duration).toBe(20);
     expect(forms['3'].base.fromNext).toBe(undefined);
   });

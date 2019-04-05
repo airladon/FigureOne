@@ -101,6 +101,8 @@ describe('Diagram Equations From Object', () => {
           alignV: 'middle',
           navTypeOptions: { arrows: true },
         });
+        // spoof a the navigator drawingObject
+        collection._nav._table.drawingObject.element = { style: { opacity: 1 } };
         collection._nav.showForm('1');
       },
       navigatorWithoutEquationSplit: () => {
@@ -124,6 +126,7 @@ describe('Diagram Equations From Object', () => {
           1: [{ frac: ['a', '_2', 'v'] }, 'c'],
         });
         collection._testEqn.setFormSeries(['0', '1']);
+        collection._testNav._table.drawingObject.element = { style: { opacity: 1 } };
         collection._testNav.showForm('1');
       },
       navigatorWithoutEquationAllInOne: () => {
@@ -147,6 +150,7 @@ describe('Diagram Equations From Object', () => {
           alignV: 'middle',
           navTypeOptions: { arrows: true },
         });
+        collection._testNav._table.drawingObject.element = { style: { opacity: 1 } };
         collection._testNav.showForm('1');
       },
     };

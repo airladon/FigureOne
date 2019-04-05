@@ -29,7 +29,7 @@ function updateDescription(
   let form = null;
   // $FlowFixMe
   // form = eqn.eqn.formSeries[index][formType];
-  form = eqn.getForm(eqn.eqn.formSeries[index], subForm);
+  form = eqn.getForm(eqn.eqn.currentFormSeries[index], subForm);
   if (form == null) {
     return;
   }
@@ -90,7 +90,7 @@ function updateButtons(
       enableTouch(nav.prevDescription);
       enableTouch(nav.description);
     }
-    if (nav.eqn.eqn.formSeries.length > 1) {
+    if (nav.eqn.eqn.currentFormSeries.length > 1) {
       enableTouch(nav.next);
       enableTouch(nav.nextDescription);
     } else {
@@ -98,7 +98,7 @@ function updateButtons(
       disableTouch(nav.nextDescription);
     }
     const nextIndex = index + 1;
-    if (nextIndex > nav.eqn.eqn.formSeries.length - 1) {
+    if (nextIndex > nav.eqn.eqn.currentFormSeries.length - 1) {
       if (nav.nextDescription) {
         // eslint-disable-next-line no-param-reassign
         nav.nextDescription.innerHTML = 'RESTART from begining';
