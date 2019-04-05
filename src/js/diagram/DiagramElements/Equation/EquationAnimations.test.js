@@ -74,9 +74,9 @@ describe('Equation Animation', () => {
     expect(a.isShown).toBe(false);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(false);
-    expect(a.color).toEqual(col(1));
-    expect(b.color).toEqual(col(1));
-    expect(c.color).toEqual(col(1));
+    expect(a.opacity).toEqual(1);
+    expect(b.opacity).toEqual(1);
+    expect(c.opacity).toEqual(1);
 
     eqn.nextForm(1);
     diagram.drawNow(1);
@@ -85,18 +85,18 @@ describe('Equation Animation', () => {
     expect(a.isShown).toBe(false);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(true);
-    expect(a.color).toEqual(col(1));
-    expect(b.color).toEqual(col(1));
-    expect(round(c.color, 2)).toEqual(col(0.5));
+    expect(a.opacity).toEqual(1);
+    expect(b.opacity).toEqual(1);
+    expect(round(c.opacity, 2)).toEqual(0.5);
 
     // 'c' is now fully in
     diagram.drawNow(1.5);
     expect(a.isShown).toBe(false);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(true);
-    expect(a.color).toEqual(col(1));
-    expect(b.color).toEqual(col(1));
-    expect(c.color).toEqual(col(1));
+    expect(a.opacity).toEqual(1);
+    expect(b.opacity).toEqual(1);
+    expect(round(c.opacity)).toEqual(1);
 
     // 'c' fades out, 'a' is waiting to fade in till after move
     eqn.nextForm(1);
@@ -105,9 +105,9 @@ describe('Equation Animation', () => {
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(true);
-    expect(round(a.color)).toEqual(col(0.001));
-    expect(b.color).toEqual(col(1));
-    expect(round(c.color, 2)).toEqual(col(0.5));
+    expect(round(a.opacity)).toEqual(0.001);
+    expect(b.opacity).toEqual(1);
+    expect(round(c.opacity, 2)).toEqual(0.5);
     expect(b.getPosition()).toEqual(new Point(0, 0));
     expect(a.animations.animations).toHaveLength(1);
     expect(b.animations.animations).toHaveLength(1);
@@ -118,9 +118,9 @@ describe('Equation Animation', () => {
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(true);
-    expect(round(a.color)).toEqual(col(0.001));
-    expect(b.color).toEqual(col(1));
-    expect(round(c.color)).toEqual(col(0.001));
+    expect(round(a.opacity)).toEqual(0.001);
+    expect(b.opacity).toEqual(1);
+    expect(round(c.opacity, 3)).toEqual(0.001);
     expect(b.getPosition()).toEqual(new Point(0, 0));
     expect(a.animations.animations).toHaveLength(1);
     expect(b.animations.animations).toHaveLength(1);
@@ -131,9 +131,9 @@ describe('Equation Animation', () => {
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(false);
-    expect(round(a.color)).toEqual(col(0.001));
-    expect(b.color).toEqual(col(1));
-    expect(round(c.color)).toEqual(col(1));
+    expect(round(a.opacity)).toEqual(0.001);
+    expect(b.opacity).toEqual(1);
+    expect(round(c.opacity)).toEqual(1);
     expect(b.getPosition().round(8)).toEqual(new Point(0.00000286, 0));
     expect(a.animations.animations).toHaveLength(1);
     expect(b.animations.animations).toHaveLength(1);
@@ -144,9 +144,9 @@ describe('Equation Animation', () => {
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(false);
-    expect(round(a.color)).toEqual(col(0.001));
-    expect(b.color).toEqual(col(1));
-    expect(round(c.color)).toEqual(col(1));
+    expect(round(a.opacity)).toEqual(0.001);
+    expect(b.opacity).toEqual(1);
+    expect(round(c.opacity)).toEqual(1);
     expect(b.getPosition().round()).toEqual(new Point(0.014, 0));
     expect(a.animations.animations).toHaveLength(1);
     expect(b.animations.animations).toHaveLength(1);
@@ -157,9 +157,9 @@ describe('Equation Animation', () => {
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(false);
-    expect(round(a.color)).toEqual(col(0.001));
-    expect(b.color).toEqual(col(1));
-    expect(round(c.color)).toEqual(col(1));
+    expect(round(a.opacity)).toEqual(0.001);
+    expect(b.opacity).toEqual(1);
+    expect(round(c.opacity)).toEqual(1);
     expect(b.getPosition().round()).toEqual(new Point(0.028, 0));
     expect(a.animations.animations).toHaveLength(1);
     expect(b.animations.animations).toHaveLength(1);
@@ -170,9 +170,9 @@ describe('Equation Animation', () => {
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(false);
-    expect(round(a.color, 2)).toEqual(col(0.5));
-    expect(b.color).toEqual(col(1));
-    expect(round(c.color)).toEqual(col(1));
+    expect(round(a.opacity, 2)).toEqual(0.5);
+    expect(b.opacity).toEqual(1);
+    expect(round(c.opacity)).toEqual(1);
     expect(b.getPosition().round()).toEqual(new Point(0.028, 0));
     expect(a.animations.animations).toHaveLength(1);
     expect(b.animations.animations).toHaveLength(0);
@@ -183,9 +183,9 @@ describe('Equation Animation', () => {
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(false);
-    expect(round(a.color, 2)).toEqual(col(1));
-    expect(b.color).toEqual(col(1));
-    expect(round(c.color)).toEqual(col(1));
+    expect(round(a.opacity, 2)).toEqual(1);
+    expect(b.opacity).toEqual(1);
+    expect(round(c.opacity)).toEqual(1);
     expect(b.getPosition().round()).toEqual(new Point(0.028, 0));
     expect(a.animations.animations).toHaveLength(1);
     expect(b.animations.animations).toHaveLength(0);
@@ -196,9 +196,9 @@ describe('Equation Animation', () => {
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(false);
-    expect(a.color).toEqual(col(1));
-    expect(b.color).toEqual(col(1));
-    expect(c.color).toEqual(col(1));
+    expect(a.opacity).toEqual(1);
+    expect(b.opacity).toEqual(1);
+    expect(c.opacity).toEqual(1);
     expect(b.getPosition().round()).toEqual(new Point(0.028, 0));
     expect(a.animations.animations).toHaveLength(0);
     expect(b.animations.animations).toHaveLength(0);
@@ -215,9 +215,9 @@ describe('Equation Animation', () => {
     expect(a.isShown).toBe(false);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(false);
-    expect(a.color).toEqual(col(1));
-    expect(b.color).toEqual(col(1));
-    expect(c.color).toEqual(col(1));
+    expect(a.opacity).toEqual(1);
+    expect(b.opacity).toEqual(1);
+    expect(c.opacity).toEqual(1);
 
     eqn.nextForm(1);
     diagram.drawNow(1);
@@ -226,9 +226,9 @@ describe('Equation Animation', () => {
     expect(a.isShown).toBe(false);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(true);
-    expect(a.color).toEqual(col(1));
-    expect(b.color).toEqual(col(1));
-    expect(round(c.color, 4)).toEqual(col(0.5005));
+    expect(a.opacity).toEqual(1);
+    expect(b.opacity).toEqual(1);
+    expect(round(c.opacity, 4)).toEqual(0.5005);
 
     // Interrupt by moving to next form while previous was animating
     // 'c' skips to be fully shown
@@ -237,9 +237,9 @@ describe('Equation Animation', () => {
     expect(a.isShown).toBe(false);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(true);
-    expect(a.color).toEqual(col(1));
-    expect(b.color).toEqual(col(1));
-    expect(round(c.color, 4)).toEqual(col(1));
+    expect(a.opacity).toEqual(1);
+    expect(b.opacity).toEqual(1);
+    expect(round(c.opacity, 4)).toEqual(1);
     expect(a.animations.animations).toHaveLength(0);
     expect(b.animations.animations).toHaveLength(0);
     expect(c.animations.animations).toHaveLength(0);
@@ -249,9 +249,9 @@ describe('Equation Animation', () => {
     expect(a.isShown).toBe(false);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(true);
-    expect(a.color).toEqual(col(1));
-    expect(b.color).toEqual(col(1));
-    expect(round(c.color, 4)).toEqual(col(1));
+    expect(a.opacity).toEqual(1);
+    expect(b.opacity).toEqual(1);
+    expect(round(c.opacity, 4)).toEqual(1);
     expect(a.animations.animations).toHaveLength(0);
     expect(b.animations.animations).toHaveLength(0);
     expect(c.animations.animations).toHaveLength(0);
@@ -268,9 +268,9 @@ describe('Equation Animation', () => {
     expect(a.isShown).toBe(false);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(true);
-    expect(a.color).toEqual(col(1));
-    expect(b.color).toEqual(col(1));
-    expect(c.color).toEqual(col(1));
+    expect(a.opacity).toEqual(1);
+    expect(b.opacity).toEqual(1);
+    expect(c.opacity).toEqual(1);
 
     // 'c' will fade out, 'b' will move, then 'a' will fade in
     eqn.nextForm(1);
@@ -279,9 +279,9 @@ describe('Equation Animation', () => {
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(true);
-    expect(round(a.color)).toEqual(col(0.001));
-    expect(b.color).toEqual(col(1));
-    expect(round(c.color, 2)).toEqual(col(0.5));
+    expect(round(a.opacity)).toEqual(0.001);
+    expect(b.opacity).toEqual(1);
+    expect(round(c.opacity, 2)).toEqual(0.5);
     expect(b.getPosition()).toEqual(new Point(0, 0));
     expect(a.animations.animations).toHaveLength(1);
     expect(b.animations.animations).toHaveLength(1);
@@ -292,9 +292,9 @@ describe('Equation Animation', () => {
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
     expect(c.isShown).toBe(false);
-    expect(a.color).toEqual(col(1));
-    expect(b.color).toEqual(col(1));
-    expect(c.color).toEqual(col(1));
+    expect(a.opacity).toEqual(1);
+    expect(b.opacity).toEqual(1);
+    expect(c.opacity).toEqual(1);
     expect(b.getPosition().round()).toEqual(new Point(0.028, 0));
     expect(a.animations.animations).toHaveLength(0);
     expect(b.animations.animations).toHaveLength(0);
