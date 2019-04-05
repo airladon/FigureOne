@@ -28,7 +28,8 @@ export class ColorAnimationStep extends ElementAnimationStep {
     delta: TypeColor;
     target: TypeColor;
     whenComplete: TypeColor;  // Color after dissolving
-    dissolve?: 'in' | 'out' | null;
+    dissolve: 'in' | 'out' | null;
+    fullOpacity: boolean;
   };
 
   constructor(...optionsIn: Array<TypeColorAnimationStepInputOptions>) {
@@ -38,17 +39,18 @@ export class ColorAnimationStep extends ElementAnimationStep {
       'start', 'delta', 'target', 'dissolve',
     ]);
     super(ElementAnimationStepOptionsIn);
-    const defaultPositionOptions = {
+    const defaultColorOptions = {
       start: null,
       target: null,
       delta: null,
       dissolve: null,
+      fullOpacity: false,
     };
-    const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
+    const options = joinObjects({}, defaultColorOptions, ...optionsIn);
     // $FlowFixMe
     this.color = {};
     copyKeysFromTo(options, this.color, [
-      'start', 'delta', 'target', 'dissolve',
+      'start', 'delta', 'target', 'dissolve', 'fullOpacity',
     ]);
   }
 
@@ -61,6 +63,9 @@ export class ColorAnimationStep extends ElementAnimationStep {
     if (element != null) {
       super.start(startTime);
       if (this.color.start == null) {
+        if (this.color.fullOpacity) {
+          this.color.start = [...element.color.slice(0, 3), 1];
+        }
         this.color.start = element.color.slice();
       }
       if (this.color.delta == null && this.color.target == null) {
@@ -114,34 +119,35 @@ export class ColorAnimationStep extends ElementAnimationStep {
     }
   }
 
-  // finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
-  //   if (this.state === 'idle') {
-  //     return;
-  //   }
-  //   super.finish(cancelled, force);
-  //   const setToEnd = () => {
-  //     const { element } = this;
-  //     if (element != null) {
-  //       element.setColor(this.color.whenComplete);
-  //       if (this.color.dissolve === 'out') {
-  //         element.hide();
-  //       }
-  //     }
-  //   };
-  //   if (cancelled && force === 'complete') {
-  //     setToEnd();
-  //   }
-  //   if (cancelled && force == null && this.completeOnCancel === true) {
-  //     setToEnd();
-  //   }
-  //   if (cancelled === false) {
-  //     setToEnd();
-  //   }
+  cancelledWithNoComplete() {
+    const { element } = this;
+    console.log('cancel with no complete')
+    if (element != null) {
+      if (this.color.fullOpacity) {
+        element.setColor([...element.color.slice(0, 3), 1]);
+      }
+    }
+  }
 
-  //   if (this.onFinish != null) {
-  //     this.onFinish(cancelled);
-  //   }
-  // }
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+    if (this.state === 'idle' || this.state === 'finished') {
+      return;
+    }
+    const oldState = this.state;
+    this.state = 'finished';
+    // console.log('color finished', !cancelled || force === 'complete' || this.completeOnCancel !== false, cancelled, force, this.completeOnCancel)
+    if (!cancelled || force === 'complete' || this.completeOnCancel !== false) {
+      if (oldState === 'waitingToStart') {
+        this.start();
+      }
+      this.setToEnd();
+    }
+
+    if (this.onFinish != null) {
+      this.onFinish(cancelled);
+    }
+  }
 
   _dup() {
     const step = new ColorAnimationStep();
@@ -157,7 +163,9 @@ export class DissolveInAnimationStep extends ColorAnimationStep {
     ...args: Array<TypeElementAnimationStepInputOptions>
   ) {
     let options = {};
-    const defaultOptions = { duration: 1, dissolve: 'in', completeOnCancel: true };
+    const defaultOptions = {
+      duration: 1, dissolve: 'in', completeOnCancel: true, fullOpacity: true,
+    };
     if (typeof timeOrOptionsIn === 'number') {
       options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
     } else {
@@ -180,7 +188,9 @@ export class DissolveOutAnimationStep extends ColorAnimationStep {
     ...args: Array<TypeElementAnimationStepInputOptions>
   ) {
     let options = {};
-    const defaultOptions = { duration: 1, dissolve: 'out', completeOnCancel: true };
+    const defaultOptions = {
+      duration: 1, dissolve: 'out', completeOnCancel: true, fullOpacity: true,
+    };
     if (typeof timeOrOptionsIn === 'number') {
       options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
     } else {

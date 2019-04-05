@@ -319,7 +319,7 @@ export default class EquationForm extends Elements {
     elements.forEach((e) => {
       e.animations.addTo('Equation Color')
         .color({
-          dissolve, onFinish, duration: time, delay,
+          dissolve, onFinish, duration: time, delay, completeOnCancel: true, fullOpacity: true,
         })
         .start();
     });

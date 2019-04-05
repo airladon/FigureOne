@@ -112,19 +112,26 @@ export default class AnimationStep {
     }
     const oldState = this.state;
     this.state = 'finished';
+    console.log(cancelled, force, this.completeOnCancel)
+    if (cancelled) {
+      if (force === 'complete') {
+        if (oldState === 'waitingToStart') {
+          this.start();
+        }
+        this.setToEnd();
+      } else if (force == null && this.completeOnCancel === true) {
+        if (oldState === 'waitingToStart') {
+          this.start();
+        }
+        this.setToEnd();
+      } else {
+        if (oldState === 'waitingToStart') {
+          console.log('asdf')
+          this.cancelledWithNoComplete();
+        }
+      }
+    }
 
-    if (cancelled && force === 'complete') {
-      if (oldState === 'waitingToStart') {
-        this.start();
-      }
-      this.setToEnd();
-    }
-    if (cancelled && force == null && this.completeOnCancel === true) {
-      if (oldState === 'waitingToStart') {
-        this.start();
-      }
-      this.setToEnd();
-    }
     if (cancelled === false) {
       if (oldState === 'waitingToStart') {
         this.start();
@@ -135,6 +142,9 @@ export default class AnimationStep {
     if (this.onFinish != null) {
       this.onFinish(cancelled);
     }
+  }
+
+  cancelledWithNoComplete() {
   }
 
   cancel(force: ?'complete' | 'noComplete' = null) {

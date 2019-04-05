@@ -864,15 +864,14 @@ export class EquationNew extends DiagramElementCollection {
     if (this.eqn.isAnimating) {
       if (options.ifAnimating.skipToTarget) {
         this.stop(true, true);
+        const currentForm = this.getCurrentForm();
+        if (currentForm != null) {
+          this.showForm(currentForm);
+        }
       } else {
-        this.stop();
+        this.stop(true, false);
       }
-
       this.eqn.isAnimating = false;
-      const currentForm = this.getCurrentForm();
-      if (currentForm != null) {
-        this.showForm(currentForm);
-      }
       if (options.ifAnimating.cancelGoTo) {
         return;
       }
