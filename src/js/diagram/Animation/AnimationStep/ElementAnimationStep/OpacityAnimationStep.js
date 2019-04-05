@@ -89,7 +89,6 @@ export class OpacityAnimationStep extends ElementAnimationStep {
 
   cancelledWithNoComplete() {
     const { element } = this;
-    console.log('no end')
     if (element != null) {
       if (element.opacity === 0.001) {
         element.hide();
@@ -126,7 +125,6 @@ export class OpacityAnimationStep extends ElementAnimationStep {
 
   setToEnd() {
     const { element } = this;
-    console.log('end')
     if (element != null) {
       // console.log(this.name, this.color.whenComplete)
       element.setOpacity(this.opacity.whenComplete);
