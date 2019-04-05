@@ -18,9 +18,6 @@ import DrawContext2D from '../DrawContext2D';
 // import Brace from '../DiagramElements/Equation/Symbols/Brace';
 // import RoundedSquareBracket from '../DiagramElements/Equation/Symbols/RoundedSquareBracket';
 // import EquationForm from '../DiagramElements/Equation/EquationForm';
-import {
-  createEquationElements, Equation, getDiagramElement,
-} from '../DiagramElements/Equation/GLEquation';
 import { EquationNew } from '../DiagramElements/Equation/Equation';
 // import type {
 //   TypeHAlign, TypeVAlign,
@@ -256,13 +253,13 @@ export default class DiagramEquation {
   //   return new HTMLEquation(id, classes);
   // }
 
-  makeEqn() {                               // Deprecate
-    return new Equation(
-      this.draw2D,
-      this.limits,
-      // diagram.diagramToGLSpaceTransform,
-    );
-  }
+  // makeEqn() {                               // Deprecate
+  //   return new Equation(
+  //     this.draw2D,
+  //     this.limits,
+  //     // diagram.diagramToGLSpaceTransform,
+  //   );
+  // }
 
   // makeDescription(id: string) {             // Deprecate
   //   return this.shapes.htmlElement(
