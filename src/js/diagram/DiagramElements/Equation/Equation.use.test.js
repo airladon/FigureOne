@@ -308,7 +308,7 @@ describe('Different ways to make an equation', () => {
 
     // Check color
     expect(eqn._a.drawingObject.text[0].font.color)
-      .toBe(colorTools.colorArrayToRGBA(color1));
+      .toEqual(color1);
 
     // Check math vs number style
     expect(eqn._a.drawingObject.text[0].font.style).toBe('italic');
@@ -325,7 +325,7 @@ describe('Different ways to make an equation', () => {
 
     // Check color
     expect(eqn._a.drawingObject.text[0].font.color)
-      .toBe(colorTools.colorArrayToRGBA(color1));
+      .toEqual(color1);
 
     // Check position
     expect(eqn.transform.t()).toEqual(new Point(1, 1));
@@ -349,7 +349,7 @@ describe('Different ways to make an equation', () => {
 
     // Check color
     expect(eqn._a.drawingObject.text[0].font.color)
-      .toBe(colorTools.colorArrayToRGBA(color1));
+      .toEqual(color1);
 
     // Test locations of all elements
     tools.cleanUIDs(eqn);
