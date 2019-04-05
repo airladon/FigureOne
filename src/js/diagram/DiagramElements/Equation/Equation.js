@@ -3,7 +3,7 @@ import {
   Point, Transform, parsePoint,
 } from '../../../tools/g2';
 import { joinObjects } from '../../../tools/tools';
-import { RGBToArray } from '../../../tools/color';
+// import { RGBToArray } from '../../../tools/color';
 import {
   DiagramElementPrimative, DiagramElementCollection,
 } from '../../Element';
@@ -304,7 +304,7 @@ export class EquationNew extends DiagramElementCollection {
       if (options.color != null) {
         p.setColor(options.color);
       } else {
-        p.setColor(RGBToArray(p.drawingObject.text[0].font.color));
+        p.setColor(p.drawingObject.text[0].font.color);
       }
       return p;
     };
@@ -863,12 +863,14 @@ export class EquationNew extends DiagramElementCollection {
 
     if (this.eqn.isAnimating) {
       if (options.ifAnimating.skipToTarget) {
+        console.log('cancel complete')
         this.stop(true, true);
         const currentForm = this.getCurrentForm();
         if (currentForm != null) {
           this.showForm(currentForm);
         }
       } else {
+        console.log('cancel nocomplete')
         this.stop(true, false);
       }
       this.eqn.isAnimating = false;

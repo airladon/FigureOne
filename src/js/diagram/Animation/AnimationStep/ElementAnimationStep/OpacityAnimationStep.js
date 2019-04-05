@@ -68,7 +68,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
       this.opacity.whenComplete = this.opacity.target;
 
       if (this.opacity.dissolve === 'out') {
-        this.opacity.start = 1;
+        // this.opacity.start = 1;
         this.opacity.target = 0.001;
         this.opacity.whenComplete = 0.001;
         element.setOpacity(this.opacity.start);
@@ -84,6 +84,17 @@ export class OpacityAnimationStep extends ElementAnimationStep {
       this.opacity.delta = this.opacity.target - this.opacity.start;
     } else {
       this.duration = 0;
+    }
+  }
+
+  cancelledWithNoComplete() {
+    const { element } = this;
+    console.log('no end')
+    if (element != null) {
+      if (element.opacity === 0.001) {
+        element.hide();
+        element.opacity = 1;
+      }
     }
   }
 
@@ -115,6 +126,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
 
   setToEnd() {
     const { element } = this;
+    console.log('end')
     if (element != null) {
       // console.log(this.name, this.color.whenComplete)
       element.setOpacity(this.opacity.whenComplete);

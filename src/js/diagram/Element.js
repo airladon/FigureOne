@@ -2674,7 +2674,7 @@ class DiagramElementPrimative extends DiagramElement {
     this.opacity = opacity;
     if (this instanceof DiagramElementPrimative) {
       if (this.drawingObject instanceof TextObject) {
-        this.drawingObject.setColor(this.color);
+        this.drawingObject.setOpacity(opacity);
       }
       if (this.drawingObject instanceof HTMLObject) {
         // $FlowFixMe
