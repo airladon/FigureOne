@@ -2677,9 +2677,11 @@ class DiagramElementPrimative extends DiagramElement {
         this.drawingObject.setOpacity(opacity);
       }
       if (this.drawingObject instanceof HTMLObject) {
+        // console.log(this.name, this.drawingObject)
         // $FlowFixMe
         // this.drawingObject.element.style.color =
         // colorArrayToRGBA([...this.color.slice(0, 2), opacity]);
+        // console.log(this.drawingObject.element)
         this.drawingObject.element.style.opacity = `${opacity}`;
       }
     }
