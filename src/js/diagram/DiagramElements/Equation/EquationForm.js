@@ -483,8 +483,17 @@ export default class EquationForm extends Elements {
   ) {
     const allElements = this.collectionMethods.getAllElements();
     this.collectionMethods.stop();
-    const elementsShown = allElements.filter(e => e.isShown);
     const elementsShownTarget = this.getAllElements();
+    elementsShownTarget.forEach((e) => {
+      if (e.opacity === 0.001) {
+        e.hide();
+        e.setOpacity(1);
+      } else {
+        e.setOpacity(1);
+      }
+    });
+
+    const elementsShown = allElements.filter(e => e.isShown);
     const elementsToHide =
       elementsShown.filter(e => elementsShownTarget.indexOf(e) === -1);
     const elementsToShow =
@@ -540,35 +549,6 @@ export default class EquationForm extends Elements {
     }
 
     this.applyElementMods();
-    // Object.values(this.elementMods).forEach((elementMods) => {
-    //   const { element, mods } = elementMods;
-    //   if (element != null && mods != null) {
-    //     element.setProperties(mods);
-    //   }
-    //   //   element, mods, // color, style, direction, mag, mods,
-    //   // } = elementMods;
-    //   // if (element != null && mods != null) {
-    //   //   // if (color != null) {
-    //   //   //   element.animations.addTo('Equation Color')
-    //   //   //     .color({
-    //   //   //       target: color, duration: moveTimeToUse, delay: cumTime,
-    //   //   //     })
-    //   //   //     .start();
-    //   //   // }
-    //   //   // if (style != null) {
-    //   //   //   element.animations.options.translation.style = style;
-    //   //   // }
-    //   //   // if (direction != null) {
-    //   //   //   element.animations.options.translation.direction = direction;
-    //   //   // }
-    //   //   // if (mag != null) {
-    //   //   //   element.animations.options.translation.magnitude = mag;
-    //   //   // }
-    //   //   // if (mods != null) {
-    //   //   element.setProperties(mods);
-    //   //   // }
-    //   // }
-    // });
 
     let translationToUse = {};
     if (fromWhere === 'fromPrev' && this.fromPrev != null) {

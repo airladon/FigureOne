@@ -831,7 +831,7 @@ export class EquationNew extends DiagramElementCollection {
       callback: null,
       // finishAnimatingAndCancelGoTo: false,
       ifAnimating: {
-        skipToTarget: false,
+        skipToTarget: true,
         cancelGoTo: true,
       },
     };
@@ -863,14 +863,12 @@ export class EquationNew extends DiagramElementCollection {
 
     if (this.eqn.isAnimating) {
       if (options.ifAnimating.skipToTarget) {
-        console.log('cancel complete')
         this.stop(true, true);
         const currentForm = this.getCurrentForm();
         if (currentForm != null) {
           this.showForm(currentForm);
         }
       } else {
-        console.log('cancel nocomplete')
         this.stop(true, false);
       }
       this.eqn.isAnimating = false;
