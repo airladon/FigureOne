@@ -5,7 +5,6 @@ import {
 import {
   DiagramElementCollection, DiagramElementPrimative,
 } from '../Element';
-// import { Equation } from '../DiagramElements/Equation/GLEquation';
 import EquationForm from '../DiagramElements/Equation/EquationForm';
 import * as html from '../../tools/htmlGenerator';
 import { generateUniqueId, joinObjects } from '../../tools/tools';

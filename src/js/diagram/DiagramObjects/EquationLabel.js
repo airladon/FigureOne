@@ -4,7 +4,7 @@
 import {
   Point, Transform, polarToRect,
 } from '../../tools/g2';
-import { Equation } from '../DiagramElements/Equation/GLEquation';
+import { EquationNew } from '../DiagramElements/Equation/Equation';
 import type {
   TypeVAlign, TypeHAlign,
 } from '../DiagramElements/Equation/EquationForm';
@@ -27,7 +27,7 @@ export type TypeLabelEquationOptions = {
 };
 
 export type TypeLabelOptions = {
-  label?: string | Equation | Array<string> | TypeLabelEquationOptions,
+  label?: string | EquationNew | Array<string> | TypeLabelEquationOptions,
   color?: Array<number>,
   scale?: number,
   position?: Point,
@@ -38,7 +38,7 @@ export type TypeLabelOptions = {
 };
 
 export default class EquationLabel {
-  eqn: Equation;
+  eqn: EquationNew;
   updateRotation: (number, Point, ?number, ?number) => void;
   setText: (string) => {};
   getText: void => string;
@@ -64,29 +64,57 @@ export default class EquationLabel {
     const { vAlign, hAlign } = optionsToUse;
     let eqn;
     if (typeof labelTextOrEquation === 'string') {
-      eqn = equations.makeEqn();
-      eqn.createElements({ base: labelTextOrEquation }, color);
-      eqn.collection.transform = new Transform().scale(1, 1).rotate(0).translate(position);
-      eqn.formAlignment.fixTo = new Point(0, 0);
-      eqn.formAlignment.hAlign = hAlign;
-      eqn.formAlignment.vAlign = vAlign;
-      eqn.formAlignment.scale = scale;
-      eqn.addForm('base', ['base']);
+      eqn = equations.equation({
+        elements: { base: labelTextOrEquation },
+        color,
+        defaultFormAlignment: {
+          fixTo: new Point(0, 0),
+          hAlign,
+          vAlign,
+        },
+        scale,
+        forms: {
+          base: ['base'],
+        },
+        position,
+      });
+      // eqn = equations.makeEqn();
+      // eqn.createElements({ base: labelTextOrEquation }, color);
+      // eqn.collection.transform = new Transform().scale(1, 1).rotate(0).translate(position);
+      // eqn.formAlignment.fixTo = new Point(0, 0);
+      // eqn.formAlignment.hAlign = hAlign;
+      // eqn.formAlignment.vAlign = vAlign;
+      // eqn.formAlignment.scale = scale;
+      // eqn.addForm('base', ['base']);
       eqn.setCurrentForm('base');
-    } else if (labelTextOrEquation instanceof Equation) {
+    } else if (labelTextOrEquation instanceof EquationNew) {
       eqn = labelTextOrEquation;
     } else if (Array.isArray(labelTextOrEquation)) {
-      eqn = equations.makeEqn();
       const elements = {};
       labelTextOrEquation.forEach((labelText, index) => {
         elements[`_${index}`] = labelText;
       });
-      eqn.createElements(elements, color);
-      eqn.collection.transform = new Transform().scale(1, 1).rotate(0).translate(position);
-      eqn.formAlignment.fixTo = new Point(0, 0);
-      eqn.formAlignment.hAlign = hAlign;
-      eqn.formAlignment.vAlign = vAlign;
-      eqn.formAlignment.scale = scale;
+      eqn = equations.equation({
+        elements,
+        color,
+        position,
+        defaultFormAlignment: {
+          fixTo: new Point(0, 0),
+          hAlign,
+          vAlign,
+        },
+        scale,
+        forms: {
+          base: ['base'],
+        },
+      });
+      // eqn = equations.makeEqn();
+      // eqn.createElements(elements, color);
+      // eqn.collection.transform = new Transform().scale(1, 1).rotate(0).translate(position);
+      // eqn.formAlignment.fixTo = new Point(0, 0);
+      // eqn.formAlignment.hAlign = hAlign;
+      // eqn.formAlignment.vAlign = vAlign;
+      // eqn.formAlignment.scale = scale;
       labelTextOrEquation.forEach((labelText, index) => {
         eqn.addForm(`${index}`, [`_${index}`]);
       });
@@ -106,6 +134,7 @@ export default class EquationLabel {
         eqn.setCurrentForm('base');
       }
     }
+    console.log(eqn)
     this.eqn = eqn;
   }
 
@@ -122,10 +151,10 @@ export default class EquationLabel {
         textObject.setText(text);
       }
       form.arrange(
-        this.eqn.formAlignment.scale,
-        this.eqn.formAlignment.hAlign,
-        this.eqn.formAlignment.vAlign,
-        this.eqn.formAlignment.fixTo,
+        this.eqn.eqn.scale,
+        this.eqn.eqn.defaultFormAlignment.hAlign,
+        this.eqn.eqn.defaultFormAlignment.vAlign,
+        this.eqn.eqn.defaultFormAlignment.fixTo,
       );
     }
   }
@@ -168,11 +197,11 @@ export default class EquationLabel {
       const b = labelHeight + offsetMag;
       const r = a * b / Math.sqrt((b * Math.cos(labelAngle - offsetAngle)) ** 2
         + (a * Math.sin(labelAngle - offsetAngle)) ** 2);
-      this.eqn.collection.setPosition(position.add(polarToRect(r, offsetAngle)));
+      this.eqn.setPosition(position.add(polarToRect(r, offsetAngle)));
     } else {
-      this.eqn.collection.setPosition(position);
+      this.eqn.setPosition(position);
     }
-    this.eqn.collection.transform.updateRotation(labelAngle);
+    this.eqn.transform.updateRotation(labelAngle);
   }
 
   // const label = {

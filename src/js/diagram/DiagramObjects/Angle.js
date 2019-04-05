@@ -14,11 +14,12 @@ import {
 } from '../Element';
 import EquationLabel from './EquationLabel';
 import type { TypeLabelEquationOptions } from './EquationLabel';
-import { Equation } from '../DiagramElements/Equation/GLEquation';
+import { EquationNew } from '../DiagramElements/Equation/Equation';
 
 export type TypeAngleLabelOrientation = 'horizontal' | 'tangent';
 export type TypeAngleLabelOptions = {
-  text: null | string | Array<string> | Equation | TypeLabelEquationOptions, // String goes to eqn,
+  // String goes to eqn,
+  text: null | string | Array<string> | EquationNew | TypeLabelEquationOptions,
                                   // Array<string> into eqn forms
   radius?: number,                // Label radius
   curvePosition?: number,         // Label position along curve in %
@@ -128,7 +129,7 @@ class AngleLabel extends EquationLabel {
 
   constructor(
     equation: Object,
-    labelText: string | Equation | Array<string>,
+    labelText: string | EquationNew | Array<string>,
     color: Array<number>,
     radius: number,
     curvePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
@@ -444,7 +445,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
   }
 
   addLabel(options: {
-    labelText?: string | Equation | Array<string> | TypeLabelEquationOptions,
+    labelText?: string | EquationNew | Array<string> | TypeLabelOptions,
     radius?: number,
     curvePosition?: number,
     showRealAngle?: boolean,
@@ -489,7 +490,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       optionsToUse.textScale,
     );
     if (this.label != null) {
-      this.add('label', this.label.eqn.collection);
+      this.add('label', this.label.eqn);
     }
     // this.updateLabel();
   }
@@ -777,8 +778,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
             ).toFixed(label.precision);
             angleText = `${angleText}º`;
           }
-          _label._base.drawingObject.setText(`${angleText}`);
-          label.eqn.reArrangeCurrentForm();
+          label.setText(angleText);
+          // _label._base.drawingObject.setText(`${angleText}`);
+          // label.eqn.reArrangeCurrentForm();
         }
         const labelPosition = polarToRect(label.radius, this.angle * label.curvePosition);
         if (label.orientation === 'horizontal') {

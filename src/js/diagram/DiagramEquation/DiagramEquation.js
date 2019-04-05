@@ -1,31 +1,31 @@
 // @flow
 import WebGLInstance from '../webgl/webgl';
 import {
-  Rect, Point, Transform,
+  Rect,
 } from '../../tools/g2';
 import {
   DiagramElementCollection,
 } from '../Element';
 import { joinObjects } from '../../tools/tools';
 import DrawContext2D from '../DrawContext2D';
-import {
-  DiagramFont,
-} from '../DrawingObjects/TextObject/TextObject';
-import Integral from '../DiagramElements/Equation/Symbols/Integral';
-import Bracket from '../DiagramElements/Equation/Symbols/Bracket';
-import Bar from '../DiagramElements/Equation/Symbols/Bar';
-import SquareBracket from '../DiagramElements/Equation/Symbols/SquareBracket';
-import Brace from '../DiagramElements/Equation/Symbols/Brace';
-import RoundedSquareBracket from '../DiagramElements/Equation/Symbols/RoundedSquareBracket';
-import EquationForm from '../DiagramElements/Equation/EquationForm';
+// import {
+//   DiagramFont,
+// } from '../DrawingObjects/TextObject/TextObject';
+// import Integral from '../DiagramElements/Equation/Symbols/Integral';
+// import Bracket from '../DiagramElements/Equation/Symbols/Bracket';
+// import Bar from '../DiagramElements/Equation/Symbols/Bar';
+// import SquareBracket from '../DiagramElements/Equation/Symbols/SquareBracket';
+// import Brace from '../DiagramElements/Equation/Symbols/Brace';
+// import RoundedSquareBracket from '../DiagramElements/Equation/Symbols/RoundedSquareBracket';
+// import EquationForm from '../DiagramElements/Equation/EquationForm';
 import {
   createEquationElements, Equation, getDiagramElement,
 } from '../DiagramElements/Equation/GLEquation';
 import { EquationNew } from '../DiagramElements/Equation/Equation';
-import type {
-  TypeHAlign, TypeVAlign,
-} from '../DiagramElements/Equation/EquationForm';
-import HTMLEquation from '../DiagramElements/Equation/HTMLEquation';
+// import type {
+//   TypeHAlign, TypeVAlign,
+// } from '../DiagramElements/Equation/EquationForm';
+// import HTMLEquation from '../DiagramElements/Equation/HTMLEquation';
 import type { TypeEquationOptions } from '../DiagramElements/Equation/Equation';
 import type { TypeNavigatorOptions } from '../DiagramObjects/EqnNavigator';
 import EqnNavigator from '../DiagramObjects/EqnNavigator';
@@ -810,6 +810,13 @@ export default class DiagramEquation {
   //   eqn.formTypeOrder = ['rad', 'deg', 'base'];
   //   return eqn;
   // }
+
+  equation(
+    options: TypeEquationOptions,
+  ) {
+    const equation = new EquationNew(this.shapes, options);
+    return equation;
+  }
 
   addEquation(
     parent: DiagramElementCollection,
