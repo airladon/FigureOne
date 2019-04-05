@@ -1055,7 +1055,7 @@ export class EquationNew extends DiagramElementCollection {
     const form = this.getForm(formToGet);
     let index = -1;
     if (form != null) {
-      index = this.eqn.formSeries.indexOf(form.name);
+      index = this.eqn.currentFormSeries.indexOf(form.name);
     }
     return index;
   }
