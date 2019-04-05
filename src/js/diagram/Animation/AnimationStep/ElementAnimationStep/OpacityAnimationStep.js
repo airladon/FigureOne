@@ -70,7 +70,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
       if (this.opacity.dissolve === 'out') {
         // this.opacity.start = 1;
         this.opacity.target = 0.001;
-        this.opacity.whenComplete = 0.001;
+        this.opacity.whenComplete = 1;
         element.setOpacity(this.opacity.start);
         // this.opacity.target = 0.001;
       }
