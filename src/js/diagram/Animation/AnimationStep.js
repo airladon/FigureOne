@@ -112,7 +112,6 @@ export default class AnimationStep {
     }
     const oldState = this.state;
     this.state = 'finished';
-    console.log(cancelled, force, this.completeOnCancel)
     if (cancelled) {
       if (force === 'complete') {
         if (oldState === 'waitingToStart') {
@@ -124,11 +123,8 @@ export default class AnimationStep {
           this.start();
         }
         this.setToEnd();
-      } else {
-        if (oldState === 'waitingToStart') {
-          console.log('asdf')
-          this.cancelledWithNoComplete();
-        }
+      } else if (oldState === 'waitingToStart') {
+        this.cancelledWithNoComplete();
       }
     }
 
@@ -144,6 +140,7 @@ export default class AnimationStep {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   cancelledWithNoComplete() {
   }
 

@@ -39,6 +39,7 @@ class DiagramFont {
     this.weight = weight;
     this.alignH = alignH;
     this.alignV = alignV;
+    this.opacity = 1;
     this.setColor(color);
     // if (Array.isArray(color)) {
     //   this.color = colorArrayToString(color);
@@ -277,7 +278,7 @@ class TextObject extends DrawingObject {
       diagramText.font.set(ctx, scalingFactor);
       if (diagramText.font.color != null) {
         const c = [
-          ...diagramText.font.color.slice(0, 3),
+          ...diagramText.font.color.slice(0, 3),  // $FlowFixMe
           diagramText.font.color[3] * diagramText.font.opacity,
         ];
         ctx.fillStyle = colorArrayToString(c);
