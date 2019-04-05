@@ -49,7 +49,7 @@ DiagramElementPrimative {
   },
   "cannotTouchHole": false,
   "color": Array [
-    0.9490196078431372,
+    0.95,
     0,
     0,
     1,
@@ -145,8 +145,14 @@ DiagramElementPrimative {
         "font": DiagramFont {
           "alignH": "left",
           "alignV": "alphabetic",
-          "color": "rgba(242,0,0,1)",
+          "color": Array [
+            0.95,
+            0,
+            0,
+            1,
+          ],
           "family": "Times New Roman",
+          "opacity": 1,
           "size": 0.2,
           "style": "italic",
           "weight": "200",
@@ -339,6 +345,7 @@ DiagramElementPrimative {
   "name": "a",
   "noRotationFromParent": false,
   "onClick": null,
+  "opacity": 1,
   "parent": EquationNew {
     "__2": DiagramElementPrimative {
       "angleToDraw": -1,
@@ -388,7 +395,7 @@ DiagramElementPrimative {
       },
       "cannotTouchHole": false,
       "color": Array [
-        0.9490196078431372,
+        0.95,
         0,
         0,
         1,
@@ -484,8 +491,14 @@ DiagramElementPrimative {
             "font": DiagramFont {
               "alignH": "left",
               "alignV": "alphabetic",
-              "color": "rgba(242,0,0,1)",
+              "color": Array [
+                0.95,
+                0,
+                0,
+                1,
+              ],
               "family": "Times New Roman",
+              "opacity": 1,
               "size": 0.2,
               "style": "normal",
               "weight": "200",
@@ -678,6 +691,7 @@ DiagramElementPrimative {
       "name": "_2",
       "noRotationFromParent": false,
       "onClick": null,
+      "opacity": 1,
       "parent": [Circular],
       "pointsToDraw": -1,
       "pulse": Object {
@@ -972,7 +986,7 @@ DiagramElementPrimative {
       },
       "cannotTouchHole": false,
       "color": Array [
-        0.9490196078431372,
+        0.95,
         0,
         0,
         1,
@@ -1068,8 +1082,14 @@ DiagramElementPrimative {
             "font": DiagramFont {
               "alignH": "left",
               "alignV": "alphabetic",
-              "color": "rgba(242,0,0,1)",
+              "color": Array [
+                0.95,
+                0,
+                0,
+                1,
+              ],
               "family": "Times New Roman",
+              "opacity": 1,
               "size": 0.2,
               "style": "italic",
               "weight": "200",
@@ -1262,6 +1282,7 @@ DiagramElementPrimative {
       "name": "b",
       "noRotationFromParent": false,
       "onClick": null,
+      "opacity": 1,
       "parent": [Circular],
       "pointsToDraw": -1,
       "pulse": Object {
@@ -1555,7 +1576,7 @@ DiagramElementPrimative {
       },
       "cannotTouchHole": false,
       "color": Array [
-        0.9490196078431372,
+        0.95,
         0,
         0,
         1,
@@ -1651,8 +1672,14 @@ DiagramElementPrimative {
             "font": DiagramFont {
               "alignH": "left",
               "alignV": "alphabetic",
-              "color": "rgba(242,0,0,1)",
+              "color": Array [
+                0.95,
+                0,
+                0,
+                1,
+              ],
               "family": "Times New Roman",
+              "opacity": 1,
               "size": 0.2,
               "style": "italic",
               "weight": "200",
@@ -1845,6 +1872,7 @@ DiagramElementPrimative {
       "name": "c",
       "noRotationFromParent": false,
       "onClick": null,
+      "opacity": 1,
       "parent": [Circular],
       "pointsToDraw": -1,
       "pulse": Object {
@@ -2432,6 +2460,7 @@ DiagramElementPrimative {
       "name": "v",
       "noRotationFromParent": false,
       "onClick": null,
+      "opacity": 1,
       "parent": [Circular],
       "pointsToDraw": -1,
       "pulse": Object {
@@ -2780,7 +2809,7 @@ DiagramElementPrimative {
         },
         "cannotTouchHole": false,
         "color": Array [
-          0.9490196078431372,
+          0.95,
           0,
           0,
           1,
@@ -2876,8 +2905,14 @@ DiagramElementPrimative {
               "font": DiagramFont {
                 "alignH": "left",
                 "alignV": "alphabetic",
-                "color": "rgba(242,0,0,1)",
+                "color": Array [
+                  0.95,
+                  0,
+                  0,
+                  1,
+                ],
                 "family": "Times New Roman",
+                "opacity": 1,
                 "size": 0.2,
                 "style": "normal",
                 "weight": "200",
@@ -3070,6 +3105,7 @@ DiagramElementPrimative {
         "name": "_2",
         "noRotationFromParent": false,
         "onClick": null,
+        "opacity": 1,
         "parent": [Circular],
         "pointsToDraw": -1,
         "pulse": Object {
@@ -3364,7 +3400,7 @@ DiagramElementPrimative {
         },
         "cannotTouchHole": false,
         "color": Array [
-          0.9490196078431372,
+          0.95,
           0,
           0,
           1,
@@ -3460,8 +3496,14 @@ DiagramElementPrimative {
               "font": DiagramFont {
                 "alignH": "left",
                 "alignV": "alphabetic",
-                "color": "rgba(242,0,0,1)",
+                "color": Array [
+                  0.95,
+                  0,
+                  0,
+                  1,
+                ],
                 "family": "Times New Roman",
+                "opacity": 1,
                 "size": 0.2,
                 "style": "italic",
                 "weight": "200",
@@ -3654,6 +3696,7 @@ DiagramElementPrimative {
         "name": "b",
         "noRotationFromParent": false,
         "onClick": null,
+        "opacity": 1,
         "parent": [Circular],
         "pointsToDraw": -1,
         "pulse": Object {
@@ -3947,7 +3990,7 @@ DiagramElementPrimative {
         },
         "cannotTouchHole": false,
         "color": Array [
-          0.9490196078431372,
+          0.95,
           0,
           0,
           1,
@@ -4043,8 +4086,14 @@ DiagramElementPrimative {
               "font": DiagramFont {
                 "alignH": "left",
                 "alignV": "alphabetic",
-                "color": "rgba(242,0,0,1)",
+                "color": Array [
+                  0.95,
+                  0,
+                  0,
+                  1,
+                ],
                 "family": "Times New Roman",
+                "opacity": 1,
                 "size": 0.2,
                 "style": "italic",
                 "weight": "200",
@@ -4237,6 +4286,7 @@ DiagramElementPrimative {
         "name": "c",
         "noRotationFromParent": false,
         "onClick": null,
+        "opacity": 1,
         "parent": [Circular],
         "pointsToDraw": -1,
         "pulse": Object {
@@ -4824,6 +4874,7 @@ DiagramElementPrimative {
         "name": "v",
         "noRotationFromParent": false,
         "onClick": null,
+        "opacity": 1,
         "parent": [Circular],
         "pointsToDraw": -1,
         "pulse": Object {
@@ -5060,7 +5111,11 @@ DiagramElementPrimative {
     },
     "eqn": Object {
       "currentForm": "0",
-      "currentFormSeries": "",
+      "currentFormSeries": Array [
+        "0",
+        "1",
+      ],
+      "currentFormSeriesName": "base",
       "currentSubForm": "base",
       "defaultFormAlignment": Object {
         "alignH": "right",
@@ -5080,8 +5135,14 @@ DiagramElementPrimative {
       "fontMath": DiagramFont {
         "alignH": "left",
         "alignV": "alphabetic",
-        "color": "rgba(242,0,0,1)",
+        "color": Array [
+          0.95,
+          0,
+          0,
+          1,
+        ],
         "family": "Times New Roman",
+        "opacity": 1,
         "size": 0.2,
         "style": "normal",
         "weight": "200",
@@ -5089,16 +5150,24 @@ DiagramElementPrimative {
       "fontText": DiagramFont {
         "alignH": "left",
         "alignV": "alphabetic",
-        "color": "rgba(242,0,0,1)",
+        "color": Array [
+          0.95,
+          0,
+          0,
+          1,
+        ],
         "family": "Times New Roman",
+        "opacity": 1,
         "size": 0.2,
         "style": "italic",
         "weight": "200",
       },
-      "formSeries": Array [
-        "0",
-        "1",
-      ],
+      "formSeries": Object {
+        "base": Array [
+          "0",
+          "1",
+        ],
+      },
       "forms": Object {
         "0": Object {
           "base": EquationForm {
@@ -5180,7 +5249,7 @@ DiagramElementPrimative {
                       },
                       "cannotTouchHole": false,
                       "color": Array [
-                        0.9490196078431372,
+                        0.95,
                         0,
                         0,
                         1,
@@ -5276,8 +5345,14 @@ DiagramElementPrimative {
                             "font": DiagramFont {
                               "alignH": "left",
                               "alignV": "alphabetic",
-                              "color": "rgba(242,0,0,1)",
+                              "color": Array [
+                                0.95,
+                                0,
+                                0,
+                                1,
+                              ],
                               "family": "Times New Roman",
+                              "opacity": 1,
                               "size": 0.2,
                               "style": "italic",
                               "weight": "200",
@@ -5470,6 +5545,7 @@ DiagramElementPrimative {
                       "name": "b",
                       "noRotationFromParent": false,
                       "onClick": null,
+                      "opacity": 1,
                       "parent": [Circular],
                       "pointsToDraw": -1,
                       "pulse": Object {
@@ -5775,7 +5851,7 @@ DiagramElementPrimative {
                       },
                       "cannotTouchHole": false,
                       "color": Array [
-                        0.9490196078431372,
+                        0.95,
                         0,
                         0,
                         1,
@@ -5871,8 +5947,14 @@ DiagramElementPrimative {
                             "font": DiagramFont {
                               "alignH": "left",
                               "alignV": "alphabetic",
-                              "color": "rgba(242,0,0,1)",
+                              "color": Array [
+                                0.95,
+                                0,
+                                0,
+                                1,
+                              ],
                               "family": "Times New Roman",
+                              "opacity": 1,
                               "size": 0.2,
                               "style": "italic",
                               "weight": "200",
@@ -6065,6 +6147,7 @@ DiagramElementPrimative {
                       "name": "c",
                       "noRotationFromParent": false,
                       "onClick": null,
+                      "opacity": 1,
                       "parent": [Circular],
                       "pointsToDraw": -1,
                       "pulse": Object {
@@ -6333,6 +6416,7 @@ DiagramElementPrimative {
             ],
             "descent": 0.0014400000000000003,
             "description": "",
+            "duration": undefined,
             "elementMods": Object {},
             "elements": Object {
               "_2": DiagramElementPrimative {
@@ -6383,7 +6467,7 @@ DiagramElementPrimative {
                 },
                 "cannotTouchHole": false,
                 "color": Array [
-                  0.9490196078431372,
+                  0.95,
                   0,
                   0,
                   1,
@@ -6479,8 +6563,14 @@ DiagramElementPrimative {
                       "font": DiagramFont {
                         "alignH": "left",
                         "alignV": "alphabetic",
-                        "color": "rgba(242,0,0,1)",
+                        "color": Array [
+                          0.95,
+                          0,
+                          0,
+                          1,
+                        ],
                         "family": "Times New Roman",
+                        "opacity": 1,
                         "size": 0.2,
                         "style": "normal",
                         "weight": "200",
@@ -6673,6 +6763,7 @@ DiagramElementPrimative {
                 "name": "_2",
                 "noRotationFromParent": false,
                 "onClick": null,
+                "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
                 "pulse": Object {
@@ -6967,7 +7058,7 @@ DiagramElementPrimative {
                 },
                 "cannotTouchHole": false,
                 "color": Array [
-                  0.9490196078431372,
+                  0.95,
                   0,
                   0,
                   1,
@@ -7063,8 +7154,14 @@ DiagramElementPrimative {
                       "font": DiagramFont {
                         "alignH": "left",
                         "alignV": "alphabetic",
-                        "color": "rgba(242,0,0,1)",
+                        "color": Array [
+                          0.95,
+                          0,
+                          0,
+                          1,
+                        ],
                         "family": "Times New Roman",
+                        "opacity": 1,
                         "size": 0.2,
                         "style": "italic",
                         "weight": "200",
@@ -7257,6 +7354,7 @@ DiagramElementPrimative {
                 "name": "b",
                 "noRotationFromParent": false,
                 "onClick": null,
+                "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
                 "pulse": Object {
@@ -7550,7 +7648,7 @@ DiagramElementPrimative {
                 },
                 "cannotTouchHole": false,
                 "color": Array [
-                  0.9490196078431372,
+                  0.95,
                   0,
                   0,
                   1,
@@ -7646,8 +7744,14 @@ DiagramElementPrimative {
                       "font": DiagramFont {
                         "alignH": "left",
                         "alignV": "alphabetic",
-                        "color": "rgba(242,0,0,1)",
+                        "color": Array [
+                          0.95,
+                          0,
+                          0,
+                          1,
+                        ],
                         "family": "Times New Roman",
+                        "opacity": 1,
                         "size": 0.2,
                         "style": "italic",
                         "weight": "200",
@@ -7840,6 +7944,7 @@ DiagramElementPrimative {
                 "name": "c",
                 "noRotationFromParent": false,
                 "onClick": null,
+                "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
                 "pulse": Object {
@@ -8427,6 +8532,7 @@ DiagramElementPrimative {
                 "name": "v",
                 "noRotationFromParent": false,
                 "onClick": null,
+                "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
                 "pulse": Object {
@@ -8670,7 +8776,7 @@ DiagramElementPrimative {
             "modifiers": Object {},
             "name": "0",
             "subForm": "base",
-            "time": null,
+            "translation": Object {},
             "width": 0.05400000000000002,
           },
           "name": "0",
@@ -8774,7 +8880,7 @@ DiagramElementPrimative {
                               },
                               "cannotTouchHole": false,
                               "color": Array [
-                                0.9490196078431372,
+                                0.95,
                                 0,
                                 0,
                                 1,
@@ -8870,8 +8976,14 @@ DiagramElementPrimative {
                                     "font": DiagramFont {
                                       "alignH": "left",
                                       "alignV": "alphabetic",
-                                      "color": "rgba(242,0,0,1)",
+                                      "color": Array [
+                                        0.95,
+                                        0,
+                                        0,
+                                        1,
+                                      ],
                                       "family": "Times New Roman",
+                                      "opacity": 1,
                                       "size": 0.2,
                                       "style": "normal",
                                       "weight": "200",
@@ -9064,6 +9176,7 @@ DiagramElementPrimative {
                               "name": "_2",
                               "noRotationFromParent": false,
                               "onClick": null,
+                              "opacity": 1,
                               "parent": [Circular],
                               "pointsToDraw": -1,
                               "pulse": Object {
@@ -9673,6 +9786,7 @@ DiagramElementPrimative {
                           "name": "v",
                           "noRotationFromParent": false,
                           "onClick": null,
+                          "opacity": 1,
                           "parent": [Circular],
                           "pointsToDraw": -1,
                           "pulse": Object {
@@ -9969,7 +10083,7 @@ DiagramElementPrimative {
                             },
                             "cannotTouchHole": false,
                             "color": Array [
-                              0.9490196078431372,
+                              0.95,
                               0,
                               0,
                               1,
@@ -10065,8 +10179,14 @@ DiagramElementPrimative {
                                   "font": DiagramFont {
                                     "alignH": "left",
                                     "alignV": "alphabetic",
-                                    "color": "rgba(242,0,0,1)",
+                                    "color": Array [
+                                      0.95,
+                                      0,
+                                      0,
+                                      1,
+                                    ],
                                     "family": "Times New Roman",
+                                    "opacity": 1,
                                     "size": 0.2,
                                     "style": "normal",
                                     "weight": "200",
@@ -10259,6 +10379,7 @@ DiagramElementPrimative {
                             "name": "_2",
                             "noRotationFromParent": false,
                             "onClick": null,
+                            "opacity": 1,
                             "parent": [Circular],
                             "pointsToDraw": -1,
                             "pulse": Object {
@@ -10904,6 +11025,7 @@ DiagramElementPrimative {
                       "name": "v",
                       "noRotationFromParent": false,
                       "onClick": null,
+                      "opacity": 1,
                       "parent": [Circular],
                       "pointsToDraw": -1,
                       "pulse": Object {
@@ -11199,7 +11321,7 @@ DiagramElementPrimative {
                       },
                       "cannotTouchHole": false,
                       "color": Array [
-                        0.9490196078431372,
+                        0.95,
                         0,
                         0,
                         1,
@@ -11295,8 +11417,14 @@ DiagramElementPrimative {
                             "font": DiagramFont {
                               "alignH": "left",
                               "alignV": "alphabetic",
-                              "color": "rgba(242,0,0,1)",
+                              "color": Array [
+                                0.95,
+                                0,
+                                0,
+                                1,
+                              ],
                               "family": "Times New Roman",
+                              "opacity": 1,
                               "size": 0.2,
                               "style": "italic",
                               "weight": "200",
@@ -11489,6 +11617,7 @@ DiagramElementPrimative {
                       "name": "c",
                       "noRotationFromParent": false,
                       "onClick": null,
+                      "opacity": 1,
                       "parent": [Circular],
                       "pointsToDraw": -1,
                       "pulse": Object {
@@ -11757,6 +11886,7 @@ DiagramElementPrimative {
             ],
             "descent": 0.02164,
             "description": "",
+            "duration": undefined,
             "elementMods": Object {},
             "elements": Object {
               "_2": DiagramElementPrimative {
@@ -11807,7 +11937,7 @@ DiagramElementPrimative {
                 },
                 "cannotTouchHole": false,
                 "color": Array [
-                  0.9490196078431372,
+                  0.95,
                   0,
                   0,
                   1,
@@ -11903,8 +12033,14 @@ DiagramElementPrimative {
                       "font": DiagramFont {
                         "alignH": "left",
                         "alignV": "alphabetic",
-                        "color": "rgba(242,0,0,1)",
+                        "color": Array [
+                          0.95,
+                          0,
+                          0,
+                          1,
+                        ],
                         "family": "Times New Roman",
+                        "opacity": 1,
                         "size": 0.2,
                         "style": "normal",
                         "weight": "200",
@@ -12097,6 +12233,7 @@ DiagramElementPrimative {
                 "name": "_2",
                 "noRotationFromParent": false,
                 "onClick": null,
+                "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
                 "pulse": Object {
@@ -12391,7 +12528,7 @@ DiagramElementPrimative {
                 },
                 "cannotTouchHole": false,
                 "color": Array [
-                  0.9490196078431372,
+                  0.95,
                   0,
                   0,
                   1,
@@ -12487,8 +12624,14 @@ DiagramElementPrimative {
                       "font": DiagramFont {
                         "alignH": "left",
                         "alignV": "alphabetic",
-                        "color": "rgba(242,0,0,1)",
+                        "color": Array [
+                          0.95,
+                          0,
+                          0,
+                          1,
+                        ],
                         "family": "Times New Roman",
+                        "opacity": 1,
                         "size": 0.2,
                         "style": "italic",
                         "weight": "200",
@@ -12681,6 +12824,7 @@ DiagramElementPrimative {
                 "name": "b",
                 "noRotationFromParent": false,
                 "onClick": null,
+                "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
                 "pulse": Object {
@@ -12974,7 +13118,7 @@ DiagramElementPrimative {
                 },
                 "cannotTouchHole": false,
                 "color": Array [
-                  0.9490196078431372,
+                  0.95,
                   0,
                   0,
                   1,
@@ -13070,8 +13214,14 @@ DiagramElementPrimative {
                       "font": DiagramFont {
                         "alignH": "left",
                         "alignV": "alphabetic",
-                        "color": "rgba(242,0,0,1)",
+                        "color": Array [
+                          0.95,
+                          0,
+                          0,
+                          1,
+                        ],
                         "family": "Times New Roman",
+                        "opacity": 1,
                         "size": 0.2,
                         "style": "italic",
                         "weight": "200",
@@ -13264,6 +13414,7 @@ DiagramElementPrimative {
                 "name": "c",
                 "noRotationFromParent": false,
                 "onClick": null,
+                "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
                 "pulse": Object {
@@ -13851,6 +14002,7 @@ DiagramElementPrimative {
                 "name": "v",
                 "noRotationFromParent": false,
                 "onClick": null,
+                "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
                 "pulse": Object {
@@ -14094,7 +14246,7 @@ DiagramElementPrimative {
             "modifiers": Object {},
             "name": "1",
             "subForm": "base",
-            "time": null,
+            "translation": Object {},
             "width": 0.04140000000000001,
           },
           "name": "1",
@@ -14150,7 +14302,7 @@ DiagramElementPrimative {
             },
             "cannotTouchHole": false,
             "color": Array [
-              0.9490196078431372,
+              0.95,
               0,
               0,
               1,
@@ -14246,8 +14398,14 @@ DiagramElementPrimative {
                   "font": DiagramFont {
                     "alignH": "left",
                     "alignV": "alphabetic",
-                    "color": "rgba(242,0,0,1)",
+                    "color": Array [
+                      0.95,
+                      0,
+                      0,
+                      1,
+                    ],
                     "family": "Times New Roman",
+                    "opacity": 1,
                     "size": 0.2,
                     "style": "normal",
                     "weight": "200",
@@ -14440,6 +14598,7 @@ DiagramElementPrimative {
             "name": "_2",
             "noRotationFromParent": false,
             "onClick": null,
+            "opacity": 1,
             "parent": [Circular],
             "pointsToDraw": -1,
             "pulse": Object {
@@ -14734,7 +14893,7 @@ DiagramElementPrimative {
             },
             "cannotTouchHole": false,
             "color": Array [
-              0.9490196078431372,
+              0.95,
               0,
               0,
               1,
@@ -14830,8 +14989,14 @@ DiagramElementPrimative {
                   "font": DiagramFont {
                     "alignH": "left",
                     "alignV": "alphabetic",
-                    "color": "rgba(242,0,0,1)",
+                    "color": Array [
+                      0.95,
+                      0,
+                      0,
+                      1,
+                    ],
                     "family": "Times New Roman",
+                    "opacity": 1,
                     "size": 0.2,
                     "style": "italic",
                     "weight": "200",
@@ -15024,6 +15189,7 @@ DiagramElementPrimative {
             "name": "b",
             "noRotationFromParent": false,
             "onClick": null,
+            "opacity": 1,
             "parent": [Circular],
             "pointsToDraw": -1,
             "pulse": Object {
@@ -15317,7 +15483,7 @@ DiagramElementPrimative {
             },
             "cannotTouchHole": false,
             "color": Array [
-              0.9490196078431372,
+              0.95,
               0,
               0,
               1,
@@ -15413,8 +15579,14 @@ DiagramElementPrimative {
                   "font": DiagramFont {
                     "alignH": "left",
                     "alignV": "alphabetic",
-                    "color": "rgba(242,0,0,1)",
+                    "color": Array [
+                      0.95,
+                      0,
+                      0,
+                      1,
+                    ],
                     "family": "Times New Roman",
+                    "opacity": 1,
                     "size": 0.2,
                     "style": "italic",
                     "weight": "200",
@@ -15607,6 +15779,7 @@ DiagramElementPrimative {
             "name": "c",
             "noRotationFromParent": false,
             "onClick": null,
+            "opacity": 1,
             "parent": [Circular],
             "pointsToDraw": -1,
             "pulse": Object {
@@ -16194,6 +16367,7 @@ DiagramElementPrimative {
             "name": "v",
             "noRotationFromParent": false,
             "onClick": null,
+            "opacity": 1,
             "parent": [Circular],
             "pointsToDraw": -1,
             "pulse": Object {
@@ -16494,7 +16668,7 @@ DiagramElementPrimative {
                     },
                     "cannotTouchHole": false,
                     "color": Array [
-                      0.9490196078431372,
+                      0.95,
                       0,
                       0,
                       1,
@@ -16590,8 +16764,14 @@ DiagramElementPrimative {
                           "font": DiagramFont {
                             "alignH": "left",
                             "alignV": "alphabetic",
-                            "color": "rgba(242,0,0,1)",
+                            "color": Array [
+                              0.95,
+                              0,
+                              0,
+                              1,
+                            ],
                             "family": "Times New Roman",
+                            "opacity": 1,
                             "size": 0.2,
                             "style": "italic",
                             "weight": "200",
@@ -16752,6 +16932,7 @@ DiagramElementPrimative {
                     "name": "",
                     "noRotationFromParent": false,
                     "onClick": null,
+                    "opacity": 1,
                     "parent": null,
                     "pointsToDraw": -1,
                     "pulse": Object {
@@ -17070,7 +17251,7 @@ DiagramElementPrimative {
               },
               "cannotTouchHole": false,
               "color": Array [
-                0.9490196078431372,
+                0.95,
                 0,
                 0,
                 1,
@@ -17166,8 +17347,14 @@ DiagramElementPrimative {
                     "font": DiagramFont {
                       "alignH": "left",
                       "alignV": "alphabetic",
-                      "color": "rgba(242,0,0,1)",
+                      "color": Array [
+                        0.95,
+                        0,
+                        0,
+                        1,
+                      ],
                       "family": "Times New Roman",
+                      "opacity": 1,
                       "size": 0.2,
                       "style": "italic",
                       "weight": "200",
@@ -17328,6 +17515,7 @@ DiagramElementPrimative {
               "name": "",
               "noRotationFromParent": false,
               "onClick": null,
+              "opacity": 1,
               "parent": null,
               "pointsToDraw": -1,
               "pulse": Object {
@@ -17582,7 +17770,7 @@ DiagramElementPrimative {
           },
           "modifiers": Object {},
           "subForm": "",
-          "time": null,
+          "translation": Object {},
           "width": 0.018000000000000006,
         },
         "phrases": Object {},
@@ -18066,6 +18254,7 @@ DiagramElementPrimative {
     "name": "",
     "noRotationFromParent": false,
     "onClick": null,
+    "opacity": 1,
     "parent": null,
     "pulse": Object {
       "A": 1,
