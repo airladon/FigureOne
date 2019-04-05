@@ -810,7 +810,14 @@ export class EquationNew extends DiagramElementCollection {
     fromWhere?: ?'fromPrev' | 'fromNext',
     animate?: 'move' | 'disolve',
     callback?: ?() => void,
-    finishAnimatingAndCancelGoTo?: boolean,
+    // finishAnimatingAndCancelGoTo?: boolean,
+    ifAnimating?: {
+      cancelGoTo?: boolean;
+      skipToTarget?: boolean;
+    },
+    // goToIfAnimating?: 'cancel' | 'continue',
+    // ifAnimating: 'goToNow' | 'goToFromAnimationTarget' | 'canc'
+    // toAnimationEndOnCancel?: boolean,
     disolveOutTime?: number,
     disolveInTime?: number,
     blankTime?: number,
@@ -822,7 +829,11 @@ export class EquationNew extends DiagramElementCollection {
       fromWhere: null,
       animate: 'disolve',
       callback: null,
-      finishAnimatingAndCancelGoTo: false,
+      // finishAnimatingAndCancelGoTo: false,
+      ifAnimating: {
+        skipToTarget: false,
+        cancelGoTo: true,
+      },
     };
     const options = joinObjects(defaultOptions, optionsIn);
 
@@ -851,13 +862,18 @@ export class EquationNew extends DiagramElementCollection {
     }
 
     if (this.eqn.isAnimating) {
-      this.stop(true, true);
+      if (options.ifAnimating.skipToTarget) {
+        this.stop(true, true);
+      } else {
+        this.stop();
+      }
+
       this.eqn.isAnimating = false;
       const currentForm = this.getCurrentForm();
       if (currentForm != null) {
         this.showForm(currentForm);
       }
-      if (options.finishAnimatingAndCancelGoTo) {
+      if (options.ifAnimating.cancelGoTo) {
         return;
       }
     }
