@@ -3,7 +3,7 @@ import {
   Point, getMoveTime, Transform,
 } from '../../../tools/g2';
 // import { roundNum } from '../../../tools/math';
-import { duplicateFromTo } from '../../../tools/tools';
+import { duplicateFromTo, joinObjects } from '../../../tools/tools';
 import {
   DiagramElementPrimative, DiagramElementCollection,
 } from '../../Element';
@@ -572,7 +572,7 @@ export default class EquationForm extends Elements {
 
     let translationToUse = {};
     if (fromWhere === 'fromPrev' && this.fromPrev != null) {
-      translationToUse = joinObjects({}, this.translation, this.fromWhere);
+      translationToUse = joinObjects({}, this.translation, this.fromPrev);
     } else if (fromWhere === 'fromNext' && this.fromNext != null) {
       translationToUse = joinObjects({}, this.translation, this.fromNext);
     } else {
