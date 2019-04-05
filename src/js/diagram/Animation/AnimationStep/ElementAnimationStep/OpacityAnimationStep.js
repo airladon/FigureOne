@@ -58,7 +58,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
       super.start(startTime);
       if (this.opacity.start == null) {
         // eslint-disable-next-line prefer-destructuring
-        this.opacity.start = element.color[3];
+        this.opacity.start = element.opacity;
       }
       if (this.opacity.delta == null && this.opacity.target == null) {
         this.opacity.target = this.opacity.start;
@@ -68,12 +68,18 @@ export class OpacityAnimationStep extends ElementAnimationStep {
       this.opacity.whenComplete = this.opacity.target;
 
       if (this.opacity.dissolve === 'out') {
+        this.opacity.start = 1;
         this.opacity.target = 0.001;
+        this.opacity.whenComplete = 0.001;
+        element.setOpacity(this.opacity.start);
+        // this.opacity.target = 0.001;
       }
       if (this.opacity.dissolve === 'in') {
         this.opacity.start = 0.001;
-        element.setOpacity(this.opacity.start);
+        this.opacity.target = 1;
+        this.opacity.whenComplete = 1;
         element.showAll();
+        element.setOpacity(this.opacity.start);
       }
       this.opacity.delta = this.opacity.target - this.opacity.start;
     } else {
@@ -96,6 +102,16 @@ export class OpacityAnimationStep extends ElementAnimationStep {
       this.element.setOpacity(next);
     }
   }
+
+  // cancelledWithNoComplete() {
+  //   const { element } = this;
+  //   console.log('cancel with no complete')
+  //   if (element != null) {
+  //     if (this.color.fullOpacity) {
+  //       element.setColor([...element.color.slice(0, 3), 1]);
+  //     }
+  //   }
+  // }
 
   setToEnd() {
     const { element } = this;
