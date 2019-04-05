@@ -66,7 +66,7 @@ export default class EquationForm extends Elements {
   name: string;
   elementMods: {
     [elementName: string]: {
-      element: element: DiagramElementPrimative | DiagramElementCollection;
+      element: DiagramElementPrimative | DiagramElementCollection;
       mods: Object;
     }
   };
@@ -479,7 +479,7 @@ export default class EquationForm extends Elements {
     moveTime: number | null,
     dissolveInTime: number,
     callback: ?(?mixed) => void = null,
-    fromWhere: ?'fromPrev' | 'fromNext';
+    fromWhere: ?'fromPrev' | 'fromNext' = null,
   ) {
     const allElements = this.collectionMethods.getAllElements();
     this.collectionMethods.stop();
@@ -579,7 +579,7 @@ export default class EquationForm extends Elements {
       translationToUse = joinObjects({}, this.translation);
     }
 
-    Object.values(translationToUse).forEach([mods] => {
+    Object.values(translationToUse).forEach((mods) => {
       const { element, style, direction, mag } = mods;
       if (element) {
         if (style != null) {

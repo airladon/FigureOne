@@ -256,13 +256,13 @@ export default class DiagramEquation {
   //   return new HTMLEquation(id, classes);
   // }
 
-  // makeEqn() {                               // Deprecate
-  //   return new Equation(
-  //     this.draw2D,
-  //     this.limits,
-  //     // diagram.diagramToGLSpaceTransform,
-  //   );
-  // }
+  makeEqn() {                               // Deprecate
+    return new Equation(
+      this.draw2D,
+      this.limits,
+      // diagram.diagramToGLSpaceTransform,
+    );
+  }
 
   // makeDescription(id: string) {             // Deprecate
   //   return this.shapes.htmlElement(
