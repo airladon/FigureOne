@@ -43,6 +43,7 @@ export default class DiagramObjects {
     this.equation = equation;
   }
 
+  // deprecate
   equationNavigator(
     equation: Equation,
     offset: Point,
