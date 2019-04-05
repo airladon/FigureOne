@@ -12,8 +12,8 @@ import {
 } from '../Element';
 import EquationLabel from './EquationLabel';
 import type { TypeLabelEquationOptions } from './EquationLabel';
-import { Equation } from '../DiagramElements/Equation/GLEquation';
 import { joinObjects } from '../../tools/tools';
+import { EquationNew } from '../DiagramElements/Equation/Equation';
 
 // top - text is on top of line (except when line is vertical)
 // bottom - text is on bottom of line (except when line is vertical)
@@ -43,7 +43,7 @@ export type TypeLineVertexOrigin = 'start' | 'end' | 'center' | number | Point;
 export type TypeLineVertexSpaceStart = 'start' | 'end' | 'center' | number | Point;
 
 export type TypeLineLabelOptions = {
-  text: null | string | Array<string> | Equation | TypeLabelEquationOptions,
+  text: null | string | Array<string> | EquationNew | TypeLabelEquationOptions,
   precision?: number,
   offset?: number,
   location?: TypeLineLabelLocation,
@@ -707,7 +707,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       precision,
     );
     if (this.label != null) {
-      this.add('label', this.label.eqn.collection);
+      this.add('label', this.label.eqn);
     }
     this.updateLabel();
   }
@@ -720,9 +720,11 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     const lineAngle = normAngle(this.transform.r() || 0);
     let labelAngle = 0;
     if (this.showRealLength && this._label) {
-      this._label._base.drawingObject.setText(roundNum(this.currentLength, 2)
+      // this._label._base.drawingObject.setText(roundNum(this.currentLength, 2)
+      //   .toFixed(label.precision));
+      label.setText(roundNum(this.currentLength, 2)
         .toFixed(label.precision));
-      label.eqn.reArrangeCurrentForm();
+      // label.eqn.reArrangeCurrentForm();
     }
     const labelPosition = new Point(
       this.vertexSpaceStart.x * this.currentLength + label.linePosition * this.currentLength,

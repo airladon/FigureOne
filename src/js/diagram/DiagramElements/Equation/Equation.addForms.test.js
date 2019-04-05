@@ -282,7 +282,6 @@ describe('Diagram Equations From Object', () => {
           },
         },
       },
-      
     };
     ({ forms } = eqn.eqn);
   });

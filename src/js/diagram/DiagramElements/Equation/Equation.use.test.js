@@ -5,7 +5,7 @@ import {
   round,
 } from '../../../tools/math';
 import * as tools from '../../../tools/tools';
-import * as colorTools from '../../../tools/color';
+// import * as colorTools from '../../../tools/color';
 import makeDiagram from '../../../__mocks__/makeDiagram';
 import { EquationNew } from './Equation';
 // import EquationForm from './EquationForm';
