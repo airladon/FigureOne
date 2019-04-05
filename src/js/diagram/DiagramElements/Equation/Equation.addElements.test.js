@@ -171,13 +171,13 @@ describe('Diagram Equations From Object', () => {
     expect(eqn._d.drawingObject.text[0].font.family).toBe('Helvetica');
 
     expect(eqn._a.drawingObject.text[0].font.color)
-      .toBe(colorTools.colorArrayToRGBA(defaultColor));
+      .toEqual(defaultColor);
     expect(eqn._b.drawingObject.text[0].font.color)
-      .toBe(colorTools.colorArrayToRGBA(defaultColor));
+      .toEqual(defaultColor);
     expect(eqn._c.drawingObject.text[0].font.color)
-      .toBe(colorTools.colorArrayToRGBA(color1));
+      .toEqual(color1);
     expect(eqn._d.drawingObject.text[0].font.color)
-      .toBe(colorTools.colorArrayToRGBA(color2));
+      .toEqual(color2);
   });
   test('Symbol', () => {
     eqn.addElements(addElements.symbols);
@@ -196,7 +196,7 @@ describe('Diagram Equations From Object', () => {
     expect(eqn._b.isTouchable).toBe(true);
     expect(eqn._v.isTouchable).toBe(true);
 
-    expect(round(eqn._a.color)).toEqual(round([127 / 255, 127 / 255, 127 / 255, 1]));
+    expect(round(eqn._a.color)).toEqual(round([0.5, 0.5, 0.5, 1]));
     expect(eqn._b.color).toEqual(color1);
     expect(eqn._v.color).toEqual(color1);
   });
