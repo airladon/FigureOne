@@ -121,7 +121,7 @@ export default class EquationForm extends Elements {
     this.description = null;
     this.modifiers = {};
     this.elementMods = {};
-    this.duration = null;
+    // this.duration = null;
     this.translation = {};
     this.subForm = '';
   }

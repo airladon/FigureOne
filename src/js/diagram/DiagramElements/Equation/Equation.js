@@ -255,8 +255,11 @@ export class EquationNew extends DiagramElementCollection {
     if (optionsToUse.formSeries != null) {
       if (Array.isArray(optionsToUse.formSeries)) {
         this.eqn.formSeries = { base: optionsToUse.formSeries };
+        this.eqn.currentFormSeries = this.eqn.formSeries.base;
+        this.eqn.currentFormSeriesName = 'base';
       } else {
         this.eqn.formSeries = optionsToUse.formSeries;
+        this.setFormSeries(Object.keys(this.eqn.formSeries)[0]);
       }
     }
   }
@@ -601,7 +604,7 @@ export class EquationNew extends DiagramElementCollection {
     const defaultOptions = {
       subForm: 'base',
       elementMods: {},
-      duration: null,                // use velocities instead of time
+      // duration: null,                // use velocities instead of time
       description: '',
       modifiers: {},
       scale: this.eqn.scale,
@@ -810,14 +813,14 @@ export class EquationNew extends DiagramElementCollection {
   }
 
   // This animates to a form
-  goToForm1(optionsIn: {
+  goToForm(optionsIn: {
     name?: string,
     index?: number,
-    duration?: number,
-    useFormDurationIfExists?: boolean,
+    duration?: ?number,
+    prioritizeFormDuration?: boolean,
     delay?: number,
     fromWhere?: ?'fromPrev' | 'fromNext',
-    animate?: 'move' | 'disolve',
+    animate?: 'move' | 'dissolve',
     callback?: ?() => void,
     // finishAnimatingAndCancelGoTo?: boolean,
     ifAnimating?: {
@@ -827,16 +830,16 @@ export class EquationNew extends DiagramElementCollection {
     // goToIfAnimating?: 'cancel' | 'continue',
     // ifAnimating: 'goToNow' | 'goToFromAnimationTarget' | 'canc'
     // toAnimationEndOnCancel?: boolean,
-    disolveOutTime?: number,
-    disolveInTime?: number,
+    dissolveOutTime?: number,
+    dissolveInTime?: number,
     blankTime?: number,
   } = {}) {
     const defaultOptions = {
-      duration: 0,
-      useFormDurationIfExists: false,
+      duration: null,
+      prioritizeFormDuration: true,
       delay: 0,
       fromWhere: null,
-      animate: 'disolve',
+      animate: 'dissolve',
       callback: null,
       // finishAnimatingAndCancelGoTo: false,
       ifAnimating: {
@@ -845,30 +848,6 @@ export class EquationNew extends DiagramElementCollection {
       },
     };
     const options = joinObjects(defaultOptions, optionsIn);
-
-    if (options.duration > 0 && options.animate === 'disolve') {
-      if (options.disolveOutTime == null) {
-        options.disolveOutTime = options.duration * 0.45;
-      }
-      if (options.disolveInTime == null) {
-        options.disolveInTime = options.duration * 0.45;
-      }
-      if (options.blankTime == null) {
-        options.blankTime = options.duration * 0.1;
-      }
-    }
-
-    if (options.duration > 0 && options.animate === 'move') {
-      if (options.disolveOutTime == null) {
-        options.disolveOutTime = 0.45;
-      }
-      if (options.disolveInTime == null) {
-        options.disolveInTime = 0.45;
-      }
-      if (options.blankTime == null) {
-        options.blankTime = 0.1;
-      }
-    }
 
     if (this.eqn.isAnimating) {
       if (options.ifAnimating.skipToTarget) {
@@ -928,11 +907,43 @@ export class EquationNew extends DiagramElementCollection {
       // eslint-disable-next-line prefer-destructuring
       subFormToUse = possibleSubForms[0];
     }
-
     if (subFormToUse != null) {
       // $FlowFixMe
       subForm = form[subFormToUse];
-      if (options.duration === 0) {
+      let { duration } = options;
+      if (options.prioritizeFormDuration) {
+        if (options.fromWhere === 'fromPrev' && subForm.fromPrev != null && subForm.fromPrev.duration !== undefined) {
+          ({ duration } = subForm.fromPrev);
+        } else if (options.fromWhere === 'fromNext' && subForm.fromNext != null && subForm.fromNext.duration !== undefined) {
+          ({ duration } = subForm.fromNext);
+        } else if (subForm.duration !== undefined) {
+          ({ duration } = subForm);
+        }
+      }
+
+      if (duration != null && duration > 0 && options.animate === 'dissolve') {
+        if (options.dissolveOutTime == null) {
+          options.dissolveOutTime = duration * 0.4;
+        }
+        if (options.dissolveInTime == null) {
+          options.dissolveInTime = duration * 0.4;
+        }
+        if (options.blankTime == null) {
+          options.blankTime = duration * 0.2;
+        }
+      } else {
+        if (options.dissolveOutTime == null) {
+          options.dissolveOutTime = 0.4;
+        }
+        if (options.dissolveInTime == null) {
+          options.dissolveInTime = 0.4;
+        }
+        if (options.blankTime == null) {
+          options.blankTime = 0.2;
+        }
+      }
+
+      if (duration === 0) {
         this.showForm(subForm);
         if (options.callback != null) {
           options.callback();
@@ -946,22 +957,13 @@ export class EquationNew extends DiagramElementCollection {
           }
         };
         if (options.animate === 'move') {
-          let timeToUse = options.duration;
-          if (options.useFormDurationIfExists) {
-            if (options.fromWhere === 'fromPrev' && subForm.fromPrev != null && subForm.fromPrev.duration !== undefined) {
-              timeToUse = subForm.fromPrev.duration;
-            } else if (options.fromWhere === 'fromNext' && subForm.fromNext != null && subForm.fromNext.duration !== undefined) {
-              timeToUse = subForm.fromNext.duration;
-            } else if (subForm.duration !== undefined) {
-              timeToUse = subForm.duration;
-            }
-          }
+          // console.log('move', duration, options, subForm.duration)
           // console.log('******************* animate')
           subForm.animatePositionsTo(
             options.delay,
-            options.disolveOutTime,
-            timeToUse,
-            options.disolveInTime,
+            options.dissolveOutTime,
+            duration,
+            options.dissolveInTime,
             end,
             options.fromWhere,
           );
@@ -969,9 +971,9 @@ export class EquationNew extends DiagramElementCollection {
           // console.log('******************* hideshow')
           subForm.allHideShow(
             options.delay,
-            options.disolveOutTime,
+            options.dissolveOutTime,
             options.blankTime,
-            options.disolveInTime,
+            options.dissolveInTime,
             end,
           );
         }
@@ -981,7 +983,7 @@ export class EquationNew extends DiagramElementCollection {
     }
   }
 
-  goToForm(
+  goToFormLegacy(
     name: ?string | number = null,
     time: number | null = null,
     delay: number = 0,
@@ -1095,12 +1097,15 @@ export class EquationNew extends DiagramElementCollection {
       if (index < 0) {
         index = this.eqn.currentFormSeries.length - 1;
       }
-      this.goToForm(index, time, delay, 'fromNext');
+      this.goToForm({
+        index, duration: time, delay, fromWhere: 'fromNext',
+      });
     }
   }
 
   nextForm(time: number | null = null, delay: number = 0) {
-    let animate = true;
+    let animate = 'move';
+
     const currentForm = this.getCurrentForm();
     if (currentForm == null) {
       return;
@@ -1110,9 +1115,16 @@ export class EquationNew extends DiagramElementCollection {
       index += 1;
       if (index > this.eqn.currentFormSeries.length - 1) {
         index = 0;
-        animate = false;
+        animate = 'dissolve';
       }
-      this.goToForm(index, time, delay, 'fromPrev', animate);
+
+      this.goToForm({
+        index,
+        duration: time,
+        delay,
+        fromWhere: 'fromPrev',
+        animate,
+      });
     }
   }
 
