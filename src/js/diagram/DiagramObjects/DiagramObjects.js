@@ -1,15 +1,15 @@
 // @flow
 import WebGLInstance from '../webgl/webgl';
 import {
-  Rect, Point, // Line,
+  Rect, // Point, Line,
 } from '../../tools/g2';
 import { joinObjects } from '../../tools/tools';
 // import {
 //   DiagramElementCollection,
 // } from '../Element';
 import DrawContext2D from '../DrawContext2D';
-import EquationNavigator from './EquationNavigator';
-import { Equation } from '../DiagramElements/Equation/GLEquation';
+// import EquationNavigator from './EquationNavigator';
+// import { Equation } from '../DiagramElements/Equation/GLEquation';
 import DiagramObjectLine from './Line';
 import DiagramObjectAngle from './Angle';
 import DiagramObjectPolyLine from './PolyLine';
@@ -43,21 +43,21 @@ export default class DiagramObjects {
     this.equation = equation;
   }
 
-  // deprecate
-  equationNavigator(
-    equation: Equation,
-    offset: Point,
-    navType: 'threeLine' | 'descriptionOnly' | 'equationOnly' | 'oneLine' | 'twoLine' = 'threeLine',
-    options: string | Array<string> = '',
-    xAlign: 'left' | 'right' | 'center' = 'left',
-    vAlign: 'top' | 'bottom' | 'middle' | 'baseline' = 'middle',
-    id: string = `id_lesson__equation_navigator_${Math.floor(Math.random() * 10000)}`,
-  ) {
-    return new EquationNavigator(
-      this.shapes, this.animateNextFrame, equation,
-      offset, navType, options, xAlign, vAlign, id,
-    );
-  }
+  // // deprecate
+  // equationNavigator(
+  //   equation: Equation,
+  //   offset: Point,
+  //   navType: 'threeLine' | 'descriptionOnly' | 'equationOnly' | 'oneLine' | 'twoLine' = 'threeLine',
+  //   options: string | Array<string> = '',
+  //   xAlign: 'left' | 'right' | 'center' = 'left',
+  //   vAlign: 'top' | 'bottom' | 'middle' | 'baseline' = 'middle',
+  //   id: string = `id_lesson__equation_navigator_${Math.floor(Math.random() * 10000)}`,
+  // ) {
+  //   return new EquationNavigator(
+  //     this.shapes, this.animateNextFrame, equation,
+  //     offset, navType, options, xAlign, vAlign, id,
+  //   );
+  // }
 
   line(...options: Array<TypeLineOptions>) {
     // const optionsToUse = Object.assign({}, ...options);
