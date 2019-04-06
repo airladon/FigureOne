@@ -32,13 +32,13 @@ import WebGLInstance from './webgl/webgl';
 //   AnimationPhase, ColorAnimationPhase, CustomAnimationPhase,
 // } from './AnimationPhase';
 
-function checkCallback(callback: ?(boolean) => void): (boolean) => void {
-  let callbackToUse = () => {};
-  if (typeof callback === 'function') {
-    callbackToUse = callback;
-  }
-  return callbackToUse;
-}
+// function checkCallback(callback: ?(boolean) => void): (boolean) => void {
+//   let callbackToUse = () => {};
+//   if (typeof callback === 'function') {
+//     callbackToUse = callback;
+//   }
+//   return callbackToUse;
+// }
 
 export type TypeScenario = {
   position?: Point,
@@ -366,7 +366,7 @@ class DiagramElement {
   setProperties(properties: Object) {
     joinObjects(this, properties);
   }
-  
+
   // Space definition:
   //   * Pixel space: css pixels
   //   * GL Space: x,y = -1 to 1
@@ -1495,7 +1495,7 @@ class DiagramElementPrimative extends DiagramElement {
       }
       this.animations.nextFrame(now);
       this.nextMovingFreelyFrame(now);
-      
+
       if (!this.isShown) {
         return;
       }
@@ -1586,7 +1586,7 @@ class DiagramElementPrimative extends DiagramElement {
     }
     return oldWebgl;
   }
-  
+
   getGLBoundaries() {
     return this.drawingObject.getGLBoundaries(this.lastDrawTransform.matrix());
   }
@@ -1680,11 +1680,7 @@ class DiagramElementCollection extends DiagramElement {
     if (this.isShown === false) {
       return false;
     }
-    if (
-        // this.state.isAnimating
-        // || this.state.isAnimatingCustom
-        // || this.state.isAnimatingColor
-        this.state.isMovingFreely
+    if (this.state.isMovingFreely
         || this.state.isBeingMoved
         || this.state.isPulsing
         || this.animations.state === 'animating') {
@@ -2027,7 +2023,7 @@ class DiagramElementCollection extends DiagramElement {
     return touched;
   }
 
-  stop(cancelled: boolean = true, forceSetToEndOfPlan: ?boolean = false) {
+  stop(cancelled: boolean = true, forceSetToEndOfPlan: ?boolean | 'complete' | 'noComplete' = false) {
     super.stop(cancelled, forceSetToEndOfPlan);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
