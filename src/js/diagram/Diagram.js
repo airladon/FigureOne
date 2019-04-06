@@ -987,7 +987,7 @@ class Diagram {
   }
 
   isAnimating(): boolean {
-    return this.elements.state.isAnimating;
+    return this.elements.isMoving();
   }
 
   clientToPixel(clientLocation: Point): Point {
