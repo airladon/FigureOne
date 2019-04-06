@@ -41,7 +41,7 @@ describe('Animationa and Movement', () => {
         element.move.minTransform = element.transform.constant(-100);
       });
       describe('Rotation', () => {
-        test.only('Rotate 1 radian, for 1 second, with linear movement', () => {
+        test('Rotate 1 radian, for 1 second, with linear movement', () => {
           expect(element.state.isAnimating).toBe(false);
           expect(element.isMoving()).toBe(false);
 
