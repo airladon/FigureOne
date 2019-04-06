@@ -41,7 +41,7 @@ describe('Animationa and Movement', () => {
         element.move.minTransform = element.transform.constant(-100);
       });
       describe('Rotation', () => {
-        test('Rotate 1 radian, for 1 second, with linear movement', () => {
+        test.only('Rotate 1 radian, for 1 second, with linear movement', () => {
           expect(element.state.isAnimating).toBe(false);
           expect(element.isMoving()).toBe(false);
 
@@ -61,7 +61,7 @@ describe('Animationa and Movement', () => {
 
           // expect(element.state.isAnimating).toBe(true);
           expect(element.animations.state).toBe('idle');
-          expect(element.isMoving()).toBe(false);
+          expect(element.isMoving()).toBe(true);
           // expect(phase.startTime).toBe(-1);
 
           element.draw(new Transform(), 10);
@@ -91,22 +91,20 @@ describe('Animationa and Movement', () => {
           expect(element.isMoving()).toBe(false);
         });
         test('translate (0, 0) to (1, 0), 1 second, linear movement', () => {
-          expect(element.state.isAnimating).toBe(false);
           expect(element.isMoving()).toBe(false);
 
           // Setup the animation
-          element.animateTranslationTo(new Point(1, 0), 1, null, linear);
+          element.animations.new()
+            .position({ target: new Point(1, 0), duration: 1, progression: 'linear' })
+            .start();
           const t = element.transform;
           expect(t).toEqual(new Transform().scale(1, 1).rotate(0).translate(0, 0));
-          const phase = element.state.animation.currentPhase;
-          expect(element.state.isAnimating).toBe(true);
+
+          expect(element.animations.state).toBe('idle');
           expect(element.isMoving()).toBe(true);
-          expect(phase.startTime).toBe(-1);
 
           // Initial draw setting start time
           element.draw(new Transform(), 0);
-          expect(phase.startTime).toBe(0);
-          expect(phase.time).toBe(1);
           expect(t.r()).toBe(0);
 
           // Draw half way through
@@ -116,13 +114,13 @@ describe('Animationa and Movement', () => {
           // Draw at last time
           element.draw(new Transform(), 1);
           expect(element.transform.t()).toEqual(new Point(1.0, 0));
-          expect(element.state.isAnimating).toBe(true);
+          expect(element.animations.state).toBe('animating');
           expect(element.isMoving()).toBe(true);
 
           // Draw after time elapsed
           element.draw(new Transform(), 1.01);
           expect(element.transform.t()).toEqual(new Point(1.0, 0));
-          expect(element.state.isAnimating).toBe(false);
+          expect(element.animations.state).toBe('idle');
           expect(element.isMoving()).toBe(false);
         });
         test('Callback', () => {
