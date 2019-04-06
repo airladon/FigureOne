@@ -598,7 +598,7 @@ describe('Animationa and Movement', () => {
     afterEach(() => {
       Date.now = RealDate;
     });
-    test('Combination of animation and movement with a collection', () => {
+    test.only('Combination of animation and movement with a collection', () => {
       const callbackAnim = jest.fn();
       const callbackMoveFree = jest.fn();
       const draw = jest.fn();
@@ -610,18 +610,29 @@ describe('Animationa and Movement', () => {
       expect(collection.state.isMovingFreely).toBe(false);
 
       // Move translation to (0.5, 0)
-      collection.animateTranslationTo(new Point(1, 0), 1, callbackAnim, linear);
-      expect(collection.state.isAnimating).toBe(true);
+      collection.animations.new()
+        .position({
+          target: new Point(2, 0),
+          duration: 1,
+          translationStyle: 'linear',
+          onFinish: callbackAnim,
+        })
+        .start();
+      // collection.animateTranslationTo(new Point(1, 0), 1, callbackAnim, linear);
+      // expect(collection.state.isAnimating).toBe(true);
+      expect(collection.animations.state).toBe('idle');
       expect(collection.state.isBeingMoved).toBe(false);
       expect(collection.state.isMovingFreely).toBe(false);
       collection.draw(new Transform(), 0);
       collection.draw(new Transform(), 0.5);
+      expect(collection.animations.state).toBe('animating');
       expect(collection.transform.round()).toEqual(new Transform()
-        .scale(1, 1).rotate(0).translate(0.5, 0));
+        .scale(1, 1).rotate(0).translate(1, 0));
 
       Date.now = () => 0;
       collection.startBeingMoved();
-      expect(collection.state.isAnimating).toBe(false);
+      // expect(collection.state.isAnimating).toBe(false);
+      expect(collection.animations.state).toBe('idle');
       expect(collection.state.isBeingMoved).toBe(true);
       expect(collection.state.isMovingFreely).toBe(false);
 
@@ -629,7 +640,6 @@ describe('Animationa and Movement', () => {
       Date.now = () => 1000;
       collection.moved(new Transform()
         .scale(1, 1).rotate(0.1).translate(0.5, 0));
-      // new Point(0.5, 0), 0.1, Point.Unity()));
       expect(collection.transform.round()).toEqual(new Transform()
         .scale(1, 1).rotate(0.1).translate(0.5, 0));
       const velocity = new Transform().scale(0, 0).rotate(0.1).translate(-0.5, 0);
@@ -639,11 +649,12 @@ describe('Animationa and Movement', () => {
       moveFreeProps.deceleration = new TransformLimit(1, 0.01, 1);
       moveFreeProps.zeroVelocityThreshold = new TransformLimit(0.1, 0.05, 0.1);
 
-      // Now at (0.5, 0), 0.1 and rotating with velocity 0.1 rads/s
+      // Now at (1, 0), 0.1 and rotating with velocity 0.1 rads/s
       collection.startMovingFreely(callbackMoveFree);
       expect(collection.state.isAnimating).toBe(false);
       expect(collection.state.isBeingMoved).toBe(false);
       expect(collection.state.isMovingFreely).toBe(true);
+
 
       collection.draw(new Transform(), 10);
       expect(collection.state.movement.velocity.isEqualTo(velocity)).toEqual(true);
