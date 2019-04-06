@@ -85,7 +85,7 @@ describe('Animation Manager', () => {
 
     elem.animations.nextFrame(0.5);
     expect(elem.getPosition().round()).toEqual(point(0.5));
-    expect(math.round(elem.opacity, 2)).toEqual( 0.75);
+    expect(math.round(elem.opacity, 2)).toEqual(0.75);
     expect(elem.isShown).toBe(true);
     expect(elem.animations.animations).toHaveLength(2);
 
