@@ -660,7 +660,6 @@ DiagramElementPrimative {
       "scenarios": Object {},
       "setTransformCallback": [Function],
       "state": Object {
-        "isAnimating": false,
         "isBeingMoved": false,
         "isMovingFreely": false,
         "isPulsing": false,
@@ -1127,7 +1126,6 @@ DiagramElementPrimative {
       "scenarios": Object {},
       "setTransformCallback": [Function],
       "state": Object {
-        "isAnimating": false,
         "isBeingMoved": false,
         "isMovingFreely": false,
         "isPulsing": false,
@@ -1593,7 +1591,6 @@ DiagramElementPrimative {
       "scenarios": Object {},
       "setTransformCallback": [Function],
       "state": Object {
-        "isAnimating": false,
         "isBeingMoved": false,
         "isMovingFreely": false,
         "isPulsing": false,
@@ -2057,7 +2054,6 @@ DiagramElementPrimative {
       "scenarios": Object {},
       "setTransformCallback": [Function],
       "state": Object {
-        "isAnimating": false,
         "isBeingMoved": false,
         "isMovingFreely": false,
         "isPulsing": false,
@@ -2553,7 +2549,6 @@ DiagramElementPrimative {
         "scenarios": Object {},
         "setTransformCallback": [Function],
         "state": Object {
-          "isAnimating": false,
           "isBeingMoved": false,
           "isMovingFreely": false,
           "isPulsing": false,
@@ -3020,7 +3015,6 @@ DiagramElementPrimative {
         "scenarios": Object {},
         "setTransformCallback": [Function],
         "state": Object {
-          "isAnimating": false,
           "isBeingMoved": false,
           "isMovingFreely": false,
           "isPulsing": false,
@@ -3486,7 +3480,6 @@ DiagramElementPrimative {
         "scenarios": Object {},
         "setTransformCallback": [Function],
         "state": Object {
-          "isAnimating": false,
           "isBeingMoved": false,
           "isMovingFreely": false,
           "isPulsing": false,
@@ -3950,7 +3943,6 @@ DiagramElementPrimative {
         "scenarios": Object {},
         "setTransformCallback": [Function],
         "state": Object {
-          "isAnimating": false,
           "isBeingMoved": false,
           "isMovingFreely": false,
           "isPulsing": false,
@@ -4497,7 +4489,6 @@ DiagramElementPrimative {
                       "scenarios": Object {},
                       "setTransformCallback": [Function],
                       "state": Object {
-                        "isAnimating": false,
                         "isBeingMoved": false,
                         "isMovingFreely": false,
                         "isPulsing": false,
@@ -4975,7 +4966,6 @@ DiagramElementPrimative {
                       "scenarios": Object {},
                       "setTransformCallback": [Function],
                       "state": Object {
-                        "isAnimating": false,
                         "isBeingMoved": false,
                         "isMovingFreely": false,
                         "isPulsing": false,
@@ -5467,7 +5457,6 @@ DiagramElementPrimative {
                 "scenarios": Object {},
                 "setTransformCallback": [Function],
                 "state": Object {
-                  "isAnimating": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -5934,7 +5923,6 @@ DiagramElementPrimative {
                 "scenarios": Object {},
                 "setTransformCallback": [Function],
                 "state": Object {
-                  "isAnimating": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -6400,7 +6388,6 @@ DiagramElementPrimative {
                 "scenarios": Object {},
                 "setTransformCallback": [Function],
                 "state": Object {
-                  "isAnimating": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -6864,7 +6851,6 @@ DiagramElementPrimative {
                 "scenarios": Object {},
                 "setTransformCallback": [Function],
                 "state": Object {
-                  "isAnimating": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -7384,7 +7370,6 @@ DiagramElementPrimative {
                               "scenarios": Object {},
                               "setTransformCallback": [Function],
                               "state": Object {
-                                "isAnimating": false,
                                 "isBeingMoved": false,
                                 "isMovingFreely": false,
                                 "isPulsing": false,
@@ -7870,7 +7855,6 @@ DiagramElementPrimative {
                           "scenarios": Object {},
                           "setTransformCallback": [Function],
                           "state": Object {
-                            "isAnimating": false,
                             "isBeingMoved": false,
                             "isMovingFreely": false,
                             "isPulsing": false,
@@ -8339,7 +8323,6 @@ DiagramElementPrimative {
                             "scenarios": Object {},
                             "setTransformCallback": [Function],
                             "state": Object {
-                              "isAnimating": false,
                               "isBeingMoved": false,
                               "isMovingFreely": false,
                               "isPulsing": false,
@@ -8861,7 +8844,6 @@ DiagramElementPrimative {
                       "scenarios": Object {},
                       "setTransformCallback": [Function],
                       "state": Object {
-                        "isAnimating": false,
                         "isBeingMoved": false,
                         "isMovingFreely": false,
                         "isPulsing": false,
@@ -9329,7 +9311,6 @@ DiagramElementPrimative {
                       "scenarios": Object {},
                       "setTransformCallback": [Function],
                       "state": Object {
-                        "isAnimating": false,
                         "isBeingMoved": false,
                         "isMovingFreely": false,
                         "isPulsing": false,
@@ -9821,7 +9802,6 @@ DiagramElementPrimative {
                 "scenarios": Object {},
                 "setTransformCallback": [Function],
                 "state": Object {
-                  "isAnimating": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -10288,7 +10268,6 @@ DiagramElementPrimative {
                 "scenarios": Object {},
                 "setTransformCallback": [Function],
                 "state": Object {
-                  "isAnimating": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -10754,7 +10733,6 @@ DiagramElementPrimative {
                 "scenarios": Object {},
                 "setTransformCallback": [Function],
                 "state": Object {
-                  "isAnimating": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -11218,7 +11196,6 @@ DiagramElementPrimative {
                 "scenarios": Object {},
                 "setTransformCallback": [Function],
                 "state": Object {
-                  "isAnimating": false,
                   "isBeingMoved": false,
                   "isMovingFreely": false,
                   "isPulsing": false,
@@ -11690,7 +11667,6 @@ DiagramElementPrimative {
             "scenarios": Object {},
             "setTransformCallback": [Function],
             "state": Object {
-              "isAnimating": false,
               "isBeingMoved": false,
               "isMovingFreely": false,
               "isPulsing": false,
@@ -12157,7 +12133,6 @@ DiagramElementPrimative {
             "scenarios": Object {},
             "setTransformCallback": [Function],
             "state": Object {
-              "isAnimating": false,
               "isBeingMoved": false,
               "isMovingFreely": false,
               "isPulsing": false,
@@ -12623,7 +12598,6 @@ DiagramElementPrimative {
             "scenarios": Object {},
             "setTransformCallback": [Function],
             "state": Object {
-              "isAnimating": false,
               "isBeingMoved": false,
               "isMovingFreely": false,
               "isPulsing": false,
@@ -13087,7 +13061,6 @@ DiagramElementPrimative {
             "scenarios": Object {},
             "setTransformCallback": [Function],
             "state": Object {
-              "isAnimating": false,
               "isBeingMoved": false,
               "isMovingFreely": false,
               "isPulsing": false,
@@ -13528,7 +13501,6 @@ DiagramElementPrimative {
                     "scenarios": Object {},
                     "setTransformCallback": [Function],
                     "state": Object {
-                      "isAnimating": false,
                       "isBeingMoved": false,
                       "isMovingFreely": false,
                       "isPulsing": false,
@@ -13987,7 +13959,6 @@ DiagramElementPrimative {
               "scenarios": Object {},
               "setTransformCallback": [Function],
               "state": Object {
-                "isAnimating": false,
                 "isBeingMoved": false,
                 "isMovingFreely": false,
                 "isPulsing": false,
@@ -14929,7 +14900,6 @@ DiagramElementPrimative {
       },
     },
     "state": Object {
-      "isAnimating": false,
       "isBeingMoved": false,
       "isMovingFreely": false,
       "isPulsing": false,
@@ -15074,7 +15044,6 @@ DiagramElementPrimative {
   "scenarios": Object {},
   "setTransformCallback": [Function],
   "state": Object {
-    "isAnimating": false,
     "isBeingMoved": false,
     "isMovingFreely": false,
     "isPulsing": false,
