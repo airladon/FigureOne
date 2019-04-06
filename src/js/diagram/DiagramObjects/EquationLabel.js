@@ -33,8 +33,8 @@ export type TypeLabelOptions = {
   position?: Point,
   form?: string,
   formType?: string,
-  vAlign?: TypeVAlign,
-  hAlign?: TypeHAlign,
+  alignV?: TypeVAlign,
+  alignH?: TypeHAlign,
 };
 
 export default class EquationLabel {
@@ -54,14 +54,14 @@ export default class EquationLabel {
       position: new Point(0, 0),
       form: '0',
       formType: 'base',
-      vAlign: 'middle',
-      hAlign: 'center',
+      alignH: 'middle',
+      alignV: 'center',
     };
     const optionsToUse = Object.assign({}, defaultOptions, options);
     const labelTextOrEquation = optionsToUse.label;
     const { color, scale, position } = optionsToUse;
     const { form, formType } = optionsToUse;
-    const { vAlign, hAlign } = optionsToUse;
+    const { alignV, alignH } = optionsToUse;
     let eqn;
     if (typeof labelTextOrEquation === 'string') {
       eqn = equations.equation({
@@ -69,8 +69,8 @@ export default class EquationLabel {
         color,
         defaultFormAlignment: {
           fixTo: new Point(0, 0),
-          hAlign,
-          vAlign,
+          alignH,
+          alignV,
         },
         scale,
         forms: {
@@ -82,8 +82,8 @@ export default class EquationLabel {
       // eqn.createElements({ base: labelTextOrEquation }, color);
       // eqn.collection.transform = new Transform().scale(1, 1).rotate(0).translate(position);
       // eqn.formAlignment.fixTo = new Point(0, 0);
-      // eqn.formAlignment.hAlign = hAlign;
-      // eqn.formAlignment.vAlign = vAlign;
+      // eqn.formAlignment.alignH = alignH;
+      // eqn.formAlignment.alignV = alignV;
       // eqn.formAlignment.scale = scale;
       // eqn.addForm('base', ['base']);
       eqn.setCurrentForm('base');
@@ -107,8 +107,8 @@ export default class EquationLabel {
         position,
         defaultFormAlignment: {
           fixTo: new Point(0, 0),
-          hAlign,
-          vAlign,
+          alignH,
+          alignV,
         },
         scale,
       });
@@ -116,8 +116,8 @@ export default class EquationLabel {
       // eqn.createElements(elements, color);
       // eqn.collection.transform = new Transform().scale(1, 1).rotate(0).translate(position);
       // eqn.formAlignment.fixTo = new Point(0, 0);
-      // eqn.formAlignment.hAlign = hAlign;
-      // eqn.formAlignment.vAlign = vAlign;
+      // eqn.formAlignment.alignH = alignH;
+      // eqn.formAlignment.alignV = alignV;
       // eqn.formAlignment.scale = scale;
       // labelTextOrEquation.forEach((labelText, index) => {
       //   eqn.addForm(`${index}`, [`_${index}`]);
