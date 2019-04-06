@@ -954,20 +954,17 @@ class DiagramElement {
     }
   }
 
-  stop(cancelled?: boolean = true, forceSetToEndOfPlan?: ?boolean = false) {
-    if (forceSetToEndOfPlan === true) {
+  stop(
+    cancelled?: boolean = true,
+    forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false,
+  ) {
+    if (forceSetToEndOfPlan === true || forceSetToEndOfPlan === 'complete') {
       this.animations.cancelAll('complete');
-    } else if (forceSetToEndOfPlan === false) {
+    } else if (forceSetToEndOfPlan === false || forceSetToEndOfPlan === 'noComplete') {
       this.animations.cancelAll('noComplete');
     } else {
       this.animations.cancelAll(null);
     }
-    // // Deprecate
-    // this.stopAnimating(cancelled, forceSetToEndOfPlan);
-    // // Deprecate
-    // this.stopAnimatingColor(cancelled, forceSetToEndOfPlan);
-    // // Deprecate
-    // this.stopAnimatingCustom(cancelled, forceSetToEndOfPlan);
     this.stopMovingFreely(cancelled);
     this.stopBeingMoved();
     this.stopPulsing(cancelled);
