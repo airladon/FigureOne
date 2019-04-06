@@ -45,36 +45,49 @@ describe('Animationa and Movement', () => {
           expect(element.state.isAnimating).toBe(false);
           expect(element.isMoving()).toBe(false);
 
-          element.animateRotationTo(1, 1, 1, null, linear);
+          // element.animateRotationTo(1, 1, 1, null, linear);
+          element.animations.new()
+            .rotation({
+              target: 1,
+              direction: 1,
+              duration: 1,
+              progression: 'linear',
+            })
+            .start();
           const t = element.transform;
           expect(t).toEqual(new Transform().scale(1, 1).rotate(0).translate(0, 0));
 
-          const phase = element.state.animation.currentPhase;
+          // const phase = element.state.animation.currentPhase;
 
-          expect(element.state.isAnimating).toBe(true);
-          expect(element.isMoving()).toBe(true);
-          expect(phase.startTime).toBe(-1);
+          // expect(element.state.isAnimating).toBe(true);
+          expect(element.animations.state).toBe('idle');
+          expect(element.isMoving()).toBe(false);
+          // expect(phase.startTime).toBe(-1);
 
           element.draw(new Transform(), 10);
-          expect(phase.startTime).toBe(10);
-          expect(phase.time).toBe(1);
+          // expect(phase.startTime).toBe(10);
+          // expect(phase.time).toBe(1);
           expect(t.r()).toBe(0);
 
           element.draw(new Transform(), 10.5);
-          expect(phase.startTime).toBe(10);
-          expect(phase.time).toBe(1);
+          // expect(phase.startTime).toBe(10);
+          // expect(phase.time).toBe(1);
           expect(element.transform.r()).toBe(0.5);
+          expect(element.animations.state).toBe('animating');
+          expect(element.isMoving()).toBe(true);
 
           element.draw(new Transform(), 11);
-          expect(phase.time).toBe(1);
+          // expect(phase.time).toBe(1);
           expect(element.transform.r()).toBe(1);
-          expect(element.state.isAnimating).toBe(true);
+          // expect(element.state.isAnimating).toBe(true);
+          expect(element.animations.state).toBe('animating');
           expect(element.isMoving()).toBe(true);
 
           element.draw(new Transform(), 11.01);
-          expect(phase.time).toBe(1);
+          // expect(phase.time).toBe(1);
           expect(element.transform.r()).toBe(1);
-          expect(element.state.isAnimating).toBe(false);
+          // expect(element.state.isAnimating).toBe(false);
+          expect(element.animations.state).toBe('idle');
           expect(element.isMoving()).toBe(false);
         });
         test('translate (0, 0) to (1, 0), 1 second, linear movement', () => {
@@ -598,7 +611,7 @@ describe('Animationa and Movement', () => {
     afterEach(() => {
       Date.now = RealDate;
     });
-    test.only('Combination of animation and movement with a collection', () => {
+    test('Combination of animation and movement with a collection', () => {
       const callbackAnim = jest.fn();
       const callbackMoveFree = jest.fn();
       const draw = jest.fn();
@@ -614,7 +627,7 @@ describe('Animationa and Movement', () => {
         .position({
           target: new Point(2, 0),
           duration: 1,
-          translationStyle: 'linear',
+          progression: 'linear',
           onFinish: callbackAnim,
         })
         .start();
