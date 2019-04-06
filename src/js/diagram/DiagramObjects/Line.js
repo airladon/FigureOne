@@ -135,7 +135,7 @@ class LineLabel extends EquationLabel {
 
   constructor(
     equation: Object,
-    labelText: string | Equation | Array<string> | TypeLabelEquationOptions,
+    labelText: string | EquationNew | Array<string> | TypeLabelEquationOptions,
     color: Array<number>,
     offset: number,
     location: TypeLineLabelLocation = 'top',
@@ -281,7 +281,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   addArrow: (number, ?number, ?number) => void;
   pulseWidth: () => void;
   updateLabel: (?number) => {};
-  addLabel: (string | Equation | Array<string> | TypeLabelEquationOptions,
+  addLabel: (string | EquationNew | Array<string> | TypeLabelEquationOptions,
              number, ?TypeLineLabelLocation,
              ?TypeLineLabelSubLocation, ?TypeLineLabelOrientation, ?number,
              ?number, ?Array<number>, ?number,
@@ -691,7 +691,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   }
 
   addLabel(
-    labelText: string | Equation | Array<string> | TypeLabelEquationOptions,
+    labelText: string | EquationNew | Array<string> | TypeLabelEquationOptions,
     offset: number,
     location: TypeLineLabelLocation = 'top',
     subLocation: TypeLineLabelSubLocation = 'left',

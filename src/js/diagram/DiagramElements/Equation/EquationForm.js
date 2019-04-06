@@ -35,7 +35,12 @@ export type TypeEquationForm = {
   description: string | null;
   modifiers: Object;
   type: string;
-  elementMods: Object;
+  elementMods: {
+    [string]: {
+      element: DiagramElementPrimative | DiagramElementCollection,
+      mods: Object,
+    }
+  };
   time: number | null;
 } & Elements;
 
@@ -465,8 +470,8 @@ export default class EquationForm extends Elements {
   }
 
   applyElementMods() {
-    Object.values(this.elementMods).forEach((elementMods) => {
-      const { element, mods } = elementMods;
+    Object.keys(this.elementMods).forEach((elementName) => {
+      const { element, mods } = this.elementMods[elementName];
       if (element != null && mods != null) {
         element.setProperties(mods);
         if (mods.color != null) {
@@ -565,20 +570,22 @@ export default class EquationForm extends Elements {
       translationToUse = joinObjects({}, this.translation);
     }
 
-    Object.values(translationToUse).forEach((mods) => {
-      const { element, style, direction, mag } = mods;
-      if (element) {
-        if (style != null) {
-          element.animations.options.translation.style = style;
-        }
-        if (direction != null) {
-          element.animations.options.translation.direction = direction;
-        }
-        if (mag != null) {
-          element.animations.options.translation.magnitude = mag;
-        }
+    // Object.values(translationToUse).forEach((mods) => {
+    const {
+      element, style, direction, mag,
+    } = translationToUse;
+    if (element) {
+      if (style != null) {
+        element.animations.options.translation.style = style;
       }
-    });
+      if (direction != null) {
+        element.animations.options.translation.direction = direction;
+      }
+      if (mag != null) {
+        element.animations.options.translation.magnitude = mag;
+      }
+    }
+    // });
 
     const t = this.collectionMethods.animateToTransforms(
       animateToTransforms,

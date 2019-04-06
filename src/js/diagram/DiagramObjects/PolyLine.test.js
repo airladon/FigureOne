@@ -213,45 +213,45 @@ describe('Diagram Objects PolyLine', () => {
     });
     test('Full Define', () => {
       const poly = ways.SideLabelsFullDefine();
-      const base01 = poly.elements.side01.label.eqn.collection._base;
-      const base12 = poly.elements.side12.label.eqn.collection._base;
-      const base20 = poly.elements.side20.label.eqn.collection._base;
+      const base01 = poly.elements.side01.label.eqn._base;
+      const base12 = poly.elements.side12.label.eqn._base;
+      const base20 = poly.elements.side20.label.eqn._base;
       expect(base01.drawingObject.text[0].text).toBe('a');
       expect(base12.drawingObject.text[0].text).toBe('b');
       expect(base20.drawingObject.text[0].text).toBe('1.4');
     });
     test('Under Define', () => {
       const poly = ways.SideLabelsUnderDefine();
-      const base01 = poly.elements.side01.label.eqn.collection._base;
-      const base12 = poly.elements.side12.label.eqn.collection._base;
-      const base20 = poly.elements.side20.label.eqn.collection._base;
+      const base01 = poly.elements.side01.label.eqn._base;
+      const base12 = poly.elements.side12.label.eqn._base;
+      const base20 = poly.elements.side20.label.eqn._base;
       expect(base01.drawingObject.text[0].text).toBe('a');
       expect(base12.drawingObject.text[0].text).toBe('b');
       expect(base20.drawingObject.text[0].text).toBe('a');
     });
     test('Over Define', () => {
       const poly = ways.SideLabelsOverDefine();
-      const base01 = poly.elements.side01.label.eqn.collection._base;
-      const base12 = poly.elements.side12.label.eqn.collection._base;
-      const base20 = poly.elements.side20.label.eqn.collection._base;
+      const base01 = poly.elements.side01.label.eqn._base;
+      const base12 = poly.elements.side12.label.eqn._base;
+      const base20 = poly.elements.side20.label.eqn._base;
       expect(base01.drawingObject.text[0].text).toBe('a');
       expect(base12.drawingObject.text[0].text).toBe('b');
       expect(base20.drawingObject.text[0].text).toBe('c');
     });
     test('Single Define', () => {
       const poly = ways.SideLabelsSingleDefine();
-      const base01 = poly.elements.side01.label.eqn.collection._base;
-      const base12 = poly.elements.side12.label.eqn.collection._base;
-      const base20 = poly.elements.side20.label.eqn.collection._base;
+      const base01 = poly.elements.side01.label.eqn._base;
+      const base12 = poly.elements.side12.label.eqn._base;
+      const base20 = poly.elements.side20.label.eqn._base;
       expect(base01.drawingObject.text[0].text).toBe('a');
       expect(base12.drawingObject.text[0].text).toBe('a');
       expect(base20.drawingObject.text[0].text).toBe('a');
     });
     test('Actual Length', () => {
       const poly = ways.SideLabelsActualLength();
-      const base01 = poly.elements.side01.label.eqn.collection._base;
-      const base12 = poly.elements.side12.label.eqn.collection._base;
-      const base20 = poly.elements.side20.label.eqn.collection._base;
+      const base01 = poly.elements.side01.label.eqn._base;
+      const base12 = poly.elements.side12.label.eqn._base;
+      const base20 = poly.elements.side20.label.eqn._base;
       expect(base01.drawingObject.text[0].text).toBe('1.0');
       expect(base12.drawingObject.text[0].text).toBe('1.0');
       expect(base20.drawingObject.text[0].text).toBe('1.4');
@@ -284,9 +284,9 @@ describe('Diagram Objects PolyLine', () => {
     });
     test('Full Define', () => {
       const poly = ways.AngleLabelsFullDefine();
-      const base01 = poly.elements.angle0.label.eqn.collection._base;
-      const base12 = poly.elements.angle1.label.eqn.collection._base;
-      const base20 = poly.elements.angle2.label.eqn.collection._base;
+      const base01 = poly.elements.angle0.label.eqn._base;
+      const base12 = poly.elements.angle1.label.eqn._base;
+      const base20 = poly.elements.angle2.label.eqn._base;
       expect(base01.drawingObject.text[0].text).toBe('a');
       expect(base12.drawingObject.text[0].text).toBe('b');
       expect(base20.drawingObject.text[0].text).toBe('315º');

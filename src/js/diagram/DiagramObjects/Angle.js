@@ -13,8 +13,9 @@ import {
   DiagramElementCollection, DiagramElementPrimative,
 } from '../Element';
 import EquationLabel from './EquationLabel';
-import type { TypeLabelEquationOptions } from './EquationLabel';
+import type { TypeLabelEquationOptions, TypeLabelOptions } from './EquationLabel';
 import { EquationNew } from '../DiagramElements/Equation/Equation';
+
 
 export type TypeAngleLabelOrientation = 'horizontal' | 'tangent';
 export type TypeAngleLabelOptions = {
