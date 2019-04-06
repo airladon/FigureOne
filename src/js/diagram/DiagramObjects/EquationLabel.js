@@ -2,7 +2,7 @@
 // import Diagram from '../Diagram';
 
 import {
-  Point, Transform, polarToRect,
+  Point, polarToRect,
 } from '../../tools/g2';
 import { EquationNew } from '../DiagramElements/Equation/Equation';
 import type {
@@ -91,11 +91,18 @@ export default class EquationLabel {
       eqn = labelTextOrEquation;
     } else if (Array.isArray(labelTextOrEquation)) {
       const elements = {};
+      const forms = {};
       labelTextOrEquation.forEach((labelText, index) => {
         elements[`_${index}`] = labelText;
+        forms[index] = [labelText];
       });
+
+      // labelTextOrEquation.forEach((labelText, index) => {
+      //   eqn.addForm(`${index}`, [`_${index}`]);
+      // });
       eqn = equations.equation({
         elements,
+        forms,
         color,
         position,
         defaultFormAlignment: {
@@ -104,9 +111,6 @@ export default class EquationLabel {
           vAlign,
         },
         scale,
-        forms: {
-          base: ['base'],
-        },
       });
       // eqn = equations.makeEqn();
       // eqn.createElements(elements, color);
@@ -115,9 +119,9 @@ export default class EquationLabel {
       // eqn.formAlignment.hAlign = hAlign;
       // eqn.formAlignment.vAlign = vAlign;
       // eqn.formAlignment.scale = scale;
-      labelTextOrEquation.forEach((labelText, index) => {
-        eqn.addForm(`${index}`, [`_${index}`]);
-      });
+      // labelTextOrEquation.forEach((labelText, index) => {
+      //   eqn.addForm(`${index}`, [`_${index}`]);
+      // });
       eqn.setCurrentForm(form, formType);
     } else {
       // eslint-disable-next-line no-lonely-if
@@ -134,7 +138,6 @@ export default class EquationLabel {
         eqn.setCurrentForm('base');
       }
     }
-    console.log(eqn)
     this.eqn = eqn;
   }
 
@@ -152,8 +155,8 @@ export default class EquationLabel {
       }
       form.arrange(
         this.eqn.eqn.scale,
-        this.eqn.eqn.defaultFormAlignment.hAlign,
-        this.eqn.eqn.defaultFormAlignment.vAlign,
+        this.eqn.eqn.defaultFormAlignment.alignH,
+        this.eqn.eqn.defaultFormAlignment.alignV,
         this.eqn.eqn.defaultFormAlignment.fixTo,
       );
     }

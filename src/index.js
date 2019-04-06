@@ -26,7 +26,6 @@ import DiagramObjectAngle from './js/diagram/DiagramObjects/Angle';
 import DiagramObjectLine from './js/diagram/DiagramObjects/Line';
 import EqnNavigator from './js/diagram/DiagramObjects/EqnNavigator';
 import EquationLabel from './js/diagram/DiagramObjects/EquationLabel';
-import { Equation } from './js/diagram/DiagramElements/Equation/GLEquation';
 import { EquationNew } from './js/diagram/DiagramElements/Equation/Equation';
 import EquationForm from './js/diagram/DiagramElements/Equation/EquationForm';
 
@@ -87,7 +86,6 @@ const FigureOne = {
   EqnNavigator,
   EquationLabel,
   //
-  EquationLegacy: Equation,
   EquationForm,
   Equation: EquationNew,
   //
