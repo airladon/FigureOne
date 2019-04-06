@@ -1553,8 +1553,9 @@ class DiagramElementPrimative extends DiagramElement {
   }
 
   isMoving(): boolean {
-    if (this.state.isAnimating
-      || this.state.isMovingFreely
+    if (
+      // this.state.isAnimating
+      this.state.isMovingFreely
       || this.state.isBeingMoved
       || this.state.isPulsing
       // || this.state.isAnimatingColor
@@ -1682,10 +1683,11 @@ class DiagramElementCollection extends DiagramElement {
     if (this.isShown === false) {
       return false;
     }
-    if (this.state.isAnimating
+    if (
+        // this.state.isAnimating
         // || this.state.isAnimatingCustom
         // || this.state.isAnimatingColor
-        || this.state.isMovingFreely
+        this.state.isMovingFreely
         || this.state.isBeingMoved
         || this.state.isPulsing
         || this.animations.state === 'animating') {

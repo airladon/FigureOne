@@ -12,9 +12,6 @@ import {
 } from './js/diagram/Element';
 import DrawContext2D from './js/diagram/DrawContext2D';
 import WebGLInstance from './js/diagram/webgl/webgl';
-import {
-  AnimationPhase, ColorAnimationPhase, CustomAnimationPhase,
-} from './js/diagram/AnimationPhase';
 import DrawingObject from './js/diagram/DrawingObjects/DrawingObject';
 import VertexObject from './js/diagram/DrawingObjects/VertexObject/VertexObject';
 import {
@@ -70,9 +67,6 @@ const FigureOne = {
   DiagramElementPrimative,
   DrawContext2D,
   WebGLInstance,
-  AnimationPhase,
-  ColorAnimationPhase,
-  CustomAnimationPhase,
   //
   DrawingObject,
   VertexObject,
