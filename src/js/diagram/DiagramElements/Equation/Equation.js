@@ -1051,7 +1051,7 @@ export class EquationNew extends DiagramElementCollection {
 
   replayCurrentForm(time: number) {
     if (this.eqn.isAnimating) {
-      this.stop(true, true);
+      // this.stop(true, true);
       this.stop(true, true);
       // this.animations.cancel('complete');
       // this.animations.cancel('complete');
@@ -1064,7 +1064,7 @@ export class EquationNew extends DiagramElementCollection {
     }
     // this.animations.cancel();
     // this.animations.cancel();
-    this.stop();
+    // this.stop();
     this.stop();
     this.eqn.isAnimating = false;
     this.prevForm(0);
@@ -1079,7 +1079,7 @@ export class EquationNew extends DiagramElementCollection {
   ) {
     // this.stopAnimatingColor(true, true);
     // this.stopAnimatingColor(true, true);
-    this.stop();
+    // this.stop();
     this.stop();
     // this.animations.cancel();
     // this.animations.cancel();

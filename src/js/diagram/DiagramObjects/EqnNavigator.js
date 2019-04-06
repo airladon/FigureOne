@@ -435,12 +435,19 @@ export default class EqnNavigator extends DiagramElementCollection {
         forceTwoLines: false,
         arrows: false,
       },
-      alignH: 'left',
+      alignH: 'center',
       alignV: 'middle',
       id: generateUniqueId('id_lesson__equation_navigator_'),
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
-    this.eqn = optionsToUse.equation;
+    if (optionsToUse.equation != null) {
+      // this.eqn = optionsToUse.equation;
+      // this.eqn.onClick = this.clickNext.bind(this);
+      // this.eqn.hasTouchableElements = true;
+      // this.eqn.isTouchable = true;
+      // this.eqn.touchInBoundingRect = true;
+      this.connectToEquation(optionsToUse.equation);
+    }
 
     this.navType = optionsToUse.navType;
 
@@ -485,11 +492,18 @@ export default class EqnNavigator extends DiagramElementCollection {
       );
       this.add('table', table);
     }
+  }
 
+  connectToEquation(eqn: EquationNew) {
+    this.eqn = eqn;
     this.eqn.onClick = this.clickNext.bind(this);
     this.eqn.hasTouchableElements = true;
     this.eqn.isTouchable = true;
     this.eqn.touchInBoundingRect = true;
+    // this.setTransformCallback = () => {
+    //   const p = this.getPosition();
+    //   this.eqn.setPosition(p);
+    // }
   }
 
   // const navigator = shapes.collection(;
@@ -497,6 +511,10 @@ export default class EqnNavigator extends DiagramElementCollection {
   //   this.eqn = eqn;
   //   // this._eqn = [];
   //   this.add('eqn', eqn.collection);
+  // }
+
+  // setWidth(width) {
+
   // }
 
   clickNext() {
