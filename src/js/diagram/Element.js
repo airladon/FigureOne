@@ -112,31 +112,6 @@ class DiagramElement {
 
   interactiveLocation: Point;   // this is in vertex space
 
-  // animate: {
-  //   transform: {
-  //     plan: Array<AnimationPhase>;
-  //     translation: {
-  //       style: 'linear' | 'curved';
-  //       options: pathOptionsType;
-  //     };
-  //     callback: ?(boolean) => void;
-  //   };
-  //   custom: {
-  //     // This is happening I think because of the generic stopAnimation
-  //     // method. I think maybe in the future after a few flow updates this
-  //     // will fix itself.
-  //     // $FlowFixMe
-  //     plan: Array<CustomAnimationPhase>;
-  //     callback: ?(boolean) => void;
-  //   };
-  //   color: {
-  //     toDisolve: '' | 'in' | 'out';
-  //     // $FlowFixMe
-  //     plan: Array<ColorAnimationPhase>;
-  //     callback: ?(boolean) => void;
-  //   };
-  // }
-
   move: {
     maxTransform: Transform,
     minTransform: Transform,
@@ -178,22 +153,6 @@ class DiagramElement {
 
   // Current animation/movement state of element
   state: {
-    isAnimating: boolean,
-    // isAnimatingColor: boolean,
-    // isAnimatingCustom: boolean,
-    // disolving: '' | 'in' | 'out',
-    // animation: {
-    //   currentPhaseIndex: number,
-    //   currentPhase: AnimationPhase,
-    // },
-    // colorAnimation: {
-    //   currentPhaseIndex: number,
-    //   currentPhase: ColorAnimationPhase,
-    // },
-    // customAnimation: {
-    //   currentPhaseIndex: number,
-    //   currentPhase: CustomAnimationPhase,
-    // },
     isBeingMoved: boolean,
     isMovingFreely: boolean,
     movement: {
@@ -242,26 +201,7 @@ class DiagramElement {
   isRenderedAsImage: boolean;
   unrenderNextDraw: boolean;
 
-  // tieToHTMLElement: string | null | HTMLElement;
-  // // Can be:
-  // //  1em: diagram units will be scaled so 0.2 diagram units (default
-  // //       font size) looks like 1em of the element font size in pixels
-  // //  100px: diagram units will be scaled so that the max diagram limit
-  // //         with be the pixel count
-  // //  stretch: diagram units be stretched so diagram limits extend to
-  // //           element dimensions independently in x and y
-  // //  max: -1 to 1 diagram units will be scaled to max dimension of element
-  // //  fit: diagram units will be scaled so that diagram limits aspect ratio
-  // //       fits within the element aspect ratio
-  // //  '': defaults to fit
-  // // keeping aspect ratio.
-  // tieToHTMLElementScale: string;
-  // tieToHTMLElementScaleLimits: Rect;
-
   constructor(
-    // translation: Point = Point.zero(),
-    // rotation: number = 0,
-    // scale: Point = Point.Unity(),
     transform: Transform = new Transform(),
     diagramLimits: Rect = new Rect(-1, -1, 2, 2),
     parent: DiagramElement | null = null,
@@ -365,31 +305,6 @@ class DiagramElement {
         return new animations.TransformAnimationStep(options);
       },
     };
-    // this.animate = {
-    //   color: {
-    //     plan: [],
-    //     toDisolve: '',
-    //     callback: null,
-    //   },
-    //   transform: {
-    //     plan: [],
-    //     translation: {
-    //       style: 'linear',
-    //       options: {
-    //         rot: 1,
-    //         magnitude: 0.5,
-    //         offset: 0.5,
-    //         controlPoint: null,
-    //         direction: '',
-    //       },
-    //     },
-    //     callback: null,
-    //   },
-    //   custom: {
-    //     plan: [],
-    //     callback: null,
-    //   },
-    // };
     this.diagramLimits = diagramLimits;
     this.move = {
       maxTransform: this.transform.constant(1000),
@@ -423,22 +338,6 @@ class DiagramElement {
     };
 
     this.state = {
-      isAnimating: false,
-      // isAnimatingColor: false,
-      // isAnimatingCustom: false,
-      // disolving: '',
-      // animation: {
-      //   currentPhaseIndex: 0,         // current animation phase index in plan
-      //   currentPhase: new AnimationPhase(),  // current animation phase
-      // },
-      // colorAnimation: {
-      //   currentPhaseIndex: 0,         // current animation phase index in plan
-      //   currentPhase: new ColorAnimationPhase(),  // current animation phase
-      // },
-      // customAnimation: {
-      //   currentPhaseIndex: 0,         // current animation phase index in plan
-      //   currentPhase: new CustomAnimationPhase(() => {}),  // current animation phase
-      // },
       isBeingMoved: false,
       isMovingFreely: false,
       movement: {
@@ -462,63 +361,12 @@ class DiagramElement {
     };
     this.isRenderedAsImage = false;
     this.unrenderNextDraw = false;
-    // this.tieToHTMLElement = null;
-    // this.tieToHTMLElementScale = 'fit';
-    // this.tieToHTMLElementScaleLimits = this.diagramLimits;
-    // this.presetTransforms = {};
   }
 
   setProperties(properties: Object) {
     joinObjects(this, properties);
   }
-  // copyFrom(element: Object) {
-  //   const copyValue = (value) => {
-  //     if (typeof value === 'number'
-  //         || typeof value === 'boolean'
-  //         || typeof value === 'string'
-  //         || value == null
-  //         || typeof value === 'function') {
-  //       return value;
-  //     }
-  //     if (typeof value._dup === 'function') {
-  //       return value._dup();
-  //     }
-  //     // if (value instanceof AnimationPhase
-  //     //     || value instanceof ColorAnimationPhase
-  //     //     || value instanceof CustomAnimationPhase
-  //     //     // eslint-disable-next-line no-use-before-define
-  //     //     || value instanceof DiagramElementCollection
-  //     //     // eslint-disable-next-line no-use-before-define
-  //     //     || value instanceof DiagramElementPrimative
-  //     //     || value instanceof DrawingObject
-  //     //     || value instanceof Transform
-  //     //     || value instanceof Point
-  //     //     || value instanceof Rect
-  //     //     || value instanceof TransformLimit) {
-  //     //   return value._dup();
-  //     // }
-  //     if (Array.isArray(value)) {
-  //       const arrayCopy = [];
-  //       value.forEach(arrayElement => arrayCopy.push(copyValue(arrayElement)));
-  //       return arrayCopy;
-  //     }
-  //     if (typeof value === 'object') {
-  //       const objectCopy = {};
-  //       Object.keys(value).forEach((key) => {
-  //         const v = copyValue(value[key]);
-  //         objectCopy[key] = v;
-  //       });
-  //       return objectCopy;
-  //     }
-  //     return value;
-  //   };
-
-  //   Object.keys(element).forEach((key) => {
-  //     // $FlowFixMe
-  //     this[key] = copyValue(element[key]);
-  //   });
-  // }
-
+  
   // Space definition:
   //   * Pixel space: css pixels
   //   * GL Space: x,y = -1 to 1
@@ -561,125 +409,6 @@ class DiagramElement {
   //     to the clip space.
   //
   // Each diagram element holds a DIAGRAM ELMENT CLIP space
-
-  // vertexToClip(vertex: Point) {
-  //   const scaleX = this.diagramLimits.width / 2;
-  //   const scaleY = this.diagramLimits.height / 2;
-  //   const biasX = -(-this.diagramLimits.width / 2 - this.diagramLimits.left);
-  //   const biasY = -(this.diagramLimits.height / 2 - this.diagramLimits.top);
-  //   const transform = new Transform().scale(scaleX, scaleY).translate(biasX, biasY);
-  //   return vertex.transformBy(this.lastDrawTransformMatrix)
-  //     .transformBy(transform.matrix());
-  // }
-  // textVertexToClip(vertex: Point) {
-  //   const scaleX = this.diagramLimits.width / 2;
-  //   const scaleY = this.diagramLimits.height / 2;
-  //   const biasX = -(-this.diagramLimits.width / 2 - this.diagramLimits.left);
-  //   const biasY = -(this.diagramLimits.height / 2 - this.diagramLimits.top);
-  //   const transform = new Transform().scale(scaleX, scaleY).translate(biasX, biasY);
-  //   return vertex.transformBy(transform.matrix());
-  // }
-
-  // updateHTMLElementTieScale(
-  //   diagramCanvas: HTMLElement,
-  // ) {
-  //   let tieToElement;
-  //   if (typeof this.tieToHTML.element === 'string') {
-  //     tieToElement = document.getElementById(this.tieToHTML.element);
-  //   } else if (this.tieToHTML.element instanceof HTMLElement) {
-  //     tieToElement = this.tieToHTML.element;
-  //   }
-  //   if (tieToElement != null) {
-  //     const tie = tieToElement.getBoundingClientRect();
-  //     const canvas = diagramCanvas.getBoundingClientRect();
-  //     const diagram = this.diagramLimits;
-  //     const dWindow = this.tieToHTML.window;
-  //     const cAspectRatio = canvas.width / canvas.height;
-  //     const dAspectRatio = diagram.width / diagram.height;
-  //     const tAspectRatio = tie.width / tie.height;
-  //     const wAspectRatio = dWindow.width / dWindow.height;
-
-  //     const topLeftPixels = new Point(
-  //       tie.left - canvas.left,
-  //       tie.top - canvas.top,
-  //     );
-  //     const bottomRightPixels = topLeftPixels.add(new Point(
-  //       tie.width, tie.height,
-  //     ));
-
-  //     const { pixelToDiagram } = this.diagramTransforms;
-  //     const topLeft = topLeftPixels.transformBy(pixelToDiagram.m());
-  //     const bottomRight = bottomRightPixels.transformBy(pixelToDiagram.m());
-  //     const width = bottomRight.x - topLeft.x;
-  //     const height = topLeft.y - bottomRight.y;
-  //     const center = topLeft.add(new Point(width / 2, -height / 2));
-
-  //     const scaleString = this.tieToHTML.scale.trim().toLowerCase();
-
-  //     let scaleX = 1;
-  //     let scaleY = 1;
-  //     const diagramToWindowScaleX = diagram.width / dWindow.width;
-  //     const diagramToWindowScaleY = diagram.height / dWindow.height;
-
-  //     // Window has no scaling impact on em, it only has impact on translation
-  //     if (scaleString.endsWith('em')) {
-  //       const scale = parseFloat(scaleString);
-  //       const em = parseFloat(getComputedStyle(tieToElement).fontSize);
-  //       // 0.2 is default font size in diagram units
-  //       const defaultFontScale = diagram.width / 0.2;
-  //       scaleX = scale * em * defaultFontScale / canvas.width;
-  //       scaleY = scale * em * defaultFontScale / dAspectRatio / canvas.height;
-  //     }
-
-  //     // Scale the maximum dimension of the window to the pixel value
-  //     if (scaleString.endsWith('px')) {
-  //       const maxPixels = parseFloat(scaleString);
-  //       if (wAspectRatio > 1) {
-  //         const scale = maxPixels / canvas.width;
-  //         scaleX = scale * diagramToWindowScaleX;
-  //         scaleY = scale * cAspectRatio / dAspectRatio * diagramToWindowScaleX;
-  //       } else {
-  //         const scale = maxPixels / canvas.height;
-  //         scaleX = scale / cAspectRatio * dAspectRatio * diagramToWindowScaleY;
-  //         scaleY = scale * diagramToWindowScaleY;
-  //       }
-  //     }
-
-  //     // Scale the window x to tie x, and window y to tie y
-  //     if (scaleString === 'stretch') {
-  //       scaleX = tie.width / canvas.width * diagramToWindowScaleX;
-  //       scaleY = tie.height / canvas.height * diagramToWindowScaleY;
-  //     }
-
-  //     // Scale so window either fits within the tie element, or fits only
-  //     // within the max dimension of the tie element
-  //     if (scaleString === 'max' || scaleString === 'fit') {
-  //       const fitHeightScale = new Point(
-  //         1 / cAspectRatio * dAspectRatio * diagramToWindowScaleY,
-  //         diagramToWindowScaleY,
-  //       );
-
-  //       const fitWidthScale = new Point(
-  //         diagramToWindowScaleX,
-  //         cAspectRatio / dAspectRatio * diagramToWindowScaleX,
-  //       );
-
-  //       if (
-  //         (scaleString === 'max' && tAspectRatio > wAspectRatio)
-  //         || (scaleString === 'fit' && tAspectRatio < wAspectRatio)
-  //       ) {
-  //         scaleX = fitWidthScale.x;
-  //         scaleY = fitWidthScale.y;
-  //       } else {
-  //         scaleX = fitHeightScale.x;
-  //         scaleY = fitHeightScale.y;
-  //       }
-  //     }
-
-  //     this.setScale(scaleX, scaleY);
-  //     return { center, scaleX, scaleY };
-  //   }
-  // }
 
   updateHTMLElementTie(
     diagramCanvas: HTMLElement,
@@ -790,50 +519,6 @@ class DiagramElement {
   setFirstTransform(parentTransform: Transform) {
   }
 
-  // // Calculate the next transform due to a progressing animation
-  // calcNextAnimationTransform(elapsedTime: number): Transform {
-  //   const phase = this.state.animation.currentPhase;
-  //   // This flow error cannot happen as start is un-nulled in the phase start
-  //   // $FlowFixMe
-  //   const start = phase.startTransform._dup();
-  //   const delta = phase.deltaTransform._dup();
-  //   const percentTime = elapsedTime / phase.time;
-  //   const percentComplete = phase.animationStyle(percentTime);
-
-  //   const p = percentComplete;
-  //   // let next = delta._dup().constant(p);
-
-  //   // next = start.add(delta.mul(next));
-  //   const next = start.toDelta(
-  //     delta, p,
-  //     phase.translationStyle,
-  //     phase.translationOptions,
-  //   );
-  //   return next;
-  // }
-
-  // calcNextAnimationColor(elapsedTime: number): Array<number> {
-  //   const phase = this.state.colorAnimation.currentPhase;
-  //   const start = phase.startColor;
-  //   const delta = phase.deltaColor;
-  //   const percentTime = elapsedTime / phase.time;
-  //   const percentComplete = phase.animationStyle(percentTime);
-
-  //   const p = percentComplete;
-  //   let next = [0, 0, 0, 1];
-  //   if (start != null) {
-  //     next = start.map((c, index) => c + delta[index] * p);
-  //   }
-  //   return next;
-  // }
-
-  // calcNextCustomAnimationPercentComplete(elapsedTime: number): number {
-  //   const phase = this.state.customAnimation.currentPhase;
-  //   const percentTime = elapsedTime / phase.time;
-  //   const percentComplete = phase.animationStyle(percentTime);
-  //   return percentComplete;
-  // }
-
   setPosition(pointOrX: Point | number, y: number = 0) {
     let position = pointOrX;
     if (typeof pointOrX === 'number') {
@@ -890,53 +575,7 @@ class DiagramElement {
   // deceleration (in freelyProperties) and zeroVelocityThreshold.
   // Once the velocity goes to zero, this metho will stop the element moving
   // freely.
-  setNextTransform(now: number): void {
-    // // If animation is happening
-    // if (this.state.isAnimating) {
-    //   const phase = this.state.animation.currentPhase;
-    //   // If an animation hasn't yet started, the start time will be -1.
-    //   // If this is so, then set the start time to the current time and
-    //   // return the current transform.
-    //   if (phase.startTime < 0) {
-    //     phase.startTime = now;
-    //     return;
-    //   }
-    //   // If we have got here, that means the animation has already started,
-    //   // so calculate the time delta between now and the startTime
-    //   const deltaTime = now - phase.startTime;
-    //   // If this time delta is larger than the phase's planned time, then
-    //   // either progress to the next animation phase, or end animation.
-    //   if (deltaTime > phase.time) {
-    //     // If there are more animation phases in the plan:
-    //     //   - set the current transform to be the end of the current phase
-    //     //   - start the next phase
-    //     if (this.state.animation.currentPhaseIndex < this.animate.transform.plan.length - 1) {
-    //       // Set current transform to the end of the current phase
-    //       phase.finish(this);
-    //       // this.setTransform(this.calcNextAnimationTransform(phase.time));
-
-    //       // Get the amount of time that has elapsed in the next phase
-    //       const nextPhaseDeltaTime = deltaTime - phase.time;
-
-    //       // Start the next animation phase
-    //       this.state.animation.currentPhaseIndex += 1;
-    //       this.animatePhase(this.state.animation.currentPhaseIndex);
-    //       this.state.animation.currentPhase.startTime =
-    //         now - nextPhaseDeltaTime;
-    //       this.setNextTransform(now);
-    //       return;
-    //     }
-
-    //     // Note, stopAnimating will finish the last phase
-    //     this.stopAnimating(false);
-    //     return;
-    //   }
-    //   // If we are here, that means the time elapsed is not more than the
-    //   // current animation phase plan time, so calculate the next transform.
-    //   this.setTransform(this.calcNextAnimationTransform(deltaTime));
-    //   return;
-    // }
-
+  nextMovingFreelyFrame(now: number): void {
     // If the element is moving freely, then calc it's next velocity and
     // transform. Save the new velocity into state.movement and return the
     // transform.
@@ -964,240 +603,6 @@ class DiagramElement {
       this.setTransform(next.transform);
     }
   }
-
-  // // Deprecate
-  // setNextCustomAnimation(now: number): void {
-  //   // If animation is happening
-  //   // if (this.name === 'diameterDimension') {
-  //   //   console.log("0", this.state.isAnimatingCustom)
-  //   // }
-  //   if (this.state.isAnimatingCustom) {
-  //     const phase = this.state.customAnimation.currentPhase;
-  //     // console.log("0.5", phase.startTime)
-  //     // If an animation hasn't yet started, the start time will be -1.
-  //     // If this is so, then set the start time to the current time and
-  //     // return the current transform.
-  //     if (phase.startTime < 0) {
-  //       phase.startTime = now - phase.plannedStartTime;
-  //       return;
-  //     }
-  //     // const percent = calcNextCustomAnimationPercentComplete(now);
-  //     // If we have got here, that means the animation has already started,
-  //     // so calculate the time delta between now and the startTime
-  //     const deltaTime = now - phase.startTime;
-  //     // If this time delta is larger than the phase's planned time, then
-  //     // either progress to the next animation phase, or end animation.
-  //     if (deltaTime > phase.time) {
-  //       // console.log("1")
-  //       // If there are more animation phases in the plan:
-  //       //   - set the current transform to be the end of the current phase
-  //       //   - start the next phase
-  //       if (this.state.customAnimation.currentPhaseIndex < this.animate.custom.plan.length - 1) {
-  //         // Set current transform to the end of the current phase
-  //         // phase.animationCallback(1);
-  //         phase.finish();
-
-  //         // Get the amount of time that has elapsed in the next phase
-  //         const nextPhaseDeltaTime = deltaTime - phase.time;
-
-  //         // Start the next animation phase
-  //         this.state.customAnimation.currentPhaseIndex += 1;
-  //         this.animateCustomPhase(this.state.customAnimation.currentPhaseIndex);
-  //         this.state.customAnimation.currentPhase.startTime =
-  //           now - nextPhaseDeltaTime;
-  //         this.setNextCustomAnimation(now);
-  //         return;
-  //       }
-  //       // This needs to go before StopAnimating, as stopAnimating clears
-  //       // the animation plan (incase a callback is used to start another
-  //       // animation)
-  //       // const endColor = this.calcNextAnimationColor(phase.time);
-
-  //       // this.setColor(endColor);
-  //       // console.log("2")
-  //       // phase.animationCallback(1);
-  //       this.stopAnimatingCustom(true);
-  //       // console.log("3")
-  //       return;
-  //     }
-  //     // If we are here, that means the time elapsed is not more than the
-  //     // current animation phase plan time, so calculate the next transform.
-  //     // console.log("4", this.state.isAnimatingCustom)
-  //     const percent = this.calcNextCustomAnimationPercentComplete(deltaTime);
-  //     // console.log(phase.animationCallback)
-  //     phase.animationCallback(percent);
-  //     // console.log("5", this.state.isAnimatingCustom)
-  //     // this.setColor(this.calcNextAnimationColor(deltaTime));
-  //   }
-  //   // if (this.name === 'diameterDimension') {
-  //   //   console.log("6", this.state.isAnimatingCustom)
-  //   // }
-  // }
-
-  // // Deprecate
-  // setNextColor(now: number): void {
-  //   // If animation is happening
-  //   if (this.state.isAnimatingColor) {
-  //     const phase = this.state.colorAnimation.currentPhase;
-
-  //     // If an animation hasn't yet started, the start time will be -1.
-  //     // If this is so, then set the start time to the current time and
-  //     // return the current transform.
-  //     if (phase.startTime < 0) {
-  //       phase.startTime = now;
-  //       return;
-  //     }
-
-  //     // If we have got here, that means the animation has already started,
-  //     // so calculate the time delta between now and the startTime
-  //     const deltaTime = now - phase.startTime;
-  //     // If this time delta is larger than the phase's planned time, then
-  //     // either progress to the next animation phase, or end animation.
-  //     if (deltaTime > phase.time) {
-  //       // If there are more animation phases in the plan:
-  //       //   - set the current transform to be the end of the current phase
-  //       //   - start the next phase
-  //       if (this.state.colorAnimation.currentPhaseIndex < this.animate.color.plan.length - 1) {
-  //         // Set current transform to the end of the current phase
-  //         // this.setColor(this.calcNextAnimationColor(phase.time));
-  //         // Phase callback
-  //         phase.finish(this);
-  //         // Get the amount of time that has elapsed in the next phase
-  //         const nextPhaseDeltaTime = deltaTime - phase.time;
-
-  //         // Start the next animation phase
-  //         this.state.colorAnimation.currentPhaseIndex += 1;
-  //         this.animateColorPhase(this.state.colorAnimation.currentPhaseIndex);
-  //         this.state.colorAnimation.currentPhase.startTime =
-  //           now - nextPhaseDeltaTime;
-  //         this.setNextColor(now);
-  //         return;
-  //       }
-  //       // This needs to go before StopAnimating, as stopAnimating clears
-  //       // the animation plan (incase a callback is used to start another
-  //       // animation)
-  //       // const endColor = this.calcNextAnimationColor(phase.time);
-  //       // this.setColor(endColor);
-  //       // phase.finish(this);
-  //       this.stopAnimatingColor(false);
-  //       return;
-  //     }
-  //     // If we are here, that means the time elapsed is not more than the
-  //     // current animation phase plan time, so calculate the next transform.
-  //     this.setColor(this.calcNextAnimationColor(deltaTime));
-  //     // if(this.name === 'times') {
-  //     //   console.log(now, this.color[3])
-  //     // }
-  //   }
-  // }
-
-  // ///////////////// Deprecate Start
-  // rotateTo(...optionsIn: Array<TypeRotationAnimationStepInputOptions>) {
-  //   const options = joinObjects({}, { element: this }, ...optionsIn);
-  //   return new animations.RotationAnimationStep(options);
-  // }
-
-  // scaleTo(...optionsIn: Array<TypeScaleAnimationStepInputOptions>) {
-  //   const options = joinObjects({}, { element: this }, ...optionsIn);
-  //   return new animations.ScaleAnimationStep(options);
-  // }
-
-  // moveTo(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
-  //   return this.moveToPosition(...optionsIn);
-  // }
-
-  // moveToPosition(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
-  //   const options = joinObjects({}, { element: this }, ...optionsIn);
-  //   return new animations.PositionAnimationStep(options);
-  // }
-
-  // moveToTransform(...optionsIn: Array<TypeTransformAnimationStepInputOptions>) {
-  //   const options = joinObjects({}, { element: this }, ...optionsIn);
-  //   return new animations.TransformAnimationStep(options);
-  // }
-
-  // dissolveIn(
-  //   timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
-  //   ...args: Array<TypeColorAnimationStepInputOptions>
-  // ) {
-  //   const defaultOptions = { element: this };
-  //   let options;
-  //   if (typeof timeOrOptionsIn === 'number') {
-  //     options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
-  //   } else {
-  //     options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
-  //   }
-  //   return new animations.DissolveInAnimationStep(options);
-  // }
-
-  // dissolveOut(
-  //   timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
-  //   ...args: Array<TypeColorAnimationStepInputOptions>
-  // ) {
-  //   const defaultOptions = { element: this };
-  //   let options;
-  //   if (typeof timeOrOptionsIn === 'number') {
-  //     options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
-  //   } else {
-  //     options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
-  //   }
-  //   return new animations.DissolveOutAnimationStep(options);
-  // }
-
-  // animationBuilder(...optionsIn: Array<TypeAnimationBuilderInputOptions>) {
-  //   return new animations.AnimationBuilder(this, ...optionsIn);
-  // }
-
-  // Deprecate
-  // moveToScenario(
-  //   ...optionsIn: Array<TypeTransformAnimationStepInputOptions & { scenario: string }>
-  // ) {
-  //   const defaultOptions = { element: this };
-  //   const options = joinObjects({}, defaultOptions, ...optionsIn);
-  //   if (options.target != null
-  //     && options.target in options.element.scenarios
-  //   ) {
-  //     const target = options.element.getScenarioTarget(options.target);
-  //     options.target = target;
-  //   }
-  //   if (options.start != null
-  //     && options.start in options.element.scenarios
-  //   ) {
-  //     const start = options.element.getScenarioTarget(options.start);
-  //     options.start = start;
-  //   }
-  //   if (options.delta != null
-  //     && options.delta in options.element.scenarios
-  //   ) {
-  //     const delta = options.element.getScenarioTarget(options.delta);
-  //     options.delta = delta;
-  //   }
-  //   return new animations.TransformAnimationStep(options);
-  // }
-  // //////////// Deprecate End
-
-  // moveToScenario_old(
-  //   scenarioName: string,
-  //   animationTimeOrVelocity: ?number = null,    // null uses velocity
-  //   callback: ?() => void = null,
-  //   rotDirection: -1 | 1 | 0 | 2 = 0,
-  // ) {
-  //   this.stop();
-  //   const target = this.getScenarioTarget(scenarioName);
-  //   let time = 1;
-  //   const estimatedTime = this.getTimeToMoveToScenario(scenarioName, rotDirection);
-  //   if (animationTimeOrVelocity == null) {
-  //     time = estimatedTime;
-  //   } else {
-  //     time = animationTimeOrVelocity;
-  //   }
-  //   if (time > 0 && estimatedTime !== 0) {
-  //     this.animateTo(target, time, 0, rotDirection, callback);
-  //   } else if (callback != null) {
-  //     callback();
-  //   }
-  //   return time;
-  // }
 
   // Used only to clear 2D context
   // eslint-disable-next-line class-methods-use-this
@@ -1342,632 +747,6 @@ class DiagramElement {
     return new Transform(this.lastDrawTransform.order.slice(-parentCount));
   }
 
-  // // Start an animation plan of phases ending in a callback
-  // animatePlan(
-  //   phases: Array<AnimationPhase>,
-  //   callback: ?(boolean) => void = null,
-  // ): void {
-  //   this.stopAnimating();
-  //   this.stopMovingFreely();
-  //   this.stopBeingMoved();
-  //   this.animate.transform.plan = [];
-  //   for (let i = 0, j = phases.length; i < j; i += 1) {
-  //     this.animate.transform.plan.push(phases[i]);
-  //   }
-  //   if (this.animate.transform.plan.length > 0) {
-  //     if (callback) {
-  //       this.animate.transform.callback = callback;
-  //     }
-  //     this.state.isAnimating = true;
-  //     this.state.animation.currentPhaseIndex = 0;
-  //     this.animatePhase(this.state.animation.currentPhaseIndex);
-  //   }
-  // }
-
-  // animateColorPlan(
-  //   phases: Array<ColorAnimationPhase>,
-  //   callback: ?(boolean) => void = null,
-  // ): void {
-  //   this.stopAnimatingColor();
-  //   this.animate.color.plan = [];
-  //   for (let i = 0, j = phases.length; i < j; i += 1) {
-  //     this.animate.color.plan.push(phases[i]);
-  //   }
-  //   if (this.animate.color.plan.length > 0) {
-  //     if (callback) {
-  //       this.animate.color.callback = callback;
-  //     }
-  //     // console.log(this.animate.color.toDisolve, this.name)
-  //     // this.state.disolving = this.animate.color.toDisolve;
-  //     // this.animate.color.toDisolve = '';
-  //     this.state.isAnimatingColor = true;
-  //     this.state.colorAnimation.currentPhaseIndex = 0;
-  //     this.animateColorPhase(this.state.colorAnimation.currentPhaseIndex);
-  //   }
-  // }
-
-  // animateCustomPlan(
-  //   phases: Array<CustomAnimationPhase>,
-  //   callback: ?(boolean) => void = null,
-  // ): void {
-  //   this.stopAnimatingCustom();
-  //   this.animate.custom.plan = [];
-  //   for (let i = 0, j = phases.length; i < j; i += 1) {
-  //     this.animate.custom.plan.push(phases[i]);
-  //   }
-  //   if (this.animate.custom.plan.length > 0) {
-  //     if (callback) {
-  //       this.animate.custom.callback = callback;
-  //     }
-  //     this.state.isAnimatingCustom = true;
-  //     this.state.customAnimation.currentPhaseIndex = 0;
-  //     this.animateCustomPhase(this.state.customAnimation.currentPhaseIndex);
-  //   }
-  // }
-
-  // // Start the animation of a phase - this should only be called by methods
-  // // internal to this class.
-  // animatePhase(index: number): void {
-  //   this.state.animation.currentPhase = this.animate.transform.plan[index];
-  //   this.state.animation.currentPhase.start(this.transform._dup());
-  // }
-
-
-  // animateColorPhase(index: number): void {
-  //   this.state.colorAnimation.currentPhase = this.animate.color.plan[index];
-  //   this.state.colorAnimation.currentPhase.start(this);
-  // }
-
-  // animateCustomPhase(index: number): void {
-  //   this.state.customAnimation.currentPhase = this.animate.custom.plan[index];
-  //   this.state.customAnimation.currentPhase.start();
-  // }
-
-  // stopAnimatingGeneric(
-  //   cancelled: boolean,
-  //   forceSetToEnd: ?boolean,
-  //   currentPhaseIndex: number,
-  //   animateString: 'transform' | 'color' | 'custom',
-  //   isState: 'isAnimating' | 'isAnimatingColor' | 'isAnimatingCustom',
-  // ) {
-  //   // Animation state needs to be cleaned up before calling callbacks
-  //   // as the last phase callback may trigger more animations which need
-  //   // to start from scratch (and not use the existing callback for example).
-  //   // Therefore, make some temporary variables to store the animation state.
-  //   let runRemainingPhases = false;
-  //   // const currentIndex = currentPhaseIndex;
-  //   let runLastPhase = false;
-  //   const { plan, callback } = this.animate[animateString];
-
-  //   // If the animation was cancelled, then run finish on all unfinished
-  //   // phases.
-  //   if (plan.length > 0
-  //     && this.state[isState]
-  //     && cancelled
-  //   ) {
-  //     runRemainingPhases = true;
-  //   }
-
-  //   // If the animation finished without being cancelled, then just call
-  //   // the finish routine on the last phase as it hasn't been called yet
-  //   // by setNextTransform
-  //   if (!cancelled) {
-  //     runLastPhase = true;
-  //   }
-
-  //   // Reset the animation state, plan and callback
-  //   this.state[isState] = false;
-  //   // $FlowFixMe
-  //   this.animate[animateString].plan = [];
-  //   this.animate[animateString].callback = null;
-
-  //   // Finish remaining phases if required.
-  //   if (runRemainingPhases) {
-  //     const endIndex = plan.length - 1;
-  //     for (let i = currentPhaseIndex; i <= endIndex; i += 1) {
-  //       const phase = plan[i];
-  //       if (phase instanceof CustomAnimationPhase) {
-  //         phase.finish(cancelled, forceSetToEnd);
-  //       } else {
-  //         phase.finish(this, cancelled, forceSetToEnd);
-  //       }
-  //     }
-  //   }
-
-  //   // Finish last phases if required.
-  //   if (runLastPhase) {
-  //     if (plan.length > 0) {
-  //       const phase = plan.slice(-1)[0];
-  //       if (phase instanceof CustomAnimationPhase) {
-  //         phase.finish(cancelled, forceSetToEnd);
-  //       } else {
-  //         phase.finish(this, cancelled, forceSetToEnd);
-  //       }
-  //     }
-  //   }
-
-  //   // Run animation plan callback if it exists.
-  //   if (callback != null) {
-  //     callback(cancelled);
-  //   }
-  // }
-
-  // // When animation is stopped, any callback associated with the animation
-  // // needs to be called, with whatever is passed to stopAnimating.
-  // stopAnimating(
-  //   cancelled: boolean = true,
-  //   forceSetToEnd: ?boolean = null,
-  // ): void {
-  //   this.stopAnimatingGeneric(
-  //     cancelled, forceSetToEnd,
-  //     this.state.animation.currentPhaseIndex,
-  //     'transform',
-  //     'isAnimating',
-  //   );
-  // }
-
-  // stopAnimatingColor(
-  //   cancelled: boolean = true,
-  //   forceSetToEnd: ?boolean = null,   // null means use phase default
-  // ): void {
-  //   this.stopAnimatingGeneric(
-  //     cancelled, forceSetToEnd,
-  //     this.state.colorAnimation.currentPhaseIndex,
-  //     'color',
-  //     'isAnimatingColor',
-  //   );
-  // }
-
-  // stopAnimatingCustom(
-  //   cancelled: boolean = true,
-  //   forceSetToEnd: ?boolean = null,   // null means use phase default
-  // ): void {
-  //   this.stopAnimatingGeneric(
-  //     cancelled, forceSetToEnd,
-  //     this.state.colorAnimation.currentPhaseIndex,
-  //     'custom',
-  //     'isAnimatingCustom',
-  //   );
-  // }
-
-
-  // **************************************************************
-  // **************************************************************
-  // Helper functions for quicker animation plans
-  // Deprecate
-  // animateTo(
-  //   transform: Transform,
-  //   timeOrVelocity: number | Transform = 1,
-  //   delay: number = 0,
-  //   rotDirection: TypeRotationDirection = 0,
-  //   callback: ?(?mixed) => void = null,
-  //   easeFunction: (number) => number = tools.easeinout,
-  // ): void {
-  //   this.animateTransformToWithDelay(
-  //     transform, delay, timeOrVelocity, rotDirection,
-  //     callback, true, easeFunction,
-  //   );
-  // }
-
-  // // Deprecate
-  // animateFrom(
-  //   transform: Transform,
-  //   timeOrVelocity: number | Transform = 1,
-  //   rotDirection: TypeRotationDirection = 0,
-  //   callback: ?(boolean) => void = null,
-  //   easeFunction: (number) => number = tools.easeinout,
-  // ): void {
-  //   const target = this.transform._dup();
-  //   this.animateTransformToWithDelay(
-  //     target, 0, timeOrVelocity, rotDirection,
-  //     callback, true, easeFunction,
-  //   );
-  // }
-
-  // // Deprecate
-  // animateColorTo(
-  //   color: Array<number>,
-  //   time: number = 1,
-  //   callback: ?(?boolean) => void = null,
-  //   finishOnCancel: boolean = true,
-  //   easeFunction: (number) => number = tools.linear,
-  // ): void {
-  //   this.animateColorToWithDelay(
-  //     color, 0, time, null, callback, finishOnCancel, easeFunction,
-  //   );
-  // }
-
-  // // Deprecate
-  // animateTransformToWithDelay(
-  //   targetTransform: Transform,
-  //   delay: number = 0,
-  //   timeOrVelocity: number | Transform = 1,
-  //   rotDirection: TypeRotationDirection = 0,
-  //   callback: ?(boolean) => void = null,
-  //   finishOnCancel: boolean = true,
-  //   easeFunction: (number) => number = tools.easeinout,
-  //   addToExistingPlan: boolean = true,
-  //   // translationPath: ?(Point, Point, number) => Point = null,
-  // ): void {
-  //   const callbackToUse = checkCallback(callback);
-  //   let moveTime = 0;
-  //   if (timeOrVelocity instanceof Transform) {
-  //     moveTime = getMaxTimeFromVelocity(
-  //       this.transform,
-  //       targetTransform,
-  //       timeOrVelocity,
-  //       rotDirection,
-  //     );
-  //   } else {
-  //     moveTime = timeOrVelocity;
-  //   }
-  //   if (delay === 0 && moveTime === 0) {
-  //     this.setTransform(targetTransform);
-  //     callbackToUse(false);
-  //     return;
-  //   }
-
-  //   let phaseDelay = null;
-  //   let phaseMove = null;
-  //   const phases = [];
-
-  //   let delayCallback = null;
-  //   let moveCallback = callbackToUse;
-  //   if (moveTime === 0) {
-  //     delayCallback = (cancelled: boolean) => {
-  //       callbackToUse(cancelled);
-  //     };
-  //     moveCallback = null;
-  //   }
-
-  //   if (delay > 0) {
-  //     let delayTransform = this.transform._dup();
-  //     if (addToExistingPlan && this.animate.transform.plan.length > 0) {
-  //       delayTransform = this.animate
-  //         .transform.plan.slice(-1)[0].targetTransform._dup();
-  //     }
-  //     phaseDelay = new AnimationPhase(
-  //       delayTransform, delayTransform, delay, rotDirection, delayCallback,
-  //       finishOnCancel, tools.linear, this.animate.transform.translation.style,
-  //       this.animate.transform.translation.options,
-  //     );
-  //     phases.push(phaseDelay);
-  //   }
-
-  //   if (moveTime > 0) {
-  //     phaseMove = new AnimationPhase(
-  //       null, targetTransform, timeOrVelocity, rotDirection, moveCallback,
-  //       finishOnCancel, easeFunction, this.animate.transform.translation.style,
-  //       this.animate.transform.translation.options,
-  //     );
-  //     phases.push(phaseMove);
-  //   }
-
-  //   if (phases.length > 0) {
-  //     if (addToExistingPlan && this.state.isAnimating) {
-  //       this.animate.transform.plan = [...this.animate.transform.plan, ...phases];
-  //     } else {
-  //       this.animatePlan(phases);
-  //     }
-  //   }
-  // }
-
-  // // Deprecate
-  // animateColorToWithDelay(
-  //   color: Array<number>,
-  //   delay: number,
-  //   time: number = 1,
-  //   disolve: 'in' | 'out' | null = null,
-  //   callback: ?(boolean) => void = null,
-  //   finishOnCancel: boolean = true,
-  //   easeFunction: (number) => number = tools.linear,
-  //   addToExistingPlan: boolean = true,
-  // ): void {
-  //   const callbackToUse = checkCallback(callback);
-  //   if (delay === 0 && time === 0) {
-  //     this.setColor(color);
-  //     callbackToUse(false);
-  //     return;
-  //   }
-
-  //   let phaseDelay = null;
-  //   let phaseColor = null;
-  //   const phases = [];
-
-  //   let delayCallback = null;
-  //   let colorCallback = callbackToUse;
-  //   if (time === 0) {
-  //     delayCallback = (cancelled: boolean) => {
-  //       if (!cancelled && finishOnCancel) {
-  //         this.setColor(color);
-  //       }
-  //       callbackToUse(cancelled);
-  //     };
-  //     colorCallback = null;
-  //   }
-  //   if (delay > 0) {
-  //     let delayColor = this.color.slice();
-  //     if (addToExistingPlan && this.animate.color.plan.length > 0) {
-  //       delayColor = this.animate.color.plan.slice(-1)[0].targetColor.slice();
-  //     }
-  //     let delayDisolve = null;
-  //     if (disolve === 'in') {
-  //       delayColor[3] = 0.01;
-  //       delayDisolve = 'in';
-  //     }
-  //     phaseDelay = new ColorAnimationPhase(
-  //       delayColor, delayColor, delay, delayDisolve, delayCallback,
-  //       finishOnCancel, tools.linear,
-  //     );
-  //     phases.push(phaseDelay);
-  //   }
-
-  //   if (time > 0) {
-  //     phaseColor = new ColorAnimationPhase(
-  //       null, color, time, disolve, colorCallback,
-  //       finishOnCancel, easeFunction,
-  //     );
-  //     phases.push(phaseColor);
-  //   }
-
-  //   if (phases.length > 0) {
-  //     if (addToExistingPlan && this.state.isAnimatingColor) {
-  //       this.animate.color.plan = [...this.animate.color.plan, ...phases];
-  //     } else {
-  //       this.animateColorPlan(phases);
-  //     }
-  //   }
-  // }
-
-  // // Deprecate
-  // disolveOutWithDelay(
-  //   delay: number = 1,
-  //   time: number = 1,
-  //   callback: ?(boolean) => void = null,
-  // ): void {
-  //   this.animateColorToWithDelay(
-  //     this.color, delay, time, 'out', callback,
-  //   );
-  // }
-
-  // // Deprecate
-  // disolveInWithDelay(
-  //   delay: number = 1,
-  //   time: number = 1,
-  //   callback: ?(boolean) => void = null,
-  // ): void {
-  //   this.animateColorToWithDelay(
-  //     this.color, delay, time, 'in', callback,
-  //   );
-  // }
-
-  // // Deprecate
-  // disolveWithDelay(
-  //   delay: number = 1,
-  //   time: number = 1,
-  //   disolve: 'in' | 'out' = 'in',
-  //   callback: ?(boolean) => void = null,
-  //   finishOnCancel: boolean = true,
-  // ): void {
-  //   this.animateColorToWithDelay(
-  //     this.color, delay, time, disolve, callback, finishOnCancel,
-  //   );
-  // }
-
-  // // Deprecate
-  // animateCustomTo(
-  //   phaseCallback: (number) => void,
-  //   time: number = 1,
-  //   startPercent: number = 0,
-  //   callback: ?(boolean) => void = null,
-  //   easeFunction: (number) => number = tools.linear,
-  // ): void {
-  //   this.animateCustomToWithDelay(
-  //     0, phaseCallback, time, startPercent, callback,
-  //     true, easeFunction, true,
-  //   );
-  // }
-
-  // // Deprecate
-  // animateCustomToWithDelay(
-  //   delay: number,
-  //   phaseCallback: (number) => void,
-  //   time: number = 1,
-  //   startPercent: number = 0,
-  //   callback: ?(boolean) => void = null,
-  //   finishOnCancel: boolean = true,
-  //   easeFunction: (number) => number = tools.easeinout,
-  //   addToExistingPlan: boolean = true,
-  // ): void {
-  //   const callbackToUse = checkCallback(callback);
-  //   if (delay === 0 && time === 0) {
-  //     phaseCallback(1);
-  //     callbackToUse(false);
-  //     return;
-  //   }
-
-  //   let phaseDelay = null;
-  //   let phaseCustom = null;
-  //   const phases = [];
-
-  //   let delayCallback = null;
-  //   let customCallback = callbackToUse;
-  //   if (time === 0) {
-  //     delayCallback = (cancelled: boolean) => {
-  //       callbackToUse(cancelled);
-  //     };
-  //     customCallback = null;
-  //   }
-
-  //   if (delay > 0) {
-  //     phaseDelay = new CustomAnimationPhase(
-  //       () => {}, delay, 0, delayCallback,
-  //       finishOnCancel, tools.linear,
-  //     );
-  //     phases.push(phaseDelay);
-  //   }
-
-  //   if (time > 0) {
-  //     phaseCustom = new CustomAnimationPhase(
-  //       phaseCallback, time, startPercent, customCallback,
-  //       finishOnCancel, easeFunction,
-  //     );
-  //     phases.push(phaseCustom);
-  //   }
-
-  //   if (phases.length > 0) {
-  //     if (addToExistingPlan && this.state.isAnimating) {
-  //       this.animate.custom.plan = [...this.animate.custom.plan, ...phases];
-  //     } else {
-  //       this.animateCustomPlan(phases);
-  //     }
-  //   }
-  // }
-
-  // // Deprecate
-  // disolveIn(
-  //   time: number = 1,
-  //   callback: ?(boolean) => void = null,
-  // ): void {
-  //   this.disolveInWithDelay(0, time, callback);
-  // }
-
-  // // Deprecate
-  // disolveOut(
-  //   time: number = 1,
-  //   callback: ?(boolean) => void = null,
-  // ): void {
-  //   this.disolveOutWithDelay(0, time, callback);
-  // }
-
-  // // With update only first instace of translation in the transform order
-  // // Deprecate
-  // animateTranslationTo(
-  //   translation: Point,
-  //   time: number = 1,
-  //   callback: ?(boolean) => void = null,
-  //   easeFunction: (number) => number = tools.easeinout,
-  // ): void {
-  //   const transform = this.transform._dup();
-  //   transform.updateTranslation(translation);
-
-  //   this.animateTransformToWithDelay(
-  //     transform, 0, time, 0,
-  //     callback, true, easeFunction,
-  //   );
-  // }
-
-  // // With update only first instace of translation in the transform order
-  // // Deprecate
-  // animateScaleTo(
-  //   scale: Point,
-  //   time: number = 1,
-  //   callback: ?(boolean) => void = null,
-  //   easeFunction: (number) => number = tools.easeinout,
-  // ): void {
-  //   const transform = this.transform._dup();
-  //   transform.updateScale(scale);
-
-  //   this.animateTransformToWithDelay(
-  //     transform, 0, time, 0,
-  //     callback, true, easeFunction,
-  //   );
-  // }
-
-  // // Will update only first instace of translation in the transform order
-  // // Deprecate
-  // animateTranslationFrom(
-  //   translation: Point,
-  //   timeOrVelocity: number | Transform = 1,
-  //   callback: ?(boolean) => void = null,
-  //   easeFunction: (number) => number = tools.easeinout,
-  // ): void {
-  //   const target = this.transform._dup();
-  //   this.transform.updateTranslation(translation);
-  //   this.animateTransformToWithDelay(
-  //     target, 0, timeOrVelocity, 0,
-  //     callback, true, easeFunction,
-  //   );
-  //   // this.animateTo(target, timeOrVelocity, 0, 0, callback, easeFunction);
-  // }
-
-  // // Deprecate
-  // animateTranslationToWithDelay(
-  //   translation: Point,
-  //   delay: number = 1,
-  //   time: number = 1,
-  //   callback: ?(boolean) => void = null,
-  //   easeFunction: (number) => number = tools.easeinout,
-  // ): void {
-  //   const transform = this.transform._dup();
-  //   transform.updateTranslation(translation);
-  //   this.animateTransformToWithDelay(
-  //     transform, delay, time, 0,
-  //     callback, true, easeFunction,
-  //   );
-  // }
-
-  // // With update only first instace of rotation in the transform order
-  // // Deprecate
-  // animateRotationTo(
-  //   rotation: number,
-  //   rotDirection: TypeRotationDirection,
-  //   timeOrVelocity: number | Transform = 1,
-  //   callback: ?(boolean) => void = null,
-  //   easeFunction: (number) => number = tools.easeinout,
-  // ): void {
-  //   const transform = this.transform._dup();
-  //   transform.updateRotation(rotation);
-  //   this.animateTransformToWithDelay(
-  //     transform, 0, timeOrVelocity, rotDirection,
-  //     callback, true, easeFunction,
-  //   );
-  // }
-
-  // // With update only first instace of rotation in the transform order
-  // // Deprecate
-  // animateTranslationAndRotationTo(
-  //   translation: Point,
-  //   rotation: number,
-  //   rotDirection: TypeRotationDirection,
-  //   time: number = 1,
-  //   callback: ?(boolean) => void = null,
-  //   easeFunction: (number) => number = tools.easeinout,
-  // ): void {
-  //   const transform = this.transform._dup();
-  //   transform.updateRotation(rotation);
-  //   transform.updateTranslation(translation._dup());
-  //   this.animateTransformToWithDelay(
-  //     transform, 0, time, rotDirection,
-  //     callback, true, easeFunction,
-  //   );
-  // }
-
-  // // Deprecate
-  // animateTranslationAndScaleTo(
-  //   translation: Point,
-  //   scale: Point | number,
-  //   time: number = 1,
-  //   callback: ?(boolean) => void = null,
-  //   easeFunction: (number) => number = tools.easeinout,
-  // ): void {
-  //   const transform = this.transform._dup();
-  //   if (typeof scale === 'number') {
-  //     transform.updateScale(scale, scale);
-  //   } else {
-  //     transform.updateScale(scale._dup());
-  //   }
-
-  //   transform.updateTranslation(translation._dup());
-  //   this.animateTransformToWithDelay(
-  //     transform, 0, time, 0,
-  //     callback, true, easeFunction,
-  //   );
-  // }
-  // **************************************************************
-  // **************************************************************
-
-
   // Being Moved
   startBeingMoved(): void {
     // this.stopAnimating();
@@ -2016,7 +795,6 @@ class DiagramElement {
       this.move.freely.zeroVelocityThreshold,
       this.move.maxVelocity,
     );
-    console.log(this.transform.t(), newTransform.t())
     this.state.movement.previousTime = currentTime;
   }
 
@@ -2524,34 +1302,6 @@ class DiagramElement {
       this.isMovable = true;
     }
   }
-
-  // processParentTransform(parentTransform: Transform): Transform {
-  //   let newTransform;
-  //   if (this.noRotationFromParent) {
-  //     const finalParentTransform = parentTransform._dup();
-  //     let r = 0;
-  //     for (let i = 0; i < finalParentTransform.order.length; i += 1) {
-  //       const t = finalParentTransform.order[i];
-  //       if (t instanceof Rotation) {
-  //         r += t.r;
-  //       }
-  //     }
-
-  //     const m = parentTransform.matrix();
-  //     const translation = new Point(m[2], m[5]);
-  //     const scale = new Point(
-  //       new Point(m[0], m[3]).distance(),
-  //       new Point(m[1], m[4]).distance(),
-  //     );
-  //     newTransform = new Transform()
-  //       .scale(scale)
-  //       // .rotate(r)
-  //       .translate(translation);
-  //   } else {
-  //     newTransform = parentTransform;
-  //   }
-  //   return newTransform;
-  // }
 }
 
 // ***************************************************************
@@ -2747,32 +1497,21 @@ class DiagramElementPrimative extends DiagramElement {
         }
       }
       this.animations.nextFrame(now);
-      // Deprecate
-      this.setNextTransform(now);
-      // // Deprecate
-      // this.setNextColor(now);
-      // set next color can end up hiding an element when disolving out
+      this.nextMovingFreelyFrame(now);
+      
       if (!this.isShown) {
         return;
       }
-      // Deprecate
-      // this.setNextCustomAnimation(now);
-      // this.lastDrawParentTransform = parentTransform._dup();
       this.lastDrawElementTransformPosition = {
         parentCount: parentTransform.order.length,
         elementCount: this.transform.order.length,
       };
 
-      // const finalParentTransform = this.processParentTransform(parentTransform);
       const newTransform = parentTransform.transform(this.transform);
       const pulseTransforms = this.transformWithPulse(now, newTransform);
 
-      // let matrix = m2.mul(transformMatrix, this.transform.matrix());
-      // matrix = this.transformWithPulse(now, matrix);
-
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawTransform = pulseTransforms[0];
-      // this.lastDrawPulseTransform = pulseTransforms[0]._dup();
 
       let pointCount = -1;
       if (this.drawingObject instanceof VertexObject) {
@@ -2849,57 +1588,7 @@ class DiagramElementPrimative extends DiagramElement {
     }
     return oldWebgl;
   }
-  // // Update the translation move boundary for the element's transform.
-  // // This will limit the first translation part of the transform to only
-  // // translations within the max/min limit.
-  // updateMoveTranslationBoundary(
-  //   bounday: Array<number> = [
-  //     this.diagramLimits.left,
-  //     this.diagramLimits.top - this.diagramLimits.height,
-  //     this.diagramLimits.left + this.diagramLimits.width,
-  //     this.diagramLimits.top],
-  //   scale: Point = new Point(1, 1),
-  // ): void {
-  //   const glSpace = {
-  //     x: { bottomLeft: -1, width: 2 },
-  //     y: { bottomLeft: -1, height: 2 },
-  //   };
-  //   const diagramSpace = {
-  //     x: {
-  //       bottomLeft: this.diagramLimits.left,
-  //       width: this.diagramLimits.width,
-  //     },
-  //     y: {
-  //       bottomLeft: this.diagramLimits.bottom,
-  //       height: this.diagramLimits.height,
-  //     },
-  //   };
-
-  //   const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
-
-  //   const rect = this.drawingObject.getRelativeGLBoundingRect(this.lastDrawTransform.matrix());
-
-  //   const minPoint = new Point(rect.left, rect.bottom).transformBy(glToDiagramSpace.matrix());
-  //   const maxPoint = new Point(rect.right, rect.top).transformBy(glToDiagramSpace.matrix());
-
-  //   const min = new Point(0, 0);
-  //   const max = new Point(0, 0);
-
-  //   min.x = bounday[0] - minPoint.x * scale.x;
-  //   min.y = bounday[1] - minPoint.y * scale.y;
-  //   max.x = bounday[2] - maxPoint.x * scale.x;
-  //   max.y = bounday[3] - maxPoint.y * scale.y;
-
-  //   this.move.maxTransform.updateTranslation(
-  //     max.x,
-  //     max.y,
-  //   );
-  //   this.move.minTransform.updateTranslation(
-  //     min.x,
-  //     min.y,
-  //   );
-  // }
-
+  
   getGLBoundaries() {
     return this.drawingObject.getGLBoundaries(this.lastDrawTransform.matrix());
   }
@@ -3051,21 +1740,8 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   draw(parentTransform: Transform = new Transform(), now: number = 0) {
-    // console.log('draw collection', now, this.name)
-    // if (this.name === 'fig3') {
-    //   const ga = new GlobalAnimation();
-    //   const deltaTime = new Date().getTime() - ga.diagramDrawStart;
-    //   // console.log(this.name, deltaTime)
-    // }
-    // if (this.name === 'circumference') {
-    //   const ga = new GlobalAnimation();
-    //   const deltaTime = new Date().getTime() - ga.diagramDrawStart;
-    //   // console.log(this.name, deltaTime)
-    // }
     if (this.isShown) {
       if (this.isRenderedAsImage === true) {
-        // if (this.willStartAnimating()) {
-        //   console.log(this.name, this.willStartAnimating())
         if (this.willStartAnimating()) {
           this.unrender();
         } else {
@@ -3073,24 +1749,17 @@ class DiagramElementCollection extends DiagramElement {
         }
       }
       this.animations.nextFrame(now);
-      // // Deprecate
-      this.setNextTransform(now);
-      // // Deprecate
-      // this.setNextColor(now);
+      this.nextMovingFreelyFrame(now);
 
       // set next color can end up hiding an element when disolving out
       if (!this.isShown) {
         return;
       }
-      // // Deprecate
-      // this.setNextCustomAnimation(now);
-      // this.lastDrawParentTransform = parentTransform._dup();
-      // this.lastDrawElementTransform = this.transform._dup();
+
       this.lastDrawElementTransformPosition = {
         parentCount: parentTransform.order.length,
         elementCount: this.transform.order.length,
       };
-      // const finalParentTransform = this.processParentTransform(parentTransform);
       const newTransform = parentTransform.transform(this.transform);
       const pulseTransforms = this.transformWithPulse(now, newTransform);
 
@@ -3311,36 +1980,18 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   updateHTMLElementTie(
-    // pixelSpaceToDiagramSpaceTransform: Transform,
-    // diagramToPixelSpaceScale: Point,
-    // diagramToGLSpaceTransformMatrix: Array<number>,
     container: HTMLElement,
   ) {
-    // console.log('collection', this.name)
     super.updateHTMLElementTie(
-      // pixelSpaceToDiagramSpaceTransform,
-      // diagramToPixelSpaceScale,
-      // diagramToGLSpaceTransformMatrix,
       container,
     );
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       element.updateHTMLElementTie(
-        // pixelSpaceToDiagramSpaceTransform,
-        // diagramToPixelSpaceScale,
-        // diagramToGLSpaceTransformMatrix,
         container,
       );
     }
   }
-
-  // updateHTMLElementTieScale() {
-  //   super.updateHTMLElementTieScale();
-  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
-  //     const element = this.elements[this.drawOrder[i]];
-  //     element.updateHTMLElementTieScale();
-  //   }
-  // }
 
   // Returns an array of touched elements.
   // In a collection, elements defined later in the collection.order
@@ -3508,20 +2159,6 @@ class DiagramElementCollection extends DiagramElement {
     return elements;
   }
 
-  // getAllTiedElements() {
-  //   let elements = [];
-  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
-  //     const element = this.elements[this.drawOrder[i]];
-  //     if (element.tieToHTML.element != null) {
-  //       elements.push(element);
-  //     }
-  //     if (element instanceof DiagramElementCollection) {
-  //       elements = [...elements, ...element.getAllTiedElements()];
-  //     }
-  //   }
-  //   return elements;
-  // }
-
   // Get all ineractive elemnts, but only go as deep as a
   // DiagramElementColleciton if it is touchable or movable
   getAllCurrentlyInteractiveElements() {
@@ -3543,50 +2180,6 @@ class DiagramElementCollection extends DiagramElement {
     }
     return elements;
   }
-
-
-  // disolveWithDelay(
-  //   delay: number = 1,
-  //   time: number = 1,
-  //   disolve: 'in' | 'out' = 'in',
-  //   callback: ?(boolean) => void = null,
-  // ): void {
-  //   for (let i = 0; i < this.order.length; i += 1) {
-  //     const element = this.elements[this.order[i]];
-  //     console.log(element.name)
-  //     element.disolveWithDelay(delay, time, disolve, callback);
-  //   }
-  // }
-
-  // // deprecate
-  // disolveElementsOut(
-  //   time: number = 1,
-  //   callback: ?(boolean) => void = null,
-  // ): void {
-  //   for (let i = 0; i < this.order.length; i += 1) {
-  //     const element = this.elements[this.order[i]];
-  //     if (element instanceof DiagramElementCollection) {
-  //       element.disolveElementsOut(time, callback);
-  //     } else {
-  //       element.disolveOut(time, callback);
-  //     }
-  //   }
-  // }
-
-  // // deprecate
-  // disolveElementsIn(
-  //   time: number = 1,
-  //   callback: ?(boolean) => void = null,
-  // ): void {
-  //   for (let i = 0; i < this.order.length; i += 1) {
-  //     const element = this.elements[this.order[i]];
-  //     if (element instanceof DiagramElementCollection) {
-  //       element.disolveElementsIn(time, callback);
-  //     } else {
-  //       element.disolveIn(time, callback);
-  //     }
-  //   }
-  // }
 
   // This method is here as a convenience method for content item selectors
   // eslint-disable-next-line class-methods-use-this
