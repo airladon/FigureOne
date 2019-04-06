@@ -2820,7 +2820,7 @@ class DiagramElementPrimative extends DiagramElement {
       || this.state.isPulsing
       // || this.state.isAnimatingColor
       // || this.state.isAnimatingCustom
-      || this.animations.state === 'animating'
+      || this.animations.willStartAnimating()
     ) {
       return true;
     }
