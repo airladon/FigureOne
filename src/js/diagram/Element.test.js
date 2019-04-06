@@ -2,7 +2,7 @@ import {
   DiagramElementPrimative,
   DiagramElementCollection,
 } from './Element';
-import { AnimationPhase } from './AnimationPhase';
+// import { AnimationPhase } from './AnimationPhase';
 import {
   Point, Transform, TransformLimit,
 } from '../tools/g2';
@@ -152,7 +152,7 @@ describe('Animationa and Movement', () => {
               duration: 1,
               direction: 1,
               onFinish: callback,
-              progression: linear
+              progression: linear,
             })
             .start();
           element.draw(new Transform(), 0);     // Initial draw setting start time
@@ -188,7 +188,7 @@ describe('Animationa and Movement', () => {
             })
             .whenFinished(callback)
             .start();
-          
+
           expect(callback.mock.calls).toHaveLength(0);
           element.draw(identity, 0);          // Give animation an initial time
 
