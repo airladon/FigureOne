@@ -604,12 +604,15 @@ export class EquationNew extends DiagramElementCollection {
     const defaultOptions = {
       subForm: 'base',
       elementMods: {},
+      duration: undefined,
       // duration: null,                // use velocities instead of time
       description: '',
       modifiers: {},
       scale: this.eqn.scale,
       alignment: this.eqn.defaultFormAlignment,
       translation: {},
+      fromNext: undefined,
+      fromPrev: undefined,
     };
     let optionsToUse = defaultOptions;
     if (options) {
@@ -629,14 +632,18 @@ export class EquationNew extends DiagramElementCollection {
 
     // Populate element mods
     form[subForm].elementMods = {};
-    Object.entries(optionsToUse.elementMods).forEach(([elementName, mods]) => {
+    Object.keys(optionsToUse.elementMods).forEach((elementName) => {
+      const mods = optionsToUse.elementMods[elementName];
       const diagramElement = getDiagramElement(this, elementName);
-      form[subForm].elementMods[elementName] = { element: diagramElement, mods };
+      if (diagramElement != null) {
+        form[subForm].elementMods[elementName] = { element: diagramElement, mods };
+      }
     });
 
     // Populate translation mods
     form[subForm].translation = {};
-    Object.entries(optionsToUse.translation).forEach(([elementName, mods]) => {
+    Object.keys(optionsToUse.translation).forEach((elementName) => {
+      const mods = optionsToUse.translation[elementName];
       const diagramElement = getDiagramElement(this, elementName);
       let direction;
       let style;
@@ -646,20 +653,24 @@ export class EquationNew extends DiagramElementCollection {
       } else {
         ({ style, direction, mag } = mods);
       }
-      form[subForm].translation[elementName] = {
-        element: diagramElement, style, direction, mag,
-      };
+      if (diagramElement != null) {
+        form[subForm].translation[elementName] = {
+          element: diagramElement, style, direction, mag,
+        };
+      }
     });
 
     // Populate translation mods
-    if (optionsToUse.fromPrev != null) {
+    const { fromPrev } = optionsToUse;
+    if (fromPrev != null) {
       form[subForm].fromPrev = {};
-      if (optionsToUse.fromPrev.duration !== undefined) {
-        form[subForm].fromPrev.duration = optionsToUse.fromPrev.duration;
+      if (fromPrev.duration !== undefined) {
+        form[subForm].fromPrev.duration = fromPrev.duration;
       }
       form[subForm].fromPrev.translation = {};
-      if (optionsToUse.fromPrev.translation != null) {
-        Object.entries(optionsToUse.fromPrev.translation).forEach(([elementName, mods]) => {
+      if (fromPrev.translation != null) {
+        Object.keys(fromPrev.translation).forEach((elementName) => {
+          const mods = fromPrev.translation[elementName];
           const diagramElement = getDiagramElement(this, elementName);
           let direction;
           let style;
@@ -669,22 +680,27 @@ export class EquationNew extends DiagramElementCollection {
           } else {
             ({ style, direction, mag } = mods);
           }
-          form[subForm].fromPrev.translation[elementName] = {
-            element: diagramElement, style, direction, mag,
-          };
+          if (diagramElement != null) {
+            // $FlowFixMe
+            form[subForm].fromPrev.translation[elementName] = {
+              element: diagramElement, style, direction, mag,
+            };
+          }
         });
       }
     }
 
     // Populate translation mods
-    if (optionsToUse.fromNext != null) {
+    const { fromNext } = optionsToUse;
+    if (fromNext != null) {
       form[subForm].fromNext = {};
-      if (optionsToUse.fromNext.duration !== undefined) {
-        form[subForm].fromNext.duration = optionsToUse.fromNext.duration;
+      if (fromNext.duration !== undefined) {
+        form[subForm].fromNext.duration = fromNext.duration;
       }
       form[subForm].fromNext.translation = {};
-      if (optionsToUse.fromNext.translation != null) {
-        Object.entries(optionsToUse.fromNext.translation).forEach(([elementName, mods]) => {
+      if (fromNext.translation != null) {
+        Object.keys(fromNext.translation).forEach((elementName) => {
+          const mods = fromNext.translation[elementName];
           const diagramElement = getDiagramElement(this, elementName);
           let direction;
           let style;
@@ -694,9 +710,12 @@ export class EquationNew extends DiagramElementCollection {
           } else {
             ({ style, direction, mag } = mods);
           }
-          form[subForm].fromNext.translation[elementName] = {
-            element: diagramElement, style, direction, mag,
-          };
+          if (diagramElement != null) {
+            // $FlowFixMe
+            form[subForm].fromNext.translation[elementName] = {
+              element: diagramElement, style, direction, mag,
+            };
+          }
         });
       }
     }
@@ -869,11 +888,7 @@ export class EquationNew extends DiagramElementCollection {
 
     // Get the desired form - preference is name, then series index,
     // then next form in the current series
-    let form: {
-      base: EquationForm;                   // There is always a base form
-      [subFormName: string]: EquationForm;  // Sub forms may differ in units
-      name: string;                         // Name of form
-    };
+    let form;
     if (options.name != null) {
       form = this.eqn.forms[options.name];
     } else if (options.index != null) {
@@ -901,7 +916,7 @@ export class EquationNew extends DiagramElementCollection {
     // const nextForm = this.eqn.forms[this.eqn.currentFormSeries[formIndex]];
     let subForm = null;
     let subFormToUse = null;
-    const possibleSubForms
+    const possibleSubForms        // $FlowFixMe - this is already checked above
           = this.eqn.subFormPriority.filter(sf => sf in form);
     if (possibleSubForms.length) {
       // eslint-disable-next-line prefer-destructuring
