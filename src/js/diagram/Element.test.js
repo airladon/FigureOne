@@ -42,7 +42,7 @@ describe('Animationa and Movement', () => {
       });
       describe('Rotation', () => {
         test('Rotate 1 radian, for 1 second, with linear movement', () => {
-          expect(element.state.isAnimating).toBe(false);
+          // expect(element.state.isAnimating).toBe(false);
           expect(element.isMoving()).toBe(false);
 
           // element.animateRotationTo(1, 1, 1, null, linear);
@@ -126,75 +126,92 @@ describe('Animationa and Movement', () => {
         test('Callback', () => {
           const callback = jest.fn();         // Callback mock
           // Setup the animation
-          element.animateRotationTo(1, 1, 1, callback, linear);
+          element.animations.new()
+            .rotation({
+              target: 1,
+              direction: 1,
+              duration: 1,
+              onFinish: callback,
+              progression: 'linear',
+            })
+            .start();
+          // element.animateRotationTo(1, 1, 1, callback, linear);
           element.draw(new Transform(), 0);     // Initial draw setting start time
           element.draw(new Transform(), 2);   // Draw half way through
-          element.stopAnimating();            // Stop animating
+          element.animations.cancelAll();            // Stop animating
 
-          expect(element.state.isAnimating).toBe(false);
+          // expect(element.state.isAnimating).toBe(false);
           expect(callback.mock.calls).toHaveLength(1);
         });
         test('Stop animating during animation', () => {
           const callback = jest.fn();         // Callback mock
           // Setup the animation
-          element.animateRotationTo(1, 1, 1, callback, linear);
+          element.animations.new()
+            .rotation({
+              target: 1,
+              duration: 1,
+              direction: 1,
+              onFinish: callback,
+              progression: linear
+            })
+            .start();
           element.draw(new Transform(), 0);     // Initial draw setting start time
           element.draw(new Transform(), 0.5);   // Draw half way through
-          element.stopAnimating();            // Stop animating
+          element.animations.cancelAll();            // Stop animating
 
-          expect(element.state.isAnimating).toBe(false);
+          // expect(element.state.isAnimating).toBe(false);
           expect(callback.mock.calls).toHaveLength(1);
         });
         test('Three phase animation plan', () => {
-          // Phase 1 rotates to 1 radian in 1 second
-          const phase1 = new AnimationPhase(
-            null,
-            new Transform().scale(1, 1).rotate(1).translate(0, 0),
-            1, 1, null, true, linear,
-          );
-          // Phase 2 rotates back to 0 radians in 1 second
-          const phase2 = new AnimationPhase(
-            null,
-            new Transform().scale(1, 1).rotate(0).translate(0, 0),
-            1, -1, null, true, linear,
-          );
-          // Phase 3 rotates to -1 radians in 1 second
-          const phase3 = new AnimationPhase(
-            null,
-            new Transform().scale(1, 1).rotate(-1).translate(0, 0),
-            1, -1, null, true, linear,
-          );
           const callback = jest.fn();         // Callback mock
-          expect(callback.mock.calls).toHaveLength(0);
-          element.animatePlan([phase1, phase2, phase3], callback);
+          element.animations.new()
+            .rotation({
+              target: 1,
+              direction: 1,
+              duration: 1,
+              progression: linear,
+              completeOnCancel: true,
+            })
+            .rotation({
+              target: 0,
+              direction: -1,
+              duration: 1,
+              progression: linear,
+              completeOnCancel: true,
+            })
+            .rotation({
+              target: -1,
+              direction: -1,
+              duration: 1,
+              progression: linear,
+              completeOnCancel: true,
+            })
+            .whenFinished(callback)
+            .start();
+          
           expect(callback.mock.calls).toHaveLength(0);
           element.draw(identity, 0);          // Give animation an initial time
 
           // Check initial values
-          expect(element.state.isAnimating).toBe(true);
-          expect(element.state.animation.currentPhaseIndex).toBe(0);
+          expect(element.isMoving()).toBe(true);
 
           // Half way through first phase
           element.draw(identity, 0.5);
-          expect(element.state.animation.currentPhaseIndex).toBe(0);
           expect(element.transform.r()).toBe(0.5);
           expect(callback.mock.calls).toHaveLength(0);
 
           // End of first phase
           element.draw(identity, 1.0);
-          expect(element.state.animation.currentPhaseIndex).toBe(0);
           expect(element.transform.r()).toBe(1.0);
           expect(callback.mock.calls).toHaveLength(0);
 
           // Start of next phase
           element.draw(identity, 1.1);
-          expect(element.state.animation.currentPhaseIndex).toBe(1);
           expect(round(element.transform.r())).toBe(0.9);
           expect(callback.mock.calls).toHaveLength(0);
 
           // Skip to into third phase
           element.draw(identity, 2.1);
-          expect(element.state.animation.currentPhaseIndex).toBe(2);
           expect(round(element.transform.r())).toBe(-0.1);
           expect(callback.mock.calls).toHaveLength(0);
 
@@ -202,7 +219,7 @@ describe('Animationa and Movement', () => {
           element.draw(identity, 3.1);
           expect(round(element.transform.r())).toBe(-1);
           expect(callback.mock.calls).toHaveLength(1);
-          expect(element.state.isAnimating).toBe(false);
+          expect(element.isMoving()).toBe(false);
         });
       });
     });
@@ -616,7 +633,6 @@ describe('Animationa and Movement', () => {
       webgl.gl.drawArrays = draw;
       collection.draw(identity, 0);
       expect(draw.mock.instances).toHaveLength(2);
-      expect(collection.state.isAnimating).toBe(false);
       expect(collection.state.isBeingMoved).toBe(false);
       expect(collection.state.isMovingFreely).toBe(false);
 
@@ -662,7 +678,7 @@ describe('Animationa and Movement', () => {
 
       // Now at (1, 0), 0.1 and rotating with velocity 0.1 rads/s
       collection.startMovingFreely(callbackMoveFree);
-      expect(collection.state.isAnimating).toBe(false);
+      // expect(collection.state.isAnimating).toBe(false);
       expect(collection.state.isBeingMoved).toBe(false);
       expect(collection.state.isMovingFreely).toBe(true);
 
@@ -683,7 +699,7 @@ describe('Animationa and Movement', () => {
       //  rotation: 0.1 + 0.1*5 - 0.5*0.01*5*5
       //  with velocity: 0.1 - 0.01*1*1
       collection.draw(new Transform(), 15.1);
-      expect(collection.state.isAnimating).toBe(false);
+      // expect(collection.state.isAnimating).toBe(false);
       expect(collection.state.isBeingMoved).toBe(false);
       expect(collection.state.isMovingFreely).toBe(false);
       expect(collection.state.movement.velocity).toEqual(collection.state.movement.velocity.zero());
