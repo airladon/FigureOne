@@ -54,8 +54,8 @@ export default class EquationLabel {
       position: new Point(0, 0),
       form: '0',
       formType: 'base',
-      alignH: 'middle',
-      alignV: 'center',
+      alignH: 'center',
+      alignV: 'middle',
     };
     const optionsToUse = Object.assign({}, defaultOptions, options);
     const labelTextOrEquation = optionsToUse.label;
