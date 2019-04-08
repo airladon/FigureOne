@@ -64,7 +64,7 @@ function style(
     className?: string,
     color?: Array<number>,
     centerV?: boolean,
-    list: ?'ordered' | 'unordered',
+    list?: ?'ordered' | 'unordered',
     listStyleType?: string,  // css styes
   } = 0,
   text: string | Array<string> = '',
