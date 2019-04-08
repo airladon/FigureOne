@@ -491,7 +491,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     const defaultMoveOptions = {
       type: 'rotation',
       middleLengthPercent: 0.22,
-      translationbounds: this.diagramLimits,
+      translationBounds: this.diagramLimits,
     };
     if (optionsToUse.move) {
       const moveOptions = joinObjects({}, defaultMoveOptions, optionsToUse.move);
@@ -499,7 +499,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         true,
         moveOptions.type,
         moveOptions.middleLengthPercent,
-        moveOptions.translationbounds,
+        moveOptions.translationBounds,
       );
     }
 
@@ -667,7 +667,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.setLength(this.currentLength);
   }
 
-  updateMoveTransform(t: Transform) {
+  updateMoveTransform(t: Transform = this.transform._dup()) {
     const r = t.r();
     const { bounds } = this.multiMove;
     if (r != null) {

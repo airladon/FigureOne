@@ -97,7 +97,7 @@ class DiagramElement {
 
   isMovable: boolean;             // Element is able to be moved
   isTouchable: boolean;           // Element can be touched
-  isInteractive: boolean;         // Touch event is not processed by Diagram
+  isInteractive: ?boolean;         // Touch event is not processed by Diagram
   hasTouchableElements: boolean;
 
   drawPriority: number;
@@ -212,7 +212,7 @@ class DiagramElement {
     this.transform = transform._dup();
     this.isMovable = false;
     this.isTouchable = false;
-    this.isInteractive = false;
+    this.isInteractive = null;  // means touch or move will dictate
     this.hasTouchableElements = false;
     this.color = [1, 1, 1, 1];
     this.opacity = 1;
@@ -2162,13 +2162,16 @@ class DiagramElementCollection extends DiagramElement {
       const element = this.elements[this.drawOrder[i]];
       // if (element.isShown) {
       if (element instanceof DiagramElementCollection) {
-        if (!element.isTouchable && !element.isMovable
-          && element.hasTouchableElements && !element.isInteractive
+        if (!element.isTouchable
+          && !element.isMovable
+          && element.hasTouchableElements
+          && (!element.isInteractive || element.isInteractive == null)
         ) {
           elements = [...elements, ...element.getAllCurrentlyInteractiveElements()];
         }
       }
-      if (element.isTouchable || element.isMovable || element.isInteractive) {
+      if (element.isInteractive !== false
+        && (element.isTouchable || element.isMovable || element.isInteractive)) {
         elements.push(element);
       }
       // }

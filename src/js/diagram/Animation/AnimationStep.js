@@ -31,6 +31,8 @@ export default class AnimationStep {
   removeOnFinish: boolean;
   name: string;
   startDelay: number;
+  beforeFrame: ?(number) => void;
+  afterFrame: ?(number) => void;
 
   constructor(optionsIn: TypeAnimationStepInputOptions = {}) {
     const defaultOptions = {
@@ -40,6 +42,8 @@ export default class AnimationStep {
       name: generateRandomString(),
       duration: 0,
       delay: 0,
+      beforeFrame: null,
+      afterFrame: null,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     this.onFinish = options.onFinish;
@@ -77,7 +81,13 @@ export default class AnimationStep {
         remainingTime = deltaTimeAfterDelay - this.duration;
         deltaTimeAfterDelay = this.duration;
       }
+      if (this.beforeFrame) {
+        this.beforeFrame(deltaTimeAfterDelay / this.duration);
+      }
       this.setFrame(deltaTimeAfterDelay);
+      if (this.afterFrame) {
+        this.afterFrame(deltaTimeAfterDelay / this.duration);
+      }
       if (remainingTime > 0) {
         this.finish();
       }
