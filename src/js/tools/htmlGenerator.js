@@ -58,20 +58,25 @@ function style(
   options: number | {
     left: number,
     top: number,
+    line: number,
     right: number,
     size: number,
     className: string,
     color: Array<number>,
     centerV: boolean,
+    list: ?'ordered' | 'unordered',
+    listStyleType: 'dash' | 'circle' | 'none',
   } = 0,
   text: string | Array<string> = '',
 ) {
   let marginLeft = '';
   let marginRight = '';
   let marginTop = '';
+  let marginLine = '';
   let size = '';
   let className = '';
   let color = '';
+  let listStyleType = '';
   if (typeof options === 'number') {
     marginTop = `margin-top:${options}%`;
   } else {
@@ -84,6 +89,9 @@ function style(
     if (options.top != null) {
       marginTop = `margin-top:${options.top}%;`;
     }
+    if (options.line != null) {
+      marginLine = `margin-top:${options.line}%;`;
+    }
     if (options.size != null) {
       size = `font-size:${options.size}em;`;
     }
@@ -93,18 +101,38 @@ function style(
     if (options.color) {
       color = `color:${colorArrayToRGBA(options.color)};`;
     }
+    if (options.listStyleType) {
+      listStyleType = `list-style-type:${options.listStyleType};`;
+    }
   }
 
-  const p = `<p style="${marginLeft}${marginRight}${size}${color}"${className}>`;
+  const p = `<p style="${marginLeft}${marginRight}${marginLine}${size}${color}"${className}>`;
   const pFirst = `<p style="${marginLeft}${marginRight}${marginTop}${size}${color}"${className}>`;
 
+  const li = `<li style="${marginLeft}${marginRight}${marginLine}${size}${color}${listStyleType}"${className}>`;
+  const ul = `<ul style="${marginLeft}${marginRight}${marginTop}${size}${color}"${className}>`;
+  const ol = `<ol style="${marginLeft}${marginRight}${marginTop}${size}${color}"${className}>`;
+
   let textToUse;
-  if (Array.isArray(text)) {
-    textToUse = text.join(`</p>${p}`);
+  if (options.list != null) {
+    if (Array.isArray(text)) {
+      textToUse = text.join(`</li>${li}`);
+    } else {
+      textToUse = text;
+    }
+    if (options.list === 'unordered') {
+      textToUse = `${ul}${li}${textToUse}</ul>`;
+    } else {
+      textToUse = `${ol}${li}${textToUse}</ol>`;
+    }
   } else {
-    textToUse = text;
+    if (Array.isArray(text)) {
+      textToUse = text.join(`</p>${p}`);
+    } else {
+      textToUse = text;
+    }
+    textToUse = `${pFirst}${textToUse}</p>`;
   }
-  textToUse = `${pFirst}${textToUse}</p>`;
   if (options.centerV) {
     textToUse = centerV(textToUse);
   }
