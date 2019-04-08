@@ -56,16 +56,16 @@ function centerH(text: string | Array<string> = '') {
 
 function style(
   options: number | {
-    left: number,
-    top: number,
-    line: number,
-    right: number,
-    size: number,
-    className: string,
-    color: Array<number>,
-    centerV: boolean,
+    left?: number,
+    top?: number,
+    line?: number,
+    right?: number,
+    size?: number,
+    className?: string,
+    color?: Array<number>,
+    centerV?: boolean,
     list: ?'ordered' | 'unordered',
-    listStyleType: 'dash' | 'circle' | 'none',
+    listStyleType?: string,  // css styes
   } = 0,
   text: string | Array<string> = '',
 ) {
