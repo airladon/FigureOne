@@ -1857,8 +1857,11 @@ describe('g2 tests', () => {
     test('Point', () => {
       expect(parsePoint(new Point(1, 1), new Point(0, 0))).toEqual(new Point(1, 1));
     });
+    test('Number', () => {
+      expect(parsePoint(1, new Point(0, 0))).toEqual(new Point(1, 1));
+    });
     test('Fail', () => {
-      expect(parsePoint(1, new Point(0, 0))).toEqual(new Point(0, 0));
+      expect(parsePoint('hello', new Point(0, 0))).toEqual(new Point(0, 0));
     });
   });
   describe('Three point angle', () => {
