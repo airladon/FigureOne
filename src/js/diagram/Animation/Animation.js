@@ -88,6 +88,7 @@ import AnimationManager from './AnimationManager';
 import type { TypeAnimationBuilderInputOptions } from './AnimationBuilder';
 import AnimationBuilder from './AnimationBuilder';
 
+
 export type {
   TypePositionAnimationStepInputOptions, TypeAnimationBuilderInputOptions,
   TypeParallelAnimationStepInputOptions, TypeSerialAnimationStepInputOptions,

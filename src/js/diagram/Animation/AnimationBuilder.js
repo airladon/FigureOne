@@ -9,6 +9,7 @@ import type {
   TypeTransformAnimationStepInputOptions,
   TypeRotationAnimationStepInputOptions, TypeScaleAnimationStepInputOptions,
   TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
+  TypeParallelBuilderInputOptions,
 } from './Animation';
 // import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
 // import SerialAnimationStep from './AnimationStep/SerialAnimationStep';
@@ -99,6 +100,17 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
+  scenarios(    // eslint-disable-next-line max-len
+    ...optionsIn: Array<TypeTransformAnimationStepInputOptions & TypeParallelAnimationStepInputOptions>
+  ) {
+    if (this.element != null) {
+      const defaultOptions = { element: this.element };
+      const options = joinObjects({}, defaultOptions, ...optionsIn);
+      this.then(options.element.anim.scenarios(options));
+    }
+    return this;
+  }
+
   color(...optionsIn: Array<TypeColorAnimationStepInputOptions>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
@@ -160,6 +172,17 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     ...optionsIn: Array<TypeTriggerStepInputOptions>
   ) {
     this.then(animation.trigger(triggerOrOptionsIn, ...optionsIn));
+    return this;
+  }
+
+  parallel(
+    ...optionsIn: Array<TypeParallelBuilderInputOptions>
+  ) {
+    if (this.element != null) {
+      const defaultOptions = { element: this.element };
+      const options = joinObjects({}, defaultOptions, ...optionsIn);
+      this.then(new animation.ParallelBuilder(options));
+    }
     return this;
   }
 
