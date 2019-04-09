@@ -14,6 +14,7 @@ DiagramElementPrimative {
     "rotation": [Function],
     "scale": [Function],
     "scenario": [Function],
+    "scenarios": [Function],
     "transform": [Function],
   },
   "animations": AnimationManager {
@@ -336,6 +337,7 @@ DiagramElementPrimative {
         "rotation": [Function],
         "scale": [Function],
         "scenario": [Function],
+        "scenarios": [Function],
         "transform": [Function],
       },
       "animations": AnimationManager {
@@ -802,6 +804,7 @@ DiagramElementPrimative {
         "rotation": [Function],
         "scale": [Function],
         "scenario": [Function],
+        "scenarios": [Function],
         "transform": [Function],
       },
       "animations": AnimationManager {
@@ -1267,6 +1270,7 @@ DiagramElementPrimative {
         "rotation": [Function],
         "scale": [Function],
         "scenario": [Function],
+        "scenarios": [Function],
         "transform": [Function],
       },
       "animations": AnimationManager {
@@ -1732,6 +1736,7 @@ DiagramElementPrimative {
         "rotation": [Function],
         "scale": [Function],
         "scenario": [Function],
+        "scenarios": [Function],
         "transform": [Function],
       },
       "animations": AnimationManager {
@@ -2181,6 +2186,7 @@ DiagramElementPrimative {
       "rotation": [Function],
       "scale": [Function],
       "scenario": [Function],
+      "scenarios": [Function],
       "transform": [Function],
     },
     "animations": AnimationManager {
@@ -2225,6 +2231,7 @@ DiagramElementPrimative {
           "rotation": [Function],
           "scale": [Function],
           "scenario": [Function],
+          "scenarios": [Function],
           "transform": [Function],
         },
         "animations": AnimationManager {
@@ -2691,6 +2698,7 @@ DiagramElementPrimative {
           "rotation": [Function],
           "scale": [Function],
           "scenario": [Function],
+          "scenarios": [Function],
           "transform": [Function],
         },
         "animations": AnimationManager {
@@ -3156,6 +3164,7 @@ DiagramElementPrimative {
           "rotation": [Function],
           "scale": [Function],
           "scenario": [Function],
+          "scenarios": [Function],
           "transform": [Function],
         },
         "animations": AnimationManager {
@@ -3621,6 +3630,7 @@ DiagramElementPrimative {
           "rotation": [Function],
           "scale": [Function],
           "scenario": [Function],
+          "scenarios": [Function],
           "transform": [Function],
         },
         "animations": AnimationManager {
@@ -4165,6 +4175,7 @@ DiagramElementPrimative {
                         "rotation": [Function],
                         "scale": [Function],
                         "scenario": [Function],
+                        "scenarios": [Function],
                         "transform": [Function],
                       },
                       "animations": AnimationManager {
@@ -4642,6 +4653,7 @@ DiagramElementPrimative {
                         "rotation": [Function],
                         "scale": [Function],
                         "scenario": [Function],
+                        "scenarios": [Function],
                         "transform": [Function],
                       },
                       "animations": AnimationManager {
@@ -5133,6 +5145,7 @@ DiagramElementPrimative {
                   "rotation": [Function],
                   "scale": [Function],
                   "scenario": [Function],
+                  "scenarios": [Function],
                   "transform": [Function],
                 },
                 "animations": AnimationManager {
@@ -5599,6 +5612,7 @@ DiagramElementPrimative {
                   "rotation": [Function],
                   "scale": [Function],
                   "scenario": [Function],
+                  "scenarios": [Function],
                   "transform": [Function],
                 },
                 "animations": AnimationManager {
@@ -6064,6 +6078,7 @@ DiagramElementPrimative {
                   "rotation": [Function],
                   "scale": [Function],
                   "scenario": [Function],
+                  "scenarios": [Function],
                   "transform": [Function],
                 },
                 "animations": AnimationManager {
@@ -6529,6 +6544,7 @@ DiagramElementPrimative {
                   "rotation": [Function],
                   "scale": [Function],
                   "scenario": [Function],
+                  "scenarios": [Function],
                   "transform": [Function],
                 },
                 "animations": AnimationManager {
@@ -7046,6 +7062,7 @@ DiagramElementPrimative {
                                 "rotation": [Function],
                                 "scale": [Function],
                                 "scenario": [Function],
+                                "scenarios": [Function],
                                 "transform": [Function],
                               },
                               "animations": AnimationManager {
@@ -7533,6 +7550,7 @@ DiagramElementPrimative {
                             "rotation": [Function],
                             "scale": [Function],
                             "scenario": [Function],
+                            "scenarios": [Function],
                             "transform": [Function],
                           },
                           "animations": AnimationManager {
@@ -7999,6 +8017,7 @@ DiagramElementPrimative {
                               "rotation": [Function],
                               "scale": [Function],
                               "scenario": [Function],
+                              "scenarios": [Function],
                               "transform": [Function],
                             },
                             "animations": AnimationManager {
@@ -8522,6 +8541,7 @@ DiagramElementPrimative {
                         "rotation": [Function],
                         "scale": [Function],
                         "scenario": [Function],
+                        "scenarios": [Function],
                         "transform": [Function],
                       },
                       "animations": AnimationManager {
@@ -8987,6 +9007,7 @@ DiagramElementPrimative {
                         "rotation": [Function],
                         "scale": [Function],
                         "scenario": [Function],
+                        "scenarios": [Function],
                         "transform": [Function],
                       },
                       "animations": AnimationManager {
@@ -9478,6 +9499,7 @@ DiagramElementPrimative {
                   "rotation": [Function],
                   "scale": [Function],
                   "scenario": [Function],
+                  "scenarios": [Function],
                   "transform": [Function],
                 },
                 "animations": AnimationManager {
@@ -9944,6 +9966,7 @@ DiagramElementPrimative {
                   "rotation": [Function],
                   "scale": [Function],
                   "scenario": [Function],
+                  "scenarios": [Function],
                   "transform": [Function],
                 },
                 "animations": AnimationManager {
@@ -10409,6 +10432,7 @@ DiagramElementPrimative {
                   "rotation": [Function],
                   "scale": [Function],
                   "scenario": [Function],
+                  "scenarios": [Function],
                   "transform": [Function],
                 },
                 "animations": AnimationManager {
@@ -10874,6 +10898,7 @@ DiagramElementPrimative {
                   "rotation": [Function],
                   "scale": [Function],
                   "scenario": [Function],
+                  "scenarios": [Function],
                   "transform": [Function],
                 },
                 "animations": AnimationManager {
@@ -11343,6 +11368,7 @@ DiagramElementPrimative {
               "rotation": [Function],
               "scale": [Function],
               "scenario": [Function],
+              "scenarios": [Function],
               "transform": [Function],
             },
             "animations": AnimationManager {
@@ -11809,6 +11835,7 @@ DiagramElementPrimative {
               "rotation": [Function],
               "scale": [Function],
               "scenario": [Function],
+              "scenarios": [Function],
               "transform": [Function],
             },
             "animations": AnimationManager {
@@ -12274,6 +12301,7 @@ DiagramElementPrimative {
               "rotation": [Function],
               "scale": [Function],
               "scenario": [Function],
+              "scenarios": [Function],
               "transform": [Function],
             },
             "animations": AnimationManager {
@@ -12739,6 +12767,7 @@ DiagramElementPrimative {
               "rotation": [Function],
               "scale": [Function],
               "scenario": [Function],
+              "scenarios": [Function],
               "transform": [Function],
             },
             "animations": AnimationManager {
@@ -13209,6 +13238,7 @@ DiagramElementPrimative {
                       "rotation": [Function],
                       "scale": [Function],
                       "scenario": [Function],
+                      "scenarios": [Function],
                       "transform": [Function],
                     },
                     "animations": AnimationManager {
@@ -13667,6 +13697,7 @@ DiagramElementPrimative {
                 "rotation": [Function],
                 "scale": [Function],
                 "scenario": [Function],
+                "scenarios": [Function],
                 "transform": [Function],
               },
               "animations": AnimationManager {
