@@ -2203,8 +2203,8 @@ class DiagramElementCollection extends DiagramElement {
       if (element.scenarios[scenario] != null) {
         elements.push(element);
       }
-      if (element.DiagramElementCollection) {
-        elements = [...elements, element.getAllElementsWithScenario(scenario)];
+      if (element instanceof DiagramElementCollection) {
+        elements = [...elements, ...element.getAllElementsWithScenario(scenario)];
       }
     }
     return elements;
@@ -2323,7 +2323,6 @@ class DiagramElementCollection extends DiagramElement {
       }
     }
   }
-
 }
 
 export {

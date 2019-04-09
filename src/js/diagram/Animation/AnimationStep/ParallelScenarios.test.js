@@ -1,6 +1,6 @@
-import { DelayStep } from './DelayStep';
+// import { DelayStep } from './DelayStep';
 import * as tools from '../../../tools/tools';
-import * as math from '../../../tools/math';
+// import * as math from '../../../tools/math';
 import makeDiagram from '../../../__mocks__/makeDiagram';
 import {
   Point,
