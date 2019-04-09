@@ -1897,7 +1897,7 @@ function getMoveTime(
   return maxTime;
 }
 
-export type TypeParsablePoint = [number, number] | Point | { x: number, y: number};
+export type TypeParsablePoint = [number, number] | Point | { x: number, y: number} | number;
 // point can be defined as:
 //    - Point instance
 //    - [1, 1]
@@ -1916,6 +1916,9 @@ function parsePoint<T>(p: TypeParsablePoint, onFail: T): Point | T | null {
       return new Point(p[0], p[1]);
     }
     return onFailToUse;
+  }
+  if (typeof p === 'number') {
+    return new Point(p, p);
   }
   if (typeof (p) === 'object') {
     const keys = Object.keys(p);

@@ -26,7 +26,7 @@ import EquationLabel from './js/diagram/DiagramObjects/EquationLabel';
 import { EquationNew } from './js/diagram/DiagramElements/Equation/Equation';
 import EquationForm from './js/diagram/DiagramElements/Equation/EquationForm';
 
-import type { TypeRotationDirection } from './js/tools/g2';
+import type { TypeRotationDirection, TypeParsablePoint } from './js/tools/g2';
 import type {
   TypeLineLabelLocation, TypeLineLabelSubLocation, TypeLineLabelOrientation,
   TypeLineVertexOrigin, TypeLineVertexSpaceStart, TypeLineOptions,
@@ -46,7 +46,7 @@ export type {
   TypeLineVertexOrigin, TypeLineVertexSpaceStart, TypeLineOptions,
   TypeAngleLabelOrientation, TypeAngleOptions, TypeDiagramOptions,
   TypeLineLabelOptions, TypeAngleLabelOptions,
-  TypePolyLineOptions, TypePadOptions,
+  TypePolyLineOptions, TypePadOptions, TypeParsablePoint,
 };
 
 const tools = {
@@ -93,6 +93,7 @@ const FigureOne = {
   Translation: g2.Translation,
   Scale: g2.Scale,
   Rotation: g2.Rotation,
+  parsePoint: g2.getPoint,
 };
 
 export default FigureOne;

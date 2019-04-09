@@ -4,7 +4,9 @@ import {
   Transform, Point, TransformLimit, Rect,
   Translation, spaceToSpaceTransform, getBoundingRect,
   Scale, Rotation, Line, getMaxTimeFromVelocity, clipAngle,
+  getPoint,
 } from '../tools/g2';
+import type { TypeParsablePoint } from '../tools/g2';
 import * as m2 from '../tools/m2';
 // import type { pathOptionsType, TypeRotationDirection } from '../tools/g2';
 import * as tools from '../tools/math';
@@ -42,9 +44,9 @@ import WebGLInstance from './webgl/webgl';
 // }
 
 export type TypeScenario = {
-  position?: Point,
+  position?: TypeParsablePoint,
   rotation?: number,
-  scale?: Point | number,
+  scale?: TypeParsablePoint,
 };
 
 
@@ -663,30 +665,30 @@ class DiagramElement {
     if (scenarioName in this.scenarios) {
       const scenario = this.scenarios[scenarioName];
       if (scenario.position != null) {
-        target.updateTranslation(scenario.position);
+        target.updateTranslation(getPoint(scenario.position));
       }
 
       if (scenario.rotation != null) {
         target.updateRotation(scenario.rotation);
       }
       if (scenario.scale != null) {
-        if (scenario.scale instanceof Point) {
-          target.updateScale(scenario.scale);
-        } else {
-          target.updateScale(scenario.scale, scenario.scale);
-        }
+        target.updateScale(getPoint(scenario.position));
       }
     }
     return target;
   }
 
   setScenario(scenarioName: string) {
-    const target = this.getScenarioTarget(scenarioName);
-    this.setTransform(target._dup());
+    if (this.scenarios[scenarioName] != null) {
+      const target = this.getScenarioTarget(scenarioName);
+      this.setTransform(target._dup());
+    }
   }
 
   setScenarios(scenarioName: string) {
-    this.setScenario(scenarioName);
+    if (this.scenarios[scenarioName] != null) {
+      this.setScenario(scenarioName);
+    }
   }
 
   getAllElementsWithScenario(scenarioName: string) {
@@ -2314,8 +2316,7 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   setScenarios(scenarioName: string, onlyIfVisible: boolean = true) {
-    this.setScenario(scenarioName);
-
+    super.setScenarios(scenarioName);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       if ((onlyIfVisible && element.isShown) || onlyIfVisible === false) {
