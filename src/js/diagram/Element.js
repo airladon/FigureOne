@@ -23,6 +23,7 @@ import type {
   TypeColorAnimationStepInputOptions, TypeTransformAnimationStepInputOptions,
   TypeRotationAnimationStepInputOptions, TypeScaleAnimationStepInputOptions,
   TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
+  TypeParallelAnimationStepInputOptions,
 } from './Animation/Animation';
 import * as animations from './Animation/Animation';
 import WebGLInstance from './webgl/webgl';
@@ -201,6 +202,23 @@ class DiagramElement {
   isRenderedAsImage: boolean;
   unrenderNextDraw: boolean;
 
+  // scenarioSet: {
+  //   quiz1: [
+  //     { element: xyz, position: (), scale: (), rotation: (), length: () }
+  //     { element: abc, position: (), }
+  //   ],
+  // };
+  //  element1.scenarioSet['quiz'] = [
+  //     { element: abc, position: [1, 2], scale: 2 },
+  //     { element: xyz, position: [2, 2]},
+  //  ];
+  //  element.setScenarios('center', evenIfNotShown
+  //  element.moveToScenarios('center', 1, callback))
+
+  // element.animations.new()
+  //    .parallel()
+  //
+
   constructor(
     transform: Transform = new Transform(),
     diagramLimits: Rect = new Rect(-1, -1, 2, 2),
@@ -303,6 +321,19 @@ class DiagramElement {
           options.delta = delta;
         }
         return new animations.TransformAnimationStep(options);
+      },
+      // eslint-disable-next-line max-len
+      scenarios: (...optionsIn: Array<TypeParallelAnimationStepInputOptions & TypeTransformAnimationStepInputOptions>) => {
+        const defaultOptions = {};
+        const options = joinObjects({}, defaultOptions, ...optionsIn);
+        const elements = this.getAllElementsWithScenario(options.target);
+        const steps = [];
+        const simpleOptions = {};
+        duplicateFromTo(options, simpleOptions, ['steps', 'element']);
+        elements.forEach((element) => {
+          steps.push(element.anim.scenario(simpleOptions));
+        });
+        return new animations.ParallelAnimationStep(simpleOptions, { steps });
       },
     };
     this.diagramLimits = diagramLimits;
@@ -652,6 +683,17 @@ class DiagramElement {
   setScenario(scenarioName: string) {
     const target = this.getScenarioTarget(scenarioName);
     this.setTransform(target._dup());
+  }
+
+  setScenarios(scenarioName: string) {
+    this.setScenario(scenarioName);
+  }
+
+  getAllElementsWithScenario(scenarioName: string) {
+    if (this.scenarios[scenarioName] != null) {
+      return [this];
+    }
+    return [];
   }
 
   getTimeToMoveToScenario(
@@ -2154,6 +2196,20 @@ class DiagramElementCollection extends DiagramElement {
     return elements;
   }
 
+  getAllElementsWithScenario(scenario: string) {
+    let elements = [];
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element.scenarios[scenario] != null) {
+        elements.push(element);
+      }
+      if (element.DiagramElementCollection) {
+        elements = [...elements, element.getAllElementsWithScenario(scenario)];
+      }
+    }
+    return elements;
+  }
+
   // Get all ineractive elemnts, but only go as deep as a
   // DiagramElementColleciton if it is touchable or movable
   getAllCurrentlyInteractiveElements() {
@@ -2256,6 +2312,18 @@ class DiagramElementCollection extends DiagramElement {
       }
     }
   }
+
+  setScenarios(scenarioName: string, onlyIfVisible: boolean = true) {
+    this.setScenario(scenarioName);
+
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if ((onlyIfVisible && element.isShown) || onlyIfVisible === false) {
+        element.setScenarios(scenarioName, onlyIfVisible);
+      }
+    }
+  }
+
 }
 
 export {

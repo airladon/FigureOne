@@ -35,6 +35,11 @@ export class ParallelAnimationStep extends AnimationStep {
     }
   }
 
+  with(step: AnimationStep) {
+    this.steps.push(step);
+    return this;
+  }
+
   nextFrame(now: number) {
     let remaining = -1;
     this.steps.forEach((step) => {
