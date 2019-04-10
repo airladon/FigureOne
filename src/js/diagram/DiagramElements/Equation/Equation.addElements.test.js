@@ -64,8 +64,7 @@ describe('Diagram Equations From Object', () => {
       // Options can be used in the object to override default options
       textOverrides: {
         a: 'a',
-        b: {
-          text: 'b',
+        b: {        // if text isn't defined, key will be default text
           style: 'normal',
         },
         c: {

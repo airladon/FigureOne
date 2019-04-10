@@ -223,6 +223,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       p1?: Point,
       p2?: Point,
       p3?: Point,
+      rotationOffset?: number,
     }) => void;
 
   update: (?number) => void;
