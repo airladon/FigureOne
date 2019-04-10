@@ -92,25 +92,25 @@ describe('Parallel Animation', () => {
       expect(element1.transform.round()).toEqual(element1.transform.constant(0));
       expect(element2.transform.round()).toEqual(element2.transform.constant(0));
       expect(element3.transform.round()).toEqual(element3.transform.constant(0));
-      expect(math.round(remainingTime)).toBe(0);
+      expect(math.round(remainingTime)).toBe(-3);
 
       remainingTime = parallel.nextFrame(100.5);
       expect(element1.transform.round()).toEqual(t1.constant(0.5));
       expect(element2.transform).toEqual(t2.constant(0.5));
       expect(element3.transform).toEqual(t3.constant(0.5));
-      expect(math.round(remainingTime)).toBe(0);
+      expect(math.round(remainingTime)).toBe(-2.5);
 
       remainingTime = parallel.nextFrame(101.5);
       expect(element1.transform.round()).toEqual(t1.constant(1));
       expect(element2.transform).toEqual(t2.constant(1.5));
       expect(element3.transform).toEqual(t3.constant(1.5));
-      expect(math.round(remainingTime)).toBe(0);
+      expect(math.round(remainingTime)).toBe(-1.5);
 
       remainingTime = parallel.nextFrame(102.5);
       expect(element1.transform.round()).toEqual(t1.constant(1));
       expect(element2.transform).toEqual(t2.constant(2));
       expect(element3.transform).toEqual(t3.constant(2.5));
-      expect(math.round(remainingTime)).toBe(0);
+      expect(math.round(remainingTime)).toBe(-0.5);
 
       remainingTime = parallel.nextFrame(103);
       expect(element1.transform.round()).toEqual(t1.constant(1));

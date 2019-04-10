@@ -57,36 +57,19 @@ describe('Animationa and Movement', () => {
           const t = element.transform;
           expect(t).toEqual(new Transform().scale(1, 1).rotate(0).translate(0, 0));
 
-          // const phase = element.state.animation.currentPhase;
-
-          // expect(element.state.isAnimating).toBe(true);
           expect(element.animations.state).toBe('idle');
           expect(element.isMoving()).toBe(true);
-          // expect(phase.startTime).toBe(-1);
 
           element.draw(new Transform(), 10);
-          // expect(phase.startTime).toBe(10);
-          // expect(phase.time).toBe(1);
           expect(t.r()).toBe(0);
 
           element.draw(new Transform(), 10.5);
-          // expect(phase.startTime).toBe(10);
-          // expect(phase.time).toBe(1);
           expect(element.transform.r()).toBe(0.5);
           expect(element.animations.state).toBe('animating');
           expect(element.isMoving()).toBe(true);
 
           element.draw(new Transform(), 11);
-          // expect(phase.time).toBe(1);
           expect(element.transform.r()).toBe(1);
-          // expect(element.state.isAnimating).toBe(true);
-          expect(element.animations.state).toBe('animating');
-          expect(element.isMoving()).toBe(true);
-
-          element.draw(new Transform(), 11.01);
-          // expect(phase.time).toBe(1);
-          expect(element.transform.r()).toBe(1);
-          // expect(element.state.isAnimating).toBe(false);
           expect(element.animations.state).toBe('idle');
           expect(element.isMoving()).toBe(false);
         });
@@ -110,15 +93,11 @@ describe('Animationa and Movement', () => {
           // Draw half way through
           element.draw(new Transform(), 0.5);
           expect(element.transform.t()).toEqual(new Point(0.5, 0));
-
-          // Draw at last time
-          element.draw(new Transform(), 1);
-          expect(element.transform.t()).toEqual(new Point(1.0, 0));
           expect(element.animations.state).toBe('animating');
           expect(element.isMoving()).toBe(true);
 
-          // Draw after time elapsed
-          element.draw(new Transform(), 1.01);
+          // Draw at last time
+          element.draw(new Transform(), 1);
           expect(element.transform.t()).toEqual(new Point(1.0, 0));
           expect(element.animations.state).toBe('idle');
           expect(element.isMoving()).toBe(false);
