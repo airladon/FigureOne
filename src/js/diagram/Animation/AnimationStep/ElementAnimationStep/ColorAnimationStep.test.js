@@ -36,11 +36,11 @@ describe('Color Animation', () => {
 
     elem1.animations.nextFrame(1.0);
     expect(math.round(elem1.color)).toEqual([0.2, 0.2, 0.2, 0.2]);
-    expect(callback.mock.calls.length).toBe(0);
-
-    elem1.animations.nextFrame(1.01);
-    expect(math.round(elem1.color)).toEqual([0.2, 0.2, 0.2, 0.2]);
     expect(callback.mock.calls.length).toBe(1);
+
+    // elem1.animations.nextFrame(1.01);
+    // expect(math.round(elem1.color)).toEqual([0.2, 0.2, 0.2, 0.2]);
+    // expect(callback.mock.calls.length).toBe(1);
   });
   test('Color change defined by delta color change', () => {
     elem1.animations.new()
@@ -58,10 +58,10 @@ describe('Color Animation', () => {
 
     elem1.animations.nextFrame(1.0);
     expect(math.round(elem1.color)).toEqual([0, 0, 0, 0]);
-    expect(callback.mock.calls.length).toBe(0);
-
-    elem1.animations.nextFrame(1.01);
-    expect(math.round(elem1.color)).toEqual([0, 0, 0, 0]);
     expect(callback.mock.calls.length).toBe(1);
+
+    // elem1.animations.nextFrame(1.01);
+    // expect(math.round(elem1.color)).toEqual([0, 0, 0, 0]);
+    // expect(callback.mock.calls.length).toBe(1);
   });
 });

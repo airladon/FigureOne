@@ -66,10 +66,10 @@ describe('Rotation Animation Step', () => {
     expect(math.round(elem1.getRotation(), 2)).toBe(3.64);
 
     elem1.animations.nextFrame(1.0);
-    expect(math.round(elem1.getRotation(), 2)).toBe(6.28);
-
-    elem1.animations.nextFrame(1.1);
     expect(math.round(elem1.getRotation(), 2)).toBe(0);
+
+    // elem1.animations.nextFrame(1.1);
+    // expect(math.round(elem1.getRotation(), 2)).toBe(0);
   });
   test('Rotate clip to 0to360', () => {
     elem1.animations.new()
