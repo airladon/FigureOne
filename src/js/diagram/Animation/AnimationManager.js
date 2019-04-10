@@ -172,7 +172,6 @@ export default class AnimationManager {
       if (animation.state !== 'animating') {
         animation.start();
         animation.finishIfZeroDuration();
-        console.log(animation.state)
         if (animation.state === 'animating') {
           this.state = 'animating';
         }

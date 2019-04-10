@@ -301,6 +301,8 @@ describe('Serial Animation', () => {
       diagram = makeDiagram();
       elem1 = diagram.objects.line();
       elem2 = diagram.objects.line();
+      diagram.elements.add('elem1', elem1);
+      diagram.elements.add('elem2', elem2);
     });
     test('Zero duration, two steps, inSerial', () => {
       diagram.elements.animations.new()
@@ -348,6 +350,65 @@ describe('Serial Animation', () => {
       expect(e1.state).toBe('finished');
       expect(e2.state).toBe('finished');
       expect(elem1.getRotation()).toBe(2);
+    });
+    test('Zero using one element as builder', () => {
+      elem1.animations.new()
+        .rotation({ target: 1, duration: 0 })
+        .rotation({ element: elem2, target: 2, duration: 0 })
+        .start();
+      const animationManager = elem1.animations;
+      const builder = animationManager.animations[0];
+      const e1 = builder.steps[0];
+      const e2 = builder.steps[1];
+      expect(animationManager.state).toBe('idle');
+      expect(builder.state).toBe('finished');
+      expect(e1.state).toBe('finished');
+      expect(e2.state).toBe('finished');
+      expect(elem2.getRotation()).toBe(2);
+    });
+    test('Zero first element only', () => {
+      elem2.setRotation(1);
+      elem1.animations.new()
+        .rotation({ target: 1, duration: 0 })
+        .rotation({ element: elem2, target: 2, duration: 1 })
+        .start();
+      const animationManager = elem1.animations;
+      const builder = animationManager.animations[0];
+      const e1 = builder.steps[0];
+      const e2 = builder.steps[1];
+      expect(animationManager.state).toBe('idle');
+      expect(builder.state).toBe('animating');
+      expect(e1.state).toBe('finished');
+      expect(e2.state).toBe('animating');
+      expect(elem2.getRotation()).toBe(1);
+      expect(elem1.getRotation()).toBe(1);
+      
+      diagram.draw(0)
+      expect(animationManager.state).toBe('animating');
+      expect(builder.state).toBe('animating');
+      expect(e1.state).toBe('finished');
+      expect(e2.state).toBe('animating');
+      expect(elem2.getRotation()).toBe(1);
+
+      diagram.draw(0.5)
+      expect(animationManager.state).toBe('animating');
+      expect(builder.state).toBe('animating');
+      expect(e1.state).toBe('finished');
+      expect(e2.state).toBe('animating');
+      expect(elem2.getRotation()).toBe(1.5);
+
+      diagram.draw(1)
+      expect(animationManager.state).toBe('animating');
+      expect(builder.state).toBe('animating');
+      expect(e1.state).toBe('finished');
+      expect(e2.state).toBe('animating');
+      expect(elem2.getRotation()).toBe(2);
+      expect(elem1.getRotation()).toBe(1);
+
+      diagram.draw(1.01)
+      expect(animationManager.state).toBe('idle');
+      expect(animationManager.animations).toHaveLength(0);
+      expect(elem2.getRotation()).toBe(2);
     });
   });
 });
