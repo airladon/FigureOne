@@ -279,14 +279,18 @@ export class EquationNew extends DiagramElementCollection {
     elems: TypeEquationElements,
   ) {
     // Helper function to add text element
-    const makeTextElem = (options: { text: string, font?: DiagramFont, style?: 'italic' | 'normal', color?: Array<number> }) => {
+    const makeTextElem = (options: { text?: string, font?: DiagramFont, style?: 'italic' | 'normal', color?: Array<number> }, defaultText: string = '') => {
       // Priority:
       //  1. color
       //  2. font
       //  3. style
       //  4. fontMath or fontText based on actual text
+      let textToUse = defaultText;
+      if (options.text != null) {
+        textToUse = options.text;
+      }
       let fontToUse: DiagramFont = this.eqn.fontMath;
-      if (options.text.match(/[A-Z,a-z]/)) {
+      if (textToUse.match(/[A-Z,a-z]/)) {
         fontToUse = this.eqn.fontText;
       }
       if (options.style != null) {
@@ -301,7 +305,7 @@ export class EquationNew extends DiagramElementCollection {
         fontToUse = options.font;
       }
       const p = this.shapes.txt(
-        options.text,
+        textToUse,
         { position: new Point(0, 0), font: fontToUse },
       );
       if (options.color != null) {
@@ -346,9 +350,9 @@ export class EquationNew extends DiagramElementCollection {
           // console.log(elem.symbol)
           // $FlowFixMe
           diagramElem = makeSymbolElem(elem);
-        } else if (elem.text != null && elem.text) {
+        } else {
           // $FlowFixMe
-          diagramElem = makeTextElem(elem);
+          diagramElem = makeTextElem(elem, key);
         }
         if (diagramElem != null) {
           if (elem.mods != null) {

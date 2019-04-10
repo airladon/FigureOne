@@ -672,7 +672,7 @@ class DiagramElement {
         target.updateRotation(scenario.rotation);
       }
       if (scenario.scale != null) {
-        target.updateScale(getPoint(scenario.position));
+        target.updateScale(getPoint(scenario.scale));
       }
     }
     return target;
