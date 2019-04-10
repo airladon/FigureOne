@@ -290,22 +290,34 @@ describe('Parallel Animation', () => {
       elem1 = diagram.objects.line();
       elem2 = diagram.objects.line();
     });
-    test('Simple', () => {
-      elem1.setRotation(1);
-      elem2.setRotation(1);
+    test('Zero duration two steps', () => {
+      // elem1.setRotation(1);
+      // elem2.setRotation(1);
       diagram.elements.animations.new()
         .inParallel([
-          elem1.anim.rotation({ target: 1, velocity: 1 }),
-          elem2.anim.rotation({ target: 1, velocity: 1 }),
+          elem1.anim.rotation({ target: 1, duration: 0 }),
+          elem2.anim.rotation({ target: 2, duration: 0 }),
         ])
         .whenFinished(() => {})
         .start();
+      const animationManager = diagram.elements.animations;
+      const builder = animationManager.animations[0];
+      const inParallel = builder.steps[0];
+      const e1 = inParallel.steps[0];
+      const e2 = inParallel.steps[1];
+      expect(animationManager.state).toBe('idle');
+      expect(builder.state).toBe('finished');
+      expect(inParallel.state).toBe('finished');
+      expect(e1.state).toBe('finished');
+      expect(e2.state).toBe('finished');
+      expect(elem2.getRotation()).toBe(2);
       diagram.draw(0);
-      diagram.draw(0.01);
-      console.log(diagram.elements.animations.state)
+      expect(animationManager.animations).toHaveLength(0);
+      // diagram.draw(0.01);
+      // console.log(diagram.elements.animations.state)
       // diagram.draw(1);
       
-      expect(elem1.getRotation()).toBe(1);
+      
 
       // elem1.animations.nextFrame(0.5);
       // expect(math.round(elem1.opacity, 2)).toEqual(0.5);
