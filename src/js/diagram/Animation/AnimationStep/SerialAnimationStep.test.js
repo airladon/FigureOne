@@ -96,16 +96,8 @@ describe('Serial Animation', () => {
       expect(element.transform.round()).toEqual(element.transform.constant(0.9));
 
       serial.nextFrame(101);
-      expect(serial.index).toBe(0);
-      expect(element.transform.round()).toEqual(element.transform.constant(1));
-      expect(step1.state).toBe('animating');
-      expect(step2.state).toBe('waitingToStart');
-      expect(step3.state).toBe('waitingToStart');
-      expect(serial.state).toBe('animating');
-
-      serial.nextFrame(101.01);
       expect(serial.index).toBe(1);
-      expect(element.transform.round()).toEqual(element.transform.constant(1.01));
+      expect(element.transform.round()).toEqual(element.transform.constant(1));
       expect(step1.state).toBe('finished');
       expect(step2.state).toBe('animating');
       expect(step3.state).toBe('waitingToStart');
@@ -382,7 +374,6 @@ describe('Serial Animation', () => {
       expect(e2.state).toBe('animating');
       expect(elem2.getRotation()).toBe(1);
       expect(elem1.getRotation()).toBe(1);
-      
       diagram.draw(0)
       expect(animationManager.state).toBe('animating');
       expect(builder.state).toBe('animating');
@@ -396,12 +387,12 @@ describe('Serial Animation', () => {
       expect(e1.state).toBe('finished');
       expect(e2.state).toBe('animating');
       expect(elem2.getRotation()).toBe(1.5);
-
       diagram.draw(1)
-      expect(animationManager.state).toBe('animating');
-      expect(builder.state).toBe('animating');
-      expect(e1.state).toBe('finished');
-      expect(e2.state).toBe('animating');
+      expect(animationManager.state).toBe('idle');
+      expect(animationManager.animations).toHaveLength(0);
+      // expect(builder.state).toBe('finished');
+      // expect(e1.state).toBe('finished');
+      // expect(e2.state).toBe('finished');
       expect(elem2.getRotation()).toBe(2);
       expect(elem1.getRotation()).toBe(1);
 

@@ -106,15 +106,15 @@ describe('Position Animation', () => {
     let remainingTime;
     remainingTime = step.nextFrame(100.1);
     expect(step.element.getPosition().round()).toEqual(new Point(0.1, 0.1));
-    expect(remainingTime).toBe(0);
+    expect(math.round(remainingTime, 3)).toBe(-0.9);
 
     remainingTime = step.nextFrame(100.55);
     expect(step.element.getPosition().round()).toEqual(new Point(0.55, 0.55));
-    expect(remainingTime).toBe(0);
+    expect(math.round(remainingTime, 3)).toBe(-0.45);
 
     remainingTime = step.nextFrame(100.9);
     expect(step.element.getPosition().round()).toEqual(new Point(0.9, 0.9));
-    expect(remainingTime).toBe(0);
+    expect(math.round(remainingTime, 3)).toBe(-0.1);
 
     remainingTime = step.nextFrame(101.1);
     expect(step.element.getPosition().round()).toEqual(target);
