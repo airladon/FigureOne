@@ -52,7 +52,7 @@ export class ParallelAnimationStep extends AnimationStep {
         remaining = stepRemaining;
       }
     });
-    if (remaining > 0) {
+    if (remaining >= 0) {
       this.finish();
     }
     return remaining;
