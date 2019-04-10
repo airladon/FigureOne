@@ -68,7 +68,25 @@ export class SerialAnimationStep extends AnimationStep {
       this.index = 0;
       if (this.steps.length > 0) {
         this.steps[0].start(startTime);
+        this.steps[0].finishIfZeroDuration();
       }
+    }
+    this.finishIfZeroDuration();
+  }
+
+  finishIfZeroDuration() {
+    let i = 0;
+    let step = this.steps[0];
+    while (i < this.steps.length && step.state === 'finished') {
+      i += 1;
+      if (i < this.steps.length) {
+        step = this.steps[i];
+        step.start(this.steps[i-1].startTime)
+        step.finishIfZeroDuration;
+      }
+    }
+    if (i === this.steps.length) {
+      this.finish();
     }
   }
 

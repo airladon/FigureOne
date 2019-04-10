@@ -109,6 +109,12 @@ export default class AnimationStep {
     this.state = 'animating';
   }
 
+  finishIfZeroDuration() {
+    if (this.duration === 0) {
+      this.finish();
+    }
+  }
+
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
   setToEnd() {
   }
