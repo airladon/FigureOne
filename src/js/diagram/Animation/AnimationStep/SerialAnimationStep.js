@@ -82,7 +82,7 @@ export class SerialAnimationStep extends AnimationStep {
       if (i < this.steps.length) {
         this.index = i;
         step = this.steps[i];
-        step.start(this.steps[i-1].startTime)
+        step.start(this.steps[i - 1].startTime);
         step.finishIfZeroDuration();
       }
     }

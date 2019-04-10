@@ -316,9 +316,6 @@ describe('Parallel Animation', () => {
       // diagram.draw(0.01);
       // console.log(diagram.elements.animations.state)
       // diagram.draw(1);
-      
-      
-
       // elem1.animations.nextFrame(0.5);
       // expect(math.round(elem1.opacity, 2)).toEqual(0.5);
 

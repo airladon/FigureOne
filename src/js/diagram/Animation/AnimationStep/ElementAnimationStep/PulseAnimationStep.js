@@ -18,6 +18,7 @@ export default class PulseAnimationStep extends ElementAnimationStep {
   scale: number;
   numLines: number;
   frequency: number;
+  stopAfterDuration: boolean;
 
   constructor(...optionsIn: Array<TypePulseAnimationStepInputOptions>) {
     // const ElementAnimationStepOptionsIn =
@@ -37,6 +38,7 @@ export default class PulseAnimationStep extends ElementAnimationStep {
     this.numLines = options.numLines;
     this.duration = options.duration;
     this.frequency = options.frequency;
+    this.stopAfterDuration = options.stopAfterDuration;
   }
 
   // On start, calculate the duration, target and delta if not already present.

@@ -374,20 +374,20 @@ describe('Serial Animation', () => {
       expect(e2.state).toBe('animating');
       expect(elem2.getRotation()).toBe(1);
       expect(elem1.getRotation()).toBe(1);
-      diagram.draw(0)
+      diagram.draw(0);
       expect(animationManager.state).toBe('animating');
       expect(builder.state).toBe('animating');
       expect(e1.state).toBe('finished');
       expect(e2.state).toBe('animating');
       expect(elem2.getRotation()).toBe(1);
 
-      diagram.draw(0.5)
+      diagram.draw(0.5);
       expect(animationManager.state).toBe('animating');
       expect(builder.state).toBe('animating');
       expect(e1.state).toBe('finished');
       expect(e2.state).toBe('animating');
       expect(elem2.getRotation()).toBe(1.5);
-      diagram.draw(1)
+      diagram.draw(1);
       expect(animationManager.state).toBe('idle');
       expect(animationManager.animations).toHaveLength(0);
       // expect(builder.state).toBe('finished');
@@ -396,7 +396,7 @@ describe('Serial Animation', () => {
       expect(elem2.getRotation()).toBe(2);
       expect(elem1.getRotation()).toBe(1);
 
-      diagram.draw(1.01)
+      diagram.draw(1.01);
       expect(animationManager.state).toBe('idle');
       expect(animationManager.animations).toHaveLength(0);
       expect(elem2.getRotation()).toBe(2);
