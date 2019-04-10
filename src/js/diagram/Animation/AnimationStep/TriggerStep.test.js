@@ -67,4 +67,14 @@ describe('Animation Trigger', () => {
     expect(triggerFlag1).toBe(1);
     expect(triggerFlag2).toBe(0);
   });
+  test('Zero duration', () => {
+    expect(triggerFlag1).toBe(0);
+    expect(triggerFlag2).toBe(0);
+    elem1.animations.new()
+      .trigger({ callback: trigger1, duration: 0 })
+      .trigger({ callback: trigger2, duration: 0 })
+      .start();
+    expect(triggerFlag1).toBe(1);
+    expect(triggerFlag2).toBe(1);
+  });
 });

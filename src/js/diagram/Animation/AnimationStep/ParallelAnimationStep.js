@@ -58,6 +58,18 @@ export class ParallelAnimationStep extends AnimationStep {
     return remaining;
   }
 
+  finishIfZeroDuration() {
+    let state = 'finished';
+    this.steps.forEach((step) => {
+      if (step.state !== 'finished') {
+        state = 'animating';
+      }
+    });
+    if (state === 'finished') {
+      this.finish();
+    }
+  }
+
   startWaiting() {
     super.startWaiting();
     this.steps.forEach((step) => {
@@ -70,6 +82,7 @@ export class ParallelAnimationStep extends AnimationStep {
     super.start(startTime);
     this.steps.forEach((step) => {
       step.start(startTime);
+      step.finishIfZeroDuration();
     });
   }
 
