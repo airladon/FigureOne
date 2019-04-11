@@ -20,6 +20,7 @@ export type TypeTransformAnimationStepInputOptions = {
   translationOptions?: pathOptionsType;
   rotDirection: 0 | 1 | -1 | 2;
   clipRotationTo: '0to360' | '-180to180' | null;
+  velocity: ?Transform | number;
 } & TypeElementAnimationStepInputOptions;
 
 // A transform animation unit manages a transform animation on an element.
@@ -40,7 +41,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     rotDirection: 0 | 1 | -1 | 2;
     translationStyle: 'linear' | 'curved';
     translationOptions: pathOptionsType;
-    velocity: ?Transform;
+    velocity: ?Transform | number;
     clipRotationTo: '0to360' | '-180to180' | null;
   };
 

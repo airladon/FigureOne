@@ -2315,7 +2315,7 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  setScenarios(scenarioName: string, onlyIfVisible: boolean = true) {
+  setScenarios(scenarioName: string, onlyIfVisible: boolean = false) {
     super.setScenarios(scenarioName);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];

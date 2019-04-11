@@ -1811,14 +1811,20 @@ function randomPoint(withinRect: Rect) {
 function getMaxTimeFromVelocity(
   startTransform: Transform,
   stopTransform: Transform,
-  velocityTransform: Transform,
+  velocityTransform: Transform | number,
   rotDirection: 0 | 1 | -1 | 2 = 0,
 ) {
   const deltaTransform = stopTransform.sub(startTransform);
   let time = 0;
+  let velocityTransformToUse;
+  if (typeof velocityTransform === 'number') {
+    velocityTransformToUse = startTransform._dup().constant(velocityTransform);
+  } else {
+    velocityTransformToUse = velocityTransform;
+  }
   deltaTransform.order.forEach((delta, index) => {
     if (delta instanceof Translation || delta instanceof Scale) {
-      const v = velocityTransform.order[index];
+      const v = velocityTransformToUse.order[index];
       if (
         (v instanceof Translation || v instanceof Scale)
         && v.x !== 0
@@ -1838,7 +1844,7 @@ function getMaxTimeFromVelocity(
       const rotDiff = getDeltaAngle(start.r, target.r, rotDirection);
       // eslint-disable-next-line no-param-reassign
       delta.r = rotDiff;
-      const v = velocityTransform.order[index];
+      const v = velocityTransformToUse.order[index];
       if (v instanceof Rotation && v !== 0) {
         const rTime = Math.abs(delta.r / v.r);
         time = rTime > time ? rTime : time;

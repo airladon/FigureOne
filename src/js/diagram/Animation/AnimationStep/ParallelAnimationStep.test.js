@@ -118,11 +118,11 @@ describe('Parallel Animation', () => {
       expect(element3.transform).toEqual(t3.constant(3));
       expect(math.round(remainingTime)).toBe(0);
 
-      remainingTime = parallel.nextFrame(103.1);
-      expect(element1.transform.round()).toEqual(t1.constant(1));
-      expect(element2.transform).toEqual(t2.constant(2));
-      expect(element3.transform).toEqual(t3.constant(3));
-      expect(math.round(remainingTime)).toBe(0.1);
+      // remainingTime = parallel.nextFrame(103.1);
+      // expect(element1.transform.round()).toEqual(t1.constant(1));
+      // expect(element2.transform).toEqual(t2.constant(2));
+      // expect(element3.transform).toEqual(t3.constant(3));
+      // expect(math.round(remainingTime)).toBe(0.1);
     });
     test('Duplication', () => {
       const dup = parallel._dup();
@@ -291,8 +291,6 @@ describe('Parallel Animation', () => {
       elem2 = diagram.objects.line();
     });
     test('Zero duration two steps', () => {
-      // elem1.setRotation(1);
-      // elem2.setRotation(1);
       diagram.elements.animations.new()
         .inParallel([
           elem1.anim.rotation({ target: 1, duration: 0 }),
@@ -313,23 +311,30 @@ describe('Parallel Animation', () => {
       expect(elem2.getRotation()).toBe(2);
       diagram.draw(0);
       expect(animationManager.animations).toHaveLength(0);
-      // diagram.draw(0.01);
-      // console.log(diagram.elements.animations.state)
-      // diagram.draw(1);
-      // elem1.animations.nextFrame(0.5);
-      // expect(math.round(elem1.opacity, 2)).toEqual(0.5);
-
-      // elem1.animations.nextFrame(0.9);
-      // expect(math.round(elem1.opacity, 2)).toEqual(0.1);
-
-      // elem1.animations.nextFrame(1.0);
-      // expect(math.round(elem1.opacity)).toEqual(0.001);
-      // expect(callback.mock.calls.length).toBe(0);
-
-      // elem1.animations.nextFrame(1.01);
-      // expect(math.round(elem1.opacity)).toEqual(1);
-      // expect(callback.mock.calls.length).toBe(1);
-      // expect(elem1.isShown).toBe(false);
+    });
+    test('One zero, the other not', () => {
+      diagram.elements.animations.new()
+        .inParallel([
+          elem1.anim.rotation({ target: 1, duration: 0 }),
+          elem2.anim.rotation({ target: 2, duration: 1 }),
+        ])
+        .whenFinished(() => {})
+        .start();
+      const animationManager = diagram.elements.animations;
+      const builder = animationManager.animations[0];
+      const inParallel = builder.steps[0];
+      const e1 = inParallel.steps[0];
+      const e2 = inParallel.steps[1];
+      expect(animationManager.state).toBe('idle');
+      expect(builder.state).toBe('animating');
+      expect(inParallel.state).toBe('animating');
+      expect(e1.state).toBe('finished');
+      expect(e2.state).toBe('animating');
+      expect(elem1.getRotation()).toBe(1);
+      expect(elem2.getRotation()).toBe(0);
+      diagram.draw(0);
+      expect(elem1.getRotation()).toBe(1);
+      expect(elem2.getRotation()).toBe(0);
     });
   });
 });

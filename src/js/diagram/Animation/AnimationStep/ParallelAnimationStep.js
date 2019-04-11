@@ -41,17 +41,22 @@ export class ParallelAnimationStep extends AnimationStep {
   }
 
   nextFrame(now: number) {
-    let remaining = -1;
+    let remaining = null;
     this.steps.forEach((step) => {
-      const stepRemaining = step.nextFrame(now);
-      // console.log(step.element.uid, stepRemaining)
-      if (remaining === -1) {
-        remaining = stepRemaining;
-      }
-      if (stepRemaining < remaining) {
-        remaining = stepRemaining;
+      if (step.state === 'animating' || step.state === 'waitingToStart') {
+        const stepRemaining = step.nextFrame(now);
+        // console.log(step.element.uid, stepRemaining)
+        if (remaining === null) {
+          remaining = stepRemaining;
+        }
+        if (stepRemaining < remaining) {
+          remaining = stepRemaining;
+        }
       }
     });
+    if (remaining === null) {
+      remaining = 0;
+    }
     if (remaining >= 0) {
       this.finish();
     }
