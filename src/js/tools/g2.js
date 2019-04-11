@@ -617,15 +617,15 @@ class Line {
   }
 
   /* eslint-disable comma-dangle */
-  midpoint() {
+  midPoint() {
     const length = this.length();
     const direction = this.p2.sub(this.p1);
     const angle = Math.atan2(direction.y, direction.x);
-    const midpoint = point(
+    const midPoint = point(
       this.p1.x + length / 2 * Math.cos(angle),
       this.p1.y + length / 2 * Math.sin(angle)
     );
-    return midpoint;
+    return midPoint;
   }
   /* eslint-enable comma-dangle */
 
@@ -784,18 +784,18 @@ class Line {
         const line21 = new Line(l1.p2, l2.p1);
         const line22 = new Line(l1.p2, l2.p2);
 
-        let i = line11.midpoint();
+        let i = line11.midPoint();
         let len = line11.length();
         if (line12.length() < len) {
-          i = line12.midpoint();
+          i = line12.midPoint();
           len = line12.length();
         }
         if (line21.length() < len) {
-          i = line21.midpoint();
+          i = line21.midPoint();
           len = line21.length();
         }
         if (line22.length() < len) {
-          i = line22.midpoint();
+          i = line22.midPoint();
           len = line22.length();
         }
         return {
@@ -816,11 +816,11 @@ class Line {
           && (!l1.p1.isOnLine(l2, precision) || !l1.p2.isOnLine(l2, precision))
         )
       ) {
-        const midLine = new Line(l1.midpoint(), l2.midpoint());
+        const midLine = new Line(l1.midPoint(), l2.midPoint());
         return {
           onLine: true,
           inLine: true,
-          intersect: midLine.midpoint(),
+          intersect: midLine.midPoint(),
         };
       }
       let midLine;
@@ -860,7 +860,7 @@ class Line {
       let i;
 
       if (midLine instanceof Line) {
-        i = midLine.midpoint();
+        i = midLine.midPoint();
       }
 
       return {

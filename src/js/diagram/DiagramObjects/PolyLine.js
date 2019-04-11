@@ -368,14 +368,26 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         }
         const name = `angle${i}`;
         if (this.elements[name] != null) {
+          const wasHidden = !this.elements[name].isShown;
           this.elements[name].setAngle({
             p1: newPoints[k],
             p2: newPoints[i],
             p3: newPoints[j],
           });
+          if (wasHidden) {
+            this.elements[name].hide();
+          }
         }
       }
     }
     this.points = newPoints;
+  }
+
+  setPositionWithoutMoving(newPosition: Point) {
+    const currentPosition = this.getPosition();
+    const delta = currentPosition.sub(newPosition);
+    this.setPosition(newPosition);
+    const newPoints = this.points.map(p => p.add(delta));
+    this.updatePoints(newPoints);
   }
 }
