@@ -227,6 +227,7 @@ DiagramElementPrimative {
   "lengthToDraw": -1,
   "move": Object {
     "bounce": true,
+    "boundary": null,
     "canBeMovedAfterLoosingTouch": false,
     "element": null,
     "freely": Object {
@@ -243,7 +244,6 @@ DiagramElementPrimative {
       },
     },
     "limitLine": null,
-    "limitToDiagram": false,
     "maxTransform": Transform {
       "_type": "transform",
       "index": 3,
@@ -550,6 +550,7 @@ DiagramElementPrimative {
       "lengthToDraw": -1,
       "move": Object {
         "bounce": true,
+        "boundary": null,
         "canBeMovedAfterLoosingTouch": false,
         "element": null,
         "freely": Object {
@@ -566,7 +567,6 @@ DiagramElementPrimative {
           },
         },
         "limitLine": null,
-        "limitToDiagram": false,
         "maxTransform": Transform {
           "_type": "transform",
           "index": 3,
@@ -1017,6 +1017,7 @@ DiagramElementPrimative {
       "lengthToDraw": -1,
       "move": Object {
         "bounce": true,
+        "boundary": null,
         "canBeMovedAfterLoosingTouch": false,
         "element": null,
         "freely": Object {
@@ -1033,7 +1034,6 @@ DiagramElementPrimative {
           },
         },
         "limitLine": null,
-        "limitToDiagram": false,
         "maxTransform": Transform {
           "_type": "transform",
           "index": 3,
@@ -1483,6 +1483,7 @@ DiagramElementPrimative {
       "lengthToDraw": -1,
       "move": Object {
         "bounce": true,
+        "boundary": null,
         "canBeMovedAfterLoosingTouch": false,
         "element": null,
         "freely": Object {
@@ -1499,7 +1500,6 @@ DiagramElementPrimative {
           },
         },
         "limitLine": null,
-        "limitToDiagram": false,
         "maxTransform": Transform {
           "_type": "transform",
           "index": 3,
@@ -1955,6 +1955,7 @@ DiagramElementPrimative {
       "lengthToDraw": -1,
       "move": Object {
         "bounce": true,
+        "boundary": null,
         "canBeMovedAfterLoosingTouch": false,
         "element": null,
         "freely": Object {
@@ -1971,7 +1972,6 @@ DiagramElementPrimative {
           },
         },
         "limitLine": null,
-        "limitToDiagram": false,
         "maxTransform": Transform {
           "_type": "transform",
           "index": 2,
@@ -2444,6 +2444,7 @@ DiagramElementPrimative {
         "lengthToDraw": -1,
         "move": Object {
           "bounce": true,
+          "boundary": null,
           "canBeMovedAfterLoosingTouch": false,
           "element": null,
           "freely": Object {
@@ -2460,7 +2461,6 @@ DiagramElementPrimative {
             },
           },
           "limitLine": null,
-          "limitToDiagram": false,
           "maxTransform": Transform {
             "_type": "transform",
             "index": 3,
@@ -2911,6 +2911,7 @@ DiagramElementPrimative {
         "lengthToDraw": -1,
         "move": Object {
           "bounce": true,
+          "boundary": null,
           "canBeMovedAfterLoosingTouch": false,
           "element": null,
           "freely": Object {
@@ -2927,7 +2928,6 @@ DiagramElementPrimative {
             },
           },
           "limitLine": null,
-          "limitToDiagram": false,
           "maxTransform": Transform {
             "_type": "transform",
             "index": 3,
@@ -3377,6 +3377,7 @@ DiagramElementPrimative {
         "lengthToDraw": -1,
         "move": Object {
           "bounce": true,
+          "boundary": null,
           "canBeMovedAfterLoosingTouch": false,
           "element": null,
           "freely": Object {
@@ -3393,7 +3394,6 @@ DiagramElementPrimative {
             },
           },
           "limitLine": null,
-          "limitToDiagram": false,
           "maxTransform": Transform {
             "_type": "transform",
             "index": 3,
@@ -3849,6 +3849,7 @@ DiagramElementPrimative {
         "lengthToDraw": -1,
         "move": Object {
           "bounce": true,
+          "boundary": null,
           "canBeMovedAfterLoosingTouch": false,
           "element": null,
           "freely": Object {
@@ -3865,7 +3866,6 @@ DiagramElementPrimative {
             },
           },
           "limitLine": null,
-          "limitToDiagram": false,
           "maxTransform": Transform {
             "_type": "transform",
             "index": 2,
@@ -4388,6 +4388,7 @@ DiagramElementPrimative {
                       "lengthToDraw": -1,
                       "move": Object {
                         "bounce": true,
+                        "boundary": null,
                         "canBeMovedAfterLoosingTouch": false,
                         "element": null,
                         "freely": Object {
@@ -4404,7 +4405,6 @@ DiagramElementPrimative {
                           },
                         },
                         "limitLine": null,
-                        "limitToDiagram": false,
                         "maxTransform": Transform {
                           "_type": "transform",
                           "index": 3,
@@ -4866,6 +4866,7 @@ DiagramElementPrimative {
                       "lengthToDraw": -1,
                       "move": Object {
                         "bounce": true,
+                        "boundary": null,
                         "canBeMovedAfterLoosingTouch": false,
                         "element": null,
                         "freely": Object {
@@ -4882,7 +4883,6 @@ DiagramElementPrimative {
                           },
                         },
                         "limitLine": null,
-                        "limitToDiagram": false,
                         "maxTransform": Transform {
                           "_type": "transform",
                           "index": 3,
@@ -5358,6 +5358,7 @@ DiagramElementPrimative {
                 "lengthToDraw": -1,
                 "move": Object {
                   "bounce": true,
+                  "boundary": null,
                   "canBeMovedAfterLoosingTouch": false,
                   "element": null,
                   "freely": Object {
@@ -5374,7 +5375,6 @@ DiagramElementPrimative {
                     },
                   },
                   "limitLine": null,
-                  "limitToDiagram": false,
                   "maxTransform": Transform {
                     "_type": "transform",
                     "index": 3,
@@ -5825,6 +5825,7 @@ DiagramElementPrimative {
                 "lengthToDraw": -1,
                 "move": Object {
                   "bounce": true,
+                  "boundary": null,
                   "canBeMovedAfterLoosingTouch": false,
                   "element": null,
                   "freely": Object {
@@ -5841,7 +5842,6 @@ DiagramElementPrimative {
                     },
                   },
                   "limitLine": null,
-                  "limitToDiagram": false,
                   "maxTransform": Transform {
                     "_type": "transform",
                     "index": 3,
@@ -6291,6 +6291,7 @@ DiagramElementPrimative {
                 "lengthToDraw": -1,
                 "move": Object {
                   "bounce": true,
+                  "boundary": null,
                   "canBeMovedAfterLoosingTouch": false,
                   "element": null,
                   "freely": Object {
@@ -6307,7 +6308,6 @@ DiagramElementPrimative {
                     },
                   },
                   "limitLine": null,
-                  "limitToDiagram": false,
                   "maxTransform": Transform {
                     "_type": "transform",
                     "index": 3,
@@ -6763,6 +6763,7 @@ DiagramElementPrimative {
                 "lengthToDraw": -1,
                 "move": Object {
                   "bounce": true,
+                  "boundary": null,
                   "canBeMovedAfterLoosingTouch": false,
                   "element": null,
                   "freely": Object {
@@ -6779,7 +6780,6 @@ DiagramElementPrimative {
                     },
                   },
                   "limitLine": null,
-                  "limitToDiagram": false,
                   "maxTransform": Transform {
                     "_type": "transform",
                     "index": 2,
@@ -7275,6 +7275,7 @@ DiagramElementPrimative {
                               "lengthToDraw": -1,
                               "move": Object {
                                 "bounce": true,
+                                "boundary": null,
                                 "canBeMovedAfterLoosingTouch": false,
                                 "element": null,
                                 "freely": Object {
@@ -7291,7 +7292,6 @@ DiagramElementPrimative {
                                   },
                                 },
                                 "limitLine": null,
-                                "limitToDiagram": false,
                                 "maxTransform": Transform {
                                   "_type": "transform",
                                   "index": 3,
@@ -7769,6 +7769,7 @@ DiagramElementPrimative {
                           "lengthToDraw": -1,
                           "move": Object {
                             "bounce": true,
+                            "boundary": null,
                             "canBeMovedAfterLoosingTouch": false,
                             "element": null,
                             "freely": Object {
@@ -7785,7 +7786,6 @@ DiagramElementPrimative {
                               },
                             },
                             "limitLine": null,
-                            "limitToDiagram": false,
                             "maxTransform": Transform {
                               "_type": "transform",
                               "index": 2,
@@ -8230,6 +8230,7 @@ DiagramElementPrimative {
                             "lengthToDraw": -1,
                             "move": Object {
                               "bounce": true,
+                              "boundary": null,
                               "canBeMovedAfterLoosingTouch": false,
                               "element": null,
                               "freely": Object {
@@ -8246,7 +8247,6 @@ DiagramElementPrimative {
                                 },
                               },
                               "limitLine": null,
-                              "limitToDiagram": false,
                               "maxTransform": Transform {
                                 "_type": "transform",
                                 "index": 3,
@@ -8760,6 +8760,7 @@ DiagramElementPrimative {
                       "lengthToDraw": -1,
                       "move": Object {
                         "bounce": true,
+                        "boundary": null,
                         "canBeMovedAfterLoosingTouch": false,
                         "element": null,
                         "freely": Object {
@@ -8776,7 +8777,6 @@ DiagramElementPrimative {
                           },
                         },
                         "limitLine": null,
-                        "limitToDiagram": false,
                         "maxTransform": Transform {
                           "_type": "transform",
                           "index": 2,
@@ -9220,6 +9220,7 @@ DiagramElementPrimative {
                       "lengthToDraw": -1,
                       "move": Object {
                         "bounce": true,
+                        "boundary": null,
                         "canBeMovedAfterLoosingTouch": false,
                         "element": null,
                         "freely": Object {
@@ -9236,7 +9237,6 @@ DiagramElementPrimative {
                           },
                         },
                         "limitLine": null,
-                        "limitToDiagram": false,
                         "maxTransform": Transform {
                           "_type": "transform",
                           "index": 3,
@@ -9712,6 +9712,7 @@ DiagramElementPrimative {
                 "lengthToDraw": -1,
                 "move": Object {
                   "bounce": true,
+                  "boundary": null,
                   "canBeMovedAfterLoosingTouch": false,
                   "element": null,
                   "freely": Object {
@@ -9728,7 +9729,6 @@ DiagramElementPrimative {
                     },
                   },
                   "limitLine": null,
-                  "limitToDiagram": false,
                   "maxTransform": Transform {
                     "_type": "transform",
                     "index": 3,
@@ -10179,6 +10179,7 @@ DiagramElementPrimative {
                 "lengthToDraw": -1,
                 "move": Object {
                   "bounce": true,
+                  "boundary": null,
                   "canBeMovedAfterLoosingTouch": false,
                   "element": null,
                   "freely": Object {
@@ -10195,7 +10196,6 @@ DiagramElementPrimative {
                     },
                   },
                   "limitLine": null,
-                  "limitToDiagram": false,
                   "maxTransform": Transform {
                     "_type": "transform",
                     "index": 3,
@@ -10645,6 +10645,7 @@ DiagramElementPrimative {
                 "lengthToDraw": -1,
                 "move": Object {
                   "bounce": true,
+                  "boundary": null,
                   "canBeMovedAfterLoosingTouch": false,
                   "element": null,
                   "freely": Object {
@@ -10661,7 +10662,6 @@ DiagramElementPrimative {
                     },
                   },
                   "limitLine": null,
-                  "limitToDiagram": false,
                   "maxTransform": Transform {
                     "_type": "transform",
                     "index": 3,
@@ -11117,6 +11117,7 @@ DiagramElementPrimative {
                 "lengthToDraw": -1,
                 "move": Object {
                   "bounce": true,
+                  "boundary": null,
                   "canBeMovedAfterLoosingTouch": false,
                   "element": null,
                   "freely": Object {
@@ -11133,7 +11134,6 @@ DiagramElementPrimative {
                     },
                   },
                   "limitLine": null,
-                  "limitToDiagram": false,
                   "maxTransform": Transform {
                     "_type": "transform",
                     "index": 2,
@@ -11581,6 +11581,7 @@ DiagramElementPrimative {
             "lengthToDraw": -1,
             "move": Object {
               "bounce": true,
+              "boundary": null,
               "canBeMovedAfterLoosingTouch": false,
               "element": null,
               "freely": Object {
@@ -11597,7 +11598,6 @@ DiagramElementPrimative {
                 },
               },
               "limitLine": null,
-              "limitToDiagram": false,
               "maxTransform": Transform {
                 "_type": "transform",
                 "index": 3,
@@ -12048,6 +12048,7 @@ DiagramElementPrimative {
             "lengthToDraw": -1,
             "move": Object {
               "bounce": true,
+              "boundary": null,
               "canBeMovedAfterLoosingTouch": false,
               "element": null,
               "freely": Object {
@@ -12064,7 +12065,6 @@ DiagramElementPrimative {
                 },
               },
               "limitLine": null,
-              "limitToDiagram": false,
               "maxTransform": Transform {
                 "_type": "transform",
                 "index": 3,
@@ -12514,6 +12514,7 @@ DiagramElementPrimative {
             "lengthToDraw": -1,
             "move": Object {
               "bounce": true,
+              "boundary": null,
               "canBeMovedAfterLoosingTouch": false,
               "element": null,
               "freely": Object {
@@ -12530,7 +12531,6 @@ DiagramElementPrimative {
                 },
               },
               "limitLine": null,
-              "limitToDiagram": false,
               "maxTransform": Transform {
                 "_type": "transform",
                 "index": 3,
@@ -12986,6 +12986,7 @@ DiagramElementPrimative {
             "lengthToDraw": -1,
             "move": Object {
               "bounce": true,
+              "boundary": null,
               "canBeMovedAfterLoosingTouch": false,
               "element": null,
               "freely": Object {
@@ -13002,7 +13003,6 @@ DiagramElementPrimative {
                 },
               },
               "limitLine": null,
-              "limitToDiagram": false,
               "maxTransform": Transform {
                 "_type": "transform",
                 "index": 2,
@@ -13419,6 +13419,7 @@ DiagramElementPrimative {
                     "lengthToDraw": -1,
                     "move": Object {
                       "bounce": true,
+                      "boundary": null,
                       "canBeMovedAfterLoosingTouch": false,
                       "element": null,
                       "freely": Object {
@@ -13435,7 +13436,6 @@ DiagramElementPrimative {
                         },
                       },
                       "limitLine": null,
-                      "limitToDiagram": false,
                       "maxTransform": Transform {
                         "_type": "transform",
                         "index": 3,
@@ -13878,6 +13878,7 @@ DiagramElementPrimative {
               "lengthToDraw": -1,
               "move": Object {
                 "bounce": true,
+                "boundary": null,
                 "canBeMovedAfterLoosingTouch": false,
                 "element": null,
                 "freely": Object {
@@ -13894,7 +13895,6 @@ DiagramElementPrimative {
                   },
                 },
                 "limitLine": null,
-                "limitToDiagram": false,
                 "maxTransform": Transform {
                   "_type": "transform",
                   "index": 3,
@@ -14517,6 +14517,7 @@ DiagramElementPrimative {
     },
     "move": Object {
       "bounce": true,
+      "boundary": null,
       "canBeMovedAfterLoosingTouch": false,
       "element": null,
       "freely": Object {
@@ -14533,7 +14534,6 @@ DiagramElementPrimative {
         },
       },
       "limitLine": null,
-      "limitToDiagram": false,
       "maxTransform": Transform {
         "_type": "transform",
         "index": 3,

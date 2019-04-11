@@ -118,7 +118,7 @@ class DiagramElement {
   move: {
     maxTransform: Transform,
     minTransform: Transform,
-    limitToDiagram: boolean,
+    boundary: ?Rect | Array<number> | 'diagram',
     limitLine: null | Line,
     maxVelocity: TransformLimit;            // Maximum velocity allowed
     // When moving freely, the velocity decelerates until it reaches a threshold,
@@ -342,7 +342,7 @@ class DiagramElement {
     this.move = {
       maxTransform: this.transform.constant(1000),
       minTransform: this.transform.constant(-1000),
-      limitToDiagram: false,
+      boundary: null,
       maxVelocity: new TransformLimit(5, 5, 5),
       freely: {
         zeroVelocityThreshold: new TransformLimit(0.001, 0.001, 0.001),
@@ -1204,19 +1204,28 @@ class DiagramElement {
   }
 
   setMoveBoundaryToDiagram(
-    boundary: Array<number> = [
-      this.diagramLimits.left,
-      this.diagramLimits.top - this.diagramLimits.height,
-      this.diagramLimits.left + this.diagramLimits.width,
-      this.diagramLimits.top],
+    boundaryIn: ?Array<number> | Rect | 'diagram' = this.move.boundary,
     scale: Point = new Point(1, 1),
   ): void {
     if (!this.isMovable) {
       return;
     }
-    if (!this.move.limitToDiagram) {
+    if (boundaryIn != null) {
+      this.move.boundary = boundaryIn;
+    }
+    if (this.move.boundary == null) {
       return;
     }
+    let boundary;
+    if (Array.isArray(this.move.boundary)) {
+      const [left, bottom, width, height] = this.move.boundary;
+      boundary = new Rect(left, bottom, width, height);
+    } else if (this.move.boundary === 'diagram') {
+      boundary = this.diagramLimits;
+    } else {
+      ({ boundary } = this.move);
+    }
+
     const glSpace = {
       x: { bottomLeft: -1, width: 2 },
       y: { bottomLeft: -1, height: 2 },
@@ -1245,10 +1254,10 @@ class DiagramElement {
     const min = new Point(0, 0);
     const max = new Point(0, 0);
 
-    min.x = boundary[0] - minPoint.x * scale.x;
-    min.y = boundary[1] - minPoint.y * scale.y;
-    max.x = boundary[2] - maxPoint.x * scale.x;
-    max.y = boundary[3] - maxPoint.y * scale.y;
+    min.x = boundary.left - minPoint.x * scale.x;
+    min.y = boundary.bottom - minPoint.y * scale.y;
+    max.x = boundary.right - maxPoint.x * scale.x;
+    max.y = boundary.top - maxPoint.y * scale.y;
 
     this.move.maxTransform.updateTranslation(
       max.x,
