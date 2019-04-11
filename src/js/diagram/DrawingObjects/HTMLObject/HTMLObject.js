@@ -119,8 +119,9 @@ class HTMLObject extends DrawingObject {
       const glLocation = this.location.transformBy(transformMatrix);
       const pixelLocation = this.glToPixelSpace(glLocation);
 
-      const w = this.element.offsetWidth;
-      const h = this.element.offsetHeight;
+      const w = this.element.clientWidth;
+      const h = this.element.clientHeight;
+      // console.log(w, h, this.element.id)
       let left = 0;
       let top = 0;
       if (this.alignH === 'center') {
