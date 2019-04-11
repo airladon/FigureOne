@@ -505,11 +505,11 @@ describe('Animationa and Movement', () => {
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
         );
         square.isMovable = true;
-        square.move.limitToDiagram = true;
+        square.move.boundary = 'diagram';
         square.setMoveBoundaryToDiagram();
         expect(square.move.maxTransform.t()).toEqual(new Point(0.895, 0.895));
         expect(square.move.minTransform.t()).toEqual(new Point(-0.895, -0.895));
-        square.setMoveBoundaryToDiagram([-2, -1, 2, 1]);
+        square.setMoveBoundaryToDiagram([-2, -1, 4, 2]);
         expect(square.move.maxTransform.t()).toEqual(new Point(1.895, 0.895));
         expect(square.move.minTransform.t()).toEqual(new Point(-1.895, -0.895));
       });
@@ -525,7 +525,7 @@ describe('Animationa and Movement', () => {
           new Transform().scale(2, 2).rotate(0).translate(0, 0),
         );
         square.isMovable = true;
-        square.move.limitToDiagram = true;
+        square.move.boundary = 'diagram';
 
         expect(square.move.maxTransform.t().round()).toEqual(new Point(1000, 1000));
         expect(square.move.minTransform.t().round()).toEqual(new Point(-1000, -1000));
@@ -534,7 +534,7 @@ describe('Animationa and Movement', () => {
         expect(square.move.maxTransform.t().round()).toEqual(new Point(0.79, 0.79));
         expect(square.move.minTransform.t().round()).toEqual(new Point(-0.79, -0.79));
 
-        square.setMoveBoundaryToDiagram([-1, -2, 1, 2]);
+        square.setMoveBoundaryToDiagram([-1, -2, 2, 4]);
         expect(square.move.maxTransform.t().round()).toEqual(new Point(0.79, 1.79));
         expect(square.move.minTransform.t().round()).toEqual(new Point(-0.79, -1.79));
       });

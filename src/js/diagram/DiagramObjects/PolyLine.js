@@ -1,7 +1,7 @@
 // @flow
 
 import {
-  Transform, Point,
+  Transform, Point, getPoint, Rect,
 } from '../../tools/g2';
 import { joinObjects } from '../../tools/tools';
 import {
@@ -27,6 +27,8 @@ export type TypePadOptions = {
   fill?: boolean,
   isMovable?: boolean,
   touchRadius?: number,
+  boundary?: Rect | Array<number> | 'diagram',
+  touchRadiusInBoundary?: boolean,
 };
 export type TypePolyLineOptions = {
   position?: Point,
@@ -142,6 +144,8 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       color: options.color == null ? [0, 1, 0, 1] : options.color,
       fill: true,
       isMovable: false,
+      boundary: 'diagram',
+      touchRadiusInBoundary: false,
     };
 
     if (options.side != null) {
@@ -187,29 +191,48 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     this.isTouchDevice = isTouchDevice;
     this.animateNextFrame = animateNextFrame;
 
-    this.position = optionsToUse.position;
+    this.position = getPoint(optionsToUse.position);
     this.transform.updateTranslation(this.position);
     this.close = optionsToUse.close;
     this.options = optionsToUse;
 
-    this.points = optionsToUse.points;
+    this.points = optionsToUse.points.map(p => getPoint(p));
 
     // Add Pads
     if (optionsToUse.pad) {
       const { pad } = optionsToUse;
-      const pCount = optionsToUse.points.length;
+      const pCount = this.points.length;
       const padArray = makeArray(pad, pCount);
       for (let i = 0; i < pCount; i += 1) {
         const name = `pad${i}`;
         const padOptions = joinObjects({}, {
-          transform: new Transform().translate(optionsToUse.points[i]),
+          transform: new Transform().translate(this.points[i]),
         }, padArray[i]);
         const padShape = this.shapes.polygon(padOptions);
         if (padArray[i].isMovable) {
           padShape.isMovable = true;
           padShape.isTouchable = true;
-          padShape.move.limitToDiagram = true;
-          padShape.setMoveBoundaryToDiagram();
+          if (padArray[i].touchRadius != null) {
+            const multiplier = padArray[i].touchRadius / padArray[i].radius;
+            padShape.increaseBorderSize(multiplier);
+          }
+          let { boundary } = pad;
+          if (boundary === 'diagram') {
+            boundary = shapes.limits._dup();
+          } else if (Array.isArray(boundary)) {
+            const [left, bottom, width, height] = boundary;
+            boundary = new Rect(left, bottom, width, height);
+          }
+          if (pad.touchRadiusInBoundary === false && pad.touchRadius != null) {
+            const delta = pad.touchRadius - pad.radius;
+            boundary = new Rect(
+              boundary.left - delta,
+              boundary.bottom - delta,
+              boundary.width + 2 * delta,
+              boundary.height + 2 * delta,
+            );
+          }
+          padShape.setMoveBoundaryToDiagram(boundary);
           padShape.setTransformCallback = (transform) => {
             const index = parseInt(padShape.name.slice(3), 10);
             const translation = transform.t();
@@ -218,10 +241,6 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
               this.updatePoints(this.points);
             }
           };
-          if (padArray[i].touchRadius != null) {
-            const multiplier = padArray[i].touchRadius / padArray[i].radius;
-            padShape.increaseBorderSize(multiplier);
-          }
         }
         this.add(name, padShape);
       }
@@ -230,7 +249,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     // Add Line
     if (optionsToUse.showLine) {
       const line = this.shapes.polyLine({
-        points: optionsToUse.points,
+        points: this.points,
         color: optionsToUse.color,
         close: optionsToUse.close,
         borderToPoint: optionsToUse.borderToPoint,
@@ -242,7 +261,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     // Add Sides
     if (optionsToUse.side) {
       const { side } = optionsToUse;
-      let pCount = optionsToUse.points.length - 1;
+      let pCount = this.points.length - 1;
       if (optionsToUse.close) {
         pCount += 1;
       }
@@ -254,8 +273,8 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         }
         const name = `side${i}${j}`;
         const sideOptions = joinObjects({}, {
-          p1: optionsToUse.points[i],
-          p2: optionsToUse.points[j],
+          p1: this.points[i],
+          p2: this.points[j],
         }, sideArray[i]);
         const sideLine = this.objects.line(sideOptions);
         this.add(name, sideLine);
@@ -265,7 +284,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     // Add Angles
     if (optionsToUse.angle) {
       const { angle } = optionsToUse;
-      let pCount = optionsToUse.points.length;
+      let pCount = this.points.length;
       if (optionsToUse.close === false) {
         pCount -= 2;
       }
@@ -285,9 +304,9 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         }
         const name = `angle${i}`;
         const angleOptions = joinObjects({}, {
-          p1: optionsToUse.points[k],
-          p2: optionsToUse.points[i],
-          p3: optionsToUse.points[j],
+          p1: this.points[k],
+          p2: this.points[i],
+          p3: this.points[j],
         }, angleArray[i]);
         const angleAnnotation = this.objects.angle(angleOptions);
         this.add(name, angleAnnotation);
