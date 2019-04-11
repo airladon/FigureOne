@@ -96,8 +96,8 @@ class HTMLObject extends DrawingObject {
   }
 
   glToPixelSpace(p: Point) {
-    const x = (p.x - -1) / 2 * this.parentDiv.offsetWidth;
-    const y = (1 - p.y) / 2 * this.parentDiv.offsetHeight;
+    const x = (p.x - -1) / 2 * this.parentDiv.clientWidth;
+    const y = (1 - p.y) / 2 * this.parentDiv.clientHeight;
     return new Point(x, y);
   }
 
