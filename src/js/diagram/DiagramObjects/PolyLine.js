@@ -246,6 +246,38 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       }
     }
 
+    // Add Angles
+    if (optionsToUse.angle) {
+      const { angle } = optionsToUse;
+      let pCount = this.points.length;
+      if (optionsToUse.close === false) {
+        pCount -= 2;
+      }
+      const angleArray = makeArray(angle, pCount);
+      let firstIndex = 0;
+      if (optionsToUse.close === false) {
+        firstIndex = 1;
+      }
+      for (let i = firstIndex; i < pCount + firstIndex; i += 1) {
+        let j = i + 1;
+        let k = i - 1;
+        if (i === pCount - 1 && optionsToUse.close) {
+          j = 0;
+        }
+        if (i === 0 && optionsToUse.close) {
+          k = pCount - 1;
+        }
+        const name = `angle${i}`;
+        const angleOptions = joinObjects({}, {
+          p1: this.points[k],
+          p2: this.points[i],
+          p3: this.points[j],
+        }, angleArray[i]);
+        const angleAnnotation = this.objects.angle(angleOptions);
+        this.add(name, angleAnnotation);
+      }
+    }
+
     // Add Line
     if (optionsToUse.showLine) {
       const line = this.shapes.polyLine({
@@ -278,38 +310,6 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         }, sideArray[i]);
         const sideLine = this.objects.line(sideOptions);
         this.add(name, sideLine);
-      }
-    }
-
-    // Add Angles
-    if (optionsToUse.angle) {
-      const { angle } = optionsToUse;
-      let pCount = this.points.length;
-      if (optionsToUse.close === false) {
-        pCount -= 2;
-      }
-      const angleArray = makeArray(angle, pCount);
-      let firstIndex = 0;
-      if (optionsToUse.close === false) {
-        firstIndex = 1;
-      }
-      for (let i = firstIndex; i < pCount + firstIndex; i += 1) {
-        let j = i + 1;
-        let k = i - 1;
-        if (i === pCount - 1 && optionsToUse.close) {
-          j = 0;
-        }
-        if (i === 0 && optionsToUse.close) {
-          k = pCount - 1;
-        }
-        const name = `angle${i}`;
-        const angleOptions = joinObjects({}, {
-          p1: this.points[k],
-          p2: this.points[i],
-          p3: this.points[j],
-        }, angleArray[i]);
-        const angleAnnotation = this.objects.angle(angleOptions);
-        this.add(name, angleAnnotation);
       }
     }
   }
@@ -384,7 +384,39 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     this.points = newPoints;
   }
 
-  setPositionWithoutMoving(newPosition: Point) {
+  updateRotation(rotationOffset: number = 0) {
+    let i = 0;      // $FlowFixMe
+    let angle = this[`_angle${i}`];
+    while (angle != null) {
+      angle.update(this.getRotation() + rotationOffset);
+      i += 1;       // $FlowFixMe
+      angle = this[`_angle${i}`];
+    }
+
+    i = 0;          // $FlowFixMe
+    let side = this[`_side${i}${i + 1}`];
+    while (side != null) {
+      side.updateLabel(this.getRotation() + rotationOffset);
+      i += 1;       // $FlowFixMe
+      side = this[`_side${i}${i + 1}`];
+    }               // $FlowFixMe
+    side = this[`_side${i}${0}`];
+    if (side != null) {
+      side.updateLabel(this.getRotation() + rotationOffset);
+    }
+  }
+
+  setPositionWithoutMoving(
+    newPositionPointOrX: Point | number,
+    newPositionY: number = 0,
+  ) {
+    let newPosition = new Point(0, 0);
+    if (typeof newPositionPointOrX === 'number') {
+      newPosition.x = newPositionPointOrX;
+      newPosition.y = newPositionY;
+    } else {
+      newPosition = newPositionPointOrX;
+    }
     const currentPosition = this.getPosition();
     const delta = currentPosition.sub(newPosition);
     this.setPosition(newPosition);
@@ -401,7 +433,17 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     this.updatePoints(newPoints);
   }
 
-  setScaleWithoutMoving(newScale: Point) {
+  setScaleWithoutMoving(
+    newScalePointOrX: Point | number,
+    newScaleY: number = 0,
+  ) {
+    let newScale = new Point(0, 0);
+    if (typeof newScalePointOrX === 'number') {
+      newScale.x = newScalePointOrX;
+      newScale.y = newScaleY;
+    } else {
+      newScale = newScalePointOrX;
+    }
     const currentScale = this.getScale();
     const delta = new Point(
       currentScale.x / newScale.x,
