@@ -314,7 +314,8 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     }
   }
 
-  updatePoints(newPoints: Array<Point>) {
+  updatePoints(newPointsIn: Array<Point>) {
+    const newPoints = newPointsIn.map(p => getPoint(p));
     if (this._line != null) {
       this._line.drawingObject.change(newPoints);
     }
