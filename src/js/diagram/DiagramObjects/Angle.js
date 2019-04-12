@@ -29,7 +29,7 @@ export type TypeAngleLabelOptions = {
   precision?: number,     // Num decimal places if using angle label
   orientation?: TypeAngleLabelOrientation,  // horiztonal or tangent
   autoHide?: number,              // Auto hide label at this threshold
-  textScale?: number,             // Text scale
+  scale?: number,             // Text scale
   color?: Array<number>,          // Text color can be different to curve
 };
 
@@ -455,7 +455,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     precision?: number,
     orientation?: TypeAngleLabelOrientation,
     autoHide?: number,
-    textScale?: number,
+    scale?: number,
   } = {}) {
     const defaultLabelOptions = {
       text: null,
@@ -466,13 +466,13 @@ class DiagramObjectAngle extends DiagramElementCollection {
       precision: 0,
       orientation: 'horizontal',
       autoHide: -1,
-      textScale: 0.7,
+      scale: 0.7,
       color: this.color,
     };
     if (this.curve) {
       defaultLabelOptions.radius = this.curve.radius;
     }
-    // console.log(options)
+
     const optionsToUse = joinObjects({}, defaultLabelOptions, options);
     if (optionsToUse.text === null) {
       optionsToUse.text = '';
@@ -489,7 +489,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       optionsToUse.precision,
       optionsToUse.autoHide,
       optionsToUse.orientation,
-      optionsToUse.textScale,
+      optionsToUse.scale,
     );
     if (this.label != null) {
       this.add('label', this.label.eqn);
