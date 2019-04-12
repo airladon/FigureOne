@@ -390,4 +390,25 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     const newPoints = this.points.map(p => p.add(delta));
     this.updatePoints(newPoints);
   }
+
+  setRotationWithoutMoving(newRotation: number) {
+    const currentRotation = this.getRotation();
+    const delta = currentRotation - newRotation;
+    const deltaMatrix = new Transform().rotate(delta).m();
+    this.setRotation(newRotation);
+    const newPoints = this.points.map(p => p.transformBy(deltaMatrix));
+    this.updatePoints(newPoints);
+  }
+
+  setScaleWithoutMoving(newScale: Point) {
+    const currentScale = this.getScale();
+    const delta = new Point(
+      currentScale.x / newScale.x,
+      currentScale.y / newScale.y,
+    );
+    const deltaMatrix = new Transform().scale(delta).m();
+    this.setScale(newScale);
+    const newPoints = this.points.map(p => p.transformBy(deltaMatrix));
+    this.updatePoints(newPoints);
+  }
 }
