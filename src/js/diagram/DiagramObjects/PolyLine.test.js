@@ -323,7 +323,7 @@ describe('Diagram Objects PolyLine', () => {
       const poly = ways.AngleLabelsClose();
       expect(Object.keys(poly.elements)).toHaveLength(4);
       expect(Object.keys(poly.elements))
-        .toEqual(['line', 'angle0', 'angle1', 'angle2']);
+        .toEqual(['angle0', 'angle1', 'angle2', 'line']);
       // expect(poly.elements.angle0.p1).toEqual(points[1]);
       // expect(poly.elements.angle0.p2).toEqual(points[0]);
       // expect(poly.elements.angle0.p3).toEqual(points[2]);
@@ -337,7 +337,7 @@ describe('Diagram Objects PolyLine', () => {
       const poly = ways.AngleLabelsOpen();
       expect(Object.keys(poly.elements)).toHaveLength(2);
       expect(Object.keys(poly.elements))
-        .toEqual(['line', 'angle1']);
+        .toEqual(['angle1', 'line']);
       // expect(poly.elements.side01.p1).toEqual(points[0]);
       // expect(poly.elements.side01.p2).toEqual(points[1]);
       // expect(poly.elements.side12.p1).toEqual(points[1]);
