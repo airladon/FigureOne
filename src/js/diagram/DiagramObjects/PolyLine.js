@@ -97,6 +97,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
   close: boolean;
   _line: ?DiagramElementPrimative;
   options: TypePolyLineOptions;
+  updatePointsCallback: ?() => void;
 
   constructor(
     shapes: DiagramPrimatives,
@@ -190,6 +191,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     this.largerTouchBorder = optionsToUse.largerTouchBorder;
     this.isTouchDevice = isTouchDevice;
     this.animateNextFrame = animateNextFrame;
+    this.updatePointsCallback = null;
 
     this.position = getPoint(optionsToUse.position);
     this.transform.updateTranslation(this.position);
@@ -216,15 +218,16 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
             const multiplier = padArray[i].touchRadius / padArray[i].radius;
             padShape.increaseBorderSize(multiplier);
           }
-          let { boundary } = pad;
+          let { boundary } = padArray[i];
+          // console.log(boundary, padArray[i])
           if (boundary === 'diagram') {
             boundary = shapes.limits._dup();
           } else if (Array.isArray(boundary)) {
             const [left, bottom, width, height] = boundary;
             boundary = new Rect(left, bottom, width, height);
           }
-          if (pad.touchRadiusInBoundary === false && pad.touchRadius != null) {
-            const delta = pad.touchRadius - pad.radius;
+          if (padArray[i].touchRadiusInBoundary === false && padArray[i].touchRadius != null) {
+            const delta = padArray[i].touchRadius - padArray[i].radius;
             boundary = new Rect(
               boundary.left - delta,
               boundary.bottom - delta,
@@ -272,7 +275,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
           p1: this.points[k],
           p2: this.points[i],
           p3: this.points[j],
-        }, angleArray[i]);
+        }, angleArray[i - firstIndex]);
         const angleAnnotation = this.objects.angle(angleOptions);
         this.add(name, angleAnnotation);
       }
@@ -382,6 +385,9 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       }
     }
     this.points = newPoints;
+    if (this.updatePointsCallback != null) {
+      this.updatePointsCallback();
+    }
   }
 
   updateRotation(rotationOffset: number = 0) {
