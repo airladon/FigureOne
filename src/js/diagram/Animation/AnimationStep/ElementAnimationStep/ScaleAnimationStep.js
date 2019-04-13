@@ -24,6 +24,7 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
     delta: ?Point;
     target: ?Point;
     velocity: ?Point;
+    maxTime: ?number;
   };
 
   constructor(...optionsIn: Array<TypeScaleAnimationStepInputOptions>) {
