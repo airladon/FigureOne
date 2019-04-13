@@ -18,6 +18,7 @@ export type TypePositionAnimationStepInputOptions = {
   translationStyle?: 'linear' | 'curved'; // default is linear
   translationOptions?: pathOptionsType;
   velocity?: Point;
+  maxTime?: number;
 } & TypeElementAnimationStepInputOptions;
 
 export default class PositionAnimationStep extends ElementAnimationStep {
@@ -29,6 +30,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     translationStyle: 'linear' | 'curved';
     translationOptions: pathOptionsType;
     velocity: ?Point | number;
+    maxTime: ?number;
   };
 
   constructor(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
@@ -36,7 +38,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       joinObjects({}, { type: 'position' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
       'start', 'delta', 'target', 'translationStyle', 'translationOptions',
-      'velocity',
+      'velocity', 'maxTime',
     ]);
     super(ElementAnimationStepOptionsIn);
     const defaultPositionOptions = {
@@ -50,6 +52,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
         offset: 0.5,
         controlPoint: null,
         direction: '',
+        maxTime: null,
       },
       velocity: null,
     };
@@ -66,7 +69,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     this.position = { translationOptions: {} };
     copyKeysFromTo(options, this.position, [
       'start', 'delta', 'target', 'translationStyle',
-      'velocity',
+      'velocity', 'maxTime',
     ]);
     duplicateFromTo(options.translationOptions, this.position.translationOptions);
   }
@@ -110,6 +113,11 @@ export default class PositionAnimationStep extends ElementAnimationStep {
         new Transform().translate(target),
         new Transform().translate(velocityToUse),
       );
+    }
+    if (this.position.maxTime != null) {
+      if (this.duration > this.position.maxTime) {
+        this.duration = this.position.maxTime;
+      }
     }
   }
 

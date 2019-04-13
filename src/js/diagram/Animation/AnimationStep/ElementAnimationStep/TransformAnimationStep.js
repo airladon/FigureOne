@@ -21,6 +21,7 @@ export type TypeTransformAnimationStepInputOptions = {
   rotDirection: 0 | 1 | -1 | 2;
   clipRotationTo: '0to360' | '-180to180' | null;
   velocity: ?Transform | number;
+  maxTime?: number;
 } & TypeElementAnimationStepInputOptions;
 
 // A transform animation unit manages a transform animation on an element.
@@ -43,6 +44,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     translationOptions: pathOptionsType;
     velocity: ?Transform | number;
     clipRotationTo: '0to360' | '-180to180' | null;
+    maxTime: ?number;
   };
 
   constructor(...optionsIn: Array<TypeTransformAnimationStepInputOptions>) {
@@ -50,7 +52,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
       joinObjects({}, { type: 'transform' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
       'start', 'delta', 'target', 'rotDirection', 'translationStyle',
-      'translationOptions', 'velocity', 'clipRotationTo',
+      'translationOptions', 'velocity', 'clipRotationTo', 'maxTime',
     ]);
     super(ElementAnimationStepOptionsIn);
     const defaultTransformOptions = {
@@ -68,6 +70,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
       },
       velocity: null,
       clipRotationTo: null,
+      maxTime: null,
     };
     if (this.element && this.element.animations.options.translation) {
       const translationOptions = this.element.animations.options.translation;
@@ -81,7 +84,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     this.transform = { translationOptions: {} };
     copyKeysFromTo(options, this.transform, [
       'start', 'delta', 'target', 'translationStyle',
-      'velocity', 'rotDirection', 'clipRotationTo',
+      'velocity', 'rotDirection', 'clipRotationTo', 'maxTime',
     ]);
     duplicateFromTo(options.translationOptions, this.transform.translationOptions);
   }
@@ -133,6 +136,11 @@ export default class TransformAnimationStep extends ElementAnimationStep {
         this.transform.velocity,
         this.transform.rotDirection,
       );
+    }
+    if (this.transform.maxTime != null) {
+      if (this.duration > this.transform.maxTime) {
+        this.duration = this.transform.maxTime;
+      }
     }
   }
 
