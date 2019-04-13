@@ -17,6 +17,7 @@ export type TypeRotationAnimationStepInputOptions = {
   // 1 is CCW, -1 is CW, 0 is fastest, 2 is not through 0
   direction: 0 | 1 | -1 | 2;
   clipTo: '0to360' | '-180to180' | null;
+  maxTime?: number;
 } & TypeElementAnimationStepInputOptions;
 
 // A transform animation unit manages a transform animation on an element.
@@ -36,6 +37,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     target: number;
     direction: 0 | 1 | -1 | 2;
     velocity: ?number;
+    maxTime: ?number;
     clipTo: '0to360' | '-180to180' | null;
   };
 
@@ -43,7 +45,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, { type: 'rotation' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
-      'start', 'delta', 'target', 'direction', 'velocity', 'clipTo',
+      'start', 'delta', 'target', 'direction', 'velocity', 'clipTo', 'maxTime',
     ]);
     super(ElementAnimationStepOptionsIn);
     const defaultTransformOptions = {
@@ -53,12 +55,14 @@ export default class RotationAnimationStep extends ElementAnimationStep {
       direction: 0,
       velocity: null,
       clipTo: null,
+      maxTime: null,
     };
     const options = joinObjects({}, defaultTransformOptions, ...optionsIn);
     // $FlowFixMe
     this.rotation = {};
     copyKeysFromTo(options, this.rotation, [
       'start', 'delta', 'target', 'velocity', 'direction', 'clipTo',
+      'maxTime',
     ]);
   }
 
@@ -99,6 +103,12 @@ export default class RotationAnimationStep extends ElementAnimationStep {
         new Transform().rotate(velocity),
         this.rotation.direction,
       );
+    }
+
+    if (this.rotation.maxTime != null) {
+      if (this.duration > this.rotation.maxTime) {
+        this.duration = this.rotation.maxTime;
+      }
     }
   }
 

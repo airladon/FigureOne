@@ -15,6 +15,7 @@ export type TypeScaleAnimationStepInputOptions = {
   target?: Point | number;     // Either target or delta must be defined
   delta?: Point | number;      // delta overrides target if both are defined
   velocity?: Point | number;
+  maxTime: ?number;
 } & TypeElementAnimationStepInputOptions;
 
 export default class ScaleAnimationStep extends ElementAnimationStep {
@@ -29,7 +30,7 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, { type: 'position' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
-      'start', 'delta', 'target', 'velocity',
+      'start', 'delta', 'target', 'velocity', 'maxTime',
     ]);
     super(ElementAnimationStepOptionsIn);
     const defaultPositionOptions = {
@@ -37,6 +38,7 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
       target: null,
       delta: null,
       velocity: null,
+      maxTime: null,
     };
     const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
     // $FlowFixMe
@@ -52,7 +54,7 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
     }
     copyKeysFromTo(options, this.scale, [
       'start', 'delta', 'target', 'translationStyle',
-      'velocity',
+      'velocity', 'maxTime',
     ]);
   }
 
@@ -98,6 +100,11 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
         new Transform().scale(target),
         new Transform().scale(velocityToUse),
       );
+    }
+    if (this.scale.maxTime != null) {
+      if (this.duration > this.scale.maxTime) {
+        this.duration = this.scale.maxTime;
+      }
     }
   }
 
