@@ -618,12 +618,34 @@ class Line {
 
   /* eslint-disable comma-dangle */
   midPoint() {
+    // const length = this.length();
+    // const direction = this.p2.sub(this.p1);
+    // const angle = Math.atan2(direction.y, direction.x);
+    // const midPoint = point(
+    //   this.p1.x + length / 2 * Math.cos(angle),
+    //   this.p1.y + length / 2 * Math.sin(angle)
+    // );
+    // return midPoint;
+    return this.pointAtPercent(0.5);
+  }
+
+  pointAtPercent(percent: number) {
     const length = this.length();
     const direction = this.p2.sub(this.p1);
     const angle = Math.atan2(direction.y, direction.x);
     const midPoint = point(
-      this.p1.x + length / 2 * Math.cos(angle),
-      this.p1.y + length / 2 * Math.sin(angle)
+      this.p1.x + length * percent * Math.cos(angle),
+      this.p1.y + length * percent * Math.sin(angle)
+    );
+    return midPoint;
+  }
+
+  pointAtLength(length: number) {
+    const direction = this.p2.sub(this.p1);
+    const angle = Math.atan2(direction.y, direction.x);
+    const midPoint = point(
+      this.p1.x + length * Math.cos(angle),
+      this.p1.y + length * Math.sin(angle)
     );
     return midPoint;
   }
