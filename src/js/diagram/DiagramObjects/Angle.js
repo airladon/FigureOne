@@ -297,7 +297,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     this.animateNextFrame = animateNextFrame;
 
     // Calculate and store the angle geometry
-    this.position = optionsToUse.position;
+    this.position = getPoint(optionsToUse.position);
     this.rotation = optionsToUse.rotation;
     this.direction = optionsToUse.direction;
     this.angle = optionsToUse.angle;

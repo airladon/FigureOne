@@ -2,7 +2,7 @@
 
 // import Diagram from '../Diagram';
 import {
-  Transform, Point, Line, polarToRect, normAngle, Rect, distance,
+  Transform, Point, Line, polarToRect, normAngle, Rect, distance, getPoint,
 } from '../../tools/g2';
 import {
   roundNum,
@@ -367,7 +367,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
 
     this.offset = optionsToUse.offset;
     this.width = optionsToUse.width;
-    this.position = optionsToUse.position;
+    this.position = getPoint(optionsToUse.position);
     this.length = optionsToUse.length;
     this.angle = optionsToUse.angle;
 
