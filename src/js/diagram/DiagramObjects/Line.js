@@ -62,7 +62,7 @@ export type TypeLineOptions = {
   vertexSpaceStart?: 'start' | 'end' | 'center' | number | Point,
   color?: Array<number>,
   showLine?: boolean,
-  largerTouchBorder?: boolean,
+  largerTouchBorder?: boolean | number, // number is the size to grow
   offset?: number,
   p1?: Point,
   p2?: Point,
@@ -164,7 +164,7 @@ function makeStraightLine(
   dashStyle: {
     style: Array<number>,
     maxLength: number } | null,
-  largerTouchBorder: boolean,
+  largerTouchBorder: boolean | number,
   isTouchDevice: boolean,
 ) {
   let straightLine = shapes.horizontalLine(
@@ -180,7 +180,10 @@ function makeStraightLine(
     );
   }
   if (largerTouchBorder) {
-    const multiplier = isTouchDevice ? 16 : 8;
+    let multiplier = isTouchDevice ? 16 : 8;
+    if (typeof largerTouchBorder === 'number') {
+      multiplier = largerTouchBorder;
+    }
     const increaseBorderSize = (element: DiagramElementPrimative) => {
       for (let i = 0; i < element.drawingObject.border[0].length; i += 1) {
         // eslint-disable-next-line no-param-reassign
@@ -265,7 +268,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   vertexSpaceStart: Point;
   offset: number;
   isTouchDevice: boolean;
-  largerTouchBorder: boolean;
+  largerTouchBorder: boolean | number;
   dashStyle: { style: Array<number>, maxLength: number } | null;
 
   // line methods
