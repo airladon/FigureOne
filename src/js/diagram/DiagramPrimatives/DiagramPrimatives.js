@@ -636,6 +636,48 @@ export default class DiagramPrimatives {
     );
   }
 
+  rectangle(...optionsIn: Array<{
+    reference: 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight' | 'center' | Point,
+    width?: number,
+    height?: number,
+    corner?: {
+      radius?: number,
+      sides?: number,
+    },
+    colors?: Array<number>,
+    transform?: Transform,
+    position?: Point,
+  }>) {
+    const defaultOptions = {
+      reference: 'bottomLeft',
+      width: 1,
+      height: 1,
+      corner: null,
+      fill: false,
+      color: [1, 0, 0, 1],
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
+      position: null,
+    }
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    const defultCornerOptions = {
+      radius: options.width / 10,
+      sides: 10,
+    };
+    if (options.corner != null) {
+      options.corner = joinObjects({}, defultCornerOptions, options.corner);
+    }
+    if (options.position != null) {
+      options.transform.updateTranslation(getPoint(options.position))
+    }
+    if (typeof options.reference !== 'string') {
+      options.reference = getPoint(options.reference);
+    }
+    return RectangleFilled(
+      this.webgl, options.reference, options.width, options.height,
+      options.corner.radius, options.corner.sides, options.color, options.transform, this.limits,
+    )
+  }
+
   rectangleFilled(
     topLeft: TypeRectangleFilledReference,
     width: number,

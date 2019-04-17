@@ -6,7 +6,7 @@ import {
 import WebGLInstance from '../../webgl/webgl';
 import VertexObject from './VertexObject';
 
-export type TypeVertexRectangleFilledReference = 'topLeft' | 'center';
+export type TypeVertexRectangleFilledReference = 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight' | 'center' | Point;
 
 export default class VertexRectangleFilled extends VertexObject {
   start: Point;
@@ -66,6 +66,14 @@ export default class VertexRectangleFilled extends VertexObject {
 
     if (reference === 'topLeft') {
       points = points.map(p => p.add(new Point(width / 2, -height / 2)));
+    } else if (reference === 'topRight') {
+      points = points.map(p => p.add(new Point(-width / 2, -height / 2)));
+    } else if (reference === 'bottomLeft') {
+      points = points.map(p => p.add(new Point(width / 2, height / 2)));
+    } else if (reference === 'bottomRight') {
+      points = points.map(p => p.add(new Point(-width / 2, height / 2)));
+    } else if (reference instanceof Point) {
+      points = points.map(p => p.add(reference));
     }
 
     points.forEach((p) => {
