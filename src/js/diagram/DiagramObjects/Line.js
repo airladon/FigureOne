@@ -341,6 +341,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     if (dashStyle) {
       let defaultMaxLength = optionsToUse.length;
       if (optionsToUse.p1 != null && optionsToUse.p2 != null) {
+        optionsToUse.p1 = getPoint(optionsToUse.p1);
+        optionsToUse.p2 = getPoint(optionsToUse.p2);
         defaultMaxLength = distance(optionsToUse.p1, optionsToUse.p2);
       }
       dashStyle = Object.assign({}, {
@@ -881,7 +883,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
 
   setEndPoints(p: Point, q: Point, offset: number = this.offset) {
     this.offset = offset;
-    const { length, angle, position } = this.calculateFromP1P2(p, q);
+    const { length, angle, position } = this.calculateFromP1P2(getPoint(p), getPoint(q));
     this.angle = angle;
     this.length = length;
     this.position = position;
