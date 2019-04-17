@@ -12,9 +12,8 @@ export default class VertexRectangleFilled extends VertexObject {
   start: Point;
   constructor(
     webgl: WebGLInstance,
-    reference: TypeVertexRectangleFilledReference,
-    alignV: 'bottom' | 'middle' | 'top' | number,
     alignH: 'left' | 'center' | 'right' | number,
+    alignV: 'bottom' | 'middle' | 'top' | number,
     width: number = 1,
     height: number = 1,
     cornerRadius: number = 0,
@@ -33,8 +32,8 @@ export default class VertexRectangleFilled extends VertexObject {
       offset: Point,
     ) {
       const cornerPoints = [];
-      if (radius === 0 || sides <= 1) {
-        cornerPoints.push(new Point(0, 0));
+      if (radius === 0 || sides === 0) {
+        cornerPoints.push(offset);
       } else {
         const step = Math.PI / 2 / sides;
         for (let i = 0; i < sides + 1; i += 1) {
@@ -47,8 +46,11 @@ export default class VertexRectangleFilled extends VertexObject {
       return cornerPoints;
     };
 
-    const rad = cornerRadius;
+    let rad = Math.min(cornerRadius, width / 2, height / 2);
     const sides = cornerSides;
+    if (sides === 0) {
+      rad = 0;
+    }
     points = [
       ...points,
       ...makeCorner(rad, sides, 0, new Point(width / 2 - rad, height / 2 - rad)),
@@ -68,21 +70,21 @@ export default class VertexRectangleFilled extends VertexObject {
 
     if (alignV === 'top') {
       points = points.map(p => p.add(0, -height / 2));
-    }
-    if (alignV === 'bottom') {
+    } else if (alignV === 'bottom') {
       points = points.map(p => p.add(0, height / 2));
+    } else if (alignV === 'middle') {
+      points = points.map(p => p.add(0, 0));
+    } else {
+      points = points.map(p => p.add(0, alignV));
     }
     if (alignH === 'left') {
       points = points.map(p => p.add(width / 2, 0));
-    }
-    if (alignH === 'right') {
+    } else if (alignH === 'right') {
       points = points.map(p => p.add(-width / 2, 0));
-    }
-    if (typeof alignV === 'number') {
-      points = points.map(p => p.add(0, alignV));
-    }
-    if (typeof alignH === 'number') {
-      points = points.map(p => p.add(alignH, number));
+    } else if (alignH === 'center') {
+      points = points.map(p => p.add(0, 0));
+    } else {
+      points = points.map(p => p.add(alignH, alignH));
     }
     // if (reference === 'topLeft') {
     //   points = points.map(p => p.add(new Point(width / 2, -height / 2)));

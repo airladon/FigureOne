@@ -637,7 +637,6 @@ export default class DiagramPrimatives {
   }
 
   rectangle(...optionsIn: Array<{
-    reference: 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight' | 'center' | Point,
     alignV: 'bottom' | 'middle' | 'top' | number,
     alignH: 'left' | 'center' | 'right' | number,
     width?: number,
@@ -655,20 +654,23 @@ export default class DiagramPrimatives {
       alignH: 'center',
       width: 1,
       height: 1,
-      corner: null,
+      corner: {
+        radius: 0,
+        sides: 1,
+      },
       fill: false,
       color: [1, 0, 0, 1],
       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       position: null,
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
-    const defultCornerOptions = {
-      radius: options.width / 10,
-      sides: 10,
-    };
-    if (options.corner != null) {
-      options.corner = joinObjects({}, defultCornerOptions, options.corner);
-    }
+    // const defultCornerOptions = {
+    //   radius: options.width / 10,
+    //   sides: 10,
+    // };
+    // if (options.corner != null) {
+    //   options.corner = joinObjects({}, defultCornerOptions, options.corner);
+    // }
     if (options.position != null) {
       options.transform.updateTranslation(getPoint(options.position));
     }
@@ -676,25 +678,25 @@ export default class DiagramPrimatives {
       options.reference = getPoint(options.reference);
     }
     return RectangleFilled(
-      this.webgl, options.reference, options.width, options.height,
+      this.webgl, options.alignH, options.alignV, options.width, options.height,
       options.corner.radius, options.corner.sides, options.color, options.transform, this.limits,
     );
   }
 
-  rectangleFilled(
-    topLeft: TypeRectangleFilledReference,
-    width: number,
-    height: number,
-    cornerRadius: number,
-    cornerSides: number,
-    color: Array<number>,
-    transform: Transform | Point = new Transform(),
-  ) {
-    return RectangleFilled(
-      this.webgl, topLeft, width, height,
-      cornerRadius, cornerSides, color, transform, this.limits,
-    );
-  }
+  // rectangleFilled(
+  //   topLeft: TypeRectangleFilledReference,
+  //   width: number,
+  //   height: number,
+  //   cornerRadius: number,
+  //   cornerSides: number,
+  //   color: Array<number>,
+  //   transform: Transform | Point = new Transform(),
+  // ) {
+  //   return RectangleFilled(
+  //     this.webgl, topLeft, width, height,
+  //     cornerRadius, cornerSides, color, transform, this.limits,
+  //   );
+  // }
 
   radialLines(...optionsIn: Array<{
     innerRadius?: number,
