@@ -6,13 +6,15 @@ import {
 import WebGLInstance from '../../webgl/webgl';
 import VertexObject from './VertexObject';
 
-export type TypeVertexRectangleFilledReference = 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight' | 'center' | Point;
+export type TypeVertexRectangleFilledReference = 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight' | 'center' | 'middleLeft' | 'middleRight' | 'topCenter' | 'bottomCenter' | Point;
 
 export default class VertexRectangleFilled extends VertexObject {
   start: Point;
   constructor(
     webgl: WebGLInstance,
     reference: TypeVertexRectangleFilledReference,
+    alignV: 'bottom' | 'middle' | 'top' | number,
+    alignH: 'left' | 'center' | 'right' | number,
     width: number = 1,
     height: number = 1,
     cornerRadius: number = 0,
@@ -64,17 +66,43 @@ export default class VertexRectangleFilled extends VertexObject {
       ...makeCorner(rad, sides, Math.PI / 2 * 3, new Point(width / 2 - rad, -height / 2 + rad)),
     ];
 
-    if (reference === 'topLeft') {
-      points = points.map(p => p.add(new Point(width / 2, -height / 2)));
-    } else if (reference === 'topRight') {
-      points = points.map(p => p.add(new Point(-width / 2, -height / 2)));
-    } else if (reference === 'bottomLeft') {
-      points = points.map(p => p.add(new Point(width / 2, height / 2)));
-    } else if (reference === 'bottomRight') {
-      points = points.map(p => p.add(new Point(-width / 2, height / 2)));
-    } else if (reference instanceof Point) {
-      points = points.map(p => p.add(reference));
+    if (alignV === 'top') {
+      points = points.map(p => p.add(0, -height / 2));
     }
+    if (alignV === 'bottom') {
+      points = points.map(p => p.add(0, height / 2));
+    }
+    if (alignH === 'left') {
+      points = points.map(p => p.add(width / 2, 0));
+    }
+    if (alignH === 'right') {
+      points = points.map(p => p.add(-width / 2, 0));
+    }
+    if (typeof alignV === 'number') {
+      points = points.map(p => p.add(0, alignV));
+    }
+    if (typeof alignH === 'number') {
+      points = points.map(p => p.add(alignH, number));
+    }
+    // if (reference === 'topLeft') {
+    //   points = points.map(p => p.add(new Point(width / 2, -height / 2)));
+    // } else if (reference === 'topRight') {
+    //   points = points.map(p => p.add(new Point(-width / 2, -height / 2)));
+    // } else if (reference === 'bottomLeft') {
+    //   points = points.map(p => p.add(new Point(width / 2, height / 2)));
+    // } else if (reference === 'bottomRight') {
+    //   points = points.map(p => p.add(new Point(-width / 2, height / 2)));
+    // } else if (reference === 'middleLeft') {
+    //   points = points.map(p => p.add(new Point(width / 2, 0)));
+    // } else if (reference === 'middleRight') {
+    //   points = points.map(p => p.add(new Point(-width / 2, 0)));
+    // } else if (reference === 'topCenter') {
+    //   points = points.map(p => p.add(new Point(0, -height / 2)));
+    // } else if (reference === 'bottomCenter') {
+    //   points = points.map(p => p.add(new Point(0, height / 2)));
+    // } else if (typeof reference !== 'string') {   // $FlowFixMe
+    //   points = points.map(p => p.add(reference));
+    // }
 
     points.forEach((p) => {
       this.points.push(p.x);
