@@ -24,7 +24,7 @@ import RadialLines from '../DiagramElements/RadialLines';
 import HorizontalLine from '../DiagramElements/HorizontalLine';
 import DashedLine from '../DiagramElements/DashedLine';
 import RectangleFilled from '../DiagramElements/RectangleFilled';
-import type { TypeRectangleFilledReference } from '../DiagramElements/RectangleFilled';
+// import type { TypeRectangleFilledReference } from '../DiagramElements/RectangleFilled';
 import Lines from '../DiagramElements/Lines';
 import Arrow from '../DiagramElements/Arrow';
 import { AxisProperties } from '../DiagramElements/Plot/AxisProperties';
