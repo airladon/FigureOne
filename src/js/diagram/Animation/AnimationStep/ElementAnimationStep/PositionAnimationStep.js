@@ -1,6 +1,6 @@
 // @flow
 import {
-  Transform, Point, getMaxTimeFromVelocity,
+  Transform, Point, getMaxTimeFromVelocity, getPoint,
 } from '../../../../tools/g2';
 import type { pathOptionsType } from '../../../../tools/g2';
 import {
@@ -65,6 +65,15 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       joinObjects(defaultPositionOptions.translationOptions, translationOptions);
     }
     const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
+    if (options.start != null) {
+      options.start = getPoint(options.start);
+    }
+    if (options.target != null) {
+      options.target = getPoint(options.target);
+    }
+    if (options.delta != null) {
+      options.delta = getPoint(options.delta);
+    }
     // $FlowFixMe
     this.position = { translationOptions: {} };
     copyKeysFromTo(options, this.position, [
@@ -104,10 +113,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     // If Velocity is defined, then use it to calculate duration
     const { target, start, velocity } = this.position;
     if (velocity != null && start != null && target != null) {
-      let velocityToUse = velocity;
-      if (typeof velocity === 'number') {
-        velocityToUse = new Point(velocity, velocity);
-      }
+      const velocityToUse = getPoint(velocity);
       this.duration = getMaxTimeFromVelocity(
         new Transform().translate(start),
         new Transform().translate(target),

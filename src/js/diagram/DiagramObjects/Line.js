@@ -282,7 +282,12 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   addArrowStart: (?number, ?number) => void;
   addArrowEnd: (?number, ?number) => void;
   addArrow: (number, ?number, ?number) => void;
-  pulseWidth: () => void;
+  pulseWidth: (?{
+    line?: number,
+    label?: number,
+    arrow?: number,
+  }) => void;
+
   updateLabel: (?number) => {};
   addLabel: (string | EquationNew | Array<string> | TypeLabelEquationOptions,
              number, ?TypeLineLabelLocation,

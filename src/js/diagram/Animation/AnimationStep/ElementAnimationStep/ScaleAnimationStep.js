@@ -1,6 +1,6 @@
 // @flow
 import {
-  Transform, Point, getMaxTimeFromVelocity,
+  Transform, Point, getMaxTimeFromVelocity, getPoint,
 } from '../../../../tools/g2';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
@@ -44,15 +44,16 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
     const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
     // $FlowFixMe
     this.scale = {};
-    if (typeof options.start === 'number') {
-      options.start = new Point(options.start, options.start);
+    if (options.start != null) {
+      options.start = getPoint(options.start);
     }
-    if (typeof options.target === 'number') {
-      options.target = new Point(options.target, options.target);
+    if (options.target != null) {
+      options.target = getPoint(options.target);
     }
-    if (typeof options.delta === 'number') {
-      options.delta = new Point(options.delta, options.delta);
+    if (options.delta != null) {
+      options.delta = getPoint(options.delta);
     }
+
     copyKeysFromTo(options, this.scale, [
       'start', 'delta', 'target', 'translationStyle',
       'velocity', 'maxTime',
@@ -92,10 +93,10 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
       && target != null
       && start != null
     ) {
-      let velocityToUse = velocity;
-      if (typeof velocity === 'number') {
-        velocityToUse = new Point(velocity, velocity);
-      }
+      const velocityToUse = getPoint(velocity);
+      // if (typeof velocity === 'number') {
+      //   velocityToUse = new Point(velocity, velocity);
+      // }
       this.duration = getMaxTimeFromVelocity(
         new Transform().scale(start),
         new Transform().scale(target),
