@@ -98,6 +98,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
   _line: ?DiagramElementPrimative;
   options: TypePolyLineOptions;
   updatePointsCallback: ?() => void;
+  reverse: boolean;
 
   constructor(
     shapes: DiagramPrimatives,
@@ -115,6 +116,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       showLine: true,
       borderToPoint: 'never',
       width: 0.01,
+      reverse: false,
     };
     const defaultSideOptions: TypeLineOptions = {
       showLine: false,
@@ -197,6 +199,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     this.transform.updateTranslation(this.position);
     this.close = optionsToUse.close;
     this.options = optionsToUse;
+    this.reverse = optionsToUse.reverse;
 
     this.points = optionsToUse.points.map(p => getPoint(p));
 
@@ -271,6 +274,11 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
           k = pCount - 1;
         }
         const name = `angle${i}`;
+        if (this.reverse) {
+          const newJ = k;
+          k = j;
+          j = newJ;
+        }
         const angleOptions = joinObjects({}, {
           p1: this.points[k],
           p2: this.points[i],
@@ -307,10 +315,16 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
           j = 0;
         }
         const name = `side${i}${j}`;
-        const sideOptions = joinObjects({}, {
+        let sideOptions = joinObjects({}, {
           p1: this.points[i],
           p2: this.points[j],
         }, sideArray[i]);
+        if (this.reverse) {
+          sideOptions = joinObjects({}, {
+            p1: this.points[j],
+            p2: this.points[i],
+          }, sideArray[i]);
+        }
         const sideLine = this.objects.line(sideOptions);
         this.add(name, sideLine);
       }
@@ -347,7 +361,11 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         }
         const name = `side${i}${j}`;
         if (this.elements[name] != null) {
-          this.elements[name].setEndPoints(newPoints[i], newPoints[j]);
+          if (this.reverse) {
+            this.elements[name].setEndPoints(newPoints[j], newPoints[i]);
+          } else {
+            this.elements[name].setEndPoints(newPoints[i], newPoints[j]);
+          }
         }
       }
     }
@@ -373,6 +391,11 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         const name = `angle${i}`;
         if (this.elements[name] != null) {
           const wasHidden = !this.elements[name].isShown;
+          if (this.reverse) {
+            const newJ = k;
+            k = j;
+            j = newJ;
+          }
           this.elements[name].setAngle({
             p1: newPoints[k],
             p2: newPoints[i],
@@ -410,6 +433,14 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     if (side != null) {
       side.updateLabel(this.getRotation() + rotationOffset);
     }
+  }
+
+  reversePoints() {
+    const newPoints = [];
+    for (let i = 0; i < this.points.length; i += 1) {
+      newPoints.push(this.points[this.points.length - 1 - i]);
+    }
+    this.updatePoints(newPoints);
   }
 
   setPositionWithoutMoving(
