@@ -553,7 +553,7 @@ class DiagramElement {
   }
 
   setPosition(pointOrX: Point | number, y: number = 0) {
-    let position = pointOrX;
+    let position = getPoint(pointOrX);
     if (typeof pointOrX === 'number') {
       position = new Point(pointOrX, y);
     }
@@ -569,7 +569,7 @@ class DiagramElement {
   }
 
   setScale(scaleOrX: Point | number, y: ?number = null) {
-    let scale = scaleOrX;
+    let scale = getPoint(scaleOrX);
     if (typeof scaleOrX === 'number') {
       if (y == null) {
         scale = new Point(scaleOrX, scaleOrX);

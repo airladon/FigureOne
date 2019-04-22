@@ -531,7 +531,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     // Right Angle
     if (this.autoRightAngle) {
       const right = this.shapes.collection();
-      const rightLength = optionsToUse.radius; // / Math.sqrt(2);
+      const rightLength = optionsToUse.radius * 0.707; // / Math.sqrt(2);
       right.add('line1', this.shapes.horizontalLine(
         new Point(rightLength, 0),
         rightLength + optionsToUse.width / 2, optionsToUse.width,
