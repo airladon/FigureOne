@@ -78,14 +78,6 @@ export default class EquationLabel {
         },
         position,
       });
-      // eqn = equations.makeEqn();
-      // eqn.createElements({ base: labelTextOrEquation }, color);
-      // eqn.collection.transform = new Transform().scale(1, 1).rotate(0).translate(position);
-      // eqn.formAlignment.fixTo = new Point(0, 0);
-      // eqn.formAlignment.alignH = alignH;
-      // eqn.formAlignment.alignV = alignV;
-      // eqn.formAlignment.scale = scale;
-      // eqn.addForm('base', ['base']);
       eqn.setCurrentForm('base');
     } else if (labelTextOrEquation instanceof EquationNew) {
       eqn = labelTextOrEquation;
@@ -97,9 +89,6 @@ export default class EquationLabel {
         forms[index] = [labelText];
       });
 
-      // labelTextOrEquation.forEach((labelText, index) => {
-      //   eqn.addForm(`${index}`, [`_${index}`]);
-      // });
       eqn = equations.equation({
         elements,
         forms,
@@ -112,31 +101,8 @@ export default class EquationLabel {
         },
         scale,
       });
-      // eqn = equations.makeEqn();
-      // eqn.createElements(elements, color);
-      // eqn.collection.transform = new Transform().scale(1, 1).rotate(0).translate(position);
-      // eqn.formAlignment.fixTo = new Point(0, 0);
-      // eqn.formAlignment.alignH = alignH;
-      // eqn.formAlignment.alignV = alignV;
-      // eqn.formAlignment.scale = scale;
-      // labelTextOrEquation.forEach((labelText, index) => {
-      //   eqn.addForm(`${index}`, [`_${index}`]);
-      // });
       eqn.setCurrentForm(form, formType);
     } else {
-      // // eslint-disable-next-line no-lonely-if
-      // if (labelTextOrEquation.eqn === 'fraction') {
-      //   const defaultFracOptions = { color, scale: 0.5 };
-      //   const fracOptions = joinObjects({}, defaultFracOptions, labelTextOrEquation);
-      //   eqn = equations.fraction(fracOptions);
-      //   eqn.setCurrentForm('base');
-      // } else {
-      // // if (labelTextOrEquation.eqn === 'fractionPre') {
-      //   const defaultFracOptions = { color, scale: 0.7, fracScale: 0.5 };
-      //   const fracOptions = joinObjects({}, defaultFracOptions, labelTextOrEquation);
-      //   eqn = equations.fractionPre(fracOptions);
-      //   eqn.setCurrentForm('base');
-      // }
       const defaultEqnOptions = { color };
       eqn = equations.equation(joinObjects(
         defaultEqnOptions, labelTextOrEquation,
@@ -145,6 +111,9 @@ export default class EquationLabel {
     this.eqn = eqn;
   }
 
+  // TODO
+  // setEqn() {
+  // }
 
   setText(text: string) {
     const form = this.eqn.getCurrentForm();

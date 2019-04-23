@@ -491,4 +491,33 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     const newPoints = this.points.map(p => p.transformBy(deltaMatrix));
     this.updatePoints(newPoints);
   }
+
+  setShow(name: string, show: boolean) {
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element.name.startsWith(name)) {
+        if (show) {
+          element.showAll();
+        } else {
+          element.hide();
+        }
+      }
+    }
+  }
+
+  hideAngles() {
+    this.setShow('angle', false);
+  }
+
+  hideSides() {
+    this.setShow('side', false);
+  }
+
+  showAngles() {
+    this.setShow('angle', true);
+  }
+
+  showSides() {
+    this.setShow('side', true);
+  }
 }
