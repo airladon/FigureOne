@@ -69,6 +69,16 @@ export type TypeTextOptions = {
   mods?: {},
 };
 
+export type TypeGridOptions = {
+  bounds?: Rect,
+  xStep?: number,
+  yStep?: number,
+  numLinesThick?: number,
+  color?: Array<number>,
+  position?: Point, 
+  transform?: Transform,
+};
+
 export default class DiagramPrimatives {
   webgl: WebGLInstance;
   draw2D: DrawContext2D;
@@ -461,7 +471,7 @@ export default class DiagramPrimatives {
     return Lines(this.webgl, linePairs, numLinesThick, color, transform, this.limits);
   }
 
-  grid(
+  gridLegacy(
     bounds: Rect,
     xStep: number,
     yStep: number,
@@ -484,37 +494,40 @@ export default class DiagramPrimatives {
     return this.lines(linePairs, numLinesThick, color, transform);
   }
 
-  // polygon(
-  //   numSides: number,
-  //   radius: number,
-  //   lineWidth: number,
-  //   rotation: number,
-  //   direction: -1 | 1,
-  //   numSidesToDraw: number,
-  //   color: Array<number>,
-  //   transform: Transform | Point = new Transform(),
-  // ) {
-  //   return Polygon(
-  //     this.webgl, numSides, radius, lineWidth,
-  //     rotation, direction, numSidesToDraw, color, transform, this.limits,
-  //   );
-  // }
-
-  // polygonFilled(
-  //   numSides: number,
-  //   radius: number,
-  //   rotation: number,
-  //   numSidesToDraw: number,
-  //   color: Array<number>,
-  //   transform: Transform | Point = new Transform(),
-  //   textureLocation: string = '',
-  //   textureCoords: Rect = new Rect(0, 0, 1, 1),
-  // ) {
-  //   return PolygonFilled(
-  //     this.webgl, numSides, radius,
-  //     rotation, numSidesToDraw, color, transform, this.limits, textureLocation, textureCoords,
-  //   );
-  // }
+  grid(...optionsIn: Array<TypeGridOptions>) {
+    const defaultOptions = {
+      bounds: new Rect(-1, -1, 2, 2),
+      xStep: 0.1,
+      yStep: 0.1,
+      xOffset: 0,
+      yOffset: 0,
+      numLinesThick: 1,
+      color: [1, 0, 0, 1],
+      position: null,
+      transform: new Transform('grid').standard(),
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    if (options.position != null) {
+      const point = getPoint(options.position);
+      options.transform.updateTranslation(point);
+    }
+    const linePairs = [];
+    // const xLimit = tools.roundNum(bounds.righ + xStep);
+    const {
+      bounds, xStep, xOffset, yStep, yOffset, color, numLinesThick, transform,
+    } = options;
+    if (options.xStep !== 0) {
+      for (let x = bounds.left + xOffset; tools.roundNum(x, 8) <= bounds.right; x += xStep) {
+        linePairs.push([new Point(x, bounds.top), new Point(x, bounds.bottom)]);
+      }
+    }
+    if (yStep !== 0) {
+      for (let y = bounds.bottom + yOffset; tools.roundNum(y, 8) <= bounds.top; y += yStep) {
+        linePairs.push([new Point(bounds.left, y), new Point(bounds.right, y)]);
+      }
+    }
+    return this.lines(linePairs, numLinesThick, color, transform);
+  }
 
   polygon(...optionsIn: Array<TypePolygonOptions>) {
     const defaultOptions = {

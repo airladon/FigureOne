@@ -47,6 +47,7 @@ function addElements(
       axes: shapes.axes.bind(shapes),
       radialLines: shapes.radialLines.bind(shapes),
       rectangle: shapes.rectangle.bind(shapes),
+      grid: shapes.grid.bind(shapes),
       //
       line: objects.line.bind(objects),
       angle: objects.angle.bind(objects),
