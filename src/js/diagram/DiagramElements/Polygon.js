@@ -21,6 +21,7 @@ function Polygon(
   color: Array<number>,
   transformOrLocation: Transform | Point,
   diagramLimits: Rect,
+  triangles: boolean,
 ) {
   const vertexLine = new VertexPolygon(
     webgl,
@@ -31,6 +32,7 @@ function Polygon(
     center,
     numSidesToDraw,
     direction,
+    triangles,
   );
   let transform = new Transform();
   if (transformOrLocation instanceof Point) {
