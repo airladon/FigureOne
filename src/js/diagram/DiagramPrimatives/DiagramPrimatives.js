@@ -556,6 +556,7 @@ export default class DiagramPrimatives {
       transform: new Transform('polygon').standard(),
       position: null,
       center: new Point(0, 0),
+      trianglePrimitives: false,
     };
     const options = Object.assign({}, defaultOptions, ...optionsIn);
     // const o = optionsToUse;
@@ -606,6 +607,7 @@ export default class DiagramPrimatives {
         options.color,
         options.transform,
         this.limits,
+        options.trianglePrimitives,
       );
     }
     if (options.mods != null && options.mods !== {}) {

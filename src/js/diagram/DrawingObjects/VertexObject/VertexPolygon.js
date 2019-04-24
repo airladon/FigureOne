@@ -21,10 +21,15 @@ class VertexPolygon extends VertexObject {
     center: Point = new Point(0, 0),
     numSidesToDraw: number = numSides, // Must be <= numSides (def: numSides if greater)
     direction: -1 | 1 = 1,
+    triangles: boolean = false,
   ) {
     // setup webgl stuff
     super(webgl);
-    this.glPrimative = webgl.gl.TRIANGLE_STRIP;
+    if (triangles) {
+      this.glPrimative = webgl.gl.TRIANGLES;
+    } else {
+      this.glPrimative = webgl.gl.TRIANGLE_STRIP;
+    }
 
     // Check potential errors in constructor input
     let sides = numSides;
@@ -51,15 +56,57 @@ class VertexPolygon extends VertexObject {
     let i;
     let j = 0;
     for (i = 0; i <= sidesToDraw; i += 1) {
-      this.points[j] =
-        center.x + inRad * Math.cos(i * this.dAngle * direction + rotation * direction);
-      this.points[j + 1] =
-        center.y + inRad * Math.sin(i * this.dAngle * direction + rotation * direction);
-      this.points[j + 2] =
-        center.x + radius * Math.cos(i * this.dAngle * direction + rotation * direction);
-      this.points[j + 3] =
-        center.y + radius * Math.sin(i * this.dAngle * direction + rotation * direction);
-      j += 4;
+      const angle = i * this.dAngle * direction + rotation * direction;
+      const lastAngle = (i - 1) * this.dAngle * direction + rotation * direction;
+
+      const inPoint = new Point(
+        inRad * Math.cos(angle),
+        inRad * Math.sin(angle),
+      ).add(center);
+      const outPoint = new Point(
+        radius * Math.cos(angle),
+        radius * Math.sin(angle),
+      ).add(center);
+      const lastInPoint = new Point(
+        inRad * Math.cos(lastAngle),
+        inRad * Math.sin(lastAngle),
+      ).add(center);
+      const lastOutPoint = new Point(
+        radius * Math.cos(lastAngle),
+        radius * Math.sin(lastAngle),
+      ).add(center);
+      if (triangles) {
+        if (i > 0) {
+          this.points[j] = lastInPoint.x;
+          this.points[j + 1] = lastInPoint.y;
+          this.points[j + 2] = lastOutPoint.x;
+          this.points[j + 3] = lastOutPoint.y;
+          this.points[j + 4] = outPoint.x;
+          this.points[j + 5] = outPoint.y;
+          this.points[j + 6] = outPoint.x;
+          this.points[j + 7] = outPoint.y;
+          this.points[j + 8] = lastInPoint.x;
+          this.points[j + 9] = lastInPoint.y;
+          this.points[j + 10] = inPoint.x;
+          this.points[j + 11] = inPoint.y;
+          j += 12;
+        }
+      } else {
+        // this.points[j] =
+        //   center.x + inRad * Math.cos(i * this.dAngle * direction + rotation * direction);
+        // this.points[j + 1] =
+        //   center.y + inRad * Math.sin(i * this.dAngle * direction + rotation * direction);
+        // this.points[j + 2] =
+        //   center.x + radius * Math.cos(i * this.dAngle * direction + rotation * direction);
+        // this.points[j + 3] =
+        //   center.y + radius * Math.sin(i * this.dAngle * direction + rotation * direction);
+        // j += 4;
+        this.points[j] = inPoint.x;
+        this.points[j + 1] = inPoint.y;
+        this.points[j + 2] = outPoint.x;
+        this.points[j + 3] = outPoint.y;
+        j += 4;
+      }
     }
 
     // Make the encapsulating border
