@@ -75,7 +75,17 @@ export type TypeGridOptions = {
   yStep?: number,
   numLinesThick?: number,
   color?: Array<number>,
-  position?: Point, 
+  position?: Point,
+  transform?: Transform,
+};
+
+export type TypeRepeatPatternVertex = {
+  element?: DiagramElementPrimative,
+  xNum?: number,
+  yNum?: number,
+  xStep?: number,
+  yStep?: number,
+  position?: Point,
   transform?: Transform,
 };
 
@@ -716,6 +726,7 @@ export default class DiagramPrimatives {
     outerRadius?: number,
     width?: number,
     dAngle?: number,
+    angle?: number,
     color?: Array<number>,
     transform?: Transform,
     position?: Point,
@@ -725,6 +736,7 @@ export default class DiagramPrimatives {
       outerRadius: 1,
       width: 0.05,
       dAngle: Math.PI / 4,
+      angle: Math.PI * 2,
       transform: new Transform().standard(),
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -733,24 +745,67 @@ export default class DiagramPrimatives {
     }
     return RadialLines(
       this.webgl, options.innerRadius, options.outerRadius,
-      options.width, options.dAngle, options.color,
+      options.width, options.dAngle, options.angle, options.color,
       options.transform, this.limits,
     );
   }
 
-  radialLinesLegacy(
-    innerRadius: number = 0,
-    outerRadius: number = 1,
-    width: number = 0.05,
-    dAngle: number = Math.PI / 4,
-    color: Array<number>,
-    transform: Transform | Point = new Transform(),
-  ) {
-    return RadialLines(
-      this.webgl, innerRadius, outerRadius, width,
-      dAngle, color, transform, this.limits,
-    );
+  repeatPatternVertex(...optionsIn: Array<TypeRepeatPatternVertex>) {
+    const defaultOptions = {
+      element: null,
+      xNum: 2,
+      yNum: 2,
+      xStep: 1,
+      yStep: 1,
+      transform: new Transform('repeatPattern').standard(),
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    if (options.position != null) {
+      options.transform.updateTranslation(getPoint(options.position));
+    }
+    const {
+      element, transform, xNum, yNum, xStep, yStep,
+    } = options;
+    if (element == null) {
+      return this.collection();
+    }
+    const copy = element._dup();
+    const { drawingObject } = element;
+    // console.log(element.drawingObject.points)
+    if (drawingObject instanceof VertexObject) {
+      copy.transform = transform._dup();
+      const newPoints = [];
+      const { points } = drawingObject;
+      for (let x = 0; x < xNum; x += 1) {
+        for (let y = 0; y < yNum; y += 1) {
+          for (let p = 0; p < points.length; p += 2) {
+            newPoints.push(new Point(
+              points[p] + x * xStep,
+              points[p + 1] + y * yStep,
+            ));
+            // console.log(points[p], points[p+1], newPoints.slice(-1))
+          }
+        }
+      }
+      // console.log(newPoints)
+      copy.drawingObject.changeVertices(newPoints);
+    }
+    return copy;
   }
+
+  // radialLinesLegacy(
+  //   innerRadius: number = 0,
+  //   outerRadius: number = 1,
+  //   width: number = 0.05,
+  //   dAngle: number = Math.PI / 4,
+  //   color: Array<number>,
+  //   transform: Transform | Point = new Transform(),
+  // ) {
+  //   return RadialLines(
+  //     this.webgl, innerRadius, outerRadius, width,
+  //     dAngle, color, transform, this.limits,
+  //   );
+  // }
 
   collection(
     transformOrPointOrOptions: Transform | Point | {
@@ -814,7 +869,7 @@ export default class DiagramPrimatives {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  repeatPatternVertex(
+  repeatPatternVertexLegacy(
     element: DiagramElementPrimative,
     xNum: number,
     yNum: number,
@@ -988,13 +1043,14 @@ export default class DiagramPrimatives {
     }
     const xy = this.collection(transform);
     if (showGrid) {
-      const gridLines = this.grid(
-        new Rect(0, 0, width, height),
-        tools.roundNum(stepX * width / limits.width, 8),
-        tools.roundNum(stepY * height / limits.height, 8),
-        1,
-        gridColor, new Transform().scale(1, 1).rotate(0).translate(0, 0),
-      );
+      const gridLines = this.grid({
+        bounds: new Rect(0, 0, width, height),
+        stepX: tools.roundNum(stepX * width / limits.width, 8),
+        stepY: tools.roundNum(stepY * height / limits.height, 8),
+        numThickLines: 1,
+        color: gridColor,
+        transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
+      });
       xy.add('grid', gridLines);
     }
     xy.add('y', yAxis);
@@ -1002,137 +1058,137 @@ export default class DiagramPrimatives {
     return xy;
   }
 
-  axesLegacy(
-    width: number = 1,
-    height: number = 1,
-    limits: Rect = new Rect(-1, -1, 2, 2),
-    yAxisLocation: number = 0,
-    xAxisLocation: number = 0,
-    stepX: number = 0.1,
-    stepY: number = 0.1,
-    fontSize: number = 0.13,
-    showGrid: boolean = true,
-    color: Array<number> = [1, 1, 1, 0],
-    gridColor: Array<number> = [1, 1, 1, 0],
-    location: Transform | Point = new Transform(),
-    decimalPlaces: number = 1,
-  ) {
-    const lineWidth = 0.01;
-    const xProps = new AxisProperties('x', 0);
+  // axesLegacy(
+  //   width: number = 1,
+  //   height: number = 1,
+  //   limits: Rect = new Rect(-1, -1, 2, 2),
+  //   yAxisLocation: number = 0,
+  //   xAxisLocation: number = 0,
+  //   stepX: number = 0.1,
+  //   stepY: number = 0.1,
+  //   fontSize: number = 0.13,
+  //   showGrid: boolean = true,
+  //   color: Array<number> = [1, 1, 1, 0],
+  //   gridColor: Array<number> = [1, 1, 1, 0],
+  //   location: Transform | Point = new Transform(),
+  //   decimalPlaces: number = 1,
+  // ) {
+  //   const lineWidth = 0.01;
+  //   const xProps = new AxisProperties('x', 0);
 
-    xProps.minorTicks.mode = 'off';
-    xProps.minorGrid.mode = 'off';
-    xProps.majorGrid.mode = 'off';
+  //   xProps.minorTicks.mode = 'off';
+  //   xProps.minorGrid.mode = 'off';
+  //   xProps.majorGrid.mode = 'off';
 
-    xProps.length = width;
-    xProps.width = lineWidth;
-    xProps.limits = { min: limits.left, max: limits.right };
-    xProps.color = color.slice();
-    xProps.title = '';
+  //   xProps.length = width;
+  //   xProps.width = lineWidth;
+  //   xProps.limits = { min: limits.left, max: limits.right };
+  //   xProps.color = color.slice();
+  //   xProps.title = '';
 
-    xProps.majorTicks.start = limits.left;
-    xProps.majorTicks.step = stepX;
-    xProps.majorTicks.length = lineWidth * 5;
-    xProps.majorTicks.offset = -xProps.majorTicks.length / 2;
-    xProps.majorTicks.width = lineWidth * 2;
-    xProps.majorTicks.labelMode = 'off';
-    xProps.majorTicks.labels = tools.range(
-      xProps.limits.min,
-      xProps.limits.max,
-      stepX,
-    ).map(v => v.toFixed(decimalPlaces)).map((v) => {
-      if (v === yAxisLocation.toString() && yAxisLocation === xAxisLocation) {
-        return `${v}     `;
-      }
-      return v;
-    });
+  //   xProps.majorTicks.start = limits.left;
+  //   xProps.majorTicks.step = stepX;
+  //   xProps.majorTicks.length = lineWidth * 5;
+  //   xProps.majorTicks.offset = -xProps.majorTicks.length / 2;
+  //   xProps.majorTicks.width = lineWidth * 2;
+  //   xProps.majorTicks.labelMode = 'off';
+  //   xProps.majorTicks.labels = tools.range(
+  //     xProps.limits.min,
+  //     xProps.limits.max,
+  //     stepX,
+  //   ).map(v => v.toFixed(decimalPlaces)).map((v) => {
+  //     if (v === yAxisLocation.toString() && yAxisLocation === xAxisLocation) {
+  //       return `${v}     `;
+  //     }
+  //     return v;
+  //   });
 
-    // xProps.majorTicks.labels[xProps.majorTicks.labels / 2] = '   0';
-    xProps.majorTicks.labelOffset = new Point(
-      0,
-      xProps.majorTicks.offset - fontSize * 0.1,
-    );
-    xProps.majorTicks.labelsHAlign = 'center';
-    xProps.majorTicks.labelsVAlign = 'top';
-    xProps.majorTicks.fontColor = color.slice();
-    xProps.majorTicks.fontSize = fontSize;
-    xProps.majorTicks.fontWeight = '400';
+  //   // xProps.majorTicks.labels[xProps.majorTicks.labels / 2] = '   0';
+  //   xProps.majorTicks.labelOffset = new Point(
+  //     0,
+  //     xProps.majorTicks.offset - fontSize * 0.1,
+  //   );
+  //   xProps.majorTicks.labelsHAlign = 'center';
+  //   xProps.majorTicks.labelsVAlign = 'top';
+  //   xProps.majorTicks.fontColor = color.slice();
+  //   xProps.majorTicks.fontSize = fontSize;
+  //   xProps.majorTicks.fontWeight = '400';
 
-    const xAxis = new Axis(
-      this.webgl, this.draw2D, xProps,
-      new Transform().scale(1, 1).rotate(0)
-        .translate(0, xAxisLocation - limits.bottom * height / 2),
-      this.limits,
-    );
+  //   const xAxis = new Axis(
+  //     this.webgl, this.draw2D, xProps,
+  //     new Transform().scale(1, 1).rotate(0)
+  //       .translate(0, xAxisLocation - limits.bottom * height / 2),
+  //     this.limits,
+  //   );
 
-    const yProps = new AxisProperties('x', 0);
-    yProps.minorTicks.mode = 'off';
-    yProps.minorGrid.mode = 'off';
-    yProps.majorGrid.mode = 'off';
+  //   const yProps = new AxisProperties('x', 0);
+  //   yProps.minorTicks.mode = 'off';
+  //   yProps.minorGrid.mode = 'off';
+  //   yProps.majorGrid.mode = 'off';
 
-    yProps.length = height;
-    yProps.width = xProps.width;
-    yProps.limits = { min: limits.bottom, max: limits.top };
-    yProps.color = xProps.color;
-    yProps.title = '';
-    yProps.rotation = Math.PI / 2;
+  //   yProps.length = height;
+  //   yProps.width = xProps.width;
+  //   yProps.limits = { min: limits.bottom, max: limits.top };
+  //   yProps.color = xProps.color;
+  //   yProps.title = '';
+  //   yProps.rotation = Math.PI / 2;
 
-    yProps.majorTicks.step = stepY;
-    yProps.majorTicks.start = limits.bottom;
-    yProps.majorTicks.length = xProps.majorTicks.length;
-    yProps.majorTicks.offset = -yProps.majorTicks.length / 2;
-    yProps.majorTicks.width = xProps.majorTicks.width;
-    yProps.majorTicks.labelMode = 'off';
-    yProps.majorTicks.labels = tools.range(
-      yProps.limits.min,
-      yProps.limits.max,
-      stepY,
-    ).map(v => v.toFixed(decimalPlaces)).map((v) => {
-      if (v === xAxisLocation.toString() && yAxisLocation === xAxisLocation) {
-        return '';
-      }
-      return v;
-    });
+  //   yProps.majorTicks.step = stepY;
+  //   yProps.majorTicks.start = limits.bottom;
+  //   yProps.majorTicks.length = xProps.majorTicks.length;
+  //   yProps.majorTicks.offset = -yProps.majorTicks.length / 2;
+  //   yProps.majorTicks.width = xProps.majorTicks.width;
+  //   yProps.majorTicks.labelMode = 'off';
+  //   yProps.majorTicks.labels = tools.range(
+  //     yProps.limits.min,
+  //     yProps.limits.max,
+  //     stepY,
+  //   ).map(v => v.toFixed(decimalPlaces)).map((v) => {
+  //     if (v === xAxisLocation.toString() && yAxisLocation === xAxisLocation) {
+  //       return '';
+  //     }
+  //     return v;
+  //   });
 
-    // yProps.majorTicks.labels[3] = '';
-    yProps.majorTicks.labelOffset = new Point(
-      yProps.majorTicks.offset - fontSize * 0.2,
-      0,
-    );
-    yProps.majorTicks.labelsHAlign = 'right';
-    yProps.majorTicks.labelsVAlign = 'middle';
-    yProps.majorTicks.fontColor = xProps.majorTicks.fontColor;
-    yProps.majorTicks.fontSize = fontSize;
-    yProps.majorTicks.fontWeight = xProps.majorTicks.fontWeight;
+  //   // yProps.majorTicks.labels[3] = '';
+  //   yProps.majorTicks.labelOffset = new Point(
+  //     yProps.majorTicks.offset - fontSize * 0.2,
+  //     0,
+  //   );
+  //   yProps.majorTicks.labelsHAlign = 'right';
+  //   yProps.majorTicks.labelsVAlign = 'middle';
+  //   yProps.majorTicks.fontColor = xProps.majorTicks.fontColor;
+  //   yProps.majorTicks.fontSize = fontSize;
+  //   yProps.majorTicks.fontWeight = xProps.majorTicks.fontWeight;
 
-    const yAxis = new Axis(
-      this.webgl, this.draw2D, yProps,
-      new Transform().scale(1, 1).rotate(0)
-        .translate(yAxisLocation - limits.left * width / 2, 0),
-      this.limits,
-    );
+  //   const yAxis = new Axis(
+  //     this.webgl, this.draw2D, yProps,
+  //     new Transform().scale(1, 1).rotate(0)
+  //       .translate(yAxisLocation - limits.left * width / 2, 0),
+  //     this.limits,
+  //   );
 
-    let transform = new Transform();
-    if (location instanceof Point) {
-      transform = transform.translate(location.x, location.y);
-    } else {
-      transform = location._dup();
-    }
-    const xy = this.collection(transform);
-    if (showGrid) {
-      const gridLines = this.grid(
-        new Rect(0, 0, width, height),
-        tools.roundNum(stepX * width / limits.width, 8),
-        tools.roundNum(stepY * height / limits.height, 8),
-        1,
-        gridColor, new Transform().scale(1, 1).rotate(0).translate(0, 0),
-      );
-      xy.add('grid', gridLines);
-    }
-    xy.add('y', yAxis);
-    xy.add('x', xAxis);
-    return xy;
-  }
+  //   let transform = new Transform();
+  //   if (location instanceof Point) {
+  //     transform = transform.translate(location.x, location.y);
+  //   } else {
+  //     transform = location._dup();
+  //   }
+  //   const xy = this.collection(transform);
+  //   if (showGrid) {
+  //     const gridLines = this.grid(
+  //       new Rect(0, 0, width, height),
+  //       tools.roundNum(stepX * width / limits.width, 8),
+  //       tools.roundNum(stepY * height / limits.height, 8),
+  //       1,
+  //       gridColor, new Transform().scale(1, 1).rotate(0).translate(0, 0),
+  //     );
+  //     xy.add('grid', gridLines);
+  //   }
+  //   xy.add('y', yAxis);
+  //   xy.add('x', xAxis);
+  //   return xy;
+  // }
 }
 
 export type TypeDiagramPrimatives = DiagramPrimatives;
