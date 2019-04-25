@@ -1290,6 +1290,17 @@ class DiagramElement {
     }
   }
 
+  setMovable(movable: boolean = true) {
+    if (movable) {
+      this.isMovable = true;
+      this.isTouchable = true;
+      this.parent.makeTouchable(false);
+    } else {
+      this.isMovable = false;
+      this.isTouchable = false;
+    }
+  }
+
   clearRender() {
     let tieToElement;
     let elementId = '';
