@@ -641,6 +641,11 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       }
     } else {
       this.isMovable = false;
+      this.isTouchable = false;
+      if (this._line != null) {
+        this._line.isTouchable = false;
+        this._line.isMovable = false;
+      }
     }
   }
 
