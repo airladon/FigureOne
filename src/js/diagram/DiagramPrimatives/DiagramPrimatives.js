@@ -2,6 +2,7 @@
 import {
   Rect, Point, Transform, getPoint,
 } from '../../tools/g2';
+import { setHTML, toHTML } from '../../tools/htmlGenerator';
 import {
   DiagramElementCollection, DiagramElementPrimative,
 } from '../Element';
@@ -457,20 +458,49 @@ export default class DiagramPrimatives {
     return diagramElement;
   }
 
-  htmlText(
-    textInput: string,
-    id: string = generateUniqueId('id__html_text_'),
-    classes: string = '',
-    location: Point = new Point(0, 0),
-    alignV: 'top' | 'bottom' | 'middle' = 'middle',
-    alignH: 'left' | 'right' | 'center' = 'left',
-  ) {
-    // const inside = document.createTextNode(textInput);
-    const inside = document.createElement('div');
-    inside.innerHTML = textInput;
-    return this.htmlElement(inside, id, classes, location, alignV, alignH);
-  }
+  // htmlText(
+  //   textInput: string,
+  //   id: string = generateUniqueId('id__html_text_'),
+  //   classes: string = '',
+  //   location: Point = new Point(0, 0),
+  //   alignV: 'top' | 'bottom' | 'middle' = 'middle',
+  //   alignH: 'left' | 'right' | 'center' = 'left',
+  // ) {
+  //   // const inside = document.createTextNode(textInput);
+  //   const inside = document.createElement('div');
+  //   inside.innerHTML = textInput;
+  //   return this.htmlElement(inside, id, classes, location, alignV, alignH);
+  // }
 
+  htmlText(...optionsIn: Array<{
+    textInput?: string,
+    id?: string,
+    classes?: string,
+    position?: Point,
+    alignV?: 'top' | 'bottom' | 'middle',
+    alignH?: 'left' | 'right' | 'center',
+    modifiers: Object;
+    color?: Array<number>,
+  }>) {
+    const defaultOptions = {
+      text: '',
+      id: generateUniqueId('id__html_text_'),
+      classes: '',
+      position: new Point(0, 0),
+      alignV: 'middle',
+      alignH: 'left',
+      // color: [1, 0, 0, 1],
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    const inside = document.createElement('div');
+    // const htmlText = toHTML(options.textInput, '', '', options.color);
+    // console.log(options.textInput, htmlText)
+    setHTML(inside, options.text, options.modifiers);
+    const {
+      id, classes, position, alignV, alignH,
+    } = options;
+    return this.htmlElement(inside, id, classes, getPoint(position), alignV, alignH);
+  }
 
   lines(
     linePairs: Array<Array<Point>>,
@@ -479,29 +509,6 @@ export default class DiagramPrimatives {
     transform: Transform | Point = new Transform(),
   ) {
     return Lines(this.webgl, linePairs, numLinesThick, color, transform, this.limits);
-  }
-
-  gridLegacy(
-    bounds: Rect,
-    xStep: number,
-    yStep: number,
-    numLinesThick: number,
-    color: Array<number>,
-    transform: Transform | Point = new Transform(),
-  ) {
-    const linePairs = [];
-    // const xLimit = tools.roundNum(bounds.righ + xStep);
-    if (xStep !== 0) {
-      for (let x = bounds.left; tools.roundNum(x, 8) <= bounds.right; x += xStep) {
-        linePairs.push([new Point(x, bounds.top), new Point(x, bounds.bottom)]);
-      }
-    }
-    if (yStep !== 0) {
-      for (let y = bounds.bottom; tools.roundNum(y, 8) <= bounds.top; y += yStep) {
-        linePairs.push([new Point(bounds.left, y), new Point(bounds.right, y)]);
-      }
-    }
-    return this.lines(linePairs, numLinesThick, color, transform);
   }
 
   grid(...optionsIn: Array<TypeGridOptions>) {
