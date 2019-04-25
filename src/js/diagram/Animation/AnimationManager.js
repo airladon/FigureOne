@@ -43,8 +43,8 @@ export default class AnimationManager {
     }
     this.element = options.element;
     this.animations = [];
-    this.state = 'idle';
-    this.options = {};
+    this.state = 'idle';      // $FlowFixme
+    this.options = { translation: {} };
     return this;
   }
 

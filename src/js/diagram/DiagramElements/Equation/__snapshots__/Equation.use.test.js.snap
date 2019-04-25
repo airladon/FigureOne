@@ -20,7 +20,9 @@ DiagramElementPrimative {
   "animations": AnimationManager {
     "animations": Array [],
     "element": [Circular],
-    "options": Object {},
+    "options": Object {
+      "translation": Object {},
+    },
     "state": "idle",
   },
   "cannotTouchHole": false,
@@ -343,7 +345,9 @@ DiagramElementPrimative {
       "animations": AnimationManager {
         "animations": Array [],
         "element": [Circular],
-        "options": Object {},
+        "options": Object {
+          "translation": Object {},
+        },
         "state": "idle",
       },
       "cannotTouchHole": false,
@@ -810,7 +814,9 @@ DiagramElementPrimative {
       "animations": AnimationManager {
         "animations": Array [],
         "element": [Circular],
-        "options": Object {},
+        "options": Object {
+          "translation": Object {},
+        },
         "state": "idle",
       },
       "cannotTouchHole": false,
@@ -1276,7 +1282,9 @@ DiagramElementPrimative {
       "animations": AnimationManager {
         "animations": Array [],
         "element": [Circular],
-        "options": Object {},
+        "options": Object {
+          "translation": Object {},
+        },
         "state": "idle",
       },
       "cannotTouchHole": false,
@@ -1742,7 +1750,9 @@ DiagramElementPrimative {
       "animations": AnimationManager {
         "animations": Array [],
         "element": [Circular],
-        "options": Object {},
+        "options": Object {
+          "translation": Object {},
+        },
         "state": "idle",
       },
       "cannotTouchHole": false,
@@ -2192,7 +2202,9 @@ DiagramElementPrimative {
     "animations": AnimationManager {
       "animations": Array [],
       "element": [Circular],
-      "options": Object {},
+      "options": Object {
+        "translation": Object {},
+      },
       "state": "idle",
     },
     "color": Array [
@@ -2237,7 +2249,9 @@ DiagramElementPrimative {
         "animations": AnimationManager {
           "animations": Array [],
           "element": [Circular],
-          "options": Object {},
+          "options": Object {
+            "translation": Object {},
+          },
           "state": "idle",
         },
         "cannotTouchHole": false,
@@ -2704,7 +2718,9 @@ DiagramElementPrimative {
         "animations": AnimationManager {
           "animations": Array [],
           "element": [Circular],
-          "options": Object {},
+          "options": Object {
+            "translation": Object {},
+          },
           "state": "idle",
         },
         "cannotTouchHole": false,
@@ -3170,7 +3186,9 @@ DiagramElementPrimative {
         "animations": AnimationManager {
           "animations": Array [],
           "element": [Circular],
-          "options": Object {},
+          "options": Object {
+            "translation": Object {},
+          },
           "state": "idle",
         },
         "cannotTouchHole": false,
@@ -3636,7 +3654,9 @@ DiagramElementPrimative {
         "animations": AnimationManager {
           "animations": Array [],
           "element": [Circular],
-          "options": Object {},
+          "options": Object {
+            "translation": Object {},
+          },
           "state": "idle",
         },
         "cannotTouchHole": false,
@@ -4181,7 +4201,9 @@ DiagramElementPrimative {
                       "animations": AnimationManager {
                         "animations": Array [],
                         "element": [Circular],
-                        "options": Object {},
+                        "options": Object {
+                          "translation": Object {},
+                        },
                         "state": "idle",
                       },
                       "cannotTouchHole": false,
@@ -4659,7 +4681,9 @@ DiagramElementPrimative {
                       "animations": AnimationManager {
                         "animations": Array [],
                         "element": [Circular],
-                        "options": Object {},
+                        "options": Object {
+                          "translation": Object {},
+                        },
                         "state": "idle",
                       },
                       "cannotTouchHole": false,
@@ -5151,7 +5175,9 @@ DiagramElementPrimative {
                 "animations": AnimationManager {
                   "animations": Array [],
                   "element": [Circular],
-                  "options": Object {},
+                  "options": Object {
+                    "translation": Object {},
+                  },
                   "state": "idle",
                 },
                 "cannotTouchHole": false,
@@ -5618,7 +5644,9 @@ DiagramElementPrimative {
                 "animations": AnimationManager {
                   "animations": Array [],
                   "element": [Circular],
-                  "options": Object {},
+                  "options": Object {
+                    "translation": Object {},
+                  },
                   "state": "idle",
                 },
                 "cannotTouchHole": false,
@@ -6084,7 +6112,9 @@ DiagramElementPrimative {
                 "animations": AnimationManager {
                   "animations": Array [],
                   "element": [Circular],
-                  "options": Object {},
+                  "options": Object {
+                    "translation": Object {},
+                  },
                   "state": "idle",
                 },
                 "cannotTouchHole": false,
@@ -6550,7 +6580,9 @@ DiagramElementPrimative {
                 "animations": AnimationManager {
                   "animations": Array [],
                   "element": [Circular],
-                  "options": Object {},
+                  "options": Object {
+                    "translation": Object {},
+                  },
                   "state": "idle",
                 },
                 "cannotTouchHole": false,
@@ -7068,7 +7100,9 @@ DiagramElementPrimative {
                               "animations": AnimationManager {
                                 "animations": Array [],
                                 "element": [Circular],
-                                "options": Object {},
+                                "options": Object {
+                                  "translation": Object {},
+                                },
                                 "state": "idle",
                               },
                               "cannotTouchHole": false,
@@ -7556,7 +7590,9 @@ DiagramElementPrimative {
                           "animations": AnimationManager {
                             "animations": Array [],
                             "element": [Circular],
-                            "options": Object {},
+                            "options": Object {
+                              "translation": Object {},
+                            },
                             "state": "idle",
                           },
                           "cannotTouchHole": false,
@@ -8023,7 +8059,9 @@ DiagramElementPrimative {
                             "animations": AnimationManager {
                               "animations": Array [],
                               "element": [Circular],
-                              "options": Object {},
+                              "options": Object {
+                                "translation": Object {},
+                              },
                               "state": "idle",
                             },
                             "cannotTouchHole": false,
@@ -8547,7 +8585,9 @@ DiagramElementPrimative {
                       "animations": AnimationManager {
                         "animations": Array [],
                         "element": [Circular],
-                        "options": Object {},
+                        "options": Object {
+                          "translation": Object {},
+                        },
                         "state": "idle",
                       },
                       "cannotTouchHole": false,
@@ -9013,7 +9053,9 @@ DiagramElementPrimative {
                       "animations": AnimationManager {
                         "animations": Array [],
                         "element": [Circular],
-                        "options": Object {},
+                        "options": Object {
+                          "translation": Object {},
+                        },
                         "state": "idle",
                       },
                       "cannotTouchHole": false,
@@ -9505,7 +9547,9 @@ DiagramElementPrimative {
                 "animations": AnimationManager {
                   "animations": Array [],
                   "element": [Circular],
-                  "options": Object {},
+                  "options": Object {
+                    "translation": Object {},
+                  },
                   "state": "idle",
                 },
                 "cannotTouchHole": false,
@@ -9972,7 +10016,9 @@ DiagramElementPrimative {
                 "animations": AnimationManager {
                   "animations": Array [],
                   "element": [Circular],
-                  "options": Object {},
+                  "options": Object {
+                    "translation": Object {},
+                  },
                   "state": "idle",
                 },
                 "cannotTouchHole": false,
@@ -10438,7 +10484,9 @@ DiagramElementPrimative {
                 "animations": AnimationManager {
                   "animations": Array [],
                   "element": [Circular],
-                  "options": Object {},
+                  "options": Object {
+                    "translation": Object {},
+                  },
                   "state": "idle",
                 },
                 "cannotTouchHole": false,
@@ -10904,7 +10952,9 @@ DiagramElementPrimative {
                 "animations": AnimationManager {
                   "animations": Array [],
                   "element": [Circular],
-                  "options": Object {},
+                  "options": Object {
+                    "translation": Object {},
+                  },
                   "state": "idle",
                 },
                 "cannotTouchHole": false,
@@ -11374,7 +11424,9 @@ DiagramElementPrimative {
             "animations": AnimationManager {
               "animations": Array [],
               "element": [Circular],
-              "options": Object {},
+              "options": Object {
+                "translation": Object {},
+              },
               "state": "idle",
             },
             "cannotTouchHole": false,
@@ -11841,7 +11893,9 @@ DiagramElementPrimative {
             "animations": AnimationManager {
               "animations": Array [],
               "element": [Circular],
-              "options": Object {},
+              "options": Object {
+                "translation": Object {},
+              },
               "state": "idle",
             },
             "cannotTouchHole": false,
@@ -12307,7 +12361,9 @@ DiagramElementPrimative {
             "animations": AnimationManager {
               "animations": Array [],
               "element": [Circular],
-              "options": Object {},
+              "options": Object {
+                "translation": Object {},
+              },
               "state": "idle",
             },
             "cannotTouchHole": false,
@@ -12773,7 +12829,9 @@ DiagramElementPrimative {
             "animations": AnimationManager {
               "animations": Array [],
               "element": [Circular],
-              "options": Object {},
+              "options": Object {
+                "translation": Object {},
+              },
               "state": "idle",
             },
             "cannotTouchHole": false,
@@ -13244,7 +13302,9 @@ DiagramElementPrimative {
                     "animations": AnimationManager {
                       "animations": Array [],
                       "element": [Circular],
-                      "options": Object {},
+                      "options": Object {
+                        "translation": Object {},
+                      },
                       "state": "idle",
                     },
                     "cannotTouchHole": false,
@@ -13703,7 +13763,9 @@ DiagramElementPrimative {
               "animations": AnimationManager {
                 "animations": Array [],
                 "element": [Circular],
-                "options": Object {},
+                "options": Object {
+                  "translation": Object {},
+                },
                 "state": "idle",
               },
               "cannotTouchHole": false,
