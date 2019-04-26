@@ -304,7 +304,7 @@ export class EquationNew extends DiagramElementCollection {
       if (options.font != null) {
         fontToUse = options.font;
       }
-      const p = this.shapes.txt(
+      const p = this.shapes.text(
         textToUse,
         { position: new Point(0, 0), font: fontToUse },
       );

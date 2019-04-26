@@ -42,6 +42,9 @@ export class ParallelAnimationStep extends AnimationStep {
 
   nextFrame(now: number) {
     let remaining = null;
+    if (this.beforeFrame != null) {
+      this.beforeFrame(now - this.startTime);
+    }
     this.steps.forEach((step) => {
       if (step.state === 'animating' || step.state === 'waitingToStart') {
         const stepRemaining = step.nextFrame(now);
@@ -54,6 +57,9 @@ export class ParallelAnimationStep extends AnimationStep {
         }
       }
     });
+    if (this.afterFrame != null) {
+      this.afterFrame(now - this.startTime);
+    }
     if (remaining === null) {
       remaining = 0;
     }

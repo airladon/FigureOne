@@ -93,8 +93,14 @@ export class SerialAnimationStep extends AnimationStep {
 
   nextFrame(now: number) {
     let remaining = -1;
+    if (this.beforeFrame != null) {
+      this.beforeFrame(now - this.startTime);
+    }
     if (this.index <= this.steps.length - 1) {
       remaining = this.steps[this.index].nextFrame(now);
+      if (this.afterFrame != null) {
+        this.afterFrame(now - this.startTime);
+      }
       // console.log('serial', now, this.index, remaining)
       if (remaining >= 0) {
         if (this.index === this.steps.length - 1) {
