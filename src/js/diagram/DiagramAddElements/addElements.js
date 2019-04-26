@@ -43,7 +43,7 @@ function addElements(
       polygon: shapes.polygon.bind(shapes),
       arrow: shapes.arrow.bind(shapes),
       fan: shapes.fan.bind(shapes),
-      text: shapes.txt.bind(shapes),
+      text: shapes.text.bind(shapes),
       textGL: shapes.textGL.bind(shapes),
       textHTML: shapes.htmlText.bind(shapes),
       axes: shapes.axes.bind(shapes),

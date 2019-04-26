@@ -2,7 +2,7 @@
 import {
   Rect, Point, Transform, getPoint,
 } from '../../tools/g2';
-import { setHTML, toHTML } from '../../tools/htmlGenerator';
+import { setHTML } from '../../tools/htmlGenerator';
 import {
   DiagramElementCollection, DiagramElementPrimative,
 } from '../Element';
@@ -279,7 +279,7 @@ export default class DiagramPrimatives {
     );
   }
 
-  txt(textOrOptions: string | TypeTextOptions, ...optionsIn: Array<TypeTextOptions>) {
+  text(textOrOptions: string | TypeTextOptions, ...optionsIn: Array<TypeTextOptions>) {
     const defaultOptions = {
       text: '',
       // position: new Point(0, 0),
@@ -397,7 +397,7 @@ export default class DiagramPrimatives {
     );
   }
 
-  text(
+  textLegacy(
     textInput: string,
     location: Point,
     color: Array<number>,
