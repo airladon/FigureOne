@@ -258,7 +258,7 @@ export default class DiagramPrimatives {
 
     const element = Fan(
       this.webgl,
-      options.points,
+      options.points.map(p => getPoint(p)),
       options.color,
       options.transform,
       this.limits,
