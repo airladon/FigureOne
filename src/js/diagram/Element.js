@@ -1293,8 +1293,7 @@ class DiagramElement {
   setMovable(movable: boolean = true) {
     if (movable) {
       this.isMovable = true;
-      this.isTouchable = true;
-      this.parent.makeTouchable(false);
+      this.makeTouchable(true);
     } else {
       this.isMovable = false;
       this.isTouchable = false;
@@ -1357,12 +1356,12 @@ class DiagramElement {
     }
   }
 
-  setMovable(movable: boolean = true) {
-    if (movable) {
-      this.isTouchable = true;
-      this.isMovable = true;
-    }
-  }
+  // setMovable(movable: boolean = true) {
+  //   if (movable) {
+  //     this.isTouchable = true;
+  //     this.isMovable = true;
+  //   }
+  // }
 }
 
 // ***************************************************************
@@ -2305,9 +2304,10 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   setMovable(movable: boolean = true) {
+    super.setMovable(movable);
     if (movable) {
       this.hasTouchableElements = true;
-      this.isMovable = true;
+      // this.isMovable = true;
     }
   }
 

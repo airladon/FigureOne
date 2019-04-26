@@ -673,6 +673,7 @@ export default class DiagramPrimatives {
     alignH: 'left' | 'center' | 'right' | number,
     width?: number,
     height?: number,
+    fill?: boolean,
     corner?: {
       radius?: number,
       sides?: number,
