@@ -173,11 +173,24 @@ function makeStraightLine(
     0, color, new Transform().scale(1, 1).translate(0, 0),
   );
   if (dashStyle) {
-    straightLine = shapes.dashedLine(
+    straightLine = shapes.dashedLine({
       position,
-      dashStyle.maxLength, width,
-      0, dashStyle.style, color, new Transform().scale(1, 1).translate(0, 0),
-    );
+      length: dashStyle.maxLength,
+      width,
+      rotation: 0,
+      dashStyle: dashStyle.style,
+      color,
+      transform: new Transform().scale(1, 1).translate(0, 0),
+    });
+    //   position,
+    //   dashStyle.maxLength, width,
+    //   0, dashStyle.style, color, new Transform().scale(1, 1).translate(0, 0),
+    // );
+    // straightLine = shapes.dashedLine(
+    //   position,
+    //   dashStyle.maxLength, width,
+    //   0, dashStyle.style, color, new Transform().scale(1, 1).translate(0, 0),
+    // );
   }
   if (largerTouchBorder) {
     let multiplier = isTouchDevice ? 16 : 8;
@@ -567,10 +580,20 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     if (index === 2) {
       r = Math.PI / 2 * 3;
     }
-    const a = this.shapes.arrowLegacy(
-      width, 0, height, 0,
-      this.color, new Transform().translate(this.vertexSpaceStart.x, 0), new Point(0, 0), r,
-    );
+    const a = this.shapes.arrow({
+      width,
+      legWidth: 0,
+      height,
+      legHeight: 0,
+      color: this.color,
+      transform: new Transform().translate(this.vertexSpaceStart.x, 0),
+      tip: new Point(0, 0),
+      rotation: r,
+    });
+    // const a = this.shapes.arrowLegacy(
+    //   width, 0, height, 0,
+    //   this.color, new Transform().translate(this.vertexSpaceStart.x, 0), new Point(0, 0), r,
+    // );
     // $FlowFixMe
     this[`arrow${index}`] = { height };
     this.add(`arrow${index}`, a);
