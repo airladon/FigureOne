@@ -141,15 +141,15 @@ function addElements(
         const element = method(collectionPath, nameToUse, optionsToUse);
         if (elementModsToUse != null && elementModsToUse !== {}) {
           element.setProperties(elementModsToUse);
-          if (methodPath.slice(-1)[0] === 'addNavigator') {
-            element.eqn.setProperties(elementModsToUse);
-          }
+          // if (methodPath.slice(-1)[0] === 'addNavigator') {
+          //   element.eqn.setProperties(elementModsToUse);
+          // }
         }
         if (firstScenario != null && firstScenario in element.scenarios) {
           element.setScenario(firstScenario);
-          if (methodPath.slice(-1)[0] === 'addNavigator') {
-            element.eqn.setScenario(firstScenario);
-          }
+          // if (methodPath.slice(-1)[0] === 'addNavigator') {
+          //   element.eqn.setScenario(firstScenario);
+          // }
         }
       } else {
         let element;
