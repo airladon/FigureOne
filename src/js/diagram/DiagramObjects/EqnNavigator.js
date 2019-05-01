@@ -387,6 +387,7 @@ export type TypeNavigatorOptions = {
   alignH?: 'left' | 'right' | 'center',
   alignV?: 'top' | 'bottom' | 'middle' | 'baseline',
   id?: string,
+  interactive?: boolean,
 };
 
 export default class EqnNavigator extends DiagramElementCollection {
@@ -441,6 +442,7 @@ export default class EqnNavigator extends DiagramElementCollection {
       },
       alignH: 'center',
       alignV: 'middle',
+      interactive: true,
       id: generateUniqueId('id_lesson__equation_navigator_'),
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
@@ -450,7 +452,7 @@ export default class EqnNavigator extends DiagramElementCollection {
       // this.eqn.hasTouchableElements = true;
       // this.eqn.isTouchable = true;
       // this.eqn.touchInBoundingRect = true;
-      this.connectToEquation(optionsToUse.equation);
+      this.connectToEquation(optionsToUse.equation, optionsToUse.interactive);
     }
 
     this.navType = optionsToUse.navType;
@@ -498,12 +500,14 @@ export default class EqnNavigator extends DiagramElementCollection {
     }
   }
 
-  connectToEquation(eqn: EquationNew) {
+  connectToEquation(eqn: EquationNew, interactive: boolean) {
     this.eqn = eqn;
-    this.eqn.onClick = this.clickNext.bind(this);
-    this.eqn.hasTouchableElements = true;
-    this.eqn.isTouchable = true;
-    this.eqn.touchInBoundingRect = true;
+    if (interactive) {
+      this.eqn.onClick = this.clickNext.bind(this);
+      this.eqn.hasTouchableElements = true;
+      this.eqn.isTouchable = true;
+      this.eqn.touchInBoundingRect = true;
+    }
     // this.setTransformCallback = () => {
     //   const p = this.getPosition();
     //   this.eqn.setPosition(p);
