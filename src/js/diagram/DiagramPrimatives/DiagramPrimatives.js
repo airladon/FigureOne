@@ -653,20 +653,50 @@ export default class DiagramPrimatives {
     );
   }
 
-  dashedLine(
-    start: Point,
-    length: number,
-    width: number,
-    rotation: number,
-    dashStyle: Array<number>,
-    color: Array<number>,
-    transform: Transform | Point = new Transform(),
-  ) {
+  dashedLine(...optionsIn: Array<{
+    start?: Point,
+    length?: number,
+    width?: number,
+    rotation?: number,
+    dashStyle?: Array<number>,
+    color?: Array<number>,
+    transform?: Transform,
+    position?: Point,
+  }>) {
+    const defaultOptions = {
+      start: [0, 0],
+      length: 1,
+      width: 0.01,
+      rotation: 0,
+      dashStyle: [0.1, 0.1],
+      transform: new Transform('dashedLine').scale(1, 1).rotate(0).translate(0, 0),
+      position: null,
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    if (options.position != null) {
+      options.transform.updateTranslation(getPoint(options.position));
+    }
     return DashedLine(
-      this.webgl, start, length, width,
-      rotation, dashStyle, color, transform, this.limits,
+      this.webgl, getPoint(options.start), options.length, options.width,
+      options.rotation, options.dashStyle, options.color,
+      options.transform, this.limits,
     );
   }
+
+  // dashedLine(
+  //   start: Point,
+  //   length: number,
+  //   width: number,
+  //   rotation: number,
+  //   dashStyle: Array<number>,
+  //   color: Array<number>,
+  //   transform: Transform | Point = new Transform(),
+  // ) {
+  //   return DashedLine(
+  //     this.webgl, start, length, width,
+  //     rotation, dashStyle, color, transform, this.limits,
+  //   );
+  // }
 
   rectangle(...optionsIn: Array<{
     alignV: 'bottom' | 'middle' | 'top' | number,

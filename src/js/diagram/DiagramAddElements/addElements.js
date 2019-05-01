@@ -50,6 +50,7 @@ function addElements(
       radialLines: shapes.radialLines.bind(shapes),
       rectangle: shapes.rectangle.bind(shapes),
       grid: shapes.grid.bind(shapes),
+      dashedLine: shapes.dashedLine.bind(shapes),
       //
       line: objects.line.bind(objects),
       angle: objects.angle.bind(objects),
