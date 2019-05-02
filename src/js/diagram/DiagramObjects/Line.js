@@ -750,6 +750,19 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.updateLabel();
   }
 
+  setLabel(text: string) {
+    this.showRealLength = false;
+    if (this.label != null) {
+      this.label.setText(text);
+    }
+    this.updateLabel();
+  }
+
+  setLabelToRealLength() {
+    this.showRealLength = true;
+    this.updateLabel();
+  }
+
   updateLabel(parentRotationOffset: number = 0) {
     const { label } = this;
     if (label == null) {
