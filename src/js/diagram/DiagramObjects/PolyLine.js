@@ -361,10 +361,14 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         }
         const name = `side${i}${j}`;
         if (this.elements[name] != null) {
+          const wasHidden = !this.elements[name].isShown;
           if (this.reverse) {
             this.elements[name].setEndPoints(newPoints[j], newPoints[i]);
           } else {
             this.elements[name].setEndPoints(newPoints[i], newPoints[j]);
+          }
+          if (wasHidden) {
+            this.elements[name].hide();
           }
         }
       }
