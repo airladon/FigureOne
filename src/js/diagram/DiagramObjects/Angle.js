@@ -840,6 +840,23 @@ class DiagramObjectAngle extends DiagramElementCollection {
     }
   }
 
+  setLabel(text: string) {
+    const { label } = this;
+    if (label != null) {
+      label.setText(text);
+      label.showRealAngle = false;
+    }
+    this.updateLabel();
+  }
+
+  setLabelToRealAngle() {
+    const { label } = this;
+    if (label != null) {
+      label.showRealAngle = true;
+    }
+    this.updateLabel();
+  }
+
   updateLabel() {
     const { _label, label } = this;
     if (_label && label) {
