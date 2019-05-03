@@ -535,13 +535,16 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       line?: number,
       label?: number,
       arrow?: number,
+      done?: ?() => void,
     } = {}) {
     const defaultOptions = {
       line: 3,
       label: 1.5,
       arrow: 2,
+      done: null,
     };
     const options = joinObjects(defaultOptions, optionsIn);
+    let { done } = options;
     const line = this._line;
     if (line != null) {
       line.stopPulsing();
@@ -553,20 +556,27 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       };
       line.pulse.callback = finishPulsing;
       line.pulse.transformMethod = s => new Transform().scale(1, s);
-      line.pulseScaleNow(1, options.line);
+      line.pulseScaleNow(1, options.line, 0, done);
+      done = null;
     }
     const arrow1 = this._arrow1;
     const arrow2 = this._arrow2;
     if (arrow1 != null) {
-      arrow1.pulseScaleNow(1, options.arrow);
+      arrow1.pulseScaleNow(1, options.arrow, 0, done);
+      done = null;
     }
     if (arrow2 != null) {
-      arrow2.pulseScaleNow(1, options.arrow);
+      arrow2.pulseScaleNow(1, options.arrow, 0, done);
+      done = null;
     }
 
     const label = this._label;
     if (label != null) {
-      label.pulseScaleNow(1, options.label);
+      label.pulseScaleNow(1, options.label, 0, done);
+      done = null;
+    }
+    if (done != null) {
+      done();
     }
     this.animateNextFrame();
   }
