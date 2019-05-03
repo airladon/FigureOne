@@ -126,6 +126,7 @@ export type TypeEquationOptions = {
   formSeries?: Array<string> | {};
   defaultFormSeries?: string;
   formRestartPosition?: ?Point | DiagramElementCollection;
+  formRestartAnimation?: 'dissolve' | 'pulse' | 'moveFrom';
   //
 };
 
@@ -170,6 +171,7 @@ export class EquationNew extends DiagramElementCollection {
     descriptionPosition: Point;
 
     formRestartPosition: ?Point | DiagramElementCollection;
+    formRestartAnimation: 'dissolve' | 'moveFrom' | 'pulse';
   };
 
   // isTouchDevice: boolean;
@@ -207,6 +209,7 @@ export class EquationNew extends DiagramElementCollection {
       forms: {},
       formSeries: {},
       formRestartPosition: null,
+      formRestartAnimation: 'dissolve',
     };
 
     const optionsToUse = joinObjects({}, defaultOptions, options);
@@ -246,6 +249,7 @@ export class EquationNew extends DiagramElementCollection {
       descriptionElement: null,
       descriptionPosition: new Point(0, 0),
       formRestartPosition: optionsToUse.formRestartPosition,
+      formRestartAnimation: optionsToUse.formRestartAnimation,
     };
 
     this.setPosition(optionsToUse.position);
@@ -854,7 +858,7 @@ export class EquationNew extends DiagramElementCollection {
     prioritizeFormDuration?: boolean,
     delay?: number,
     fromWhere?: ?'fromPrev' | 'fromNext',
-    animate?: 'move' | 'dissolve' | 'moveFrom',
+    animate?: 'move' | 'dissolve' | 'moveFrom' | 'pulse',
     callback?: ?() => void,
     // finishAnimatingAndCancelGoTo?: boolean,
     ifAnimating?: {
@@ -1003,39 +1007,16 @@ export class EquationNew extends DiagramElementCollection {
         ) {
           const target = this.getPosition();
           let start = this.getPosition();
-          // let pulseDuration = 0;
-          // let pulseCallback = () => {};
-          let hideShowCallback = () => {};
-          let hideShowCallbackDuration = 0;
           if (this.eqn.formRestartPosition instanceof EquationNew) {
-            console.log(this.eqn.formRestartPosition.eqn.currentForm, subForm.name)
-            if (this.eqn.formRestartPosition.currentForm !== subForm.name) {
-              hideShowCallback = () => {
-                this.eqn.formRestartPosition.goToForm({
-                  name: subForm.name,
-                  animate: 'dissolve',
-                  // duration: 0.5,
-                });
-              };
-              hideShowCallbackDuration = 1;
-            }
             this.eqn.formRestartPosition.showForm(subForm.name);
-            // pulseDuration = 1;
-            // pulseCallback = () => {
-            //   this.eqn.formRestartPosition.pulseScaleNow(1, 1.3);
-            // };
           }
           if (this.eqn.formRestartPosition instanceof DiagramElementCollection) {
             start = this.eqn.formRestartPosition.getPosition();
           } else {  // $FlowFixMe
             start = getPoint(this.eqn.formRestartPosition);
           }
-          // this.showForm(subForm);
-
           this.animations.new()
-            .dissolveOut({ duration: 0.6 })
-            // .trigger({ callback: pulseCallback.bind(this), duration: pulseDuration })
-            // .trigger({ callback: hideShowCallback, duration: hideShowCallbackDuration })
+            .dissolveOut({ duration: options.dissolveOutTime })
             .position({ target: start, duration: 0 })
             .trigger({
               callback: () => {
@@ -1046,6 +1027,23 @@ export class EquationNew extends DiagramElementCollection {
             .position({ target, duration })
             .whenFinished(end)
             .start();
+        } else if (options.animate === 'pulse') {
+          const newEnd = () => {
+            this.pulseScaleNow(1, 1.2, 0, end);
+            if (this.eqn.formRestartPosition != null
+              && this.eqn.formRestartPosition instanceof EquationNew
+              && this.eqn.formRestartPosition.getCurrentForm().name === subForm.name
+            ) {
+              this.eqn.formRestartPosition.pulseScaleNow(1, 1.1);
+            }
+          };
+          subForm.allHideShow(
+            options.delay,
+            options.dissolveOutTime,
+            options.blankTime,
+            options.dissolveInTime,
+            newEnd,
+          );
         } else {
           // console.log('******************* hideshow')
           subForm.allHideShow(
@@ -1100,11 +1098,12 @@ export class EquationNew extends DiagramElementCollection {
       index += 1;
       if (index > this.eqn.currentFormSeries.length - 1) {
         index = 0;
-        if (this.eqn.formRestartPosition != null) {
-          animate = 'moveFrom';
-        } else {
-          animate = 'dissolve';
-        }
+        animate = this.eqn.formRestartAnimation;
+        // if (this.eqn.formRestartPosition != null) {
+        //   animate = 'moveFrom';
+        // } else {
+        //   animate = 'dissolve';
+        // }
       }
 
       this.goToForm({
