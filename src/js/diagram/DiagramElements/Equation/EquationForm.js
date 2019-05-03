@@ -354,8 +354,11 @@ export default class EquationForm extends Elements {
     showTime: number = 0,
     hideTime: number = 0,
     callback: ?(?mixed) => void = null,
+    animationStop: boolean = true,
   ) {
-    this.collectionMethods.stop();
+    if (animationStop) {
+      this.collectionMethods.stop();
+    }
     this.collectionMethods.show();
     const { show, hide } = this.getElementsToShowAndHide();
     if (showTime === 0) {
@@ -377,8 +380,11 @@ export default class EquationForm extends Elements {
     showTime: number = 0,
     hideTime: number = 0,
     callback: ?(?mixed) => void = null,
+    animationStop: boolean = true,
   ) {
-    this.collectionMethods.stop();
+    if (animationStop) {
+      this.collectionMethods.stop();
+    }
     this.collectionMethods.show();
     const { show, hide } = this.getElementsToShowAndHide();
     if (hideTime === 0) {
