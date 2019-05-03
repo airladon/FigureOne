@@ -1001,13 +1001,24 @@ export class EquationNew extends DiagramElementCollection {
           && this.eqn.formRestartPosition != null
         ) {
           const target = this.getPosition();
+          let start = this.getPosition();
+          if (this.eqn.formRestartPosition instanceof EquationNew) {
+            this.eqn.formRestartPosition.showForm(subFormToUse);
+          }
           if (this.eqn.formRestartPosition instanceof DiagramElementCollection) {
-            this.setPosition(this.eqn.formRestartPosition.getPosition());
+            start = this.eqn.formRestartPosition.getPosition();
           } else {  // $FlowFixMe
-            this.setPosition(getPoint(this.eqn.formRestartPosition));
+            start = getPoint(this.eqn.formRestartPosition);
           }
           this.showForm(subForm);
+          
+          // console.log(target)
           this.animations.new()
+            // .dissolveOut({ duration: 0.6 })
+            .position({ target: start, duration: 0 })
+            // .trigger({
+            //   callback: () => { this.showForm(subForm); },
+            // })
             .position({ target, duration })
             .whenFinished(end)
             .start();
