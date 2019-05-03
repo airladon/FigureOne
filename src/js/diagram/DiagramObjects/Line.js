@@ -763,7 +763,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.updateLabel();
   }
 
-  updateLabel(parentRotationOffset: number = this.getRotation() + this.angle) {
+  updateLabel(parentRotationOffset: number = 0) {
     const { label } = this;
     if (label == null) {
       return;
