@@ -178,7 +178,7 @@ export class EquationNew extends DiagramElementCollection {
     formRestart: ?{
       moveFrom?: Point | DiagramElementCollection;
       pulse?: {
-        time: number;
+        duration: number;
         scale: number;
         element: DiagramElement;
       }
@@ -1039,7 +1039,7 @@ export class EquationNew extends DiagramElementCollection {
             .dissolveOut({ duration: options.dissolveOutTime })
             .position({ target: start, duration: 0 })
             .trigger({
-              callback: () => {
+              callback: () => {   // $FlowFixMe
                 this.showForm(subForm.name, subFormToUse, false);
               },
               duration: 0.01,
@@ -1056,7 +1056,7 @@ export class EquationNew extends DiagramElementCollection {
           const newEnd = () => {
             this.pulseScaleNow(pulse.duration, pulse.scale, 0, end);
             if (pulse.element != null
-              && pulse.element instanceof EquationNew
+              && pulse.element instanceof EquationNew  // $FlowFixMe
               && pulse.element.getCurrentForm().name === subForm.name
             ) {
               pulse.element.pulseScaleNow(pulse.duration, pulse.scale);
