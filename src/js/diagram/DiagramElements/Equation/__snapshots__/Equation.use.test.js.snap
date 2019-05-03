@@ -4143,6 +4143,7 @@ DiagramElementPrimative {
         "style": "italic",
         "weight": "200",
       },
+      "formRestart": null,
       "formSeries": Object {
         "base": Array [
           "0",
