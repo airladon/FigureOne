@@ -41,6 +41,7 @@ export type TypePolyLineOptions = {
   angle?: TypeAngleOptions | Array<TypeAngleOptions>,
   side?: TypeLineOptions | Array<TypeLineOptions>,
   pad?: TypePadOptions | Array<TypePadOptions>,
+  transform?: Transform,
 };
 
 function makeArray<T>(
@@ -109,7 +110,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     options: TypePolyLineOptions = {},
   ) {
     const defaultOptions: TypePolyLineOptions = {
-      position: new Point(0, 0),
+      position: null,
       color: [0, 1, 0, 1],
       points: [new Point(1, 0), new Point(0, 0), new Point(0, 1)],
       close: false,
@@ -117,6 +118,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       borderToPoint: 'never',
       width: 0.01,
       reverse: false,
+      transform: new Transform('PolyLine').scale(1, 1).rotate(0).translate(0, 0),
     };
     const defaultSideOptions: TypeLineOptions = {
       showLine: false,
@@ -181,10 +183,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       optionsToUse.angle = options.angle.map(angle => joinObjects({}, defaultOptions.angle, angle));
     }
 
-    super(new Transform('PolyLine')
-      .scale(1, 1)
-      .rotate(0)
-      .translate(0, 0), shapes.limits);
+    super(optionsToUse.transform, shapes.limits);
     this.setColor(optionsToUse.color);
 
     this.shapes = shapes;
@@ -195,8 +194,10 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     this.animateNextFrame = animateNextFrame;
     this.updatePointsCallback = null;
 
-    this.position = getPoint(optionsToUse.position);
-    this.transform.updateTranslation(this.position);
+    if (optionsToUse.position != null) {
+      this.transform.updateTranslation(this.position);
+    }
+    this.position = this.getPosition();
     this.close = optionsToUse.close;
     this.options = optionsToUse;
     this.reverse = optionsToUse.reverse;
@@ -327,6 +328,52 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         }
         const sideLine = this.objects.line(sideOptions);
         this.add(name, sideLine);
+      }
+    }
+  }
+
+  updateSideLabels(rotationOffset: number = 0) {
+    if (this.options.side != null) {
+      let pCount = this.points.length - 1;
+      if (this.close) {
+        pCount += 1;
+      }
+      for (let i = 0; i < pCount; i += 1) {
+        let j = i + 1;
+        if (i === pCount - 1 && this.close) {
+          j = 0;
+        }
+        const name = `side${i}${j}`;
+        if (this.elements[name] != null) {
+          const wasHidden = !this.elements[name].isShown;
+          this.elements[name].updateLabel(rotationOffset);
+          if (wasHidden) {
+            this.elements[name].hide();
+          }
+        }
+      }
+    }
+  }
+
+  updateAngleLabels(rotationOffset: number = 0) {
+    if (this.options.angle != null) {
+      let pCount = this.points.length;
+      if (this.close === false) {
+        pCount -= 2;
+      }
+      let firstIndex = 0;
+      if (this.close === false) {
+        firstIndex = 1;
+      }
+      for (let i = firstIndex; i < pCount + firstIndex; i += 1) {
+        const name = `angle${i}`;
+        if (this.elements[name] != null) {
+          const wasHidden = !this.elements[name].isShown;
+          this.elements[name].updateLabel(rotationOffset);
+          if (wasHidden) {
+            this.elements[name].hide();
+          }
+        }
       }
     }
   }
@@ -523,5 +570,10 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
 
   showSides() {
     this.setShow('side', true);
+  }
+
+  updateLabels(rotationOffset: number = this.getRotation()) {
+    this.updateAngleLabels(rotationOffset);
+    this.updateSideLabels(rotationOffset);
   }
 }
