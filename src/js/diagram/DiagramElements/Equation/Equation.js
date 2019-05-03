@@ -776,10 +776,10 @@ export class EquationNew extends DiagramElementCollection {
     return this.eqn.forms[this.eqn.currentForm][this.eqn.currentSubForm];
   }
 
-  render() {
+  render(animationStop: boolean = true) {
     const form = this.getCurrentForm();
     if (form != null) {
-      form.showHide();
+      form.showHide(0, 0, null, animationStop);
       this.show();
       form.setPositions();
       form.applyElementMods();
@@ -809,6 +809,7 @@ export class EquationNew extends DiagramElementCollection {
   showForm(
     formOrName: EquationForm | string,
     subForm: ?string = null,
+    animationStop: boolean = true,
   ) {
     this.show();
     let form = formOrName;
@@ -817,7 +818,7 @@ export class EquationNew extends DiagramElementCollection {
     }
     if (form) {
       this.setCurrentForm(form);
-      this.render();
+      this.render(animationStop);
     }
   }
 
@@ -1002,23 +1003,46 @@ export class EquationNew extends DiagramElementCollection {
         ) {
           const target = this.getPosition();
           let start = this.getPosition();
+          // let pulseDuration = 0;
+          // let pulseCallback = () => {};
+          let hideShowCallback = () => {};
+          let hideShowCallbackDuration = 0;
           if (this.eqn.formRestartPosition instanceof EquationNew) {
-            this.eqn.formRestartPosition.showForm(subFormToUse);
+            console.log(this.eqn.formRestartPosition.eqn.currentForm, subForm.name)
+            if (this.eqn.formRestartPosition.currentForm !== subForm.name) {
+              hideShowCallback = () => {
+                this.eqn.formRestartPosition.goToForm({
+                  name: subForm.name,
+                  animate: 'dissolve',
+                  // duration: 0.5,
+                });
+              };
+              hideShowCallbackDuration = 1;
+            }
+            this.eqn.formRestartPosition.showForm(subForm.name);
+            // pulseDuration = 1;
+            // pulseCallback = () => {
+            //   this.eqn.formRestartPosition.pulseScaleNow(1, 1.3);
+            // };
           }
           if (this.eqn.formRestartPosition instanceof DiagramElementCollection) {
             start = this.eqn.formRestartPosition.getPosition();
           } else {  // $FlowFixMe
             start = getPoint(this.eqn.formRestartPosition);
           }
-          this.showForm(subForm);
-          
-          // console.log(target)
+          // this.showForm(subForm);
+
           this.animations.new()
-            // .dissolveOut({ duration: 0.6 })
+            .dissolveOut({ duration: 0.6 })
+            // .trigger({ callback: pulseCallback.bind(this), duration: pulseDuration })
+            // .trigger({ callback: hideShowCallback, duration: hideShowCallbackDuration })
             .position({ target: start, duration: 0 })
-            // .trigger({
-            //   callback: () => { this.showForm(subForm); },
-            // })
+            .trigger({
+              callback: () => {
+                this.showForm(subForm.name, subFormToUse, false);
+              },
+              duration: 0.01,
+            })
             .position({ target, duration })
             .whenFinished(end)
             .start();
