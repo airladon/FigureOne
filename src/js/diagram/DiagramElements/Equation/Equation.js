@@ -5,7 +5,7 @@ import {
 import { joinObjects } from '../../../tools/tools';
 // import { RGBToArray } from '../../../tools/color';
 import {
-  DiagramElementPrimative, DiagramElementCollection,
+  DiagramElementPrimative, DiagramElementCollection, DiagramElement,
 } from '../../Element';
 import {
   DiagramFont,
@@ -125,9 +125,14 @@ export type TypeEquationOptions = {
   forms?: TypeEquationForms;
   formSeries?: Array<string> | {};
   defaultFormSeries?: string;
-  formRestartPosition?: ?Point | DiagramElementCollection;
-  formRestartAnimation?: 'dissolve' | 'pulse' | 'moveFrom';
-  //
+  formRestart?: {
+    moveFrom?: ?Point | DiagramElementCollection;
+    pulse?: {
+      duration?: number;
+      scale?: number;
+      element?: ?DiagramElement;
+    }
+  }
 };
 
 export const foo = () => {};
@@ -170,8 +175,16 @@ export class EquationNew extends DiagramElementCollection {
     descriptionElement: DiagramElementPrimative | null;
     descriptionPosition: Point;
 
-    formRestartPosition: ?Point | DiagramElementCollection;
-    formRestartAnimation: 'dissolve' | 'moveFrom' | 'pulse';
+    formRestart: ?{
+      moveFrom?: Point | DiagramElementCollection;
+      pulse?: {
+        time: number;
+        scale: number;
+        element: DiagramElement;
+      }
+    }
+    // formRestartPosition: ?Point | DiagramElementCollection;
+    // formRestartAnimation: 'dissolve' | 'moveFrom' | 'pulse';
   };
 
   // isTouchDevice: boolean;
@@ -208,8 +221,7 @@ export class EquationNew extends DiagramElementCollection {
       elements: {},
       forms: {},
       formSeries: {},
-      formRestartPosition: null,
-      formRestartAnimation: 'dissolve',
+      formRestart: null,
     };
 
     const optionsToUse = joinObjects({}, defaultOptions, options);
@@ -220,6 +232,13 @@ export class EquationNew extends DiagramElementCollection {
       optionsToUse.defaultFormAlignment.fixTo,
       optionsToUse.defaultFormAlignment.fixTo,
     );
+    if (optionsToUse.formRestart != null
+      && optionsToUse.formRestart.pulse != null) {
+      optionsToUse.formRestart.pulse = joinObjects({}, {
+        scale: 1.1,
+        duration: 1,
+      }, optionsToUse.formRestart.pulse);
+    }
 
     super(new Transform('Equation')
       .scale(1, 1)
@@ -248,8 +267,7 @@ export class EquationNew extends DiagramElementCollection {
       isAnimating: false,
       descriptionElement: null,
       descriptionPosition: new Point(0, 0),
-      formRestartPosition: optionsToUse.formRestartPosition,
-      formRestartAnimation: optionsToUse.formRestartAnimation,
+      formRestart: optionsToUse.formRestart,
     };
 
     this.setPosition(optionsToUse.position);
@@ -1003,17 +1021,19 @@ export class EquationNew extends DiagramElementCollection {
           );
         } else if (
           options.animate === 'moveFrom'
-          && this.eqn.formRestartPosition != null
+          && this.eqn.formRestart != null
+          && this.eqn.formRestart.moveFrom != null
         ) {
+          const { moveFrom } = this.eqn.formRestart;
           const target = this.getPosition();
           let start = this.getPosition();
-          if (this.eqn.formRestartPosition instanceof EquationNew) {
-            this.eqn.formRestartPosition.showForm(subForm.name);
+          if (moveFrom instanceof EquationNew) {
+            moveFrom.showForm(subForm.name);
           }
-          if (this.eqn.formRestartPosition instanceof DiagramElementCollection) {
-            start = this.eqn.formRestartPosition.getPosition();
+          if (moveFrom instanceof DiagramElementCollection) {
+            start = moveFrom.getPosition();
           } else {  // $FlowFixMe
-            start = getPoint(this.eqn.formRestartPosition);
+            start = getPoint(this.eqn.formRestart.moveFrom);
           }
           this.animations.new()
             .dissolveOut({ duration: options.dissolveOutTime })
@@ -1027,14 +1047,19 @@ export class EquationNew extends DiagramElementCollection {
             .position({ target, duration })
             .whenFinished(end)
             .start();
-        } else if (options.animate === 'pulse') {
+        } else if (
+          options.animate === 'pulse'
+          && this.eqn.formRestart != null
+          && this.eqn.formRestart.pulse != null
+        ) {
+          const { pulse } = this.eqn.formRestart;
           const newEnd = () => {
-            this.pulseScaleNow(1, 1.2, 0, end);
-            if (this.eqn.formRestartPosition != null
-              && this.eqn.formRestartPosition instanceof EquationNew
-              && this.eqn.formRestartPosition.getCurrentForm().name === subForm.name
+            this.pulseScaleNow(pulse.duration, pulse.scale, 0, end);
+            if (pulse.element != null
+              && pulse.element instanceof EquationNew
+              && pulse.element.getCurrentForm().name === subForm.name
             ) {
-              this.eqn.formRestartPosition.pulseScaleNow(1, 1.1);
+              pulse.element.pulseScaleNow(pulse.duration, pulse.scale);
             }
           };
           subForm.allHideShow(
@@ -1098,12 +1123,14 @@ export class EquationNew extends DiagramElementCollection {
       index += 1;
       if (index > this.eqn.currentFormSeries.length - 1) {
         index = 0;
-        animate = this.eqn.formRestartAnimation;
-        // if (this.eqn.formRestartPosition != null) {
-        //   animate = 'moveFrom';
-        // } else {
-        //   animate = 'dissolve';
-        // }
+        const { formRestart } = this.eqn;
+        if (formRestart != null && formRestart.moveFrom != null) {
+          animate = 'moveFrom';
+        } else if (formRestart != null && formRestart.pulse != null) {
+          animate = 'pulse';
+        } else {
+          animate = 'dissolve';
+        }
       }
 
       this.goToForm({
