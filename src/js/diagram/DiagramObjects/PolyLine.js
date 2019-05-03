@@ -31,7 +31,7 @@ export type TypePadOptions = {
   touchRadiusInBoundary?: boolean,
 };
 export type TypePolyLineOptions = {
-  position?: Point,
+  position?: ?Point,
   points?: Array<Point>,
   close?: boolean,
   showLine?: boolean,
