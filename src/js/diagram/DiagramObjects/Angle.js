@@ -857,7 +857,10 @@ class DiagramObjectAngle extends DiagramElementCollection {
     this.updateLabel();
   }
 
-  updateLabel() {
+  updateLabel(rotationOffset: ?number = null) {
+    if (rotationOffset != null) {
+      this.lastLabelRotationOffset = rotationOffset;
+    }
     const { _label, label } = this;
     if (_label && label) {
       if (label.autoHide > this.angle) {
