@@ -2218,7 +2218,7 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   getAllElementsWithScenario(scenario: string) {
-    let elements = [];
+    let elements = super.getAllElementsWithScenario(scenario);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       if (element.scenarios[scenario] != null) {
