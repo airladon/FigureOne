@@ -760,6 +760,17 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.updateLabel();
   }
 
+  getLength() {
+    return this.length;
+  }
+
+  getAngle(units: 'deg' | 'rad' = 'rad') {
+    if (units === 'deg') {
+      return this.angle * 180 / Math.PI;
+    }
+    return this.angle;
+  }
+
   setLabel(text: string) {
     this.showRealLength = false;
     if (this.label != null) {

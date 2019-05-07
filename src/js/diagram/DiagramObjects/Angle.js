@@ -840,6 +840,13 @@ class DiagramObjectAngle extends DiagramElementCollection {
     }
   }
 
+  getAngle(units: 'deg' | 'rad' = 'rad') {
+    if (units === 'deg') {
+      return this.angle * 180 / Math.PI;
+    }
+    return this.angle;
+  }
+
   setLabel(text: string) {
     const { label } = this;
     if (label != null) {
