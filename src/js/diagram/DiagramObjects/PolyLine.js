@@ -195,7 +195,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     this.updatePointsCallback = null;
 
     if (optionsToUse.position != null) {
-      this.transform.updateTranslation(this.position);
+      this.transform.updateTranslation(getPoint(optionsToUse.position));
     }
     this.position = this.getPosition();
     this.close = optionsToUse.close;
