@@ -118,7 +118,7 @@ class DiagramElement {
   move: {
     maxTransform: Transform,
     minTransform: Transform,
-    limitToDiagram: boolean,
+    boundary: ?Rect | Array<number> | 'diagram',
     limitLine: null | Line,
     maxVelocity: TransformLimit;            // Maximum velocity allowed
     // When moving freely, the velocity decelerates until it reaches a threshold,
@@ -232,7 +232,7 @@ class DiagramElement {
     this.transform = transform._dup();
     this.isMovable = false;
     this.isTouchable = false;
-    this.isInteractive = null;  // means touch or move will dictate
+    this.isInteractive = undefined;
     this.hasTouchableElements = false;
     this.color = [1, 1, 1, 1];
     this.opacity = 1;
@@ -342,7 +342,7 @@ class DiagramElement {
     this.move = {
       maxTransform: this.transform.constant(1000),
       minTransform: this.transform.constant(-1000),
-      limitToDiagram: false,
+      boundary: null,
       maxVelocity: new TransformLimit(5, 5, 5),
       freely: {
         zeroVelocityThreshold: new TransformLimit(0.001, 0.001, 0.001),
@@ -553,7 +553,7 @@ class DiagramElement {
   }
 
   setPosition(pointOrX: Point | number, y: number = 0) {
-    let position = pointOrX;
+    let position = getPoint(pointOrX);
     if (typeof pointOrX === 'number') {
       position = new Point(pointOrX, y);
     }
@@ -569,7 +569,7 @@ class DiagramElement {
   }
 
   setScale(scaleOrX: Point | number, y: ?number = null) {
-    let scale = scaleOrX;
+    let scale = getPoint(scaleOrX);
     if (typeof scaleOrX === 'number') {
       if (y == null) {
         scale = new Point(scaleOrX, scaleOrX);
@@ -1204,19 +1204,28 @@ class DiagramElement {
   }
 
   setMoveBoundaryToDiagram(
-    boundary: Array<number> = [
-      this.diagramLimits.left,
-      this.diagramLimits.top - this.diagramLimits.height,
-      this.diagramLimits.left + this.diagramLimits.width,
-      this.diagramLimits.top],
+    boundaryIn: ?Array<number> | Rect | 'diagram' = this.move.boundary,
     scale: Point = new Point(1, 1),
   ): void {
     if (!this.isMovable) {
       return;
     }
-    if (!this.move.limitToDiagram) {
+    if (boundaryIn != null) {
+      this.move.boundary = boundaryIn;
+    }
+    if (this.move.boundary == null) {
       return;
     }
+    let boundary;
+    if (Array.isArray(this.move.boundary)) {
+      const [left, bottom, width, height] = this.move.boundary;
+      boundary = new Rect(left, bottom, width, height);
+    } else if (this.move.boundary === 'diagram') {
+      boundary = this.diagramLimits;
+    } else {
+      ({ boundary } = this.move);
+    }
+
     const glSpace = {
       x: { bottomLeft: -1, width: 2 },
       y: { bottomLeft: -1, height: 2 },
@@ -1245,10 +1254,10 @@ class DiagramElement {
     const min = new Point(0, 0);
     const max = new Point(0, 0);
 
-    min.x = boundary[0] - minPoint.x * scale.x;
-    min.y = boundary[1] - minPoint.y * scale.y;
-    max.x = boundary[2] - maxPoint.x * scale.x;
-    max.y = boundary[3] - maxPoint.y * scale.y;
+    min.x = boundary.left - minPoint.x * scale.x;
+    min.y = boundary.bottom - minPoint.y * scale.y;
+    max.x = boundary.right - maxPoint.x * scale.x;
+    max.y = boundary.top - maxPoint.y * scale.y;
 
     this.move.maxTransform.updateTranslation(
       max.x,
@@ -1278,6 +1287,16 @@ class DiagramElement {
     }
     if (this.parent != null) {
       this.parent.makeTouchable(false);
+    }
+  }
+
+  setMovable(movable: boolean = true) {
+    if (movable) {
+      this.isMovable = true;
+      this.makeTouchable(true);
+    } else {
+      this.isMovable = false;
+      this.isTouchable = false;
     }
   }
 
@@ -1337,12 +1356,12 @@ class DiagramElement {
     }
   }
 
-  setMovable(movable: boolean = true) {
-    if (movable) {
-      this.isTouchable = true;
-      this.isMovable = true;
-    }
-  }
+  // setMovable(movable: boolean = true) {
+  //   if (movable) {
+  //     this.isTouchable = true;
+  //     this.isMovable = true;
+  //   }
+  // }
 }
 
 // ***************************************************************
@@ -2199,7 +2218,7 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   getAllElementsWithScenario(scenario: string) {
-    let elements = [];
+    let elements = super.getAllElementsWithScenario(scenario);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       if (element.scenarios[scenario] != null) {
@@ -2212,9 +2231,34 @@ class DiagramElementCollection extends DiagramElement {
     return elements;
   }
 
+  // // Get all ineractive elemnts, but only go as deep as a
+  // // DiagramElementColleciton if it is touchable or movable
+  // getAllCurrentlyInteractiveElements() {
+  //   let elements = [];
+  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     // if (element.isShown) {
+  //     if (element instanceof DiagramElementCollection) {
+  //       if (!element.isTouchable
+  //         && !element.isMovable
+  //         && element.hasTouchableElements
+  //         && (!element.isInteractive || element.isInteractive == null)
+  //       ) {
+  //         elements = [...elements, ...element.getAllCurrentlyInteractiveElements()];
+  //       }
+  //     }
+  //     if (element.isInteractive !== false
+  //       && (element.isTouchable || element.isMovable || element.isInteractive)) {
+  //       elements.push(element);
+  //     }
+  //     // }
+  //   }
+  //   return elements;
+  // }
+
   // Get all ineractive elemnts, but only go as deep as a
   // DiagramElementColleciton if it is touchable or movable
-  getAllCurrentlyInteractiveElements() {
+  getAllPossiblyInteractiveElements() {
     let elements = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
@@ -2225,14 +2269,15 @@ class DiagramElementCollection extends DiagramElement {
           && element.hasTouchableElements
           && (!element.isInteractive || element.isInteractive == null)
         ) {
-          elements = [...elements, ...element.getAllCurrentlyInteractiveElements()];
+          elements = [...elements, ...element.getAllPossiblyInteractiveElements()];
         }
       }
-      if (element.isInteractive !== false
-        && (element.isTouchable || element.isMovable || element.isInteractive)) {
+      if (element.isInteractive !== undefined
+        || element.isTouchable
+        || element.isMovable
+      ) {
         elements.push(element);
       }
-      // }
     }
     return elements;
   }
@@ -2259,9 +2304,10 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   setMovable(movable: boolean = true) {
+    super.setMovable(movable);
     if (movable) {
       this.hasTouchableElements = true;
-      this.isMovable = true;
+      // this.isMovable = true;
     }
   }
 
@@ -2315,7 +2361,7 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  setScenarios(scenarioName: string, onlyIfVisible: boolean = true) {
+  setScenarios(scenarioName: string, onlyIfVisible: boolean = false) {
     super.setScenarios(scenarioName);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];

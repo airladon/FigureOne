@@ -57,9 +57,9 @@ describe('Transfrom Animation Unit', () => {
     diagram.draw(2);
     expect(elem1.getPosition().round(3)).toEqual(new Point(2, 0));
     expect(elem2.getPosition().round(3)).toEqual(new Point(0, 2));
-    expect(diagram.elements.animations.state).toBe('animating');
-    diagram.draw(2.01);
     expect(diagram.elements.animations.state).toBe('idle');
+    // diagram.draw(2.01);
+    // expect(diagram.elements.animations.state).toBe('idle');
   });
   // test('Delay then move', () => {
   //   elem1.animations.new()

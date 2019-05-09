@@ -52,6 +52,8 @@ export default class AnimationStep {
     this.startTime = -1;
     this.state = 'idle';
     this.name = options.name;
+    this.afterFrame = options.afterFrame;
+    this.beforeFrame = options.beforeFrame;
     this.startDelay = options.delay;
     // This is only for it this step is a primary path in an Animation Manager
     this.removeOnFinish = options.removeOnFinish;
@@ -73,11 +75,12 @@ export default class AnimationStep {
     if (this.startTime === -1) {
       this.startTime = now - this.startTimeOffset;
     }
-    let remainingTime = 0;
+
     const deltaTime = now - this.startTime;
+    let remainingTime = -(this.duration + this.startDelay - deltaTime);
     if (deltaTime >= this.startDelay) {
       let deltaTimeAfterDelay = deltaTime - this.startDelay;
-      if (deltaTimeAfterDelay > this.duration) {
+      if (deltaTimeAfterDelay >= this.duration) {
         remainingTime = deltaTimeAfterDelay - this.duration;
         deltaTimeAfterDelay = this.duration;
       }
@@ -88,7 +91,7 @@ export default class AnimationStep {
       if (this.afterFrame) {
         this.afterFrame(deltaTimeAfterDelay / this.duration);
       }
-      if (remainingTime > 0) {
+      if (remainingTime >= 0) {
         this.finish();
       }
     }
@@ -107,6 +110,12 @@ export default class AnimationStep {
   start(startTime: number = -1) {
     this.startTime = startTime;
     this.state = 'animating';
+  }
+
+  finishIfZeroDuration() {
+    if (this.duration === 0) {
+      this.finish();
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars

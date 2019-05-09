@@ -2,6 +2,7 @@
 import {
   Rect, Point, Transform, getPoint,
 } from '../../tools/g2';
+import { setHTML } from '../../tools/htmlGenerator';
 import {
   DiagramElementCollection, DiagramElementPrimative,
 } from '../Element';
@@ -24,7 +25,7 @@ import RadialLines from '../DiagramElements/RadialLines';
 import HorizontalLine from '../DiagramElements/HorizontalLine';
 import DashedLine from '../DiagramElements/DashedLine';
 import RectangleFilled from '../DiagramElements/RectangleFilled';
-import type { TypeRectangleFilledReference } from '../DiagramElements/RectangleFilled';
+// import type { TypeRectangleFilledReference } from '../DiagramElements/RectangleFilled';
 import Lines from '../DiagramElements/Lines';
 import Arrow from '../DiagramElements/Arrow';
 import { AxisProperties } from '../DiagramElements/Plot/AxisProperties';
@@ -67,6 +68,26 @@ export type TypeTextOptions = {
   vAlign?: string;
   color?: Array<number>;
   mods?: {},
+};
+
+export type TypeGridOptions = {
+  bounds?: Rect,
+  xStep?: number,
+  yStep?: number,
+  numLinesThick?: number,
+  color?: Array<number>,
+  position?: Point,
+  transform?: Transform,
+};
+
+export type TypeRepeatPatternVertex = {
+  element?: DiagramElementPrimative,
+  xNum?: number,
+  yNum?: number,
+  xStep?: number,
+  yStep?: number,
+  position?: Point,
+  transform?: Transform,
 };
 
 export default class DiagramPrimatives {
@@ -237,7 +258,7 @@ export default class DiagramPrimatives {
 
     const element = Fan(
       this.webgl,
-      options.points,
+      options.points.map(p => getPoint(p)),
       options.color,
       options.transform,
       this.limits,
@@ -258,7 +279,7 @@ export default class DiagramPrimatives {
     );
   }
 
-  txt(textOrOptions: string | TypeTextOptions, ...optionsIn: Array<TypeTextOptions>) {
+  text(textOrOptions: string | TypeTextOptions, ...optionsIn: Array<TypeTextOptions>) {
     const defaultOptions = {
       text: '',
       // position: new Point(0, 0),
@@ -325,10 +346,10 @@ export default class DiagramPrimatives {
     mods?: {},
   }>) {
     const defaultOptions = {
-      width: 1,
-      legWidth: 1,
-      height: 1,
-      legHeight: 1,
+      width: 0.5,
+      legWidth: 0,
+      height: 0.5,
+      legHeight: 0,
       color: [1, 0, 0, 1],
       transform: new Transform('arrow').standard(),
       tip: new Point(0, 0),
@@ -360,49 +381,49 @@ export default class DiagramPrimatives {
     return element;
   }
 
-  arrowLegacy(
-    width: number = 1,
-    legWidth: number = 0.5,
-    height: number = 1,
-    legHeight: number = 0.5,
-    color: Array<number>,
-    transform: Transform | Point = new Transform(),
-    tip: Point = new Point(0, 0),
-    rotation: number = 0,
-  ) {
-    return Arrow(
-      this.webgl, width, legWidth, height, legHeight,
-      tip, rotation, color, transform, this.limits,
-    );
-  }
+  // arrowLegacy(
+  //   width: number = 1,
+  //   legWidth: number = 0.5,
+  //   height: number = 1,
+  //   legHeight: number = 0.5,
+  //   color: Array<number>,
+  //   transform: Transform | Point = new Transform(),
+  //   tip: Point = new Point(0, 0),
+  //   rotation: number = 0,
+  // ) {
+  //   return Arrow(
+  //     this.webgl, width, legWidth, height, legHeight,
+  //     tip, rotation, color, transform, this.limits,
+  //   );
+  // }
 
-  text(
-    textInput: string,
-    location: Point,
-    color: Array<number>,
-    fontInput: DiagramFont | null = null,
-  ) {
-    let font = new DiagramFont(
-      'Times New Roman',
-      'italic',
-      0.2,
-      '200',
-      'center',
-      'middle',
-      color,
-    );
-    if (fontInput !== null) {
-      font = fontInput;
-    }
-    const dT = new DiagramText(new Point(0, 0), textInput, font);
-    const to = new TextObject(this.draw2D, [dT]);
-    return new DiagramElementPrimative(
-      to,
-      new Transform().scale(1, 1).translate(location.x, location.y),
-      color,
-      this.limits,
-    );
-  }
+  // textLegacy(
+  //   textInput: string,
+  //   location: Point,
+  //   color: Array<number>,
+  //   fontInput: DiagramFont | null = null,
+  // ) {
+  //   let font = new DiagramFont(
+  //     'Times New Roman',
+  //     'italic',
+  //     0.2,
+  //     '200',
+  //     'center',
+  //     'middle',
+  //     color,
+  //   );
+  //   if (fontInput !== null) {
+  //     font = fontInput;
+  //   }
+  //   const dT = new DiagramText(new Point(0, 0), textInput, font);
+  //   const to = new TextObject(this.draw2D, [dT]);
+  //   return new DiagramElementPrimative(
+  //     to,
+  //     new Transform().scale(1, 1).translate(location.x, location.y),
+  //     color,
+  //     this.limits,
+  //   );
+  // }
 
   htmlElement(
     elementToAdd: HTMLElement | Array<HTMLElement>,
@@ -437,20 +458,49 @@ export default class DiagramPrimatives {
     return diagramElement;
   }
 
-  htmlText(
-    textInput: string,
-    id: string = generateUniqueId('id__html_text_'),
-    classes: string = '',
-    location: Point = new Point(0, 0),
-    alignV: 'top' | 'bottom' | 'middle' = 'middle',
-    alignH: 'left' | 'right' | 'center' = 'left',
-  ) {
-    // const inside = document.createTextNode(textInput);
-    const inside = document.createElement('div');
-    inside.innerHTML = textInput;
-    return this.htmlElement(inside, id, classes, location, alignV, alignH);
-  }
+  // htmlText(
+  //   textInput: string,
+  //   id: string = generateUniqueId('id__html_text_'),
+  //   classes: string = '',
+  //   location: Point = new Point(0, 0),
+  //   alignV: 'top' | 'bottom' | 'middle' = 'middle',
+  //   alignH: 'left' | 'right' | 'center' = 'left',
+  // ) {
+  //   // const inside = document.createTextNode(textInput);
+  //   const inside = document.createElement('div');
+  //   inside.innerHTML = textInput;
+  //   return this.htmlElement(inside, id, classes, location, alignV, alignH);
+  // }
 
+  htmlText(...optionsIn: Array<{
+    textInput?: string,
+    id?: string,
+    classes?: string,
+    position?: Point,
+    alignV?: 'top' | 'bottom' | 'middle',
+    alignH?: 'left' | 'right' | 'center',
+    modifiers: Object;
+    color?: Array<number>,
+  }>) {
+    const defaultOptions = {
+      text: '',
+      id: generateUniqueId('id__html_text_'),
+      classes: '',
+      position: new Point(0, 0),
+      alignV: 'middle',
+      alignH: 'left',
+      // color: [1, 0, 0, 1],
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    const inside = document.createElement('div');
+    // const htmlText = toHTML(options.textInput, '', '', options.color);
+    // console.log(options.textInput, htmlText)
+    setHTML(inside, options.text, options.modifiers);
+    const {
+      id, classes, position, alignV, alignH,
+    } = options;
+    return this.htmlElement(inside, id, classes, getPoint(position), alignV, alignH);
+  }
 
   lines(
     linePairs: Array<Array<Point>>,
@@ -461,60 +511,40 @@ export default class DiagramPrimatives {
     return Lines(this.webgl, linePairs, numLinesThick, color, transform, this.limits);
   }
 
-  grid(
-    bounds: Rect,
-    xStep: number,
-    yStep: number,
-    numLinesThick: number,
-    color: Array<number>,
-    transform: Transform | Point = new Transform(),
-  ) {
+  grid(...optionsIn: Array<TypeGridOptions>) {
+    const defaultOptions = {
+      bounds: new Rect(-1, -1, 2, 2),
+      xStep: 0.1,
+      yStep: 0.1,
+      xOffset: 0,
+      yOffset: 0,
+      numLinesThick: 1,
+      color: [1, 0, 0, 1],
+      position: null,
+      transform: new Transform('grid').standard(),
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    if (options.position != null) {
+      const point = getPoint(options.position);
+      options.transform.updateTranslation(point);
+    }
     const linePairs = [];
     // const xLimit = tools.roundNum(bounds.righ + xStep);
-    if (xStep !== 0) {
-      for (let x = bounds.left; tools.roundNum(x, 8) <= bounds.right; x += xStep) {
+    const {
+      bounds, xStep, xOffset, yStep, yOffset, color, numLinesThick, transform,
+    } = options;
+    if (options.xStep !== 0) {
+      for (let x = bounds.left + xOffset; tools.roundNum(x, 8) <= bounds.right; x += xStep) {
         linePairs.push([new Point(x, bounds.top), new Point(x, bounds.bottom)]);
       }
     }
     if (yStep !== 0) {
-      for (let y = bounds.bottom; tools.roundNum(y, 8) <= bounds.top; y += yStep) {
+      for (let y = bounds.bottom + yOffset; tools.roundNum(y, 8) <= bounds.top; y += yStep) {
         linePairs.push([new Point(bounds.left, y), new Point(bounds.right, y)]);
       }
     }
     return this.lines(linePairs, numLinesThick, color, transform);
   }
-
-  // polygon(
-  //   numSides: number,
-  //   radius: number,
-  //   lineWidth: number,
-  //   rotation: number,
-  //   direction: -1 | 1,
-  //   numSidesToDraw: number,
-  //   color: Array<number>,
-  //   transform: Transform | Point = new Transform(),
-  // ) {
-  //   return Polygon(
-  //     this.webgl, numSides, radius, lineWidth,
-  //     rotation, direction, numSidesToDraw, color, transform, this.limits,
-  //   );
-  // }
-
-  // polygonFilled(
-  //   numSides: number,
-  //   radius: number,
-  //   rotation: number,
-  //   numSidesToDraw: number,
-  //   color: Array<number>,
-  //   transform: Transform | Point = new Transform(),
-  //   textureLocation: string = '',
-  //   textureCoords: Rect = new Rect(0, 0, 1, 1),
-  // ) {
-  //   return PolygonFilled(
-  //     this.webgl, numSides, radius,
-  //     rotation, numSidesToDraw, color, transform, this.limits, textureLocation, textureCoords,
-  //   );
-  // }
 
   polygon(...optionsIn: Array<TypePolygonOptions>) {
     const defaultOptions = {
@@ -533,6 +563,7 @@ export default class DiagramPrimatives {
       transform: new Transform('polygon').standard(),
       position: null,
       center: new Point(0, 0),
+      trianglePrimitives: false,
     };
     const options = Object.assign({}, defaultOptions, ...optionsIn);
     // const o = optionsToUse;
@@ -583,6 +614,7 @@ export default class DiagramPrimatives {
         options.color,
         options.transform,
         this.limits,
+        options.trianglePrimitives,
       );
     }
     if (options.mods != null && options.mods !== {}) {
@@ -621,33 +653,89 @@ export default class DiagramPrimatives {
     );
   }
 
-  dashedLine(
-    start: Point,
-    length: number,
-    width: number,
-    rotation: number,
-    dashStyle: Array<number>,
-    color: Array<number>,
-    transform: Transform | Point = new Transform(),
-  ) {
+  dashedLine(...optionsIn: Array<{
+    start?: Point,
+    length?: number,
+    width?: number,
+    rotation?: number,
+    dashStyle?: Array<number>,
+    color?: Array<number>,
+    transform?: Transform,
+    position?: Point,
+  }>) {
+    const defaultOptions = {
+      start: [0, 0],
+      length: 1,
+      width: 0.01,
+      rotation: 0,
+      dashStyle: [0.1, 0.1],
+      transform: new Transform('dashedLine').scale(1, 1).rotate(0).translate(0, 0),
+      position: null,
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    if (options.position != null) {
+      options.transform.updateTranslation(getPoint(options.position));
+    }
     return DashedLine(
-      this.webgl, start, length, width,
-      rotation, dashStyle, color, transform, this.limits,
+      this.webgl, getPoint(options.start), options.length, options.width,
+      options.rotation, options.dashStyle, options.color,
+      options.transform, this.limits,
     );
   }
 
-  rectangleFilled(
-    topLeft: TypeRectangleFilledReference,
-    width: number,
-    height: number,
-    cornerRadius: number,
-    cornerSides: number,
-    color: Array<number>,
-    transform: Transform | Point = new Transform(),
-  ) {
+  // dashedLine(
+  //   start: Point,
+  //   length: number,
+  //   width: number,
+  //   rotation: number,
+  //   dashStyle: Array<number>,
+  //   color: Array<number>,
+  //   transform: Transform | Point = new Transform(),
+  // ) {
+  //   return DashedLine(
+  //     this.webgl, start, length, width,
+  //     rotation, dashStyle, color, transform, this.limits,
+  //   );
+  // }
+
+  rectangle(...optionsIn: Array<{
+    alignV: 'bottom' | 'middle' | 'top' | number,
+    alignH: 'left' | 'center' | 'right' | number,
+    width?: number,
+    height?: number,
+    fill?: boolean,
+    corner?: {
+      radius?: number,
+      sides?: number,
+    },
+    colors?: Array<number>,
+    transform?: Transform,
+    position?: Point,
+  }>) {
+    const defaultOptions = {
+      alignV: 'middle',
+      alignH: 'center',
+      width: 1,
+      height: 1,
+      corner: {
+        radius: 0,
+        sides: 1,
+      },
+      fill: false,
+      color: [1, 0, 0, 1],
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
+      position: null,
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    if (options.position != null) {
+      options.transform.updateTranslation(getPoint(options.position));
+    }
+    if (typeof options.reference !== 'string') {
+      options.reference = getPoint(options.reference);
+    }
     return RectangleFilled(
-      this.webgl, topLeft, width, height,
-      cornerRadius, cornerSides, color, transform, this.limits,
+      this.webgl, options.alignH, options.alignV, options.width, options.height,
+      options.corner.radius, options.corner.sides, options.color, options.transform, this.limits,
     );
   }
 
@@ -656,6 +744,7 @@ export default class DiagramPrimatives {
     outerRadius?: number,
     width?: number,
     dAngle?: number,
+    angle?: number,
     color?: Array<number>,
     transform?: Transform,
     position?: Point,
@@ -665,6 +754,7 @@ export default class DiagramPrimatives {
       outerRadius: 1,
       width: 0.05,
       dAngle: Math.PI / 4,
+      angle: Math.PI * 2,
       transform: new Transform().standard(),
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -673,23 +763,52 @@ export default class DiagramPrimatives {
     }
     return RadialLines(
       this.webgl, options.innerRadius, options.outerRadius,
-      options.width, options.dAngle, options.color,
+      options.width, options.dAngle, options.angle, options.color,
       options.transform, this.limits,
     );
   }
 
-  radialLinesLegacy(
-    innerRadius: number = 0,
-    outerRadius: number = 1,
-    width: number = 0.05,
-    dAngle: number = Math.PI / 4,
-    color: Array<number>,
-    transform: Transform | Point = new Transform(),
-  ) {
-    return RadialLines(
-      this.webgl, innerRadius, outerRadius, width,
-      dAngle, color, transform, this.limits,
-    );
+  repeatPatternVertex(...optionsIn: Array<TypeRepeatPatternVertex>) {
+    const defaultOptions = {
+      element: null,
+      xNum: 2,
+      yNum: 2,
+      xStep: 1,
+      yStep: 1,
+      transform: new Transform('repeatPattern').standard(),
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    if (options.position != null) {
+      options.transform.updateTranslation(getPoint(options.position));
+    }
+    const {
+      element, transform, xNum, yNum, xStep, yStep,
+    } = options;
+    if (element == null) {
+      return this.collection();
+    }
+    const copy = element._dup();
+    const { drawingObject } = element;
+    // console.log(element.drawingObject.points)
+    if (drawingObject instanceof VertexObject) {
+      copy.transform = transform._dup();
+      const newPoints = [];
+      const { points } = drawingObject;
+      for (let x = 0; x < xNum; x += 1) {
+        for (let y = 0; y < yNum; y += 1) {
+          for (let p = 0; p < points.length; p += 2) {
+            newPoints.push(new Point(
+              points[p] + x * xStep,
+              points[p + 1] + y * yStep,
+            ));
+            // console.log(points[p], points[p+1], newPoints.slice(-1))
+          }
+        }
+      }
+      // console.log(newPoints)
+      copy.drawingObject.changeVertices(newPoints);
+    }
+    return copy;
   }
 
   collection(
@@ -754,7 +873,7 @@ export default class DiagramPrimatives {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  repeatPatternVertex(
+  repeatPatternVertexLegacy(
     element: DiagramElementPrimative,
     xNum: number,
     yNum: number,
@@ -928,145 +1047,14 @@ export default class DiagramPrimatives {
     }
     const xy = this.collection(transform);
     if (showGrid) {
-      const gridLines = this.grid(
-        new Rect(0, 0, width, height),
-        tools.roundNum(stepX * width / limits.width, 8),
-        tools.roundNum(stepY * height / limits.height, 8),
-        1,
-        gridColor, new Transform().scale(1, 1).rotate(0).translate(0, 0),
-      );
-      xy.add('grid', gridLines);
-    }
-    xy.add('y', yAxis);
-    xy.add('x', xAxis);
-    return xy;
-  }
-
-  axesLegacy(
-    width: number = 1,
-    height: number = 1,
-    limits: Rect = new Rect(-1, -1, 2, 2),
-    yAxisLocation: number = 0,
-    xAxisLocation: number = 0,
-    stepX: number = 0.1,
-    stepY: number = 0.1,
-    fontSize: number = 0.13,
-    showGrid: boolean = true,
-    color: Array<number> = [1, 1, 1, 0],
-    gridColor: Array<number> = [1, 1, 1, 0],
-    location: Transform | Point = new Transform(),
-    decimalPlaces: number = 1,
-  ) {
-    const lineWidth = 0.01;
-    const xProps = new AxisProperties('x', 0);
-
-    xProps.minorTicks.mode = 'off';
-    xProps.minorGrid.mode = 'off';
-    xProps.majorGrid.mode = 'off';
-
-    xProps.length = width;
-    xProps.width = lineWidth;
-    xProps.limits = { min: limits.left, max: limits.right };
-    xProps.color = color.slice();
-    xProps.title = '';
-
-    xProps.majorTicks.start = limits.left;
-    xProps.majorTicks.step = stepX;
-    xProps.majorTicks.length = lineWidth * 5;
-    xProps.majorTicks.offset = -xProps.majorTicks.length / 2;
-    xProps.majorTicks.width = lineWidth * 2;
-    xProps.majorTicks.labelMode = 'off';
-    xProps.majorTicks.labels = tools.range(
-      xProps.limits.min,
-      xProps.limits.max,
-      stepX,
-    ).map(v => v.toFixed(decimalPlaces)).map((v) => {
-      if (v === yAxisLocation.toString() && yAxisLocation === xAxisLocation) {
-        return `${v}     `;
-      }
-      return v;
-    });
-
-    // xProps.majorTicks.labels[xProps.majorTicks.labels / 2] = '   0';
-    xProps.majorTicks.labelOffset = new Point(
-      0,
-      xProps.majorTicks.offset - fontSize * 0.1,
-    );
-    xProps.majorTicks.labelsHAlign = 'center';
-    xProps.majorTicks.labelsVAlign = 'top';
-    xProps.majorTicks.fontColor = color.slice();
-    xProps.majorTicks.fontSize = fontSize;
-    xProps.majorTicks.fontWeight = '400';
-
-    const xAxis = new Axis(
-      this.webgl, this.draw2D, xProps,
-      new Transform().scale(1, 1).rotate(0)
-        .translate(0, xAxisLocation - limits.bottom * height / 2),
-      this.limits,
-    );
-
-    const yProps = new AxisProperties('x', 0);
-    yProps.minorTicks.mode = 'off';
-    yProps.minorGrid.mode = 'off';
-    yProps.majorGrid.mode = 'off';
-
-    yProps.length = height;
-    yProps.width = xProps.width;
-    yProps.limits = { min: limits.bottom, max: limits.top };
-    yProps.color = xProps.color;
-    yProps.title = '';
-    yProps.rotation = Math.PI / 2;
-
-    yProps.majorTicks.step = stepY;
-    yProps.majorTicks.start = limits.bottom;
-    yProps.majorTicks.length = xProps.majorTicks.length;
-    yProps.majorTicks.offset = -yProps.majorTicks.length / 2;
-    yProps.majorTicks.width = xProps.majorTicks.width;
-    yProps.majorTicks.labelMode = 'off';
-    yProps.majorTicks.labels = tools.range(
-      yProps.limits.min,
-      yProps.limits.max,
-      stepY,
-    ).map(v => v.toFixed(decimalPlaces)).map((v) => {
-      if (v === xAxisLocation.toString() && yAxisLocation === xAxisLocation) {
-        return '';
-      }
-      return v;
-    });
-
-    // yProps.majorTicks.labels[3] = '';
-    yProps.majorTicks.labelOffset = new Point(
-      yProps.majorTicks.offset - fontSize * 0.2,
-      0,
-    );
-    yProps.majorTicks.labelsHAlign = 'right';
-    yProps.majorTicks.labelsVAlign = 'middle';
-    yProps.majorTicks.fontColor = xProps.majorTicks.fontColor;
-    yProps.majorTicks.fontSize = fontSize;
-    yProps.majorTicks.fontWeight = xProps.majorTicks.fontWeight;
-
-    const yAxis = new Axis(
-      this.webgl, this.draw2D, yProps,
-      new Transform().scale(1, 1).rotate(0)
-        .translate(yAxisLocation - limits.left * width / 2, 0),
-      this.limits,
-    );
-
-    let transform = new Transform();
-    if (location instanceof Point) {
-      transform = transform.translate(location.x, location.y);
-    } else {
-      transform = location._dup();
-    }
-    const xy = this.collection(transform);
-    if (showGrid) {
-      const gridLines = this.grid(
-        new Rect(0, 0, width, height),
-        tools.roundNum(stepX * width / limits.width, 8),
-        tools.roundNum(stepY * height / limits.height, 8),
-        1,
-        gridColor, new Transform().scale(1, 1).rotate(0).translate(0, 0),
-      );
+      const gridLines = this.grid({
+        bounds: new Rect(0, 0, width, height),
+        stepX: tools.roundNum(stepX * width / limits.width, 8),
+        stepY: tools.roundNum(stepY * height / limits.height, 8),
+        numThickLines: 1,
+        color: gridColor,
+        transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
+      });
       xy.add('grid', gridLines);
     }
     xy.add('y', yAxis);

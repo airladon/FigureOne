@@ -42,10 +42,15 @@ function addElements(
       polyLineCorners: shapes.polyLineCorners.bind(shapes),
       polygon: shapes.polygon.bind(shapes),
       arrow: shapes.arrow.bind(shapes),
-      text: shapes.txt.bind(shapes),
+      fan: shapes.fan.bind(shapes),
+      text: shapes.text.bind(shapes),
       textGL: shapes.textGL.bind(shapes),
+      textHTML: shapes.htmlText.bind(shapes),
       axes: shapes.axes.bind(shapes),
       radialLines: shapes.radialLines.bind(shapes),
+      rectangle: shapes.rectangle.bind(shapes),
+      grid: shapes.grid.bind(shapes),
+      dashedLine: shapes.dashedLine.bind(shapes),
       //
       line: objects.line.bind(objects),
       angle: objects.angle.bind(objects),
@@ -136,15 +141,15 @@ function addElements(
         const element = method(collectionPath, nameToUse, optionsToUse);
         if (elementModsToUse != null && elementModsToUse !== {}) {
           element.setProperties(elementModsToUse);
-          if (methodPath.slice(-1)[0] === 'addNavigator') {
-            element.eqn.setProperties(elementModsToUse);
-          }
+          // if (methodPath.slice(-1)[0] === 'addNavigator') {
+          //   element.eqn.setProperties(elementModsToUse);
+          // }
         }
         if (firstScenario != null && firstScenario in element.scenarios) {
           element.setScenario(firstScenario);
-          if (methodPath.slice(-1)[0] === 'addNavigator') {
-            element.eqn.setScenario(firstScenario);
-          }
+          // if (methodPath.slice(-1)[0] === 'addNavigator') {
+          //   element.eqn.setScenario(firstScenario);
+          // }
         }
       } else {
         let element;

@@ -11,12 +11,14 @@ export type TypePulseAnimationStepInputOptions = {
   scale: ?number;
   numLines: ?number;
   frequency: ?number;
+  stopAfterDuration: ?boolean;
 } & TypeElementAnimationStepInputOptions;
 
 export default class PulseAnimationStep extends ElementAnimationStep {
   scale: number;
   numLines: number;
   frequency: number;
+  stopAfterDuration: boolean;
 
   constructor(...optionsIn: Array<TypePulseAnimationStepInputOptions>) {
     // const ElementAnimationStepOptionsIn =
@@ -28,6 +30,7 @@ export default class PulseAnimationStep extends ElementAnimationStep {
       type: 'pulse',
       duration: 1,
       frequency: 0,
+      stopAfterDuration: true,
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
     super(options);
@@ -35,6 +38,7 @@ export default class PulseAnimationStep extends ElementAnimationStep {
     this.numLines = options.numLines;
     this.duration = options.duration;
     this.frequency = options.frequency;
+    this.stopAfterDuration = options.stopAfterDuration;
   }
 
   // On start, calculate the duration, target and delta if not already present.
@@ -61,7 +65,9 @@ export default class PulseAnimationStep extends ElementAnimationStep {
 
   setToEnd() {
     if (this.element != null) {
-      this.element.stopPulsing(true);
+      if (this.stopAfterDuration) {
+        this.element.stopPulsing(true);
+      }
     }
   }
 

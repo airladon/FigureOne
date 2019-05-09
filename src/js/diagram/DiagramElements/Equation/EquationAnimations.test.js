@@ -162,7 +162,7 @@ describe('Equation Animation', () => {
     expect(round(c.opacity)).toEqual(1);
     expect(b.getPosition().round()).toEqual(new Point(0.028, 0));
     expect(a.animations.animations).toHaveLength(1);
-    expect(b.animations.animations).toHaveLength(1);
+    expect(b.animations.animations).toHaveLength(0);
     expect(c.animations.animations).toHaveLength(0);
 
     // 'a' is half way through appearing
@@ -187,7 +187,7 @@ describe('Equation Animation', () => {
     expect(b.opacity).toEqual(1);
     expect(round(c.opacity)).toEqual(1);
     expect(b.getPosition().round()).toEqual(new Point(0.028, 0));
-    expect(a.animations.animations).toHaveLength(1);
+    expect(a.animations.animations).toHaveLength(0);
     expect(b.animations.animations).toHaveLength(0);
     expect(c.animations.animations).toHaveLength(0);
 

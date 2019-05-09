@@ -126,6 +126,43 @@ describe('Diagram Objects PolyLine', () => {
           { label: { text: null } },
         ],
       }),
+      PadSimple: () => diagram.objects.polyLine({
+        points,
+        close: true,
+        pad: {
+          radius: 0.2,
+        },
+      }),
+      PadBoundary: () => diagram.objects.polyLine({
+        points,
+        close: true,
+        pad: {
+          radius: 0.2,
+          boundary: [-3, -2, 6, 4],
+          isMovable: true,
+        },
+      }),
+      PadBoundaryWithoutTouchRadius: () => diagram.objects.polyLine({
+        points,
+        close: true,
+        pad: {
+          radius: 0.2,
+          boundary: [-3, -2, 6, 4],
+          isMovable: true,
+          touchRadius: 0.4,
+        },
+      }),
+      PadBoundaryWithTouchRadius: () => diagram.objects.polyLine({
+        points,
+        close: true,
+        pad: {
+          radius: 0.2,
+          boundary: [-3, -2, 6, 4],
+          isMovable: true,
+          touchRadius: 0.4,
+          touchRadiusInBoundary: true,
+        },
+      }),
       Misc: () => diagram.objects.polyLine({
         points,
         close: true,
@@ -187,6 +224,30 @@ describe('Diagram Objects PolyLine', () => {
   test('Misc options', () => {
     const poly = ways.Misc();
     expect(tools.cleanUIDs(poly)).toMatchSnapshot();
+  });
+  describe('Pads', () => {
+    test('Simple', () => {
+      const poly = ways.PadSimple();
+      expect(poly).toHaveProperty('_pad0');
+    });
+    test('Boundary', () => {
+      const poly = ways.PadBoundary();
+      expect(poly).toHaveProperty('_pad0');
+      expect(poly._pad0.move.maxTransform.t()).toEqual(new Point(2.8, 1.8));
+      expect(poly._pad0.move.minTransform.t()).toEqual(new Point(-2.8, -1.8));
+    });
+    test('Boundary not including touch radius', () => {
+      const poly = ways.PadBoundaryWithoutTouchRadius();
+      expect(poly).toHaveProperty('_pad0');
+      expect(poly._pad0.move.maxTransform.t().round()).toEqual(new Point(2.8, 1.8));
+      expect(poly._pad0.move.minTransform.t().round()).toEqual(new Point(-2.8, -1.8));
+    });
+    test('Boundary including touch radius', () => {
+      const poly = ways.PadBoundaryWithTouchRadius();
+      expect(poly).toHaveProperty('_pad0');
+      expect(poly._pad0.move.maxTransform.t().round()).toEqual(new Point(2.6, 1.6));
+      expect(poly._pad0.move.minTransform.t().round()).toEqual(new Point(-2.6, -1.6));
+    });
   });
   describe('Side Labels', () => {
     test('Close', () => {
@@ -262,7 +323,7 @@ describe('Diagram Objects PolyLine', () => {
       const poly = ways.AngleLabelsClose();
       expect(Object.keys(poly.elements)).toHaveLength(4);
       expect(Object.keys(poly.elements))
-        .toEqual(['line', 'angle0', 'angle1', 'angle2']);
+        .toEqual(['angle0', 'angle1', 'angle2', 'line']);
       // expect(poly.elements.angle0.p1).toEqual(points[1]);
       // expect(poly.elements.angle0.p2).toEqual(points[0]);
       // expect(poly.elements.angle0.p3).toEqual(points[2]);
@@ -276,7 +337,7 @@ describe('Diagram Objects PolyLine', () => {
       const poly = ways.AngleLabelsOpen();
       expect(Object.keys(poly.elements)).toHaveLength(2);
       expect(Object.keys(poly.elements))
-        .toEqual(['line', 'angle1']);
+        .toEqual(['angle1', 'line']);
       // expect(poly.elements.side01.p1).toEqual(points[0]);
       // expect(poly.elements.side01.p2).toEqual(points[1]);
       // expect(poly.elements.side12.p1).toEqual(points[1]);

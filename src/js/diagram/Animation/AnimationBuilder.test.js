@@ -36,7 +36,7 @@ describe('AnimationBuilder API', () => {
 
     let remaining = builder.nextFrame(101.1);
     expect(element.getPosition().round()).toEqual(point(1.1));
-    expect(math.round(remaining)).toBe(0);
+    expect(math.round(remaining)).toBe(-0.9);
 
     remaining = builder.nextFrame(102.1);
     expect(element.getPosition().round()).toEqual(point(2));

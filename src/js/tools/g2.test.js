@@ -451,15 +451,15 @@ describe('g2 tests', () => {
     describe('Lines can have midpoints', () => {
       test('Line from 0, 0 to 0, 2 has midpoint 0, 1', () => {
         const l = new Line(new Point(0, 0), new Point(0, 2));
-        expect(l.midpoint().round()).toEqual(new Point(0, 1));
+        expect(l.midPoint().round()).toEqual(new Point(0, 1));
       });
       test('Line from 0, 0 to 2, 2 has midpoint 1, 1', () => {
         const l = new Line(new Point(0, 0), new Point(2, 2));
-        expect(l.midpoint().round()).toEqual(new Point(1, 1));
+        expect(l.midPoint().round()).toEqual(new Point(1, 1));
       });
       test('Line from 2, 0 to 4, 0 has midpoint 3, 0', () => {
         const l = new Line(new Point(2, 0), new Point(4, 0));
-        expect(l.midpoint().round()).toEqual(new Point(3, 0));
+        expect(l.midPoint().round()).toEqual(new Point(3, 0));
       });
     });
     describe('Lines can have points within them', () => {

@@ -617,15 +617,37 @@ class Line {
   }
 
   /* eslint-disable comma-dangle */
-  midpoint() {
+  midPoint() {
+    // const length = this.length();
+    // const direction = this.p2.sub(this.p1);
+    // const angle = Math.atan2(direction.y, direction.x);
+    // const midPoint = point(
+    //   this.p1.x + length / 2 * Math.cos(angle),
+    //   this.p1.y + length / 2 * Math.sin(angle)
+    // );
+    // return midPoint;
+    return this.pointAtPercent(0.5);
+  }
+
+  pointAtPercent(percent: number) {
     const length = this.length();
     const direction = this.p2.sub(this.p1);
     const angle = Math.atan2(direction.y, direction.x);
-    const midpoint = point(
-      this.p1.x + length / 2 * Math.cos(angle),
-      this.p1.y + length / 2 * Math.sin(angle)
+    const midPoint = point(
+      this.p1.x + length * percent * Math.cos(angle),
+      this.p1.y + length * percent * Math.sin(angle)
     );
-    return midpoint;
+    return midPoint;
+  }
+
+  pointAtLength(length: number) {
+    const direction = this.p2.sub(this.p1);
+    const angle = Math.atan2(direction.y, direction.x);
+    const midPoint = point(
+      this.p1.x + length * Math.cos(angle),
+      this.p1.y + length * Math.sin(angle)
+    );
+    return midPoint;
   }
   /* eslint-enable comma-dangle */
 
@@ -784,18 +806,18 @@ class Line {
         const line21 = new Line(l1.p2, l2.p1);
         const line22 = new Line(l1.p2, l2.p2);
 
-        let i = line11.midpoint();
+        let i = line11.midPoint();
         let len = line11.length();
         if (line12.length() < len) {
-          i = line12.midpoint();
+          i = line12.midPoint();
           len = line12.length();
         }
         if (line21.length() < len) {
-          i = line21.midpoint();
+          i = line21.midPoint();
           len = line21.length();
         }
         if (line22.length() < len) {
-          i = line22.midpoint();
+          i = line22.midPoint();
           len = line22.length();
         }
         return {
@@ -816,11 +838,11 @@ class Line {
           && (!l1.p1.isOnLine(l2, precision) || !l1.p2.isOnLine(l2, precision))
         )
       ) {
-        const midLine = new Line(l1.midpoint(), l2.midpoint());
+        const midLine = new Line(l1.midPoint(), l2.midPoint());
         return {
           onLine: true,
           inLine: true,
-          intersect: midLine.midpoint(),
+          intersect: midLine.midPoint(),
         };
       }
       let midLine;
@@ -860,7 +882,7 @@ class Line {
       let i;
 
       if (midLine instanceof Line) {
-        i = midLine.midpoint();
+        i = midLine.midPoint();
       }
 
       return {
@@ -1811,14 +1833,20 @@ function randomPoint(withinRect: Rect) {
 function getMaxTimeFromVelocity(
   startTransform: Transform,
   stopTransform: Transform,
-  velocityTransform: Transform,
+  velocityTransform: Transform | number,
   rotDirection: 0 | 1 | -1 | 2 = 0,
 ) {
   const deltaTransform = stopTransform.sub(startTransform);
   let time = 0;
+  let velocityTransformToUse;
+  if (typeof velocityTransform === 'number') {
+    velocityTransformToUse = startTransform._dup().constant(velocityTransform);
+  } else {
+    velocityTransformToUse = velocityTransform;
+  }
   deltaTransform.order.forEach((delta, index) => {
     if (delta instanceof Translation || delta instanceof Scale) {
-      const v = velocityTransform.order[index];
+      const v = velocityTransformToUse.order[index];
       if (
         (v instanceof Translation || v instanceof Scale)
         && v.x !== 0
@@ -1838,7 +1866,7 @@ function getMaxTimeFromVelocity(
       const rotDiff = getDeltaAngle(start.r, target.r, rotDirection);
       // eslint-disable-next-line no-param-reassign
       delta.r = rotDiff;
-      const v = velocityTransform.order[index];
+      const v = velocityTransformToUse.order[index];
       if (v instanceof Rotation && v !== 0) {
         const rTime = Math.abs(delta.r / v.r);
         time = rTime > time ? rTime : time;
