@@ -576,6 +576,10 @@ class Line {
     this.distance = distance(this.p1, this.p2);
   }
 
+  _dup() {
+    return new Line(this.p1, this.p2);
+  }
+
   getPoint(index: number = 1) {
     if (index === 2) {
       return this.p2;
