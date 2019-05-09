@@ -13,6 +13,7 @@ function RadialLines(
   outerRadius: number = 1,
   width: number = 0.05,
   dAngle: number = Math.PI / 4,
+  maxAngle: number = Math.PI * 2,
   color: Array<number>,
   transformOrLocation: Transform | Point,
   diagramLimits: Rect,
@@ -23,7 +24,7 @@ function RadialLines(
     outerRadius,
     width,
     dAngle,
-    Math.PI * 2,
+    maxAngle,
   );
   let transform = new Transform();
   if (transformOrLocation instanceof Point) {

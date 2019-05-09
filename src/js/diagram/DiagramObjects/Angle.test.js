@@ -23,7 +23,8 @@ describe('Angle', () => {
   test('Default Angle', () => {
     const angle = diagram.objects.angle();
     expect(angle.angle).toBe(1);
-    expect(angle.rotation).toBe(0);
+    expect(angle.getRotation()).toBe(0);
+    // expect(angle.rotation).toBe(0);
   });
   test('By Angle', () => {
     const angle = diagram.objects.angle({
@@ -31,7 +32,8 @@ describe('Angle', () => {
       rotation: 1,
     });
     expect(angle.angle).toBe(2);
-    expect(angle.rotation).toBe(1);
+    expect(angle.getRotation()).toBe(1);
+    // expect(angle.rotation).toBe(1);
   });
   test('By Points', () => {
     const angle = diagram.objects.angle({

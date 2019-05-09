@@ -98,7 +98,8 @@ describe('Transfrom Animation Unit', () => {
     expect(math.round(remaining)).toBe(0);
     remaining = elem1.animations.nextFrame(4.1);
     expect(elem1.getPosition().round()).toEqual(new Point(2, 2));
-    expect(math.round(remaining)).toBe(0.1);
+    expect(math.round(remaining)).toBe(0);
+    expect(elem1.animations.animations).toHaveLength(0);
   });
   test('Delay separate elem1 in parallel method', () => {
     elem1.animations.new()
@@ -115,7 +116,7 @@ describe('Transfrom Animation Unit', () => {
     remaining = elem1.animations.nextFrame(0.5);
     expect(elem1.getPosition().round()).toEqual(new Point(0.5, 0.5));
     expect(elem2.getPosition().round()).toEqual(new Point(0, 0));
-    expect(remaining).toBe(0);
+    expect(remaining).toBe(-0.5);
 
     remaining = elem1.animations.nextFrame(1.5);
     expect(elem1.getPosition().round()).toEqual(new Point(1, 1));
@@ -124,7 +125,7 @@ describe('Transfrom Animation Unit', () => {
     remaining = elem1.animations.nextFrame(2.5);
     expect(elem1.getPosition().round()).toEqual(new Point(1.5, 1.5));
     expect(elem2.getPosition().round()).toEqual(new Point(1, 1));
-    expect(remaining).toBe(0);
+    expect(remaining).toBe(-0.5);
 
     remaining = elem1.animations.nextFrame(3.5);
     expect(elem1.getPosition().round()).toEqual(new Point(2, 2));

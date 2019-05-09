@@ -43,8 +43,8 @@ export default class AnimationManager {
     }
     this.element = options.element;
     this.animations = [];
-    this.state = 'idle';
-    this.options = {};
+    this.state = 'idle';      // $FlowFixMe
+    this.options = { translation: {} };
     return this;
   }
 
@@ -65,13 +65,13 @@ export default class AnimationManager {
   nextFrame(now: number) {
     // console.log('animation manager', now)
     const animationsToRemove = [];
-    let remaining = -1;
+    let remaining = null;
     let isAnimating = false;
     this.animations.forEach((animation, index) => {
       let animationIsAnimating = false;
       if (animation.state === 'waitingToStart' || animation.state === 'animating') {
         const stepRemaining = animation.nextFrame(now);
-        if (remaining === -1) {
+        if (remaining === null) {
           remaining = stepRemaining;
         }
         if (stepRemaining < remaining) {
@@ -156,7 +156,10 @@ export default class AnimationManager {
         if (animation.name === name) {
           if (animation.state !== 'animating') {
             animation.start();
-            this.state = 'animating';
+            animation.finishIfZeroDuration();
+            if (animation.state === 'animating') {
+              this.state = 'animating';
+            }
           }
         }
       }
@@ -168,7 +171,10 @@ export default class AnimationManager {
       const animation = this.animations[i];
       if (animation.state !== 'animating') {
         animation.start();
-        this.state = 'animating';
+        animation.finishIfZeroDuration();
+        if (animation.state === 'animating') {
+          this.state = 'animating';
+        }
       }
     }
   }

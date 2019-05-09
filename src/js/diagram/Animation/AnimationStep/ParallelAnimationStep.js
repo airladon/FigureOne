@@ -41,21 +41,44 @@ export class ParallelAnimationStep extends AnimationStep {
   }
 
   nextFrame(now: number) {
-    let remaining = -1;
+    let remaining = null;
+    if (this.beforeFrame != null) {
+      this.beforeFrame(now - this.startTime);
+    }
     this.steps.forEach((step) => {
-      const stepRemaining = step.nextFrame(now);
-      // console.log(step.element.uid, stepRemaining)
-      if (remaining === -1) {
-        remaining = stepRemaining;
-      }
-      if (stepRemaining < remaining) {
-        remaining = stepRemaining;
+      if (step.state === 'animating' || step.state === 'waitingToStart') {
+        const stepRemaining = step.nextFrame(now);
+        // console.log(step.element.uid, stepRemaining)
+        if (remaining === null) {
+          remaining = stepRemaining;
+        }
+        if (stepRemaining < remaining) {
+          remaining = stepRemaining;
+        }
       }
     });
-    if (remaining > 0) {
+    if (this.afterFrame != null) {
+      this.afterFrame(now - this.startTime);
+    }
+    if (remaining === null) {
+      remaining = 0;
+    }
+    if (remaining >= 0) {
       this.finish();
     }
     return remaining;
+  }
+
+  finishIfZeroDuration() {
+    let state = 'finished';
+    this.steps.forEach((step) => {
+      if (step.state !== 'finished') {
+        state = 'animating';
+      }
+    });
+    if (state === 'finished') {
+      this.finish();
+    }
   }
 
   startWaiting() {
@@ -70,6 +93,7 @@ export class ParallelAnimationStep extends AnimationStep {
     super.start(startTime);
     this.steps.forEach((step) => {
       step.start(startTime);
+      step.finishIfZeroDuration();
     });
   }
 

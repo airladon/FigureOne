@@ -237,7 +237,7 @@ describe('Animation Examples', () => {
 
     let remaining = elem1.animations.nextFrame(101.1);
     expect(elem1.getPosition().round()).toEqual(point(1.1));
-    expect(math.round(remaining)).toBe(0);
+    expect(math.round(remaining)).toBe(-0.9);
 
     remaining = elem1.animations.nextFrame(102.1);
     expect(elem1.getPosition().round()).toEqual(point(2));
@@ -253,7 +253,7 @@ describe('Animation Examples', () => {
     let remaining = elem1.animations.nextFrame(101.1);
     expect(elem1.getPosition().round()).toEqual(point(1.1));
     expect(elem2.getPosition().round()).toEqual(point(1));
-    expect(math.round(remaining)).toBe(0);
+    expect(math.round(remaining)).toBe(-0.9);
 
     remaining = elem1.animations.nextFrame(102.1);
     expect(elem1.getPosition().round()).toEqual(point(2));
@@ -271,7 +271,7 @@ describe('Animation Examples', () => {
     let remaining = elem1.animations.nextFrame(101.1);
     expect(elem1.getPosition().round()).toEqual(point(1.1));
     expect(elem2.getPosition().round()).toEqual(point(1));
-    expect(math.round(remaining)).toBe(0);
+    expect(math.round(remaining)).toBe(-0.9);
 
     remaining = elem1.animations.nextFrame(102.1);
     expect(elem1.getPosition().round()).toEqual(point(2));

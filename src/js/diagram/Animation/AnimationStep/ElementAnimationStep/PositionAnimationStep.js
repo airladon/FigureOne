@@ -1,6 +1,6 @@
 // @flow
 import {
-  Transform, Point, getMaxTimeFromVelocity,
+  Transform, Point, getMaxTimeFromVelocity, getPoint,
 } from '../../../../tools/g2';
 import type { pathOptionsType } from '../../../../tools/g2';
 import {
@@ -18,6 +18,7 @@ export type TypePositionAnimationStepInputOptions = {
   translationStyle?: 'linear' | 'curved'; // default is linear
   translationOptions?: pathOptionsType;
   velocity?: Point;
+  maxTime?: number;
 } & TypeElementAnimationStepInputOptions;
 
 export default class PositionAnimationStep extends ElementAnimationStep {
@@ -29,6 +30,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     translationStyle: 'linear' | 'curved';
     translationOptions: pathOptionsType;
     velocity: ?Point | number;
+    maxTime: ?number;
   };
 
   constructor(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
@@ -36,7 +38,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       joinObjects({}, { type: 'position' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
       'start', 'delta', 'target', 'translationStyle', 'translationOptions',
-      'velocity',
+      'velocity', 'maxTime',
     ]);
     super(ElementAnimationStepOptionsIn);
     const defaultPositionOptions = {
@@ -50,6 +52,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
         offset: 0.5,
         controlPoint: null,
         direction: '',
+        maxTime: null,
       },
       velocity: null,
     };
@@ -62,11 +65,20 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       joinObjects(defaultPositionOptions.translationOptions, translationOptions);
     }
     const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
+    if (options.start != null) {
+      options.start = getPoint(options.start);
+    }
+    if (options.target != null) {
+      options.target = getPoint(options.target);
+    }
+    if (options.delta != null) {
+      options.delta = getPoint(options.delta);
+    }
     // $FlowFixMe
     this.position = { translationOptions: {} };
     copyKeysFromTo(options, this.position, [
       'start', 'delta', 'target', 'translationStyle',
-      'velocity',
+      'velocity', 'maxTime',
     ]);
     duplicateFromTo(options.translationOptions, this.position.translationOptions);
   }
@@ -101,15 +113,17 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     // If Velocity is defined, then use it to calculate duration
     const { target, start, velocity } = this.position;
     if (velocity != null && start != null && target != null) {
-      let velocityToUse = velocity;
-      if (typeof velocity === 'number') {
-        velocityToUse = new Point(velocity, velocity);
-      }
+      const velocityToUse = getPoint(velocity);
       this.duration = getMaxTimeFromVelocity(
         new Transform().translate(start),
         new Transform().translate(target),
         new Transform().translate(velocityToUse),
       );
+    }
+    if (this.position.maxTime != null) {
+      if (this.duration > this.position.maxTime) {
+        this.duration = this.position.maxTime;
+      }
     }
   }
 

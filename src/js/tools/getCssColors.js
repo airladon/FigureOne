@@ -65,7 +65,7 @@ const diagramColorNames = [
   '--diagram-text-latin',
   '--diagram-text-greek',
   '--diagram-text-english',
-  '--diagram-quizCheck',
+  '--diagram-qr-background',
 ];
 
 export default function getCSSColors(customColorNames: Array<string> = []): Object {

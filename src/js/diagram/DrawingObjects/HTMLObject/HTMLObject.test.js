@@ -9,16 +9,16 @@ describe('Diagram HTML Object', () => {
   let mockElement;
   beforeEach(() => {
     parentDiv = {
-      offsetWidth: 1000,
-      offsetHeight: 500,
+      clientWidth: 1000,
+      clientHeight: 500,
       getBoundingClientRect: () => new Rect(100, 100, 1000, 500),
     };
     // Element is initially in center of the parent Div
     mockElement = {
       style: {},
       getBoundingClientRect: () => new Rect(475, 240, 50, 20),
-      offsetWidth: 50,
-      offsetHeight: 20,
+      clientWidth: 50,
+      clientHeight: 20,
     };
     const element = document.createElement('div');
     const inside = document.createTextNode('test text');

@@ -354,8 +354,11 @@ export default class EquationForm extends Elements {
     showTime: number = 0,
     hideTime: number = 0,
     callback: ?(?mixed) => void = null,
+    animationStop: boolean = true,
   ) {
-    this.collectionMethods.stop();
+    if (animationStop) {
+      this.collectionMethods.stop();
+    }
     this.collectionMethods.show();
     const { show, hide } = this.getElementsToShowAndHide();
     if (showTime === 0) {
@@ -377,8 +380,11 @@ export default class EquationForm extends Elements {
     showTime: number = 0,
     hideTime: number = 0,
     callback: ?(?mixed) => void = null,
+    animationStop: boolean = true,
   ) {
-    this.collectionMethods.stop();
+    if (animationStop) {
+      this.collectionMethods.stop();
+    }
     this.collectionMethods.show();
     const { show, hide } = this.getElementsToShowAndHide();
     if (hideTime === 0) {
@@ -570,22 +576,23 @@ export default class EquationForm extends Elements {
       translationToUse = joinObjects({}, this.translation);
     }
 
-    // Object.values(translationToUse).forEach((mods) => {
-    const {
-      element, style, direction, mag,
-    } = translationToUse;
-    if (element) {
-      if (style != null) {
-        element.animations.options.translation.style = style;
+    Object.keys(translationToUse).forEach((key) => {
+      const mods = translationToUse[key];
+      const {
+        element, style, direction, mag,
+      } = mods;
+      if (element) {
+        if (style != null) {
+          element.animations.options.translation.style = style;
+        }
+        if (direction != null) {
+          element.animations.options.translation.direction = direction;
+        }
+        if (mag != null) {
+          element.animations.options.translation.magnitude = mag;
+        }
       }
-      if (direction != null) {
-        element.animations.options.translation.direction = direction;
-      }
-      if (mag != null) {
-        element.animations.options.translation.magnitude = mag;
-      }
-    }
-    // });
+    });
 
     const t = this.collectionMethods.animateToTransforms(
       animateToTransforms,

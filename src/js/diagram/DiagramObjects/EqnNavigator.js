@@ -28,11 +28,15 @@ function updateDescription(
   let form = null;
   // $FlowFixMe
   // form = eqn.eqn.formSeries[index][formType];
-  form = eqn.getForm(eqn.eqn.currentFormSeries[index], subForm);
+  // form = eqn.getForm(eqn.eqn.currentFormSeries[index], subForm);
+  form = eqn.getCurrentForm();
   if (form == null) {
     return;
   }
   if (form.description == null) {
+    if (element != null) {
+      element.innerHTML = '';
+    }
     return;
   }
 
@@ -383,6 +387,7 @@ export type TypeNavigatorOptions = {
   alignH?: 'left' | 'right' | 'center',
   alignV?: 'top' | 'bottom' | 'middle' | 'baseline',
   id?: string,
+  interactive?: boolean,
 };
 
 export default class EqnNavigator extends DiagramElementCollection {
@@ -437,6 +442,7 @@ export default class EqnNavigator extends DiagramElementCollection {
       },
       alignH: 'center',
       alignV: 'middle',
+      interactive: true,
       id: generateUniqueId('id_lesson__equation_navigator_'),
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
@@ -446,7 +452,7 @@ export default class EqnNavigator extends DiagramElementCollection {
       // this.eqn.hasTouchableElements = true;
       // this.eqn.isTouchable = true;
       // this.eqn.touchInBoundingRect = true;
-      this.connectToEquation(optionsToUse.equation);
+      this.connectToEquation(optionsToUse.equation, optionsToUse.interactive);
     }
 
     this.navType = optionsToUse.navType;
@@ -494,12 +500,14 @@ export default class EqnNavigator extends DiagramElementCollection {
     }
   }
 
-  connectToEquation(eqn: EquationNew) {
+  connectToEquation(eqn: EquationNew, interactive: boolean) {
     this.eqn = eqn;
-    this.eqn.onClick = this.clickNext.bind(this);
-    this.eqn.hasTouchableElements = true;
-    this.eqn.isTouchable = true;
-    this.eqn.touchInBoundingRect = true;
+    if (interactive) {
+      this.eqn.onClick = this.clickNext.bind(this);
+      this.eqn.hasTouchableElements = true;
+      this.eqn.isTouchable = true;
+      this.eqn.touchInBoundingRect = true;
+    }
     // this.setTransformCallback = () => {
     //   const p = this.getPosition();
     //   this.eqn.setPosition(p);

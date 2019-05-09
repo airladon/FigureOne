@@ -134,4 +134,42 @@ describe('Animation Manager', () => {
     expect(math.round(elem.opacity, 2)).toEqual(1);
     expect(elem.isShown).toBe(false);
   });
+  // test('Animation dependent on another animation both from same manager', () => {
+  //   const mover = () => {
+  //     elem.animations.new('mover')
+  //       .position({ target: p1, duration: 1, progression: 'linear' })
+  //       .start();
+  //   };
+  //   elem.animations.new('master')
+  //     .trigger({ callback: mover, duration: 1 })
+  //     .dissolveOut(1)
+  //     .start();
+  //   diagram.draw(0)
+  //   expect(elem.getPosition().round()).toEqual(point(0));
+  //   expect(math.round(elem.opacity, 2)).toEqual(1);
+  //   // expect(elem.animations.animations).toHaveLength(2);
+  //   // console.log(elem.animations.animations[0].name)
+  //   // console.log(elem.animations.animations[1].name)
+
+
+  //   diagram.draw(0.5)
+  //   diagram.draw(1)
+  //   console.log(elem.animations.animations[0].steps[0].startTime)
+  //   console.log(elem.animations.animations[1].steps[0].startTime)
+  //   expect(elem.getPosition().round()).toEqual(point(0.5));
+  //   expect(math.round(elem.opacity, 2)).toEqual(1);
+  //   expect(elem.isShown).toBe(true);
+  //   expect(elem.animations.animations).toHaveLength(2);
+
+  //   elem.animations.nextFrame(1.5);
+  //   expect(elem.getPosition().round()).toEqual(point(1));
+  //   expect(math.round(elem.opacity, 2)).toEqual(0.5);
+  //   expect(elem.animations.animations).toHaveLength(1);
+
+  //   // elem.animations.nextFrame(2.1);
+  //   // expect(elem.getPosition().round()).toEqual(point(1));
+  //   // expect(math.round(elem.opacity, 2)).toEqual(1);
+  //   // expect(elem.isShown).toBe(false);
+  //   // expect(elem.animations.animations).toHaveLength(0);
+  // });
 });

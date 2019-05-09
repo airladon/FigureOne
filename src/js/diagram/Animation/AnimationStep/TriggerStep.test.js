@@ -60,11 +60,74 @@ describe('Animation Trigger', () => {
     expect(triggerFlag2).toBe(0);
 
     elem1.animations.nextFrame(1);
+    expect(triggerFlag1).toBe(1);
+    expect(triggerFlag2).toBe(0);
+
+    // elem1.animations.nextFrame(1.01);
+    // expect(triggerFlag1).toBe(1);
+    // expect(triggerFlag2).toBe(0);
+  });
+  test('Zero duration', () => {
+    expect(triggerFlag1).toBe(0);
+    expect(triggerFlag2).toBe(0);
+    elem1.animations.new()
+      .trigger({ callback: trigger1, duration: 0 })
+      .trigger({ callback: trigger2, duration: 0 })
+      .start();
+    expect(triggerFlag1).toBe(1);
+    expect(triggerFlag2).toBe(1);
+  });
+  test('Some duration', () => {
+    expect(triggerFlag1).toBe(0);
+    expect(triggerFlag2).toBe(0);
+    elem1.animations.new()
+      .trigger({ callback: trigger1, duration: 2 })
+      .trigger({ callback: trigger2, duration: 0 })
+      .start();
     expect(triggerFlag1).toBe(0);
     expect(triggerFlag2).toBe(0);
 
-    elem1.animations.nextFrame(1.01);
+    elem1.animations.nextFrame(0);
     expect(triggerFlag1).toBe(1);
     expect(triggerFlag2).toBe(0);
+
+    elem1.animations.nextFrame(0.5);
+    expect(triggerFlag1).toBe(1);
+    expect(triggerFlag2).toBe(0);
+
+    elem1.animations.nextFrame(1.5);
+    expect(triggerFlag1).toBe(1);
+    expect(triggerFlag2).toBe(0);
+
+    elem1.animations.nextFrame(2);
+    expect(triggerFlag1).toBe(1);
+    expect(triggerFlag2).toBe(1);
+  });
+  test('Some More duration', () => {
+    expect(triggerFlag1).toBe(0);
+    expect(triggerFlag2).toBe(0);
+    elem1.animations.new()
+      .trigger({ callback: () => {}, duration: 1 })
+      .trigger({ callback: trigger1, duration: 2 })
+      .trigger({ callback: trigger2, duration: 0 })
+      .start();
+    expect(triggerFlag1).toBe(0);
+    expect(triggerFlag2).toBe(0);
+
+    elem1.animations.nextFrame(0);
+    expect(triggerFlag1).toBe(0);
+    expect(triggerFlag2).toBe(0);
+
+    elem1.animations.nextFrame(0.5);
+    expect(triggerFlag1).toBe(0);
+    expect(triggerFlag2).toBe(0);
+
+    elem1.animations.nextFrame(1);
+    expect(triggerFlag1).toBe(1);
+    expect(triggerFlag2).toBe(0);
+
+    elem1.animations.nextFrame(3);
+    expect(triggerFlag1).toBe(1);
+    expect(triggerFlag2).toBe(1);
   });
 });

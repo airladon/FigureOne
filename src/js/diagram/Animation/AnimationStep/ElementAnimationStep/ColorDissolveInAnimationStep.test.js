@@ -43,10 +43,10 @@ describe('Disolve In Animation', () => {
     expect(math.round(elem1.opacity, 2)).toEqual(0.9);
 
     elem1.animations.nextFrame(1.0);
-    expect(math.round(elem1.opacity)).toEqual(1);
-    expect(callback.mock.calls.length).toBe(0);
+    // expect(math.round(elem1.opacity)).toEqual(1);
+    // expect(callback.mock.calls.length).toBe(0);
 
-    elem1.animations.nextFrame(1.01);
+    // elem1.animations.nextFrame(1.01);
     expect(math.round(elem1.opacity)).toEqual(1);
     expect(callback.mock.calls.length).toBe(1);
   });

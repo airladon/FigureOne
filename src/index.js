@@ -21,6 +21,7 @@ import HTMLObject from './js/diagram/DrawingObjects/HTMLObject/HTMLObject';
 import HTMLEquation from './js/diagram/DiagramElements/Equation/HTMLEquation';
 import DiagramObjectAngle from './js/diagram/DiagramObjects/Angle';
 import DiagramObjectLine from './js/diagram/DiagramObjects/Line';
+import DiagramObjectPolyLine from './js/diagram/DiagramObjects/PolyLine';
 import EqnNavigator from './js/diagram/DiagramObjects/EqnNavigator';
 import EquationLabel from './js/diagram/DiagramObjects/EquationLabel';
 import { EquationNew } from './js/diagram/DiagramElements/Equation/Equation';
@@ -77,6 +78,7 @@ const FigureOne = {
   //
   DiagramObjectAngle,
   DiagramObjectLine,
+  DiagramObjectPolyLine,
   EqnNavigator,
   EquationLabel,
   //

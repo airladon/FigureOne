@@ -1,7 +1,7 @@
 // @flow
 
 import {
-  Transform, Point,
+  Transform, Point, getPoint, Rect,
 } from '../../tools/g2';
 import { joinObjects } from '../../tools/tools';
 import {
@@ -27,9 +27,11 @@ export type TypePadOptions = {
   fill?: boolean,
   isMovable?: boolean,
   touchRadius?: number,
+  boundary?: Rect | Array<number> | 'diagram',
+  touchRadiusInBoundary?: boolean,
 };
 export type TypePolyLineOptions = {
-  position?: Point,
+  position?: ?Point,
   points?: Array<Point>,
   close?: boolean,
   showLine?: boolean,
@@ -39,6 +41,7 @@ export type TypePolyLineOptions = {
   angle?: TypeAngleOptions | Array<TypeAngleOptions>,
   side?: TypeLineOptions | Array<TypeLineOptions>,
   pad?: TypePadOptions | Array<TypePadOptions>,
+  transform?: Transform,
 };
 
 function makeArray<T>(
@@ -95,6 +98,8 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
   close: boolean;
   _line: ?DiagramElementPrimative;
   options: TypePolyLineOptions;
+  updatePointsCallback: ?() => void;
+  reverse: boolean;
 
   constructor(
     shapes: DiagramPrimatives,
@@ -105,13 +110,15 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     options: TypePolyLineOptions = {},
   ) {
     const defaultOptions: TypePolyLineOptions = {
-      position: new Point(0, 0),
+      position: null,
       color: [0, 1, 0, 1],
       points: [new Point(1, 0), new Point(0, 0), new Point(0, 1)],
       close: false,
       showLine: true,
       borderToPoint: 'never',
       width: 0.01,
+      reverse: false,
+      transform: new Transform('PolyLine').scale(1, 1).rotate(0).translate(0, 0),
     };
     const defaultSideOptions: TypeLineOptions = {
       showLine: false,
@@ -142,6 +149,8 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       color: options.color == null ? [0, 1, 0, 1] : options.color,
       fill: true,
       isMovable: false,
+      boundary: 'diagram',
+      touchRadiusInBoundary: false,
     };
 
     if (options.side != null) {
@@ -174,10 +183,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       optionsToUse.angle = options.angle.map(angle => joinObjects({}, defaultOptions.angle, angle));
     }
 
-    super(new Transform('PolyLine')
-      .scale(1, 1)
-      .rotate(0)
-      .translate(0, 0), shapes.limits);
+    super(optionsToUse.transform, shapes.limits);
     this.setColor(optionsToUse.color);
 
     this.shapes = shapes;
@@ -186,30 +192,54 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     this.largerTouchBorder = optionsToUse.largerTouchBorder;
     this.isTouchDevice = isTouchDevice;
     this.animateNextFrame = animateNextFrame;
+    this.updatePointsCallback = null;
 
-    this.position = optionsToUse.position;
-    this.transform.updateTranslation(this.position);
+    if (optionsToUse.position != null) {
+      this.transform.updateTranslation(getPoint(optionsToUse.position));
+    }
+    this.position = this.getPosition();
     this.close = optionsToUse.close;
     this.options = optionsToUse;
+    this.reverse = optionsToUse.reverse;
 
-    this.points = optionsToUse.points;
+    this.points = optionsToUse.points.map(p => getPoint(p));
 
     // Add Pads
     if (optionsToUse.pad) {
       const { pad } = optionsToUse;
-      const pCount = optionsToUse.points.length;
+      const pCount = this.points.length;
       const padArray = makeArray(pad, pCount);
       for (let i = 0; i < pCount; i += 1) {
         const name = `pad${i}`;
         const padOptions = joinObjects({}, {
-          transform: new Transform().translate(optionsToUse.points[i]),
+          transform: new Transform().translate(this.points[i]),
         }, padArray[i]);
         const padShape = this.shapes.polygon(padOptions);
         if (padArray[i].isMovable) {
           padShape.isMovable = true;
           padShape.isTouchable = true;
-          padShape.move.limitToDiagram = true;
-          padShape.setMoveBoundaryToDiagram();
+          if (padArray[i].touchRadius != null) {
+            const multiplier = padArray[i].touchRadius / padArray[i].radius;
+            padShape.increaseBorderSize(multiplier);
+          }
+          let { boundary } = padArray[i];
+          // console.log(boundary, padArray[i])
+          if (boundary === 'diagram') {
+            boundary = shapes.limits._dup();
+          } else if (Array.isArray(boundary)) {
+            const [left, bottom, width, height] = boundary;
+            boundary = new Rect(left, bottom, width, height);
+          }
+          if (padArray[i].touchRadiusInBoundary === false && padArray[i].touchRadius != null) {
+            const delta = padArray[i].touchRadius - padArray[i].radius;
+            boundary = new Rect(
+              boundary.left - delta,
+              boundary.bottom - delta,
+              boundary.width + 2 * delta,
+              boundary.height + 2 * delta,
+            );
+          }
+          padShape.setMoveBoundaryToDiagram(boundary);
           padShape.setTransformCallback = (transform) => {
             const index = parseInt(padShape.name.slice(3), 10);
             const translation = transform.t();
@@ -218,54 +248,15 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
               this.updatePoints(this.points);
             }
           };
-          if (padArray[i].touchRadius != null) {
-            const multiplier = padArray[i].touchRadius / padArray[i].radius;
-            padShape.increaseBorderSize(multiplier);
-          }
         }
         this.add(name, padShape);
-      }
-    }
-
-    // Add Line
-    if (optionsToUse.showLine) {
-      const line = this.shapes.polyLine({
-        points: optionsToUse.points,
-        color: optionsToUse.color,
-        close: optionsToUse.close,
-        borderToPoint: optionsToUse.borderToPoint,
-        width: optionsToUse.width,
-      });
-      this.add('line', line);
-    }
-
-    // Add Sides
-    if (optionsToUse.side) {
-      const { side } = optionsToUse;
-      let pCount = optionsToUse.points.length - 1;
-      if (optionsToUse.close) {
-        pCount += 1;
-      }
-      const sideArray = makeArray(side, pCount);
-      for (let i = 0; i < pCount; i += 1) {
-        let j = i + 1;
-        if (i === pCount - 1 && optionsToUse.close) {
-          j = 0;
-        }
-        const name = `side${i}${j}`;
-        const sideOptions = joinObjects({}, {
-          p1: optionsToUse.points[i],
-          p2: optionsToUse.points[j],
-        }, sideArray[i]);
-        const sideLine = this.objects.line(sideOptions);
-        this.add(name, sideLine);
       }
     }
 
     // Add Angles
     if (optionsToUse.angle) {
       const { angle } = optionsToUse;
-      let pCount = optionsToUse.points.length;
+      let pCount = this.points.length;
       if (optionsToUse.close === false) {
         pCount -= 2;
       }
@@ -284,18 +275,111 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
           k = pCount - 1;
         }
         const name = `angle${i}`;
+        if (this.reverse) {
+          const newJ = k;
+          k = j;
+          j = newJ;
+        }
         const angleOptions = joinObjects({}, {
-          p1: optionsToUse.points[k],
-          p2: optionsToUse.points[i],
-          p3: optionsToUse.points[j],
-        }, angleArray[i]);
+          p1: this.points[k],
+          p2: this.points[i],
+          p3: this.points[j],
+        }, angleArray[i - firstIndex]);
         const angleAnnotation = this.objects.angle(angleOptions);
         this.add(name, angleAnnotation);
       }
     }
+
+    // Add Line
+    if (optionsToUse.showLine) {
+      const line = this.shapes.polyLine({
+        points: this.points,
+        color: optionsToUse.color,
+        close: optionsToUse.close,
+        borderToPoint: optionsToUse.borderToPoint,
+        width: optionsToUse.width,
+      });
+      this.add('line', line);
+    }
+
+    // Add Sides
+    if (optionsToUse.side) {
+      const { side } = optionsToUse;
+      let pCount = this.points.length - 1;
+      if (optionsToUse.close) {
+        pCount += 1;
+      }
+      const sideArray = makeArray(side, pCount);
+      for (let i = 0; i < pCount; i += 1) {
+        let j = i + 1;
+        if (i === pCount - 1 && optionsToUse.close) {
+          j = 0;
+        }
+        const name = `side${i}${j}`;
+        let sideOptions = joinObjects({}, {
+          p1: this.points[i],
+          p2: this.points[j],
+        }, sideArray[i]);
+        if (this.reverse) {
+          sideOptions = joinObjects({}, {
+            p1: this.points[j],
+            p2: this.points[i],
+          }, sideArray[i]);
+        }
+        const sideLine = this.objects.line(sideOptions);
+        this.add(name, sideLine);
+      }
+    }
   }
 
-  updatePoints(newPoints: Array<Point>) {
+  updateSideLabels(rotationOffset: number = 0) {
+    if (this.options.side != null) {
+      let pCount = this.points.length - 1;
+      if (this.close) {
+        pCount += 1;
+      }
+      for (let i = 0; i < pCount; i += 1) {
+        let j = i + 1;
+        if (i === pCount - 1 && this.close) {
+          j = 0;
+        }
+        const name = `side${i}${j}`;
+        if (this.elements[name] != null) {
+          const wasHidden = !this.elements[name].isShown;
+          this.elements[name].updateLabel(rotationOffset);
+          if (wasHidden) {
+            this.elements[name].hide();
+          }
+        }
+      }
+    }
+  }
+
+  updateAngleLabels(rotationOffset: number = 0) {
+    if (this.options.angle != null) {
+      let pCount = this.points.length;
+      if (this.close === false) {
+        pCount -= 2;
+      }
+      let firstIndex = 0;
+      if (this.close === false) {
+        firstIndex = 1;
+      }
+      for (let i = firstIndex; i < pCount + firstIndex; i += 1) {
+        const name = `angle${i}`;
+        if (this.elements[name] != null) {
+          const wasHidden = !this.elements[name].isShown;
+          this.elements[name].updateLabel(rotationOffset);
+          if (wasHidden) {
+            this.elements[name].hide();
+          }
+        }
+      }
+    }
+  }
+
+  updatePoints(newPointsIn: Array<Point>) {
+    const newPoints = newPointsIn.map(p => getPoint(p));
     if (this._line != null) {
       this._line.drawingObject.change(newPoints);
     }
@@ -324,7 +408,15 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         }
         const name = `side${i}${j}`;
         if (this.elements[name] != null) {
-          this.elements[name].setEndPoints(newPoints[i], newPoints[j]);
+          const wasHidden = !this.elements[name].isShown;
+          if (this.reverse) {
+            this.elements[name].setEndPoints(newPoints[j], newPoints[i]);
+          } else {
+            this.elements[name].setEndPoints(newPoints[i], newPoints[j]);
+          }
+          if (wasHidden) {
+            this.elements[name].hide();
+          }
         }
       }
     }
@@ -349,14 +441,139 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         }
         const name = `angle${i}`;
         if (this.elements[name] != null) {
+          const wasHidden = !this.elements[name].isShown;
+          if (this.reverse) {
+            const newJ = k;
+            k = j;
+            j = newJ;
+          }
           this.elements[name].setAngle({
             p1: newPoints[k],
             p2: newPoints[i],
             p3: newPoints[j],
           });
+          if (wasHidden) {
+            this.elements[name].hide();
+          }
         }
       }
     }
     this.points = newPoints;
+    if (this.updatePointsCallback != null) {
+      this.updatePointsCallback();
+    }
+  }
+
+  updateRotation(rotationOffset: number = 0) {
+    let i = 0;      // $FlowFixMe
+    let angle = this[`_angle${i}`];
+    while (angle != null) {
+      angle.update(this.getRotation() + rotationOffset);
+      i += 1;       // $FlowFixMe
+      angle = this[`_angle${i}`];
+    }
+
+    i = 0;          // $FlowFixMe
+    let side = this[`_side${i}${i + 1}`];
+    while (side != null) {
+      side.updateLabel(this.getRotation() + rotationOffset);
+      i += 1;       // $FlowFixMe
+      side = this[`_side${i}${i + 1}`];
+    }               // $FlowFixMe
+    side = this[`_side${i}${0}`];
+    if (side != null) {
+      side.updateLabel(this.getRotation() + rotationOffset);
+    }
+  }
+
+  reversePoints() {
+    const newPoints = [];
+    for (let i = 0; i < this.points.length; i += 1) {
+      newPoints.push(this.points[this.points.length - 1 - i]);
+    }
+    this.updatePoints(newPoints);
+  }
+
+  setPositionWithoutMoving(
+    newPositionPointOrX: Point | number,
+    newPositionY: number = 0,
+  ) {
+    let newPosition = new Point(0, 0);
+    if (typeof newPositionPointOrX === 'number') {
+      newPosition.x = newPositionPointOrX;
+      newPosition.y = newPositionY;
+    } else {
+      newPosition = newPositionPointOrX;
+    }
+    const currentPosition = this.getPosition();
+    const delta = currentPosition.sub(newPosition);
+    this.setPosition(newPosition);
+    const newPoints = this.points.map(p => p.add(delta));
+    this.updatePoints(newPoints);
+  }
+
+  setRotationWithoutMoving(newRotation: number) {
+    const currentRotation = this.getRotation();
+    const delta = currentRotation - newRotation;
+    const deltaMatrix = new Transform().rotate(delta).m();
+    this.setRotation(newRotation);
+    const newPoints = this.points.map(p => p.transformBy(deltaMatrix));
+    this.updatePoints(newPoints);
+  }
+
+  setScaleWithoutMoving(
+    newScalePointOrX: Point | number,
+    newScaleY: number = 0,
+  ) {
+    let newScale = new Point(0, 0);
+    if (typeof newScalePointOrX === 'number') {
+      newScale.x = newScalePointOrX;
+      newScale.y = newScaleY;
+    } else {
+      newScale = newScalePointOrX;
+    }
+    const currentScale = this.getScale();
+    const delta = new Point(
+      currentScale.x / newScale.x,
+      currentScale.y / newScale.y,
+    );
+    const deltaMatrix = new Transform().scale(delta).m();
+    this.setScale(newScale);
+    const newPoints = this.points.map(p => p.transformBy(deltaMatrix));
+    this.updatePoints(newPoints);
+  }
+
+  setShow(name: string, show: boolean) {
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element.name.startsWith(name)) {
+        if (show) {
+          element.showAll();
+        } else {
+          element.hide();
+        }
+      }
+    }
+  }
+
+  hideAngles() {
+    this.setShow('angle', false);
+  }
+
+  hideSides() {
+    this.setShow('side', false);
+  }
+
+  showAngles() {
+    this.setShow('angle', true);
+  }
+
+  showSides() {
+    this.setShow('side', true);
+  }
+
+  updateLabels(rotationOffset: number = this.getRotation()) {
+    this.updateAngleLabels(rotationOffset);
+    this.updateSideLabels(rotationOffset);
   }
 }

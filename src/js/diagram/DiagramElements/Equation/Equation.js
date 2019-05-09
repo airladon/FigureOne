@@ -1,11 +1,11 @@
 // @flow
 import {
-  Point, Transform, parsePoint,
+  Point, Transform, parsePoint, getPoint,
 } from '../../../tools/g2';
 import { joinObjects } from '../../../tools/tools';
 // import { RGBToArray } from '../../../tools/color';
 import {
-  DiagramElementPrimative, DiagramElementCollection,
+  DiagramElementPrimative, DiagramElementCollection, DiagramElement,
 } from '../../Element';
 import {
   DiagramFont,
@@ -124,7 +124,15 @@ export type TypeEquationOptions = {
   elements?: TypeEquationElements;
   forms?: TypeEquationForms;
   formSeries?: Array<string> | {};
-  //
+  defaultFormSeries?: string;
+  formRestart?: {
+    moveFrom?: ?Point | DiagramElementCollection;
+    pulse?: {
+      duration?: number;
+      scale?: number;
+      element?: ?DiagramElement;
+    }
+  }
 };
 
 export const foo = () => {};
@@ -166,6 +174,17 @@ export class EquationNew extends DiagramElementCollection {
 
     descriptionElement: DiagramElementPrimative | null;
     descriptionPosition: Point;
+
+    formRestart: ?{
+      moveFrom?: Point | DiagramElementCollection;
+      pulse?: {
+        duration: number;
+        scale: number;
+        element: DiagramElement;
+      }
+    }
+    // formRestartPosition: ?Point | DiagramElementCollection;
+    // formRestartAnimation: 'dissolve' | 'moveFrom' | 'pulse';
   };
 
   // isTouchDevice: boolean;
@@ -202,6 +221,7 @@ export class EquationNew extends DiagramElementCollection {
       elements: {},
       forms: {},
       formSeries: {},
+      formRestart: null,
     };
 
     const optionsToUse = joinObjects({}, defaultOptions, options);
@@ -212,6 +232,13 @@ export class EquationNew extends DiagramElementCollection {
       optionsToUse.defaultFormAlignment.fixTo,
       optionsToUse.defaultFormAlignment.fixTo,
     );
+    if (optionsToUse.formRestart != null
+      && optionsToUse.formRestart.pulse != null) {
+      optionsToUse.formRestart.pulse = joinObjects({}, {
+        scale: 1.1,
+        duration: 1,
+      }, optionsToUse.formRestart.pulse);
+    }
 
     super(new Transform('Equation')
       .scale(1, 1)
@@ -240,6 +267,7 @@ export class EquationNew extends DiagramElementCollection {
       isAnimating: false,
       descriptionElement: null,
       descriptionPosition: new Point(0, 0),
+      formRestart: optionsToUse.formRestart,
     };
 
     this.setPosition(optionsToUse.position);
@@ -259,7 +287,11 @@ export class EquationNew extends DiagramElementCollection {
         this.eqn.currentFormSeriesName = 'base';
       } else {
         this.eqn.formSeries = optionsToUse.formSeries;
-        this.setFormSeries(Object.keys(this.eqn.formSeries)[0]);
+        if (optionsToUse.defaultFormSeries != null) {
+          this.setFormSeries(optionsToUse.defaultFormSeries);
+        } else {
+          this.setFormSeries(Object.keys(this.eqn.formSeries)[0]);
+        }
       }
     }
   }
@@ -304,7 +336,7 @@ export class EquationNew extends DiagramElementCollection {
       if (options.font != null) {
         fontToUse = options.font;
       }
-      const p = this.shapes.txt(
+      const p = this.shapes.text(
         textToUse,
         { position: new Point(0, 0), font: fontToUse },
       );
@@ -766,10 +798,10 @@ export class EquationNew extends DiagramElementCollection {
     return this.eqn.forms[this.eqn.currentForm][this.eqn.currentSubForm];
   }
 
-  render() {
+  render(animationStop: boolean = true) {
     const form = this.getCurrentForm();
     if (form != null) {
-      form.showHide();
+      form.showHide(0, 0, null, animationStop);
       this.show();
       form.setPositions();
       form.applyElementMods();
@@ -799,6 +831,7 @@ export class EquationNew extends DiagramElementCollection {
   showForm(
     formOrName: EquationForm | string,
     subForm: ?string = null,
+    animationStop: boolean = true,
   ) {
     this.show();
     let form = formOrName;
@@ -807,7 +840,7 @@ export class EquationNew extends DiagramElementCollection {
     }
     if (form) {
       this.setCurrentForm(form);
-      this.render();
+      this.render(animationStop);
     }
   }
 
@@ -843,7 +876,7 @@ export class EquationNew extends DiagramElementCollection {
     prioritizeFormDuration?: boolean,
     delay?: number,
     fromWhere?: ?'fromPrev' | 'fromNext',
-    animate?: 'move' | 'dissolve',
+    animate?: 'move' | 'dissolve' | 'moveFrom' | 'pulse',
     callback?: ?() => void,
     // finishAnimatingAndCancelGoTo?: boolean,
     ifAnimating?: {
@@ -986,6 +1019,56 @@ export class EquationNew extends DiagramElementCollection {
             end,
             options.fromWhere,
           );
+        } else if (
+          options.animate === 'moveFrom'
+          && this.eqn.formRestart != null
+          && this.eqn.formRestart.moveFrom != null
+        ) {
+          const { moveFrom } = this.eqn.formRestart;
+          const target = this.getPosition();
+          let start = this.getPosition();
+          if (moveFrom instanceof EquationNew) {
+            moveFrom.showForm(subForm.name);
+          }
+          if (moveFrom instanceof DiagramElementCollection) {
+            start = moveFrom.getPosition();
+          } else {  // $FlowFixMe
+            start = getPoint(this.eqn.formRestart.moveFrom);
+          }
+          this.animations.new()
+            .dissolveOut({ duration: options.dissolveOutTime })
+            .position({ target: start, duration: 0 })
+            .trigger({
+              callback: () => {   // $FlowFixMe
+                this.showForm(subForm.name, subFormToUse, false);
+              },
+              duration: 0.01,
+            })
+            .position({ target, duration })
+            .whenFinished(end)
+            .start();
+        } else if (
+          options.animate === 'pulse'
+          && this.eqn.formRestart != null
+          && this.eqn.formRestart.pulse != null
+        ) {
+          const { pulse } = this.eqn.formRestart;
+          const newEnd = () => {
+            this.pulseScaleNow(pulse.duration, pulse.scale, 0, end);
+            if (pulse.element != null
+              && pulse.element instanceof EquationNew  // $FlowFixMe
+              && pulse.element.getCurrentForm().name === subForm.name
+            ) {
+              pulse.element.pulseScaleNow(pulse.duration, pulse.scale);
+            }
+          };
+          subForm.allHideShow(
+            options.delay,
+            options.dissolveOutTime,
+            options.blankTime,
+            options.dissolveInTime,
+            newEnd,
+          );
         } else {
           // console.log('******************* hideshow')
           subForm.allHideShow(
@@ -1040,7 +1123,14 @@ export class EquationNew extends DiagramElementCollection {
       index += 1;
       if (index > this.eqn.currentFormSeries.length - 1) {
         index = 0;
-        animate = 'dissolve';
+        const { formRestart } = this.eqn;
+        if (formRestart != null && formRestart.moveFrom != null) {
+          animate = 'moveFrom';
+        } else if (formRestart != null && formRestart.pulse != null) {
+          animate = 'pulse';
+        } else {
+          animate = 'dissolve';
+        }
       }
 
       this.goToForm({
