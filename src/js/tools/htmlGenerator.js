@@ -86,6 +86,9 @@ function style(
     if (options.right != null) {
       marginRight = `margin-right:${options.right}%;`;
     }
+    if (options.centerV) {
+      marginTop = 'margin-top:0;';
+    }
     if (options.top != null) {
       marginTop = `margin-top:${options.top}%;`;
     }
