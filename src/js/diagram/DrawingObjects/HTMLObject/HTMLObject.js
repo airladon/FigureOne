@@ -116,6 +116,7 @@ class HTMLObject extends DrawingObject {
 
   transformHtml(transformMatrix: Array<number>) {
     if (this.show) {
+      // this.element.style.visibility = 'visible';
       const glLocation = this.location.transformBy(transformMatrix);
       const pixelLocation = this.glToPixelSpace(glLocation);
 
@@ -143,6 +144,7 @@ class HTMLObject extends DrawingObject {
       this.element.style.position = 'absolute';
       this.element.style.left = '-10000px';
       this.element.style.top = '-10000px';
+      // this.element.style.visibility = 'hidden';
       // console.trace()
     }
   }

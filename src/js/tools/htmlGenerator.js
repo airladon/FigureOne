@@ -1,7 +1,6 @@
 // @flow
 import { colorArrayToRGBA } from './color';
-import { generateUniqueId } from './tools';
-
+import { generateUniqueId, joinObjects } from './tools';
 
 function convertTextArrayToParagraphs(
   text: string | Array<string>,
@@ -225,102 +224,63 @@ function addId(id: string = '') {
   };
 }
 
+function click(
+  actionMethod: Function,
+  bind: Array<mixed>,
+  colorOrOptions: Array<number> | {
+    color?: ?Array<number>,
+    interactive?: boolean,
+    id?: string,
+    classes?: string,
+    text?: ?string,
+  } | null = null,
+) {
+  let classStr = 'action_word';
+  let colorToUse = null;
+  const defaultOptions = {
+    color: null,
+    id: `lesson__id_${generateUniqueId()}`,
+    interactive: true,
+    classes: '',
+    text: null,
+  };
+  let options = defaultOptions;
+  if (Array.isArray(colorOrOptions)) {
+    colorToUse = colorOrOptions;
+  } else if (colorOrOptions != null) {
+    options = joinObjects(defaultOptions, colorOrOptions);
+  }
+  const {
+    interactive, color, id, classes, text,
+  } = options;
+  if (color != null) {
+    colorToUse = color;
+  }
+  if (interactive) {
+    classStr = `${classStr} interactive_word`;
+  }
+  if (classes !== '') {
+    classStr = `${classStr} ${classes}`;
+  }
+  const idToUse = () => id;
+  return {
+    replacementText: (textIn: string) => toHTML(text || textIn, idToUse(), classStr, colorToUse),
+    id: idToUse,
+    actionMethod,
+    bind,
+  };
+}
+
 function clickW(
   textToUse: string,
   actionMethod: Function,
   bind: Array<mixed>,
-  classesOrColor: string | Array<number> | null = null,
-  interactive: boolean = true,
-  id: string = `lesson__id_${generateUniqueId()}`,
+  color: Array<number> | null = null,
 ) {
-  let classStr = 'action_word';
-  if (interactive) {
-    classStr = `${classStr} interactive_word`;
-  }
-  if (typeof classesOrColor === 'string') {
-    classStr = `${classesOrColor} ${classStr}`;
-  }
-  let color = null;
-  if (Array.isArray(classesOrColor)) {
-    color = classesOrColor;
-  }
-  const idToUse = () => id;
-  // const id = `lesson__id_${textToUse}`;
-  return {
-    replacementText: () => toHTML(textToUse, idToUse(), classStr, color),
-    id: idToUse,
-    actionMethod,
-    bind,
-  };
-}
-
-function clickWord(
-  textToUse: string,
-  id: string,
-  actionMethod: Function,
-  bind: Array<mixed>,
-  classesOrColor: string | Array<number> | null = null,
-  interactive: boolean = true,
-) {
-  let classStr = 'action_word';
-  if (interactive) {
-    classStr = `${classStr} interactive_word`;
-  }
-  if (typeof classesOrColor === 'string') {
-    classStr = `${classesOrColor} ${classStr}`;
-  }
-  let color = null;
-  if (Array.isArray(classesOrColor)) {
-    color = classesOrColor;
-  }
-  const idToUse = () => id;
-  // const id = `lesson__id_${textToUse}`;
-  return {
-    replacementText: () => toHTML(textToUse, idToUse(), classStr, color),
-    id: idToUse,
-    actionMethod,
-    bind,
-  };
-}
-
-
-function click(
-  actionMethod: Function,
-  bind: Array<mixed>,
-  classesOrColor: string | Array<number> | null = null,
-  interactive: boolean = true,
-  id: string = `lesson__id_${generateUniqueId()}`,
-) {
-  let classStr = 'action_word';
-  if (interactive) {
-    classStr = `${classStr} interactive_word`;
-  }
-  if (typeof classesOrColor === 'string') {
-    classStr = `${classesOrColor} ${classStr}`;
-  }
-  let color = null;
-  if (Array.isArray(classesOrColor)) {
-    color = classesOrColor;
-  }
-  const idToUse = () => id;
-  return {
-    replacementText: (text: string) => toHTML(text, idToUse(), classStr, color),
-    id: idToUse,
-    actionMethod,
-    bind,
-  };
-}
-
-function clickId(
-  id: string = '',
-  actionMethod: Function,
-  bind: Array<mixed>,
-) {
-  return {
-    id: () => id,
-    actionMethod,
-    bind,
-  };
+  return click(actionMethod, bind, {
+    color,
+    text: textToUse,
+  });
 }
 
 function actionWord(
@@ -469,6 +429,6 @@ function setHTML(
 export {
   actionWord, click, highlight, addClass, addId,
   onClickId, highlightWord, centerV, centerH, centerVH, toHTML,
-  clickWord, itemSelector, unit, applyModifiers,
-  setOnClicks, setHTML, withClass, style, clickId, clickW,
+  itemSelector, unit, applyModifiers,
+  setOnClicks, setHTML, withClass, style, clickW,
 };
