@@ -73,6 +73,7 @@ export type TypeSpaceTransforms = {
 //    - html element size in gl coordinates found
 
 class Diagram {
+  htmlId: string;
   canvasLow: HTMLCanvasElement;
   // canvasHigh: HTMLCanvasElement;
   textCanvasLow: HTMLCanvasElement;
@@ -136,7 +137,7 @@ class Diagram {
   oldWidth: number;
 
   drawAnimationFrames: number;
-  updateFontSize: boolean;
+  // updateFontSize: string;
 
   isTouchDevice: boolean;
 
@@ -148,6 +149,7 @@ class Diagram {
       limits: new Rect(-1, -1, 2, 2),
       backgroundColor: [1, 1, 1, 1],
       fontScale: 1,
+      // updateFontSize: '',
     };
     this.scrolled = false;
     // this.oldScrollY = 0;
@@ -155,6 +157,7 @@ class Diagram {
     const {
       htmlId, backgroundColor, limits,
     } = optionsToUse;
+    this.htmlId = htmlId;
     // this.layout = layout;
     if (typeof htmlId === 'string') {
       const container = document.getElementById(htmlId);
@@ -239,7 +242,7 @@ class Diagram {
       this.elements.name = 'diagramRoot';
     }
 
-    this.updateFontSize = true;
+    // this.updateFontSize = optionsToUse.updateFontSize;
 
     window.addEventListener('resize', this.resize.bind(this));
     this.sizeHtmlText();
@@ -335,12 +338,21 @@ class Diagram {
   }
 
   sizeHtmlText() {
-    if (this.updateFontSize) {
-      const style = window.getComputedStyle(document.documentElement);
-      if (style) {
-        this.htmlCanvas.style.fontSize = style.getPropertyValue('--lesson__diagram-font-size');
+    const containerRect = this.container.getBoundingClientRect();
+    let size = containerRect.width / 35;
+    const test = document.getElementById(`${this.htmlId}_measure`);
+    if (test != null) {
+      test.style.fontSize = `${size}px`;
+      const width = (test.clientWidth + 1);
+      const ratio = width / containerRect.width;
+      if (containerRect.width < 500) {
+        size = Math.floor(0.84 / ratio * size * 10000) / 10000;
+      } else {
+        size = Math.floor(0.85 / ratio * size * 10000) / 10000;
       }
     }
+
+    this.htmlCanvas.style.fontSize = `${size}px`;
   }
 
   destroy() {
