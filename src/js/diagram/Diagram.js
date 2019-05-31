@@ -441,6 +441,9 @@ class Diagram {
     if (needClear) {
       this.drawQueued = true;
       this.draw(-1);
+      // this.animateNextFrame(true, 'clear frame');
+      // this.draw(-1);
+      // this.clickearContext();
     }
   }
 
@@ -482,13 +485,10 @@ class Diagram {
 
     this.renderToCanvas(elementToRender.tieToHTML.element);
     elementToRender.isRenderedAsImage = true;
+    // elementToRender.setRenderedOnNextDraw();
     // reset position
     elementToRender.setPosition(oldPosition);
     elementToRender.setScale(oldScale);
-    // elementToRender.updateHTMLElementTie(this.canvasLow);
-    // this.draw(-1);
-    // this.fromWhere = 'reset Position';
-    // elementToRender.hide();
 
     // show all elements that were shown previously (except element that was just rendered)
     Object.keys(this.elements.elements).forEach((name) => {
@@ -526,34 +526,34 @@ class Diagram {
 
     // const { ctx } = new DrawContext2D(htmlCanvas);
 
-    const getDimensions = (c: HTMLElement) => ({
-      // width: c.width,
-      // height: c.height,
-      clientWidth: c.clientWidth,
-      clientHeight: c.clientHeight,
-    });
+    // const getDimensions = (c: HTMLElement) => ({
+    //   // width: c.width,
+    //   // height: c.height,
+    //   clientWidth: c.clientWidth,
+    //   clientHeight: c.clientHeight,
+    // });
 
-    const canvas = getDimensions(htmlCanvas);
-    // this.canvasOffscreen.style.width = `${htmlCanvas.clientWidth}px`;
-    // this.canvasOffscreen.style.height = `${htmlCanvas.clientHeight}px`;
-    // this.textCanvasOffscreen.style.width = `${htmlCanvas.clientWidth}px`;
-    // this.textCanvasOffscreen.style.height = `${htmlCanvas.clientHeight}px`;
-    const gl = getDimensions(this.webglOffscreen.gl.canvas);
-    const text = getDimensions(this.draw2DOffscreen.canvas);
+    // const canvas = getDimensions(htmlCanvas);
+    // // this.canvasOffscreen.style.width = `${htmlCanvas.clientWidth}px`;
+    // // this.canvasOffscreen.style.height = `${htmlCanvas.clientHeight}px`;
+    // // this.textCanvasOffscreen.style.width = `${htmlCanvas.clientWidth}px`;
+    // // this.textCanvasOffscreen.style.height = `${htmlCanvas.clientHeight}px`;
+    // const gl = getDimensions(this.webglOffscreen.gl.canvas);
+    // const text = getDimensions(this.draw2DOffscreen.canvas);
 
     const w = document.getElementById(`${htmlCanvasElementOrId}_webgl`);
     if (w instanceof HTMLImageElement) {
       w.src = this.webglOffscreen.gl.canvas.toDataURL('image/png', 0.5);
-      w.style.visibility = 'visible';
-      w.style.transform = `scale(${gl.clientWidth / canvas.clientWidth},${gl.clientHeight / canvas.clientHeight})`;
+      w.style.display = 'block';
+      // w.style.transform = `scale(${gl.clientWidth / canvas.clientWidth},${gl.clientHeight / canvas.clientHeight})`;
     }
 
 
     const d = document.getElementById(`${htmlCanvasElementOrId}_2d`);
     if (d instanceof HTMLImageElement) {
       d.src = this.draw2DOffscreen.canvas.toDataURL('image/png', 0.5);
-      d.style.visibility = 'visible';
-      d.style.transform = `scale(${text.clientWidth / canvas.clientWidth},${text.clientHeight / canvas.clientHeight})`;
+      d.style.display = 'block';
+      // d.style.transform = `scale(${text.clientWidth / canvas.clientWidth},${text.clientHeight / canvas.clientHeight})`;
     }
     this.clearContext(1);
   }
@@ -971,11 +971,11 @@ class Diagram {
       this.animateNextFrame(true, 'queued frames');
     }
 
-    if (this.drawTimeoutId) {
-      clearTimeout(this.drawTimeoutId);
-      this.drawTimeoutId = null;
-    }
-    this.drawTimeoutId = setTimeout(this.renderToImages.bind(this), 100);
+    // if (this.drawTimeoutId) {
+    //   clearTimeout(this.drawTimeoutId);
+    //   this.drawTimeoutId = null;
+    // }
+    // this.drawTimeoutId = setTimeout(this.renderToImages.bind(this), 100);
   }
 
   renderToImages() {
@@ -986,7 +986,7 @@ class Diagram {
     //   this.waitForFrames = 1;
     // }
     this.renderAllElementsToTiedCanvases();
-    this.centerDrawingLens();
+    // this.centerDrawingLens();
     // this.webglLow.gl.canvas.style.visibility = 'visible';
   }
 

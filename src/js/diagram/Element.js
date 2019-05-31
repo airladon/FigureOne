@@ -202,6 +202,7 @@ class DiagramElement {
   };
 
   isRenderedAsImage: boolean;
+  renderedOnNextDraw: boolean;
   unrenderNextDraw: boolean;
 
   // scenarioSet: {
@@ -394,6 +395,7 @@ class DiagramElement {
     };
     this.isRenderedAsImage = false;
     this.unrenderNextDraw = false;
+    this.renderedOnNextDraw = false;
   }
 
   setProperties(properties: Object) {
@@ -1311,13 +1313,19 @@ class DiagramElement {
     if (tieToElement) {
       const w = document.getElementById(`${elementId}_webgl`);
       if (w != null) {
-        w.style.visibility = 'hidden';
+        // w.style.visibility = 'hidden';
+        w.style.display = 'none';
       }
       const d = document.getElementById(`${elementId}_2d`);
       if (d != null) {
-        d.style.visibility = 'hidden';
+        // d.style.visibility = 'hidden';
+        d.style.display = 'none';
       }
     }
+  }
+
+  setRenderedOnNextDraw() {
+    this.renderedOnNextDraw = true;
   }
 
   unrender(): void {
@@ -1594,6 +1602,10 @@ class DiagramElementPrimative extends DiagramElement {
         this.clearRender();
         this.unrenderNextDraw = false;
       }
+      if (this.renderedOnNextDraw) {
+        this.isRenderedAsImage = true;
+        this.renderedOnNextDraw = false;
+      }
     }
   }
 
@@ -1833,6 +1845,10 @@ class DiagramElementCollection extends DiagramElement {
       if (this.unrenderNextDraw) {
         this.clearRender();
         this.unrenderNextDraw = false;
+      }
+      if (this.renderedOnNextDraw) {
+        this.isRenderedAsImage = true;
+        this.renderedOnNextDraw = false;
       }
     }
   }
