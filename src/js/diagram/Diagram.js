@@ -78,9 +78,11 @@ class Diagram {
   canvasOffscreen: HTMLCanvasElement;
   // canvasHigh: HTMLCanvasElement;
   textCanvasLow: HTMLCanvasElement;
+  textCanvasOffscreen: HTMLCanvasElement;
   container: HTMLElement;
   // textCanvasHigh: HTMLCanvasElement;
   draw2DLow: DrawContext2D;
+  draw2DOffscreen: DrawContext2D;
   // draw2DHigh: DrawContext2D;
   htmlCanvas: HTMLElement;
   webglLow: WebGLInstance;
@@ -939,15 +941,15 @@ class Diagram {
       if (Math.abs(window.pageYOffset - this.oldScroll)
           > this.webglLow.gl.canvas.clientHeight / 4
       ) {
-        if (this.webglLow.gl.canvas.style.top !== '-10000px') {
-          this.webglLow.gl.canvas.style.top = '-10000px';
-          this.waitForFrames = 1;
-        }
-        if (this.waitForFrames > 0) {
-          this.waitForFrames -= 1;
-        } else {
-          this.renderAllElementsToTiedCanvases();
-        }
+        // if (this.webglLow.gl.canvas.style.top !== '-10000px') {
+        //   this.webglLow.gl.canvas.style.top = '-10000px';
+        //   this.waitForFrames = 1;
+        // }
+        // if (this.waitForFrames > 0) {
+        //   this.waitForFrames -= 1;
+        // } else {
+        this.renderAllElementsToTiedCanvases();
+        // }
         this.scrollingFast = true;
         if (this.scrollTimeoutId) {
           clearTimeout(this.scrollTimeoutId);
