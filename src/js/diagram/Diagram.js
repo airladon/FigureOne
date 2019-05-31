@@ -425,6 +425,9 @@ class Diagram {
 
   // Renders all tied elements in the first level of diagram elements
   renderAllElementsToTiedCanvases(force: boolean = false) {
+    if (this.canvasOffscreen == null) {
+      return;
+    }
     let needClear = false;
     Object.keys(this.elements.elements).forEach((name) => {
       const element = this.elements.elements[name];
