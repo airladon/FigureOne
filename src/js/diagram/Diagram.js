@@ -464,6 +464,15 @@ class Diagram {
     // Move it to the origin to render
     const oldPosition = elementToRender.getPosition();
     const oldScale = elementToRender.getScale();
+    const htmlCanvas = document.getElementById(elementToRender.tieToHTML.element);
+    if (htmlCanvas instanceof HTMLElement) {
+      this.canvasOffscreen.style.width = `${htmlCanvas.clientWidth}px`;
+      this.canvasOffscreen.style.height = `${htmlCanvas.clientHeight}px`;
+      this.textCanvasOffscreen.style.width = `${htmlCanvas.clientWidth}px`;
+      this.textCanvasOffscreen.style.height = `${htmlCanvas.clientHeight}px`;
+      this.webglOffscreen.resize();
+      this.draw2DOffscreen.resize();
+    }
     elementToRender.updateHTMLElementTie(this.canvasOffscreen);
     elementToRender.setPosition(0, 0);
     // elementToRender.updateHTMLElementTieScale(this.canvasLow);
@@ -525,6 +534,10 @@ class Diagram {
     });
 
     const canvas = getDimensions(htmlCanvas);
+    // this.canvasOffscreen.style.width = `${htmlCanvas.clientWidth}px`;
+    // this.canvasOffscreen.style.height = `${htmlCanvas.clientHeight}px`;
+    // this.textCanvasOffscreen.style.width = `${htmlCanvas.clientWidth}px`;
+    // this.textCanvasOffscreen.style.height = `${htmlCanvas.clientHeight}px`;
     const gl = getDimensions(this.webglOffscreen.gl.canvas);
     const text = getDimensions(this.draw2DOffscreen.canvas);
 
