@@ -514,38 +514,13 @@ class Diagram {
       return;
     }
 
-    // if (!(htmlCanvas instanceof HTMLImageElement)) {
-    //   return;
-    // }
-
     this.drawQueued = true;
-    // this.fromWhere = 'RenderToCanvas';
-    // console.log('drawing')
     this.draw(-1, 1);
-    // console.log('done');
-
-    // const { ctx } = new DrawContext2D(htmlCanvas);
-
-    // const getDimensions = (c: HTMLElement) => ({
-    //   // width: c.width,
-    //   // height: c.height,
-    //   clientWidth: c.clientWidth,
-    //   clientHeight: c.clientHeight,
-    // });
-
-    // const canvas = getDimensions(htmlCanvas);
-    // // this.canvasOffscreen.style.width = `${htmlCanvas.clientWidth}px`;
-    // // this.canvasOffscreen.style.height = `${htmlCanvas.clientHeight}px`;
-    // // this.textCanvasOffscreen.style.width = `${htmlCanvas.clientWidth}px`;
-    // // this.textCanvasOffscreen.style.height = `${htmlCanvas.clientHeight}px`;
-    // const gl = getDimensions(this.webglOffscreen.gl.canvas);
-    // const text = getDimensions(this.draw2DOffscreen.canvas);
 
     const w = document.getElementById(`${htmlCanvasElementOrId}_webgl`);
     if (w instanceof HTMLImageElement) {
       w.src = this.webglOffscreen.gl.canvas.toDataURL('image/png', 0.5);
       w.style.display = 'block';
-      // w.style.transform = `scale(${gl.clientWidth / canvas.clientWidth},${gl.clientHeight / canvas.clientHeight})`;
     }
 
 
@@ -553,7 +528,6 @@ class Diagram {
     if (d instanceof HTMLImageElement) {
       d.src = this.draw2DOffscreen.canvas.toDataURL('image/png', 0.5);
       d.style.display = 'block';
-      // d.style.transform = `scale(${text.clientWidth / canvas.clientWidth},${text.clientHeight / canvas.clientHeight})`;
     }
     this.clearContext(1);
   }
@@ -978,17 +952,17 @@ class Diagram {
     // this.drawTimeoutId = setTimeout(this.renderToImages.bind(this), 100);
   }
 
-  renderToImages() {
-    // console.log('visibility1')
-    this.drawTimeoutId = null;
-    // if (this.webglLow.gl.canvas.style.top !== '-10000px') {
-    //   this.webglLow.gl.canvas.style.top = '-10000px';
-    //   this.waitForFrames = 1;
-    // }
-    this.renderAllElementsToTiedCanvases();
-    // this.centerDrawingLens();
-    // this.webglLow.gl.canvas.style.visibility = 'visible';
-  }
+  // renderToImages() {
+  //   // console.log('visibility1')
+  //   this.drawTimeoutId = null;
+  //   // if (this.webglLow.gl.canvas.style.top !== '-10000px') {
+  //   //   this.webglLow.gl.canvas.style.top = '-10000px';
+  //   //   this.waitForFrames = 1;
+  //   // }
+  //   this.renderAllElementsToTiedCanvases();
+  //   // this.centerDrawingLens();
+  //   // this.webglLow.gl.canvas.style.visibility = 'visible';
+  // }
 
   centerDrawingLens(fromTimeOut: boolean = false) {
     if (fromTimeOut) {
