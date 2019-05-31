@@ -132,6 +132,7 @@ class Diagram {
   scrolled: boolean;
   scrollingFast: boolean;
   scrollTimeoutId: ?TimeoutID;
+  drawTimeoutId: ?TimeoutID;
   oldScroll: number;
   fromWhere: string;      // used for drawing debug only
   oldWidth: number;
@@ -257,6 +258,7 @@ class Diagram {
     this.waitForFrames = 0;
     this.scrollingFast = false;
     this.scrollTimeoutId = null;
+    this.drawTimeoutId = null;
     this.oldScroll = window.pageYOffset;
     this.drawAnimationFrames = 0;
   }
@@ -493,7 +495,9 @@ class Diagram {
 
     this.drawQueued = true;
     // this.fromWhere = 'RenderToCanvas';
+    // console.log('drawing')
     this.draw(-1);
+    // console.log('done');
 
     // const { ctx } = new DrawContext2D(htmlCanvas);
 
@@ -523,13 +527,14 @@ class Diagram {
     //   text.width / 2 - textWidthOfCanvas / 2,
     //   text.height / 2 - textHeightOfCanvas / 2,
     // );
-
+    // console.log(gl.clientWidth, canvas.clientWidth, this.webglLow.gl.canvas.clientWidth, this.webglLow.gl.canvas.width, this.webglLow.gl.canvas.offsetWidth)
     const w = document.getElementById(`${htmlCanvasElementOrId}_webgl`);
     if (w instanceof HTMLImageElement) {
       w.src = this.webglLow.gl.canvas.toDataURL('image/png', 0.5);
       // w.src = offscreenCanvas.toDataURL();
       w.style.visibility = 'visible';
       w.style.transform = `scale(${gl.clientWidth / canvas.clientWidth},${gl.clientHeight / canvas.clientHeight})`;
+      // w.style.transform = `scale(1,${gl.clientHeight / canvas.clientHeight})`;
     }
 
 
@@ -538,6 +543,7 @@ class Diagram {
       d.src = this.draw2DLow.canvas.toDataURL('image/png', 0.5);
       d.style.visibility = 'visible';
       d.style.transform = `scale(${text.clientWidth / canvas.clientWidth},${text.clientHeight / canvas.clientHeight})`;
+      // d.style.transform = `scale(1,${text.clientHeight / canvas.clientHeight})`;
     }
     this.clearContext();
   }
@@ -566,7 +572,9 @@ class Diagram {
     //   console.log('unrender')
     //   this.elements.unrenderAll();
     // }
+    // console.log('before webgl')
     this.webglLow.resize();
+    // console.log('after webgl')
     // this.webglHigh.resize();
     this.draw2DLow.resize();
     // this.draw2DHigh.resize();
@@ -584,7 +592,8 @@ class Diagram {
     }
     if (this.oldWidth !== this.canvasLow.clientWidth) {
       // this.unrenderAll();
-      this.renderAllElementsToTiedCanvases(true);
+      // console.log('updating width')
+      // this.renderAllElementsToTiedCanvases(true);
       this.oldWidth = this.canvasLow.clientWidth;
     }
     this.animateNextFrame(true, 'resize');
@@ -947,10 +956,12 @@ class Diagram {
     this.drawQueued = false;
     this.clearContext();
 
+    // console.log('really drawing')
     this.elements.draw(
       this.spaceTransforms.diagramToGL,
       now,
     );
+    // console.log('really done')
 
 
     if (this.elements.isMoving()) {
@@ -961,6 +972,18 @@ class Diagram {
       this.drawAnimationFrames -= 1;
       this.animateNextFrame(true, 'queued frames');
     }
+
+    if (this.drawTimeoutId) {
+      clearTimeout(this.drawTimeoutId);
+      this.drawTimeoutId = null;
+    }
+    this.drawTimeoutId = setTimeout(this.renderToImages.bind(this), 100);
+  }
+
+  renderToImages() {
+    this.drawTimeoutId = null;
+    this.renderAllElementsToTiedCanvases();
+    this.centerDrawingLens();
   }
 
   centerDrawingLens(fromTimeOut: boolean = false) {

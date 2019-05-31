@@ -246,7 +246,7 @@ class WebGLInstance {
       Math.floor(this.gl.canvas.clientWidth  * realToCSSPixels);
     var displayHeight =
       Math.floor(this.gl.canvas.clientHeight * realToCSSPixels);
-
+    // console.log('in webgl', displayWidth)
     // Check if the canvas is not the same size.
     if (this.gl.canvas.width  !== displayWidth
         || this.gl.canvas.height !== displayHeight) {
