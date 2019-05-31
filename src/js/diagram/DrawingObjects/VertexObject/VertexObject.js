@@ -14,10 +14,10 @@ import DrawingObject from '../DrawingObject';
 //  - Setup the webgl buffer
 //  - Draw the shape
 class VertexObject extends DrawingObject {
-  gl: WebGLRenderingContext;    // shortcut for the webgl context
-  webgl: WebGLInstance;         // webgl instance for a html canvas
-  glPrimative: number;          // primitive tyle (e.g. TRIANGLE_STRIP)
-  buffer: WebGLBuffer;          // Vertex buffer
+  gl: Array<WebGLRenderingContext>;    // shortcut for the webgl context
+  webgl: Array<WebGLInstance>;         // webgl instance for a html canvas
+  glPrimative: number;                  // primitive tyle (e.g. TRIANGLE_STRIP)
+  buffer: Array<WebGLBuffer>;          // Vertex buffer
   // textureBuffer: WebGLBuffer;
 
   points: Array<number>;        // Primative vertices of shape
@@ -29,35 +29,43 @@ class VertexObject extends DrawingObject {
     src?: ?string;
     data?: ?Object;
     points: Array<number>;
-    buffer?: ?WebGLBuffer;
+    buffer?: ?Array<WebGLBuffer>;
     type: 'canvasText' | 'image';
   };
 
   state: 'loading' | 'loaded';
 
   +change: (Array<g2.Point>) => void;
-  programIndex: number;
+  programIndex: Array<number>;
 
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance> | WebGLInstance,
     vertexShader: string = 'simple',
     fragmentShader: string = 'simple',
   ) {
     super();
     this.numPoints = 0;
-    this.gl = webgl.gl;
-    this.webgl = webgl;
-    this.glPrimative = webgl.gl.TRIANGLES;
+    let webglArray;
+    if (Array.isArray(webgl)) {
+      webglArray = webgl;
+    } else {
+      webglArray = [webgl];
+    }
+    this.gl = webglArray.map(w => w.gl);
+    this.webgl = webglArray;
+    this.glPrimative = webglArray[0].gl.TRIANGLES;
     this.points = [];
     this.z = 0;
+    this.buffer = webglArray.map(() => null);
     // this.textureLocation = '';
     // this.texturePoints = [];
     this.texture = null;
-    this.programIndex = webgl.getProgram(vertexShader, fragmentShader);
+    this.programIndex = webglArray.map(w => w.getProgram(vertexShader, fragmentShader));
     this.type = 'vertexPrimative';
   }
 
   addTextureToBuffer(
+    glIndex: number,
     glTexture: WebGLTexture,
     image: Object, // image data
   ) {
@@ -65,112 +73,124 @@ class VertexObject extends DrawingObject {
       // eslint-disable-next-line no-bitwise
       return (value & (value - 1)) === 0;
     }
+    const gl = this.gl[glIndex];
+    const webgl = this.webgl[glIndex];
     const { texture } = this;
     if (texture != null) {
-      const { index } = this.webgl.textures[texture.id];
-      this.gl.activeTexture(this.gl.TEXTURE0 + index);
-      this.gl.bindTexture(this.gl.TEXTURE_2D, glTexture);
-      this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, 1);
-      this.gl.texImage2D(
-        this.gl.TEXTURE_2D, 0, this.gl.RGBA,
-        this.gl.RGBA, this.gl.UNSIGNED_BYTE, image,
+      const { index } = webgl.textures[texture.id];
+      gl.activeTexture(gl.TEXTURE0 + index);
+      gl.bindTexture(gl.TEXTURE_2D, glTexture);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+      gl.texImage2D(
+        gl.TEXTURE_2D, 0, gl.RGBA,
+        gl.RGBA, gl.UNSIGNED_BYTE, image,
       );
 
       // Check if the image is a power of 2 in both dimensions.
       if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
         // Yes, it's a power of 2. Generate mips.
-        this.gl.generateMipmap(this.gl.TEXTURE_2D);
+        gl.generateMipmap(gl.TEXTURE_2D);
       } else {
         // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
-        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
-        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
-        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
       }
     }
   }
 
   setupBuffer(numPoints: number = 0) {
-    this.state = 'loaded';
-    if (numPoints === 0) {
-      this.numPoints = this.points.length / 2.0;
-    } else {
-      this.numPoints = numPoints;
-    }
-
-    // if (this.texture && this.texture.points == null) {
-    //   this.texture.points = [];
-    //   this.createTextureMap();
-    // }
-
-    const { texture } = this;
-    if (texture != null) {
-      if (texture.points == null) {
-        texture.points = [];
-      }
-      if (texture.points.length === 0) {
-        this.createTextureMap();
+    for (let glIndex = 0; glIndex < this.webgl.length; glIndex += 1) {
+      const gl = this.gl[glIndex];
+      const webgl = this.webgl[glIndex];
+      // const texture = this.texture[glIndex];
+      // const buffer = this.buffer[glIndex];
+      this.state = 'loaded';
+      if (numPoints === 0) {
+        this.numPoints = this.points.length / 2.0;
+      } else {
+        this.numPoints = numPoints;
       }
 
-      texture.buffer = this.gl.createBuffer();
-      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, texture.buffer);
-      this.gl.bufferData(
-        this.gl.ARRAY_BUFFER,
-        new Float32Array(texture.points),
-        this.gl.STATIC_DRAW,
-      );
+      // if (this.texture && this.texture.points == null) {
+      //   this.texture.points = [];
+      //   this.createTextureMap();
+      // }
 
-      if (
-        !(texture.id in this.webgl.textures)
-        || (
-          texture.id in this.webgl.textures
-          && this.webgl.textures[texture.id].glTexture == null
-        )
-      ) {
-        const glTexture = this.gl.createTexture();
-        this.webgl.addTexture(texture.id, glTexture, texture.type);
-        this.gl.activeTexture(
-          this.gl.TEXTURE0 + this.webgl.textures[texture.id].index,
+      const { texture } = this;
+      if (texture != null) {
+        if (texture.points == null) {
+          texture.points = [];
+        }
+        if (texture.points.length === 0) {
+          this.createTextureMap();
+        }
+
+        if (texture.buffer == null) {
+          texture.buffer = this.gl.map(() => null);
+        }
+
+        texture.buffer[glIndex] = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, texture.buffer[glIndex]);
+        gl.bufferData(
+          gl.ARRAY_BUFFER,
+          new Float32Array(texture.points),
+          gl.STATIC_DRAW,
         );
-        this.gl.bindTexture(this.gl.TEXTURE_2D, glTexture);
-        const { src } = texture;
-        if (src) {
-          // Fill the texture with a 1x1 blue pixel.
-          this.gl.texImage2D(
-            this.gl.TEXTURE_2D, 0, this.gl.RGBA, 1, 1, 0,
-            this.gl.RGBA, this.gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 255, 100]),
+
+        if (
+          !(texture.id in webgl.textures)
+          || (
+            texture.id in webgl.textures
+            && webgl.textures[texture.id].glTexture == null
+          )
+        ) {
+          const glTexture = gl.createTexture();
+          webgl.addTexture(texture.id, glTexture, texture.type);
+          gl.activeTexture(
+            gl.TEXTURE0 + webgl.textures[texture.id].index,
           );
-          const image = new Image();
-          image.src = src;
-          this.state = 'loading';
-          this.webgl.textures[texture.id].state = 'loading';
-          this.webgl.textures[texture.id].onLoad.push(this.executeOnLoad.bind(this));
-          image.addEventListener('load', () => {
-            // Now that the image has loaded make copy it to the texture.
-            texture.data = image;
-            this.addTextureToBuffer(glTexture, texture.data);
-            // if (this.onLoad != null) {
-            this.webgl.onLoad(texture.id);
-            // this.onLoad();
-            // }
+          gl.bindTexture(gl.TEXTURE_2D, glTexture);
+          const { src } = texture;
+          if (src) {
+            // Fill the texture with a 1x1 blue pixel.
+            gl.texImage2D(
+              gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0,
+              gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 255, 100]),
+            );
+            const image = new Image();
+            image.src = src;
+            this.state = 'loading';
+            webgl.textures[texture.id].state = 'loading';
+            webgl.textures[texture.id].onLoad.push(this.executeOnLoad.bind(this));
+            image.addEventListener('load', () => {
+              // Now that the image has loaded make copy it to the texture.
+              texture.data = image;
+              this.addTextureToBuffer(glIndex, glTexture, texture.data);
+              // if (this.onLoad != null) {
+              webgl.onLoad(texture.id);
+              // this.onLoad();
+              // }
+              this.state = 'loaded';
+              webgl.textures[texture.id].state = 'loaded';
+            });
+          } else if (texture.data != null) {
+            this.addTextureToBuffer(glIndex, glTexture, texture.data);
+          }
+        } else if (texture.id in webgl.textures) {
+          if (webgl.textures[texture.id].state === 'loading') {
+            this.state = 'loading';
+            webgl.textures[texture.id].onLoad.push(this.executeOnLoad.bind(this));
+          } else {
             this.state = 'loaded';
-            this.webgl.textures[texture.id].state = 'loaded';
-          });
-        } else if (texture.data != null) {
-          this.addTextureToBuffer(glTexture, texture.data);
-        }
-      } else if (texture.id in this.webgl.textures) {
-        if (this.webgl.textures[texture.id].state === 'loading') {
-          this.state = 'loading';
-          this.webgl.textures[texture.id].onLoad.push(this.executeOnLoad.bind(this));
-        } else {
-          this.state = 'loaded';
+          }
         }
       }
-    }
 
-    this.buffer = this.gl.createBuffer();
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.points), this.gl.STATIC_DRAW);
+      this.buffer[glIndex] = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer[glIndex]);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.points), gl.STATIC_DRAW);
+    }
   }
 
   executeOnLoad() {
@@ -180,21 +200,27 @@ class VertexObject extends DrawingObject {
   }
 
   resetBuffer(numPoints: number = 0) {
-    const { texture } = this;
-    if (texture) {
-      // this.gl.activeTexture(this.gl.TEXTURE0 + texture.index);
-      // this.gl.bindTexture(this.gl.TEXTURE_2D, null);
-      if (this.webgl.textures[texture.id].glTexture != null) {
-        this.gl.deleteTexture(this.webgl.textures[texture.id].glTexture);
-        this.webgl.textures[texture.id].glTexture = null;
+    for (let glIndex = 0; glIndex < this.webgl.length; glIndex += 1) {
+      const gl = this.gl[glIndex];
+      const webgl = this.webgl[glIndex];
+      const { texture } = this;
+      if (texture) {
+        // this.gl.activeTexture(this.gl.TEXTURE0 + texture.index);
+        // this.gl.bindTexture(this.gl.TEXTURE_2D, null);
+        if (webgl.textures[texture.id].glTexture != null) {
+          gl.deleteTexture(webgl.textures[texture.id].glTexture);
+          webgl.textures[texture.id].glTexture = null;
+        }
+        if (texture.buffer != null) {
+          gl.deleteBuffer(texture.buffer[glIndex]);
+          texture.buffer[glIndex] = null;
+        }
+        // texture.glTexture = null;
       }
-      this.gl.deleteBuffer(texture.buffer);
-      // texture.glTexture = null;
-      texture.buffer = null;
+      // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
+      gl.deleteBuffer(this.buffer[glIndex]);
+      this.setupBuffer(numPoints);
     }
-    // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
-    this.gl.deleteBuffer(this.buffer);
-    this.setupBuffer(numPoints);
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -291,30 +317,35 @@ class VertexObject extends DrawingObject {
     scale: g2.Point,
     count: number,
     color: Array<number>,
-    webGLInstance: WebGLInstance = this.webgl,
+    glIndex: number = 0,
+    // webGLInstance: WebGLInstance = this.webgl,
   ) {
     let transformation = m2.identity();
     transformation = m2.translate(transformation, translation.x, translation.y);
     transformation = m2.rotate(transformation, rotation);
     transformation = m2.scale(transformation, scale.x, scale.y);
-    this.drawWithTransformMatrix(m2.t(transformation), color, count, webGLInstance);
+    this.drawWithTransformMatrix(m2.t(transformation), color, count, glIndex);
   }
 
   drawWithTransformMatrix(
     transformMatrix: Array<number>,
     color: Array<number>,
     count: number,
-    webglInstance: WebGLInstance = this.webgl,
+    glIndex: number = 0,
+    // webglInstance: WebGLInstance = this.webgl,
   ) {
+    const gl = this.gl[glIndex];
+    const webglInstance = this.webgl[glIndex];
+
     const size = 2;         // 2 components per iteration
-    const type = this.gl.FLOAT;   // the data is 32bit floats
+    const type = gl.FLOAT;   // the data is 32bit floats
     const normalize = false;    // don't normalize the data
     // 0 = move forward size * sizeof(type) each iteration to get
     // the next position
     const stride = 0;
     const offset = 0;       // start at the beginning of the buffer
 
-    const locations = webglInstance.useProgram(this.programIndex);
+    const locations = webglInstance.useProgram(this.programIndex[glIndex]);
 
     if (
       this.texture
@@ -322,32 +353,32 @@ class VertexObject extends DrawingObject {
     ) {
       // this.gl.pixelStorei(this.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
       // this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA);
-      this.gl.pixelStorei(this.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
-      this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+      gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     } else {
-      this.gl.pixelStorei(this.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
-      this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+      gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     }
     // Turn on the attribute
-    this.gl.enableVertexAttribArray(locations.a_position);
+    gl.enableVertexAttribArray(locations.a_position);
 
     // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffer);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer[glIndex]);
     // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-    this.gl.vertexAttribPointer(
+    gl.vertexAttribPointer(
       locations.a_position,
       size, type, normalize, stride, offset,
     );
 
-    this.gl.uniformMatrix3fv(
+    gl.uniformMatrix3fv(
       locations.u_matrix,
       false,
       m2.t(transformMatrix),
     );  // Translate
 
-    this.gl.uniform1f(locations.u_z, this.z);
+    gl.uniform1f(locations.u_z, this.z);
 
-    this.gl.uniform4f(
+    gl.uniform4f(
       locations.u_color,
       color[0], color[1], color[2], color[3],
     );  // Translate
@@ -357,33 +388,33 @@ class VertexObject extends DrawingObject {
       // Textures
       // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
       const texSize = 2;          // 2 components per iteration
-      const texType = this.gl.FLOAT;   // the data is 32bit floats
+      const texType = gl.FLOAT;   // the data is 32bit floats
       const texNormalize = false; // don't normalize the data
       const texStride = 0;
       // 0 = move forward size * sizeof(type) each iteration to get
       // the next position
       const texOffset = 0;        // start at the beginning of the buffer
 
-      this.gl.enableVertexAttribArray(locations.a_texcoord);
-      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, texture.buffer);
-      this.gl.vertexAttribPointer(
+      gl.enableVertexAttribArray(locations.a_texcoord);
+      gl.bindBuffer(gl.ARRAY_BUFFER, texture.buffer[glIndex]);
+      gl.vertexAttribPointer(
         locations.a_texcoord, texSize, texType,
         texNormalize, texStride, texOffset,
       );
     }
     if (texture) {
-      this.gl.uniform1i(locations.u_use_texture, 1);
+      gl.uniform1i(locations.u_use_texture, 1);
       const { index } = webglInstance.textures[texture.id];
       // console.log(texture.id, index, webglInstance.textures)
-      this.gl.uniform1i(locations.u_texture, index);
+      gl.uniform1i(locations.u_texture, index);
     } else {
-      this.gl.uniform1i(locations.u_use_texture, 0);
+      gl.uniform1i(locations.u_use_texture, 0);
     }
 
-    this.gl.drawArrays(this.glPrimative, offset, count);
+    gl.drawArrays(this.glPrimative, offset, count);
 
     if (texture) {
-      this.gl.disableVertexAttribArray(locations.a_texcoord);
+      gl.disableVertexAttribArray(locations.a_texcoord);
     }
   }
 

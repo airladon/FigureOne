@@ -23,7 +23,7 @@ class VertexIntegral extends VertexObject {
     serif: boolean = true,
   ) {
     super(webgl);
-    this.glPrimative = this.gl.TRIANGLE_STRIP;
+    this.glPrimative = this.gl[0].TRIANGLE_STRIP;
     // let mul = 0.5;
     // if (lineHeight === 1) {
     //   mul = 1;
