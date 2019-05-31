@@ -1451,9 +1451,9 @@ class DiagramElementPrimative extends DiagramElement {
     return primative;
   }
 
-  clear() {
+  clear(canvasIndex: number = 0) {
     if (this.drawingObject instanceof TextObject) {
-      this.drawingObject.clear();
+      this.drawingObject.clear(canvasIndex);
     }
   }
 
@@ -1588,7 +1588,7 @@ class DiagramElementPrimative extends DiagramElement {
       }
       const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity];
       pulseTransforms.forEach((t) => {
-        this.drawingObject.drawWithTransformMatrix(t.matrix(), colorToUse, pointCount, canvasIndex);
+        this.drawingObject.drawWithTransformMatrix(t.matrix(), colorToUse, canvasIndex, pointCount);
       });
       if (this.unrenderNextDraw) {
         this.clearRender();
@@ -1946,10 +1946,10 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  clear() {
+  clear(canvasIndex: number = 0) {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.clear();
+      element.clear(canvasIndex);
     }
   }
 

@@ -324,14 +324,14 @@ class VertexObject extends DrawingObject {
     transformation = m2.translate(transformation, translation.x, translation.y);
     transformation = m2.rotate(transformation, rotation);
     transformation = m2.scale(transformation, scale.x, scale.y);
-    this.drawWithTransformMatrix(m2.t(transformation), color, count, glIndex);
+    this.drawWithTransformMatrix(m2.t(transformation), color, glIndex, count);
   }
 
   drawWithTransformMatrix(
     transformMatrix: Array<number>,
     color: Array<number>,
+    glIndex: number,
     count: number,
-    glIndex: number = 0,
     // webglInstance: WebGLInstance = this.webgl,
   ) {
     const gl = this.gl[glIndex];

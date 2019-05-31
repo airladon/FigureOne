@@ -183,6 +183,10 @@ class Diagram {
             && child.classList.contains('diagram__text')) {
             this.textCanvasLow = child;
           }
+          if (child instanceof HTMLCanvasElement
+            && child.classList.contains('diagram__text__offscreen')) {
+            this.textCanvasOffscreen = child;
+          }
           if (child.classList.contains('diagram__html')
           ) {
             this.htmlCanvas = child;
@@ -202,6 +206,10 @@ class Diagram {
           this.webglOffscreen = webglOffscreen;
         }
         this.draw2DLow = new DrawContext2D(this.textCanvasLow);
+        if (this.textCanvasOffscreen) {
+          const draw2DOffscreen = new DrawContext2D(this.textCanvasOffscreen);
+          this.draw2DOffscreen = draw2DOffscreen;
+        }
         // this.draw2DHigh = new DrawContext2D(this.textCanvasHigh);
       }
     }
@@ -304,7 +312,10 @@ class Diagram {
     if (this.webglOffscreen) {
       webgl.push(this.webglOffscreen);
     }
-    const draw2D = this.draw2DLow;
+    const draw2D = [this.draw2DLow];
+    if (this.draw2DOffscreen) {
+      draw2D.push(this.draw2DOffscreen);
+    }
     // if (high) {
     //   webgl = this.webglHigh;
     //   draw2D = this.draw2DHigh;
@@ -459,7 +470,7 @@ class Diagram {
     // Stop animations and render
     elementToRender.isRenderedAsImage = false;
     elementToRender.stop(true, true);
-    
+
     this.renderToCanvas(elementToRender.tieToHTML.element);
     elementToRender.isRenderedAsImage = true;
     // reset position
@@ -515,7 +526,7 @@ class Diagram {
 
     const canvas = getDimensions(htmlCanvas);
     const gl = getDimensions(this.webglOffscreen.gl.canvas);
-    const text = getDimensions(this.draw2DLow.canvas);
+    const text = getDimensions(this.draw2DOffscreen.canvas);
 
     // const glWidthOfCanvas = canvas.clientWidth / gl.clientWidth * gl.width;
     // const glHeightOfCanvas = canvas.clientHeight / gl.clientHeight * gl.height;
@@ -545,7 +556,7 @@ class Diagram {
 
     const d = document.getElementById(`${htmlCanvasElementOrId}_2d`);
     if (d instanceof HTMLImageElement) {
-      d.src = this.draw2DLow.canvas.toDataURL('image/png', 0.5);
+      d.src = this.draw2DOffscreen.canvas.toDataURL('image/png', 0.5);
       d.style.visibility = 'visible';
       d.style.transform = `scale(${text.clientWidth / canvas.clientWidth},${text.clientHeight / canvas.clientHeight})`;
       // d.style.transform = `scale(1,${text.clientHeight / canvas.clientHeight})`;
@@ -907,7 +918,7 @@ class Diagram {
     }
     // this.webglHigh.gl.clearColor(0, 0, 0, 0);
     // this.webglHigh.gl.clear(this.webglHigh.gl.COLOR_BUFFER_BIT);
-    this.elements.clear();
+    this.elements.clear(canvasIndex);
   }
 
   // scroll() {

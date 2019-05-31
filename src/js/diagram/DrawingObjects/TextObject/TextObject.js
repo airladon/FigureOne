@@ -101,7 +101,7 @@ class DiagramText {
 // TextObject is the DrawingObject used in the DiagramElementPrimative.
 // TextObject will draw an array of DiagramText objects.
 class TextObject extends DrawingObject {
-  drawContext2D: DrawContext2D;
+  drawContext2D: Array<DrawContext2D>;
   border: Array<Array<Point>>;
   text: Array<DiagramText>;
   scalingFactor: number;
@@ -114,11 +114,15 @@ class TextObject extends DrawingObject {
   }>;
 
   constructor(
-    drawContext2D: DrawContext2D,
+    drawContext2D: Array<DrawContext2D> | DrawContext2D,
     text: Array<DiagramText> = [],
   ) {
     super();
-    this.drawContext2D = drawContext2D;
+    if (Array.isArray(drawContext2D)) {
+      this.drawContext2D = drawContext2D;
+    } else {
+      this.drawContext2D = [drawContext2D];
+    }
     this.text = text;
     this.scalingFactor = 1;
     this.lastDraw = [];
@@ -228,8 +232,10 @@ class TextObject extends DrawingObject {
   drawWithTransformMatrix(
     transformMatrix: Array<number>,
     color: Array<number> = [1, 1, 1, 1],
+    contextIndex: number = 0,
   ) {
-    const { ctx } = this.drawContext2D;
+    const drawContext2D = this.drawContext2D[contextIndex];
+    const { ctx } = this.drawContext2D[contextIndex];
     // Arbitrary scaling factor used to ensure font size is >> 1 pixel
     // const scalingFactor = this.drawContext2D.canvas.offsetHeight /
     //                       (this.diagramLimits.height / 1000);
@@ -249,11 +255,11 @@ class TextObject extends DrawingObject {
     // like to pixel space.
     // When zoomed: 1 pixel = 1 GL unit.
     // Zoom in so limits betcome 0 to 2:
-    const sx = this.drawContext2D.canvas.offsetWidth / 2 / scalingFactor;
-    const sy = this.drawContext2D.canvas.offsetHeight / 2 / scalingFactor;
+    const sx = drawContext2D.canvas.offsetWidth / 2 / scalingFactor;
+    const sy = drawContext2D.canvas.offsetHeight / 2 / scalingFactor;
     // Translate so limits become -1 to 1
-    const tx = this.drawContext2D.canvas.offsetWidth / 2;
-    const ty = this.drawContext2D.canvas.offsetHeight / 2;
+    const tx = drawContext2D.canvas.offsetWidth / 2;
+    const ty = drawContext2D.canvas.offsetHeight / 2;
 
     // Modify the incoming transformMatrix to be compatible with zoomed
     // pixel space
@@ -342,10 +348,10 @@ class TextObject extends DrawingObject {
     // console.log(this.lastDraw)
   }
 
-  clear() {
+  clear(contextIndex: number = 0) {
     const { lastDraw } = this;
     if (lastDraw.length > 0) {
-      const { ctx } = this.drawContext2D;
+      const { ctx } = this.drawContext2D[contextIndex];
       const t = this.lastDrawTransform;
       ctx.save();
       ctx.transform(t[0], t[3], t[1], t[4], t[2], t[5]);
@@ -465,15 +471,15 @@ class TextObject extends DrawingObject {
     };
   }
 
-  getBoundaryOfText(text: DiagramText): Array<Point> {
+  getBoundaryOfText(text: DiagramText, contextIndex: number = 0): Array<Point> {
     const boundary = [];
 
     const { scalingFactor } = this;
 
     // Measure the text
-    text.font.set(this.drawContext2D.ctx, scalingFactor);
+    text.font.set(this.drawContext2D[contextIndex].ctx, scalingFactor);
     // const textMetrics = this.drawContext2D.ctx.measureText(text.text);
-    const textMetrics = this.measureText(this.drawContext2D.ctx, text);
+    const textMetrics = this.measureText(this.drawContext2D[contextIndex].ctx, text);
     // Create a box around the text
     const { location } = text;
     const box = [
@@ -504,6 +510,7 @@ class TextObject extends DrawingObject {
   getGLBoundaryOfText(
     text: DiagramText,
     lastDrawTransformMatrix: Array<number>,
+    contextIndex: number = 0,
   ): Array<Point> {
     const glBoundary = [];
 
@@ -533,7 +540,7 @@ class TextObject extends DrawingObject {
     //     -textMetrics.fontBoundingBoxDescent / scalingFactor,
     //   ).add(location),
     // ];
-    const box = this.getBoundaryOfText(text);
+    const box = this.getBoundaryOfText(text, contextIndex);
     box.forEach((p) => {
       glBoundary.push(p.transformBy(lastDrawTransformMatrix));
     });
