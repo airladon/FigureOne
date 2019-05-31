@@ -1627,28 +1627,28 @@ class DiagramElementPrimative extends DiagramElement {
     return false;
   }
 
-  setupWebGLBuffers(newWebgl: WebGLInstance) {
-    const { drawingObject } = this;
-    if (drawingObject instanceof VertexObject) {
-      const oldWebgl = drawingObject.webgl;
-      drawingObject.webgl = newWebgl;
-      drawingObject.gl = newWebgl.gl;
-      drawingObject.setupBuffer();
-      drawingObject.webgl = oldWebgl;
-      drawingObject.gl = oldWebgl.gl;
-    }
-  }
+  // setupWebGLBuffers(newWebgl: WebGLInstance) {
+  //   const { drawingObject } = this;
+  //   if (drawingObject instanceof VertexObject) {
+  //     const oldWebgl = drawingObject.webgl;
+  //     drawingObject.webgl = newWebgl;
+  //     drawingObject.gl = newWebgl.gl;
+  //     drawingObject.setupBuffer();
+  //     drawingObject.webgl = oldWebgl;
+  //     drawingObject.gl = oldWebgl.gl;
+  //   }
+  // }
 
-  changeWebGLInstance(newWebgl: WebGLInstance) {
-    let oldWebgl;
-    const { drawingObject } = this;
-    if (drawingObject instanceof VertexObject) {
-      oldWebgl = drawingObject.webgl;
-      drawingObject.webgl = newWebgl;
-      drawingObject.gl = newWebgl.gl;
-    }
-    return oldWebgl;
-  }
+  // changeWebGLInstance(newWebgl: WebGLInstance) {
+  //   let oldWebgl;
+  //   const { drawingObject } = this;
+  //   if (drawingObject instanceof VertexObject) {
+  //     oldWebgl = drawingObject.webgl;
+  //     drawingObject.webgl = newWebgl;
+  //     drawingObject.gl = newWebgl.gl;
+  //   }
+  //   return oldWebgl;
+  // }
 
   getGLBoundaries() {
     return this.drawingObject.getGLBoundaries(this.lastDrawTransform.matrix());
