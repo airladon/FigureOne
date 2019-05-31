@@ -43,7 +43,7 @@ class VertexBracket extends VertexObject {
   }
 
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     side: 'left' | 'right' | 'top' | 'bottom',
     numLines: number = 1,
   ) {

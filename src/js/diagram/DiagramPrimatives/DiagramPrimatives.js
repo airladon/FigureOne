@@ -91,7 +91,7 @@ export type TypeRepeatPatternVertex = {
 };
 
 export default class DiagramPrimatives {
-  webgl: WebGLInstance;
+  webgl: Array<WebGLInstance>;
   draw2D: DrawContext2D;
   htmlCanvas: HTMLElement;
   limits: Rect;
@@ -100,7 +100,7 @@ export default class DiagramPrimatives {
   draw2DFigures: Object;
 
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance> | WebGLInstance,
     draw2D: DrawContext2D,
     // draw2DFigures: Object,
     htmlCanvas: HTMLElement,
@@ -108,7 +108,12 @@ export default class DiagramPrimatives {
     spaceTransforms: TypeSpaceTransforms,
     animateNextFrame: Function,
   ) {
-    this.webgl = webgl;
+    if (Array.isArray(webgl)) {
+      this.webgl = webgl;
+    } else {
+      this.webgl = [webgl];
+    }
+    // this.webgl = webgl;
     this.draw2D = draw2D;
     this.htmlCanvas = htmlCanvas;
     this.limits = limits;

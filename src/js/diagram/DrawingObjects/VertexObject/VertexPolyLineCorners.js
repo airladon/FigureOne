@@ -29,7 +29,7 @@ function cornerLength(coords, length, forceLength = true) {
 
 class PolyLineCorners extends VertexObject {
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     coords: Array<Point>,
     close: boolean,
     length: number,

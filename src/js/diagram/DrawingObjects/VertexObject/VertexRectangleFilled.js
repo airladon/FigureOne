@@ -11,7 +11,7 @@ export type TypeVertexRectangleFilledReference = 'topLeft' | 'topRight' | 'botto
 export default class VertexRectangleFilled extends VertexObject {
   start: Point;
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     alignH: 'left' | 'center' | 'right' | number,
     alignV: 'bottom' | 'middle' | 'top' | number,
     width: number = 1,

@@ -24,7 +24,7 @@ type TypeTextInputOptions = {
 };
 
 function Text(
-  webgl: WebGLInstance,
+  webgl: Array<WebGLInstance>,
   diagramLimits: Rect,
   optionsIn: TypeTextInputOptions,
 ) {

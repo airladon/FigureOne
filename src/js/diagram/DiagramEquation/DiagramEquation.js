@@ -66,7 +66,7 @@ export type TypeEquationPhrase =
     }>;
 
 export default class DiagramEquation {
-  webgl: WebGLInstance;
+  webgl: Array<WebGLInstance>;
   draw2D: DrawContext2D;
   limits: Rect;
   shapes: Object;

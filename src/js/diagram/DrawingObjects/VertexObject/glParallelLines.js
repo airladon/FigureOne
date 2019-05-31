@@ -8,7 +8,7 @@ class GLParallelLines extends VertexObject {
   num: number;
 
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     num: number = 10,
     spacing: number = 0.1,
     start: Point = new Point(0, 0),

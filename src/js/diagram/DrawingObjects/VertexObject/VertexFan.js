@@ -13,11 +13,11 @@ class VertextFan extends VertexObject {
   dAngle: number;       // angle between adjacent verteces to center lines
 
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     points: Array<Point>,
   ) {
     super(webgl);
-    this.glPrimative = webgl.gl.TRIANGLE_FAN;
+    this.glPrimative = webgl[0].gl.TRIANGLE_FAN;
 
     this.points = [];
     points.forEach((p) => {

@@ -12,7 +12,7 @@ import WebGLInstance from '../webgl/webgl';
 export type TypePolyLineBorderToPoint = TypeVertexPolyLineBorderToPoint;
 
 function PolyLine(
-  webgl: WebGLInstance,
+  webgl: Array<WebGLInstance>,
   points: Array<Point>,
   close: boolean,
   lineWidth: number,
@@ -32,7 +32,7 @@ function PolyLine(
 }
 
 function PolyLineCorners(
-  webgl: WebGLInstance,
+  webgl: Array<WebGLInstance>,
   points: Array<Point>,
   close: boolean,
   cornerLength: number,

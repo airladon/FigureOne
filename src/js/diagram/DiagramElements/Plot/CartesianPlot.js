@@ -19,7 +19,7 @@ class CartesianPlot extends DiagramElementCollection {
   glBoundingRect: Rect;
 
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     drawContext2D: DrawContext2D,
     plotProperties: CartesianPlotProperties = new CartesianPlotProperties(),
     transform: Transform = new Transform().scale(1, 1).rotate(0).translate(0, 0),

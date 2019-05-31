@@ -8,7 +8,7 @@ import {
 import WebGLInstance from '../webgl/webgl';
 
 function RadialLines(
-  webgl: WebGLInstance,
+  webgl: Array<WebGLInstance>,
   innerRadius: number = 0,
   outerRadius: number = 1,
   width: number = 0.05,

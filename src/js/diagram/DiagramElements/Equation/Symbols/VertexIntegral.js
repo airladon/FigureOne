@@ -18,7 +18,7 @@ class VertexIntegral extends VertexObject {
   height: number;
 
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     lineHeight: number = 1,
     serif: boolean = true,
   ) {

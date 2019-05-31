@@ -8,7 +8,7 @@ import {
 import WebGLInstance from '../webgl/webgl';
 
 export default function Arrow(
-  webgl: WebGLInstance,
+  webgl: Array<WebGLInstance>,
   width: number = 1,
   legWidth: number = 0.5,
   height: number = 1,

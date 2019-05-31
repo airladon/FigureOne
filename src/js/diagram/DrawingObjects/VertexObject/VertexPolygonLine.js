@@ -11,7 +11,7 @@ class VertexPolygonLine extends VertexObject {
   dAngle: number;       // angle between adjacent verteces to center lines
 
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     numSides: number,       // Must be 3 or greater (def: 3 if smaller)
     radius: number,
     rotation: number = 0,
@@ -22,7 +22,7 @@ class VertexPolygonLine extends VertexObject {
   ) {
     // setup webgl stuff
     super(webgl);
-    this.glPrimative = webgl.gl.LINES;
+    this.glPrimative = webgl[0].gl.LINES;
 
     // Check potential errors in constructor input
     let sides = numSides;

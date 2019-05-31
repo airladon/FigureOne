@@ -13,7 +13,7 @@ class TickMarks extends DiagramElementPrimative {
   start: g2.Point;
 
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     num: number = 10,
     spacing: number = 0.1,
     start: g2.Point = new g2.Point(0, 0),

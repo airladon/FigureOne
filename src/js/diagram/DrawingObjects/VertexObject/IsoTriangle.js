@@ -8,7 +8,7 @@ import VertexObject from './VertexObject';
 class IsoTriangle extends VertexObject {
   height: number;
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     width: number = 1,
     height: number = 2,
     tip: Point = new Point(0, 0),

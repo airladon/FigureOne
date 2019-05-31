@@ -8,7 +8,7 @@ class VertexArrow extends VertexObject {
   height: number;
 
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     width: number = 1,
     legWidth: number = 0.5,
     height: number = 1,

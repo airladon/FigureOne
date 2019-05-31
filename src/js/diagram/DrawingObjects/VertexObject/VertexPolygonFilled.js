@@ -13,7 +13,7 @@ class PolygonFilled extends VertexObject {
   dAngle: number;       // angle between adjacent verteces to center lines
 
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     numSides: number,
     radius: number,
     rotation: number = 0,
@@ -27,7 +27,7 @@ class PolygonFilled extends VertexObject {
     } else {
       super(webgl);
     }
-    this.glPrimative = webgl.gl.TRIANGLE_FAN;
+    this.glPrimative = webgl[0].gl.TRIANGLE_FAN;
 
     // Check potential errors in constructor input
     let sides = numSides;
