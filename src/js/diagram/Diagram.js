@@ -541,29 +541,11 @@ class Diagram {
     const gl = getDimensions(this.webglOffscreen.gl.canvas);
     const text = getDimensions(this.draw2DOffscreen.canvas);
 
-    // const glWidthOfCanvas = canvas.clientWidth / gl.clientWidth * gl.width;
-    // const glHeightOfCanvas = canvas.clientHeight / gl.clientHeight * gl.height;
-    // const glStartOfCanavas = new Point(
-    //   gl.width / 2 - glWidthOfCanvas / 2,
-    //   gl.height / 2 - glHeightOfCanvas / 2,
-    // );
-
-    // const textWidthOfCanvas = canvas.clientWidth / text.clientWidth
-    //                           * text.width;
-    // const textHeightOfCanvas = canvas.clientHeight / text.clientHeight
-    //                            * text.height;
-    // const textStartOfCanvas = new Point(
-    //   text.width / 2 - textWidthOfCanvas / 2,
-    //   text.height / 2 - textHeightOfCanvas / 2,
-    // );
-    // console.log(gl.clientWidth, canvas.clientWidth, this.webglLow.gl.canvas.clientWidth, this.webglLow.gl.canvas.width, this.webglLow.gl.canvas.offsetWidth)
     const w = document.getElementById(`${htmlCanvasElementOrId}_webgl`);
     if (w instanceof HTMLImageElement) {
       w.src = this.webglOffscreen.gl.canvas.toDataURL('image/png', 0.5);
-      // w.src = offscreenCanvas.toDataURL();
       w.style.visibility = 'visible';
       w.style.transform = `scale(${gl.clientWidth / canvas.clientWidth},${gl.clientHeight / canvas.clientHeight})`;
-      // w.style.transform = `scale(1,${gl.clientHeight / canvas.clientHeight})`;
     }
 
 
@@ -572,7 +554,6 @@ class Diagram {
       d.src = this.draw2DOffscreen.canvas.toDataURL('image/png', 0.5);
       d.style.visibility = 'visible';
       d.style.transform = `scale(${text.clientWidth / canvas.clientWidth},${text.clientHeight / canvas.clientHeight})`;
-      // d.style.transform = `scale(1,${text.clientHeight / canvas.clientHeight})`;
     }
     this.clearContext(1);
   }
@@ -587,26 +568,8 @@ class Diagram {
 
   // resize should only be called if the viewport size has changed.
   resize(skipHTMLTie: boolean = false) {
-    // console.log('resize', fromWgere, event)
-    // if (this.elements != null) {
-    //   this.elements.updateLimits(this.limits, this.spaceTransforms);
-    // }
-    // if (this.count == null) {
-    //   this.count = 0;
-    // } else {
-    //   this.count += 1
-    // }
-    // console.log('resize')
-    // if (this.count > 2) {
-    //   console.log('unrender')
-    //   this.elements.unrenderAll();
-    // }
-    // console.log('before webgl')
     this.webglLow.resize();
-    // console.log('after webgl')
-    // this.webglHigh.resize();
     this.draw2DLow.resize();
-    // this.draw2DHigh.resize();
     this.setSpaceTransforms();
     if (this.elements != null) {
       this.elements.updateLimits(this.limits, this.spaceTransforms);
@@ -622,7 +585,7 @@ class Diagram {
     if (this.oldWidth !== this.canvasLow.clientWidth) {
       // this.unrenderAll();
       // console.log('updating width')
-      // this.renderAllElementsToTiedCanvases(true);
+      this.renderAllElementsToTiedCanvases();
       this.oldWidth = this.canvasLow.clientWidth;
     }
     this.animateNextFrame(true, 'resize');
@@ -1008,24 +971,24 @@ class Diagram {
       this.animateNextFrame(true, 'queued frames');
     }
 
-    // if (this.drawTimeoutId) {
-    //   clearTimeout(this.drawTimeoutId);
-    //   this.drawTimeoutId = null;
-    // }
-    // this.drawTimeoutId = setTimeout(this.renderToImages.bind(this), 100);
+    if (this.drawTimeoutId) {
+      clearTimeout(this.drawTimeoutId);
+      this.drawTimeoutId = null;
+    }
+    this.drawTimeoutId = setTimeout(this.renderToImages.bind(this), 100);
   }
 
-  // renderToImages() {
-  //   console.log('visibility1')
-  //   this.drawTimeoutId = null;
-  //   if (this.webglLow.gl.canvas.style.top !== '-10000px') {
-  //     this.webglLow.gl.canvas.style.top = '-10000px';
-  //     this.waitForFrames = 1;
-  //   }
-  //   this.renderAllElementsToTiedCanvases();
-  //   this.centerDrawingLens();
-  //   this.webglLow.gl.canvas.style.visibility = 'visible';
-  // }
+  renderToImages() {
+    // console.log('visibility1')
+    this.drawTimeoutId = null;
+    // if (this.webglLow.gl.canvas.style.top !== '-10000px') {
+    //   this.webglLow.gl.canvas.style.top = '-10000px';
+    //   this.waitForFrames = 1;
+    // }
+    this.renderAllElementsToTiedCanvases();
+    this.centerDrawingLens();
+    // this.webglLow.gl.canvas.style.visibility = 'visible';
+  }
 
   centerDrawingLens(fromTimeOut: boolean = false) {
     if (fromTimeOut) {
