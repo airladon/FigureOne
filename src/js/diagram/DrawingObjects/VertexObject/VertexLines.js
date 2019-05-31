@@ -12,7 +12,7 @@ class VertexLines extends VertexObject {
     numLinesThick: number = 1,
   ): void {
     super(webgl);
-    this.glPrimative = this.gl.LINES;
+    this.glPrimative = this.gl[0].LINES;
 
     this.points = [];
     linePairs.forEach((line) => {
