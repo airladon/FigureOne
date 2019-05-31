@@ -451,17 +451,19 @@ class Diagram {
     // Move it to the origin to render
     const oldPosition = elementToRender.getPosition();
     const oldScale = elementToRender.getScale();
+    elementToRender.updateHTMLElementTie(this.canvasOffscreen);
     elementToRender.setPosition(0, 0);
     // elementToRender.updateHTMLElementTieScale(this.canvasLow);
     // Stop animations and render
     elementToRender.isRenderedAsImage = false;
     elementToRender.stop(true, true);
+    
     this.renderToCanvas(elementToRender.tieToHTML.element);
     elementToRender.isRenderedAsImage = true;
     // reset position
     elementToRender.setPosition(oldPosition);
     elementToRender.setScale(oldScale);
-
+    // elementToRender.updateHTMLElementTie(this.canvasLow);
     // this.draw(-1);
     // this.fromWhere = 'reset Position';
     // elementToRender.hide();
@@ -497,7 +499,7 @@ class Diagram {
     this.drawQueued = true;
     // this.fromWhere = 'RenderToCanvas';
     // console.log('drawing')
-    this.draw(-1);
+    this.draw(-1, 1);
     // console.log('done');
 
     // const { ctx } = new DrawContext2D(htmlCanvas);
@@ -510,7 +512,7 @@ class Diagram {
     });
 
     const canvas = getDimensions(htmlCanvas);
-    const gl = getDimensions(this.webglLow.gl.canvas);
+    const gl = getDimensions(this.webglOffscreen.gl.canvas);
     const text = getDimensions(this.draw2DLow.canvas);
 
     // const glWidthOfCanvas = canvas.clientWidth / gl.clientWidth * gl.width;
@@ -531,7 +533,7 @@ class Diagram {
     // console.log(gl.clientWidth, canvas.clientWidth, this.webglLow.gl.canvas.clientWidth, this.webglLow.gl.canvas.width, this.webglLow.gl.canvas.offsetWidth)
     const w = document.getElementById(`${htmlCanvasElementOrId}_webgl`);
     if (w instanceof HTMLImageElement) {
-      w.src = this.webglLow.gl.canvas.toDataURL('image/png', 0.5);
+      w.src = this.webglOffscreen.gl.canvas.toDataURL('image/png', 0.5);
       // w.src = offscreenCanvas.toDataURL();
       w.style.visibility = 'visible';
       w.style.transform = `scale(${gl.clientWidth / canvas.clientWidth},${gl.clientHeight / canvas.clientHeight})`;
@@ -546,7 +548,7 @@ class Diagram {
       d.style.transform = `scale(${text.clientWidth / canvas.clientWidth},${text.clientHeight / canvas.clientHeight})`;
       // d.style.transform = `scale(1,${text.clientHeight / canvas.clientHeight})`;
     }
-    this.clearContext();
+    this.clearContext(1);
   }
 
   unrenderAll() {
@@ -893,9 +895,14 @@ class Diagram {
     this.setFirstTransform();
   }
 
-  clearContext() {
-    this.webglLow.gl.clearColor(0, 0, 0, 0);
-    this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
+  clearContext(canvasIndex: number = 0) {
+    if (canvasIndex === 0) {
+      this.webglLow.gl.clearColor(0, 0, 0, 0);
+      this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
+    } else {
+      this.webglOffscreen.gl.clearColor(0, 0, 0, 0);
+      this.webglOffscreen.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
+    }
     // this.webglHigh.gl.clearColor(0, 0, 0, 0);
     // this.webglHigh.gl.clear(this.webglHigh.gl.COLOR_BUFFER_BIT);
     this.elements.clear();
@@ -955,7 +962,7 @@ class Diagram {
       return;
     }
     this.drawQueued = false;
-    this.clearContext();
+    this.clearContext(canvasIndex);
 
     // console.log('really drawing')
     this.elements.draw(
