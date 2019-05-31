@@ -440,6 +440,8 @@ class Diagram {
     });
     if (needClear) {
       this.drawQueued = true;
+      this.clearContext();
+      this.draw2DLow.ctx.clearRect(0, 0, this.textCanvasLow.width, this.textCanvasLow.height);
       this.draw(-1);
       // this.animateNextFrame(true, 'clear frame');
       // this.draw(-1);
@@ -476,9 +478,19 @@ class Diagram {
       this.webglOffscreen.resize();
       this.draw2DOffscreen.resize();
     }
+
     elementToRender.updateHTMLElementTie(this.canvasOffscreen);
-    elementToRender.setPosition(0, 0);
-    // elementToRender.updateHTMLElementTieScale(this.canvasLow);
+    // Need to reset position as updateHTMLElementTie doesn't set correct
+    // position as it uses a diagram pixels space transform that is only
+    // relavant to the first gl canvas.
+    const scale = elementToRender.getScale();
+    elementToRender
+      .setPosition(0 - scale.x * (elementToRender.tieToHTML.window.left
+        + elementToRender.tieToHTML.window.width / 2),
+      0 - scale.y * (elementToRender.tieToHTML.window.bottom
+        + elementToRender.tieToHTML.window.height / 2));
+    // elementToRender.setPosition(0, 0);
+
     // Stop animations and render
     elementToRender.isRenderedAsImage = false;
     elementToRender.stop(true, true);
