@@ -51,11 +51,11 @@ class VertexText extends VertexObject {
   width: number;
 
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     textOptions: TypeVertexInputTextOptions,
   ) {
     super(webgl, 'withTexture', 'text');
-    this.glPrimative = webgl.gl.TRIANGLE_FAN;
+    this.glPrimative = webgl[0].gl.TRIANGLE_FAN;
 
     const defaultTextOptions = {
       text: 'DEFAULT_TEXT',

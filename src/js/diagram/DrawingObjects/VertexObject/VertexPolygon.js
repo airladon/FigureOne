@@ -13,7 +13,7 @@ class VertexPolygon extends VertexObject {
   dAngle: number;       // angle between adjacent verteces to center lines
 
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     numSides: number,       // Must be 3 or greater (def: 3 if smaller)
     radius: number,
     lineWidth: number,
@@ -26,9 +26,9 @@ class VertexPolygon extends VertexObject {
     // setup webgl stuff
     super(webgl);
     if (triangles) {
-      this.glPrimative = webgl.gl.TRIANGLES;
+      this.glPrimative = webgl[0].gl.TRIANGLES;
     } else {
-      this.glPrimative = webgl.gl.TRIANGLE_STRIP;
+      this.glPrimative = webgl[0].gl.TRIANGLE_STRIP;
     }
 
     // Check potential errors in constructor input

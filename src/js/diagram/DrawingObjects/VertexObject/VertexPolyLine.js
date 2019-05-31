@@ -14,7 +14,7 @@ class VertexPolyLine extends VertexObject {
   borderToPoint: TypeBorderToPoint;
 
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     coords: Array<Point>,
     close: boolean,
     width: number,

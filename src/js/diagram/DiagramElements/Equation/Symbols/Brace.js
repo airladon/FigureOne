@@ -8,7 +8,7 @@ import {
 import WebGLInstance from '../../../webgl/webgl';
 
 export default function Brace(
-  webgl: WebGLInstance,
+  webgl: Array<WebGLInstance>,
   color: Array<number>,
   side: 'left' | 'right' | 'top' | 'bottom',
   numLines: number,

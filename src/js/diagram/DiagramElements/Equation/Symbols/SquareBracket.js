@@ -8,7 +8,7 @@ import {
 import WebGLInstance from '../../../webgl/webgl';
 
 export default function SquareBracket(
-  webgl: WebGLInstance,
+  webgl: Array<WebGLInstance>,
   color: Array<number>,
   side: 'left' | 'right' | 'top' | 'bottom',
   numLines: number,

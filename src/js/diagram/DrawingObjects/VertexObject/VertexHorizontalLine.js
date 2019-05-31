@@ -9,7 +9,7 @@ import VertexObject from './VertexObject';
 class VertexHorizontalLine extends VertexObject {
   start: Point;
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     start: Point = new Point(0, 0),
     length: number = 1,
     width: number = 0.1,

@@ -27,7 +27,7 @@ class VertexDashedLine extends VertexObject {
   maxLength: number;
 
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     start: Point = new Point(0, 0),
     maxLength: number = 1,
     width: number = 0.1,

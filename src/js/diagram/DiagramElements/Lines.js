@@ -8,7 +8,7 @@ import {
 import WebGLInstance from '../webgl/webgl';
 
 function Lines(
-  webgl: WebGLInstance,
+  webgl: Array<WebGLInstance>,
   linePairs: Array<Array<Point>>,
   numLinesThick: number,
   color: Array<number>,

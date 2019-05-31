@@ -9,7 +9,7 @@ import {
 import WebGLInstance from '../../../webgl/webgl';
 
 export default function Integral(
-  webgl: WebGLInstance,
+  webgl: Array<WebGLInstance>,
   color: Array<number>,
   numLines: number,
   transformOrLocation: Transform | Point,

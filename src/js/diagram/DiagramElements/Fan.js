@@ -8,7 +8,7 @@ import {
 import WebGLInstance from '../webgl/webgl';
 
 function Fan(
-  webgl: WebGLInstance,
+  webgl: Array<WebGLInstance>,
   points: Array<Point>,
   color: Array<number>,
   transformOrLocation: Transform | Point,

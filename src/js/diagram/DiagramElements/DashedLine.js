@@ -8,7 +8,7 @@ import {
 import WebGLInstance from '../webgl/webgl';
 
 function DashedLine(
-  webgl: WebGLInstance,
+  webgl: Array<WebGLInstance>,
   start: Point,
   length: number,
   width: number,

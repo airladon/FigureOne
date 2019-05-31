@@ -11,7 +11,7 @@ import WebGLInstance from '../webgl/webgl';
 export type TypeRectangleFilledReference = TypeVertexRectangleFilledReference;
 
 export default function RectangleFilled(
-  webgl: WebGLInstance,
+  webgl: Array<WebGLInstance>,
   alignH: 'left' | 'center' | 'right' | number,
   alignV: 'bottom' | 'middle' | 'top' | number,
   width: number,

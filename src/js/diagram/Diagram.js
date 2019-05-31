@@ -75,6 +75,7 @@ export type TypeSpaceTransforms = {
 class Diagram {
   htmlId: string;
   canvasLow: HTMLCanvasElement;
+  canvasOffscreen: HTMLCanvasElement;
   // canvasHigh: HTMLCanvasElement;
   textCanvasLow: HTMLCanvasElement;
   container: HTMLElement;
@@ -83,6 +84,7 @@ class Diagram {
   // draw2DHigh: DrawContext2D;
   htmlCanvas: HTMLElement;
   webglLow: WebGLInstance;
+  webglOffscreen: WebGLInstance;
   // webglHigh: WebGLInstance;
   gestureCanvas: HTMLElement;
 
@@ -169,21 +171,15 @@ class Diagram {
           const child = children[i];
           if (child instanceof HTMLCanvasElement
             && child.classList.contains('diagram__gl')) {
-            // if (child.id === 'id_diagram__gl__low') {
             this.canvasLow = child;
-            // }
-            // if (child.id === 'id_diagram__gl__high') {
-            //   this.canvasHigh = child;
-            // }
+          }
+          if (child instanceof HTMLCanvasElement
+            && child.classList.contains('diagram__gl__offscreen')) {
+            this.canvasOffscreen = child;
           }
           if (child instanceof HTMLCanvasElement
             && child.classList.contains('diagram__text')) {
-            // if (child.id === 'id_diagram__text__low') {
             this.textCanvasLow = child;
-            // }
-            // if (child.id === 'id_diagram__text__high') {
-            //   this.textCanvasHigh = child;
-            // }
           }
           if (child.classList.contains('diagram__html')
           ) {
@@ -195,12 +191,14 @@ class Diagram {
           this.canvasLow,
           this.backgroundColor,
         );
-        // const webglHigh = new WebGLInstance(
-        //   this.canvasHigh,
-        //   this.backgroundColor,
-        // );
         this.webglLow = webglLow;
-        // this.webglHigh = webglHigh;
+        if (this.canvasOffscreen) {
+          const webglOffscreen = new WebGLInstance(
+            this.canvasOffscreen,
+            this.backgroundColor,
+          );
+          this.webglOffscreen = webglOffscreen;
+        }
         this.draw2DLow = new DrawContext2D(this.textCanvasLow);
         // this.draw2DHigh = new DrawContext2D(this.textCanvasHigh);
       }
@@ -300,7 +298,10 @@ class Diagram {
   }
 
   getShapes() {
-    const webgl = this.webglLow;
+    const webgl = [this.webglLow];
+    if (this.webglOffscreen) {
+      webgl.push(this.webglOffscreen);
+    }
     const draw2D = this.draw2DLow;
     // if (high) {
     //   webgl = this.webglHigh;

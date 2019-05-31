@@ -19,7 +19,7 @@ import type { TypePolyLineOptions } from './PolyLine';
 import EquationLabel from './EquationLabel';
 
 export default class DiagramObjects {
-  webgl: WebGLInstance;
+  webgl: Array<WebGLInstance>;
   draw2D: DrawContext2D;
   limits: Rect;
   shapes: Object;

@@ -10,7 +10,7 @@ import {
 import WebGLInstance from '../webgl/webgl';
 
 function Polygon(
-  webgl: WebGLInstance,
+  webgl: Array<WebGLInstance>,
   numSides: number,
   radius: number,
   lineWidth: number,
@@ -44,7 +44,7 @@ function Polygon(
 }
 
 function PolygonFilled(
-  webgl: WebGLInstance,
+  webgl: Array<WebGLInstance>,
   numSides: number,
   radius: number,
   rotation: number,
@@ -80,7 +80,7 @@ function PolygonFilled(
 }
 
 function PolygonLine(
-  webgl: WebGLInstance,
+  webgl: Array<WebGLInstance>,
   numSides: number,
   radius: number,
   rotation: number,

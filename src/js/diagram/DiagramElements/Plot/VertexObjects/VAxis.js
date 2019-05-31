@@ -10,7 +10,7 @@ import VertexObject from '../../../DrawingObjects/VertexObject/VertexObject';
 
 class VAxis extends VertexObject {
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     axisProperties: AxisProperties = new AxisProperties(),
   ): void {
     super(webgl);

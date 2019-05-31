@@ -21,12 +21,12 @@ import DrawContext2D from '../../DrawContext2D';
 
 class Axis extends DiagramElementCollection {
   props: AxisProperties;
-  webgl: WebGLInstance;
+  webgl: Array<WebGLInstance>;
   diagramLimits: Rect;
   drawContext2D: DrawContext2D;
 
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     drawContext2D: DrawContext2D,
     axisProperties: AxisProperties = new AxisProperties(),
     transform: Transform = new Transform(),
@@ -147,7 +147,7 @@ class Axis extends DiagramElementCollection {
 
   addTicksOrGrid(
     name: string,
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     ticksOrGrid: GridProperties,
     num: number,
     step: number,

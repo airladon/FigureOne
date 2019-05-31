@@ -9,7 +9,7 @@ import VertexObject from '../../../DrawingObjects/VertexObject/VertexObject';
 
 class VTickMarks extends VertexObject {
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     start: Point,
     rotation: number,
     num: number,

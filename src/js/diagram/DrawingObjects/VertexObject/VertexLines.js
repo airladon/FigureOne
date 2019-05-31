@@ -7,7 +7,7 @@ import VertexObject from './VertexObject';
 class VertexLines extends VertexObject {
   start: Point;
   constructor(
-    webgl: WebGLInstance,
+    webgl: Array<WebGLInstance>,
     linePairs: Array<Array<Point>>,
     numLinesThick: number = 1,
   ): void {
