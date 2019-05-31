@@ -29,7 +29,7 @@ class VertexObject extends DrawingObject {
     src?: ?string;
     data?: ?Object;
     points: Array<number>;
-    buffer?: ?Array<WebGLBuffer>;
+    buffer?: Array<WebGLBuffer>;
     type: 'canvasText' | 'image';
   };
 
@@ -130,7 +130,9 @@ class VertexObject extends DrawingObject {
           texture.buffer = this.gl.map(() => null);
         }
 
+        // $FlowFixMe
         texture.buffer[glIndex] = gl.createBuffer();
+        // $FlowFixMe
         gl.bindBuffer(gl.ARRAY_BUFFER, texture.buffer[glIndex]);
         gl.bufferData(
           gl.ARRAY_BUFFER,
@@ -213,6 +215,7 @@ class VertexObject extends DrawingObject {
         }
         if (texture.buffer != null) {
           gl.deleteBuffer(texture.buffer[glIndex]);
+          // $FlowFixMe
           texture.buffer[glIndex] = null;
         }
         // texture.glTexture = null;
@@ -396,6 +399,7 @@ class VertexObject extends DrawingObject {
       const texOffset = 0;        // start at the beginning of the buffer
 
       gl.enableVertexAttribArray(locations.a_texcoord);
+      // $FlowFixMe
       gl.bindBuffer(gl.ARRAY_BUFFER, texture.buffer[glIndex]);
       gl.vertexAttribPointer(
         locations.a_texcoord, texSize, texType,

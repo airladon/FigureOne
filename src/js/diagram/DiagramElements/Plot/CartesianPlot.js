@@ -20,7 +20,7 @@ class CartesianPlot extends DiagramElementCollection {
 
   constructor(
     webgl: Array<WebGLInstance>,
-    drawContext2D: DrawContext2D,
+    drawContext2D: Array<DrawContext2D>,
     plotProperties: CartesianPlotProperties = new CartesianPlotProperties(),
     transform: Transform = new Transform().scale(1, 1).rotate(0).translate(0, 0),
     diagramLimits: Rect = new Rect(-1, 1, 2, 2),
