@@ -314,11 +314,12 @@ function modifyText(
   let outText = '';
   const expression = new RegExp(`\\|${key}\\|`, 'gi');
   let replacement = '';
-  if (typeof mod.replacementText === 'string') {
+  if (typeof mod === 'string') {
+    replacement = mod;
+  } else if (typeof mod.replacementText === 'string') {
     replacement = mod.replacementText;
   } else {
     replacement = mod.replacementText(key).replacementText;
-    // console.log(replacement)
   }
   outText = text.replace(expression, replacement);
   return outText;
@@ -386,9 +387,9 @@ function applyModifiers(
   let outText = text;
   Object.keys(modifiers).forEach((key) => {
     const mod = modifiers[key];
-    if (mod.replacementText != null) {
-      outText = modifyText(outText, key, mod);
-    }
+    // if (mod.replacementText != null) {
+    outText = modifyText(outText, key, mod);
+    // }
   });
   const r = RegExp(/\|([^|]*)\|/, 'gi');
   outText = outText.replace(r, `<span class="${highlightClass}">$1</span>`);
@@ -408,7 +409,7 @@ function applyModifiers(
 function setOnClicks(modifiers: Object, additionalClassesToAdd: string = '') {
   Object.keys(modifiers).forEach((key) => {
     const mod = modifiers[key];
-    if ('actionMethod' in mod) {
+    if (typeof mod !== 'string' && 'actionMethod' in mod) {
       onClickId(mod.id(key), mod.actionMethod, mod.bind, additionalClassesToAdd);
     }
   });
