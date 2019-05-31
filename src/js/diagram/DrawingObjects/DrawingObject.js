@@ -78,8 +78,8 @@ class DrawingObject {
   drawWithTransformMatrix(
     transformMatrix: Array<number>,
     color: Array<number>,
+    canvasIndex: number,
     numPoints: number,
-    canvasIndex: number = 0,
   ) {
   }
   /* eslint-enable */
