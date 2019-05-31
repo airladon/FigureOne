@@ -62,7 +62,7 @@ describe('Axis', () => {
     props.minorGrid.length = 1;
     props.minorGrid.width = 0.008;
     props.minorGrid.color = [0.9, 0.9, 0.9, 1];
-    axis = new Axis(webgl, mockCtx, props);
+    axis = new Axis([webgl], [mockCtx], props);
   });
   test('Default', () => {
     // console.log(axis.props)

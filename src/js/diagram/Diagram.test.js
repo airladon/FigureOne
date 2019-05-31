@@ -143,7 +143,7 @@ describe('Diagram', () => {
       Object.keys(squareDefinitions).forEach((sKey) => {
         const def = squareDefinitions[sKey];
         const square = new VertexPolygon(
-          diagram.webglLow,
+          [diagram.webglLow],
           4,
           (def.sideLength / 2) * Math.sqrt(2), 0.05 * Math.sqrt(2),
           def.rotation, def.center,
@@ -182,7 +182,7 @@ describe('Diagram', () => {
     const d = new Diagram({ htmlId: 'c', limits: new Rect(0, 0, 4, 4) });
     d.webglLow = webgl;      // needed for mocking only
     const squareVertices = new VertexPolygon(
-      d.webglLow,            // gl instance
+      [d.webglLow],            // gl instance
       4,                  // number of sides in polygon
       1,                  // radius to center of corner
       0.05,               // thickness of polygon border

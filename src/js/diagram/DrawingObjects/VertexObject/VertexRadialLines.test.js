@@ -6,7 +6,7 @@ import { round } from '../../../tools/math';
 
 describe('Horizontal Line', () => {
   test('Default', () => {
-    const lines = new VertexRadialLines(webgl, 0, 1, 0.01, Math.PI / 2, Math.PI);
+    const lines = new VertexRadialLines([webgl], 0, 1, 0.01, Math.PI / 2, Math.PI);
     const border = [
       [
         new Point(0, -0.005),

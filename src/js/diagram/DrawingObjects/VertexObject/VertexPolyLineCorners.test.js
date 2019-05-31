@@ -10,7 +10,7 @@ describe('Corners', () => {
       new Point(1, 0), new Point(0, 0),
       new Point(0, 1),
     ];
-    const corner = new VertexPolyLineCorners(webgl, cornerCoords, false, 1, 0.1);
+    const corner = new VertexPolyLineCorners([webgl], cornerCoords, false, 1, 0.1);
 
     const border = [
       new Point(1, -0.05),
@@ -45,7 +45,7 @@ describe('Corners', () => {
       new Point(0, 1),
       new Point(1, 1),
     ];
-    const corner = new VertexPolyLineCorners(webgl, cornerCoords, true, 1, 0.1);
+    const corner = new VertexPolyLineCorners([webgl], cornerCoords, true, 1, 0.1);
 
     const border = [
       [

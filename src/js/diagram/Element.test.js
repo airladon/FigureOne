@@ -17,7 +17,7 @@ describe('Animationa and Movement', () => {
   describe('DiagramElementPrimative', () => {
     describe('Setup', () => {
       test('Instantiation', () => {
-        const square = new VertexPolygon(webgl, 4, 1, 0.01, 0, Point.zero());
+        const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
         const element = new DiagramElementPrimative(
           square,
           new Transform(),
@@ -30,7 +30,7 @@ describe('Animationa and Movement', () => {
       let element;
       let identity;
       beforeEach(() => {
-        const square = new VertexPolygon(webgl, 4, 1, 0.01, 0, Point.zero());
+        const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
         element = new DiagramElementPrimative(
           square,
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
@@ -206,7 +206,7 @@ describe('Animationa and Movement', () => {
       let element;
       let identity;
       beforeEach(() => {
-        const square = new VertexPolygon(webgl, 4, 1, 0.01, 0, Point.zero());
+        const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
         element = new DiagramElementPrimative(
           square,
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
@@ -307,7 +307,7 @@ describe('Animationa and Movement', () => {
       let element;
       const RealDate = Date.now;
       beforeEach(() => {
-        const square = new VertexPolygon(webgl, 4, 1, 0.01, 0, Point.zero());
+        const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
         element = new DiagramElementPrimative(
           square,
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
@@ -337,7 +337,7 @@ describe('Animationa and Movement', () => {
       let element;
       let identity;
       beforeEach(() => {
-        const square = new VertexPolygon(webgl, 4, 1, 0.01, 0, Point.zero());
+        const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
         element = new DiagramElementPrimative(
           square,
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
@@ -394,7 +394,7 @@ describe('Animationa and Movement', () => {
     describe('Get and Is being touched', () => {
       let square;
       beforeEach(() => {
-        const sq = new VertexPolygon(webgl, 4, Math.sqrt(2.205), 0.1, 0, Point.zero());
+        const sq = new VertexPolygon([webgl], 4, Math.sqrt(2.205), 0.1, 0, Point.zero());
         square = new DiagramElementPrimative(
           sq,
           new Transform().rotate(Math.PI / 4),
@@ -429,7 +429,7 @@ describe('Animationa and Movement', () => {
     describe('Get bounding box', () => {
       test('square centered on origin with scale 1', () => {
         const sq = new VertexPolygon(
-          webgl,
+          [webgl],
           4,
           Math.sqrt(2) * (0.105), Math.sqrt(2) * 0.01,
           Math.PI / 4, Point.zero(),
@@ -443,7 +443,7 @@ describe('Animationa and Movement', () => {
       });
       test('square vertices offset to origin with scale 1', () => {
         const sq = new VertexPolygon(
-          webgl,
+          [webgl],
           4,
           Math.sqrt(2) * (0.105), Math.sqrt(2) * 0.01,
           Math.PI / 4, new Point(0.5, 0),
@@ -457,7 +457,7 @@ describe('Animationa and Movement', () => {
       });
       test('square element offset to origin with scale 1', () => {
         const sq = new VertexPolygon(
-          webgl,
+          [webgl],
           4,
           Math.sqrt(2) * (0.105), Math.sqrt(2) * 0.01,
           Math.PI / 4, new Point(0, 0),
@@ -475,7 +475,7 @@ describe('Animationa and Movement', () => {
       });
       test('square element offset to origin with scale 2', () => {
         const sq = new VertexPolygon(
-          webgl,
+          [webgl],
           4,
           Math.sqrt(2) * (0.105), Math.sqrt(2) * 0.01,
           Math.PI / 4, new Point(0.5, 0),
@@ -495,7 +495,7 @@ describe('Animationa and Movement', () => {
     describe('Default move max/min transforms', () => {
       test('setMoveBoundaryToDiagram no transform', () => {
         const sq = new VertexPolygon(
-          webgl,
+          [webgl],
           4,
           Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
           Math.PI / 4, new Point(0, 0),
@@ -515,7 +515,7 @@ describe('Animationa and Movement', () => {
       });
       test('setMoveBoundaryToDiagram with transform', () => {
         const sq = new VertexPolygon(
-          webgl,
+          [webgl],
           4,
           Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
           Math.PI / 4, new Point(0, 0),
@@ -542,7 +542,7 @@ describe('Animationa and Movement', () => {
     describe('Copy', () => {
       test('Vertex Object', () => {
         const sq = new VertexPolygon(
-          webgl,
+          [webgl],
           4,
           Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
           Math.PI / 4, new Point(0, 0),
@@ -580,8 +580,8 @@ describe('Animationa and Movement', () => {
     let identity;
     beforeEach(() => {
       identity = new Transform();
-      const square = new VertexPolygon(webgl, 4, 1005, 0.01, 0, Point.zero());
-      const tri = new VertexPolygon(webgl, 3, 0.1005, 0.01, 0, new Point(0.1, 0.1));
+      const square = new VertexPolygon([webgl], 4, 1005, 0.01, 0, Point.zero());
+      const tri = new VertexPolygon([webgl], 3, 0.1005, 0.01, 0, new Point(0.1, 0.1));
       squareElement = new DiagramElementPrimative(
         square,
         new Transform().scale(1, 1).rotate(0).translate(0, 0),
@@ -738,7 +738,7 @@ describe('Animationa and Movement', () => {
       beforeEach(() => {
         identity = new Transform();
         square = new VertexPolygon(
-          webgl,
+          [webgl],
           4,
           Math.sqrt(2) * (1.05),
           Math.sqrt(2) * 0.1,
@@ -818,7 +818,7 @@ describe('Animationa and Movement', () => {
   describe('Get bounding box', () => {
     test('square centered on origin with scale 1', () => {
       const sq = new VertexPolygon(
-        webgl,
+        [webgl],
         4,
         Math.sqrt(2) * (0.105), Math.sqrt(2) * 0.01,
         Math.PI / 4, Point.zero(),
@@ -836,7 +836,7 @@ describe('Animationa and Movement', () => {
     });
     test('square offset from origin with scale 1, normal collection', () => {
       const sq = new VertexPolygon(
-        webgl,
+        [webgl],
         4,
         Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
         Math.PI / 4, Point.zero(),
@@ -857,7 +857,7 @@ describe('Animationa and Movement', () => {
     });
     test('square on origin with scale 1, collection offset', () => {
       const sq = new VertexPolygon(
-        webgl,
+        [webgl],
         4,
         Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
         Math.PI / 4, Point.zero(),
@@ -878,7 +878,7 @@ describe('Animationa and Movement', () => {
     });
     test('square element offset and colleciton offset', () => {
       const sq = new VertexPolygon(
-        webgl,
+        [webgl],
         4,
         Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
         Math.PI / 4, Point.zero(),
@@ -902,7 +902,7 @@ describe('Animationa and Movement', () => {
     });
     test('square element offset and scaled and colleciton offset', () => {
       const sq = new VertexPolygon(
-        webgl,
+        [webgl],
         4,
         Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
         Math.PI / 4, Point.zero(),
@@ -926,7 +926,7 @@ describe('Animationa and Movement', () => {
     });
     test('two squares', () => {
       const sq = new VertexPolygon(
-        webgl,
+        [webgl],
         4,
         Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
         Math.PI / 4, Point.zero(),
