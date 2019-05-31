@@ -79,6 +79,7 @@ class DrawingObject {
     transformMatrix: Array<number>,
     color: Array<number>,
     numPoints: number,
+    canvasIndex: number = 0,
   ) {
   }
   /* eslint-enable */

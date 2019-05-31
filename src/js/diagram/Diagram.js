@@ -919,7 +919,7 @@ class Diagram {
     this.draw(time);
   }
 
-  draw(nowIn: number): void {
+  draw(nowIn: number, canvasIndex: number = 0): void {
     let now = nowIn;
     if (nowIn === -1) {
       now = this.lastDrawTime;
@@ -961,6 +961,7 @@ class Diagram {
     this.elements.draw(
       this.spaceTransforms.diagramToGL,
       now,
+      canvasIndex,
     );
     // console.log('really done')
 
