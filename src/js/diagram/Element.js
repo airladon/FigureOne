@@ -1547,7 +1547,7 @@ class DiagramElementPrimative extends DiagramElement {
     }
   }
 
-  draw(parentTransform: Transform = new Transform(), now: number = 0) {
+  draw(parentTransform: Transform = new Transform(), now: number = 0, canvasIndex: number = 0) {
     if (this.isShown) {
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {
@@ -1588,7 +1588,7 @@ class DiagramElementPrimative extends DiagramElement {
       }
       const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity];
       pulseTransforms.forEach((t) => {
-        this.drawingObject.drawWithTransformMatrix(t.matrix(), colorToUse, pointCount);
+        this.drawingObject.drawWithTransformMatrix(t.matrix(), colorToUse, pointCount, canvasIndex);
       });
       if (this.unrenderNextDraw) {
         this.clearRender();
@@ -1797,7 +1797,7 @@ class DiagramElementCollection extends DiagramElement {
     return false;
   }
 
-  draw(parentTransform: Transform = new Transform(), now: number = 0) {
+  draw(parentTransform: Transform = new Transform(), now: number = 0, canvasIndex: number = 0) {
     if (this.isShown) {
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {
@@ -1827,7 +1827,7 @@ class DiagramElementCollection extends DiagramElement {
 
       for (let k = 0; k < pulseTransforms.length; k += 1) {
         for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-          this.elements[this.drawOrder[i]].draw(pulseTransforms[k], now);
+          this.elements[this.drawOrder[i]].draw(pulseTransforms[k], now, canvasIndex);
         }
       }
       if (this.unrenderNextDraw) {
