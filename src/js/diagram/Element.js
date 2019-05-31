@@ -17,7 +17,7 @@ import { TextObject } from './DrawingObjects/TextObject/TextObject';
 import { duplicateFromTo, joinObjects } from '../tools/tools';
 import { colorArrayToRGBA } from '../tools/color';
 // import GlobalAnimation from './webgl/GlobalAnimation';
-import DrawContext2D from './DrawContext2D';
+// import DrawContext2D from './DrawContext2D';
 
 import type { TypeSpaceTransforms } from './Diagram';
 import type {
@@ -1434,11 +1434,11 @@ class DiagramElementPrimative extends DiagramElement {
     return false;
   }
 
-  updateContext(context: DrawContext2D) {
-    if (this.drawingObject instanceof TextObject) {
-      this.drawingObject.drawContext2D = context;
-    }
-  }
+  // updateContext(context: DrawContext2D) {
+  //   if (this.drawingObject instanceof TextObject) {
+  //     this.drawingObject.drawContext2D = context;
+  //   }
+  // }
 
   _dup(transform: Transform | null = null) {
     // const vertices = this.drawingObject._dup();
@@ -2327,12 +2327,12 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  updateContext(context: DrawContext2D) {
-    for (let i = 0; i < this.drawOrder.length; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      element.updateContext(context);
-    }
-  }
+  // updateContext(context: DrawContext2D) {
+  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     element.updateContext(context);
+  //   }
+  // }
 
   setupWebGLBuffers(newWebgl: WebGLInstance) {
     for (let i = 0; i < this.drawOrder.length; i += 1) {

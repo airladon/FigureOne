@@ -23,11 +23,11 @@ class Axis extends DiagramElementCollection {
   props: AxisProperties;
   webgl: Array<WebGLInstance>;
   diagramLimits: Rect;
-  drawContext2D: DrawContext2D;
+  drawContext2D: Array<DrawContext2D>;
 
   constructor(
     webgl: Array<WebGLInstance>,
-    drawContext2D: DrawContext2D,
+    drawContext2D: Array<DrawContext2D>,
     axisProperties: AxisProperties = new AxisProperties(),
     transform: Transform = new Transform(),
     diagramLimits: Rect = new Rect(-1, 1, 2, 2),
@@ -111,7 +111,7 @@ class Axis extends DiagramElementCollection {
       font,
     )];
     const title = new TextObject(
-      this.drawContext2D,
+      this.drawContext2D[0],
       titleText,
     );
 
@@ -126,12 +126,12 @@ class Axis extends DiagramElementCollection {
 
     // Labels
     this.addTickLabels(
-      'major', this.drawContext2D, majorTicks,
+      'major', this.drawContext2D[0], majorTicks,
       this.props.generateMajorLabels.bind(this.props), this.diagramLimits,
       this.props.majorTicks.labelOffset,
     );
     this.addTickLabels(
-      'minor', this.drawContext2D, minorTicks,
+      'minor', this.drawContext2D[0], minorTicks,
       this.props.generateMinorLabels.bind(this.props), this.diagramLimits,
       this.props.minorTicks.labelOffset,
     );
