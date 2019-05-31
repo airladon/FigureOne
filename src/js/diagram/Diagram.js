@@ -981,9 +981,15 @@ class Diagram {
   }
 
   renderToImages() {
+    console.log('visibility1')
     this.drawTimeoutId = null;
+    if (this.webglLow.gl.canvas.style.top !== '-10000px') {
+      this.webglLow.gl.canvas.style.top = '-10000px';
+      this.waitForFrames = 1;
+    }
     this.renderAllElementsToTiedCanvases();
     this.centerDrawingLens();
+    this.webglLow.gl.canvas.style.visibility = 'visible';
   }
 
   centerDrawingLens(fromTimeOut: boolean = false) {
