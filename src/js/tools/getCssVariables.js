@@ -111,22 +111,21 @@ function getCSSVariables(
         const propertyName = style[i];
         if (prefix === '' || propertyName.startsWith(prefix)) {
           let value = style.getPropertyValue(propertyName);
-          if (value == null) {
-            return;
-          }
-          value = value.trim();
-          const fValue = parseFloat(value);
-          let valueToAdd = value;
-          if (!Number.isNaN(fValue)) {
-            valueToAdd = fValue;
-          }
-          if (makeFlat) {
-            const shortName = toCamelCase(propertyName, prefix);
-            variables[shortName] = valueToAdd;
-          } else {
-            const rePrefix = new RegExp(prefix, 'g');
-            const noPrefix = propertyName.replace(rePrefix, '');
-            addToObject(variables, noPrefix, valueToAdd, '-');
+          if (value != null) {
+            value = value.trim();
+            const fValue = parseFloat(value);
+            let valueToAdd = value;
+            if (!Number.isNaN(fValue)) {
+              valueToAdd = fValue;
+            }
+            if (makeFlat) {
+              const shortName = toCamelCase(propertyName, prefix);
+              variables[shortName] = valueToAdd;
+            } else {
+              const rePrefix = new RegExp(prefix, 'g');
+              const noPrefix = propertyName.replace(rePrefix, '');
+              addToObject(variables, noPrefix, valueToAdd, '-');
+            }
           }
         }
       }
