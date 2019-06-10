@@ -67,7 +67,11 @@ function getDefinedCSSVariables(
     const style = window.getComputedStyle(elem);
     if (style) {
       propertyNames.forEach((propertyName) => {
-        const value = style.getPropertyValue(propertyName).trim();
+        let value = style.getPropertyValue(propertyName);
+        if (value == null) {
+          return;
+        }
+        value = value.trim();
         const fValue = parseFloat(value);
         let valueToAdd = value;
         if (!Number.isNaN(fValue)) {
@@ -106,7 +110,11 @@ function getCSSVariables(
       for (let i = 0; i < numProperties; i += 1) {
         const propertyName = style[i];
         if (prefix === '' || propertyName.startsWith(prefix)) {
-          const value = style.getPropertyValue(propertyName).trim();
+          let value = style.getPropertyValue(propertyName);
+          if (value == null) {
+            return;
+          }
+          value = value.trim();
           const fValue = parseFloat(value);
           let valueToAdd = value;
           if (!Number.isNaN(fValue)) {
