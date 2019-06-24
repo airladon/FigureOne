@@ -2,6 +2,84 @@
 
 import getShaders from './shaders';
 
+const glMock = {
+  TRIANGLES: 1,
+  TRIANGLE_STRIP: 2,
+  TRIANGLE_FAN: 3,
+  LINES: 4,
+  LINK_STATUS: 1,
+  VERTEX_SHADER: 1,
+  COMPILE_STATUS: 1,
+  FRAGMENT_SHADER: 1,
+  SRC_ALPHA: 1,
+  ONE_MINUS_SRC_ALPHA: 1,
+  BLEND: 1,
+  COLOR_BUFFER_BIT: 1,
+  TEXTURE_2D: 1,
+  RGBA: 1,
+  UNSIGNED_BYTE: 1,
+  TEXTURE_WRAP_S: 1,
+  CLAMP_TO_EDGE: 1,
+  TEXTURE_WRAP_T: 1,
+  TEXTURE_MIN_FILTER: 1,
+  LINEAR: 1,
+  ARRAY_BUFFER: 1,
+  STATIC_DRAW: 1,
+  FLOAT: 1,
+  UNPACK_PREMULTIPLY_ALPHA_WEBGL: 1,
+  createBuffer: () => {},
+  bindBuffer: () => {},
+  bufferData: () => {},
+  enableVertexAttribArray: () => {},
+  vertexAttribPointer: () => {},
+  disableVertexAttribArray: () => {},
+  uniformMatrix3fv: () => {},
+  uniform4f: () => {},
+  uniform1f: () => {},
+  uniform1i: () => {},
+  texParameteri: () => {},
+  drawArrays: () => {},
+  clearColor: () => {},
+  clear: () => {},
+  createTexture: () => {},
+  activeTexture: () => {},
+  bindTexture: () => {},
+  pixelStorei: () => {},
+  texImage2D: () => {},
+  blendFunc: () => {},
+  attachShader: () => {},
+  linkProgram: () => {},
+  getProgramParameter: () => {},
+  createProgram: () => {},
+  deleteProgram: () => {},
+  createShader: () => {},
+  shaderSource: () => {},
+  compileShader: () => {},
+  getShaderParameter: () => {},
+  getAttribLocation: () => {},
+  getUniformLocation: () => {},
+  enable: () => {},
+  map: () => {},
+  getExtension: () => ({
+    loseContext: () => {},
+  }),
+  disable: () => {},
+  deleteShader: () => {},
+  useProgram: () => {},
+  viewport: () => {},
+  canvas: ({
+    toDataURL: () => '',
+    width: 100,
+    clientHeight: 100,
+    height: 100,
+    style: {
+      top: 0,
+      visibility: 'visible',
+    },
+  }),
+
+};
+
 function createProgram(
   gl: WebGLRenderingContext,
   vertexShader: WebGLShader,
@@ -196,11 +274,16 @@ class WebGLInstance {
   // shaderLocations: Array<string>,
   backgroundColor: Array<number>,
 ) {
-    const gl = canvas.getContext('webgl', { antialias: true });
+    let gl: ?WebGLRenderingContext = canvas.getContext('webgl', { antialias: true });
+    if (gl == null) {
+      // $FlowFixMe
+      gl = glMock;
+    }
     this.programs = [];
     this.lastUsedProgram = null;
     this.textures = {};
-    if (gl instanceof WebGLRenderingContext) {
+    if (gl != null) {
+      // $FlowFixMe
       this.gl = gl;
       
       // this.program = createProgramFromScripts(
@@ -228,8 +311,8 @@ class WebGLInstance {
       this.gl.clearColor(0, 0, 0, 0);
       this.gl.clear(this.gl.COLOR_BUFFER_BIT);
       this.gl.disable(this.gl.DEPTH_TEST);
-      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
-      gl.enable(gl.BLEND);
+      this.gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
+      this.gl.enable(gl.BLEND);
       // this.gl.useProgram(this.program);
 
       // window.addEventListener('resize', autoResize.bind(this, event));
