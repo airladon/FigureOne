@@ -2118,12 +2118,13 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  setColor(color: Array<number>) {
+  setColor(color: Array<number> = [0, 0, 0, 1]) {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       element.setColor(color);
     }
     this.color = color.slice();
+    // this.color = [color[0], color[1], color[2], color[3]];
   }
 
   setOpacity(opacity: number) {

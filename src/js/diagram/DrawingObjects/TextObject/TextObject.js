@@ -139,7 +139,7 @@ class TextObject extends DrawingObject {
         this.scalingFactor = minSize * 50;
       }
       if (minSize < 1) {
-        const power = -Math.log10(minSize) + 2;
+        const power = -Math.log(minSize) / Math.LN10 + 2;
         this.scalingFactor = 10 ** power;
       }
     }
