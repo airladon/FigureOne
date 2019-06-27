@@ -99,6 +99,13 @@ function updateButtons(
     } else {
       disableTouch(nav.next);
       disableTouch(nav.nextDescription);
+      if (nav.navType === '1Button') {
+        const { next } = nav;
+        if (next) {
+          next.classList.remove('lesson__eqn_nav__next_form');
+          next.classList.remove('lesson__eqn_nav__reset');
+        }
+      }
     }
     const nextIndex = index + 1;
     if (nextIndex > nav.eqn.eqn.currentFormSeries.length - 1) {
@@ -106,11 +113,25 @@ function updateButtons(
         // eslint-disable-next-line no-param-reassign
         nav.nextDescription.innerHTML = 'RESTART from begining';
       }
+      if (nav.navType === '1Button' && nav.eqn.eqn.currentFormSeries.length > 1) {
+        const { next } = nav;
+        if (next) {
+          next.classList.add('lesson__eqn_nav__reset');
+          next.classList.remove('lesson__eqn_nav__next_form');
+        }
+      }
     } else {
       updateDescription(
         nav.eqn, currentForm.subForm, nav.nextDescription,
         nextIndex, false, nextPrefix,
       );
+      if (nav.navType === '1Button' && nav.eqn.eqn.currentFormSeries.length > 1) {
+        const { next } = nav;
+        if (next) {
+          next.classList.add('lesson__eqn_nav__next_form');
+          next.classList.remove('lesson__eqn_nav__reset');
+        }
+      }
     }
     updateDescription(nav.eqn, currentForm.subForm, nav.description, index, true);
     // nav.eqn.updateDescription(currentForm);
@@ -138,8 +159,8 @@ function updateButtonsDescriptionOnly(nav: EqnNavigator) {
 }
 
 export type TypeNavTypeOptions = {
-  forceTwoLines: boolean;
-  arrows: boolean;
+  forceTwoLines?: boolean;
+  arrows?: boolean;
 };
 
 // Nav3Line
@@ -235,6 +256,45 @@ function makeTypeDescriptionOnly(
   return {
     table,
     currentGroup,
+    description,
+  };
+}
+
+// Nav1Button
+function makeTypeOneButton(
+  nextMethod: () => void,
+  // options: TypeNavTypeOptions,  // can be: 'twoLines'
+) {
+  const table = document.createElement('table');
+  const currentGroup = document.createElement('tr');
+  const next = document.createElement('td');
+  const description = document.createElement('td');
+  currentGroup.appendChild(next);
+  currentGroup.appendChild(description);
+  table.appendChild(currentGroup);
+
+  table.classList.add('lesson__eqn_nav__table');
+  currentGroup.classList.add('lesson__eqn_nav__1button__currentRow');
+  next.classList.add('lesson__eqn_nav__1button__button');
+  description.classList.add('lesson__eqn_nav__1line__currentRow__description');
+  description.classList.add('lesson__eqn_nav__description');
+
+  // const defaultOptions = {
+  //   icons: true,
+  // };
+  // const optionsToUse = joinObjects({}, defaultOptions, options);
+
+  next.onclick = nextMethod;
+  description.onclick = nextMethod;
+
+  // if (optionsToUse.icons) {
+  next.classList.add('lesson__eqn_nav__next_form');
+  // }
+
+  return {
+    table,
+    currentGroup,
+    next,
     description,
   };
 }
@@ -382,13 +442,26 @@ function makeType2Line(
 export type TypeNavigatorOptions = {
   equation?: EquationNew,
   offset?: Point,
-  navType?: 'equationOnly' | 'description' | '1Line' | '2Line' | '3Line',
+  navType?: 'equationOnly' | 'description' | '1Line' | '2Line' | '3Line' | '1Button',
   navTypeOptions?: TypeNavTypeOptions,
   alignH?: 'left' | 'right' | 'center',
   alignV?: 'top' | 'bottom' | 'middle' | 'baseline',
   id?: string,
   interactive?: boolean,
 };
+
+// A Navigator is a DiagramElementCollection that is a html table that has
+// the possible html elements of:
+//   next: a next form button
+//   prev: a prev form button
+//   refresh: a button that shows animation to current form again
+//   description: description of current form
+//   nextDescription: description of next form
+//   prevDescription: description of prev form
+//   nextGroup: a html parent that holds nextDescription and nextButton
+//   prevGroup: a html parent that holds prevDescription and prevButton
+//
+// Equation navigators 
 
 export default class EqnNavigator extends DiagramElementCollection {
   shapes: Object;
@@ -407,7 +480,8 @@ export default class EqnNavigator extends DiagramElementCollection {
   updateButtons: () => void;
   eqn: EquationNew;
   animateNextFrame: void => void;
-  navType: 'equationOnly' | 'description' | '1Line' | '2Line' | '3Line';
+  navType: 'equationOnly' | 'description' | '1Line' | '2Line' | '3Line' | '1Button';
+  options: TypeNavTypeOptions;
 
   constructor(
     shapes: Object,
@@ -446,6 +520,7 @@ export default class EqnNavigator extends DiagramElementCollection {
       id: generateUniqueId('id_lesson__equation_navigator_'),
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
+    this.options = optionsToUse;
     if (optionsToUse.equation != null) {
       // this.eqn = optionsToUse.equation;
       // this.eqn.onClick = this.clickNext.bind(this);
@@ -475,6 +550,12 @@ export default class EqnNavigator extends DiagramElementCollection {
         this.clickRefresh.bind(this),
         this.clickNext.bind(this),
         optionsToUse.navTypeOptions,
+      );
+    }
+    if (this.navType === '1Button') {
+      navigatorHTMLElement = makeTypeOneButton(
+        this.clickNext.bind(this),
+        // optionsToUse.navTypeOptions,
       );
     }
     if (this.navType === '2Line') {
