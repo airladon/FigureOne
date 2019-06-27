@@ -96,6 +96,9 @@ function updateButtons(
     if (nav.eqn.eqn.currentFormSeries.length > 1) {
       enableTouch(nav.next);
       enableTouch(nav.nextDescription);
+      if (nav.navType === '1Button') {
+        enableTouch(nav.description);
+      }
     } else {
       disableTouch(nav.next);
       disableTouch(nav.nextDescription);
@@ -104,6 +107,7 @@ function updateButtons(
         if (next) {
           next.classList.remove('lesson__eqn_nav__next_form');
           next.classList.remove('lesson__eqn_nav__reset');
+          next.classList.remove('interactive_top_right');
         }
       }
     }
@@ -278,7 +282,7 @@ function makeTypeOneButton(
   next.classList.add('lesson__eqn_nav__1button__button');
   description.classList.add('lesson__eqn_nav__1line__currentRow__description');
   description.classList.add('lesson__eqn_nav__description');
-
+  next.classList.add('interactive_top_right');
   // const defaultOptions = {
   //   icons: true,
   // };
