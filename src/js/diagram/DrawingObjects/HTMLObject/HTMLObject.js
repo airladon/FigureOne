@@ -142,12 +142,12 @@ class HTMLObject extends DrawingObject {
       this.element.style.left = `${x}px`;
       this.element.style.top = `${y}px`;
       this.element.style.visibility = 'visible';
-      this.element.classList.remove('diagram__hidden');
+      // this.element.classList.remove('diagram__hidden');
     } else {
       this.element.style.position = 'absolute';
       this.element.style.left = '-10000px';
       this.element.style.top = '-10000px';
-      this.element.classList.add('diagram__hidden');
+      // this.element.classList.add('diagram__hidden');
       this.element.style.visibility = 'hidden';
       // this.element.style.visibility = 'hidden';
       // console.trace()
