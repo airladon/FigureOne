@@ -55,37 +55,72 @@ describe('Diagram HTML Object', () => {
     test('Center, middle, (0,0) and transforms', () => {
       h.transformHtml(new Transform().matrix());
       expect(h.element.style)
-        .toEqual({ position: 'absolute', left: '475px', top: '240px' });
+        .toEqual({
+          position: 'absolute',
+          left: '475px',
+          top: '240px',
+          visibility: 'visible',
+        });
 
       h.transformHtml(new Transform().translate(0.1, 0.1).matrix());
       expect(h.element.style)
-        .toEqual({ position: 'absolute', left: '525px', top: '215px' });
+        .toEqual({
+          position: 'absolute',
+          left: '525px',
+          top: '215px',
+          visibility: 'visible',
+        });
 
       h.transformHtml(new Transform().translate(0.1, 0).rotate(Math.PI / 2).matrix());
       expect(h.element.style)
-        .toEqual({ position: 'absolute', left: '475px', top: '215px' });
+        .toEqual({
+          position: 'absolute',
+          left: '475px',
+          top: '215px',
+          visibility: 'visible',
+        });
     });
     test('Left, right, bottom, top', () => {
       h.alignH = 'left';
       h.transformHtml(new Transform().matrix());
       expect(h.element.style)
-        .toEqual({ position: 'absolute', left: '500px', top: '240px' });
+        .toEqual({
+          position: 'absolute',
+          left: '500px',
+          top: '240px',
+          visibility: 'visible',
+        });
 
       h.alignH = 'right';
       h.transformHtml(new Transform().matrix());
       expect(h.element.style)
-        .toEqual({ position: 'absolute', left: '450px', top: '240px' });
+        .toEqual({
+          position: 'absolute',
+          left: '450px',
+          top: '240px',
+          visibility: 'visible',
+        });
 
       h.alignH = 'center';
       h.alignV = 'top';
       h.transformHtml(new Transform().matrix());
       expect(h.element.style)
-        .toEqual({ position: 'absolute', left: '475px', top: '250px' });
+        .toEqual({
+          position: 'absolute',
+          left: '475px',
+          top: '250px',
+          visibility: 'visible',
+        });
 
       h.alignV = 'bottom';
       h.transformHtml(new Transform().matrix());
       expect(h.element.style)
-        .toEqual({ position: 'absolute', left: '475px', top: '230px' });
+        .toEqual({
+          position: 'absolute',
+          left: '475px',
+          top: '230px',
+          visibility: 'visible',
+        });
     });
   });
   test('getGLBoundaries', () => {
