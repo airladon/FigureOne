@@ -465,7 +465,7 @@ export type TypeNavigatorOptions = {
 //   nextGroup: a html parent that holds nextDescription and nextButton
 //   prevGroup: a html parent that holds prevDescription and prevButton
 //
-// Equation navigators 
+// Equation navigators
 
 export default class EqnNavigator extends DiagramElementCollection {
   shapes: Object;
