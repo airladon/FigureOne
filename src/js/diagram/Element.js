@@ -1513,7 +1513,8 @@ class DiagramElementPrimative extends DiagramElement {
     super.show();
     if (this.drawingObject instanceof HTMLObject) {
       this.drawingObject.show = true;
-      this.drawingObject.transformHtml(this.lastDrawTransform.matrix());
+      // console.log(this.lastDrawTransform.matrix())
+      // this.drawingObject.transformHtml(this.lastDrawTransform.matrix());
     }
   }
 

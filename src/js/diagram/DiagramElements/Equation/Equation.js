@@ -801,9 +801,10 @@ export class EquationNew extends DiagramElementCollection {
   render(animationStop: boolean = true) {
     const form = this.getCurrentForm();
     if (form != null) {
+      form.setPositions();
       form.showHide(0, 0, null, animationStop);
       this.show();
-      form.setPositions();
+      // form.setPositions();
       form.applyElementMods();
       // this.updateDescription();
     }
