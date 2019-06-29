@@ -1513,8 +1513,16 @@ class DiagramElementPrimative extends DiagramElement {
     super.show();
     if (this.drawingObject instanceof HTMLObject) {
       this.drawingObject.show = true;
-      // console.log(this.lastDrawTransform.matrix())
-      // this.drawingObject.transformHtml(this.lastDrawTransform.matrix());
+
+      // This line is a challenge.
+      // It will show a html element immediately before the next draw frame
+      // meaning the draw matrix will be old.
+      // If this line is removed, it causes a blanking between lesson pages
+      // for html elements that are always on screen
+      // Therefore, should use diagram.setFirstTransform before using this,
+      // or in the future remove this line, and the line in hide(), and
+      // somehow do the hide in the draw call
+      this.drawingObject.transformHtml(this.lastDrawTransform.matrix());
     }
   }
 
