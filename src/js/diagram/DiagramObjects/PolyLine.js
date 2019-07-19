@@ -378,7 +378,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     }
   }
 
-  updatePoints(newPointsIn: Array<Point>) {
+  updatePoints(newPointsIn: Array<Point>, skipCallback: boolean = false) {
     const newPoints = newPointsIn.map(p => getPoint(p));
     if (this._line != null) {
       this._line.drawingObject.change(newPoints);
@@ -459,7 +459,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       }
     }
     this.points = newPoints;
-    if (this.updatePointsCallback != null) {
+    if (this.updatePointsCallback != null && !skipCallback) {
       this.updatePointsCallback();
     }
   }
@@ -486,12 +486,12 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     }
   }
 
-  reversePoints() {
+  reversePoints(skipCallback: boolean = true) {
     const newPoints = [];
     for (let i = 0; i < this.points.length; i += 1) {
       newPoints.push(this.points[this.points.length - 1 - i]);
     }
-    this.updatePoints(newPoints);
+    this.updatePoints(newPoints, skipCallback);
   }
 
   setPositionWithoutMoving(

@@ -878,10 +878,11 @@ class DiagramObjectAngle extends DiagramElementCollection {
           let angleText = roundNum(this.angle, label.precision)
             .toFixed(label.precision);
           if (label.units === 'degrees') {
-            angleText = roundNum(
-              this.angle * 180 / Math.PI,
-              label.precision,
-            ).toFixed(label.precision);
+            let a = roundNum(this.angle * 180 / Math.PI, label.precision);
+            if (a === 360) {
+              a = 0;
+            }
+            angleText = a.toFixed(label.precision);
             angleText = `${angleText}º`;
           }
           label.setText(angleText);

@@ -925,6 +925,7 @@ export default class DiagramPrimatives {
     fontSize?: number,
     showGrid?: boolean,
     color?: Array<number>,
+    fontColor?: Array<number>,
     gridColor?: Array<number>,
     location?: Transform | Point,
     decimalPlaces?: number,
@@ -941,17 +942,23 @@ export default class DiagramPrimatives {
       fontSize: 0.13,
       showGrid: true,
       color: [1, 1, 1, 0],
-      gridColor: [1, 1, 1, 0],
       location: new Transform(),
       decimalPlaces: 1,
       lineWidth: 0.01,
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
 
+    if (options.fontColor == null) {
+      options.fontColor = options.color.slice();
+    }
+    if (options.gridColor == null) {
+      options.gridColor = options.color.slice();
+    }
+
     const {
       width, lineWidth, limits, color, stepX, decimalPlaces,
       yAxisLocation, xAxisLocation, fontSize, height, stepY,
-      location, showGrid, gridColor,
+      location, showGrid, gridColor, fontColor,
     } = options;
 
     const xProps = new AxisProperties('x', 0);
@@ -972,6 +979,7 @@ export default class DiagramPrimatives {
     xProps.majorTicks.offset = -xProps.majorTicks.length / 2;
     xProps.majorTicks.width = lineWidth * 2;
     xProps.majorTicks.labelMode = 'off';
+    xProps.majorTicks.color = color.slice();
     xProps.majorTicks.labels = tools.range(
       xProps.limits.min,
       xProps.limits.max,
@@ -990,7 +998,7 @@ export default class DiagramPrimatives {
     );
     xProps.majorTicks.labelsHAlign = 'center';
     xProps.majorTicks.labelsVAlign = 'top';
-    xProps.majorTicks.fontColor = color.slice();
+    xProps.majorTicks.fontColor = fontColor.slice();
     xProps.majorTicks.fontSize = fontSize;
     xProps.majorTicks.fontWeight = '400';
 
@@ -1019,6 +1027,7 @@ export default class DiagramPrimatives {
     yProps.majorTicks.offset = -yProps.majorTicks.length / 2;
     yProps.majorTicks.width = xProps.majorTicks.width;
     yProps.majorTicks.labelMode = 'off';
+    yProps.majorTicks.color = color.slice();
     yProps.majorTicks.labels = tools.range(
       yProps.limits.min,
       yProps.limits.max,
