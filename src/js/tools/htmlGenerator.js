@@ -196,6 +196,57 @@ function highlight(classesOrColor: string | Array<number> = '') {
   };
 }
 
+function link(
+  linkStr: string,
+  colorOrOptions: Array<number> | {
+    color?: ?Array<number>,
+    id?: string,
+    classes?: string,
+    text?: ?string,
+    newTab?: ?boolean,
+  } | null = null,
+) {
+  let classStr = 'action_word interactive_word';
+  let colorToUse = null;
+  const defaultOptions = {
+    color: null,
+    id: `lesson__id_${generateUniqueId()}`,
+    interactive: true,
+    classes: '',
+    text: null,
+    newTab: true,
+  };
+  let options = defaultOptions;
+  if (Array.isArray(colorOrOptions)) {
+    colorToUse = colorOrOptions;
+  } else if (colorOrOptions != null) {
+    options = joinObjects(defaultOptions, colorOrOptions);
+  }
+  const {
+    color, id, classes, text,
+  } = options;
+  if (color != null) {
+    colorToUse = color;
+  }
+
+  if (classes !== '') {
+    classStr = `${classStr} ${classes}`;
+  }
+
+  const target = options.newTab ? ' target="_blank"' : '';
+  const idToUse = () => id;
+  return {
+    replacementText: (textIn: string) => {
+      const idStr = id ? ` id="${id}"` : '';
+      const colorStr = colorToUse ? ` style="color:${colorArrayToRGBA(colorToUse)};"` : '';
+      return {
+        replacementText: `<a href=${linkStr}${idStr}class="${classStr}"${colorStr} rel="noreferrer noopener"${target}>${(text || textIn).trim()}</a>`,
+      };
+    },
+    id: idToUse,
+  };
+}
+
 function highlightWord(text: string, classesOrColor: string | Array<number> = '') {
   let classStr = 'highlight_word';
   if (typeof classesOrColor === 'string') {
@@ -431,5 +482,5 @@ export {
   actionWord, click, highlight, addClass, addId,
   onClickId, highlightWord, centerV, centerH, centerVH, toHTML,
   itemSelector, unit, applyModifiers,
-  setOnClicks, setHTML, withClass, style, clickW,
+  setOnClicks, setHTML, withClass, style, clickW, link,
 };

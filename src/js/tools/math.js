@@ -281,20 +281,36 @@ function range(start: number, stop: number, step: number = 1) {
   return out;
 }
 
-function randInt(minOrMax: number, max: ?number = null) {
-  if (max != null) {
-    const min = minOrMax;
-    return Math.floor(Math.random() * Math.floor((max - min)) + Math.floor(min));
-  }
-  return Math.floor(Math.random() * Math.floor(minOrMax));
+function randSign() {
+  return Math.random() > 0.5 ? 1 : -1;
 }
 
-function rand(minOrMax: number, max: ?number = null) {
+function randInt(minOrMax: number, max: ?number = null, plusOrMinus: boolean = false) {
+  let r = 0;
   if (max != null) {
     const min = minOrMax;
-    return Math.random() * (max - min) + min;
+    r = Math.floor(Math.random() * Math.floor((max - min)) + Math.floor(min));
+  } else {
+    r = Math.floor(Math.random() * Math.floor(minOrMax));
   }
-  return Math.random() * minOrMax;
+  if (plusOrMinus) {
+    r *= randSign();
+  }
+  return r;
+}
+
+function rand(minOrMax: number, max: ?number = null, plusOrMinus: boolean = false) {
+  let r = 0;
+  if (max != null) {
+    const min = minOrMax;
+    r = Math.random() * (max - min) + min;
+  } else {
+    r = Math.random() * minOrMax;
+  }
+  if (plusOrMinus) {
+    r *= randSign();
+  }
+  return r;
 }
 
 function randElement<T>(inputArray: Array<T>): T {
@@ -342,5 +358,6 @@ export {
   removeRandElement,
   randElements,
   rand2D,
+  randSign,
 };
 
