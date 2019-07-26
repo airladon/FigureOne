@@ -65,6 +65,7 @@ const diagramColorNames = [
   '--diagram-text-latin',
   '--diagram-text-greek',
   '--diagram-text-english',
+  '--diagram-text-note',
   '--diagram-qr-background',
 ];
 

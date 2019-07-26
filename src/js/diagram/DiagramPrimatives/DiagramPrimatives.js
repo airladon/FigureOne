@@ -508,7 +508,11 @@ export default class DiagramPrimatives {
     const {
       id, classes, position, alignV, alignH,
     } = options;
-    return this.htmlElement(inside, id, classes, getPoint(position), alignV, alignH);
+    const element = this.htmlElement(inside, id, classes, getPoint(position), alignV, alignH);
+    if (options.color != null) {
+      element.setColor(options.color);
+    }
+    return element;
   }
 
   lines(
@@ -573,6 +577,7 @@ export default class DiagramPrimatives {
       position: null,
       center: new Point(0, 0),
       trianglePrimitives: false,
+      linePrimitives: false,
     };
     const options = Object.assign({}, defaultOptions, ...optionsIn);
     // const o = optionsToUse;
@@ -595,7 +600,20 @@ export default class DiagramPrimatives {
       direction = -1;
     }
     let element;
-    if (options.fill) {
+    if (options.linePrimitives) {
+      element = PolygonLine(
+        this.webgl,
+        options.sides,
+        options.radius,
+        options.rotation,
+        direction,
+        options.sidesToDraw,
+        options.width,
+        options.color,
+        options.transform,
+        this.limits,
+      );
+    } else if (options.fill) {
       element = PolygonFilled(
         this.webgl,
         options.sides,

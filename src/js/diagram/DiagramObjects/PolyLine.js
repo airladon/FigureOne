@@ -59,6 +59,25 @@ function makeArray<T>(
     return outArray;
   }
   const outArray = [];
+  let labels = [];
+
+  if (typeof possibleArray === 'object' && possibleArray != null) {
+    if (possibleArray.label != null
+      && possibleArray.label.text != null
+      && Array.isArray(possibleArray.label.text)
+    ) {
+      labels = possibleArray.label.text.slice();
+      // const obj = possibleArray;
+      for (let i = 0; i < count; i += 1) {
+        // $FlowFixMe
+        const obj = { label: { text: labels[i % labels.length] } };
+        // console.log(labels, labels[i % labels.length]);
+        outArray.push(joinObjects({}, possibleArray, obj));
+      }
+      // $FlowFixMe
+      return outArray;
+    }
+  }
   for (let i = 0; i < count; i += 1) {
     outArray.push(possibleArray);
   }
