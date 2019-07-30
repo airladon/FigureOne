@@ -26,11 +26,12 @@ export type TypeAngleLabelOptions = {
   curvePosition?: number,         // Label position along curve in %
   showRealAngle?: boolean,        // Use angle as label
   units?: 'degrees' | 'radians';  // Real angle units
-  precision?: number,     // Num decimal places if using angle label
+  precision?: number,         // Num decimal places if using angle label
   orientation?: TypeAngleLabelOrientation,  // horiztonal or tangent
-  autoHide?: number,              // Auto hide label at this threshold
+  autoHide?: ?number,         // Auto hide label if angle is less than this
+  autoHideMax?: ?number,      // Auto hide label if angle is greater than this
   scale?: number,             // Text scale
-  color?: Array<number>,          // Text color can be different to curve
+  color?: Array<number>,      // Text color can be different to curve
 };
 
 export type TypeAngleOptions = {
@@ -44,6 +45,8 @@ export type TypeAngleOptions = {
     radius?: number,          // Curve radius
     num?: number,             // Number of curves
     step?: number,            // Step radius of curves if curve num > 1
+    autoHideMin?: ?number,     // if angle is less than this, hide curve
+    autoHideMax?: ?number,     // if angle is less than this, hide curve
   },
   p1?: Point,               // Can define angle with p1, p2, p3
   p2?: Point,               // p2 is angle vertex
@@ -127,6 +130,7 @@ class AngleLabel extends EquationLabel {
   precision: number;
   units: 'degrees' | 'radians';
   autoHide: number;
+  autoHideMax: ?number;
 
   constructor(
     equation: Object,
@@ -137,7 +141,8 @@ class AngleLabel extends EquationLabel {
     showRealAngle: boolean = false,
     units: 'degrees' | 'radians' = 'degrees',
     precision: number = 0,
-    autoHide: number = -1,
+    autoHide: ?number = null,
+    autoHideMax: ?number = null,
     orientation: TypeAngleLabelOrientation = 'horizontal',
     scale: number = 0.7,
   ) {
@@ -149,6 +154,7 @@ class AngleLabel extends EquationLabel {
     this.orientation = orientation;
     this.precision = precision;
     this.autoHide = autoHide;
+    this.autoHideMax = autoHideMax;
   }
 }
 
@@ -191,6 +197,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
     radius: number,
     num: number,
     step: number,
+    autoHideMin: ?number,
+    autoHideMax: ?number,
   };
 
   // angle properties - pulic read only
@@ -486,7 +494,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
       units: 'degrees',
       precision: 0,
       orientation: 'horizontal',
-      autoHide: -1,
+      autoHide: null,
+      autoHideMax: null,
       scale: 0.7,
       color: this.color,
     };
@@ -509,6 +518,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       optionsToUse.units,
       optionsToUse.precision,
       optionsToUse.autoHide,
+      optionsToUse.autoHideMax,
       optionsToUse.orientation,
       optionsToUse.scale,
     );
@@ -528,6 +538,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
       radius: 0.5,
       num: 1,
       step: 0,
+      autoHideMin: null,
+      autoHideMax: null,
     };
     const optionsToUse = Object.assign(
       {}, defaultCurveOptions, curveOptions,
@@ -754,7 +766,21 @@ class DiagramObjectAngle extends DiagramElementCollection {
 
     const { _curve, curve, _curveRight } = this;
     if (_curve != null && curve != null) {
-      if (this.autoRightAngle
+      if (
+        (curve.autoHideMin != null && this.angle < curve.autoHideMin)
+        || (curve.autoHideMax != null && this.angle > curve.autoHideMax)
+      ) {
+        if (_curveRight != null) {
+          _curveRight.hide();
+        }
+        _curve.hide();
+        if (_arrow1 != null) {
+          _arrow1.hide();
+        }
+        if (_arrow2 != null) {
+          _arrow2.hide();
+        }
+      } else if (this.autoRightAngle
         && this.angle >= Math.PI / 2 - this.rightAngleRange / 2
         && this.angle <= Math.PI / 2 + this.rightAngleRange / 2
       ) {
@@ -870,7 +896,10 @@ class DiagramObjectAngle extends DiagramElementCollection {
     }
     const { _label, label } = this;
     if (_label && label) {
-      if (label.autoHide > this.angle) {
+      if (
+        (label.autoHide != null && label.autoHide > this.angle)
+        || (label.autoHideMax != null && this.angle > label.autoHideMax)
+      ) {
         _label.hide();
       } else {
         _label.show();

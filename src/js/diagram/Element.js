@@ -1016,6 +1016,10 @@ class DiagramElement {
     this.stopPulsing(cancelled);
   }
 
+  cancel(forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false) {
+    this.stop(true, forceSetToEndOfPlan);
+  }
+
   updateLimits(
     limits: Rect,
     transforms: TypeSpaceTransforms = this.diagramTransforms,
