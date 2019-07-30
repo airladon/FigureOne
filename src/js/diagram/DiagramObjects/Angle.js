@@ -866,6 +866,38 @@ class DiagramObjectAngle extends DiagramElementCollection {
     }
   }
 
+  checkLabelForRightAngle() {
+    if (this.autoRightAngle === false) {
+      return;
+    }
+    const { label } = this;
+    let setRight = false;
+    if (label != null) {
+      const angle = parseFloat(label.getText());
+      if (angle === 90) {
+        setRight = true;
+      }
+    }
+    if (setRight === false) {
+      return;
+    }
+    const {
+      _curveRight, _curve, _arrow1, _arrow2,
+    } = this;
+    if (_curveRight != null) {
+      _curveRight.showAll();
+    }
+    if (_curve != null) {
+      _curve.hide();
+    }
+    if (_arrow1 != null) {
+      _arrow1.hide();
+    }
+    if (_arrow2 != null) {
+      _arrow2.hide();
+    }
+  }
+
   getAngle(units: 'deg' | 'rad' = 'rad') {
     if (units === 'deg') {
       return this.angle * 180 / Math.PI;
