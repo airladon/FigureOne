@@ -707,6 +707,9 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     angle0.setLabel(`${a0.toFixed(anglePrecision)}º`);
     angle1.setLabel(`${a1.toFixed(anglePrecision)}º`);
     angle2.setLabel(`${a2.toFixed(anglePrecision)}º`);
+    angle0.checkLabelForRightAngle();
+    angle1.checkLabelForRightAngle();
+    angle2.checkLabelForRightAngle();
 
     if (this.makeValid != null) {
       const { minSide } = this.makeValid.hide;
@@ -731,8 +734,6 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       }
       if (hideAngles) {
         this.hideAngles();
-      } else {
-        this.showAngles();
       }
     }
 
