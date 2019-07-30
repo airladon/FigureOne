@@ -1,9 +1,10 @@
 // @flow
 
 import {
-  Transform, Point, getPoint, Rect,
+  Transform, Point, getPoint, Rect, clipAngle,
 } from '../../tools/g2';
 import { joinObjects } from '../../tools/tools';
+import { round } from '../../tools/math';
 import {
   DiagramElementCollection, DiagramElementPrimative,
 } from '../Element';
@@ -42,6 +43,14 @@ export type TypePolyLineOptions = {
   side?: TypeLineOptions | Array<TypeLineOptions>,
   pad?: TypePadOptions | Array<TypePadOptions>,
   transform?: Transform,
+  makeValid?: ?{
+    shape: 'triangle',
+    hide?: {
+      minAngle?: ?number,
+      maxAngle?: ?number,
+      minSide?: ?number,
+    },
+  };
 };
 
 function makeArray<T>(
@@ -119,6 +128,14 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
   options: TypePolyLineOptions;
   updatePointsCallback: ?() => void;
   reverse: boolean;
+  makeValid: ?{
+    shape: 'triangle';
+    hide: {
+      minAngle: ?number,
+      maxAngle: ?number,
+      minSide: ?number,
+    }
+  };
 
   constructor(
     shapes: DiagramPrimatives,
@@ -138,7 +155,18 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       width: 0.01,
       reverse: false,
       transform: new Transform('PolyLine').scale(1, 1).rotate(0).translate(0, 0),
+      makeValid: null,
     };
+    if (options.makeValid != null && options.makeValid.shape != null && options.makeValid.shape === 'triangle') {
+      defaultOptions.makeValid = {
+        shape: 'triangle',
+        hide: {
+          minAngle: null,
+          maxAngle: null,
+          minSide: null,
+        },
+      };
+    }
     const defaultSideOptions: TypeLineOptions = {
       showLine: false,
       offset: 0,
@@ -220,6 +248,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     this.close = optionsToUse.close;
     this.options = optionsToUse;
     this.reverse = optionsToUse.reverse;
+    this.makeValid = optionsToUse.makeValid;
 
     this.points = optionsToUse.points.map(p => getPoint(p));
 
@@ -478,6 +507,9 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       }
     }
     this.points = newPoints;
+    if (this.makeValid != null && this.makeValid.shape === 'triangle' && !skipCallback) {
+      this.makeValidTriangle();
+    }
     if (this.updatePointsCallback != null && !skipCallback) {
       this.updatePointsCallback();
     }
@@ -594,5 +626,185 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
   updateLabels(rotationOffset: number = this.getRotation()) {
     this.updateAngleLabels(rotationOffset);
     this.updateSideLabels(rotationOffset);
+  }
+
+  makeValidTriangle() {
+    // $FlowFixMe
+    const angle0 = this._angle0;  // $FlowFixMe
+    const angle1 = this._angle1;  // $FlowFixMe
+    const angle2 = this._angle2;  // $FlowFixMe
+    const side01 = this._side01;  // $FlowFixMe
+    const side12 = this._side12;  // $FlowFixMe
+    const side20 = this._side20;
+    const anglePrecision = angle0.label.precision;
+    const sidePrecision = side01.label.precision;
+
+    // $FlowFixMe
+    const clipAngle0 = clipAngle(angle0.getAngle(), '0to360') * 180 / Math.PI;
+    const clipAngle1 = clipAngle(angle1.getAngle(), '0to360') * 180 / Math.PI;
+    const clipAngle2 = clipAngle(angle2.getAngle(), '0to360') * 180 / Math.PI;
+    let a0 = round(clipAngle0, anglePrecision);
+    let a1 = round(clipAngle1, anglePrecision);
+    let a2 = round(clipAngle2, anglePrecision);
+    let s01 = round(side01.getLength(), sidePrecision);
+    let s12 = round(side12.getLength(), sidePrecision);
+    let s20 = round(side20.getLength(), sidePrecision);
+
+    // Reverse the points if the angles are on the outside
+    if (a0 > 90 && a1 > 90 && a2 > 90) {
+      this.reverse = !this.reverse;
+      this.updatePoints(this.points, false);
+      a0 = round(clipAngle(angle0.getAngle(), '0to360') * 180 / Math.PI, anglePrecision);
+      a1 = round(clipAngle(angle1.getAngle(), '0to360') * 180 / Math.PI, anglePrecision);
+      a2 = round(clipAngle(angle2.getAngle(), '0to360') * 180 / Math.PI, anglePrecision);
+    }
+    // else {
+    // This is a weird case at the 0/360 transition
+    if (a0 > 180) {
+      a0 = 360 - angle0;
+    }
+    if (a1 > 180) {
+      a1 = 360 - angle1;
+    }
+    if (a2 > 180) {
+      a2 = 360 - angle2;
+    }
+
+    // Hide the angles if the triangle is thin or small enough
+    // if (
+    //   (angle0.label.autoHide > -1 && a0 > angle0.label.autoHide)
+    //   || (angle0.label.autoHideMax != null && angle0.label.autoHideMax < a0)
+    //   || (angle1.label.autoHide > -1 && a1 > angle1.label.autoHide)
+    //   || (angle1.label.autoHideMax != null && angle1.label.autoHideMax < a1)
+    //   || (angle2.label.autoHide > -1 && a2 > angle2.label.autoHide)
+    //   || (angle2.label.autoHideMax != null && angle2.label.autoHideMax < a2)
+    //   || s01 < 0.6 || s12 < 0.6 || s20 < 0.6
+    // ) {
+    // if (angle0.isShown) {
+    // Make angles consistent with 180º
+    const tot = a0 + a1 + a2;
+    const diff = tot - 180;
+    // If the angles are > 180, then find the closet angle
+    // to rounding down and reduce it by diff
+    // If the angles are < 180 then find the closes angle
+    // to round down and round it down
+    const remainders = [
+      round(clipAngle0, anglePrecision + 1),
+      round(clipAngle1, anglePrecision + 1),
+      round(clipAngle2, anglePrecision + 1),
+    ].map(a => a - Math.floor(a * (10 ** anglePrecision)) / (10 ** anglePrecision));
+    const angles = [a0, a1, a2];
+    let indexToChange = 0;
+    if (tot > 180) {
+      indexToChange =
+        remainders.reduce((iMax, x, i, arr) => (x > arr[iMax] ? i : iMax), 0);
+    } else if (tot < 180) {
+      indexToChange =
+        remainders.reduce((iMin, x, i, arr) => (x < arr[iMin] ? i : iMin), 1);
+    }
+    angles[indexToChange] -= diff;
+    [a0, a1, a2] = angles;
+    angle0.setLabel(`${a0.toFixed(anglePrecision)}º`);
+    angle1.setLabel(`${a1.toFixed(anglePrecision)}º`);
+    angle2.setLabel(`${a2.toFixed(anglePrecision)}º`);
+
+    if (this.makeValid != null) {
+      const { minSide } = this.makeValid.hide;
+      let { minAngle, maxAngle } = this.makeValid.hide;
+      let hideAngles = false;
+      if (minAngle != null) {
+        minAngle *= 180 / Math.PI;
+        if (a0 < minAngle || a1 < minAngle || a2 < minAngle) {
+          hideAngles = true;
+        }
+      }
+      if (maxAngle != null) {
+        maxAngle *= 180 / Math.PI;
+        if (a0 > maxAngle || a1 > maxAngle || a2 > maxAngle) {
+          hideAngles = true;
+        }
+      }
+      if (
+        minSide != null && (s01 < minSide || s12 < minSide || s20 < minSide)
+      ) {
+        hideAngles = true;
+      }
+      if (hideAngles) {
+        this.hideAngles();
+      } else {
+        this.showAngles();
+      }
+    }
+
+    // Make sides consistent with equilateral or isosceles
+    if (
+      (side01.isShown || side12.isShown || side20.isShown)
+      && a0 > 0 && a0 < 180
+      && a1 > 0 && a1 < 180
+      && a2 > 0 && a2 < 180
+    ) {
+      s12 = round(
+        s01 / Math.sin(a2 * Math.PI / 180) * Math.sin(a0 * Math.PI / 180),
+        sidePrecision,
+      );
+      s20 = round(
+        s01 / Math.sin(a2 * Math.PI / 180) * Math.sin(a1 * Math.PI / 180),
+        sidePrecision,
+      );
+      const leastSigStep = 1 / (10 ** sidePrecision);
+      // If Equilateral, make all sides equal
+      if (a0 === 60 && a1 === 60 && a2 === 60) {
+        s12 = s01;
+        s20 = s01;
+      // If Isosceles possibility 1:
+      } else if (a0 === a1) {
+        s20 = s12;
+        if (s01 === s12) {
+          const moreAccurate = round(side01.getLength(), sidePrecision + 1);
+          if (moreAccurate < s01) {
+            s01 -= leastSigStep;
+          } else {
+            s01 += leastSigStep;
+          }
+        }
+      // If Isosceles possibility 2:
+      } else if (a0 === a2) {
+        s01 = s12;
+        if (s20 === s12) {
+          const moreAccurate = round(side20.getLength(), sidePrecision + 1);
+          if (moreAccurate < s20) {
+            s20 -= leastSigStep;
+          } else {
+            s20 += leastSigStep;
+          }
+        }
+      // If Isosceles possibility 3:
+      } else if (a1 === a2) {
+        s20 = s01;
+        if (s12 === s01) {
+          const moreAccurate = round(side12.getLength(), sidePrecision + 1);
+          if (moreAccurate < s12) {
+            s12 -= leastSigStep;
+          } else {
+            s12 += leastSigStep;
+          }
+        }
+      // If these are not equilateral, or isosceles, then all sides must be different length
+      }
+    }
+
+    // if (s01 === Infinity) {
+    //   s01 = round(side01.getLength(), sidePrecision);
+    // }
+    // if (s12 === Infinity) {
+    //   s12 = round(side12.getLength(), sidePrecision);
+    // }
+    // if (s20 === Infinity) {
+    //   s20 = round(side20.getLength(), sidePrecision);
+    // }
+    side01.setLabel(`${s01.toFixed(sidePrecision)}`);
+    side12.setLabel(`${s12.toFixed(sidePrecision)}`);
+    side20.setLabel(`${s20.toFixed(sidePrecision)}`);
+    // }
   }
 }
