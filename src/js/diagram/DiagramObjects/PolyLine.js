@@ -743,14 +743,14 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       && a1 > 0 && a1 < 180
       && a2 > 0 && a2 < 180
     ) {
-      s12 = round(
-        s01 / Math.sin(a2 * Math.PI / 180) * Math.sin(a0 * Math.PI / 180),
-        sidePrecision,
-      );
-      s20 = round(
-        s01 / Math.sin(a2 * Math.PI / 180) * Math.sin(a1 * Math.PI / 180),
-        sidePrecision,
-      );
+      // s12 = round(
+      //   s01 / Math.sin(a2 * Math.PI / 180) * Math.sin(a0 * Math.PI / 180),
+      //   sidePrecision,
+      // );
+      // s20 = round(
+      //   s01 / Math.sin(a2 * Math.PI / 180) * Math.sin(a1 * Math.PI / 180),
+      //   sidePrecision,
+      // );
       const leastSigStep = 1 / (10 ** sidePrecision);
       // If Equilateral, make all sides equal
       if (a0 === 60 && a1 === 60 && a2 === 60) {
