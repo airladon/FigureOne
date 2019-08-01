@@ -129,7 +129,7 @@ class AngleLabel extends EquationLabel {
   orientation: TypeAngleLabelOrientation;
   precision: number;
   units: 'degrees' | 'radians';
-  autoHide: number;
+  autoHide: ?number;
   autoHideMax: ?number;
 
   constructor(
