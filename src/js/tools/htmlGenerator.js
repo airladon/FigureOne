@@ -146,10 +146,10 @@ function itemSelector(
   classes: string = '',
   selectorIndex: number = 0,
 ) {
-  let outStr = `<ul id="id__lesson_item_selector_${selectorIndex}" 
+  let outStr = `<ul id="id__figureone_item_selector_${selectorIndex}" 
                     class=${classes}>`;
   items.forEach((item, index) => {
-    outStr += `<li id="id__lesson_item_selector_${index}">${item}</li>`;
+    outStr += `<li id="id__figureone_item_selector_${index}">${item}</li>`;
   });
   outStr += '</ul>';
   return outStr;

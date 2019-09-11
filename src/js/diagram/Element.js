@@ -2315,7 +2315,7 @@ class DiagramElementCollection extends DiagramElement {
   // This method is here as a convenience method for content item selectors
   // eslint-disable-next-line class-methods-use-this
   goToStep(step: number) {
-    const elem = document.getElementById('id__lesson_item_selector_0');
+    const elem = document.getElementById('id__figureone_item_selector_0');
     const elems = [];
     if (elem != null) {
       if (elem.children.length > 0) {
@@ -2326,9 +2326,9 @@ class DiagramElementCollection extends DiagramElement {
     }
     elems.forEach((e, index) => {
       if (index === step) {
-        e.classList.add('lesson__item_selector_selected');
+        e.classList.add('figureone__item_selector_selected');
       } else {
-        e.classList.remove('lesson__item_selector_selected');
+        e.classList.remove('figureone__item_selector_selected');
       }
     });
   }

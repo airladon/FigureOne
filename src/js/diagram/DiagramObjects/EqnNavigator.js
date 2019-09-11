@@ -521,7 +521,7 @@ export default class EqnNavigator extends DiagramElementCollection {
       alignH: 'center',
       alignV: 'middle',
       interactive: true,
-      id: generateUniqueId('id_lesson__equation_navigator_'),
+      id: generateUniqueId('id_figureone__equation_navigator_'),
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
     this.options = optionsToUse;
