@@ -57,13 +57,13 @@ function updateDescription(
 
 function enableTouch(element: ?HTMLElement) {
   if (element) {
-    element.classList.remove('lesson__eqn_nav__not_touchable');
+    element.classList.remove('figureone__eqn_nav__not_touchable');
   }
 }
 
 function disableTouch(element: ?HTMLElement) {
   if (element) {
-    element.classList.add('lesson__eqn_nav__not_touchable');
+    element.classList.add('figureone__eqn_nav__not_touchable');
   }
 }
 
@@ -105,8 +105,8 @@ function updateButtons(
       if (nav.navType === '1Button') {
         const { next } = nav;
         if (next) {
-          next.classList.remove('lesson__eqn_nav__next_form');
-          next.classList.remove('lesson__eqn_nav__reset');
+          next.classList.remove('figureone__eqn_nav__next_form');
+          next.classList.remove('figureone__eqn_nav__reset');
           next.classList.remove('interactive_top_right');
         }
       }
@@ -120,8 +120,8 @@ function updateButtons(
       if (nav.navType === '1Button' && nav.eqn.eqn.currentFormSeries.length > 1) {
         const { next } = nav;
         if (next) {
-          next.classList.add('lesson__eqn_nav__reset');
-          next.classList.remove('lesson__eqn_nav__next_form');
+          next.classList.add('figureone__eqn_nav__reset');
+          next.classList.remove('figureone__eqn_nav__next_form');
         }
       }
     } else {
@@ -132,8 +132,8 @@ function updateButtons(
       if (nav.navType === '1Button' && nav.eqn.eqn.currentFormSeries.length > 1) {
         const { next } = nav;
         if (next) {
-          next.classList.add('lesson__eqn_nav__next_form');
-          next.classList.remove('lesson__eqn_nav__reset');
+          next.classList.add('figureone__eqn_nav__next_form');
+          next.classList.remove('figureone__eqn_nav__reset');
         }
       }
     }
@@ -194,17 +194,17 @@ function makeType3Line(
   table.appendChild(currentGroup);
   table.appendChild(nextGroup);
 
-  table.classList.add('lesson__eqn_nav__table');
-  prevGroup.classList.add('lesson__eqn_nav__3line__prevRow');
-  currentGroup.classList.add('lesson__eqn_nav__3line__currentRow');
-  nextGroup.classList.add('lesson__eqn_nav__3line__nextRow');
-  prev.classList.add('lesson__eqn_nav__3line__prevRow__button');
-  refresh.classList.add('lesson__eqn_nav__3line__currentRow__button');
-  next.classList.add('lesson__eqn_nav__3line__nextRow__button');
-  prevDescription.classList.add('lesson__eqn_nav__3line__prevRow__description');
-  description.classList.add('lesson__eqn_nav__3line__currentRow__description');
-  description.classList.add('lesson__eqn_nav__description');
-  nextDescription.classList.add('lesson__eqn_nav__3line__nextRow__description');
+  table.classList.add('figureone__eqn_nav__table');
+  prevGroup.classList.add('figureone__eqn_nav__3line__prevRow');
+  currentGroup.classList.add('figureone__eqn_nav__3line__currentRow');
+  nextGroup.classList.add('figureone__eqn_nav__3line__nextRow');
+  prev.classList.add('figureone__eqn_nav__3line__prevRow__button');
+  refresh.classList.add('figureone__eqn_nav__3line__currentRow__button');
+  next.classList.add('figureone__eqn_nav__3line__nextRow__button');
+  prevDescription.classList.add('figureone__eqn_nav__3line__prevRow__description');
+  description.classList.add('figureone__eqn_nav__3line__currentRow__description');
+  description.classList.add('figureone__eqn_nav__description');
+  nextDescription.classList.add('figureone__eqn_nav__3line__nextRow__description');
 
   const defaultOptions = {
     forceTwoLines: false,
@@ -217,9 +217,9 @@ function makeType3Line(
   // Use two lines to stop jittering when transitioning from one line to two
   // lines
   if (optionsToUse.forceTwoLines) {
-    prevGroup.classList.add('lesson__eqn_nav__3line__prev_twoLines');
-    currentGroup.classList.add('lesson__eqn_nav__3line__current_twoLines');
-    nextGroup.classList.add('lesson__eqn_nav__3line__next_twoLines');
+    prevGroup.classList.add('figureone__eqn_nav__3line__prev_twoLines');
+    currentGroup.classList.add('figureone__eqn_nav__3line__current_twoLines');
+    nextGroup.classList.add('figureone__eqn_nav__3line__next_twoLines');
   }
 
   prevGroup.onclick = prevMethod;
@@ -252,10 +252,10 @@ function makeTypeDescriptionOnly(
   const description = document.createElement('td');
   currentGroup.appendChild(description);
   table.appendChild(currentGroup);
-  table.classList.add('lesson__eqn_nav__table');
-  currentGroup.classList.add('lesson__eqn_nav__description_only__currentRow');
-  description.classList.add('lesson__eqn_nav__description_only__currentRow__description');
-  description.classList.add('lesson__eqn_nav__description');
+  table.classList.add('figureone__eqn_nav__table');
+  currentGroup.classList.add('figureone__eqn_nav__description_only__currentRow');
+  description.classList.add('figureone__eqn_nav__description_only__currentRow__description');
+  description.classList.add('figureone__eqn_nav__description');
   currentGroup.onclick = nextMethod;
   return {
     table,
@@ -277,11 +277,11 @@ function makeTypeOneButton(
   currentGroup.appendChild(description);
   table.appendChild(currentGroup);
 
-  table.classList.add('lesson__eqn_nav__table');
-  currentGroup.classList.add('lesson__eqn_nav__1button__currentRow');
-  next.classList.add('lesson__eqn_nav__1button__button');
-  description.classList.add('lesson__eqn_nav__1line__currentRow__description');
-  description.classList.add('lesson__eqn_nav__description');
+  table.classList.add('figureone__eqn_nav__table');
+  currentGroup.classList.add('figureone__eqn_nav__1button__currentRow');
+  next.classList.add('figureone__eqn_nav__1button__button');
+  description.classList.add('figureone__eqn_nav__1line__currentRow__description');
+  description.classList.add('figureone__eqn_nav__description');
   next.classList.add('interactive_top_right');
   // const defaultOptions = {
   //   icons: true,
@@ -292,7 +292,7 @@ function makeTypeOneButton(
   description.onclick = nextMethod;
 
   // if (optionsToUse.icons) {
-  next.classList.add('lesson__eqn_nav__next_form');
+  next.classList.add('figureone__eqn_nav__next_form');
   // }
 
   return {
@@ -320,12 +320,12 @@ function makeType1Line(
   currentGroup.appendChild(next);
   table.appendChild(currentGroup);
 
-  table.classList.add('lesson__eqn_nav__table');
-  currentGroup.classList.add('lesson__eqn_nav__1line__currentRow');
-  prev.classList.add('lesson__eqn_nav__1line__prev__button');
-  next.classList.add('lesson__eqn_nav__1line__next__button');
-  description.classList.add('lesson__eqn_nav__1line__currentRow__description');
-  description.classList.add('lesson__eqn_nav__description');
+  table.classList.add('figureone__eqn_nav__table');
+  currentGroup.classList.add('figureone__eqn_nav__1line__currentRow');
+  prev.classList.add('figureone__eqn_nav__1line__prev__button');
+  next.classList.add('figureone__eqn_nav__1line__next__button');
+  description.classList.add('figureone__eqn_nav__1line__currentRow__description');
+  description.classList.add('figureone__eqn_nav__description');
 
   const defaultOptions = {
     forceTwoLines: false,
@@ -336,7 +336,7 @@ function makeType1Line(
   // Use two lines to stop jittering when transitioning from one line to two
   // lines
   if (optionsToUse.forceTwoLines) {
-    currentGroup.classList.add('lesson__eqn_nav__1line__current_twoLines');
+    currentGroup.classList.add('figureone__eqn_nav__1line__current_twoLines');
   }
 
   prev.onclick = prevMethod;
@@ -345,11 +345,11 @@ function makeType1Line(
 
   if (optionsToUse.arrows) {
     const nextArrow = document.createElement('div');
-    nextArrow.classList.add('lesson__eqn_nav__arrow_right');
+    nextArrow.classList.add('figureone__eqn_nav__arrow_right');
     next.appendChild(nextArrow);
 
     const prevArrow = document.createElement('div');
-    prevArrow.classList.add('lesson__eqn_nav__arrow_left');
+    prevArrow.classList.add('figureone__eqn_nav__arrow_left');
     prev.appendChild(prevArrow);
   } else {
     next.innerHTML = 'Next';
@@ -394,14 +394,14 @@ function makeType2Line(
   row.appendChild(next);
   table.appendChild(row);
 
-  table.classList.add('lesson__eqn_nav__table');
-  currentGroup.classList.add('lesson__eqn_nav__2lines__currentRow');
-  nextGroup.classList.add('lesson__eqn_nav__2lines__nextRow');
-  prev.classList.add('lesson__eqn_nav__2lines__prev__button');
-  next.classList.add('lesson__eqn_nav__2lines__next__button');
-  description.classList.add('lesson__eqn_nav__2lines__currentRow__description');
-  description.classList.add('lesson__eqn_nav__description');
-  nextDescription.classList.add('lesson__eqn_nav__2lines__nextRow__description');
+  table.classList.add('figureone__eqn_nav__table');
+  currentGroup.classList.add('figureone__eqn_nav__2lines__currentRow');
+  nextGroup.classList.add('figureone__eqn_nav__2lines__nextRow');
+  prev.classList.add('figureone__eqn_nav__2lines__prev__button');
+  next.classList.add('figureone__eqn_nav__2lines__next__button');
+  description.classList.add('figureone__eqn_nav__2lines__currentRow__description');
+  description.classList.add('figureone__eqn_nav__description');
+  nextDescription.classList.add('figureone__eqn_nav__2lines__nextRow__description');
 
   const defaultOptions = {
     forceTwoLines: false,
@@ -411,7 +411,7 @@ function makeType2Line(
   // Use two lines to stop jittering when transitioning from one line to two
   // lines
   if (optionsToUse.forceTwoLines > -1) {
-    currentGroup.classList.add('lesson__eqn_nav__2lines__current_twoLines');
+    currentGroup.classList.add('figureone__eqn_nav__2lines__current_twoLines');
   }
 
   prev.onclick = prevMethod;
@@ -421,11 +421,11 @@ function makeType2Line(
 
   if (optionsToUse.arrows) {
     const nextArrow = document.createElement('div');
-    nextArrow.classList.add('lesson__eqn_nav__arrow_right');
+    nextArrow.classList.add('figureone__eqn_nav__arrow_right');
     next.appendChild(nextArrow);
 
     const prevArrow = document.createElement('div');
-    prevArrow.classList.add('lesson__eqn_nav__arrow_left');
+    prevArrow.classList.add('figureone__eqn_nav__arrow_left');
     prev.appendChild(prevArrow);
   } else {
     next.innerHTML = 'Next';
