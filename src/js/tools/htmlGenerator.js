@@ -155,7 +155,7 @@ function itemSelector(
   return outStr;
 }
 
-const unit = (deg: string, rad: string) => `<span class="lesson__unit_deg">${deg}</span><span class="lesson__unit_rad">${rad}</span>
+const unit = (deg: string, rad: string) => `<span class="figureone__unit_deg">${deg}</span><span class="figureone__unit_rad">${rad}</span>
   `;
 
 
@@ -210,7 +210,7 @@ function link(
   let colorToUse = null;
   const defaultOptions = {
     color: null,
-    id: `lesson__id_${generateUniqueId()}`,
+    id: `figureone__id_${generateUniqueId()}`,
     interactive: true,
     classes: '',
     text: null,
@@ -290,7 +290,7 @@ function click(
   let colorToUse = null;
   const defaultOptions = {
     color: null,
-    id: `lesson__id_${generateUniqueId()}`,
+    id: `figureone__id_${generateUniqueId()}`,
     interactive: true,
     classes: '',
     text: null,

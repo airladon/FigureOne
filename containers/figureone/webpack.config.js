@@ -224,14 +224,6 @@ module.exports = (env) => {
             test: /js\/(diagram|Lesson|tools|components)/,
             name: 'tools',
           },
-          commonlessons: {
-            minSize: 10,
-            minChunks: 2,
-            priority: -10,
-            reuseExistingChunk: true,
-            test: /Lessons\/LessonsCommon/,
-            name: 'commonlessons',
-          },
           commoncss: {
             minSize: 10,
             minChunks: 2,
