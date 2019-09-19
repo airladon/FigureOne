@@ -2,6 +2,7 @@
 
 Interactive diagrams for js.
 
+Used in www.thisiget.com.
 
 # Interactive linting and testing
 
