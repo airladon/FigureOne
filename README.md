@@ -4,6 +4,8 @@ Interactive diagrams for js.
 
 Used in www.thisiget.com.
 
+Documentation to come...
+
 # Interactive linting and testing
 
 `./start_env dev` starts a dev container. Use commands: `flow`, `jest`, `npm lint` or `npm css` to run various linters and tests.
