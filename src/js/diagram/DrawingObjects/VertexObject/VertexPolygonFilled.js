@@ -27,7 +27,7 @@ class PolygonFilled extends VertexObject {
     } else {
       super(webgl);
     }
-    this.glPrimative = webgl[0].gl.TRIANGLE_FAN;
+    this.glPrimitive = webgl[0].gl.TRIANGLE_FAN;
 
     // Check potential errors in constructor input
     let sides = numSides;

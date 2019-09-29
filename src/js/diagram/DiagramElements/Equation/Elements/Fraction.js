@@ -4,11 +4,11 @@ import {
 } from '../../../../tools/g2';
 import { duplicateFromTo } from '../../../../tools/tools';
 import {
-  DiagramElementPrimative, DiagramElementCollection,
+  DiagramElementPrimitive, DiagramElementCollection,
 } from '../../../Element';
 import { Element, Elements } from './Element';
 // // Equation is a class that takes a set of drawing objects (TextObjects,
-// // DiagramElementPrimatives or DiagramElementCollections and HTML Objects
+// // DiagramElementPrimitives or DiagramElementCollections and HTML Objects
 // // and arranges their size in a )
 
 export default class Fraction extends Elements {
@@ -18,7 +18,7 @@ export default class Fraction extends Elements {
   vSpaceDenom: number;
   lineWidth: number;
   lineVAboveBaseline: number;
-  vinculum: DiagramElementPrimative | null | DiagramElementCollection;
+  vinculum: DiagramElementPrimitive | null | DiagramElementCollection;
   // mini: boolean;
   scaleModifier: number
   vinculumPosition: Point;
@@ -27,7 +27,7 @@ export default class Fraction extends Elements {
   constructor(
     numerator: Elements,
     denominator: Elements,
-    vinculum: DiagramElementPrimative | null | DiagramElementCollection,
+    vinculum: DiagramElementPrimitive | null | DiagramElementCollection,
   ) {
     if (vinculum) {
       super([numerator, denominator, new Element(vinculum)]);

@@ -2,7 +2,7 @@
 
 import VertexIntegral from './VertexIntegral';
 // import VertexPolygonFilled from '../../DrawingObjects/VertexObject/VertexPolygon';
-import { DiagramElementPrimative } from '../../../Element';
+import { DiagramElementPrimitive } from '../../../Element';
 import {
   Point, Transform, Rect,
 } from '../../../../tools/g2';
@@ -33,5 +33,5 @@ export default function Integral(
     transform = transformOrLocation._dup();
   }
 
-  return new DiagramElementPrimative(vertices, transform, color, diagramLimits);
+  return new DiagramElementPrimitive(vertices, transform, color, diagramLimits);
 }

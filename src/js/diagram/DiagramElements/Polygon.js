@@ -3,7 +3,7 @@
 import VertexPolygon from '../DrawingObjects/VertexObject/VertexPolygon';
 import VertexPolygonFilled from '../DrawingObjects/VertexObject/VertexPolygonFilled';
 import VertexPolygonLine from '../DrawingObjects/VertexObject/VertexPolygonLine';
-import { DiagramElementPrimative } from '../Element';
+import { DiagramElementPrimitive } from '../Element';
 import {
   Point, Transform, Rect,
 } from '../../tools/g2';
@@ -40,7 +40,7 @@ function Polygon(
   } else {
     transform = transformOrLocation._dup();
   }
-  return new DiagramElementPrimative(vertexLine, transform, color, diagramLimits);
+  return new DiagramElementPrimitive(vertexLine, transform, color, diagramLimits);
 }
 
 function PolygonFilled(
@@ -76,7 +76,7 @@ function PolygonFilled(
   } else {
     transform = transformOrLocation._dup();
   }
-  return new DiagramElementPrimative(vertexLineCorners, transform, color, diagramLimits);
+  return new DiagramElementPrimitive(vertexLineCorners, transform, color, diagramLimits);
 }
 
 function PolygonLine(
@@ -107,6 +107,6 @@ function PolygonLine(
   } else {
     transform = transformOrLocation._dup();
   }
-  return new DiagramElementPrimative(vertexLine, transform, color, diagramLimits);
+  return new DiagramElementPrimitive(vertexLine, transform, color, diagramLimits);
 }
 export { Polygon, PolygonFilled, PolygonLine };

@@ -8,13 +8,13 @@ import {
 } from '../tools/g2';
 import { isTouchDevice, joinObjects } from '../tools/tools';
 import {
-  DiagramElementCollection, DiagramElementPrimative,
+  DiagramElementCollection, DiagramElementPrimitive,
 } from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
 // eslint-disable-next-line import/no-cycle
 import Gesture from './Gesture';
 import DrawContext2D from './DrawContext2D';
-import DiagramPrimatives from './DiagramPrimatives/DiagramPrimatives';
+import DiagramPrimitives from './DiagramPrimitives/DiagramPrimitives';
 import DiagramEquation from './DiagramEquation/DiagramEquation';
 import DiagramObjects from './DiagramObjects/DiagramObjects';
 import addElements from './DiagramAddElements/addElements';
@@ -44,7 +44,7 @@ export type TypeSpaceTransforms = {
 //  - GL Canvas
 //    - Diagram
 //      - Element Collection
-//        - Element Primative
+//        - Element Primitive
 //          - Drawing Object (e.g. shape, text) from primative vertices
 //
 // A shape is defined in Drawing Object space.
@@ -94,10 +94,10 @@ class Diagram {
   globalAnimation: GlobalAnimation;
   gesture: Gesture;
   inTransition: boolean;
-  beingMovedElements: Array<DiagramElementPrimative |
+  beingMovedElements: Array<DiagramElementPrimitive |
                       DiagramElementCollection>;
 
-  beingTouchedElements: Array<DiagramElementPrimative |
+  beingTouchedElements: Array<DiagramElementPrimitive |
                         DiagramElementCollection>;
 
   moveTopElementOnly: boolean;
@@ -107,6 +107,7 @@ class Diagram {
   // gestureElement: HTMLElement;
   shapes: Object;
   shapesLow: Object;
+  primitive: Object;
   // shapesHigh: Object;
   equation: Object;
   equationLow: Object;
@@ -240,6 +241,7 @@ class Diagram {
     this.shapesLow = this.getShapes();
     // this.shapesHigh = this.getShapes(true);
     this.shapes = this.shapesLow;
+    this.primitive = this.shapes;
     this.equationLow = this.getEquations();
     // this.equationHigh = this.getEquations(true);
     this.equation = this.equationLow;
@@ -320,7 +322,7 @@ class Diagram {
     //   webgl = this.webglHigh;
     //   draw2D = this.draw2DHigh;
     // }
-    return new DiagramPrimatives(
+    return new DiagramPrimitives(
       webgl, draw2D,
       // this.draw2DFigures,
       this.htmlCanvas,
@@ -656,7 +658,7 @@ class Diagram {
   }
 
   rotateElement(
-    element: DiagramElementPrimative | DiagramElementCollection,
+    element: DiagramElementPrimitive | DiagramElementCollection,
     previousClientPoint: Point,
     currentClientPoint: Point,
   ) {
@@ -707,7 +709,7 @@ class Diagram {
   }
 
   translateElement(
-    element: DiagramElementPrimative | DiagramElementCollection,
+    element: DiagramElementPrimitive | DiagramElementCollection,
     previousClientPoint: Point,
     currentClientPoint: Point,
   ) {
@@ -735,7 +737,7 @@ class Diagram {
   }
 
   scaleElement(
-    element: DiagramElementPrimative | DiagramElementCollection,
+    element: DiagramElementPrimitive | DiagramElementCollection,
     previousClientPoint: Point,
     currentClientPoint: Point,
     type: 'x' | 'y' | '' = '',
@@ -857,13 +859,14 @@ class Diagram {
   // or the `add` method can be used.
   createDiagramElements() {
     // $FlowFixMe
-    this.elements = new DiagramElementCollection();
+    // this.elements = new DiagramElementCollection();
+    this.elements = this.primitive.collection();
     this.elements.diagramLimits = this.limits;
   }
 
   add(
     name: string,
-    diagramElement: DiagramElementPrimative | DiagramElementCollection,
+    diagramElement: DiagramElementPrimitive | DiagramElementCollection,
   ) {
     this.elements.add(name, diagramElement);
   }

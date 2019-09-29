@@ -17,7 +17,7 @@ class VertextFan extends VertexObject {
     points: Array<Point>,
   ) {
     super(webgl);
-    this.glPrimative = webgl[0].gl.TRIANGLE_FAN;
+    this.glPrimitive = webgl[0].gl.TRIANGLE_FAN;
 
     this.points = [];
     points.forEach((p) => {

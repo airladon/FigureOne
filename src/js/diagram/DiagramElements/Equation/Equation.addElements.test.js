@@ -84,14 +84,14 @@ describe('Diagram Equations From Object', () => {
           ),
         },
       },
-      // Equation symbols are DiagramElementPrimatives or Collections
+      // Equation symbols are DiagramElementPrimitives or Collections
       symbols: {     // Symbols can be auto generated from string, or passed in
         a: 'a',
         v: { symbol: 'vinculum' },
         v1: eqn.eqn.symbols.vinculum(),
         v2: diagram.shapes.horizontalLine(new Point(0, 0), 1, 0.1, 0, defaultColor),
       },
-      // Elements all become DiagramElementPrimatives/Collections and their
+      // Elements all become DiagramElementPrimitives/Collections and their
       // properties can be overwritten with elementOptions
       elementOptions: {
         a: 'a',

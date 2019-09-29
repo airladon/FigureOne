@@ -3,7 +3,7 @@ import {
   Point, Transform,
 } from '../../../tools/g2';
 import { joinObjects } from '../../../tools/tools';
-import DiagramPrimatives from '../../DiagramPrimatives/DiagramPrimatives';
+import DiagramPrimitives from '../../DiagramPrimitives/DiagramPrimitives';
 import Integral from './Symbols/Integral';
 // import SuperSub from './Elements/SuperSub';
 import Bracket from './Symbols/Bracket';
@@ -14,11 +14,11 @@ import SquareBracket from './Symbols/SquareBracket';
 // import { Annotation, AnnotationInformation } from './Elements/Annotation';
 
 export default class EquationSymbols {
-  shapes: DiagramPrimatives;
+  shapes: DiagramPrimitives;
   defaultColor: Array<number>;
 
   constructor(
-    shapes: DiagramPrimatives,
+    shapes: DiagramPrimitives,
     defaultColor: Array<number>,
   ) {
     this.shapes = shapes;

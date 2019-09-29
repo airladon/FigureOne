@@ -55,7 +55,7 @@ class VertexText extends VertexObject {
     textOptions: TypeVertexInputTextOptions,
   ) {
     super(webgl, 'withTexture', 'text');
-    this.glPrimative = webgl[0].gl.TRIANGLE_FAN;
+    this.glPrimitive = webgl[0].gl.TRIANGLE_FAN;
 
     const defaultTextOptions = {
       text: 'DEFAULT_TEXT',

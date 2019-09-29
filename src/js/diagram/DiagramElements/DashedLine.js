@@ -1,7 +1,7 @@
 // @flow
 
 import VertexDashedLine from '../DrawingObjects/VertexObject/VertexDashedLine';
-import { DiagramElementPrimative } from '../Element';
+import { DiagramElementPrimitive } from '../Element';
 import {
   Point, Transform, Rect,
 } from '../../tools/g2';
@@ -32,7 +32,7 @@ function DashedLine(
   } else {
     transform = transformOrLocation._dup();
   }
-  return new DiagramElementPrimative(vertexLine, transform, color, diagramLimits);
+  return new DiagramElementPrimitive(vertexLine, transform, color, diagramLimits);
 }
 
 export default DashedLine;

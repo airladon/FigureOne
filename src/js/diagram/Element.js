@@ -53,7 +53,7 @@ export type TypeScenario = {
 // A diagram is composed of multiple diagram elements.
 //
 // A diagram element can either be a:
-//  - Primative: a basic element that has the webGL vertices, color
+//  - Primitive: a basic element that has the webGL vertices, color
 //  - Collection: a group of elements (either primatives or collections)
 //
 // A diagram element can be:
@@ -132,7 +132,7 @@ class DiagramElement {
     canBeMovedAfterLoosingTouch: boolean;
     type: 'rotation' | 'translation' | 'scaleX' | 'scaleY' | 'scale';
     // eslint-disable-next-line no-use-before-define
-    element: DiagramElementCollection | DiagramElementPrimative | null;
+    element: DiagramElementCollection | DiagramElementPrimitive | null;
   };
 
   scenarios: {
@@ -1379,7 +1379,7 @@ class DiagramElement {
 // ***************************************************************
 // Geometry Object
 // ***************************************************************
-class DiagramElementPrimative extends DiagramElement {
+class DiagramElementPrimitive extends DiagramElement {
   drawingObject: DrawingObject;
   color: Array<number>;
   opacity: number;
@@ -1446,8 +1446,8 @@ class DiagramElementPrimative extends DiagramElement {
 
   _dup(transform: Transform | null = null) {
     // const vertices = this.drawingObject._dup();
-    const primative = new DiagramElementPrimative(this.drawingObject._dup());
-    // const primative = new DiagramElementPrimative(
+    const primative = new DiagramElementPrimitive(this.drawingObject._dup());
+    // const primative = new DiagramElementPrimitive(
     //   vertices,
     //   transform,
     //   color,
@@ -1484,7 +1484,7 @@ class DiagramElementPrimative extends DiagramElement {
 
   setColor(color: Array<number>) {
     this.color = color.slice();
-    if (this instanceof DiagramElementPrimative) {
+    if (this instanceof DiagramElementPrimitive) {
       if (this.drawingObject instanceof TextObject) {
         this.drawingObject.setColor(this.color);
       }
@@ -1498,7 +1498,7 @@ class DiagramElementPrimative extends DiagramElement {
   setOpacity(opacity: number) {
     // this.color[3] = opacity;
     this.opacity = opacity;
-    if (this instanceof DiagramElementPrimative) {
+    if (this instanceof DiagramElementPrimitive) {
       if (this.drawingObject instanceof TextObject) {
         this.drawingObject.setOpacity(opacity);
       }
@@ -1546,7 +1546,7 @@ class DiagramElementPrimative extends DiagramElement {
   //   this.hide();
   // }
 
-  getTouched(glLocation: Point): Array<DiagramElementPrimative> {
+  getTouched(glLocation: Point): Array<DiagramElementPrimitive> {
     if (!this.isTouchable) {
       return [];
     }
@@ -1789,7 +1789,7 @@ class DiagramElementCollection extends DiagramElement {
 
   add(
     name: string,
-    diagramElement: DiagramElementPrimative | DiagramElementCollection,
+    diagramElement: DiagramElementPrimitive | DiagramElementCollection,
     index: number = -1,
   ) {
     // eslint-disable-next-line no-param-reassign
@@ -1866,7 +1866,7 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  show(listToShow: Array<DiagramElementPrimative | DiagramElementCollection> = []): void {
+  show(listToShow: Array<DiagramElementPrimitive | DiagramElementCollection> = []): void {
     super.show();
     listToShow.forEach((element) => {
       if (element instanceof DiagramElementCollection) {
@@ -1877,7 +1877,7 @@ class DiagramElementCollection extends DiagramElement {
     });
   }
 
-  hide(listToShow: Array<DiagramElementPrimative | DiagramElementCollection> = []): void {
+  hide(listToShow: Array<DiagramElementPrimitive | DiagramElementCollection> = []): void {
     super.hide();
     listToShow.forEach((element) => {
       if (element instanceof DiagramElementCollection) {
@@ -1910,7 +1910,7 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  showOnly(listToShow: Array<DiagramElementPrimative | DiagramElementCollection>): void {
+  showOnly(listToShow: Array<DiagramElementPrimitive | DiagramElementCollection>): void {
     this.hideAll();
     this.show();
     for (let i = 0, j = listToShow.length; i < j; i += 1) {
@@ -1923,7 +1923,7 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  hideOnly(listToHide: Array<DiagramElementPrimative | DiagramElementCollection>): void {
+  hideOnly(listToHide: Array<DiagramElementPrimitive | DiagramElementCollection>): void {
     this.showAll();
     for (let i = 0, j = listToHide.length; i < j; i += 1) {
       const element = listToHide[i];
@@ -2090,7 +2090,7 @@ class DiagramElementCollection extends DiagramElement {
   //  1 to n: n top elements in collection
   //  n+1: second top collection
   //  n+2 to m: top elements in second top colleciton.
-  getTouched(glLocation: Point): Array<DiagramElementPrimative | DiagramElementCollection> {
+  getTouched(glLocation: Point): Array<DiagramElementPrimitive | DiagramElementCollection> {
     if (!this.isTouchable && !this.hasTouchableElements) {
       return [];
     }
@@ -2225,7 +2225,7 @@ class DiagramElementCollection extends DiagramElement {
     return timeToAnimate;
   }
 
-  getAllPrimatives() {
+  getAllPrimitives() {
     let elements = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
@@ -2368,7 +2368,7 @@ class DiagramElementCollection extends DiagramElement {
     let elems = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      if (element instanceof DiagramElementPrimative) {
+      if (element instanceof DiagramElementPrimitive) {
         if (element.drawingObject.state === 'loading') {
           elems.push(element);
         }
@@ -2383,7 +2383,7 @@ class DiagramElementCollection extends DiagramElement {
     this.unrender();
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      if (element instanceof DiagramElementPrimative) {
+      if (element instanceof DiagramElementPrimitive) {
         element.unrender();
       } else {
         element.unrenderAll();
@@ -2403,6 +2403,6 @@ class DiagramElementCollection extends DiagramElement {
 }
 
 export {
-  DiagramElementPrimative, DiagramElementCollection,
+  DiagramElementPrimitive, DiagramElementCollection,
   DiagramElement,
 };

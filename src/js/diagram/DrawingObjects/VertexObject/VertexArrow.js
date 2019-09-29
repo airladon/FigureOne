@@ -17,7 +17,7 @@ class VertexArrow extends VertexObject {
     rotation: number = 0,
   ) {
     super(webgl);
-    this.glPrimative = this.gl[0].TRIANGLE_FAN;
+    this.glPrimitive = this.gl[0].TRIANGLE_FAN;
     this.height = height;
     const arrowHeight = height - legHeight;
     const points = [];

@@ -3,7 +3,7 @@
 // import VertexPolygon from '../DrawingObjects/VertexObject/VertexPolygon';
 import VertexText from '../DrawingObjects/VertexObject/VertexText';
 // import VertexPolygonLine from '../DrawingObjects/VertexObject/VertexPolygonLine';
-import { DiagramElementPrimative } from '../Element';
+import { DiagramElementPrimitive } from '../Element';
 import {
   Point, Transform, Rect,
 } from '../../tools/g2';
@@ -52,7 +52,7 @@ function Text(
   // } else {
   //   transform = transformOrLocation._dup();
   // }
-  return new DiagramElementPrimative(vertexText, options.transform, options.color, diagramLimits);
+  return new DiagramElementPrimitive(vertexText, options.transform, options.color, diagramLimits);
 }
 
 export default Text;

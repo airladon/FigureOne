@@ -22,7 +22,7 @@ class VertexPolygonLine extends VertexObject {
   ) {
     // setup webgl stuff
     super(webgl);
-    this.glPrimative = webgl[0].gl.LINES;
+    this.glPrimitive = webgl[0].gl.LINES;
 
     // Check potential errors in constructor input
     let sides = numSides;

@@ -3,7 +3,7 @@
 import VertexPolyLine from '../DrawingObjects/VertexObject/VertexPolyLine';
 import type { TypeVertexPolyLineBorderToPoint } from '../DrawingObjects/VertexObject/VertexPolyLine';
 import VertexPolyLineCorners from '../DrawingObjects/VertexObject/VertexPolyLineCorners';
-import { DiagramElementPrimative } from '../Element';
+import { DiagramElementPrimitive } from '../Element';
 import {
   Point, Transform, Rect,
 } from '../../tools/g2';
@@ -28,7 +28,7 @@ function PolyLine(
   } else {
     transform = transformOrLocation._dup();
   }
-  return new DiagramElementPrimative(vertexLine, transform, color, diagramLimits);
+  return new DiagramElementPrimitive(vertexLine, transform, color, diagramLimits);
 }
 
 function PolyLineCorners(
@@ -54,7 +54,7 @@ function PolyLineCorners(
   } else {
     transform = transformOrLocation._dup();
   }
-  return new DiagramElementPrimative(vertexLineCorners, transform, color, diagramLimits);
+  return new DiagramElementPrimitive(vertexLineCorners, transform, color, diagramLimits);
 }
 
 export { PolyLine, PolyLineCorners };

@@ -5,7 +5,7 @@ import {
 // import { roundNum } from '../../../tools/math';
 import { duplicateFromTo, joinObjects } from '../../../tools/tools';
 import {
-  DiagramElementPrimative, DiagramElementCollection,
+  DiagramElementPrimitive, DiagramElementCollection,
 } from '../../Element';
 import { Element, Elements, BlankElement } from './Elements/Element';
 import { getDiagramElement } from './EquationFunctions';
@@ -17,17 +17,17 @@ export type TypeEquationForm = {
   createEq: (Array<Elements | Element | string>) => void;
   arrange: (
     number, TypeHAlign | null, TypeVAlign | null,
-    DiagramElementPrimative | DiagramElementCollection | Point
+    DiagramElementPrimitive | DiagramElementCollection | Point
   ) => void;
   dissolveElements: (
-    Array<DiagramElementPrimative | DiagramElementCollection>,
+    Array<DiagramElementPrimitive | DiagramElementCollection>,
     boolean, number, number, ?(?boolean)) => void;
   getElementsToShowAndHide: () => void;
   showHide: (number, number, ?(?mixed)) => void;
   hideShow: (number, number, ?(?mixed)) => void;
   // animateTo: (
   //   number, number,
-  //   DiagramElementPrimative | DiagramElementCollection | Point,
+  //   DiagramElementPrimitive | DiagramElementCollection | Point,
   //   ?(?mixed) => void,
   //   'left' | 'center' | 'right', 'top' | 'bottom' | 'middle' | 'baseline',
   // ) => void;
@@ -37,7 +37,7 @@ export type TypeEquationForm = {
   type: string;
   elementMods: {
     [string]: {
-      element: DiagramElementPrimative | DiagramElementCollection,
+      element: DiagramElementPrimitive | DiagramElementCollection,
       mods: Object,
     }
   };
@@ -45,10 +45,10 @@ export type TypeEquationForm = {
 } & Elements;
 
 export type TypeCollectionMethods = {
-  getAllElements: () => Array<DiagramElementPrimative | DiagramElementCollection>,
+  getAllElements: () => Array<DiagramElementPrimitive | DiagramElementCollection>,
   hideAll: () => void,
   show: () => void,
-  showOnly: (Array<DiagramElementPrimative | DiagramElementCollection>) => void,
+  showOnly: (Array<DiagramElementPrimitive | DiagramElementCollection>) => void,
   stop(cancelled?: boolean, forceSetToEndOfPlan?: boolean): void;
   getElementTransforms: () => { [string: string]: Transform },
   setElementTransforms: ({ [string: string]: Transform }) => void,
@@ -62,16 +62,16 @@ export type TypeCollectionMethods = {
 };
 
 export type TypeElements = {
-  [string: string]: DiagramElementCollection | DiagramElementPrimative;
+  [string: string]: DiagramElementCollection | DiagramElementPrimitive;
 };
 
 export default class EquationForm extends Elements {
-  elements: { [string: string]: DiagramElementCollection | DiagramElementPrimative };
+  elements: { [string: string]: DiagramElementCollection | DiagramElementPrimitive };
   collectionMethods: TypeCollectionMethods;
   name: string;
   elementMods: {
     [elementName: string]: {
-      element: DiagramElementPrimative | DiagramElementCollection;
+      element: DiagramElementPrimitive | DiagramElementCollection;
       mods: Object;
     }
   };
@@ -84,7 +84,7 @@ export default class EquationForm extends Elements {
   duration: ?number;
   translation: {
     [elementName: string]: {
-      element: DiagramElementPrimative | DiagramElementCollection;
+      element: DiagramElementPrimitive | DiagramElementCollection;
       direction?: 'up' | 'down',
       style: 'curved' | 'linear',
       mag: number,
@@ -94,7 +94,7 @@ export default class EquationForm extends Elements {
   fromNext: {
     translation?: {
       [elementName: string]: {
-        element: DiagramElementPrimative | DiagramElementCollection;
+        element: DiagramElementPrimitive | DiagramElementCollection;
         direction?: 'up' | 'down',
         style: 'curved' | 'linear',
         mag: number,
@@ -106,7 +106,7 @@ export default class EquationForm extends Elements {
   fromPrev: {
     translation?: {
       [elementName: string]: {
-        element: DiagramElementPrimative | DiagramElementCollection;
+        element: DiagramElementPrimitive | DiagramElementCollection;
         direction?: 'up' | 'down',
         style: 'curved' | 'linear',
         mag: number,
@@ -236,7 +236,7 @@ export default class EquationForm extends Elements {
     scale: number = 1,
     alignH: TypeHAlign | null = 'left',
     alignV: TypeVAlign | null = 'baseline',
-    fixTo: DiagramElementPrimative | DiagramElementCollection | Point = new Point(0, 0),
+    fixTo: DiagramElementPrimitive | DiagramElementCollection | Point = new Point(0, 0),
   ) {
     const elementsInCollection = this.collectionMethods.getAllElements();
     const elementsCurrentlyShowing = elementsInCollection.filter(e => e.isShown);
@@ -245,7 +245,7 @@ export default class EquationForm extends Elements {
     super.calcSize(new Point(0, 0), scale);
 
     let fixPoint = new Point(0, 0);
-    if (fixTo instanceof DiagramElementPrimative
+    if (fixTo instanceof DiagramElementPrimitive
         || fixTo instanceof DiagramElementCollection) {
       const t = fixTo.transform.t();
       if (t != null) {
@@ -261,7 +261,7 @@ export default class EquationForm extends Elements {
     let d = this.descent;
     let p = this.location._dup();
 
-    if (fixTo instanceof DiagramElementPrimative
+    if (fixTo instanceof DiagramElementPrimitive
         || fixTo instanceof DiagramElementCollection) {
       const t = fixTo.transform.t();
       const s = fixTo.transform.s();
@@ -299,7 +299,7 @@ export default class EquationForm extends Elements {
 
   // eslint-disable-next-line class-methods-use-this
   dissolveElements(
-    elements: Array<DiagramElementPrimative | DiagramElementCollection>,
+    elements: Array<DiagramElementPrimitive | DiagramElementCollection>,
     dissolve: 'in' | 'out' = 'in',
     delay: number = 0.01,
     time: number = 1,
@@ -334,10 +334,10 @@ export default class EquationForm extends Elements {
     const allElements = this.collectionMethods.getAllElements();
     const elementsShown = allElements.filter(e => e.isShown);
     const elementsShownTarget = this.getAllElements();
-    const elementsToHide: Array<DiagramElementPrimative
+    const elementsToHide: Array<DiagramElementPrimitive
                                 | DiagramElementCollection> =
        elementsShown.filter(e => elementsShownTarget.indexOf(e) === -1);
-    const elementsToShow: Array<DiagramElementCollection | DiagramElementPrimative> =
+    const elementsToShow: Array<DiagramElementCollection | DiagramElementPrimitive> =
       elementsShownTarget.filter(e => elementsShown.indexOf(e) === -1);
     return {
       show: elementsToShow,

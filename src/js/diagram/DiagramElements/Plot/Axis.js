@@ -1,7 +1,7 @@
 // @flow
 
 import {
-  DiagramElementPrimative, DiagramElementCollection,
+  DiagramElementPrimitive, DiagramElementCollection,
 } from '../../Element';
 import {
   Rect, Transform, Point,
@@ -88,7 +88,7 @@ class Axis extends DiagramElementCollection {
 
     // Axis Line
     const axis = new VAxis(this.webgl, this.props);
-    this.add('line', new DiagramElementPrimative(
+    this.add('line', new DiagramElementPrimitive(
       axis,
       new Transform(),
       this.props.color,
@@ -115,7 +115,7 @@ class Axis extends DiagramElementCollection {
       titleText,
     );
 
-    this.add('title', new DiagramElementPrimative(
+    this.add('title', new DiagramElementPrimitive(
       title,
       new Transform()
         .rotate(this.props.rotation)
@@ -170,7 +170,7 @@ class Axis extends DiagramElementCollection {
         ticksOrGrid.width,
         ticksOrGrid.offset,
       );
-      this.add(name, new DiagramElementPrimative(
+      this.add(name, new DiagramElementPrimitive(
         ticks,
         new Transform().scale(1, 1).rotate(0).translate(0, 0),
         ticksOrGrid.color,
@@ -223,7 +223,7 @@ class Axis extends DiagramElementCollection {
       dText,
     );
 
-    this.add(`label_${name}`, new DiagramElementPrimative(
+    this.add(`label_${name}`, new DiagramElementPrimitive(
       axisLabels,
       new Transform().scale(1, 1).rotate(0).translate(offset.x, offset.y),
       [0.5, 0.5, 0.5, 1],
@@ -243,7 +243,7 @@ class Axis extends DiagramElementCollection {
     // label.fontFamily = ticks.fontFamily;
     // label.fontWeight = ticks.fontWeight;
 
-    // this.add(`label_${name}_${i}`, new DiagramElementPrimative(
+    // this.add(`label_${name}_${i}`, new DiagramElementPrimitive(
     //   label,
     //   new Transform().scale(1, 1).rotate(0).translate(0, 0),
     //   [0.5, 0.5, 0.5, 1],

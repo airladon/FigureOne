@@ -8,7 +8,7 @@ import * as html from './js/tools/htmlGenerator';
 import * as misc from './js/tools/tools';
 import * as css from './js/tools/styleSheets';
 import {
-  DiagramElement, DiagramElementPrimative, DiagramElementCollection,
+  DiagramElement, DiagramElementPrimitive, DiagramElementCollection,
 } from './js/diagram/Element';
 import DrawContext2D from './js/diagram/DrawContext2D';
 import WebGLInstance from './js/diagram/webgl/webgl';
@@ -65,7 +65,7 @@ const FigureOne = {
   //
   DiagramElement,
   DiagramElementCollection,
-  DiagramElementPrimative,
+  DiagramElementPrimitive,
   DrawContext2D,
   WebGLInstance,
   //

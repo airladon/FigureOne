@@ -1,5 +1,5 @@
 import {
-  DiagramElementPrimative,
+  DiagramElementPrimitive,
   DiagramElementCollection,
   // AnimationPhase,
 } from './Element';
@@ -148,7 +148,7 @@ describe('Diagram', () => {
           (def.sideLength / 2) * Math.sqrt(2), 0.05 * Math.sqrt(2),
           def.rotation, def.center,
         );
-        const squareElement = new DiagramElementPrimative(
+        const squareElement = new DiagramElementPrimitive(
           square, def.transform,
           [0, 0, 1, 1], diagram.limits,
         );
@@ -190,7 +190,7 @@ describe('Diagram', () => {
       new Point(0, 0),    // offset
       4,                  // number of sides to draw
     );
-    const square = new DiagramElementPrimative(squareVertices);
+    const square = new DiagramElementPrimitive(squareVertices);
     d.add('square', square);
     expect(d.elements.drawOrder).toHaveLength(1);
   });

@@ -26,9 +26,9 @@ class VertexPolygon extends VertexObject {
     // setup webgl stuff
     super(webgl);
     if (triangles) {
-      this.glPrimative = webgl[0].gl.TRIANGLES;
+      this.glPrimitive = webgl[0].gl.TRIANGLES;
     } else {
-      this.glPrimative = webgl[0].gl.TRIANGLE_STRIP;
+      this.glPrimitive = webgl[0].gl.TRIANGLE_STRIP;
     }
 
     // Check potential errors in constructor input

@@ -10,7 +10,7 @@ import {
 } from '../../tools/math';
 import { joinObjects } from '../../tools/tools';
 import {
-  DiagramElementCollection, DiagramElementPrimative,
+  DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
 import EquationLabel from './EquationLabel';
 import type { TypeLabelEquationOptions, TypeLabelOptions } from './EquationLabel';
@@ -161,14 +161,14 @@ class AngleLabel extends EquationLabel {
 
 class DiagramObjectAngle extends DiagramElementCollection {
   // Diagram elements
-  _curve: ?DiagramElementPrimative;
-  _curveRight: ?DiagramElementPrimative;
-  _arrow1: ?DiagramElementPrimative;
-  _arrow2: ?DiagramElementPrimative;
-  _side1: ?DiagramElementPrimative;
-  _side2: ?DiagramElementPrimative;
+  _curve: ?DiagramElementPrimitive;
+  _curveRight: ?DiagramElementPrimitive;
+  _arrow1: ?DiagramElementPrimitive;
+  _arrow2: ?DiagramElementPrimitive;
+  _side1: ?DiagramElementPrimitive;
+  _side2: ?DiagramElementPrimitive;
   _label: null | {
-    _base: DiagramElementPrimative;
+    _base: DiagramElementPrimitive;
   } & DiagramElementCollection;
 
   // Objects that may or may not exist

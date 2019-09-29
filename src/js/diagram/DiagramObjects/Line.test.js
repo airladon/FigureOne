@@ -1,5 +1,5 @@
 // import {
-//   DiagramElementPrimative,
+//   DiagramElementPrimitive,
 //   DiagramElementCollection,
 //   // AnimationPhase,
 // } from '../Element';

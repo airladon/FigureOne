@@ -35,7 +35,7 @@ class VertexDashedLine extends VertexObject {
     dashStyle: Array<number> = [1],
   ): void {
     super(webgl);
-    this.glPrimative = this.gl[0].TRIANGLES;
+    this.glPrimitive = this.gl[0].TRIANGLES;
     this.dashCumLength = [];
     this.maxLength = maxLength;
     const cx = 0;
