@@ -2,7 +2,7 @@
 
 import VertexRectangleFilled from '../DrawingObjects/VertexObject/VertexRectangleFilled';
 import type { TypeVertexRectangleFilledReference } from '../DrawingObjects/VertexObject/VertexRectangleFilled';
-import { DiagramElementPrimative } from '../Element';
+import { DiagramElementPrimitive } from '../Element';
 import {
   Point, Transform, Rect,
 } from '../../tools/g2';
@@ -37,5 +37,5 @@ export default function RectangleFilled(
   } else {
     transform = transformOrLocation._dup();
   }
-  return new DiagramElementPrimative(vertexRectangle, transform, color, diagramLimits);
+  return new DiagramElementPrimitive(vertexRectangle, transform, color, diagramLimits);
 }

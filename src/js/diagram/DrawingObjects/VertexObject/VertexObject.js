@@ -16,11 +16,11 @@ import DrawingObject from '../DrawingObject';
 class VertexObject extends DrawingObject {
   gl: Array<WebGLRenderingContext>;    // shortcut for the webgl context
   webgl: Array<WebGLInstance>;         // webgl instance for a html canvas
-  glPrimative: number;                  // primitive tyle (e.g. TRIANGLE_STRIP)
+  glPrimitive: number;                  // primitive tyle (e.g. TRIANGLE_STRIP)
   buffer: Array<WebGLBuffer>;          // Vertex buffer
   // textureBuffer: WebGLBuffer;
 
-  points: Array<number>;        // Primative vertices of shape
+  points: Array<number>;        // Primitive vertices of shape
   numPoints: number;            // Number of primative vertices
   border: Array<Array<g2.Point>>; // Border vertices
   z: number;
@@ -53,7 +53,7 @@ class VertexObject extends DrawingObject {
     }
     this.gl = webglArray.map(w => w.gl);
     this.webgl = webglArray;
-    this.glPrimative = webglArray[0].gl.TRIANGLES;
+    this.glPrimitive = webglArray[0].gl.TRIANGLES;
     this.points = [];
     this.z = 0;
     this.buffer = webglArray.map(() => null);
@@ -61,7 +61,7 @@ class VertexObject extends DrawingObject {
     // this.texturePoints = [];
     this.texture = null;
     this.programIndex = webglArray.map(w => w.getProgram(vertexShader, fragmentShader));
-    this.type = 'vertexPrimative';
+    this.type = 'vertexPrimitive';
   }
 
   addTextureToBuffer(
@@ -415,7 +415,7 @@ class VertexObject extends DrawingObject {
       gl.uniform1i(locations.u_use_texture, 0);
     }
 
-    gl.drawArrays(this.glPrimative, offset, count);
+    gl.drawArrays(this.glPrimitive, offset, count);
 
     if (texture) {
       gl.disableVertexAttribArray(locations.a_texcoord);

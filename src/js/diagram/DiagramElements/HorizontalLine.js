@@ -1,7 +1,7 @@
 // @flow
 
 import VertexHorizontalLine from '../DrawingObjects/VertexObject/VertexHorizontalLine';
-import { DiagramElementPrimative } from '../Element';
+import { DiagramElementPrimitive } from '../Element';
 import {
   Point, Transform, Rect,
 } from '../../tools/g2';
@@ -30,7 +30,7 @@ function HorizontalLine(
   } else {
     transform = transformOrLocation._dup();
   }
-  return new DiagramElementPrimative(vertexLine, transform, color, diagramLimits);
+  return new DiagramElementPrimitive(vertexLine, transform, color, diagramLimits);
 }
 
 export default HorizontalLine;

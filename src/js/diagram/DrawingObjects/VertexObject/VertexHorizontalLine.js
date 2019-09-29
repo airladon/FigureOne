@@ -19,7 +19,7 @@ class VertexHorizontalLine extends VertexObject {
     const cx = 0;
     const cy = 0 - width / 2.0;
     const points = [];
-    this.glPrimative = this.gl[0].TRIANGLE_STRIP;
+    this.glPrimitive = this.gl[0].TRIANGLE_STRIP;
     points.push(new Point(cx, cy));
     points.push(new Point(cx, cy + width));
     points.push(new Point(cx + length, cy));

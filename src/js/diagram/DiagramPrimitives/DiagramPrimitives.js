@@ -4,7 +4,7 @@ import {
 } from '../../tools/g2';
 import { setHTML } from '../../tools/htmlGenerator';
 import {
-  DiagramElementCollection, DiagramElementPrimative,
+  DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
 import WebGLInstance from '../webgl/webgl';
 import DrawContext2D from '../DrawContext2D';
@@ -81,7 +81,7 @@ export type TypeGridOptions = {
 };
 
 export type TypeRepeatPatternVertex = {
-  element?: DiagramElementPrimative,
+  element?: DiagramElementPrimitive,
   xNum?: number,
   yNum?: number,
   xStep?: number,
@@ -90,7 +90,7 @@ export type TypeRepeatPatternVertex = {
   transform?: Transform,
 };
 
-export default class DiagramPrimatives {
+export default class DiagramPrimitives {
   webgl: Array<WebGLInstance>;
   draw2D: Array<DrawContext2D>;
   htmlCanvas: HTMLElement;
@@ -328,7 +328,7 @@ export default class DiagramPrimatives {
     }
     const dT = new DiagramText(o.offset, text, fontToUse);
     const to = new TextObject(this.draw2D, [dT]);
-    const element = new DiagramElementPrimative(
+    const element = new DiagramElementPrimitive(
       to,
       o.transform,
       o.color,
@@ -426,7 +426,7 @@ export default class DiagramPrimatives {
   //   }
   //   const dT = new DiagramText(new Point(0, 0), textInput, font);
   //   const to = new TextObject(this.draw2D, [dT]);
-  //   return new DiagramElementPrimative(
+  //   return new DiagramElementPrimitive(
   //     to,
   //     new Transform().scale(1, 1).translate(location.x, location.y),
   //     color,
@@ -456,7 +456,7 @@ export default class DiagramPrimatives {
     element.setAttribute('id', id);
     this.htmlCanvas.appendChild(element);
     const hT = new HTMLObject(this.htmlCanvas, id, new Point(0, 0), alignV, alignH);
-    const diagramElement = new DiagramElementPrimative(
+    const diagramElement = new DiagramElementPrimitive(
       hT,
       new Transform().scale(1, 1).translate(location.x, location.y),
       [1, 1, 1, 1],
@@ -867,7 +867,7 @@ export default class DiagramPrimatives {
   }
 
   repeatPattern(
-    element: DiagramElementPrimative,
+    element: DiagramElementPrimitive,
     xNum: number,
     yNum: number,
     xStep: number,
@@ -901,7 +901,7 @@ export default class DiagramPrimatives {
 
   // eslint-disable-next-line class-methods-use-this
   repeatPatternVertexLegacy(
-    element: DiagramElementPrimative,
+    element: DiagramElementPrimitive,
     xNum: number,
     yNum: number,
     xStep: number,
@@ -1099,4 +1099,4 @@ export default class DiagramPrimatives {
   }
 }
 
-export type TypeDiagramPrimatives = DiagramPrimatives;
+export type TypeDiagramPrimitives = DiagramPrimitives;

@@ -98,7 +98,7 @@ class DiagramText {
   }
 }
 
-// TextObject is the DrawingObject used in the DiagramElementPrimative.
+// TextObject is the DrawingObject used in the DiagramElementPrimitive.
 // TextObject will draw an array of DiagramText objects.
 class TextObject extends DrawingObject {
   drawContext2D: Array<DrawContext2D>;

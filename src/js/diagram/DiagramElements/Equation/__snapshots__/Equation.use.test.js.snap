@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Different ways to make an equation All Text in constructor with all options 1`] = `
-DiagramElementPrimative {
+DiagramElementPrimitive {
   "angleToDraw": -1,
   "anim": Object {
     "builder": [Function],
@@ -328,7 +328,7 @@ DiagramElementPrimative {
   "onClick": null,
   "opacity": 1,
   "parent": EquationNew {
-    "__2": DiagramElementPrimative {
+    "__2": DiagramElementPrimitive {
       "angleToDraw": -1,
       "anim": Object {
         "builder": [Function],
@@ -800,7 +800,7 @@ DiagramElementPrimative {
       "unrenderNextDraw": false,
     },
     "_a": [Circular],
-    "_b": DiagramElementPrimative {
+    "_b": DiagramElementPrimitive {
       "angleToDraw": -1,
       "anim": Object {
         "builder": [Function],
@@ -1271,7 +1271,7 @@ DiagramElementPrimative {
       "uid": "0000000000",
       "unrenderNextDraw": false,
     },
-    "_c": DiagramElementPrimative {
+    "_c": DiagramElementPrimitive {
       "angleToDraw": -1,
       "anim": Object {
         "builder": [Function],
@@ -1742,7 +1742,7 @@ DiagramElementPrimative {
       "uid": "0000000000",
       "unrenderNextDraw": false,
     },
-    "_v": DiagramElementPrimative {
+    "_v": DiagramElementPrimitive {
       "angleToDraw": -1,
       "anim": Object {
         "builder": [Function],
@@ -1839,7 +1839,7 @@ DiagramElementPrimative {
             "vertexAttribPointer": [Function],
           },
         ],
-        "glPrimative": 2,
+        "glPrimitive": 2,
         "holeBorder": Array [
           Array [],
         ],
@@ -1865,7 +1865,7 @@ DiagramElementPrimative {
         ],
         "state": "loaded",
         "texture": null,
-        "type": "vertexPrimative",
+        "type": "vertexPrimitive",
         "webgl": Array [
           Object {
             "addTexture": [Function],
@@ -2250,7 +2250,7 @@ DiagramElementPrimative {
     ],
     "drawPriority": 1,
     "elements": Object {
-      "_2": DiagramElementPrimative {
+      "_2": DiagramElementPrimitive {
         "angleToDraw": -1,
         "anim": Object {
           "builder": [Function],
@@ -2722,7 +2722,7 @@ DiagramElementPrimative {
         "unrenderNextDraw": false,
       },
       "a": [Circular],
-      "b": DiagramElementPrimative {
+      "b": DiagramElementPrimitive {
         "angleToDraw": -1,
         "anim": Object {
           "builder": [Function],
@@ -3193,7 +3193,7 @@ DiagramElementPrimative {
         "uid": "0000000000",
         "unrenderNextDraw": false,
       },
-      "c": DiagramElementPrimative {
+      "c": DiagramElementPrimitive {
         "angleToDraw": -1,
         "anim": Object {
           "builder": [Function],
@@ -3664,7 +3664,7 @@ DiagramElementPrimative {
         "uid": "0000000000",
         "unrenderNextDraw": false,
       },
-      "v": DiagramElementPrimative {
+      "v": DiagramElementPrimitive {
         "angleToDraw": -1,
         "anim": Object {
           "builder": [Function],
@@ -3761,7 +3761,7 @@ DiagramElementPrimative {
               "vertexAttribPointer": [Function],
             },
           ],
-          "glPrimative": 2,
+          "glPrimitive": 2,
           "holeBorder": Array [
             Array [],
           ],
@@ -3787,7 +3787,7 @@ DiagramElementPrimative {
           ],
           "state": "loaded",
           "texture": null,
-          "type": "vertexPrimative",
+          "type": "vertexPrimitive",
           "webgl": Array [
             Object {
               "addTexture": [Function],
@@ -4221,7 +4221,7 @@ DiagramElementPrimative {
                   },
                   Element {
                     "ascent": 0.025200000000000004,
-                    "content": DiagramElementPrimative {
+                    "content": DiagramElementPrimitive {
                       "angleToDraw": -1,
                       "anim": Object {
                         "builder": [Function],
@@ -4704,7 +4704,7 @@ DiagramElementPrimative {
                   },
                   Element {
                     "ascent": 0.017100000000000004,
-                    "content": DiagramElementPrimative {
+                    "content": DiagramElementPrimitive {
                       "angleToDraw": -1,
                       "anim": Object {
                         "builder": [Function],
@@ -5201,7 +5201,7 @@ DiagramElementPrimative {
             "duration": undefined,
             "elementMods": Object {},
             "elements": Object {
-              "_2": DiagramElementPrimative {
+              "_2": DiagramElementPrimitive {
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
@@ -5673,7 +5673,7 @@ DiagramElementPrimative {
                 "unrenderNextDraw": false,
               },
               "a": [Circular],
-              "b": DiagramElementPrimative {
+              "b": DiagramElementPrimitive {
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
@@ -6144,7 +6144,7 @@ DiagramElementPrimative {
                 "uid": "0000000000",
                 "unrenderNextDraw": false,
               },
-              "c": DiagramElementPrimative {
+              "c": DiagramElementPrimitive {
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
@@ -6615,7 +6615,7 @@ DiagramElementPrimative {
                 "uid": "0000000000",
                 "unrenderNextDraw": false,
               },
-              "v": DiagramElementPrimative {
+              "v": DiagramElementPrimitive {
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
@@ -6712,7 +6712,7 @@ DiagramElementPrimative {
                       "vertexAttribPointer": [Function],
                     },
                   ],
-                  "glPrimative": 2,
+                  "glPrimitive": 2,
                   "holeBorder": Array [
                     Array [],
                   ],
@@ -6738,7 +6738,7 @@ DiagramElementPrimative {
                   ],
                   "state": "loaded",
                   "texture": null,
-                  "type": "vertexPrimative",
+                  "type": "vertexPrimitive",
                   "webgl": Array [
                     Object {
                       "addTexture": [Function],
@@ -7144,7 +7144,7 @@ DiagramElementPrimative {
                         "content": Array [
                           Element {
                             "ascent": 0.025200000000000004,
-                            "content": DiagramElementPrimative {
+                            "content": DiagramElementPrimitive {
                               "angleToDraw": -1,
                               "anim": Object {
                                 "builder": [Function],
@@ -7637,7 +7637,7 @@ DiagramElementPrimative {
                       },
                       Element {
                         "ascent": 0,
-                        "content": DiagramElementPrimative {
+                        "content": DiagramElementPrimitive {
                           "angleToDraw": -1,
                           "anim": Object {
                             "builder": [Function],
@@ -7734,7 +7734,7 @@ DiagramElementPrimative {
                                 "vertexAttribPointer": [Function],
                               },
                             ],
-                            "glPrimative": 2,
+                            "glPrimitive": 2,
                             "holeBorder": Array [
                               Array [],
                             ],
@@ -7760,7 +7760,7 @@ DiagramElementPrimative {
                             ],
                             "state": "loaded",
                             "texture": null,
-                            "type": "vertexPrimative",
+                            "type": "vertexPrimitive",
                             "webgl": Array [
                               Object {
                                 "addTexture": [Function],
@@ -8115,7 +8115,7 @@ DiagramElementPrimative {
                       "content": Array [
                         Element {
                           "ascent": 0.025200000000000004,
-                          "content": DiagramElementPrimative {
+                          "content": DiagramElementPrimitive {
                             "angleToDraw": -1,
                             "anim": Object {
                               "builder": [Function],
@@ -8644,7 +8644,7 @@ DiagramElementPrimative {
                     "scaleModifier": 1,
                     "vSpaceDenom": 0.022500000000000003,
                     "vSpaceNum": 0.022500000000000003,
-                    "vinculum": DiagramElementPrimative {
+                    "vinculum": DiagramElementPrimitive {
                       "angleToDraw": -1,
                       "anim": Object {
                         "builder": [Function],
@@ -8741,7 +8741,7 @@ DiagramElementPrimative {
                             "vertexAttribPointer": [Function],
                           },
                         ],
-                        "glPrimative": 2,
+                        "glPrimitive": 2,
                         "holeBorder": Array [
                           Array [],
                         ],
@@ -8767,7 +8767,7 @@ DiagramElementPrimative {
                         ],
                         "state": "loaded",
                         "texture": null,
-                        "type": "vertexPrimative",
+                        "type": "vertexPrimitive",
                         "webgl": Array [
                           Object {
                             "addTexture": [Function],
@@ -9121,7 +9121,7 @@ DiagramElementPrimative {
                   },
                   Element {
                     "ascent": 0.017100000000000004,
-                    "content": DiagramElementPrimative {
+                    "content": DiagramElementPrimitive {
                       "angleToDraw": -1,
                       "anim": Object {
                         "builder": [Function],
@@ -9618,7 +9618,7 @@ DiagramElementPrimative {
             "duration": undefined,
             "elementMods": Object {},
             "elements": Object {
-              "_2": DiagramElementPrimative {
+              "_2": DiagramElementPrimitive {
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
@@ -10090,7 +10090,7 @@ DiagramElementPrimative {
                 "unrenderNextDraw": false,
               },
               "a": [Circular],
-              "b": DiagramElementPrimative {
+              "b": DiagramElementPrimitive {
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
@@ -10561,7 +10561,7 @@ DiagramElementPrimative {
                 "uid": "0000000000",
                 "unrenderNextDraw": false,
               },
-              "c": DiagramElementPrimative {
+              "c": DiagramElementPrimitive {
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
@@ -11032,7 +11032,7 @@ DiagramElementPrimative {
                 "uid": "0000000000",
                 "unrenderNextDraw": false,
               },
-              "v": DiagramElementPrimative {
+              "v": DiagramElementPrimitive {
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
@@ -11129,7 +11129,7 @@ DiagramElementPrimative {
                       "vertexAttribPointer": [Function],
                     },
                   ],
-                  "glPrimative": 2,
+                  "glPrimitive": 2,
                   "holeBorder": Array [
                     Array [],
                   ],
@@ -11155,7 +11155,7 @@ DiagramElementPrimative {
                   ],
                   "state": "loaded",
                   "texture": null,
-                  "type": "vertexPrimative",
+                  "type": "vertexPrimitive",
                   "webgl": Array [
                     Object {
                       "addTexture": [Function],
@@ -11513,7 +11513,7 @@ DiagramElementPrimative {
       },
       "functions": EquationFunctions {
         "elements": Object {
-          "_2": DiagramElementPrimative {
+          "_2": DiagramElementPrimitive {
             "angleToDraw": -1,
             "anim": Object {
               "builder": [Function],
@@ -11985,7 +11985,7 @@ DiagramElementPrimative {
             "unrenderNextDraw": false,
           },
           "a": [Circular],
-          "b": DiagramElementPrimative {
+          "b": DiagramElementPrimitive {
             "angleToDraw": -1,
             "anim": Object {
               "builder": [Function],
@@ -12456,7 +12456,7 @@ DiagramElementPrimative {
             "uid": "0000000000",
             "unrenderNextDraw": false,
           },
-          "c": DiagramElementPrimative {
+          "c": DiagramElementPrimitive {
             "angleToDraw": -1,
             "anim": Object {
               "builder": [Function],
@@ -12927,7 +12927,7 @@ DiagramElementPrimative {
             "uid": "0000000000",
             "unrenderNextDraw": false,
           },
-          "v": DiagramElementPrimative {
+          "v": DiagramElementPrimitive {
             "angleToDraw": -1,
             "anim": Object {
               "builder": [Function],
@@ -13024,7 +13024,7 @@ DiagramElementPrimative {
                   "vertexAttribPointer": [Function],
                 },
               ],
-              "glPrimative": 2,
+              "glPrimitive": 2,
               "holeBorder": Array [
                 Array [],
               ],
@@ -13050,7 +13050,7 @@ DiagramElementPrimative {
               ],
               "state": "loaded",
               "texture": null,
-              "type": "vertexPrimative",
+              "type": "vertexPrimitive",
               "webgl": Array [
                 Object {
                   "addTexture": [Function],
@@ -13409,7 +13409,7 @@ DiagramElementPrimative {
               "content": Array [
                 Element {
                   "ascent": 0.025200000000000004,
-                  "content": DiagramElementPrimative {
+                  "content": DiagramElementPrimitive {
                     "angleToDraw": -1,
                     "anim": Object {
                       "builder": [Function],
@@ -13873,7 +13873,7 @@ DiagramElementPrimative {
           "description": null,
           "elementMods": Object {},
           "elements": Object {
-            "elem": DiagramElementPrimative {
+            "elem": DiagramElementPrimitive {
               "angleToDraw": -1,
               "anim": Object {
                 "builder": [Function],
@@ -14338,7 +14338,7 @@ DiagramElementPrimative {
           0,
           1,
         ],
-        "shapes": DiagramPrimatives {
+        "shapes": DiagramPrimitives {
           "animateNextFrame": [Function],
           "draw2D": Array [
             DrawContext2D {
@@ -14826,7 +14826,7 @@ DiagramElementPrimative {
     "renderedOnNextDraw": false,
     "scenarios": Object {},
     "setTransformCallback": [Function],
-    "shapes": DiagramPrimatives {
+    "shapes": DiagramPrimitives {
       "animateNextFrame": [Function],
       "draw2D": Array [
         DrawContext2D {

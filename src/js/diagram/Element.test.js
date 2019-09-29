@@ -1,5 +1,5 @@
 import {
-  DiagramElementPrimative,
+  DiagramElementPrimitive,
   DiagramElementCollection,
 } from './Element';
 // import { AnimationPhase } from './AnimationPhase';
@@ -14,16 +14,16 @@ import {
 import * as m2 from '../tools/m2';
 
 describe('Animationa and Movement', () => {
-  describe('DiagramElementPrimative', () => {
+  describe('DiagramElementPrimitive', () => {
     describe('Setup', () => {
       test('Instantiation', () => {
         const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
-        const element = new DiagramElementPrimative(
+        const element = new DiagramElementPrimitive(
           square,
           new Transform(),
           [0, 0, 1, 1],
         );
-        expect(element instanceof DiagramElementPrimative).toBe(true);
+        expect(element instanceof DiagramElementPrimitive).toBe(true);
       });
     });
     describe('Animation', () => {
@@ -31,7 +31,7 @@ describe('Animationa and Movement', () => {
       let identity;
       beforeEach(() => {
         const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
-        element = new DiagramElementPrimative(
+        element = new DiagramElementPrimitive(
           square,
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
           [0, 0, 1, 1],
@@ -207,7 +207,7 @@ describe('Animationa and Movement', () => {
       let identity;
       beforeEach(() => {
         const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
-        element = new DiagramElementPrimative(
+        element = new DiagramElementPrimitive(
           square,
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
           [0, 0, 1, 1],
@@ -308,7 +308,7 @@ describe('Animationa and Movement', () => {
       const RealDate = Date.now;
       beforeEach(() => {
         const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
-        element = new DiagramElementPrimative(
+        element = new DiagramElementPrimitive(
           square,
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
           [0, 0, 1, 1],
@@ -338,7 +338,7 @@ describe('Animationa and Movement', () => {
       let identity;
       beforeEach(() => {
         const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
-        element = new DiagramElementPrimative(
+        element = new DiagramElementPrimitive(
           square,
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
           [0, 0, 1, 1],
@@ -395,7 +395,7 @@ describe('Animationa and Movement', () => {
       let square;
       beforeEach(() => {
         const sq = new VertexPolygon([webgl], 4, Math.sqrt(2.205), 0.1, 0, Point.zero());
-        square = new DiagramElementPrimative(
+        square = new DiagramElementPrimitive(
           sq,
           new Transform().rotate(Math.PI / 4),
           [0, 0, 1, 1],
@@ -434,7 +434,7 @@ describe('Animationa and Movement', () => {
           Math.sqrt(2) * (0.105), Math.sqrt(2) * 0.01,
           Math.PI / 4, Point.zero(),
         );
-        const square = new DiagramElementPrimative(sq);
+        const square = new DiagramElementPrimitive(sq);
         const box = square.getGLBoundingRect();
         expect(round(box.left, 3)).toEqual(-0.105);
         expect(round(box.bottom, 3)).toEqual(-0.105);
@@ -448,7 +448,7 @@ describe('Animationa and Movement', () => {
           Math.sqrt(2) * (0.105), Math.sqrt(2) * 0.01,
           Math.PI / 4, new Point(0.5, 0),
         );
-        const square = new DiagramElementPrimative(sq);
+        const square = new DiagramElementPrimitive(sq);
         const box = square.getGLBoundingRect();
         expect(round(box.left, 3)).toEqual(-0.105 + 0.5);
         expect(round(box.bottom, 3)).toEqual(-0.105);
@@ -462,7 +462,7 @@ describe('Animationa and Movement', () => {
           Math.sqrt(2) * (0.105), Math.sqrt(2) * 0.01,
           Math.PI / 4, new Point(0, 0),
         );
-        const square = new DiagramElementPrimative(
+        const square = new DiagramElementPrimitive(
           sq,
           new Transform().scale(1, 1).rotate(0).translate(0.5, 0),
         );
@@ -480,7 +480,7 @@ describe('Animationa and Movement', () => {
           Math.sqrt(2) * (0.105), Math.sqrt(2) * 0.01,
           Math.PI / 4, new Point(0.5, 0),
         );
-        const square = new DiagramElementPrimative(
+        const square = new DiagramElementPrimitive(
           sq,
           new Transform().scale(2, 2).rotate(0).translate(0, 0),
         );
@@ -500,7 +500,7 @@ describe('Animationa and Movement', () => {
           Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
           Math.PI / 4, new Point(0, 0),
         );
-        const square = new DiagramElementPrimative(
+        const square = new DiagramElementPrimitive(
           sq,
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
         );
@@ -520,7 +520,7 @@ describe('Animationa and Movement', () => {
           Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
           Math.PI / 4, new Point(0, 0),
         );
-        const square = new DiagramElementPrimative(
+        const square = new DiagramElementPrimitive(
           sq,
           new Transform().scale(2, 2).rotate(0).translate(0, 0),
         );
@@ -547,13 +547,13 @@ describe('Animationa and Movement', () => {
           Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
           Math.PI / 4, new Point(0, 0),
         );
-        const square = new DiagramElementPrimative(
+        const square = new DiagramElementPrimitive(
           sq,
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
         );
         // change a default value DiagramElement base class
         square.isShown = true;
-        // change a default value in DiagramElementPrimative class
+        // change a default value in DiagramElementPrimitive class
         square.color = [0.5, 0.4, 0.3, 0.2];
 
         const copy = square._dup();
@@ -563,7 +563,7 @@ describe('Animationa and Movement', () => {
 
         // change a default value DiagramElement base class
         square.isShown = false;
-        // change a default value in DiagramElementPrimative class
+        // change a default value in DiagramElementPrimitive class
         square.color = [0.6, 0.5, 0.4, 0.3];
         expect(square.color).toEqual([0.6, 0.5, 0.4, 0.3]);
         expect(copy.color).toEqual([0.5, 0.4, 0.3, 0.2]);
@@ -582,7 +582,7 @@ describe('Animationa and Movement', () => {
       identity = new Transform();
       const square = new VertexPolygon([webgl], 4, 1005, 0.01, 0, Point.zero());
       const tri = new VertexPolygon([webgl], 3, 0.1005, 0.01, 0, new Point(0.1, 0.1));
-      squareElement = new DiagramElementPrimative(
+      squareElement = new DiagramElementPrimitive(
         square,
         new Transform().scale(1, 1).rotate(0).translate(0, 0),
         [0, 0, 1, 1],
@@ -592,7 +592,7 @@ describe('Animationa and Movement', () => {
       //    - tranlation x by 0.1: (0.205, 0)
       //    - rotation by 90 degrees: (0, 0.205)
       //    - scale by 2: (0, 0.41)
-      triElement = new DiagramElementPrimative(
+      triElement = new DiagramElementPrimitive(
         tri,
         new Transform().scale(2, 2).rotate(Math.PI / 2).translate(0.1, 0),
         [0, 0, 1, 1],
@@ -745,7 +745,7 @@ describe('Animationa and Movement', () => {
           Math.PI / 4,
           Point.zero(),
         );
-        squareElement = new DiagramElementPrimative(square);
+        squareElement = new DiagramElementPrimitive(square);
         collection = new DiagramElementCollection();
         collection.add('square', squareElement);
         collection.isTouchable = true;
@@ -774,7 +774,7 @@ describe('Animationa and Movement', () => {
         expect(collection.isBeingTouched(new Point(0, 0))).toBe(false);
       });
       test('Get being touched', () => {
-        const squareElement2 = new DiagramElementPrimative(
+        const squareElement2 = new DiagramElementPrimitive(
           square,
           new Transform().translate(0.5, 0),
         );
@@ -823,7 +823,7 @@ describe('Animationa and Movement', () => {
         Math.sqrt(2) * (0.105), Math.sqrt(2) * 0.01,
         Math.PI / 4, Point.zero(),
       );
-      const square = new DiagramElementPrimative(sq);
+      const square = new DiagramElementPrimitive(sq);
       const collection = new DiagramElementCollection();
       collection.add('square', square);
       collection.setFirstTransform(new Transform());
@@ -841,7 +841,7 @@ describe('Animationa and Movement', () => {
         Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
         Math.PI / 4, Point.zero(),
       );
-      const square = new DiagramElementPrimative(sq, new Transform()
+      const square = new DiagramElementPrimitive(sq, new Transform()
         .scale(1, 1)
         .rotate(0)
         .translate(0.5, 0));
@@ -862,7 +862,7 @@ describe('Animationa and Movement', () => {
         Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
         Math.PI / 4, Point.zero(),
       );
-      const square = new DiagramElementPrimative(sq);
+      const square = new DiagramElementPrimitive(sq);
       const collection = new DiagramElementCollection(new Transform()
         .scale(1, 1)
         .rotate(0)
@@ -883,7 +883,7 @@ describe('Animationa and Movement', () => {
         Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
         Math.PI / 4, Point.zero(),
       );
-      const square = new DiagramElementPrimative(sq, new Transform()
+      const square = new DiagramElementPrimitive(sq, new Transform()
         .scale(1, 1)
         .rotate(0)
         .translate(0.5, 0));
@@ -907,7 +907,7 @@ describe('Animationa and Movement', () => {
         Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
         Math.PI / 4, Point.zero(),
       );
-      const square = new DiagramElementPrimative(sq, new Transform()
+      const square = new DiagramElementPrimitive(sq, new Transform()
         .scale(1, 1)
         .rotate(0)
         .translate(0.5, 0));
@@ -931,11 +931,11 @@ describe('Animationa and Movement', () => {
         Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
         Math.PI / 4, Point.zero(),
       );
-      const square1 = new DiagramElementPrimative(sq, new Transform()
+      const square1 = new DiagramElementPrimitive(sq, new Transform()
         .scale(1, 1)
         .rotate(0)
         .translate(0.5, 0));
-      const square2 = new DiagramElementPrimative(sq, new Transform()
+      const square2 = new DiagramElementPrimitive(sq, new Transform()
         .scale(1, 1)
         .rotate(0)
         .translate(0, -0.5));
@@ -959,7 +959,7 @@ describe('Animationa and Movement', () => {
     //     Math.sqrt(2) * 0.1, 4, 4, Math.sqrt(2) * 0.01,
     //     Math.PI / 4, new Point(0.5, 0),
     //   );
-    //   const square = new DiagramElementPrimative(sq);
+    //   const square = new DiagramElementPrimitive(sq);
     //   const box = square.getGLBoundingRect();
     //   expect(box.max.round()).toEqual(new Point(0.105 + 0.5, 0.105));
     //   expect(box.min.round()).toEqual(new Point(-0.105 + 0.5, -0.105));
@@ -970,7 +970,7 @@ describe('Animationa and Movement', () => {
     //     Math.sqrt(2) * 0.1, 4, 4, Math.sqrt(2) * 0.01,
     //     Math.PI / 4, new Point(0, 0),
     //   );
-    //   const square = new DiagramElementPrimative(
+    //   const square = new DiagramElementPrimitive(
     //     sq,
     //     new Transform().scale(1, 1).rotate(0).translate(0.5, 0),
     //   );
@@ -984,7 +984,7 @@ describe('Animationa and Movement', () => {
     //     Math.sqrt(2) * 0.1, 4, 4, Math.sqrt(2) * 0.01,
     //     Math.PI / 4, new Point(0.5, 0),
     //   );
-    //   const square = new DiagramElementPrimative(
+    //   const square = new DiagramElementPrimitive(
     //     sq,
     //     new Transform().scale(2, 2).rotate(0).translate(0, 0),
     //   );

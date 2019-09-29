@@ -48,7 +48,7 @@ class VertexBracket extends VertexObject {
     numLines: number = 1,
   ) {
     super(webgl);
-    this.glPrimative = this.gl[0].TRIANGLE_STRIP;
+    this.glPrimitive = this.gl[0].TRIANGLE_STRIP;
     this.numLines = numLines;
     this.mainHeight = 1;
 

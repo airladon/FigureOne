@@ -5,7 +5,7 @@ import {
 import { joinObjects } from '../../../tools/tools';
 // import { RGBToArray } from '../../../tools/color';
 import {
-  DiagramElementPrimative, DiagramElementCollection, DiagramElement,
+  DiagramElementPrimitive, DiagramElementCollection, DiagramElement,
 } from '../../Element';
 import {
   DiagramFont,
@@ -37,7 +37,7 @@ type TypeEquationElement = string | {
     // Both Text and Symbol
     color?: Array<number>;
     mods?: {};
-  } | DiagramElementPrimative | DiagramElementCollection;
+  } | DiagramElementPrimitive | DiagramElementCollection;
 
 export type TypeEquationElements = {
   [elementName: string]: TypeEquationElement;
@@ -49,7 +49,7 @@ export type TypeEquationElements = {
 //   alignV?: TypeVAlign | null,
 // };
 type TypeFormAlignment = {
-  fixTo: DiagramElementPrimative | DiagramElementCollection | Point;
+  fixTo: DiagramElementPrimitive | DiagramElementCollection | Point;
   alignH: TypeHAlign;
   alignV: TypeVAlign;
 };
@@ -165,14 +165,14 @@ export class EquationNew extends DiagramElementCollection {
 
     //
     defaultFormAlignment: {
-      fixTo: DiagramElementPrimative | DiagramElementCollection | Point;
+      fixTo: DiagramElementPrimitive | DiagramElementCollection | Point;
       alignH: TypeHAlign;
       alignV: TypeVAlign;
     };
 
     isAnimating: boolean;
 
-    descriptionElement: DiagramElementPrimative | null;
+    descriptionElement: DiagramElementPrimitive | null;
     descriptionPosition: Point;
 
     formRestart: ?{
@@ -372,7 +372,7 @@ export class EquationNew extends DiagramElementCollection {
         if (!(key.startsWith('space') && key.startsWith(' '))) {
           this.add(key, makeTextElem({ text: elem }));
         }
-      } else if (elem instanceof DiagramElementPrimative) {
+      } else if (elem instanceof DiagramElementPrimitive) {
         this.add(key, elem);
       } else if (elem instanceof DiagramElementCollection) {
         this.add(key, elem);
@@ -395,9 +395,9 @@ export class EquationNew extends DiagramElementCollection {
       }
     });
 
-    const fullLineHeightPrimative = makeTextElem({ text: 'gh' });
-    const form = this.createForm({ elem: fullLineHeightPrimative });
-    form.content = [this.eqn.functions.contentToElement(fullLineHeightPrimative)];
+    const fullLineHeightPrimitive = makeTextElem({ text: 'gh' });
+    const form = this.createForm({ elem: fullLineHeightPrimitive });
+    form.content = [this.eqn.functions.contentToElement(fullLineHeightPrimitive)];
     form.arrange(
       this.eqn.scale,
       'left',
@@ -410,7 +410,7 @@ export class EquationNew extends DiagramElementCollection {
   }
 
   addDescriptionElement(
-    descriptionElement: DiagramElementPrimative | null = null,
+    descriptionElement: DiagramElementPrimitive | null = null,
     descriptionPosition: Point = new Point(0, 0),
   ) {
     this.eqn.descriptionElement = descriptionElement;
@@ -550,9 +550,9 @@ export class EquationNew extends DiagramElementCollection {
 
   checkFixTo(
     fixTo: DiagramElementCollection
-          | DiagramElementPrimative
+          | DiagramElementPrimitive
           | string | Point | null,
-  ): DiagramElementPrimative | DiagramElementCollection | Point {
+  ): DiagramElementPrimitive | DiagramElementCollection | Point {
     if (typeof fixTo === 'string') {
       const element = getDiagramElement(this, fixTo);
       if (element != null) {
@@ -560,7 +560,7 @@ export class EquationNew extends DiagramElementCollection {
       }
       return new Point(0, 0);
     }
-    if (fixTo instanceof DiagramElementPrimative
+    if (fixTo instanceof DiagramElementPrimitive
       || fixTo instanceof DiagramElementCollection
       || fixTo instanceof Point
     ) {
@@ -570,7 +570,7 @@ export class EquationNew extends DiagramElementCollection {
   }
 
   createForm(
-    elements: { [elementName: string]: DiagramElementPrimative |
+    elements: { [elementName: string]: DiagramElementPrimitive |
                                        DiagramElementCollection }
     = this.elements,
   ) {

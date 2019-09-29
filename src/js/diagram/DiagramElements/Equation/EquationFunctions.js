@@ -7,12 +7,12 @@ import type {
 } from '../../../tools/g2';
 // import { joinObjects } from '../../../tools/tools';
 import {
-  DiagramElementPrimative, DiagramElementCollection,
+  DiagramElementPrimitive, DiagramElementCollection,
 } from '../../Element';
 import { BlankElement, Element, Elements } from './Elements/Element';
 import Fraction from './Elements/Fraction';
 import Strike from './Elements/Strike';
-// import DiagramPrimatives from '../../DiagramPrimatives/DiagramPrimatives';
+// import DiagramPrimitives from '../../DiagramPrimitives/DiagramPrimitives';
 import SuperSub from './Elements/SuperSub';
 import { Brackets, Bar } from './Elements/Brackets';
 import EquationForm from './EquationForm';
@@ -20,11 +20,11 @@ import { Annotation, AnnotationInformation } from './Elements/Annotation';
 import Padding from './Elements/Padding';
 
 export function getDiagramElement(
-  elementsObject: { [string: string]: DiagramElementPrimative |
+  elementsObject: { [string: string]: DiagramElementPrimitive |
                     DiagramElementCollection }
                   | DiagramElementCollection,
-  name: string | DiagramElementPrimative | DiagramElementCollection,
-): DiagramElementPrimative | DiagramElementCollection | null {
+  name: string | DiagramElementPrimitive | DiagramElementCollection,
+): DiagramElementPrimitive | DiagramElementCollection | null {
   if (typeof name !== 'string') {
     return name;
   }
@@ -91,7 +91,7 @@ export type TypeEquationPhrase =
     ?number,
   ]
   | Array<TypeEquationPhrase>
-  | DiagramElementPrimative
+  | DiagramElementPrimitive
   | DiagramElementCollection
   | Elements
   | Element;
@@ -259,7 +259,7 @@ export type TypeAnnotateArray = [
 // is all confused.
 export class EquationFunctions {
   // eslint-disable-next-line no-use-before-define
-  elements: { [name: string]: DiagramElementCollection | DiagramElementPrimative };
+  elements: { [name: string]: DiagramElementCollection | DiagramElementPrimitive };
   shapes: {};
   contentToElement: (TypeEquationPhrase | Elements) => Elements;
   phrases: {
@@ -271,7 +271,7 @@ export class EquationFunctions {
   // [methodName: string]: (TypeEquationPhrase) => {};
 
   // eslint-disable-next-line no-use-before-define
-  constructor(elements: { [name: string]: DiagramElementCollection | DiagramElementPrimative }) {
+  constructor(elements: { [name: string]: DiagramElementCollection | DiagramElementPrimitive }) {
     this.elements = elements;
     this.phrases = {};
     this.fullLineHeight = null;
@@ -332,14 +332,14 @@ export class EquationFunctions {
   }
 
   contentToElement(
-    content: TypeEquationPhrase | Elements | DiagramElementPrimative | DiagramElementCollection,
+    content: TypeEquationPhrase | Elements | DiagramElementPrimitive | DiagramElementCollection,
   ): Elements {
     // If input is alread an Elements object, then return it
     if (content instanceof Elements) {
       return content._dup();
     }
     if (content instanceof DiagramElementCollection
-      || content instanceof DiagramElementPrimative
+      || content instanceof DiagramElementPrimitive
     ) {
       return new Elements([new Element(content)]);
     }

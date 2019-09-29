@@ -3,7 +3,7 @@ import {
   Transform, Point, parsePoint,
 } from '../../tools/g2';
 import {
-  DiagramElementCollection, DiagramElementPrimative,
+  DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
 import EquationForm from '../DiagramElements/Equation/EquationForm';
 import * as html from '../../tools/htmlGenerator';
@@ -479,7 +479,7 @@ export default class EqnNavigator extends DiagramElementCollection {
   prevGroup: ?HTMLElement;
   nextGroup: ?HTMLElement;
   table: ?HTMLElement;
-  _table: DiagramElementPrimative;
+  _table: DiagramElementPrimitive;
   currentGroup: ?HTMLElement;
   updateButtons: () => void;
   eqn: EquationNew;

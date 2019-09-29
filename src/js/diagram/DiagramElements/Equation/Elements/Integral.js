@@ -3,7 +3,7 @@ import {
   Point,
 } from '../../../../tools/g2';
 import {
-  DiagramElementPrimative, DiagramElementCollection,
+  DiagramElementPrimitive, DiagramElementCollection,
 } from '../../../Element';
 import { roundNum } from '../../../../tools/math';
 import { duplicateFromTo } from '../../../../tools/tools';
@@ -14,7 +14,7 @@ export default class Integral extends Elements {
   limitMin: Elements | null;
   limitMax: Elements | null;
   mainContent: Elements | null;
-  integralGlyph: DiagramElementPrimative | DiagramElementCollection | null;
+  integralGlyph: DiagramElementPrimitive | DiagramElementCollection | null;
   glyphLocation: Point;
   glyphScale: number;
 
@@ -22,7 +22,7 @@ export default class Integral extends Elements {
     limitMin: Elements | null,
     limitMax: Elements | null,
     content: Elements | null,
-    integralGlyph: DiagramElementPrimative | null | DiagramElementCollection,
+    integralGlyph: DiagramElementPrimitive | null | DiagramElementCollection,
   ) {
     const glyph = integralGlyph !== null ? new Element(integralGlyph) : null;
     super([glyph, limitMin, limitMax, content]);
@@ -158,7 +158,7 @@ export default class Integral extends Elements {
     );
 
     const { integralGlyph } = this;
-    if (integralGlyph instanceof DiagramElementPrimative) {
+    if (integralGlyph instanceof DiagramElementPrimitive) {
       integralGlyph.show();
       integralGlyph.transform.updateScale(
         height,

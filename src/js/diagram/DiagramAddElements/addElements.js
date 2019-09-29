@@ -3,7 +3,7 @@
 import {
   DiagramElementCollection,
 } from '../Element';
-import DiagramPrimatives from '../DiagramPrimatives/DiagramPrimatives';
+import DiagramPrimitives from '../DiagramPrimitives/DiagramPrimitives';
 import DiagramObjects from '../DiagramObjects/DiagramObjects';
 import DiagramEquation from '../DiagramEquation/DiagramEquation';
 
@@ -18,7 +18,7 @@ export type TypeAddElementObject = {
 };
 
 function addElements(
-  shapes: DiagramPrimatives,
+  shapes: DiagramPrimitives,
   equation: DiagramEquation,
   objects: DiagramObjects,
   rootCollection: DiagramElementCollection,

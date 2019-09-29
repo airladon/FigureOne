@@ -6,7 +6,7 @@ import {
 import { joinObjects } from '../../tools/tools';
 import { round } from '../../tools/math';
 import {
-  DiagramElementCollection, DiagramElementPrimative,
+  DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
 import type {
   TypePolyLineBorderToPoint,
@@ -17,7 +17,7 @@ import type {
 import type {
   TypeAngleOptions, TypeAngleLabelOptions,
 } from './Angle';
-import DiagramPrimatives from '../DiagramPrimatives/DiagramPrimatives';
+import DiagramPrimitives from '../DiagramPrimitives/DiagramPrimitives';
 import DiagramObjects from './DiagramObjects';
 import DiagramEquation from '../DiagramEquation/DiagramEquation';
 
@@ -115,7 +115,7 @@ function makeArray<T>(
 // }
 
 export default class DiagramObjectPolyLine extends DiagramElementCollection {
-  shapes: DiagramPrimatives;
+  shapes: DiagramPrimitives;
   equation: DiagramEquation;
   objects: DiagramObjects;
   animateNextFrame: void => void;
@@ -124,7 +124,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
   position: Point;
   points: Array<Point>;
   close: boolean;
-  _line: ?DiagramElementPrimative;
+  _line: ?DiagramElementPrimitive;
   options: TypePolyLineOptions;
   updatePointsCallback: ?() => void;
   reverse: boolean;
@@ -138,7 +138,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
   };
 
   constructor(
-    shapes: DiagramPrimatives,
+    shapes: DiagramPrimitives,
     equation: DiagramEquation,
     objects: DiagramObjects,
     isTouchDevice: boolean,

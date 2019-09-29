@@ -1,7 +1,7 @@
 // @flow
 
 import VertexBrace from './VertexBrace';
-import { DiagramElementPrimative } from '../../../Element';
+import { DiagramElementPrimitive } from '../../../Element';
 import {
   Point, Transform, Rect,
 } from '../../../../tools/g2';
@@ -22,5 +22,5 @@ export default function Brace(
   } else {
     transform = transformOrLocation._dup();
   }
-  return new DiagramElementPrimative(vertices, transform, color, diagramLimits);
+  return new DiagramElementPrimitive(vertices, transform, color, diagramLimits);
 }

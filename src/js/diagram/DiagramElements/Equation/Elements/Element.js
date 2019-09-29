@@ -4,11 +4,11 @@ import {
 } from '../../../../tools/g2';
 import { duplicateFromTo } from '../../../../tools/tools';
 import {
-  DiagramElementPrimative, DiagramElementCollection,
+  DiagramElementPrimitive, DiagramElementCollection,
 } from '../../../Element';
 
 // Equation is a class that takes a set of drawing objects (TextObjects,
-// DiagramElementPrimatives or DiagramElementCollections and HTML Objects
+// DiagramElementPrimitives or DiagramElementCollections and HTML Objects
 // and arranges their size in a )
 class BlankElement {
   ascent: number;
@@ -29,7 +29,7 @@ class BlankElement {
 }
 
 class Element {
-  content: DiagramElementPrimative | DiagramElementCollection | BlankElement;
+  content: DiagramElementPrimitive | DiagramElementCollection | BlankElement;
   ascent: number;
   descent: number;
   width: number;
@@ -37,7 +37,7 @@ class Element {
   height: number;
   scale: number;
 
-  constructor(content: DiagramElementPrimative | DiagramElementCollection | BlankElement) {
+  constructor(content: DiagramElementPrimitive | DiagramElementCollection | BlankElement) {
     this.content = content;
     this.ascent = 0;
     this.descent = 0;
@@ -57,7 +57,7 @@ class Element {
       this.scale = scale;
     }
     if (content instanceof DiagramElementCollection
-        || content instanceof DiagramElementPrimative) {
+        || content instanceof DiagramElementPrimitive) {
       // Update translation and scale
       content.transform.updateTranslation(location.x, location.y);
       content.transform.updateScale(scale, scale);
@@ -106,7 +106,7 @@ class Element {
   setPositions() {
     const { content } = this;
     if (content instanceof DiagramElementCollection
-        || content instanceof DiagramElementPrimative) {
+        || content instanceof DiagramElementPrimitive) {
       content.transform.updateTranslation(this.location.x, this.location.y);
       content.transform.updateScale(this.scale, this.scale);
       content.updateLastDrawTransform();
@@ -125,7 +125,7 @@ class Elements {
   width: number;
   location: Point;
   height: number;
-  +getAllElements: () => Array<DiagramElementPrimative | DiagramElementCollection>;
+  +getAllElements: () => Array<DiagramElementPrimitive | DiagramElementCollection>;
 
   constructor(content: Array<Element | Elements | null>) {
     const nonNullContent = [];

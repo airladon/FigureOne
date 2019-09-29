@@ -3,7 +3,7 @@ import {
   Point,
 } from '../../../../tools/g2';
 import {
-  DiagramElementPrimative, DiagramElementCollection,
+  DiagramElementPrimitive, DiagramElementCollection,
 } from '../../../Element';
 import { duplicateFromTo } from '../../../../tools/tools';
 import { Element, Elements } from './Element';
@@ -11,8 +11,8 @@ import Bounds from './Bounds';
 
 export class Brackets extends Elements {
   mainContent: Elements | null;
-  glyph: DiagramElementPrimative | DiagramElementCollection | null;
-  rightGlyph: DiagramElementPrimative | DiagramElementCollection | null;
+  glyph: DiagramElementPrimitive | DiagramElementCollection | null;
+  rightGlyph: DiagramElementPrimitive | DiagramElementCollection | null;
   glyphLocation: Point;
   rightGlyphLocation: Point;
   glyphScale: number;
@@ -23,8 +23,8 @@ export class Brackets extends Elements {
 
   constructor(
     content: Elements | null,
-    glyph: DiagramElementPrimative | null | DiagramElementCollection,
-    rightGlyph: DiagramElementPrimative | null | DiagramElementCollection,
+    glyph: DiagramElementPrimitive | null | DiagramElementCollection,
+    rightGlyph: DiagramElementPrimitive | null | DiagramElementCollection,
     insideSpace: number = 0.03,
     outsideSpace: number = 0.05,
     minLineHeight: Elements | null = null,
@@ -155,7 +155,7 @@ export class Brackets extends Elements {
       loc.y - glyphDescent,
     );
     const { glyph } = this;
-    if (glyph instanceof DiagramElementPrimative) {
+    if (glyph instanceof DiagramElementPrimitive) {
       glyph.show();
       glyph.transform.updateScale(
         bracketScale,
@@ -181,7 +181,7 @@ export class Brackets extends Elements {
       leftSymbolLocation.y,
     );
     const { rightGlyph } = this;
-    if (rightGlyph instanceof DiagramElementPrimative) {
+    if (rightGlyph instanceof DiagramElementPrimitive) {
       rightGlyph.show();
       rightGlyph.transform.updateScale(
         bracketScale,
@@ -226,7 +226,7 @@ export class Bar extends Brackets {
 
   constructor(
     content: Elements | null,
-    barGlyph: DiagramElementPrimative | null | DiagramElementCollection,
+    barGlyph: DiagramElementPrimitive | null | DiagramElementCollection,
     space: number = 0.03,
     outsideSpace: number = 0.03,
     barPosition: 'top' | 'bottom' = 'top',
@@ -263,7 +263,7 @@ export class Bar extends Brackets {
       leftSymbolLocation.y = loc.y - contentBounds.descent - this.insideSpace * scale;
     }
     const { glyph } = this;
-    if (glyph instanceof DiagramElementPrimative) {
+    if (glyph instanceof DiagramElementPrimitive) {
       glyph.show();
       glyph.transform.updateScale(
         bracketScale,

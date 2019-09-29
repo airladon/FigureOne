@@ -4,11 +4,11 @@ import {
 } from '../../../../tools/g2';
 import { duplicateFromTo } from '../../../../tools/tools';
 // import {
-//   DiagramElementPrimative, DiagramElementCollection,
+//   DiagramElementPrimitive, DiagramElementCollection,
 // } from '../../../Element';
 import { Elements } from './Element';
 // // Equation is a class that takes a set of drawing objects (TextObjects,
-// // DiagramElementPrimatives or DiagramElementCollections and HTML Objects
+// // DiagramElementPrimitives or DiagramElementCollections and HTML Objects
 // // and arranges their size in a )
 
 export default class Padding extends Elements {

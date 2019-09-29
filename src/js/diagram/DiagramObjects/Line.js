@@ -8,7 +8,7 @@ import {
   roundNum,
 } from '../../tools/math';
 import {
-  DiagramElementCollection, DiagramElementPrimative,
+  DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
 import EquationLabel from './EquationLabel';
 import type { TypeLabelEquationOptions } from './EquationLabel';
@@ -197,7 +197,7 @@ function makeStraightLine(
     if (typeof largerTouchBorder === 'number') {
       multiplier = largerTouchBorder;
     }
-    const increaseBorderSize = (element: DiagramElementPrimative) => {
+    const increaseBorderSize = (element: DiagramElementPrimitive) => {
       for (let i = 0; i < element.drawingObject.border[0].length; i += 1) {
         // eslint-disable-next-line no-param-reassign
         element.drawingObject.border[0][i].y *= multiplier;
@@ -208,7 +208,7 @@ function makeStraightLine(
   return straightLine;
 }
 // export type TypeLine = {
-//   _line: DiagramElementPrimative;
+//   _line: DiagramElementPrimitive;
 //   currentLength: number;
 //   setLength: (number) => void;
 //   setEndPoints: (Point, Point, number) => void;
@@ -245,12 +245,12 @@ function makeStraightLine(
 // The line's length is the _line primative x scale.
 export default class DiagramObjectLine extends DiagramElementCollection {
   // Diagram elements
-  _line: ?DiagramElementPrimative;
-  _midLine: ?DiagramElementPrimative;
-  _arrow1: ?DiagramElementPrimative;
-  _arrow2: ?DiagramElementPrimative;
+  _line: ?DiagramElementPrimitive;
+  _midLine: ?DiagramElementPrimitive;
+  _arrow1: ?DiagramElementPrimitive;
+  _arrow2: ?DiagramElementPrimitive;
   _label: null | {
-    _base: DiagramElementPrimative;
+    _base: DiagramElementPrimitive;
   } & DiagramElementCollection;
 
   // label and arrow objects that exist if labels and arrows exist

@@ -20,7 +20,7 @@ export default class VertexRectangleFilled extends VertexObject {
     cornerSides: number = 20,
   ): void {
     super(webgl);
-    this.glPrimative = this.gl[0].TRIANGLE_FAN;
+    this.glPrimitive = this.gl[0].TRIANGLE_FAN;
 
     let points = [];
     points.push(new Point(0, 0));

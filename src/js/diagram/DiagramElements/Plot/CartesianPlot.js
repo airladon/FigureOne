@@ -1,7 +1,7 @@
 // @flow
 
 import {
-  DiagramElementCollection, DiagramElementPrimative,
+  DiagramElementCollection, DiagramElementPrimitive,
 } from '../../Element';
 import {
   Rect, Transform, Point,
@@ -46,7 +46,7 @@ class CartesianPlot extends DiagramElementCollection {
         ));
       }
       const polyLine = new VertexPolyLine(webgl, line, false, 0.01);
-      this.add(trace.name, new DiagramElementPrimative(
+      this.add(trace.name, new DiagramElementPrimitive(
         polyLine,
         new Transform().scale(1, 1).rotate(0).translate(0, 0),
         trace.color,
@@ -86,7 +86,7 @@ class CartesianPlot extends DiagramElementCollection {
   //   return false;
   // }
 
-  // getTouched(glLocation: Point): Array<DiagramElementPrimative | DiagramElementCollection> {
+  // getTouched(glLocation: Point): Array<DiagramElementPrimitive | DiagramElementCollection> {
   //   if (!this.isTouchable) {
   //     return [];
   //   }
