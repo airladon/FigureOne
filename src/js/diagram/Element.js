@@ -155,7 +155,12 @@ class DiagramElement {
     callback: ?(mixed) => void;
   };
 
-  pulseDefault: (?() => void) => void;
+  pulseDefault: ((?() => void) => void) | {
+    scale: number,
+    time: number,
+    frequency: number,
+  };
+
 
   diagramLimits: Rect;
   diagramTransforms: TypeSpaceTransforms;
@@ -263,9 +268,15 @@ class DiagramElement {
     this.parent = parent;
     this.drawPriority = 1;
     this.noRotationFromParent = false;
-    this.pulseDefault = (callback: ?() => void = null) => {
-      this.pulseScaleNow(1, 2, 0, callback);
+    // this.pulseDefault = (callback: ?() => void = null) => {
+    //   this.pulseScaleNow(1, 2, 0, callback);
+    // };
+    this.pulseDefault = {
+      frequency: 0,
+      scale: 2,
+      time: 1,
     };
+
     // Rename to animate in future
     this.anim = {
       rotation: (...optionsIn: Array<TypeRotationAnimationStepInputOptions>) => {
@@ -598,7 +609,12 @@ class DiagramElement {
   }
 
   pulse(done: ?(mixed) => void = null) {
-    this.pulseDefault(done);
+    if (typeof this.pulseDefault === 'function') {
+      this.pulseDefault(done);
+    } else {
+      const { frequency, time, scale } = this.pulseDefault;
+      this.pulseScaleNow(time, scale, frequency, done);
+    }
   }
 
   getElement() {
