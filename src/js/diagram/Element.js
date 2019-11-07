@@ -1987,10 +1987,7 @@ class DiagramElementCollection extends DiagramElement {
       super.pulse(elementsOrDone);
       return;
     }
-    // if (elementsToPulse == null || typeof elementsToPulse === 'function') {
-    //   this.pulseDefault(done);
-    //   return;
-    // }
+
     let doneToUse = done;
     elementsOrDone.forEach((elementToPulse) => {
       let element: ?DiagramElement;
@@ -2347,10 +2344,15 @@ class DiagramElementCollection extends DiagramElement {
   highlight(elementsToDim: ?Array<string | DiagramElement> = null) {
     if (elementsToDim == null) {
       this.undim();
-    } else {
-      this.dim();
-      this.exec('undim', elementsToDim);
+      return;
     }
+
+    if (Array.isArray(elementsToDim) && elementsToDim.length === 0) {
+      return;
+    }
+
+    this.dim();
+    this.exec('undim', elementsToDim);
   }
 
   setOpacity(opacity: number) {
