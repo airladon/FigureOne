@@ -548,14 +548,14 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     const line = this._line;
     if (line != null) {
       line.stopPulsing();
-      const oldTransformMethod = line.pulse.transformMethod;
-      const oldPulseCallback = line.pulse.callback;
+      const oldTransformMethod = line.pulseSettings.transformMethod;
+      const oldPulseCallback = line.pulseSettings.callback;
       const finishPulsing = () => {
-        line.pulse.transformMethod = oldTransformMethod;
-        line.pulse.callback = oldPulseCallback;
+        line.pulseSettings.transformMethod = oldTransformMethod;
+        line.pulseSettings.callback = oldPulseCallback;
       };
-      line.pulse.callback = finishPulsing;
-      line.pulse.transformMethod = s => new Transform().scale(1, s);
+      line.pulseSettings.callback = finishPulsing;
+      line.pulseSettings.transformMethod = s => new Transform().scale(1, s);
       line.pulseScaleNow(1, options.line, 0, done);
       done = null;
     }

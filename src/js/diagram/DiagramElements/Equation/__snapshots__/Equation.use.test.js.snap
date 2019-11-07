@@ -32,6 +32,12 @@ DiagramElementPrimitive {
     0,
     1,
   ],
+  "defaultColor": Array [
+    0.95,
+    0,
+    0,
+    1,
+  ],
   "diagramLimits": Rect {
     "bottom": -1,
     "height": 2,
@@ -40,6 +46,12 @@ DiagramElementPrimitive {
     "top": 1,
     "width": 2,
   },
+  "dimColor": Array [
+    0.5,
+    0.5,
+    0.5,
+    1,
+  ],
   "drawPriority": 1,
   "drawingObject": TextObject {
     "border": Array [
@@ -359,6 +371,12 @@ DiagramElementPrimitive {
         0,
         1,
       ],
+      "defaultColor": Array [
+        0.95,
+        0,
+        0,
+        1,
+      ],
       "diagramLimits": Rect {
         "bottom": -1,
         "height": 2,
@@ -367,6 +385,12 @@ DiagramElementPrimitive {
         "top": 1,
         "width": 2,
       },
+      "dimColor": Array [
+        0.5,
+        0.5,
+        0.5,
+        1,
+      ],
       "drawPriority": 1,
       "drawingObject": TextObject {
         "border": Array [
@@ -656,7 +680,8 @@ DiagramElementPrimitive {
       "opacity": 1,
       "parent": [Circular],
       "pointsToDraw": -1,
-      "pulse": Object {
+      "pulseDefault": [Function],
+      "pulseSettings": Object {
         "A": 1,
         "B": 0.5,
         "C": 0,
@@ -831,6 +856,12 @@ DiagramElementPrimitive {
         0,
         1,
       ],
+      "defaultColor": Array [
+        0.95,
+        0,
+        0,
+        1,
+      ],
       "diagramLimits": Rect {
         "bottom": -1,
         "height": 2,
@@ -839,6 +870,12 @@ DiagramElementPrimitive {
         "top": 1,
         "width": 2,
       },
+      "dimColor": Array [
+        0.5,
+        0.5,
+        0.5,
+        1,
+      ],
       "drawPriority": 1,
       "drawingObject": TextObject {
         "border": Array [
@@ -1128,7 +1165,8 @@ DiagramElementPrimitive {
       "opacity": 1,
       "parent": [Circular],
       "pointsToDraw": -1,
-      "pulse": Object {
+      "pulseDefault": [Function],
+      "pulseSettings": Object {
         "A": 1,
         "B": 0.5,
         "C": 0,
@@ -1302,6 +1340,12 @@ DiagramElementPrimitive {
         0,
         1,
       ],
+      "defaultColor": Array [
+        0.95,
+        0,
+        0,
+        1,
+      ],
       "diagramLimits": Rect {
         "bottom": -1,
         "height": 2,
@@ -1310,6 +1354,12 @@ DiagramElementPrimitive {
         "top": 1,
         "width": 2,
       },
+      "dimColor": Array [
+        0.5,
+        0.5,
+        0.5,
+        1,
+      ],
       "drawPriority": 1,
       "drawingObject": TextObject {
         "border": Array [
@@ -1599,7 +1649,8 @@ DiagramElementPrimitive {
       "opacity": 1,
       "parent": [Circular],
       "pointsToDraw": -1,
-      "pulse": Object {
+      "pulseDefault": [Function],
+      "pulseSettings": Object {
         "A": 1,
         "B": 0.5,
         "C": 0,
@@ -1773,6 +1824,12 @@ DiagramElementPrimitive {
         0,
         1,
       ],
+      "defaultColor": Array [
+        0.95,
+        0,
+        0,
+        1,
+      ],
       "diagramLimits": Rect {
         "bottom": -1,
         "height": 2,
@@ -1781,6 +1838,12 @@ DiagramElementPrimitive {
         "top": 1,
         "width": 2,
       },
+      "dimColor": Array [
+        0.5,
+        0.5,
+        0.5,
+        1,
+      ],
       "drawPriority": 1,
       "drawingObject": VertexHorizontalLine {
         "border": Array [
@@ -2074,7 +2137,8 @@ DiagramElementPrimitive {
       "opacity": 1,
       "parent": [Circular],
       "pointsToDraw": -1,
-      "pulse": Object {
+      "pulseDefault": [Function],
+      "pulseSettings": Object {
         "A": 1,
         "B": 0.5,
         "C": 0,
@@ -2233,6 +2297,12 @@ DiagramElementPrimitive {
       0,
       1,
     ],
+    "defaultColor": Array [
+      1,
+      1,
+      1,
+      1,
+    ],
     "diagramLimits": Rect {
       "bottom": -1,
       "height": 2,
@@ -2241,6 +2311,12 @@ DiagramElementPrimitive {
       "top": 1,
       "width": 2,
     },
+    "dimColor": Array [
+      0.5,
+      0.5,
+      0.5,
+      1,
+    ],
     "drawOrder": Array [
       "a",
       "b",
@@ -2281,6 +2357,12 @@ DiagramElementPrimitive {
           0,
           1,
         ],
+        "defaultColor": Array [
+          0.95,
+          0,
+          0,
+          1,
+        ],
         "diagramLimits": Rect {
           "bottom": -1,
           "height": 2,
@@ -2289,6 +2371,12 @@ DiagramElementPrimitive {
           "top": 1,
           "width": 2,
         },
+        "dimColor": Array [
+          0.5,
+          0.5,
+          0.5,
+          1,
+        ],
         "drawPriority": 1,
         "drawingObject": TextObject {
           "border": Array [
@@ -2578,7 +2666,8 @@ DiagramElementPrimitive {
         "opacity": 1,
         "parent": [Circular],
         "pointsToDraw": -1,
-        "pulse": Object {
+        "pulseDefault": [Function],
+        "pulseSettings": Object {
           "A": 1,
           "B": 0.5,
           "C": 0,
@@ -2753,6 +2842,12 @@ DiagramElementPrimitive {
           0,
           1,
         ],
+        "defaultColor": Array [
+          0.95,
+          0,
+          0,
+          1,
+        ],
         "diagramLimits": Rect {
           "bottom": -1,
           "height": 2,
@@ -2761,6 +2856,12 @@ DiagramElementPrimitive {
           "top": 1,
           "width": 2,
         },
+        "dimColor": Array [
+          0.5,
+          0.5,
+          0.5,
+          1,
+        ],
         "drawPriority": 1,
         "drawingObject": TextObject {
           "border": Array [
@@ -3050,7 +3151,8 @@ DiagramElementPrimitive {
         "opacity": 1,
         "parent": [Circular],
         "pointsToDraw": -1,
-        "pulse": Object {
+        "pulseDefault": [Function],
+        "pulseSettings": Object {
           "A": 1,
           "B": 0.5,
           "C": 0,
@@ -3224,6 +3326,12 @@ DiagramElementPrimitive {
           0,
           1,
         ],
+        "defaultColor": Array [
+          0.95,
+          0,
+          0,
+          1,
+        ],
         "diagramLimits": Rect {
           "bottom": -1,
           "height": 2,
@@ -3232,6 +3340,12 @@ DiagramElementPrimitive {
           "top": 1,
           "width": 2,
         },
+        "dimColor": Array [
+          0.5,
+          0.5,
+          0.5,
+          1,
+        ],
         "drawPriority": 1,
         "drawingObject": TextObject {
           "border": Array [
@@ -3521,7 +3635,8 @@ DiagramElementPrimitive {
         "opacity": 1,
         "parent": [Circular],
         "pointsToDraw": -1,
-        "pulse": Object {
+        "pulseDefault": [Function],
+        "pulseSettings": Object {
           "A": 1,
           "B": 0.5,
           "C": 0,
@@ -3695,6 +3810,12 @@ DiagramElementPrimitive {
           0,
           1,
         ],
+        "defaultColor": Array [
+          0.95,
+          0,
+          0,
+          1,
+        ],
         "diagramLimits": Rect {
           "bottom": -1,
           "height": 2,
@@ -3703,6 +3824,12 @@ DiagramElementPrimitive {
           "top": 1,
           "width": 2,
         },
+        "dimColor": Array [
+          0.5,
+          0.5,
+          0.5,
+          1,
+        ],
         "drawPriority": 1,
         "drawingObject": VertexHorizontalLine {
           "border": Array [
@@ -3996,7 +4123,8 @@ DiagramElementPrimitive {
         "opacity": 1,
         "parent": [Circular],
         "pointsToDraw": -1,
-        "pulse": Object {
+        "pulseDefault": [Function],
+        "pulseSettings": Object {
           "A": 1,
           "B": 0.5,
           "C": 0,
@@ -4252,6 +4380,12 @@ DiagramElementPrimitive {
                         0,
                         1,
                       ],
+                      "defaultColor": Array [
+                        0.95,
+                        0,
+                        0,
+                        1,
+                      ],
                       "diagramLimits": Rect {
                         "bottom": -1,
                         "height": 2,
@@ -4260,6 +4394,12 @@ DiagramElementPrimitive {
                         "top": 1,
                         "width": 2,
                       },
+                      "dimColor": Array [
+                        0.5,
+                        0.5,
+                        0.5,
+                        1,
+                      ],
                       "drawPriority": 1,
                       "drawingObject": TextObject {
                         "border": Array [
@@ -4549,7 +4689,8 @@ DiagramElementPrimitive {
                       "opacity": 1,
                       "parent": [Circular],
                       "pointsToDraw": -1,
-                      "pulse": Object {
+                      "pulseDefault": [Function],
+                      "pulseSettings": Object {
                         "A": 1,
                         "B": 0.5,
                         "C": 0,
@@ -4735,6 +4876,12 @@ DiagramElementPrimitive {
                         0,
                         1,
                       ],
+                      "defaultColor": Array [
+                        0.95,
+                        0,
+                        0,
+                        1,
+                      ],
                       "diagramLimits": Rect {
                         "bottom": -1,
                         "height": 2,
@@ -4743,6 +4890,12 @@ DiagramElementPrimitive {
                         "top": 1,
                         "width": 2,
                       },
+                      "dimColor": Array [
+                        0.5,
+                        0.5,
+                        0.5,
+                        1,
+                      ],
                       "drawPriority": 1,
                       "drawingObject": TextObject {
                         "border": Array [
@@ -5032,7 +5185,8 @@ DiagramElementPrimitive {
                       "opacity": 1,
                       "parent": [Circular],
                       "pointsToDraw": -1,
-                      "pulse": Object {
+                      "pulseDefault": [Function],
+                      "pulseSettings": Object {
                         "A": 1,
                         "B": 0.5,
                         "C": 0,
@@ -5232,6 +5386,12 @@ DiagramElementPrimitive {
                   0,
                   1,
                 ],
+                "defaultColor": Array [
+                  0.95,
+                  0,
+                  0,
+                  1,
+                ],
                 "diagramLimits": Rect {
                   "bottom": -1,
                   "height": 2,
@@ -5240,6 +5400,12 @@ DiagramElementPrimitive {
                   "top": 1,
                   "width": 2,
                 },
+                "dimColor": Array [
+                  0.5,
+                  0.5,
+                  0.5,
+                  1,
+                ],
                 "drawPriority": 1,
                 "drawingObject": TextObject {
                   "border": Array [
@@ -5529,7 +5695,8 @@ DiagramElementPrimitive {
                 "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
-                "pulse": Object {
+                "pulseDefault": [Function],
+                "pulseSettings": Object {
                   "A": 1,
                   "B": 0.5,
                   "C": 0,
@@ -5704,6 +5871,12 @@ DiagramElementPrimitive {
                   0,
                   1,
                 ],
+                "defaultColor": Array [
+                  0.95,
+                  0,
+                  0,
+                  1,
+                ],
                 "diagramLimits": Rect {
                   "bottom": -1,
                   "height": 2,
@@ -5712,6 +5885,12 @@ DiagramElementPrimitive {
                   "top": 1,
                   "width": 2,
                 },
+                "dimColor": Array [
+                  0.5,
+                  0.5,
+                  0.5,
+                  1,
+                ],
                 "drawPriority": 1,
                 "drawingObject": TextObject {
                   "border": Array [
@@ -6001,7 +6180,8 @@ DiagramElementPrimitive {
                 "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
-                "pulse": Object {
+                "pulseDefault": [Function],
+                "pulseSettings": Object {
                   "A": 1,
                   "B": 0.5,
                   "C": 0,
@@ -6175,6 +6355,12 @@ DiagramElementPrimitive {
                   0,
                   1,
                 ],
+                "defaultColor": Array [
+                  0.95,
+                  0,
+                  0,
+                  1,
+                ],
                 "diagramLimits": Rect {
                   "bottom": -1,
                   "height": 2,
@@ -6183,6 +6369,12 @@ DiagramElementPrimitive {
                   "top": 1,
                   "width": 2,
                 },
+                "dimColor": Array [
+                  0.5,
+                  0.5,
+                  0.5,
+                  1,
+                ],
                 "drawPriority": 1,
                 "drawingObject": TextObject {
                   "border": Array [
@@ -6472,7 +6664,8 @@ DiagramElementPrimitive {
                 "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
-                "pulse": Object {
+                "pulseDefault": [Function],
+                "pulseSettings": Object {
                   "A": 1,
                   "B": 0.5,
                   "C": 0,
@@ -6646,6 +6839,12 @@ DiagramElementPrimitive {
                   0,
                   1,
                 ],
+                "defaultColor": Array [
+                  0.95,
+                  0,
+                  0,
+                  1,
+                ],
                 "diagramLimits": Rect {
                   "bottom": -1,
                   "height": 2,
@@ -6654,6 +6853,12 @@ DiagramElementPrimitive {
                   "top": 1,
                   "width": 2,
                 },
+                "dimColor": Array [
+                  0.5,
+                  0.5,
+                  0.5,
+                  1,
+                ],
                 "drawPriority": 1,
                 "drawingObject": VertexHorizontalLine {
                   "border": Array [
@@ -6947,7 +7152,8 @@ DiagramElementPrimitive {
                 "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
-                "pulse": Object {
+                "pulseDefault": [Function],
+                "pulseSettings": Object {
                   "A": 1,
                   "B": 0.5,
                   "C": 0,
@@ -7175,6 +7381,12 @@ DiagramElementPrimitive {
                                 0,
                                 1,
                               ],
+                              "defaultColor": Array [
+                                0.95,
+                                0,
+                                0,
+                                1,
+                              ],
                               "diagramLimits": Rect {
                                 "bottom": -1,
                                 "height": 2,
@@ -7183,6 +7395,12 @@ DiagramElementPrimitive {
                                 "top": 1,
                                 "width": 2,
                               },
+                              "dimColor": Array [
+                                0.5,
+                                0.5,
+                                0.5,
+                                1,
+                              ],
                               "drawPriority": 1,
                               "drawingObject": TextObject {
                                 "border": Array [
@@ -7472,7 +7690,8 @@ DiagramElementPrimitive {
                               "opacity": 1,
                               "parent": [Circular],
                               "pointsToDraw": -1,
-                              "pulse": Object {
+                              "pulseDefault": [Function],
+                              "pulseSettings": Object {
                                 "A": 1,
                                 "B": 0.5,
                                 "C": 0,
@@ -7668,6 +7887,12 @@ DiagramElementPrimitive {
                             0,
                             1,
                           ],
+                          "defaultColor": Array [
+                            0.95,
+                            0,
+                            0,
+                            1,
+                          ],
                           "diagramLimits": Rect {
                             "bottom": -1,
                             "height": 2,
@@ -7676,6 +7901,12 @@ DiagramElementPrimitive {
                             "top": 1,
                             "width": 2,
                           },
+                          "dimColor": Array [
+                            0.5,
+                            0.5,
+                            0.5,
+                            1,
+                          ],
                           "drawPriority": 1,
                           "drawingObject": VertexHorizontalLine {
                             "border": Array [
@@ -7969,7 +8200,8 @@ DiagramElementPrimitive {
                           "opacity": 1,
                           "parent": [Circular],
                           "pointsToDraw": -1,
-                          "pulse": Object {
+                          "pulseDefault": [Function],
+                          "pulseSettings": Object {
                             "A": 1,
                             "B": 0.5,
                             "C": 0,
@@ -8146,6 +8378,12 @@ DiagramElementPrimitive {
                               0,
                               1,
                             ],
+                            "defaultColor": Array [
+                              0.95,
+                              0,
+                              0,
+                              1,
+                            ],
                             "diagramLimits": Rect {
                               "bottom": -1,
                               "height": 2,
@@ -8154,6 +8392,12 @@ DiagramElementPrimitive {
                               "top": 1,
                               "width": 2,
                             },
+                            "dimColor": Array [
+                              0.5,
+                              0.5,
+                              0.5,
+                              1,
+                            ],
                             "drawPriority": 1,
                             "drawingObject": TextObject {
                               "border": Array [
@@ -8443,7 +8687,8 @@ DiagramElementPrimitive {
                             "opacity": 1,
                             "parent": [Circular],
                             "pointsToDraw": -1,
-                            "pulse": Object {
+                            "pulseDefault": [Function],
+                            "pulseSettings": Object {
                               "A": 1,
                               "B": 0.5,
                               "C": 0,
@@ -8675,6 +8920,12 @@ DiagramElementPrimitive {
                         0,
                         1,
                       ],
+                      "defaultColor": Array [
+                        0.95,
+                        0,
+                        0,
+                        1,
+                      ],
                       "diagramLimits": Rect {
                         "bottom": -1,
                         "height": 2,
@@ -8683,6 +8934,12 @@ DiagramElementPrimitive {
                         "top": 1,
                         "width": 2,
                       },
+                      "dimColor": Array [
+                        0.5,
+                        0.5,
+                        0.5,
+                        1,
+                      ],
                       "drawPriority": 1,
                       "drawingObject": VertexHorizontalLine {
                         "border": Array [
@@ -8976,7 +9233,8 @@ DiagramElementPrimitive {
                       "opacity": 1,
                       "parent": [Circular],
                       "pointsToDraw": -1,
-                      "pulse": Object {
+                      "pulseDefault": [Function],
+                      "pulseSettings": Object {
                         "A": 1,
                         "B": 0.5,
                         "C": 0,
@@ -9152,6 +9410,12 @@ DiagramElementPrimitive {
                         0,
                         1,
                       ],
+                      "defaultColor": Array [
+                        0.95,
+                        0,
+                        0,
+                        1,
+                      ],
                       "diagramLimits": Rect {
                         "bottom": -1,
                         "height": 2,
@@ -9160,6 +9424,12 @@ DiagramElementPrimitive {
                         "top": 1,
                         "width": 2,
                       },
+                      "dimColor": Array [
+                        0.5,
+                        0.5,
+                        0.5,
+                        1,
+                      ],
                       "drawPriority": 1,
                       "drawingObject": TextObject {
                         "border": Array [
@@ -9449,7 +9719,8 @@ DiagramElementPrimitive {
                       "opacity": 1,
                       "parent": [Circular],
                       "pointsToDraw": -1,
-                      "pulse": Object {
+                      "pulseDefault": [Function],
+                      "pulseSettings": Object {
                         "A": 1,
                         "B": 0.5,
                         "C": 0,
@@ -9649,6 +9920,12 @@ DiagramElementPrimitive {
                   0,
                   1,
                 ],
+                "defaultColor": Array [
+                  0.95,
+                  0,
+                  0,
+                  1,
+                ],
                 "diagramLimits": Rect {
                   "bottom": -1,
                   "height": 2,
@@ -9657,6 +9934,12 @@ DiagramElementPrimitive {
                   "top": 1,
                   "width": 2,
                 },
+                "dimColor": Array [
+                  0.5,
+                  0.5,
+                  0.5,
+                  1,
+                ],
                 "drawPriority": 1,
                 "drawingObject": TextObject {
                   "border": Array [
@@ -9946,7 +10229,8 @@ DiagramElementPrimitive {
                 "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
-                "pulse": Object {
+                "pulseDefault": [Function],
+                "pulseSettings": Object {
                   "A": 1,
                   "B": 0.5,
                   "C": 0,
@@ -10121,6 +10405,12 @@ DiagramElementPrimitive {
                   0,
                   1,
                 ],
+                "defaultColor": Array [
+                  0.95,
+                  0,
+                  0,
+                  1,
+                ],
                 "diagramLimits": Rect {
                   "bottom": -1,
                   "height": 2,
@@ -10129,6 +10419,12 @@ DiagramElementPrimitive {
                   "top": 1,
                   "width": 2,
                 },
+                "dimColor": Array [
+                  0.5,
+                  0.5,
+                  0.5,
+                  1,
+                ],
                 "drawPriority": 1,
                 "drawingObject": TextObject {
                   "border": Array [
@@ -10418,7 +10714,8 @@ DiagramElementPrimitive {
                 "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
-                "pulse": Object {
+                "pulseDefault": [Function],
+                "pulseSettings": Object {
                   "A": 1,
                   "B": 0.5,
                   "C": 0,
@@ -10592,6 +10889,12 @@ DiagramElementPrimitive {
                   0,
                   1,
                 ],
+                "defaultColor": Array [
+                  0.95,
+                  0,
+                  0,
+                  1,
+                ],
                 "diagramLimits": Rect {
                   "bottom": -1,
                   "height": 2,
@@ -10600,6 +10903,12 @@ DiagramElementPrimitive {
                   "top": 1,
                   "width": 2,
                 },
+                "dimColor": Array [
+                  0.5,
+                  0.5,
+                  0.5,
+                  1,
+                ],
                 "drawPriority": 1,
                 "drawingObject": TextObject {
                   "border": Array [
@@ -10889,7 +11198,8 @@ DiagramElementPrimitive {
                 "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
-                "pulse": Object {
+                "pulseDefault": [Function],
+                "pulseSettings": Object {
                   "A": 1,
                   "B": 0.5,
                   "C": 0,
@@ -11063,6 +11373,12 @@ DiagramElementPrimitive {
                   0,
                   1,
                 ],
+                "defaultColor": Array [
+                  0.95,
+                  0,
+                  0,
+                  1,
+                ],
                 "diagramLimits": Rect {
                   "bottom": -1,
                   "height": 2,
@@ -11071,6 +11387,12 @@ DiagramElementPrimitive {
                   "top": 1,
                   "width": 2,
                 },
+                "dimColor": Array [
+                  0.5,
+                  0.5,
+                  0.5,
+                  1,
+                ],
                 "drawPriority": 1,
                 "drawingObject": VertexHorizontalLine {
                   "border": Array [
@@ -11364,7 +11686,8 @@ DiagramElementPrimitive {
                 "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
-                "pulse": Object {
+                "pulseDefault": [Function],
+                "pulseSettings": Object {
                   "A": 1,
                   "B": 0.5,
                   "C": 0,
@@ -11544,6 +11867,12 @@ DiagramElementPrimitive {
               0,
               1,
             ],
+            "defaultColor": Array [
+              0.95,
+              0,
+              0,
+              1,
+            ],
             "diagramLimits": Rect {
               "bottom": -1,
               "height": 2,
@@ -11552,6 +11881,12 @@ DiagramElementPrimitive {
               "top": 1,
               "width": 2,
             },
+            "dimColor": Array [
+              0.5,
+              0.5,
+              0.5,
+              1,
+            ],
             "drawPriority": 1,
             "drawingObject": TextObject {
               "border": Array [
@@ -11841,7 +12176,8 @@ DiagramElementPrimitive {
             "opacity": 1,
             "parent": [Circular],
             "pointsToDraw": -1,
-            "pulse": Object {
+            "pulseDefault": [Function],
+            "pulseSettings": Object {
               "A": 1,
               "B": 0.5,
               "C": 0,
@@ -12016,6 +12352,12 @@ DiagramElementPrimitive {
               0,
               1,
             ],
+            "defaultColor": Array [
+              0.95,
+              0,
+              0,
+              1,
+            ],
             "diagramLimits": Rect {
               "bottom": -1,
               "height": 2,
@@ -12024,6 +12366,12 @@ DiagramElementPrimitive {
               "top": 1,
               "width": 2,
             },
+            "dimColor": Array [
+              0.5,
+              0.5,
+              0.5,
+              1,
+            ],
             "drawPriority": 1,
             "drawingObject": TextObject {
               "border": Array [
@@ -12313,7 +12661,8 @@ DiagramElementPrimitive {
             "opacity": 1,
             "parent": [Circular],
             "pointsToDraw": -1,
-            "pulse": Object {
+            "pulseDefault": [Function],
+            "pulseSettings": Object {
               "A": 1,
               "B": 0.5,
               "C": 0,
@@ -12487,6 +12836,12 @@ DiagramElementPrimitive {
               0,
               1,
             ],
+            "defaultColor": Array [
+              0.95,
+              0,
+              0,
+              1,
+            ],
             "diagramLimits": Rect {
               "bottom": -1,
               "height": 2,
@@ -12495,6 +12850,12 @@ DiagramElementPrimitive {
               "top": 1,
               "width": 2,
             },
+            "dimColor": Array [
+              0.5,
+              0.5,
+              0.5,
+              1,
+            ],
             "drawPriority": 1,
             "drawingObject": TextObject {
               "border": Array [
@@ -12784,7 +13145,8 @@ DiagramElementPrimitive {
             "opacity": 1,
             "parent": [Circular],
             "pointsToDraw": -1,
-            "pulse": Object {
+            "pulseDefault": [Function],
+            "pulseSettings": Object {
               "A": 1,
               "B": 0.5,
               "C": 0,
@@ -12958,6 +13320,12 @@ DiagramElementPrimitive {
               0,
               1,
             ],
+            "defaultColor": Array [
+              0.95,
+              0,
+              0,
+              1,
+            ],
             "diagramLimits": Rect {
               "bottom": -1,
               "height": 2,
@@ -12966,6 +13334,12 @@ DiagramElementPrimitive {
               "top": 1,
               "width": 2,
             },
+            "dimColor": Array [
+              0.5,
+              0.5,
+              0.5,
+              1,
+            ],
             "drawPriority": 1,
             "drawingObject": VertexHorizontalLine {
               "border": Array [
@@ -13259,7 +13633,8 @@ DiagramElementPrimitive {
             "opacity": 1,
             "parent": [Circular],
             "pointsToDraw": -1,
-            "pulse": Object {
+            "pulseDefault": [Function],
+            "pulseSettings": Object {
               "A": 1,
               "B": 0.5,
               "C": 0,
@@ -13440,6 +13815,12 @@ DiagramElementPrimitive {
                       0,
                       1,
                     ],
+                    "defaultColor": Array [
+                      0.95,
+                      0,
+                      0,
+                      1,
+                    ],
                     "diagramLimits": Rect {
                       "bottom": -1,
                       "height": 2,
@@ -13448,6 +13829,12 @@ DiagramElementPrimitive {
                       "top": 1,
                       "width": 2,
                     },
+                    "dimColor": Array [
+                      0.5,
+                      0.5,
+                      0.5,
+                      1,
+                    ],
                     "drawPriority": 1,
                     "drawingObject": TextObject {
                       "border": Array [
@@ -13705,7 +14092,8 @@ DiagramElementPrimitive {
                     "opacity": 1,
                     "parent": null,
                     "pointsToDraw": -1,
-                    "pulse": Object {
+                    "pulseDefault": [Function],
+                    "pulseSettings": Object {
                       "A": 1,
                       "B": 0.5,
                       "C": 0,
@@ -13904,6 +14292,12 @@ DiagramElementPrimitive {
                 0,
                 1,
               ],
+              "defaultColor": Array [
+                0.95,
+                0,
+                0,
+                1,
+              ],
               "diagramLimits": Rect {
                 "bottom": -1,
                 "height": 2,
@@ -13912,6 +14306,12 @@ DiagramElementPrimitive {
                 "top": 1,
                 "width": 2,
               },
+              "dimColor": Array [
+                0.5,
+                0.5,
+                0.5,
+                1,
+              ],
               "drawPriority": 1,
               "drawingObject": TextObject {
                 "border": Array [
@@ -14169,7 +14569,8 @@ DiagramElementPrimitive {
               "opacity": 1,
               "parent": null,
               "pointsToDraw": -1,
-              "pulse": Object {
+              "pulseDefault": [Function],
+              "pulseSettings": Object {
                 "A": 1,
                 "B": 0.5,
                 "C": 0,
@@ -14812,7 +15213,8 @@ DiagramElementPrimitive {
     "onClick": null,
     "opacity": 1,
     "parent": null,
-    "pulse": Object {
+    "pulseDefault": [Function],
+    "pulseSettings": Object {
       "A": 1,
       "B": 0.5,
       "C": 0,
@@ -15264,7 +15666,8 @@ DiagramElementPrimitive {
     "unrenderNextDraw": false,
   },
   "pointsToDraw": -1,
-  "pulse": Object {
+  "pulseDefault": [Function],
+  "pulseSettings": Object {
     "A": 1,
     "B": 0.5,
     "C": 0,
