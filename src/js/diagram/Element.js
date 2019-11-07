@@ -1815,8 +1815,8 @@ class DiagramElementCollection extends DiagramElement {
   drawOrder: Array<string>;
   touchInBoundingRect: boolean;
   eqns: Object;
-  +pulse: (Array<string | DiagramElement>, ?(mixed) => void) => void;
-  +getElement: (string) => DiagramElement;
+  +pulse: (?(Array<string | DiagramElement> | (mixed) => void), ?(mixed) => void) => void;
+  +getElement: (?string) => ?DiagramElement;
   +exec: (string | Array<Object>, ?Array<string | DiagramElement>) => void;
   +highlight: (elementsToDim: ?Array<string | DiagramElement>) => void;
 
