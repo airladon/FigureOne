@@ -38,7 +38,7 @@ const makeCollection = () => {
   return collection;
 };
 
-describe('ElementExec', () => {
+describe('Pulse', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
