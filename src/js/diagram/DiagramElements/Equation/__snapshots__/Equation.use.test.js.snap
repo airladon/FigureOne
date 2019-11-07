@@ -680,7 +680,11 @@ DiagramElementPrimitive {
       "opacity": 1,
       "parent": [Circular],
       "pointsToDraw": -1,
-      "pulseDefault": [Function],
+      "pulseDefault": Object {
+        "frequency": 0,
+        "scale": 2,
+        "time": 1,
+      },
       "pulseSettings": Object {
         "A": 1,
         "B": 0.5,
@@ -1166,7 +1170,11 @@ DiagramElementPrimitive {
       "opacity": 1,
       "parent": [Circular],
       "pointsToDraw": -1,
-      "pulseDefault": [Function],
+      "pulseDefault": Object {
+        "frequency": 0,
+        "scale": 2,
+        "time": 1,
+      },
       "pulseSettings": Object {
         "A": 1,
         "B": 0.5,
@@ -1651,7 +1659,11 @@ DiagramElementPrimitive {
       "opacity": 1,
       "parent": [Circular],
       "pointsToDraw": -1,
-      "pulseDefault": [Function],
+      "pulseDefault": Object {
+        "frequency": 0,
+        "scale": 2,
+        "time": 1,
+      },
       "pulseSettings": Object {
         "A": 1,
         "B": 0.5,
@@ -2140,7 +2152,11 @@ DiagramElementPrimitive {
       "opacity": 1,
       "parent": [Circular],
       "pointsToDraw": -1,
-      "pulseDefault": [Function],
+      "pulseDefault": Object {
+        "frequency": 0,
+        "scale": 2,
+        "time": 1,
+      },
       "pulseSettings": Object {
         "A": 1,
         "B": 0.5,
@@ -2670,7 +2686,11 @@ DiagramElementPrimitive {
         "opacity": 1,
         "parent": [Circular],
         "pointsToDraw": -1,
-        "pulseDefault": [Function],
+        "pulseDefault": Object {
+          "frequency": 0,
+          "scale": 2,
+          "time": 1,
+        },
         "pulseSettings": Object {
           "A": 1,
           "B": 0.5,
@@ -3156,7 +3176,11 @@ DiagramElementPrimitive {
         "opacity": 1,
         "parent": [Circular],
         "pointsToDraw": -1,
-        "pulseDefault": [Function],
+        "pulseDefault": Object {
+          "frequency": 0,
+          "scale": 2,
+          "time": 1,
+        },
         "pulseSettings": Object {
           "A": 1,
           "B": 0.5,
@@ -3641,7 +3665,11 @@ DiagramElementPrimitive {
         "opacity": 1,
         "parent": [Circular],
         "pointsToDraw": -1,
-        "pulseDefault": [Function],
+        "pulseDefault": Object {
+          "frequency": 0,
+          "scale": 2,
+          "time": 1,
+        },
         "pulseSettings": Object {
           "A": 1,
           "B": 0.5,
@@ -4130,7 +4158,11 @@ DiagramElementPrimitive {
         "opacity": 1,
         "parent": [Circular],
         "pointsToDraw": -1,
-        "pulseDefault": [Function],
+        "pulseDefault": Object {
+          "frequency": 0,
+          "scale": 2,
+          "time": 1,
+        },
         "pulseSettings": Object {
           "A": 1,
           "B": 0.5,
@@ -4697,7 +4729,11 @@ DiagramElementPrimitive {
                       "opacity": 1,
                       "parent": [Circular],
                       "pointsToDraw": -1,
-                      "pulseDefault": [Function],
+                      "pulseDefault": Object {
+                        "frequency": 0,
+                        "scale": 2,
+                        "time": 1,
+                      },
                       "pulseSettings": Object {
                         "A": 1,
                         "B": 0.5,
@@ -5194,7 +5230,11 @@ DiagramElementPrimitive {
                       "opacity": 1,
                       "parent": [Circular],
                       "pointsToDraw": -1,
-                      "pulseDefault": [Function],
+                      "pulseDefault": Object {
+                        "frequency": 0,
+                        "scale": 2,
+                        "time": 1,
+                      },
                       "pulseSettings": Object {
                         "A": 1,
                         "B": 0.5,
@@ -5705,7 +5745,11 @@ DiagramElementPrimitive {
                 "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
-                "pulseDefault": [Function],
+                "pulseDefault": Object {
+                  "frequency": 0,
+                  "scale": 2,
+                  "time": 1,
+                },
                 "pulseSettings": Object {
                   "A": 1,
                   "B": 0.5,
@@ -6191,7 +6235,11 @@ DiagramElementPrimitive {
                 "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
-                "pulseDefault": [Function],
+                "pulseDefault": Object {
+                  "frequency": 0,
+                  "scale": 2,
+                  "time": 1,
+                },
                 "pulseSettings": Object {
                   "A": 1,
                   "B": 0.5,
@@ -6676,7 +6724,11 @@ DiagramElementPrimitive {
                 "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
-                "pulseDefault": [Function],
+                "pulseDefault": Object {
+                  "frequency": 0,
+                  "scale": 2,
+                  "time": 1,
+                },
                 "pulseSettings": Object {
                   "A": 1,
                   "B": 0.5,
@@ -7165,7 +7217,11 @@ DiagramElementPrimitive {
                 "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
-                "pulseDefault": [Function],
+                "pulseDefault": Object {
+                  "frequency": 0,
+                  "scale": 2,
+                  "time": 1,
+                },
                 "pulseSettings": Object {
                   "A": 1,
                   "B": 0.5,
@@ -7704,7 +7760,11 @@ DiagramElementPrimitive {
                               "opacity": 1,
                               "parent": [Circular],
                               "pointsToDraw": -1,
-                              "pulseDefault": [Function],
+                              "pulseDefault": Object {
+                                "frequency": 0,
+                                "scale": 2,
+                                "time": 1,
+                              },
                               "pulseSettings": Object {
                                 "A": 1,
                                 "B": 0.5,
@@ -8215,7 +8275,11 @@ DiagramElementPrimitive {
                           "opacity": 1,
                           "parent": [Circular],
                           "pointsToDraw": -1,
-                          "pulseDefault": [Function],
+                          "pulseDefault": Object {
+                            "frequency": 0,
+                            "scale": 2,
+                            "time": 1,
+                          },
                           "pulseSettings": Object {
                             "A": 1,
                             "B": 0.5,
@@ -8703,7 +8767,11 @@ DiagramElementPrimitive {
                             "opacity": 1,
                             "parent": [Circular],
                             "pointsToDraw": -1,
-                            "pulseDefault": [Function],
+                            "pulseDefault": Object {
+                              "frequency": 0,
+                              "scale": 2,
+                              "time": 1,
+                            },
                             "pulseSettings": Object {
                               "A": 1,
                               "B": 0.5,
@@ -9250,7 +9318,11 @@ DiagramElementPrimitive {
                       "opacity": 1,
                       "parent": [Circular],
                       "pointsToDraw": -1,
-                      "pulseDefault": [Function],
+                      "pulseDefault": Object {
+                        "frequency": 0,
+                        "scale": 2,
+                        "time": 1,
+                      },
                       "pulseSettings": Object {
                         "A": 1,
                         "B": 0.5,
@@ -9737,7 +9809,11 @@ DiagramElementPrimitive {
                       "opacity": 1,
                       "parent": [Circular],
                       "pointsToDraw": -1,
-                      "pulseDefault": [Function],
+                      "pulseDefault": Object {
+                        "frequency": 0,
+                        "scale": 2,
+                        "time": 1,
+                      },
                       "pulseSettings": Object {
                         "A": 1,
                         "B": 0.5,
@@ -10248,7 +10324,11 @@ DiagramElementPrimitive {
                 "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
-                "pulseDefault": [Function],
+                "pulseDefault": Object {
+                  "frequency": 0,
+                  "scale": 2,
+                  "time": 1,
+                },
                 "pulseSettings": Object {
                   "A": 1,
                   "B": 0.5,
@@ -10734,7 +10814,11 @@ DiagramElementPrimitive {
                 "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
-                "pulseDefault": [Function],
+                "pulseDefault": Object {
+                  "frequency": 0,
+                  "scale": 2,
+                  "time": 1,
+                },
                 "pulseSettings": Object {
                   "A": 1,
                   "B": 0.5,
@@ -11219,7 +11303,11 @@ DiagramElementPrimitive {
                 "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
-                "pulseDefault": [Function],
+                "pulseDefault": Object {
+                  "frequency": 0,
+                  "scale": 2,
+                  "time": 1,
+                },
                 "pulseSettings": Object {
                   "A": 1,
                   "B": 0.5,
@@ -11708,7 +11796,11 @@ DiagramElementPrimitive {
                 "opacity": 1,
                 "parent": [Circular],
                 "pointsToDraw": -1,
-                "pulseDefault": [Function],
+                "pulseDefault": Object {
+                  "frequency": 0,
+                  "scale": 2,
+                  "time": 1,
+                },
                 "pulseSettings": Object {
                   "A": 1,
                   "B": 0.5,
@@ -12199,7 +12291,11 @@ DiagramElementPrimitive {
             "opacity": 1,
             "parent": [Circular],
             "pointsToDraw": -1,
-            "pulseDefault": [Function],
+            "pulseDefault": Object {
+              "frequency": 0,
+              "scale": 2,
+              "time": 1,
+            },
             "pulseSettings": Object {
               "A": 1,
               "B": 0.5,
@@ -12685,7 +12781,11 @@ DiagramElementPrimitive {
             "opacity": 1,
             "parent": [Circular],
             "pointsToDraw": -1,
-            "pulseDefault": [Function],
+            "pulseDefault": Object {
+              "frequency": 0,
+              "scale": 2,
+              "time": 1,
+            },
             "pulseSettings": Object {
               "A": 1,
               "B": 0.5,
@@ -13170,7 +13270,11 @@ DiagramElementPrimitive {
             "opacity": 1,
             "parent": [Circular],
             "pointsToDraw": -1,
-            "pulseDefault": [Function],
+            "pulseDefault": Object {
+              "frequency": 0,
+              "scale": 2,
+              "time": 1,
+            },
             "pulseSettings": Object {
               "A": 1,
               "B": 0.5,
@@ -13659,7 +13763,11 @@ DiagramElementPrimitive {
             "opacity": 1,
             "parent": [Circular],
             "pointsToDraw": -1,
-            "pulseDefault": [Function],
+            "pulseDefault": Object {
+              "frequency": 0,
+              "scale": 2,
+              "time": 1,
+            },
             "pulseSettings": Object {
               "A": 1,
               "B": 0.5,
@@ -14119,7 +14227,11 @@ DiagramElementPrimitive {
                     "opacity": 1,
                     "parent": null,
                     "pointsToDraw": -1,
-                    "pulseDefault": [Function],
+                    "pulseDefault": Object {
+                      "frequency": 0,
+                      "scale": 2,
+                      "time": 1,
+                    },
                     "pulseSettings": Object {
                       "A": 1,
                       "B": 0.5,
@@ -14597,7 +14709,11 @@ DiagramElementPrimitive {
               "opacity": 1,
               "parent": null,
               "pointsToDraw": -1,
-              "pulseDefault": [Function],
+              "pulseDefault": Object {
+                "frequency": 0,
+                "scale": 2,
+                "time": 1,
+              },
               "pulseSettings": Object {
                 "A": 1,
                 "B": 0.5,
@@ -15242,7 +15358,11 @@ DiagramElementPrimitive {
     "onClick": null,
     "opacity": 1,
     "parent": null,
-    "pulseDefault": [Function],
+    "pulseDefault": Object {
+      "frequency": 0,
+      "scale": 2,
+      "time": 1,
+    },
     "pulseSettings": Object {
       "A": 1,
       "B": 0.5,
@@ -15696,7 +15816,11 @@ DiagramElementPrimitive {
     "unrenderNextDraw": false,
   },
   "pointsToDraw": -1,
-  "pulseDefault": [Function],
+  "pulseDefault": Object {
+    "frequency": 0,
+    "scale": 2,
+    "time": 1,
+  },
   "pulseSettings": Object {
     "A": 1,
     "B": 0.5,
