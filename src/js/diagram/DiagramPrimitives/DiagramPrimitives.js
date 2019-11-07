@@ -1200,7 +1200,7 @@ export default class DiagramPrimitives {
         .rotate(options.rotation);
 
       const points = single.map(
-        p => (p._dup().transformBy(t.matrix()))
+        p => (p._dup().transformBy(t.matrix())),
       );
       collection.add(`${i}`, this.fan({
         points,
