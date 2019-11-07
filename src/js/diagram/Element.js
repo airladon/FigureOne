@@ -110,6 +110,8 @@ class DiagramElement {
   setTransformCallback: (Transform) => void; // element.transform is updated
 
   color: Array<number>;           // For the future when collections use color
+  defaultColor: Array<number>;
+  dimColor: Array<number>;
   opacity: number;
   noRotationFromParent: boolean;
 
@@ -236,6 +238,8 @@ class DiagramElement {
     this.isInteractive = undefined;
     this.hasTouchableElements = false;
     this.color = [1, 1, 1, 1];
+    this.dimColor = [0.5, 0.5, 0.5, 1];
+    this.defaultColor = this.color.slice();
     this.opacity = 1;
     this.setTransformCallback = () => {};
     this.lastDrawTransform = this.transform._dup();
@@ -651,8 +655,23 @@ class DiagramElement {
     return false;
   }
 
-  setColor(color: Array<number>) {
+  setColor(color: Array<number>, setDefault: boolean = true) {
     this.color = color != null ? color.slice() : [0, 0, 0, 0];
+    if (setDefault) {
+      this.defaultColor = this.color.slice();
+    }
+  }
+
+  dim() {
+    this.setColor(this.dimColor, false);
+  }
+
+  setDimColor(color: Array<number>) {
+    this.dimColor = color != null ? color.slice() : [0, 0, 0, 0];
+  }
+
+  undim() {
+    this.setColor(this.defaultColor, true);
   }
 
   setOpacity(opacity: number) {
@@ -1398,6 +1417,8 @@ class DiagramElementPrimitive extends DiagramElement {
     super(transform, diagramLimits, parent);
     this.drawingObject = drawingObject;
     this.color = color != null ? color.slice() : [0, 0, 0, 0];
+    this.defaultColor = this.color.slice();
+    this.dimColor = [0.5, 0.5, 0.5, 1];
     this.pointsToDraw = -1;
     this.angleToDraw = -1;
     this.lengthToDraw = -1;
@@ -1482,8 +1503,11 @@ class DiagramElementPrimitive extends DiagramElement {
     }
   }
 
-  setColor(color: Array<number>) {
+  setColor(color: Array<number>, setDefault: boolean = true) {
     this.color = color != null ? color.slice() : [0, 0, 0, 0];
+    if (setDefault) {
+      this.defaultColor = this.color.slice();
+    }
     if (this instanceof DiagramElementPrimitive) {
       if (this.drawingObject instanceof TextObject) {
         this.drawingObject.setColor(this.color);
@@ -2131,14 +2155,34 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  setColor(color: Array<number> = [0, 0, 0, 1]) {
+  setColor(color: Array<number> = [0, 0, 0, 1], setDefault: boolean = true) {
     const nonNullColor = color != null ? color : [0, 0, 0, 0];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.setColor(nonNullColor);
+      element.setColor(nonNullColor, setDefault);
     }
     this.color = nonNullColor.slice();
+    if (setDefault) {
+      this.defaultColor = this.color.slice();
+    }
     // this.color = [color[0], color[1], color[2], color[3]];
+  }
+
+  setDimColor(color: Array<number> = [0, 0, 0, 1]) {
+    const nonNullColor = color != null ? color : [0, 0, 0, 0];
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.setDimColor(nonNullColor);
+    }
+    this.dimColor = nonNullColor.slice();
+  }
+
+  undim() {
+    this.color = this.defaultColor.slice();
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.undim();
+    }
   }
 
   setOpacity(opacity: number) {
