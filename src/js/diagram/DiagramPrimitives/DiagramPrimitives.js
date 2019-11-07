@@ -842,13 +842,16 @@ export default class DiagramPrimitives {
     transformOrPointOrOptions: Transform | Point | {
       transform?: Transform,
       position?: Point,
+      color?: Array<number>,
     } = {},
     ...moreOptions: Array<{
       transform?: Transform,
       position?: Point,
+      color?: Array<number>,
     }>
   ) {
     let transform = new Transform('collection').scale(1, 1).rotate(0).translate(0, 0);
+    let color = [1, 0, 0, 1];
     if (transformOrPointOrOptions instanceof Point) {
       transform.updateTranslation(transformOrPointOrOptions);
     } else if (transformOrPointOrOptions instanceof Transform) {
@@ -861,8 +864,12 @@ export default class DiagramPrimitives {
       if (optionsToUse.position != null) {
         transform.updateTranslation(getPoint(optionsToUse.position));
       }
+      if (optionsToUse.color != null) {
+        ({ color } = optionsToUse);
+      }
     }
     const element = new DiagramElementCollection(transform, this.limits);
+    element.setColor(color);
     return element;
   }
 
