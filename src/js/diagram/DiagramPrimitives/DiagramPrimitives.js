@@ -1193,7 +1193,6 @@ export default class DiagramPrimitives {
       options.transform,
     );
     const start = -((options.num - 1) / 2) * options.step;
-    console.log(options.num, start)
     for (let i = 0; i < options.num; i += 1) {
       const t = new Transform()
         .rotate(options.angle)
@@ -1201,9 +1200,6 @@ export default class DiagramPrimitives {
         .rotate(options.rotation);
 
       const points = single.map(
-        // p => (p._dup.new Point(p.x + start + i * options.step, p.y))
-        //   .rotate(options.angle)
-        //   .rotate(options.rotation),
         p => (p._dup().transformBy(t.matrix()))
       );
       collection.add(`${i}`, this.fan({
@@ -1211,7 +1207,6 @@ export default class DiagramPrimitives {
         color: options.color,
       }));
     }
-    console.log(collection)
     return collection;
   }
 }
