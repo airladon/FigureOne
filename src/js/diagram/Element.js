@@ -153,6 +153,8 @@ class DiagramElement {
     callback: (boolean) => void;
   };
 
+  pulseDefault: Function;
+
   diagramLimits: Rect;
   diagramTransforms: TypeSpaceTransforms;
 
@@ -251,6 +253,9 @@ class DiagramElement {
     this.parent = parent;
     this.drawPriority = 1;
     this.noRotationFromParent = false;
+    this.pulseDefault = (callback: ?() => void = null) => {
+      this.pulseScaleNow(1, 2, 0, callback);
+    };
     // Rename to animate in future
     this.anim = {
       rotation: (...optionsIn: Array<TypeRotationAnimationStepInputOptions>) => {
