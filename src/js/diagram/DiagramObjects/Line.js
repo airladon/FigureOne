@@ -526,6 +526,15 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       );
     }
 
+    this.pulseDefault = (done) => {
+      this.pulseWidth({
+        line: 6,
+        label: 2,
+        arrow: 4,
+        done,
+      });
+    };
+
     if (optionsToUse.mods != null && optionsToUse.mods !== {}) {
       this.setProperties(optionsToUse.mods);
     }
