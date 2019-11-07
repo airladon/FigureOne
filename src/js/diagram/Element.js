@@ -141,6 +141,8 @@ class DiagramElement {
     [scenarioName: string]: TypeScenario;
   };
 
+  type: 'collection' | 'primitive';
+
   pulseSettings: {
     time: number,
     frequency: number,
@@ -187,6 +189,9 @@ class DiagramElement {
   // pulse: (mixed) => void;
   // pulse: (?Array<string | DiagramElement> | mixed) => void;
   +pulse: (any, ?any) => void;
+  +exec: (any, any) => void;
+  +getElement: (any) => ?DiagramElement;
+  +highlight: (any) => void;
   // +pulse: (Array<string | DiagramElement>) => void;
 
   // This will scale and position this element such that the center of the
@@ -566,6 +571,19 @@ class DiagramElement {
 
   // eslint-disable-next-line no-unused-vars, class-methods-use-this
   setFirstTransform(parentTransform: Transform) {
+  }
+
+  // eslint-disable-next-line no-unused-vars, class-methods-use-this
+  exec() {
+  }
+
+  getElement() {
+    return this;
+  }
+
+  // eslint-disable-next-line no-unused-vars, class-methods-use-this
+  highlight() {
+    this.undim();
   }
 
   setPosition(pointOrX: Point | number, y: number = 0) {
@@ -1438,6 +1456,7 @@ class DiagramElementPrimitive extends DiagramElement {
     this.angleToDraw = -1;
     this.lengthToDraw = -1;
     this.cannotTouchHole = false;
+    this.type = 'primitive';
     // this.setMoveBoundaryToDiagram();
   }
 
@@ -1777,6 +1796,9 @@ class DiagramElementCollection extends DiagramElement {
   touchInBoundingRect: boolean;
   eqns: Object;
   +pulse: (Array<string | DiagramElement>, ?(mixed) => void) => void;
+  +getElement: (string) => DiagramElement;
+  +exec: (string | Array<Object>, Array<string | DiagramElement>) => void;
+  +highlight: (elementsToDim: Array<string | DiagramElement>) => void;
 
   constructor(
     transform: Transform = new Transform(),
@@ -1788,6 +1810,7 @@ class DiagramElementCollection extends DiagramElement {
     this.drawOrder = [];
     this.touchInBoundingRect = false;
     this.eqns = {};
+    this.type = 'collection';
   }
 
   _dup() {
@@ -1909,7 +1932,41 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  // $FlowFixMe
+  exec(
+    execFunctionAndArgs: string | Array<Object>,
+    elementsToPulse: Array<string | DiagramElement>,
+  ) {
+    if (elementsToPulse == null || typeof elementsToPulse === 'function') {
+      return;
+    }
+    let execFunc;
+    let args;
+    if (Array.isArray(execFunctionAndArgs)) {
+      [execFunc, ...args] = execFunctionAndArgs;
+    } else {
+      execFunc = execFunctionAndArgs;
+    }
+
+    elementsToPulse.forEach((elementToPulse) => {
+      let element: ?DiagramElement;
+      if (typeof elementToPulse === 'string') {
+        element = this.getElement(elementToPulse);
+      } else {
+        element = elementToPulse;
+      }
+      // $FlowFixMe
+      if (element != null && element[execFunc] != null && typeof element[execFunc] === 'function') {
+        if (args === undefined) {
+          // $FlowFixMe
+          element[execFunc]();
+        } else {
+          // $FlowFixMe
+          element[execFunc](...args);
+        }
+      }
+    });
+  }
+
   pulse(
     elementsToPulse: Array<string | DiagramElement>,
     done: ?(mixed) => void = null,
@@ -1937,6 +1994,9 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   getElement(elementPath: string) {
+    if (elementPath instanceof DiagramElement) {
+      return elementPath;
+    }
     const getElement = (inputElementPath, parent) => {
       const ep = inputElementPath.split('.');
       let newParent = parent.elements[ep[0]];
@@ -2248,6 +2308,25 @@ class DiagramElementCollection extends DiagramElement {
       const element = this.elements[this.drawOrder[i]];
       element.undim();
     }
+  }
+
+  dim(elementsToDim: ?Array<string | DiagramElement>) {
+    if (elementsToDim == null
+      || (Array.isArray(elementsToDim) && elementsToDim.length === 0)) {
+      // super.dim();
+      this.color = this.dimColor.slice();
+      for (let i = 0; i < this.drawOrder.length; i += 1) {
+        const element = this.elements[this.drawOrder[i]];
+        element.dim();
+      }
+      return;
+    }
+    this.exec('dim', elementsToDim);
+  }
+
+  highlight(elementsToDim: Array<string | DiagramElement>) {
+    this.dim();
+    this.exec('undim', elementsToDim);
   }
 
   setOpacity(opacity: number) {

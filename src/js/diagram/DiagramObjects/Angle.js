@@ -403,6 +403,11 @@ class DiagramObjectAngle extends DiagramElementCollection {
       this.addSide(1, sideOptions.length, sideOptions.width, sideOptions.color);
       this.addSide(2, sideOptions.length, sideOptions.width, sideOptions.color);
     }
+
+    this.pulseDefault = (done) => {
+      this.pulseScaleNow(1, 1.5, 0, done);
+    };
+
     this.update();
     if (optionsToUse.mods != null && optionsToUse.mods !== {}) {
       this.setProperties(optionsToUse.mods);
