@@ -1939,8 +1939,11 @@ class DiagramElementCollection extends DiagramElement {
   getElement(elementPath: string) {
     const getElement = (inputElementPath, parent) => {
       const ep = inputElementPath.split('.');
-      // $FlowFixMe
-      const newParent = parent[ep[0]];
+      let newParent = parent.elements[ep[0]];
+      if (newParent == null) {
+        // $FlowFixMe
+        newParent = parent[ep[0]];
+      }
       if (newParent == null) {
         return null;
       }
