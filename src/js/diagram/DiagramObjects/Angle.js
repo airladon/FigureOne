@@ -983,3 +983,11 @@ class DiagramObjectAngle extends DiagramElementCollection {
 }
 
 export default DiagramObjectAngle;
+
+export type TypeLabelledAngle = {
+  _curve: DiagramElementPrimitive;
+  _label: {
+    _base: DiagramElementPrimitive;
+  } & EquationNew;
+} & DiagramObjectAngle;
+

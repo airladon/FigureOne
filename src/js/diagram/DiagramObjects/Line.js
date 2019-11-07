@@ -1070,3 +1070,10 @@ export default class DiagramObjectLine extends DiagramElementCollection {
 // }
 
 // export type TypeMovableLine = MovableLine;
+
+export type TypeLabelledLine = {
+  _line: DiagramElementPrimitive;
+  _label: {
+    _base: DiagramElementPrimitive;
+  } & EquationNew;
+} & DiagramObjectLine;

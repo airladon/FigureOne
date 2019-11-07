@@ -31,10 +31,11 @@ import type { TypeRotationDirection, TypeParsablePoint } from './js/tools/g2';
 import type {
   TypeLineLabelLocation, TypeLineLabelSubLocation, TypeLineLabelOrientation,
   TypeLineVertexOrigin, TypeLineVertexSpaceStart, TypeLineOptions,
-  TypeLineLabelOptions,
+  TypeLineLabelOptions, TypeLabelledLine,
 } from './js/diagram/DiagramObjects/Line';
 import type {
   TypeAngleLabelOrientation, TypeAngleOptions, TypeAngleLabelOptions,
+  TypeLabelledAngle,
 } from './js/diagram/DiagramObjects/Angle';
 import type { TypeDiagramOptions } from './js/diagram/Diagram';
 import type {
@@ -48,6 +49,7 @@ export type {
   TypeAngleLabelOrientation, TypeAngleOptions, TypeDiagramOptions,
   TypeLineLabelOptions, TypeAngleLabelOptions,
   TypePolyLineOptions, TypePadOptions, TypeParsablePoint,
+  TypeLabelledAngle, TypeLabelledLine,
 };
 
 const tools = {
