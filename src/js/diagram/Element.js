@@ -2341,18 +2341,18 @@ class DiagramElementCollection extends DiagramElement {
     this.exec('dim', elementsToDim);
   }
 
-  highlight(elementsToDim: ?Array<string | DiagramElement> = null) {
-    if (elementsToDim == null) {
+  highlight(elementsToHighlight: ?Array<string | DiagramElement> = null) {
+    if (elementsToHighlight == null) {
       this.undim();
       return;
     }
 
-    if (Array.isArray(elementsToDim) && elementsToDim.length === 0) {
+    if (Array.isArray(elementsToHighlight) && elementsToHighlight.length === 0) {
       return;
     }
 
     this.dim();
-    this.exec('undim', elementsToDim);
+    this.exec('undim', elementsToHighlight);
   }
 
   setOpacity(opacity: number) {
