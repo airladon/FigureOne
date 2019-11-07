@@ -573,8 +573,32 @@ class DiagramElement {
   setFirstTransform(parentTransform: Transform) {
   }
 
-  // eslint-disable-next-line no-unused-vars, class-methods-use-this
-  exec() {
+  exec(
+    execFunctionAndArgs: string | Array<Object>,
+  ) {
+    // if (elementsToExec == null || typeof elementsToExec === 'function') {
+    let execFunc;
+    let args;
+    if (Array.isArray(execFunctionAndArgs)) {
+      [execFunc, ...args] = execFunctionAndArgs;
+    } else {
+      execFunc = execFunctionAndArgs;
+    }
+
+    // $FlowFixMe
+    if (this[execFunc] != null && typeof this[execFunc] === 'function') {
+      if (args === undefined) {
+        // $FlowFixMe
+        this[execFunc]();
+      } else {
+        // $FlowFixMe
+        this[execFunc](...args);
+      }
+    }
+  }
+
+  pulse(done: ?(mixed) => void = null) {
+    this.pulseDefault(done);
   }
 
   getElement() {
@@ -1460,10 +1484,6 @@ class DiagramElementPrimitive extends DiagramElement {
     // this.setMoveBoundaryToDiagram();
   }
 
-  pulse(done: ?(mixed) => void = null) {
-    this.pulseDefault(done);
-  }
-
   setAngleToDraw(intputAngle: number = -1) {
     this.angleToDraw = intputAngle;
   }
@@ -1797,8 +1817,8 @@ class DiagramElementCollection extends DiagramElement {
   eqns: Object;
   +pulse: (Array<string | DiagramElement>, ?(mixed) => void) => void;
   +getElement: (string) => DiagramElement;
-  +exec: (string | Array<Object>, Array<string | DiagramElement>) => void;
-  +highlight: (elementsToDim: Array<string | DiagramElement>) => void;
+  +exec: (string | Array<Object>, ?Array<string | DiagramElement>) => void;
+  +highlight: (elementsToDim: ?Array<string | DiagramElement>) => void;
 
   constructor(
     transform: Transform = new Transform(),
@@ -1934,49 +1954,45 @@ class DiagramElementCollection extends DiagramElement {
 
   exec(
     execFunctionAndArgs: string | Array<Object>,
-    elementsToPulse: Array<string | DiagramElement>,
+    elementsToExec: ?Array<string | DiagramElement> = null,
   ) {
-    if (elementsToPulse == null || typeof elementsToPulse === 'function') {
+    if (elementsToExec == null) {
+      super.exec(execFunctionAndArgs);
       return;
     }
-    let execFunc;
-    let args;
-    if (Array.isArray(execFunctionAndArgs)) {
-      [execFunc, ...args] = execFunctionAndArgs;
-    } else {
-      execFunc = execFunctionAndArgs;
+
+    if (Array.isArray(elementsToExec) && elementsToExec.length === 0) {
+      return;
     }
 
-    elementsToPulse.forEach((elementToPulse) => {
+    elementsToExec.forEach((elementToExec) => {
       let element: ?DiagramElement;
-      if (typeof elementToPulse === 'string') {
-        element = this.getElement(elementToPulse);
+      if (typeof elementToExec === 'string') {
+        element = this.getElement(elementToExec);
       } else {
-        element = elementToPulse;
+        element = elementToExec;
       }
-      // $FlowFixMe
-      if (element != null && element[execFunc] != null && typeof element[execFunc] === 'function') {
-        if (args === undefined) {
-          // $FlowFixMe
-          element[execFunc]();
-        } else {
-          // $FlowFixMe
-          element[execFunc](...args);
-        }
+      if (element != null) {
+        element.exec(execFunctionAndArgs);
       }
     });
   }
 
   pulse(
-    elementsToPulse: Array<string | DiagramElement>,
+    elementsOrDone: ?(Array<string | DiagramElement> | (mixed) => void),
+    // elementsToPulse: Array<string | DiagramElement>,
     done: ?(mixed) => void = null,
   ) {
-    if (elementsToPulse == null || typeof elementsToPulse === 'function') {
-      this.pulseDefault(done);
+    if (elementsOrDone == null || typeof elementsOrDone === 'function') {
+      super.pulse(elementsOrDone);
       return;
     }
+    // if (elementsToPulse == null || typeof elementsToPulse === 'function') {
+    //   this.pulseDefault(done);
+    //   return;
+    // }
     let doneToUse = done;
-    elementsToPulse.forEach((elementToPulse) => {
+    elementsOrDone.forEach((elementToPulse) => {
       let element: ?DiagramElement;
       if (typeof elementToPulse === 'string') {
         element = this.getElement(elementToPulse);
@@ -1984,7 +2000,8 @@ class DiagramElementCollection extends DiagramElement {
         element = elementToPulse;
       }
       if (element != null) {
-        element.pulseDefault(doneToUse);
+        // element.pulseDefault(doneToUse);
+        element.pulse(doneToUse);
         doneToUse = null;
       }
     });
@@ -1993,10 +2010,13 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  getElement(elementPath: string) {
-    if (elementPath instanceof DiagramElement) {
-      return elementPath;
+  getElement(elementPath: ?string = null) {
+    if (elementPath == null) {
+      return this;
     }
+    // if (elementPath instanceof DiagramElement) {
+    //   return elementPath;
+    // }
     const getElement = (inputElementPath, parent) => {
       const ep = inputElementPath.split('.');
       let newParent = parent.elements[ep[0]];
@@ -2324,9 +2344,13 @@ class DiagramElementCollection extends DiagramElement {
     this.exec('dim', elementsToDim);
   }
 
-  highlight(elementsToDim: Array<string | DiagramElement>) {
-    this.dim();
-    this.exec('undim', elementsToDim);
+  highlight(elementsToDim: ?Array<string | DiagramElement> = null) {
+    if (elementsToDim == null) {
+      this.undim();
+    } else {
+      this.dim();
+      this.exec('undim', elementsToDim);
+    }
   }
 
   setOpacity(opacity: number) {
