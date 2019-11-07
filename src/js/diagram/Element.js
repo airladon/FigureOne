@@ -652,7 +652,7 @@ class DiagramElement {
   }
 
   setColor(color: Array<number>) {
-    this.color = color.slice();
+    this.color = color != null ? color.slice() : [0, 0, 0, 0];
   }
 
   setOpacity(opacity: number) {
@@ -1397,7 +1397,7 @@ class DiagramElementPrimitive extends DiagramElement {
   ) {
     super(transform, diagramLimits, parent);
     this.drawingObject = drawingObject;
-    this.color = color.slice();
+    this.color = color != null ? color.slice() : [0, 0, 0, 0];
     this.pointsToDraw = -1;
     this.angleToDraw = -1;
     this.lengthToDraw = -1;
@@ -1483,7 +1483,7 @@ class DiagramElementPrimitive extends DiagramElement {
   }
 
   setColor(color: Array<number>) {
-    this.color = color.slice();
+    this.color = color != null ? color.slice() : [0, 0, 0, 0];
     if (this instanceof DiagramElementPrimitive) {
       if (this.drawingObject instanceof TextObject) {
         this.drawingObject.setColor(this.color);
@@ -2132,11 +2132,12 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   setColor(color: Array<number> = [0, 0, 0, 1]) {
+    const nonNullColor = color != null ? color : [0, 0, 0, 0];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.setColor(color);
+      element.setColor(nonNullColor);
     }
-    this.color = color.slice();
+    this.color = nonNullColor.slice();
     // this.color = [color[0], color[1], color[2], color[3]];
   }
 

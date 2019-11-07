@@ -1097,6 +1097,123 @@ export default class DiagramPrimitives {
     xy.add('x', xAxis);
     return xy;
   }
+
+  parallelMarks(...optionsIn: Array<{
+    num?: number,
+    width?: number,
+    length?: number,
+    angle?: number,
+    step?: number,
+    rotation?: number,
+    color?: Array<number>,
+    transform?: Transform,
+    position?: Point,
+  }>) {
+    const defaultOptions = {
+      width: 0.01,
+      num: 1,
+      length: 0.1,
+      angle: Math.PI / 4,
+      step: 0.04,
+      rotation: 0,
+      color: [1, 0, 0, 1],
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
+      position: null,
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    if (options.position != null) {
+      options.transform.updateTranslation(getPoint(options.position));
+    }
+
+    const x = options.length * Math.cos(options.angle);
+    const y = options.length * Math.sin(options.angle);
+    const wx = Math.abs(options.width * Math.cos(options.angle + Math.PI / 2));
+    const wy = options.width * Math.sin(options.angle + Math.PI / 2);
+    const single = [
+      new Point(0, 0),
+      new Point(0 - x, 0 - y),
+      new Point(-x - wx, -y + wy),
+      new Point(-Math.abs(options.width / Math.cos(options.angle + Math.PI / 2)), 0),
+      new Point(-x - wx, y - wy),
+      new Point(0 - x, 0 + y),
+    ];
+
+    const collection = this.collection(
+      options.transform,
+    );
+
+    const start = -((options.num - 1) / 2) * options.step;
+    for (let i = 0; i < options.num; i += 1) {
+      const points = single.map(
+        p => (new Point(p.x + start + i * options.step, p.y)).rotate(options.rotation),
+      );
+      collection.add(`${i}`, this.fan({
+        points,
+        color: options.color,
+      }));
+    }
+    return collection;
+  }
+
+  marks(...optionsIn: Array<{
+    num?: number,
+    width?: number,
+    length?: number,
+    angle?: number,
+    step?: number,
+    rotation?: number,
+    color?: Array<number>,
+    transform?: Transform,
+    position?: Point,
+  }>) {
+    const defaultOptions = {
+      width: 0.01,
+      num: 1,
+      length: 0.2,
+      angle: Math.PI / 2,
+      step: 0.04,
+      rotation: 0,
+      color: [1, 0, 0, 1],
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
+      position: null,
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    if (options.position != null) {
+      options.transform.updateTranslation(getPoint(options.position));
+    }
+
+    const single = [
+      new Point(options.length / 2, options.width / 2),
+      new Point(options.length / 2, -options.width / 2),
+      new Point(-options.length / 2, -options.width / 2),
+      new Point(-options.length / 2, options.width / 2),
+    ];
+
+    const collection = this.collection(
+      options.transform,
+    );
+    const start = -((options.num - 1) / 2) * options.step;
+    console.log(options.num, start)
+    for (let i = 0; i < options.num; i += 1) {
+      const t = new Transform()
+        .rotate(options.angle)
+        .translate(start + i * options.step, 0)
+        .rotate(options.rotation);
+
+      const points = single.map(
+        // p => (p._dup.new Point(p.x + start + i * options.step, p.y))
+        //   .rotate(options.angle)
+        //   .rotate(options.rotation),
+        p => (p._dup().transformBy(t.matrix()))
+      );
+      collection.add(`${i}`, this.fan({
+        points,
+        color: options.color,
+      }));
+    }
+    console.log(collection)
+    return collection;
+  }
 }
 
 export type TypeDiagramPrimitives = DiagramPrimitives;
