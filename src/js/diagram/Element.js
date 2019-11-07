@@ -141,19 +141,19 @@ class DiagramElement {
     [scenarioName: string]: TypeScenario;
   };
 
-  pulse: {
+  pulseSettings: {
     time: number,
     frequency: number,
-    A: number,
-    B: number,
-    C: number,
-    style: (number) => number,
+    A: number | Array<number>,
+    B: number | Array<number>,
+    C: number | Array<number>,
+    style: (number, number, number, number, number) => number,
     num: number,
     transformMethod: (number) => Transform,
-    callback: (boolean) => void;
+    callback: ?(mixed) => void;
   };
 
-  pulseDefault: Function;
+  pulseDefault: (?() => void) => void;
 
   diagramLimits: Rect;
   diagramTransforms: TypeSpaceTransforms;
@@ -177,12 +177,17 @@ class DiagramElement {
 
   animations: animations.AnimationManager;
 
-  pulse: Object;                  // Pulse animation state
+  // pulse: Object;                  // Pulse animation state
 
   uid: string;
 
   // Rename to animate in future
   anim: Object;
+
+  // pulse: (mixed) => void;
+  // pulse: (?Array<string | DiagramElement> | mixed) => void;
+  +pulse: (any, ?any) => void;
+  // +pulse: (Array<string | DiagramElement>) => void;
 
   // This will scale and position this element such that the center of the
   // diagram limits will will look like it is centered on a html element
@@ -368,7 +373,7 @@ class DiagramElement {
 
     this.scenarios = {};
 
-    this.pulse = {
+    this.pulseSettings = {
       time: 1,
       frequency: 0.5,
       A: 1,
@@ -925,26 +930,26 @@ class DiagramElement {
       // clip the elapsed time to the pulse time, and end pulsing (after this
       // draw). If the pulse time is 0, that means pulsing will loop
       // indefinitely.
-      if (deltaTime > this.pulse.time && this.pulse.time !== 0) {
+      if (deltaTime > this.pulseSettings.time && this.pulseSettings.time !== 0) {
         // this.state.isPulsing = false;
         this.stopPulsing(true);
-        deltaTime = this.pulse.time;
+        deltaTime = this.pulseSettings.time;
       }
 
       // Go through each pulse matrix planned, and transform the input matrix
       // with the pulse.
-      for (let i = 0; i < this.pulse.num; i += 1) {
+      for (let i = 0; i < this.pulseSettings.num; i += 1) {
         // Get the current pulse magnitude
-        const pulseMag = this.pulse.style(
+        const pulseMag = this.pulseSettings.style(
           deltaTime,
-          this.pulse.frequency,
-          this.pulse.A instanceof Array ? this.pulse.A[i] : this.pulse.A,
-          this.pulse.B instanceof Array ? this.pulse.B[i] : this.pulse.B,
-          this.pulse.C instanceof Array ? this.pulse.C[i] : this.pulse.C,
+          this.pulseSettings.frequency,
+          this.pulseSettings.A instanceof Array ? this.pulseSettings.A[i] : this.pulseSettings.A,
+          this.pulseSettings.B instanceof Array ? this.pulseSettings.B[i] : this.pulseSettings.B,
+          this.pulseSettings.C instanceof Array ? this.pulseSettings.C[i] : this.pulseSettings.C,
         );
 
         // Use the pulse magnitude to get the current pulse transform
-        const pTransform = this.pulse.transformMethod(pulseMag);
+        const pTransform = this.pulseSettings.transformMethod(pulseMag);
         // if(this.name === '_radius') {
         // }
         // Transform the current transformMatrix by the pulse transform matrix
@@ -964,22 +969,22 @@ class DiagramElement {
     time: number, scale: number,
     frequency: number = 0, callback: ?(?mixed) => void = null,
   ) {
-    this.pulse.time = time;
+    this.pulseSettings.time = time;
     if (frequency === 0 && time === 0) {
-      this.pulse.frequency = 1;
+      this.pulseSettings.frequency = 1;
     }
     if (frequency !== 0) {
-      this.pulse.frequency = frequency;
+      this.pulseSettings.frequency = frequency;
     }
     if (time !== 0 && frequency === 0) {
-      this.pulse.frequency = 1 / (time * 2);
+      this.pulseSettings.frequency = 1 / (time * 2);
     }
 
-    this.pulse.A = 1;
-    this.pulse.B = scale - 1;
-    this.pulse.C = 0;
-    this.pulse.num = 1;
-    this.pulse.callback = callback;
+    this.pulseSettings.A = 1;
+    this.pulseSettings.B = scale - 1;
+    this.pulseSettings.C = 0;
+    this.pulseSettings.num = 1;
+    this.pulseSettings.callback = callback;
     this.pulseNow();
   }
 
@@ -988,26 +993,30 @@ class DiagramElement {
     num: number = 3, callback: ?(?mixed) => void = null,
   ) {
     let bArray = [scale];
-    this.pulse.num = num;
-    if (this.pulse.num > 1) {
+    this.pulseSettings.num = num;
+    if (this.pulseSettings.num > 1) {
       const b = Math.abs(1 - scale);
       const bMax = b;
       const bMin = -b;
       const range = bMax - bMin;
-      const bStep = range / (this.pulse.num - 1);
+      const bStep = range / (this.pulseSettings.num - 1);
       bArray = [];
-      for (let i = 0; i < this.pulse.num; i += 1) {
+      for (let i = 0; i < this.pulseSettings.num; i += 1) {
         bArray.push(bMax - i * bStep);
       }
     }
-    this.pulse.time = time;
-    this.pulse.frequency = 1 / (time * 2);
-    this.pulse.A = 1;
-    this.pulse.B = bArray;
-    this.pulse.C = 0;
-    this.pulse.callback = callback;
+    this.pulseSettings.time = time;
+    this.pulseSettings.frequency = 1 / (time * 2);
+    this.pulseSettings.A = 1;
+    this.pulseSettings.B = bArray;
+    this.pulseSettings.C = 0;
+    this.pulseSettings.callback = callback;
     this.pulseNow();
   }
+
+  // pulse(done: ?(mixed) => void = null) {
+  //   this.pulseDefault(done);
+  // }
 
   pulseNow() {
     this.state.isPulsing = true;
@@ -1017,9 +1026,9 @@ class DiagramElement {
 
   stopPulsing(result: ?mixed) {
     this.state.isPulsing = false;
-    if (this.pulse.callback) {
-      const { callback } = this.pulse;
-      this.pulse.callback = null;
+    if (this.pulseSettings.callback) {
+      const { callback } = this.pulseSettings;
+      this.pulseSettings.callback = null;
       callback(result);
     }
   }
@@ -1411,6 +1420,7 @@ class DiagramElementPrimitive extends DiagramElement {
   angleToDraw: number;
   lengthToDraw: number;
   cannotTouchHole: boolean;
+  +pulse: (?(mixed) => void) => void;
 
   constructor(
     drawingObject: DrawingObject,
@@ -1429,6 +1439,10 @@ class DiagramElementPrimitive extends DiagramElement {
     this.lengthToDraw = -1;
     this.cannotTouchHole = false;
     // this.setMoveBoundaryToDiagram();
+  }
+
+  pulse(done: ?(mixed) => void = null) {
+    this.pulseDefault(done);
   }
 
   setAngleToDraw(intputAngle: number = -1) {
@@ -1762,7 +1776,7 @@ class DiagramElementCollection extends DiagramElement {
   drawOrder: Array<string>;
   touchInBoundingRect: boolean;
   eqns: Object;
-  // biasTransform: Array<number>;
+  +pulse: (Array<string | DiagramElement>, ?(mixed) => void) => void;
 
   constructor(
     transform: Transform = new Transform(),
@@ -1893,6 +1907,49 @@ class DiagramElementCollection extends DiagramElement {
         this.renderedOnNextDraw = false;
       }
     }
+  }
+
+  // $FlowFixMe
+  pulse(
+    elementsToPulse: Array<string | DiagramElement>,
+    done: ?(mixed) => void = null,
+  ) {
+    if (elementsToPulse == null || typeof elementsToPulse === 'function') {
+      this.pulseDefault(done);
+      return;
+    }
+    let doneToUse = done;
+    elementsToPulse.forEach((elementToPulse) => {
+      let element: ?DiagramElement;
+      if (typeof elementToPulse === 'string') {
+        element = this.getElement(elementToPulse);
+      } else {
+        element = elementToPulse;
+      }
+      if (element != null) {
+        element.pulseDefault(doneToUse);
+        doneToUse = null;
+      }
+    });
+    if (doneToUse != null) {
+      doneToUse();
+    }
+  }
+
+  getElement(elementPath: string) {
+    const getElement = (inputElementPath, parent) => {
+      const ep = inputElementPath.split('.');
+      // $FlowFixMe
+      const newParent = parent[ep[0]];
+      if (newParent == null) {
+        return null;
+      }
+      if (ep.length > 1) {
+        return getElement(ep.slice(1).join('.'), newParent);
+      }
+      return newParent;
+    };
+    return getElement(elementPath, this);
   }
 
   show(listToShow: Array<DiagramElementPrimitive | DiagramElementCollection> = []): void {
