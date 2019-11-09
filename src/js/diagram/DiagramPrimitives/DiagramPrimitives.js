@@ -1148,6 +1148,7 @@ export default class DiagramPrimitives {
     const collection = this.collection(
       options.transform,
     );
+    collection.setColor(options.color);
 
     const start = -((options.num - 1) / 2) * options.step;
     for (let i = 0; i < options.num; i += 1) {
@@ -1199,6 +1200,7 @@ export default class DiagramPrimitives {
     const collection = this.collection(
       options.transform,
     );
+    collection.setColor(options.color);
     const start = -((options.num - 1) / 2) * options.step;
     for (let i = 0; i < options.num; i += 1) {
       const t = new Transform()
