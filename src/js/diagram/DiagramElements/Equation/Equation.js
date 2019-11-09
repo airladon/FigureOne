@@ -245,7 +245,7 @@ export class EquationNew extends DiagramElementCollection {
       .rotate(0)
       .translate(0, 0), shapes.limits);
     this.shapes = shapes;
-    this.color = optionsToUse.color;
+    this.setColor(optionsToUse.color);
     // this.isTouchDevice = isTouchDevice;
     // this.animateNextFrame = animateNextFrame;
 
