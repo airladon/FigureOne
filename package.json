@@ -1,6 +1,6 @@
 {
   "name": "figureone",
-  "version": "0.0.97",
+  "version": "0.0.98",
   "description": "Interactive Diagram Builder",
   "main": "index.js",
   "repository": {
