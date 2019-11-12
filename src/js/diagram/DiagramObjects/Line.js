@@ -788,6 +788,13 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.updateLabel();
   }
 
+  getLabel() {
+    if (this.label != null) {
+      return this.label.getText();
+    }
+    return '';
+  }
+
   setLabelToRealLength() {
     this.showRealLength = true;
     this.updateLabel();
