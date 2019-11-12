@@ -405,7 +405,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     }
 
     this.pulseDefault = (done) => {
-      this.pulseScaleNow(1, 1.5, 0, done);
+      this.pulseScaleNow(1, 1.7, 0, done);
     };
 
     this.update();
@@ -917,6 +917,13 @@ class DiagramObjectAngle extends DiagramElementCollection {
       label.showRealAngle = false;
     }
     this.updateLabel();
+  }
+
+  getLabel() {
+    if (this.label != null) {
+      return this.label.getText();
+    }
+    return '';
   }
 
   setLabelToRealAngle() {
