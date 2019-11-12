@@ -83,6 +83,12 @@ export type TypeLineOptions = {
     style: Array<number>,
     maxLength?: number,
   },
+  pulse?: {
+    line?: number,
+    label?: number,
+    arrow?: number,
+    collection?: number,
+  },
   mods?: {},
   move?: {
     type?: 'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale';
@@ -301,6 +307,13 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     arrow?: number,
   }) => void;
 
+  pulseDefaultSettings: {
+    line: number,
+    label: number,
+    arrow: number,
+    collection: number,
+  };
+
   updateLabel: (?number) => {};
   addLabel: (string | EquationNew | Array<string> | TypeLabelEquationOptions,
              number, ?TypeLineLabelLocation,
@@ -356,6 +369,12 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       offset: 0,
       dashStyle: null,
       mods: {},
+      pulse: {
+        line: 6,
+        label: 2,
+        arrow: 3,
+        collection: 1,
+      },
     };
     const optionsToUse = Object.assign({}, defaultOptions, options);
     let { dashStyle } = optionsToUse;
@@ -526,13 +545,23 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       );
     }
 
+    this.pulseDefaultSettings = {
+      line: optionsToUse.pulse.line || 1,
+      label: optionsToUse.pulse.label || 1,
+      arrow: optionsToUse.pulse.arrow || 1,
+      collection: optionsToUse.pulse.collection || 1,
+    };
+
     this.pulseDefault = (done) => {
       this.pulseWidth({
-        line: 6,
-        label: 2,
-        arrow: 4,
+        line: this.pulseDefaultSettings.line,
+        label: this.pulseDefaultSettings.label,
+        arrow: this.pulseDefaultSettings.arrow,
         done,
       });
+      if (this.pulseDefaultSettings.collection !== 1) {
+        this.pulseScaleNow(1, this.pulseDefaultSettings.collection);
+      }
     };
 
     if (optionsToUse.mods != null && optionsToUse.mods !== {}) {
