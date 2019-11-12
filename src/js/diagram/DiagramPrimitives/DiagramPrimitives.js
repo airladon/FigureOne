@@ -51,6 +51,7 @@ export type TypePolygonOptions = {
   textureLocation?: string,
   textureCoords?: Rect,
   onLoad?: Function,
+  pulse?: number;
   mods?: {},
 };
 
@@ -67,6 +68,7 @@ export type TypeTextOptions = {
   hAlign?: string;
   vAlign?: string;
   color?: Array<number>;
+  pulse?: number;
   mods?: {},
 };
 
@@ -78,6 +80,7 @@ export type TypeGridOptions = {
   color?: Array<number>,
   position?: Point,
   transform?: Transform,
+  pulse?: number,
 };
 
 export type TypeRepeatPatternVertex = {
@@ -86,6 +89,7 @@ export type TypeRepeatPatternVertex = {
   yNum?: number,
   xStep?: number,
   yStep?: number,
+  pulse?: number;
   position?: Point,
   transform?: Transform,
 };
@@ -160,6 +164,7 @@ export default class DiagramPrimitives {
     close?: boolean,
     cornerLength?: number,
     width?: number,
+    pulse?: number,
     transform?: Transform,
     position?: Point,
     }>) {
@@ -189,6 +194,10 @@ export default class DiagramPrimitives {
       options.color, options.transform, this.limits,
     );
 
+    if (options.pulse != null) {
+      element.pulseDefault.scale = options.pulse;
+    }
+
     if (options.mods != null && options.mods !== {}) {
       element.setProperties(options.mods);
     }
@@ -203,6 +212,7 @@ export default class DiagramPrimitives {
       close?: boolean,
       width?: number,
       borderToPoint?: TypePolyLineBorderToPoint,
+      pulse?: number,
       position?: Point,
       transform?: Transform,
       mods?: {},
@@ -238,6 +248,10 @@ export default class DiagramPrimitives {
       this.limits,
     );
 
+    if (options.pulse != null) {
+      element.pulseDefault.scale = options.pulse;
+    }
+
     if (options.mods != null && options.mods !== {}) {
       element.setProperties(options.mods);
     }
@@ -250,6 +264,7 @@ export default class DiagramPrimitives {
     color?: Array<number>,
     transform?: Transform,
     position?: Point,
+    pulse?: number,
     mods?: {},
   }>) {
     const defaultOptions = {
@@ -272,6 +287,10 @@ export default class DiagramPrimitives {
       options.transform,
       this.limits,
     );
+
+    if (options.pulse != null) {
+      element.pulseDefault.scale = options.pulse;
+    }
 
     if (options.mods != null && options.mods !== {}) {
       element.setProperties(options.mods);
@@ -335,6 +354,10 @@ export default class DiagramPrimitives {
       this.limits,
     );
 
+    if (options.pulse != null) {
+      element.pulseDefault.scale = options.pulse;
+    }
+
     if (options.mods != null && options.mods !== {}) {
       element.setProperties(options.mods);
     }
@@ -352,6 +375,7 @@ export default class DiagramPrimitives {
     position?: Point;
     tip?: Point;
     rotation?: number;
+    pulse?: number,
     mods?: {},
   }>) {
     const defaultOptions = {
@@ -382,6 +406,10 @@ export default class DiagramPrimitives {
       options.transform,
       this.limits,
     );
+
+    if (options.pulse != null) {
+      element.pulseDefault.scale = options.pulse;
+    }
 
     if (options.mods != null && options.mods !== {}) {
       element.setProperties(options.mods);
@@ -490,6 +518,7 @@ export default class DiagramPrimitives {
     alignH?: 'left' | 'right' | 'center',
     modifiers: Object;
     color?: Array<number>,
+    pulse?: number,
   }>) {
     const defaultOptions = {
       text: '',
@@ -511,6 +540,9 @@ export default class DiagramPrimitives {
     const element = this.htmlElement(inside, id, classes, getPoint(position), alignV, alignH);
     if (options.color != null) {
       element.setColor(options.color);
+    }
+    if (options.pulse != null) {
+      element.pulseDefault.scale = options.pulse;
     }
     return element;
   }
@@ -556,7 +588,11 @@ export default class DiagramPrimitives {
         linePairs.push([new Point(bounds.left, y), new Point(bounds.right, y)]);
       }
     }
-    return this.lines(linePairs, numLinesThick, color, transform);
+    const element = this.lines(linePairs, numLinesThick, color, transform);
+    if (options.pulse != null) {
+      element.pulseDefault.scale = options.pulse;
+    }
+    return element;
   }
 
   polygon(...optionsIn: Array<TypePolygonOptions>) {
@@ -644,6 +680,11 @@ export default class DiagramPrimitives {
         options.trianglePrimitives,
       );
     }
+
+    if (options.pulse != null) {
+      element.pulseDefault.scale = options.pulse;
+    }
+
     if (options.mods != null && options.mods !== {}) {
       element.setProperties(options.mods);
     }
@@ -689,6 +730,7 @@ export default class DiagramPrimitives {
     color?: Array<number>,
     transform?: Transform,
     position?: Point,
+    pulse?: number,
   }>) {
     const defaultOptions = {
       start: [0, 0],
@@ -703,11 +745,15 @@ export default class DiagramPrimitives {
     if (options.position != null) {
       options.transform.updateTranslation(getPoint(options.position));
     }
-    return DashedLine(
+    const element = DashedLine(
       this.webgl, getPoint(options.start), options.length, options.width,
       options.rotation, options.dashStyle, options.color,
       options.transform, this.limits,
     );
+    if (options.pulse != null) {
+      element.pulseDefault.scale = options.pulse;
+    }
+    return element;
   }
 
   // dashedLine(
@@ -738,6 +784,7 @@ export default class DiagramPrimitives {
     colors?: Array<number>,
     transform?: Transform,
     position?: Point,
+    pulse?: number,
   }>) {
     const defaultOptions = {
       alignV: 'middle',
@@ -760,10 +807,14 @@ export default class DiagramPrimitives {
     if (typeof options.reference !== 'string') {
       options.reference = getPoint(options.reference);
     }
-    return RectangleFilled(
+    const element = RectangleFilled(
       this.webgl, options.alignH, options.alignV, options.width, options.height,
       options.corner.radius, options.corner.sides, options.color, options.transform, this.limits,
     );
+    if (options.pulse != null) {
+      element.pulseDefault.scale = options.pulse;
+    }
+    return element;
   }
 
   radialLines(...optionsIn: Array<{
@@ -775,6 +826,7 @@ export default class DiagramPrimitives {
     color?: Array<number>,
     transform?: Transform,
     position?: Point,
+    pulse?: number,
   }>) {
     const defaultOptions = {
       innerRadius: 0,
@@ -788,11 +840,17 @@ export default class DiagramPrimitives {
     if (options.position != null) {
       options.transform.updateTranslation(getPoint(options.position));
     }
-    return RadialLines(
+    const element = RadialLines(
       this.webgl, options.innerRadius, options.outerRadius,
       options.width, options.dAngle, options.angle, options.color,
       options.transform, this.limits,
     );
+
+    if (options.pulse != null) {
+      element.pulseDefault.scale = options.pulse;
+    }
+
+    return element;
   }
 
   repeatPatternVertex(...optionsIn: Array<TypeRepeatPatternVertex>) {
@@ -835,6 +893,9 @@ export default class DiagramPrimitives {
       // console.log(newPoints)
       copy.drawingObject.changeVertices(newPoints);
     }
+    if (options.pulse != null) {
+      copy.pulseDefault.scale = options.pulse;
+    }
     return copy;
   }
 
@@ -843,15 +904,18 @@ export default class DiagramPrimitives {
       transform?: Transform,
       position?: Point,
       color?: Array<number>,
+      pulse?: number,
     } = {},
     ...moreOptions: Array<{
       transform?: Transform,
       position?: Point,
       color?: Array<number>,
+      pulse?: number,
     }>
   ) {
     let transform = new Transform('collection').scale(1, 1).rotate(0).translate(0, 0);
     let color = [1, 0, 0, 1];
+    let pulse = null;
     if (transformOrPointOrOptions instanceof Point) {
       transform.updateTranslation(transformOrPointOrOptions);
     } else if (transformOrPointOrOptions instanceof Transform) {
@@ -867,9 +931,15 @@ export default class DiagramPrimitives {
       if (optionsToUse.color != null) {
         ({ color } = optionsToUse);
       }
+      if (optionsToUse.pulse != null) {
+        ({ pulse } = optionsToUse);
+      }
     }
     const element = new DiagramElementCollection(transform, this.limits);
     element.setColor(color);
+    if (pulse != null) {
+      element.pulseDefault.scale = pulse;
+    }
     return element;
   }
 
@@ -955,6 +1025,7 @@ export default class DiagramPrimitives {
     location?: Transform | Point,
     decimalPlaces?: number,
     lineWidth?: number,
+    pulse?: number,
   }>) {
     const defaultOptions = {
       width: 1,
@@ -1102,6 +1173,9 @@ export default class DiagramPrimitives {
     }
     xy.add('y', yAxis);
     xy.add('x', xAxis);
+    if (options.pulse != null) {
+      xy.pulseDefault.scale = options.pulse;
+    }
     return xy;
   }
 
@@ -1113,6 +1187,7 @@ export default class DiagramPrimitives {
     step?: number,
     rotation?: number,
     color?: Array<number>,
+    pulse?: number,
     transform?: Transform,
     position?: Point,
   }>) {
@@ -1149,6 +1224,9 @@ export default class DiagramPrimitives {
       options.transform,
     );
     collection.setColor(options.color);
+    if (options.pulse != null) {
+      collection.pulseDefault.scale = options.pulse;
+    }
 
     const start = -((options.num - 1) / 2) * options.step;
     for (let i = 0; i < options.num; i += 1) {
@@ -1171,6 +1249,7 @@ export default class DiagramPrimitives {
     step?: number,
     rotation?: number,
     color?: Array<number>,
+    pulse?: number,
     transform?: Transform,
     position?: Point,
   }>) {
@@ -1201,6 +1280,10 @@ export default class DiagramPrimitives {
       options.transform,
     );
     collection.setColor(options.color);
+    if (options.pulse != null) {
+      collection.pulseDefault.scale = options.pulse;
+    }
+
     const start = -((options.num - 1) / 2) * options.step;
     for (let i = 0; i < options.num; i += 1) {
       const t = new Transform()

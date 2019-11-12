@@ -97,6 +97,16 @@ export type TypeAngleOptions = {
     width?: number,
     color?: Array<number>,
   },
+  pulse?: {
+    curve?: number | {
+      width?: number,
+      num?: number,
+    },
+    label?: number,
+    arrow?: number,
+    side?: number,
+    collection?: number,
+  },
   mods?: {};
 };
 
@@ -240,6 +250,17 @@ class DiagramObjectAngle extends DiagramElementCollection {
   nextPosition: ?Point;
   nextRotation: ?number;
 
+  pulseDefaultSettings: {
+    curve: number | {
+      width?: number,
+      num?: number,
+    },
+    label: number,
+    arrow: number,
+    side: number,
+    collection: number,
+  };
+
   // eslint-disable-next-line class-methods-use-this
   calculateFromP1P2P3(
     p1: Point,
@@ -291,6 +312,13 @@ class DiagramObjectAngle extends DiagramElementCollection {
       p1: null,       // if p1, p2 and p3 are defined, position, angle and
       p2: null,       // rotation will be overridden
       p3: null,
+      pulse: {
+        curve: 1,
+        label: 1,
+        arrow: 1,
+        side: 1,
+        collection: 1.8,
+      },
       mods: {},
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
@@ -404,8 +432,59 @@ class DiagramObjectAngle extends DiagramElementCollection {
       this.addSide(2, sideOptions.length, sideOptions.width, sideOptions.color);
     }
 
+    this.pulseDefaultSettings = {
+      curve: optionsToUse.pulse.curve || 1,
+      label: optionsToUse.pulse.label || 1,
+      arrow: optionsToUse.pulse.arrow || 1,
+      side: optionsToUse.pulse.side || 1,
+      collection: optionsToUse.pulse.collection || 1,
+    };
+
+    // this.pulseDefault = (done) => {
+    //   this.pulseScaleNow(1, 1.7, 0, done);
+    // };
     this.pulseDefault = (done) => {
-      this.pulseScaleNow(1, 1.7, 0, done);
+      let doneToUse = done;
+      const pulseSettings = this.pulseDefaultSettings;
+      if (typeof pulseSettings.curve === 'number') {
+        if (pulseSettings.curve !== 1 && this._curve != null) {
+          this._curve.pulseScaleNow(1, pulseSettings.curve, 0, doneToUse);
+          doneToUse = null;
+        }
+      } else if (this._curve != null && pulseSettings.curve != null) {
+        const defaultCurveThickOptions = { width: 2, num: 5 };
+        const curveOptions = joinObjects(defaultCurveThickOptions, pulseSettings.curve);
+        // $FlowFixMe
+        this._curve.pulseThickNow(1, curveOptions.width, curveOptions.num, doneToUse);
+        doneToUse = null;
+      }
+      if (pulseSettings.label !== 1 && this._label != null) {
+        this._label.pulseScaleNow(1, pulseSettings.label, 0, doneToUse);
+        doneToUse = null;
+      }
+      if (pulseSettings.arrow !== 1) {
+        if (this._arrow1 != null) {
+          this._arrow1.pulseScaleNow(1, pulseSettings.arrow, 0, doneToUse);
+          doneToUse = null;
+        }
+        if (this._arrow2 != null) {
+          this._arrow2.pulseScaleNow(1, pulseSettings.arrow, 0, doneToUse);
+          doneToUse = null;
+        }
+      }
+      if (pulseSettings.side !== 1) {
+        if (this._side1 != null) {
+          this._side1.pulseScaleNow(1, pulseSettings.side, 0, doneToUse);
+          doneToUse = null;
+        }
+        if (this._side2 != null) {
+          this._side2.pulseScaleNow(1, pulseSettings.side, 0, doneToUse);
+          doneToUse = null;
+        }
+      }
+      if (pulseSettings.collection !== 1) {
+        this.pulseScaleNow(1, pulseSettings.collection, 0, doneToUse);
+      }
     };
 
     this.update();
