@@ -1126,11 +1126,64 @@ class DiagramElement {
     }
   }
 
+  // ***************************************************************
+  // Boundaries
+  // ***************************************************************
+  // eslint-disable-next-line class-methods-use-this
+  getVertexSpaceBoundaries() {
+    return [[]];
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getGLBoundaries() {
+    return [[]];
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getLocalBoundaries() {
+    return [[]];
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getDiagramBoundaries() {
+    return [[]];
+  }
+
+  getBoundaries(space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local') {
+    if (space === 'local') {
+      return this.getLocalBoundaries();
+    }
+    if (space === 'diagram') {
+      return this.getDiagramBoundaries();
+    }
+    if (space === 'vertex') {
+      return this.getVertexSpaceBoundaries();
+    }
+    if (space === 'gl') {
+      return this.getGLBoundaries();
+    }
+    return [[]];
+  }
+
+  // ***************************************************************
+  // Bounding Rect
+  // ***************************************************************
   // eslint-disable-next-line class-methods-use-this
   getGLBoundingRect() {
     return new Rect(0, 0, 1, 1);
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  getLocalBoundingRect() {
+    return new Rect(0, 0, 1, 1);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getVertexSpaceBoundingRect() {
+    return new Rect(0, 0, 1, 1);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
   getDiagramBoundingRect() {
     const gl = this.getGLBoundingRect();
     const glToDiagramScale = new Point(
@@ -1142,6 +1195,40 @@ class DiagramElement {
       gl.bottom * glToDiagramScale.y,
       gl.width * glToDiagramScale.x,
       gl.height * glToDiagramScale.y,
+    );
+  }
+
+  getBoundingRect(
+    space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
+  ) {
+    if (space === 'local') {
+      return this.getLocalBoundingRect();
+    }
+    if (space === 'diagram') {
+      return this.getDiagramBoundingRect();
+    }
+    if (space === 'vertex') {
+      return this.getVertexSpaceBoundingRect();
+    }
+    if (space === 'gl') {
+      return this.getGLBoundingRect();
+    }
+    return new Rect(0, 0, 1, 1);
+  }
+
+  // ***************************************************************
+  // Size
+  // ***************************************************************
+  getRelativeBoundingRect(
+    space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
+  ) {
+    const rect = this.getBoundingRect(space);
+    const position = this.getPosition(space);
+    return new Rect(
+      rect.left - position.x,
+      rect.bottom - position.y,
+      rect.width,
+      rect.height,
     );
   }
 
@@ -1172,13 +1259,38 @@ class DiagramElement {
     );
   }
 
-  getPosition() {
+  getLocalPosition() {
     const t = this.transform.t();
     let position = new Point(0, 0);
     if (t != null) {
       position = t._dup();
     }
     return position;
+  }
+
+  getDiagramPosition() {
+    return new Point(0, 0);
+  }
+
+  getGLPosition() {
+    return new Point(0, 0);
+  }
+
+  getPosition(space: 'local' | 'diagram' | 'gl' = 'local') {
+    if (space === 'local') {
+      return this.getLocalPosition();
+    } else if (space === 'diagramm') {
+      return this.getDiagramPosition();
+    } else if (space === 'gl') {
+      return this.getGLPosition();
+    }
+    return new Point(0, 0);
+    // const t = this.transform.t();
+    // let position = new Point(0, 0);
+    // if (t != null) {
+    //   position = t._dup();
+    // }
+    // return position;
   }
 
   getScale() {
@@ -1773,28 +1885,45 @@ class DiagramElementPrimitive extends DiagramElement {
   //   return oldWebgl;
   // }
 
+  getVertexSpaceBoundaries() {
+    return this.drawingObject.border;
+  }
+
+  getLocalBoundaries() {
+    return this.drawingObject.getGLBoundaries(this.transform.matrix());
+  }
+
   getGLBoundaries() {
     return this.drawingObject.getGLBoundaries(this.lastDrawTransform.matrix());
   }
 
-  getVertexSpaceBoundaries() {
-    return this.drawingObject.border;
+
+  getVertexSpaceBoundingRect() {
+    return this.drawingObject.getVertexSpaceBoundingRect();
+  }
+
+  getLocalBoundingRect() {
+    return this.drawingObject.getGLBoundingRect(this.transform.matrix());
   }
 
   getGLBoundingRect() {
     return this.drawingObject.getGLBoundingRect(this.lastDrawTransform.matrix());
   }
 
-  getVertexSpaceBoundingRect() {
-    return this.drawingObject.getVertexSpaceBoundingRect();
+
+  // deprecated
+  getRelativeVertexSpaceBoundingRect(): Rect {
+    return this.drawingObject.getRelativeVertexSpaceBoundingRect();
   }
 
+  // deprecated
   getRelativeGLBoundingRect(): Rect {
     return this.drawingObject.getRelativeGLBoundingRect(this.lastDrawTransform.matrix());
   }
 
-  getRelativeVertexSpaceBoundingRect(): Rect {
-    return this.drawingObject.getRelativeVertexSpaceBoundingRect();
+  // deprecated
+  getRelativeLocalBoundingRect(): Rect {
+    return this.drawingObject.getRelativeGLBoundingRect(this.transform.matrix());
   }
 
   increaseBorderSize(
@@ -2023,9 +2152,12 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  getElement(elementPath: ?string = null) {
+  getElement(elementPath: ?string | DiagramElement = null) {
     if (elementPath == null) {
       return this;
+    }
+    if (typeof elementPath !== 'string') {
+      return elementPath;
     }
     // if (elementPath instanceof DiagramElement) {
     //   return elementPath;
@@ -2176,6 +2308,23 @@ class DiagramElementCollection extends DiagramElement {
     this.setMoveBoundaryToDiagram();
   }
 
+  getBoundaries(
+    space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
+    children: ?Array<string | DiagramElement> = null
+  ) {
+    let boundaries = [];
+    children.forEach((child) => {
+      const e = this.getElement(child);
+      if (e == null) {
+        return;
+      }
+      const elementBoundaries = e.getBoundaries(space);
+      boundaries = boundaries.concat(elementBoundaries);
+    });
+    return boundaries;
+  }
+
+  // deprecated
   getGLBoundaries() {
     let boundaries = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
@@ -2188,6 +2337,7 @@ class DiagramElementCollection extends DiagramElement {
     return boundaries;
   }
 
+  // deprecated
   getVertexSpaceBoundaries() {
     let boundaries = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
@@ -2200,6 +2350,63 @@ class DiagramElementCollection extends DiagramElement {
     return boundaries;
   }
 
+  // getBoundaries() {
+  //   let boundaries = [];
+  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     if (element.isShown) {
+  //       const elementBoundaries = element.getBoundaries();
+  //       boundaries = boundaries.concat(elementBoundaries);
+  //     }
+  //   }
+  //   return boundaries;
+  // }
+
+  getBoundingRect(
+    space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
+    children: ?Array<string | DiagramElement> = null
+  ) {
+    if (children == null) {
+      const boundaries = this.getBoundaries(space);
+      return getBoundingRect(boundaries);
+    }
+
+    const points = [];
+    children.forEach((child) => {
+      const e = this.getElement(child);
+      if (e == null) {
+        return;
+      }
+      const bound = e.getBoundingRect();
+      points.push(new Point(bound.left, bound.bottom));
+      points.push(new Point(bound.right, bound.top));
+    });
+    return getBoundingRect(points);
+  }
+
+  // getRelativeBoundingRect(
+  //   space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
+  //   children: ?Array<string | DiagramElement> = null
+  // ) {
+  //   if (children == null) {
+  //     const boundaries = this.getBoundaries(space);
+  //     return getBoundingRect(boundaries);
+  //   }
+
+  //   const points = [];
+  //   children.forEach((child) => {
+  //     const e = this.getElement(child);
+  //     if (e == null) {
+  //       return;
+  //     }
+  //     const bound = e.getBoundingRect();
+  //     points.push(new Point(bound.left, bound.bottom));
+  //     points.push(new Point(bound.right, bound.top));
+  //   });
+  //   return getBoundingRect(points);
+  // }
+
+  // deprecated
   getGLBoundingRect() {
     const glAbsoluteBoundaries = this.getGLBoundaries();
     return getBoundingRect(glAbsoluteBoundaries);
@@ -2210,6 +2417,7 @@ class DiagramElementCollection extends DiagramElement {
   //   return getBoundingRect(boundaries);
   // }
 
+  // deprecated
   getVertexSpaceBoundingRect(elementsToBound: ?Array<string | DiagramElement> = null) {
     if (elementsToBound == null) {
       // return super.getDiagramBoundingRect();
@@ -2218,24 +2426,18 @@ class DiagramElementCollection extends DiagramElement {
     }
     const points = [];
     elementsToBound.forEach((element) => {
-      let e;
-      if (typeof element === 'string') {
-        e = this.getElement(element);
-      } else {
-        e = element;
-      }
+      const e = this.getElement(element);
       if (e == null) {
         return;
       }
-      const bound = e.getVertexSpaceBoundingRect();
-      // boundaries.push(new Point elementBoundaries]
-
+      const bound = e.getBoundingRect();
       points.push(new Point(bound.left, bound.bottom));
       points.push(new Point(bound.right, bound.top));
     });
     return getBoundingRect(points);
   }
 
+  // deprecated
   getRelativeGLBoundingRect() {
     const boundingRect = this.getGLBoundingRect();
 
@@ -2249,6 +2451,7 @@ class DiagramElementCollection extends DiagramElement {
     );
   }
 
+  // deprecated
   getRelativeVertexSpaceBoundingRect(): Rect {
     const boundingRect = this.getVertexSpaceBoundingRect();
 
