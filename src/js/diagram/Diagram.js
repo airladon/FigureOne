@@ -662,7 +662,7 @@ class Diagram {
     previousClientPoint: Point,
     currentClientPoint: Point,
   ) {
-    let centerDiagramSpace = element.getDiagramPosition();
+    let centerDiagramSpace = element.getPosition('diagram');
     if (centerDiagramSpace == null) {
       centerDiagramSpace = new Point(0, 0);
     }
@@ -750,10 +750,9 @@ class Diagram {
     // const currentDiagramPoint =
     //   currentPixelPoint.transformBy(this.pixelToDiagramSpaceTransform.matrix());
 
-    // const center = element.getDiagramPosition();
     // const previousMag = previousDiagramPoint.sub(center).distance();
     // const currentMag = currentDiagramPoint.sub(center).distance();
-    const center = element.getDiagramPosition()
+    const center = element.getPosition('diagram')
       .transformBy(this.spaceTransforms.diagramToPixel.matrix());
     const previousMag = previousPixelPoint.sub(center).distance();
     const currentMag = currentPixelPoint.sub(center).distance();

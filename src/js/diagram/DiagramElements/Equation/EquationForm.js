@@ -266,7 +266,7 @@ export default class EquationForm extends Elements {
       const t = fixTo.transform.t();
       const s = fixTo.transform.s();
       if (t != null && s != null) {
-        const rect = fixTo.getVertexSpaceBoundingRect();
+        const rect = fixTo.getBoundingRect('vertex');
         w = rect.width * s.x;
         h = rect.height * s.y;
         a = rect.top * s.y - t.y;

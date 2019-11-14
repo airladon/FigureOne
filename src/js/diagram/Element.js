@@ -1310,12 +1310,12 @@ class DiagramElement {
     return position;
   }
 
-  // deprecated
-  getDiagramPosition() {
-    // Note, this should be 0,0 as the current transform's translation will
-    // be included in getVertexSpaceDiagramPosition
-    return this.getVertexSpaceDiagramPosition(new Point(0, 0));
-  }
+  // // deprecated
+  // getDiagramPosition() {
+  //   // Note, this should be 0,0 as the current transform's translation will
+  //   // be included in getVertexSpaceDiagramPosition
+  //   return this.getVertexSpaceDiagramPosition(new Point(0, 0));
+  // }
 
   // // eslint-disable-next-line class-methods-use-this
   // getGLPosition() {
@@ -1403,7 +1403,7 @@ class DiagramElement {
   }
 
   setDiagramPositionToElement(element: DiagramElement) {
-    const p = element.getDiagramPosition();
+    const p = element.getPosition('diagram');
     this.setDiagramPosition(p._dup());
   }
 
@@ -1912,18 +1912,14 @@ class DiagramElementPrimitive extends DiagramElement {
     return this.drawingObject.getGLBoundingRect(this.lastDrawTransform.matrix());
   }
 
-
-  // deprecated
   getRelativeVertexSpaceBoundingRect(): Rect {
     return this.drawingObject.getRelativeVertexSpaceBoundingRect();
   }
 
-  // deprecated
   getRelativeGLBoundingRect(): Rect {
     return this.drawingObject.getRelativeGLBoundingRect(this.lastDrawTransform.matrix());
   }
 
-  // deprecated
   getRelativeLocalBoundingRect(): Rect {
     return this.drawingObject.getRelativeGLBoundingRect(this.transform.matrix());
   }
@@ -2401,40 +2397,11 @@ class DiagramElementCollection extends DiagramElement {
     return getBoundingRect(points);
   }
 
-  // getRelativeBoundingRect(
-  //   space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
-  //   children: ?Array<string | DiagramElement> = null
-  // ) {
-  //   if (children == null) {
-  //     const boundaries = this.getBoundaries(space);
-  //     return getBoundingRect(boundaries);
-  //   }
-
-  //   const points = [];
-  //   children.forEach((child) => {
-  //     const e = this.getElement(child);
-  //     if (e == null) {
-  //       return;
-  //     }
-  //     const bound = e.getBoundingRect();
-  //     points.push(new Point(bound.left, bound.bottom));
-  //     points.push(new Point(bound.right, bound.top));
-  //   });
-  //   return getBoundingRect(points);
-  // }
-
-  // deprecated
   getGLBoundingRect() {
     const glAbsoluteBoundaries = this.getGLBoundaries();
     return getBoundingRect(glAbsoluteBoundaries);
   }
 
-  // getVertexSpaceBoundingRect() {
-  //   const boundaries = this.getVertexSpaceBoundaries();
-  //   return getBoundingRect(boundaries);
-  // }
-
-  // deprecated
   getVertexSpaceBoundingRect(elementsToBound: ?Array<string | DiagramElement> = null) {
     if (elementsToBound == null) {
       // return super.getDiagramBoundingRect();
@@ -2454,7 +2421,6 @@ class DiagramElementCollection extends DiagramElement {
     return getBoundingRect(points);
   }
 
-  // deprecated
   getRelativeGLBoundingRect() {
     const boundingRect = this.getGLBoundingRect();
 

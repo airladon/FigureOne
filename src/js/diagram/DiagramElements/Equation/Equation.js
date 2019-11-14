@@ -417,14 +417,14 @@ export class EquationNew extends DiagramElementCollection {
     this.eqn.descriptionPosition = descriptionPosition;
     if (this.eqn.descriptionElement) {
       this.eqn.descriptionElement
-        .setPosition(this.getDiagramPosition()
+        .setPosition(this.getPosition('diagram')
           .add(descriptionPosition));
     }
   }
 
   setPosition(pointOrX: Point | number, y: number = 0) {
     super.setPosition(pointOrX, y);
-    const position = this.getDiagramPosition();
+    const position = this.getPosition('diagram');
     // console.log(this.eqn, this.eqn.descriptionElement)
     if (this.eqn.descriptionElement != null) {
       this.eqn.descriptionElement.setPosition(position.add(this.eqn.descriptionPosition));
