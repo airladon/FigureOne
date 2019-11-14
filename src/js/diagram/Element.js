@@ -1259,40 +1259,6 @@ class DiagramElement {
     );
   }
 
-  getLocalPosition() {
-    const t = this.transform.t();
-    let position = new Point(0, 0);
-    if (t != null) {
-      position = t._dup();
-    }
-    return position;
-  }
-
-  getDiagramPosition() {
-    return new Point(0, 0);
-  }
-
-  getGLPosition() {
-    return new Point(0, 0);
-  }
-
-  getPosition(space: 'local' | 'diagram' | 'gl' = 'local') {
-    if (space === 'local') {
-      return this.getLocalPosition();
-    } else if (space === 'diagramm') {
-      return this.getDiagramPosition();
-    } else if (space === 'gl') {
-      return this.getGLPosition();
-    }
-    return new Point(0, 0);
-    // const t = this.transform.t();
-    // let position = new Point(0, 0);
-    // if (t != null) {
-    //   position = t._dup();
-    // }
-    // return position;
-  }
-
   getScale() {
     const s = this.transform.s();
     let scale = new Point(0, 0);
@@ -1335,10 +1301,46 @@ class DiagramElement {
     return location.transformBy(glToDiagramSpace.matrix());
   }
 
+  getLocalPosition() {
+    const t = this.transform.t();
+    let position = new Point(0, 0);
+    if (t != null) {
+      position = t._dup();
+    }
+    return position;
+  }
+
+  // deprecated
   getDiagramPosition() {
     // Note, this should be 0,0 as the current transform's translation will
     // be included in getVertexSpaceDiagramPosition
     return this.getVertexSpaceDiagramPosition(new Point(0, 0));
+  }
+
+  // // eslint-disable-next-line class-methods-use-this
+  // getGLPosition() {
+  //   return new Point(0, 0);
+  // }
+
+  getPosition(space: 'local' | 'diagram' | 'gl' | 'vertex' = 'local') {
+    // vertex space position doesn't mean much as it will always be 0, 0
+    if (space === 'vertex') {
+      return new Point(0, 0);
+    }
+    if (space === 'local') {
+      return this.getLocalPosition();
+    }
+    if (space === 'diagram') {
+      // Note, this should be 0,0 as the current transform's translation will
+      // be included in getVertexSpaceDiagramPosition
+      return this.getVertexSpaceDiagramPosition(new Point(0, 0));
+    }
+    if (space === 'gl') {
+      // Note, this should be 0,0 as the current transform's translation will
+      // be included in getVertexSpaceDiagramPosition
+      return (new Point(0, 0)).transformBy(this.lastDrawTransform.matrix());
+    }
+    return new Point(0, 0);
   }
 
   getPixelToVertexSpaceScale() {
@@ -1961,7 +1963,7 @@ class DiagramElementCollection extends DiagramElement {
   touchInBoundingRect: boolean;
   eqns: Object;
   +pulse: (?(Array<string | DiagramElement> | (mixed) => void), ?(mixed) => void) => void;
-  +getElement: (?string) => ?DiagramElement;
+  +getElement: (?(string | DiagramElement)) => ?DiagramElement;
   +exec: (string | Array<Object>, ?Array<string | DiagramElement>) => void;
   +highlight: (elementsToDim: ?Array<string | DiagramElement>) => void;
 
@@ -2152,7 +2154,7 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  getElement(elementPath: ?string | DiagramElement = null) {
+  getElement(elementPath: ?(string | DiagramElement) = null) {
     if (elementPath == null) {
       return this;
     }
@@ -2308,11 +2310,26 @@ class DiagramElementCollection extends DiagramElement {
     this.setMoveBoundaryToDiagram();
   }
 
+  getAllBoundaries(space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local') {
+    let boundaries = [];
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element.isShown) {
+        const elementBoundaries = element.getBoundaries(space);
+        boundaries = boundaries.concat(elementBoundaries);
+      }
+    }
+    return boundaries;
+  }
+
   getBoundaries(
     space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
-    children: ?Array<string | DiagramElement> = null
+    children: ?Array<string | DiagramElement> = null,
   ) {
     let boundaries = [];
+    if (children == null) {
+      return this.getAllBoundaries();
+    }
     children.forEach((child) => {
       const e = this.getElement(child);
       if (e == null) {
@@ -2364,7 +2381,7 @@ class DiagramElementCollection extends DiagramElement {
 
   getBoundingRect(
     space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
-    children: ?Array<string | DiagramElement> = null
+    children: ?Array<string | DiagramElement> = null,
   ) {
     if (children == null) {
       const boundaries = this.getBoundaries(space);

@@ -772,8 +772,8 @@ export default class DiagramPrimitives {
   // }
 
   rectangle(...optionsIn: Array<{
-    alignV: 'bottom' | 'middle' | 'top' | number,
-    alignH: 'left' | 'center' | 'right' | number,
+    alignV?: 'bottom' | 'middle' | 'top' | number,
+    alignH?: 'left' | 'center' | 'right' | number,
     width?: number,
     height?: number,
     fill?: boolean,
