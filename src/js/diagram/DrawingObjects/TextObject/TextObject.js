@@ -393,7 +393,16 @@ class TextObject extends DrawingObject {
   // Estimates are made for height based on width.
   // eslint-disable-next-line class-methods-use-this
   measureText(ctx: CanvasRenderingContext2D, text: DiagramText) {
-    const aWidth = ctx.measureText('a').width;
+    // const aWidth = ctx.measureText('a').width;
+    // const { font } = ctx;
+    const fontHeight = ctx.font.match(/[^ ]*px/);
+    let aWidth;
+    if (fontHeight != null) {
+      aWidth = parseFloat(fontHeight[0]) / 2;
+    } else {
+      aWidth = ctx.measureText('a').width;
+    }
+    // const aWidth = parseFloat(ctx.font.match(/[^ ]*px/)[0]) / 2;
 
     // Estimations of FONT ascent and descent for a baseline of "alphabetic"
     let ascent = aWidth * 1.4;
