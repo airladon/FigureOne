@@ -31,6 +31,8 @@ export default class EquationSymbols {
       color?: Array<number>,
       numLines?: number,
       side?: 'left' | 'right' | 'bottom' | 'top',
+      width?: number,
+      fill?: boolean,
     },
   ) {
     if (name === 'vinculum') {
@@ -60,6 +62,9 @@ export default class EquationSymbols {
     if (name === 'roundedSquareBracket') {
       return this.roundedSquareBracket(options);
     }
+    if (name === 'box') {
+      return this.box(options);
+    }
     return null;
   }
 
@@ -74,6 +79,48 @@ export default class EquationSymbols {
       color,
       new Transform('vinculum').scale(1, 1).translate(0, 0),
     );
+  }
+
+  box(optionsIn: { color?: Array<number>, fill: ?boolean, width: ?number}) {
+    const defaultOptions = {
+      color: this.defaultColor,
+      fill: false,
+      width: 0.01,
+    };
+    const options = joinObjects(defaultOptions, optionsIn);
+    let box;
+    if (options.fill === false) {
+      box = this.shapes.polyLine({
+        points: [
+          new Point(-0.5, -0.5), new Point(-0.5, 0.5),
+          new Point(0.5, 0.5), new Point(0.5, -0.5),
+        ],
+        color: options.color,
+        width: options.width,
+        close: true,
+      });
+      box.setSize = (rect: Rect) => {
+        box.drawingObject.change([
+          new Point(-rect.width / 2, -rect.height / 2),
+          new Point(-rect.width / 2, rect.height / 2),
+          new Point(rect.width / 2, rect.height / 2),
+          new Point(rect.width / 2, -rect.height / 2),
+        ]);
+        box.setPosition(rect.left + rect.width / 2, rect.bottom + rect.height / 2);
+      };
+    } else {
+      box = this.shapes.rectangle({
+        color: options.color,
+      });
+      box.setSize = (rect: Rect) => {
+        box.setScale(rect.width, rect.height);
+        box.setPosition(
+          rect.left + rect.width / 2,
+          rect.bottom + rect.height / 2,
+        );
+      };
+    }
+    return box;
   }
 
   strike(options: { color?: Array<number> } = {}) {
