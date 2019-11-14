@@ -1,6 +1,6 @@
 // @flow
 import {
-  Point, Transform,
+  Point, Transform, Rect,
 } from '../../../tools/g2';
 import { joinObjects } from '../../../tools/tools';
 import DiagramPrimitives from '../../DiagramPrimitives/DiagramPrimitives';
@@ -81,7 +81,7 @@ export default class EquationSymbols {
     );
   }
 
-  box(optionsIn: { color?: Array<number>, fill: ?boolean, width: ?number}) {
+  box(optionsIn: { color?: Array<number>, fill?: boolean, width?: number}) {
     const defaultOptions = {
       color: this.defaultColor,
       fill: false,
