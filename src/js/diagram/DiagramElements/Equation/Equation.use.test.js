@@ -368,13 +368,13 @@ describe('Different ways to make an equation', () => {
   test('Equation Form Alignment', () => {
     ways.equationFormAlignment();
     eqn.showForm('originBasline');
-    const originBasline = eqn._a.getDiagramPosition();
+    const originBasline = eqn._a.getPosition('diagram');
     eqn.showForm('aCenterTop');
-    const aCenterTop = eqn._a.getDiagramPosition();
+    const aCenterTop = eqn._a.getPosition('diagram');
     eqn.showForm('aRightMiddle');
-    const aRightMiddle = eqn._a.getDiagramPosition();
+    const aRightMiddle = eqn._a.getPosition('diagram');
     eqn.showForm('bRightBottom');
-    const bRightBottom = eqn._a.getDiagramPosition();
+    const bRightBottom = eqn._a.getPosition('diagram');
 
     // Test x positions
     expect(originBasline.x > aCenterTop.x).toBe(true);
