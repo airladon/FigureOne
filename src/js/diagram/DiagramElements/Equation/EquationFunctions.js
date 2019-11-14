@@ -18,6 +18,7 @@ import { Brackets, Bar } from './Elements/Brackets';
 import EquationForm from './EquationForm';
 import { Annotation, AnnotationInformation } from './Elements/Annotation';
 import Padding from './Elements/Padding';
+import Box from './Elements/Box';
 
 export function getDiagramElement(
   elementsObject: { [string: string]: DiagramElementPrimitive |
@@ -114,10 +115,22 @@ export type TypeStrikeObject = {
   symbol: string;
   strikeInSize?: boolean;
 };
+export type TypeBoxObject = {
+  content: TypeEquationPhrase;
+  symbol: string;
+  inSize?: boolean;
+  space: number;
+};
 export type TypeStrikeArray = [
   TypeEquationPhrase,
   string,
   ?boolean,
+];
+export type TypeBoxArray = [
+  TypeEquationPhrase,
+  string,
+  ?boolean,
+  ?number,
 ];
 export type TypeBracketObject = {
   content: TypeEquationPhrase;
@@ -355,6 +368,7 @@ export class EquationFunctions {
     // $FlowFixMe
     if (name === 'frac') { return this.frac(params); }        // $FlowFixMe
     if (name === 'strike') { return this.strike(params); }    // $FlowFixMe
+    if (name === 'box') { return this.box(params); }    // $FlowFixMe
     if (name === 'brac') { return this.brac(params); }        // $FlowFixMe
     if (name === 'sub') { return this.sub(params); }          // $FlowFixMe
     if (name === 'sup') { return this.sup(params); }          // $FlowFixMe
@@ -565,6 +579,37 @@ export class EquationFunctions {
       this.contentToElement(content),                     // $FlowFixMe
       getDiagramElement(this.elements, symbol),           // $FlowFixMe
       strikeInSize,
+    );
+  }
+
+  box(
+    optionsOrContent: TypeBoxObject | TypeBoxArray | TypeEquationPhrase,
+    sym: string | null = null,
+    boxInSize: boolean | null = null,
+    spaceIn: number | null = null,
+    // options: TypeStrikeObject | TypeStrikeArray) {
+  ) {
+    let content;
+    let symbol;
+    let inSize;
+    let space;
+    if (!(sym == null && boxInSize == null && spaceIn == null)) {
+      content = optionsOrContent;
+      symbol = sym;
+      inSize = boxInSize;
+      space = spaceIn;
+    } else if (Array.isArray(optionsOrContent)) {         // $FlowFixMe
+      [content, symbol, inSize, space] = optionsOrContent;
+    } else {
+      ({                                                  // $FlowFixMe
+        content, symbol, inSize, space,
+      } = optionsOrContent);
+    }
+    return new Box(                                    // $FlowFixMe
+      this.contentToElement(content),                     // $FlowFixMe
+      getDiagramElement(this.elements, symbol),           // $FlowFixMe
+      inSize,
+      space,
     );
   }
 

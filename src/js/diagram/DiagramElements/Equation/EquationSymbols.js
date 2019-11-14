@@ -1,14 +1,16 @@
 // @flow
 import {
-  Point, Transform, Rect,
+  Point, Transform,
 } from '../../../tools/g2';
 import { joinObjects } from '../../../tools/tools';
 import DiagramPrimitives from '../../DiagramPrimitives/DiagramPrimitives';
+// import { DiagramElementCollection } from '../../Element';
 import Integral from './Symbols/Integral';
 // import SuperSub from './Elements/SuperSub';
 import Bracket from './Symbols/Bracket';
 import RoundedSquareBracket from './Symbols/RoundedSquareBracket';
 import Bar from './Symbols/Bar';
+import Box from './Symbols/Box';
 import Brace from './Symbols/Brace';
 import SquareBracket from './Symbols/SquareBracket';
 // import { Annotation, AnnotationInformation } from './Elements/Annotation';
@@ -88,39 +90,7 @@ export default class EquationSymbols {
       width: 0.01,
     };
     const options = joinObjects(defaultOptions, optionsIn);
-    let box;
-    if (options.fill === false) {
-      box = this.shapes.polyLine({
-        points: [
-          new Point(-0.5, -0.5), new Point(-0.5, 0.5),
-          new Point(0.5, 0.5), new Point(0.5, -0.5),
-        ],
-        color: options.color,
-        width: options.width,
-        close: true,
-      });
-      box.setSize = (rect: Rect) => {
-        box.drawingObject.change([
-          new Point(-rect.width / 2, -rect.height / 2),
-          new Point(-rect.width / 2, rect.height / 2),
-          new Point(rect.width / 2, rect.height / 2),
-          new Point(rect.width / 2, -rect.height / 2),
-        ]);
-        box.setPosition(rect.left + rect.width / 2, rect.bottom + rect.height / 2);
-      };
-    } else {
-      box = this.shapes.rectangle({
-        color: options.color,
-      });
-      box.setSize = (rect: Rect) => {
-        box.setScale(rect.width, rect.height);
-        box.setPosition(
-          rect.left + rect.width / 2,
-          rect.bottom + rect.height / 2,
-        );
-      };
-    }
-    return box;
+    return Box(this.shapes, options.color, options.fill, options.width);
   }
 
   strike(options: { color?: Array<number> } = {}) {

@@ -224,6 +224,7 @@ class DiagramElement {
   renderedOnNextDraw: boolean;
   unrenderNextDraw: boolean;
 
+  custom: { [string]: any };
   // scenarioSet: {
   //   quiz1: [
   //     { element: xyz, position: (), scale: (), rotation: (), length: () }
@@ -265,6 +266,7 @@ class DiagramElement {
       parentCount: 0,
       elementCount: 0,
     };
+    this.custom = {};
     this.parent = parent;
     this.drawPriority = 1;
     this.noRotationFromParent = false;
