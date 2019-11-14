@@ -2205,9 +2205,35 @@ class DiagramElementCollection extends DiagramElement {
     return getBoundingRect(glAbsoluteBoundaries);
   }
 
-  getVertexSpaceBoundingRect() {
-    const boundaries = this.getVertexSpaceBoundaries();
-    return getBoundingRect(boundaries);
+  // getVertexSpaceBoundingRect() {
+  //   const boundaries = this.getVertexSpaceBoundaries();
+  //   return getBoundingRect(boundaries);
+  // }
+
+  getVertexSpaceBoundingRect(elementsToBound: ?Array<string | DiagramElement> = null) {
+    if (elementsToBound == null) {
+      // return super.getDiagramBoundingRect();
+      const boundaries = this.getVertexSpaceBoundaries();
+      return getBoundingRect(boundaries);
+    }
+    const points = [];
+    elementsToBound.forEach((element) => {
+      let e;
+      if (typeof element === 'string') {
+        e = this.getElement(element);
+      } else {
+        e = element;
+      }
+      if (e == null) {
+        return;
+      }
+      const bound = e.getVertexSpaceBoundingRect();
+      // boundaries.push(new Point elementBoundaries]
+
+      points.push(new Point(bound.left, bound.bottom));
+      points.push(new Point(bound.right, bound.top));
+    });
+    return getBoundingRect(points);
   }
 
   getRelativeGLBoundingRect() {
@@ -2369,6 +2395,28 @@ class DiagramElementCollection extends DiagramElement {
 
     this.dim();
     this.exec('undim', elementsToHighlight);
+  }
+
+  getDiagramBoundingRect(elementsToBound: ?Array<string | DiagramElement> = null) {
+    if (elementsToBound == null) {
+      return super.getDiagramBoundingRect();
+    }
+    const points = [];
+    elementsToBound.forEach((element) => {
+      let e;
+      if (typeof element === 'string') {
+        e = this.getElement(element);
+      } else {
+        e = element;
+      }
+      if (e == null) {
+        return;
+      }
+      const bound = e.getDiagramBoundingRect();
+      points.push(new Point(bound.left, bound.bottom));
+      points.push(new Point(bound.right, bound.top));
+    });
+    return getBoundingRect(points);
   }
 
   setOpacity(opacity: number) {
