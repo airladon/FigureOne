@@ -476,7 +476,7 @@ describe('Diagram Equations From Object', () => {
     expect(form.fromNext.translation.a.mag).toBe(0.2);
 
     eqn.showForm('0');
-    expect(eqn._a.getPosition().round(3)).toEqual(new Point(-0.072, 0.004));
+    expect(eqn._a.getPosition().round(3)).toEqual(new Point(-0.072, 0.01));
     expect(eqn._a.getScale().round(3)).toEqual(new Point(1.2, 1.2));
   });
 });
