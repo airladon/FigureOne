@@ -133,10 +133,10 @@ describe('Diagram Text Object', () => {
         const to = new TextObject(draw2D, textArray);
         const b = to.getGLBoundaryOfText(textArray[0], m2.identity());
         expect(b).toEqual([
-          new Point(-10, 14.8),
-          new Point(10, 14.8),
-          new Point(10, -14.8),
-          new Point(-10, -14.8),
+          new Point(-10, 7.4),
+          new Point(10, 7.4),
+          new Point(10, -7.4),
+          new Point(-10, -7.4),
         ]);
       });
       test('Text Boundary for 1, 1 location, no scaling, 0.5 transformation sacle', () => {
@@ -146,10 +146,10 @@ describe('Diagram Text Object', () => {
           new Transform().scale(0.5, 0.5).matrix(),
         );
         expect(b).toEqual([
-          new Point(-4.5, 7.9),
-          new Point(5.5, 7.9),
-          new Point(5.5, -6.9),
-          new Point(-4.5, -6.9),
+          new Point(-4.5, 4.2),
+          new Point(5.5, 4.2),
+          new Point(5.5, -3.2),
+          new Point(-4.5, -3.2),
         ]);
       });
       test('All Text Boundaries', () => {
@@ -157,16 +157,16 @@ describe('Diagram Text Object', () => {
         const b = to.getGLBoundaries(new Transform().scale(0.5, 0.5).translate(1, 1).matrix());
         expect(b).toEqual([
           [
-            new Point(-4, 8.4),
-            new Point(6, 8.4),
-            new Point(6, -6.4),
-            new Point(-4, -6.4),
+            new Point(-4, 4.7),
+            new Point(6, 4.7),
+            new Point(6, -2.7),
+            new Point(-4, -2.7),
           ],
           [
-            new Point(-3.5, 8.9),
-            new Point(6.5, 8.9),
-            new Point(6.5, -5.9),
-            new Point(-3.5, -5.9),
+            new Point(-3.5, 5.2),
+            new Point(6.5, 5.2),
+            new Point(6.5, -2.2),
+            new Point(-3.5, -2.2),
           ],
         ]);
       });
