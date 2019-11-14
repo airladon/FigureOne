@@ -394,7 +394,6 @@ class TextObject extends DrawingObject {
   // eslint-disable-next-line class-methods-use-this
   measureText(ctx: CanvasRenderingContext2D, text: DiagramText) {
     // const aWidth = ctx.measureText('a').width;
-    // const { font } = ctx;
     const fontHeight = ctx.font.match(/[^ ]*px/);
     let aWidth;
     if (fontHeight != null) {
