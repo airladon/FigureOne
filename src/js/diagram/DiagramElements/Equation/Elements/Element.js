@@ -74,7 +74,6 @@ class Element {
       this.descent = -r.bottom * scale;
       this.height = r.height * scale;
       this.width = r.width * scale;
-      // console.log(this.height)
     }
   }
 
