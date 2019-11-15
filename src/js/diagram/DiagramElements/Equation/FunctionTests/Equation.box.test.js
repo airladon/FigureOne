@@ -32,7 +32,8 @@ describe('Equation Functions - Strike', () => {
       // e: 'e',
       // f: 'f',
       // g: 'g',
-      box: { symbol: 'box', color: [0, 0.9, 0, 1] },
+      box: { symbol: 'box', color: [0, 0.9, 0, 1], width: 0.1 },
+      box1: { symbol: 'box', color: [0, 0.9, 0, 1], fill: true },
     };
     functions = {
       single: () => {
@@ -99,6 +100,10 @@ describe('Equation Functions - Strike', () => {
           2: e.box('a', 'box', true, 0.1),
         });
       },
+      box: () => {
+        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn.addElements(elements);
+      },
     };
   });
   test('Box', () => {
@@ -146,5 +151,63 @@ describe('Equation Functions - Strike', () => {
       const positions = elems.map(elem => round(elem.transform.mat).slice());
       expect(withPos).toEqual(positions);
     });
+  });
+  test('Box Line Element', () => {
+    functions.box();
+    const w = 0.1;
+    const box = eqn._box;
+    const a = eqn._a.getBoundingRect();
+    box.custom.setSize(a);
+
+    let bx = box.getBoundingRect();
+    expect(round(bx.left)).toEqual(round(a.left - w / 2));
+    expect(round(bx.width)).toEqual(round(a.width + w));
+    expect(round(bx.bottom)).toEqual(round(a.bottom - w / 2));
+    expect(round(bx.height)).toEqual(round(a.height + w));
+
+    let s = 0.1; // space
+    box.custom.setSize(a, s);
+    bx = box.getBoundingRect();
+    expect(round(bx.left)).toEqual(round(a.left - w / 2 - s));
+    expect(round(bx.width)).toEqual(round(a.width + w + 2 * s));
+    expect(round(bx.bottom)).toEqual(round(a.bottom - w / 2 - s));
+    expect(round(bx.height)).toEqual(round(a.height + w + 2 * s));
+
+    s = 0.2;
+    box.custom.setSize(eqn, ['a'], s);
+    bx = box.getBoundingRect();
+    expect(round(bx.left)).toEqual(round(a.left - w / 2 - s));
+    expect(round(bx.width)).toEqual(round(a.width + w + 2 * s));
+    expect(round(bx.bottom)).toEqual(round(a.bottom - w / 2 - s));
+    expect(round(bx.height)).toEqual(round(a.height + w + 2 * s));
+  });
+  test('Box Fill Element', () => {
+    functions.box();
+    const w = 0;
+    const box = eqn._box1;
+    const a = eqn._a.getBoundingRect();
+    box.custom.setSize(a);
+
+    let bx = box.getBoundingRect();
+    expect(round(bx.left)).toEqual(round(a.left - w / 2));
+    expect(round(bx.width)).toEqual(round(a.width + w));
+    expect(round(bx.bottom)).toEqual(round(a.bottom - w / 2));
+    expect(round(bx.height)).toEqual(round(a.height + w));
+
+    let s = 0.1; // space
+    box.custom.setSize(a, s);
+    bx = box.getBoundingRect();
+    expect(round(bx.left)).toEqual(round(a.left - w / 2 - s));
+    expect(round(bx.width)).toEqual(round(a.width + w + 2 * s));
+    expect(round(bx.bottom)).toEqual(round(a.bottom - w / 2 - s));
+    expect(round(bx.height)).toEqual(round(a.height + w + 2 * s));
+
+    s = 0.2;
+    box.custom.setSize(eqn, ['a'], s);
+    bx = box.getBoundingRect();
+    expect(round(bx.left)).toEqual(round(a.left - w / 2 - s));
+    expect(round(bx.width)).toEqual(round(a.width + w + 2 * s));
+    expect(round(bx.bottom)).toEqual(round(a.bottom - w / 2 - s));
+    expect(round(bx.height)).toEqual(round(a.height + w + 2 * s));
   });
 });

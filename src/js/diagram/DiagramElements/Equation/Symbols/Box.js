@@ -8,6 +8,30 @@ import {
 } from '../../../../tools/g2';
 // import WebGLInstance from '../../../webgl/webgl';
 
+function getRectAndSpace(
+  rectOrParent: Rect | DiagramElementCollection,
+  childrenOrSpace: ?Array<string | DiagramElement> = null,
+  space: ?number = null,
+) {
+  let rectToUse;
+  let spaceToUse = 0;
+  if (rectOrParent instanceof Rect) {
+    rectToUse = rectOrParent;
+    if (typeof childrenOrSpace === 'number') {
+      spaceToUse = childrenOrSpace;
+    }
+  } else if (typeof childrenOrSpace === 'number') {
+    spaceToUse = childrenOrSpace;
+    rectToUse = rectOrParent.getBoundingRect('local');
+  } else {
+    rectToUse = rectOrParent.getBoundingRect('local', childrenOrSpace);
+    if (typeof space === 'number') {
+      spaceToUse = space;
+    }
+  }
+  return [rectToUse, spaceToUse];
+}
+
 export default function Box(
   shapes: DiagramPrimitives,
   color: Array<number>,
@@ -23,14 +47,11 @@ export default function Box(
       transform: new Transform('box').scale(1, 1).translate(0, 0),
     });
     // eslint-disable-next-line max-len
-    box.custom.setSize = (rectOrParent: Rect | DiagramElementCollection, children: ?Array<string | DiagramElement> = null) => {
-      let rectToUse;
-      if (rectOrParent instanceof Rect) {
-        rectToUse = rectOrParent;
-      } else {
-        rectToUse = rectOrParent.getBoundingRect('local', children);
-      }
-      box.setScale(rectToUse.width, rectToUse.height);
+    box.custom.setSize = (rectOrParent: Rect | DiagramElementCollection, childrenOrSpace: ?Array<string | DiagramElement> = null, space: ?number = null) => {
+      const [rectToUse, spaceToUse] = getRectAndSpace(
+        rectOrParent, childrenOrSpace, space,
+      );
+      box.setScale(rectToUse.width + spaceToUse * 2, rectToUse.height + spaceToUse * 2);
       box.setPosition(
         rectToUse.left + rectToUse.width / 2,
         rectToUse.bottom + rectToUse.height / 2,
@@ -49,18 +70,15 @@ export default function Box(
     });
     box.custom.lineWidth = width;
     // eslint-disable-next-line max-len
-    box.custom.setSize = (rectOrParent: Rect | DiagramElementCollection, children: ?Array<string | DiagramElement> = null) => {
-      let rectToUse;
-      if (rectOrParent instanceof Rect) {
-        rectToUse = rectOrParent;
-      } else {
-        rectToUse = rectOrParent.getBoundingRect('local', children);
-      }
+    box.custom.setSize = (rectOrParent: Rect | DiagramElementCollection, childrenOrSpace: ?Array<string | DiagramElement> = null, space: ?number = null) => {
+      const [rectToUse, spaceToUse] = getRectAndSpace(
+        rectOrParent, childrenOrSpace, space,
+      );
       box.drawingObject.change([
-        new Point(-rectToUse.width / 2, -rectToUse.height / 2),
-        new Point(-rectToUse.width / 2, rectToUse.height / 2),
-        new Point(rectToUse.width / 2, rectToUse.height / 2),
-        new Point(rectToUse.width / 2, -rectToUse.height / 2),
+        new Point(-rectToUse.width / 2 - spaceToUse, -rectToUse.height / 2 - spaceToUse),
+        new Point(-rectToUse.width / 2 - spaceToUse, rectToUse.height / 2 + spaceToUse),
+        new Point(rectToUse.width / 2 + spaceToUse, rectToUse.height / 2 + spaceToUse),
+        new Point(rectToUse.width / 2 + spaceToUse, -rectToUse.height / 2 - spaceToUse),
       ]);
       box.setPosition(
         rectToUse.left + rectToUse.width / 2,
@@ -69,13 +87,4 @@ export default function Box(
     };
   }
   return box;
-  // const vertices = new VertexBar(webgl, side, numLines);
-  // let transform = new Transform();
-  // if (transformOrLocation instanceof Point) {
-  //   transform = transform.translate(transformOrLocation.x, transformOrLocation.y);
-  // } else {
-  //   transform = transformOrLocation._dup();
-  // }
-
-  // return new DiagramElementPrimitive(vertices, transform, color, diagramLimits);
 }
