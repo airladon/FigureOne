@@ -24,6 +24,7 @@ const webgl = {
     pixelStorei: () => {},
     texImage2D: () => {},
     blendFunc: () => {},
+    deleteBuffer: () => {},
   },
   resize: () => {},
   getProgram: () => {},
