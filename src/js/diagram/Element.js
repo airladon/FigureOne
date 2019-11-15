@@ -2325,7 +2325,7 @@ class DiagramElementCollection extends DiagramElement {
 
   setFirstTransform(parentTransform: Transform = new Transform()) {
     // const finalParentTransform = this.processParentTransform(parentTransform);
-    const firstTransform = parentTransform.transform(this.transform);
+    const firstTransform = parentTransform.transform(this.getTransform());
     this.lastDrawTransform = firstTransform;
 
     for (let i = 0; i < this.drawOrder.length; i += 1) {
