@@ -47,16 +47,16 @@ export default function Box(
       transform: new Transform('box').scale(1, 1).translate(0, 0),
     });
     // eslint-disable-next-line max-len
-    box.custom.setSize = (rectOrParent: Rect | DiagramElementCollection, childrenOrSpace: ?Array<string | DiagramElement> = null, space: ?number = null) => {
-      const [rectToUse, spaceToUse] = getRectAndSpace(
-        rectOrParent, childrenOrSpace, space,
-      );
-      box.setScale(rectToUse.width + spaceToUse * 2, rectToUse.height + spaceToUse * 2);
-      box.setPosition(
-        rectToUse.left + rectToUse.width / 2,
-        rectToUse.bottom + rectToUse.height / 2,
-      );
-    };
+    // box.custom.setSize = (rectOrParent: Rect | DiagramElementCollection, childrenOrSpace: ?Array<string | DiagramElement> = null, space: ?number = null) => {
+    //   const [rectToUse, spaceToUse] = getRectAndSpace(
+    //     rectOrParent, childrenOrSpace, space,
+    //   );
+    //   box.setScale(rectToUse.width + spaceToUse * 2, rectToUse.height + spaceToUse * 2);
+    //   box.setPosition(
+    //     rectToUse.left + rectToUse.width / 2,
+    //     rectToUse.bottom + rectToUse.height / 2,
+    //   );
+    // };
   } else {
     box = shapes.polyLine({
       points: [
@@ -69,22 +69,64 @@ export default function Box(
       transform: new Transform('box').scale(1, 1).translate(0, 0),
     });
     box.custom.lineWidth = width;
-    // eslint-disable-next-line max-len
-    box.custom.setSize = (rectOrParent: Rect | DiagramElementCollection, childrenOrSpace: ?Array<string | DiagramElement> = null, space: ?number = null) => {
-      const [rectToUse, spaceToUse] = getRectAndSpace(
-        rectOrParent, childrenOrSpace, space,
-      );
+    box.custom.scale = (x, y) => {
       box.drawingObject.change([
-        new Point(-rectToUse.width / 2 - spaceToUse, -rectToUse.height / 2 - spaceToUse),
-        new Point(-rectToUse.width / 2 - spaceToUse, rectToUse.height / 2 + spaceToUse),
-        new Point(rectToUse.width / 2 + spaceToUse, rectToUse.height / 2 + spaceToUse),
-        new Point(rectToUse.width / 2 + spaceToUse, -rectToUse.height / 2 - spaceToUse),
+        new Point(-x / 2, -y / 2),
+        new Point(-x / 2, y / 2),
+        new Point(x / 2, y / 2),
+        new Point(x / 2, -y / 2),
       ]);
-      box.setPosition(
-        rectToUse.left + rectToUse.width / 2,
-        rectToUse.bottom + rectToUse.height / 2,
-      );
     };
+    box.setTransform = (transform: Transform) => {
+      box.transform = transform._dup().clip(
+        box.move.minTransform,
+        box.move.maxTransform,
+        box.move.limitLine,
+      );
+      const s = box.getScale();
+      // if (s.x !== 1 || s.y !== 1) {
+      box.custom.scale(s.x, s.y);
+      // box.setScale(1, 1);
+      // }
+      if (box.setTransformCallback) {
+        box.setTransformCallback();
+      }
+    };
+    box.getTransform = () => {
+      const t = box.transform._dup();
+      t.updateScale(1, 1);
+      return t;
+    };
+    // eslint-disable-next-line max-len
+    // box.custom.setSize = (rectOrParent: Rect | DiagramElementCollection, childrenOrSpace: ?Array<string | DiagramElement> = null, space: ?number = null) => {
+    //   const [rectToUse, spaceToUse] = getRectAndSpace(
+    //     rectOrParent, childrenOrSpace, space,
+    //   );
+
+    //   box.setScale(rectToUse.width + spaceToUse * 2, rectToUse.height + spaceToUse * 2);
+    //   // box.drawingObject.change([
+    //   //   new Point(-rectToUse.width / 2 - spaceToUse, -rectToUse.height / 2 - spaceToUse),
+    //   //   new Point(-rectToUse.width / 2 - spaceToUse, rectToUse.height / 2 + spaceToUse),
+    //   //   new Point(rectToUse.width / 2 + spaceToUse, rectToUse.height / 2 + spaceToUse),
+    //   //   new Point(rectToUse.width / 2 + spaceToUse, -rectToUse.height / 2 - spaceToUse),
+    //   // ]);
+
+
+    //   box.setPosition(
+    //     rectToUse.left + rectToUse.width / 2,
+    //     rectToUse.bottom + rectToUse.height / 2,
+    //   );
+    // };
   }
+  box.custom.setSize = (rectOrParent: Rect | DiagramElementCollection, childrenOrSpace: ?Array<string | DiagramElement> = null, space: ?number = null) => {
+    const [rectToUse, spaceToUse] = getRectAndSpace(
+      rectOrParent, childrenOrSpace, space,
+    );
+    box.setScale(rectToUse.width + spaceToUse * 2, rectToUse.height + spaceToUse * 2);
+    box.setPosition(
+      rectToUse.left + rectToUse.width / 2,
+      rectToUse.bottom + rectToUse.height / 2,
+    );
+  };
   return box;
 }

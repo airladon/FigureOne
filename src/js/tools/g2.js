@@ -1126,6 +1126,7 @@ class Transform {
   index: number;
   name: string;
   _type: 'transform';
+  custom: ?Object;
 
   constructor(orderOrName: Array<Translation | Rotation | Scale> | string = [], name: string = '') {
     if (typeof orderOrName === 'string') {

@@ -1586,6 +1586,10 @@ class DiagramElement {
   //     this.isMovable = true;
   //   }
   // }
+
+  getTransform() {
+    return this.transform;
+  }
 }
 
 // ***************************************************************
@@ -1807,7 +1811,7 @@ class DiagramElementPrimitive extends DiagramElement {
         elementCount: this.transform.order.length,
       };
 
-      const newTransform = parentTransform.transform(this.transform);
+      const newTransform = parentTransform.transform(this.getTransform());
       const pulseTransforms = this.transformWithPulse(now, newTransform);
 
       // eslint-disable-next-line prefer-destructuring
@@ -2080,7 +2084,7 @@ class DiagramElementCollection extends DiagramElement {
         parentCount: parentTransform.order.length,
         elementCount: this.transform.order.length,
       };
-      const newTransform = parentTransform.transform(this.transform);
+      const newTransform = parentTransform.transform(this.getTransform());
       const pulseTransforms = this.transformWithPulse(now, newTransform);
 
       // eslint-disable-next-line prefer-destructuring
