@@ -32,6 +32,7 @@ DiagramElementPrimitive {
     0,
     1,
   ],
+  "custom": Object {},
   "defaultColor": Array [
     0.95,
     0,
@@ -371,6 +372,7 @@ DiagramElementPrimitive {
         0,
         1,
       ],
+      "custom": Object {},
       "defaultColor": Array [
         0.95,
         0,
@@ -861,6 +863,7 @@ DiagramElementPrimitive {
         0,
         1,
       ],
+      "custom": Object {},
       "defaultColor": Array [
         0.95,
         0,
@@ -1350,6 +1353,7 @@ DiagramElementPrimitive {
         0,
         1,
       ],
+      "custom": Object {},
       "defaultColor": Array [
         0.95,
         0,
@@ -1839,6 +1843,7 @@ DiagramElementPrimitive {
         0,
         1,
       ],
+      "custom": Object {},
       "defaultColor": Array [
         0.95,
         0,
@@ -1906,6 +1911,7 @@ DiagramElementPrimitive {
             "clearColor": [Function],
             "createBuffer": [Function],
             "createTexture": [Function],
+            "deleteBuffer": [Function],
             "drawArrays": [Function],
             "enableVertexAttribArray": [Function],
             "pixelStorei": [Function],
@@ -1960,6 +1966,7 @@ DiagramElementPrimitive {
               "clearColor": [Function],
               "createBuffer": [Function],
               "createTexture": [Function],
+              "deleteBuffer": [Function],
               "drawArrays": [Function],
               "enableVertexAttribArray": [Function],
               "pixelStorei": [Function],
@@ -2317,6 +2324,7 @@ DiagramElementPrimitive {
       0,
       1,
     ],
+    "custom": Object {},
     "defaultColor": Array [
       0.95,
       0,
@@ -2377,6 +2385,7 @@ DiagramElementPrimitive {
           0,
           1,
         ],
+        "custom": Object {},
         "defaultColor": Array [
           0.95,
           0,
@@ -2867,6 +2876,7 @@ DiagramElementPrimitive {
           0,
           1,
         ],
+        "custom": Object {},
         "defaultColor": Array [
           0.95,
           0,
@@ -3356,6 +3366,7 @@ DiagramElementPrimitive {
           0,
           1,
         ],
+        "custom": Object {},
         "defaultColor": Array [
           0.95,
           0,
@@ -3845,6 +3856,7 @@ DiagramElementPrimitive {
           0,
           1,
         ],
+        "custom": Object {},
         "defaultColor": Array [
           0.95,
           0,
@@ -3912,6 +3924,7 @@ DiagramElementPrimitive {
               "clearColor": [Function],
               "createBuffer": [Function],
               "createTexture": [Function],
+              "deleteBuffer": [Function],
               "drawArrays": [Function],
               "enableVertexAttribArray": [Function],
               "pixelStorei": [Function],
@@ -3966,6 +3979,7 @@ DiagramElementPrimitive {
                 "clearColor": [Function],
                 "createBuffer": [Function],
                 "createTexture": [Function],
+                "deleteBuffer": [Function],
                 "drawArrays": [Function],
                 "enableVertexAttribArray": [Function],
                 "pixelStorei": [Function],
@@ -4420,6 +4434,7 @@ DiagramElementPrimitive {
                         0,
                         1,
                       ],
+                      "custom": Object {},
                       "defaultColor": Array [
                         0.95,
                         0,
@@ -4921,6 +4936,7 @@ DiagramElementPrimitive {
                         0,
                         1,
                       ],
+                      "custom": Object {},
                       "defaultColor": Array [
                         0.95,
                         0,
@@ -5436,6 +5452,7 @@ DiagramElementPrimitive {
                   0,
                   1,
                 ],
+                "custom": Object {},
                 "defaultColor": Array [
                   0.95,
                   0,
@@ -5926,6 +5943,7 @@ DiagramElementPrimitive {
                   0,
                   1,
                 ],
+                "custom": Object {},
                 "defaultColor": Array [
                   0.95,
                   0,
@@ -6415,6 +6433,7 @@ DiagramElementPrimitive {
                   0,
                   1,
                 ],
+                "custom": Object {},
                 "defaultColor": Array [
                   0.95,
                   0,
@@ -6904,6 +6923,7 @@ DiagramElementPrimitive {
                   0,
                   1,
                 ],
+                "custom": Object {},
                 "defaultColor": Array [
                   0.95,
                   0,
@@ -6971,6 +6991,7 @@ DiagramElementPrimitive {
                       "clearColor": [Function],
                       "createBuffer": [Function],
                       "createTexture": [Function],
+                      "deleteBuffer": [Function],
                       "drawArrays": [Function],
                       "enableVertexAttribArray": [Function],
                       "pixelStorei": [Function],
@@ -7025,6 +7046,7 @@ DiagramElementPrimitive {
                         "clearColor": [Function],
                         "createBuffer": [Function],
                         "createTexture": [Function],
+                        "deleteBuffer": [Function],
                         "drawArrays": [Function],
                         "enableVertexAttribArray": [Function],
                         "pixelStorei": [Function],
@@ -7451,6 +7473,7 @@ DiagramElementPrimitive {
                                 0,
                                 1,
                               ],
+                              "custom": Object {},
                               "defaultColor": Array [
                                 0.95,
                                 0,
@@ -7962,6 +7985,7 @@ DiagramElementPrimitive {
                             0,
                             1,
                           ],
+                          "custom": Object {},
                           "defaultColor": Array [
                             0.95,
                             0,
@@ -8029,6 +8053,7 @@ DiagramElementPrimitive {
                                 "clearColor": [Function],
                                 "createBuffer": [Function],
                                 "createTexture": [Function],
+                                "deleteBuffer": [Function],
                                 "drawArrays": [Function],
                                 "enableVertexAttribArray": [Function],
                                 "pixelStorei": [Function],
@@ -8083,6 +8108,7 @@ DiagramElementPrimitive {
                                   "clearColor": [Function],
                                   "createBuffer": [Function],
                                   "createTexture": [Function],
+                                  "deleteBuffer": [Function],
                                   "drawArrays": [Function],
                                   "enableVertexAttribArray": [Function],
                                   "pixelStorei": [Function],
@@ -8458,6 +8484,7 @@ DiagramElementPrimitive {
                               0,
                               1,
                             ],
+                            "custom": Object {},
                             "defaultColor": Array [
                               0.95,
                               0,
@@ -9005,6 +9032,7 @@ DiagramElementPrimitive {
                         0,
                         1,
                       ],
+                      "custom": Object {},
                       "defaultColor": Array [
                         0.95,
                         0,
@@ -9072,6 +9100,7 @@ DiagramElementPrimitive {
                             "clearColor": [Function],
                             "createBuffer": [Function],
                             "createTexture": [Function],
+                            "deleteBuffer": [Function],
                             "drawArrays": [Function],
                             "enableVertexAttribArray": [Function],
                             "pixelStorei": [Function],
@@ -9126,6 +9155,7 @@ DiagramElementPrimitive {
                               "clearColor": [Function],
                               "createBuffer": [Function],
                               "createTexture": [Function],
+                              "deleteBuffer": [Function],
                               "drawArrays": [Function],
                               "enableVertexAttribArray": [Function],
                               "pixelStorei": [Function],
@@ -9500,6 +9530,7 @@ DiagramElementPrimitive {
                         0,
                         1,
                       ],
+                      "custom": Object {},
                       "defaultColor": Array [
                         0.95,
                         0,
@@ -10015,6 +10046,7 @@ DiagramElementPrimitive {
                   0,
                   1,
                 ],
+                "custom": Object {},
                 "defaultColor": Array [
                   0.95,
                   0,
@@ -10505,6 +10537,7 @@ DiagramElementPrimitive {
                   0,
                   1,
                 ],
+                "custom": Object {},
                 "defaultColor": Array [
                   0.95,
                   0,
@@ -10994,6 +11027,7 @@ DiagramElementPrimitive {
                   0,
                   1,
                 ],
+                "custom": Object {},
                 "defaultColor": Array [
                   0.95,
                   0,
@@ -11483,6 +11517,7 @@ DiagramElementPrimitive {
                   0,
                   1,
                 ],
+                "custom": Object {},
                 "defaultColor": Array [
                   0.95,
                   0,
@@ -11550,6 +11585,7 @@ DiagramElementPrimitive {
                       "clearColor": [Function],
                       "createBuffer": [Function],
                       "createTexture": [Function],
+                      "deleteBuffer": [Function],
                       "drawArrays": [Function],
                       "enableVertexAttribArray": [Function],
                       "pixelStorei": [Function],
@@ -11604,6 +11640,7 @@ DiagramElementPrimitive {
                         "clearColor": [Function],
                         "createBuffer": [Function],
                         "createTexture": [Function],
+                        "deleteBuffer": [Function],
                         "drawArrays": [Function],
                         "enableVertexAttribArray": [Function],
                         "pixelStorei": [Function],
@@ -11982,6 +12019,7 @@ DiagramElementPrimitive {
               0,
               1,
             ],
+            "custom": Object {},
             "defaultColor": Array [
               0.95,
               0,
@@ -12472,6 +12510,7 @@ DiagramElementPrimitive {
               0,
               1,
             ],
+            "custom": Object {},
             "defaultColor": Array [
               0.95,
               0,
@@ -12961,6 +13000,7 @@ DiagramElementPrimitive {
               0,
               1,
             ],
+            "custom": Object {},
             "defaultColor": Array [
               0.95,
               0,
@@ -13450,6 +13490,7 @@ DiagramElementPrimitive {
               0,
               1,
             ],
+            "custom": Object {},
             "defaultColor": Array [
               0.95,
               0,
@@ -13517,6 +13558,7 @@ DiagramElementPrimitive {
                   "clearColor": [Function],
                   "createBuffer": [Function],
                   "createTexture": [Function],
+                  "deleteBuffer": [Function],
                   "drawArrays": [Function],
                   "enableVertexAttribArray": [Function],
                   "pixelStorei": [Function],
@@ -13571,6 +13613,7 @@ DiagramElementPrimitive {
                     "clearColor": [Function],
                     "createBuffer": [Function],
                     "createTexture": [Function],
+                    "deleteBuffer": [Function],
                     "drawArrays": [Function],
                     "enableVertexAttribArray": [Function],
                     "pixelStorei": [Function],
@@ -13950,6 +13993,7 @@ DiagramElementPrimitive {
                       0,
                       1,
                     ],
+                    "custom": Object {},
                     "defaultColor": Array [
                       0.95,
                       0,
@@ -14432,6 +14476,7 @@ DiagramElementPrimitive {
                 0,
                 1,
               ],
+              "custom": Object {},
               "defaultColor": Array [
                 0.95,
                 0,
@@ -15170,6 +15215,7 @@ DiagramElementPrimitive {
                 "clearColor": [Function],
                 "createBuffer": [Function],
                 "createTexture": [Function],
+                "deleteBuffer": [Function],
                 "drawArrays": [Function],
                 "enableVertexAttribArray": [Function],
                 "pixelStorei": [Function],
@@ -15663,6 +15709,7 @@ DiagramElementPrimitive {
             "clearColor": [Function],
             "createBuffer": [Function],
             "createTexture": [Function],
+            "deleteBuffer": [Function],
             "drawArrays": [Function],
             "enableVertexAttribArray": [Function],
             "pixelStorei": [Function],

@@ -45,7 +45,7 @@ export default class Box extends Elements {
     }
     this.box = box;
     this.scaleModifier = 1;
-    this.lineWidth = 0.1;
+    this.lineWidth = 0.01;
     this.mainContent = mainContent;
     if (boxInSize == null) {
       this.boxInSize = false;
@@ -80,15 +80,15 @@ export default class Box extends Elements {
     this.location = location._dup();
     this.mainContent.calcSize(location, scale);
 
-    const boxWidth = this.mainContent.width + this.space * 2;
-    const boxHeight = this.mainContent.height + this.space * 2;
-
     let lineWidth = 0;
     if (this.box
        && this.box.lineWidth != null && typeof this.box.lineWidth === 'number'
     ) {
       ({ lineWidth } = this.box);
     }
+
+    const boxWidth = this.mainContent.width + this.space * 2;
+    const boxHeight = this.mainContent.height + this.space * 2;
 
     const bottomLeft = new Point(
       location.x - this.space,
@@ -102,26 +102,10 @@ export default class Box extends Elements {
       this.descent = this.mainContent.descent + this.space + lineWidth / 2;
       this.mainContent.offsetLocation(new Point(this.space, 0));
       bottomLeft.x += this.space;
-      // if (this.box) {
-      //   this.box.setSize(new Rect(
-      //     location.x,
-      //     location.y - this.descent + lineWidth / 2,
-      //     boxWidth,
-      //     boxHeight,
-      //   ));
-      // }
     } else {
       this.width = this.mainContent.width;
       this.ascent = this.mainContent.ascent + this.space;
       this.descent = this.mainContent.descent + this.space;
-      // if (this.box) {
-      //   this.box.setSize(new Rect(
-      //     location.x - this.space,
-      //     location.y - this.mainContent.descent - this.space,
-      //     boxWidth,
-      //     boxHeight,
-      //   ));
-      // }
     }
 
     this.height = this.descent + this.ascent;

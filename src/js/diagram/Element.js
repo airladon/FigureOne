@@ -196,6 +196,7 @@ class DiagramElement {
   +pulse: (any, ?any) => void;
   +exec: (any, any) => void;
   +getElement: (any) => ?DiagramElement;
+  +getElements: (any) => Array<DiagramElement>;
   +highlight: (any) => void;
   // +pulse: (Array<string | DiagramElement>) => void;
 
@@ -621,6 +622,10 @@ class DiagramElement {
 
   getElement() {
     return this;
+  }
+
+  getElements() {
+    return [this];
   }
 
   // eslint-disable-next-line no-unused-vars, class-methods-use-this
@@ -1962,6 +1967,7 @@ class DiagramElementCollection extends DiagramElement {
   eqns: Object;
   +pulse: (?(Array<string | DiagramElement> | (mixed) => void), ?(mixed) => void) => void;
   +getElement: (?(string | DiagramElement)) => ?DiagramElement;
+  +getElements: (Array<string | DiagramElement>) => Array<DiagramElement>;
   +exec: (string | Array<Object>, ?Array<string | DiagramElement>) => void;
   +highlight: (elementsToDim: ?Array<string | DiagramElement>) => void;
 
@@ -2178,6 +2184,17 @@ class DiagramElementCollection extends DiagramElement {
       return newParent;
     };
     return getElement(elementPath, this);
+  }
+
+  getElements(children: Array<string | DiagramElement>) {
+    const elements = [];
+    children.forEach((child) => {
+      const element = this.getElement(child);
+      if (element != null) {
+        elements.push(element);
+      }
+    });
+    return elements;
   }
 
   show(listToShow: Array<DiagramElementPrimitive | DiagramElementCollection> = []): void {

@@ -119,7 +119,7 @@ export type TypeBoxObject = {
   content: TypeEquationPhrase;
   symbol: string;
   inSize?: boolean;
-  space: number;
+  space?: number;
 };
 export type TypeStrikeArray = [
   TypeEquationPhrase,
@@ -604,10 +604,10 @@ export class EquationFunctions {
         content, symbol, inSize, space,
       } = optionsOrContent);
     }
-    return new Box(                                    // $FlowFixMe
+    return new Box(                                       // $FlowFixMe
       this.contentToElement(content),                     // $FlowFixMe
       getDiagramElement(this.elements, symbol),           // $FlowFixMe
-      inSize,
+      inSize,                                             // $FlowFixMe
       space,
     );
   }
