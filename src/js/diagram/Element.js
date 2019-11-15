@@ -1909,7 +1909,7 @@ class DiagramElementPrimitive extends DiagramElement {
   }
 
   getLocalBoundaries() {
-    return this.drawingObject.getGLBoundaries(this.transform.matrix());
+    return this.drawingObject.getGLBoundaries(this.getTransform().matrix());
   }
 
   getGLBoundaries() {
@@ -1922,7 +1922,7 @@ class DiagramElementPrimitive extends DiagramElement {
   }
 
   getLocalBoundingRect() {
-    return this.drawingObject.getGLBoundingRect(this.transform.matrix());
+    return this.drawingObject.getGLBoundingRect(this.getTransform().matrix());
   }
 
   getGLBoundingRect() {
@@ -1938,7 +1938,7 @@ class DiagramElementPrimitive extends DiagramElement {
   }
 
   getRelativeLocalBoundingRect(): Rect {
-    return this.drawingObject.getRelativeGLBoundingRect(this.transform.matrix());
+    return this.drawingObject.getRelativeGLBoundingRect(this.getTransform().matrix());
   }
 
   increaseBorderSize(
