@@ -490,7 +490,6 @@ export class EquationNew extends DiagramElementCollection {
       }
       return false;
     };
-
     const addFormNormal = (name: string, form: TypeEquationForm) => {
       // $FlowFixMe
       const formContent = [this.eqn.functions.contentToElement(form)];

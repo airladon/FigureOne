@@ -356,7 +356,6 @@ export class EquationFunctions {
     ) {
       return new Elements([new Element(content)]);
     }
-
     let elementArray = this.parseContent(content);
     if (!Array.isArray(elementArray)) {
       elementArray = [elementArray];

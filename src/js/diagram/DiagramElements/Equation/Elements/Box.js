@@ -48,7 +48,7 @@ export default class Box extends Elements {
     this.lineWidth = 0.1;
     this.mainContent = mainContent;
     if (boxInSize == null) {
-      this.boxInSize = true;
+      this.boxInSize = false;
     } else {
       this.boxInSize = boxInSize;
     }
@@ -68,6 +68,8 @@ export default class Box extends Elements {
     const boxCopy = new Box(
       this.mainContent._dup(namedCollection),
       box,
+      this.boxInSize,
+      this.space,
     );
     duplicateFromTo(this, boxCopy, ['box', 'mainContent']);
     return boxCopy;
