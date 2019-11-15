@@ -146,7 +146,7 @@ export default class Box extends Elements {
         this.boxWidth,
         this.boxHeight,
       ));
-      box.showAll();
+      // box.showAll();
     }
   }
 

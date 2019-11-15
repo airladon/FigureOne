@@ -108,6 +108,7 @@ class DiagramElement {
   // Callbacks
   onClick: ?(?mixed) => void;
   setTransformCallback: (Transform) => void; // element.transform is updated
+  internalSetTransformCallback: (Transform) => void;
 
   color: Array<number>;           // For the future when collections use color
   defaultColor: Array<number>;
@@ -261,6 +262,7 @@ class DiagramElement {
     this.defaultColor = this.color.slice();
     this.opacity = 1;
     this.setTransformCallback = () => {};
+    this.internalSetTransformCallback = () => {};
     this.lastDrawTransform = this.transform._dup();
     this.onClick = null;
     this.lastDrawElementTransformPosition = {
@@ -671,6 +673,9 @@ class DiagramElement {
       this.move.maxTransform,
       this.move.limitLine,
     );
+    if (this.internalSetTransformCallback) {
+      this.internalSetTransformCallback(this.transform);
+    }
     if (this.setTransformCallback) {
       this.setTransformCallback(this.transform);
     }
@@ -876,7 +881,8 @@ class DiagramElement {
   updateLastDrawTransform() {
     const { parentCount } = this.lastDrawElementTransformPosition;
     const pLength = this.lastDrawTransform.order.length;
-    this.transform.order.forEach((t, index) => {
+    const transform = this.getTransform();
+    transform.order.forEach((t, index) => {
       this.lastDrawTransform.order[pLength - parentCount - index - 1] = t._dup();
     });
     this.lastDrawTransform.calcMatrix();
@@ -2651,6 +2657,9 @@ class DiagramElementCollection extends DiagramElement {
       const element = this.elements[this.drawOrder[i]];
       if (element.name in elementTransforms) {
         element.transform = elementTransforms[element.name];
+        if (element.internalSetTransformCallback) {
+          element.internalSetTransformCallback(element.transform);
+        }
       }
     }
   }
@@ -2704,6 +2713,9 @@ class DiagramElementCollection extends DiagramElement {
           }
         } else {
           element.transform = elementTransforms[element.name]._dup();
+          if (element.internalSetTransformCallback) {
+            element.internalSetTransformCallback(element.transform);
+          }
         }
       }
     }
