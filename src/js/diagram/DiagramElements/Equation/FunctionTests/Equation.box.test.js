@@ -160,6 +160,7 @@ describe('Equation Functions - Strike', () => {
     box.custom.setSize(a);
 
     let bx = box.getBoundingRect();
+    // console.log(box.drawingObject.points)
     expect(round(bx.left)).toEqual(round(a.left - w / 2));
     expect(round(bx.width)).toEqual(round(a.width + w));
     expect(round(bx.bottom)).toEqual(round(a.bottom - w / 2));

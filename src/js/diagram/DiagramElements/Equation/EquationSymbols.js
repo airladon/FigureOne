@@ -83,14 +83,20 @@ export default class EquationSymbols {
     );
   }
 
-  box(optionsIn: { color?: Array<number>, fill?: boolean, width?: number}) {
+  box(optionsIn: {
+    color?: Array<number>,
+    fill?: boolean,
+    width?: number,
+    staticSize?: Point | [number, number],
+  }) {
     const defaultOptions = {
       color: this.defaultColor,
       fill: false,
       width: 0.01,
+      staticSize: null,
     };
     const options = joinObjects(defaultOptions, optionsIn);
-    return Box(this.shapes, options.color, options.fill, options.width);
+    return Box(this.shapes, options.color, options.fill, options.width, options.staticSize);
   }
 
   strike(options: { color?: Array<number> } = {}) {
