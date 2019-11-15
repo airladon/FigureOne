@@ -62,6 +62,9 @@ class Element {
       content.transform.updateTranslation(location.x, location.y);
       content.transform.updateScale(scale, scale);
       content.updateLastDrawTransform();
+      if (content.internalSetTransformCallback != null) {
+        content.internalSetTransformCallback(content.transform);
+      }
 
       // Get the boundaries of element
       // const t = content.lastDrawTransform._dup();
