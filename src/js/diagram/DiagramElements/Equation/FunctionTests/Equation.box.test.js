@@ -128,7 +128,7 @@ describe('Equation Functions - Strike', () => {
   test('Box Parameters', () => {
     functions.parameters();
     const elems = [eqn._a];
-    const withoutFormsToTest = ['with0True', 'with0False', 'with1False']
+    const withoutFormsToTest = ['with0True', 'with0False', 'with1False'];
     const withFormsToTest = ['1', '2'];
 
     // get without positions

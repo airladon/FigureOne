@@ -1,6 +1,6 @@
 // @flow
 import {
-  Point, Line, Rect,
+  Point, Rect,
 } from '../../../../tools/g2';
 import { duplicateFromTo } from '../../../../tools/tools';
 import {
