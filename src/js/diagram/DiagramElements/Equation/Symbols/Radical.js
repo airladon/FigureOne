@@ -17,13 +17,19 @@ function updateStaticLinePoints(
     _up: DiagramElementPrimitive,
     _top: DiagramElementPrimitive,
   },
-  startWidth: number,
-  startHeight: number,
+  startWidthIn: number,
+  startHeightIn: number,
   width: number,
   height: number,
   lineWidth: number,
   proportionalToHeight: boolean,
 ) {
+  let startHeight = startHeightIn;
+  let startWidth = startWidthIn;
+  if (proportionalToHeight) {
+    startHeight = startHeightIn * height;
+    startWidth = startWidthIn * height;
+  }
   const coords = [
     new Point(0, startHeight * 0.9),
     new Point(startWidth / 3, startHeight),
@@ -31,10 +37,10 @@ function updateStaticLinePoints(
     new Point(startWidth, height),
     new Point(width, height),
   ];
-  if (proportionalToHeight) {
-    coords[0] = new Point(0, startHeight * 0.9 * height);
-    coords[1] = new Point(startWidth / 3, startHeight * height);
-  }
+  // if (proportionalToHeight) {
+  //   coords[0] = new Point(0, startHeight * 0.9 * height);
+  //   coords[1] = new Point(startWidth / 3, startHeight * height);
+  // }
 
   // console.log(coords)
   const lineTriangles = polyLineTriangles3(
