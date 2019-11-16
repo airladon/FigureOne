@@ -62,9 +62,13 @@ function updateStaticLinePoints(
   if (left == null || right == null || top == null || bottom == null) {
     return;
   }
+  // $FlowFixMe
   left.drawingObject.changeVertices(getPoints([0, 1, 2, 1, 3, 2]));
+  // $FlowFixMe
   top.drawingObject.changeVertices(getPoints([2, 3, 4, 3, 5, 4]));
+  // $FlowFixMe
   right.drawingObject.changeVertices(getPoints([4, 5, 6, 5, 7, 6]));
+  // $FlowFixMe
   bottom.drawingObject.changeVertices(getPoints([6, 7, 0, 7, 1, 0]));
 }
 

@@ -11,6 +11,7 @@ import Bracket from './Symbols/Bracket';
 import RoundedSquareBracket from './Symbols/RoundedSquareBracket';
 import Bar from './Symbols/Bar';
 import Box from './Symbols/Box';
+import Radical from './Symbols/Radical';
 import Brace from './Symbols/Brace';
 import SquareBracket from './Symbols/SquareBracket';
 // import { Annotation, AnnotationInformation } from './Elements/Annotation';
@@ -35,6 +36,7 @@ export default class EquationSymbols {
       side?: 'left' | 'right' | 'bottom' | 'top',
       width?: number,
       fill?: boolean,
+      staticSize?: Point | [number, number],
     },
   ) {
     if (name === 'vinculum') {
@@ -67,6 +69,9 @@ export default class EquationSymbols {
     if (name === 'box') {
       return this.box(options);
     }
+    if (name === 'radical') {
+      return this.radical(options);
+    }
     return null;
   }
 
@@ -97,6 +102,21 @@ export default class EquationSymbols {
     };
     const options = joinObjects(defaultOptions, optionsIn);
     return Box(this.shapes, options.color, options.fill, options.width, options.staticSize);
+  }
+
+  radical(optionsIn: {
+    color?: Array<number>,
+    width?: number,
+    staticSize?: Point | [number, number],
+  }) {
+    const defaultOptions = {
+      color: this.defaultColor,
+      fill: false,
+      width: 0.01,
+      staticSize: null,
+    };
+    const options = joinObjects(defaultOptions, optionsIn);
+    return Radical(this.shapes, options.color, options.width, options.staticSize);
   }
 
   strike(options: { color?: Array<number> } = {}) {
