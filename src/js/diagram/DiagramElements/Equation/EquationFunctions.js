@@ -120,7 +120,12 @@ export type TypeRootObject = {
   // startWidth?: number,
   // startHeight?: number,
   // lineWidth?: number,
-  contentSpace?: number,
+  contentSpace?: ?({
+      left: ?number,
+      right: ?number,
+      top: ?number,
+      bottom: ?number,
+    } | Point | [number, number] | number),
   rootSpace?: number,
   rootScale?: number,
   // scale?: number;
@@ -132,7 +137,12 @@ export type TypeRootArray = [
   // ?number,    // line width
   // ?number,    // start width
   // ?number,    // start height
-  ?number,    // content space
+  ?({
+      left: ?number,
+      right: ?number,
+      top: ?number,
+      bottom: ?number,
+    } | Point | [number, number] | number),    // content space
   ?number,    // root space
   ?number,    // root scale
 ];
@@ -464,7 +474,12 @@ export class EquationFunctions {
     // lineWidthIn: ?number = null,
     // startWidthIn: ?number = null,
     // startHeightIn: ?number = null,
-    contentSpaceIn: ?number = null,
+    contentSpaceIn: ?({
+      left: ?number,
+      right: ?number,
+      top: ?number,
+      bottom: ?number,
+    } | Point | [number, number] | number) = null,
     rootSpaceIn: ?number = null,
     rootScaleIn: ?number = null,
   ) {
