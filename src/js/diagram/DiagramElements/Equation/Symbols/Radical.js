@@ -121,9 +121,6 @@ export default function Radical(
   // defined everytime a setTransform event is called
   } else {
     radical.custom.scale = new Point(1, 1);
-    // radical.custom.startWidth = 0.2;
-    // radical.custom.startHeight = 0.2;
-    // radical.custom.lineWidth = 0.01;
     radical.internalSetTransformCallback = () => {
       const s = radical.getScale();
       if (radical.custom.scale.isNotEqualTo(s, 8)) {
@@ -147,14 +144,6 @@ export default function Radical(
 
   // eslint-disable-next-line max-len
   radical.custom.setSize = (location: Point, widthIn: number, heightIn: number) => {
-    // if (radical.custom.boxType === 'line') {
-    //   updateStaticLinePoints(box, width, new Point(rectToUse.width, rectToUse.height));
-    // }
-    // console.log('asdf', startWidth, startHeight)
-    // radical.custom.startWidth = startWidth;
-    // radical.custom.startHeight = startHeight;
-    // radical.custom.lineWidth = lineWidth;
-
     const t = radical.transform._dup();
     t.updateScale(
       widthIn,
