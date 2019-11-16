@@ -15,11 +15,11 @@ export default class Root extends Elements {
   mainContent: Elements | null;
   radicalGlyph: DiagramElementPrimitive | DiagramElementCollection | null;
   glyphLocation: Point;
-  glyphStartWidth: number;
-  glyphStartHeight: number;
+  // glyphStartWidth: number;
+  // glyphStartHeight: number;
   glyphWidth: number;
   glyphHeight: number;
-  glyphLineWidth: number;
+  // glyphLineWidth: number;
   // glyphContentWidth: number;
   rootSpace: Point;
   contentSpace: Point;
@@ -30,9 +30,9 @@ export default class Root extends Elements {
     content: Elements | null,
     radicalGlyph: DiagramElementPrimitive | null | DiagramElementCollection,
     root: Elements | null,
-    glyphLineWidth: ?number = null,
-    glyphStartWidth: ?number = null,
-    glyphStartHeight: ?number = null,
+    // glyphLineWidth: ?number = null,
+    // glyphStartWidth: ?number = null,
+    // glyphStartHeight: ?number = null,
     contentSpace: ?(Point | [number, number] | number) = null,
     rootSpace: ?(Point | [number, number] | number) = null,
     rootScale: ?number = null,
@@ -44,13 +44,13 @@ export default class Root extends Elements {
     this.radicalGlyph = radicalGlyph;
     this.contentSpace = getPoint(contentSpace || 0.05);
     this.rootSpace = getPoint(rootSpace || 0.05);
-    this.glyphStartHeight = glyphStartHeight || 0.1;
-    this.glyphStartWidth = glyphStartWidth || 0.1;
+    // this.glyphStartHeight = glyphStartHeight || 0.1;
+    // this.glyphStartWidth = glyphStartWidth || 0.1;
     this.glyphLocation = new Point(0, 0);
     this.rootScale = rootScale || 0.5;
     this.glyphWidth = 1;
     this.glyphHeight = 1;
-    this.glyphLineWidth = glyphLineWidth || 0.01;
+    // this.glyphLineWidth = glyphLineWidth || 0.01;
   }
 
   _dup(namedCollection?: Object) {
@@ -136,51 +136,97 @@ export default class Root extends Elements {
       contentBounds.ascent = mainContent.ascent;
       contentBounds.descent = mainContent.descent;
     }
+    const mainContentLocation = loc._dup();
 
     const { root } = this;
     if (root instanceof Elements) {
       root.calcSize(loc._dup(), scale * this.rootScale);
-      console.log(scale, this.rootScale, root.width);
       rootBounds.width = root.width;
       rootBounds.height = root.ascent + root.descent;
       rootBounds.ascent = root.ascent;
       rootBounds.descent = root.descent;
     }
-
-    glyphBounds.descent = contentBounds.descent + this.contentSpace.y;
-    glyphBounds.ascent = contentBounds.ascent + this.contentSpace.y;
-    glyphBounds.height = glyphBounds.ascent + glyphBounds.descent;
-    glyphBounds.width = this.glyphStartWidth
-      + this.contentSpace.x + contentBounds.width + this.contentSpace.x;
-    
-
-    const glyphStartToTop = glyphBounds.height - this.glyphStartHeight;
     const rootLocation = loc._dup();
-    if (glyphStartToTop < rootBounds.height / 2 + this.rootSpace.y) {
-      rootLocation.y = loc.y
-        - glyphBounds.descent + this.glyphStartHeight
-        + this.rootSpace.y + rootBounds.height / 2
-        - (rootBounds.height / 2 - rootBounds.descent);
-    } else {
-      rootLocation.y = loc.y
-        + glyphBounds.ascent
-        - (rootBounds.height / 2 - rootBounds.descent);
-    }
+
+    // glyphBounds.descent = contentBounds.descent + this.contentSpace.y;
+    // glyphBounds.ascent = contentBounds.ascent + this.contentSpace.y;
+    // glyphBounds.height = glyphBounds.ascent + glyphBounds.descent;
+    // glyphBounds.width = this.glyphStartWidth
+    //   + this.contentSpace.x + contentBounds.width + this.contentSpace.x;
+    
+    // let startHeight = 0;
+    // let startWidth = 0;
+    // let lineWidth = 0;
+    // let proportionalToHeight = false;
 
     this.glyphLocation = loc._dup();
-    console.log(rootBounds.width, this.rootSpace.x, this.glyphStartWidth)
-    if (rootBounds.width + this.rootSpace.x > this.glyphStartWidth) {
-      this.glyphLocation.x = loc.x + rootBounds.width + this.rootSpace.x - this.glyphStartWidth;
+    const { radicalGlyph } = this;
+    if (radicalGlyph) {
+      const {
+        startHeight, startWidth, proportionalToHeight,
+      } = radicalGlyph.custom;
+
+      glyphBounds.descent = contentBounds.descent + this.contentSpace.y;
+      glyphBounds.ascent = contentBounds.ascent + this.contentSpace.y;
+      glyphBounds.height = glyphBounds.ascent + glyphBounds.descent;
+      glyphBounds.width = startWidth
+        + this.contentSpace.x + contentBounds.width + this.contentSpace.x;
+      let glyphStartHeight = startHeight;
+      if (proportionalToHeight) {
+        glyphStartHeight = startHeight * glyphBounds.height;
+      }
+      const startTop = glyphBounds.height - glyphStartHeight;
+      if (startTop < rootBounds.height / 2 + this.rootSpace.y) {
+        rootLocation.y = loc.y
+          - glyphBounds.descent + glyphStartHeight
+          + this.rootSpace.y + rootBounds.height / 2
+          - (rootBounds.height / 2 - rootBounds.descent);
+      } else {
+        rootLocation.y = loc.y
+          + glyphBounds.ascent
+          - (rootBounds.height / 2 - rootBounds.descent);
+      }
+
+      if (rootBounds.width + this.rootSpace.x > startWidth) {
+        this.glyphLocation.x = loc.x + rootBounds.width + this.rootSpace.x - startWidth;
+      }
+      mainContentLocation.x = this.glyphLocation.x + startWidth + this.contentSpace.x;
+      this.width = this.glyphLocation.x + glyphBounds.width - loc.x;
+      this.ascent = Math.max(
+        glyphBounds.ascent, rootBounds.ascent + rootLocation.y,
+      );
+      this.descent = glyphBounds.descent;
+    } else {
+      mainContentLocation.x = rootLocation.x + rootLocation.width;
+      this.width = rootBounds.width + this.contentSpace.x + contentBounds.width;
+      this.ascent = Math.max(rootBounds.ascent, contentBounds.ascent);
+      this.descent = Math.max(rootBounds.descent, contentBounds.descent);
     }
 
-    const mainContentLocation = loc._dup();
-    mainContentLocation.x = this.glyphLocation.x + this.glyphStartWidth + this.contentSpace.x;
+    // const glyphStartToTop = glyphBounds.height - this.glyphStartHeight;
+    // const rootLocation = loc._dup();
+    // if (glyphStartToTop < rootBounds.height / 2 + this.rootSpace.y) {
+    //   rootLocation.y = loc.y
+    //     - glyphBounds.descent + this.glyphStartHeight
+    //     + this.rootSpace.y + rootBounds.height / 2
+    //     - (rootBounds.height / 2 - rootBounds.descent);
+    // } else {
+    //   rootLocation.y = loc.y
+    //     + glyphBounds.ascent
+    //     - (rootBounds.height / 2 - rootBounds.descent);
+    // }
 
-    this.width = this.glyphLocation.x + glyphBounds.width - loc.x;
-    this.ascent = Math.max(
-      glyphBounds.ascent, rootBounds.ascent + rootLocation.y,
-    );
-    this.descent = glyphBounds.descent;
+    // if (rootBounds.width + this.rootSpace.x > this.glyphStartWidth) {
+    //   this.glyphLocation.x = loc.x + rootBounds.width + this.rootSpace.x - this.glyphStartWidth;
+    // }
+
+    // mainContentLocation.x = this.glyphLocation.x + this.glyphStartWidth + this.contentSpace.x;
+
+    // this.width = this.glyphLocation.x + glyphBounds.width - loc.x;
+    // this.ascent = Math.max(
+    //   glyphBounds.ascent, rootBounds.ascent + rootLocation.y,
+    // );
+    // this.descent = glyphBounds.descent;
     this.height = this.ascent + this.descent;
 
     if (mainContent instanceof Elements) {
@@ -192,16 +238,16 @@ export default class Root extends Elements {
     this.glyphWidth = glyphBounds.width;
     this.glyphHeight = glyphBounds.height;
 
-    const { radicalGlyph } = this;
+    // const { radicalGlyph } = this;
     this.glyphLocation.y = this.glyphLocation.y - glyphBounds.descent;
     if (radicalGlyph instanceof DiagramElement) {
       radicalGlyph.custom.setSize(
         this.glyphLocation,
-        this.glyphStartWidth,
-        this.glyphStartHeight,
+        // this.glyphStartWidth,
+        // this.glyphStartHeight,
         glyphBounds.width,
         glyphBounds.height,
-        this.glyphLineWidth,
+        // this.glyphLineWidth,
       );
     }
   }

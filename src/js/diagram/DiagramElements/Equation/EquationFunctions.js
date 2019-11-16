@@ -117,9 +117,9 @@ export type TypeRootObject = {
   content: TypeEquationPhrase;
   root: TypeEquationPhrase;
   symbol?: string;
-  startWidth?: number,
-  startHeight?: number,
-  lineWidth?: number,
+  // startWidth?: number,
+  // startHeight?: number,
+  // lineWidth?: number,
   contentSpace?: number,
   rootSpace?: number,
   rootScale?: number,
@@ -129,9 +129,9 @@ export type TypeRootArray = [
   TypeEquationPhrase,
   string,
   ?TypeEquationPhrase,
-  ?number,    // line width
-  ?number,    // start width
-  ?number,    // start height
+  // ?number,    // line width
+  // ?number,    // start width
+  // ?number,    // start height
   ?number,    // content space
   ?number,    // root space
   ?number,    // root scale
@@ -461,9 +461,9 @@ export class EquationFunctions {
     optionsOrNum: TypeRootObject | TypeRootArray | TypeEquationPhrase,
     sym: string | null = null,
     rootIn: TypeEquationPhrase | null = null,
-    lineWidthIn: ?number = null,
-    startWidthIn: ?number = null,
-    startHeightIn: ?number = null,
+    // lineWidthIn: ?number = null,
+    // startWidthIn: ?number = null,
+    // startHeightIn: ?number = null,
     contentSpaceIn: ?number = null,
     rootSpaceIn: ?number = null,
     rootScaleIn: ?number = null,
@@ -471,9 +471,9 @@ export class EquationFunctions {
     let content;
     let root;
     let symbol;
-    let lineWidth;
-    let startWidth;
-    let startHeight;
+    // let lineWidth;
+    // let startWidth;
+    // let startHeight;
     let contentSpace;
     let rootSpace;
     let rootScale;
@@ -482,30 +482,32 @@ export class EquationFunctions {
       content = optionsOrNum;
       root = rootIn;
       symbol = sym;
-      lineWidth = lineWidthIn;
-      startWidth = startWidthIn;
-      startHeight = startHeightIn;
+      // lineWidth = lineWidthIn;
+      // startWidth = startWidthIn;
+      // startHeight = startHeightIn;
       contentSpace = contentSpaceIn;
       rootSpace = rootSpaceIn;
       rootScale = rootScaleIn;
     } else if (Array.isArray(optionsOrNum)) {
       [                                                  // $FlowFixMe
-        content, symbol, root, lineWidth, startWidth,    // $FlowFixMe
-        startHeight, contentSpace, rootSpace, rootScale,
+        content, symbol, root,
+        // lineWidth, startWidth, startHeight,
+        contentSpace, rootSpace, rootScale,
       ] = optionsOrNum;
     } else {
       ({                                            // $FlowFixMe
-        content, symbol, root, lineWidth, startWidth,
-        startHeight, contentSpace, rootSpace, rootScale,
+        content, symbol, root,
+        // lineWidth, startWidth, startHeight,    // $FlowFixMe
+        contentSpace, rootSpace, rootScale,
       } = optionsOrNum);
     }
     const f = new Root(                         // $FlowFixMe
       this.contentToElement(content),             // $FlowFixMe
       getDiagramElement(this.elements, symbol),     // $FlowFixMe
       this.contentToElement(root),           // $FlowFixMe
-      lineWidth,
-      startWidth,
-      startHeight,
+      // lineWidth,
+      // startWidth,
+      // startHeight,
       contentSpace,
       rootSpace,
       rootScale,

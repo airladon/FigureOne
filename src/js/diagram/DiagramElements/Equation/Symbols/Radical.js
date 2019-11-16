@@ -22,6 +22,7 @@ function updateStaticLinePoints(
   width: number,
   height: number,
   lineWidth: number,
+  proportionalToHeight: boolean,
 ) {
   const coords = [
     new Point(0, startHeight * 0.9),
@@ -30,6 +31,11 @@ function updateStaticLinePoints(
     new Point(startWidth, height),
     new Point(width, height),
   ];
+  if (proportionalToHeight) {
+    coords[0] = new Point(0, startHeight * 0.9 * height);
+    coords[1] = new Point(startWidth / 3, startHeight * height);
+  }
+
   // console.log(coords)
   const lineTriangles = polyLineTriangles3(
     coords,
@@ -71,7 +77,10 @@ const poly = (color: Array<number>) => ({
 export default function Radical(
   shapes: DiagramPrimitives,
   color: Array<number>,
-  width: number,
+  lineWidth: number,
+  startWidth: number,
+  startHeight: number,
+  proportionalToHeight: boolean,
   staticSize: ?(Point | [number, number]),
 ) {
   const radical = shapes.collection({ color, transform: new Transform('radical').scale(1, 1).translate(0, 0) });
@@ -79,23 +88,27 @@ export default function Radical(
   radical.add('down', shapes.polyLine(poly(color)));
   radical.add('up', shapes.polyLine(poly(color)));
   radical.add('top', shapes.polyLine(poly(color)));
-  updateStaticLinePoints(radical, 0.2, 0.2, 1, 1, 0.01);
-
+  updateStaticLinePoints(radical, 0.2, 0.2, 1, 1, 0.01, true);
+  radical.custom.startWidth = startWidth;
+  radical.custom.startHeight = startHeight;
+  radical.custom.lineWidth = lineWidth;
+  radical.custom.proportionalToHeight = proportionalToHeight;
   // Defined every time a setSize event is called
   if (staticSize != null) {
     radical.custom.boxType = 'static';
   // defined everytime a setTransform event is called
   } else {
     radical.custom.scale = new Point(1, 1);
-    radical.custom.startWidth = 0.2;
-    radical.custom.startHeight = 0.2;
-    radical.custom.lineWidth = 0.01;
+    // radical.custom.startWidth = 0.2;
+    // radical.custom.startHeight = 0.2;
+    // radical.custom.lineWidth = 0.01;
     radical.internalSetTransformCallback = () => {
       const s = radical.getScale();
       if (radical.custom.scale.isNotEqualTo(s, 8)) {
         updateStaticLinePoints(
           radical, radical.custom.startWidth, radical.custom.startHeight,
           s.x, s.y, radical.custom.lineWidth,
+          radical.custom.proportionalToHeight,
         );
         radical.custom.scale = s;
       }
@@ -109,14 +122,14 @@ export default function Radical(
   }
 
   // eslint-disable-next-line max-len
-  radical.custom.setSize = (location: Point, startWidth: number, startHeight: number, widthIn: number, heightIn: number, lineWidth: number) => {
+  radical.custom.setSize = (location: Point, widthIn: number, heightIn: number) => {
     // if (radical.custom.boxType === 'line') {
     //   updateStaticLinePoints(box, width, new Point(rectToUse.width, rectToUse.height));
     // }
-    console.log('asdf', startWidth, startHeight)
-    radical.custom.startWidth = startWidth;
-    radical.custom.startHeight = startHeight;
-    radical.custom.lineWidth = lineWidth;
+    // console.log('asdf', startWidth, startHeight)
+    // radical.custom.startWidth = startWidth;
+    // radical.custom.startHeight = startHeight;
+    // radical.custom.lineWidth = lineWidth;
 
     const t = radical.transform._dup();
     t.updateScale(
