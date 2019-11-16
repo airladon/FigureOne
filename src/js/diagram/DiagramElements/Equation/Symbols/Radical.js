@@ -23,12 +23,24 @@ function updateStaticLinePoints(
   height: number,
   lineWidth: number,
   proportionalToHeight: boolean,
+  maxStartWidth: ?number,
+  maxStartHeight: ?number,
 ) {
   let startHeight = startHeightIn;
   let startWidth = startWidthIn;
   if (proportionalToHeight) {
     startHeight = startHeightIn * height;
     startWidth = startWidthIn * height;
+  }
+  if (maxStartWidth != null) {
+    if (maxStartWidth < startWidth) {
+      startWidth = maxStartWidth;
+    }
+  }
+  if (maxStartHeight != null) {
+    if (maxStartHeight < startHeight) {
+      startHeight = maxStartHeight;
+    }
   }
   const coords = [
     new Point(0, startHeight * 0.9),
@@ -87,6 +99,8 @@ export default function Radical(
   startWidth: number,
   startHeight: number,
   proportionalToHeight: boolean,
+  maxStartWidth: ?number,
+  maxStartHeight: ?number,
   staticSize: ?(Point | [number, number]),
 ) {
   const radical = shapes.collection({ color, transform: new Transform('radical').scale(1, 1).translate(0, 0) });
@@ -94,11 +108,13 @@ export default function Radical(
   radical.add('down', shapes.polyLine(poly(color)));
   radical.add('up', shapes.polyLine(poly(color)));
   radical.add('top', shapes.polyLine(poly(color)));
-  updateStaticLinePoints(radical, 0.2, 0.2, 1, 1, 0.01, true);
+  updateStaticLinePoints(radical, 0.2, 0.2, 1, 1, 0.01, true, null, null);
   radical.custom.startWidth = startWidth;
   radical.custom.startHeight = startHeight;
   radical.custom.lineWidth = lineWidth;
   radical.custom.proportionalToHeight = proportionalToHeight;
+  radical.custom.maxStartWidth = maxStartWidth;
+  radical.custom.maxStartHeight = maxStartHeight;
   // Defined every time a setSize event is called
   if (staticSize != null) {
     radical.custom.boxType = 'static';
@@ -113,8 +129,10 @@ export default function Radical(
       if (radical.custom.scale.isNotEqualTo(s, 8)) {
         updateStaticLinePoints(
           radical, radical.custom.startWidth, radical.custom.startHeight,
-          s.x, s.y, radical.custom.lineWidth,
+          s.x, s.y,
+          radical.custom.lineWidth,
           radical.custom.proportionalToHeight,
+          radical.custom.maxStartWidth, radical.custom.maxStartHeight,
         );
         radical.custom.scale = s;
       }

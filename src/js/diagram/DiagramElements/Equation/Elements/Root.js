@@ -164,6 +164,7 @@ export default class Root extends Elements {
     if (radicalGlyph) {
       const {
         startHeight, startWidth, proportionalToHeight,
+        maxStartWidth, maxStartHeight,
       } = radicalGlyph.custom;
 
       glyphBounds.descent = contentBounds.descent + this.contentSpace.y;
@@ -174,6 +175,12 @@ export default class Root extends Elements {
       if (proportionalToHeight) {
         glyphStartHeight = startHeight * glyphBounds.height;
         glyphStartWidth = startWidth * glyphBounds.height;
+      }
+      if (maxStartHeight != null && glyphStartHeight > maxStartHeight) {
+        glyphStartHeight = maxStartHeight;
+      }
+      if (maxStartWidth != null && glyphStartWidth > maxStartWidth) {
+        glyphStartWidth = maxStartWidth;
       }
 
       glyphBounds.width = glyphStartWidth
