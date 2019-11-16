@@ -10,6 +10,13 @@ import { duplicateFromTo } from '../../../../tools/tools';
 import { Element, Elements } from './Element';
 import Bounds from './Bounds';
 
+const space = (l, b, r, t) => ({
+  left: l,
+  bottom: b,
+  right: r,
+  top: t,
+});
+
 export default class Root extends Elements {
   root: Elements | null;
   mainContent: Elements | null;
@@ -22,7 +29,12 @@ export default class Root extends Elements {
   // glyphLineWidth: number;
   // glyphContentWidth: number;
   rootSpace: Point;
-  contentSpace: Point;
+  contentSpace: {
+    left: number,
+    bottom: number,
+    right: number,
+    top: number,
+  };
   rootScale: number;
   // glyphScale: number;
 
@@ -33,7 +45,12 @@ export default class Root extends Elements {
     // glyphLineWidth: ?number = null,
     // glyphStartWidth: ?number = null,
     // glyphStartHeight: ?number = null,
-    contentSpace: ?(Point | [number, number] | number) = null,
+    contentSpace: ?({
+      left: ?number,
+      right: ?number,
+      top: ?number,
+      bottom: ?number,
+    } | Point | [number, number] | number) = null,
     rootSpace: ?(Point | [number, number] | number) = null,
     rootScale: ?number = null,
   ) {
@@ -42,7 +59,23 @@ export default class Root extends Elements {
     this.root = root;
     this.mainContent = content;
     this.radicalGlyph = radicalGlyph;
-    this.contentSpace = getPoint(contentSpace || 0.05);
+    this.contentSpace = space(0.01, 0.01, 0.01, 0.01);
+    if (typeof contentSpace === 'number') {
+      this.contentSpace = space(
+        contentSpace, contentSpace, contentSpace, contentSpace,
+      );
+    } else if (Array.isArray(contentSpace) && contentSpace.length === 2) {
+      this.contentSpace = space(
+        contentSpace[0], contentSpace[1], contentSpace[0], contentSpace[1],
+      );
+    } else if (contentSpace instanceof Point) {
+      this.contentSpace = space(
+        contentSpace.x, contentSpace.y, contentSpace.x, contentSpace.y,
+      );
+    } else if (contentSpace != null) {
+      this.contentSpace = contentSpace;
+    }
+    // this.contentSpace = getPoint(contentSpace || 0.05);
     this.rootSpace = getPoint(rootSpace || 0.05);
     // this.glyphStartHeight = glyphStartHeight || 0.1;
     // this.glyphStartWidth = glyphStartWidth || 0.1;
@@ -156,8 +189,8 @@ export default class Root extends Elements {
         maxStartWidth, maxStartHeight,
       } = radicalGlyph.custom;
 
-      glyphBounds.descent = contentBounds.descent + this.contentSpace.y;
-      glyphBounds.ascent = contentBounds.ascent + this.contentSpace.y;
+      glyphBounds.descent = contentBounds.descent + this.contentSpace.bottom;
+      glyphBounds.ascent = contentBounds.ascent + this.contentSpace.top;
       glyphBounds.height = glyphBounds.ascent + glyphBounds.descent;
       let glyphStartHeight = startHeight;
       let glyphStartWidth = startWidth;
@@ -173,7 +206,7 @@ export default class Root extends Elements {
       }
 
       glyphBounds.width = glyphStartWidth
-        + this.contentSpace.x + contentBounds.width + this.contentSpace.x;
+        + this.contentSpace.left + contentBounds.width + this.contentSpace.right;
       
       const startTop = glyphBounds.height - glyphStartHeight;
       if (startTop < rootBounds.height / 2 + this.rootSpace.y) {
@@ -190,7 +223,7 @@ export default class Root extends Elements {
       if (rootBounds.width + this.rootSpace.x > glyphStartWidth) {
         this.glyphLocation.x = loc.x + rootBounds.width + this.rootSpace.x - glyphStartWidth;
       }
-      mainContentLocation.x = this.glyphLocation.x + glyphStartWidth + this.contentSpace.x;
+      mainContentLocation.x = this.glyphLocation.x + glyphStartWidth + this.contentSpace.left;
       this.width = this.glyphLocation.x + glyphBounds.width - loc.x;
       this.ascent = Math.max(
         glyphBounds.ascent, rootBounds.ascent + rootLocation.y,
@@ -198,7 +231,7 @@ export default class Root extends Elements {
       this.descent = glyphBounds.descent;
     } else {
       mainContentLocation.x = rootLocation.x + rootLocation.width;
-      this.width = rootBounds.width + this.contentSpace.x + contentBounds.width;
+      this.width = rootBounds.width + this.contentSpace.left + contentBounds.width;
       this.ascent = Math.max(rootBounds.ascent, contentBounds.ascent);
       this.descent = Math.max(rootBounds.descent, contentBounds.descent);
     }
