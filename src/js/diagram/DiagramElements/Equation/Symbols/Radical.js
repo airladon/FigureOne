@@ -24,10 +24,10 @@ function updateStaticLinePoints(
   lineWidth: number,
 ) {
   const coords = [
-    new Point(0, startHeight),
-    new Point(startWidth / 3, startHeight),
-    new Point(startWidth / 3 * 2, 0),
-    new Point(startWidth, height),
+    new Point(0, startHeight * height * 0.9),
+    new Point(startWidth * height / 3, startHeight * height),
+    new Point(startWidth * height / 3 * 2, 0),
+    new Point(startWidth * height, height),
     new Point(width, height),
   ];
   // console.log(coords)

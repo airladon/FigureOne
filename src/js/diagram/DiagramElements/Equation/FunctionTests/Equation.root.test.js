@@ -106,8 +106,10 @@ describe('Equation Functions - Strike', () => {
     // const elems = [eqn._a, eqn._b, eqn._c];
     // const formsToTest = ['1', '2', '3', '4', '5', '6'];
 
-
+    console.log(1)
     eqn.showForm('0');
+    console.log(2)
+    console.log(eqn._root.getScale())
     // const positions0 = elems.map(elem => round(elem.transform.mat).slice());
     // formsToTest.forEach((f) => {
     //   eqn.showForm(f);
