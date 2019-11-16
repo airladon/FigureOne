@@ -117,13 +117,24 @@ export type TypeRootObject = {
   content: TypeEquationPhrase;
   root: TypeEquationPhrase;
   symbol?: string;
+  startWidth?: number,
+  startHeight?: number,
+  lineWidth?: number,
+  contentSpace?: number,
+  rootSpace?: number,
+  rootScale?: number,
   // scale?: number;
 };
 export type TypeRootArray = [
   TypeEquationPhrase,
   string,
   ?TypeEquationPhrase,
-  // ?number,
+  ?number,    // line width
+  ?number,    // start width
+  ?number,    // start height
+  ?number,    // content space
+  ?number,    // root space
+  ?number,    // root scale
 ];
 export type TypeStrikeObject = {
   content: TypeEquationPhrase;
@@ -450,27 +461,54 @@ export class EquationFunctions {
     optionsOrNum: TypeRootObject | TypeRootArray | TypeEquationPhrase,
     sym: string | null = null,
     rootIn: TypeEquationPhrase | null = null,
+    lineWidthIn: ?number = null,
+    startWidthIn: ?number = null,
+    startHeightIn: ?number = null,
+    contentSpaceIn: ?number = null,
+    rootSpaceIn: ?number = null,
+    rootScaleIn: ?number = null,
   ) {
     let content;
     let root;
     let symbol;
-    // let scale;
+    let lineWidth;
+    let startWidth;
+    let startHeight;
+    let contentSpace;
+    let rootSpace;
+    let rootScale;
 
     if (!(sym == null && root == null)) {
       content = optionsOrNum;
       root = rootIn;
       symbol = sym;
-    } else if (Array.isArray(optionsOrNum)) {       // $FlowFixMe
-      [content, symbol, root] = optionsOrNum;
+      lineWidth = lineWidthIn;
+      startWidth = startWidthIn;
+      startHeight = startHeightIn;
+      contentSpace = contentSpaceIn;
+      rootSpace = rootSpaceIn;
+      rootScale = rootScaleIn;
+    } else if (Array.isArray(optionsOrNum)) {
+      [                                                  // $FlowFixMe
+        content, symbol, root, lineWidth, startWidth,    // $FlowFixMe
+        startHeight, contentSpace, rootSpace, rootScale,
+      ] = optionsOrNum;
     } else {
       ({                                            // $FlowFixMe
-        content, symbol, root,
+        content, symbol, root, lineWidth, startWidth,
+        startHeight, contentSpace, rootSpace, rootScale,
       } = optionsOrNum);
     }
     const f = new Root(                         // $FlowFixMe
       this.contentToElement(content),             // $FlowFixMe
       getDiagramElement(this.elements, symbol),     // $FlowFixMe
       this.contentToElement(root),           // $FlowFixMe
+      lineWidth,
+      startWidth,
+      startHeight,
+      contentSpace,
+      rootSpace,
+      rootScale,
     );
     // if (scale != null) {                            // $FlowFixMe
     //   f.scaleModifier = scale;
