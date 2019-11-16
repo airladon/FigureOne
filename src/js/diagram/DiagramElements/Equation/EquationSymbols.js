@@ -37,6 +37,9 @@ export default class EquationSymbols {
       width?: number,
       fill?: boolean,
       staticSize?: Point | [number, number],
+      startWidth?: number,
+      startHeight?: number,
+      proportionalToHeight?: boolean,
     },
   ) {
     if (name === 'vinculum') {
@@ -107,6 +110,9 @@ export default class EquationSymbols {
   radical(optionsIn: {
     color?: Array<number>,
     width?: number,
+    startHeight?: number,
+    startWidth?: number,
+    proportionalToHeight?: boolean,
     staticSize?: Point | [number, number],
   }) {
     const defaultOptions = {
@@ -114,9 +120,16 @@ export default class EquationSymbols {
       fill: false,
       width: 0.01,
       staticSize: null,
+      startHeight: 0.1,
+      startWidth: 0.1,
+      proportionalToHeight: false,
     };
     const options = joinObjects(defaultOptions, optionsIn);
-    return Radical(this.shapes, options.color, options.width, options.staticSize);
+    return Radical(
+      this.shapes, options.color, options.width,
+      options.startWidth, options.startHeight, options.proportionalToHeight,
+      options.staticSize,
+    );
   }
 
   strike(options: { color?: Array<number> } = {}) {
