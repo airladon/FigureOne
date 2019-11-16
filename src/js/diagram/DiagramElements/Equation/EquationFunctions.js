@@ -11,6 +11,7 @@ import {
 } from '../../Element';
 import { BlankElement, Element, Elements } from './Elements/Element';
 import Fraction from './Elements/Fraction';
+import Root from './Elements/Root';
 import Strike from './Elements/Strike';
 // import DiagramPrimitives from '../../DiagramPrimitives/DiagramPrimitives';
 import SuperSub from './Elements/SuperSub';
@@ -74,6 +75,8 @@ export type TypeEquationPhrase =
   | number
   | { frac: TypeFracObject } | TypeFracArray
   | { strike: TypeStrikeObject } | TypeStrikeArray
+  | { box: TypeBoxObject } | TypeBoxArray
+  | { root: TypeRootObject } | TypeRootArray
   | { brac: TypeBracketObject } | TypeBracketArray
   | { sub: TypeSubObject } | TypeSubArray
   | { sup: TypeSupObject } | TypeSupArray
@@ -109,6 +112,18 @@ export type TypeFracArray = [
   TypeEquationPhrase,
   string,
   ?number,
+];
+export type TypeRootObject = {
+  content: TypeEquationPhrase;
+  root: TypeEquationPhrase;
+  symbol?: string;
+  // scale?: number;
+};
+export type TypeRootArray = [
+  TypeEquationPhrase,
+  string,
+  ?TypeEquationPhrase,
+  // ?number,
 ];
 export type TypeStrikeObject = {
   content: TypeEquationPhrase;
@@ -368,6 +383,7 @@ export class EquationFunctions {
     if (name === 'frac') { return this.frac(params); }        // $FlowFixMe
     if (name === 'strike') { return this.strike(params); }    // $FlowFixMe
     if (name === 'box') { return this.box(params); }    // $FlowFixMe
+    if (name === 'root') { return this.root(params); }    // $FlowFixMe
     if (name === 'brac') { return this.brac(params); }        // $FlowFixMe
     if (name === 'sub') { return this.sub(params); }          // $FlowFixMe
     if (name === 'sup') { return this.sup(params); }          // $FlowFixMe
@@ -429,6 +445,40 @@ export class EquationFunctions {
     }
     return f;
   }
+
+  root(
+    optionsOrNum: TypeRootObject | TypeRootArray | TypeEquationPhrase,
+    sym: string | null = null,
+    rootIn: TypeEquationPhrase | null = null,
+  ) {
+    let content;
+    let root;
+    let symbol;
+    // let scale;
+
+    if (!(sym == null && root == null)) {
+      content = optionsOrNum;
+      root = rootIn;
+      symbol = sym;
+    } else if (Array.isArray(optionsOrNum)) {       // $FlowFixMe
+      [content, symbol, root] = optionsOrNum;
+    } else {
+      ({                                            // $FlowFixMe
+        content, symbol, root,
+      } = optionsOrNum);
+    }
+    const f = new Root(                         // $FlowFixMe
+      this.contentToElement(content),             // $FlowFixMe
+      getDiagramElement(this.elements, symbol),     // $FlowFixMe
+      this.contentToElement(root),           // $FlowFixMe
+    );
+    // if (scale != null) {                            // $FlowFixMe
+    //   f.scaleModifier = scale;
+    // }
+    return f;
+  }
+
+
 
   supSub(
     optionsOrContent: TypeSupSubObject | TypeSupSubArray | TypeEquationPhrase,

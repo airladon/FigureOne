@@ -54,7 +54,7 @@ export default class Integral extends Elements {
     );
     duplicateFromTo(
       this, integralCopy,
-      ['limitMin', 'limitMax', 'content', 'integralGlyph', 'content'],
+      ['limitMin', 'limitMax', 'mainContent', 'integralGlyph'],
     );
     return integralCopy;
   }
