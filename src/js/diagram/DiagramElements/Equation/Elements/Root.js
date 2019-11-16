@@ -148,17 +148,6 @@ export default class Root extends Elements {
     }
     const rootLocation = loc._dup();
 
-    // glyphBounds.descent = contentBounds.descent + this.contentSpace.y;
-    // glyphBounds.ascent = contentBounds.ascent + this.contentSpace.y;
-    // glyphBounds.height = glyphBounds.ascent + glyphBounds.descent;
-    // glyphBounds.width = this.glyphStartWidth
-    //   + this.contentSpace.x + contentBounds.width + this.contentSpace.x;
-    
-    // let startHeight = 0;
-    // let startWidth = 0;
-    // let lineWidth = 0;
-    // let proportionalToHeight = false;
-
     this.glyphLocation = loc._dup();
     const { radicalGlyph } = this;
     if (radicalGlyph) {
@@ -213,31 +202,6 @@ export default class Root extends Elements {
       this.ascent = Math.max(rootBounds.ascent, contentBounds.ascent);
       this.descent = Math.max(rootBounds.descent, contentBounds.descent);
     }
-
-    // const glyphStartToTop = glyphBounds.height - this.glyphStartHeight;
-    // const rootLocation = loc._dup();
-    // if (glyphStartToTop < rootBounds.height / 2 + this.rootSpace.y) {
-    //   rootLocation.y = loc.y
-    //     - glyphBounds.descent + this.glyphStartHeight
-    //     + this.rootSpace.y + rootBounds.height / 2
-    //     - (rootBounds.height / 2 - rootBounds.descent);
-    // } else {
-    //   rootLocation.y = loc.y
-    //     + glyphBounds.ascent
-    //     - (rootBounds.height / 2 - rootBounds.descent);
-    // }
-
-    // if (rootBounds.width + this.rootSpace.x > this.glyphStartWidth) {
-    //   this.glyphLocation.x = loc.x + rootBounds.width + this.rootSpace.x - this.glyphStartWidth;
-    // }
-
-    // mainContentLocation.x = this.glyphLocation.x + this.glyphStartWidth + this.contentSpace.x;
-
-    // this.width = this.glyphLocation.x + glyphBounds.width - loc.x;
-    // this.ascent = Math.max(
-    //   glyphBounds.ascent, rootBounds.ascent + rootLocation.y,
-    // );
-    // this.descent = glyphBounds.descent;
     this.height = this.ascent + this.descent;
 
     if (mainContent instanceof Elements) {
@@ -249,16 +213,12 @@ export default class Root extends Elements {
     this.glyphWidth = glyphBounds.width;
     this.glyphHeight = glyphBounds.height;
 
-    // const { radicalGlyph } = this;
     this.glyphLocation.y = this.glyphLocation.y - glyphBounds.descent;
     if (radicalGlyph instanceof DiagramElement) {
       radicalGlyph.custom.setSize(
         this.glyphLocation,
-        // this.glyphStartWidth,
-        // this.glyphStartHeight,
         glyphBounds.width,
         glyphBounds.height,
-        // this.glyphLineWidth,
       );
     }
   }
