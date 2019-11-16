@@ -169,12 +169,16 @@ export default class Root extends Elements {
       glyphBounds.descent = contentBounds.descent + this.contentSpace.y;
       glyphBounds.ascent = contentBounds.ascent + this.contentSpace.y;
       glyphBounds.height = glyphBounds.ascent + glyphBounds.descent;
-      glyphBounds.width = startWidth
-        + this.contentSpace.x + contentBounds.width + this.contentSpace.x;
       let glyphStartHeight = startHeight;
+      let glyphStartWidth = startWidth;
       if (proportionalToHeight) {
         glyphStartHeight = startHeight * glyphBounds.height;
+        glyphStartWidth = startWidth * glyphBounds.height;
       }
+
+      glyphBounds.width = glyphStartWidth
+        + this.contentSpace.x + contentBounds.width + this.contentSpace.x;
+      
       const startTop = glyphBounds.height - glyphStartHeight;
       if (startTop < rootBounds.height / 2 + this.rootSpace.y) {
         rootLocation.y = loc.y
@@ -187,10 +191,10 @@ export default class Root extends Elements {
           - (rootBounds.height / 2 - rootBounds.descent);
       }
 
-      if (rootBounds.width + this.rootSpace.x > startWidth) {
-        this.glyphLocation.x = loc.x + rootBounds.width + this.rootSpace.x - startWidth;
+      if (rootBounds.width + this.rootSpace.x > glyphStartWidth) {
+        this.glyphLocation.x = loc.x + rootBounds.width + this.rootSpace.x - glyphStartWidth;
       }
-      mainContentLocation.x = this.glyphLocation.x + startWidth + this.contentSpace.x;
+      mainContentLocation.x = this.glyphLocation.x + glyphStartWidth + this.contentSpace.x;
       this.width = this.glyphLocation.x + glyphBounds.width - loc.x;
       this.ascent = Math.max(
         glyphBounds.ascent, rootBounds.ascent + rootLocation.y,
