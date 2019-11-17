@@ -1,6 +1,6 @@
 // @flow
 import {
-  Point, Rect,
+  Point, Rect, getPoint,
 } from '../../../../tools/g2';
 import { duplicateFromTo } from '../../../../tools/tools';
 import {
@@ -29,14 +29,14 @@ export default class Box extends Elements {
   // boxRotation: number;
   boxPosition: Point;
   boxInSize: boolean;
-  space: number;
+  space: Point;
 
   constructor(
     mainContent: Elements,
     box: TypeBoxElement & DiagramElementPrimitive | null
        | TypeBoxElement & DiagramElementCollection,
     boxInSize: ?boolean = false,
-    space: ?number = 0,
+    space: ?([number, number] | Point | number) = 0,
   ) {
     if (box) {
       super([mainContent, new Element(box)]);
@@ -52,7 +52,7 @@ export default class Box extends Elements {
     } else {
       this.boxInSize = boxInSize;
     }
-    this.space = space == null ? 0 : space;
+    this.space = getPoint(space || 0); // space == null ? 0 : space;
     this.boxWidth = 1;
     this.boxHeight = 1;
     this.boxPosition = new Point(0, 0);
@@ -87,25 +87,25 @@ export default class Box extends Elements {
       ({ lineWidth } = this.box);
     }
 
-    const boxWidth = this.mainContent.width + this.space * 2;
-    const boxHeight = this.mainContent.height + this.space * 2;
+    const boxWidth = this.mainContent.width + this.space.x * 2;
+    const boxHeight = this.mainContent.height + this.space.y * 2;
 
     const bottomLeft = new Point(
-      location.x - this.space,
-      location.y - this.mainContent.descent - this.space,
+      location.x - this.space.x,
+      location.y - this.mainContent.descent - this.space.y,
     );
 
     if (this.boxInSize) {
       this.width = boxWidth + lineWidth;
       this.height = boxHeight + lineWidth;
-      this.ascent = this.mainContent.ascent + this.space + lineWidth / 2;
-      this.descent = this.mainContent.descent + this.space + lineWidth / 2;
-      this.mainContent.offsetLocation(new Point(this.space, 0));
-      bottomLeft.x += this.space;
+      this.ascent = this.mainContent.ascent + this.space.y + lineWidth / 2;
+      this.descent = this.mainContent.descent + this.space.y + lineWidth / 2;
+      this.mainContent.offsetLocation(new Point(this.space.x, 0));
+      bottomLeft.x += this.space.x;
     } else {
       this.width = this.mainContent.width;
-      this.ascent = this.mainContent.ascent + this.space;
-      this.descent = this.mainContent.descent + this.space;
+      this.ascent = this.mainContent.ascent + this.space.y;
+      this.descent = this.mainContent.descent + this.space.y;
     }
 
     this.height = this.descent + this.ascent;
