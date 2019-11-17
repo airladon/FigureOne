@@ -211,7 +211,7 @@ export default class Root extends Elements {
 
       glyphBounds.width = glyphStartWidth
         + this.contentSpace.left + contentBounds.width + this.contentSpace.right;
-      
+
       const startTop = glyphBounds.height - glyphStartHeight;
       if (startTop < rootBounds.height / 2 + this.rootSpace.y) {
         rootLocation.y = loc.y
