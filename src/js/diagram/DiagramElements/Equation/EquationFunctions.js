@@ -459,7 +459,7 @@ export class EquationFunctions {
     const f = new Fraction(                         // $FlowFixMe
       this.contentToElement(numerator),             // $FlowFixMe
       this.contentToElement(denominator),           // $FlowFixMe
-      getDiagramElement(this.elements, symbol),     // $FlowFixMe
+      getDiagramElement(this.elements, symbol),
     );
     if (scale != null) {                            // $FlowFixMe
       f.scaleModifier = scale;
@@ -471,9 +471,6 @@ export class EquationFunctions {
     optionsOrNum: TypeRootObject | TypeRootArray | TypeEquationPhrase,
     sym: string | null = null,
     rootIn: TypeEquationPhrase | null = null,
-    // lineWidthIn: ?number = null,
-    // startWidthIn: ?number = null,
-    // startHeightIn: ?number = null,
     contentSpaceIn: ?({
       left: ?number,
       right: ?number,
@@ -486,9 +483,6 @@ export class EquationFunctions {
     let content;
     let root;
     let symbol;
-    // let lineWidth;
-    // let startWidth;
-    // let startHeight;
     let contentSpace;
     let rootSpace;
     let rootScale;
@@ -497,16 +491,12 @@ export class EquationFunctions {
       content = optionsOrNum;
       root = rootIn;
       symbol = sym;
-      // lineWidth = lineWidthIn;
-      // startWidth = startWidthIn;
-      // startHeight = startHeightIn;
       contentSpace = contentSpaceIn;
       rootSpace = rootSpaceIn;
       rootScale = rootScaleIn;
     } else if (Array.isArray(optionsOrNum)) {
       [                                                  // $FlowFixMe
-        content, symbol, root,
-        // lineWidth, startWidth, startHeight,
+        content, symbol, root,                           // $FlowFixMe
         contentSpace, rootSpace, rootScale,
       ] = optionsOrNum;
     } else {
@@ -520,20 +510,12 @@ export class EquationFunctions {
       this.contentToElement(content),             // $FlowFixMe
       getDiagramElement(this.elements, symbol),     // $FlowFixMe
       this.contentToElement(root),           // $FlowFixMe
-      // lineWidth,
-      // startWidth,
-      // startHeight,
-      contentSpace,
-      rootSpace,
+      contentSpace,           // $FlowFixMe
+      rootSpace,           // $FlowFixMe
       rootScale,
     );
-    // if (scale != null) {                            // $FlowFixMe
-    //   f.scaleModifier = scale;
-    // }
     return f;
   }
-
-
 
   supSub(
     optionsOrContent: TypeSupSubObject | TypeSupSubArray | TypeEquationPhrase,

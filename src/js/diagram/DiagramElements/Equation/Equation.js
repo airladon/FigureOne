@@ -350,7 +350,7 @@ export class EquationNew extends DiagramElementCollection {
 
     // Helper function to add symbol element
     const makeSymbolElem = (options: { symbol: string, numLines?: number,
-    side?: 'top' | 'left' | 'bottom' | 'right', color?: Array<number>, fill?: boolean, width?: number}) => {
+    side?: 'top' | 'left' | 'bottom' | 'right', color?: Array<number>, fill?: boolean, width?: number, lineWidth?: number, maxStartHeight?: ?number, maxStartWidth?: ?number, proportionalToHeight?: boolean, startHeight?: number, startWidth?: number, staticSize?: ?(Point | [number, number])}) => {
       let symbol = this.eqn.symbols.get(options.symbol, options);
       // console.log('got', symbol)
       if (symbol == null) {

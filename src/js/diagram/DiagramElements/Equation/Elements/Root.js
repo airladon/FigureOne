@@ -6,7 +6,7 @@ import {
   DiagramElementPrimitive, DiagramElementCollection, DiagramElement,
 } from '../../../Element';
 // import { roundNum } from '../../../../tools/math';
-import { duplicateFromTo } from '../../../../tools/tools';
+import { duplicateFromTo, joinObjects } from '../../../../tools/tools';
 import { Element, Elements } from './Element';
 import Bounds from './Bounds';
 
@@ -74,7 +74,10 @@ export default class Root extends Elements {
         contentSpace.x, contentSpace.y, contentSpace.x, contentSpace.y,
       );
     } else if (contentSpace != null) {
-      this.contentSpace = contentSpace;
+      this.contentSpace = joinObjects(
+        space(0.01, 0.01, 0.01, 0.01),  // $FlowFixMe
+        contentSpace,
+      );
     }
     // this.contentSpace = getPoint(contentSpace || 0.05);
     this.rootSpace = getPoint(rootSpace || 0.05);
