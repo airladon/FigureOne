@@ -27,3 +27,87 @@ Array [
   1,
 ]
 `;
+
+exports[`Equation Functions - Root Symbols 1`] = `
+Array [
+  0.7,
+  0,
+  0.07447,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Root Symbols 2`] = `
+Array [
+  0.11247,
+  0,
+  0,
+  0,
+  0.0921,
+  -0.0156,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Root Symbols 3`] = `
+Array [
+  0.7,
+  0,
+  0.07447,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Root Symbols 4`] = `
+Array [
+  0.11247,
+  0,
+  0,
+  0,
+  0.0921,
+  -0.0156,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Root Symbols 5`] = `
+Array [
+  0.7,
+  0,
+  0.07447,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Root Symbols 6`] = `
+Array [
+  0.11247,
+  0,
+  0,
+  0,
+  0.0921,
+  -0.0156,
+  0,
+  0,
+  1,
+]
+`;
