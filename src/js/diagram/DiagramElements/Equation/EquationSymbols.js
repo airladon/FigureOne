@@ -36,7 +36,7 @@ export default class EquationSymbols {
       side?: 'left' | 'right' | 'bottom' | 'top',
       width?: number,
       fill?: boolean,
-      staticSize?: Point | [number, number],
+      staticSize?: ?(Point | [number, number]),
       startWidth?: number,
       lineWidth?: number,
       startHeight?: number,
@@ -98,7 +98,7 @@ export default class EquationSymbols {
     color?: Array<number>,
     fill?: boolean,
     width?: number,
-    staticSize?: Point | [number, number],
+    staticSize?: ?(Point | [number, number]),
   }) {
     const defaultOptions = {
       color: this.defaultColor,
@@ -118,9 +118,18 @@ export default class EquationSymbols {
     proportionalToHeight?: boolean,
     maxStartWidth?: ?number,
     maxStartHeight?: ?number,
-    staticSize?: Point | [number, number],
+    staticSize?: ?(Point | [number, number]),
   }) {
-    const defaultOptions = {
+    const defaultOptions: {
+      color: Array<number>,
+      lineWidth: number,
+      startHeight: number,
+      startWidth: number,
+      proportionalToHeight: boolean,
+      maxStartWidth: ?number,
+      maxStartHeight: ?number,
+      staticSize: ?(Point | [number, number]),
+    } = {
       color: this.defaultColor,
       lineWidth: 0.01,
       staticSize: null,
