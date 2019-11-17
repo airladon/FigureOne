@@ -35,6 +35,7 @@ export default class Root extends Elements {
     right: number,
     top: number,
   };
+
   rootScale: number;
   // glyphScale: number;
 
@@ -97,9 +98,9 @@ export default class Root extends Elements {
     }
 
     const rootCopy = new Root(
-      root,
       content,
       glyph,
+      root,
     );
     duplicateFromTo(
       this, rootCopy,

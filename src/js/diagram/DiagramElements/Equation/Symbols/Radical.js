@@ -7,7 +7,7 @@ import {
 import DiagramPrimitives from '../../../DiagramPrimitives/DiagramPrimitives';
 import polyLineTriangles3 from '../../../DrawingObjects/VertexObject/PolyLineTriangles3';
 import {
-  Point, Transform, // Rect, getPoint,
+  Point, Transform, getPoint,
 } from '../../../../tools/g2';
 
 function updateStaticLinePoints(
@@ -44,8 +44,8 @@ function updateStaticLinePoints(
   }
   const coords = [
     new Point(0, startHeight * 0.9),
-    new Point(startWidth / 3, startHeight),
-    new Point(startWidth / 3 * 2, 0),
+    new Point(startWidth / 5, startHeight),
+    new Point(startWidth / 5 * 3, 0),
     new Point(startWidth, height),
     new Point(width, height),
   ];
@@ -117,7 +117,16 @@ export default function Radical(
   radical.custom.maxStartHeight = maxStartHeight;
   // Defined every time a setSize event is called
   if (staticSize != null) {
-    radical.custom.boxType = 'static';
+    radical.custom.type = 'static';
+    const size = getPoint(staticSize);
+    // this is messed up and I wouldn't use it, but you can
+    updateStaticLinePoints(
+      radical, radical.custom.startWidth, radical.custom.startHeight,
+      size.x, size.y,
+      radical.custom.lineWidth,
+      radical.custom.proportionalToHeight,
+      radical.custom.maxStartWidth, radical.custom.maxStartHeight,
+    );
   // defined everytime a setTransform event is called
   } else {
     radical.custom.scale = new Point(1, 1);
@@ -139,7 +148,7 @@ export default function Radical(
       t.updateScale(1, 1);
       return t;
     };
-    radical.custom.boxType = 'dynamic';
+    radical.custom.type = 'dynamic';
   }
 
   // eslint-disable-next-line max-len

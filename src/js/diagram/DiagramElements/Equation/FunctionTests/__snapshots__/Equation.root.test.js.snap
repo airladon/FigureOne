@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Equation Functions - Root Root 1`] = `
+Array [
+  0.7,
+  0,
+  0.07447,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Root Root 2`] = `
+Array [
+  0.20247,
+  0,
+  0,
+  0,
+  0.0921,
+  -0.0056,
+  0,
+  0,
+  1,
+]
+`;

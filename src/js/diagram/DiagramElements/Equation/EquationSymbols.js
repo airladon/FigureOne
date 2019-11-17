@@ -38,6 +38,7 @@ export default class EquationSymbols {
       fill?: boolean,
       staticSize?: Point | [number, number],
       startWidth?: number,
+      lineWidth?: number,
       startHeight?: number,
       maxStartWidth?: ?number,
       maxStartHeight?: ?number,
@@ -111,7 +112,7 @@ export default class EquationSymbols {
 
   radical(optionsIn: {
     color?: Array<number>,
-    width?: number,
+    lineWidth?: number,
     startHeight?: number,
     startWidth?: number,
     proportionalToHeight?: boolean,
@@ -121,20 +122,27 @@ export default class EquationSymbols {
   }) {
     const defaultOptions = {
       color: this.defaultColor,
-      fill: false,
-      width: 0.01,
+      lineWidth: 0.01,
       staticSize: null,
-      startHeight: 0.1,
-      startWidth: 0.1,
-      maxStartWidth: null,
-      maxStartHeight: null,
-      proportionalToHeight: false,
+      startHeight: 0.5,
+      startWidth: 0.7,
+      maxStartWidth: 0.15,
+      maxStartHeight: 0.15,
+      proportionalToHeight: true,
     };
+    if (optionsIn.proportionalToHeight != null
+      && optionsIn.proportionalToHeight === false
+    ) {
+      defaultOptions.startHeight = 0.15;
+      defaultOptions.startWidth = 0.15;
+      defaultOptions.maxStartHeight = null;
+      defaultOptions.maxStartWidth = null;
+    }
     const options = joinObjects(defaultOptions, optionsIn);
     return Radical(
-      this.shapes, options.color, options.width,
+      this.shapes, options.color, options.lineWidth,
       options.startWidth, options.startHeight, options.proportionalToHeight,
-      options.maxStartHeight, options.minStartHeight,
+      options.maxStartWidth, options.maxStartHeight,
       options.staticSize,
     );
   }
