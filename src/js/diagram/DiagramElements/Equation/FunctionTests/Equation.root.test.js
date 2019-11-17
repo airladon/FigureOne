@@ -14,7 +14,7 @@ jest.mock('../../../Gesture');
 jest.mock('../../../webgl/webgl');
 jest.mock('../../../DrawContext2D');
 
-describe('Equation Functions - Strike', () => {
+describe('Equation Functions - Root', () => {
   let diagram;
   let eqn;
   let color1;
@@ -28,7 +28,29 @@ describe('Equation Functions - Strike', () => {
       a: 'a',
       b: 'b',
       c: 'c',
-      root: { symbol: 'radical', color: [0, 0.9, 0, 1] },
+      // root1: {
+      //   symbol: 'radical',
+      //   color: color1,
+      //   lineWidth: 0.01,
+      //   startHeight: 0.5,
+      //   startWidth: 0.7,
+      //   maxStartHeight: 0.15,
+      //   maxStartWidth: 0.15,
+      //   proportionalToHeight: true,
+      //   // staticSize: [3, 1],
+      // },
+      // root2: {
+      //   symbol: 'radical',
+      //   color: color1,
+      //   lineWidth: 0.01,
+      //   startHeight: 0.5,
+      //   startWidth: 0.7,
+      //   maxStartHeight: null,
+      //   maxStartWidth: null,
+      // },
+      root3: {
+        symbol: 'radical',
+      },
     };
     functions = {
       single: () => {
@@ -37,35 +59,48 @@ describe('Equation Functions - Strike', () => {
         const root = e.root.bind(e);
         eqn.addElements(elements);
         eqn.addForms({
-          // Full Object
+          // Method Object
           0: {
-            content: {
-              root: {
-                content: 'a',
-                symbol: 'root',
+            root: {
+              content: 'a',
+              symbol: 'root3',
+              root: 'b',
+              contentSpace: {
+                left: 0.01, bottom: 0, top: 0.02, right: 0.1,
               },
+              rootSpace: [0.01, 0.01],
+              rootScale: 0.8,
             },
           },
-          //   // Method Object
-          // 1: {
-          //   box: {
-          //     content: 'a',
-          //     symbol: 'box',
-          //   },
-          // },
-          // // Method Array
-          // 2: { box: ['a', 'box'] },
-          // // Function with Method Array
-          // 3: e.box(['a', 'box']),
-          // // Function with parameters
-          // 4: e.box('a', 'box'),
-          // // Bound Function with parameters
-          // 5: box('a', 'box'),
-          // // Bound Function with Object
-          // 6: box({
-          //   content: 'a',
-          //   symbol: 'box',
-          // }),
+          // Method Array
+          1: {
+            root: ['a', 'root3', 'b', {
+              left: 0.01, bottom: 0, top: 0.02, right: 0.1,
+            }, [0.01, 0.01], 0.8],
+          },
+          // Function with Method Array
+          2: e.root(['a', 'root3', 'b', {
+            left: 0.01, bottom: 0, top: 0.02, right: 0.1,
+          }, [0.01, 0.01], 0.8]),
+          // Function with parameters
+          3: e.root('a', 'root3', 'b', {
+            left: 0.01, bottom: 0, top: 0.02, right: 0.1,
+          }, [0.01, 0.01], 0.8),
+          // Bound Function with parameters
+          4: root('a', 'root3', 'b', {
+            left: 0.01, bottom: 0, top: 0.02, right: 0.1,
+          }, [0.01, 0.01], 0.8),
+          // Bound Function with Object
+          5: root({
+            content: 'a',
+            symbol: 'root3',
+            root: 'b',
+            contentSpace: {
+              left: 0.01, bottom: 0, top: 0.02, right: 0.1,
+            },
+            rootSpace: [0.01, 0.01],
+            rootScale: 0.8,
+          }),
         });
       },
       // parameters: () => {
@@ -103,25 +138,25 @@ describe('Equation Functions - Strike', () => {
   });
   test('Root', () => {
     functions.single();
-    // const elems = [eqn._a, eqn._b, eqn._c];
-    // const formsToTest = ['1', '2', '3', '4', '5', '6'];
+    const elems = [eqn._a, eqn._b];
+    const formsToTest = ['1', '2', '3', '4', '5'];
 
-    console.log(1)
+    // console.log(1)
     eqn.showForm('0');
-    console.log(2)
-    console.log(eqn._root.getScale())
-    // const positions0 = elems.map(elem => round(elem.transform.mat).slice());
-    // formsToTest.forEach((f) => {
-    //   eqn.showForm(f);
-    //   const positions = elems.map(elem => round(elem.transform.mat).slice());
-    //   expect(positions0).toEqual(positions);
-    // });
+    // console.log(2)
+    // console.log(eqn._root.getScale())
+    const positions0 = elems.map(elem => round(elem.transform.mat).slice());
+    formsToTest.forEach((f) => {
+      eqn.showForm(f);
+      const positions = elems.map(elem => round(elem.transform.mat).slice());
+      expect(positions0).toEqual(positions);
+    });
 
-    // // Snapshot test on most simple layout
-    // eqn.showForm('0');
-    // tools.cleanUIDs(eqn);
-    // expect(round(eqn._a.transform.mat)).toMatchSnapshot();
-    // expect(round(eqn._box.transform.mat)).toMatchSnapshot();
+    // Snapshot test on most simple layout
+    eqn.showForm('0');
+    tools.cleanUIDs(eqn);
+    expect(round(eqn._a.transform.mat)).toMatchSnapshot();
+    expect(round(eqn._root3.transform.mat)).toMatchSnapshot();
   });
   // test('Box Parameters', () => {
   //   functions.parameters();
