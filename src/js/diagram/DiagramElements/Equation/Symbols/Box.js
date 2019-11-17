@@ -8,25 +8,53 @@ import {
 
 function getRectAndSpace(
   rectOrParent: Rect | DiagramElementCollection,
-  childrenOrSpace: ?Array<string | DiagramElement> = null,
-  space: ?number = null,
+  childrenOrSpace: ?(Array<string | DiagramElement> | ?([number, number] | Point | number)) = null,
+  space: ?([number, number] | Point | number) = null,
 ) {
   let rectToUse;
-  let spaceToUse = 0;
-  if (rectOrParent instanceof Rect) {
-    rectToUse = rectOrParent;
-    if (typeof childrenOrSpace === 'number') {
-      spaceToUse = childrenOrSpace;
-    }
-  } else if (typeof childrenOrSpace === 'number') {
-    spaceToUse = childrenOrSpace;
-    rectToUse = rectOrParent.getBoundingRect('local');
-  } else {
-    rectToUse = rectOrParent.getBoundingRect('local', childrenOrSpace);
-    if (typeof space === 'number') {
-      spaceToUse = space;
+  let childrenToUse = null;
+  let spaceToUse = new Point(0, 0);
+  
+  if (Array.isArray(childrenOrSpace)) {
+    if (childrenOrSpace.length > 1) {
+      if (typeof childrenOrSpace[0] === 'string' || childrenOrSpace[0] instanceof DiagramElement) {
+        childrenToUse = childrenOrSpace;
+      } else {  // $FlowFixMe
+        spaceToUse = getPoint(childrenOrSpace);
+      }
     }
   }
+
+  if (space != null) {
+    spaceToUse = getPoint(space);
+  }
+
+  if (rectOrParent instanceof Rect) {
+    rectToUse = rectOrParent;
+  } else {  // $FlowFixMe
+    rectToUse = rectOrParent.getBoundingRect('local', childrenToUse);
+  }
+
+  // if (rectOrParent instanceof Rect) {
+  //   rectToUse = rectOrParent;
+  //   if (typeof childrenOrSpace === 'number'
+  //     || childrenOrSpace instanceof Point
+  //     || (Array.isArray(childrenOrSpace) && childrenOrSpace.length > 0 && typeof childrenOrSpace[0] === 'number')) {
+  //     spaceToUse = getPoint(childrenOrSpace);
+  //   }
+  // } else if (typeof childrenOrSpace === 'number'
+  //   || childrenOrSpace instanceof Point
+  //   || (Array.isArray(childrenOrSpace) && childrenOrSpace.length > 0 && typeof childrenOrSpace[0] === 'number')) {
+  //   spaceToUse = getPoint(childrenOrSpace);
+  //   rectToUse = rectOrParent.getBoundingRect('local');
+  // } else {
+  //   rectToUse = rectOrParent.getBoundingRect('local', childrenOrSpace);
+  //   if (typeof space === 'number'
+  //     || childrenOrSpace instanceof Point
+  //     || (Array.isArray(childrenOrSpace) && childrenOrSpace.length > 0 && typeof childrenOrSpace[0] === 'number')) {
+  //     spaceToUse = getPoint(space);
+  //   }
+  // }
   return [rectToUse, spaceToUse];
 }
 
@@ -140,7 +168,7 @@ export default function Box(
   }
 
   // eslint-disable-next-line max-len
-  box.custom.setSize = (rectOrParent: Rect | DiagramElementCollection, childrenOrSpace: ?Array<string | DiagramElement> = null, space: ?number = null) => {
+  box.custom.setSize = (rectOrParent: Rect | DiagramElementCollection, childrenOrSpace: ?(Array<string | DiagramElement> | ?([number, number] | Point | number)) = null, space: ?([number, number] | Point | number) = null) => {
     const [rectToUse, spaceToUse] = getRectAndSpace(
       rectOrParent, childrenOrSpace, space,
     );
@@ -149,8 +177,8 @@ export default function Box(
     }
     const t = box.transform._dup();
     t.updateScale(
-      rectToUse.width + spaceToUse * 2,
-      rectToUse.height + spaceToUse * 2,
+      rectToUse.width + spaceToUse.x * 2,
+      rectToUse.height + spaceToUse.y * 2,
     );
     t.updateTranslation(
       rectToUse.left + rectToUse.width / 2,

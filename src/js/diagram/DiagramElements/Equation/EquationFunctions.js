@@ -155,7 +155,7 @@ export type TypeBoxObject = {
   content: TypeEquationPhrase;
   symbol: string;
   inSize?: boolean;
-  space?: number;
+  space?: ?([number, number] | Point | number) ;
 };
 export type TypeStrikeArray = [
   TypeEquationPhrase,
@@ -166,7 +166,7 @@ export type TypeBoxArray = [
   TypeEquationPhrase,
   string,
   ?boolean,
-  ?number,
+  ?([number, number] | Point | number) ,
 ];
 export type TypeBracketObject = {
   content: TypeEquationPhrase;
@@ -672,7 +672,7 @@ export class EquationFunctions {
     optionsOrContent: TypeBoxObject | TypeBoxArray | TypeEquationPhrase,
     sym: string | null = null,
     boxInSize: boolean | null = null,
-    spaceIn: number | null = null,
+    spaceIn: ?([number, number] | Point | number) = null,
     // options: TypeStrikeObject | TypeStrikeArray) {
   ) {
     let content;
