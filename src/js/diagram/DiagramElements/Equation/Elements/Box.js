@@ -11,18 +11,17 @@ import { Element, Elements } from './Element';
 // // DiagramElementPrimitives or DiagramElementCollections and HTML Objects
 // // and arranges their size in a )
 
-type TypeBoxElement = {
-  lineWidth?: number,
-  setSize: (Rect) => void,
-};
+// type TypeBoxElement = {
+//   lineWidth?: number,
+//   setSize: (Rect) => void,
+// };
 
 export default class Box extends Elements {
   mainContent: Elements;
-  box: TypeBoxElement & DiagramElementPrimitive | null
-    | TypeBoxElement & DiagramElementCollection;
+  box: DiagramElementPrimitive | null | DiagramElementCollection;
 
   scaleModifier: number;
-  lineWidth: number;
+  // lineWidth: number;
   boxWidth: number;
   boxHeight: number;
   // boxScale: Point;
@@ -33,8 +32,7 @@ export default class Box extends Elements {
 
   constructor(
     mainContent: Elements,
-    box: TypeBoxElement & DiagramElementPrimitive | null
-       | TypeBoxElement & DiagramElementCollection,
+    box: DiagramElementPrimitive | null | DiagramElementCollection,
     boxInSize: ?boolean = false,
     space: ?([number, number] | Point | number) = 0,
   ) {
@@ -45,7 +43,7 @@ export default class Box extends Elements {
     }
     this.box = box;
     this.scaleModifier = 1;
-    this.lineWidth = 0.01;
+    // this.lineWidth = 0;
     this.mainContent = mainContent;
     if (boxInSize == null) {
       this.boxInSize = false;

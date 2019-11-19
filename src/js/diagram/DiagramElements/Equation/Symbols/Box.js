@@ -15,7 +15,7 @@ function getRectAndSpace(
   let childrenToUse = null;
   let spaceToUse = new Point(0, 0);
   if (Array.isArray(childrenOrSpace)) {
-    if (childrenOrSpace.length > 1) {
+    if (childrenOrSpace.length > 0) {
       if (typeof childrenOrSpace[0] === 'string' || childrenOrSpace[0] instanceof DiagramElement) {
         childrenToUse = childrenOrSpace;
       } else {  // $FlowFixMe
@@ -32,7 +32,7 @@ function getRectAndSpace(
 
   if (rectOrParent instanceof Rect) {
     rectToUse = rectOrParent;
-  } else {  // $FlowFixMe
+  } else {                                            // $FlowFixMe
     rectToUse = rectOrParent.getBoundingRect('local', childrenToUse);
   }
   return [rectToUse, spaceToUse];
@@ -95,6 +95,7 @@ export default function Box(
       transform: new Transform('box').scale(1, 1).translate(0, 0),
     });
     box.custom.boxType = 'fill';
+    box.custom.lineWidth = 0;
   // Defined every time a setSize event is called
   } else if (staticSize != null) {
     const poly = (p1, p2, w) => shapes.polyLine({
@@ -154,14 +155,14 @@ export default function Box(
     const [rectToUse, spaceToUse] = getRectAndSpace(
       rectOrParent, childrenOrSpace, space,
     );
+
     if (box.custom.boxType === 'line') {
-      updateStaticLinePoints(box, width, new Point(rectToUse.width, rectToUse.height));
+      updateStaticLinePoints(box, box.custom.lineWidth, new Point(rectToUse.width, rectToUse.height));
     }
     const t = box.transform._dup();
-
     t.updateScale(
-      rectToUse.width + spaceToUse.x * 2 + width,
-      rectToUse.height + spaceToUse.y * 2 + width,
+      rectToUse.width + spaceToUse.x * 2 + box.custom.lineWidth,
+      rectToUse.height + spaceToUse.y * 2 + box.custom.lineWidth,
     );
     t.updateTranslation(
       rectToUse.left + rectToUse.width / 2,

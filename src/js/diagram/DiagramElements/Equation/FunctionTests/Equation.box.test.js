@@ -26,12 +26,8 @@ describe('Equation Functions - Box', () => {
     color1 = [0.95, 0, 0, 1];
     elements = {
       a: 'a',
-      b: 'b',
-      c: 'c',
-      // d: 'd',
-      // e: 'e',
-      // f: 'f',
-      // g: 'g',
+      // b: 'b',
+      // c: 'c',
       box: { symbol: 'box', color: [0, 0.9, 0, 1], width: 0.1 },
       box1: { symbol: 'box', color: [0, 0.9, 0, 1], fill: true },
     };
@@ -81,11 +77,12 @@ describe('Equation Functions - Box', () => {
         eqn.addForms({
           // without
           //   // Method Object
-          without: box('a', 'box'),
-          with0True: box('a', 'box', true),
-          with0False: box('a', 'box', false),
-          with1False: box('a', 'box', false, 0.1),
+          false0: box('a', 'box'),
+          true0fill: box('a', 'box1', true),
+          false0_1: box('a', 'box', false),
+          false0p1: box('a', 'box', false, 0.1),
           // With parameters
+          // True 0.1
           0: {
             box: {
               content: 'a',
@@ -108,7 +105,7 @@ describe('Equation Functions - Box', () => {
   });
   test('Box', () => {
     functions.single();
-    const elems = [eqn._a, eqn._b, eqn._c];
+    const elems = [eqn._a];
     const formsToTest = ['1', '2', '3', '4', '5', '6'];
 
     eqn.showForm('0');
@@ -128,31 +125,31 @@ describe('Equation Functions - Box', () => {
   test('Box Parameters', () => {
     functions.parameters();
     const elems = [eqn._a];
-    const withoutFormsToTest = ['with0True', 'with0False', 'with1False'];
-    const withFormsToTest = ['1', '2'];
+    const noMoveCases = ['true0fill', 'false0_1', 'false0p1'];
+    const moveCases = ['1', '2'];
 
     // get without positions
-    eqn.showForm('without');
-    const withoutPos = elems.map(elem => round(elem.transform.mat).slice());
+    eqn.showForm('false0');
+    const false0 = elems.map(elem => round(elem.transform.mat).slice());
 
-    withoutFormsToTest.forEach((f) => {
+    noMoveCases.forEach((f) => {
       eqn.showForm(f);
       const positions = elems.map(elem => round(elem.transform.mat).slice());
-      expect(withoutPos).toEqual(positions);
+      expect(false0).toEqual(positions);
     });
 
     // with reference positions
     eqn.showForm('0');
-    const withPos = elems.map(elem => round(elem.transform.mat).slice());
-    expect(withoutPos).not.toEqual(withPos);
+    const true0p1 = elems.map(elem => round(elem.transform.mat).slice());
+    expect(false0).not.toEqual(true0p1);
 
-    withFormsToTest.forEach((f) => {
+    moveCases.forEach((f) => {
       eqn.showForm(f);
       const positions = elems.map(elem => round(elem.transform.mat).slice());
-      expect(withPos).toEqual(positions);
+      expect(true0p1).toEqual(positions);
     });
   });
-  test.only('Box Line Element', () => {
+  test('Box Line Element', () => {
     functions.box();
     const w = 0.1;
     const box = eqn._box;
@@ -161,26 +158,26 @@ describe('Equation Functions - Box', () => {
 
     let bx = box.getBoundingRect();
     // console.log(box.drawingObject.points)
-    expect(round(bx.left)).toEqual(round(a.left - w / 2));
-    expect(round(bx.width)).toEqual(round(a.width + w));
-    expect(round(bx.bottom)).toEqual(round(a.bottom - w / 2));
-    expect(round(bx.height)).toEqual(round(a.height + w));
+    expect(round(bx.left)).toEqual(round(a.left - w));
+    expect(round(bx.width)).toEqual(round(a.width + w * 2));
+    expect(round(bx.bottom)).toEqual(round(a.bottom - w));
+    expect(round(bx.height)).toEqual(round(a.height + w * 2));
 
     let s = 0.1; // space
     box.custom.setSize(a, s);
     bx = box.getBoundingRect();
-    expect(round(bx.left)).toEqual(round(a.left - w / 2 - s));
-    expect(round(bx.width)).toEqual(round(a.width + w + 2 * s));
-    expect(round(bx.bottom)).toEqual(round(a.bottom - w / 2 - s));
-    expect(round(bx.height)).toEqual(round(a.height + w + 2 * s));
+    expect(round(bx.left)).toEqual(round(a.left - w - s));
+    expect(round(bx.width)).toEqual(round(a.width + w * 2 + 2 * s));
+    expect(round(bx.bottom)).toEqual(round(a.bottom - w - s));
+    expect(round(bx.height)).toEqual(round(a.height + w * 2 + 2 * s));
 
     s = 0.2;
     box.custom.setSize(eqn, ['a'], s);
     bx = box.getBoundingRect();
-    expect(round(bx.left)).toEqual(round(a.left - w / 2 - s));
-    expect(round(bx.width)).toEqual(round(a.width + w + 2 * s));
-    expect(round(bx.bottom)).toEqual(round(a.bottom - w / 2 - s));
-    expect(round(bx.height)).toEqual(round(a.height + w + 2 * s));
+    expect(round(bx.left)).toEqual(round(a.left - w - s));
+    expect(round(bx.width)).toEqual(round(a.width + w * 2 + 2 * s));
+    expect(round(bx.bottom)).toEqual(round(a.bottom - w - s));
+    expect(round(bx.height)).toEqual(round(a.height + w * 2 + 2 * s));
   });
   test('Box Fill Element', () => {
     functions.box();

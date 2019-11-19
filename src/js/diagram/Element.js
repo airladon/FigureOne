@@ -40,7 +40,7 @@ import WebGLInstance from './webgl/webgl';
 //   if (typeof callback === 'function') {
 //     callbackToUse = callback;
 //   }
-//   return callbackToUse;
+//   return callbackToUse; + width
 // }
 
 export type TypeScenario = {
