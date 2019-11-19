@@ -598,7 +598,11 @@ class Line {
   C: number;
   distance: number;
 
-  constructor(p1: Point | [number, number], p2OrMag: Point  | [number, number] | number, angle: number = 0) {
+  constructor(
+    p1: Point | [number, number],
+    p2OrMag: Point | [number, number] | number,
+    angle: number = 0,
+  ) {
     this.p1 = getPoint(p1);
     if (p2OrMag instanceof Point || Array.isArray(p2OrMag)) {
       this.p2 = getPoint(p2OrMag);
