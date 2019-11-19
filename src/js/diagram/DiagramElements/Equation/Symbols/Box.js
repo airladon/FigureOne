@@ -14,7 +14,6 @@ function getRectAndSpace(
   let rectToUse;
   let childrenToUse = null;
   let spaceToUse = new Point(0, 0);
-  
   if (Array.isArray(childrenOrSpace)) {
     if (childrenOrSpace.length > 1) {
       if (typeof childrenOrSpace[0] === 'string' || childrenOrSpace[0] instanceof DiagramElement) {
@@ -23,6 +22,8 @@ function getRectAndSpace(
         spaceToUse = getPoint(childrenOrSpace);
       }
     }
+  } if (typeof childrenOrSpace === 'number') {
+    spaceToUse = getPoint(childrenOrSpace);
   }
 
   if (space != null) {
@@ -34,27 +35,6 @@ function getRectAndSpace(
   } else {  // $FlowFixMe
     rectToUse = rectOrParent.getBoundingRect('local', childrenToUse);
   }
-
-  // if (rectOrParent instanceof Rect) {
-  //   rectToUse = rectOrParent;
-  //   if (typeof childrenOrSpace === 'number'
-  //     || childrenOrSpace instanceof Point
-  //     || (Array.isArray(childrenOrSpace) && childrenOrSpace.length > 0 && typeof childrenOrSpace[0] === 'number')) {
-  //     spaceToUse = getPoint(childrenOrSpace);
-  //   }
-  // } else if (typeof childrenOrSpace === 'number'
-  //   || childrenOrSpace instanceof Point
-  //   || (Array.isArray(childrenOrSpace) && childrenOrSpace.length > 0 && typeof childrenOrSpace[0] === 'number')) {
-  //   spaceToUse = getPoint(childrenOrSpace);
-  //   rectToUse = rectOrParent.getBoundingRect('local');
-  // } else {
-  //   rectToUse = rectOrParent.getBoundingRect('local', childrenOrSpace);
-  //   if (typeof space === 'number'
-  //     || childrenOrSpace instanceof Point
-  //     || (Array.isArray(childrenOrSpace) && childrenOrSpace.length > 0 && typeof childrenOrSpace[0] === 'number')) {
-  //     spaceToUse = getPoint(space);
-  //   }
-  // }
   return [rectToUse, spaceToUse];
 }
 
@@ -134,6 +114,7 @@ export default function Box(
     box.add('bottom', poly(points[0], points[1], 0.1));
     updateStaticLinePoints(box, width, staticSize);
     box.custom.boxType = 'line';
+    box.custom.lineWidth = width;
   // defined everytime a setTransform event is called
   } else {
     box = shapes.polyLine({
@@ -147,6 +128,7 @@ export default function Box(
       transform: new Transform('box').scale(1, 1).translate(0, 0),
     });
     box.custom.scale = new Point(1, 1);
+    box.custom.lineWidth = width;
     box.internalSetTransformCallback = () => {
       const s = box.getScale();
       if (box.custom.scale.isNotEqualTo(s, 8)) {
@@ -176,6 +158,7 @@ export default function Box(
       updateStaticLinePoints(box, width, new Point(rectToUse.width, rectToUse.height));
     }
     const t = box.transform._dup();
+
     t.updateScale(
       rectToUse.width + spaceToUse.x * 2,
       rectToUse.height + spaceToUse.y * 2,

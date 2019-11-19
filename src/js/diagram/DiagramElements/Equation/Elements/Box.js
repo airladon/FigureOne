@@ -82,14 +82,15 @@ export default class Box extends Elements {
 
     let lineWidth = 0;
     if (this.box
-       && this.box.lineWidth != null && typeof this.box.lineWidth === 'number'
+       && this.box.custom.lineWidth != null && typeof this.box.custom.lineWidth === 'number'
     ) {
-      ({ lineWidth } = this.box);
+      ({ lineWidth } = this.box.custom);
     }
 
     const boxWidth = this.mainContent.width + this.space.x * 2;
     const boxHeight = this.mainContent.height + this.space.y * 2;
 
+    // Position of center of box line in bottom left corner
     const bottomLeft = new Point(
       location.x - this.space.x,
       location.y - this.mainContent.descent - this.space.y,
@@ -100,12 +101,12 @@ export default class Box extends Elements {
       this.height = boxHeight + lineWidth;
       this.ascent = this.mainContent.ascent + this.space.y + lineWidth / 2;
       this.descent = this.mainContent.descent + this.space.y + lineWidth / 2;
-      this.mainContent.offsetLocation(new Point(this.space.x, 0));
-      bottomLeft.x += this.space.x;
+      this.mainContent.offsetLocation(new Point(this.space.x + lineWidth / 2, 0));
+      bottomLeft.x += this.space.x + lineWidth / 2;
     } else {
       this.width = this.mainContent.width;
-      this.ascent = this.mainContent.ascent + this.space.y;
-      this.descent = this.mainContent.descent + this.space.y;
+      this.ascent = this.mainContent.ascent;
+      this.descent = this.mainContent.descent;
     }
 
     this.height = this.descent + this.ascent;
