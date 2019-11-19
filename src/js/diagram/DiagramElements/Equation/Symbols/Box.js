@@ -157,7 +157,10 @@ export default function Box(
     );
 
     if (box.custom.boxType === 'line') {
-      updateStaticLinePoints(box, box.custom.lineWidth, new Point(rectToUse.width, rectToUse.height));
+      updateStaticLinePoints(
+        box, box.custom.lineWidth,
+        new Point(rectToUse.width, rectToUse.height),
+      );
     }
     const t = box.transform._dup();
     t.updateScale(

@@ -166,7 +166,7 @@ export type TypeBoxArray = [
   TypeEquationPhrase,
   string,
   ?boolean,
-  ?([number, number] | Point | number) ,
+  ?([number, number] | Point | number),
 ];
 export type TypeBracketObject = {
   content: TypeEquationPhrase;
@@ -740,7 +740,7 @@ export class EquationFunctions {
           // case that annotation is a method object
           if (parsedContent instanceof AnnotationInformation) {
             return parsedContent;
-          }                                                     // $FlowFixMe
+          }
           // Case of single annotation in array form
           if (Array.isArray(annotation)) {
             const annotationFromArray = this.annotation(annotation);
