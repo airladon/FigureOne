@@ -1,5 +1,33 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Equation Functions - Box Box 1`] = `
+Array [
+  0.7,
+  0,
+  0,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Box Box 2`] = `
+Array [
+  0.028,
+  0,
+  0.014,
+  0,
+  0.0721,
+  0.03045,
+  0,
+  0,
+  1,
+]
+`;
+
 exports[`Equation Functions - Strike Box 1`] = `
 Array [
   0.7,

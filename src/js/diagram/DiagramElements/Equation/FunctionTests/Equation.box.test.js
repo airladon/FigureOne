@@ -14,7 +14,7 @@ jest.mock('../../../Gesture');
 jest.mock('../../../webgl/webgl');
 jest.mock('../../../DrawContext2D');
 
-describe('Equation Functions - Strike', () => {
+describe('Equation Functions - Box', () => {
   let diagram;
   let eqn;
   let color1;
@@ -152,7 +152,7 @@ describe('Equation Functions - Strike', () => {
       expect(withPos).toEqual(positions);
     });
   });
-  test('Box Line Element', () => {
+  test.only('Box Line Element', () => {
     functions.box();
     const w = 0.1;
     const box = eqn._box;

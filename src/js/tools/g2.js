@@ -345,6 +345,46 @@ class Point {
   }
 }
 
+export type TypeParsablePoint = [number, number] | Point | { x: number, y: number} | number;
+// point can be defined as:
+//    - Point instance
+//    - [1, 1]
+//    - { x: 1, y: 1 }
+function parsePoint<T>(p: TypeParsablePoint, onFail: T): Point | T | null {
+  if (p instanceof Point) {
+    return p;
+  }
+  let onFailToUse = onFail;
+  if (onFailToUse == null) {
+    onFailToUse = null;
+  }
+
+  if (Array.isArray(p)) {
+    if (p.length === 2) {
+      return new Point(p[0], p[1]);
+    }
+    return onFailToUse;
+  }
+  if (typeof p === 'number') {
+    return new Point(p, p);
+  }
+  if (typeof (p) === 'object') {
+    const keys = Object.keys(p);
+    if (keys.indexOf('x') > -1 && keys.indexOf('y') > -1) {
+      return new Point(p.x, p.y);
+    }
+  }
+  return onFailToUse;
+}
+
+function getPoint(p: TypeParsablePoint): Point {
+  let parsedPoint = parsePoint(p);
+  if (parsedPoint == null) {
+    parsedPoint = new Point(0, 0);
+  }
+  return parsedPoint;
+}
+
 function linearPath(
   start: Point,
   delta: Point,
@@ -558,10 +598,10 @@ class Line {
   C: number;
   distance: number;
 
-  constructor(p1: Point, p2OrMag: Point | number, angle: number = 0) {
-    this.p1 = p1._dup();
-    if (p2OrMag instanceof Point) {
-      this.p2 = p2OrMag._dup();
+  constructor(p1: Point | [number, number], p2OrMag: Point  | [number, number] | number, angle: number = 0) {
+    this.p1 = getPoint(p1);
+    if (p2OrMag instanceof Point || Array.isArray(p2OrMag)) {
+      this.p2 = getPoint(p2OrMag);
       this.ang = Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
     } else {
       this.p2 = this.p1.add(
@@ -1930,45 +1970,6 @@ function getMoveTime(
   return maxTime;
 }
 
-export type TypeParsablePoint = [number, number] | Point | { x: number, y: number} | number;
-// point can be defined as:
-//    - Point instance
-//    - [1, 1]
-//    - { x: 1, y: 1 }
-function parsePoint<T>(p: TypeParsablePoint, onFail: T): Point | T | null {
-  if (p instanceof Point) {
-    return p;
-  }
-  let onFailToUse = onFail;
-  if (onFailToUse == null) {
-    onFailToUse = null;
-  }
-
-  if (Array.isArray(p)) {
-    if (p.length === 2) {
-      return new Point(p[0], p[1]);
-    }
-    return onFailToUse;
-  }
-  if (typeof p === 'number') {
-    return new Point(p, p);
-  }
-  if (typeof (p) === 'object') {
-    const keys = Object.keys(p);
-    if (keys.indexOf('x') > -1 && keys.indexOf('y') > -1) {
-      return new Point(p.x, p.y);
-    }
-  }
-  return onFailToUse;
-}
-
-function getPoint(p: TypeParsablePoint): Point {
-  let parsedPoint = parsePoint(p);
-  if (parsedPoint == null) {
-    parsedPoint = new Point(0, 0);
-  }
-  return parsedPoint;
-}
 
 export {
   point,
