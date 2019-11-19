@@ -160,8 +160,8 @@ export default function Box(
     const t = box.transform._dup();
 
     t.updateScale(
-      rectToUse.width + spaceToUse.x * 2,
-      rectToUse.height + spaceToUse.y * 2,
+      rectToUse.width + spaceToUse.x * 2 + width,
+      rectToUse.height + spaceToUse.y * 2 + width,
     );
     t.updateTranslation(
       rectToUse.left + rectToUse.width / 2,
