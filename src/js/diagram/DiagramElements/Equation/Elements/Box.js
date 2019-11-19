@@ -97,12 +97,12 @@ export default class Box extends Elements {
     );
 
     if (this.boxInSize) {
-      this.width = boxWidth + lineWidth;
-      this.height = boxHeight + lineWidth;
-      this.ascent = this.mainContent.ascent + this.space.y + lineWidth / 2;
-      this.descent = this.mainContent.descent + this.space.y + lineWidth / 2;
-      this.mainContent.offsetLocation(new Point(this.space.x + lineWidth / 2, 0));
-      bottomLeft.x += this.space.x + lineWidth / 2;
+      this.width = boxWidth + lineWidth * 2;
+      this.height = boxHeight + lineWidth * 2;
+      this.ascent = this.mainContent.ascent + this.space.y + lineWidth;
+      this.descent = this.mainContent.descent + this.space.y + lineWidth;
+      this.mainContent.offsetLocation(new Point(this.space.x + lineWidth, 0));
+      bottomLeft.x += this.space.x + lineWidth;
     } else {
       this.width = this.mainContent.width;
       this.ascent = this.mainContent.ascent;
