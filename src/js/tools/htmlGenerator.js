@@ -63,6 +63,7 @@ function style(
     className?: string,
     color?: Array<number>,
     centerV?: boolean,
+    centerH?: boolean,
     list?: ?'ordered' | 'unordered',
     listStyleType?: string,  // css styes
   } = 0,
@@ -134,6 +135,9 @@ function style(
       textToUse = text;
     }
     textToUse = `${pFirst}${textToUse}</p>`;
+  }
+  if (options.centerH) {
+    textToUse = centerH(textToUse);
   }
   if (options.centerV) {
     textToUse = centerV(textToUse);
