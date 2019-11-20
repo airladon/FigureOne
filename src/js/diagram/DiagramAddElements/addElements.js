@@ -46,7 +46,7 @@ function addElements(
       text: shapes.text.bind(shapes),
       textGL: shapes.textGL.bind(shapes),
       textHTML: shapes.htmlText.bind(shapes),
-      imageHTML: shapes.htmlImage.bind(shapes),
+      htmlImage: shapes.htmlImage.bind(shapes),
       axes: shapes.axes.bind(shapes),
       radialLines: shapes.radialLines.bind(shapes),
       rectangle: shapes.rectangle.bind(shapes),
