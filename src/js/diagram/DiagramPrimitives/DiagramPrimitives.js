@@ -509,6 +509,43 @@ export default class DiagramPrimitives {
   //   return this.htmlElement(inside, id, classes, location, alignV, alignH);
   // }
 
+  htmlImage(...optionsIn: Array<{
+    id?: string,
+    classes?: string,
+    position?: Point,
+    alignV?: 'top' | 'bottom' | 'middle',
+    alignH?: 'left' | 'right' | 'center',
+    src?: string,
+    color?: Array<number>,
+    pulse?: number,
+  }>) {
+    const defaultOptions = {
+      id: generateUniqueId('id__html_image_'),
+      classes: '',
+      position: new Point(0, 0),
+      alignV: 'middle',
+      alignH: 'left',
+      src: '',
+      // color: [1, 0, 0, 1],
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    const image = document.createElement('img');
+    image.src = options.src;
+
+    // setHTML(inside, options.text, options.modifiers);
+    const {
+      id, classes, position, alignV, alignH,
+    } = options;
+    const element = this.htmlElement(image, id, classes, getPoint(position), alignV, alignH);
+    if (options.color != null) {
+      element.setColor(options.color);
+    }
+    if (options.pulse != null) {
+      element.pulseDefault.scale = options.pulse;
+    }
+    return element;
+  }
+
   htmlText(...optionsIn: Array<{
     textInput?: string,
     id?: string,
