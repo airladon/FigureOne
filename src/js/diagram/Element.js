@@ -109,8 +109,8 @@ class DiagramElement {
   onClick: ?(?mixed) => void;
   setTransformCallback: (Transform) => void; // element.transform is updated
   internalSetTransformCallback: (Transform) => void;
-  beforeDrawCallback: ?() => void;
-  afterDrawCallback: ?() => void;
+  beforeDrawCallback: ?(number) => void;
+  afterDrawCallback: ?(number) => void;
 
   color: Array<number>;           // For the future when collections use color
   defaultColor: Array<number>;
