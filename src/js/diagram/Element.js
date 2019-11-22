@@ -109,6 +109,8 @@ class DiagramElement {
   onClick: ?(?mixed) => void;
   setTransformCallback: (Transform) => void; // element.transform is updated
   internalSetTransformCallback: (Transform) => void;
+  beforeDrawCallback: ?() => void;
+  afterDrawCallback: ?() => void;
 
   color: Array<number>;           // For the future when collections use color
   defaultColor: Array<number>;
@@ -262,6 +264,8 @@ class DiagramElement {
     this.defaultColor = this.color.slice();
     this.opacity = 1;
     this.setTransformCallback = () => {};
+    this.beforeDrawCallback = null;
+    this.afterDrawCallback = null;
     this.internalSetTransformCallback = () => {};
     this.lastDrawTransform = this.transform._dup();
     this.onClick = null;
@@ -1806,6 +1810,9 @@ class DiagramElementPrimitive extends DiagramElement {
           return;
         }
       }
+      if (this.beforeDrawCallback != null) {
+        this.beforeDrawCallback(now);
+      }
       this.animations.nextFrame(now);
       this.nextMovingFreelyFrame(now);
 
@@ -1847,6 +1854,9 @@ class DiagramElementPrimitive extends DiagramElement {
       if (this.renderedOnNextDraw) {
         this.isRenderedAsImage = true;
         this.renderedOnNextDraw = false;
+      }
+      if (this.afterDrawCallback != null) {
+        this.afterDrawCallback(now);
       }
     }
   }
@@ -2078,6 +2088,9 @@ class DiagramElementCollection extends DiagramElement {
           return;
         }
       }
+      if (this.beforeDrawCallback != null) {
+        this.beforeDrawCallback(now);
+      }
       this.animations.nextFrame(now);
       this.nextMovingFreelyFrame(now);
 
@@ -2109,6 +2122,9 @@ class DiagramElementCollection extends DiagramElement {
       if (this.renderedOnNextDraw) {
         this.isRenderedAsImage = true;
         this.renderedOnNextDraw = false;
+      }
+      if (this.afterDrawCallback != null) {
+        this.afterDrawCallback(now);
       }
     }
   }
