@@ -2,6 +2,7 @@
 
 exports[`Different ways to make an equation All Text in constructor with all options 1`] = `
 DiagramElementPrimitive {
+  "afterDrawCallback": null,
   "angleToDraw": -1,
   "anim": Object {
     "builder": [Function],
@@ -25,6 +26,7 @@ DiagramElementPrimitive {
     },
     "state": "idle",
   },
+  "beforeDrawCallback": null,
   "cannotTouchHole": false,
   "color": Array [
     0.95,
@@ -343,6 +345,7 @@ DiagramElementPrimitive {
   "opacity": 1,
   "parent": EquationNew {
     "__2": DiagramElementPrimitive {
+      "afterDrawCallback": null,
       "angleToDraw": -1,
       "anim": Object {
         "builder": [Function],
@@ -366,6 +369,7 @@ DiagramElementPrimitive {
         },
         "state": "idle",
       },
+      "beforeDrawCallback": null,
       "cannotTouchHole": false,
       "color": Array [
         0.95,
@@ -835,6 +839,7 @@ DiagramElementPrimitive {
     },
     "_a": [Circular],
     "_b": DiagramElementPrimitive {
+      "afterDrawCallback": null,
       "angleToDraw": -1,
       "anim": Object {
         "builder": [Function],
@@ -858,6 +863,7 @@ DiagramElementPrimitive {
         },
         "state": "idle",
       },
+      "beforeDrawCallback": null,
       "cannotTouchHole": false,
       "color": Array [
         0.95,
@@ -1326,6 +1332,7 @@ DiagramElementPrimitive {
       "unrenderNextDraw": false,
     },
     "_c": DiagramElementPrimitive {
+      "afterDrawCallback": null,
       "angleToDraw": -1,
       "anim": Object {
         "builder": [Function],
@@ -1349,6 +1356,7 @@ DiagramElementPrimitive {
         },
         "state": "idle",
       },
+      "beforeDrawCallback": null,
       "cannotTouchHole": false,
       "color": Array [
         0.95,
@@ -1817,6 +1825,7 @@ DiagramElementPrimitive {
       "unrenderNextDraw": false,
     },
     "_v": DiagramElementPrimitive {
+      "afterDrawCallback": null,
       "angleToDraw": -1,
       "anim": Object {
         "builder": [Function],
@@ -1840,6 +1849,7 @@ DiagramElementPrimitive {
         },
         "state": "idle",
       },
+      "beforeDrawCallback": null,
       "cannotTouchHole": false,
       "color": Array [
         0.95,
@@ -2301,6 +2311,7 @@ DiagramElementPrimitive {
       "uid": "0000000000",
       "unrenderNextDraw": false,
     },
+    "afterDrawCallback": null,
     "anim": Object {
       "builder": [Function],
       "color": [Function],
@@ -2323,6 +2334,7 @@ DiagramElementPrimitive {
       },
       "state": "idle",
     },
+    "beforeDrawCallback": null,
     "color": Array [
       0.95,
       0,
@@ -2360,6 +2372,7 @@ DiagramElementPrimitive {
     "drawPriority": 1,
     "elements": Object {
       "_2": DiagramElementPrimitive {
+        "afterDrawCallback": null,
         "angleToDraw": -1,
         "anim": Object {
           "builder": [Function],
@@ -2383,6 +2396,7 @@ DiagramElementPrimitive {
           },
           "state": "idle",
         },
+        "beforeDrawCallback": null,
         "cannotTouchHole": false,
         "color": Array [
           0.95,
@@ -2852,6 +2866,7 @@ DiagramElementPrimitive {
       },
       "a": [Circular],
       "b": DiagramElementPrimitive {
+        "afterDrawCallback": null,
         "angleToDraw": -1,
         "anim": Object {
           "builder": [Function],
@@ -2875,6 +2890,7 @@ DiagramElementPrimitive {
           },
           "state": "idle",
         },
+        "beforeDrawCallback": null,
         "cannotTouchHole": false,
         "color": Array [
           0.95,
@@ -3343,6 +3359,7 @@ DiagramElementPrimitive {
         "unrenderNextDraw": false,
       },
       "c": DiagramElementPrimitive {
+        "afterDrawCallback": null,
         "angleToDraw": -1,
         "anim": Object {
           "builder": [Function],
@@ -3366,6 +3383,7 @@ DiagramElementPrimitive {
           },
           "state": "idle",
         },
+        "beforeDrawCallback": null,
         "cannotTouchHole": false,
         "color": Array [
           0.95,
@@ -3834,6 +3852,7 @@ DiagramElementPrimitive {
         "unrenderNextDraw": false,
       },
       "v": DiagramElementPrimitive {
+        "afterDrawCallback": null,
         "angleToDraw": -1,
         "anim": Object {
           "builder": [Function],
@@ -3857,6 +3876,7 @@ DiagramElementPrimitive {
           },
           "state": "idle",
         },
+        "beforeDrawCallback": null,
         "cannotTouchHole": false,
         "color": Array [
           0.95,
@@ -4413,6 +4433,7 @@ DiagramElementPrimitive {
                   Element {
                     "ascent": 0.06300000000000001,
                     "content": DiagramElementPrimitive {
+                      "afterDrawCallback": null,
                       "angleToDraw": -1,
                       "anim": Object {
                         "builder": [Function],
@@ -4436,6 +4457,7 @@ DiagramElementPrimitive {
                         },
                         "state": "idle",
                       },
+                      "beforeDrawCallback": null,
                       "cannotTouchHole": false,
                       "color": Array [
                         0.95,
@@ -4916,6 +4938,7 @@ DiagramElementPrimitive {
                   Element {
                     "ascent": 0.04275,
                     "content": DiagramElementPrimitive {
+                      "afterDrawCallback": null,
                       "angleToDraw": -1,
                       "anim": Object {
                         "builder": [Function],
@@ -4939,6 +4962,7 @@ DiagramElementPrimitive {
                         },
                         "state": "idle",
                       },
+                      "beforeDrawCallback": null,
                       "cannotTouchHole": false,
                       "color": Array [
                         0.95,
@@ -5433,6 +5457,7 @@ DiagramElementPrimitive {
             "elementMods": Object {},
             "elements": Object {
               "_2": DiagramElementPrimitive {
+                "afterDrawCallback": null,
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
@@ -5456,6 +5481,7 @@ DiagramElementPrimitive {
                   },
                   "state": "idle",
                 },
+                "beforeDrawCallback": null,
                 "cannotTouchHole": false,
                 "color": Array [
                   0.95,
@@ -5925,6 +5951,7 @@ DiagramElementPrimitive {
               },
               "a": [Circular],
               "b": DiagramElementPrimitive {
+                "afterDrawCallback": null,
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
@@ -5948,6 +5975,7 @@ DiagramElementPrimitive {
                   },
                   "state": "idle",
                 },
+                "beforeDrawCallback": null,
                 "cannotTouchHole": false,
                 "color": Array [
                   0.95,
@@ -6416,6 +6444,7 @@ DiagramElementPrimitive {
                 "unrenderNextDraw": false,
               },
               "c": DiagramElementPrimitive {
+                "afterDrawCallback": null,
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
@@ -6439,6 +6468,7 @@ DiagramElementPrimitive {
                   },
                   "state": "idle",
                 },
+                "beforeDrawCallback": null,
                 "cannotTouchHole": false,
                 "color": Array [
                   0.95,
@@ -6907,6 +6937,7 @@ DiagramElementPrimitive {
                 "unrenderNextDraw": false,
               },
               "v": DiagramElementPrimitive {
+                "afterDrawCallback": null,
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
@@ -6930,6 +6961,7 @@ DiagramElementPrimitive {
                   },
                   "state": "idle",
                 },
+                "beforeDrawCallback": null,
                 "cannotTouchHole": false,
                 "color": Array [
                   0.95,
@@ -7458,6 +7490,7 @@ DiagramElementPrimitive {
                           Element {
                             "ascent": 0.06300000000000001,
                             "content": DiagramElementPrimitive {
+                              "afterDrawCallback": null,
                               "angleToDraw": -1,
                               "anim": Object {
                                 "builder": [Function],
@@ -7481,6 +7514,7 @@ DiagramElementPrimitive {
                                 },
                                 "state": "idle",
                               },
+                              "beforeDrawCallback": null,
                               "cannotTouchHole": false,
                               "color": Array [
                                 0.95,
@@ -7971,6 +8005,7 @@ DiagramElementPrimitive {
                       Element {
                         "ascent": 0,
                         "content": DiagramElementPrimitive {
+                          "afterDrawCallback": null,
                           "angleToDraw": -1,
                           "anim": Object {
                             "builder": [Function],
@@ -7994,6 +8029,7 @@ DiagramElementPrimitive {
                             },
                             "state": "idle",
                           },
+                          "beforeDrawCallback": null,
                           "cannotTouchHole": false,
                           "color": Array [
                             0.95,
@@ -8471,6 +8507,7 @@ DiagramElementPrimitive {
                         Element {
                           "ascent": 0.06300000000000001,
                           "content": DiagramElementPrimitive {
+                            "afterDrawCallback": null,
                             "angleToDraw": -1,
                             "anim": Object {
                               "builder": [Function],
@@ -8494,6 +8531,7 @@ DiagramElementPrimitive {
                               },
                               "state": "idle",
                             },
+                            "beforeDrawCallback": null,
                             "cannotTouchHole": false,
                             "color": Array [
                               0.95,
@@ -9020,6 +9058,7 @@ DiagramElementPrimitive {
                     "vSpaceDenom": 0.022500000000000003,
                     "vSpaceNum": 0.022500000000000003,
                     "vinculum": DiagramElementPrimitive {
+                      "afterDrawCallback": null,
                       "angleToDraw": -1,
                       "anim": Object {
                         "builder": [Function],
@@ -9043,6 +9082,7 @@ DiagramElementPrimitive {
                         },
                         "state": "idle",
                       },
+                      "beforeDrawCallback": null,
                       "cannotTouchHole": false,
                       "color": Array [
                         0.95,
@@ -9519,6 +9559,7 @@ DiagramElementPrimitive {
                   Element {
                     "ascent": 0.04275,
                     "content": DiagramElementPrimitive {
+                      "afterDrawCallback": null,
                       "angleToDraw": -1,
                       "anim": Object {
                         "builder": [Function],
@@ -9542,6 +9583,7 @@ DiagramElementPrimitive {
                         },
                         "state": "idle",
                       },
+                      "beforeDrawCallback": null,
                       "cannotTouchHole": false,
                       "color": Array [
                         0.95,
@@ -10036,6 +10078,7 @@ DiagramElementPrimitive {
             "elementMods": Object {},
             "elements": Object {
               "_2": DiagramElementPrimitive {
+                "afterDrawCallback": null,
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
@@ -10059,6 +10102,7 @@ DiagramElementPrimitive {
                   },
                   "state": "idle",
                 },
+                "beforeDrawCallback": null,
                 "cannotTouchHole": false,
                 "color": Array [
                   0.95,
@@ -10528,6 +10572,7 @@ DiagramElementPrimitive {
               },
               "a": [Circular],
               "b": DiagramElementPrimitive {
+                "afterDrawCallback": null,
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
@@ -10551,6 +10596,7 @@ DiagramElementPrimitive {
                   },
                   "state": "idle",
                 },
+                "beforeDrawCallback": null,
                 "cannotTouchHole": false,
                 "color": Array [
                   0.95,
@@ -11019,6 +11065,7 @@ DiagramElementPrimitive {
                 "unrenderNextDraw": false,
               },
               "c": DiagramElementPrimitive {
+                "afterDrawCallback": null,
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
@@ -11042,6 +11089,7 @@ DiagramElementPrimitive {
                   },
                   "state": "idle",
                 },
+                "beforeDrawCallback": null,
                 "cannotTouchHole": false,
                 "color": Array [
                   0.95,
@@ -11510,6 +11558,7 @@ DiagramElementPrimitive {
                 "unrenderNextDraw": false,
               },
               "v": DiagramElementPrimitive {
+                "afterDrawCallback": null,
                 "angleToDraw": -1,
                 "anim": Object {
                   "builder": [Function],
@@ -11533,6 +11582,7 @@ DiagramElementPrimitive {
                   },
                   "state": "idle",
                 },
+                "beforeDrawCallback": null,
                 "cannotTouchHole": false,
                 "color": Array [
                   0.95,
@@ -12013,6 +12063,7 @@ DiagramElementPrimitive {
       "functions": EquationFunctions {
         "elements": Object {
           "_2": DiagramElementPrimitive {
+            "afterDrawCallback": null,
             "angleToDraw": -1,
             "anim": Object {
               "builder": [Function],
@@ -12036,6 +12087,7 @@ DiagramElementPrimitive {
               },
               "state": "idle",
             },
+            "beforeDrawCallback": null,
             "cannotTouchHole": false,
             "color": Array [
               0.95,
@@ -12505,6 +12557,7 @@ DiagramElementPrimitive {
           },
           "a": [Circular],
           "b": DiagramElementPrimitive {
+            "afterDrawCallback": null,
             "angleToDraw": -1,
             "anim": Object {
               "builder": [Function],
@@ -12528,6 +12581,7 @@ DiagramElementPrimitive {
               },
               "state": "idle",
             },
+            "beforeDrawCallback": null,
             "cannotTouchHole": false,
             "color": Array [
               0.95,
@@ -12996,6 +13050,7 @@ DiagramElementPrimitive {
             "unrenderNextDraw": false,
           },
           "c": DiagramElementPrimitive {
+            "afterDrawCallback": null,
             "angleToDraw": -1,
             "anim": Object {
               "builder": [Function],
@@ -13019,6 +13074,7 @@ DiagramElementPrimitive {
               },
               "state": "idle",
             },
+            "beforeDrawCallback": null,
             "cannotTouchHole": false,
             "color": Array [
               0.95,
@@ -13487,6 +13543,7 @@ DiagramElementPrimitive {
             "unrenderNextDraw": false,
           },
           "v": DiagramElementPrimitive {
+            "afterDrawCallback": null,
             "angleToDraw": -1,
             "anim": Object {
               "builder": [Function],
@@ -13510,6 +13567,7 @@ DiagramElementPrimitive {
               },
               "state": "idle",
             },
+            "beforeDrawCallback": null,
             "cannotTouchHole": false,
             "color": Array [
               0.95,
@@ -13991,6 +14049,7 @@ DiagramElementPrimitive {
                 Element {
                   "ascent": 0.06300000000000001,
                   "content": DiagramElementPrimitive {
+                    "afterDrawCallback": null,
                     "angleToDraw": -1,
                     "anim": Object {
                       "builder": [Function],
@@ -14014,6 +14073,7 @@ DiagramElementPrimitive {
                       },
                       "state": "idle",
                     },
+                    "beforeDrawCallback": null,
                     "cannotTouchHole": false,
                     "color": Array [
                       0.95,
@@ -14475,6 +14535,7 @@ DiagramElementPrimitive {
           "elementMods": Object {},
           "elements": Object {
             "elem": DiagramElementPrimitive {
+              "afterDrawCallback": null,
               "angleToDraw": -1,
               "anim": Object {
                 "builder": [Function],
@@ -14498,6 +14559,7 @@ DiagramElementPrimitive {
                 },
                 "state": "idle",
               },
+              "beforeDrawCallback": null,
               "cannotTouchHole": false,
               "color": Array [
                 0.95,
