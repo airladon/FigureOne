@@ -4,6 +4,7 @@
 import {
   Transform, Point, Line, polarToRect, normAngle, Rect, distance, getPoint,
 } from '../../tools/g2';
+import type { TypeParsablePoint } from '../../tools/g2';
 import {
   roundNum,
 } from '../../tools/math';
@@ -70,7 +71,7 @@ export type TypeLineOptions = {
     width?: number,
     height?: number,
   },
-  arrowStop?: {
+  arrowEnd?: {
     width?: number,
     height?: number,
   },
@@ -292,7 +293,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
 
   // line methods
   setLength: (number) => void;
-  setEndPoints: (Point, Point, ?number) => void;
+  setEndPoints: (TypeParsablePoint, TypeParsablePoint, ?number) => void;
   animateLengthTo: (?number, ?number, ?boolean, ?() => void) => void;
   grow: (?number, ?number, ?boolean, ?() => void) => void;
   setMovable: (?boolean, ?('translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale'), ?number, ?Rect) => void;
@@ -996,7 +997,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.updateLabel();
   }
 
-  setEndPoints(p: Point, q: Point, offset: number = this.offset) {
+  setEndPoints(p: TypeParsablePoint, q: TypeParsablePoint, offset: number = this.offset) {
     this.offset = offset;
     const { length, angle, position } = this.calculateFromP1P2(getPoint(p), getPoint(q));
     this.angle = angle;
@@ -1089,6 +1090,16 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     if (this._label) {
       this._label.hideAll();
     }
+  }
+
+  getP1() {
+    const m = this.transform.matrix();
+    return this.p1.transformBy(m);
+  }
+
+  getP2() {
+    const m = this.transform.matrix();
+    return this.p2.transformBy(m);
   }
 }
 
