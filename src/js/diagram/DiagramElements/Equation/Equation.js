@@ -922,7 +922,6 @@ export class EquationNew extends DiagramElementCollection {
     }
     // this.stop(true, true);
     // this.eqn.isAnimating = false;
-
     // Get the desired form - preference is name, then series index,
     // then next form in the current series
     let form;
@@ -994,7 +993,6 @@ export class EquationNew extends DiagramElementCollection {
           options.blankTime = 0.2;
         }
       }
-
       if (duration === 0) {
         this.showForm(subForm);
         if (options.callback != null) {

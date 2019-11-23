@@ -51,6 +51,7 @@ export default class Padding extends Elements {
     this.descent = this.mainContent.descent + this.bottom;
     this.ascent = this.mainContent.ascent + this.top;
     this.width = this.mainContent.width + this.left + this.right;
+    this.height = this.descent + this.ascent;
   }
 
   getAllElements() {
