@@ -10,8 +10,8 @@ import {
 import { Element, Elements, BlankElement } from './Elements/Element';
 import { getDiagramElement } from './EquationFunctions';
 
-export type TypeHAlign = 'left' | 'right' | 'center';
-export type TypeVAlign = 'top' | 'bottom' | 'middle' | 'baseline';
+export type TypeHAlign = 'left' | 'right' | 'center' | number;
+export type TypeVAlign = 'top' | 'bottom' | 'middle' | 'baseline' | number;
 export type TypeEquationForm = {
   collection: DiagramElementCollection;
   createEq: (Array<Elements | Element | string>) => void;
@@ -279,13 +279,18 @@ export default class EquationForm extends Elements {
       fixPoint.x += w;
     } else if (alignH === 'center') {
       fixPoint.x += w / 2;
+    } else if (typeof alignH === 'number') {
+      fixPoint.x += alignH;
     }
+
     if (alignV === 'top') {
       fixPoint.y += p.y + a;
     } else if (alignV === 'bottom') {
       fixPoint.y += p.y - d;
     } else if (alignV === 'middle') {
       fixPoint.y += p.y - d + h / 2;
+    } else if (typeof alignV === 'number') {
+      fixPoint.y += p.y + alignV;
     }
 
     const delta = new Point(0, 0).sub(fixPoint);
@@ -490,6 +495,7 @@ export default class EquationForm extends Elements {
     });
   }
 
+  // Check callback is being called
   animatePositionsTo(
     delay: number,
     dissolveOutTime: number,
@@ -563,6 +569,8 @@ export default class EquationForm extends Elements {
     if (elementsToHide.length > 0) {
       this.dissolveElements(elementsToHide, 'out', delay, dissolveOutTime, dissolveOutCallback);
       cumTime += dissolveOutTime;
+    } else if (dissolveOutCallback != null) {
+      dissolveOutCallback();
     }
 
     this.applyElementMods();
