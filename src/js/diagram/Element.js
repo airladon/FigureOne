@@ -594,7 +594,7 @@ class DiagramElement {
   }
 
   exec(
-    execFunctionAndArgs: string | Array<Object>,
+    execFunctionAndArgs: string | Array<string | Object>,
   ) {
     // if (elementsToExec == null || typeof elementsToExec === 'function') {
     let execFunc;
@@ -1988,7 +1988,7 @@ class DiagramElementCollection extends DiagramElement {
   +pulse: (?(Array<string | DiagramElement> | (mixed) => void), ?(mixed) => void) => void;
   +getElement: (?(string | DiagramElement)) => ?DiagramElement;
   +getElements: (Array<string | DiagramElement>) => Array<DiagramElement>;
-  +exec: (string | Array<Object>, ?Array<string | DiagramElement>) => void;
+  +exec: (string | Array<string | Object>, ?Array<string | DiagramElement>) => void;
   +highlight: (elementsToDim: ?Array<string | DiagramElement>) => void;
 
   constructor(
@@ -2130,7 +2130,7 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   exec(
-    execFunctionAndArgs: string | Array<Object>,
+    execFunctionAndArgs: string | Array<string | Object>,
     elementsToExec: ?Array<string | DiagramElement> = null,
   ) {
     if (elementsToExec == null) {
