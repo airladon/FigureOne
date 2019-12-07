@@ -461,6 +461,7 @@ export class EquationFunctions {
     if (name === 'bottomStrike') { return this.bottomStrike(params); }
     // $FlowFixMe
     if (name === 'pad') { return this.pad(params); }
+    // Add container - where you fix the ascent, descent, and width (content is centered in width) - Content spills out of container by default
     return null;
   }
 
