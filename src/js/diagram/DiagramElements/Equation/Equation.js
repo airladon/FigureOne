@@ -322,7 +322,7 @@ export class EquationNew extends DiagramElementCollection {
         textToUse = options.text;
       }
       let fontToUse: DiagramFont = this.eqn.fontMath;
-      if (textToUse.match(/[A-Z,a-z]/)) {
+      if (textToUse.match(/[A-Z,a-z,\u03B8]/)) {
         fontToUse = this.eqn.fontText;
       }
       if (options.style != null) {

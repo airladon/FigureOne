@@ -237,6 +237,92 @@ describe('Equation Functions - Annotations', () => {
           ]),
         });
       },
+      parameterSteps: () => {
+        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        const e = eqn.eqn.functions;
+        const annotate = e.annotate.bind(e);
+        eqn.addElements(elements);
+        eqn.addForms({
+          base: {
+            content: [
+              annotate(
+                {
+                  content: 'a',
+                  withAnnotations: [
+                    {
+                      annotation: {
+                        annotation: 'b',
+                        relativeToContent: ['right', 'bottom'],
+                        relativeToAnnotation: ['left', 'top'],
+                        scale: 1,
+                        xOffset: 0,
+                        yOffset: 0,
+                      },
+                    },
+                  ],
+                  inSize: true,
+                },
+              ),
+              'c',
+            ],
+            scale: 1,
+          },
+          offsetXY: {
+            content: [
+              annotate('a', ['b', 'right', 'bottom', 'left', 'top', 1, 0.01, 0.01], true), 'c',
+            ],
+            scale: 1,
+          },
+          contentLeftTop: {
+            content: [
+              annotate('a', ['b', 'left', 'top', 'left', 'top', 1, 0, 0], true), 'c',
+            ],
+            scale: 1,
+          },
+          contentCenterMiddle: {
+            content: [
+              annotate('a', ['b', 'center', 'middle', 'left', 'top', 1, 0, 0], true), 'c',
+            ],
+            scale: 1,
+          },
+          content0909: {
+            content: [
+              annotate('a', ['b', 0.9, 0.9, 'left', 'top', 1, 0, 0], true), 'c',
+            ],
+            scale: 1,
+          },
+          annotationRightBottom: {
+            content: [
+              annotate('a', ['b', 'right', 'bottom', 'right', 'bottom', 1, 0, 0], true), 'c',
+            ],
+            scale: 1,
+          },
+          annotationCenterMiddle: {
+            content: [
+              annotate('a', ['b', 'right', 'bottom', 'center', 'middle', 1, 0, 0], true), 'c',
+            ],
+            scale: 1,
+          },
+          annotation0909: {
+            content: [
+              annotate('a', ['b', 'right', 'bottom', 0.9, 0.9, 1, 0, 0], true), 'c',
+            ],
+            scale: 1,
+          },
+          inSize: {
+            content: [
+              annotate('a', ['b', 'right', 'bottom', 'left', 'top', 1, 0, 0], false), 'c',
+            ],
+            scale: 1,
+          },
+          scaleAnnotation: {
+            content: [
+              annotate('a', ['b', 'right', 'bottom', 'left', 'top', 0.5, 0, 0], true), 'c',
+            ],
+            scale: 1,
+          },
+        });
+      },
       parameters: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
@@ -256,6 +342,8 @@ describe('Equation Functions - Annotations', () => {
                       relativeToContent: ['right', 'bottom'],
                       relativeToAnnotation: ['left', 'top'],
                       scale: 0.5,
+                      xOffset: 0,
+                      yOffset: 0,
                     },
                   },
                 ],
@@ -264,37 +352,42 @@ describe('Equation Functions - Annotations', () => {
             'c',
           ],
           // With parameters
-          0: [
-            annotate(
-              {
-                content: 'a',
-                withAnnotations: [
-                  {
-                    annotation: {
-                      annotation: 'b',
-                      relativeToContent: ['right', 'bottom'],
-                      relativeToAnnotation: ['left', 'top'],
-                      scale: 0.5,
+          0: {
+            content: [
+              annotate(
+                {
+                  content: 'a',
+                  withAnnotations: [
+                    {
+                      annotation: {
+                        annotation: 'b',
+                        relativeToContent: ['right', 'bottom'],
+                        relativeToAnnotation: ['left', 'top'],
+                        scale: 1,
+                        xOffset: 0.01,
+                        yOffset: 0.01,
+                      },
                     },
-                  },
-                ],
-                includeAnnotationInSize: false,
-              },
-            ),
-            'c',
-          ],
+                  ],
+                  inSize: false,
+                },
+              ),
+              'c',
+            ],
+            scale: 1,
+          },
           // Method Array
-          1: [
-            annotate(
-              'a',
-              ['b', 'right', 'bottom', 'left', 'top', 0.5],
-              false,
-            ),
-            'c',
-          ],
-          // 1: ['a', { brac: ['b', 'lb', 'rb', 0.1, 0.2, false, 2] }, 'c'],
-          // // Function with parameters
-          // 2: ['a', brac('b', 'lb', 'rb', 0.1, 0.2, false, 2), 'c'],
+          1: {
+            content: [
+              annotate(
+                'a',
+                ['b', 'right', 'bottom', 'left', 'top', 1, 0.01, 0.01],
+                false,
+              ),
+              'c',
+            ],
+            scale: 1,
+          },
         });
       },
     };
@@ -378,6 +471,77 @@ describe('Equation Functions - Annotations', () => {
       eqn.showForm(f);
       const positions = elems.map(elem => round(elem.transform.mat).slice());
       expect(withPos).toEqual(positions);
+    });
+  });
+  describe('Parameter Steps', () => {
+    let basePos;
+    beforeEach(() => {
+      functions.parameterSteps();
+      eqn.showForm('base');
+      basePos = eqn._b.getPosition();
+    });
+    test('OffsetXY', () => {
+      eqn.showForm('offsetXY');
+      const newPos = eqn._b.getPosition();
+      expect(round(basePos.x + 0.01)).toBe(round(newPos.x));
+      expect(round(basePos.y + 0.01)).toBe(round(newPos.y));
+    });
+    test('contentLeftTop', () => {
+      eqn.showForm('contentLeftTop');
+      const newPos = eqn._b.getPosition();
+      const bounds = eqn._a.getBoundingRect('diagram');
+      expect(round(basePos.x - bounds.width)).toBe(round(newPos.x));
+      expect(round(basePos.y + bounds.height)).toBe(round(newPos.y));
+    });
+    test('contentCenterMiddle', () => {
+      eqn.showForm('contentCenterMiddle');
+      const newPos = eqn._b.getPosition();
+      const bounds = eqn._a.getBoundingRect('diagram');
+      expect(round(basePos.x - bounds.width / 2)).toBe(round(newPos.x));
+      expect(round(basePos.y + bounds.height / 2)).toBe(round(newPos.y));
+    });
+    test('content0909', () => {
+      eqn.showForm('content0909');
+      const newPos = eqn._b.getPosition();
+      const bounds = eqn._a.getBoundingRect('diagram');
+      expect(round(basePos.x - bounds.width * 0.1)).toBe(round(newPos.x));
+      expect(round(basePos.y + bounds.height * 0.9)).toBe(round(newPos.y));
+    });
+    test('annotationRightBottom', () => {
+      eqn.showForm('annotationRightBottom');
+      const newPos = eqn._b.getPosition();
+      const bounds = eqn._b.getBoundingRect('diagram');
+      expect(round(basePos.x - bounds.width)).toBe(round(newPos.x));
+      expect(round(basePos.y + bounds.height)).toBe(round(newPos.y));
+    });
+    test('annotationCenterMiddle', () => {
+      eqn.showForm('annotationCenterMiddle');
+      const newPos = eqn._b.getPosition();
+      const bounds = eqn._b.getBoundingRect('diagram');
+      expect(round(basePos.x - bounds.width * 0.5)).toBe(round(newPos.x));
+      expect(round(basePos.y + bounds.height * 0.5)).toBe(round(newPos.y));
+    });
+    test('annotation0909', () => {
+      eqn.showForm('annotation0909');
+      const newPos = eqn._b.getPosition();
+      const bounds = eqn._b.getBoundingRect('diagram');
+      expect(round(basePos.x - bounds.width * 0.9)).toBe(round(newPos.x));
+      expect(round(basePos.y + bounds.height * 0.1)).toBe(round(newPos.y));
+    });
+    test('inSize', () => {
+      const baseC = eqn._c.getPosition();
+      eqn.showForm('inSize');
+      const newC = eqn._c.getPosition();
+      const bounds = eqn._b.getBoundingRect('diagram');
+      expect(round(baseC.x - bounds.width)).toBe(round(newC.x));
+      expect(round(baseC.y)).toBe(round(newC.y));
+    });
+    test('scaleAnnotation', () => {
+      const baseB = eqn._b.getBoundingRect('diagram');
+      eqn.showForm('scaleAnnotation');
+      const newB = eqn._b.getBoundingRect('diagram');
+      expect(round(baseB.width / 2)).toBe(round(newB.width));
+      expect(round(baseB.height / 2)).toBe(round(newB.height));
     });
   });
 });

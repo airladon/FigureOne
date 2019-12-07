@@ -697,8 +697,9 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         || moveType === 'scaleY'
       ) {
         this.move.type = moveType;
-        this.isTouchable = true;
-        this.isMovable = true;
+        super.setMovable(true);
+        // this.isTouchable = true;
+        // this.isMovable = true;
         this.hasTouchableElements = true;
         if (this._line != null) {
           this._line.isTouchable = true;

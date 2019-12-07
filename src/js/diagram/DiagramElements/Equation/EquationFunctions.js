@@ -16,6 +16,7 @@ import Strike from './Elements/Strike';
 // import DiagramPrimitives from '../../DiagramPrimitives/DiagramPrimitives';
 import SuperSub from './Elements/SuperSub';
 import { Brackets, Bar } from './Elements/Brackets';
+import { BracketsNew } from './Elements/BracketsNew';
 import EquationForm from './EquationForm';
 import { Annotation, AnnotationInformation } from './Elements/Annotation';
 import Padding from './Elements/Padding';
@@ -78,6 +79,7 @@ export type TypeEquationPhrase =
   | { box: TypeBoxObject } | TypeBoxArray
   | { root: TypeRootObject } | TypeRootArray
   | { brac: TypeBracketObject } | TypeBracketArray
+  | { bracNew: TypeBracketObject } | TypeBracketArray
   | { sub: TypeSubObject } | TypeSubArray
   | { sup: TypeSupObject } | TypeSupArray
   | { supSub: TypeSupSubObject } | TypeSupSubArray
@@ -149,7 +151,7 @@ export type TypeRootArray = [
 export type TypeStrikeObject = {
   content: TypeEquationPhrase;
   symbol: string;
-  strikeInSize?: boolean;
+  inSize?: boolean;
 };
 export type TypeBoxObject = {
   content: TypeEquationPhrase;
@@ -185,6 +187,28 @@ export type TypeBracketArray = [
   ?number,
   ?boolean,
   ?number,
+];
+export type TypeBracketNewObject = {
+  content: TypeEquationPhrase;
+  left?: string;
+  right?: string;
+  insideSpace?: number;
+  outsideSpace?: number;
+  topSpace?: number;
+  bottomSpace?: number;
+  minHeight?: number;
+  inSize?: boolean;
+};
+export type TypeBracketNewArray = [
+  TypeEquationPhrase,
+  ?string,
+  ?string,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?boolean,
 ];
 export type TypeSubObject = {
   content: TypeEquationPhrase;
@@ -230,11 +254,13 @@ export type TypeBarObject = {
   content: TypeEquationPhrase;
   symbol: string;
   space?: number;
+  inSize?: boolean;
 };
 export type TypeBarArray = [
   TypeEquationPhrase,
   string,
   ?number,
+  ?boolean,
 ];
 export type TypeCommentObject = {
   content: TypeEquationPhrase;
@@ -278,6 +304,8 @@ export type TypeAnnotationObject = {
     'bottom' | 'top' | 'middle' | 'baseline' | number,
   ],
   scale?: number,
+  xOffset?: number,
+  yOffset?: number,
 };
 export type TypeAnnotationArray = [
   TypeEquationPhrase,
@@ -286,12 +314,14 @@ export type TypeAnnotationArray = [
   'left' | 'right' | 'center' | number,
   'bottom' | 'top' | 'middle' | 'baseline' | number,
   ?number,
+  ?number,
+  ?number,
 ];
 export type TypeAnnotateObject = {
   content: TypeEquationPhrase,                              // $FlowFixMe
   withAnnotations: Array<TypeEquationPhrase | AnnotationInformation>
                   | AnnotationInformation | TypeEquationPhrase,
-  includeAnnotationInSize?: boolean,
+  inSize?: boolean,
 };
 export type TypeAnnotateArray = [
   TypeEquationPhrase,
@@ -406,6 +436,7 @@ export class EquationFunctions {
     if (name === 'box') { return this.box(params); }    // $FlowFixMe
     if (name === 'root') { return this.root(params); }    // $FlowFixMe
     if (name === 'brac') { return this.brac(params); }        // $FlowFixMe
+    if (name === 'bracNew') { return this.bracNew(params); }        // $FlowFixMe
     if (name === 'sub') { return this.sub(params); }          // $FlowFixMe
     if (name === 'sup') { return this.sup(params); }          // $FlowFixMe
     if (name === 'supSub') { return this.supSub(params); }    // $FlowFixMe
@@ -644,27 +675,27 @@ export class EquationFunctions {
   strike(
     optionsOrContent: TypeStrikeObject | TypeStrikeArray | TypeEquationPhrase,
     sym: string | null = null,
-    inSize: boolean | null = null,
+    inSizeIn: boolean | null = null,
     // options: TypeStrikeObject | TypeStrikeArray) {
   ) {
     let content;
     let symbol;
-    let strikeInSize;
-    if (!(sym == null && inSize == null)) {
+    let inSize;
+    if (!(sym == null && inSizeIn == null)) {
       content = optionsOrContent;
       symbol = sym;
-      strikeInSize = inSize;
+      inSize = inSizeIn;
     } else if (Array.isArray(optionsOrContent)) {         // $FlowFixMe
-      [content, symbol, strikeInSize] = optionsOrContent;
+      [content, symbol, inSize] = optionsOrContent;
     } else {
       ({                                                  // $FlowFixMe
-        content, symbol, strikeInSize,
+        content, symbol, inSize,
       } = optionsOrContent);
     }
     return new Strike(                                    // $FlowFixMe
       this.contentToElement(content),                     // $FlowFixMe
       getDiagramElement(this.elements, symbol),           // $FlowFixMe
-      strikeInSize,
+      inSize,
     );
   }
 
@@ -706,21 +737,21 @@ export class EquationFunctions {
                       | TypeEquationPhrase,               // $FlowFixMe
     withAnnotationsArray: Array<TypeEquationPhrase | AnnotationInformation>
                         | AnnotationInformation | TypeEquationPhrase | null = null,
-    includeAnnotationInSizeCalc: boolean | null = null,
+    inSizeCalc: boolean | null = null,
   ) {
     let content;
     let withAnnotations;
     // let withAnnotation;
-    let includeAnnotationInSize;
-    if (!(withAnnotationsArray == null && includeAnnotationInSizeCalc == null)) {
+    let inSize;
+    if (!(withAnnotationsArray == null && inSizeCalc == null)) {
       content = optionsOrContent;
       withAnnotations = withAnnotationsArray;
-      includeAnnotationInSize = includeAnnotationInSizeCalc;
+      inSize = inSizeCalc;
     } else if (Array.isArray(optionsOrContent)) {
-      [content, withAnnotations, includeAnnotationInSize] = optionsOrContent;
+      [content, withAnnotations, inSize] = optionsOrContent;
     } else {
       ({                                                    // $FlowFixMe
-        content, withAnnotations, includeAnnotationInSize,
+        content, withAnnotations, inSize,
       } = optionsOrContent);
       // console.log(withAnnotation)
       // if (withAnnotation != null) {
@@ -771,14 +802,14 @@ export class EquationFunctions {
         }
       }
     }
-    let includeAnnotationInSizeToUse = true;
-    if (includeAnnotationInSize != null) {
-      includeAnnotationInSizeToUse = includeAnnotationInSize;
+    let inSizeToUse = true;
+    if (inSize != null) {
+      inSizeToUse = inSize;
     }
     return new Annotation(               // $FlowFixMe
       this.contentToElement(content),    // $FlowFixMe
       annotations,                       // $FlowFixMe
-      includeAnnotationInSizeToUse,
+      inSizeToUse,
     );
   }
 
@@ -789,6 +820,8 @@ export class EquationFunctions {
     positionRelativeToAnnotationH: 'left' | 'right' | 'center' | number | null = null,
     positionRelativeToAnnotationV: 'bottom' | 'top' | 'middle' | 'baseline' | number | null = null,
     annotationScale: number | null = null,
+    xOffsetIn: number | null = null,
+    yOffsetIn: number | null = null,
   ) {
     let annotation;
     let relativeToContentH;
@@ -796,11 +829,15 @@ export class EquationFunctions {
     let relativeToAnnotationH;
     let relativeToAnnotationV;
     let scale;
+    let xOffset;
+    let yOffset;
     if (!(positionRelativeToContentH == null
           && positionRelativeToContentV == null
           && positionRelativeToAnnotationH == null
           && positionRelativeToAnnotationV == null
-          && annotationScale == null)
+          && annotationScale == null
+          && xOffsetIn == null
+          && yOffsetIn == null)
     ) {
       annotation = optionsOrAnnotation;
       relativeToContentH = positionRelativeToContentH;
@@ -808,16 +845,20 @@ export class EquationFunctions {
       relativeToAnnotationH = positionRelativeToAnnotationH;
       relativeToAnnotationV = positionRelativeToAnnotationV;
       scale = annotationScale;
+      xOffset = xOffsetIn;
+      yOffset = yOffsetIn;
     } else if (Array.isArray(optionsOrAnnotation)) {
       [
         annotation, relativeToContentH, relativeToContentV,   // $FlowFixMe
         relativeToAnnotationH, relativeToAnnotationV, scale,  // $FlowFixMe
+        xOffset, yOffset,                                     // $FlowFixMe
       ] = optionsOrAnnotation;
     } else {
       let relativeToContent;
       let relativeToAnnotation;
       ({                                                      // $FlowFixMe
         annotation, relativeToContent, relativeToAnnotation, scale,
+        xOffset, yOffset,
       } = optionsOrAnnotation);
       [relativeToContentH, relativeToContentV] = relativeToContent;
       [relativeToAnnotationH, relativeToAnnotationV] = relativeToAnnotation;
@@ -835,6 +876,8 @@ export class EquationFunctions {
       relativeToAnnotationH,                    // $FlowFixMe
       relativeToAnnotationV,                    // $FlowFixMe
       scaleToUse,
+      xOffset,
+      yOffset,
     );
   }
 
@@ -876,6 +919,100 @@ export class EquationFunctions {
       right,                                              // $FlowFixMe
       bottom,                                             // $FlowFixMe
       left,
+    );
+  }
+
+  bracNew(
+    optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
+    leftBracketString: string | null = null,
+    rightBracketString: string | null = null,
+    insideSpaceToContent: number | null = null,
+    outsideSpaceToContent: number | null = null,
+    topSpaceToContent: number | null = null,
+    bottomSpaceToContent: number | null = null,
+    minContentHeight: number | null = null,
+    inSizeInput: boolean | null = null,
+  ) {
+    let content;
+    let left;
+    let right;
+    let insideSpace;
+    let outsideSpace;
+    let topSpace;
+    let bottomSpace;
+    let minHeight;
+    let inSize;
+    if (!(leftBracketString == null
+          && rightBracketString == null
+          && insideSpaceToContent == null
+          && outsideSpaceToContent == null
+          && topSpaceToContent == null
+          && bottomSpaceToContent == null
+          && minContentHeight == null
+          && inSizeInput == null)
+    ) {
+      content = optionsOrContent;
+      left = leftBracketString;
+      right = rightBracketString;
+      insideSpace = insideSpaceToContent;
+      outsideSpace = outsideSpaceToContent;
+      topSpace = topSpaceToContent;
+      bottomSpace = bottomSpaceToContent;
+      minHeight = minContentHeight;
+      inSize = inSizeInput;
+    } else if (Array.isArray(optionsOrContent)) {
+      [                                                    // $FlowFixMe
+        content, left, right, insideSpace, outsideSpace,   // $FlowFixMe
+        topSpace, bottomSpace, minHeight, inSize,
+      ] = optionsOrContent;
+    } else {
+      ({                                                   // $FlowFixMe
+        content, left, right, insideSpace, outsideSpace,
+        topSpace, bottomSpace, minHeight, inSize,
+      } = optionsOrContent);
+    }
+    let leftBracket = null;
+    if (left != null) {                                    // $FlowFixMe
+      leftBracket = getDiagramElement(this.elements, left);
+    }
+    let rightBracket = null;
+    if (right != null) {                                   // $FlowFixMe
+      rightBracket = getDiagramElement(this.elements, right);
+    }
+    let insideSpaceToUse;
+    if (insideSpace != null) {
+      insideSpaceToUse = insideSpace;
+    }
+    let outsideSpaceToUse;
+    if (outsideSpace != null) {
+      outsideSpaceToUse = outsideSpace;
+    }
+    let topSpaceToUse;
+    if (topSpace != null) {
+      topSpaceToUse = topSpace;
+    }
+    let bottomSpaceToUse;
+    if (bottomSpace != null) {
+      bottomSpaceToUse = bottomSpace;
+    }
+    let minHeightToUse;
+    if (minHeight != null) {
+      minHeightToUse = minHeight;
+    }
+    let inSizeToUse;
+    if (inSize != null) {
+      inSizeToUse = inSize;
+    }
+    return new BracketsNew(                                // $FlowFixMe
+      this.contentToElement(content),                      // $FlowFixMe
+      leftBracket,                                         // $FlowFixMe
+      rightBracket,                                        // $FlowFixMe
+      insideSpaceToUse,                                    // $FlowFixMe
+      outsideSpaceToUse,                                   // $FlowFixMe
+      topSpaceToUse,                                       // $FlowFixMe
+      bottomSpaceToUse,                                    // $FlowFixMe
+      minHeightToUse,                                      // $FlowFixMe
+      inSizeToUse,
     );
   }
 
@@ -958,49 +1095,58 @@ export class EquationFunctions {
     optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
     sym: string | null = null,
     insideSpace: number | null = null,
+    barInSize: boolean | null = null,
   ) {
     let content;
     let symbol;
     let space;
+    let inSize;
     if (!(sym == null && insideSpace == null)) {
       content = optionsOrContent;
       symbol = sym;
       space = insideSpace;
+      inSize = barInSize;
     } else if (Array.isArray(optionsOrContent)) {
-      [content, symbol, space] = optionsOrContent;
+      [content, symbol, space, inSize] = optionsOrContent;
     } else {
       ({                                                    // $FlowFixMe
-        content, symbol, space,
+        content, symbol, space, inSize,
       } = optionsOrContent);
     }
     let spaceToUse = 0.03;
     if (space != null) {
       spaceToUse = space;
     }
-    return [content, symbol, spaceToUse];
+    let inSizeToUse = true;
+    if (inSize != null) {
+      inSizeToUse = inSize;
+    }
+    return [content, symbol, spaceToUse, inSizeToUse];
   }
 
   // $FlowFixMe
   topBar(...args) {
-    const [content, symbol, spaceToUse] = this.processBar(...args);
+    const [content, symbol, spaceToUse, inSize] = this.processBar(...args);
     return new Bar(                                         // $FlowFixMe
       this.contentToElement(content),                       // $FlowFixMe
       getDiagramElement(this.elements, symbol),             // $FlowFixMe
       spaceToUse,
       0.03,
       'top',
+      inSize,
     );
   }
 
   // $FlowFixMe
   bottomBar(...args) {
-    const [content, symbol, spaceToUse] = this.processBar(...args);
+    const [content, symbol, spaceToUse, inSize] = this.processBar(...args);
     return new Bar(                                         // $FlowFixMe
       this.contentToElement(content),                       // $FlowFixMe
       getDiagramElement(this.elements, symbol),             // $FlowFixMe
       spaceToUse,
       0.03,
       'bottom',
+      inSize,
     );
   }
 
@@ -1080,6 +1226,7 @@ export class EquationFunctions {
         contentSpaceToUse,                                   // $FlowFixMe
         commentSpaceToUse,
         'bottom',
+        includeInSize,
       );
     } else {
       contentToUse = this.pad(                               // $FlowFixMe
@@ -1096,7 +1243,7 @@ export class EquationFunctions {
           scale: scaleToUse,
         }),
       ],                                                    // $FlowFixMe
-      includeAnnotationInSize: includeInSize,
+      inSize: includeInSize,
     });
   }
 
@@ -1115,6 +1262,7 @@ export class EquationFunctions {
         contentSpaceToUse,                                   // $FlowFixMe
         commentSpaceToUse,
         'top',
+        includeInSize,
       );
     } else {
       contentToUse = this.pad(                               // $FlowFixMe
@@ -1131,7 +1279,7 @@ export class EquationFunctions {
           scale: scaleToUse,
         }),
       ],                                                    // $FlowFixMe
-      includeAnnotationInSize: includeInSize,
+      inSize: includeInSize,
     });
   }
 

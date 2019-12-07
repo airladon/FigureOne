@@ -87,7 +87,7 @@ describe('Equation Functions - Strike', () => {
             strike: {
               content: 'a',
               symbol: 'x',
-              strikeInSize: true,
+              inSize: true,
             },
           },
           // Method Array

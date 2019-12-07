@@ -5,6 +5,7 @@ import {
   Transform, Point, Line, polarToRect,
   threePointAngle, getPoint, clipAngle,
 } from '../../tools/g2';
+import type { TypeParsablePoint } from '../../tools/g2';
 import {
   roundNum,
 } from '../../tools/math';
@@ -235,12 +236,12 @@ class DiagramObjectAngle extends DiagramElementCollection {
 
   // Pulic Angle methods
   setAngle: (?{
-      position?: Point,
+      position?: TypeParsablePoint,
       rotation?: number,
       angle?: number,
-      p1?: Point,
-      p2?: Point,
-      p3?: Point,
+      p1?: TypeParsablePoint,
+      p2?: TypeParsablePoint,
+      p3?: TypeParsablePoint,
       rotationOffset?: number,
     }) => void;
 
@@ -505,12 +506,12 @@ class DiagramObjectAngle extends DiagramElementCollection {
   }
 
   setAngle(options: {
-      position?: Point,
+      position?: TypeParsablePoint,
       rotation?: number,
       angle?: number,
-      p1?: Point,
-      p2?: Point,
-      p3?: Point,
+      p1?: TypeParsablePoint,
+      p2?: TypeParsablePoint,
+      p3?: TypeParsablePoint,
       rotationOffset?: number,
     } = {}) {
     if (options.position != null) {
