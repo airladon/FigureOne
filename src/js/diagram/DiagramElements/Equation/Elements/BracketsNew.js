@@ -20,7 +20,10 @@ export class BracketsNew extends Elements {
   outsideSpace: number;
   topSpace: number;
   bottomSpace: number;
-  minHeight: number | null;
+  minContentHeight: number | null;
+  minContentDescent: number | null;
+  forceHeight: number | null;
+  forceDescent: number | null;
   inSize: boolean;
 
   constructor(
@@ -31,7 +34,10 @@ export class BracketsNew extends Elements {
     outsideSpace: number = 0.05,
     topSpace: number = 0.05,
     bottomSpace: number = 0.05,
-    minHeight: number | null = null,
+    minContentHeight: number | null = null,
+    minContentDescent: number | null = null,
+    forceHeight: number | null = null,
+    forceDescent: number | null = null,
     inSize: boolean = true,
   ) {
     const left = leftGlyph !== null ? new Element(leftGlyph) : null;
@@ -48,7 +54,10 @@ export class BracketsNew extends Elements {
     this.outsideSpace = outsideSpace;
     this.topSpace = topSpace;
     this.bottomSpace = bottomSpace;
-    this.minHeight = minHeight;
+    this.minContentHeight = minContentHeight;
+    this.minContentDescent = minContentDescent;
+    this.forceHeight = forceHeight;
+    this.forceDescent = forceDescent;
     // this.heightScale = heightScale;
     this.inSize = inSize;
   }
@@ -131,6 +140,7 @@ export class BracketsNew extends Elements {
     this.location = location._dup();
     const loc = location._dup();
     const contentBounds = new Bounds();
+    const originalContentBounds = new Bounds();
     const leftGlyphBounds = new Bounds();
     const rightGlyphBounds = new Bounds();
 
@@ -141,37 +151,44 @@ export class BracketsNew extends Elements {
       contentBounds.height = mainContent.ascent + mainContent.descent;
       contentBounds.ascent = mainContent.ascent;
       contentBounds.descent = mainContent.descent;
+      originalContentBounds.width = mainContent.width;
+      originalContentBounds.height = mainContent.height;
+      originalContentBounds.ascent = mainContent.ascent;
+      originalContentBounds.descent = mainContent.descent;
     }
 
-    const lineHeight = this.minHeight;
-    if (lineHeight != null) {
-      // let lineHeightToUse;
-      // let descentToUse = 0;
-      // if (lineHeight instanceof Elements) {
-      //   lineHeight.calcSize(loc._dup(), scale);
-      //   lineHeightToUse = lineHeight.height;
-      //   descentToUse = lineHeight.descent;
-      // } else {
-      //   lineHeightToUse = lineHeight * scale;
-      // }
-      contentBounds.height = Math.max(lineHeight * scale, contentBounds.height);
-      // contentBounds.descent = Math.max(descentToUse, contentBounds.descent);
+    // Calculation of descent and height needs to be done in this order to
+    // to preserve precedence (larger number overrides smaller number):
+    //    1. minContentDescent
+    //    2. forceDescent
+    //
+    //    1. Height based on bracket descent, to content ascent
+    //    2. forceHeight
+    if (this.minContentDescent != null) {
+      contentBounds.descent = Math.max(this.minContentDescent, contentBounds.descent);
     }
 
-    // const { heightScale } = this;
-    const height = contentBounds.height + this.topSpace * scale + this.bottomSpace * scale;
-    // const bracketScale = height;
+    let glyphDescent = contentBounds.descent + scale * this.bottomSpace;
+    if (this.forceDescent != null) {
+      glyphDescent = this.forceDescent;
+    }
 
-    // const glyphDescent = contentBounds.descent
-    //     + contentBounds.height * (heightScale - 1) / 2;
-    const glyphDescent = contentBounds.descent + scale * this.bottomSpace;
+    if (this.minContentHeight != null) {
+      contentBounds.height = Math.max(this.minContentHeight, contentBounds.height);
+      contentBounds.ascent = contentBounds.height - contentBounds.descent;
+    }
+
+    let height = glyphDescent + contentBounds.ascent + this.topSpace * scale;
+    if (this.forceHeight != null) {
+      height = this.forceHeight;
+    }
+
     const leftSymbolLocation = new Point(
       loc.x + this.outsideSpace * scale,
       loc.y - glyphDescent,
     );
     const { leftGlyph } = this;
     if (leftGlyph != null) {
-      // console.log(leftGlyph.custom)
       leftGlyph.showAll();
       leftGlyph.transform.updateScale(
         height,
@@ -183,7 +200,6 @@ export class BracketsNew extends Elements {
       );
       this.leftGlyphLocation = leftSymbolLocation;
       this.glyphHeight = height;
-      // const bounds = leftGlyph.getBoundingRect('vertex');
       leftGlyphBounds.width = leftGlyph.custom.width;
       leftGlyphBounds.height = height;
       leftGlyphBounds.ascent = height - glyphDescent;
@@ -208,9 +224,7 @@ export class BracketsNew extends Elements {
         rightSymbolLocation.y,
       );
       this.rightGlyphLocation = rightSymbolLocation;
-      // const bounds = rightGlyph.getBoundingRect('vertex');
       rightGlyphBounds.width = rightGlyph.custom.width;
-      // rightGlyphBounds.width = bounds.width;
       rightGlyphBounds.height = height;
       rightGlyphBounds.ascent = height - glyphDescent;
       rightGlyphBounds.descent = glyphDescent;
@@ -224,11 +238,11 @@ export class BracketsNew extends Elements {
       mainContent.offsetLocation(contentLocation.sub(mainContent.location));
     }
 
-    this.width = leftGlyphBounds.width + contentBounds.width
+    this.width = leftGlyphBounds.width + originalContentBounds.width
       + rightGlyphBounds.width + this.insideSpace * scale * 2
       + this.outsideSpace * scale * 2;
-    this.ascent = leftGlyphBounds.height - glyphDescent;
-    this.descent = glyphDescent;
+    this.ascent = Math.max(leftGlyphBounds.height - glyphDescent, originalContentBounds.ascent);
+    this.descent = Math.max(glyphDescent, originalContentBounds.descent);
     this.height = this.descent + this.ascent;
 
     if (leftGlyph) {
@@ -237,8 +251,6 @@ export class BracketsNew extends Elements {
     if (rightGlyph) {
       rightGlyph.custom.setSize(this.rightGlyphLocation, height);
     }
-    // console.log(this.glyphLocation, this.rightGlyphLocation)
-    // console.log(this.glyph.getPosition()._dup(), this.rightGlyph.getPosition()._dup());
   }
 }
 
