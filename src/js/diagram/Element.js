@@ -2353,16 +2353,13 @@ class DiagramElementCollection extends DiagramElement {
 
   getAllBoundaries(space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local') {
     let boundaries = [];
-    console.log(this.name, space, this.drawOrder.length)
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      console.log(element.name, element.isShown)
       if (element.isShown) {
         const elementBoundaries = element.getBoundaries(space);
         boundaries = boundaries.concat(elementBoundaries);
       }
     }
-    console.log(boundaries)
     return boundaries;
   }
 
