@@ -183,12 +183,19 @@ export class BracketsNew extends Elements {
       height = this.forceHeight;
     }
 
-    const leftSymbolLocation = new Point(
+    let leftSymbolLocation = new Point(
       loc.x + this.outsideSpace * scale,
       loc.y - glyphDescent,
     );
+
     const { leftGlyph } = this;
     if (leftGlyph != null) {
+      if (this.inSize === false) {
+        leftSymbolLocation = new Point(
+          loc.x - this.insideSpace * scale - leftGlyph.custom.width,
+          loc.y - glyphDescent,
+        );
+      }
       leftGlyph.showAll();
       leftGlyph.transform.updateScale(
         height,
@@ -206,11 +213,18 @@ export class BracketsNew extends Elements {
       leftGlyphBounds.descent = glyphDescent;
     }
 
-    const rightSymbolLocation = new Point(
+    let rightSymbolLocation = new Point(
       loc.x + contentBounds.width + leftGlyphBounds.width
         + (this.insideSpace * 2 + this.outsideSpace) * scale,
       leftSymbolLocation.y,
     );
+
+    if (this.inSize === false) {
+      rightSymbolLocation = new Point(
+        loc.x + contentBounds.width + this.insideSpace * scale,
+        leftSymbolLocation.y,
+      );
+    }
 
     const { rightGlyph } = this;
     if (rightGlyph != null) {
@@ -234,16 +248,23 @@ export class BracketsNew extends Elements {
       this.location.y,
     );
 
-    if (mainContent instanceof Elements) {
+    if (mainContent instanceof Elements && this.inSize) {
       mainContent.offsetLocation(contentLocation.sub(mainContent.location));
     }
 
-    this.width = leftGlyphBounds.width + originalContentBounds.width
-      + rightGlyphBounds.width + this.insideSpace * scale * 2
-      + this.outsideSpace * scale * 2;
-    this.ascent = Math.max(leftGlyphBounds.height - glyphDescent, originalContentBounds.ascent);
-    this.descent = Math.max(glyphDescent, originalContentBounds.descent);
-    this.height = this.descent + this.ascent;
+    if (this.inSize) {
+      this.width = leftGlyphBounds.width + originalContentBounds.width
+        + rightGlyphBounds.width + this.insideSpace * scale * 2
+        + this.outsideSpace * scale * 2;
+      this.ascent = Math.max(leftGlyphBounds.height - glyphDescent, originalContentBounds.ascent);
+      this.descent = Math.max(glyphDescent, originalContentBounds.descent);
+      this.height = this.descent + this.ascent;
+    } else {
+      this.width = originalContentBounds.width;
+      this.ascent = originalContentBounds.ascent;
+      this.descent = originalContentBounds.descent;
+      this.height = originalContentBounds.height;
+    }
 
     if (leftGlyph) {
       leftGlyph.custom.setSize(this.leftGlyphLocation, height);
