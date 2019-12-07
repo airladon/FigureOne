@@ -75,7 +75,7 @@ export default function SquareBracket(
   side: 'left' | 'right' | 'top' | 'bottom',
   lineWidth: number,
   endLength: number,
-  staticSize: ?number,
+  staticSize: ?boolean,
 ) {
   const symbol = shapes.collection({ color, transform: new Transform('squareBracket').scale(1, 1).translate(0, 0) });
   symbol.add('line', shapes.fan(fan(color)));
@@ -84,12 +84,13 @@ export default function SquareBracket(
   updatePoints(symbol, side, 1, lineWidth, endLength);
   symbol.custom.lineWidth = lineWidth;
   symbol.custom.endLength = endLength;
-  symbol.custom.width = lineWidth + endLength;
 
   if (staticSize) {
     symbol.custom.type = 'static';
-    updatePoints(symbol, side, staticSize, lineWidth, endLength);
+    updatePoints(symbol, side, 1, lineWidth, endLength);
+    symbol.custom.getWidth = height => height * (lineWidth + endLength);
   } else {
+    symbol.custom.getWidth = () => lineWidth + endLength;
     symbol.custom.scale = new Point(1, 1);
     symbol.internalSetTransformCallback = () => {
       const s = symbol.getScale();

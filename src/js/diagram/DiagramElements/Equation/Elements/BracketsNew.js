@@ -192,7 +192,7 @@ export class BracketsNew extends Elements {
     if (leftGlyph != null) {
       if (this.inSize === false) {
         leftSymbolLocation = new Point(
-          loc.x - this.insideSpace * scale - leftGlyph.custom.width,
+          loc.x - this.insideSpace * scale - leftGlyph.custom.getWidth(height),
           loc.y - glyphDescent,
         );
       }
@@ -207,7 +207,7 @@ export class BracketsNew extends Elements {
       );
       this.leftGlyphLocation = leftSymbolLocation;
       this.glyphHeight = height;
-      leftGlyphBounds.width = leftGlyph.custom.width;
+      leftGlyphBounds.width = leftGlyph.custom.getWidth(height);
       leftGlyphBounds.height = height;
       leftGlyphBounds.ascent = height - glyphDescent;
       leftGlyphBounds.descent = glyphDescent;
@@ -238,7 +238,7 @@ export class BracketsNew extends Elements {
         rightSymbolLocation.y,
       );
       this.rightGlyphLocation = rightSymbolLocation;
-      rightGlyphBounds.width = rightGlyph.custom.width;
+      rightGlyphBounds.width = rightGlyph.custom.getWidth(height);
       rightGlyphBounds.height = height;
       rightGlyphBounds.ascent = height - glyphDescent;
       rightGlyphBounds.descent = glyphDescent;

@@ -257,7 +257,7 @@ export default class EquationSymbols {
     color?: Array<number>,
     lineWidth?: number,
     endLength?: number,
-    staticSize?: ?number,
+    staticSize?: ?boolean,
   }) {
     const defaultOptions = {
       side: 'left',
