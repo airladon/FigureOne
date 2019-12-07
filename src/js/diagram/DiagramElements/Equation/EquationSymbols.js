@@ -14,6 +14,7 @@ import Box from './Symbols/Box';
 import Radical from './Symbols/Radical';
 import Brace from './Symbols/Brace';
 import SquareBracket from './Symbols/SquareBracket';
+import SquareBracketNew from './Symbols/SquareBracketNew';
 // import { Annotation, AnnotationInformation } from './Elements/Annotation';
 
 export default class EquationSymbols {
@@ -36,13 +37,14 @@ export default class EquationSymbols {
       side?: 'left' | 'right' | 'bottom' | 'top',
       width?: number,
       fill?: boolean,
-      staticSize?: ?(Point | [number, number]),
+      staticSize?: ?(Point | [number, number] | number),
       startWidth?: number,
       lineWidth?: number,
       startHeight?: number,
       maxStartWidth?: ?number,
       maxStartHeight?: ?number,
       proportionalToHeight?: boolean,
+      endLength?: number,
     },
   ) {
     if (name === 'vinculum') {
@@ -62,6 +64,9 @@ export default class EquationSymbols {
     }
     if (name === 'squareBracket') {
       return this.squareBracket(options);
+    }
+    if (name === 'squareBracketNew') {
+      return this.squareBracketNew(options);
     }
     if (name === 'brace') {
       return this.brace(options);
@@ -244,6 +249,31 @@ export default class EquationSymbols {
       optionsToUse.numLines,
       new Transform('bar').scale(1, 1).translate(0, 0),
       this.shapes.limits,
+    );
+  }
+
+  squareBracketNew(options: {
+    side?: 'left' | 'right' | 'top' | 'bottom',
+    color?: Array<number>,
+    lineWidth?: number,
+    endLength?: number,
+    staticSize?: ?number,
+  }) {
+    const defaultOptions = {
+      side: 'left',
+      lineWidth: 0.01,
+      color: this.defaultColor,
+      endLength: 0.04,
+      staticSize: null,
+    };
+    const optionsToUse = joinObjects(defaultOptions, options);
+    return new SquareBracketNew(
+      this.shapes,
+      optionsToUse.color,
+      optionsToUse.side,
+      optionsToUse.lineWidth,
+      optionsToUse.endLength,
+      optionsToUse.staticSize,
     );
   }
 

@@ -12,6 +12,8 @@ export class AnnotationInformation {
   xAlign: 'left' | 'right' | 'center' | number;
   yAlign: 'bottom' | 'top' | 'middle' | 'baseline' | number;
   annotationScale: number;
+  xOffset: number;
+  yOffset: number;
 
   constructor(
     content: Elements,
@@ -20,6 +22,8 @@ export class AnnotationInformation {
     xAlign: 'left' | 'right' | 'center' | number | null = 'left',
     yAlign: 'bottom' | 'top' | 'middle' | 'baseline' | number | null = 'bottom',
     annotationScale: number | null = 0.5,
+    xOffset: number = 0,
+    yOffset: number = 0,
   ) {
     this.content = content;
     this.xPosition = xPosition == null ? 'right' : xPosition;
@@ -27,6 +31,8 @@ export class AnnotationInformation {
     this.xAlign = xAlign == null ? 'left' : xAlign;
     this.yAlign = yAlign == null ? 'bottom' : yAlign;
     this.annotationScale = annotationScale == null ? 0.5 : annotationScale;
+    this.xOffset = xOffset;
+    this.yOffset = yOffset;
   }
 }
 
@@ -53,6 +59,8 @@ export class Annotation extends Elements {
   yAlign: 'bottom' | 'top' | 'middle' | 'baseline' | number;
   annotationInSize: boolean;
   annotationScale: number;
+  xOffset: number;
+  yOffset: number;
 
   constructor(
     mainContent: Elements,
@@ -63,6 +71,8 @@ export class Annotation extends Elements {
     yAlign: 'bottom' | 'top' | 'middle' | 'baseline' | number = 'bottom',
     annotationScale: number = 0.5,
     annotationInSize: boolean = false,
+    xOffset: number = 0,
+    yOffset: number = 0,
   ) {
     if (Array.isArray(annotationOrAnnotationArray)) {
       const annotationElements = [mainContent];
@@ -95,6 +105,8 @@ export class Annotation extends Elements {
         xAlign,
         yAlign,
         annotationScale,
+        xOffset,
+        yOffset,
       )];
       this.annotationInSize = annotationInSize;
     }
@@ -133,6 +145,8 @@ export class Annotation extends Elements {
         xPosition, yPosition, xAlign,
         yAlign, annotationScale,
       } = annotationInfo;
+      const annotationXOffset = annotationInfo.xOffset;
+      const annotationYOffset = annotationInfo.yOffset;
       annotation.calcSize(location, incomingScale * annotationScale);
 
       const annotationLoc = this.location._dup();
@@ -180,8 +194,8 @@ export class Annotation extends Elements {
       }
 
       const annotationOffset = new Point(
-        -xOffset * annotation.width,
-        annotation.descent - yOffset * annotation.height,
+        -xOffset * annotation.width + annotationXOffset * incomingScale,
+        annotation.descent - yOffset * annotation.height + annotationYOffset * incomingScale,
       );
 
       annotation.calcSize(annotationLoc, incomingScale * annotationScale);

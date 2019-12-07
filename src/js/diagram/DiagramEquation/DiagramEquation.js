@@ -31,7 +31,7 @@ export type TypeEquationPhrase =
     | {                                 // Strike
       content: TypeEquationPhrase;
       symbol: string;
-      strikeInSize?: boolean;
+      inSize?: boolean;
     }
     | {                                 // Annotation
       content: TypeEquationPhrase;
@@ -43,7 +43,7 @@ export type TypeEquationPhrase =
         yAlign?: 'bottom' | 'top' | 'middle' | 'baseline';
         scale?: number;
       }>;
-      annotationInSize?: boolean;
+      inSize?: boolean;
     }
     | {                                 // Bracket
       content: TypeEquationPhrase;
