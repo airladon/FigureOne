@@ -196,13 +196,18 @@ export type TypeBracketNewObject = {
   outsideSpace?: number;
   topSpace?: number;
   bottomSpace?: number;
-  minHeight?: number;
+  minContentHeight?: number;
+  minContentDescent?: number;
+  height?: number;
+  descent?: number;
   inSize?: boolean;
 };
 export type TypeBracketNewArray = [
   TypeEquationPhrase,
   ?string,
   ?string,
+  ?number,
+  ?number,
   ?number,
   ?number,
   ?number,
@@ -923,14 +928,17 @@ export class EquationFunctions {
   }
 
   bracNew(
-    optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
+    optionsOrContent: TypeBracketNewObject | TypeBracketNewArray | TypeEquationPhrase,
     leftBracketString: string | null = null,
     rightBracketString: string | null = null,
     insideSpaceToContent: number | null = null,
     outsideSpaceToContent: number | null = null,
     topSpaceToContent: number | null = null,
     bottomSpaceToContent: number | null = null,
-    minContentHeight: number | null = null,
+    minimumContentHeight: number | null = null,
+    minimumContentDescent: number | null = null,
+    forceHeight: number | null = null,
+    forceDescent: number | null = null,
     inSizeInput: boolean | null = null,
   ) {
     let content;
@@ -940,7 +948,10 @@ export class EquationFunctions {
     let outsideSpace;
     let topSpace;
     let bottomSpace;
-    let minHeight;
+    let minContentHeight;
+    let minContentDescent;
+    let descent;
+    let height;
     let inSize;
     if (!(leftBracketString == null
           && rightBracketString == null
@@ -948,7 +959,10 @@ export class EquationFunctions {
           && outsideSpaceToContent == null
           && topSpaceToContent == null
           && bottomSpaceToContent == null
-          && minContentHeight == null
+          && minimumContentHeight == null
+          && minimumContentDescent == null
+          && forceDescent == null
+          && forceHeight == null
           && inSizeInput == null)
     ) {
       content = optionsOrContent;
@@ -958,17 +972,20 @@ export class EquationFunctions {
       outsideSpace = outsideSpaceToContent;
       topSpace = topSpaceToContent;
       bottomSpace = bottomSpaceToContent;
-      minHeight = minContentHeight;
+      minContentHeight = minimumContentHeight;
+      minContentDescent = minimumContentDescent;
+      descent = forceDescent;
+      height = forceHeight;
       inSize = inSizeInput;
     } else if (Array.isArray(optionsOrContent)) {
       [                                                    // $FlowFixMe
         content, left, right, insideSpace, outsideSpace,   // $FlowFixMe
-        topSpace, bottomSpace, minHeight, inSize,
+        topSpace, bottomSpace, minContentHeight, minContentDescent, height, descent, inSize,
       ] = optionsOrContent;
     } else {
       ({                                                   // $FlowFixMe
         content, left, right, insideSpace, outsideSpace,
-        topSpace, bottomSpace, minHeight, inSize,
+        topSpace, bottomSpace, minContentHeight, minContentDescent, height, descent, inSize,
       } = optionsOrContent);
     }
     let leftBracket = null;
@@ -996,8 +1013,20 @@ export class EquationFunctions {
       bottomSpaceToUse = bottomSpace;
     }
     let minHeightToUse;
-    if (minHeight != null) {
-      minHeightToUse = minHeight;
+    if (minContentHeight != null) {
+      minHeightToUse = minContentHeight;
+    }
+    let minDescentToUse;
+    if (minContentDescent != null) {
+      minDescentToUse = minContentDescent;
+    }
+    let heightToUse;
+    if (height != null) {
+      heightToUse = height;
+    }
+    let descentToUse;
+    if (descent != null) {
+      descentToUse = descent;
     }
     let inSizeToUse;
     if (inSize != null) {
@@ -1012,6 +1041,9 @@ export class EquationFunctions {
       topSpaceToUse,                                       // $FlowFixMe
       bottomSpaceToUse,                                    // $FlowFixMe
       minHeightToUse,                                      // $FlowFixMe
+      minDescentToUse,                                     // $FlowFixMe
+      heightToUse,                                         // $FlowFixMe
+      descentToUse,                                        // $FlowFixMe
       inSizeToUse,
     );
   }
