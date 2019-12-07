@@ -86,7 +86,7 @@ export default function SquareBracket(
   symbol.custom.endLength = endLength;
   symbol.custom.width = lineWidth + endLength;
 
-  if (staticSize != null) {
+  if (staticSize) {
     symbol.custom.type = 'static';
     updatePoints(symbol, side, staticSize, lineWidth, endLength);
   } else {
