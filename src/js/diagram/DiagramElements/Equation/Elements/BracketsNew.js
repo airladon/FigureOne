@@ -166,16 +166,20 @@ export class BracketsNew extends Elements {
     //    2. forceHeight
     if (this.minContentDescent != null) {
       contentBounds.descent = Math.max(this.minContentDescent, contentBounds.descent);
+      contentBounds.height = contentBounds.ascent + contentBounds.descent;
     }
 
     let glyphDescent = contentBounds.descent + scale * this.bottomSpace;
     if (this.forceDescent != null) {
       glyphDescent = this.forceDescent;
     }
-
     if (this.minContentHeight != null) {
-      contentBounds.height = Math.max(this.minContentHeight, contentBounds.height);
-      contentBounds.ascent = contentBounds.height - contentBounds.descent;
+      contentBounds.ascent = -contentBounds.descent + Math.max(
+        this.minContentHeight, contentBounds.height,
+      );
+      contentBounds.height = contentBounds.ascent + contentBounds.descent;
+      // contentBounds.height = Math.max(this.minContentHeight, contentBounds.height);
+      // contentBounds.ascent = contentBounds.height - contentBounds.descent;
     }
 
     let height = glyphDescent + contentBounds.ascent + this.topSpace * scale;
