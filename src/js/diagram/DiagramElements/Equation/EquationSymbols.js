@@ -258,6 +258,8 @@ export default class EquationSymbols {
     lineWidth?: number,
     endLength?: number,
     staticSize?: ?boolean,
+    radius?: number,
+    sides?: number,
   }) {
     const defaultOptions = {
       side: 'left',
@@ -265,6 +267,8 @@ export default class EquationSymbols {
       color: this.defaultColor,
       endLength: 0.04,
       staticSize: null,
+      radius: 0,
+      sides: 5,
     };
     const optionsToUse = joinObjects(defaultOptions, options);
     return (new SquareBracketNew(
@@ -277,6 +281,8 @@ export default class EquationSymbols {
       {
         lineWidth: optionsToUse.lineWidth,
         endLength: optionsToUse.endLength,
+        radius: optionsToUse.radius,
+        sides: optionsToUse.sides,
       },
     )).symbol;
   }
