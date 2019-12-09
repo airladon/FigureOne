@@ -178,8 +178,6 @@ export class BracketsNew extends Elements {
         this.minContentHeight, contentBounds.height,
       );
       contentBounds.height = contentBounds.ascent + contentBounds.descent;
-      // contentBounds.height = Math.max(this.minContentHeight, contentBounds.height);
-      // contentBounds.ascent = contentBounds.height - contentBounds.descent;
     }
 
     let height = glyphDescent + contentBounds.ascent + this.topSpace * scale;

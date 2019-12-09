@@ -231,7 +231,7 @@ class VertexObject extends DrawingObject {
     this.resetBuffer();
   }
 
-  changeVertices(coords: Array<g2.Point>) {
+  changeVertices(coords: Array<g2.Point>, border: Array<Array<g2.Point>> = []) {
     this.points = [];
     this.border = [];
     let minX = null;
@@ -254,13 +254,17 @@ class VertexObject extends DrawingObject {
         maxX = p.x;
       }
     });
-    if (minX != null && minY != null && maxX != null && maxY != null) {
-      this.border[0] = [
-        new g2.Point(minX, minY),
-        new g2.Point(minX, maxY),
-        new g2.Point(maxX, maxY),
-        new g2.Point(maxX, minY),
-      ];
+    if (border.length === 0) {
+      if (minX != null && minY != null && maxX != null && maxY != null) {
+        this.border[0] = [
+          new g2.Point(minX, minY),
+          new g2.Point(minX, maxY),
+          new g2.Point(maxX, maxY),
+          new g2.Point(maxX, minY),
+        ];
+      }
+    } else {
+      this.border = border;
     }
     this.resetBuffer();
   }

@@ -14,7 +14,7 @@ import Box from './Symbols/Box';
 import Radical from './Symbols/Radical';
 import Brace from './Symbols/Brace';
 import SquareBracket from './Symbols/SquareBracket';
-import SquareBracketNew from './Symbols/SquareBracketNew';
+import SquareBracketNew from './Symbols/BracketNew';
 // import { Annotation, AnnotationInformation } from './Elements/Annotation';
 
 export default class EquationSymbols {
@@ -268,8 +268,10 @@ export default class EquationSymbols {
     };
     const optionsToUse = joinObjects(defaultOptions, options);
     return new SquareBracketNew(
-      this.shapes,
+      this.shapes.webgl,
       optionsToUse.color,
+      new Transform('bar').scale(1, 1).translate(0, 0),
+      this.shapes.limits,
       optionsToUse.side,
       optionsToUse.lineWidth,
       optionsToUse.endLength,
