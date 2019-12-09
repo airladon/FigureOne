@@ -17,6 +17,7 @@ import SquareBracket from './Symbols/SquareBracket';
 import SquareBracketNew from './Symbols/SquareBracketNew';
 import BarNew from './Symbols/BarNew';
 import BracketNew from './Symbols/BracketNew';
+import BraceNew from './Symbols/BraceNew';
 
 // import { Annotation, AnnotationInformation } from './Elements/Annotation';
 
@@ -77,6 +78,9 @@ export default class EquationSymbols {
     }
     if (name === 'brace') {
       return this.brace(options);
+    }
+    if (name === 'braceNew') {
+      return this.braceNew(options);
     }
     if (name === 'bar') {
       return this.bar(options);
@@ -288,6 +292,45 @@ export default class EquationSymbols {
       this.shapes.webgl,
       optionsToUse.color,
       new Transform('bracket').scale(1, 1).translate(0, 0),
+      this.shapes.limits,
+      optionsToUse.side,
+      optionsToUse.staticSize,
+      {
+        sides: optionsToUse.sides,
+        lineWidth: optionsToUse.lineWidth,
+        width: optionsToUse.width,
+        tipWidth: optionsToUse.tipWidth,
+      },
+    )).symbol;
+  }
+
+  braceNew(options: {
+    side?: 'left' | 'right' | 'top' | 'bottom',
+    color?: Array<number>,
+    lineWidth?: number,
+    sides?: number,
+    width?: number,
+    tipWidth?: number,
+    staticSize?: boolean,
+  }) {
+    const defaultOptions = {
+      side: 'left',
+      color: this.defaultColor,
+      lineWidth: 0.012,
+      sides: 10,
+      staticSize: null,
+    };
+    const optionsToUse = joinObjects(defaultOptions, options);
+    if (optionsToUse.width == null) {
+      optionsToUse.width = optionsToUse.lineWidth * 4.2;
+    }
+    if (optionsToUse.tipWidth == null) {
+      optionsToUse.tipWidth = optionsToUse.lineWidth / 3;
+    }
+    return (new BraceNew(
+      this.shapes.webgl,
+      optionsToUse.color,
+      new Transform('brace').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse.side,
       optionsToUse.staticSize,
