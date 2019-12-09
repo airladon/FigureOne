@@ -84,6 +84,9 @@ export default class Bracket {
     };
   }
 
+  // This is the same math as for Brace, but the outside radius is only a
+  // portion of a half circle
+
   // eslint-disable-next-line class-methods-use-this
   getPoints() {
     // eslint-disable-next-line no-unused-vars
