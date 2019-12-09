@@ -16,6 +16,7 @@ import Brace from './Symbols/Brace';
 import SquareBracket from './Symbols/SquareBracket';
 import SquareBracketNew from './Symbols/SquareBracketNew';
 import BarNew from './Symbols/BarNew';
+import BracketNew from './Symbols/BracketNew';
 
 // import { Annotation, AnnotationInformation } from './Elements/Annotation';
 
@@ -47,6 +48,7 @@ export default class EquationSymbols {
       maxStartHeight?: ?number,
       proportionalToHeight?: boolean,
       endLength?: number,
+      sides?: number,
     },
   ) {
     if (name === 'vinculum') {
@@ -63,6 +65,9 @@ export default class EquationSymbols {
     }
     if (name === 'bracket') {
       return this.bracket(options);
+    }
+    if (name === 'bracketNew') {
+      return this.bracketNew(options);
     }
     if (name === 'squareBracket') {
       return this.squareBracket(options);
@@ -235,7 +240,6 @@ export default class EquationSymbols {
     );
   }
 
-
   bar(options: {
     side?: 'left' | 'right' | 'top' | 'bottom',
     numLines?: number,
@@ -255,6 +259,45 @@ export default class EquationSymbols {
       new Transform('bar').scale(1, 1).translate(0, 0),
       this.shapes.limits,
     );
+  }
+
+  bracketNew(options: {
+    side?: 'left' | 'right' | 'top' | 'bottom',
+    color?: Array<number>,
+    lineWidth?: number,
+    sides?: number,
+    width?: number,
+    tipWidth?: number,
+    staticSize?: boolean,
+  }) {
+    const defaultOptions = {
+      side: 'left',
+      color: this.defaultColor,
+      lineWidth: 0.012,
+      sides: 10,
+      staticSize: null,
+    };
+    const optionsToUse = joinObjects(defaultOptions, options);
+    if (optionsToUse.width == null) {
+      optionsToUse.width = optionsToUse.lineWidth * 4.2;
+    }
+    if (optionsToUse.tipWidth == null) {
+      optionsToUse.tipWidth = optionsToUse.lineWidth / 3;
+    }
+    return (new BracketNew(
+      this.shapes.webgl,
+      optionsToUse.color,
+      new Transform('bracket').scale(1, 1).translate(0, 0),
+      this.shapes.limits,
+      optionsToUse.side,
+      optionsToUse.staticSize,
+      {
+        sides: optionsToUse.sides,
+        lineWidth: optionsToUse.lineWidth,
+        width: optionsToUse.width,
+        tipWidth: optionsToUse.tipWidth,
+      },
+    )).symbol;
   }
 
   barNew(options: {
