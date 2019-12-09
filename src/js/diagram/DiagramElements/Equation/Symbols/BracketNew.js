@@ -9,7 +9,6 @@ import WebGLInstance from '../../../webgl/webgl';
 
 export default class Bracket {
   symbol: DiagramElementPrimitive;
-  // options: Object;
 
   constructor(
     webgl: Array<WebGLInstance>,
@@ -17,12 +16,9 @@ export default class Bracket {
     transformOrLocation: Transform | Point,
     diagramLimits: Rect,
     side: 'left' | 'right' | 'top' | 'bottom',
-    // lineWidth: number,
-    // endLength: number,
     staticSize: ?boolean,
     symbolOptions: Object,
   ) {
-    // this.options = symbolOptions;
     const getPoints = this.getPoints();
     const getWidth = this.getWidth();
     const vertexObject = new VertexBracket(webgl, side);
@@ -70,14 +66,8 @@ export default class Bracket {
     // eslint-disable-next-line max-len
     symbol.custom.setSize = (location: Point, heightIn: number) => {
       const t = symbol.transform._dup();
-      t.updateScale(
-        heightIn,
-        heightIn,
-      );
-      t.updateTranslation(
-        location.x,
-        location.y,
-      );
+      t.updateScale(heightIn, heightIn);
+      t.updateTranslation(location.x, location.y);
       symbol.setTransform(t);
     };
     this.symbol = symbol;
@@ -85,32 +75,23 @@ export default class Bracket {
 
   // eslint-disable-next-line class-methods-use-this
   getWidth() {
-    return (type: 'static' | 'dynamic', options: Object, height: number) => {
-      const { lineWidth, endLength } = options;
-      if (type === 'static') {
-        return height * (lineWidth + endLength);
-      }
-      return lineWidth + endLength;
-    };
+    // eslint-disable-next-line no-unused-vars
+    return (type: 'static' | 'dynamic', options: Object, height: number) => 1;
   }
 
   // eslint-disable-next-line class-methods-use-this
   getPoints() {
+    // eslint-disable-next-line no-unused-vars
     return (options: Object, height: number) => {
-      const { lineWidth, endLength } = options;
       const leftPoints = [
-        new Point(lineWidth + endLength, 0),
         new Point(0, 0),
         new Point(0, height),
-        new Point(lineWidth + endLength, height),
       ];
       const rightPoints = [
-        new Point(lineWidth + endLength, lineWidth),
-        new Point(lineWidth, lineWidth),
-        new Point(lineWidth, height - lineWidth),
-        new Point(lineWidth + endLength, height - lineWidth),
+        new Point(0, height),
+        new Point(1, height),
       ];
-      return [leftPoints, rightPoints, lineWidth + endLength, height];
+      return [leftPoints, rightPoints, 1, height];
     };
   }
 }

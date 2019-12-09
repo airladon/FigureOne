@@ -14,7 +14,7 @@ import Box from './Symbols/Box';
 import Radical from './Symbols/Radical';
 import Brace from './Symbols/Brace';
 import SquareBracket from './Symbols/SquareBracket';
-import SquareBracketNew from './Symbols/BracketNew';
+import SquareBracketNew from './Symbols/SquareBracketNew';
 // import { Annotation, AnnotationInformation } from './Elements/Annotation';
 
 export default class EquationSymbols {
