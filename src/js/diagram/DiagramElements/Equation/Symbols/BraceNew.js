@@ -17,22 +17,59 @@ export default class Bar extends Bracket {
     };
   }
 
+  // The solution to a circle that intersect at the same
+  //
+  //                       |OOO ooo
+  //                       |       OOo
+  //                       |         | OOo              A
+  //                       |         |    OOo           |
+  //                       |         |      OOo         |
+  //                       |         |        OOo       |
+  //                       |         |         OOo      | h
+  //                       |         |          OOo     |
+  //                       |         |           OOo    |
+  //                       |         |           OOo    |
+  //                       C---------|-----------OOo    V
+  //                       |         |      w      |
+  //                       |         |<----------->|
+  //                       |                       |
+  //                       |          r            |
+  //                       |<--------------------->|
+  // Circle with radius r intersects a vertical line with height h
+  // a distance w from the circle horizontal.
+  //
+  // Calculate r:
+  //          w^2 + h^2
+  //     r = -----------
+  //              2w
+  //
+  // Calculate angle from center C to intersection with h:
+  //
+  //     theta = arcsin (h / r))
+  //
+  //
+  //
+  //  For the brace case, the outside radius is a full 90º arc
+  //  The inside arc is calculated from the top equations where
+  //
+  //       w = outsideRadius - lineWidth
+  //
   //                              width
   //                   <---------------------->
   //
-  //           A       OOO ooo                        A
-  //  TipWidth |       00o    OOo                     |
-  //           V       00o        OOo                 |
-  //                    00o          OOo              |
-  //                     00o           OOo            | h = outside radius
-  //                      00o            OOo          |
-  //                      00o              OOo        |
-  //                       00o             OOo        |
-  //                       00o              OOo       |
-  //  Ci              Co    00o              OOo      V
+  //           A       OOO ooo
+  //  TipWidth |       00o    OOo
+  //           V       00o        OOo   ---------------
+  //                     00o         OOo              A
+  //                       00o           OOo          |
+  //                        00o            OOo        |
+  //                         00o            OOo       | h
+  //                         00o             OOo      |
+  //                          00o            OOo      |
+  //  Ci              Co      00o            OOo      V
   //  |                |
-  //  |                |  w  |  line width     |
-  //  |                |<--->|<--------------->|
+  //  |                |     |  line width     |
+  //  |                |     |<--------------->|
   //  |                |     |                 |
   //  |  inside radius |     |                 |
   //  |<-------------------->|                 |
@@ -40,7 +77,7 @@ export default class Bar extends Bracket {
   //                   |    outside radius     |
   //                   |<--------------------->|
   //
-  // The solution to a circle that intersect at the same
+  //
   // eslint-disable-next-line class-methods-use-this
   getPoints() {
     return (options: Object, height: number) => {
@@ -51,6 +88,7 @@ export default class Bar extends Bracket {
       const outsideRadius = (width / 2 + lineWidth / 2);
       const h = outsideRadius - tipWidth;
       const w = outsideRadius - lineWidth;
+      // const w = lineWidth;
       const insideRadius = (w ** 2 + h ** 2) / (2 * w);
       const leftPoints = [];
       const rightPoints = [];
