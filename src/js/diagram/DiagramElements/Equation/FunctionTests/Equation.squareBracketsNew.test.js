@@ -28,10 +28,10 @@ describe('Equation Functions - Brackets', () => {
       a: 'a',
       b: 'b',
       lb: {
-        symbol: 'bracketNew', side: 'left', lineWidth: 0.01, endLength: 0.03,
+        symbol: 'squareBracketNew', side: 'left', lineWidth: 0.01, endLength: 0.03,
       },
       rb: {
-        symbol: 'bracketNew', side: 'right', lineWidth: 0.01, endLength: 0.03,
+        symbol: 'squareBracketNew', side: 'right', lineWidth: 0.01, endLength: 0.03,
       },
     };
     functions = {
@@ -228,7 +228,7 @@ describe('Equation Functions - Brackets', () => {
       expect(round(newLScale.y)).toBe(0.303);
       expect(round(newL.y)).toBe(-0.108);
       // 0 - 0.1 - 0.04 = -0.14
-      expect(round(newL.x)).toBe(-0.1 - eqn._lb.getBoundingRect('diagram').width);
+      expect(round(newL.x)).toBe(-0.14);
       expect(round(newB.x)).toBe(0.04);
     });
     test('forceHeightGreaterThanActualHeight', () => {

@@ -1,7 +1,7 @@
 // @flow
 import { DiagramElementPrimitive } from '../../../Element';
 import {
-  Point, Transform, Rect,
+  Point, Transform, Rect, polarToRect,
 } from '../../../../tools/g2';
 import VertexBracket from './VertexBracketNew';
 import WebGLInstance from '../../../webgl/webgl';
@@ -75,23 +75,48 @@ export default class Bracket {
 
   // eslint-disable-next-line class-methods-use-this
   getWidth() {
-    // eslint-disable-next-line no-unused-vars
-    return (type: 'static' | 'dynamic', options: Object, height: number) => 1;
+    return (type: 'static' | 'dynamic', options: Object, height: number) => {
+      const { width } = options;
+      if (type === 'static') {
+        return height * width;
+      }
+      return width;
+    };
   }
 
   // eslint-disable-next-line class-methods-use-this
   getPoints() {
     // eslint-disable-next-line no-unused-vars
     return (options: Object, height: number) => {
-      const leftPoints = [
-        new Point(0, 0),
-        new Point(0, height),
-      ];
-      const rightPoints = [
-        new Point(0, height),
-        new Point(1, height),
-      ];
-      return [leftPoints, rightPoints, 1, height];
+      const {
+        lineWidth, width, sides, tipWidth,
+      } = options;
+      // width of bracket without linewidth - essentially width of inner radius
+      const wInnerRadius = (width - lineWidth);
+      const innerRadius = (wInnerRadius ** 2 + (height / 2) ** 2) / (2 * wInnerRadius);
+
+      // top line width is half middle line width
+      const wOuterRadius = (width - tipWidth);
+      const outerRadius = (wOuterRadius ** 2 + (height / 2) ** 2) / (2 * wOuterRadius);
+
+      const angleInner = Math.asin(height / 2 / innerRadius);
+      const stepAngleInner = angleInner * 2 / sides;
+      const angleOuter = Math.asin(height / 2 / outerRadius);
+      const stepAngleOuter = angleOuter * 2 / sides;
+
+      const innerPoints = [];
+      const outerPoints = [];
+
+      for (let i = 0; i < sides + 1; i += 1) {
+        innerPoints.push(polarToRect(
+          innerRadius, angleInner - stepAngleInner * i + Math.PI,
+        ).add(innerRadius + lineWidth, height / 2));
+        outerPoints.push(polarToRect(
+          outerRadius, angleOuter - stepAngleOuter * i + Math.PI,
+        ).add(outerRadius, height / 2));
+      }
+
+      return [outerPoints, innerPoints, innerPoints[0].x, height];
     };
   }
 }
