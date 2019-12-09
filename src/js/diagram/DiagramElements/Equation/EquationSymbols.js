@@ -267,16 +267,18 @@ export default class EquationSymbols {
       staticSize: null,
     };
     const optionsToUse = joinObjects(defaultOptions, options);
-    return new SquareBracketNew(
+    return (new SquareBracketNew(
       this.shapes.webgl,
       optionsToUse.color,
       new Transform('bar').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse.side,
-      optionsToUse.lineWidth,
-      optionsToUse.endLength,
       optionsToUse.staticSize,
-    );
+      {
+        lineWidth: optionsToUse.lineWidth,
+        endLength: optionsToUse.endLength,
+      },
+    )).symbol;
   }
 
   squareBracket(options: {
