@@ -15,6 +15,8 @@ import Radical from './Symbols/Radical';
 import Brace from './Symbols/Brace';
 import SquareBracket from './Symbols/SquareBracket';
 import SquareBracketNew from './Symbols/SquareBracketNew';
+import BarNew from './Symbols/BarNew';
+
 // import { Annotation, AnnotationInformation } from './Elements/Annotation';
 
 export default class EquationSymbols {
@@ -73,6 +75,9 @@ export default class EquationSymbols {
     }
     if (name === 'bar') {
       return this.bar(options);
+    }
+    if (name === 'barNew') {
+      return this.barNew(options);
     }
     if (name === 'roundedSquareBracket') {
       return this.roundedSquareBracket(options);
@@ -250,6 +255,32 @@ export default class EquationSymbols {
       new Transform('bar').scale(1, 1).translate(0, 0),
       this.shapes.limits,
     );
+  }
+
+  barNew(options: {
+    side?: 'left' | 'right' | 'top' | 'bottom',
+    color?: Array<number>,
+    lineWidth?: number,
+    staticSize?: ?boolean,
+  }) {
+    const defaultOptions = {
+      side: 'left',
+      lineWidth: 0.01,
+      color: this.defaultColor,
+      staticSize: null,
+    };
+    const optionsToUse = joinObjects(defaultOptions, options);
+    return (new BarNew(
+      this.shapes.webgl,
+      optionsToUse.color,
+      new Transform('bar').scale(1, 1).translate(0, 0),
+      this.shapes.limits,
+      optionsToUse.side,
+      optionsToUse.staticSize,
+      {
+        lineWidth: optionsToUse.lineWidth,
+      },
+    )).symbol;
   }
 
   squareBracketNew(options: {
