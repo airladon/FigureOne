@@ -184,6 +184,7 @@ export class BracketsNew extends Elements {
     if (this.forceHeight != null) {
       height = this.forceHeight;
     }
+    this.glyphHeight = height;
 
     let leftSymbolLocation = new Point(
       loc.x + this.outsideSpace * scale,
@@ -210,7 +211,6 @@ export class BracketsNew extends Elements {
         leftSymbolLocation.y,
       );
       this.leftGlyphLocation = leftSymbolLocation;
-      this.glyphHeight = height;
       leftGlyphBounds.width = leftGlyph.custom.getWidth(
         leftGlyph.custom.type, leftGlyph.custom.options, height,
       );
@@ -224,6 +224,10 @@ export class BracketsNew extends Elements {
         + (this.insideSpace * 2 + this.outsideSpace) * scale,
       leftSymbolLocation.y,
     );
+
+    if (this.leftGlyph === null) {
+      rightSymbolLocation.x = loc.x + contentBounds.width + this.insideSpace * scale;
+    }
 
     if (this.inSize === false) {
       rightSymbolLocation = new Point(
@@ -255,6 +259,9 @@ export class BracketsNew extends Elements {
       this.location.x + leftGlyphBounds.width + (this.insideSpace + this.outsideSpace) * scale,
       this.location.y,
     );
+    if (this.leftGlyph == null) {
+      contentLocation.x = this.location.x;
+    }
 
     if (mainContent instanceof Elements && this.inSize) {
       mainContent.offsetLocation(contentLocation.sub(mainContent.location));
@@ -264,6 +271,9 @@ export class BracketsNew extends Elements {
       this.width = leftGlyphBounds.width + originalContentBounds.width
         + rightGlyphBounds.width + this.insideSpace * scale * 2
         + this.outsideSpace * scale * 2;
+      if (this.leftGlyph == null) {
+        this.width -= (this.insideSpace + this.outsideSpace) * scale;
+      }
       this.ascent = Math.max(
         leftGlyphBounds.height - glyphDescent,
         rightGlyphBounds.height - glyphDescent,

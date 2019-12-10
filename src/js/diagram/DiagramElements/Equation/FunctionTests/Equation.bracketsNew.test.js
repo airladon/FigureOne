@@ -195,6 +195,12 @@ describe('Equation Functions - Brackets', () => {
             ), 'b'],
             scale: 1,
           },
+          noLeftBracket: {
+            content: [bracNew(
+              'a', '', 'rb', 0.1, 0.1, 0.1, 0.1, null, null, null, null,
+            ), 'b'],
+            scale: 1,
+          },
         });
       },
     };
@@ -219,6 +225,14 @@ describe('Equation Functions - Brackets', () => {
     // height: 0.10300000000000001,
     // descent: -0.008,
     // ascent: top: 0.095,
+    test.only('noLeftBracket', () => {
+      eqn.showForm('noLeftBracket');
+      const newA = eqn._a.getPosition();
+      const newR = eqn._rb.getPosition();
+      // 1
+      expect(round(newA.x)).toBe(0);
+      expect(round(newR.x)).toBe(0.04 + 0.1);
+    });
     test('notInSize', () => {
       eqn.showForm('notInSize');
       const newLScale = eqn._lb.custom.scale._dup();
