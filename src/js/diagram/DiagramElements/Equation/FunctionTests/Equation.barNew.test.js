@@ -14,7 +14,7 @@ jest.mock('../../../Gesture');
 jest.mock('../../../webgl/webgl');
 jest.mock('../../../DrawContext2D');
 
-describe('Equation Functions - Brackets', () => {
+describe('Equation Functions - Bar', () => {
   let diagram;
   let eqn;
   let color1;
