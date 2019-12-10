@@ -229,9 +229,9 @@ describe('Equation Functions - Brackets', () => {
       eqn.showForm('noLeftBracket');
       const newA = eqn._a.getPosition();
       const newR = eqn._rb.getPosition();
-      // 1
+      // 0.04 + 0.1 = 0.14
       expect(round(newA.x)).toBe(0);
-      expect(round(newR.x)).toBe(0.04 + 0.1);
+      expect(round(newR.x)).toBe(0.14);
     });
     test('notInSize', () => {
       eqn.showForm('notInSize');
