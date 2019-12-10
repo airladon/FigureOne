@@ -481,6 +481,9 @@ export class EquationFunctions {
     if (name === 'topBar') { return this.topBar(params); }    // $FlowFixMe
     if (name === 'bottomBar') { return this.bottomBar(params); }
     // $FlowFixMe
+    if (name === 'topBarNew') { return this.topBarNew(params); }    // $FlowFixMe
+    if (name === 'bottomBarNew') { return this.bottomBarNew(params); }
+    // $FlowFixMe
     if (name === 'annotate') { return this.annotate(params); }
     // $FlowFixMe
     if (name === 'annotation') { return this.annotation(params); }
@@ -1134,8 +1137,9 @@ export class EquationFunctions {
       ] = optionsOrContent;
     } else {
       ({                                                   // $FlowFixMe
-        content, left, right, insideSpace, outsideSpace,
-        topSpace, bottomSpace, minContentHeight, minContentDescent, height, descent, inSize,
+        content, left, right, insideSpace, outsideSpace,   // $FlowFixMe
+        topSpace, bottomSpace, minContentHeight,           // $FlowFixMe
+        minContentDescent, height, descent, inSize,
       } = optionsOrContent);
     }
     let leftBracket = null;
@@ -1307,6 +1311,40 @@ export class EquationFunctions {
   }
 
   // $FlowFixMe
+  topBarNew(...args) {
+    const [content, symbol, spaceToUse, inSize] = this.processBar(...args);
+    return new BarNew(                                         // $FlowFixMe
+      this.contentToElement(content),                       // $FlowFixMe
+      getDiagramElement(this.elements, symbol),             // $FlowFixMe
+      'top',        // $FlowFixMe
+      spaceToUse,
+      null,
+      null,
+      null,
+      null,
+      null,         // $FlowFixMe
+      inSize,
+    );
+  }
+
+  // $FlowFixMe
+  bottomBarNew(...args) {
+    const [content, symbol, spaceToUse, inSize] = this.processBar(...args);
+    return new BarNew(                                         // $FlowFixMe
+      this.contentToElement(content),                       // $FlowFixMe
+      getDiagramElement(this.elements, symbol),             // $FlowFixMe
+      'bottom',        // $FlowFixMe
+      spaceToUse,
+      null,
+      null,
+      null,
+      null,
+      null,         // $FlowFixMe
+      inSize,
+    );
+  }
+
+  // $FlowFixMe
   topBar(...args) {
     const [content, symbol, spaceToUse, inSize] = this.processBar(...args);
     return new Bar(                                         // $FlowFixMe
@@ -1348,7 +1386,7 @@ export class EquationFunctions {
     let contentSpace;
     let commentSpace;
     let scale;
-    let includeInSize;
+    let inSize;
     if (!(commentString == null
       && sym == null
       && contSpace == null
@@ -1362,13 +1400,13 @@ export class EquationFunctions {
       contentSpace = contSpace;
       commentSpace = comSpace;
       scale = comScale;
-      includeInSize = includeInSizeCalc;
+      inSize = includeInSizeCalc;
     } else if (Array.isArray(optionsOrContent)) {             // $FlowFixMe
-      [content, comment, symbol, contentSpace, commentSpace, scale, includeInSize,
+      [content, comment, symbol, contentSpace, commentSpace, scale, inSize,
       ] = optionsOrContent;
     } else {
       ({                                                      // $FlowFixMe
-        content, comment, symbol, contentSpace, commentSpace, scale, includeInSize,
+        content, comment, symbol, contentSpace, commentSpace, scale, inSize,
       } = optionsOrContent);
     }
     let contentSpaceToUse = 0.03;
@@ -1384,8 +1422,8 @@ export class EquationFunctions {
       scaleToUse = scale;
     }
     let includeInSizeToUse = true;
-    if (includeInSize != null) {
-      includeInSizeToUse = includeInSize;
+    if (inSize != null) {
+      includeInSizeToUse = inSize;
     }
     return [
       content, comment, symbol,
@@ -1398,7 +1436,7 @@ export class EquationFunctions {
     const [
       content, comment, symbol,
       contentSpaceToUse, commentSpaceToUse, scaleToUse,
-      includeInSize,
+      inSize,
     ] = this.processComment(...args);
     let contentToUse;
     if (symbol) {
@@ -1408,7 +1446,7 @@ export class EquationFunctions {
         contentSpaceToUse,                                   // $FlowFixMe
         commentSpaceToUse,
         'bottom',
-        includeInSize,
+        inSize,
       );
     } else {
       contentToUse = this.pad(                               // $FlowFixMe
@@ -1423,9 +1461,10 @@ export class EquationFunctions {
           relativeToContent: ['center', 'bottom'],
           relativeToAnnotation: ['center', 'top'],
           scale: scaleToUse,
+          yOffset: commentSpaceToUse,
         }),
       ],                                                    // $FlowFixMe
-      inSize: includeInSize,
+      inSize,
     });
   }
 
@@ -1434,7 +1473,7 @@ export class EquationFunctions {
     const [
       content, comment, symbol,
       contentSpaceToUse, commentSpaceToUse, scaleToUse,
-      includeInSize,
+      inSize,
     ] = this.processComment(...args);
     let contentToUse;
     if (symbol) {
@@ -1444,7 +1483,7 @@ export class EquationFunctions {
         contentSpaceToUse,                                   // $FlowFixMe
         commentSpaceToUse,
         'top',
-        includeInSize,
+        inSize,
       );
     } else {
       contentToUse = this.pad(                               // $FlowFixMe
@@ -1459,9 +1498,10 @@ export class EquationFunctions {
           relativeToContent: ['center', 'top'],
           relativeToAnnotation: ['center', 'bottom'],
           scale: scaleToUse,
+          yOffset: commentSpaceToUse,
         }),
       ],                                                    // $FlowFixMe
-      inSize: includeInSize,
+      inSize,
     });
   }
 
