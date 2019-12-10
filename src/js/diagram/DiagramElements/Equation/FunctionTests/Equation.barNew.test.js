@@ -187,9 +187,93 @@ describe('Equation Functions - Brackets', () => {
             ), 'b'],
             scale: 1,
           },
+          leftInSize: {
+            content: [bar(
+              'a', 'vBar', 'left', 0, null, null, null, null, null, null, false,
+            ), 'b'],
+            scale: 1,
+          },
           right: {
             content: [bar(
               'a', 'vBar', 'right', 0, null, null, null, null, null, null, true,
+            ), 'b'],
+            scale: 1,
+          },
+          rightSpaceTopBottomInSize: {
+            content: [bar(
+              'a', 'vBar', 'right', 0.1, null, null, null, null, 0.01, 0.01, false,
+            ), 'b'],
+            scale: 1,
+          },
+          top: {
+            content: [bar(
+              'a', 'hBar', 'top', 0, null, null, null, null, null, null, true,
+            ), 'b'],
+            scale: 1,
+          },
+          topSpace: {
+            content: [bar(
+              'a', 'hBar', 'top', 0.1, null, null, null, null, null, null, true,
+            ), 'b'],
+            scale: 1,
+          },
+          topOverhangPositive: {
+            content: [bar(
+              'a', 'hBar', 'top', 0, 0.01, null, null, null, null, null, true,
+            ), 'b'],
+            scale: 1,
+          },
+          topOverhangNegative: {
+            content: [bar(
+              'a', 'hBar', 'top', 0, -0.01, null, null, null, null, null, true,
+            ), 'b'],
+            scale: 1,
+          },
+          topLengthLonger: {
+            content: [bar(
+              'a', 'hBar', 'top', 0, 0, 3, null, null, null, null, true,
+            ), 'b'],
+            scale: 1,
+          },
+          topLengthShorter: {
+            content: [bar(
+              'a', 'hBar', 'top', 0, 0, 0.01, null, null, null, null, true,
+            ), 'b'],
+            scale: 1,
+          },
+          topLeftPositive: {
+            content: [bar(
+              'a', 'hBar', 'top', 0, null, null, 0.01, null, null, null, true,
+            ), 'b'],
+            scale: 1,
+          },
+          topLeftNegative: {
+            content: [bar(
+              'a', 'hBar', 'top', 0, null, null, -0.01, null, null, null, true,
+            ), 'b'],
+            scale: 1,
+          },
+          topRightPositive: {
+            content: [bar(
+              'a', 'hBar', 'top', 0, null, null, null, 0.01, null, null, true,
+            ), 'b'],
+            scale: 1,
+          },
+          topRightNegative: {
+            content: [bar(
+              'a', 'hBar', 'top', 0, null, null, null, -0.01, null, null, true,
+            ), 'b'],
+            scale: 1,
+          },
+          topLeftRight: {
+            content: [bar(
+              'a', 'hBar', 'top', 0, null, null, 0.01, 0.01, null, null, true,
+            ), 'b'],
+            scale: 1,
+          },
+          topInSize: {
+            content: [bar(
+              'a', 'hBar', 'top', 0, null, 3, null, null, null, null, false,
             ), 'b'],
             scale: 1,
           },
@@ -224,6 +308,122 @@ describe('Equation Functions - Brackets', () => {
     // height: 0.10300000000000001,
     // descent: -0.008,
     // ascent: top: 0.095,
+    test('topInSize', () => {
+      eqn.showForm('topInSize');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect();
+      const newB = eqn._b.getBoundingRect();
+      const newBar = eqn._hBar.getBoundingRect();
+      expect(round(newBar.left)).toBe(round(-(lengthLonger - newA.width) / 2));
+      expect(round(newBar.width)).toBe(lengthLonger);
+      expect(round(newA.left)).toBe(0);
+      expect(round(newB.left)).toBe(round(newA.width));
+    });
+    test('topLeftRight', () => {
+      eqn.showForm('topLeftRight');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect();
+      const newB = eqn._b.getBoundingRect();
+      const newBar = eqn._hBar.getBoundingRect();
+      expect(round(newBar.left)).toBe(0);
+      expect(round(newBar.width)).toBe(round(newA.width + offset * 2));
+      expect(round(newA.left)).toBe(offset);
+      expect(round(newB.left)).toBe(round(newA.width + offset * 2));
+    });
+    test('topRightPositive', () => {
+      eqn.showForm('topRightPositive');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect();
+      const newB = eqn._b.getBoundingRect();
+      const newBar = eqn._hBar.getBoundingRect();
+      expect(round(newBar.left)).toBe(0);
+      expect(round(newBar.width)).toBe(round(newA.width + offset));
+      expect(round(newA.left)).toBe(0);
+      expect(round(newB.left)).toBe(round(newA.width + offset));
+    });
+    test('topRightNegative', () => {
+      eqn.showForm('topRightNegative');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect();
+      const newB = eqn._b.getBoundingRect();
+      const newBar = eqn._hBar.getBoundingRect();
+      expect(round(newBar.left)).toBe(0);
+      expect(round(newBar.width)).toBe(round(newA.width - offset));
+      expect(round(newA.left)).toBe(0);
+      expect(round(newB.left)).toBe(round(newA.width));
+    });
+    test('topLeftPositive', () => {
+      eqn.showForm('topLeftPositive');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect();
+      const newBar = eqn._hBar.getBoundingRect();
+      expect(round(newBar.left)).toBe(0);
+      expect(round(newBar.width)).toBe(round(newA.width + offset));
+      expect(round(newA.left)).toBe(offset);
+    });
+    test('topLeftNegative', () => {
+      eqn.showForm('topLeftNegative');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect();
+      const newBar = eqn._hBar.getBoundingRect();
+      expect(round(newBar.left)).toBe(offset);
+      expect(round(newBar.width)).toBe(round(newA.width - offset));
+      expect(round(newA.left)).toBe(0);
+    });
+    test('topLengthShorter', () => {
+      eqn.showForm('topLengthShorter');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect();
+      const newBar = eqn._hBar.getBoundingRect();
+      expect(round(newBar.left)).toBe(round((a.width - lengthShorter) / 2));
+      expect(round(newBar.width)).toBe(lengthShorter);
+      expect(round(newA.left)).toBe(0);
+    });
+    test('topLengthLonger', () => {
+      eqn.showForm('topLengthLonger');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect();
+      const newBar = eqn._hBar.getBoundingRect();
+      expect(round(newBar.left)).toBe(0);
+      expect(round(newBar.width)).toBe(lengthLonger);
+      expect(round(newA.left)).toBe(round((lengthLonger - a.width) / 2));
+    });
+    test('topOverhangPositive', () => {
+      eqn.showForm('topOverhangPositive');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect();
+      const newBar = eqn._hBar.getBoundingRect();
+      expect(round(newBar.left)).toBe(0);
+      expect(round(newBar.width)).toBe(round(newA.width + overhang * 2));
+      expect(round(newA.left)).toBe(overhang);
+    });
+    test('topOverhangNegative', () => {
+      eqn.showForm('topOverhangNegative');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect();
+      const newBar = eqn._hBar.getBoundingRect();
+      expect(round(newBar.left)).toBe(overhang);
+      expect(round(newBar.width)).toBe(round(newA.width - overhang * 2));
+      expect(round(newA.left)).toBe(0);
+    });
+    test('topSpace', () => {
+      eqn.showForm('topSpace');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect();
+      const newBar = eqn._hBar.getBoundingRect();
+      expect(round(newBar.bottom)).toBe(round(newA.top + space));
+    });
+    test('top', () => {
+      eqn.showForm('top');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect();
+      const newBar = eqn._hBar.getBoundingRect();
+      expect(round(newA.left)).toBe(0);
+      expect(round(newA.bottom)).toBe(round(a.bottom));
+      expect(round(newBar.left)).toBe(round(newA.left));
+      expect(round(newBar.bottom)).toBe(round(newA.top));
+      expect(round(newBar.width)).toBe(round(newA.width));
+    });
     test('left', () => {
       expect(round(a.left)).toBe(round(bar.width));
       expect(round(bar.height)).toBe(round(a.height));
@@ -314,6 +514,14 @@ describe('Equation Functions - Brackets', () => {
       expect(round(newBar.bottom)).toBe(round(a.bottom - offset));
       expect(round(newBar.top)).toBe(round(a.top + offset));
     });
+    test('leftInSize', () => {
+      eqn.showForm('leftInSize');
+      diagram.setFirstTransform();
+      const newBar = eqn._vBar.getBoundingRect();
+      const newA = eqn._a.getBoundingRect();
+      expect(round(newBar.left)).toBe(round(newA.left - newBar.width));
+      expect(round(newA.left)).toBe(0);
+    });
     test('right', () => {
       eqn.showForm('right');
       diagram.setFirstTransform();
@@ -323,127 +531,18 @@ describe('Equation Functions - Brackets', () => {
       expect(round(newBar.left)).toBe(round(a.width));
       expect(round(newBar.height)).toBe(round(a.height));
     });
-  //   test('notInSize', () => {
-  //     eqn.showForm('notInSize');
-  //     const newLScale = eqn._lb.custom.scale._dup();
-  //     const newL = eqn._lb.getPosition();
-  //     const newB = eqn._b.getPosition();
-  //     // 0.1x2 + 0.103 = 0.303
-  //     expect(round(newLScale.y)).toBe(0.303);
-  //     expect(round(newL.y)).toBe(-0.108);
-  //     // 0 - 0.1 - 0.04 = -0.14
-  //     expect(round(newL.x)).toBe(round(-0.1 - eqn._lb.getBoundingRect('diagram').width));
-  //     expect(round(newB.x)).toBe(0.04);
-  //   });
-  //   test('forceHeightGreaterThanActualHeight', () => {
-  //     eqn.showForm('forceHeightGreaterThanActualHeight');
-  //     const newLScale = eqn._lb.custom.scale._dup();
-  //     const newL = eqn._lb.getPosition();
-  //     // 1
-  //     expect(round(newLScale.y)).toBe(1);
-  //     expect(round(newL.y)).toBe(-0.108);
-  //   });
-  //   test('forceHeightLessThanActualHeight', () => {
-  //     eqn.showForm('forceHeightLessThanActualHeight');
-  //     const newLScale = eqn._lb.custom.scale._dup();
-  //     const newL = eqn._lb.getPosition();
-  //     // 0.005
-  //     expect(round(newLScale.y)).toBe(0.05);
-  //     expect(round(newL.y)).toBe(-0.108);
-  //   });
-  //   test('forceDecentGreaterThanActualDescent', () => {
-  //     eqn.showForm('forceDecentGreaterThanActualDescent');
-  //     const newLScale = eqn._lb.custom.scale._dup();
-  //     const newL = eqn._lb.getPosition();
-  //     // 0.1 + 0.095 + 0.1 = 0.295
-  //     expect(round(newLScale.y)).toBe(0.295);
-  //     expect(round(newL.y)).toBe(-0.1);
-  //   });
-  //   test('forceDecentLessThanActualDescent', () => {
-  //     eqn.showForm('forceDecentLessThanActualDescent');
-  //     const newLScale = eqn._lb.custom.scale._dup();
-  //     const newL = eqn._lb.getPosition();
-  //     // 0.004 + 0.095 + 0.1 = 0.199
-  //     expect(round(newLScale.y)).toBe(0.199);
-  //     expect(round(newL.y)).toBe(-0.004);
-  //   });
-  //   test('minContentDescentWithLargeMinHeight', () => {
-  //     eqn.showForm('minContentDescentWithLargeMinHeight');
-  //     const newLScale = eqn._lb.custom.scale._dup();
-  //     const newL = eqn._lb.getPosition();
-  //     // 1 + 1 + 0.1x2 = 2.2
-  //     expect(round(newLScale.y)).toBe(2.2);
-  //     expect(round(newL.y)).toBe(-1.1);
-  //   });
-  //   test('minContentDescentWithSmallLargeHeight', () => {
-  //     eqn.showForm('minContentDescentWithSmallMinHeight');
-  //     const newLScale = eqn._lb.custom.scale._dup();
-  //     const newL = eqn._lb.getPosition();
-  //     // 1 + 0.095 + 0.1x2 = 1.295 as minHeight doesn't raise above minDescent
-  //     // more than old ascent does
-  //     expect(round(newLScale.y)).toBe(1.295);
-  //     expect(round(newL.y)).toBe(-1.1);
-  //   });
-  //   test('minContentDescentWithSmallMinHeight', () => {
-  //     eqn.showForm('minContentDescentWithSmallMinHeight');
-  //     const newLScale = eqn._lb.custom.scale._dup();
-  //     const newL = eqn._lb.getPosition();
-  //     // 1 + 0.095 + 0.1x2 = 1.295
-  //     expect(round(newLScale.y)).toBe(1.295);
-  //     expect(round(newL.y)).toBe(-1.1);
-  //   });
-  //   test('minContentDescent', () => {
-  //     eqn.showForm('minContentDescent');
-  //     const newLScale = eqn._lb.custom.scale._dup();
-  //     const newL = eqn._lb.getPosition();
-  //     // 1 + 0.095 + 0.1x2 = 1.295
-  //     expect(round(newLScale.y)).toBe(1.295);
-  //     expect(round(newL.y)).toBe(-1.1);
-  //   });
-  //   test('minContentHeight', () => {
-  //     eqn.showForm('minContentHeight');
-  //     const newLScale = eqn._lb.custom.scale._dup();
-  //     const newL = eqn._lb.getPosition();
-  //     // 1 + 0.1x2 = 1.2
-  //     expect(round(newLScale.y)).toBe(1.2);
-  //     expect(round(newL.y)).toBe(round(baseL.y));
-  //   });
-  //   test('bottomSpace', () => {
-  //     eqn.showForm('bottomSpace');
-  //     const newLScale = eqn._lb.custom.scale._dup();
-  //     const newL = eqn._lb.getPosition();
-  //     expect(round(newLScale.y)).toBe(round(baseLScale.y + 0.1));
-  //     expect(round(newL.y)).toBe(round(baseL.y - 0.1));
-  //   });
-  //   test('topSpace', () => {
-  //     eqn.showForm('topSpace');
-  //     const newLScale = eqn._lb.custom.scale._dup();
-  //     const newL = eqn._lb.getPosition();
-  //     expect(round(newLScale.y)).toBe(round(baseLScale.y + 0.1));
-  //     expect(round(newL.y)).toBe(round(baseL.y));
-  //   });
-  //   test('outsideSpace', () => {
-  //     eqn.showForm('outsideSpace');
-  //     const newB = eqn._b.getPosition();
-  //     const newL = eqn._lb.getPosition();
-  //     const newR = eqn._rb.getPosition();
-  //     const newA = eqn._a.getPosition();
-  //     expect(round(newL.x)).toBe(round(baseL.x + 0.1));
-  //     expect(round(newA.x)).toBe(round(baseA.x + 0.1));
-  //     expect(round(newR.x)).toBe(round(baseR.x + 0.1));
-  //     expect(round(newB.x)).toBe(round(baseB.x + 0.2));
-  //   });
-  //   test('insideSpace', () => {
-  //     eqn.showForm('insideSpace');
-  //     const newB = eqn._b.getPosition();
-  //     const newL = eqn._lb.getPosition();
-  //     const newR = eqn._rb.getPosition();
-  //     const newA = eqn._a.getPosition();
-  //     expect(round(newL.x)).toBe(round(baseL.x));
-  //     expect(round(newA.x)).toBe(round(baseA.x + 0.1));
-  //     expect(round(newR.x)).toBe(round(baseR.x + 0.2));
-  //     expect(round(newB.x)).toBe(round(baseB.x + 0.2));
-  //   });
+    test('rightSpaceTopBottomInSize', () => {
+      eqn.showForm('rightSpaceTopBottomInSize');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect();
+      const newB = eqn._b.getBoundingRect();
+      const newBar = eqn._vBar.getBoundingRect();
+      expect(round(newA.left)).toBe(0);
+      expect(round(newBar.left)).toBe(round(a.width + space));
+      expect(round(newBar.height)).toBe(round(a.height + offset * 2));
+      expect(round(newBar.bottom)).toBe(round(a.bottom - offset));
+      expect(round(newB.left)).toBe(round(newA.left + newA.width));
+    });
   });
   test('Bar', () => {
     functions.single();

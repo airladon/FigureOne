@@ -161,7 +161,11 @@ export default class Bar extends Elements {
       // x Location moves content if overhang is > 0, glyph if overhang < 0
       if (this.overhang != null) {
         if (this.overhang > 0) {
-          contentLoc.x = loc.x + this.overhang;
+          if (this.inSize) {
+            contentLoc.x = loc.x + this.overhang;
+          } else {
+            glyphLoc.x = loc.x - this.overhang;
+          }
         } else if (this.overhang < 0) {
           glyphLoc.x = loc.x - this.overhang;
         }
@@ -170,7 +174,11 @@ export default class Bar extends Elements {
       // x Location moves content if barLength > content width, glyph if smaller
       if (this.barLength != null) {
         if (this.barLength > contentBounds.width) {
-          contentLoc.x = loc.x + (this.barLength - contentBounds.width) / 2;
+          if (this.inSize) {
+            contentLoc.x = loc.x + (this.barLength - contentBounds.width) / 2;
+          } else {
+            glyphLoc.x = loc.x - (this.barLength - contentBounds.width) / 2;
+          }
         } else if (this.barLength < contentBounds.width) {
           glyphLoc.x = loc.x + (contentBounds.width - this.barLength) / 2;
         }
@@ -179,7 +187,11 @@ export default class Bar extends Elements {
       // If left > 0, then content moves, otherwise glyph does
       if (this.left) {
         if (this.left > 0) {
-          contentLoc.x = loc.x + this.left;
+          if (this.inSize) {
+            contentLoc.x = loc.x + this.left;
+          } else {
+            glyphLoc.x = loc.x - this.left;
+          }
         } else if (this.left < 0) {
           glyphLoc.x = loc.x - this.left;
         }
