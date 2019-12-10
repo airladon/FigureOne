@@ -1867,9 +1867,8 @@ class DiagramElementPrimitive extends DiagramElement {
       elementCount: this.transform.order.length,
     };
     // const finalParentTransform = this.processParentTransform(parentTransform);
-    const firstTransform = parentTransform.transform(this.transform);
+    const firstTransform = parentTransform.transform(this.getTransform());
     this.lastDrawTransform = firstTransform;
-
     if (this.drawingObject instanceof HTMLObject) {
       this.drawingObject.transformHtml(firstTransform.matrix());
     }

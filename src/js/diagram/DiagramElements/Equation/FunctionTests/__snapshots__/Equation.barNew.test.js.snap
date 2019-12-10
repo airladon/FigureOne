@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Equation Functions - Brackets Bar 1`] = `
+Array [
+  0.7,
+  0,
+  0.11,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Brackets Bar 2`] = `
+Array [
+  0.2721,
+  0,
+  0,
+  0,
+  0.2721,
+  -0.1056,
+  0,
+  0,
+  1,
+]
+`;
