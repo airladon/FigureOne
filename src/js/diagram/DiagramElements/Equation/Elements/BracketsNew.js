@@ -264,7 +264,11 @@ export class BracketsNew extends Elements {
       this.width = leftGlyphBounds.width + originalContentBounds.width
         + rightGlyphBounds.width + this.insideSpace * scale * 2
         + this.outsideSpace * scale * 2;
-      this.ascent = Math.max(leftGlyphBounds.height - glyphDescent, originalContentBounds.ascent);
+      this.ascent = Math.max(
+        leftGlyphBounds.height - glyphDescent,
+        rightGlyphBounds.height - glyphDescent,
+        originalContentBounds.ascent,
+      );
       this.descent = Math.max(glyphDescent, originalContentBounds.descent);
       this.height = this.descent + this.ascent;
     } else {
