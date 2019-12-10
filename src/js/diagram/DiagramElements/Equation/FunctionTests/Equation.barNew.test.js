@@ -285,7 +285,121 @@ describe('Equation Functions - Bar', () => {
           },
         });
       },
+      topBar: () => {
+        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        diagram.elements = eqn;
+        const e = eqn.eqn.functions;
+        const bar = e.bar.bind(e);
+        eqn.addElements(elements);
+        eqn.addForms({
+          base: {
+            content: {
+              bar: {
+                content: 'a',
+                symbol: 'hBar',
+                side: 'top',
+                space: 0.1,
+                overhang: null,
+                length: null,
+                left: null,
+                right: null,
+                top: null,
+                bottom: null,
+                inSize: true,
+              },
+            },
+          },
+          1: {
+            content: {
+              topBarNew: {
+                content: 'a',
+                symbol: 'hBar',
+                space: 0.1,
+                inSize: true,
+              },
+            },
+          },
+          2: {
+            topBarNew: {
+              content: 'a',
+              symbol: 'hBar',
+              space: 0.1,
+              inSize: true,
+            },
+          },
+          3: { topBarNew: ['a', 'hBar', 0.1, true] },
+        });
+      },
+      bottomBar: () => {
+        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        diagram.elements = eqn;
+        const e = eqn.eqn.functions;
+        const bar = e.bar.bind(e);
+        eqn.addElements(elements);
+        eqn.addForms({
+          base: {
+            content: {
+              bar: {
+                content: 'a',
+                symbol: 'hBar',
+                side: 'bottom',
+                space: 0.1,
+                overhang: null,
+                length: null,
+                left: null,
+                right: null,
+                top: null,
+                bottom: null,
+                inSize: true,
+              },
+            },
+          },
+          1: {
+            content: {
+              bottomBarNew: {
+                content: 'a',
+                symbol: 'hBar',
+                space: 0.1,
+                inSize: true,
+              },
+            },
+          },
+          2: {
+            bottomBarNew: {
+              content: 'a',
+              symbol: 'hBar',
+              space: 0.1,
+              inSize: true,
+            },
+          },
+          3: { bottomBarNew: ['a', 'hBar', 0.1, true] },
+        });
+      },
     };
+  });
+  test('topBar', () => {
+    functions.topBar();
+    const elems = [eqn._a, eqn._hBar];
+    const formsToTest = ['1', '2', '3'];
+    eqn.showForm('base');
+    const basePositions = elems.map(elem => round(elem.transform.mat).slice());
+    formsToTest.forEach((f) => {
+      eqn.showForm(f);
+      const positions = elems.map(elem => round(elem.transform.mat).slice());
+      expect(basePositions).toEqual(positions);
+    });
+  });
+  test('bottomBar', () => {
+    functions.bottomBar();
+    const elems = [eqn._a, eqn._hBar];
+    const formsToTest = ['1', '2', '3'];
+    eqn.showForm('base');
+    const basePositions = elems.map(elem => round(elem.transform.mat).slice());
+    formsToTest.forEach((f) => {
+      eqn.showForm(f);
+      const positions = elems.map(elem => round(elem.transform.mat).slice());
+      expect(basePositions).toEqual(positions);
+    });
   });
   describe('Parameter Steps', () => {
     let bar;
