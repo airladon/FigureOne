@@ -334,7 +334,7 @@ describe('Equation Functions - Bar', () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         diagram.elements = eqn;
         const e = eqn.eqn.functions;
-        const bar = e.bar.bind(e);
+        // const bar = e.bar.bind(e);
         eqn.addElements(elements);
         eqn.addForms({
           base: {

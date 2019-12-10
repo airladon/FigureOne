@@ -490,7 +490,11 @@ export class EquationFunctions {
     // $FlowFixMe
     if (name === 'bottomComment') { return this.bottomComment(params); }
     // $FlowFixMe
+    if (name === 'bottomCommentNew') { return this.bottomCommentNew(params); }
+    // $FlowFixMe
     if (name === 'topComment') { return this.topComment(params); }
+    // $FlowFixMe
+    if (name === 'topCommentNew') { return this.topCommentNew(params); }
     // $FlowFixMe
     if (name === 'bar') { return this.bar(params); }
     // $FlowFixMe
@@ -1315,7 +1319,7 @@ export class EquationFunctions {
     const [content, symbol, spaceToUse, inSize] = this.processBar(...args);
     return new BarNew(                                         // $FlowFixMe
       this.contentToElement(content),                       // $FlowFixMe
-      getDiagramElement(this.elements, symbol),             // $FlowFixMe
+      getDiagramElement(this.elements, symbol),
       'top',        // $FlowFixMe
       spaceToUse,
       null,
@@ -1332,7 +1336,7 @@ export class EquationFunctions {
     const [content, symbol, spaceToUse, inSize] = this.processBar(...args);
     return new BarNew(                                         // $FlowFixMe
       this.contentToElement(content),                       // $FlowFixMe
-      getDiagramElement(this.elements, symbol),             // $FlowFixMe
+      getDiagramElement(this.elements, symbol),
       'bottom',        // $FlowFixMe
       spaceToUse,
       null,
@@ -1352,7 +1356,7 @@ export class EquationFunctions {
       getDiagramElement(this.elements, symbol),             // $FlowFixMe
       spaceToUse,
       0.03,
-      'top',
+      'top',             // $FlowFixMe
       inSize,
     );
   }
@@ -1365,7 +1369,7 @@ export class EquationFunctions {
       getDiagramElement(this.elements, symbol),             // $FlowFixMe
       spaceToUse,
       0.03,
-      'bottom',
+      'bottom',             // $FlowFixMe
       inSize,
     );
   }
@@ -1461,7 +1465,48 @@ export class EquationFunctions {
           relativeToContent: ['center', 'bottom'],
           relativeToAnnotation: ['center', 'top'],
           scale: scaleToUse,
-          yOffset: commentSpaceToUse,
+          // yOffset: commentSpaceToUse,
+        }),
+      ],                                                    // $FlowFixMe
+      inSize,
+    });
+  }
+
+  // $FlowFixMe
+  bottomCommentNew(...args) {
+    const [
+      content, comment, symbol,
+      contentSpaceToUse, commentSpaceToUse, scaleToUse,
+      inSize,
+    ] = this.processComment(...args);
+    let contentToUse;
+    if (symbol) {
+      contentToUse = new BarNew(                                // $FlowFixMe
+        this.contentToElement(content),             // $FlowFixMe
+        getDiagramElement(this.elements, symbol),
+        'bottom',                                   // $FlowFixMe
+        contentSpaceToUse,
+        null,
+        null,
+        null,
+        null,
+        null,                                   // $FlowFixMe
+        inSize,
+      );
+    } else {
+      contentToUse = this.pad(                               // $FlowFixMe
+        content, 0, 0, contentSpaceToUse + commentSpaceToUse,
+      );
+    }
+    return this.annotate({                                   // $FlowFixMe
+      content: contentToUse,
+      withAnnotations: [                                     // $FlowFixMe
+        this.annotation({
+          annotation: comment,
+          relativeToContent: ['center', 'bottom'],
+          relativeToAnnotation: ['center', 'top'],
+          scale: scaleToUse,
+          yOffset: -commentSpaceToUse,
         }),
       ],                                                    // $FlowFixMe
       inSize,
@@ -1483,6 +1528,47 @@ export class EquationFunctions {
         contentSpaceToUse,                                   // $FlowFixMe
         commentSpaceToUse,
         'top',
+        inSize,
+      );
+    } else {
+      contentToUse = this.pad(                               // $FlowFixMe
+        content, contentSpaceToUse + commentSpaceToUse,
+      );
+    }
+    return this.annotate({                                   // $FlowFixMe
+      content: contentToUse,
+      withAnnotations: [                                     // $FlowFixMe
+        this.annotation({
+          annotation: comment,
+          relativeToContent: ['center', 'top'],
+          relativeToAnnotation: ['center', 'bottom'],
+          scale: scaleToUse,
+          // yOffset: commentSpaceToUse,
+        }),
+      ],                                                    // $FlowFixMe
+      inSize,
+    });
+  }
+
+  // $FlowFixMe
+  topCommentNew(...args) {
+    const [
+      content, comment, symbol,
+      contentSpaceToUse, commentSpaceToUse, scaleToUse,
+      inSize,
+    ] = this.processComment(...args);
+    let contentToUse;
+    if (symbol) {
+      contentToUse = new BarNew(                                // $FlowFixMe
+        this.contentToElement(content),             // $FlowFixMe
+        getDiagramElement(this.elements, symbol),
+        'top',                                   // $FlowFixMe
+        contentSpaceToUse,
+        null,
+        null,
+        null,
+        null,
+        null,                                   // $FlowFixMe
         inSize,
       );
     } else {
