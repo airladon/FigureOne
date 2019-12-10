@@ -187,8 +187,8 @@ export default class Bar extends Elements {
 
       if (this.inSize) {
         bounds.width = Math.max(
-          contentBounds.width,
-          this.glyphLength,
+          contentLoc.x + contentBounds.width - loc.x,
+          glyphLoc.x + this.glyphLength - loc.x,
         );
         if (this.side === 'top') {
           bounds.ascent = contentBounds.ascent + this.space + glyphWidth;

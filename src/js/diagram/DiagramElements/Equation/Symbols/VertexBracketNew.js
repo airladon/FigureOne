@@ -29,7 +29,7 @@ class VertexBracket extends VertexObject {
       t = new Transform()
         .translate(0, -height / 2)
         .rotate(Math.PI / 2)
-        .translate(height / 2, -width);
+        .translate(height / 2, 0);
     } else {
       t = new Transform();
     }
