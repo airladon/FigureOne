@@ -277,6 +277,12 @@ describe('Equation Functions - Brackets', () => {
             ), 'b'],
             scale: 1,
           },
+          bottomSpaceLeftRightInSize: {
+            content: [bar(
+              'a', 'hBar', 'bottom', 0.1, null, null, 0.01, 0.01, null, null, false,
+            ), 'b'],
+            scale: 1,
+          },
         });
       },
     };
@@ -308,6 +314,18 @@ describe('Equation Functions - Brackets', () => {
     // height: 0.10300000000000001,
     // descent: -0.008,
     // ascent: top: 0.095,
+    test('bottomSpaceLeftRightInSize', () => {
+      eqn.showForm('bottomSpaceLeftRightInSize');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect();
+      const newB = eqn._b.getBoundingRect();
+      const newBar = eqn._hBar.getBoundingRect();
+      expect(round(newBar.left)).toBe(-offset);
+      expect(round(newBar.bottom)).toBe(round(newA.bottom - space - newBar.height));
+      expect(round(newBar.width)).toBe(round(newA.width) + offset * 2);
+      expect(round(newA.left)).toBe(0);
+      expect(round(newB.left)).toBe(round(newA.width));
+    });
     test('topInSize', () => {
       eqn.showForm('topInSize');
       diagram.setFirstTransform();
