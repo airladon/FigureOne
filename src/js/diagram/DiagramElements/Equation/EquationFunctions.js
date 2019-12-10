@@ -17,6 +17,7 @@ import Strike from './Elements/Strike';
 import SuperSub from './Elements/SuperSub';
 import { Brackets, Bar } from './Elements/Brackets';
 import { BracketsNew } from './Elements/BracketsNew';
+import BarNew from './Elements/Bar';
 import EquationForm from './EquationForm';
 import { Annotation, AnnotationInformation } from './Elements/Annotation';
 import Padding from './Elements/Padding';
@@ -90,6 +91,7 @@ export type TypeEquationPhrase =
   | { topComment: TypeCommentObject } | TypeCommentArray
   | { bottomComment: TypeCommentObject } | TypeCommentArray
   | { padding: TypePaddingObject } | TypePaddingArray
+  | { bar: TypeBarNewObject } | TypeBarNewArray
   | [
     TypeEquationPhrase,
     TypeEquationPhrase,
@@ -170,6 +172,37 @@ export type TypeBoxArray = [
   ?boolean,
   ?([number, number] | Point | number),
 ];
+
+export type TypeBarNewObject = {
+  content: TypeEquationPhrase;
+  // comment?: TypeEquationPhrase;
+  symbol?: string;
+  side?: 'left' | 'right' | 'top' | 'bottom';
+  insideSpace?: number,
+  // outsideSpace?: number,    // Only used if a comment exists
+  barOverhang?: number,
+  barLength?: number,     // prioritized over barOverhang
+  minLeft?: number,  // If minLeft and minRight are specified, overwrites length
+  minRight?: number,
+  minAscent?: number, // If ascent and descent are specified, overwrites length
+  minDescent?: number,
+  inSize?: boolean
+}
+
+export type TypeBarNewArray = [
+  TypeEquationPhrase,
+  ?string,
+  ?'left' | 'right' | 'top' | 'bottom',
+  ?number,
+  ?number,
+  ?number,     // prioritized over barOverhang
+  ?number,  // If minLeft and minRight are specified, overwrites length
+  ?number,
+  ?number, // If ascent and descent are specified, overwrites length
+  ?number,
+  ?boolean
+]
+
 export type TypeBracketObject = {
   content: TypeEquationPhrase;
   left?: string;
@@ -455,6 +488,8 @@ export class EquationFunctions {
     if (name === 'bottomComment') { return this.bottomComment(params); }
     // $FlowFixMe
     if (name === 'topComment') { return this.topComment(params); }
+    // $FlowFixMe
+    if (name === 'bar') { return this.bar(params); }
     // $FlowFixMe
     if (name === 'topStrike') { return this.topStrike(params); }
     // $FlowFixMe
@@ -925,6 +960,120 @@ export class EquationFunctions {
       right,                                              // $FlowFixMe
       bottom,                                             // $FlowFixMe
       left,
+    );
+  }
+
+  bar(
+    optionsOrContent: TypeBarNewObject | TypeBarNewArray | TypeEquationPhrase,
+    symbolIn: string | null = null,
+    sideIn: 'left' | 'right' | 'top' | 'bottom' | null = null,
+    spaceIn: number | null = null,
+    overhangIn: number | null = null,
+    barLengthIn: number | null = null,
+    leftIn: number | null = null,
+    rightIn: number | null = null,
+    topIn: number | null = null,
+    bottomIn: number | null = null,
+    inSizeIn: boolean | null = null,
+  ) {
+    let content;
+    let symbol;
+    let side;
+    let space;
+    let overhang;
+    let barLength;
+    let left;
+    let right;
+    let top;
+    let bottom;
+    let inSize;
+    if (!(symbolIn == null
+          && sideIn == null
+          && spaceIn == null
+          && overhangIn == null
+          && barLengthIn == null
+          && leftIn == null
+          && rightIn == null
+          && topIn == null
+          && bottomIn == null
+          && inSizeIn == null)
+    ) {
+      content = optionsOrContent;
+      symbol = symbolIn;
+      side = sideIn;
+      space = spaceIn;
+      overhang = overhangIn;
+      barLength = barLengthIn;
+      left = leftIn;
+      right = rightIn;
+      top = topIn;
+      bottom = bottomIn;
+      inSize = inSizeIn;
+    } else if (Array.isArray(optionsOrContent)) {
+      [                                                    // $FlowFixMe
+        content, symbol, side, space, overhang,   // $FlowFixMe
+        barLength, left, right, top,           // $FlowFixMe
+        bottom, inSize,
+      ] = optionsOrContent;
+    } else {
+      ({                                                   // $FlowFixMe
+        content, symbol, side, space, overhang,   // $FlowFixMe
+        barLength, left, right, top,           // $FlowFixMe
+        bottom, inSize,
+      } = optionsOrContent);
+    }
+    let symbolToUse = null;
+    if (symbol != null) {                                    // $FlowFixMe
+      symbolToUse = getDiagramElement(this.elements, symbol);
+    }
+    let sideToUse;
+    if (side != null) {
+      sideToUse = side;
+    }
+    let spaceToUse;
+    if (space != null) {
+      spaceToUse = space;
+    }
+    let overhangToUse;
+    if (overhang != null) {
+      overhangToUse = overhang;
+    }
+    let barLengthToUse;
+    if (barLength != null) {
+      barLengthToUse = barLength;
+    }
+    let leftToUse;
+    if (left != null) {
+      leftToUse = left;
+    }
+    let rightToUse;
+    if (right != null) {
+      rightToUse = right;
+    }
+    let topToUse;
+    if (top != null) {
+      topToUse = top;
+    }
+    let bottomToUse;
+    if (bottom != null) {
+      bottomToUse = bottom;
+    }
+    let inSizeToUse;
+    if (inSize != null) {
+      inSizeToUse = inSize;
+    }
+    return new BarNew(                                // $FlowFixMe
+      this.contentToElement(content),                      // $FlowFixMe
+      symbolToUse,    // $FlowFixMe
+      sideToUse,    // $FlowFixMe
+      spaceToUse,    // $FlowFixMe
+      overhangToUse,    // $FlowFixMe
+      barLengthToUse,    // $FlowFixMe
+      leftToUse,    // $FlowFixMe
+      rightToUse,    // $FlowFixMe
+      topToUse,    // $FlowFixMe
+      bottomToUse,    // $FlowFixMe
+      inSizeToUse,    // $FlowFixMe
     );
   }
 
