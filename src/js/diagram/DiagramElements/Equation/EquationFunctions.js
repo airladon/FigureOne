@@ -969,7 +969,7 @@ export class EquationFunctions {
     sideIn: 'left' | 'right' | 'top' | 'bottom' | null = null,
     spaceIn: number | null = null,
     overhangIn: number | null = null,
-    barLengthIn: number | null = null,
+    lengthIn: number | null = null,
     leftIn: number | null = null,
     rightIn: number | null = null,
     topIn: number | null = null,
@@ -981,7 +981,7 @@ export class EquationFunctions {
     let side;
     let space;
     let overhang;
-    let barLength;
+    let length;
     let left;
     let right;
     let top;
@@ -991,7 +991,7 @@ export class EquationFunctions {
           && sideIn == null
           && spaceIn == null
           && overhangIn == null
-          && barLengthIn == null
+          && lengthIn == null
           && leftIn == null
           && rightIn == null
           && topIn == null
@@ -1003,7 +1003,7 @@ export class EquationFunctions {
       side = sideIn;
       space = spaceIn;
       overhang = overhangIn;
-      barLength = barLengthIn;
+      length = lengthIn;
       left = leftIn;
       right = rightIn;
       top = topIn;
@@ -1012,13 +1012,13 @@ export class EquationFunctions {
     } else if (Array.isArray(optionsOrContent)) {
       [                                                    // $FlowFixMe
         content, symbol, side, space, overhang,   // $FlowFixMe
-        barLength, left, right, top,           // $FlowFixMe
+        length, left, right, top,           // $FlowFixMe
         bottom, inSize,
       ] = optionsOrContent;
     } else {
       ({                                                   // $FlowFixMe
         content, symbol, side, space, overhang,   // $FlowFixMe
-        barLength, left, right, top,           // $FlowFixMe
+        length, left, right, top,           // $FlowFixMe
         bottom, inSize,
       } = optionsOrContent);
     }
@@ -1038,9 +1038,9 @@ export class EquationFunctions {
     if (overhang != null) {
       overhangToUse = overhang;
     }
-    let barLengthToUse;
-    if (barLength != null) {
-      barLengthToUse = barLength;
+    let lengthToUse;
+    if (length != null) {
+      lengthToUse = length;
     }
     let leftToUse;
     if (left != null) {
@@ -1068,12 +1068,12 @@ export class EquationFunctions {
       sideToUse,    // $FlowFixMe
       spaceToUse,    // $FlowFixMe
       overhangToUse,    // $FlowFixMe
-      barLengthToUse,    // $FlowFixMe
+      lengthToUse,    // $FlowFixMe
       leftToUse,    // $FlowFixMe
       rightToUse,    // $FlowFixMe
       topToUse,    // $FlowFixMe
       bottomToUse,    // $FlowFixMe
-      inSizeToUse,    // $FlowFixMe
+      inSizeToUse,
     );
   }
 
