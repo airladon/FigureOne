@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Equation Symbols - Brace Bracket 1`] = `
+Array [
+  0.7,
+  0,
+  0,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Symbols - Brace Bracket 2`] = `
+Array [
+  0.7,
+  0,
+  0.028,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Symbols - Brace Bracket 3`] = `
+Array [
+  0.7,
+  0,
+  0.16738,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
