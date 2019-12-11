@@ -490,7 +490,7 @@ export class EquationFunctions {
     // $FlowFixMe
     if (name === 'bottomComment') { return this.bottomComment(params); }
     // $FlowFixMe
-    if (name === 'bottomCommentNew') { return this.bottomCommentNew(params); }
+    // if (name === 'bottomCommentNew') { return this.bottomCommentNew(params); }
     // $FlowFixMe
     if (name === 'topComment') { return this.topComment(params); }
     // $FlowFixMe
@@ -916,7 +916,6 @@ export class EquationFunctions {
     if (scale != null) {
       scaleToUse = scale;
     }
-
     return new AnnotationInformation(           // $FlowFixMe
       this.contentToElement(annotation),        // $FlowFixMe
       relativeToContentH,                       // $FlowFixMe
@@ -1435,45 +1434,45 @@ export class EquationFunctions {
     ];
   }
 
-  // $FlowFixMe
-  bottomComment(...args) {
-    const [
-      content, comment, symbol,
-      contentSpaceToUse, commentSpaceToUse, scaleToUse,
-      inSize,
-    ] = this.processComment(...args);
-    let contentToUse;
-    if (symbol) {
-      contentToUse = new Bar(                                // $FlowFixMe
-        this.contentToElement(content),             // $FlowFixMe
-        getDiagramElement(this.elements, symbol),            // $FlowFixMe
-        contentSpaceToUse,                                   // $FlowFixMe
-        commentSpaceToUse,
-        'bottom',
-        inSize,
-      );
-    } else {
-      contentToUse = this.pad(                               // $FlowFixMe
-        content, 0, 0, contentSpaceToUse + commentSpaceToUse,
-      );
-    }
-    return this.annotate({                                   // $FlowFixMe
-      content: contentToUse,
-      withAnnotations: [                                     // $FlowFixMe
-        this.annotation({
-          annotation: comment,
-          relativeToContent: ['center', 'bottom'],
-          relativeToAnnotation: ['center', 'top'],
-          scale: scaleToUse,
-          // yOffset: commentSpaceToUse,
-        }),
-      ],                                                    // $FlowFixMe
-      inSize,
-    });
-  }
+  // // $FlowFixMe
+  // bottomComment(...args) {
+  //   const [
+  //     content, comment, symbol,
+  //     contentSpaceToUse, commentSpaceToUse, scaleToUse,
+  //     inSize,
+  //   ] = this.processComment(...args);
+  //   let contentToUse;
+  //   if (symbol) {
+  //     contentToUse = new Bar(                                // $FlowFixMe
+  //       this.contentToElement(content),             // $FlowFixMe
+  //       getDiagramElement(this.elements, symbol),            // $FlowFixMe
+  //       contentSpaceToUse,                                   // $FlowFixMe
+  //       commentSpaceToUse,
+  //       'bottom',
+  //       inSize,
+  //     );
+  //   } else {
+  //     contentToUse = this.pad(                               // $FlowFixMe
+  //       content, 0, 0, contentSpaceToUse + commentSpaceToUse,
+  //     );
+  //   }
+  //   return this.annotate({                                   // $FlowFixMe
+  //     content: contentToUse,
+  //     withAnnotations: [                                     // $FlowFixMe
+  //       this.annotation({
+  //         annotation: comment,
+  //         relativeToContent: ['center', 'bottom'],
+  //         relativeToAnnotation: ['center', 'top'],
+  //         scale: scaleToUse,
+  //         // yOffset: commentSpaceToUse,
+  //       }),
+  //     ],                                                    // $FlowFixMe
+  //     inSize,
+  //   });
+  // }
 
   // $FlowFixMe
-  bottomCommentNew(...args) {
+  bottomComment(...args) {
     const [
       content, comment, symbol,
       contentSpaceToUse, commentSpaceToUse, scaleToUse,
@@ -1505,7 +1504,7 @@ export class EquationFunctions {
           annotation: comment,
           relativeToContent: ['center', 'bottom'],
           relativeToAnnotation: ['center', 'top'],
-          scale: scaleToUse,
+          scale: scaleToUse,                                // $FlowFixMe
           yOffset: -commentSpaceToUse,
         }),
       ],                                                    // $FlowFixMe

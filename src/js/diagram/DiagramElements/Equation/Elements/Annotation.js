@@ -122,6 +122,8 @@ export class Annotation extends Elements {
         annotationInfo.xAlign,
         annotationInfo.yAlign,
         annotationInfo.annotationScale,
+        annotationInfo.xOffset,
+        annotationInfo.yOffset,
       ));
     const annotationCopy = new Annotation(
       this.mainContent._dup(namedCollection),

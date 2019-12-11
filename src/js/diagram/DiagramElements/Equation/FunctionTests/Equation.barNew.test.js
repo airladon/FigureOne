@@ -27,10 +27,14 @@ describe('Equation Functions - Bar', () => {
     elements = {
       a: 'a',
       b: 'b',
+      c: 'c',
       vBar: {
         symbol: 'barNew', side: 'left', lineWidth: 0.01,
       },
       hBar: {
+        symbol: 'barNew', side: 'top', lineWidth: 0.01,
+      },
+      hBar1: {
         symbol: 'barNew', side: 'top', lineWidth: 0.01,
       },
     };
@@ -356,7 +360,7 @@ describe('Equation Functions - Bar', () => {
           },
           1: {
             content: {
-              bottomBarNew: {
+              bottomBar: {
                 content: 'a',
                 symbol: 'hBar',
                 space: 0.1,
@@ -365,7 +369,7 @@ describe('Equation Functions - Bar', () => {
             },
           },
           2: {
-            bottomBarNew: {
+            bottomBar: {
               content: 'a',
               symbol: 'hBar',
               space: 0.1,
@@ -375,7 +379,44 @@ describe('Equation Functions - Bar', () => {
           3: { bottomBarNew: ['a', 'hBar', 0.1, true] },
         });
       },
+      nestedTopBar: () => {
+        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        diagram.elements = eqn;
+        eqn.addElements(elements);
+        eqn.addForms({
+          base: {
+            content: {
+              topCommentNew: [
+                { topCommentNew: ['a', 'b', 'hBar', 0.1, 0.1] },
+                'c', 'hBar1', 0.1, 0.1,
+              ],
+            },
+            scale: 1,
+          },
+          // test: {
+          //   content: {
+          //     topCommentNew: ['a', 'b', 'hBar', 0.1, 0.1],
+          //   },
+          //   scale: 1,
+          // },
+        });
+      },
     };
+  });
+  test.only('nestedTopBar', () => {
+    functions.nestedTopBar();
+    eqn.showForm('base');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const c = eqn._c.getBoundingRect('diagram');
+    const bar = eqn._hBar.getBoundingRect('diagram');
+    const bar1 = eqn._hBar1.getBoundingRect('diagram');
+    console.log(c.bottom, c.height, c.top)
+    console.log(bar1.bottom, bar1.height, bar1.top)
+    console.log(b.bottom, b.height, b.top)
+    console.log(bar.bottom, bar.height, bar.top)
+    console.log(a.bottom, a.height, a.top)
   });
   test('topBar', () => {
     functions.topBar();
