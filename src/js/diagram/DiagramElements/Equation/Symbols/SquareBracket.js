@@ -1,26 +1,70 @@
 // @flow
-
-import VertexSquareBracket from './VertexSquareBracket';
-import { DiagramElementPrimitive } from '../../../Element';
 import {
-  Point, Transform, Rect,
+  Point, polarToRect,
 } from '../../../../tools/g2';
-import WebGLInstance from '../../../webgl/webgl';
+import Bracket from './Bracket';
 
-export default function SquareBracket(
-  webgl: Array<WebGLInstance>,
-  color: Array<number>,
-  side: 'left' | 'right' | 'top' | 'bottom',
-  numLines: number,
-  transformOrLocation: Transform | Point,
-  diagramLimits: Rect,
-) {
-  const vertices = new VertexSquareBracket(webgl, side, numLines);
-  let transform = new Transform();
-  if (transformOrLocation instanceof Point) {
-    transform = transform.translate(transformOrLocation.x, transformOrLocation.y);
-  } else {
-    transform = transformOrLocation._dup();
+
+export default class SquareBracket extends Bracket {
+  // eslint-disable-next-line class-methods-use-this
+  getWidth() {
+    return (type: 'static' | 'dynamic', options: Object, height: number) => {
+      const { lineWidth, endLength } = options;
+      if (type === 'static') {
+        return height * (lineWidth + endLength);
+      }
+      return lineWidth + endLength;
+    };
   }
-  return new DiagramElementPrimitive(vertices, transform, color, diagramLimits);
+
+  // eslint-disable-next-line class-methods-use-this
+  getPoints() {
+    return (options: Object, height: number) => {
+      const {
+        lineWidth, endLength, radius, sides,
+      } = options;
+
+      if (radius === 0) {
+        const outsidePoints = [
+          new Point(lineWidth + endLength, 0),
+          new Point(0, 0),
+          new Point(0, height),
+          new Point(lineWidth + endLength, height),
+        ];
+        const insidePoints = [
+          new Point(lineWidth + endLength, lineWidth),
+          new Point(lineWidth, lineWidth),
+          new Point(lineWidth, height - lineWidth),
+          new Point(lineWidth + endLength, height - lineWidth),
+        ];
+        return [outsidePoints, insidePoints, lineWidth + endLength, height];
+      }
+
+      const radiusToUse = Math.min(radius, endLength + lineWidth, height / 2);
+      const rOutside = radiusToUse;
+      const rInside = radiusToUse - lineWidth;
+
+      const outsidePoints = [new Point(lineWidth + endLength, 0)];
+      const insidePoints = [new Point(lineWidth + endLength, lineWidth)];
+
+      const lowCenter = new Point(rOutside, rOutside);
+      const highCenter = new Point(rOutside, height - rOutside);
+
+      for (let i = 0; i <= sides; i += 1) {
+        const angle = Math.PI / 2 / sides * i;
+        outsidePoints.push(polarToRect(rOutside, Math.PI / 2 * 3 - angle).add(lowCenter));
+        insidePoints.push(polarToRect(rInside, Math.PI / 2 * 3 - angle).add(lowCenter));
+      }
+
+      for (let i = 0; i <= sides; i += 1) {
+        const angle = Math.PI / 2 / sides * i;
+        outsidePoints.push(polarToRect(rOutside, Math.PI - angle).add(highCenter));
+        insidePoints.push(polarToRect(rInside, Math.PI - angle).add(highCenter));
+      }
+
+      outsidePoints.push(new Point(lineWidth + endLength, height));
+      insidePoints.push(new Point(lineWidth + endLength, height - lineWidth));
+      return [outsidePoints, insidePoints, lineWidth + endLength, height];
+    };
+  }
 }

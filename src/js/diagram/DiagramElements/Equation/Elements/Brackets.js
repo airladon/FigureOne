@@ -9,50 +9,64 @@ import { duplicateFromTo } from '../../../../tools/tools';
 import { Element, Elements } from './Element';
 import Bounds from './Bounds';
 
-export class Brackets extends Elements {
+export default class Brackets extends Elements {
   mainContent: Elements | null;
-  glyph: DiagramElementPrimitive | DiagramElementCollection | null;
+  leftGlyph: DiagramElementPrimitive | DiagramElementCollection | null;
   rightGlyph: DiagramElementPrimitive | DiagramElementCollection | null;
-  glyphLocation: Point;
+  leftGlyphLocation: Point;
   rightGlyphLocation: Point;
-  glyphScale: number;
+  glyphHeight: number; // ?
   insideSpace: number;
   outsideSpace: number;
-  minLineHeight: Elements | null;
-  heightScale: number;
+  topSpace: number;
+  bottomSpace: number;
+  minContentHeight: number | null;
+  minContentDescent: number | null;
+  forceHeight: number | null;
+  forceDescent: number | null;
   inSize: boolean;
 
   constructor(
     content: Elements | null,
-    glyph: DiagramElementPrimitive | null | DiagramElementCollection,
+    leftGlyph: DiagramElementPrimitive | null | DiagramElementCollection,
     rightGlyph: DiagramElementPrimitive | null | DiagramElementCollection,
     insideSpace: number = 0.03,
     outsideSpace: number = 0.05,
-    minLineHeight: Elements | null = null,
-    heightScale: number = 1.2,
+    topSpace: number = 0.05,
+    bottomSpace: number = 0.05,
+    minContentHeight: number | null = null,
+    minContentDescent: number | null = null,
+    forceHeight: number | null = null,
+    forceDescent: number | null = null,
     inSize: boolean = true,
   ) {
-    const left = glyph !== null ? new Element(glyph) : null;
+    const left = leftGlyph !== null ? new Element(leftGlyph) : null;
     const right = rightGlyph !== null ? new Element(rightGlyph) : null;
     super([left, content, right]);
-    this.glyph = glyph;
+    this.leftGlyph = leftGlyph;
     this.rightGlyph = rightGlyph;
     this.mainContent = content;
-    this.glyphLocation = new Point(0, 0);
+    this.leftGlyphLocation = new Point(0, 0);
     this.rightGlyphLocation = new Point(0, 0);
-    this.glyphScale = 1;
+    // this.glyphScale = 1;
+    this.glyphHeight = 1;
     this.insideSpace = insideSpace;
     this.outsideSpace = outsideSpace;
-    this.minLineHeight = minLineHeight;
-    this.heightScale = heightScale;
+    this.topSpace = topSpace;
+    this.bottomSpace = bottomSpace;
+    this.minContentHeight = minContentHeight;
+    this.minContentDescent = minContentDescent;
+    this.forceHeight = forceHeight;
+    this.forceDescent = forceDescent;
+    // this.heightScale = heightScale;
     this.inSize = inSize;
   }
 
   _dup(namedCollection?: Object) {
     const content = this.mainContent == null ? null : this.mainContent._dup(namedCollection);
-    let lglyph = this.glyph;
-    if (this.glyph != null && namedCollection) {
-      lglyph = namedCollection[this.glyph.name];
+    let lglyph = this.leftGlyph;
+    if (this.leftGlyph != null && namedCollection) {
+      lglyph = namedCollection[this.leftGlyph.name];
     }
     let rglyph = this.rightGlyph;
     if (this.rightGlyph != null && namedCollection) {
@@ -67,7 +81,7 @@ export class Brackets extends Elements {
     );
     duplicateFromTo(
       this, bracketCopy,
-      ['content', 'glyph', 'rightGlyph'],
+      ['content', 'leftGlyph', 'rightGlyph'],
     );
     // console.log(this.glyph.getPosition()._dup(), this.rightGlyph.getPosition()._dup());
     return bracketCopy;
@@ -78,8 +92,8 @@ export class Brackets extends Elements {
     if (this.mainContent) {
       elements = [...elements, ...this.mainContent.getAllElements()];
     }
-    if (this.glyph) {
-      elements = [...elements, this.glyph];
+    if (this.leftGlyph) {
+      elements = [...elements, this.leftGlyph];
     }
     if (this.rightGlyph) {
       elements = [...elements, this.rightGlyph];
@@ -89,20 +103,18 @@ export class Brackets extends Elements {
   }
 
   setPositions() {
-    const { glyph, rightGlyph } = this;
-    if (glyph != null) {
-      glyph.transform.updateScale(this.glyphScale, this.glyphScale);
-      glyph.transform.updateTranslation(
-        this.glyphLocation.x,
-        this.glyphLocation.y,
-      );
+    const { leftGlyph, rightGlyph } = this;
+    if (leftGlyph != null) {
+      const t = leftGlyph.getTransform()._dup();
+      t.updateTranslation(this.leftGlyphLocation.x, this.leftGlyphLocation.y);
+      t.updateScale(this.glyphHeight, this.glyphHeight);
+      leftGlyph.setTransform(t);
     }
     if (rightGlyph != null) {
-      rightGlyph.transform.updateScale(this.glyphScale, this.glyphScale);
-      rightGlyph.transform.updateTranslation(
-        this.rightGlyphLocation.x,
-        this.rightGlyphLocation.y,
-      );
+      const t = rightGlyph.getTransform()._dup();
+      t.updateTranslation(this.rightGlyphLocation.x, this.rightGlyphLocation.y);
+      t.updateScale(this.glyphHeight, this.glyphHeight);
+      rightGlyph.setTransform(t);
     }
     if (this.mainContent) {
       this.mainContent.setPositions();
@@ -111,9 +123,9 @@ export class Brackets extends Elements {
 
   offsetLocation(offset: Point = new Point(0, 0)) {
     this.location = this.location.add(offset);
-    const { glyph, rightGlyph } = this;
-    if (glyph != null) {
-      this.glyphLocation = this.glyphLocation.add(offset);
+    const { leftGlyph, rightGlyph } = this;
+    if (leftGlyph != null) {
+      this.leftGlyphLocation = this.leftGlyphLocation.add(offset);
     }
     if (rightGlyph != null) {
       this.rightGlyphLocation = this.rightGlyphLocation.add(offset);
@@ -128,7 +140,8 @@ export class Brackets extends Elements {
     this.location = location._dup();
     const loc = location._dup();
     const contentBounds = new Bounds();
-    const glyphBounds = new Bounds();
+    const originalContentBounds = new Bounds();
+    const leftGlyphBounds = new Bounds();
     const rightGlyphBounds = new Bounds();
 
     const { mainContent } = this;
@@ -138,203 +151,148 @@ export class Brackets extends Elements {
       contentBounds.height = mainContent.ascent + mainContent.descent;
       contentBounds.ascent = mainContent.ascent;
       contentBounds.descent = mainContent.descent;
+      originalContentBounds.width = mainContent.width;
+      originalContentBounds.height = mainContent.height;
+      originalContentBounds.ascent = mainContent.ascent;
+      originalContentBounds.descent = mainContent.descent;
     }
 
-    const lineHeight = this.minLineHeight;
-    if (lineHeight != null) {
-      lineHeight.calcSize(loc._dup(), scale);
-      contentBounds.height = Math.max(lineHeight.height, contentBounds.height);
-      contentBounds.descent = Math.max(lineHeight.descent, contentBounds.descent);
+    // Calculation of descent and height needs to be done in this order to
+    // to preserve precedence (larger number overrides smaller number):
+    //    1. minContentDescent
+    //    2. forceDescent
+    //
+    //    1. Height based on bracket descent, to content ascent
+    //    2. forceHeight
+    if (this.minContentDescent != null) {
+      contentBounds.descent = Math.max(this.minContentDescent, contentBounds.descent);
+      contentBounds.height = contentBounds.ascent + contentBounds.descent;
     }
 
-    const { heightScale } = this;
-    const height = contentBounds.height * heightScale;
-    const bracketScale = height;
+    let glyphDescent = contentBounds.descent + scale * this.bottomSpace;
+    if (this.forceDescent != null) {
+      glyphDescent = this.forceDescent;
+    }
+    if (this.minContentHeight != null) {
+      contentBounds.ascent = -contentBounds.descent + Math.max(
+        this.minContentHeight, contentBounds.height,
+      );
+      contentBounds.height = contentBounds.ascent + contentBounds.descent;
+    }
 
-    const glyphDescent = contentBounds.descent
-        + contentBounds.height * (heightScale - 1) / 2;
-    const leftSymbolLocation = new Point(
+    let height = glyphDescent + contentBounds.ascent + this.topSpace * scale;
+    if (this.forceHeight != null) {
+      height = this.forceHeight;
+    }
+    this.glyphHeight = height;
+
+    let leftSymbolLocation = new Point(
       loc.x + this.outsideSpace * scale,
       loc.y - glyphDescent,
     );
-    const { glyph } = this;
-    if (glyph instanceof DiagramElementPrimitive) {
-      glyph.show();
-      glyph.transform.updateScale(
-        bracketScale,
-        bracketScale,
+
+    const { leftGlyph } = this;
+    if (leftGlyph != null) {
+      if (this.inSize === false) {
+        leftSymbolLocation = new Point(
+          loc.x - this.insideSpace * scale - leftGlyph.custom.getWidth(
+            leftGlyph.custom.type, leftGlyph.custom.options, height,
+          ),
+          loc.y - glyphDescent,
+        );
+      }
+      leftGlyph.showAll();
+      leftGlyph.transform.updateScale(
+        height,
+        height,
       );
-      glyph.transform.updateTranslation(
+      leftGlyph.transform.updateTranslation(
         leftSymbolLocation.x,
         leftSymbolLocation.y,
       );
-      this.glyphLocation = leftSymbolLocation;
-      this.glyphScale = bracketScale;
-      const bounds = glyph.drawingObject
-        .getRelativeVertexSpaceBoundingRect();
-      glyphBounds.width = bounds.width * bracketScale;
-      glyphBounds.height = (-bounds.bottom + bounds.top) * bracketScale;
-      glyphBounds.ascent = (bounds.top) * bracketScale;
-      glyphBounds.descent = (-bounds.bottom) * bracketScale;
+      this.leftGlyphLocation = leftSymbolLocation;
+      leftGlyphBounds.width = leftGlyph.custom.getWidth(
+        leftGlyph.custom.type, leftGlyph.custom.options, height,
+      );
+      leftGlyphBounds.height = height;
+      leftGlyphBounds.ascent = height - glyphDescent;
+      leftGlyphBounds.descent = glyphDescent;
     }
 
-    const rightSymbolLocation = new Point(
-      loc.x + contentBounds.width + glyphBounds.width
+    let rightSymbolLocation = new Point(
+      loc.x + contentBounds.width + leftGlyphBounds.width
         + (this.insideSpace * 2 + this.outsideSpace) * scale,
       leftSymbolLocation.y,
     );
+
+    if (this.leftGlyph === null) {
+      rightSymbolLocation.x = loc.x + contentBounds.width + this.insideSpace * scale;
+    }
+
+    if (this.inSize === false) {
+      rightSymbolLocation = new Point(
+        loc.x + contentBounds.width + this.insideSpace * scale,
+        leftSymbolLocation.y,
+      );
+    }
+
     const { rightGlyph } = this;
-    if (rightGlyph instanceof DiagramElementPrimitive) {
-      rightGlyph.show();
+    if (rightGlyph != null) {
+      rightGlyph.showAll();
       rightGlyph.transform.updateScale(
-        bracketScale,
-        bracketScale,
+        height,
+        height,
       );
       rightGlyph.transform.updateTranslation(
         rightSymbolLocation.x,
         rightSymbolLocation.y,
       );
       this.rightGlyphLocation = rightSymbolLocation;
-      const bounds = rightGlyph.drawingObject
-        .getRelativeVertexSpaceBoundingRect();
-      rightGlyphBounds.width = bounds.width * bracketScale;
-      rightGlyphBounds.height = (-bounds.bottom + bounds.top) * bracketScale;
-      rightGlyphBounds.ascent = (bounds.top) * bracketScale;
-      rightGlyphBounds.descent = (-bounds.bottom) * bracketScale;
+      rightGlyphBounds.width = rightGlyph.custom.getWidth(
+        rightGlyph.custom.type, rightGlyph.custom.options, height,
+      );
+      rightGlyphBounds.height = height;
+      rightGlyphBounds.ascent = height - glyphDescent;
+      rightGlyphBounds.descent = glyphDescent;
     }
     const contentLocation = new Point(
-      this.location.x + glyphBounds.width + (this.insideSpace + this.outsideSpace) * scale,
+      this.location.x + leftGlyphBounds.width + (this.insideSpace + this.outsideSpace) * scale,
       this.location.y,
     );
+    if (this.leftGlyph == null) {
+      contentLocation.x = this.location.x;
+    }
 
-    if (mainContent instanceof Elements) {
+    if (mainContent instanceof Elements && this.inSize) {
       mainContent.offsetLocation(contentLocation.sub(mainContent.location));
     }
 
-    this.width = glyphBounds.width + contentBounds.width
-      + rightGlyphBounds.width + this.insideSpace * scale * 2
-      + this.outsideSpace * scale * 2;
-    this.ascent = glyphBounds.height - glyphDescent;
-    this.descent = glyphDescent;
-    this.height = this.descent + this.ascent;
-    // console.log(this.glyphLocation, this.rightGlyphLocation)
-    // console.log(this.glyph.getPosition()._dup(), this.rightGlyph.getPosition()._dup());
-  }
-}
-
-// /////////////////////////////////////////////////////////////////////////////
-// /////////////////////////////////////////////////////////////////////////////
-// /////////////////////////////////////////////////////////////////////////////
-// /////////////////////////////////////////////////////////////////////////////
-// /////////////////////////////////////////////////////////////////////////////
-// Make brackets have a custom setabble ascent and descent instead of auto scale
-// /////////////////////////////////////////////////////////////////////////////
-// /////////////////////////////////////////////////////////////////////////////
-// /////////////////////////////////////////////////////////////////////////////
-// /////////////////////////////////////////////////////////////////////////////
-// /////////////////////////////////////////////////////////////////////////////
-export class Bar extends Brackets {
-  barPosition: 'top' | 'bottom';
-  inSize: boolean;
-  // outsideSpace: number;
-
-  constructor(
-    content: Elements | null,
-    barGlyph: DiagramElementPrimitive | null | DiagramElementCollection,
-    space: number = 0.03,
-    outsideSpace: number = 0.03,
-    barPosition: 'top' | 'bottom' = 'top',
-    inSize: boolean = true,
-  ) {
-    super(content, barGlyph, null, space, outsideSpace);
-    this.barPosition = barPosition;
-    this.inSize = inSize;
-    // this.outsideSpace = outsideSpace;
-  }
-
-  calcSize(location: Point, scale: number) {
-    this.location = location._dup();
-    const loc = location._dup();
-    const contentBounds = new Bounds();
-    const glyphBounds = new Bounds();
-
-    const { mainContent } = this;
-    if (mainContent instanceof Elements) {
-      mainContent.calcSize(loc._dup(), scale);
-      contentBounds.width = mainContent.width;
-      contentBounds.height = mainContent.ascent + mainContent.descent;
-      contentBounds.ascent = mainContent.ascent;
-      contentBounds.descent = mainContent.descent;
-    }
-
-    const widthScale = 1;
-    const width = contentBounds.width * widthScale;
-    const bracketScale = width;
-
-    const leftSymbolLocation = new Point(
-      loc.x - (widthScale - 1) * width / 2,
-      loc.y + contentBounds.ascent + this.insideSpace * scale,
-    );
-    if (this.barPosition === 'bottom') {
-      leftSymbolLocation.y = loc.y - contentBounds.descent - this.insideSpace * scale;
-    }
-    const { glyph } = this;
-    if (glyph instanceof DiagramElementPrimitive) {
-      glyph.show();
-      glyph.transform.updateScale(
-        bracketScale,
-        bracketScale,
-      );
-      glyph.transform.updateTranslation(
-        leftSymbolLocation.x,
-        leftSymbolLocation.y,
-      );
-      this.glyphLocation = leftSymbolLocation;
-      this.glyphScale = bracketScale;
-      const bounds = glyph.drawingObject
-        .getRelativeVertexSpaceBoundingRect();
-      glyphBounds.width = bounds.width * bracketScale;
-      glyphBounds.height = (-bounds.bottom + bounds.top) * bracketScale;
-      glyphBounds.ascent = (bounds.top) * bracketScale;
-      glyphBounds.descent = (-bounds.bottom) * bracketScale;
-    }
-    this.width = contentBounds.width;
     if (this.inSize) {
-      if (this.barPosition === 'top') {
-        this.ascent = contentBounds.ascent + glyphBounds.height
-          + this.insideSpace * scale + this.outsideSpace * scale;
-        this.descent = contentBounds.descent;
-      } else {
-        this.ascent = contentBounds.ascent;
-        this.descent = contentBounds.descent + glyphBounds.height
-          + this.insideSpace * scale + this.outsideSpace * scale;
+      this.width = leftGlyphBounds.width + originalContentBounds.width
+        + rightGlyphBounds.width + this.insideSpace * scale * 2
+        + this.outsideSpace * scale * 2;
+      if (this.leftGlyph == null) {
+        this.width -= (this.insideSpace + this.outsideSpace) * scale;
       }
+      this.ascent = Math.max(
+        leftGlyphBounds.height - glyphDescent,
+        rightGlyphBounds.height - glyphDescent,
+        originalContentBounds.ascent,
+      );
+      this.descent = Math.max(glyphDescent, originalContentBounds.descent);
+      this.height = this.descent + this.ascent;
     } else {
-      this.ascent = contentBounds.ascent;
-      this.descent = contentBounds.descent;
+      this.width = originalContentBounds.width;
+      this.ascent = originalContentBounds.ascent;
+      this.descent = originalContentBounds.descent;
+      this.height = originalContentBounds.height;
     }
-    this.height = this.descent + this.ascent;
-  }
 
-  // Must make a dup method in a subclass or else the parent class will
-  // create a new copy of its own class type
-  _dup(namedCollection?: Object) {
-    const content = this.mainContent == null ? null : this.mainContent._dup(namedCollection);
-    let { glyph } = this;
-    if (this.glyph != null && namedCollection) {
-      glyph = namedCollection[this.glyph.name];
+    if (leftGlyph) {
+      leftGlyph.custom.setSize(this.leftGlyphLocation, height);
     }
-    const barCopy = new Bar(
-      content,
-      glyph,
-      this.insideSpace,
-      this.outsideSpace,
-      this.barPosition,
-    );
-    duplicateFromTo(
-      this, barCopy,
-      ['content', 'glyph'],
-    );
-    return barCopy;
+    if (rightGlyph) {
+      rightGlyph.custom.setSize(this.rightGlyphLocation, height);
+    }
   }
 }

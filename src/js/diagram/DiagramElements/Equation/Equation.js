@@ -470,7 +470,6 @@ export class EquationNew extends DiagramElementCollection {
         return false;
       }
       if (form != null && typeof form === 'object') {
-        // $FlowFixMe
         const keys = Object.keys(form);
         if (keys.length === 1 && keys[0] in this.eqn.functions) {
           return true;
@@ -491,18 +490,14 @@ export class EquationNew extends DiagramElementCollection {
       return false;
     };
     const addFormNormal = (name: string, form: TypeEquationForm) => {
-      // $FlowFixMe
       const formContent = [this.eqn.functions.contentToElement(form)];
       this.addForm(name, formContent);
     };
     const addFormFullObject = (name: string, form: TypeEquationForm) => {
-      // $FlowFixMe
       const formContent = [this.eqn.functions.contentToElement(form.content)];
       const {
-        // $FlowFixMe
         subForm, elementMods, duration, alignment, scale,
-        // $FlowFixMe
-        description, modifiers, fromPrev, fromNext, translation, // $FlowFixMe
+        description, modifiers, fromPrev, fromNext, translation,
       } = form;
       const options = {
         subForm,
@@ -536,7 +531,6 @@ export class EquationNew extends DiagramElementCollection {
           if (isFormString(subFormValue) || isFormArray(subFormValue)
             || isFormMethodDefinition(subFormValue) || isFormElements(subFormValue)
           ) {
-            // $FlowFixMe
             addFormFullObject(name, { content: subFormValue, subForm: subFormName });
           } else {
             // $FlowFixMe
@@ -959,7 +953,6 @@ export class EquationNew extends DiagramElementCollection {
       subFormToUse = possibleSubForms[0];
     }
     if (subFormToUse != null) {
-      // $FlowFixMe
       subForm = form[subFormToUse];
       let { duration } = options;
       if (options.prioritizeFormDuration) {
