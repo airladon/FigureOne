@@ -379,69 +379,7 @@ describe('Equation Functions - Bar', () => {
           3: { bottomBarNew: ['a', 'hBar', 0.1, true] },
         });
       },
-      nestedTopComment: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
-        diagram.elements = eqn;
-        eqn.addElements(elements);
-        eqn.addForms({
-          base: {
-            content: {
-              topCommentNew: [
-                { topCommentNew: ['a', 'b', 'hBar', 0.1, 0.1] },
-                'c', 'hBar1', 0.1, 0.1,
-              ],
-            },
-            scale: 1,
-          },
-        });
-      },
-      nestedBottomComment: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
-        diagram.elements = eqn;
-        eqn.addElements(elements);
-        eqn.addForms({
-          base: {
-            content: {
-              bottomComment: [
-                { bottomComment: ['a', 'b', 'hBar', 0.1, 0.1] },
-                'c', 'hBar1', 0.1, 0.1,
-              ],
-            },
-            scale: 1,
-          },
-        });
-      },
     };
-  });
-  test('nestedTopComment', () => {
-    functions.nestedTopComment();
-    eqn.showForm('base');
-    diagram.setFirstTransform();
-    const a = eqn._a.getBoundingRect('diagram');
-    const b = eqn._b.getBoundingRect('diagram');
-    const c = eqn._c.getBoundingRect('diagram');
-    const bar = eqn._hBar.getBoundingRect('diagram');
-    const bar1 = eqn._hBar1.getBoundingRect('diagram');
-    const space = 0.1;
-    expect(round(bar.bottom)).toBe(round(a.top + space));
-    expect(round(b.bottom)).toBe(round(bar.top + space));
-    expect(round(bar1.bottom)).toBe(round(b.top + space));
-    expect(round(c.bottom)).toBe(round(bar1.top + space));
-  });
-  test('nestedBottomComment', () => {
-    functions.nestedBottomComment();
-    eqn.showForm('base');
-    diagram.setFirstTransform();
-    const a = eqn._a.getBoundingRect('diagram');
-    const b = eqn._b.getBoundingRect('diagram');
-    const c = eqn._c.getBoundingRect('diagram');
-    const bar = eqn._hBar.getBoundingRect('diagram');
-    const bar1 = eqn._hBar1.getBoundingRect('diagram');
-    const space = 0.1;
-    expect(round(bar.top)).toBe(round(a.bottom - space));
-    expect(round(b.top)).toBe(round(bar.bottom - space));
-    expect(round(bar1.top)).toBe(round(b.bottom - space));
-    expect(round(c.top)).toBe(round(bar1.bottom - space));
   });
   test('topBar', () => {
     functions.topBar();

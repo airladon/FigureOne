@@ -225,6 +225,7 @@ export type TypeBracketNewObject = {
   content: TypeEquationPhrase;
   left?: string;
   right?: string;
+  inSize?: boolean;
   insideSpace?: number;
   outsideSpace?: number;
   topSpace?: number;
@@ -233,20 +234,19 @@ export type TypeBracketNewObject = {
   minContentDescent?: number;
   height?: number;
   descent?: number;
-  inSize?: boolean;
 };
 export type TypeBracketNewArray = [
   TypeEquationPhrase,
   ?string,
   ?string,
-  ?number,
-  ?number,
-  ?number,
-  ?number,
-  ?number,
-  ?number,
-  ?number,
   ?boolean,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
 ];
 export type TypeSubObject = {
   content: TypeEquationPhrase;
@@ -1087,6 +1087,7 @@ export class EquationFunctions {
     optionsOrContent: TypeBracketNewObject | TypeBracketNewArray | TypeEquationPhrase,
     leftBracketString: string | null = null,
     rightBracketString: string | null = null,
+    inSizeInput: boolean | null = null,
     insideSpaceToContent: number | null = null,
     outsideSpaceToContent: number | null = null,
     topSpaceToContent: number | null = null,
@@ -1095,7 +1096,6 @@ export class EquationFunctions {
     minimumContentDescent: number | null = null,
     forceHeight: number | null = null,
     forceDescent: number | null = null,
-    inSizeInput: boolean | null = null,
   ) {
     let content;
     let left;
@@ -1135,14 +1135,14 @@ export class EquationFunctions {
       inSize = inSizeInput;
     } else if (Array.isArray(optionsOrContent)) {
       [                                                    // $FlowFixMe
-        content, left, right, insideSpace, outsideSpace,   // $FlowFixMe
-        topSpace, bottomSpace, minContentHeight, minContentDescent, height, descent, inSize,
+        content, left, right, inSize, insideSpace, outsideSpace,   // $FlowFixMe
+        topSpace, bottomSpace, minContentHeight, minContentDescent, height, descent,
       ] = optionsOrContent;
     } else {
       ({                                                   // $FlowFixMe
-        content, left, right, insideSpace, outsideSpace,   // $FlowFixMe
+        content, left, right, inSize, insideSpace, outsideSpace,   // $FlowFixMe
         topSpace, bottomSpace, minContentHeight,           // $FlowFixMe
-        minContentDescent, height, descent, inSize,
+        minContentDescent, height, descent,
       } = optionsOrContent);
     }
     let leftBracket = null;
@@ -1190,8 +1190,8 @@ export class EquationFunctions {
       inSizeToUse = inSize;
     }
     return new BracketsNew(                                // $FlowFixMe
-      this.contentToElement(content),                      // $FlowFixMe
-      leftBracket,                                         // $FlowFixMe
+      this.contentToElement(content),
+      leftBracket,
       rightBracket,                                        // $FlowFixMe
       insideSpaceToUse,                                    // $FlowFixMe
       outsideSpaceToUse,                                   // $FlowFixMe
