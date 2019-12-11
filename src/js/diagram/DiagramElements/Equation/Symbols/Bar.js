@@ -1,27 +1,36 @@
 // @flow
-
-import VertexBar from './VertexBar';
-import { DiagramElementPrimitive } from '../../../Element';
 import {
-  Point, Transform, Rect,
+  Point,
 } from '../../../../tools/g2';
-import WebGLInstance from '../../../webgl/webgl';
+import Bracket from './Bracket';
 
-export default function Bracket(
-  webgl: Array<WebGLInstance>,
-  color: Array<number>,
-  side: 'left' | 'right' | 'top' | 'bottom',
-  numLines: number,
-  transformOrLocation: Transform | Point,
-  diagramLimits: Rect,
-) {
-  const vertices = new VertexBar(webgl, side, numLines);
-  let transform = new Transform();
-  if (transformOrLocation instanceof Point) {
-    transform = transform.translate(transformOrLocation.x, transformOrLocation.y);
-  } else {
-    transform = transformOrLocation._dup();
+
+export default class Bar extends Bracket {
+  // eslint-disable-next-line class-methods-use-this
+  getWidth() {
+    return (type: 'static' | 'dynamic', options: Object, height: number) => {
+      const { lineWidth } = options;
+      if (type === 'static') {
+        return height * lineWidth;
+      }
+      return lineWidth;
+    };
   }
 
-  return new DiagramElementPrimitive(vertices, transform, color, diagramLimits);
+  // eslint-disable-next-line class-methods-use-this
+  getPoints() {
+    return (options: Object, height: number) => {
+      const { lineWidth } = options;
+
+      const leftPoints = [
+        new Point(0, 0),
+        new Point(0, height),
+      ];
+      const rightPoints = [
+        new Point(lineWidth, 0),
+        new Point(lineWidth, height),
+      ];
+      return [leftPoints, rightPoints, lineWidth, height];
+    }
+  }
 }

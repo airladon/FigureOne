@@ -8,16 +8,14 @@ import DiagramPrimitives from '../../DiagramPrimitives/DiagramPrimitives';
 import Integral from './Symbols/Integral';
 // import SuperSub from './Elements/SuperSub';
 import Bracket from './Symbols/Bracket';
-import RoundedSquareBracket from './Symbols/RoundedSquareBracket';
-import Bar from './Symbols/Bar';
 import Box from './Symbols/Box';
 import Radical from './Symbols/Radical';
 import Brace from './Symbols/Brace';
 import SquareBracket from './Symbols/SquareBracket';
-import SquareBracketNew from './Symbols/SquareBracketNew';
-import BarNew from './Symbols/BarNew';
-import BracketNew from './Symbols/BracketNew';
-import BraceNew from './Symbols/BraceNew';
+// import SquareBracketNew from './Symbols/SquareBracketNew';
+import Bar from './Symbols/Bar';
+// import BracketNew from './Symbols/BracketNew';
+// import BraceNew from './Symbols/BraceNew';
 
 // import { Annotation, AnnotationInformation } from './Elements/Annotation';
 
@@ -50,6 +48,8 @@ export default class EquationSymbols {
       proportionalToHeight?: boolean,
       endLength?: number,
       sides?: number,
+      tipWidth?: number,
+      radius?: number,
     },
   ) {
     if (name === 'vinculum') {
@@ -67,30 +67,30 @@ export default class EquationSymbols {
     if (name === 'bracket') {
       return this.bracket(options);
     }
-    if (name === 'bracketNew') {
-      return this.bracketNew(options);
-    }
+    // if (name === 'bracketNew') {
+    //   return this.bracketNew(options);
+    // }
     if (name === 'squareBracket') {
       return this.squareBracket(options);
     }
-    if (name === 'squareBracketNew') {
-      return this.squareBracketNew(options);
-    }
+    // if (name === 'squareBracketNew') {
+    //   return this.squareBracketNew(options);
+    // }
     if (name === 'brace') {
       return this.brace(options);
     }
-    if (name === 'braceNew') {
-      return this.braceNew(options);
-    }
+    // if (name === 'braceNew') {
+    //   return this.braceNew(options);
+    // }
     if (name === 'bar') {
       return this.bar(options);
     }
-    if (name === 'barNew') {
-      return this.barNew(options);
-    }
-    if (name === 'roundedSquareBracket') {
-      return this.roundedSquareBracket(options);
-    }
+    // if (name === 'barNew') {
+    //   return this.barNew(options);
+    // }
+    // if (name === 'roundedSquareBracket') {
+    //   return this.roundedSquareBracket(options);
+    // }
     if (name === 'box') {
       return this.box(options);
     }
@@ -223,49 +223,49 @@ export default class EquationSymbols {
   }
 
 
+  // bracket(options: {
+  //   side?: 'left' | 'right' | 'top' | 'bottom',
+  //   numLines?: number,
+  //   color?: Array<number>,
+  // }) {
+  //   const defaultOptions = {
+  //     side: 'left',
+  //     numLines: 1,
+  //     color: this.defaultColor,
+  //   };
+  //   const optionsToUse = joinObjects(defaultOptions, options);
+  //   return new Bracket(
+  //     this.shapes.webgl,
+  //     optionsToUse.color,
+  //     optionsToUse.side,
+  //     optionsToUse.numLines,
+  //     new Transform('bracket').scale(1, 1).translate(0, 0),
+  //     this.shapes.limits,
+  //   );
+  // }
+
+  // bar(options: {
+  //   side?: 'left' | 'right' | 'top' | 'bottom',
+  //   numLines?: number,
+  //   color?: Array<number>,
+  // }) {
+  //   const defaultOptions = {
+  //     side: 'top',
+  //     numLines: 1,
+  //     color: this.defaultColor,
+  //   };
+  //   const optionsToUse = joinObjects(defaultOptions, options);
+  //   return new Bar(
+  //     this.shapes.webgl,
+  //     optionsToUse.color,
+  //     optionsToUse.side,
+  //     optionsToUse.numLines,
+  //     new Transform('bar').scale(1, 1).translate(0, 0),
+  //     this.shapes.limits,
+  //   );
+  // }
+
   bracket(options: {
-    side?: 'left' | 'right' | 'top' | 'bottom',
-    numLines?: number,
-    color?: Array<number>,
-  }) {
-    const defaultOptions = {
-      side: 'left',
-      numLines: 1,
-      color: this.defaultColor,
-    };
-    const optionsToUse = joinObjects(defaultOptions, options);
-    return new Bracket(
-      this.shapes.webgl,
-      optionsToUse.color,
-      optionsToUse.side,
-      optionsToUse.numLines,
-      new Transform('bracket').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
-    );
-  }
-
-  bar(options: {
-    side?: 'left' | 'right' | 'top' | 'bottom',
-    numLines?: number,
-    color?: Array<number>,
-  }) {
-    const defaultOptions = {
-      side: 'top',
-      numLines: 1,
-      color: this.defaultColor,
-    };
-    const optionsToUse = joinObjects(defaultOptions, options);
-    return new Bar(
-      this.shapes.webgl,
-      optionsToUse.color,
-      optionsToUse.side,
-      optionsToUse.numLines,
-      new Transform('bar').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
-    );
-  }
-
-  bracketNew(options: {
     side?: 'left' | 'right' | 'top' | 'bottom',
     color?: Array<number>,
     lineWidth?: number,
@@ -288,7 +288,7 @@ export default class EquationSymbols {
     if (optionsToUse.tipWidth == null) {
       optionsToUse.tipWidth = optionsToUse.lineWidth / 3;
     }
-    return (new BracketNew(
+    return (new Bracket(
       this.shapes.webgl,
       optionsToUse.color,
       new Transform('bracket').scale(1, 1).translate(0, 0),
@@ -304,7 +304,7 @@ export default class EquationSymbols {
     )).symbol;
   }
 
-  braceNew(options: {
+  brace(options: {
     side?: 'left' | 'right' | 'top' | 'bottom',
     color?: Array<number>,
     lineWidth?: number,
@@ -327,7 +327,7 @@ export default class EquationSymbols {
     if (optionsToUse.tipWidth == null) {
       optionsToUse.tipWidth = optionsToUse.lineWidth / 3;
     }
-    return (new BraceNew(
+    return (new Brace(
       this.shapes.webgl,
       optionsToUse.color,
       new Transform('brace').scale(1, 1).translate(0, 0),
@@ -343,7 +343,7 @@ export default class EquationSymbols {
     )).symbol;
   }
 
-  barNew(options: {
+  bar(options: {
     side?: 'left' | 'right' | 'top' | 'bottom',
     color?: Array<number>,
     lineWidth?: number,
@@ -356,7 +356,7 @@ export default class EquationSymbols {
       staticSize: null,
     };
     const optionsToUse = joinObjects(defaultOptions, options);
-    return (new BarNew(
+    return (new Bar(
       this.shapes.webgl,
       optionsToUse.color,
       new Transform('bar').scale(1, 1).translate(0, 0),
@@ -369,7 +369,7 @@ export default class EquationSymbols {
     )).symbol;
   }
 
-  squareBracketNew(options: {
+  squareBracket(options: {
     side?: 'left' | 'right' | 'top' | 'bottom',
     color?: Array<number>,
     lineWidth?: number,
@@ -388,7 +388,7 @@ export default class EquationSymbols {
       sides: 5,
     };
     const optionsToUse = joinObjects(defaultOptions, options);
-    return (new SquareBracketNew(
+    return (new SquareBracket(
       this.shapes.webgl,
       optionsToUse.color,
       new Transform('bar').scale(1, 1).translate(0, 0),
@@ -404,66 +404,66 @@ export default class EquationSymbols {
     )).symbol;
   }
 
-  squareBracket(options: {
-    side?: 'left' | 'right' | 'top' | 'bottom',
-    numLines?: number,
-    color?: Array<number>,
-  }) {
-    const defaultOptions = {
-      side: 'left',
-      numLines: 1,
-      color: this.defaultColor,
-    };
-    const optionsToUse = joinObjects(defaultOptions, options);
-    return new SquareBracket(
-      this.shapes.webgl,
-      optionsToUse.color,
-      optionsToUse.side,
-      optionsToUse.numLines,
-      new Transform('bar').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
-    );
-  }
+  // squareBracket(options: {
+  //   side?: 'left' | 'right' | 'top' | 'bottom',
+  //   numLines?: number,
+  //   color?: Array<number>,
+  // }) {
+  //   const defaultOptions = {
+  //     side: 'left',
+  //     numLines: 1,
+  //     color: this.defaultColor,
+  //   };
+  //   const optionsToUse = joinObjects(defaultOptions, options);
+  //   return new SquareBracket(
+  //     this.shapes.webgl,
+  //     optionsToUse.color,
+  //     optionsToUse.side,
+  //     optionsToUse.numLines,
+  //     new Transform('bar').scale(1, 1).translate(0, 0),
+  //     this.shapes.limits,
+  //   );
+  // }
 
-  brace(options: {
-    side?: 'left' | 'right' | 'top' | 'bottom',
-    numLines?: number,
-    color?: Array<number>,
-  }) {
-    const defaultOptions = {
-      side: 'left',
-      numLines: 1,
-      color: this.defaultColor,
-    };
-    const optionsToUse = joinObjects(defaultOptions, options);
-    return new Brace(
-      this.shapes.webgl,
-      optionsToUse.color,
-      optionsToUse.side,
-      optionsToUse.numLines,
-      new Transform('bar').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
-    );
-  }
+  // brace(options: {
+  //   side?: 'left' | 'right' | 'top' | 'bottom',
+  //   numLines?: number,
+  //   color?: Array<number>,
+  // }) {
+  //   const defaultOptions = {
+  //     side: 'left',
+  //     numLines: 1,
+  //     color: this.defaultColor,
+  //   };
+  //   const optionsToUse = joinObjects(defaultOptions, options);
+  //   return new Brace(
+  //     this.shapes.webgl,
+  //     optionsToUse.color,
+  //     optionsToUse.side,
+  //     optionsToUse.numLines,
+  //     new Transform('bar').scale(1, 1).translate(0, 0),
+  //     this.shapes.limits,
+  //   );
+  // }
 
-  roundedSquareBracket(options: {
-    side?: 'left' | 'right' | 'top' | 'bottom',
-    numLines?: number,
-    color?: Array<number>,
-  }) {
-    const defaultOptions = {
-      side: 'left',
-      numLines: 1,
-      color: this.defaultColor,
-    };
-    const optionsToUse = joinObjects(defaultOptions, options);
-    return new RoundedSquareBracket(
-      this.shapes.webgl,
-      optionsToUse.color,
-      optionsToUse.side,
-      optionsToUse.numLines,
-      new Transform('bar').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
-    );
-  }
+  // roundedSquareBracket(options: {
+  //   side?: 'left' | 'right' | 'top' | 'bottom',
+  //   numLines?: number,
+  //   color?: Array<number>,
+  // }) {
+  //   const defaultOptions = {
+  //     side: 'left',
+  //     numLines: 1,
+  //     color: this.defaultColor,
+  //   };
+  //   const optionsToUse = joinObjects(defaultOptions, options);
+  //   return new RoundedSquareBracket(
+  //     this.shapes.webgl,
+  //     optionsToUse.color,
+  //     optionsToUse.side,
+  //     optionsToUse.numLines,
+  //     new Transform('bar').scale(1, 1).translate(0, 0),
+  //     this.shapes.limits,
+  //   );
+  // }
 }
