@@ -292,8 +292,8 @@ describe('Equation Functions - Bar', () => {
       topBar: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         diagram.elements = eqn;
-        const e = eqn.eqn.functions;
-        const bar = e.bar.bind(e);
+        // const e = eqn.eqn.functions;
+        // const bar = e.bar.bind(e);
         eqn.addElements(elements);
         eqn.addForms({
           base: {
@@ -408,7 +408,7 @@ describe('Equation Functions - Bar', () => {
   describe('Parameter Steps', () => {
     let bar;
     let a;
-    let b;
+    // let b;
     let space;
     let overhang;
     let lengthLonger;
@@ -420,7 +420,7 @@ describe('Equation Functions - Bar', () => {
       diagram.setFirstTransform();
       bar = eqn._vBar.getBoundingRect('diagram');
       a = eqn._a.getBoundingRect('diagram');
-      b = eqn._b.getBoundingRect('diagram');
+      // b = eqn._b.getBoundingRect('diagram');
       space = 0.1;
       overhang = 0.01;
       lengthLonger = 3;
