@@ -18,6 +18,24 @@ import Bar from './Symbols/Bar';
 // import BraceNew from './Symbols/BraceNew';
 
 // import { Annotation, AnnotationInformation } from './Elements/Annotation';
+export type TypeSymbolOptions = {
+  color?: Array<number>,
+  numLines?: number,
+  side?: 'left' | 'right' | 'bottom' | 'top',
+  width?: number,
+  fill?: boolean,
+  staticSize?: ?(Point | [number, number] | number),
+  startWidth?: number,
+  lineWidth?: number,
+  startHeight?: number,
+  maxStartWidth?: ?number,
+  maxStartHeight?: ?number,
+  proportionalToHeight?: boolean,
+  endLength?: number,
+  sides?: number,
+  tipWidth?: number,
+  radius?: number,
+}
 
 export default class EquationSymbols {
   shapes: DiagramPrimitives;
@@ -33,24 +51,7 @@ export default class EquationSymbols {
 
   get(
     name: string,
-    options: {
-      color?: Array<number>,
-      numLines?: number,
-      side?: 'left' | 'right' | 'bottom' | 'top',
-      width?: number,
-      fill?: boolean,
-      staticSize?: ?(Point | [number, number] | number),
-      startWidth?: number,
-      lineWidth?: number,
-      startHeight?: number,
-      maxStartWidth?: ?number,
-      maxStartHeight?: ?number,
-      proportionalToHeight?: boolean,
-      endLength?: number,
-      sides?: number,
-      tipWidth?: number,
-      radius?: number,
-    },
+    options: TypeSymbolOptions,
   ) {
     if (name === 'vinculum') {
       return this.vinculum(options);
@@ -64,25 +65,25 @@ export default class EquationSymbols {
     if (name === 'integral') {
       return this.integral(options);
     }
-    if (name === 'bracket') {
+    if (name === 'bracket') {         // $FlowFixMe
       return this.bracket(options);
     }
     // if (name === 'bracketNew') {
     //   return this.bracketNew(options);
     // }
-    if (name === 'squareBracket') {
+    if (name === 'squareBracket') {         // $FlowFixMe
       return this.squareBracket(options);
     }
     // if (name === 'squareBracketNew') {
     //   return this.squareBracketNew(options);
     // }
-    if (name === 'brace') {
+    if (name === 'brace') {         // $FlowFixMe
       return this.brace(options);
     }
     // if (name === 'braceNew') {
     //   return this.braceNew(options);
     // }
-    if (name === 'bar') {
+    if (name === 'bar') {         // $FlowFixMe
       return this.bar(options);
     }
     // if (name === 'barNew') {
@@ -91,10 +92,10 @@ export default class EquationSymbols {
     // if (name === 'roundedSquareBracket') {
     //   return this.roundedSquareBracket(options);
     // }
-    if (name === 'box') {
+    if (name === 'box') {         // $FlowFixMe
       return this.box(options);
     }
-    if (name === 'radical') {
+    if (name === 'radical') {         // $FlowFixMe
       return this.radical(options);
     }
     return null;

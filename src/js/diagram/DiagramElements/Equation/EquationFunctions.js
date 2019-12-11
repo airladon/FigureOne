@@ -288,18 +288,18 @@ export type TypeSupSubArray = [
   ?TypeParsablePoint,
   ?TypeParsablePoint,
 ];
-export type TypeBarObject = {
-  content: TypeEquationPhrase;
-  symbol: string;
-  space?: number;
-  inSize?: boolean;
-};
-export type TypeBarArray = [
-  TypeEquationPhrase,
-  string,
-  ?number,
-  ?boolean,
-];
+// export type TypeBarObject = {
+//   content: TypeEquationPhrase;
+//   symbol: string;
+//   space?: number;
+//   inSize?: boolean;
+// };
+// export type TypeBarArray = [
+//   TypeEquationPhrase,
+//   string,
+//   ?number,
+//   ?boolean,
+// ];
 export type TypeCommentObject = {
   content: TypeEquationPhrase;
   comment: TypeEquationPhrase;
@@ -495,7 +495,8 @@ export class EquationFunctions {
     if (name === 'bottomStrike') { return this.bottomStrike(params); }
     // $FlowFixMe
     if (name === 'pad') { return this.pad(params); }
-    // Add container - where you fix the ascent, descent, and width (content is centered in width) - Content spills out of container by default
+    // Add container - where you fix the ascent, descent, and width
+    // (content is centered in width) - Content spills out of container by default
     return null;
   }
 
@@ -897,7 +898,7 @@ export class EquationFunctions {
       let relativeToContent;
       let relativeToAnnotation;
       ({                                                      // $FlowFixMe
-        annotation, relativeToContent, relativeToAnnotation, scale,
+        annotation, relativeToContent, relativeToAnnotation, scale, // $FlowFixMe
         xOffset, yOffset,
       } = optionsOrAnnotation);
       [relativeToContentH, relativeToContentV] = relativeToContent;
@@ -914,8 +915,8 @@ export class EquationFunctions {
       relativeToContentV,                       // $FlowFixMe
       relativeToAnnotationH,                    // $FlowFixMe
       relativeToAnnotationV,                    // $FlowFixMe
-      scaleToUse,
-      xOffset,
+      scaleToUse,                               // $FlowFixMe
+      xOffset,                                  // $FlowFixMe
       yOffset,
     );
   }
@@ -1350,7 +1351,7 @@ export class EquationFunctions {
       symbol = sym;
       space = insideSpace;
       inSize = barInSize;
-    } else if (Array.isArray(optionsOrContent)) {
+    } else if (Array.isArray(optionsOrContent)) {     // $FlowFixMe
       [content, symbol, space, inSize] = optionsOrContent;
     } else {
       ({                                                    // $FlowFixMe
