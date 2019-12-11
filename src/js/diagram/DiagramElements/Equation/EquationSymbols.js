@@ -283,7 +283,7 @@ export default class EquationSymbols {
     };
     const optionsToUse = joinObjects(defaultOptions, options);
     if (optionsToUse.width == null) {
-      optionsToUse.width = optionsToUse.lineWidth * 4.2;
+      optionsToUse.width = optionsToUse.lineWidth * 2.5;
     }
     if (optionsToUse.tipWidth == null) {
       optionsToUse.tipWidth = optionsToUse.lineWidth / 3;
