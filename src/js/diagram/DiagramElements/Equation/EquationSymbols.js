@@ -12,6 +12,7 @@ import Box from './Symbols/Box';
 import Radical from './Symbols/Radical';
 import Brace from './Symbols/Brace';
 import SquareBracket from './Symbols/SquareBracket';
+import AngleBracket from './Symbols/AngleBracket';
 // import SquareBracketNew from './Symbols/SquareBracketNew';
 import Bar from './Symbols/Bar';
 // import BracketNew from './Symbols/BracketNew';
@@ -68,32 +69,20 @@ export default class EquationSymbols {
     if (name === 'bracket') {         // $FlowFixMe
       return this.bracket(options);
     }
-    // if (name === 'bracketNew') {
-    //   return this.bracketNew(options);
-    // }
     if (name === 'squareBracket') {         // $FlowFixMe
       return this.squareBracket(options);
     }
-    // if (name === 'squareBracketNew') {
-    //   return this.squareBracketNew(options);
-    // }
     if (name === 'brace') {         // $FlowFixMe
       return this.brace(options);
     }
-    // if (name === 'braceNew') {
-    //   return this.braceNew(options);
-    // }
     if (name === 'bar') {         // $FlowFixMe
       return this.bar(options);
     }
-    // if (name === 'bar') {
-    //   return this.bar(options);
-    // }
-    // if (name === 'roundedSquareBracket') {
-    //   return this.roundedSquareBracket(options);
-    // }
     if (name === 'box') {         // $FlowFixMe
       return this.box(options);
+    }
+    if (name === 'angleBracket') {         // $FlowFixMe
+      return this.angleBracket(options);
     }
     if (name === 'radical') {         // $FlowFixMe
       return this.radical(options);
@@ -222,49 +211,6 @@ export default class EquationSymbols {
       this.shapes.limits,
     );
   }
-
-
-  // bracket(options: {
-  //   side?: 'left' | 'right' | 'top' | 'bottom',
-  //   numLines?: number,
-  //   color?: Array<number>,
-  // }) {
-  //   const defaultOptions = {
-  //     side: 'left',
-  //     numLines: 1,
-  //     color: this.defaultColor,
-  //   };
-  //   const optionsToUse = joinObjects(defaultOptions, options);
-  //   return new Bracket(
-  //     this.shapes.webgl,
-  //     optionsToUse.color,
-  //     optionsToUse.side,
-  //     optionsToUse.numLines,
-  //     new Transform('bracket').scale(1, 1).translate(0, 0),
-  //     this.shapes.limits,
-  //   );
-  // }
-
-  // bar(options: {
-  //   side?: 'left' | 'right' | 'top' | 'bottom',
-  //   numLines?: number,
-  //   color?: Array<number>,
-  // }) {
-  //   const defaultOptions = {
-  //     side: 'top',
-  //     numLines: 1,
-  //     color: this.defaultColor,
-  //   };
-  //   const optionsToUse = joinObjects(defaultOptions, options);
-  //   return new Bar(
-  //     this.shapes.webgl,
-  //     optionsToUse.color,
-  //     optionsToUse.side,
-  //     optionsToUse.numLines,
-  //     new Transform('bar').scale(1, 1).translate(0, 0),
-  //     this.shapes.limits,
-  //   );
-  // }
 
   bracket(options: {
     side?: 'left' | 'right' | 'top' | 'bottom',
@@ -401,6 +347,35 @@ export default class EquationSymbols {
         endLength: optionsToUse.endLength,
         radius: optionsToUse.radius,
         sides: optionsToUse.sides,
+      },
+    )).symbol;
+  }
+
+  angleBracket(options: {
+    side?: 'left' | 'right' | 'top' | 'bottom',
+    color?: Array<number>,
+    lineWidth?: number,
+    width?: number,
+    staticSize?: ?boolean,
+  }) {
+    const defaultOptions = {
+      side: 'left',
+      lineWidth: 0.01,
+      width: 0.05,
+      color: this.defaultColor,
+      staticSize: null,
+    };
+    const optionsToUse = joinObjects(defaultOptions, options);
+    return (new AngleBracket(
+      this.shapes.webgl,
+      optionsToUse.color,
+      new Transform('bar').scale(1, 1).translate(0, 0),
+      this.shapes.limits,
+      optionsToUse.side,
+      optionsToUse.staticSize,
+      {
+        lineWidth: optionsToUse.lineWidth,
+        width: optionsToUse.width,
       },
     )).symbol;
   }

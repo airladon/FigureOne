@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Equation Symbols - Angle Bracket Angle Bracket 1`] = `
+Array [
+  0.7,
+  0,
+  0.086,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Symbols - Angle Bracket Angle Bracket 2`] = `
+Array [
+  0.1421,
+  0,
+  0.035,
+  0,
+  0.1421,
+  -0.0406,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Symbols - Angle Bracket Angle Bracket 3`] = `
+Array [
+  0.1421,
+  0,
+  0.135,
+  0,
+  0.1421,
+  -0.0406,
+  0,
+  0,
+  1,
+]
+`;
