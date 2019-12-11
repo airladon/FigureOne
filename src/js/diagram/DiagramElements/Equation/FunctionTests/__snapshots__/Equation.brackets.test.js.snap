@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Equation Functions - Strike Bracket 1`] = `
+exports[`Equation Functions - Brackets Bracket 1`] = `
 Array [
   0.7,
   0,
-  0.08071,
+  0.165,
   0,
   0.7,
   0,
@@ -14,28 +14,28 @@ Array [
 ]
 `;
 
-exports[`Equation Functions - Strike Bracket 2`] = `
+exports[`Equation Functions - Brackets Bracket 2`] = `
 Array [
-  0.1596,
+  0.2121,
   0,
-  0.035,
+  0.07,
   0,
-  0.1596,
-  -0.0483,
+  0.2121,
+  -0.0756,
   0,
   0,
   1,
 ]
 `;
 
-exports[`Equation Functions - Strike Bracket 3`] = `
+exports[`Equation Functions - Brackets Bracket 3`] = `
 Array [
-  0.1596,
+  0.2121,
   0,
-  0.12971,
+  0.263,
   0,
-  0.1596,
-  -0.0483,
+  0.2121,
+  -0.0756,
   0,
   0,
   1,

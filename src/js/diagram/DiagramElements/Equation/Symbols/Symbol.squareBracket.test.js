@@ -25,7 +25,7 @@ describe('Equation Symbols - Square Bracket', () => {
     elements = {
       a: 'a',
       left: {
-        symbol: 'squareBracketNew',
+        symbol: 'squarebracket',
         side: 'left',
         lineWidth: 0.01,
         endLength: 0.03,
@@ -34,7 +34,7 @@ describe('Equation Symbols - Square Bracket', () => {
         staticSize: false,
       },
       right: {
-        symbol: 'squareBracketNew',
+        symbol: 'squarebracket',
         side: 'right',
         lineWidth: 0.01,
         endLength: 0.03,

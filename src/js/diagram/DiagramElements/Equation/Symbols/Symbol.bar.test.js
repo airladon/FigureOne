@@ -41,7 +41,7 @@ describe('Equation Symbols - Bar', () => {
     eqn.addElements(elements);
     eqn.addForms({ 0: ['a', 'left', 'right'] });
   });
-  test('Bracket', () => {
+  test('Bar', () => {
     // Snapshot test on most simple layout
     eqn.showForm('0');
     tools.cleanUIDs(eqn);

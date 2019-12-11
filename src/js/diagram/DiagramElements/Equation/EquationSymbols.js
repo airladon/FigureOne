@@ -86,8 +86,8 @@ export default class EquationSymbols {
     if (name === 'bar') {         // $FlowFixMe
       return this.bar(options);
     }
-    // if (name === 'barNew') {
-    //   return this.barNew(options);
+    // if (name === 'bar') {
+    //   return this.bar(options);
     // }
     // if (name === 'roundedSquareBracket') {
     //   return this.roundedSquareBracket(options);

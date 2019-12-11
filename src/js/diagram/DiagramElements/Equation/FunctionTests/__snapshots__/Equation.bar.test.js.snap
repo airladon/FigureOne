@@ -1,38 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Equation Functions - Bar Bottom Bar 1`] = `
+exports[`Equation Functions - Bar Bar 1`] = `
 Array [
   0.7,
   0,
-  0,
-  0,
-  0.7,
-  0,
-  0,
-  0,
-  1,
-]
-`;
-
-exports[`Equation Functions - Bar Bottom Bar 2`] = `
-Array [
-  0.028,
-  0,
-  0,
-  0,
-  0.028,
-  -0.0266,
-  0,
-  0,
-  1,
-]
-`;
-
-exports[`Equation Functions - Bar Top Bar 1`] = `
-Array [
-  0.7,
-  0,
-  0,
+  0.11,
   0,
   0.7,
   0,
@@ -42,14 +14,14 @@ Array [
 ]
 `;
 
-exports[`Equation Functions - Bar Top Bar 2`] = `
+exports[`Equation Functions - Bar Bar 2`] = `
 Array [
-  0.028,
+  0.2721,
   0,
   0,
   0,
-  0.028,
-  0.0875,
+  0.2721,
+  -0.1056,
   0,
   0,
   1,

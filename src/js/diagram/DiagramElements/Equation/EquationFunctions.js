@@ -80,7 +80,7 @@ export type TypeEquationPhrase =
   | { box: TypeBoxObject } | TypeBoxArray
   | { root: TypeRootObject } | TypeRootArray
   | { brac: TypeBracketObject } | TypeBracketArray
-  // | { bracNew: TypeBracketObject } | TypeBracketArray
+  // | { brac: TypeBracketObject } | TypeBracketArray
   | { sub: TypeSubObject } | TypeSubArray
   | { sup: TypeSupObject } | TypeSupArray
   | { supSub: TypeSupSubObject } | TypeSupSubArray
