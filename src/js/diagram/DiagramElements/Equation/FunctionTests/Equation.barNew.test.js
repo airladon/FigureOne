@@ -379,7 +379,7 @@ describe('Equation Functions - Bar', () => {
           3: { bottomBarNew: ['a', 'hBar', 0.1, true] },
         });
       },
-      nestedTopBar: () => {
+      nestedTopComment: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         diagram.elements = eqn;
         eqn.addElements(elements);
@@ -393,18 +393,12 @@ describe('Equation Functions - Bar', () => {
             },
             scale: 1,
           },
-          // test: {
-          //   content: {
-          //     topCommentNew: ['a', 'b', 'hBar', 0.1, 0.1],
-          //   },
-          //   scale: 1,
-          // },
         });
       },
     };
   });
-  test.only('nestedTopBar', () => {
-    functions.nestedTopBar();
+  test.only('nestedTopComment', () => {
+    functions.nestedTopComment();
     eqn.showForm('base');
     diagram.setFirstTransform();
     const a = eqn._a.getBoundingRect('diagram');
@@ -412,11 +406,11 @@ describe('Equation Functions - Bar', () => {
     const c = eqn._c.getBoundingRect('diagram');
     const bar = eqn._hBar.getBoundingRect('diagram');
     const bar1 = eqn._hBar1.getBoundingRect('diagram');
-    console.log(c.bottom, c.height, c.top)
-    console.log(bar1.bottom, bar1.height, bar1.top)
-    console.log(b.bottom, b.height, b.top)
-    console.log(bar.bottom, bar.height, bar.top)
-    console.log(a.bottom, a.height, a.top)
+    const space = 0.1;
+    expect(round(bar.bottom)).toBe(round(a.top + space));
+    expect(round(b.bottom)).toBe(round(bar.top + space));
+    expect(round(bar1.bottom)).toBe(round(b.top + space));
+    expect(round(c.bottom)).toBe(round(bar1.top + space));
   });
   test('topBar', () => {
     functions.topBar();
