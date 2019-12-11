@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Equation Symbols - Bar Bracket 1`] = `
+exports[`Equation Symbols - Bar Bar 1`] = `
 Array [
   0.7,
   0,
@@ -14,7 +14,7 @@ Array [
 ]
 `;
 
-exports[`Equation Symbols - Bar Bracket 2`] = `
+exports[`Equation Symbols - Bar Bar 2`] = `
 Array [
   0.7,
   0,
@@ -28,11 +28,11 @@ Array [
 ]
 `;
 
-exports[`Equation Symbols - Bar Bracket 3`] = `
+exports[`Equation Symbols - Bar Bar 3`] = `
 Array [
   0.7,
   0,
-  0.07467,
+  0.035,
   0,
   0.7,
   0,

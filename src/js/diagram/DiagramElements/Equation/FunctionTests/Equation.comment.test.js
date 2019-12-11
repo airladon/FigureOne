@@ -32,20 +32,20 @@ describe('Equation Functions - Bar', () => {
       e: 'e',
       f: 'f',
       g: 'g',
-      bar: { symbol: 'barNew', side: 'top' },
-      bar1: { symbol: 'barNew', side: 'top' },
+      bar: { symbol: 'bar', side: 'top' },
+      bar1: { symbol: 'bar', side: 'top' },
     };
     functions = {
       topComment: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
-        const topCommentNew = e.topCommentNew.bind(e);
+        const topComment = e.topComment.bind(e);
         eqn.addElements(elements);
         eqn.addForms({
           // Full Object
           0: {
             content: {
-              topCommentNew: {
+              topComment: {
                 content: 'a',
                 comment: 'b',
                 symbol: 'bar',
@@ -54,22 +54,22 @@ describe('Equation Functions - Bar', () => {
           },
           //   // Method Object
           1: {
-            topCommentNew: {
+            topComment: {
               content: 'a',
               comment: 'b',
               symbol: 'bar',
             },
           },
           // Method Array
-          2: { topCommentNew: ['a', 'b', 'bar'] },
+          2: { topComment: ['a', 'b', 'bar'] },
           // Function with Method Array
-          3: e.topCommentNew(['a', 'b', 'bar']),
+          3: e.topComment(['a', 'b', 'bar']),
           // Function with parameters
-          4: e.topCommentNew('a', 'b', 'bar'),
+          4: e.topComment('a', 'b', 'bar'),
           // Bound Function with parameters
-          5: topCommentNew('a', 'b', 'bar'),
+          5: topComment('a', 'b', 'bar'),
           // Bound Function with Object
-          6: topCommentNew({
+          6: topComment({
             content: 'a',
             comment: 'b',
             symbol: 'bar',
@@ -119,15 +119,15 @@ describe('Equation Functions - Bar', () => {
       topCommentParameters: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
-        const topCommentNew = e.topCommentNew.bind(e);
+        const topComment = e.topComment.bind(e);
         eqn.addElements(elements);
         eqn.addForms({
           // without
           //   // Method Object
-          without: topCommentNew('a', 'b', 'bar'),
+          without: topComment('a', 'b', 'bar'),
           // With parameters
           0: {
-            topCommentNew: {
+            topComment: {
               content: 'a',
               comment: 'b',
               symbol: 'bar',
@@ -137,9 +137,9 @@ describe('Equation Functions - Bar', () => {
             },
           },
           // Method Array
-          1: { topCommentNew: ['a', 'b', 'bar', 0.1, 0.2, 2] },
+          1: { topComment: ['a', 'b', 'bar', 0.1, 0.2, 2] },
           // Function with parameters
-          2: e.topCommentNew('a', 'b', 'bar', 0.1, 0.2, 2),
+          2: e.topComment('a', 'b', 'bar', 0.1, 0.2, 2),
         });
       },
       bottomCommentParameters: () => {
@@ -175,8 +175,8 @@ describe('Equation Functions - Bar', () => {
         eqn.addForms({
           base: {
             content: {
-              topCommentNew: [
-                { topCommentNew: ['a', 'b', 'bar', 0.1, 0.1] },
+              topComment: [
+                { topComment: ['a', 'b', 'bar', 0.1, 0.1] },
                 'c', 'bar1', 0.1, 0.1,
               ],
             },
