@@ -48,6 +48,7 @@ describe('Equation Functions - Brackets', () => {
                 content: 'a',
                 left: 'lb',
                 right: 'rb',
+                inSize: true,
                 insideSpace: 0.1,
                 outsideSpace: 0.1,
                 topSpace: 0.1,
@@ -61,6 +62,7 @@ describe('Equation Functions - Brackets', () => {
               content: 'a',
               left: 'lb',
               right: 'rb',
+              inSize: true,
               insideSpace: 0.1,
               outsideSpace: 0.1,
               topSpace: 0.1,
@@ -68,18 +70,19 @@ describe('Equation Functions - Brackets', () => {
             },
           },
           // Method Array
-          2: { bracNew: ['a', 'lb', 'rb', 0.1, 0.1, 0.1, 0.1] },
+          2: { bracNew: ['a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1] },
           // Function with Method Array
-          3: e.bracNew(['a', 'lb', 'rb', 0.1, 0.1, 0.1, 0.1]),
+          3: e.bracNew(['a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1]),
           // Function with parameters
-          4: e.bracNew('a', 'lb', 'rb', 0.1, 0.1, 0.1, 0.1),
+          4: e.bracNew('a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1),
           // Bound Function with parameters
-          5: bracNew('a', 'lb', 'rb', 0.1, 0.1, 0.1, 0.1),
+          5: bracNew('a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1),
           // Bound Function with Object
           6: bracNew({
             content: 'a',
             left: 'lb',
             right: 'rb',
+            inSize: true,
             insideSpace: 0.1,
             outsideSpace: 0.1,
             topSpace: 0.1,
@@ -102,6 +105,7 @@ describe('Equation Functions - Brackets', () => {
                   content: 'a',
                   left: 'lb',
                   right: 'rb',
+                  inSize: null,
                   insideSpace: 0.1,
                   outsideSpace: 0.1,
                   topSpace: 0.1,
@@ -110,7 +114,6 @@ describe('Equation Functions - Brackets', () => {
                   minContentDescent: null,
                   height: null,
                   descent: null,
-                  inSize: null,
                 },
               },
               'b',
@@ -119,85 +122,85 @@ describe('Equation Functions - Brackets', () => {
           },
           insideSpace: {
             content: [bracNew(
-              'a', 'lb', 'rb', 0.2, 0.1, 0.1, 0.1, null, null, null, null, null,
+              'a', 'lb', 'rb', null, 0.2, 0.1, 0.1, 0.1, null, null, null, null,
             ), 'b'],
             scale: 1,
           },
           outsideSpace: {
             content: [bracNew(
-              'a', 'lb', 'rb', 0.1, 0.2, 0.1, 0.1, null, null, null, null, null,
+              'a', 'lb', 'rb', null, 0.1, 0.2, 0.1, 0.1, null, null, null, null,
             ), 'b'],
             scale: 1,
           },
           topSpace: {
             content: [bracNew(
-              'a', 'lb', 'rb', 0.1, 0.1, 0.2, 0.1, null, null, null, null, null,
+              'a', 'lb', 'rb', null, 0.1, 0.1, 0.2, 0.1, null, null, null, null,
             ), 'b'],
             scale: 1,
           },
           bottomSpace: {
             content: [bracNew(
-              'a', 'lb', 'rb', 0.1, 0.1, 0.1, 0.2, null, null, null, null, null,
+              'a', 'lb', 'rb', null, 0.1, 0.1, 0.1, 0.2, null, null, null, null,
             ), 'b'],
             scale: 1,
           },
           minContentHeight: {
             content: [bracNew(
-              'a', 'lb', 'rb', 0.1, 0.1, 0.1, 0.1, 1, null, null, null, null,
+              'a', 'lb', 'rb', null, 0.1, 0.1, 0.1, 0.1, 1, null, null, null,
             ), 'b'],
             scale: 1,
           },
           minContentDescent: {
             content: [bracNew(
-              'a', 'lb', 'rb', 0.1, 0.1, 0.1, 0.1, null, 1, null, null, null,
+              'a', 'lb', 'rb', null, 0.1, 0.1, 0.1, 0.1, null, 1, null, null,
             ), 'b'],
             scale: 1,
           },
           minContentDescentWithSmallMinHeight: {
             content: [bracNew(
-              'a', 'lb', 'rb', 0.1, 0.1, 0.1, 0.1, 0.1, 1, null, null, null,
+              'a', 'lb', 'rb', null, 0.1, 0.1, 0.1, 0.1, 0.1, 1, null, null,
             ), 'b'],
             scale: 1,
           },
           minContentDescentWithLargeMinHeight: {
             content: [bracNew(
-              'a', 'lb', 'rb', 0.1, 0.1, 0.1, 0.1, 2, 1, null, null, null,
+              'a', 'lb', 'rb', null, 0.1, 0.1, 0.1, 0.1, 2, 1, null, null,
             ), 'b'],
             scale: 1,
           },
           forceDecentLessThanActualDescent: {
             content: [bracNew(
-              'a', 'lb', 'rb', 0.1, 0.1, 0.1, 0.1, null, null, null, 0.004, null,
+              'a', 'lb', 'rb', null, 0.1, 0.1, 0.1, 0.1, null, null, null, 0.004,
             ), 'b'],
             scale: 1,
           },
           forceDecentGreaterThanActualDescent: {
             content: [bracNew(
-              'a', 'lb', 'rb', 0.1, 0.1, 0.1, 0.1, null, null, null, 0.1, null,
+              'a', 'lb', 'rb', null, 0.1, 0.1, 0.1, 0.1, null, null, null, 0.1,
             ), 'b'],
             scale: 1,
           },
           forceHeightLessThanActualHeight: {
             content: [bracNew(
-              'a', 'lb', 'rb', 0.1, 0.1, 0.1, 0.1, null, null, 0.05, null, null,
+              'a', 'lb', 'rb', null, 0.1, 0.1, 0.1, 0.1, null, null, 0.05, null,
             ), 'b'],
             scale: 1,
           },
           forceHeightGreaterThanActualHeight: {
             content: [bracNew(
-              'a', 'lb', 'rb', 0.1, 0.1, 0.1, 0.1, null, null, 1, null, null,
+              'a', 'lb', 'rb', null, 0.1, 0.1, 0.1, 0.1, null, null, 1, null,
             ), 'b'],
             scale: 1,
           },
           notInSize: {
             content: [bracNew(
-              'a', 'lb', 'rb', 0.1, 0.1, 0.1, 0.1, null, null, null, null, false,
+              'a', 'lb', 'rb', false, 0.1, 0.1, 0.1, 0.1, null, null, null, null,
             ), 'b'],
             scale: 1,
           },
           noLeftBracket: {
             content: [bracNew(
-              'a', '', 'rb', 0.1, 0.1, 0.1, 0.1, null, null, null, null,
+              'a', '', 'rb', null, 0.1, 0.1, 0.1, 0.1, null, null, null, null,
             ), 'b'],
             scale: 1,
           },
@@ -225,7 +228,7 @@ describe('Equation Functions - Brackets', () => {
     // height: 0.10300000000000001,
     // descent: -0.008,
     // ascent: top: 0.095,
-    test.only('noLeftBracket', () => {
+    test('noLeftBracket', () => {
       eqn.showForm('noLeftBracket');
       const newA = eqn._a.getPosition();
       const newR = eqn._rb.getPosition();
