@@ -928,6 +928,69 @@ export class EquationFunctions {
     );
   }
 
+  // container(
+  //   optionsOrContent: TypeContainerObject | TypeContainerArray
+  //                     | TypeEquationPhrase,
+  //   widthIn: number | null = null,
+  //   ascentIn: number | null = null,
+  //   descentIn: number | null = null,
+  //   fitIn: boolean | null = null,
+  //   xAlignIn: 'center' | 'left' | 'right' | number = null,
+  //   yAlignIn: 'middle' | 'bottom' | 'top' | number = null,
+  //   xOffsetIn: number | null = null,
+  //   yOffsetIn: number | null = null,
+  // ) {
+  //   let content;
+  //   let width;
+  //   let ascent;
+  //   let descent;
+  //   let fit;
+  //   let xAlign;
+  //   let yAlign;
+  //   let xOffset;
+  //   let yOffset;
+  //   if (!(widthIn == null
+  //         && ascentIn == null
+  //         && descentIn == null
+  //         && fitIn == null
+  //         && xAlignIn == null
+  //         && yAlignIn == null
+  //         && xOffsetIn == null
+  //         && yOffsetIn == null)
+  //   ) {
+  //     content = optionsOrContent;
+  //     width = widthIn;
+  //     ascent = ascentIn;
+  //     descent = descentIn;
+  //     fit = fitIn;
+  //     xAlign = xAlignIn;
+  //     yAlign = yAlignIn;
+  //     xOffset = xOffsetIn;
+  //     yOffset = yOffsetIn;
+  //   } else if (Array.isArray(optionsOrContent)) {
+  //     [                                                    // $FlowFixMe
+  //       content, width, ascent, descent, fit,              // $FlowFixMe
+  //       xAlign, yAlign, xOffset, yOffset,
+  //     ] = optionsOrContent;
+  //   } else {
+  //     ({                                                   // $FlowFixMe
+  //       content, width, ascent, descent, fit,              // $FlowFixMe
+  //       xAlign, yAlign, xOffset, yOffset,
+  //     } = optionsOrContent);
+  //   }
+  //   return new Container(                                 // $FlowFixMe
+  //     this.contentToElement(content),                     // $FlowFixMe
+  //     width,                                              // $FlowFixMe
+  //     ascent,                                             // $FlowFixMe
+  //     descent,                                            // $FlowFixMe
+  //     fit,                                                // $FlowFixMe
+  //     xAlign,                                             // $FlowFixMe
+  //     yAlign,                                             // $FlowFixMe
+  //     xOffset,                                            // $FlowFixMe
+  //     yOffset,
+  //   );
+  // }
+
   pad(
     optionsOrContent: TypePaddingObject | TypePaddingArray
                       | TypeEquationPhrase,
