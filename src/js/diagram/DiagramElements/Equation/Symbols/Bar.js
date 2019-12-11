@@ -31,6 +31,6 @@ export default class Bar extends Bracket {
         new Point(lineWidth, height),
       ];
       return [leftPoints, rightPoints, lineWidth, height];
-    }
+    };
   }
 }

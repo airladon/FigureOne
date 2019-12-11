@@ -18,6 +18,7 @@ import type {
 // import HTMLObject from '../../DrawingObjects/HTMLObject/HTMLObject';
 import * as html from '../../../tools/htmlGenerator';
 import EquationSymbols from './EquationSymbols';
+import type { TypeSymbolOptions } from './EquationSymbols';
 import { getDiagramElement, EquationFunctions } from './EquationFunctions';
 import type { TypeEquationPhrase } from './EquationFunctions';
 
@@ -349,8 +350,7 @@ export class EquationNew extends DiagramElementCollection {
     };
 
     // Helper function to add symbol element
-    const makeSymbolElem = (options: { symbol: string, numLines?: number,
-    side?: 'top' | 'left' | 'bottom' | 'right', color?: Array<number>, fill?: boolean, width?: number, lineWidth?: number, maxStartHeight?: ?number, maxStartWidth?: ?number, proportionalToHeight?: boolean, startHeight?: number, startWidth?: number, staticSize?: ?(Point | [number, number])}) => {
+    const makeSymbolElem = (options: { symbol: string } & TypeSymbolOptions) => {
       let symbol = this.eqn.symbols.get(options.symbol, options);
       // console.log('got', symbol)
       if (symbol == null) {
@@ -470,6 +470,7 @@ export class EquationNew extends DiagramElementCollection {
         return false;
       }
       if (form != null && typeof form === 'object') {
+        // $FlowFixMe
         const keys = Object.keys(form);
         if (keys.length === 1 && keys[0] in this.eqn.functions) {
           return true;
@@ -490,14 +491,16 @@ export class EquationNew extends DiagramElementCollection {
       return false;
     };
     const addFormNormal = (name: string, form: TypeEquationForm) => {
+      // $FlowFixMe
       const formContent = [this.eqn.functions.contentToElement(form)];
       this.addForm(name, formContent);
     };
     const addFormFullObject = (name: string, form: TypeEquationForm) => {
+      // $FlowFixMe
       const formContent = [this.eqn.functions.contentToElement(form.content)];
-      const {
-        subForm, elementMods, duration, alignment, scale,
-        description, modifiers, fromPrev, fromNext, translation,
+      const {   // $FlowFixMe
+        subForm, elementMods, duration, alignment, scale, // $FlowFixMe
+        description, modifiers, fromPrev, fromNext, translation, // $FlowFixMe
       } = form;
       const options = {
         subForm,
@@ -530,7 +533,7 @@ export class EquationNew extends DiagramElementCollection {
           // const subFormOption = { subForm: subFormName };
           if (isFormString(subFormValue) || isFormArray(subFormValue)
             || isFormMethodDefinition(subFormValue) || isFormElements(subFormValue)
-          ) {
+          ) { // $FlowFixMe
             addFormFullObject(name, { content: subFormValue, subForm: subFormName });
           } else {
             // $FlowFixMe
@@ -953,6 +956,7 @@ export class EquationNew extends DiagramElementCollection {
       subFormToUse = possibleSubForms[0];
     }
     if (subFormToUse != null) {
+      // $FlowFixMe
       subForm = form[subFormToUse];
       let { duration } = options;
       if (options.prioritizeFormDuration) {
