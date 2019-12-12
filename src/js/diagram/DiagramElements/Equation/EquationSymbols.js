@@ -320,7 +320,8 @@ export default class EquationSymbols {
     side?: 'left' | 'right' | 'top' | 'bottom',
     color?: Array<number>,
     lineWidth?: number,
-    endLength?: number,
+    width?: number,
+    endLineWidth?: number,
     staticSize?: ?boolean,
     radius?: number,
     sides?: number,
@@ -329,12 +330,15 @@ export default class EquationSymbols {
       side: 'left',
       lineWidth: 0.01,
       color: this.defaultColor,
-      endLength: 0.04,
+      width: 0.04,
       staticSize: null,
       radius: 0,
       sides: 5,
     };
     const optionsToUse = joinObjects(defaultOptions, options);
+    if (optionsToUse.endLineWidth == null) {
+      optionsToUse.endLineWidth = optionsToUse.lineWidth * 0.7;
+    }
     return (new SquareBracket(
       this.shapes.webgl,
       optionsToUse.color,
@@ -344,7 +348,8 @@ export default class EquationSymbols {
       optionsToUse.staticSize,
       {
         lineWidth: optionsToUse.lineWidth,
-        endLength: optionsToUse.endLength,
+        width: optionsToUse.width,
+        endLineWidth: optionsToUse.endLineWidth,
         radius: optionsToUse.radius,
         sides: optionsToUse.sides,
       },
@@ -379,67 +384,4 @@ export default class EquationSymbols {
       },
     )).symbol;
   }
-
-  // squareBracket(options: {
-  //   side?: 'left' | 'right' | 'top' | 'bottom',
-  //   numLines?: number,
-  //   color?: Array<number>,
-  // }) {
-  //   const defaultOptions = {
-  //     side: 'left',
-  //     numLines: 1,
-  //     color: this.defaultColor,
-  //   };
-  //   const optionsToUse = joinObjects(defaultOptions, options);
-  //   return new SquareBracket(
-  //     this.shapes.webgl,
-  //     optionsToUse.color,
-  //     optionsToUse.side,
-  //     optionsToUse.numLines,
-  //     new Transform('bar').scale(1, 1).translate(0, 0),
-  //     this.shapes.limits,
-  //   );
-  // }
-
-  // brace(options: {
-  //   side?: 'left' | 'right' | 'top' | 'bottom',
-  //   numLines?: number,
-  //   color?: Array<number>,
-  // }) {
-  //   const defaultOptions = {
-  //     side: 'left',
-  //     numLines: 1,
-  //     color: this.defaultColor,
-  //   };
-  //   const optionsToUse = joinObjects(defaultOptions, options);
-  //   return new Brace(
-  //     this.shapes.webgl,
-  //     optionsToUse.color,
-  //     optionsToUse.side,
-  //     optionsToUse.numLines,
-  //     new Transform('bar').scale(1, 1).translate(0, 0),
-  //     this.shapes.limits,
-  //   );
-  // }
-
-  // roundedSquareBracket(options: {
-  //   side?: 'left' | 'right' | 'top' | 'bottom',
-  //   numLines?: number,
-  //   color?: Array<number>,
-  // }) {
-  //   const defaultOptions = {
-  //     side: 'left',
-  //     numLines: 1,
-  //     color: this.defaultColor,
-  //   };
-  //   const optionsToUse = joinObjects(defaultOptions, options);
-  //   return new RoundedSquareBracket(
-  //     this.shapes.webgl,
-  //     optionsToUse.color,
-  //     optionsToUse.side,
-  //     optionsToUse.numLines,
-  //     new Transform('bar').scale(1, 1).translate(0, 0),
-  //     this.shapes.limits,
-  //   );
-  // }
 }
