@@ -22,6 +22,7 @@ import EquationForm from './EquationForm';
 import { Annotation, AnnotationInformation } from './Elements/Annotation';
 import Padding from './Elements/Padding';
 import Box from './Elements/Box';
+import SimpleIntegral from './Elements/SimpleIntegral';
 
 export function getDiagramElement(
   elementsObject: { [string: string]: DiagramElementPrimitive |
@@ -433,6 +434,7 @@ export class EquationFunctions {
     if (name === 'topStrike') { return this.topStrike(params); }   // $FlowFixMe
     if (name === 'bottomStrike') { return this.bottomStrike(params); } // $FlowFixMe
     if (name === 'pad') { return this.pad(params); }
+    if (name === 'simpleIntegral') { return this.simpleIntegral(params); }
     // Add container - where you fix the ascent, descent, and width
     // (content is centered in width) - Content spills out of container by default
     return null;
@@ -1010,6 +1012,110 @@ export class EquationFunctions {
       rightToUse,    // $FlowFixMe
       topToUse,    // $FlowFixMe
       bottomToUse,    // $FlowFixMe
+      inSizeToUse,
+    );
+  }
+
+  simpleIntegral(
+    optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
+    symbolString: string | null = null,
+    inSizeInput: boolean | null = null,
+    spaceToContent: number | null = null,
+    topSpaceToContent: number | null = null,
+    bottomSpaceToContent: number | null = null,
+    minimumContentHeight: number | null = null,
+    minimumContentDescent: number | null = null,
+    forceHeight: number | null = null,
+    forceDescent: number | null = null,
+  ) {
+    let content;
+    let symbol;
+    let space;
+    let topSpace;
+    let bottomSpace;
+    let minContentHeight;
+    let minContentDescent;
+    let descent;
+    let height;
+    let inSize;
+    if (!(symbolString == null
+          && spaceToContent == null
+          && topSpaceToContent == null
+          && bottomSpaceToContent == null
+          && minimumContentHeight == null
+          && minimumContentDescent == null
+          && forceDescent == null
+          && forceHeight == null
+          && inSizeInput == null)
+    ) {
+      content = optionsOrContent;
+      symbol = symbolString;
+      space = spaceToContent;
+      topSpace = topSpaceToContent;
+      bottomSpace = bottomSpaceToContent;
+      minContentHeight = minimumContentHeight;
+      minContentDescent = minimumContentDescent;
+      descent = forceDescent;
+      height = forceHeight;
+      inSize = inSizeInput;
+    } else if (Array.isArray(optionsOrContent)) {
+      [                                                    // $FlowFixMe
+        content, symbol, inSize, space,   // $FlowFixMe
+        topSpace, bottomSpace, minContentHeight, minContentDescent, height, descent,
+      ] = optionsOrContent;
+    } else {
+      ({                                                   // $FlowFixMe
+        content, symbol, inSize, space,   // $FlowFixMe
+        topSpace, bottomSpace, minContentHeight,           // $FlowFixMe
+        minContentDescent, height, descent,
+      } = optionsOrContent);
+    }
+    let symbolToUse = null;
+    if (symbol != null) {                                    // $FlowFixMe
+      symbolToUse = getDiagramElement(this.elements, symbol);
+    }
+    let spaceToUse;
+    if (space != null) {
+      spaceToUse = space;
+    }
+    let topSpaceToUse;
+    if (topSpace != null) {
+      topSpaceToUse = topSpace;
+    }
+    let bottomSpaceToUse;
+    if (bottomSpace != null) {
+      bottomSpaceToUse = bottomSpace;
+    }
+    let minHeightToUse;
+    if (minContentHeight != null) {
+      minHeightToUse = minContentHeight;
+    }
+    let minDescentToUse;
+    if (minContentDescent != null) {
+      minDescentToUse = minContentDescent;
+    }
+    let heightToUse;
+    if (height != null) {
+      heightToUse = height;
+    }
+    let descentToUse;
+    if (descent != null) {
+      descentToUse = descent;
+    }
+    let inSizeToUse;
+    if (inSize != null) {
+      inSizeToUse = inSize;
+    }
+    return new SimpleIntegral(                                // $FlowFixMe
+      this.contentToElement(content),
+      symbolToUse,                                         // $FlowFixMe
+      spaceToUse,                                          // $FlowFixMe
+      topSpaceToUse,                                       // $FlowFixMe
+      bottomSpaceToUse,                                    // $FlowFixMe
+      minHeightToUse,                                      // $FlowFixMe
+      minDescentToUse,                                     // $FlowFixMe
+      heightToUse,                                         // $FlowFixMe
+      descentToUse,                                        // $FlowFixMe
       inSizeToUse,
     );
   }
