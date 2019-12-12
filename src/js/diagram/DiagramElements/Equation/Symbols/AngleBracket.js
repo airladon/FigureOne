@@ -18,38 +18,29 @@ export default class Bar extends Bracket {
   }
 
   // Angle Bracket
-  //                       width
-  //                      |<--->|
-  //                      |
-  //           A          |     /
-  //           |          |    /
-  //           |          |   /
-  //           |             /
-  //           |            /
-  //    height |           /
-  //           |           \
-  //           |            \
-  //           |             \
-  //           |              \
-  //           |               \
-  //           |                \
-  //           V                 \
+  //                         width
+  //                      |<------->|
+  //                      |         |
+  //                      |      ___
+  //           A          |     /  /
+  //           |          |    /  /
+  //           |          |   /  /
+  //           |          |  /  /
+  //           |            /  /
+  //    height |           /  /
+  //           |           \  \
+  //           |            \  \
+  //           |             \  \
+  //           |              \  \
+  //           |               \  \
+  //           |                \  \
+  //           V                 \__\
 
   // To calculate dimensions, need to solve the below where we know:
   //   * height (h)
   //   * width (w)
   //
-  //   - Draw a circle at B of radius lineWidth
-  //   - This circle will touch an extended line C at a right angle (R)
-  //   - Line E is the line from the circle center (B) to the tangent point (R)
-  //   - Line A is the secant and the extended line C is the tangent of the
-  //     the angle Theta which is angle between the line A and line E
-  //   - The angle between lines E and D is also a right angle (as C || D),
-  //     therefore we can calculate the angle between A and D (Beta)
-  //   - Calculate the angle from the horiontal to A: a = arctan2(h/2, w)
-  //   - Calculate the angle from the horizontal to D: alpha = a + Beta
-  //   - Calculate the horizontal component of D: Dh = h / 2 / tan(alpha)
-  //   - Calculate Tip Width = w - Dh
+  // Looking at the bottom half of the bracket:
   //
   //                                 width
   //                   |<------------------------------>|
@@ -78,6 +69,18 @@ export default class Bar extends Bracket {
   //                        C extension  \          *
   //                                      \      *   E
   //                                     R \ *
+  //
+  //   - Draw a circle at B of radius lineWidth
+  //   - This circle will touch an extended line C at a right angle (R)
+  //   - Line E is the line from the circle center (B) to the tangent point (R)
+  //   - Line A is the secant and the extended line C is the tangent of the
+  //     the angle Theta which is angle between the line A and line E
+  //   - The angle between lines E and D is also a right angle (as C || D),
+  //     therefore we can calculate the angle between A and D (Beta)
+  //   - Calculate the angle from the horiontal to A: a = arctan2(h/2, w)
+  //   - Calculate the angle from the horizontal to D: alpha = a + Beta
+  //   - Calculate the horizontal component of D: Dh = h / 2 / tan(alpha)
+  //   - Calculate Tip Width = w - Dh
 
   // eslint-disable-next-line class-methods-use-this
   getPoints() {
