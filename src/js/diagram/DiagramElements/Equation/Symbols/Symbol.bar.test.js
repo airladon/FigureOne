@@ -41,12 +41,11 @@ describe('Equation Symbols - Bar', () => {
     eqn.addElements(elements);
     eqn.addForms({ 0: ['a', 'left', 'right'] });
   });
-  test('Bar', () => {
+  test('Snapshot', () => {
     // Snapshot test on most simple layout
     eqn.showForm('0');
-    tools.cleanUIDs(eqn);
-    expect(round(eqn._a.transform.mat)).toMatchSnapshot();
-    expect(round(eqn._left.transform.mat)).toMatchSnapshot();
-    expect(round(eqn._right.transform.mat)).toMatchSnapshot();
+    diagram.setFirstTransform();
+    expect(round(eqn._left.drawingObject.points)).toMatchSnapshot();
+    expect(round(eqn._right.drawingObject.points)).toMatchSnapshot();
   });
 });
