@@ -15,6 +15,7 @@ import SquareBracket from './Symbols/SquareBracket';
 import AngleBracket from './Symbols/AngleBracket';
 // import SquareBracketNew from './Symbols/SquareBracketNew';
 import Bar from './Symbols/Bar';
+import SimpleIntegral from './Symbols/SimpleIntegral';
 // import BracketNew from './Symbols/BracketNew';
 // import BraceNew from './Symbols/BraceNew';
 
@@ -87,6 +88,9 @@ export default class EquationSymbols {
     if (name === 'radical') {         // $FlowFixMe
       return this.radical(options);
     }
+    if (name === 'simpleIntegral') {
+      return this.simpleIntegral(options);
+    }
     return null;
   }
 
@@ -117,6 +121,41 @@ export default class EquationSymbols {
     };
     const options = joinObjects(defaultOptions, optionsIn);
     return Box(this.shapes, options.color, options.fill, options.width, options.staticSize);
+  }
+
+  // simpleIntegral(optionsIn: {
+  //   color?: Array<number>,
+  //   lineWidth?: number,
+  //   staticSize?: ?(Point | [number, number]),
+  // }) {
+  //   const defaultOptions: {
+  //     color: this.defaultColor,
+  //     lineWidth: 0.01,
+  //   }
+  // }
+
+  simpleIntegral(options: {
+    color?: Array<number>,
+    lineWidth?: number,
+    staticSize?: boolean,
+  }) {
+    const defaultOptions = {
+      color: this.defaultColor,
+      lineWidth: 0.012,
+      staticSize: null,
+    };
+    const optionsToUse = joinObjects(defaultOptions, options);
+
+    return (new SimpleIntegral(
+      this.shapes.webgl,
+      optionsToUse.color,
+      new Transform('brace').scale(1, 1).translate(0, 0),
+      this.shapes.limits,
+      optionsToUse.staticSize,
+      {
+        lineWidth: optionsToUse.lineWidth,
+      },
+    )).symbol;
   }
 
   radical(optionsIn: {
