@@ -44,13 +44,80 @@ describe('Equation Symbols - Bracket', () => {
     eqn = new EquationNew(diagram.shapes, { color: color1 });
     eqn.addElements(elements);
     eqn.addForms({ 0: ['a', 'left', 'right'] });
+    diagram.elements = eqn;
   });
-  test('Bracket', () => {
+  test('Snapshot Bracket', () => {
     // Snapshot test on most simple layout
     eqn.showForm('0');
-    tools.cleanUIDs(eqn);
-    expect(round(eqn._a.transform.mat)).toMatchSnapshot();
-    expect(round(eqn._left.transform.mat)).toMatchSnapshot();
-    expect(round(eqn._right.transform.mat)).toMatchSnapshot();
+    diagram.setFirstTransform();
+    expect(round(eqn._left.drawingObject.points)).toMatchSnapshot();
+    expect(round(eqn._right.drawingObject.points)).toMatchSnapshot();
   });
+  //                             * *
+  //                          *  *
+  //                        *   *
+  //                      *    *
+  //                     *    *
+  //                     *    *
+  //                    *    *
+  //                    *    *
+  //                    *    *
+  //                     *    *
+  //                     *    *
+  //                      *    *
+  //                        *   *
+  //                          *  *
+  //                            * *
+  //
+
+  //                                       width
+  //                               |<--------------->|
+  //                               |                 |
+  //                               |                 |
+  //           A                   |              * *
+  //           |                   |            *  *
+  //           |                   |          *   *
+  //           |                   |        *    *
+  //           |                   |       *    *
+  //           |                   |       *    *
+  //           |                   |      *    *
+  //           |                   |      *    *
+  //           |                   |      *    *
+  //           |                   |      *    *
+  //           |                   |      *    *
+  //           |                   |      *    *
+  //           |                   |      *    *
+  //           |                   |      *    *
+  //           |                   |      *    *
+  //           |                   |      *    *
+  //           |                   |     *    *
+  //           |                   |     *    *
+  //           |                   |    *    *
+  //           |                      *   *
+  //   height  |                    *  *
+  //           |                   * *
+  //           |          A        * *
+  //           |          |          *  *
+  //           |          |        |   *   *
+  //           |          |        |     *    *
+  //           |          |        |      *    *
+  //           |          |        |      *    *
+  //           |          |        |       *    *
+  //           |          |        |       *    *
+  //           |          |        |       *    *
+  //           |          |        |       *    *
+  //           |    h / 2 |        |       *    *
+  //           |          |        |       *    *
+  //           |          |        |       *    *
+  //           |          |        |       *    *
+  //           |          |        |       *    *
+  //           |          |        |       *    *
+  //           |          |        |        *    *
+  //           |          |        |        *    *
+  //           |          |        |         *    *
+  //           |          |        |           *   *
+  //           |          |        |             *  *
+  //           V          V        |_______________ * *
+  //                           (0,0)
+  //
 });
