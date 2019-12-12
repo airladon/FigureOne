@@ -10,20 +10,20 @@ import { duplicateFromTo } from '../../../../tools/tools';
 import { Element, Elements } from './Element';
 // import Bounds from './Bounds';
 
-export default class Brackets extends Elements {
+export default class BaseEquationFunction extends Elements {
   contents: Array<Elements | null>;
   glyphs: Array<DiagramElementPrimitive | DiagramElementCollection | null>;
   glyphLocations: Array<Point>;
   glyphWidths: Array<number>;
   glyphHeights: Array<number>;
-  inSize: boolean;
+  // inSize: boolean;
   options: Object;
 
   constructor(
     content: Elements | null | Array<Elements | null>,
     glyph: DiagramElementPrimitive | null | DiagramElementCollection
       | Array<DiagramElementPrimitive | null | DiagramElementCollection>,
-    inSize: boolean,
+    // inSize: boolean = true,
     options: Object,
   ) {
     const glyphElements = [];
@@ -34,6 +34,12 @@ export default class Brackets extends Elements {
     } else {
       glyphElements.push(glyph !== null ? new Element(glyph) : null);
     }
+    const glyphs = [];
+    if (Array.isArray(glyph)) {
+      glyphs = glyph;
+    } else {
+      glyphs.push(glyph);
+    }
 
     let contentArray: Array<Elements | null> = [];
     if (Array.isArray(content)) {
@@ -42,13 +48,13 @@ export default class Brackets extends Elements {
       contentArray.push(content);
     }
     super([...glyphElements, ...contentArray]);
-    this.glyphs = glyphElements;
+    this.glyphs = glyphs;
     this.contents = contentArray;
     this.glyphLocations = glyphElements.map(() => new Point(0, 0));
     this.glyphWidths = glyphElements.map(() => 1);
     this.glyphHeights = glyphElements.map(() => 1);
     this.options = options;
-    this.inSize = inSize;
+    // this.inSize = inSize;
   }
 
   _dup(namedCollection?: Object) {
@@ -71,7 +77,7 @@ export default class Brackets extends Elements {
     const copy = new this.constructor(
       copyContent,
       glyphs,
-      this.inSize,
+      // this.inSize,
       this.options,
     );
     duplicateFromTo(
