@@ -5,7 +5,7 @@ import {
 import type {
   TypeParsablePoint,
 } from '../../../tools/g2';
-// import { joinObjects } from '../../../tools/tools';
+import { joinObjects } from '../../../tools/tools';
 import {
   DiagramElementPrimitive, DiagramElementCollection,
 } from '../../Element';
@@ -1038,6 +1038,16 @@ export class EquationFunctions {
     let descent;
     let height;
     let inSize;
+    const defaultOptions = {
+      space: 0.05,
+      topSpace: 0.05,
+      bottomSpace: 0.05,
+      minContentHeight: null,
+      minContentDescent: null,
+      height: null,
+      descent: null,
+      inSize: true,
+    };
     if (!(symbolString == null
           && spaceToContent == null
           && topSpaceToContent == null
@@ -1070,53 +1080,25 @@ export class EquationFunctions {
         minContentDescent, height, descent,
       } = optionsOrContent);
     }
+    const optionsIn = {
+      space,
+      topSpace,
+      bottomSpace,
+      minContentHeight,
+      minContentDescent,
+      height,
+      descent,
+      inSize,
+    };
+    const options = joinObjects({}, defaultOptions, optionsIn);
     let symbolToUse = null;
     if (symbol != null) {                                    // $FlowFixMe
       symbolToUse = getDiagramElement(this.elements, symbol);
     }
-    let spaceToUse;
-    if (space != null) {
-      spaceToUse = space;
-    }
-    let topSpaceToUse;
-    if (topSpace != null) {
-      topSpaceToUse = topSpace;
-    }
-    let bottomSpaceToUse;
-    if (bottomSpace != null) {
-      bottomSpaceToUse = bottomSpace;
-    }
-    let minHeightToUse;
-    if (minContentHeight != null) {
-      minHeightToUse = minContentHeight;
-    }
-    let minDescentToUse;
-    if (minContentDescent != null) {
-      minDescentToUse = minContentDescent;
-    }
-    let heightToUse;
-    if (height != null) {
-      heightToUse = height;
-    }
-    let descentToUse;
-    if (descent != null) {
-      descentToUse = descent;
-    }
-    let inSizeToUse;
-    if (inSize != null) {
-      inSizeToUse = inSize;
-    }
     return new SimpleIntegral(                                // $FlowFixMe
       this.contentToElement(content),
-      symbolToUse,                                         // $FlowFixMe
-      spaceToUse,                                          // $FlowFixMe
-      topSpaceToUse,                                       // $FlowFixMe
-      bottomSpaceToUse,                                    // $FlowFixMe
-      minHeightToUse,                                      // $FlowFixMe
-      minDescentToUse,                                     // $FlowFixMe
-      heightToUse,                                         // $FlowFixMe
-      descentToUse,                                        // $FlowFixMe
-      inSizeToUse,
+      symbolToUse,
+      options,
     );
   }
 
