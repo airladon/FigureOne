@@ -16,6 +16,7 @@ import AngleBracket from './Symbols/AngleBracket';
 // import SquareBracketNew from './Symbols/SquareBracketNew';
 import Bar from './Symbols/Bar';
 import Sum from './Symbols/Sum';
+import Product from './Symbols/Product';
 import SimpleIntegral from './Symbols/SimpleIntegral';
 // import BracketNew from './Symbols/BracketNew';
 // import BraceNew from './Symbols/BraceNew';
@@ -94,6 +95,9 @@ export default class EquationSymbols {
     }
     if (name === 'sum') {
       return this.sum(options);
+    }
+    if (name === 'prod') {
+      return this.product(options);
     }
     return null;
   }
@@ -177,6 +181,33 @@ export default class EquationSymbols {
     const optionsToUse = joinObjects(defaultOptions, options);
 
     return (new Sum(
+      this.shapes.webgl,
+      optionsToUse.color,
+      new Transform('brace').scale(1, 1).translate(0, 0),
+      this.shapes.limits,
+      optionsToUse.staticSize,
+      {
+        lineWidth: optionsToUse.lineWidth,
+        sides: optionsToUse.sides,
+      },
+    )).symbol;
+  }
+
+  product(options: {
+    color?: Array<number>,
+    lineWidth?: number,
+    sides?: number,
+    staticSize?: boolean,
+  }) {
+    const defaultOptions = {
+      color: this.defaultColor,
+      lineWidth: null,
+      sides: 5,
+      staticSize: true,
+    };
+    const optionsToUse = joinObjects(defaultOptions, options);
+
+    return (new Product(
       this.shapes.webgl,
       optionsToUse.color,
       new Transform('brace').scale(1, 1).translate(0, 0),
