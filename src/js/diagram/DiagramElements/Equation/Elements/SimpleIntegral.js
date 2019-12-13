@@ -54,6 +54,7 @@ export default class SimpleIntegral extends BaseEquationFunction {
       totHeight = height;
     }
     this.glyphHeights[0] = totHeight;
+    this.glyphWidths[0] = totHeight * 0.5;
 
     let glyphLocation = new Point(
       loc.x,
@@ -62,9 +63,9 @@ export default class SimpleIntegral extends BaseEquationFunction {
     if (glyph != null) {
       if (inSize === false) {
         glyphLocation = new Point(
-          loc.x - space * scale - glyph.custom.getWidth(
-            glyph.custom.type, glyph.custom.options, totHeight,
-          ),
+          loc.x - space * scale
+          // - glyph.custom.getWidth(glyph.custom.type, glyph.custom.options, totHeight),
+          - this.glyphWidths[0],
           loc.y - glyphDescent,
         );
       }
@@ -78,9 +79,10 @@ export default class SimpleIntegral extends BaseEquationFunction {
         glyphLocation.y,
       );
       this.glyphLocations[0] = glyphLocation;
-      glyphBounds.width = glyph.custom.getWidth(
-        glyph.custom.type, glyph.custom.options, totHeight,
-      );
+      // glyphBounds.width = glyph.custom.getWidth(
+      //   glyph.custom.type, glyph.custom.options, totHeight,
+      // );
+      [glyphBounds.width] = this.glyphWidths;
       glyphBounds.height = totHeight;
       glyphBounds.ascent = totHeight - glyphDescent;
       glyphBounds.descent = glyphDescent;
