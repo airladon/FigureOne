@@ -1,7 +1,7 @@
 
 // @flow
 import {
-  Point, Line,
+  Point, Line, quadBezierPoints,
 } from '../../../../tools/g2';
 import Symbol from './Symbol';
 
@@ -71,38 +71,21 @@ export default class Sum extends Symbol {
   //                   |                  w                   |
   //                   |<------------------------------------>|
   //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
 
-  // eslint-disable-next-line class-methods-use-this
-  bezierPoints(p0, p1, p2, sides) {
-    const step = 1 / sides;
-    if (sides === 0 || sides === 1 || sides === 2) {
-      return [p0, p1, p2];
-    }
-    const points = [];
-    for (let i = 0; i < sides + 1; i += 1) {
-      const t = 0 + i * step;
-      points.push(new Point(
-        (1 - t) ** 2 * p0.x + 2 * (1 - t) * t * p1.x + t * t * p2.x,
-        (1 - t) ** 2 * p0.y + 2 * (1 - t) * t * p1.y + t * t * p2.y,
-      ));
-    }
-    return points;
-  }
-
+  // Linewidths that look good:
+  // height = 0.2, linewWidth = width / 20
+  // height = 0.6, linewWidth = width / 30
+  // height = 1, linewWidth = width / 40
+  // height = 1.4, linewWidth = width / 50
+  // height = 1.8, linewWidth = width / 60
+  // Therefore default lineWidth =  width / (25 * height + 15)
   // eslint-disable-next-line class-methods-use-this
   getPoints() {
     return (options: Object, width: number, height: number) => {
       const { lineWidth, sides } = options;
       let lineWidthToUse = lineWidth;
       if (lineWidth == null) {
-        lineWidthToUse = width / 25;
+        lineWidthToUse = width / (25 * height + 15);
       }
       const bottomTipAngle = Math.PI / 2 * 0.9;
       const topTipAngle = Math.PI / 2 * 0.95;
@@ -153,7 +136,7 @@ export default class Sum extends Symbol {
       const p30 = p1;
       const p31 = p3;
       const p32 = new Point(p31.x - (cBottom - thick3), thick3);
-      const bottomCurve = this.bezierPoints(p30, p31, p32, sides);
+      const bottomCurve = quadBezierPoints(p30, p31, p32, sides);
       const bottomCurvePairs = [];
       bottomCurve.forEach((p) => {
         bottomCurvePairs.push(p2);
@@ -163,7 +146,7 @@ export default class Sum extends Symbol {
       const p111 = p11;
       const p110 = new Point(p111.x - cTop + thick2, height - thick2);
       const p112 = p13;
-      const topCurve = this.bezierPoints(p110, p111, p112, sides);
+      const topCurve = quadBezierPoints(p110, p111, p112, sides);
       const topCurvePairs = [];
       topCurve.forEach((p) => {
         topCurvePairs.push(p10);
