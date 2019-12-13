@@ -34,7 +34,7 @@ export default class BaseEquationFunction extends Elements {
     } else {
       glyphElements.push(glyph !== null ? new Element(glyph) : null);
     }
-    const glyphs = [];
+    let glyphs = [];
     if (Array.isArray(glyph)) {
       glyphs = glyph;
     } else {
@@ -54,7 +54,6 @@ export default class BaseEquationFunction extends Elements {
     this.glyphWidths = glyphElements.map(() => 1);
     this.glyphHeights = glyphElements.map(() => 1);
     this.options = options;
-    // this.inSize = inSize;
   }
 
   _dup(namedCollection?: Object) {
@@ -66,7 +65,7 @@ export default class BaseEquationFunction extends Elements {
     if (namedCollection) {
       const newGlyphs = [];
       this.glyphs.forEach((g) => {
-        if (g != null) {
+        if (g != null) {        // $FlowFixMe
           newGlyphs.push(namedCollection[g.name]);
         } else {
           newGlyphs.push(g);
@@ -77,7 +76,6 @@ export default class BaseEquationFunction extends Elements {
     const copy = new this.constructor(
       copyContent,
       glyphs,
-      // this.inSize,
       this.options,
     );
     duplicateFromTo(
