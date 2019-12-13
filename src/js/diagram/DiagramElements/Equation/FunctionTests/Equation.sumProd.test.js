@@ -29,7 +29,7 @@ describe('Equation Functions - SumPro', () => {
       b: 'b',
       c: 'c',
       s: {
-        symbol: 'sum', lineWidth: 0.01,
+        symbol: 'prod', lineWidth: 0.01,
       },
     };
     functions = {
