@@ -1975,6 +1975,23 @@ function getMoveTime(
 }
 
 
+function quadBezierPoints(p0, p1, p2, sides) {
+  const step = 1 / sides;
+  if (sides === 0 || sides === 1 || sides === 2) {
+    return [p0, p1, p2];
+  }
+  const points = [];
+  for (let i = 0; i < sides + 1; i += 1) {
+    const t = 0 + i * step;
+    points.push(new Point(
+      (1 - t) ** 2 * p0.x + 2 * (1 - t) * t * p1.x + t * t * p2.x,
+      (1 - t) ** 2 * p0.y + 2 * (1 - t) * t * p1.y + t * t * p2.y,
+    ));
+  }
+  return points;
+}
+
+
 export {
   point,
   Point,
@@ -2009,4 +2026,5 @@ export {
   clipAngle,
   spaceToSpaceScale,
   getPoint,
+  quadBezierPoints,
 };
