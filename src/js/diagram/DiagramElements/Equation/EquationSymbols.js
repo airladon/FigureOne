@@ -18,6 +18,7 @@ import Bar from './Symbols/Bar';
 import Sum from './Symbols/Sum';
 import Product from './Symbols/Product';
 import SimpleIntegral from './Symbols/SimpleIntegral';
+import IntegralNew from './Symbols/IntegralNew';
 // import BracketNew from './Symbols/BracketNew';
 // import BraceNew from './Symbols/BraceNew';
 
@@ -98,6 +99,9 @@ export default class EquationSymbols {
     }
     if (name === 'prod') {
       return this.product(options);
+    }
+    if (name === 'int') {
+      return this.integralNew(options);
     }
     return null;
   }
@@ -217,6 +221,47 @@ export default class EquationSymbols {
         lineWidth: optionsToUse.lineWidth,
         sides: optionsToUse.sides,
       },
+    )).symbol;
+  }
+
+  integralNew(options: {
+    color?: Array<number>,
+    lineWidth?: number,
+    sides?: number,
+    width?: ?number,
+    tipWidth?: number,
+    percentage?: number,
+    staticSize?: boolean,
+    serif?: boolean,
+  }) {
+    const defaultOptions = {
+      color: this.defaultColor,
+      lineWidth: null,
+      width: null,
+      tipWidth: null,
+      percentage: 0.95,
+      sides: 5,
+      staticSize: true,
+      radius: 0.03,
+      serif: true,
+    };
+    const optionsToUse = joinObjects(defaultOptions, options);
+
+    return (new IntegralNew(
+      this.shapes.webgl,
+      optionsToUse.color,
+      new Transform('brace').scale(1, 1).translate(0, 0),
+      this.shapes.limits,
+      optionsToUse.staticSize,
+      optionsToUse,
+      // {
+      //   lineWidth: optionsToUse.lineWidth,
+      //   minLineWidth: optionsToUse.minLineWidth,
+      //   sides: optionsToUse.sides,
+      //   width: optionsToUse.width,
+      //   percentage: optionsToUse.percentage,
+      //   sigma: optionsToUse.sigma,
+      // },
     )).symbol;
   }
 
