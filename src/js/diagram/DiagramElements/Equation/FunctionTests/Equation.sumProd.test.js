@@ -29,7 +29,7 @@ describe('Equation Functions - SumPro', () => {
       b: 'b',
       c: 'c',
       s: {
-        symbol: 'int', lineWidth: 0.01,
+        symbol: 'int', lineWidth: 0.01, draw: 'static', staticHeight: 0.5,
       },
     };
     functions = {
@@ -54,6 +54,8 @@ describe('Equation Functions - SumPro', () => {
     // const elems = [eqn._a, eqn._s];
     eqn.showForm('0');
     diagram.setFirstTransform();
+    console.log(eqn._s.getScale())
+    console.log(eqn._s.getTransform())
     // console.log(eqn._a.getBoundingRect('diagram'))
     // console.log(eqn._s.getBoundingRect('diagram'));
     // console.log(eqn._b.getBoundingRect('diagram'));

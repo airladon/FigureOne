@@ -230,8 +230,9 @@ export default class EquationSymbols {
     sides?: number,
     width?: ?number,
     tipWidth?: number,
-    percentage?: number,
-    staticSize?: boolean,
+    // percentage?: number,
+    draw?: 'static' | 'dynamic',
+    staticHeight?: number | 'first',
     serif?: boolean,
   }) {
     const defaultOptions = {
@@ -241,9 +242,12 @@ export default class EquationSymbols {
       tipWidth: null,
       percentage: 0.95,
       sides: 5,
-      staticSize: true,
+      // staticSize: 'first',
       radius: 0.03,
       serif: true,
+      staticHeight: 'first',
+      draw: 'static',
+      staticWidth: null,          // not definable by user
     };
     const optionsToUse = joinObjects(defaultOptions, options);
 
@@ -252,7 +256,7 @@ export default class EquationSymbols {
       optionsToUse.color,
       new Transform('brace').scale(1, 1).translate(0, 0),
       this.shapes.limits,
-      optionsToUse.staticSize,
+      // optionsToUse.staticSize,
       optionsToUse,
       // {
       //   lineWidth: optionsToUse.lineWidth,

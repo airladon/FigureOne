@@ -3,9 +3,9 @@
 import {
   Point,
 } from '../../../../tools/g2';
-import {
-  joinObjects,
-} from '../../../../tools/tools';
+// import {
+//   joinObjects,
+// } from '../../../../tools/tools';
 import {
   range,
 } from '../../../../tools/math';
@@ -20,33 +20,22 @@ export default class IntegralNew extends Symbol {
 
   // eslint-disable-next-line class-methods-use-this
   getWidth() {
-    return (type: 'static' | 'dynamic', options: Object, height: number) => {
-      // The width should be 7 times the thick2 linewidth;
-      // const { lineWidth } = options;
-      // let lineWidthToUse = lineWidth;
-      // if (lineWidth == null) {
-      //   lineWidthToUse = height * 0.93 / (25 * height + 15);
-      // }
-      // const width = lineWidthToUse * 7 * 3;
-      // if (type === 'static') {
-      //   return width * height;
-      // }
-      // return width;
-      let { width } = options;
-      ({ width } = this.getDefaultValues(height, width, options));
-      // const { width } = options;
-      // let widthToUse = width;
-      // if (widthToUse == null) {
-      //   widthToUse = height * 0.2;
-      // }
-      if (options.type === 'static') {
-        return width * height;
+    return (options: Object, height: number) => {
+      let width;
+      if (options.draw === 'static') {
+        let { staticHeight } = options;
+        if (typeof staticHeight !== 'number') {
+          staticHeight = height;
+        }
+        ({ width } = this.getDefaultValues(staticHeight, null, options));
+        return width / staticHeight * height;
       }
+      ({ width } = options);
+      ({ width } = this.getDefaultValues(height, width, options));
       return width;
     };
   }
 
-  //                                  
   //     --------------------------------------------------   0000000
   //     A                                              000000011111111
   //     |                                         0000000   111111111111
@@ -124,16 +113,15 @@ export default class IntegralNew extends Symbol {
   //
   // eslint-disable-next-line class-methods-use-this
   getPoints() {
-    return (options: Object, width: number, height: number) => {
+    return (options: Object, widthIn: number, height: number) => {
       const {
         sides, serif, // lineWidth, tipWidth,
       } = options;
-      const { lineWidth, tipWidth } = this.getDefaultValues(
+      const { lineWidth, width, tipWidth } = this.getDefaultValues(
         height,
-        width,
+        widthIn,
         options,
       );
-
 
       const percentage = 0.99999999999;
       const h = height;

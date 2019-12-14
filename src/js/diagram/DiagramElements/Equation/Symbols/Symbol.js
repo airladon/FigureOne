@@ -20,7 +20,7 @@ export default class Symbol {
     color: Array<number>,
     transformOrLocation: Transform | Point,
     diagramLimits: Rect,
-    staticSize: ?boolean,
+    // staticSize: ?boolean,
     symbolOptions: Object,
   ) {
     const getPoints = this.getPoints();
@@ -30,9 +30,9 @@ export default class Symbol {
 
     const vertexObject = new VertexSymbol(webgl, triangles);
     // const widthFromheight = getWidth('static', symbolOptions, 1);
-    const [points, width, height] = getPoints(symbolOptions, 1, 1);
     // const [points, width, height] = getPoints(symbolOptions, 1, 1);
-    vertexObject.updatePoints(points, width, height, true);
+    // const [points, width, height] = getPoints(symbolOptions, 1, 1);
+    // vertexObject.updatePoints(points, width, height, true);
 
     let initialT;
     if (transformOrLocation instanceof Transform) {
@@ -47,8 +47,20 @@ export default class Symbol {
     symbol.custom.getWidth = getWidth;
     symbol.custom.getHeight = getHeight;
 
-    if (staticSize) {
-      symbol.custom.type = 'static';
+    if (symbol.custom.options.draw === 'static') {
+      // symbol.custom.type = 'static';
+      symbol.getTransform = () => {
+        const t = symbol.transform._dup();
+        const s = t.s();
+
+        if (s != null) {
+          t.updateScale(
+            s.x / symbol.custom.options.staticWidth,
+            s.y / symbol.custom.options.staticHeight,
+          );
+        }
+        return t;
+      };
     } else {
       symbol.custom.scale = new Point(1, 1);
       symbol.internalSetTransformCallback = () => {
@@ -70,11 +82,34 @@ export default class Symbol {
         t.updateScale(1, 1);
         return t;
       };
-      symbol.custom.type = 'dynamic';
+      // symbol.custom.type = 'dynamic';
     }
 
     // eslint-disable-next-line max-len
     symbol.custom.setSize = (location: Point, widthIn: number, heightIn: number) => {
+      if (
+        symbol.custom.options.draw === 'static'
+        && symbol.drawingObject.points.length === 0
+      ) {
+        let points;
+        let width;
+        let height;
+        if (
+          symbol.custom.options.staticHeight === 'first'
+          || symbol.custom.options.staticWidth === 'first'
+        ) {
+          ([points, width, height] = getPoints(symbolOptions, widthIn, heightIn));
+        } else if (symbol.custom.options.staticHeight != null || symbol.custom.options.staticWidth != null) {
+          ([points, width, height] = getPoints(
+            symbolOptions,
+            symbol.custom.options.staticWidth,
+            symbol.custom.options.staticHeight,
+          ));
+        }
+        symbol.drawingObject.updatePoints(points, width, height);
+        symbol.custom.options.staticHeight = height;
+        symbol.custom.options.staticWidth = width;
+      }
       const t = symbol.transform._dup();
       t.updateScale(widthIn, heightIn);
       t.updateTranslation(location.x, location.y);
