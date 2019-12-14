@@ -1,15 +1,18 @@
 
 // @flow
 import {
-  Point, quadBezierPoints,
+  Point,
 } from '../../../../tools/g2';
+import {
+  joinObjects,
+} from '../../../../tools/tools';
 import {
   range,
 } from '../../../../tools/math';
 import Symbol from './Symbol';
 
 
-export default class Product extends Symbol {
+export default class IntegralNew extends Symbol {
   // eslint-disable-next-line class-methods-use-this
   getTriangles() {
     return 'strip';
@@ -29,15 +32,17 @@ export default class Product extends Symbol {
       //   return width * height;
       // }
       // return width;
-      const { width } = options;
-      let widthToUse = width;
-      if (widthToUse == null) {
-        widthToUse = height * 0.5;
-      }
+      let { width } = options;
+      ({ width } = this.getDefaultValues(height, width, options));
+      // const { width } = options;
+      // let widthToUse = width;
+      // if (widthToUse == null) {
+      //   widthToUse = height * 0.2;
+      // }
       if (options.type === 'static') {
-        return widthToUse * height;
+        return width * height;
       }
-      return widthToUse;
+      return width;
     };
   }
 
@@ -51,13 +56,13 @@ export default class Product extends Symbol {
   //     |                                   000000000         11111111
   //     |                                  000000000
   //     |                                 0000000000
-  //     |             gradient = k        000000000
+  //     |    S curve gradient = k         000000000
   //     |                                0000000000
   //     |                                0000000000
   //     |                               00000000000
   //     |                              00000000000
   //     |                              000000000000
-  //     |                             000000000000      a
+  //     |                             000000000000      lineWidth
   //   h |                     ------->000000000000<----------
   //     |                             000000000000
   //     |                             000000000000
@@ -77,42 +82,84 @@ export default class Product extends Symbol {
   //     V      111111110000000
   //     -------  0000000
 
-  // S Curve thickened with a Guassian Curve
+  // Integral line is generated from a sigmoid function (S-curve) that is
+  // thickened more in middle than on ends (square of cosine of normalized
+  // height)
   //
-  // S Curve:            h
-  //         f(x) = -----------
+  // S (sigmoid) Curve:
+  //                    h
+  //         s(x) = -----------            (1)
   //                       -kx
   //                  1 + e
   //
-  // Normal Distribution:
+  // It's derivative is:
   //
-  //                    1           -1/2((x - u) / s)^2
-  //       f(x) = --------------- e
-  //                s*sqrt(2π)
+  //        ds
+  //       ----  =  h k s (1 - s)          (2)
+  //        dx
   //
-  // Where s is sigma (standard deviation) and u is mu (mean).
+  // The angle theta of the curve at some given x can is then:
+  //
+  //     theta = atan(ds/dx)               (3)
+  //
+  //
+  // If you know s, x and want to find k, then can rearrange the above to:
+  //
+  //      k = -ln((h / s) - 1) / x         (4)
+  //
+  // Procedure:
+  //    - Find gradient where s = 0.999999 of the height and x is w / 2
+  //    - Make an xRange from w / 2 to w / 2 (with buffer for serif)
+  //    - Go through all x and:
+  //        - Find y from (1)
+  //        - Find the derivative at x using (2) and theta using (3)
+  //        - Find the left and right sides of the line using theta + PI / 2
+  //          and add more thickness in the middle
+  //
+  //    - Find serifs by:
+  //        - Go to end outside point and find its theta
+  //        - Center of serif is then at vector from end point to
+  //          theta + π/2 with magnitude of serif radius
+  //        - Draw circle at serif
+  //
+  // eslint-disable-next-line class-methods-use-this
   getPoints() {
-    // $FlowFixMe
     return (options: Object, width: number, height: number) => {
-      const { lineWidth, sides, percentage, tipWidth, serif } = options;
+      const {
+        sides, serif, // lineWidth, tipWidth,
+      } = options;
+      const { lineWidth, tipWidth } = this.getDefaultValues(
+        height,
+        width,
+        options,
+      );
 
-      const L = height;
-      const xArray = range(-width / 2, width / 2, width / sides);
+
+      const percentage = 0.99999999999;
+      const h = height;
+      const serifRadius = lineWidth * 0.7;
+      let widthWithoutSerifs = width;
+      if (serif) {
+        widthWithoutSerifs = width - serifRadius * 2;
+      }
+      const xArray = range(
+        -widthWithoutSerifs / 2,
+        widthWithoutSerifs / 2,
+        widthWithoutSerifs / sides,
+      );
       const targetY = percentage * height;
       const k = -Math.log(height / targetY - 1) / width / 2;
 
-      // leftPoints = [];
-      // rightPoints = [];
-      // centerPoints = [];
-      let bottomTheta;
+      let bottomTheta = 0;
       const linePoints = [];
       xArray.forEach((x, index) => {
         const sigmoid = 1 / (1 + Math.exp(-k * x));
-        const derivative = L * k * sigmoid * (1 - sigmoid);
+        const derivative = h * k * sigmoid * (1 - sigmoid);
         const theta = Math.atan(derivative);
-        // const a = lineWidth * Math.sin(theta) / 2 + lineWidth / 2;
-        const y = sigmoid * L;
-        const a = (lineWidth / 2 - tipWidth / 2) * (Math.cos((y - height / 2) / (height) * Math.PI)) ** 2 + tipWidth / 2;
+        const y = sigmoid * h;
+        const a = (lineWidth / 2 - tipWidth / 2)
+                 * (Math.cos((y - height / 2) / height * Math.PI)) ** 2
+                 + tipWidth / 2;
         const xDelta = a * Math.cos(theta + Math.PI / 2);
         const yDelta = a * Math.sin(theta + Math.PI / 2);
         linePoints.push(new Point(x + xDelta + width / 2, y + yDelta));
@@ -125,7 +172,6 @@ export default class Product extends Symbol {
       if (serif === false) {
         return [linePoints, width, height];
       }
-      const serifRadius = lineWidth * 0.7;
       const serifPoints = 10;
 
       const bottomCenter = new Point(
@@ -140,8 +186,8 @@ export default class Product extends Symbol {
 
       const bottomSerifPoints = [];
       const topSerifPoints = [];
-      const angleDelta = Math.PI * 2 / Math.max(sides, 3);
-      for (let i = 0; i < sides + 1; i += 1) {
+      const angleDelta = Math.PI * 2 / Math.max(serifPoints, 3);
+      for (let i = 0; i < serifPoints + 1; i += 1) {
         bottomSerifPoints.push(linePoints[1]._dup());
         bottomSerifPoints.push(new Point(
           bottomCenter.x + serifRadius * Math.cos(angleDelta * i),
@@ -151,133 +197,57 @@ export default class Product extends Symbol {
         topSerifPoints.push(new Point(
           topCenter.x + serifRadius * Math.cos(angleDelta * i),
           topCenter.y + serifRadius * Math.sin(angleDelta * i),
-        ))
+        ));
       }
       const points = [
         ...bottomSerifPoints,
         ...linePoints,
         ...topSerifPoints,
       ];
-      // console.log(points)
       return [points, width, height];
     };
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getPointsOld() {
-    return (options: Object, width: number, height: number) => {
-      const { lineWidth, sides, percentage, minLineWidth, sigma, radius, serif } = options;
-      let lineWidthToUse = lineWidth;
-      if (lineWidth == null) {
-        // lineWidthToUse = width / (25 * height + 15);
-        lineWidthToUse = width / 21;
-      }
-      let minLineWidthToUse = minLineWidth;
-      if (minLineWidth == null) {
-        minLineWidthToUse = lineWidthToUse / 2;
-      }
-
-      const targetY = percentage * height;
-      const k = -Math.log(height / targetY - 1) / width / 2;
-      // const k = 40;
-      const L = height;
-      const s = sigma || 0.07;
-      const a = lineWidthToUse / 2 - minLineWidthToUse / 2;
-      const bias = minLineWidthToUse / 2;
-      const xArray = range(-width / 2, width / 2, width / sides);
-      const yArray = xArray.map(x => L / (1 + Math.exp(-k * x)));
-      const normDist = xArray.map(x => a / Math.sqrt(2 * Math.PI * s ** 2)
-                                      * Math.exp(-(x ** 2) / (2 * s ** 2)));
-      const xLeft = xArray.map((x, index) => x - normDist[index] - bias);
-      const xRight = xArray.map((x, index) => x + normDist[index] + bias);
-      
-      // calculate upper serif properites
-      const serifRadius = radius;
-      const serifPoints = 30;
-      const num = xLeft.length;
-      const upperSerifPoint = new Point(xLeft[num - 1], yArray[num - 1]);
-      const gradient = k * yArray[num - 1] * (L - yArray[num - 1]);
-      const theta = Math.atan(gradient);
-      const alpha = Math.PI / 2 - theta;
-
-      const center = upperSerifPoint.add(new Point(
-        serifRadius * Math.cos(alpha),
-        -serifRadius * Math.sin(alpha),
-      ));
-      const dAngle = Math.PI * 2 / (serifPoints - 1);
-      const startAngle = Math.PI / 2 + theta;
-
-      // calculate lower serif properties
-      const lowerSerifCenter = new Point(-center.x, L - center.y);
-      const lowerSerifStartAngle = -alpha;
-
-      // lower serif
-      const lowSerifPoints = [];
-      if (serif) {
-        for (let i = 0; i < serifPoints; i += 1) {
-          lowSerifPoints.push(new Point(lowerSerifCenter.x + width / 2, lowerSerifCenter.y));
-          const angle = lowerSerifStartAngle + dAngle * i;
-          const perimeterPoint = new Point(
-            lowerSerifCenter.x + serifRadius * Math.cos(angle),
-            lowerSerifCenter.y + serifRadius * Math.sin(angle),
-          );
-          lowSerifPoints.push(new Point(perimeterPoint.x + width / 2, perimeterPoint.y));
-        }
-      }
-
-      // yArray.map((y, index) => {
-      //   const pLeft = new Point(xLeft[index], y);
-      //   const pRight = new Point(xRight[index], y);
-
-      //   this.points.push(pRight.x);
-      //   this.points.push(pRight.y);
-      //   this.points.push(pLeft.x);
-      //   this.points.push(pLeft.y);
-      //   borderLeft.push(pLeft._dup());
-      //   borderRight.push(pRight._dup());
-      //   return undefined;
-      // });
-
-      // upper serif
-      const upperSerifPoints = [];
-      if (serif) {
-        for (let i = 0; i < serifPoints; i += 1) {
-          upperSerifPoints.push(new Point(center.x + width / 2, center.y));
-          const angle = startAngle + dAngle * i;
-          const perimeterPoint = new Point(
-            center.x + serifRadius * Math.cos(angle),
-            center.y + serifRadius * Math.sin(angle),
-          );
-          upperSerifPoints.push(new Point(perimeterPoint.x + width / 2, perimeterPoint.y));
-        }
-      }
-
-      let points = lowSerifPoints;
-      yArray.forEach((y, index) => {
-        points.push(new Point(xLeft[index] + width / 2, y));
-        points.push(new Point(xRight[index] + width / 2, y));
-      });
-      points = [...points, ...upperSerifPoints];
-      return [points, width, height];
+  getDefaultValues(height: number, width: ?number, options: {
+      lineWidth?: number,
+      tipWidth?: number,
+    }) {
+    // at 2:
+    //    lw = 0.05 (40)
+    //     w = 0.4 (5)
+    //     e = 0.01 (200)
+    //
+    // at 1:
+    //    lw = 0.03 (33)
+    //     w = 0.25 (4)
+    //     e = 0.01 (100)
+    //
+    // at 0.5:
+    //    lw = 0.02 (25)
+    //     w = 0.15 (3.3)
+    //     e = 0.008 (63)
+    //
+    // at 0.3:
+    //    lw = 0.017 (17)
+    //     w = 0.15 (2)
+    //     e = 0.006 (50)
+    //
+    // Using https://mycurvefit.com and add 0 to each to keep values under 0.3 positive
+    const out = {
+      lineWidth: 607.73 + (0.0004220802 - 607.73) / (1 + (height / 5368595) ** 0.6370402),
+      width: 12277.16 + (0.003737719 - 12277.16) / (1 + (height / 36507180) ** 0.6193363),
+      tipWidth: 0.01033455 + (0.000004751934 - 0.01033455) / (1 + (height / 0.2588074) ** 2.024942),
     };
+    if (width != null) {
+      out.width = width;
+    }
+    if (options.lineWidth != null) {
+      out.lineWidth = options.lineWidth;
+    }
+    if (options.tipWidth != null) {
+      out.tipWidth = options.tipWidth;
+    }
+    return out;
   }
 }
-
-  //                                                     0
-  //                                               0
-  //                                          0
-  //                                        0
-  //                                       0
-  //                                      0
-  //                                      0
-  //                                     0
-  //                                     0
-  //                                    0
-  //                                    0
-  //                                   0
-  //                                   0
-  //                                  0
-  //                                  0
-  //                                 0
-  //                                 0
-  // 
