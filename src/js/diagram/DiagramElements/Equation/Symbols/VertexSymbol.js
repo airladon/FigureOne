@@ -12,7 +12,7 @@ class VertexSymbol extends VertexObject {
     height: number,
     initialize: boolean = false,
   ) {
-    let t;
+    // let t;
     this.points = [];
     points.forEach((p) => {
       this.points.push(p.x);
@@ -45,6 +45,7 @@ class VertexSymbol extends VertexObject {
     } else {
       this.glPrimitive = this.gl[0].TRIANGLES;
     }
+    this.points = [];
   }
 }
 export default VertexSymbol;
