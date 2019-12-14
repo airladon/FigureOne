@@ -29,7 +29,9 @@ export default class Symbol {
     const triangles = this.getTriangles();
 
     const vertexObject = new VertexSymbol(webgl, triangles);
+    // const widthFromheight = getWidth('static', symbolOptions, 1);
     const [points, width, height] = getPoints(symbolOptions, 1, 1);
+    // const [points, width, height] = getPoints(symbolOptions, 1, 1);
     vertexObject.updatePoints(points, width, height, true);
 
     let initialT;

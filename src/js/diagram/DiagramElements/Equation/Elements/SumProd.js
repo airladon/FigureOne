@@ -64,7 +64,7 @@ export default class SumProd extends BaseEquationFunction {
 
     // Find x position and bounds of glyph, from and to content
     this.glyphHeights[0] = glyphBounds.height;
-    console.log(glyphBounds.height);
+    // console.log(glyphBounds.height);
     if (glyph != null) {
       glyphBounds.width = glyph.custom.getWidth(glyph.custom.type, glyph.custom.options, glyphBounds.height);
     } else {
@@ -143,6 +143,6 @@ export default class SumProd extends BaseEquationFunction {
     if (glyph) {
       glyph.custom.setSize(glyphLoc, glyphBounds.width, glyphBounds.height);
     }
-    console.log(this.width, this.ascent, this.descent, this.height)
+    // console.log(this.width, this.ascent, this.descent, this.height)
   }
 }
