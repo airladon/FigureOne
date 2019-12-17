@@ -163,10 +163,7 @@ export default class EquationSymbols {
       optionsToUse.color,
       new Transform('brace').scale(1, 1).translate(0, 0),
       this.shapes.limits,
-      optionsToUse.staticSize,
-      {
-        lineWidth: optionsToUse.lineWidth,
-      },
+      optionsToUse,
     )).symbol;
   }
 
@@ -174,26 +171,25 @@ export default class EquationSymbols {
     color?: Array<number>,
     lineWidth?: number,
     sides?: number,
-    staticSize?: boolean,
+    draw?: 'static' | 'dynamic',
+    staticHeight?: number | 'first',
   }) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
       sides: 5,
-      staticSize: true,
+      staticHeight: 'first',
+      draw: 'static',
+      staticWidth: null,          // not definable by user
     };
     const optionsToUse = joinObjects(defaultOptions, options);
 
     return (new Sum(
       this.shapes.webgl,
       optionsToUse.color,
-      new Transform('brace').scale(1, 1).translate(0, 0),
+      new Transform('sum').scale(1, 1).translate(0, 0),
       this.shapes.limits,
-      optionsToUse.staticSize,
-      {
-        lineWidth: optionsToUse.lineWidth,
-        sides: optionsToUse.sides,
-      },
+      optionsToUse,
     )).symbol;
   }
 
@@ -201,26 +197,25 @@ export default class EquationSymbols {
     color?: Array<number>,
     lineWidth?: number,
     sides?: number,
-    staticSize?: boolean,
+    draw?: 'static' | 'dynamic',
+    staticHeight?: number | 'first',
   }) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
       sides: 5,
-      staticSize: true,
+      staticHeight: 'first',
+      draw: 'static',
+      staticWidth: null,          // not definable by user
     };
     const optionsToUse = joinObjects(defaultOptions, options);
 
     return (new Product(
       this.shapes.webgl,
       optionsToUse.color,
-      new Transform('brace').scale(1, 1).translate(0, 0),
+      new Transform('Sum').scale(1, 1).translate(0, 0),
       this.shapes.limits,
-      optionsToUse.staticSize,
-      {
-        lineWidth: optionsToUse.lineWidth,
-        sides: optionsToUse.sides,
-      },
+      optionsToUse,
     )).symbol;
   }
 
@@ -254,7 +249,7 @@ export default class EquationSymbols {
     return (new IntegralNew(
       this.shapes.webgl,
       optionsToUse.color,
-      new Transform('brace').scale(1, 1).translate(0, 0),
+      new Transform('Integral').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       // optionsToUse.staticSize,
       optionsToUse,

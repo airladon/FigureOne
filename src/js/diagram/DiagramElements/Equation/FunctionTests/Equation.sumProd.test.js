@@ -33,6 +33,61 @@ describe('Equation Functions - SumPro', () => {
       },
     };
     functions = {
+      // single: () => {
+      //   eqn = new EquationNew(diagram.shapes, { color: color1 });
+      //   const e = eqn.eqn.functions;
+      //   const sum = e.sum.bind(e);
+      //   eqn.addElements(elements);
+      //   eqn.addForms({
+      //     // Full Object
+      //     0: {
+      //       sumProd: {
+      //         brac: {
+      //           content: 'a',
+      //           left: 'lb',
+      //           right: 'rb',
+      //           inSize: true,
+      //           insideSpace: 0.1,
+      //           outsideSpace: 0.1,
+      //           topSpace: 0.1,
+      //           bottomSpace: 0.1,
+      //         },
+      //       },
+      //     },
+      //     // Method Object
+      //     1: {
+      //       brac: {
+      //         content: 'a',
+      //         left: 'lb',
+      //         right: 'rb',
+      //         inSize: true,
+      //         insideSpace: 0.1,
+      //         outsideSpace: 0.1,
+      //         topSpace: 0.1,
+      //         bottomSpace: 0.1,
+      //       },
+      //     },
+      //     // Method Array
+      //     2: { brac: ['a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1] },
+      //     // Function with Method Array
+      //     3: e.brac(['a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1]),
+      //     // Function with parameters
+      //     4: e.brac('a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1),
+      //     // Bound Function with parameters
+      //     5: brac('a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1),
+      //     // Bound Function with Object
+      //     6: brac({
+      //       content: 'a',
+      //       left: 'lb',
+      //       right: 'rb',
+      //       inSize: true,
+      //       insideSpace: 0.1,
+      //       outsideSpace: 0.1,
+      //       topSpace: 0.1,
+      //       bottomSpace: 0.1,
+      //     }),
+      //   });
+      // },
       single: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         eqn.addElements(elements);

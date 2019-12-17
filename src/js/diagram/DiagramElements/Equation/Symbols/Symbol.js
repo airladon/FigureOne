@@ -120,20 +120,28 @@ export default class Symbol {
 
   // eslint-disable-next-line class-methods-use-this
   getWidth() {
-    return (type: 'static' | 'dynamic', options: Object, height: number) => {
-      const { width } = options;
-      if (type === 'static') {
-        return height * width;
+    return (options: Object, height: number) => {
+      let width;
+      if (options.draw === 'static') {
+        let { staticHeight } = options;
+        const { staticWidth } = options;
+        if (staticHeight === 'first') {
+          staticHeight = height;
+        }
+        ({ width } = this.getDefaultValues(staticHeight, staticWidth, options));
+        return width / staticHeight * height;
       }
+      ({ width } = options);
+      ({ width } = this.getDefaultValues(height, width, options));
       return width;
     };
   }
 
   // eslint-disable-next-line class-methods-use-this
   getHeight() {
-    return (type: 'static' | 'dynamic', options: Object, width: number) => {
+    return (options: Object, width: number) => {
       const { height } = options;
-      if (type === 'static') {
+      if (options.draw === 'static') {
         return height * width;
       }
       return height;
@@ -156,5 +164,19 @@ export default class Symbol {
 
       return [points, width, height];
     };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getDefaultValues(height: number, width: ?number, options: Object) {
+    const out = {
+      width: height,
+    };
+    if (width != null) {
+      out.width = null;
+    }
+    if (options.width != null) {
+      out.width = options.width;
+    }
+    return out;
   }
 }

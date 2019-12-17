@@ -24,11 +24,22 @@ export default class Sum extends Symbol {
   // }
 
   // eslint-disable-next-line class-methods-use-this
-  getWidth() {
-    return (type: 'static' | 'dynamic', options: Object, height: number) => {
-      return height * 0.88;
-    };
-  }
+  // getWidth() {
+  //   return (options: Object, height: number) => {
+  //     let width;
+  //     if (options.draw === 'static') {
+  //       let { staticHeight } = options;
+  //       if (typeof staticHeight !== 'number') {
+  //         staticHeight = height;
+  //       }
+  //       ({ width } = this.getDefaultValues(staticHeight, null, options));
+  //       return width / staticHeight * height;
+  //     }
+  //     ({ width } = options);
+  //     ({ width } = this.getDefaultValues(height, width, options));
+  //     return width;
+  //   };
+  // }
 
 
   //                   8                                    10
@@ -81,25 +92,26 @@ export default class Sum extends Symbol {
   // Therefore default lineWidth =  width / (25 * height + 15)
   // eslint-disable-next-line class-methods-use-this
   getPoints() {
-    return (options: Object, width: number, height: number) => {
-      const { lineWidth, sides } = options;
-      let lineWidthToUse = lineWidth;
-      if (lineWidth == null) {
-        lineWidthToUse = width / (25 * height + 15);
-      }
+    return (options: Object, widthIn: number, height: number) => {
+      const { sides } = options;
+      // let lineWidthToUse = lineWidth;
+      const { lineWidth, width } = this.getDefaultValues(height, widthIn, options);
+      // if (lineWidth == null) {
+      //   lineWidthToUse = width / (25 * height + 15);
+      // }
       const bottomTipAngle = Math.PI / 2 * 0.9;
       const topTipAngle = Math.PI / 2 * 0.95;
       const a = 0.431 * width;
-      const e = height / 2 - lineWidthToUse;
+      const e = height / 2 - lineWidth;
       const cBottom = 0.176 * height;
       const cTop = 0.153 * height;
       const bBottom = cBottom / Math.tan(bottomTipAngle);
       const bTop = cTop / Math.tan(topTipAngle);
 
-      const thick2 = lineWidthToUse;
-      const thick3 = lineWidthToUse * 2;
-      const thick1 = lineWidthToUse * 3;
-      const tipWidth = lineWidthToUse * 0.6;
+      const thick2 = lineWidth;
+      const thick3 = lineWidth * 2;
+      const thick1 = lineWidth * 3;
+      const tipWidth = lineWidth * 0.6;
 
       const lineA = new Line(new Point(0, 0), new Point(a, e));
       const CxOffset = thick2 / Math.sin(lineA.ang);
@@ -168,5 +180,23 @@ export default class Sum extends Symbol {
       ];
       return [points, width, height];
     };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getDefaultValues(height: number, width: ?number, options: {
+      lineWidth?: number,
+      width?: number,
+    }) {
+    const out = {
+      lineWidth: height * 0.88 / (25 * height + 15),
+      width: height * 0.88,
+    };
+    if (options.lineWidth != null) {
+      out.lineWidth = options.lineWidth;
+    }
+    if (options.width != null) {
+      out.width = options.width;
+    }
+    return out;
   }
 }
