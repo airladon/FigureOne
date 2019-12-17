@@ -43,19 +43,21 @@ export default class SumProd extends BaseEquationFunction {
     }
 
     // Find y position and bounds of glyph, from and to content
-    const glyphMidY = loc.y - contentBounds.descent + contentBounds.height / 2
-                      + yOffset * scale - (bottomSpace - topSpace) * scale;
+                      // + yOffset * scale;
 
     glyphBounds.height = contentBounds.height + (bottomSpace + topSpace) * scale;
+    glyphLoc.y = loc.y - contentBounds.descent - bottomSpace * scale + yOffset * scale;
     if (height != null) {
+      const contentMidY = loc.y - contentBounds.descent + contentBounds.height / 2;
       glyphBounds.height = height;
+      glyphLoc.y = contentMidY - height / 2 + yOffset * scale;
     }
-
-    glyphBounds.descent = glyphBounds.height / 2 - (glyphMidY - loc.y);
+    // glyphBounds.descent = glyphBounds.height / 2 - (glyphMidY - loc.y);
+    glyphBounds.descent = loc.y - glyphLoc.y;
     glyphBounds.ascent = glyphBounds.height - glyphBounds.descent;
-    glyphLoc.y = glyphMidY - glyphBounds.height / 2;
+    // glyphLoc.y = glyphMidY - glyphBounds.height / 2;
     fromLoc.y = glyphLoc.y
-              - (fromSpace + fromOffset.y) * scale - fromBounds.ascent;
+              - (fromSpace - fromOffset.y) * scale - fromBounds.ascent;
     toLoc.y = glyphLoc.y + glyphBounds.height
              + (toSpace + toOffset.y) * scale + toBounds.descent;
 

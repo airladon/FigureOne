@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Equation Functions - SumPro Input Forms 1`] = `
+Array [
+  0.7,
+  0,
+  0.228,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - SumPro Input Forms 2`] = `
+Array [
+  0.7,
+  0,
+  0.2,
+  0,
+  0.7,
+  -0.1736,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - SumPro Input Forms 3`] = `
+Array [
+  0.7,
+  0,
+  0,
+  0,
+  0.7,
+  0.1421,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - SumPro Input Forms 4`] = `
+Array [
+  0.18665,
+  0,
+  0.02068,
+  0,
+  0.2121,
+  -0.0756,
+  0,
+  0,
+  1,
+]
+`;
