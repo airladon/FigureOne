@@ -276,7 +276,7 @@ describe('Equation Functions - SumPro', () => {
     let baseC;
     let baseS;
     // let baseSScale;
-    let space;
+    // let space;
     let spaceDelta;
     let height;
     let yOffset;
@@ -290,7 +290,7 @@ describe('Equation Functions - SumPro', () => {
       baseB = eqn._b.getBoundingRect('diagram');
       baseC = eqn._c.getBoundingRect('diagram');
       baseS = eqn._s.getBoundingRect('diagram');
-      space = 0.1;
+      // space = 0.1;
       spaceDelta = 0.09;
       height = 1;
       yOffset = 0.1;
