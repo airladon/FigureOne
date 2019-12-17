@@ -43,10 +43,10 @@ export default class SumProd extends BaseEquationFunction {
     }
 
     // Find y position and bounds of glyph, from and to content
-                      // + yOffset * scale;
-
     glyphBounds.height = contentBounds.height + (bottomSpace + topSpace) * scale;
     glyphLoc.y = loc.y - contentBounds.descent - bottomSpace * scale + yOffset * scale;
+
+    // If height is defined it overwrites topSpace and bottomSpace
     if (height != null) {
       const contentMidY = loc.y - contentBounds.descent + contentBounds.height / 2;
       glyphBounds.height = height;
@@ -78,7 +78,7 @@ export default class SumProd extends BaseEquationFunction {
     const maxWidth = Math.max(glyphBounds.width, fromBounds.width, toBounds.width);
     glyphLoc.x = loc.x + (maxWidth - glyphBounds.width) / 2;
     fromLoc.x = loc.x + (maxWidth - fromBounds.width) / 2 + fromOffset.x;
-    toLoc.x = loc.x + (maxWidth - fromBounds.width) / 2 + toOffset.x;
+    toLoc.x = loc.x + (maxWidth - toBounds.width) / 2 + toOffset.x;
 
     const minLocX = Math.min(toLoc.x, fromLoc.x, glyphLoc.x);
     if (minLocX < loc.x) {
