@@ -1,6 +1,6 @@
-// import {
-//   Point,
-// } from '../../../../tools/g2';
+import {
+  Point,
+} from '../../../../tools/g2';
 import {
   round,
 } from '../../../../tools/math';
@@ -159,6 +159,13 @@ describe('Equation Functions - SumPro', () => {
             },
             scale: 1,
           },
+          inSizeFalse: {
+            content: sumOf(
+              'a', 'b', 'c', 's', false, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0],
+            ),
+            scale: 1,
+          },
           space: {
             content: sumOf(
               'a', 'b', 'c', 's', true, 0.1, 0.01, 0.01, null,
@@ -208,10 +215,52 @@ describe('Equation Functions - SumPro', () => {
             ),
             scale: 1,
           },
-          delta: {
+          scale: {
             content: sumOf(
               'a', 'b', 'c', 's', true, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0],
+              0, 0.5, 1, 1, 0.01, 0.01, [0, 0], [0, 0],
+            ),
+            scale: 1,
+          },
+          fromScale: {
+            content: sumOf(
+              'a', 'b', 'c', 's', true, 0.01, 0.01, 0.01, null,
+              0, 1, 0.5, 1, 0.01, 0.01, [0, 0], [0, 0],
+            ),
+            scale: 1,
+          },
+          toScale: {
+            content: sumOf(
+              'a', 'b', 'c', 's', true, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 0.5, 0.01, 0.01, [0, 0], [0, 0],
+            ),
+            scale: 1,
+          },
+          fromSpace: {
+            content: sumOf(
+              'a', 'b', 'c', 's', true, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 1, 0.1, 0.01, [0, 0], [0, 0],
+            ),
+            scale: 1,
+          },
+          toSpace: {
+            content: sumOf(
+              'a', 'b', 'c', 's', true, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 1, 0.01, 0.1, [0, 0], [0, 0],
+            ),
+            scale: 1,
+          },
+          fromOffset: {
+            content: sumOf(
+              'a', 'b', 'c', 's', true, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 1, 0.01, 0.01, [-0.3, -0.2], [0, 0],
+            ),
+            scale: 1,
+          },
+          toOffset: {
+            content: sumOf(
+              'a', 'b', 'c', 's', true, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0.3, 0.2],
             ),
             scale: 1,
           },
@@ -226,11 +275,14 @@ describe('Equation Functions - SumPro', () => {
     let baseB;
     let baseC;
     let baseS;
-    let baseSScale;
+    // let baseSScale;
     let space;
     let spaceDelta;
     let height;
     let yOffset;
+    let scale;
+    let initialSpace;
+    let offset;
     beforeEach(() => {
       functions.parameterSteps();
       eqn.showForm('base');
@@ -242,6 +294,9 @@ describe('Equation Functions - SumPro', () => {
       spaceDelta = 0.09;
       height = 1;
       yOffset = 0.1;
+      scale = 0.5;
+      initialSpace = 0.01;
+      offset = new Point(0.3, 0.2);
       // baseSScale = eqn._s.custom.scale._dup();
     });
     // Note, the letter a has the following bounds:
@@ -303,6 +358,90 @@ describe('Equation Functions - SumPro', () => {
       expect(round(newS.bottom)).toBe(round(baseS.bottom - yOffset));
       expect(round(newS.top)).toBe(round(baseS.top - yOffset));
     });
+    test('scale', () => {
+      eqn.showForm('scale');
+      diagram.setFirstTransform();
+      const newS = eqn._s.getBoundingRect('diagram');
+      const newA = eqn._a.getBoundingRect('diagram');
+      expect(round(newS.height)).toBe(round(baseA.height * scale + initialSpace * 2));
+      expect(round(newA.height)).toBe(round(baseA.height * scale));
+      expect(round(newS.bottom)).toBe(round(newA.bottom - initialSpace));
+    });
+    test('fromScale', () => {
+      eqn.showForm('fromScale');
+      diagram.setFirstTransform();
+      const newS = eqn._s.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      expect(round(newS.height)).toBe(round(baseS.height));
+      expect(round(newS.bottom)).toBe(round(baseS.bottom));
+      expect(round(newB.height)).toBe(round(baseB.height * scale));
+      expect(round(newB.top)).toBe(round(baseB.top));
+      expect(round(newB.bottom)).toBe(round(baseB.top - baseB.height * scale));
+    });
+    test('toScale', () => {
+      eqn.showForm('toScale');
+      diagram.setFirstTransform();
+      const newS = eqn._s.getBoundingRect('diagram');
+      const newC = eqn._c.getBoundingRect('diagram');
+      expect(round(newS.height)).toBe(round(baseS.height));
+      expect(round(newS.bottom)).toBe(round(baseS.bottom));
+      expect(round(newC.height)).toBe(round(baseC.height * scale));
+      expect(round(newC.bottom)).toBe(round(baseC.bottom));
+      expect(round(newC.top)).toBe(round(baseC.bottom + baseC.height * scale));
+    });
+    test('fromSpace', () => {
+      eqn.showForm('fromSpace');
+      diagram.setFirstTransform();
+      const newS = eqn._s.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      expect(round(newS.height)).toBe(round(baseS.height));
+      expect(round(newS.bottom)).toBe(round(baseS.bottom));
+      expect(round(newB.height)).toBe(round(baseB.height));
+      expect(round(newB.top)).toBe(round(baseB.top - spaceDelta));
+      expect(round(newB.bottom)).toBe(round(baseB.bottom - spaceDelta));
+    });
+    test('toSpace', () => {
+      eqn.showForm('toSpace');
+      diagram.setFirstTransform();
+      const newS = eqn._s.getBoundingRect('diagram');
+      const newC = eqn._c.getBoundingRect('diagram');
+      expect(round(newS.height)).toBe(round(baseS.height));
+      expect(round(newS.bottom)).toBe(round(baseS.bottom));
+      expect(round(newC.height)).toBe(round(baseC.height));
+      expect(round(newC.bottom)).toBe(round(baseC.bottom + spaceDelta));
+      expect(round(newC.top)).toBe(round(baseC.top + spaceDelta));
+    });
+    test('fromOffset', () => {
+      eqn.showForm('fromOffset');
+      diagram.setFirstTransform();
+      const newS = eqn._s.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      expect(round(newS.height)).toBe(round(baseS.height));
+      expect(round(newS.bottom)).toBe(round(baseS.bottom));
+      expect(round(newB.height)).toBe(round(baseB.height));
+      expect(round(newB.top)).toBe(round(baseB.top - offset.y));
+      expect(round(newB.left)).toBe(round(0));
+      expect(round(newS.left)).toBe(round(offset.x + newB.width / 2 - baseS.width / 2));
+    });
+    test('toOffset', () => {
+      eqn.showForm('toOffset');
+      diagram.setFirstTransform();
+      const newS = eqn._s.getBoundingRect('diagram');
+      const newC = eqn._c.getBoundingRect('diagram');
+      expect(round(newS.height)).toBe(round(baseS.height));
+      expect(round(newS.bottom)).toBe(round(baseS.bottom));
+      expect(round(newS.left)).toBe(round(baseS.left));
+      expect(round(newC.left))
+        .toBe(round(baseS.left + baseS.width / 2 + offset.x - baseC.width / 2));
+      expect(round(newC.top)).toBe(round(baseC.top + offset.y));
+    });
+    test('inSizeFalse', () => {
+      eqn.showForm('inSizeFalse');
+      diagram.setFirstTransform();
+      const newS = eqn._s.getBoundingRect('diagram');
+      const newA = eqn._a.getBoundingRect('diagram');
+      expect(round(newS.left)).toBe(round(newA.left - initialSpace - baseS.width));
+    });
   });
   test('Input Forms', () => {
     functions.inputForms();
@@ -324,16 +463,4 @@ describe('Equation Functions - SumPro', () => {
     expect(round(eqn._c.transform.mat)).toMatchSnapshot();
     expect(round(eqn._s.transform.mat)).toMatchSnapshot();
   });
-  // test('test', () => {
-  //   functions.single();
-  //   // const elems = [eqn._a, eqn._s];
-  //   eqn.showForm('0');
-  //   diagram.setFirstTransform();
-  //   console.log(eqn._s.getScale())
-  //   console.log(eqn._s.getTransform())
-  //   // console.log(eqn._a.getBoundingRect('diagram'))
-  //   // console.log(eqn._s.getBoundingRect('diagram'));
-  //   // console.log(eqn._b.getBoundingRect('diagram'));
-  //   // console.log(eqn._c.getBoundingRect('diagram'));
-  // });
 });
