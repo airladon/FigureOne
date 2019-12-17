@@ -13,21 +13,24 @@ export default class Product extends Symbol {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getWidth() {
-    return (type: 'static' | 'dynamic', options: Object, height: number) => {
-      // The width should be 7 times the thick2 linewidth;
-      const { lineWidth } = options;
-      let lineWidthToUse = lineWidth;
-      if (lineWidth == null) {
-        lineWidthToUse = height * 0.93 / (25 * height + 15);
-      }
-      const width = lineWidthToUse * 7 * 3;
-      if (type === 'static') {
-        return width * height;
-      }
-      return width;
-    };
-  }
+  // getWidth() {
+  //   return (options: Object, height: number) => {
+  //     // The width should be 7 times the thick2 linewidth;
+  //     // const { lineWidth } = options;
+  //     let width;
+  //     if (options.draw === 'static') {
+  //       let { staticHeight } = options;
+  //       if (typeof staticHeight !== 'number') {
+  //         staticHeight = height;
+  //       }
+  //       ({ width } = this.getDefaultValues(staticHeight, null, options));
+  //       return width / staticHeight * height;
+  //     }
+  //     ({ width } = options);
+  //     ({ width } = this.getDefaultValues(height, width, options));
+  //     return width;
+  //   };
+  // }
 
   //                                            w
   //             |<--------------------------------------------------------->|
@@ -95,26 +98,29 @@ export default class Product extends Symbol {
   //                          0 00000000000000000000000000  1
   //                        (0, 0)
 
-  // Linewidths that look good:
-  // height = 0.2, linewWidth = width / 20
-  // height = 0.6, linewWidth = width / 30
-  // height = 1, linewWidth = width / 40
-  // height = 1.4, linewWidth = width / 50
-  // height = 1.8, linewWidth = width / 60
-  // Therefore default lineWidth =  width / (25 * height + 15)
   // eslint-disable-next-line class-methods-use-this
   getPoints() {
-    return (options: Object, width: number, height: number) => {
-      const { lineWidth, sides } = options;
-      let lineWidthToUse = lineWidth;
-      if (lineWidth == null) {
-        // lineWidthToUse = width / (25 * height + 15);
-        lineWidthToUse = width / 21;
+    return (options: Object, widthIn: number, height: number) => {
+      const { serif, sides } = options;
+      const { lineWidth, width } = this.getDefaultValues(
+        height,
+        widthIn,
+        options,
+      );
+      let sidesToUse = sides;
+      if (serif === 'false') {
+        sidesToUse = 2;
       }
+      // const { lineWidth, sides } = options;
+      // let lineWidthToUse = lineWidth;
+      // if (lineWidth == null) {
+      //   // lineWidthToUse = width / (25 * height + 15);
+      //   lineWidthToUse = width / 21;
+      // }
 
-      const thick1 = lineWidthToUse * 1.2;
-      const thick2 = lineWidthToUse * 3;
-      const tipWidth = lineWidthToUse / 2;
+      const thick1 = lineWidth * 1.2;
+      const thick2 = lineWidth * 3;
+      const tipWidth = lineWidth / 2;
       const a = thick2 * 0.9;
 
       const p0 = new Point(0, 0);
@@ -136,8 +142,8 @@ export default class Product extends Symbol {
       const p50 = p3;
       const p51 = p5;
       const p52 = new Point(p5.x, p4.y + a);
-      const p4Curve = quadBezierPoints(p40, p41, p42, sides);
-      const p5Curve = quadBezierPoints(p50, p51, p52, sides);
+      const p4Curve = quadBezierPoints(p40, p41, p42, sidesToUse);
+      const p5Curve = quadBezierPoints(p50, p51, p52, sidesToUse);
       const bottomCurve = [];
       p4Curve.forEach((p, index) => {
         bottomCurve.push(p);
@@ -150,10 +156,10 @@ export default class Product extends Symbol {
       // const p70 = new Point(p7.x, p7.y - a);
       // const p71 = p7;
       // const p72 = p9;
-      const p6Curve = quadBezierPoints(p60, p61, p62, sides);
+      const p6Curve = quadBezierPoints(p60, p61, p62, sidesToUse);
       // const p7Curve = quadBezierPoints(p70, p71, p72, sides);
       const topCurve = [];
-      p6Curve.forEach((p, index) => {
+      p6Curve.forEach((p) => {
         topCurve.push(p);
         // topCurve.push(p7Curve[index]);
         topCurve.push(new Point(p7.x, p.y));
@@ -193,5 +199,35 @@ export default class Product extends Symbol {
       ];
       return [points, width, height];
     };
+  }
+
+  // Linewidths that look good:
+  // height          width         lineWidth
+  //   2              1.6            0.05
+  //   1              0.8            0.025
+  //   0.5            0.4            0.012
+  //   0.3            0.25           0.009
+  //   0.2            0.2           0.008
+  // eslint-disable-next-line class-methods-use-this
+  getDefaultValues(height: number, width: ?number, options: {
+      lineWidth?: number,
+    }) {
+    const out: {
+      lineWidth: number,
+      width: number,
+    } = {
+      lineWidth: options.lineWidth || 1, // height * 0.93 / (25 * height + 15),
+      width: width || 1,
+    };
+    if (options.lineWidth == null && width != null) {
+      out.lineWidth = width / 7 / 3;
+    } else if (options.lineWidth == null && width == null) {
+      // out.lineWidth = height * 0.93 / (25 * height + 15);
+      out.lineWidth = 12902.65 + (0.001053004 - 12902.65) / (1 + (height / 573148) ** 0.9938213);
+      out.width = 1704804 + (0.002184303 - 1704804) / (1 + (height / 2234236) ** 0.9967453);
+    } else if (options.lineWidth != null && width == null) {
+      out.width = options.lineWidth * 7 * 3;
+    }
+    return out;
   }
 }

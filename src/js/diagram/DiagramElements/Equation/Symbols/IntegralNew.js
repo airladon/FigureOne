@@ -19,22 +19,22 @@ export default class IntegralNew extends Symbol {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getWidth() {
-    return (options: Object, height: number) => {
-      let width;
-      if (options.draw === 'static') {
-        let { staticHeight } = options;
-        if (typeof staticHeight !== 'number') {
-          staticHeight = height;
-        }
-        ({ width } = this.getDefaultValues(staticHeight, null, options));
-        return width / staticHeight * height;
-      }
-      ({ width } = options);
-      ({ width } = this.getDefaultValues(height, width, options));
-      return width;
-    };
-  }
+  // getWidth() {
+  //   return (options: Object, height: number) => {
+  //     let width;
+  //     if (options.draw === 'static') {
+  //       let { staticHeight } = options;
+  //       if (typeof staticHeight !== 'number') {
+  //         staticHeight = height;
+  //       }
+  //       ({ width } = this.getDefaultValues(staticHeight, null, options));
+  //       return width / staticHeight * height;
+  //     }
+  //     ({ width } = options);
+  //     ({ width } = this.getDefaultValues(height, width, options));
+  //     return width;
+  //   };
+  // }
 
   //     --------------------------------------------------   0000000
   //     A                                              000000011111111
@@ -64,7 +64,7 @@ export default class IntegralNew extends Symbol {
   //     |                           000000000
   //     |                          0000000000
   //     |      11111111           000000000
-  //     |    111111111111       0000000
+  //     |    111111111111       00000000
   //     |   11111111111111     0000000
   //     |   11111111111111   0000000
   //     |    111111111111   0000000
