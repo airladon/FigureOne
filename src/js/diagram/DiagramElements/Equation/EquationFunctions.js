@@ -436,8 +436,8 @@ export class EquationFunctions {
     if (name === 'bottomStrike') { return this.bottomStrike(params); } // $FlowFixMe
     if (name === 'pad') { return this.pad(params); }   // $FlowFixMe
     if (name === 'simpleIntegral') { return this.simpleIntegral(params); }   // $FlowFixMe
-    if (name === 'sumProd') { return this.sumProd(params); }   // $FlowFixMe
-    if (name === 'prod') { return this.sumProd(params); }
+    if (name === 'sumOf') { return this.sumProd(params); }   // $FlowFixMe
+    if (name === 'prodOf') { return this.sumProd(params); }
     // Add container - where you fix the ascent, descent, and width
     // (content is centered in width) - Content spills out of container by default
     return null;
@@ -1105,6 +1105,33 @@ export class EquationFunctions {
     );
   }
 
+  // sumOf(optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
+  //   fromIn: TypeEquationPhrase,
+  //   toIn: TypeEquationPhrase,
+  //   symbolString: string | null,
+  //   inSizeInput: boolean | null,
+  //   spaceToContent: number | null,
+  //   topSpaceToContent: number | null,
+  //   bottomSpaceToContent: number | null,
+  //   forceHeight: number | null,
+  //   yOffsetIn: number | null,
+  //   scaleIn: number | null,
+  //   fromScaleIn: number | null,
+  //   toScaleIn: number | null,
+  //   fromSpaceIn: number | null,
+  //   toSpaceIn: number | null,
+  //   fromOffsetIn: TypeParsablePoint | null,
+  //   toOffsetIn: TypeParsablePoint | null,
+  // ) {
+  sumOf(...args) {
+    return this.sumProd(...args);
+  }
+
+  prodOf(...args) {
+    return this.sumProd(...args);
+  }
+
+
   sumProd(
     optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
     fromIn: TypeEquationPhrase,
@@ -1114,11 +1141,8 @@ export class EquationFunctions {
     spaceToContent: number | null = null,
     topSpaceToContent: number | null = null,
     bottomSpaceToContent: number | null = null,
-    // minimumContentHeight: number | null = null,
-    // minimumContentDescent: number | null = null,
     forceHeight: number | null = null,
     yOffsetIn: number | null = null,
-    // forceDescent: number | null = null,
     scaleIn: number | null = null,
     fromScaleIn: number | null = null,
     toScaleIn: number | null = null,
