@@ -15,7 +15,7 @@ import Symbol from './Symbol';
 export default class IntegralNew extends Symbol {
   // eslint-disable-next-line class-methods-use-this
   getTriangles() {
-    return 'strip';
+    return 'triangles';
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -140,6 +140,8 @@ export default class IntegralNew extends Symbol {
 
       let bottomTheta = 0;
       const linePoints = [];
+      let prevLeft;
+      let prevRight;
       xArray.forEach((x, index) => {
         const sigmoid = 1 / (1 + Math.exp(-k * x));
         const derivative = h * k * sigmoid * (1 - sigmoid);
@@ -150,8 +152,18 @@ export default class IntegralNew extends Symbol {
                  + tipWidth / 2;
         const xDelta = a * Math.cos(theta + Math.PI / 2);
         const yDelta = a * Math.sin(theta + Math.PI / 2);
-        linePoints.push(new Point(x + xDelta + width / 2, y + yDelta));
-        linePoints.push(new Point(x - xDelta + width / 2, y - yDelta));
+        const left = new Point(x + xDelta + width / 2, y + yDelta);
+        const right = new Point(x - xDelta + width / 2, y - yDelta);
+        if (index > 0) {
+          linePoints.push(prevLeft._dup());
+          linePoints.push(prevRight._dup());
+          linePoints.push(right._dup());
+          linePoints.push(prevLeft._dup());
+          linePoints.push(right._dup());
+          linePoints.push(left._dup());
+        }
+        prevLeft = left;
+        prevRight = right;
         if (index === 0) {
           bottomTheta = theta;
         }
@@ -168,24 +180,44 @@ export default class IntegralNew extends Symbol {
       );
 
       const topCenter = new Point(
-        linePoints[linePoints.length - 2].x + serifRadius * Math.cos(bottomTheta - Math.PI / 2),
-        linePoints[linePoints.length - 2].y + serifRadius * Math.sin(bottomTheta - Math.PI / 2),
+        linePoints[linePoints.length - 1].x + serifRadius * Math.cos(bottomTheta - Math.PI / 2),
+        linePoints[linePoints.length - 1].y + serifRadius * Math.sin(bottomTheta - Math.PI / 2),
       );
 
       const bottomSerifPoints = [];
       const topSerifPoints = [];
       const angleDelta = Math.PI * 2 / Math.max(serifPoints, 3);
+      let prevBottom;
+      let prevTop;
       for (let i = 0; i < serifPoints + 1; i += 1) {
-        bottomSerifPoints.push(linePoints[1]._dup());
-        bottomSerifPoints.push(new Point(
+        const bottom = new Point(
           bottomCenter.x + serifRadius * Math.cos(angleDelta * i),
           bottomCenter.y + serifRadius * Math.sin(angleDelta * i),
-        ));
-        topSerifPoints.push(linePoints[linePoints.length - 2]._dup());
-        topSerifPoints.push(new Point(
+        );
+        const top = new Point(
           topCenter.x + serifRadius * Math.cos(angleDelta * i),
           topCenter.y + serifRadius * Math.sin(angleDelta * i),
-        ));
+        );
+        if (i > 0) {
+          bottomSerifPoints.push(linePoints[1]._dup());
+          bottomSerifPoints.push(prevBottom._dup());
+          bottomSerifPoints.push(bottom._dup());
+          topSerifPoints.push(linePoints[linePoints.length - 2]._dup());
+          topSerifPoints.push(prevTop._dup());
+          topSerifPoints.push(top._dup());
+        }
+        prevBottom = bottom;
+        prevTop = top;
+        // bottomSerifPoints.push(linePoints[1]._dup());
+        // bottomSerifPoints.push(new Point(
+        //   bottomCenter.x + serifRadius * Math.cos(angleDelta * i),
+        //   bottomCenter.y + serifRadius * Math.sin(angleDelta * i),
+        // ));
+        // topSerifPoints.push(linePoints[linePoints.length - 2]._dup());
+        // topSerifPoints.push(new Point(
+        //   topCenter.x + serifRadius * Math.cos(angleDelta * i),
+        //   topCenter.y + serifRadius * Math.sin(angleDelta * i),
+        // ));
       }
       const points = [
         ...bottomSerifPoints,
