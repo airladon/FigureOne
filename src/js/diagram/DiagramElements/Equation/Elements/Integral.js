@@ -68,13 +68,13 @@ export default class Integral extends BaseEquationFunction {
     glyphBounds.descent = loc.y - glyphLoc.y;
     glyphBounds.ascent = glyphBounds.height - glyphBounds.descent;
     if (limitsPosition === 'side') {
-      fromLoc.y = glyphLoc.y - fromBounds.height / 2 + fromOffset.y;
-      toLoc.y = glyphLoc.y + glyphBounds.height - toBounds.height / 2 + toOffset.y;
+      fromLoc.y = glyphLoc.y - fromBounds.height / 2 + fromOffset.y * scale;
+      toLoc.y = glyphLoc.y + glyphBounds.height - toBounds.height / 2 + toOffset.y * scale;
     } else {
       fromLoc.y = glyphLoc.y
-                - (fromSpace - fromOffset.y) * scale - fromBounds.ascent + fromOffset.y;
+                - (fromSpace - fromOffset.y) * scale - fromBounds.ascent;
       toLoc.y = glyphLoc.y + glyphBounds.height
-              + (toSpace + toOffset.y) * scale + toBounds.descent + toOffset.y;
+              + (toSpace + toOffset.y) * scale + toBounds.descent;
     }
 
     if (toContent != null) {
@@ -107,13 +107,13 @@ export default class Integral extends BaseEquationFunction {
 
     if (limitsPosition === 'side') {
       glyphLoc.x = loc.x;
-      fromLoc.x = loc.x + glyphBounds.width / 2 + fromSpace + fromOffset.x;
-      toLoc.x = loc.x + glyphBounds.width + toSpace + toOffset.x;
+      fromLoc.x = loc.x + glyphBounds.width / 2 + (fromSpace + fromOffset.x) * scale;
+      toLoc.x = loc.x + glyphBounds.width + (toSpace + toOffset.x) * scale;
     } else {
       const maxWidth = Math.max(glyphBounds.width, fromBounds.width, toBounds.width);
       glyphLoc.x = loc.x + (maxWidth - glyphBounds.width) / 2;
-      fromLoc.x = loc.x + (maxWidth - fromBounds.width) / 2 + fromOffset.x;
-      toLoc.x = loc.x + (maxWidth - toBounds.width) / 2 + toOffset.x;
+      fromLoc.x = loc.x + (maxWidth - fromBounds.width) / 2 + fromOffset.x * scale;
+      toLoc.x = loc.x + (maxWidth - toBounds.width) / 2 + toOffset.x * scale;
 
       const minLocX = Math.min(toLoc.x, fromLoc.x, glyphLoc.x);
       if (minLocX < loc.x) {

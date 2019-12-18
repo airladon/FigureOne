@@ -98,9 +98,6 @@ export type TypeRootObject = {
   content: TypeEquationPhrase;
   root: TypeEquationPhrase;
   symbol?: string;
-  // startWidth?: number,
-  // startHeight?: number,
-  // lineWidth?: number,
   contentSpace?: ?({
       left: ?number,
       right: ?number,
@@ -109,7 +106,6 @@ export type TypeRootObject = {
     } | Point | [number, number] | number),
   rootSpace?: number,
   rootScale?: number,
-  // scale?: number;
 };
 export type TypeRootArray = [
   TypeEquationPhrase,
@@ -252,9 +248,9 @@ export type TypeLimitsIntegralObject = {
 };
 export type TypeLimitsIntegralArray = [
   ?string,
-  TypeEquationPhrase,
-  TypeEquationPhrase,
-  TypeEquationPhrase,
+  ?TypeEquationPhrase,
+  ?TypeEquationPhrase,
+  ?TypeEquationPhrase,
   ?boolean,
   ?number,
   ?number,
@@ -266,9 +262,48 @@ export type TypeLimitsIntegralArray = [
   ?number,
   ?number,
   ?number,
-  TypeParsablePoint | null,
-  TypeParsablePoint | null,
-  'side' | 'top' | 'topCenter' | null,
+  ?TypeParsablePoint,
+  ?TypeParsablePoint,
+  'side' | 'top' | 'topCenter',
+];
+
+export type TypeSumProdObject = {
+  symbolString?: string,
+  content: TypeEquationPhrase,
+  from?: TypeEquationPhrase,
+  to?: TypeEquationPhrase,
+  inSize?: boolean,
+  space?: number,
+  topSpace?: number,
+  bottomSpace?: number,
+  height?: number,
+  yOffset?: number,
+  scale?: number,
+  fromScale?: number,
+  toScale?: number,
+  fromSpace?: number,
+  toSpace?: number,
+  fromOffset?: TypeParsablePoint,
+  toOffset?: TypeParsablePoint,
+};
+export type TypeSumProdArray = [
+  ?string,
+  TypeEquationPhrase,
+  ?TypeEquationPhrase,
+  ?TypeEquationPhrase,
+  ?boolean,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?TypeParsablePoint | null,
+  ?TypeParsablePoint | null,
 ];
 
 export type TypeSubObject = {
@@ -499,8 +534,8 @@ export class EquationFunctions {
     if (name === 'topStrike') { return this.topStrike(params); }   // $FlowFixMe
     if (name === 'bottomStrike') { return this.bottomStrike(params); } // $FlowFixMe
     if (name === 'pad') { return this.pad(params); }   // $FlowFixMe
-    if (name === 'intLimits') { return this.limitsIntegral(params); }   // $FlowFixMe
-    if (name === 'int') { return this.noLimitsIntegral(params); }   // $FlowFixMe
+    if (name === 'intLimits') { return this.intLimits(params); }   // $FlowFixMe
+    if (name === 'int') { return this.int(params); }   // $FlowFixMe
     if (name === 'sumOf') { return this.sumProd(params); }   // $FlowFixMe
     if (name === 'prodOf') { return this.sumProd(params); }
     // Add container - where you fix the ascent, descent, and width
@@ -1084,7 +1119,7 @@ export class EquationFunctions {
     );
   }
 
-  noLimitsIntegral(
+  int(
     optionsOrArray: TypeIntegralObject | TypeIntegralArray | TypeEquationPhrase,
   ) {
     let content;
@@ -1152,7 +1187,7 @@ export class EquationFunctions {
     );
   }
 
-  limitsIntegral(
+  intLimits(
     optionsOrArray: TypeLimitsIntegralObject | TypeLimitsIntegralArray | TypeEquationPhrase,
   ) {
     let content;
@@ -1250,146 +1285,23 @@ export class EquationFunctions {
     );
   }
 
-  // simpleIntegralOld(
-  //   optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
-  //   symbolString: string | null = null,
-  //   inSizeInput: boolean | null = null,
-  //   spaceToContent: number | null = null,
-  //   topSpaceToContent: number | null = null,
-  //   bottomSpaceToContent: number | null = null,
-  //   minimumContentHeight: number | null = null,
-  //   minimumContentDescent: number | null = null,
-  //   forceHeight: number | null = null,
-  //   forceDescent: number | null = null,
-  // ) {
-  //   let content;
-  //   let symbol;
-  //   let space;
-  //   let topSpace;
-  //   let bottomSpace;
-  //   let minContentHeight;
-  //   let minContentDescent;
-  //   let descent;
-  //   let height;
-  //   let inSize;
-  //   const defaultOptions = {
-  //     space: 0.05,
-  //     topSpace: 0.05,
-  //     bottomSpace: 0.05,
-  //     minContentHeight: null,
-  //     minContentDescent: null,
-  //     height: null,
-  //     descent: null,
-  //     inSize: true,
-  //   };
-  //   if (!(symbolString == null
-  //         && spaceToContent == null
-  //         && topSpaceToContent == null
-  //         && bottomSpaceToContent == null
-  //         && minimumContentHeight == null
-  //         && minimumContentDescent == null
-  //         && forceDescent == null
-  //         && forceHeight == null
-  //         && inSizeInput == null)
-  //   ) {
-  //     content = optionsOrContent;
-  //     symbol = symbolString;
-  //     space = spaceToContent;
-  //     topSpace = topSpaceToContent;
-  //     bottomSpace = bottomSpaceToContent;
-  //     minContentHeight = minimumContentHeight;
-  //     minContentDescent = minimumContentDescent;
-  //     descent = forceDescent;
-  //     height = forceHeight;
-  //     inSize = inSizeInput;
-  //   } else if (Array.isArray(optionsOrContent)) {
-  //     [                                                    // $FlowFixMe
-  //       content, symbol, inSize, space,   // $FlowFixMe
-  //       topSpace, bottomSpace, minContentHeight, minContentDescent, height, descent,
-  //     ] = optionsOrContent;
-  //   } else {
-  //     ({                                                   // $FlowFixMe
-  //       content, symbol, inSize, space,   // $FlowFixMe
-  //       topSpace, bottomSpace, minContentHeight,           // $FlowFixMe
-  //       minContentDescent, height, descent,
-  //     } = optionsOrContent);
-  //   }
-  //   const optionsIn = {
-  //     space,
-  //     topSpace,
-  //     bottomSpace,
-  //     minContentHeight,
-  //     minContentDescent,
-  //     height,
-  //     descent,
-  //     inSize,
-  //   };
-  //   const options = joinObjects({}, defaultOptions, optionsIn);
-  //   let symbolToUse = null;
-  //   if (symbol != null) {                                    // $FlowFixMe
-  //     symbolToUse = getDiagramElement(this.elements, symbol);
-  //   }
-  //   return new SimpleIntegral(                                // $FlowFixMe
-  //     this.contentToElement(content),
-  //     symbolToUse,
-  //     options,
-  //   );
-  // }
-
-  // sumOf(optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
-  //   fromIn: TypeEquationPhrase,
-  //   toIn: TypeEquationPhrase,
-  //   symbolString: string | null,
-  //   inSizeInput: boolean | null,
-  //   spaceToContent: number | null,
-  //   topSpaceToContent: number | null,
-  //   bottomSpaceToContent: number | null,
-  //   forceHeight: number | null,
-  //   yOffsetIn: number | null,
-  //   scaleIn: number | null,
-  //   fromScaleIn: number | null,
-  //   toScaleIn: number | null,
-  //   fromSpaceIn: number | null,
-  //   toSpaceIn: number | null,
-  //   fromOffsetIn: TypeParsablePoint | null,
-  //   toOffsetIn: TypeParsablePoint | null,
-  // ) {
-  sumOf(...args) {
-    return this.sumProd(...args);
+  sumOf(options: TypeSumProdObject | TypeSumProdArray) {
+    return this.sumProd(options);
   }
 
-  prodOf(...args) {
-    return this.sumProd(...args);
+  prodOf(options: TypeSumProdObject | TypeSumProdArray) {
+    return this.sumProd(options);
   }
 
 
   sumProd(
-    optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
-    fromIn: TypeEquationPhrase,
-    toIn: TypeEquationPhrase,
-    symbolString: string | null = null,
-    inSizeInput: boolean | null = null,
-    spaceToContent: number | null = null,
-    topSpaceToContent: number | null = null,
-    bottomSpaceToContent: number | null = null,
-    forceHeight: number | null = null,
-    yOffsetIn: number | null = null,
-    scaleIn: number | null = null,
-    fromScaleIn: number | null = null,
-    toScaleIn: number | null = null,
-    fromSpaceIn: number | null = null,
-    toSpaceIn: number | null = null,
-    fromOffsetIn: TypeParsablePoint | null = null,
-    toOffsetIn: TypeParsablePoint | null = null,
+    optionsOrArray: TypeSumProdObject | TypeSumProdArray,
   ) {
     let content;
     let symbol;
     let space;
     let topSpace;
     let bottomSpace;
-    // let minContentHeight;
-    // let minContentDescent;
-    // let descent;
     let height;
     let yOffset;
     let inSize;
@@ -1417,50 +1329,20 @@ export class EquationFunctions {
       fromOffset: [0, 0],
       toOffset: [0, 0],
     };
-    if (!(symbolString == null
-          && from == null
-          && to == null
-          && spaceToContent == null
-          && topSpaceToContent == null
-          && bottomSpaceToContent == null
-          && yOffsetIn == null
-          && forceHeight == null
-          && inSizeInput == null
-          && scaleIn == null
-          && fromScaleIn == null
-          && toScaleIn == null)
-    ) {
-      content = optionsOrContent;
-      from = fromIn;
-      to = toIn;
-      symbol = symbolString;
-      space = spaceToContent;
-      topSpace = topSpaceToContent;
-      bottomSpace = bottomSpaceToContent;
-      yOffset = yOffsetIn;
-      height = forceHeight;
-      inSize = inSizeInput;
-      scale = scaleIn;
-      fromScale = fromScaleIn;
-      toScale = toScaleIn;
-      fromSpace = fromSpaceIn;
-      toSpace = toSpaceIn;
-      fromOffset = fromOffsetIn;
-      toOffset = toOffsetIn;
-    } else if (Array.isArray(optionsOrContent)) {
+    if (Array.isArray(optionsOrArray)) {
       [                                                    // $FlowFixMe
-        content, from, to, symbol, inSize, space,          // $FlowFixMe
+        symbol, content, from, to, inSize, space,          // $FlowFixMe
         topSpace, bottomSpace,           // $FlowFixMe
         height, yOffset, scale,         // $FlowFixMe
         fromScale, toScale, fromSpace, toSpace, fromOffset, toOffset,
-      ] = optionsOrContent;
+      ] = optionsOrArray;
     } else {
       ({                                                   // $FlowFixMe
-        content, from, to, symbol, inSize, space,          // $FlowFixMe
+        symbol, content, from, to, inSize, space,          // $FlowFixMe
         topSpace, bottomSpace,           // $FlowFixMe
         height, yOffset,                // $FlowFixMe
         scale, fromScale, toScale, fromSpace, toSpace, fromOffset, toOffset,
-      } = optionsOrContent);
+      } = optionsOrArray);
     }
     const optionsIn = {
       space,
