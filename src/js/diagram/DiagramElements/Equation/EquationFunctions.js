@@ -675,8 +675,8 @@ export class EquationFunctions {
       this.contentToElement(content),                       // $FlowFixMe
       this.contentToElement(superscript),                   // $FlowFixMe
       this.contentToElement(subscript),                     // $FlowFixMe
-      scale,                                                // $FlowFixMe
-      superscriptBias,                                      // $FlowFixMe
+      scale,
+      superscriptBias,
       subscriptBias,
     );
   }

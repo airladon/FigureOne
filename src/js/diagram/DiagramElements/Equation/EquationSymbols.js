@@ -5,7 +5,7 @@ import {
 import { joinObjects } from '../../../tools/tools';
 import DiagramPrimitives from '../../DiagramPrimitives/DiagramPrimitives';
 // import { DiagramElementCollection } from '../../Element';
-import Integral from './Symbols/Integral';
+// import Integral from './Symbols/Integral';
 // import SuperSub from './Elements/SuperSub';
 import Bracket from './Symbols/Bracket';
 import Box from './Symbols/Box';
@@ -17,8 +17,8 @@ import AngleBracket from './Symbols/AngleBracket';
 import Bar from './Symbols/Bar';
 import Sum from './Symbols/Sum';
 import Product from './Symbols/Product';
-import SimpleIntegral from './Symbols/SimpleIntegral';
-import IntegralNew from './Symbols/IntegralNew';
+// import SimpleIntegral from './Symbols/SimpleIntegral';
+import Integral from './Symbols/Integral';
 // import BracketNew from './Symbols/BracketNew';
 // import BraceNew from './Symbols/BraceNew';
 
@@ -67,9 +67,9 @@ export default class EquationSymbols {
     if (name === 'xStrike') {
       return this.xStrike(options);
     }
-    if (name === 'integral') {
-      return this.integral(options);
-    }
+    // if (name === 'integral') {
+    //   return this.integral(options);
+    // }
     if (name === 'bracket') {         // $FlowFixMe
       return this.bracket(options);
     }
@@ -91,17 +91,17 @@ export default class EquationSymbols {
     if (name === 'radical') {         // $FlowFixMe
       return this.radical(options);
     }
-    if (name === 'simpleIntegral') {
-      return this.simpleIntegral(options);
-    }
-    if (name === 'sum') {
+    // if (name === 'simpleIntegral') {
+    //   return this.simpleIntegral(options);
+    // }
+    if (name === 'sum') {         // $FlowFixMe
       return this.sum(options);
     }
-    if (name === 'prod') {
+    if (name === 'prod') {         // $FlowFixMe
       return this.product(options);
     }
-    if (name === 'int') {
-      return this.integralNew(options);
+    if (name === 'int') {         // $FlowFixMe
+      return this.integral(options);
     }
     return null;
   }
@@ -146,26 +146,26 @@ export default class EquationSymbols {
   //   }
   // }
 
-  simpleIntegral(options: {
-    color?: Array<number>,
-    lineWidth?: number,
-    staticSize?: boolean,
-  }) {
-    const defaultOptions = {
-      color: this.defaultColor,
-      lineWidth: 0.012,
-      staticSize: null,
-    };
-    const optionsToUse = joinObjects(defaultOptions, options);
+  // simpleIntegral(options: {
+  //   color?: Array<number>,
+  //   lineWidth?: number,
+  //   staticSize?: boolean,
+  // }) {
+  //   const defaultOptions = {
+  //     color: this.defaultColor,
+  //     lineWidth: 0.012,
+  //     staticSize: null,
+  //   };
+  //   const optionsToUse = joinObjects(defaultOptions, options);
 
-    return (new SimpleIntegral(
-      this.shapes.webgl,
-      optionsToUse.color,
-      new Transform('brace').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
-      optionsToUse,
-    )).symbol;
-  }
+  //   return (new SimpleIntegral(
+  //     this.shapes.webgl,
+  //     optionsToUse.color,
+  //     new Transform('brace').scale(1, 1).translate(0, 0),
+  //     this.shapes.limits,
+  //     optionsToUse,
+  //   )).symbol;
+  // }
 
   sum(options: {
     color?: Array<number>,
@@ -219,7 +219,7 @@ export default class EquationSymbols {
     )).symbol;
   }
 
-  integralNew(options: {
+  integral(options: {
     color?: Array<number>,
     lineWidth?: number,
     sides?: number,
@@ -254,7 +254,7 @@ export default class EquationSymbols {
     };
     const optionsToUse = joinObjects(defaultOptions, options);
 
-    return (new IntegralNew(
+    return (new Integral(
       this.shapes.webgl,
       optionsToUse.color,
       new Transform('Integral').scale(1, 1).translate(0, 0),
@@ -350,20 +350,20 @@ export default class EquationSymbols {
     return cross;
   }
 
-  integral(options: { color?: Array<number>, numLines?: number}) {
-    const defaultOptions = {
-      color: this.defaultColor,
-      numLines: 1,
-    };
-    const optionsToUse = joinObjects(defaultOptions, options);
-    return new Integral(
-      this.shapes.webgl,
-      optionsToUse.color,
-      optionsToUse.numLines,
-      new Transform('integral').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
-    );
-  }
+  // integral(options: { color?: Array<number>, numLines?: number}) {
+  //   const defaultOptions = {
+  //     color: this.defaultColor,
+  //     numLines: 1,
+  //   };
+  //   const optionsToUse = joinObjects(defaultOptions, options);
+  //   return new Integral(
+  //     this.shapes.webgl,
+  //     optionsToUse.color,
+  //     optionsToUse.numLines,
+  //     new Transform('integral').scale(1, 1).translate(0, 0),
+  //     this.shapes.limits,
+  //   );
+  // }
 
   bracket(options: {
     side?: 'left' | 'right' | 'top' | 'bottom',
