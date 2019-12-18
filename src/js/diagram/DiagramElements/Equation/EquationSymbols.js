@@ -231,6 +231,8 @@ export default class EquationSymbols {
     serif?: boolean,
     num?: number,
     type?: 'line' | 'generic',
+    serifSides?: number,
+    lineIntegralSides?: number,
   }) {
     const defaultOptions = {
       color: this.defaultColor,
@@ -247,6 +249,8 @@ export default class EquationSymbols {
       staticWidth: null,          // not definable by user
       num: 1,
       type: 'generic',
+      serifSides: 10,
+      lineIntegralSides: 20,
     };
     const optionsToUse = joinObjects(defaultOptions, options);
 

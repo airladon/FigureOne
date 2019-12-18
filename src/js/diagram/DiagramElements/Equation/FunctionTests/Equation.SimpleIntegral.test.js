@@ -27,7 +27,7 @@ describe('Equation Functions - Bar', () => {
     elements = {
       a: 'a',
       s: {
-        symbol: 'simpleIntegral', lineWidth: 0.01,
+        symbol: 'int', type: 'line', num: 1,
       },
     };
     functions = {
@@ -37,7 +37,7 @@ describe('Equation Functions - Bar', () => {
         eqn.addForms({
           // Full Object
           0: {
-            simpleIntegral: ['a', 's']
+            simpleIntegral: ['a', '', '', 's']
           },
         });
         diagram.elements = eqn;

@@ -1021,9 +1021,9 @@ export class EquationFunctions {
 
   simpleIntegral(
     optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
+    symbolString: string | null,
     fromIn: TypeEquationPhrase,
     toIn: TypeEquationPhrase,
-    symbolString: string | null = null,
     inSizeInput: boolean | null = null,
     spaceToContent: number | null = null,
     topSpaceToContent: number | null = null,
@@ -1037,7 +1037,7 @@ export class EquationFunctions {
     toSpaceIn: number | null = null,
     fromOffsetIn: TypeParsablePoint | null = null,
     toOffsetIn: TypeParsablePoint | null = null,
-    limitPositionIn: 'side' | 'top' | 'topCenter' | null = null
+    limitPositionIn: 'side' | 'top' | 'topCenter' | null = null,
   ) {
     let content;
     let symbol;
@@ -1110,7 +1110,7 @@ export class EquationFunctions {
       limitsPosition = limitPositionIn;
     } else if (Array.isArray(optionsOrContent)) {
       [                                                    // $FlowFixMe
-        content, from, to, symbol, inSize, space,          // $FlowFixMe
+        content, symbol, from, to, inSize, space,          // $FlowFixMe
         topSpace, bottomSpace,                             // $FlowFixMe
         height, yOffset, scale,                            // $FlowFixMe
         fromScale, toScale, fromSpace, toSpace,            // $FlowFixMe
@@ -1118,7 +1118,7 @@ export class EquationFunctions {
       ] = optionsOrContent;
     } else {
       ({                                                   // $FlowFixMe
-        content, from, to, symbol, inSize, space,          // $FlowFixMe
+        content, symbol, from, to, inSize, space,          // $FlowFixMe
         topSpace, bottomSpace,                             // $FlowFixMe
         height, yOffset,                                   // $FlowFixMe
         scale, fromScale, toScale, fromSpace, toSpace,     // $FlowFixMe
