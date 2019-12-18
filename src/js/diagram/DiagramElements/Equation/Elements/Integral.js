@@ -68,8 +68,9 @@ export default class Integral extends BaseEquationFunction {
     glyphBounds.descent = loc.y - glyphLoc.y;
     glyphBounds.ascent = glyphBounds.height - glyphBounds.descent;
     if (limitsPosition === 'side') {
-      fromLoc.y = glyphLoc.y - fromBounds.height / 2 + fromOffset.y * scale;
-      toLoc.y = glyphLoc.y + glyphBounds.height - toBounds.height / 2 + toOffset.y * scale;
+      fromLoc.y = glyphLoc.y - fromBounds.height / 2 + fromOffset.y * scale + fromBounds.descent;
+      toLoc.y = glyphLoc.y + glyphBounds.height - toBounds.height / 2
+        + toBounds.descent + toOffset.y * scale;
     } else {
       fromLoc.y = glyphLoc.y
                 - (fromSpace - fromOffset.y) * scale - fromBounds.ascent;
@@ -104,7 +105,6 @@ export default class Integral extends BaseEquationFunction {
       glyphBounds.width = 0;
     }
     this.glyphWidths[0] = glyphBounds.width;
-
     if (limitsPosition === 'side') {
       glyphLoc.x = loc.x;
       fromLoc.x = loc.x + glyphBounds.width / 2 + (fromSpace + fromOffset.x) * scale;
@@ -114,14 +114,14 @@ export default class Integral extends BaseEquationFunction {
       glyphLoc.x = loc.x + (maxWidth - glyphBounds.width) / 2;
       fromLoc.x = loc.x + (maxWidth - fromBounds.width) / 2 + fromOffset.x * scale;
       toLoc.x = loc.x + (maxWidth - toBounds.width) / 2 + toOffset.x * scale;
+    }
 
-      const minLocX = Math.min(toLoc.x, fromLoc.x, glyphLoc.x);
-      if (minLocX < loc.x) {
-        const offset = loc.x - minLocX;
-        glyphLoc.x += offset;
-        fromLoc.x += offset;
-        toLoc.x += offset;
-      }
+    const minLocX = Math.min(toLoc.x, fromLoc.x, glyphLoc.x);
+    if (minLocX < loc.x) {
+      const offset = loc.x - minLocX;
+      glyphLoc.x += offset;
+      fromLoc.x += offset;
+      toLoc.x += offset;
     }
 
     if (limitsAroundContent) {
@@ -168,6 +168,10 @@ export default class Integral extends BaseEquationFunction {
       this.location.x + operatorBounds.width + space * scale,
       this.location.y,
     );
+
+    if (limitsAroundContent) {
+      contentLocation.x = glyphLoc.x + glyphBounds.width + space * scale;
+    }
 
     if (glyph == null) {
       contentLocation.x = location.x;

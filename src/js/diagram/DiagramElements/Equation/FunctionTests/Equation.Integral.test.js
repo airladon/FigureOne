@@ -282,6 +282,27 @@ describe('Equation Functions - SumPro', () => {
             ]),
             scale: 1,
           },
+          limitsPosition: {
+            content: intLimits([
+              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'side', true,
+            ]),
+            scale: 1,
+          },
+          sideSpace: {
+            content: intLimits([
+              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 1, 0.1, 0.1, [0, 0], [0, 0], 'side', true,
+            ]),
+            scale: 1,
+          },
+          sideOffset: {
+            content: intLimits([
+              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 1, 0.01, 0.01, [-0.3, -0.2], [0.3, 0.2], 'side', true,
+            ]),
+            scale: 1,
+          },
         });
         diagram.elements = eqn;
         diagram.setFirstTransform();
@@ -294,7 +315,7 @@ describe('Equation Functions - SumPro', () => {
     let baseC;
     let baseS;
     // let baseSScale;
-    // let space;
+    let space;
     let spaceDelta;
     let height;
     let yOffset;
@@ -304,16 +325,18 @@ describe('Equation Functions - SumPro', () => {
     beforeEach(() => {
       functions.parameterSteps();
       eqn.showForm('base');
+      diagram.setFirstTransform();
       baseA = eqn._a.getBoundingRect('diagram');
       baseB = eqn._b.getBoundingRect('diagram');
       baseC = eqn._c.getBoundingRect('diagram');
       baseS = eqn._s.getBoundingRect('diagram');
-      // space = 0.1;
-      spaceDelta = 0.09;
+      space = 0.1;
+      initialSpace = 0.01;
+      spaceDelta = space - initialSpace;
       height = 1;
       yOffset = 0.1;
       scale = 0.5;
-      initialSpace = 0.01;
+      
       offset = new Point(0.3, 0.2);
       // baseSScale = eqn._s.custom.scale._dup();
     });
@@ -483,6 +506,36 @@ describe('Equation Functions - SumPro', () => {
       expect(round(newB.left)).toBe(round(baseB.left));
       expect(round(newB.bottom)).toBe(round(baseB.bottom));
       expect(round(newB.height)).toBe(round(baseB.height));
+    });
+    test('limitsPosition', () => {
+      eqn.showForm('limitsPosition');
+      diagram.setFirstTransform();
+      const newS = eqn._s.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      const newC = eqn._c.getBoundingRect('diagram');
+      expect(round(newC.left)).toBe(round(newS.right + initialSpace));
+      expect(round(newC.bottom)).toBe(round(newS.top - newC.height / 2));
+      expect(round(newB.left)).toBe(round(newS.left + newS.width / 2 + initialSpace));
+      expect(round(newB.bottom)).toBe(round(newS.bottom - newB.height / 2));
+    });
+    test('sideSpace', () => {
+      eqn.showForm('sideSpace');
+      diagram.setFirstTransform();
+      const newS = eqn._s.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      const newC = eqn._c.getBoundingRect('diagram');
+      expect(round(newC.left)).toBe(round(newS.right + space));
+      expect(round(newB.left)).toBe(round(newS.left + newS.width / 2 + space));
+    });
+    test('sideOffset', () => {
+      eqn.showForm('sideOffset');
+      diagram.setFirstTransform();
+      const newS = eqn._s.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      const newC = eqn._c.getBoundingRect('diagram');
+      expect(round(newB.left)).toBe(0);
+      // expect(round(newC.left)).toBe(round(newS.right + space));
+      // expect(round(newB.left)).toBe(round(newS.left + newS.width / 2 + space));
     });
   });
   test('Input Forms', () => {
