@@ -34,11 +34,11 @@ export default class SimpleIntegral extends BaseEquationFunction {
       originalContentBounds.copyFrom(mainContent);
     }
     if (fromContent != null) {
-      fromContent.calcSize(loc._dup(), scale * fromScale)
+      fromContent.calcSize(loc._dup(), scale * fromScale);
       fromBounds.copyFrom(fromContent);
     }
     if (toContent != null) {
-      toContent.calcSize(loc._dup(), scale * toScale)
+      toContent.calcSize(loc._dup(), scale * toScale);
       toBounds.copyFrom(toContent);
     }
 
@@ -76,15 +76,20 @@ export default class SimpleIntegral extends BaseEquationFunction {
       toLoc.y = glyphLoc.y + glyphBounds.height
               + (toSpace + toOffset.y) * scale + toBounds.descent;
     }
-    // operatorBounds.ascent = toLoc.y + toBounds.height - loc.y;
-    // operatorBounds.descent = loc.y - (fromLoc.y - fromBounds.descent);
+
     if (toContent != null) {
-      operatorBounds.ascent = toLoc.y + toBounds.height - loc.y;
+      operatorBounds.ascent = Math.max(
+        toLoc.y + toBounds.height - loc.y,
+        glyphLoc.y + glyphBounds.height - loc.y,
+      );
     } else {
       operatorBounds.ascent = glyphBounds.ascent;
     }
     if (fromContent != null) {
-      operatorBounds.descent = loc.y - (fromLoc.y - fromBounds.descent);
+      operatorBounds.descent = Math.max(
+        loc.y - (fromLoc.y - fromBounds.descent),
+        loc.y - (glyphLoc.y - glyphBounds.descent),
+      );
     } else {
       operatorBounds.descent = glyphBounds.descent;
     }
