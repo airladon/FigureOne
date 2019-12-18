@@ -1021,6 +1021,153 @@ export class EquationFunctions {
 
   simpleIntegral(
     optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
+    fromIn: TypeEquationPhrase,
+    toIn: TypeEquationPhrase,
+    symbolString: string | null = null,
+    inSizeInput: boolean | null = null,
+    spaceToContent: number | null = null,
+    topSpaceToContent: number | null = null,
+    bottomSpaceToContent: number | null = null,
+    forceHeight: number | null = null,
+    yOffsetIn: number | null = null,
+    scaleIn: number | null = null,
+    fromScaleIn: number | null = null,
+    toScaleIn: number | null = null,
+    fromSpaceIn: number | null = null,
+    toSpaceIn: number | null = null,
+    fromOffsetIn: TypeParsablePoint | null = null,
+    toOffsetIn: TypeParsablePoint | null = null,
+    limitPositionIn: 'side' | 'top' | 'topCenter' | null = null
+  ) {
+    let content;
+    let symbol;
+    let space;
+    let topSpace;
+    let bottomSpace;
+    // let minContentHeight;
+    // let minContentDescent;
+    // let descent;
+    let height;
+    let yOffset;
+    let inSize;
+    let from;
+    let to;
+    let scale;
+    let fromScale;
+    let toScale;
+    let fromSpace;
+    let toSpace;
+    let fromOffset;
+    let toOffset;
+    let limitsPosition;
+    const defaultOptions = {
+      space: 0.05,
+      topSpace: 0.07,
+      bottomSpace: 0.07,
+      height: null,
+      yOffset: 0,
+      inSize: true,
+      contentScale: 1,
+      fromScale: 0.5,
+      toScale: 0.5,
+      fromSpace: 0.04,
+      toSpace: 0.04,
+      fromOffset: [0, 0],
+      toOffset: [0, 0],
+      limitPosition: 'side',
+    };
+    if (!(symbolString == null
+          && from == null
+          && to == null
+          && spaceToContent == null
+          && topSpaceToContent == null
+          && bottomSpaceToContent == null
+          && yOffsetIn == null
+          && forceHeight == null
+          && inSizeInput == null
+          && scaleIn == null
+          && fromScaleIn == null
+          && toScaleIn == null
+          && limitPositionIn == null)
+    ) {
+      content = optionsOrContent;
+      from = fromIn;
+      to = toIn;
+      symbol = symbolString;
+      space = spaceToContent;
+      topSpace = topSpaceToContent;
+      bottomSpace = bottomSpaceToContent;
+      yOffset = yOffsetIn;
+      height = forceHeight;
+      inSize = inSizeInput;
+      scale = scaleIn;
+      fromScale = fromScaleIn;
+      toScale = toScaleIn;
+      fromSpace = fromSpaceIn;
+      toSpace = toSpaceIn;
+      fromOffset = fromOffsetIn;
+      toOffset = toOffsetIn;
+      limitsPosition = limitPositionIn;
+    } else if (Array.isArray(optionsOrContent)) {
+      [                                                    // $FlowFixMe
+        content, from, to, symbol, inSize, space,          // $FlowFixMe
+        topSpace, bottomSpace,                             // $FlowFixMe
+        height, yOffset, scale,                            // $FlowFixMe
+        fromScale, toScale, fromSpace, toSpace,            // $FlowFixMe
+        fromOffset, toOffset, limitsPosition,
+      ] = optionsOrContent;
+    } else {
+      ({                                                   // $FlowFixMe
+        content, from, to, symbol, inSize, space,          // $FlowFixMe
+        topSpace, bottomSpace,                             // $FlowFixMe
+        height, yOffset,                                   // $FlowFixMe
+        scale, fromScale, toScale, fromSpace, toSpace,     // $FlowFixMe
+        fromOffset, toOffset, limitsPosition,
+      } = optionsOrContent);
+    }
+    const optionsIn = {
+      space,
+      topSpace,
+      bottomSpace,
+      height,
+      yOffset,
+      inSize,
+      contentScale: scale,
+      fromScale,
+      toScale,
+      fromSpace,
+      toSpace,
+      fromOffset,
+      toOffset,
+      limitsPosition,
+    };
+    const options = joinObjects({}, defaultOptions, optionsIn);
+    options.fromOffset = parsePoint(options.fromOffset);
+    options.toOffset = parsePoint(options.toOffset);
+    let symbolToUse = null;
+    if (symbol != null) {                                    // $FlowFixMe
+      symbolToUse = getDiagramElement(this.elements, symbol);
+    }
+    const contentArray = [];
+    if (content != null) {                           // $FlowFixMe
+      contentArray.push(this.contentToElement(content));
+    }
+    if (from != null) {                              // $FlowFixMe
+      contentArray.push(this.contentToElement(from));
+    }
+    if (to != null) {                                // $FlowFixMe
+      contentArray.push(this.contentToElement(to));
+    }
+
+    return new SimpleIntegral(
+      contentArray,
+      symbolToUse,
+      options,
+    );
+  }
+
+  simpleIntegralOld(
+    optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
     symbolString: string | null = null,
     inSizeInput: boolean | null = null,
     spaceToContent: number | null = null,

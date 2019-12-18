@@ -20,7 +20,6 @@ export default class Symbol {
     color: Array<number>,
     transformOrLocation: Transform | Point,
     diagramLimits: Rect,
-    // staticSize: ?boolean,
     symbolOptions: Object,
   ) {
     const getPoints = this.getPoints();
@@ -99,7 +98,8 @@ export default class Symbol {
           || symbol.custom.options.staticWidth === 'first'
         ) {
           ([points, width, height] = getPoints(symbolOptions, widthIn, heightIn));
-        } else if (symbol.custom.options.staticHeight != null || symbol.custom.options.staticWidth != null) {
+        } else if (symbol.custom.options.staticHeight != null
+          || symbol.custom.options.staticWidth != null) {
           ([points, width, height] = getPoints(
             symbolOptions,
             symbol.custom.options.staticWidth,
@@ -172,7 +172,7 @@ export default class Symbol {
       width: height,
     };
     if (width != null) {
-      out.width = null;
+      out.width = width;
     }
     if (options.width != null) {
       out.width = options.width;
