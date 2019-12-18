@@ -24,7 +24,7 @@ export default class SimpleIntegral extends BaseEquationFunction {
       height, topSpace, bottomSpace, yOffset,
       space, inSize, contentScale, fromScale, toScale,
       fromSpace, toSpace, fromOffset, toOffset,
-      limitsPosition,
+      limitsPosition, limitsAroundContent,
     } = this.options;
     const [glyph] = this.glyphs;
     const [mainContent, fromContent, toContent] = this.contents;
@@ -68,13 +68,13 @@ export default class SimpleIntegral extends BaseEquationFunction {
     glyphBounds.descent = loc.y - glyphLoc.y;
     glyphBounds.ascent = glyphBounds.height - glyphBounds.descent;
     if (limitsPosition === 'side') {
-      fromLoc.y = glyphLoc.y - fromBounds.height / 2;
-      toLoc.y = glyphLoc.y + glyphBounds.height - toBounds.height / 2;
+      fromLoc.y = glyphLoc.y - fromBounds.height / 2 + fromOffset.y;
+      toLoc.y = glyphLoc.y + glyphBounds.height - toBounds.height / 2 + toOffset.y;
     } else {
       fromLoc.y = glyphLoc.y
-                - (fromSpace - fromOffset.y) * scale - fromBounds.ascent;
+                - (fromSpace - fromOffset.y) * scale - fromBounds.ascent + fromOffset.y;
       toLoc.y = glyphLoc.y + glyphBounds.height
-              + (toSpace + toOffset.y) * scale + toBounds.descent;
+              + (toSpace + toOffset.y) * scale + toBounds.descent + toOffset.y;
     }
 
     if (toContent != null) {
@@ -107,8 +107,8 @@ export default class SimpleIntegral extends BaseEquationFunction {
 
     if (limitsPosition === 'side') {
       glyphLoc.x = loc.x;
-      fromLoc.x = loc.x + glyphBounds.width / 2 + fromSpace;
-      toLoc.x = loc.x + glyphBounds.width + toSpace;
+      fromLoc.x = loc.x + glyphBounds.width / 2 + fromSpace + fromOffset.x;
+      toLoc.x = loc.x + glyphBounds.width + toSpace + toOffset.x;
     } else {
       const maxWidth = Math.max(glyphBounds.width, fromBounds.width, toBounds.width);
       glyphLoc.x = loc.x + (maxWidth - glyphBounds.width) / 2;
@@ -124,11 +124,15 @@ export default class SimpleIntegral extends BaseEquationFunction {
       }
     }
 
-    operatorBounds.width = Math.max(
-      glyphLoc.x + glyphBounds.width,
-      fromLoc.x + fromBounds.width,
-      toLoc.x + toBounds.width,
-    ) - loc.x;
+    if (limitsAroundContent) {
+      operatorBounds.width = glyphBounds.width;
+    } else {
+      operatorBounds.width = Math.max(
+        glyphLoc.x + glyphBounds.width,
+        fromLoc.x + fromBounds.width,
+        toLoc.x + toBounds.width,
+      ) - loc.x;
+    }
 
 
     // Final sizing and positioning
@@ -164,6 +168,7 @@ export default class SimpleIntegral extends BaseEquationFunction {
       this.location.x + operatorBounds.width + space * scale,
       this.location.y,
     );
+
     if (glyph == null) {
       contentLocation.x = location.x;
     }
@@ -172,8 +177,17 @@ export default class SimpleIntegral extends BaseEquationFunction {
     }
 
     if (inSize) {
-      this.width = operatorBounds.width + originalContentBounds.width
+      if (limitsAroundContent) {
+        this.width = Math.max(
+          glyphLoc.x + glyphBounds.width,
+          fromLoc.x + fromBounds.width,
+          toLoc.x + toBounds.width,
+          contentLocation.x + contentBounds.width,
+        ) - loc.x;
+      } else {
+        this.width = operatorBounds.width + originalContentBounds.width
         + space * scale;
+      }
       if (operatorBounds.width === 0) {
         this.width -= space * scale;
       }

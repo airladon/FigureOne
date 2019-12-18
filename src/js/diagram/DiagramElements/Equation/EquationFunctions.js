@@ -1157,6 +1157,7 @@ export class EquationFunctions {
     let fromOffset;
     let toOffset;
     let limitsPosition;
+    let limitsAroundContent;
     const defaultOptions = {
       space: 0.05,
       topSpace: 0.07,
@@ -1172,6 +1173,7 @@ export class EquationFunctions {
       fromOffset: [0, 0],
       toOffset: [0, 0],
       limitsPosition: 'side',
+      limitsAroundContent: true,
     };
     if (Array.isArray(optionsOrArray)) {
       [                                                    // $FlowFixMe
@@ -1179,7 +1181,7 @@ export class EquationFunctions {
         topSpace, bottomSpace,                             // $FlowFixMe
         height, yOffset, scale,                            // $FlowFixMe
         fromScale, toScale, fromSpace, toSpace,            // $FlowFixMe
-        fromOffset, toOffset, limitsPosition,
+        fromOffset, toOffset, limitsPosition, limitsAroundContent,
       ] = optionsOrArray;
     } else {
       ({                                                   // $FlowFixMe
@@ -1187,7 +1189,7 @@ export class EquationFunctions {
         topSpace, bottomSpace,                             // $FlowFixMe
         height, yOffset,                                   // $FlowFixMe
         scale, fromScale, toScale, fromSpace, toSpace,     // $FlowFixMe
-        fromOffset, toOffset, limitsPosition,
+        fromOffset, toOffset, limitsPosition, limitsAroundContent,
       } = optionsOrArray);
     }
     const optionsIn = {
@@ -1205,6 +1207,7 @@ export class EquationFunctions {
       fromOffset,
       toOffset,
       limitsPosition,
+      limitsAroundContent,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     options.fromOffset = parsePoint(options.fromOffset);
