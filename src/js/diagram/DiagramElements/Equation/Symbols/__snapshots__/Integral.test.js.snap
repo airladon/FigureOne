@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Equation Functions - Integral Symbol 1 1`] = `
+Array [
+  0.7,
+  0,
+  0.1724,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Integral Symbol 1 2`] = `
+Array [
+  0.1374,
+  0,
+  0,
+  0,
+  0.2121,
+  -0.0756,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Integral Symbol 2 1`] = `
+Array [
+  0.7,
+  0,
+  0.13609,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Integral Symbol 2 2`] = `
+Array [
+  0.10109,
+  0,
+  0,
+  0,
+  0.2121,
+  -0.0756,
+  0,
+  0,
+  1,
+]
+`;

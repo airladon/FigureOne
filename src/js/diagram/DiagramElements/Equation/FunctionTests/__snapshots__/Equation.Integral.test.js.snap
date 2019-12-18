@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Equation Functions - SumPro Input Forms 1`] = `
+exports[`Equation Functions - Integral Input Forms 1`] = `
 Array [
   0.7,
   0,
@@ -14,7 +14,7 @@ Array [
 ]
 `;
 
-exports[`Equation Functions - SumPro Input Forms 2`] = `
+exports[`Equation Functions - Integral Input Forms 2`] = `
 Array [
   0.7,
   0,
@@ -28,7 +28,7 @@ Array [
 ]
 `;
 
-exports[`Equation Functions - SumPro Input Forms 3`] = `
+exports[`Equation Functions - Integral Input Forms 3`] = `
 Array [
   0.7,
   0,
@@ -42,7 +42,7 @@ Array [
 ]
 `;
 
-exports[`Equation Functions - SumPro Input Forms 4`] = `
+exports[`Equation Functions - Integral Input Forms 4`] = `
 Array [
   0.10109,
   0,

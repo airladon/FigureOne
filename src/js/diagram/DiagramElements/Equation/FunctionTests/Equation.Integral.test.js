@@ -14,7 +14,7 @@ jest.mock('../../../Gesture');
 jest.mock('../../../webgl/webgl');
 jest.mock('../../../DrawContext2D');
 
-describe('Equation Functions - SumPro', () => {
+describe('Equation Functions - Integral', () => {
   let diagram;
   let eqn;
   let color1;
@@ -336,7 +336,6 @@ describe('Equation Functions - SumPro', () => {
       height = 1;
       yOffset = 0.1;
       scale = 0.5;
-      
       offset = new Point(0.3, 0.2);
       // baseSScale = eqn._s.custom.scale._dup();
     });
@@ -534,8 +533,8 @@ describe('Equation Functions - SumPro', () => {
       const newB = eqn._b.getBoundingRect('diagram');
       const newC = eqn._c.getBoundingRect('diagram');
       expect(round(newB.left)).toBe(0);
-      // expect(round(newC.left)).toBe(round(newS.right + space));
-      // expect(round(newB.left)).toBe(round(newS.left + newS.width / 2 + space));
+      expect(round(newC.left)).toBe(round(newS.right + initialSpace + offset.x));
+      expect(round(newB.left)).toBe(round(newS.left + newS.width / 2 + initialSpace - offset.x));
     });
   });
   test('Input Forms', () => {
