@@ -264,6 +264,20 @@ describe('Equation Functions - SumPro', () => {
             ),
             scale: 1,
           },
+          noFrom: {
+            content: sumOf(
+              'a', '', 'c', 's', true, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0],
+            ),
+            scale: 1,
+          },
+          noTo: {
+            content: sumOf(
+              'a', 'b', '', 's', true, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0],
+            ),
+            scale: 1,
+          },
         });
         diagram.elements = eqn;
         diagram.setFirstTransform();
@@ -441,6 +455,30 @@ describe('Equation Functions - SumPro', () => {
       const newS = eqn._s.getBoundingRect('diagram');
       const newA = eqn._a.getBoundingRect('diagram');
       expect(round(newS.left)).toBe(round(newA.left - initialSpace - baseS.width));
+    });
+    test('noFrom', () => {
+      eqn.showForm('noFrom');
+      diagram.setFirstTransform();
+      const newS = eqn._s.getBoundingRect('diagram');
+      const newC = eqn._c.getBoundingRect('diagram');
+      expect(round(newS.left)).toBe(round(baseS.left));
+      expect(round(newS.bottom)).toBe(round(baseS.bottom));
+      expect(round(newS.height)).toBe(round(baseS.height));
+      expect(round(newC.left)).toBe(round(baseC.left));
+      expect(round(newC.bottom)).toBe(round(baseC.bottom));
+      expect(round(newC.height)).toBe(round(baseC.height));
+    });
+    test('noTo', () => {
+      eqn.showForm('noTo');
+      diagram.setFirstTransform();
+      const newS = eqn._s.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      expect(round(newS.left)).toBe(round(baseS.left));
+      expect(round(newS.bottom)).toBe(round(baseS.bottom));
+      expect(round(newS.height)).toBe(round(baseS.height));
+      expect(round(newB.left)).toBe(round(baseB.left));
+      expect(round(newB.bottom)).toBe(round(baseB.bottom));
+      expect(round(newB.height)).toBe(round(baseB.height));
     });
   });
   test('Input Forms', () => {

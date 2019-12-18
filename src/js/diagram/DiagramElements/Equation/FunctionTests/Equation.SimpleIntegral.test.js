@@ -49,6 +49,5 @@ describe('Equation Functions - Bar', () => {
     // const elems = [eqn._a, eqn._s];
     eqn.showForm('0');
     diagram.setFirstTransform();
-    console.log(eqn._s.getBoundingRect('diagram'));
   });
 });
