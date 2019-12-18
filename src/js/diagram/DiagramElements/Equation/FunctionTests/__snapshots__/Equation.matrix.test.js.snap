@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Equation Functions - Integral Input Forms 1`] = `
+Array [
+  0.7,
+  0,
+  0.086,
+  0,
+  0.7,
+  0.04635,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Integral Input Forms 2`] = `
+Array [
+  0.7,
+  0,
+  0.2396,
+  0,
+  0.7,
+  0.0306,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Integral Input Forms 3`] = `
+Array [
+  0.7,
+  0,
+  0.086,
+  0,
+  0.7,
+  -0.10725,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Integral Input Forms 4`] = `
+Array [
+  0.7,
+  0,
+  0.2396,
+  0,
+  0.7,
+  -0.123,
+  0,
+  0,
+  1,
+]
+`;

@@ -24,6 +24,7 @@ import Padding from './Elements/Padding';
 import Box from './Elements/Box';
 import Integral from './Elements/Integral';
 import SumProd from './Elements/SumProd';
+import Matrix from './Elements/Matrix';
 
 export function getDiagramElement(
   elementsObject: { [string: string]: DiagramElementPrimitive |
@@ -537,7 +538,8 @@ export class EquationFunctions {
     if (name === 'intLimits') { return this.intLimits(params); }   // $FlowFixMe
     if (name === 'int') { return this.int(params); }   // $FlowFixMe
     if (name === 'sumOf') { return this.sumProd(params); }   // $FlowFixMe
-    if (name === 'prodOf') { return this.sumProd(params); }
+    if (name === 'prodOf') { return this.sumProd(params); }   // $FlowFixMe
+    if (name === 'matrix') { return this.matrix(params); }
     // Add container - where you fix the ascent, descent, and width
     // (content is centered in width) - Content spills out of container by default
     return null;
@@ -1119,8 +1121,78 @@ export class EquationFunctions {
     );
   }
 
+  // {
+  //   matrix: {
+  //     order: [2, 2],
+  //     left: glyph
+  //     content: [
+  //       a, b, c,
+  //       d, e, f,
+  //     ],
+  //     right: glyph,
+  //     fit: 'max' | 'rowCol' | number | Point,
+  //     space: number | Point,
+  //   }
+  // }
+  matrix(optionsOrArray: TypeMatrixObject | TypeMatrixArray) {
+    let content;
+    let left;
+    let right;
+    let order;
+    let fit;
+    let space;
+    let scale;
+    const defaultOptions = {
+      space: [0.05, 0.05],
+      fit: 'rowCol',
+      contentScale: 0.6,
+    };
+    if (Array.isArray(optionsOrArray)) {
+      [                                                    // $FlowFixMe
+        order, left, content, right,                       // $FlowFixMe
+        scale, fit, space,
+      ] = optionsOrArray;
+    } else {
+      ({                                                   // $FlowFixMe
+        order, left, content, right,                       // $FlowFixMe
+        scale, fit, space,
+      } = optionsOrArray);
+    }
+    const optionsIn = {
+      space,
+      fit,
+      order,
+      contentScale: scale,
+    };
+    const options = joinObjects({}, defaultOptions, optionsIn);
+
+    let contentArray = [];
+    if (content != null) {
+      contentArray = content.map(c => this.contentToElement(c));
+    }
+    if (options.order == null
+      || options.order[0] * options.order[1] !== contentArray.length) {
+      options.order = [1, contentArray.length];
+    }
+    if (options.space != null) {
+      options.space = parsePoint(options.space);
+    }
+
+    const matrixContent = new Matrix(
+      contentArray,
+      [],
+      options,
+    );
+    return this.brac({
+      content: matrixContent,
+      left,
+      right,
+    });
+  }
+
+
   int(
-    optionsOrArray: TypeIntegralObject | TypeIntegralArray | TypeEquationPhrase,
+    optionsOrArray: TypeIntegralObject | TypeIntegralArray,
   ) {
     let content;
     let symbol;
