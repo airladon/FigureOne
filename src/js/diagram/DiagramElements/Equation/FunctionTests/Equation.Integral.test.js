@@ -29,24 +29,24 @@ describe('Equation Functions - SumPro', () => {
       b: 'b',
       c: 'c',
       s: {
-        symbol: 'sum', lineWidth: 0.01, draw: 'dynamic',
+        symbol: 'int', lineWidth: 0.01, draw: 'dynamic',
       },
     };
     functions = {
       inputForms: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
-        const sumOf = e.sumOf.bind(e);
+        const intLimits = e.intLimits.bind(e);
         eqn.addElements(elements);
         eqn.addForms({
           // Full Object
           base: {
             content: {
-              sumOf: {
+              intLimits: {
+                symbol: 's',
                 content: 'a',
                 from: 'b',
                 to: 'c',
-                symbol: 's',
                 inSize: true,
                 space: 0,
                 topSpace: 0.1,
@@ -60,12 +60,14 @@ describe('Equation Functions - SumPro', () => {
                 toSpace: 0.1,
                 fromOffset: [0.1, 0.1],
                 toOffset: [-0.1, -0.1],
+                limitsPosition: 'topBottom',
+                limitsAroundContent: true,
               },
             },
           },
           // Method Object
           1: {
-            sumOf: {
+            intLimits: {
               content: 'a',
               from: 'b',
               to: 'c',
@@ -83,22 +85,20 @@ describe('Equation Functions - SumPro', () => {
               toSpace: 0.1,
               fromOffset: [0.1, 0.1],
               toOffset: [-0.1, -0.1],
+              limitsPosition: 'topBottom',
+              limitsAroundContent: true,
             },
           },
           // Method Array
-          2: { sumOf: ['s', 'a', 'b', 'c', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, 0.1, 0.1, [0.1, 0.1], [-0.1, -0.1]] },
+          2: { intLimits: ['s', 'a', 'b', 'c', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, 0.1, 0.1, [0.1, 0.1], [-0.1, -0.1], 'topBottom', true] },
           // Function with Method Array
-          3: e.sumOf(['s', 'a', 'b', 'c', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, 0.1, 0.1, [0.1, 0.1], [-0.1, -0.1]]),
-          // Function with parameters
-          // 4: e.sumOf('a', 'b', 'c', 's', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, 0.1, 0.1, [0.1, 0.1], [-0.1, -0.1]),
-          // Bound Function with parameters
-          // 5: sumOf('a', 'b', 'c', 's', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, 0.1, 0.1, [0.1, 0.1], [-0.1, -0.1]),
+          3: e.intLimits(['s', 'a', 'b', 'c', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, 0.1, 0.1, [0.1, 0.1], [-0.1, -0.1], 'topBottom', true]),
           // Bound Function with Object
-          4: sumOf({
+          4: intLimits({
+            symbol: 's',
             content: 'a',
             from: 'b',
             to: 'c',
-            symbol: 's',
             inSize: true,
             space: 0,
             topSpace: 0.1,
@@ -112,6 +112,8 @@ describe('Equation Functions - SumPro', () => {
             toSpace: 0.1,
             fromOffset: [0.1, 0.1],
             toOffset: [-0.1, -0.1],
+            limitsPosition: 'topBottom',
+            limitsAroundContent: true,
           }),
         });
       },
@@ -122,7 +124,7 @@ describe('Equation Functions - SumPro', () => {
       //     // Full Object
       //     0: {
       //       content: {
-      //         sumOf: ['a', 'b', 'c', 's'],
+      //         intLimits: ['a', 'b', 'c', 's'],
       //       },
       //       scale: 1,
       //     },
@@ -132,12 +134,12 @@ describe('Equation Functions - SumPro', () => {
       parameterSteps: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
-        const sumOf = e.sumOf.bind(e);
+        const intLimits = e.intLimits.bind(e);
         eqn.addElements(elements);
         eqn.addForms({
           base: {
             content: {
-              sumOf: {
+              intLimits: {
                 content: 'a',
                 from: 'b',
                 to: 'c',
@@ -155,126 +157,128 @@ describe('Equation Functions - SumPro', () => {
                 toSpace: 0.01,
                 fromOffset: [0, 0],
                 toOffset: [0, 0],
+                limitsPosition: 'topBottom',
+                limitsAroundContent: true,
               },
             },
             scale: 1,
           },
           inSizeFalse: {
-            content: sumOf([
+            content: intLimits([
               's', 'a', 'b', 'c', false, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0],
+              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
             ]),
             scale: 1,
           },
           space: {
-            content: sumOf([
+            content: intLimits([
               's', 'a', 'b', 'c', true, 0.1, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0],
+              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
             ]),
             scale: 1,
           },
           topSpace: {
-            content: sumOf([
+            content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.1, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0],
+              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
             ]),
             scale: 1,
           },
           bottomSpace: {
-            content: sumOf([
+            content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.1, null,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0],
+              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
             ]),
             scale: 1,
           },
           topBottomSpace: {
-            content: sumOf([
+            content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.1, 0.1, null,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0],
+              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
             ]),
             scale: 1,
           },
           heightAndOverride: {
-            content: sumOf([
+            content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 1, 1, 1,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0],
+              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
             ]),
             scale: 1,
           },
           heightYOffset: {
-            content: sumOf([
+            content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, 1,
-              0.1, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0],
+              0.1, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
             ]),
             scale: 1,
           },
           yOffsetNegative: {
-            content: sumOf([
+            content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              -0.1, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0],
+              -0.1, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
             ]),
             scale: 1,
           },
           scale: {
-            content: sumOf([
+            content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 0.5, 1, 1, 0.01, 0.01, [0, 0], [0, 0],
+              0, 0.5, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
             ]),
             scale: 1,
           },
           fromScale: {
-            content: sumOf([
+            content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 1, 0.5, 1, 0.01, 0.01, [0, 0], [0, 0],
+              0, 1, 0.5, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
             ]),
             scale: 1,
           },
           toScale: {
-            content: sumOf([
+            content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 0.5, 0.01, 0.01, [0, 0], [0, 0],
+              0, 1, 1, 0.5, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
             ]),
             scale: 1,
           },
           fromSpace: {
-            content: sumOf([
+            content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.1, 0.01, [0, 0], [0, 0],
+              0, 1, 1, 1, 0.1, 0.01, [0, 0], [0, 0], 'topBottom', true,
             ]),
             scale: 1,
           },
           toSpace: {
-            content: sumOf([
+            content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.1, [0, 0], [0, 0],
+              0, 1, 1, 1, 0.01, 0.1, [0, 0], [0, 0], 'topBottom', true,
             ]),
             scale: 1,
           },
           fromOffset: {
-            content: sumOf([
+            content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.01, [-0.3, -0.2], [0, 0],
+              0, 1, 1, 1, 0.01, 0.01, [-0.3, -0.2], [0, 0], 'topBottom', true,
             ]),
             scale: 1,
           },
           toOffset: {
-            content: sumOf([
+            content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0.3, 0.2],
+              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0.3, 0.2], 'topBottom', true,
             ]),
             scale: 1,
           },
           noFrom: {
-            content: sumOf([
+            content: intLimits([
               's', 'a', '', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0],
+              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
             ]),
             scale: 1,
           },
           noTo: {
-            content: sumOf([
+            content: intLimits([
               's', 'a', 'b', '', true, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0],
+              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
             ]),
             scale: 1,
           },
