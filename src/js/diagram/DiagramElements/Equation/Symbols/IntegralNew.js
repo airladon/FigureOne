@@ -115,20 +115,20 @@ export default class IntegralNew extends Symbol {
   getPoints() {
     return (options: Object, widthIn: number, height: number) => {
       const {
-        sides, serif, // lineWidth, tipWidth,
+        sides, serif, num, type, serifSides, lineIntegralSides,
       } = options;
       const { lineWidth, width, tipWidth } = this.getDefaultValues(
         height,
         widthIn,
         options,
       );
-
+      const singleWidth = width - (num - 1) * lineWidth * 3;
       const percentage = 0.99999999999;
       const h = height;
       const serifRadius = lineWidth * 0.7;
-      let widthWithoutSerifs = width;
+      let widthWithoutSerifs = singleWidth;
       if (serif) {
-        widthWithoutSerifs = width - serifRadius * 2;
+        widthWithoutSerifs = singleWidth - serifRadius * 2;
       }
       const xArray = range(
         -widthWithoutSerifs / 2,
@@ -136,7 +136,7 @@ export default class IntegralNew extends Symbol {
         widthWithoutSerifs / sides,
       );
       const targetY = percentage * height;
-      const k = -Math.log(height / targetY - 1) / width / 2;
+      const k = -Math.log(height / targetY - 1) / singleWidth / 2;
 
       let bottomTheta = 0;
       const linePoints = [];
@@ -152,8 +152,8 @@ export default class IntegralNew extends Symbol {
                  + tipWidth / 2;
         const xDelta = a * Math.cos(theta + Math.PI / 2);
         const yDelta = a * Math.sin(theta + Math.PI / 2);
-        const left = new Point(x + xDelta + width / 2, y + yDelta);
-        const right = new Point(x - xDelta + width / 2, y - yDelta);
+        const left = new Point(x + xDelta + singleWidth / 2, y + yDelta);
+        const right = new Point(x - xDelta + singleWidth / 2, y - yDelta);
         if (index > 0) {
           linePoints.push(prevLeft._dup());
           linePoints.push(prevRight._dup());
@@ -169,69 +169,118 @@ export default class IntegralNew extends Symbol {
         }
       });
 
+      let points = [];
       if (serif === false) {
-        return [linePoints, width, height];
-      }
-      const serifPoints = 10;
+        points = linePoints;
+      } else {
+        const serifPoints = serifSides;
 
-      const bottomCenter = new Point(
-        linePoints[1].x + serifRadius * Math.cos(bottomTheta + Math.PI / 2),
-        linePoints[1].y + serifRadius * Math.sin(bottomTheta + Math.PI / 2),
-      );
-
-      const topCenter = new Point(
-        linePoints[linePoints.length - 1].x + serifRadius * Math.cos(bottomTheta - Math.PI / 2),
-        linePoints[linePoints.length - 1].y + serifRadius * Math.sin(bottomTheta - Math.PI / 2),
-      );
-
-      const bottomSerifPoints = [];
-      const topSerifPoints = [];
-      const angleDelta = Math.PI * 2 / Math.max(serifPoints, 3);
-      let prevBottom;
-      let prevTop;
-      for (let i = 0; i < serifPoints + 1; i += 1) {
-        const bottom = new Point(
-          bottomCenter.x + serifRadius * Math.cos(angleDelta * i),
-          bottomCenter.y + serifRadius * Math.sin(angleDelta * i),
+        const bottomCenter = new Point(
+          linePoints[1].x + serifRadius * Math.cos(bottomTheta + Math.PI / 2),
+          linePoints[1].y + serifRadius * Math.sin(bottomTheta + Math.PI / 2),
         );
-        const top = new Point(
-          topCenter.x + serifRadius * Math.cos(angleDelta * i),
-          topCenter.y + serifRadius * Math.sin(angleDelta * i),
+
+        const topCenter = new Point(
+          linePoints[linePoints.length - 1].x + serifRadius * Math.cos(bottomTheta - Math.PI / 2),
+          linePoints[linePoints.length - 1].y + serifRadius * Math.sin(bottomTheta - Math.PI / 2),
         );
-        if (i > 0) {
-          bottomSerifPoints.push(linePoints[1]._dup());
-          bottomSerifPoints.push(prevBottom._dup());
-          bottomSerifPoints.push(bottom._dup());
-          topSerifPoints.push(linePoints[linePoints.length - 2]._dup());
-          topSerifPoints.push(prevTop._dup());
-          topSerifPoints.push(top._dup());
+
+        const bottomSerifPoints = [];
+        const topSerifPoints = [];
+        const angleDelta = Math.PI * 2 / Math.max(serifPoints, 3);
+        let prevBottom = new Point(0, 0); // initialied for flow only
+        let prevTop = new Point(0, 0);    // initialied for flow only
+        for (let i = 0; i < serifPoints + 1; i += 1) {
+          const bottom = new Point(
+            bottomCenter.x + serifRadius * Math.cos(angleDelta * i),
+            bottomCenter.y + serifRadius * Math.sin(angleDelta * i),
+          );
+          const top = new Point(
+            topCenter.x + serifRadius * Math.cos(angleDelta * i),
+            topCenter.y + serifRadius * Math.sin(angleDelta * i),
+          );
+          if (i > 0) {
+            bottomSerifPoints.push(linePoints[1]._dup());
+            bottomSerifPoints.push(prevBottom._dup());
+            bottomSerifPoints.push(bottom._dup());
+            topSerifPoints.push(linePoints[linePoints.length - 2]._dup());
+            topSerifPoints.push(prevTop._dup());
+            topSerifPoints.push(top._dup());
+          }
+          prevBottom = bottom;
+          prevTop = top;
         }
-        prevBottom = bottom;
-        prevTop = top;
-        // bottomSerifPoints.push(linePoints[1]._dup());
-        // bottomSerifPoints.push(new Point(
-        //   bottomCenter.x + serifRadius * Math.cos(angleDelta * i),
-        //   bottomCenter.y + serifRadius * Math.sin(angleDelta * i),
-        // ));
-        // topSerifPoints.push(linePoints[linePoints.length - 2]._dup());
-        // topSerifPoints.push(new Point(
-        //   topCenter.x + serifRadius * Math.cos(angleDelta * i),
-        //   topCenter.y + serifRadius * Math.sin(angleDelta * i),
-        // ));
+        points = [
+          ...bottomSerifPoints,
+          ...linePoints,
+          ...topSerifPoints,
+        ];
       }
-      const points = [
-        ...bottomSerifPoints,
-        ...linePoints,
-        ...topSerifPoints,
-      ];
+      const numPoints = points.length;
+      for (let i = 1; i < num; i += 1) {
+        for (let j = 0; j < numPoints; j += 1) {
+          points.push(points[j].add(lineWidth * 3 * i, 0));
+        }
+        // width = width + lineWidth * 2;
+      }
+      if (type === 'line') {
+        const lineIntegralEllipsePoints = this.getLineIntegralPoints(
+          lineWidth, num, width, height, lineIntegralSides,
+        );
+        points = [...points, ...lineIntegralEllipsePoints];
+      }
       return [points, width, height];
     };
   }
 
   // eslint-disable-next-line class-methods-use-this
+  getLineIntegralPoints(
+    lineWidth: number,
+    num: number,
+    width: number,
+    height: number,
+    sides: number,
+  ) {
+    const ellipseHeight = lineWidth * 6;
+    const ellipseWidth = Math.max(
+      ellipseHeight,
+      (lineWidth * 3 + (num - 1) * lineWidth * 3 / 2) * 2,
+    );
+    const center = new Point(width / 2, height / 2);
+    const deltaAngle = Math.PI * 2 / sides;
+    let prevOuter = new Point(0, 0);
+    let prevInner = new Point(0, 0);
+    const ellipseLineWidth = lineWidth / 2;
+    const points = [];
+    for (let i = 0; i < sides + 1; i += 1) {
+      const angle = i * deltaAngle;
+      const inner = new Point(
+        (ellipseWidth / 2 - ellipseLineWidth / 2) * Math.cos(angle),
+        (ellipseHeight / 2 - ellipseLineWidth / 2) * Math.sin(angle),
+      ).add(center);
+      const outer = new Point(
+        (ellipseWidth / 2 + ellipseLineWidth / 2) * Math.cos(angle),
+        (ellipseHeight / 2 + ellipseLineWidth / 2) * Math.sin(angle),
+      ).add(center);
+      if (i > 0) {
+        points.push(prevOuter._dup());
+        points.push(prevInner._dup());
+        points.push(inner._dup());
+        points.push(prevOuter._dup());
+        points.push(inner._dup());
+        points.push(outer._dup());
+      }
+      prevOuter = outer;
+      prevInner = inner;
+    }
+    return points;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
   getDefaultValues(height: number, width: ?number, options: {
-      lineWidth?: number,
-      tipWidth?: number,
+      lineWidth: number,
+      tipWidth: number,
+      num: number,
     }) {
     // at 2:
     //    lw = 0.05 (40)
@@ -254,9 +303,14 @@ export default class IntegralNew extends Symbol {
     //     e = 0.006 (50)
     //
     // Using https://mycurvefit.com and add 0 to each to keep values under 0.3 positive
+    const defaultLineWidth = 607.73 + (0.0004220802 - 607.73)
+      / (1 + (height / 5368595) ** 0.6370402);
+    const defaultSingleWidth = 12277.16 + (0.003737719 - 12277.16)
+      / (1 + (height / 36507180) ** 0.6193363);
+    const defaultTotalWidth = defaultSingleWidth + ((options.num - 1) * defaultLineWidth * 3);
     const out = {
-      lineWidth: 607.73 + (0.0004220802 - 607.73) / (1 + (height / 5368595) ** 0.6370402),
-      width: 12277.16 + (0.003737719 - 12277.16) / (1 + (height / 36507180) ** 0.6193363),
+      lineWidth: defaultLineWidth,
+      width: defaultTotalWidth,
       tipWidth: 0.01033455 + (0.000004751934 - 0.01033455) / (1 + (height / 0.2588074) ** 2.024942),
     };
     if (width != null) {
