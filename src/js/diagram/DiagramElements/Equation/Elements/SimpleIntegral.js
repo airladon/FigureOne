@@ -88,7 +88,7 @@ export default class SimpleIntegral extends BaseEquationFunction {
     if (fromContent != null) {
       operatorBounds.descent = Math.max(
         loc.y - (fromLoc.y - fromBounds.descent),
-        loc.y - (glyphLoc.y - glyphBounds.descent),
+        loc.y - glyphLoc.y,
       );
     } else {
       operatorBounds.descent = glyphBounds.descent;
