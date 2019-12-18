@@ -22,7 +22,7 @@ import EquationForm from './EquationForm';
 import { Annotation, AnnotationInformation } from './Elements/Annotation';
 import Padding from './Elements/Padding';
 import Box from './Elements/Box';
-import SimpleIntegral from './Elements/SimpleIntegral';
+import Integral from './Elements/Integral';
 import SumProd from './Elements/SumProd';
 
 export function getDiagramElement(
@@ -211,6 +211,28 @@ export type TypeBracketArray = [
 export type TypeIntegralObject = {
   symbol?: string,
   content?: TypeEquationPhrase;
+  inSize?: boolean,
+  space?: number,
+  topSpace?: number,
+  bottomSpace?: number,
+  height?: number,
+  yOffset?: number,
+  scale?: number,
+};
+export type TypeIntegralArray = [
+  ?string,
+  TypeEquationPhrase,
+  ?boolean,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+];
+
+export type TypeLimitsIntegralObject = {
+  symbol?: string,
+  content?: TypeEquationPhrase;
   from?: TypeEquationPhrase,
   to?: TypeEquationPhrase,
   inSize?: boolean,
@@ -228,7 +250,7 @@ export type TypeIntegralObject = {
   toOffset?: TypeParsablePoint,
   limitsPosition?: 'side' | 'top' | 'topCenter',
 };
-export type TypeIntegralArray = [
+export type TypeLimitsIntegralArray = [
   ?string,
   TypeEquationPhrase,
   TypeEquationPhrase,
@@ -477,7 +499,7 @@ export class EquationFunctions {
     if (name === 'topStrike') { return this.topStrike(params); }   // $FlowFixMe
     if (name === 'bottomStrike') { return this.bottomStrike(params); } // $FlowFixMe
     if (name === 'pad') { return this.pad(params); }   // $FlowFixMe
-    if (name === 'limitsInt') { return this.limitsIntegral(params); }   // $FlowFixMe
+    if (name === 'intLimits') { return this.limitsIntegral(params); }   // $FlowFixMe
     if (name === 'int') { return this.noLimitsIntegral(params); }   // $FlowFixMe
     if (name === 'sumOf') { return this.sumProd(params); }   // $FlowFixMe
     if (name === 'prodOf') { return this.sumProd(params); }
@@ -1122,14 +1144,8 @@ export class EquationFunctions {
     if (content != null) {                           // $FlowFixMe
       contentArray.push(this.contentToElement(content));
     }
-    // if (from != null) {                              // $FlowFixMe
-    //   contentArray.push(this.contentToElement(''));
-    // }
-    // if (to != null) {                                // $FlowFixMe
-    //   contentArray.push(this.contentToElement(''));
-    // }
 
-    return new SimpleIntegral(
+    return new Integral(
       contentArray,
       symbolToUse,
       options,
@@ -1227,98 +1243,98 @@ export class EquationFunctions {
       contentArray.push(this.contentToElement(to));
     }
 
-    return new SimpleIntegral(
+    return new Integral(
       contentArray,
       symbolToUse,
       options,
     );
   }
 
-  simpleIntegralOld(
-    optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
-    symbolString: string | null = null,
-    inSizeInput: boolean | null = null,
-    spaceToContent: number | null = null,
-    topSpaceToContent: number | null = null,
-    bottomSpaceToContent: number | null = null,
-    minimumContentHeight: number | null = null,
-    minimumContentDescent: number | null = null,
-    forceHeight: number | null = null,
-    forceDescent: number | null = null,
-  ) {
-    let content;
-    let symbol;
-    let space;
-    let topSpace;
-    let bottomSpace;
-    let minContentHeight;
-    let minContentDescent;
-    let descent;
-    let height;
-    let inSize;
-    const defaultOptions = {
-      space: 0.05,
-      topSpace: 0.05,
-      bottomSpace: 0.05,
-      minContentHeight: null,
-      minContentDescent: null,
-      height: null,
-      descent: null,
-      inSize: true,
-    };
-    if (!(symbolString == null
-          && spaceToContent == null
-          && topSpaceToContent == null
-          && bottomSpaceToContent == null
-          && minimumContentHeight == null
-          && minimumContentDescent == null
-          && forceDescent == null
-          && forceHeight == null
-          && inSizeInput == null)
-    ) {
-      content = optionsOrContent;
-      symbol = symbolString;
-      space = spaceToContent;
-      topSpace = topSpaceToContent;
-      bottomSpace = bottomSpaceToContent;
-      minContentHeight = minimumContentHeight;
-      minContentDescent = minimumContentDescent;
-      descent = forceDescent;
-      height = forceHeight;
-      inSize = inSizeInput;
-    } else if (Array.isArray(optionsOrContent)) {
-      [                                                    // $FlowFixMe
-        content, symbol, inSize, space,   // $FlowFixMe
-        topSpace, bottomSpace, minContentHeight, minContentDescent, height, descent,
-      ] = optionsOrContent;
-    } else {
-      ({                                                   // $FlowFixMe
-        content, symbol, inSize, space,   // $FlowFixMe
-        topSpace, bottomSpace, minContentHeight,           // $FlowFixMe
-        minContentDescent, height, descent,
-      } = optionsOrContent);
-    }
-    const optionsIn = {
-      space,
-      topSpace,
-      bottomSpace,
-      minContentHeight,
-      minContentDescent,
-      height,
-      descent,
-      inSize,
-    };
-    const options = joinObjects({}, defaultOptions, optionsIn);
-    let symbolToUse = null;
-    if (symbol != null) {                                    // $FlowFixMe
-      symbolToUse = getDiagramElement(this.elements, symbol);
-    }
-    return new SimpleIntegral(                                // $FlowFixMe
-      this.contentToElement(content),
-      symbolToUse,
-      options,
-    );
-  }
+  // simpleIntegralOld(
+  //   optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
+  //   symbolString: string | null = null,
+  //   inSizeInput: boolean | null = null,
+  //   spaceToContent: number | null = null,
+  //   topSpaceToContent: number | null = null,
+  //   bottomSpaceToContent: number | null = null,
+  //   minimumContentHeight: number | null = null,
+  //   minimumContentDescent: number | null = null,
+  //   forceHeight: number | null = null,
+  //   forceDescent: number | null = null,
+  // ) {
+  //   let content;
+  //   let symbol;
+  //   let space;
+  //   let topSpace;
+  //   let bottomSpace;
+  //   let minContentHeight;
+  //   let minContentDescent;
+  //   let descent;
+  //   let height;
+  //   let inSize;
+  //   const defaultOptions = {
+  //     space: 0.05,
+  //     topSpace: 0.05,
+  //     bottomSpace: 0.05,
+  //     minContentHeight: null,
+  //     minContentDescent: null,
+  //     height: null,
+  //     descent: null,
+  //     inSize: true,
+  //   };
+  //   if (!(symbolString == null
+  //         && spaceToContent == null
+  //         && topSpaceToContent == null
+  //         && bottomSpaceToContent == null
+  //         && minimumContentHeight == null
+  //         && minimumContentDescent == null
+  //         && forceDescent == null
+  //         && forceHeight == null
+  //         && inSizeInput == null)
+  //   ) {
+  //     content = optionsOrContent;
+  //     symbol = symbolString;
+  //     space = spaceToContent;
+  //     topSpace = topSpaceToContent;
+  //     bottomSpace = bottomSpaceToContent;
+  //     minContentHeight = minimumContentHeight;
+  //     minContentDescent = minimumContentDescent;
+  //     descent = forceDescent;
+  //     height = forceHeight;
+  //     inSize = inSizeInput;
+  //   } else if (Array.isArray(optionsOrContent)) {
+  //     [                                                    // $FlowFixMe
+  //       content, symbol, inSize, space,   // $FlowFixMe
+  //       topSpace, bottomSpace, minContentHeight, minContentDescent, height, descent,
+  //     ] = optionsOrContent;
+  //   } else {
+  //     ({                                                   // $FlowFixMe
+  //       content, symbol, inSize, space,   // $FlowFixMe
+  //       topSpace, bottomSpace, minContentHeight,           // $FlowFixMe
+  //       minContentDescent, height, descent,
+  //     } = optionsOrContent);
+  //   }
+  //   const optionsIn = {
+  //     space,
+  //     topSpace,
+  //     bottomSpace,
+  //     minContentHeight,
+  //     minContentDescent,
+  //     height,
+  //     descent,
+  //     inSize,
+  //   };
+  //   const options = joinObjects({}, defaultOptions, optionsIn);
+  //   let symbolToUse = null;
+  //   if (symbol != null) {                                    // $FlowFixMe
+  //     symbolToUse = getDiagramElement(this.elements, symbol);
+  //   }
+  //   return new SimpleIntegral(                                // $FlowFixMe
+  //     this.contentToElement(content),
+  //     symbolToUse,
+  //     options,
+  //   );
+  // }
 
   // sumOf(optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
   //   fromIn: TypeEquationPhrase,

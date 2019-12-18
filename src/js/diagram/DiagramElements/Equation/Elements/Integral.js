@@ -1,227 +1,212 @@
+
 // @flow
 import {
   Point,
 } from '../../../../tools/g2';
-import {
-  DiagramElementPrimitive, DiagramElementCollection,
-} from '../../../Element';
-import { roundNum } from '../../../../tools/math';
-import { duplicateFromTo } from '../../../../tools/tools';
-import { Element, Elements } from './Element';
 import Bounds from './Bounds';
+import BaseEquationFunction from './BaseEquationFunction';
 
-export default class Integral extends Elements {
-  limitMin: Elements | null;
-  limitMax: Elements | null;
-  mainContent: Elements | null;
-  integralGlyph: DiagramElementPrimitive | DiagramElementCollection | null;
-  glyphLocation: Point;
-  glyphScale: number;
-
-  constructor(
-    limitMin: Elements | null,
-    limitMax: Elements | null,
-    content: Elements | null,
-    integralGlyph: DiagramElementPrimitive | null | DiagramElementCollection,
-  ) {
-    const glyph = integralGlyph !== null ? new Element(integralGlyph) : null;
-    super([glyph, limitMin, limitMax, content]);
-
-    this.limitMin = limitMin;
-    this.limitMax = limitMax;
-    this.mainContent = content;
-    this.integralGlyph = integralGlyph;
-    this.glyphLocation = new Point(0, 0);
-    this.glyphScale = 1;
-  }
-
-  _dup(namedCollection?: Object) {
-    const limitMin = this.limitMin == null ? null : this.limitMin._dup(namedCollection);
-    const limitMax = this.limitMax == null ? null : this.limitMax._dup(namedCollection);
-    const content = this.mainContent == null ? null : this.mainContent._dup(namedCollection);
-    let glyph = null;
-    if (this.integralGlyph != null && namedCollection) {
-      glyph = namedCollection[this.integralGlyph.name];
-    } else {
-      glyph = this.integralGlyph;
-    }
-
-    const integralCopy = new Integral(
-      limitMin,
-      limitMax,
-      content,
-      glyph,
-    );
-    duplicateFromTo(
-      this, integralCopy,
-      ['limitMin', 'limitMax', 'mainContent', 'integralGlyph'],
-    );
-    return integralCopy;
-  }
-
-  getAllElements() {
-    let elements = [];
-    if (this.limitMin) {
-      elements = [...elements, ...this.limitMin.getAllElements()];
-    }
-    if (this.limitMax) {
-      elements = [...elements, ...this.limitMax.getAllElements()];
-    }
-    if (this.mainContent) {
-      elements = [...elements, ...this.mainContent.getAllElements()];
-    }
-    if (this.integralGlyph) {
-      elements = [...elements, this.integralGlyph];
-    }
-    return elements;
-  }
-
-  setPositions() {
-    const { integralGlyph } = this;
-    if (integralGlyph != null) {
-      integralGlyph.transform.updateScale(this.glyphScale, this.glyphScale);
-      integralGlyph.transform.updateTranslation(
-        this.glyphLocation.x,
-        this.glyphLocation.y,
-      );
-    }
-    if (this.limitMin) {
-      this.limitMin.setPositions();
-    }
-    if (this.limitMax) {
-      this.limitMax.setPositions();
-    }
-    if (this.mainContent) {
-      this.mainContent.setPositions();
-    }
-  }
-
-  offsetLocation(offset: Point = new Point(0, 0)) {
-    this.location = this.location.add(offset);
-    const { integralGlyph } = this;
-    if (integralGlyph != null) {
-      this.glyphLocation = this.glyphLocation.add(offset);
-    }
-    if (this.mainContent) {
-      this.mainContent.offsetLocation(offset);
-    }
-    if (this.limitMax) {
-      this.limitMax.offsetLocation(offset);
-    }
-    if (this.limitMin) {
-      this.limitMin.offsetLocation(offset);
-    }
-  }
-
+export default class Integral extends BaseEquationFunction {
   calcSize(location: Point, scale: number) {
     this.location = location._dup();
     const loc = location._dup();
     const contentBounds = new Bounds();
-    const limitMinBounds = new Bounds();
-    const limitMaxBounds = new Bounds();
-    const integralGlyphBounds = new Bounds();
+    const fromBounds = new Bounds();
+    const toBounds = new Bounds();
+    const originalContentBounds = new Bounds();
+    const glyphBounds = new Bounds();
+    const operatorBounds = new Bounds();
 
-    const { mainContent } = this;
-    if (mainContent instanceof Elements) {
-      mainContent.calcSize(loc._dup(), scale);
-      contentBounds.width = mainContent.width;
-      contentBounds.height = mainContent.ascent + mainContent.descent;
-      contentBounds.ascent = mainContent.ascent;
-      contentBounds.descent = mainContent.descent;
+    const fromLoc = location._dup();
+    const toLoc = location._dup();
+    const glyphLoc = location._dup();
+    const {
+      height, topSpace, bottomSpace, yOffset,
+      space, inSize, contentScale, fromScale, toScale,
+      fromSpace, toSpace, fromOffset, toOffset,
+      limitsPosition, limitsAroundContent,
+    } = this.options;
+    const [glyph] = this.glyphs;
+    const [mainContent, fromContent, toContent] = this.contents;
+    if (mainContent != null) {
+      mainContent.calcSize(loc._dup(), scale * contentScale);
+      contentBounds.copyFrom(mainContent);
+      originalContentBounds.copyFrom(mainContent);
+    }
+    if (fromContent != null) {
+      fromContent.calcSize(loc._dup(), scale * fromScale);
+      fromBounds.copyFrom(fromContent);
+    }
+    if (toContent != null) {
+      toContent.calcSize(loc._dup(), scale * toScale);
+      toBounds.copyFrom(toContent);
     }
 
-    const { limitMax } = this;
-    if (limitMax instanceof Elements) {
-      limitMax.calcSize(loc._dup(), scale / 2);
-      limitMaxBounds.width = limitMax.width;
-      limitMaxBounds.height = limitMax.ascent + limitMax.descent;
-      limitMaxBounds.ascent = limitMax.ascent;
-      limitMaxBounds.descent = limitMax.descent;
+    // Find y position and bounds of glyph, from and to content
+    glyphBounds.height = contentBounds.height + (bottomSpace + topSpace) * scale;
+    glyphLoc.y = loc.y - contentBounds.descent - bottomSpace * scale + yOffset * scale;
+
+    if (limitsPosition === 'side'
+      && fromBounds.height / 2 > glyphBounds.height / 2) {
+      const delta = fromBounds.height / 2 - glyphBounds.height / 2;
+      glyphLoc.y -= delta;
+      glyphBounds.height += delta;
     }
 
-    const { limitMin } = this;
-    if (limitMin instanceof Elements) {
-      limitMin.calcSize(loc._dup(), scale / 2);
-      limitMinBounds.width = limitMin.width;
-      limitMinBounds.height = limitMin.ascent + limitMin.descent;
-      limitMinBounds.ascent = limitMin.ascent;
-      limitMinBounds.descent = limitMin.descent;
+    if (limitsPosition === 'side'
+      && toBounds.height / 2 > glyphBounds.height / 2) {
+      const delta = toBounds.height / 2 - glyphBounds.height / 2;
+      glyphBounds.height += delta;
     }
 
-    const integralMinHeight = contentBounds.ascent + contentBounds.descent
-                              + limitMinBounds.height + limitMaxBounds.height;
-    const numLines = roundNum(integralMinHeight / scale, 0);
-    const height = numLines * scale * 1.2;
-    const integralSymbolLocation = new Point(
-      loc.x,
-      loc.y - height / 2 + scale * 0.45,
-    );
+    // If height is defined it overwrites topSpace and bottomSpace
+    if (height != null) {
+      const contentMidY = loc.y - contentBounds.descent + contentBounds.height / 2;
+      glyphBounds.height = height;
+      glyphLoc.y = contentMidY - height / 2 + yOffset * scale;
+    }
+    glyphBounds.descent = loc.y - glyphLoc.y;
+    glyphBounds.ascent = glyphBounds.height - glyphBounds.descent;
+    if (limitsPosition === 'side') {
+      fromLoc.y = glyphLoc.y - fromBounds.height / 2 + fromOffset.y;
+      toLoc.y = glyphLoc.y + glyphBounds.height - toBounds.height / 2 + toOffset.y;
+    } else {
+      fromLoc.y = glyphLoc.y
+                - (fromSpace - fromOffset.y) * scale - fromBounds.ascent + fromOffset.y;
+      toLoc.y = glyphLoc.y + glyphBounds.height
+              + (toSpace + toOffset.y) * scale + toBounds.descent + toOffset.y;
+    }
 
-    const { integralGlyph } = this;
-    if (integralGlyph instanceof DiagramElementPrimitive) {
-      integralGlyph.show();
-      integralGlyph.transform.updateScale(
-        height,
-        height,
+    if (toContent != null) {
+      operatorBounds.ascent = Math.max(
+        toLoc.y + toBounds.height - loc.y,
+        glyphLoc.y + glyphBounds.height - loc.y,
       );
-      integralGlyph.transform.updateTranslation(
-        integralSymbolLocation.x,
-        integralSymbolLocation.y,
+    } else {
+      operatorBounds.ascent = glyphBounds.ascent;
+    }
+    if (fromContent != null) {
+      operatorBounds.descent = Math.max(
+        loc.y - (fromLoc.y - fromBounds.descent),
+        loc.y - glyphLoc.y,
       );
-      this.glyphLocation = integralSymbolLocation;
-      this.glyphScale = height;
-      const bounds = integralGlyph.drawingObject
-        .getRelativeVertexSpaceBoundingRect();
-        // .getRelativeGLBoundingRect(integralGlyph.transform.matrix());
-      integralGlyphBounds.width = (bounds.width) * height;
-      integralGlyphBounds.height = (-bounds.bottom + bounds.top) * height;
-      integralGlyphBounds.ascent = bounds.top * height;
-      integralGlyphBounds.descent = (-bounds.bottom) * height;
+    } else {
+      operatorBounds.descent = glyphBounds.descent;
+    }
+    operatorBounds.height = operatorBounds.ascent + operatorBounds.descent;
+
+    // Find x position and bounds of glyph, from and to content
+    this.glyphHeights[0] = glyphBounds.height;
+    // console.log(glyphBounds.height);
+    if (glyph != null) {
+      glyphBounds.width = glyph.custom.getWidth(glyph.custom.options, glyphBounds.height);
+    } else {
+      glyphBounds.width = 0;
+    }
+    this.glyphWidths[0] = glyphBounds.width;
+
+    if (limitsPosition === 'side') {
+      glyphLoc.x = loc.x;
+      fromLoc.x = loc.x + glyphBounds.width / 2 + fromSpace + fromOffset.x;
+      toLoc.x = loc.x + glyphBounds.width + toSpace + toOffset.x;
+    } else {
+      const maxWidth = Math.max(glyphBounds.width, fromBounds.width, toBounds.width);
+      glyphLoc.x = loc.x + (maxWidth - glyphBounds.width) / 2;
+      fromLoc.x = loc.x + (maxWidth - fromBounds.width) / 2 + fromOffset.x;
+      toLoc.x = loc.x + (maxWidth - toBounds.width) / 2 + toOffset.x;
+
+      const minLocX = Math.min(toLoc.x, fromLoc.x, glyphLoc.x);
+      if (minLocX < loc.x) {
+        const offset = loc.x - minLocX;
+        glyphLoc.x += offset;
+        fromLoc.x += offset;
+        toLoc.x += offset;
+      }
     }
 
-    const minLimitLocation = new Point(
-      this.location.x + integralGlyphBounds.width * 0.5,
-      integralSymbolLocation.y,
-    );
+    if (limitsAroundContent) {
+      operatorBounds.width = glyphBounds.width;
+    } else {
+      operatorBounds.width = Math.max(
+        glyphLoc.x + glyphBounds.width,
+        fromLoc.x + fromBounds.width,
+        toLoc.x + toBounds.width,
+      ) - loc.x;
+    }
 
-    const maxLimitLocation = new Point(
-      this.location.x + integralGlyphBounds.width * 1.2,
-      integralSymbolLocation.y + integralGlyphBounds.height - limitMaxBounds.height / 2,
-    );
+
+    // Final sizing and positioning
+    if (inSize === false) {
+      const offset = space * scale + operatorBounds.width;
+      glyphLoc.x -= offset;
+      fromLoc.x -= offset;
+      toLoc.x -= offset;
+    }
+
+
+    if (glyph != null) {
+      glyph.showAll();
+      glyph.transform.updateScale(
+        glyphBounds.width,
+        glyphBounds.height,
+      );
+      glyph.transform.updateTranslation(
+        glyphLoc.x,
+        glyphLoc.y,
+      );
+      this.glyphLocations[0] = glyphLoc;
+    }
+
+    if (fromContent != null) {
+      fromContent.offsetLocation(fromLoc.sub(fromContent.location));
+    }
+    if (toContent != null) {
+      toContent.offsetLocation(toLoc.sub(toContent.location));
+    }
 
     const contentLocation = new Point(
-      this.location.x + integralGlyphBounds.width * 0.8,
+      this.location.x + operatorBounds.width + space * scale,
       this.location.y,
     );
 
-    if (mainContent instanceof Elements) {
-      mainContent.calcSize(contentLocation, scale);
+    if (glyph == null) {
+      contentLocation.x = location.x;
     }
-    if (limitMin instanceof Elements) {
-      limitMin.calcSize(minLimitLocation, scale / 2);
-    }
-    if (limitMax instanceof Elements) {
-      limitMax.calcSize(maxLimitLocation, scale / 2);
+    if (mainContent != null && inSize) {
+      mainContent.offsetLocation(contentLocation.sub(mainContent.location));
     }
 
-    this.width = Math.max(
-      integralGlyphBounds.width,
-      limitMinBounds.width + minLimitLocation.x - this.location.x,
-      limitMaxBounds.width + maxLimitLocation.x - this.location.x,
-      contentBounds.width + contentLocation.x - this.location.x,
-    );
-    this.ascent = Math.max(
-      integralGlyphBounds.ascent,
-      limitMaxBounds.ascent + maxLimitLocation.y - this.location.y,
-      contentBounds.ascent + contentLocation.y - this.location.y,
-    );
+    if (inSize) {
+      if (limitsAroundContent) {
+        this.width = Math.max(
+          glyphLoc.x + glyphBounds.width,
+          fromLoc.x + fromBounds.width,
+          toLoc.x + toBounds.width,
+          contentLocation.x + contentBounds.width,
+        ) - loc.x;
+      } else {
+        this.width = operatorBounds.width + originalContentBounds.width
+        + space * scale;
+      }
+      if (operatorBounds.width === 0) {
+        this.width -= space * scale;
+      }
+      this.ascent = Math.max(
+        operatorBounds.ascent,
+        originalContentBounds.ascent,
+      );
+      this.descent = Math.max(operatorBounds.descent, originalContentBounds.descent);
+      this.height = this.descent + this.ascent;
+    } else {
+      this.width = originalContentBounds.width;
+      this.ascent = originalContentBounds.ascent;
+      this.descent = originalContentBounds.descent;
+      this.height = originalContentBounds.height;
+    }
 
-    this.descent = Math.max(
-      integralGlyphBounds.descent,
-      limitMinBounds.descent + this.location.y - minLimitLocation.y,
-      contentBounds.ascent + this.location.y - contentLocation.y,
-    );
-
-    this.height = this.descent + this.ascent;
+    if (glyph) {
+      glyph.custom.setSize(glyphLoc, glyphBounds.width, glyphBounds.height);
+    }
+    // console.log(this.width, this.ascent, this.descent, this.height)
   }
 }
