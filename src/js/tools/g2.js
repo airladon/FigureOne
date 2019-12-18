@@ -1975,7 +1975,7 @@ function getMoveTime(
 }
 
 
-function quadBezierPoints(p0, p1, p2, sides) {
+function quadBezierPoints(p0: Point, p1: Point, p2: Point, sides: number) {
   const step = 1 / sides;
   if (sides === 0 || sides === 1 || sides === 2) {
     return [p0, p1, p2];
