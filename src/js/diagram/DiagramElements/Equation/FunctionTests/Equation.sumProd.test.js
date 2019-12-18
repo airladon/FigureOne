@@ -300,6 +300,7 @@ describe('Equation Functions - SumPro', () => {
     beforeEach(() => {
       functions.parameterSteps();
       eqn.showForm('base');
+      diagram.setFirstTransform();
       baseA = eqn._a.getBoundingRect('diagram');
       baseB = eqn._b.getBoundingRect('diagram');
       baseC = eqn._c.getBoundingRect('diagram');
