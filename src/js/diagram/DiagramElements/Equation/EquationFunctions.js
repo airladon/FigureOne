@@ -1160,8 +1160,8 @@ export class EquationFunctions {
     let limitsAroundContent;
     const defaultOptions = {
       space: 0.05,
-      topSpace: 0.07,
-      bottomSpace: 0.07,
+      topSpace: 0.1,
+      bottomSpace: 0.1,
       height: null,
       yOffset: 0,
       inSize: true,
