@@ -411,18 +411,19 @@ export default class EquationSymbols {
     const defaultOptions = {
       side: 'left',
       color: this.defaultColor,
-      lineWidth: 0.012,
+      lineWidth: null,
       sides: 10,
       draw: 'dynamic',
       staticHeight: 'first',
+      width: null,
     };
     const optionsToUse = joinObjects(defaultOptions, options);
-    if (optionsToUse.width == null) {
-      optionsToUse.width = optionsToUse.lineWidth * 2.5;
-    }
-    if (optionsToUse.tipWidth == null) {
-      optionsToUse.tipWidth = optionsToUse.lineWidth / 3;
-    }
+    // if (optionsToUse.width == null) {
+    //   optionsToUse.width = optionsToUse.lineWidth * 2.5;
+    // }
+    // if (optionsToUse.tipWidth == null) {
+    //   optionsToUse.tipWidth = optionsToUse.lineWidth / 3;
+    // }
     return (new Bracket(
       this.shapes.webgl,
       optionsToUse.color,

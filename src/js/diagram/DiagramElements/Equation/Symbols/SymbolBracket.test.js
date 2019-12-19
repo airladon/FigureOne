@@ -27,10 +27,10 @@ describe('Equation Symbols - Bracket', () => {
       left: {
         symbol: 'bracket',
         side: 'left',
-        lineWidth: 0.01,
-        sides: 10,
-        tipWidth: 0.003,
-        staticSize: false,
+        // lineWidth: 0.01,
+        // sides: 10,
+        // tipWidth: 0.003,
+        // staticSize: false,
       },
       right: {
         symbol: 'bracket',
@@ -38,12 +38,26 @@ describe('Equation Symbols - Bracket', () => {
         lineWidth: 0.01,
         sides: 10,
         tipWidth: 0.003,
-        staticSize: true,
+        // staticSize: true,
+      },
+      leftStatic: {
+        symbol: 'bracket',
+        side: 'left',
+        lineWidth: 0.01,
+        sides: 10,
+        tipWidth: 0.003,
+        draw: 'static',
+        staticHeight: 'first',
       },
     };
     eqn = new EquationNew(diagram.shapes, { color: color1 });
     eqn.addElements(elements);
-    eqn.addForms({ 0: ['a', 'left', 'right'] });
+    eqn.addForms(
+      {
+        0: { brac: ['a', 'left', 'right'] },
+        1: { brac: ['a', 'leftStatic', 'right'] },
+      },
+    );
     diagram.elements = eqn;
   });
   test('Snapshot Bracket', () => {
@@ -52,5 +66,10 @@ describe('Equation Symbols - Bracket', () => {
     diagram.setFirstTransform();
     expect(round(eqn._left.drawingObject.points)).toMatchSnapshot();
     expect(round(eqn._right.drawingObject.points)).toMatchSnapshot();
+  });
+  test('Static', () => {
+    eqn.showForm('1');
+    diagram.setFirstTransform();
+    expect(round(eqn._leftStatic.drawingObject.points)).toMatchSnapshot();
   });
 });

@@ -51,7 +51,6 @@ export default class Symbol {
       symbol.getTransform = () => {
         const t = symbol.transform._dup();
         const s = t.s();
-
         if (s != null) {
           t.updateScale(
             s.x / symbol.custom.options.staticWidth,

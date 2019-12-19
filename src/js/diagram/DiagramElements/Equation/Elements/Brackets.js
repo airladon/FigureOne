@@ -94,6 +94,7 @@ export default class Brackets extends BaseEquationFunction {
       leftGlyphBounds.ascent = glyphHeight - glyphDescent;
       leftGlyphBounds.descent = glyphDescent;
       this.glyphHeights[0] = glyphHeight;
+      this.glyphWidths[0] = leftGlyphBounds.width;
     }
 
     let rightSymbolLocation = new Point(
@@ -131,6 +132,7 @@ export default class Brackets extends BaseEquationFunction {
       rightGlyphBounds.ascent = glyphHeight - glyphDescent;
       rightGlyphBounds.descent = glyphDescent;
       this.glyphHeights[1] = glyphHeight;
+      this.glyphWidths[1] = rightGlyphBounds.width;
     }
     const contentLocation = new Point(
       this.location.x + leftGlyphBounds.width + (insideSpace + outsideSpace) * scale,
