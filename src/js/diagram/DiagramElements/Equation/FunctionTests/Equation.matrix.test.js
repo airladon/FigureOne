@@ -47,6 +47,20 @@ describe('Equation Functions - Matrix', () => {
                 left: 'left',
                 content: ['a', 'b', 'c', 'd'],
                 right: 'right',
+                scale: 1,
+                fit: 'min',
+                space: [0.1, 0.1],
+                brac: {
+                  inSize: null,
+                  insideSpace: 0.1,
+                  outsideSpace: 0.1,
+                  topSpace: 0.1,
+                  bottomSpace: 0.1,
+                  minContentHeight: null,
+                  minContentDescent: null,
+                  height: null,
+                  descent: null,
+                },
               },
             },
           },
@@ -57,18 +71,70 @@ describe('Equation Functions - Matrix', () => {
               left: 'left',
               content: ['a', 'b', 'c', 'd'],
               right: 'right',
+              scale: 1,
+              fit: 'min',
+              space: [0.1, 0.1],
+              brac: {
+                inSize: null,
+                insideSpace: 0.1,
+                outsideSpace: 0.1,
+                topSpace: 0.1,
+                bottomSpace: 0.1,
+                minContentHeight: null,
+                minContentDescent: null,
+                height: null,
+                descent: null,
+              },
             },
           },
           // Method Array
-          2: { matrix: [[2, 2], 'left', ['a', 'b', 'c', 'd'], 'right'] },
+          2: { matrix: [
+            [2, 2], 'left', ['a', 'b', 'c', 'd'], 'right', 1, 'min',
+            [0.1, 0.1], {
+              inSize: null,
+              insideSpace: 0.1,
+              outsideSpace: 0.1,
+              topSpace: 0.1,
+              bottomSpace: 0.1,
+              minContentHeight: null,
+              minContentDescent: null,
+              height: null,
+              descent: null,
+            }] },
           // Function with Method Array
-          3: e.matrix([[2, 2], 'left', ['a', 'b', 'c', 'd'], 'right']),
+          3: e.matrix([
+            [2, 2], 'left', ['a', 'b', 'c', 'd'], 'right', 1, 'min',
+            [0.1, 0.1], {
+              inSize: null,
+              insideSpace: 0.1,
+              outsideSpace: 0.1,
+              topSpace: 0.1,
+              bottomSpace: 0.1,
+              minContentHeight: null,
+              minContentDescent: null,
+              height: null,
+              descent: null,
+            }]),
           // Bound Function with Object
           4: matrix({
             order: [2, 2],
             left: 'left',
             content: ['a', 'b', 'c', 'd'],
             right: 'right',
+            scale: 1,
+            fit: 'min',
+            space: [0.1, 0.1],
+            brac: {
+              inSize: null,
+              insideSpace: 0.1,
+              outsideSpace: 0.1,
+              topSpace: 0.1,
+              bottomSpace: 0.1,
+              minContentHeight: null,
+              minContentDescent: null,
+              height: null,
+              descent: null,
+            },
           }),
         });
         diagram.elements = eqn;
@@ -87,8 +153,9 @@ describe('Equation Functions - Matrix', () => {
                 right: 'right',
                 order: [2, 2],
                 scale: 1,
-                fit: 'rowCol',
+                fit: 'min',
                 space: [0.1, 0.1],
+                brac: { insideSpace: 0.1 },
               },
             },
             scale: 1,
@@ -96,7 +163,7 @@ describe('Equation Functions - Matrix', () => {
           order: {
             content: matrix([
               [1, 4], 'left', ['a', 'b', 'c', 'd'], 'right',
-              1, 'rowCol', [0.1, 0.1],
+              1, 'min', [0.1, 0.1], { insideSpace: 0.1 },
             ]),
             scale: 1,
           },
@@ -111,19 +178,23 @@ describe('Equation Functions - Matrix', () => {
     let baseB;
     let baseC;
     let baseD;
+    let baseLeft;
+    let left;
     let initialSpace;
+    let insideSpace;
     beforeEach(() => {
       functions.parameterSteps();
-      console.log('asdfasdfasdf')
       eqn.showForm('base');
       diagram.setFirstTransform();
       baseA = eqn._a.getBoundingRect('diagram');
       baseB = eqn._b.getBoundingRect('diagram');
       baseC = eqn._c.getBoundingRect('diagram');
       baseD = eqn._d.getBoundingRect('diagram');
+      baseLeft = eqn._left.getBoundingRect('diagram');
       initialSpace = 0.1;
+      insideSpace = 0.1;
     });
-    test.only('order', () => {
+    test('order', () => {
       // console.log(baseA)
       eqn.showForm('order');
       diagram.setFirstTransform();
@@ -131,11 +202,10 @@ describe('Equation Functions - Matrix', () => {
       const newB = eqn._b.getBoundingRect('diagram');
       const newC = eqn._c.getBoundingRect('diagram');
       const newD = eqn._d.getBoundingRect('diagram');
-      console.log(newA);
-      console.log(newB);
-      console.log(newC);
-      console.log(newD);
-      // expect(round(newA.left)).toBe(round(baseA.left + spaceDelta));
+      expect(round(newA.left)).toBe(round(baseLeft.right + insideSpace));
+      expect(round(newB.left)).toBe(round(newA.right + initialSpace));
+      expect(round(newC.left)).toBe(round(newB.right + initialSpace));
+      expect(round(newD.left)).toBe(round(newC.right + initialSpace));
     });
   });
   test('Input Forms', () => {

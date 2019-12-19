@@ -1121,19 +1121,6 @@ export class EquationFunctions {
     );
   }
 
-  // {
-  //   matrix: {
-  //     order: [2, 2],
-  //     left: glyph
-  //     content: [
-  //       a, b, c,
-  //       d, e, f,
-  //     ],
-  //     right: glyph,
-  //     fit: 'max' | 'rowCol' | number | Point,
-  //     space: number | Point,
-  //   }
-  // }
   matrix(optionsOrArray: TypeMatrixObject | TypeMatrixArray) {
     let content;
     let left;
@@ -1142,20 +1129,22 @@ export class EquationFunctions {
     let fit;
     let space;
     let scale;
+    let brac;
     const defaultOptions = {
       space: [0.05, 0.05],
-      fit: 'rowCol',
+      fit: 'min',
       contentScale: 0.7,
+      brac: {},
     };
     if (Array.isArray(optionsOrArray)) {
       [                                                    // $FlowFixMe
         order, left, content, right,                       // $FlowFixMe
-        scale, fit, space,
+        scale, fit, space, brac,
       ] = optionsOrArray;
     } else {
       ({                                                   // $FlowFixMe
         order, left, content, right,                       // $FlowFixMe
-        scale, fit, space,
+        scale, fit, space, brac,
       } = optionsOrArray);
     }
     const optionsIn = {
@@ -1163,6 +1152,7 @@ export class EquationFunctions {
       fit,
       order,
       contentScale: scale,
+      brac,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
 
@@ -1185,11 +1175,14 @@ export class EquationFunctions {
       [],
       options,
     );
-    return this.brac({
-      content: matrixContent,
-      left,
-      right,
-    });
+    if (left != null && right != null) {
+      return this.brac(joinObjects({}, options.brac, {
+        content: matrixContent,
+        left,
+        right,
+      }));
+    }
+    return matrixContent;
   }
 
 
