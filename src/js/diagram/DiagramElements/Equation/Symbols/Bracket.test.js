@@ -27,10 +27,10 @@ describe('Equation Symbols - Bracket', () => {
       left: {
         symbol: 'bracket',
         side: 'left',
-        // lineWidth: 0.01,
-        // sides: 10,
-        // tipWidth: 0.003,
-        // staticSize: false,
+        lineWidth: 0.01,
+        sides: 10,
+        tipWidth: 0.003,
+        staticSize: false,
       },
       right: {
         symbol: 'bracket',
@@ -38,7 +38,6 @@ describe('Equation Symbols - Bracket', () => {
         lineWidth: 0.01,
         sides: 10,
         tipWidth: 0.003,
-        // staticSize: true,
       },
       leftStatic: {
         symbol: 'bracket',

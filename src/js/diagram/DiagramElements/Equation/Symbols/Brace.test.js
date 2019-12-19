@@ -31,7 +31,7 @@ describe('Equation Symbols - Brace', () => {
         sides: 10,
         width: 0.04,
         tipWidth: 0.01,
-        staticSize: false,
+        draw: 'dynamic',
       },
       right: {
         symbol: 'brace',
@@ -40,17 +40,22 @@ describe('Equation Symbols - Brace', () => {
         sides: 10,
         width: 0.04,
         tipWidth: 0.01,
-        staticSize: true,
+        draw: 'static',
+        staticHeight: 'first',
       },
     };
     eqn = new EquationNew(diagram.shapes, { color: color1 });
     eqn.addElements(elements);
-    eqn.addForms({ 0: ['a', 'left', 'right'] });
+    eqn.addForms({ 0: { brac: ['a', 'left', 'right'] } });
+    diagram.elements = eqn;
   });
-  test('Snapshot', () => {
+  test('Snapshot 1', () => {
     // Snapshot test on most simple layout
     eqn.showForm('0');
     diagram.setFirstTransform();
+    // console.log(eqn._left.getBoundingRect('diagram'))
+    // console.log(eqn._right.transform)
+    // console.log(eqn._right.getBoundingRect('diagram'))
     expect(round(eqn._left.drawingObject.points)).toMatchSnapshot();
     expect(round(eqn._right.drawingObject.points)).toMatchSnapshot();
   });

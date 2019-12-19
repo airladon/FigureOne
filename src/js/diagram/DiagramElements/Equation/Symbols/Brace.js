@@ -5,17 +5,17 @@ import {
 import Bracket from './Bracket';
 
 
-export default class Bar extends Bracket {
+export default class Brace extends Bracket {
   // eslint-disable-next-line class-methods-use-this
-  getWidth() {
-    return (type: 'static' | 'dynamic', options: Object, height: number) => {
-      const { width } = options;
-      if (type === 'static') {
-        return height * width;
-      }
-      return width;
-    };
-  }
+  // getWidth() {
+  //   return (type: 'static' | 'dynamic', options: Object, height: number) => {
+  //     const { width } = options;
+  //     if (type === 'static') {
+  //       return height * width;
+  //     }
+  //     return width;
+  //   };
+  // }
 
   //  - Curve R1 and R2 are repeated 4 times in brace
   //  - Curve R1 is a full 90º circle
@@ -134,10 +134,12 @@ export default class Bar extends Bracket {
   //
   // eslint-disable-next-line class-methods-use-this
   getPoints() {
-    return (options: Object, height: number) => {
+    return (options: Object, widthIn: number, height: number) => {
       const {
-        lineWidth, width, sides, tipWidth,
+        sides, side,
       } = options;
+
+      const { lineWidth, width, tipWidth } = this.getDefaultValues(height, widthIn, options);
 
       const outsideRadius = (width / 2 + lineWidth / 2);
       const h = outsideRadius - tipWidth;
@@ -200,8 +202,47 @@ export default class Bar extends Bracket {
         leftPoints.push(outsidePoints[i].transformBy(m));
         rightPoints.push(insidePoints[i].transformBy(m));
       }
-
-      return [leftPoints, rightPoints, width, height];
+      // return [leftPoints, rightPoints, width, height];
+      return this.getBracketPoints(leftPoints, rightPoints, side, width, height);
     };
+  }
+
+  // Values that look good:
+  // height          width         lineWidth
+  //   2              0.2           0.04  0.03
+  //   1              0.1           0.03  0.02
+  //   0.5            0.05          0.015
+  //   0.3            0.05          0.015
+  //   0.2            0.03          0.012
+  // eslint-disable-next-line class-methods-use-this
+  getDefaultValues(height: number, width: ?number, options: {
+      lineWidth?: number,
+      width?: number,
+      tipWidth?: number,
+    }) {
+    const out = {};
+    if (width == null && options.width == null) {
+      out.width = 97570.78 + (0.004958708 - 97570.78)
+                  / (1 + (height / 2399858) ** 0.9383909);
+    }
+    if (width != null) {
+      out.width = width;
+    }
+    if (options.width != null) {
+      out.width = options.width;
+    }
+    if (options.lineWidth == null) {
+      out.lineWidth = (0.2933614 + (0.0001418178 - 0.2933614)
+                      / (1 + (height / 39.01413) ** 0.618041)) * 0.8;
+    } else {
+      out.lineWidth = options.lineWidth;
+    }
+
+    if (options.tipWidth == null) {
+      out.tipWidth = out.lineWidth / 3;
+    } else {
+      out.tipWidth = options.tipWidth;
+    }
+    return out;
   }
 }
