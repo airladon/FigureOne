@@ -7,30 +7,6 @@ import Bounds from './Bounds';
 import { Elements } from './Element';
 import BaseEquationFunction from './BaseEquationFunction';
 
-// function getMaxRowHeight(
-//   numRows,
-//   numCols,
-//   matrix: Array<Array<Elements | null>>,
-//   bounds: Array<Array<Bounds>>,
-// ) {
-//   const rowHeights = [];
-//   let maxHeight = 0;
-//   for (let row = 0; row < numRows; row += 1) {
-//     let maxRowHeight = 0;
-//     for (let col = 0; col < numCols; col += 1) {
-//       const elementHeight = bounds[row][col].height;
-//       if (elementHeight > maxRowHeight) {
-//         maxRowHeight = elementHeight;
-//       }
-//       if (elementHeight > maxHeight) {
-//         maxHeight = elementHeight;
-//       }
-//     }
-//     rowHeights.push(maxRowHeight);
-//   }
-//   return [rowHeights, maxHeight];
-// }
-
 function getMaxAscentDescent(
   numRows,
   numCols,
@@ -138,7 +114,6 @@ export default class Integral extends BaseEquationFunction {
       }
     }
 
-    // const [rowHeights, maxHeight] = getMaxRowHeight(numRows, numCols, matrix, bounds);
     const rowBounds = getMaxAscentDescent(numRows, numCols, matrix, bounds);
     const [colWidths, maxWidth] = getMaxColWidth(numRows, numCols, matrix, bounds);
     const maxDim = Math.max(maxWidth, rowBounds.maxHeight);
@@ -163,7 +138,6 @@ export default class Integral extends BaseEquationFunction {
     for (let row = numRows - 1; row >= 0; row -= 1) {
       cumWidth = 0;
       for (let col = 0; col < numCols; col += 1) {
-        // const element = matrix[row][col];
         const bound = bounds[row][col];
         const x = cumWidth + colWidths[col] / 2 - bound.width / 2;
         let y = cumHeight + rowBounds.heights[row] / 2
@@ -193,38 +167,6 @@ export default class Integral extends BaseEquationFunction {
         }
       }
     }
-    // const cumHeight = [];
-    // for (let row = 0; row < numRows; row += 1) {
-    //   const h = rowBounds.heights[row];
-    //   cumHeight.push(row === 0 ? h : cumHeight[row - 1] + space.x + h);
-    // }
-    // const cumWidth = [];
-    // for (let col = 0; col < numCols; col += 1) {
-    //   const w = colWidths[col];
-    //   cumWidth.push(col === 0 ? w : cumWidth[col - 1] + space.x + w);
-    // }
-
-    // const totalHeight = cumHeight.slice(-1)[0];
-    // const totalWidth = cumWidth.slice(-1)[0];
-    // index = 0;
-    // for (let row = 0; row < numRows; row += 1) {
-    //   for (let col = 0; col < numCols; col += 1) {
-    //     const element = matrix[row][col];
-    //     const bound = bounds[row][col];
-    //     const elementLoc = new Point(
-    //       loc.x + cumWidth[col] - colWidths[col] / 2 - bound.width / 2,
-    //       loc.y + totalHeight / 2 - cumHeight[row] + rowBounds.heights[row] / 2
-    //         - (bound.ascent - bound.descent) / 2 + aboveBaseline,
-    //     );
-    //     if (alignBaselines) {
-    //       elementLoc.y = loc.y + totalHeight / 2 - cumHeight[row] + rowBounds.heights[row] / 2
-    //         - (bound.ascent - bound.descent) / 2 + aboveBaseline,
-    //     }
-    //     if (element != null) {
-    //       element.offsetLocation(elementLoc.sub(element.location));
-    //     }
-    //   }
-    // }
 
     this.width = totalWidth;
     this.height = totalHeight;
