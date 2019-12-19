@@ -1145,7 +1145,7 @@ export class EquationFunctions {
     const defaultOptions = {
       space: [0.05, 0.05],
       fit: 'rowCol',
-      contentScale: 0.6,
+      contentScale: 0.7,
     };
     if (Array.isArray(optionsOrArray)) {
       [                                                    // $FlowFixMe
@@ -1170,10 +1170,12 @@ export class EquationFunctions {
     if (content != null) {
       contentArray = content.map(c => this.contentToElement(c));
     }
+
     if (options.order == null
       || options.order[0] * options.order[1] !== contentArray.length) {
       options.order = [1, contentArray.length];
     }
+
     if (options.space != null) {
       options.space = parsePoint(options.space);
     }

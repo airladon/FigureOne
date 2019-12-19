@@ -61,8 +61,12 @@ export default class Integral extends BaseEquationFunction {
   calcSize(location: Point, scale: number) {
     this.location = location._dup();
     const loc = location._dup();
-    const { order, fit, space, contentScale } = this.options;
+    const aboveBaseline = scale * 0.07;
+    const {
+      order, fit, space, contentScale,
+    } = this.options;
     const [numRows, numCols] = order;
+
     const bounds = [];
     let index = 0;
     const matrix: Array<Array<Elements | null>> = [];
@@ -100,18 +104,19 @@ export default class Integral extends BaseEquationFunction {
       }
     }
 
-    // const totalHeight = rowHeights.reduce((sum, height) => sum + height, 0) + (numRows - 1) * space.y;
-    // const totalWidth = colWidths.reduce((sum, width) => sum + width, 0) + (numCols - 1) * space.x;
+    const cumHeight = [];
+    for (let row = 0; row < numRows; row += 1) {
+      const h = rowHeights[row];
+      cumHeight.push(row === 0 ? h : cumHeight[row - 1] + space.x + h);
+    }
+    const cumWidth = [];
+    for (let col = 0; col < numCols; col += 1) {
+      const w = colWidths[col];
+      cumWidth.push(col === 0 ? w : cumWidth[col - 1] + space.x + w);
+    }
 
-    const cumHeight = rowHeights.map(
-      (h, i) => (i === 0 ? h : h + space.y + rowHeights[i - 1]),
-    );
-    const cumWidth = colWidths.map(
-      (w, i) => (i === 0 ? w : colWidths[i - 1] + space.x + w),
-    );
     const totalHeight = cumHeight.slice(-1)[0];
     const totalWidth = cumWidth.slice(-1)[0];
-
     index = 0;
     for (let row = 0; row < numRows; row += 1) {
       for (let col = 0; col < numCols; col += 1) {
@@ -120,7 +125,7 @@ export default class Integral extends BaseEquationFunction {
         const elementLoc = new Point(
           loc.x + cumWidth[col] - colWidths[col] / 2 - bound.width / 2,
           loc.y + totalHeight / 2 - cumHeight[row] + rowHeights[row] / 2
-            - (bound.ascent - bound.descent) / 2,
+            - (bound.ascent - bound.descent) / 2 + aboveBaseline,
         );
         if (element != null) {
           element.offsetLocation(elementLoc.sub(element.location));
@@ -130,7 +135,7 @@ export default class Integral extends BaseEquationFunction {
 
     this.width = totalWidth;
     this.height = totalHeight;
-    this.descent = totalHeight / 2;
-    this.ascent = totalHeight / 2;
+    this.descent = totalHeight / 2 - aboveBaseline;
+    this.ascent = totalHeight / 2 + aboveBaseline;
   }
 }
