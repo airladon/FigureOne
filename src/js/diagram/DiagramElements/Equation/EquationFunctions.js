@@ -1455,18 +1455,7 @@ export class EquationFunctions {
   }
 
   brac(
-    optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
-    leftBracketString: string | null = null,
-    rightBracketString: string | null = null,
-    inSizeInput: boolean | null = null,
-    insideSpaceToContent: number | null = null,
-    outsideSpaceToContent: number | null = null,
-    topSpaceToContent: number | null = null,
-    bottomSpaceToContent: number | null = null,
-    minimumContentHeight: number | null = null,
-    minimumContentDescent: number | null = null,
-    forceHeight: number | null = null,
-    forceDescent: number | null = null,
+    optionsOrArray: TypeBracketObject | TypeBracketArray,
   ) {
     let content;
     let left;
@@ -1480,41 +1469,18 @@ export class EquationFunctions {
     let descent;
     let height;
     let inSize;
-    if (!(leftBracketString == null
-          && rightBracketString == null
-          && insideSpaceToContent == null
-          && outsideSpaceToContent == null
-          && topSpaceToContent == null
-          && bottomSpaceToContent == null
-          && minimumContentHeight == null
-          && minimumContentDescent == null
-          && forceDescent == null
-          && forceHeight == null
-          && inSizeInput == null)
-    ) {
-      content = optionsOrContent;
-      left = leftBracketString;
-      right = rightBracketString;
-      insideSpace = insideSpaceToContent;
-      outsideSpace = outsideSpaceToContent;
-      topSpace = topSpaceToContent;
-      bottomSpace = bottomSpaceToContent;
-      minContentHeight = minimumContentHeight;
-      minContentDescent = minimumContentDescent;
-      descent = forceDescent;
-      height = forceHeight;
-      inSize = inSizeInput;
-    } else if (Array.isArray(optionsOrContent)) {
+
+    if (Array.isArray(optionsOrArray)) {
       [                                                    // $FlowFixMe
         content, left, right, inSize, insideSpace, outsideSpace,   // $FlowFixMe
         topSpace, bottomSpace, minContentHeight, minContentDescent, height, descent,
-      ] = optionsOrContent;
+      ] = optionsOrArray;
     } else {
       ({                                                   // $FlowFixMe
         content, left, right, inSize, insideSpace, outsideSpace,   // $FlowFixMe
         topSpace, bottomSpace, minContentHeight,           // $FlowFixMe
         minContentDescent, height, descent,
-      } = optionsOrContent);
+      } = optionsOrArray);
     }
     let leftBracket = null;
     if (left != null) {                                    // $FlowFixMe
@@ -1524,55 +1490,37 @@ export class EquationFunctions {
     if (right != null) {                                   // $FlowFixMe
       rightBracket = getDiagramElement(this.elements, right);
     }
-    let insideSpaceToUse;
-    if (insideSpace != null) {
-      insideSpaceToUse = insideSpace;
+    const contentArray = [];
+    if (content != null) {                           // $FlowFixMe
+      contentArray.push(this.contentToElement(content));
     }
-    let outsideSpaceToUse;
-    if (outsideSpace != null) {
-      outsideSpaceToUse = outsideSpace;
-    }
-    let topSpaceToUse;
-    if (topSpace != null) {
-      topSpaceToUse = topSpace;
-    }
-    let bottomSpaceToUse;
-    if (bottomSpace != null) {
-      bottomSpaceToUse = bottomSpace;
-    }
-    let minHeightToUse;
-    if (minContentHeight != null) {
-      minHeightToUse = minContentHeight;
-    }
-    let minDescentToUse;
-    if (minContentDescent != null) {
-      minDescentToUse = minContentDescent;
-    }
-    let heightToUse;
-    if (height != null) {
-      heightToUse = height;
-    }
-    let descentToUse;
-    if (descent != null) {
-      descentToUse = descent;
-    }
-    let inSizeToUse;
-    if (inSize != null) {
-      inSizeToUse = inSize;
-    }
+    const defaultOptions = {
+      insideSpace: 0.03,
+      outsideSpace: 0,
+      topSpace: 0.05,
+      bottomSpace: 0.05,
+      minContentHeight: null,
+      minContentDescent: null,
+      descent: null,
+      height: null,
+      inSize: true,
+    };
+    const optionsIn = {
+      insideSpace,
+      outsideSpace,
+      topSpace,
+      bottomSpace,
+      minContentHeight,
+      minContentDescent,
+      descent,
+      height,
+      inSize,
+    };
+    const options = joinObjects({}, defaultOptions, optionsIn);
     return new Brackets(                                // $FlowFixMe
-      this.contentToElement(content),
-      leftBracket,
-      rightBracket,                                        // $FlowFixMe
-      insideSpaceToUse,                                    // $FlowFixMe
-      outsideSpaceToUse,                                   // $FlowFixMe
-      topSpaceToUse,                                       // $FlowFixMe
-      bottomSpaceToUse,                                    // $FlowFixMe
-      minHeightToUse,                                      // $FlowFixMe
-      minDescentToUse,                                     // $FlowFixMe
-      heightToUse,                                         // $FlowFixMe
-      descentToUse,                                        // $FlowFixMe
-      inSizeToUse,
+      contentArray,
+      [leftBracket, rightBracket],
+      options,
     );
   }
 
