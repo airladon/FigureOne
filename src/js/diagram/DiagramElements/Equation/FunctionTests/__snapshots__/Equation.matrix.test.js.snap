@@ -2,12 +2,12 @@
 
 exports[`Equation Functions - Matrix Input Forms 1`] = `
 Array [
-  0.42,
+  0.7,
   0,
-  0.086,
+  0.17,
   0,
-  0.42,
-  0.03781,
+  0.7,
+  0.12035,
   0,
   0,
   1,
@@ -16,12 +16,12 @@ Array [
 
 exports[`Equation Functions - Matrix Input Forms 2`] = `
 Array [
-  0.42,
+  0.7,
   0,
-  0.1528,
+  0.298,
   0,
-  0.42,
-  0.02836,
+  0.7,
+  0.1046,
   0,
   0,
   1,
@@ -30,12 +30,12 @@ Array [
 
 exports[`Equation Functions - Matrix Input Forms 3`] = `
 Array [
-  0.42,
+  0.7,
   0,
-  0.086,
+  0.17,
   0,
-  0.42,
-  -0.07435,
+  0.7,
+  -0.08325,
   0,
   0,
   1,
@@ -44,12 +44,12 @@ Array [
 
 exports[`Equation Functions - Matrix Input Forms 4`] = `
 Array [
-  0.42,
+  0.7,
   0,
-  0.1528,
+  0.298,
   0,
-  0.42,
-  -0.0838,
+  0.7,
+  -0.099,
   0,
   0,
   1,

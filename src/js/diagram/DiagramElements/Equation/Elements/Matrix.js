@@ -89,7 +89,7 @@ export default class Integral extends BaseEquationFunction {
     const [rowHeights, maxHeight] = getMaxRowHeight(numRows, numCols, matrix, bounds);
     const [colWidths, maxWidth] = getMaxColWidth(numRows, numCols, matrix, bounds);
     const maxDim = Math.max(maxWidth, maxHeight);
-    if (fit !== 'rowCol') {
+    if (fit !== 'min') {
       let dim;
       if (fit === 'max') {
         dim = new Point(maxDim, maxDim);
