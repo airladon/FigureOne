@@ -172,9 +172,9 @@ export default class Bracket extends Symbol {
     // eslint-disable-next-line no-unused-vars
     return (options: Object, widthIn: number, height: number) => {
       const {
-        sides, tipWidth, side,
+        sides, side,
       } = options;
-      const { lineWidth, width } = this.getDefaultValues(height, widthIn, options);
+      const { lineWidth, width, tipWidth } = this.getDefaultValues(height, widthIn, options);
       // width of bracket without linewidth - essentially width of inner radius
       const wInnerRadius = (width - lineWidth);
       const innerRadius = (wInnerRadius ** 2 + (height / 2) ** 2) / (2 * wInnerRadius);
@@ -205,21 +205,41 @@ export default class Bracket extends Symbol {
     };
   }
 
+  // Values that look good:
+  // height          width         lineWidth
+  //   2              0.2           0.04
+  //   1              0.1           0.03
+  //   0.5            0.05          0.015
+  //   0.3            0.05          0.015
+  //   0.2            0.03          0.012
   // eslint-disable-next-line class-methods-use-this
   getDefaultValues(height: number, width: ?number, options: {
       lineWidth?: number,
       width?: number,
+      tipWidth?: number,
     }) {
-    const out = {
-      lineWidth: 0.01,
-      width: 0.03,
-    };
-    if (options.lineWidth != null) {
-      out.lineWidth = options.lineWidth;
-      out.width = options.lineWidth * 3;
+    const out = {};
+    if (width == null && options.width == null) {
+      out.width = 97570.78 + (0.004958708 - 97570.78)
+                  / (1 + (height / 2399858) ** 0.9383909);
+    }
+    if (width != null) {
+      out.width = width;
     }
     if (options.width != null) {
       out.width = options.width;
+    }
+    if (options.lineWidth == null) {
+      out.lineWidth = 0.2933614 + (0.0001418178 - 0.2933614)
+                      / (1 + (height / 39.01413) ** 0.618041);
+    } else {
+      out.lineWidth = options.lineWidth;
+    }
+
+    if (options.tipWidth == null) {
+      out.tipWidth = out.lineWidth / 3;
+    } else {
+      out.tipWidth = options.tipWidth;
     }
     return out;
   }
