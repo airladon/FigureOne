@@ -1129,22 +1129,24 @@ export class EquationFunctions {
     let fit;
     let space;
     let scale;
+    let vAlign;
     let brac;
     const defaultOptions = {
       space: [0.05, 0.05],
       fit: 'min',
       contentScale: 0.7,
       brac: {},
+      vAlign: 'baseline',
     };
     if (Array.isArray(optionsOrArray)) {
       [                                                    // $FlowFixMe
         order, left, content, right,                       // $FlowFixMe
-        scale, fit, space, brac,
+        scale, fit, space, vAlign, brac,
       ] = optionsOrArray;
     } else {
       ({                                                   // $FlowFixMe
         order, left, content, right,                       // $FlowFixMe
-        scale, fit, space, brac,
+        scale, fit, space, vAlign, brac,
       } = optionsOrArray);
     }
     const optionsIn = {
@@ -1153,6 +1155,7 @@ export class EquationFunctions {
       order,
       contentScale: scale,
       brac,
+      vAlign,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
 

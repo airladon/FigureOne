@@ -7,28 +7,77 @@ import Bounds from './Bounds';
 import { Elements } from './Element';
 import BaseEquationFunction from './BaseEquationFunction';
 
-function getMaxRowHeight(
+// function getMaxRowHeight(
+//   numRows,
+//   numCols,
+//   matrix: Array<Array<Elements | null>>,
+//   bounds: Array<Array<Bounds>>,
+// ) {
+//   const rowHeights = [];
+//   let maxHeight = 0;
+//   for (let row = 0; row < numRows; row += 1) {
+//     let maxRowHeight = 0;
+//     for (let col = 0; col < numCols; col += 1) {
+//       const elementHeight = bounds[row][col].height;
+//       if (elementHeight > maxRowHeight) {
+//         maxRowHeight = elementHeight;
+//       }
+//       if (elementHeight > maxHeight) {
+//         maxHeight = elementHeight;
+//       }
+//     }
+//     rowHeights.push(maxRowHeight);
+//   }
+//   return [rowHeights, maxHeight];
+// }
+
+function getMaxAscentDescent(
   numRows,
   numCols,
   matrix: Array<Array<Elements | null>>,
   bounds: Array<Array<Bounds>>,
 ) {
+  const rowAscents = [];
+  const rowDescents = [];
   const rowHeights = [];
+  let maxAscent = 0;
+  let maxDescent = 0;
   let maxHeight = 0;
   for (let row = 0; row < numRows; row += 1) {
-    let maxRowHeight = 0;
+    let rowMaxAscent = 0;
+    let rowMaxDescent = 0;
+    // let rowMaxHeight = 0;
     for (let col = 0; col < numCols; col += 1) {
-      const elementHeight = bounds[row][col].height;
-      if (elementHeight > maxRowHeight) {
-        maxRowHeight = elementHeight;
+      const bound = bounds[row][col];
+      if (bound.ascent > rowMaxAscent || col === 0) {
+        rowMaxAscent = bound.ascent;
       }
-      if (elementHeight > maxHeight) {
-        maxHeight = elementHeight;
+      if (bound.descent > rowMaxDescent || col === 0) {
+        rowMaxDescent = bound.descent;
       }
     }
-    rowHeights.push(maxRowHeight);
+    if (rowMaxAscent > maxAscent || row === 0) {
+      maxAscent = rowMaxAscent;
+    }
+    if (rowMaxDescent > maxDescent || row === 0) {
+      maxDescent = rowMaxDescent;
+    }
+    const rowMaxHeight = rowMaxDescent + rowMaxAscent;
+    if (rowMaxHeight > maxHeight || row === 0) {
+      maxHeight = rowMaxHeight;
+    }
+    rowHeights.push(rowMaxHeight);
+    rowAscents.push(rowMaxAscent);
+    rowDescents.push(rowMaxDescent);
   }
-  return [rowHeights, maxHeight];
+  return {
+    ascents: rowAscents,
+    descents: rowDescents,
+    heights: rowHeights,
+    maxAscent,
+    maxDescent,
+    maxHeight,
+  };
 }
 
 function getMaxColWidth(
@@ -63,16 +112,18 @@ export default class Integral extends BaseEquationFunction {
     const loc = location._dup();
     const aboveBaseline = scale * 0.07;
     const {
-      order, fit, space, contentScale,
+      order, fit, space, contentScale, vAlign,
     } = this.options;
     const [numRows, numCols] = order;
 
     const bounds = [];
+    const locs = [];
     let index = 0;
     const matrix: Array<Array<Elements | null>> = [];
     for (let row = 0; row < numRows; row += 1) {
       matrix.push([]);
       bounds.push([]);
+      locs.push([]);
       for (let col = 0; col < numCols; col += 1) {
         const elementBounds = new Bounds();
         const element = this.contents[index];
@@ -82,13 +133,15 @@ export default class Integral extends BaseEquationFunction {
         }
         matrix[row].push(element);
         bounds[row].push(elementBounds);
+        locs[row].push(new Point(0, 0));
         index += 1;
       }
     }
 
-    const [rowHeights, maxHeight] = getMaxRowHeight(numRows, numCols, matrix, bounds);
+    // const [rowHeights, maxHeight] = getMaxRowHeight(numRows, numCols, matrix, bounds);
+    const rowBounds = getMaxAscentDescent(numRows, numCols, matrix, bounds);
     const [colWidths, maxWidth] = getMaxColWidth(numRows, numCols, matrix, bounds);
-    const maxDim = Math.max(maxWidth, maxHeight);
+    const maxDim = Math.max(maxWidth, rowBounds.maxHeight);
     if (fit !== 'min') {
       let dim;
       if (fit === 'max') {
@@ -96,42 +149,82 @@ export default class Integral extends BaseEquationFunction {
       } else {
         dim = parsePoint(fit);
       }
+
       for (let row = 0; row < numRows; row += 1) {
-        rowHeights[row] = dim.x;
+        rowBounds.heights[row] = dim.x;
       }
       for (let col = 0; col < numCols; col += 1) {
         colWidths[col] = dim.y;
       }
     }
 
-    const cumHeight = [];
-    for (let row = 0; row < numRows; row += 1) {
-      const h = rowHeights[row];
-      cumHeight.push(row === 0 ? h : cumHeight[row - 1] + space.x + h);
+    let cumHeight = 0;
+    let cumWidth = 0;
+    for (let row = numRows - 1; row >= 0; row -= 1) {
+      cumWidth = 0;
+      for (let col = 0; col < numCols; col += 1) {
+        // const element = matrix[row][col];
+        const bound = bounds[row][col];
+        const x = cumWidth + colWidths[col] / 2 - bound.width / 2;
+        let y = cumHeight + rowBounds.heights[row] / 2
+            - (bound.ascent - bound.descent) / 2;
+        if (vAlign === 'baseline') {
+          y = cumHeight + rowBounds.descents[row];
+        }
+        cumWidth += colWidths[col] + space.x * scale;
+        locs[row][col] = new Point(x, y);
+      }
+      if (vAlign === 'baseline') {
+        cumHeight += rowBounds.descents[row] + rowBounds.ascents[row] + space.y * scale;
+      } else {
+        cumHeight += rowBounds.heights[row] + space.y * scale;
+      }
     }
-    const cumWidth = [];
-    for (let col = 0; col < numCols; col += 1) {
-      const w = colWidths[col];
-      cumWidth.push(col === 0 ? w : cumWidth[col - 1] + space.x + w);
-    }
+    const totalHeight = cumHeight - space.y * scale;
+    const totalWidth = cumWidth - space.x * scale;
 
-    const totalHeight = cumHeight.slice(-1)[0];
-    const totalWidth = cumWidth.slice(-1)[0];
-    index = 0;
     for (let row = 0; row < numRows; row += 1) {
       for (let col = 0; col < numCols; col += 1) {
+        locs[row][col].x += loc.x;
+        locs[row][col].y = loc.y - totalHeight / 2 + locs[row][col].y + aboveBaseline;
         const element = matrix[row][col];
-        const bound = bounds[row][col];
-        const elementLoc = new Point(
-          loc.x + cumWidth[col] - colWidths[col] / 2 - bound.width / 2,
-          loc.y + totalHeight / 2 - cumHeight[row] + rowHeights[row] / 2
-            - (bound.ascent - bound.descent) / 2 + aboveBaseline,
-        );
         if (element != null) {
-          element.offsetLocation(elementLoc.sub(element.location));
+          element.offsetLocation(locs[row][col].sub(element.location));
         }
       }
     }
+    // const cumHeight = [];
+    // for (let row = 0; row < numRows; row += 1) {
+    //   const h = rowBounds.heights[row];
+    //   cumHeight.push(row === 0 ? h : cumHeight[row - 1] + space.x + h);
+    // }
+    // const cumWidth = [];
+    // for (let col = 0; col < numCols; col += 1) {
+    //   const w = colWidths[col];
+    //   cumWidth.push(col === 0 ? w : cumWidth[col - 1] + space.x + w);
+    // }
+
+    // const totalHeight = cumHeight.slice(-1)[0];
+    // const totalWidth = cumWidth.slice(-1)[0];
+    // index = 0;
+    // for (let row = 0; row < numRows; row += 1) {
+    //   for (let col = 0; col < numCols; col += 1) {
+    //     const element = matrix[row][col];
+    //     const bound = bounds[row][col];
+    //     const elementLoc = new Point(
+    //       loc.x + cumWidth[col] - colWidths[col] / 2 - bound.width / 2,
+    //       loc.y + totalHeight / 2 - cumHeight[row] + rowBounds.heights[row] / 2
+    //         - (bound.ascent - bound.descent) / 2 + aboveBaseline,
+    //     );
+    //     if (alignBaselines) {
+    //       elementLoc.y = loc.y + totalHeight / 2 - cumHeight[row] + rowBounds.heights[row] / 2
+    //         - (bound.ascent - bound.descent) / 2 + aboveBaseline,
+    //     }
+    //     if (element != null) {
+    //       element.offsetLocation(elementLoc.sub(element.location));
+    //     }
+    //   }
+    // }
 
     this.width = totalWidth;
     this.height = totalHeight;
