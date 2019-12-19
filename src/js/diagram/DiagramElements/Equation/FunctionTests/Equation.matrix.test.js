@@ -90,19 +90,22 @@ describe('Equation Functions - Matrix', () => {
             },
           },
           // Method Array
-          2: { matrix: [
-            [2, 2], 'left', ['a', 'b', 'c', 'd'], 'right', 1, 'min',
-            [0.1, 0.1], 'baseline', {
-              inSize: null,
-              insideSpace: 0.1,
-              outsideSpace: 0.1,
-              topSpace: 0.1,
-              bottomSpace: 0.1,
-              minContentHeight: null,
-              minContentDescent: null,
-              height: null,
-              descent: null,
-            }] },
+          2: {
+            matrix: [
+              [2, 2], 'left', ['a', 'b', 'c', 'd'], 'right', 1, 'min',
+              [0.1, 0.1], 'baseline', {
+                inSize: null,
+                insideSpace: 0.1,
+                outsideSpace: 0.1,
+                topSpace: 0.1,
+                bottomSpace: 0.1,
+                minContentHeight: null,
+                minContentDescent: null,
+                height: null,
+                descent: null,
+              },
+            ],
+          },
           // Function with Method Array
           3: e.matrix([
             [2, 2], 'left', ['a', 'b', 'c', 'd'], 'right', 1, 'min',
