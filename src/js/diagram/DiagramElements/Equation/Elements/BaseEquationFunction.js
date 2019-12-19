@@ -132,5 +132,13 @@ export default class BaseEquationFunction extends Elements {
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
   calcSize(location: Point, scale: number) {
+    // this.location =
+    // this.glyphLocations[] =
+    // this.glyphHeights[] =
+    // this.glyphWidths[] =
+    // this.width =
+    // this.ascent =
+    // this.descent =
+    // this.height =
   }
 }

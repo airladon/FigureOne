@@ -19,6 +19,7 @@ import Sum from './Symbols/Sum';
 import Product from './Symbols/Product';
 // import SimpleIntegral from './Symbols/SimpleIntegral';
 import Integral from './Symbols/Integral';
+import Arrow from './Symbols/Arrow';
 // import BracketNew from './Symbols/BracketNew';
 // import BraceNew from './Symbols/BraceNew';
 
@@ -40,6 +41,8 @@ export type TypeSymbolOptions = {
   sides?: number,
   tipWidth?: number,
   radius?: number,
+  arrowWidth?: number,
+  arrowHeight?: number,
 }
 
 export default class EquationSymbols {
@@ -102,6 +105,9 @@ export default class EquationSymbols {
     }
     if (name === 'int') {         // $FlowFixMe
       return this.integral(options);
+    }
+    if (name === 'arrow') {         // $FlowFixMe
+      return this.arrow(options);
     }
     return null;
   }
@@ -166,6 +172,33 @@ export default class EquationSymbols {
   //     optionsToUse,
   //   )).symbol;
   // }
+
+  arrow(options: {
+    color?: Array<number>,
+    lineWidth?: number,
+    arrowHeight?: number,
+    arrowWidth?: number,
+    draw?: 'static' | 'dynamic',
+    staticHeight?: number | 'first',
+  }) {
+    const defaultOptions = {
+      color: this.defaultColor,
+      lineWidth: 0.01,
+      arrowWidth: 0.03,
+      arrowHeight: 0.04,
+      staticHeight: 'first',
+      draw: 'static',
+      staticWidth: null,          // not definable by user
+    };
+    const optionsToUse = joinObjects(defaultOptions, options);
+    return (new Arrow(
+      this.shapes.webgl,
+      optionsToUse.color,
+      new Transform('ArrowSymbol').scale(1, 1).translate(0, 0),
+      this.shapes.limits,
+      optionsToUse,
+    )).symbol;
+  }
 
   sum(options: {
     color?: Array<number>,
@@ -372,14 +405,16 @@ export default class EquationSymbols {
     sides?: number,
     width?: number,
     tipWidth?: number,
-    staticSize?: boolean,
+    draw?: 'static' | 'dynamic',
+    staticHeight?: number | 'first',
   }) {
     const defaultOptions = {
       side: 'left',
       color: this.defaultColor,
       lineWidth: 0.012,
       sides: 10,
-      staticSize: null,
+      draw: 'dynamic',
+      staticHeight: 'first',
     };
     const optionsToUse = joinObjects(defaultOptions, options);
     if (optionsToUse.width == null) {
@@ -393,14 +428,15 @@ export default class EquationSymbols {
       optionsToUse.color,
       new Transform('bracket').scale(1, 1).translate(0, 0),
       this.shapes.limits,
-      optionsToUse.side,
-      optionsToUse.staticSize,
-      {
-        sides: optionsToUse.sides,
-        lineWidth: optionsToUse.lineWidth,
-        width: optionsToUse.width,
-        tipWidth: optionsToUse.tipWidth,
-      },
+      optionsToUse,
+      // optionsToUse.side,
+      // optionsToUse.staticSize,
+      // {
+      //   sides: optionsToUse.sides,
+      //   lineWidth: optionsToUse.lineWidth,
+      //   width: optionsToUse.width,
+      //   tipWidth: optionsToUse.tipWidth,
+      // },
     )).symbol;
   }
 
