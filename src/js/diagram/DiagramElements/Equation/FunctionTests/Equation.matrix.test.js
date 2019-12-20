@@ -309,7 +309,7 @@ describe('Equation Functions - Matrix', () => {
         .toBe(round(newB.bottom + (newB.height - newA.height) / 2));
     });
   });
-  test('Input Forms', () => {
+  test.only('Input Forms', () => {
     functions.inputForms();
     const elems = [eqn._a, eqn._b, eqn._c, eqn._d];
     const formsToTest = ['1', '2', '3', '4'];
@@ -327,6 +327,10 @@ describe('Equation Functions - Matrix', () => {
     eqn.showForm('base');
     diagram.setFirstTransform();
     tools.cleanUIDs(eqn);
+    console.log(eqn._a.getBoundingRect('diagram'))
+    console.log(eqn._b.getBoundingRect('diagram'))
+    console.log(eqn._c.getBoundingRect('diagram'))
+    console.log(eqn._d.getBoundingRect('diagram'))
     expect(round(eqn._a.transform.mat)).toMatchSnapshot();
     expect(round(eqn._b.transform.mat)).toMatchSnapshot();
     expect(round(eqn._c.transform.mat)).toMatchSnapshot();

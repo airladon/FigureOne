@@ -121,8 +121,8 @@ export default class Bar extends BaseEquationFunction {
       bounds.ascent = mainContent.ascent;
       bounds.descent = mainContent.descent;
     }
-    let glyphLength;
-    let glyphWidth;
+    let glyphLength = 0;
+    let glyphWidth = 0;
     if (side === 'top' || side === 'bottom') {
       // Length
       // By default the length is the same width as the content
@@ -143,9 +143,11 @@ export default class Bar extends BaseEquationFunction {
         glyphLength = (left || 0) + contentBounds.width + (right || 0);
       }
 
-      glyphWidth = glyph.custom.getWidth(
-        glyph.custom.options, glyphLength,
-      );
+      if (glyph != null) {
+        glyphWidth = glyph.custom.getWidth(
+          glyph.custom.options, glyphLength,
+        );
+      }
       this.glyphWidths[0] = glyphWidth;
       this.glyphHeights[0] = glyphLength;
 
@@ -231,9 +233,11 @@ export default class Bar extends BaseEquationFunction {
         glyphLength = (top || 0) + contentBounds.height + (bottom || 0);
       }
 
-      glyphWidth = glyph.custom.getWidth(
-        glyph.custom.options, glyphLength,
-      );
+      if (glyph != null) {
+        glyphWidth = glyph.custom.getWidth(
+          glyph.custom.options, glyphLength,
+        );
+      }
       this.glyphWidths[0] = glyphWidth;
       this.glyphHeights[0] = glyphLength;
 
@@ -278,6 +282,16 @@ export default class Bar extends BaseEquationFunction {
     this.descent = bounds.descent;
     this.glyphLocations[0] = glyphLoc;
     // this.glyphHeights[0] = glyphLength;
-    glyph.custom.setSize(glyphLoc, this.glyphWidths[0], this.glyphHeights[0]);
+    if (glyph != null) {
+      glyph.custom.setSize(glyphLoc, this.glyphWidths[0], this.glyphHeights[0]);
+    }
+    if (glyph != null && glyph.custom.options.draw === 'static'
+        && (side === 'top' || side === 'bottom')
+    ) {
+      const [w] = this.glyphWidths;
+      const [h] = this.glyphHeights;
+      this.glyphWidths[0] = h;
+      this.glyphHeights[0] = w;
+    }
   }
 }
