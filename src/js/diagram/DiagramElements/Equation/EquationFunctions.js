@@ -502,7 +502,13 @@ export class EquationFunctions {
     // return this[method](params);
     // }
     // $FlowFixMe
-    return this.eqnMethod(method, params);
+    const eqnMethod = this.eqnMethod(method, params);
+    if (eqnMethod != null) {
+      return eqnMethod;
+    }
+    // If it is not a known function, then it must be a new text or symbol element
+    const elem = this.addElementFromKey(method, params);
+    return new Element(elem);
   }
 
   contentToElement(
