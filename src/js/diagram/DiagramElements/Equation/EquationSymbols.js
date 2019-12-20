@@ -534,10 +534,11 @@ export default class EquationSymbols {
   }) {
     const defaultOptions = {
       side: 'left',
-      lineWidth: 0.01,
-      width: 0.05,
+      lineWidth: null,
+      width: null,
       color: this.defaultColor,
-      staticSize: null,
+      draw: 'dynamic',
+      staticHeight: 'first',
     };
     const optionsToUse = joinObjects(defaultOptions, options);
     return (new AngleBracket(
@@ -545,12 +546,7 @@ export default class EquationSymbols {
       optionsToUse.color,
       new Transform('bar').scale(1, 1).translate(0, 0),
       this.shapes.limits,
-      optionsToUse.side,
-      optionsToUse.staticSize,
-      {
-        lineWidth: optionsToUse.lineWidth,
-        width: optionsToUse.width,
-      },
+      optionsToUse,
     )).symbol;
   }
 }
