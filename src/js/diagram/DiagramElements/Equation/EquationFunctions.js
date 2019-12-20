@@ -1007,8 +1007,17 @@ export class EquationFunctions {
     );
   }
 
+  topBar(optionsOrArray: TypeBarObject | TypeBarArray) {
+    return this.bar(optionsOrArray, { side: 'top' });
+  }
+
+  bottomBar(optionsOrArray: TypeBarObject | TypeBarArray) {
+    return this.bar(optionsOrArray, { side: 'bottom' });
+  }
+
   bar(
     optionsOrArray: TypeBarObject | TypeBarArray,
+    forceOptions: TypeBarObject = {},
   ) {
     let content;
     let symbol;
@@ -1056,7 +1065,7 @@ export class EquationFunctions {
       bottom,
       inSize,
     };
-    const options = joinObjects({}, defaultOptions, optionsIn);
+    const options = joinObjects({}, defaultOptions, optionsIn, forceOptions);
     let symbolToUse = null;
     if (symbol != null) {                                    // $FlowFixMe
       symbolToUse = getDiagramElement(this.elements, symbol);
@@ -1472,66 +1481,66 @@ export class EquationFunctions {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  processBar(
-    optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
-    sym: string | null = null,
-    insideSpace: number | null = null,
-    barInSize: boolean | null = null,
-  ) {
-    let content;
-    let symbol;
-    let space;
-    let inSize;
-    if (!(sym == null && insideSpace == null)) {
-      content = optionsOrContent;
-      symbol = sym;
-      space = insideSpace;
-      inSize = barInSize;
-    } else if (Array.isArray(optionsOrContent)) {     // $FlowFixMe
-      [content, symbol, space, inSize] = optionsOrContent;
-    } else {
-      ({                                                    // $FlowFixMe
-        content, symbol, space, inSize,
-      } = optionsOrContent);
-    }
-    let spaceToUse = 0.03;
-    if (space != null) {
-      spaceToUse = space;
-    }
-    let inSizeToUse = true;
-    if (inSize != null) {
-      inSizeToUse = inSize;
-    }
-    return [content, symbol, spaceToUse, inSizeToUse];
-  }
+  // processBar(
+  //   optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
+  //   sym: string | null = null,
+  //   insideSpace: number | null = null,
+  //   barInSize: boolean | null = null,
+  // ) {
+  //   let content;
+  //   let symbol;
+  //   let space;
+  //   let inSize;
+  //   if (!(sym == null && insideSpace == null)) {
+  //     content = optionsOrContent;
+  //     symbol = sym;
+  //     space = insideSpace;
+  //     inSize = barInSize;
+  //   } else if (Array.isArray(optionsOrContent)) {     // $FlowFixMe
+  //     [content, symbol, space, inSize] = optionsOrContent;
+  //   } else {
+  //     ({                                                    // $FlowFixMe
+  //       content, symbol, space, inSize,
+  //     } = optionsOrContent);
+  //   }
+  //   let spaceToUse = 0.03;
+  //   if (space != null) {
+  //     spaceToUse = space;
+  //   }
+  //   let inSizeToUse = true;
+  //   if (inSize != null) {
+  //     inSizeToUse = inSize;
+  //   }
+  //   return [content, symbol, spaceToUse, inSizeToUse];
+  // }
 
   // $FlowFixMe
-  topBar(...args) {
-    const [content, symbol, spaceToUse, inSize] = this.processBar(...args);
-    return new Bar(                                         // $FlowFixMe
-      [this.contentToElement(content)],                       // $FlowFixMe
-      getDiagramElement(this.elements, symbol),
-      {
-        side: 'top',        // $FlowFixMe
-        space: spaceToUse,        // $FlowFixMe
-        inSize,
-      },
-    );
-  }
+  // topBar(...args) {
+  //   const [content, symbol, spaceToUse, inSize] = this.processBar(...args);
+  //   return new Bar(                                         // $FlowFixMe
+  //     [this.contentToElement(content)],                       // $FlowFixMe
+  //     getDiagramElement(this.elements, symbol),
+  //     {
+  //       side: 'top',        // $FlowFixMe
+  //       space: spaceToUse,        // $FlowFixMe
+  //       inSize,
+  //     },
+  //   );
+  // }
 
   // $FlowFixMe
-  bottomBar(...args) {
-    const [content, symbol, spaceToUse, inSize] = this.processBar(...args);
-    return new Bar(                                         // $FlowFixMe
-      [this.contentToElement(content)],                       // $FlowFixMe
-      getDiagramElement(this.elements, symbol),
-      {
-        side: 'bottom',        // $FlowFixMe
-        space: spaceToUse,        // $FlowFixMe
-        inSize,
-      },
-    );
-  }
+  // bottomBar(...args) {
+  //   const [content, symbol, spaceToUse, inSize] = this.processBar(...args);
+  //   return new Bar(                                         // $FlowFixMe
+  //     [this.contentToElement(content)],                       // $FlowFixMe
+  //     getDiagramElement(this.elements, symbol),
+  //     {
+  //       side: 'bottom',        // $FlowFixMe
+  //       space: spaceToUse,        // $FlowFixMe
+  //       inSize,
+  //     },
+  //   );
+  // }
 
   // eslint-disable-next-line class-methods-use-this
   processComment(
