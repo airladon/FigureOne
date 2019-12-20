@@ -202,7 +202,10 @@ export default class Brace extends Bracket {
         leftPoints.push(outsidePoints[i].transformBy(m));
         rightPoints.push(insidePoints[i].transformBy(m));
       }
-      // return [leftPoints, rightPoints, width, height];
+
+      // if (side === 'top' || side === 'bottom') {
+      //   return this.getBracketPoints(leftPoints, rightPoints, side, height, width);
+      // }
       return this.getBracketPoints(leftPoints, rightPoints, side, width, height);
     };
   }

@@ -47,6 +47,9 @@ export default class Bracket extends Symbol {
       points.push(r1p);
       points.push(r2p);
     });
+    if (side === 'top' || side === 'bottom') {
+      return [points, height, width];
+    }
     return [points, width, height];
   }
 
@@ -138,6 +141,9 @@ export default class Bracket extends Symbol {
         ).add(outerRadius, height / 2));
       }
 
+      // if (side === 'top' || side === 'bottom') {
+      //   return this.getBracketPoints(outerPoints, innerPoints, side, height, innerPoints[0].x);
+      // }
       return this.getBracketPoints(outerPoints, innerPoints, side, innerPoints[0].x, height);
     };
   }

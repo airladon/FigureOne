@@ -554,7 +554,6 @@ describe('Equation Functions - Bar', () => {
       diagram.setFirstTransform();
       const newA = eqn._a.getBoundingRect();
       const newBar = eqn._hBar.getBoundingRect();
-      console.log(newBar)
       expect(round(newA.left)).toBe(0);
       expect(round(newA.bottom)).toBe(round(a.bottom));
       expect(round(newBar.left)).toBe(round(newA.left));
