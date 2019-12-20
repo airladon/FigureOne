@@ -32,8 +32,12 @@ describe('Equation Functions - Bar', () => {
       e: 'e',
       f: 'f',
       g: 'g',
-      bar: { symbol: 'bar', side: 'top' },
-      bar1: { symbol: 'bar', side: 'top' },
+      bar: {
+        symbol: 'bar', side: 'top', lineWidth: 0.01,
+      },
+      bar1: {
+        symbol: 'bar', side: 'top', lineWidth: 0.01,
+      },
     };
     functions = {
       topComment: () => {
@@ -75,6 +79,7 @@ describe('Equation Functions - Bar', () => {
             symbol: 'bar',
           }),
         });
+        diagram.elements = eqn;
       },
       bottomComment: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
@@ -232,15 +237,17 @@ describe('Equation Functions - Bar', () => {
     expect(round(bar1.top)).toBe(round(b.bottom - space));
     expect(round(c.top)).toBe(round(bar1.bottom - space));
   });
-  test('Top Comment', () => {
+  test.only('Top Comment', () => {
     functions.topComment();
     const elems = [eqn._a, eqn._b, eqn._bar];
     const formsToTest = ['1', '2', '3', '4', '5', '6'];
 
     eqn.showForm('0');
+    diagram.setFirstTransform();
     const positions0 = elems.map(elem => round(elem.transform.mat).slice());
     formsToTest.forEach((f) => {
       eqn.showForm(f);
+      diagram.setFirstTransform();
       const positions = elems.map(elem => round(elem.transform.mat).slice());
       expect(positions0).toEqual(positions);
     });
@@ -248,6 +255,9 @@ describe('Equation Functions - Bar', () => {
     // Snapshot test on most simple layout
     eqn.showForm('0');
     tools.cleanUIDs(eqn);
+    console.log(eqn._a.getBoundingRect('diagram'))
+    console.log(eqn._bar.getBoundingRect('diagram'))
+    console.log(eqn._b.getBoundingRect('diagram'))
     expect(round(eqn._a.transform.mat)).toMatchSnapshot();
     expect(round(eqn._b.transform.mat)).toMatchSnapshot();
     expect(round(eqn._bar.transform.mat)).toMatchSnapshot();
