@@ -8,45 +8,38 @@ import Bracket from './Bracket';
 
 export default class Arrow extends Bracket {
   // eslint-disable-next-line class-methods-use-this
-  // getTriangles() {
-  //   return 'triangles';
-  // }
 
-  //                                                        5 0
-  //                                                          000
-  //            1                                           3 00000
-  //              000000000000000000000000000000000000000000000000000
-  //              00000000000000000000000000000000000000000000000000000 6
-  //              000000000000000000000000000000000000000000000000000
-  //            0                                           2 00000
-  //                                                          000
-  //                                                        4 0
-
-  //
-  //                          6
-  //                          0
-  //                        00000
-  //                       0000000
-  //                     00000000000
-  //                   000000000000000
-  //               5 0000000000000000000 4
-  //                       0000000
-  //                    3  0000000  2
-  //                       0000000
-  //                       0000000
-  //                       0000000
-  //                       0000000
-  //                       0000000
-  //                       0000000
-  //                       0000000
-  //                       0000000
-  //                       0000000
-  //                       0000000
-  //                       0000000
-  //                       0000000
-  //                       0000000
-  //                       0000000
+  //                      arrow width
+  //                 |<--------------->|
+  //                 |                 |
+  //                 |        6        |
+  //          -------|------- 0 -------|---------
+  //          A      |      00000      |        A
+  //   arrow  |      |     0000000     |        |
+  //   height |      |   00000000000   |        |
+  //          V      | 000000000000000 |        |
+  //          ---- 5 0000000000000000000 4      |
+  //                       0000000              |
+  //                    3  0000000 2            |
+  //                       0000000              |
+  //                       0000000              |
+  //                       0000000              |  height
+  //                       0000000              |
+  //                       0000000              |
+  //                       0000000              |
+  //                       0000000              |
+  //                       0000000              |
+  //                       0000000              |
+  //                       0000000              |
+  //                       0000000              |
+  //                       0000000              |
+  //                       0000000              V
+  //                       0000000 --------------
   //                      1       0
+  //                       |     |
+  //                       |     |
+  //                       |<--->|
+  //                     Line Width
 
   // eslint-disable-next-line class-methods-use-this
   getPoints() { // $FlowFixMe
@@ -56,13 +49,6 @@ export default class Arrow extends Bracket {
       const {
         lineWidth, arrowWidth, arrowHeight, width,
       } = this.getDefaultValues(height, widthIn, options);
-      // const p0 = new Point(0, (arrowWidth - lineWidth) / 2);
-      // const p1 = new Point(0, p0.y + lineWidth);
-      // const p2 = new Point(widthIn - arrowHeight, p0.y);
-      // const p3 = new Point(widthIn - arrowHeight, p1.y);
-      // const p4 = new Point(p2.x, 0);
-      // const p5 = new Point(p2.x, arrowWidth);
-      // const p6 = new Point(widthIn, arrowWidth / 2);
 
       const p0 = new Point(arrowWidth / 2 + lineWidth / 2, 0);
       const p1 = new Point(arrowWidth / 2 - lineWidth / 2, 0);
