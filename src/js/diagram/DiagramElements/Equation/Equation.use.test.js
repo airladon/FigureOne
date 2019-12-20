@@ -296,6 +296,15 @@ describe('Different ways to make an equation', () => {
           },
         });
       },
+      autoKeys: () => {
+        eqn = new EquationNew(diagram.shapes, {
+          color: color1,
+          scale: 0.95,
+        });
+        eqn.addForms({
+          0: ['a', 'b_1', '_c_2'],
+        });
+      },
     };
   });
   test('All Text in constructor', () => {
@@ -399,5 +408,15 @@ describe('Different ways to make an equation', () => {
     expect(clean('e')).toEqual(clean('e0'));
     // console.log(Object.entries(eqn.eqn.forms['1a'].base))
     // console.log(Object.entries(eqn.eqn.forms['1b'].base))
+  });
+  test('Auto Keys', () => {
+    ways.autoKeys();
+    expect(eqn._a).not.toBe(undefined);
+    expect(eqn._b_1).not.toBe(undefined);
+    expect(eqn.__c_2).not.toBe(undefined);
+    expect(eqn._d).toBe(undefined);
+    expect(eqn._a.drawingObject.text[0].text).toBe('a');
+    expect(eqn._b_1.drawingObject.text[0].text).toBe('b');
+    expect(eqn.__c_2.drawingObject.text[0].text).toBe('c');
   });
 });

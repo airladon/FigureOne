@@ -12046,6 +12046,7 @@ DiagramElementPrimitive {
         },
       },
       "functions": EquationFunctions {
+        "addElementFromKey": [Function],
         "elements": Object {
           "_2": DiagramElementPrimitive {
             "afterDrawCallback": null,
