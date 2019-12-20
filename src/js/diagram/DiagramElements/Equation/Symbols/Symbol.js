@@ -85,6 +85,7 @@ export default class Symbol {
 
     // eslint-disable-next-line max-len
     symbol.custom.setSize = (location: Point, widthIn: number, heightIn: number) => {
+      const t = symbol.transform._dup();
       if (
         symbol.custom.options.draw === 'static'
         && symbol.drawingObject.points.length === 0
@@ -108,9 +109,10 @@ export default class Symbol {
         symbol.drawingObject.updatePoints(points, width, height);
         symbol.custom.options.staticHeight = height;
         symbol.custom.options.staticWidth = width;
+        t.updateScale(width, height);
+      } else {
+        t.updateScale(widthIn, heightIn);
       }
-      const t = symbol.transform._dup();
-      t.updateScale(widthIn, heightIn);
       t.updateTranslation(location.x, location.y);
       symbol.setTransform(t);
     };
