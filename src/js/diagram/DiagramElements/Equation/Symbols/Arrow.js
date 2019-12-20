@@ -42,7 +42,7 @@ export default class Arrow extends Bracket {
   //                     Line Width
 
   // eslint-disable-next-line class-methods-use-this
-  getPoints() { // $FlowFixMe
+  getPoints() {                                        // $FlowFixMe
     return (options: Object, widthIn: number, height: number) => {
       const { direction } = options;
 
