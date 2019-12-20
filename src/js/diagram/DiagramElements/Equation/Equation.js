@@ -271,7 +271,11 @@ export class EquationNew extends DiagramElementCollection {
       currentFormSeriesName: '',
       scale: optionsToUse.scale,
       defaultFormAlignment: optionsToUse.defaultFormAlignment,
-      functions: new EquationFunctions(this.elements, this.addElementFromKey.bind(this)),
+      functions: new EquationFunctions(
+        this.elements,
+        this.addElementFromKey.bind(this),
+        this.getExistingOrAddSymbol.bind(this),
+      ),
       symbols: new EquationSymbols(this.shapes, this.color),
       fontMath: optionsToUse.fontMath,
       // fontText: optionsToUse.fontText,
@@ -386,12 +390,20 @@ export class EquationNew extends DiagramElementCollection {
     return key.replace(/^_*/, '').replace(/_.*/, '');
   }
 
+  getExistingOrAddSymbol(symbol: 'string' | Object) {
+    if (typeof symbol === 'string') {
+      return this.getExistingOrAddSymbolFromKey(symbol, {});
+    }
+    const [key, params] = Object.entries(symbol)[0];
+    return this.getExistingOrAddSymbolFromKey(key, params);
+  }
+
   // 'text'
   // 'text_id'
   // 'id_symbol'
   // 'id_id_symbol'
   // 'symbol'
-  addElementFromKey(key: string, options: Object = {}) {
+  getExistingOrAddSymbolFromKey(key: string, options: Object = {}) {
     const existingElement = this.getElement(key);
     if (existingElement != null) {
       return existingElement;
@@ -414,22 +426,17 @@ export class EquationNew extends DiagramElementCollection {
         return symbol;
       }
     }
-    const text = cleanKey.replace(/_.*/, '');
-    const element = this.makeTextElem(joinObjects({ text }, options));
-    this.add(key, element);
-    return element;
+    return null;
   }
 
-  addElementFromKeyOld(key: string) {
-    if (typeof key !== 'string') {
-      return null;
+  addElementFromKey(key: string, options: Object = {}) {
+    let element = this.getExistingOrAddSymbolFromKey(key, options);
+    if (element != null) {
+      return element;
     }
-    const existingElement = this.getElement(key);
-    if (existingElement != null) {
-      return existingElement;
-    }
-    const text = this.getTextFromKey(key);
-    const element = this.makeTextElem({ text });
+    const cleanKey = key.replace(/^_*/, '');
+    const text = cleanKey.replace(/_.*/, '');
+    element = this.makeTextElem(joinObjects({ text }, options));
     this.add(key, element);
     return element;
   }
