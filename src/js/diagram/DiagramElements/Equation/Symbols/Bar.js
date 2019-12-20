@@ -7,17 +7,6 @@ import Bracket from './Bracket';
 
 export default class Bar extends Bracket {
   // eslint-disable-next-line class-methods-use-this
-  // getWidth() {
-  //   return (type: 'static' | 'dynamic', options: Object, height: number) => {
-  //     const { lineWidth } = options;
-  //     if (type === 'static') {
-  //       return height * lineWidth;
-  //     }
-  //     return lineWidth;
-  //   };
-  // }
-
-  // eslint-disable-next-line class-methods-use-this
   getPoints() {
     return (options: Object, widthIn: number, height: number) => {
       // const { lineWidth } = options;
@@ -34,9 +23,6 @@ export default class Bar extends Bracket {
         new Point(lineWidth, height),
       ];
 
-      // if (side === 'top' || side === 'bottom') {
-      //   return this.getBracketPoints(leftPoints, rightPoints, side, height, width);
-      // }
       return this.getBracketPoints(leftPoints, rightPoints, side, width, height);
     };
   }
@@ -45,6 +31,7 @@ export default class Bar extends Bracket {
   getDefaultValues(height: number, width: ?number, options: {
       lineWidth?: number,
       width?: number,
+      tipWidth?: number,
     }) {
     const out = {};
     if (options.lineWidth == null) {
