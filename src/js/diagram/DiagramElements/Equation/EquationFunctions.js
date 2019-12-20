@@ -1008,17 +1008,7 @@ export class EquationFunctions {
   }
 
   bar(
-    optionsOrContent: TypeBarObject | TypeBarArray | TypeEquationPhrase,
-    symbolIn: string | null = null,
-    sideIn: 'left' | 'right' | 'top' | 'bottom' | null = null,
-    spaceIn: number | null = null,
-    overhangIn: number | null = null,
-    lengthIn: number | null = null,
-    leftIn: number | null = null,
-    rightIn: number | null = null,
-    topIn: number | null = null,
-    bottomIn: number | null = null,
-    inSizeIn: boolean | null = null,
+    optionsOrArray: TypeBarObject | TypeBarArray,
   ) {
     let content;
     let symbol;
@@ -1031,93 +1021,50 @@ export class EquationFunctions {
     let top;
     let bottom;
     let inSize;
-    if (!(symbolIn == null
-          && sideIn == null
-          && spaceIn == null
-          && overhangIn == null
-          && lengthIn == null
-          && leftIn == null
-          && rightIn == null
-          && topIn == null
-          && bottomIn == null
-          && inSizeIn == null)
-    ) {
-      content = optionsOrContent;
-      symbol = symbolIn;
-      side = sideIn;
-      space = spaceIn;
-      overhang = overhangIn;
-      length = lengthIn;
-      left = leftIn;
-      right = rightIn;
-      top = topIn;
-      bottom = bottomIn;
-      inSize = inSizeIn;
-    } else if (Array.isArray(optionsOrContent)) {
+    const defaultOptions = {
+      side: 'top',
+      space: 0.03,
+      overhang: 0,
+      length: null,
+      left: null,
+      right: null,
+      top: null,
+      bottom: null,
+      inSize: true,
+    };
+    if (Array.isArray(optionsOrArray)) {
       [                                                    // $FlowFixMe
         content, symbol, side, space, overhang,   // $FlowFixMe
         length, left, right, top,           // $FlowFixMe
         bottom, inSize,
-      ] = optionsOrContent;
+      ] = optionsOrArray;
     } else {
       ({                                                   // $FlowFixMe
         content, symbol, side, space, overhang,   // $FlowFixMe
         length, left, right, top,           // $FlowFixMe
         bottom, inSize,
-      } = optionsOrContent);
+      } = optionsOrArray);
     }
+    const optionsIn = {
+      side,
+      space,
+      overhang,
+      length,
+      left,
+      right,
+      top,
+      bottom,
+      inSize,
+    };
+    const options = joinObjects({}, defaultOptions, optionsIn);
     let symbolToUse = null;
     if (symbol != null) {                                    // $FlowFixMe
       symbolToUse = getDiagramElement(this.elements, symbol);
     }
-    let sideToUse;
-    if (side != null) {
-      sideToUse = side;
-    }
-    let spaceToUse;
-    if (space != null) {
-      spaceToUse = space;
-    }
-    let overhangToUse;
-    if (overhang != null) {
-      overhangToUse = overhang;
-    }
-    let lengthToUse;
-    if (length != null) {
-      lengthToUse = length;
-    }
-    let leftToUse;
-    if (left != null) {
-      leftToUse = left;
-    }
-    let rightToUse;
-    if (right != null) {
-      rightToUse = right;
-    }
-    let topToUse;
-    if (top != null) {
-      topToUse = top;
-    }
-    let bottomToUse;
-    if (bottom != null) {
-      bottomToUse = bottom;
-    }
-    let inSizeToUse;
-    if (inSize != null) {
-      inSizeToUse = inSize;
-    }
-    return new Bar(                                // $FlowFixMe
-      this.contentToElement(content),                      // $FlowFixMe
-      symbolToUse,    // $FlowFixMe
-      sideToUse,    // $FlowFixMe
-      spaceToUse,    // $FlowFixMe
-      overhangToUse,    // $FlowFixMe
-      lengthToUse,    // $FlowFixMe
-      leftToUse,    // $FlowFixMe
-      rightToUse,    // $FlowFixMe
-      topToUse,    // $FlowFixMe
-      bottomToUse,    // $FlowFixMe
-      inSizeToUse,
+    return new Bar(                                         // $FlowFixMe
+      [this.contentToElement(content)],
+      symbolToUse,
+      options,
     );
   }
 
@@ -1562,16 +1509,13 @@ export class EquationFunctions {
   topBar(...args) {
     const [content, symbol, spaceToUse, inSize] = this.processBar(...args);
     return new Bar(                                         // $FlowFixMe
-      this.contentToElement(content),                       // $FlowFixMe
+      [this.contentToElement(content)],                       // $FlowFixMe
       getDiagramElement(this.elements, symbol),
-      'top',        // $FlowFixMe
-      spaceToUse,
-      null,
-      null,
-      null,
-      null,
-      null,         // $FlowFixMe
-      inSize,
+      {
+        side: 'top',        // $FlowFixMe
+        space: spaceToUse,        // $FlowFixMe
+        inSize,
+      },
     );
   }
 
@@ -1579,16 +1523,13 @@ export class EquationFunctions {
   bottomBar(...args) {
     const [content, symbol, spaceToUse, inSize] = this.processBar(...args);
     return new Bar(                                         // $FlowFixMe
-      this.contentToElement(content),                       // $FlowFixMe
+      [this.contentToElement(content)],                       // $FlowFixMe
       getDiagramElement(this.elements, symbol),
-      'bottom',        // $FlowFixMe
-      spaceToUse,
-      null,
-      null,
-      null,
-      null,
-      null,         // $FlowFixMe
-      inSize,
+      {
+        side: 'bottom',        // $FlowFixMe
+        space: spaceToUse,        // $FlowFixMe
+        inSize,
+      },
     );
   }
 
@@ -1663,16 +1604,13 @@ export class EquationFunctions {
     let contentToUse;
     if (symbol) {
       contentToUse = new Bar(                                // $FlowFixMe
-        this.contentToElement(content),             // $FlowFixMe
+        [this.contentToElement(content)],             // $FlowFixMe
         getDiagramElement(this.elements, symbol),
-        'bottom',                                   // $FlowFixMe
-        contentSpaceToUse,
-        null,
-        null,
-        null,
-        null,
-        null,                                   // $FlowFixMe
-        inSize,
+        {
+          side: 'bottom',                                   // $FlowFixMe
+          space: contentSpaceToUse,                          // $FlowFixMe
+          inSize,
+        },
       );
     } else {
       contentToUse = this.pad(                               // $FlowFixMe
@@ -1704,16 +1642,13 @@ export class EquationFunctions {
     let contentToUse;
     if (symbol) {
       contentToUse = new Bar(                                // $FlowFixMe
-        this.contentToElement(content),             // $FlowFixMe
+        [this.contentToElement(content)],             // $FlowFixMe
         getDiagramElement(this.elements, symbol),
-        'top',                                   // $FlowFixMe
-        contentSpaceToUse,
-        null,
-        null,
-        null,
-        null,
-        null,                                   // $FlowFixMe
-        inSize,
+        {
+          side: 'top',                                   // $FlowFixMe
+          space: contentSpaceToUse,                      // $FlowFixMe
+          inSize,
+        },
       );
     } else {
       contentToUse = this.pad(                               // $FlowFixMe

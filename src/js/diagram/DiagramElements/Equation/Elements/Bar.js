@@ -2,112 +2,106 @@
 import {
   Point,
 } from '../../../../tools/g2';
-import {
-  DiagramElementPrimitive, DiagramElementCollection,
-} from '../../../Element';
-import { duplicateFromTo } from '../../../../tools/tools';
-import { Element, Elements } from './Element';
+// import {
+//   DiagramElementPrimitive, DiagramElementCollection,
+// } from '../../../Element';
+// import { duplicateFromTo } from '../../../../tools/tools';
+import { Elements } from './Element';
 import Bounds from './Bounds';
+import BaseEquationFunction from './BaseEquationFunction';
 
-export default class Bar extends Elements {
-  mainContent: Elements | null;
-  glyph: DiagramElementPrimitive | DiagramElementCollection;
-  glyphLocation: Point;
-  glyphLength: number;
-  side: 'left' | 'right' | 'top' | 'bottom';
-  space: number;
-  overhang: number | null;
-  barLength: number | null;
-  left: number | null;
-  right: number | null;
-  top: number | null;
-  bottom: number | null;
-  inSize: boolean;
+export default class Bar extends BaseEquationFunction {
 
-  constructor(
-    content: Elements | null,
-    glyph: DiagramElementPrimitive | DiagramElementCollection,
-    side: 'left' | 'right' | 'top' | 'bottom' = 'top',
-    space: number = 0.03,
-    overhang: number | null = 0,
-    barLength: number | null = null,
-    left: number | null = null,
-    right: number | null = null,
-    top: number | null = null,
-    bottom: number | null = null,
-    inSize: boolean = true,
-  ) {
-    const bar = glyph !== null ? new Element(glyph) : null;
-    super([content, bar]);
-    this.glyph = glyph;
-    this.glyphLength = 1;
-    this.mainContent = content;
-    this.glyphLocation = new Point(0, 0);
-    this.space = space;
-    this.side = side;
-    this.overhang = overhang;
-    this.barLength = barLength;
-    this.left = left;
-    this.right = right;
-    this.top = top;
-    this.bottom = bottom;
-    this.inSize = inSize;
-  }
+  // constructor(
+  //   content: Elements | null,
+  //   glyph: DiagramElementPrimitive | DiagramElementCollection,
+  //   side: 'left' | 'right' | 'top' | 'bottom' = 'top',
+  //   space: number = 0.03,
+  //   overhang: number | null = 0,
+  //   length: number | null = null,
+  //   left: number | null = null,
+  //   right: number | null = null,
+  //   top: number | null = null,
+  //   bottom: number | null = null,
+  //   inSize: boolean = true,
+  // ) {
+  //   const bar = glyph !== null ? new Element(glyph) : null;
+  //   super([content, bar]);
+  //   glyph = glyph;
+  //   glyphLength = 1;
+  //   mainContent = content;
+  //   glyphLocation = new Point(0, 0);
+  //   space = space;
+  //   side = side;
+  //   overhang = overhang;
+  //   length = length;
+  //   left = left;
+  //   right = right;
+  //   top = top;
+  //   bottom = bottom;
+  //   inSize = inSize;
+  // }
 
-  _dup(namedCollection?: Object) {
-    const content = this.mainContent == null ? null : this.mainContent._dup(namedCollection);
-    let { glyph } = this;
-    if (glyph != null && namedCollection) {
-      glyph = namedCollection[glyph.name];
-    }
-    const barCopy = new Bar(
-      content,
-      glyph,
-    );
-    duplicateFromTo(
-      this, barCopy,
-      ['content', 'glyph'],
-    );
-    return barCopy;
-  }
+  // _dup(namedCollection?: Object) {
+  //   const content = mainContent == null ? null : mainContent._dup(namedCollection);
+  //   let { glyph } = this;
+  //   if (glyph != null && namedCollection) {
+  //     glyph = namedCollection[glyph.name];
+  //   }
+  //   const barCopy = new Bar(
+  //     content,
+  //     glyph,
+  //   );
+  //   duplicateFromTo(
+  //     this, barCopy,
+  //     ['content', 'glyph'],
+  //   );
+  //   return barCopy;
+  // }
 
-  getAllElements() {
-    let elements = [];
-    if (this.mainContent) {
-      elements = [...elements, ...this.mainContent.getAllElements()];
-    }
-    if (this.glyph) {
-      elements = [...elements, this.glyph];
-    }
-    return elements;
-  }
+  // getAllElements() {
+  //   let elements = [];
+  //   if (mainContent) {
+  //     elements = [...elements, ...mainContent.getAllElements()];
+  //   }
+  //   if (glyph) {
+  //     elements = [...elements, glyph];
+  //   }
+  //   return elements;
+  // }
 
-  setPositions() {
-    const { glyph } = this;
-    if (glyph != null) {
-      const t = glyph.getTransform()._dup();
-      t.updateTranslation(this.glyphLocation.x, this.glyphLocation.y);
-      t.updateScale(this.glyphLength, this.glyphLength);
-      glyph.setTransform(t);
-    }
-    if (this.mainContent) {
-      this.mainContent.setPositions();
-    }
-  }
+  // setPositions() {
+  //   const { glyph } = this;
+  //   if (glyph != null) {
+  //     const t = glyph.getTransform()._dup();
+  //     t.updateTranslation(glyphLocation.x, glyphLocation.y);
+  //     t.updateScale(glyphLength, glyphLength);
+  //     glyph.setTransform(t);
+  //   }
+  //   if (mainContent) {
+  //     mainContent.setPositions();
+  //   }
+  // }
 
-  offsetLocation(offset: Point = new Point(0, 0)) {
-    this.location = this.location.add(offset);
-    const { glyph } = this;
-    if (glyph != null) {
-      this.glyphLocation = this.glyphLocation.add(offset);
-    }
-    if (this.mainContent) {
-      this.mainContent.offsetLocation(offset);
-    }
-  }
+  // offsetLocation(offset: Point = new Point(0, 0)) {
+  //   this.location = this.location.add(offset);
+  //   const { glyph } = this;
+  //   if (glyph != null) {
+  //     glyphLocation = glyphLocation.add(offset);
+  //   }
+  //   if (mainContent) {
+  //     mainContent.offsetLocation(offset);
+  //   }
+  // }
 
   calcSize(location: Point, scale: number) {
     this.location = location._dup();
+    const [glyph] = this.glyphs;
+    const [mainContent] = this.contents;
+    const {
+      side, space, overhang, length,
+      left, right, top, bottom, inSize,
+    } = this.options;
     const loc = location._dup();
     const contentLoc = loc._dup();
     const glyphLoc = loc._dup();
@@ -115,7 +109,7 @@ export default class Bar extends Elements {
     // const originalContentBounds = new Bounds();
     const bounds = new Bounds();
 
-    const { mainContent } = this;
+    // const { mainContent } = this;
     if (mainContent instanceof Elements) {
       mainContent.calcSize(loc._dup(), scale);
       contentBounds.width = mainContent.width;
@@ -127,88 +121,94 @@ export default class Bar extends Elements {
       bounds.ascent = mainContent.ascent;
       bounds.descent = mainContent.descent;
     }
-    if (this.side === 'top' || this.side === 'bottom') {
+    let glyphLength;
+    let glyphWidth;
+    if (side === 'top' || side === 'bottom') {
       // Length
       // By default the length is the same width as the content
-      this.glyphLength = contentBounds.width;
+      glyphLength = contentBounds.width;
 
       // Overhand overrides the length
-      if (this.overhang != null) {
-        this.glyphLength = contentBounds.width + 2 * this.overhang;
+      if (overhang != null) {
+        glyphLength = contentBounds.width + 2 * overhang;
       }
 
       // Bar length overrides the length
-      if (this.barLength != null) {
-        this.glyphLength = this.barLength;
+      if (length != null) {
+        glyphLength = length;
       }
 
       // left or right have the highest priority for length
-      if (this.left != null || this.right != null) {
-        this.glyphLength = (this.left || 0) + contentBounds.width + (this.right || 0);
+      if (left != null || right != null) {
+        glyphLength = (left || 0) + contentBounds.width + (right || 0);
       }
 
-      const glyphWidth = this.glyph.custom.getWidth(
-        this.glyph.custom.type, this.glyph.custom.options, this.glyphLength,
+      glyphWidth = glyph.custom.getWidth(
+        glyph.custom.options, glyphLength,
       );
+      // this.glyphHeights[0] = glyphWidth;
+      // this.glyphWidths[0] = glyphLength;
+      this.glyphWidths[0] = glyphWidth;
+      this.glyphHeights[0] = glyphLength;
 
       // y Location
-      if (this.side === 'bottom') {
-        glyphLoc.y = loc.y - contentBounds.descent - this.space - glyphWidth;
+      if (side === 'bottom') {
+        glyphLoc.y = loc.y - contentBounds.descent - space - glyphWidth;
       } else {
-        glyphLoc.y = loc.y + contentBounds.ascent + this.space;
+        glyphLoc.y = loc.y + contentBounds.ascent + space;
       }
 
       // x Location moves content if overhang is > 0, glyph if overhang < 0
-      if (this.overhang != null) {
-        if (this.overhang > 0) {
-          if (this.inSize) {
-            contentLoc.x = loc.x + this.overhang;
+      if (overhang != null) {
+        if (overhang > 0) {
+          if (inSize) {
+            contentLoc.x = loc.x + overhang;
           } else {
-            glyphLoc.x = loc.x - this.overhang;
+            glyphLoc.x = loc.x - overhang;
           }
-        } else if (this.overhang < 0) {
-          glyphLoc.x = loc.x - this.overhang;
+        } else if (overhang < 0) {
+          glyphLoc.x = loc.x - overhang;
         }
       }
 
-      // x Location moves content if barLength > content width, glyph if smaller
-      if (this.barLength != null) {
-        if (this.barLength > contentBounds.width) {
-          if (this.inSize) {
-            contentLoc.x = loc.x + (this.barLength - contentBounds.width) / 2;
+      // x Location moves content if length > content width, glyph if smaller
+      if (length != null) {
+        if (length > contentBounds.width) {
+          if (inSize) {
+            contentLoc.x = loc.x + (length - contentBounds.width) / 2;
           } else {
-            glyphLoc.x = loc.x - (this.barLength - contentBounds.width) / 2;
+            glyphLoc.x = loc.x - (length - contentBounds.width) / 2;
           }
-        } else if (this.barLength < contentBounds.width) {
-          glyphLoc.x = loc.x + (contentBounds.width - this.barLength) / 2;
+        } else if (length < contentBounds.width) {
+          glyphLoc.x = loc.x + (contentBounds.width - length) / 2;
         }
       }
 
       // If left > 0, then content moves, otherwise glyph does
-      if (this.left) {
-        if (this.left > 0) {
-          if (this.inSize) {
-            contentLoc.x = loc.x + this.left;
+      if (left) {
+        if (left > 0) {
+          if (inSize) {
+            contentLoc.x = loc.x + left;
           } else {
-            glyphLoc.x = loc.x - this.left;
+            glyphLoc.x = loc.x - left;
           }
-        } else if (this.left < 0) {
-          glyphLoc.x = loc.x - this.left;
+        } else if (left < 0) {
+          glyphLoc.x = loc.x - left;
         }
       }
 
-      if (this.inSize) {
+      if (inSize) {
         bounds.width = Math.max(
           contentLoc.x + contentBounds.width - loc.x,
-          glyphLoc.x + this.glyphLength - loc.x,
+          glyphLoc.x + glyphLength - loc.x,
         );
-        if (this.side === 'top') {
-          bounds.ascent = contentBounds.ascent + this.space + glyphWidth;
+        if (side === 'top') {
+          bounds.ascent = contentBounds.ascent + space + glyphWidth;
           bounds.descent = contentBounds.descent;
         }
-        if (this.side === 'bottom') {
+        if (side === 'bottom') {
           bounds.ascent = contentBounds.ascent;
-          bounds.descent = contentBounds.descent + this.space + glyphWidth;
+          bounds.descent = contentBounds.descent + space + glyphWidth;
         }
         bounds.height = bounds.ascent + bounds.descent;
         if (mainContent instanceof Elements) {
@@ -217,53 +217,55 @@ export default class Bar extends Elements {
       }
     } else {
       // Length is the content height by default
-      this.glyphLength = contentBounds.height;
+      glyphLength = contentBounds.height;
 
       // Positive overhang makes the glyph longer, negative shorter
-      if (this.overhang != null) {
-        this.glyphLength = contentBounds.height + 2 * this.overhang;
+      if (overhang != null) {
+        glyphLength = contentBounds.height + 2 * overhang;
       }
 
       // bar length sets the length directly
-      if (this.barLength != null) {
-        this.glyphLength = this.barLength;
+      if (length != null) {
+        glyphLength = length;
       }
 
-      if (this.top != null || this.bottom != null) {
-        this.glyphLength = (this.top || 0) + contentBounds.height + (this.bottom || 0);
+      if (top != null || bottom != null) {
+        glyphLength = (top || 0) + contentBounds.height + (bottom || 0);
       }
 
-      const glyphWidth = this.glyph.custom.getWidth(
-        this.glyph.custom.type, this.glyph.custom.options, this.glyphLength,
+      glyphWidth = glyph.custom.getWidth(
+        glyph.custom.options, glyphLength,
       );
+      this.glyphWidths[0] = glyphWidth;
+      this.glyphHeights[0] = glyphLength;
 
       // Location
-      if (this.side === 'left') {
-        contentLoc.x = loc.x + glyphWidth + this.space;
-        if (this.inSize === false) {
-          glyphLoc.x = loc.x - this.space - glyphWidth;
+      if (side === 'left') {
+        contentLoc.x = loc.x + glyphWidth + space;
+        if (inSize === false) {
+          glyphLoc.x = loc.x - space - glyphWidth;
         }
       } else {
-        glyphLoc.x = loc.x + contentBounds.width + this.space;
+        glyphLoc.x = loc.x + contentBounds.width + space;
       }
       glyphLoc.y = loc.y - contentBounds.descent;
 
-      if (this.overhang) {
-        glyphLoc.y = loc.y - contentBounds.descent - this.overhang;
+      if (overhang) {
+        glyphLoc.y = loc.y - contentBounds.descent - overhang;
       }
-      if (this.barLength) {
-        glyphLoc.y = loc.y - contentBounds.descent - (this.barLength - contentBounds.height) / 2;
-      }
-
-      if (this.bottom) {
-        glyphLoc.y = loc.y - contentBounds.descent - this.bottom;
+      if (length) {
+        glyphLoc.y = loc.y - contentBounds.descent - (length - contentBounds.height) / 2;
       }
 
-      if (this.inSize) {
-        bounds.width = contentBounds.width + this.space + glyphWidth;
+      if (bottom) {
+        glyphLoc.y = loc.y - contentBounds.descent - bottom;
+      }
+
+      if (inSize) {
+        bounds.width = contentBounds.width + space + glyphWidth;
         bounds.descent = Math.max(loc.y - glyphLoc.y, contentBounds.descent);
         bounds.ascent = Math.max(
-          this.glyphLength - (loc.y - glyphLoc.y),
+          glyphLength - (loc.y - glyphLoc.y),
           contentBounds.ascent,
         );
         bounds.height = bounds.ascent + bounds.descent;
@@ -276,7 +278,8 @@ export default class Bar extends Elements {
     this.height = bounds.height;
     this.ascent = bounds.ascent;
     this.descent = bounds.descent;
-    this.glyphLocation = glyphLoc;
-    this.glyph.custom.setSize(glyphLoc, this.glyphLength);
+    this.glyphLocations[0] = glyphLoc;
+    // this.glyphHeights[0] = glyphLength;
+    glyph.custom.setSize(glyphLoc, this.glyphWidths[0], this.glyphHeights[0]);
   }
 }
