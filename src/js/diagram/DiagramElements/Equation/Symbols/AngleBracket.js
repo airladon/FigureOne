@@ -4,18 +4,8 @@ import {
 } from '../../../../tools/g2';
 import Bracket from './Bracket';
 
-
 export default class Bar extends Bracket {
   // eslint-disable-next-line class-methods-use-this
-  getWidth() {
-    return (type: 'static' | 'dynamic', options: Object, height: number) => {
-      const { width } = options;
-      if (type === 'static') {
-        return height * width;
-      }
-      return width;
-    };
-  }
 
   // Angle Bracket
   //                         width
@@ -84,10 +74,9 @@ export default class Bar extends Bracket {
 
   // eslint-disable-next-line class-methods-use-this
   getPoints() {
-    return (options: Object, height: number) => {
-      const {
-        lineWidth, width,
-      } = options;
+    return (options: Object, widthIn: number, height: number) => {
+      const { side } = options;
+      const { lineWidth, width } = this.getDefaultValues(height, widthIn, options);
       const line = new Line(new Point(0, 0), new Point(width, height / 2));
       const theta = Math.acos(lineWidth / line.distance);
       const beta = Math.PI / 2 - theta;
@@ -105,7 +94,32 @@ export default class Bar extends Bracket {
         new Point(width, height),
       ];
 
-      return [leftPoints, rightPoints, width, height];
+      return this.getBracketPoints(leftPoints, rightPoints, side, width, height);
     };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getDefaultValues(height: number, width: ?number, options: {
+      lineWidth?: number,
+      width?: number,
+    }) {
+    const out = {};
+    if (width == null && options.width == null) {
+      out.width = 97570.78 + (0.004958708 - 97570.78)
+                  / (1 + (height / 2399858) ** 0.9383909);
+    }
+    if (width != null) {
+      out.width = width;
+    }
+    if (options.width != null) {
+      out.width = options.width;
+    }
+    if (options.lineWidth == null) {
+      out.lineWidth = (0.2933614 + (0.0001418178 - 0.2933614)
+                      / (1 + (height / 39.01413) ** 0.618041)) * 0.7;
+    } else {
+      out.lineWidth = options.lineWidth;
+    }
+    return out;
   }
 }

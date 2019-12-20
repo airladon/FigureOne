@@ -29,14 +29,15 @@ describe('Equation Symbols - Angle Bracket', () => {
         side: 'left',
         lineWidth: 0.01,
         width: 0.03,
-        staticSize: false,
+        draw: 'dynamic',
       },
       right: {
         symbol: 'angleBracket',
         side: 'right',
         lineWidth: 0.01,
         width: 0.03,
-        staticSize: true,
+        draw: 'static',
+        staticHeight: 'first',
       },
     };
     eqn = new EquationNew(diagram.shapes, { color: color1 });
