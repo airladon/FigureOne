@@ -33,7 +33,10 @@ export default class Bar extends Bracket {
         new Point(lineWidth, 0),
         new Point(lineWidth, height),
       ];
-      // return [leftPoints, rightPoints, lineWidth, height];
+
+      // if (side === 'top' || side === 'bottom') {
+      //   return this.getBracketPoints(leftPoints, rightPoints, side, height, width);
+      // }
       return this.getBracketPoints(leftPoints, rightPoints, side, width, height);
     };
   }

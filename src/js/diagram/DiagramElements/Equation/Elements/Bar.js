@@ -146,8 +146,6 @@ export default class Bar extends BaseEquationFunction {
       glyphWidth = glyph.custom.getWidth(
         glyph.custom.options, glyphLength,
       );
-      // this.glyphHeights[0] = glyphWidth;
-      // this.glyphWidths[0] = glyphLength;
       this.glyphWidths[0] = glyphWidth;
       this.glyphHeights[0] = glyphLength;
 

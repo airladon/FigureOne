@@ -98,6 +98,10 @@ export default class SquareBracket extends Bracket {
 
       outsidePoints.push(new Point(width, height));
       insidePoints.push(new Point(width, height - lineWidth));
+
+      // if (side === 'top' || side === 'bottom') {
+      //   return this.getBracketPoints(outsidePoints, insidePoints, side, height, width);
+      // }
       return this.getBracketPoints(outsidePoints, insidePoints, side, width, height);
     };
   }
