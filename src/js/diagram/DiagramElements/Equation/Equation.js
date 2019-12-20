@@ -212,6 +212,16 @@ export class EquationNew extends DiagramElementCollection {
         'italic',
         0.2, '200', 'left', 'alphabetic', color,
       ),
+      // fontMathBold: new DiagramFont(
+      //   'Times New Roman',
+      //   'normal',
+      //   0.7, '200', 'left', 'alphabetic', color,
+      // ),
+      // fontTextBold: new DiagramFont(
+      //   'Times New Roman',
+      //   'italic',
+      //   0.7, '200', 'left', 'alphabetic', color,
+      // ),
       position: new Point(0, 0),
       scale: 0.7,
       defaultFormAlignment: {
@@ -312,7 +322,7 @@ export class EquationNew extends DiagramElementCollection {
     elems: TypeEquationElements,
   ) {
     // Helper function to add text element
-    const makeTextElem = (options: { text?: string, font?: DiagramFont, style?: 'italic' | 'normal', color?: Array<number> }, defaultText: string = '') => {
+    const makeTextElem = (options: { text?: string, font?: DiagramFont, style?: 'italic' | 'normal', weight?: 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900', scale?: number, size?: number, color?: Array<number> }, defaultText: string = '') => {
       // Priority:
       //  1. color
       //  2. font
@@ -323,16 +333,36 @@ export class EquationNew extends DiagramElementCollection {
         textToUse = options.text;
       }
       let fontToUse: DiagramFont = this.eqn.fontMath;
-      if (textToUse.match(/[A-Z,a-z,\u03B8]/)) {
-        fontToUse = this.eqn.fontText;
-      }
+      // if (textToUse.match(/[A-Z,a-z,\u03B8]/)) {
+      //   fontToUse = this.eqn.fontText;
+      // }
+      let style;
+      let weight;
+      let scale;
+      let size;
       if (options.style != null) {
-        if (options.style === 'italic') {
-          fontToUse = this.eqn.fontText;
-        }
-        if (options.style === 'normal') {
-          fontToUse = this.eqn.fontMath;
-        }
+        ({ style } = options);
+      } else if (textToUse.match(/[A-Z,a-z,\u03B8]/)) {
+        style = 'italic';
+      }
+      if (options.weight != null) {
+        ({ weight } = options);
+      }
+      if (options.scale != null) {
+        ({ scale } = options);
+        size = scale * 0.2;
+      }
+      if (options.size != null) {
+        ({ size } = options);
+      }
+      if (style != null || weight != null || size != null) {
+        fontToUse = new DiagramFont(
+          'Times New Roman',
+          style || 'normal',
+          size || 0.2,
+          weight || 'normal',
+          'left', 'alphabetic', this.color,
+        );
       }
       if (options.font != null) {
         fontToUse = options.font;
