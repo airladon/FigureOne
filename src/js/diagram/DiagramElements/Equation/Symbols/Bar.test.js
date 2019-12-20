@@ -28,13 +28,14 @@ describe('Equation Symbols - Bar', () => {
         symbol: 'bar',
         side: 'left',
         lineWidth: 0.01,
-        staticSize: false,
+        draw: 'dynamic',
       },
       right: {
         symbol: 'bar',
         side: 'right',
         lineWidth: 0.01,
-        staticSize: true,
+        draw: 'static',
+        staticHeight: 'first',
       },
     };
     eqn = new EquationNew(diagram.shapes, { color: color1 });

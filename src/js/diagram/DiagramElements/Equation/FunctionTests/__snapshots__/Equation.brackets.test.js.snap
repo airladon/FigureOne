@@ -4,7 +4,7 @@ exports[`Equation Functions - Brackets Bracket 1`] = `
 Array [
   0.7,
   0,
-  0.165,
+  0.16841,
   0,
   0.7,
   0,
@@ -16,7 +16,7 @@ Array [
 
 exports[`Equation Functions - Brackets Bracket 2`] = `
 Array [
-  0.2121,
+  0.02841,
   0,
   0.07,
   0,
@@ -30,9 +30,9 @@ Array [
 
 exports[`Equation Functions - Brackets Bracket 3`] = `
 Array [
-  0.2121,
+  0.02841,
   0,
-  0.263,
+  0.26641,
   0,
   0.2121,
   -0.0756,

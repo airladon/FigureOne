@@ -383,21 +383,6 @@ export default class EquationSymbols {
     return cross;
   }
 
-  // integral(options: { color?: Array<number>, numLines?: number}) {
-  //   const defaultOptions = {
-  //     color: this.defaultColor,
-  //     numLines: 1,
-  //   };
-  //   const optionsToUse = joinObjects(defaultOptions, options);
-  //   return new Integral(
-  //     this.shapes.webgl,
-  //     optionsToUse.color,
-  //     optionsToUse.numLines,
-  //     new Transform('integral').scale(1, 1).translate(0, 0),
-  //     this.shapes.limits,
-  //   );
-  // }
-
   bracket(options: {
     side?: 'left' | 'right' | 'top' | 'bottom',
     color?: Array<number>,
@@ -436,7 +421,8 @@ export default class EquationSymbols {
     sides?: number,
     width?: number,
     tipWidth?: number,
-    staticSize?: boolean,
+    draw?: 'dynamic' | 'static',
+    staticHeight?: number | 'first',
   }) {
     const defaultOptions = {
       side: 'left',
@@ -450,12 +436,6 @@ export default class EquationSymbols {
       staticWidth: null,
     };
     const optionsToUse = joinObjects(defaultOptions, options);
-    // if (optionsToUse.width == null) {
-    //   optionsToUse.width = optionsToUse.lineWidth * 4.2;
-    // }
-    // if (optionsToUse.tipWidth == null) {
-    //   optionsToUse.tipWidth = optionsToUse.lineWidth / 3;
-    // }
     return (new Brace(
       this.shapes.webgl,
       optionsToUse.color,
@@ -469,13 +449,15 @@ export default class EquationSymbols {
     side?: 'left' | 'right' | 'top' | 'bottom',
     color?: Array<number>,
     lineWidth?: number,
-    staticSize?: ?boolean,
+    draw?: 'dynamic' | 'static',
+    staticHeight?: number | 'first',
   }) {
     const defaultOptions = {
       side: 'left',
       lineWidth: 0.01,
       color: this.defaultColor,
-      staticSize: null,
+      draw: 'dynamic',
+      staticHeight: 'first',
     };
     const optionsToUse = joinObjects(defaultOptions, options);
     return (new Bar(
@@ -483,11 +465,7 @@ export default class EquationSymbols {
       optionsToUse.color,
       new Transform('bar').scale(1, 1).translate(0, 0),
       this.shapes.limits,
-      optionsToUse.side,
-      optionsToUse.staticSize,
-      {
-        lineWidth: optionsToUse.lineWidth,
-      },
+      optionsToUse,
     )).symbol;
   }
 
@@ -496,8 +474,9 @@ export default class EquationSymbols {
     color?: Array<number>,
     lineWidth?: number,
     width?: number,
-    endLineWidth?: number,
-    staticSize?: ?boolean,
+    tipWidth?: number,
+    draw?: 'dynamic' | 'static',
+    staticHeight?: number | 'first',
     radius?: number,
     sides?: number,
   }) {
@@ -530,7 +509,8 @@ export default class EquationSymbols {
     color?: Array<number>,
     lineWidth?: number,
     width?: number,
-    staticSize?: ?boolean,
+    draw?: 'dynamic' | 'static',
+    staticHeight?: number | 'first',
   }) {
     const defaultOptions = {
       side: 'left',

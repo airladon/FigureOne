@@ -1935,8 +1935,6 @@ class DiagramElementPrimitive extends DiagramElement {
   }
 
   getGLBoundingRect() {
-    console.log(this.lastDrawTransform)
-    console.log(this.transform)
     return this.drawingObject.getGLBoundingRect(this.lastDrawTransform.matrix());
   }
 
