@@ -432,14 +432,19 @@ export class EquationFunctions {
   };
 
   fullLineHeight: EquationForm | null;
+  addElementFromKey: (string) => ?DiagramElementPrimative;
 
   // [methodName: string]: (TypeEquationPhrase) => {};
 
   // eslint-disable-next-line no-use-before-define
-  constructor(elements: { [name: string]: DiagramElementCollection | DiagramElementPrimitive }) {
+  constructor(
+    elements: { [name: string]: DiagramElementCollection | DiagramElementPrimitive },
+    addElementFromKey: (string) => ?DiagramElementPrimative,
+  ) {
     this.elements = elements;
     this.phrases = {};
     this.fullLineHeight = null;
+    this.addElementFromKey = addElementFromKey;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -458,6 +463,10 @@ export class EquationFunctions {
     }
     if (content in this.phrases) {
       return this.parseContent(this.phrases[content]);
+    }
+    const elementFromKey = this.addElementFromKey(content);
+    if (elementFromKey != null) {
+      return new Element(elementFromKey);
     }
     return null;
   }

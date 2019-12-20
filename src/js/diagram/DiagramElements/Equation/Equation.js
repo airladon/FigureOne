@@ -271,7 +271,7 @@ export class EquationNew extends DiagramElementCollection {
       currentFormSeriesName: '',
       scale: optionsToUse.scale,
       defaultFormAlignment: optionsToUse.defaultFormAlignment,
-      functions: new EquationFunctions(this.elements),
+      functions: new EquationFunctions(this.elements, this.addElementFromKey.bind(this)),
       symbols: new EquationSymbols(this.shapes, this.color),
       fontMath: optionsToUse.fontMath,
       // fontText: optionsToUse.fontText,
@@ -318,89 +318,116 @@ export class EquationNew extends DiagramElementCollection {
     return this.eqn.currentFormSeriesName;
   }
 
+  makeTextElem(
+    options: {
+      text?: string,
+      font?: DiagramFont,
+      style?: 'italic' | 'normal',
+      weight?: 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
+      scale?: number,
+      size?: number,
+      color?: Array<number>
+    },
+    defaultText: string = '',
+  ) {
+    let textToUse = defaultText;
+    if (options.text != null) {
+      textToUse = options.text;
+    }
+    let fontToUse: DiagramFont = this.eqn.fontMath;
+    // if (textToUse.match(/[A-Z,a-z,\u03B8]/)) {
+    //   fontToUse = this.eqn.fontText;
+    // }
+    let style;
+    let weight;
+    let scale;
+    let size;
+    if (options.style != null) {
+      ({ style } = options);
+    } else if (textToUse.match(/[A-Z,a-z,\u03B8]/)) {
+      style = 'italic';
+    }
+    if (options.weight != null) {
+      ({ weight } = options);
+    }
+    if (options.scale != null) {
+      ({ scale } = options);
+      size = scale * 0.2;
+    }
+    if (options.size != null) {
+      ({ size } = options);
+    }
+    if (style != null || weight != null || size != null) {
+      fontToUse = new DiagramFont(
+        'Times New Roman',
+        style || 'normal',
+        size || 0.2,
+        weight || '200',
+        'left', 'alphabetic', this.color,
+      );
+    }
+    if (options.font != null) {
+      fontToUse = options.font;
+    }
+    const p = this.shapes.text(
+      textToUse,
+      { position: new Point(0, 0), font: fontToUse },
+    );
+    if (options.color != null) {
+      p.setColor(options.color);
+    } else {
+      p.setColor(p.drawingObject.text[0].font.color);
+    }
+    return p;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getTextFromKey(key: string) {
+    return key.replace(/^_/, '').replace(/_.*/, '');
+  }
+
+  addElementFromKey(key: string) {
+    if (typeof key !== 'string') {
+      return null;
+    }
+    const existingElement = this.getElement(key);
+    if (existingElement != null) {
+      return existingElement;
+    }
+    const text = this.getTextFromKey(key);
+    const element = this.makeTextElem({ text });
+    this.add(key, element);
+    return element;
+  }
+
+  makeSymbolElem(
+    options: {
+      symbol: string
+    } & TypeSymbolOptions,
+  ) {
+    let symbol = this.eqn.symbols.get(options.symbol, options);
+    // console.log('got', symbol)
+    if (symbol == null) {
+      symbol = this.makeTextElem({
+        text: `Symbol ${options.symbol} not valid`,
+      });
+    }
+    if (options.color == null) {
+      symbol.setColor(this.color);
+    }
+    return symbol;
+  }
+
   addElements(
     elems: TypeEquationElements,
   ) {
-    // Helper function to add text element
-    const makeTextElem = (options: { text?: string, font?: DiagramFont, style?: 'italic' | 'normal', weight?: 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900', scale?: number, size?: number, color?: Array<number> }, defaultText: string = '') => {
-      // Priority:
-      //  1. color
-      //  2. font
-      //  3. style
-      //  4. fontMath or fontText based on actual text
-      let textToUse = defaultText;
-      if (options.text != null) {
-        textToUse = options.text;
-      }
-      let fontToUse: DiagramFont = this.eqn.fontMath;
-      // if (textToUse.match(/[A-Z,a-z,\u03B8]/)) {
-      //   fontToUse = this.eqn.fontText;
-      // }
-      let style;
-      let weight;
-      let scale;
-      let size;
-      if (options.style != null) {
-        ({ style } = options);
-      } else if (textToUse.match(/[A-Z,a-z,\u03B8]/)) {
-        style = 'italic';
-      }
-      if (options.weight != null) {
-        ({ weight } = options);
-      }
-      if (options.scale != null) {
-        ({ scale } = options);
-        size = scale * 0.2;
-      }
-      if (options.size != null) {
-        ({ size } = options);
-      }
-      if (style != null || weight != null || size != null) {
-        fontToUse = new DiagramFont(
-          'Times New Roman',
-          style || 'normal',
-          size || 0.2,
-          weight || '200',
-          'left', 'alphabetic', this.color,
-        );
-      }
-      if (options.font != null) {
-        fontToUse = options.font;
-      }
-      const p = this.shapes.text(
-        textToUse,
-        { position: new Point(0, 0), font: fontToUse },
-      );
-      if (options.color != null) {
-        p.setColor(options.color);
-      } else {
-        p.setColor(p.drawingObject.text[0].font.color);
-      }
-      return p;
-    };
-
-    // Helper function to add symbol element
-    const makeSymbolElem = (options: { symbol: string } & TypeSymbolOptions) => {
-      let symbol = this.eqn.symbols.get(options.symbol, options);
-      // console.log('got', symbol)
-      if (symbol == null) {
-        symbol = makeTextElem({
-          text: `Symbol ${options.symbol} not valid`,
-        });
-      }
-      if (options.color == null) {
-        symbol.setColor(this.color);
-      }
-      return symbol;
-    };
-
     // Go through each element and add it
     Object.keys(elems).forEach((key) => {
       // const [key, elem] = entry;
       const elem = elems[key];
       if (typeof elem === 'string') {
         if (!(key.startsWith('space') && key.startsWith(' '))) {
-          this.add(key, makeTextElem({ text: elem }));
+          this.add(key, this.makeTextElem({ text: elem }));
         }
       } else if (elem instanceof DiagramElementPrimitive) {
         this.add(key, elem);
@@ -411,10 +438,10 @@ export class EquationNew extends DiagramElementCollection {
         if (elem.symbol != null && typeof elem.symbol === 'string') {
           // console.log(elem.symbol)
           // $FlowFixMe
-          diagramElem = makeSymbolElem(elem);
+          diagramElem = this.makeSymbolElem(elem);
         } else {
           // $FlowFixMe
-          diagramElem = makeTextElem(elem, key);
+          diagramElem = this.makeTextElem(elem, key);
         }
         if (diagramElem != null) {
           if (elem.mods != null) {
@@ -425,7 +452,7 @@ export class EquationNew extends DiagramElementCollection {
       }
     });
 
-    const fullLineHeightPrimitive = makeTextElem({ text: 'gh' });
+    const fullLineHeightPrimitive = this.makeTextElem({ text: 'gh' });
     const form = this.createForm({ elem: fullLineHeightPrimitive });
     form.content = [this.eqn.functions.contentToElement(fullLineHeightPrimitive)];
     form.arrange(
