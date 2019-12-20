@@ -360,7 +360,7 @@ export class EquationNew extends DiagramElementCollection {
           'Times New Roman',
           style || 'normal',
           size || 0.2,
-          weight || 'normal',
+          weight || '200',
           'left', 'alphabetic', this.color,
         );
       }
