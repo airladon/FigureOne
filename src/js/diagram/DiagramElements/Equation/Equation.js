@@ -441,7 +441,7 @@ export class EquationNew extends DiagramElementCollection {
           diagramElem = this.makeSymbolElem(elem);
         } else {
           // $FlowFixMe
-          diagramElem = this.makeTextElem(elem, key);
+          diagramElem = this.makeTextElem(elem, this.getTextFromKey(key));
         }
         if (diagramElem != null) {
           if (elem.mods != null) {
