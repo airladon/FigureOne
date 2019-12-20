@@ -84,6 +84,7 @@ describe('Different ways to make an equation', () => {
   let diagram;
   let eqn;
   let color1;
+  let color2;
   let ways;
   let clean;
   beforeEach(() => {
@@ -93,6 +94,7 @@ describe('Different ways to make an equation', () => {
     };
     diagram = makeDiagram();
     color1 = [0.95, 0, 0, 1];
+    color2 = [0, 0.95, 0, 1];
     ways = {
       allTextInConstructor: () => {
         eqn = new EquationNew(diagram.shapes, {
@@ -302,7 +304,40 @@ describe('Different ways to make an equation', () => {
           scale: 0.95,
         });
         eqn.addForms({
-          0: ['a', 'b_1', '_c_2'],
+          0: [
+            'a',
+            'b_1',
+            '_c_2',
+            { d: { color: color2 } },
+            { _e: { color: color2 } },
+            { _f_: { color: color2 } },
+            { _g_1: { color: color2 } },
+          ],
+        });
+      },
+      autoSymbolsName: () => {
+        eqn = new EquationNew(diagram.shapes, { color: color1, scale: 0.95 });
+        eqn.addForms({
+          0: ['a', 'b', 'vinculum'],
+        });
+      },
+      autoSymbolsID: () => {
+        eqn = new EquationNew(diagram.shapes, { color: color1, scale: 0.95 });
+        eqn.addForms({
+          0: ['a', 'b', 'v_vinculum'],
+          // 2: ['a', 'b', { vinculum }],
+        });
+      },
+      autoSymbolsObjectName: () => {
+        eqn = new EquationNew(diagram.shapes, { color: color1, scale: 0.95 });
+        eqn.addForms({
+          0: ['a', 'b', { vinculum: { color: color2 } }],
+        });
+      },
+      autoSymbolsObjectID: () => {
+        eqn = new EquationNew(diagram.shapes, { color: color1, scale: 0.95 });
+        eqn.addForms({
+          0: ['a', 'b', { v_vinculum: { color: color2 } }],
         });
       },
     };
@@ -406,17 +441,67 @@ describe('Different ways to make an equation', () => {
     //
     expect(clean('d')).toEqual(clean('d0'));
     expect(clean('e')).toEqual(clean('e0'));
-    // console.log(Object.entries(eqn.eqn.forms['1a'].base))
-    // console.log(Object.entries(eqn.eqn.forms['1b'].base))
   });
   test('Auto Keys', () => {
     ways.autoKeys();
     expect(eqn._a).not.toBe(undefined);
-    expect(eqn._b_1).not.toBe(undefined);
-    expect(eqn.__c_2).not.toBe(undefined);
-    expect(eqn._d).toBe(undefined);
     expect(eqn._a.drawingObject.text[0].text).toBe('a');
+    expect(eqn._a.color).toEqual(color1);
+
+    expect(eqn._b_1).not.toBe(undefined);
     expect(eqn._b_1.drawingObject.text[0].text).toBe('b');
+    expect(eqn._b_1.color).toEqual(color1);
+
+    expect(eqn.__c_2).not.toBe(undefined);
     expect(eqn.__c_2.drawingObject.text[0].text).toBe('c');
+    expect(eqn.__c_2.color).toEqual(color1);
+
+    expect(eqn._d).not.toBe(undefined);
+    expect(eqn._d.drawingObject.text[0].text).toBe('d');
+    expect(eqn._d.color).toEqual(color2);
+
+    expect(eqn.__e).not.toBe(undefined);
+    expect(eqn.__e.drawingObject.text[0].text).toBe('e');
+    expect(eqn.__e.color).toEqual(color2);
+
+    expect(eqn.__f_).not.toBe(undefined);
+    expect(eqn.__f_.drawingObject.text[0].text).toBe('f');
+    expect(eqn.__f_.color).toEqual(color2);
+
+    expect(eqn.__g_1).not.toBe(undefined);
+    expect(eqn.__g_1.drawingObject.text[0].text).toBe('g');
+    expect(eqn.__g_1.color).toEqual(color2);
+  });
+  test('Auto Symbols Name', () => {
+    ways.autoSymbolsName();
+    expect(eqn._a).not.toBe(undefined);
+    expect(eqn._b).not.toBe(undefined);
+    expect(eqn._a.drawingObject.text[0].text).toBe('a');
+    expect(eqn._b.drawingObject.text[0].text).toBe('b');
+    expect(eqn._vinculum.drawingObject.points).toEqual([
+      0, -0.5, 0, 0.5, 1, -0.5, 1, 0.5,
+    ]);
+    expect(eqn._vinculum.color).toEqual(color1);
+  });
+  test('Auto Symbols ID', () => {
+    ways.autoSymbolsID();
+    expect(eqn._v.drawingObject.points).toEqual([
+      0, -0.5, 0, 0.5, 1, -0.5, 1, 0.5,
+    ]);
+    expect(eqn._v.color).toEqual(color1);
+  });
+  test('Auto Symbols Object Name', () => {
+    ways.autoSymbolsObjectName();
+    expect(eqn._vinculum.drawingObject.points).toEqual([
+      0, -0.5, 0, 0.5, 1, -0.5, 1, 0.5,
+    ]);
+    expect(eqn._vinculum.color).toEqual(color1);
+  });
+  test('Auto Symbols Object ID', () => {
+    ways.autoSymbolsObjectID();
+    expect(eqn._v.drawingObject.points).toEqual([
+      0, -0.5, 0, 0.5, 1, -0.5, 1, 0.5,
+    ]);
+    expect(eqn._v.color).toEqual(color1);
   });
 });

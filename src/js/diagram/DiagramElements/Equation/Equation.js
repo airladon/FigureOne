@@ -383,10 +383,58 @@ export class EquationNew extends DiagramElementCollection {
 
   // eslint-disable-next-line class-methods-use-this
   getTextFromKey(key: string) {
-    return key.replace(/^_/, '').replace(/_.*/, '');
+    return key.replace(/^_*/, '').replace(/_.*/, '');
   }
 
-  addElementFromKey(key: string) {
+  // 'text'
+  // 'text_id'
+  // 'id_symbol'
+  // 'id_id_symbol'
+  // 'symbol'
+  addElementFromKey(key: string, options: Object = {}) {
+    const existingElement = this.getElement(key);
+    if (existingElement != null) {
+      return existingElement;
+    }
+
+    // Check the key is a symbol
+    const cleanKey = key.replace(/^_*/, '');
+    let symbol = this.eqn.symbols.get(cleanKey, options);
+    if (symbol != null) {
+      symbol.setColor(this.color);
+      this.add(key, symbol);
+      return symbol;
+    }
+    const ending = cleanKey.match(/_[^_]*$/);
+    if (ending != null) {
+      symbol = this.eqn.symbols.get(ending[0].replace(/_/, ''), options);
+      if (symbol != null) {
+        symbol.setColor(this.color);
+        this.add(key.replace(/_[^_]*$/, ''), symbol);
+        return symbol;
+      }
+    }
+    const text = cleanKey.replace(/_.*/, '');
+    const element = this.makeTextElem(joinObjects({ text }, options));
+    this.add(key, element);
+    return element;
+  }
+
+  addElementFromKeyOld(key: string) {
+    if (typeof key !== 'string') {
+      return null;
+    }
+    const existingElement = this.getElement(key);
+    if (existingElement != null) {
+      return existingElement;
+    }
+    const text = this.getTextFromKey(key);
+    const element = this.makeTextElem({ text });
+    this.add(key, element);
+    return element;
+  }
+
+  addElementFromObject(key: string, options: Object) {
     if (typeof key !== 'string') {
       return null;
     }
