@@ -47,6 +47,7 @@ describe('Equation Symbols - Bar', () => {
     eqn.showForm('0');
     diagram.setFirstTransform();
     expect(round(eqn._left.drawingObject.points)).toMatchSnapshot();
+    console.log(eqn._right.drawingObject.points)
     expect(round(eqn._right.drawingObject.points)).toMatchSnapshot();
   });
 });

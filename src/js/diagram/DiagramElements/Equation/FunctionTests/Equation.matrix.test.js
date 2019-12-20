@@ -29,8 +29,12 @@ describe('Equation Functions - Matrix', () => {
       b: 'b',
       c: 'c',
       d: 'd',
-      left: { symbol: 'bracket', side: 'left' },
-      right: { symbol: 'bracket', side: 'right' },
+      left: {
+        symbol: 'bracket', side: 'left', lineWidth: 0.012, width: 0.03,
+      },
+      right: {
+        symbol: 'bracket', side: 'right', lineWidth: 0.012, width: 0.03,
+      },
     };
     functions = {
       inputForms: () => {
@@ -52,7 +56,7 @@ describe('Equation Functions - Matrix', () => {
                 space: [0.1, 0.1],
                 vAlign: 'baseline',
                 brac: {
-                  inSize: null,
+                  inSize: true,
                   insideSpace: 0.1,
                   outsideSpace: 0.1,
                   topSpace: 0.1,
@@ -77,7 +81,7 @@ describe('Equation Functions - Matrix', () => {
               space: [0.1, 0.1],
               vAlign: 'baseline',
               brac: {
-                inSize: null,
+                inSize: true,
                 insideSpace: 0.1,
                 outsideSpace: 0.1,
                 topSpace: 0.1,
@@ -94,7 +98,7 @@ describe('Equation Functions - Matrix', () => {
             matrix: [
               [2, 2], 'left', ['a', 'b', 'c', 'd'], 'right', 1, 'min',
               [0.1, 0.1], 'baseline', {
-                inSize: null,
+                inSize: true,
                 insideSpace: 0.1,
                 outsideSpace: 0.1,
                 topSpace: 0.1,
@@ -110,7 +114,7 @@ describe('Equation Functions - Matrix', () => {
           3: e.matrix([
             [2, 2], 'left', ['a', 'b', 'c', 'd'], 'right', 1, 'min',
             [0.1, 0.1], 'baseline', {
-              inSize: null,
+              inSize: true,
               insideSpace: 0.1,
               outsideSpace: 0.1,
               topSpace: 0.1,
@@ -131,7 +135,7 @@ describe('Equation Functions - Matrix', () => {
             space: [0.1, 0.1],
             vAlign: 'baseline',
             brac: {
-              inSize: null,
+              inSize: true,
               insideSpace: 0.1,
               outsideSpace: 0.1,
               topSpace: 0.1,
@@ -309,7 +313,7 @@ describe('Equation Functions - Matrix', () => {
         .toBe(round(newB.bottom + (newB.height - newA.height) / 2));
     });
   });
-  test.only('Input Forms', () => {
+  test('Input Forms', () => {
     functions.inputForms();
     const elems = [eqn._a, eqn._b, eqn._c, eqn._d];
     const formsToTest = ['1', '2', '3', '4'];
@@ -327,10 +331,6 @@ describe('Equation Functions - Matrix', () => {
     eqn.showForm('base');
     diagram.setFirstTransform();
     tools.cleanUIDs(eqn);
-    console.log(eqn._a.getBoundingRect('diagram'))
-    console.log(eqn._b.getBoundingRect('diagram'))
-    console.log(eqn._c.getBoundingRect('diagram'))
-    console.log(eqn._d.getBoundingRect('diagram'))
     expect(round(eqn._a.transform.mat)).toMatchSnapshot();
     expect(round(eqn._b.transform.mat)).toMatchSnapshot();
     expect(round(eqn._c.transform.mat)).toMatchSnapshot();
