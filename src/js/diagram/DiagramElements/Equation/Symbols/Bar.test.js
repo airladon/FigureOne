@@ -40,14 +40,14 @@ describe('Equation Symbols - Bar', () => {
     };
     eqn = new EquationNew(diagram.shapes, { color: color1 });
     eqn.addElements(elements);
-    eqn.addForms({ 0: ['a', 'left', 'right'] });
+    eqn.addForms({ 0: { brac: ['a', 'left', 'right'] } });
+    diagram.elements = eqn;
   });
   test('Snapshot', () => {
     // Snapshot test on most simple layout
     eqn.showForm('0');
     diagram.setFirstTransform();
     expect(round(eqn._left.drawingObject.points)).toMatchSnapshot();
-    console.log(eqn._right.drawingObject.points)
     expect(round(eqn._right.drawingObject.points)).toMatchSnapshot();
   });
 });
