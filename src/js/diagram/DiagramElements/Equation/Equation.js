@@ -118,7 +118,7 @@ export type TypeEquationForms = {
 export type TypeEquationOptions = {
   color?: Array<number>;
   fontMath?: DiagramFont;
-  fontText?: DiagramFont;
+  // fontText?: DiagramFont;
   position?: Point;
   scale?: number,
   defaultFormAlignment?: TypeFormAlignment;
@@ -154,7 +154,7 @@ export class EquationNew extends DiagramElementCollection {
     currentForm: string;
     currentSubForm: string;
     fontMath: DiagramFont;
-    fontText: DiagramFont;
+    // fontText: DiagramFont;
     scale: number;
 
     subFormPriority: Array<string>,
@@ -207,11 +207,11 @@ export class EquationNew extends DiagramElementCollection {
         'normal',
         0.2, '200', 'left', 'alphabetic', color,
       ),
-      fontText: new DiagramFont(
-        'Times New Roman',
-        'italic',
-        0.2, '200', 'left', 'alphabetic', color,
-      ),
+      // fontText: new DiagramFont(
+      //   'Times New Roman',
+      //   'italic',
+      //   0.2, '200', 'left', 'alphabetic', color,
+      // ),
       // fontMathBold: new DiagramFont(
       //   'Times New Roman',
       //   'normal',
@@ -274,7 +274,7 @@ export class EquationNew extends DiagramElementCollection {
       functions: new EquationFunctions(this.elements),
       symbols: new EquationSymbols(this.shapes, this.color),
       fontMath: optionsToUse.fontMath,
-      fontText: optionsToUse.fontText,
+      // fontText: optionsToUse.fontText,
       isAnimating: false,
       descriptionElement: null,
       descriptionPosition: new Point(0, 0),
