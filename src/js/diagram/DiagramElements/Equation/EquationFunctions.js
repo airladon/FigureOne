@@ -166,7 +166,6 @@ export type TypeBarObject = {
 export type TypeBarArray = [
   TypeEquationPhrase,
   ?string,
-  ?'left' | 'right' | 'top' | 'bottom',
   ?number,
   ?number,
   ?number,     // prioritized over barOverhang
@@ -174,7 +173,8 @@ export type TypeBarArray = [
   ?number,
   ?number, // If ascent and descent are specified, overwrites length
   ?number,
-  ?boolean
+  ?boolean,
+  ?'left' | 'right' | 'top' | 'bottom',
 ]
 
 export type TypeBracketObject = {
@@ -1017,7 +1017,7 @@ export class EquationFunctions {
 
   bar(
     optionsOrArray: TypeBarObject | TypeBarArray,
-    forceOptions: TypeBarObject = {},
+    forceOptions: Object = {},
   ) {
     let content;
     let symbol;
@@ -1545,13 +1545,7 @@ export class EquationFunctions {
 
   // eslint-disable-next-line class-methods-use-this
   processComment(
-    optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
-    commentString: TypeEquationPhrase | null = null,
-    sym: string | null = null,
-    contSpace: number | null = null,
-    comSpace: number | null = null,
-    comScale: number | null = null,
-    includeInSizeCalc: boolean | null = null,
+    optionsOrArray: TypeBracketObject | TypeBracketArray,
   ) {
     let content;
     let comment;
@@ -1560,47 +1554,32 @@ export class EquationFunctions {
     let commentSpace;
     let scale;
     let inSize;
-    if (!(commentString == null
-      && sym == null
-      && contSpace == null
-      && comSpace == null
-      && comScale == null
-      && includeInSizeCalc == null)
-    ) {
-      content = optionsOrContent;
-      comment = commentString;
-      symbol = sym;
-      contentSpace = contSpace;
-      commentSpace = comSpace;
-      scale = comScale;
-      inSize = includeInSizeCalc;
-    } else if (Array.isArray(optionsOrContent)) {             // $FlowFixMe
+    if (Array.isArray(optionsOrArray)) {             // $FlowFixMe
       [content, comment, symbol, contentSpace, commentSpace, scale, inSize,
-      ] = optionsOrContent;
+      ] = optionsOrArray;
     } else {
       ({                                                      // $FlowFixMe
         content, comment, symbol, contentSpace, commentSpace, scale, inSize,
-      } = optionsOrContent);
+      } = optionsOrArray);
     }
-    let contentSpaceToUse = 0.03;
-    if (contentSpace != null) {
-      contentSpaceToUse = contentSpace;
-    }
-    let commentSpaceToUse = 0.03;
-    if (commentSpace != null) {
-      commentSpaceToUse = commentSpace;
-    }
-    let scaleToUse = 0.6;
-    if (scale != null) {
-      scaleToUse = scale;
-    }
-    let includeInSizeToUse = true;
-    if (inSize != null) {
-      includeInSizeToUse = inSize;
-    }
+    const optionsIn = {
+      contentSpace,
+      commentSpace,
+      scale,
+      inSize,
+    };
+    const defaultOptions = {
+      contentSpace: 0.03,
+      commentSpace: 0.03,
+      scale: 0.6,
+      inSize: true,
+    };
+
+    const options = joinObjects(defaultOptions, optionsIn);
     return [
       content, comment, symbol,
-      contentSpaceToUse, commentSpaceToUse, scaleToUse, includeInSizeToUse,
+      options.contentSpace, options.commentSpace, options.scale,
+      options.inSize,
     ];
   }
 
