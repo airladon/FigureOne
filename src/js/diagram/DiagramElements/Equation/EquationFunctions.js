@@ -1043,15 +1043,15 @@ export class EquationFunctions {
     };
     if (Array.isArray(optionsOrArray)) {
       [                                                    // $FlowFixMe
-        content, symbol, side, space, overhang,   // $FlowFixMe
+        content, symbol, inSize, space, overhang,   // $FlowFixMe
         length, left, right, top,           // $FlowFixMe
-        bottom, inSize,
+        bottom, side,
       ] = optionsOrArray;
     } else {
       ({                                                   // $FlowFixMe
-        content, symbol, side, space, overhang,   // $FlowFixMe
+        content, symbol, space, overhang,   // $FlowFixMe
         length, left, right, top,           // $FlowFixMe
-        bottom, inSize,
+        bottom, inSize, side,
       } = optionsOrArray);
     }
     const optionsIn = {
@@ -1070,6 +1070,7 @@ export class EquationFunctions {
     if (symbol != null) {                                    // $FlowFixMe
       symbolToUse = getDiagramElement(this.elements, symbol);
     }
+
     return new Bar(                                         // $FlowFixMe
       [this.contentToElement(content)],
       symbolToUse,
