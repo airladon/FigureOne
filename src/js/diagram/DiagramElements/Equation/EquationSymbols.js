@@ -503,31 +503,25 @@ export default class EquationSymbols {
   }) {
     const defaultOptions = {
       side: 'left',
-      lineWidth: 0.01,
+      lineWidth: null,
       color: this.defaultColor,
-      width: 0.04,
-      staticSize: null,
+      width: null,
+      draw: 'dynamic',
+      staticHeight: 'first',
       radius: 0,
       sides: 5,
+      tipWidth: null,
     };
     const optionsToUse = joinObjects(defaultOptions, options);
-    if (optionsToUse.endLineWidth == null) {
-      optionsToUse.endLineWidth = optionsToUse.lineWidth * 0.7;
-    }
+    // if (optionsToUse.endLineWidth == null) {
+    //   optionsToUse.endLineWidth = optionsToUse.lineWidth * 0.7;
+    // }
     return (new SquareBracket(
       this.shapes.webgl,
       optionsToUse.color,
       new Transform('bar').scale(1, 1).translate(0, 0),
       this.shapes.limits,
-      optionsToUse.side,
-      optionsToUse.staticSize,
-      {
-        lineWidth: optionsToUse.lineWidth,
-        width: optionsToUse.width,
-        endLineWidth: optionsToUse.endLineWidth,
-        radius: optionsToUse.radius,
-        sides: optionsToUse.sides,
-      },
+      optionsToUse,
     )).symbol;
   }
 
