@@ -14993,6 +14993,7 @@ DiagramElementPrimitive {
           "translation": Object {},
           "width": 0.018000000000000006,
         },
+        "getExistingOrAddSymbol": [Function],
         "phrases": Object {},
       },
       "isAnimating": false,

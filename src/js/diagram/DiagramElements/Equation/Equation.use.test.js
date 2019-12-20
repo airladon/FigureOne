@@ -318,26 +318,26 @@ describe('Different ways to make an equation', () => {
       autoSymbolsName: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1, scale: 0.95 });
         eqn.addForms({
-          0: ['a', 'b', 'vinculum'],
+          0: { frac: ['a', 'b', 'vinculum'] },
         });
       },
       autoSymbolsID: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1, scale: 0.95 });
         eqn.addForms({
-          0: ['a', 'b', 'v_vinculum'],
+          0: { frac: ['a', 'b', 'v_vinculum'] },
           // 2: ['a', 'b', { vinculum }],
         });
       },
       autoSymbolsObjectName: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1, scale: 0.95 });
         eqn.addForms({
-          0: ['a', 'b', { vinculum: { color: color2 } }],
+          0: { frac: ['a', 'b', { vinculum: { color: color2 } }] },
         });
       },
       autoSymbolsObjectID: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1, scale: 0.95 });
         eqn.addForms({
-          0: ['a', 'b', { v_vinculum: { color: color2 } }],
+          0: { frac: ['a', 'b', { v_vinculum: { color: color2 } }] },
         });
       },
     };

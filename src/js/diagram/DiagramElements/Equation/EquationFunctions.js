@@ -432,19 +432,22 @@ export class EquationFunctions {
   };
 
   fullLineHeight: EquationForm | null;
-  addElementFromKey: (string) => ?DiagramElementPrimative;
+  addElementFromKey: (string, Object) => ?DiagramElementPrimitive;
+  getExistingOrAddSymbol: (string | Object) => ?DiagramElementPrimitive;
 
   // [methodName: string]: (TypeEquationPhrase) => {};
 
   // eslint-disable-next-line no-use-before-define
   constructor(
     elements: { [name: string]: DiagramElementCollection | DiagramElementPrimitive },
-    addElementFromKey: (string) => ?DiagramElementPrimative,
+    addElementFromKey: (string) => ?DiagramElementPrimitive,
+    getExistingOrAddSymbol: (string | Object) => ?DiagramElementPrimitive,
   ) {
     this.elements = elements;
     this.phrases = {};
     this.fullLineHeight = null;
     this.addElementFromKey = addElementFromKey;
+    this.getExistingOrAddSymbol = getExistingOrAddSymbol;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -464,7 +467,7 @@ export class EquationFunctions {
     if (content in this.phrases) {
       return this.parseContent(this.phrases[content]);
     }
-    const elementFromKey = this.addElementFromKey(content);
+    const elementFromKey = this.addElementFromKey(content, {});
     if (elementFromKey != null) {
       return new Element(elementFromKey);
     }
@@ -591,7 +594,7 @@ export class EquationFunctions {
     const f = new Fraction(                         // $FlowFixMe
       this.contentToElement(numerator),             // $FlowFixMe
       this.contentToElement(denominator),           // $FlowFixMe
-      getDiagramElement(this.elements, symbol),
+      this.getExistingOrAddSymbol(symbol),
     );
     if (scale != null) {                            // $FlowFixMe
       f.scaleModifier = scale;
@@ -640,7 +643,7 @@ export class EquationFunctions {
     }
     const f = new Root(                         // $FlowFixMe
       this.contentToElement(content),             // $FlowFixMe
-      getDiagramElement(this.elements, symbol),     // $FlowFixMe
+      this.getExistingOrAddSymbol(symbol),     // $FlowFixMe
       this.contentToElement(root),           // $FlowFixMe
       contentSpace,           // $FlowFixMe
       rootSpace,           // $FlowFixMe
@@ -795,7 +798,7 @@ export class EquationFunctions {
     }
     return new Strike(                                    // $FlowFixMe
       this.contentToElement(content),                     // $FlowFixMe
-      getDiagramElement(this.elements, symbol),           // $FlowFixMe
+      this.getExistingOrAddSymbol(symbol),           // $FlowFixMe
       inSize,
     );
   }
@@ -825,7 +828,7 @@ export class EquationFunctions {
     }
     return new Box(                                       // $FlowFixMe
       this.contentToElement(content),                     // $FlowFixMe
-      getDiagramElement(this.elements, symbol),           // $FlowFixMe
+      this.getExistingOrAddSymbol(symbol),           // $FlowFixMe
       inSize,                                             // $FlowFixMe
       space,
     );
@@ -1083,7 +1086,7 @@ export class EquationFunctions {
     const options = joinObjects({}, defaultOptions, optionsIn, forceOptions);
     let symbolToUse = null;
     if (symbol != null) {                                    // $FlowFixMe
-      symbolToUse = getDiagramElement(this.elements, symbol);
+      symbolToUse = this.getExistingOrAddSymbol(symbol);
     }
 
     return new Bar(                                         // $FlowFixMe
@@ -1215,7 +1218,7 @@ export class EquationFunctions {
 
     let symbolToUse = null;
     if (symbol != null) {                                    // $FlowFixMe
-      symbolToUse = getDiagramElement(this.elements, symbol);
+      symbolToUse = this.getExistingOrAddSymbol(symbol);
     }
     const contentArray = [];
     if (content != null) {                           // $FlowFixMe
@@ -1307,7 +1310,7 @@ export class EquationFunctions {
     options.toOffset = parsePoint(options.toOffset);
     let symbolToUse = null;
     if (symbol != null) {                                    // $FlowFixMe
-      symbolToUse = getDiagramElement(this.elements, symbol);
+      symbolToUse = this.getExistingOrAddSymbol(symbol);
     }
     const contentArray = [];
     if (content != null) {                           // $FlowFixMe
@@ -1406,7 +1409,7 @@ export class EquationFunctions {
     options.toOffset = parsePoint(options.toOffset);
     let symbolToUse = null;
     if (symbol != null) {                                    // $FlowFixMe
-      symbolToUse = getDiagramElement(this.elements, symbol);
+      symbolToUse = this.getExistingOrAddSymbol(symbol);
     }
     const contentArray = [];
     if (content != null) {                           // $FlowFixMe
@@ -1456,11 +1459,11 @@ export class EquationFunctions {
     }
     let leftBracket = null;
     if (left != null) {                                    // $FlowFixMe
-      leftBracket = getDiagramElement(this.elements, left);
+      leftBracket = this.getExistingOrAddSymbol(left);
     }
     let rightBracket = null;
     if (right != null) {                                   // $FlowFixMe
-      rightBracket = getDiagramElement(this.elements, right);
+      rightBracket = this.getExistingOrAddSymbol(right);
     }
     const contentArray = [];
     if (content != null) {                           // $FlowFixMe
@@ -1547,7 +1550,7 @@ export class EquationFunctions {
     if (symbol) {
       contentToUse = new Bar(                                // $FlowFixMe
         [this.contentToElement(content)],             // $FlowFixMe
-        getDiagramElement(this.elements, symbol),
+        this.getExistingOrAddSymbol(symbol),
         {
           side: 'bottom',                                   // $FlowFixMe
           space: contentSpaceToUse,                          // $FlowFixMe
@@ -1585,7 +1588,7 @@ export class EquationFunctions {
     if (symbol) {
       contentToUse = new Bar(                                // $FlowFixMe
         [this.contentToElement(content)],             // $FlowFixMe
-        getDiagramElement(this.elements, symbol),
+        this.getExistingOrAddSymbol(symbol),
         {
           side: 'top',                                   // $FlowFixMe
           space: contentSpaceToUse,                      // $FlowFixMe
@@ -1666,7 +1669,7 @@ export class EquationFunctions {
     if (symbol) {
       contentToUse = new Strike(                             // $FlowFixMe
         this.contentToElement(content),             // $FlowFixMe
-        getDiagramElement(this.elements, symbol),            // $FlowFixMe
+        this.getExistingOrAddSymbol(symbol),            // $FlowFixMe
         false,                                               // $FlowFixMe
         spaceToUse,
       );
@@ -1696,7 +1699,7 @@ export class EquationFunctions {
     if (symbol) {
       contentToUse = new Strike(                             // $FlowFixMe
         this.contentToElement(content),             // $FlowFixMe
-        getDiagramElement(this.elements, symbol),            // $FlowFixMe
+        this.getExistingOrAddSymbol(symbol),            // $FlowFixMe
         false,                                               // $FlowFixMe
         spaceToUse,
       );
