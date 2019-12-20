@@ -69,11 +69,11 @@ describe('Equation Functions - Bar', () => {
           // Function with Method Array
           3: e.topComment(['a', 'b', 'bar']),
           // Function with parameters
-          4: e.topComment('a', 'b', 'bar'),
+          // 4: e.topComment('a', 'b', 'bar'),
           // Bound Function with parameters
-          5: topComment('a', 'b', 'bar'),
+          // 5: topComment('a', 'b', 'bar'),
           // Bound Function with Object
-          6: topComment({
+          4: topComment({
             content: 'a',
             comment: 'b',
             symbol: 'bar',
@@ -110,11 +110,11 @@ describe('Equation Functions - Bar', () => {
           // Function with Method Array
           3: e.bottomComment(['a', 'b', 'bar']),
           // Function with parameters
-          4: e.bottomComment('a', 'b', 'bar'),
-          // Bound Function with parameters
-          5: bottomComment('a', 'b', 'bar'),
+          // 4: e.bottomComment('a', 'b', 'bar'),
+          // // Bound Function with parameters
+          // 5: bottomComment('a', 'b', 'bar'),
           // Bound Function with Object
-          6: bottomComment({
+          4: bottomComment({
             content: 'a',
             comment: 'b',
             symbol: 'bar',
@@ -144,7 +144,7 @@ describe('Equation Functions - Bar', () => {
           // Method Array
           1: { topComment: ['a', 'b', 'bar', 0.1, 0.2, 2] },
           // Function with parameters
-          2: e.topComment('a', 'b', 'bar', 0.1, 0.2, 2),
+          2: e.topComment(['a', 'b', 'bar', 0.1, 0.2, 2]),
         });
       },
       bottomCommentParameters: () => {
@@ -170,7 +170,7 @@ describe('Equation Functions - Bar', () => {
           // Method Array
           1: { bottomComment: ['a', 'b', 'bar', 0.1, 0.2, 2] },
           // Function with parameters
-          2: e.bottomComment('a', 'b', 'bar', 0.1, 0.2, 2),
+          2: e.bottomComment(['a', 'b', 'bar', 0.1, 0.2, 2]),
         });
       },
       nestedTopComment: () => {
@@ -237,10 +237,10 @@ describe('Equation Functions - Bar', () => {
     expect(round(bar1.top)).toBe(round(b.bottom - space));
     expect(round(c.top)).toBe(round(bar1.bottom - space));
   });
-  test.only('Top Comment', () => {
+  test('Top Comment', () => {
     functions.topComment();
     const elems = [eqn._a, eqn._b, eqn._bar];
-    const formsToTest = ['1', '2', '3', '4', '5', '6'];
+    const formsToTest = ['1', '2', '3', '4'];
 
     eqn.showForm('0');
     diagram.setFirstTransform();
@@ -254,10 +254,8 @@ describe('Equation Functions - Bar', () => {
 
     // Snapshot test on most simple layout
     eqn.showForm('0');
+    diagram.setFirstTransform();
     tools.cleanUIDs(eqn);
-    console.log(eqn._a.getBoundingRect('diagram'))
-    console.log(eqn._bar.getBoundingRect('diagram'))
-    console.log(eqn._b.getBoundingRect('diagram'))
     expect(round(eqn._a.transform.mat)).toMatchSnapshot();
     expect(round(eqn._b.transform.mat)).toMatchSnapshot();
     expect(round(eqn._bar.transform.mat)).toMatchSnapshot();
@@ -265,7 +263,7 @@ describe('Equation Functions - Bar', () => {
   test('Bottom Comment', () => {
     functions.bottomComment();
     const elems = [eqn._a, eqn._b, eqn._bar];
-    const formsToTest = ['1', '2', '3', '4', '5', '6'];
+    const formsToTest = ['1', '2', '3', '4'];
 
     eqn.showForm('0');
     const positions0 = elems.map(elem => round(elem.transform.mat).slice());

@@ -1,3 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Equation Symbols - Bar Snapshot 1`] = `Array []`;
+exports[`Equation Symbols - Bar Snapshot 1`] = `
+Array [
+  0,
+  0.01,
+  -0.01,
+  0.01,
+  0,
+  0.02,
+  0,
+  0.01,
+  -0.01,
+  0.02,
+  0,
+  0.02,
+  -0.01,
+  0,
+  0.03,
+  0.015,
+  -0.01,
+  0.03,
+]
+`;
