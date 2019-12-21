@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Equation Functions - Container Input Forms 1`] = `
+Array [
+  0.7,
+  0,
+  0,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Container Input Forms 2`] = `
+Array [
+  0.7,
+  0,
+  0.028,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;
+
+exports[`Equation Functions - Container Input Forms 3`] = `
+Array [
+  0.7,
+  0,
+  0.056,
+  0,
+  0.7,
+  0,
+  0,
+  0,
+  1,
+]
+`;

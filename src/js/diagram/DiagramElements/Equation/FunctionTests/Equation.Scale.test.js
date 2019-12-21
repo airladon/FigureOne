@@ -123,7 +123,7 @@ describe('Equation Functions - Scale', () => {
     eqn.showForm('base');
     diagram.setFirstTransform();
     const positions0 = elems.map(elem => round(elem.transform.mat).slice());
-    formsToTest.forEach((f, i) => {
+    formsToTest.forEach((f) => {
       eqn.showForm(f);
       diagram.setFirstTransform();
       const positions = elems.map(elem => round(elem.transform.mat).slice());
