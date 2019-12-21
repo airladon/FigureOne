@@ -209,6 +209,7 @@ describe('Equation Functions - Fraction', () => {
     let baseV;
     let space;
     let overhang;
+    let offsetY;
     beforeEach(() => {
       functions.parameterSteps();
       eqn.showForm('base');
@@ -217,7 +218,8 @@ describe('Equation Functions - Fraction', () => {
       baseB = eqn._b.getBoundingRect('diagram');
       baseV = eqn._v.getBoundingRect('diagram');
       space = 0.01;
-      overhang = 0.01;
+      overhang = 0.02;
+      offsetY = 0.02;
     });
     test('Numerator Space', () => {
       eqn.showForm('numeratorSpace');
@@ -239,16 +241,22 @@ describe('Equation Functions - Fraction', () => {
       expect(round(newV.top)).toBe(round(baseV.top));
       expect(round(newB.top)).toBe(round(baseB.top - space));
     });
-    test.only('Overhang', () => {
+    test('Overhang', () => {
       eqn.showForm('overhang');
       diagram.setFirstTransform();
       const newA = eqn._a.getBoundingRect('diagram');
       const newB = eqn._b.getBoundingRect('diagram');
       const newV = eqn._v.getBoundingRect('diagram');
-      expect(round(newA.left)).toBe(round(baseA.left + overhang / 2));
+      expect(round(newA.left)).toBe(round(newV.left + overhang));
       expect(round(newV.left)).toBe(round(baseV.left));
       expect(round(newV.width)).toBe(round(baseV.width + overhang));
-      expect(round(newB.left)).toBe(round(baseB.left + overhang / 2));
+      expect(round(newB.left)).toBe(round(newV.left + overhang));
+    });
+    test('OffsetY', () => {
+      eqn.showForm('offsetY');
+      diagram.setFirstTransform();
+      const newV = eqn._v.getBoundingRect('diagram');
+      expect(round(newV.bottom)).toBe(round(offsetY));
     });
   });
   test('Single Fraction', () => {
