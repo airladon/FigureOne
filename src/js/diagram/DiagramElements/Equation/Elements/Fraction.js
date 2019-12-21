@@ -20,7 +20,6 @@ export default class Fraction extends BaseEquationFunction {
       offsetY,
     } = this.options;
     const scale = incomingScale * scaleModifier;
-
     const vinculumBounds = new Bounds();
     const numeratorBounds = new Bounds();
     const denominatorBounds = new Bounds();

@@ -608,7 +608,6 @@ export class EquationFunctions {
       offsetY,
     };
     const options = joinObjects(defaultOptions, optionsIn);
-    console.log(symbol)
     return new Fraction(                         // $FlowFixMe
       [this.contentToElement(numerator), this.contentToElement(denominator)],       // $FlowFixMe
       this.getExistingOrAddSymbol(symbol),
