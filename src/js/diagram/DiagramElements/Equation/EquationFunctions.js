@@ -26,6 +26,7 @@ import Integral from './Elements/Integral';
 import SumProd from './Elements/SumProd';
 import Matrix from './Elements/Matrix';
 import Scale from './Elements/Scale';
+import Container from './Elements/Container';
 
 export function getDiagramElement(
   elementsObject: { [string: string]: DiagramElementPrimitive |
@@ -559,11 +560,60 @@ export class EquationFunctions {
     if (name === 'sumOf') { return this.sumProd(params); }   // $FlowFixMe
     if (name === 'prodOf') { return this.sumProd(params); }   // $FlowFixMe
     if (name === 'matrix') { return this.matrix(params); }   // $FlowFixMe
-    if (name === 'scale') { return this.scale(params); }
+    if (name === 'scale') { return this.scale(params); }   // $FlowFixMe
+    if (name === 'container') { return this.container(params); }   // $FlowFixMe
     // Add container - where you fix the ascent, descent, and width
     // (content is centered in width) - Content spills out of container by default
     return null;
   }
+
+  container(
+    optionsOrArray: TypeScaleObject | TypeScaleArray,
+  ) {
+    let content;
+    let scale;
+    let fit; // fits content to container - width, height, both, null
+    let width;
+    let ascent;
+    let descent;
+    let alignX; // left, center, right, multiplier (to left)
+    let alignY; // bototm, middle, top, multiplier (to bottom)
+
+    const defaultOptions = {
+      scaleModifier: 1,
+      fit: null,
+      width: null,
+      ascent: null,
+      descent: null,
+      alignX: 'left',
+      alignY: 'bottom',
+    };
+    if (Array.isArray(optionsOrArray)) {
+      [
+        content, width, descent, ascent, alignX, alignY, fit,
+      ] = optionsOrArray;
+    } else {
+      ({
+        content, width, descent, ascent, alignX, alignY, fit,
+      } = optionsOrArray);
+    }
+    const optionsIn = {
+      scaleModifier: scale,
+      fit,
+      width,
+      ascent,
+      descent,
+      alignX,
+      alignY,
+    };
+    const options = joinObjects(defaultOptions, optionsIn);
+    return new Container(                         // $FlowFixMe
+      [this.contentToElement(content)],
+      [],
+      options,
+    );
+  }
+
 
   scale(
     optionsOrArray: TypeScaleObject | TypeScaleArray,
