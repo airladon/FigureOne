@@ -20,6 +20,8 @@ import Product from './Symbols/Product';
 // import SimpleIntegral from './Symbols/SimpleIntegral';
 import Integral from './Symbols/Integral';
 import Arrow from './Symbols/Arrow';
+import VinculumNew from './Symbols/Vinculum';
+
 // import BracketNew from './Symbols/BracketNew';
 // import BraceNew from './Symbols/BraceNew';
 
@@ -109,6 +111,9 @@ export default class EquationSymbols {
     if (name === 'arrow') {         // $FlowFixMe
       return this.arrow(options);
     }
+    if (name === 'vinculumNew') {         // $FlowFixMe
+      return this.vinculumNew(options);
+    }
     return null;
   }
 
@@ -123,6 +128,29 @@ export default class EquationSymbols {
       color,
       new Transform('vinculum').scale(1, 1).translate(0, 0),
     );
+  }
+
+  vinculumNew(options: {
+    color?: Array<number>,
+    lineWidth?: number,
+    draw?: 'static' | 'dynamic',
+    staticWidth?: number | 'first',
+  }) {
+    const defaultOptions = {
+      color: this.defaultColor,
+      lineWidth: null,
+      staticHeight: null,          // not definable by user
+      draw: 'dynamic',
+      staticWidth: 'first',
+    };
+    const optionsToUse = joinObjects(defaultOptions, options);
+    return (new VinculumNew(
+      this.shapes.webgl,
+      optionsToUse.color,
+      new Transform('ArrowSymbol').scale(1, 1).translate(0, 0),
+      this.shapes.limits,
+      optionsToUse,
+    )).symbol;
   }
 
   box(optionsIn: {

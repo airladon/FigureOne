@@ -2,153 +2,110 @@
 import {
   Point,
 } from '../../../../tools/g2';
-import { duplicateFromTo } from '../../../../tools/tools';
-import {
-  DiagramElementPrimitive, DiagramElementCollection,
-} from '../../../Element';
-import { Element, Elements } from './Element';
+import Bounds from './Bounds';
+import BaseEquationFunction from './BaseEquationFunction';
 // // Equation is a class that takes a set of drawing objects (TextObjects,
 // // DiagramElementPrimitives or DiagramElementCollections and HTML Objects
 // // and arranges their size in a )
 
-export default class Fraction extends Elements {
-  numerator: Elements;
-  denominator: Elements;
-  vSpaceNum: number;
-  vSpaceDenom: number;
-  lineWidth: number;
-  lineVAboveBaseline: number;
-  vinculum: DiagramElementPrimitive | null | DiagramElementCollection;
-  // mini: boolean;
-  scaleModifier: number
-  vinculumPosition: Point;
-  vinculumScale: Point;
-
-  constructor(
-    numerator: Elements,
-    denominator: Elements,
-    vinculum: DiagramElementPrimitive | null | DiagramElementCollection,
-  ) {
-    if (vinculum) {
-      super([numerator, denominator, new Element(vinculum)]);
-    } else {
-      super([numerator, denominator]);
-    }
-    this.vinculum = vinculum;
-    this.numerator = numerator;
-    this.denominator = denominator;
-
-    this.vSpaceNum = 0;
-    this.vSpaceDenom = 0;
-    this.lineVAboveBaseline = 0;
-    this.lineWidth = 0;
-    // this.mini = false;
-    this.scaleModifier = 1;
-    this.vinculumPosition = new Point(0, 0);
-    this.vinculumScale = new Point(1, 0.01);
-  }
-
-  _dup(namedCollection?: Object) {
-    let { vinculum } = this;
-    if (this.vinculum != null && namedCollection) {
-      vinculum = namedCollection[this.vinculum.name];
-    }
-    const fractionCopy = new Fraction(
-      this.numerator._dup(namedCollection),
-      this.denominator._dup(namedCollection),
-      vinculum,
-    );
-    duplicateFromTo(this, fractionCopy, ['numerator', 'denominator', 'vinculum', 'content']);
-    return fractionCopy;
-  }
+export default class Fraction extends BaseEquationFunction {
 
   calcSize(location: Point, incomingScale: number) {
-    const scale = incomingScale * this.scaleModifier;
     this.location = location._dup();
-    this.numerator.calcSize(location, scale);
-    this.denominator.calcSize(location, scale);
+    const loc = location._dup();
+    const [vinculum] = this.glyphs;
+    const [numerator, denominator] = this.contents;
+    const {
+      scaleModifier, numeratorSpace, denominatorSpace, overhang,
+      offsetY,
+    } = this.options;
+    const scale = incomingScale * scaleModifier;
 
-    this.width = Math.max(this.numerator.width, this.denominator.width) * 1.3;
+    const vinculumBounds = new Bounds();
+    const numeratorBounds = new Bounds();
+    const denominatorBounds = new Bounds();
 
-    const xNumerator = (this.width - this.numerator.width) / 2;
-    const xDenominator = (this.width - this.denominator.width) / 2;
-    this.vSpaceNum = scale * 0.05;
-    this.vSpaceDenom = scale * 0.05;
-    this.lineVAboveBaseline = scale * 0.07 / this.scaleModifier;
-    this.lineWidth = Math.max(scale * 0.01, 0.008);
+    if (numerator != null) {
+      numerator.calcSize(loc._dup(), scale);
+      numeratorBounds.copyFrom(numerator);
+    }
 
-    const yNumerator = this.numerator.descent
-                        + this.vSpaceNum + this.lineVAboveBaseline;
+    if (denominator != null) {
+      denominator.calcSize(loc._dup(), scale);
+      denominatorBounds.copyFrom(denominator);
+    }
 
-    const yDenominator = this.denominator.ascent
-                         + this.vSpaceDenom - this.lineVAboveBaseline;
+    this.location = location._dup();
+    // numerator.calcSize(location, scale);
+    // denominator.calcSize(location, scale);
 
-    const yScale = 1;
+    vinculumBounds.width = Math.max(
+      numeratorBounds.width, denominatorBounds.width,
+    ) + overhang * 2 * scale;
 
-    const loc = this.location;
-    this.numerator.calcSize(
-      new Point(loc.x + xNumerator, loc.y + yScale * yNumerator),
-      scale,
+    if (vinculum != null) {
+      vinculumBounds.height = vinculum.custom.getHeight(
+        vinculum.custom.options, vinculumBounds.width,
+      );
+    }
+
+    // const vSpaceNum = scale * numeratorSpace;
+    // const vSpaceDenom = scale * denominatorSpace;
+    const lineVAboveBaseline = scale * offsetY / scaleModifier;
+
+    const numeratorLoc = new Point(
+      loc.x + (vinculumBounds.width - numeratorBounds.width) / 2,
+      loc.y + lineVAboveBaseline + vinculumBounds.height
+        + numeratorSpace * scale + numeratorBounds.descent,
     );
-
-    this.denominator.calcSize(
-      new Point(loc.x + xDenominator, loc.y - yScale * yDenominator),
-      scale,
+    const denominatorLoc = new Point(
+      loc.x + (vinculumBounds.width - denominatorBounds.width) / 2,
+      loc.y + lineVAboveBaseline - denominatorSpace * scale
+        - denominatorBounds.ascent,
     );
+    // const xNumerator = (vinculumBounds.width - numeratorBounds.width) / 2;
+    // const xDenominator = (vinculumBounds.width - denominatorBounds.width) / 2;
 
-    this.descent = this.vSpaceNum + this.lineWidth / 2
-                   - this.lineVAboveBaseline
-                   + this.denominator.ascent + this.denominator.descent;
+    // const lineWidth = Math.max(scale * 0.01, 0.008);
+
+    // const yNumerator = numeratorBounds.descent
+    //                     + vSpaceNum + lineVAboveBaseline;
+
+    // const yDenominator = denominatorBounds.ascent
+    //                      + vSpaceDenom - lineVAboveBaseline;
+
+
+    if (numerator != null) {
+      numerator.offsetLocation(numeratorLoc.sub(numerator.location));
+    }
+    if (denominator != null) {
+      denominator.offsetLocation(denominatorLoc.sub(denominator.location));
+    }
+
+    this.width = vinculumBounds.width;
+    this.descent = loc.y - (denominatorLoc.y - denominatorBounds.descent);
+    // vSpaceNum + lineWidth / 2
+    //                - lineVAboveBaseline
+    //                + denominatorBounds.ascent + denominatorBounds.descent;
     if (this.descent < 0) {
       this.descent = 0;
     }
-    this.ascent = this.vSpaceNum + this.lineWidth / 2
-                  + this.lineVAboveBaseline + this.numerator.ascent
-                  + this.numerator.descent;
+    this.ascent = (numeratorLoc.y + numeratorBounds.ascent) - loc.y;
+    // vSpaceNum + lineWidth / 2
+    //               + lineVAboveBaseline + numeratorBounds.ascent
+    //               + numeratorBounds.descent;
     this.height = this.descent + this.ascent;
 
-    const { vinculum } = this;
+    this.glyphLocations[0] = new Point(this.location.x, this.location.y + lineVAboveBaseline);
+    this.glyphWidths[0] = vinculumBounds.width;
+    this.glyphHeights[0] = vinculumBounds.height;
+
     if (vinculum) {
-      this.vinculumPosition = new Point(
-        this.location.x,
-        this.location.y + this.lineVAboveBaseline,
+      vinculum.custom.setSize(
+        this.glyphLocations[0],
+        vinculumBounds.width,
+        vinculumBounds.height,
       );
-      this.vinculumScale = new Point(this.width, this.lineWidth);
-      vinculum.transform.updateScale(this.vinculumScale);
-      vinculum.transform.updateTranslation(this.vinculumPosition);
-
-      vinculum.show();
     }
-  }
-
-  getAllElements() {
-    let elements = [];
-    if (this.numerator) {
-      elements = [...elements, ...this.numerator.getAllElements()];
-    }
-    if (this.denominator) {
-      elements = [...elements, ...this.denominator.getAllElements()];
-    }
-    if (this.vinculum) {
-      elements = [...elements, this.vinculum];
-    }
-    return elements;
-  }
-
-  setPositions() {
-    this.numerator.setPositions();
-    this.denominator.setPositions();
-    const { vinculum } = this;
-    if (vinculum) {
-      vinculum.transform.updateScale(this.vinculumScale);
-      vinculum.transform.updateTranslation(this.vinculumPosition);
-    }
-  }
-
-  offsetLocation(offset: Point = new Point(0, 0)) {
-    this.location = this.location.add(offset);
-    this.numerator.offsetLocation(offset);
-    this.denominator.offsetLocation(offset);
-    this.vinculumPosition = this.vinculumPosition.add(offset);
   }
 }

@@ -139,12 +139,29 @@ export default class Symbol {
   }
 
   // eslint-disable-next-line class-methods-use-this
+  // getHeight() {
+  //   return (options: Object, width: number) => {
+  //     const { height } = options;
+  //     if (options.draw === 'static') {
+  //       return height * width;
+  //     }
+  //     return height;
+  //   };
+  // }
   getHeight() {
     return (options: Object, width: number) => {
-      const { height } = options;
+      let height;
       if (options.draw === 'static') {
-        return height * width;
+        let { staticWidth } = options;
+        const { staticHeight } = options;
+        if (staticWidth === 'first') {
+          staticWidth = width;
+        } // ????
+        ({ height } = this.getDefaultValues(staticHeight, staticWidth, options));
+        return height / staticWidth * width;
       }
+      ({ height } = options);
+      ({ height } = this.getDefaultValues(height, width, options));
       return height;
     };
   }
@@ -177,6 +194,12 @@ export default class Symbol {
     }
     if (options.width != null) {
       out.width = options.width;
+    }
+    if (height != null) {
+      out.height = height;
+    }
+    if (options.height != null) {
+      out.height = options.height;
     }
     return out;
   }
