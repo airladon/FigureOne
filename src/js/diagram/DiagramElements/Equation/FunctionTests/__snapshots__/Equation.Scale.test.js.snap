@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Equation Functions - Scale Input Forms 1`] = `
+Array [
+  NaN,
+  NaN,
+  0,
+  NaN,
+  NaN,
+  0,
+  NaN,
+  NaN,
+  1,
+]
+`;
+
+exports[`Equation Functions - Scale Input Forms 2`] = `
+Array [
+  NaN,
+  NaN,
+  NaN,
+  NaN,
+  NaN,
+  NaN,
+  NaN,
+  NaN,
+  NaN,
+]
+`;
+
+exports[`Equation Functions - Scale Input Forms 3`] = `
+Array [
+  NaN,
+  NaN,
+  NaN,
+  NaN,
+  NaN,
+  NaN,
+  NaN,
+  NaN,
+  NaN,
+]
+`;

@@ -25,6 +25,7 @@ import Box from './Elements/Box';
 import Integral from './Elements/Integral';
 import SumProd from './Elements/SumProd';
 import Matrix from './Elements/Matrix';
+import Scale from './Elements/Scale';
 
 export function getDiagramElement(
   elementsObject: { [string: string]: DiagramElementPrimitive |
@@ -557,10 +558,39 @@ export class EquationFunctions {
     if (name === 'int') { return this.int(params); }   // $FlowFixMe
     if (name === 'sumOf') { return this.sumProd(params); }   // $FlowFixMe
     if (name === 'prodOf') { return this.sumProd(params); }   // $FlowFixMe
-    if (name === 'matrix') { return this.matrix(params); }
+    if (name === 'matrix') { return this.matrix(params); }   // $FlowFixMe
+    if (name === 'scale') { return this.scale(params); }
     // Add container - where you fix the ascent, descent, and width
     // (content is centered in width) - Content spills out of container by default
     return null;
+  }
+
+  scale(
+    optionsOrArray: TypeScaleObject | TypeScaleArray,
+  ) {
+    let content;
+    let scale;
+    const defaultOptions = {
+      scaleModifier: 1,
+    };
+    if (Array.isArray(optionsOrArray)) {
+      [
+        content, scale,
+      ] = optionsOrArray;
+    } else {
+      ({
+        content, scale,
+      } = optionsOrArray);
+    }
+    const optionsIn = {
+      scaleModifier: scale,
+    };
+    const options = joinObjects(defaultOptions, optionsIn);
+    return new Scale(                         // $FlowFixMe
+      [this.contentToElement(content)],
+      [],
+      options,
+    );
   }
 
   frac(
