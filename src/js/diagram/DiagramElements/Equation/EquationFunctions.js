@@ -564,42 +564,60 @@ export class EquationFunctions {
   }
 
   frac(
-    optionsOrNum: TypeFracObject | TypeFracArray | TypeEquationPhrase,
-    den: TypeEquationPhrase | null = null,
-    sym: string | null = null,
-    fractionScale?: number | null = null,
+    optionsOrArray: TypeFracObject | TypeFracArray,
   ) {
     let numerator;
     let denominator;
     let symbol;
     let scale;
+    let overhang;
+    let numeratorSpace;
+    let denominatorSpace;
+    let offsetY;
 
     // This is imperfect type checking, as the assumption is if den, sym
     // and fractionScale is null, then they weren't defined by the caller
     // and therefore the caller is passing in a TypeFracObject or TypeFracArray
     // All the flow errors go away if TypeEquationPhrase is removed from
     // optionsOrNum (and then also remove the first if statement below)
-    if (!(den == null && sym == null && fractionScale == null)) {
-      numerator = optionsOrNum;
-      denominator = den;
-      symbol = sym;
-      scale = fractionScale;
-    } else if (Array.isArray(optionsOrNum)) {       // $FlowFixMe
-      [numerator, denominator, symbol, scale] = optionsOrNum;
+    const defaultOptions = {
+      scaleModifier: 1,
+      numeratorSpace: 0.05,
+      denominatorSpace: 0.05,
+      offsetY: 0.07,
+      overhang: 0.05,
+    };
+    if (Array.isArray(optionsOrArray)) {
+      [
+        numerator, symbol, denominator, scale,       // $FlowFixMe
+        numeratorSpace, denominatorSpace, overhang,  // $FlowFixMe
+        offsetY,
+      ] = optionsOrArray;
     } else {
-      ({                                            // $FlowFixMe
-        numerator, denominator, symbol, scale,
-      } = optionsOrNum);
+      ({
+        numerator, symbol, denominator, scale,      // $FlowFixMe
+        numeratorSpace, denominatorSpace, overhang, // $FlowFixMe
+        offsetY,
+      } = optionsOrArray);
     }
-    const f = new Fraction(                         // $FlowFixMe
-      this.contentToElement(numerator),             // $FlowFixMe
-      this.contentToElement(denominator),           // $FlowFixMe
+    const optionsIn = {
+      scaleModifier: scale,
+      overhang,
+      numeratorSpace,
+      denominatorSpace,
+      offsetY,
+    };
+    const options = joinObjects(defaultOptions, optionsIn);
+    console.log(symbol)
+    return new Fraction(                         // $FlowFixMe
+      [this.contentToElement(numerator), this.contentToElement(denominator)],       // $FlowFixMe
       this.getExistingOrAddSymbol(symbol),
+      options,
     );
-    if (scale != null) {                            // $FlowFixMe
-      f.scaleModifier = scale;
-    }
-    return f;
+    // if (scale != null) {                            // $FlowFixMe
+    //   f.scaleModifier = scale;
+    // }
+    // return f;
   }
 
   root(
