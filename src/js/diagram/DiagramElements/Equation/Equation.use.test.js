@@ -108,7 +108,7 @@ describe('Different ways to make an equation', () => {
           },
           forms: {
             0: ['a', 'b', 'c'],
-            1: [{ frac: ['a', '_2', 'v'] }, 'c'],
+            1: [{ frac: ['a', 'v', '_2'] }, 'c'],
           },
           formSeries: ['0', '1'],
         });
@@ -132,7 +132,7 @@ describe('Different ways to make an equation', () => {
           scale: 0.45,
           forms: {
             0: ['a', 'b', 'c'],
-            1: [{ frac: ['a', '_2', 'v'] }, 'c'],
+            1: [{ frac: ['a', 'v', '_2'] }, 'c'],
           },
           formSeries: ['0', '1'],
         });
@@ -152,7 +152,7 @@ describe('Different ways to make an equation', () => {
         });
         eqn.addForms({
           0: ['a', 'b', 'c'],
-          1: [{ frac: ['a', '_2', 'v'] }, 'c'],
+          1: [{ frac: ['a', 'v', '_2'] }, 'c'],
         });
         eqn.addForms({
           2: ['a', 'b', 'c'],
@@ -174,7 +174,7 @@ describe('Different ways to make an equation', () => {
           // Simple
           abc: ['a', 'b', 'c'],
           // All different ways to write a fraction
-          f0: { frac: ['a', 'b', 'v'] },
+          f0: { frac: ['a', 'v', 'b'] },
           f1: {
             frac: {
               numerator: 'a',
@@ -187,7 +187,7 @@ describe('Different ways to make an equation', () => {
             denominator: 'b',
             symbol: 'v',
           }),
-          f3: frac('a', 'b', 'v'),
+          f3: frac(['a', 'v', 'b']),
           // Phrases dependent on other phrases
           ba: ['b', 'a'],
           bac: ['ba', 'c'],
@@ -199,7 +199,7 @@ describe('Different ways to make an equation', () => {
           '0a': ['a', 'b', 'c'],
           '0b': 'abc',
           //
-          f: { frac: ['a', 'b', 'v'] },
+          f: { frac: ['a', 'v', 'b'] },
           f0: 'f0',
           f1: 'f1',
           f2: 'f2',
@@ -208,8 +208,8 @@ describe('Different ways to make an equation', () => {
           d: ['b', 'a', 'c'],
           d0: 'bac',
           //
-          e: { frac: [['a', 'b'], 'c', 'v'] },
-          e0: { frac: ['ab', 'c', 'v'] },
+          e: { frac: [['a', 'b'], 'v', 'c'] },
+          e0: { frac: ['ab', 'v', 'c'] },
         });
       },
       // nonTextFunctions: () => {
@@ -318,26 +318,26 @@ describe('Different ways to make an equation', () => {
       autoSymbolsName: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1, scale: 0.95 });
         eqn.addForms({
-          0: { frac: ['a', 'b', 'vinculum'] },
+          0: { frac: ['a', 'vinculum', 'b'] },
         });
       },
       autoSymbolsID: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1, scale: 0.95 });
         eqn.addForms({
-          0: { frac: ['a', 'b', 'v_vinculum'] },
+          0: { frac: ['a', 'v_vinculum', 'b'] },
           // 2: ['a', 'b', { vinculum }],
         });
       },
       autoSymbolsObjectName: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1, scale: 0.95 });
         eqn.addForms({
-          0: { frac: ['a', 'b', { vinculum: { color: color2 } }] },
+          0: { frac: ['a', { vinculum: { color: color2 } }, 'b'] },
         });
       },
       autoSymbolsObjectID: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1, scale: 0.95 });
         eqn.addForms({
-          0: { frac: ['a', 'b', { v_vinculum: { color: color2 } }] },
+          0: { frac: ['a', { v_vinculum: { color: color2 } }, 'b'] },
         });
       },
     };
@@ -379,8 +379,9 @@ describe('Different ways to make an equation', () => {
     expect(eqn.eqn.defaultFormAlignment.alignH).toEqual('right');
     expect(eqn.eqn.defaultFormAlignment.alignV).toEqual('top');
     expect(eqn.eqn.scale).toEqual(0.45);
-
     tools.cleanUIDs(eqn);
+    eqn._a.parent = null;
+    // console.log(eqn._a)
     expect(eqn._a).toMatchSnapshot();
   });
   test('Separate All Text', () => {
@@ -479,28 +480,28 @@ describe('Different ways to make an equation', () => {
     expect(eqn._a.drawingObject.text[0].text).toBe('a');
     expect(eqn._b.drawingObject.text[0].text).toBe('b');
     expect(eqn._vinculum.drawingObject.points).toEqual([
-      0, -0.5, 0, 0.5, 1, -0.5, 1, 0.5,
+      0, 0, 0, 0.01, 0.133, 0, 0.133, 0.01,
     ]);
     expect(eqn._vinculum.color).toEqual(color1);
   });
   test('Auto Symbols ID', () => {
     ways.autoSymbolsID();
     expect(eqn._v.drawingObject.points).toEqual([
-      0, -0.5, 0, 0.5, 1, -0.5, 1, 0.5,
+      0, 0, 0, 0.01, 0.133, 0, 0.133, 0.01,
     ]);
     expect(eqn._v.color).toEqual(color1);
   });
   test('Auto Symbols Object Name', () => {
     ways.autoSymbolsObjectName();
     expect(eqn._vinculum.drawingObject.points).toEqual([
-      0, -0.5, 0, 0.5, 1, -0.5, 1, 0.5,
+      0, 0, 0, 0.01, 0.133, 0, 0.133, 0.01,
     ]);
     expect(eqn._vinculum.color).toEqual(color1);
   });
   test('Auto Symbols Object ID', () => {
     ways.autoSymbolsObjectID();
     expect(eqn._v.drawingObject.points).toEqual([
-      0, -0.5, 0, 0.5, 1, -0.5, 1, 0.5,
+      0, 0, 0, 0.01, 0.133, 0, 0.133, 0.01,
     ]);
     expect(eqn._v.color).toEqual(color1);
   });

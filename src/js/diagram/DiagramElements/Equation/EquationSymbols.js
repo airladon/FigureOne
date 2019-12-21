@@ -63,7 +63,10 @@ export default class EquationSymbols {
     name: string,
     options: TypeSymbolOptions,
   ) {
-    if (name === 'vinculum') {
+    // if (name === 'vinculumOld') {
+    //   return this.vinculum(options);
+    // }
+    if (name === 'vinculum') {         // $FlowFixMe
       return this.vinculum(options);
     }
     if (name === 'strike') {
@@ -111,26 +114,23 @@ export default class EquationSymbols {
     if (name === 'arrow') {         // $FlowFixMe
       return this.arrow(options);
     }
-    if (name === 'vinculumNew') {         // $FlowFixMe
-      return this.vinculumNew(options);
-    }
     return null;
   }
 
-  vinculum(options: { color?: Array<number> } = {}) {
-    let { color } = options;
-    if (color == null) {
-      color = this.defaultColor;
-    }
-    return this.shapes.horizontalLine(
-      new Point(0, 0),
-      1, 1, 0,
-      color,
-      new Transform('vinculum').scale(1, 1).translate(0, 0),
-    );
-  }
+  // vinculumOld(options: { color?: Array<number> } = {}) {
+  //   let { color } = options;
+  //   if (color == null) {
+  //     color = this.defaultColor;
+  //   }
+  //   return this.shapes.horizontalLine(
+  //     new Point(0, 0),
+  //     1, 1, 0,
+  //     color,
+  //     new Transform('vinculum').scale(1, 1).translate(0, 0),
+  //   );
+  // }
 
-  vinculumNew(options: {
+  vinculum(options: {
     color?: Array<number>,
     lineWidth?: number,
     draw?: 'static' | 'dynamic',

@@ -26,7 +26,7 @@ describe('Equation Symbols - Vinculum', () => {
       a: 'a',
       b: 'b',
       v: {
-        symbol: 'vinculumNew',
+        symbol: 'vinculum',
         lineWidth: 0.01,
         draw: 'dynamic',
       },
