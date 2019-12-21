@@ -4,10 +4,10 @@ exports[`Diagram Equations From Object Equation Creation Equation with all optio
 Array [
   0.85,
   0,
-  1.9269,
+  1.8895,
   0,
   0.85,
-  1.915,
+  1.91925,
   0,
   0,
   1,
@@ -18,10 +18,10 @@ exports[`Diagram Equations From Object Equation Creation Equation with all optio
 Array [
   0.85,
   0,
-  1.9269,
+  1.8895,
   0,
   0.85,
-  1.7042,
+  1.69845,
   0,
   0,
   1,
@@ -35,7 +35,7 @@ Array [
   1.966,
   0,
   0.85,
-  1.8062,
+  1.80045,
   0,
   0,
   1,
@@ -44,12 +44,12 @@ Array [
 
 exports[`Diagram Equations From Object Equation Creation Equation with all options 4`] = `
 Array [
-  0.0442,
+  0.119,
   0,
-  1.9218,
+  1.847,
   0,
-  0.0085,
-  1.8657,
+  0.01,
+  1.85995,
   0,
   0,
   1,
@@ -60,10 +60,10 @@ exports[`Diagram Equations From Object Equation Creation Navigator with all opti
 Array [
   0.7,
   0,
-  0.0042,
+  0.035,
   0,
   0.7,
-  0.0896,
+  0.0996,
   0,
   0,
   1,
@@ -74,7 +74,7 @@ exports[`Diagram Equations From Object Equation Creation Navigator with all opti
 Array [
   0.7,
   0,
-  0.0042,
+  0.035,
   0,
   0.7,
   -0.084,
@@ -88,7 +88,7 @@ exports[`Diagram Equations From Object Equation Creation Navigator with all opti
 Array [
   0.7,
   0,
-  0.0364,
+  0.098,
   0,
   0.7,
   0,
@@ -100,11 +100,11 @@ Array [
 
 exports[`Diagram Equations From Object Equation Creation Navigator with all options 4`] = `
 Array [
-  0.0364,
+  0.098,
   0,
   0,
   0,
-  0.008,
+  0.01,
   0.049,
   0,
   0,
@@ -116,10 +116,10 @@ exports[`Diagram Equations From Object Equation Creation Navigator without equat
 Array [
   0.7,
   0,
-  0.0042,
+  0.035,
   0,
   0.7,
-  0.0896,
+  0.0996,
   0,
   0,
   1,
@@ -130,7 +130,7 @@ exports[`Diagram Equations From Object Equation Creation Navigator without equat
 Array [
   0.7,
   0,
-  0.0042,
+  0.035,
   0,
   0.7,
   -0.084,
@@ -144,7 +144,7 @@ exports[`Diagram Equations From Object Equation Creation Navigator without equat
 Array [
   0.7,
   0,
-  0.0364,
+  0.098,
   0,
   0.7,
   0,
@@ -156,11 +156,11 @@ Array [
 
 exports[`Diagram Equations From Object Equation Creation Navigator without equation Split 4`] = `
 Array [
-  0.0364,
+  0.098,
   0,
   0,
   0,
-  0.008,
+  0.01,
   0.049,
   0,
   0,
@@ -172,10 +172,10 @@ exports[`Diagram Equations From Object Equation Creation Navigator without equat
 Array [
   0.7,
   0,
-  0.0042,
+  0.035,
   0,
   0.7,
-  0.0896,
+  0.0996,
   0,
   0,
   1,
@@ -186,7 +186,7 @@ exports[`Diagram Equations From Object Equation Creation Navigator without equat
 Array [
   0.7,
   0,
-  0.0042,
+  0.035,
   0,
   0.7,
   -0.084,
@@ -200,7 +200,7 @@ exports[`Diagram Equations From Object Equation Creation Navigator without equat
 Array [
   0.7,
   0,
-  0.0364,
+  0.098,
   0,
   0.7,
   0,
@@ -212,11 +212,11 @@ Array [
 
 exports[`Diagram Equations From Object Equation Creation Navigator without equation all in one object 4`] = `
 Array [
-  0.0364,
+  0.098,
   0,
   0,
   0,
-  0.008,
+  0.01,
   0.049,
   0,
   0,
@@ -228,10 +228,10 @@ exports[`Diagram Equations From Object Equation Creation Simple 1`] = `
 Array [
   0.7,
   0,
-  0.0042,
+  0.035,
   0,
   0.7,
-  0.0896,
+  0.0996,
   0,
   0,
   1,
@@ -242,7 +242,7 @@ exports[`Diagram Equations From Object Equation Creation Simple 2`] = `
 Array [
   0.7,
   0,
-  0.0042,
+  0.035,
   0,
   0.7,
   -0.084,
@@ -256,7 +256,7 @@ exports[`Diagram Equations From Object Equation Creation Simple 3`] = `
 Array [
   0.7,
   0,
-  0.0364,
+  0.098,
   0,
   0.7,
   0,
@@ -268,11 +268,11 @@ Array [
 
 exports[`Diagram Equations From Object Equation Creation Simple 4`] = `
 Array [
-  0.0364,
+  0.098,
   0,
   0,
   0,
-  0.008,
+  0.01,
   0.049,
   0,
   0,

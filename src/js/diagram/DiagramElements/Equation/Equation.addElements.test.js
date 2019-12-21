@@ -12,8 +12,9 @@ import {
 } from '../../DrawingObjects/TextObject/TextObject';
 import VertexHorizontalLine from '../../DrawingObjects/VertexObject/VertexHorizontalLine';
 // import {
-//   DiagramElementCollection,
+//   DiagramElementPrimitive,
 // } from '../../Element';
+import VertexSymbol from './Symbols/VertexSymbol';
 
 tools.isTouchDevice = jest.fn();
 
@@ -180,15 +181,15 @@ describe('Diagram Equations From Object', () => {
   test('Symbol', () => {
     eqn.addElements(addElements.symbols);
     expect(eqn._a.drawingObject.text[0].text).toBe('a');
-    expect(eqn._v.drawingObject).toBeInstanceOf(VertexHorizontalLine);
-    expect(eqn._v1.drawingObject).toBeInstanceOf(VertexHorizontalLine);
+    expect(eqn._v.drawingObject).toBeInstanceOf(VertexSymbol);
+    expect(eqn._v1.drawingObject).toBeInstanceOf(VertexSymbol);
     expect(eqn._v2.drawingObject).toBeInstanceOf(VertexHorizontalLine);
   });
   test('ElementOptions', () => {
     eqn.addElements(addElements.elementOptions);
     expect(eqn._a.drawingObject.text[0].text).toBe('a');
     expect(eqn._b.drawingObject.text[0].text).toBe('b');
-    expect(eqn._v.drawingObject).toBeInstanceOf(VertexHorizontalLine);
+    expect(eqn._v.drawingObject).toBeInstanceOf(VertexSymbol);
 
     expect(eqn._a.isTouchable).toBe(false);
     expect(eqn._b.isTouchable).toBe(true);
@@ -209,7 +210,7 @@ describe('Diagram Equations From Object', () => {
   });
   test('Symbol: Vinculum', () => {
     eqn.addElements(addElements.vinculum);
-    expect(eqn._v.drawingObject).toBeInstanceOf(VertexHorizontalLine);
+    expect(eqn._v.drawingObject).toBeInstanceOf(VertexSymbol);
     expect(eqn._v.color).toEqual(color1);
   });
   test('Symbol: Strike', () => {

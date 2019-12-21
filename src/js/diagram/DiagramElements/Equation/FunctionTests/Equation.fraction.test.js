@@ -32,8 +32,8 @@ describe('Equation Functions - Fraction', () => {
       d: 'd',
       e: 'e',
       f: 'f',
-      v: { symbol: 'vinculumNew' },
-      v1: { symbol: 'vinculumNew' },
+      v: { symbol: 'vinculum' },
+      v1: { symbol: 'vinculum' },
     };
     functions = {
       single: () => {

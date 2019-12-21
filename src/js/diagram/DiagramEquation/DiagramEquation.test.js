@@ -46,7 +46,7 @@ describe('Diagram Equations From Object', () => {
           },
           forms: {
             0: ['a', 'b', 'c'],
-            1: [{ frac: ['a', '_2', 'v'] }, 'c'],
+            1: [{ frac: ['a', 'v', '_2'] }, 'c'],
           },
           formSeries: ['0', '1'],
         });
@@ -71,7 +71,7 @@ describe('Diagram Equations From Object', () => {
           },
           forms: {
             0: ['a', 'b', 'c'],
-            1: [{ frac: ['a', '_2', 'v'] }, 'c'],
+            1: [{ frac: ['a', 'v', '_2'] }, 'c'],
           },
           formSeries: ['0', '1'],
         });
@@ -89,7 +89,7 @@ describe('Diagram Equations From Object', () => {
           },
           forms: {
             0: ['a', 'b', 'c'],
-            1: [{ frac: ['a', '_2', 'v'] }, 'c'],
+            1: [{ frac: ['a', 'v', '_2'] }, 'c'],
           },
           formSeries: ['0', '1'],
         });
@@ -123,7 +123,7 @@ describe('Diagram Equations From Object', () => {
         });
         collection._testEqn.addForms({
           0: ['a', 'b', 'c'],
-          1: [{ frac: ['a', '_2', 'v'] }, 'c'],
+          1: [{ frac: ['a', 'v', '_2'] }, 'c'],
         });
         collection._testEqn.setFormSeries(['0', '1']);
         collection._testNav._table.drawingObject.element = { style: { opacity: 1 } };
@@ -141,7 +141,7 @@ describe('Diagram Equations From Object', () => {
           },
           forms: {
             0: ['a', 'b', 'c'],
-            1: [{ frac: ['a', '_2', 'v'] }, 'c'],
+            1: [{ frac: ['a', 'v', '_2'] }, 'c'],
           },
           formSeries: ['0', '1'],
           offset: new Point(0.2, -0.5),

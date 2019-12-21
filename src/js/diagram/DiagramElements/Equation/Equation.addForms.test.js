@@ -32,9 +32,9 @@ describe('Diagram Equations From Object', () => {
         d: 'd',
         e: 'e',
         f: 'f',
-        v: { symbol: 'vinculumNew' },
-        v1: { symbol: 'vinculumNew' },
-        v2: { symbol: 'vinculumNew' },
+        v: { symbol: 'vinculum' },
+        v1: { symbol: 'vinculum' },
+        v2: { symbol: 'vinculum' },
       },
     });
     color1 = [0.95, 0, 0, 1];
