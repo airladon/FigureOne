@@ -12,12 +12,12 @@ export default class Scale extends BaseEquationFunction {
     this.location = location._dup();
     const loc = location._dup();
     const {
-      contentScale,
+      scaleModifier,
     } = this.options;
     const [mainContent] = this.contents;
     const contentBounds = new Bounds();
     if (mainContent != null) {
-      mainContent.calcSize(loc._dup(), scale * contentScale);
+      mainContent.calcSize(loc._dup(), scale * scaleModifier);
       contentBounds.copyFrom(mainContent);
     }
 
