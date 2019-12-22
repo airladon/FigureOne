@@ -576,8 +576,8 @@ export class EquationFunctions {
     let width;
     let ascent;
     let descent;
-    let alignX; // left, center, right, multiplier (to left)
-    let alignY; // bottom, baseline, middle, top, multiplier (to bottom)
+    let xAlign; // left, center, right, multiplier (to left)
+    let yAlign; // bottom, baseline, middle, top, multiplier (to bottom)
 
     const defaultOptions = {
       scaleModifier: 1,
@@ -585,16 +585,16 @@ export class EquationFunctions {
       width: null,
       ascent: null,
       descent: null,
-      alignX: 'left',
-      alignY: 'baseline',
+      xAlign: 'center',
+      yAlign: 'baseline',
     };
     if (Array.isArray(optionsOrArray)) {
       [
-        content, width, descent, ascent, alignX, alignY, fit, scale,
+        content, width, descent, ascent, xAlign, yAlign, fit, scale,
       ] = optionsOrArray;
     } else {
       ({
-        content, width, descent, ascent, alignX, alignY, fit, scale,
+        content, width, descent, ascent, xAlign, yAlign, fit, scale,
       } = optionsOrArray);
     }
     const optionsIn = {
@@ -603,8 +603,8 @@ export class EquationFunctions {
       width,
       ascent,
       descent,
-      alignX,
-      alignY,
+      xAlign,
+      yAlign,
     };
     const options = joinObjects(defaultOptions, optionsIn);
     return new Container(                         // $FlowFixMe
