@@ -276,10 +276,11 @@ export default class Integral extends Symbol {
     return points;
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  /* eslint-disable class-methods-use-this */
+  // $FlowFixMe
   getDefaultValues(height: number, width: ?number, options: {
-      lineWidth: number,
-      tipWidth: number,
+      lineWidth?: number,
+      tipWidth?: number,
       num: number,
     }) {
     // at 2:

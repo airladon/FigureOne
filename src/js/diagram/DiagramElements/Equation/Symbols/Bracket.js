@@ -155,7 +155,8 @@ export default class Bracket extends Symbol {
   //   0.5            0.05          0.015
   //   0.3            0.05          0.015
   //   0.2            0.03          0.012
-  // eslint-disable-next-line class-methods-use-this
+  /* eslint-disable class-methods-use-this */
+  // $FlowFixMe
   getDefaultValues(height: number, width: ?number, options: {
       lineWidth?: number,
       width?: number,

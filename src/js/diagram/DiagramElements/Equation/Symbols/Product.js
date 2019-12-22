@@ -208,16 +208,19 @@ export default class Product extends Symbol {
   //   0.5            0.4            0.012
   //   0.3            0.25           0.009
   //   0.2            0.2           0.008
-  // eslint-disable-next-line class-methods-use-this
+  /* eslint-disable class-methods-use-this */
+  // $FlowFixMe
   getDefaultValues(height: number, width: ?number, options: {
       lineWidth?: number,
     }) {
     const out: {
       lineWidth: number,
       width: number,
+      height: number,
     } = {
       lineWidth: options.lineWidth || 1, // height * 0.93 / (25 * height + 15),
       width: width || 1,
+      height,
     };
     if (options.lineWidth == null && width != null) {
       out.lineWidth = width / 7 / 3;

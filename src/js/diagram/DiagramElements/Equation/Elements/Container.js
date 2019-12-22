@@ -65,7 +65,8 @@ export default class Container extends BaseEquationFunction {
       contentLoc.y = loc.y - containerBounds.descent + contentBounds.descent;
     } else if (yAlign === 'middle') {
       contentLoc.y = loc.y - containerBounds.descent
-                     + containerBounds.height / 2 - contentBounds.height / 2 + contentBounds.descent;
+                     + containerBounds.height / 2 - contentBounds.height / 2
+                     + contentBounds.descent;
     } else if (yAlign === 'top') {
       contentLoc.y = loc.y + containerBounds.ascent
                      - contentBounds.height + contentBounds.descent;
