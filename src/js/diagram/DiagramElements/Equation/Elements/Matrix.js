@@ -123,6 +123,9 @@ export default class Integral extends BaseEquationFunction {
         dim = new Point(maxDim, maxDim);
       } else {
         dim = parsePoint(fit);
+        if (dim == null) {
+          dim = new Point(0, 0);
+        }
       }
 
       for (let row = 0; row < numRows; row += 1) {

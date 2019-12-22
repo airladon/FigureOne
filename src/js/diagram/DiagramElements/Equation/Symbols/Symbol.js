@@ -130,6 +130,9 @@ export default class Symbol {
           staticHeight = height;
         }
         ({ width } = this.getDefaultValues(staticHeight, staticWidth, options));
+        if (width == null) {
+          width = height;
+        }
         return width / staticHeight * height;
       }
       ({ width } = options);
@@ -158,6 +161,9 @@ export default class Symbol {
           staticWidth = width;
         } // ????
         ({ height } = this.getDefaultValues(staticHeight, staticWidth, options));
+        if (height == null) {
+          height = width;
+        }
         return height / staticWidth * width;
       }
       ({ height } = options);
@@ -184,23 +190,50 @@ export default class Symbol {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getDefaultValues(height: number, width: ?number, options: Object) {
-    const out = {
-      width: height,
-    };
-    if (width != null) {
-      out.width = width;
-    }
-    if (options.width != null) {
-      out.width = options.width;
-    }
-    if (height != null) {
-      out.height = height;
-    }
-    if (options.height != null) {
-      out.height = options.height;
-    }
+  /* eslint-disable class-methods-use-this */
+  // getDefaultValues(height: number, width: ?number, options: {
+  //     height?: number,
+  //     width?: number,
+  //     lineWidth?: number,
+  //     tipWidth?: number,
+  //     arrowWidth?: number,
+  //     arrowHeight?: number,
+  //   }) {
+  //   const out: {
+  //     height?: number,
+  //     width?: number,
+  //     lineWidth?: number,
+  //     tipWidth?: number,
+  //     arrowWidth?: number,
+  //     arrowHeight?: number,
+  //   } = {
+  //     width: height,
+  //   };
+  //   if (width != null) {
+  //     out.width = width;
+  //   }
+  //   if (options.width != null) {
+  //     out.width = options.width;
+  //   }
+  //   if (height != null) {
+  //     out.height = height;
+  //   }
+  //   if (options.height != null) {
+  //     out.height = options.height;
+  //   }
+  //   return out;
+  // }
+  /* eslint-disable no-unused-vars */
+  // $FlowFixMe
+  getDefaultValues(height: number, width: ?number, options: {}) {
+    const out: {
+      height?: number,
+      width?: number,
+      lineWidth?: number,
+      tipWidth?: number,
+      arrowWidth?: number,
+      arrowHeight?: number,
+    } = {};
     return out;
   }
 }

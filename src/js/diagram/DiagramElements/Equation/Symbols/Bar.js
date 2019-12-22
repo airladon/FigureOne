@@ -27,11 +27,11 @@ export default class Bar extends Bracket {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  /* eslint-disable class-methods-use-this */
+  // $FlowFixMe
   getDefaultValues(height: number, width: ?number, options: {
       lineWidth?: number,
       width?: number,
-      tipWidth?: number,
     }) {
     const out = {};
     if (options.lineWidth == null) {

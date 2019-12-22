@@ -106,7 +106,7 @@ export default class SquareBracket extends Bracket {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  /* eslint-disable class-methods-use-this */
   getDefaultValues(height: number, width: ?number, options: {
       lineWidth?: number,
       width?: number,

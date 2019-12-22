@@ -42,12 +42,12 @@ export default class Arrow extends Bracket {
   //                     Line Width
 
   // eslint-disable-next-line class-methods-use-this
-  getPoints() {                                        // $FlowFixMe
+  getPoints() {
     return (options: Object, widthIn: number, height: number) => {
       const { direction } = options;
 
       const {
-        lineWidth, arrowWidth, arrowHeight, width,
+        lineWidth, arrowWidth, arrowHeight,
       } = this.getDefaultValues(height, widthIn, options);
 
       const p0 = new Point(arrowWidth / 2 + lineWidth / 2, 0);
@@ -86,7 +86,8 @@ export default class Arrow extends Bracket {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  /* eslint-disable class-methods-use-this */
+  // $FlowFixMe
   getDefaultValues(height: number, width: ?number, options: {
       lineWidth?: number,
       arrowWidth?: number,
@@ -102,7 +103,7 @@ export default class Arrow extends Bracket {
     if (options.arrowWidth == null) {
       out.arrowWidth = out.lineWidth * 3;
     } else {
-      out.arrowWidth = options.arrowWidth
+      out.arrowWidth = options.arrowWidth;
     }
     if (options.arrowHeight == null) {
       out.arrowHeight = out.lineWidth * 3;

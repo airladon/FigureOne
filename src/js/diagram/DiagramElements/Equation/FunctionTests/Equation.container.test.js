@@ -1,6 +1,6 @@
-import {
-  Point,
-} from '../../../../tools/g2';
+// import {
+//   Point,
+// } from '../../../../tools/g2';
 import {
   round,
 } from '../../../../tools/math';
@@ -261,7 +261,8 @@ describe('Equation Functions - Container', () => {
       eqn.showForm('descentAscentMiddle');
       diagram.setFirstTransform();
       const newB = eqn._b.getBoundingRect('diagram');
-      expect(round(newB.bottom)).toEqual(round(-descent + (descent + ascent) / 2 - baseB.height / 2));
+      expect(round(newB.bottom))
+        .toEqual(round(-descent + (descent + ascent) / 2 - baseB.height / 2));
     });
     test('Descent Ascent Top', () => {
       eqn.showForm('descentAscentTop');

@@ -182,7 +182,8 @@ export default class Sum extends Symbol {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  /* eslint-disable class-methods-use-this */
+  // $FlowFixMe
   getDefaultValues(height: number, width: ?number, options: {
       lineWidth?: number,
       width?: number,
@@ -190,6 +191,7 @@ export default class Sum extends Symbol {
     const out = {
       lineWidth: height * 0.88 / (25 * height + 15),
       width: height * 0.88,
+      height,
     };
     if (options.lineWidth != null) {
       out.lineWidth = options.lineWidth;

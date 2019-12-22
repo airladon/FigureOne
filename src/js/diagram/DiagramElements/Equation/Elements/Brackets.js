@@ -2,16 +2,11 @@
 import {
   Point,
 } from '../../../../tools/g2';
-// import {
-//   DiagramElementPrimitive, DiagramElementCollection,
-// } from '../../../Element';
-// import { duplicateFromTo } from '../../../../tools/tools';
 import { Elements } from './Element';
 import Bounds from './Bounds';
 import BaseEquationFunction from './BaseEquationFunction';
 
 export default class Brackets extends BaseEquationFunction {
-
   calcSize(location: Point, scale: number) {
     this.location = location._dup();
     const [leftGlyph, rightGlyph] = this.glyphs;
