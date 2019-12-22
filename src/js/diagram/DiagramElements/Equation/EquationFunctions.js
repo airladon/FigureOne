@@ -72,6 +72,8 @@ export type TypeEquationPhrase =
   | { bottomComment: TypeCommentObject } | TypeCommentArray
   | { padding: TypePaddingObject } | TypePaddingArray
   | { bar: TypeBarObject } | TypeBarArray
+  | { scale: TypeScaleObject } | TypeScaleArray
+  | { container: TypeContainerObject } | TypeContainerArray
   | [
     TypeEquationPhrase,
     TypeEquationPhrase,
@@ -90,13 +92,54 @@ export type TypeFracObject = {
   denominator: TypeEquationPhrase;
   symbol: string;
   scale?: number;
+  numeratorSpace?: number;
+  denominatorSpace?: number;
+  overhang?: number;
+  offsetY?: number;
 };
 export type TypeFracArray = [
   TypeEquationPhrase,
   TypeEquationPhrase,
   string,
   ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
 ];
+
+export type TypeContainerObject = {
+  content: TypeEquationPhrase,
+  width?: number,
+  descent?: number,
+  ascent?: number,
+  xAlign?: 'left' | 'center' | 'right' | number,
+  yAlign?: 'bottom' | 'middle' | 'top' | 'baseline' | number,
+  fit?: 'width' | 'height' | 'contain',
+  scale?: number,
+};
+
+export type TypeContainerArray = [
+  TypeEquationPhrase,
+  number,
+  number,
+  number,
+  'left' | 'center' | 'right' | number,
+  'bottom' | 'middle' | 'top' | 'baseline' | number,
+  'width' | 'height' | 'contain',
+  number,
+];
+
+export type TypeScaleObject = {
+  content: TypeEquationPhrase,
+  scale?: number,
+};
+
+export type TypeScaleArray = [
+  TypeEquationPhrase,
+  ?number,
+];
+
 export type TypeRootObject = {
   content: TypeEquationPhrase;
   root: TypeEquationPhrase;
@@ -154,28 +197,27 @@ export type TypeBarObject = {
   // comment?: TypeEquationPhrase;
   symbol?: string;
   side?: 'left' | 'right' | 'top' | 'bottom';
-  insideSpace?: number,
-  // outsideSpace?: number,    // Only used if a comment exists
-  barOverhang?: number,
-  barLength?: number,     // prioritized over barOverhang
-  minLeft?: number,  // If minLeft and minRight are specified, overwrites length
-  minRight?: number,
-  minAscent?: number, // If ascent and descent are specified, overwrites length
-  minDescent?: number,
-  inSize?: boolean
+  space?: number,
+  overhang?: number,
+  length?: number,
+  left?: number,
+  right?: number,
+  top?: number,
+  bottom?: number,
+  inSize?: boolean,
 }
 
 export type TypeBarArray = [
   TypeEquationPhrase,
   ?string,
-  ?number,
-  ?number,
-  ?number,     // prioritized over barOverhang
-  ?number,  // If minLeft and minRight are specified, overwrites length
-  ?number,
-  ?number, // If ascent and descent are specified, overwrites length
-  ?number,
   ?boolean,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
   ?'left' | 'right' | 'top' | 'bottom',
 ]
 
@@ -568,7 +610,7 @@ export class EquationFunctions {
   }
 
   container(
-    optionsOrArray: TypeScaleObject | TypeScaleArray,
+    optionsOrArray: TypeContainerObject | TypeContainerArray,
   ) {
     let content;
     let scale;
