@@ -572,12 +572,12 @@ export class EquationFunctions {
   ) {
     let content;
     let scale;
-    let fit; // fits content to container - width, height, both, null
+    let fit; // fits content to container - width, height, contain, null
     let width;
     let ascent;
     let descent;
     let alignX; // left, center, right, multiplier (to left)
-    let alignY; // bototm, middle, top, multiplier (to bottom)
+    let alignY; // bottom, baseline, middle, top, multiplier (to bottom)
 
     const defaultOptions = {
       scaleModifier: 1,
@@ -586,15 +586,15 @@ export class EquationFunctions {
       ascent: null,
       descent: null,
       alignX: 'left',
-      alignY: 'bottom',
+      alignY: 'baseline',
     };
     if (Array.isArray(optionsOrArray)) {
       [
-        content, width, descent, ascent, alignX, alignY, fit,
+        content, width, descent, ascent, alignX, alignY, fit, scale,
       ] = optionsOrArray;
     } else {
       ({
-        content, width, descent, ascent, alignX, alignY, fit,
+        content, width, descent, ascent, alignX, alignY, fit, scale,
       } = optionsOrArray);
     }
     const optionsIn = {
