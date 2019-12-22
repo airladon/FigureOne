@@ -390,11 +390,11 @@ export class EquationNew extends DiagramElementCollection {
     return key.replace(/^_*/, '').replace(/_.*/, '');
   }
 
-  getExistingOrAddSymbol(symbol: 'string' | Object) {
+  getExistingOrAddSymbol(symbol: Object) {
     if (typeof symbol === 'string') {
       return this.getExistingOrAddSymbolFromKey(symbol, {});
     }
-    const [key, params] = Object.entries(symbol)[0];
+    const [key, params] = Object.entries(symbol)[0];  // $FlowFixMe
     return this.getExistingOrAddSymbolFromKey(key, params);
   }
 

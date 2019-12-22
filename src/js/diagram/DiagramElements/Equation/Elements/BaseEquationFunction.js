@@ -12,7 +12,7 @@ import { Element, Elements } from './Element';
 
 export default class BaseEquationFunction extends Elements {
   contents: Array<Elements | null>;
-  glyphs: Array<DiagramElementPrimitive | DiagramElementCollection | null>;
+  glyphs: Array<?DiagramElementPrimitive | ?DiagramElementCollection>;
   glyphLocations: Array<Point>;
   glyphWidths: Array<number>;
   glyphHeights: Array<number>;
@@ -21,18 +21,18 @@ export default class BaseEquationFunction extends Elements {
 
   constructor(
     content: Elements | null | Array<Elements | null>,
-    glyph: DiagramElementPrimitive | null | DiagramElementCollection
-      | Array<DiagramElementPrimitive | null | DiagramElementCollection>,
+    glyph: ?(DiagramElementPrimitive | DiagramElementCollection
+      | Array<?DiagramElementPrimitive | ?DiagramElementCollection>),
     // inSize: boolean = true,
     options: Object,
   ) {
     const glyphElements = [];
     if (Array.isArray(glyph)) {
       glyph.forEach((g) => {
-        glyphElements.push(g !== null ? new Element(g) : null);
+        glyphElements.push(g != null ? new Element(g) : null);
       });
     } else {
-      glyphElements.push(glyph !== null ? new Element(glyph) : null);
+      glyphElements.push(glyph != null ? new Element(glyph) : null);
     }
     let glyphs = [];
     if (Array.isArray(glyph)) {

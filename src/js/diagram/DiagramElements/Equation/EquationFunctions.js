@@ -53,6 +53,7 @@ export function getDiagramElement(
 }
 
 /* eslint-disable no-use-before-define */
+// $FlowFixMe
 export type TypeEquationPhrase =
   string
   | number
@@ -74,12 +75,13 @@ export type TypeEquationPhrase =
   | { bar: TypeBarObject } | TypeBarArray
   | { scale: TypeScaleObject } | TypeScaleArray
   | { container: TypeContainerObject } | TypeContainerArray
-  | [
-    TypeEquationPhrase,
-    TypeEquationPhrase,
-    string,
-    ?number,
-  ]
+  | { matrix: TypeMatrixObject } | TypeMatrixArray
+  // | [
+  //   TypeEquationPhrase,
+  //   TypeEquationPhrase,
+  //   string,
+  //   ?number,
+  // ]
   | Array<TypeEquationPhrase>
   | DiagramElementPrimitive
   | DiagramElementCollection
@@ -423,6 +425,30 @@ export type TypePaddingArray = [
   ?number,
 ];
 
+export type TypeMatrixObject = {
+  order?: [number, number],
+  left?: string,
+  content: TypeEquationPhrase,
+  right?: string,                       // $FlowFixM: ,
+  scale?: number,
+  fit?: 'max' | 'min',
+  space?: TypeParsablePoint,
+  vAlign?: 'baseline' | 'middle',
+  brac?: TypeBracketObject,
+};
+
+export type TypeMatrixArray = [
+  [number, number],
+  string,
+  TypeEquationPhrase,
+  string,
+  number,
+  'max' | 'min',
+  TypeParsablePoint,
+  'baseline' | 'middle',
+  TypeBracketObject,
+];
+
 export type TypeAnnotationObject = {
   annotation: TypeEquationPhrase,
   relativeToContent: [
@@ -533,7 +559,7 @@ export class EquationFunctions {
     }
     if (Array.isArray(content)) {
       let elementArray = [];
-      content.forEach((c) => {
+      content.forEach((c) => {       // $FlowFixMe
         const result = this.parseContent(c);
         if (Array.isArray(result)) {
           elementArray = [...elementArray, ...result];
@@ -553,8 +579,9 @@ export class EquationFunctions {
     if (eqnMethod != null) {
       return eqnMethod;
     }
-    // If it is not a known function, then it must be a new text or symbol element
-    const elem = this.addElementFromKey(method, params);
+    // If it is not a known function, then it must be a new text or
+    // symbol element           // $FlowFixMe
+    const elem = this.addElementFromKey(method, params);     // $FlowFixMe
     return new Element(elem);
   }
 
@@ -603,7 +630,7 @@ export class EquationFunctions {
     if (name === 'prodOf') { return this.sumProd(params); }   // $FlowFixMe
     if (name === 'matrix') { return this.matrix(params); }   // $FlowFixMe
     if (name === 'scale') { return this.scale(params); }   // $FlowFixMe
-    if (name === 'container') { return this.container(params); }   // $FlowFixMe
+    if (name === 'container') { return this.container(params); }
     // Add container - where you fix the ascent, descent, and width
     // (content is centered in width) - Content spills out of container by default
     return null;
@@ -649,7 +676,7 @@ export class EquationFunctions {
       yAlign,
     };
     const options = joinObjects(defaultOptions, optionsIn);
-    return new Container(                         // $FlowFixMe
+    return new Container(
       [this.contentToElement(content)],
       [],
       options,
@@ -678,7 +705,7 @@ export class EquationFunctions {
       scaleModifier: scale,
     };
     const options = joinObjects(defaultOptions, optionsIn);
-    return new Scale(                         // $FlowFixMe
+    return new Scale(
       [this.contentToElement(content)],
       [],
       options,
@@ -711,14 +738,14 @@ export class EquationFunctions {
     };
     if (Array.isArray(optionsOrArray)) {
       [
-        numerator, symbol, denominator, scale,       // $FlowFixMe
-        numeratorSpace, denominatorSpace, overhang,  // $FlowFixMe
+        numerator, symbol, denominator, scale,
+        numeratorSpace, denominatorSpace, overhang,
         offsetY,
       ] = optionsOrArray;
     } else {
       ({
-        numerator, symbol, denominator, scale,      // $FlowFixMe
-        numeratorSpace, denominatorSpace, overhang, // $FlowFixMe
+        numerator, symbol, denominator, scale,
+        numeratorSpace, denominatorSpace, overhang,
         offsetY,
       } = optionsOrArray);
     }
@@ -730,15 +757,11 @@ export class EquationFunctions {
       offsetY,
     };
     const options = joinObjects(defaultOptions, optionsIn);
-    return new Fraction(                         // $FlowFixMe
+    return new Fraction(
       [this.contentToElement(numerator), this.contentToElement(denominator)],       // $FlowFixMe
       this.getExistingOrAddSymbol(symbol),
       options,
     );
-    // if (scale != null) {                            // $FlowFixMe
-    //   f.scaleModifier = scale;
-    // }
-    // return f;
   }
 
   root(
@@ -976,7 +999,7 @@ export class EquationFunctions {
 
   annotate(
     optionsOrContent: TypeAnnotateObject
-                      | TypeAnnotateArray
+                      | TypeAnnotateArray                 // $FlowFixMe
                       | TypeEquationPhrase,               // $FlowFixMe
     withAnnotationsArray: Array<TypeEquationPhrase | AnnotationInformation>
                         | AnnotationInformation | TypeEquationPhrase | null = null,
@@ -1009,7 +1032,7 @@ export class EquationFunctions {
           // annotation is an already instantiated AnnotationInformation
           if (annotation instanceof AnnotationInformation) {
             return annotation;
-          }
+          }       // $FlowFixMe
           const parsedContent = this.parseContent(annotation);
           // case that annotation is a method object
           if (parsedContent instanceof AnnotationInformation) {
@@ -1091,7 +1114,7 @@ export class EquationFunctions {
       xOffset = xOffsetIn;
       yOffset = yOffsetIn;
     } else if (Array.isArray(optionsOrAnnotation)) {
-      [
+      [   // $FlowFixMe
         annotation, relativeToContentH, relativeToContentV,   // $FlowFixMe
         relativeToAnnotationH, relativeToAnnotationV, scale,  // $FlowFixMe
         xOffset, yOffset,                                     // $FlowFixMe
@@ -1274,7 +1297,7 @@ export class EquationFunctions {
     const options = joinObjects({}, defaultOptions, optionsIn);
 
     let contentArray = [];
-    if (content != null) {
+    if (content != null) {      // $FlowFixMe
       contentArray = content.map(c => this.contentToElement(c));
     }
 
@@ -1708,10 +1731,10 @@ export class EquationFunctions {
           annotation: comment,
           relativeToContent: ['center', 'bottom'],
           relativeToAnnotation: ['center', 'top'],
-          scale: scaleToUse,                                // $FlowFixMe
+          scale: scaleToUse,
           yOffset: -commentSpaceToUse,
         }),
-      ],                                                    // $FlowFixMe
+      ],
       inSize,
     });
   }
