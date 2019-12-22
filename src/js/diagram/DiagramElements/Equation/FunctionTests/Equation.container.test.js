@@ -136,6 +136,30 @@ describe('Equation Functions - Container', () => {
             content: ['a', { container: ['b', null, 1, 1, 'left', 0.2, null, 1] }, 'c'],
             scale: 1,
           },
+          fitWidth: {
+            content: ['a', { container: ['b', 1, null, null, 'left', 'baseline', 'width', 1] }, 'c'],
+            scale: 1,
+          },
+          fitHeight: {
+            content: ['a', { container: ['b', null, 1, 1, 'left', 'baseline', 'height', 1] }, 'c'],
+            scale: 1,
+          },
+          fitContainWidth: {
+            content: ['a', { container: ['b', 1, 10, 10, 'left', 'baseline', 'contain', 1] }, 'c'],
+            scale: 1,
+          },
+          fitContainHeight: {
+            content: ['a', { container: ['b', 10, 1, 1, 'left', 'baseline', 'contain', 1] }, 'c'],
+            scale: 1,
+          },
+          scaleDefault: {
+            content: ['a', { container: ['b', null, null, null, 'left', 'baseline', null, 0.5] }, 'c'],
+            scale: 1,
+          },
+          scaleFixedContainer: {
+            content: ['a', { container: ['b', 1, 1, 1, 'left', 'baseline', null, 0.5] }, 'c'],
+            scale: 1,
+          },
         });
         diagram.elements = eqn;
         diagram.setFirstTransform();
@@ -151,6 +175,7 @@ describe('Equation Functions - Container', () => {
     let multiplier;
     let descent;
     let ascent;
+    let scale;
     beforeEach(() => {
       functions.parameterSteps();
       eqn.showForm('base');
@@ -163,6 +188,7 @@ describe('Equation Functions - Container', () => {
       smallWidth = 0.01;
       descent = 1;
       ascent = 1;
+      scale = 0.5;
     });
     test('Width Left', () => {
       eqn.showForm('widthLeft');
@@ -248,6 +274,54 @@ describe('Equation Functions - Container', () => {
       diagram.setFirstTransform();
       const newB = eqn._b.getBoundingRect('diagram');
       expect(round(newB.bottom)).toEqual(round(-descent + (descent + ascent) * multiplier));
+    });
+    test('Fit Width', () => {
+      eqn.showForm('fitWidth');
+      diagram.setFirstTransform();
+      const newB = eqn._b.getBoundingRect('diagram');
+      expect(round(newB.width)).toEqual(round(width));
+      expect(round(newB.height)).toEqual(round(width / baseB.width * baseB.height));
+    });
+    test('Fit Height', () => {
+      eqn.showForm('fitHeight');
+      diagram.setFirstTransform();
+      const newB = eqn._b.getBoundingRect('diagram');
+      expect(round(newB.height)).toEqual(round(ascent + descent));
+      expect(round(newB.width)).toEqual(round((ascent + descent) / baseB.height * baseB.width));
+    });
+    test('Fit Contain Width', () => {
+      eqn.showForm('fitContainWidth');
+      diagram.setFirstTransform();
+      const newB = eqn._b.getBoundingRect('diagram');
+      expect(round(newB.width)).toEqual(round(width));
+      expect(round(newB.height)).toEqual(round(width / baseB.width * baseB.height));
+    });
+    test('Fit Contain Height', () => {
+      eqn.showForm('fitContainHeight');
+      diagram.setFirstTransform();
+      const newB = eqn._b.getBoundingRect('diagram');
+      expect(round(newB.height)).toEqual(round(ascent + descent));
+      expect(round(newB.width)).toEqual(round((ascent + descent) / baseB.height * baseB.width));
+    });
+    test('Scale Default', () => {
+      eqn.showForm('scaleDefault');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      expect(round(newA.left)).toEqual(round(baseA.left));
+      expect(round(newA.width)).toEqual(round(baseA.width));
+      expect(round(newB.left)).toEqual(round(baseA.right));
+      expect(round(newB.width)).toEqual(round(baseB.width * scale));
+    });
+    test('Scale Fixed Container', () => {
+      eqn.showForm('scaleFixedContainer');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      expect(round(newA.left)).toEqual(round(baseA.left));
+      expect(round(newA.width)).toEqual(round(baseA.width));
+      expect(round(newB.left)).toEqual(round(baseA.right));
+      expect(round(newB.width)).toEqual(round(baseB.width * scale));
     });
   });
   test('Input Forms', () => {
