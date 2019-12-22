@@ -441,19 +441,19 @@ export class EquationNew extends DiagramElementCollection {
     return element;
   }
 
-  addElementFromObject(key: string, options: Object) {
-    if (typeof key !== 'string') {
-      return null;
-    }
-    const existingElement = this.getElement(key);
-    if (existingElement != null) {
-      return existingElement;
-    }
-    const text = this.getTextFromKey(key);
-    const element = this.makeTextElem({ text });
-    this.add(key, element);
-    return element;
-  }
+  // addElementFromObject(key: string, options: Object) {
+  //   if (typeof key !== 'string') {
+  //     return null;
+  //   }
+  //   const existingElement = this.getElement(key);
+  //   if (existingElement != null) {
+  //     return existingElement;
+  //   }
+  //   const text = this.getTextFromKey(key);
+  //   const element = this.makeTextElem({ text });
+  //   this.add(key, element);
+  //   return element;
+  // }
 
   makeSymbolElem(
     options: {
@@ -1068,7 +1068,6 @@ export class EquationNew extends DiagramElementCollection {
       subFormToUse = possibleSubForms[0];
     }
     if (subFormToUse != null) {
-      // $FlowFixMe
       subForm = form[subFormToUse];
       let { duration } = options;
       if (options.prioritizeFormDuration) {
