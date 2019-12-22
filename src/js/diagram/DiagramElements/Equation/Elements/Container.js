@@ -12,7 +12,7 @@ export default class Container extends BaseEquationFunction {
     this.location = location._dup();
     const loc = location._dup();
     const {
-      width, descent, ascent, alignX, alignY, fit, scaleModifier,
+      width, descent, ascent, xAlign, yAlign, fit, scaleModifier,
     } = this.options;
     const [mainContent] = this.contents;
     const contentBounds = new Bounds();
@@ -53,25 +53,25 @@ export default class Container extends BaseEquationFunction {
     }
 
     const contentLoc = loc._dup();
-    if (alignX === 'center') {
+    if (xAlign === 'center') {
       contentLoc.x = loc.x + containerBounds.width / 2 - contentBounds.width / 2;
-    } else if (alignX === 'right') {
+    } else if (xAlign === 'right') {
       contentLoc.x = loc.x + containerBounds.width - contentBounds.width;
-    } else if (typeof alignX === 'number') {
-      contentLoc.x = loc.x + containerBounds.width * alignX;
+    } else if (typeof xAlign === 'number') {
+      contentLoc.x = loc.x + containerBounds.width * xAlign;
     }
 
-    if (alignY === 'bottom') {
+    if (yAlign === 'bottom') {
       contentLoc.y = loc.y - containerBounds.descent + contentBounds.descent;
-    } else if (alignY === 'middle') {
+    } else if (yAlign === 'middle') {
       contentLoc.y = loc.y - containerBounds.descent
                      + containerBounds.height / 2 - contentBounds.height / 2 + contentBounds.descent;
-    } else if (alignY === 'top') {
+    } else if (yAlign === 'top') {
       contentLoc.y = loc.y + containerBounds.ascent
                      - contentBounds.height + contentBounds.descent;
-    } else if (typeof alignY === 'number') {
+    } else if (typeof yAlign === 'number') {
       contentLoc.y = loc.y - containerBounds.descent
-                     + containerBounds.height * alignY + contentBounds.descent;
+                     + containerBounds.height * yAlign + contentBounds.descent;
     }
     if (mainContent != null) {
       mainContent.offsetLocation(contentLoc.sub(mainContent.location));
