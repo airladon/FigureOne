@@ -82,7 +82,7 @@ function getMaxColWidth(
 
 // Matrix is centered in y.
 
-export default class Integral extends BaseEquationFunction {
+export default class Matrix extends BaseEquationFunction {
   calcSize(location: Point, scale: number) {
     this.location = location._dup();
     const loc = location._dup();
