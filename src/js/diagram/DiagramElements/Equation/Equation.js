@@ -390,7 +390,7 @@ export class EquationNew extends DiagramElementCollection {
     return key.replace(/^_*/, '').replace(/_.*/, '');
   }
 
-  getExistingOrAddSymbol(symbol: Object) {
+  getExistingOrAddSymbol(symbol: string | Object) {
     if (typeof symbol === 'string') {
       return this.getExistingOrAddSymbolFromKey(symbol, {});
     }
