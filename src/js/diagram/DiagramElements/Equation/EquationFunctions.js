@@ -1719,9 +1719,10 @@ export class EquationFunctions {
         },
       );
     } else {
-      contentToUse = this.pad(
-        content, 0, 0, contentSpaceToUse + commentSpaceToUse,
-      );
+      contentToUse = this.pad({
+        content,
+        bottom: contentSpaceToUse + commentSpaceToUse,
+      });
     }
     return this.annotate({
       content: contentToUse,
@@ -1757,9 +1758,10 @@ export class EquationFunctions {
         },
       );
     } else {
-      contentToUse = this.pad(
-        content, contentSpaceToUse + commentSpaceToUse,
-      );
+      contentToUse = this.pad({
+        content,
+        top: contentSpaceToUse + commentSpaceToUse,
+      });
     }
     return this.annotate({
       content: contentToUse,
