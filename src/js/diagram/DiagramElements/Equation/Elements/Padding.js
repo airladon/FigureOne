@@ -2,72 +2,31 @@
 import {
   Point,
 } from '../../../../tools/g2';
-import { duplicateFromTo } from '../../../../tools/tools';
-// import {
-//   DiagramElementPrimitive, DiagramElementCollection,
-// } from '../../../Element';
-import { Elements } from './Element';
-// // Equation is a class that takes a set of drawing objects (TextObjects,
-// // DiagramElementPrimitives or DiagramElementCollections and HTML Objects
-// // and arranges their size in a )
+import Bounds from './Bounds';
+import BaseEquationFunction from './BaseEquationFunction';
 
-export default class Padding extends Elements {
-  mainContent: Elements;
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
-
-  constructor(
-    mainContent: Elements,
-    top: ?number = 0,
-    right: ?number = 0,
-    bottom: ?number = 0,
-    left: ?number = 0,
-  ) {
-    super([mainContent]);
-    this.left = left == null ? 0 : left;
-    this.right = right == null ? 0 : right;
-    this.top = top == null ? 0 : top;
-    this.bottom = bottom == null ? 0 : bottom;
-    this.mainContent = mainContent;
-  }
-
-  _dup(namedCollection?: Object) {
-    const paddingCopy = new Padding(
-      this.mainContent._dup(namedCollection),
-      this.top,
-      this.right,
-      this.bottom,
-      this.left,
-    );
-    duplicateFromTo(this, paddingCopy, ['mainContent']);
-    return paddingCopy;
-  }
-
+export default class Brackets extends BaseEquationFunction {
   calcSize(location: Point, scale: number) {
     this.location = location._dup();
-    this.mainContent.calcSize(location.add(this.left, 0), scale);
-    this.descent = this.mainContent.descent + this.bottom;
-    this.ascent = this.mainContent.ascent + this.top;
-    this.width = this.mainContent.width + this.left + this.right;
-    this.height = this.descent + this.ascent;
-  }
-
-  getAllElements() {
-    let elements = [];
-    if (this.mainContent) {
-      elements = [...elements, ...this.mainContent.getAllElements()];
+    const loc = location._dup();
+    const [mainContent] = this.contents;
+    const {
+      left, top, right, bottom,
+    } = this.options;
+    const contentBounds = new Bounds();
+    if (mainContent != null) {
+      mainContent.calcSize(loc._dup(), scale);
+      contentBounds.copyFrom(mainContent);
     }
-    return elements;
-  }
 
-  setPositions() {
-    this.mainContent.setPositions();
-  }
+    const contentLocation = new Point(loc.x + left, loc.y);
+    if (mainContent != null) {
+      mainContent.offsetLocation(contentLocation.sub(mainContent.location));
+    }
 
-  offsetLocation(offset: Point = new Point(0, 0)) {
-    this.location = this.location.add(offset);
-    this.mainContent.offsetLocation(offset);
+    this.descent = contentBounds.descent + bottom;
+    this.ascent = contentBounds.ascent + top;
+    this.width = contentBounds.width + left + right;
+    this.height = this.descent + this.ascent;
   }
 }

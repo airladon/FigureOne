@@ -1146,43 +1146,39 @@ export class EquationFunctions {
   }
 
   pad(
-    optionsOrContent: TypePaddingObject | TypePaddingArray
-                      | TypeEquationPhrase,
-    topPad: number | null = null,
-    rightPad: number | null = null,
-    bottomPad: number | null = null,
-    leftPad: number | null = null,
+    optionsOrContent: TypePaddingObject | TypePaddingArray,
   ) {
     let content;
     let top;
     let right;
     let bottom;
     let left;
-    if (!(topPad == null
-          && rightPad == null
-          && leftPad == null
-          && bottomPad == null)
-    ) {
-      content = optionsOrContent;
-      top = topPad;
-      left = leftPad;
-      right = rightPad;
-      bottom = bottomPad;
-    } else if (Array.isArray(optionsOrContent)) {
-      [                                                    // $FlowFixMe
+    const defaultOptions = {
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+    };
+    if (Array.isArray(optionsOrContent)) {
+      [
         content, top, right, bottom, left,
       ] = optionsOrContent;
     } else {
-      ({                                                   // $FlowFixMe
+      ({
         content, top, right, bottom, left,
       } = optionsOrContent);
     }
-    return new Padding(                                   // $FlowFixMe
-      this.contentToElement(content),                     // $FlowFixMe
-      top,                                                // $FlowFixMe
-      right,                                              // $FlowFixMe
-      bottom,                                             // $FlowFixMe
+    const optionsIn = {
+      top,
+      right,
+      bottom,
       left,
+    };
+    const options = joinObjects(defaultOptions, optionsIn);
+    return new Padding(
+      this.contentToElement(content),
+      [],
+      options,
     );
   }
 
