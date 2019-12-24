@@ -176,10 +176,14 @@ export type TypeStrikeObject = {
   inSize?: boolean;
 };
 export type TypeBoxObject = {
-  content: TypeEquationPhrase;
-  symbol: string;
-  inSize?: boolean;
-  space?: ?([number, number] | Point | number) ;
+  content: TypeEquationPhrase,
+  symbol: string,
+  inSize?: boolean,
+  space?: number,
+  topSpace?: number,
+  rightSpace?: number,
+  bottomSpace?: number,
+  leftSpace?: number,
 };
 export type TypeStrikeArray = [
   TypeEquationPhrase,
@@ -190,7 +194,11 @@ export type TypeBoxArray = [
   TypeEquationPhrase,
   string,
   ?boolean,
-  ?([number, number] | Point | number),
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
 ];
 
 export type TypeBarObject = {
@@ -965,33 +973,50 @@ export class EquationFunctions {
   }
 
   box(
-    optionsOrContent: TypeBoxObject | TypeBoxArray | TypeEquationPhrase,
-    sym: string | null = null,
-    boxInSize: boolean | null = null,
-    spaceIn: ?([number, number] | Point | number) = null,
-    // options: TypeStrikeObject | TypeStrikeArray) {
+    optionsOrArray: TypeBoxObject | TypeBoxArray,
   ) {
     let content;
     let symbol;
     let inSize;
     let space;
-    if (!(sym == null && boxInSize == null && spaceIn == null)) {
-      content = optionsOrContent;
-      symbol = sym;
-      inSize = boxInSize;
-      space = spaceIn;
-    } else if (Array.isArray(optionsOrContent)) {         // $FlowFixMe
-      [content, symbol, inSize, space] = optionsOrContent;
+    let topSpace;
+    let bottomSpace;
+    let leftSpace;
+    let rightSpace;
+    const defaultOptions = {
+      inSize: false,
+      space: 0,
+      topSpace: null,
+      bottomSpace: null,
+      leftSpace: null,
+      rightSpace: null,
+    };
+    if (Array.isArray(optionsOrArray)) {         // $FlowFixMe
+      [
+        content, symbol, inSize, space, topSpace,
+        rightSpace, bottomSpace, leftSpace,
+      ] = optionsOrArray;
     } else {
       ({                                                  // $FlowFixMe
-        content, symbol, inSize, space,
-      } = optionsOrContent);
+        content, symbol, inSize, space, topSpace,
+        rightSpace, bottomSpace, leftSpace,
+      } = optionsOrArray);
     }
-    return new Box(                                       // $FlowFixMe
-      this.contentToElement(content),                     // $FlowFixMe
-      this.getExistingOrAddSymbol(symbol),           // $FlowFixMe
-      inSize,                                             // $FlowFixMe
+    const optionsIn = {
+      content,
+      symbol,
+      inSize,
       space,
+      topSpace,
+      rightSpace,
+      bottomSpace,
+      leftSpace,
+    };
+    const optionsToUse = joinObjects(defaultOptions, optionsIn);
+    return new Box(                                       // $FlowFixMe
+      [this.contentToElement(content)],                     // $FlowFixMe
+      this.getExistingOrAddSymbol(symbol),           // $FlowFixMe
+      optionsToUse,
     );
   }
 

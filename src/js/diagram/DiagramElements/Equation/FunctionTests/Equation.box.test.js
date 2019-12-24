@@ -26,10 +26,16 @@ describe('Equation Functions - Box', () => {
     color1 = [0.95, 0, 0, 1];
     elements = {
       a: 'a',
-      // b: 'b',
-      // c: 'c',
-      box: { symbol: 'box', color: [0, 0.9, 0, 1], width: 0.1 },
-      box1: { symbol: 'box', color: [0, 0.9, 0, 1], fill: true },
+      box: { symbol: 'box', color: [0, 0.9, 0, 1], lineWidth: 0.01 },
+      boxFill: { symbol: 'box', color: [0, 0.9, 0, 1], fill: true },
+      boxStatic: {
+        symbol: 'box',
+        color: [0, 0.9, 0, 1],
+        lineWidth: 0.1,
+        draw: 'static',
+        staticHeight: 1,
+        staticWidth: 2,
+      },
     };
     functions = {
       single: () => {
@@ -58,12 +64,8 @@ describe('Equation Functions - Box', () => {
           2: { box: ['a', 'box'] },
           // Function with Method Array
           3: e.box(['a', 'box']),
-          // Function with parameters
-          4: e.box('a', 'box'),
-          // Bound Function with parameters
-          5: box('a', 'box'),
           // Bound Function with Object
-          6: box({
+          4: box({
             content: 'a',
             symbol: 'box',
           }),
@@ -101,12 +103,133 @@ describe('Equation Functions - Box', () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         eqn.addElements(elements);
       },
+      parameterSteps: () => {
+        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        // const e = eqn.eqn.functions;
+        eqn.addElements(elements);
+        diagram.elements = eqn;
+        eqn.addForms({
+          // Full Object
+          base: {
+            content: {
+              box: {
+                content: 'a',
+                symbol: 'box',
+                inSize: true,
+                space: 0.1,
+                topSpace: null,
+                bottomSpace: null,
+                leftSpace: null,
+                rightSpace: null,
+                fill: false,
+              },
+            },
+            scale: 1,
+          },
+          topSpace: {
+            content: { box: ['a', 'box', true, 0.1, 0.2, null, null, null] },
+            scale: 1,
+          },
+          rightSpace: {
+            content: { box: ['a', 'box', true, 0.1, null, 0.2, null, null] },
+            scale: 1,
+          },
+          bottomSpace: {
+            content: { box: ['a', 'box', true, 0.1, null, null, 0.2, null] },
+            scale: 1,
+          },
+          leftSpace: {
+            content: { box: ['a', 'box', true, 0.1, null, null, null, 0.2] },
+            scale: 1,
+          },
+        });
+      },
     };
+  });
+  describe('Parameter Steps', () => {
+    let baseA;
+    let baseBox;
+    let space;
+    let lineWidth;
+    let newSpace;
+    beforeEach(() => {
+      functions.parameterSteps();
+      eqn.showForm('base');
+      diagram.setFirstTransform();
+      baseA = eqn._a.getBoundingRect('diagram');
+      baseBox = eqn._box.getBoundingRect('diagram');
+      space = 0.1;
+      lineWidth = 0.01;
+      newSpace = 0.2;
+    });
+    // test.only('Base', () => {
+    //   // eqn.showForm('numeratorSpace');
+    //   // diagram.setFirstTransform();
+    //   // const newA = eqn._a.getBoundingRect('diagram');
+    //   // const newB = eqn._b.getBoundingRect('diagram');
+    //   // const newV = eqn._v.getBoundingRect('diagram');
+    //   expect(round(baseBox.width)).toBe(round(baseA.width + space * 2 + lineWidth * 2));
+    //   expect(round(baseBox.height)).toBe(round(baseA.height + space * 2 + lineWidth * 2));
+    //   expect(round(baseBox.left)).toBe(0);
+    //   expect(round(baseBox.bottom)).toBe(round(baseA.bottom - space - lineWidth));
+    //   expect(round(baseA.left)).toBe(round(baseBox.left + space + lineWidth));
+    // });
+    test('Base', () => {
+      expect(round(baseBox.width)).toBe(round(baseA.width + space * 2 + lineWidth * 2));
+      expect(round(baseBox.height)).toBe(round(baseA.height + space * 2 + lineWidth * 2));
+      expect(round(baseBox.left)).toBe(0);
+      expect(round(baseBox.bottom)).toBe(round(baseA.bottom - space - lineWidth));
+      expect(round(baseA.left)).toBe(round(baseBox.left + space + lineWidth));
+    });
+    test('Top Space', () => {
+      eqn.showForm('topSpace');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newBox = eqn._box.getBoundingRect('diagram');
+      expect(round(newBox.width)).toBe(round(newA.width + space * 2 + lineWidth * 2));
+      expect(round(newBox.height)).toBe(round(newA.height + space + newSpace + lineWidth * 2));
+      expect(round(newBox.left)).toBe(0);
+      expect(round(newBox.bottom)).toBe(round(newA.bottom - space - lineWidth));
+      expect(round(newA.left)).toBe(round(newBox.left + space + lineWidth));
+    });
+    test('Left Space', () => {
+      eqn.showForm('leftSpace');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newBox = eqn._box.getBoundingRect('diagram');
+      expect(round(newBox.width)).toBe(round(newA.width + space + newSpace + lineWidth * 2));
+      expect(round(newBox.height)).toBe(round(newA.height + space * 2 + lineWidth * 2));
+      expect(round(newBox.left)).toBe(0);
+      expect(round(newBox.bottom)).toBe(round(newA.bottom - space - lineWidth));
+      expect(round(newA.left)).toBe(round(newBox.left + newSpace + lineWidth));
+    });
+    test('Bottom Space', () => {
+      eqn.showForm('bottomSpace');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newBox = eqn._box.getBoundingRect('diagram');
+      expect(round(newBox.width)).toBe(round(newA.width + space * 2 + lineWidth * 2));
+      expect(round(newBox.height)).toBe(round(newA.height + space + newSpace + lineWidth * 2));
+      expect(round(newBox.left)).toBe(0);
+      expect(round(newBox.bottom)).toBe(round(newA.bottom - newSpace - lineWidth));
+      expect(round(newA.left)).toBe(round(newBox.left + space + lineWidth));
+    });
+    test('Right Space', () => {
+      eqn.showForm('rightSpace');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newBox = eqn._box.getBoundingRect('diagram');
+      expect(round(newBox.width)).toBe(round(newA.width + space + newSpace + lineWidth * 2));
+      expect(round(newBox.height)).toBe(round(newA.height + space * 2 + lineWidth * 2));
+      expect(round(newBox.left)).toBe(0);
+      expect(round(newBox.bottom)).toBe(round(newA.bottom - space - lineWidth));
+      expect(round(newA.left)).toBe(round(newBox.left + space + lineWidth));
+    });
   });
   test('Box', () => {
     functions.single();
     const elems = [eqn._a];
-    const formsToTest = ['1', '2', '3', '4', '5', '6'];
+    const formsToTest = ['1', '2', '3', '4'];
 
     eqn.showForm('0');
     const positions0 = elems.map(elem => round(elem.transform.mat).slice());

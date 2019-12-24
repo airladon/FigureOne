@@ -157,16 +157,30 @@ export default class EquationSymbols {
     color?: Array<number>,
     fill?: boolean,
     width?: number,
-    staticSize?: ?(Point | [number, number]),
+    height?: number,
+    lineWidth?: number,
+    draw?: 'static' | 'dynamic',
+    staticWidth?: number | 'first',
+    staticHeight?: number | 'first',
   }) {
     const defaultOptions = {
       color: this.defaultColor,
       fill: false,
-      width: 0.01,
-      staticSize: null,
+      width: null,
+      height: null,
+      lineWidth: 0.01,
+      draw: 'dynamic',
+      staticHeight: null,
+      staticWidth: null,
     };
-    const options = joinObjects(defaultOptions, optionsIn);
-    return Box(this.shapes, options.color, options.fill, options.width, options.staticSize);
+    const optionsToUse = joinObjects(defaultOptions, optionsIn);
+    return (new Box(
+      this.shapes.webgl,
+      optionsToUse.color,
+      new Transform('Box').scale(1, 1).translate(0, 0),
+      this.shapes.limits,
+      optionsToUse,
+    )).symbol;
   }
 
   // simpleIntegral(optionsIn: {
