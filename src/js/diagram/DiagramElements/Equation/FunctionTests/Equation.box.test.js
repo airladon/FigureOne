@@ -71,38 +71,6 @@ describe('Equation Functions - Box', () => {
           }),
         });
       },
-      parameters: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
-        const e = eqn.eqn.functions;
-        const box = e.box.bind(e);
-        eqn.addElements(elements);
-        eqn.addForms({
-          // without
-          //   // Method Object
-          false0: box('a', 'box'),
-          true0fill: box('a', 'box1', true),
-          false0_1: box('a', 'box', false),
-          false0p1: box('a', 'box', false, 0.1),
-          // With parameters
-          // True 0.1
-          0: {
-            box: {
-              content: 'a',
-              symbol: 'box',
-              inSize: true,
-              space: 0.1,
-            },
-          },
-          // Method Array
-          1: { box: ['a', 'box', true, 0.1] },
-          // Function with parameters
-          2: e.box('a', 'box', true, 0.1),
-        });
-      },
-      box: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
-        eqn.addElements(elements);
-      },
       parameterSteps: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         // const e = eqn.eqn.functions;
@@ -142,6 +110,10 @@ describe('Equation Functions - Box', () => {
             content: { box: ['a', 'box', true, 0.1, null, null, null, 0.2] },
             scale: 1,
           },
+          notInSize: {
+            content: { box: ['a', 'box', false, 0.1, null, null, null, null] },
+            scale: 1,
+          },
         });
       },
     };
@@ -162,18 +134,6 @@ describe('Equation Functions - Box', () => {
       lineWidth = 0.01;
       newSpace = 0.2;
     });
-    // test.only('Base', () => {
-    //   // eqn.showForm('numeratorSpace');
-    //   // diagram.setFirstTransform();
-    //   // const newA = eqn._a.getBoundingRect('diagram');
-    //   // const newB = eqn._b.getBoundingRect('diagram');
-    //   // const newV = eqn._v.getBoundingRect('diagram');
-    //   expect(round(baseBox.width)).toBe(round(baseA.width + space * 2 + lineWidth * 2));
-    //   expect(round(baseBox.height)).toBe(round(baseA.height + space * 2 + lineWidth * 2));
-    //   expect(round(baseBox.left)).toBe(0);
-    //   expect(round(baseBox.bottom)).toBe(round(baseA.bottom - space - lineWidth));
-    //   expect(round(baseA.left)).toBe(round(baseBox.left + space + lineWidth));
-    // });
     test('Base', () => {
       expect(round(baseBox.width)).toBe(round(baseA.width + space * 2 + lineWidth * 2));
       expect(round(baseBox.height)).toBe(round(baseA.height + space * 2 + lineWidth * 2));
@@ -225,6 +185,14 @@ describe('Equation Functions - Box', () => {
       expect(round(newBox.bottom)).toBe(round(newA.bottom - space - lineWidth));
       expect(round(newA.left)).toBe(round(newBox.left + space + lineWidth));
     });
+    test('Not In Size', () => {
+      eqn.showForm('notInSize');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newBox = eqn._box.getBoundingRect('diagram');
+      expect(round(newA.left)).toBe(round(0));
+      expect(round(newBox.left)).toBe(-space - lineWidth)
+    });
   });
   test('Box', () => {
     functions.single();
@@ -245,90 +213,90 @@ describe('Equation Functions - Box', () => {
     expect(round(eqn._a.transform.mat)).toMatchSnapshot();
     expect(round(eqn._box.transform.mat)).toMatchSnapshot();
   });
-  test('Box Parameters', () => {
-    functions.parameters();
-    const elems = [eqn._a];
-    const noMoveCases = ['true0fill', 'false0_1', 'false0p1'];
-    const moveCases = ['1', '2'];
+  // test('Box Parameters', () => {
+  //   functions.parameters();
+  //   const elems = [eqn._a];
+  //   const noMoveCases = ['true0fill', 'false0_1', 'false0p1'];
+  //   const moveCases = ['1', '2'];
 
-    // get without positions
-    eqn.showForm('false0');
-    const false0 = elems.map(elem => round(elem.transform.mat).slice());
+  //   // get without positions
+  //   eqn.showForm('false0');
+  //   const false0 = elems.map(elem => round(elem.transform.mat).slice());
 
-    noMoveCases.forEach((f) => {
-      eqn.showForm(f);
-      const positions = elems.map(elem => round(elem.transform.mat).slice());
-      expect(false0).toEqual(positions);
-    });
+  //   noMoveCases.forEach((f) => {
+  //     eqn.showForm(f);
+  //     const positions = elems.map(elem => round(elem.transform.mat).slice());
+  //     expect(false0).toEqual(positions);
+  //   });
 
-    // with reference positions
-    eqn.showForm('0');
-    const true0p1 = elems.map(elem => round(elem.transform.mat).slice());
-    expect(false0).not.toEqual(true0p1);
+  //   // with reference positions
+  //   eqn.showForm('0');
+  //   const true0p1 = elems.map(elem => round(elem.transform.mat).slice());
+  //   expect(false0).not.toEqual(true0p1);
 
-    moveCases.forEach((f) => {
-      eqn.showForm(f);
-      const positions = elems.map(elem => round(elem.transform.mat).slice());
-      expect(true0p1).toEqual(positions);
-    });
-  });
-  test('Box Line Element', () => {
-    functions.box();
-    const w = 0.1;
-    const box = eqn._box;
-    const a = eqn._a.getBoundingRect();
-    box.custom.setSize(a);
+  //   moveCases.forEach((f) => {
+  //     eqn.showForm(f);
+  //     const positions = elems.map(elem => round(elem.transform.mat).slice());
+  //     expect(true0p1).toEqual(positions);
+  //   });
+  // });
+  // test('Box Line Element', () => {
+  //   functions.box();
+  //   const w = 0.1;
+  //   const box = eqn._box;
+  //   const a = eqn._a.getBoundingRect();
+  //   box.custom.setSize(a);
 
-    let bx = box.getBoundingRect();
-    // console.log(box.drawingObject.points)
-    expect(round(bx.left)).toEqual(round(a.left - w));
-    expect(round(bx.width)).toEqual(round(a.width + w * 2));
-    expect(round(bx.bottom)).toEqual(round(a.bottom - w));
-    expect(round(bx.height)).toEqual(round(a.height + w * 2));
+  //   let bx = box.getBoundingRect();
+  //   // console.log(box.drawingObject.points)
+  //   expect(round(bx.left)).toEqual(round(a.left - w));
+  //   expect(round(bx.width)).toEqual(round(a.width + w * 2));
+  //   expect(round(bx.bottom)).toEqual(round(a.bottom - w));
+  //   expect(round(bx.height)).toEqual(round(a.height + w * 2));
 
-    let s = 0.1; // space
-    box.custom.setSize(a, s);
-    bx = box.getBoundingRect();
-    expect(round(bx.left)).toEqual(round(a.left - w - s));
-    expect(round(bx.width)).toEqual(round(a.width + w * 2 + 2 * s));
-    expect(round(bx.bottom)).toEqual(round(a.bottom - w - s));
-    expect(round(bx.height)).toEqual(round(a.height + w * 2 + 2 * s));
+  //   let s = 0.1; // space
+  //   box.custom.setSize(a, s);
+  //   bx = box.getBoundingRect();
+  //   expect(round(bx.left)).toEqual(round(a.left - w - s));
+  //   expect(round(bx.width)).toEqual(round(a.width + w * 2 + 2 * s));
+  //   expect(round(bx.bottom)).toEqual(round(a.bottom - w - s));
+  //   expect(round(bx.height)).toEqual(round(a.height + w * 2 + 2 * s));
 
-    s = 0.2;
-    box.custom.setSize(eqn, ['a'], s);
-    bx = box.getBoundingRect();
-    expect(round(bx.left)).toEqual(round(a.left - w - s));
-    expect(round(bx.width)).toEqual(round(a.width + w * 2 + 2 * s));
-    expect(round(bx.bottom)).toEqual(round(a.bottom - w - s));
-    expect(round(bx.height)).toEqual(round(a.height + w * 2 + 2 * s));
-  });
-  test('Box Fill Element', () => {
-    functions.box();
-    const w = 0;
-    const box = eqn._box1;
-    const a = eqn._a.getBoundingRect();
-    box.custom.setSize(a);
+  //   s = 0.2;
+  //   box.custom.setSize(eqn, ['a'], s);
+  //   bx = box.getBoundingRect();
+  //   expect(round(bx.left)).toEqual(round(a.left - w - s));
+  //   expect(round(bx.width)).toEqual(round(a.width + w * 2 + 2 * s));
+  //   expect(round(bx.bottom)).toEqual(round(a.bottom - w - s));
+  //   expect(round(bx.height)).toEqual(round(a.height + w * 2 + 2 * s));
+  // });
+  // test('Box Fill Element', () => {
+  //   functions.box();
+  //   const w = 0;
+  //   const box = eqn._box1;
+  //   const a = eqn._a.getBoundingRect();
+  //   box.custom.setSize(a);
 
-    let bx = box.getBoundingRect();
-    expect(round(bx.left)).toEqual(round(a.left - w / 2));
-    expect(round(bx.width)).toEqual(round(a.width + w));
-    expect(round(bx.bottom)).toEqual(round(a.bottom - w / 2));
-    expect(round(bx.height)).toEqual(round(a.height + w));
+  //   let bx = box.getBoundingRect();
+  //   expect(round(bx.left)).toEqual(round(a.left - w / 2));
+  //   expect(round(bx.width)).toEqual(round(a.width + w));
+  //   expect(round(bx.bottom)).toEqual(round(a.bottom - w / 2));
+  //   expect(round(bx.height)).toEqual(round(a.height + w));
 
-    let s = 0.1; // space
-    box.custom.setSize(a, s);
-    bx = box.getBoundingRect();
-    expect(round(bx.left)).toEqual(round(a.left - w / 2 - s));
-    expect(round(bx.width)).toEqual(round(a.width + w + 2 * s));
-    expect(round(bx.bottom)).toEqual(round(a.bottom - w / 2 - s));
-    expect(round(bx.height)).toEqual(round(a.height + w + 2 * s));
+  //   let s = 0.1; // space
+  //   box.custom.setSize(a, s);
+  //   bx = box.getBoundingRect();
+  //   expect(round(bx.left)).toEqual(round(a.left - w / 2 - s));
+  //   expect(round(bx.width)).toEqual(round(a.width + w + 2 * s));
+  //   expect(round(bx.bottom)).toEqual(round(a.bottom - w / 2 - s));
+  //   expect(round(bx.height)).toEqual(round(a.height + w + 2 * s));
 
-    s = 0.2;
-    box.custom.setSize(eqn, ['a'], s);
-    bx = box.getBoundingRect();
-    expect(round(bx.left)).toEqual(round(a.left - w / 2 - s));
-    expect(round(bx.width)).toEqual(round(a.width + w + 2 * s));
-    expect(round(bx.bottom)).toEqual(round(a.bottom - w / 2 - s));
-    expect(round(bx.height)).toEqual(round(a.height + w + 2 * s));
-  });
+  //   s = 0.2;
+  //   box.custom.setSize(eqn, ['a'], s);
+  //   bx = box.getBoundingRect();
+  //   expect(round(bx.left)).toEqual(round(a.left - w / 2 - s));
+  //   expect(round(bx.width)).toEqual(round(a.width + w + 2 * s));
+  //   expect(round(bx.bottom)).toEqual(round(a.bottom - w / 2 - s));
+  //   expect(round(bx.height)).toEqual(round(a.height + w + 2 * s));
+  // });
 });
