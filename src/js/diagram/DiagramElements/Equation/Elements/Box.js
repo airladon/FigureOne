@@ -52,7 +52,10 @@ export default class Box extends BaseEquationFunction {
     let boxWidth = fullContentBounds.height;
 
     if (glyph != null) {
-      const { lineWidth } = glyph.custom.options;
+      let { lineWidth } = glyph.custom.options;
+      if (glyph.custom.options.fill) {
+        lineWidth = 0;
+      }
       let widthLineWidth = lineWidth;
       let heightLineWidth = lineWidth;
       if (glyph.custom.options.draw === 'static') {
@@ -69,12 +72,9 @@ export default class Box extends BaseEquationFunction {
         boxHeight = fullContentBounds.height / (1 - 2 * heightLineWidthRatio);
         widthLineWidth = boxWidth * widthLineWidthRatio;
         heightLineWidth = boxHeight * heightLineWidthRatio;
-      } else if (glyph.custom.options.fill !== true) {
+      } else {
         boxWidth = fullContentBounds.width + lineWidth * 2;
         boxHeight = fullContentBounds.height + lineWidth * 2;
-      } else {
-        boxWidth = fullContentBounds.width;
-        boxHeight = fullContentBounds.height;
       }
       this.glyphHeights[0] = boxHeight;
       this.glyphWidths[0] = boxWidth;
