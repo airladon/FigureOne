@@ -55,7 +55,7 @@ export default class Box extends Symbol {
           new Point(0, 0),
           new Point(lineWidth, lineWidth),
           new Point(0, height),
-          new Point(0, height - lineWidth),
+          new Point(lineWidth, height - lineWidth),
           new Point(width, height),
           new Point(width - lineWidth, height - lineWidth),
           new Point(width, 0),
