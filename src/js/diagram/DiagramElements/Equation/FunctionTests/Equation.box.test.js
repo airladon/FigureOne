@@ -191,7 +191,7 @@ describe('Equation Functions - Box', () => {
       const newA = eqn._a.getBoundingRect('diagram');
       const newBox = eqn._box.getBoundingRect('diagram');
       expect(round(newA.left)).toBe(round(0));
-      expect(round(newBox.left)).toBe(-space - lineWidth)
+      expect(round(newBox.left)).toBe(-space - lineWidth);
     });
   });
   test('Box', () => {
