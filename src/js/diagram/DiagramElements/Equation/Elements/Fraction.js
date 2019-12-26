@@ -9,7 +9,6 @@ import BaseEquationFunction from './BaseEquationFunction';
 // // and arranges their size in a )
 
 export default class Fraction extends BaseEquationFunction {
-
   calcSize(location: Point, incomingScale: number) {
     this.location = location._dup();
     const loc = location._dup();

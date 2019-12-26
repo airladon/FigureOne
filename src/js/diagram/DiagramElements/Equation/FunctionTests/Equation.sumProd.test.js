@@ -89,10 +89,6 @@ describe('Equation Functions - SumPro', () => {
           2: { sumOf: ['s', 'a', 'b', 'c', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, 0.1, 0.1, [0.1, 0.1], [-0.1, -0.1]] },
           // Function with Method Array
           3: e.sumOf(['s', 'a', 'b', 'c', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, 0.1, 0.1, [0.1, 0.1], [-0.1, -0.1]]),
-          // Function with parameters
-          // 4: e.sumOf('a', 'b', 'c', 's', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, 0.1, 0.1, [0.1, 0.1], [-0.1, -0.1]),
-          // Bound Function with parameters
-          // 5: sumOf('a', 'b', 'c', 's', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, 0.1, 0.1, [0.1, 0.1], [-0.1, -0.1]),
           // Bound Function with Object
           4: sumOf({
             content: 'a',
@@ -115,20 +111,6 @@ describe('Equation Functions - SumPro', () => {
           }),
         });
       },
-      // single: () => {
-      //   eqn = new EquationNew(diagram.shapes, { color: color1 });
-      //   eqn.addElements(elements);
-      //   eqn.addForms({
-      //     // Full Object
-      //     0: {
-      //       content: {
-      //         sumOf: ['a', 'b', 'c', 's'],
-      //       },
-      //       scale: 1,
-      //     },
-      //   });
-      //   diagram.elements = eqn;
-      // },
       parameterSteps: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;

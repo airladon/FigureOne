@@ -1,6 +1,6 @@
-import {
-  Point,
-} from '../../../../tools/g2';
+// import {
+//   Point,
+// } from '../../../../tools/g2';
 import {
   round,
 } from '../../../../tools/math';
