@@ -5,7 +5,7 @@ import {
 import Bounds from './Bounds';
 import BaseEquationFunction from './BaseEquationFunction';
 
-export default class Brackets extends BaseEquationFunction {
+export default class Box extends BaseEquationFunction {
   calcSize(location: Point, scale: number) {
     this.location = location._dup();
     const loc = location._dup();
@@ -56,28 +56,53 @@ export default class Brackets extends BaseEquationFunction {
       let widthLineWidth = lineWidth;
       let heightLineWidth = lineWidth;
       if (glyph.custom.options.draw === 'static') {
-        const { staticWidth, staticHeight } = glyph.custom.options;
+        let { staticWidth, staticHeight } = glyph.custom.options;
+        if (staticWidth === 'first') {
+          staticWidth = fullContentBounds.width + lineWidth * 2;
+        }
+        if (staticHeight === 'first') {
+          staticHeight = fullContentBounds.height + lineWidth * 2;
+        }
         const heightLineWidthRatio = lineWidth / staticHeight;
         const widthLineWidthRatio = lineWidth / staticWidth;
         boxWidth = fullContentBounds.width / (1 - 2 * widthLineWidthRatio);
         boxHeight = fullContentBounds.height / (1 - 2 * heightLineWidthRatio);
         widthLineWidth = boxWidth * widthLineWidthRatio;
         heightLineWidth = boxHeight * heightLineWidthRatio;
-      } else {
+      } else if (glyph.custom.options.fill !== true) {
         boxWidth = fullContentBounds.width + lineWidth * 2;
         boxHeight = fullContentBounds.height + lineWidth * 2;
+      } else {
+        boxWidth = fullContentBounds.width;
+        boxHeight = fullContentBounds.height;
       }
       this.glyphHeights[0] = boxHeight;
       this.glyphWidths[0] = boxWidth;
-
+      if (glyph.custom.options.fill) {
+        heightLineWidth = 0;
+        widthLineWidth = 0;
+      }
       glyphLoc.y = loc.y - fullContentBounds.descent - heightLineWidth;
+      if (glyph != null && glyph.custom.options.height != null) {
+        glyphLoc.y = loc.y - fullContentBounds.descent
+                     + fullContentBounds.height / 2
+                     - glyph.custom.options.height / 2;
+      }
       if (inSize) {
         contentLoc.x = loc.x + widthLineWidth + leftSpaceToUse;
+        if (glyph != null && glyph.custom.options.width != null) {
+          contentLoc.x = loc.x + glyph.custom.options.width / 2
+                       - fullContentBounds.width / 2;
+        }
         this.width = boxWidth;
         this.descent = fullContentBounds.descent + heightLineWidth;
         this.ascent = fullContentBounds.ascent + heightLineWidth;
       } else {
         glyphLoc.x = loc.x - widthLineWidth - leftSpaceToUse;
+        if (glyph != null && glyph.custom.options.width != null) {
+          glyphLoc.x = loc.x + fullContentBounds.width / 2
+                       - glyph.custom.options.width / 2;
+        }
         this.width = fullContentBounds.width;
         this.descent = fullContentBounds.descent;
         this.ascent = fullContentBounds.ascent;
