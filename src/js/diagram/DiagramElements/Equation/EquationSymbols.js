@@ -170,8 +170,8 @@ export default class EquationSymbols {
       height: null,
       lineWidth: 0.01,
       draw: 'dynamic',
-      staticHeight: null,
-      staticWidth: null,
+      staticHeight: 'first',
+      staticWidth: 'first',
     };
     const optionsToUse = joinObjects(defaultOptions, optionsIn);
     return (new Box(
