@@ -72,21 +72,25 @@ export default class Box extends Symbol {
   // $FlowFixMe
   getDefaultValues(height: number, width: ?number, options: {
       lineWidth?: number,
-    }) {
+    }): {
+      height: number,
+      width: number,
+      lineWidth: number,
+    } {
     const out = {};
-    if (options.lineWidth != null) {
+    if (options.lineWidth != null && typeof options.lineWidth === 'number') {
       out.lineWidth = options.lineWidth;
     } else {
       out.lineWidth = 0.01;
     }
-    if (options.height != null) {
+    if (options.height != null && typeof options.height === 'number') {
       out.height = options.height;
     } else if (height != null) {
       out.height = height;
     } else {
       out.height = 1;
     }
-    if (options.width != null) {
+    if (options.width != null && typeof options.width === 'number') {
       out.width = options.width;
     } else if (width != null) {
       out.width = width;
