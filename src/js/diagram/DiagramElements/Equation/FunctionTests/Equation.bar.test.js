@@ -389,7 +389,7 @@ describe('Equation Functions - Bar', () => {
     eqn.showForm('base');
     diagram.setFirstTransform();
     const basePositions = elems.map(elem => round(elem.transform.mat).slice());
-    formsToTest.forEach((f, i) => {
+    formsToTest.forEach((f) => {
       eqn.showForm(f);
       diagram.setFirstTransform();
       const positions = elems.map(elem => round(elem.transform.mat).slice());

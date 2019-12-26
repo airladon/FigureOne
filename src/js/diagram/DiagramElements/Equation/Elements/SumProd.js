@@ -33,11 +33,11 @@ export default class SumProd extends BaseEquationFunction {
       originalContentBounds.copyFrom(mainContent);
     }
     if (fromContent != null) {
-      fromContent.calcSize(loc._dup(), scale * fromScale)
+      fromContent.calcSize(loc._dup(), scale * fromScale);
       fromBounds.copyFrom(fromContent);
     }
     if (toContent != null) {
-      toContent.calcSize(loc._dup(), scale * toScale)
+      toContent.calcSize(loc._dup(), scale * toScale);
       toBounds.copyFrom(toContent);
     }
 
