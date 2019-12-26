@@ -212,32 +212,6 @@ describe('Different ways to make an equation', () => {
           e0: { frac: ['ab', 'v', 'c'] },
         });
       },
-      // nonTextFunctions: () => {
-      //   eqn = new EquationNew(diagram.shapes, { color: color1 });
-      //   const e = eqn.eqn.functions;
-      //   eqn.addElements({
-      //     a: 'a',
-      //     b: 'b',
-      //     c: 'c',
-      //     _2: '2',
-      //     v: { symbol: 'vinculum' },
-      //     v1: { symbol: 'vinculum' },
-      //   });
-      //   eqn.addForms({
-      //     0: {
-      //       frac: [
-      //         {
-      //           frac: ['a', 'b', 'v'],
-      //         },
-      //         'c',
-      //         'v1',
-      //       ],
-      //     },
-      //     1: [{ frac: ['a', '_2', 'v'] }, 'c'],
-      //   });
-      //   eqn.setFormSeries(['0', '1', '2']);
-      //   eqn.showForm('1');
-      // },
       equationScale: () => {
         eqn = new EquationNew(diagram.shapes, {
           color: color1,
@@ -298,7 +272,7 @@ describe('Different ways to make an equation', () => {
           },
         });
       },
-      autoKeys: () => {
+      autoAddElements: () => {
         eqn = new EquationNew(diagram.shapes, {
           color: color1,
           scale: 0.95,
@@ -443,8 +417,8 @@ describe('Different ways to make an equation', () => {
     expect(clean('d')).toEqual(clean('d0'));
     expect(clean('e')).toEqual(clean('e0'));
   });
-  test('Auto Keys', () => {
-    ways.autoKeys();
+  test('Auto Add Elements', () => {
+    ways.autoAddElements();
     expect(eqn._a).not.toBe(undefined);
     expect(eqn._a.drawingObject.text[0].text).toBe('a');
     expect(eqn._a.color).toEqual(color1);
