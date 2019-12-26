@@ -991,13 +991,13 @@ export class EquationFunctions {
       leftSpace: null,
       rightSpace: null,
     };
-    if (Array.isArray(optionsOrArray)) {         // $FlowFixMe
+    if (Array.isArray(optionsOrArray)) {
       [
         content, symbol, inSize, space, topSpace,
         rightSpace, bottomSpace, leftSpace,
       ] = optionsOrArray;
     } else {
-      ({                                                  // $FlowFixMe
+      ({
         content, symbol, inSize, space, topSpace,
         rightSpace, bottomSpace, leftSpace,
       } = optionsOrArray);
@@ -1013,9 +1013,9 @@ export class EquationFunctions {
       leftSpace,
     };
     const optionsToUse = joinObjects(defaultOptions, optionsIn);
-    return new Box(                                       // $FlowFixMe
-      [this.contentToElement(content)],                     // $FlowFixMe
-      this.getExistingOrAddSymbol(symbol),           // $FlowFixMe
+    return new Box(
+      [this.contentToElement(content)],
+      this.getExistingOrAddSymbol(symbol),
       optionsToUse,
     );
   }
