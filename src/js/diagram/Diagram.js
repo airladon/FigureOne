@@ -857,7 +857,6 @@ class Diagram {
   // To add elements to a diagram, either this method can be overridden,
   // or the `add` method can be used.
   createDiagramElements() {
-    // $FlowFixMe
     // this.elements = new DiagramElementCollection();
     this.elements = this.primitive.collection();
     this.elements.diagramLimits = this.limits;
