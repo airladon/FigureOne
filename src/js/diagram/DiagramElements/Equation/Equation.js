@@ -10,7 +10,9 @@ import {
 import {
   DiagramFont,
 } from '../../DrawingObjects/TextObject/TextObject';
-import { Element, Elements } from './Elements/Element';
+import type { ElementInterface } from './Elements/Element';
+import { Elements } from './Elements/Element';
+import BaseAnnotationFunction from './Elements/BaseAnnotationFunction';
 import EquationForm from './EquationForm';
 import type {
   TypeHAlign, TypeVAlign,
@@ -590,7 +592,7 @@ export class EquationNew extends DiagramElementCollection {
       }
       return false;
     };
-    const isFormElements = form => form instanceof Elements;
+    const isFormElements = form => (form instanceof Elements || form instanceof BaseAnnotationFunction);
     const isFormFullObject = (form) => {
       if (isFormString(form) || isFormArray(form)
         || isFormMethodDefinition(form) || isFormElements(form)
@@ -699,7 +701,7 @@ export class EquationNew extends DiagramElementCollection {
 
   addForm(
     name: string,
-    content: Array<Elements | Element>,
+    content: Array<ElementInterface>,
     options: {
       subForm?: string,
       scale?: number,

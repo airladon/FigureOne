@@ -4,210 +4,402 @@ import {
 } from '../../../../tools/g2';
 import { Elements } from './Element';
 import Bounds from './Bounds';
-import BaseEquationFunction from './BaseEquationFunction';
-import type { TypeParsablePoint } from '../../../../tools/g2';
-import type {TypeAnnotation } from './Base'
+// import BaseEquationFunction from './BaseEquationFunction';
+// import type { TypeParsablePoint } from '../../../../tools/g2';
+// import type {TypeAnnotation } from './Base'
 
 import {
   DiagramElementPrimitive, DiagramElementCollection,
 } from '../../../Element';
 import { duplicateFromTo } from '../../../../tools/tools';
-import { Element, Elements } from './Element';
+// import { Element, Elements } from './Element';
+
+import type { ElementInterface } from './Element';
 
 export type TypeAnnotation = {
   xPosition: 'left' | 'center' | 'right' | number,
   yPosition: 'bottom' | 'baseline' | 'middle' | 'top' | number,
   xAlign: 'left' | 'center' | 'right' | number,
   yAlign: 'bottom' | 'baseline' | 'middle' | 'top' | number,
-  offset: TypeParsablePoint,
+  offset: Point,
   scale: number,
-  content: Elements,
+  content: ElementInterface,
   inSize: boolean,
 };
 
-export default class BaseEquationFunction extends Elements {
-  contents: Array<Elements | null>;
-  annotations: Array<TypeAnnotation>;
-  glyphs: {
-    left?: {
-      glyph: DiagramElementPrimitive | ?DiagramElementCollection,
-      annotations: Array<TypeAnnotation>,
-      width: number,
-      height: number,
-      location: Point,
-    },
-    right?: {
-      glyph: DiagramElementPrimitive | ?DiagramElementCollection,
-      annotations: Array<TypeAnnotation>,
-      width: number,
-      height: number,
-      location: Point,
-    },
-    bottom?: {
-      glyph: DiagramElementPrimitive | ?DiagramElementCollection,
-      annotations: Array<TypeAnnotation>,
-      width: number,
-      height: number,
-      location: Point,
-    },
-    top?: {
-      glyph: DiagramElementPrimitive | ?DiagramElementCollection,
-      annotations: Array<TypeAnnotation>,
-      width: number,
-      height: number,
-      location: Point,
-    },
-    encompass: {
-      glyph: DiagramElementPrimitive | ?DiagramElementCollection,
-      annotations: Array<TypeAnnotation>,
-      width: number,
-      height: number,
-      location: Point,
+export type TypeAnnotatedGlyph = {
+  glyph: DiagramElementPrimitive | DiagramElementCollection,
+  // glyph: ElementInterface,
+  annotations: Array<TypeAnnotation>,
+  width: number,
+  height: number,
+  location: Point,
+};
+
+export type TypeGlyphs = {
+  left?: TypeAnnotatedGlyph;
+  right?: TypeAnnotatedGlyph;
+  top?: TypeAnnotatedGlyph;
+  bottom?: TypeAnnotatedGlyph;
+  encompass?: TypeAnnotatedGlyph;
+};
+
+function copyAnnotation(annotation: TypeAnnotation, namedCollection?: Object) {
+  return {
+    xPosition: annotation.xPosition,
+    yPosition: annotation.yPosition,
+    xAlign: annotation.xAlign,
+    yAlign: annotation.yAlign,
+    offset: annotation.offset._dup(),
+    scale: annotation.scale,
+    content: annotation.content._dup(namedCollection),
+    inSize: annotation.inSize,
+  };
+}
+
+function copyAnnotations(
+  annotations: Array<TypeAnnotation>,
+  namedCollection?: Object,
+) {
+  const copy = [];
+  annotations.forEach((annotation) => {
+    copy.push(copyAnnotation(annotation, namedCollection));
+  });
+  return copy;
+}
+
+function copyGlyphs(
+  glyphs: TypeGlyphs,
+  namedCollection?: Object,
+) {
+  const copy = {};
+  Object.keys(glyphs).forEach((key) => {
+    if (glyphs[key] == null) {
+      return {};
     }
+    const glyph = glyphs[key];
+    const copyGlyph = {};
+    if (namedCollection != null) {
+      copyGlyph.glyph = namedCollection[glyph.glyph.name];
+    } else {
+      copyGlyph.glyph = glyph.glyph;
+    }
+    copyGlyph.width = glyph.width;
+    copyGlyph.height = glyph.height;
+    copyGlyph.location = glyph.location;
+    copyGlyph.annotations = copyAnnotations(glyph.annotations, namedCollection);
+    copy[key] = copyGlyph;
+  });
+  return copy;
+}
+
+function getAllElementsFromAnnotations(annotations: Array<TypeAnnotation>) {
+  let elements = [];
+  annotations.forEach((annotation) => {
+    elements = [...elements, ...annotation.content.getAllElements()];
+  });
+  return elements;
+}
+
+function getAllElementsFromGlyphs(glyphs: TypeGlyphs) {
+  let elements = [];
+  Object.keys(glyphs).forEach((key) => {
+    const glyph = glyphs[key];
+    if (glyph == null) {
+      return [];
+    }
+    elements = [
+      ...elements,
+      glyph.glyph,
+      getAllElementsFromAnnotations(glyph.annotations),
+    ];
+  });
+  return elements;
+}
+
+function setPositionsForAnnotations(annotations: Array<TypeAnnotation>) {
+  annotations.forEach((annotation) => {
+    annotation.content.setPositions();
+  });
+}
+
+function offsetLocationForAnnotations(annotations: Array<TypeAnnotation>, offset: Point) {
+  annotations.forEach((annotation) => {
+    annotation.content.offsetLocation(offset);
+  });
+}
+
+function setPositionsForGlyphs(glyphs: TypeGlyphs) {
+  Object.keys(glyphs).forEach((key) => {
+    if (glyphs[key] == null) {
+      return;
+    }
+    const glyph = glyphs[key];
+    const t = glyph.glyph.transform._dup();
+    t.updateScale(glyph.width, glyph.height);
+    t.updateTranslation(glyph.location.x, glyph.location.y);
+    glyph.glyph.setTransform(t);
+    setPositionsForAnnotations(glyph.annotations);
+  });
+}
+
+function offsetLocationForGlyphs(glyphs: TypeGlyphs, offset: Point) {
+  Object.keys(glyphs).forEach((key) => {
+    if (glyphs[key] == null) {
+      return;
+    }
+    const glyph = glyphs[key];
+    glyph.location = glyph.location.add(offset);
+    offsetLocationForAnnotations(glyph.annotations, offset);
+  });
+}
+
+export default class BaseAnnotationFunction implements ElementInterface {
+  ascent: number;
+  descent: number;
+  width: number;
+  location: Point;
+  height: number;
+  scale: number;
+  fullSize: {
+    leftOffset: number,
+    width: number,
+    descent: number,
+    ascent: number,
+    height: number,
   };
 
+  content: ElementInterface;
+  annotations: Array<TypeAnnotation>;
+  glyphs: TypeGlyphs;
   options: Object;
 
   constructor(
-    content: Elements | null | Array<Elements | null>,
-    annotations: Array<typeAnnotation>
-    glyph: ?(DiagramElementPrimitive | DiagramElementCollection
-      | Array<?DiagramElementPrimitive | ?DiagramElementCollection>),
-    // inSize: boolean = true,
+    content: ElementInterface,
+    annotations: Array<TypeAnnotation>,
+    glyphs: TypeGlyphs,
     options: Object,
   ) {
-    const glyphElements = [];
-    if (Array.isArray(glyph)) {
-      glyph.forEach((g) => {
-        glyphElements.push(g != null ? new Element(g) : null);
-      });
-    } else {
-      glyphElements.push(glyph != null ? new Element(glyph) : null);
-    }
-    let glyphs = [];
-    if (Array.isArray(glyph)) {
-      glyphs = glyph;
-    } else {
-      glyphs.push(glyph);
-    }
-
-    let contentArray: Array<Elements | null> = [];
-    if (Array.isArray(content)) {
-      contentArray = content;
-    } else {
-      contentArray.push(content);
-    }
-    super([...glyphElements, ...contentArray]);
+    // const elements = [content];
+    // annotations.forEach((annotation) => {
+    //   elements.push(annotation.content);
+    // });
+    // Object.keys(glyphs).forEach((key) => {
+    //   const glyphPosition = glyphs[key];
+    //   const glyphElement = new Element(glyphPosition.glyph);
+    //   elements.push(glyphElement);
+    //   glyphPosition.annotations.forEach((annotation) => {
+    //     elements.push(annotation.content);
+    //   });
+    // });
+    // super(elements);
     this.glyphs = glyphs;
-    this.contents = contentArray;
-    this.glyphLocations = glyphElements.map(() => new Point(0, 0));
-    this.glyphWidths = glyphElements.map(() => 1);
-    this.glyphHeights = glyphElements.map(() => 1);
+    this.content = content;
+    this.annotations = annotations;
     this.options = options;
-    this.fullSize = null;
   }
 
-  // getFullSize(useFullSize: boolean) {
-  //   if (useFullSize && this.full != null) {
-  //     return {
-  //       width: this.fullBounds.width,
-  //       height: this.fullBounds.height,
-  //       ascent: this.fullBounds.ascent,
-  //       descent: this.fullBounds.descent,
-  //     };
-  //   }
-  //   return {
-  //     width: this.width,
-  //     height: this.height,
-  //     ascent: this.ascent,
-  //     descent: this.descent,
-  //   };
-  // }
-
   _dup(namedCollection?: Object) {
-    const copyContent = this.contents.map(
-      content => (content == null ? null : content._dup(namedCollection)),
-    );
-    let { glyphs } = this;
-    // let copyGlyphs = [];
-    if (namedCollection) {
-      const newGlyphs = [];
-      this.glyphs.forEach((g) => {
-        if (g != null) {        // $FlowFixMe
-          newGlyphs.push(namedCollection[g.name]);
-        } else {
-          newGlyphs.push(g);
-        }
-      });
-      glyphs = newGlyphs;
-    }
+    const contentCopy = this.content._dup(namedCollection);
+    const glyphsCopy = copyGlyphs(this.glyphs);
+    const annotationsCopy = copyAnnotations(this.annotations);
     const copy = new this.constructor(
-      copyContent,
-      glyphs,
-      this.options,
+      contentCopy, annotationsCopy, glyphsCopy, this.options,
     );
     duplicateFromTo(
       this, copy,
-      ['content', 'contents', 'glyphs'],
+      ['content', 'glyphs', 'annotations'],
     );
     return copy;
   }
 
   getAllElements() {
-    let elements = [];
-    this.contents.forEach((c) => {
-      if (c != null) {
-        elements = [...elements, ...c.getAllElements()];
-      }
-    });
-    this.glyphs.forEach((g) => {
-      if (g != null) {
-        elements = [...elements, g];
-      }
-    });
-    return elements;
+    return [
+      ...this.content.getAllElements(),
+      ...getAllElementsFromAnnotations(this.annotations),
+      ...getAllElementsFromGlyphs(this.glyphs),
+    ];
   }
 
   setPositions() {
-    this.glyphs.forEach((glyph, index) => {
-      if (glyph != null) {
-        const t = glyph.getTransform()._dup();
-        t.updateTranslation(this.glyphLocations[index].x, this.glyphLocations[index].y);
-        t.updateScale(this.glyphWidths[index], this.glyphHeights[index]);
-        glyph.setTransform(t);
-      }
-    });
-    this.contents.forEach((content) => {
-      if (content != null) {
-        content.setPositions();
-      }
-    });
+    this.content.setPositions();
+    setPositionsForAnnotations(this.annotations);
+    setPositionsForGlyphs(this.glyphs);
+    // Object.keys(this.glyphs).forEach((key) => {
+    //   const glyph = this.glpyhs[key];
+
+    // });
+    // // setPositionsForGlyphs(this.glyphs);
+    // this.glyphs.forEach((glyph, index) => {
+    //   if (glyph != null) {
+    //     const t = glyph.getTransform()._dup();
+    //     t.updateTranslation(this.glyphLocations[index].x, this.glyphLocations[index].y);
+    //     t.updateScale(this.glyphWidths[index], this.glyphHeights[index]);
+    //     glyph.setTransform(t);
+    //   }
+    // });
+    // this.contents.forEach((content) => {
+    //   if (content != null) {
+    //     content.setPositions();
+    //   }
+    // });
   }
 
   offsetLocation(offset: Point = new Point(0, 0)) {
     this.location = this.location.add(offset);
-    this.glyphLocations.forEach((glyphLocation, index) => {
-      if (this.glyphs[index] != null) {
-        this.glyphLocations[index] = glyphLocation.add(offset);
-      }
-    });
-    this.contents.forEach((content) => {
-      if (content != null) {
-        content.offsetLocation(offset);
-      }
-    });
+    this.content.offsetLocation(offset);
+    offsetLocationForAnnotations(this.annotations, offset);
+    offsetLocationForGlyphs(this.glyphs, offset);
+    // this.glyphLocations.forEach((glyphLocation, index) => {
+    //   if (this.glyphs[index] != null) {
+    //     this.glyphLocations[index] = glyphLocation.add(offset);
+    //   }
+    // });
+    // this.contents.forEach((content) => {
+    //   if (content != null) {
+    //     content.offsetLocation(offset);
+    //   }
+    // });
   }
 
-  // eslint-disable-next-line class-methods-use-this, no-unused-vars
   calcSize(location: Point, scale: number) {
-    // this.location =
-    // this.glyphLocations[] =
-    // this.glyphHeights[] =
-    // this.glyphWidths[] =
-    // this.width =
-    // this.ascent =
-    // this.descent =
-    // this.height =
+    this.location = location._dup();
+    const loc = location._dup();
+    // const [encompassGlyph, leftGlyph, bottomGlyph, rightGlyph, topGlyph] = this.glyphs;
+    const { content, annotations } = this;
+    const {
+      inSize, useFullContent,
+    } = this.options;
+
+    const maxBounds = new Bounds();
+
+    const contentBounds = new Bounds();
+    content.calcSize(loc._dup(), scale);
+    contentBounds.copyFrom(content.getBounds(useFullContent));
+    maxBounds.copyFrom(contentBounds);
+    annotations.forEach((annotation) => {
+      annotation.content.calcSize(loc, scale * annotation.scale);
+      this.setAnnotationPosition(content, loc, annotation);
+      const annotationBounds = annotation.content.getBounds();
+      maxBounds.growWithSameBaseline(annotationBounds);
+    });
+
+    let xLocationOffset = 0;
+
+    if (inSize) {
+      this.width = maxBounds.width;
+      this.ascent = maxBounds.ascent;
+      this.descent = maxBounds.descent;
+      this.height = maxBounds.height;
+      xLocationOffset = loc.x - maxBounds.left;
+    } else {
+      this.width = contentBounds.width;
+      this.ascent = contentBounds.ascent;
+      this.descent = contentBounds.descent;
+      this.height = contentBounds.height;
+    }
+    this.fullSize = {
+      leftOffset: maxBounds.left - loc.x,
+      width: maxBounds.width,
+      ascent: maxBounds.ascent,
+      descent: maxBounds.descent,
+      height: maxBounds.height,
+    };
+
+    if (xLocationOffset !== 0 && content != null) {
+      const locationOffset = new Point(xLocationOffset, 0);
+      content.offsetLocation(locationOffset);
+      annotations.forEach((annotation) => {
+        annotation.content.offsetLocation(locationOffset);
+      });
+    }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  setAnnotationPosition(
+    contentToAnnotate: ElementInterface,
+    locationContentToAnnotate: Point,
+    annotation: TypeAnnotation,
+  ) {
+    const {
+      xPosition, yPosition, xAlign, yAlign, offset, content,
+    } = annotation;
+
+    let xPos;
+    let yPos;
+
+    if (xPosition === 'right') {
+      xPos = 1;
+    } else if (xPosition === 'center') {
+      xPos = 0.5;
+    } else if (typeof xPosition === 'number') {
+      xPos = xPosition;
+    } else {  // left
+      xPos = 0;
+    }
+    xPos = xPos * contentToAnnotate.width + locationContentToAnnotate.x;
+
+    if (yPosition === 'bottom') {
+      yPos = 0;
+    } else if (yPosition === 'middle') {
+      yPos = 0.5;
+    } else if (yPosition === 'top') {
+      yPos = 1;
+    } else if (typeof yPosition === 'number') {
+      yPos = yPosition;
+    } else {    // baseline
+      yPos = contentToAnnotate.descent / contentToAnnotate.height;
+    }
+    yPos = yPos * contentToAnnotate.height + locationContentToAnnotate.y;
+
+    if (xAlign === 'center') {
+      xPos -= content.width * 0.5;
+    } else if (xAlign === 'right') {
+      xPos -= content.width;
+    } else if (typeof xAlign === 'number') {
+      xPos -= content.width * xAlign;
+    }
+
+    if (yAlign === 'bottom') {
+      yPos += content.descent;
+    } else if (yAlign === 'middle') {
+      yPos = yPos + content.descent - content.height / 2;
+    } else if (yAlign === 'top') {
+      yPos -= content.ascent;
+    }
+
+    const offsetToUse = getPoint(offset);
+    xPos += offsetToUse.x;
+    yPos += offsetToUse.y;
+
+    const locationOffset = (new Point(xPos, yPos)).sub(content.location);
+    content.offsetLocation(locationOffset);
+    console.log(content)
+  }
+
+  getBounds(useFullSize: boolean = false) {
+    if (useFullSize && this.fullSize != null) {
+      return new Bounds({
+        left: this.location.x + this.fullSize.leftOffset,
+        right: this.location.x + this.fullSize.leftOffset + this.fullSize.width,
+        top: this.location.y + this.fullSize.ascent,
+        bottom: this.location.y - this.fullSize.descent,
+        width: this.fullSize.width,
+        height: this.fullSize.height,
+        ascent: this.fullSize.ascent,
+        descent: this.fullSize.descent,
+      });
+    }
+    return new Bounds({
+      left: this.location.x,
+      right: this.location.x + this.width,
+      top: this.location.y + this.ascent,
+      bottom: this.location.y - this.descent,
+      width: this.width,
+      height: this.height,
+      ascent: this.ascent,
+      descent: this.descent,
+    });
   }
 }
 
@@ -335,119 +527,3 @@ export default class BaseEquationFunction extends Elements {
 //    },
 //  }
 
-export default class BaseAnnotationFunction extends BaseEquationFunction {
-  calcSize(location: Point, scale: number) {
-    this.location = location._dup();
-    const loc = location._dup();
-    // const [encompassGlyph, leftGlyph, bottomGlyph, rightGlyph, topGlyph] = this.glyphs;
-    const [content, annotations] = this.contents;
-    const {
-      inSize, useFullContent,
-    } = this.options;
-
-    const maxBounds = new Bounds();
-
-    const contentBounds = new Bounds();
-    if (content != null) {
-      content.calcSize(loc._dup(), scale);
-      contentBounds.copyFrom(content.getBounds(useFullContent));
-      maxBounds.copyFrom(contentBounds);
-      annotations.forEach((annotation) => {
-        annotation.content.calc(loc._dup, scale * annotation.scale);
-        this.setAnnotationPosition(content, loc, annotation);
-        const annotationBounds = annotation.content.getBounds();
-        maxBounds.growWithSameBaseline(annotationBounds);
-      });
-    }
-    let xLocationOffset = 0;
-
-    if (inSize) {
-      this.width = maxBounds.width;
-      this.ascent = maxBounds.ascent;
-      this.descent = maxBounds.descent;
-      this.height = maxBounds.height;
-      xLocationOffset = loc.x - maxBounds.left;
-    } else {
-      this.width = contentBounds.width;
-      this.ascent = contentBounds.ascent;
-      this.descent = contentBounds.descent;
-      this.height = contentBounds.height;
-    }
-    this.fullSize = {
-      left: maxBounds.left - loc.x,
-      width: maxBounds.width,
-      ascent: maxBounds.ascent,
-      descent: maxBounds.descent,
-      height: maxBounds.height,
-    };
-
-    if (xLocationOffset !== 0 && content != null) {
-      const locationOffset = new Point(xLocationOffset, 0);
-      content.offsetLocation(locationOffset);
-      annotations.forEach((annotation) => {
-        annotation.content.offsetLocation(locationOffset);
-      });
-    }
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  setAnnotationPosition(
-    contentToAnnotate: Elements,
-    locationContentToAnnotate: Point,
-    annotation: TypeAnnotation,
-  ) {
-    const {
-      xPosition, yPosition, xAlign, yAlign, offset, content,
-    } = annotation;
-
-    let xPos;
-    let yPos;
-
-    if (xPosition === 'right') {
-      xPos = 1;
-    } else if (xPosition === 'center') {
-      xPos = 0.5;
-    } else if (typeof xPosition === 'number') {
-      xPos = xPosition;
-    } else {  // left
-      xPos = 0;
-    }
-    xPos = xPos * contentToAnnotate.width + locationContentToAnnotate.x;
-
-    if (yPosition === 'bottom') {
-      yPos = 0;
-    } else if (yPosition === 'middle') {
-      yPos = 0.5;
-    } else if (yPosition === 'top') {
-      yPos = 1;
-    } else if (typeof yPosition === 'number') {
-      yPos = yPosition;
-    } else {    // baseline
-      yPos = contentToAnnotate.descent / contentToAnnotate.height;
-    }
-    yPos = yPos * contentToAnnotate.height + locationContentToAnnotate.y;
-
-    if (xAlign === 'center') {
-      xPos -= content.width * 0.5;
-    } else if (xAlign === 'right') {
-      xPos -= content.width;
-    } else if (typeof xAlign === 'number') {
-      xPos -= content.width * xAlign;
-    }
-
-    if (yAlign === 'bottom') {
-      yPos += content.descent;
-    } else if (yAlign === 'middle') {
-      yPos = yPos + content.descent - content.height / 2;
-    } else if (yAlign === 'top') {
-      yPos -= content.ascent;
-    }
-
-    const offsetToUse = getPoint(offset);
-    xPos += offsetToUse.x;
-    yPos += offsetToUse.y;
-
-    const locationOffset = (new Point(xPos, yPos)).sub(content.location);
-    content.offsetLocation(locationOffset);
-  }
-}

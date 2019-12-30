@@ -1,9 +1,9 @@
 // import {
 //   Point,
 // } from '../../../../tools/g2';
-import {
-  round,
-} from '../../../../tools/math';
+// import {
+//   round,
+// } from '../../../../tools/math';
 import * as tools from '../../../../tools/tools';
 import makeDiagram from '../../../../__mocks__/makeDiagram';
 import { EquationNew } from '../Equation';
@@ -27,16 +27,19 @@ describe('Equation Functions - Ann', () => {
     elements = {
       a: 'a',
       b: 'b',
+      c: 'c',
     };
     functions = {
       single: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         eqn.addElements(elements);
         eqn.addForms({
-          ann: {
-            content: 'a',
-            annotations: {
-              content: 'b',
+          0: {
+            ann: {
+              content: 'a',
+              annotation: {
+                content: ['b', 'c'],
+              },
             },
           },
         });
@@ -48,7 +51,8 @@ describe('Equation Functions - Ann', () => {
     functions.single();
     eqn.showForm('0');
     diagram.setFirstTransform();
-    console.log(eqn._a.getBoundingRect('diagram'))
-    console.log(eqn._b.getBoundingRect('diagram'))
+    console.log(eqn._a.getBoundingRect('diagram'));
+    console.log(eqn._b.getBoundingRect('diagram'));
+    console.log(eqn._c.getBoundingRect('diagram'));
   });
 });

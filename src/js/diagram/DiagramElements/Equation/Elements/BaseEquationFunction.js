@@ -60,7 +60,7 @@ export default class BaseEquationFunction extends Elements {
     this.glyphWidths = glyphElements.map(() => 1);
     this.glyphHeights = glyphElements.map(() => 1);
     this.options = options;
-    this.fullSize = null;
+    // this.fullSize = null;
   }
 
   // getFullSize(useFullSize: boolean) {

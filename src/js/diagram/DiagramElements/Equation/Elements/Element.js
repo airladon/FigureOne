@@ -8,6 +8,28 @@ import {
   DiagramElementPrimitive, DiagramElementCollection,
 } from '../../../Element';
 
+export interface ElementInterface {
+  ascent: number;
+  descent: number;
+  width: number;
+  location: Point;
+  height: number;
+  fullSize: {
+    leftOffset: number,
+    width: number,
+    descent: number,
+    ascent: number,
+    height: number,
+  };
+
+  calcSize(location: Point, scale: number): void;
+  _dup(namedCollection?: Object): ElementInterface;
+  getAllElements(): Array<ElementInterface | DiagramElementPrimitive | DiagramElementCollection>;
+  setPositions(): void;
+  offsetLocation(offset: Point): void;
+  getBounds(useFullSize?: boolean): Bounds;
+}
+
 // Equation is a class that takes a set of drawing objects (TextObjects,
 // DiagramElementPrimitives or DiagramElementCollections and HTML Objects
 // and arranges their size in a )
@@ -29,7 +51,7 @@ class BlankElement {
   }
 }
 
-class Element {
+class Element implements ElementInterface {
   content: DiagramElementPrimitive | DiagramElementCollection | BlankElement;
   ascent: number;
   descent: number;
@@ -37,8 +59,8 @@ class Element {
   location: Point;
   height: number;
   scale: number;
-  fullSize: ?{
-    left: number,
+  fullSize: {
+    leftOffset: number,
     width: number,
     height: number,
     ascent: number,
@@ -75,10 +97,7 @@ class Element {
       }
 
       // Get the boundaries of element
-      // const t = content.lastDrawTransform._dup();
-      // content.lastDrawTransform = content.transform._dup();
       const r = content.getRelativeVertexSpaceBoundingRect();
-      // content.lastDrawTransform = t;
       this.location = location._dup();
       this.scale = scale;
       this.ascent = r.top * scale;
@@ -127,11 +146,11 @@ class Element {
     this.location = this.location.add(offset);
   }
 
-  getBounds(useFullSize: boolean) {
+  getBounds(useFullSize: boolean = false) {
     if (useFullSize && this.fullSize != null) {
       return new Bounds({
-        left: this.fullSize.left,
-        right: this.fullSize.left + this.fullSize.width,
+        left: this.location.x + this.fullSize.leftOffset,
+        right: this.location.x + this.fullSize.leftOffset + this.fullSize.width,
         top: this.location.y + this.fullSize.ascent,
         bottom: this.location.y - this.fullSize.descent,
         width: this.fullSize.width,
@@ -153,24 +172,23 @@ class Element {
   }
 }
 
-class Elements {
-  content: Array<Element | Elements>;
+class Elements implements ElementInterface {
+  content: Array<ElementInterface>;
   ascent: number;
   descent: number;
   width: number;
   location: Point;
   height: number;
-  +getAllElements: () => Array<DiagramElementPrimitive | DiagramElementCollection>;
-  fullSize: ?{
-    left: number,
+  fullSize: {
+    leftOffset: number,
     width: number,
     height: number,
     ascent: number,
     descent: number,
-  }
+  };
 
-  constructor(content: Array<Element | Elements | null>) {
-    const nonNullContent = [];
+  constructor(content: Array<ElementInterface | null>) {
+    const nonNullContent: Array<ElementInterface> = [];
     content.forEach((c) => {
       if (c !== null) {
         nonNullContent.push(c);
@@ -186,7 +204,6 @@ class Elements {
 
   _dup(namedCollection?: Object) {
     const contentCopy = [];
-    // console.log("Asdf", this.content, namedCollection)
     this.content.forEach(element => contentCopy.push(element._dup(namedCollection)));
     const c = new Elements(contentCopy);
     duplicateFromTo(this, c, ['content']);
@@ -208,11 +225,6 @@ class Elements {
         asc = element.ascent;
       }
     });
-    // if (this.content.length === 4 && this.content[0] instanceof Fraction) {
-    //   console.log(this.content)
-    //   console.log(this.content[0].location, this.content[1].location)
-    //   // debugger;
-    // }
     this.width = loc.x - location.x;
     this.ascent = asc;
     this.descent = des;
@@ -223,11 +235,7 @@ class Elements {
   getAllElements() {
     let elements = [];
     this.content.forEach((e) => {
-      // if (e instanceof Element && !(e.content instanceof BlankElement)) {
-      //   elements.push(e.content);
-      // } else {
       elements = [...elements, ...e.getAllElements()];
-      // }
     });
     return elements;
   }
@@ -245,11 +253,11 @@ class Elements {
     });
   }
 
-  getBounds(useFullSize: boolean) {
+  getBounds(useFullSize: boolean = false) {
     if (useFullSize && this.fullSize != null) {
       return new Bounds({
-        left: this.fullSize.left,
-        right: this.fullSize.left + this.fullSize.width,
+        left: this.location.x + this.fullSize.leftOffset,
+        right: this.location.x + this.fullSize.leftOffset + this.fullSize.width,
         top: this.location.y + this.fullSize.ascent,
         bottom: this.location.y - this.fullSize.descent,
         width: this.fullSize.width,
