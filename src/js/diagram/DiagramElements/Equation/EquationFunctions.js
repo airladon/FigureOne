@@ -27,6 +27,8 @@ import SumProd from './Elements/SumProd';
 import Matrix from './Elements/Matrix';
 import Scale from './Elements/Scale';
 import Container from './Elements/Container';
+import BaseAnnotationFunction from './Elements/BaseAnnotationFunction';
+import type { TypeAnnotation } from './Elements/BaseAnnotationFunction';
 
 export function getDiagramElement(
   elementsObject: { [string: string]: DiagramElementPrimitive |
@@ -638,6 +640,7 @@ export class EquationFunctions {
     if (name === 'matrix') { return this.matrix(params); }   // $FlowFixMe
     if (name === 'scale') { return this.scale(params); }   // $FlowFixMe
     if (name === 'container') { return this.container(params); }
+    if (name === 'ann') { return this.ann(params); }
     // Add container - where you fix the ascent, descent, and width
     // (content is centered in width) - Content spills out of container by default
     return null;
@@ -685,6 +688,50 @@ export class EquationFunctions {
     const options = joinObjects(defaultOptions, optionsIn);
     return new Container(
       [this.contentToElement(content)],
+      [],
+      options,
+    );
+  }
+
+  ann(optionsIn: {
+    content: Elements,
+    annotation?: TypeAnnotation,
+    annotations?: Array<TypeAnnotation>,
+    inSize?: boolean,
+    useFullContent?: boolean,
+  }) {
+    const defaultOptions = {
+      inSize: true,
+      useFullContent: false,
+    };
+    const {
+      content, annotation, annotations,
+    } = optionsIn;
+    const defaultAnnotation = {
+      xPosition: 'center',
+      yPosition: 'top',
+      xAlign: 'center',
+      yAlign: 'bottom',
+      offset: [0, 0],
+      scale: 1,
+      inSize: true,
+    };
+    let annotationsToUse = [];
+    if (annotation != null) {
+      annotationsToUse.push(annotation);
+    } else if (annotations != null) {
+      annotationsToUse = annotations;
+    }
+    annotationsToUse.forEach((annotation) => {
+      Object.keys(defaultAnnotation).forEach((key) => {
+        if (annotation[key] == null) {
+          annotation[key] = defaultAnnotation[key];
+        }
+      });
+    });
+    const options = joinObjects(defaultOptions, optionsIn);
+    return new BaseAnnotationFunction(
+      [this.contentToElement(content), annotationsToUse],
       [],
       options,
     );

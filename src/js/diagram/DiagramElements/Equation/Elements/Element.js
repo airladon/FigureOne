@@ -3,6 +3,7 @@ import {
   Point,
 } from '../../../../tools/g2';
 import { duplicateFromTo } from '../../../../tools/tools';
+import Bounds from './Bounds';
 import {
   DiagramElementPrimitive, DiagramElementCollection,
 } from '../../../Element';
@@ -36,6 +37,13 @@ class Element {
   location: Point;
   height: number;
   scale: number;
+  fullSize: ?{
+    left: number,
+    width: number,
+    height: number,
+    ascent: number,
+    descent: number,
+  }
 
   constructor(content: DiagramElementPrimitive | DiagramElementCollection | BlankElement) {
     this.content = content;
@@ -118,6 +126,31 @@ class Element {
   offsetLocation(offset: Point = new Point(0, 0)) {
     this.location = this.location.add(offset);
   }
+
+  getBounds(useFullSize: boolean) {
+    if (useFullSize && this.fullSize != null) {
+      return new Bounds({
+        left: this.fullSize.left,
+        right: this.fullSize.left + this.fullSize.width,
+        top: this.location.y + this.fullSize.ascent,
+        bottom: this.location.y - this.fullSize.descent,
+        width: this.fullSize.width,
+        height: this.fullSize.height,
+        ascent: this.fullSize.ascent,
+        descent: this.fullSize.descent,
+      });
+    }
+    return new Bounds({
+      left: this.location.x,
+      right: this.location.x + this.width,
+      top: this.location.y + this.ascent,
+      bottom: this.location.y - this.descent,
+      width: this.width,
+      height: this.height,
+      ascent: this.ascent,
+      descent: this.descent,
+    });
+  }
 }
 
 class Elements {
@@ -128,6 +161,13 @@ class Elements {
   location: Point;
   height: number;
   +getAllElements: () => Array<DiagramElementPrimitive | DiagramElementCollection>;
+  fullSize: ?{
+    left: number,
+    width: number,
+    height: number,
+    ascent: number,
+    descent: number,
+  }
 
   constructor(content: Array<Element | Elements | null>) {
     const nonNullContent = [];
@@ -202,6 +242,31 @@ class Elements {
     this.location = this.location.add(offset);
     this.content.forEach((e) => {
       e.offsetLocation(offset);
+    });
+  }
+
+  getBounds(useFullSize: boolean) {
+    if (useFullSize && this.fullSize != null) {
+      return new Bounds({
+        left: this.fullSize.left,
+        right: this.fullSize.left + this.fullSize.width,
+        top: this.location.y + this.fullSize.ascent,
+        bottom: this.location.y - this.fullSize.descent,
+        width: this.fullSize.width,
+        height: this.fullSize.height,
+        ascent: this.fullSize.ascent,
+        descent: this.fullSize.descent,
+      });
+    }
+    return new Bounds({
+      left: this.location.x,
+      right: this.location.x + this.width,
+      top: this.location.y + this.ascent,
+      bottom: this.location.y - this.descent,
+      width: this.width,
+      height: this.height,
+      ascent: this.ascent,
+      descent: this.descent,
     });
   }
 }
