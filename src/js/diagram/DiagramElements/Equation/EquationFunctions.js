@@ -9,7 +9,9 @@ import { joinObjects } from '../../../tools/tools';
 import {
   DiagramElementPrimitive, DiagramElementCollection,
 } from '../../Element';
-import { BlankElement, Element, Elements } from './Elements/Element';
+import {
+  BlankElement, Element, Elements, ElementInterface,
+} from './Elements/Element';
 import Fraction from './Elements/Fraction';
 import Root from './Elements/Root';
 import Strike from './Elements/Strike';
@@ -639,7 +641,7 @@ export class EquationFunctions {
     if (name === 'prodOf') { return this.sumProd(params); }   // $FlowFixMe
     if (name === 'matrix') { return this.matrix(params); }   // $FlowFixMe
     if (name === 'scale') { return this.scale(params); }   // $FlowFixMe
-    if (name === 'container') { return this.container(params); }
+    if (name === 'container') { return this.container(params); }  // $FlowFixMe
     if (name === 'ann') { return this.ann(params); }
     // Add container - where you fix the ascent, descent, and width
     // (content is centered in width) - Content spills out of container by default
@@ -694,7 +696,7 @@ export class EquationFunctions {
   }
 
   ann(optionsIn: {
-    content: Elements,
+    content: ElementInterface,
     annotation?: TypeAnnotation,
     annotations?: Array<TypeAnnotation>,
     inSize?: boolean,
@@ -712,7 +714,7 @@ export class EquationFunctions {
       yPosition: 'top',
       xAlign: 'center',
       yAlign: 'bottom',
-      offset: [0, 0],
+      offset: new Point(0, 0),
       scale: 1,
       inSize: true,
     };
@@ -722,17 +724,39 @@ export class EquationFunctions {
     } else if (annotations != null) {
       annotationsToUse = annotations;
     }
-    annotationsToUse.forEach((annotation) => {
-      Object.keys(defaultAnnotation).forEach((key) => {
-        if (annotation[key] == null) {
-          annotation[key] = defaultAnnotation[key];
-        }
-      });
+    // console.log(annotationsToUse)
+    annotationsToUse.forEach((ann) => {
+      /* eslint-disable no-param-reassign */
+      if (ann.xPosition == null) {
+        ann.xPosition = defaultAnnotation.xPosition;
+      }
+      if (ann.yPosition == null) {
+        ann.yPosition = defaultAnnotation.yPosition;
+      }
+      if (ann.xAlign == null) {
+        ann.xAlign = defaultAnnotation.xAlign;
+      }
+      if (ann.yAlign == null) {
+        ann.yAlign = defaultAnnotation.yAlign;
+      }
+      if (ann.offset == null) {
+        ann.offset = defaultAnnotation.offset;
+      }
+      if (ann.scale == null) {
+        ann.scale = defaultAnnotation.scale;
+      }
+      if (ann.inSize == null) {
+        ann.inSize = defaultAnnotation.inSize;
+      }
+      ann.content = this.contentToElement(ann.content);
+      /* eslint-enable no-param-reassign */
     });
+    
     const options = joinObjects(defaultOptions, optionsIn);
-    return new BaseAnnotationFunction(
-      [this.contentToElement(content), annotationsToUse],
-      [],
+    return new BaseAnnotationFunction(  // $FlowFixMe
+      this.contentToElement(content),
+      annotationsToUse,
+      {},
       options,
     );
   }

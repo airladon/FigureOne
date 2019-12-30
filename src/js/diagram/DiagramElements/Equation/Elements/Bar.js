@@ -17,7 +17,7 @@ export default class Bar extends BaseEquationFunction {
     const [mainContent] = this.contents;
     const {
       side, space, overhang, length,
-      left, right, top, bottom, inSize, useFullSizeContent,
+      left, right, top, bottom, inSize, // useFullSizeContent,
     } = this.options;
     const loc = location._dup();
     const contentLoc = loc._dup();
@@ -221,9 +221,9 @@ export default class Bar extends BaseEquationFunction {
       if (mainContent instanceof Elements) {
         mainContent.offsetLocation(contentLoc.sub(mainContent.location));
       }
-      this.fullSize = null;
+      // this.fullSize = null;
     } else {
-      this.fullSize = fullBounds;
+      // this.fullSize = fullBounds;
     }
     this.width = bounds.width;
     this.height = bounds.height;

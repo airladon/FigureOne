@@ -30,8 +30,7 @@ export default class Bounds {
     bottom?: number;
     left?: number;
     right?: number;
-  } = {},
-  ) {
+  } = {}) {
     const defaultBounds = {
       width: 0,
       height: 0,
