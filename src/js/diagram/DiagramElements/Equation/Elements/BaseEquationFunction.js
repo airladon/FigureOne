@@ -18,6 +18,12 @@ export default class BaseEquationFunction extends Elements {
   glyphHeights: Array<number>;
   // inSize: boolean;
   options: Object;
+  // fullBounds: ?{
+  //   width: number,
+  //   height: number,
+  //   ascent: number,
+  //   descent: number,
+  // }
 
   constructor(
     content: Elements | null | Array<Elements | null>,
@@ -54,7 +60,25 @@ export default class BaseEquationFunction extends Elements {
     this.glyphWidths = glyphElements.map(() => 1);
     this.glyphHeights = glyphElements.map(() => 1);
     this.options = options;
+    this.fullSize = null;
   }
+
+  // getFullSize(useFullSize: boolean) {
+  //   if (useFullSize && this.full != null) {
+  //     return {
+  //       width: this.fullBounds.width,
+  //       height: this.fullBounds.height,
+  //       ascent: this.fullBounds.ascent,
+  //       descent: this.fullBounds.descent,
+  //     };
+  //   }
+  //   return {
+  //     width: this.width,
+  //     height: this.height,
+  //     ascent: this.ascent,
+  //     descent: this.descent,
+  //   };
+  // }
 
   _dup(namedCollection?: Object) {
     const copyContent = this.contents.map(

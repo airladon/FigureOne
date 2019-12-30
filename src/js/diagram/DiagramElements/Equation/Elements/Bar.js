@@ -17,7 +17,7 @@ export default class Bar extends BaseEquationFunction {
     const [mainContent] = this.contents;
     const {
       side, space, overhang, length,
-      left, right, top, bottom, inSize,
+      left, right, top, bottom, inSize, useFullSizeContent,
     } = this.options;
     const loc = location._dup();
     const contentLoc = loc._dup();
@@ -25,18 +25,22 @@ export default class Bar extends BaseEquationFunction {
     const contentBounds = new Bounds();
     // const originalContentBounds = new Bounds();
     const bounds = new Bounds();
+    const fullBounds = new Bounds();
 
     // const { mainContent } = this;
     if (mainContent instanceof Elements) {
       mainContent.calcSize(loc._dup(), scale);
-      contentBounds.width = mainContent.width;
-      contentBounds.height = mainContent.ascent + mainContent.descent;
-      contentBounds.ascent = mainContent.ascent;
-      contentBounds.descent = mainContent.descent;
-      bounds.width = mainContent.width;
-      bounds.height = mainContent.height;
-      bounds.ascent = mainContent.ascent;
-      bounds.descent = mainContent.descent;
+      contentBounds.copyFrom(mainContent);
+      bounds.copyFrom(contentBounds);
+      // contentBounds.width = mainContent.width;
+      // contentBounds.height = mainContent.ascent + mainContent.descent;
+      // contentBounds.ascent = mainContent.ascent;
+      // contentBounds.descent = mainContent.descent;
+      // bounds.width = mainContent.width;
+      // bounds.height = mainContent.height;
+      // bounds.ascent = mainContent.ascent;
+      // bounds.descent = mainContent.descent;
+      fullBounds.copyFrom(bounds);
     }
     let glyphLength = 0;
     let glyphWidth = 0;
@@ -114,24 +118,36 @@ export default class Bar extends BaseEquationFunction {
         }
       }
 
-      if (inSize) {
-        bounds.width = Math.max(
-          contentLoc.x + contentBounds.width - loc.x,
-          glyphLoc.x + glyphLength - loc.x,
-        );
-        if (side === 'top') {
-          bounds.ascent = contentBounds.ascent + space + glyphWidth;
-          bounds.descent = contentBounds.descent;
-        }
-        if (side === 'bottom') {
-          bounds.ascent = contentBounds.ascent;
-          bounds.descent = contentBounds.descent + space + glyphWidth;
-        }
-        bounds.height = bounds.ascent + bounds.descent;
-        if (mainContent instanceof Elements) {
-          mainContent.offsetLocation(contentLoc.sub(mainContent.location));
-        }
+      fullBounds.width = Math.max(
+        contentLoc.x + contentBounds.width - loc.x,
+        glyphLoc.x + glyphLength - loc.x,
+      );
+      if (side === 'top') {
+        fullBounds.ascent = contentBounds.ascent + space + glyphWidth;
+        fullBounds.descent = contentBounds.descent;
+      } else {
+        fullBounds.ascent = contentBounds.ascent;
+        fullBounds.descent = contentBounds.descent + space + glyphWidth;
       }
+      fullBounds.height = fullBounds.ascent + fullBounds.descent;
+      // if (inSize) {
+      //   bounds.width = Math.max(
+      //     contentLoc.x + contentBounds.width - loc.x,
+      //     glyphLoc.x + glyphLength - loc.x,
+      //   );
+      //   if (side === 'top') {
+      //     bounds.ascent = contentBounds.ascent + space + glyphWidth;
+      //     bounds.descent = contentBounds.descent;
+      //   }
+      //   if (side === 'bottom') {
+      //     bounds.ascent = contentBounds.ascent;
+      //     bounds.descent = contentBounds.descent + space + glyphWidth;
+      //   }
+      //   bounds.height = bounds.ascent + bounds.descent;
+      //   if (mainContent instanceof Elements) {
+      //     mainContent.offsetLocation(contentLoc.sub(mainContent.location));
+      //   }
+      // }
     } else {
       // Length is the content height by default
       glyphLength = contentBounds.height;
@@ -180,18 +196,34 @@ export default class Bar extends BaseEquationFunction {
         glyphLoc.y = loc.y - contentBounds.descent - bottom;
       }
 
-      if (inSize) {
-        bounds.width = contentBounds.width + space + glyphWidth;
-        bounds.descent = Math.max(loc.y - glyphLoc.y, contentBounds.descent);
-        bounds.ascent = Math.max(
-          glyphLength - (loc.y - glyphLoc.y),
-          contentBounds.ascent,
-        );
-        bounds.height = bounds.ascent + bounds.descent;
-        if (mainContent instanceof Elements) {
-          mainContent.offsetLocation(contentLoc.sub(mainContent.location));
-        }
+      fullBounds.width = contentBounds.width + space + glyphWidth;
+      fullBounds.descent = Math.max(loc.y - glyphLoc.y, contentBounds.descent);
+      fullBounds.ascent = Math.max(
+        glyphLength - (loc.y - glyphLoc.y),
+        contentBounds.ascent,
+      );
+      fullBounds.height = bounds.ascent + bounds.descent;
+      // if (inSize) {
+      //   bounds.width = contentBounds.width + space + glyphWidth;
+      //   bounds.descent = Math.max(loc.y - glyphLoc.y, contentBounds.descent);
+      //   bounds.ascent = Math.max(
+      //     glyphLength - (loc.y - glyphLoc.y),
+      //     contentBounds.ascent,
+      //   );
+      //   bounds.height = bounds.ascent + bounds.descent;
+      //   if (mainContent instanceof Elements) {
+      //     mainContent.offsetLocation(contentLoc.sub(mainContent.location));
+      //   }
+      // }
+    }
+    if (inSize) {
+      bounds.copyFrom(fullBounds);
+      if (mainContent instanceof Elements) {
+        mainContent.offsetLocation(contentLoc.sub(mainContent.location));
       }
+      this.fullSize = null;
+    } else {
+      this.fullSize = fullBounds;
     }
     this.width = bounds.width;
     this.height = bounds.height;
