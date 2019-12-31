@@ -37,7 +37,11 @@ export type TypeAnnotatedGlyph = {
 };
 
 export type TypeEncompassGlyph = {
-  space: number | { left?: number, right?: number, top?: number, bottom?: number },
+  space: number,
+  leftSpace: number,
+  bottomSpace: number,
+  topSpace: number,
+  rightSpace: number,
 } & TypeAnnotatedGlyph;
 
 export type TypeGlyphs = {
@@ -335,7 +339,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     }
     const {
       leftSpace, rightSpace, bottomSpace, topSpace, space,
-    } = this.options.encompass;
+    } = this.glyphs.encompass;
     const glyph = this.glyphs.encompass;
     const left = leftSpace != null ? leftSpace : space;
     const right = rightSpace != null ? rightSpace : space;
@@ -358,6 +362,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);
     glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
     glyph.annotations.forEach((annotation) => {
+      annotation.content.calcSize(glyph.location, scale * annotation.scale);
       this.setAnnotationPosition(glyphBounds, glyph.location, annotation);
       const annotationBounds = annotation.content.getBounds();
       totalBounds.growWithSameBaseline(annotationBounds);
@@ -425,7 +430,6 @@ export default class BaseAnnotationFunction implements ElementInterface {
 
     const locationOffset = (new Point(xPos, yPos)).sub(content.location);
     content.offsetLocation(locationOffset);
-    // console.log(content)
   }
 
   getBounds(useFullSize: boolean = false) {
