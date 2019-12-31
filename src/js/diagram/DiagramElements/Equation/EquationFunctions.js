@@ -703,7 +703,11 @@ export class EquationFunctions {
       encompass: {
         symbol: string,
         annotations?: Array<TypeAnnotation>,
-        space?: number | { left?: number, right?: number, top?: number, bottom?: number }
+        space?: number;
+        topSpace?: number;
+        leftSpace?: number;
+        bottomSpace?: number;
+        rightSpace?: number;
       },
     },
     inSize?: boolean,
@@ -780,6 +784,10 @@ export class EquationFunctions {
       glyphsToUse.encompass.annotations = glyphs.encompass.annotations || [];
       glyphsToUse.encompass.glyph = this.getExistingOrAddSymbol(glyphs.encompass.symbol);
       glyphsToUse.encompass.space = glyphs.encompass.space != null ? glyphs.encompass.space : 0;
+      glyphsToUse.encompass.leftSpace = glyphs.encompass.leftSpace;
+      glyphsToUse.encompass.rightSpace = glyphs.encompass.rightSpace;
+      glyphsToUse.encompass.topSpace = glyphs.encompass.topSpace;
+      glyphsToUse.encompass.bottomSpace = glyphs.encompass.bottomSpace;
     }
     // console.log(glyphsToUse)
 

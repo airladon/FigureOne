@@ -24,12 +24,14 @@ describe('Equation Functions - Ann', () => {
   let lineWidth;
   let staticWidth;
   let staticHeight;
+  let space;
   beforeEach(() => {
     diagram = makeDiagram();
     color1 = [0.95, 0, 0, 1];
     lineWidth = 0.01;
     staticWidth = 2;
     staticHeight = 2;
+    space = 0.1;
     elements = {
       a: 'a',
       b: 'b',
@@ -84,6 +86,20 @@ describe('Equation Functions - Ann', () => {
               },
             },
           },
+          simpleEncompassWithSpace: {
+            ann: {
+              content: 'a',
+              glyphs: {
+                encompass: {
+                  symbol: 'box',
+                  leftSpace: space,
+                  rightSpace: space,
+                  bottomSpace: space,
+                  topSpace: space,
+                },
+              },
+            },
+          },
           simpleStaticEncompass: {
             ann: {
               content: 'a',
@@ -91,6 +107,24 @@ describe('Equation Functions - Ann', () => {
                 encompass: {
                   symbol: 'boxStatic',
                   space: 0, // { left: 0 }
+                },
+              },
+            },
+          },
+          encompassWithAnnotation: {
+            ann: {
+              content: 'a',
+              glyphs: {
+                encompass: {
+                  symbol: 'box',
+                  space,
+                  annotations: [{
+                    content: 'b',
+                    yPosition: 'top',
+                    yAlign: 'bottom',
+                    xPosition: 'right',
+                    xAlign: 'left',
+                  }],
                 },
               },
             },
@@ -131,6 +165,17 @@ describe('Equation Functions - Ann', () => {
     expect(round(box.bottom)).toBe(round(a.bottom - lineWidth));
     expect(round(box.top)).toBe(round(a.top + lineWidth));
   });
+  test('Simple Encompass With Space', () => {
+    functions.single();
+    eqn.showForm('simpleEncompassWithSpace');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const box = eqn._box.getBoundingRect('diagram');
+    expect(round(box.left)).toBe(round(a.left - lineWidth - space));
+    expect(round(box.right)).toBe(round(a.right + lineWidth + space));
+    expect(round(box.bottom)).toBe(round(a.bottom - lineWidth - space));
+    expect(round(box.top)).toBe(round(a.top + lineWidth + space));
+  });
   test('Simple Static Encompass', () => {
     functions.single();
     eqn.showForm('simpleStaticEncompass');
@@ -147,5 +192,19 @@ describe('Equation Functions - Ann', () => {
     expect(round(box.right)).toBe(round(a.right + horiztonalLineWidth));
     expect(round(box.bottom)).toBe(round(a.bottom - verticalLineHeight));
     expect(round(box.top)).toBe(round(a.top + verticalLineHeight));
+  });
+  test('Annotated Encompass', () => {
+    functions.single();
+    eqn.showForm('encompassWithAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const box = eqn._box.getBoundingRect('diagram');
+    expect(round(box.left)).toBe(round(a.left - space - lineWidth));
+    expect(round(box.bottom)).toBe(round(a.bottom - space - lineWidth));
+    expect(round(box.right)).toBe(round(a.right + space + lineWidth));
+    expect(round(box.top)).toBe(round(a.top + space + lineWidth));
+    expect(round(b.left)).toBe(round(box.right));
+    expect(round(b.bottom)).toBe(round(box.top));
   });
 });
