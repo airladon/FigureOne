@@ -302,6 +302,8 @@ export default class BaseAnnotationFunction implements ElementInterface {
     });
 
     const encompassBounds = this.setEncompassGlyph(scale, contentBounds);
+    maxBounds.growWithSameBaseline(encompassBounds);
+
     let xLocationOffset = 0;
 
     if (inSize) {
@@ -329,6 +331,17 @@ export default class BaseAnnotationFunction implements ElementInterface {
       content.offsetLocation(locationOffset);
       annotations.forEach((annotation) => {
         annotation.content.offsetLocation(locationOffset);
+      });
+      Object.keys(this.glyphs).forEach((key) => {
+        const glyph = this.glyphs[key];
+        if (glyph == null) {
+          return;
+        }
+        glyph.location = glyph.location.add(locationOffset);
+        glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
+        glyph.annotations.forEach((annotation) => {
+          annotation.content.offsetLocation(locationOffset);
+        });
       });
     }
   }

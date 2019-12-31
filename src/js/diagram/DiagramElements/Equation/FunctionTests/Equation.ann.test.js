@@ -100,6 +100,21 @@ describe('Equation Functions - Ann', () => {
               },
             },
           },
+          encompassNotInSize: {
+            ann: {
+              content: 'a',
+              glyphs: {
+                encompass: {
+                  symbol: 'box',
+                  leftSpace: space,
+                  rightSpace: space,
+                  bottomSpace: space,
+                  topSpace: space,
+                },
+              },
+              inSize: false,
+            },
+          },
           simpleStaticEncompass: {
             ann: {
               content: 'a',
@@ -175,6 +190,19 @@ describe('Equation Functions - Ann', () => {
     expect(round(box.right)).toBe(round(a.right + lineWidth + space));
     expect(round(box.bottom)).toBe(round(a.bottom - lineWidth - space));
     expect(round(box.top)).toBe(round(a.top + lineWidth + space));
+    expect(round(box.left)).toBe(0);
+  });
+  test('Encompass Not InSize', () => {
+    functions.single();
+    eqn.showForm('encompassNotInSize');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const box = eqn._box.getBoundingRect('diagram');
+    expect(round(box.left)).toBe(round(a.left - lineWidth - space));
+    expect(round(box.right)).toBe(round(a.right + lineWidth + space));
+    expect(round(box.bottom)).toBe(round(a.bottom - lineWidth - space));
+    expect(round(box.top)).toBe(round(a.top + lineWidth + space));
+    expect(round(box.left)).toBe(-lineWidth - space);
   });
   test('Simple Static Encompass', () => {
     functions.single();
