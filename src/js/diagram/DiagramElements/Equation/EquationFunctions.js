@@ -701,8 +701,9 @@ export class EquationFunctions {
     annotations?: Array<TypeAnnotation>,
     glyphs?: {
       encompass: {
-        glyph: string,
+        symbol: string,
         annotations?: Array<TypeAnnotation>,
+        space?: number | { left?: number, right?: number, top?: number, bottom?: number }
       },
     },
     inSize?: boolean,
@@ -711,6 +712,9 @@ export class EquationFunctions {
     const defaultOptions = {
       inSize: true,
       useFullContent: false,
+      encompass: {
+        space: 0,
+      },
     };
     const {
       content, annotation, annotations, glyphs,
@@ -773,9 +777,11 @@ export class EquationFunctions {
     if (glyphs != null && glyphs.encompass != null) {
       glyphsToUse.encompass = {};
       fillAnnotations(glyphs.encompass.annotations);
-      glyphsToUse.encompass.annotations = glyphs.encompass.annotations;
+      glyphsToUse.encompass.annotations = glyphs.encompass.annotations || [];
       glyphsToUse.encompass.glyph = this.getExistingOrAddSymbol(glyphs.encompass.symbol);
+      glyphsToUse.encompass.space = glyphs.encompass.space != null ? glyphs.encompass.space : 0;
     }
+    // console.log(glyphsToUse)
 
     const options = joinObjects(defaultOptions, optionsIn);
     return new BaseAnnotationFunction(  // $FlowFixMe
