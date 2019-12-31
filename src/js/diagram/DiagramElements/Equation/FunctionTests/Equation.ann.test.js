@@ -22,10 +22,14 @@ describe('Equation Functions - Ann', () => {
   let functions;
   // let forms;
   let lineWidth;
+  let staticWidth;
+  let staticHeight;
   beforeEach(() => {
     diagram = makeDiagram();
     color1 = [0.95, 0, 0, 1];
     lineWidth = 0.01;
+    staticWidth = 2;
+    staticHeight = 2;
     elements = {
       a: 'a',
       b: 'b',
@@ -33,6 +37,13 @@ describe('Equation Functions - Ann', () => {
       box: {
         symbol: 'box',
         lineWidth,
+      },
+      boxStatic: {
+        symbol: 'box',
+        lineWidth,
+        draw: 'static',
+        staticHeight,
+        staticWidth,
       },
     };
     functions = {
@@ -73,6 +84,17 @@ describe('Equation Functions - Ann', () => {
               },
             },
           },
+          simpleStaticEncompass: {
+            ann: {
+              content: 'a',
+              glyphs: {
+                encompass: {
+                  symbol: 'boxStatic',
+                  space: 0, // { left: 0 }
+                },
+              },
+            },
+          },
         });
         diagram.elements = eqn;
       },
@@ -108,11 +130,22 @@ describe('Equation Functions - Ann', () => {
     expect(round(box.right)).toBe(round(a.right + lineWidth));
     expect(round(box.bottom)).toBe(round(a.bottom - lineWidth));
     expect(round(box.top)).toBe(round(a.top + lineWidth));
-    // console.log(a)
-    // console.log(box);
-    // const c = eqn._c.getBoundingRect('diagram');
-    // expect(round(a.bottom)).toBe(round(b.top));
-    // expect(round(b.bottom)).toBe(round(c.bottom));
-    // expect(round(a.left)).toBe(round((b.width + c.width) / 2 - a.width / 2));
+  });
+  test('Simple Static Encompass', () => {
+    functions.single();
+    eqn.showForm('simpleStaticEncompass');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const box = eqn._boxStatic.getBoundingRect('diagram');
+    const heightLineWidthRatio = lineWidth / staticHeight;
+    const widthLineWidthRatio = lineWidth / staticWidth;
+    const expectedWidth = a.width / (1 - 2 * widthLineWidthRatio);
+    const expectedHeight = a.height / (1 - 2 * heightLineWidthRatio);
+    const horiztonalLineWidth = widthLineWidthRatio * expectedWidth;
+    const verticalLineHeight = heightLineWidthRatio * expectedHeight;
+    expect(round(box.left)).toBe(round(a.left - horiztonalLineWidth));
+    expect(round(box.right)).toBe(round(a.right + horiztonalLineWidth));
+    expect(round(box.bottom)).toBe(round(a.bottom - verticalLineHeight));
+    expect(round(box.top)).toBe(round(a.top + verticalLineHeight));
   });
 });

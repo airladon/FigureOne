@@ -72,21 +72,49 @@ export default class Box extends Symbol {
   /* eslint-disable class-methods-use-this */
   getBounds() {
     // eslint-disable-next-line max-len
-    return (options: { lineWidth?: number }, leftIn: number, bottomIn: number, widthIn: number, heightIn: number) => {
+    return (options: { lineWidth?: number, staticWidth?: number, staticHeight?: number, draw: 'dynamic' | 'static' }, leftIn: number, bottomIn: number, widthIn: number, heightIn: number) => {
       const { lineWidth, width, height } = this.getDefaultValues(
         heightIn, widthIn, options,
       );
       const bounds = new Bounds();
-      bounds.left = leftIn - lineWidth;
-      bounds.bottom = bottomIn - lineWidth;
-      bounds.width = width + lineWidth * 2;
-      bounds.height = height + lineWidth * 2;
-      bounds.right = bounds.left + bounds.right;
-      bounds.top = bounds.bottom + bounds.height;
-      bounds.descent = 0;
-      bounds.ascent = bounds.height;
+      if (options.draw === 'static') {
+        let { staticWidth, staticHeight } = options;
+        if (staticWidth === 'first') {
+          staticWidth = width + lineWidth * 2;
+        }
+        if (staticHeight === 'first') {
+          staticHeight = height + lineWidth * 2;
+        }
+        if (staticWidth == null) {
+          staticWidth = 1;
+        }
+        if (staticHeight == null) {
+          staticHeight = 1;
+        }
+        const heightLineWidthRatio = lineWidth / staticHeight;
+        const widthLineWidthRatio = lineWidth / staticWidth;
+        bounds.width = width / (1 - 2 * widthLineWidthRatio);
+        bounds.height = height / (1 - 2 * heightLineWidthRatio);
+        const widthLineWidth = bounds.width * widthLineWidthRatio;
+        const heightLineWidth = bounds.height * heightLineWidthRatio;
+        bounds.left = leftIn - widthLineWidth;
+        bounds.right = bounds.left + bounds.width;
+        bounds.bottom = bottomIn - heightLineWidth;
+        bounds.top = bounds.bottom + bounds.height;
+        bounds.ascent = bounds.height;
+        bounds.descent = 0;
+      } else {
+        bounds.left = leftIn - lineWidth;
+        bounds.bottom = bottomIn - lineWidth;
+        bounds.width = width + lineWidth * 2;
+        bounds.height = height + lineWidth * 2;
+        bounds.right = bounds.left + bounds.right;
+        bounds.top = bounds.bottom + bounds.height;
+        bounds.descent = 0;
+        bounds.ascent = bounds.height;
+      }
       return bounds;
-    }
+    };
   }
 
   /* eslint-disable class-methods-use-this */
