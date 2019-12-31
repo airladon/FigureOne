@@ -1,9 +1,9 @@
 // import {
 //   Point,
 // } from '../../../../tools/g2';
-// import {
-//   round,
-// } from '../../../../tools/math';
+import {
+  round,
+} from '../../../../tools/math';
 import * as tools from '../../../../tools/tools';
 import makeDiagram from '../../../../__mocks__/makeDiagram';
 import { EquationNew } from '../Equation';
@@ -28,6 +28,10 @@ describe('Equation Functions - Ann', () => {
       a: 'a',
       b: 'b',
       c: 'c',
+      box: {
+        symbol: 'box',
+        lineWidth: 0.01,
+      },
     };
     functions = {
       single: () => {
@@ -38,21 +42,58 @@ describe('Equation Functions - Ann', () => {
             ann: {
               content: 'a',
               annotation: {
-                content: ['b', 'c'],
+                content: 'b',
+                yPosition: 'top',
+                yAlign: 'bottom',
+                xPosition: 'right',
+                xAlign: 'left',
               },
             },
           },
+          1: {
+            ann: {
+              content: 'a',
+              annotation: {
+                content: ['b', 'c'],
+                yPosition: 'bottom',
+                yAlign: 'top',
+              },
+            },
+          },
+          // 2: {
+          //   ann: {
+          //     content: 'a',
+          //     glyphs: {
+          //       encompass: {
+          //         glyph: 'box',
+
+          //       }
+          //     }
+          //   },
+          // },
         });
         diagram.elements = eqn;
       },
     };
   });
-  test('Ann', () => {
+  test('Simple Element Annotation', () => {
     functions.single();
     eqn.showForm('0');
     diagram.setFirstTransform();
-    console.log(eqn._a.getBoundingRect('diagram'));
-    console.log(eqn._b.getBoundingRect('diagram'));
-    console.log(eqn._c.getBoundingRect('diagram'));
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    expect(round(a.top)).toBe(round(b.bottom));
+    expect(round(a.right)).toBe(round(b.left));
+  });
+  test('Multi Element Annotation', () => {
+    functions.single();
+    eqn.showForm('1');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const c = eqn._c.getBoundingRect('diagram');
+    expect(round(a.bottom)).toBe(round(b.top));
+    expect(round(b.bottom)).toBe(round(c.bottom));
+    expect(round(a.left)).toBe(round((b.width + c.width) / 2 - a.width / 2));
   });
 });

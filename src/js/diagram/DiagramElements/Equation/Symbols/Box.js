@@ -4,6 +4,7 @@ import {
   Point,
 } from '../../../../tools/g2';
 import Symbol from './Symbol';
+import Bounds from '../Elements/Bounds';
 // import WebGLInstance from '../../../webgl/webgl';
 
 
@@ -66,6 +67,26 @@ export default class Box extends Symbol {
       }
       return [points, width, height];
     };
+  }
+
+  /* eslint-disable class-methods-use-this */
+  getBounds() {
+    // eslint-disable-next-line max-len
+    return (options: { lineWidth?: number }, leftIn: number, bottomIn: number, widthIn: number, heightIn: number) => {
+      const { lineWidth, width, height } = this.getDefaultValues(
+        heightIn, widthIn, options,
+      );
+      const bounds = new Bounds();
+      bounds.left = leftIn - lineWidth;
+      bounds.bottom = bottomIn - lineWidth;
+      bounds.width = width + lineWidth * 2;
+      bounds.height = height + lineWidth * 2;
+      bounds.right = bounds.left + bounds.right;
+      bounds.top = bounds.bottom + bounds.height;
+      bounds.descent = 0;
+      bounds.ascent = bounds.height;
+      return bounds;
+    }
   }
 
   /* eslint-disable class-methods-use-this */
