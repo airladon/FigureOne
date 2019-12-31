@@ -36,13 +36,25 @@ export type TypeAnnotatedGlyph = {
   location: Point,
 };
 
+export type TypeEncompassGlyph = {
+  space: number | { left?: number, right?: number, top?: number, bottom?: number },
+} & TypeAnnotatedGlyph;
+
 export type TypeGlyphs = {
   left?: TypeAnnotatedGlyph;
   right?: TypeAnnotatedGlyph;
   top?: TypeAnnotatedGlyph;
   bottom?: TypeAnnotatedGlyph;
-  encompass?: TypeAnnotatedGlyph;
+  encompass?: TypeEncompassGlyph;
 };
+
+// export type TypeGlyphsIn = {
+//   left?: TypeAnnotatedGlyph;
+//   right?: TypeAnnotatedGlyph;
+//   top?: TypeAnnotatedGlyph;
+//   bottom?: TypeAnnotatedGlyph;
+//   encompass?: TypeEncompassGlyphIn;
+// };
 
 function copyAnnotation(annotation: TypeAnnotation, namedCollection?: Object) {
   return {
@@ -111,7 +123,7 @@ function getAllElementsFromGlyphs(glyphs: TypeGlyphs) {
     elements = [
       ...elements,
       glyph.glyph,
-      getAllElementsFromAnnotations(glyph.annotations),
+      ...getAllElementsFromAnnotations(glyph.annotations),
     ];
   });
   return elements;
@@ -197,6 +209,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     this.content = content;
     this.annotations = annotations;
     this.options = options;
+    // console.log(this.glyphs)
   }
 
   _dup(namedCollection?: Object) {
@@ -386,7 +399,8 @@ export default class BaseAnnotationFunction implements ElementInterface {
     } else {    // baseline
       yPos = contentToAnnotate.descent / contentToAnnotate.height;
     }
-    yPos = yPos * contentToAnnotate.height + locationContentToAnnotate.y - contentToAnnotate.descent;
+    yPos = yPos * contentToAnnotate.height
+           + locationContentToAnnotate.y - contentToAnnotate.descent;
 
     if (xAlign === 'center') {
       xPos -= content.width * 0.5;
