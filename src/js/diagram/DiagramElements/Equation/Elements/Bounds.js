@@ -72,6 +72,39 @@ export default class Bounds {
     }
   }
 
+  leftOffset(leftDelta: number) {
+    this.left += leftDelta;
+    this.width = this.right - this.left;
+  }
+
+  rightOffset(rightDelta: number) {
+    this.right += rightDelta;
+    this.width = this.right - this.left;
+  }
+
+  topOffset(topDelta: number) {
+    this.top += topDelta;
+    this.ascent += topDelta;
+    this.height = this.ascent + this.descent;
+  }
+
+  bottomOffset(bottomDelta: number) {
+    this.bottom += bottomDelta;
+    this.descent -= bottomDelta;
+    this.height = this.ascent + this.descent;
+  }
+
+  offset(top: number, right: number, bottom: number, left: number) {
+    this.left += left;
+    this.right += right;
+    this.top += top;
+    this.ascent += top;
+    this.descent -= bottom;
+    this.bottom += bottom;
+    this.width = this.right - this.left;
+    this.height = this.ascent + this.descent;
+  }
+
   growWithSameBaseline(newBounds: TypeBounds) {
     const baseline = this.bottom + this.descent;
     if (newBounds.left < this.left) {

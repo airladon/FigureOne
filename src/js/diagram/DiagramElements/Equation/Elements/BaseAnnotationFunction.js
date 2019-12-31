@@ -284,6 +284,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
       maxBounds.growWithSameBaseline(annotationBounds);
     });
 
+    const encompassBounds = this.setEncompassGlyph(scale, contentBounds);
     let xLocationOffset = 0;
 
     if (inSize) {
@@ -315,9 +316,44 @@ export default class BaseAnnotationFunction implements ElementInterface {
     }
   }
 
+  setEncompassGlyph(scale: number, contentBoundsIn: Bounds) {
+    if (this.glyphs.encompass == null) {
+      return contentBoundsIn;
+    }
+    const {
+      leftSpace, rightSpace, bottomSpace, topSpace, space,
+    } = this.options.encompass;
+    const glyph = this.glyphs.encompass;
+    const left = leftSpace != null ? leftSpace : space;
+    const right = rightSpace != null ? rightSpace : space;
+    const top = topSpace != null ? topSpace : space;
+    const bottom = bottomSpace != null ? bottomSpace : space;
+    const contentBounds = new Bounds();
+    contentBounds.copyFrom(contentBoundsIn);
+    contentBounds.offset(top, right, -left, -bottom);
+    const glyphBounds = glyph.glyph.custom.getBounds(
+      glyph.glyph.custom.options,
+      contentBounds.left,
+      contentBounds.bottom,
+      contentBounds.width,
+      contentBounds.height,
+    );
+    const totalBounds = new Bounds();
+    totalBounds.copyFrom(glyphBounds);
+    glyph.width = glyphBounds.width;
+    glyph.height = glyphBounds.height;
+    glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);
+    glyph.annotations.forEach((annotation) => {
+      this.setAnnotationPosition(glyphBounds, glyph.location, annotation);
+      const annotationBounds = annotation.content.getBounds();
+      totalBounds.growWithSameBaseline(annotationBounds);
+    });
+    return totalBounds;
+  }
+
   // eslint-disable-next-line class-methods-use-this
   setAnnotationPosition(
-    contentToAnnotate: ElementInterface,
+    contentToAnnotate: ElementInterface | Bounds,
     locationContentToAnnotate: Point,
     annotation: TypeAnnotation,
   ) {
@@ -350,7 +386,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     } else {    // baseline
       yPos = contentToAnnotate.descent / contentToAnnotate.height;
     }
-    yPos = yPos * contentToAnnotate.height + locationContentToAnnotate.y;
+    yPos = yPos * contentToAnnotate.height + locationContentToAnnotate.y - contentToAnnotate.descent;
 
     if (xAlign === 'center') {
       xPos -= content.width * 0.5;
@@ -374,7 +410,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
 
     const locationOffset = (new Point(xPos, yPos)).sub(content.location);
     content.offsetLocation(locationOffset);
-    console.log(content)
+    // console.log(content)
   }
 
   getBounds(useFullSize: boolean = false) {

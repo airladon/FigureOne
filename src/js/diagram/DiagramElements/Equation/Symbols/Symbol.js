@@ -5,6 +5,7 @@ import {
 } from '../../../../tools/g2';
 import VertexSymbol from './VertexSymbol';
 import WebGLInstance from '../../../webgl/webgl';
+import Bounds from '../Elements/Bounds';
 
 
 export default class Symbol {
@@ -26,6 +27,7 @@ export default class Symbol {
     const getWidth = this.getWidth();
     const getHeight = this.getHeight();
     const triangles = this.getTriangles();
+    const getBounds = this.getBounds();
 
     const vertexObject = new VertexSymbol(webgl, triangles);
     // const widthFromheight = getWidth('static', symbolOptions, 1);
@@ -45,6 +47,7 @@ export default class Symbol {
     symbol.custom.options = symbolOptions;
     symbol.custom.getWidth = getWidth;
     symbol.custom.getHeight = getHeight;
+    symbol.custom.getBounds = getBounds;
 
     if (symbol.custom.options.draw === 'static') {
       // symbol.custom.type = 'static';
@@ -139,6 +142,14 @@ export default class Symbol {
       ({ width } = this.getDefaultValues(height, width, options));
       return width;
     };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getBounds() {
+    // eslint-disable-next-line no-unused-vars
+    return (options: Object, leftIn: number, bottomIn: number, widthIn: number, heightIn: number) => {
+      return new Bounds();
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this

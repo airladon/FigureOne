@@ -699,6 +699,12 @@ export class EquationFunctions {
     content: ElementInterface,
     annotation?: TypeAnnotation,
     annotations?: Array<TypeAnnotation>,
+    glyphs?: {
+      encompass: {
+        glyph: string,
+        annotations?: Array<TypeAnnotation>,
+      },
+    },
     inSize?: boolean,
     useFullContent?: boolean,
   }) {
@@ -707,7 +713,7 @@ export class EquationFunctions {
       useFullContent: false,
     };
     const {
-      content, annotation, annotations,
+      content, annotation, annotations, glyphs,
     } = optionsIn;
     const defaultAnnotation = {
       xPosition: 'center',
@@ -724,8 +730,8 @@ export class EquationFunctions {
     } else if (annotations != null) {
       annotationsToUse = annotations;
     }
-    // console.log(annotationsToUse)
-    annotationsToUse.forEach((ann) => {
+
+    const fillAnnotation = (ann) => {
       /* eslint-disable no-param-reassign */
       if (ann.xPosition == null) {
         ann.xPosition = defaultAnnotation.xPosition;
@@ -750,13 +756,32 @@ export class EquationFunctions {
       }
       ann.content = this.contentToElement(ann.content);
       /* eslint-enable no-param-reassign */
-    });
-    
+    };
+
+    const fillAnnotations = (anns) => {
+      if (anns == null || !Array.isArray(anns)) {
+        return;
+      }
+      anns.forEach((ann) => {
+        fillAnnotation(ann);
+      });
+    };
+    fillAnnotations(annotationsToUse);
+
+    const glyphsToUse = {};
+
+    if (glyphs != null && glyphs.encompass != null) {
+      glyphsToUse.encompass = {};
+      fillAnnotations(glyphs.encompass.annotations);
+      glyphsToUse.encompass.annotations = glyphs.encompass.annotations;
+      glyphsToUse.encompass.glyph = this.getExistingOrAddSymbol(glyphs.encompass.symbol);
+    }
+
     const options = joinObjects(defaultOptions, optionsIn);
     return new BaseAnnotationFunction(  // $FlowFixMe
       this.contentToElement(content),
       annotationsToUse,
-      {},
+      glyphsToUse,
       options,
     );
   }
