@@ -47,6 +47,22 @@ describe('Equation Functions - Ann', () => {
         staticHeight,
         staticWidth,
       },
+      left: {
+        symbol: 'bracketNew',
+        side: 'left',
+        lineWidth: 0.01,
+        sides: 10,
+        tipWidth: 0.003,
+        staticSize: false,
+      },
+      right: {
+        symbol: 'bracketNew',
+        side: 'right',
+        lineWidth: 0.01,
+        sides: 10,
+        tipWidth: 0.003,
+        staticSize: false,
+      },
     };
     functions = {
       single: () => {
@@ -144,6 +160,32 @@ describe('Equation Functions - Ann', () => {
               },
             },
           },
+          left: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  left: {
+                    symbol: 'left',
+                  },
+                  right: {
+                    symbol: 'right',
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          bracAnnotation: {
+            content: {
+              annBrac: {
+                content: 'a',
+                left: 'left',
+                right: 'right',
+              },
+            },
+            scale: 1,
+          },
         });
         diagram.elements = eqn;
       },
@@ -157,6 +199,28 @@ describe('Equation Functions - Ann', () => {
     const b = eqn._b.getBoundingRect('diagram');
     expect(round(a.top)).toBe(round(b.bottom));
     expect(round(a.right)).toBe(round(b.left));
+  });
+  test('Simple Left', () => {
+    functions.single();
+    eqn.showForm('left');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const left = eqn._left.getBoundingRect('diagram');
+    const right = eqn._right.getBoundingRect('diagram');
+    expect(round(left.left)).toBe(0);
+    expect(round(a.left)).toBe(round(left.right));
+    expect(round(right.left)).toBe(round(a.right));
+  });
+  test.only('Bracket Annotation', () => {
+    functions.single();
+    eqn.showForm('bracAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const left = eqn._left.getBoundingRect('diagram');
+    const right = eqn._right.getBoundingRect('diagram');
+    expect(round(left.left)).toBe(0);
+    expect(round(a.left)).toBe(round(left.right + 0.03));
+    expect(round(right.left)).toBe(round(a.right + 0.03));
   });
   test('Multi Annotation', () => {
     functions.single();
