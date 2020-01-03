@@ -646,7 +646,7 @@ export class EquationFunctions {
     if (name === 'scale') { return this.scale(params); }   // $FlowFixMe
     if (name === 'container') { return this.container(params); }  // $FlowFixMe
     if (name === 'ann') { return this.ann(params); }
-    if (name === 'annBrac') { return this.annBrac(params); }
+    // if (name === 'annBrac') { return this.annBrac(params); }
     // Add container - where you fix the ascent, descent, and width
     // (content is centered in width) - Content spills out of container by default
     return null;
@@ -699,7 +699,7 @@ export class EquationFunctions {
     );
   }
 
-  annBrac(
+  brac(
     optionsOrArray: TypeBracketObject | TypeBracketArray,
   ) {
     let content;
@@ -727,18 +727,6 @@ export class EquationFunctions {
         minContentDescent, height, descent,
       } = optionsOrArray);
     }
-    // let leftBracket = null;
-    // if (left != null) {
-    //   leftBracket = this.getExistingOrAddSymbol(left);
-    // }
-    // let rightBracket = null;
-    // if (right != null) {
-    //   rightBracket = this.getExistingOrAddSymbol(right);
-    // }
-    // const contentArray = [];
-    // if (content != null) {
-    //   contentArray.push(this.contentToElement(content));
-    // }
     const defaultOptions = {
       insideSpace: 0.03,
       outsideSpace: 0,
@@ -785,7 +773,7 @@ export class EquationFunctions {
         minContentDescent: options.minContentDescent,
         descent: options.descent,
         height: options.height,
-      }
+      };
     }
     return this.ann({
       content,
@@ -1872,7 +1860,7 @@ export class EquationFunctions {
     );
   }
 
-  brac(
+  bracLegacy(
     optionsOrArray: TypeBracketObject | TypeBracketArray,
   ) {
     let content;
