@@ -82,9 +82,9 @@ export default class EquationSymbols {
     if (name === 'bracket') {         // $FlowFixMe
       return this.bracket(options);
     }
-    if (name === 'bracketNew') {         // $FlowFixMe
-      return this.bracketNew(options);
-    }
+    // if (name === 'bracketNew') {         // $FlowFixMe
+    //   return this.bracketNew(options);
+    // }
     if (name === 'squareBracket') {         // $FlowFixMe
       return this.squareBracket(options);
     }
@@ -429,7 +429,7 @@ export default class EquationSymbols {
     return cross;
   }
 
-  bracket(options: {
+  bracketLegacy(options: {
     side?: 'left' | 'right' | 'top' | 'bottom',
     color?: Array<number>,
     lineWidth?: number,
@@ -460,7 +460,7 @@ export default class EquationSymbols {
     )).symbol;
   }
 
-  bracketNew(options: {
+  bracket(options: {
     side?: 'left' | 'right' | 'top' | 'bottom',
     color?: Array<number>,
     lineWidth?: number,
