@@ -547,7 +547,8 @@ export default class EquationSymbols {
       new Transform('brace').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-    )).symbol;
+      'strip',
+    ));
   }
 
   bar(options: {
