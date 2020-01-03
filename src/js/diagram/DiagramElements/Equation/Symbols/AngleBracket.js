@@ -2,7 +2,7 @@
 import {
   Point, Line,
 } from '../../../../tools/g2';
-import Bracket from './Bracket';
+import Bracket from './BracketNew';
 
 export default class Bar extends Bracket {
   // eslint-disable-next-line class-methods-use-this
@@ -73,37 +73,36 @@ export default class Bar extends Bracket {
   //   - Calculate Tip Width = w - Dh
 
   // eslint-disable-next-line class-methods-use-this
-  getPoints() {
-    return (options: Object, widthIn: number, height: number) => {
-      const { side } = options;
-      const { lineWidth, width } = this.getDefaultValues(height, widthIn, options);
-      const line = new Line(new Point(0, 0), new Point(width, height / 2));
-      const theta = Math.acos(lineWidth / line.distance);
-      const beta = Math.PI / 2 - theta;
-      const alpha = line.ang + beta;
-      const tipWidth = width - height / 2 / Math.tan(alpha);
+  getLeftPoints(options: Object, widthIn: number, height: number) {
+    // const { side } = options;
+    const { lineWidth, width } = this.getVerticalDefaultValues(height, widthIn, options);
+    const line = new Line(new Point(0, 0), new Point(width, height / 2));
+    const theta = Math.acos(lineWidth / line.distance);
+    const beta = Math.PI / 2 - theta;
+    const alpha = line.ang + beta;
+    const tipWidth = width - height / 2 / Math.tan(alpha);
 
-      const leftPoints = [
-        new Point(width - tipWidth, 0),
-        new Point(0, height / 2),
-        new Point(width - tipWidth, height),
-      ];
-      const rightPoints = [
-        new Point(width, 0),
-        new Point(tipWidth, height / 2),
-        new Point(width, height),
-      ];
+    const leftPoints = [
+      new Point(width - tipWidth, 0),
+      new Point(0, height / 2),
+      new Point(width - tipWidth, height),
+    ];
+    const rightPoints = [
+      new Point(width, 0),
+      new Point(tipWidth, height / 2),
+      new Point(width, height),
+    ];
 
-      // if (side === 'top' || side === 'bottom') {
-      //   return this.getBracketPoints(leftPoints, rightPoints, side, height, width);
-      // }
-      return this.getBracketPoints(leftPoints, rightPoints, side, width, height);
-    };
+    // if (side === 'top' || side === 'bottom') {
+    //   return this.getBracketPoints(leftPoints, rightPoints, side, height, width);
+    // }
+    return [leftPoints, rightPoints, width, height];
+    // return this.getBracketPoints(leftPoints, rightPoints, side, width, height);
   }
 
   /* eslint-disable class-methods-use-this */
   // $FlowFixMe
-  getDefaultValues(height: number, width: ?number, options: {
+  getVerticalDefaultValues(height: number, width: ?number, options: {
       lineWidth?: number,
       width?: number,
     }) {

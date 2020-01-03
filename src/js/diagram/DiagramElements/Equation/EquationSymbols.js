@@ -492,6 +492,33 @@ export default class EquationSymbols {
     ));
   }
 
+  angleBracket(options: {
+    side?: 'left' | 'right' | 'top' | 'bottom',
+    color?: Array<number>,
+    lineWidth?: number,
+    width?: number,
+    draw?: 'dynamic' | 'static',
+    staticHeight?: number | 'first',
+  }) {
+    const defaultOptions = {
+      side: 'left',
+      lineWidth: null,
+      width: null,
+      color: this.defaultColor,
+      draw: 'dynamic',
+      staticHeight: 'first',
+    };
+    const optionsToUse = joinObjects(defaultOptions, options);
+    return (new AngleBracket(
+      this.shapes.webgl,
+      optionsToUse.color,
+      new Transform('bar').scale(1, 1).translate(0, 0),
+      this.shapes.limits,
+      optionsToUse,
+      'strip',
+    ));
+  }
+
   brace(options: {
     side?: 'left' | 'right' | 'top' | 'bottom',
     color?: Array<number>,
@@ -582,29 +609,5 @@ export default class EquationSymbols {
     )).symbol;
   }
 
-  angleBracket(options: {
-    side?: 'left' | 'right' | 'top' | 'bottom',
-    color?: Array<number>,
-    lineWidth?: number,
-    width?: number,
-    draw?: 'dynamic' | 'static',
-    staticHeight?: number | 'first',
-  }) {
-    const defaultOptions = {
-      side: 'left',
-      lineWidth: null,
-      width: null,
-      color: this.defaultColor,
-      draw: 'dynamic',
-      staticHeight: 'first',
-    };
-    const optionsToUse = joinObjects(defaultOptions, options);
-    return (new AngleBracket(
-      this.shapes.webgl,
-      optionsToUse.color,
-      new Transform('bar').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
-      optionsToUse,
-    )).symbol;
-  }
+  
 }
