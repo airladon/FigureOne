@@ -185,7 +185,7 @@ export default class Bracket extends Symbol {
       bounds.top = bounds.bottom + glyphHeight;
       bounds.right = bounds.left + glyphWidth;
     } else if (options.side === 'right') {
-      bounds.left = leftIn + widthIn;
+      bounds.left = leftIn;
       bounds.bottom = bottomIn;
       bounds.top = bounds.bottom + glyphHeight;
       bounds.right = bounds.left + glyphWidth;
@@ -193,12 +193,12 @@ export default class Bracket extends Symbol {
       bounds.bottom = bottomIn;
       bounds.top = bottomIn + glyphHeight;
       bounds.left = leftIn + widthIn / 2 - glyphWidth / 2;
-      bounds.right = bounds.left + glyphWidth / 2;
+      bounds.right = bounds.left + glyphWidth;
     } else {
       bounds.top = bottomIn;
       bounds.bottom = bottomIn - glyphHeight;
       bounds.left = leftIn + widthIn / 2 - glyphWidth / 2;
-      bounds.right = bounds.left + glyphWidth / 2;
+      bounds.right = bounds.left + glyphWidth;
     }
     bounds.width = glyphWidth;
     bounds.height = glyphHeight;

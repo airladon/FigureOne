@@ -784,6 +784,131 @@ export class EquationFunctions {
     });
   }
 
+
+  bar(
+    optionsOrArray: TypeBarObject | TypeBarArray,
+    forceOptions: Object = {},
+  ) {
+    let content;
+    let symbol;
+    let side;
+    let space;
+    let overhang;
+    let length;
+    let left;
+    let right;
+    let top;
+    let bottom;
+    let inSize;
+    let minContentHeight;
+    let minContentDescent;
+    let minContentAscent;
+    let descent;
+    const defaultOptions = {
+      side: 'top',
+      space: 0.03,
+      overhang: 0,
+      length: null,
+      left: null,
+      right: null,
+      top: null,
+      bottom: null,
+      inSize: true,
+      minContentDescent: null,
+      minContentHeight: null,
+      minContentAscent: null,
+      descent: null,
+    };
+    if (Array.isArray(optionsOrArray)) {
+      [
+        content, symbol, inSize, space, overhang,
+        length, left, right, top,
+        bottom, side,
+      ] = optionsOrArray;
+    } else {
+      ({
+        content, symbol, space, overhang,
+        length, left, right, top,
+        bottom, inSize, side, minContentHeight, minContentDescent,
+        minContentAscent, descent,
+      } = optionsOrArray);
+    }
+    const optionsIn = {
+      side,
+      space,
+      overhang,
+      length,
+      left,
+      right,
+      top,
+      bottom,
+      inSize,
+      minContentHeight,
+      minContentDescent,
+      minContentAscent,
+      descent,
+    };
+    const options = joinObjects({}, defaultOptions, optionsIn, forceOptions);
+
+    const glyphs = {};
+    if (options.side === 'top') {
+      glyphs.top = {
+        symbol,
+        space: options.space,
+        overhang: options.overhang,
+        leftSpace: options.left,
+        rightSpace: options.right,
+        width: options.length,
+      };
+    }
+    if (options.side === 'bottom') {
+      glyphs.bottom = {
+        symbol,
+        space: options.space,
+        overhang: options.overhang,
+        leftSpace: options.left,
+        rightSpace: options.right,
+        width: options.length,
+      };
+    }
+    if (options.side === 'left') {
+      glyphs.left = {
+        symbol,
+        space: options.space,
+        overhang: options.overhang,
+        topSpace: options.top,
+        bottomSpace: options.bottom,
+        height: options.length,
+        minContentHeight: options.minContentHeight,
+        minContentDescent: options.minContentDescent,
+        minContentAscent: options.minContentAscent,
+        descent: options.descent,
+      };
+    }
+    if (options.side === 'right') {
+      glyphs.right = {
+        symbol,
+        space: options.space,
+        overhang: options.overhang,
+        topSpace: options.top,
+        bottomSpace: options.bottom,
+        height: options.length,
+        minContentHeight: options.minContentHeight,
+        minContentDescent: options.minContentDescent,
+        minContentAscent: options.minContentAscent,
+        descent: options.descent,
+      };
+    }
+    return this.ann({
+      content,
+      glyphs,
+      inSize,
+      // leftSpace: options.outsideSpace,
+      // rightSpace: options.outsideSpace,
+    });
+  }
+
+
   ann(optionsIn: {
     content: ElementInterface,
     annotation?: TypeAnnotation,
@@ -802,6 +927,7 @@ export class EquationFunctions {
         symbol: string,
         annotations?: Array<TypeAnnotation>,
         space?: number;
+        overhang?: number,
         topSpace?: number;
         bottomSpace?: number;
         minContentHeight?: number,
@@ -814,6 +940,7 @@ export class EquationFunctions {
         symbol: string,
         annotations?: Array<TypeAnnotation>,
         space?: number;
+        overhang?: number,
         topSpace?: number;
         bottomSpace?: number;
         minContentHeight?: number,
@@ -827,18 +954,18 @@ export class EquationFunctions {
         annotations?: Array<TypeAnnotation>,
         space?: number;
         overhang?: number,
-        length?: number,
-        left?: number,
-        right?: number,
+        width?: number,
+        leftSpace?: number,
+        rightSpace?: number,
       },
       bottom: {
         symbol: string,
         annotations?: Array<TypeAnnotation>,
         space?: number;
         overhang?: number,
-        length?: number,
-        left?: number,
-        right?: number,
+        width?: number,
+        leftSpace?: number,
+        rightSpace?: number,
       },
     },
     inSize?: boolean,
@@ -858,13 +985,11 @@ export class EquationFunctions {
       },
       left: {
         space: 0,
-        topSpace: 0,
-        bottomSpace: 0,
+        overhang: 0,
       },
       right: {
         space: 0,
-        topSpace: 0,
-        bottomSpace: 0,
+        overhang: 0,
       },
       top: {
         space: 0,
@@ -1506,7 +1631,7 @@ export class EquationFunctions {
     return this.bar(optionsOrArray, { side: 'bottom' });
   }
 
-  bar(
+  barLegacy(
     optionsOrArray: TypeBarObject | TypeBarArray,
     forceOptions: Object = {},
   ) {
