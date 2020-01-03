@@ -287,7 +287,6 @@ export default class BaseAnnotationFunction implements ElementInterface {
     const {
       inSize, useFullContent, space, topSpace, bottomSpace, leftSpace, rightSpace,
     } = this.options;
-
     const maxBounds = new Bounds();
 
     const contentBounds = new Bounds();
@@ -311,11 +310,11 @@ export default class BaseAnnotationFunction implements ElementInterface {
 
     let xLocationOffset = 0;
 
-    const topSpaceToUse = topSpace != null ? topSpace : (space || 0);
-    const bottomSpaceToUse = bottomSpace != null ? bottomSpace : (space || 0);
-    const leftSpaceToUse = leftSpace != null ? leftSpace : (space || 0);
-    const rightSpaceToUse = rightSpace != null ? rightSpace : (space || 0);
-    maxBounds.offset(topSpaceToUse, rightSpaceToUse, -leftSpaceToUse, -bottomSpaceToUse);
+    const topSpaceToUse = (topSpace != null ? topSpace : (space || 0)) * scale;
+    const bottomSpaceToUse = (bottomSpace != null ? bottomSpace : (space || 0)) * scale;
+    const leftSpaceToUse = (leftSpace != null ? leftSpace : (space || 0)) * scale;
+    const rightSpaceToUse = (rightSpace != null ? rightSpace : (space || 0)) * scale;
+    maxBounds.offset(topSpaceToUse, rightSpaceToUse, -bottomSpaceToUse, -leftSpaceToUse);
 
     if (inSize) {
       this.width = maxBounds.width;
@@ -405,7 +404,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     } = this.glyphs[glyphName];
     const glyph = this.glyphs[glyphName];
     const contentBounds = new Bounds();
-    
+
     contentBounds.copyFrom(contentBoundsIn);
     if (minContentDescent != null) {
       contentBounds.descent = Math.max(minContentDescent, contentBounds.descent);

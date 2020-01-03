@@ -565,6 +565,9 @@ export class EquationFunctions {
     if (content instanceof Elements) {
       return content;
     }
+    if (content instanceof BaseAnnotationFunction) {
+      return content;
+    }
     if (typeof content === 'string') {
       return this.stringToElement(content);
     }
@@ -759,31 +762,34 @@ export class EquationFunctions {
       inSize,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
-
+    const glyphs = {};
+    if (left) {
+      glyphs.left = {
+        symbol: left,
+        space: options.insideSpace,
+        topSpace: options.topSpace,
+        bottomSpace: options.bottomSpace,
+        minContentHeight: options.minContentHeight,
+        minContentDescent: options.minContentDescent,
+        descent: options.descent,
+        height: options.height,
+      };
+    }
+    if (right) {
+      glyphs.right = {
+        symbol: right,
+        space: options.insideSpace,
+        topSpace: options.topSpace,
+        bottomSpace: options.bottomSpace,
+        minContentHeight: options.minContentHeight,
+        minContentDescent: options.minContentDescent,
+        descent: options.descent,
+        height: options.height,
+      }
+    }
     return this.ann({
       content,
-      glyphs: {
-        left: {
-          symbol: left,
-          space: options.insideSpace,
-          topSpace: options.topSpace,
-          bottomSpace: options.bottomSpace,
-          minContentHeight: options.minContentHeight,
-          minContentDescent: options.minContentDescent,
-          descent: options.descent,
-          height: options.height,
-        },
-        right: {
-          symbol: right,
-          space: options.insideSpace,
-          topSpace: options.topSpace,
-          bottomSpace: options.bottomSpace,
-          minContentHeight: options.minContentHeight,
-          minContentDescent: options.minContentDescent,
-          descent: options.descent,
-          height: options.height,
-        },
-      },
+      glyphs,
       inSize,
       leftSpace: options.outsideSpace,
       rightSpace: options.outsideSpace,
@@ -912,7 +918,6 @@ export class EquationFunctions {
     fillAnnotations(annotationsToUse);
 
     const glyphsToUse = {};
-
     if (glyphs != null && glyphs.encompass != null) {
       glyphsToUse.encompass = {};
       fillAnnotations(glyphs.encompass.annotations);
@@ -929,6 +934,7 @@ export class EquationFunctions {
       glyphsToUse.left.annotations = glyphs.left.annotations || [];
       glyphsToUse.left.glyph = this.getExistingOrAddSymbol(glyphs.left.symbol);
     }
+
     if (glyphs != null && glyphs.right != null) {
       glyphsToUse.right = {};
       fillAnnotations(glyphs.right.annotations);
@@ -936,7 +942,6 @@ export class EquationFunctions {
       glyphsToUse.right.annotations = glyphs.right.annotations || [];
       glyphsToUse.right.glyph = this.getExistingOrAddSymbol(glyphs.right.symbol);
     }
-
     const options = joinObjects(defaultOptions, optionsIn);
     return new BaseAnnotationFunction(  // $FlowFixMe
       this.contentToElement(content),

@@ -28,23 +28,23 @@ describe('Equation Functions - Brackets', () => {
       a: 'a',
       b: 'b',
       lb: {
-        symbol: 'bracket', side: 'left', lineWidth: 0.01, endLength: 0.03,
+        symbol: 'bracketNew', side: 'left', lineWidth: 0.01, endLength: 0.03,
       },
       rb: {
-        symbol: 'bracket', side: 'right', lineWidth: 0.01, endLength: 0.03,
+        symbol: 'bracketNew', side: 'right', lineWidth: 0.01, endLength: 0.03,
       },
     };
     functions = {
       single: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
-        const brac = e.brac.bind(e);
+        const annBrac = e.annBrac.bind(e);
         eqn.addElements(elements);
         eqn.addForms({
           // Full Object
           0: {
             content: {
-              brac: {
+              annBrac: {
                 content: 'a',
                 left: 'lb',
                 right: 'rb',
@@ -58,7 +58,7 @@ describe('Equation Functions - Brackets', () => {
           },
           // Method Object
           1: {
-            brac: {
+            annBrac: {
               content: 'a',
               left: 'lb',
               right: 'rb',
@@ -70,15 +70,15 @@ describe('Equation Functions - Brackets', () => {
             },
           },
           // Method Array
-          2: { brac: ['a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1] },
+          2: { annBrac: ['a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1] },
           // Function with Method Array
-          3: e.brac(['a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1]),
+          3: e.annBrac(['a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1]),
           // Function with parameters
           // 4: e.brac('a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1),
           // // Bound Function with parameters
           // 5: brac('a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1),
           // Bound Function with Object
-          4: brac({
+          4: annBrac({
             content: 'a',
             left: 'lb',
             right: 'rb',
@@ -93,7 +93,7 @@ describe('Equation Functions - Brackets', () => {
       parameterSteps: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
-        const brac = e.brac.bind(e);
+        const annBrac = e.annBrac.bind(e);
         eqn.addElements(elements);
         eqn.addForms({
           // without
@@ -101,7 +101,7 @@ describe('Equation Functions - Brackets', () => {
           base: {
             content: [
               {
-                brac: {
+                annBrac: {
                   content: 'a',
                   left: 'lb',
                   right: 'rb',
@@ -121,85 +121,85 @@ describe('Equation Functions - Brackets', () => {
             scale: 1,
           },
           insideSpace: {
-            content: [brac([
+            content: [annBrac([
               'a', 'lb', 'rb', true, 0.2, 0.1, 0.1, 0.1, null, null, null, null,
             ]), 'b'],
             scale: 1,
           },
           outsideSpace: {
-            content: [brac([
+            content: [annBrac([
               'a', 'lb', 'rb', true, 0.1, 0.2, 0.1, 0.1, null, null, null, null,
             ]), 'b'],
             scale: 1,
           },
           topSpace: {
-            content: [brac([
+            content: [annBrac([
               'a', 'lb', 'rb', true, 0.1, 0.1, 0.2, 0.1, null, null, null, null,
             ]), 'b'],
             scale: 1,
           },
           bottomSpace: {
-            content: [brac([
+            content: [annBrac([
               'a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.2, null, null, null, null,
             ]), 'b'],
             scale: 1,
           },
           minContentHeight: {
-            content: [brac([
+            content: [annBrac([
               'a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1, 1, null, null, null,
             ]), 'b'],
             scale: 1,
           },
           minContentDescent: {
-            content: [brac([
+            content: [annBrac([
               'a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1, null, 1, null, null,
             ]), 'b'],
             scale: 1,
           },
           minContentDescentWithSmallMinHeight: {
-            content: [brac([
+            content: [annBrac([
               'a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1, 0.1, 1, null, null,
             ]), 'b'],
             scale: 1,
           },
           minContentDescentWithLargeMinHeight: {
-            content: [brac([
+            content: [annBrac([
               'a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1, 2, 1, null, null,
             ]), 'b'],
             scale: 1,
           },
           forceDecentLessThanActualDescent: {
-            content: [brac([
+            content: [annBrac([
               'a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1, null, null, null, 0.004,
             ]), 'b'],
             scale: 1,
           },
           forceDecentGreaterThanActualDescent: {
-            content: [brac([
+            content: [annBrac([
               'a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1, null, null, null, 0.1,
             ]), 'b'],
             scale: 1,
           },
           forceHeightLessThanActualHeight: {
-            content: [brac([
+            content: [annBrac([
               'a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1, null, null, 0.05, null,
             ]), 'b'],
             scale: 1,
           },
           forceHeightGreaterThanActualHeight: {
-            content: [brac([
+            content: [annBrac([
               'a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1, null, null, 1, null,
             ]), 'b'],
             scale: 1,
           },
           notInSize: {
-            content: [brac([
+            content: [annBrac([
               'a', 'lb', 'rb', false, 0.1, 0.1, 0.1, 0.1, null, null, null, null,
             ]), 'b'],
             scale: 1,
           },
           noLeftBracket: {
-            content: [brac([
+            content: [annBrac([
               'a', '', 'rb', true, 0.1, 0.1, 0.1, 0.1, null, null, null, null,
             ]), 'b'],
             scale: 1,
@@ -235,8 +235,8 @@ describe('Equation Functions - Brackets', () => {
       const newA = eqn._a.getPosition();
       const newR = eqn._rb.getPosition();
       // 0.04 + 0.1 = 0.14
-      expect(round(newA.x)).toBe(0);
-      expect(round(newR.x)).toBe(0.14);
+      expect(round(newA.x)).toBe(0.1);
+      expect(round(newR.x)).toBe(0.24);
     });
     test('notInSize', () => {
       eqn.showForm('notInSize');
