@@ -2,8 +2,7 @@
 import {
   Point, Transform,
 } from '../../../../tools/g2';
-import Bracket from './Bracket';
-
+import Bracket from './BracketNew';
 
 export default class Brace extends Bracket {
   // eslint-disable-next-line class-methods-use-this
@@ -133,81 +132,79 @@ export default class Brace extends Bracket {
   //
   //
   // eslint-disable-next-line class-methods-use-this
-  getPoints() {
-    return (options: Object, widthIn: number, height: number) => {
-      const {
-        sides, side,
-      } = options;
+  getLeftPoints(options: Object, widthIn: number, height: number) {
+    const {
+      sides, side,
+    } = options;
 
-      const { lineWidth, width, tipWidth } = this.getDefaultValues(height, widthIn, options);
+    const { lineWidth, width, tipWidth } = this.getVerticalDefaultValues(height, widthIn, options);
 
-      const outsideRadius = (width / 2 + lineWidth / 2);
-      const h = outsideRadius - tipWidth;
-      const w = outsideRadius - lineWidth;
-      // const w = lineWidth;
-      const insideRadius = (w ** 2 + h ** 2) / (2 * w);
-      const leftPoints = [];
-      const rightPoints = [];
-      const outsideStep = Math.PI / 2 / sides;
+    const outsideRadius = (width / 2 + lineWidth / 2);
+    const h = outsideRadius - tipWidth;
+    const w = outsideRadius - lineWidth;
+    // const w = lineWidth;
+    const insideRadius = (w ** 2 + h ** 2) / (2 * w);
+    const leftPoints = [];
+    const rightPoints = [];
+    const outsideStep = Math.PI / 2 / sides;
 
-      const insideStep = Math.asin(h / insideRadius) / sides;
+    const insideStep = Math.asin(h / insideRadius) / sides;
 
-      const insidePoints = [];
-      const outsidePoints = [];
-      for (let i = 0; i < sides + 1; i += 1) {
-        const outsideAngle = i * outsideStep;
-        const insideAngle = i * insideStep;
-        outsidePoints.push(new Point(
-          outsideRadius * Math.cos(outsideAngle),
-          outsideRadius * Math.sin(outsideAngle),
-        ));
-        insidePoints.push(new Point(
-          insideRadius * Math.cos(insideAngle) - insideRadius + outsideRadius - lineWidth,
-          insideRadius * Math.sin(insideAngle),
-        ));
-      }
+    const insidePoints = [];
+    const outsidePoints = [];
+    for (let i = 0; i < sides + 1; i += 1) {
+      const outsideAngle = i * outsideStep;
+      const insideAngle = i * insideStep;
+      outsidePoints.push(new Point(
+        outsideRadius * Math.cos(outsideAngle),
+        outsideRadius * Math.sin(outsideAngle),
+      ));
+      insidePoints.push(new Point(
+        insideRadius * Math.cos(insideAngle) - insideRadius + outsideRadius - lineWidth,
+        insideRadius * Math.sin(insideAngle),
+      ));
+    }
 
-      // const topCurveCenter = new Point(width, height - outsideRadius);
-      let m = (new Transform().scale(-1, 1).translate(
-        width, height - outsideRadius,
-      )).m();
-      for (let i = 0; i < sides + 1; i += 1) {
-        leftPoints.push(outsidePoints[sides - i].transformBy(m));
-        rightPoints.push(insidePoints[sides - i].transformBy(m));
-      }
+    // const topCurveCenter = new Point(width, height - outsideRadius);
+    let m = (new Transform().scale(-1, 1).translate(
+      width, height - outsideRadius,
+    )).m();
+    for (let i = 0; i < sides + 1; i += 1) {
+      leftPoints.push(outsidePoints[sides - i].transformBy(m));
+      rightPoints.push(insidePoints[sides - i].transformBy(m));
+    }
 
-      m = (new Transform().scale(1, -1).translate(
-        0,
-        height / 2 - tipWidth / 2 + outsideRadius,
-      )).m();
-      for (let i = 0; i < sides + 1; i += 1) {
-        leftPoints.push(insidePoints[i].transformBy(m));
-        rightPoints.push(outsidePoints[i].transformBy(m));
-      }
+    m = (new Transform().scale(1, -1).translate(
+      0,
+      height / 2 - tipWidth / 2 + outsideRadius,
+    )).m();
+    for (let i = 0; i < sides + 1; i += 1) {
+      leftPoints.push(insidePoints[i].transformBy(m));
+      rightPoints.push(outsidePoints[i].transformBy(m));
+    }
 
-      m = (new Transform().translate(
-        0,
-        height / 2 + tipWidth / 2 - outsideRadius,
-      )).m();
-      for (let i = 0; i < sides + 1; i += 1) {
-        leftPoints.push(insidePoints[sides - i].transformBy(m));
-        rightPoints.push(outsidePoints[sides - i].transformBy(m));
-      }
+    m = (new Transform().translate(
+      0,
+      height / 2 + tipWidth / 2 - outsideRadius,
+    )).m();
+    for (let i = 0; i < sides + 1; i += 1) {
+      leftPoints.push(insidePoints[sides - i].transformBy(m));
+      rightPoints.push(outsidePoints[sides - i].transformBy(m));
+    }
 
-      m = (new Transform().scale(-1, -1).translate(
-        width,
-        outsideRadius,
-      )).m();
-      for (let i = 0; i < sides + 1; i += 1) {
-        leftPoints.push(outsidePoints[i].transformBy(m));
-        rightPoints.push(insidePoints[i].transformBy(m));
-      }
+    m = (new Transform().scale(-1, -1).translate(
+      width,
+      outsideRadius,
+    )).m();
+    for (let i = 0; i < sides + 1; i += 1) {
+      leftPoints.push(outsidePoints[i].transformBy(m));
+      rightPoints.push(insidePoints[i].transformBy(m));
+    }
 
-      // if (side === 'top' || side === 'bottom') {
-      //   return this.getBracketPoints(leftPoints, rightPoints, side, height, width);
-      // }
-      return this.getBracketPoints(leftPoints, rightPoints, side, width, height);
-    };
+    // if (side === 'top' || side === 'bottom') {
+    //   return this.getBracketPoints(leftPoints, rightPoints, side, height, width);
+    // }
+    return [leftPoints, rightPoints, width, height];
   }
 
   // Values that look good:
@@ -218,7 +215,7 @@ export default class Brace extends Bracket {
   //   0.3            0.05          0.015
   //   0.2            0.03          0.012
   // eslint-disable-next-line class-methods-use-this
-  getDefaultValues(height: number, width: ?number, options: {
+  getVerticalDefaultValues(height: number, width: ?number, options: {
       lineWidth?: number,
       width?: number,
       tipWidth?: number,
