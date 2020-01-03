@@ -16,7 +16,6 @@ export default class Bracket extends Symbol {
     let rightPoints;
     let width;
     let height;
-
     if (side === 'left' || side === 'right') {
       [leftPoints, rightPoints, width, height] = this.getLeftPoints(
         options, widthIn, heightIn,
@@ -167,14 +166,17 @@ export default class Bracket extends Symbol {
     const bounds = new Bounds();
     let glyphWidth = width;
     let glyphHeight = height;
-    if (options.draw === 'static') {
-      const { staticWidth, staticHeight } = options;
-      if (options.side === 'left' || options.side === 'right') {
-        glyphWidth = staticWidth / staticHeight * height;
-      } else {
-        glyphHeight = staticHeight / staticWidth * width;
-      }
-    }
+    // if (options.draw === 'static') {
+    //   const { staticWidth, staticHeight } = options;
+    //   if (options.side === 'left' || options.side === 'right') {
+    //     console.log(widthIn, heightIn, width, height, staticWidth, staticHeight);
+    //     glyphWidth = height / staticHeight * width / height;
+    //     // glyphWidth = staticWidth / staticHeight * height;
+    //   } else {
+    //     glyphHeight = staticHeight / staticWidth * width;
+    //   }
+    // }
+    // console.log(glyphWidth, glyphHeight)
     if (options.side === 'left') {
       bounds.left = leftIn - glyphWidth;
       bounds.bottom = bottomIn;
