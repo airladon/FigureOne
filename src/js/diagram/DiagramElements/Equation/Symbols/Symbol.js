@@ -145,14 +145,6 @@ export default class Symbol {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getBounds() {
-    // eslint-disable-next-line no-unused-vars
-    return (options: Object, leftIn: number, bottomIn: number, widthIn: number, heightIn: number) => {
-      return new Bounds();
-    }
-  }
-
-  // eslint-disable-next-line class-methods-use-this
   // getHeight() {
   //   return (options: Object, width: number) => {
   //     const { height } = options;
@@ -180,6 +172,14 @@ export default class Symbol {
       ({ height } = options);
       ({ height } = this.getDefaultValues(height, width, options));
       return height;
+    };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getBounds() {
+    // eslint-disable-next-line no-unused-vars
+    return (options: Object, leftIn: number, bottomIn: number, widthIn: number, heightIn: number) => {
+      return new Bounds();
     };
   }
 

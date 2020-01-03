@@ -643,6 +643,7 @@ export class EquationFunctions {
     if (name === 'scale') { return this.scale(params); }   // $FlowFixMe
     if (name === 'container') { return this.container(params); }  // $FlowFixMe
     if (name === 'ann') { return this.ann(params); }
+    if (name === 'annBrac') { return this.annBrac(params); }
     // Add container - where you fix the ascent, descent, and width
     // (content is centered in width) - Content spills out of container by default
     return null;
@@ -695,6 +696,100 @@ export class EquationFunctions {
     );
   }
 
+  annBrac(
+    optionsOrArray: TypeBracketObject | TypeBracketArray,
+  ) {
+    let content;
+    let left;
+    let right;
+    let insideSpace;
+    let outsideSpace;
+    let topSpace;
+    let bottomSpace;
+    let minContentHeight;
+    let minContentDescent;
+    let descent;
+    let height;
+    let inSize;
+
+    if (Array.isArray(optionsOrArray)) {
+      [
+        content, left, right, inSize, insideSpace, outsideSpace,   // $FlowFixMe
+        topSpace, bottomSpace, minContentHeight, minContentDescent, height, descent,
+      ] = optionsOrArray;
+    } else {
+      ({
+        content, left, right, inSize, insideSpace, outsideSpace,
+        topSpace, bottomSpace, minContentHeight,
+        minContentDescent, height, descent,
+      } = optionsOrArray);
+    }
+    // let leftBracket = null;
+    // if (left != null) {
+    //   leftBracket = this.getExistingOrAddSymbol(left);
+    // }
+    // let rightBracket = null;
+    // if (right != null) {
+    //   rightBracket = this.getExistingOrAddSymbol(right);
+    // }
+    // const contentArray = [];
+    // if (content != null) {
+    //   contentArray.push(this.contentToElement(content));
+    // }
+    const defaultOptions = {
+      insideSpace: 0.03,
+      outsideSpace: 0,
+      topSpace: 0.05,
+      bottomSpace: 0.05,
+      minContentHeight: null,
+      minContentDescent: null,
+      descent: null,
+      height: null,
+      inSize: true,
+    };
+    const optionsIn = {
+      insideSpace,
+      outsideSpace,
+      topSpace,
+      bottomSpace,
+      minContentHeight,
+      minContentDescent,
+      descent,
+      height,
+      inSize,
+    };
+    const options = joinObjects({}, defaultOptions, optionsIn);
+
+    return this.ann({
+      content,
+      glyphs: {
+        left: {
+          symbol: left,
+          space: options.insideSpace,
+          topSpace: options.topSpace,
+          bottomSpace: options.bottomSpace,
+          minContentHeight: options.minContentHeight,
+          minContentDescent: options.minContentDescent,
+          descent: options.descent,
+          height: options.height,
+        },
+        right: {
+          symbol: right,
+          space: options.insideSpace,
+          topSpace: options.topSpace,
+          bottomSpace: options.bottomSpace,
+          minContentHeight: options.minContentHeight,
+          minContentDescent: options.minContentDescent,
+          descent: options.descent,
+          height: options.height,
+        },
+      },
+      inSize,
+      leftSpace: options.outsideSpace,
+      rightSpace: options.outsideSpace,
+    });
+  }
+
   ann(optionsIn: {
     content: ElementInterface,
     annotation?: TypeAnnotation,
@@ -709,15 +804,55 @@ export class EquationFunctions {
         bottomSpace?: number;
         rightSpace?: number;
       },
+      left: {
+        symbol: string,
+        annotations?: Array<TypeAnnotation>,
+        space?: number;
+        topSpace?: number;
+        bottomSpace?: number;
+        minContentHeight?: number,
+        minContentDescent?: number;
+        minContentAscent?: number,
+        descent?: number,
+        height?: number,
+      },
+      right: {
+        symbol: string,
+        annotations?: Array<TypeAnnotation>,
+        space?: number;
+        topSpace?: number;
+        bottomSpace?: number;
+        minContentHeight?: number,
+        minContentDescent?: number;
+        minContentAscent?: number,
+        descent?: number,
+        height?: number,
+      }
     },
     inSize?: boolean,
     useFullContent?: boolean,
+    space?: number,
+    topSpace?: number,
+    bottomSpace?: number,
+    leftSpace?: number,
+    rightSpace?: number,
   }) {
     const defaultOptions = {
       inSize: true,
       useFullContent: false,
+      space: 0,
       encompass: {
         space: 0,
+      },
+      left: {
+        space: 0,
+        topSpace: 0,
+        bottomSpace: 0,
+      },
+      right: {
+        space: 0,
+        topSpace: 0,
+        bottomSpace: 0,
       },
     };
     const {
@@ -781,15 +916,26 @@ export class EquationFunctions {
     if (glyphs != null && glyphs.encompass != null) {
       glyphsToUse.encompass = {};
       fillAnnotations(glyphs.encompass.annotations);
+      glyphsToUse.encompass = {};
+      fillAnnotations(glyphs.encompass.annotations);
+      joinObjects(glyphsToUse.encompass, defaultOptions.encompass, glyphs.encompass);
       glyphsToUse.encompass.annotations = glyphs.encompass.annotations || [];
       glyphsToUse.encompass.glyph = this.getExistingOrAddSymbol(glyphs.encompass.symbol);
-      glyphsToUse.encompass.space = glyphs.encompass.space != null ? glyphs.encompass.space : 0;
-      glyphsToUse.encompass.leftSpace = glyphs.encompass.leftSpace;
-      glyphsToUse.encompass.rightSpace = glyphs.encompass.rightSpace;
-      glyphsToUse.encompass.topSpace = glyphs.encompass.topSpace;
-      glyphsToUse.encompass.bottomSpace = glyphs.encompass.bottomSpace;
     }
-    // console.log(glyphsToUse)
+    if (glyphs != null && glyphs.left != null) {
+      glyphsToUse.left = {};
+      fillAnnotations(glyphs.left.annotations);
+      joinObjects(glyphsToUse.left, defaultOptions.left, glyphs.left);
+      glyphsToUse.left.annotations = glyphs.left.annotations || [];
+      glyphsToUse.left.glyph = this.getExistingOrAddSymbol(glyphs.left.symbol);
+    }
+    if (glyphs != null && glyphs.right != null) {
+      glyphsToUse.right = {};
+      fillAnnotations(glyphs.right.annotations);
+      joinObjects(glyphsToUse.right, defaultOptions.right, glyphs.right);
+      glyphsToUse.right.annotations = glyphs.right.annotations || [];
+      glyphsToUse.right.glyph = this.getExistingOrAddSymbol(glyphs.right.symbol);
+    }
 
     const options = joinObjects(defaultOptions, optionsIn);
     return new BaseAnnotationFunction(  // $FlowFixMe

@@ -8,6 +8,7 @@ import DiagramPrimitives from '../../DiagramPrimitives/DiagramPrimitives';
 // import Integral from './Symbols/Integral';
 // import SuperSub from './Elements/SuperSub';
 import Bracket from './Symbols/Bracket';
+import BracketNew from './Symbols/BracketNew';
 import Box from './Symbols/Box';
 import Radical from './Symbols/Radical';
 import Brace from './Symbols/Brace';
@@ -80,6 +81,9 @@ export default class EquationSymbols {
     // }
     if (name === 'bracket') {         // $FlowFixMe
       return this.bracket(options);
+    }
+    if (name === 'bracketNew') {         // $FlowFixMe
+      return this.bracketNew(options);
     }
     if (name === 'squareBracket') {         // $FlowFixMe
       return this.squareBracket(options);
@@ -454,6 +458,38 @@ export default class EquationSymbols {
       this.shapes.limits,
       optionsToUse,
     )).symbol;
+  }
+
+  bracketNew(options: {
+    side?: 'left' | 'right' | 'top' | 'bottom',
+    color?: Array<number>,
+    lineWidth?: number,
+    sides?: number,
+    width?: number,
+    tipWidth?: number,
+    draw?: 'static' | 'dynamic',
+    staticHeight?: number | 'first',
+  }) {
+    const defaultOptions = {
+      side: 'left',
+      color: this.defaultColor,
+      lineWidth: null,
+      sides: 10,
+      draw: 'dynamic',
+      staticHeight: 'first',
+      width: null,
+      tipWidth: null,
+      staticWidth: null,
+    };
+    const optionsToUse = joinObjects(defaultOptions, options);
+    return (new BracketNew(
+      this.shapes.webgl,
+      optionsToUse.color,
+      new Transform('bracket').scale(1, 1).translate(0, 0),
+      this.shapes.limits,
+      optionsToUse,
+      'strip',
+    ));
   }
 
   brace(options: {
