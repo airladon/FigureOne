@@ -403,7 +403,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
       return contentBoundsIn;
     }
     const {
-      space, topSpace, bottomSpace, minContentHeight,
+      space, overhang, topSpace, bottomSpace, minContentHeight,
       minContentDescent, minContentAscent,
       descent, height,
     } = this.glyphs[glyphName];
@@ -423,11 +423,13 @@ export default class BaseAnnotationFunction implements ElementInterface {
       contentBounds.ascent = -contentBounds.descent
                              + Math.max(minContentHeight, contentBounds.height);
     }
-    contentBounds.descent += scale * bottomSpace;
+    const topSpaceToUse = topSpace != null ? topSpace : overhang;
+    const bottomSpaceToUse = bottomSpace != null ? bottomSpace : overhang;
+    contentBounds.descent += scale * bottomSpaceToUse;
     if (descent != null) {
       contentBounds.descent = descent;
     }
-    contentBounds.ascent += scale * topSpace;
+    contentBounds.ascent += scale * topSpaceToUse;
     contentBounds.height = contentBounds.descent + contentBounds.ascent;
     if (height != null) {
       contentBounds.height = height;
@@ -446,10 +448,16 @@ export default class BaseAnnotationFunction implements ElementInterface {
       glyphLeft = contentBounds.left + contentBounds.width + space * scale;
     }
 
+    let glyphBottom = contentBounds.bottom;
+    if (descent == null && bottomSpace == null && height != null) {
+      glyphBottom = contentBounds.bottom + contentBounds.height / 2 - height / 2;
+      console.log(glyphBottom, height)
+    }
+
     const glyphBounds = glyph.glyph.getBounds(
       glyph.glyph.custom.options,
       glyphLeft,
-      contentBounds.bottom,
+      glyphBottom,
       null,
       contentBounds.height,
     );
@@ -476,7 +484,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
       return contentBoundsIn;
     }
     const {
-      space, overhang, length, left, right,
+      space, overhang, width, leftSpace, rightSpace,
     } = this.glyphs[glyphName];
 
     const glyph = this.glyphs[glyphName];
@@ -488,19 +496,21 @@ export default class BaseAnnotationFunction implements ElementInterface {
       glyphLength += 2 * overhang * scale;
       glyphLeft = contentBounds.left - overhang * scale;
     }
-    if (length != null) {
-      glyphLength = length * scale;
+    if (width != null) {
+      glyphLength = width * scale;
     }
 
-    if (left != null || right != null) {
-      glyphLength = (left * scale || 0) + contentBounds.width + (right * scale || 0);
-      if (left != null) {
-        glyphLeft = contentBounds.left - left * scale;
+    if (leftSpace != null || rightSpace != null) {
+      glyphLength = (leftSpace * scale || 0) + contentBounds.width + (rightSpace * scale || 0);
+      if (leftSpace != null) {
+        glyphLeft = contentBounds.left - leftSpace * scale;
       }
     }
 
-    if (overhang == null && left == null && length != null) {
-      glyphLeft = contentBounds.left + (contentBounds.width - length) / 2;
+    if (leftSpace == null && rightSpace == null && width != null) {
+      glyphLeft = contentBounds.left + (contentBounds.width - width) / 2;
+    } else if (leftSpace == null && rightSpace != null && width != null) {
+      glyphLeft = contentBounds.right + rightSpace * scale - width;
     }
     let glyphBottom;
     if (glyphName === 'top') {
@@ -516,11 +526,12 @@ export default class BaseAnnotationFunction implements ElementInterface {
       glyphLength,
       null,
     );
+
     const totalBounds = new Bounds();
     totalBounds.copyFrom(contentBounds);
     totalBounds.growWithSameBaseline(glyphBounds);
-
     glyph.width = glyphBounds.width;
+
     glyph.height = glyphBounds.height;
     glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);
     glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
