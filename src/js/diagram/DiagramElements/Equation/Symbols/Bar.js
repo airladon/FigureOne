@@ -2,34 +2,29 @@
 import {
   Point,
 } from '../../../../tools/g2';
-import Bracket from './Bracket';
+import Bracket from './BracketNew';
 
 
 export default class Bar extends Bracket {
   // eslint-disable-next-line class-methods-use-this
-  getPoints() {
-    return (options: Object, widthIn: number, height: number) => {
-      // const { lineWidth } = options;
-      const { side } = options;
+  getLeftPoints(options: Object, widthIn: number, height: number) {
+    const { lineWidth, width } = this.getVerticalDefaultValues(height, widthIn, options);
 
-      const { lineWidth, width } = this.getDefaultValues(height, widthIn, options);
+    const leftPoints = [
+      new Point(0, 0),
+      new Point(0, height),
+    ];
+    const rightPoints = [
+      new Point(lineWidth, 0),
+      new Point(lineWidth, height),
+    ];
 
-      const leftPoints = [
-        new Point(0, 0),
-        new Point(0, height),
-      ];
-      const rightPoints = [
-        new Point(lineWidth, 0),
-        new Point(lineWidth, height),
-      ];
-
-      return this.getBracketPoints(leftPoints, rightPoints, side, width, height);
-    };
+    return [leftPoints, rightPoints, width, height];
   }
 
   /* eslint-disable class-methods-use-this */
   // $FlowFixMe
-  getDefaultValues(height: number, width: ?number, options: {
+  getVerticalDefaultValues(height: number, width: ?number, options: {
       lineWidth?: number,
       width?: number,
     }) {
