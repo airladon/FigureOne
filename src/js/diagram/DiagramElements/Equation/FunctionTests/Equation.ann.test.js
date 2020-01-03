@@ -48,7 +48,7 @@ describe('Equation Functions - Ann', () => {
         staticWidth,
       },
       left: {
-        symbol: 'bracketNew',
+        symbol: 'bracket',
         side: 'left',
         lineWidth: 0.01,
         sides: 10,
@@ -56,8 +56,24 @@ describe('Equation Functions - Ann', () => {
         staticSize: false,
       },
       right: {
-        symbol: 'bracketNew',
+        symbol: 'bracket',
         side: 'right',
+        lineWidth: 0.01,
+        sides: 10,
+        tipWidth: 0.003,
+        staticSize: false,
+      },
+      top: {
+        symbol: 'bracket',
+        side: 'top',
+        lineWidth: 0.01,
+        sides: 10,
+        tipWidth: 0.003,
+        staticSize: false,
+      },
+      bottom: {
+        symbol: 'bracket',
+        side: 'bottom',
         lineWidth: 0.01,
         sides: 10,
         tipWidth: 0.003,
@@ -178,10 +194,26 @@ describe('Equation Functions - Ann', () => {
           },
           bracAnnotation: {
             content: {
-              annBrac: {
+              brac: {
                 content: 'a',
                 left: 'left',
                 right: 'right',
+              },
+            },
+            scale: 1,
+          },
+          topBottom: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  top: {
+                    symbol: 'top',
+                  },
+                  bottom: {
+                    symbol: 'bottom',
+                  },
+                },
               },
             },
             scale: 1,
@@ -221,6 +253,18 @@ describe('Equation Functions - Ann', () => {
     expect(round(left.left)).toBe(0);
     expect(round(a.left)).toBe(round(left.right + 0.03));
     expect(round(right.left)).toBe(round(a.right + 0.03));
+  });
+  test('Simple Top Bottom', () => {
+    functions.single();
+    eqn.showForm('topBottom');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const top = eqn._top.getBoundingRect('diagram');
+    const bottom = eqn._bottom.getBoundingRect('diagram');
+    // console.log(a)
+    // console.log(bottom)
+    expect(round(top.bottom)).toBe(a.top);
+    expect(round(bottom.top)).toBe(round(a.bottom));
   });
   test('Multi Annotation', () => {
     functions.single();

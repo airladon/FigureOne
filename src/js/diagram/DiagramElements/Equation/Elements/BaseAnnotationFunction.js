@@ -308,6 +308,11 @@ export default class BaseAnnotationFunction implements ElementInterface {
     const rightBounds = this.setVerticalGlyph(scale, contentBounds, 'right');
     maxBounds.growWithSameBaseline(rightBounds);
 
+    const topBounds = this.setHorizontalGlyph(scale, contentBounds, 'top');
+    maxBounds.growWithSameBaseline(topBounds);
+    const bottomBounds = this.setHorizontalGlyph(scale, contentBounds, 'bottom')
+    maxBounds.growWithSameBaseline(bottomBounds);
+
     let xLocationOffset = 0;
 
     const topSpaceToUse = (topSpace != null ? topSpace : (space || 0)) * scale;
@@ -464,35 +469,68 @@ export default class BaseAnnotationFunction implements ElementInterface {
       totalBounds.growWithSameBaseline(annotationBounds);
     });
     return totalBounds;
+  }
 
+  setHorizontalGlyph(scale: number, contentBoundsIn: Bounds, glyphName: 'top' | 'bottom') {
+    if (this.glyphs[glyphName] == null) {
+      return contentBoundsIn;
+    }
+    const {
+      space, overhang, length, left, right,
+    } = this.glyphs[glyphName];
 
-    // const left = leftSpace != null ? leftSpace : space;
-    // const right = rightSpace != null ? rightSpace : space;
-    // const top = topSpace != null ? topSpace : space;
-    // const bottom = bottomSpace != null ? bottomSpace : space;
-    // const contentBounds = new Bounds();
-    // contentBounds.copyFrom(contentBoundsIn);
-    // contentBounds.offset(top, right, -left, -bottom);
-    // const glyphBounds = glyph.glyph.custom.getBounds(
-    //   glyph.glyph.custom.options,
-    //   contentBounds.left,
-    //   contentBounds.bottom,
-    //   contentBounds.width,
-    //   contentBounds.height,
-    // );
-    // const totalBounds = new Bounds();
-    // totalBounds.copyFrom(glyphBounds);
-    // glyph.width = glyphBounds.width;
-    // glyph.height = glyphBounds.height;
-    // glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);
-    // glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
-    // glyph.annotations.forEach((annotation) => {
-    //   annotation.content.calcSize(glyph.location, scale * annotation.scale);
-    //   this.setAnnotationPosition(glyphBounds, glyph.location, annotation);
-    //   const annotationBounds = annotation.content.getBounds();
-    //   totalBounds.growWithSameBaseline(annotationBounds);
-    // });
-    // return totalBounds;
+    const glyph = this.glyphs[glyphName];
+    const contentBounds = new Bounds();
+    contentBounds.copyFrom(contentBoundsIn);
+    let glyphLength = contentBounds.width;
+    let glyphLeft = contentBounds.left;
+    if (overhang != null) {
+      glyphLength += 2 * overhang * scale;
+      glyphLeft = contentBounds.left - overhang * scale;
+    }
+    if (length != null) {
+      glyphLength = length * scale;
+    }
+
+    if (left != null || right != null) {
+      glyphLength = (left * scale || 0) + contentBounds.width + (right * scale || 0);
+      if (left != null) {
+        glyphLeft = contentBounds.left - left * scale;
+      }
+    }
+
+    if (overhang == null && left == null && length != null) {
+      glyphLeft = contentBounds.left + (contentBounds.width - length) / 2;
+    }
+    let glyphBottom;
+    if (glyphName === 'top') {
+      glyphBottom = contentBounds.top + space * scale;
+    } else {
+      glyphBottom = contentBounds.bottom - space * scale;
+    }
+
+    const glyphBounds = glyph.glyph.getBounds(
+      glyph.glyph.custom.options,
+      glyphLeft,
+      glyphBottom,
+      glyphLength,
+      null,
+    );
+    const totalBounds = new Bounds();
+    totalBounds.copyFrom(contentBounds);
+    totalBounds.growWithSameBaseline(glyphBounds);
+
+    glyph.width = glyphBounds.width;
+    glyph.height = glyphBounds.height;
+    glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);
+    glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
+    glyph.annotations.forEach((annotation) => {
+      annotation.content.calcSize(glyph.location, scale * annotation.scale);
+      this.setAnnotationPosition(glyphBounds, glyph.location, annotation);
+      const annotationBounds = annotation.content.getBounds();
+      totalBounds.growWithSameBaseline(annotationBounds);
+    });
+    return totalBounds;
   }
 
   // eslint-disable-next-line class-methods-use-this
