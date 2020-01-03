@@ -111,11 +111,13 @@ export default class Bracket extends Symbol {
       width?: number,
       tipWidth?: number,
     }) {
-    const out = this.getVerticalDefaultValues(contentHeight, contentWidth, options);
-    const { width } = out;
-    if (options.side === 'left' || 'right') {
+    let out = {};
+    if (options.side === 'left' || options.side === 'right') {
+      out = this.getVerticalDefaultValues(contentHeight, contentWidth, options);
       out.height = contentHeight;
     } else {
+      out = this.getVerticalDefaultValues(contentWidth, contentHeight, options);
+      const { width } = out;
       out.width = contentWidth;
       out.height = width;
     }
@@ -164,8 +166,8 @@ export default class Bracket extends Symbol {
       heightIn, widthIn, options,
     );
     const bounds = new Bounds();
-    let glyphWidth = width;
-    let glyphHeight = height;
+    const glyphWidth = width;
+    const glyphHeight = height;
     // if (options.draw === 'static') {
     //   const { staticWidth, staticHeight } = options;
     //   if (options.side === 'left' || options.side === 'right') {

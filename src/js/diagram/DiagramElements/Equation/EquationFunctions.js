@@ -821,7 +821,25 @@ export class EquationFunctions {
         minContentAscent?: number,
         descent?: number,
         height?: number,
-      }
+      },
+      top: {
+        symbol: string,
+        annotations?: Array<TypeAnnotation>,
+        space?: number;
+        overhang?: number,
+        length?: number,
+        left?: number,
+        right?: number,
+      },
+      bottom: {
+        symbol: string,
+        annotations?: Array<TypeAnnotation>,
+        space?: number;
+        overhang?: number,
+        length?: number,
+        left?: number,
+        right?: number,
+      },
     },
     inSize?: boolean,
     useFullContent?: boolean,
@@ -847,6 +865,14 @@ export class EquationFunctions {
         space: 0,
         topSpace: 0,
         bottomSpace: 0,
+      },
+      top: {
+        space: 0,
+        overhang: 0,
+      },
+      bottom: {
+        space: 0,
+        overhang: 0,
       },
     };
     const {
@@ -929,6 +955,22 @@ export class EquationFunctions {
       joinObjects(glyphsToUse.right, defaultOptions.right, glyphs.right);
       glyphsToUse.right.annotations = glyphs.right.annotations || [];
       glyphsToUse.right.glyph = this.getExistingOrAddSymbol(glyphs.right.symbol);
+    }
+
+    if (glyphs != null && glyphs.top != null) {
+      glyphsToUse.top = {};
+      fillAnnotations(glyphs.top.annotations);
+      joinObjects(glyphsToUse.top, defaultOptions.top, glyphs.top);
+      glyphsToUse.top.annotations = glyphs.top.annotations || [];
+      glyphsToUse.top.glyph = this.getExistingOrAddSymbol(glyphs.top.symbol);
+    }
+
+    if (glyphs != null && glyphs.bottom != null) {
+      glyphsToUse.bottom = {};
+      fillAnnotations(glyphs.bottom.annotations);
+      joinObjects(glyphsToUse.bottom, defaultOptions.bottom, glyphs.bottom);
+      glyphsToUse.bottom.annotations = glyphs.bottom.annotations || [];
+      glyphsToUse.bottom.glyph = this.getExistingOrAddSymbol(glyphs.bottom.symbol);
     }
     const options = joinObjects(defaultOptions, optionsIn);
     return new BaseAnnotationFunction(  // $FlowFixMe
