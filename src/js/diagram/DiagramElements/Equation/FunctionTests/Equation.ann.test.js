@@ -211,7 +211,7 @@ describe('Equation Functions - Ann', () => {
     expect(round(a.left)).toBe(round(left.right));
     expect(round(right.left)).toBe(round(a.right));
   });
-  test.only('Bracket Annotation', () => {
+  test('Bracket Annotation', () => {
     functions.single();
     eqn.showForm('bracAnnotation');
     diagram.setFirstTransform();
