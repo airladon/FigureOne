@@ -138,7 +138,7 @@ export default class Symbol extends DiagramElementPrimitive {
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  getBounds(options: Object, leftIn: number, bottomIn: number, widthIn: number, heightIn: number) {
+  getBounds(options: Object, leftIn: number, bottomIn: number, widthIn: number, heightIn: number, side?: 'left' | 'right' | 'bottom' | 'top') {
     return new Bounds();
   }
 
