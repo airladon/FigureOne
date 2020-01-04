@@ -2,7 +2,7 @@
 import {
   Point, Line,
 } from '../../../../tools/g2';
-import Bracket from './BracketNew';
+import Bracket from './Bracket';
 
 export default class Bar extends Bracket {
   // eslint-disable-next-line class-methods-use-this

@@ -1631,69 +1631,6 @@ export class EquationFunctions {
     return this.bar(optionsOrArray, { side: 'bottom' });
   }
 
-  barLegacy(
-    optionsOrArray: TypeBarObject | TypeBarArray,
-    forceOptions: Object = {},
-  ) {
-    let content;
-    let symbol;
-    let side;
-    let space;
-    let overhang;
-    let length;
-    let left;
-    let right;
-    let top;
-    let bottom;
-    let inSize;
-    const defaultOptions = {
-      side: 'top',
-      space: 0.03,
-      overhang: 0,
-      length: null,
-      left: null,
-      right: null,
-      top: null,
-      bottom: null,
-      inSize: true,
-    };
-    if (Array.isArray(optionsOrArray)) {
-      [
-        content, symbol, inSize, space, overhang,
-        length, left, right, top,
-        bottom, side,
-      ] = optionsOrArray;
-    } else {
-      ({
-        content, symbol, space, overhang,
-        length, left, right, top,
-        bottom, inSize, side,
-      } = optionsOrArray);
-    }
-    const optionsIn = {
-      side,
-      space,
-      overhang,
-      length,
-      left,
-      right,
-      top,
-      bottom,
-      inSize,
-    };
-    const options = joinObjects({}, defaultOptions, optionsIn, forceOptions);
-    let symbolToUse = null;
-    if (symbol != null) {
-      symbolToUse = this.getExistingOrAddSymbol(symbol);
-    }
-
-    return new Bar(
-      [this.contentToElement(content)],
-      symbolToUse,
-      options,
-    );
-  }
-
   matrix(optionsOrArray: TypeMatrixObject | TypeMatrixArray) {
     let content;
     let left;
