@@ -110,6 +110,7 @@ describe('Equation Functions - SumPro', () => {
             toOffset: [-0.1, -0.1],
           }),
         });
+        diagram.elements = eqn;
       },
       parameterSteps: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
@@ -186,6 +187,13 @@ describe('Equation Functions - SumPro', () => {
           heightYOffset: {
             content: sumOf([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, 1,
+              0.1, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0],
+            ]),
+            scale: 1,
+          },
+          heightCenterYOffset: {
+            content: sumOf([
+              's', 'a', 'b', 'c', true, 0.01, null, null, 1,
               0.1, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0],
             ]),
             scale: 1,
@@ -336,16 +344,24 @@ describe('Equation Functions - SumPro', () => {
       diagram.setFirstTransform();
       const newS = eqn._s.getBoundingRect('diagram');
       expect(round(newS.height)).toBe(round(height));
-      expect(round(newS.bottom)).toBe(round(baseS.bottom - (height - baseS.height) / 2));
-      expect(round(newS.top)).toBe(round(baseS.top + (height - baseS.height) / 2));
+      expect(round(newS.bottom)).toBe(round(baseA.bottom - 1));
+      expect(round(newS.top)).toBe(round(newS.bottom + height));
+    });
+    test('heightCenterYOffset', () => {
+      eqn.showForm('heightCenterYOffset');
+      diagram.setFirstTransform();
+      const newS = eqn._s.getBoundingRect('diagram');
+      expect(round(newS.height)).toBe(round(height));
+      expect(round(newS.bottom)).toBe(round(baseS.bottom - (height - baseS.height) / 2 + yOffset));
+      expect(round(newS.top)).toBe(round(baseS.top + (height - baseS.height) / 2 + yOffset));
     });
     test('heightYOffset', () => {
       eqn.showForm('heightYOffset');
       diagram.setFirstTransform();
       const newS = eqn._s.getBoundingRect('diagram');
       expect(round(newS.height)).toBe(round(height));
-      expect(round(newS.bottom)).toBe(round(baseS.bottom - (height - baseS.height) / 2 + yOffset));
-      expect(round(newS.top)).toBe(round(baseS.top + (height - baseS.height) / 2 + yOffset));
+      expect(round(newS.bottom)).toBe(round(baseS.bottom + yOffset));
+      expect(round(newS.top)).toBe(round(newS.bottom + height));
     });
     test('yOffsetNegative', () => {
       eqn.showForm('yOffsetNegative');
@@ -478,6 +494,7 @@ describe('Equation Functions - SumPro', () => {
 
     // Snapshot test on most simple layout
     eqn.showForm('base');
+    diagram.setFirstTransform();
     tools.cleanUIDs(eqn);
     expect(round(eqn._a.transform.mat)).toMatchSnapshot();
     expect(round(eqn._b.transform.mat)).toMatchSnapshot();
