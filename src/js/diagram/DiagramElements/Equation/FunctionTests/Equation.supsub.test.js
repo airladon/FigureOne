@@ -286,8 +286,8 @@ describe('Equation Functions - Superscript and Subscript', () => {
     expect(round(baseC.width / newC.width)).toBe(round(0.5 / 0.8));
 
     // Check xBias location was done correctly
-    expect(round(newB.left - baseB.left)).toBe(0.5);
-    expect(round(newC.left - baseC.left)).toBe(0.5);
+    expect(round(newB.left - baseB.left)).toBe(0.5 * 0.7);
+    expect(round(newC.left - baseC.left)).toBe(0.5 * 0.7);
 
     // expect(round(newB.bottom)).toBe(baseB.bottom)
     // expect(round(withSub.location.x - withoutSub.location.x)).toBe(0.5);
