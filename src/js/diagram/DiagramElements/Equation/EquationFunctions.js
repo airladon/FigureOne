@@ -2107,44 +2107,44 @@ export class EquationFunctions {
     ];
   }
 
-  // $FlowFixMe
-  bottomComment(...args) {
-    const [
-      content, comment, symbol,
-      contentSpaceToUse, commentSpaceToUse, scaleToUse,
-      inSize,
-    ] = this.processComment(...args);
-    let contentToUse;
-    if (symbol) {
-      contentToUse = new Bar(
-        [this.contentToElement(content)],
-        this.getExistingOrAddSymbol(symbol),
-        {
-          side: 'bottom',
-          space: contentSpaceToUse,
-          inSize,
-        },
-      );
-    } else {
-      contentToUse = this.pad({
-        content,
-        bottom: contentSpaceToUse + commentSpaceToUse,
-      });
-    }
-    return this.annotate({
-      content: contentToUse,
-      withAnnotations: [                                     // $FlowFixMe
-        this.annotation({
-          annotation: comment,
-          relativeToContent: ['center', 'bottom'],
-          relativeToAnnotation: ['center', 'top'],
-          scale: scaleToUse,
-          yOffset: -commentSpaceToUse,
-        }),
-      ],
-      inSize,
-    });
-  }
+  // // $FlowFixMe
+  // bottomComment(...args) {
+  //   const [
+  //     content, comment, symbol,
+  //     contentSpaceToUse, commentSpaceToUse, scaleToUse,
+  //     inSize,
+  //   ] = this.processComment(...args);
+  //   let contentToUse;
+  //   if (symbol) {
+  //     contentToUse = new Bar(
+  //       [this.contentToElement(content)],
+  //       this.getExistingOrAddSymbol(symbol),
+  //       {
+  //         side: 'bottom',
+  //         space: contentSpaceToUse,
+  //         inSize,
+  //       },
+  //     );
+  //   } else {
+  //     contentToUse = this.pad({
+  //       content,
+  //       bottom: contentSpaceToUse + commentSpaceToUse,
+  //     });
+  //   }
+  //   return this.annotate({
+  //     content: contentToUse,
+  //     withAnnotations: [                                     // $FlowFixMe
+  //       this.annotation({
+  //         annotation: comment,
+  //         relativeToContent: ['center', 'bottom'],
+  //         relativeToAnnotation: ['center', 'top'],
+  //         scale: scaleToUse,
+  //         yOffset: -commentSpaceToUse,
+  //       }),
+  //     ],
+  //     inSize,
+  //   });
+  // }
 
   // $FlowFixMe
   topComment(...args) {
@@ -2153,34 +2153,52 @@ export class EquationFunctions {
       contentSpaceToUse, commentSpaceToUse, scaleToUse,
       inSize,
     ] = this.processComment(...args);
-    let contentToUse;
-    if (symbol) {
-      contentToUse = new Bar(
-        [this.contentToElement(content)],
-        this.getExistingOrAddSymbol(symbol),
-        {
-          side: 'top',
+    return this.ann({
+      content,
+      glyphs: {
+        top: {
+          symbol,
+          annotations: [{
+            content: comment,
+            xPosition: 'center',
+            yPosition: 'top',
+            xAlign: 'center',
+            yAlign: 'bottom',
+            scale: scaleToUse,
+            offset: [0, commentSpaceToUse],
+          }],
           space: contentSpaceToUse,
-          inSize,
         },
-      );
-    } else {
-      contentToUse = this.pad({
-        content,
-        top: contentSpaceToUse + commentSpaceToUse,
-      });
-    }
-    return this.annotate({
-      content: contentToUse,
-      withAnnotations: [                                     // $FlowFixMe
-        this.annotation({
-          annotation: comment,
-          relativeToContent: ['center', 'top'],
-          relativeToAnnotation: ['center', 'bottom'],
-          scale: scaleToUse,
-          yOffset: commentSpaceToUse,
-        }),
-      ],
+      },
+      inSize,
+    });
+  }
+
+  // $FlowFixMe
+  bottomComment(...args) {
+    const [
+      content, comment, symbol,
+      contentSpaceToUse, commentSpaceToUse, scaleToUse,
+      inSize,
+    ] = this.processComment(...args);
+
+    return this.ann({
+      content,
+      glyphs: {
+        bottom: {
+          symbol,
+          annotations: [{
+            content: comment,
+            xPosition: 'center',
+            yPosition: 'bottom',
+            xAlign: 'center',
+            yAlign: 'top',
+            scale: scaleToUse,
+            offset: [0, -commentSpaceToUse],
+          }],
+          space: contentSpaceToUse,
+        },
+      },
       inSize,
     });
   }

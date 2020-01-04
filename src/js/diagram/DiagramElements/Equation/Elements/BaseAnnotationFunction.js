@@ -282,7 +282,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     maxBounds.copyFrom(contentBounds);
     annotations.forEach((annotation) => {
       annotation.content.calcSize(loc, scale * annotation.scale);
-      this.setAnnotationPosition(content, loc, annotation);
+      this.setAnnotationPosition(content, loc, annotation, scale);
       const annotationBounds = annotation.content.getBounds();
       maxBounds.growWithSameBaseline(annotationBounds);
     });
@@ -378,7 +378,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
     glyph.annotations.forEach((annotation) => {
       annotation.content.calcSize(glyph.location, scale * annotation.scale);
-      this.setAnnotationPosition(glyphBounds, glyph.location, annotation);
+      this.setAnnotationPosition(glyphBounds, glyph.location, annotation, scale);
       const annotationBounds = annotation.content.getBounds();
       totalBounds.growWithSameBaseline(annotationBounds);
     });
@@ -466,7 +466,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
     glyph.annotations.forEach((annotation) => {
       annotation.content.calcSize(glyph.location, scale * annotation.scale);
-      this.setAnnotationPosition(glyphBounds, glyph.location, annotation);
+      this.setAnnotationPosition(glyphBounds, glyph.location, annotation, scale);
       const annotationBounds = annotation.content.getBounds();
       totalBounds.growWithSameBaseline(annotationBounds);
     });
@@ -532,7 +532,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
     glyph.annotations.forEach((annotation) => {
       annotation.content.calcSize(glyph.location, scale * annotation.scale);
-      this.setAnnotationPosition(glyphBounds, glyph.location, annotation);
+      this.setAnnotationPosition(glyphBounds, glyph.location, annotation, scale);
       const annotationBounds = annotation.content.getBounds();
       totalBounds.growWithSameBaseline(annotationBounds);
     });
@@ -544,6 +544,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     contentToAnnotate: ElementInterface | Bounds,
     locationContentToAnnotate: Point,
     annotation: TypeAnnotation,
+    scale: number,
   ) {
     const {
       xPosition, yPosition, xAlign, yAlign, offset, content,
@@ -604,8 +605,8 @@ export default class BaseAnnotationFunction implements ElementInterface {
     }
 
     const offsetToUse = getPoint(offset);
-    xPos += offsetToUse.x;
-    yPos += offsetToUse.y;
+    xPos += offsetToUse.x * scale;
+    yPos += offsetToUse.y * scale;
 
     const locationOffset = (new Point(xPos, yPos)).sub(content.location);
     content.offsetLocation(locationOffset);
