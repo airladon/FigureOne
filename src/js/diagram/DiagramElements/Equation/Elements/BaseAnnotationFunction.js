@@ -398,9 +398,9 @@ export default class BaseAnnotationFunction implements ElementInterface {
     return totalBounds;
   }
 
-  setVerticalGlyph(scale: number, contentBoundsIn: Bounds, glyphName: 'left' | 'right') {
+  setVerticalGlyph(scale: number, contentBounds: Bounds, glyphName: 'left' | 'right') {
     if (this.glyphs[glyphName] == null) {
-      return contentBoundsIn;
+      return contentBounds;
     }
     const {
       space, overhang, topSpace, bottomSpace, minContentHeight,
@@ -408,50 +408,56 @@ export default class BaseAnnotationFunction implements ElementInterface {
       descent, height,
     } = this.glyphs[glyphName];
     const glyph = this.glyphs[glyphName];
-    const contentBounds = new Bounds();
+    // const contentBounds = new Bounds();
 
-    contentBounds.copyFrom(contentBoundsIn);
+    // contentBounds.copyFrom(contentBounds);
+    let glyphHeight = contentBounds.height;
+    let glyphLeft = contentBounds.left;
+    let glyphBottom = contentBounds.bottom;
+    // let glyphTop = contentBounds.top;
+    let glyphDescent = contentBounds.descent;
+    let glyphAscent = contentBounds.ascent;
+
     if (minContentDescent != null) {
-      contentBounds.descent = Math.max(minContentDescent, contentBounds.descent);
-      contentBounds.height = contentBounds.ascent + contentBounds.descent;
+      glyphDescent = Math.max(minContentDescent, glyphDescent);
+      glyphHeight = contentBounds.ascent + glyphDescent;
     }
     if (minContentAscent != null) {
-      contentBounds.ascent = Math.max(minContentAscent, contentBounds.ascent);
-      contentBounds.height = contentBounds.ascent + contentBounds.descent;
+      glyphAscent = Math.max(minContentAscent, glyphAscent);
+      glyphHeight = glyphAscent + glyphDescent;
     }
     if (minContentHeight != null) {
-      contentBounds.ascent = -contentBounds.descent
-                             + Math.max(minContentHeight, contentBounds.height);
+      glyphAscent = -glyphDescent
+                             + Math.max(minContentHeight, glyphHeight);
     }
     const topSpaceToUse = topSpace != null ? topSpace : overhang;
     const bottomSpaceToUse = bottomSpace != null ? bottomSpace : overhang;
-    contentBounds.descent += scale * bottomSpaceToUse;
+    glyphDescent += scale * bottomSpaceToUse;
     if (descent != null) {
-      contentBounds.descent = descent;
+      glyphDescent = descent;
     }
-    contentBounds.ascent += scale * topSpaceToUse;
-    contentBounds.height = contentBounds.descent + contentBounds.ascent;
+    glyphAscent += scale * topSpaceToUse;
+    glyphHeight = glyphDescent + glyphAscent;
     if (height != null) {
-      contentBounds.height = height;
-      contentBounds.ascent = contentBounds.height - contentBounds.descent;
+      glyphHeight = height;
+      glyphAscent = glyphHeight - glyphDescent;
     }
 
-    contentBounds.bottom = contentBoundsIn.bottom
-                           - (contentBounds.descent - contentBoundsIn.descent);
+    glyphBottom = contentBounds.bottom
+                           - (glyphDescent - contentBounds.descent);
 
-    contentBounds.top = contentBoundsIn.top + (contentBounds.ascent - contentBoundsIn.ascent);
+    // glyphTop = contentBoundsIn.top + (glyphAscent - contentBoundsIn.ascent);
 
-    let glyphLeft = contentBounds.left;
+    // glyphLeft = contentBounds.left;
     if (glyphName === 'left') {
       glyphLeft -= space * scale;
     } else {
       glyphLeft = contentBounds.left + contentBounds.width + space * scale;
     }
 
-    let glyphBottom = contentBounds.bottom;
+    // let glyphBottom = contentBounds.bottom;
     if (descent == null && bottomSpace == null && height != null) {
       glyphBottom = contentBounds.bottom + contentBounds.height / 2 - height / 2;
-      console.log(glyphBottom, height)
     }
 
     const glyphBounds = glyph.glyph.getBounds(
@@ -459,7 +465,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
       glyphLeft,
       glyphBottom,
       null,
-      contentBounds.height,
+      glyphHeight,
     );
 
     const totalBounds = new Bounds();
