@@ -63,9 +63,9 @@ describe('Equation Functions - Superscript and Subscript', () => {
           // Function with Method Array
           3: e.supSub(['a', 'b', 'c']),
           // Function with parameters
-          4: e.supSub('a', 'b', 'c'),
+          4: e.supSub(['a', 'b', 'c']),
           // Bound Function with parameters
-          5: supSub('a', 'b', 'c'),
+          5: supSub(['a', 'b', 'c']),
           // Bound Function with Object
           6: supSub({
             content: 'a',
@@ -138,7 +138,7 @@ describe('Equation Functions - Superscript and Subscript', () => {
             }),
             'g',
           ),
-          4: supSub('a', supSub('b', supSub('c', 'd', 'e'), 'f'), 'g'),
+          4: supSub(['a', supSub(['b', supSub(['c', 'd', 'e']), 'f']), 'g']),
         });
       },
       parameters: () => {
@@ -173,7 +173,7 @@ describe('Equation Functions - Superscript and Subscript', () => {
           // Method Array
           1: { supSub: ['a', 'b', 'c', scale, supBias, subBias] },
           // Function with parameters
-          2: supSub('a', 'b', 'c', scale, supBias, subBias),
+          2: supSub(['a', 'b', 'c', scale, supBias, subBias]),
         });
         diagram.elements = eqn;
       },
@@ -184,7 +184,7 @@ describe('Equation Functions - Superscript and Subscript', () => {
         eqn.addElements(elements);
         eqn.addForms({
           0: { sub: ['a', { sub: ['b', { sub: ['g', 'd'] }] }] },
-          1: sub('a', sub('b', sub('g', 'd'))),
+          1: sub(['a', sub(['b', sub(['g', 'd'])])]),
         });
       },
       sup: () => {
@@ -193,7 +193,7 @@ describe('Equation Functions - Superscript and Subscript', () => {
         eqn.addElements(elements);
         eqn.addForms({
           0: { sup: ['a', { sup: ['b', { sup: ['c', 'g'] }] }] },
-          1: e.sup('a', e.sup('b', e.sup('c', 'd'))),
+          1: e.sup(['a', e.sup(['b', e.sup(['c', 'd'])])]),
         });
       },
     };

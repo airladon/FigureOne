@@ -1237,76 +1237,65 @@ export class EquationFunctions {
     return f;
   }
 
-  supSub(
-    optionsOrContent: TypeSupSubObject | TypeSupSubArray | TypeEquationPhrase,
-    sup: TypeEquationPhrase | null = null,
-    sub: TypeEquationPhrase | null = null,
-    scriptScale: number | null = null,
-    supBias: TypeParsablePoint | null = null,
-    subBias: TypeParsablePoint | null = null,
-  ) {
+  supSub(optionsOrContent: TypeSupSubObject | TypeSupSubArray) {
     let content;
     let superscript = null;
     let subscript = null;
     let scale = null;
     let subscriptBias = null;
     let superscriptBias = null;
-    if (!(sup == null && sub == null && scriptScale == null)) {
-      content = optionsOrContent;
-      superscript = sup;
-      subscript = sub;
-      scale = scriptScale;
-      subscriptBias = subBias;
-      superscriptBias = supBias;
-    } else if (Array.isArray(optionsOrContent)) {           // $FlowFixMe
-      [content, superscript, subscript, scale, superscriptBias, subscriptBias] = optionsOrContent;
+    let inSize = true;
+    if (Array.isArray(optionsOrContent)) {           // $FlowFixMe
+      [content, superscript, subscript, scale, superscriptBias, subscriptBias, inSize] = optionsOrContent;
     } else {
       ({                                                    // $FlowFixMe
-        content, superscript, subscript, scale, superscriptBias, subscriptBias,
+        content, superscript, subscript, scale, superscriptBias, subscriptBias, inSize
       } = optionsOrContent);
     }
 
-    subscriptBias = subscriptBias == null ? new Point(0, 0) : parsePoint(
-    // $FlowFixMe
-      subscriptBias, new Point(0, 0),
-    );
-
-    superscriptBias = superscriptBias == null ? new Point(0, 0) : parsePoint(
-      // $FlowFixMe
-      superscriptBias, new Point(0, 0),
-    );
-
-    if (scale == null) {
-      scale = 0.5;
-    }
+    const defaultOptions = {
+      scale: 0.5,
+      subscriptBias: [0, 0],
+      superscriptBias: [0, 0],
+    };
+    const optionsIn = {
+      superscript,
+      subscript,
+      scale,
+      subscriptBias,
+      superscriptBias,
+    };
+    const options = joinObjects(defaultOptions, optionsIn);
+    options.subscriptBias = parsePoint(options.subscriptBias, new Point(0, 0));
+    options.superscriptBias = parsePoint(options.superscriptBias, new Point(0, 0));
 
     const annotations = [];
     if (superscript != null) {
       annotations.push({
-        content: superscript,
+        content: options.superscript,
         xPosition: 'right',
         yPosition: '0.7a',
         xAlign: 'left',
         yAlign: 'baseline',
-        offset: superscriptBias._dup(),
-        scale,
+        offset: options.superscriptBias._dup(),
+        scale: options.scale,
       });
     }
     if (subscript != null) {
       annotations.push({
-        content: subscript,
+        content: options.subscript,
         xPosition: 'right',
         yPosition: 'baseline',
         xAlign: 'left',
         yAlign: '0.7a',
-        offset: subscriptBias._dup(),
-        scale,
+        offset: options.subscriptBias._dup(),
+        scale: options.scale,
       });
     }
     return this.ann({
       content,
       annotations,
-      // inSize,
+      inSize,
     });
 
     // return new SuperSub(                                    // $FlowFixMe
