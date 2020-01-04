@@ -197,24 +197,10 @@ export default class BaseAnnotationFunction implements ElementInterface {
     glyphs: TypeGlyphs,
     options: Object,
   ) {
-    // const elements = [content];
-    // annotations.forEach((annotation) => {
-    //   elements.push(annotation.content);
-    // });
-    // Object.keys(glyphs).forEach((key) => {
-    //   const glyphPosition = glyphs[key];
-    //   const glyphElement = new Element(glyphPosition.glyph);
-    //   elements.push(glyphElement);
-    //   glyphPosition.annotations.forEach((annotation) => {
-    //     elements.push(annotation.content);
-    //   });
-    // });
-    // super(elements);
     this.glyphs = glyphs;
     this.content = content;
     this.annotations = annotations;
     this.options = options;
-    // console.log(this.glyphs)
   }
 
   _dup(namedCollection?: Object) {
@@ -585,6 +571,11 @@ export default class BaseAnnotationFunction implements ElementInterface {
       yPos = 1;
     } else if (typeof yPosition === 'number') {
       yPos = yPosition;
+    } else if (typeof yPosition === 'string' && yPosition.slice(-1)[0] === 'a') {
+      const ascentPercentage = parseFloat(yPosition);
+      const ascentPercentHeight = contentToAnnotate.ascent / contentToAnnotate.height;
+      const descentPercentHeight = contentToAnnotate.descent / contentToAnnotate.height;
+      yPos = ascentPercentHeight * ascentPercentage + descentPercentHeight;
     } else {    // baseline
       yPos = contentToAnnotate.descent / contentToAnnotate.height;
     }
@@ -605,6 +596,11 @@ export default class BaseAnnotationFunction implements ElementInterface {
       yPos = yPos + content.descent - content.height / 2;
     } else if (yAlign === 'top') {
       yPos -= content.ascent;
+    } else if (typeof yAlign === 'string' && yAlign.slice(-1)[0] === 'a') {
+      const ascentPercentage = parseFloat(yAlign);
+      yPos -= content.ascent * ascentPercentage;
+    } else if (typeof yAlign === 'number') {
+      yPos += content.descent - content.height * yAlign;
     }
 
     const offsetToUse = getPoint(offset);

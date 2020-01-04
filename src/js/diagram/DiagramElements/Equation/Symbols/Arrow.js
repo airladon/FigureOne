@@ -71,8 +71,8 @@ export default class Arrow extends Bracket {
     ];
     if (direction === 'down' || direction === 'left') {
       const m = new Transform().scale(1, -1).translate(0, height).m();
-      leftPoints = leftPoints.map(p => p.transformBy(m));
-      rightPoints = rightPoints.map(p => p.transformBy(m));
+      leftPoints = leftPoints.map((p: Point) => p.transformBy(m));
+      rightPoints = rightPoints.map((p: Point) => p.transformBy(m));
     }
     // let side = 'left';
     // if (direction === 'up' || direction === 'down') {
