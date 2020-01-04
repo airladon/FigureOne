@@ -466,6 +466,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
       glyphBottom,
       null,
       glyphHeight,
+      glyphName,
     );
 
     const totalBounds = new Bounds();
@@ -531,6 +532,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
       glyphBottom,
       glyphLength,
       null,
+      glyphName,
     );
 
     const totalBounds = new Bounds();

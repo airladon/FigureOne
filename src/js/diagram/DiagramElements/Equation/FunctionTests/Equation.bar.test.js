@@ -32,7 +32,7 @@ describe('Equation Functions - Bar', () => {
         symbol: 'bar', side: 'left', lineWidth: 0.01,
       },
       vBar1: {
-        symbol: 'bar', side: 'right', lineWidth: 0.01,
+        symbol: 'bar', side: 'left', lineWidth: 0.01,
       },
       hBar: {
         symbol: 'bar', side: 'top', lineWidth: 0.01,

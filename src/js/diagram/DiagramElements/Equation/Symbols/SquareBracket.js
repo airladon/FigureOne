@@ -2,7 +2,7 @@
 import {
   Point, polarToRect,
 } from '../../../../tools/g2';
-import Bracket from './BracketNew';
+import Bracket from './Bracket';
 
 
 export default class SquareBracket extends Bracket {

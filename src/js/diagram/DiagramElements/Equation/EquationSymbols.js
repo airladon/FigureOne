@@ -8,7 +8,7 @@ import DiagramPrimitives from '../../DiagramPrimitives/DiagramPrimitives';
 // import Integral from './Symbols/Integral';
 // import SuperSub from './Elements/SuperSub';
 import Bracket from './Symbols/Bracket';
-import BracketNew from './Symbols/BracketNew';
+// import BracketNew from './Symbols/BracketNew';
 import Box from './Symbols/Box';
 import Radical from './Symbols/Radical';
 import Brace from './Symbols/Brace';
@@ -237,13 +237,19 @@ export default class EquationSymbols {
       staticWidth: null,          // not definable by user
     };
     const optionsToUse = joinObjects(defaultOptions, options);
+    if (optionsToUse.direction === 'left' || optionsToUse.direction === 'right') {
+      optionsToUse.side = 'top';
+    } else {
+      optionsToUSe.side = 'left';
+    }
     return (new Arrow(
       this.shapes.webgl,
       optionsToUse.color,
       new Transform('ArrowSymbol').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-    )).symbol;
+      'strip',
+    ));
   }
 
   sum(options: {
@@ -482,7 +488,7 @@ export default class EquationSymbols {
       staticWidth: null,
     };
     const optionsToUse = joinObjects(defaultOptions, options);
-    return (new BracketNew(
+    return (new Bracket(
       this.shapes.webgl,
       optionsToUse.color,
       new Transform('bracket').scale(1, 1).translate(0, 0),
