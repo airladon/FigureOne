@@ -137,162 +137,162 @@ describe('Equation Functions - Bar', () => {
             ],
             scale: 1,
           },
-          // leftSpace: {
-          //   content: [bar([
-          //     'a', 'vBar', true, 0.1, null, null, null, null, null, null, 'left',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // leftOverhangPositive: {
-          //   content: [bar([
-          //     'a', 'vBar', true, 0, 0.01, null, null, null, null, null, 'left',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // leftOverhangNegative: {
-          //   content: [bar([
-          //     'a', 'vBar', true, 0, -0.01, null, null, null, null, null, 'left',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
+          leftSpace: {
+            content: [bar([
+              'a', 'vBar', true, 0.1, null, null, null, null, null, null, 'left',
+            ]), 'b'],
+            scale: 1,
+          },
+          leftOverhangPositive: {
+            content: [bar([
+              'a', 'vBar', true, 0, 0.01, null, null, null, null, null, 'left',
+            ]), 'b'],
+            scale: 1,
+          },
+          leftOverhangNegative: {
+            content: [bar([
+              'a', 'vBar', true, 0, -0.01, null, null, null, null, null, 'left',
+            ]), 'b'],
+            scale: 1,
+          },
           leftLengthLonger: {
             content: [bar([
               'a', 'vBar', true, 0, null, 3, null, null, null, null, 'left',
             ]), 'b'],
             scale: 1,
           },
-          // leftLengthShorter: {
-          //   content: [bar([
-          //     'a', 'vBar', true, 0, null, 0.01, null, null, null, null, 'left',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // leftTopPositive: {
-          //   content: [bar([
-          //     'a', 'vBar', true, 0, null, null, null, null, 0.01, null, 'left',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // leftTopNegative: {
-          //   content: [bar([
-          //     'a', 'vBar', true, 0, null, null, null, null, -0.01, null, 'left',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // leftBottomPositive: {
-          //   content: [bar([
-          //     'a', 'vBar', true, 0, null, null, null, null, null, 0.01, 'left',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // leftBottomNegative: {
-          //   content: [bar([
-          //     'a', 'vBar', true, 0, null, null, null, null, null, -0.01, 'left',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // leftTopBottom: {
-          //   content: [bar([
-          //     'a', 'vBar', true, 0, null, null, null, null, 0.01, 0.01, 'left',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // leftInSize: {
-          //   content: [bar([
-          //     'a', 'vBar', false, 0, null, null, null, null, null, null, 'left',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // right: {
-          //   content: [bar([
-          //     'a', 'vBar1', true, 0, null, null, null, null, null, null, 'right',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // rightSpaceTopBottomInSize: {
-          //   content: [bar([
-          //     'a', 'vBar1', false, 0.1, null, null, null, null, 0.01, 0.01, 'right',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // top: {
-          //   content: [bar([
-          //     'a', 'hBar', true, 0, null, null, null, null, null, null, 'top',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // topSpace: {
-          //   content: [bar([
-          //     'a', 'hBar', true, 0.1, null, null, null, null, null, null, 'top',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // topOverhangPositive: {
-          //   content: [bar([
-          //     'a', 'hBar', true, 0, 0.01, null, null, null, null, null, 'top',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // topOverhangNegative: {
-          //   content: [bar([
-          //     'a', 'hBar', true, 0, -0.01, null, null, null, null, null, 'top',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // topLengthLonger: {
-          //   content: [bar([
-          //     'a', 'hBar', true, 0, 0, 3, null, null, null, null, 'top',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // topLengthShorter: {
-          //   content: [bar([
-          //     'a', 'hBar', true, 0, 0, 0.01, null, null, null, null, 'top',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // topLeftPositive: {
-          //   content: [bar([
-          //     'a', 'hBar', true, 0, null, null, 0.01, null, null, null, 'top',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // topLeftNegative: {
-          //   content: [bar([
-          //     'a', 'hBar', true, 0, null, null, -0.01, null, null, null, 'top',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // topRightPositive: {
-          //   content: [bar([
-          //     'a', 'hBar', true, 0, null, null, null, 0.01, null, null, 'top',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // topRightNegative: {
-          //   content: [bar([
-          //     'a', 'hBar', true, 0, null, null, null, -0.01, null, null, 'top',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // topLeftRight: {
-          //   content: [bar([
-          //     'a', 'hBar', true, 0, null, null, 0.01, 0.01, null, null, 'top',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // topInSize: {
-          //   content: [bar([
-          //     'a', 'hBar', false, 0, null, 3, null, null, null, null, 'top',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
-          // bottomSpaceLeftRightInSize: {
-          //   content: [bar([
-          //     'a', 'hBar2', false, 0.1, null, null, 0.01, 0.01, null, null, 'bottom',
-          //   ]), 'b'],
-          //   scale: 1,
-          // },
+          leftLengthShorter: {
+            content: [bar([
+              'a', 'vBar', true, 0, null, 0.01, null, null, null, null, 'left',
+            ]), 'b'],
+            scale: 1,
+          },
+          leftTopPositive: {
+            content: [bar([
+              'a', 'vBar', true, 0, null, null, null, null, 0.01, null, 'left',
+            ]), 'b'],
+            scale: 1,
+          },
+          leftTopNegative: {
+            content: [bar([
+              'a', 'vBar', true, 0, null, null, null, null, -0.01, null, 'left',
+            ]), 'b'],
+            scale: 1,
+          },
+          leftBottomPositive: {
+            content: [bar([
+              'a', 'vBar', true, 0, null, null, null, null, null, 0.01, 'left',
+            ]), 'b'],
+            scale: 1,
+          },
+          leftBottomNegative: {
+            content: [bar([
+              'a', 'vBar', true, 0, null, null, null, null, null, -0.01, 'left',
+            ]), 'b'],
+            scale: 1,
+          },
+          leftTopBottom: {
+            content: [bar([
+              'a', 'vBar', true, 0, null, null, null, null, 0.01, 0.01, 'left',
+            ]), 'b'],
+            scale: 1,
+          },
+          leftInSize: {
+            content: [bar([
+              'a', 'vBar', false, 0, null, null, null, null, null, null, 'left',
+            ]), 'b'],
+            scale: 1,
+          },
+          right: {
+            content: [bar([
+              'a', 'vBar1', true, 0, null, null, null, null, null, null, 'right',
+            ]), 'b'],
+            scale: 1,
+          },
+          rightSpaceTopBottomInSize: {
+            content: [bar([
+              'a', 'vBar1', false, 0.1, null, null, null, null, 0.01, 0.01, 'right',
+            ]), 'b'],
+            scale: 1,
+          },
+          top: {
+            content: [bar([
+              'a', 'hBar', true, 0, null, null, null, null, null, null, 'top',
+            ]), 'b'],
+            scale: 1,
+          },
+          topSpace: {
+            content: [bar([
+              'a', 'hBar', true, 0.1, null, null, null, null, null, null, 'top',
+            ]), 'b'],
+            scale: 1,
+          },
+          topOverhangPositive: {
+            content: [bar([
+              'a', 'hBar', true, 0, 0.01, null, null, null, null, null, 'top',
+            ]), 'b'],
+            scale: 1,
+          },
+          topOverhangNegative: {
+            content: [bar([
+              'a', 'hBar', true, 0, -0.01, null, null, null, null, null, 'top',
+            ]), 'b'],
+            scale: 1,
+          },
+          topLengthLonger: {
+            content: [bar([
+              'a', 'hBar', true, 0, 0, 3, null, null, null, null, 'top',
+            ]), 'b'],
+            scale: 1,
+          },
+          topLengthShorter: {
+            content: [bar([
+              'a', 'hBar', true, 0, 0, 0.01, null, null, null, null, 'top',
+            ]), 'b'],
+            scale: 1,
+          },
+          topLeftPositive: {
+            content: [bar([
+              'a', 'hBar', true, 0, null, null, 0.01, null, null, null, 'top',
+            ]), 'b'],
+            scale: 1,
+          },
+          topLeftNegative: {
+            content: [bar([
+              'a', 'hBar', true, 0, null, null, -0.01, null, null, null, 'top',
+            ]), 'b'],
+            scale: 1,
+          },
+          topRightPositive: {
+            content: [bar([
+              'a', 'hBar', true, 0, null, null, null, 0.01, null, null, 'top',
+            ]), 'b'],
+            scale: 1,
+          },
+          topRightNegative: {
+            content: [bar([
+              'a', 'hBar', true, 0, null, null, null, -0.01, null, null, 'top',
+            ]), 'b'],
+            scale: 1,
+          },
+          topLeftRight: {
+            content: [bar([
+              'a', 'hBar', true, 0, null, null, 0.01, 0.01, null, null, 'top',
+            ]), 'b'],
+            scale: 1,
+          },
+          topInSize: {
+            content: [bar([
+              'a', 'hBar', false, 0, null, 3, null, null, null, null, 'top',
+            ]), 'b'],
+            scale: 1,
+          },
+          bottomSpaceLeftRightInSize: {
+            content: [bar([
+              'a', 'hBar2', false, 0.1, null, null, 0.01, 0.01, null, null, 'bottom',
+            ]), 'b'],
+            scale: 1,
+          },
         });
       },
       topBar: () => {
@@ -601,7 +601,7 @@ describe('Equation Functions - Bar', () => {
       expect(round(newBar.bottom)).toBe(round(a.bottom + overhang));
       expect(round(newBar.top)).toBe(round(a.top - overhang));
     });
-    test.only('leftLengthLonger', () => {
+    test('leftLengthLonger', () => {
       eqn.showForm('leftLengthLonger');
       diagram.setFirstTransform();
       const newBar = eqn._vBar.getBoundingRect();
@@ -694,15 +694,18 @@ describe('Equation Functions - Bar', () => {
     const elems = [eqn._a, eqn._vBar];
     const formsToTest = ['1', '2', '3', '4', '5', '6'];
     eqn.showForm('0');
+    diagram.setFirstTransform();
     const positions0 = elems.map(elem => round(elem.transform.mat).slice());
     formsToTest.forEach((f) => {
       eqn.showForm(f);
+      diagram.setFirstTransform();
       const positions = elems.map(elem => round(elem.transform.mat).slice());
       expect(positions0).toEqual(positions);
     });
 
     // Snapshot test on most simple layout
     eqn.showForm('0');
+    diagram.setFirstTransform();
     tools.cleanUIDs(eqn);
     expect(round(eqn._a.transform.mat)).toMatchSnapshot();
     expect(round(eqn._vBar.transform.mat)).toMatchSnapshot();
