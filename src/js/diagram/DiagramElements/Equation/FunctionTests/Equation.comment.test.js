@@ -129,7 +129,7 @@ describe('Equation Functions - Bar', () => {
         eqn.addForms({
           // without
           //   // Method Object
-          without: topComment('a', 'b', 'bar'),
+          without: topComment(['a', 'b', 'bar']),
           // With parameters
           0: {
             topComment: {
@@ -256,9 +256,14 @@ describe('Equation Functions - Bar', () => {
     eqn.showForm('0');
     diagram.setFirstTransform();
     tools.cleanUIDs(eqn);
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const bar = eqn._bar.getBoundingRect('diagram');
     expect(round(eqn._a.transform.mat)).toMatchSnapshot();
     expect(round(eqn._b.transform.mat)).toMatchSnapshot();
     expect(round(eqn._bar.transform.mat)).toMatchSnapshot();
+    expect(round(bar.bottom)).toBe(round(a.top + 0.03 * 0.7));
+    expect(round(b.bottom)).toBe(round(bar.top + 0.03 * 0.7));
   });
   test('Bottom Comment', () => {
     functions.bottomComment();
