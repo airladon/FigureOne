@@ -1242,32 +1242,33 @@ export class EquationFunctions {
     let superscript = null;
     let subscript = null;
     let scale = null;
-    let subscriptBias = null;
-    let superscriptBias = null;
+    let subscriptOffset = null;
+    let superscriptOffset = null;
     let inSize = true;
-    if (Array.isArray(optionsOrContent)) {           // $FlowFixMe
-      [content, superscript, subscript, scale, superscriptBias, subscriptBias, inSize] = optionsOrContent;
+    if (Array.isArray(optionsOrContent)) {
+      [           // $FlowFixMe
+        content, superscript, subscript, scale,            // $FlowFixMe
+        superscriptOffset, subscriptOffset, inSize,
+      ] = optionsOrContent;
     } else {
       ({                                                    // $FlowFixMe
-        content, superscript, subscript, scale, superscriptBias, subscriptBias, inSize
+        content, superscript, subscript, scale, superscriptOffset, subscriptOffset, inSize,
       } = optionsOrContent);
     }
 
     const defaultOptions = {
       scale: 0.5,
-      subscriptBias: [0, 0],
-      superscriptBias: [0, 0],
+      subscriptOffset: [0, 0],
+      superscriptOffset: [0, 0],
     };
     const optionsIn = {
       superscript,
       subscript,
       scale,
-      subscriptBias,
-      superscriptBias,
+      subscriptOffset,
+      superscriptOffset,
     };
     const options = joinObjects(defaultOptions, optionsIn);
-    options.subscriptBias = parsePoint(options.subscriptBias, new Point(0, 0));
-    options.superscriptBias = parsePoint(options.superscriptBias, new Point(0, 0));
 
     const annotations = [];
     if (superscript != null) {
@@ -1277,7 +1278,7 @@ export class EquationFunctions {
         yPosition: '0.7a',
         xAlign: 'left',
         yAlign: 'baseline',
-        offset: options.superscriptBias._dup(),
+        offset: options.superscriptOffset,
         scale: options.scale,
       });
     }
@@ -1288,7 +1289,7 @@ export class EquationFunctions {
         yPosition: 'baseline',
         xAlign: 'left',
         yAlign: '0.7a',
-        offset: options.subscriptBias._dup(),
+        offset: options.subscriptOffset,
         scale: options.scale,
       });
     }
@@ -1297,91 +1298,93 @@ export class EquationFunctions {
       annotations,
       inSize,
     });
-
-    // return new SuperSub(                                    // $FlowFixMe
-    //   this.contentToElement(content),                       // $FlowFixMe
-    //   this.contentToElement(superscript),                   // $FlowFixMe
-    //   this.contentToElement(subscript),                     // $FlowFixMe
-    //   scale,
-    //   superscriptBias,
-    //   subscriptBias,
-    // );
   }
 
-  sup(
-    optionsOrContent: TypeSupObject | TypeSupArray | TypeEquationPhrase,
-    sup: TypeEquationPhrase | null = null,
-    scriptScale: number | null = null,
-    scriptBias: TypeParsablePoint | null = null,
-  ) {
+  sup(optionsOrArray: TypeSupObject | TypeSupArray) {
     let content;
-    let superscript = null;
-    let scale = null;
-    let superscriptBias = null;
-    if (!(sup == null && scriptScale == null && scriptBias == null)) {
-      content = optionsOrContent;
-      superscript = sup;
-      scale = scriptScale;
-      superscriptBias = scriptBias;
-    } else if (Array.isArray(optionsOrContent)) {           // $FlowFixMe
-      [content, superscript, scale, superscriptBias] = optionsOrContent;
+    let superscript;
+    let scale;
+    let offset;
+    // let superscriptOffset = null;
+    let inSize;
+    if (Array.isArray(optionsOrArray)) {
+      [           // $FlowFixMe
+        content, superscript, scale, offset, inSize,           // $FlowFixMe
+      ] = optionsOrArray;
     } else {
       ({                                                    // $FlowFixMe
-        content, superscript, scale, superscriptBias,
-      } = optionsOrContent);
+        content, superscript, scale, offset, inSize,
+      } = optionsOrArray);
     }
-
-    superscriptBias = superscriptBias == null ? null : parsePoint(
-      // $FlowFixMe
-      superscriptBias, new Point(0, 0),
-    );
-
-    return new SuperSub(                                    // $FlowFixMe
-      this.contentToElement(content),                       // $FlowFixMe
-      this.contentToElement(superscript),
-      null,                                                 // $FlowFixMe
+    return this.supSub({
+      content,
+      superscript,
+      superscriptOffset: offset,
+      inSize,
       scale,
-      superscriptBias,
-      null,
-    );
+    });
   }
 
-  sub(
-    optionsOrContent: TypeSubObject | TypeSubArray | TypeEquationPhrase,
-    sub: TypeEquationPhrase | null = null,
-    scriptScale: number | null = null,
-    scriptBias: TypeParsablePoint | null = null,
-  ) {
+  sub(optionsOrArray: TypeSubObject | TypeSubArray) {
     let content;
-    let subscript = null;
-    let scale = null;
-    let subscriptBias = null;
-    if (!(sub == null && scriptScale == null && scriptBias == null)) {
-      content = optionsOrContent;
-      subscript = sub;
-      scale = scriptScale;
-      subscriptBias = scriptBias;
-    } else if (Array.isArray(optionsOrContent)) {           // $FlowFixMe
-      [content, subscript, scale, subscriptBias] = optionsOrContent;
+    let subscript;
+    let scale;
+    let offset;
+    let inSize;
+    if (Array.isArray(optionsOrArray)) {
+      [           // $FlowFixMe
+        content, subscript, scale, offset, inSize,           // $FlowFixMe
+      ] = optionsOrArray;
     } else {
       ({                                                    // $FlowFixMe
-        content, subscript, scale, subscriptBias,
-      } = optionsOrContent);
+        content, subscript, scale, offset, inSize,
+      } = optionsOrArray);
     }
-
-    subscriptBias = subscriptBias == null ? null : parsePoint(  // $FlowFixMe
-      subscriptBias, new Point(0, 0),
-    );
-
-    return new SuperSub(                                    // $FlowFixMe
-      this.contentToElement(content),
-      null,                                                 // $FlowFixMe
-      this.contentToElement(subscript),                     // $FlowFixMe
+    return this.supSub({
+      content,
+      subscript,
+      subscriptOffset: offset,
+      inSize,
       scale,
-      null,
-      subscriptBias,
-    );
+    });
   }
+
+  // sub(
+  //   optionsOrContent: TypeSubObject | TypeSubArray | TypeEquationPhrase,
+  //   sub: TypeEquationPhrase | null = null,
+  //   scriptScale: number | null = null,
+  //   scriptBias: TypeParsablePoint | null = null,
+  // ) {
+  //   let content;
+  //   let subscript = null;
+  //   let scale = null;
+  //   let subscriptBias = null;
+  //   if (!(sub == null && scriptScale == null && scriptBias == null)) {
+  //     content = optionsOrContent;
+  //     subscript = sub;
+  //     scale = scriptScale;
+  //     subscriptBias = scriptBias;
+  //   } else if (Array.isArray(optionsOrContent)) {           // $FlowFixMe
+  //     [content, subscript, scale, subscriptBias] = optionsOrContent;
+  //   } else {
+  //     ({                                                    // $FlowFixMe
+  //       content, subscript, scale, subscriptBias,
+  //     } = optionsOrContent);
+  //   }
+
+  //   subscriptBias = subscriptBias == null ? null : parsePoint(  // $FlowFixMe
+  //     subscriptBias, new Point(0, 0),
+  //   );
+
+  //   return new SuperSub(                                    // $FlowFixMe
+  //     this.contentToElement(content),
+  //     null,                                                 // $FlowFixMe
+  //     this.contentToElement(subscript),                     // $FlowFixMe
+  //     scale,
+  //     null,
+  //     subscriptBias,
+  //   );
+  // }
 
   strike(
     optionsOrContent: TypeStrikeObject | TypeStrikeArray | TypeEquationPhrase,
