@@ -1997,76 +1997,6 @@ export class EquationFunctions {
     );
   }
 
-  bracLegacy(
-    optionsOrArray: TypeBracketObject | TypeBracketArray,
-  ) {
-    let content;
-    let left;
-    let right;
-    let insideSpace;
-    let outsideSpace;
-    let topSpace;
-    let bottomSpace;
-    let minContentHeight;
-    let minContentDescent;
-    let descent;
-    let height;
-    let inSize;
-
-    if (Array.isArray(optionsOrArray)) {
-      [
-        content, left, right, inSize, insideSpace, outsideSpace,   // $FlowFixMe
-        topSpace, bottomSpace, minContentHeight, minContentDescent, height, descent,
-      ] = optionsOrArray;
-    } else {
-      ({
-        content, left, right, inSize, insideSpace, outsideSpace,
-        topSpace, bottomSpace, minContentHeight,
-        minContentDescent, height, descent,
-      } = optionsOrArray);
-    }
-    let leftBracket = null;
-    if (left != null) {
-      leftBracket = this.getExistingOrAddSymbol(left);
-    }
-    let rightBracket = null;
-    if (right != null) {
-      rightBracket = this.getExistingOrAddSymbol(right);
-    }
-    const contentArray = [];
-    if (content != null) {
-      contentArray.push(this.contentToElement(content));
-    }
-    const defaultOptions = {
-      insideSpace: 0.03,
-      outsideSpace: 0,
-      topSpace: 0.05,
-      bottomSpace: 0.05,
-      minContentHeight: null,
-      minContentDescent: null,
-      descent: null,
-      height: null,
-      inSize: true,
-    };
-    const optionsIn = {
-      insideSpace,
-      outsideSpace,
-      topSpace,
-      bottomSpace,
-      minContentHeight,
-      minContentDescent,
-      descent,
-      height,
-      inSize,
-    };
-    const options = joinObjects({}, defaultOptions, optionsIn);
-    return new Brackets(
-      contentArray,
-      [leftBracket, rightBracket],
-      options,
-    );
-  }
-
   // eslint-disable-next-line class-methods-use-this
   processComment(
     optionsOrArray: TypeBracketObject | TypeBracketArray,
@@ -2106,45 +2036,6 @@ export class EquationFunctions {
       options.inSize,
     ];
   }
-
-  // // $FlowFixMe
-  // bottomComment(...args) {
-  //   const [
-  //     content, comment, symbol,
-  //     contentSpaceToUse, commentSpaceToUse, scaleToUse,
-  //     inSize,
-  //   ] = this.processComment(...args);
-  //   let contentToUse;
-  //   if (symbol) {
-  //     contentToUse = new Bar(
-  //       [this.contentToElement(content)],
-  //       this.getExistingOrAddSymbol(symbol),
-  //       {
-  //         side: 'bottom',
-  //         space: contentSpaceToUse,
-  //         inSize,
-  //       },
-  //     );
-  //   } else {
-  //     contentToUse = this.pad({
-  //       content,
-  //       bottom: contentSpaceToUse + commentSpaceToUse,
-  //     });
-  //   }
-  //   return this.annotate({
-  //     content: contentToUse,
-  //     withAnnotations: [                                     // $FlowFixMe
-  //       this.annotation({
-  //         annotation: comment,
-  //         relativeToContent: ['center', 'bottom'],
-  //         relativeToAnnotation: ['center', 'top'],
-  //         scale: scaleToUse,
-  //         yOffset: -commentSpaceToUse,
-  //       }),
-  //     ],
-  //     inSize,
-  //   });
-  // }
 
   // $FlowFixMe
   topComment(...args) {
