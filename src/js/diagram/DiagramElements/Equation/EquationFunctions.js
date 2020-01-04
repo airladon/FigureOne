@@ -935,6 +935,7 @@ export class EquationFunctions {
         minContentAscent?: number,
         descent?: number,
         height?: number,
+        yOffset?: number,
       },
       right: {
         symbol: string,
@@ -948,6 +949,7 @@ export class EquationFunctions {
         minContentAscent?: number,
         descent?: number,
         height?: number,
+        yOffset?: number,
       },
       top: {
         symbol: string,
@@ -957,6 +959,7 @@ export class EquationFunctions {
         width?: number,
         leftSpace?: number,
         rightSpace?: number,
+        xOffset?: number,
       },
       bottom: {
         symbol: string,
@@ -966,6 +969,7 @@ export class EquationFunctions {
         width?: number,
         leftSpace?: number,
         rightSpace?: number,
+        xOffset?: number,
       },
     },
     inSize?: boolean,
@@ -975,29 +979,35 @@ export class EquationFunctions {
     bottomSpace?: number,
     leftSpace?: number,
     rightSpace?: number,
+    contentScale?: number,
   }) {
     const defaultOptions = {
       inSize: true,
       useFullContent: false,
       space: 0,
+      contentScale: 1,
       encompass: {
         space: 0,
       },
       left: {
         space: 0,
         overhang: 0,
+        yOffset: 0,
       },
       right: {
         space: 0,
         overhang: 0,
+        yOffset: 0,
       },
       top: {
         space: 0,
         overhang: 0,
+        xOffset: 0,
       },
       bottom: {
         space: 0,
         overhang: 0,
+        xOffset: 0,
       },
     };
     const {
@@ -1967,6 +1977,7 @@ export class EquationFunctions {
     const options = joinObjects({}, defaultOptions, optionsIn);
     return this.ann({
       content,
+      contentScale: options.contentScale,
       glyphs: {
         left: {
           symbol,
@@ -1993,6 +2004,8 @@ export class EquationFunctions {
           space,
           topSpace: options.topSpace,
           bottomSpace: options.bottomSpace,
+          yOffset: options.yOffset,
+          height: options.height,
         },
       },
       inSize,

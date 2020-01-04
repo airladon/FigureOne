@@ -272,12 +272,12 @@ export default class BaseAnnotationFunction implements ElementInterface {
     // const [encompassGlyph, leftGlyph, bottomGlyph, rightGlyph, topGlyph] = this.glyphs;
     const { content, annotations } = this;
     const {
-      inSize, useFullContent, space, topSpace, bottomSpace, leftSpace, rightSpace,
+      inSize, useFullContent, space, topSpace, bottomSpace, leftSpace, rightSpace, contentScale,
     } = this.options;
     const maxBounds = new Bounds();
 
     const contentBounds = new Bounds();
-    content.calcSize(loc._dup(), scale);
+    content.calcSize(loc._dup(), scale * contentScale);
     contentBounds.copyFrom(content.getBounds(useFullContent));
     maxBounds.copyFrom(contentBounds);
     annotations.forEach((annotation) => {
@@ -392,11 +392,10 @@ export default class BaseAnnotationFunction implements ElementInterface {
     const {
       space, overhang, topSpace, bottomSpace, minContentHeight,
       minContentDescent, minContentAscent,
-      descent, height,
+      descent, height, yOffset,
     } = this.glyphs[glyphName];
     const glyph = this.glyphs[glyphName];
     // const contentBounds = new Bounds();
-
     // contentBounds.copyFrom(contentBounds);
     let glyphHeight = contentBounds.height;
     let glyphLeft = contentBounds.left;
@@ -450,7 +449,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     const glyphBounds = glyph.glyph.getBounds(
       glyph.glyph.custom.options,
       glyphLeft,
-      glyphBottom,
+      glyphBottom + yOffset,
       null,
       glyphHeight,
       glyphName,
@@ -478,7 +477,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
       return contentBoundsIn;
     }
     const {
-      space, overhang, width, leftSpace, rightSpace,
+      space, overhang, width, leftSpace, rightSpace, xOffset,
     } = this.glyphs[glyphName];
 
     const glyph = this.glyphs[glyphName];
@@ -515,7 +514,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
 
     const glyphBounds = glyph.glyph.getBounds(
       glyph.glyph.custom.options,
-      glyphLeft,
+      glyphLeft + xOffset,
       glyphBottom,
       glyphLength,
       null,
