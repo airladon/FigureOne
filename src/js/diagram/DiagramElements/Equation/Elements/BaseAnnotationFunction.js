@@ -95,14 +95,15 @@ function copyGlyphs(
     }
     const glyph = glyphs[key];
     const copyGlyph = {};
+    duplicateFromTo(glyph, copyGlyph, ['glyph', 'annotations']);
     if (namedCollection != null) {
       copyGlyph.glyph = namedCollection[glyph.glyph.name];
     } else {
       copyGlyph.glyph = glyph.glyph;
     }
-    copyGlyph.width = glyph.width;
-    copyGlyph.height = glyph.height;
-    copyGlyph.location = glyph.location;
+    // copyGlyph.width = glyph.width;
+    // copyGlyph.height = glyph.height;
+    // copyGlyph.location = glyph.location;
     copyGlyph.annotations = copyAnnotations(glyph.annotations, namedCollection);
     copy[key] = copyGlyph;
   });
