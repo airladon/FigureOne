@@ -166,8 +166,8 @@ describe('Equation Functions - Superscript and Subscript', () => {
               superscript: 'b',
               subscript: 'c',
               scale,
-              superscriptBias: supBias,
-              subscriptBias: subBias,
+              superscriptOffset: supBias,
+              subscriptOffset: subBias,
             },
           },
           // Method Array
@@ -193,7 +193,7 @@ describe('Equation Functions - Superscript and Subscript', () => {
         eqn.addElements(elements);
         eqn.addForms({
           0: { sup: ['a', { sup: ['b', { sup: ['c', 'g'] }] }] },
-          1: e.sup(['a', e.sup(['b', e.sup(['c', 'd'])])]),
+          1: e.sup(['a', e.sup(['b', e.sup(['c', 'g'])])]),
         });
       },
     };
