@@ -139,7 +139,36 @@ export default class Symbol extends DiagramElementPrimitive {
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
   getBounds(options: Object, leftIn: number, bottomIn: number, widthIn: number, heightIn: number, side?: 'left' | 'right' | 'bottom' | 'top') {
-    return new Bounds();
+    const { width, height } = this.getDefaultValues(
+      heightIn, widthIn, options,
+    );
+    const bounds = new Bounds();
+    if (side === 'left') {
+      bounds.left = leftIn - width;
+      bounds.bottom = bottomIn;
+      bounds.top = bounds.bottom + height;
+      bounds.right = bounds.left + width;
+    } else if (side === 'right') {
+      bounds.left = leftIn;
+      bounds.bottom = bottomIn;
+      bounds.top = bounds.bottom + height;
+      bounds.right = bounds.left + width;
+    } else if (side === 'top') {
+      bounds.bottom = bottomIn;
+      bounds.top = bottomIn + height;
+      bounds.left = leftIn + widthIn / 2 - width / 2;
+      bounds.right = bounds.left + width;
+    } else {
+      bounds.top = bottomIn;
+      bounds.bottom = bottomIn - height;
+      bounds.left = leftIn + widthIn / 2 - width / 2;
+      bounds.right = bounds.left + width;
+    }
+    bounds.width = width;
+    bounds.height = height;
+    bounds.ascent = height;
+    bounds.descent = 0;
+    return bounds;
   }
 
   // eslint-disable-next-line class-methods-use-this

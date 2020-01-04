@@ -1965,28 +1965,60 @@ export class EquationFunctions {
       toOffset,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
-    options.fromOffset = parsePoint(options.fromOffset);
-    options.toOffset = parsePoint(options.toOffset);
-    let symbolToUse = null;
-    if (symbol != null) {
-      symbolToUse = this.getExistingOrAddSymbol(symbol);
-    }
-    const contentArray = [];
-    if (content != null) {
-      contentArray.push(this.contentToElement(content));
-    }
-    if (from != null) {
-      contentArray.push(this.contentToElement(from));
-    }
-    if (to != null) {
-      contentArray.push(this.contentToElement(to));
-    }
+    return this.ann({
+      content,
+      glyphs: {
+        left: {
+          symbol,
+          annotations: [
+            {
+              content: to,
+              xPosition: 'center',
+              yPosition: 'top',
+              xAlign: 'center',
+              yAlign: 'bottom',
+              offset: parsePoint(options.toOffset).add(0, options.toSpace),
+              scale: options.toScale,
+            },
+            {
+              content: from,
+              xPosition: 'center',
+              yPosition: 'bottom',
+              xAlign: 'center',
+              yAlign: 'top',
+              offset: parsePoint(options.fromOffset).add(0, -options.fromSpace),
+              scale: options.fromScale,
+            },
+          ],
+          space,
+          topSpace: options.topSpace,
+          bottomSpace: options.bottomSpace,
+        },
+      },
+      inSize,
+    });
+    // options.fromOffset = parsePoint(options.fromOffset);
+    // options.toOffset = parsePoint(options.toOffset);
+    // let symbolToUse = null;
+    // if (symbol != null) {
+    //   symbolToUse = this.getExistingOrAddSymbol(symbol);
+    // }
+    // const contentArray = [];
+    // if (content != null) {
+    //   contentArray.push(this.contentToElement(content));
+    // }
+    // if (from != null) {
+    //   contentArray.push(this.contentToElement(from));
+    // }
+    // if (to != null) {
+    //   contentArray.push(this.contentToElement(to));
+    // }
 
-    return new SumProd(
-      contentArray,
-      symbolToUse,
-      options,
-    );
+    // return new SumProd(
+    //   contentArray,
+    //   symbolToUse,
+    //   options,
+    // );
   }
 
   // eslint-disable-next-line class-methods-use-this
