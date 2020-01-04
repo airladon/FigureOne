@@ -134,7 +134,7 @@ export default class Brace extends Bracket {
   // eslint-disable-next-line class-methods-use-this
   getLeftPoints(options: Object, widthIn: number, height: number) {
     const {
-      sides, side,
+      sides,
     } = options;
 
     const { lineWidth, width, tipWidth } = this.getVerticalDefaultValues(height, widthIn, options);

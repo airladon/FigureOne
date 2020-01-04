@@ -73,6 +73,7 @@ describe('Equation Functions - Superscript and Subscript', () => {
             subscript: 'c',
           }),
         });
+        diagram.elements = eqn;
       },
       nested: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
@@ -174,6 +175,7 @@ describe('Equation Functions - Superscript and Subscript', () => {
           // Function with parameters
           2: supSub('a', 'b', 'c', scale, supBias, subBias),
         });
+        diagram.elements = eqn;
       },
       sub: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
@@ -211,6 +213,7 @@ describe('Equation Functions - Superscript and Subscript', () => {
 
     // Snapshot test on most simple layout
     eqn.showForm('0');
+    diagram.setFirstTransform();
     tools.cleanUIDs(eqn);
     expect(round(eqn._a.transform.mat)).toMatchSnapshot();
     expect(round(eqn._b.transform.mat)).toMatchSnapshot();
@@ -247,10 +250,15 @@ describe('Equation Functions - Superscript and Subscript', () => {
 
     // get without positions
     eqn.showForm('without');
+    diagram.setFirstTransform();
+    const baseB = eqn._b.getBoundingRect('diagram');
+    const baseC = eqn._c.getBoundingRect('diagram');
+    // console.log(baseB)
     const withoutPos = elems.map(elem => round(elem.transform.mat).slice());
 
     // with reference positions
     eqn.showForm('0');
+
     const withPos = elems.map(elem => round(elem.transform.mat).slice());
 
     expect(withoutPos).not.toEqual(withPos);
@@ -260,24 +268,35 @@ describe('Equation Functions - Superscript and Subscript', () => {
       const positions = elems.map(elem => round(elem.transform.mat).slice());
       expect(withPos).toEqual(positions);
     });
+    diagram.setFirstTransform();
+    const newB = eqn._b.getBoundingRect('diagram');
+    const newC = eqn._c.getBoundingRect('diagram');
+    // console.log(newB)
 
-    const withSub = eqn.eqn.forms['0'].base.content[0].content[0].subscript;
-    const withoutSub = eqn.eqn.forms.without.base.content[0].content[0].subscript;
-    const withSup = eqn.eqn.forms['0'].base.content[0].content[0].subscript;
-    const withoutSup = eqn.eqn.forms.without.base.content[0].content[0].subscript;
+    // const withSub = eqn.eqn.forms['0'].base.content[0].content[0].subscript;
+    // const withoutSub = eqn.eqn.forms.without.base.content[0].content[0].subscript;
+    // const withSup = eqn.eqn.forms['0'].base.content[0].content[0].subscript;
+    // const withoutSup = eqn.eqn.forms.without.base.content[0].content[0].subscript;
+
 
     // Check scaling was done correctly
-    expect(round(withSub.height / withoutSub.height)).toBe(round(0.8 / 0.5));
-    expect(round(withSup.height / withoutSup.height)).toBe(round(0.8 / 0.5));
+    // expect(round(withSub.height / withoutSub.height)).toBe(round(0.8 / 0.5));
+    // expect(round(withSup.height / withoutSup.height)).toBe(round(0.8 / 0.5));
+    expect(round(baseB.width / newB.width)).toBe(round(0.5 / 0.8));
+    expect(round(baseC.width / newC.width)).toBe(round(0.5 / 0.8));
 
     // Check xBias location was done correctly
-    expect(round(withSub.location.x - withoutSub.location.x)).toBe(0.5);
-    expect(round(withSup.location.x - withoutSup.location.x)).toBe(0.5);
+    expect(round(newB.left - baseB.left)).toBe(0.5);
+    expect(round(newC.left - baseC.left)).toBe(0.5);
+
+    // expect(round(newB.bottom)).toBe(baseB.bottom)
+    // expect(round(withSub.location.x - withoutSub.location.x)).toBe(0.5);
+    // expect(round(withSup.location.x - withoutSup.location.x)).toBe(0.5);
 
     // Check yBias location was done correctly
     // subscript.height * 0.7 + this.subBias.y
-    expect(round(withoutSub.location.y)).toBe(round(-withoutSub.ascent * 0.7 + 0));
-    expect(round(withSub.location.y)).toBe(round(-withSub.ascent * 0.7 - 0.5));
+    // expect(round(withoutSub.location.y)).toBe(round(-withoutSub.ascent * 0.7 + 0));
+    // expect(round(withSub.location.y)).toBe(round(-withSub.ascent * 0.7 - 0.5));
   });
   test('Nested Subscript', () => {
     functions.sub();

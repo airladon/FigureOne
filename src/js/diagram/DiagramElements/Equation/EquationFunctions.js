@@ -1266,24 +1266,57 @@ export class EquationFunctions {
       } = optionsOrContent);
     }
 
-    subscriptBias = subscriptBias == null ? null : parsePoint(
+    subscriptBias = subscriptBias == null ? new Point(0, 0) : parsePoint(
     // $FlowFixMe
       subscriptBias, new Point(0, 0),
     );
 
-    superscriptBias = superscriptBias == null ? null : parsePoint(
+    superscriptBias = superscriptBias == null ? new Point(0, 0) : parsePoint(
       // $FlowFixMe
       superscriptBias, new Point(0, 0),
     );
 
-    return new SuperSub(                                    // $FlowFixMe
-      this.contentToElement(content),                       // $FlowFixMe
-      this.contentToElement(superscript),                   // $FlowFixMe
-      this.contentToElement(subscript),                     // $FlowFixMe
-      scale,
-      superscriptBias,
-      subscriptBias,
-    );
+    if (scale == null) {
+      scale = 0.5;
+    }
+
+    const annotations = [];
+    if (superscript != null) {
+      annotations.push({
+        content: superscript,
+        xPosition: 'right',
+        yPosition: '0.7a',
+        xAlign: 'left',
+        yAlign: 'baseline',
+        offset: superscriptBias._dup(),
+        scale,
+      });
+    }
+    if (subscript != null) {
+      annotations.push({
+        content: subscript,
+        xPosition: 'right',
+        yPosition: 'baseline',
+        xAlign: 'left',
+        yAlign: '0.7a',
+        offset: subscriptBias._dup(),
+        scale,
+      });
+    }
+    return this.ann({
+      content,
+      annotations,
+      // inSize,
+    });
+
+    // return new SuperSub(                                    // $FlowFixMe
+    //   this.contentToElement(content),                       // $FlowFixMe
+    //   this.contentToElement(superscript),                   // $FlowFixMe
+    //   this.contentToElement(subscript),                     // $FlowFixMe
+    //   scale,
+    //   superscriptBias,
+    //   subscriptBias,
+    // );
   }
 
   sup(
