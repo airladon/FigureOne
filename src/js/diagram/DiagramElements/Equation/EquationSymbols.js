@@ -184,7 +184,8 @@ export default class EquationSymbols {
       new Transform('Box').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-    )).symbol;
+      'strip',
+    ));
   }
 
   // simpleIntegral(optionsIn: {
