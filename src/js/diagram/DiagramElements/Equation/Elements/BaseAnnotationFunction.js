@@ -552,7 +552,6 @@ export default class BaseAnnotationFunction implements ElementInterface {
 
     let xPos;
     let yPos;
-
     if (xPosition === 'right') {
       xPos = 1;
     } else if (xPosition === 'center') {

@@ -151,7 +151,7 @@ export default class EquationSymbols {
     return (new VinculumNew(
       this.shapes.webgl,
       optionsToUse.color,
-      new Transform('ArrowSymbol').scale(1, 1).translate(0, 0),
+      new Transform('VinculumSymbol').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
     )).symbol;
@@ -241,7 +241,7 @@ export default class EquationSymbols {
     if (optionsToUse.direction === 'left' || optionsToUse.direction === 'right') {
       optionsToUse.side = 'top';
     } else {
-      optionsToUSe.side = 'left';
+      optionsToUse.side = 'left';
     }
     return (new Arrow(
       this.shapes.webgl,
@@ -276,7 +276,8 @@ export default class EquationSymbols {
       new Transform('sum').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-    )).symbol;
+      'strip',
+    ));
   }
 
   product(options: {
@@ -302,7 +303,8 @@ export default class EquationSymbols {
       new Transform('Sum').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-    )).symbol;
+      'strip',
+    ));
   }
 
   integral(options: {

@@ -196,56 +196,56 @@ export default class Bracket extends Symbol {
     return out;
   }
 
-  getBounds(
-    options: Object,
-    leftIn: number,
-    bottomIn: number,
-    widthIn: number,
-    heightIn: number,
-    side: 'left' | 'right' | 'bottom' | 'top',
-  ) {
-    const { width, height } = this.getDefaultValues(
-      heightIn, widthIn, options,
-    );
-    const bounds = new Bounds();
-    const glyphWidth = width;
-    const glyphHeight = height;
-    // if (options.draw === 'static') {
-    //   const { staticWidth, staticHeight } = options;
-    //   if (options.side === 'left' || options.side === 'right') {
-    //     console.log(widthIn, heightIn, width, height, staticWidth, staticHeight);
-    //     glyphWidth = height / staticHeight * width / height;
-    //     // glyphWidth = staticWidth / staticHeight * height;
-    //   } else {
-    //     glyphHeight = staticHeight / staticWidth * width;
-    //   }
-    // }
-    // console.log(glyphWidth, glyphHeight)
-    if (side === 'left') {
-      bounds.left = leftIn - glyphWidth;
-      bounds.bottom = bottomIn;
-      bounds.top = bounds.bottom + glyphHeight;
-      bounds.right = bounds.left + glyphWidth;
-    } else if (side === 'right') {
-      bounds.left = leftIn;
-      bounds.bottom = bottomIn;
-      bounds.top = bounds.bottom + glyphHeight;
-      bounds.right = bounds.left + glyphWidth;
-    } else if (side === 'top') {
-      bounds.bottom = bottomIn;
-      bounds.top = bottomIn + glyphHeight;
-      bounds.left = leftIn + widthIn / 2 - glyphWidth / 2;
-      bounds.right = bounds.left + glyphWidth;
-    } else {
-      bounds.top = bottomIn;
-      bounds.bottom = bottomIn - glyphHeight;
-      bounds.left = leftIn + widthIn / 2 - glyphWidth / 2;
-      bounds.right = bounds.left + glyphWidth;
-    }
-    bounds.width = glyphWidth;
-    bounds.height = glyphHeight;
-    bounds.ascent = glyphHeight;
-    bounds.descent = 0;
-    return bounds;
-  }
+  // getBounds(
+  //   options: Object,
+  //   leftIn: number,
+  //   bottomIn: number,
+  //   widthIn: number,
+  //   heightIn: number,
+  //   side: 'left' | 'right' | 'bottom' | 'top' = 'left',
+  // ) {
+  //   const { width, height } = this.getDefaultValues(
+  //     heightIn, widthIn, options,
+  //   );
+  //   const bounds = new Bounds();
+  //   const glyphWidth = width;
+  //   const glyphHeight = height;
+  //   // if (options.draw === 'static') {
+  //   //   const { staticWidth, staticHeight } = options;
+  //   //   if (options.side === 'left' || options.side === 'right') {
+  //   //     console.log(widthIn, heightIn, width, height, staticWidth, staticHeight);
+  //   //     glyphWidth = height / staticHeight * width / height;
+  //   //     // glyphWidth = staticWidth / staticHeight * height;
+  //   //   } else {
+  //   //     glyphHeight = staticHeight / staticWidth * width;
+  //   //   }
+  //   // }
+  //   // console.log(glyphWidth, glyphHeight)
+  //   if (side === 'left') {
+  //     bounds.left = leftIn - glyphWidth;
+  //     bounds.bottom = bottomIn;
+  //     bounds.top = bounds.bottom + glyphHeight;
+  //     bounds.right = bounds.left + glyphWidth;
+  //   } else if (side === 'right') {
+  //     bounds.left = leftIn;
+  //     bounds.bottom = bottomIn;
+  //     bounds.top = bounds.bottom + glyphHeight;
+  //     bounds.right = bounds.left + glyphWidth;
+  //   } else if (side === 'top') {
+  //     bounds.bottom = bottomIn;
+  //     bounds.top = bottomIn + glyphHeight;
+  //     bounds.left = leftIn + widthIn / 2 - glyphWidth / 2;
+  //     bounds.right = bounds.left + glyphWidth;
+  //   } else {
+  //     bounds.top = bottomIn;
+  //     bounds.bottom = bottomIn - glyphHeight;
+  //     bounds.left = leftIn + widthIn / 2 - glyphWidth / 2;
+  //     bounds.right = bounds.left + glyphWidth;
+  //   }
+  //   bounds.width = glyphWidth;
+  //   bounds.height = glyphHeight;
+  //   bounds.ascent = glyphHeight;
+  //   bounds.descent = 0;
+  //   return bounds;
+  // }
 }
