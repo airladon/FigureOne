@@ -362,7 +362,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     const bottom = bottomSpace != null ? bottomSpace : space;
     const contentBounds = new Bounds();
     contentBounds.copyFrom(contentBoundsIn);
-    contentBounds.offset(top, right, -left, -bottom);
+    contentBounds.offset(top, right, -bottom, -left);
     const glyphBounds = glyph.glyph.getBounds(
       glyph.glyph.custom.options,
       contentBounds.left,
@@ -370,6 +370,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
       contentBounds.width,
       contentBounds.height,
     );
+    // console.log(left, glyphBounds)
     const totalBounds = new Bounds();
     totalBounds.copyFrom(glyphBounds);
     glyph.width = glyphBounds.width;
