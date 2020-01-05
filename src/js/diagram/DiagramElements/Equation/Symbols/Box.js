@@ -111,7 +111,7 @@ export default class Box extends Symbol {
       bounds.bottom = bottomIn - lineWidth;
       bounds.width = width + lineWidth * 2;
       bounds.height = height + lineWidth * 2;
-      bounds.right = bounds.left + bounds.right;
+      bounds.right = bounds.left + bounds.width;
       bounds.top = bounds.bottom + bounds.height;
       bounds.descent = 0;
       bounds.ascent = bounds.height;

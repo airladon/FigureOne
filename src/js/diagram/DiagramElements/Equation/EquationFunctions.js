@@ -622,6 +622,7 @@ export class EquationFunctions {
     // $FlowFixMe
     if (name === 'frac') { return this.frac(params); }        // $FlowFixMe
     if (name === 'strike') { return this.strike(params); }    // $FlowFixMe
+    if (name === 'strikeNew') { return this.strikeNew(params); }    // $FlowFixMe
     if (name === 'box') { return this.box(params); }    // $FlowFixMe
     if (name === 'root') { return this.root(params); }    // $FlowFixMe
     if (name === 'brac') { return this.brac(params); }        // $FlowFixMe
@@ -1421,6 +1422,63 @@ export class EquationFunctions {
       this.getExistingOrAddSymbol(symbol),           // $FlowFixMe
       inSize,
     );
+  }
+
+  strikeNew(
+    optionsOrArray: TypeSrikeNewObject | TypeStrikeNewArray,
+  ) {
+    let content;
+    let symbol;
+    let inSize;
+    let space;
+    let topSpace;
+    let bottomSpace;
+    let leftSpace;
+    let rightSpace;
+    const defaultOptions = {
+      inSize: false,
+      space: 0,
+      topSpace: null,
+      bottomSpace: null,
+      leftSpace: null,
+      rightSpace: null,
+    };
+    if (Array.isArray(optionsOrArray)) {
+      [
+        content, symbol, inSize, space, topSpace,
+        rightSpace, bottomSpace, leftSpace,
+      ] = optionsOrArray;
+    } else {
+      ({
+        content, symbol, inSize, space, topSpace,
+        rightSpace, bottomSpace, leftSpace,
+      } = optionsOrArray);
+    }
+    const optionsIn = {
+      content,
+      symbol,
+      inSize,
+      space,
+      topSpace,
+      rightSpace,
+      bottomSpace,
+      leftSpace,
+    };
+    const options = joinObjects(defaultOptions, optionsIn);
+    return this.ann({
+      content,
+      inSize: options.inSize,
+      glyphs: {
+        encompass: {
+          symbol,
+          topSpace: options.topSpace,
+          bottomSpace: options.bottomSpace,
+          leftSpace: options.leftSpace,
+          rightSpace: options.rightSpace,
+          space: options.space,
+        },
+      },
+    });
   }
 
   box(

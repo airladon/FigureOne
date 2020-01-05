@@ -22,6 +22,7 @@ import Product from './Symbols/Product';
 import Integral from './Symbols/Integral';
 import Arrow from './Symbols/Arrow';
 import VinculumNew from './Symbols/Vinculum';
+import Strike from './Symbols/Strike';
 
 // import BracketNew from './Symbols/BracketNew';
 // import BraceNew from './Symbols/BraceNew';
@@ -406,17 +407,45 @@ export default class EquationSymbols {
     );
   }
 
-  strike(options: { color?: Array<number> } = {}) {
-    let { color } = options;
-    if (color == null) {
-      color = this.defaultColor;
-    }
-    return this.shapes.horizontalLine(
-      new Point(0, 0),
-      1, 1, 0,
-      color,
-      new Transform('strike').scale(1, 1).rotate(0).translate(0, 0),
+  strike(options: {
+    color?: Array<number>,
+    style?: 'cross' | 'forward' | 'backward' | 'horizontal',
+    lineWidth?: number,
+    width?: number,
+    height?: number,
+    draw: 'static' | 'dynamic',
+    staticHeight?: number | 'first',
+    staticWidth?: number | 'first',
+  }) {
+    const defaultOptions = {
+      style: 'cross',
+      color: this.defaultColor,
+      lineWidth: null,
+      draw: 'dynamic',
+      staticHeight: 'first',
+      width: null,
+      height: null,
+      staticWidth: 'first',
+    };
+    const optionsToUse = joinObjects(defaultOptions, options);
+    return new Strike(
+      this.shapes.webgl,
+      optionsToUse.color,
+      new Transform('bracket').scale(1, 1).translate(0, 0),
+      this.shapes.limits,
+      optionsToUse,
+      'triangles',
     );
+    // let { color } = options;
+    // if (color == null) {
+    //   color = this.defaultColor;
+    // }
+    // return this.shapes.horizontalLine(
+    //   new Point(0, 0),
+    //   1, 1, 0,
+    //   color,
+    //   new Transform('strike').scale(1, 1).rotate(0).translate(0, 0),
+    // );
   }
 
   xStrike(options: { color?: Array<number> } = {}) {
@@ -436,37 +465,6 @@ export default class EquationSymbols {
     cross.add('s1', strike1);
     cross.add('s2', strike2);
     return cross;
-  }
-
-  bracketLegacy(options: {
-    side?: 'left' | 'right' | 'top' | 'bottom',
-    color?: Array<number>,
-    lineWidth?: number,
-    sides?: number,
-    width?: number,
-    tipWidth?: number,
-    draw?: 'static' | 'dynamic',
-    staticHeight?: number | 'first',
-  }) {
-    const defaultOptions = {
-      side: 'left',
-      color: this.defaultColor,
-      lineWidth: null,
-      sides: 10,
-      draw: 'dynamic',
-      staticHeight: 'first',
-      width: null,
-      tipWidth: null,
-      staticWidth: null,
-    };
-    const optionsToUse = joinObjects(defaultOptions, options);
-    return (new Bracket(
-      this.shapes.webgl,
-      optionsToUse.color,
-      new Transform('bracket').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
-      optionsToUse,
-    )).symbol;
   }
 
   bracket(options: {
