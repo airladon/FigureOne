@@ -622,7 +622,7 @@ export class EquationFunctions {
     // $FlowFixMe
     if (name === 'frac') { return this.frac(params); }        // $FlowFixMe
     if (name === 'strike') { return this.strike(params); }    // $FlowFixMe
-    if (name === 'strikeNew') { return this.strikeNew(params); }    // $FlowFixMe
+    // if (name === 'strikeNew') { return this.strikeNew(params); }    // $FlowFixMe
     if (name === 'box') { return this.box(params); }    // $FlowFixMe
     if (name === 'root') { return this.root(params); }    // $FlowFixMe
     if (name === 'brac') { return this.brac(params); }        // $FlowFixMe
@@ -1397,7 +1397,7 @@ export class EquationFunctions {
   //   );
   // }
 
-  strike(
+  strikeLegacy(
     optionsOrContent: TypeStrikeObject | TypeStrikeArray | TypeEquationPhrase,
     sym: string | null = null,
     inSizeIn: boolean | null = null,
@@ -1424,7 +1424,7 @@ export class EquationFunctions {
     );
   }
 
-  strikeNew(
+  strike(
     optionsOrArray: TypeSrikeNewObject | TypeStrikeNewArray,
   ) {
     let content;

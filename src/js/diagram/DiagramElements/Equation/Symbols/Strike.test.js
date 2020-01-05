@@ -72,13 +72,13 @@ describe('Equation Symbols - Bracket', () => {
     eqn.addElements(elements);
     eqn.addForms(
       {
-        cross: { strikeNew: ['a', 's'] },
-        forward: { strikeNew: ['a', 'sf'] },
-        back: { strikeNew: ['a', 'sb'] },
-        horizontal: { strikeNew: ['a', 'sh'] },
-        staticFirst: { strikeNew: ['a', 'staticFirst'] },
-        static: { strikeNew: ['a', 'static'] },
-        fixedHeightWidth: { strikeNew: ['a', 'fixedHeightWidth'] },
+        cross: { strike: ['a', 's'] },
+        forward: { strike: ['a', 'sf'] },
+        back: { strike: ['a', 'sb'] },
+        horizontal: { strike: ['a', 'sh'] },
+        staticFirst: { strike: ['a', 'staticFirst'] },
+        static: { strike: ['a', 'static'] },
+        fixedHeightWidth: { strike: ['a', 'fixedHeightWidth'] },
       },
     );
     diagram.elements = eqn;
