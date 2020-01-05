@@ -73,6 +73,15 @@ export default class Symbol extends DiagramElementPrimitive {
         this.custom.options.staticWidth = width;
         t.updateScale(width, height);
       } else {
+        const [
+          pointsNew, widthNew, heightNew,
+        ] = this.getPoints(this.custom.options, widthIn, heightIn);
+        this.drawingObject.updatePoints(
+          pointsNew,
+          widthNew,
+          heightNew,
+        );
+        this.custom.scale = new Point(widthIn, heightIn);
         t.updateScale(widthIn, heightIn);
       }
       t.updateTranslation(location.x, location.y);
