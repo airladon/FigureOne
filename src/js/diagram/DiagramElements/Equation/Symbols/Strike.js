@@ -8,7 +8,7 @@ import Bounds from '../Elements/Bounds';
 // import WebGLInstance from '../../../webgl/webgl';
 
 
-export default class Box extends Symbol {
+export default class Strike extends Symbol {
   symbol: DiagramElementPrimitive;
 
   // eslint-disable-next-line class-methods-use-this

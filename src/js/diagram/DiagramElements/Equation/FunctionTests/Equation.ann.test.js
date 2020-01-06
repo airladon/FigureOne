@@ -148,15 +148,18 @@ describe('Equation Functions - Ann', () => {
             },
           },
           simpleStaticEncompass: {
-            ann: {
-              content: 'a',
-              glyphs: {
-                encompass: {
-                  symbol: 'boxStatic',
-                  space: 0, // { left: 0 }
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  encompass: {
+                    symbol: 'boxStatic',
+                    space: 0, // { left: 0 }
+                  },
                 },
               },
             },
+            scale: 1,
           },
           encompassWithAnnotation: {
             ann: {
