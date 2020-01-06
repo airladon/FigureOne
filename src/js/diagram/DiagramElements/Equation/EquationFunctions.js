@@ -16,16 +16,16 @@ import Fraction from './Elements/Fraction';
 import Root from './Elements/Root';
 import Strike from './Elements/Strike';
 // import DiagramPrimitives from '../../DiagramPrimitives/DiagramPrimitives';
-import SuperSub from './Elements/SuperSub';
+// import SuperSub from './Elements/SuperSub';
 // import { Brackets, Bar } from './Elements/Brackets';
-import Brackets from './Elements/Brackets';
-import Bar from './Elements/Bar';
+// import Brackets from './Elements/Brackets';
+// import Bar from './Elements/Bar';
 import EquationForm from './EquationForm';
 import { Annotation, AnnotationInformation } from './Elements/Annotation';
 import Padding from './Elements/Padding';
 import Box from './Elements/Box';
 import Integral from './Elements/Integral';
-import SumProd from './Elements/SumProd';
+// import SumProd from './Elements/SumProd';
 import Matrix from './Elements/Matrix';
 import Scale from './Elements/Scale';
 import Container from './Elements/Container';
@@ -1464,12 +1464,26 @@ export class EquationFunctions {
       bottomSpace,
       leftSpace,
     };
-    const optionsToUse = joinObjects(defaultOptions, optionsIn);
-    return new Box(
-      [this.contentToElement(content)],
-      this.getExistingOrAddSymbol(symbol),
-      optionsToUse,
-    );
+    const options = joinObjects(defaultOptions, optionsIn);
+    return this.ann({
+      content,
+      inSize,
+      glyphs: {
+        encompass: {
+          symbol,
+          space: options.space,
+          leftSpace: options.leftSpace,
+          rightSpace: options.rightSpace,
+          topSpace: options.topSpace,
+          bottomSpace: options.bottomSpace,
+        },
+      },
+    });
+    // return new Box(
+    //   [this.contentToElement(content)],
+    //   this.getExistingOrAddSymbol(symbol),
+    //   optionsToUse,
+    // );
   }
 
 
@@ -2110,7 +2124,6 @@ export class EquationFunctions {
     });
   }
 
-  
   strike(
     optionsOrArray: TypeSrikeNewObject | TypeStrikeNewArray,
   ) {

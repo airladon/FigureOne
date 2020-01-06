@@ -107,8 +107,8 @@ export default class Box extends Symbol {
       bounds.ascent = bounds.height;
       bounds.descent = 0;
     } else {
-      bounds.left = leftIn - lineWidth;
-      bounds.bottom = bottomIn - lineWidth;
+      bounds.left = leftIn + widthIn / 2 - width / 2 - lineWidth;
+      bounds.bottom = bottomIn + heightIn / 2 - height / 2 - lineWidth;
       bounds.width = width + lineWidth * 2;
       bounds.height = height + lineWidth * 2;
       bounds.right = bounds.left + bounds.width;
@@ -134,6 +134,10 @@ export default class Box extends Symbol {
     } else {
       out.lineWidth = 0.01;
     }
+    if (options.fill === true) {
+      out.lineWidth = 0;
+    }
+
     if (options.height != null && typeof options.height === 'number') {
       out.height = options.height;
     } else if (height != null) {
