@@ -937,6 +937,7 @@ export class EquationFunctions {
         descent?: number,
         height?: number,
         yOffset?: number,
+        annotationsOverContent?: boolean,
       },
       right: {
         symbol: string,
@@ -951,6 +952,7 @@ export class EquationFunctions {
         descent?: number,
         height?: number,
         yOffset?: number,
+        annotationsOverContent?: boolean,
       },
       top: {
         symbol: string,
@@ -961,6 +963,7 @@ export class EquationFunctions {
         leftSpace?: number,
         rightSpace?: number,
         xOffset?: number,
+        annotationsOverContent?: boolean,
       },
       bottom: {
         symbol: string,
@@ -971,6 +974,7 @@ export class EquationFunctions {
         leftSpace?: number,
         rightSpace?: number,
         xOffset?: number,
+        annotationsOverContent?: boolean,
       },
     },
     inSize?: boolean,
@@ -994,21 +998,25 @@ export class EquationFunctions {
         space: 0,
         overhang: 0,
         yOffset: 0,
+        annotationsOverContent: false,
       },
       right: {
         space: 0,
         overhang: 0,
         yOffset: 0,
+        annotationsOverContent: false,
       },
       top: {
         space: 0,
         overhang: 0,
         xOffset: 0,
+        annotationsOverContent: false,
       },
       bottom: {
         space: 0,
         overhang: 0,
         xOffset: 0,
+        annotationsOverContent: false,
       },
     };
     const {
@@ -1467,7 +1475,7 @@ export class EquationFunctions {
     const options = joinObjects(defaultOptions, optionsIn);
     return this.ann({
       content,
-      inSize,
+      inSize: options.inSize,
       glyphs: {
         encompass: {
           symbol,
@@ -1795,21 +1803,34 @@ export class EquationFunctions {
       contentScale: scale,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
+    return this.ann({
+      content,
+      inSize: options.inSize,
+      glyphs: {
+        left: {
+          symbol,
+          space: options.space,
+          topSpace: options.topSpace,
+          bottomSpace: options.bottomSpace,
+          height: options.height,
+          yOffset: options.yOffset,
+        },
+      },
+    });
+    // let symbolToUse = null;
+    // if (symbol != null) {
+    //   symbolToUse = this.getExistingOrAddSymbol(symbol);
+    // }
+    // const contentArray = [];
+    // if (content != null) {
+    //   contentArray.push(this.contentToElement(content));
+    // }
 
-    let symbolToUse = null;
-    if (symbol != null) {
-      symbolToUse = this.getExistingOrAddSymbol(symbol);
-    }
-    const contentArray = [];
-    if (content != null) {
-      contentArray.push(this.contentToElement(content));
-    }
-
-    return new Integral(
-      contentArray,
-      symbolToUse,
-      options,
-    );
+    // return new Integral(
+    //   contentArray,
+    //   symbolToUse,
+    //   options,
+    // );
   }
 
   intLimits(
@@ -1828,12 +1849,20 @@ export class EquationFunctions {
     let scale;
     let fromScale;
     let toScale;
-    let fromSpace;
-    let toSpace;
+    // let fromSpace;
+    // let toSpace;
     let fromOffset;
     let toOffset;
     let limitsPosition;
     let limitsAroundContent;
+    let fromXPosition;
+    let fromYPosition;
+    let fromXAlign;
+    let fromYAlign;
+    let toXPosition;
+    let toYPosition;
+    let toXAlign;
+    let toYAlign;
     const defaultOptions = {
       space: 0.05,
       topSpace: 0.1,
@@ -1844,29 +1873,67 @@ export class EquationFunctions {
       contentScale: 1,
       fromScale: 0.5,
       toScale: 0.5,
-      fromSpace: 0.04,
-      toSpace: 0.04,
+      // fromSpace: 0.01,
+      // toSpace: 0.01,
       fromOffset: [0, 0],
-      toOffset: [0, 0],
+      toOffset: [0.04, 0],
       limitsPosition: 'side',
       limitsAroundContent: true,
+      fromXPosition: 0.5,
+      fromYPosition: 'bottom',
+      fromXAlign: 'left',
+      fromYAlign: 'middle',
+      toXPosition: 'right',
+      toYPosition: 'top',
+      toXAlign: 'left',
+      toYAlign: 'middle',
     };
     if (Array.isArray(optionsOrArray)) {
       [                                                    // $FlowFixMe
         symbol, content, from, to, inSize, space,          // $FlowFixMe
         topSpace, bottomSpace,                             // $FlowFixMe
         height, yOffset, scale,                            // $FlowFixMe
-        fromScale, toScale, fromSpace, toSpace,            // $FlowFixMe
-        fromOffset, toOffset, limitsPosition, limitsAroundContent,
+        fromScale, toScale,                                // $FlowFixMe
+        fromOffset, toOffset, limitsPosition,              // $FlowFixMe
+        limitsAroundContent,                               // $FlowFixMe
+        fromXPosition, fromYPosition, fromXAlign, fromYAlign, // $FlowFixMe
+        toXPosition, toYPosition, toXAlign, toYAlign,
       ] = optionsOrArray;
     } else {
       ({                                                   // $FlowFixMe
         content, symbol, from, to, inSize, space,          // $FlowFixMe
         topSpace, bottomSpace,                             // $FlowFixMe
         height, yOffset,                                   // $FlowFixMe
-        scale, fromScale, toScale, fromSpace, toSpace,     // $FlowFixMe
-        fromOffset, toOffset, limitsPosition, limitsAroundContent,
+        scale, fromScale, toScale,                         // $FlowFixMe
+        fromOffset, toOffset, limitsPosition,              // $FlowFixMe
+        limitsAroundContent,                               // $FlowFixMe
+        fromXPosition, fromYPosition, fromXAlign, fromYAlign, // $FlowFixMe
+        toXPosition, toYPosition, toXAlign, toYAlign,
       } = optionsOrArray);
+    }
+    if (limitsPosition === 'topBottom') {
+      defaultOptions.fromXPosition = 0.1;
+      defaultOptions.fromYPosition = 'bottom';
+      defaultOptions.fromXAlign = 'center';
+      defaultOptions.fromYAlign = 'top';
+      defaultOptions.toXPosition = 0.9;
+      defaultOptions.toYPosition = 'top';
+      defaultOptions.toXAlign = 'center';
+      defaultOptions.toYAlign = 'bottom';
+      defaultOptions.fromOffset = [0, -0.04];
+      defaultOptions.toOffset = [0, 0.04];
+    }
+    if (limitsPosition === 'topBottomCenter') {
+      defaultOptions.fromXPosition = 'center';
+      defaultOptions.fromYPosition = 'bottom';
+      defaultOptions.fromXAlign = 'center';
+      defaultOptions.fromYAlign = 'top';
+      defaultOptions.toXPosition = 'center';
+      defaultOptions.toYPosition = 'top';
+      defaultOptions.toXAlign = 'center';
+      defaultOptions.toYAlign = 'bottom';
+      defaultOptions.fromOffset = [0, -0.04];
+      defaultOptions.toOffset = [0, 0.04];
     }
     const optionsIn = {
       space,
@@ -1878,36 +1945,116 @@ export class EquationFunctions {
       contentScale: scale,
       fromScale,
       toScale,
-      fromSpace,
-      toSpace,
+      // fromSpace,
+      // toSpace,
       fromOffset,
       toOffset,
       limitsPosition,
       limitsAroundContent,
+      fromXPosition,
+      fromYPosition,
+      fromXAlign,
+      fromYAlign,
+      toXPosition,
+      toYPosition,
+      toXAlign,
+      toYAlign,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     options.fromOffset = parsePoint(options.fromOffset);
     options.toOffset = parsePoint(options.toOffset);
-    let symbolToUse = null;
-    if (symbol != null) {                                    // $FlowFixMe
-      symbolToUse = this.getExistingOrAddSymbol(symbol);
-    }
-    const contentArray = [];
-    if (content != null) {                           // $FlowFixMe
-      contentArray.push(this.contentToElement(content));
-    }
-    if (from != null) {                              // $FlowFixMe
-      contentArray.push(this.contentToElement(from));
-    }
-    if (to != null) {                                // $FlowFixMe
-      contentArray.push(this.contentToElement(to));
-    }
 
-    return new Integral(
-      contentArray,
-      symbolToUse,
-      options,
-    );
+    // if (options.limitsPosition === 'side') {
+    return this.ann({
+      content,
+      inSize: options.inSize,
+      glyphs: {
+        left: {
+          symbol,
+          space: options.space,
+          topSpace: options.topSpace,
+          bottomSpace: options.bottomSpace,
+          height: options.height,
+          yOffset: options.yOffset,
+          annotations: [
+            {
+              content: from,
+              xPosition: options.fromXPosition,
+              yPosition: options.fromYPosition,
+              xAlign: options.fromXAlign,
+              yAlign: options.fromYAlign,
+              offset: options.fromOffset,
+              scale: options.fromScale,
+            },
+            {
+              content: to,
+              xPosition: options.toXPosition,
+              yPosition: options.toYPosition,
+              xAlign: options.toXAlign,
+              yAlign: options.toYAlign,
+              offset: options.toOffset,
+              scale: options.toScale,
+            },
+          ],
+        },
+      },
+    });
+    // }
+    // return this.ann({
+    //   content,
+    //   inSize: options.inSize,
+    //   glyphs: {
+    //     left: {
+    //       symbol,
+    //       space: options.space,
+    //       topSpace: options.topSpace,
+    //       bottomSpace: options.bottomSpace,
+    //       height: options.height,
+    //       yOffset: options.yOffset,
+    //       annotations: [
+    //         {
+    //           content: from,
+    //           xPosition: 0.1,
+    //           yPosition: 'bottom',
+    //           xAlign: 'center',
+    //           yAlign: 'top',
+    //           offset: parsePoint(options.fromOffset).add(0, -options.fromSpace),
+    //           scale: options.fromScale,
+    //         },
+    //         {
+    //           content: to,
+    //           xPosition: 0.9,
+    //           yPosition: 'top',
+    //           xAlign: 'center',
+    //           yAlign: 'bottom',
+    //           offset: parsePoint(options.toOffset).add(0, options.toSpace),
+    //           scale: options.toScale,
+    //         },
+    //       ],
+    //     },
+    //   },
+    // });
+
+    // let symbolToUse = null;
+    // if (symbol != null) {                                    // $FlowFixMe
+    //   symbolToUse = this.getExistingOrAddSymbol(symbol);
+    // }
+    // const contentArray = [];
+    // if (content != null) {                           // $FlowFixMe
+    //   contentArray.push(this.contentToElement(content));
+    // }
+    // if (from != null) {                              // $FlowFixMe
+    //   contentArray.push(this.contentToElement(from));
+    // }
+    // if (to != null) {                                // $FlowFixMe
+    //   contentArray.push(this.contentToElement(to));
+    // }
+
+    // return new Integral(
+    //   contentArray,
+    //   symbolToUse,
+    //   options,
+    // );
   }
 
   sumOf(options: TypeSumProdObject | TypeSumProdArray) {

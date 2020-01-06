@@ -147,30 +147,30 @@ export default class Symbol extends DiagramElementPrimitive {
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  getBounds(options: Object, leftIn: number, bottomIn: number, widthIn: number, heightIn: number, side?: 'left' | 'right' | 'bottom' | 'top') {
+  getBounds(options: Object, contentX: number, contentY: number, widthIn: number, heightIn: number, side?: 'left' | 'right' | 'bottom' | 'top') {
     const { width, height } = this.getDefaultValues(
       heightIn, widthIn, options,
     );
     const bounds = new Bounds();
     if (side === 'left') {
-      bounds.left = leftIn - width;
-      bounds.bottom = bottomIn;
+      bounds.left = contentX - width;
+      bounds.bottom = contentY;
       bounds.top = bounds.bottom + height;
       bounds.right = bounds.left + width;
     } else if (side === 'right') {
-      bounds.left = leftIn;
-      bounds.bottom = bottomIn;
+      bounds.left = contentX;
+      bounds.bottom = contentY;
       bounds.top = bounds.bottom + height;
       bounds.right = bounds.left + width;
     } else if (side === 'top') {
-      bounds.bottom = bottomIn;
-      bounds.top = bottomIn + height;
-      bounds.left = leftIn + widthIn / 2 - width / 2;
+      bounds.bottom = contentY;
+      bounds.top = contentY + height;
+      bounds.left = contentX + widthIn / 2 - width / 2;
       bounds.right = bounds.left + width;
     } else {
-      bounds.top = bottomIn;
-      bounds.bottom = bottomIn - height;
-      bounds.left = leftIn + widthIn / 2 - width / 2;
+      bounds.top = contentY;
+      bounds.bottom = contentY - height;
+      bounds.left = contentX + widthIn / 2 - width / 2;
       bounds.right = bounds.left + width;
     }
     bounds.width = width;

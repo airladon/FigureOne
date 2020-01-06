@@ -343,13 +343,14 @@ export default class EquationSymbols {
     };
     const optionsToUse = joinObjects(defaultOptions, options);
 
-    return (new Integral(
+    return new Integral(
       this.shapes.webgl,
       optionsToUse.color,
       new Transform('Integral').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       // optionsToUse.staticSize,
       optionsToUse,
+      'triangles',
       // {
       //   lineWidth: optionsToUse.lineWidth,
       //   minLineWidth: optionsToUse.minLineWidth,
@@ -358,7 +359,7 @@ export default class EquationSymbols {
       //   percentage: optionsToUse.percentage,
       //   sigma: optionsToUse.sigma,
       // },
-    )).symbol;
+    );
   }
 
   radical(optionsIn: {

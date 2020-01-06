@@ -56,8 +56,8 @@ describe('Equation Functions - Integral', () => {
                 scale: 1,
                 fromScale: 1,
                 toScale: 1,
-                fromSpace: 0.1,
-                toSpace: 0.1,
+                // fromSpace: 0.1,
+                // toSpace: 0.1,
                 fromOffset: [0.1, 0.1],
                 toOffset: [-0.1, -0.1],
                 limitsPosition: 'topBottom',
@@ -81,8 +81,8 @@ describe('Equation Functions - Integral', () => {
               scale: 1,
               fromScale: 1,
               toScale: 1,
-              fromSpace: 0.1,
-              toSpace: 0.1,
+              // fromSpace: 0.1,
+              // toSpace: 0.1,
               fromOffset: [0.1, 0.1],
               toOffset: [-0.1, -0.1],
               limitsPosition: 'topBottom',
@@ -90,9 +90,9 @@ describe('Equation Functions - Integral', () => {
             },
           },
           // Method Array
-          2: { intLimits: ['s', 'a', 'b', 'c', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, 0.1, 0.1, [0.1, 0.1], [-0.1, -0.1], 'topBottom', true] },
+          2: { intLimits: ['s', 'a', 'b', 'c', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, [0.1, 0.1], [-0.1, -0.1], 'topBottom', true] },
           // Function with Method Array
-          3: e.intLimits(['s', 'a', 'b', 'c', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, 0.1, 0.1, [0.1, 0.1], [-0.1, -0.1], 'topBottom', true]),
+          3: e.intLimits(['s', 'a', 'b', 'c', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, [0.1, 0.1], [-0.1, -0.1], 'topBottom', true]),
           // Bound Function with Object
           4: intLimits({
             symbol: 's',
@@ -108,8 +108,6 @@ describe('Equation Functions - Integral', () => {
             scale: 1,
             fromScale: 1,
             toScale: 1,
-            fromSpace: 0.1,
-            toSpace: 0.1,
             fromOffset: [0.1, 0.1],
             toOffset: [-0.1, -0.1],
             limitsPosition: 'topBottom',
@@ -153,8 +151,6 @@ describe('Equation Functions - Integral', () => {
                 scale: 1,
                 fromScale: 1,
                 toScale: 1,
-                fromSpace: 0.01,
-                toSpace: 0.01,
                 fromOffset: [0, 0],
                 toOffset: [0, 0],
                 limitsPosition: 'topBottom',
@@ -163,146 +159,146 @@ describe('Equation Functions - Integral', () => {
             },
             scale: 1,
           },
-          inSizeFalse: {
-            content: intLimits([
-              's', 'a', 'b', 'c', false, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
-            ]),
-            scale: 1,
-          },
-          space: {
-            content: intLimits([
-              's', 'a', 'b', 'c', true, 0.1, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
-            ]),
-            scale: 1,
-          },
-          topSpace: {
-            content: intLimits([
-              's', 'a', 'b', 'c', true, 0.01, 0.1, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
-            ]),
-            scale: 1,
-          },
-          bottomSpace: {
-            content: intLimits([
-              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.1, null,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
-            ]),
-            scale: 1,
-          },
-          topBottomSpace: {
-            content: intLimits([
-              's', 'a', 'b', 'c', true, 0.01, 0.1, 0.1, null,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
-            ]),
-            scale: 1,
-          },
-          heightAndOverride: {
-            content: intLimits([
-              's', 'a', 'b', 'c', true, 0.01, 1, 1, 1,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
-            ]),
-            scale: 1,
-          },
-          heightYOffset: {
-            content: intLimits([
-              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, 1,
-              0.1, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
-            ]),
-            scale: 1,
-          },
-          yOffsetNegative: {
-            content: intLimits([
-              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              -0.1, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
-            ]),
-            scale: 1,
-          },
-          scale: {
-            content: intLimits([
-              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 0.5, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
-            ]),
-            scale: 1,
-          },
-          fromScale: {
-            content: intLimits([
-              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 1, 0.5, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
-            ]),
-            scale: 1,
-          },
-          toScale: {
-            content: intLimits([
-              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 0.5, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
-            ]),
-            scale: 1,
-          },
-          fromSpace: {
-            content: intLimits([
-              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.1, 0.01, [0, 0], [0, 0], 'topBottom', true,
-            ]),
-            scale: 1,
-          },
-          toSpace: {
-            content: intLimits([
-              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.1, [0, 0], [0, 0], 'topBottom', true,
-            ]),
-            scale: 1,
-          },
-          fromOffset: {
-            content: intLimits([
-              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.01, [-0.3, -0.2], [0, 0], 'topBottom', true,
-            ]),
-            scale: 1,
-          },
-          toOffset: {
-            content: intLimits([
-              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0.3, 0.2], 'topBottom', true,
-            ]),
-            scale: 1,
-          },
-          noFrom: {
-            content: intLimits([
-              's', 'a', '', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
-            ]),
-            scale: 1,
-          },
-          noTo: {
-            content: intLimits([
-              's', 'a', 'b', '', true, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'topBottom', true,
-            ]),
-            scale: 1,
-          },
+          // inSizeFalse: {
+          //   content: intLimits([
+          //     's', 'a', 'b', 'c', false, 0.01, 0.01, 0.01, null,
+          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
+          //   ]),
+          //   scale: 1,
+          // },
+          // space: {
+          //   content: intLimits([
+          //     's', 'a', 'b', 'c', true, 0.1, 0.01, 0.01, null,
+          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
+          //   ]),
+          //   scale: 1,
+          // },
+          // topSpace: {
+          //   content: intLimits([
+          //     's', 'a', 'b', 'c', true, 0.01, 0.1, 0.01, null,
+          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
+          //   ]),
+          //   scale: 1,
+          // },
+          // bottomSpace: {
+          //   content: intLimits([
+          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.1, null,
+          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
+          //   ]),
+          //   scale: 1,
+          // },
+          // topBottomSpace: {
+          //   content: intLimits([
+          //     's', 'a', 'b', 'c', true, 0.01, 0.1, 0.1, null,
+          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
+          //   ]),
+          //   scale: 1,
+          // },
+          // heightAndOverride: {
+          //   content: intLimits([
+          //     's', 'a', 'b', 'c', true, 0.01, 1, 1, 1,
+          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
+          //   ]),
+          //   scale: 1,
+          // },
+          // heightYOffset: {
+          //   content: intLimits([
+          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, 1,
+          //     0.1, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
+          //   ]),
+          //   scale: 1,
+          // },
+          // yOffsetNegative: {
+          //   content: intLimits([
+          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+          //     -0.1, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
+          //   ]),
+          //   scale: 1,
+          // },
+          // scale: {
+          //   content: intLimits([
+          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+          //     0, 0.5, 1, 1, [0, 0], [0, 0], 'topBottom', true,
+          //   ]),
+          //   scale: 1,
+          // },
+          // fromScale: {
+          //   content: intLimits([
+          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+          //     0, 1, 0.5, 1, [0, 0], [0, 0], 'topBottom', true,
+          //   ]),
+          //   scale: 1,
+          // },
+          // toScale: {
+          //   content: intLimits([
+          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+          //     0, 1, 1, 0.5, [0, 0], [0, 0], 'topBottom', true,
+          //   ]),
+          //   scale: 1,
+          // },
+          // fromSpace: {
+          //   content: intLimits([
+          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
+          //   ]),
+          //   scale: 1,
+          // },
+          // toSpace: {
+          //   content: intLimits([
+          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
+          //   ]),
+          //   scale: 1,
+          // },
+          // fromOffset: {
+          //   content: intLimits([
+          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+          //     0, 1, 1, 1, [-0.3, -0.2], [0, 0], 'topBottom', true,
+          //   ]),
+          //   scale: 1,
+          // },
+          // toOffset: {
+          //   content: intLimits([
+          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+          //     0, 1, 1, 1, [0, 0], [0.3, 0.2], 'topBottom', true,
+          //   ]),
+          //   scale: 1,
+          // },
+          // noFrom: {
+          //   content: intLimits([
+          //     's', 'a', '', 'c', true, 0.01, 0.01, 0.01, null,
+          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
+          //   ]),
+          //   scale: 1,
+          // },
+          // noTo: {
+          //   content: intLimits([
+          //     's', 'a', 'b', '', true, 0.01, 0.01, 0.01, null,
+          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
+          //   ]),
+          //   scale: 1,
+          // },
           limitsPosition: {
             content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.01, [0, 0], [0, 0], 'side', true,
+              0, 1, 1, 1, [0, 0], [0, 0], 'side', true,
             ]),
             scale: 1,
           },
-          sideSpace: {
-            content: intLimits([
-              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.1, 0.1, [0, 0], [0, 0], 'side', true,
-            ]),
-            scale: 1,
-          },
-          sideOffset: {
-            content: intLimits([
-              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-              0, 1, 1, 1, 0.01, 0.01, [-0.3, -0.2], [0.3, 0.2], 'side', true,
-            ]),
-            scale: 1,
-          },
+          // sideSpace: {
+          //   content: intLimits([
+          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+          //     0, 1, 1, 1, [0, 0], [0, 0], 'side', true,
+          //   ]),
+          //   scale: 1,
+          // },
+          // sideOffset: {
+          //   content: intLimits([
+          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+          //     0, 1, 1, 1, [-0.3, -0.2], [0.3, 0.2], 'side', true,
+          //   ]),
+          //   scale: 1,
+          // },
         });
         diagram.elements = eqn;
         diagram.setFirstTransform();
@@ -344,6 +340,12 @@ describe('Equation Functions - Integral', () => {
     // height: 0.10300000000000001,
     // descent: -0.008,
     // ascent: top: 0.095,
+    // test.only('base', () => {
+    //   console.log(baseB)
+    //   console.log(baseC)
+    //   console.log(baseS)
+    //   expect(round(baseS.left)).toBe(0);
+    // });
     test('space', () => {
       eqn.showForm('space');
       diagram.setFirstTransform();
@@ -506,16 +508,19 @@ describe('Equation Functions - Integral', () => {
       expect(round(newB.bottom)).toBe(round(baseB.bottom));
       expect(round(newB.height)).toBe(round(baseB.height));
     });
-    test('limitsPosition', () => {
+    test.only('limitsPosition', () => {
       eqn.showForm('limitsPosition');
       diagram.setFirstTransform();
       const newS = eqn._s.getBoundingRect('diagram');
       const newB = eqn._b.getBoundingRect('diagram');
       const newC = eqn._c.getBoundingRect('diagram');
-      expect(round(newC.left)).toBe(round(newS.right + initialSpace));
+      const newA = eqn._c.getBoundingRect('diagram');
+      expect(round(newS.left)).toBe(0);
+      expect(round(newC.left)).toBe(round(newS.right));
       expect(round(newC.bottom)).toBe(round(newS.top - newC.height / 2));
-      expect(round(newB.left)).toBe(round(newS.left + newS.width / 2 + initialSpace));
+      expect(round(newB.left)).toBe(round(newS.left + newS.width / 2));
       expect(round(newB.bottom)).toBe(round(newS.bottom - newB.height / 2));
+      expect(round(newA.left)).toBe(round(newC.right + initialSpace))
     });
     test('sideSpace', () => {
       eqn.showForm('sideSpace');
