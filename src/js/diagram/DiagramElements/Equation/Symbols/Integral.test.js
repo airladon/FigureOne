@@ -70,6 +70,7 @@ describe('Equation Functions - Integral', () => {
     eqn.showForm('s1');
     diagram.setFirstTransform();
     tools.cleanUIDs(eqn);
+    // console.log(eqn._s1.drawingObject.points);
     expect(round(eqn._a.transform.mat)).toMatchSnapshot();
     expect(round(eqn._s1.transform.mat)).toMatchSnapshot();
   });

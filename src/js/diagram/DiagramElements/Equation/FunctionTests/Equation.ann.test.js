@@ -195,7 +195,7 @@ describe('Equation Functions - Ann', () => {
             },
             scale: 1,
           },
-          leftWithAnnotation: {
+          leftWithLeftAnnotation: {
             content: {
               ann: {
                 content: 'a',
@@ -207,6 +207,108 @@ describe('Equation Functions - Ann', () => {
                       xPosition: 'left',
                       yPosition: 'top',
                       xAlign: 'right',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          leftWithRightAnnotation: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  left: {
+                    symbol: 'left',
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'right',
+                      yPosition: 'top',
+                      xAlign: 'left',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          leftWithRightAnnotationOverContent: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  left: {
+                    symbol: 'left',
+                    annotationsOverContent: true,
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'right',
+                      yPosition: 'top',
+                      xAlign: 'left',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          rightWithRightAnnotation: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  right: {
+                    symbol: 'right',
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'right',
+                      yPosition: 'top',
+                      xAlign: 'left',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          rightWithLeftAnnotation: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  right: {
+                    symbol: 'right',
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'left',
+                      yPosition: 'top',
+                      xAlign: 'right',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          rightWithLeftAnnotationOverContent: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  right: {
+                    symbol: 'right',
+                    annotationsOverContent: true,
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'left',
+                      yPosition: 'top',
+                      xAlign: 'left',
                       yAlign: 'bottom',
                     }],
                   },
@@ -266,9 +368,9 @@ describe('Equation Functions - Ann', () => {
     expect(round(a.left)).toBe(round(left.right));
     expect(round(right.left)).toBe(round(a.right));
   });
-  test('Left with Annotation', () => {
+  test('Left with Left Annotation', () => {
     functions.single();
-    eqn.showForm('leftWithAnnotation');
+    eqn.showForm('leftWithLeftAnnotation');
     diagram.setFirstTransform();
     const a = eqn._a.getBoundingRect('diagram');
     const b = eqn._b.getBoundingRect('diagram');
@@ -277,6 +379,66 @@ describe('Equation Functions - Ann', () => {
     expect(round(left.left)).toBe(round(b.right));
     expect(round(a.left)).toBe(round(left.right));
     expect(round(b.bottom)).toBe(round(left.top));
+  });
+  test('Left with Right Annotation', () => {
+    functions.single();
+    eqn.showForm('leftWithRightAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const left = eqn._left.getBoundingRect('diagram');
+    expect(round(left.left)).toBe(0);
+    expect(round(b.left)).toBe(round(left.right));
+    expect(round(a.left)).toBe(round(b.right));
+    expect(round(b.bottom)).toBe(round(left.top));
+  });
+  test('Left with Right Annotation Over Content', () => {
+    functions.single();
+    eqn.showForm('leftWithRightAnnotationOverContent');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const left = eqn._left.getBoundingRect('diagram');
+    expect(round(left.left)).toBe(0);
+    expect(round(b.left)).toBe(round(left.right));
+    expect(round(a.left)).toBe(round(left.right));
+    expect(round(b.bottom)).toBe(round(left.top));
+  });
+  test('Right with Right Annotation', () => {
+    functions.single();
+    eqn.showForm('rightWithRightAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const right = eqn._right.getBoundingRect('diagram');
+    expect(round(a.left)).toBe(0);
+    expect(round(right.left)).toBe(round(a.right));
+    expect(round(b.left)).toBe(round(right.right));
+    expect(round(b.bottom)).toBe(round(right.top));
+  });
+  test('Right with Left Annotation', () => {
+    functions.single();
+    eqn.showForm('rightWithLeftAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const right = eqn._right.getBoundingRect('diagram');
+    expect(round(a.left)).toBe(0);
+    expect(round(b.left)).toBe(round(a.right));
+    expect(round(right.left)).toBe(round(b.right));
+    expect(round(b.bottom)).toBe(round(right.top));
+  });
+  test('Right with Left Annotation Over Content', () => {
+    functions.single();
+    eqn.showForm('rightWithLeftAnnotationOverContent');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const right = eqn._right.getBoundingRect('diagram');
+    expect(round(a.left)).toBe(0);
+    expect(round(b.left)).toBe(round(a.right));
+    expect(round(right.left)).toBe(round(a.right));
+    expect(round(b.bottom)).toBe(round(right.top));
   });
   test('Bracket Annotation', () => {
     functions.single();

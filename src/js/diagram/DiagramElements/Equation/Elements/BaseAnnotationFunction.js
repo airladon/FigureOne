@@ -386,7 +386,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     return totalBounds;
   }
 
-  setVerticalGlyph(scale: number, contentBounds: Bounds, glyphName: 'left' | 'right') {
+  setVerticalGlyph(scale: number, contentBounds: Bounds, glyphName: 'left' | 'right', ) {
     if (this.glyphs[glyphName] == null) {
       return contentBounds;
     }
@@ -394,12 +394,13 @@ export default class BaseAnnotationFunction implements ElementInterface {
       space, overhang, topSpace, bottomSpace, minContentHeight,
       minContentDescent, minContentAscent,
       descent, height, yOffset,
+      annotationsOverContent,
     } = this.glyphs[glyphName];
     const glyph = this.glyphs[glyphName];
     // const contentBounds = new Bounds();
     // contentBounds.copyFrom(contentBounds);
     let glyphHeight = contentBounds.height;
-    let glyphLeft = contentBounds.left;
+    let contentX = contentBounds.left;
     let glyphBottom = contentBounds.bottom;
     // let glyphTop = contentBounds.top;
     let glyphDescent = contentBounds.descent;
@@ -437,9 +438,9 @@ export default class BaseAnnotationFunction implements ElementInterface {
 
     // glyphLeft = contentBounds.left;
     if (glyphName === 'left') {
-      glyphLeft -= space * scale;
+      contentX -= space * scale;
     } else {
-      glyphLeft = contentBounds.left + contentBounds.width + space * scale;
+      contentX = contentBounds.left + contentBounds.width + space * scale;
     }
 
     // let glyphBottom = contentBounds.bottom;
@@ -449,7 +450,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
 
     const glyphBounds = glyph.glyph.getBounds(
       glyph.glyph.custom.options,
-      glyphLeft,
+      contentX,
       glyphBottom + yOffset,
       null,
       glyphHeight,
@@ -459,7 +460,8 @@ export default class BaseAnnotationFunction implements ElementInterface {
     const totalBounds = new Bounds();
     totalBounds.copyFrom(contentBounds);
     totalBounds.growWithSameBaseline(glyphBounds);
-
+    const glyphAndAnnotationBounds = new Bounds();
+    glyphAndAnnotationBounds.copyFrom(glyphBounds);
     glyph.width = glyphBounds.width;
     glyph.height = glyphBounds.height;
     glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);
@@ -469,7 +471,44 @@ export default class BaseAnnotationFunction implements ElementInterface {
       this.setAnnotationPosition(glyphBounds, glyph.location, annotation, scale);
       const annotationBounds = annotation.content.getBounds();
       totalBounds.growWithSameBaseline(annotationBounds);
+      glyphAndAnnotationBounds.growWithSameBaseline(annotationBounds);
     });
+
+    let xOffset = 0;
+    if (glyphName === 'left'
+      && glyphAndAnnotationBounds.right > contentX
+      && annotationsOverContent === false
+    ) {
+      xOffset = contentX - glyphAndAnnotationBounds.right;
+    }
+    if (glyphName === 'right'
+      && glyphAndAnnotationBounds.left < contentX
+      && annotationsOverContent === false
+    ) {
+      xOffset = contentX - glyphAndAnnotationBounds.left;
+    }
+
+    if (xOffset !== 0) {
+      const locationOffset = new Point(xOffset, 0);
+      glyph.location = glyph.location.add(locationOffset);
+      glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
+      glyph.annotations.forEach((annotation) => {
+        annotation.content.offsetLocation(locationOffset);
+      });
+      totalBounds.left += xOffset;
+      totalBounds.right += xOffset;
+    }
+
+    // if (glyphName === 'left') {
+    //   glyph.location.x -= totalAnnotationBounds.right - glyphBounds.right;
+    //   totalBounds.left -= totalAnnotationBounds.right - glyphBounds.right;
+    //   totalBounds.right = totalBounds.left + totalBounds.width;
+    // }
+    // if (glyphName === 'right') {
+    //   glyph.location.x += glyphBounds.left - totalAnnotationBounds.left;
+    //   totalBounds.right += glyphBounds.left - totalAnnotationBounds.left;
+    //   totalBounds.left = totalBounds.right - totalBounds.width;
+    // }
     return totalBounds;
   }
 
