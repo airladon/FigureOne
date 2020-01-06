@@ -27,12 +27,7 @@ describe('Equation Functions - Bar', () => {
     elements = {
       a: 'a',
       b: 'b',
-      c: 'c',
-      d: 'd',
-      e: 'e',
-      f: 'f',
-      g: 'g',
-      x: { symbol: 'strike' },
+      x: { symbol: 'strike', style: 'cross' },
     };
     functions = {
       topStrike: () => {
@@ -60,15 +55,15 @@ describe('Equation Functions - Bar', () => {
             },
           },
           // Method Array
-          2: { topStrike: ['a', 'b', 'x'] },
+          2: { topStrike: ['a', 'x', 'b'] },
           // Function with Method Array
-          3: e.topStrike(['a', 'b', 'x']),
+          3: e.topStrike(['a', 'x', 'b']),
           // Function with parameters
-          4: e.topStrike('a', 'b', 'x'),
+          // 4: e.topStrike('a', 'b', 'x'),
           // Bound Function with parameters
-          5: topStrike('a', 'b', 'x'),
+          4: topStrike(['a', 'x', 'b']),
           // Bound Function with Object
-          6: topStrike({
+          5: topStrike({
             content: 'a',
             comment: 'b',
             symbol: 'x',
@@ -100,77 +95,103 @@ describe('Equation Functions - Bar', () => {
             },
           },
           // Method Array
-          2: { bottomStrike: ['a', 'b', 'x'] },
+          2: { bottomStrike: ['a', 'x', 'b'] },
           // Function with Method Array
-          3: e.bottomStrike(['a', 'b', 'x']),
+          3: e.bottomStrike(['a', 'x', 'b']),
           // Function with parameters
-          4: e.bottomStrike('a', 'b', 'x'),
+          // 4: e.bottomStrike('a', 'b', 'x'),
           // Bound Function with parameters
-          5: bottomStrike('a', 'b', 'x'),
+          4: bottomStrike(['a', 'x', 'b']),
           // Bound Function with Object
-          6: bottomStrike({
+          5: bottomStrike({
             content: 'a',
             comment: 'b',
             symbol: 'x',
           }),
         });
       },
-      topStrikeParameters: () => {
+      topStrikeParameterSteps: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
-        const e = eqn.eqn.functions;
-        const topStrike = e.topStrike.bind(e);
         eqn.addElements(elements);
         eqn.addForms({
-          // without
-          //   // Method Object
-          without: topStrike('a', 'b', 'x'),
-          // With parameters
-          0: {
-            topStrike: {
-              content: 'a',
-              comment: 'b',
-              symbol: 'x',
-              space: 0.1,
-              scale: 2,
+          base: {
+            content: {
+              topStrike: {
+                content: 'a',
+                symbol: 'x',
+                comment: 'b',
+                inSize: true,
+                space: 0,
+                scale: 1,
+                overhang: 0,
+              },
             },
+            scale: 1,
           },
           // Method Array
-          1: { topStrike: ['a', 'b', 'x', 0.1, 2] },
-          // Function with parameters
-          2: e.topStrike('a', 'b', 'x', 0.1, 2),
+          inSize: {
+            content: { topStrike: ['a', 'x', 'b', false, 0, 1, 1] },
+            scale: 1,
+          },
+          space: {
+            content: { topStrike: ['a', 'x', 'b', true, 1, 1, 0] },
+            scale: 1,
+          },
+          scale: {
+            content: { topStrike: ['a', 'x', 'b', true, 0, 0.5, 0] },
+            scale: 1,
+          },
+          overhang: {
+            content: { topStrike: ['a', 'x', 'b', true, 0, 1, 1] },
+            scale: 1,
+          },
         });
+        diagram.elements = eqn;
       },
-      bottomStrikeParameters: () => {
+      bottomStrikeParameterSteps: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
-        const e = eqn.eqn.functions;
-        const bottomStrike = e.bottomStrike.bind(e);
         eqn.addElements(elements);
         eqn.addForms({
-          // without
-          //   // Method Object
-          without: bottomStrike('a', 'b', 'x'),
-          // With parameters
-          0: {
-            bottomStrike: {
-              content: 'a',
-              comment: 'b',
-              symbol: 'x',
-              space: 0.1,
-              scale: 2,
+          base: {
+            content: {
+              bottomStrike: {
+                content: 'a',
+                symbol: 'x',
+                comment: 'b',
+                inSize: true,
+                space: 0,
+                scale: 1,
+                overhang: 0,
+              },
             },
+            scale: 1,
           },
           // Method Array
-          1: { bottomStrike: ['a', 'b', 'x', 0.1, 2] },
-          // Function with parameters
-          2: e.bottomStrike('a', 'b', 'x', 0.1, 2),
+          inSize: {
+            content: { bottomStrike: ['a', 'x', 'b', false, 0, 1, 1] },
+            scale: 1,
+          },
+          space: {
+            content: { bottomStrike: ['a', 'x', 'b', true, 1, 1, 0] },
+            scale: 1,
+          },
+          scale: {
+            content: { bottomStrike: ['a', 'x', 'b', true, 0, 0.5, 0] },
+            scale: 1,
+          },
+          overhang: {
+            content: { bottomStrike: ['a', 'x', 'b', true, 0, 1, 1] },
+            scale: 1,
+          },
         });
+        diagram.elements = eqn;
       },
     };
   });
   test('Top Strike', () => {
     functions.topStrike();
     const elems = [eqn._a, eqn._b, eqn._x];
-    const formsToTest = ['1', '2', '3', '4', '5', '6'];
+    const formsToTest = ['1', '2', '3', '4', '5'];
 
     eqn.showForm('0');
     const positions0 = elems.map(elem => round(elem.transform.mat).slice());
@@ -190,7 +211,7 @@ describe('Equation Functions - Bar', () => {
   test('Bottom Strike', () => {
     functions.bottomStrike();
     const elems = [eqn._a, eqn._b, eqn._x];
-    const formsToTest = ['1', '2', '3', '4', '5', '6'];
+    const formsToTest = ['1', '2', '3', '4', '5'];
 
     eqn.showForm('0');
     const positions0 = elems.map(elem => round(elem.transform.mat).slice());
@@ -207,46 +228,188 @@ describe('Equation Functions - Bar', () => {
     expect(round(eqn._b.transform.mat)).toMatchSnapshot();
     expect(round(eqn._x.transform.mat)).toMatchSnapshot();
   });
-  test('Top Strike Parameters', () => {
-    functions.topStrikeParameters();
-    const elems = [eqn._a, eqn._b, eqn._x];
-    const withFormsToTest = ['1', '2'];
-
-    // get without positions
-    eqn.showForm('without');
-    const withoutPos = elems.map(elem => round(elem.transform.mat).slice());
-
-    // with reference positions
-    eqn.showForm('0');
-    const withPos = elems.map(elem => round(elem.transform.mat).slice());
-
-    expect(withoutPos).not.toEqual(withPos);
-
-    withFormsToTest.forEach((f) => {
-      eqn.showForm(f);
-      const positions = elems.map(elem => round(elem.transform.mat).slice());
-      expect(withPos).toEqual(positions);
+  describe('Top Strike Parameters', () => {
+    let space;
+    let overhang;
+    let baseB;
+    let scale;
+    beforeEach(() => {
+      functions.topStrikeParameterSteps();
+      eqn.showForm('base');
+      diagram.setFirstTransform();
+      // baseA = eqn._a.getBoundingRect('diagram');
+      baseB = eqn._b.getBoundingRect('diagram');
+      space = 1;
+      scale = 0.5;
+      overhang = 1;
+    });
+    test('inSize', () => {
+      eqn.showForm('inSize');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      const newX = eqn._x.getBoundingRect('diagram');
+      expect(round(newX.width)).toBe(round(newA.width + overhang * 2));
+      expect(round(newX.height)).toBe(round(newA.height + overhang * 2));
+      expect(round(newX.left)).toBe(round(newA.left - overhang));
+      expect(round(newA.left)).toBe(0);
+      expect(round(newX.bottom)).toBe(round(newA.bottom - overhang));
+      expect(round(newB.bottom)).toBe(round(newA.top + overhang));
+      expect(round(newB.left)).toBe(round(newA.left + newA.width / 2 - newB.width / 2));
+    });
+    test('Space', () => {
+      eqn.showForm('space');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      const newX = eqn._x.getBoundingRect('diagram');
+      expect(round(newX.width)).toBe(round(newA.width));
+      expect(round(newX.height)).toBe(round(newA.height));
+      expect(round(newX.left)).toBe(round(newA.left));
+      expect(round(newX.bottom)).toBe(round(newA.bottom));
+      expect(round(newB.bottom)).toBe(round(newA.top + space));
+      expect(round(newB.left)).toBe(round(newA.left + newA.width / 2 - newB.width / 2));
+    });
+    test('Scale', () => {
+      eqn.showForm('scale');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      const newX = eqn._x.getBoundingRect('diagram');
+      expect(round(newX.width)).toBe(round(newA.width));
+      expect(round(newX.height)).toBe(round(newA.height));
+      expect(round(newX.left)).toBe(round(newA.left));
+      expect(round(newX.bottom)).toBe(round(newA.bottom));
+      expect(round(newB.bottom)).toBe(round(newA.top));
+      expect(round(newB.left)).toBe(round(newA.left + newA.width / 2 - newB.width / 2));
+      expect(round(newB.width)).toBe(round(baseB.width * scale));
+      expect(round(newB.height)).toBe(round(baseB.height * scale));
+    });
+    test('Overhang', () => {
+      eqn.showForm('overhang');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      const newX = eqn._x.getBoundingRect('diagram');
+      expect(round(newX.width)).toBe(round(newA.width + overhang * 2));
+      expect(round(newX.height)).toBe(round(newA.height + overhang * 2));
+      expect(round(newX.left)).toBe(round(newA.left - overhang));
+      expect(round(newX.bottom)).toBe(round(newA.bottom - overhang));
+      expect(round(newB.bottom)).toBe(round(newX.top));
+      expect(round(newB.left)).toBe(round(newA.left + newA.width / 2 - newB.width / 2));
     });
   });
-  test('Bottom Strike Parameters', () => {
-    functions.bottomStrike();
-    const elems = [eqn._a, eqn._b, eqn._x];
-    const withFormsToTest = ['1', '2'];
-
-    // get without positions
-    eqn.showForm('without');
-    const withoutPos = elems.map(elem => round(elem.transform.mat).slice());
-
-    // with reference positions
-    eqn.showForm('0');
-    const withPos = elems.map(elem => round(elem.transform.mat).slice());
-
-    expect(withoutPos).not.toEqual(withPos);
-
-    withFormsToTest.forEach((f) => {
-      eqn.showForm(f);
-      const positions = elems.map(elem => round(elem.transform.mat).slice());
-      expect(withPos).toEqual(positions);
+  describe('Bottom Strike Parameters', () => {
+    let space;
+    let overhang;
+    let baseB;
+    let scale;
+    beforeEach(() => {
+      functions.bottomStrikeParameterSteps();
+      eqn.showForm('base');
+      diagram.setFirstTransform();
+      // baseA = eqn._a.getBoundingRect('diagram');
+      baseB = eqn._b.getBoundingRect('diagram');
+      space = 1;
+      scale = 0.5;
+      overhang = 1;
+    });
+    test('inSize', () => {
+      eqn.showForm('inSize');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      const newX = eqn._x.getBoundingRect('diagram');
+      expect(round(newX.width)).toBe(round(newA.width + overhang * 2));
+      expect(round(newX.height)).toBe(round(newA.height + overhang * 2));
+      expect(round(newX.left)).toBe(round(newA.left - overhang));
+      expect(round(newA.left)).toBe(0);
+      expect(round(newX.bottom)).toBe(round(newA.bottom - overhang));
+      expect(round(newB.top)).toBe(round(newA.bottom - overhang));
+      expect(round(newB.left)).toBe(round(newA.left + newA.width / 2 - newB.width / 2));
+    });
+    test('Space', () => {
+      eqn.showForm('space');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      const newX = eqn._x.getBoundingRect('diagram');
+      expect(round(newX.width)).toBe(round(newA.width));
+      expect(round(newX.height)).toBe(round(newA.height));
+      expect(round(newX.left)).toBe(round(newA.left));
+      expect(round(newX.bottom)).toBe(round(newA.bottom));
+      expect(round(newB.top)).toBe(round(newA.bottom - space));
+      expect(round(newB.left)).toBe(round(newA.left + newA.width / 2 - newB.width / 2));
+    });
+    test('Scale', () => {
+      eqn.showForm('scale');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      const newX = eqn._x.getBoundingRect('diagram');
+      expect(round(newX.width)).toBe(round(newA.width));
+      expect(round(newX.height)).toBe(round(newA.height));
+      expect(round(newX.left)).toBe(round(newA.left));
+      expect(round(newX.bottom)).toBe(round(newA.bottom));
+      expect(round(newB.top)).toBe(round(newA.bottom));
+      expect(round(newB.left)).toBe(round(newA.left + newA.width / 2 - newB.width / 2));
+      expect(round(newB.width)).toBe(round(baseB.width * scale));
+      expect(round(newB.height)).toBe(round(baseB.height * scale));
+    });
+    test('Overhang', () => {
+      eqn.showForm('overhang');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      const newX = eqn._x.getBoundingRect('diagram');
+      expect(round(newX.width)).toBe(round(newA.width + overhang * 2));
+      expect(round(newX.height)).toBe(round(newA.height + overhang * 2));
+      expect(round(newX.left)).toBe(round(newA.left - overhang));
+      expect(round(newX.bottom)).toBe(round(newA.bottom - overhang));
+      expect(round(newB.top)).toBe(round(newX.bottom));
+      expect(round(newB.left)).toBe(round(newA.left + newA.width / 2 - newB.width / 2));
     });
   });
+  // test('Top Strike Parameters', () => {
+  //   functions.topStrikeParameterSteps();
+  //   const elems = [eqn._a, eqn._b, eqn._x];
+  //   const withFormsToTest = ['1', '2'];
+
+  //   // get without positions
+  //   eqn.showForm('without');
+  //   const withoutPos = elems.map(elem => round(elem.transform.mat).slice());
+
+  //   // with reference positions
+  //   eqn.showForm('0');
+  //   const withPos = elems.map(elem => round(elem.transform.mat).slice());
+
+  //   expect(withoutPos).not.toEqual(withPos);
+
+  //   withFormsToTest.forEach((f) => {
+  //     eqn.showForm(f);
+  //     const positions = elems.map(elem => round(elem.transform.mat).slice());
+  //     expect(withPos).toEqual(positions);
+  //   });
+  // });
+  // test('Bottom Strike Parameters', () => {
+  //   functions.bottomStrike();
+  //   const elems = [eqn._a, eqn._b, eqn._x];
+  //   const withFormsToTest = ['1', '2'];
+
+  //   // get without positions
+  //   eqn.showForm('without');
+  //   const withoutPos = elems.map(elem => round(elem.transform.mat).slice());
+
+  //   // with reference positions
+  //   eqn.showForm('0');
+  //   const withPos = elems.map(elem => round(elem.transform.mat).slice());
+
+  //   expect(withoutPos).not.toEqual(withPos);
+
+  //   withFormsToTest.forEach((f) => {
+  //     eqn.showForm(f);
+  //     const positions = elems.map(elem => round(elem.transform.mat).slice());
+  //     expect(withPos).toEqual(positions);
+  //   });
+  // });
 });
