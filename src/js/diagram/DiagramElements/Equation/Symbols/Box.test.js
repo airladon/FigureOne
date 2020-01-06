@@ -117,8 +117,9 @@ describe('Equation Symbols - Brace', () => {
     expect(round(box.left)).toBe(0);
     expect(round(box.width)).toBe(width);
     expect(round(box.height)).toBe(height);
-    expect(round(a.left)).toBe(round(width / 2 - a.width / 2 - space));
-    expect(round(box.bottom)).toBe(round(a.bottom + a.height / 2 - height / 2));
+    // expect(round(a.left)).toBe(round(width / 2 - a.width / 2 - space));
+    expect(round(a.left)).toBe(round(lineWidth + width / 2 - a.width / 2));
+    expect(round(box.bottom)).toBe(round(a.bottom + a.height / 2 - height / 2 - lineWidth));
   });
   test('Box Static First', () => {
     eqn.showForm('boxStaticFirst');
