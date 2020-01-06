@@ -1424,63 +1424,6 @@ export class EquationFunctions {
     );
   }
 
-  strike(
-    optionsOrArray: TypeSrikeNewObject | TypeStrikeNewArray,
-  ) {
-    let content;
-    let symbol;
-    let inSize;
-    let space;
-    let topSpace;
-    let bottomSpace;
-    let leftSpace;
-    let rightSpace;
-    const defaultOptions = {
-      inSize: false,
-      space: 0,
-      topSpace: null,
-      bottomSpace: null,
-      leftSpace: null,
-      rightSpace: null,
-    };
-    if (Array.isArray(optionsOrArray)) {
-      [
-        content, symbol, inSize, space, topSpace,
-        rightSpace, bottomSpace, leftSpace,
-      ] = optionsOrArray;
-    } else {
-      ({
-        content, symbol, inSize, space, topSpace,
-        rightSpace, bottomSpace, leftSpace,
-      } = optionsOrArray);
-    }
-    const optionsIn = {
-      content,
-      symbol,
-      inSize,
-      space,
-      topSpace,
-      rightSpace,
-      bottomSpace,
-      leftSpace,
-    };
-    const options = joinObjects(defaultOptions, optionsIn);
-    return this.ann({
-      content,
-      inSize: options.inSize,
-      glyphs: {
-        encompass: {
-          symbol,
-          topSpace: options.topSpace,
-          bottomSpace: options.bottomSpace,
-          leftSpace: options.leftSpace,
-          rightSpace: options.rightSpace,
-          space: options.space,
-        },
-      },
-    });
-  }
-
   box(
     optionsOrArray: TypeBoxObject | TypeBoxArray,
   ) {
@@ -2068,28 +2011,6 @@ export class EquationFunctions {
       },
       inSize,
     });
-    // options.fromOffset = parsePoint(options.fromOffset);
-    // options.toOffset = parsePoint(options.toOffset);
-    // let symbolToUse = null;
-    // if (symbol != null) {
-    //   symbolToUse = this.getExistingOrAddSymbol(symbol);
-    // }
-    // const contentArray = [];
-    // if (content != null) {
-    //   contentArray.push(this.contentToElement(content));
-    // }
-    // if (from != null) {
-    //   contentArray.push(this.contentToElement(from));
-    // }
-    // if (to != null) {
-    //   contentArray.push(this.contentToElement(to));
-    // }
-
-    // return new SumProd(
-    //   contentArray,
-    //   symbolToUse,
-    //   options,
-    // );
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -2189,107 +2110,186 @@ export class EquationFunctions {
     });
   }
 
+  
+  strike(
+    optionsOrArray: TypeSrikeNewObject | TypeStrikeNewArray,
+  ) {
+    let content;
+    let symbol;
+    let inSize;
+    let space;
+    let topSpace;
+    let bottomSpace;
+    let leftSpace;
+    let rightSpace;
+    const defaultOptions = {
+      inSize: false,
+      space: 0,
+      topSpace: null,
+      bottomSpace: null,
+      leftSpace: null,
+      rightSpace: null,
+    };
+    if (Array.isArray(optionsOrArray)) {
+      [
+        content, symbol, inSize, space, topSpace,
+        rightSpace, bottomSpace, leftSpace,
+      ] = optionsOrArray;
+    } else {
+      ({
+        content, symbol, inSize, space, topSpace,
+        rightSpace, bottomSpace, leftSpace,
+      } = optionsOrArray);
+    }
+    const optionsIn = {
+      content,
+      symbol,
+      inSize,
+      space,
+      topSpace,
+      rightSpace,
+      bottomSpace,
+      leftSpace,
+    };
+    const options = joinObjects(defaultOptions, optionsIn);
+    return this.ann({
+      content,
+      inSize: options.inSize,
+      glyphs: {
+        encompass: {
+          symbol,
+          topSpace: options.topSpace,
+          bottomSpace: options.bottomSpace,
+          leftSpace: options.leftSpace,
+          rightSpace: options.rightSpace,
+          space: options.space,
+        },
+      },
+    });
+  }
+
   // eslint-disable-next-line class-methods-use-this
   processStrike(
-    optionsOrContent: TypeBracketObject | TypeBracketArray | TypeEquationPhrase,
-    commentString: TypeEquationPhrase | null = null,
-    sym: string | null = null,
-    comSpace: number | null = null,
-    comScale: number | null = null,
+    optionsOrContent: TypeStrikeCommentObject | TypeStrikeCommentArray,
   ) {
     let content;
     let comment;
     let symbol;
     let space;
     let scale;
-    if (!(commentString == null
-      && sym == null
-      && comSpace == null
-      && comScale == null)
-    ) {
-      content = optionsOrContent;
-      comment = commentString;
-      symbol = sym;
-      space = comSpace;
-      scale = comScale;
-    } else if (Array.isArray(optionsOrContent)) {             // $FlowFixMe
-      [content, comment, symbol, space, scale] = optionsOrContent;
+    let overhang;
+    let inSize;
+    if (Array.isArray(optionsOrContent)) {             // $FlowFixMe
+      [content, symbol, comment, inSize, space, scale, overhang] = optionsOrContent;
     } else {
       ({                                                      // $FlowFixMe
-        content, comment, symbol, space, scale,
+        content, comment, symbol, inSize, space, scale, overhang,
       } = optionsOrContent);
     }
-    let spaceToUse = 0.1;
-    if (space != null) {
-      spaceToUse = space;
-    }
-    let scaleToUse = 0.5;
-    if (scale != null) {
-      scaleToUse = scale;
-    }
+    const optionsIn = {
+      inSize,
+      space,
+      scale,
+      overhang,
+    };
+    const defaultOptions = {
+      space: 0.1,
+      overhang: 0,
+      scale: 0.5,
+      inSize: true,
+    };
+    const options = joinObjects(defaultOptions, optionsIn);
     return [
-      content, comment, symbol,
-      spaceToUse, scaleToUse,
+      content, symbol, comment, options.inSize,
+      options.space, options.scale, options.overhang,
     ];
   }
 
   // $FlowFixMe
   topStrike(...args) {
     const [
-      content, comment, symbol,
-      spaceToUse, scaleToUse,
+      content, symbol, comment, inSize,
+      space, scale, overhang,
     ] = this.processStrike(...args);
-    let contentToUse;
-    if (symbol) {
-      contentToUse = new Strike(                             // $FlowFixMe
-        this.contentToElement(content),             // $FlowFixMe
-        this.getExistingOrAddSymbol(symbol),
-        false,                                               // $FlowFixMe
-        spaceToUse,
-      );
-    } else {
-      contentToUse = content;
-    }
-    return this.annotate({                                   // $FlowFixMe
-      content: contentToUse,
-      withAnnotations: [                                     // $FlowFixMe
-        this.annotation({
-          annotation: comment,
-          relativeToContent: ['center', 'top'],
-          relativeToAnnotation: ['center', 'bottom'],
-          scale: scaleToUse,
-        }),
-      ],
+    return this.ann({
+      content,
+      inSize,
+      glyphs: {
+        encompass: {
+          symbol,
+          space: overhang,
+          annotations: [
+            {
+              content: comment,
+              xPosition: 'center',
+              yPosition: 'top',
+              xAlign: 'center',
+              yAlign: 'bottom',
+              offset: [0, space],
+              scale,
+            },
+          ],
+        },
+      },
     });
   }
 
   // $FlowFixMe
   bottomStrike(...args) {
     const [
-      content, comment, symbol,
-      spaceToUse, scaleToUse,
+      content, symbol, comment, inSize,
+      space, scale, overhang,
     ] = this.processStrike(...args);
-    let contentToUse;
-    if (symbol) {
-      contentToUse = new Strike(                             // $FlowFixMe
-        this.contentToElement(content),             // $FlowFixMe
-        this.getExistingOrAddSymbol(symbol),
-        false,                                               // $FlowFixMe
-        spaceToUse,
-      );
-    } else {
-      contentToUse = content;
-    }
-    return this.annotate({                                   // $FlowFixMe
-      content: contentToUse,
-      withAnnotations: [                                     // $FlowFixMe
-        this.annotation({
-          annotation: comment,
-          relativeToContent: ['center', 'bottom'],
-          relativeToAnnotation: ['center', 'top'],
-          scale: scaleToUse,
-        }),
-      ],
+    return this.ann({
+      content,
+      inSize,
+      glyphs: {
+        encompass: {
+          symbol,
+          space: overhang,
+          annotations: [
+            {
+              content: comment,
+              xPosition: 'center',
+              yPosition: 'bottom',
+              xAlign: 'center',
+              yAlign: 'top',
+              offset: [0, -space],
+              scale,
+            },
+          ],
+        },
+      },
     });
   }
+
+  // // $FlowFixMe
+  // bottomStrike(...args) {
+  //   const [
+  //     content, comment, symbol,
+  //     spaceToUse, scaleToUse,
+  //   ] = this.processStrike(...args);
+  //   let contentToUse;
+  //   if (symbol) {
+  //     contentToUse = new Strike(                             // $FlowFixMe
+  //       this.contentToElement(content),             // $FlowFixMe
+  //       this.getExistingOrAddSymbol(symbol),
+  //       false,                                               // $FlowFixMe
+  //       spaceToUse,
+  //     );
+  //   } else {
+  //     contentToUse = content;
+  //   }
+  //   return this.annotate({                                   // $FlowFixMe
+  //     content: contentToUse,
+  //     withAnnotations: [                                     // $FlowFixMe
+  //       this.annotation({
+  //         annotation: comment,
+  //         relativeToContent: ['center', 'bottom'],
+  //         relativeToAnnotation: ['center', 'top'],
+  //         scale: scaleToUse,
+  //       }),
+  //     ],
+  //   });
+  // }
 }
