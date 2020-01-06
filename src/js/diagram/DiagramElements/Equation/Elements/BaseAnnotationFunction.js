@@ -498,17 +498,6 @@ export default class BaseAnnotationFunction implements ElementInterface {
       totalBounds.left += xOffset;
       totalBounds.right += xOffset;
     }
-
-    // if (glyphName === 'left') {
-    //   glyph.location.x -= totalAnnotationBounds.right - glyphBounds.right;
-    //   totalBounds.left -= totalAnnotationBounds.right - glyphBounds.right;
-    //   totalBounds.right = totalBounds.left + totalBounds.width;
-    // }
-    // if (glyphName === 'right') {
-    //   glyph.location.x += glyphBounds.left - totalAnnotationBounds.left;
-    //   totalBounds.right += glyphBounds.left - totalAnnotationBounds.left;
-    //   totalBounds.left = totalBounds.right - totalBounds.width;
-    // }
     return totalBounds;
   }
 
@@ -518,16 +507,17 @@ export default class BaseAnnotationFunction implements ElementInterface {
     }
     const {
       space, overhang, width, leftSpace, rightSpace, xOffset,
+      annotationsOverContent,
     } = this.glyphs[glyphName];
 
     const glyph = this.glyphs[glyphName];
     const contentBounds = new Bounds();
     contentBounds.copyFrom(contentBoundsIn);
     let glyphLength = contentBounds.width;
-    let glyphLeft = contentBounds.left;
+    let contentX = contentBounds.left;
     if (overhang != null) {
       glyphLength += 2 * overhang * scale;
-      glyphLeft = contentBounds.left - overhang * scale;
+      contentX = contentBounds.left - overhang * scale;
     }
     if (width != null) {
       glyphLength = width * scale;
@@ -536,26 +526,26 @@ export default class BaseAnnotationFunction implements ElementInterface {
     if (leftSpace != null || rightSpace != null) {
       glyphLength = (leftSpace * scale || 0) + contentBounds.width + (rightSpace * scale || 0);
       if (leftSpace != null) {
-        glyphLeft = contentBounds.left - leftSpace * scale;
+        contentX = contentBounds.left - leftSpace * scale;
       }
     }
 
     if (leftSpace == null && rightSpace == null && width != null) {
-      glyphLeft = contentBounds.left + (contentBounds.width - width) / 2;
+      contentX = contentBounds.left + (contentBounds.width - width) / 2;
     } else if (leftSpace == null && rightSpace != null && width != null) {
-      glyphLeft = contentBounds.right + rightSpace * scale - width;
+      contentX = contentBounds.right + rightSpace * scale - width;
     }
-    let glyphBottom;
+    let contentY;
     if (glyphName === 'top') {
-      glyphBottom = contentBounds.top + space * scale;
+      contentY = contentBounds.top + space * scale;
     } else {
-      glyphBottom = contentBounds.bottom - space * scale;
+      contentY = contentBounds.bottom - space * scale;
     }
 
     const glyphBounds = glyph.glyph.getBounds(
       glyph.glyph.custom.options,
-      glyphLeft + xOffset,
-      glyphBottom,
+      contentX + xOffset,
+      contentY,
       glyphLength,
       null,
       glyphName,
@@ -564,6 +554,8 @@ export default class BaseAnnotationFunction implements ElementInterface {
     const totalBounds = new Bounds();
     totalBounds.copyFrom(contentBounds);
     totalBounds.growWithSameBaseline(glyphBounds);
+    const glyphAndAnnotationBounds = new Bounds();
+    glyphAndAnnotationBounds.copyFrom(glyphBounds);
     glyph.width = glyphBounds.width;
 
     glyph.height = glyphBounds.height;
@@ -574,7 +566,33 @@ export default class BaseAnnotationFunction implements ElementInterface {
       this.setAnnotationPosition(glyphBounds, glyph.location, annotation, scale);
       const annotationBounds = annotation.content.getBounds();
       totalBounds.growWithSameBaseline(annotationBounds);
+      glyphAndAnnotationBounds.growWithSameBaseline(annotationBounds);
     });
+
+    let yOffset = 0;
+    if (glyphName === 'top'
+      && glyphAndAnnotationBounds.bottom < contentY
+      && annotationsOverContent === false
+    ) {
+      yOffset = contentY - glyphAndAnnotationBounds.bottom;
+    }
+    if (glyphName === 'bottom'
+      && glyphAndAnnotationBounds.top > contentY
+      && annotationsOverContent === false
+    ) {
+      yOffset = contentY - glyphAndAnnotationBounds.top;
+    }
+
+    if (yOffset !== 0) {
+      const locationOffset = new Point(0, yOffset);
+      glyph.location = glyph.location.add(locationOffset);
+      glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
+      glyph.annotations.forEach((annotation) => {
+        annotation.content.offsetLocation(locationOffset);
+      });
+      totalBounds.top += yOffset;
+      totalBounds.bottom += yOffset;
+    }
     return totalBounds;
   }
 

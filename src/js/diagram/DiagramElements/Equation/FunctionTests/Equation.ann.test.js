@@ -317,6 +317,128 @@ describe('Equation Functions - Ann', () => {
             },
             scale: 1,
           },
+          topWithTopAnnotation: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  top: {
+                    symbol: 'top',
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'center',
+                      yPosition: 'top',
+                      xAlign: 'center',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          topWithBottomAnnotation: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  top: {
+                    symbol: 'top',
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'center',
+                      yPosition: 'bottom',
+                      xAlign: 'center',
+                      yAlign: 'top',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          topWithBottomAnnotationOverContent: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  top: {
+                    symbol: 'top',
+                    annotationsOverContent: true,
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'center',
+                      yPosition: 'bottom',
+                      xAlign: 'center',
+                      yAlign: 'top',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          bottomWithBottomAnnotation: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  bottom: {
+                    symbol: 'bottom',
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'center',
+                      yPosition: 'bottom',
+                      xAlign: 'center',
+                      yAlign: 'top',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          bottomWithTopAnnotation: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  bottom: {
+                    symbol: 'bottom',
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'center',
+                      yPosition: 'top',
+                      xAlign: 'center',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          bottomWithTopAnnotationOverContent: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  bottom: {
+                    symbol: 'bottom',
+                    annotationsOverContent: true,
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'center',
+                      yPosition: 'top',
+                      xAlign: 'center',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
           brac: {
             content: {
               brac: {
@@ -439,6 +561,72 @@ describe('Equation Functions - Ann', () => {
     expect(round(b.left)).toBe(round(a.right));
     expect(round(right.left)).toBe(round(a.right));
     expect(round(b.bottom)).toBe(round(right.top));
+  });
+  test('Top with Top Annotation', () => {
+    functions.single();
+    eqn.showForm('topWithTopAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const top = eqn._top.getBoundingRect('diagram');
+    expect(round(top.bottom)).toBe(round(a.top));
+    expect(round(b.bottom)).toBe(round(top.top));
+    expect(round(b.left)).toBe(round(top.left + top.width / 2 - b.width / 2));
+  });
+  test('Top with Bottom Annotation', () => {
+    functions.single();
+    eqn.showForm('topWithBottomAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const top = eqn._top.getBoundingRect('diagram');
+    expect(round(b.bottom)).toBe(round(a.top));
+    expect(round(top.bottom)).toBe(round(b.top));
+    expect(round(b.left)).toBe(round(top.left + top.width / 2 - b.width / 2));
+  });
+  test('Top with Bottom Annotation Over Content', () => {
+    functions.single();
+    eqn.showForm('topWithBottomAnnotationOverContent');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const top = eqn._top.getBoundingRect('diagram');
+    expect(round(top.bottom)).toBe(round(a.top));
+    expect(round(b.top)).toBe(round(top.bottom));
+    expect(round(b.left)).toBe(round(top.left + top.width / 2 - b.width / 2));
+  });
+  test('Bottom with Bottom Annotation', () => {
+    functions.single();
+    eqn.showForm('bottomWithBottomAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const bottom = eqn._bottom.getBoundingRect('diagram');
+    expect(round(bottom.top)).toBe(round(a.bottom));
+    expect(round(b.top)).toBe(round(bottom.bottom));
+    expect(round(b.left)).toBe(round(bottom.left + bottom.width / 2 - b.width / 2));
+  });
+  test('Bottom with Top Annotation', () => {
+    functions.single();
+    eqn.showForm('bottomWithTopAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const bottom = eqn._bottom.getBoundingRect('diagram');
+    expect(round(b.top)).toBe(round(a.bottom));
+    expect(round(bottom.top)).toBe(round(b.bottom));
+    expect(round(b.left)).toBe(round(bottom.left + bottom.width / 2 - b.width / 2));
+  });
+  test('Bottom with Top Annotation Over Content', () => {
+    functions.single();
+    eqn.showForm('bottomWithTopAnnotationOverContent');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const bottom = eqn._bottom.getBoundingRect('diagram');
+    expect(round(b.bottom)).toBe(round(bottom.top));
+    expect(round(bottom.top)).toBe(round(a.bottom));
+    expect(round(b.left)).toBe(round(bottom.left + bottom.width / 2 - b.width / 2));
   });
   test('Bracket Annotation', () => {
     functions.single();
