@@ -118,7 +118,7 @@ describe('Diagram Equations From Object', () => {
         s: { symbol: 'strike', color: color1 },
       },
       xStrike: {
-        x: { symbol: 'xStrike', color: color1 },
+        x: { symbol: 'strike', style: 'cross', color: color1 },
       },
     };
   });
@@ -215,13 +215,12 @@ describe('Diagram Equations From Object', () => {
   });
   test('Symbol: Strike', () => {
     eqn.addElements(addElements.strike);
-    expect(eqn._s.drawingObject).toBeInstanceOf(VertexHorizontalLine);
+    expect(eqn._s.drawingObject).toBeInstanceOf(VertexSymbol);
     expect(eqn._s.color).toEqual(color1);
   });
   test('Symbol: xStrike', () => {
     eqn.addElements(addElements.xStrike);
-    expect(eqn._x._s1.drawingObject).toBeInstanceOf(VertexHorizontalLine);
-    expect(eqn._x._s2.drawingObject).toBeInstanceOf(VertexHorizontalLine);
+    expect(eqn._x.drawingObject).toBeInstanceOf(VertexSymbol);
     expect(eqn._x.color).toEqual(color1);
   });
 });

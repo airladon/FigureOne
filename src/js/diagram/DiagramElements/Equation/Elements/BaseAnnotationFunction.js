@@ -297,7 +297,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
 
     const topBounds = this.setHorizontalGlyph(scale, contentBounds, 'top');
     maxBounds.growWithSameBaseline(topBounds);
-    const bottomBounds = this.setHorizontalGlyph(scale, contentBounds, 'bottom')
+    const bottomBounds = this.setHorizontalGlyph(scale, contentBounds, 'bottom');
     maxBounds.growWithSameBaseline(bottomBounds);
 
     let xLocationOffset = 0;

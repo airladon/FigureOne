@@ -50,7 +50,7 @@ export default class Symbol extends DiagramElementPrimitive {
       const t = this.transform._dup();
       if (
         this.custom.options.draw === 'static'
-        && this.drawingObject.points.length === 0
+        // && this.drawingObject.points.length === 0
       ) {
         let points;
         let width;
