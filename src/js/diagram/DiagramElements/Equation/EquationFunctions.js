@@ -14,7 +14,7 @@ import {
 } from './Elements/Element';
 import Fraction from './Elements/Fraction';
 import Root from './Elements/Root';
-import Strike from './Elements/Strike';
+// import Strike from './Elements/Strike';
 // import DiagramPrimitives from '../../DiagramPrimitives/DiagramPrimitives';
 // import SuperSub from './Elements/SuperSub';
 // import { Brackets, Bar } from './Elements/Brackets';
@@ -23,7 +23,7 @@ import Strike from './Elements/Strike';
 import EquationForm from './EquationForm';
 import { Annotation, AnnotationInformation } from './Elements/Annotation';
 import Padding from './Elements/Padding';
-import Box from './Elements/Box';
+// import Box from './Elements/Box';
 import Integral from './Elements/Integral';
 // import SumProd from './Elements/SumProd';
 import Matrix from './Elements/Matrix';
@@ -1397,32 +1397,32 @@ export class EquationFunctions {
   //   );
   // }
 
-  strikeLegacy(
-    optionsOrContent: TypeStrikeObject | TypeStrikeArray | TypeEquationPhrase,
-    sym: string | null = null,
-    inSizeIn: boolean | null = null,
-    // options: TypeStrikeObject | TypeStrikeArray) {
-  ) {
-    let content;
-    let symbol;
-    let inSize;
-    if (!(sym == null && inSizeIn == null)) {
-      content = optionsOrContent;
-      symbol = sym;
-      inSize = inSizeIn;
-    } else if (Array.isArray(optionsOrContent)) {         // $FlowFixMe
-      [content, symbol, inSize] = optionsOrContent;
-    } else {
-      ({                                                  // $FlowFixMe
-        content, symbol, inSize,
-      } = optionsOrContent);
-    }
-    return new Strike(                                    // $FlowFixMe
-      this.contentToElement(content),                     // $FlowFixMe
-      this.getExistingOrAddSymbol(symbol),           // $FlowFixMe
-      inSize,
-    );
-  }
+  // strikeLegacy(
+  //   optionsOrContent: TypeStrikeObject | TypeStrikeArray | TypeEquationPhrase,
+  //   sym: string | null = null,
+  //   inSizeIn: boolean | null = null,
+  //   // options: TypeStrikeObject | TypeStrikeArray) {
+  // ) {
+  //   let content;
+  //   let symbol;
+  //   let inSize;
+  //   if (!(sym == null && inSizeIn == null)) {
+  //     content = optionsOrContent;
+  //     symbol = sym;
+  //     inSize = inSizeIn;
+  //   } else if (Array.isArray(optionsOrContent)) {         // $FlowFixMe
+  //     [content, symbol, inSize] = optionsOrContent;
+  //   } else {
+  //     ({                                                  // $FlowFixMe
+  //       content, symbol, inSize,
+  //     } = optionsOrContent);
+  //   }
+  //   return new Strike(                                    // $FlowFixMe
+  //     this.contentToElement(content),                     // $FlowFixMe
+  //     this.getExistingOrAddSymbol(symbol),           // $FlowFixMe
+  //     inSize,
+  //   );
+  // }
 
   box(
     optionsOrArray: TypeBoxObject | TypeBoxArray,
@@ -1479,11 +1479,6 @@ export class EquationFunctions {
         },
       },
     });
-    // return new Box(
-    //   [this.contentToElement(content)],
-    //   this.getExistingOrAddSymbol(symbol),
-    //   optionsToUse,
-    // );
   }
 
 
