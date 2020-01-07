@@ -229,24 +229,6 @@ export default class BaseAnnotationFunction implements ElementInterface {
     this.content.setPositions();
     setPositionsForAnnotations(this.annotations);
     setPositionsForGlyphs(this.glyphs);
-    // Object.keys(this.glyphs).forEach((key) => {
-    //   const glyph = this.glpyhs[key];
-
-    // });
-    // // setPositionsForGlyphs(this.glyphs);
-    // this.glyphs.forEach((glyph, index) => {
-    //   if (glyph != null) {
-    //     const t = glyph.getTransform()._dup();
-    //     t.updateTranslation(this.glyphLocations[index].x, this.glyphLocations[index].y);
-    //     t.updateScale(this.glyphWidths[index], this.glyphHeights[index]);
-    //     glyph.setTransform(t);
-    //   }
-    // });
-    // this.contents.forEach((content) => {
-    //   if (content != null) {
-    //     content.setPositions();
-    //   }
-    // });
   }
 
   offsetLocation(offset: Point = new Point(0, 0)) {
@@ -254,17 +236,66 @@ export default class BaseAnnotationFunction implements ElementInterface {
     this.content.offsetLocation(offset);
     offsetLocationForAnnotations(this.annotations, offset);
     offsetLocationForGlyphs(this.glyphs, offset);
-    // this.glyphLocations.forEach((glyphLocation, index) => {
-    //   if (this.glyphs[index] != null) {
-    //     this.glyphLocations[index] = glyphLocation.add(offset);
-    //   }
-    // });
-    // this.contents.forEach((content) => {
-    //   if (content != null) {
-    //     content.offsetLocation(offset);
-    //   }
-    // });
   }
+
+
+  //                               Top Glyph
+  //                  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+  //                  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG     Encompassing Glyph
+  //                                                      /
+  //                                                    /
+  //        GGG       GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG        GGG
+  //        GGG       GGG                           GGG        GGG
+  //        GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
+  //        GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
+  // Left   GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG   Right
+  // Glyph  GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG   Glyph
+  //        GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
+  //        GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
+  //        GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
+  //        GGG       GGG                           GGG        GGG
+  //        GGG       GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG        GGG
+  //
+  //
+  //                  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+  //                  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+  //                            Bottom Glyph
+  //
+  //
+  //
+  //
+  // |                          GGGGGGGGGGGGGGGGGGGGGGGG
+  // |                          GGGGGGGGGGGGGGGGGGGGGGGG
+  // |                          GGG                  GGG
+  // |                          GGG                  GGG
+  // |        GGG               GGG   CCCCCCCCCCCC   GGG               GGG
+  // |        GGG               GGG   CCCCCCCCCCCC   GGG               GGG
+  // |        GGG               GGG   CCCCCCCCCCCC   GGG               GGG
+  // |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
+  // |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
+  // |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
+  // |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
+  // |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
+  // | |   |  GGG  |   | |   |  GGG   CCCCCCCCCCCC   GGG               GGG
+  // | |   |  GGG  |   | |   |  GGG   CCCCCCCCCCCC   GGG               GGG
+  // | |   |  GGG  |   | |   |  GGG   CCCCCCCCCCCC   GGG               GGG
+  // | |   |  |  | |   | |   |  GGG   |              GGG
+  // | |   |  |  | |   | |   |  GGG   |              GGG
+  // | |   |  |  | |   | |   |  GGGGGGGGGGGGGGGGGGGGGGGG
+  // | |   |  |  | |   | |   |  GGGGGGGGGGGGGGGGGGGGGGGG
+  // | |   |  |  | |   | |   |  |  |  |
+  // | |   |  |  | |   | |   |  |  |--|<----  contentEncompassGlyph Space
+  // | |   |  |  | |   | |   |  |
+  // | |   |  |  | |   | |   |--|<----- EncompassGlyphAnnotation Space
+  // | |   |  |  | |   | |
+  // | |   |  |  | |   |-|<----- ContentAnnotationGlyphInsideAnnotation Space
+  // | |   |  |  | |
+  // | |   |  |  |-|<------- GlyphInsideAnnotationGlyph Space
+  // | |   |  |
+  // | |  >|--|<------ GlypgGlyphOutsideAnnotation Space
+  // | |
+  // |-|<------ Outside Space
+
 
   calcSize(location: Point, scale: number) {
     this.location = location._dup();
@@ -692,128 +723,3 @@ export default class BaseAnnotationFunction implements ElementInterface {
     });
   }
 }
-
-
-//                                 Top Glyph
-//                    GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
-//                    GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG     Encompassing Glyph
-//                                                        /
-//                                                      /
-//          GGG       GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG        GGG
-//          GGG       GGG                           GGG        GGG
-//          GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
-//          GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
-//   Left   GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG   Right
-//   Glyph  GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG   Glyph
-//          GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
-//          GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
-//          GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
-//          GGG       GGG                           GGG        GGG
-//          GGG       GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG        GGG
-//
-//
-//                    GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
-//                    GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
-//                              Bottom Glyph
-//
-
-
-//
-//   |                          GGGGGGGGGGGGGGGGGGGGGGGG
-//   |                          GGGGGGGGGGGGGGGGGGGGGGGG
-//   |                          GGG                  GGG
-//   |                          GGG                  GGG
-//   |        GGG               GGG   CCCCCCCCCCCC   GGG               GGG
-//   |        GGG               GGG   CCCCCCCCCCCC   GGG               GGG
-//   |        GGG               GGG   CCCCCCCCCCCC   GGG               GGG
-//   |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
-//   |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
-//   |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
-//   |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
-//   |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
-//   | |   |  GGG  |   | |   |  GGG   CCCCCCCCCCCC   GGG               GGG
-//   | |   |  GGG  |   | |   |  GGG   CCCCCCCCCCCC   GGG               GGG
-//   | |   |  GGG  |   | |   |  GGG   CCCCCCCCCCCC   GGG               GGG
-//   | |   |  |  | |   | |   |  GGG   |              GGG
-//   | |   |  |  | |   | |   |  GGG   |              GGG
-//   | |   |  |  | |   | |   |  GGGGGGGGGGGGGGGGGGGGGGGG
-//   | |   |  |  | |   | |   |  GGGGGGGGGGGGGGGGGGGGGGGG
-//   | |   |  |  | |   | |   |  |  |  |
-//   | |   |  |  | |   | |   |  |  |--|<----  contentEncompassGlyph Space
-//   | |   |  |  | |   | |   |  |
-//   | |   |  |  | |   | |   |--|<----- EncompassGlyphAnnotation Space
-//   | |   |  |  | |   | |
-//   | |   |  |  | |   |-|<----- ContentAnnotationGlyphInsideAnnotation Space
-//   | |   |  |  | |
-//   | |   |  |  |-|<------- GlyphInsideAnnotationGlyph Space
-//   | |   |  |
-//   | |  >|--|<------ GlypgGlyphOutsideAnnotation Space
-//   | |
-//   |-|<------ Outside Space
-//
-
-//  this.glyphs: {
-//    encompass: Symbol,
-//    left: Symbol,
-//    right: Symbol,
-//    bottom: Symbol,
-//    top: Symbol,
-//  }
-//
-//  this.mainContent: Elements
-//
-//  annotations: [
-//    {
-//      xPosition: 'left' | 'center' | 'right' | number,
-//      yPosition: 'bottom' | 'baseline' | 'middle' | 'top' | number,
-//      xAlign: 'left' | 'center' | 'right' | number,
-//      yAlign: 'bottom' | 'baseline' | 'middle' | 'top' | number,
-//      offset: parsiblePoint,
-//      scale: number,
-//      content: Elements,
-//      inSize,
-//    },
-//  ],
-//
-//  this.options: {
-//    inSize: boolean,
-//    useFullContent: boolean,
-//    space: {
-//      left: {
-//        contentEncompassGlyph: number,
-//        encompassGlyphAnnotation: number,
-//        annotationGlyphInsideAnnotation: number,
-//        glyphInsideAnnotationGlyph: number,
-//        glyphGlyphOutsideAnnotation: number,
-//        outside: number,
-//      },
-//    },
-//    leftGlyph, rightGlyph: {
-//      contentBottom: 'contentBottom' | 'contentBaseline' | 'minBottom'
-//                     | 'minBaseline',
-//      contentTop: 'contentTop' | 'maxTop' | 'maxBaseline',
-//      minContentDescent: number,
-//      minContentAscent: number,
-//      height: number,
-//      topSpace: number,
-//      bottomSpace: number,
-//      descent: number,
-//      ascent: number,
-//      yOffset: number,
-//      annotations: []
-//    },
-//    topGlyph, bottomGlyph: {
-//      minContentWidth: number,
-//      leftSpace: number,
-//      rightSpace: number,
-//      width: number,
-//      left: number,    // from x = 0
-//      right: number,   // from x = 0
-//      xOffset: number,
-//      annotations: [],
-//    },
-//    encompassGlyph: {
-//      annotations: [],
-//    },
-//  }
-
