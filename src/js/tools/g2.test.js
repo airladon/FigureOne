@@ -462,6 +462,159 @@ describe('g2 tests', () => {
         expect(l.midPoint().round()).toEqual(new Point(3, 0));
       });
     });
+    describe('Lines can be offset', () => {
+      let offsetter;
+      beforeEach(() => {
+        offsetter = (p, mag, angle) => new Point(
+          p.x + mag * Math.cos(angle),
+          p.y + mag * Math.sin(angle),
+        ).round();
+      });
+      test('Offset 45 to right', () => {
+        const l = new Line(new Point(0, 0), 1, Math.PI / 4);
+        const o = l.offset('right', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, -Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, -Math.PI / 4));
+      });
+      test('Offset 45 to bottom', () => {
+        const l = new Line(new Point(0, 0), 1, Math.PI / 4);
+        const o = l.offset('bottom', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, -Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, -Math.PI / 4));
+      });
+      test('Offset 45 to left', () => {
+        const l = new Line(new Point(0, 0), 1, Math.PI / 4);
+        const o = l.offset('left', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, 3 * Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, 3 * Math.PI / 4));
+      });
+      test('Offset 45 to top', () => {
+        const l = new Line(new Point(0, 0), 1, Math.PI / 4);
+        const o = l.offset('top', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, 3 * Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, 3 * Math.PI / 4));
+      });
+      test('Offset 135 to right', () => {
+        const l = new Line(new Point(0, 0), 1, 3 * Math.PI / 4);
+        const o = l.offset('right', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, Math.PI / 4));
+      });
+      test('Offset 135 to bottom', () => {
+        const l = new Line(new Point(0, 0), 1, 3 * Math.PI / 4);
+        const o = l.offset('bottom', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, 5 * Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, 5 * Math.PI / 4));
+      });
+      test('Offset 135 to left', () => {
+        const l = new Line(new Point(0, 0), 1, 3 * Math.PI / 4);
+        const o = l.offset('left', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, 5 * Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, 5 * Math.PI / 4));
+      });
+      test('Offset 135 to top', () => {
+        const l = new Line(new Point(0, 0), 1, 3 * Math.PI / 4);
+        const o = l.offset('top', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, Math.PI / 4));
+      });
+      test('Offset 225 to right', () => {
+        const l = new Line(new Point(0, 0), 1, 5 * Math.PI / 4);
+        const o = l.offset('right', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, -Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, -Math.PI / 4));
+      });
+      test('Offset 225 to bottom', () => {
+        const l = new Line(new Point(0, 0), 1, 5 * Math.PI / 4);
+        const o = l.offset('bottom', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, -Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, -Math.PI / 4));
+      });
+      test('Offset 225 to left', () => {
+        const l = new Line(new Point(0, 0), 1, 5 * Math.PI / 4);
+        const o = l.offset('left', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, 3 * Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, 3 * Math.PI / 4));
+      });
+      test('Offset 225 to top', () => {
+        const l = new Line(new Point(0, 0), 1, 5 * Math.PI / 4);
+        const o = l.offset('top', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, 3 * Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, 3 * Math.PI / 4));
+      });
+      test('Offset 315 to right', () => {
+        const l = new Line(new Point(0, 0), 1, 7 * Math.PI / 4);
+        const o = l.offset('right', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, Math.PI / 4));
+      });
+      test('Offset 315 to bottom', () => {
+        const l = new Line(new Point(0, 0), 1, 7 * Math.PI / 4);
+        const o = l.offset('bottom', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, 5 * Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, 5 * Math.PI / 4));
+      });
+      test('Offset 315 to left', () => {
+        const l = new Line(new Point(0, 0), 1, 7 * Math.PI / 4);
+        const o = l.offset('left', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, 5 * Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, 5 * Math.PI / 4));
+      });
+      test('Offset 315 to top', () => {
+        const l = new Line(new Point(0, 0), 1, 7 * Math.PI / 4);
+        const o = l.offset('top', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, Math.PI / 4));
+      });
+      test('Offset 0 to right', () => {
+        const l = new Line(new Point(0, 0), 1, 0);
+        const o = l.offset('right', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, -Math.PI / 2));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, -Math.PI / 2));
+      });
+      test('Offset 0 to bottom', () => {
+        const l = new Line(new Point(0, 0), 1, 0);
+        const o = l.offset('bottom', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, -Math.PI / 2));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, -Math.PI / 2));
+      });
+      test('Offset 0 to left', () => {
+        const l = new Line(new Point(0, 0), 1, 0);
+        const o = l.offset('left', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, Math.PI / 2));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, Math.PI / 2));
+      });
+      test('Offset 0 to top', () => {
+        const l = new Line(new Point(0, 0), 1, 0);
+        const o = l.offset('top', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, Math.PI / 2));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, Math.PI / 2));
+      });
+      test('Offset 90 to right', () => {
+        const l = new Line(new Point(0, 0), 1, Math.PI / 2);
+        const o = l.offset('right', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, 0));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, 0));
+      });
+      test('Offset 90 to bottom', () => {
+        const l = new Line(new Point(0, 0), 1, Math.PI / 2);
+        const o = l.offset('bottom', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, Math.PI));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, Math.PI));
+      });
+      test('Offset 90 to left', () => {
+        const l = new Line(new Point(0, 0), 1, Math.PI / 2);
+        const o = l.offset('left', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, Math.PI));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, Math.PI));
+      });
+      test('Offset 90 to top', () => {
+        const l = new Line(new Point(0, 0), 1, Math.PI / 2);
+        const o = l.offset('top', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, 0));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, 0));
+      });
+    });
     describe('Lines can have points within them', () => {
       test('Line <0, 0 2, 0> has point 1, 0 within it', () => {
         const l = new Line(new Point(0, 0), new Point(2, 0));
