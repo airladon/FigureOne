@@ -74,6 +74,13 @@ class Element implements ElementInterface {
     this.width = 0;
     this.location = new Point(0, 0);
     this.height = 0;
+    this.fullSize = {
+      leftOffset: 0,
+      width: this.width,
+      height: this.height,
+      ascent: this.ascent,
+      descent: this.descent,
+    };
   }
 
   calcSize(location: Point, scale: number) {
@@ -105,6 +112,13 @@ class Element implements ElementInterface {
       this.height = r.height * scale;
       this.width = r.width * scale;
     }
+    this.fullSize = {
+      leftOffset: 0,
+      width: this.width,
+      height: this.height,
+      ascent: this.ascent,
+      descent: this.descent,
+    };
   }
 
   _dup(namedCollection?: Object) {
@@ -124,6 +138,10 @@ class Element implements ElementInterface {
     c.scale = this.scale;
     return c;
   }
+
+  // getFullSize() {
+  //   return this.fullSize;
+  // }
 
   getAllElements() {
     if (this.content instanceof BlankElement) {
@@ -145,6 +163,19 @@ class Element implements ElementInterface {
   offsetLocation(offset: Point = new Point(0, 0)) {
     this.location = this.location.add(offset);
   }
+
+  // getFullBounds() {
+  //   return new Bounds({
+  //     left: this.location.x + this.fullSize.leftOffset,
+  //     right: this.location.x + this.fullSize.leftOffset + this.fullSize.width,
+  //     top: this.location.y + this.fullSize.ascent,
+  //     bottom: this.location.y - this.fullSize.descent,
+  //     width: this.fullSize.width,
+  //     height: this.fullSize.height,
+  //     ascent: this.fullSize.ascent,
+  //     descent: this.fullSize.descent,
+  //   });
+  // }
 
   getBounds(useFullSize: boolean = false) {
     if (useFullSize && this.fullSize != null) {
@@ -214,6 +245,7 @@ class Elements implements ElementInterface {
     let des = 0;
     let asc = 0;
     const loc = location._dup();
+    let fullBounds = null;
     this.content.forEach((element) => {
       element.calcSize(loc, scale);
 
@@ -224,13 +256,60 @@ class Elements implements ElementInterface {
       if (element.ascent > asc) {
         asc = element.ascent;
       }
+      const fullElementBounds = element.getBounds(true);
+      if (fullBounds == null) {
+        fullBounds = new Bounds();
+        fullBounds.copyFrom(fullElementBounds);
+      }
     });
+    if (fullBounds === null) {
+      fullBounds = new Bounds();
+      fullBounds.left = location.x;
+      fullBounds.top = location.y;
+      fullBounds.bottom = location.y;
+    }
     this.width = loc.x - location.x;
     this.ascent = asc;
     this.descent = des;
     this.location = location._dup();
     this.height = this.descent + this.ascent;
+    this.fullSize = {
+      leftOffset: this.location.x - fullBounds.left,
+      width: fullBounds.width,
+      ascent: fullBounds.ascent,
+      descent: fullBounds.descent,
+      height: fullBounds.height,
+    };
   }
+
+  // getFullBounds() {
+  //   // const fullSize = {
+  //   //   leftOffset: 0,
+  //   //   width: this.width,
+  //   //   ascent: this.ascent,
+  //   //   descent: this.descent,
+  //   //   height: this.height,
+  //   // };
+  //   // const bounds = new Bounds();
+  //   // bounds.width = this.width;
+  //   // bounds.left = this.location.x;
+  //   // bounds.right = bounds.left + bounds.right;
+  //   // bounds.bottom = this.location.y - this.descent;
+  //   // bounds.top = this.location.y + this.ascent;
+  //   // bounds.ascent = this.ascent;
+  //   // bounds.descent = this.descent;
+  //   // bounds.height = this.height;
+  //   const bounds = new Bounds();
+  //   bounds.left = this.location.x;
+  //   bounds.bottom = this.location.y;
+  //   bounds.top = this.location.y;
+
+  //   this.content.forEach((element) => {
+  //     const elementBounds = element.getBounds();
+  //     bounds.growWithSameBaseline(elementBounds);
+  //   });
+  //   return bounds;
+  // }
 
   getAllElements() {
     let elements = [];
