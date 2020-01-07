@@ -1806,6 +1806,7 @@ export class EquationFunctions {
     return this.ann({
       content,
       inSize: options.inSize,
+      contentScale: options.contentScale,
       glyphs: {
         left: {
           symbol,
@@ -1863,7 +1864,6 @@ export class EquationFunctions {
     let toYPosition;
     let toXAlign;
     let toYAlign;
-    let limitsOverContent;
     const defaultOptions = {
       space: 0.05,
       topSpace: 0.1,
@@ -1888,7 +1888,6 @@ export class EquationFunctions {
       toYPosition: 'top',
       toXAlign: 'left',
       toYAlign: 'middle',
-      limitsOverContent: true,
     };
     if (Array.isArray(optionsOrArray)) {
       [                                                    // $FlowFixMe
@@ -1899,7 +1898,7 @@ export class EquationFunctions {
         fromOffset, toOffset, limitsPosition,              // $FlowFixMe
         limitsAroundContent,                               // $FlowFixMe
         fromXPosition, fromYPosition, fromXAlign, fromYAlign, // $FlowFixMe
-        toXPosition, toYPosition, toXAlign, toYAlign, limitsOverContent,
+        toXPosition, toYPosition, toXAlign, toYAlign,
       ] = optionsOrArray;
     } else {
       ({                                                   // $FlowFixMe
@@ -1910,7 +1909,7 @@ export class EquationFunctions {
         fromOffset, toOffset, limitsPosition,              // $FlowFixMe
         limitsAroundContent,                               // $FlowFixMe
         fromXPosition, fromYPosition, fromXAlign, fromYAlign, // $FlowFixMe
-        toXPosition, toYPosition, toXAlign, toYAlign, limitsOverContent,
+        toXPosition, toYPosition, toXAlign, toYAlign,
       } = optionsOrArray);
     }
     if (limitsPosition === 'topBottom') {
@@ -1961,7 +1960,6 @@ export class EquationFunctions {
       toYPosition,
       toXAlign,
       toYAlign,
-      limitsOverContent,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     options.fromOffset = parsePoint(options.fromOffset);
@@ -1971,6 +1969,7 @@ export class EquationFunctions {
     return this.ann({
       content,
       inSize: options.inSize,
+      contentScale: options.contentScale,
       glyphs: {
         left: {
           symbol,
@@ -1979,7 +1978,7 @@ export class EquationFunctions {
           bottomSpace: options.bottomSpace,
           height: options.height,
           yOffset: options.yOffset,
-          annotationsOverContent: options.limitsOverContent,
+          annotationsOverContent: options.limitsAroundContent,
           annotations: [
             {
               content: from,

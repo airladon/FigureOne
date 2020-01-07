@@ -4,7 +4,7 @@ exports[`Equation Functions - Box Box 1`] = `
 Array [
   0.7,
   0,
-  0.01,
+  0,
   0,
   0.7,
   0,
@@ -18,7 +18,7 @@ exports[`Equation Functions - Box Box 2`] = `
 Array [
   0.048,
   0,
-  0,
+  -0.01,
   0,
   0.0921,
   -0.0156,

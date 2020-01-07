@@ -153,152 +153,138 @@ describe('Equation Functions - Integral', () => {
                 toScale: 1,
                 fromOffset: [0, 0],
                 toOffset: [0, 0],
-                limitsPosition: 'topBottom',
+                limitsPosition: 'topBottomCenter',
                 limitsAroundContent: true,
               },
             },
             scale: 1,
           },
-          // inSizeFalse: {
-          //   content: intLimits([
-          //     's', 'a', 'b', 'c', false, 0.01, 0.01, 0.01, null,
-          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
-          //   ]),
-          //   scale: 1,
-          // },
-          // space: {
-          //   content: intLimits([
-          //     's', 'a', 'b', 'c', true, 0.1, 0.01, 0.01, null,
-          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
-          //   ]),
-          //   scale: 1,
-          // },
-          // topSpace: {
-          //   content: intLimits([
-          //     's', 'a', 'b', 'c', true, 0.01, 0.1, 0.01, null,
-          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
-          //   ]),
-          //   scale: 1,
-          // },
-          // bottomSpace: {
-          //   content: intLimits([
-          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.1, null,
-          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
-          //   ]),
-          //   scale: 1,
-          // },
-          // topBottomSpace: {
-          //   content: intLimits([
-          //     's', 'a', 'b', 'c', true, 0.01, 0.1, 0.1, null,
-          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
-          //   ]),
-          //   scale: 1,
-          // },
-          // heightAndOverride: {
-          //   content: intLimits([
-          //     's', 'a', 'b', 'c', true, 0.01, 1, 1, 1,
-          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
-          //   ]),
-          //   scale: 1,
-          // },
-          // heightYOffset: {
-          //   content: intLimits([
-          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, 1,
-          //     0.1, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
-          //   ]),
-          //   scale: 1,
-          // },
-          // yOffsetNegative: {
-          //   content: intLimits([
-          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-          //     -0.1, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
-          //   ]),
-          //   scale: 1,
-          // },
-          // scale: {
-          //   content: intLimits([
-          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-          //     0, 0.5, 1, 1, [0, 0], [0, 0], 'topBottom', true,
-          //   ]),
-          //   scale: 1,
-          // },
-          // fromScale: {
-          //   content: intLimits([
-          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-          //     0, 1, 0.5, 1, [0, 0], [0, 0], 'topBottom', true,
-          //   ]),
-          //   scale: 1,
-          // },
-          // toScale: {
-          //   content: intLimits([
-          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-          //     0, 1, 1, 0.5, [0, 0], [0, 0], 'topBottom', true,
-          //   ]),
-          //   scale: 1,
-          // },
-          // fromSpace: {
-          //   content: intLimits([
-          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
-          //   ]),
-          //   scale: 1,
-          // },
-          // toSpace: {
-          //   content: intLimits([
-          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
-          //   ]),
-          //   scale: 1,
-          // },
-          // fromOffset: {
-          //   content: intLimits([
-          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-          //     0, 1, 1, 1, [-0.3, -0.2], [0, 0], 'topBottom', true,
-          //   ]),
-          //   scale: 1,
-          // },
-          // toOffset: {
-          //   content: intLimits([
-          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-          //     0, 1, 1, 1, [0, 0], [0.3, 0.2], 'topBottom', true,
-          //   ]),
-          //   scale: 1,
-          // },
-          // noFrom: {
-          //   content: intLimits([
-          //     's', 'a', '', 'c', true, 0.01, 0.01, 0.01, null,
-          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
-          //   ]),
-          //   scale: 1,
-          // },
-          // noTo: {
-          //   content: intLimits([
-          //     's', 'a', 'b', '', true, 0.01, 0.01, 0.01, null,
-          //     0, 1, 1, 1, [0, 0], [0, 0], 'topBottom', true,
-          //   ]),
-          //   scale: 1,
-          // },
-          limitsPosition: {
+          inSizeFalse: {
+            content: intLimits([
+              's', 'a', 'b', 'c', false, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+            ]),
+            scale: 1,
+          },
+          space: {
+            content: intLimits([
+              's', 'a', 'b', 'c', true, 0.1, 0.01, 0.01, null,
+              0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+            ]),
+            scale: 1,
+          },
+          topSpace: {
+            content: intLimits([
+              's', 'a', 'b', 'c', true, 0.01, 0.1, 0.01, null,
+              0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+            ]),
+            scale: 1,
+          },
+          bottomSpace: {
+            content: intLimits([
+              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.1, null,
+              0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+            ]),
+            scale: 1,
+          },
+          topBottomSpace: {
+            content: intLimits([
+              's', 'a', 'b', 'c', true, 0.01, 0.1, 0.1, null,
+              0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+            ]),
+            scale: 1,
+          },
+          heightAndOverride: {
+            content: intLimits([
+              's', 'a', 'b', 'c', true, 0.01, 1, 1, 1,
+              0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+            ]),
+            scale: 1,
+          },
+          heightYOffset: {
+            content: intLimits([
+              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, 1,
+              0.1, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+            ]),
+            scale: 1,
+          },
+          yOffsetNegative: {
+            content: intLimits([
+              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+              -0.1, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+            ]),
+            scale: 1,
+          },
+          scale: {
+            content: intLimits([
+              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+              0, 0.5, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+            ]),
+            scale: 1,
+          },
+          fromScale: {
+            content: intLimits([
+              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+              0, 1, 0.5, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+            ]),
+            scale: 1,
+          },
+          toScale: {
+            content: intLimits([
+              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 0.5, [0, 0], [0, 0], 'topBottomCenter', true,
+            ]),
+            scale: 1,
+          },
+          fromOffset: {
+            content: intLimits([
+              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 1, [-0.3, -0.2], [0, 0], 'topBottomCenter', true,
+            ]),
+            scale: 1,
+          },
+          toOffset: {
+            content: intLimits([
+              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 1, [0, 0], [0.3, 0.2], 'topBottomCenter', true,
+            ]),
+            scale: 1,
+          },
+          noFrom: {
+            content: intLimits([
+              's', 'a', '', 'c', true, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+            ]),
+            scale: 1,
+          },
+          noTo: {
+            content: intLimits([
+              's', 'a', 'b', '', true, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+            ]),
+            scale: 1,
+          },
+          limitsPositionSide: {
             content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
               0, 1, 1, 1, [0, 0], [0, 0], 'side', true,
             ]),
             scale: 1,
           },
-          // sideSpace: {
-          //   content: intLimits([
-          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-          //     0, 1, 1, 1, [0, 0], [0, 0], 'side', true,
-          //   ]),
-          //   scale: 1,
-          // },
-          // sideOffset: {
-          //   content: intLimits([
-          //     's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
-          //     0, 1, 1, 1, [-0.3, -0.2], [0.3, 0.2], 'side', true,
-          //   ]),
-          //   scale: 1,
-          // },
+          limitsPositionSideNotOver: {
+            content: intLimits([
+              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 1, [0, 0], [0, 0], 'side', false,
+            ]),
+            scale: 1,
+          },
+          sideOffset: {
+            content: intLimits([
+              's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
+              0, 1, 1, 1, [-0.3, -0.2], [0.3, 0.2], 'side', true,
+            ]),
+            scale: 1,
+          },
         });
         diagram.elements = eqn;
         diagram.setFirstTransform();
@@ -381,16 +367,16 @@ describe('Equation Functions - Integral', () => {
       diagram.setFirstTransform();
       const newS = eqn._s.getBoundingRect('diagram');
       expect(round(newS.height)).toBe(round(height));
-      expect(round(newS.bottom)).toBe(round(baseS.bottom - (height - baseS.height) / 2));
-      expect(round(newS.top)).toBe(round(baseS.top + (height - baseS.height) / 2));
+      expect(round(newS.bottom)).toBe(round(baseA.bottom - 1));
+      expect(round(newS.top)).toBe(round(newS.bottom + height));
     });
     test('heightYOffset', () => {
       eqn.showForm('heightYOffset');
       diagram.setFirstTransform();
       const newS = eqn._s.getBoundingRect('diagram');
       expect(round(newS.height)).toBe(round(height));
-      expect(round(newS.bottom)).toBe(round(baseS.bottom - (height - baseS.height) / 2 + yOffset));
-      expect(round(newS.top)).toBe(round(baseS.top + (height - baseS.height) / 2 + yOffset));
+      expect(round(newS.bottom)).toBe(round(baseA.bottom - initialSpace + yOffset));
+      expect(round(newS.top)).toBe(round(newS.bottom + height));
     });
     test('yOffsetNegative', () => {
       eqn.showForm('yOffsetNegative');
@@ -431,28 +417,28 @@ describe('Equation Functions - Integral', () => {
       expect(round(newC.bottom)).toBe(round(baseC.bottom));
       expect(round(newC.top)).toBe(round(baseC.bottom + baseC.height * scale));
     });
-    test('fromSpace', () => {
-      eqn.showForm('fromSpace');
-      diagram.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('diagram');
-      const newB = eqn._b.getBoundingRect('diagram');
-      expect(round(newS.height)).toBe(round(baseS.height));
-      expect(round(newS.bottom)).toBe(round(baseS.bottom));
-      expect(round(newB.height)).toBe(round(baseB.height));
-      expect(round(newB.top)).toBe(round(baseB.top - spaceDelta));
-      expect(round(newB.bottom)).toBe(round(baseB.bottom - spaceDelta));
-    });
-    test('toSpace', () => {
-      eqn.showForm('toSpace');
-      diagram.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('diagram');
-      const newC = eqn._c.getBoundingRect('diagram');
-      expect(round(newS.height)).toBe(round(baseS.height));
-      expect(round(newS.bottom)).toBe(round(baseS.bottom));
-      expect(round(newC.height)).toBe(round(baseC.height));
-      expect(round(newC.bottom)).toBe(round(baseC.bottom + spaceDelta));
-      expect(round(newC.top)).toBe(round(baseC.top + spaceDelta));
-    });
+    // test('fromSpace', () => {
+    //   eqn.showForm('fromSpace');
+    //   diagram.setFirstTransform();
+    //   const newS = eqn._s.getBoundingRect('diagram');
+    //   const newB = eqn._b.getBoundingRect('diagram');
+    //   expect(round(newS.height)).toBe(round(baseS.height));
+    //   expect(round(newS.bottom)).toBe(round(baseS.bottom));
+    //   expect(round(newB.height)).toBe(round(baseB.height));
+    //   expect(round(newB.top)).toBe(round(baseB.top - spaceDelta));
+    //   expect(round(newB.bottom)).toBe(round(baseB.bottom - spaceDelta));
+    // });
+    // test('toSpace', () => {
+    //   eqn.showForm('toSpace');
+    //   diagram.setFirstTransform();
+    //   const newS = eqn._s.getBoundingRect('diagram');
+    //   const newC = eqn._c.getBoundingRect('diagram');
+    //   expect(round(newS.height)).toBe(round(baseS.height));
+    //   expect(round(newS.bottom)).toBe(round(baseS.bottom));
+    //   expect(round(newC.height)).toBe(round(baseC.height));
+    //   expect(round(newC.bottom)).toBe(round(baseC.bottom + spaceDelta));
+    //   expect(round(newC.top)).toBe(round(baseC.top + spaceDelta));
+    // });
     test('fromOffset', () => {
       eqn.showForm('fromOffset');
       diagram.setFirstTransform();
@@ -461,7 +447,7 @@ describe('Equation Functions - Integral', () => {
       expect(round(newS.height)).toBe(round(baseS.height));
       expect(round(newS.bottom)).toBe(round(baseS.bottom));
       expect(round(newB.height)).toBe(round(baseB.height));
-      expect(round(newB.top)).toBe(round(baseB.top - offset.y));
+      expect(round(newB.top)).toBe(round(newS.bottom - offset.y));
       expect(round(newB.left)).toBe(round(0));
       expect(round(newS.left)).toBe(round(offset.x + newB.width / 2 - baseS.width / 2));
     });
@@ -508,28 +494,33 @@ describe('Equation Functions - Integral', () => {
       expect(round(newB.bottom)).toBe(round(baseB.bottom));
       expect(round(newB.height)).toBe(round(baseB.height));
     });
-    test.only('limitsPosition', () => {
-      eqn.showForm('limitsPosition');
+    test('limitsPosition Side', () => {
+      eqn.showForm('limitsPositionSide');
       diagram.setFirstTransform();
       const newS = eqn._s.getBoundingRect('diagram');
       const newB = eqn._b.getBoundingRect('diagram');
       const newC = eqn._c.getBoundingRect('diagram');
-      const newA = eqn._c.getBoundingRect('diagram');
+      const newA = eqn._a.getBoundingRect('diagram');
       expect(round(newS.left)).toBe(0);
       expect(round(newC.left)).toBe(round(newS.right));
       expect(round(newC.bottom)).toBe(round(newS.top - newC.height / 2));
       expect(round(newB.left)).toBe(round(newS.left + newS.width / 2));
       expect(round(newB.bottom)).toBe(round(newS.bottom - newB.height / 2));
-      expect(round(newA.left)).toBe(round(newC.right + initialSpace))
+      expect(round(newA.left)).toBe(round(newS.right + initialSpace));
     });
-    test('sideSpace', () => {
-      eqn.showForm('sideSpace');
+    test('limitsPosition Side Not Over Content', () => {
+      eqn.showForm('limitsPositionSideNotOver');
       diagram.setFirstTransform();
       const newS = eqn._s.getBoundingRect('diagram');
       const newB = eqn._b.getBoundingRect('diagram');
       const newC = eqn._c.getBoundingRect('diagram');
-      expect(round(newC.left)).toBe(round(newS.right + space));
-      expect(round(newB.left)).toBe(round(newS.left + newS.width / 2 + space));
+      const newA = eqn._a.getBoundingRect('diagram');
+      expect(round(newS.left)).toBe(0);
+      expect(round(newC.left)).toBe(round(newS.right));
+      expect(round(newC.bottom)).toBe(round(newS.top - newC.height / 2));
+      expect(round(newB.left)).toBe(round(newS.left + newS.width / 2));
+      expect(round(newB.bottom)).toBe(round(newS.bottom - newB.height / 2));
+      expect(round(newA.left)).toBe(round(newC.right + initialSpace));
     });
     test('sideOffset', () => {
       eqn.showForm('sideOffset');
@@ -538,8 +529,8 @@ describe('Equation Functions - Integral', () => {
       const newB = eqn._b.getBoundingRect('diagram');
       const newC = eqn._c.getBoundingRect('diagram');
       expect(round(newB.left)).toBe(0);
-      expect(round(newC.left)).toBe(round(newS.right + initialSpace + offset.x));
-      expect(round(newB.left)).toBe(round(newS.left + newS.width / 2 + initialSpace - offset.x));
+      expect(round(newC.left)).toBe(round(newS.right + offset.x));
+      expect(round(newS.left)).toBe(round(offset.x - newS.width / 2));
     });
   });
   test('Input Forms', () => {
