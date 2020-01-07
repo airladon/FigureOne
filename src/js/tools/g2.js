@@ -810,6 +810,36 @@ class Line {
     return true;
   }
 
+  offset(
+    direction: 'left' | 'right' | 'top' | 'bottom',
+    space: number,
+  ) {
+    let normalizedAngle = this.ang;
+    if (normalizedAngle >= Math.PI) {
+      normalizedAngle -= Math.PI;
+    }
+    if (normalizedAngle < 0) {
+      normalizedAngle += Math.PI;
+    }
+    let offsetAngle = normalizedAngle - Math.PI / 2;
+    if (normalizedAngle < Math.PI / 2) {
+      if (direction === 'left' || direction === 'top') {
+        offsetAngle = normalizedAngle + Math.PI / 2;
+      }
+    } else if (direction === 'left' || direction === 'bottom') {
+      offsetAngle = normalizedAngle + Math.PI / 2;
+    }
+    const p1 = new Point(
+      this.p1.x + space * Math.cos(offsetAngle),
+      this.p1.y + space * Math.sin(offsetAngle),
+    );
+    const p2 = new Point(
+      this.p2.x + space * Math.cos(offsetAngle),
+      this.p2.y + space * Math.sin(offsetAngle),
+    );
+    return new Line(p1, p2);
+  }
+
   intersectsWith(line2: Line, precision: number = 8) {
     const l2 = line2; // line2.round(precision);
     const l1 = this;  // this.round(precision);
