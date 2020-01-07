@@ -238,35 +238,6 @@ describe('Equation Functions - Ann', () => {
             },
             scale: 1,
           },
-          // example: {
-          //   content: {
-          //     ann: {
-          //       content: 'a',
-          //       fullContentBounds: true,
-          //       fullBounds: true,
-          //       annotation: {
-          //         content: 'b',
-          //         useFullBounds: true,
-          //         yPosition: 'top',
-          //         yAlign: 'bottom',
-          //         xPosition: 'right',
-          //         xAlign: 'left',
-          //       },
-          //       glyphs: {
-          //         left: {
-          //           symbol: 'bracket',
-          //           annotations: [
-          //             {
-          //               content: { strike: ['c', 'strike', false, 0.1] },
-          //               useFullBounds: true,
-          //             },
-          //           ],
-          //         },
-          //       },
-          //     },
-          //   },
-          //   scale: 1,
-          // },
         });
         diagram.elements = eqn;
       },
@@ -361,6 +332,18 @@ describe('Equation Functions - Ann', () => {
     expect(round(s.left)).toBe(round(c.left - space));
     expect(round(s.bottom)).toBe(round(c.bottom - space));
   });
+
+  //                       X       X
+  //                    ____X_____X
+  //                   |     XcccX|
+  //                   |     cXcXc|
+  //                   |     ccXcc|
+  //                   |     cXcXc|
+  //                   |aaaaaX   X|
+  //                   |aaaaX     X
+  //                   |aaaaa     |
+  //                   |aaaaa     |
+  //                   ------------
   test('Use Full Bounds False', () => {
     functions.single();
     eqn.showForm('useFullBoundsFalse');
@@ -376,6 +359,21 @@ describe('Equation Functions - Ann', () => {
     expect(round(box.bottom)).toBe(round(a.bottom));
     expect(round(box.top)).toBe(round(c.top));
   });
+
+  //                    ____________
+  //                   |   X       X|
+  //                   |    X     X |
+  //                   |     XcccX  |
+  //                   |     cXcXc  |
+  //                   |     ccXcc  |
+  //                   |     cXcXc  |
+  //                   |aaaaaX   X  |
+  //                   |aaaaX     X |
+  //                   |aaaaa       |
+  //                   |aaaaa       |
+  //                   -------------
+  //
+  //
   test('Use Full Bounds True', () => {
     functions.single();
     eqn.showForm('useFullBoundsTrue');
