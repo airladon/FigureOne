@@ -327,7 +327,6 @@ export default class BaseAnnotationFunction implements ElementInterface {
       descent: maxBounds.descent,
       height: maxBounds.height,
     };
-
     if (xLocationOffset !== 0 && content != null) {
       const locationOffset = new Point(xLocationOffset, 0);
       content.offsetLocation(locationOffset);
@@ -370,7 +369,6 @@ export default class BaseAnnotationFunction implements ElementInterface {
       contentBounds.width,
       contentBounds.height,
     );
-    // console.log(left, glyphBounds)
     const totalBounds = new Bounds();
     totalBounds.copyFrom(glyphBounds);
     glyph.width = glyphBounds.width;
@@ -396,6 +394,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
       descent, height, yOffset,
       annotationsOverContent,
     } = this.glyphs[glyphName];
+
     const glyph = this.glyphs[glyphName];
     // const contentBounds = new Bounds();
     // contentBounds.copyFrom(contentBounds);
@@ -487,7 +486,6 @@ export default class BaseAnnotationFunction implements ElementInterface {
     ) {
       xOffset = contentX - glyphAndAnnotationBounds.left;
     }
-
     if (xOffset !== 0) {
       const locationOffset = new Point(xOffset, 0);
       glyph.location = glyph.location.add(locationOffset);
@@ -496,8 +494,9 @@ export default class BaseAnnotationFunction implements ElementInterface {
         annotation.content.offsetLocation(locationOffset);
       });
       totalBounds.left += xOffset;
-      totalBounds.right += xOffset;
+      totalBounds.right = Math.max(totalBounds.right + xOffset, contentBounds.right);
     }
+    // console.log(totalBounds.left, totalBounds.width)
     return totalBounds;
   }
 
