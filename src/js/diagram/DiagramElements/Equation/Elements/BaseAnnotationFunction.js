@@ -2,7 +2,7 @@
 import {
   Point, getPoint,
 } from '../../../../tools/g2';
-import { Elements } from './Element';
+// import { Elements } from './Element';
 import Bounds from './Bounds';
 // import BaseEquationFunction from './BaseEquationFunction';
 // import type { TypeParsablePoint } from '../../../../tools/g2';
@@ -25,6 +25,7 @@ export type TypeAnnotation = {
   scale: number,
   content: ElementInterface,
   inSize: boolean,
+  fullContentBounds: boolean,
 };
 
 export type TypeAnnotatedGlyph = {
@@ -303,33 +304,42 @@ export default class BaseAnnotationFunction implements ElementInterface {
     // const [encompassGlyph, leftGlyph, bottomGlyph, rightGlyph, topGlyph] = this.glyphs;
     const { content, annotations } = this;
     const {
-      inSize, useFullContent, space, topSpace, bottomSpace, leftSpace, rightSpace, contentScale,
+      inSize, space, topSpace, bottomSpace, leftSpace, rightSpace, contentScale, useFullBounds, fullContentBounds,
     } = this.options;
-    const maxBounds = new Bounds();
+    const inSizeBounds = new Bounds();
+    const fullBounds = new Bounds();
 
     const contentBounds = new Bounds();
     content.calcSize(loc._dup(), scale * contentScale);
-    contentBounds.copyFrom(content.getBounds(useFullContent));
-    maxBounds.copyFrom(contentBounds);
+    contentBounds.copyFrom(content.getBounds(fullContentBounds));
+    inSizeBounds.copyFrom(contentBounds);
+    fullBounds.copyFrom(contentBounds);
     annotations.forEach((annotation) => {
       annotation.content.calcSize(loc, scale * annotation.scale);
       this.setAnnotationPosition(content, loc, annotation, scale);
       const annotationBounds = annotation.content.getBounds();
-      maxBounds.growWithSameBaseline(annotationBounds);
+      inSizeBounds.growWithSameBaseline(annotationBounds);
+      const fullSizeAnnotationBounds = annotation.content.getBounds(true);
+      fullBounds.growWithSameBaseline(fullSizeAnnotationBounds);
     });
+    const [encompassBounds, encompassFullBounds] = this.setEncompassGlyph(scale, contentBounds);
+    inSizeBounds.growWithSameBaseline(encompassBounds);
+    fullBounds.growWithSameBaseline(encompassFullBounds);
 
-    const encompassBounds = this.setEncompassGlyph(scale, contentBounds);
-    maxBounds.growWithSameBaseline(encompassBounds);
+    const [leftBounds, leftFullBounds] = this.setVerticalGlyph(scale, contentBounds, 'left');
+    inSizeBounds.growWithSameBaseline(leftBounds);
+    fullBounds.growWithSameBaseline(leftFullBounds);
+    const [rightBounds, rightFullBounds] = this.setVerticalGlyph(scale, contentBounds, 'right');
+    inSizeBounds.growWithSameBaseline(rightBounds);
+    fullBounds.growWithSameBaseline(rightFullBounds);
 
-    const leftBounds = this.setVerticalGlyph(scale, contentBounds, 'left');
-    maxBounds.growWithSameBaseline(leftBounds);
-    const rightBounds = this.setVerticalGlyph(scale, contentBounds, 'right');
-    maxBounds.growWithSameBaseline(rightBounds);
+    const [topBounds, topFullBounds] = this.setHorizontalGlyph(scale, contentBounds, 'top');
+    inSizeBounds.growWithSameBaseline(topBounds);
+    fullBounds.growWithSameBaseline(topFullBounds);
 
-    const topBounds = this.setHorizontalGlyph(scale, contentBounds, 'top');
-    maxBounds.growWithSameBaseline(topBounds);
-    const bottomBounds = this.setHorizontalGlyph(scale, contentBounds, 'bottom');
-    maxBounds.growWithSameBaseline(bottomBounds);
+    const [bottomBounds, bottomFullBounds] = this.setHorizontalGlyph(scale, contentBounds, 'bottom');
+    inSizeBounds.growWithSameBaseline(bottomBounds);
+    fullBounds.growWithSameBaseline(bottomFullBounds);
 
     let xLocationOffset = 0;
 
@@ -337,14 +347,19 @@ export default class BaseAnnotationFunction implements ElementInterface {
     const bottomSpaceToUse = (bottomSpace != null ? bottomSpace : (space || 0)) * scale;
     const leftSpaceToUse = (leftSpace != null ? leftSpace : (space || 0)) * scale;
     const rightSpaceToUse = (rightSpace != null ? rightSpace : (space || 0)) * scale;
-    maxBounds.offset(topSpaceToUse, rightSpaceToUse, -bottomSpaceToUse, -leftSpaceToUse);
+    inSizeBounds.offset(topSpaceToUse, rightSpaceToUse, -bottomSpaceToUse, -leftSpaceToUse);
+    fullBounds.growWithSameBaseline(inSizeBounds);
+
+    if (useFullBounds) {
+      inSizeBounds.copyFrom(fullBounds);
+    }
 
     if (inSize) {
-      this.width = maxBounds.width;
-      this.ascent = maxBounds.ascent;
-      this.descent = maxBounds.descent;
-      this.height = maxBounds.height;
-      xLocationOffset = loc.x - maxBounds.left;
+      this.width = inSizeBounds.width;
+      this.ascent = inSizeBounds.ascent;
+      this.descent = inSizeBounds.descent;
+      this.height = inSizeBounds.height;
+      xLocationOffset = loc.x - inSizeBounds.left;
     } else {
       this.width = contentBounds.width;
       this.ascent = contentBounds.ascent;
@@ -352,11 +367,11 @@ export default class BaseAnnotationFunction implements ElementInterface {
       this.height = contentBounds.height;
     }
     this.fullSize = {
-      leftOffset: maxBounds.left - loc.x,
-      width: maxBounds.width,
-      ascent: maxBounds.ascent,
-      descent: maxBounds.descent,
-      height: maxBounds.height,
+      leftOffset: this.location.x - fullBounds.left,
+      width: fullBounds.width,
+      ascent: fullBounds.ascent,
+      descent: fullBounds.descent,
+      height: fullBounds.height,
     };
     if (xLocationOffset !== 0 && content != null) {
       const locationOffset = new Point(xLocationOffset, 0);
@@ -380,7 +395,9 @@ export default class BaseAnnotationFunction implements ElementInterface {
 
   setEncompassGlyph(scale: number, contentBoundsIn: Bounds) {
     if (this.glyphs.encompass == null) {
-      return contentBoundsIn;
+      const fullBounds = new Bounds();
+      fullBounds.copyFrom(contentBoundsIn);
+      return [contentBoundsIn, fullBounds];
     }
     const {
       leftSpace, rightSpace, bottomSpace, topSpace, space,
@@ -400,8 +417,11 @@ export default class BaseAnnotationFunction implements ElementInterface {
       contentBounds.width,
       contentBounds.height,
     );
-    const totalBounds = new Bounds();
-    totalBounds.copyFrom(glyphBounds);
+    const inSizeBounds = new Bounds();
+    const fullBounds = new Bounds();
+    inSizeBounds.copyFrom(contentBounds);
+    inSizeBounds.growWithSameBaseline(glyphBounds);
+    fullBounds.copyFrom(inSizeBounds);
     glyph.width = glyphBounds.width;
     glyph.height = glyphBounds.height;
     glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);
@@ -410,14 +430,18 @@ export default class BaseAnnotationFunction implements ElementInterface {
       annotation.content.calcSize(glyph.location, scale * annotation.scale);
       this.setAnnotationPosition(glyphBounds, glyph.location, annotation, scale);
       const annotationBounds = annotation.content.getBounds();
-      totalBounds.growWithSameBaseline(annotationBounds);
+      inSizeBounds.growWithSameBaseline(annotationBounds);
+      const fullAnnotationBounds = annotation.content.getBounds(true);
+      fullBounds.growWithSameBaseline(fullAnnotationBounds);
     });
-    return totalBounds;
+    return [inSizeBounds, fullBounds];
   }
 
-  setVerticalGlyph(scale: number, contentBounds: Bounds, glyphName: 'left' | 'right', ) {
+  setVerticalGlyph(scale: number, contentBounds: Bounds, glyphName: 'left' | 'right') {
     if (this.glyphs[glyphName] == null) {
-      return contentBounds;
+      const fullBounds = new Bounds();
+      fullBounds.copyFrom(contentBounds);
+      return [contentBounds, fullBounds];
     }
     const {
       space, overhang, topSpace, bottomSpace, minContentHeight,
@@ -487,9 +511,12 @@ export default class BaseAnnotationFunction implements ElementInterface {
       glyphName,
     );
 
-    const totalBounds = new Bounds();
-    totalBounds.copyFrom(contentBounds);
-    totalBounds.growWithSameBaseline(glyphBounds);
+    // const totalBounds = new Bounds();
+    const inSizeBounds = new Bounds();
+    const fullBounds = new Bounds();
+    inSizeBounds.copyFrom(contentBounds);
+    inSizeBounds.growWithSameBaseline(glyphBounds);
+    fullBounds.copyFrom(inSizeBounds);
     const glyphAndAnnotationBounds = new Bounds();
     glyphAndAnnotationBounds.copyFrom(glyphBounds);
     glyph.width = glyphBounds.width;
@@ -500,8 +527,10 @@ export default class BaseAnnotationFunction implements ElementInterface {
       annotation.content.calcSize(glyph.location, scale * annotation.scale);
       this.setAnnotationPosition(glyphBounds, glyph.location, annotation, scale);
       const annotationBounds = annotation.content.getBounds();
-      totalBounds.growWithSameBaseline(annotationBounds);
+      inSizeBounds.growWithSameBaseline(annotationBounds);
       glyphAndAnnotationBounds.growWithSameBaseline(annotationBounds);
+      const fullAnnotationBounds = annotation.content.getBounds(true);
+      fullBounds.growWithSameBaseline(fullAnnotationBounds);
     });
 
     let xOffset = 0;
@@ -524,16 +553,20 @@ export default class BaseAnnotationFunction implements ElementInterface {
       glyph.annotations.forEach((annotation) => {
         annotation.content.offsetLocation(locationOffset);
       });
-      totalBounds.left += xOffset;
-      totalBounds.right = Math.max(totalBounds.right + xOffset, contentBounds.right);
+      inSizeBounds.left += xOffset;
+      inSizeBounds.right = Math.max(inSizeBounds.right + xOffset, contentBounds.right);
+      fullBounds.left += xOffset;
+      fullBounds.right = Math.max(inSizeBounds.right + xOffset, contentBounds.right);
     }
-    // console.log(totalBounds.left, totalBounds.width)
-    return totalBounds;
+    // console.log(inSizeBounds.left, inSizeBounds.width)
+    return [inSizeBounds, fullBounds];
   }
 
   setHorizontalGlyph(scale: number, contentBoundsIn: Bounds, glyphName: 'top' | 'bottom') {
     if (this.glyphs[glyphName] == null) {
-      return contentBoundsIn;
+      const fullBounds = new Bounds();
+      fullBounds.copyFrom(contentBoundsIn);
+      return [contentBoundsIn, fullBounds];
     }
     const {
       space, overhang, width, leftSpace, rightSpace, xOffset,
@@ -581,9 +614,12 @@ export default class BaseAnnotationFunction implements ElementInterface {
       glyphName,
     );
 
-    const totalBounds = new Bounds();
-    totalBounds.copyFrom(contentBounds);
-    totalBounds.growWithSameBaseline(glyphBounds);
+    const inSizeBounds = new Bounds();
+    const fullBounds = new Bounds();
+    inSizeBounds.copyFrom(contentBounds);
+    inSizeBounds.growWithSameBaseline(glyphBounds);
+    fullBounds.copyFrom(inSizeBounds);
+
     const glyphAndAnnotationBounds = new Bounds();
     glyphAndAnnotationBounds.copyFrom(glyphBounds);
     glyph.width = glyphBounds.width;
@@ -595,8 +631,10 @@ export default class BaseAnnotationFunction implements ElementInterface {
       annotation.content.calcSize(glyph.location, scale * annotation.scale);
       this.setAnnotationPosition(glyphBounds, glyph.location, annotation, scale);
       const annotationBounds = annotation.content.getBounds();
-      totalBounds.growWithSameBaseline(annotationBounds);
+      inSizeBounds.growWithSameBaseline(annotationBounds);
       glyphAndAnnotationBounds.growWithSameBaseline(annotationBounds);
+      const fullAnnotationBounds = annotation.content.getBounds(true);
+      fullBounds.growWithSameBaseline(fullAnnotationBounds);
     });
 
     let yOffset = 0;
@@ -620,10 +658,12 @@ export default class BaseAnnotationFunction implements ElementInterface {
       glyph.annotations.forEach((annotation) => {
         annotation.content.offsetLocation(locationOffset);
       });
-      totalBounds.top += yOffset;
-      totalBounds.bottom += yOffset;
+      inSizeBounds.top += yOffset;
+      inSizeBounds.bottom += yOffset;
+      fullBounds.top += yOffset;
+      fullBounds.bottom += yOffset;
     }
-    return totalBounds;
+    return [inSizeBounds, fullBounds];
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -634,9 +674,9 @@ export default class BaseAnnotationFunction implements ElementInterface {
     scale: number,
   ) {
     const {
-      xPosition, yPosition, xAlign, yAlign, offset, content,
+      xPosition, yPosition, xAlign, yAlign, offset, content, fullContentBounds,
     } = annotation;
-
+    console.log(fullContentBounds)
     let xPos;
     let yPos;
     if (xPosition === 'right') {
@@ -669,25 +709,26 @@ export default class BaseAnnotationFunction implements ElementInterface {
     yPos = yPos * contentToAnnotate.height
            + locationContentToAnnotate.y - contentToAnnotate.descent;
 
+    const contentBounds = content.getBounds(fullContentBounds);
     if (xAlign === 'center') {
-      xPos -= content.width * 0.5;
+      xPos -= contentBounds.width * 0.5;
     } else if (xAlign === 'right') {
-      xPos -= content.width;
+      xPos -= contentBounds.width;
     } else if (typeof xAlign === 'number') {
-      xPos -= content.width * xAlign;
+      xPos -= contentBounds.width * xAlign;
     }
 
     if (yAlign === 'bottom') {
-      yPos += content.descent;
+      yPos += contentBounds.descent;
     } else if (yAlign === 'middle') {
-      yPos = yPos + content.descent - content.height / 2;
+      yPos = yPos + contentBounds.descent - contentBounds.height / 2;
     } else if (yAlign === 'top') {
-      yPos -= content.ascent;
+      yPos -= contentBounds.ascent;
     } else if (typeof yAlign === 'string' && yAlign.slice(-1)[0] === 'a') {
       const ascentPercentage = parseFloat(yAlign);
-      yPos -= content.ascent * ascentPercentage;
+      yPos -= contentBounds.ascent * ascentPercentage;
     } else if (typeof yAlign === 'number') {
-      yPos += content.descent - content.height * yAlign;
+      yPos += contentBounds.descent - contentBounds.height * yAlign;
     }
 
     const offsetToUse = getPoint(offset);
