@@ -33,14 +33,10 @@ describe('Equation Functions - Ann', () => {
       a: 'a',
       b: 'b',
       c: 'c',
-      box: {
-        symbol: 'box',
-        lineWidth,
-      },
       left: {
         symbol: 'bracket',
         side: 'left',
-        lineWidth: 0.01,
+        lineWidth,
         sides: 10,
         tipWidth: 0.003,
         staticSize: false,
@@ -48,7 +44,7 @@ describe('Equation Functions - Ann', () => {
       top: {
         symbol: 'bracket',
         side: 'top',
-        lineWidth: 0.01,
+        lineWidth,
         sides: 10,
         tipWidth: 0.003,
         staticSize: false,
