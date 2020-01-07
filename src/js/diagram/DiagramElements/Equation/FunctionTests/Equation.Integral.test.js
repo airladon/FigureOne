@@ -115,20 +115,6 @@ describe('Equation Functions - Integral', () => {
           }),
         });
       },
-      // single: () => {
-      //   eqn = new EquationNew(diagram.shapes, { color: color1 });
-      //   eqn.addElements(elements);
-      //   eqn.addForms({
-      //     // Full Object
-      //     0: {
-      //       content: {
-      //         intLimits: ['a', 'b', 'c', 's'],
-      //       },
-      //       scale: 1,
-      //     },
-      //   });
-      //   diagram.elements = eqn;
-      // },
       parameterSteps: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
@@ -155,6 +141,14 @@ describe('Equation Functions - Integral', () => {
                 toOffset: [0, 0],
                 limitsPosition: 'topBottomCenter',
                 limitsAroundContent: true,
+                fromXPosition: 'center',
+                fromYPosition: 'bottom',
+                fromXAlign: 'center',
+                fromYAlign: 'top',
+                toXPosition: 'center',
+                toYPosition: 'top',
+                toXAlign: 'center',
+                toYAlign: 'bottom',
               },
             },
             scale: 1,
@@ -163,6 +157,8 @@ describe('Equation Functions - Integral', () => {
             content: intLimits([
               's', 'a', 'b', 'c', false, 0.01, 0.01, 0.01, null,
               0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+              'center', 'bottom', 'center', 'top', 'center', 'top',
+              'center', 'bottom',
             ]),
             scale: 1,
           },
@@ -170,6 +166,8 @@ describe('Equation Functions - Integral', () => {
             content: intLimits([
               's', 'a', 'b', 'c', true, 0.1, 0.01, 0.01, null,
               0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+              'center', 'bottom', 'center', 'top', 'center', 'top',
+              'center', 'bottom',
             ]),
             scale: 1,
           },
@@ -177,6 +175,8 @@ describe('Equation Functions - Integral', () => {
             content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.1, 0.01, null,
               0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+              'center', 'bottom', 'center', 'top', 'center', 'top',
+              'center', 'bottom',
             ]),
             scale: 1,
           },
@@ -184,6 +184,8 @@ describe('Equation Functions - Integral', () => {
             content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.1, null,
               0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+              'center', 'bottom', 'center', 'top', 'center', 'top',
+              'center', 'bottom',
             ]),
             scale: 1,
           },
@@ -191,6 +193,8 @@ describe('Equation Functions - Integral', () => {
             content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.1, 0.1, null,
               0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+              'center', 'bottom', 'center', 'top', 'center', 'top',
+              'center', 'bottom',
             ]),
             scale: 1,
           },
@@ -198,6 +202,8 @@ describe('Equation Functions - Integral', () => {
             content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 1, 1, 1,
               0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+              'center', 'bottom', 'center', 'top', 'center', 'top',
+              'center', 'bottom',
             ]),
             scale: 1,
           },
@@ -205,6 +211,8 @@ describe('Equation Functions - Integral', () => {
             content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, 1,
               0.1, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+              'center', 'bottom', 'center', 'top', 'center', 'top',
+              'center', 'bottom',
             ]),
             scale: 1,
           },
@@ -212,6 +220,8 @@ describe('Equation Functions - Integral', () => {
             content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
               -0.1, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+              'center', 'bottom', 'center', 'top', 'center', 'top',
+              'center', 'bottom',
             ]),
             scale: 1,
           },
@@ -219,6 +229,8 @@ describe('Equation Functions - Integral', () => {
             content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
               0, 0.5, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+              'center', 'bottom', 'center', 'top', 'center', 'top',
+              'center', 'bottom',
             ]),
             scale: 1,
           },
@@ -226,6 +238,8 @@ describe('Equation Functions - Integral', () => {
             content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
               0, 1, 0.5, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+              'center', 'bottom', 'center', 'top', 'center', 'top',
+              'center', 'bottom',
             ]),
             scale: 1,
           },
@@ -233,6 +247,8 @@ describe('Equation Functions - Integral', () => {
             content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
               0, 1, 1, 0.5, [0, 0], [0, 0], 'topBottomCenter', true,
+              'center', 'bottom', 'center', 'top', 'center', 'top',
+              'center', 'bottom',
             ]),
             scale: 1,
           },
@@ -240,6 +256,8 @@ describe('Equation Functions - Integral', () => {
             content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
               0, 1, 1, 1, [-0.3, -0.2], [0, 0], 'topBottomCenter', true,
+              'center', 'bottom', 'center', 'top', 'center', 'top',
+              'center', 'bottom',
             ]),
             scale: 1,
           },
@@ -247,6 +265,8 @@ describe('Equation Functions - Integral', () => {
             content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
               0, 1, 1, 1, [0, 0], [0.3, 0.2], 'topBottomCenter', true,
+              'center', 'bottom', 'center', 'top', 'center', 'top',
+              'center', 'bottom',
             ]),
             scale: 1,
           },
@@ -254,6 +274,8 @@ describe('Equation Functions - Integral', () => {
             content: intLimits([
               's', 'a', '', 'c', true, 0.01, 0.01, 0.01, null,
               0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+              'center', 'bottom', 'center', 'top', 'center', 'top',
+              'center', 'bottom',
             ]),
             scale: 1,
           },
@@ -261,6 +283,8 @@ describe('Equation Functions - Integral', () => {
             content: intLimits([
               's', 'a', 'b', '', true, 0.01, 0.01, 0.01, null,
               0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+              'center', 'bottom', 'center', 'top', 'center', 'top',
+              'center', 'bottom',
             ]),
             scale: 1,
           },
@@ -282,6 +306,15 @@ describe('Equation Functions - Integral', () => {
             content: intLimits([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
               0, 1, 1, 1, [-0.3, -0.2], [0.3, 0.2], 'side', true,
+            ]),
+            scale: 1,
+          },
+          reversePositionAndAlign: {
+            content: intLimits([
+              's', 'a', 'b', 'c', true, 0.1, 0.01, 0.01, null,
+              0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
+              'left', 'top', 'right', 'bottom', 'left', 'bottom',
+              'right', 'top',
             ]),
             scale: 1,
           },
@@ -345,6 +378,18 @@ describe('Equation Functions - Integral', () => {
       expect(round(newS.height)).toBe(round(baseS.height + spaceDelta));
       expect(round(newS.bottom)).toBe(round(baseS.bottom));
       expect(round(newS.top)).toBe(round(baseS.top + spaceDelta));
+    });
+    test('Reverse Position And Align', () => {
+      eqn.showForm('reversePositionAndAlign');
+      diagram.setFirstTransform();
+      const newS = eqn._s.getBoundingRect('diagram');
+      const newC = eqn._c.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      expect(round(newC.left)).toBe(0);
+      expect(round(newC.top)).toBe(round(newS.bottom));
+      expect(round(newB.left)).toBe(0);
+      expect(round(newB.bottom)).toBe(round(newS.top));
+      expect(round(newS.left)).toBe(round(newC.right));
     });
     test('bottomSpace', () => {
       eqn.showForm('bottomSpace');
