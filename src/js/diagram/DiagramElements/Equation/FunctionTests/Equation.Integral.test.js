@@ -36,13 +36,13 @@ describe('Equation Functions - Integral', () => {
       inputForms: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
-        const intLimits = e.intLimits.bind(e);
+        const int = e.int.bind(e);
         eqn.addElements(elements);
         eqn.addForms({
           // Full Object
           base: {
             content: {
-              intLimits: {
+              int: {
                 symbol: 's',
                 content: 'a',
                 from: 'b',
@@ -56,18 +56,24 @@ describe('Equation Functions - Integral', () => {
                 scale: 1,
                 fromScale: 1,
                 toScale: 1,
-                // fromSpace: 0.1,
-                // toSpace: 0.1,
                 fromOffset: [0.1, 0.1],
                 toOffset: [-0.1, -0.1],
                 limitsPosition: 'topBottom',
                 limitsAroundContent: true,
+                fromXPosition: 'center',
+                fromYPosition: 'bottom',
+                fromXAlign: 'center',
+                fromYAlign: 'top',
+                toXPosition: 'center',
+                toYPosition: 'top',
+                toXAlign: 'center',
+                toYAlign: 'bottom',
               },
             },
           },
           // Method Object
           1: {
-            intLimits: {
+            int: {
               content: 'a',
               from: 'b',
               to: 'c',
@@ -81,20 +87,26 @@ describe('Equation Functions - Integral', () => {
               scale: 1,
               fromScale: 1,
               toScale: 1,
-              // fromSpace: 0.1,
-              // toSpace: 0.1,
               fromOffset: [0.1, 0.1],
               toOffset: [-0.1, -0.1],
               limitsPosition: 'topBottom',
               limitsAroundContent: true,
+              fromXPosition: 'center',
+              fromYPosition: 'bottom',
+              fromXAlign: 'center',
+              fromYAlign: 'top',
+              toXPosition: 'center',
+              toYPosition: 'top',
+              toXAlign: 'center',
+              toYAlign: 'bottom',
             },
           },
           // Method Array
-          2: { intLimits: ['s', 'a', 'b', 'c', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, [0.1, 0.1], [-0.1, -0.1], 'topBottom', true] },
+          2: { int: ['s', 'a', 'b', 'c', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, [0.1, 0.1], [-0.1, -0.1], 'topBottom', true, 'center', 'bottom', 'center', 'top', 'center', 'top', 'center', 'bottom'] },
           // Function with Method Array
-          3: e.intLimits(['s', 'a', 'b', 'c', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, [0.1, 0.1], [-0.1, -0.1], 'topBottom', true]),
+          3: e.int(['s', 'a', 'b', 'c', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, [0.1, 0.1], [-0.1, -0.1], 'topBottom', true, 'center', 'bottom', 'center', 'top', 'center', 'top', 'center', 'bottom']),
           // Bound Function with Object
-          4: intLimits({
+          4: int({
             symbol: 's',
             content: 'a',
             from: 'b',
@@ -112,18 +124,26 @@ describe('Equation Functions - Integral', () => {
             toOffset: [-0.1, -0.1],
             limitsPosition: 'topBottom',
             limitsAroundContent: true,
+            fromXPosition: 'center',
+            fromYPosition: 'bottom',
+            fromXAlign: 'center',
+            fromYAlign: 'top',
+            toXPosition: 'center',
+            toYPosition: 'top',
+            toXAlign: 'center',
+            toYAlign: 'bottom',
           }),
         });
       },
       parameterSteps: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
-        const intLimits = e.intLimits.bind(e);
+        const int = e.int.bind(e);
         eqn.addElements(elements);
         eqn.addForms({
           base: {
             content: {
-              intLimits: {
+              int: {
                 content: 'a',
                 from: 'b',
                 to: 'c',
@@ -154,7 +174,7 @@ describe('Equation Functions - Integral', () => {
             scale: 1,
           },
           inSizeFalse: {
-            content: intLimits([
+            content: int([
               's', 'a', 'b', 'c', false, 0.01, 0.01, 0.01, null,
               0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
               'center', 'bottom', 'center', 'top', 'center', 'top',
@@ -162,8 +182,15 @@ describe('Equation Functions - Integral', () => {
             ]),
             scale: 1,
           },
+          indefinite: {
+            content: int([
+              's', 'a', '', '', true, 0.01, 0.01, 0.01, null,
+              0, 1,
+            ]),
+            scale: 1,
+          },
           space: {
-            content: intLimits([
+            content: int([
               's', 'a', 'b', 'c', true, 0.1, 0.01, 0.01, null,
               0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
               'center', 'bottom', 'center', 'top', 'center', 'top',
@@ -172,7 +199,7 @@ describe('Equation Functions - Integral', () => {
             scale: 1,
           },
           topSpace: {
-            content: intLimits([
+            content: int([
               's', 'a', 'b', 'c', true, 0.01, 0.1, 0.01, null,
               0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
               'center', 'bottom', 'center', 'top', 'center', 'top',
@@ -181,7 +208,7 @@ describe('Equation Functions - Integral', () => {
             scale: 1,
           },
           bottomSpace: {
-            content: intLimits([
+            content: int([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.1, null,
               0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
               'center', 'bottom', 'center', 'top', 'center', 'top',
@@ -190,7 +217,7 @@ describe('Equation Functions - Integral', () => {
             scale: 1,
           },
           topBottomSpace: {
-            content: intLimits([
+            content: int([
               's', 'a', 'b', 'c', true, 0.01, 0.1, 0.1, null,
               0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
               'center', 'bottom', 'center', 'top', 'center', 'top',
@@ -199,7 +226,7 @@ describe('Equation Functions - Integral', () => {
             scale: 1,
           },
           heightAndOverride: {
-            content: intLimits([
+            content: int([
               's', 'a', 'b', 'c', true, 0.01, 1, 1, 1,
               0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
               'center', 'bottom', 'center', 'top', 'center', 'top',
@@ -208,7 +235,7 @@ describe('Equation Functions - Integral', () => {
             scale: 1,
           },
           heightYOffset: {
-            content: intLimits([
+            content: int([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, 1,
               0.1, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
               'center', 'bottom', 'center', 'top', 'center', 'top',
@@ -217,7 +244,7 @@ describe('Equation Functions - Integral', () => {
             scale: 1,
           },
           yOffsetNegative: {
-            content: intLimits([
+            content: int([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
               -0.1, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
               'center', 'bottom', 'center', 'top', 'center', 'top',
@@ -226,7 +253,7 @@ describe('Equation Functions - Integral', () => {
             scale: 1,
           },
           scale: {
-            content: intLimits([
+            content: int([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
               0, 0.5, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
               'center', 'bottom', 'center', 'top', 'center', 'top',
@@ -235,7 +262,7 @@ describe('Equation Functions - Integral', () => {
             scale: 1,
           },
           fromScale: {
-            content: intLimits([
+            content: int([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
               0, 1, 0.5, 1, [0, 0], [0, 0], 'topBottomCenter', true,
               'center', 'bottom', 'center', 'top', 'center', 'top',
@@ -244,7 +271,7 @@ describe('Equation Functions - Integral', () => {
             scale: 1,
           },
           toScale: {
-            content: intLimits([
+            content: int([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
               0, 1, 1, 0.5, [0, 0], [0, 0], 'topBottomCenter', true,
               'center', 'bottom', 'center', 'top', 'center', 'top',
@@ -253,7 +280,7 @@ describe('Equation Functions - Integral', () => {
             scale: 1,
           },
           fromOffset: {
-            content: intLimits([
+            content: int([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
               0, 1, 1, 1, [-0.3, -0.2], [0, 0], 'topBottomCenter', true,
               'center', 'bottom', 'center', 'top', 'center', 'top',
@@ -262,7 +289,7 @@ describe('Equation Functions - Integral', () => {
             scale: 1,
           },
           toOffset: {
-            content: intLimits([
+            content: int([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
               0, 1, 1, 1, [0, 0], [0.3, 0.2], 'topBottomCenter', true,
               'center', 'bottom', 'center', 'top', 'center', 'top',
@@ -271,7 +298,7 @@ describe('Equation Functions - Integral', () => {
             scale: 1,
           },
           noFrom: {
-            content: intLimits([
+            content: int([
               's', 'a', '', 'c', true, 0.01, 0.01, 0.01, null,
               0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
               'center', 'bottom', 'center', 'top', 'center', 'top',
@@ -280,7 +307,7 @@ describe('Equation Functions - Integral', () => {
             scale: 1,
           },
           noTo: {
-            content: intLimits([
+            content: int([
               's', 'a', 'b', '', true, 0.01, 0.01, 0.01, null,
               0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
               'center', 'bottom', 'center', 'top', 'center', 'top',
@@ -289,28 +316,28 @@ describe('Equation Functions - Integral', () => {
             scale: 1,
           },
           limitsPositionSide: {
-            content: intLimits([
+            content: int([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
               0, 1, 1, 1, [0, 0], [0, 0], 'side', true,
             ]),
             scale: 1,
           },
           limitsPositionSideNotOver: {
-            content: intLimits([
+            content: int([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
               0, 1, 1, 1, [0, 0], [0, 0], 'side', false,
             ]),
             scale: 1,
           },
           sideOffset: {
-            content: intLimits([
+            content: int([
               's', 'a', 'b', 'c', true, 0.01, 0.01, 0.01, null,
               0, 1, 1, 1, [-0.3, -0.2], [0.3, 0.2], 'side', true,
             ]),
             scale: 1,
           },
           reversePositionAndAlign: {
-            content: intLimits([
+            content: int([
               's', 'a', 'b', 'c', true, 0.1, 0.01, 0.01, null,
               0, 1, 1, 1, [0, 0], [0, 0], 'topBottomCenter', true,
               'left', 'top', 'right', 'bottom', 'left', 'bottom',
@@ -370,6 +397,13 @@ describe('Equation Functions - Integral', () => {
       diagram.setFirstTransform();
       const newA = eqn._a.getBoundingRect('diagram');
       expect(round(newA.left)).toBe(round(baseA.left + spaceDelta));
+    });
+    test('indefinite', () => {
+      eqn.showForm('indefinite');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newS = eqn._s.getBoundingRect('diagram');
+      expect(round(newA.left)).toBe(round(newS.right + initialSpace));
     });
     test('topSpace', () => {
       eqn.showForm('topSpace');

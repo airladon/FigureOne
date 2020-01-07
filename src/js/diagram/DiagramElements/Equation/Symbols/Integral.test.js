@@ -58,8 +58,8 @@ describe('Equation Functions - Integral', () => {
         };
         eqn.addElements(elements);
         eqn.addForms({
-          s1: { content: { intLimits: ['s1', 'a'] } },
-          s2: { content: { intLimits: ['s2', 'a'] } },
+          s1: { content: { int: ['s1', 'a'] } },
+          s2: { content: { int: ['s2', 'a'] } },
         });
         diagram.elements = eqn;
       },

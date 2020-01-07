@@ -639,7 +639,6 @@ export class EquationFunctions {
     if (name === 'topStrike') { return this.topStrike(params); }   // $FlowFixMe
     if (name === 'bottomStrike') { return this.bottomStrike(params); } // $FlowFixMe
     if (name === 'pad') { return this.pad(params); }   // $FlowFixMe
-    if (name === 'intLimits') { return this.intLimits(params); }   // $FlowFixMe
     if (name === 'int') { return this.int(params); }   // $FlowFixMe
     if (name === 'sumOf') { return this.sumProd(params); }   // $FlowFixMe
     if (name === 'prodOf') { return this.sumProd(params); }   // $FlowFixMe
@@ -1751,90 +1750,7 @@ export class EquationFunctions {
     return matrixContent;
   }
 
-
   int(
-    optionsOrArray: TypeIntegralObject | TypeIntegralArray,
-  ) {
-    let content;
-    let symbol;
-    let space;
-    let topSpace;
-    let bottomSpace;
-    let height;
-    let yOffset;
-    let inSize;
-    let scale;
-    const defaultOptions = {
-      space: 0.05,
-      topSpace: 0.07,
-      bottomSpace: 0.07,
-      height: null,
-      yOffset: 0,
-      inSize: true,
-      contentScale: 1,
-      fromScale: 1,
-      toScale: 1,
-      fromSpace: 0,
-      toSpace: 0,
-      fromOffset: [0, 0],
-      toOffset: [0, 0],
-      limitsPosition: 'side',
-    };
-    if (Array.isArray(optionsOrArray)) {
-      [
-        symbol, content, inSize, space,
-        topSpace, bottomSpace,                             // $FlowFixMe
-        height, yOffset, scale,
-      ] = optionsOrArray;
-    } else {
-      ({
-        content, symbol, inSize, space,
-        topSpace, bottomSpace,
-        height, yOffset,
-      } = optionsOrArray);
-    }
-    const optionsIn = {
-      space,
-      topSpace,
-      bottomSpace,
-      height,
-      yOffset,
-      inSize,
-      contentScale: scale,
-    };
-    const options = joinObjects({}, defaultOptions, optionsIn);
-    return this.ann({
-      content,
-      inSize: options.inSize,
-      contentScale: options.contentScale,
-      glyphs: {
-        left: {
-          symbol,
-          space: options.space,
-          topSpace: options.topSpace,
-          bottomSpace: options.bottomSpace,
-          height: options.height,
-          yOffset: options.yOffset,
-        },
-      },
-    });
-    // let symbolToUse = null;
-    // if (symbol != null) {
-    //   symbolToUse = this.getExistingOrAddSymbol(symbol);
-    // }
-    // const contentArray = [];
-    // if (content != null) {
-    //   contentArray.push(this.contentToElement(content));
-    // }
-
-    // return new Integral(
-    //   contentArray,
-    //   symbolToUse,
-    //   options,
-    // );
-  }
-
-  intLimits(
     optionsOrArray: TypeLimitsIntegralObject | TypeLimitsIntegralArray | TypeEquationPhrase,
   ) {
     let content;

@@ -4,7 +4,7 @@ exports[`Equation Functions - Integral Input Forms 1`] = `
 Array [
   0.7,
   0,
-  0.10109,
+  0.13454,
   0,
   0.7,
   0,
@@ -18,7 +18,7 @@ exports[`Equation Functions - Integral Input Forms 2`] = `
 Array [
   0.7,
   0,
-  0.06611,
+  0.14,
   0,
   0.7,
   -0.1036,
@@ -32,7 +32,7 @@ exports[`Equation Functions - Integral Input Forms 3`] = `
 Array [
   0.7,
   0,
-  0.00698,
+  0,
   0,
   0.7,
   0.0721,
@@ -46,7 +46,7 @@ exports[`Equation Functions - Integral Input Forms 4`] = `
 Array [
   0.10109,
   0,
-  0,
+  0.03346,
   0,
   0.2121,
   -0.0756,
