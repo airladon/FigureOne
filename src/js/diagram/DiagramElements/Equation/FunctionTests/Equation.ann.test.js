@@ -107,6 +107,17 @@ describe('Equation Functions - Ann', () => {
               },
             },
           },
+          noAnnotationContent: {
+            ann: {
+              content: 'a',
+              annotation: {
+                yPosition: 'top',
+                yAlign: 'bottom',
+                xPosition: 'right',
+                xAlign: 'left',
+              },
+            },
+          },
           simpleEncompass: {
             ann: {
               content: 'a',
@@ -224,6 +235,26 @@ describe('Equation Functions - Ann', () => {
                     symbol: 'left',
                     annotations: [{
                       content: 'b',
+                      xPosition: 'right',
+                      yPosition: 'top',
+                      xAlign: 'left',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          leftWithNoAnnotationContent: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  left: {
+                    symbol: 'left',
+                    annotations: [{
+                      // content: 'b',
                       xPosition: 'right',
                       yPosition: 'top',
                       xAlign: 'left',
@@ -479,6 +510,13 @@ describe('Equation Functions - Ann', () => {
     expect(round(a.top)).toBe(round(b.bottom));
     expect(round(a.right)).toBe(round(b.left));
   });
+  test('No Annotation Content', () => {
+    functions.single();
+    eqn.showForm('noAnnotationContent');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    expect(round(a.left)).toBe(0);
+  });
   test('Simple Left', () => {
     functions.single();
     eqn.showForm('left');
@@ -513,6 +551,15 @@ describe('Equation Functions - Ann', () => {
     expect(round(b.left)).toBe(round(left.right));
     expect(round(a.left)).toBe(round(b.right));
     expect(round(b.bottom)).toBe(round(left.top));
+  });
+  test('Left with No Annotation Content', () => {
+    functions.single();
+    eqn.showForm('leftWithRightAnnotationOverContent');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const left = eqn._left.getBoundingRect('diagram');
+    expect(round(left.left)).toBe(0);
+    expect(round(a.left)).toBe(round(left.right));
   });
   test('Left with Right Annotation Over Content', () => {
     functions.single();
