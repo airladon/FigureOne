@@ -83,8 +83,8 @@ export default class Radical extends Symbol {
   getPoints(options: Object, widthIn: number, heightIn: number) {
     // const { proportionalToHeight } = options;
     const {
-      lineWidth, width, height, startWidth, tickWidth, tickHeight,
-      downWidth, startHeight, lineWidth2,
+      lineWidth, startWidth, tickWidth, tickHeight,
+      downWidth, startHeight, lineWidth2, height, width,
     } = this.getDefaultValues(
       heightIn, widthIn, options,
     );
@@ -92,8 +92,8 @@ export default class Radical extends Symbol {
     const p0 = new Point(0, startHeight - tickHeight);
     const p2 = new Point(tickWidth, startHeight);
     const p4 = new Point(downWidth + tickWidth, 0);
-    const p6 = new Point(startWidth, height);
-    const p8 = new Point(width, height);
+    const p6 = new Point(startWidth, height - lineWidth);
+    const p8 = new Point(width, height - lineWidth);
 
     const line02 = new Line(p0, p2);
     const line24 = new Line(p2, p4);
@@ -113,23 +113,25 @@ export default class Radical extends Symbol {
 
     const points = [p0, p1, p2, p3, p4, p5, p6, p7, p8, p9];
 
-    return [points, width, height];
+    return [points, widthIn, heightIn];
   }
 
+  // Get Glyph bounds based on content
   /* eslint-disable class-methods-use-this */
   getBounds(
     options: {
       lineWidth?: number, staticWidth?: number, staticHeight?: number, draw: 'dynamic' | 'static',
     },
-    leftIn: number,
-    bottomIn: number,
-    widthIn: number,
-    heightIn: number,
+    contentX: number,
+    contentY: number,
+    contentWidthIn: number,
+    contentHeightIn: number,
   ) {
+    const height = this.getHeightFromContentHeight(contentHeightIn, options);
     const {
-      width, height, startWidth, lineWidth, startHeight,
+      width, startWidth, lineWidth, startHeight,
     } = this.getDefaultValues(
-      heightIn, widthIn, options,
+      height, contentWidthIn, options,
     );
     const bounds = new Bounds();
     if (options.draw === 'static') {
@@ -154,9 +156,9 @@ export default class Radical extends Symbol {
       const widthStartWidth = bounds.width * widthStartWidthRatio;
       const heightStartHeight = bounds.height * heightStartHeightRatio;
       // const heightLineWidth = bounds.height * heightLineWidthRatio;
-      bounds.left = leftIn - widthStartWidth;
+      bounds.left = contentX - widthStartWidth;
       bounds.right = bounds.left + bounds.width;
-      bounds.bottom = bottomIn;
+      bounds.bottom = contentY;
       bounds.top = bounds.bottom + bounds.height;
       bounds.ascent = bounds.height;
       bounds.descent = 0;
@@ -170,10 +172,10 @@ export default class Radical extends Symbol {
         },
       };
     } else {
-      bounds.left = leftIn + widthIn / 2 - width / 2 - startWidth;
-      bounds.bottom = bottomIn + heightIn / 2 - height / 2;
+      bounds.left = contentX + contentWidthIn / 2 - width / 2 - startWidth;
+      bounds.bottom = contentY;
       bounds.width = width + startWidth;
-      bounds.height = height + lineWidth;
+      bounds.height = height;
       bounds.right = bounds.left + bounds.width;
       bounds.top = bounds.bottom + bounds.height;
       bounds.descent = 0;
@@ -192,8 +194,34 @@ export default class Radical extends Symbol {
   }
 
   /* eslint-disable class-methods-use-this */
+  getHeightFromContentHeight(contentHeightIn: number, options: {
+    lineWidth?: number,
+    contentHeight?: number,
+  }): number {
+    let lineWidth;
+    let contentHeight;
+    if (options.lineWidth != null && typeof options.lineWidth === 'number') {
+      ({ lineWidth } = options);
+    } else {
+      lineWidth = 0.01;
+    }
+
+    if (options.contentHeight != null && typeof options.contentHeight === 'number') {
+      ({ contentHeight } = options);
+    } else if (contentHeightIn != null) {
+      contentHeight = contentHeightIn;
+    } else {
+      contentHeight = 1;
+    }
+    return contentHeight + lineWidth;
+  }
+
+  /* eslint-disable class-methods-use-this */
   // $FlowFixMe
-  getDefaultValues(height: number, width: ?number, options: {
+  getDefaultValues(
+    height: ?number,
+    width: ?number,
+    options: {
       lineWidth?: number,
       height?: number,
       width?: number,
@@ -208,7 +236,8 @@ export default class Radical extends Symbol {
       maxStartHeight?: number,
       proportionalToHeight?: boolean,
       downWidth?: number,
-    }): {
+    },
+  ): {
       height: number,
       width: number,
       lineWidth: number,
@@ -264,7 +293,6 @@ export default class Radical extends Symbol {
       out.startWidth = options.startWidth;
       if (options.proportionalToHeight) {
         out.startWidth = options.startWidth * out.height;
-        console.log(out.startWidth, out.height)
       }
     } else {
       out.startWidth = out.startHeight / 2;
