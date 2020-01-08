@@ -162,56 +162,56 @@ describe('Equation Functions - Root', () => {
   test('', () => {
     expect(true).toBe(true);
   });
-  // test('Root', () => {
-  //   functions.single();
-  //   const elems = [eqn._a, eqn._b];
-  //   const formsToTest = ['1', '2', '3', '4', '5'];
-  //   eqn.showForm('0');
-  //   const positions0 = elems.map(elem => round(elem.transform.mat).slice());
-  //   formsToTest.forEach((f) => {
-  //     eqn.showForm(f);
-  //     const positions = elems.map(elem => round(elem.transform.mat).slice());
-  //     expect(positions0).toEqual(positions);
-  //   });
+  test('Root', () => {
+    functions.single();
+    const elems = [eqn._a, eqn._b];
+    const formsToTest = ['1', '2', '3', '4', '5'];
+    eqn.showForm('0');
+    const positions0 = elems.map(elem => round(elem.transform.mat).slice());
+    formsToTest.forEach((f) => {
+      eqn.showForm(f);
+      const positions = elems.map(elem => round(elem.transform.mat).slice());
+      expect(positions0).toEqual(positions);
+    });
 
-  //   // Snapshot test on most simple layout
-  //   eqn.showForm('0');
-  //   tools.cleanUIDs(eqn);
-  //   expect(round(eqn._a.transform.mat)).toMatchSnapshot();
-  //   expect(round(eqn._root3.transform.mat)).toMatchSnapshot();
-  // });
-  // test('Deltas', () => {
-  //   functions.parameterDeltas();
-  //   eqn.showForm('a0');
-  //   const a0 = eqn._a.getPosition();
-  //   eqn.showForm('a1');
-  //   const a1 = eqn._a.getPosition();
-  //   expect(round(a1.x - a0.x)).toBe(0.01);
-  // });
-  // test('Symbols', () => {
-  //   functions.symbols();
-  //   eqn.showForm('0');
-  //   expect(round(eqn._a.transform.mat)).toMatchSnapshot();
-  //   expect(round(eqn._root1.transform.mat)).toMatchSnapshot();
+    // Snapshot test on most simple layout
+    eqn.showForm('0');
+    tools.cleanUIDs(eqn);
+    expect(round(eqn._a.transform.mat)).toMatchSnapshot();
+    expect(round(eqn._root3.transform.mat)).toMatchSnapshot();
+  });
+  test('Deltas', () => {
+    functions.parameterDeltas();
+    eqn.showForm('a0');
+    const a0 = eqn._a.getPosition();
+    eqn.showForm('a1');
+    const a1 = eqn._a.getPosition();
+    expect(round(a1.x - a0.x)).toBe(0.01);
+  });
+  test('Symbols', () => {
+    functions.symbols();
+    eqn.showForm('0');
+    expect(round(eqn._a.transform.mat)).toMatchSnapshot();
+    expect(round(eqn._root1.transform.mat)).toMatchSnapshot();
 
-  //   eqn.showForm('1');
-  //   expect(round(eqn._a.transform.mat)).toMatchSnapshot();
-  //   expect(round(eqn._root2.transform.mat)).toMatchSnapshot();
+    eqn.showForm('1');
+    expect(round(eqn._a.transform.mat)).toMatchSnapshot();
+    expect(round(eqn._root2.transform.mat)).toMatchSnapshot();
 
-  //   eqn.showForm('2');
-  //   expect(round(eqn._a.transform.mat)).toMatchSnapshot();
-  //   expect(round(eqn._root3.transform.mat)).toMatchSnapshot();
-  // });
-  // test('ContentSpace', () => {
-  //   functions.contentSpace();
-  //   const elems = [eqn._a, eqn._root1];
-  //   const formsToTest = ['1', '2', '3'];
-  //   eqn.showForm('0');
-  //   const positions0 = elems.map(elem => round(elem.transform.mat).slice());
-  //   formsToTest.forEach((f) => {
-  //     eqn.showForm(f);
-  //     const positions = elems.map(elem => round(elem.transform.mat).slice());
-  //     expect(positions0).toEqual(positions);
-  //   });
-  // });
+    eqn.showForm('2');
+    expect(round(eqn._a.transform.mat)).toMatchSnapshot();
+    expect(round(eqn._root3.transform.mat)).toMatchSnapshot();
+  });
+  test('ContentSpace', () => {
+    functions.contentSpace();
+    const elems = [eqn._a, eqn._root1];
+    const formsToTest = ['1', '2', '3'];
+    eqn.showForm('0');
+    const positions0 = elems.map(elem => round(elem.transform.mat).slice());
+    formsToTest.forEach((f) => {
+      eqn.showForm(f);
+      const positions = elems.map(elem => round(elem.transform.mat).slice());
+      expect(positions0).toEqual(positions);
+    });
+  });
 });

@@ -10,7 +10,7 @@ import DiagramPrimitives from '../../DiagramPrimitives/DiagramPrimitives';
 import Bracket from './Symbols/Bracket';
 // import BracketNew from './Symbols/BracketNew';
 import Box from './Symbols/Box';
-import Radical from './Symbols/Radical';
+// import Radical from './Symbols/Radical';
 import Brace from './Symbols/Brace';
 import SquareBracket from './Symbols/SquareBracket';
 import AngleBracket from './Symbols/AngleBracket';
@@ -23,7 +23,7 @@ import Integral from './Symbols/Integral';
 import Arrow from './Symbols/Arrow';
 import VinculumNew from './Symbols/Vinculum';
 import Strike from './Symbols/Strike';
-import RadicalNew from './Symbols/RadicalNew';
+import Radical from './Symbols/Radical';
 
 // import BracketNew from './Symbols/BracketNew';
 // import BraceNew from './Symbols/BraceNew';
@@ -105,9 +105,9 @@ export default class EquationSymbols {
     if (name === 'radical') {         // $FlowFixMe
       return this.radical(options);
     }
-    if (name === 'radicalNew') {         // $FlowFixMe
-      return this.radicalNew(options);
-    }
+    // if (name === 'radicalNew') {         // $FlowFixMe
+    //   return this.radicalNew(options);
+    // }
     // if (name === 'simpleIntegral') {
     //   return this.simpleIntegral(options);
     // }
@@ -366,7 +366,7 @@ export default class EquationSymbols {
     );
   }
 
-  radical(optionsIn: {
+  radicalLegacy(optionsIn: {
     color?: Array<number>,
     lineWidth?: number,
     startHeight?: number,
@@ -412,7 +412,7 @@ export default class EquationSymbols {
     );
   }
 
-  radicalNew(optionsIn: {
+  radical(optionsIn: {
     color?: Array<number>,
     lineWidth?: number,
     startHeight?: number,
@@ -439,6 +439,9 @@ export default class EquationSymbols {
       maxStartWidth: ?number,
       maxStartHeight: ?number,
       staticSize: ?(Point | [number, number]),
+      draw: 'static' | 'dynamic',
+      staticHeight?: number | 'first',
+      staticWidth?: number | 'first',
     } = {
       color: this.defaultColor,
       lineWidth: 0.01,
@@ -448,6 +451,9 @@ export default class EquationSymbols {
       maxStartWidth: 0.15,
       maxStartHeight: 0.15,
       proportionalToHeight: true,
+      draw: 'dynamic',
+      staticHeight: 'first',
+      staticWidth: 'first',
     };
     if (optionsIn.proportionalToHeight != null
       && optionsIn.proportionalToHeight === false
@@ -458,7 +464,7 @@ export default class EquationSymbols {
       // defaultOptions.maxStartWidth = null;
     }
     const optionsToUse = joinObjects(defaultOptions, optionsIn);
-    return new RadicalNew(
+    return new Radical(
       this.shapes.webgl,
       optionsToUse.color,
       new Transform('bracket').scale(1, 1).translate(0, 0),
