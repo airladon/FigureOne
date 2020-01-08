@@ -14,7 +14,7 @@ jest.mock('../../../Gesture');
 jest.mock('../../../webgl/webgl');
 jest.mock('../../../DrawContext2D');
 
-describe('Equation Symbols - Brace', () => {
+describe('Equation Symbols - Box', () => {
   let diagram;
   let eqn;
   let color1;
@@ -90,11 +90,36 @@ describe('Equation Symbols - Brace', () => {
     };
     eqn = new EquationNew(diagram.shapes, { color: color1 });
     eqn.addElements(elements);
-    eqn.addForms({ boxDynamic: { box: ['a', 'boxDynamic', true, space] } });
-    eqn.addForms({ boxWidthHeight: { box: ['a', 'boxWidthHeight', true, space] } });
-    eqn.addForms({ boxStaticFirst: { box: ['a', 'boxStaticFirst', true, space] } });
-    eqn.addForms({ boxStatic1: { box: ['a', 'boxStatic1', true, space] } });
-    eqn.addForms({ boxFill: { box: ['a', 'boxFill', true, space] } });
+    eqn.addForms({
+      boxDynamic: {
+        content: { box: ['a', 'boxDynamic', true, space] },
+        scale: 1,
+      },
+    });
+    eqn.addForms({
+      boxWidthHeight: {
+        content: { box: ['a', 'boxWidthHeight', true, space] },
+        scale: 1,
+      },
+    });
+    eqn.addForms({
+      boxStaticFirst: {
+        content: { box: ['a', 'boxStaticFirst', true, space] },
+        scale: 1,
+      },
+    });
+    eqn.addForms({
+      boxStatic1: {
+        content: { box: ['a', 'boxStatic1', true, space] },
+        scale: 1,
+      },
+    });
+    eqn.addForms({
+      boxFill: {
+        content: { box: ['a', 'boxFill', true, space] },
+        scale: 1,
+      },
+    });
     diagram.elements = eqn;
   });
   test('Box Dynamic', () => {

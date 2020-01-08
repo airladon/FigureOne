@@ -1,24 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Equation Symbols - Brace Box Dynamic 1`] = `0`;
+exports[`Equation Symbols - Box Box Dynamic 1`] = `0`;
 
-exports[`Equation Symbols - Brace Box Dynamic 2`] = `
+exports[`Equation Symbols - Box Box Dynamic 2`] = `
 Array [
   0,
   0,
   0.01,
   0.01,
   0,
-  0.2921,
+  0.323,
   0.01,
-  0.2821,
-  0.248,
-  0.2921,
-  0.238,
-  0.2821,
-  0.248,
+  0.313,
+  0.26,
+  0.323,
+  0.25,
+  0.313,
+  0.26,
   0,
-  0.238,
+  0.25,
   0.01,
   0,
   0,

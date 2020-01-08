@@ -130,33 +130,39 @@ describe('Equation Functions - Ann', () => {
             },
           },
           simpleEncompassWithSpace: {
-            ann: {
-              content: 'a',
-              glyphs: {
-                encompass: {
-                  symbol: 'box',
-                  leftSpace: space,
-                  rightSpace: space,
-                  bottomSpace: space,
-                  topSpace: space,
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  encompass: {
+                    symbol: 'box',
+                    leftSpace: space,
+                    rightSpace: space,
+                    bottomSpace: space,
+                    topSpace: space,
+                  },
                 },
               },
             },
+            scale: 1,
           },
           encompassNotInSize: {
-            ann: {
-              content: 'a',
-              glyphs: {
-                encompass: {
-                  symbol: 'box',
-                  leftSpace: space,
-                  rightSpace: space,
-                  bottomSpace: space,
-                  topSpace: space,
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  encompass: {
+                    symbol: 'box',
+                    leftSpace: space,
+                    rightSpace: space,
+                    bottomSpace: space,
+                    topSpace: space,
+                  },
                 },
+                inSize: false,
               },
-              inSize: false,
             },
+            scale: 1,
           },
           simpleStaticEncompass: {
             content: {
@@ -173,22 +179,25 @@ describe('Equation Functions - Ann', () => {
             scale: 1,
           },
           encompassWithAnnotation: {
-            ann: {
-              content: 'a',
-              glyphs: {
-                encompass: {
-                  symbol: 'box',
-                  space,
-                  annotations: [{
-                    content: 'b',
-                    yPosition: 'top',
-                    yAlign: 'bottom',
-                    xPosition: 'right',
-                    xAlign: 'left',
-                  }],
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  encompass: {
+                    symbol: 'box',
+                    space,
+                    annotations: [{
+                      content: 'b',
+                      yPosition: 'top',
+                      yAlign: 'bottom',
+                      xPosition: 'right',
+                      xAlign: 'left',
+                    }],
+                  },
                 },
               },
             },
+            scale: 1,
           },
           left: {
             content: {

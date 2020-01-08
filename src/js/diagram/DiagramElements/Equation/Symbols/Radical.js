@@ -46,26 +46,26 @@ export default class Radical extends Symbol {
   //
   //  First define bottom line (B), then offset the lines and find intercepts to
   //  get the top line (T)
-  //                                           7                          9
-  //                                             TTTTTTTTTTTTTTTTTTTTTTTTT
-  //                                            T  BBBBBBBBBBBBBBBBBBBBBBB
-  //                                           T  B 6                     8
-  //                                          T  B
-  //                                         T  B
-  //                                        T  B
-  //                                       T  B
-  //                                      T  B
-  //            3                        T  B
-  //            T                       T  B
-  //           T T                     T  B
+  //         RRRRRRRRRRRRRRRR                  7                          9
+  //         RRRRRRRRRRRRRRRR                    TTTTTTTTTTTTTTTTTTTTTTTTT
+  //         RRRRRRRRRRRRRRRR                   T  BBBBBBBBBBBBBBBBBBBBBBB
+  //         RRRRRRRRRRRRRRRR                  T  B 6                     8
+  //         RRRRRRRRRRRRRRRR                 T  B
+  //         RRRRRRRRRRRRRRRR                T  B
+  //         RRRRRRRRRRRRRRRR               T  B
+  //                        |              T  B
+  //                        |             T  B
+  //            3           |            T  B
+  //            T           |           T  B
+  //           T T          |          T  B
   //          T   T   lineWidth2      T  B\
-  //         T     T       /         T  B  \
-  //        T  B    T    /          T  B    \
-  //       T  B B    T /           T  B      lineWidth
-  //    1 T  B 2 B    T           T  B
-  //        B     B    T         T  B
-  //        0      B    T       T  B
-  //                B    T     T  B
+  //         T     T       /|        T  B  \
+  //        T  B    T    /  |       T  B    \
+  //       T  B B    T /    |      T  B      lineWidth
+  //    1 T  B 2 B    T     |     T  B
+  //        B     B    T    |    T  B
+  //        0      B    T   |   T  B
+  //                B    T  |  T  B
   //                 B    T 5 T  B
   //                  B    T T  B
   //                   B    T  B
@@ -75,7 +75,7 @@ export default class Radical extends Symbol {
   //                       B
   //                       4
   //
-  //
+  // Root aligns with downWidth + tickWidth
   //
 
 
@@ -129,7 +129,7 @@ export default class Radical extends Symbol {
   ) {
     const height = this.getHeightFromContentHeight(contentHeightIn, options);
     const {
-      width, startWidth, lineWidth, startHeight,
+      width, startWidth, lineWidth, startHeight, downWidth, tickWidth, lineWidth2,
     } = this.getDefaultValues(
       height, contentWidthIn, options,
     );
@@ -155,7 +155,7 @@ export default class Radical extends Symbol {
       bounds.height = height / (1 - heightLineWidthRatio);
       const widthStartWidth = bounds.width * widthStartWidthRatio;
       const heightStartHeight = bounds.height * heightStartHeightRatio;
-      // const heightLineWidth = bounds.height * heightLineWidthRatio;
+      const heightLineWidth = bounds.height * heightLineWidthRatio;
       bounds.left = contentX - widthStartWidth;
       bounds.right = bounds.left + bounds.width;
       bounds.bottom = contentY;
@@ -168,7 +168,7 @@ export default class Radical extends Symbol {
           yPosition: 'bottom',
           xAlign: 'right',
           yAlign: 'bottom',
-          offset: new Point(widthStartWidth, heightStartHeight),
+          offset: new Point(widthStartWidth * 0.5, heightStartHeight + heightLineWidth * 2),
         },
       };
     } else {
@@ -186,7 +186,7 @@ export default class Radical extends Symbol {
           yPosition: 'bottom',
           xAlign: 'right',
           yAlign: 'bottom',
-          offset: new Point(startWidth, startHeight),
+          offset: new Point(downWidth + tickWidth, startHeight + lineWidth2),
         },
       };
     }

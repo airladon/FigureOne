@@ -4,7 +4,7 @@ exports[`Equation Functions - Root Root 1`] = `
 Array [
   0.7,
   0,
-  0.07447,
+  0.18105,
   0,
   0.7,
   0,
@@ -16,96 +16,12 @@ Array [
 
 exports[`Equation Functions - Root Root 2`] = `
 Array [
-  0.20247,
+  0.27905,
   0,
   0,
   0,
-  0.0921,
-  -0.0056,
-  0,
-  0,
-  1,
-]
-`;
-
-exports[`Equation Functions - Root Symbols 1`] = `
-Array [
-  0.7,
-  0,
-  0.07447,
-  0,
-  0.7,
-  0,
-  0,
-  0,
-  1,
-]
-`;
-
-exports[`Equation Functions - Root Symbols 2`] = `
-Array [
-  0.11247,
-  0,
-  0,
-  0,
-  0.0921,
-  -0.0156,
-  0,
-  0,
-  1,
-]
-`;
-
-exports[`Equation Functions - Root Symbols 3`] = `
-Array [
-  0.7,
-  0,
-  0.07447,
-  0,
-  0.7,
-  0,
-  0,
-  0,
-  1,
-]
-`;
-
-exports[`Equation Functions - Root Symbols 4`] = `
-Array [
-  0.11247,
-  0,
-  0,
-  0,
-  0.0921,
-  -0.0156,
-  0,
-  0,
-  1,
-]
-`;
-
-exports[`Equation Functions - Root Symbols 5`] = `
-Array [
-  0.7,
-  0,
-  0.07447,
-  0,
-  0.7,
-  0,
-  0,
-  0,
-  1,
-]
-`;
-
-exports[`Equation Functions - Root Symbols 6`] = `
-Array [
-  0.11247,
-  0,
-  0,
-  0,
-  0.0921,
-  -0.0156,
+  0.2221,
+  -0.0756,
   0,
   0,
   1,
