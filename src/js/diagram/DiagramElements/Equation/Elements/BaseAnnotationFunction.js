@@ -417,6 +417,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
       contentBounds.width,
       contentBounds.height,
     );
+    console.log(glyphBounds.height)
     const inSizeBounds = new Bounds();
     const fullBounds = new Bounds();
     inSizeBounds.copyFrom(contentBounds);
@@ -425,6 +426,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     glyph.width = glyphBounds.width;
     glyph.height = glyphBounds.height;
     glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);
+    console.log(glyph.height)
     glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
     glyph.annotations.forEach((annotation) => {
       annotation.content.calcSize(glyph.location, scale * annotation.scale);
@@ -672,15 +674,35 @@ export default class BaseAnnotationFunction implements ElementInterface {
     annotation: TypeAnnotation,
     scale: number,
   ) {
-    const {
-      xPosition, yPosition, xAlign, yAlign, offset, content, fullContentBounds,
+    let {
+      xPosition, yPosition, xAlign, yAlign, offset,
     } = annotation;
+    const { content, fullContentBounds } = annotation;
     const locationContentToAnnotate = new Point(
       contentToAnnotateBounds.left,
       contentToAnnotateBounds.bottom + contentToAnnotateBounds.descent,
     );
     let xPos;
     let yPos;
+    if (contentToAnnotateBounds.annotations != null
+      && annotation.reference != null) {
+      const reference = contentToAnnotateBounds.annotations[annotation.reference];
+      if (reference.xPosition != null) {
+        ({ xPosition } = reference);
+      }
+      if (reference.yPosition != null) {
+        ({ yPosition } = reference);
+      }
+      if (reference.xAlign != null) {
+        ({ xAlign } = reference);
+      }
+      if (reference.yAlign != null) {
+        ({ yAlign } = reference);
+      }
+      if (reference.offset != null) {
+        offset.add(reference.offset);
+      }
+    }
     if (xPosition === 'right') {
       xPos = 1;
     } else if (xPosition === 'center') {

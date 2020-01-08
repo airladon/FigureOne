@@ -23,6 +23,7 @@ import Integral from './Symbols/Integral';
 import Arrow from './Symbols/Arrow';
 import VinculumNew from './Symbols/Vinculum';
 import Strike from './Symbols/Strike';
+import RadicalNew from './Symbols/RadicalNew';
 
 // import BracketNew from './Symbols/BracketNew';
 // import BraceNew from './Symbols/BraceNew';
@@ -103,6 +104,9 @@ export default class EquationSymbols {
     }
     if (name === 'radical') {         // $FlowFixMe
       return this.radical(options);
+    }
+    if (name === 'radicalNew') {         // $FlowFixMe
+      return this.radicalNew(options);
     }
     // if (name === 'simpleIntegral') {
     //   return this.simpleIntegral(options);
@@ -405,6 +409,62 @@ export default class EquationSymbols {
       options.startWidth, options.startHeight, options.proportionalToHeight,
       options.maxStartWidth, options.maxStartHeight,
       options.staticSize,
+    );
+  }
+
+  radicalNew(optionsIn: {
+    color?: Array<number>,
+    lineWidth?: number,
+    startHeight?: number,
+    startWidth?: number,
+    proportionalToHeight?: boolean,
+    maxStartWidth?: ?number,
+    maxStartHeight?: ?number,
+    width?: number,
+    height?: number,
+    draw: 'static' | 'dynamic',
+    staticHeight?: number | 'first',
+    staticWidth?: number | 'first',
+    lineWidth2?: number,
+    tickWidth?: number,
+    tickHeight?: number,
+    downWidth?: number,
+  }) {
+    const defaultOptions: {
+      color: Array<number>,
+      lineWidth: number,
+      startHeight: number,
+      startWidth: number,
+      proportionalToHeight: boolean,
+      maxStartWidth: ?number,
+      maxStartHeight: ?number,
+      staticSize: ?(Point | [number, number]),
+    } = {
+      color: this.defaultColor,
+      lineWidth: 0.01,
+      staticSize: null,
+      startHeight: 0.5,
+      startWidth: 0.5,
+      maxStartWidth: 0.15,
+      maxStartHeight: 0.15,
+      proportionalToHeight: true,
+    };
+    if (optionsIn.proportionalToHeight != null
+      && optionsIn.proportionalToHeight === false
+    ) {
+      defaultOptions.startHeight = 0.15;
+      defaultOptions.startWidth = 0.15;
+      // defaultOptions.maxStartHeight = null;
+      // defaultOptions.maxStartWidth = null;
+    }
+    const optionsToUse = joinObjects(defaultOptions, optionsIn);
+    return new RadicalNew(
+      this.shapes.webgl,
+      optionsToUse.color,
+      new Transform('bracket').scale(1, 1).translate(0, 0),
+      this.shapes.limits,
+      optionsToUse,
+      'strip',
     );
   }
 
