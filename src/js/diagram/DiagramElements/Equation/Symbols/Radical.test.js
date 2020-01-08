@@ -101,8 +101,6 @@ describe('Equation Symbols - Radical', () => {
     const a = eqn._a.getBoundingRect('diagram');
     const rad = eqn._rad1.getBoundingRect('diagram');
     expect(round(rad.height)).toBe(round(a.height + space * 2 + lineWidth));
-    const h = rad.height;
-
     const startHeight = eqn._rad1.drawingObject.points[5];
     expect(round(startHeight)).toBe(round(0.03));
 

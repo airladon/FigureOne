@@ -410,7 +410,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     const bottom = bottomSpace != null ? bottomSpace : space;
     const contentBounds = new Bounds();
     contentBounds.copyFrom(contentBoundsIn);
-    contentBounds.offset(top, right, -bottom, -left);
+    contentBounds.offset(top * scale, right * scale, -bottom * scale, -left * scale);
     const glyphBounds = glyph.glyph.getBounds(
       glyph.glyph.custom.options,
       contentBounds.left,
@@ -676,6 +676,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     let {
       xPosition, yPosition, xAlign, yAlign, offset,
     } = annotation;
+    offset = getPoint(offset);
     const { content, fullContentBounds } = annotation;
     const locationContentToAnnotate = new Point(
       contentToAnnotateBounds.left,
@@ -699,7 +700,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
         ({ yAlign } = reference);
       }
       if (reference.offset != null) {
-        offset.add(reference.offset);
+        offset = offset.add(getPoint(reference.offset));
       }
     }
     if (xPosition === 'right') {
@@ -740,7 +741,6 @@ export default class BaseAnnotationFunction implements ElementInterface {
     } else if (typeof xAlign === 'number') {
       xPos -= contentBounds.width * xAlign;
     }
-
     if (yAlign === 'bottom') {
       yPos += contentBounds.descent;
     } else if (yAlign === 'middle') {

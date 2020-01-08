@@ -1291,7 +1291,7 @@ export class EquationFunctions {
     const defaultOptions = {
       space: 0.02,
       rootScale: 0.6,
-      rootOffset: [0, 0.04],
+      rootOffset: [0, 0.06],
       inSize: true,
     };
     const optionsIn = {
