@@ -10,6 +10,15 @@ type TypeBounds = {
   bottom: number;
   left: number;
   right: number;
+  annotations?: {
+    [referenceName: string]: {
+      xPosition: 'left' | 'center' | 'right' | number,
+      yPosition: 'bottom' | 'baseline' | 'middle' | 'top' | number,
+      xAlign: 'left' | 'center' | 'right' | number,
+      yAlign: 'bottom' | 'baseline' | 'middle' | 'top' | number,
+      offset?: Point,
+    }
+  }
 };
 export default class Bounds {
   width: number;

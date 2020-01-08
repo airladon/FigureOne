@@ -106,45 +106,45 @@ export default class Symbol extends DiagramElementPrimitive {
     return t;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getWidth(options: Object, height: number) {
-    let width;
-    if (options.draw === 'static') {
-      let { staticHeight } = options;
-      const { staticWidth } = options;
-      if (staticHeight === 'first') {
-        staticHeight = height;
-      }
-      ({ width } = this.getDefaultValues(staticHeight, staticWidth, options));
-      if (width == null) {
-        width = height;
-      }
-      return width / staticHeight * height;
-    }
-    ({ width } = options);
-    ({ width } = this.getDefaultValues(height, width, options));
-    return width;
-  }
+  // // eslint-disable-next-line class-methods-use-this
+  // getWidth(options: Object, height: number) {
+  //   let width;
+  //   if (options.draw === 'static') {
+  //     let { staticHeight } = options;
+  //     const { staticWidth } = options;
+  //     if (staticHeight === 'first') {
+  //       staticHeight = height;
+  //     }
+  //     ({ width } = this.getDefaultValues(staticHeight, staticWidth, options));
+  //     if (width == null) {
+  //       width = height;
+  //     }
+  //     return width / staticHeight * height;
+  //   }
+  //   ({ width } = options);
+  //   ({ width } = this.getDefaultValues(height, width, options));
+  //   return width;
+  // }
 
-  // eslint-disable-next-line class-methods-use-this
-  getHeight(options: Object, width: number) {
-    let height;
-    if (options.draw === 'static') {
-      let { staticWidth } = options;
-      const { staticHeight } = options;
-      if (staticWidth === 'first') {
-        staticWidth = width;
-      } // ????
-      ({ height } = this.getDefaultValues(staticHeight, staticWidth, options));
-      if (height == null) {
-        height = width;
-      }
-      return height / staticWidth * width;
-    }
-    ({ height } = options);
-    ({ height } = this.getDefaultValues(height, width, options));
-    return height;
-  }
+  // // eslint-disable-next-line class-methods-use-this
+  // getHeight(options: Object, width: number) {
+  //   let height;
+  //   if (options.draw === 'static') {
+  //     let { staticWidth } = options;
+  //     const { staticHeight } = options;
+  //     if (staticWidth === 'first') {
+  //       staticWidth = width;
+  //     } // ????
+  //     ({ height } = this.getDefaultValues(staticHeight, staticWidth, options));
+  //     if (height == null) {
+  //       height = width;
+  //     }
+  //     return height / staticWidth * width;
+  //   }
+  //   ({ height } = options);
+  //   ({ height } = this.getDefaultValues(height, width, options));
+  //   return height;
+  // }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
   getBounds(options: Object, contentX: number, contentY: number, widthIn: number, heightIn: number, side?: 'left' | 'right' | 'bottom' | 'top') {

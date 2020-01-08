@@ -1212,7 +1212,7 @@ export class EquationFunctions {
     );
   }
 
-  root(
+  rootLegacy(
     optionsOrNum: TypeRootObject | TypeRootArray | TypeEquationPhrase,
     sym: string | null = null,
     rootIn: TypeEquationPhrase | null = null,
@@ -1260,6 +1260,80 @@ export class EquationFunctions {
       rootScale,
     );
     return f;
+  }
+
+  root(optionsOrArray: TypeRootObject | TypeRootArray) {
+    let content;
+    let root;
+    let symbol;
+    let space;
+    let leftSpace;
+    let topSpace;
+    let bottomSpace;
+    let rightSpace;
+    let rootScale;
+    let rootOffset;
+    let inSize = true;
+    if (Array.isArray(optionsOrArray)) {
+      [                                                            // $FlowFixMe
+        content, symbol, inSize,                                   // $FlowFixMe
+        space, topSpace, rightSpace, bottomSpace, leftSpace,       // $FlowFixMe
+        root, rootOffset, rootScale,
+      ] = optionsOrArray;
+    } else {
+      ({                                                    // $FlowFixMe
+        content, symbol, inSize,                                   // $FlowFixMe
+        space, topSpace, rightSpace, bottomSpace, leftSpace,       // $FlowFixMe
+        root, rootOffset, rootScale,
+      } = optionsOrArray);
+    }
+
+    const defaultOptions = {
+      space: 0.02,
+      rootScale: 0.6,
+      rootOffset: [0, 0.04],
+      inSize: true,
+    };
+    const optionsIn = {
+      leftSpace,
+      topSpace,
+      bottomSpace,
+      rightSpace,
+      space,
+      rootScale,
+      rootOffset,
+      inSize,
+    };
+    const options = joinObjects(defaultOptions, optionsIn);
+    options.rootOffset = parsePoint(options.rootOffset, new Point(0, 0));
+    const annotations = [];
+    if (root != null) {
+      annotations.push({
+        content: root,
+        // xPosition: 'left',
+        // yPosition: 'top',
+        // xAlign: 'right',
+        // yAlign: 'middle',
+        offset: options.rootOffset,
+        scale: options.rootScale,
+        reference: 'root',
+      });
+    }
+    return this.ann({
+      content,
+      inSize,
+      glyphs: {
+        encompass: {
+          symbol,
+          annotations,
+          space: options.space,
+          leftSpace: options.leftSpace,
+          rightSpace: options.rightSpace,
+          topSpace: options.topSpace,
+          bottomSpace: options.bottomSpace,
+        },
+      },
+    });
   }
 
   supSub(optionsOrContent: TypeSupSubObject | TypeSupSubArray) {
