@@ -125,13 +125,13 @@ describe('Equation Symbols - Radical', () => {
     const downWidth = eqn._rad.drawingObject.points[4];
     expect(round(downWidth)).toBe(round(0.1 * startWidth));
 
-    console.log(eqn._rad.drawingObject.points)
+    expect(round(a.left)).toBe(round(startWidth + space));
+
     console.log(a)
     console.log(rad)
-
-    // expect(round(a.left)).toBe(round(startWidth + space));
-    // expect(round(a.left)).toBe(round(0.3 * height));
-    
+    expect(round(rad.right)).toBe(round(a.right + space));
+    expect(round(rad.top)).toBe(round(a.top + space + lineWidth));
+    expect(round(rad.bottom)).toBe(round(a.bottom - space));
   });
   // test('Box Dynamic', () => {
   //   eqn.showForm('boxDynamic');

@@ -304,7 +304,8 @@ export default class BaseAnnotationFunction implements ElementInterface {
     // const [encompassGlyph, leftGlyph, bottomGlyph, rightGlyph, topGlyph] = this.glyphs;
     const { content, annotations } = this;
     const {
-      inSize, space, topSpace, bottomSpace, leftSpace, rightSpace, contentScale, useFullBounds, fullContentBounds,
+      inSize, space, topSpace, bottomSpace, leftSpace, rightSpace,
+      contentScale, useFullBounds, fullContentBounds,
     } = this.options;
     const inSizeBounds = new Bounds();
     const fullBounds = new Bounds();
@@ -417,7 +418,6 @@ export default class BaseAnnotationFunction implements ElementInterface {
       contentBounds.width,
       contentBounds.height,
     );
-    console.log(glyphBounds.height)
     const inSizeBounds = new Bounds();
     const fullBounds = new Bounds();
     inSizeBounds.copyFrom(contentBounds);
@@ -426,7 +426,6 @@ export default class BaseAnnotationFunction implements ElementInterface {
     glyph.width = glyphBounds.width;
     glyph.height = glyphBounds.height;
     glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);
-    console.log(glyph.height)
     glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
     glyph.annotations.forEach((annotation) => {
       annotation.content.calcSize(glyph.location, scale * annotation.scale);

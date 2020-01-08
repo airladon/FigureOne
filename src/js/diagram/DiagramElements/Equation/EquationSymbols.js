@@ -420,8 +420,8 @@ export default class EquationSymbols {
     proportionalToHeight?: boolean,
     maxStartWidth?: ?number,
     maxStartHeight?: ?number,
-    width?: number,
-    height?: number,
+    width?: number,             // contentWidth
+    height?: number,            // contentHeight
     draw: 'static' | 'dynamic',
     staticHeight?: number | 'first',
     staticWidth?: number | 'first',
