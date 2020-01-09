@@ -212,15 +212,32 @@ export type TypeRootArray = [
   ?number,
 ];
 
-
-
-
-
 export type TypeStrikeObject = {
   content: TypeEquationPhrase;
   symbol: string;
   inSize?: boolean;
+  space?: number;
+  topSpace?: number;
+  rightSpace?: number;
+  bottomSpace?: number;
+  leftSpace?: number;
+  fullContentBounds?: boolean;
+  useFullBounds?: boolean;
 };
+
+export type TypeStrikeArray = [
+  TypeEquationPhrase,
+  string,
+  ?boolean,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?boolean,
+  ?boolean,
+];
+
 export type TypeBoxObject = {
   content: TypeEquationPhrase,
   symbol: string,
@@ -230,12 +247,10 @@ export type TypeBoxObject = {
   rightSpace?: number,
   bottomSpace?: number,
   leftSpace?: number,
+  fullContentBounds?: boolean,
+  useFullBounds?: boolean,
 };
-export type TypeStrikeArray = [
-  TypeEquationPhrase,
-  string,
-  ?boolean,
-];
+
 export type TypeBoxArray = [
   TypeEquationPhrase,
   string,
@@ -245,13 +260,15 @@ export type TypeBoxArray = [
   ?number,
   ?number,
   ?number,
+  ?boolean,
+  ?boolean,
 ];
 
 export type TypeBarObject = {
   content: TypeEquationPhrase;
   // comment?: TypeEquationPhrase;
   symbol?: string;
-  side?: 'left' | 'right' | 'top' | 'bottom';
+  inSize?: boolean,
   space?: number,
   overhang?: number,
   length?: number,
@@ -259,8 +276,14 @@ export type TypeBarObject = {
   right?: number,
   top?: number,
   bottom?: number,
-  inSize?: boolean,
-}
+  side?: 'left' | 'right' | 'top' | 'bottom',
+  minContentHeight?: number,
+  minContentDescent?: number,
+  minContentAscent?: number,
+  descent?: number,
+  fullContentBounds?: boolean,
+  useFullBounds?: boolean,
+};
 
 export type TypeBarArray = [
   TypeEquationPhrase,
@@ -274,7 +297,17 @@ export type TypeBarArray = [
   ?number,
   ?number,
   ?'left' | 'right' | 'top' | 'bottom',
-]
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?boolean,
+  ?boolean,
+];
+
+
+
+
 
 
 export type TypeIntegralObject = {
@@ -811,7 +844,6 @@ export class EquationFunctions {
     });
   }
 
-
   bar(
     optionsOrArray: TypeBarObject | TypeBarArray,
     forceOptions: Object = {},
@@ -831,6 +863,8 @@ export class EquationFunctions {
     let minContentDescent;
     let minContentAscent;
     let descent;
+    let fullContentBounds;
+    let useFullBounds;
     const defaultOptions = {
       side: 'top',
       space: 0.03,
@@ -845,19 +879,22 @@ export class EquationFunctions {
       minContentHeight: null,
       minContentAscent: null,
       descent: null,
+      fullContentBounds: false,
+      useFullBounds: false,
     };
     if (Array.isArray(optionsOrArray)) {
       [
         content, symbol, inSize, space, overhang,
-        length, left, right, top,
-        bottom, side,
+        length, left, right, top, bottom,
+        side,  minContentHeight, minContentDescent,
+        minContentAscent, descent, fullContentBounds, useFullBounds,
       ] = optionsOrArray;
     } else {
       ({
-        content, symbol, space, overhang,
-        length, left, right, top,
-        bottom, inSize, side, minContentHeight, minContentDescent,
-        minContentAscent, descent,
+        content, symbol, inSize, space, overhang,
+        length, left, right, top, bottom,
+        side, minContentHeight, minContentDescent,
+        minContentAscent, descent, fullContentBounds, useFullBounds,
       } = optionsOrArray);
     }
     const optionsIn = {
@@ -874,6 +911,8 @@ export class EquationFunctions {
       minContentDescent,
       minContentAscent,
       descent,
+      fullContentBounds,
+      useFullBounds,
     };
     const options = joinObjects({}, defaultOptions, optionsIn, forceOptions);
 
@@ -930,6 +969,8 @@ export class EquationFunctions {
       content,
       glyphs,
       inSize,
+      fullContentBounds: options.fullContentBounds,
+      useFullBounds: options.useFullBounds,
       // leftSpace: options.outsideSpace,
       // rightSpace: options.outsideSpace,
     });
@@ -1489,6 +1530,7 @@ export class EquationFunctions {
     });
   }
 
+
   box(
     optionsOrArray: TypeBoxObject | TypeBoxArray,
   ) {
@@ -1500,6 +1542,8 @@ export class EquationFunctions {
     let bottomSpace;
     let leftSpace;
     let rightSpace;
+    let fullContentBounds;
+    let useFullBounds;
     const defaultOptions = {
       inSize: false,
       space: 0,
@@ -1507,16 +1551,18 @@ export class EquationFunctions {
       bottomSpace: null,
       leftSpace: null,
       rightSpace: null,
+      fullContentBounds: false,
+      useFullBounds: false,
     };
     if (Array.isArray(optionsOrArray)) {
       [
         content, symbol, inSize, space, topSpace,
-        rightSpace, bottomSpace, leftSpace,
+        rightSpace, bottomSpace, leftSpace, fullContentBounds, useFullBounds,
       ] = optionsOrArray;
     } else {
       ({
         content, symbol, inSize, space, topSpace,
-        rightSpace, bottomSpace, leftSpace,
+        rightSpace, bottomSpace, leftSpace, fullContentBounds, useFullBounds,
       } = optionsOrArray);
     }
     const optionsIn = {
@@ -1528,11 +1574,15 @@ export class EquationFunctions {
       rightSpace,
       bottomSpace,
       leftSpace,
+      fullContentBounds,
+      useFullBounds,
     };
     const options = joinObjects(defaultOptions, optionsIn);
     return this.ann({
       content,
       inSize: options.inSize,
+      fullContentBounds: options.fullContentBounds,
+      useFullBounds: options.useFullBounds,
       glyphs: {
         encompass: {
           symbol,
@@ -2266,6 +2316,7 @@ export class EquationFunctions {
     });
   }
 
+
   strike(
     optionsOrArray: TypeSrikeNewObject | TypeStrikeNewArray,
   ) {
@@ -2277,6 +2328,9 @@ export class EquationFunctions {
     let bottomSpace;
     let leftSpace;
     let rightSpace;
+    let fullContentBounds;
+    let useFullBounds;
+
     const defaultOptions = {
       inSize: false,
       space: 0.02,
@@ -2284,16 +2338,18 @@ export class EquationFunctions {
       bottomSpace: null,
       leftSpace: null,
       rightSpace: null,
+      fullContentBounds: false,
+      useFullBounds: false,
     };
     if (Array.isArray(optionsOrArray)) {
       [
         content, symbol, inSize, space, topSpace,
-        rightSpace, bottomSpace, leftSpace,
+        rightSpace, bottomSpace, leftSpace, fullContentBounds, useFullBounds,
       ] = optionsOrArray;
     } else {
       ({
         content, symbol, inSize, space, topSpace,
-        rightSpace, bottomSpace, leftSpace,
+        rightSpace, bottomSpace, leftSpace, fullContentBounds, useFullBounds,
       } = optionsOrArray);
     }
     const glyph = this.getExistingOrAddSymbol(symbol);
@@ -2311,11 +2367,15 @@ export class EquationFunctions {
       rightSpace,
       bottomSpace,
       leftSpace,
+      fullContentBounds,
+      useFullBounds,
     };
     const options = joinObjects(defaultOptions, optionsIn);
     return this.ann({
       content,
       inSize: options.inSize,
+      fullContentBounds: options.fullContentBounds,
+      useFullBounds: options.useFullBounds,
       glyphs: {
         encompass: {
           symbol,
