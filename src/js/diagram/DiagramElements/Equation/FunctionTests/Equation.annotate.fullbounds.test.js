@@ -93,7 +93,7 @@ describe('Equation Functions - Ann', () => {
         eqn.addForms({
           annotationNormalBounds: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 annotation: {
                   content: cStrike,
@@ -108,7 +108,7 @@ describe('Equation Functions - Ann', () => {
           },
           annotationFullBoundsAnnotation: {
             content: {
-              ann: {
+              annotate: {
                 content: aStrike,
                 annotation: {
                   content: cStrike,
@@ -124,7 +124,7 @@ describe('Equation Functions - Ann', () => {
           },
           annotationWithNotInSizeContent: {
             content: {
-              ann: {
+              annotate: {
                 content: aStrike,
                 // fullContentBounds: true,
                 annotation: {
@@ -141,7 +141,7 @@ describe('Equation Functions - Ann', () => {
           },
           annotationWithFullBoundsContent: {
             content: {
-              ann: {
+              annotate: {
                 content: aStrike,
                 fullContentBounds: true,
                 annotation: {
@@ -158,7 +158,7 @@ describe('Equation Functions - Ann', () => {
           },
           annotationWithFullBoundsContentAndFullBoundsAnnotation: {
             content: {
-              ann: {
+              annotate: {
                 content: aStrike,
                 fullContentBounds: true,
                 annotation: {
@@ -175,11 +175,11 @@ describe('Equation Functions - Ann', () => {
           },
           nestedAnnotation: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 annotation: {
                   content: {
-                    ann: {
+                    annotate: {
                       content: cStrike,
                     },
                   },
@@ -196,7 +196,7 @@ describe('Equation Functions - Ann', () => {
             content: {
               box: {
                 content: {
-                  ann: {
+                  annotate: {
                     content: 'a',
                     useFullBounds: false,
                     annotation: {
@@ -217,7 +217,7 @@ describe('Equation Functions - Ann', () => {
             content: {
               box: {
                 content: {
-                  ann: {
+                  annotate: {
                     content: 'a',
                     useFullBounds: true,
                     annotation: {

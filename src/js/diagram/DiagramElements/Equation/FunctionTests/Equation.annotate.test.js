@@ -90,7 +90,7 @@ describe('Equation Functions - Ann', () => {
         eqn.addElements(elements);
         eqn.addForms({
           simpleAnnotation: {
-            ann: {
+            annotate: {
               content: 'a',
               annotation: {
                 content: 'b',
@@ -102,7 +102,7 @@ describe('Equation Functions - Ann', () => {
             },
           },
           multiAnnotation: {
-            ann: {
+            annotate: {
               content: 'a',
               annotation: {
                 content: ['b', 'c'],
@@ -112,7 +112,7 @@ describe('Equation Functions - Ann', () => {
             },
           },
           noAnnotationContent: {
-            ann: {
+            annotate: {
               content: 'a',
               annotation: {
                 yPosition: 'top',
@@ -123,7 +123,7 @@ describe('Equation Functions - Ann', () => {
             },
           },
           nested: {
-            ann: {
+            annotate: {
               content: 'a',
               annotation: {
                 content: {
@@ -135,8 +135,8 @@ describe('Equation Functions - Ann', () => {
                       yPosition: 'top',
                       xAlign: 'left',
                       yAlign: 'bottom',
-                    }
-                  }
+                    },
+                  },
                 },
                 xPosition: 'right',
                 yPosition: 'top',
@@ -146,7 +146,7 @@ describe('Equation Functions - Ann', () => {
             },
           },
           simpleEncompass: {
-            ann: {
+            annotate: {
               content: 'a',
               glyphs: {
                 encompass: {
@@ -158,7 +158,7 @@ describe('Equation Functions - Ann', () => {
           },
           simpleEncompassWithSpace: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   encompass: {
@@ -175,7 +175,7 @@ describe('Equation Functions - Ann', () => {
           },
           encompassNotInSize: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   encompass: {
@@ -193,7 +193,7 @@ describe('Equation Functions - Ann', () => {
           },
           simpleStaticEncompass: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   encompass: {
@@ -207,7 +207,7 @@ describe('Equation Functions - Ann', () => {
           },
           encompassWithAnnotation: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   encompass: {
@@ -228,7 +228,7 @@ describe('Equation Functions - Ann', () => {
           },
           left: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   left: {
@@ -244,7 +244,7 @@ describe('Equation Functions - Ann', () => {
           },
           leftWithLeftAnnotation: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   left: {
@@ -264,7 +264,7 @@ describe('Equation Functions - Ann', () => {
           },
           leftWithRightAnnotation: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   left: {
@@ -284,7 +284,7 @@ describe('Equation Functions - Ann', () => {
           },
           leftWithNoAnnotationContent: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   left: {
@@ -304,7 +304,7 @@ describe('Equation Functions - Ann', () => {
           },
           leftWithRightAnnotationOverContent: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   left: {
@@ -325,7 +325,7 @@ describe('Equation Functions - Ann', () => {
           },
           rightWithRightAnnotation: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   right: {
@@ -345,7 +345,7 @@ describe('Equation Functions - Ann', () => {
           },
           rightWithLeftAnnotation: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   right: {
@@ -365,7 +365,7 @@ describe('Equation Functions - Ann', () => {
           },
           rightWithLeftAnnotationOverContent: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   right: {
@@ -386,7 +386,7 @@ describe('Equation Functions - Ann', () => {
           },
           topWithTopAnnotation: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   top: {
@@ -406,7 +406,7 @@ describe('Equation Functions - Ann', () => {
           },
           topWithBottomAnnotation: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   top: {
@@ -426,7 +426,7 @@ describe('Equation Functions - Ann', () => {
           },
           topWithBottomAnnotationOverContent: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   top: {
@@ -447,7 +447,7 @@ describe('Equation Functions - Ann', () => {
           },
           bottomWithBottomAnnotation: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   bottom: {
@@ -467,7 +467,7 @@ describe('Equation Functions - Ann', () => {
           },
           bottomWithTopAnnotation: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   bottom: {
@@ -487,7 +487,7 @@ describe('Equation Functions - Ann', () => {
           },
           bottomWithTopAnnotationOverContent: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   bottom: {
@@ -518,7 +518,7 @@ describe('Equation Functions - Ann', () => {
           },
           topBottom: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 glyphs: {
                   top: {
@@ -534,7 +534,7 @@ describe('Equation Functions - Ann', () => {
           },
           twoAnnotations: {
             content: {
-              ann: {
+              annotate: {
                 content: 'a',
                 annotations: [
                   {
