@@ -10,7 +10,7 @@ import {
   DiagramElementPrimitive, DiagramElementCollection,
 } from '../../Element';
 import {
-  BlankElement, Element, Elements, ElementInterface,
+  BlankElement, Element, Elements,
 } from './Elements/Element';
 import Fraction from './Elements/Fraction';
 // import Root from './Elements/Root';
@@ -21,7 +21,7 @@ import Fraction from './Elements/Fraction';
 // import Brackets from './Elements/Brackets';
 // import Bar from './Elements/Bar';
 import EquationForm from './EquationForm';
-import { Annotation, AnnotationInformation } from './Elements/Annotation';
+// import { Annotation, AnnotationInformation } from './Elements/Annotation';
 // import Padding from './Elements/Padding';
 // import Box from './Elements/Box';
 // import Integral from './Elements/Integral';
@@ -70,8 +70,7 @@ export type TypeEquationPhrase =
   | { supSub: TypeSupSubObject } | TypeSupSubArray
   | { topBar: TypeBarObject } | TypeBarArray
   | { bottomBar: TypeBarObject } | TypeBarArray
-  | { annotation: TypeAnnotationObject } | TypeAnnotationArray
-  | { annotate: TypeAnnotateObject } | TypeAnnotateArray
+  | { annotate: TypeAnnotateObject }
   | { topComment: TypeCommentObject } | TypeCommentArray
   | { bottomComment: TypeCommentObject } | TypeCommentArray
   | { padding: TypePaddingObject } | TypePaddingArray
@@ -89,7 +88,8 @@ export type TypeEquationPhrase =
   | DiagramElementPrimitive
   | DiagramElementCollection
   | Elements
-  | Element;
+  | Element
+  | BaseAnnotationFunction;
 
 
 export type TypeContainerObject = {
@@ -193,7 +193,7 @@ export type TypeRootObject = {
   topSpace?: number;
   rightSpace?: number;
   bottomSpace?: number;
-  leftSpace?: number; 
+  leftSpace?: number;
   root: TypeEquationPhrase;
   rootOffset?: number,
   rootScale?: number,
@@ -519,7 +519,7 @@ export type TypeMatrixArray = [
   ?boolean,
 ];
 
-export type TypeAnnotationObject = {
+export type TypeAnnotateObject = {
   content: TypeEquationPhrase,
   annotation?: TypeAnnotation,
   annotations?: Array<TypeAnnotation>,
@@ -721,19 +721,17 @@ export class EquationFunctions {
 
   eqnMethod(name: string, params: {}) {
     // $FlowFixMe
-    if (name === 'frac') { return this.frac(params); }        // $FlowFixMe
+    if (name === 'frac') { return this.frac(params); }
     if (name === 'strike') { return this.strike(params); }    // $FlowFixMe
-    // if (name === 'strikeNew') { return this.strikeNew(params); }    // $FlowFixMe
-    if (name === 'box') { return this.box(params); }    // $FlowFixMe
-    if (name === 'root') { return this.root(params); }    // $FlowFixMe
+    if (name === 'box') { return this.box(params); }          // $FlowFixMe
+    if (name === 'root') { return this.root(params); }        // $FlowFixMe
     if (name === 'brac') { return this.brac(params); }        // $FlowFixMe
     if (name === 'sub') { return this.sub(params); }          // $FlowFixMe
     if (name === 'sup') { return this.sup(params); }          // $FlowFixMe
     if (name === 'supSub') { return this.supSub(params); }    // $FlowFixMe
     if (name === 'topBar') { return this.topBar(params); }    // $FlowFixMe
     if (name === 'bottomBar') { return this.bottomBar(params); } // $FlowFixMe
-    if (name === 'annotate') { return this.annotate(params); }  // $FlowFixMe
-    // if (name === 'annotation') { return this.annotation(params); } // $FlowFixMe
+    if (name === 'annotate') { return this.annotate(params); } // $FlowFixMe
     if (name === 'bottomComment') { return this.bottomComment(params); } // $FlowFixMe
     if (name === 'topComment') { return this.topComment(params); } // $FlowFixMe
     if (name === 'bar') { return this.bar(params); }               // $FlowFixMe
@@ -746,7 +744,6 @@ export class EquationFunctions {
     if (name === 'matrix') { return this.matrix(params); }   // $FlowFixMe
     if (name === 'scale') { return this.scale(params); }   // $FlowFixMe
     if (name === 'container') { return this.container(params); }  // $FlowFixMe
-    // if (name === 'ann') { return this.ann(params); }
     return null;
   }
 
@@ -1029,7 +1026,7 @@ export class EquationFunctions {
     });
   }
 
-  annotate(optionsIn: TypeAnnotationObject) {
+  annotate(optionsIn: TypeAnnotateObject) {
     const defaultOptions = {
       inSize: true,
       useFullBounds: false,
@@ -1067,6 +1064,7 @@ export class EquationFunctions {
     const {
       content, annotation, annotations, glyphs,
     } = optionsIn;
+
     const defaultAnnotation = {
       xPosition: 'center',
       yPosition: 'top',
@@ -1077,53 +1075,58 @@ export class EquationFunctions {
       inSize: true,
       fullContentBounds: false,
     };
-    let annotationsToUse = [];
+    let annotationsToProcess = [];
     if (annotation != null) {
-      annotationsToUse.push(annotation);
+      annotationsToProcess.push(annotation);
     } else if (annotations != null) {
-      annotationsToUse = annotations;
+      annotationsToProcess = annotations;
     }
 
     const fillAnnotation = (ann) => {
+      const annCopy = joinObjects({}, defaultAnnotation, ann);
       /* eslint-disable no-param-reassign */
-      if (ann.xPosition == null) {
-        ann.xPosition = defaultAnnotation.xPosition;
-      }
-      if (ann.yPosition == null) {
-        ann.yPosition = defaultAnnotation.yPosition;
-      }
-      if (ann.xAlign == null) {
-        ann.xAlign = defaultAnnotation.xAlign;
-      }
-      if (ann.yAlign == null) {
-        ann.yAlign = defaultAnnotation.yAlign;
-      }
-      if (ann.offset == null) {
-        ann.offset = defaultAnnotation.offset;
-      }
-      if (ann.scale == null) {
-        ann.scale = defaultAnnotation.scale;
-      }
-      if (ann.inSize == null) {
-        ann.inSize = defaultAnnotation.inSize;
-      }
-      if (ann.fullContentBounds == null) {
-        ann.fullContentBounds = defaultAnnotation.fullContentBounds;
-      }
-      ann.content = this.contentToElement(ann.content);
+      // if (ann.xPosition == null) {
+      //   ann.xPosition = defaultAnnotation.xPosition;
+      // }
+      // if (ann.yPosition == null) {
+      //   ann.yPosition = defaultAnnotation.yPosition;
+      // }
+      // if (ann.xAlign == null) {
+      //   ann.xAlign = defaultAnnotation.xAlign;
+      // }
+      // if (ann.yAlign == null) {
+      //   ann.yAlign = defaultAnnotation.yAlign;
+      // }
+      // if (ann.offset == null) {
+      //   ann.offset = defaultAnnotation.offset;
+      // }
+      // if (ann.scale == null) {
+      //   ann.scale = defaultAnnotation.scale;
+      // }
+      // if (ann.inSize == null) {
+      //   ann.inSize = defaultAnnotation.inSize;
+      // }
+      // if (ann.fullContentBounds == null) {
+      //   ann.fullContentBounds = defaultAnnotation.fullContentBounds;
+      // }
+      annCopy.content = this.contentToElement(ann.content);
+      // ann.content = this.contentToElement(ann.content);
       /* eslint-enable no-param-reassign */
+      return annCopy;
     };
 
     const fillAnnotations = (anns) => {
       if (anns == null || !Array.isArray(anns)) {
-        return;
+        return [];
       }
+      const annsCopy = [];
       anns.forEach((ann) => {
-        fillAnnotation(ann);
+        annsCopy.push(fillAnnotation(ann));
       });
+      return annsCopy;
     };
-    fillAnnotations(annotationsToUse);
-
+    const annotationsToUse = fillAnnotations(annotationsToProcess);
+    // console.log(annotationsToUse)
     const glyphsToUse = {};
 
     const fillGlyphAnnotation = (side) => {
@@ -1135,12 +1138,13 @@ export class EquationFunctions {
         return;
       }
       glyphsToUse[side] = {};
+      let glyphAnnotationsToProcess = glyphSide.annotations;
       if (glyphSide.annotate != null) {
-        glyphSide.annotations = [glyphSide.annotate];
+        glyphAnnotationsToProcess = [glyphSide.annotate];
       }
-      fillAnnotations(glyphSide.annotations);
-      joinObjects(glyphsToUse[side], defaultOptions[side], glyphSide);
-      glyphsToUse[side].annotations = glyphSide.annotations || [];
+      const glyphAnnotationsToUse = fillAnnotations(glyphAnnotationsToProcess);
+      glyphsToUse[side] = joinObjects({}, defaultOptions[side], glyphSide);
+      glyphsToUse[side].annotations = glyphAnnotationsToUse;
       glyphsToUse[side].glyph = this.getExistingOrAddSymbol(glyphSide.symbol);
     };
 
