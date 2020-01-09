@@ -305,36 +305,9 @@ export type TypeBarArray = [
   ?boolean,
 ];
 
-
-
-
-
-
 export type TypeIntegralObject = {
   symbol?: string,
-  content?: TypeEquationPhrase;
-  inSize?: boolean,
-  space?: number,
-  topSpace?: number,
-  bottomSpace?: number,
-  height?: number,
-  yOffset?: number,
-  scale?: number,
-};
-export type TypeIntegralArray = [
-  ?string,
-  TypeEquationPhrase,
-  ?boolean,
-  ?number,
-  ?number,
-  ?number,
-  ?number,
-  ?number,
-];
-
-export type TypeLimitsIntegralObject = {
-  symbol?: string,
-  content?: TypeEquationPhrase;
+  content?: TypeEquationPhrase,
   from?: TypeEquationPhrase,
   to?: TypeEquationPhrase,
   inSize?: boolean,
@@ -346,13 +319,22 @@ export type TypeLimitsIntegralObject = {
   scale?: number,
   fromScale?: number,
   toScale?: number,
-  fromSpace?: number,
-  toSpace?: number,
-  fromOffset?: TypeParsablePoint,
-  toOffset?: TypeParsablePoint,
-  limitsPosition?: 'side' | 'top' | 'topCenter',
-};
-export type TypeLimitsIntegralArray = [
+  fromOffset?: parsiblePoint,
+  toOffset?: parsiblePoint,
+  limitsPosition?: 'side' | 'topBottom' | 'topBottomCenter',
+  limitsAroundContent?: boolean,
+  fromXPosition?: 'left' | 'center' | 'right' | number,
+  fromYPosition?: 'bottom' | 'top' | 'middle' | 'baseline' | number,
+  fromXAlign?: 'left' | 'center' | 'right' | number,
+  fromYAlign?: 'bottom' | 'top' | 'middle' | 'baseline' | number,
+  toXPosition?: 'left' | 'center' | 'right' | number,
+  toYPosition?: 'bottom' | 'top' | 'middle' | 'baseline' | number,
+  toXAlign?: 'left' | 'center' | 'right' | number,
+  toYAlign?: 'bottom' | 'top' | 'middle' | 'baseline' | number,
+  fullBoundsContent?: boolean,
+  useFullBounds?: boolean,
+  };
+export type TypeIntegralArray = [
   ?string,
   ?TypeEquationPhrase,
   ?TypeEquationPhrase,
@@ -366,11 +348,20 @@ export type TypeLimitsIntegralArray = [
   ?number,
   ?number,
   ?number,
-  ?number,
-  ?number,
-  ?TypeParsablePoint,
-  ?TypeParsablePoint,
-  'side' | 'top' | 'topCenter',
+  ?parsiblePoint,
+  ?arsiblePoint,
+  ?'side' | 'topBottom' | 'topBottomCenter',
+  ?boolean,
+  ?'left' | 'center' | 'right' | number,
+  ?'bottom' | 'top' | 'middle' | 'baseline' | number,
+  ?'left' | 'center' | 'right' | number,
+  ?'bottom' | 'top' | 'middle' | 'baseline' | number,
+  ?'left' | 'center' | 'right' | number,
+  ?'bottom' | 'top' | 'middle' | 'baseline' | number,
+  ?'left' | 'center' | 'right' | number,
+  ?'bottom' | 'top' | 'middle' | 'baseline' | number,
+  ?boolean,
+  ?boolean,
 ];
 
 export type TypeSumProdObject = {
@@ -391,6 +382,8 @@ export type TypeSumProdObject = {
   toSpace?: number,
   fromOffset?: TypeParsablePoint,
   toOffset?: TypeParsablePoint,
+  fullBoundsContent?: boolean,
+  useFullBounds?: boolean,
 };
 export type TypeSumProdArray = [
   ?string,
@@ -410,7 +403,17 @@ export type TypeSumProdArray = [
   ?number,
   ?TypeParsablePoint | null,
   ?TypeParsablePoint | null,
+  ?boolean,
+  ?boolean,
 ];
+
+
+
+
+
+
+
+
 
 export type TypeSubObject = {
   content: TypeEquationPhrase;
@@ -1863,8 +1866,9 @@ export class EquationFunctions {
     return matrixContent;
   }
 
+
   int(
-    optionsOrArray: TypeLimitsIntegralObject | TypeLimitsIntegralArray | TypeEquationPhrase,
+    optionsOrArray: TypeIntegralObject | TypeIntegralArray | TypeEquationPhrase,
   ) {
     let content;
     let symbol;
@@ -1893,6 +1897,8 @@ export class EquationFunctions {
     let toYPosition;
     let toXAlign;
     let toYAlign;
+    let fullBoundsContent;
+    let useFullBounds;
     const defaultOptions = {
       space: 0.05,
       topSpace: 0.1,
@@ -1917,6 +1923,8 @@ export class EquationFunctions {
       toYPosition: 'top',
       toXAlign: 'left',
       toYAlign: 'middle',
+      fullBoundsContent: false,
+      useFullBounds: false,
     };
     if (Array.isArray(optionsOrArray)) {
       [                                                    // $FlowFixMe
@@ -1927,7 +1935,8 @@ export class EquationFunctions {
         fromOffset, toOffset, limitsPosition,              // $FlowFixMe
         limitsAroundContent,                               // $FlowFixMe
         fromXPosition, fromYPosition, fromXAlign, fromYAlign, // $FlowFixMe
-        toXPosition, toYPosition, toXAlign, toYAlign,
+        toXPosition, toYPosition, toXAlign, toYAlign, // $FlowFixMe
+        fullBoundsContent, useFullBounds,
       ] = optionsOrArray;
     } else {
       ({                                                   // $FlowFixMe
@@ -1938,7 +1947,8 @@ export class EquationFunctions {
         fromOffset, toOffset, limitsPosition,              // $FlowFixMe
         limitsAroundContent,                               // $FlowFixMe
         fromXPosition, fromYPosition, fromXAlign, fromYAlign, // $FlowFixMe
-        toXPosition, toYPosition, toXAlign, toYAlign,
+        toXPosition, toYPosition, toXAlign, toYAlign, // $FlowFixMe
+        fullBoundsContent, useFullBounds,
       } = optionsOrArray);
     }
     if (limitsPosition === 'topBottom') {
@@ -1989,6 +1999,8 @@ export class EquationFunctions {
       toYPosition,
       toXAlign,
       toYAlign,
+      fullBoundsContent,
+      useFullBounds,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     options.fromOffset = parsePoint(options.fromOffset);
@@ -1999,6 +2011,8 @@ export class EquationFunctions {
       content,
       inSize: options.inSize,
       contentScale: options.contentScale,
+      fullBoundsContent: options.fullBoundsContent,
+      useFullBounds: options.useFullBounds,
       glyphs: {
         left: {
           symbol,
@@ -2097,7 +2111,6 @@ export class EquationFunctions {
     return this.sumProd(options);
   }
 
-
   sumProd(
     optionsOrArray: TypeSumProdObject | TypeSumProdArray,
   ) {
@@ -2118,6 +2131,8 @@ export class EquationFunctions {
     let toSpace;
     let fromOffset;
     let toOffset;
+    let fullBoundsContent;
+    let useFullBounds;
     const defaultOptions = {
       space: 0.05,
       topSpace: 0.07,
@@ -2132,6 +2147,8 @@ export class EquationFunctions {
       toSpace: 0.04,
       fromOffset: [0, 0],
       toOffset: [0, 0],
+      fullBoundsContent: false,
+      useFullBounds: false,
     };
     if (Array.isArray(optionsOrArray)) {
       [
@@ -2139,6 +2156,7 @@ export class EquationFunctions {
         topSpace, bottomSpace,
         height, yOffset, scale,
         fromScale, toScale, fromSpace, toSpace, fromOffset, toOffset,
+        fullBoundsContent, useFullBounds,
       ] = optionsOrArray;
     } else {
       ({                                                   // $FlowFixMe
@@ -2146,6 +2164,7 @@ export class EquationFunctions {
         topSpace, bottomSpace,
         height, yOffset,
         scale, fromScale, toScale, fromSpace, toSpace, fromOffset, toOffset,
+        fullBoundsContent, useFullBounds,
       } = optionsOrArray);
     }
     const optionsIn = {
@@ -2162,11 +2181,14 @@ export class EquationFunctions {
       toSpace,
       fromOffset,
       toOffset,
+      fullBoundsContent, useFullBounds,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     return this.ann({
       content,
       contentScale: options.contentScale,
+      fullBoundsContent: options.fullBoundsContent,
+      useFullBounds: options.useFullBounds,
       glyphs: {
         left: {
           symbol,
