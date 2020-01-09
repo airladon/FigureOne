@@ -1,5 +1,8 @@
 // @flow
 import { joinObjects } from '../../../../tools/tools';
+import {
+  Point,
+} from '../../../../tools/g2';
 
 type TypeBounds = {
   width: number;
