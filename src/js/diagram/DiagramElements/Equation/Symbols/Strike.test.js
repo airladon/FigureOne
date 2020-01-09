@@ -41,7 +41,7 @@ describe('Equation Symbols - Bracket', () => {
       },
       sh: {
         symbol: 'strike',
-        style: 'horiztonal',
+        style: 'horizontal',
         lineWidth: 0.01,
       },
       fixedHeightWidth: {
@@ -53,7 +53,7 @@ describe('Equation Symbols - Bracket', () => {
       },
       staticFirst: {
         symbol: 'strike',
-        style: 'horiztonal',
+        style: 'horizontal',
         lineWidth: 0.01,
         draw: 'static',
         staticHeight: 'first',
@@ -61,7 +61,7 @@ describe('Equation Symbols - Bracket', () => {
       },
       static: {
         symbol: 'strike',
-        style: 'horiztonal',
+        style: 'horizontal',
         lineWidth: 0.01,
         draw: 'static',
         staticHeight: 1,
@@ -88,8 +88,8 @@ describe('Equation Symbols - Bracket', () => {
     diagram.setFirstTransform();
     const a = eqn._a.getBoundingRect('diagram');
     const s = eqn._s.getBoundingRect('diagram');
-    expect(round(s.width)).toBe(round(a.width));
-    expect(round(s.height)).toBe(round(a.height));
+    expect(round(s.width)).toBe(round(a.width + (0.02 * 2) * 0.7));
+    expect(round(s.height)).toBe(round(a.height + (0.02 * 2) * 0.7));
     expect(round(eqn._s.drawingObject.points)).toMatchSnapshot();
   });
   test('Snapshot Forward', () => {
@@ -118,7 +118,7 @@ describe('Equation Symbols - Bracket', () => {
     diagram.setFirstTransform();
     const a = eqn._a.getBoundingRect('diagram');
     const s = eqn._staticFirst.getBoundingRect('diagram');
-    expect(round(s.width)).toBe(round(a.width));
+    expect(round(s.width)).toBe(round(a.width + (0.02 * 2) * 0.7));
     expect(round(s.height)).toBe(round(a.height));
     const yBottom = eqn._staticFirst.drawingObject.points[1];
     const yTop = eqn._staticFirst.drawingObject.points.slice(-1)[0];
@@ -130,7 +130,7 @@ describe('Equation Symbols - Bracket', () => {
     diagram.setFirstTransform();
     const a = eqn._a.getBoundingRect('diagram');
     const s = eqn._static.getBoundingRect('diagram');
-    expect(round(s.width)).toBe(round(a.width));
+    expect(round(s.width)).toBe(round(a.width + (0.02 * 2) * 0.7));
     expect(round(s.height)).toBe(round(a.height));
     const yBottom = eqn._static.drawingObject.points[1];
     const yTop = eqn._static.drawingObject.points.slice(-1)[0];

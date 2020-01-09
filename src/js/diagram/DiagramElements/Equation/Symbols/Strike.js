@@ -189,7 +189,7 @@ export default class Strike extends Symbol {
     if (options.lineWidth != null && typeof options.lineWidth === 'number') {
       out.lineWidth = options.lineWidth;
     } else {
-      out.lineWidth = 0.01;
+      out.lineWidth = 0.015;
     }
     if (options.height != null && typeof options.height === 'number') {
       out.height = options.height;

@@ -691,9 +691,9 @@ describe('Equation Functions - Ann', () => {
     const a = eqn._a.getBoundingRect('diagram');
     const left = eqn._left.getBoundingRect('diagram');
     const right = eqn._right.getBoundingRect('diagram');
-    expect(round(left.left)).toBe(0);
-    expect(round(a.left)).toBe(round(left.right + 0.03));
-    expect(round(right.left)).toBe(round(a.right + 0.03));
+    expect(round(left.left)).toBe(0.03);
+    expect(round(a.left)).toBe(round(left.right + 0.02));
+    expect(round(right.left)).toBe(round(a.right + 0.02));
   });
   test('Simple Top Bottom', () => {
     functions.single();

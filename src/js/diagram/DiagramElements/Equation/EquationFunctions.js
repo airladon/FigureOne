@@ -749,8 +749,8 @@ export class EquationFunctions {
       } = optionsOrArray);
     }
     const defaultOptions = {
-      insideSpace: 0.03,
-      outsideSpace: 0,
+      insideSpace: 0.02,
+      outsideSpace: 0.03,
       topSpace: 0.05,
       bottomSpace: 0.05,
       minContentHeight: null,
@@ -2279,7 +2279,7 @@ export class EquationFunctions {
     let rightSpace;
     const defaultOptions = {
       inSize: false,
-      space: 0,
+      space: 0.02,
       topSpace: null,
       bottomSpace: null,
       leftSpace: null,
@@ -2295,6 +2295,12 @@ export class EquationFunctions {
         content, symbol, inSize, space, topSpace,
         rightSpace, bottomSpace, leftSpace,
       } = optionsOrArray);
+    }
+    const glyph = this.getExistingOrAddSymbol(symbol);
+    if (glyph != null && glyph.custom.options.style === 'horizontal') {
+      defaultOptions.space = 0;
+      defaultOptions.leftSpace = 0.02;
+      defaultOptions.rightSpace = 0.02;
     }
     const optionsIn = {
       content,
