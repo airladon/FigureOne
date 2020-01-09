@@ -746,7 +746,7 @@ export class EquationFunctions {
     if (name === 'matrix') { return this.matrix(params); }   // $FlowFixMe
     if (name === 'scale') { return this.scale(params); }   // $FlowFixMe
     if (name === 'container') { return this.container(params); }  // $FlowFixMe
-    if (name === 'ann') { return this.ann(params); }
+    // if (name === 'ann') { return this.ann(params); }
     return null;
   }
 
@@ -886,7 +886,7 @@ export class EquationFunctions {
         height: options.height,
       };
     }
-    return this.ann({
+    return this.annotate({
       content,
       glyphs,
       inSize,
@@ -1018,7 +1018,7 @@ export class EquationFunctions {
         descent: options.descent,
       };
     }
-    return this.ann({
+    return this.annotate({
       content,
       glyphs,
       inSize,
@@ -1030,10 +1030,6 @@ export class EquationFunctions {
   }
 
   annotate(optionsIn: TypeAnnotationObject) {
-    return this.ann(optionsIn);
-  }
-
-  ann(optionsIn: TypeAnnotationObject) {
     const defaultOptions = {
       inSize: true,
       useFullBounds: false,
@@ -1362,7 +1358,7 @@ export class EquationFunctions {
         reference: 'root',
       });
     }
-    return this.ann({
+    return this.annotate({
       content,
       inSize,
       useFullBounds: options.useFullBounds,
@@ -1437,7 +1433,7 @@ export class EquationFunctions {
         scale: options.scale,
       });
     }
-    return this.ann({
+    return this.annotate({
       content,
       annotations,
       inSize,
@@ -1541,7 +1537,7 @@ export class EquationFunctions {
       useFullBounds,
     };
     const options = joinObjects(defaultOptions, optionsIn);
-    return this.ann({
+    return this.annotate({
       content,
       inSize: options.inSize,
       fullContentBounds: options.fullContentBounds,
@@ -1739,7 +1735,7 @@ export class EquationFunctions {
       left,
     };
     const options = joinObjects(defaultOptions, optionsIn);
-    return this.ann({
+    return this.annotate({
       content,
       topSpace: options.top,
       bottomSpace: options.bottom,
@@ -1968,7 +1964,7 @@ export class EquationFunctions {
     options.toOffset = parsePoint(options.toOffset);
 
     // if (options.limitsPosition === 'side') {
-    return this.ann({
+    return this.annotate({
       content,
       inSize: options.inSize,
       contentScale: options.contentScale,
@@ -2007,7 +2003,7 @@ export class EquationFunctions {
       },
     });
     // }
-    // return this.ann({
+    // return this.annotate({
     //   content,
     //   inSize: options.inSize,
     //   glyphs: {
@@ -2145,7 +2141,7 @@ export class EquationFunctions {
       fullBoundsContent, useFullBounds,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
-    return this.ann({
+    return this.annotate({
       content,
       contentScale: options.contentScale,
       fullBoundsContent: options.fullBoundsContent,
@@ -2248,13 +2244,13 @@ export class EquationFunctions {
       offset: [0, commentSpaceToUse],
     }];
     if (symbol === '' || symbol == null) {
-      return this.ann({
+      return this.annotate({
         content,
         annotations,
         inSize,
       });
     }
-    return this.ann({
+    return this.annotate({
       content,
       fullContentBounds,
       useFullBounds,
@@ -2288,14 +2284,14 @@ export class EquationFunctions {
     }];
 
     if (symbol === '' || symbol == null) {
-      return this.ann({
+      return this.annotate({
         content,
         annotations,
         inSize,
       });
     }
 
-    return this.ann({
+    return this.annotate({
       content,
       fullContentBounds,
       useFullBounds,
@@ -2365,7 +2361,7 @@ export class EquationFunctions {
       useFullBounds,
     };
     const options = joinObjects(defaultOptions, optionsIn);
-    return this.ann({
+    return this.annotate({
       content,
       inSize: options.inSize,
       fullContentBounds: options.fullContentBounds,
@@ -2426,7 +2422,7 @@ export class EquationFunctions {
       content, symbol, comment, inSize,
       space, scale, overhang,
     ] = this.processStrike(...args);
-    return this.ann({
+    return this.annotate({
       content,
       inSize,
       glyphs: {
@@ -2455,7 +2451,7 @@ export class EquationFunctions {
       content, symbol, comment, inSize,
       space, scale, overhang,
     ] = this.processStrike(...args);
-    return this.ann({
+    return this.annotate({
       content,
       inSize,
       glyphs: {
