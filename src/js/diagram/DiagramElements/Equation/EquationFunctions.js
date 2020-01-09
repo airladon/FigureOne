@@ -749,7 +749,7 @@ export class EquationFunctions {
       } = optionsOrArray);
     }
     const defaultOptions = {
-      insideSpace: 0.02,
+      insideSpace: 0.03,
       outsideSpace: 0.03,
       topSpace: 0.05,
       bottomSpace: 0.05,
