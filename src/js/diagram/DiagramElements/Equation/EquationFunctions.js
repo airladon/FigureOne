@@ -319,8 +319,8 @@ export type TypeIntegralObject = {
   scale?: number,
   fromScale?: number,
   toScale?: number,
-  fromOffset?: parsiblePoint,
-  toOffset?: parsiblePoint,
+  fromOffset?: TypeParsablePoint,
+  toOffset?: TypeParsablePoint,
   limitsPosition?: 'side' | 'topBottom' | 'topBottomCenter',
   limitsAroundContent?: boolean,
   fromXPosition?: 'left' | 'center' | 'right' | number,
@@ -348,8 +348,8 @@ export type TypeIntegralArray = [
   ?number,
   ?number,
   ?number,
-  ?parsiblePoint,
-  ?arsiblePoint,
+  ?TypeParsablePoint,
+  ?TypeParsablePoint,
   ?'side' | 'topBottom' | 'topBottomCenter',
   ?boolean,
   ?'left' | 'center' | 'right' | number,
@@ -407,45 +407,43 @@ export type TypeSumProdArray = [
   ?boolean,
 ];
 
-
-
-
-
-
-
-
-
 export type TypeSubObject = {
   content: TypeEquationPhrase;
   subscript: TypeEquationPhrase;
   scale?: number,
-  bias?: TypeParsablePoint,
+  offset?: TypeParsablePoint,
+  inSize: boolean,
 };
 export type TypeSubArray = [
   TypeEquationPhrase,
   TypeEquationPhrase,
   ?number,
   ?TypeParsablePoint,
+  ?boolean,
 ];
 export type TypeSupObject = {
   content: TypeEquationPhrase;
   superscript: TypeEquationPhrase;
   scale?: number,
-  bias?: TypeParsablePoint,
+  offset?: TypeParsablePoint,
+  inSize: boolean,
 };
 export type TypeSupArray = [
   TypeEquationPhrase,
   TypeEquationPhrase,
   ?number,
   ?TypeParsablePoint,
+  ?boolean,
 ];
+
 export type TypeSupSubObject = {
   content: TypeEquationPhrase;
   subscript: TypeEquationPhrase;
   superscript: TypeEquationPhrase;
   scale?: number;
-  superscriptBias?: TypeParsablePoint;
-  subscriptBias?: TypeParsablePoint;
+  superscriptOffset?: TypeParsablePoint;
+  subscriptOffset?: TypeParsablePoint;
+  inSize?: boolean,
 };
 export type TypeSupSubArray = [
   TypeEquationPhrase,
@@ -454,6 +452,7 @@ export type TypeSupSubArray = [
   ?number,
   ?TypeParsablePoint,
   ?TypeParsablePoint,
+  ?boolean,
 ];
 
 export type TypeCommentObject = {
@@ -463,6 +462,9 @@ export type TypeCommentObject = {
   contentSpace?: number;
   commentSpace?: number;
   scale?: number;
+  inSize?: boolean;
+  fullContentBounds?: boolean;
+  useFullBounds?: boolean;
 };
 export type TypeCommentArray = [
   TypeEquationPhrase,
@@ -471,7 +473,17 @@ export type TypeCommentArray = [
   ?number,
   ?number,
   ?number,
+  ?boolean,
+  ?boolean,
+  ?boolean,
 ];
+
+
+
+
+
+
+
 export type TypePaddingObject = {
   content: TypeEquationPhrase;
   top?: number,
@@ -2225,7 +2237,7 @@ export class EquationFunctions {
 
   // eslint-disable-next-line class-methods-use-this
   processComment(
-    optionsOrArray: TypeBracketObject | TypeBracketArray,
+    optionsOrArray: TypeCommentObject | TypeCommentArray,
   ) {
     let content;
     let comment;
@@ -2234,12 +2246,17 @@ export class EquationFunctions {
     let commentSpace;
     let scale;
     let inSize;
+    let fullContentBounds;
+    let useFullBounds;
     if (Array.isArray(optionsOrArray)) {
-      [content, comment, symbol, contentSpace, commentSpace, scale, inSize,
+      [
+        content, comment, symbol, contentSpace, commentSpace, scale, inSize,
+        fullContentBounds, useFullBounds,
       ] = optionsOrArray;
     } else {
       ({                                                      // $FlowFixMe
         content, comment, symbol, contentSpace, commentSpace, scale, inSize,
+        fullContentBounds, useFullBounds,
       } = optionsOrArray);
     }
     const optionsIn = {
@@ -2253,13 +2270,15 @@ export class EquationFunctions {
       commentSpace: 0.03,
       scale: 0.6,
       inSize: true,
+      fullContentBounds: false,
+      useFullBounds: false,
     };
 
     const options = joinObjects(defaultOptions, optionsIn);
     return [
       content, comment, symbol,
       options.contentSpace, options.commentSpace, options.scale,
-      options.inSize,
+      options.inSize, options.fullContentBounds, options.useFullBounds,
     ];
   }
 
@@ -2268,7 +2287,7 @@ export class EquationFunctions {
     const [
       content, comment, symbol,
       contentSpaceToUse, commentSpaceToUse, scaleToUse,
-      inSize,
+      inSize, fullContentBounds, useFullBounds,
     ] = this.processComment(...args);
     const annotations = [{
       content: comment,
@@ -2288,6 +2307,8 @@ export class EquationFunctions {
     }
     return this.ann({
       content,
+      fullContentBounds,
+      useFullBounds,
       glyphs: {
         top: {
           symbol,
@@ -2304,7 +2325,7 @@ export class EquationFunctions {
     const [
       content, comment, symbol,
       contentSpaceToUse, commentSpaceToUse, scaleToUse,
-      inSize,
+      inSize, fullContentBounds, useFullBounds,
     ] = this.processComment(...args);
 
     const annotations = [{
@@ -2327,6 +2348,8 @@ export class EquationFunctions {
 
     return this.ann({
       content,
+      fullContentBounds,
+      useFullBounds,
       glyphs: {
         bottom: {
           symbol,
