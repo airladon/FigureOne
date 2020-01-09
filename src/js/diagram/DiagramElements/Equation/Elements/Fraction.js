@@ -16,21 +16,21 @@ export default class Fraction extends BaseEquationFunction {
     const [numerator, denominator] = this.contents;
     const {
       scaleModifier, numeratorSpace, denominatorSpace, overhang,
-      offsetY,
+      offsetY, fullContentBounds,
     } = this.options;
     const scale = incomingScale * scaleModifier;
     const vinculumBounds = new Bounds();
     const numeratorBounds = new Bounds();
     const denominatorBounds = new Bounds();
-
+    const fullBounds = new Bounds();
     if (numerator != null) {
       numerator.calcSize(loc._dup(), scale);
-      numeratorBounds.copyFrom(numerator);
+      numeratorBounds.copyFrom(numerator.getBounds(fullContentBounds));
     }
 
     if (denominator != null) {
       denominator.calcSize(loc._dup(), scale);
-      denominatorBounds.copyFrom(denominator);
+      denominatorBounds.copyFrom(denominator.getBounds(fullContentBounds));
     }
 
     this.location = location._dup();
@@ -98,6 +98,16 @@ export default class Fraction extends BaseEquationFunction {
     this.glyphWidths[0] = vinculumBounds.width;
     this.glyphHeights[0] = vinculumBounds.height;
 
+    fullBounds.copyFrom(vinculumBounds);
+    fullBounds.left = this.glyphLocations[0].x;
+    fullBounds.bottom = this.glyphLocations[0].y;
+    if (numerator != null) {
+      fullBounds.growWithSameBaseline(numerator.getBounds(true));
+    }
+    if (denominator != null) {
+      fullBounds.growWithSameBaseline(denominator.getBounds(true));
+    }
+
     if (vinculum) {
       vinculum.custom.setSize(
         this.glyphLocations[0],
@@ -105,5 +115,13 @@ export default class Fraction extends BaseEquationFunction {
         vinculumBounds.height,
       );
     }
+
+    this.fullSize = {
+      leftOffset: this.location.x - fullBounds.left,
+      width: fullBounds.width,
+      ascent: fullBounds.ascent,
+      descent: fullBounds.descent,
+      height: fullBounds.height,
+    };
   }
 }

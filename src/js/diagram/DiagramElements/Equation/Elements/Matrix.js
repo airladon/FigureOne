@@ -88,7 +88,7 @@ export default class Matrix extends BaseEquationFunction {
     const loc = location._dup();
     const aboveBaseline = scale * 0.07;
     const {
-      order, fit, space, contentScale, vAlign,
+      order, fit, space, contentScale, vAlign, fullContentBounds,
     } = this.options;
     const [numRows, numCols] = order;
 
@@ -105,7 +105,7 @@ export default class Matrix extends BaseEquationFunction {
         const element = this.contents[index];
         if (element != null) {
           element.calcSize(loc._dup(), scale * contentScale);
-          elementBounds.copyFrom(element);
+          elementBounds.copyFrom(element.getBounds(fullContentBounds));
         }
         matrix[row].push(element);
         bounds[row].push(elementBounds);
@@ -160,6 +160,7 @@ export default class Matrix extends BaseEquationFunction {
     const totalHeight = cumHeight - space.y * scale;
     const totalWidth = cumWidth - space.x * scale;
 
+    const fullBounds = new Bounds();
     for (let row = 0; row < numRows; row += 1) {
       for (let col = 0; col < numCols; col += 1) {
         locs[row][col].x += loc.x;
@@ -167,6 +168,10 @@ export default class Matrix extends BaseEquationFunction {
         const element = matrix[row][col];
         if (element != null) {
           element.offsetLocation(locs[row][col].sub(element.location));
+          if (fullBounds.width === 0) {
+            fullBounds.copyFrom(element.getBounds(true));
+          }
+          fullBounds.growWithSameBaseline(element.getBounds(true));
         }
       }
     }
@@ -175,5 +180,12 @@ export default class Matrix extends BaseEquationFunction {
     this.height = totalHeight;
     this.descent = totalHeight / 2 - aboveBaseline;
     this.ascent = totalHeight / 2 + aboveBaseline;
+    this.fullSize = {
+      leftOffset: this.location.x - fullBounds.left,
+      width: fullBounds.width,
+      ascent: fullBounds.ascent,
+      descent: fullBounds.descent,
+      height: fullBounds.height,
+    };
   }
 }

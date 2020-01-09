@@ -13,7 +13,7 @@ import {
   BlankElement, Element, Elements, ElementInterface,
 } from './Elements/Element';
 import Fraction from './Elements/Fraction';
-import Root from './Elements/Root';
+// import Root from './Elements/Root';
 // import Strike from './Elements/Strike';
 // import DiagramPrimitives from '../../DiagramPrimitives/DiagramPrimitives';
 // import SuperSub from './Elements/SuperSub';
@@ -22,7 +22,7 @@ import Root from './Elements/Root';
 // import Bar from './Elements/Bar';
 import EquationForm from './EquationForm';
 import { Annotation, AnnotationInformation } from './Elements/Annotation';
-import Padding from './Elements/Padding';
+// import Padding from './Elements/Padding';
 // import Box from './Elements/Box';
 // import Integral from './Elements/Integral';
 // import SumProd from './Elements/SumProd';
@@ -646,9 +646,6 @@ export class EquationFunctions {
     if (name === 'scale') { return this.scale(params); }   // $FlowFixMe
     if (name === 'container') { return this.container(params); }  // $FlowFixMe
     if (name === 'ann') { return this.ann(params); }
-    // if (name === 'annBrac') { return this.annBrac(params); }
-    // Add container - where you fix the ascent, descent, and width
-    // (content is centered in width) - Content spills out of container by default
     return null;
   }
 
@@ -663,6 +660,7 @@ export class EquationFunctions {
     let descent;
     let xAlign; // left, center, right, multiplier (to left)
     let yAlign; // bottom, baseline, middle, top, multiplier (to bottom)
+    let fullContentBounds;
 
     const defaultOptions = {
       scaleModifier: 1,
@@ -672,14 +670,17 @@ export class EquationFunctions {
       descent: null,
       xAlign: 'center',
       yAlign: 'baseline',
+      fullContentBounds: false,
     };
     if (Array.isArray(optionsOrArray)) {
       [
         content, width, descent, ascent, xAlign, yAlign, fit, scale,
+        fullContentBounds,
       ] = optionsOrArray;
     } else {
       ({
         content, width, descent, ascent, xAlign, yAlign, fit, scale,
+        fullContentBounds,
       } = optionsOrArray);
     }
     const optionsIn = {
@@ -690,6 +691,7 @@ export class EquationFunctions {
       descent,
       xAlign,
       yAlign,
+      fullContentBounds,
     };
     const options = joinObjects(defaultOptions, optionsIn);
     return new Container(
@@ -1171,6 +1173,7 @@ export class EquationFunctions {
     let numeratorSpace;
     let denominatorSpace;
     let offsetY;
+    let fullContentBounds;
 
     // This is imperfect type checking, as the assumption is if den, sym
     // and fractionScale is null, then they weren't defined by the caller
@@ -1183,18 +1186,19 @@ export class EquationFunctions {
       denominatorSpace: 0.05,
       offsetY: 0.07,
       overhang: 0.05,
+      fullContentBounds: false,
     };
     if (Array.isArray(optionsOrArray)) {
       [
         numerator, symbol, denominator, scale,
         numeratorSpace, denominatorSpace, overhang,
-        offsetY,
+        offsetY, fullContentBounds,
       ] = optionsOrArray;
     } else {
       ({
         numerator, symbol, denominator, scale,
         numeratorSpace, denominatorSpace, overhang,
-        offsetY,
+        offsetY, fullContentBounds,
       } = optionsOrArray);
     }
     const optionsIn = {
@@ -1203,6 +1207,7 @@ export class EquationFunctions {
       numeratorSpace,
       denominatorSpace,
       offsetY,
+      fullContentBounds,
     };
     const options = joinObjects(defaultOptions, optionsIn);
     return new Fraction(
@@ -1212,55 +1217,55 @@ export class EquationFunctions {
     );
   }
 
-  rootLegacy(
-    optionsOrNum: TypeRootObject | TypeRootArray | TypeEquationPhrase,
-    sym: string | null = null,
-    rootIn: TypeEquationPhrase | null = null,
-    contentSpaceIn: ?({
-      left: ?number,
-      right: ?number,
-      top: ?number,
-      bottom: ?number,
-    } | Point | [number, number] | number) = null,
-    rootSpaceIn: ?number = null,
-    rootScaleIn: ?number = null,
-  ) {
-    let content;
-    let root;
-    let symbol;
-    let contentSpace;
-    let rootSpace;
-    let rootScale;
+  // rootLegacy(
+  //   optionsOrNum: TypeRootObject | TypeRootArray | TypeEquationPhrase,
+  //   sym: string | null = null,
+  //   rootIn: TypeEquationPhrase | null = null,
+  //   contentSpaceIn: ?({
+  //     left: ?number,
+  //     right: ?number,
+  //     top: ?number,
+  //     bottom: ?number,
+  //   } | Point | [number, number] | number) = null,
+  //   rootSpaceIn: ?number = null,
+  //   rootScaleIn: ?number = null,
+  // ) {
+  //   let content;
+  //   let root;
+  //   let symbol;
+  //   let contentSpace;
+  //   let rootSpace;
+  //   let rootScale;
 
-    if (!(sym == null && root == null)) {
-      content = optionsOrNum;
-      root = rootIn;
-      symbol = sym;
-      contentSpace = contentSpaceIn;
-      rootSpace = rootSpaceIn;
-      rootScale = rootScaleIn;
-    } else if (Array.isArray(optionsOrNum)) {
-      [                                                  // $FlowFixMe
-        content, symbol, root,                           // $FlowFixMe
-        contentSpace, rootSpace, rootScale,
-      ] = optionsOrNum;
-    } else {
-      ({                                            // $FlowFixMe
-        content, symbol, root,
-        // lineWidth, startWidth, startHeight,    // $FlowFixMe
-        contentSpace, rootSpace, rootScale,
-      } = optionsOrNum);
-    }
-    const f = new Root(                         // $FlowFixMe
-      this.contentToElement(content),             // $FlowFixMe
-      this.getExistingOrAddSymbol(symbol),     // $FlowFixMe
-      this.contentToElement(root),           // $FlowFixMe
-      contentSpace,           // $FlowFixMe
-      rootSpace,           // $FlowFixMe
-      rootScale,
-    );
-    return f;
-  }
+  //   if (!(sym == null && root == null)) {
+  //     content = optionsOrNum;
+  //     root = rootIn;
+  //     symbol = sym;
+  //     contentSpace = contentSpaceIn;
+  //     rootSpace = rootSpaceIn;
+  //     rootScale = rootScaleIn;
+  //   } else if (Array.isArray(optionsOrNum)) {
+  //     [                                                  // $FlowFixMe
+  //       content, symbol, root,                           // $FlowFixMe
+  //       contentSpace, rootSpace, rootScale,
+  //     ] = optionsOrNum;
+  //   } else {
+  //     ({                                            // $FlowFixMe
+  //       content, symbol, root,
+  //       // lineWidth, startWidth, startHeight,    // $FlowFixMe
+  //       contentSpace, rootSpace, rootScale,
+  //     } = optionsOrNum);
+  //   }
+  //   const f = new Root(                         // $FlowFixMe
+  //     this.contentToElement(content),             // $FlowFixMe
+  //     this.getExistingOrAddSymbol(symbol),     // $FlowFixMe
+  //     this.contentToElement(root),           // $FlowFixMe
+  //     contentSpace,           // $FlowFixMe
+  //     rootSpace,           // $FlowFixMe
+  //     rootScale,
+  //   );
+  //   return f;
+  // }
 
   root(optionsOrArray: TypeRootObject | TypeRootArray) {
     let content;
@@ -1712,22 +1717,24 @@ export class EquationFunctions {
     let scale;
     let vAlign;
     let brac;
+    let fullContentBounds;
     const defaultOptions = {
       space: [0.05, 0.05],
       fit: 'min',
       contentScale: 0.7,
       brac: {},
       vAlign: 'baseline',
+      fullContentBounds: false,
     };
     if (Array.isArray(optionsOrArray)) {
       [
         order, left, content, right,
-        scale, fit, space, vAlign, brac,
+        scale, fit, space, vAlign, brac, fullContentBounds,
       ] = optionsOrArray;
     } else {
       ({
         order, left, content, right,
-        scale, fit, space, vAlign, brac,
+        scale, fit, space, vAlign, brac, fullContentBounds,
       } = optionsOrArray);
     }
     const optionsIn = {
@@ -1737,6 +1744,7 @@ export class EquationFunctions {
       contentScale: scale,
       brac,
       vAlign,
+      fullContentBounds,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
 

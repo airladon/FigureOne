@@ -8,6 +8,7 @@ import {
 } from '../../../Element';
 import { duplicateFromTo } from '../../../../tools/tools';
 import { Element, Elements } from './Element';
+// import type { ElementInterface } from './Element';
 // import Bounds from './Bounds';
 
 export default class BaseEquationFunction extends Elements {
@@ -18,12 +19,6 @@ export default class BaseEquationFunction extends Elements {
   glyphHeights: Array<number>;
   // inSize: boolean;
   options: Object;
-  // fullBounds: ?{
-  //   width: number,
-  //   height: number,
-  //   ascent: number,
-  //   descent: number,
-  // }
 
   constructor(
     content: Elements | null | Array<Elements | null>,
@@ -156,13 +151,20 @@ export default class BaseEquationFunction extends Elements {
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
   calcSize(location: Point, scale: number) {
-    // this.location =
-    // this.glyphLocations[] =
-    // this.glyphHeights[] =
-    // this.glyphWidths[] =
-    // this.width =
-    // this.ascent =
-    // this.descent =
-    // this.height =
+    // this.location = ;
+    // this.glyphLocations[] = ;
+    // this.glyphHeights[] = ;
+    // this.glyphWidths[] = ;
+    // this.width = ;
+    // this.ascent = ;
+    // this.descent = ;
+    // this.height = ;
+    // this.fullSize = {
+    //   leftOffset: ,
+    //   width: ,
+    //   ascent: ,
+    //   descent: ,
+    //   height: ,
+    // };
   }
 }
