@@ -91,27 +91,6 @@ export type TypeEquationPhrase =
   | Elements
   | Element;
 
-/* eslint-enable no-use-before-define */
-export type TypeFracObject = {
-  numerator: TypeEquationPhrase;
-  denominator: TypeEquationPhrase;
-  symbol: string;
-  scale?: number;
-  numeratorSpace?: number;
-  denominatorSpace?: number;
-  overhang?: number;
-  offsetY?: number;
-};
-export type TypeFracArray = [
-  TypeEquationPhrase,
-  TypeEquationPhrase,
-  string,
-  ?number,
-  ?number,
-  ?number,
-  ?number,
-  ?number,
-];
 
 export type TypeContainerObject = {
   content: TypeEquationPhrase,
@@ -122,6 +101,7 @@ export type TypeContainerObject = {
   yAlign?: 'bottom' | 'middle' | 'top' | 'baseline' | number,
   fit?: 'width' | 'height' | 'contain',
   scale?: number,
+  fullContentBounds?: boolean,
 };
 
 export type TypeContainerArray = [
@@ -133,17 +113,78 @@ export type TypeContainerArray = [
   'bottom' | 'middle' | 'top' | 'baseline' | number,
   'width' | 'height' | 'contain',
   number,
+  boolean,
+];
+
+/* eslint-enable no-use-before-define */
+export type TypeFracObject = {
+  numerator: TypeEquationPhrase;
+  symbol: string;
+  denominator: TypeEquationPhrase;
+  scale?: number;
+  numeratorSpace?: number;
+  denominatorSpace?: number;
+  overhang?: number;
+  offsetY?: number;
+  fullContentBounds?: boolean,
+};
+export type TypeFracArray = [
+  TypeEquationPhrase,
+  string,
+  TypeEquationPhrase,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?boolean,
 ];
 
 export type TypeScaleObject = {
   content: TypeEquationPhrase,
   scale?: number,
+  useFullContent?: boolean,
 };
 
 export type TypeScaleArray = [
   TypeEquationPhrase,
   ?number,
+  ?boolean,
 ];
+
+
+export type TypeBracketObject = {
+  content: TypeEquationPhrase;
+  left?: string;
+  right?: string;
+  inSize?: boolean;
+  insideSpace?: number;
+  outsideSpace?: number;
+  topSpace?: number;
+  bottomSpace?: number;
+  minContentHeight?: number;
+  minContentDescent?: number;
+  height?: number;
+  descent?: number;
+  fullContentBounds?: boolean;
+  useFullBounds?: boolean;
+};
+export type TypeBracketArray = [
+  TypeEquationPhrase,
+  ?string,
+  ?string,
+  ?boolean,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?boolean,
+  ?boolean,
+];
+
 
 export type TypeRootObject = {
   content: TypeEquationPhrase;
@@ -234,33 +275,7 @@ export type TypeBarArray = [
   ?'left' | 'right' | 'top' | 'bottom',
 ]
 
-export type TypeBracketObject = {
-  content: TypeEquationPhrase;
-  left?: string;
-  right?: string;
-  inSize?: boolean;
-  insideSpace?: number;
-  outsideSpace?: number;
-  topSpace?: number;
-  bottomSpace?: number;
-  minContentHeight?: number;
-  minContentDescent?: number;
-  height?: number;
-  descent?: number;
-};
-export type TypeBracketArray = [
-  TypeEquationPhrase,
-  ?string,
-  ?string,
-  ?boolean,
-  ?number,
-  ?number,
-  ?number,
-  ?number,
-  ?number,
-  ?number,
-  ?number,
-];
+
 
 export type TypeIntegralObject = {
   symbol?: string,
@@ -716,17 +731,21 @@ export class EquationFunctions {
     let descent;
     let height;
     let inSize;
+    let useFullBounds;
+    let fullContentBounds;
 
     if (Array.isArray(optionsOrArray)) {
       [
         content, left, right, inSize, insideSpace, outsideSpace,   // $FlowFixMe
-        topSpace, bottomSpace, minContentHeight, minContentDescent, height, descent,
+        topSpace, bottomSpace, minContentHeight,                   // $FlowFixMe
+        minContentDescent, height, descent, fullContentBounds,     // $FlowFixMe
+        useFullBounds,
       ] = optionsOrArray;
     } else {
       ({
         content, left, right, inSize, insideSpace, outsideSpace,
         topSpace, bottomSpace, minContentHeight,
-        minContentDescent, height, descent,
+        minContentDescent, height, descent, fullContentBounds, useFullBounds,
       } = optionsOrArray);
     }
     const defaultOptions = {
@@ -739,6 +758,8 @@ export class EquationFunctions {
       descent: null,
       height: null,
       inSize: true,
+      useFullBounds: false,
+      fullContentBounds: false,
     };
     const optionsIn = {
       insideSpace,
@@ -750,6 +771,8 @@ export class EquationFunctions {
       descent,
       height,
       inSize,
+      useFullBounds,
+      fullContentBounds,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     const glyphs = {};
@@ -783,6 +806,8 @@ export class EquationFunctions {
       inSize,
       leftSpace: options.outsideSpace,
       rightSpace: options.outsideSpace,
+      useFullBounds: options.useFullBounds,
+      fullContentBounds: options.fullContentBounds,
     });
   }
 
@@ -1139,20 +1164,23 @@ export class EquationFunctions {
   ) {
     let content;
     let scale;
+    let useFullContent;
     const defaultOptions = {
       scaleModifier: 1,
+      useFullContent: false,
     };
     if (Array.isArray(optionsOrArray)) {
       [
-        content, scale,
+        content, scale, useFullContent,
       ] = optionsOrArray;
     } else {
       ({
-        content, scale,
+        content, scale, useFullContent,
       } = optionsOrArray);
     }
     const optionsIn = {
       scaleModifier: scale,
+      useFullContent,
     };
     const options = joinObjects(defaultOptions, optionsIn);
     return new Scale(
