@@ -154,8 +154,8 @@ export type TypeScaleArray = [
 
 
 export type TypeBracketObject = {
-  content: TypeEquationPhrase;
   left?: string;
+  content: TypeEquationPhrase;
   right?: string;
   inSize?: boolean;
   insideSpace?: number;
@@ -170,8 +170,8 @@ export type TypeBracketObject = {
   useFullBounds?: boolean;
 };
 export type TypeBracketArray = [
-  TypeEquationPhrase,
   ?string,
+  TypeEquationPhrase,
   ?string,
   ?boolean,
   ?number,
@@ -736,14 +736,14 @@ export class EquationFunctions {
 
     if (Array.isArray(optionsOrArray)) {
       [
-        content, left, right, inSize, insideSpace, outsideSpace,   // $FlowFixMe
+        left, content, right, inSize, insideSpace, outsideSpace,   // $FlowFixMe
         topSpace, bottomSpace, minContentHeight,                   // $FlowFixMe
         minContentDescent, height, descent, fullContentBounds,     // $FlowFixMe
         useFullBounds,
       ] = optionsOrArray;
     } else {
       ({
-        content, left, right, inSize, insideSpace, outsideSpace,
+        left, content, right, inSize, insideSpace, outsideSpace,
         topSpace, bottomSpace, minContentHeight,
         minContentDescent, height, descent, fullContentBounds, useFullBounds,
       } = optionsOrArray);

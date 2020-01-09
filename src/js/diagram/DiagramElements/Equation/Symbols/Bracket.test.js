@@ -53,8 +53,8 @@ describe('Equation Symbols - Bracket', () => {
     eqn.addElements(elements);
     eqn.addForms(
       {
-        0: { brac: ['a', 'left', 'right'] },
-        1: { brac: ['a', 'leftStatic', 'right'] },
+        0: { brac: ['left', 'a', 'right'] },
+        1: { brac: ['leftStatic', 'a', 'right'] },
       },
     );
     diagram.elements = eqn;

@@ -46,7 +46,7 @@ describe('Equation Symbols - Brace', () => {
     };
     eqn = new EquationNew(diagram.shapes, { color: color1 });
     eqn.addElements(elements);
-    eqn.addForms({ 0: { brac: ['a', 'left', 'right'] } });
+    eqn.addForms({ 0: { brac: ['left', 'a', 'right'] } });
     diagram.elements = eqn;
   });
   test('Snapshot 1', () => {

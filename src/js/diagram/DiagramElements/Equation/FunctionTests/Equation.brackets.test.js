@@ -45,8 +45,8 @@ describe('Equation Functions - Brackets', () => {
           0: {
             content: {
               brac: {
-                content: 'a',
                 left: 'lb',
+                content: 'a',
                 right: 'rb',
                 inSize: true,
                 insideSpace: 0.1,
@@ -59,8 +59,8 @@ describe('Equation Functions - Brackets', () => {
           // Method Object
           1: {
             brac: {
-              content: 'a',
               left: 'lb',
+              content: 'a',
               right: 'rb',
               inSize: true,
               insideSpace: 0.1,
@@ -70,17 +70,17 @@ describe('Equation Functions - Brackets', () => {
             },
           },
           // Method Array
-          2: { brac: ['a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1] },
+          2: { brac: ['lb', 'a', 'rb', true, 0.1, 0.1, 0.1, 0.1] },
           // Function with Method Array
-          3: e.brac(['a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1]),
+          3: e.brac(['lb', 'a', 'rb', true, 0.1, 0.1, 0.1, 0.1]),
           // Function with parameters
           // 4: e.brac('a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1),
           // // Bound Function with parameters
           // 5: brac('a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1),
           // Bound Function with Object
           4: brac({
-            content: 'a',
             left: 'lb',
+            content: 'a',
             right: 'rb',
             inSize: true,
             insideSpace: 0.1,
@@ -102,8 +102,8 @@ describe('Equation Functions - Brackets', () => {
             content: [
               {
                 brac: {
-                  content: 'a',
                   left: 'lb',
+                  content: 'a',
                   right: 'rb',
                   inSize: true,
                   insideSpace: 0.1,
@@ -122,85 +122,85 @@ describe('Equation Functions - Brackets', () => {
           },
           insideSpace: {
             content: [brac([
-              'a', 'lb', 'rb', true, 0.2, 0.1, 0.1, 0.1, null, null, null, null,
+              'lb', 'a', 'rb', true, 0.2, 0.1, 0.1, 0.1, null, null, null, null,
             ]), 'b'],
             scale: 1,
           },
           outsideSpace: {
             content: [brac([
-              'a', 'lb', 'rb', true, 0.1, 0.2, 0.1, 0.1, null, null, null, null,
+              'lb', 'a', 'rb', true, 0.1, 0.2, 0.1, 0.1, null, null, null, null,
             ]), 'b'],
             scale: 1,
           },
           topSpace: {
             content: [brac([
-              'a', 'lb', 'rb', true, 0.1, 0.1, 0.2, 0.1, null, null, null, null,
+              'lb', 'a', 'rb', true, 0.1, 0.1, 0.2, 0.1, null, null, null, null,
             ]), 'b'],
             scale: 1,
           },
           bottomSpace: {
             content: [brac([
-              'a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.2, null, null, null, null,
+              'lb', 'a', 'rb', true, 0.1, 0.1, 0.1, 0.2, null, null, null, null,
             ]), 'b'],
             scale: 1,
           },
           minContentHeight: {
             content: [brac([
-              'a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1, 1, null, null, null,
+              'lb', 'a', 'rb', true, 0.1, 0.1, 0.1, 0.1, 1, null, null, null,
             ]), 'b'],
             scale: 1,
           },
           minContentDescent: {
             content: [brac([
-              'a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1, null, 1, null, null,
+              'lb', 'a', 'rb', true, 0.1, 0.1, 0.1, 0.1, null, 1, null, null,
             ]), 'b'],
             scale: 1,
           },
           minContentDescentWithSmallMinHeight: {
             content: [brac([
-              'a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1, 0.1, 1, null, null,
+              'lb', 'a', 'rb', true, 0.1, 0.1, 0.1, 0.1, 0.1, 1, null, null,
             ]), 'b'],
             scale: 1,
           },
           minContentDescentWithLargeMinHeight: {
             content: [brac([
-              'a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1, 2, 1, null, null,
+              'lb', 'a', 'rb', true, 0.1, 0.1, 0.1, 0.1, 2, 1, null, null,
             ]), 'b'],
             scale: 1,
           },
           forceDecentLessThanActualDescent: {
             content: [brac([
-              'a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1, null, null, null, 0.004,
+              'lb', 'a', 'rb', true, 0.1, 0.1, 0.1, 0.1, null, null, null, 0.004,
             ]), 'b'],
             scale: 1,
           },
           forceDecentGreaterThanActualDescent: {
             content: [brac([
-              'a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1, null, null, null, 0.1,
+              'lb', 'a', 'rb', true, 0.1, 0.1, 0.1, 0.1, null, null, null, 0.1,
             ]), 'b'],
             scale: 1,
           },
           forceHeightLessThanActualHeight: {
             content: [brac([
-              'a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1, null, null, 0.05, null,
+              'lb', 'a', 'rb', true, 0.1, 0.1, 0.1, 0.1, null, null, 0.05, null,
             ]), 'b'],
             scale: 1,
           },
           forceHeightGreaterThanActualHeight: {
             content: [brac([
-              'a', 'lb', 'rb', true, 0.1, 0.1, 0.1, 0.1, null, null, 1, null,
+              'lb', 'a', 'rb', true, 0.1, 0.1, 0.1, 0.1, null, null, 1, null,
             ]), 'b'],
             scale: 1,
           },
           notInSize: {
             content: [brac([
-              'a', 'lb', 'rb', false, 0.1, 0.1, 0.1, 0.1, null, null, null, null,
+              'lb', 'a', 'rb', false, 0.1, 0.1, 0.1, 0.1, null, null, null, null,
             ]), 'b'],
             scale: 1,
           },
           noLeftBracket: {
             content: [brac([
-              'a', '', 'rb', true, 0.1, 0.1, 0.1, 0.1, null, null, null, null,
+              '', 'a', 'rb', true, 0.1, 0.1, 0.1, 0.1, null, null, null, null,
             ]), 'b'],
             scale: 1,
           },
