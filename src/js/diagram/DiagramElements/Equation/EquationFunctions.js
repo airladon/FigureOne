@@ -1685,11 +1685,13 @@ export class EquationFunctions {
       left,
     };
     const options = joinObjects(defaultOptions, optionsIn);
-    return new Padding(
-      this.contentToElement(content),
-      [],
-      options,
-    );
+    return this.ann({
+      content,
+      topSpace: options.top,
+      bottomSpace: options.bottom,
+      rightSpace: options.right,
+      leftSpace: options.left,
+    });
   }
 
   topBar(optionsOrArray: TypeBarObject | TypeBarArray) {
