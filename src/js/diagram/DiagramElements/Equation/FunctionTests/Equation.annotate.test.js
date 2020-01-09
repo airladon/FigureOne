@@ -14,534 +14,1082 @@ jest.mock('../../../Gesture');
 jest.mock('../../../webgl/webgl');
 jest.mock('../../../DrawContext2D');
 
-describe('Equation Functions - Annotations', () => {
+describe('Equation Functions - Ann', () => {
   let diagram;
   let eqn;
   let color1;
   let elements;
   let functions;
   // let forms;
+  let lineWidth;
+  let staticWidth;
+  let staticHeight;
+  let space;
   beforeEach(() => {
     diagram = makeDiagram();
     color1 = [0.95, 0, 0, 1];
+    lineWidth = 0.01;
+    staticWidth = 2;
+    staticHeight = 2;
+    space = 0.1;
     elements = {
       a: 'a',
       b: 'b',
       c: 'c',
-      d: 'd',
-      e: 'e',
-      f: 'f',
-      g: 'g',
+      box: {
+        symbol: 'box',
+        lineWidth,
+      },
+      box1: {
+        symbol: 'box',
+        fill: true,
+      },
+      boxStatic: {
+        symbol: 'box',
+        lineWidth,
+        draw: 'static',
+        staticHeight,
+        staticWidth,
+      },
+      left: {
+        symbol: 'bracket',
+        side: 'left',
+        lineWidth: 0.01,
+        sides: 10,
+        tipWidth: 0.003,
+        staticSize: false,
+      },
+      right: {
+        symbol: 'bracket',
+        side: 'right',
+        lineWidth: 0.01,
+        sides: 10,
+        tipWidth: 0.003,
+        staticSize: false,
+      },
+      top: {
+        symbol: 'bracket',
+        side: 'top',
+        lineWidth: 0.01,
+        sides: 10,
+        tipWidth: 0.003,
+        staticSize: false,
+      },
+      bottom: {
+        symbol: 'bracket',
+        side: 'bottom',
+        lineWidth: 0.01,
+        sides: 10,
+        tipWidth: 0.003,
+        staticSize: false,
+      },
     };
     functions = {
       single: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
-        const e = eqn.eqn.functions;
-        const annotate = e.annotate.bind(e);
         eqn.addElements(elements);
-        const annotation = ['b', 'right', 'bottom', 'left', 'top', 0.5];
-        const annotations = [annotation];
-
         eqn.addForms({
-          // Full Object
-          0: {
-            content: {
-              annotate: {
-                content: 'a',
-                withAnnotations: annotations,
-              },
-            },
-          },
-          //   // Method Object
-          1: {
-            annotate: {
+          simpleAnnotation: {
+            ann: {
               content: 'a',
-              withAnnotations: annotations,
+              annotation: {
+                content: 'b',
+                yPosition: 'top',
+                yAlign: 'bottom',
+                xPosition: 'right',
+                xAlign: 'left',
+              },
             },
           },
-          // Method Array
-          2: {
-            annotate: ['a', annotations],
-          },
-          // Function with Method Array
-          3: e.annotate(['a', annotations]),
-          // Function with parameters
-          4: e.annotate('a', annotations),
-          // Bound Function with parameters
-          5: annotate('a', annotations),
-          // Bound Function with Object
-          6: annotate({
-            content: 'a',
-            withAnnotations: annotations,
-          }),
-          7: {
-            annotate: {
+          multiAnnotation: {
+            ann: {
               content: 'a',
-              withAnnotations: {
-                annotation: {
-                  annotation: 'b',
-                  relativeToContent: ['right', 'bottom'],
-                  relativeToAnnotation: ['left', 'top'],
-                  scale: 0.5,
-                },
+              annotation: {
+                content: ['b', 'c'],
+                yPosition: 'bottom',
+                yAlign: 'top',
               },
             },
           },
-          8: {
-            annotate: {
+          noAnnotationContent: {
+            ann: {
               content: 'a',
-              withAnnotations: ['b', 'right', 'bottom', 'left', 'top', 0.5],
-            },
-          },
-          // 7: {
-          //   annotate: ['a', annotation],
-          // },
-        });
-      },
-      annotations: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
-        const e = eqn.eqn.functions;
-        const annotation = e.annotation.bind(e);
-        const annotate = e.annotate.bind(e);
-        eqn.addElements(elements);
-        eqn.addForms({
-          // Method Object
-          0: annotate('a', [
-            {
               annotation: {
-                annotation: 'b',
-                relativeToContent: ['right', 'bottom'],
-                relativeToAnnotation: ['left', 'top'],
-                scale: 0.5,
+                yPosition: 'top',
+                yAlign: 'bottom',
+                xPosition: 'right',
+                xAlign: 'left',
               },
             },
-          ]),
-          // Method Array
-          1: annotate('a', [
-            {
-              annotation: ['b', 'right', 'bottom', 'left', 'top', 0.5],
-            },
-          ]),
-          // Array only
-          2: annotate('a', [
-            'b', 'right', 'bottom', 'left', 'top', 0.5,
-          ]),
-          // Array of array annotations
-          3: annotate('a', [[
-            'b', 'right', 'bottom', 'left', 'top', 0.5,
-          ]]),
-          // Function with method Array
-          4: annotate('a', [
-            e.annotation(['b', 'right', 'bottom', 'left', 'top', 0.5]),
-          ]),
-          // Function with parameters
-          5: annotate('a', [
-            e.annotation('b', 'right', 'bottom', 'left', 'top', 0.5),
-          ]),
-          // Bound function with parameters
-          6: annotate('a', [
-            annotation('b', 'right', 'bottom', 'left', 'top', 0.5),
-          ]),
-          // Bound Function with Object
-          7: annotate('a', [
-            annotation({
-              annotation: 'b',
-              relativeToContent: ['right', 'bottom'],
-              relativeToAnnotation: ['left', 'top'],
-              scale: 0.5,
-            }),
-          ]),
-        });
-      },
-      multiple: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
-        const e = eqn.eqn.functions;
-        const annotation = e.annotation.bind(e);
-        const annotate = e.annotate.bind(e);
-        eqn.addElements(elements);
-        eqn.addForms({
-          // Method Object
-          0: annotate('a', [
-            {
+          },
+          nested: {
+            ann: {
+              content: 'a',
               annotation: {
-                annotation: 'b',
-                relativeToContent: ['right', 'bottom'],
-                relativeToAnnotation: ['left', 'top'],
-                scale: 0.5,
-              },
-            },
-            {
-              annotation: {
-                annotation: 'c',
-                relativeToContent: ['left', 'top'],
-                relativeToAnnotation: ['right', 'bottom'],
-                scale: 0.5,
-              },
-            },
-          ]),
-          // Functions
-          1: annotate('a', [
-            annotation('b', 'right', 'bottom', 'left', 'top', 0.5),
-            annotation('c', 'left', 'top', 'right', 'bottom', 0.5),
-          ]),
-          // Arrays only
-          2: annotate('a', [
-            ['b', 'right', 'bottom', 'left', 'top', 0.5],
-            ['c', 'left', 'top', 'right', 'bottom', 0.5],
-          ]),
-        });
-      },
-      nested: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
-        const e = eqn.eqn.functions;
-        const annotation = e.annotation.bind(e);
-        const annotate = e.annotate.bind(e);
-        eqn.addElements(elements);
-        eqn.addForms({
-          // Method Object
-          0: annotate('a', [
-            {
-              annotation: {
-                annotation: annotate(
-                  'b', ['c', 'center', 'bottom', 'center', 'top'],
-                ),
-                relativeToContent: ['right', 'bottom'],
-                relativeToAnnotation: ['left', 'top'],
-                scale: 0.5,
-              },
-            },
-            {
-              annotation: {
-                annotation: 'd',
-                relativeToContent: ['left', 'top'],
-                relativeToAnnotation: ['right', 'bottom'],
-                scale: 0.5,
-              },
-            },
-          ]),
-          // Functions
-          1: annotate('a', [
-            annotation(annotate(
-              'b', ['c', 'center', 'bottom', 'center', 'top'],
-            ), 'right', 'bottom', 'left', 'top', 0.5),
-            annotation('d', 'left', 'top', 'right', 'bottom', 0.5),
-          ]),
-          // Arrays only
-          2: annotate('a', [
-            [
-              annotate(
-                'b', ['c', 'center', 'bottom', 'center', 'top'],
-              ), 'right', 'bottom', 'left', 'top', 0.5,
-            ],
-            ['d', 'left', 'top', 'right', 'bottom', 0.5],
-          ]),
-        });
-      },
-      parameterSteps: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
-        const e = eqn.eqn.functions;
-        const annotate = e.annotate.bind(e);
-        eqn.addElements(elements);
-        eqn.addForms({
-          base: {
-            content: [
-              annotate(
-                {
-                  content: 'a',
-                  withAnnotations: [
-                    {
-                      annotation: {
-                        annotation: 'b',
-                        relativeToContent: ['right', 'bottom'],
-                        relativeToAnnotation: ['left', 'top'],
-                        scale: 1,
-                        xOffset: 0,
-                        yOffset: 0,
-                      },
-                    },
-                  ],
-                  inSize: true,
-                },
-              ),
-              'c',
-            ],
-            scale: 1,
-          },
-          offsetXY: {
-            content: [
-              annotate('a', ['b', 'right', 'bottom', 'left', 'top', 1, 0.01, 0.01], true), 'c',
-            ],
-            scale: 1,
-          },
-          contentLeftTop: {
-            content: [
-              annotate('a', ['b', 'left', 'top', 'left', 'top', 1, 0, 0], true), 'c',
-            ],
-            scale: 1,
-          },
-          contentCenterMiddle: {
-            content: [
-              annotate('a', ['b', 'center', 'middle', 'left', 'top', 1, 0, 0], true), 'c',
-            ],
-            scale: 1,
-          },
-          content0909: {
-            content: [
-              annotate('a', ['b', 0.9, 0.9, 'left', 'top', 1, 0, 0], true), 'c',
-            ],
-            scale: 1,
-          },
-          annotationRightBottom: {
-            content: [
-              annotate('a', ['b', 'right', 'bottom', 'right', 'bottom', 1, 0, 0], true), 'c',
-            ],
-            scale: 1,
-          },
-          annotationCenterMiddle: {
-            content: [
-              annotate('a', ['b', 'right', 'bottom', 'center', 'middle', 1, 0, 0], true), 'c',
-            ],
-            scale: 1,
-          },
-          annotation0909: {
-            content: [
-              annotate('a', ['b', 'right', 'bottom', 0.9, 0.9, 1, 0, 0], true), 'c',
-            ],
-            scale: 1,
-          },
-          inSize: {
-            content: [
-              annotate('a', ['b', 'right', 'bottom', 'left', 'top', 1, 0, 0], false), 'c',
-            ],
-            scale: 1,
-          },
-          scaleAnnotation: {
-            content: [
-              annotate('a', ['b', 'right', 'bottom', 'left', 'top', 0.5, 0, 0], true), 'c',
-            ],
-            scale: 1,
-          },
-        });
-      },
-      parameters: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
-        const e = eqn.eqn.functions;
-        const annotate = e.annotate.bind(e);
-        eqn.addElements(elements);
-        eqn.addForms({
-          // without
-          //   // Method Object
-          without: [
-            annotate(
-              {
-                content: 'a',
-                withAnnotations: [
-                  {
+                content: {
+                  annotate: {
+                    content: 'b',
                     annotation: {
-                      annotation: 'b',
-                      relativeToContent: ['right', 'bottom'],
-                      relativeToAnnotation: ['left', 'top'],
-                      scale: 0.5,
-                      xOffset: 0,
-                      yOffset: 0,
-                    },
+                      content: 'c',
+                      xPosition: 'right',
+                      yPosition: 'top',
+                      xAlign: 'left',
+                      yAlign: 'bottom',
+                    }
+                  }
+                },
+                xPosition: 'right',
+                yPosition: 'top',
+                xAlign: 'left',
+                yAlign: 'bottom',
+              },
+            },
+          },
+          simpleEncompass: {
+            ann: {
+              content: 'a',
+              glyphs: {
+                encompass: {
+                  symbol: 'box',
+                  space: 0, // { left: 0 }
+                },
+              },
+            },
+          },
+          simpleEncompassWithSpace: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  encompass: {
+                    symbol: 'box',
+                    leftSpace: space,
+                    rightSpace: space,
+                    bottomSpace: space,
+                    topSpace: space,
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          encompassNotInSize: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  encompass: {
+                    symbol: 'box',
+                    leftSpace: space,
+                    rightSpace: space,
+                    bottomSpace: space,
+                    topSpace: space,
+                  },
+                },
+                inSize: false,
+              },
+            },
+            scale: 1,
+          },
+          simpleStaticEncompass: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  encompass: {
+                    symbol: 'boxStatic',
+                    space: 0, // { left: 0 }
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          encompassWithAnnotation: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  encompass: {
+                    symbol: 'box',
+                    space,
+                    annotations: [{
+                      content: 'b',
+                      yPosition: 'top',
+                      yAlign: 'bottom',
+                      xPosition: 'right',
+                      xAlign: 'left',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          left: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  left: {
+                    symbol: 'left',
+                  },
+                  right: {
+                    symbol: 'right',
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          leftWithLeftAnnotation: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  left: {
+                    symbol: 'left',
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'left',
+                      yPosition: 'top',
+                      xAlign: 'right',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          leftWithRightAnnotation: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  left: {
+                    symbol: 'left',
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'right',
+                      yPosition: 'top',
+                      xAlign: 'left',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          leftWithNoAnnotationContent: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  left: {
+                    symbol: 'left',
+                    annotations: [{
+                      // content: 'b',
+                      xPosition: 'right',
+                      yPosition: 'top',
+                      xAlign: 'left',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          leftWithRightAnnotationOverContent: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  left: {
+                    symbol: 'left',
+                    annotationsOverContent: true,
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'right',
+                      yPosition: 'top',
+                      xAlign: 'left',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          rightWithRightAnnotation: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  right: {
+                    symbol: 'right',
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'right',
+                      yPosition: 'top',
+                      xAlign: 'left',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          rightWithLeftAnnotation: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  right: {
+                    symbol: 'right',
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'left',
+                      yPosition: 'top',
+                      xAlign: 'right',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          rightWithLeftAnnotationOverContent: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  right: {
+                    symbol: 'right',
+                    annotationsOverContent: true,
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'left',
+                      yPosition: 'top',
+                      xAlign: 'left',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          topWithTopAnnotation: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  top: {
+                    symbol: 'top',
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'center',
+                      yPosition: 'top',
+                      xAlign: 'center',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          topWithBottomAnnotation: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  top: {
+                    symbol: 'top',
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'center',
+                      yPosition: 'bottom',
+                      xAlign: 'center',
+                      yAlign: 'top',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          topWithBottomAnnotationOverContent: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  top: {
+                    symbol: 'top',
+                    annotationsOverContent: true,
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'center',
+                      yPosition: 'bottom',
+                      xAlign: 'center',
+                      yAlign: 'top',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          bottomWithBottomAnnotation: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  bottom: {
+                    symbol: 'bottom',
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'center',
+                      yPosition: 'bottom',
+                      xAlign: 'center',
+                      yAlign: 'top',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          bottomWithTopAnnotation: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  bottom: {
+                    symbol: 'bottom',
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'center',
+                      yPosition: 'top',
+                      xAlign: 'center',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          bottomWithTopAnnotationOverContent: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  bottom: {
+                    symbol: 'bottom',
+                    annotationsOverContent: true,
+                    annotations: [{
+                      content: 'b',
+                      xPosition: 'center',
+                      yPosition: 'top',
+                      xAlign: 'center',
+                      yAlign: 'bottom',
+                    }],
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          brac: {
+            content: {
+              brac: {
+                content: 'a',
+                left: 'left',
+                right: 'right',
+              },
+            },
+            scale: 1,
+          },
+          topBottom: {
+            content: {
+              ann: {
+                content: 'a',
+                glyphs: {
+                  top: {
+                    symbol: 'top',
+                  },
+                  bottom: {
+                    symbol: 'bottom',
+                  },
+                },
+              },
+            },
+            scale: 1,
+          },
+          twoAnnotations: {
+            content: {
+              ann: {
+                content: 'a',
+                annotations: [
+                  {
+                    content: 'b',
+                    xPosition: 'right',
+                    yPosition: 'top',
+                    xAlign: 'left',
+                    yAlign: 'bottom',
+                    offset: [0, 0],
+                    scale: 0.5,
+                  },
+                  {
+                    content: 'c',
+                    xPosition: 'right',
+                    yPosition: 'bottom',
+                    xAlign: 'left',
+                    yAlign: 'top',
+                    offset: [0, 0],
+                    scale: 0.5,
                   },
                 ],
               },
-            ),
-            'c',
-          ],
-          // With parameters
-          0: {
-            content: [
-              annotate(
-                {
-                  content: 'a',
-                  withAnnotations: [
-                    {
-                      annotation: {
-                        annotation: 'b',
-                        relativeToContent: ['right', 'bottom'],
-                        relativeToAnnotation: ['left', 'top'],
-                        scale: 1,
-                        xOffset: 0.01,
-                        yOffset: 0.01,
-                      },
-                    },
-                  ],
-                  inSize: false,
-                },
-              ),
-              'c',
-            ],
-            scale: 1,
-          },
-          // Method Array
-          1: {
-            content: [
-              annotate(
-                'a',
-                ['b', 'right', 'bottom', 'left', 'top', 1, 0.01, 0.01],
-                false,
-              ),
-              'c',
-            ],
+            },
             scale: 1,
           },
         });
+        diagram.elements = eqn;
+      },
+      parameterSteps: () => {
+        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn.addElements(elements);
+        eqn.addForms({
+          base: {
+            content: {
+              box: [
+                {
+                  annotate: {
+                    content: 'a',
+                    annotation: {
+                      content: 'b',
+                      yPosition: 'top',
+                      yAlign: 'bottom',
+                      xPosition: 'right',
+                      xAlign: 'left',
+                      offset: [0, 0],
+                      scale: 1,
+                      fullContentBounds: false,
+                    },
+                    inSize: true,
+                    space: 0,
+                    topSpace: null,
+                    rightSpace: null,
+                    bottomSpace: null,
+                    leftSpace: null,
+                    fullContentBounds: false,
+                    useFullBounds: false,
+                  },
+                },
+                'box1',
+              ],
+            },
+            scale: 1,
+          },
+          space: {
+            content: {
+              box: [
+                {
+                  annotate: {
+                    content: 'a',
+                    annotation: {
+                      content: 'b',
+                      yPosition: 'top',
+                      yAlign: 'bottom',
+                      xPosition: 'right',
+                      xAlign: 'left',
+                      offset: [0, 0],
+                      scale: 1,
+                      fullContentBounds: false,
+                    },
+                    inSize: true,
+                    space: 1,
+                    topSpace: null,
+                    rightSpace: null,
+                    bottomSpace: null,
+                    leftSpace: null,
+                    fullContentBounds: false,
+                    useFullBounds: false,
+                  },
+                },
+                'box1',
+              ],
+            },
+            scale: 1,
+          },
+          individualSpace: {
+            content: {
+              box: [
+                {
+                  annotate: {
+                    content: 'a',
+                    annotation: {
+                      content: 'b',
+                      yPosition: 'top',
+                      yAlign: 'bottom',
+                      xPosition: 'right',
+                      xAlign: 'left',
+                      offset: [0, 0],
+                      scale: 1,
+                      fullContentBounds: false,
+                    },
+                    inSize: true,
+                    space: 0,
+                    topSpace: 1,
+                    rightSpace: 2,
+                    bottomSpace: 3,
+                    leftSpace: 4,
+                    fullContentBounds: false,
+                    useFullBounds: false,
+                  },
+                },
+                'box1',
+              ],
+            },
+            scale: 1,
+          },
+          offset: {
+            content: {
+              box: [
+                {
+                  annotate: {
+                    content: 'a',
+                    annotation: {
+                      content: 'b',
+                      yPosition: 'top',
+                      yAlign: 'bottom',
+                      xPosition: 'right',
+                      xAlign: 'left',
+                      offset: [1, 1],
+                      scale: 1,
+                      fullContentBounds: false,
+                    },
+                    inSize: true,
+                    space: 0,
+                    topSpace: null,
+                    rightSpace: null,
+                    bottomSpace: null,
+                    leftSpace: null,
+                    fullContentBounds: false,
+                    useFullBounds: false,
+                  },
+                },
+                'box1',
+              ],
+            },
+            scale: 1,
+          },
+          scale: {
+            content: {
+              box: [
+                {
+                  annotate: {
+                    content: 'a',
+                    annotation: {
+                      content: 'b',
+                      yPosition: 'top',
+                      yAlign: 'bottom',
+                      xPosition: 'right',
+                      xAlign: 'left',
+                      offset: [0, 0],
+                      scale: 0.5,
+                      fullContentBounds: false,
+                    },
+                    inSize: true,
+                    space: 0,
+                    topSpace: null,
+                    rightSpace: null,
+                    bottomSpace: null,
+                    leftSpace: null,
+                    fullContentBounds: false,
+                    useFullBounds: false,
+                  },
+                },
+                'box1',
+              ],
+            },
+            scale: 1,
+          },
+        });
+        diagram.elements = eqn;
       },
     };
   });
-  test('Single', () => {
+  test('Simple Annotation', () => {
     functions.single();
-    const elems = [eqn._a, eqn._b, eqn._c];
-    const formsToTest = ['1', '2', '3', '4', '5', '6', '7', '8'];
-
-    eqn.showForm('0');
-    const positions0 = elems.map(elem => round(elem.transform.mat).slice());
-    formsToTest.forEach((f) => {
-      eqn.showForm(f);
-      const positions = elems.map(elem => round(elem.transform.mat).slice());
-      expect(positions0).toEqual(positions);
-    });
+    eqn.showForm('simpleAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    expect(round(a.top)).toBe(round(b.bottom));
+    expect(round(a.right)).toBe(round(b.left));
   });
-  test('Annotations', () => {
-    functions.annotations();
-    const elems = [eqn._a, eqn._b, eqn._c];
-    const formsToTest = ['1', '2', '3', '4', '5', '6', '7'];
-
-    eqn.showForm('0');
-    const positions0 = elems.map(elem => round(elem.transform.mat).slice());
-    formsToTest.forEach((f) => {
-      eqn.showForm(f);
-      const positions = elems.map(elem => round(elem.transform.mat).slice());
-      expect(positions0).toEqual(positions);
-    });
+  test('No Annotation Content', () => {
+    functions.single();
+    eqn.showForm('noAnnotationContent');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    expect(round(a.left)).toBe(0);
   });
-  test('Multiple Annotations', () => {
-    functions.multiple();
-    const elems = [eqn._a, eqn._b, eqn._c];
-    const formsToTest = ['1', '2'];
-
-    eqn.showForm('0');
-    const positions0 = elems.map(elem => round(elem.transform.mat).slice());
-    formsToTest.forEach((f) => {
-      eqn.showForm(f);
-      const positions = elems.map(elem => round(elem.transform.mat).slice());
-      expect(positions0).toEqual(positions);
-    });
+  test('Simple Left', () => {
+    functions.single();
+    eqn.showForm('left');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const left = eqn._left.getBoundingRect('diagram');
+    const right = eqn._right.getBoundingRect('diagram');
+    expect(round(left.left)).toBe(0);
+    expect(round(a.left)).toBe(round(left.right));
+    expect(round(right.left)).toBe(round(a.right));
   });
-  test('Nested Annotations', () => {
-    functions.nested();
-    const elems = [eqn._a, eqn._b, eqn._c];
-    const formsToTest = ['1', '2'];
-
-    eqn.showForm('0');
-    const positions0 = elems.map(elem => round(elem.transform.mat).slice());
-    formsToTest.forEach((f) => {
-      eqn.showForm(f);
-      const positions = elems.map(elem => round(elem.transform.mat).slice());
-      expect(positions0).toEqual(positions);
-    });
-
-    // Snapshot test on most complex layout
-    eqn.showForm('0');
-    tools.cleanUIDs(eqn);
-    expect(round(eqn._a.transform.mat)).toMatchSnapshot();
-    expect(round(eqn._b.transform.mat)).toMatchSnapshot();
-    expect(round(eqn._c.transform.mat)).toMatchSnapshot();
-    expect(round(eqn._d.transform.mat)).toMatchSnapshot();
+  test('Left with Left Annotation', () => {
+    functions.single();
+    eqn.showForm('leftWithLeftAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const left = eqn._left.getBoundingRect('diagram');
+    expect(round(b.left)).toBe(0);
+    expect(round(left.left)).toBe(round(b.right));
+    expect(round(a.left)).toBe(round(left.right));
+    expect(round(b.bottom)).toBe(round(left.top));
   });
-  test('Annotation Parameters', () => {
-    functions.parameters();
-    const elems = [eqn._a, eqn._b, eqn._c];
-    const withFormsToTest = ['1'];
-
-    // get without positions
-    eqn.showForm('without');
-    const withoutPos = elems.map(elem => round(elem.transform.mat).slice());
-
-    // with reference positions
-    eqn.showForm('0');
-    const withPos = elems.map(elem => round(elem.transform.mat).slice());
-
-    expect(withoutPos).not.toEqual(withPos);
-
-    withFormsToTest.forEach((f) => {
-      eqn.showForm(f);
-      const positions = elems.map(elem => round(elem.transform.mat).slice());
-      expect(withPos).toEqual(positions);
-    });
+  test('Left with Right Annotation', () => {
+    functions.single();
+    eqn.showForm('leftWithRightAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const left = eqn._left.getBoundingRect('diagram');
+    expect(round(left.left)).toBe(0);
+    expect(round(b.left)).toBe(round(left.right));
+    expect(round(a.left)).toBe(round(b.right));
+    expect(round(b.bottom)).toBe(round(left.top));
+  });
+  test('Left with No Annotation Content', () => {
+    functions.single();
+    eqn.showForm('leftWithRightAnnotationOverContent');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const left = eqn._left.getBoundingRect('diagram');
+    expect(round(left.left)).toBe(0);
+    expect(round(a.left)).toBe(round(left.right));
+  });
+  test('Left with Right Annotation Over Content', () => {
+    functions.single();
+    eqn.showForm('leftWithRightAnnotationOverContent');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const left = eqn._left.getBoundingRect('diagram');
+    expect(round(left.left)).toBe(0);
+    expect(round(b.left)).toBe(round(left.right));
+    expect(round(a.left)).toBe(round(left.right));
+    expect(round(b.bottom)).toBe(round(left.top));
+  });
+  test('Right with Right Annotation', () => {
+    functions.single();
+    eqn.showForm('rightWithRightAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const right = eqn._right.getBoundingRect('diagram');
+    expect(round(a.left)).toBe(0);
+    expect(round(right.left)).toBe(round(a.right));
+    expect(round(b.left)).toBe(round(right.right));
+    expect(round(b.bottom)).toBe(round(right.top));
+  });
+  test('Right with Left Annotation', () => {
+    functions.single();
+    eqn.showForm('rightWithLeftAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const right = eqn._right.getBoundingRect('diagram');
+    expect(round(a.left)).toBe(0);
+    expect(round(b.left)).toBe(round(a.right));
+    expect(round(right.left)).toBe(round(b.right));
+    expect(round(b.bottom)).toBe(round(right.top));
+  });
+  test('Right with Left Annotation Over Content', () => {
+    functions.single();
+    eqn.showForm('rightWithLeftAnnotationOverContent');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const right = eqn._right.getBoundingRect('diagram');
+    expect(round(a.left)).toBe(0);
+    expect(round(b.left)).toBe(round(a.right));
+    expect(round(right.left)).toBe(round(a.right));
+    expect(round(b.bottom)).toBe(round(right.top));
+  });
+  test('Top with Top Annotation', () => {
+    functions.single();
+    eqn.showForm('topWithTopAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const top = eqn._top.getBoundingRect('diagram');
+    expect(round(top.bottom)).toBe(round(a.top));
+    expect(round(b.bottom)).toBe(round(top.top));
+    expect(round(b.left)).toBe(round(top.left + top.width / 2 - b.width / 2));
+  });
+  test('Top with Bottom Annotation', () => {
+    functions.single();
+    eqn.showForm('topWithBottomAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const top = eqn._top.getBoundingRect('diagram');
+    expect(round(b.bottom)).toBe(round(a.top));
+    expect(round(top.bottom)).toBe(round(b.top));
+    expect(round(b.left)).toBe(round(top.left + top.width / 2 - b.width / 2));
+  });
+  test('Top with Bottom Annotation Over Content', () => {
+    functions.single();
+    eqn.showForm('topWithBottomAnnotationOverContent');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const top = eqn._top.getBoundingRect('diagram');
+    expect(round(top.bottom)).toBe(round(a.top));
+    expect(round(b.top)).toBe(round(top.bottom));
+    expect(round(b.left)).toBe(round(top.left + top.width / 2 - b.width / 2));
+  });
+  test('Bottom with Bottom Annotation', () => {
+    functions.single();
+    eqn.showForm('bottomWithBottomAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const bottom = eqn._bottom.getBoundingRect('diagram');
+    expect(round(bottom.top)).toBe(round(a.bottom));
+    expect(round(b.top)).toBe(round(bottom.bottom));
+    expect(round(b.left)).toBe(round(bottom.left + bottom.width / 2 - b.width / 2));
+  });
+  test('Bottom with Top Annotation', () => {
+    functions.single();
+    eqn.showForm('bottomWithTopAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const bottom = eqn._bottom.getBoundingRect('diagram');
+    expect(round(b.top)).toBe(round(a.bottom));
+    expect(round(bottom.top)).toBe(round(b.bottom));
+    expect(round(b.left)).toBe(round(bottom.left + bottom.width / 2 - b.width / 2));
+  });
+  test('Bottom with Top Annotation Over Content', () => {
+    functions.single();
+    eqn.showForm('bottomWithTopAnnotationOverContent');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const bottom = eqn._bottom.getBoundingRect('diagram');
+    expect(round(b.bottom)).toBe(round(bottom.top));
+    expect(round(bottom.top)).toBe(round(a.bottom));
+    expect(round(b.left)).toBe(round(bottom.left + bottom.width / 2 - b.width / 2));
+  });
+  test('Bracket Annotation', () => {
+    functions.single();
+    eqn.showForm('brac');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const left = eqn._left.getBoundingRect('diagram');
+    const right = eqn._right.getBoundingRect('diagram');
+    expect(round(left.left)).toBe(0.03);
+    expect(round(a.left)).toBe(round(left.right + 0.03));
+    expect(round(right.left)).toBe(round(a.right + 0.03));
+  });
+  test('Simple Top Bottom', () => {
+    functions.single();
+    eqn.showForm('topBottom');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const top = eqn._top.getBoundingRect('diagram');
+    const bottom = eqn._bottom.getBoundingRect('diagram');
+    // console.log(a)
+    // console.log(bottom)
+    expect(round(top.bottom)).toBe(a.top);
+    expect(round(bottom.top)).toBe(round(a.bottom));
+  });
+  test('Multi Annotation', () => {
+    functions.single();
+    eqn.showForm('multiAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const c = eqn._c.getBoundingRect('diagram');
+    expect(round(a.bottom)).toBe(round(b.top));
+    expect(round(b.bottom)).toBe(round(c.bottom));
+    expect(round(a.left)).toBe(round((b.width + c.width) / 2 - a.width / 2));
+  });
+  test('Simple Encompass', () => {
+    functions.single();
+    eqn.showForm('simpleEncompass');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const box = eqn._box.getBoundingRect('diagram');
+    expect(round(box.left)).toBe(round(a.left - lineWidth));
+    expect(round(box.right)).toBe(round(a.right + lineWidth));
+    expect(round(box.bottom)).toBe(round(a.bottom - lineWidth));
+    expect(round(box.top)).toBe(round(a.top + lineWidth));
+  });
+  test('Simple Encompass With Space', () => {
+    functions.single();
+    eqn.showForm('simpleEncompassWithSpace');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const box = eqn._box.getBoundingRect('diagram');
+    expect(round(box.left)).toBe(round(a.left - lineWidth - space));
+    expect(round(box.right)).toBe(round(a.right + lineWidth + space));
+    expect(round(box.bottom)).toBe(round(a.bottom - lineWidth - space));
+    expect(round(box.top)).toBe(round(a.top + lineWidth + space));
+    expect(round(box.left)).toBe(0);
+  });
+  test('Encompass Not InSize', () => {
+    functions.single();
+    eqn.showForm('encompassNotInSize');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const box = eqn._box.getBoundingRect('diagram');
+    expect(round(box.left)).toBe(round(a.left - lineWidth - space));
+    expect(round(box.right)).toBe(round(a.right + lineWidth + space));
+    expect(round(box.bottom)).toBe(round(a.bottom - lineWidth - space));
+    expect(round(box.top)).toBe(round(a.top + lineWidth + space));
+    expect(round(box.left)).toBe(-lineWidth - space);
+  });
+  test('Simple Static Encompass', () => {
+    functions.single();
+    eqn.showForm('simpleStaticEncompass');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const box = eqn._boxStatic.getBoundingRect('diagram');
+    const heightLineWidthRatio = lineWidth / staticHeight;
+    const widthLineWidthRatio = lineWidth / staticWidth;
+    const expectedWidth = a.width / (1 - 2 * widthLineWidthRatio);
+    const expectedHeight = a.height / (1 - 2 * heightLineWidthRatio);
+    const horiztonalLineWidth = widthLineWidthRatio * expectedWidth;
+    const verticalLineHeight = heightLineWidthRatio * expectedHeight;
+    expect(round(box.left)).toBe(round(a.left - horiztonalLineWidth));
+    expect(round(box.right)).toBe(round(a.right + horiztonalLineWidth));
+    expect(round(box.bottom)).toBe(round(a.bottom - verticalLineHeight));
+    expect(round(box.top)).toBe(round(a.top + verticalLineHeight));
+  });
+  test('Annotated Encompass', () => {
+    functions.single();
+    eqn.showForm('encompassWithAnnotation');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const box = eqn._box.getBoundingRect('diagram');
+    expect(round(box.left)).toBe(round(a.left - space - lineWidth));
+    expect(round(box.bottom)).toBe(round(a.bottom - space - lineWidth));
+    expect(round(box.right)).toBe(round(a.right + space + lineWidth));
+    expect(round(box.top)).toBe(round(a.top + space + lineWidth));
+    expect(round(b.left)).toBe(round(box.right));
+    expect(round(b.bottom)).toBe(round(box.top));
+  });
+  test('Two Annotations', () => {
+    functions.single();
+    eqn.showForm('twoAnnotations');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const c = eqn._c.getBoundingRect('diagram');
+    expect(round(b.left)).toBe(round(a.right));
+    expect(round(b.bottom)).toBe(round(a.top));
+    expect(round(c.left)).toBe(round(a.right));
+    expect(round(c.top)).toBe(round(a.bottom));
+  });
+  test('Nested', () => {
+    functions.single();
+    eqn.showForm('nested');
+    diagram.setFirstTransform();
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
+    const c = eqn._c.getBoundingRect('diagram');
+    expect(round(b.left)).toBe(round(a.right));
+    expect(round(b.bottom)).toBe(round(a.top));
+    expect(round(c.left)).toBe(round(b.right));
+    expect(round(c.bottom)).toBe(round(b.top));
   });
   describe('Parameter Steps', () => {
-    let basePos;
+    let baseB;
+    let allSpace;
+    let leftSpace;
+    let topSpace;
+    let bottomSpace;
+    let rightSpace;
+    let offset;
+    let scale;
     beforeEach(() => {
       functions.parameterSteps();
       eqn.showForm('base');
-      basePos = eqn._b.getPosition();
+      diagram.setFirstTransform();
+      baseB = eqn._b.getBoundingRect('diagram');
+      allSpace = 1;
+      topSpace = 1;
+      rightSpace = 2;
+      bottomSpace = 3;
+      leftSpace = 4;
+      offset = 1;
+      scale = 0.5;
     });
-    test('OffsetXY', () => {
-      eqn.showForm('offsetXY');
-      const newPos = eqn._b.getPosition();
-      expect(round(basePos.x + 0.01)).toBe(round(newPos.x));
-      expect(round(basePos.y + 0.01)).toBe(round(newPos.y));
-    });
-    test('contentLeftTop', () => {
-      eqn.showForm('contentLeftTop');
-      const newPos = eqn._b.getPosition();
-      const bounds = eqn._a.getBoundingRect('diagram');
-      expect(round(basePos.x - bounds.width)).toBe(round(newPos.x));
-      expect(round(basePos.y + bounds.height)).toBe(round(newPos.y));
-    });
-    test('contentCenterMiddle', () => {
-      eqn.showForm('contentCenterMiddle');
-      const newPos = eqn._b.getPosition();
-      const bounds = eqn._a.getBoundingRect('diagram');
-      expect(round(basePos.x - bounds.width / 2)).toBe(round(newPos.x));
-      expect(round(basePos.y + bounds.height / 2)).toBe(round(newPos.y));
-    });
-    test('content0909', () => {
-      eqn.showForm('content0909');
-      const newPos = eqn._b.getPosition();
-      const bounds = eqn._a.getBoundingRect('diagram');
-      expect(round(basePos.x - bounds.width * 0.1)).toBe(round(newPos.x));
-      expect(round(basePos.y + bounds.height * 0.9)).toBe(round(newPos.y));
-    });
-    test('annotationRightBottom', () => {
-      eqn.showForm('annotationRightBottom');
-      const newPos = eqn._b.getPosition();
-      const bounds = eqn._b.getBoundingRect('diagram');
-      expect(round(basePos.x - bounds.width)).toBe(round(newPos.x));
-      expect(round(basePos.y + bounds.height)).toBe(round(newPos.y));
-    });
-    test('annotationCenterMiddle', () => {
-      eqn.showForm('annotationCenterMiddle');
-      const newPos = eqn._b.getPosition();
-      const bounds = eqn._b.getBoundingRect('diagram');
-      expect(round(basePos.x - bounds.width * 0.5)).toBe(round(newPos.x));
-      expect(round(basePos.y + bounds.height * 0.5)).toBe(round(newPos.y));
-    });
-    test('annotation0909', () => {
-      eqn.showForm('annotation0909');
-      const newPos = eqn._b.getPosition();
-      const bounds = eqn._b.getBoundingRect('diagram');
-      expect(round(basePos.x - bounds.width * 0.9)).toBe(round(newPos.x));
-      expect(round(basePos.y + bounds.height * 0.1)).toBe(round(newPos.y));
-    });
-    test('inSize', () => {
-      const baseC = eqn._c.getPosition();
-      eqn.showForm('inSize');
-      const newC = eqn._c.getPosition();
-      const bounds = eqn._b.getBoundingRect('diagram');
-      expect(round(baseC.x - bounds.width)).toBe(round(newC.x));
-      expect(round(baseC.y)).toBe(round(newC.y));
-    });
-    test('scaleAnnotation', () => {
-      const baseB = eqn._b.getBoundingRect('diagram');
-      eqn.showForm('scaleAnnotation');
+    test('space', () => {
+      eqn.showForm('space');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
       const newB = eqn._b.getBoundingRect('diagram');
-      expect(round(baseB.width / 2)).toBe(round(newB.width));
-      expect(round(baseB.height / 2)).toBe(round(newB.height));
+      const newBox = eqn._box1.getBoundingRect('diagram');
+      expect(round(newB.left)).toBe(round(newA.right));
+      expect(round(newB.bottom)).toBe(round(newA.top));
+      expect(round(newBox.width)).toBe(round(newA.width + newB.width + allSpace * 2));
+      expect(round(newBox.height)).toBe(round(newA.height + newB.height + allSpace * 2));
+      expect(round(newBox.bottom)).toBe(round(newA.bottom - allSpace));
+      expect(round(newBox.top)).toBe(round(newB.top + allSpace));
+    });
+    test('Individual Space', () => {
+      eqn.showForm('individualSpace');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      const newBox = eqn._box1.getBoundingRect('diagram');
+      expect(round(newA.left)).toBe(round(newBox.left + leftSpace));
+      expect(round(newA.bottom)).toBe(round(newBox.bottom + bottomSpace));
+      expect(round(newB.left)).toBe(round(newA.right));
+      expect(round(newB.bottom)).toBe(round(newA.top));
+      expect(round(newBox.right)).toBe(round(newB.right + rightSpace));
+      expect(round(newBox.top)).toBe(round(newB.top + topSpace));
+    });
+    test('Annotation Offset', () => {
+      eqn.showForm('offset');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      expect(round(newB.left)).toBe(round(newA.right + offset));
+      expect(round(newB.bottom)).toBe(round(newA.top + offset));
+    });
+    test('Annotation Scale', () => {
+      eqn.showForm('scale');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      expect(round(newB.left)).toBe(round(newA.right));
+      expect(round(newB.bottom)).toBe(round(newA.top));
+      expect(round(newB.width)).toBe(round(baseB.width * scale));
+      expect(round(newB.height)).toBe(round(baseB.height * scale));
     });
   });
 });

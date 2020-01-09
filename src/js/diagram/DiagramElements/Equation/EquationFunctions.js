@@ -597,48 +597,6 @@ export type TypeAnnotationObject = {
   contentScale?: number,
 };
 
-
-
-
-
-
-
-// export type TypeAnnotationObjectLegacy = {
-//   annotation: TypeEquationPhrase,
-//   relativeToContent: [
-//     'left' | 'right' | 'center' | number,
-//     'bottom' | 'top' | 'middle' | 'baseline' | number,
-//   ],
-//   relativeToAnnotation: [
-//     'left' | 'right' | 'center' | number,
-//     'bottom' | 'top' | 'middle' | 'baseline' | number,
-//   ],
-//   scale?: number,
-//   xOffset?: number,
-//   yOffset?: number,
-// };
-// export type TypeAnnotationArray = [
-//   TypeEquationPhrase,
-//   'left' | 'right' | 'center' | number,
-//   'bottom' | 'top' | 'middle' | 'baseline' | number,
-//   'left' | 'right' | 'center' | number,
-//   'bottom' | 'top' | 'middle' | 'baseline' | number,
-//   ?number,
-//   ?number,
-//   ?number,
-// ];
-// export type TypeAnnotateObject = {
-//   content: TypeEquationPhrase,                              // $FlowFixMe
-//   withAnnotations: Array<TypeEquationPhrase | AnnotationInformation>
-//                   | AnnotationInformation | TypeEquationPhrase,
-//   inSize?: boolean,
-// };
-// export type TypeAnnotateArray = [
-//   TypeEquationPhrase,
-//   Array<TypeEquationPhrase>,
-//   ?boolean,
-// ];
-
 // There are lots of FlowFixMes in this file. This is not perfect, but
 // haven't been able to come up with a quick work around. The problem statement
 // is each function can accept as arguements either a full object definition
@@ -716,7 +674,7 @@ export class EquationFunctions {
     }
     if (Array.isArray(content)) {
       let elementArray = [];
-      content.forEach((c) => {       // $FlowFixMe
+      content.forEach((c) => {
         const result = this.parseContent(c);
         if (Array.isArray(result)) {
           elementArray = [...elementArray, ...result];
@@ -774,7 +732,7 @@ export class EquationFunctions {
     if (name === 'supSub') { return this.supSub(params); }    // $FlowFixMe
     if (name === 'topBar') { return this.topBar(params); }    // $FlowFixMe
     if (name === 'bottomBar') { return this.bottomBar(params); } // $FlowFixMe
-    if (name === 'annotate') { return this.ann(params); }  // $FlowFixMe
+    if (name === 'annotate') { return this.annotate(params); }  // $FlowFixMe
     // if (name === 'annotation') { return this.annotation(params); } // $FlowFixMe
     if (name === 'bottomComment') { return this.bottomComment(params); } // $FlowFixMe
     if (name === 'topComment') { return this.topComment(params); } // $FlowFixMe
@@ -1071,6 +1029,9 @@ export class EquationFunctions {
     });
   }
 
+  annotate(optionsIn: TypeAnnotationObject) {
+    return this.ann(optionsIn);
+  }
 
   ann(optionsIn: TypeAnnotationObject) {
     const defaultOptions = {
