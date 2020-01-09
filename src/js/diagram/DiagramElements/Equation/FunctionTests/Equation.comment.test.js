@@ -173,6 +173,28 @@ describe('Equation Functions - Bar', () => {
           2: e.bottomComment(['a', 'b', 'bar', 0.1, 0.2, 2]),
         });
       },
+      bottomCommentNoGlyph: () => {
+        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        const e = eqn.eqn.functions;
+        const bottomComment = e.bottomComment.bind(e);
+        eqn.addElements(elements);
+        eqn.addForms({
+          // without
+          //   // Method Object
+          without: bottomComment('a', 'b'),
+          // With parameters
+          0: {
+            bottomComment: {
+              content: 'a',
+              comment: 'b',
+            },
+          },
+          // Method Array
+          1: { bottomComment: ['a', 'b'] },
+          // Function with parameters
+          2: e.bottomComment(['a', 'b']),
+        });
+      },
       nestedTopComment: () => {
         eqn = new EquationNew(diagram.shapes, { color: color1 });
         diagram.elements = eqn;
@@ -286,6 +308,27 @@ describe('Equation Functions - Bar', () => {
   });
   test('Top Comment Parameters', () => {
     functions.topCommentParameters();
+    const elems = [eqn._a, eqn._b, eqn._bar];
+    const withFormsToTest = ['1', '2'];
+
+    // get without positions
+    eqn.showForm('without');
+    const withoutPos = elems.map(elem => round(elem.transform.mat).slice());
+
+    // with reference positions
+    eqn.showForm('0');
+    const withPos = elems.map(elem => round(elem.transform.mat).slice());
+
+    expect(withoutPos).not.toEqual(withPos);
+
+    withFormsToTest.forEach((f) => {
+      eqn.showForm(f);
+      const positions = elems.map(elem => round(elem.transform.mat).slice());
+      expect(withPos).toEqual(positions);
+    });
+  });
+  test('Bottom Comment without Glyph', () => {
+    functions.bottomCommentNoGlyph();
     const elems = [eqn._a, eqn._b, eqn._bar];
     const withFormsToTest = ['1', '2'];
 

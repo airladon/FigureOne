@@ -185,36 +185,37 @@ export type TypeBracketArray = [
   ?boolean,
 ];
 
-
 export type TypeRootObject = {
+  symbol: string;
   content: TypeEquationPhrase;
+  inSize?: boolean;
+  space?: number;
+  topSpace?: number;
+  rightSpace?: number;
+  bottomSpace?: number;
+  leftSpace?: number; 
   root: TypeEquationPhrase;
-  symbol?: string;
-  contentSpace?: ?({
-      left: ?number,
-      right: ?number,
-      top: ?number,
-      bottom: ?number,
-    } | Point | [number, number] | number),
-  rootSpace?: number,
+  rootOffset?: number,
   rootScale?: number,
 };
 export type TypeRootArray = [
-  TypeEquationPhrase,
   string,
+  TypeEquationPhrase,
+  ?boolean,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
   ?TypeEquationPhrase,
-  // ?number,    // line width
-  // ?number,    // start width
-  // ?number,    // start height
-  ?({
-      left: ?number,
-      right: ?number,
-      top: ?number,
-      bottom: ?number,
-    } | Point | [number, number] | number),    // content space
-  ?number,    // root space
-  ?number,    // root scale
+  ?number,
+  ?number,
 ];
+
+
+
+
+
 export type TypeStrikeObject = {
   content: TypeEquationPhrase;
   symbol: string;
@@ -274,7 +275,6 @@ export type TypeBarArray = [
   ?number,
   ?'left' | 'right' | 'top' | 'bottom',
 ]
-
 
 
 export type TypeIntegralObject = {
@@ -1307,17 +1307,19 @@ export class EquationFunctions {
     let rootScale;
     let rootOffset;
     let inSize = true;
+    let fullContentBounds;
+    let useFullBounds;
     if (Array.isArray(optionsOrArray)) {
       [                                                            // $FlowFixMe
-        content, symbol, inSize,                                   // $FlowFixMe
+        symbol, content, inSize,                                   // $FlowFixMe
         space, topSpace, rightSpace, bottomSpace, leftSpace,       // $FlowFixMe
-        root, rootOffset, rootScale,
+        root, rootOffset, rootScale, fullContentBounds, useFullBounds,
       ] = optionsOrArray;
     } else {
       ({                                                    // $FlowFixMe
-        content, symbol, inSize,                                   // $FlowFixMe
+        symbol, content, inSize,                                   // $FlowFixMe
         space, topSpace, rightSpace, bottomSpace, leftSpace,       // $FlowFixMe
-        root, rootOffset, rootScale,
+        root, rootOffset, rootScale, fullContentBounds, useFullBounds,
       } = optionsOrArray);
     }
 
@@ -1326,6 +1328,8 @@ export class EquationFunctions {
       rootScale: 0.6,
       rootOffset: [0, 0.06],
       inSize: true,
+      fullContentBounds: false,
+      useFullBounds: false,
     };
     const optionsIn = {
       leftSpace,
@@ -1336,6 +1340,8 @@ export class EquationFunctions {
       rootScale,
       rootOffset,
       inSize,
+      fullContentBounds,
+      useFullBounds,
     };
     const options = joinObjects(defaultOptions, optionsIn);
     options.rootOffset = parsePoint(options.rootOffset, new Point(0, 0));
@@ -1355,6 +1361,8 @@ export class EquationFunctions {
     return this.ann({
       content,
       inSize,
+      useFullBounds: options.useFullBounds,
+      fullContentBounds: options.fullContentBounds,
       glyphs: {
         encompass: {
           symbol,
@@ -2190,20 +2198,28 @@ export class EquationFunctions {
       contentSpaceToUse, commentSpaceToUse, scaleToUse,
       inSize,
     ] = this.processComment(...args);
+    const annotations = [{
+      content: comment,
+      xPosition: 'center',
+      yPosition: 'top',
+      xAlign: 'center',
+      yAlign: 'bottom',
+      scale: scaleToUse,
+      offset: [0, commentSpaceToUse],
+    }];
+    if (symbol === '' || symbol == null) {
+      return this.ann({
+        content,
+        annotations,
+        inSize,
+      });
+    }
     return this.ann({
       content,
       glyphs: {
         top: {
           symbol,
-          annotations: [{
-            content: comment,
-            xPosition: 'center',
-            yPosition: 'top',
-            xAlign: 'center',
-            yAlign: 'bottom',
-            scale: scaleToUse,
-            offset: [0, commentSpaceToUse],
-          }],
+          annotations,
           space: contentSpaceToUse,
         },
       },
@@ -2219,20 +2235,30 @@ export class EquationFunctions {
       inSize,
     ] = this.processComment(...args);
 
+    const annotations = [{
+      content: comment,
+      xPosition: 'center',
+      yPosition: 'bottom',
+      xAlign: 'center',
+      yAlign: 'top',
+      scale: scaleToUse,
+      offset: [0, -commentSpaceToUse],
+    }];
+
+    if (symbol === '' || symbol == null) {
+      return this.ann({
+        content,
+        annotations,
+        inSize,
+      });
+    }
+
     return this.ann({
       content,
       glyphs: {
         bottom: {
           symbol,
-          annotations: [{
-            content: comment,
-            xPosition: 'center',
-            yPosition: 'bottom',
-            xAlign: 'center',
-            yAlign: 'top',
-            scale: scaleToUse,
-            offset: [0, -commentSpaceToUse],
-          }],
+          annotations,
           space: contentSpaceToUse,
         },
       },

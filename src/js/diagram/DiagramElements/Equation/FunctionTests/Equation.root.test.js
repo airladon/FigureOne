@@ -107,12 +107,12 @@ describe('Equation Functions - Root', () => {
           },
           // Method Array
           2: {
-            root: ['a', 'root3', true, 0.1, 0.1, 0.1, 0.1, 0.1, 'b', [0, 0], 1],
+            root: ['root3', 'a', true, 0.1, 0.1, 0.1, 0.1, 0.1, 'b', [0, 0], 1],
           },
           // Function with parameters
-          3: e.root(['a', 'root3', true, 0.1, 0.1, 0.1, 0.1, 0.1, 'b', [0, 0], 1]),
+          3: e.root(['root3', 'a', true, 0.1, 0.1, 0.1, 0.1, 0.1, 'b', [0, 0], 1]),
           // Bound Function with parameters
-          4: root(['a', 'root3', true, 0.1, 0.1, 0.1, 0.1, 0.1, 'b', [0, 0], 1]),
+          4: root(['root3', 'a', true, 0.1, 0.1, 0.1, 0.1, 0.1, 'b', [0, 0], 1]),
           // Bound Function with Object
           5: root({
             content: 'a',
@@ -189,43 +189,43 @@ describe('Equation Functions - Root', () => {
           },
           space: {
             content: {
-              root: ['a', 'root3', true, 0.2, null, null, null, null, 'b', [0, 0], 1],
+              root: ['root3', 'a', true, 0.2, null, null, null, null, 'b', [0, 0], 1],
             },
             scale: 1,
           },
           topSpace: {
             content: {
-              root: ['a', 'root3', true, 0.1, 0.2, 0.1, 0.1, 0.1, 'b', [0, 0], 1],
+              root: ['root3', 'a', true, 0.1, 0.2, 0.1, 0.1, 0.1, 'b', [0, 0], 1],
             },
             scale: 1,
           },
           rightSpace: {
             content: {
-              root: ['a', 'root3', true, 0.1, 0.1, 0.2, 0.1, 0.1, 'b', [0, 0], 1],
+              root: ['root3', 'a', true, 0.1, 0.1, 0.2, 0.1, 0.1, 'b', [0, 0], 1],
             },
             scale: 1,
           },
           bottomSpace: {
             content: {
-              root: ['a', 'root3', true, 0.1, 0.1, 0.1, 0.2, 0.1, 'b', [0, 0], 1],
+              root: ['root3', 'a', true, 0.1, 0.1, 0.1, 0.2, 0.1, 'b', [0, 0], 1],
             },
             scale: 1,
           },
           leftSpace: {
             content: {
-              root: ['a', 'root3', true, 0.1, 0.1, 0.1, 0.1, 0.2, 'b', [0, 0], 1],
+              root: ['root3', 'a', true, 0.1, 0.1, 0.1, 0.1, 0.2, 'b', [0, 0], 1],
             },
             scale: 1,
           },
           rootOffset: {
             content: {
-              root: ['a', 'root3', true, 0.1, 0.1, 0.1, 0.1, 0.1, 'b', [0.1, 0.1], 1],
+              root: ['root3', 'a', true, 0.1, 0.1, 0.1, 0.1, 0.1, 'b', [0.1, 0.1], 1],
             },
             scale: 1,
           },
           rootScale: {
             content: {
-              root: ['a', 'root3', true, 0.1, 0.1, 0.1, 0.1, 0.1, 'b', [0, 0], 0.5],
+              root: ['root3', 'a', true, 0.1, 0.1, 0.1, 0.1, 0.1, 'b', [0, 0], 0.5],
             },
             scale: 1,
           },

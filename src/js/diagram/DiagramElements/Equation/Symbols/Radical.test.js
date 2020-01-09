@@ -62,8 +62,8 @@ describe('Equation Symbols - Radical', () => {
     };
     eqn = new EquationNew(diagram.shapes, { color: color1 });
     eqn.addElements(elements);
-    eqn.addForms({ default: { content: { root: ['a', 'rad', true, space] }, scale: 1 } });
-    eqn.addForms({ notProportional: { content: { root: ['a', 'rad1', true, space] }, scale: 1 } });
+    eqn.addForms({ default: { content: { root: ['rad', 'a', true, space] }, scale: 1 } });
+    eqn.addForms({ notProportional: { content: { root: ['rad1', 'a', true, space] }, scale: 1 } });
     diagram.elements = eqn;
   });
   test('Default', () => {
