@@ -28,31 +28,68 @@ export type TypeAnnotation = {
   content: ElementInterface,
   inSize: boolean,
   fullContentBounds: boolean,
+  reference?: string,
+};
+
+export type TypeEncompassGlyph = {
+  symbol?: string,
+  annotations?: Array<TypeAnnotation>,
+  space: number;
+  topSpace?: number;
+  leftSpace?: number;
+  bottomSpace?: number;
+  rightSpace?: number;
+};
+export type TypeLeftRightGlyph = {
+  symbol?: string,
+  annotations?: Array<TypeAnnotation>,
+  space: number;
+  overhang: number,
+  topSpace?: number;
+  bottomSpace?: number;
+  minContentHeight?: number,
+  minContentDescent?: number;
+  minContentAscent?: number,
+  descent?: number,
+  height?: number,
+  yOffset: number,
+  annotationsOverContent?: boolean,
+};
+
+export type TypeTopBottomGlyph = {
+  symbol?: string,
+  annotations?: Array<TypeAnnotation>,
+  space: number;
+  overhang: number,
+  width?: number,
+  leftSpace?: number,
+  rightSpace?: number,
+  xOffset: number,
+  annotationsOverContent?: boolean,
 };
 
 export type TypeAnnotatedGlyph = {
   glyph: SymbolNew,
-  // glyph: ElementInterface,
   annotations: Array<TypeAnnotation>,
   width: number,
   height: number,
   location: Point,
 };
 
-export type TypeEncompassGlyph = {
-  space: number,
-  leftSpace: number,
-  bottomSpace: number,
-  topSpace: number,
-  rightSpace: number,
-} & TypeAnnotatedGlyph;
+// export type TypeEncompassGlyph = {
+//   space: number,
+//   leftSpace: number,
+//   bottomSpace: number,
+//   topSpace: number,
+//   rightSpace: number,
+// } & TypeAnnotatedGlyph;
 
 export type TypeGlyphs = {
-  left?: TypeAnnotatedGlyph;
-  right?: TypeAnnotatedGlyph;
-  top?: TypeAnnotatedGlyph;
-  bottom?: TypeAnnotatedGlyph;
-  encompass?: TypeEncompassGlyph;
+  left?: TypeAnnotatedGlyph & TypeLeftRightGlyph;
+  right?: TypeAnnotatedGlyph & TypeLeftRightGlyph;
+  top?: TypeAnnotatedGlyph & TypeTopBottomGlyph;
+  bottom?: TypeAnnotatedGlyph & TypeTopBottomGlyph;
+  encompass?: TypeAnnotatedGlyph & TypeEncompassGlyph;
 };
 
 // export type TypeGlyphsIn = {
@@ -404,10 +441,11 @@ export default class BaseAnnotationFunction implements ElementInterface {
       leftSpace, rightSpace, bottomSpace, topSpace, space,
     } = this.glyphs.encompass;
     const glyph = this.glyphs.encompass;
-    const left = leftSpace != null ? leftSpace : space;
-    const right = rightSpace != null ? rightSpace : space;
-    const top = topSpace != null ? topSpace : space;
-    const bottom = bottomSpace != null ? bottomSpace : space;
+    const spaceToUse = space != null ? space : 0;
+    const left = leftSpace != null ? leftSpace : spaceToUse;
+    const right = rightSpace != null ? rightSpace : spaceToUse;
+    const top = topSpace != null ? topSpace : spaceToUse;
+    const bottom = bottomSpace != null ? bottomSpace : spaceToUse;
     const contentBounds = new Bounds();
     contentBounds.copyFrom(contentBoundsIn);
     contentBounds.offset(top * scale, right * scale, -bottom * scale, -left * scale);
@@ -506,7 +544,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     const glyphBounds = glyph.glyph.getBounds(
       glyph.glyph.custom.options,
       contentX,
-      glyphBottom + yOffset,
+      glyphBottom + yOffset,  // $FlowFixMe
       null,
       glyphHeight,
       glyphName,
@@ -588,7 +626,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     }
 
     if (leftSpace != null || rightSpace != null) {
-      glyphLength = (leftSpace * scale || 0) + contentBounds.width + (rightSpace * scale || 0);
+      glyphLength = (leftSpace || 0) * scale + contentBounds.width + (rightSpace || 0) * scale;
       if (leftSpace != null) {
         contentX = contentBounds.left - leftSpace * scale;
       }
@@ -610,7 +648,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
       glyph.glyph.custom.options,
       contentX + xOffset,
       contentY,
-      glyphLength,
+      glyphLength,  // $FlowFixMe
       null,
       glyphName,
     );
@@ -684,8 +722,10 @@ export default class BaseAnnotationFunction implements ElementInterface {
     );
     let xPos;
     let yPos;
+    // $FlowFixMe
     if (contentToAnnotateBounds.annotations != null
       && annotation.reference != null) {
+      // $FlowFixMe
       const reference = contentToAnnotateBounds.annotations[annotation.reference];
       if (reference.xPosition != null) {
         ({ xPosition } = reference);
@@ -758,7 +798,10 @@ export default class BaseAnnotationFunction implements ElementInterface {
     xPos += offsetToUse.x * scale;
     yPos += offsetToUse.y * scale;
 
-    const locationOffset = (new Point(xPos, yPos)).sub(contentBounds.left, contentBounds.bottom + contentBounds.descent);
+    const locationOffset = (new Point(xPos, yPos)).sub(
+      contentBounds.left,
+      contentBounds.bottom + contentBounds.descent,
+    );
     content.offsetLocation(locationOffset);
   }
 
