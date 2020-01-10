@@ -592,6 +592,7 @@ export class EquationNew extends DiagramElementCollection {
       }
       return false;
     };
+    // eslint-disable-next-line max-len
     const isFormElements = form => (form instanceof Elements || form instanceof BaseAnnotationFunction);
     const isFormFullObject = (form) => {
       if (isFormString(form) || isFormArray(form)
