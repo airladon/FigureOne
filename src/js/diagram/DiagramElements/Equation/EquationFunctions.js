@@ -1362,6 +1362,7 @@ export class EquationFunctions {
         content, superscript, scale, offset, inSize,
       } = optionsOrArray);
     }
+    // $FlowFixMe
     return this.supSub({          // $FlowFixMe
       content,                    // $FlowFixMe
       superscript,                // $FlowFixMe
@@ -1386,6 +1387,7 @@ export class EquationFunctions {
         content, subscript, scale, offset, inSize,
       } = optionsOrArray);
     }
+    // $FlowFixMe
     return this.supSub({          // $FlowFixMe
       content,                    // $FlowFixMe
       subscript,                  // $FlowFixMe
@@ -1735,7 +1737,7 @@ export class EquationFunctions {
           height: options.height,
           yOffset: options.yOffset,
           annotationsOverContent: options.limitsAroundContent,
-          annotations: [
+          annotations: [  // $ FlowFixMe
             {
               content: from,
               xPosition: options.fromXPosition,
@@ -2176,3 +2178,4 @@ export class EquationFunctions {
       },
     });
   }
+}
