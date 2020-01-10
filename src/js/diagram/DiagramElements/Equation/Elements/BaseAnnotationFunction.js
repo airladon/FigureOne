@@ -8,13 +8,15 @@ import Bounds from './Bounds';
 // import type { TypeParsablePoint } from '../../../../tools/g2';
 // import type {TypeAnnotation } from './Base'
 
-import {
-  DiagramElementPrimitive, DiagramElementCollection,
-} from '../../../Element';
+// import {
+//   DiagramElementPrimitive, DiagramElementCollection,
+// } from '../../../Element';
 import { duplicateFromTo } from '../../../../tools/tools';
 // import { Element, Elements } from './Element';
 
 import type { ElementInterface } from './Element';
+// import Symbol from '../Symbols/Symbol';
+import SymbolNew from '../Symbols/SymbolNew';
 
 export type TypeAnnotation = {
   xPosition: 'left' | 'center' | 'right' | number,
@@ -29,7 +31,7 @@ export type TypeAnnotation = {
 };
 
 export type TypeAnnotatedGlyph = {
-  glyph: DiagramElementPrimitive | DiagramElementCollection,
+  glyph: SymbolNew,
   // glyph: ElementInterface,
   annotations: Array<TypeAnnotation>,
   width: number,
@@ -71,6 +73,7 @@ function copyAnnotation(annotation: TypeAnnotation, namedCollection?: Object) {
     scale: annotation.scale,
     content: annotation.content._dup(namedCollection),
     inSize: annotation.inSize,
+    fullContentBounds: annotation.fullContentBounds,
   };
 }
 
@@ -92,7 +95,7 @@ function copyGlyphs(
   const copy = {};
   Object.keys(glyphs).forEach((key) => {
     if (glyphs[key] == null) {
-      return {};
+      return;
     }
     const glyph = glyphs[key];
     const copyGlyph = {};
@@ -102,9 +105,6 @@ function copyGlyphs(
     } else {
       copyGlyph.glyph = glyph.glyph;
     }
-    // copyGlyph.width = glyph.width;
-    // copyGlyph.height = glyph.height;
-    // copyGlyph.location = glyph.location;
     copyGlyph.annotations = copyAnnotations(glyph.annotations, namedCollection);
     copy[key] = copyGlyph;
   });
@@ -124,7 +124,7 @@ function getAllElementsFromGlyphs(glyphs: TypeGlyphs) {
   Object.keys(glyphs).forEach((key) => {
     const glyph = glyphs[key];
     if (glyph == null) {
-      return [];
+      return;
     }
     elements = [
       ...elements,
@@ -208,7 +208,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     const contentCopy = this.content._dup(namedCollection);
     const glyphsCopy = copyGlyphs(this.glyphs);
     const annotationsCopy = copyAnnotations(this.annotations);
-    const copy = new this.constructor(
+    const copy = new this.constructor(  // $FlowFixMe
       contentCopy, annotationsCopy, glyphsCopy, this.options,
     );
     duplicateFromTo(

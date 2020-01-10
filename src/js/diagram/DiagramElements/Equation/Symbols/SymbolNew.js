@@ -35,6 +35,7 @@ export default class Symbol extends DiagramElementPrimitive {
           const [
             pointsNew, widthNew, heightNew,
           ] = this.getPoints(this.custom.options, s.x, s.y);
+          // $FlowFixMe
           this.drawingObject.updatePoints(
             pointsNew,
             widthNew,
@@ -53,8 +54,8 @@ export default class Symbol extends DiagramElementPrimitive {
         // && this.drawingObject.points.length === 0
       ) {
         let points;
-        let width;
-        let height;
+        let width = 0;
+        let height = 0;
         if (
           this.custom.options.staticHeight === 'first'
           || this.custom.options.staticWidth === 'first'
@@ -68,6 +69,7 @@ export default class Symbol extends DiagramElementPrimitive {
             this.custom.options.staticHeight,
           ));
         }
+        // $FlowFixMe
         this.drawingObject.updatePoints(points, width, height);
         this.custom.options.staticHeight = height;
         this.custom.options.staticWidth = width;
@@ -76,6 +78,7 @@ export default class Symbol extends DiagramElementPrimitive {
         const [
           pointsNew, widthNew, heightNew,
         ] = this.getPoints(this.custom.options, widthIn, heightIn);
+        // $FlowFixMe
         this.drawingObject.updatePoints(
           pointsNew,
           widthNew,

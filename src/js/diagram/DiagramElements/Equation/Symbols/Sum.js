@@ -4,7 +4,7 @@ import {
   Point, Line, quadBezierPoints,
 } from '../../../../tools/g2';
 import Symbol from './SymbolNew';
-import Bounds from '../Elements/Bounds';
+// import Bounds from '../Elements/Bounds';
 
 export default class Sum extends Symbol {
   // eslint-disable-next-line class-methods-use-this
