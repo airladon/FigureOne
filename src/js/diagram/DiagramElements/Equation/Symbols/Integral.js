@@ -310,6 +310,7 @@ export default class Integral extends Symbol {
       lineWidth: defaultLineWidth,
       width: defaultTotalWidth,
       tipWidth: 0.01033455 + (0.000004751934 - 0.01033455) / (1 + (height / 0.2588074) ** 2.024942),
+      height,
     };
     if (width != null) {
       out.width = width;
@@ -322,7 +323,7 @@ export default class Integral extends Symbol {
     } else {
       out.tipWidth = out.lineWidth / 3;
     }
-    out.height = height;
+
     return out;
   }
 }

@@ -42,7 +42,7 @@ export default class Fraction extends BaseEquationFunction {
     ) + overhang * 2 * scale;
 
     if (vinculum != null) {
-      vinculumBounds.height = vinculum.custom.getHeight(
+      vinculumBounds.height = vinculum.getHeight(
         vinculum.custom.options, vinculumBounds.width,
       );
     }

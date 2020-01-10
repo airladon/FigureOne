@@ -144,6 +144,7 @@ export default class EquationSymbols {
     lineWidth?: number,
     draw?: 'static' | 'dynamic',
     staticWidth?: number | 'first',
+    staticHeight?: number | 'first',
   }) {
     const defaultOptions = {
       color: this.defaultColor,
@@ -159,7 +160,8 @@ export default class EquationSymbols {
       new Transform('VinculumSymbol').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-    )).symbol;
+      'strip',
+    ));
   }
 
   box(optionsIn: {
