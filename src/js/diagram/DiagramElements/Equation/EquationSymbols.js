@@ -69,58 +69,46 @@ export default class EquationSymbols {
     // if (name === 'vinculumOld') {
     //   return this.vinculum(options);
     // }
-    if (name === 'vinculum') {         // $FlowFixMe
+    if (name === 'vinculum') {              // $FlowFixMe
       return this.vinculum(options);
     }
-    if (name === 'strike') {
+    if (name === 'strike') {                // $FlowFixMe
       return this.strike(options);
     }
     if (name === 'xStrike') {
       return this.xStrike(options);
     }
-    // if (name === 'integral') {
-    //   return this.integral(options);
-    // }
-    if (name === 'bracket') {         // $FlowFixMe
+    if (name === 'bracket') {               // $FlowFixMe
       return this.bracket(options);
     }
-    // if (name === 'bracketNew') {         // $FlowFixMe
-    //   return this.bracketNew(options);
-    // }
     if (name === 'squareBracket') {         // $FlowFixMe
       return this.squareBracket(options);
     }
-    if (name === 'brace') {         // $FlowFixMe
+    if (name === 'brace') {                 // $FlowFixMe
       return this.brace(options);
     }
-    if (name === 'bar') {         // $FlowFixMe
+    if (name === 'bar') {                   // $FlowFixMe
       return this.bar(options);
     }
-    if (name === 'box') {         // $FlowFixMe
+    if (name === 'box') {                   // $FlowFixMe
       return this.box(options);
     }
-    if (name === 'angleBracket') {         // $FlowFixMe
+    if (name === 'angleBracket') {          // $FlowFixMe
       return this.angleBracket(options);
     }
-    if (name === 'radical') {         // $FlowFixMe
+    if (name === 'radical') {               // $FlowFixMe
       return this.radical(options);
     }
-    // if (name === 'radicalNew') {         // $FlowFixMe
-    //   return this.radicalNew(options);
-    // }
-    // if (name === 'simpleIntegral') {
-    //   return this.simpleIntegral(options);
-    // }
-    if (name === 'sum') {         // $FlowFixMe
+    if (name === 'sum') {                   // $FlowFixMe
       return this.sum(options);
     }
-    if (name === 'prod') {         // $FlowFixMe
+    if (name === 'prod') {                  // $FlowFixMe
       return this.product(options);
     }
-    if (name === 'int') {         // $FlowFixMe
+    if (name === 'int') {                   // $FlowFixMe
       return this.integral(options);
     }
-    if (name === 'arrow') {         // $FlowFixMe
+    if (name === 'arrow') {                 // $FlowFixMe
       return this.arrow(options);
     }
     return null;
@@ -365,52 +353,6 @@ export default class EquationSymbols {
       //   percentage: optionsToUse.percentage,
       //   sigma: optionsToUse.sigma,
       // },
-    );
-  }
-
-  radicalLegacy(optionsIn: {
-    color?: Array<number>,
-    lineWidth?: number,
-    startHeight?: number,
-    startWidth?: number,
-    proportionalToHeight?: boolean,
-    maxStartWidth?: ?number,
-    maxStartHeight?: ?number,
-    staticSize?: ?(Point | [number, number]),
-  }) {
-    const defaultOptions: {
-      color: Array<number>,
-      lineWidth: number,
-      startHeight: number,
-      startWidth: number,
-      proportionalToHeight: boolean,
-      maxStartWidth: ?number,
-      maxStartHeight: ?number,
-      staticSize: ?(Point | [number, number]),
-    } = {
-      color: this.defaultColor,
-      lineWidth: 0.01,
-      staticSize: null,
-      startHeight: 0.5,
-      startWidth: 0.7,
-      maxStartWidth: 0.15,
-      maxStartHeight: 0.15,
-      proportionalToHeight: true,
-    };
-    if (optionsIn.proportionalToHeight != null
-      && optionsIn.proportionalToHeight === false
-    ) {
-      defaultOptions.startHeight = 0.15;
-      defaultOptions.startWidth = 0.15;
-      defaultOptions.maxStartHeight = null;
-      defaultOptions.maxStartWidth = null;
-    }
-    const options = joinObjects(defaultOptions, optionsIn);
-    return Radical(
-      this.shapes, options.color, options.lineWidth,
-      options.startWidth, options.startHeight, options.proportionalToHeight,
-      options.maxStartWidth, options.maxStartHeight,
-      options.staticSize,
     );
   }
 

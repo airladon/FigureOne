@@ -141,11 +141,11 @@ export default class Radical extends Symbol {
     contentY: number,
     contentWidthIn: number,
     contentHeightIn: number,
-  ) {
+  ) {    // $FlowFixMe
     const height = this.getHeightFromContentHeight(contentHeightIn, options);
     const {
       width, startWidth, lineWidth, startHeight, downWidth, tickWidth, lineWidth2,
-    } = this.getDefaultValues(
+    } = this.getDefaultValues(    // $FlowFixMe
       height, contentWidthIn, options,
     );
     const bounds = new Bounds();
@@ -177,6 +177,7 @@ export default class Radical extends Symbol {
       bounds.top = bounds.bottom + bounds.height;
       bounds.ascent = bounds.height;
       bounds.descent = 0;
+      // $FlowFixMe
       bounds.annotations = {
         root: {
           xPosition: 'left',
@@ -195,6 +196,7 @@ export default class Radical extends Symbol {
       bounds.top = bounds.bottom + bounds.height;
       bounds.descent = 0;
       bounds.ascent = bounds.height;
+      // $FlowFixMe
       bounds.annotations = {
         root: {
           xPosition: 'left',
@@ -283,7 +285,7 @@ export default class Radical extends Symbol {
 
     if (options.startHeight != null && typeof options.startHeight === 'number') {
       out.startHeight = options.startHeight;
-      if (options.proportionalToHeight) {
+      if (options.proportionalToHeight) {   // $FlowFixMe
         out.startHeight = options.startHeight * out.height;
       }
     } else {
@@ -295,7 +297,7 @@ export default class Radical extends Symbol {
 
     if (options.tickHeight != null && typeof options.tickHeight === 'number') {
       out.tickHeight = options.tickHeight;
-      if (options.proportionalToHeight) {
+      if (options.proportionalToHeight) {   // $FlowFixMe
         out.tickHeight = options.tickHeight * out.startHeight;
       }
     } else {
@@ -304,7 +306,7 @@ export default class Radical extends Symbol {
 
     if (options.startWidth != null && typeof options.startWidth === 'number') {
       out.startWidth = options.startWidth;
-      if (options.proportionalToHeight) {
+      if (options.proportionalToHeight) {   // $FlowFixMe
         out.startWidth = options.startWidth * out.height;
       }
     } else {
@@ -316,7 +318,7 @@ export default class Radical extends Symbol {
 
     if (options.tickWidth != null && typeof options.tickWidth === 'number') {
       out.tickWidth = options.tickWidth;
-      if (options.proportionalToHeight) {
+      if (options.proportionalToHeight) {   // $FlowFixMe
         out.tickWidth = options.tickWidth * out.startWidth;
       }
     } else {
@@ -325,7 +327,7 @@ export default class Radical extends Symbol {
 
     if (options.downWidth != null && typeof options.downWidth === 'number') {
       out.downWidth = options.downWidth;
-      if (options.proportionalToHeight) {
+      if (options.proportionalToHeight) {   // $FlowFixMe
         out.downWidth = options.downWidth * out.startWidth;
       }
     } else {
