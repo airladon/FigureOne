@@ -3,7 +3,7 @@ import {
   Transform, polarToRect,
 } from '../../../../tools/g2';
 import Symbol from './SymbolNew';
-import Bounds from '../Elements/Bounds';
+// import Bounds from '../Elements/Bounds';
 
 
 export default class Bracket extends Symbol {
@@ -155,11 +155,13 @@ export default class Bracket extends Symbol {
     let out = {};
     if (options.side === 'left' || options.side === 'right') {
       out = this.getVerticalDefaultValues(contentHeight, contentWidth, options);
+      // $FlowFixMe
       out.height = contentHeight;
     } else {
       out = this.getVerticalDefaultValues(contentWidth, contentHeight, options);
       const { width } = out;
       out.width = contentWidth;
+      // $FlowFixMe
       out.height = width;
     }
     return out;

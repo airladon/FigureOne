@@ -71,7 +71,9 @@ export default class Arrow extends Bracket {
     ];
     if (direction === 'down' || direction === 'left') {
       const m = new Transform().scale(1, -1).translate(0, height).m();
+      // $FlowFixMe
       leftPoints = leftPoints.map((p: Point) => p.transformBy(m));
+      // $FlowFixMe
       rightPoints = rightPoints.map((p: Point) => p.transformBy(m));
     }
     // let side = 'left';

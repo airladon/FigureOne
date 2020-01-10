@@ -13,19 +13,7 @@ import {
   BlankElement, Element, Elements,
 } from './Elements/Element';
 import Fraction from './Elements/Fraction';
-// import Root from './Elements/Root';
-// import Strike from './Elements/Strike';
-// import DiagramPrimitives from '../../DiagramPrimitives/DiagramPrimitives';
-// import SuperSub from './Elements/SuperSub';
-// import { Brackets, Bar } from './Elements/Brackets';
-// import Brackets from './Elements/Brackets';
-// import Bar from './Elements/Bar';
 import EquationForm from './EquationForm';
-// import { Annotation, AnnotationInformation } from './Elements/Annotation';
-// import Padding from './Elements/Padding';
-// import Box from './Elements/Box';
-// import Integral from './Elements/Integral';
-// import SumProd from './Elements/SumProd';
 import Matrix from './Elements/Matrix';
 import Scale from './Elements/Scale';
 import Container from './Elements/Container';
@@ -1269,10 +1257,6 @@ export class EquationFunctions {
     if (root != null) {
       annotations.push({
         content: root,
-        // xPosition: 'left',
-        // yPosition: 'top',
-        // xAlign: 'right',
-        // yAlign: 'middle',
         offset: options.rootOffset,
         scale: options.rootScale,
         reference: 'root',
@@ -1280,12 +1264,12 @@ export class EquationFunctions {
     }
     return this.annotate({
       content,
-      inSize,
+      inSize: options.inSize,
       useFullBounds: options.useFullBounds,
       fullContentBounds: options.fullContentBounds,
       glyphs: {
         encompass: {
-          symbol,
+          symbol,       // $FlowFixMe
           annotations,
           space: options.space,
           leftSpace: options.leftSpace,
@@ -1297,29 +1281,30 @@ export class EquationFunctions {
     });
   }
 
-  supSub(optionsOrContent: TypeSupSubObject | TypeSupSubArray) {
+  supSub(optionsOrArray: TypeSupSubObject | TypeSupSubArray) {
     let content;
     let superscript = null;
     let subscript = null;
     let scale = null;
     let subscriptOffset = null;
     let superscriptOffset = null;
-    let inSize = true;
-    if (Array.isArray(optionsOrContent)) {
+    let inSize;
+    if (Array.isArray(optionsOrArray)) {
       [           // $FlowFixMe
         content, superscript, subscript, scale,            // $FlowFixMe
         superscriptOffset, subscriptOffset, inSize,
-      ] = optionsOrContent;
+      ] = optionsOrArray;
     } else {
       ({                                                    // $FlowFixMe
         content, superscript, subscript, scale, superscriptOffset, subscriptOffset, inSize,
-      } = optionsOrContent);
+      } = optionsOrArray);
     }
 
     const defaultOptions = {
       scale: 0.5,
       subscriptOffset: [0, 0],
       superscriptOffset: [0, 0],
+      inSize: true,
     };
     const optionsIn = {
       superscript,
@@ -1327,6 +1312,7 @@ export class EquationFunctions {
       scale,
       subscriptOffset,
       superscriptOffset,
+      inSize,
     };
     const options = joinObjects(defaultOptions, optionsIn);
 
@@ -1354,9 +1340,9 @@ export class EquationFunctions {
       });
     }
     return this.annotate({
-      content,
+      content,      // $FlowFixMe
       annotations,
-      inSize,
+      inSize: options.inSize,
     });
   }
 
@@ -1376,11 +1362,11 @@ export class EquationFunctions {
         content, superscript, scale, offset, inSize,
       } = optionsOrArray);
     }
-    return this.supSub({
-      content,
-      superscript,
-      superscriptOffset: offset,
-      inSize,
+    return this.supSub({          // $FlowFixMe
+      content,                    // $FlowFixMe
+      superscript,                // $FlowFixMe
+      superscriptOffset: offset,  // $FlowFixMe
+      inSize,                     // $FlowFixMe
       scale,
     });
   }
@@ -1400,11 +1386,11 @@ export class EquationFunctions {
         content, subscript, scale, offset, inSize,
       } = optionsOrArray);
     }
-    return this.supSub({
-      content,
-      subscript,
-      subscriptOffset: offset,
-      inSize,
+    return this.supSub({          // $FlowFixMe
+      content,                    // $FlowFixMe
+      subscript,                  // $FlowFixMe
+      subscriptOffset: offset,    // $FlowFixMe
+      inSize,                     // $FlowFixMe
       scale,
     });
   }
@@ -1474,156 +1460,6 @@ export class EquationFunctions {
       },
     });
   }
-
-
-  // annotate(
-  //   optionsOrContent: TypeAnnotateObject
-  //                     | TypeAnnotateArray                 // $FlowFixMe
-  //                     | TypeEquationPhrase,               // $FlowFixMe
-  //   withAnnotationsArray: Array<TypeEquationPhrase | AnnotationInformation>
-  //                       | AnnotationInformation | TypeEquationPhrase | null = null,
-  //   inSizeCalc: boolean | null = null,
-  // ) {
-  //   let content;
-  //   let withAnnotations;
-  //   // let withAnnotation;
-  //   let inSize;
-  //   if (!(withAnnotationsArray == null && inSizeCalc == null)) {
-  //     content = optionsOrContent;
-  //     withAnnotations = withAnnotationsArray;
-  //     inSize = inSizeCalc;
-  //   } else if (Array.isArray(optionsOrContent)) {
-  //     [content, withAnnotations, inSize] = optionsOrContent;
-  //   } else {
-  //     ({                                                    // $FlowFixMe
-  //       content, withAnnotations, inSize,
-  //     } = optionsOrContent);
-  //     // console.log(withAnnotation)
-  //     // if (withAnnotation != null) {
-  //     //   withAnnotations = withAnnotation;
-  //     // }
-  //   }
-  //   let annotations;
-  //   // Case of single annotation in array form or array of annotations
-  //   if (Array.isArray(withAnnotations)) {
-  //     annotations = withAnnotations.map(
-  //       (annotation) => {
-  //         // annotation is an already instantiated AnnotationInformation
-  //         if (annotation instanceof AnnotationInformation) {
-  //           return annotation;
-  //         }       // $FlowFixMe
-  //         const parsedContent = this.parseContent(annotation);
-  //         // case that annotation is a method object
-  //         if (parsedContent instanceof AnnotationInformation) {
-  //           return parsedContent;
-  //         }
-  //         // Case of single annotation in array form
-  //         if (Array.isArray(annotation)) {
-  //           const annotationFromArray = this.annotation(annotation);
-  //           if (annotationFromArray instanceof AnnotationInformation) {
-  //             return annotationFromArray;
-  //           }
-  //         }
-  //         return null;
-  //       },
-  //     );
-  //     // Case of single annotation in array form
-  //     if (annotations[0] === null) {                           // $FlowFixMe
-  //       annotations = [this.annotation(withAnnotations)];
-  //     }
-  //   // Case of annotation as a Method Object, Method Array or
-  //   // AnnotationInformation instantiation
-  //   } else if (withAnnotations != null) {
-  //     if (withAnnotations instanceof AnnotationInformation) {
-  //       annotations = [withAnnotations];
-  //     } else {
-  //       const parsedContent = this.parseContent(withAnnotations);
-  //       // Method Object
-  //       if (parsedContent instanceof AnnotationInformation) {
-  //         annotations = [parsedContent];
-  //       // Array form only
-  //       } else {
-  //         annotations = [this.annotation(withAnnotations)];
-  //       }
-  //     }
-  //   }
-  //   let inSizeToUse = true;
-  //   if (inSize != null) {
-  //     inSizeToUse = inSize;
-  //   }
-  //   return new Annotation(               // $FlowFixMe
-  //     this.contentToElement(content),    // $FlowFixMe
-  //     annotations,                       // $FlowFixMe
-  //     inSizeToUse,
-  //   );
-  // }
-
-  // annotation(
-  //   optionsOrAnnotation: TypeAnnotationObject | TypeAnnotationArray | TypeEquationPhrase,
-  //   positionRelativeToContentH: 'left' | 'right' | 'center' | number | null = null,
-  //   positionRelativeToContentV: 'bottom' | 'top' | 'middle' | 'baseline' | number | null = null,
-  //   positionRelativeToAnnotationH: 'left' | 'right' | 'center' | number | null = null,
-  //   positionRelativeToAnnotationV: 'bottom' | 'top' | 'middle' | 'baseline' | number | null = null,
-  //   annotationScale: number | null = null,
-  //   xOffsetIn: number | null = null,
-  //   yOffsetIn: number | null = null,
-  // ) {
-  //   let annotation;
-  //   let relativeToContentH;
-  //   let relativeToContentV;
-  //   let relativeToAnnotationH;
-  //   let relativeToAnnotationV;
-  //   let scale;
-  //   let xOffset;
-  //   let yOffset;
-  //   if (!(positionRelativeToContentH == null
-  //         && positionRelativeToContentV == null
-  //         && positionRelativeToAnnotationH == null
-  //         && positionRelativeToAnnotationV == null
-  //         && annotationScale == null
-  //         && xOffsetIn == null
-  //         && yOffsetIn == null)
-  //   ) {
-  //     annotation = optionsOrAnnotation;
-  //     relativeToContentH = positionRelativeToContentH;
-  //     relativeToContentV = positionRelativeToContentV;
-  //     relativeToAnnotationH = positionRelativeToAnnotationH;
-  //     relativeToAnnotationV = positionRelativeToAnnotationV;
-  //     scale = annotationScale;
-  //     xOffset = xOffsetIn;
-  //     yOffset = yOffsetIn;
-  //   } else if (Array.isArray(optionsOrAnnotation)) {
-  //     [   // $FlowFixMe
-  //       annotation, relativeToContentH, relativeToContentV,   // $FlowFixMe
-  //       relativeToAnnotationH, relativeToAnnotationV, scale,  // $FlowFixMe
-  //       xOffset, yOffset,
-  //     ] = optionsOrAnnotation;
-  //   } else {
-  //     let relativeToContent;
-  //     let relativeToAnnotation;
-  //     ({                                                      // $FlowFixMe
-  //       annotation, relativeToContent, relativeToAnnotation, scale, // $FlowFixMe
-  //       xOffset, yOffset,
-  //     } = optionsOrAnnotation);
-  //     [relativeToContentH, relativeToContentV] = relativeToContent;
-  //     [relativeToAnnotationH, relativeToAnnotationV] = relativeToAnnotation;
-  //   }
-
-  //   let scaleToUse = 0.6;
-  //   if (scale != null) {
-  //     scaleToUse = scale;
-  //   }
-  //   return new AnnotationInformation(           // $FlowFixMe
-  //     this.contentToElement(annotation),        // $FlowFixMe
-  //     relativeToContentH,                       // $FlowFixMe
-  //     relativeToContentV,                       // $FlowFixMe
-  //     relativeToAnnotationH,                    // $FlowFixMe
-  //     relativeToAnnotationV,                    // $FlowFixMe
-  //     scaleToUse,                               // $FlowFixMe
-  //     xOffset,                                  // $FlowFixMe
-  //     yOffset,
-  //   );
-  // }
 
   pad(
     optionsOrContent: TypePaddingObject | TypePaddingArray,
@@ -1832,7 +1668,7 @@ export class EquationFunctions {
       defaultOptions.fromXPosition = 0.1;
       defaultOptions.fromYPosition = 'bottom';
       defaultOptions.fromXAlign = 'center';
-      defaultOptions.fromYAlign = 'top';
+      defaultOptions.fromYAlign = 'top';        // $FlowFixMe
       defaultOptions.toXPosition = 0.9;
       defaultOptions.toYPosition = 'top';
       defaultOptions.toXAlign = 'center';
@@ -1840,7 +1676,7 @@ export class EquationFunctions {
       defaultOptions.fromOffset = [0, -0.04];
       defaultOptions.toOffset = [0, 0.04];
     }
-    if (limitsPosition === 'topBottomCenter') {
+    if (limitsPosition === 'topBottomCenter') {        // $FlowFixMe
       defaultOptions.fromXPosition = 'center';
       defaultOptions.fromYPosition = 'bottom';
       defaultOptions.fromXAlign = 'center';
@@ -1884,14 +1720,14 @@ export class EquationFunctions {
     options.toOffset = parsePoint(options.toOffset);
 
     // if (options.limitsPosition === 'side') {
-    return this.annotate({
+    return this.annotate({            // $FlowFixMe
       content,
       inSize: options.inSize,
       contentScale: options.contentScale,
       fullBoundsContent: options.fullBoundsContent,
       useFullBounds: options.useFullBounds,
       glyphs: {
-        left: {
+        left: {             // $FlowFixMe
           symbol,
           space: options.space,
           topSpace: options.topSpace,
@@ -1922,62 +1758,6 @@ export class EquationFunctions {
         },
       },
     });
-    // }
-    // return this.annotate({
-    //   content,
-    //   inSize: options.inSize,
-    //   glyphs: {
-    //     left: {
-    //       symbol,
-    //       space: options.space,
-    //       topSpace: options.topSpace,
-    //       bottomSpace: options.bottomSpace,
-    //       height: options.height,
-    //       yOffset: options.yOffset,
-    //       annotations: [
-    //         {
-    //           content: from,
-    //           xPosition: 0.1,
-    //           yPosition: 'bottom',
-    //           xAlign: 'center',
-    //           yAlign: 'top',
-    //           offset: parsePoint(options.fromOffset).add(0, -options.fromSpace),
-    //           scale: options.fromScale,
-    //         },
-    //         {
-    //           content: to,
-    //           xPosition: 0.9,
-    //           yPosition: 'top',
-    //           xAlign: 'center',
-    //           yAlign: 'bottom',
-    //           offset: parsePoint(options.toOffset).add(0, options.toSpace),
-    //           scale: options.toScale,
-    //         },
-    //       ],
-    //     },
-    //   },
-    // });
-
-    // let symbolToUse = null;
-    // if (symbol != null) {                                    // $FlowFixMe
-    //   symbolToUse = this.getExistingOrAddSymbol(symbol);
-    // }
-    // const contentArray = [];
-    // if (content != null) {                           // $FlowFixMe
-    //   contentArray.push(this.contentToElement(content));
-    // }
-    // if (from != null) {                              // $FlowFixMe
-    //   contentArray.push(this.contentToElement(from));
-    // }
-    // if (to != null) {                                // $FlowFixMe
-    //   contentArray.push(this.contentToElement(to));
-    // }
-
-    // return new Integral(
-    //   contentArray,
-    //   symbolToUse,
-    //   options,
-    // );
   }
 
   sumOf(options: TypeSumProdObject | TypeSumProdArray) {
@@ -2058,7 +1838,8 @@ export class EquationFunctions {
       toSpace,
       fromOffset,
       toOffset,
-      fullBoundsContent, useFullBounds,
+      fullBoundsContent,
+      useFullBounds,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     return this.annotate({
@@ -2096,7 +1877,7 @@ export class EquationFunctions {
           height: options.height,
         },
       },
-      inSize,
+      inSize: options.inSize,
     });
   }
 
@@ -2129,6 +1910,8 @@ export class EquationFunctions {
       commentSpace,
       scale,
       inSize,
+      useFullBounds,
+      fullContentBounds,
     };
     const defaultOptions = {
       contentSpace: 0.03,
@@ -2393,34 +2176,3 @@ export class EquationFunctions {
       },
     });
   }
-
-  // // $FlowFixMe
-  // bottomStrike(...args) {
-  //   const [
-  //     content, comment, symbol,
-  //     spaceToUse, scaleToUse,
-  //   ] = this.processStrike(...args);
-  //   let contentToUse;
-  //   if (symbol) {
-  //     contentToUse = new Strike(                             // $FlowFixMe
-  //       this.contentToElement(content),             // $FlowFixMe
-  //       this.getExistingOrAddSymbol(symbol),
-  //       false,                                               // $FlowFixMe
-  //       spaceToUse,
-  //     );
-  //   } else {
-  //     contentToUse = content;
-  //   }
-  //   return this.annotate({                                   // $FlowFixMe
-  //     content: contentToUse,
-  //     withAnnotations: [                                     // $FlowFixMe
-  //       this.annotation({
-  //         annotation: comment,
-  //         relativeToContent: ['center', 'bottom'],
-  //         relativeToAnnotation: ['center', 'top'],
-  //         scale: scaleToUse,
-  //       }),
-  //     ],
-  //   });
-  // }
-}
