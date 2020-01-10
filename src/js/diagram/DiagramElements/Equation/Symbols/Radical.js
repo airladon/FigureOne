@@ -120,7 +120,22 @@ export default class Radical extends Symbol {
   /* eslint-disable class-methods-use-this */
   getBounds(
     options: {
-      lineWidth?: number, staticWidth?: number, staticHeight?: number, draw: 'dynamic' | 'static',
+      color?: Array<number>,
+      lineWidth?: number,
+      startHeight?: number,
+      startWidth?: number,
+      proportionalToHeight?: boolean,
+      maxStartWidth?: ?number,
+      maxStartHeight?: ?number,
+      width?: number,             // contentWidth
+      height?: number,            // contentHeight
+      draw: 'static' | 'dynamic',
+      staticHeight?: number | 'first',
+      staticWidth?: number | 'first',
+      lineWidth2?: number,
+      tickWidth?: number,
+      tickHeight?: number,
+      downWidth?: number,
     },
     contentX: number,
     contentY: number,
@@ -206,9 +221,7 @@ export default class Radical extends Symbol {
       lineWidth = 0.01;
     }
 
-    if (options.contentHeight != null && typeof options.contentHeight === 'number') {
-      ({ contentHeight } = options);
-    } else if (contentHeightIn != null) {
+    if (contentHeightIn != null) {
       contentHeight = contentHeightIn;
     } else {
       contentHeight = 1;

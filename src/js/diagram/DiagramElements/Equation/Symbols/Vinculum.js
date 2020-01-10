@@ -3,7 +3,7 @@ import { DiagramElementPrimitive } from '../../../Element';
 import {
   Point,
 } from '../../../../tools/g2';
-import Symbol from './Symbol';
+import Symbol from './SymbolNew';
 // import WebGLInstance from '../../../webgl/webgl';
 
 
@@ -11,9 +11,9 @@ export default class Bracket extends Symbol {
   symbol: DiagramElementPrimitive;
 
   // eslint-disable-next-line class-methods-use-this
-  getTriangles() {
-    return 'strip';
-  }
+  // getTriangles() {
+  //   return 'strip';
+  // }
 
   //                             width
   //          |<---------------------------------------->|
@@ -26,21 +26,18 @@ export default class Bracket extends Symbol {
   //
 
   // eslint-disable-next-line class-methods-use-this
-  getPoints() {
-    // eslint-disable-next-line no-unused-vars
-    return (options: Object, widthIn: number, heightIn: number) => {
-      const { lineWidth, width, height } = this.getDefaultValues(
-        heightIn, widthIn, options,
-      );
+  getPoints(options: Object, widthIn: number, heightIn: number) {
+    const { lineWidth, width, height } = this.getDefaultValues(
+      heightIn, widthIn, options,
+    );
 
-      const points = [
-        new Point(0, 0),
-        new Point(0, lineWidth),
-        new Point(width, 0),
-        new Point(width, lineWidth),
-      ];
-      return [points, width, height];
-    };
+    const points = [
+      new Point(0, 0),
+      new Point(0, lineWidth),
+      new Point(width, 0),
+      new Point(width, lineWidth),
+    ];
+    return [points, width, height];
   }
 
   /* eslint-disable class-methods-use-this */

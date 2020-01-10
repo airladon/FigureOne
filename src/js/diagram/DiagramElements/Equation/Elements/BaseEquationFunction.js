@@ -3,17 +3,18 @@
 import {
   Point,
 } from '../../../../tools/g2';
-import {
-  DiagramElementPrimitive, DiagramElementCollection,
-} from '../../../Element';
+// import {
+//   DiagramElementPrimitive, DiagramElementCollection,
+// } from '../../../Element';
 import { duplicateFromTo } from '../../../../tools/tools';
 import { Element, Elements } from './Element';
+import Symbol from '../Symbols/SymbolNew';
 // import type { ElementInterface } from './Element';
 // import Bounds from './Bounds';
 
 export default class BaseEquationFunction extends Elements {
   contents: Array<Elements | null>;
-  glyphs: Array<?DiagramElementPrimitive | ?DiagramElementCollection>;
+  glyphs: Array<?Symbol>;
   glyphLocations: Array<Point>;
   glyphWidths: Array<number>;
   glyphHeights: Array<number>;
@@ -22,8 +23,8 @@ export default class BaseEquationFunction extends Elements {
 
   constructor(
     content: Elements | null | Array<Elements | null>,
-    glyph: ?(DiagramElementPrimitive | DiagramElementCollection
-      | Array<?DiagramElementPrimitive | ?DiagramElementCollection>),
+    glyph: ?(Symbol
+      | Array<?Symbol>),
     // inSize: boolean = true,
     options: Object,
   ) {
