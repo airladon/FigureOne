@@ -526,8 +526,8 @@ export type TypeAnnotateObject = {
   fullContentBounds?: boolean,
   useFullBounds?: boolean,
   glyphs?: {
-    encompass: {
-      symbol: string,
+    encompass?: {
+      symbol?: string,
       annotations?: Array<TypeAnnotation>,
       space?: number;
       topSpace?: number;
@@ -535,8 +535,8 @@ export type TypeAnnotateObject = {
       bottomSpace?: number;
       rightSpace?: number;
     },
-    left: {
-      symbol: string,
+    left?: {
+      symbol?: string,
       annotations?: Array<TypeAnnotation>,
       space?: number;
       overhang?: number,
@@ -550,8 +550,8 @@ export type TypeAnnotateObject = {
       yOffset?: number,
       annotationsOverContent?: boolean,
     },
-    right: {
-      symbol: string,
+    right?: {
+      symbol?: string,
       annotations?: Array<TypeAnnotation>,
       space?: number;
       overhang?: number,
@@ -565,8 +565,8 @@ export type TypeAnnotateObject = {
       yOffset?: number,
       annotationsOverContent?: boolean,
     },
-    top: {
-      symbol: string,
+    top?: {
+      symbol?: string,
       annotations?: Array<TypeAnnotation>,
       space?: number;
       overhang?: number,
@@ -576,8 +576,8 @@ export type TypeAnnotateObject = {
       xOffset?: number,
       annotationsOverContent?: boolean,
     },
-    bottom: {
-      symbol: string,
+    bottom?: {
+      symbol?: string,
       annotations?: Array<TypeAnnotation>,
       space?: number;
       overhang?: number,
@@ -936,7 +936,7 @@ export class EquationFunctions {
       [
         content, symbol, inSize, space, overhang,
         length, left, right, top, bottom,
-        side,  minContentHeight, minContentDescent,
+        side, minContentHeight, minContentDescent,
         minContentAscent, descent, fullContentBounds, useFullBounds,
       ] = optionsOrArray;
     } else {
@@ -1018,7 +1018,7 @@ export class EquationFunctions {
     return this.annotate({
       content,
       glyphs,
-      inSize,
+      inSize: options.inSize,
       fullContentBounds: options.fullContentBounds,
       useFullBounds: options.useFullBounds,
       // leftSpace: options.outsideSpace,
@@ -1084,34 +1084,7 @@ export class EquationFunctions {
 
     const fillAnnotation = (ann) => {
       const annCopy = joinObjects({}, defaultAnnotation, ann);
-      /* eslint-disable no-param-reassign */
-      // if (ann.xPosition == null) {
-      //   ann.xPosition = defaultAnnotation.xPosition;
-      // }
-      // if (ann.yPosition == null) {
-      //   ann.yPosition = defaultAnnotation.yPosition;
-      // }
-      // if (ann.xAlign == null) {
-      //   ann.xAlign = defaultAnnotation.xAlign;
-      // }
-      // if (ann.yAlign == null) {
-      //   ann.yAlign = defaultAnnotation.yAlign;
-      // }
-      // if (ann.offset == null) {
-      //   ann.offset = defaultAnnotation.offset;
-      // }
-      // if (ann.scale == null) {
-      //   ann.scale = defaultAnnotation.scale;
-      // }
-      // if (ann.inSize == null) {
-      //   ann.inSize = defaultAnnotation.inSize;
-      // }
-      // if (ann.fullContentBounds == null) {
-      //   ann.fullContentBounds = defaultAnnotation.fullContentBounds;
-      // }
       annCopy.content = this.contentToElement(ann.content);
-      // ann.content = this.contentToElement(ann.content);
-      /* eslint-enable no-param-reassign */
       return annCopy;
     };
 
@@ -1126,7 +1099,7 @@ export class EquationFunctions {
       return annsCopy;
     };
     const annotationsToUse = fillAnnotations(annotationsToProcess);
-    // console.log(annotationsToUse)
+
     const glyphsToUse = {};
 
     const fillGlyphAnnotation = (side) => {
@@ -1154,7 +1127,7 @@ export class EquationFunctions {
     fillGlyphAnnotation('top');
     fillGlyphAnnotation('bottom');
     const options = joinObjects(defaultOptions, optionsIn);
-    return new BaseAnnotationFunction(  // $FlowFixMe
+    return new BaseAnnotationFunction(
       this.contentToElement(content),
       annotationsToUse,
       glyphsToUse,
