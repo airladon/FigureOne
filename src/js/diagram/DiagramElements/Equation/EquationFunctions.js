@@ -1,6 +1,6 @@
 // @flow
 import {
-  Point, parsePoint,
+  Point, getPoint,
 } from '../../../tools/g2';
 import type {
   TypeParsablePoint,
@@ -460,6 +460,28 @@ export type TypeCommentArray = [
   ?boolean,
 ];
 
+export type TypeStrikeCommentObject = {
+  content?: TypeEquationPhrase,
+  symbol?: string,
+  comment?: TypeEquationPhrase,
+  inSize?: boolean,
+  space?: number,
+  scale?: number,
+  overhang?: number,
+};
+
+
+export type TypeStrikeCommentArray = [
+  ?TypeEquationPhrase,
+  ?string,
+  ?TypeEquationPhrase,
+  ?boolean,
+  ?number,
+  ?number,
+  ?number,
+];
+
+
 export type TypePaddingObject = {
   content: TypeEquationPhrase;
   top?: number,
@@ -703,7 +725,7 @@ export class EquationFunctions {
 
   eqnMethod(name: string, params: {}) {
     // $FlowFixMe
-    if (name === 'frac') { return this.frac(params); }
+    if (name === 'frac') { return this.frac(params); }  // $FlowFixMe
     if (name === 'strike') { return this.strike(params); }    // $FlowFixMe
     if (name === 'box') { return this.box(params); }          // $FlowFixMe
     if (name === 'root') { return this.root(params); }        // $FlowFixMe
@@ -725,7 +747,7 @@ export class EquationFunctions {
     if (name === 'prodOf') { return this.sumProd(params); }   // $FlowFixMe
     if (name === 'matrix') { return this.matrix(params); }   // $FlowFixMe
     if (name === 'scale') { return this.scale(params); }   // $FlowFixMe
-    if (name === 'container') { return this.container(params); }  // $FlowFixMe
+    if (name === 'container') { return this.container(params); }
     return null;
   }
 
@@ -1252,7 +1274,7 @@ export class EquationFunctions {
       useFullBounds,
     };
     const options = joinObjects(defaultOptions, optionsIn);
-    options.rootOffset = parsePoint(options.rootOffset, new Point(0, 0));
+    options.rootOffset = getPoint(options.rootOffset);
     const annotations = [];
     if (root != null) {
       annotations.push({
@@ -1563,7 +1585,7 @@ export class EquationFunctions {
     }
 
     if (options.space != null) {
-      options.space = parsePoint(options.space);
+      options.space = getPoint(options.space);
     }
 
     const matrixContent = new Matrix(
@@ -1718,18 +1740,37 @@ export class EquationFunctions {
       useFullBounds,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
-    options.fromOffset = parsePoint(options.fromOffset);
-    options.toOffset = parsePoint(options.toOffset);
+    options.fromOffset = getPoint(options.fromOffset);
+    options.toOffset = getPoint(options.toOffset);
 
-    // if (options.limitsPosition === 'side') {
-    return this.annotate({            // $FlowFixMe
+    const annotations = [
+      {
+        content: to,
+        xPosition: options.toXPosition,
+        yPosition: options.toYPosition,
+        xAlign: options.toXAlign,
+        yAlign: options.toYAlign,
+        offset: options.toOffset,
+        scale: options.toScale,
+      },
+      {
+        content: from,
+        xPosition: options.fromXPosition,
+        yPosition: options.fromYPosition,
+        xAlign: options.fromXAlign,
+        yAlign: options.fromYAlign,
+        offset: options.fromOffset,
+        scale: options.fromScale,
+      },
+    ];
+    return this.annotate({  // $FlowFixMe
       content,
       inSize: options.inSize,
       contentScale: options.contentScale,
       fullBoundsContent: options.fullBoundsContent,
       useFullBounds: options.useFullBounds,
       glyphs: {
-        left: {             // $FlowFixMe
+        left: {   // $FlowFixMe
           symbol,
           space: options.space,
           topSpace: options.topSpace,
@@ -1737,26 +1778,8 @@ export class EquationFunctions {
           height: options.height,
           yOffset: options.yOffset,
           annotationsOverContent: options.limitsAroundContent,
-          annotations: [  // $ FlowFixMe
-            {
-              content: from,
-              xPosition: options.fromXPosition,
-              yPosition: options.fromYPosition,
-              xAlign: options.fromXAlign,
-              yAlign: options.fromYAlign,
-              offset: options.fromOffset,
-              scale: options.fromScale,
-            },
-            {
-              content: to,
-              xPosition: options.toXPosition,
-              yPosition: options.toYPosition,
-              xAlign: options.toXAlign,
-              yAlign: options.toYAlign,
-              offset: options.toOffset,
-              scale: options.toScale,
-            },
-          ],
+          // $FlowFixMe
+          annotations,
         },
       },
     });
@@ -1844,34 +1867,37 @@ export class EquationFunctions {
       useFullBounds,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
+    const annotations = [
+      {
+        content: to,
+        xPosition: 'center',
+        yPosition: 'top',
+        xAlign: 'center',
+        yAlign: 'bottom',
+        offset: getPoint(options.toOffset)
+          .add(0, options.toSpace),
+        scale: options.toScale,
+      },
+      {
+        content: from,
+        xPosition: 'center',
+        yPosition: 'bottom',
+        xAlign: 'center',
+        yAlign: 'top',
+        offset: getPoint(options.fromOffset)
+          .add(0, -options.fromSpace),
+        scale: options.fromScale,
+      },
+    ];
     return this.annotate({
       content,
       contentScale: options.contentScale,
       fullBoundsContent: options.fullBoundsContent,
       useFullBounds: options.useFullBounds,
       glyphs: {
-        left: {
-          symbol,
-          annotations: [
-            {
-              content: to,
-              xPosition: 'center',
-              yPosition: 'top',
-              xAlign: 'center',
-              yAlign: 'bottom',
-              offset: parsePoint(options.toOffset).add(0, options.toSpace),
-              scale: options.toScale,
-            },
-            {
-              content: from,
-              xPosition: 'center',
-              yPosition: 'bottom',
-              xAlign: 'center',
-              yAlign: 'top',
-              offset: parsePoint(options.fromOffset).add(0, -options.fromSpace),
-              scale: options.fromScale,
-            },
-          ],
+        left: {         // $FlowFixMe
+          symbol,         // $FlowFixMe
+          annotations,         // $FlowFixMe
           space,
           topSpace: options.topSpace,
           bottomSpace: options.bottomSpace,
@@ -1950,7 +1976,7 @@ export class EquationFunctions {
     }];
     if (symbol === '' || symbol == null) {
       return this.annotate({
-        content,
+        content,           // $FlowFixMe
         annotations,
         inSize,
       });
@@ -1961,7 +1987,7 @@ export class EquationFunctions {
       useFullBounds,
       glyphs: {
         top: {
-          symbol,
+          symbol,              // $FlowFixMe
           annotations,
           space: contentSpaceToUse,
         },
@@ -1990,7 +2016,7 @@ export class EquationFunctions {
 
     if (symbol === '' || symbol == null) {
       return this.annotate({
-        content,
+        content,           // $FlowFixMe
         annotations,
         inSize,
       });
@@ -2002,7 +2028,7 @@ export class EquationFunctions {
       useFullBounds,
       glyphs: {
         bottom: {
-          symbol,
+          symbol,            // $FlowFixMe
           annotations,
           space: contentSpaceToUse,
         },
@@ -2013,7 +2039,7 @@ export class EquationFunctions {
 
 
   strike(
-    optionsOrArray: TypeSrikeNewObject | TypeStrikeNewArray,
+    optionsOrArray: TypeStrikeObject | TypeStrikeArray,
   ) {
     let content;
     let symbol;
@@ -2049,9 +2075,9 @@ export class EquationFunctions {
     }
     const glyph = this.getExistingOrAddSymbol(symbol);
     if (glyph != null && glyph.custom.options.style === 'horizontal') {
-      defaultOptions.space = 0;
-      defaultOptions.leftSpace = 0.02;
-      defaultOptions.rightSpace = 0.02;
+      defaultOptions.space = 0;           // $FlowFixMe
+      defaultOptions.leftSpace = 0.02;    // $FlowFixMe
+      defaultOptions.rightSpace = 0.02;   // $FlowFixMe
     }
     const optionsIn = {
       content,
@@ -2127,24 +2153,25 @@ export class EquationFunctions {
       content, symbol, comment, inSize,
       space, scale, overhang,
     ] = this.processStrike(...args);
-    return this.annotate({
+    const annotations = [
+      {
+        content: comment,
+        xPosition: 'center',
+        yPosition: 'top',
+        xAlign: 'center',
+        yAlign: 'bottom',
+        offset: [0, space],
+        scale,
+      },
+    ];
+    return this.annotate({    // $FlowFixMe
       content,
       inSize,
       glyphs: {
-        encompass: {
+        encompass: {    // $FlowFixMe
           symbol,
-          space: overhang,
-          annotations: [
-            {
-              content: comment,
-              xPosition: 'center',
-              yPosition: 'top',
-              xAlign: 'center',
-              yAlign: 'bottom',
-              offset: [0, space],
-              scale,
-            },
-          ],
+          space: overhang,    // $FlowFixMe
+          annotations,
         },
       },
     });
@@ -2156,24 +2183,25 @@ export class EquationFunctions {
       content, symbol, comment, inSize,
       space, scale, overhang,
     ] = this.processStrike(...args);
-    return this.annotate({
+    const annotations = [
+      {
+        content: comment,
+        xPosition: 'center',
+        yPosition: 'bottom',
+        xAlign: 'center',
+        yAlign: 'top',
+        offset: [0, -space],
+        scale,
+      },
+    ];
+    return this.annotate({    // $FlowFixMe
       content,
       inSize,
       glyphs: {
-        encompass: {
+        encompass: {    // $FlowFixMe
           symbol,
-          space: overhang,
-          annotations: [
-            {
-              content: comment,
-              xPosition: 'center',
-              yPosition: 'bottom',
-              xAlign: 'center',
-              yAlign: 'top',
-              offset: [0, -space],
-              scale,
-            },
-          ],
+          space: overhang,    // $FlowFixMe
+          annotations,
         },
       },
     });
