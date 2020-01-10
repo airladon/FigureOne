@@ -4,9 +4,7 @@ import {
   Point, quadBezierPoints,
 } from '../../../../tools/g2';
 import Symbol from './SymbolNew';
-import Bounds from '../Elements/Bounds';
-
-
+// import Bounds from '../Elements/Bounds';
 
 export default class Product extends Symbol {
   // eslint-disable-next-line class-methods-use-this
