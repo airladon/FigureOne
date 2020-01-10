@@ -78,12 +78,6 @@ export type TypeEquationPhrase =
   | { scale: TypeScaleObject } | TypeScaleArray
   | { container: TypeContainerObject } | TypeContainerArray
   | { matrix: TypeMatrixObject } | TypeMatrixArray
-  // | [
-  //   TypeEquationPhrase,
-  //   TypeEquationPhrase,
-  //   string,
-  //   ?number,
-  // ]
   | Array<TypeEquationPhrase>
   | DiagramElementPrimitive
   | DiagramElementCollection
@@ -674,7 +668,7 @@ export class EquationFunctions {
     }
     if (Array.isArray(content)) {
       let elementArray = [];
-      content.forEach((c) => {
+      content.forEach((c) => {      // $FlowFixMe
         const result = this.parseContent(c);
         if (Array.isArray(result)) {
           elementArray = [...elementArray, ...result];
@@ -886,7 +880,7 @@ export class EquationFunctions {
     return this.annotate({
       content,
       glyphs,
-      inSize,
+      inSize: options.inSize,
       leftSpace: options.outsideSpace,
       rightSpace: options.outsideSpace,
       useFullBounds: options.useFullBounds,
@@ -1016,13 +1010,11 @@ export class EquationFunctions {
       };
     }
     return this.annotate({
-      content,
+      content,                            // $FlowFixMe
       glyphs,
       inSize: options.inSize,
       fullContentBounds: options.fullContentBounds,
       useFullBounds: options.useFullBounds,
-      // leftSpace: options.outsideSpace,
-      // rightSpace: options.outsideSpace,
     });
   }
 
@@ -1083,7 +1075,7 @@ export class EquationFunctions {
     }
 
     const fillAnnotation = (ann) => {
-      const annCopy = joinObjects({}, defaultAnnotation, ann);
+      const annCopy = joinObjects({}, defaultAnnotation, ann);  // $FlowFixMe
       annCopy.content = this.contentToElement(ann.content);
       return annCopy;
     };
@@ -1112,13 +1104,14 @@ export class EquationFunctions {
       }
       glyphsToUse[side] = {};
       let glyphAnnotationsToProcess = glyphSide.annotations;
-      if (glyphSide.annotate != null) {
+      // $FlowFixMe
+      if (glyphSide.annotate != null) {      // $FlowFixMe
         glyphAnnotationsToProcess = [glyphSide.annotate];
       }
       const glyphAnnotationsToUse = fillAnnotations(glyphAnnotationsToProcess);
       glyphsToUse[side] = joinObjects({}, defaultOptions[side], glyphSide);
-      glyphsToUse[side].annotations = glyphAnnotationsToUse;
-      glyphsToUse[side].glyph = this.getExistingOrAddSymbol(glyphSide.symbol);
+      glyphsToUse[side].annotations = glyphAnnotationsToUse;     // $FlowFixMe
+      glyphsToUse[side].glyph = this.getExistingOrAddSymbol(glyphSide.symbol || '');
     };
 
     fillGlyphAnnotation('encompass');
@@ -1129,7 +1122,7 @@ export class EquationFunctions {
     const options = joinObjects(defaultOptions, optionsIn);
     return new BaseAnnotationFunction(
       this.contentToElement(content),
-      annotationsToUse,
+      annotationsToUse,       // $FlowFixMe
       glyphsToUse,
       options,
     );
@@ -1221,56 +1214,6 @@ export class EquationFunctions {
       options,
     );
   }
-
-  // rootLegacy(
-  //   optionsOrNum: TypeRootObject | TypeRootArray | TypeEquationPhrase,
-  //   sym: string | null = null,
-  //   rootIn: TypeEquationPhrase | null = null,
-  //   contentSpaceIn: ?({
-  //     left: ?number,
-  //     right: ?number,
-  //     top: ?number,
-  //     bottom: ?number,
-  //   } | Point | [number, number] | number) = null,
-  //   rootSpaceIn: ?number = null,
-  //   rootScaleIn: ?number = null,
-  // ) {
-  //   let content;
-  //   let root;
-  //   let symbol;
-  //   let contentSpace;
-  //   let rootSpace;
-  //   let rootScale;
-
-  //   if (!(sym == null && root == null)) {
-  //     content = optionsOrNum;
-  //     root = rootIn;
-  //     symbol = sym;
-  //     contentSpace = contentSpaceIn;
-  //     rootSpace = rootSpaceIn;
-  //     rootScale = rootScaleIn;
-  //   } else if (Array.isArray(optionsOrNum)) {
-  //     [                                                  // $FlowFixMe
-  //       content, symbol, root,                           // $FlowFixMe
-  //       contentSpace, rootSpace, rootScale,
-  //     ] = optionsOrNum;
-  //   } else {
-  //     ({                                            // $FlowFixMe
-  //       content, symbol, root,
-  //       // lineWidth, startWidth, startHeight,    // $FlowFixMe
-  //       contentSpace, rootSpace, rootScale,
-  //     } = optionsOrNum);
-  //   }
-  //   const f = new Root(                         // $FlowFixMe
-  //     this.contentToElement(content),             // $FlowFixMe
-  //     this.getExistingOrAddSymbol(symbol),     // $FlowFixMe
-  //     this.contentToElement(root),           // $FlowFixMe
-  //     contentSpace,           // $FlowFixMe
-  //     rootSpace,           // $FlowFixMe
-  //     rootScale,
-  //   );
-  //   return f;
-  // }
 
   root(optionsOrArray: TypeRootObject | TypeRootArray) {
     let content;
