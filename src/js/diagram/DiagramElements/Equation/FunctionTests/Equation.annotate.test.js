@@ -780,7 +780,7 @@ describe('Equation Functions - Ann', () => {
   });
   test('Left with No Annotation Content', () => {
     functions.single();
-    eqn.showForm('leftWithRightAnnotationOverContent');
+    eqn.showForm('leftWithNoAnnotationContent');
     diagram.setFirstTransform();
     const a = eqn._a.getBoundingRect('diagram');
     const left = eqn._left.getBoundingRect('diagram');
