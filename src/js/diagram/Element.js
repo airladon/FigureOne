@@ -338,6 +338,26 @@ class DiagramElement {
         }
         return new animations.DissolveOutAnimationStep(options);
       },
+      dim: (timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {}, ...args: Array<TypeColorAnimationStepInputOptions>) => {
+        const defaultOptions = { element: this };
+        let options;
+        if (typeof timeOrOptionsIn === 'number') {
+          options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+        } else {
+          options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+        }
+        return new animations.DimAnimationStep(options);
+      },
+      undim: (timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {}, ...args: Array<TypeColorAnimationStepInputOptions>) => {
+        const defaultOptions = { element: this };
+        let options;
+        if (typeof timeOrOptionsIn === 'number') {
+          options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+        } else {
+          options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+        }
+        return new animations.UndimAnimationStep(options);
+      },
       // eslint-disable-next-line max-len
       builder: (...optionsIn: Array<TypeAnimationBuilderInputOptions>) => new animations.AnimationBuilder(this, ...optionsIn),
       // eslint-disable-next-line max-len

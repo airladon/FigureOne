@@ -208,11 +208,11 @@ export default class EquationForm extends Elements {
   //      then be used to position the equation in the diagram (or relative
   //      collection space)
   //    - if alignH is:
-  //        - 'middle': the fixTo element is centered in x around (0, 0)
+  //        - 'center': the fixTo element is centered in x around (0, 0)
   //        - 'right': the fixTo element right most point is at x = 0
   //        - 'left': default - the fixTo element x position at 0
   //    - if alignV is:
-  //        - 'center': the fixTo element is centered in y around (0, 0)
+  //        - 'middle': the fixTo element is centered in y around (0, 0)
   //        - 'bottom': the fixTo element bottom most point is at y = 0
   //        - 'top': the fixTo element top most point is at y = 0
   //        - 'baseline': default - the fixTo element y position at 0
@@ -280,7 +280,10 @@ export default class EquationForm extends Elements {
     } else if (alignH === 'center') {
       fixPoint.x += w / 2;
     } else if (typeof alignH === 'number') {
-      fixPoint.x += alignH;
+      fixPoint.x += alignH * w;
+    } else if (alignH != null && alignH.slice(-1)[0] === 'o') {
+      const offset = parseFloat(alignH);
+      fixPoint.x += offset;
     }
 
     if (alignV === 'top') {
@@ -290,7 +293,10 @@ export default class EquationForm extends Elements {
     } else if (alignV === 'middle') {
       fixPoint.y += p.y - d + h / 2;
     } else if (typeof alignV === 'number') {
-      fixPoint.y += p.y + alignV;
+      fixPoint.y += p.y - d + alignV * h;
+    } else if (alignV != null && alignV.slice(-1)[0] === 'o') {
+      const offset = parseFloat(alignV);
+      fixPoint.y += p.y + offset;
     }
 
     const delta = new Point(0, 0).sub(fixPoint);
