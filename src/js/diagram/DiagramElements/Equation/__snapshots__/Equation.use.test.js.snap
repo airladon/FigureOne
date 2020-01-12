@@ -7,6 +7,7 @@ DiagramElementPrimitive {
   "anim": Object {
     "builder": [Function],
     "color": [Function],
+    "dim": [Function],
     "dissolveIn": [Function],
     "dissolveOut": [Function],
     "opacity": [Function],
@@ -17,6 +18,7 @@ DiagramElementPrimitive {
     "scenario": [Function],
     "scenarios": [Function],
     "transform": [Function],
+    "undim": [Function],
   },
   "animations": AnimationManager {
     "animations": Array [],

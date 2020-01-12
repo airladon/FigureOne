@@ -7,7 +7,10 @@ import PositionAnimationStep from './AnimationStep/ElementAnimationStep/Position
 import type {
   TypeColorAnimationStepInputOptions,
 } from './AnimationStep/ElementAnimationStep/ColorAnimationStep';
-import ColorAnimationStep from './AnimationStep/ElementAnimationStep/ColorAnimationStep';
+import {
+  ColorAnimationStep, DimAnimationStep, UndimAnimationStep, dim,
+  undim,
+} from './AnimationStep/ElementAnimationStep/ColorAnimationStep';
 
 
 import type {
@@ -106,4 +109,5 @@ export {
   DissolveInAnimationStep, dissolveIn, DissolveOutAnimationStep, dissolveOut,
   CustomAnimationStep, custom, AnimationManager, RotationAnimationStep,
   ScaleAnimationStep, PulseAnimationStep, OpacityAnimationStep,
+  DimAnimationStep, dim, UndimAnimationStep, undim,
 };

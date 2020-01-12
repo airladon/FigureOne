@@ -158,6 +158,36 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
+  dim(
+    timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
+    ...args: Array<TypeColorAnimationStepInputOptions>
+  ) {
+    const defaultOptions = { element: this.element };
+    let options;
+    if (typeof timeOrOptionsIn === 'number') {
+      options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+    } else {
+      options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+    }
+    this.then(animation.dim(options));
+    return this;
+  }
+
+  undim(
+    timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
+    ...args: Array<TypeColorAnimationStepInputOptions>
+  ) {
+    const defaultOptions = { element: this.element };
+    let options;
+    if (typeof timeOrOptionsIn === 'number') {
+      options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+    } else {
+      options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+    }
+    this.then(animation.undim(options));
+    return this;
+  }
+
   delay(
     numOrOptionsIn: number | TypeDelayStepInputOptions = {},
     ...args: Array<TypeDelayStepInputOptions>

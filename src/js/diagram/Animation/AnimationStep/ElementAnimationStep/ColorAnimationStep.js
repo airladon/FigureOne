@@ -13,7 +13,7 @@ import ElementAnimationStep from '../ElementAnimationStep';
 type TypeColor = Array<number>;
 export type TypeColorAnimationStepInputOptions = {
   start?: TypeColor;      // default is element transform
-  target?: TypeColor;     // Either target or delta must be defined
+  target?: TypeColor | 'dim' | 'undim';     // Either target or delta must be defined
   delta?: TypeColor;      // delta overrides target if both are defined
   dissolve?: 'in' | 'out' | null
 } & TypeElementAnimationStepInputOptions;
@@ -22,7 +22,7 @@ const addColors = (color1, color2) => color1.map((c, index) => Math.min(c + colo
 
 const subtractColors = (color1, color2) => color1.map((c, index) => c - color2[index]);
 
-export default class ColorAnimationStep extends ElementAnimationStep {
+export class ColorAnimationStep extends ElementAnimationStep {
   color: {
     start: TypeColor;     // null means use element color
     delta: TypeColor;
@@ -50,6 +50,12 @@ export default class ColorAnimationStep extends ElementAnimationStep {
     copyKeysFromTo(options, this.color, [
       'start', 'delta', 'target', 'dissolve',
     ]);
+    if (this.color.target === 'dim') {
+      this.color.target = this.element.dimColor.slice();
+    }
+    if (this.color.target === 'undim') {
+      this.color.target = this.element.defaultColor.slice();
+    }
   }
 
   // On start, calculate the duration, target and delta if not already present.
@@ -149,6 +155,52 @@ export default class ColorAnimationStep extends ElementAnimationStep {
     step.element = this.element;
     return step;
   }
+}
+
+export class DimAnimationStep extends ColorAnimationStep {
+  constructor(
+    timeOrOptionsIn: number | TypeElementAnimationStepInputOptions = {},
+    ...args: Array<TypeElementAnimationStepInputOptions>
+  ) {
+    let options = {};
+    const defaultOptions = { duration: 1, target: 'dim', completeOnCancel: true };
+    if (typeof timeOrOptionsIn === 'number') {
+      options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+    } else {
+      options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+    }
+    super(options);
+  }
+}
+
+export function dim(
+  timeOrOptionsIn: number | TypeOpacityAnimationStepInputOptions = {},
+  ...args: Array<TypeOpacityAnimationStepInputOptions>
+) {
+  return new DimAnimationStep(timeOrOptionsIn, ...args);
+}
+
+export class UndimAnimationStep extends ColorAnimationStep {
+  constructor(
+    timeOrOptionsIn: number | TypeElementAnimationStepInputOptions = {},
+    ...args: Array<TypeElementAnimationStepInputOptions>
+  ) {
+    let options = {};
+    const defaultOptions = { duration: 1, target: 'undim', completeOnCancel: true };
+    if (typeof timeOrOptionsIn === 'number') {
+      options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+    } else {
+      options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+    }
+    super(options);
+  }
+}
+
+export function undim(
+  timeOrOptionsIn: number | TypeOpacityAnimationStepInputOptions = {},
+  ...args: Array<TypeOpacityAnimationStepInputOptions>
+) {
+  return new UndimAnimationStep(timeOrOptionsIn, ...args);
 }
 
 // export class DissolveInAnimationStep extends ColorAnimationStep {

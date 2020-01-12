@@ -1040,12 +1040,19 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     time: number = 1,
     finishOnCancel: boolean = true,
     callback: ?() => void = null,
+    onStepCallback: ?(number, number) => void = null,
+    stop: ?boolean = true,
   ) {
-    this.stop();
+    if (stop) {
+      this.stop();
+    }
     const initialLength = this.currentLength;
     const deltaLength = toLength - this.currentLength;
     const func = (percent) => {
       this.setLength(initialLength + deltaLength * percent);
+      if (onStepCallback != null) {
+        onStepCallback(percent, initialLength + deltaLength * percent);
+      }
     };
     const done = () => {
       if (finishOnCancel) {
@@ -1070,11 +1077,12 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     time: number = 1,
     finishOnCancel: boolean = true,
     callback: ?() => void = null,
+    onStepCallback: ?(number, number) => void = null,
   ) {
     this.stop();
     const target = this.currentLength;
     this.setLength(fromLength);
-    this.animateLengthTo(target, time, finishOnCancel, callback);
+    this.animateLengthTo(target, time, finishOnCancel, callback, onStepCallback);
   }
 
   showLineOnly() {
