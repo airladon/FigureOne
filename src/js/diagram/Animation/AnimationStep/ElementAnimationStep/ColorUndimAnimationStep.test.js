@@ -17,7 +17,11 @@ describe('Dim Animation', () => {
   let dimColor;
   beforeEach(() => {
     diagram = makeDiagram();
-    elem1 = diagram.objects.line();
+    elem1 = diagram.objects.line({
+      label: {
+        text: 'a',
+      },
+    });
     color = [1, 1, 1, 1];
     dimColor = [0.5, 0.5, 0.5, 1];
     elem1.setColor(color);
@@ -33,6 +37,7 @@ describe('Dim Animation', () => {
 
     expect(elem1.isShown).toBe(true);
     expect(math.round(elem1.color[0])).toEqual(0.5);
+    expect(math.round(elem1._label.color[0])).toEqual(0.5);
 
     elem1.animations.nextFrame(0);
     expect(math.round(elem1.color[0])).toEqual(0.5);
