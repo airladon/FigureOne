@@ -338,6 +338,7 @@ class DiagramElement {
         }
         return new animations.DissolveOutAnimationStep(options);
       },
+      // eslint-disable-next-line max-len
       dim: (timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {}, ...args: Array<TypeColorAnimationStepInputOptions>) => {
         const defaultOptions = { element: this };
         let options;
@@ -348,6 +349,7 @@ class DiagramElement {
         }
         return new animations.DimAnimationStep(options);
       },
+      // eslint-disable-next-line max-len
       undim: (timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {}, ...args: Array<TypeColorAnimationStepInputOptions>) => {
         const defaultOptions = { element: this };
         let options;
