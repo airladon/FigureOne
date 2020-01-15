@@ -25,6 +25,7 @@ import RadialLines from '../DiagramElements/RadialLines';
 import HorizontalLine from '../DiagramElements/HorizontalLine';
 import DashedLine from '../DiagramElements/DashedLine';
 import RectangleFilled from '../DiagramElements/RectangleFilled';
+import Box from '../DiagramElements/Box';
 // import type { TypeRectangleFilledReference } from '../DiagramElements/RectangleFilled';
 import Lines from '../DiagramElements/Lines';
 import Arrow from '../DiagramElements/Arrow';
@@ -847,6 +848,42 @@ export default class DiagramPrimitives {
     const element = RectangleFilled(
       this.webgl, options.alignH, options.alignV, options.width, options.height,
       options.corner.radius, options.corner.sides, options.color, options.transform, this.limits,
+    );
+    if (options.pulse != null) {
+      element.pulseDefault.scale = options.pulse;
+    }
+    return element;
+  }
+
+  box(...optionsIn: Array<{
+    width?: number,
+    height?: number,
+    fill?: boolean,
+    lineWidth?: number,
+    colors?: Array<number>,
+    transform?: Transform,
+    position?: parsablePoint,
+    pulse?: number,
+  }>) {
+    const defaultOptions = {
+      width: 1,
+      height: 1,
+      fill: false,
+      lineWidth: 0.01,
+      color: [1, 0, 0, 1],
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
+      position: null,
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    if (options.position != null) {
+      options.transform.updateTranslation(getPoint(options.position));
+    }
+    if (typeof options.reference !== 'string') {
+      options.reference = getPoint(options.reference);
+    }
+    const element = Box(
+      this.webgl, options.width, options.height, options.lineWidth,
+      options.fill, options.color, options.transform, this.limits,
     );
     if (options.pulse != null) {
       element.pulseDefault.scale = options.pulse;

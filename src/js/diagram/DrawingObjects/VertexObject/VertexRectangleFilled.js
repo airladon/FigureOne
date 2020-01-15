@@ -86,25 +86,6 @@ export default class VertexRectangleFilled extends VertexObject {
     } else {
       points = points.map(p => p.add(alignH, alignH));
     }
-    // if (reference === 'topLeft') {
-    //   points = points.map(p => p.add(new Point(width / 2, -height / 2)));
-    // } else if (reference === 'topRight') {
-    //   points = points.map(p => p.add(new Point(-width / 2, -height / 2)));
-    // } else if (reference === 'bottomLeft') {
-    //   points = points.map(p => p.add(new Point(width / 2, height / 2)));
-    // } else if (reference === 'bottomRight') {
-    //   points = points.map(p => p.add(new Point(-width / 2, height / 2)));
-    // } else if (reference === 'middleLeft') {
-    //   points = points.map(p => p.add(new Point(width / 2, 0)));
-    // } else if (reference === 'middleRight') {
-    //   points = points.map(p => p.add(new Point(-width / 2, 0)));
-    // } else if (reference === 'topCenter') {
-    //   points = points.map(p => p.add(new Point(0, -height / 2)));
-    // } else if (reference === 'bottomCenter') {
-    //   points = points.map(p => p.add(new Point(0, height / 2)));
-    // } else if (typeof reference !== 'string') {   // $FlowFixMe
-    //   points = points.map(p => p.add(reference));
-    // }
 
     points.forEach((p) => {
       this.points.push(p.x);

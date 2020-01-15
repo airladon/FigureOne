@@ -54,6 +54,7 @@ function addElements(
       dashedLine: shapes.dashedLine.bind(shapes),
       parallelMarks: shapes.parallelMarks.bind(shapes),
       marks: shapes.marks.bind(shapes),
+      box: shapes.box.bind(shapes),
       //
       line: objects.line.bind(objects),
       angle: objects.angle.bind(objects),
