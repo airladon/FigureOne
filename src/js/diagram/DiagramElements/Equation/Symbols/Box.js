@@ -154,4 +154,12 @@ export default class Box extends Symbol {
     }
     return out;
   }
+
+  // surround(parent, childrenToUse, space) {
+  //   let elements = [parent];
+  //   if (childrenToUse !== '' && childrenToUse != null) {
+  //     elements = parent.getElements(childrenToUse);
+  //   }
+  //   maxBounds = elements.
+  // }
 }
