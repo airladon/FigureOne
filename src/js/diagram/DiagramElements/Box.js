@@ -3,7 +3,7 @@
 import VertexBox from '../DrawingObjects/VertexObject/VertexBox';
 import { DiagramElementPrimitive } from '../Element';
 import {
-  Point, Transform, Rect,
+  Point, Transform, Rect, getPoint,
 } from '../../tools/g2';
 import WebGLInstance from '../webgl/webgl';
 
@@ -32,7 +32,7 @@ export default function Box(
   }
   const element = new DiagramElementPrimitive(vertexRectangle, transform, color, diagramLimits);
 
-  element.surround = (parent, children, space = 0, drawingSpace = 'diagram') => {
+  element.surround = (parent, children, spaceIn = 0, drawingSpace = 'diagram') => {
     let elements = [parent];
     if (children != null && children !== '') {
       elements = parent.getElements(children);
@@ -40,6 +40,7 @@ export default function Box(
     if (elements.length === 0) {
       return;
     }
+    const space = getPoint(spaceIn);
     const maxBounds = elements[0].getBoundingRect(drawingSpace);
     for (let i = 1; i < elements.length; i += 1) {
       const bounds = elements[i].getBoundingRect(drawingSpace);
@@ -56,10 +57,10 @@ export default function Box(
         maxBounds.height = bounds.top - maxBounds.bottom;
       }
     }
-    maxBounds.left -= space;
-    maxBounds.bottom -= space;
-    maxBounds.height += 2 * space;
-    maxBounds.width += 2 * space;
+    maxBounds.left -= space.x;
+    maxBounds.bottom -= space.y;
+    maxBounds.height += 2 * space.x;
+    maxBounds.width += 2 * space.y;
     maxBounds.right = maxBounds.left + maxBounds.width;
     maxBounds.top = maxBounds.bottom + maxBounds.height;
 
