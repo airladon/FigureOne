@@ -1,7 +1,7 @@
 // @flow
 import { DiagramElementPrimitive } from '../../../Element';
 import {
-  Point,
+  Point, getPoint,
 } from '../../../../tools/g2';
 import Symbol from './SymbolNew';
 import Bounds from '../Elements/Bounds';
@@ -153,6 +153,52 @@ export default class Box extends Symbol {
       out.width = 1;
     }
     return out;
+  }
+
+  surround(parent, children, spaceIn = 0, drawingSpace = 'diagram') {
+    let elements = [parent];
+    if (children != null && children !== '') {
+      elements = parent.getElements(children);
+    }
+    if (elements.length === 0) {
+      return;
+    }
+    const space = getPoint(spaceIn);
+    const maxBounds = elements[0].getBoundingRect(drawingSpace);
+    for (let i = 1; i < elements.length; i += 1) {
+      const bounds = elements[i].getBoundingRect(drawingSpace);
+      if (bounds.left < maxBounds.left) {
+        maxBounds.left = bounds.left;
+      }
+      if (bounds.bottom < maxBounds.bottom) {
+        maxBounds.bottom = bounds.bottom;
+      }
+      if (bounds.right - maxBounds.left > maxBounds.width) {
+        maxBounds.width = bounds.right - maxBounds.left;
+      }
+      if (bounds.top - maxBounds.bottom > maxBounds.height) {
+        maxBounds.height = bounds.top - maxBounds.bottom;
+      }
+    }
+    maxBounds.left -= space.x;
+    maxBounds.bottom -= space.y;
+    maxBounds.height += 2 * space.x;
+    maxBounds.width += 2 * space.y;
+    maxBounds.right = maxBounds.left + maxBounds.width;
+    maxBounds.top = maxBounds.bottom + maxBounds.height;
+
+    this.custom.setSize(
+      new Point(maxBounds.left, maxBounds.bottom),
+      maxBounds.width, maxBounds.height,
+    );
+    // this.drawingObject.updateBox(
+    //   maxBounds.width,
+    //   maxBounds.height,
+    // );
+    // this.setPosition(
+    //   maxBounds.left + maxBounds.width / 2,
+    //   maxBounds.bottom + maxBounds.height / 2,
+    // );
   }
 
   // surround(parent, childrenToUse, space) {
