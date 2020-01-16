@@ -164,26 +164,12 @@ export default class Box extends Symbol {
       return;
     }
     const space = getPoint(spaceIn);
-    const maxBounds = elements[0].getBoundingRect(drawingSpace);
-    for (let i = 1; i < elements.length; i += 1) {
-      const bounds = elements[i].getBoundingRect(drawingSpace);
-      if (bounds.left < maxBounds.left) {
-        maxBounds.left = bounds.left;
-      }
-      if (bounds.bottom < maxBounds.bottom) {
-        maxBounds.bottom = bounds.bottom;
-      }
-      if (bounds.right - maxBounds.left > maxBounds.width) {
-        maxBounds.width = bounds.right - maxBounds.left;
-      }
-      if (bounds.top - maxBounds.bottom > maxBounds.height) {
-        maxBounds.height = bounds.top - maxBounds.bottom;
-      }
-    }
+    const maxBounds = parent.getBoundingRect('local', children);
+
     maxBounds.left -= space.x;
     maxBounds.bottom -= space.y;
-    maxBounds.height += 2 * space.x;
-    maxBounds.width += 2 * space.y;
+    maxBounds.width += 2 * space.x;
+    maxBounds.height += 2 * space.y;
     maxBounds.right = maxBounds.left + maxBounds.width;
     maxBounds.top = maxBounds.bottom + maxBounds.height;
 
