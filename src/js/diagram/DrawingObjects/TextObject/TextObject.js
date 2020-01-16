@@ -455,7 +455,7 @@ class TextObject extends DrawingObject {
     if (text.font.alignH === 'right') {
       left = width;
     }
-    if (text.font.alignV === 'alphabetic') {
+    if (text.font.alignV === 'alphabetic' || text.font.alignV === 'baseline') {
       asc = ascent;
       des = descent;
     }
@@ -507,7 +507,7 @@ class TextObject extends DrawingObject {
         -textMetrics.actualBoundingBoxLeft / scalingFactor,
         -textMetrics.fontBoundingBoxDescent / scalingFactor,
       ).add(location),
-    ];
+    ];    
     box.forEach((p) => {
       boundary.push(p);
     });
