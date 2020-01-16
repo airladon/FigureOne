@@ -1941,6 +1941,10 @@ class DiagramElementPrimitive extends DiagramElement {
     return this.drawingObject.getGLBoundaries(this.getTransform().matrix());
   }
 
+  getDiagramBoundaries() {
+    return this.drawingObject.getGLBoundaries(this.vertexToDiagramSpaceTransformMatrix());
+  }
+
   getGLBoundaries() {
     return this.drawingObject.getGLBoundaries(this.lastDrawTransform.matrix());
   }
@@ -2388,7 +2392,7 @@ class DiagramElementCollection extends DiagramElement {
   ) {
     let boundaries = [];
     if (children == null) {
-      return this.getAllBoundaries();
+      return this.getAllBoundaries(space);
     }
     children.forEach((child) => {
       const e = this.getElement(child);
