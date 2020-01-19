@@ -46,4 +46,32 @@ describe('Dim Animation', () => {
     expect(math.round(elem1.color[0])).toEqual(0.5);
     expect(callback.mock.calls.length).toBe(1);
   });
+  test('Simple undim', () => {
+    elem1.animations.new()
+      .dim(1)
+      .start();
+    elem1.animations.nextFrame(0);
+    elem1.animations.nextFrame(1);
+
+    elem1.animations.new()
+      .undim(1)
+      .whenFinished(callback)
+      .start();
+
+    expect(elem1.isShown).toBe(true);
+    expect(math.round(elem1.color[0])).toEqual(0.5);
+
+    elem1.animations.nextFrame(0);
+    expect(math.round(elem1.color[0])).toEqual(0.5);
+
+    elem1.animations.nextFrame(0.5);
+    expect(math.round(elem1.color[0])).toEqual(0.75);
+
+    elem1.animations.nextFrame(0.9);
+    expect(math.round(elem1.color[0])).toEqual(0.95);
+
+    elem1.animations.nextFrame(1.0);
+    expect(math.round(elem1.color[0])).toEqual(1);
+    expect(callback.mock.calls.length).toBe(1);
+  });
 });
