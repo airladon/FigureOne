@@ -29,6 +29,7 @@ export class ColorAnimationStep extends ElementAnimationStep {
     target: TypeColor;
     whenComplete: TypeColor;  // Color after dissolving
     dissolve?: 'in' | 'out' | null;
+    setDefault?: boolean;
   };
 
   constructor(...optionsIn: Array<TypeColorAnimationStepInputOptions>) {
@@ -52,9 +53,12 @@ export class ColorAnimationStep extends ElementAnimationStep {
     ]);
     if (this.color.target === 'dim') {
       this.color.target = this.element.dimColor.slice();
-    }
-    if (this.color.target === 'undim') {
+      this.color.setDefault = false;
+    } else if (this.color.target === 'undim') {
       this.color.target = this.element.defaultColor.slice();
+      this.color.setDefault = false;
+    } else {
+      this.color.setDefault = true;
     }
   }
 
@@ -81,7 +85,7 @@ export class ColorAnimationStep extends ElementAnimationStep {
       }
       if (this.color.dissolve === 'in') {
         this.color.start[3] = 0.001;
-        element.setColor(this.color.start);
+        element.setColor(this.color.start, this.color.setDefault);
         element.showAll();
       }
       this.color.delta = subtractColors(this.color.target, this.color.start);
@@ -105,7 +109,7 @@ export class ColorAnimationStep extends ElementAnimationStep {
       return newColor;
     });
     if (this.element != null) {
-      this.element.setColor(next);
+      this.element.setColor(next, this.color.setDefault);
     }
   }
 
@@ -113,7 +117,7 @@ export class ColorAnimationStep extends ElementAnimationStep {
     const { element } = this;
     if (element != null) {
       // console.log(this.name, this.color.whenComplete)
-      element.setColor(this.color.whenComplete);
+      element.setColor(this.color.whenComplete, this.color.setDefault);
       if (this.color.dissolve === 'out') {
         element.hide();
       }
