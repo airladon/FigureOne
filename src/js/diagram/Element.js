@@ -154,7 +154,8 @@ class DiagramElement {
     C: number | Array<number>,
     style: (number, number, number, number, number) => number,
     num: number,
-    transformMethod: (number) => Transform,
+    delta: TypeParsablePoint,
+    transformMethod: (number, ?Point) => Transform,
     callback: ?(mixed) => void;
   };
 
@@ -432,7 +433,16 @@ class DiagramElement {
       C: 0,
       style: tools.sinusoid,
       num: 1,
-      transformMethod: s => new Transform().scale(s, s),
+      delta: new Point(0, 0),
+      transformMethod: (s, d) => {
+        if (d == null || d.x === 0 && d.y === 0) {
+          return new Transform().scale(s, s);
+        }
+        return new Transform()
+          .translate(-d.x, -d.y)
+          .scale(s, s)
+          .translate(d.x, d.y);
+      },
       callback: () => {},
     };
 
@@ -1050,7 +1060,7 @@ class DiagramElement {
         );
 
         // Use the pulse magnitude to get the current pulse transform
-        const pTransform = this.pulseSettings.transformMethod(pulseMag);
+        const pTransform = this.pulseSettings.transformMethod(pulseMag, this.pulseSettings.delta);
         // if(this.name === '_radius') {
         // }
         // Transform the current transformMatrix by the pulse transform matrix
@@ -1069,6 +1079,7 @@ class DiagramElement {
   pulseScaleNow(
     time: number, scale: number,
     frequency: number = 0, callback: ?(?mixed) => void = null,
+    delta: TypeParsablePoint = new Point(0, 0),
   ) {
     this.pulseSettings.time = time;
     if (frequency === 0 && time === 0) {
@@ -1085,7 +1096,8 @@ class DiagramElement {
     this.pulseSettings.B = scale - 1;
     this.pulseSettings.C = 0;
     this.pulseSettings.num = 1;
-    this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
+    this.pulseSettings.delta = getPoint(delta);
+    // this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
     this.pulseSettings.callback = callback;
     this.pulseNow();
   }
@@ -1098,28 +1110,29 @@ class DiagramElement {
     frequency: number = 0,
     callback: ?(?mixed) => void = null,
   ) {
-    this.pulseSettings.time = time;
-    if (frequency === 0 && time === 0) {
-      this.pulseSettings.frequency = 1;
-    }
-    if (frequency !== 0) {
-      this.pulseSettings.frequency = frequency;
-    }
-    if (time !== 0 && frequency === 0) {
-      this.pulseSettings.frequency = 1 / (time * 2);
-    }
-    this.pulseSettings.A = 1;
-    this.pulseSettings.B = scale - 1;
-    this.pulseSettings.C = 0;
-    this.pulseSettings.num = 1;
-    this.pulseSettings.callback = callback;
+    // this.pulseSettings.time = time;
+    // if (frequency === 0 && time === 0) {
+    //   this.pulseSettings.frequency = 1;
+    // }
+    // if (frequency !== 0) {
+    //   this.pulseSettings.frequency = frequency;
+    // }
+    // if (time !== 0 && frequency === 0) {
+    //   this.pulseSettings.frequency = 1 / (time * 2);
+    // }
+    // this.pulseSettings.A = 1;
+    // this.pulseSettings.B = scale - 1;
+    // this.pulseSettings.C = 0;
+    // this.pulseSettings.num = 1;
+    // this.pulseSettings.callback = callback;
     const currentPosition = this.getPosition(space);
     const delta = getPoint(p).sub(currentPosition);
-    this.pulseSettings.transformMethod = s => new Transform()
-      .translate(-delta.x, -delta.y)
-      .scale(s, s)
-      .translate(delta.x, delta.y);
-    this.pulseNow();
+    this.pulseScaleNow(time, scale, frequency, callback, delta);
+    // this.pulseSettings.transformMethod = s => new Transform()
+    //   .translate(-delta.x, -delta.y)
+    //   .scale(s, s)
+    //   .translate(delta.x, delta.y);
+    // this.pulseNow();
   }
 
   pulseScaleRelativeToElement(
