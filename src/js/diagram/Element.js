@@ -653,7 +653,73 @@ class DiagramElement {
     }
   }
 
-  pulse(done: ?(mixed) => void = null) {
+  // pulseScaleRelativeTo(
+  //   e: DiagramElement | TypeParsablePoint | null,
+  //   x: 'left' | 'center' | 'right' | 'origin' | number,
+  //   y: 'bottom' | 'middle' | 'top' | 'origin' | number,
+  //   space: 'diagram' | 'gl' | 'vertex' | 'local',
+  //   time: number,
+  //   scale: number,
+  //   frequency: number = 0,
+  //   callback: ?(?mixed) => void = null,
+  // ) {
+  //   if (e == null || e instanceof DiagramElement) {
+  //     this.pulseScaleRelativeToElement(e, x, y, space, time, scale, frequency, callback);
+  //   } else {
+  //     this.pulseScaleRelativeToPoint(e, space, time, scale, frequency, callback)
+  //   }
+  // }
+  pulse(optionsOrDone: {
+      x?: 'left' | 'center' | 'right' | 'origin' | number,
+      y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
+      space?: 'diagram' | 'gl' | 'local' | 'vertex',
+      centerOn?: null | DiagramElement | TypeParsablePoint,
+      frequency?: number,
+      time?: number,
+      scale?: number,
+      done?: ?(mixed) => void,
+    } | ?(mixed) => void = null) {
+    const defaultOptions = {
+      x: 'center',
+      y: 'middle',
+      space: 'diagram',
+      centerOn: null,
+      frequency: this.pulseDefault.frequency,
+      time: this.pulseDefault.time,
+      scale: this.pulseDefault.scale,
+      done: null,
+    };
+    let done;
+    let options = defaultOptions;
+    if (typeof optionsOrDone === 'function') {
+      options = defaultOptions;
+      done = optionsOrDone;
+    } else if (optionsOrDone == null) {
+      options = defaultOptions;
+      done = null;
+    } else {
+      options = joinObjects({}, defaultOptions, optionsOrDone);
+      ({ done } = options);
+    }
+    if (typeof this.pulseDefault === 'function') {
+      this.pulseDefault(done);
+    } else {
+      // const { frequency, time, scale } = this.pulseDefault;
+      // this.pulseScaleNow(time, scale, frequency, done);
+      this.pulseScaleRelativeTo(
+        options.centerOn,
+        options.x,
+        options.y,
+        options.space,
+        options.time,
+        options.scale,
+        options.frequency,
+        done,
+      );
+    }
+  }
+
+  pulseLegacy(done: ?(mixed) => void = null) {
     if (typeof this.pulseDefault === 'function') {
       this.pulseDefault(done);
     } else {
@@ -1116,15 +1182,39 @@ class DiagramElement {
   }
 
   pulseScaleRelativeToElement(
-    e: DiagramElement,
+    e: ?DiagramElement,
+    x: 'left' | 'center' | 'right' | 'origin' | number,
+    y: 'bottom' | 'middle' | 'top' | 'origin' | number,
     space: 'diagram' | 'gl' | 'vertex' | 'local',
     time: number,
     scale: number,
     frequency: number = 0,
     callback: ?(?mixed) => void = null,
   ) {
-    const p = e.getPosition(space);
+    let p;
+    if (e == null) {
+      p = this.getPositionInBounds(space, x, y);
+    } else {
+      p = e.getPositionInBounds(space, x, y);
+    }
     this.pulseScaleRelativeToPoint(p, space, time, scale, frequency, callback);
+  }
+
+  pulseScaleRelativeTo(
+    e: DiagramElement | TypeParsablePoint | null,
+    x: 'left' | 'center' | 'right' | 'origin' | number,
+    y: 'bottom' | 'middle' | 'top' | 'origin' | number,
+    space: 'diagram' | 'gl' | 'vertex' | 'local',
+    time: number,
+    scale: number,
+    frequency: number = 0,
+    callback: ?(?mixed) => void = null,
+  ) {
+    if (e == null || e instanceof DiagramElement) {
+      this.pulseScaleRelativeToElement(e, x, y, space, time, scale, frequency, callback);
+    } else {
+      this.pulseScaleRelativeToPoint(e, space, time, scale, frequency, callback)
+    }
   }
 
   pulseThickNow(
@@ -2256,6 +2346,102 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   pulse(
+    optionsOrElementsOrDone: {
+      x?: 'left' | 'center' | 'right' | 'origin' | number,
+      y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
+      space?: 'diagram' | 'gl' | 'local' | 'vertex',
+      centerOn?: null | DiagramElement | TypeParsablePoint,
+      frequency?: number,
+      time?: number,
+      scale?: number,
+      done?: ?(mixed) => void,
+      elements?: Array<string | DiagramElement>
+    } | Array<string | DiagramElement> | ((mixed) => void) | null = null,
+    done: ?(mixed) => void = null,
+  ) {
+    if (optionsOrElementsOrDone == null
+      || typeof optionsOrElementsOrDone === 'function'
+    ) {
+      super.pulse(optionsOrElementsOrDone);
+      return;
+    }
+
+    const defaultOptions = {
+      x: 'center',
+      y: 'middle',
+      space: 'diagram',
+      centerOn: null,
+      frequency: this.pulseDefault.frequency,
+      time: this.pulseDefault.time,
+      scale: this.pulseDefault.scale,
+      done: null,
+      elements: null,
+    };
+
+    let doneToUse;
+    let options;
+    let elements;
+    if (Array.isArray(optionsOrElementsOrDone)) {
+      options = defaultOptions;
+      doneToUse = done;
+      elements = optionsOrElementsOrDone;
+    } else {
+      options = joinObjects({}, defaultOptions, optionsOrElementsOrDone);
+      ({ elements } = options);
+      doneToUse = options.done;
+    }
+    if (elements == null || elements.length === 1) {
+      super.pulse(optionsOrElementsOrDone);
+      return;
+    }
+
+    let counter = 0;
+    const combinedCallback = () => {
+      counter += 1;
+      if (counter === elements.length) {
+        if (doneToUse != null) {
+          doneToUse();
+        }
+      }
+    };
+    options.done = combinedCallback;
+    // let doneToUse = done;
+    elements.forEach((elementToPulse) => {
+      let element: ?DiagramElement;
+      if (typeof elementToPulse === 'string') {
+        element = this.getElement(elementToPulse);
+      } else {
+        element = elementToPulse;
+      }
+      if (element != null) {
+        // element.pulseDefault(doneToUse);
+        element.pulse(options);
+        // doneToUse = null;
+      }
+    });
+    // if (doneToUse != null) {
+    //   doneToUse();
+    // }
+
+    // if (typeof this.pulseDefault === 'function') {
+    //   this.pulseDefault(done);
+    // } else {
+    //   // const { frequency, time, scale } = this.pulseDefault;
+    //   // this.pulseScaleNow(time, scale, frequency, done);
+    //   this.pulseScaleRelativeTo(
+    //     options.centeredOn,
+    //     options.x,
+    //     options.y,
+    //     options.space,
+    //     options.time,
+    //     options.scale,
+    //     options.frequency,
+    //     done,
+    //   );
+    // }
+  }
+
+  pulseLegacy(
     elementsOrDone: ?(Array<string | DiagramElement> | (mixed) => void),
     // elementsToPulse: Array<string | DiagramElement>,
     done: ?(mixed) => void = null,
