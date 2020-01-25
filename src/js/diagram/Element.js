@@ -25,7 +25,7 @@ import type {
   TypeColorAnimationStepInputOptions, TypeTransformAnimationStepInputOptions,
   TypeRotationAnimationStepInputOptions, TypeScaleAnimationStepInputOptions,
   TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
-  TypeParallelAnimationStepInputOptions,
+  TypeParallelAnimationStepInputOptions, TypeTriggerStepInputOptions,
 } from './Animation/Animation';
 import * as animations from './Animation/Animation';
 import WebGLInstance from './webgl/webgl';
@@ -295,6 +295,10 @@ class DiagramElement {
       scale: (...optionsIn: Array<TypeScaleAnimationStepInputOptions>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.ScaleAnimationStep(options);
+      },
+      trigger: (...optionsIn: Array<TypeTriggerStepInputOptions>) => {
+        const options = joinObjects({}, ...optionsIn);
+        return new animations.TriggerStep(options);
       },
       position: (...optionsIn: Array<TypePositionAnimationStepInputOptions>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
@@ -1081,8 +1085,53 @@ class DiagramElement {
     this.pulseSettings.B = scale - 1;
     this.pulseSettings.C = 0;
     this.pulseSettings.num = 1;
+    this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
     this.pulseSettings.callback = callback;
     this.pulseNow();
+  }
+
+  pulseScaleRelativeToPoint(
+    p: TypeParsablePoint,
+    space: 'diagram' | 'gl' | 'vertex' | 'local',
+    time: number,
+    scale: number,
+    frequency: number = 0,
+    callback: ?(?mixed) => void = null,
+  ) {
+    this.pulseSettings.time = time;
+    if (frequency === 0 && time === 0) {
+      this.pulseSettings.frequency = 1;
+    }
+    if (frequency !== 0) {
+      this.pulseSettings.frequency = frequency;
+    }
+    if (time !== 0 && frequency === 0) {
+      this.pulseSettings.frequency = 1 / (time * 2);
+    }
+    this.pulseSettings.A = 1;
+    this.pulseSettings.B = scale - 1;
+    this.pulseSettings.C = 0;
+    this.pulseSettings.num = 1;
+    this.pulseSettings.callback = callback;
+    const currentPosition = this.getPosition(space);
+    const delta = getPoint(p).sub(currentPosition);
+    this.pulseSettings.transformMethod = s => new Transform()
+      .translate(-delta.x, -delta.y)
+      .scale(s, s)
+      .translate(delta.x, delta.y);
+    this.pulseNow();
+  }
+
+  pulseScaleRelativeToElement(
+    e: DiagramElement,
+    space: 'diagram' | 'gl' | 'vertex' | 'local',
+    time: number,
+    scale: number,
+    frequency: number = 0,
+    callback: ?(?mixed) => void = null,
+  ) {
+    const p = e.getPosition(space);
+    this.pulseScaleRelativeToPoint(p, space, time, scale, frequency, callback);
   }
 
   pulseThickNow(
@@ -1361,8 +1410,43 @@ class DiagramElement {
   //   return new Point(0, 0);
   // }
 
-  getPosition(space: 'local' | 'diagram' | 'gl' | 'vertex' = 'local') {
+  getPositionInBounds(
+    space: 'local' | 'diagram' | 'gl' | 'vertex' = 'local',
+    x: 'center' | 'left' | 'right' | 'origin' | number,
+    y: 'middle' | 'top' | 'bottom' | 'origin' | number,
+  ) {
+    const bounds = this.getBoundingRect(space);
+    const p = this.getPosition(space);
+    if (x === 'left') {
+      p.x = bounds.left;
+    } else if (x === 'right') {
+      p.x = bounds.right;
+    } else if (x === 'center') {
+      p.x = bounds.left + bounds.width / 2;
+    } else if (typeof x === 'number') {
+      p.x = bounds.left + bounds.width * x;
+    }
+    if (y === 'top') {
+      p.y = bounds.top;
+    } else if (y === 'bottom') {
+      p.y = bounds.bottom;
+    } else if (y === 'middle') {
+      p.y = bounds.bottom + bounds.height / 2;
+    } else if (typeof y === 'number') {
+      p.y = bounds.bottom + bounds.height * y;
+    }
+    return p;
+  }
+
+  getPosition(
+    space: 'local' | 'diagram' | 'gl' | 'vertex' = 'local',
+    x: 'center' | 'left' | 'right' | 'origin' | number = 'origin',
+    y: 'middle' | 'top' | 'bottom' | 'origin' | number = 'origin',
+  ) {
     // vertex space position doesn't mean much as it will always be 0, 0
+    if (x !== 'origin' || y !== 'origin') {
+      this.getPositionInBounds(space, x, y);
+    }
     if (space === 'vertex') {
       return new Point(0, 0);
     }
