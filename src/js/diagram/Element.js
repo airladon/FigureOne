@@ -1110,29 +1110,9 @@ class DiagramElement {
     frequency: number = 0,
     callback: ?(?mixed) => void = null,
   ) {
-    // this.pulseSettings.time = time;
-    // if (frequency === 0 && time === 0) {
-    //   this.pulseSettings.frequency = 1;
-    // }
-    // if (frequency !== 0) {
-    //   this.pulseSettings.frequency = frequency;
-    // }
-    // if (time !== 0 && frequency === 0) {
-    //   this.pulseSettings.frequency = 1 / (time * 2);
-    // }
-    // this.pulseSettings.A = 1;
-    // this.pulseSettings.B = scale - 1;
-    // this.pulseSettings.C = 0;
-    // this.pulseSettings.num = 1;
-    // this.pulseSettings.callback = callback;
     const currentPosition = this.getPosition(space);
     const delta = getPoint(p).sub(currentPosition);
     this.pulseScaleNow(time, scale, frequency, callback, delta);
-    // this.pulseSettings.transformMethod = s => new Transform()
-    //   .translate(-delta.x, -delta.y)
-    //   .scale(s, s)
-    //   .translate(delta.x, delta.y);
-    // this.pulseNow();
   }
 
   pulseScaleRelativeToElement(
@@ -2539,6 +2519,35 @@ class DiagramElementCollection extends DiagramElement {
   //   }
   //   return boundaries;
   // }
+
+  getPositionInBounds(
+    space: 'local' | 'diagram' | 'gl' | 'vertex' = 'local',
+    x: 'center' | 'left' | 'right' | 'origin' | number,
+    y: 'middle' | 'top' | 'bottom' | 'origin' | number,
+    children: ?Array<string | DiagramElement> = null,
+  ) {
+    const bounds = this.getBoundingRect(space, children);
+    const p = this.getPosition(space);
+    if (x === 'left') {
+      p.x = bounds.left;
+    } else if (x === 'right') {
+      p.x = bounds.right;
+    } else if (x === 'center') {
+      p.x = bounds.left + bounds.width / 2;
+    } else if (typeof x === 'number') {
+      p.x = bounds.left + bounds.width * x;
+    }
+    if (y === 'top') {
+      p.y = bounds.top;
+    } else if (y === 'bottom') {
+      p.y = bounds.bottom;
+    } else if (y === 'middle') {
+      p.y = bounds.bottom + bounds.height / 2;
+    } else if (typeof y === 'number') {
+      p.y = bounds.bottom + bounds.height * y;
+    }
+    return p;
+  }
 
   getBoundingRect(
     space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
