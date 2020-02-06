@@ -5,9 +5,8 @@
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
-import type {
-  TypeElementAnimationStepInputOptions,
-} from '../ElementAnimationStep';
+import type { TypeElementAnimationStepInputOptions } from '../ElementAnimationStep';
+import type { TypeOpacityAnimationStepInputOptions } from './OpacityAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 
 type TypeColor = Array<number>;
@@ -52,10 +51,14 @@ export class ColorAnimationStep extends ElementAnimationStep {
       'start', 'delta', 'target', 'dissolve',
     ]);
     if (this.color.target === 'dim') {
-      this.color.target = this.element.dimColor.slice();
+      if (this.element != null) {
+        this.color.target = this.element.dimColor.slice();
+      }
       this.color.setDefault = false;
     } else if (this.color.target === 'undim') {
-      this.color.target = this.element.defaultColor.slice();
+      if (this.element != null) {
+        this.color.target = this.element.defaultColor.slice();
+      }
       this.color.setDefault = false;
     } else {
       this.color.setDefault = true;

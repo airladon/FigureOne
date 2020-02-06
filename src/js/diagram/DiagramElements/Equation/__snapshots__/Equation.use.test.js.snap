@@ -18,6 +18,7 @@ DiagramElementPrimitive {
     "scenario": [Function],
     "scenarios": [Function],
     "transform": [Function],
+    "trigger": [Function],
     "undim": [Function],
   },
   "animations": AnimationManager {
@@ -357,6 +358,11 @@ DiagramElementPrimitive {
     "B": 0.5,
     "C": 0,
     "callback": [Function],
+    "delta": Point {
+      "_type": "point",
+      "x": 0,
+      "y": 0,
+    },
     "frequency": 0.5,
     "num": 1,
     "style": [Function],

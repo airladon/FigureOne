@@ -507,7 +507,7 @@ class TextObject extends DrawingObject {
         -textMetrics.actualBoundingBoxLeft / scalingFactor,
         -textMetrics.fontBoundingBoxDescent / scalingFactor,
       ).add(location),
-    ];    
+    ];
     box.forEach((p) => {
       boundary.push(p);
     });

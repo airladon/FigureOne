@@ -435,7 +435,7 @@ class DiagramElement {
       num: 1,
       delta: new Point(0, 0),
       transformMethod: (s, d) => {
-        if (d == null || d.x === 0 && d.y === 0) {
+        if (d == null || (d.x === 0 && d.y === 0)) {
           return new Transform().scale(s, s);
         }
         return new Transform()
@@ -1126,7 +1126,10 @@ class DiagramElement {
         );
 
         // Use the pulse magnitude to get the current pulse transform
-        const pTransform = this.pulseSettings.transformMethod(pulseMag, this.pulseSettings.delta);
+        const pTransform = this.pulseSettings.transformMethod(
+          pulseMag,
+          getPoint(this.pulseSettings.delta),
+        );
         // if(this.name === '_radius') {
         // }
         // Transform the current transformMatrix by the pulse transform matrix
@@ -1213,7 +1216,7 @@ class DiagramElement {
     if (e == null || e instanceof DiagramElement) {
       this.pulseScaleRelativeToElement(e, x, y, space, time, scale, frequency, callback);
     } else {
-      this.pulseScaleRelativeToPoint(e, space, time, scale, frequency, callback)
+      this.pulseScaleRelativeToPoint(e, space, time, scale, frequency, callback);
     }
   }
 
@@ -2175,7 +2178,18 @@ class DiagramElementCollection extends DiagramElement {
   drawOrder: Array<string>;
   touchInBoundingRect: boolean;
   eqns: Object;
-  +pulse: (?(Array<string | DiagramElement> | (mixed) => void), ?(mixed) => void) => void;
+  +pulse: (?({
+      x?: 'left' | 'center' | 'right' | 'origin' | number,
+      y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
+      space?: 'diagram' | 'gl' | 'local' | 'vertex',
+      centerOn?: null | DiagramElement | TypeParsablePoint,
+      frequency?: number,
+      time?: number,
+      scale?: number,
+      done?: ?(mixed) => void,
+      elements?: Array<string | DiagramElement>
+    } | Array<string | DiagramElement> | ((mixed) => void)), ?(mixed) => void) => void;
+
   +getElement: (?(string | DiagramElement)) => ?DiagramElement;
   +getElements: (Array<string | DiagramElement>) => Array<DiagramElement>;
   +exec: (string | Array<string | Object>, ?Array<string | DiagramElement>) => void;
@@ -2346,7 +2360,7 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   pulse(
-    optionsOrElementsOrDone: {
+    optionsOrElementsOrDone: ?({
       x?: 'left' | 'center' | 'right' | 'origin' | number,
       y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
       space?: 'diagram' | 'gl' | 'local' | 'vertex',
@@ -2356,7 +2370,7 @@ class DiagramElementCollection extends DiagramElement {
       scale?: number,
       done?: ?(mixed) => void,
       elements?: Array<string | DiagramElement>
-    } | Array<string | DiagramElement> | ((mixed) => void) | null = null,
+    } | Array<string | DiagramElement> | ((mixed) => void)) = null,
     done: ?(mixed) => void = null,
   ) {
     if (optionsOrElementsOrDone == null
@@ -2390,7 +2404,8 @@ class DiagramElementCollection extends DiagramElement {
       ({ elements } = options);
       doneToUse = options.done;
     }
-    if (elements == null || elements.length === 1) {
+    options.elements = null;
+    if (elements == null || elements.length === 0) {
       super.pulse(optionsOrElementsOrDone);
       return;
     }
@@ -2404,6 +2419,7 @@ class DiagramElementCollection extends DiagramElement {
         }
       }
     };
+    // $FlowFixMe
     options.done = combinedCallback;
     // let doneToUse = done;
     elements.forEach((elementToPulse) => {

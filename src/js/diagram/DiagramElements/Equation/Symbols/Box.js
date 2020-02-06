@@ -1,5 +1,5 @@
 // @flow
-import { DiagramElementPrimitive } from '../../../Element';
+import { DiagramElementPrimitive, DiagramElement, DiagramElementCollection } from '../../../Element';
 import {
   Point, getPoint,
 } from '../../../../tools/g2';
@@ -155,16 +155,26 @@ export default class Box extends Symbol {
     return out;
   }
 
-  surround(parent, children, spaceIn = 0, drawingSpace = 'diagram') {
+  surround(
+    parent: DiagramElement,
+    children: ?Array<string | DiagramElement>,
+    spaceIn: number = 0,
+    drawingSpace: 'diagram' | 'local' | 'gl' | 'vertex' = 'local',
+  ) {
     let elements = [parent];
-    if (children != null && children !== '') {
+    if (children != null && children.length !== 0) {
       elements = parent.getElements(children);
     }
     if (elements.length === 0) {
       return;
     }
     const space = getPoint(spaceIn);
-    const maxBounds = parent.getBoundingRect('local', children);
+    let maxBounds;
+    if (parent instanceof DiagramElementCollection) {
+      maxBounds = parent.getBoundingRect(drawingSpace, children);
+    } else {
+      maxBounds = parent.getBoundingRect(drawingSpace);
+    }
 
     maxBounds.left -= space.x;
     maxBounds.bottom -= space.y;

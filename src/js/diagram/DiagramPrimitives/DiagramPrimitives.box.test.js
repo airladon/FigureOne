@@ -1,9 +1,9 @@
 import {
   Point,
 } from '../../tools/g2';
-import {
-  round,
-} from '../../tools/math';
+// import {
+//   round,
+// } from '../../tools/math';
 import * as tools from '../../tools/tools';
 import makeDiagram from '../../__mocks__/makeDiagram';
 
