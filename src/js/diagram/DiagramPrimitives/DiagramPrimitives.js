@@ -2,6 +2,9 @@
 import {
   Rect, Point, Transform, getPoint,
 } from '../../tools/g2';
+import type {
+  TypeParsablePoint,
+} from '../../tools/g2';
 import { setHTML } from '../../tools/htmlGenerator';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
@@ -862,7 +865,7 @@ export default class DiagramPrimitives {
     lineWidth?: number,
     colors?: Array<number>,
     transform?: Transform,
-    position?: parsablePoint,
+    position?: TypeParsablePoint,
     pulse?: number,
   }>) {
     const defaultOptions = {

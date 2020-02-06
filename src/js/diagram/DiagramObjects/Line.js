@@ -294,7 +294,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   // line methods
   setLength: (number) => void;
   setEndPoints: (TypeParsablePoint, TypeParsablePoint, ?number) => void;
-  animateLengthTo: (?number, ?number, ?boolean, ?() => void) => void;
+  // eslint-disable-next-line max-len
+  animateLengthTo: (?number, ?number, ?boolean, ?() => void, ?(number, number) => void, ?boolean) => void;
   grow: (?number, ?number, ?boolean, ?() => void) => void;
   setMovable: (?boolean, ?('translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale'), ?number, ?Rect) => void;
   addArrow1: (?number, ?number) => void;

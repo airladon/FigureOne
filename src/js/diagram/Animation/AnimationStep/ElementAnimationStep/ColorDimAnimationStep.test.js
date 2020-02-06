@@ -19,7 +19,7 @@ describe('Dim Animation', () => {
     diagram = makeDiagram();
     elem1 = diagram.objects.line();
     color = [1, 1, 1, 1];
-    dimColor = [0.5, 0.5, 0.5, 1]
+    dimColor = [0.5, 0.5, 0.5, 1];
     elem1.setColor(color);
     elem1.setDimColor(dimColor);
     callback = jest.fn(() => {});
