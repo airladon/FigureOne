@@ -13,6 +13,7 @@ import {
   BlankElement, Element, Elements,
 } from './Elements/Element';
 import Fraction from './Elements/Fraction';
+// eslint-disable-next-line import/no-cycle
 import EquationForm from './EquationForm';
 import Matrix from './Elements/Matrix';
 import Scale from './Elements/Scale';

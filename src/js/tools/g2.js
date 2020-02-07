@@ -115,7 +115,7 @@ class Point {
     return new Point(this.x * scalar, this.y * scalar);
   }
 
-  sub(qOrX: Point, y: number = 0) {
+  sub(qOrX: Point | number, y: number = 0) {
     if (qOrX instanceof Point) {
       return new Point(this.x - qOrX.x, this.y - qOrX.y);
     }

@@ -18,6 +18,7 @@ import type {
   TypeAngleOptions, TypeAngleLabelOptions,
 } from './Angle';
 import DiagramPrimitives from '../DiagramPrimitives/DiagramPrimitives';
+// eslint-disable-next-line import/no-cycle
 import DiagramObjects from './DiagramObjects';
 import DiagramEquation from '../DiagramEquation/DiagramEquation';
 
@@ -58,7 +59,7 @@ function makeArray<T>(
   count: number,
 ): Array<T> {
   if (Array.isArray(possibleArray)) {
-    if (count === possibleArray.length) {
+    if (count === possibleArray.length) { // $FlowFixMe
       return possibleArray;
     }
     const outArray = [];

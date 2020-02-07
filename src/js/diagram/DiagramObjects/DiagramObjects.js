@@ -11,6 +11,7 @@ import DrawContext2D from '../DrawContext2D';
 // import EquationNavigator from './EquationNavigator';
 import DiagramObjectLine from './Line';
 import DiagramObjectAngle from './Angle';
+// eslint-disable-next-line import/no-cycle
 import DiagramObjectPolyLine from './PolyLine';
 import type { TypeLineOptions } from './Line';
 import type { TypeAngleOptions } from './Angle';

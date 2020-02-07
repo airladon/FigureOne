@@ -104,7 +104,7 @@ export default class Bracket extends Symbol {
     const {
       sides,
     } = options;
-    const {
+    const {     // $FlowFixMe
       lineWidth, width, tipWidth,
     } = this.getVerticalDefaultValues(heightIn, widthIn, options);
 

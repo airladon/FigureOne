@@ -27,6 +27,7 @@ import type {
   TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
   TypeParallelAnimationStepInputOptions, TypeTriggerStepInputOptions,
 } from './Animation/Animation';
+// eslint-disable-next-line import/no-cycle
 import * as animations from './Animation/Animation';
 import WebGLInstance from './webgl/webgl';
 
@@ -679,14 +680,24 @@ class DiagramElement {
       scale?: number,
       done?: ?(mixed) => void,
     } | ?(mixed) => void = null) {
+    const defaultPulseOptions = {
+      frequency: 0,
+      time: 1,
+      scale: 2,
+    };
+    if (typeof this.pulseDefault !== 'function') {
+      defaultPulseOptions.frequency = this.pulseDefault.frequency;
+      defaultPulseOptions.time = this.pulseDefault.time;
+      defaultPulseOptions.scale = this.pulseDefault.scale;
+    }
     const defaultOptions = {
       x: 'center',
       y: 'middle',
       space: 'diagram',
       centerOn: null,
-      frequency: this.pulseDefault.frequency,
-      time: this.pulseDefault.time,
-      scale: this.pulseDefault.scale,
+      frequency: defaultPulseOptions.frequency,
+      time: defaultPulseOptions.time,
+      scale: defaultPulseOptions.scale,
       done: null,
     };
     let done;
@@ -2379,15 +2390,24 @@ class DiagramElementCollection extends DiagramElement {
       super.pulse(optionsOrElementsOrDone);
       return;
     }
-
+    const defaultPulseOptions = {
+      frequency: 0,
+      time: 1,
+      scale: 2,
+    };
+    if (typeof this.pulseDefault !== 'function') {
+      defaultPulseOptions.frequency = this.pulseDefault.frequency;
+      defaultPulseOptions.time = this.pulseDefault.time;
+      defaultPulseOptions.scale = this.pulseDefault.scale;
+    }
     const defaultOptions = {
       x: 'center',
       y: 'middle',
       space: 'diagram',
       centerOn: null,
-      frequency: this.pulseDefault.frequency,
-      time: this.pulseDefault.time,
-      scale: this.pulseDefault.scale,
+      frequency: defaultPulseOptions.frequency,
+      time: defaultPulseOptions.time,
+      scale: defaultPulseOptions.scale,
       done: null,
       elements: null,
     };

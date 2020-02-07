@@ -1,5 +1,5 @@
 // @flow
-
+// eslint-disable-next-line import/no-cycle
 import { cssColorToArray } from './color';
 import { getDefinedCSSVariables } from './getCssVariables';
 
