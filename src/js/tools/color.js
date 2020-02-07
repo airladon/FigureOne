@@ -1,6 +1,7 @@
 // @flow
 
 import colorNames from './colorNames';  // official css color names
+// eslint-disable-next-line import/no-cycle
 import getCSSColors from './getCssColors';
 // Function that converts any rgb or rgba string to an array of rgba numbers
 // between 0 and 1

@@ -32,6 +32,7 @@ export default function Box(
   }
   const element = new DiagramElementPrimitive(vertexRectangle, transform, color, diagramLimits);
 
+  // $FlowFixMe
   element.surround = (parent, children, spaceIn = 0, drawingSpace = 'diagram') => {
     let elements = [parent];
     if (children != null && children !== '') {
@@ -64,6 +65,7 @@ export default function Box(
     maxBounds.right = maxBounds.left + maxBounds.width;
     maxBounds.top = maxBounds.bottom + maxBounds.height;
 
+    // $FlowFixMe
     element.drawingObject.updateBox(
       maxBounds.width,
       maxBounds.height,

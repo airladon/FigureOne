@@ -199,7 +199,9 @@ export default class DiagramPrimitives {
     );
 
     if (options.pulse != null) {
-      element.pulseDefault.scale = options.pulse;
+      if (typeof element.pulseDefault !== 'function') {
+        element.pulseDefault.scale = options.pulse;
+      }
     }
 
     if (options.mods != null && options.mods !== {}) {
@@ -253,7 +255,9 @@ export default class DiagramPrimitives {
     );
 
     if (options.pulse != null) {
-      element.pulseDefault.scale = options.pulse;
+      if (typeof element.pulseDefault !== 'function') {
+        element.pulseDefault.scale = options.pulse;
+      }
     }
 
     if (options.mods != null && options.mods !== {}) {
@@ -293,7 +297,9 @@ export default class DiagramPrimitives {
     );
 
     if (options.pulse != null) {
-      element.pulseDefault.scale = options.pulse;
+      if (typeof element.pulseDefault !== 'function') {
+        element.pulseDefault.scale = options.pulse;
+      }
     }
 
     if (options.mods != null && options.mods !== {}) {
@@ -359,7 +365,9 @@ export default class DiagramPrimitives {
     );
 
     if (options.pulse != null) {
-      element.pulseDefault.scale = options.pulse;
+      if (typeof element.pulseDefault !== 'function') {
+        element.pulseDefault.scale = options.pulse;
+      }
     }
 
     if (options.mods != null && options.mods !== {}) {
@@ -412,7 +420,9 @@ export default class DiagramPrimitives {
     );
 
     if (options.pulse != null) {
-      element.pulseDefault.scale = options.pulse;
+      if (typeof element.pulseDefault !== 'function') {
+        element.pulseDefault.scale = options.pulse;
+      }
     }
 
     if (options.mods != null && options.mods !== {}) {
@@ -545,7 +555,9 @@ export default class DiagramPrimitives {
       element.setColor(options.color);
     }
     if (options.pulse != null) {
-      element.pulseDefault.scale = options.pulse;
+      if (typeof element.pulseDefault !== 'function') {
+        element.pulseDefault.scale = options.pulse;
+      }
     }
     return element;
   }
@@ -583,7 +595,9 @@ export default class DiagramPrimitives {
       element.setColor(options.color);
     }
     if (options.pulse != null) {
-      element.pulseDefault.scale = options.pulse;
+      if (typeof element.pulseDefault !== 'function') {
+        element.pulseDefault.scale = options.pulse;
+      }
     }
     return element;
   }
@@ -630,7 +644,7 @@ export default class DiagramPrimitives {
       }
     }
     const element = this.lines(linePairs, numLinesThick, color, transform);
-    if (options.pulse != null) {
+    if (options.pulse != null && typeof element.pulseDefault !== 'function') {
       element.pulseDefault.scale = options.pulse;
     }
     return element;
@@ -722,7 +736,7 @@ export default class DiagramPrimitives {
       );
     }
 
-    if (options.pulse != null) {
+    if (options.pulse != null && typeof element.pulseDefault !== 'function') {
       element.pulseDefault.scale = options.pulse;
     }
 
@@ -791,7 +805,7 @@ export default class DiagramPrimitives {
       options.rotation, options.dashStyle, options.color,
       options.transform, this.limits,
     );
-    if (options.pulse != null) {
+    if (options.pulse != null && typeof element.pulseDefault !== 'function') {
       element.pulseDefault.scale = options.pulse;
     }
     return element;
@@ -852,7 +866,7 @@ export default class DiagramPrimitives {
       this.webgl, options.alignH, options.alignV, options.width, options.height,
       options.corner.radius, options.corner.sides, options.color, options.transform, this.limits,
     );
-    if (options.pulse != null) {
+    if (options.pulse != null && typeof element.pulseDefault !== 'function') {
       element.pulseDefault.scale = options.pulse;
     }
     return element;
@@ -888,7 +902,7 @@ export default class DiagramPrimitives {
       this.webgl, options.width, options.height, options.lineWidth,
       options.fill, options.color, options.transform, this.limits,
     );
-    if (options.pulse != null) {
+    if (options.pulse != null && typeof element.pulseDefault !== 'function') {
       element.pulseDefault.scale = options.pulse;
     }
     return element;
@@ -923,7 +937,7 @@ export default class DiagramPrimitives {
       options.transform, this.limits,
     );
 
-    if (options.pulse != null) {
+    if (options.pulse != null && typeof element.pulseDefault !== 'function') {
       element.pulseDefault.scale = options.pulse;
     }
 
@@ -970,7 +984,7 @@ export default class DiagramPrimitives {
       // console.log(newPoints)
       copy.drawingObject.changeVertices(newPoints);
     }
-    if (options.pulse != null) {
+    if (options.pulse != null && typeof element.pulseDefault !== 'function') {
       copy.pulseDefault.scale = options.pulse;
     }
     return copy;
@@ -1014,7 +1028,7 @@ export default class DiagramPrimitives {
     }
     const element = new DiagramElementCollection(transform, this.limits);
     element.setColor(color);
-    if (pulse != null) {
+    if (pulse != null && typeof element.pulseDefault !== 'function') {
       element.pulseDefault.scale = pulse;
     }
     return element;
@@ -1250,7 +1264,7 @@ export default class DiagramPrimitives {
     }
     xy.add('y', yAxis);
     xy.add('x', xAxis);
-    if (options.pulse != null) {
+    if (options.pulse != null && typeof xy.pulseDefault !== 'function') {
       xy.pulseDefault.scale = options.pulse;
     }
     return xy;
@@ -1301,7 +1315,7 @@ export default class DiagramPrimitives {
       options.transform,
     );
     collection.setColor(options.color);
-    if (options.pulse != null) {
+    if (options.pulse != null && typeof collection.pulseDefault !== 'function') {
       collection.pulseDefault.scale = options.pulse;
     }
 
@@ -1357,7 +1371,7 @@ export default class DiagramPrimitives {
       options.transform,
     );
     collection.setColor(options.color);
-    if (options.pulse != null) {
+    if (options.pulse != null && typeof collection.pulseDefault !== 'function') {
       collection.pulseDefault.scale = options.pulse;
     }
 

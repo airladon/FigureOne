@@ -8,6 +8,7 @@ import {
   DiagramElementPrimitive, DiagramElementCollection,
 } from '../../Element';
 import { Element, Elements, BlankElement } from './Elements/Element';
+// eslint-disable-next-line import/no-cycle
 import { getDiagramElement } from './EquationFunctions';
 
 export type TypeHAlign = 'left' | 'right' | 'center' | number;

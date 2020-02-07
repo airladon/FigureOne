@@ -1,5 +1,6 @@
 // @flow
 // import * as tools from '../../tools/math';
+// eslint-disable-next-line import/no-cycle
 import { DiagramElement } from '../Element';
 // import type { TypeSerialAnimationStepInputOptions } from './AnimationStep/SerialAnimationStep';
 // import type {
@@ -7,6 +8,7 @@ import { DiagramElement } from '../Element';
 //   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
 //   TypeColorAnimationStepInputOptions, TypeCustomAnimationStepInputOptions,
 // } from './Animation';
+// eslint-disable-next-line import/no-cycle
 import * as anim from './Animation';
 import { joinObjects, duplicateFromTo } from '../../tools/tools';
 

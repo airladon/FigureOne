@@ -86,9 +86,12 @@ import AnimationStep from './AnimationStep';
 import type {
   TypeAnimationManagerInputOptions,
 } from './AnimationManager';
+
+// eslint-disable-next-line import/no-cycle
 import AnimationManager from './AnimationManager';
 
 import type { TypeAnimationBuilderInputOptions } from './AnimationBuilder';
+// eslint-disable-next-line import/no-cycle
 import AnimationBuilder from './AnimationBuilder';
 
 
