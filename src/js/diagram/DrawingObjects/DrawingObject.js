@@ -49,6 +49,10 @@ class DrawingObject {
   setText(text: string) {
   }
 
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  update(options: Object) {
+  }
+
   getGLBoundaries(lastDrawTransformMatrix: Array<number>): Array<Array<Point>> {
     const glBoundaries = [];
     this.border.forEach((boundary) => {

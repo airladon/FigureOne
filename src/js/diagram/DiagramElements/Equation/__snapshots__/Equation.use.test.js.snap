@@ -251,7 +251,7 @@ DiagramElementPrimitive {
   "move": Object {
     "bounce": true,
     "boundary": null,
-    "canBeMovedAfterLoosingTouch": false,
+    "canBeMovedAfterLosingTouch": false,
     "element": null,
     "freely": Object {
       "callback": null,
@@ -340,6 +340,7 @@ DiagramElementPrimitive {
         },
       ],
     },
+    "transformClip": null,
     "type": "translation",
   },
   "name": "a",

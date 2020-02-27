@@ -277,7 +277,6 @@ class TextObject extends DrawingObject {
     // and apply it to the drawing context.
     const totalT = m2.mul([sx, 0, tx, 0, sy, ty, 0, 0, 1], t);
     ctx.transform(totalT[0], totalT[3], totalT[1], totalT[4], totalT[2], totalT[5]);
-
     this.lastDrawTransform = totalT.slice();
     // Fill in all the text
     this.text.forEach((diagramText) => {

@@ -25,6 +25,7 @@ export type TypeAngleLabelOptions = {
                                   // Array<string> into eqn forms
   radius?: number,                // Label radius
   curvePosition?: number,         // Label position along curve in %
+  curveOffset?: number,           // Label position along curve in rad
   showRealAngle?: boolean,        // Use angle as label
   units?: 'degrees' | 'radians';  // Real angle units
   precision?: number,         // Num decimal places if using angle label
@@ -136,6 +137,7 @@ export type TypeAngleOptions = {
 class AngleLabel extends EquationLabel {
   radius: number;
   curvePosition: number;
+  curveOffset: number;
   showRealAngle: boolean;
   orientation: TypeAngleLabelOrientation;
   precision: number;
@@ -149,6 +151,7 @@ class AngleLabel extends EquationLabel {
     color: Array<number>,
     radius: number,
     curvePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
+    curveOffset: number = 0,
     showRealAngle: boolean = false,
     units: 'degrees' | 'radians' = 'degrees',
     precision: number = 0,
@@ -160,6 +163,7 @@ class AngleLabel extends EquationLabel {
     super(equation, { label: labelText, color, scale });
     this.radius = radius;
     this.curvePosition = curvePosition;
+    this.curveOffset = curveOffset;
     this.showRealAngle = showRealAngle;
     this.units = units;
     this.orientation = orientation;
@@ -564,6 +568,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     labelText?: string | EquationNew | Array<string> | TypeLabelOptions,
     radius?: number,
     curvePosition?: number,
+    curveOffset?: number,
     showRealAngle?: boolean,
     units?: 'degrees' | 'radians',
     precision?: number,
@@ -575,6 +580,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       text: null,
       radius: 0.4,
       curvePosition: 0.5,
+      curveOffset: 0,
       showRealAngle: false,
       units: 'degrees',
       precision: 0,
@@ -599,6 +605,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       optionsToUse.color,
       optionsToUse.radius,
       optionsToUse.curvePosition,
+      optionsToUse.curveOffset,
       optionsToUse.showRealAngle,
       optionsToUse.units,
       optionsToUse.precision,
@@ -662,6 +669,38 @@ class DiagramObjectAngle extends DiagramElementCollection {
       ));
       this.add('curveRight', right);
     }
+  }
+
+  change(options: {
+    radius?: number,
+    curveRadius?: number,
+    curvePosition?: number,
+    curveOffset?: number,
+  }) {
+    if (this._curve != null && options.radius != null) {
+      this._curve.drawingObject.update({ radius: options.radius });
+    }
+    if (this.label != null) {
+      if (options.curveRadius != null) {
+        this.label.radius = options.curveRadius;
+      }
+      if (options.curvePosition != null) {
+        this.label.curvePosition = options.curvePosition;
+      }
+      if (options.curveOffset != null) {
+        this.label.curveOffset = options.curveOffset;
+      }
+    }
+
+    // // this._curve.drawingObject.radius = radius;
+    // // this._curve.drawingObject.makePolygon();
+    // // this._curve.drawingObject.change();
+    // if (curveRadius != null && this.label != null) {
+    //   this.label.radius = curveRadius;
+    // }
+    // if (curvePosition != null && this.label != null) {
+    //   this.label.curvePosition = curvePosition;
+    // }
   }
 
   // pulseWidth() {
@@ -1042,21 +1081,23 @@ class DiagramObjectAngle extends DiagramElementCollection {
           // _label._base.drawingObject.setText(`${angleText}`);
           // label.eqn.reArrangeCurrentForm();
         }
-        const labelPosition = polarToRect(label.radius, this.angle * label.curvePosition);
+        const labelPosition = polarToRect(
+          label.radius, this.angle * label.curvePosition + label.curveOffset,
+        );
         if (label.orientation === 'horizontal') {
           label.updateRotation(
             -this.getRotation() - this.lastLabelRotationOffset,
             labelPosition,
             label.radius / 5,
-            this.angle * label.curvePosition,
+            this.angle * label.curvePosition + label.curveOffset,
           );
         }
         if (label.orientation === 'tangent') {
           label.updateRotation(
-            this.angle * label.curvePosition - Math.PI / 2,
+            this.angle * label.curvePosition + label.curveOffset - Math.PI / 2,
             labelPosition,
             label.radius / 50,
-            this.angle * label.curvePosition,
+            this.angle * label.curvePosition + label.curveOffset,
           );
         }
       }

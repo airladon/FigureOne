@@ -740,14 +740,14 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     midLine.move.type = 'translation';
     midLine.move.element = this;
     midLine.isMovable = true;
-    midLine.move.canBeMovedAfterLoosingTouch = true;
+    midLine.move.canBeMovedAfterLosingTouch = true;
     this.add('midLine', midLine);
     if (this._line) {
       this._line.isTouchable = true;
       this._line.move.type = 'rotation';
       this._line.move.element = this;
       this._line.isMovable = true;
-      this._line.move.canBeMovedAfterLoosingTouch = true;
+      this._line.move.canBeMovedAfterLosingTouch = true;
     }
     this.hasTouchableElements = true;
     this.isTouchable = false;
@@ -926,6 +926,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         labelAngle = Math.PI;
       }
     }
+
     label.updateRotation(
       labelAngle - parentRotationOffset,
       labelPosition, labelOffsetMag, labelOffsetAngle,

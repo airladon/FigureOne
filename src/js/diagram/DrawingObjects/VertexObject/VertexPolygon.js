@@ -3,14 +3,23 @@
 import { Point } from '../../../tools/g2';
 import WebGLInstance from '../../webgl/webgl';
 import VertexObject from './VertexObject';
+import { joinObjects } from '../../../tools/tools';
 
 class VertexPolygon extends VertexObject {
-  radius: number;       // radius from center to outside of polygon
   glPrimitive: number;  // WebGL primitive used
   // outRad: number;       // radius from center to polygon vertex + 1/2 linewidth
   // inRad: number;        // radius from center to polygon vertex - 1/2 linewidth
-  center: Point;     // center point
-  dAngle: number;       // angle between adjacent verteces to center lines
+  options: {
+    radius: number;       // radius from center to outside of polygon
+    center: Point;     // center point
+    // dAngle: number;       // angle between adjacent verteces to center lines
+    sides: number;
+    sidesToDraw: number;
+    lineWidth: number;
+    direction: -1 | 1;
+    rotation: number;
+    triangles: boolean;
+  }
 
   constructor(
     webgl: Array<WebGLInstance>,
@@ -30,6 +39,7 @@ class VertexPolygon extends VertexObject {
     } else {
       this.glPrimitive = webgl[0].gl.TRIANGLE_STRIP;
     }
+    // this.triangles = triangles;
 
     // Check potential errors in constructor input
     let sides = numSides;
@@ -44,20 +54,58 @@ class VertexPolygon extends VertexObject {
       sidesToDraw = sides;
     }
     // setup shape geometry
-    this.radius = radius;
-    const inRad = radius - lineWidth;
-    // const outRad = radius + lineWidth / 2.0;
-    // this.outRad = outRad;
-    // this.inRad = inRad;
-    this.center = center;
-    this.dAngle = Math.PI * 2.0 / sides;
+    this.options = {
+      triangles,
+      radius,
+      center,
+      lineWidth,
+      sides,
+      sidesToDraw,
+      rotation,
+      direction,
+    };
+    // this.radius = radius;
+    // this.center = center;
+    // this.lineWidth = lineWidth;
+    // this.sides = sides;
+    // this.sidesToDraw = sidesToDraw;
+    // // this.dAngle = Math.PI * 2.0 / sides;
+    // this.rotation = rotation;
+    // this.direction = direction;
 
+    this.makePolygon();
+    this.setupBuffer();
+    // console.log(this.numPoints);
+  }
+
+  update(options: {
+    radius?: number,
+    lineWidth?: number,
+    rotation?: number,
+    center?: Point,
+    sidesToDraw?: number,
+    sides?: number,
+    direction?: -1 | 1,
+    triangles?: boolean,
+  }) {
+    this.options = joinObjects({}, this.options, options);
+    this.makePolygon();
+    this.resetBuffer();
+  }
+
+  makePolygon() {
+    const {
+      radius, direction, rotation, lineWidth, center, sides, sidesToDraw,
+      triangles,
+    } = this.options;
+    const inRad = radius - lineWidth;
+    const dAngle = Math.PI * 2.0 / sides;
     // Setup shape primative vertices
     let i;
     let j = 0;
     for (i = 0; i <= sidesToDraw; i += 1) {
-      const angle = i * this.dAngle * direction + rotation * direction;
-      const lastAngle = (i - 1) * this.dAngle * direction + rotation * direction;
+      const angle = i * dAngle * direction + rotation * direction;
+      const lastAngle = (i - 1) * dAngle * direction + rotation * direction;
 
       const inPoint = new Point(
         inRad * Math.cos(angle),
@@ -113,27 +161,37 @@ class VertexPolygon extends VertexObject {
     if (sidesToDraw < sides) {
       for (i = 0; i <= sidesToDraw; i += 1) {
         this.border[0].push(new Point(
-          center.x + radius * Math.cos(i * this.dAngle * direction + rotation * direction),
-          center.y + radius * Math.sin(i * this.dAngle * direction + rotation * direction),
+          center.x + radius * Math.cos(
+            i * dAngle * direction + rotation * direction,
+          ),
+          center.y + radius * Math.sin(
+            i * dAngle * direction + rotation * direction,
+          ),
         ));
       }
       for (i = sidesToDraw; i >= 0; i -= 1) {
         this.border[0].push(new Point(
-          center.x + inRad * Math.cos(i * this.dAngle * direction + rotation * direction),
-          center.y + inRad * Math.sin(i * this.dAngle * direction + rotation * direction),
+          center.x + inRad * Math.cos(
+            i * dAngle * direction + rotation * direction,
+          ),
+          center.y + inRad * Math.sin(
+            i * dAngle * direction + rotation * direction,
+          ),
         ));
       }
       this.border[0].push(this.border[0][0]._dup());
     } else {
       for (i = 0; i <= sidesToDraw; i += 1) {
         this.border[0].push(new Point(
-          center.x + radius * Math.cos(i * this.dAngle * direction + rotation * direction),
-          center.y + radius * Math.sin(i * this.dAngle * direction + rotation * direction),
+          center.x + radius * Math.cos(
+            i * dAngle * direction + rotation * direction,
+          ),
+          center.y + radius * Math.sin(
+            i * dAngle * direction + rotation * direction,
+          ),
         ));
       }
     }
-    this.setupBuffer();
-    // console.log(this.numPoints);
   }
 
   drawToAngle(
@@ -143,7 +201,8 @@ class VertexPolygon extends VertexObject {
     drawAngle: number,
     color: Array<number>,
   ) {
-    let count = Math.floor(drawAngle / this.dAngle) * 2.0 + 2;
+    const dAngle = Math.PI * 2.0 / this.options.sides;
+    let count = Math.floor(drawAngle / dAngle) * 2.0 + 2;
     if (drawAngle >= Math.PI * 2.0) {
       count = this.numPoints;
     }
@@ -151,7 +210,8 @@ class VertexPolygon extends VertexObject {
   }
 
   getPointCountForAngle(drawAngle: number = Math.PI * 2) {
-    let count = Math.floor(drawAngle / this.dAngle) * 2.0 + 2;
+    const dAngle = Math.PI * 2.0 / this.options.sides;
+    let count = Math.floor(drawAngle / dAngle) * 2.0 + 2;
     if (drawAngle >= Math.PI * 2.0) {
       count = this.numPoints;
     }

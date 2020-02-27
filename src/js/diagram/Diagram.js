@@ -799,7 +799,7 @@ class Diagram {
       const element = this.beingMovedElements[i];
       if (element !== this.elements) {
         if (element.isBeingTouched(previousGLPoint)
-              || element.move.canBeMovedAfterLoosingTouch) {
+              || element.move.canBeMovedAfterLosingTouch) {
           const elementToMove = element.move.element == null ? element : element.move.element;
           if (elementToMove.state.isBeingMoved === false) {
             elementToMove.startBeingMoved();
