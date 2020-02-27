@@ -126,6 +126,7 @@ class DiagramElement {
     minTransform: Transform,
     boundary: ?Rect | Array<number> | 'diagram',
     limitLine: null | Line,
+    transformClip: ?(Transform) => Transform;
     maxVelocity: TransformLimit;            // Maximum velocity allowed
     // When moving freely, the velocity decelerates until it reaches a threshold,
   // then it is considered 0 - at which point moving freely ends.
@@ -135,7 +136,7 @@ class DiagramElement {
       callback: ?(boolean) => void,
     };
     bounce: boolean;
-    canBeMovedAfterLoosingTouch: boolean;
+    canBeMovedAfterLosingTouch: boolean;
     type: 'rotation' | 'translation' | 'scaleX' | 'scaleY' | 'scale';
     // eslint-disable-next-line no-use-before-define
     element: DiagramElementCollection | DiagramElementPrimitive | null;
@@ -418,10 +419,11 @@ class DiagramElement {
         callback: null,
       },
       bounce: true,
-      canBeMovedAfterLoosingTouch: false,
+      canBeMovedAfterLosingTouch: false,
       type: 'translation',
       element: null,
       limitLine: null,
+      transformClip: null,
     };
 
     this.scenarios = {};
@@ -785,11 +787,15 @@ class DiagramElement {
   // Use this method to set the element's transform in case a callback has been
   // connected that is tied to an update of the transform.
   setTransform(transform: Transform): void {
-    this.transform = transform._dup().clip(
-      this.move.minTransform,
-      this.move.maxTransform,
-      this.move.limitLine,
-    );
+    if (this.move.transformClip != null) {
+      this.transform = this.move.transformClip(transform);
+    } else {
+      this.transform = transform._dup().clip(
+        this.move.minTransform,
+        this.move.maxTransform,
+        this.move.limitLine,
+      );
+    }
     if (this.internalSetTransformCallback) {
       this.internalSetTransformCallback(this.transform);
     }
@@ -2423,6 +2429,15 @@ class DiagramElementCollection extends DiagramElement {
       options = joinObjects({}, defaultOptions, optionsOrElementsOrDone);
       ({ elements } = options);
       doneToUse = options.done;
+      if (optionsOrElementsOrDone.scale == null) {
+        options.scale = undefined;
+      }
+      if (optionsOrElementsOrDone.frequency == null) {
+        options.frequency = undefined;
+      }
+      if (optionsOrElementsOrDone.time == null) {
+        options.time = undefined;
+      }
     }
     options.elements = null;
     if (elements == null || elements.length === 0) {

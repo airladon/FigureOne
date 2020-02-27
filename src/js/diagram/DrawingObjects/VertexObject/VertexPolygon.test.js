@@ -7,12 +7,12 @@ import { round } from '../../../tools/math';
 describe('Polygon', () => {
   test('Initialization', () => {
     const polygon = new VertexPolygon([webgl], 5, 0.5, 0.02, 0, new g2.Point(0, 0));
-    expect(polygon.radius).toBe(0.5);
+    expect(polygon.options.radius).toBe(0.5);
     // expect(polygon.outRad).toBe(0.51);
     // expect(polygon.inRad).toBe(0.49);
     expect(polygon.numPoints).toBe(12);
-    expect(polygon.center).toEqual(new g2.Point(0, 0));
-    expect(round(polygon.dAngle)).toEqual(round(Math.PI * 2 / 5));
+    expect(polygon.options.center).toEqual(new g2.Point(0, 0));
+    // expect(round(polygon.dAngle)).toEqual(round(Math.PI * 2 / 5));
   });
   test('Square with corner radius 1 and thickness 0.1', () => {
     const square = new VertexPolygon([webgl], 4, 1.1, 0.2, 0, g2.point(0,0));
