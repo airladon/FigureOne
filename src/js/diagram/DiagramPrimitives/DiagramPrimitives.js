@@ -669,6 +669,7 @@ export default class DiagramPrimitives {
       center: new Point(0, 0),
       trianglePrimitives: false,
       linePrimitives: false,
+      angleToDraw: null,
     };
     const options = Object.assign({}, defaultOptions, ...optionsIn);
     // const o = optionsToUse;
@@ -685,6 +686,9 @@ export default class DiagramPrimitives {
     }
     if (options.sidesToDraw == null) {
       options.sidesToDraw = options.sides;
+    }
+    if (options.angleToDraw != null) {
+      options.sidesToDraw = Math.max(0, Math.floor(options.angleToDraw / Math.PI / 2 * options.sides));
     }
     let direction = 1;
     if (options.clockwise) {

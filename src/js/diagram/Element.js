@@ -2242,6 +2242,42 @@ class DiagramElementCollection extends DiagramElement {
     return collection;
   }
 
+  toFront(elements: Array<string | DiagramElement>) {
+    const names = [];
+    elements.forEach((element) => {
+      if (typeof element === 'string') {
+        names.push(element);
+      } else {
+        names.push(element.name);
+      }
+    });
+    const newOrder = [];
+    this.drawOrder.forEach((element) => {
+      if (names.indexOf(element) === -1) {
+        newOrder.push(element);
+      }
+    });
+    this.drawOrder = [...newOrder, ...names];
+  }
+
+  toBack(elements: Array<string | DiagramElement>) {
+    const names = [];
+    elements.forEach((element) => {
+      if (typeof element === 'string') {
+        names.push(element);
+      } else {
+        names.push(element.name);
+      }
+    });
+    const newOrder = [];
+    this.drawOrder.forEach((element) => {
+      if (names.indexOf(element) === -1) {
+        newOrder.push(element);
+      }
+    });
+    this.drawOrder = [...names.reverse(), ...newOrder];
+  }
+
   isMoving(): boolean {
     if (this.isShown === false) {
       return false;
