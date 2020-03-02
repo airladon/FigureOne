@@ -89,6 +89,7 @@ class DiagramElement {
   transform: Transform;        // Transform of diagram element
   // presetTransforms: Object;       // Convenience dict of transform presets
   lastDrawTransform: Transform; // Transform matrix used in last draw
+  lastDrawPulseTransform: Transform; // Transform matrix used in last draw
   // lastDrawParentTransform: Transform;
   // lastDrawElementTransform: Transform;
   // lastDrawPulseTransform: Transform;
@@ -271,6 +272,7 @@ class DiagramElement {
     this.afterDrawCallback = null;
     this.internalSetTransformCallback = () => {};
     this.lastDrawTransform = this.transform._dup();
+    this.lastDrawPulseTransform = this.transform._dup();
     this.onClick = null;
     this.lastDrawElementTransformPosition = {
       parentCount: 0,
@@ -2032,10 +2034,12 @@ class DiagramElementPrimitive extends DiagramElement {
       };
 
       const newTransform = parentTransform.transform(this.getTransform());
+      this.lastDrawTransform = newTransform._dup();
       const pulseTransforms = this.transformWithPulse(now, newTransform);
 
       // eslint-disable-next-line prefer-destructuring
-      this.lastDrawTransform = pulseTransforms[0];
+      this.lastDrawPulseTransform = pulseTransforms[0];
+      // this.lastDrawTransform = pulseTransforms[0];
 
       let pointCount = -1;
       if (this.drawingObject instanceof VertexObject) {
@@ -2361,10 +2365,13 @@ class DiagramElementCollection extends DiagramElement {
         elementCount: this.transform.order.length,
       };
       const newTransform = parentTransform.transform(this.getTransform());
+      this.lastDrawTransform = newTransform._dup();
       const pulseTransforms = this.transformWithPulse(now, newTransform);
 
       // eslint-disable-next-line prefer-destructuring
-      this.lastDrawTransform = pulseTransforms[0];
+      this.lastDrawPulseTransform = pulseTransforms[0];
+      // this.lastDrawTransform = pulseTransforms[0];
+
       // this.lastDrawPulseTransform = pulseTransforms[0]._dup();
 
       for (let k = 0; k < pulseTransforms.length; k += 1) {

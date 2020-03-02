@@ -181,6 +181,40 @@ DiagramElementPrimitive {
     "elementCount": 3,
     "parentCount": 6,
   },
+  "lastDrawPulseTransform": Transform {
+    "_type": "transform",
+    "index": 3,
+    "mat": Array [
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+    ],
+    "name": "text",
+    "order": Array [
+      Scale {
+        "_type": "point",
+        "name": "text",
+        "x": 1,
+        "y": 1,
+      },
+      Rotation {
+        "name": "text",
+        "r": 0,
+      },
+      Translation {
+        "_type": "point",
+        "name": "text",
+        "x": 0,
+        "y": 0,
+      },
+    ],
+  },
   "lastDrawTransform": Transform {
     "_type": "transform",
     "index": 0,
