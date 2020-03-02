@@ -99,7 +99,7 @@ export type TypeAngleOptions = {
     width?: number,
     color?: Array<number>,
   },
-  pulse?: {
+  pulse?: number | {
     curve?: number | {
       width?: number,
       num?: number,
@@ -437,13 +437,23 @@ class DiagramObjectAngle extends DiagramElementCollection {
       this.addSide(2, sideOptions.length, sideOptions.width, sideOptions.color);
     }
 
-    this.pulseDefaultSettings = {
-      curve: optionsToUse.pulse.curve || 1,
-      label: optionsToUse.pulse.label || 1,
-      arrow: optionsToUse.pulse.arrow || 1,
-      side: optionsToUse.pulse.side || 1,
-      collection: optionsToUse.pulse.collection || 1,
-    };
+    if (typeof optionsToUse.pulse === 'number') {
+      this.pulseDefaultSettings = {
+        curve: defaultOptions.pulse.curve,
+        label: defaultOptions.pulse.label,
+        arrow: defaultOptions.pulse.arrow,
+        side: defaultOptions.pulse.side,
+        collection: optionsToUse.pulse,
+      };
+    } else {
+      this.pulseDefaultSettings = {
+        curve: optionsToUse.pulse.curve || 1,
+        label: optionsToUse.pulse.label || 1,
+        arrow: optionsToUse.pulse.arrow || 1,
+        side: optionsToUse.pulse.side || 1,
+        collection: optionsToUse.pulse.collection || 1,
+      };
+    }
 
     // this.pulseDefault = (done) => {
     //   this.pulseScaleNow(1, 1.7, 0, done);
