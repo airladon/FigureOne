@@ -1539,6 +1539,26 @@ describe('g2 tests', () => {
         t1 = new Transform().scale(1.5, 0).rotate(2).translate(1.5, 0);
         expect(t0.clip(min, max)).toEqual(t1);
       });
+      test('Remove string', () => {
+        const ta = new Transform('a').scale(1, 1).rotate(1).translate(1, 1);
+        const tb = new Transform('b').scale(-1, -1).rotate(-1).translate(-1, -1);
+        const tab = ta.transform(tb);
+        expect(tab.order).toHaveLength(6);
+        const tabRemoveA = tab.remove('a');
+        expect(tabRemoveA.order).toHaveLength(3);
+        expect(tabRemoveA.order[0].name).toBe('b');
+        expect(tabRemoveA.order[0].x).toBe(-1);
+      });
+      test('Remove Array', () => {
+        const ta = new Transform('a').scale(1, 1).rotate(1).translate(1, 1);
+        const tb = new Transform('b').scale(-1, -1).rotate(-1).translate(-1, -1);
+        const tc = new Transform('c').scale(-2, -2).rotate(-2).translate(-2, -2);
+        const tab = ta.transform(tb).transform(tc);
+        expect(tab.order).toHaveLength(9);
+        const tabRemoveA = tab.remove('a');
+        expect(tabRemoveA.order).toHaveLength(6);
+        expect(tabRemoveA.order[0].name).toBe('c');
+      });
     });
   });
   describe('Space to space transform', () => {

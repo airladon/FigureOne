@@ -26,8 +26,8 @@ describe('Scale Animation Step', () => {
     diagram.draw(0);
     expect(elem1.getScale().round()).toEqual(new Point(1, 1));
     diagram.draw(0.5);
-    expect(elem1.lastDrawTransform.s()).toEqual(new Point(2, 2));
+    expect(elem1.lastDrawPulseTransform.s()).toEqual(new Point(2, 2));
     diagram.draw(0.75);
-    expect(elem1.lastDrawTransform.s().round(3)).toEqual(new Point(1.707, 1.707));
+    expect(elem1.lastDrawPulseTransform.s().round(3)).toEqual(new Point(1.707, 1.707));
   });
 });

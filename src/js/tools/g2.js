@@ -1267,6 +1267,22 @@ class Transform {
     return new Transform(order, this.name);
   }
 
+  remove(transformNames: string | Array<string>) {
+    const newOrder = [];
+    let names;
+    if (typeof transformNames === 'string') {
+      names = [transformNames];
+    } else {
+      names = transformNames;
+    }
+    this.order.forEach((transformElement) => {
+      if (names.indexOf(transformElement.name) === -1) {
+        newOrder.push(transformElement._dup());
+      }
+    });
+    return new Transform(newOrder, this.name);
+  }
+
   calcMatrix() {
     let m = m2.identity();
     for (let i = this.order.length - 1; i >= 0; i -= 1) {
