@@ -688,7 +688,9 @@ export default class DiagramPrimitives {
       options.sidesToDraw = options.sides;
     }
     if (options.angleToDraw != null) {
-      options.sidesToDraw = Math.max(0, Math.floor(options.angleToDraw / Math.PI / 2 * options.sides));
+      options.sidesToDraw = Math.max(
+        0, Math.floor(options.angleToDraw / Math.PI / 2 * options.sides),
+      );
     }
     let direction = 1;
     if (options.clockwise) {
