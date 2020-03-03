@@ -510,6 +510,7 @@ export default class EquationForm extends Elements {
     dissolveInTime: number,
     callback: ?(?mixed) => void = null,
     fromWhere: ?'fromPrev' | 'fromNext' = null,
+    dissolveInBeforeMove: boolean = false,
   ) {
     const allElements = this.collectionMethods.getAllElements();
     this.collectionMethods.stop();
@@ -565,7 +566,15 @@ export default class EquationForm extends Elements {
     let dissolveInCallback = null;
     let dissolveOutCallback = null;
 
-    if (elementsToMove.length === 0 && elementsToShow.length === 0) {
+    if (dissolveInBeforeMove) {
+      if (elementsToMove.length === 0 && elementsToShow.length === 0) {
+        dissolveOutCallback = callback;
+      } else if (elementsToMove.length === 0) {
+        dissolveInCallback = callback;
+      } else {
+        moveCallback = callback;
+      }
+    } else if (elementsToMove.length === 0 && elementsToShow.length === 0) {
       dissolveOutCallback = callback;
     } else if (elementsToShow.length === 0) {
       moveCallback = callback;
@@ -609,6 +618,12 @@ export default class EquationForm extends Elements {
       }
     });
 
+    if (dissolveInBeforeMove) {
+      if (elementsToShow.length > 0) {
+        this.dissolveElements(elementsToShow, 'in', cumTime, dissolveInTime, dissolveInCallback);
+        cumTime += dissolveInTime + 0.001;
+      }
+    }
     const t = this.collectionMethods.animateToTransforms(
       animateToTransforms,
       moveTimeToUse,
@@ -620,9 +635,15 @@ export default class EquationForm extends Elements {
       cumTime = t;
     }
 
-    if (elementsToShow.length > 0) {
-      this.dissolveElements(elementsToShow, 'in', cumTime, dissolveInTime, dissolveInCallback);
-      cumTime += dissolveInTime + 0.001;
+    // if (elementsToShow.length > 0) {
+    //   this.dissolveElements(elementsToShow, 'in', cumTime, dissolveInTime, dissolveInCallback);
+    //   cumTime += dissolveInTime + 0.001;
+    // }
+    if (!dissolveInBeforeMove) {
+      if (elementsToShow.length > 0) {
+        this.dissolveElements(elementsToShow, 'in', cumTime, dissolveInTime, dissolveInCallback);
+        cumTime += dissolveInTime + 0.001;
+      }
     }
     return cumTime;
   }
