@@ -547,6 +547,11 @@ export default class EquationForm extends Elements {
       }
     });
 
+    const toShowTransforms = {};
+    elementsToShow.forEach((element) => {
+      toShowTransforms[element.name] = element.transform._dup();
+    });
+
     // Find move time to use. If moveTime is null, then a velocity is used.
     let moveTimeToUse;
     if (moveTime === null) {
@@ -560,6 +565,7 @@ export default class EquationForm extends Elements {
       moveTimeToUse = moveTime;
     }
     this.collectionMethods.setElementTransforms(currentTransforms);
+    this.collectionMethods.setElementTransforms(toShowTransforms);
     let cumTime = delay;
 
     let moveCallback = null;

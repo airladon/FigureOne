@@ -142,6 +142,7 @@ module.exports = (env) => {
       library: 'Fig',
       libraryTarget: 'var',
       libraryExport: 'default',
+      // libraryTarget: 'umd',
       // umdNamedDefine: true,
     },
     externals,
