@@ -988,7 +988,7 @@ export class EquationNew extends DiagramElementCollection {
     prioritizeFormDuration?: boolean,
     delay?: number,
     fromWhere?: ?'fromPrev' | 'fromNext',
-    animate?: 'move' | 'dissolve' | 'moveFrom' | 'pulse',
+    animate?: 'move' | 'dissolve' | 'moveFrom' | 'pulse' | 'dissolveInThenMove',
     callback?: ?() => void,
     // finishAnimatingAndCancelGoTo?: boolean,
     ifAnimating?: {
@@ -1127,6 +1127,19 @@ export class EquationNew extends DiagramElementCollection {
             options.dissolveInTime,
             end,
             options.fromWhere,
+            false,
+          );
+        } else if (options.animate === 'dissolveInThenMove') {
+          // console.log('move', duration, options, subForm.duration)
+          // console.log('******************* animate')
+          subForm.animatePositionsTo(
+            options.delay,
+            options.dissolveOutTime,
+            duration,
+            options.dissolveInTime,
+            end,
+            options.fromWhere,
+            true,
           );
         } else if (
           options.animate === 'moveFrom'
