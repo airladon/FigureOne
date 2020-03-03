@@ -1697,7 +1697,6 @@ class DiagramElement {
     min.y = boundary.bottom - minPoint.y * scale.y;
     max.x = boundary.right - maxPoint.x * scale.x;
     max.y = boundary.top - maxPoint.y * scale.y;
-    console.log(this.name, boundary, minPoint.x, scale.x, min, max)
     this.move.maxTransform.updateTranslation(
       max.x,
       max.y,
