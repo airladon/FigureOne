@@ -1,0 +1,1 @@
+Simple diamond shape that can be dragged around.
