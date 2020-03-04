@@ -245,6 +245,88 @@ describe('Extract From Collection', () => {
     });
   });
 });
+describe('Duplicate Values', () => {
+  test('number', () => {
+    const dup = tools.duplicate(3);
+    expect(dup).toBe(3);
+  });
+  test('string', () => {
+    const dup = tools.duplicate('test');
+    expect(dup).toBe('test');
+  });
+  test('null', () => {
+    const dup = tools.duplicate(null);
+    expect(dup).toBe(null);
+  });
+  test('Array', () => {
+    const initial = [1, 2, 3];
+    const dup = tools.duplicate(initial);
+    expect(dup).not.toBe(initial);
+    expect(dup).toEqual(initial);
+  });
+  test('function', () => {
+    const initial = i => i + 10;
+    const dup = tools.duplicate(initial);
+    expect(dup).toBe(initial);
+    expect(dup(10)).toBe(initial(10));
+  });
+  test('Object with Arrays', () => {
+    const initial = {
+      a: [1, 2, 3],
+      b: {
+        c: [4, 5, 6],
+      },
+    };
+    const dup = tools.duplicate(initial);
+    expect(dup).not.toBe(initial);
+    expect(Object.keys(dup)).toEqual(Object.keys(initial));
+    expect(dup.a).not.toBe(initial.a);
+    expect(dup.a).toEqual(initial.a);
+    expect(dup.b.c).not.toBe(initial.b.c);
+    expect(dup.b.c).toEqual(initial.b.c);
+  });
+  test('Object with _dup function', () => {
+    const initial = {
+      a: [1, 2, 3],
+      b: {
+        c: [4, 5, 6],
+      },
+      _dup: () => 10,
+    };
+    const dup = tools.duplicate(initial);
+    expect(dup).toBe(10);
+  });
+  test('Object with Arrays with Objects with Arrays', () => {
+    const initial = {
+      a: [1, 2, 3],
+      b: {
+        c: [4, 5, 6],
+        d: [
+          {
+            e: [7, 8, 9],
+            f: 'hello',
+          },
+          10,
+          11,
+        ],
+      },
+    };
+    const dup = tools.duplicate(initial);
+    expect(dup).not.toBe(initial);
+    expect(Object.keys(dup)).toEqual(Object.keys(initial));
+    expect(dup.a).not.toBe(initial.a);
+    expect(dup.a).toEqual(initial.a);
+    expect(dup.b.c).not.toBe(initial.b.c);
+    expect(dup.b.c).toEqual(initial.b.c);
+
+    expect(dup.b.d[0].e).not.toBe(initial.b.d[0].e);
+    expect(dup.b.d[0].e).toEqual(initial.b.d[0].e);
+
+    expect(dup.b.d[0].f).toBe('hello');
+    expect(dup.b.d).not.toBe(initial.b.d);
+    expect(dup.b.d).toEqual(initial.b.d);
+  });
+});
 describe('Join Objects', () => {
   test('Empty object first', () => {
     const result = tools.joinObjects({ a: 1, b: 2 }, {});
