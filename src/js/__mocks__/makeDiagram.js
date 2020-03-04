@@ -28,15 +28,15 @@ export default function makeDiagram(
 ) {
   document.body.innerHTML =
     '<div id="c">'
-    + '  <canvas class="diagram__gl" id="id_diagram__gl__low">'
+    + '  <canvas class="figureone__gl" id="id_figureone__gl__low">'
     + '  </canvas>'
-    + '  <canvas class="diagram__text" id="id_diagram__text__low">'
+    + '  <canvas class="figureone__text" id="id_figureone__text__low">'
     + '  </canvas>'
-    + '  <div class="diagram__html">'
+    + '  <div class="figureone__html">'
     + '  </div>'
-    + '  <canvas class="diagram__gl" id="id_diagram__gl__high">'
+    + '  <canvas class="figureone__gl" id="id_figureone__gl__high">'
     + '  </canvas>'
-    + '  <canvas class="diagram__text" id="id_diagram__text__high">'
+    + '  <canvas class="figureone__text" id="id_figureone__text__high">'
     + '  </canvas>'
     + '</div>';
   // canvas = document.getElementById('c');
