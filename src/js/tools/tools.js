@@ -198,10 +198,11 @@ function duplicate(value: ?number | boolean | string | Object) {
 function assignObjectFromTo(
   fromObject: Object,
   toObject: Object,
-  except: Array<string> = [],
+  exceptIn: Array<string> | string = [],
   duplicateValues: boolean = false,
   parentPath: string = '',
 ) {
+  const except = typeof exceptIn === 'string' ? [exceptIn] : exceptIn;
   Object.keys(fromObject).forEach((key) => {
     const keyPath = parentPath !== '' ? `${parentPath}.${key}` : key;
     if (except.indexOf(keyPath) !== -1) {
@@ -216,6 +217,9 @@ function assignObjectFromTo(
       || typeof value._dup === 'function'
       || Array.isArray(value)
     ) {
+      // Only assign the value if:
+      //    * Value is not undefined OR
+      //    * Value is undefined and toObject[key] is undefined
       if (value !== undefined || toObject[key] === undefined) {
         if (duplicateValues) {     // eslint-disable-next-line no-param-reassign
           toObject[key] = duplicate(value);

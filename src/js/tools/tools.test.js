@@ -327,6 +327,67 @@ describe('Duplicate Values', () => {
     expect(dup.b.d).toEqual(initial.b.d);
   });
 });
+describe('AssignObjectFromTo', () => {
+  test('Simple', () => {
+    const to = { a: 1, b: 2 };
+    const from = { a: 2, c: 2 };
+    tools.assignObjectFromTo(from, to);
+    expect(Object.keys(to)).toEqual(['a', 'b', 'c']);
+    expect(to.a).toBe(from.a);
+    expect(to.b).toBe(2);
+    expect(to.c).toBe(from.c);
+  });
+  test('Simple with exception', () => {
+    const to = { a: 1, b: 2 };
+    const from = { a: 2, c: 2 };
+    tools.assignObjectFromTo(from, to, 'a');
+    expect(Object.keys(to)).toEqual(['a', 'b', 'c']);
+    expect(to.a).toBe(1);
+    expect(to.b).toBe(2);
+    expect(to.c).toBe(from.c);
+  });
+  test('Multi level exception', () => {
+    const to = {
+      a: 1,
+      b: {
+        c: 2,
+        d: {
+          e: 3,
+        },
+      },
+    };
+    const from = {
+      a: 10,
+      b: {
+        c: 20,
+        d: {
+          e: 30,
+          f: 40,
+          g: 50,
+        },
+      },
+    };
+    tools.assignObjectFromTo(from, to, ['a', 'b.d.e', 'b.d.g']);
+    expect(to.a).toBe(1);
+    expect(to.b.c).toBe(from.b.c);
+    expect(to.b.d.e).toBe(3);
+    expect(to.b.d.f).toBe(from.b.d.f);
+    expect(to.b.d.g).toBe(undefined);
+  });
+  test('DuplicateValues True', () => {
+    const to = { a: 1 };
+    const from = { a: 2, b: [1, 2, 3] };
+    tools.assignObjectFromTo(from, to, [], true);
+    expect(to.b).not.toBe(from.b);
+    expect(to.b).toEqual(from.b);
+  });
+  test('DuplicateValues False', () => {
+    const to = { a: 1 };
+    const from = { a: 2, b: [1, 2, 3] };
+    tools.assignObjectFromTo(from, to, [], false);
+    expect(to.b).toBe(from.b);
+  });
+});
 describe('Join Objects', () => {
   test('Empty object first', () => {
     const result = tools.joinObjects({ a: 1, b: 2 }, {});
