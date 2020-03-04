@@ -173,41 +173,61 @@ class Diagram {
         for (let i = 0; i < children.length; i += 1) {
           const child = children[i];
           if (child instanceof HTMLCanvasElement
-            && child.classList.contains('diagram__gl')) {
+            && child.classList.contains('figureone__gl')) {
             this.canvasLow = child;
           }
           if (child instanceof HTMLCanvasElement
-            && child.classList.contains('diagram__gl__offscreen')) {
+            && child.classList.contains('figureone__gl__offscreen')) {
             this.canvasOffscreen = child;
           }
           if (child instanceof HTMLCanvasElement
-            && child.classList.contains('diagram__text')) {
+            && child.classList.contains('figureone__text')) {
             this.textCanvasLow = child;
           }
           if (child instanceof HTMLCanvasElement
-            && child.classList.contains('diagram__text__offscreen')) {
+            && child.classList.contains('figureone__text__offscreen')) {
             this.textCanvasOffscreen = child;
           }
-          if (child.classList.contains('diagram__html')
+          if (child.classList.contains('figureone__html')
           ) {
             this.htmlCanvas = child;
           }
         }
         if (this.canvasLow == null) {
           this.canvasLow = document.createElement('canvas');
-          this.canvasLow.classList.add('diagram__gl', 'diagram__canvas');
+          this.canvasLow.classList.add('figureone__gl', 'figureone__canvas');
           container.appendChild(this.canvasLow);
         }
         if (this.textCanvasLow == null) {
           this.textCanvasLow = document.createElement('canvas');
-          this.textCanvasLow.classList.add('diagram__text', 'diagram__canvas');
+          this.textCanvasLow.classList.add('figureone__text', 'figureone__canvas');
           container.appendChild(this.textCanvasLow);
         }
         if (this.htmlCanvas == null) {
           this.htmlCanvas = document.createElement('div');
-          this.htmlCanvas.classList.add('diagram__html', 'diagram__canvas');
+          this.htmlCanvas.classList.add('figureone__html', 'figureone__canvas');
           container.appendChild(this.htmlCanvas);
         }
+
+        const canvasStyle = document.createElement('style');
+        canvasStyle.type = 'text/css';
+        container.classList.add('figureone__container');
+        canvasStyle.innerHTML = `
+          .figureone__container {
+            position: relative;
+            pointer-events: none;
+          }
+          .figureone__canvas {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+          }
+          .figureone__html {
+            pointer-events: auto;
+          }
+        `;
+        document.getElementsByTagName('head')[0].appendChild(canvasStyle);
+
         this.backgroundColor = backgroundColor;
         const webglLow = new WebGLInstance(
           this.canvasLow,
