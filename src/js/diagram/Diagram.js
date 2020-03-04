@@ -193,6 +193,21 @@ class Diagram {
             this.htmlCanvas = child;
           }
         }
+        if (this.canvasLow == null) {
+          this.canvasLow = document.createElement('canvas');
+          this.canvasLow.classList.add('diagram__gl', 'diagram__canvas');
+          container.appendChild(this.canvasLow);
+        }
+        if (this.textCanvasLow == null) {
+          this.textCanvasLow = document.createElement('canvas');
+          this.textCanvasLow.classList.add('diagram__text', 'diagram__canvas');
+          container.appendChild(this.textCanvasLow);
+        }
+        if (this.htmlCanvas == null) {
+          this.htmlCanvas = document.createElement('div');
+          this.htmlCanvas.classList.add('diagram__html', 'diagram__canvas');
+          container.appendChild(this.htmlCanvas);
+        }
         this.backgroundColor = backgroundColor;
         const webglLow = new WebGLInstance(
           this.canvasLow,

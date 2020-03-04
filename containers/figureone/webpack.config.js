@@ -140,10 +140,10 @@ module.exports = (env) => {
       path: buildPath,
       filename: e.output,
       library: 'Fig',
-      libraryTarget: 'var',
+      // libraryTarget: 'var',
       libraryExport: 'default',
-      // libraryTarget: 'umd',
-      // umdNamedDefine: true,
+      libraryTarget: 'umd',
+      umdNamedDefine: true,
     },
     externals,
     module: {
