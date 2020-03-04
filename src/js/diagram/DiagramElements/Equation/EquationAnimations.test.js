@@ -40,7 +40,7 @@ describe('Equation Animation', () => {
       simple: () => {
         diagram.addElements([{
           name: 'eqnA',
-          method: 'equation/addNavigator',
+          method: 'addNavigator',
           options: {
             color: col(1),
             elements: {

@@ -13,11 +13,13 @@ diagram.addElement(
       fill: true,
       color: [1, 0, 0, 1],
     },
-    isTouchable: true,
-    isMovable: true,
-    move: {
-      canBeMovedAfterLosingTouch: true,
-      boundary: 'diagram',
+    mods: {
+      isTouchable: true,
+      isMovable: true,
+      move: {
+        canBeMovedAfterLosingTouch: true,
+        boundary: 'diagram',
+      },
     },
   },
 );
