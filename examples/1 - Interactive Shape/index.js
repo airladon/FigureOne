@@ -6,20 +6,18 @@ diagram.setTouchable();
 diagram.addElement(
   {
     name: 'circle',
-    method: 'polygon',
-    options: {
+    type: 'polygon',
+    params: {
       sides: 100,
       radius: 0.2,
       fill: true,
       color: [1, 0, 0, 1],
     },
-    mods: {
-      isTouchable: true,
-      isMovable: true,
-      move: {
-        canBeMovedAfterLosingTouch: true,
-        boundary: 'diagram',
-      },
+    isTouchable: true,
+    isMovable: true,
+    move: {
+      canBeMovedAfterLosingTouch: true,
+      boundary: 'diagram',
     },
   },
 );

@@ -168,13 +168,112 @@ function duplicateFromTo(
   });
 }
 
+function duplicate(value: ?number | boolean | string | Object) {
+  if (typeof value === 'number'
+      || typeof value === 'boolean'
+      || typeof value === 'string'
+      || value == null
+      || typeof value === 'function') {
+    return value;
+  }
+  if (typeof value._dup === 'function') {
+    return value._dup();
+  }
+  if (Array.isArray(value)) {
+    const arrayDup = [];
+    value.forEach(arrayElement => arrayDup.push(duplicate(arrayElement)));
+    return arrayDup;
+  }
+  if (typeof value === 'object') {
+    const objectDup = {};
+    Object.keys(value).forEach((key) => {
+      const v = duplicate(value[key]);
+      objectDup[key] = v;
+    });
+    return objectDup;
+  }
+  return value;
+}
+
+function assignObjectFromTo(
+  fromObject: Object,
+  toObject: Object,
+  except: Array<string> = [],
+  duplicateValues: boolean = false,
+  parentPath: string = '',
+) {
+  Object.keys(fromObject).forEach((key) => {
+    const keyPath = parentPath !== '' ? `${parentPath}.${key}` : key;
+    if (except.indexOf(keyPath) !== -1) {
+      return;
+    }
+    const value = fromObject[key];
+    if (typeof value === 'number'
+      || typeof value === 'boolean'
+      || typeof value === 'string'
+      || value == null
+      || typeof value === 'function'
+      || typeof value._dup === 'function'
+      || Array.isArray(value)
+    ) {
+      if (value !== undefined || toObject[key] === undefined) {
+        if (duplicateValues) {     // eslint-disable-next-line no-param-reassign
+          toObject[key] = duplicate(value);
+        } else {                   // eslint-disable-next-line no-param-reassign
+          toObject[key] = value;
+        }
+      }
+    } else {
+      // If the fromObject[key] value is an object, but the toObject[key] value
+      // is not an object, but then make toObject[key] an empty object
+      const toValue = toObject[key];
+      if (typeof toValue === 'number'
+        || typeof toValue === 'boolean'
+        || typeof toValue === 'string'
+        || toValue == null
+        || typeof toValue === 'function'
+        || Array.isArray(toValue)
+      ) {
+        // eslint-disable-next-line no-param-reassign
+        toObject[key] = {};
+      }
+      assignObjectFromTo(value, toObject[key], except, duplicateValues, keyPath);
+    }
+  });
+}
+
+function joinObjectsWithOptions(options: {
+  duplicate?: boolean,
+  except?: Array<string>
+}, ...objects: Array<ArrayObject>): Object {
+
+  let { except } = options;
+  let dup = options.duplicate;
+  if (except == null) {
+    except = [];
+  }
+  if (dup == null) {
+    dup = false;
+  }
+
+  const num = objects.length;
+  const out = objects[0];
+  for (let i = 1; i < num; i += 1) {
+    const o = objects[i];
+    if (o != null) {
+      assignObjectFromTo(o, out, except, dup, '');
+    }
+  }
+  return out;
+}
+
 // joins objects like object.assign but goes as many levels deep as the object
 // is. Objects later in the arrawy overwrite objects earlier.
 function joinObjects(...objects: Array<Object>): Object {
   // if (typeof objects === 'object') {
   //   return objects;
   // }
-  const assignObjectFromTo = (fromObject: Object, toObject: Object) => {
+  const assignObjectFromTo1 = (fromObject: Object, toObject: Object) => {
     Object.keys(fromObject).forEach((key) => {
       const value = fromObject[key];
       if (typeof value === 'number'
@@ -202,7 +301,7 @@ function joinObjects(...objects: Array<Object>): Object {
           // eslint-disable-next-line no-param-reassign
           toObject[key] = {};
         }
-        assignObjectFromTo(value, toObject[key]);
+        assignObjectFromTo1(value, toObject[key]);
       }
     });
   };
@@ -212,7 +311,7 @@ function joinObjects(...objects: Array<Object>): Object {
   for (let i = 1; i < num; i += 1) {
     const o = objects[i];
     if (o != null) {
-      assignObjectFromTo(o, out);
+      assignObjectFromTo1(o, out);
     }
   }
   return out;
@@ -370,4 +469,5 @@ export {
   addToObject, duplicateFromTo, isTouchDevice,
   generateUniqueId, joinObjects, cleanUIDs, loadRemote, loadRemoteCSS,
   deleteKeys, copyKeysFromTo, generateRandomString,
+  duplicate, assignObjectFromTo, joinObjectsWithOptions,
 };
