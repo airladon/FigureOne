@@ -15,7 +15,6 @@ index.html:
 <body>
     <div id="figureOneContainer" style="width: 500px; height: 500px; background-color: black">
     </div>
-    <!-- <script type="text/javascript" src='./index.js'></script> -->
     <script type="text/javascript" src='./figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
