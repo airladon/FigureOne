@@ -1490,7 +1490,6 @@ class DiagramElement {
       },
     };
     const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
-    // console.log(location, glToDiagramSpace)
     return location.transformBy(glToDiagramSpace.matrix());
   }
 
@@ -1680,13 +1679,11 @@ class DiagramElement {
       },
     };
     const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
-
     const rect = this.getRelativeGLBoundingRect();
     const glToDiagramScaleMatrix = [
       glToDiagramSpace.matrix()[0], 0, 0,
       0, glToDiagramSpace.matrix()[4], 0,
       0, 0, 1];
-
     const minPoint = new Point(rect.left, rect.bottom).transformBy(glToDiagramScaleMatrix);
     const maxPoint = new Point(rect.right, rect.top).transformBy(glToDiagramScaleMatrix);
 
@@ -2876,7 +2873,6 @@ class DiagramElementCollection extends DiagramElement {
 
   getRelativeGLBoundingRect() {
     const boundingRect = this.getGLBoundingRect();
-
     const location = new Point(0, 0).transformBy(this.lastDrawTransform.matrix());
 
     return new Rect(
