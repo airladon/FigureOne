@@ -388,6 +388,69 @@ describe('AssignObjectFromTo', () => {
     expect(to.b).toBe(from.b);
   });
 });
+describe('Join Objects with Options', () => {
+  test('With exceptions and no duplication', () => {
+    const to = {
+      a: 1,
+      b: {
+        c: 2,
+        d: 3,
+      },
+    };
+    const from1 = {
+      a: 10,
+      b: {
+        c: 20,
+        d: 30,
+        e: [1, 2, 3],
+      },
+    };
+    const from2 = {
+      a: 100,
+      g: 600,
+    };
+    tools.joinObjectsWithOptions({
+      except: 'b.d',
+      duplicate: false,
+    }, to, from1, from2);
+    expect(to.a).toBe(100);
+    expect(to.b.c).toBe(20);
+    expect(to.b.d).toBe(3);
+    expect(to.b.e).toBe(from1.b.e);
+    expect(to.g).toBe(600);
+  });
+  test('With exceptions and duplication', () => {
+    const to = {
+      a: 1,
+      b: {
+        c: 2,
+        d: 3,
+      },
+    };
+    const from1 = {
+      a: 10,
+      b: {
+        c: 20,
+        d: 30,
+        e: [1, 2, 3],
+      },
+    };
+    const from2 = {
+      a: 100,
+      g: 600,
+    };
+    tools.joinObjectsWithOptions({
+      except: 'b.d',
+      duplicate: true,
+    }, to, from1, from2);
+    expect(to.a).toBe(100);
+    expect(to.b.c).toBe(20);
+    expect(to.b.d).toBe(3);
+    expect(to.b.e).not.toBe(from1.b.e);
+    expect(to.b.e).toEqual(from1.b.e);
+    expect(to.g).toBe(600);
+  });
+});
 describe('Join Objects', () => {
   test('Empty object first', () => {
     const result = tools.joinObjects({ a: 1, b: 2 }, {});

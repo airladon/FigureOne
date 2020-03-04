@@ -128,45 +128,45 @@ function addToObject(
   });
 }
 
-function duplicateFromTo(
-  fromObject: Object,
-  toObject: Object,
-  exceptKeys: Array<string> = [],
-) {
-  const copyValue = (value) => {
-    if (typeof value === 'number'
-        || typeof value === 'boolean'
-        || typeof value === 'string'
-        || value == null
-        || typeof value === 'function') {
-      return value;
-    }
-    if (typeof value._dup === 'function') {
-      return value._dup();
-    }
-    if (Array.isArray(value)) {
-      const arrayCopy = [];
-      value.forEach(arrayElement => arrayCopy.push(copyValue(arrayElement)));
-      return arrayCopy;
-    }
-    if (typeof value === 'object') {
-      const objectCopy = {};
-      Object.keys(value).forEach((key) => {
-        const v = copyValue(value[key]);
-        objectCopy[key] = v;
-      });
-      return objectCopy;
-    }
-    return value;
-  };
+// function duplicateFromTo(
+//   fromObject: Object,
+//   toObject: Object,
+//   exceptKeys: Array<string> = [],
+// ) {
+//   const copyValue = (value) => {
+//     if (typeof value === 'number'
+//         || typeof value === 'boolean'
+//         || typeof value === 'string'
+//         || value == null
+//         || typeof value === 'function') {
+//       return value;
+//     }
+//     if (typeof value._dup === 'function') {
+//       return value._dup();
+//     }
+//     if (Array.isArray(value)) {
+//       const arrayCopy = [];
+//       value.forEach(arrayElement => arrayCopy.push(copyValue(arrayElement)));
+//       return arrayCopy;
+//     }
+//     if (typeof value === 'object') {
+//       const objectCopy = {};
+//       Object.keys(value).forEach((key) => {
+//         const v = copyValue(value[key]);
+//         objectCopy[key] = v;
+//       });
+//       return objectCopy;
+//     }
+//     return value;
+//   };
 
-  Object.keys(fromObject).forEach((key) => {
-    if (exceptKeys.indexOf(key) === -1) {
-      // eslint-disable-next-line no-param-reassign
-      toObject[key] = copyValue(fromObject[key]);
-    }
-  });
-}
+//   Object.keys(fromObject).forEach((key) => {
+//     if (exceptKeys.indexOf(key) === -1) {
+//       // eslint-disable-next-line no-param-reassign
+//       toObject[key] = copyValue(fromObject[key]);
+//     }
+//   });
+// }
 
 function duplicate(value: ?number | boolean | string | Object) {
   if (typeof value === 'number'
@@ -249,7 +249,7 @@ function assignObjectFromTo(
 function joinObjectsWithOptions(options: {
   duplicate?: boolean,
   except?: Array<string>
-}, ...objects: Array<ArrayObject>): Object {
+}, ...objects: Array<Object>): Object {
 
   let { except } = options;
   let dup = options.duplicate;
@@ -277,48 +277,57 @@ function joinObjects(...objects: Array<Object>): Object {
   // if (typeof objects === 'object') {
   //   return objects;
   // }
-  const assignObjectFromTo1 = (fromObject: Object, toObject: Object) => {
-    Object.keys(fromObject).forEach((key) => {
-      const value = fromObject[key];
-      if (typeof value === 'number'
-        || typeof value === 'boolean'
-        || typeof value === 'string'
-        || value == null
-        || typeof value === 'function'
-        || typeof value._dup === 'function'
-        || Array.isArray(value)
-      ) {
-        // console.log(value, toObject[key])
-        if (value !== undefined || toObject[key] === undefined) {
-          // eslint-disable-next-line no-param-reassign
-          toObject[key] = value;
-        }
-      } else {
-        const toValue = toObject[key];
-        if (typeof toValue === 'number'
-          || typeof toValue === 'boolean'
-          || typeof toValue === 'string'
-          || toValue == null
-          || typeof toValue === 'function'
-          || Array.isArray(toValue)
-        ) {
-          // eslint-disable-next-line no-param-reassign
-          toObject[key] = {};
-        }
-        assignObjectFromTo1(value, toObject[key]);
-      }
-    });
-  };
+  // const assignObjectFromTo1 = (fromObject: Object, toObject: Object) => {
+  //   Object.keys(fromObject).forEach((key) => {
+  //     const value = fromObject[key];
+  //     if (typeof value === 'number'
+  //       || typeof value === 'boolean'
+  //       || typeof value === 'string'
+  //       || value == null
+  //       || typeof value === 'function'
+  //       || typeof value._dup === 'function'
+  //       || Array.isArray(value)
+  //     ) {
+  //       // console.log(value, toObject[key])
+  //       if (value !== undefined || toObject[key] === undefined) {
+  //         // eslint-disable-next-line no-param-reassign
+  //         toObject[key] = value;
+  //       }
+  //     } else {
+  //       const toValue = toObject[key];
+  //       if (typeof toValue === 'number'
+  //         || typeof toValue === 'boolean'
+  //         || typeof toValue === 'string'
+  //         || toValue == null
+  //         || typeof toValue === 'function'
+  //         || Array.isArray(toValue)
+  //       ) {
+  //         // eslint-disable-next-line no-param-reassign
+  //         toObject[key] = {};
+  //       }
+  //       assignObjectFromTo1(value, toObject[key]);
+  //     }
+  //   });
+  // };
 
-  const num = objects.length;
-  const out = objects[0];
-  for (let i = 1; i < num; i += 1) {
-    const o = objects[i];
-    if (o != null) {
-      assignObjectFromTo1(o, out);
-    }
-  }
-  return out;
+  // const num = objects.length;
+  // const out = objects[0];
+  // for (let i = 1; i < num; i += 1) {
+  //   const o = objects[i];
+  //   if (o != null) {
+  //     assignObjectFromTo1(o, out);
+  //   }
+  // }
+  // return out;
+  return joinObjectsWithOptions({}, ...objects);
+}
+
+function duplicateFromTo(
+  fromObject: Object,
+  toObject: Object,
+  exceptKeys: Array<string> = [],
+) {
+  joinObjectsWithOptions({ except: exceptKeys, duplicate: true }, toObject, fromObject);
 }
 
 function generateUniqueId(seed: string = '') {
