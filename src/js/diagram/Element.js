@@ -14,7 +14,7 @@ import HTMLObject from './DrawingObjects/HTMLObject/HTMLObject';
 import DrawingObject from './DrawingObjects/DrawingObject';
 import VertexObject from './DrawingObjects/VertexObject/VertexObject';
 import { TextObject } from './DrawingObjects/TextObject/TextObject';
-import { duplicateFromTo, joinObjects } from '../tools/tools';
+import { duplicateFromTo, joinObjects, joinObjectsWithOptions } from '../tools/tools';
 import { colorArrayToRGBA } from '../tools/color';
 // import GlobalAnimation from './webgl/GlobalAnimation';
 // import DrawContext2D from './DrawContext2D';
@@ -478,8 +478,10 @@ class DiagramElement {
     this.renderedOnNextDraw = false;
   }
 
-  setProperties(properties: Object) {
-    joinObjects(this, properties);
+  setProperties(properties: Object, except: Array<string> | string = []) {
+    joinObjectsWithOptions({
+      except,
+    }, this, properties);
   }
 
   // Space definition:
