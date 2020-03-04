@@ -150,6 +150,9 @@ function addElements(
       if (elementModsToUse != null && elementModsToUse !== {}) {
         element.setProperties(elementModsToUse);
       }
+      // element.setProperties(elementDefinition, [
+      //   'mods', 'name', 'method', 'scenario', 'addElementsKey', 'options', 'path',
+      // ]);
       if (firstScenario != null && firstScenario in element.scenarios) {
         element.setScenario(firstScenario);
       }

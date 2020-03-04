@@ -248,7 +248,7 @@ function assignObjectFromTo(
 
 function joinObjectsWithOptions(options: {
   duplicate?: boolean,
-  except?: Array<string>
+  except?: Array<string> | string,
 }, ...objects: Array<Object>): Object {
 
   let { except } = options;

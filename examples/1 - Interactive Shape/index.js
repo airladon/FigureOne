@@ -7,7 +7,7 @@ diagram.addElement(
   {
     name: 'circle',
     type: 'polygon',
-    params: {
+    options: {
       sides: 100,
       radius: 0.2,
       fill: true,
@@ -26,4 +26,3 @@ diagram.addElement(
 
 // Initialize diagram
 diagram.initialize();
-
