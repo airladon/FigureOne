@@ -70,7 +70,7 @@ function addElements(
       objects,
       equation,
     };
-    const splitMethod = method.split('/');
+    const splitMethod = method.split('.');
     let methodToUse = getPath(diagram, splitMethod);
     if (methodToUse == null) {
       // throw new Error(`Diagram addElements ERROR: Cannot find method ${method}`);
@@ -83,39 +83,25 @@ function addElements(
   if (Array.isArray(layout)
   ) {
     layout.forEach((elementDefinition, index) => {
-      let methodPathToUse;
-      let nameToUse;
-      let pathToUse;
-      let optionsToUse;
-      let elementModsToUse;
-      let addElementsToUse;
-      let firstScenario;
-
       // Extract the parameters from the layout object
-      if (Array.isArray(elementDefinition)) {
-        [
-          pathToUse, nameToUse, methodPathToUse, optionsToUse,
-          elementModsToUse, addElementsToUse, firstScenario,
-        ] = elementDefinition;
-      } else {
-        if (elementDefinition == null) {
-          throw Error(`Add elements index ${index} does not exist in layout`);
-        }
-        nameToUse = elementDefinition.name;
-        pathToUse = elementDefinition.path;
-        optionsToUse = elementDefinition.options;
-        addElementsToUse = elementDefinition[addElementsKey];
-        methodPathToUse = elementDefinition.method;
-        elementModsToUse = elementDefinition.mods;
-        firstScenario = elementDefinition.scenario;
+      if (elementDefinition == null) {
+        throw Error(`Add elements index ${index} does not exist in layout`);
       }
+      const nameToUse = elementDefinition.name;
+      const pathToUse = elementDefinition.path;
+      const optionsToUse = elementDefinition.options;
+      const addElementsToUse = elementDefinition[addElementsKey];
+      const methodPathToUse = elementDefinition.method;
+      const elementModsToUse = elementDefinition.mods;
+      const firstScenario = elementDefinition.scenario;
 
       let collectionPath;
       if (pathToUse == null || pathToUse === '') {
         collectionPath = rootCollection;
       } else {
-        const path = pathToUse.split('/');
-        collectionPath = getPath(rootCollection, path);
+        // const path = pathToUse.split('/');
+        // collectionPath = getPath(rootCollection, path);
+        collectionPath = rootCollection.getElement(pathToUse);
       }
 
       // Check for critical errors
@@ -141,22 +127,13 @@ function addElements(
         throw new Error(`Layout addElement at index ${index} in collection ${rootCollection.name}: incorrect method property`);
       }
 
+      let element;
       if (methodPath.slice(-1)[0].startsWith('add')) {
-        const element = method(collectionPath, nameToUse, optionsToUse);
-        if (elementModsToUse != null && elementModsToUse !== {}) {
-          element.setProperties(elementModsToUse);
-          // if (methodPath.slice(-1)[0] === 'addNavigator') {
-          //   element.eqn.setProperties(elementModsToUse);
-          // }
-        }
-        if (firstScenario != null && firstScenario in element.scenarios) {
-          element.setScenario(firstScenario);
-          // if (methodPath.slice(-1)[0] === 'addNavigator') {
-          //   element.eqn.setScenario(firstScenario);
-          // }
+        element = method(collectionPath, nameToUse, optionsToUse);
+        if (element == null) {
+          return;
         }
       } else {
-        let element;
         if (Array.isArray(optionsToUse)) {
           element = method(...optionsToUse);
         } else {
@@ -165,15 +142,16 @@ function addElements(
         if (element == null) {
           return;
         }
-        if (elementModsToUse != null && elementModsToUse !== {}) {
-          element.setProperties(elementModsToUse);
-        }
         if (collectionPath instanceof DiagramElementCollection) {
           collectionPath.add(nameToUse, element);
         }
-        if (firstScenario != null && firstScenario in element.scenarios) {
-          element.setScenario(firstScenario);
-        }
+      }
+
+      if (elementModsToUse != null && elementModsToUse !== {}) {
+        element.setProperties(elementModsToUse);
+      }
+      if (firstScenario != null && firstScenario in element.scenarios) {
+        element.setScenario(firstScenario);
       }
 
       if (`_${nameToUse}` in rootCollection

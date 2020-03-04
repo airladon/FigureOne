@@ -42,7 +42,7 @@ describe('Diagram Equations From Object', () => {
           {
             path: '',
             name: 'group1',
-            method: 'shapes/collection',
+            method: 'shapes.collection',
             options: {
               transform: new Transform('group'),
             },
@@ -62,54 +62,64 @@ describe('Diagram Equations From Object', () => {
               isTouchable: true,
             },
           },
-          // Can use array form definition for simplicity
-          ['', 'group3', 'collection', { transform: new Transform('group') }, { isTouchable: true }],
-          // Multiple option objects are allowed where later objects overwrite
-          // earlier objects
-          ['', 'group4', 'collection', [
-            { transform: new Transform('group1') },
-            { transform: new Transform('group') },
-          ], { isTouchable: true }],
+          // // Can use array form definition for simplicity
+          // ['', 'group3', 'collection', { transform: new Transform('group') }, { isTouchable: true }],
+          // // Multiple option objects are allowed where later objects overwrite
+          // // earlier objects
+          // ['', 'group4', 'collection', [
+          //   { transform: new Transform('group1') },
+          //   { transform: new Transform('group') },
+          // ], { isTouchable: true }],
         ], diagram.elements);
       },
       nesting: () => {
         diagram.addElements([
-          // Start with a group
+          // Start with a collection
           {
             name: 'group',
-            method: 'shapes/collection',
+            method: 'shapes.collection',
             options: {
               transform: new Transform('group'),
             },
-            // The group can be added to by nesting
+            // The collection can be added to by nesting
             addElements: [
-              ['', 'group1', 'collection'],
+              {
+                name: 'group1',
+                method: 'collection',
+              },
             ],
           },
-          // The group can be added to by providing full path
+          // The collection can be added to by providing full path
           {
             path: '_group',
             name: 'group2',
-            method: 'shapes/collection',
+            method: 'shapes.collection',
           },
-          // The group can be added to by using array form with path first
-          ['_group', 'group3', 'collection'],
         ], diagram.elements);
-        // The group can be added to in secondary addElements
+        // The collection can be added to in secondary addElements
         diagram.addElements([
           {
             path: '_group',
-            name: 'group4',
-            method: 'shapes/collection',
+            name: 'group3',
+            method: 'shapes.collection',
           },
         ], diagram.elements);
-        // The group can be added with relative path to the root collection
+        // The collection can be added with relative path to the root collection
         diagram.addElements([
           {
-            name: 'group5',
-            method: 'shapes/collection',
+            name: 'group4',
+            method: 'shapes.collection',
           },
         ], diagram.elements._group);
+
+        // A sub collection can be added with path
+        diagram.addElements([
+          {
+            path: 'group.group1',
+            name: 'group11',
+            method: 'shapes.collection',
+          },
+        ], diagram.elements);
       },
       deepNest: () => {
         diagram.addElements([
@@ -117,9 +127,16 @@ describe('Diagram Equations From Object', () => {
             name: 'group',
             method: 'collection',
             addElements: [
-              ['', 'group1', 'collection', {}, {}, [
-                ['', 'group2', 'collection'],
-              ]],
+              {
+                name: 'group1',
+                method: 'collection',
+                addElements: [
+                  {
+                    name: 'group2',
+                    method: 'collection',
+                  },
+                ],
+              },
             ],
           },
         ], diagram.elements);
@@ -160,7 +177,7 @@ describe('Diagram Equations From Object', () => {
         diagram.addElements([
           {
             name: 'testEqn',
-            method: 'equation/addEquation',
+            method: 'addEquation',
             options: {
               elements: {
                 a: 'a',
@@ -174,14 +191,28 @@ describe('Diagram Equations From Object', () => {
           },
           {
             name: 'tri',
-            method: 'shapes/collection',
+            method: 'shapes.collection',
             options: {
               transform: new Transform('iso').translate(0, 0),
             },
             addElements: [
-              ['', 'line', 'polyLine', tri, { isTouchable: true }],
-              ['', 'side12', 'line', [sideLength, side12]],
-              ['', 'side23', 'line', [sideLength, side23]],
+              {
+                name: 'line',
+                method: 'polyLine',
+                options: tri,
+                mods: { isTouchable: true },
+              },
+              {
+                name: 'side12',
+                method: 'line',
+                options: tools.joinObjects({}, sideLength, side12),
+                mods: { isTouchable: true },
+              },
+              {
+                name: 'side23',
+                method: 'line',
+                options: tools.joinObjects({}, sideLength, side23),
+              },
             ],
           },
         ], diagram.elements);
@@ -196,13 +227,13 @@ describe('Diagram Equations From Object', () => {
     const { elements } = diagram;
     expect(elements).toHaveProperty('_group1');
     expect(elements).toHaveProperty('_group2');
-    expect(elements).toHaveProperty('_group3');
-    expect(elements).toHaveProperty('_group4');
-    expect(elements._group4.transform.name).toBe('group');
+    // expect(elements).toHaveProperty('_group3');
+    // expect(elements).toHaveProperty('_group4');
+    // expect(elements._group4.transform.name).toBe('group');
     expect(elements._group1.isTouchable).toBe(true);
     expect(elements._group2.isTouchable).toBe(true);
-    expect(elements._group3.isTouchable).toBe(true);
-    expect(elements._group4.isTouchable).toBe(true);
+    // expect(elements._group3.isTouchable).toBe(true);
+    // expect(elements._group4.isTouchable).toBe(true);
   });
   test('Nesting', () => {
     ways.nesting();
@@ -213,7 +244,8 @@ describe('Diagram Equations From Object', () => {
     expect(group).toHaveProperty('_group2');
     expect(group).toHaveProperty('_group3');
     expect(group).toHaveProperty('_group4');
-    expect(group).toHaveProperty('_group5');
+    expect(group._group1).toHaveProperty('_group11');
+    // expect(group).toHaveProperty('_group5');
   });
   test('Deep Nest', () => {
     ways.deepNest();
