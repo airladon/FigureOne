@@ -1,1 +1,3 @@
-Simple diamond shape that can be dragged around.
+Here are examples of using FigureOne.
+
+Open index.html of each example in a browser to view.
