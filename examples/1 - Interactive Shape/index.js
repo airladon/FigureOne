@@ -1,8 +1,9 @@
-// Create diagram
-const diagram = new Fig.Diagram({ htmlId: 'figureOneContainer' });
+// Create diagram and make it able to be touched
+const diagram = new Fig.Diagram();
+diagram.setTouchable();
 
 // Add circle to diagram
-diagram.addElements(diagram.elements, [
+diagram.addElement(
   {
     name: 'circle',
     method: 'polygon',
@@ -13,17 +14,16 @@ diagram.addElements(diagram.elements, [
       color: [1, 0, 0, 1],
     },
     mods: {
-      isMovable: true,
       isTouchable: true,
+      isMovable: true,
       move: {
         canBeMovedAfterLosingTouch: true,
         boundary: 'diagram',
       },
     },
   },
-]);
-diagram.elements.hasTouchableElements = true;
+);
 
 // Initialize diagram
-diagram.setFirstTransform();
-diagram.animateNextFrame();
+diagram.initialize();
+

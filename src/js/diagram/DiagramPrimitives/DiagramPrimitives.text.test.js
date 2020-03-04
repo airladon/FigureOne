@@ -17,7 +17,7 @@ describe('Equation Functions - Box', () => {
   let diagram;
   beforeEach(() => {
     diagram = makeDiagram();
-    diagram.addElements(diagram.elements, [
+    diagram.addElements([
       {
         name: 'a',
         method: 'text',

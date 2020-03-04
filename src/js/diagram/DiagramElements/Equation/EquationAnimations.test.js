@@ -38,7 +38,7 @@ describe('Equation Animation', () => {
     // color1 = [0.95, 0, 0, 1];
     ways = {
       simple: () => {
-        diagram.addElements(diagram.elements, [{
+        diagram.addElements([{
           name: 'eqnA',
           method: 'equation/addNavigator',
           options: {

@@ -37,7 +37,7 @@ describe('Diagram Equations From Object', () => {
     // }
     ways = {
       simple: () => {
-        diagram.addElements(diagram.elements, [
+        diagram.addElements([
           // Full object definition
           {
             path: '',
@@ -70,10 +70,10 @@ describe('Diagram Equations From Object', () => {
             { transform: new Transform('group1') },
             { transform: new Transform('group') },
           ], { isTouchable: true }],
-        ]);
+        ], diagram.elements);
       },
       nesting: () => {
-        diagram.addElements(diagram.elements, [
+        diagram.addElements([
           // Start with a group
           {
             name: 'group',
@@ -94,25 +94,25 @@ describe('Diagram Equations From Object', () => {
           },
           // The group can be added to by using array form with path first
           ['_group', 'group3', 'collection'],
-        ]);
+        ], diagram.elements);
         // The group can be added to in secondary addElements
-        diagram.addElements(diagram.elements, [
+        diagram.addElements([
           {
             path: '_group',
             name: 'group4',
             method: 'shapes/collection',
           },
-        ]);
+        ], diagram.elements);
         // The group can be added with relative path to the root collection
-        diagram.addElements(diagram.elements._group, [
+        diagram.addElements([
           {
             name: 'group5',
             method: 'shapes/collection',
           },
-        ]);
+        ], diagram.elements._group);
       },
       deepNest: () => {
-        diagram.addElements(diagram.elements, [
+        diagram.addElements([
           {
             name: 'group',
             method: 'collection',
@@ -122,7 +122,7 @@ describe('Diagram Equations From Object', () => {
               ]],
             ],
           },
-        ]);
+        ], diagram.elements);
       },
       examples: () => {
         const triPoints = [
@@ -157,7 +157,7 @@ describe('Diagram Equations From Object', () => {
           p1: triPoints[2],
           p2: triPoints[1],
         };
-        diagram.addElements(diagram.elements, [
+        diagram.addElements([
           {
             name: 'testEqn',
             method: 'equation/addEquation',
@@ -184,7 +184,7 @@ describe('Diagram Equations From Object', () => {
               ['', 'side23', 'line', [sideLength, side23]],
             ],
           },
-        ]);
+        ], diagram.elements);
       },
     };
   });
