@@ -151,7 +151,7 @@ class Diagram {
     options: TypeDiagramOptions,
   ) {
     const defaultOptions = {
-      htmlId: 'id_figureone_canvases',
+      htmlId: 'figureOneContainer',
       limits: new Rect(-1, -1, 2, 2),
       backgroundColor: [1, 1, 1, 1],
       fontScale: 1,
@@ -330,8 +330,8 @@ class Diagram {
   }
 
   addElements(
-    rootCollection: DiagramElementCollection,
     layout: Array<TypeAddElementObject>,
+    rootCollection: DiagramElementCollection = this.elements,
     addElementsKey: string = 'addElements',
   ) {
     addElements(
@@ -342,6 +342,29 @@ class Diagram {
       layout,
       addElementsKey,
     );
+  }
+
+  addElement(
+    layout: TypeAddElementObject,
+    rootCollection: DiagramElementCollection = this.elements,
+    addElementsKey: string = 'addElements',
+  ) {
+    addElements(
+      this.shapes,
+      this.equation,
+      this.objects,
+      rootCollection,
+      [layout],
+      addElementsKey,
+    );
+  }
+
+  setTouchable(touchable: boolean = true) {
+    if (touchable) {
+      this.elements.hasTouchableElements = true;
+    } else {
+      this.elements.hasTouchableElements = false;
+    }
   }
 
   getShapes() {
@@ -447,8 +470,8 @@ class Diagram {
   }
 
   initialize() {
-    // this.setSpaceTransforms();
     this.setFirstTransform();
+    this.animateNextFrame();
   }
 
   setFirstTransform() {
