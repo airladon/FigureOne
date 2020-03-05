@@ -1,4 +1,32 @@
-// @flow
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: math.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: math.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// @flow
 
 const roundNum = (value: number, precision: number = 5): number => {
   const multiplier = 10 ** precision;
@@ -18,7 +46,7 @@ const roundNum = (value: number, precision: number = 5): number => {
     // isNaN is broken: it converts its argument to number, so
     // isNaN("foo") => true
     // eslint-disable-next-line no-self-compare
-    return x !== x && y !== y;
+    return x !== x &amp;&amp; y !== y;
   };
   if (objectIsPolyfill(result, -0)) {
     result = 0;
@@ -34,11 +62,11 @@ const roundNum = (value: number, precision: number = 5): number => {
 /**
  * Rounds a number or numbers in an array
  * @method
- * @param {number | Array<number>} arrayOrValue - Value or array of values to be rounded
+ * @param {number | Array&lt;number>} arrayOrValue - Value or array of values to be rounded
  * @param {number} precision - Number of decimal places to round to
- * @returns {number | Array<number>} Rounded value or array of values
+ * @returns {number | Array&lt;number>} Rounded value or array of values
  */
-function round<T: number | Array<number>>(
+function round&lt;T: number | Array&lt;number>>(
   arrayOrValue: T,
   precision: number = 5,
 ): T {
@@ -67,21 +95,21 @@ function round<T: number | Array<number>>(
 // ) {
 //   let result = value;
 //   let zero = zeroThreshold;
-//   if (zero < 0) {
+//   if (zero &lt; 0) {
 //     zero = -zero;
 //   }
-//   if (value > -zero && value < zero) {
+//   if (value > -zero &amp;&amp; value &lt; zero) {
 //     return 0;
 //   }
 //   let max = maxValue;
-//   if (max < 0) {
+//   if (max &lt; 0) {
 //     max = -max;
 //   }
 
 //   if (value > max) {
 //     result = max;
 //   }
-//   if (value < -max) {
+//   if (value &lt; -max) {
 //     result = -max;
 //   }
 //   return result;
@@ -93,7 +121,7 @@ function round<T: number | Array<number>>(
 //  * velocity: can be positive or negative
 //  * maxVelocity will clip velocity to:
 //      * |maxVelocity| if velocity > 0
-//      * -|maxVelocity| if velcity < 0
+//      * -|maxVelocity| if velcity &lt; 0
 //  * zeroThreshold will clip velocity to:
 //       * 0 if velocity is larger than -|zeroThreshold| and smaller than
 //         |zeroThreshold|.
@@ -109,22 +137,22 @@ function clipMag(
   if (zeroT === null) {
     zeroT = 0;
   }
-  if (zeroT < 0) {
+  if (zeroT &lt; 0) {
     zeroT = -zeroT;
   }
   if (maxV === null) {
     return result;
   }
-  if (maxV < 0) {
+  if (maxV &lt; 0) {
     maxV = -maxV;
   }
-  if (value >= -zeroT && value <= zeroT) {
+  if (value >= -zeroT &amp;&amp; value &lt;= zeroT) {
     result = 0;
   }
   if (value > maxV) {
     result = maxV;
   }
-  if (value < -maxV) {
+  if (value &lt; -maxV) {
     result = -maxV;
   }
   return result;
@@ -137,7 +165,7 @@ function clipValue(
 ): number {
   let clipped = value;
   if (minValue !== null) {
-    if (value < minValue) {
+    if (value &lt; minValue) {
       clipped = minValue;
     }
   }
@@ -176,7 +204,7 @@ const decelerate = function getPositionVelocityFromDecAndTime(
   }
 
   let d = decel;
-  if (decel < 0) {
+  if (decel &lt; 0) {
     d = -d;
   }
   // If there is some initial velocity, then calc its sign and
@@ -282,7 +310,7 @@ function sinusoid(
 
 function range(start: number, stop: number, step: number = 1) {
   const out = [];
-  for (let i = start; i <= stop + step * 0.5; i += step) {
+  for (let i = start; i &lt;= stop + step * 0.5; i += step) {
     out.push(i);
   }
   return out;
@@ -320,20 +348,20 @@ function rand(minOrMax: number, max: ?number = null, plusOrMinus: boolean = fals
   return r;
 }
 
-function randElement<T>(inputArray: Array<T>): T {
+function randElement&lt;T>(inputArray: Array&lt;T>): T {
   const index = randInt(inputArray.length);
   return inputArray[index];
 }
 
-function removeRandElement<T>(inputArray: Array<T>): T {
+function removeRandElement&lt;T>(inputArray: Array&lt;T>): T {
   const index = rand(inputArray.length);
   return inputArray.splice(index, 1)[0];
 }
 
-function randElements<T>(num: number, inputArray: Array<T>): Array<T> {
+function randElements&lt;T>(num: number, inputArray: Array&lt;T>): Array&lt;T> {
   const possibleIndeces = range(0, inputArray.length - 1, 1);
   const elements = [];
-  for (let i = 0; i < num; i += 1) {
+  for (let i = 0; i &lt; num; i += 1) {
     const index = removeRandElement(possibleIndeces);
     elements.push(inputArray[index]);
   }
@@ -368,3 +396,26 @@ export {
   randSign,
 };
 
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#roundNum">roundNum</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Thu Mar 05 2020 23:44:10 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
