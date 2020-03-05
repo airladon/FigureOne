@@ -93,14 +93,6 @@ diagram.addElement(
         ],
       },
     },
-    mods: {
-      isTouchable: true,
-      isMovable: true,
-      touchInBoundingRect: true,
-      move: {
-        type: 'rotation',
-      },
-    },
   },
 );
 
