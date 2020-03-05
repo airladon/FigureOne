@@ -110,10 +110,12 @@ function addElements(
         throw new Error(`Diagram addElement ERROR  at index ${index} in collection ${rootCollection.name}: missing name property in ${elementDefinition}`);
       }
       if (methodPathToUse == null || methodPathToUse === '') {
-        throw new Error(`Diagram addElement ERROR  at index ${index} in collection ${rootCollection.name}: missing method property`);
+        // $FlowFixMe
+        throw new Error(`Diagram addElement ERROR  at index ${index} in collection ${rootCollection.name}: missing method property in ${elementDefinition}`);
       }
       if (!(collectionPath instanceof DiagramElementCollection)) {
-        throw new Error(`Diagram addElement ERROR at index ${index} in collection ${rootCollection.name}: missing or incorrect path property`);
+        // $FlowFixMe
+        throw new Error(`Diagram addElement ERROR at index ${index} in collection ${rootCollection.name}: missing or incorrect path property in ${elementDefinition}`);
       }
 
       const methodPath = methodPathToUse.split('/');
