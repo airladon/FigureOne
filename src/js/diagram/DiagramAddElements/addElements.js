@@ -104,10 +104,10 @@ function addElements(
         // collectionPath = getPath(rootCollection, path);
         collectionPath = rootCollection.getElement(pathToUse);
       }
-
       // Check for critical errors
       if (nameToUse == null || nameToUse === '') {
-        throw new Error(`Diagram addElement ERROR  at index ${index} in collection ${rootCollection.name}: missing name property`);
+        // $FlowFixMe
+        throw new Error(`Diagram addElement ERROR  at index ${index} in collection ${rootCollection.name}: missing name property in ${elementDefinition}`);
       }
       if (methodPathToUse == null || methodPathToUse === '') {
         throw new Error(`Diagram addElement ERROR  at index ${index} in collection ${rootCollection.name}: missing method property`);

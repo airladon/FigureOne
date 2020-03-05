@@ -29,3 +29,5 @@ An `Equation` object is a `DiagramElementCollection` that groups all the equatio
 In this example, the *equation elements* (TERMS and OPERATORS) are first defined in `options.elements`, then a *form* is defined in `options.forms.base` .
 
 Some operators are either not in unicode, or are more convient to draw as symbols. In this example the *vinculum* of the fraction is a symbol.
+
+Other symbols include
