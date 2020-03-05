@@ -60,6 +60,7 @@ function addElements(
       angle: objects.angle.bind(objects),
       //
       addEquation: equation.addEquation.bind(equation),
+      equation: equation.equation.bind(equation),
       addNavigator: equation.addNavigator.bind(equation),
     };
     if (method in methods) {

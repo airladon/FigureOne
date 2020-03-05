@@ -359,6 +359,10 @@ class Diagram {
     );
   }
 
+  getElement(elementName: string) {
+    return this.elements.getElement(elementName);
+  }
+
   setTouchable(touchable: boolean = true) {
     if (touchable) {
       this.elements.hasTouchableElements = true;

@@ -6,7 +6,7 @@ diagram.setTouchable();
 diagram.addElement(
   {
     name: 'circle',
-    type: 'polygon',
+    method: 'polygon',
     options: {
       sides: 100,
       radius: 0.2,
