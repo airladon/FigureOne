@@ -14,7 +14,7 @@ Download `index.html` and `index.js` into the same folder and open `index.html` 
 <body>
     <div id="figureOneContainer" style="width: 500px; height: 500px; background-color: black;">
     </div>
-    <script type="text/javascript" src='../../package/figureone.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.1.19/figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>
@@ -45,7 +45,29 @@ diagram.initialize();
 ```
 ## Explanation
 
-First a diagram is created.
+### HTML
+In the HTML, a `div` is created that will house the diagram.
+```html
+ <div id="figureOneContainer" style="width: 500px; height: 500px; background-color: black;">
+ ```
+
+Then the FigureOne library is loaded
+```html
+<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.1.19/figureone.min.js'></script>
+```
+In this case, the library is loaded from a CDN, but you could also run it from a local copy of the figureone library as well. For instance, if you cloned this repository, and wanted to run the local version you could use the line:
+```html
+<script type="text/javascript" src='../../package/figureone.min.js'></script>
+```
+
+Finally, the javascript file which will use the FigureOne library to create the diagram is executed.
+<script type="text/javascript" src='./index.js'></script>
+
+All other examples have the same, or very similar HTML index file.
+
+### Javascript
+
+First a diagram is created. `Fig` is the FigureOne library that is globally available to the script.
 
 ```js
 const diagram = new Fig.Diagram();
