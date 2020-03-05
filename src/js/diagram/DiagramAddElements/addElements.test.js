@@ -62,14 +62,6 @@ describe('Diagram Equations From Object', () => {
               isTouchable: true,
             },
           },
-          // // Can use array form definition for simplicity
-          // ['', 'group3', 'collection', { transform: new Transform('group') }, { isTouchable: true }],
-          // // Multiple option objects are allowed where later objects overwrite
-          // // earlier objects
-          // ['', 'group4', 'collection', [
-          //   { transform: new Transform('group1') },
-          //   { transform: new Transform('group') },
-          // ], { isTouchable: true }],
         ], diagram.elements);
       },
       nesting: () => {

@@ -250,7 +250,6 @@ function joinObjectsWithOptions(options: {
   duplicate?: boolean,
   except?: Array<string> | string,
 }, ...objects: Array<Object>): Object {
-
   let { except } = options;
   let dup = options.duplicate;
   if (except == null) {
