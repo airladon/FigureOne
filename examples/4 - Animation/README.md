@@ -10,7 +10,6 @@ Open `index.html` in a browser to view example.
 ```js
 // Create diagram and make it touchable
 const diagram = new Fig.Diagram();
-diagram.setTouchable();
 
 // Add elements to the diagram
 diagram.addElements([
