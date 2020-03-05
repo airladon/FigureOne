@@ -4,7 +4,7 @@ This example shows a triangle and a circle in a collection. The collection is sc
 
 Open `index.html` in a browser to view example.
 
-![example](./example.gif)
+![example](./example.png)
 
 ## Code
 
