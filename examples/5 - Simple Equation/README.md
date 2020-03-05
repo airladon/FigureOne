@@ -1,4 +1,4 @@
-# Example 3 - Equation
+# Example 5 - Simple Equation
 
 Simple equation with a fraction.
 

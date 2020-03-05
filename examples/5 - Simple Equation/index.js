@@ -20,11 +20,11 @@ diagram.addElement(
       },
       // An equation form is how those terms are arranged
       forms: {
-        0: ['a', 'equals', { frac: ['b', 'vinculum', 'c'] }],
+        base: ['a', 'equals', { frac: ['b', 'vinculum', 'c'] }],
       },
     },
   },
 );
 // Show the equation form
-diagram.getElement('eqn').showForm('0');
+diagram.getElement('eqn').showForm('base');
 diagram.initialize();
