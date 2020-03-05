@@ -1,7 +1,5 @@
 # Example 4 - Animation
 
-## Example
-
 A pentagon shape goes through a series of animation steps including translations, rotations, pulses, and dissolves.
 
 Open `index.html` in a browser to view example.

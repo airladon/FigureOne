@@ -1,6 +1,5 @@
 # Example 3 - Interactive Shape
 
-## Example
 This example shows a circle that can be moved in the container.
 
 If the shape is released while dragging, it will continue to travel in its last dragged direction, and bounce of the container boundaries if it reaches them.

@@ -1,7 +1,5 @@
 # Example 5 - Simple Equation
 
-## Example
-
 A simple equation including a fraction.
 
 Open `index.html` in a browser to view example.
@@ -28,6 +26,17 @@ An `Equation` object is a `DiagramElementCollection` that groups all the equatio
 
 In this example, the *equation elements* (TERMS and OPERATORS) are first defined in `options.elements`, then a *form* is defined in `options.forms.base` .
 
-Some operators are either not in unicode, or are more convient to draw as symbols. In this example the *vinculum* of the fraction is a symbol.
+Some operators are either not in unicode, or are more convient to drawn directly. In this example the *vinculum* of the fraction is a symbol.
 
-Other symbols include
+Available symbols include:
+
+* *vinculum* - for fractions
+* *radical* - for roots
+* *integral* - with multiple and path integral options
+* *sum* - sigma
+* *product* - pi
+* *brackets, square brackets, angle brackets, bar brackets and braces* - can have left, right, top or bottom orientations
+* *arrow* - can be oriented left, right, bottom or top
+* *box*
+* *strike out* - single diagonal line and cross
+* *bar*

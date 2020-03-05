@@ -1,6 +1,5 @@
 # Example 1 - Shape
 
-# Example
 Draws a filled in circle.
 
 Open `index.html` in a browser to view example.

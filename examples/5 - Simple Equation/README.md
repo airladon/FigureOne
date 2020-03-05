@@ -1,6 +1,10 @@
 # Example 5 - Simple Equation
 
-Simple equation with a fraction.
+A simple equation including a fraction.
+
+Open `index.html` in a browser to view example.
+
+## Explanation
 
 Consider the equation:
 
@@ -8,18 +12,31 @@ Consider the equation:
 a = b + c
 ```
 
-This equation has a number of TERMS (a, b, c), an OPERATOR (+) and an equals sign (which we will call an operator).
-
 We could also rearrange it to a different FORM:
 
 ```
 a - b = c
 ```
 
-An equation object is a `DiagramElementCollection` (a diagram element which is a collection of elements) that groups all the equations TERMS and OPERATORS as `DiagramElementPrimitives` (diagram elements that are drawn to the screen).
+These equations have a number of TERMS (a, b, c), an OPERATOR (+) and an equals sign (which we will call an OPERATOR).
 
-As each TERM and OPERATOR of an equation is a diagram element, these must first be defined (in the `options.elements` definition).
+Each of these TERMS and OPERATORS are diagram elements - specifically `DiagramElementPrimitive` objects that can behave in any way a normal `DiagramElement` can.
 
-The equation FORM (`options.forms`) defines the order and layout of the elements.
+An `Equation` object is a `DiagramElementCollection` that groups all the equation's elements and can arrange them into different equation FORMS.
 
-Open `index.html` in a browser to view example.
+In this example, the *equation elements* (TERMS and OPERATORS) are first defined in `options.elements`, then a *form* is defined in `options.forms.base` .
+
+Some operators are either not in unicode, or are more convient to drawn directly. In this example the *vinculum* of the fraction is a symbol.
+
+Available symbols include:
+
+* *vinculum* - for fractions
+* *radical* - for roots
+* *integral* - with multiple and path integral options
+* *sum* - sigma
+* *product* - pi
+* *brackets, square brackets, angle brackets, bar brackets and braces* - can have left, right, top or bottom orientations
+* *arrow* - can be oriented left, right, bottom or top
+* *box*
+* *strike out* - single diagonal line and cross
+* *bar*
