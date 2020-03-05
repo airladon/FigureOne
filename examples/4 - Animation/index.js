@@ -1,6 +1,5 @@
 // Create diagram and make it touchable
 const diagram = new Fig.Diagram();
-diagram.setTouchable();
 
 // Add elements to the diagram
 diagram.addElements([
