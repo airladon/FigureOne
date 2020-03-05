@@ -22,6 +22,8 @@ const envConfig = {
     shortName: 'prod',
     uglify: true,
     webpackMode: 'production',
+    // devtool: 'source-map',
+    // uglifySourceMap: true,
     devtool: false,
     uglifySourceMap: false,
     output: 'figureone.min.js',
