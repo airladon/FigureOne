@@ -1,8 +1,10 @@
 # Example 1 - Shape
 
-Draws a filled in circle.
+Draws a circle.
 
-Open `index.html` in a browser to view example.
+Download example and open `index.html` in a browser to view example.
+
+![example](./example.png)
 
 ## Code
 `index.html`
