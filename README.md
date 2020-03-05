@@ -13,18 +13,18 @@ One API creates and operates on WebGL shapes, Canvas 2D text, and custom HTML el
 
 ## Getting Started
 
-Load the library into your HTML:
+Load the Figureone library into your HTML:
 
 ```html
 <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.1.19/figureone.min.js'></script>
 ```
 
-Create a `div` element to draw to:
+Create a `div` element to attach the diagram to:
 ```html
 <div id="figureOneContainer" style="width: 500px; height: 500px; background-color: black;"></div>
 ```
 
-Then in javascript, create a shape in a diagram:
+Then in javascript, create a diagram and a shape within it:
 
 ```js
 const diagram = new Fig.Diagram();

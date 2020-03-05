@@ -14,7 +14,7 @@ diagram.addElement(
         c: { color: [1, 0, 0, 1] },
       },
 
-      // Align all forms to the 'equals' diagarm element
+      // Align all forms to the 'equals' diagram element
       defaultFormAlignment: { fixTo: 'equals' },
 
       // Define two different forms of the equation
@@ -33,13 +33,16 @@ diagram.addElement(
 );
 diagram.initialize();
 
-// Show the equation form
 const eqn = diagram.getElement('eqn');
+
+// Show the equation form
 eqn.showForm('1');
+
+// Animate to the next form
 eqn.goToForm({
   name: '2',
   delay: 1,
-  duration: 3,
+  duration: 1.5,
   animate: 'move',
 });
 
