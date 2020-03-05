@@ -53,9 +53,9 @@ diagram.initialize();
 
 ## Examples
 
-[Examples](./tree/master/examples) can be downloaded and run by opening `index.html` in a browser.
+Examples can be downloaded and run by opening their respective `index.html` files in a browser.
 
-* **Simple shape** - Simple creation and drawing of diagram element (same as above)
+* **[Simple shape](https://github.com/airladon/FigureOne/tree/master/examples/1%20-%20Shape)** - Simple creation and drawing of diagram element (same as above)
 * **Collections** - Example showing collections of diagram elements
 * **Interactive Shape** - Shape that can be dragged and bounces around after being let go
 * **Animation** - Simple animation example
