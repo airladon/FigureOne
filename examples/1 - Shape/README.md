@@ -2,7 +2,7 @@
 
 Draws a circle.
 
-Download example and open `index.html` in a browser to view example.
+Download `index.html` and `index.js` into the same folder and open `index.html` in a browser to view example.
 
 ![example](./example.png)
 

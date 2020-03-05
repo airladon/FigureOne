@@ -2,38 +2,33 @@
 
 The library used to draw interactive diagrams at <a href="https://www.thisiget.com">thisiget.com</a>.
 
-
 It can:
 
-* Create diagram elements including shapes and text
-* Animation
-* Interactivity - users can touch and move diagram elements
-* Equation rendering, animation and interaction
+* Create diagram elements including shapes, textures and text
+* Animate diagram elements
+* Allow users to interact with diagram elements (like touching and moving elements)
+* Render equations, animate and make them interactive
 
-The same API uses WebGL for shape rendering, Canvas 2D for text rendering and can create and manipulate HTML elements (for images, text and CSS animations) if desired.
+One API creates and operates on WebGL shapes, Canvas 2D text, and custom HTML elements, making them all similarly behaving diagram elements.
 
+## Getting Started
 
-## Simple Shape Example
+Load the library into your HTML:
 
-`index.html`:
 ```html
-<!doctype html>
-<html>
-<body>
-    <div id="figureOneContainer" style="width: 500px; height: 500px; background-color: black;">
-    </div>
-    <script type="text/javascript" src='./figureone.min.js'></script>
-    <script type="text/javascript" src='./index.js'></script>
-</body>
-</html>
+<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.1.19/figureone.min.js'></script>
 ```
 
-`index.js`:
+Create a `div` element to draw to:
+```html
+<div id="figureOneContainer" style="width: 500px; height: 500px; background-color: black;"></div>
+```
+
+Then in javascript, create a shape in a diagram:
+
 ```js
-// Create a diagram
 const diagram = new Fig.Diagram();
 
-// Add circle to diagram
 diagram.addElement(
   {
     name: 'circle',
@@ -47,20 +42,17 @@ diagram.addElement(
   },
 );
 
-// Initialize diagram
 diagram.initialize();
 ```
 
-## Examples
-
-Examples can be downloaded and run by opening their respective `index.html` files in a browser.
-
-* **[Simple shape](https://github.com/airladon/FigureOne/tree/master/examples/1%20-%20Shape)** - Simple creation and drawing of diagram element (same as above)
-* **Collections** - Example showing collections of diagram elements
-* **Interactive Shape** - Shape that can be dragged and bounces around after being let go
-* **Animation** - Simple animation example
-* **Simple Equation** - Create a simple fraction
-* **Advanced Equation** - Equation including integral, sum of, brackets and annotations
+Source code of this and other examples is provided:
+* **[Simple shape](https://github.com/airladon/FigureOne/tree/master/examples/1%20-%20Shape)** - Simple creation and drawing of diagram element (as above)
+* **[Collections](https://github.com/airladon/FigureOne/tree/master/examples/2%20-%20Collections)** - Example showing collections of diagram elements
+* **[Interactive Shape](https://github.com/airladon/FigureOne/tree/master/examples/3%20-%20Interactive%20Shape)** - A shape that can be moved by the user
+* **[Animation](https://github.com/airladon/FigureOne/tree/master/examples/4%20-%20Animation)** - Animating a shape
+* **[Simple Equation](https://github.com/airladon/FigureOne/tree/master/examples/5%20-%20Simple%20Equation)** - Render a simple fraction
+* **[Advanced Equation](https://github.com/airladon/FigureOne/tree/master/examples/6%20-%20Advanced%20Equation)** - Render an equation with an integral, sum operator, subscripts and color
+* **[Equation Animation](https://github.com/airladon/FigureOne/tree/master/examples/7%20-%20Animation%20between%20Equation%20Forms)** - Animation between two forms of an equation
 
 ## NPM Package
 
