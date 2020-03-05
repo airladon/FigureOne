@@ -9,6 +9,7 @@ Open `index.html` in a browser to view example.
 ![example](./example.gif)
 
 ## Code
+`index.js`
 ```js
 // Create diagram and make it able to be touched
 const diagram = new Fig.Diagram();
