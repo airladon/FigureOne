@@ -5,10 +5,10 @@ diagram.setTouchable();
 // Add elements to the diagram
 diagram.addElements([
   {
-    name: 'pentagon',
+    name: 'hexagon',
     method: 'polygon',
     options: {
-      sides: 5,
+      sides: 6,
       radius: 0.2,
       fill: true,
       color: [1, 0, 0, 1],
@@ -17,7 +17,7 @@ diagram.addElements([
 ]);
 
 // Start a new animation
-diagram.getElement('pentagon').animations.new()
+diagram.getElement('hexagon').animations.new()
   .position({ target: [-0.4, -0.4], velocity: 0.3 })
   .rotation({ delta: Math.PI / 2, duration: 1 })
   .position({ target: [0, 0], velocity: 0.3 })

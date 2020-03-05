@@ -4,13 +4,52 @@ A pentagon shape goes through a series of animation steps including translations
 
 Open `index.html` in a browser to view example.
 
+![](./example.gif)
+
+## Code
+```js
+// Create diagram and make it touchable
+const diagram = new Fig.Diagram();
+diagram.setTouchable();
+
+// Add elements to the diagram
+diagram.addElements([
+  {
+    name: 'hexagon',
+    method: 'polygon',
+    options: {
+      sides: 6,
+      radius: 0.2,
+      fill: true,
+      color: [1, 0, 0, 1],
+    },
+  },
+]);
+
+// Start a new animation
+diagram.getElement('hexagon').animations.new()
+  .position({ target: [-0.4, -0.4], velocity: 0.3 })
+  .rotation({ delta: Math.PI / 2, duration: 1 })
+  .position({ target: [0, 0], velocity: 0.3 })
+  .pulse({ duration: 1 })
+  .rotation({ delta: Math.PI / 2, duration: 1 })
+  .dissolveOut({ duration: 1 })
+  .dissolveIn({ duration: 1 })
+  .position({ target: [-0.5, 0.5], velocity: 0.3 })
+  .position({ target: [0, 0], velocity: 0.3 })
+  .start();
+
+// Initialize diagram
+diagram.initialize();
+```
+
 ## Explanation
 
 Each `DiagramElement` can manage its own animation, or another element's animation.
 
 A set of animation steps can be created using a builder pattern. For instance the below code will animate an element to position (1, 1) over 1s, and then to (0, 0) over the next second.
 
-```
+```js
 element.animations.new()
    .position({ target: [1, 1], duration: 1 })
    .position({ target: [0, 0]. duration: 1 })
@@ -21,16 +60,16 @@ Each aniamtion step has a number of parameters. Parameters are custom to the typ
 
 Several different animation steps are possible including:
 
-* position - animate position to a target or delta
-* rotation - animate rotation to a target or delta
-* scale - animate scale to a target or delta
-* delay - delay with no animation
-* trigger - trigger a function
-* custom - create a custom animation step
-* dissolveIn - dissolve opacity in
-* dissolveOut - dissolve opacity out
-* opacity - animate opacity to a target or delta
-* color - animate color to a target or delta
-* scenario - aniamte to a predefined position/rotation/scale scenario
-* serial steps - execute animation steps in series
-* parallel steps - execute animation steps in parallel
+* **position** - animate position to a target or delta
+* **rotation** - animate rotation to a target or delta
+* **scale** - animate scale to a target or delta
+* **delay** - delay with no animation
+* **trigger** - trigger a function
+* **custom** - create a custom animation step
+* **dissolveIn** - dissolve opacity in
+* **dissolveOut** - dissolve opacity out
+* **opacity** - animate opacity to a target or delta
+* **color** - animate color to a target or delta
+* **scenario** - aniamte to a predefined position/rotation/scale scenario
+* **serial steps** - execute animation steps in series
+* **parallel steps** - execute animation steps in parallel
