@@ -1,5 +1,4 @@
 const diagram = new Fig.Diagram();
-diagram.setTouchable();
 
 diagram.addElement(
   {
@@ -85,7 +84,7 @@ diagram.addElement(
                     right: 'rb1',
                     outsideSpace: 0.05,
                     bottomSpace: 0.02,
-                  }
+                  },
                 },
               ],
             },
