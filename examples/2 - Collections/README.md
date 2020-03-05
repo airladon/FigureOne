@@ -1,7 +1,5 @@
 # Example 2 - Collections
 
-## Example
-
 This example shows a triangle and a circle in a collection. The collection is scaled and so both the triangle and circle are scaled by the collection.
 
 Open `index.html` in a browser to view example.
