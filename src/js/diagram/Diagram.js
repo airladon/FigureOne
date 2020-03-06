@@ -21,9 +21,10 @@ import addElements from './DiagramAddElements/addElements';
 import type { TypeAddElementObject } from './DiagramAddElements/addElements';
 
 /**
-  Diagram Input Options
-  @property {string} [htmlId] HTML div tag id - default: 'figureOneId'
-  @property {Rect} limits - Diagram coordinate limits - default: bottom left corner at (-1, -1), width 1, height 1
+  * Diagram Input Options
+  * @property {string} [htmlId] HTML div tag id - default: 'figureOneId'
+  * @property {Rect} limits - Diagram coordinate limits - default: bottom left
+  *  corner at (-1, -1), width 1, height 1
  */
 export type TypeDiagramOptions = {
   htmlId?: string,

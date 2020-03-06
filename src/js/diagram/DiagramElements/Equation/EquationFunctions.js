@@ -46,6 +46,29 @@ export function getDiagramElement(
 }
 
 /* eslint-disable no-use-before-define */
+/**
+ * An equation phrase is used to define an equation form. An equation phrase
+ * can either be the entirety of the form definition, or a series of nested
+ * phrases.
+ *
+ *  * An object or array definition (e.g. {@link TypeFracObject} or {@link TypeFracArray})
+ *  * A string that represents an equation element
+ *  * An array of {@link TypeEquationPhrase}
+ *
+ * @example:
+ * forms: {
+ *   form1: 'a'
+ *   form2: ['a', 'equals', 'b']
+ *   form3: [{
+ *     frac: {
+ *       numerator: 'a',
+ *       symbol: 'v',
+ *       denominator: '1'
+ *     },
+ *   }, 'equals', 'b'],
+ *   form4: [{ frac: ['a', 'v', '1'], 'equals', 'b'}],
+ * },
+ */
 export type TypeEquationPhrase =
   string
   | number
@@ -102,7 +125,7 @@ export type TypeContainerArray = [
 /* eslint-enable no-use-before-define */
 
 /**
- * Fraction Object Definition
+ * Fraction object definition
  * @property {number} [symbol] - Vinculum symbol
  * @property {number} [overhang] - How far the vinculum extends beyond the content
  * @property {number} [offsetY] - Offset the fraction in y
@@ -118,6 +141,16 @@ export type TypeFracObject = {
   offsetY?: number;
   fullContentBounds?: boolean,
 };
+
+/**
+ * Fraction array definition
+ *
+ * Array order: numerator, symbol, denominator, scale, numeratorSpace,
+ *   denominatorSpace, overhang, offsetY, fullContentBounds
+ *
+ * Once an optional element is left out, then all subsequent elements must
+ * also be left out
+ */
 export type TypeFracArray = [
   TypeEquationPhrase,
   string,

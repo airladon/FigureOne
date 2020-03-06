@@ -130,9 +130,29 @@
               
                 
                 <li><a
+                  href='#typeequationphrase'
+                  class="">
+                  TypeEquationPhrase
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#typefracobject'
                   class="">
                   TypeFracObject
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typefracarray'
+                  class="">
+                  TypeFracArray
                   
                 </a>
                 
@@ -1935,7 +1955,8 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
       
         <div class='space-bottom0'>
           <span class='code bold'>limits</span> <code class='quiet'>(<a href="#rect">Rect</a>)</code>
-          : Diagram coordinate limits - default: bottom left corner at (-1, -1), width 1, height 1
+          : Diagram coordinate limits - default: bottom left
+corner at (-1, -1), width 1, height 1
 
           
         </div>
@@ -1966,6 +1987,84 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='typeequationphrase'>
+      TypeEquationPhrase
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>An equation phrase is used to define an equation form. An equation phrase
+can either be the entirety of the form definition, or a series of nested
+phrases.</p>
+<ul>
+<li>An object or array definition (e.g. <a href="#typefracobject">TypeFracObject</a> or <a href="#typefracarray">TypeFracArray</a>)</li>
+<li>A string that represents an equation element</li>
+<li>An array of <a href="#typeequationphrase">TypeEquationPhrase</a></li>
+</ul>
+
+    <div class='pre p1 fill-light mt0'>TypeEquationPhrase</div>
+  
+    <p>
+      Type:
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#typefracobject">TypeFracObject</a>} | <a href="#typefracarray">TypeFracArray</a> | {strike: TypeStrikeObject} | TypeStrikeArray | {box: TypeBoxObject} | TypeBoxArray | {root: TypeRootObject} | TypeRootArray | {brac: TypeBracketObject} | TypeBracketArray | {sub: TypeSubObject} | TypeSubArray | {sup: TypeSupObject} | TypeSupArray | {supSub: TypeSupSubObject} | TypeSupSubArray | {topBar: TypeBarObject} | TypeBarArray | {bottomBar: TypeBarObject} | TypeBarArray | {annotate: TypeAnnotateObject} | {topComment: TypeCommentObject} | TypeCommentArray | {bottomComment: TypeCommentObject} | TypeCommentArray | {padding: TypePaddingObject} | TypePaddingArray | {bar: TypeBarObject} | TypeBarArray | {scale: TypeScaleObject} | TypeScaleArray | {container: TypeContainerObject} | TypeContainerArray | {matrix: TypeMatrixObject} | TypeMatrixArray | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | DiagramElementPrimitive | DiagramElementCollection | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>:
+forms: {
+  <span class="hljs-attr">form1</span>: <span class="hljs-string">'a'</span>
+  <span class="hljs-attr">form2</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>]
+  <span class="hljs-attr">form3</span>: [{
+    <span class="hljs-attr">frac</span>: {
+      <span class="hljs-attr">numerator</span>: <span class="hljs-string">'a'</span>,
+      <span class="hljs-attr">symbol</span>: <span class="hljs-string">'v'</span>,
+      <span class="hljs-attr">denominator</span>: <span class="hljs-string">'1'</span>
+    },
+  }, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>],
+  <span class="hljs-attr">form4</span>: [{ <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'1'</span>], <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>}],
+},</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='typefracobject'>
       TypeFracObject
     </h3>
@@ -1974,13 +2073,13 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
   </div>
   
 
-  <p>Fraction Object Definition</p>
+  <p>Fraction object definition</p>
 
     <div class='pre p1 fill-light mt0'>TypeFracObject</div>
   
     <p>
       Type:
-      {numerator: TypeEquationPhrase, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, denominator: TypeEquationPhrase, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, numeratorSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, denominatorSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, overhang: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, offsetY: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}
+      {numerator: <a href="#typeequationphrase">TypeEquationPhrase</a>, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, denominator: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, numeratorSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, denominatorSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, overhang: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, offsetY: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}
     </p>
   
   
@@ -2020,13 +2119,13 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>numerator</span> <code class='quiet'>(TypeEquationPhrase)</code>
+          <span class='code bold'>numerator</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
           
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>denominator</span> <code class='quiet'>(TypeEquationPhrase)</code>
+          <span class='code bold'>denominator</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
           
           
         </div>
@@ -2056,6 +2155,63 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
         </div>
       
     </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typefracarray'>
+      TypeFracArray
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fraction array definition</p>
+<p>Array order: numerator, symbol, denominator, scale, numeratorSpace,
+denominatorSpace, overhang, offsetY, fullContentBounds</p>
+<p>Once an optional element is left out, then all subsequent elements must
+also be left out</p>
+
+    <div class='pre p1 fill-light mt0'>TypeFracArray</div>
+  
+    <p>
+      Type:
+      [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?]
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
   
 
   
