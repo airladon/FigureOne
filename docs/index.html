@@ -126,6 +126,12 @@
                       </a></li>
                     
                       <li><a
+                        href='#typeformrestart'
+                        class='regular pre-open'>
+                        .TypeFormRestart
+                      </a></li>
+                    
+                      <li><a
                         href='#typeequationoptions'
                         class='regular pre-open'>
                         .TypeEquationOptions
@@ -143,10 +149,28 @@
                 
                 <li><a
                   href='#equations'
-                  class="h5 bold black caps">
+                  class="h5 bold black caps toggle-sibling">
                   Equations
-                  
+                  <span class='icon'>▸</span>
                 </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#equation'
+                        class='regular pre-open'>
+                        .Equation
+                      </a></li>
+                    
+                    </ul>
+                  
+                  
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -209,16 +233,6 @@
                   href='#typediagramoptions'
                   class="">
                   TypeDiagramOptions
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#typeformrestart'
-                  class="">
-                  TypeFormRestart
                   
                 </a>
                 
@@ -1208,6 +1222,78 @@ is a form defintion <a href="#typeequationform">TypeEquationForm</a></p>
       </div>
     </div>
   
+    <div class='border-bottom' id='typeformrestart'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>TypeFormRestart</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>When an equation form series is restarted, or cycled back to the first form
+in the series then there are options to pulse the form to highlight to the
+user that it is restarting, or move the equation from somewhere else. Moving
+would commonly be used when the first form is displayed somewhere else, and
+you want to show that the start of this form comes from there.</p>
+<p>The default values are:</p>
+<ul>
+<li>duration: 1s</li>
+<li>scale: 1.1</li>
+</ul>
+
+    <div class='pre p1 fill-light mt0'>TypeFormRestart</div>
+  
+    <p>
+      Type:
+      {formRestart: {moveFrom: (<a href="#point">Point</a>? | DiagramElementCollection)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, element: DiagramElement??}?}?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>formRestart</span> <code class='quiet'>({moveFrom: (<a href="#point">Point</a>? | DiagramElementCollection)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, element: DiagramElement??}?}?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='typeequationoptions'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -1220,7 +1306,7 @@ is a form defintion <a href="#typeequationform">TypeEquationForm</a></p>
 
   
 
-  <p>Options for an <a href="Equation">Equation</a> constructor. All options are optional with defaults being:</p>
+  <p>Options objects to construct an <a href="#equation">Equation</a> class. All properties are optional.</p>
 
     <div class='pre p1 fill-light mt0'>TypeEquationOptions</div>
   
@@ -1268,7 +1354,8 @@ is a form defintion <a href="#typeequationform">TypeEquationForm</a></p>
       
         <div class='space-bottom0'>
           <span class='code bold'>defaultFormAlignment</span> <code class='quiet'>(<a href="#typeformalignment">TypeFormAlignment</a>?)</code>
-          : default: { fixTo: new 
+          : default:
+{ fixTo: new 
 <a href="#point">Point</a>
 (0, 0), alignH: 'left', alignV: 'baseline}
 
@@ -1294,7 +1381,9 @@ the form series name is 'base'. Default: {}
       
         <div class='space-bottom0'>
           <span class='code bold'>defaultFormSeries</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          : If more than one form series is defined, then a default must be chosen to be the first current one. Default: first form defined
+          : If more than one form series is
+defined, then a default must be chosen to be the first current one. Default:
+first form defined
 
           
         </div>
@@ -1310,8 +1399,8 @@ the form series name is 'base'. Default: {}
           <span class='code bold'>fontMath</span> <code class='quiet'>(DiagramFont?)</code>
           : default 
 <a href="DiagramFont">DiagramFont</a>
-('Times New Roman', 'normal', 0.2, '200',
-'left', 'alphabetic', color)
+('Times
+New Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)
 
           
         </div>
@@ -1395,6 +1484,73 @@ the form series name is 'base'. Default: {}
   
 
   
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='equation'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>Equation</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>An Equation is a collection of elements that can be arranged into different
+forms.</p>
+
+    <div class='pre p1 fill-light mt0'>Equation</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#typeequationoptions">TypeEquationOptions</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 
@@ -3042,79 +3198,6 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
           : Diagram coordinate limits - default: bottom left
 corner at (-1, -1), width 1, height 1
 
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='typeformrestart'>
-      TypeFormRestart
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>When an equation form series is restarted, or cycled back to the first form
-in the series then there are options to pulse the form to highlight to the
-user that it is restarting, or move the equation from somewhere else. Moving
-would commonly be used when the first form is displayed somewhere else, and
-you want to show that the start of this form comes from there.</p>
-<p>The default values are:</p>
-<ul>
-<li>duration: 1s</li>
-<li>scale: 1.1</li>
-</ul>
-
-    <div class='pre p1 fill-light mt0'>TypeFormRestart</div>
-  
-    <p>
-      Type:
-      {formRestart: {moveFrom: (<a href="#point">Point</a>? | DiagramElementCollection)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, element: DiagramElement??}?}?}
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>formRestart</span> <code class='quiet'>({moveFrom: (<a href="#point">Point</a>? | DiagramElementCollection)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, element: DiagramElement??}?}?)</code>
-          
           
         </div>
       
