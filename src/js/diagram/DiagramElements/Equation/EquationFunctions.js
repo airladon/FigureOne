@@ -100,6 +100,13 @@ export type TypeContainerArray = [
 ];
 
 /* eslint-enable no-use-before-define */
+
+/**
+ * Fraction Object Definition
+ * @property {number} [symbol] - Vinculum symbol
+ * @property {number} [overhang] - How far the vinculum extends beyond the content
+ * @property {number} [offsetY] - Offset the fraction in y
+ */
 export type TypeFracObject = {
   numerator: TypeEquationPhrase;
   symbol: string;

@@ -12,6 +12,7 @@ docker run -it --rm \
   -v $PROJECT_PATH/.eslintrc.json:/opt/app/.eslintrc.json \
   -v $PROJECT_PATH/.flowconfig:/opt/app/.flowconfig \
   -v $PROJECT_PATH/.babelrc:/opt/app/.babelrc \
+  -v $PROJECT_PATH/documentation.yml:/opt/app/documentation.yml \
   -v $PROJECT_PATH/jest.config.js:/opt/app/jest.config.js \
   -v $PROJECT_PATH/docs:/opt/app/docs \
   -v $PROJECT_PATH/generate_docs.sh:/opt/app/generate_docs.sh \

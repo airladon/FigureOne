@@ -1,1 +1,1 @@
-documentation build src/index.js -f html -o ./docs
+documentation build src/index.js -f html -o ./docs --config documentation.yml
