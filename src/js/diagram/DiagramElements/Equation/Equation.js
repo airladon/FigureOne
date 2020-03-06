@@ -218,11 +218,17 @@ export type TypeEquationOptions = {
   position?: Point;
 };
 
-export const foo = () => {};
+// export const foo = () => {};
 // An Equation is a collection of elements that can be arranged into different
 // forms.
 // Equation allows setting of forms, and navigating through form series
 // Eqn manages different forms of the
+
+/**
+ * An Equation is a collection of elements that can be arranged into different
+ * forms.
+ * @param {TypeEquationOptions} options
+ */
 export class EquationNew extends DiagramElementCollection {
   eqn: {
     forms: { [formName: string]: {
