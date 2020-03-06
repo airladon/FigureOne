@@ -106,15 +106,26 @@ class Rect {
  *
  */
 class Point {
+  /**
+   * x value of point
+  */
   x: number;
+
+  /** y value of point */
   y: number;
   _type: 'point';
 
-  static zero() {
+  /**
+   * Return a point at (0, 0)
+   */
+  static zero(): Point {
     return new Point(0, 0);
   }
 
-  static Unity() {
+  /**
+   * Return a point at (1, 1)
+   */
+  static Unity(): Point {
     return new Point(1, 1);
   }
 
@@ -131,50 +142,103 @@ class Point {
   }
 
   /**
-   * Duplicate {@link Point} object completely
-   * @example
-   * const p = new Point(0, 0);
-   * const q = p._dup();
-   * q.x = 1;
-   * console.log(p, q)
-   * // will output p = (0, 0), q = (1, 0)
-   * @return {Point}
+   * Return a duplicate of the {@link Point} object
    */
-  _dup() {
+  _dup(): Point {
     return new Point(this.x, this.y);
   }
 
   /**
-   * Scale point {@link constructor}
-   * @param {number} scalar - scaling factor
-   * @return {Point} Scaled point
+   * Scale x and y values of point by scalar
+   * @example
+   * p = new Point(1, 1);
+   * s = p.scale(3);
+   * // s = Point{x: 3, y: 3};
    */
-  scale(scalar: number) {
+  scale(scalar: number): Point {
     return new Point(this.x * scalar, this.y * scalar);
   }
 
-  sub(qOrX: Point | number, y: number = 0) {
-    if (qOrX instanceof Point) {
-      return new Point(this.x - qOrX.x, this.y - qOrX.y);
+  /**
+   * Subtract (x, y) values or a {@link Point} and return the difference as a new {@link Point}
+   * @example
+   * p = new Point(3, 3);
+   * d = p.sub(1, 1)
+   * // d = Point{x: 2, y: 2}
+   *
+   * p = new Point(3, 3);
+   * q = new Point(1, 1);
+   * d = p.sub(q)
+   * // d = Point{x: 2, y: 2}
+   */
+  sub(pointOrX: Point | number, y: number = 0): Point {
+    if (pointOrX instanceof Point) {
+      return new Point(this.x - pointOrX.x, this.y - pointOrX.y);
     }
-    return new Point(this.x - qOrX, this.y - y);
+    return new Point(this.x - pointOrX, this.y - y);
   }
 
-  add(qOrX: Point | number, y: number = 0) {
-    if (qOrX instanceof Point) {
-      return new Point(this.x + qOrX.x, this.y + qOrX.y);
+  /**
+   * Add (x, y) values or a {@link Point} and return the sum as a new {@link Point}
+   * @example
+   * p = new Point(3, 3);
+   * d = p.add(1, 1)
+   * // d = Point{x: 4, y: 4}
+   *
+   * p = new Point(3, 3);
+   * q = new Point(1, 1);
+   * d = p.add(q)
+   * // d = Point{x: 4, y: 4}
+   */
+  add(pointOrX: Point | number, y: number = 0): Point {
+    if (pointOrX instanceof Point) {
+      return new Point(this.x + pointOrX.x, this.y + pointOrX.y);
     }
-    return new Point(this.x + qOrX, this.y + y);
+    return new Point(this.x + pointOrX, this.y + y);
   }
 
-  distance() {
+  /**
+   * Return the distance between the point and the origin
+   * @example
+   * p = new Point(1, 1);
+   * d = p.distance();
+   * // d = 1.4142135623730951
+   */
+  distance(): number {
     return Math.sqrt(this.x * this.x + this.y * this.y);
   }
 
-  round(precision: number = 8) {
+  /**
+   * Return a new point with (x, y) values rounded to some precision
+   * @example
+   * p = new Point(1.234, 1.234);
+   * q = p.round(2);
+   * // q = Point{x: 1.23, y: 1.23}
+   */
+  round(precision: number = 8): Point {
     return new Point(roundNum(this.x, precision), roundNum(this.y, precision));
   }
 
+  /**
+   * Return a new point that is clipped to min and max values from the origin.
+   *
+   * Use a point as a parameter to define different (x, y) min/max values,
+   * a number to define the same (x, y) min/max values, or null to have no
+   * min/max values.
+   * @example
+   * p = new Point(2, 2);
+   * q = p.clip(1, 1);
+   * // q = Point{x: 1, y: 1}
+   *
+   * p = new Point(2, 2);
+   * q = p.clip(1, null);
+   * // q = Point{x: 1, y: 2}
+   *
+   * p = new Point(-2, -2);
+   * minClip = new Point(-1, -1.5);
+   * q = p.clip(minClip, null);
+   * // q = Point{x: -1, y: -1.5}
+   */
   clip(min: Point | number | null, max: Point | number | null): Point {
     let minX;
     let minY;
@@ -199,7 +263,17 @@ class Point {
     return new Point(x, y);
   }
 
-  transformBy(matrix: Array<number>) {
+  /**
+   * Transform the point with a 3x3 matrix (2 dimensional transform)
+   * @example
+   * // Transform a point with a (2, 2) translation then 90º rotation
+   * p = new Point(1, 1);
+   * m = new Transform().translate(2, 2).rotate(Math.PI / 2).matrix();
+   * // m = [0, -1, -2, 1, 0, 2, 0, 0, 1]
+   * q = p.transformBy(m)
+   * // q = Point{x: -3, y: 3}
+   */
+  transformBy(matrix: Array<number>): Point {
     const transformedPoint = m2.transform(matrix, this.x, this.y);
     return new Point(transformedPoint[0], transformedPoint[1]);
   }
@@ -210,12 +284,26 @@ class Point {
     return new Point(bx, by);
   }
 
-  rotate(angle: number, center?: Point) {
+  /**
+   * Rotate a point some angle around a center point
+   * @param angle - in radians
+   * @example
+   * // Rotate a point around the origin
+   * p = new Point(1, 0);
+   * q = p.rotate(Math.PI)
+   * // q = Point{x: -1, y: 0}
+   *
+   * // Rotate a point around (1, 1)
+   * p = new Point(2, 1);
+   * q = p.rotate(Math.PI, new Point(1, 1))
+   * // q = Point{x: 0, y: 1}
+   */
+  rotate(angle: number, center?: Point = new Point(0, 0)): Point {
     const c = Math.cos(angle);
     const s = Math.sin(angle);
     const matrix = [c, -s,
                     s, c]; // eslint-disable-line indent
-    const centerPoint = center || new Point(0, 0);
+    const centerPoint = center;
     const pt = this.sub(centerPoint);
     return new Point(
       matrix[0] * pt.x + matrix[1] * pt.y + centerPoint.x,
@@ -224,7 +312,19 @@ class Point {
   }
 
   /* eslint-enable comma-dangle */
-  isEqualTo(q: Point, precision?: number) {
+
+  /**
+   * Compare two points for equality to some precision
+   * @example
+   * p = new Point(1.123, 1.123);
+   * q = new Point(1.124, 1.124);
+   * p.isEqualTo(q)
+   * // false
+   *
+   * p.isEqualTo(q, 2)
+   * // true
+   */
+  isEqualTo(q: Point, precision?: number = 8) {
     let pr = this;
     let qr = q;
 
@@ -238,6 +338,17 @@ class Point {
     return false;
   }
 
+  /**
+   * Compare two points for unequality to some precision
+   * @example
+   * p = new Point(1.123, 1.123);
+   * q = new Point(1.124, 1.124);
+   * p.isNotEqualTo(q)
+   * // true
+   *
+   * p.isNotEqualTo(q, 2)
+   * // false
+   */
   isNotEqualTo(q: Point, precision?: number) {
     return !this.isEqualTo(q, precision);
   }

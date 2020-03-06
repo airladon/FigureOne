@@ -1,1 +1,1 @@
-jsdoc -c jsdoc-conf.json ./src/ -r -d ./docs
+documentation build src/index.js -f html -o ./docs
