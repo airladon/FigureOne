@@ -284,9 +284,9 @@ function sinusoid(
  * Creates an array with a range of number
  * @method
  * @memberof tools
- * @param {number} start - Start value
- * @param {number} stop - Stop value
- * @param {number} step - Stop value
+ * @param start - Range start
+ * @param stop - Range stop
+ * @param step - Range step
  * @returns {Array<number>} Range of numbers in an array
  */
 function range(start: number, stop: number, step: number = 1) {
