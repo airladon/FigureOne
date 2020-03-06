@@ -60,6 +60,98 @@
               
                 
                 <li><a
+                  href='#equation-types'
+                  class="h5 bold black caps toggle-sibling">
+                  Equation Types
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#typeequationphrase'
+                        class='regular pre-open'>
+                        .TypeEquationPhrase
+                      </a></li>
+                    
+                      <li><a
+                        href='#typefracobject'
+                        class='regular pre-open'>
+                        .TypeFracObject
+                      </a></li>
+                    
+                      <li><a
+                        href='#typefracarray'
+                        class='regular pre-open'>
+                        .TypeFracArray
+                      </a></li>
+                    
+                      <li><a
+                        href='#typeequationelement'
+                        class='regular pre-open'>
+                        .TypeEquationElement
+                      </a></li>
+                    
+                      <li><a
+                        href='#typeequationelements'
+                        class='regular pre-open'>
+                        .TypeEquationElements
+                      </a></li>
+                    
+                      <li><a
+                        href='#typeformalignment'
+                        class='regular pre-open'>
+                        .TypeFormAlignment
+                      </a></li>
+                    
+                      <li><a
+                        href='#typeequationformobject'
+                        class='regular pre-open'>
+                        .TypeEquationFormObject
+                      </a></li>
+                    
+                      <li><a
+                        href='#typeequationform'
+                        class='regular pre-open'>
+                        .TypeEquationForm
+                      </a></li>
+                    
+                      <li><a
+                        href='#typeequationforms'
+                        class='regular pre-open'>
+                        .TypeEquationForms
+                      </a></li>
+                    
+                      <li><a
+                        href='#typeequationoptions'
+                        class='regular pre-open'>
+                        .TypeEquationOptions
+                      </a></li>
+                    
+                    </ul>
+                  
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#equations'
+                  class="h5 bold black caps">
+                  Equations
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#tools'
                   class="h5 bold black caps toggle-sibling">
                   tools
@@ -72,15 +164,9 @@
                     <li class='h5'><span>Static members</span></li>
                     
                       <li><a
-                        href='#point'
+                        href='#g2'
                         class='regular pre-open'>
-                        .Point
-                      </a></li>
-                    
-                      <li><a
-                        href='#rect'
-                        class='regular pre-open'>
-                        .Rect
+                        .g2
                       </a></li>
                     
                       <li><a
@@ -130,29 +216,9 @@
               
                 
                 <li><a
-                  href='#typeequationphrase'
+                  href='#typeformrestart'
                   class="">
-                  TypeEquationPhrase
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#typefracobject'
-                  class="">
-                  TypeFracObject
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#typefracarray'
-                  class="">
-                  TypeFracArray
+                  TypeFormRestart
                   
                 </a>
                 
@@ -382,6 +448,971 @@
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='equation-types'>
+      Equation Types
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+    <div class='pre p1 fill-light mt0'>Equation Types</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='typeequationphrase'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>TypeEquationPhrase</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>An equation phrase is used to define an equation form. An equation phrase
+can either be the entirety of the form definition, or a series of nested
+phrases.</p>
+<ul>
+<li>An object or array definition (e.g. <a href="#typefracobject">TypeFracObject</a> or <a href="#typefracarray">TypeFracArray</a>)</li>
+<li>A string that represents an equation element</li>
+<li>An array of <a href="#typeequationphrase">TypeEquationPhrase</a></li>
+</ul>
+
+    <div class='pre p1 fill-light mt0'>TypeEquationPhrase</div>
+  
+    <p>
+      Type:
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#typefracobject">TypeFracObject</a>} | <a href="#typefracarray">TypeFracArray</a> | {strike: TypeStrikeObject} | TypeStrikeArray | {box: TypeBoxObject} | TypeBoxArray | {root: TypeRootObject} | TypeRootArray | {brac: TypeBracketObject} | TypeBracketArray | {sub: TypeSubObject} | TypeSubArray | {sup: TypeSupObject} | TypeSupArray | {supSub: TypeSupSubObject} | TypeSupSubArray | {topBar: TypeBarObject} | TypeBarArray | {bottomBar: TypeBarObject} | TypeBarArray | {annotate: TypeAnnotateObject} | {topComment: TypeCommentObject} | TypeCommentArray | {bottomComment: TypeCommentObject} | TypeCommentArray | {padding: TypePaddingObject} | TypePaddingArray | {bar: TypeBarObject} | TypeBarArray | {scale: TypeScaleObject} | TypeScaleArray | {container: TypeContainerObject} | TypeContainerArray | {matrix: TypeMatrixObject} | TypeMatrixArray | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | DiagramElementPrimitive | DiagramElementCollection | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>:
+forms: {
+  <span class="hljs-attr">form1</span>: <span class="hljs-string">'a'</span>
+  <span class="hljs-attr">form2</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>]
+  <span class="hljs-attr">form3</span>: [{
+    <span class="hljs-attr">frac</span>: {
+      <span class="hljs-attr">numerator</span>: <span class="hljs-string">'a'</span>,
+      <span class="hljs-attr">symbol</span>: <span class="hljs-string">'v'</span>,
+      <span class="hljs-attr">denominator</span>: <span class="hljs-string">'1'</span>
+    },
+  }, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>],
+  <span class="hljs-attr">form4</span>: [{ <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'1'</span>], <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>}],
+},</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='typefracobject'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>TypeFracObject</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Fraction object definition</p>
+
+    <div class='pre p1 fill-light mt0'>TypeFracObject</div>
+  
+    <p>
+      Type:
+      {numerator: <a href="#typeequationphrase">TypeEquationPhrase</a>, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, denominator: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, numeratorSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, denominatorSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, overhang: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, offsetY: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : Vinculum symbol
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>overhang</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : How far the vinculum extends beyond the content
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offsetY</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : Offset the fraction in y
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>numerator</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>denominator</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>numeratorSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>denominatorSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='typefracarray'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>TypeFracArray</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Fraction array definition</p>
+<p>Array order: numerator, symbol, denominator, scale, numeratorSpace,
+denominatorSpace, overhang, offsetY, fullContentBounds</p>
+<p>Once an optional element is left out, then all subsequent elements must
+also be left out</p>
+
+    <div class='pre p1 fill-light mt0'>TypeFracArray</div>
+  
+    <p>
+      Type:
+      [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?]
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='typeequationelement'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>TypeEquationElement</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Definition of a text or symbol equation element. Symbol properties take
+receive priority over text properties, so if 'symbol' is defined, then 'text'
+will be ignored.</p>
+
+    <div class='pre p1 fill-light mt0'>TypeEquationElement</div>
+  
+    <p>
+      Type:
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, font: DiagramFont?, style: (<code>"italic"</code> | <code>"normal"</code> | null)?, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, numLines: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, side: (<code>"top"</code> | <code>"left"</code> | <code>"bottom"</code> | <code>"right"</code>)?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, mods: {}?} | DiagramElementPrimitive | DiagramElementCollection)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : Text element only
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(DiagramFont?)</code>
+          : Text element only
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>style</span> <code class='quiet'>((<code>"italic"</code> | <code>"normal"</code>)?)</code>
+          : Text element only
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : Symbol element only
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>side</span> <code class='quiet'>((<code>"top"</code> | <code>"left"</code> | <code>"bottom"</code> | <code>"right"</code>)?)</code>
+          : Symbol element only
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>mods</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?)</code>
+          : Properties to set on instantiated element
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : Color to set the element
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='typeequationelements'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>TypeEquationElements</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Object with multiple equation elements.</p>
+
+    <div class='pre p1 fill-light mt0'>TypeEquationElements</div>
+  
+    <p>
+      Type:
+      {}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='typeformalignment'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>TypeFormAlignment</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Defines how to align a form</p>
+
+    <div class='pre p1 fill-light mt0'>TypeFormAlignment</div>
+  
+    <p>
+      Type:
+      {fixTo: (DiagramElementPrimitive | DiagramElementCollection | <a href="#point">Point</a>), alignH: TypeHAlign, alignV: TypeVAlign}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fixTo</span> <code class='quiet'>((DiagramElementPrimitive | DiagramElementCollection | <a href="#point">Point</a>))</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>alignH</span> <code class='quiet'>(TypeHAlign)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>alignV</span> <code class='quiet'>(TypeVAlign)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='typeequationformobject'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>TypeEquationFormObject</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Form definition object</p>
+
+    <div class='pre p1 fill-light mt0'>TypeEquationFormObject</div>
+  
+    <p>
+      Type:
+      {content: <a href="#typeequationphrase">TypeEquationPhrase</a>, subForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, alignment: <a href="#typeformalignment">TypeFormAlignment</a>?, description: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, modifiers: {}?, fromPrev: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: {}?}?, fromNext: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: {}?}?, duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: {}?, elementMods: {}?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>subForm</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>alignment</span> <code class='quiet'>(<a href="#typeformalignment">TypeFormAlignment</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>description</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>modifiers</span> <code class='quiet'>({}?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fromPrev</span> <code class='quiet'>({duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: {}?}?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fromNext</span> <code class='quiet'>({duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: {}?}?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>duration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>translation</span> <code class='quiet'>({}?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>elementMods</span> <code class='quiet'>({}?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='typeequationform'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>TypeEquationForm</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>A single form definition can either be:</p>
+<ul>
+<li>
+<p>an equation phrase <a href="#typeequationphrase">TypeEquationPhrase</a></p>
+</li>
+<li>
+<p>or an equation form object <a href="#typeequationformobject">TypeEquationFormObject</a></p>
+</li>
+<li>
+<p>or an object of subforms:</p>
+<p> {
+subform1: (<a href="#typeequationphrase">TypeEquationPhrase</a> | <a href="#typeequationformobject">TypeEquationFormObject</a>),
+subform2: ...
+},</p>
+</li>
+</ul>
+
+    <div class='pre p1 fill-light mt0'>TypeEquationForm</div>
+  
+    <p>
+      Type:
+      (<a href="#typeequationphrase">TypeEquationPhrase</a> | <a href="#typeequationformobject">TypeEquationFormObject</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&#x3C;(<a href="#typeequationformobject">TypeEquationFormObject</a> | <a href="#typeequationphrase">TypeEquationPhrase</a>)>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='typeequationforms'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>TypeEquationForms</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>An object of equation forms where each key is the form name and each value
+is a form defintion <a href="#typeequationform">TypeEquationForm</a></p>
+
+    <div class='pre p1 fill-light mt0'>TypeEquationForms</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&#x3C;<a href="#typeequationform">TypeEquationForm</a>>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='typeequationoptions'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>TypeEquationOptions</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Options for an <a href="Equation">Equation</a> constructor. All options are optional with defaults being:</p>
+
+    <div class='pre p1 fill-light mt0'>TypeEquationOptions</div>
+  
+    <p>
+      Type:
+      {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, elements: <a href="#typeequationelements">TypeEquationElements</a>?, defaultFormAlignment: <a href="#typeformalignment">TypeFormAlignment</a>?, forms: <a href="#typeequationforms">TypeEquationForms</a>?, formSeries: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>> | {})?, defaultFormSeries: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, formRestart: <a href="#typeformrestart">TypeFormRestart</a>?, fontMath: DiagramFont?, position: <a href="#point">Point</a>?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : default: 
+[0.5, 0.5, 0.5, 1]
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default: 0.7
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>elements</span> <code class='quiet'>(<a href="#typeequationelements">TypeEquationElements</a>?)</code>
+          : default: {}
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>defaultFormAlignment</span> <code class='quiet'>(<a href="#typeformalignment">TypeFormAlignment</a>?)</code>
+          : default: { fixTo: new 
+<a href="#point">Point</a>
+(0, 0), alignH: 'left', alignV: 'baseline}
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>forms</span> <code class='quiet'>(<a href="#typeequationforms">TypeEquationForms</a>?)</code>
+          : default: {}
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>formSeries</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>>)?)</code>
+          : an object
+with each key being a form series name, and each value an array for form
+names. If defined as an array, then a form series object is created where
+the form series name is 'base'. Default: {}
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>defaultFormSeries</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : If more than one form series is defined, then a default must be chosen to be the first current one. Default: first form defined
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>formRestart</span> <code class='quiet'>(<a href="#typeformrestart">TypeFormRestart</a>?)</code>
+          : default: null
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fontMath</span> <code class='quiet'>(DiagramFont?)</code>
+          : default 
+<a href="DiagramFont">DiagramFont</a>
+('Times New Roman', 'normal', 0.2, '200',
+'left', 'alphabetic', color)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          : default: new 
+<a href="#point">Point</a>
+(0, 0)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='equations'>
+      Equations
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+    <div class='pre p1 fill-light mt0'>Equations</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='tools'>
       tools
     </h3>
@@ -393,6 +1424,45 @@
   <p>These are generic tools</p>
 
     <div class='pre p1 fill-light mt0'>tools</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='g2'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>g2</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>2D geometry tools</p>
+
+    <div class='pre p1 fill-light mt0'>g2</div>
   
   
 
@@ -1646,6 +2716,20 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
       </div>
     </div>
   
+</div>
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='range'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -1987,99 +3071,30 @@ corner at (-1, -1), width 1, height 1
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='typeequationphrase'>
-      TypeEquationPhrase
+    <h3 class='fl m0' id='typeformrestart'>
+      TypeFormRestart
     </h3>
     
     
   </div>
   
 
-  <p>An equation phrase is used to define an equation form. An equation phrase
-can either be the entirety of the form definition, or a series of nested
-phrases.</p>
+  <p>When an equation form series is restarted, or cycled back to the first form
+in the series then there are options to pulse the form to highlight to the
+user that it is restarting, or move the equation from somewhere else. Moving
+would commonly be used when the first form is displayed somewhere else, and
+you want to show that the start of this form comes from there.</p>
+<p>The default values are:</p>
 <ul>
-<li>An object or array definition (e.g. <a href="#typefracobject">TypeFracObject</a> or <a href="#typefracarray">TypeFracArray</a>)</li>
-<li>A string that represents an equation element</li>
-<li>An array of <a href="#typeequationphrase">TypeEquationPhrase</a></li>
+<li>duration: 1s</li>
+<li>scale: 1.1</li>
 </ul>
 
-    <div class='pre p1 fill-light mt0'>TypeEquationPhrase</div>
+    <div class='pre p1 fill-light mt0'>TypeFormRestart</div>
   
     <p>
       Type:
-      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#typefracobject">TypeFracObject</a>} | <a href="#typefracarray">TypeFracArray</a> | {strike: TypeStrikeObject} | TypeStrikeArray | {box: TypeBoxObject} | TypeBoxArray | {root: TypeRootObject} | TypeRootArray | {brac: TypeBracketObject} | TypeBracketArray | {sub: TypeSubObject} | TypeSubArray | {sup: TypeSupObject} | TypeSupArray | {supSub: TypeSupSubObject} | TypeSupSubArray | {topBar: TypeBarObject} | TypeBarArray | {bottomBar: TypeBarObject} | TypeBarArray | {annotate: TypeAnnotateObject} | {topComment: TypeCommentObject} | TypeCommentArray | {bottomComment: TypeCommentObject} | TypeCommentArray | {padding: TypePaddingObject} | TypePaddingArray | {bar: TypeBarObject} | TypeBarArray | {scale: TypeScaleObject} | TypeScaleArray | {container: TypeContainerObject} | TypeContainerArray | {matrix: TypeMatrixObject} | TypeMatrixArray | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | DiagramElementPrimitive | DiagramElementCollection | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'>:
-forms: {
-  <span class="hljs-attr">form1</span>: <span class="hljs-string">'a'</span>
-  <span class="hljs-attr">form2</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>]
-  <span class="hljs-attr">form3</span>: [{
-    <span class="hljs-attr">frac</span>: {
-      <span class="hljs-attr">numerator</span>: <span class="hljs-string">'a'</span>,
-      <span class="hljs-attr">symbol</span>: <span class="hljs-string">'v'</span>,
-      <span class="hljs-attr">denominator</span>: <span class="hljs-string">'1'</span>
-    },
-  }, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>],
-  <span class="hljs-attr">form4</span>: [{ <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'1'</span>], <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>}],
-},</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='typefracobject'>
-      TypeFracObject
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Fraction object definition</p>
-
-    <div class='pre p1 fill-light mt0'>TypeFracObject</div>
-  
-    <p>
-      Type:
-      {numerator: <a href="#typeequationphrase">TypeEquationPhrase</a>, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, denominator: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, numeratorSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, denominatorSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, overhang: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, offsetY: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}
+      {formRestart: {moveFrom: (<a href="#point">Point</a>? | DiagramElementCollection)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, element: DiagramElement??}?}?}
     </p>
   
   
@@ -2098,120 +3113,12 @@ forms: {
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : Vinculum symbol
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>overhang</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : How far the vinculum extends beyond the content
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>offsetY</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : Offset the fraction in y
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>numerator</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>denominator</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>numeratorSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>denominatorSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          <span class='code bold'>formRestart</span> <code class='quiet'>({moveFrom: (<a href="#point">Point</a>? | DiagramElementCollection)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, element: DiagramElement??}?}?)</code>
           
           
         </div>
       
     </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='typefracarray'>
-      TypeFracArray
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Fraction array definition</p>
-<p>Array order: numerator, symbol, denominator, scale, numeratorSpace,
-denominatorSpace, overhang, offsetY, fullContentBounds</p>
-<p>Once an optional element is left out, then all subsequent elements must
-also be left out</p>
-
-    <div class='pre p1 fill-light mt0'>TypeFracArray</div>
-  
-    <p>
-      Type:
-      [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?]
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
   
 
   

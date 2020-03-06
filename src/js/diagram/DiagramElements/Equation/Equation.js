@@ -28,6 +28,19 @@ import type { TypeEquationPhrase } from './EquationFunctions';
 // Priority:
 //   1. symbol
 //   2. text
+
+/**
+ * Definition of a text or symbol equation element. Symbol properties take
+ * receive priority over text properties, so if 'symbol' is defined, then 'text'
+ * will be ignored.
+ * @property {string} [text] - Text element only
+ * @property {DiagramFont} [font] - Text element only
+ * @property {'italic' | 'normal'} [style] - Text element only
+ * @property {string} [symbol] - Symbol element only
+ * @property {'top' | 'left' | 'bottom' | 'right'} [side] - Symbol element only
+ * @property {object} [mods] - Properties to set on instantiated element
+ * @property {Array<number>} [color] - Color to set the element
+ */
 type TypeEquationElement = string | {
     // Text only
     text?: string;
@@ -42,6 +55,9 @@ type TypeEquationElement = string | {
     mods?: {};
   } | DiagramElementPrimitive | DiagramElementCollection;
 
+/**
+ * Object with multiple equation elements.
+ */
 export type TypeEquationElements = {
   [elementName: string]: TypeEquationElement;
 };
@@ -51,6 +67,10 @@ export type TypeEquationElements = {
 //   alignH?: TypeHAlign | null,
 //   alignV?: TypeVAlign | null,
 // };
+
+/**
+ * Defines how to align a form
+ */
 type TypeFormAlignment = {
   fixTo: DiagramElementPrimitive | DiagramElementCollection | Point;
   alignH: TypeHAlign;
@@ -64,6 +84,10 @@ type TypeFormAlignment = {
 // The only exception is the translation movement properties, which can be
 // different depending on whether you are going to the current form from
 // the previous one, or two the next one.
+
+/**
+ * Form definition object
+ */
 type TypeEquationFormObject = {
   content: TypeEquationPhrase,
   subForm?: string,
@@ -106,6 +130,21 @@ type TypeEquationFormObject = {
   },
 };
 
+/**
+ * A single form definition can either be:
+ *
+ * * an equation phrase {@link TypeEquationPhrase}
+ * * or an equation form object {@link TypeEquationFormObject}
+ * * or an object of subforms:
+ *
+ *    {
+ *       subform1: ({@link TypeEquationPhrase} | {@link TypeEquationFormObject}),
+ *       subform2: ...
+ *    },
+ *
+ * @type {TypeEquationPhrase | TypeEquationFormObject |
+ *   Object.<TypeEquationFormObject | TypeEquationPhrase>}
+ */
 type TypeEquationForm = TypeEquationPhrase
                         | TypeEquationFormObject
                         | {
@@ -113,21 +152,28 @@ type TypeEquationForm = TypeEquationPhrase
                                                  | TypeEquationPhrase;
                         };
 
+/**
+ * An object of equation forms where each key is the form name and each value
+ * is a form defintion {@link TypeEquationForm}
+ *
+ * @type {Object.<TypeEquationForm>}
+ */
 export type TypeEquationForms = {
   [formName: string]: TypeEquationForm
 };
 
-export type TypeEquationOptions = {
-  color?: Array<number>;
-  fontMath?: DiagramFont;
-  // fontText?: DiagramFont;
-  position?: Point;
-  scale?: number,
-  defaultFormAlignment?: TypeFormAlignment;
-  elements?: TypeEquationElements;
-  forms?: TypeEquationForms;
-  formSeries?: Array<string> | {};
-  defaultFormSeries?: string;
+/**
+ * When an equation form series is restarted, or cycled back to the first form
+ * in the series then there are options to pulse the form to highlight to the
+ * user that it is restarting, or move the equation from somewhere else. Moving
+ * would commonly be used when the first form is displayed somewhere else, and
+ * you want to show that the start of this form comes from there.
+ *
+ * The default values are:
+ * * duration: 1s
+ * * scale: 1.1
+ */
+type TypeFormRestart = {
   formRestart?: {
     moveFrom?: ?Point | DiagramElementCollection;
     pulse?: {
@@ -136,6 +182,40 @@ export type TypeEquationOptions = {
       element?: ?DiagramElement;
     }
   }
+}
+
+/**
+ * Options objects to construct an {@link Equation} class. All properties are optional.
+ *
+ * @property {Array<number>} [color] - default: [0.5, 0.5, 0.5, 1]
+ * @property {number} [scale] - default: 0.7
+ * @property {TypeEquationElements} [elements] - default: {}
+ * @property {TypeFormAlignment} [defaultFormAlignment] - default:
+ * { fixTo: new {@link Point}(0, 0), alignH: 'left', alignV: 'baseline}
+ * @property {TypeEquationForms} [forms] - default: {}
+ * @property {Array<string> | Object.<Array<string>>} [formSeries] - an object
+ * with each key being a form series name, and each value an array for form
+ * names. If defined as an array, then a form series object is created where
+ * the form series name is 'base'. Default: {}
+ * @property {string} [defaultFormSeries] - If more than one form series is
+ * defined, then a default must be chosen to be the first current one. Default:
+ * first form defined
+ * @property {TypeFormRestart} [formRestart] - default: null
+ * @property {DiagramFont} [fontMath] - default {@link DiagramFont}('Times
+ * New Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)
+ * @property {Point} [position] - default: new {@link Point}(0, 0)
+ */
+export type TypeEquationOptions = {
+  color?: Array<number>;
+  scale?: number,
+  elements?: TypeEquationElements;
+  defaultFormAlignment?: TypeFormAlignment;
+  forms?: TypeEquationForms;
+  formSeries?: Array<string> | {};
+  defaultFormSeries?: string;
+  formRestart?: TypeFormRestart;
+  fontMath?: DiagramFont;
+  position?: Point;
 };
 
 export const foo = () => {};
@@ -209,21 +289,6 @@ export class EquationNew extends DiagramElementCollection {
         'normal',
         0.2, '200', 'left', 'alphabetic', color,
       ),
-      // fontText: new DiagramFont(
-      //   'Times New Roman',
-      //   'italic',
-      //   0.2, '200', 'left', 'alphabetic', color,
-      // ),
-      // fontMathBold: new DiagramFont(
-      //   'Times New Roman',
-      //   'normal',
-      //   0.7, '200', 'left', 'alphabetic', color,
-      // ),
-      // fontTextBold: new DiagramFont(
-      //   'Times New Roman',
-      //   'italic',
-      //   0.7, '200', 'left', 'alphabetic', color,
-      // ),
       position: new Point(0, 0),
       scale: 0.7,
       defaultFormAlignment: {

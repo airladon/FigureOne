@@ -1,7 +1,0 @@
-{
-  "plugins": ["node_modules/jsdoc-babel"],
-  "babel": {
-      "presets": ["@babel/react"],
-      "plugins": ["transform-react-jsx", "transform-flow-strip-types"]
-  }
-}
