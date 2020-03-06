@@ -22,8 +22,8 @@ import type { TypeAddElementObject } from './DiagramAddElements/addElements';
 
 /**
   Diagram Input Options
-  @property {string} [htmlId] HTML div tag id - defaults to 'figureOneId'
-  @property {Rect} limits - Diagram coordinate limits - default is bottom left corner at (-2, 1) and width x height = 4 x 2
+  @property {string} [htmlId] HTML div tag id - default: 'figureOneId'
+  @property {Rect} limits - Diagram coordinate limits - default: bottom left corner at (-1, -1), width 1, height 1
  */
 export type TypeDiagramOptions = {
   htmlId?: string,
@@ -77,9 +77,16 @@ export type TypeSpaceTransforms = {
 //    - html element size in pixels and aspect ratio found
 //    - html element size in gl coordinates found
 
+//  /**
+//   * @typedef DiagramOptions
+//   * @type {object}
+//   * @property {string} [htmlId = 'figureOneContainer'] - div id of diagram container.
+//   * @property {Rect} [limits = Rect(-1, -1, 2, 2)] - limits of diagram.
+//   */
+
 /**
   * Diagram Class
-  * @class
+  * @param {TypeDiagramOptions} options
  */
 class Diagram {
   /** id of DIV that diagram is tied to */
@@ -157,17 +164,6 @@ class Diagram {
 
   isTouchDevice: boolean;
 
-  /**
-    * @typedef DiagramOptions
-    * @type {object}
-    * @property {string} [htmlId = 'figureOneContainer'] - div id of diagram container.
-    * @property {Rect} [limits = Rect(-1, -1, 2, 2)] - limits of diagram.
-    */
-
-  /**
-   * Diagram Constructor
-   * @constructor
-   */
   constructor(options: TypeDiagramOptions) {
     const defaultOptions = {
       htmlId: 'figureOneContainer',

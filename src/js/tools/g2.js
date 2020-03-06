@@ -324,9 +324,9 @@ class Point {
    * p.isEqualTo(q, 2)
    * // true
    */
-  isEqualTo(q: Point, precision?: number = 8) {
+  isEqualTo(p: Point, precision?: number = 8) {
     let pr = this;
-    let qr = q;
+    let qr = p;
 
     if (typeof precision === 'number') {
       pr = this.round(precision);
@@ -349,8 +349,8 @@ class Point {
    * p.isNotEqualTo(q, 2)
    * // false
    */
-  isNotEqualTo(q: Point, precision?: number) {
-    return !this.isEqualTo(q, precision);
+  isNotEqualTo(p: Point, precision?: number) {
+    return !this.isEqualTo(p, precision);
   }
 
   /* eslint-disable no-use-before-define */

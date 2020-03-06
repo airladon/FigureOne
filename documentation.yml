@@ -1,0 +1,7 @@
+toc:
+  - Diagram
+  - name: tools
+    description: These are generic tools
+    children:
+      - Point
+      - Rect
