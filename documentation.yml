@@ -1,7 +1,26 @@
 toc:
   - Diagram
+  - name: Equation Types
+    children:
+      - TypeEquationPhrase
+      - TypeFracObject
+      - TypeFracArray
+      - TypeEquationElement
+      - TypeEquationElements
+      - TypeFormAlignment
+      - TypeEquationFormObject
+      - TypeEquationForm
+      - TypeEquationForms
+      - TypeFormRestart
+      - TypeEquationOptions
+  - name: Equations
+    children:
+      - Equation
   - name: tools
     description: These are generic tools
     children:
-      - Point
-      - Rect
+      - name: g2
+        description: 2D geometry tools
+        children:
+          - Point
+          - Rect
