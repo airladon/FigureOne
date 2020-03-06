@@ -1,1 +1,1 @@
-jsdoc -c jsdoc-conf.json src/js/tools/math.js -d ./docs
+jsdoc -c jsdoc-conf.json ./src/ -r -d ./docs

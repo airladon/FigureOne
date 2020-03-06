@@ -20,12 +20,17 @@ import DiagramObjects from './DiagramObjects/DiagramObjects';
 import addElements from './DiagramAddElements/addElements';
 import type { TypeAddElementObject } from './DiagramAddElements/addElements';
 
+/**
+  Diagram Input Options
+  @property {string} [htmlId] HTML div tag id - defaults to 'figureOneId'
+  @property {Rect} limits - Diagram coordinate limits - default is bottom left corner at (-2, 1) and width x height = 4 x 2
+ */
 export type TypeDiagramOptions = {
   htmlId?: string,
   limits?: Rect,
-  backgroundColor?: Array<number>,
-  fontScale?: number,
-  elements?: DiagramElementCollection;
+  // backgroundColor?: Array<number>,
+  // fontScale?: number,
+  // elements?: DiagramElementCollection;
 };
 
 export type TypeSpaceTransforms = {
@@ -72,7 +77,12 @@ export type TypeSpaceTransforms = {
 //    - html element size in pixels and aspect ratio found
 //    - html element size in gl coordinates found
 
+/**
+  * Diagram Class
+  * @class
+ */
 class Diagram {
+  /** id of DIV that diagram is tied to */
   htmlId: string;
   canvasLow: HTMLCanvasElement;
   canvasOffscreen: HTMLCanvasElement;
@@ -147,13 +157,22 @@ class Diagram {
 
   isTouchDevice: boolean;
 
-  constructor(
-    options: TypeDiagramOptions,
-  ) {
+  /**
+    * @typedef DiagramOptions
+    * @type {object}
+    * @property {string} [htmlId = 'figureOneContainer'] - div id of diagram container.
+    * @property {Rect} [limits = Rect(-1, -1, 2, 2)] - limits of diagram.
+    */
+
+  /**
+   * Diagram Constructor
+   * @constructor
+   */
+  constructor(options: TypeDiagramOptions) {
     const defaultOptions = {
       htmlId: 'figureOneContainer',
       limits: new Rect(-1, -1, 2, 2),
-      backgroundColor: [1, 1, 1, 1],
+      // backgroundColor: [1, 1, 1, 1],
       fontScale: 1,
       // updateFontSize: '',
     };
@@ -161,7 +180,7 @@ class Diagram {
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
-      htmlId, backgroundColor, limits,
+      htmlId, limits,
     } = optionsToUse;
     this.htmlId = htmlId;
     // this.layout = layout;
@@ -228,7 +247,7 @@ class Diagram {
         `;
         document.getElementsByTagName('head')[0].appendChild(canvasStyle);
 
-        this.backgroundColor = backgroundColor;
+        this.backgroundColor = [1, 1, 1, 1];
         const webglLow = new WebGLInstance(
           this.canvasLow,
           this.backgroundColor,
@@ -329,17 +348,29 @@ class Diagram {
     );
   }
 
+  /**
+   * Add elements to diagram
+   * @param {Array<TypeAddElementObject>} elementsToAdd - array of element definitions
+   * @param {DiagramElementCollection} [collection = this.elements] - the collection to add elements to
+   * @param {string} [addElementsKey = 'addElements'] - key to add elements
+   *
+   * @example
+   * diagram.addElements([
+   *   { name: 'shape1', method: 'polygon', options: { position: [0, 0] } },
+   *   { name: 'shape2', method: 'polygon', options: { position: [1, 1] } },
+   * ]);
+   */
   addElements(
-    layout: Array<TypeAddElementObject>,
-    rootCollection: DiagramElementCollection = this.elements,
+    elementsToAdd: Array<TypeAddElementObject>,
+    collection: DiagramElementCollection = this.elements,
     addElementsKey: string = 'addElements',
   ) {
     addElements(
       this.shapes,
       this.equation,
       this.objects,
-      rootCollection,
-      layout,
+      collection,
+      elementsToAdd,
       addElementsKey,
     );
   }

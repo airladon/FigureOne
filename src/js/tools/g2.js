@@ -64,6 +64,10 @@ function clipAngle(
   return angle;
 }
 
+/**
+ * Rect
+ * @class
+ */
 class Rect {
   left: number;
   top: number;
@@ -72,6 +76,14 @@ class Rect {
   bottom: number;
   right: number;
 
+  /**
+   * Constructor
+   * @constructor
+   * @param {number} left - left location
+   * @param {number} bottom - bottom location
+   * @param {number} width - rectangle width
+   * @param {number} bottom - rectangle height
+   */
   constructor(left: number, bottom: number, width: number, height: number) {
     this.left = left;
     this.width = width;
@@ -88,6 +100,11 @@ class Rect {
 
 
 /* eslint-disable comma-dangle */
+
+/**
+ * Point class
+ *
+ */
 class Point {
   x: number;
   y: number;
@@ -101,16 +118,37 @@ class Point {
     return new Point(1, 1);
   }
 
+  /**
+   * Constructor
+   * @constructor
+   * @param x x coordinate of point
+   * @param y y coordinate of point
+   */
   constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
     this._type = 'point';
   }
 
+  /**
+   * Duplicate {@link Point} object completely
+   * @example
+   * const p = new Point(0, 0);
+   * const q = p._dup();
+   * q.x = 1;
+   * console.log(p, q)
+   * // will output p = (0, 0), q = (1, 0)
+   * @return {Point}
+   */
   _dup() {
     return new Point(this.x, this.y);
   }
 
+  /**
+   * Scale point {@link constructor}
+   * @param {number} scalar - scaling factor
+   * @return {Point} Scaled point
+   */
   scale(scalar: number) {
     return new Point(this.x * scalar, this.y * scalar);
   }

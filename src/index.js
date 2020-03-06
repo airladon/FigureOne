@@ -52,6 +52,14 @@ export type {
   TypeLabelledAngle, TypeLabelledLine,
 };
 
+/** Tools object that is so great
+* @namespace tools
+* @memberof module:Fig
+* @property {object} math   - Math tools
+* @property {object} g2     - 2D geometry tools
+* @property {object} color  - Color tools
+* @property {object} css    - CSS tools
+*/
 const tools = {
   math,
   g2,
@@ -61,7 +69,14 @@ const tools = {
   misc,
 };
 
-const FigureOne = {
+/**
+ * FigureOne entry point
+ * @type {object}
+ * @module Fig
+ * @global
+ * @property {class} {@link Diagram}      - Diagram Class
+ */
+const Fig = {
   tools,
   Diagram,
   //
@@ -100,4 +115,4 @@ const FigureOne = {
   parsePoint: g2.getPoint,
 };
 
-export default FigureOne;
+export default Fig;
