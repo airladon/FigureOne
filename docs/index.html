@@ -80,6 +80,26 @@
               
                 
                 <li><a
+                  href='#typecontainerobject'
+                  class="">
+                  TypeContainerObject
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typecontainerarray'
+                  class="">
+                  TypeContainerArray
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#typefracobject'
                   class="">
                   TypeFracObject
@@ -680,7 +700,7 @@ phrases.</p>
   
     <p>
       Type:
-      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#typefracobject">TypeFracObject</a>} | <a href="#typefracarray">TypeFracArray</a> | {strike: TypeStrikeObject} | TypeStrikeArray | {box: TypeBoxObject} | TypeBoxArray | {root: TypeRootObject} | TypeRootArray | {brac: TypeBracketObject} | TypeBracketArray | {sub: TypeSubObject} | TypeSubArray | {sup: TypeSupObject} | TypeSupArray | {supSub: TypeSupSubObject} | TypeSupSubArray | {topBar: TypeBarObject} | TypeBarArray | {bottomBar: TypeBarObject} | TypeBarArray | {annotate: TypeAnnotateObject} | {topComment: TypeCommentObject} | TypeCommentArray | {bottomComment: TypeCommentObject} | TypeCommentArray | {padding: TypePaddingObject} | TypePaddingArray | {bar: TypeBarObject} | TypeBarArray | {scale: TypeScaleObject} | TypeScaleArray | {container: TypeContainerObject} | TypeContainerArray | {matrix: TypeMatrixObject} | TypeMatrixArray | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | DiagramElementPrimitive | DiagramElementCollection | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#typefracobject">TypeFracObject</a>} | <a href="#typefracarray">TypeFracArray</a> | {strike: TypeStrikeObject} | TypeStrikeArray | {box: TypeBoxObject} | TypeBoxArray | {root: TypeRootObject} | TypeRootArray | {brac: TypeBracketObject} | TypeBracketArray | {sub: TypeSubObject} | TypeSubArray | {sup: TypeSupObject} | TypeSupArray | {supSub: TypeSupSubObject} | TypeSupSubArray | {topBar: TypeBarObject} | TypeBarArray | {bottomBar: TypeBarObject} | TypeBarArray | {annotate: TypeAnnotateObject} | {topComment: TypeCommentObject} | TypeCommentArray | {bottomComment: TypeCommentObject} | TypeCommentArray | {padding: TypePaddingObject} | TypePaddingArray | {bar: TypeBarObject} | TypeBarArray | {scale: TypeScaleObject} | TypeScaleArray | {container: <a href="#typecontainerobject">TypeContainerObject</a>} | <a href="#typecontainerarray">TypeContainerArray</a> | {matrix: TypeMatrixObject} | TypeMatrixArray | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | DiagramElementPrimitive | DiagramElementCollection | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
     </p>
   
   
@@ -737,6 +757,203 @@ forms: {
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='typecontainerobject'>
+      TypeContainerObject
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Container object definition</p>
+<p>A container is useful to fix spacing around content as it changes between
+equation forms.</p>
+<p>See <a href="EquationFunctions#container">EquationFunctions#container</a></p>
+
+    <div class='pre p1 fill-light mt0'>TypeContainerObject</div>
+  
+    <p>
+      Type:
+      {content: <a href="#typeequationphrase">TypeEquationPhrase</a>, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, descent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, ascent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, xAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, yAlign: (<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fit: (<code>"width"</code> | <code>"height"</code> | <code>"contain"</code>)?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default: 
+<code>null</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>descent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default: 
+<code>null</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>ascent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default: 
+<code>null</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : default: 
+<code>'center'</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : default: 
+<code>'baseline'</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fit</span> <code class='quiet'>((<code>"width"</code> | <code>"height"</code> | <code>"contain"</code>)?)</code>
+          : default: 
+<code>null</code>
+ - fit width,
+ascent and descent to either match width, height or fully contain the content
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default: 
+<code>1</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : default: 
+<code>false</code>
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typecontainerarray'>
+      TypeContainerArray
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Container array definition</p>
+<p>A container is useful to fix spacing around content as it changes between
+equation forms.</p>
+<p>Array order: content, width, descent, ascent, xAlign, yAlign,
+fit, scale, fullContentBounds</p>
+<p>Once an optional element is left out, then all subsequent elements must
+also be left out</p>
+<p>See:</p>
+<ul>
+<li><a href="#typecontainerobject">TypeContainerObject</a> for default values</li>
+<li><a href="EquationFunctions#container">EquationFunctions#container</a></li>
+</ul>
+
+    <div class='pre p1 fill-light mt0'>TypeContainerArray</div>
+  
+    <p>
+      Type:
+      [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"width"</code>? | <code>"height"</code> | <code>"contain"</code>), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?]
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='typefracobject'>
       TypeFracObject
     </h3>
@@ -746,6 +963,7 @@ forms: {
   
 
   <p>Fraction object definition</p>
+<p>See <a href="#equationfunctionsfrac">EquationFunctions#frac</a></p>
 
     <div class='pre p1 fill-light mt0'>TypeFracObject</div>
   
@@ -770,29 +988,15 @@ forms: {
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : Vinculum symbol
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>overhang</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : How far the vinculum extends beyond the content
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>offsetY</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : Offset the fraction in y
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
           <span class='code bold'>numerator</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
           
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          : Vinculum symbol
+
           
         </div>
       
@@ -804,25 +1008,50 @@ forms: {
       
         <div class='space-bottom0'>
           <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
+          : default: 
+<code>1</code>
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>numeratorSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
+          : default: 
+<code>0.05</code>
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>denominatorSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default: 
+<code>0.05</code>
+
           
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>overhang</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : Vinculum extends beyond the content
+horizontally by the this amount - default: 
+<code>0.05</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offsetY</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : Fraction offset - default: 
+<code>0.07</code>
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          
+          : : Use full bounds with content - default: 
+<code>false</code>
+
           
         </div>
       
@@ -865,6 +1094,11 @@ forms: {
 denominatorSpace, overhang, offsetY, fullContentBounds</p>
 <p>Once an optional element is left out, then all subsequent elements must
 also be left out</p>
+<p>See:</p>
+<ul>
+<li><a href="#typefracobject">TypeFracObject</a> for default values</li>
+<li><a href="#equationfunctionsfrac">EquationFunctions#frac</a></li>
+</ul>
 
     <div class='pre p1 fill-light mt0'>TypeFracArray</div>
   
