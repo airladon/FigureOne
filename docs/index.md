@@ -206,13 +206,13 @@ Type: {}
 
 Defines how to align a form
 
-Type: {fixTo: (DiagramElementPrimitive | DiagramElementCollection | [Point][83]), alignH: TypeHAlign, alignV: TypeVAlign}
+Type: {fixTo: (DiagramElementPrimitive | DiagramElementCollection | [Point][83]), xAlign: TypeHAlign, yAlign: TypeVAlign}
 
 ##### Properties
 
 -   `fixTo` **(DiagramElementPrimitive | DiagramElementCollection | [Point][83])** 
--   `alignH` **TypeHAlign** 
--   `alignV` **TypeVAlign** 
+-   `xAlign` **TypeHAlign** 
+-   `yAlign` **TypeVAlign** 
 
 #### TypeEquationFormObject
 

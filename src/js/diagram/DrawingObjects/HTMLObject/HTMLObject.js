@@ -14,8 +14,8 @@ class HTMLObject extends DrawingObject {
   // diagramLimits: Rect;
   element: HTMLElement;
   parentDiv: HTMLElement;
-  alignH: 'left' | 'right' | 'center';
-  alignV: 'top' | 'bottom' | 'middle';
+  xAlign: 'left' | 'right' | 'center';
+  yAlign: 'top' | 'bottom' | 'middle';
   show: boolean;
 
   copy: () => HTMLObject;
@@ -25,8 +25,8 @@ class HTMLObject extends DrawingObject {
     parentDiv: HTMLElement,
     id: string,
     location: Point,
-    alignV: 'top' | 'bottom' | 'middle' = 'middle',
-    alignH: 'left' | 'right' | 'center' = 'center',
+    yAlign: 'top' | 'bottom' | 'middle' = 'middle',
+    xAlign: 'left' | 'right' | 'center' = 'center',
   ) {
     super();
     const element = document.getElementById(id);
@@ -35,8 +35,8 @@ class HTMLObject extends DrawingObject {
     }
     this.id = id;
     this.location = location;
-    this.alignV = alignV;
-    this.alignH = alignH;
+    this.yAlign = yAlign;
+    this.xAlign = xAlign;
     this.parentDiv = parentDiv;
     this.show = true;
     this.setBorder();
@@ -45,7 +45,7 @@ class HTMLObject extends DrawingObject {
   _dup() {
     const c = new HTMLObject(
       this.parentDiv, this.id,
-      this.location._dup(), this.alignV, this.alignH,
+      this.location._dup(), this.yAlign, this.xAlign,
     );
     c.show = this.show;
     c.border = this.border.map(b => b.map(p => p._dup()));
@@ -126,14 +126,14 @@ class HTMLObject extends DrawingObject {
       // console.log(w, h, this.element.id)
       let left = 0;
       let top = 0;
-      if (this.alignH === 'center') {
+      if (this.xAlign === 'center') {
         left = -w / 2;
-      } else if (this.alignH === 'right') {
+      } else if (this.xAlign === 'right') {
         left = -w;
       }
-      if (this.alignV === 'middle') {
+      if (this.yAlign === 'middle') {
         top = -h / 2;
-      } else if (this.alignV === 'bottom') {
+      } else if (this.yAlign === 'bottom') {
         top = -h;
       }
       const x = pixelLocation.x + left;

@@ -12,8 +12,8 @@ export type TypeRectangleFilledReference = TypeVertexRectangleFilledReference;
 
 export default function RectangleFilled(
   webgl: Array<WebGLInstance>,
-  alignH: 'left' | 'center' | 'right' | number,
-  alignV: 'bottom' | 'middle' | 'top' | number,
+  xAlign: 'left' | 'center' | 'right' | number,
+  yAlign: 'bottom' | 'middle' | 'top' | number,
   width: number,
   height: number,
   cornerRadius: number,
@@ -24,8 +24,8 @@ export default function RectangleFilled(
 ) {
   const vertexRectangle = new VertexRectangleFilled(
     webgl,
-    alignH,
-    alignV,
+    xAlign,
+    yAlign,
     width,
     height,
     cornerRadius,

@@ -448,8 +448,8 @@ export type TypeNavigatorOptions = {
   offset?: Point,
   navType?: 'equationOnly' | 'description' | '1Line' | '2Line' | '3Line' | '1Button',
   navTypeOptions?: TypeNavTypeOptions,
-  alignH?: 'left' | 'right' | 'center',
-  alignV?: 'top' | 'bottom' | 'middle' | 'baseline',
+  xAlign?: 'left' | 'right' | 'center',
+  yAlign?: 'top' | 'bottom' | 'middle' | 'baseline',
   id?: string,
   interactive?: boolean,
 };
@@ -518,8 +518,8 @@ export default class EqnNavigator extends DiagramElementCollection {
         forceTwoLines: false,
         arrows: false,
       },
-      alignH: 'center',
-      alignV: 'middle',
+      xAlign: 'center',
+      yAlign: 'middle',
       interactive: true,
       id: generateUniqueId('id_figureone__equation_navigator_'),
     };
@@ -579,7 +579,7 @@ export default class EqnNavigator extends DiagramElementCollection {
         navigatorHTMLElement.table,
         `${optionsToUse.id}_table`,
         '',
-        offsetToUse, optionsToUse.alignV, optionsToUse.alignH,
+        offsetToUse, optionsToUse.yAlign, optionsToUse.xAlign,
       );
       this.add('table', table);
     }

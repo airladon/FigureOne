@@ -197,7 +197,7 @@ export default class EquationForm extends Elements {
   // property.
   //
   // The elements are positioned relative to 0,0 in vertex space based on the
-  // fixTo, alignH and alignV parameters.
+  // fixTo, xAlign and yAlign parameters.
   //
   // fixTo can only be a point in the equation's vertex space, or a
   // DiagramElement in the equation.
@@ -208,11 +208,11 @@ export default class EquationForm extends Elements {
   //    - The equation collection setPosition (or translation transform) can
   //      then be used to position the equation in the diagram (or relative
   //      collection space)
-  //    - if alignH is:
+  //    - if xAlign is:
   //        - 'center': the fixTo element is centered in x around (0, 0)
   //        - 'right': the fixTo element right most point is at x = 0
   //        - 'left': default - the fixTo element x position at 0
-  //    - if alignV is:
+  //    - if yAlign is:
   //        - 'middle': the fixTo element is centered in y around (0, 0)
   //        - 'bottom': the fixTo element bottom most point is at y = 0
   //        - 'top': the fixTo element top most point is at y = 0
@@ -220,13 +220,13 @@ export default class EquationForm extends Elements {
   //
   // If fixTo is a Point, the equation is positioned at that point in the
   // equation's vertex space.
-  //  - alignH:
+  //  - xAlign:
   //    - 'left': The equation's left most element's left most point is at
   //              Point.x
   //    - 'right': The equation's right most element's right most point is at
   //              Point.x
   //    - 'center': The equation is centered horizontally around Point.x
-  //  - alignV:
+  //  - yAlign:
   //    - 'baseline': The equation's baseline is at Point.y
   //    - 'top': The equation's top most element's top most point is at Point.y
   //    - 'bottom': The equation's top most element's top most point is at
@@ -235,8 +235,8 @@ export default class EquationForm extends Elements {
   //
   arrange(
     scale: number = 1,
-    alignH: TypeHAlign | null = 'left',
-    alignV: TypeVAlign | null = 'baseline',
+    xAlign: TypeHAlign | null = 'left',
+    yAlign: TypeVAlign | null = 'baseline',
     fixTo: DiagramElementPrimitive | DiagramElementCollection | Point = new Point(0, 0),
   ) {
     const elementsInCollection = this.collectionMethods.getAllElements();
@@ -276,27 +276,27 @@ export default class EquationForm extends Elements {
       }
     }
 
-    if (alignH === 'right') {
+    if (xAlign === 'right') {
       fixPoint.x += w;
-    } else if (alignH === 'center') {
+    } else if (xAlign === 'center') {
       fixPoint.x += w / 2;
-    } else if (typeof alignH === 'number') {
-      fixPoint.x += alignH * w;
-    } else if (alignH != null && alignH.slice(-1)[0] === 'o') {
-      const offset = parseFloat(alignH);
+    } else if (typeof xAlign === 'number') {
+      fixPoint.x += xAlign * w;
+    } else if (xAlign != null && xAlign.slice(-1)[0] === 'o') {
+      const offset = parseFloat(xAlign);
       fixPoint.x += offset;
     }
 
-    if (alignV === 'top') {
+    if (yAlign === 'top') {
       fixPoint.y += p.y + a;
-    } else if (alignV === 'bottom') {
+    } else if (yAlign === 'bottom') {
       fixPoint.y += p.y - d;
-    } else if (alignV === 'middle') {
+    } else if (yAlign === 'middle') {
       fixPoint.y += p.y - d + h / 2;
-    } else if (typeof alignV === 'number') {
-      fixPoint.y += p.y - d + alignV * h;
-    } else if (alignV != null && alignV.slice(-1)[0] === 'o') {
-      const offset = parseFloat(alignV);
+    } else if (typeof yAlign === 'number') {
+      fixPoint.y += p.y - d + yAlign * h;
+    } else if (yAlign != null && yAlign.slice(-1)[0] === 'o') {
+      const offset = parseFloat(yAlign);
       fixPoint.y += p.y + offset;
     }
 

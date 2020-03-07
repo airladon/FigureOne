@@ -204,8 +204,8 @@ class Axis extends DiagramElementCollection {
     );
 
     if (this.props.rotation > Math.PI / 2 * 0.95) {
-      font.alignV = 'middle';
-      font.alignH = 'right';
+      font.yAlign = 'middle';
+      font.xAlign = 'right';
     }
     const dText = [];
     for (let i = 0; i < ticks.labels.length; i += 1) {

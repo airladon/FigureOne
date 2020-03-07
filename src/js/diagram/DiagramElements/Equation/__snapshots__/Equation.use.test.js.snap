@@ -141,8 +141,6 @@ DiagramElementPrimitive {
     "text": Array [
       DiagramText {
         "font": DiagramFont {
-          "alignH": "left",
-          "alignV": "alphabetic",
           "color": Array [
             0.95,
             0,
@@ -154,6 +152,8 @@ DiagramElementPrimitive {
           "size": 0.2,
           "style": "italic",
           "weight": "200",
+          "xAlign": "left",
+          "yAlign": "alphabetic",
         },
         "location": Point {
           "_type": "point",

@@ -66,8 +66,8 @@ describe('Diagram Equations From Object', () => {
           },
           defaultFormAlignment: {
             fixTo: { x: 2, y: 2 },    // Points can also be defined as objects
-            alignH: 'right',
-            alignV: 'top',
+            xAlign: 'right',
+            yAlign: 'top',
           },
           forms: {
             0: ['a', 'b', 'c'],
@@ -97,8 +97,8 @@ describe('Diagram Equations From Object', () => {
           equation: collection._eqn,
           offset: new Point(0.2, -0.5),
           navType: '2Line',
-          alignH: 'center',
-          alignV: 'middle',
+          xAlign: 'center',
+          yAlign: 'middle',
           navTypeOptions: { arrows: true },
         });
         // spoof a the navigator drawingObject
@@ -110,8 +110,8 @@ describe('Diagram Equations From Object', () => {
           equation: collection._eqn,
           offset: [0.2, -0.5],
           navType: '2Line',
-          alignH: 'center',
-          alignV: 'middle',
+          xAlign: 'center',
+          yAlign: 'middle',
           navTypeOptions: { arrows: true },
         });
         collection._testEqn.addElements({
@@ -146,8 +146,8 @@ describe('Diagram Equations From Object', () => {
           formSeries: ['0', '1'],
           offset: new Point(0.2, -0.5),
           navType: '2Line',
-          alignH: 'center',
-          alignV: 'middle',
+          xAlign: 'center',
+          yAlign: 'middle',
           navTypeOptions: { arrows: true },
         });
         collection._testNav._table.drawingObject.element = { style: { opacity: 1 } };

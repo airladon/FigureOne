@@ -64,8 +64,8 @@ describe('Diagram Equations From Object', () => {
           scale: 1.2,
           alignment: {
             fixTo: 'b',
-            alignH: 'center',
-            alignV: 'bottom',
+            xAlign: 'center',
+            yAlign: 'bottom',
           },
           description: '|Form| 1 |description|',
           modifiers: {

@@ -30,8 +30,8 @@ describe('Diagram HTML Object', () => {
   });
   test('Instantiation', () => {
     expect(h.location).toEqual(new Point(0, 0));
-    expect(h.alignV).toBe('middle');
-    expect(h.alignH).toBe('center');
+    expect(h.yAlign).toBe('middle');
+    expect(h.xAlign).toBe('center');
     expect(h.parentDiv).toBe(parentDiv);
     expect(h.element).toBe(mockElement);
   });
@@ -81,7 +81,7 @@ describe('Diagram HTML Object', () => {
         });
     });
     test('Left, right, bottom, top', () => {
-      h.alignH = 'left';
+      h.xAlign = 'left';
       h.transformHtml(new Transform().matrix());
       expect(h.element.style)
         .toEqual({
@@ -91,7 +91,7 @@ describe('Diagram HTML Object', () => {
           visibility: 'visible',
         });
 
-      h.alignH = 'right';
+      h.xAlign = 'right';
       h.transformHtml(new Transform().matrix());
       expect(h.element.style)
         .toEqual({
@@ -101,8 +101,8 @@ describe('Diagram HTML Object', () => {
           visibility: 'visible',
         });
 
-      h.alignH = 'center';
-      h.alignV = 'top';
+      h.xAlign = 'center';
+      h.yAlign = 'top';
       h.transformHtml(new Transform().matrix());
       expect(h.element.style)
         .toEqual({
@@ -112,7 +112,7 @@ describe('Diagram HTML Object', () => {
           visibility: 'visible',
         });
 
-      h.alignV = 'bottom';
+      h.yAlign = 'bottom';
       h.transformHtml(new Transform().matrix());
       expect(h.element.style)
         .toEqual({

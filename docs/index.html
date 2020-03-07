@@ -1632,7 +1632,7 @@ forms: {
   
     <p>
       Type:
-      {fixTo: (DiagramElementPrimitive | DiagramElementCollection | <a href="#point">Point</a>), alignH: TypeHAlign, alignV: TypeVAlign}
+      {fixTo: (DiagramElementPrimitive | DiagramElementCollection | <a href="#point">Point</a>), xAlign: TypeHAlign, yAlign: TypeVAlign}
     </p>
   
   
@@ -1657,13 +1657,13 @@ forms: {
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>alignH</span> <code class='quiet'>(TypeHAlign)</code>
+          <span class='code bold'>xAlign</span> <code class='quiet'>(TypeHAlign)</code>
           
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>alignV</span> <code class='quiet'>(TypeVAlign)</code>
+          <span class='code bold'>yAlign</span> <code class='quiet'>(TypeVAlign)</code>
           
           
         </div>
@@ -2070,8 +2070,8 @@ eqn.addForms({
     <span class="hljs-attr">scale</span>: <span class="hljs-number">1.2</span>,
     <span class="hljs-attr">alignment</span>: {
       <span class="hljs-attr">fixTo</span>: <span class="hljs-string">'b'</span>,
-      <span class="hljs-attr">alignH</span>: <span class="hljs-string">'center'</span>,
-      <span class="hljs-attr">alignV</span>: <span class="hljs-string">'bottom'</span>,
+      <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+      <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'bottom'</span>,
     },
     <span class="hljs-attr">description</span>: <span class="hljs-string">'|Form| 1 |description|'</span>,
     <span class="hljs-attr">modifiers</span>: {
@@ -2397,7 +2397,7 @@ in the series, then two special animations can be defined with this object:</p>
           : default:
 { fixTo: new 
 <a href="#point">Point</a>
-(0, 0), alignH: 'left', alignV: 'baseline}
+(0, 0), xAlign: 'left', yAlign: 'baseline}
 
           
         </div>
@@ -2810,7 +2810,7 @@ eqn.addElements({
   
     <p>
       Type:
-      {forms: {}, functions: <a href="#equationfunctions">EquationFunctions</a>, symbols: EquationSymbols, currentForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, currentSubForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, fontMath: DiagramFont, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, subFormPriority: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, formSeries: {}, currentFormSeries: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, currentFormSeriesName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, defaultFormAlignment: {fixTo: (DiagramElementPrimitive | DiagramElementCollection | <a href="#point">Point</a>), alignH: TypeHAlign, alignV: TypeVAlign}, isAnimating: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, descriptionElement: (DiagramElementPrimitive | null), descriptionPosition: <a href="#point">Point</a>, formRestart: {moveFrom: (<a href="#point">Point</a> | DiagramElementCollection)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, element: DiagramElement}?}?}
+      {forms: {}, functions: <a href="#equationfunctions">EquationFunctions</a>, symbols: EquationSymbols, currentForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, currentSubForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, fontMath: DiagramFont, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, subFormPriority: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, formSeries: {}, currentFormSeries: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, currentFormSeriesName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, defaultFormAlignment: {fixTo: (DiagramElementPrimitive | DiagramElementCollection | <a href="#point">Point</a>), xAlign: TypeHAlign, yAlign: TypeVAlign}, isAnimating: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, descriptionElement: (DiagramElementPrimitive | null), descriptionPosition: <a href="#point">Point</a>, formRestart: {moveFrom: (<a href="#point">Point</a> | DiagramElementCollection)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, element: DiagramElement}?}?}
     </p>
   
   

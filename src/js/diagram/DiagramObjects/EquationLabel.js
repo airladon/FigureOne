@@ -33,8 +33,8 @@ export type TypeLabelOptions = {
   position?: Point,
   form?: string,
   formType?: string,
-  alignV?: TypeVAlign,
-  alignH?: TypeHAlign,
+  yAlign?: TypeVAlign,
+  xAlign?: TypeHAlign,
 };
 
 export default class EquationLabel {
@@ -54,14 +54,14 @@ export default class EquationLabel {
       position: new Point(0, 0),
       form: '0',
       formType: 'base',
-      alignH: 'center',
-      alignV: 'middle',
+      xAlign: 'center',
+      yAlign: 'middle',
     };
     const optionsToUse = Object.assign({}, defaultOptions, options);
     const labelTextOrEquation = optionsToUse.label;
     const { color, scale, position } = optionsToUse;
     const { form, formType } = optionsToUse;
-    const { alignV, alignH } = optionsToUse;
+    const { yAlign, xAlign } = optionsToUse;
     let eqn;
     if (typeof labelTextOrEquation === 'string') {
       eqn = equations.equation({
@@ -69,8 +69,8 @@ export default class EquationLabel {
         color,
         defaultFormAlignment: {
           fixTo: new Point(0, 0),
-          alignH,
-          alignV,
+          xAlign,
+          yAlign,
         },
         scale,
         forms: {
@@ -96,8 +96,8 @@ export default class EquationLabel {
         position,
         defaultFormAlignment: {
           fixTo: new Point(0, 0),
-          alignH,
-          alignV,
+          xAlign,
+          yAlign,
         },
         scale,
       });
@@ -128,8 +128,8 @@ export default class EquationLabel {
       }
       form.arrange(
         this.eqn.eqn.scale,
-        this.eqn.eqn.defaultFormAlignment.alignH,
-        this.eqn.eqn.defaultFormAlignment.alignV,
+        this.eqn.eqn.defaultFormAlignment.xAlign,
+        this.eqn.eqn.defaultFormAlignment.yAlign,
         this.eqn.eqn.defaultFormAlignment.fixTo,
       );
     }
