@@ -73,9 +73,9 @@ export type TypeEquationPhrase =
   string
   | number
   | { frac: TypeEquationFunctionFraction }
-  | { strike: TypeStrikeObject } | TypeStrikeArray
+  | { strike: TypeEquationFunctionStrike }
   | { box: TypeBoxObject } | TypeBoxArray
-  | { root: TypeEquationFunctionsRoot }
+  | { root: TypeEquationFunctionRoot }
   | { brac: TypeEquationFunctionBracket }
   | { sub: TypeSubObject } | TypeSubArray
   | { sup: TypeSupObject } | TypeSupArray
@@ -339,7 +339,7 @@ export type TypeEquationFunctionBracket = {
 /**
  * Equation root
  *
- * Surrond an equation phrase with a radical symbol and add a custom root if
+ * Surround an equation phrase with a radical symbol and add a custom root if
  * needed
  *
  * @property {string} symbol radical symbol
@@ -393,7 +393,7 @@ export type TypeEquationFunctionBracket = {
  *  { root: ['radical', 'a'] }
  */
 
-export type TypeEquationFunctionsRoot = {
+export type TypeEquationFunctionRoot = {
   symbol: string;
   content: TypeEquationPhrase;
   inSize?: boolean;
@@ -423,7 +423,51 @@ export type TypeEquationFunctionsRoot = {
   ?boolean,
 ];
 
-export type TypeStrikeObject = {
+/**
+ * Equation strike-through
+ *
+ * Overlay a strike symbol on an equation phrase
+ *
+ * @property {TypeEquationPhrase} content
+ * @property {string} symbol
+ * @property {boolean} [inSize] `false` exclues strike symbol from size of
+ * resulting phrase (`false`)
+ * @property {number} [space] (`0.02`)
+ * @property {number} [topSpace] (`space`)
+ * @property {number} [rightSpace] (`space`)
+ * @property {number} [bottomSpace] (`space`)
+ * @property {number} [leftSpace] (`space`)
+ * @property {boolean} [fullContentBounds] use full bounds of content,
+ * overriding any `inSize=false` properties in the content (`false`)
+ * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
+ * the full bounds of the content even if `fullContentBounds=false` and the
+ * brackets only surround a portion of the content (`false`)
+* @example
+ * // For examples, a radical symbol is defined as an equation element
+ * eqn.addElements({
+ *   x: { symbol: 'strike', style: 'cross' }
+ * });
+ * @example
+ * // Full object definition
+ * {
+ *   strike: {
+ *     content: 'a',
+ *     symbol: 'x',
+ *     inSize: true,
+ *     space: 0,
+ *     topSpace: 0.1,
+ *     rightSpace: 0.2,
+ *     bottomSpace: 0.3,
+ *     leftSpace: 0.4,
+ *     fullContentBounds: false,
+ *     useFullBounds: false,
+ *   },
+ * }
+ * @example
+ * // Example array definition
+ *  { strike: ['a', 'x'] }
+ */
+export type TypeEquationFunctionStrike = {
   content: TypeEquationPhrase;
   symbol: string;
   inSize?: boolean;
@@ -434,9 +478,7 @@ export type TypeStrikeObject = {
   leftSpace?: number;
   fullContentBounds?: boolean;
   useFullBounds?: boolean;
-};
-
-export type TypeStrikeArray = [
+} | [
   TypeEquationPhrase,
   string,
   ?boolean,
@@ -1482,7 +1524,7 @@ export class EquationFunctions {
     );
   }
 
-  root(optionsOrArray: TypeEquationFunctionsRoot) {
+  root(optionsOrArray: TypeEquationFunctionRoot) {
     let content;
     let root;
     let symbol;
@@ -2296,7 +2338,7 @@ export class EquationFunctions {
 
 
   strike(
-    optionsOrArray: TypeStrikeObject | TypeStrikeArray,
+    optionsOrArray: TypeEquationFunctionStrike,
   ) {
     let content;
     let symbol;
