@@ -1124,16 +1124,14 @@ elements.</p>
 <p>This object defines a how the elements are laid out, what properties the
 elements have, and some animation properties for when animating to this form.</p>
 <p>In the <a href="#equation">Equation</a> object, forms are defined with form names, and
-sub-form names. Most of the time, the subForm name can be ignored.
+subForm names. Most of the time, the subForm name can be ignored.
 However, it is useful when dealing with units. Sometimes you will have a
 series of forms you want to animate through, that will be slightly different
 depending on the units (for example degrees vs radians). Defining one subForm
 as degrees, and a second as radians allows switching between subForms without
 complicating the overall equation navigation logic.</p>
-<p>Subforms can either be defined within the form definition object below, or
-as a key name with a value of a form definition object or array. You would
-only use it as an object property if you were making multiple calls to
-<a href="#equationaddforms">Equation#addForms</a>.</p>
+<p>See the examples below for how to define subForms.</p>
+<p><a href="#equationaddforms">Equation#addForms</a>.</p>
 
     <div class='pre p1 fill-light mt0'>TypeEquationFormObject</div>
   
@@ -1295,6 +1293,54 @@ eqn.addForms({
     <span class="hljs-attr">subForm</span>:<span class="hljs-string">'rad'</span>,
   }
 });</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing all form options</span>
+<span class="hljs-attr">forms</span>: {
+  <span class="hljs-attr">form1</span>: {
+    <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>],
+    <span class="hljs-attr">subForm</span>: <span class="hljs-string">'deg'</span>,
+    <span class="hljs-attr">scale</span>: <span class="hljs-number">1.2</span>,
+    <span class="hljs-attr">alignment</span>: {
+      <span class="hljs-attr">fixTo</span>: <span class="hljs-string">'b'</span>,
+      <span class="hljs-attr">alignH</span>: <span class="hljs-string">'center'</span>,
+      <span class="hljs-attr">alignV</span>: <span class="hljs-string">'bottom'</span>,
+    },
+    <span class="hljs-attr">description</span>: <span class="hljs-string">'|Form| 1 |description|'</span>,
+    <span class="hljs-attr">modifiers</span>: {
+      <span class="hljs-attr">Form</span>: html.highlight([<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]),
+    },
+    <span class="hljs-attr">elementMods</span>: {
+      <span class="hljs-attr">a</span>: {
+        <span class="hljs-attr">color</span>: color1,
+        <span class="hljs-attr">isTouchable</span>: <span class="hljs-literal">true</span>,
+      },
+    },
+    <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">translation</span>: {
+      <span class="hljs-attr">a</span>: {
+        <span class="hljs-attr">style</span>: <span class="hljs-string">'curved'</span>,
+        <span class="hljs-attr">direction</span>: <span class="hljs-string">'up'</span>,
+        <span class="hljs-attr">mag</span>: <span class="hljs-number">0.95</span>,
+      },
+      <span class="hljs-attr">b</span>: [<span class="hljs-string">'curved'</span>, <span class="hljs-string">'down'</span>, <span class="hljs-number">0.45</span>],
+    },
+    <span class="hljs-attr">fromPrev</span>: {
+      <span class="hljs-attr">duration</span>: <span class="hljs-literal">null</span>,
+      <span class="hljs-attr">translation</span>: {
+        <span class="hljs-attr">a</span>: [<span class="hljs-string">'curved'</span>, <span class="hljs-string">'down'</span>, <span class="hljs-number">0.2</span>],
+        <span class="hljs-attr">b</span>: [<span class="hljs-string">'curved'</span>, <span class="hljs-string">'down'</span>, <span class="hljs-number">0.2</span>],
+      },
+    },
+    <span class="hljs-attr">fromNext</span>: {
+      <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+      <span class="hljs-attr">translation</span>: {
+        <span class="hljs-attr">a</span>: [<span class="hljs-string">'curved'</span>, <span class="hljs-string">'down'</span>, <span class="hljs-number">0.2</span>],
+        <span class="hljs-attr">b</span>: [<span class="hljs-string">'curved'</span>, <span class="hljs-string">'down'</span>, <span class="hljs-number">0.2</span>],
+      },
+    },
+  },
+}</pre>
     
   
 
