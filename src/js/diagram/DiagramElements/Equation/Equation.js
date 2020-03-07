@@ -385,7 +385,8 @@ export type TypeEquationOptions = {
  * Often, `goToForm` is called to animate from a shown form to a desired form.
  * Therefore there will be some equation elements that:
  * * Are currently shown, but need to be hidden as they are not in the desired form
- * * Are currently shown, are in the desired form, and need to be moved to the correct layout position for the desired form
+ * * Are currently shown, are in the desired form, and need to be moved to the
+ *   correct layout position for the desired form
  * * Are currently hidden and need to be shown in the desired form
  *
  * The order that elements are shown, hidden and moved is defined by the
@@ -464,6 +465,33 @@ type TypeEquationGoToFormOptions = {
  * An Equation is a collection of elements that can be arranged into different
  * forms.
  * @param {TypeEquationOptions} options
+ * @example
+ * // Create with options object
+ * eqn = new Equation({
+ *    elements: {
+ *      a: 'a',
+ *      b: 'b',
+ *      c: 'c',
+ *      equals: ' = ',
+ *      plus: ' + ',
+ *    },
+ *    forms: {
+ *      base: ['a', 'equals', 'b', 'plus', 'c'],
+ *    },
+ * );
+ * @example
+ * // Create with methods
+ * eqn = new Equation();
+ * eqn.addElements({
+ *    a: 'a',
+ *    b: 'b',
+ *    c: 'c',
+ *    equals: ' = ',
+ *    plus: ' + ',
+ *  });
+ *  eqn.addForms({
+ *    base: ['a', 'equals', 'b', 'plus', 'c'],
+ *  });
  */
 export class Equation extends DiagramElementCollection {
   eqn: {
