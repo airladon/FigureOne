@@ -1971,6 +1971,38 @@ forms.</p>
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create with options object</span>
+eqn = <span class="hljs-keyword">new</span> Equation({
+   <span class="hljs-attr">elements</span>: {
+     <span class="hljs-attr">a</span>: <span class="hljs-string">'a'</span>,
+     <span class="hljs-attr">b</span>: <span class="hljs-string">'b'</span>,
+     <span class="hljs-attr">c</span>: <span class="hljs-string">'c'</span>,
+     <span class="hljs-attr">equals</span>: <span class="hljs-string">' = '</span>,
+     <span class="hljs-attr">plus</span>: <span class="hljs-string">' + '</span>,
+   },
+   <span class="hljs-attr">forms</span>: {
+     <span class="hljs-attr">base</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'c'</span>],
+   },
+);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create with methods</span>
+eqn = <span class="hljs-keyword">new</span> Equation();
+eqn.addElements({
+   <span class="hljs-attr">a</span>: <span class="hljs-string">'a'</span>,
+   <span class="hljs-attr">b</span>: <span class="hljs-string">'b'</span>,
+   <span class="hljs-attr">c</span>: <span class="hljs-string">'c'</span>,
+   <span class="hljs-attr">equals</span>: <span class="hljs-string">' = '</span>,
+   <span class="hljs-attr">plus</span>: <span class="hljs-string">' + '</span>,
+ });
+ eqn.addForms({
+   <span class="hljs-attr">base</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'c'</span>],
+ });</pre>
+    
+  
 
   
 
