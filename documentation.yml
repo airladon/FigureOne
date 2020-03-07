@@ -5,8 +5,9 @@ toc:
   - TypeEquationElements
   - name: Equation Functions Types
   - TypeEquationFunctionContainer
-  - TypeEquationFunctionFrac
+  - TypeEquationFunctionFraction
   - TypeEquationFunctionScale
+  - TypeEquationFunctionBracket
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment
