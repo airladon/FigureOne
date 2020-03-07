@@ -2,6 +2,8 @@ toc:
   - Diagram
   - name: Equation Types
   - TypeEquationPhrase
+  - TypeContainerObject
+  - TypeContainerArray
   - TypeFracObject
   - TypeFracArray
   - TypeEquationElement
