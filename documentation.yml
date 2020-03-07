@@ -8,6 +8,8 @@ toc:
   - TypeEquationFunctionFraction
   - TypeEquationFunctionScale
   - TypeEquationFunctionBracket
+  - TypeEquationFunctionRoot
+  - TypeEquationFunctionStrike
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment
