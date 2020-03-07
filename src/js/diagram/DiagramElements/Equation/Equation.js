@@ -494,6 +494,9 @@ type TypeEquationGoToFormOptions = {
  *  });
  */
 export class Equation extends DiagramElementCollection {
+  /**
+   * Equation parameters and functions
+   */
   eqn: {
     forms: { [formName: string]: {
         base: EquationForm;                   // There is always a base form
@@ -501,6 +504,9 @@ export class Equation extends DiagramElementCollection {
         name: string;                         // Name of form
       }
     };
+    /**
+     * Functions for making equation forms
+     */
     functions: EquationFunctions;
     symbols: EquationSymbols;
     currentForm: string;

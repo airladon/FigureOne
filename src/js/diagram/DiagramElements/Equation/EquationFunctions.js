@@ -649,6 +649,10 @@ export type TypeAnnotateObject = {
 // The problem is then the first arguement can be so many types, some of which
 // are subsets of the other, then when its parameters are extracted, their type
 // is all confused.
+
+/**
+ * Functions used in making equation forms
+ */
 export class EquationFunctions {
   // eslint-disable-next-line no-use-before-define
   elements: { [name: string]: DiagramElementCollection | DiagramElementPrimitive };
@@ -1211,6 +1215,18 @@ export class EquationFunctions {
     );
   }
 
+  /**
+   * Equation fraction function
+   * @example
+   * e = new Equation();
+   * e.addElements({
+   *   v: { symbol: 'vinculum' },
+   * });
+   * frac = e.eqn.functions.frac;
+   * eqn.addForms({
+   *   base: ['a', 'equals', frac(['b', 'v', 'c'])],
+   * });
+   */
   frac(
     optionsOrArray: TypeFracObject | TypeFracArray,
   ) {
