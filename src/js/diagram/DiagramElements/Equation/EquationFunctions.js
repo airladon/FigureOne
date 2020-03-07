@@ -663,7 +663,7 @@ export type TypeMatrixObject = {
   scale?: number,
   fit?: 'max' | 'min',
   space?: TypeParsablePoint,
-  vAlign?: 'baseline' | 'middle',
+  yAlign?: 'baseline' | 'middle',
   brac?: TypeEquationFunctionBracket,
   fullContentBounds?: boolean,
 };
@@ -1727,7 +1727,7 @@ export class EquationFunctions {
     let fit;
     let space;
     let scale;
-    let vAlign;
+    let yAlign;
     let brac;
     let fullContentBounds;
     const defaultOptions = {
@@ -1735,18 +1735,18 @@ export class EquationFunctions {
       fit: 'min',
       contentScale: 0.7,
       brac: {},
-      vAlign: 'baseline',
+      yAlign: 'baseline',
       fullContentBounds: false,
     };
     if (Array.isArray(optionsOrArray)) {
       [
         order, left, content, right,
-        scale, fit, space, vAlign, brac, fullContentBounds,
+        scale, fit, space, yAlign, brac, fullContentBounds,
       ] = optionsOrArray;
     } else {
       ({
         order, left, content, right,
-        scale, fit, space, vAlign, brac, fullContentBounds,
+        scale, fit, space, yAlign, brac, fullContentBounds,
       } = optionsOrArray);
     }
     const optionsIn = {
@@ -1755,7 +1755,7 @@ export class EquationFunctions {
       order,
       contentScale: scale,
       brac,
-      vAlign,
+      yAlign,
       fullContentBounds,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);

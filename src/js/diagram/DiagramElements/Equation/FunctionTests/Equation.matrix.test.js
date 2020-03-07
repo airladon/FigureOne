@@ -54,7 +54,7 @@ describe('Equation Functions - Matrix', () => {
                 scale: 1,
                 fit: 'min',
                 space: [0.1, 0.1],
-                vAlign: 'baseline',
+                yAlign: 'baseline',
                 brac: {
                   inSize: true,
                   insideSpace: 0.1,
@@ -79,7 +79,7 @@ describe('Equation Functions - Matrix', () => {
               scale: 1,
               fit: 'min',
               space: [0.1, 0.1],
-              vAlign: 'baseline',
+              yAlign: 'baseline',
               brac: {
                 inSize: true,
                 insideSpace: 0.1,
@@ -133,7 +133,7 @@ describe('Equation Functions - Matrix', () => {
             scale: 1,
             fit: 'min',
             space: [0.1, 0.1],
-            vAlign: 'baseline',
+            yAlign: 'baseline',
             brac: {
               inSize: true,
               insideSpace: 0.1,
@@ -165,7 +165,7 @@ describe('Equation Functions - Matrix', () => {
                 scale: 1,
                 fit: 'min',
                 space: [0.1, 0.1],
-                vAlign: 'baseline',
+                yAlign: 'baseline',
                 brac: { insideSpace: 0.1 },
               },
             },
@@ -206,7 +206,7 @@ describe('Equation Functions - Matrix', () => {
             ]),
             scale: 1,
           },
-          vAlign: {
+          yAlign: {
             content: matrix([
               [2, 2], 'left', ['a', 'b', 'c', 'd'], 'right',
               1, 'min', [0.1, 0.1], 'middle', { insideSpace: 0.1 },
@@ -304,8 +304,8 @@ describe('Equation Functions - Matrix', () => {
       expect(round(newB.left)).toBe(round(newA.right + space.x));
       expect(round(newB.bottom)).toBe(round(newD.top + space.y));
     });
-    test('vAlign', () => {
-      eqn.showForm('vAlign');
+    test('yAlign', () => {
+      eqn.showForm('yAlign');
       diagram.setFirstTransform();
       const newA = eqn._a.getBoundingRect('diagram');
       const newB = eqn._b.getBoundingRect('diagram');

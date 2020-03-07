@@ -899,8 +899,8 @@ export class Equation extends DiagramElementCollection {
   //     if (subForm in this.eqn.forms[name]) {
   //       this.eqn.forms[name][subForm].arrange(
   //         scale,
-  //         this.eqn.formAlignment.hAlign,
-  //         this.eqn.formAlignment.vAlign,
+  //         this.eqn.formAlignment.xAlign,
+  //         this.eqn.formAlignment.yAlign,
   //         this.eqn.formAlignment.fixTo,
   //       );
   //     }

@@ -69,8 +69,8 @@ export type TypeTextOptions = {
   style?: string;
   size?: number;
   weight?: string;
-  hAlign?: string;
-  vAlign?: string;
+  xAlign?: string;
+  yAlign?: string;
   color?: Array<number>;
   pulse?: number;
   mods?: {},
@@ -326,8 +326,8 @@ export default class DiagramPrimitives {
       style: 'italic',
       size: 0.2,
       weight: '200',
-      hAlign: 'center',
-      vAlign: 'middle',
+      xAlign: 'center',
+      yAlign: 'middle',
       offset: new Point(0, 0),    // vertex space offset
       color: [1, 0, 0, 1],
       transform: new Transform('text').standard(),
@@ -352,7 +352,7 @@ export default class DiagramPrimitives {
     let fontToUse = o.font;
     if (fontToUse === null) {
       fontToUse = new DiagramFont(
-        o.family, o.style, o.size, o.weight, o.hAlign, o.vAlign, o.color,
+        o.family, o.style, o.size, o.weight, o.xAlign, o.yAlign, o.color,
       );
     }
     const dT = new DiagramText(o.offset, text, fontToUse);

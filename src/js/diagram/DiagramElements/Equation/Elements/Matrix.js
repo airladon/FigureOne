@@ -88,7 +88,7 @@ export default class Matrix extends BaseEquationFunction {
     const loc = location._dup();
     const aboveBaseline = scale * 0.07;
     const {
-      order, fit, space, contentScale, vAlign, fullContentBounds,
+      order, fit, space, contentScale, yAlign, fullContentBounds,
     } = this.options;
     const [numRows, numCols] = order;
 
@@ -145,13 +145,13 @@ export default class Matrix extends BaseEquationFunction {
         const x = cumWidth + colWidths[col] / 2 - bound.width / 2;
         let y = cumHeight + rowBounds.heights[row] / 2
             - (bound.ascent - bound.descent) / 2;
-        if (vAlign === 'baseline') {
+        if (yAlign === 'baseline') {
           y = cumHeight + rowBounds.descents[row];
         }
         cumWidth += colWidths[col] + space.x * scale;
         locs[row][col] = new Point(x, y);
       }
-      if (vAlign === 'baseline') {
+      if (yAlign === 'baseline') {
         cumHeight += rowBounds.descents[row] + rowBounds.ascents[row] + space.y * scale;
       } else {
         cumHeight += rowBounds.heights[row] + space.y * scale;
