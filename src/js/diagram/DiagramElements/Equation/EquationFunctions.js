@@ -443,7 +443,7 @@ export type TypeEquationFunctionRoot = {
  * the full bounds of the content even if `fullContentBounds=false` and the
  * brackets only surround a portion of the content (`false`)
 * @example
- * // For examples, a radical symbol is defined as an equation element
+ * // For examples, a strike symbol is defined as an equation element
  * eqn.addElements({
  *   x: { symbol: 'strike', style: 'cross' }
  * });
