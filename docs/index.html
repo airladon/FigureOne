@@ -1111,7 +1111,7 @@ will be ignored.</p>
   </div>
   
 
-  <p>In mathematics, an equation form is a specific arrangement of an equations
+  <p>In mathematics, an equation form is a specific arrangement of an equation's
 terms and operators. Different forms will have different arrangements, that
 that can be achieved by performing a series of operations to both sides of
 the equation.</p>
@@ -1130,6 +1130,10 @@ series of forms you want to animate through, that will be slightly different
 depending on the units (for example degrees vs radians). Defining one subForm
 as degrees, and a second as radians allows switching between subForms without
 complicating the overall equation navigation logic.</p>
+<p>Subforms can either be defined within the form definition object below, or
+as a key name with a value of a form definition object or array. You would
+only use it as an object property if you were making multiple calls to
+<a href="#equationaddforms">Equation#addForms</a>.</p>
 
     <div class='pre p1 fill-light mt0'>TypeEquationFormObject</div>
   
@@ -1254,7 +1258,7 @@ style (fromNext and fromPrev are prioritized over this)
 <span class="hljs-comment">// of the elements is colored blue in one form and red in the other</span>
 <span class="hljs-attr">forms</span>: {
   <span class="hljs-attr">form1</span>: {
-    <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'c'</span>]
+    <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'c'</span>],
     <span class="hljs-attr">elementMods</span>: {
       <span class="hljs-string">'a'</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
     }
@@ -1268,22 +1272,29 @@ style (fromNext and fromPrev are prioritized over this)
 }</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple form definition of two different forms of the same equation and one</span>
-<span class="hljs-comment">// of the elements is colored blue in one form and red in the other</span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example using subForms all defined at once</span>
 <span class="hljs-attr">forms</span>: {
   <span class="hljs-attr">form1</span>: {
-    <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'c'</span>]
-    <span class="hljs-attr">elementMods</span>: {
-      <span class="hljs-string">'a'</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
-    }
-  },
-  <span class="hljs-attr">form2</span>: {
-    <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-string">'minus'</span>, <span class="hljs-string">'b'</span>],
-    <span class="hljs-attr">elementMods</span>: {
-      <span class="hljs-string">'a'</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] },
-    }
+    <span class="hljs-attr">deg</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'deg'</span>],
+    <span class="hljs-attr">rad</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'rad'</span>],
   },
 }</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example using subForms all defined separately</span>
+<span class="hljs-keyword">const</span> eqn = <span class="hljs-keyword">new</span> Equation();
+eqn.addForms({
+  <span class="hljs-attr">deg</span>: {
+    <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'deg'</span>],
+    <span class="hljs-attr">subForm</span>:<span class="hljs-string">'deg'</span>,
+  }
+});
+eqn.addForms({
+  <span class="hljs-attr">rad</span>: {
+    <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'rad'</span>],
+    <span class="hljs-attr">subForm</span>:<span class="hljs-string">'rad'</span>,
+  }
+});</pre>
     
   
 
