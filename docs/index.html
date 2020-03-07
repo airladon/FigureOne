@@ -110,9 +110,29 @@
               
                 
                 <li><a
-                  href='#typeequationfunctionfrac'
+                  href='#typeequationfunctionfraction'
                   class="">
-                  TypeEquationFunctionFrac
+                  TypeEquationFunctionFraction
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeequationfunctionscale'
+                  class="">
+                  TypeEquationFunctionScale
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeequationfunctionbracket'
+                  class="">
+                  TypeEquationFunctionBracket
                   
                 </a>
                 
@@ -1023,8 +1043,8 @@ ascent and descent to either match width, height or fully contain the content (
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='typeequationfunctionfrac'>
-      TypeEquationFunctionFrac
+    <h3 class='fl m0' id='typeequationfunctionfraction'>
+      TypeEquationFunctionFraction
     </h3>
     
     
@@ -1033,7 +1053,7 @@ ascent and descent to either match width, height or fully contain the content (
 
   <p>Equation fraction</p>
 
-    <div class='pre p1 fill-light mt0'>TypeEquationFunctionFrac</div>
+    <div class='pre p1 fill-light mt0'>TypeEquationFunctionFraction</div>
   
     <p>
       Type:
@@ -1140,6 +1160,12 @@ horizontally by the this amount (
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// For examples, a vinculum symbol is defined as an equation element</span>
+eqn.addElements({
+  <span class="hljs-attr">v</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> }
+});</pre>
+    
+      
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition example</span>
  {
    <span class="hljs-attr">frac</span>: {
@@ -1151,12 +1177,335 @@ horizontally by the this amount (
      <span class="hljs-attr">denominatorSpace</span>: <span class="hljs-number">0.02</span>,
      <span class="hljs-attr">overhang</span>: <span class="hljs-number">0.03</span>,
      <span class="hljs-attr">offsetY</span>: <span class="hljs-number">0.04</span>,
+     <span class="hljs-attr">fullContentBounds</span>: <span class="hljs-literal">false</span>,
    },
  }</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Array definition example</span>
 { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'b'</span>] }</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeequationfunctionscale'>
+      TypeEquationFunctionScale
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation scale</p>
+<p>Scale an equation phrase</p>
+
+    <div class='pre p1 fill-light mt0'>TypeEquationFunctionScale</div>
+  
+    <p>
+      Type:
+      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Use full bounds with content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition</span>
+ {
+   <span class="hljs-attr">scale</span>: {
+     <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>],
+     <span class="hljs-attr">scale</span>: <span class="hljs-number">0.5</span>,
+     <span class="hljs-attr">fullContentBounds</span>: <span class="hljs-literal">false</span>,
+   },
+ }</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
+ { <span class="hljs-attr">scale</span>: [[<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>], <span class="hljs-number">0.5</span>] }</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeequationfunctionbracket'>
+      TypeEquationFunctionBracket
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation bracket</p>
+<p>Surround an equation phrase with brackets</p>
+
+    <div class='pre p1 fill-light mt0'>TypeEquationFunctionBracket</div>
+  
+    <p>
+      Type:
+      ({left: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, content: <a href="#typeequationphrase">TypeEquationPhrase</a>, right: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, insideSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, outsideSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, minContentHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, minContentDescent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, descent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>left</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : left bracket symbol
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>right</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : right bracket symbol
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ includes bracket symbols in overall size of phrase (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>insideSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space between brackets and content (
+<code>0.03</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>outsideSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space between brackets and neighboring phrases(
+<code>0.03</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>topSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : how far the brackets extend above the content (
+<code>0.05</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bottomSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : how far the brackets extend below the content (
+<code>0.05</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>minContentHeight</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : if content height is less than this, then this number will be used when sizing the brackets (unless it is 
+<code>null</code>
+) (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>minContentDescent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : if content descent is less than this, then this number will be used when sizing the brackets (unless it is 
+<code>null</code>
+) (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : force height of brackets (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>descent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : force descent of brackets (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : use full bounds of content, overriding any 
+<code>inSize=false</code>
+ properties for laying out the content within the brackets and sizing the brackets around the content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>useFullBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : make the bounds of this phrase equal to the full bounds of the content even if 
+<code>fullContentBounds=false</code>
+ and the brackets only surround a portion of the content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// For examples, two bracket symbols are defined as equation elements</span>
+eqn.addElements({
+  <span class="hljs-attr">lb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span> }
+  <span class="hljs-attr">rb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span> }
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition</span>
+ {
+   <span class="hljs-attr">brac</span>: {
+     <span class="hljs-attr">left</span>: <span class="hljs-string">'lb'</span>,
+     <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
+     <span class="hljs-attr">right</span>: <span class="hljs-string">'rb'</span>,
+     <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
+     <span class="hljs-attr">insideSpace</span>: <span class="hljs-number">0.1</span>,
+     <span class="hljs-attr">outsideSpace</span>: <span class="hljs-number">0.1</span>,
+     <span class="hljs-attr">topSpace</span>: <span class="hljs-number">0.1</span>,
+     <span class="hljs-attr">bottomSpace</span>: <span class="hljs-number">0.1</span>,
+     <span class="hljs-attr">minContentHeight</span>: <span class="hljs-number">0.1</span>,
+     <span class="hljs-attr">minContentDescent</span>: <span class="hljs-number">0.1</span>,
+     <span class="hljs-attr">height</span>: <span class="hljs-number">0.1</span>,
+     <span class="hljs-attr">descent</span>: <span class="hljs-number">0.1</span>,
+     <span class="hljs-attr">fullContentBounds</span>: <span class="hljs-literal">false</span>,
+     <span class="hljs-attr">useFullBounds</span>: <span class="hljs-literal">false</span>,
+   },
+ }</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
+ { <span class="hljs-attr">brac</span>: [<span class="hljs-string">'lb'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-string">'rb'</span>] }</pre>
     
   
 
@@ -1203,7 +1552,7 @@ horizontally by the this amount (
 can either be the entirety of the form definition, or a series of nested
 phrases.</p>
 <ul>
-<li>An object or array definition (e.g. <a href="#typeequationfunctionfrac">TypeEquationFunctionFrac</a>)</li>
+<li>An object or array definition (e.g. <a href="#typeequationfunctionfraction">TypeEquationFunctionFraction</a>)</li>
 <li>A string that represents an equation element</li>
 <li>An array of <a href="#typeequationphrase">TypeEquationPhrase</a></li>
 </ul>
@@ -1212,7 +1561,7 @@ phrases.</p>
   
     <p>
       Type:
-      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#typeequationfunctionfrac">TypeEquationFunctionFrac</a>} | {strike: TypeStrikeObject} | TypeStrikeArray | {box: TypeBoxObject} | TypeBoxArray | {root: TypeRootObject} | TypeRootArray | {brac: TypeBracketObject} | TypeBracketArray | {sub: TypeSubObject} | TypeSubArray | {sup: TypeSupObject} | TypeSupArray | {supSub: TypeSupSubObject} | TypeSupSubArray | {topBar: TypeBarObject} | TypeBarArray | {bottomBar: TypeBarObject} | TypeBarArray | {annotate: TypeAnnotateObject} | {topComment: TypeCommentObject} | TypeCommentArray | {bottomComment: TypeCommentObject} | TypeCommentArray | {padding: TypePaddingObject} | TypePaddingArray | {bar: TypeBarObject} | TypeBarArray | {scale: TypeScaleObject} | TypeScaleArray | {container: <a href="#typeequationfunctioncontainer">TypeEquationFunctionContainer</a>} | {matrix: TypeMatrixObject} | TypeMatrixArray | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | DiagramElementPrimitive | DiagramElementCollection | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#typeequationfunctionfraction">TypeEquationFunctionFraction</a>} | {strike: TypeStrikeObject} | TypeStrikeArray | {box: TypeBoxObject} | TypeBoxArray | {root: TypeRootObject} | TypeRootArray | {brac: <a href="#typeequationfunctionbracket">TypeEquationFunctionBracket</a>} | {sub: TypeSubObject} | TypeSubArray | {sup: TypeSupObject} | TypeSupArray | {supSub: TypeSupSubObject} | TypeSupSubArray | {topBar: TypeBarObject} | TypeBarArray | {bottomBar: TypeBarObject} | TypeBarArray | {annotate: TypeAnnotateObject} | {topComment: TypeCommentObject} | TypeCommentArray | {bottomComment: TypeCommentObject} | TypeCommentArray | {padding: TypePaddingObject} | TypePaddingArray | {bar: TypeBarObject} | TypeBarArray | {scale: <a href="#typeequationfunctionscale">TypeEquationFunctionScale</a>} | {container: <a href="#typeequationfunctioncontainer">TypeEquationFunctionContainer</a>} | {matrix: TypeMatrixObject} | TypeMatrixArray | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | DiagramElementPrimitive | DiagramElementCollection | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
     </p>
   
   
@@ -3442,7 +3791,7 @@ eqn.addForms({
 
   <p>Equation fraction function</p>
 
-    <div class='pre p1 fill-light mt0'>frac(optionsOrArray: <a href="#typeequationfunctionfrac">TypeEquationFunctionFrac</a>)</div>
+    <div class='pre p1 fill-light mt0'>frac(optionsOrArray: <a href="#typeequationfunctionfraction">TypeEquationFunctionFraction</a>)</div>
   
   
 
@@ -3459,7 +3808,7 @@ eqn.addForms({
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>optionsOrArray</span> <code class='quiet'>(<a href="#typeequationfunctionfrac">TypeEquationFunctionFrac</a>)</code>
+            <span class='code bold'>optionsOrArray</span> <code class='quiet'>(<a href="#typeequationfunctionfraction">TypeEquationFunctionFraction</a>)</code>
 	    
           </div>
           

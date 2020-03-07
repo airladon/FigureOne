@@ -51,7 +51,7 @@ export function getDiagramElement(
  * can either be the entirety of the form definition, or a series of nested
  * phrases.
  *
- *  * An object or array definition (e.g. {@link TypeEquationFunctionFrac})
+ *  * An object or array definition (e.g. {@link TypeEquationFunctionFraction})
  *  * A string that represents an equation element
  *  * An array of {@link TypeEquationPhrase}
  *
@@ -72,11 +72,11 @@ export function getDiagramElement(
 export type TypeEquationPhrase =
   string
   | number
-  | { frac: TypeEquationFunctionFrac }
+  | { frac: TypeEquationFunctionFraction }
   | { strike: TypeStrikeObject } | TypeStrikeArray
   | { box: TypeBoxObject } | TypeBoxArray
   | { root: TypeRootObject } | TypeRootArray
-  | { brac: TypeBracketObject } | TypeBracketArray
+  | { brac: TypeEquationFunctionBracket }
   | { sub: TypeSubObject } | TypeSubArray
   | { sup: TypeSupObject } | TypeSupArray
   | { supSub: TypeSupSubObject } | TypeSupSubArray
@@ -167,7 +167,11 @@ export type TypeEquationFunctionContainer = {
  * horizontally by the this amount (`0.05`)
  * @property {number} [offsetY] Offset fraction in y (`0.07`)
  * @property {boolean} [fullContentBounds] Use full bounds with content (`false`)
- *
+ * @example
+ * // For examples, a vinculum symbol is defined as an equation element
+ * eqn.addElements({
+ *   v: { symbol: 'vinculum' }
+ * });
  * @example
  * // Full object definition example
  *  {
@@ -180,13 +184,14 @@ export type TypeEquationFunctionContainer = {
  *      denominatorSpace: 0.02,
  *      overhang: 0.03,
  *      offsetY: 0.04,
+ *      fullContentBounds: false,
  *    },
  *  }
  * @example
  * // Array definition example
  * { frac: ['a', 'v', 'b'] }
  */
-export type TypeEquationFunctionFrac = {
+export type TypeEquationFunctionFraction = {
   numerator: TypeEquationPhrase;
   symbol: string;
   denominator: TypeEquationPhrase;
@@ -239,8 +244,57 @@ export type TypeEquationFunctionScale = {
   ?boolean,
 ];
 
+/**
+ * Equation bracket
+ *
+ * Surround an equation phrase with brackets
+ *
+ * @property {string} [left] left bracket symbol
+ * @property {TypeEquationPhrase} [content]
+ * @property {string} [right] right bracket symbol
+ * @property {boolean} [inSize] `true` includes bracket symbols in overall size of phrase (`true`)
+ * @property {number} [insideSpace] space between brackets and content (`0.03`)
+ * @property {number} [outsideSpace] space between brackets and neighboring phrases(`0.03`)
+ * @property {number} [topSpace] how far the brackets extend above the content (`0.05`)
+ * @property {number} [bottomSpace] how far the brackets extend below the content (`0.05`)
+ * @property {number} [minContentHeight] if content height is less than this, then this number will be used when sizing the brackets (unless it is `null`) (`null`)
+ * @property {number} [minContentDescent] if content descent is less than this, then this number will be used when sizing the brackets (unless it is `null`) (`null`)
+ * @property {number} [height] force height of brackets (`null`)
+ * @property {number} [descent] force descent of brackets (`null`)
+ * @property {boolean} [fullContentBounds] use full bounds of content, overriding any `inSize=false` properties for laying out the content within the brackets and sizing the brackets around the content (`false`)
+ * @property {boolean} [useFullBounds] make the bounds of this phrase equal to the full bounds of the content even if `fullContentBounds=false` and the brackets only surround a portion of the content (`false`)
+ * @example
+ * // For examples, two bracket symbols are defined as equation elements
+ * eqn.addElements({
+ *   lb: { symbol: 'bracket', side: 'left' }
+ *   rb: { symbol: 'bracket', side: 'right' }
+ * });
+ * @example
+ * // Full object definition
+ *  {
+ *    brac: {
+ *      left: 'lb',
+ *      content: 'a',
+ *      right: 'rb',
+ *      inSize: true,
+ *      insideSpace: 0.1,
+ *      outsideSpace: 0.1,
+ *      topSpace: 0.1,
+ *      bottomSpace: 0.1,
+ *      minContentHeight: 0.1,
+ *      minContentDescent: 0.1,
+ *      height: 0.1,
+ *      descent: 0.1,
+ *      fullContentBounds: false,
+ *      useFullBounds: false,
+ *    },
+ *  }
+ * @example
+ * // Example array definition
+ *  { brac: ['lb', 'a', 'rb'] }
+ */
 
-export type TypeBracketObject = {
+export type TypeEquationFunctionBracket = {
   left?: string;
   content: TypeEquationPhrase;
   right?: string;
@@ -255,9 +309,8 @@ export type TypeBracketObject = {
   descent?: number;
   fullContentBounds?: boolean;
   useFullBounds?: boolean;
-};
-export type TypeBracketArray = [
-  ?string,
+} | [
+  string,
   TypeEquationPhrase,
   ?string,
   ?boolean,
@@ -611,7 +664,7 @@ export type TypeMatrixObject = {
   fit?: 'max' | 'min',
   space?: TypeParsablePoint,
   vAlign?: 'baseline' | 'middle',
-  brac?: TypeBracketObject,
+  brac?: TypeEquationFunctionBracket,
   fullContentBounds?: boolean,
 };
 
@@ -624,7 +677,7 @@ export type TypeMatrixArray = [
   ?'max' | 'min',
   ?TypeParsablePoint,
   ?'baseline' | 'middle',
-  ?TypeBracketObject,
+  ?TypeEquationFunctionBracket,
   ?boolean,
 ];
 
@@ -925,7 +978,7 @@ export class EquationFunctions {
   }
 
   brac(
-    optionsOrArray: TypeBracketObject | TypeBracketArray,
+    optionsOrArray: TypeEquationFunctionBracket,
   ) {
     let content;
     let left;
@@ -1304,7 +1357,7 @@ export class EquationFunctions {
    * });
    */
   frac(
-    optionsOrArray: TypeEquationFunctionFrac,
+    optionsOrArray: TypeEquationFunctionFraction,
   ) {
     let numerator;
     let denominator;
