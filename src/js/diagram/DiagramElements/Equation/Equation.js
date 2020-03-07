@@ -153,16 +153,15 @@ type TypeFormAnimationProperties = {
  * elements have, and some animation properties for when animating to this form.
  *
  * In the {@link Equation} object, forms are defined with form names, and
- * sub-form names. Most of the time, the subForm name can be ignored.
+ * subForm names. Most of the time, the subForm name can be ignored.
  * However, it is useful when dealing with units. Sometimes you will have a
  * series of forms you want to animate through, that will be slightly different
  * depending on the units (for example degrees vs radians). Defining one subForm
  * as degrees, and a second as radians allows switching between subForms without
  * complicating the overall equation navigation logic.
  *
- * Subforms can either be defined within the form definition object below, or
- * as a key name with a value of a form definition object or array. You would
- * only use it as an object property if you were making multiple calls to
+ * See the examples below for how to define subForms.
+ *
  * {@link Equation#addForms}.
  *
  * @property {TypeEquationPhrase} content - the equation phrase of the form
@@ -227,6 +226,53 @@ type TypeFormAnimationProperties = {
  *     subForm:'rad',
  *   }
  * });
+ * @example
+ * // Example showing all form options
+ * forms: {
+ *   form1: {
+ *     content: ['a', 'b', 'c'],
+ *     subForm: 'deg',
+ *     scale: 1.2,
+ *     alignment: {
+ *       fixTo: 'b',
+ *       alignH: 'center',
+ *       alignV: 'bottom',
+ *     },
+ *     description: '|Form| 1 |description|',
+ *     modifiers: {
+ *       Form: html.highlight([1, 0, 0, 0]),
+ *     },
+ *     elementMods: {
+ *       a: {
+ *         color: color1,
+ *         isTouchable: true,
+ *       },
+ *     },
+ *     duration: 1,
+ *     translation: {
+ *       a: {
+ *         style: 'curved',
+ *         direction: 'up',
+ *         mag: 0.95,
+ *       },
+ *       b: ['curved', 'down', 0.45],
+ *     },
+ *     fromPrev: {
+ *       duration: null,
+ *       translation: {
+ *         a: ['curved', 'down', 0.2],
+ *         b: ['curved', 'down', 0.2],
+ *       },
+ *     },
+ *     fromNext: {
+ *       duration: 2,
+ *       translation: {
+ *         a: ['curved', 'down', 0.2],
+ *         b: ['curved', 'down', 0.2],
+ *       },
+ *     },
+ *   },
+ * }
  */
 type TypeEquationFormObject = {
   content: TypeEquationPhrase,
