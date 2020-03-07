@@ -16,8 +16,8 @@ type TypeTextInputOptions = {
   family: ?string;
   weight: ?number;
   style: ?'normal' | 'italic',
-  alignH: ?'left' | 'center' | 'right',
-  alignV: ?'top' | 'bottom' | 'middle' | 'baseline',
+  xAlign: ?'left' | 'center' | 'right',
+  yAlign: ?'top' | 'bottom' | 'middle' | 'baseline',
   color: ?Array<number>,
   transform: ?Transform,
   position: ?Point,

@@ -15,8 +15,8 @@ type TypeVertexInputTextOptions = {
   family: ?string;
   weight: ?number;
   style: ?'normal' | 'italic',
-  alignH: ?'left' | 'center' | 'right',
-  alignV: ?'top' | 'bottom' | 'middle' | 'baseline',
+  xAlign: ?'left' | 'center' | 'right',
+  yAlign: ?'top' | 'bottom' | 'middle' | 'baseline',
 };
 
 // type TypeTextOptions = {
@@ -25,8 +25,8 @@ type TypeVertexInputTextOptions = {
 //   family: string;
 //   weight: number;
 //   style: 'normal' | 'italic',
-//   alignH: 'left' | 'center' | 'right',
-//   alignV: 'top' | 'bottom' | 'middle' | 'baseline',
+//   xAlign: 'left' | 'center' | 'right',
+//   yAlign: 'top' | 'bottom' | 'middle' | 'baseline',
 // };
 
 class VertexText extends VertexObject {
@@ -42,8 +42,8 @@ class VertexText extends VertexObject {
   family: string;
   weight: number;
   style: 'normal' | 'italic';
-  alignH: 'left' | 'center' | 'right';
-  alignV: 'top' | 'bottom' | 'middle' | 'baseline';
+  xAlign: 'left' | 'center' | 'right';
+  yAlign: 'top' | 'bottom' | 'middle' | 'baseline';
   canvas: HTMLCanvasElement;
   ascent: number;
   descent: number;
@@ -63,16 +63,16 @@ class VertexText extends VertexObject {
       family: 'Helvetica',
       style: 'normal',
       weight: 400,
-      alignH: 'center',
-      alignV: 'alphabetic',
+      xAlign: 'center',
+      yAlign: 'alphabetic',
       id: generateUniqueId('vertexText'),
     };
     const options = joinObjects({}, defaultTextOptions, textOptions);
     this.size = options.size;
     this.text = options.text;
     this.family = options.family;
-    this.alignH = options.alignH;
-    this.alignV = options.alignV;
+    this.xAlign = options.xAlign;
+    this.yAlign = options.yAlign;
     this.style = options.style;
     this.weight = options.weight;
     this.canvas = document.createElement('canvas');
@@ -97,16 +97,16 @@ class VertexText extends VertexObject {
     const width = this.canvas.width * pixelToVertexSpaceScale.x;
     const height = this.canvas.height * pixelToVertexSpaceScale.y;
     const start = new Point(0, 0);
-    if (this.alignH === 'center') {
+    if (this.xAlign === 'center') {
       start.x = -width / 2;
-    } else if (this.alignH === 'right') {
+    } else if (this.xAlign === 'right') {
       start.x = -width;
     }
-    if (this.alignV === 'baseline') {
+    if (this.yAlign === 'baseline') {
       start.y = -height * 0.25;
-    } else if (this.alignV === 'top') {
+    } else if (this.yAlign === 'top') {
       start.y = -height;
-    } else if (this.alignV === 'middle') {
+    } else if (this.yAlign === 'middle') {
       start.y = -height / 2;
     }
 

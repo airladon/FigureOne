@@ -481,8 +481,8 @@ export default class DiagramPrimitives {
     id: string = `id__temp_${Math.round(Math.random() * 10000)}`,
     classes: string = '',
     location: Point = new Point(0, 0),
-    alignV: 'top' | 'bottom' | 'middle' = 'middle',
-    alignH: 'left' | 'right' | 'center' = 'left',
+    yAlign: 'top' | 'bottom' | 'middle' = 'middle',
+    xAlign: 'left' | 'right' | 'center' = 'left',
   ) {
     const element = document.createElement('div');
     if (classes && element) {
@@ -497,7 +497,7 @@ export default class DiagramPrimitives {
     element.style.position = 'absolute';
     element.setAttribute('id', id);
     this.htmlCanvas.appendChild(element);
-    const hT = new HTMLObject(this.htmlCanvas, id, new Point(0, 0), alignV, alignH);
+    const hT = new HTMLObject(this.htmlCanvas, id, new Point(0, 0), yAlign, xAlign);
     const diagramElement = new DiagramElementPrimitive(
       hT,
       new Transform().scale(1, 1).translate(location.x, location.y),
@@ -514,21 +514,21 @@ export default class DiagramPrimitives {
   //   id: string = generateUniqueId('id__html_text_'),
   //   classes: string = '',
   //   location: Point = new Point(0, 0),
-  //   alignV: 'top' | 'bottom' | 'middle' = 'middle',
-  //   alignH: 'left' | 'right' | 'center' = 'left',
+  //   yAlign: 'top' | 'bottom' | 'middle' = 'middle',
+  //   xAlign: 'left' | 'right' | 'center' = 'left',
   // ) {
   //   // const inside = document.createTextNode(textInput);
   //   const inside = document.createElement('div');
   //   inside.innerHTML = textInput;
-  //   return this.htmlElement(inside, id, classes, location, alignV, alignH);
+  //   return this.htmlElement(inside, id, classes, location, yAlign, xAlign);
   // }
 
   htmlImage(...optionsIn: Array<{
     id?: string,
     classes?: string,
     position?: Point,
-    alignV?: 'top' | 'bottom' | 'middle',
-    alignH?: 'left' | 'right' | 'center',
+    yAlign?: 'top' | 'bottom' | 'middle',
+    xAlign?: 'left' | 'right' | 'center',
     src?: string,
     color?: Array<number>,
     pulse?: number,
@@ -537,8 +537,8 @@ export default class DiagramPrimitives {
       id: generateUniqueId('id__html_image_'),
       classes: '',
       position: new Point(0, 0),
-      alignV: 'middle',
-      alignH: 'left',
+      yAlign: 'middle',
+      xAlign: 'left',
       src: '',
       // color: [1, 0, 0, 1],
     };
@@ -548,9 +548,9 @@ export default class DiagramPrimitives {
 
     // setHTML(inside, options.text, options.modifiers);
     const {
-      id, classes, position, alignV, alignH,
+      id, classes, position, yAlign, xAlign,
     } = options;
-    const element = this.htmlElement(image, id, classes, getPoint(position), alignV, alignH);
+    const element = this.htmlElement(image, id, classes, getPoint(position), yAlign, xAlign);
     if (options.color != null) {
       element.setColor(options.color);
     }
@@ -567,8 +567,8 @@ export default class DiagramPrimitives {
     id?: string,
     classes?: string,
     position?: Point,
-    alignV?: 'top' | 'bottom' | 'middle',
-    alignH?: 'left' | 'right' | 'center',
+    yAlign?: 'top' | 'bottom' | 'middle',
+    xAlign?: 'left' | 'right' | 'center',
     modifiers: Object;
     color?: Array<number>,
     pulse?: number,
@@ -578,8 +578,8 @@ export default class DiagramPrimitives {
       id: generateUniqueId('id__html_text_'),
       classes: '',
       position: new Point(0, 0),
-      alignV: 'middle',
-      alignH: 'left',
+      yAlign: 'middle',
+      xAlign: 'left',
       // color: [1, 0, 0, 1],
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -588,9 +588,9 @@ export default class DiagramPrimitives {
     // console.log(options.textInput, htmlText)
     setHTML(inside, options.text, options.modifiers);
     const {
-      id, classes, position, alignV, alignH,
+      id, classes, position, yAlign, xAlign,
     } = options;
-    const element = this.htmlElement(inside, id, classes, getPoint(position), alignV, alignH);
+    const element = this.htmlElement(inside, id, classes, getPoint(position), yAlign, xAlign);
     if (options.color != null) {
       element.setColor(options.color);
     }
@@ -833,8 +833,8 @@ export default class DiagramPrimitives {
   // }
 
   rectangle(...optionsIn: Array<{
-    alignV?: 'bottom' | 'middle' | 'top' | number,
-    alignH?: 'left' | 'center' | 'right' | number,
+    yAlign?: 'bottom' | 'middle' | 'top' | number,
+    xAlign?: 'left' | 'center' | 'right' | number,
     width?: number,
     height?: number,
     fill?: boolean,
@@ -848,8 +848,8 @@ export default class DiagramPrimitives {
     pulse?: number,
   }>) {
     const defaultOptions = {
-      alignV: 'middle',
-      alignH: 'center',
+      yAlign: 'middle',
+      xAlign: 'center',
       width: 1,
       height: 1,
       corner: {
@@ -869,7 +869,7 @@ export default class DiagramPrimitives {
       options.reference = getPoint(options.reference);
     }
     const element = RectangleFilled(
-      this.webgl, options.alignH, options.alignV, options.width, options.height,
+      this.webgl, options.xAlign, options.yAlign, options.width, options.height,
       options.corner.radius, options.corner.sides, options.color, options.transform, this.limits,
     );
     if (options.pulse != null && typeof element.pulseDefault !== 'function') {

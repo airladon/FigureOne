@@ -12,8 +12,8 @@ export default class VertexRectangleFilled extends VertexObject {
   start: Point;
   constructor(
     webgl: Array<WebGLInstance>,
-    alignH: 'left' | 'center' | 'right' | number,
-    alignV: 'bottom' | 'middle' | 'top' | number,
+    xAlign: 'left' | 'center' | 'right' | number,
+    yAlign: 'bottom' | 'middle' | 'top' | number,
     width: number = 1,
     height: number = 1,
     cornerRadius: number = 0,
@@ -68,23 +68,23 @@ export default class VertexRectangleFilled extends VertexObject {
       ...makeCorner(rad, sides, Math.PI / 2 * 3, new Point(width / 2 - rad, -height / 2 + rad)),
     ];
 
-    if (alignV === 'top') {
+    if (yAlign === 'top') {
       points = points.map(p => p.add(0, -height / 2));
-    } else if (alignV === 'bottom') {
+    } else if (yAlign === 'bottom') {
       points = points.map(p => p.add(0, height / 2));
-    } else if (alignV === 'middle') {
+    } else if (yAlign === 'middle') {
       points = points.map(p => p.add(0, 0));
     } else {
-      points = points.map(p => p.add(0, alignV));
+      points = points.map(p => p.add(0, yAlign));
     }
-    if (alignH === 'left') {
+    if (xAlign === 'left') {
       points = points.map(p => p.add(width / 2, 0));
-    } else if (alignH === 'right') {
+    } else if (xAlign === 'right') {
       points = points.map(p => p.add(-width / 2, 0));
-    } else if (alignH === 'center') {
+    } else if (xAlign === 'center') {
       points = points.map(p => p.add(0, 0));
     } else {
-      points = points.map(p => p.add(alignH, alignH));
+      points = points.map(p => p.add(xAlign, xAlign));
     }
 
     points.forEach((p) => {

@@ -19,8 +19,8 @@ class DiagramFont {
   weight: string;
   style: string;
   family: string;
-  alignH: 'left' | 'center' | 'right';
-  alignV: 'top' | 'bottom' | 'middle' | 'alphabetic';
+  xAlign: 'left' | 'center' | 'right';
+  yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic';
   color: Array<number> | null;
   opacity: number;
 
@@ -29,16 +29,16 @@ class DiagramFont {
     style: string = '',
     size: number = 1,
     weight: string = '200',
-    alignH: 'left' | 'center' | 'right' = 'center',
-    alignV: 'top' | 'bottom' | 'middle' | 'alphabetic' = 'middle',
+    xAlign: 'left' | 'center' | 'right' = 'center',
+    yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' = 'middle',
     color: Array<number> | null = null,
   ) {
     this.family = family;
     this.style = style;
     this.size = size;
     this.weight = weight;
-    this.alignH = alignH;
-    this.alignV = alignV;
+    this.xAlign = xAlign;
+    this.yAlign = yAlign;
     this.opacity = 1;
     this.setColor(color);
     // if (Array.isArray(color)) {
@@ -59,8 +59,8 @@ class DiagramFont {
 
   set(ctx: CanvasRenderingContext2D, scalingFactor: number = 1) {
     ctx.font = `${this.style} ${this.weight} ${this.size * scalingFactor}px ${this.family}`;
-    ctx.textAlign = this.alignH;
-    ctx.textBaseline = this.alignV;
+    ctx.textAlign = this.xAlign;
+    ctx.textBaseline = this.yAlign;
   }
 
   _dup() {
@@ -69,8 +69,8 @@ class DiagramFont {
       this.style,
       this.size,
       this.weight,
-      this.alignH,
-      this.alignV,
+      this.xAlign,
+      this.yAlign,
       this.color,
     );
   }
@@ -324,17 +324,17 @@ class TextObject extends DrawingObject {
     const height = diagramText.font.size * scalingFactor * 1.2;
     let bottom = y + height * 0.1;
     let left = x - width * 0.1;
-    if (diagramText.font.alignV === 'baseline') {
+    if (diagramText.font.yAlign === 'baseline') {
       bottom = y + height * 0.2;
-    } else if (diagramText.font.alignV === 'top') {
+    } else if (diagramText.font.yAlign === 'top') {
       bottom = y + height;
-    } else if (diagramText.font.alignV === 'middle') {
+    } else if (diagramText.font.yAlign === 'middle') {
       bottom = y + height / 2;
     }
 
-    if (diagramText.font.alignH === 'center') {
+    if (diagramText.font.xAlign === 'center') {
       left -= width / 2;
-    } else if (diagramText.font.alignH === 'right') {
+    } else if (diagramText.font.xAlign === 'right') {
       left -= width;
     }
 
@@ -444,29 +444,29 @@ class TextObject extends DrawingObject {
     let left = 0;
     let right = 0;
 
-    if (text.font.alignH === 'left') {
+    if (text.font.xAlign === 'left') {
       right = width;
     }
-    if (text.font.alignH === 'center') {
+    if (text.font.xAlign === 'center') {
       left = width / 2;
       right = width / 2;
     }
-    if (text.font.alignH === 'right') {
+    if (text.font.xAlign === 'right') {
       left = width;
     }
-    if (text.font.alignV === 'alphabetic' || text.font.alignV === 'baseline') {
+    if (text.font.yAlign === 'alphabetic' || text.font.yAlign === 'baseline') {
       asc = ascent;
       des = descent;
     }
-    if (text.font.alignV === 'top') {
+    if (text.font.yAlign === 'top') {
       asc = 0;
       des = height;
     }
-    if (text.font.alignV === 'bottom') {
+    if (text.font.yAlign === 'bottom') {
       asc = height;
       des = 0;
     }
-    if (text.font.alignV === 'middle') {
+    if (text.font.yAlign === 'middle') {
       asc = height / 2;
       des = height / 2;
     }

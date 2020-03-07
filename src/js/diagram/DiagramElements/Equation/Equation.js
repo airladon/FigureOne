@@ -64,8 +64,8 @@ export type TypeEquationElements = {
 
 // type TypeFormAlignment = {
 //   fixTo?: Point | string,
-//   alignH?: TypeHAlign | null,
-//   alignV?: TypeVAlign | null,
+//   xAlign?: TypeHAlign | null,
+//   yAlign?: TypeVAlign | null,
 // };
 
 /**
@@ -73,8 +73,8 @@ export type TypeEquationElements = {
  */
 type TypeFormAlignment = {
   fixTo: DiagramElementPrimitive | DiagramElementCollection | Point;
-  alignH: TypeHAlign;
-  alignV: TypeVAlign;
+  xAlign: TypeHAlign;
+  yAlign: TypeVAlign;
 };
 
 /**
@@ -235,8 +235,8 @@ type TypeFormAnimationProperties = {
  *     scale: 1.2,
  *     alignment: {
  *       fixTo: 'b',
- *       alignH: 'center',
- *       alignV: 'bottom',
+ *       xAlign: 'center',
+ *       yAlign: 'bottom',
  *     },
  *     description: '|Form| 1 |description|',
  *     modifiers: {
@@ -352,7 +352,7 @@ type TypeFormRestart = {
  * @property {number} [scale] - default: 0.7
  * @property {TypeEquationElements} [elements] - default: {}
  * @property {TypeFormAlignment} [defaultFormAlignment] - default:
- * { fixTo: new {@link Point}(0, 0), alignH: 'left', alignV: 'baseline}
+ * { fixTo: new {@link Point}(0, 0), xAlign: 'left', yAlign: 'baseline}
  * @property {TypeEquationForms} [forms] - default: {}
  * @property {Array<string> | Object.<Array<string>>} [formSeries] - an object
  * with each key being a form series name, and each value an array for form
@@ -523,8 +523,8 @@ export class Equation extends DiagramElementCollection {
     //
     defaultFormAlignment: {
       fixTo: DiagramElementPrimitive | DiagramElementCollection | Point;
-      alignH: TypeHAlign;
-      alignV: TypeVAlign;
+      xAlign: TypeHAlign;
+      yAlign: TypeVAlign;
     };
 
     isAnimating: boolean;
@@ -567,8 +567,8 @@ export class Equation extends DiagramElementCollection {
       scale: 0.7,
       defaultFormAlignment: {
         fixTo: new Point(0, 0),
-        alignH: 'left',
-        alignV: 'baseline',
+        xAlign: 'left',
+        yAlign: 'baseline',
       },
       elements: {},
       forms: {},
@@ -1222,8 +1222,8 @@ export class Equation extends DiagramElementCollection {
     form[subForm].content = content;
     form[subForm].arrange(
       optionsToUse.scale,
-      optionsToUse.alignment.alignH,
-      optionsToUse.alignment.alignV,
+      optionsToUse.alignment.xAlign,
+      optionsToUse.alignment.yAlign,
       optionsToUse.alignment.fixTo,
     );
     // const { addToSeries } = optionsToUse;

@@ -126,8 +126,8 @@ describe('Different ways to make an equation', () => {
           },
           defaultFormAlignment: {
             fixTo: { x: 2, y: 2 },    // Points can also be defined as objects
-            alignH: 'right',
-            alignV: 'top',
+            xAlign: 'right',
+            yAlign: 'top',
           },
           scale: 0.45,
           forms: {
@@ -235,8 +235,8 @@ describe('Different ways to make an equation', () => {
           color: color1,
           defaultFormAlignment: {
             fixTo: 'a',
-            alignV: 'top',
-            alignH: 'center',
+            yAlign: 'top',
+            xAlign: 'center',
           },
         });
         eqn.addElements({
@@ -250,24 +250,24 @@ describe('Different ways to make an equation', () => {
             content: ['a', 'space1', 'b'],
             alignment: {
               fixTo: new Point(0, 0),
-              alignH: 'left',
-              alignV: 'baseline',
+              xAlign: 'left',
+              yAlign: 'baseline',
             },
           },
           aRightMiddle: {
             content: ['a', 'space1', 'b'],
             alignment: {
               fixTo: 'a',
-              alignH: 'right',
-              alignV: 'middle',
+              xAlign: 'right',
+              yAlign: 'middle',
             },
           },
           bRightBottom: {
             content: ['a', 'space1', 'b'],
             alignment: {
               fixTo: 'b',
-              alignH: 'right',
-              alignV: 'bottom',
+              xAlign: 'right',
+              yAlign: 'bottom',
             },
           },
         });
@@ -350,8 +350,8 @@ describe('Different ways to make an equation', () => {
 
     // Check default form alignment
     expect(eqn.eqn.defaultFormAlignment.fixTo).toEqual(new Point(2, 2));
-    expect(eqn.eqn.defaultFormAlignment.alignH).toEqual('right');
-    expect(eqn.eqn.defaultFormAlignment.alignV).toEqual('top');
+    expect(eqn.eqn.defaultFormAlignment.xAlign).toEqual('right');
+    expect(eqn.eqn.defaultFormAlignment.yAlign).toEqual('top');
     expect(eqn.eqn.scale).toEqual(0.45);
     tools.cleanUIDs(eqn);
     eqn._a.parent = null;
