@@ -51,7 +51,7 @@ export function getDiagramElement(
  * can either be the entirety of the form definition, or a series of nested
  * phrases.
  *
- *  * An object or array definition (e.g. {@link TypeFracObject} or {@link TypeFracArray})
+ *  * An object or array definition (e.g. {@link TypeEquationFunctionFrac})
  *  * A string that represents an equation element
  *  * An array of {@link TypeEquationPhrase}
  *
@@ -72,7 +72,7 @@ export function getDiagramElement(
 export type TypeEquationPhrase =
   string
   | number
-  | { frac: TypeFracObject } | TypeFracArray
+  | { frac: TypeEquationFunctionFrac }
   | { strike: TypeStrikeObject } | TypeStrikeArray
   | { box: TypeBoxObject } | TypeBoxArray
   | { root: TypeRootObject } | TypeRootArray
@@ -88,7 +88,7 @@ export type TypeEquationPhrase =
   | { padding: TypePaddingObject } | TypePaddingArray
   | { bar: TypeBarObject } | TypeBarArray
   | { scale: TypeScaleObject } | TypeScaleArray
-  | { container: TypeContainerObject } | TypeContainerArray
+  | { container: TypeEquationFunctionContainer }
   | { matrix: TypeMatrixObject } | TypeMatrixArray
   | Array<TypeEquationPhrase>
   | DiagramElementPrimitive
@@ -98,26 +98,41 @@ export type TypeEquationPhrase =
   | BaseAnnotationFunction;
 
 /**
- * Container object definition
+ * Equation container
  *
  * A container is useful to fix spacing around content as it changes between
  * equation forms.
  *
- * See {@link EquationFunctions#container}
- *
  * @property {TypeEquationPhrase} content
- * @property {number} [width] - default: `null`
- * @property {number} [descent] - default: `null`
- * @property {number} [ascent] - default: `null`
- * @property {'left' | 'center' | 'right' | number} [xAlign] - default: `'center'`
- * @property {'bottom' | 'middle' | 'top' | 'baseline' | number} [yAlign] - default: `'baseline'`
- * @property {'width' | 'height' | 'contain'} [fit] - default: `null` - fit width,
- * ascent and descent to either match width, height or fully contain the content
- * @property {number} [scale] - default: `1`
- * @property {boolean} [fullContentBounds] - default: `false`
+ * @property {number} [width] (`null`)
+ * @property {number} [descent] (`null`)
+ * @property {number} [ascent] (`null`)
+ * @property {'left' | 'center' | 'right' | number} [xAlign] (`'center'`)
+ * @property {'bottom' | 'middle' | 'top' | 'baseline' | number} [yAlign]  (`'baseline'`)
+ * @property {'width' | 'height' | 'contain'} [fit] - fit width,
+ * ascent and descent to either match width, height or fully contain the content (`null`)
+ * @property {number} [scale] - (`1`)
+ * @property {boolean} [fullContentBounds] - (`false`)
+ * @example
+ * // Full object definition
+ *  {
+ *    container: {
+ *      content: 'a',
+ *      width: null,
+ *      descent: null,
+ *      ascent: null,
+ *      xAlign: 'left',
+ *      yAlign: 'baseline',
+ *      fit: null,
+ *      scale: 1,
+ *      fullContentBounds: false
+ *    },
+ *  }
+ * @example
+ * // Example array definition
+ *  { container: ['a', 1, 0.2, 0.5] }
  */
-
-export type TypeContainerObject = {
+export type TypeEquationFunctionContainer = {
   content: TypeEquationPhrase,
   width?: number,
   descent?: number,
@@ -127,25 +142,7 @@ export type TypeContainerObject = {
   fit?: 'width' | 'height' | 'contain',
   scale?: number,
   fullContentBounds?: boolean,
-};
-
-/**
- * Container array definition
- *
- * A container is useful to fix spacing around content as it changes between
- * equation forms.
- *
- * Array order: content, width, descent, ascent, xAlign, yAlign,
- * fit, scale, fullContentBounds
- *
- * Once an optional element is left out, then all subsequent elements must
- * also be left out
- *
- * See:
- * * {@link TypeContainerObject} for default values
- * * {@link EquationFunctions#container}
- */
-export type TypeContainerArray = [
+} | [
   TypeEquationPhrase,
   ?number,
   ?number,
@@ -157,27 +154,39 @@ export type TypeContainerArray = [
   ?boolean,
 ];
 
-/* eslint-enable no-use-before-define */
-
 /**
- * Fraction object definition
- *
- * See {@link EquationFunctions#frac}
+ * Equation fraction
  *
  * @property {TypeEquationPhrase} numerator
  * @property {string} symbol - Vinculum symbol
  * @property {TypeEquationPhrase} denominator
- * @property {number} [scale] - default: `1`
- * @property {number} [numeratorSpace] - default: `0.05`
- * @property {number} [denominatorSpace] - default: `0.05`
- * @property {number} [overhang] - Vinculum extends beyond the content
- * horizontally by the this amount - default: `0.05`
- * @property {number} [offsetY] - Fraction offset - default: `0.07`
- * @property {boolean} [fullContentBounds]: Use full bounds with content - default: `false`
+ * @property {number} [scale] (`1`)
+ * @property {number} [numeratorSpace] (`0.05`)
+ * @property {number} [denominatorSpace] (`0.05`)
+ * @property {number} [overhang] Vinculum extends beyond the content
+ * horizontally by the this amount (`0.05`)
+ * @property {number} [offsetY] Offset fraction in y (`0.07`)
+ * @property {boolean} [fullContentBounds] Use full bounds with content (`false`)
  *
+ * @example
+ * // Full object definition example
+ *  {
+ *    frac: {
+ *      numerator: 'a',
+ *      symbol: 'v',
+ *      denominator: 'b',
+ *      scale: 0.8,
+ *      numeratorSpace: 0.01,
+ *      denominatorSpace: 0.02,
+ *      overhang: 0.03,
+ *      offsetY: 0.04,
+ *    },
+ *  }
+ * @example
+ * // Array definition example
+ * { frac: ['a', 'v', 'b'] }
  */
-
-export type TypeFracObject = {
+export type TypeEquationFunctionFrac = {
   numerator: TypeEquationPhrase;
   symbol: string;
   denominator: TypeEquationPhrase;
@@ -187,22 +196,7 @@ export type TypeFracObject = {
   overhang?: number;
   offsetY?: number;
   fullContentBounds?: boolean,
-};
-
-/**
- * Fraction array definition
- *
- * Array order: numerator, symbol, denominator, scale, numeratorSpace,
- *   denominatorSpace, overhang, offsetY, fullContentBounds
- *
- * Once an optional element is left out, then all subsequent elements must
- * also be left out
- *
- * See:
- * * {@link TypeFracObject} for default values
- * * {@link EquationFunctions#frac}
- */
-export type TypeFracArray = [
+} | [
   TypeEquationPhrase,
   string,
   TypeEquationPhrase,
@@ -847,8 +841,20 @@ export class EquationFunctions {
     return null;
   }
 
+  /**
+   * Equation container function
+   * @example
+   * e = new Equation();
+   * e.addElements({
+   *   v: { symbol: 'vinculum' },
+   * });
+   * frac = e.eqn.functions.frac;
+   * eqn.addForms({
+   *   base: ['a', 'equals', frac(['b', 'v', 'c'])],
+   * });
+   */
   container(
-    optionsOrArray: TypeContainerObject | TypeContainerArray,
+    optionsOrArray: TypeEquationFunctionContainer,
   ) {
     let content;
     let scale;
@@ -1279,7 +1285,7 @@ export class EquationFunctions {
    * });
    */
   frac(
-    optionsOrArray: TypeFracObject | TypeFracArray,
+    optionsOrArray: TypeEquationFunctionFrac,
   ) {
     let numerator;
     let denominator;
