@@ -496,6 +496,7 @@ type TypeEquationGoToFormOptions = {
 export class Equation extends DiagramElementCollection {
   /**
    * Equation parameters and functions
+   * @property {EquationFunctions} functions - equation functions
    */
   eqn: {
     forms: { [formName: string]: {
@@ -504,9 +505,6 @@ export class Equation extends DiagramElementCollection {
         name: string;                         // Name of form
       }
     };
-    /**
-     * Functions for making equation forms
-     */
     functions: EquationFunctions;
     symbols: EquationSymbols;
     currentForm: string;
