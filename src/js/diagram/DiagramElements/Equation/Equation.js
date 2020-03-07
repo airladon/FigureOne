@@ -77,6 +77,53 @@ type TypeFormAlignment = {
   alignV: TypeVAlign;
 };
 
+/**
+ * Form translation properties
+ *
+ * @property {'curved' | 'linear'} style - element should move in a straight
+ * line, or through a curve. Default: `"linear"`
+ * @property {'up' | 'down'} [direction] - curve only - element should move
+ * through an up or down curve
+ * @property {number} [mag] - the magnitude of the curve
+ */
+type TypeFormTranslationProperties = {
+  style: 'curved' | 'linear',
+  direction?: 'up' | 'down',
+  mag: number,
+};
+
+/**
+ * Duration and translation options for form animation
+ *
+ * @property {number} [duration] in seconds
+ * @property {Object.<TypeFormTranslationProperties>} [translation]
+ * @example
+ * // for an equation with two of its elements named 'a' and 'b'
+ * {
+ *   duration: 1,
+ *   translation: {
+ *     a: {
+ *       direction: 'up',
+ *       style: 'curved',
+ *       mag: 0.5,
+ *     },
+ *     b: {
+ *       direction: 'down',
+ *       style: 'curved',
+ *       mag: 0.2,
+ *     },
+ *   },
+ * }
+ * // Note, not all elements need to be defined - only those that need a custom
+ * duration or shouldn't have a linear path
+ */
+type TypeFormAnimationProperties = {
+  duration?: ?number,
+  translation?: {
+    [elementName: string]: TypeFormTranslationProperties,
+  },
+}
+
 // A form is a steady state arrangement of elements
 // A form's elements can have different properties, but these properties
 // are generally the same independent on which form was shown before the
@@ -86,45 +133,102 @@ type TypeFormAlignment = {
 // the previous one, or two the next one.
 
 /**
- * Form definition object
+ * In mathematics, an equation form is a specific arrangement of an equations
+ * terms and operators. Different forms will have different arrangements, that
+ * that can be achieved by performing a series of operations to both sides of
+ * the equation.
+ *
+ * For instance, the equation:
+ *
+ * a + b = c
+ *
+ * can be rearranged to a different form:
+ *
+ * a = c - b
+ *
+ * From the diagram's perspective, a form is a specific layout of equation
+ * elements.
+ *
+ * This object defines a how the elements are laid out, what properties the
+ * elements have, and some animation properties for when animating to this form.
+ *
+ * In the {@link Equation} object, forms are defined with form names, and
+ * sub-form names. Most of the time, the subForm name can be ignored.
+ * However, it is useful when dealing with units. Sometimes you will have a
+ * series of forms you want to animate through, that will be slightly different
+ * depending on the units (for example degrees vs radians). Defining one subForm
+ * as degrees, and a second as radians allows switching between subForms without
+ * complicating the overall equation navigation logic.
+ *
+ * @property {TypeEquationPhrase} content - the equation phrase of the form
+ * defines how the elements are laid out
+ * @property {number} [scale] - a scaling factor for this form
+ * @property {TypeFormAlignment} [alignment] - how the Equation's position is aligned with
+ * this form
+ * @property {string} [subForm] - subForm name - default: `"base"`
+ * @property {string} [description] - a description associated with this form -
+ * used in equation navigator elements (@EquationNavigator)
+ * @property {object} [modifiers] - string modifiers for the description
+ * @property {TypeFormAnimationProperties} [fromPrev] - form animation
+ * properties if animating forward from the previous form in a formSeries
+ * @property {TypeFormAnimationProperties} [fromNext] - form animation
+ * properties if animating backward from the next form in a formSeries
+ * @property {TypeFormAnimationProperties} [duration] - animation move duration
+ *  (fromNext and fromPrev are prioritized over this)
+ * @property {TypeFormTranslationProperties} [translation] - animation move
+ * style (fromNext and fromPrev are prioritized over this)
+ * @property {object} [elementMods] - properties to set in the equation element
+ * (@DiagramElementPrimitive) when this form is shown
+ *
+ * @example
+ * // Simple form definition of two different forms of the same equation and one
+ * // of the elements is colored blue in one form and red in the other
+ * forms: {
+ *   form1: {
+ *     content: ['a', 'plus', 'b', 'equals', 'c']
+ *     elementMods: {
+ *       'a': { color: [0, 0, 1, 1] },
+ *     }
+ *   },
+ *   form2: {
+ *     content: ['a', 'equals', 'c', 'minus', 'b'],
+ *     elementMods: {
+ *       'a': { color: [1, 0, 0, 1] },
+ *     }
+ *   },
+ * }
+ *
+ * @example
+ * // Simple form definition of two different forms of the same equation and one
+ * // of the elements is colored blue in one form and red in the other
+ * forms: {
+ *   form1: {
+ *     content: ['a', 'plus', 'b', 'equals', 'c']
+ *     elementMods: {
+ *       'a': { color: [0, 0, 1, 1] },
+ *     }
+ *   },
+ *   form2: {
+ *     content: ['a', 'equals', 'c', 'minus', 'b'],
+ *     elementMods: {
+ *       'a': { color: [1, 0, 0, 1] },
+ *     }
+ *   },
+ * }
  */
 type TypeEquationFormObject = {
   content: TypeEquationPhrase,
-  subForm?: string,
   scale?: number,
   alignment?: TypeFormAlignment,
+  subForm?: string,
   description?: string,           // For equation navigation
   modifiers?: {},                 // Modifiers for description
   // First Priority
-  fromPrev?: {
-    duration?: ?number,
-    translation?: {
-      [elementName: string]: {
-        direction?: 'up' | 'down',
-        style: 'curved' | 'linear',
-        mag: number,
-      },
-    },
-  },
-  fromNext?: {
-    duration?: ?number,
-    translation?: {
-      [elementName: string]: {
-        direction?: 'up' | 'down',
-        style: 'curved' | 'linear',
-        mag: number,
-      },
-    },
-  },
+  fromPrev?: TypeFormAnimationProperties,
+  fromNext?: TypeFormAnimationProperties,
   // Last Priority
   duration?: ?number,               // null means to use velocity
-  translation?: {
-    [elementName: string]: {
-      direction?: 'up' | 'down',
-      style: 'curved' | 'linear',
-      mag: number,
-    },
-  },
+  translation?: TypeFormTranslationProperties,
   elementMods?: {
     [elementName: string]: Object
   },

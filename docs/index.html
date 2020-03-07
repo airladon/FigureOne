@@ -356,6 +356,26 @@
                 
                 </li>
               
+                
+                <li><a
+                  href='#typeformtranslationproperties'
+                  class="">
+                  TypeFormTranslationProperties
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeformanimationproperties'
+                  class="">
+                  TypeFormAnimationProperties
+                  
+                </a>
+                
+                </li>
+              
             </ul>
           </div>
           <div class='mt1 h6 quiet'>
@@ -1091,13 +1111,31 @@ will be ignored.</p>
   </div>
   
 
-  <p>Form definition object</p>
+  <p>In mathematics, an equation form is a specific arrangement of an equations
+terms and operators. Different forms will have different arrangements, that
+that can be achieved by performing a series of operations to both sides of
+the equation.</p>
+<p>For instance, the equation:</p>
+<p>a + b = c</p>
+<p>can be rearranged to a different form:</p>
+<p>a = c - b</p>
+<p>From the diagram's perspective, a form is a specific layout of equation
+elements.</p>
+<p>This object defines a how the elements are laid out, what properties the
+elements have, and some animation properties for when animating to this form.</p>
+<p>In the <a href="#equation">Equation</a> object, forms are defined with form names, and
+sub-form names. Most of the time, the subForm name can be ignored.
+However, it is useful when dealing with units. Sometimes you will have a
+series of forms you want to animate through, that will be slightly different
+depending on the units (for example degrees vs radians). Defining one subForm
+as degrees, and a second as radians allows switching between subForms without
+complicating the overall equation navigation logic.</p>
 
     <div class='pre p1 fill-light mt0'>TypeEquationFormObject</div>
   
     <p>
       Type:
-      {content: <a href="#typeequationphrase">TypeEquationPhrase</a>, subForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, alignment: <a href="#typeformalignment">TypeFormAlignment</a>?, description: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, modifiers: {}?, fromPrev: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: {}?}?, fromNext: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: {}?}?, duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: {}?, elementMods: {}?}
+      {content: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, alignment: <a href="#typeformalignment">TypeFormAlignment</a>?, subForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, description: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, modifiers: {}?, fromPrev: <a href="#typeformanimationproperties">TypeFormAnimationProperties</a>?, fromNext: <a href="#typeformanimationproperties">TypeFormAnimationProperties</a>?, duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: <a href="#typeformtranslationproperties">TypeFormTranslationProperties</a>?, elementMods: {}?}
     </p>
   
   
@@ -1117,67 +1155,87 @@ will be ignored.</p>
       
         <div class='space-bottom0'>
           <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>subForm</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          
+          : the equation phrase of the form
+defines how the elements are laid out
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
+          : a scaling factor for this form
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>alignment</span> <code class='quiet'>(<a href="#typeformalignment">TypeFormAlignment</a>?)</code>
+          : how the Equation's position is aligned with
+this form
+
           
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>subForm</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : subForm name - default: 
+<code>"base"</code>
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>description</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>modifiers</span> <code class='quiet'>({}?)</code>
-          
+          : a description associated with this form -
+used in equation navigator elements (@EquationNavigator)
+
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>fromPrev</span> <code class='quiet'>({duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: {}?}?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fromNext</span> <code class='quiet'>({duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: {}?}?)</code>
-          
+          <span class='code bold'>modifiers</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?)</code>
+          : string modifiers for the description
+
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>duration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>translation</span> <code class='quiet'>({}?)</code>
-          
+          <span class='code bold'>fromPrev</span> <code class='quiet'>(<a href="#typeformanimationproperties">TypeFormAnimationProperties</a>?)</code>
+          : form animation
+properties if animating forward from the previous form in a formSeries
+
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>elementMods</span> <code class='quiet'>({}?)</code>
+          <span class='code bold'>fromNext</span> <code class='quiet'>(<a href="#typeformanimationproperties">TypeFormAnimationProperties</a>?)</code>
+          : form animation
+properties if animating backward from the next form in a formSeries
+
           
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>duration</span> <code class='quiet'>(<a href="#typeformanimationproperties">TypeFormAnimationProperties</a>?)</code>
+          : animation move duration
+(fromNext and fromPrev are prioritized over this)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>translation</span> <code class='quiet'>(<a href="#typeformtranslationproperties">TypeFormTranslationProperties</a>?)</code>
+          : animation move
+style (fromNext and fromPrev are prioritized over this)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>elementMods</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?)</code>
+          : properties to set in the equation element
+(@DiagramElementPrimitive) when this form is shown
+
           
         </div>
       
@@ -1188,6 +1246,45 @@ will be ignored.</p>
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple form definition of two different forms of the same equation and one</span>
+<span class="hljs-comment">// of the elements is colored blue in one form and red in the other</span>
+<span class="hljs-attr">forms</span>: {
+  <span class="hljs-attr">form1</span>: {
+    <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'c'</span>]
+    <span class="hljs-attr">elementMods</span>: {
+      <span class="hljs-string">'a'</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
+    }
+  },
+  <span class="hljs-attr">form2</span>: {
+    <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-string">'minus'</span>, <span class="hljs-string">'b'</span>],
+    <span class="hljs-attr">elementMods</span>: {
+      <span class="hljs-string">'a'</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] },
+    }
+  },
+}</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple form definition of two different forms of the same equation and one</span>
+<span class="hljs-comment">// of the elements is colored blue in one form and red in the other</span>
+<span class="hljs-attr">forms</span>: {
+  <span class="hljs-attr">form1</span>: {
+    <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'c'</span>]
+    <span class="hljs-attr">elementMods</span>: {
+      <span class="hljs-string">'a'</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
+    }
+  },
+  <span class="hljs-attr">form2</span>: {
+    <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-string">'minus'</span>, <span class="hljs-string">'b'</span>],
+    <span class="hljs-attr">elementMods</span>: {
+      <span class="hljs-string">'a'</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] },
+    }
+  },
+}</pre>
+    
   
 
   
@@ -4245,6 +4342,182 @@ corner at (-1, -1), width 1, height 1
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeformtranslationproperties'>
+      TypeFormTranslationProperties
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Form translation properties</p>
+
+    <div class='pre p1 fill-light mt0'>TypeFormTranslationProperties</div>
+  
+    <p>
+      Type:
+      {style: (<code>"curved"</code> | <code>"linear"</code>), direction: (<code>"up"</code> | <code>"down"</code>)?, mag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>style</span> <code class='quiet'>((<code>"curved"</code> | <code>"linear"</code>))</code>
+          : element should move in a straight
+line, or through a curve. Default: 
+<code>"linear"</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>direction</span> <code class='quiet'>((<code>"up"</code> | <code>"down"</code>)?)</code>
+          : curve only - element should move
+through an up or down curve
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>mag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : the magnitude of the curve
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeformanimationproperties'>
+      TypeFormAnimationProperties
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Duration and translation options for form animation</p>
+
+    <div class='pre p1 fill-light mt0'>TypeFormAnimationProperties</div>
+  
+    <p>
+      Type:
+      {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: {}?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>duration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : in seconds
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>translation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&#x3C;<a href="#typeformtranslationproperties">TypeFormTranslationProperties</a>>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// for an equation with two of its elements named 'a' and 'b'</span>
+{
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">translation</span>: {
+    <span class="hljs-attr">a</span>: {
+      <span class="hljs-attr">direction</span>: <span class="hljs-string">'up'</span>,
+      <span class="hljs-attr">style</span>: <span class="hljs-string">'curved'</span>,
+      <span class="hljs-attr">mag</span>: <span class="hljs-number">0.5</span>,
+    },
+    <span class="hljs-attr">b</span>: {
+      <span class="hljs-attr">direction</span>: <span class="hljs-string">'down'</span>,
+      <span class="hljs-attr">style</span>: <span class="hljs-string">'curved'</span>,
+      <span class="hljs-attr">mag</span>: <span class="hljs-number">0.2</span>,
+    },
+  },
+}
+<span class="hljs-comment">// Note, not all elements need to be defined - only those that need a custom</span>
+duration or shouldn<span class="hljs-string">'t have a linear path</span></pre>
+    
   
 
   
