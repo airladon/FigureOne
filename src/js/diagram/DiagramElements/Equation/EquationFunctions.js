@@ -87,7 +87,7 @@ export type TypeEquationPhrase =
   | { bottomComment: TypeCommentObject } | TypeCommentArray
   | { padding: TypePaddingObject } | TypePaddingArray
   | { bar: TypeBarObject } | TypeBarArray
-  | { scale: TypeScaleObject } | TypeScaleArray
+  | { scale: TypeEquationFunctionScale }
   | { container: TypeEquationFunctionContainer }
   | { matrix: TypeMatrixObject } | TypeMatrixArray
   | Array<TypeEquationPhrase>
@@ -208,13 +208,32 @@ export type TypeEquationFunctionFrac = {
   ?boolean,
 ];
 
-export type TypeScaleObject = {
+/**
+ * Equation scale
+ *
+ * Scale an equation phrase
+ *
+ * @property {TypeEquationPhrase} content
+ * @property {number} [scale] - (`1`)
+ * @property {boolean} [fullContentBounds] Use full bounds with content (`false`)
+ * @example
+ * // Full object definition
+ *  {
+ *    scale: {
+ *      content: ['a', 'b'],
+ *      scale: 0.5,
+ *      fullContentBounds: false,
+ *    },
+ *  }
+ * @example
+ * // Example array definition
+ *  { scale: [['a', 'b'], 0.5] }
+ */
+export type TypeEquationFunctionScale = {
   content: TypeEquationPhrase,
   scale?: number,
-  useFullContent?: boolean,
-};
-
-export type TypeScaleArray = [
+  fullContentBounds?: boolean,
+} | [
   TypeEquationPhrase,
   ?number,
   ?boolean,
@@ -1242,27 +1261,27 @@ export class EquationFunctions {
 
 
   scale(
-    optionsOrArray: TypeScaleObject | TypeScaleArray,
+    optionsOrArray: TypeEquationFunctionScale,
   ) {
     let content;
     let scale;
-    let useFullContent;
+    let fullContentBounds;
     const defaultOptions = {
       scaleModifier: 1,
-      useFullContent: false,
+      fullContentBounds: false,
     };
     if (Array.isArray(optionsOrArray)) {
       [
-        content, scale, useFullContent,
+        content, scale, fullContentBounds,
       ] = optionsOrArray;
     } else {
       ({
-        content, scale, useFullContent,
+        content, scale, fullContentBounds,
       } = optionsOrArray);
     }
     const optionsIn = {
       scaleModifier: scale,
-      useFullContent,
+      fullContentBounds,
     };
     const options = joinObjects(defaultOptions, optionsIn);
     return new Scale(
