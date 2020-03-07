@@ -133,7 +133,7 @@ type TypeFormAnimationProperties = {
 // the previous one, or two the next one.
 
 /**
- * In mathematics, an equation form is a specific arrangement of an equations
+ * In mathematics, an equation form is a specific arrangement of an equation's
  * terms and operators. Different forms will have different arrangements, that
  * that can be achieved by performing a series of operations to both sides of
  * the equation.
@@ -160,6 +160,11 @@ type TypeFormAnimationProperties = {
  * as degrees, and a second as radians allows switching between subForms without
  * complicating the overall equation navigation logic.
  *
+ * Subforms can either be defined within the form definition object below, or
+ * as a key name with a value of a form definition object or array. You would
+ * only use it as an object property if you were making multiple calls to
+ * {@link Equation#addForms}.
+ *
  * @property {TypeEquationPhrase} content - the equation phrase of the form
  * defines how the elements are laid out
  * @property {number} [scale] - a scaling factor for this form
@@ -185,7 +190,7 @@ type TypeFormAnimationProperties = {
  * // of the elements is colored blue in one form and red in the other
  * forms: {
  *   form1: {
- *     content: ['a', 'plus', 'b', 'equals', 'c']
+ *     content: ['a', 'plus', 'b', 'equals', 'c'],
  *     elementMods: {
  *       'a': { color: [0, 0, 1, 1] },
  *     }
@@ -199,22 +204,29 @@ type TypeFormAnimationProperties = {
  * }
  *
  * @example
- * // Simple form definition of two different forms of the same equation and one
- * // of the elements is colored blue in one form and red in the other
+ * // Example using subForms all defined at once
  * forms: {
  *   form1: {
- *     content: ['a', 'plus', 'b', 'equals', 'c']
- *     elementMods: {
- *       'a': { color: [0, 0, 1, 1] },
- *     }
- *   },
- *   form2: {
- *     content: ['a', 'equals', 'c', 'minus', 'b'],
- *     elementMods: {
- *       'a': { color: [1, 0, 0, 1] },
- *     }
+ *     deg: ['a', 'deg'],
+ *     rad: ['a', 'rad'],
  *   },
  * }
+ *
+ * @example
+ * // Example using subForms all defined separately
+ * const eqn = new Equation();
+ * eqn.addForms({
+ *   deg: {
+ *     content: ['a', 'deg'],
+ *     subForm:'deg',
+ *   }
+ * });
+ * eqn.addForms({
+ *   rad: {
+ *     content: ['a', 'rad'],
+ *     subForm:'rad',
+ *   }
+ * });
  */
 type TypeEquationFormObject = {
   content: TypeEquationPhrase,

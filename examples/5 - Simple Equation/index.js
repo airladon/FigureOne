@@ -21,10 +21,26 @@ diagram.addElement(
       // An equation form is how those terms are arranged
       forms: {
         base: ['a', 'equals', { frac: ['b', 'vinculum', 'c'] }],
+        form1: {
+          deg: ['a', 'equals', 'b'],
+          rad: ['a', 'equals', 'c'],
+        },
+        form2: {
+          content: ['c', 'equals', 'b'],
+          subForm: 'deg',
+        }
       },
     },
   },
 );
 // Show the equation form
 diagram.getElement('eqn').showForm('base');
+
+diagram.getElement('eqn').addForms({
+  form2: {
+    content: ['b', 'equals', 'c'],
+    subForm:'rad',
+  }
+})
+diagram.getElement('eqn').showForm('form2', 'rad');
 diagram.initialize();
