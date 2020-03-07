@@ -75,7 +75,7 @@ export type TypeEquationPhrase =
   | { frac: TypeEquationFunctionFraction }
   | { strike: TypeStrikeObject } | TypeStrikeArray
   | { box: TypeBoxObject } | TypeBoxArray
-  | { root: TypeRootObject } | TypeRootArray
+  | { root: TypeEquationFunctionsRoot }
   | { brac: TypeEquationFunctionBracket }
   | { sub: TypeSubObject } | TypeSubArray
   | { sup: TypeSupObject } | TypeSupArray
@@ -252,17 +252,28 @@ export type TypeEquationFunctionScale = {
  * @property {string} [left] left bracket symbol
  * @property {TypeEquationPhrase} [content]
  * @property {string} [right] right bracket symbol
- * @property {boolean} [inSize] `true` includes bracket symbols in overall size of phrase (`true`)
+ * @property {boolean} [inSize] `false` excludes bracket symbols from
+ * size of resulting phrase (`true`)
  * @property {number} [insideSpace] space between brackets and content (`0.03`)
- * @property {number} [outsideSpace] space between brackets and neighboring phrases(`0.03`)
- * @property {number} [topSpace] how far the brackets extend above the content (`0.05`)
- * @property {number} [bottomSpace] how far the brackets extend below the content (`0.05`)
- * @property {number} [minContentHeight] if content height is less than this, then this number will be used when sizing the brackets (unless it is `null`) (`null`)
- * @property {number} [minContentDescent] if content descent is less than this, then this number will be used when sizing the brackets (unless it is `null`) (`null`)
+ * @property {number} [outsideSpace] space between brackets and neighboring
+ * phrases(`0.03`)
+ * @property {number} [topSpace] how far the brackets extend above the content
+ * (`0.05`)
+ * @property {number} [bottomSpace] how far the brackets extend below the
+ * content (`0.05`)
+ * @property {number} [minContentHeight] if content height is less than this,
+ * then this number will be used when sizing the brackets (unless it is `null`)
+ * (`null`)
+ * @property {number} [minContentDescent] if content descent is less than this,
+ * then this number will be used when sizing the brackets (unless it is `null`)
+ * (`null`)
  * @property {number} [height] force height of brackets (`null`)
  * @property {number} [descent] force descent of brackets (`null`)
- * @property {boolean} [fullContentBounds] use full bounds of content, overriding any `inSize=false` properties for laying out the content within the brackets and sizing the brackets around the content (`false`)
- * @property {boolean} [useFullBounds] make the bounds of this phrase equal to the full bounds of the content even if `fullContentBounds=false` and the brackets only surround a portion of the content (`false`)
+ * @property {boolean} [fullContentBounds] use full bounds of content,
+ * overriding any `inSize=false` properties in the content (`false`)
+ * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
+ * the full bounds of the content even if `fullContentBounds=false` and the
+ * brackets only surround a portion of the content (`false`)
  * @example
  * // For examples, two bracket symbols are defined as equation elements
  * eqn.addElements({
@@ -325,7 +336,64 @@ export type TypeEquationFunctionBracket = {
   ?boolean,
 ];
 
-export type TypeRootObject = {
+/**
+ * Equation root
+ *
+ * Surrond an equation phrase with a radical symbol and add a custom root if
+ * needed
+ *
+ * @property {string} symbol radical symbol
+ * @property {TypeEquationPhrase} content
+ * @property {boolean} [inSize] `false` exclues radical symbol and root (if
+ * defined) from size of resulting phrase (`true`)
+ * @property {number} [space] (`0.02`) default space between content and
+ * radical symbol in left, right, top and bottom directions.
+ * @property {number} [topSpace] space between content top and radical symbol
+ * horiztonal line (`space`)
+ * @property {number} [rightSpace] radical symbol overhang of content on right
+ * (`space`)
+ * @property {number} [bottomSpace] radical symbol descent below content
+ * (`space`)
+ * @property {number} [leftSpace] space between radical symbol up stroke and
+ * content (`space`)
+ * @property {TypeEquationPhrase} [root] custom root
+ * @property {number} [rootOffset] custom root offset (`[0, 0.06]`)
+ * @property {number} [rootScale] custom root scale (`0.6`)
+ * @property {boolean} [fullContentBounds] use full bounds of content,
+ * overriding any `inSize=false` properties in the content (`false`)
+ * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
+ * the full bounds of the content even if `fullContentBounds=false` and the
+ * brackets only surround a portion of the content (`false`)
+* @example
+ * // For examples, a radical symbol is defined as an equation element
+ * eqn.addElements({
+ *   radical: { symbol: 'radical' }
+ * });
+ * @example
+ * // Full object definition
+ * {
+ *   root: {
+ *     content: 'a',
+ *     symbol: 'radical',
+ *     inSize: true,
+ *     space: 0.1,
+ *     topSpace: 0.1,
+ *     rightSpace: 0.1,
+ *     bottomSpace: 0.1,
+ *     leftSpace: 0.1,
+ *     root: 'b',
+ *     rootOffset: [0, 0],
+ *     rootScale: 1,
+ *     fullContentBounds: false,
+ *     useFullBounds: false,
+ *   },
+ * }
+ * @example
+ * // Example array definition
+ *  { root: ['radical', 'a'] }
+ */
+
+export type TypeEquationFunctionsRoot = {
   symbol: string;
   content: TypeEquationPhrase;
   inSize?: boolean;
@@ -337,8 +405,9 @@ export type TypeRootObject = {
   root: TypeEquationPhrase;
   rootOffset?: number,
   rootScale?: number,
-};
-export type TypeRootArray = [
+  fullContentBounds?: boolean,
+  useFullBounds?: boolean,
+} | [
   string,
   TypeEquationPhrase,
   ?boolean,
@@ -350,6 +419,8 @@ export type TypeRootArray = [
   ?TypeEquationPhrase,
   ?number,
   ?number,
+  ?boolean,
+  ?boolean,
 ];
 
 export type TypeStrikeObject = {
@@ -1411,7 +1482,7 @@ export class EquationFunctions {
     );
   }
 
-  root(optionsOrArray: TypeRootObject | TypeRootArray) {
+  root(optionsOrArray: TypeEquationFunctionsRoot) {
     let content;
     let root;
     let symbol;
