@@ -23,8 +23,8 @@ describe('Equation Functions - Box', () => {
         method: 'text',
         options: {
           text: 'a',
-          hAlign: 'left',
-          vAlign: 'baseline',
+          xAlign: 'left',
+          yAlign: 'baseline',
         },
       },
       {
@@ -32,8 +32,8 @@ describe('Equation Functions - Box', () => {
         method: 'text',
         options: {
           text: 'c',
-          hAlign: 'left',
-          vAlign: 'baseline',
+          xAlign: 'left',
+          yAlign: 'baseline',
           position: [1, 1],
         },
       },
@@ -46,8 +46,8 @@ describe('Equation Functions - Box', () => {
             method: 'text',
             options: {
               text: 'a',
-              hAlign: 'left',
-              vAlign: 'baseline',
+              xAlign: 'left',
+              yAlign: 'baseline',
               position: [1, 1],
             },
           },
