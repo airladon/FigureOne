@@ -24,7 +24,7 @@ import DiagramObjectLine from './js/diagram/DiagramObjects/Line';
 import DiagramObjectPolyLine from './js/diagram/DiagramObjects/PolyLine';
 import EqnNavigator from './js/diagram/DiagramObjects/EqnNavigator';
 import EquationLabel from './js/diagram/DiagramObjects/EquationLabel';
-import { EquationNew } from './js/diagram/DiagramElements/Equation/Equation';
+import { Equation } from './js/diagram/DiagramElements/Equation/Equation';
 import EquationForm from './js/diagram/DiagramElements/Equation/EquationForm';
 
 import type { TypeRotationDirection, TypeParsablePoint } from './js/tools/g2';
@@ -100,7 +100,7 @@ const Fig = {
   EquationLabel,
   //
   EquationForm,
-  Equation: EquationNew,
+  Equation,
   //
   HTMLEquation,
   //

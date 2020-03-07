@@ -348,7 +348,8 @@ class Diagram {
   /**
    * Add elements to diagram
    * @param {Array<TypeAddElementObject>} elementsToAdd - array of element definitions
-   * @param {DiagramElementCollection} [collection = this.elements] - the collection to add elements to
+   * @param {DiagramElementCollection} [collection = this.elements] - the
+   * collection to add elements to
    * @param {string} [addElementsKey = 'addElements'] - key to add elements
    *
    * @example

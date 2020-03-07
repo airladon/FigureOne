@@ -6,7 +6,7 @@ import {
 } from '../../../../tools/math';
 import * as tools from '../../../../tools/tools';
 import makeDiagram from '../../../../__mocks__/makeDiagram';
-import { EquationNew } from '../Equation';
+import { Equation } from '../Equation';
 
 tools.isTouchDevice = jest.fn();
 
@@ -41,7 +41,7 @@ describe('Equation Functions - Bar', () => {
     };
     functions = {
       topComment: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
         const topComment = e.topComment.bind(e);
         eqn.addElements(elements);
@@ -82,7 +82,7 @@ describe('Equation Functions - Bar', () => {
         diagram.elements = eqn;
       },
       bottomComment: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
         const bottomComment = e.bottomComment.bind(e);
         eqn.addElements(elements);
@@ -122,7 +122,7 @@ describe('Equation Functions - Bar', () => {
         });
       },
       topCommentParameters: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
         const topComment = e.topComment.bind(e);
         eqn.addElements(elements);
@@ -148,7 +148,7 @@ describe('Equation Functions - Bar', () => {
         });
       },
       bottomCommentParameters: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
         const bottomComment = e.bottomComment.bind(e);
         eqn.addElements(elements);
@@ -174,7 +174,7 @@ describe('Equation Functions - Bar', () => {
         });
       },
       bottomCommentNoGlyph: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
         const bottomComment = e.bottomComment.bind(e);
         eqn.addElements(elements);
@@ -196,7 +196,7 @@ describe('Equation Functions - Bar', () => {
         });
       },
       nestedTopComment: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         diagram.elements = eqn;
         eqn.addElements(elements);
         eqn.addForms({
@@ -212,7 +212,7 @@ describe('Equation Functions - Bar', () => {
         });
       },
       nestedBottomComment: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         diagram.elements = eqn;
         eqn.addElements(elements);
         eqn.addForms({

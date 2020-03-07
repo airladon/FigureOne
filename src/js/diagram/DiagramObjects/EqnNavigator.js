@@ -8,13 +8,13 @@ import {
 import EquationForm from '../DiagramElements/Equation/EquationForm';
 import * as html from '../../tools/htmlGenerator';
 import { generateUniqueId, joinObjects } from '../../tools/tools';
-import { EquationNew } from '../DiagramElements/Equation/Equation';
+import { Equation } from '../DiagramElements/Equation/Equation';
 
 // eslint-disable-next-line no-use-before-define
 // export type TypeEquationNavigator = EquationNavigator;
 
 function updateDescription(
-  eqn: EquationNew,
+  eqn: Equation,
   subForm: string,
   descriptionElement: ?HTMLElement,
   index: number,
@@ -444,7 +444,7 @@ function makeType2Line(
 }
 
 export type TypeNavigatorOptions = {
-  equation?: EquationNew,
+  equation?: Equation,
   offset?: Point,
   navType?: 'equationOnly' | 'description' | '1Line' | '2Line' | '3Line' | '1Button',
   navTypeOptions?: TypeNavTypeOptions,
@@ -482,14 +482,14 @@ export default class EqnNavigator extends DiagramElementCollection {
   _table: DiagramElementPrimitive;
   currentGroup: ?HTMLElement;
   updateButtons: () => void;
-  eqn: EquationNew;
+  eqn: Equation;
   animateNextFrame: void => void;
   navType: 'equationOnly' | 'description' | '1Line' | '2Line' | '3Line' | '1Button';
   options: TypeNavTypeOptions;
 
   constructor(
     shapes: Object,
-    // eqn: EquationNew,
+    // eqn: Equation,
     animateNextFrame: () => void,
     options: TypeNavigatorOptions = {},
   ) {
@@ -585,7 +585,7 @@ export default class EqnNavigator extends DiagramElementCollection {
     }
   }
 
-  connectToEquation(eqn: EquationNew, interactive: boolean) {
+  connectToEquation(eqn: Equation, interactive: boolean) {
     this.eqn = eqn;
     if (interactive) {
       this.eqn.onClick = this.clickNext.bind(this);

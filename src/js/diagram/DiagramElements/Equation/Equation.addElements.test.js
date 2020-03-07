@@ -6,7 +6,7 @@ import {
 } from '../../../tools/math';
 import * as tools from '../../../tools/tools';
 import makeDiagram from '../../../__mocks__/makeDiagram';
-import { EquationNew } from './Equation';
+import { Equation } from './Equation';
 import {
   DiagramFont,
 } from '../../DrawingObjects/TextObject/TextObject';
@@ -31,7 +31,7 @@ describe('Diagram Equations From Object', () => {
   let defaultColor;
   beforeEach(() => {
     diagram = makeDiagram();
-    eqn = new EquationNew(diagram.shapes);
+    eqn = new Equation(diagram.shapes);
     color1 = [0.95, 0, 0, 1];
     color2 = [0, 0.95, 0, 1];
     defaultColor = [0.5, 0.5, 0.5, 1];
@@ -203,7 +203,7 @@ describe('Diagram Equations From Object', () => {
     const equationOptions = {
       elements: addElements.simple,
     };
-    const eqn1 = new EquationNew(diagram.shapes, equationOptions);
+    const eqn1 = new Equation(diagram.shapes, equationOptions);
     expect(eqn1._a.drawingObject.text[0].text).toBe('a');
     expect(eqn1._b.drawingObject.text[0].text).toBe('b');
     expect(eqn1._c.drawingObject.text[0].text).toBe('c');

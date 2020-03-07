@@ -1,21 +1,20 @@
 toc:
   - Diagram
   - name: Equation Types
-    children:
-      - TypeEquationPhrase
-      - TypeFracObject
-      - TypeFracArray
-      - TypeEquationElement
-      - TypeEquationElements
-      - TypeFormAlignment
-      - TypeEquationFormObject
-      - TypeEquationForm
-      - TypeEquationForms
-      - TypeFormRestart
-      - TypeEquationOptions
+  - TypeEquationPhrase
+  - TypeFracObject
+  - TypeFracArray
+  - TypeEquationElement
+  - TypeEquationElements
+  - TypeFormAlignment
+  - TypeEquationFormObject
+  - TypeEquationForm
+  - TypeEquationForms
+  - TypeFormRestart
+  - TypeEquationOptions
+  - TypeEquationGoToFormOptions
   - name: Equations
-    children:
-      - Equation
+  - Equation
   - name: tools
     description: These are generic tools
     children:

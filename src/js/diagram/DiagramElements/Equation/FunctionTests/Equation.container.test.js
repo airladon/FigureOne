@@ -6,7 +6,7 @@ import {
 } from '../../../../tools/math';
 import * as tools from '../../../../tools/tools';
 import makeDiagram from '../../../../__mocks__/makeDiagram';
-import { EquationNew } from '../Equation';
+import { Equation } from '../Equation';
 
 tools.isTouchDevice = jest.fn();
 
@@ -31,7 +31,7 @@ describe('Equation Functions - Container', () => {
     };
     functions = {
       inputForms: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
         const container = e.container.bind(e);
         eqn.addElements(elements);
@@ -76,7 +76,7 @@ describe('Equation Functions - Container', () => {
         diagram.elements = eqn;
       },
       parameterSteps: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         // const e = eqn.eqn.functions;
         // const scale = e.scale.bind(e);
         eqn.addElements(elements);

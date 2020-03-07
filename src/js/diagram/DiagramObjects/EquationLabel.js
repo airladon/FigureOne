@@ -4,7 +4,7 @@
 import {
   Point, polarToRect,
 } from '../../tools/g2';
-import { EquationNew } from '../DiagramElements/Equation/Equation';
+import { Equation } from '../DiagramElements/Equation/Equation';
 import type {
   TypeVAlign, TypeHAlign,
 } from '../DiagramElements/Equation/EquationForm';
@@ -27,7 +27,7 @@ export type TypeLabelEquationOptions = {
 };
 
 export type TypeLabelOptions = {
-  label?: string | EquationNew | Array<string> | TypeLabelEquationOptions,
+  label?: string | Equation | Array<string> | TypeLabelEquationOptions,
   color?: Array<number>,
   scale?: number,
   position?: Point,
@@ -38,7 +38,7 @@ export type TypeLabelOptions = {
 };
 
 export default class EquationLabel {
-  eqn: EquationNew;
+  eqn: Equation;
   updateRotation: (number, Point, ?number, ?number) => void;
   setText: (string) => void;
   getText: void => string;
@@ -79,7 +79,7 @@ export default class EquationLabel {
         position,
       });
       eqn.setCurrentForm('base');
-    } else if (labelTextOrEquation instanceof EquationNew) {
+    } else if (labelTextOrEquation instanceof Equation) {
       eqn = labelTextOrEquation;
     } else if (Array.isArray(labelTextOrEquation)) {
       const elements = {};

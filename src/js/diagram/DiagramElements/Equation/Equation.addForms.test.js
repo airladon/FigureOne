@@ -4,7 +4,7 @@ import {
 
 import * as tools from '../../../tools/tools';
 import makeDiagram from '../../../__mocks__/makeDiagram';
-import { EquationNew } from './Equation';
+import { Equation } from './Equation';
 import Fraction from './Elements/Fraction';
 import * as html from '../../../tools/htmlGenerator';
 
@@ -24,7 +24,7 @@ describe('Diagram Equations From Object', () => {
   beforeEach(() => {
     diagram = makeDiagram();
     // Some default elements
-    eqn = new EquationNew(diagram.shapes, {
+    eqn = new Equation(diagram.shapes, {
       elements: {
         a: 'a',
         b: 'b',
@@ -405,7 +405,7 @@ describe('Diagram Equations From Object', () => {
     expect(forms['1'].base.content[0].content[0].content).toBe(eqn._b);
   });
   test('Create forms as part of initial euation creation', () => {
-    const eqn1 = new EquationNew(diagram.shapes, equationOptions);
+    const eqn1 = new Equation(diagram.shapes, equationOptions);
     const forms1 = eqn1.eqn.forms;
     expect(forms1['0'].base.content[0].content[0].content).toBe(eqn1._a);
     expect(forms1['1'].base.content[0].content[0].content).toBe(eqn1._b);
