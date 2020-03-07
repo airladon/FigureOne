@@ -213,6 +213,12 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
+                        href='#equationeqn'
+                        class='regular pre-open'>
+                        #eqn
+                      </a></li>
+                      
+                      <li><a
                         href='#equationsetformseries'
                         class='regular pre-open'>
                         #setFormSeries
@@ -373,6 +379,44 @@
                   TypeFormAnimationProperties
                   
                 </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#functions'
+                  class="">
+                  functions
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#equationfunctions'
+                  class=" toggle-sibling">
+                  EquationFunctions
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#equationfunctionsfrac'
+                        class='regular pre-open'>
+                        #frac
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -1712,7 +1756,8 @@ New Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)
 Therefore there will be some equation elements that:</p>
 <ul>
 <li>Are currently shown, but need to be hidden as they are not in the desired form</li>
-<li>Are currently shown, are in the desired form, and need to be moved to the correct layout position for the desired form</li>
+<li>Are currently shown, are in the desired form, and need to be moved to the
+correct layout position for the desired form</li>
 <li>Are currently hidden and need to be shown in the desired form</li>
 </ul>
 <p>The order that elements are shown, hidden and moved is defined by the
@@ -2009,6 +2054,58 @@ eqn.addElements({
   
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
+  
+    <div class='border-bottom' id='equationeqn'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>eqn</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Equation parameters and functions</p>
+
+    <div class='pre p1 fill-light mt0'>eqn</div>
+  
+    <p>
+      Type:
+      {forms: {}, functions: <a href="#equationfunctions">EquationFunctions</a>, symbols: EquationSymbols, currentForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, currentSubForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, fontMath: DiagramFont, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, subFormPriority: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, formSeries: {}, currentFormSeries: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, currentFormSeriesName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, defaultFormAlignment: {fixTo: (DiagramElementPrimitive | DiagramElementCollection | <a href="#point">Point</a>), alignH: TypeHAlign, alignV: TypeVAlign}, isAnimating: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, descriptionElement: (DiagramElementPrimitive | null), descriptionPosition: <a href="#point">Point</a>, formRestart: {moveFrom: (<a href="#point">Point</a> | DiagramElementCollection)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, element: DiagramElement}?}?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
   
     <div class='border-bottom' id='equationsetformseries'>
       <div class="clearfix small pointer toggle-sibling">
@@ -4610,6 +4707,215 @@ duration or shouldn<span class="hljs-string">'t have a linear path</span></pre>
   
 
   
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='functions'>
+      functions
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Functions for making equation forms</p>
+
+    <div class='pre p1 fill-light mt0'>functions</div>
+  
+    <p>
+      Type:
+      <a href="#equationfunctions">EquationFunctions</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='equationfunctions'>
+      EquationFunctions
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Functions used in making equation forms</p>
+
+    <div class='pre p1 fill-light mt0'>new EquationFunctions(elements: {}, addElementFromKey: function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): DiagramElementPrimitive?, getExistingOrAddSymbol: function ((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)): DiagramElementPrimitive?)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>elements</span> <code class='quiet'>({})</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>addElementFromKey</span> <code class='quiet'>(function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): DiagramElementPrimitive?)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>getExistingOrAddSymbol</span> <code class='quiet'>(function ((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)): DiagramElementPrimitive?)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='equationfunctionsfrac'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>frac(optionsOrArray)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Equation fraction function</p>
+
+    <div class='pre p1 fill-light mt0'>frac(optionsOrArray: (<a href="#typefracobject">TypeFracObject</a> | <a href="#typefracarray">TypeFracArray</a>))</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>optionsOrArray</span> <code class='quiet'>((<a href="#typefracobject">TypeFracObject</a> | <a href="#typefracarray">TypeFracArray</a>))</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>e = <span class="hljs-keyword">new</span> Equation();
+e.addElements({
+  <span class="hljs-attr">v</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
+});
+frac = e.eqn.functions.frac;
+eqn.addForms({
+  <span class="hljs-attr">base</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, frac([<span class="hljs-string">'b'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'c'</span>])],
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 
