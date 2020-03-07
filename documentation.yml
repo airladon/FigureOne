@@ -6,6 +6,7 @@ toc:
   - name: Equation Functions Types
   - TypeEquationFunctionContainer
   - TypeEquationFunctionFrac
+  - TypeEquationFunctionScale
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment
