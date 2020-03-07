@@ -6,7 +6,7 @@ import {
 } from '../../../../tools/math';
 import * as tools from '../../../../tools/tools';
 import makeDiagram from '../../../../__mocks__/makeDiagram';
-import { EquationNew } from '../Equation';
+import { Equation } from '../Equation';
 
 tools.isTouchDevice = jest.fn();
 
@@ -60,7 +60,7 @@ describe('Equation Symbols - Radical', () => {
         draw: 'dynamic',
       },
     };
-    eqn = new EquationNew(diagram.shapes, { color: color1 });
+    eqn = new Equation(diagram.shapes, { color: color1 });
     eqn.addElements(elements);
     eqn.addForms({ default: { content: { root: ['rad', 'a', true, space] }, scale: 1 } });
     eqn.addForms({ notProportional: { content: { root: ['rad1', 'a', true, space] }, scale: 1 } });

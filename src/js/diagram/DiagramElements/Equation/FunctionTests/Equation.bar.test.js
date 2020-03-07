@@ -6,7 +6,7 @@ import {
 } from '../../../../tools/math';
 import * as tools from '../../../../tools/tools';
 import makeDiagram from '../../../../__mocks__/makeDiagram';
-import { EquationNew } from '../Equation';
+import { Equation } from '../Equation';
 
 tools.isTouchDevice = jest.fn();
 
@@ -46,7 +46,7 @@ describe('Equation Functions - Bar', () => {
     };
     functions = {
       single: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
         const bar = e.bar.bind(e);
         eqn.addElements(elements);
@@ -110,7 +110,7 @@ describe('Equation Functions - Bar', () => {
         });
       },
       parameterSteps: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         diagram.elements = eqn;
         const e = eqn.eqn.functions;
         const bar = e.bar.bind(e);
@@ -296,7 +296,7 @@ describe('Equation Functions - Bar', () => {
         });
       },
       topBar: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         diagram.elements = eqn;
         // const e = eqn.eqn.functions;
         // const bar = e.bar.bind(e);
@@ -342,7 +342,7 @@ describe('Equation Functions - Bar', () => {
         diagram.elements = eqn;
       },
       bottomBar: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         diagram.elements = eqn;
         // const e = eqn.eqn.functions;
         // const bar = e.bar.bind(e);

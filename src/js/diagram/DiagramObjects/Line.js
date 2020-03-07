@@ -14,7 +14,7 @@ import {
 import EquationLabel from './EquationLabel';
 import type { TypeLabelEquationOptions } from './EquationLabel';
 import { joinObjects } from '../../tools/tools';
-import { EquationNew } from '../DiagramElements/Equation/Equation';
+import { Equation } from '../DiagramElements/Equation/Equation';
 
 // top - text is on top of line (except when line is vertical)
 // bottom - text is on bottom of line (except when line is vertical)
@@ -44,7 +44,7 @@ export type TypeLineVertexOrigin = 'start' | 'end' | 'center' | number | Point;
 export type TypeLineVertexSpaceStart = 'start' | 'end' | 'center' | number | Point;
 
 export type TypeLineLabelOptions = {
-  text: null | string | Array<string> | EquationNew | TypeLabelEquationOptions,
+  text: null | string | Array<string> | Equation | TypeLabelEquationOptions,
   precision?: number,
   offset?: number,
   location?: TypeLineLabelLocation,
@@ -142,7 +142,7 @@ class LineLabel extends EquationLabel {
 
   constructor(
     equation: Object,
-    labelText: string | EquationNew | Array<string> | TypeLabelEquationOptions,
+    labelText: string | Equation | Array<string> | TypeLabelEquationOptions,
     color: Array<number>,
     offset: number,
     location: TypeLineLabelLocation = 'top',
@@ -317,7 +317,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   };
 
   updateLabel: (?number) => {};
-  addLabel: (string | EquationNew | Array<string> | TypeLabelEquationOptions,
+  addLabel: (string | Equation | Array<string> | TypeLabelEquationOptions,
              number, ?TypeLineLabelLocation,
              ?TypeLineLabelSubLocation, ?TypeLineLabelOrientation, ?number,
              ?number, ?Array<number>, ?number,
@@ -780,7 +780,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   }
 
   addLabel(
-    labelText: string | EquationNew | Array<string> | TypeLabelEquationOptions,
+    labelText: string | Equation | Array<string> | TypeLabelEquationOptions,
     offset: number,
     location: TypeLineLabelLocation = 'top',
     subLocation: TypeLineLabelSubLocation = 'left',
@@ -1133,5 +1133,5 @@ export type TypeLabelledLine = {
   _line: DiagramElementPrimitive;
   _label: {
     _base: DiagramElementPrimitive;
-  } & EquationNew;
+  } & Equation;
 } & DiagramObjectLine;

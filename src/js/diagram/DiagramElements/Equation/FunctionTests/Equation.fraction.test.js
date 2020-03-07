@@ -6,7 +6,7 @@ import {
 } from '../../../../tools/math';
 import * as tools from '../../../../tools/tools';
 import makeDiagram from '../../../../__mocks__/makeDiagram';
-import { EquationNew } from '../Equation';
+import { Equation } from '../Equation';
 // import Fraction from './Elements/Fraction';
 
 tools.isTouchDevice = jest.fn();
@@ -37,7 +37,7 @@ describe('Equation Functions - Fraction', () => {
     };
     functions = {
       single: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
         eqn.addElements(elements);
         diagram.elements = eqn;
@@ -78,7 +78,7 @@ describe('Equation Functions - Fraction', () => {
         });
       },
       scaling: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
         // const frac = e.frac.bind(e);
         eqn.addElements(elements);
@@ -101,7 +101,7 @@ describe('Equation Functions - Fraction', () => {
         });
       },
       nested: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
         // const frac = e.frac.bind(e);
         eqn.addElements(elements);
@@ -162,7 +162,7 @@ describe('Equation Functions - Fraction', () => {
         });
       },
       parameterSteps: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         // const e = eqn.eqn.functions;
         eqn.addElements(elements);
         diagram.elements = eqn;

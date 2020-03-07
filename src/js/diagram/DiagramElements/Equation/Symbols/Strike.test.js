@@ -6,7 +6,7 @@ import {
 } from '../../../../tools/math';
 import * as tools from '../../../../tools/tools';
 import makeDiagram from '../../../../__mocks__/makeDiagram';
-import { EquationNew } from '../Equation';
+import { Equation } from '../Equation';
 
 tools.isTouchDevice = jest.fn();
 
@@ -68,7 +68,7 @@ describe('Equation Symbols - Bracket', () => {
         staticWidth: 1,
       },
     };
-    eqn = new EquationNew(diagram.shapes, { color: color1 });
+    eqn = new Equation(diagram.shapes, { color: color1 });
     eqn.addElements(elements);
     eqn.addForms(
       {

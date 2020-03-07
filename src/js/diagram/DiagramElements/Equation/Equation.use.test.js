@@ -7,7 +7,7 @@ import {
 import * as tools from '../../../tools/tools';
 // import * as colorTools from '../../../tools/color';
 import makeDiagram from '../../../__mocks__/makeDiagram';
-import { EquationNew } from './Equation';
+import { Equation } from './Equation';
 // import EquationForm from './EquationForm';
 import { Elements } from './Elements/Element';
 // import Fraction from './Elements/Fraction';
@@ -97,7 +97,7 @@ describe('Different ways to make an equation', () => {
     color2 = [0, 0.95, 0, 1];
     ways = {
       allTextInConstructor: () => {
-        eqn = new EquationNew(diagram.shapes, {
+        eqn = new Equation(diagram.shapes, {
           color: color1,
           elements: {
             a: 'a',
@@ -114,7 +114,7 @@ describe('Different ways to make an equation', () => {
         });
       },
       allTextInConstructorAllOptions: () => {
-        eqn = new EquationNew(diagram.shapes, {
+        eqn = new Equation(diagram.shapes, {
           color: color1,
           position: [1, 1],           // Points can be defined as arrays
           elements: {
@@ -138,7 +138,7 @@ describe('Different ways to make an equation', () => {
         });
       },
       separateAllText: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         eqn.addElements({
           a: 'a',
           b: 'b',
@@ -161,7 +161,7 @@ describe('Different ways to make an equation', () => {
         eqn.showForm('1');
       },
       phrases: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         const frac = eqn.eqn.functions.frac.bind(eqn.eqn.functions);
         eqn.addElements({
           a: 'a',
@@ -213,7 +213,7 @@ describe('Different ways to make an equation', () => {
         });
       },
       equationScale: () => {
-        eqn = new EquationNew(diagram.shapes, {
+        eqn = new Equation(diagram.shapes, {
           color: color1,
           scale: 0.95,
         });
@@ -231,7 +231,7 @@ describe('Different ways to make an equation', () => {
         });
       },
       equationFormAlignment: () => {
-        eqn = new EquationNew(diagram.shapes, {
+        eqn = new Equation(diagram.shapes, {
           color: color1,
           defaultFormAlignment: {
             fixTo: 'a',
@@ -273,7 +273,7 @@ describe('Different ways to make an equation', () => {
         });
       },
       autoAddElements: () => {
-        eqn = new EquationNew(diagram.shapes, {
+        eqn = new Equation(diagram.shapes, {
           color: color1,
           scale: 0.95,
         });
@@ -290,26 +290,26 @@ describe('Different ways to make an equation', () => {
         });
       },
       autoSymbolsName: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1, scale: 0.95 });
+        eqn = new Equation(diagram.shapes, { color: color1, scale: 0.95 });
         eqn.addForms({
           0: { frac: ['a', 'vinculum', 'b'] },
         });
       },
       autoSymbolsID: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1, scale: 0.95 });
+        eqn = new Equation(diagram.shapes, { color: color1, scale: 0.95 });
         eqn.addForms({
           0: { frac: ['a', 'v_vinculum', 'b'] },
           // 2: ['a', 'b', { vinculum }],
         });
       },
       autoSymbolsObjectName: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1, scale: 0.95 });
+        eqn = new Equation(diagram.shapes, { color: color1, scale: 0.95 });
         eqn.addForms({
           0: { frac: ['a', { vinculum: { color: color2 } }, 'b'] },
         });
       },
       autoSymbolsObjectID: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1, scale: 0.95 });
+        eqn = new Equation(diagram.shapes, { color: color1, scale: 0.95 });
         eqn.addForms({
           0: { frac: ['a', { v_vinculum: { color: color2 } }, 'b'] },
         });

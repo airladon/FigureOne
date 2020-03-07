@@ -8,7 +8,7 @@ import {
 } from '../Element';
 import { joinObjects } from '../../tools/tools';
 import DrawContext2D from '../DrawContext2D';
-import { EquationNew } from '../DiagramElements/Equation/Equation';
+import { Equation } from '../DiagramElements/Equation/Equation';
 import type { TypeEquationOptions } from '../DiagramElements/Equation/Equation';
 import type { TypeNavigatorOptions } from '../DiagramObjects/EqnNavigator';
 import EqnNavigator from '../DiagramObjects/EqnNavigator';
@@ -86,7 +86,7 @@ export default class DiagramEquation {
   equation(
     options: TypeEquationOptions,
   ) {
-    const equation = new EquationNew(this.shapes, options);
+    const equation = new Equation(this.shapes, options);
     return equation;
   }
 
@@ -96,7 +96,7 @@ export default class DiagramEquation {
     options: TypeEquationOptions = {},
   ) {
     // $FlowFixMe
-    const equation = new EquationNew(this.shapes, options);
+    const equation = new Equation(this.shapes, options);
     parent.add(name, equation);
     return equation;
   }
@@ -112,7 +112,7 @@ export default class DiagramEquation {
       const equation = this.addEquation(parent, `${name}Eqn`, options);
       optionsToUse.equation = equation;
       navNameToUse = `${name}Nav`;
-    } else if (!(optionsToUse.equation instanceof EquationNew)) {
+    } else if (!(optionsToUse.equation instanceof Equation)) {
       // let methodPathToUse;
       let nameToUse;
       // let pathToUse;

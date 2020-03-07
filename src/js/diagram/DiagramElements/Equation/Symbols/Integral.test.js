@@ -6,7 +6,7 @@ import {
 } from '../../../../tools/math';
 import * as tools from '../../../../tools/tools';
 import makeDiagram from '../../../../__mocks__/makeDiagram';
-import { EquationNew } from '../Equation';
+import { Equation } from '../Equation';
 
 tools.isTouchDevice = jest.fn();
 
@@ -23,7 +23,7 @@ describe('Equation Functions - Integral', () => {
     diagram = makeDiagram();
     functions = {
       symbols: () => {
-        eqn = new EquationNew(diagram.shapes, { color: [0, 0.95, 0, 1] });
+        eqn = new Equation(diagram.shapes, { color: [0, 0.95, 0, 1] });
         elements = {
           a: 'a',
           s1: {

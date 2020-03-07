@@ -164,14 +164,13 @@ export type TypeEquationForms = {
 
 /**
  * When an equation form series is restarted, or cycled back to the first form
- * in the series then there are options to pulse the form to highlight to the
- * user that it is restarting, or move the equation from somewhere else. Moving
- * would commonly be used when the first form is displayed somewhere else, and
- * you want to show that the start of this form comes from there.
+ * in the series, then two special animations can be defined with this object:
+ * * `moveFrom`: the equation will move from a location (usually another equation of the same form)
+ * * `pulse`: An element will be pulsed when the animation is finished.
  *
- * The default values are:
- * * duration: 1s
- * * scale: 1.1
+ * The default values in the pulse object are are:
+ * * `duration`: 1s
+ * * `scale`: 1.1
  */
 type TypeFormRestart = {
   formRestart?: {
@@ -218,6 +217,81 @@ export type TypeEquationOptions = {
   position?: Point;
 };
 
+/**
+ * Options object for {@link Equation#goToForm}.
+ *
+ * Often, `goToForm` is called to animate from a shown form to a desired form.
+ * Therefore there will be some equation elements that:
+ * * Are currently shown, but need to be hidden as they are not in the desired form
+ * * Are currently shown, are in the desired form, and need to be moved to the correct layout position for the desired form
+ * * Are currently hidden and need to be shown in the desired form
+ *
+ * The order that elements are shown, hidden and moved is defined by the
+ * `animate` property:
+ * * `'move'`: Dissolve out elements to hide, move existing elements to new,
+ * dissolve in elements that need to be shown
+ * * `'dissolveInThenMove'`: Dissolve out the elements to hide, dissolve in the
+ * elements that need to be shown in the correct locations of the form, then
+ * move existing elements to their correct locations
+ * * `'dissolve'`: Dissolve out the entire current form, and then dissolve in the entire new form
+ * * `'moveFrom'`: Shows the desired form at the position defined in the
+ * formRestart property of {@link TypeEquationOptions}, then moves it to the
+ * current location
+ * * `'pulse'`: Same as `'dissolve'`, but once finished will pulse the element
+ *  defined in the pulse object in the formRestart property of {@link TypeEquationOptions}
+ *
+ * If a form is already animating, then the `ifAnimating` property will define
+ * the behavior of the animation:
+ * * `cancelGoTo: true`, `skipToTarget: true`: Current animation will skip to
+ *   the end, and current goTo call will be cancelled
+ * * `cancelGoTo: true`, `skipToTarget: false`: Current animation will stop in
+ *   its current state, and current goTo call will be cancelled
+ * * `cancelGoTo: false`, `skipToTarget: true`: Current animation will skip to
+ *   the end, and current goTo call will then be executed
+ * * `cancelGoTo: false`, `skipToTarget: false`: Current animation will stop in
+ *   its current state, and current goTo call will be executed
+ *
+ * @property {string} [name] - form name to goto
+ * @property {number} [index] - form index to goto (can be used instead of name)
+ * @property {'move' | 'dissolve' | 'moveFrom' | 'pulse' |
+ *  'dissolveInThenMove'} [animate] - default: `"dissolve"`
+ * @property {number} [delay] - delay before goto start. Default: `0`
+ * @property {number} [dissolveOutTime] - Default: 0.4 of duration, or 0.4s if
+ * no duration
+ * @property {number} [duration] - animation duration. Default: `null`
+ * @property {number} [blankTime] - time between dissolve out and dissolve in
+ * when animating with `dissolve` or `pulse`. Default: 0.2 of duration, or 0.2s
+ * if no duration
+ * @property {number} [dissolveInTime] - Default: 0.4 of duration, or 0.4s if
+ * no duration
+ * @property {boolean} [prioritizeFormDuration] - use duration from the form
+ * definition {@link TypeEquationFormObject}. Default: `true`
+ * @property {'fromPrev' | 'fromNext'} [fromWhere] - prioritze *fromPrev* or
+ * *fromNext* duration from the form definition. {@link TypeEquationFormObject}
+ * Default: `null`
+ * @property {{cancelGoTo?: boolean, skipToTarget?: boolean}} [ifAnimating] -
+ * behavior for if currently animating between forms. Default:
+ * `skipToTarget: true`, `cancelGoTo: true`
+ * @property {?() => void} [callback] - call when goto finished
+ */
+type TypeEquationGoToFormOptions = {
+  name?: string,
+  index?: number,
+  animate?: 'move' | 'dissolve' | 'moveFrom' | 'pulse' | 'dissolveInThenMove',
+  delay?: number,
+  dissolveOutTime?: number,
+  duration?: ?number,
+  dissolveInTime?: number,
+  blankTime?: number,
+  prioritizeFormDuration?: boolean,
+  fromWhere?: ?'fromPrev' | 'fromNext',
+  ifAnimating?: {
+    cancelGoTo?: boolean;
+    skipToTarget?: boolean;
+  },
+  callback?: ?() => void,
+}
+
 // export const foo = () => {};
 // An Equation is a collection of elements that can be arranged into different
 // forms.
@@ -229,7 +303,7 @@ export type TypeEquationOptions = {
  * forms.
  * @param {TypeEquationOptions} options
  */
-export class EquationNew extends DiagramElementCollection {
+export class Equation extends DiagramElementCollection {
   eqn: {
     forms: { [formName: string]: {
         base: EquationForm;                   // There is always a base form
@@ -384,6 +458,9 @@ export class EquationNew extends DiagramElementCollection {
     }
   }
 
+  /**
+    * Set the current form series to 'name'
+   */
   setFormSeries(name: string) {
     if (this.eqn.formSeries[name] != null) {
       this.eqn.currentFormSeries = this.eqn.formSeries[name];
@@ -391,7 +468,10 @@ export class EquationNew extends DiagramElementCollection {
     }
   }
 
-  getFormSeries() {
+  /**
+    * Get the current form series name
+   */
+  getFormSeries(): string {
     return this.eqn.currentFormSeriesName;
   }
 
@@ -546,6 +626,9 @@ export class EquationNew extends DiagramElementCollection {
     return symbol;
   }
 
+  /**
+   * Add elements to equation.
+   */
   addElements(
     elems: TypeEquationElements,
   ) {
@@ -647,6 +730,9 @@ export class EquationNew extends DiagramElementCollection {
     });
   }
 
+  /**
+   * Add forms to equation.
+   */
   addForms(forms: TypeEquationForms) {
     const isFormString = form => typeof form === 'string';
     const isFormArray = form => Array.isArray(form);
@@ -970,7 +1056,10 @@ export class EquationNew extends DiagramElementCollection {
     }
   }
 
-  getCurrentForm() {
+  /**
+   * Get the current equation form
+   */
+  getCurrentForm(): ?EquationForm {
     if (this.eqn.forms[this.eqn.currentForm] == null) {
       return null;
     }
@@ -992,6 +1081,9 @@ export class EquationNew extends DiagramElementCollection {
     }
   }
 
+  /**
+   * Set current equation form - Note, this does not show the form.
+   */
   setCurrentForm(
     formOrName: EquationForm | string,
     subForm: string = 'base',
@@ -1011,6 +1103,9 @@ export class EquationNew extends DiagramElementCollection {
     }
   }
 
+  /**
+   * Show equation form
+   */
   showForm(
     formOrName: EquationForm | string,
     subForm: ?string = null,
@@ -1027,6 +1122,9 @@ export class EquationNew extends DiagramElementCollection {
     }
   }
 
+  /**
+   * Get an equation form object from a form name
+   */
   getForm(
     formOrName: string | EquationForm,
     subForm: ?string,
@@ -1051,28 +1149,10 @@ export class EquationNew extends DiagramElementCollection {
     return null;
   }
 
-  // This animates to a form
-  goToForm(optionsIn: {
-    name?: string,
-    index?: number,
-    duration?: ?number,
-    prioritizeFormDuration?: boolean,
-    delay?: number,
-    fromWhere?: ?'fromPrev' | 'fromNext',
-    animate?: 'move' | 'dissolve' | 'moveFrom' | 'pulse' | 'dissolveInThenMove',
-    callback?: ?() => void,
-    // finishAnimatingAndCancelGoTo?: boolean,
-    ifAnimating?: {
-      cancelGoTo?: boolean;
-      skipToTarget?: boolean;
-    },
-    // goToIfAnimating?: 'cancel' | 'continue',
-    // ifAnimating: 'goToNow' | 'goToFromAnimationTarget' | 'canc'
-    // toAnimationEndOnCancel?: boolean,
-    dissolveOutTime?: number,
-    dissolveInTime?: number,
-    blankTime?: number,
-  } = {}) {
+  /**
+   Start an animation to an equation form
+   */
+  goToForm(optionsIn: TypeEquationGoToFormOptions = {}) {
     const defaultOptions = {
       duration: null,
       prioritizeFormDuration: true,
@@ -1220,7 +1300,7 @@ export class EquationNew extends DiagramElementCollection {
           const { moveFrom } = this.eqn.formRestart;
           const target = this.getPosition();
           let start = this.getPosition();
-          if (moveFrom instanceof EquationNew) {
+          if (moveFrom instanceof Equation) {
             moveFrom.showForm(subForm.name);
           }
           if (moveFrom instanceof DiagramElementCollection) {
@@ -1249,7 +1329,7 @@ export class EquationNew extends DiagramElementCollection {
           const newEnd = () => {
             this.pulseScaleNow(pulse.duration, pulse.scale, 0, end);
             if (pulse.element != null
-              && pulse.element instanceof EquationNew  // $FlowFixMe
+              && pulse.element instanceof Equation  // $FlowFixMe
               && pulse.element.getCurrentForm().name === subForm.name
             ) {
               pulse.element.pulseScaleNow(pulse.duration, pulse.scale);
@@ -1287,7 +1367,10 @@ export class EquationNew extends DiagramElementCollection {
     return index;
   }
 
-  prevForm(time: number | null = null, delay: number = 0) {
+  /**
+   * Animate to previous form in the current form series
+   */
+  prevForm(duration: number | null = null, delay: number = 0) {
     const currentForm = this.getCurrentForm();
     if (currentForm == null) {
       return;
@@ -1299,12 +1382,15 @@ export class EquationNew extends DiagramElementCollection {
         index = this.eqn.currentFormSeries.length - 1;
       }
       this.goToForm({
-        index, duration: time, delay, fromWhere: 'fromNext',
+        index, duration, delay, fromWhere: 'fromNext',
       });
     }
   }
 
-  nextForm(time: number | null = null, delay: number = 0) {
+  /**
+   * Animate to next form in the current form series
+   */
+  nextForm(duration: number | null = null, delay: number = 0) {
     let animate = 'move';
 
     const currentForm = this.getCurrentForm();
@@ -1328,7 +1414,7 @@ export class EquationNew extends DiagramElementCollection {
 
       this.goToForm({
         index,
-        duration: time,
+        duration,
         delay,
         fromWhere: 'fromPrev',
         animate,
@@ -1336,7 +1422,10 @@ export class EquationNew extends DiagramElementCollection {
     }
   }
 
-  replayCurrentForm(time: number) {
+  /**
+   * Start from previous form and animate to current form
+   */
+  replayCurrentForm(duration: number) {
     if (this.eqn.isAnimating) {
       // this.stop(true, true);
       this.stop(true, true);
@@ -1355,12 +1444,12 @@ export class EquationNew extends DiagramElementCollection {
     this.stop();
     this.eqn.isAnimating = false;
     this.prevForm(0);
-    this.nextForm(time, 0.5);
+    this.nextForm(duration, 0.5);
   }
 
   animateToForm(
     name: string,
-    time: number | null = null,
+    duration: number | null = null,
     delay: number = 0,
     callback: null | () => void = null,
   ) {
@@ -1372,7 +1461,7 @@ export class EquationNew extends DiagramElementCollection {
     // this.animations.cancel();
     const form = this.getForm(name);
     if (form != null) {
-      form.animatePositionsTo(delay, 0.4, time, 0.4, callback);
+      form.animatePositionsTo(delay, 0.4, duration, 0.4, callback);
     }
     this.setCurrentForm(name);
   }

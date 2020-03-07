@@ -6,7 +6,7 @@ import {
 } from '../../../../tools/math';
 import * as tools from '../../../../tools/tools';
 import makeDiagram from '../../../../__mocks__/makeDiagram';
-import { EquationNew } from '../Equation';
+import { Equation } from '../Equation';
 
 tools.isTouchDevice = jest.fn();
 
@@ -67,7 +67,7 @@ describe('Equation Functions - Root', () => {
     };
     functions = {
       single: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         const e = eqn.eqn.functions;
         const root = e.root.bind(e);
         eqn.addElements(elements);
@@ -130,7 +130,7 @@ describe('Equation Functions - Root', () => {
         });
       },
       definedRoot: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         eqn.addElements(elements);
         eqn.addForms({
           0: {
@@ -151,7 +151,7 @@ describe('Equation Functions - Root', () => {
         diagram.elements = eqn;
       },
       // contentSpace: () => {
-      //   eqn = new EquationNew(diagram.shapes, { color: color1 });
+      //   eqn = new Equation(diagram.shapes, { color: color1 });
       //   eqn.addElements(elements);
       //   eqn.addForms({
       //     0: { root: ['a', 'root1', null, 0.01] },
@@ -165,7 +165,7 @@ describe('Equation Functions - Root', () => {
       //   });
       // },
       parameterSteps: () => {
-        eqn = new EquationNew(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, { color: color1 });
         eqn.addElements(elements);
         eqn.addForms({
           // Method Object

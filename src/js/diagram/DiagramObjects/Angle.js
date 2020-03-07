@@ -15,13 +15,13 @@ import {
 } from '../Element';
 import EquationLabel from './EquationLabel';
 import type { TypeLabelEquationOptions, TypeLabelOptions } from './EquationLabel';
-import { EquationNew } from '../DiagramElements/Equation/Equation';
+import { Equation } from '../DiagramElements/Equation/Equation';
 
 
 export type TypeAngleLabelOrientation = 'horizontal' | 'tangent';
 export type TypeAngleLabelOptions = {
   // String goes to eqn,
-  text: null | string | Array<string> | EquationNew | TypeLabelEquationOptions,
+  text: null | string | Array<string> | Equation | TypeLabelEquationOptions,
                                   // Array<string> into eqn forms
   radius?: number,                // Label radius
   curvePosition?: number,         // Label position along curve in %
@@ -147,7 +147,7 @@ class AngleLabel extends EquationLabel {
 
   constructor(
     equation: Object,
-    labelText: string | EquationNew | Array<string>,
+    labelText: string | Equation | Array<string>,
     color: Array<number>,
     radius: number,
     curvePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
@@ -575,7 +575,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
   }
 
   addLabel(options: {
-    labelText?: string | EquationNew | Array<string> | TypeLabelOptions,
+    labelText?: string | Equation | Array<string> | TypeLabelOptions,
     radius?: number,
     curvePosition?: number,
     curveOffset?: number,
@@ -1126,6 +1126,6 @@ export type TypeLabelledAngle = {
   _curve: DiagramElementPrimitive;
   _label: {
     _base: DiagramElementPrimitive;
-  } & EquationNew;
+  } & Equation;
 } & DiagramObjectAngle;
 
