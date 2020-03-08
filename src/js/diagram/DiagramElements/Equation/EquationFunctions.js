@@ -91,6 +91,8 @@ export type TypeEquationPhrase =
   | { container: TypeEquationFunctionContainer }
   | { matrix: TypeMatrixObject } | TypeMatrixArray
   | { int: TypeEquationFunctionIntegral }
+  | { sumOf: TypeEquationSumOf }
+  | { prodOf: TypeEquationProdOf }
   | Array<TypeEquationPhrase>
   | DiagramElementPrimitive
   | DiagramElementCollection
@@ -709,7 +711,8 @@ export type TypeEquationFunctionBar = {
  * @property {number} [scale] content scale (`1`)
  * @property {number} [fromScale] scale of *from* (bottom) limit (`0.5`)
  * @property {number} [toScale] scale of *to* (top) limit (`0.5`)
- * @property {TypeParsablePoint} [fromOffset] from limit offest ( `side`: `[0, 0]`, `topBottom`: `[0, -0.04]`, `topBottomCenter`: `[0, -0.04]`)
+ * @property {TypeParsablePoint} [fromOffset] from limit offest ( `side`:
+ * `[0, 0]`, `topBottom`: `[0, -0.04]`, `topBottomCenter`: `[0, -0.04]`)
  * @property {TypeParsablePoint} [toOffset] to limit offest (`side`: `[0, 0]`
  * `topBottom`: `[0, 0.04]`, `topBottomCenter`: `[0, 0.04]`)
  * @property {'side' | 'topBottom' | 'topBottomCenter'} [limitsPosition] limits
@@ -846,8 +849,69 @@ export type TypeEquationFunctionIntegral = {
   ?boolean,
 ];
 
-export type TypeSumProdObject = {
-  symbolString?: string,
+/**
+ * Equation sum of
+ *
+ * Place an equation phrase in a sum of operation
+ *
+ * @property {string} symbol
+ * @property {TypeEquationPhrase} content
+ * @property {TypeEquationPhrase} [from]
+ * @property {TypeEquationPhrase} [to]
+ * @property {boolean} [inSize] `false` exclues sum of operator from size of
+ * resulting phrase (`true`)
+ * @property {number} [space] horiztonaly space between symbol and content (`0.05`)
+ * @property {number} [topSpace] space symbol extends above content top (`0.07`)
+ * @property {number} [bottomSpace] space symbol extends below content bottom (`0.07`)
+ * @property {number} [height] force height of symbol overwriting `topSpace`
+ * @property {number} [yOffset] offset of symbol in y (`0`)
+ * @property {number} [scale] content scale (`1`)
+ * @property {number} [fromScale] scale of *from* phrase (`0.5`)
+ * @property {number} [toScale] scale of *to* phrase (`0.5`)
+ * @property {number} [fromSpace] space between symbol and `from` phrase
+ * (`0.04`)
+ * @property {number} [toSpace] space between symbol and `to` phrase (`0.04`)
+ * @property {TypeParsablePoint} [fromOffset] offset of `from` phrase (`[0, 0]`)
+ * @property {TypeParsablePoint} [toOffset] offset of `to` phrase (`[0, 0]`)
+ * @property {boolean} [fullContentBounds] use full bounds of content,
+ * overriding any `inSize=false` properties in the content (`false`)
+ * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
+ * the full bounds of the content even if `fullContentBounds=false` and the
+ * brackets only surround a portion of the content (`false`)
+* @example
+ * // For examples, a sum of symbol (sigma) is defined as an equation element
+ * eqn.addElements({
+ *   s: { symbol: 'sum' }
+ * });
+ * @example
+ * // Full object definition
+ * {
+ *   sumOf: {
+ *     symbol: 's',
+ *     content: 'a',
+ *     from: 'b',
+ *     to: 'c',
+ *     inSize: true,
+ *     space: 0,
+ *     topSpace: 0.1,
+ *     bottomSpace: 0.1,
+ *     height: null,
+ *     yOffset: 0,
+ *     scale: 1,
+ *     fromScale: 1,
+ *     toScale: 1,
+ *     fromSpace: 0.1,
+ *     toSpace: 0.1,
+ *     fromOffset: [0.1, 0.1],
+ *     toOffset: [-0.1, -0.1],
+ *   },
+ * }
+ * @example
+ * // Example array definition
+ *  { sumOf: ['s', 'a', 'b', 'c'] }
+ */
+export type TypeEquationSumOf = {
+  symbol?: string,
   content: TypeEquationPhrase,
   from?: TypeEquationPhrase,
   to?: TypeEquationPhrase,
@@ -866,8 +930,110 @@ export type TypeSumProdObject = {
   toOffset?: TypeParsablePoint,
   fullBoundsContent?: boolean,
   useFullBounds?: boolean,
-};
-export type TypeSumProdArray = [
+} | [
+  ?string,
+  TypeEquationPhrase,
+  ?TypeEquationPhrase,
+  ?TypeEquationPhrase,
+  ?boolean,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?TypeParsablePoint | null,
+  ?TypeParsablePoint | null,
+  ?boolean,
+  ?boolean,
+];
+
+/**
+ * Equation product of
+ *
+ * Place an equation phrase in a product of operation
+ *
+ * @property {string} symbol
+ * @property {TypeEquationPhrase} content
+ * @property {TypeEquationPhrase} [from]
+ * @property {TypeEquationPhrase} [to]
+ * @property {boolean} [inSize] `false` exclues product of operator from size of
+ * resulting phrase (`true`)
+ * @property {number} [space] horiztonaly space between symbol and content (`0.05`)
+ * @property {number} [topSpace] space symbol extends above content top (`0.07`)
+ * @property {number} [bottomSpace] space symbol extends below content bottom (`0.07`)
+ * @property {number} [height] force height of symbol overwriting `topSpace`
+ * @property {number} [yOffset] offset of symbol in y (`0`)
+ * @property {number} [scale] content scale (`1`)
+ * @property {number} [fromScale] scale of *from* phrase (`0.5`)
+ * @property {number} [toScale] scale of *to* phrase (`0.5`)
+ * @property {number} [fromSpace] space between symbol and `from` phrase
+ * (`0.04`)
+ * @property {number} [toSpace] space between symbol and `to` phrase (`0.04`)
+ * @property {TypeParsablePoint} [fromOffset] offset of `from` phrase (`[0, 0]`)
+ * @property {TypeParsablePoint} [toOffset] offset of `to` phrase (`[0, 0]`)
+ * @property {boolean} [fullContentBounds] use full bounds of content,
+ * overriding any `inSize=false` properties in the content (`false`)
+ * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
+ * the full bounds of the content even if `fullContentBounds=false` and the
+ * brackets only surround a portion of the content (`false`)
+* @example
+ * // For examples, a sum of symbol (pi) is defined as an equation element
+ * eqn.addElements({
+ *   s: { symbol: 'prod' }
+ * });
+ * @example
+ * // Full object definition
+ * {
+ *   prodOf: {
+ *     symbol: 's',
+ *     content: 'a',
+ *     from: 'b',
+ *     to: 'c',
+ *     inSize: true,
+ *     space: 0,
+ *     topSpace: 0.1,
+ *     bottomSpace: 0.1,
+ *     height: null,
+ *     yOffset: 0,
+ *     scale: 1,
+ *     fromScale: 1,
+ *     toScale: 1,
+ *     fromSpace: 0.1,
+ *     toSpace: 0.1,
+ *     fromOffset: [0.1, 0.1],
+ *     toOffset: [-0.1, -0.1],
+ *   },
+ * }
+ * @example
+ * // Example array definition
+ *  { prodOf: ['s', 'a', 'b', 'c'] }
+ */
+export type TypeEquationProdOf = {
+  symbol?: string,
+  content: TypeEquationPhrase,
+  from?: TypeEquationPhrase,
+  to?: TypeEquationPhrase,
+  inSize?: boolean,
+  space?: number,
+  topSpace?: number,
+  bottomSpace?: number,
+  height?: number,
+  yOffset?: number,
+  scale?: number,
+  fromScale?: number,
+  toScale?: number,
+  fromSpace?: number,
+  toSpace?: number,
+  fromOffset?: TypeParsablePoint,
+  toOffset?: TypeParsablePoint,
+  fullBoundsContent?: boolean,
+  useFullBounds?: boolean,
+} | [
   ?string,
   TypeEquationPhrase,
   ?TypeEquationPhrase,
@@ -2311,16 +2477,16 @@ export class EquationFunctions {
     });
   }
 
-  sumOf(options: TypeSumProdObject | TypeSumProdArray) {
+  sumOf(options: TypeEquationSumOf) {
     return this.sumProd(options);
   }
 
-  prodOf(options: TypeSumProdObject | TypeSumProdArray) {
+  prodOf(options: TypeEquationProdOf) {
     return this.sumProd(options);
   }
 
   sumProd(
-    optionsOrArray: TypeSumProdObject | TypeSumProdArray,
+    optionsOrArray: TypeEquationSumOf | TypeEquationProdOf,
   ) {
     let content;
     let symbol;
@@ -2342,12 +2508,12 @@ export class EquationFunctions {
     let fullBoundsContent;
     let useFullBounds;
     const defaultOptions = {
+      inSize: true,
       space: 0.05,
       topSpace: 0.07,
       bottomSpace: 0.07,
       height: null,
       yOffset: 0,
-      inSize: true,
       contentScale: 1,
       fromScale: 0.5,
       toScale: 0.5,
