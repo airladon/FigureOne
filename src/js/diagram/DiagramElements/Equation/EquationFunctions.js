@@ -80,8 +80,8 @@ export type TypeEquationPhrase =
   | { sub: TypeSubObject } | TypeSubArray
   | { sup: TypeSupObject } | TypeSupArray
   | { supSub: TypeSupSubObject } | TypeSupSubArray
-  | { topBar: TypeBarObject } | TypeBarArray
-  | { bottomBar: TypeBarObject } | TypeBarArray
+  | { topBar: EquationFunctionBar }
+  | { bottomBar: EquationFunctionBar }
   | { annotate: TypeAnnotateObject }
   | { topComment: TypeCommentObject } | TypeCommentArray
   | { bottomComment: TypeCommentObject } | TypeCommentArray
@@ -577,7 +577,7 @@ export type TypeEquationFunctionBox = {
  * @property {TypeEquationPhrase} content
  * @property {string} symbol
  * @property {boolean} [inSize] `false` exclues box symbol from size of
- * resulting phrase (`false`)
+ * resulting phrase (`true`)
  * @property {number} [space] space between content and the symbol (`0.03`)
  * @property {number} [overhang] amount symbol extends beyond content (`0`)
  * @property {number} [length] total length of symbol (overrides `overhang`)
@@ -603,7 +603,7 @@ export type TypeEquationFunctionBox = {
  * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
  * the full bounds of the content even if `fullContentBounds=false` and the
  * brackets only surround a portion of the content (`false`)
-* @example
+ * @example
  * // For examples, a box symbol is defined as an equation element
  * eqn.addElements({
  *   hBar: { symbol: 'bar', side: 'top' }
@@ -649,7 +649,7 @@ export type TypeEquationFunctionBox = {
  * }
  * @example
  * // Example array definition
- *  { box: ['a', 'hBar', 'top] }
+ *  { bar: ['a', 'hBar', 'top] }
  */
 export type EquationFunctionBar = {
   content: TypeEquationPhrase;
@@ -689,6 +689,92 @@ export type EquationFunctionBar = {
   ?boolean,
 ];
 
+/**
+ * Equation integral
+ *
+ * Place an integral (with optional limits) before an equation phrase
+ *
+ inSize: true,
+      space: 0.05,
+      topSpace: 0.1,
+      bottomSpace: 0.1,
+      height: null,
+      yOffset: 0,
+      contentScale: 1,
+      fromScale: 0.5,
+      toScale: 0.5,
+      fromOffset: [0, 0],
+      toOffset: [0.04, 0],
+      limitsPosition: 'side',
+      limitsAroundContent: true,
+      fromXPosition: 0.5,
+      fromYPosition: 'bottom',
+      fromXAlign: 'left',
+      fromYAlign: 'middle',
+      toXPosition: 'right',
+      toYPosition: 'top',
+      toXAlign: 'left',
+      toYAlign: 'middle',
+      fullBoundsContent: false,
+      useFullBounds: false,
+
+ * @property {string} symbol
+ * @property {TypeEquationPhrase} content
+ * @property {TypeEquationPhrase} [from]
+ * @property {TypeEquationPhrase} [to]
+ * @property {boolean} [inSize] `false` exclues box symbol from size of
+ * resulting phrase (`true`)
+ * @property {number} [space] horizontal space between symbol and content (`0.05`)
+ * @property {number} [topSpace]
+ * @property {number} [bottomSpace]
+ * @property {number} [height]
+ * @property {number} [yOffset]
+ * @property {number} [scale]
+ * @property {number} [fromScale]
+ * @property {number} [toScale]
+ * @property {TypeParsablePoint} [fromOffset]
+ * @property {TypeParsablePoint} [toOffset]
+ * @property {'side' | 'topBottom' | 'topBottomCenter'} [limitsPosition]
+ * @property {boolean} [limitsAroundContent]
+ * @property {'left' | 'center' | 'right' | number} [fromXPosition]
+ * @property {'bottom' | 'top' | 'middle' | 'baseline' | number} [fromYPositio]
+ * @property {'left' | 'center' | 'right' | number} [fromXAlign]
+ * @property {'bottom' | 'top' | 'middle' | 'baseline' | number} [fromYAlign]
+ * @property {'left' | 'center' | 'right' | number} [toXPosition]
+ * @property {'bottom' | 'top' | 'middle' | 'baseline' | number} [toYPosition]
+ * @property {'left' | 'center' | 'right' | number} [toXAlign]
+ * @property {'bottom' | 'top' | 'middle' | 'baseline' | number} [toYAlign]
+ * @property {boolean} [fullContentBounds] use full bounds of content,
+ * overriding any `inSize=false` properties in the content (`false`)
+ * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
+ * the full bounds of the content even if `fullContentBounds=false` and the
+ * brackets only surround a portion of the content (`false`)
+ * @example
+ * // For examples, a box symbol is defined as an equation element
+ * eqn.addElements({
+ *   int: { symbol: 'int' }
+ * });
+ * @example
+ * // Full object definition for horizontal bar
+ * {
+ *   int: {
+ *     content: 'a',
+ *     symbol: 'hBar',
+ *     side: 'top',
+ *     inSize: true,
+ *     space: 0.1,
+ *     overhang: null,
+ *     length: null,
+ *     left: null,
+ *     right: null,
+ *     fullContentBounds: false,
+ *     useFullBounds: false,
+ *   },
+ * }
+ * @example
+ * // Example array definition
+ *  { bar: ['a', 'hBar', 'top] }
+ */
 export type TypeIntegralObject = {
   symbol?: string,
   content?: TypeEquationPhrase,
@@ -2067,17 +2153,15 @@ export class EquationFunctions {
     let fullBoundsContent;
     let useFullBounds;
     const defaultOptions = {
+      inSize: true,
       space: 0.05,
       topSpace: 0.1,
       bottomSpace: 0.1,
       height: null,
       yOffset: 0,
-      inSize: true,
       contentScale: 1,
       fromScale: 0.5,
       toScale: 0.5,
-      // fromSpace: 0.01,
-      // toSpace: 0.01,
       fromOffset: [0, 0],
       toOffset: [0.04, 0],
       limitsPosition: 'side',
