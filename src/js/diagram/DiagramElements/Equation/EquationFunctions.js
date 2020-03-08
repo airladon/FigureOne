@@ -77,9 +77,9 @@ export type TypeEquationPhrase =
   | { box: TypeEquationFunctionBox }
   | { root: TypeEquationFunctionRoot }
   | { brac: TypeEquationFunctionBracket }
-  | { sub: TypeSubObject } | TypeSubArray
-  | { sup: TypeSupObject } | TypeSupArray
-  | { supSub: TypeSupSubObject } | TypeSupSubArray
+  | { sub: TypeEquationFunctionSubcript }
+  | { sup: TypeEquationFunctionSuperscript }
+  | { supSub: TypeEquationFunctionSuperscriptSubcript }
   | { topBar: TypeEquationFunctionBar }
   | { bottomBar: TypeEquationFunctionBar }
   | { annotate: TypeAnnotateObject }
@@ -347,7 +347,7 @@ export type TypeEquationFunctionBracket = {
  *
  * @property {string} symbol radical symbol
  * @property {TypeEquationPhrase} content
- * @property {boolean} [inSize] `false` exclues radical symbol and root (if
+ * @property {boolean} [inSize] `false` excludes radical symbol and root (if
  * defined) from size of resulting phrase (`true`)
  * @property {number} [space] (`0.02`) default space between content and
  * radical symbol in left, right, top and bottom directions.
@@ -433,7 +433,7 @@ export type TypeEquationFunctionRoot = {
  *
  * @property {TypeEquationPhrase} content
  * @property {string} symbol
- * @property {boolean} [inSize] `false` exclues strike symbol from size of
+ * @property {boolean} [inSize] `false` excludes strike symbol from size of
  * resulting phrase (`false`)
  * @property {number} [space] amount the strike symbol overhangs the content on
  * the left, right, bottom and top sides (`0.02`)
@@ -506,7 +506,7 @@ export type TypeEquationFunctionStrike = {
  *
  * @property {TypeEquationPhrase} content
  * @property {string} symbol
- * @property {boolean} [inSize] `false` exclues box symbol from size of
+ * @property {boolean} [inSize] `false` excludes box symbol from size of
  * resulting phrase (`false`)
  * @property {number} [space] space between box symbol and content on
  * the left, right, bottom and top sides (`0`)
@@ -579,7 +579,7 @@ export type TypeEquationFunctionBox = {
  *
  * @property {TypeEquationPhrase} content
  * @property {string} symbol
- * @property {boolean} [inSize] `false` exclues box symbol from size of
+ * @property {boolean} [inSize] `false` excludes box symbol from size of
  * resulting phrase (`true`)
  * @property {number} [space] space between content and the symbol (`0.03`)
  * @property {number} [overhang] amount symbol extends beyond content (`0`)
@@ -701,7 +701,7 @@ export type TypeEquationFunctionBar = {
  * @property {TypeEquationPhrase} content
  * @property {TypeEquationPhrase} [from] bottom limit
  * @property {TypeEquationPhrase} [to] top limit
- * @property {boolean} [inSize] `false` exclues box symbol from size of
+ * @property {boolean} [inSize] `false` excludes box symbol from size of
  * resulting phrase (`true`)
  * @property {number} [space] horizontal space between symbol and content (`0.05`)
  * @property {number} [topSpace] space between content top and symbol top (`0.1`)
@@ -858,7 +858,7 @@ export type TypeEquationFunctionIntegral = {
  * @property {TypeEquationPhrase} content
  * @property {TypeEquationPhrase} [from]
  * @property {TypeEquationPhrase} [to]
- * @property {boolean} [inSize] `false` exclues sum of operator from size of
+ * @property {boolean} [inSize] `false` excludes sum of operator from size of
  * resulting phrase (`true`)
  * @property {number} [space] horiztonaly space between symbol and content (`0.05`)
  * @property {number} [topSpace] space symbol extends above content top (`0.07`)
@@ -961,7 +961,7 @@ export type TypeEquationSumOf = {
  * @property {TypeEquationPhrase} content
  * @property {TypeEquationPhrase} [from]
  * @property {TypeEquationPhrase} [to]
- * @property {boolean} [inSize] `false` exclues product of operator from size of
+ * @property {boolean} [inSize] `false` excludes product of operator from size of
  * resulting phrase (`true`)
  * @property {number} [space] horiztonaly space between symbol and content (`0.05`)
  * @property {number} [topSpace] space symbol extends above content top (`0.07`)
@@ -1055,28 +1055,37 @@ export type TypeEquationProdOf = {
   ?boolean,
 ];
 
-export type TypeSubObject = {
+/**
+ * Equation subscript
+ *
+ * @property {TypeEquationPhrase} content
+ * @property {TypeEquationPhrase} subscript
+ * @property {number} [scale] scale of subscript (`0.5`)
+ * @property {TypeParsablePoint} [offset] offset of subscript (`[0, 0]`)
+ * @property {boolean} [inSize] `true` excludes subscript from size of
+ * resulting phrase (`true`)
+ * @example
+ * // Full object definition
+ * {
+ *   sub: {
+ *     content: 'a',
+ *     subscript: 'b',
+ *     scale: 0.5,
+ *     offset: [0, 0],
+ *     inSize: true,
+ *   },
+ * }
+ * @example
+ * // Example array definition
+ *  { sub: ['a', 'b'] }
+ */
+export type TypeEquationFunctionSubcript = {
   content: TypeEquationPhrase;
   subscript: TypeEquationPhrase;
   scale?: number,
   offset?: TypeParsablePoint,
   inSize: boolean,
-};
-export type TypeSubArray = [
-  TypeEquationPhrase,
-  TypeEquationPhrase,
-  ?number,
-  ?TypeParsablePoint,
-  ?boolean,
-];
-export type TypeSupObject = {
-  content: TypeEquationPhrase;
-  superscript: TypeEquationPhrase;
-  scale?: number,
-  offset?: TypeParsablePoint,
-  inSize: boolean,
-};
-export type TypeSupArray = [
+} | [
   TypeEquationPhrase,
   TypeEquationPhrase,
   ?number,
@@ -1084,7 +1093,73 @@ export type TypeSupArray = [
   ?boolean,
 ];
 
-export type TypeSupSubObject = {
+/**
+ * Equation superscript
+ *
+ * @property {TypeEquationPhrase} content
+ * @property {TypeEquationPhrase} superscript
+ * @property {number} [scale] scale of superscript (`0.5`)
+ * @property {TypeParsablePoint} [offset] offset of superscript (`[0, 0]`)
+ * @property {boolean} [inSize] `true` excludes superscript from size of
+ * resulting phrase (`true`)
+ * @example
+ * // Full object definition
+ * {
+ *   sup: {
+ *     content: 'a',
+ *     superscript: 'b',
+ *     scale: 0.5,
+ *     offset: [0, 0],
+ *     inSize: true,
+ *   },
+ * }
+ * @example
+ * // Example array definition
+ *  { sup: ['a', 'b'] }
+ */
+export type TypeEquationFunctionSuperscript = {
+  content: TypeEquationPhrase;
+  superscript: TypeEquationPhrase;
+  scale?: number,
+  offset?: TypeParsablePoint,
+  inSize: boolean,
+} | [
+  TypeEquationPhrase,
+  TypeEquationPhrase,
+  ?number,
+  ?TypeParsablePoint,
+  ?boolean,
+];
+
+/**
+ * Equation superscript and subscript
+ *
+ * @property {TypeEquationPhrase} content
+ * @property {TypeEquationPhrase} superscript
+ * @property {TypeEquationPhrase} subscript
+ * @property {number} [scale] scale of superscript (`0.5`)
+ * @property {TypeParsablePoint} [superscriptOffset] offset of superscript (`[0, 0]`)
+ * @property {TypeParsablePoint} [subscriptOffset] offset of subscript (`[0, 0]`)
+ * @property {boolean} [inSize] `true` excludes superscript from size of
+ * resulting phrase (`true`)
+ * @example
+ * // Full object definition
+ * {
+ *   supSub: {
+ *     content: 'a',
+ *     superscript: 'b',
+ *     subscript: 'c',
+ *     scale: 0.5,
+ *     superscriptOffset: [0, 0],
+ *     subOffset: [0, 0],
+ *     inSize: true,
+ *   },
+ * }
+ * @example
+ * // Example array definition
+ *  { supSub: ['a', 'b', 'c'] }
+ */
+export type TypeEquationFunctionSuperscriptSubscript = {
   content: TypeEquationPhrase;
   subscript: TypeEquationPhrase;
   superscript: TypeEquationPhrase;
@@ -1092,8 +1167,7 @@ export type TypeSupSubObject = {
   superscriptOffset?: TypeParsablePoint;
   subscriptOffset?: TypeParsablePoint;
   inSize?: boolean,
-};
-export type TypeSupSubArray = [
+} | [
   TypeEquationPhrase,
   TypeEquationPhrase,
   TypeEquationPhrase,
