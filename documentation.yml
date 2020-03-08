@@ -17,7 +17,7 @@ toc:
   - TypeEquationProdOf
   - TypeEquationFunctionSubcript
   - TypeEquationFunctionSuperscript
-  - TypeEquationFunctionSuperscriptSubcript
+  - TypeEquationFunctionSuperscriptSubscript
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment

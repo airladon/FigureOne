@@ -2071,7 +2071,7 @@ export class EquationFunctions {
     });
   }
 
-  supSub(optionsOrArray: TypeSupSubObject | TypeSupSubArray) {
+  supSub(optionsOrArray: TypeEquationFunctionSuperscriptSubscript) {
     let content;
     let superscript = null;
     let subscript = null;
@@ -2136,7 +2136,7 @@ export class EquationFunctions {
     });
   }
 
-  sup(optionsOrArray: TypeSupObject | TypeSupArray) {
+  sup(optionsOrArray: TypeEquationFunctionSuperscript) {
     let content;
     let superscript;
     let scale;
@@ -2162,7 +2162,7 @@ export class EquationFunctions {
     });
   }
 
-  sub(optionsOrArray: TypeSubObject | TypeSubArray) {
+  sub(optionsOrArray: TypeEquationFunctionSubcript) {
     let content;
     let subscript;
     let scale;
