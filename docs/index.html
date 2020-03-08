@@ -230,6 +230,16 @@
               
                 
                 <li><a
+                  href='#typeequationfunctionsuperscriptsubscript'
+                  class="">
+                  TypeEquationFunctionSuperscriptSubscript
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#equation-form-types'
                   class="h5 bold black caps">
                   Equation Form Types
@@ -551,16 +561,6 @@
                   href='#typediagramoptions'
                   class="">
                   TypeDiagramOptions
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#typeequationfunctionsuperscriptsubscript'
-                  class="">
-                  TypeEquationFunctionSuperscriptSubscript
                   
                 </a>
                 
@@ -3782,6 +3782,141 @@ resulting phrase (
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
  { <span class="hljs-attr">sup</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>] }</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeequationfunctionsuperscriptsubscript'>
+      TypeEquationFunctionSuperscriptSubscript
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation superscript and subscript</p>
+
+    <div class='pre p1 fill-light mt0'>TypeEquationFunctionSuperscriptSubscript</div>
+  
+    <p>
+      Type:
+      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, subscript: <a href="#typeequationphrase">TypeEquationPhrase</a>, superscript: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, superscriptOffset: TypeParsablePoint?, subscriptOffset: TypeParsablePoint?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, TypeParsablePoint?, TypeParsablePoint?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>superscript</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>subscript</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : scale of superscript (
+<code>0.5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>superscriptOffset</span> <code class='quiet'>(TypeParsablePoint?)</code>
+          : offset of superscript (
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>subscriptOffset</span> <code class='quiet'>(TypeParsablePoint?)</code>
+          : offset of subscript (
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ excludes superscript from size of
+resulting phrase (
+<code>true</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition</span>
+{
+  <span class="hljs-attr">supSub</span>: {
+    <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
+    <span class="hljs-attr">superscript</span>: <span class="hljs-string">'b'</span>,
+    <span class="hljs-attr">subscript</span>: <span class="hljs-string">'c'</span>,
+    <span class="hljs-attr">scale</span>: <span class="hljs-number">0.5</span>,
+    <span class="hljs-attr">superscriptOffset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+    <span class="hljs-attr">subOffset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+    <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
+  },
+}</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
+ { <span class="hljs-attr">supSub</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>] }</pre>
     
   
 
@@ -7782,141 +7917,6 @@ corner at (-1, -1), width 1, height 1
 
   
 
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='typeequationfunctionsuperscriptsubscript'>
-      TypeEquationFunctionSuperscriptSubscript
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Equation superscript and subscript</p>
-
-    <div class='pre p1 fill-light mt0'>TypeEquationFunctionSuperscriptSubscript</div>
-  
-    <p>
-      Type:
-      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, subscript: <a href="#typeequationphrase">TypeEquationPhrase</a>, superscript: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, superscriptOffset: TypeParsablePoint?, subscriptOffset: TypeParsablePoint?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, TypeParsablePoint?, TypeParsablePoint?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>superscript</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>subscript</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : scale of superscript (
-<code>0.5</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>superscriptOffset</span> <code class='quiet'>(TypeParsablePoint?)</code>
-          : offset of superscript (
-<code>[0, 0]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>subscriptOffset</span> <code class='quiet'>(TypeParsablePoint?)</code>
-          : offset of subscript (
-<code>[0, 0]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>true</code>
- excludes superscript from size of
-resulting phrase (
-<code>true</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition</span>
-{
-  <span class="hljs-attr">supSub</span>: {
-    <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-    <span class="hljs-attr">superscript</span>: <span class="hljs-string">'b'</span>,
-    <span class="hljs-attr">subscript</span>: <span class="hljs-string">'c'</span>,
-    <span class="hljs-attr">scale</span>: <span class="hljs-number">0.5</span>,
-    <span class="hljs-attr">superscriptOffset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
-    <span class="hljs-attr">subOffset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
-    <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
-  },
-}</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
- { <span class="hljs-attr">supSub</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>] }</pre>
-    
   
 
   
