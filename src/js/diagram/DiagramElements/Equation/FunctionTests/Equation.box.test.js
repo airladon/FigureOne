@@ -89,7 +89,6 @@ describe('Equation Functions - Box', () => {
                 bottomSpace: null,
                 leftSpace: null,
                 rightSpace: null,
-                fill: false,
               },
             },
             scale: 1,

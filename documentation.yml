@@ -10,6 +10,8 @@ toc:
   - TypeEquationFunctionBracket
   - TypeEquationFunctionRoot
   - TypeEquationFunctionStrike
+  - TypeEquationFunctionBox
+  - EquationFunctionBar
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment
