@@ -720,22 +720,23 @@ export type EquationFunctionBar = {
 
  * @property {string} symbol
  * @property {TypeEquationPhrase} content
- * @property {TypeEquationPhrase} [from]
- * @property {TypeEquationPhrase} [to]
+ * @property {TypeEquationPhrase} [from] bottom limit
+ * @property {TypeEquationPhrase} [to] top limit
  * @property {boolean} [inSize] `false` exclues box symbol from size of
  * resulting phrase (`true`)
  * @property {number} [space] horizontal space between symbol and content (`0.05`)
- * @property {number} [topSpace]
- * @property {number} [bottomSpace]
- * @property {number} [height]
- * @property {number} [yOffset]
- * @property {number} [scale]
- * @property {number} [fromScale]
- * @property {number} [toScale]
- * @property {TypeParsablePoint} [fromOffset]
- * @property {TypeParsablePoint} [toOffset]
- * @property {'side' | 'topBottom' | 'topBottomCenter'} [limitsPosition]
- * @property {boolean} [limitsAroundContent]
+ * @property {number} [topSpace] space between content top and symbol top (`0.1`)
+ * @property {number} [bottomSpace] space between content bottom and symbol bottom (`0.1`)
+ * @property {number} [height] force height of symbol
+ * @property {number} [yOffset] y offset of symbol (`0`)
+ * @property {number} [scale] content scale (`1`)
+ * @property {number} [fromScale] scale of from (bottom) limit (`0.5`)
+ * @property {number} [toScale] scale of to (top) limit (`0.5`)
+ * @property {TypeParsablePoint} [fromOffset] from limit offest (`[0, 0]`)
+ * @property {TypeParsablePoint} [toOffset] to limit offest (`[0, 0]`)
+ * @property {'side' | 'topBottom' | 'topBottomCenter'} [limitsPosition] limits
+ * relative to symbol (`'side'`)
+ * @property {boolean} [limitsAroundContent] `flase` means content left is aligned with furthest right of limits
  * @property {'left' | 'center' | 'right' | number} [fromXPosition]
  * @property {'bottom' | 'top' | 'middle' | 'baseline' | number} [fromYPositio]
  * @property {'left' | 'center' | 'right' | number} [fromXAlign]
