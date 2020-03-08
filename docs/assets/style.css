@@ -125,7 +125,6 @@ table {
 .prose table th:nth-child(1) {
   border-right: none;
 }
-
 .prose table th:nth-child(2) {
   border-left: none;
 }

@@ -80,16 +80,17 @@ export type TypeEquationPhrase =
   | { sub: TypeSubObject } | TypeSubArray
   | { sup: TypeSupObject } | TypeSupArray
   | { supSub: TypeSupSubObject } | TypeSupSubArray
-  | { topBar: EquationFunctionBar }
-  | { bottomBar: EquationFunctionBar }
+  | { topBar: TypeEquationFunctionBar }
+  | { bottomBar: TypeEquationFunctionBar }
   | { annotate: TypeAnnotateObject }
   | { topComment: TypeCommentObject } | TypeCommentArray
   | { bottomComment: TypeCommentObject } | TypeCommentArray
   | { padding: TypePaddingObject } | TypePaddingArray
-  | { bar: EquationFunctionBar }
+  | { bar: TypeEquationFunctionBar }
   | { scale: TypeEquationFunctionScale }
   | { container: TypeEquationFunctionContainer }
   | { matrix: TypeMatrixObject } | TypeMatrixArray
+  | { int: TypeEquationFunctionIntegral }
   | Array<TypeEquationPhrase>
   | DiagramElementPrimitive
   | DiagramElementCollection
@@ -651,7 +652,7 @@ export type TypeEquationFunctionBox = {
  * // Example array definition
  *  { bar: ['a', 'hBar', 'top] }
  */
-export type EquationFunctionBar = {
+export type TypeEquationFunctionBar = {
   content: TypeEquationPhrase;
   symbol?: string;
   inSize?: boolean,
@@ -694,30 +695,30 @@ export type EquationFunctionBar = {
  *
  * Place an integral (with optional limits) before an equation phrase
  *
- inSize: true,
-      space: 0.05,
-      topSpace: 0.1,
-      bottomSpace: 0.1,
-      height: null,
-      yOffset: 0,
-      contentScale: 1,
-      fromScale: 0.5,
-      toScale: 0.5,
-      fromOffset: [0, 0],
-      toOffset: [0.04, 0],
-      limitsPosition: 'side',
-      limitsAroundContent: true,
-      fromXPosition: 0.5,
-      fromYPosition: 'bottom',
-      fromXAlign: 'left',
-      fromYAlign: 'middle',
-      toXPosition: 'right',
-      toYPosition: 'top',
-      toXAlign: 'left',
-      toYAlign: 'middle',
-      fullBoundsContent: false,
-      useFullBounds: false,
-
+ if (limitsPosition === 'topBottom') {
+      defaultOptions.fromXPosition = 0.1;
+      defaultOptions.fromYPosition = 'bottom';
+      defaultOptions.fromXAlign = 'center';
+      defaultOptions.fromYAlign = 'top';        // $FlowFixMe
+      defaultOptions.toXPosition = 0.9;
+      defaultOptions.toYPosition = 'top';
+      defaultOptions.toXAlign = 'center';
+      defaultOptions.toYAlign = 'bottom';
+      defaultOptions.fromOffset = [0, -0.04];
+      defaultOptions.toOffset = [0, 0.04];
+    }
+    if (limitsPosition === 'topBottomCenter') {        // $FlowFixMe
+      defaultOptions.fromXPosition = 'center';
+      defaultOptions.fromYPosition = 'bottom';
+      defaultOptions.fromXAlign = 'center';
+      defaultOptions.fromYAlign = 'top';
+      defaultOptions.toXPosition = 'center';
+      defaultOptions.toYPosition = 'top';
+      defaultOptions.toXAlign = 'center';
+      defaultOptions.toYAlign = 'bottom';
+      defaultOptions.fromOffset = [0, -0.04];
+      defaultOptions.toOffset = [0, 0.04];
+    }
  * @property {string} symbol
  * @property {TypeEquationPhrase} content
  * @property {TypeEquationPhrase} [from] bottom limit
@@ -735,16 +736,28 @@ export type EquationFunctionBar = {
  * @property {TypeParsablePoint} [fromOffset] from limit offest (`[0, 0]`)
  * @property {TypeParsablePoint} [toOffset] to limit offest (`[0, 0]`)
  * @property {'side' | 'topBottom' | 'topBottomCenter'} [limitsPosition] limits
- * relative to symbol (`'side'`)
- * @property {boolean} [limitsAroundContent] `flase` means content left is aligned with furthest right of limits
- * @property {'left' | 'center' | 'right' | number} [fromXPosition]
+ * relative to symbol. `side` is to the right of the symbol ends, `topBottom`
+ * is above and below the symbol ends and `topBottomCenter` is above and below
+ * the integral mid point (`'side'`)
+ * @property {boolean} [limitsAroundContent] `flase` means content left is
+ * aligned with furthest right of limits
+ * @property {'left' | 'center' | 'right' | number} [fromXPosition] x position
+ * of limit relative to the symbol (`'side'`: `0.5`, `'topBottom'`: `0.1`,
+ * `'topBottomCenter'`: `'center'`)
  * @property {'bottom' | 'top' | 'middle' | 'baseline' | number} [fromYPositio]
- * @property {'left' | 'center' | 'right' | number} [fromXAlign]
+ * y position of the limit relavite to the symbol (`'bottom'`)
+ * @property {'left' | 'center' | 'right' | number} [fromXAlign] limit x
+ * alignment (`'left'`)
  * @property {'bottom' | 'top' | 'middle' | 'baseline' | number} [fromYAlign]
- * @property {'left' | 'center' | 'right' | number} [toXPosition]
+ * limit y alignment (`'middle'`)
+ * @property {'left' | 'center' | 'right' | number} [toXPosition] x position
+ * of limit relative to the symbol (`'right'`)
  * @property {'bottom' | 'top' | 'middle' | 'baseline' | number} [toYPosition]
- * @property {'left' | 'center' | 'right' | number} [toXAlign]
+ * y position of the limit relavite to the symbol (`'top'`)
+ * @property {'left' | 'center' | 'right' | number} [toXAlign] limit x
+ * alignment (`'left'`)
  * @property {'bottom' | 'top' | 'middle' | 'baseline' | number} [toYAlign]
+ * limit y alignment (`'middle'`)
  * @property {boolean} [fullContentBounds] use full bounds of content,
  * overriding any `inSize=false` properties in the content (`false`)
  * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
@@ -776,7 +789,7 @@ export type EquationFunctionBar = {
  * // Example array definition
  *  { bar: ['a', 'hBar', 'top] }
  */
-export type TypeIntegralObject = {
+export type TypeEquationFunctionIntegral = {
   symbol?: string,
   content?: TypeEquationPhrase,
   from?: TypeEquationPhrase,
@@ -804,8 +817,7 @@ export type TypeIntegralObject = {
   toYAlign?: 'bottom' | 'top' | 'middle' | 'baseline' | number,
   fullBoundsContent?: boolean,
   useFullBounds?: boolean,
-  };
-export type TypeIntegralArray = [
+  } | [
   ?string,
   ?TypeEquationPhrase,
   ?TypeEquationPhrase,
@@ -1404,7 +1416,7 @@ export class EquationFunctions {
   }
 
   bar(
-    optionsOrArray: EquationFunctionBar,
+    optionsOrArray: TypeEquationFunctionBar,
     forceOptions: Object = {},
   ) {
     let content;
@@ -2041,11 +2053,11 @@ export class EquationFunctions {
     });
   }
 
-  topBar(optionsOrArray: EquationFunctionBar) {
+  topBar(optionsOrArray: TypeEquationFunctionBar) {
     return this.bar(optionsOrArray, { side: 'top' });
   }
 
-  bottomBar(optionsOrArray: EquationFunctionBar) {
+  bottomBar(optionsOrArray: TypeEquationFunctionBar) {
     return this.bar(optionsOrArray, { side: 'bottom' });
   }
 
@@ -2122,7 +2134,7 @@ export class EquationFunctions {
 
 
   int(
-    optionsOrArray: TypeIntegralObject | TypeIntegralArray | TypeEquationPhrase,
+    optionsOrArray: TypeEquationFunctionIntegral,
   ) {
     let content;
     let symbol;
