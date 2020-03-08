@@ -74,7 +74,7 @@ export type TypeEquationPhrase =
   | number
   | { frac: TypeEquationFunctionFraction }
   | { strike: TypeEquationFunctionStrike }
-  | { box: TypeBoxObject } | TypeBoxArray
+  | { box: TypeEquationFunctionBox }
   | { root: TypeEquationFunctionRoot }
   | { brac: TypeEquationFunctionBracket }
   | { sub: TypeSubObject } | TypeSubArray
@@ -86,7 +86,7 @@ export type TypeEquationPhrase =
   | { topComment: TypeCommentObject } | TypeCommentArray
   | { bottomComment: TypeCommentObject } | TypeCommentArray
   | { padding: TypePaddingObject } | TypePaddingArray
-  | { bar: TypeBarObject } | TypeBarArray
+  | { bar: EquationFunctionBar }
   | { scale: TypeEquationFunctionScale }
   | { container: TypeEquationFunctionContainer }
   | { matrix: TypeMatrixObject } | TypeMatrixArray
@@ -432,11 +432,16 @@ export type TypeEquationFunctionRoot = {
  * @property {string} symbol
  * @property {boolean} [inSize] `false` exclues strike symbol from size of
  * resulting phrase (`false`)
- * @property {number} [space] (`0.02`)
- * @property {number} [topSpace] (`space`)
- * @property {number} [rightSpace] (`space`)
- * @property {number} [bottomSpace] (`space`)
- * @property {number} [leftSpace] (`space`)
+ * @property {number} [space] amount the strike symbol overhangs the content on
+ * the left, right, bottom and top sides (`0.02`)
+ * @property {number} [topSpace] use when top overhang between content and
+ *  strike should be different thant `space` property (`space`)
+ * @property {number} [rightSpace] use when right overhang between content and
+ *  strike should be different thant `space` property (`space`)
+ * @property {number} [bottomSpace] use when bottom overhang between content and
+ *  strike should be different thant `space` property (`space`)
+ * @property {number} [leftSpace] use when left overhang between content and
+ *  strike should be different thant `space` property (`space`)
  * @property {boolean} [fullContentBounds] use full bounds of content,
  * overriding any `inSize=false` properties in the content (`false`)
  * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
@@ -491,7 +496,56 @@ export type TypeEquationFunctionStrike = {
   ?boolean,
 ];
 
-export type TypeBoxObject = {
+/**
+ * Equation box
+ *
+ * Place a box symbol around an equation phrase
+ *
+ * @property {TypeEquationPhrase} content
+ * @property {string} symbol
+ * @property {boolean} [inSize] `false` exclues box symbol from size of
+ * resulting phrase (`false`)
+ * @property {number} [space] space between box symbol and content on
+ * the left, right, bottom and top sides (`0`)
+ * @property {number} [topSpace] use when top space between content and
+ *  box should be different thant `space` property (`space`)
+ * @property {number} [rightSpace] use when right space between content and
+ *  box should be different thant `space` property (`space`)
+ * @property {number} [bottomSpace] use when bottom space between content and
+ *  box should be different thant `space` property (`space`)
+ * @property {number} [leftSpace] use when left space between content and
+ *  box should be different thant `space` property (`space`)
+ * @property {boolean} [fullContentBounds] use full bounds of content,
+ * overriding any `inSize=false` properties in the content (`false`)
+ * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
+ * the full bounds of the content even if `fullContentBounds=false` and the
+ * brackets only surround a portion of the content (`false`)
+* @example
+ * // For examples, a box symbol is defined as an equation element
+ * eqn.addElements({
+ *   x: { symbol: 'box' }
+ * });
+ * @example
+ * // Full object definition
+ * {
+ *   box: {
+ *     content: 'a',
+ *     symbol: 'box',
+ *     inSize: true,
+ *     space: 0,
+ *     topSpace: 0.1,
+ *     rightSpace: 0.2,
+ *     bottomSpace: 0.3,
+ *     leftSpace: 0.4,
+ *     fullContentBounds: false,
+ *     useFullBounds: false,
+ *   },
+ * }
+ * @example
+ * // Example array definition
+ *  { box: ['a', 'box'] }
+ */
+export type TypeEquationFunctionBox = {
   content: TypeEquationPhrase,
   symbol: string,
   inSize?: boolean,
@@ -502,9 +556,7 @@ export type TypeBoxObject = {
   leftSpace?: number,
   fullContentBounds?: boolean,
   useFullBounds?: boolean,
-};
-
-export type TypeBoxArray = [
+} | [
   TypeEquationPhrase,
   string,
   ?boolean,
@@ -517,9 +569,90 @@ export type TypeBoxArray = [
   ?boolean,
 ];
 
-export type TypeBarObject = {
+/**
+ * Equation bar
+ *
+ * Place a bar (or bracket) symbol to the side of an equation phrase
+ *
+ * @property {TypeEquationPhrase} content
+ * @property {string} symbol
+ * @property {boolean} [inSize] `false` exclues box symbol from size of
+ * resulting phrase (`false`)
+ * @property {number} [space] space between content and the symbol (`0.03`)
+ * @property {number} [overhang] amount symbol extends beyond content (`0`)
+ * @property {number} [length] total length of symbol (overrides `overhang`)
+ * @property {number} [left] amount symbol extends beyond content to the left
+ * (overrides `overhang` and `length`, and only for side `'top'` or `'bottom'`)
+ * @property {number} [left] amount symbol extends beyond content to the right
+ * (overrides `overhang` and `length`, and only for side `'top'` or `'bottom'`)
+ * @property {number} [top] amount symbol extends beyond content to the top
+ * (overrides `overhang` and `length`, and only for side `'left'` or `'right'`)
+ * @property {number} [top] amount symbol extends beyond content to the bottom
+ * (overrides `overhang` and `length`, and only for side `'left'` or `'right'`)
+ * @property {'left' | 'right' | 'top' | 'bottom'} [side] (`top`)
+ * @property {number} [minContentHeight] custom min content height for auto
+ * symbol sizing when side is `'top'` or `'bottom'`
+ * @property {number} [minContentDescent] custom min content descent for auto
+ * symbol sizing when side is `'top'` or `'bottom'`
+ * @property {number} [minContentAscent] custom min content ascent for auto
+ * symbol sizing when side is `'top'` or `'bottom'`
+ * @property {number} [descent] force descent of symbol when side is `'top'` or
+ * `'bottom'` - height is forced with `length` property
+ * @property {boolean} [fullContentBounds] use full bounds of content,
+ * overriding any `inSize=false` properties in the content (`false`)
+ * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
+ * the full bounds of the content even if `fullContentBounds=false` and the
+ * brackets only surround a portion of the content (`false`)
+* @example
+ * // For examples, a box symbol is defined as an equation element
+ * eqn.addElements({
+ *   hBar: { symbol: 'bar', side: 'top' }
+ *   vBar: { symbol: 'bar', side: 'left' }
+ * });
+ * @example
+ * // Full object definition for horizontal bar
+ * {
+ *   bar: {
+ *     content: 'a',
+ *     symbol: 'hBar',
+ *     side: 'top',
+ *     inSize: true,
+ *     space: 0.1,
+ *     overhang: null,
+ *     length: null,
+ *     left: null,
+ *     right: null,
+ *     fullContentBounds: false,
+ *     useFullBounds: false,
+ *   },
+ * }
+ * @example
+ * // Full object definition for vertical bar
+ * {
+ *   bar: {
+ *     content: 'a',
+ *     symbol: 'vBar',
+ *     side: 'left',
+ *     inSize: true,
+ *     space: 0.1,
+ *     overhang: null,
+ *     length: null,
+ *     top: null,
+ *     bottom: null,
+ *     minContentHeight: null,
+ *     minContentDescent: null,
+ *     minContentAscent: null,
+ *     descent: null,
+ *     fullContentBounds: false,
+ *     useFullBounds: false,
+ *   },
+ * }
+ * @example
+ * // Example array definition
+ *  { box: ['a', 'hBar', 'top] }
+ */
+export type EquationFunctionBar = {
   content: TypeEquationPhrase;
-  // comment?: TypeEquationPhrase;
   symbol?: string;
   inSize?: boolean,
   space?: number,
@@ -536,9 +669,7 @@ export type TypeBarObject = {
   descent?: number,
   fullContentBounds?: boolean,
   useFullBounds?: boolean,
-};
-
-export type TypeBarArray = [
+} | [
   TypeEquationPhrase,
   ?string,
   ?boolean,
@@ -1186,7 +1317,7 @@ export class EquationFunctions {
   }
 
   bar(
-    optionsOrArray: TypeBarObject | TypeBarArray,
+    optionsOrArray: EquationFunctionBar,
     forceOptions: Object = {},
   ) {
     let content;
@@ -1207,7 +1338,7 @@ export class EquationFunctions {
     let fullContentBounds;
     let useFullBounds;
     const defaultOptions = {
-      side: 'top',
+      inSize: true,
       space: 0.03,
       overhang: 0,
       length: null,
@@ -1215,9 +1346,9 @@ export class EquationFunctions {
       right: null,
       top: null,
       bottom: null,
-      inSize: true,
-      minContentDescent: null,
+      side: 'top',
       minContentHeight: null,
+      minContentDescent: null,
       minContentAscent: null,
       descent: null,
       fullContentBounds: false,
@@ -1720,7 +1851,7 @@ export class EquationFunctions {
 
 
   box(
-    optionsOrArray: TypeBoxObject | TypeBoxArray,
+    optionsOrArray: TypeEquationFunctionBox,
   ) {
     let content;
     let symbol;
@@ -1823,11 +1954,11 @@ export class EquationFunctions {
     });
   }
 
-  topBar(optionsOrArray: TypeBarObject | TypeBarArray) {
+  topBar(optionsOrArray: EquationFunctionBar) {
     return this.bar(optionsOrArray, { side: 'top' });
   }
 
-  bottomBar(optionsOrArray: TypeBarObject | TypeBarArray) {
+  bottomBar(optionsOrArray: EquationFunctionBar) {
     return this.bar(optionsOrArray, { side: 'bottom' });
   }
 
