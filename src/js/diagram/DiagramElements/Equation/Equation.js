@@ -548,6 +548,8 @@ export class Equation extends DiagramElementCollection {
   // animateNextFrame: void => void;
   shapes: Object;
 
+  getCurrentForm: () => ?EquationForm;
+
   constructor(
     shapes: Object,
     options: TypeEquationOptions = {},
