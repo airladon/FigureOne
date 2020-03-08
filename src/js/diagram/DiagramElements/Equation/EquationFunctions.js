@@ -79,12 +79,12 @@ export type TypeEquationPhrase =
   | { brac: TypeEquationFunctionBracket }
   | { sub: TypeEquationFunctionSubcript }
   | { sup: TypeEquationFunctionSuperscript }
-  | { supSub: TypeEquationFunctionSuperscriptSubcript }
+  | { supSub: TypeEquationFunctionSuperscriptSubscript }
   | { topBar: TypeEquationFunctionBar }
   | { bottomBar: TypeEquationFunctionBar }
   | { annotate: TypeAnnotateObject }
-  | { topComment: TypeCommentObject } | TypeCommentArray
-  | { bottomComment: TypeCommentObject } | TypeCommentArray
+  | { topComment: TypeEquationFunctionComment }
+  | { bottomComment: TypeEquationFunctionComment }
   | { padding: TypePaddingObject } | TypePaddingArray
   | { bar: TypeEquationFunctionBar }
   | { scale: TypeEquationFunctionScale }
@@ -981,7 +981,7 @@ export type TypeEquationSumOf = {
  * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
  * the full bounds of the content even if `fullContentBounds=false` and the
  * brackets only surround a portion of the content (`false`)
-* @example
+ * @example
  * // For examples, a sum of symbol (pi) is defined as an equation element
  * eqn.addElements({
  *   s: { symbol: 'prod' }
@@ -1151,7 +1151,7 @@ export type TypeEquationFunctionSuperscript = {
  *     subscript: 'c',
  *     scale: 0.5,
  *     superscriptOffset: [0, 0],
- *     subOffset: [0, 0],
+ *     subscriptOffset: [0, 0],
  *     inSize: true,
  *   },
  * }
@@ -1177,7 +1177,53 @@ export type TypeEquationFunctionSuperscriptSubscript = {
   ?boolean,
 ];
 
-export type TypeCommentObject = {
+/**
+ * Equation comment options used with `topComment` and `bottomComment`
+ * functions.
+ *
+ * A symbol between the content and comment is optional.
+ *
+ * @property {TypeEquationPhrase} content
+ * @property {TypeEquationPhrase} comment
+ * @property {string} [symbol] optional symbol between content and comment
+ * @property {number} [contentSpace] space from content to symbol (`0.03`)
+ * @property {number} [commentSpace] space from symbol to comment (`0.03`)
+ * @property {number} [scale] comment scale (`0.6`)
+ * @property {boolean} [inSize] `false` excludes the symbol and comment from
+ * thre resulting size of the equation phrase (`true`)
+ * @property {boolean} [fullContentBounds] use full bounds of content,
+ * overriding any `inSize=false` properties in the content (`false`)
+ * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
+ * the full bounds of the content even if `fullContentBounds=false` and the
+ * brackets only surround a portion of the content (`false`)
+ * @example
+ * // For examples, a sum of symbol (pi) is defined as an equation element
+ * eqn.addElements({
+ *   brace: { symbol: 'brace', side: 'bottom }
+ * });
+ * @example
+ * // BottomComment full object definition
+ * {
+ *   bottomComment: {
+ *     content: 'a',
+ *     comment: 'b',
+ *     symbol: 'bar',
+ *     contentSpace: 0.1,
+ *     commentSpace: 0.2,
+ *     scale: 2,
+ *     inSize: true,
+ *     fullContentBounds: false,
+ *     useFullBounds: false,
+ *   },
+ * }
+ * @example
+ * // Top comment example without symbol
+ *  { topComment: ['a', 'b'] }
+ * @example
+ * // Bottom comment example with symbol
+ *  { bottomComment: ['a', 'b', 'brace'] }
+ */
+export type TypeEquationFunctionComment = {
   content: TypeEquationPhrase;
   comment: TypeEquationPhrase;
   symbol?: string;
@@ -1187,8 +1233,7 @@ export type TypeCommentObject = {
   inSize?: boolean;
   fullContentBounds?: boolean;
   useFullBounds?: boolean;
-};
-export type TypeCommentArray = [
+} | [
   TypeEquationPhrase,
   TypeEquationPhrase,
   string,
@@ -2677,7 +2722,7 @@ export class EquationFunctions {
 
   // eslint-disable-next-line class-methods-use-this
   processComment(
-    optionsOrArray: TypeCommentObject | TypeCommentArray,
+    optionsOrArray: TypeEquationFunctionComment,
   ) {
     let content;
     let comment;

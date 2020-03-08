@@ -18,6 +18,7 @@ toc:
   - TypeEquationFunctionSubcript
   - TypeEquationFunctionSuperscript
   - TypeEquationFunctionSuperscriptSubscript
+  - TypeEquationFunctionComment
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment

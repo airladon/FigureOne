@@ -240,6 +240,16 @@
               
                 
                 <li><a
+                  href='#typeequationfunctioncomment'
+                  class="">
+                  TypeEquationFunctionComment
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#equation-form-types'
                   class="h5 bold black caps">
                   Equation Form Types
@@ -3909,7 +3919,7 @@ resulting phrase (
     <span class="hljs-attr">subscript</span>: <span class="hljs-string">'c'</span>,
     <span class="hljs-attr">scale</span>: <span class="hljs-number">0.5</span>,
     <span class="hljs-attr">superscriptOffset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
-    <span class="hljs-attr">subOffset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+    <span class="hljs-attr">subscriptOffset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
     <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
   },
 }</pre>
@@ -3917,6 +3927,181 @@ resulting phrase (
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
  { <span class="hljs-attr">supSub</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>] }</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeequationfunctioncomment'>
+      TypeEquationFunctionComment
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation comment options used with <code>topComment</code> and <code>bottomComment</code>
+functions.</p>
+<p>A symbol between the content and comment is optional.</p>
+
+    <div class='pre p1 fill-light mt0'>TypeEquationFunctionComment</div>
+  
+    <p>
+      Type:
+      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, comment: <a href="#typeequationphrase">TypeEquationPhrase</a>, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, contentSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, commentSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>comment</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : optional symbol between content and comment
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>contentSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space from content to symbol (
+<code>0.03</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>commentSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space from symbol to comment (
+<code>0.03</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : comment scale (
+<code>0.6</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>false</code>
+ excludes the symbol and comment from
+thre resulting size of the equation phrase (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : use full bounds of content,
+overriding any 
+<code>inSize=false</code>
+ properties in the content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>useFullBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : make the bounds of this phrase equal to
+the full bounds of the content even if 
+<code>fullContentBounds=false</code>
+ and the
+brackets only surround a portion of the content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>// For examples, a sum of symbol (pi) is defined as an equation element
+eqn.addElements({
+  brace: { symbol: 'brace', side: 'bottom }
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// BottomComment full object definition</span>
+{
+  <span class="hljs-attr">bottomComment</span>: {
+    <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
+    <span class="hljs-attr">comment</span>: <span class="hljs-string">'b'</span>,
+    <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bar'</span>,
+    <span class="hljs-attr">contentSpace</span>: <span class="hljs-number">0.1</span>,
+    <span class="hljs-attr">commentSpace</span>: <span class="hljs-number">0.2</span>,
+    <span class="hljs-attr">scale</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">fullContentBounds</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-attr">useFullBounds</span>: <span class="hljs-literal">false</span>,
+  },
+}</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Top comment example without symbol</span>
+ { <span class="hljs-attr">topComment</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>] }</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Bottom comment example with symbol</span>
+ { <span class="hljs-attr">bottomComment</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'brace'</span>] }</pre>
     
   
 
@@ -3972,7 +4157,7 @@ phrases.</p>
   
     <p>
       Type:
-      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#typeequationfunctionfraction">TypeEquationFunctionFraction</a>} | {strike: <a href="#typeequationfunctionstrike">TypeEquationFunctionStrike</a>} | {box: <a href="#typeequationfunctionbox">TypeEquationFunctionBox</a>} | {root: <a href="#typeequationfunctionroot">TypeEquationFunctionRoot</a>} | {brac: <a href="#typeequationfunctionbracket">TypeEquationFunctionBracket</a>} | {sub: <a href="#typeequationfunctionsubcript">TypeEquationFunctionSubcript</a>} | {sup: <a href="#typeequationfunctionsuperscript">TypeEquationFunctionSuperscript</a>} | {supSub: TypeEquationFunctionSuperscriptSubcript} | {topBar: <a href="#typeequationfunctionbar">TypeEquationFunctionBar</a>} | {bottomBar: <a href="#typeequationfunctionbar">TypeEquationFunctionBar</a>} | {annotate: TypeAnnotateObject} | {topComment: TypeCommentObject} | TypeCommentArray | {bottomComment: TypeCommentObject} | TypeCommentArray | {padding: TypePaddingObject} | TypePaddingArray | {bar: <a href="#typeequationfunctionbar">TypeEquationFunctionBar</a>} | {scale: <a href="#typeequationfunctionscale">TypeEquationFunctionScale</a>} | {container: <a href="#typeequationfunctioncontainer">TypeEquationFunctionContainer</a>} | {matrix: TypeMatrixObject} | TypeMatrixArray | {int: <a href="#typeequationfunctionintegral">TypeEquationFunctionIntegral</a>} | {sumOf: <a href="#typeequationsumof">TypeEquationSumOf</a>} | {prodOf: <a href="#typeequationprodof">TypeEquationProdOf</a>} | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | DiagramElementPrimitive | DiagramElementCollection | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#typeequationfunctionfraction">TypeEquationFunctionFraction</a>} | {strike: <a href="#typeequationfunctionstrike">TypeEquationFunctionStrike</a>} | {box: <a href="#typeequationfunctionbox">TypeEquationFunctionBox</a>} | {root: <a href="#typeequationfunctionroot">TypeEquationFunctionRoot</a>} | {brac: <a href="#typeequationfunctionbracket">TypeEquationFunctionBracket</a>} | {sub: <a href="#typeequationfunctionsubcript">TypeEquationFunctionSubcript</a>} | {sup: <a href="#typeequationfunctionsuperscript">TypeEquationFunctionSuperscript</a>} | {supSub: <a href="#typeequationfunctionsuperscriptsubscript">TypeEquationFunctionSuperscriptSubscript</a>} | {topBar: <a href="#typeequationfunctionbar">TypeEquationFunctionBar</a>} | {bottomBar: <a href="#typeequationfunctionbar">TypeEquationFunctionBar</a>} | {annotate: TypeAnnotateObject} | {topComment: <a href="#typeequationfunctioncomment">TypeEquationFunctionComment</a>} | {bottomComment: <a href="#typeequationfunctioncomment">TypeEquationFunctionComment</a>} | {padding: TypePaddingObject} | TypePaddingArray | {bar: <a href="#typeequationfunctionbar">TypeEquationFunctionBar</a>} | {scale: <a href="#typeequationfunctionscale">TypeEquationFunctionScale</a>} | {container: <a href="#typeequationfunctioncontainer">TypeEquationFunctionContainer</a>} | {matrix: TypeMatrixObject} | TypeMatrixArray | {int: <a href="#typeequationfunctionintegral">TypeEquationFunctionIntegral</a>} | {sumOf: <a href="#typeequationsumof">TypeEquationSumOf</a>} | {prodOf: <a href="#typeequationprodof">TypeEquationProdOf</a>} | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | DiagramElementPrimitive | DiagramElementCollection | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
     </p>
   
   
