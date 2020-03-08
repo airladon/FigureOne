@@ -650,7 +650,7 @@ export type TypeEquationFunctionBox = {
  * }
  * @example
  * // Example array definition
- *  { bar: ['a', 'hBar', 'top] }
+ *  { bar: ['a', 'hBar', 'top'] }
  */
 export type TypeEquationFunctionBar = {
   content: TypeEquationPhrase;
@@ -695,30 +695,6 @@ export type TypeEquationFunctionBar = {
  *
  * Place an integral (with optional limits) before an equation phrase
  *
- if (limitsPosition === 'topBottom') {
-      defaultOptions.fromXPosition = 0.1;
-      defaultOptions.fromYPosition = 'bottom';
-      defaultOptions.fromXAlign = 'center';
-      defaultOptions.fromYAlign = 'top';        // $FlowFixMe
-      defaultOptions.toXPosition = 0.9;
-      defaultOptions.toYPosition = 'top';
-      defaultOptions.toXAlign = 'center';
-      defaultOptions.toYAlign = 'bottom';
-      defaultOptions.fromOffset = [0, -0.04];
-      defaultOptions.toOffset = [0, 0.04];
-    }
-    if (limitsPosition === 'topBottomCenter') {        // $FlowFixMe
-      defaultOptions.fromXPosition = 'center';
-      defaultOptions.fromYPosition = 'bottom';
-      defaultOptions.fromXAlign = 'center';
-      defaultOptions.fromYAlign = 'top';
-      defaultOptions.toXPosition = 'center';
-      defaultOptions.toYPosition = 'top';
-      defaultOptions.toXAlign = 'center';
-      defaultOptions.toYAlign = 'bottom';
-      defaultOptions.fromOffset = [0, -0.04];
-      defaultOptions.toOffset = [0, 0.04];
-    }
  * @property {string} symbol
  * @property {TypeEquationPhrase} content
  * @property {TypeEquationPhrase} [from] bottom limit
@@ -731,33 +707,40 @@ export type TypeEquationFunctionBar = {
  * @property {number} [height] force height of symbol
  * @property {number} [yOffset] y offset of symbol (`0`)
  * @property {number} [scale] content scale (`1`)
- * @property {number} [fromScale] scale of from (bottom) limit (`0.5`)
- * @property {number} [toScale] scale of to (top) limit (`0.5`)
- * @property {TypeParsablePoint} [fromOffset] from limit offest (`[0, 0]`)
- * @property {TypeParsablePoint} [toOffset] to limit offest (`[0, 0]`)
+ * @property {number} [fromScale] scale of *from* (bottom) limit (`0.5`)
+ * @property {number} [toScale] scale of *to* (top) limit (`0.5`)
+ * @property {TypeParsablePoint} [fromOffset] from limit offest ( `side`: `[0, 0]`, `topBottom`: `[0, -0.04]`, `topBottomCenter`: `[0, -0.04]`)
+ * @property {TypeParsablePoint} [toOffset] to limit offest (`side`: `[0, 0]`
+ * `topBottom`: `[0, 0.04]`, `topBottomCenter`: `[0, 0.04]`)
  * @property {'side' | 'topBottom' | 'topBottomCenter'} [limitsPosition] limits
  * relative to symbol. `side` is to the right of the symbol ends, `topBottom`
  * is above and below the symbol ends and `topBottomCenter` is above and below
  * the integral mid point (`'side'`)
- * @property {boolean} [limitsAroundContent] `flase` means content left is
+ * @property {boolean} [limitsAroundContent] `false` means content left is
  * aligned with furthest right of limits
  * @property {'left' | 'center' | 'right' | number} [fromXPosition] x position
- * of limit relative to the symbol (`'side'`: `0.5`, `'topBottom'`: `0.1`,
- * `'topBottomCenter'`: `'center'`)
+ * of limit relative to the symbol (`side`: `0.5`, `topBottom`: `0.1`,
+ * `topBottomCenter`: `'center'`)
  * @property {'bottom' | 'top' | 'middle' | 'baseline' | number} [fromYPositio]
  * y position of the limit relavite to the symbol (`'bottom'`)
  * @property {'left' | 'center' | 'right' | number} [fromXAlign] limit x
- * alignment (`'left'`)
+ * alignment (`side`: `'left'`, `topBottom`: `center`,
+ * `topBottomCenter`: `'center'`)
  * @property {'bottom' | 'top' | 'middle' | 'baseline' | number} [fromYAlign]
- * limit y alignment (`'middle'`)
+ * limit y alignment (`side`: `'middle'`, `topBottom`: `'top'`,
+ * `topBottomCenter`: `'top'`)
  * @property {'left' | 'center' | 'right' | number} [toXPosition] x position
- * of limit relative to the symbol (`'right'`)
+ * of limit relative to the symbol (`side`: `'right'`, `topBottom`: `0.9`,
+ * `topBottomCenter`: `'center'`)
  * @property {'bottom' | 'top' | 'middle' | 'baseline' | number} [toYPosition]
- * y position of the limit relavite to the symbol (`'top'`)
+ * y position of the limit relavite to the symbol (`side`: `'top'`,
+ * `topBottom`: `top`, `topBottomCenter`: `'top'`)
  * @property {'left' | 'center' | 'right' | number} [toXAlign] limit x
- * alignment (`'left'`)
+ * alignment (`side`: `'left'`, `topBottom`: `center`,
+ * `topBottomCenter`: `'center'`)
  * @property {'bottom' | 'top' | 'middle' | 'baseline' | number} [toYAlign]
- * limit y alignment (`'middle'`)
+ * limit y alignment (`side`: `'middle'`, `topBottom`: `bottom`,
+ * `topBottomCenter`: `'bottom'`)
  * @property {boolean} [fullContentBounds] use full bounds of content,
  * overriding any `inSize=false` properties in the content (`false`)
  * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
@@ -766,28 +749,44 @@ export type TypeEquationFunctionBar = {
  * @example
  * // For examples, a box symbol is defined as an equation element
  * eqn.addElements({
- *   int: { symbol: 'int' }
+ *   integral: { symbol: 'int' }
  * });
  * @example
  * // Full object definition for horizontal bar
  * {
  *   int: {
+ *     symbol: 'integral',
  *     content: 'a',
- *     symbol: 'hBar',
- *     side: 'top',
+ *     from: 'b',
+ *     to: 'c',
  *     inSize: true,
- *     space: 0.1,
- *     overhang: null,
- *     length: null,
- *     left: null,
- *     right: null,
+ *     space: 0,
+ *     topSpace: 0.1,
+ *     bottomSpace: 0.1,
+ *     height: null,
+ *     yOffset: 0,
+ *     scale: 1,
+ *     fromScale: 1,
+ *     toScale: 1,
+ *     fromOffset: [0.1, 0.1],
+ *     toOffset: [-0.1, -0.1],
+ *     limitsPosition: 'topBottom',
+ *     limitsAroundContent: true,
+ *     fromXPosition: 'center',
+ *     fromYPosition: 'bottom',
+ *     fromXAlign: 'center',
+ *     fromYAlign: 'top',
+ *     toXPosition: 'center',
+ *     toYPosition: 'top',
+ *     toXAlign: 'center',
+ *     toYAlign: 'bottom',
  *     fullContentBounds: false,
  *     useFullBounds: false,
  *   },
  * }
  * @example
  * // Example array definition
- *  { bar: ['a', 'hBar', 'top] }
+ *  { int: ['integral', 'a', 'b', 'c'] }
  */
 export type TypeEquationFunctionIntegral = {
   symbol?: string,
