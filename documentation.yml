@@ -11,7 +11,8 @@ toc:
   - TypeEquationFunctionRoot
   - TypeEquationFunctionStrike
   - TypeEquationFunctionBox
-  - EquationFunctionBar
+  - TypeEquationFunctionBar
+  - TypeEquationFunctionIntegral
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment
