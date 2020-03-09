@@ -2933,10 +2933,10 @@ export class EquationFunctions {
     let overhang;
     let inSize;
     if (Array.isArray(optionsOrContent)) {             // $FlowFixMe
-      [content, symbol, comment, inSize, commentSpace, scale, overhang] = optionsOrContent;
+      [content, symbol, comment, inSize, overhang, scale, commentSpace] = optionsOrContent;
     } else {
       ({                                                      // $FlowFixMe
-        content, comment, symbol, inSize, commentSpace, scale, overhang,
+        content, comment, symbol, inSize, overhang, scale, commentSpace,
       } = optionsOrContent);
     }
     const optionsIn = {
