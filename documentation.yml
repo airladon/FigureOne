@@ -21,6 +21,7 @@ toc:
   - TypeEquationFunctionComment
   - TypeEquationFunctionStrikeComment
   - TypeEquationFunctionPad
+  - TypeEquationFunctionMatrix
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment
