@@ -1429,7 +1429,7 @@ export type TypeEquationFunctionMatrix = {
 
 
 /**
- * An annotation's layout is defined by its position and alignement.
+ * An annotation's layout is defined by its *position* and *alignement*.
  * For instance, an annotation at the top right of the content:
  * <pre>
  *                  AAAA
@@ -1439,11 +1439,11 @@ export type TypeEquationFunctionMatrix = {
  *          CCCCCCCC
  *          CCCCCCCC
  * </pre>
- * has a position relative to the content:
+ * has a *position* relative to the content:
  * * `xPosition`: `'right'`
  * * `yPosition`: `'top'`
  *
- * and an alignment of the annotation relative to the annotation:
+ * and an *alignment* relative to the annotation:
  * * `xAlign`: `'left'`
  * * `yAlign`: `'bottom'`
  *
@@ -1472,6 +1472,22 @@ export type TypeEquationFunctionMatrix = {
  * suggested position, alignment and offset of an annotation with some name. If
  * this name is defined here, then `xPosition`, `yPosition`, `xAlign`, `yAlign`
  * and `offset` will be overwritten with the glyph's suggestion.
+ * @example
+ *  annotate: {
+ *    content: 'a',
+ *    annotation: {
+ *      content: 'b',
+ *      xPosition: 'right',
+ *      yPosition: 'top',
+ *      xAlign: 'left',
+ *      yAlign: 'bottom',
+ *      offset: [0, 0],
+ *      scale: 0.5,
+ *      inSize: true,
+ *      fullContentBounds: false,
+ *      // reference: 'root'       // only used when annotating special glyphs
+ *    },
+ *  },
  */
 export type TypeAnnotation = {
   xPosition: 'left' | 'center' | 'right' | number,
@@ -1487,7 +1503,7 @@ export type TypeAnnotation = {
 };
 
 /**
- * A glyph can encompass (surround or overlay) an equation phrase. The glyph
+ * A glyph can encompass (surround or overlay) an equation phrase (*content*). The glyph
  * can also be annotated.
  * <pre>
  *
@@ -1514,15 +1530,16 @@ export type TypeAnnotation = {
  * @property {number} [leftSpace] space the glyph extends beyond the content
  * left
  * @example
+ *  // surrounding content with a box glyph
  * annotate: {
  *   content: 'a',
  *   glyphs: {
  *     encompass: {
  *       symbol: 'box',
- *       space: 0,        // e.g. only, this will be overwritten by next props
- *       topSpace: 0.4,
- *       rightSpace: 0.2,
- *       bottomSpace: 0.3,
+ *       space: 0.1,     // e.g. only, this will be overwritten by next props
+ *       topSpace: 0.1,
+ *       rightSpace: 0.1,
+ *       bottomSpace: 0.1,
  *       leftSpace: 0.1,
  *     },
  *   },
@@ -1540,13 +1557,63 @@ export type TypeEncompassGlyph = {
   leftSpace?: number;
 };
 
-
+/**
+ * A glyph can be to the left or right of an equation phrase (*content*).
+ * The glyph can also be annotated.
+ * <pre>
+ *
+ *       ggg   CCCCCCCC   ggg
+ *       ggg   CCCCCCCC   ggg
+ *       ggg   CCCCCCCC   ggg
+ *       ggg   CCCCCCCC   ggg
+ *
+ * </pre>
+ * @property {string} symbol
+ * @property {TypeAnnotation} [annotation] use for one annotation only instead
+ * of property `annotations`
+ * @property {Array<TypeAnnotation>} [annotations] use for one or more
+ * annotations
+ * @property {number} [space] horizontal space between glyph and content (`0`)
+ * @property {number} [overhang] amount glyph extends above content top and
+ * below content bottom (`0`)
+ * @property {number} [topSpace] amount glyph extends above content top
+ * @property {number} [bottomSpace] amount glyph extends below content bottom
+ * @property {number} [minContentHeight] force min content height for auto
+ * glyph scaling
+ * @property {number} [minContentDescent] force min content descent for auto
+ * glyph scaling
+ * @property {number} [minContentAscent] force min content ascent for auto
+ * scaling
+ * @property {number} [descent] force descent of glyph
+ * @property {number} [height] force height of glyph
+ * @property {number} [yOffset] offset glyph in y (`0`)
+ * @property {boolean} [annotationsOverContent] `true` means only glyph is
+ * separated from content by `space` and not annotations (false`)
+ * @example
+ * // Define glyph symbol
+ * eqn.addElements({
+ *   lb: { symbol: 'squareBracket', side: 'left' },
+ * });
+ *  // surrounding content with a box glyph
+ * annotate: {
+ *   content: 'a',
+ *   glyphs: {
+ *     left: {
+ *       symbol: 'lb',
+ *       space: 0.1,
+ *       overhang: 0.2,
+ *       topSpace: 0,
+ *       annotationsOverContent: true,
+ *   },
+ *   inSize: false,
+ * },
+ */
 export type TypeLeftRightGlyph = {
   symbol?: string,
   annotation?: TypeAnnotation,
   annotations?: Array<TypeAnnotation>,
-  space: number;
-  overhang: number,
+  space?: number;
+  overhang?: number,
   topSpace?: number;
   bottomSpace?: number;
   minContentHeight?: number,
@@ -1554,7 +1621,7 @@ export type TypeLeftRightGlyph = {
   minContentAscent?: number,
   descent?: number,
   height?: number,
-  yOffset: number,
+  yOffset?: number,
   annotationsOverContent?: boolean,
 };
 
