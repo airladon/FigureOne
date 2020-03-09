@@ -12,16 +12,18 @@ diagram.addElement(
       position: [-0.2, 0],
       // Equation elements are the individual terms in the equation
       elements: {
-        v: { symbol: 'vinculum' },
+        lb: { symbol: 'squareBracket', side: 'left' },
+        rb: { symbol: 'squareBracket', side: 'right' },
       },
       forms: {
         base: {
-          frac: {
-            numerator: 'a',
-            symbol: 'v',
-            denominator: 'b',
-            numeratorSpace: 0.1,
-            denominatorSpace: 0.2,
+          matrix: {
+            left: 'lb',
+            right: 'rb',
+            content: ['aasdf', 'b', 'c', { frac: ['d', 'vinculum', 'e'] }],
+            order: [2, 2],
+            space: [0.1, 0.1],
+            fit: [1, 0.3],
           },
         },
       },
