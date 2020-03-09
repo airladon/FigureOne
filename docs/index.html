@@ -190,9 +190,9 @@
               
                 
                 <li><a
-                  href='#typeequationsumof'
+                  href='#typeequationfunctionsumof'
                   class="">
-                  TypeEquationSumOf
+                  TypeEquationFunctionSumOf
                   
                 </a>
                 
@@ -200,9 +200,9 @@
               
                 
                 <li><a
-                  href='#typeequationprodof'
+                  href='#typeequationfunctionprodof'
                   class="">
-                  TypeEquationProdOf
+                  TypeEquationFunctionProdOf
                   
                 </a>
                 
@@ -243,6 +243,16 @@
                   href='#typeequationfunctioncomment'
                   class="">
                   TypeEquationFunctionComment
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeequationfunctionstrikecomment'
+                  class="">
+                  TypeEquationFunctionStrikeComment
                   
                 </a>
                 
@@ -3024,8 +3034,8 @@ eqn.addElements({
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='typeequationsumof'>
-      TypeEquationSumOf
+    <h3 class='fl m0' id='typeequationfunctionsumof'>
+      TypeEquationFunctionSumOf
     </h3>
     
     
@@ -3035,7 +3045,7 @@ eqn.addElements({
   <p>Equation sum of</p>
 <p>Place an equation phrase in a sum of operation</p>
 
-    <div class='pre p1 fill-light mt0'>TypeEquationSumOf</div>
+    <div class='pre p1 fill-light mt0'>TypeEquationFunctionSumOf</div>
   
     <p>
       Type:
@@ -3300,8 +3310,8 @@ eqn.addElements({
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='typeequationprodof'>
-      TypeEquationProdOf
+    <h3 class='fl m0' id='typeequationfunctionprodof'>
+      TypeEquationFunctionProdOf
     </h3>
     
     
@@ -3311,7 +3321,7 @@ eqn.addElements({
   <p>Equation product of</p>
 <p>Place an equation phrase in a product of operation</p>
 
-    <div class='pre p1 fill-light mt0'>TypeEquationProdOf</div>
+    <div class='pre p1 fill-light mt0'>TypeEquationFunctionProdOf</div>
   
     <p>
       Type:
@@ -4074,9 +4084,9 @@ brackets only surround a portion of the content (
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'>// For examples, a sum of symbol (pi) is defined as an equation element
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// For following examples, a bottom brace is defined as an equation element</span>
 eqn.addElements({
-  brace: { symbol: 'brace', side: 'bottom }
+  <span class="hljs-attr">brace</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'brace'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'bottom'</span> }
 });</pre>
     
       
@@ -4102,6 +4112,154 @@ eqn.addElements({
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Bottom comment example with symbol</span>
  { <span class="hljs-attr">bottomComment</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'brace'</span>] }</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeequationfunctionstrikecomment'>
+      TypeEquationFunctionStrikeComment
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation strike with comment options used with <code>topStrike</code> and <code>bottomStrike</code>
+functions.</p>
+
+    <div class='pre p1 fill-light mt0'>TypeEquationFunctionStrikeComment</div>
+  
+    <p>
+      Type:
+      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>?, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, comment: <a href="#typeequationphrase">TypeEquationPhrase</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, commentSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          : strike symbol
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>comment</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>false</code>
+ excludes the symbol and comment from
+thre resulting size of the equation phrase (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : top, right, bottom and left extension of symbol
+beyond content (
+<code>0.03</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : comment scale (
+<code>0.6</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>commentSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space from symbol to comment (
+<code>0.03</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// For following examples, a bottom brace is defined as an equation element</span>
+eqn.addElements({
+  <span class="hljs-attr">x</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'strike'</span>, <span class="hljs-attr">style</span>: <span class="hljs-string">'cross'</span> }
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// BottomStrike full object definition</span>
+{
+  <span class="hljs-attr">bottomStrike</span>: {
+    <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
+    <span class="hljs-attr">symbol</span>: <span class="hljs-string">'x'</span>,
+    <span class="hljs-attr">comment</span>: <span class="hljs-string">'b'</span>,
+    <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">commentSpace</span>: <span class="hljs-number">0</span>,
+    <span class="hljs-attr">scale</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">space</span>: <span class="hljs-number">0</span>,
+  },
+},</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Top strike array example</span>
+ { <span class="hljs-attr">topStrike</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'x'</span>, <span class="hljs-string">'b'</span>] }</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Bottom strike array examples</span>
+ { <span class="hljs-attr">bottomStrike</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'x'</span>, <span class="hljs-string">'b'</span>] }</pre>
     
   
 
@@ -4157,7 +4315,7 @@ phrases.</p>
   
     <p>
       Type:
-      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#typeequationfunctionfraction">TypeEquationFunctionFraction</a>} | {strike: <a href="#typeequationfunctionstrike">TypeEquationFunctionStrike</a>} | {box: <a href="#typeequationfunctionbox">TypeEquationFunctionBox</a>} | {root: <a href="#typeequationfunctionroot">TypeEquationFunctionRoot</a>} | {brac: <a href="#typeequationfunctionbracket">TypeEquationFunctionBracket</a>} | {sub: <a href="#typeequationfunctionsubcript">TypeEquationFunctionSubcript</a>} | {sup: <a href="#typeequationfunctionsuperscript">TypeEquationFunctionSuperscript</a>} | {supSub: <a href="#typeequationfunctionsuperscriptsubscript">TypeEquationFunctionSuperscriptSubscript</a>} | {topBar: <a href="#typeequationfunctionbar">TypeEquationFunctionBar</a>} | {bottomBar: <a href="#typeequationfunctionbar">TypeEquationFunctionBar</a>} | {annotate: TypeAnnotateObject} | {topComment: <a href="#typeequationfunctioncomment">TypeEquationFunctionComment</a>} | {bottomComment: <a href="#typeequationfunctioncomment">TypeEquationFunctionComment</a>} | {padding: TypePaddingObject} | TypePaddingArray | {bar: <a href="#typeequationfunctionbar">TypeEquationFunctionBar</a>} | {scale: <a href="#typeequationfunctionscale">TypeEquationFunctionScale</a>} | {container: <a href="#typeequationfunctioncontainer">TypeEquationFunctionContainer</a>} | {matrix: TypeMatrixObject} | TypeMatrixArray | {int: <a href="#typeequationfunctionintegral">TypeEquationFunctionIntegral</a>} | {sumOf: <a href="#typeequationsumof">TypeEquationSumOf</a>} | {prodOf: <a href="#typeequationprodof">TypeEquationProdOf</a>} | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | DiagramElementPrimitive | DiagramElementCollection | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#typeequationfunctionfraction">TypeEquationFunctionFraction</a>} | {strike: <a href="#typeequationfunctionstrike">TypeEquationFunctionStrike</a>} | {box: <a href="#typeequationfunctionbox">TypeEquationFunctionBox</a>} | {root: <a href="#typeequationfunctionroot">TypeEquationFunctionRoot</a>} | {brac: <a href="#typeequationfunctionbracket">TypeEquationFunctionBracket</a>} | {sub: <a href="#typeequationfunctionsubcript">TypeEquationFunctionSubcript</a>} | {sup: <a href="#typeequationfunctionsuperscript">TypeEquationFunctionSuperscript</a>} | {supSub: <a href="#typeequationfunctionsuperscriptsubscript">TypeEquationFunctionSuperscriptSubscript</a>} | {topBar: <a href="#typeequationfunctionbar">TypeEquationFunctionBar</a>} | {bottomBar: <a href="#typeequationfunctionbar">TypeEquationFunctionBar</a>} | {annotate: TypeAnnotateObject} | {topComment: <a href="#typeequationfunctioncomment">TypeEquationFunctionComment</a>} | {bottomComment: <a href="#typeequationfunctioncomment">TypeEquationFunctionComment</a>} | {padding: TypePaddingObject} | TypePaddingArray | {bar: <a href="#typeequationfunctionbar">TypeEquationFunctionBar</a>} | {scale: <a href="#typeequationfunctionscale">TypeEquationFunctionScale</a>} | {container: <a href="#typeequationfunctioncontainer">TypeEquationFunctionContainer</a>} | {matrix: TypeMatrixObject} | TypeMatrixArray | {int: <a href="#typeequationfunctionintegral">TypeEquationFunctionIntegral</a>} | {sumOf: <a href="#typeequationfunctionsumof">TypeEquationFunctionSumOf</a>} | {prodOf: <a href="#typeequationfunctionprodof">TypeEquationFunctionProdOf</a>} | {topStrike: <a href="#typeequationfunctionstrikecomment">TypeEquationFunctionStrikeComment</a>} | {bottomStrike: <a href="#typeequationfunctionstrikecomment">TypeEquationFunctionStrikeComment</a>} | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | DiagramElementPrimitive | DiagramElementCollection | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
     </p>
   
   

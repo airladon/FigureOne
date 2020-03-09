@@ -93,6 +93,8 @@ export type TypeEquationPhrase =
   | { int: TypeEquationFunctionIntegral }
   | { sumOf: TypeEquationFunctionSumOf }
   | { prodOf: TypeEquationFunctionProdOf }
+  | { topStrike: TypeEquationFunctionStrikeComment }
+  | { bottomStrike: TypeEquationFunctionStrikeComment }
   | Array<TypeEquationPhrase>
   | DiagramElementPrimitive
   | DiagramElementCollection
@@ -1199,7 +1201,7 @@ export type TypeEquationFunctionSuperscriptSubscript = {
  * @example
  * // For following examples, a bottom brace is defined as an equation element
  * eqn.addElements({
- *   brace: { symbol: 'brace', side: 'bottom }
+ *   brace: { symbol: 'brace', side: 'bottom' }
  * });
  * @example
  * // BottomComment full object definition
@@ -1245,18 +1247,53 @@ export type TypeEquationFunctionComment = {
   ?boolean,
 ];
 
-export type TypeStrikeCommentObject = {
+/**
+ * Equation strike with comment options used with `topStrike` and `bottomStrike`
+ * functions.
+ *
+ * @property {TypeEquationPhrase} content
+ * @property {string} symbol strike symbol
+ * @property {TypeEquationPhrase} comment
+ * @property {boolean} [inSize] `false` excludes the symbol and comment from
+ * thre resulting size of the equation phrase (`true`)
+ * @property {number} [space] top, right, bottom and left extension of symbol
+ * beyond content (`0.03`)
+ * @property {number} [scale] comment scale (`0.6`)
+ * @property {number} [commentSpace] space from symbol to comment (`0.03`)
+ * @example
+ * // For following examples, a strike symbol is defined as an equation element
+ * eqn.addElements({
+ *   x: { symbol: 'strike', style: 'cross' }
+ * });
+ * @example
+ * // BottomStrike full object definition
+ * {
+ *   bottomStrike: {
+ *     content: 'a',
+ *     symbol: 'x',
+ *     comment: 'b',
+ *     inSize: true,
+ *     commentSpace: 0,
+ *     scale: 1,
+ *     space: 0,
+ *   },
+ * },
+ * @example
+ * // Top strike array example
+ *  { topStrike: ['a', 'x', 'b'] }
+ * @example
+ * // Bottom strike array examples
+ *  { bottomStrike: ['a', 'x', 'b'] }
+ */
+export type TypeEquationFunctionStrikeComment = {
   content?: TypeEquationPhrase,
   symbol?: string,
   comment?: TypeEquationPhrase,
   inSize?: boolean,
   space?: number,
   scale?: number,
-  overhang?: number,
-};
-
-
-export type TypeStrikeCommentArray = [
+  commentSpace?: number,
+} | [
   ?TypeEquationPhrase,
   ?string,
   ?TypeEquationPhrase,
@@ -2923,7 +2960,7 @@ export class EquationFunctions {
 
   // eslint-disable-next-line class-methods-use-this
   processStrike(
-    optionsOrContent: TypeStrikeCommentObject | TypeStrikeCommentArray,
+    optionsOrContent: TypeEquationFunctionStrikeComment,
   ) {
     let content;
     let comment;
@@ -2946,9 +2983,9 @@ export class EquationFunctions {
       space,
     };
     const defaultOptions = {
-      commentSpace: 0.1,
       space: 0,
       scale: 0.5,
+      commentSpace: 0.1,
       inSize: true,
     };
     const options = joinObjects(defaultOptions, optionsIn);
