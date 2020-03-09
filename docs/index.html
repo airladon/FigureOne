@@ -8680,7 +8680,7 @@ For instance, an annotation at the top right of the content:</p>
 <li><code>xPosition</code>: <code>'right'</code></li>
 <li><code>yPosition</code>: <code>'top'</code></li>
 </ul>
-<p>and an alignment of the annotation relative to the annotation:</p>
+<p>and an alignment relative to the annotation:</p>
 <ul>
 <li><code>xAlign</code>: <code>'left'</code></li>
 <li><code>yAlign</code>: <code>'bottom'</code></li>
@@ -8823,6 +8823,26 @@ and
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>annotate: {
+   <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
+   <span class="hljs-attr">annotation</span>: {
+     <span class="hljs-attr">content</span>: <span class="hljs-string">'b'</span>,
+     <span class="hljs-attr">xPosition</span>: <span class="hljs-string">'right'</span>,
+     <span class="hljs-attr">yPosition</span>: <span class="hljs-string">'top'</span>,
+     <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'left'</span>,
+     <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'bottom'</span>,
+     <span class="hljs-attr">offset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+     <span class="hljs-attr">scale</span>: <span class="hljs-number">0.5</span>,
+     <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
+     <span class="hljs-attr">fullContentBounds</span>: <span class="hljs-literal">false</span>,
+     <span class="hljs-comment">// reference: 'root'       // this can only be used when annotating a glyph that has a reference annotation position and alignment</span>
+   },
+ },</pre>
+    
   
 
   
