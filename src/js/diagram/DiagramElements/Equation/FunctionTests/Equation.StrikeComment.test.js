@@ -130,11 +130,11 @@ describe('Equation Functions - Bar', () => {
           },
           // Method Array
           inSize: {
-            content: { topStrike: ['a', 'x', 'b', false, 0, 1, 1] },
+            content: { topStrike: ['a', 'x', 'b', false, 1, 1, 0] },
             scale: 1,
           },
           space: {
-            content: { topStrike: ['a', 'x', 'b', true, 1, 1, 0] },
+            content: { topStrike: ['a', 'x', 'b', true, 0, 1, 1] },
             scale: 1,
           },
           scale: {
@@ -142,7 +142,7 @@ describe('Equation Functions - Bar', () => {
             scale: 1,
           },
           overhang: {
-            content: { topStrike: ['a', 'x', 'b', true, 0, 1, 1] },
+            content: { topStrike: ['a', 'x', 'b', true, 1, 1, 0] },
             scale: 1,
           },
         });
@@ -168,11 +168,11 @@ describe('Equation Functions - Bar', () => {
           },
           // Method Array
           inSize: {
-            content: { bottomStrike: ['a', 'x', 'b', false, 0, 1, 1] },
+            content: { bottomStrike: ['a', 'x', 'b', false, 1, 1, 0] },
             scale: 1,
           },
           space: {
-            content: { bottomStrike: ['a', 'x', 'b', true, 1, 1, 0] },
+            content: { bottomStrike: ['a', 'x', 'b', true, 0, 1, 1] },
             scale: 1,
           },
           scale: {
@@ -180,7 +180,7 @@ describe('Equation Functions - Bar', () => {
             scale: 1,
           },
           overhang: {
-            content: { bottomStrike: ['a', 'x', 'b', true, 0, 1, 1] },
+            content: { bottomStrike: ['a', 'x', 'b', true, 1, 1, 0] },
             scale: 1,
           },
         });
