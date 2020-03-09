@@ -14,17 +14,43 @@ diagram.addElement(
       elements: {
         lb: { symbol: 'squareBracket', side: 'left' },
         rb: { symbol: 'squareBracket', side: 'right' },
+        bb: { symbol :'box', fill: true, color: [1, 0, 0, 0.5]}
       },
       forms: {
         base: {
-          matrix: {
-            left: 'lb',
-            right: 'rb',
-            content: ['aasdf', 'b', 'c', { frac: ['d', 'vinculum', 'e'] }],
-            order: [2, 2],
-            space: [0.1, 0.1],
-            fit: [1, 0.3],
-          },
+        //   box: {
+        //     content: {
+        //       annotate: {
+        //         content: ['a', { root: { symbol: 'radical', content: 'e', root: '_4', rootOffset: [-0.1, 0] } }],
+        //         topSpace: 0.1,
+        //         annotation: {
+        //           content: 'b',
+        //           yPosition: 'top',
+        //           yAlign: 'bottom',
+        //           xPosition: 'right',
+        //           xAlign: 'left',
+        //         },
+        //         glyphs: {
+        //           encompass: {
+        //             annotation: {
+        //               content: 'c',
+        //               xPosition: 'center',
+        //               yPosition: 'top',
+        //               xAlign: 'center',
+        //               yAlign: 'bottom',
+        //             },
+        //             symbol: 'bb',
+        //             topSpace: 0.05,
+        //             rightSpace: 0.05,
+        //             leftSpace: 0.05,
+        //             bottomSpace: 0.05,
+        //           },
+        //         },
+        //       },
+        //     },
+        //     symbol: 'box',
+        //   },
+          root: { symbol: 'radical', content: 'a', root: '_2'}
         },
       },
     },

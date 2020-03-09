@@ -127,12 +127,11 @@ export default class Matrix extends BaseEquationFunction {
           dim = new Point(0, 0);
         }
       }
-
       for (let row = 0; row < numRows; row += 1) {
-        rowBounds.heights[row] = dim.x;
+        rowBounds.heights[row] = dim.y;
       }
       for (let col = 0; col < numCols; col += 1) {
-        colWidths[col] = dim.y;
+        colWidths[col] = dim.x;
       }
     }
 
