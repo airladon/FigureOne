@@ -17,6 +17,8 @@ import { duplicateFromTo } from '../../../../tools/tools';
 import type { ElementInterface } from './Element';
 // import Symbol from '../Symbols/Symbol';
 import SymbolNew from '../Symbols/SymbolNew';
+// eslint-disable-next-line import/no-cycle
+// import type { TypeEquationPhrase } from '../EquationFunctions';
 
 export type TypeAnnotation = {
   xPosition: 'left' | 'center' | 'right' | number,

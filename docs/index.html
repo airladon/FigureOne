@@ -606,6 +606,36 @@
                 
                 </li>
               
+                
+                <li><a
+                  href='#typeannotation'
+                  class="">
+                  TypeAnnotation
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeencompassglyph'
+                  class="">
+                  TypeEncompassGlyph
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeannotateobject'
+                  class="">
+                  TypeAnnotateObject
+                  
+                </a>
+                
+                </li>
+              
             </ul>
           </div>
           <div class='mt1 h6 quiet'>
@@ -4493,18 +4523,28 @@ where each element is a matrix element
       
         <div class='space-bottom0'>
           <span class='code bold'>fit</span> <code class='quiet'>((<code>"max"</code> | <code>"min"</code> | TypeParsablePoint)?)</code>
-          : size of each cell -
-
-<code>max</code>
- makes each cell a square of the largest length or width of any cell -
+          : cell size -
 
 <code>min</code>
- makes each cell a rectangle with width equal to largest width in its
+ each cell is a rectangle with width equal to largest width in its
 column, and height equal to largest height in its row - 
+<code>max</code>
+
+all cells are a square with dimension equal to the largest dimension of the
+largest cell - 
 <code>point</code>
- makes each
-cell a rectangle with width point.x and height point.y (
-<code>min</code>
+ all cells are a rectangle with width as point.x and
+height as point.y - note - 
+<code>max</code>
+ and 
+<code>point</code>
+ only work with
+
+<code>yAlign</code>
+=
+<code>'middle'</code>
+ (
+<code>'min'</code>
 )
 
           
@@ -4653,7 +4693,7 @@ phrases.</p>
   
     <p>
       Type:
-      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#typeequationfunctionfraction">TypeEquationFunctionFraction</a>} | {strike: <a href="#typeequationfunctionstrike">TypeEquationFunctionStrike</a>} | {box: <a href="#typeequationfunctionbox">TypeEquationFunctionBox</a>} | {root: <a href="#typeequationfunctionroot">TypeEquationFunctionRoot</a>} | {brac: <a href="#typeequationfunctionbracket">TypeEquationFunctionBracket</a>} | {sub: <a href="#typeequationfunctionsubcript">TypeEquationFunctionSubcript</a>} | {sup: <a href="#typeequationfunctionsuperscript">TypeEquationFunctionSuperscript</a>} | {supSub: <a href="#typeequationfunctionsuperscriptsubscript">TypeEquationFunctionSuperscriptSubscript</a>} | {topBar: <a href="#typeequationfunctionbar">TypeEquationFunctionBar</a>} | {bottomBar: <a href="#typeequationfunctionbar">TypeEquationFunctionBar</a>} | {annotate: TypeAnnotateObject} | {topComment: <a href="#typeequationfunctioncomment">TypeEquationFunctionComment</a>} | {bottomComment: <a href="#typeequationfunctioncomment">TypeEquationFunctionComment</a>} | {pad: <a href="#typeequationfunctionpad">TypeEquationFunctionPad</a>} | {bar: <a href="#typeequationfunctionbar">TypeEquationFunctionBar</a>} | {scale: <a href="#typeequationfunctionscale">TypeEquationFunctionScale</a>} | {container: <a href="#typeequationfunctioncontainer">TypeEquationFunctionContainer</a>} | {matrix: <a href="#typeequationfunctionmatrix">TypeEquationFunctionMatrix</a>} | {int: <a href="#typeequationfunctionintegral">TypeEquationFunctionIntegral</a>} | {sumOf: <a href="#typeequationfunctionsumof">TypeEquationFunctionSumOf</a>} | {prodOf: <a href="#typeequationfunctionprodof">TypeEquationFunctionProdOf</a>} | {topStrike: <a href="#typeequationfunctionstrikecomment">TypeEquationFunctionStrikeComment</a>} | {bottomStrike: <a href="#typeequationfunctionstrikecomment">TypeEquationFunctionStrikeComment</a>} | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | DiagramElementPrimitive | DiagramElementCollection | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#typeequationfunctionfraction">TypeEquationFunctionFraction</a>} | {strike: <a href="#typeequationfunctionstrike">TypeEquationFunctionStrike</a>} | {box: <a href="#typeequationfunctionbox">TypeEquationFunctionBox</a>} | {root: <a href="#typeequationfunctionroot">TypeEquationFunctionRoot</a>} | {brac: <a href="#typeequationfunctionbracket">TypeEquationFunctionBracket</a>} | {sub: <a href="#typeequationfunctionsubcript">TypeEquationFunctionSubcript</a>} | {sup: <a href="#typeequationfunctionsuperscript">TypeEquationFunctionSuperscript</a>} | {supSub: <a href="#typeequationfunctionsuperscriptsubscript">TypeEquationFunctionSuperscriptSubscript</a>} | {topBar: <a href="#typeequationfunctionbar">TypeEquationFunctionBar</a>} | {bottomBar: <a href="#typeequationfunctionbar">TypeEquationFunctionBar</a>} | {annotate: <a href="#typeannotateobject">TypeAnnotateObject</a>} | {topComment: <a href="#typeequationfunctioncomment">TypeEquationFunctionComment</a>} | {bottomComment: <a href="#typeequationfunctioncomment">TypeEquationFunctionComment</a>} | {pad: <a href="#typeequationfunctionpad">TypeEquationFunctionPad</a>} | {bar: <a href="#typeequationfunctionbar">TypeEquationFunctionBar</a>} | {scale: <a href="#typeequationfunctionscale">TypeEquationFunctionScale</a>} | {container: <a href="#typeequationfunctioncontainer">TypeEquationFunctionContainer</a>} | {matrix: <a href="#typeequationfunctionmatrix">TypeEquationFunctionMatrix</a>} | {int: <a href="#typeequationfunctionintegral">TypeEquationFunctionIntegral</a>} | {sumOf: <a href="#typeequationfunctionsumof">TypeEquationFunctionSumOf</a>} | {prodOf: <a href="#typeequationfunctionprodof">TypeEquationFunctionProdOf</a>} | {topStrike: <a href="#typeequationfunctionstrikecomment">TypeEquationFunctionStrikeComment</a>} | {bottomStrike: <a href="#typeequationfunctionstrikecomment">TypeEquationFunctionStrikeComment</a>} | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | DiagramElementPrimitive | DiagramElementCollection | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
     </p>
   
   
@@ -8598,6 +8638,561 @@ corner at (-1, -1), width 1, height 1
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeannotation'>
+      TypeAnnotation
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>An annotation's layout is defined by its position and alignement.
+For instance, an annotation at the top right of the content:</p>
+<pre>
+                 AAAA
+                 AAAA
+         CCCCCCCC
+         CCCCCCCC
+         CCCCCCCC
+         CCCCCCCC
+</pre>
+<p>has a position relative to the content:</p>
+<ul>
+<li><code>xPosition</code>: <code>'right'</code></li>
+<li><code>yPosition</code>: <code>'top'</code></li>
+</ul>
+<p>and an alignment of the annotation relative to the annotation:</p>
+<ul>
+<li><code>xAlign</code>: <code>'left'</code></li>
+<li><code>yAlign</code>: <code>'bottom'</code></li>
+</ul>
+<p>In comparison, if <code>yAlign</code> were equal to <code>'top'</code>, then it would result in:</p>
+<pre>
+         CCCCCCCCAAAA
+         CCCCCCCCAAAA
+         CCCCCCCC
+         CCCCCCCC
+</pre>
+
+    <div class='pre p1 fill-light mt0'>TypeAnnotation</div>
+  
+    <p>
+      Type:
+      {xPosition: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), yPosition: (<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), xAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), yAlign: (<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), offset: <a href="#point">Point</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, content: <a href="#typeequationphrase">TypeEquationPhrase</a>, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, reference: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xPosition</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : where number is
+the percentage width of the content (
+<code>'center'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yPosition</span> <code class='quiet'>((<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : where number is the percentage height of the content (
+<code>'top'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : where number is
+the percentage width of the annotation (
+<code>'center'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : where
+number is the percentage width of the annotation (
+<code>'bottom'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          : annotation offset (
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : annotation scale (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>reference</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : calling getBounds on a glyph can return a
+suggested position, alignment and offset of an annotation with some name. If
+this name is defined here, then 
+<code>xPosition</code>
+, 
+<code>yPosition</code>
+, 
+<code>xAlign</code>
+, 
+<code>yAlign</code>
+
+and 
+<code>offset</code>
+ will be overwritten with the glyph's suggestion.
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeencompassglyph'>
+      TypeEncompassGlyph
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>A glyph can encompass (surround or overlay) an equation phrase. The glyph
+can also be annotated.</p>
+<pre>
+
+      gggggggggggggg
+      gggCCCCCCCCggg
+      gggCCCCCCCCggg
+      gggCCCCCCCCggg
+      gggCCCCCCCCggg
+      gggggggggggggg
+
+</pre>
+
+    <div class='pre p1 fill-light mt0'>TypeEncompassGlyph</div>
+  
+    <p>
+      Type:
+      {symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, annotation: <a href="#typeannotation">TypeAnnotation</a>?, annotations: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeannotation">TypeAnnotation</a>>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>annotation</span> <code class='quiet'>(<a href="#typeannotation">TypeAnnotation</a>?)</code>
+          : use for one annotation only instead
+of property 
+<code>annotations</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>annotations</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeannotation">TypeAnnotation</a>>?)</code>
+          : use for one or more
+annotations
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default space the glyph should extend beyond the
+top, right, left and bottom sides of the content (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>topSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space the glyph extends beyond the content top
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rightSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space the glyph extends beyond the content
+right
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bottomSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space the glyph extends beyond the content
+bottom
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>leftSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space the glyph extends beyond the content
+left
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>annotate: {
+  <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
+  <span class="hljs-attr">glyphs</span>: {
+    <span class="hljs-attr">encompass</span>: {
+      <span class="hljs-attr">symbol</span>: <span class="hljs-string">'box'</span>,
+      <span class="hljs-attr">space</span>: <span class="hljs-number">0</span>,        <span class="hljs-comment">// e.g. only, this will be overwritten by next props</span>
+      <span class="hljs-attr">topSpace</span>: <span class="hljs-number">0.4</span>,
+      <span class="hljs-attr">rightSpace</span>: <span class="hljs-number">0.2</span>,
+      <span class="hljs-attr">bottomSpace</span>: <span class="hljs-number">0.3</span>,
+      <span class="hljs-attr">leftSpace</span>: <span class="hljs-number">0.1</span>,
+    },
+  },
+  <span class="hljs-attr">inSize</span>: <span class="hljs-literal">false</span>,
+},</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeannotateobject'>
+      TypeAnnotateObject
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation annotation</p>
+<p>An annotation is an equation phrase ('annotation') which is laid out relative
+to another equation phrase ('content'). For example:</p>
+<pre>
+                 AAAA
+                 AAAA
+         CCCCCCCC
+         CCCCCCCC
+         CCCCCCCC
+         CCCCCCCC
+</pre>
+<p>The options for defining how to annotate one equation phrase with another is
+<a href="#typeannotation">TypeAnnotation</a></p>
+<p>Content can also be annotated with a glyph (that itself may also be
+annotated). The glyph can either encompass the content, or can be to the
+top, bottom, left or right of the content</p>
+<pre>
+                        Top Glyph
+                 GGGGGGGGGGGGGGGGGGGGGGG
+                 GGGGGGGGGGGGGGGGGGGGGGG     Encompassing Glyph
+                                           /
+                                         /
+       GGG       GGGGGGGGGGGGGGGGGGGGGGG        GGG
+       GGG       GGG                 GGG        GGG
+       GGG       GGG     CCCCCCC     GGG        GGG
+Left   GGG       GGG     CCCCCCC     GGG        GGG   Right
+Glyph  GGG       GGG     CCCCCCC     GGG        GGG   Glyph
+       GGG       GGG                 GGG        GGG
+       GGG       GGGGGGGGGGGGGGGGGGGGGGG        GGG
+
+
+                 GGGGGGGGGGGGGGGGGGGGGGG
+                 GGGGGGGGGGGGGGGGGGGGGGG
+                      Bottom Glyph
+</pre>
+
+    <div class='pre p1 fill-light mt0'>TypeAnnotateObject</div>
+  
+    <p>
+      Type:
+      {content: <a href="#typeequationphrase">TypeEquationPhrase</a>, annotation: <a href="#typeannotation">TypeAnnotation</a>?, annotations: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeannotation">TypeAnnotation</a>>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, glyphs: {encompass: <a href="#typeencompassglyph">TypeEncompassGlyph</a>?, left: TypeLeftRightGlyph?, right: TypeLeftRightGlyph?, top: TypeTopBottomGlyph?, bottom: TypeTopBottomGlyph?}?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, contentScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>annotation</span> <code class='quiet'>(<a href="#typeannotation">TypeAnnotation</a>?)</code>
+          : use for just one annotation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>annotations</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeannotation">TypeAnnotation</a>>?)</code>
+          : use for multiple annotations
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>topSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bottomSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>leftSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rightSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>contentScale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>glyphs</span> <code class='quiet'>(TypeGlyphs?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : use full bounds of content,
+overriding any 
+<code>inSize=false</code>
+ properties in the content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>useFullBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// The following examples use left and right square brackets as symbols:</span>
+eqn.addElements({
+  <span class="hljs-attr">lb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'squareBracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span> },
+  <span class="hljs-attr">rb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'squareBracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span> },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition</span>
+{
+  <span class="hljs-attr">matrix</span>: {
+    <span class="hljs-attr">order</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>],
+    <span class="hljs-attr">left</span>: <span class="hljs-string">'lb'</span>,
+    <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-string">'d'</span>],
+    <span class="hljs-attr">right</span>: <span class="hljs-string">'rb'</span>,
+    <span class="hljs-attr">scale</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">fit</span>: <span class="hljs-string">'min'</span>,
+    <span class="hljs-attr">space</span>: [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.1</span>],
+    <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'baseline'</span>,
+    <span class="hljs-attr">brac</span>: {
+      <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">insideSpace</span>: <span class="hljs-number">0.1</span>,
+      <span class="hljs-attr">outsideSpace</span>: <span class="hljs-number">0.1</span>,
+      <span class="hljs-attr">topSpace</span>: <span class="hljs-number">0.1</span>,
+      <span class="hljs-attr">bottomSpace</span>: <span class="hljs-number">0.1</span>,
+      <span class="hljs-attr">minContentHeight</span>: <span class="hljs-literal">null</span>,
+      <span class="hljs-attr">minContentDescent</span>: <span class="hljs-literal">null</span>,
+      <span class="hljs-attr">height</span>: <span class="hljs-literal">null</span>,
+      <span class="hljs-attr">descent</span>: <span class="hljs-literal">null</span>,
+    },
+  },
+},</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Array example</span>
+ { <span class="hljs-attr">matrix</span>: [[<span class="hljs-number">2</span>, <span class="hljs-number">2</span>], <span class="hljs-string">'lb'</span>, [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-string">'d'</span>], <span class="hljs-string">'rb'</span>] }</pre>
+    
   
 
   

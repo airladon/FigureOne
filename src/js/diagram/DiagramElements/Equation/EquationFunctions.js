@@ -19,7 +19,10 @@ import Matrix from './Elements/Matrix';
 import Scale from './Elements/Scale';
 import Container from './Elements/Container';
 import BaseAnnotationFunction from './Elements/BaseAnnotationFunction';
-import type { TypeAnnotation } from './Elements/BaseAnnotationFunction';
+// eslint-disable-next-line import/no-cycle
+// import type {
+//   TypeAnnotation, TypeEncompassGlyph, TypeLeftRightGlyph, TypeTopBottomGlyph,
+// } from './Elements/BaseAnnotationFunction';
 
 export function getDiagramElement(
   elementsObject: { [string: string]: DiagramElementPrimitive |
@@ -1350,11 +1353,13 @@ export type TypeEquationFunctionPad = {
  * where each element is a matrix element
  * @property {string} [right] right bracket symbol
  * @property {number} [scale] scale of matrix elements (`0.7`)
- * @property {'max' | 'min' | TypeParsablePoint} [fit] size of each cell -
- * `max` makes each cell a square of the largest length or width of any cell -
- * `min` makes each cell a rectangle with width equal to largest width in its
- * column, and height equal to largest height in its row - `point` makes each
- * cell a rectangle with width point.x and height point.y (`min`)
+ * @property {'max' | 'min' | TypeParsablePoint} [fit] cell size -
+ * `min` each cell is a rectangle with width equal to largest width in its
+ * column, and height equal to largest height in its row - `max`
+ * all cells are a square with dimension equal to the largest dimension of the
+ * largest cell - `point` all cells are a rectangle with width as point.x and
+ * height as point.y - note - `max` and `point` only work with
+ * `yAlign`=`'middle'` (`'min'`)
  * @property {TypeParsablePoint} [space] space between each cell
  * (`[0.05, 0.05]`)
  * @property {'baseline' | 'middle'} [yAlign] align cells in a row with the
@@ -1422,6 +1427,248 @@ export type TypeEquationFunctionMatrix = {
   ?boolean,
 ];
 
+
+/**
+ * An annotation's layout is defined by its position and alignement.
+ * For instance, an annotation at the top right of the content:
+ * <pre>
+ *                  AAAA
+ *                  AAAA
+ *          CCCCCCCC
+ *          CCCCCCCC
+ *          CCCCCCCC
+ *          CCCCCCCC
+ * </pre>
+ * has a position relative to the content:
+ * * `xPosition`: `'right'`
+ * * `yPosition`: `'top'`
+ *
+ * and an alignment of the annotation relative to the annotation:
+ * * `xAlign`: `'left'`
+ * * `yAlign`: `'bottom'`
+ *
+ *
+ * In comparison, if `yAlign` were equal to `'top'`, then it would result in:
+ * <pre>
+ *          CCCCCCCCAAAA
+ *          CCCCCCCCAAAA
+ *          CCCCCCCC
+ *          CCCCCCCC
+ * </pre>
+ * @property {TypeEquationPhrase} content
+ * @property {'left' | 'center' | 'right' | number} [xPosition] where number is
+ *  the percentage width of the content (`'center'`)
+ * @property {'bottom' | 'baseline' | 'middle' | 'top' | number} [yPosition]
+ * where number is the percentage height of the content (`'top'`)
+ * @property {'left' | 'center' | 'right' | number} [xAlign] where number is
+ * the percentage width of the annotation (`'center'`)
+ * @property {'bottom' | 'baseline' | 'middle' | 'top' | number} [yAlign] where
+ * number is the percentage width of the annotation (`'bottom'`)
+ * @property {Point} [offset] annotation offset (`[0, 0]`)
+ * @property {number} [scale] annotation scale (`1`)
+ * @property {boolean} [inSize] (`true`)
+ * @property {boolean} [fullContentBounds] (`false`)
+ * @property {string} [reference] calling getBounds on a glyph can return a
+ * suggested position, alignment and offset of an annotation with some name. If
+ * this name is defined here, then `xPosition`, `yPosition`, `xAlign`, `yAlign`
+ * and `offset` will be overwritten with the glyph's suggestion.
+ */
+export type TypeAnnotation = {
+  xPosition: 'left' | 'center' | 'right' | number,
+  yPosition: 'bottom' | 'baseline' | 'middle' | 'top' | number,
+  xAlign: 'left' | 'center' | 'right' | number,
+  yAlign: 'bottom' | 'baseline' | 'middle' | 'top' | number,
+  offset: Point,
+  scale: number,
+  content: TypeEquationPhrase,
+  inSize: boolean,
+  fullContentBounds: boolean,
+  reference?: string,
+};
+
+/**
+ * A glyph can encompass (surround or overlay) an equation phrase. The glyph
+ * can also be annotated.
+ * <pre>
+ *
+ *       gggggggggggggg
+ *       gggCCCCCCCCggg
+ *       gggCCCCCCCCggg
+ *       gggCCCCCCCCggg
+ *       gggCCCCCCCCggg
+ *       gggggggggggggg
+ *
+ * </pre>
+ * @property {string} symbol
+ * @property {TypeAnnotation} [annotation] use for one annotation only instead
+ * of property `annotations`
+ * @property {Array<TypeAnnotation>} [annotations] use for one or more
+ * annotations
+ * @property {number} [space] default space the glyph should extend beyond the
+ * top, right, left and bottom sides of the content (`0`)
+ * @property {number} [topSpace] space the glyph extends beyond the content top
+ * @property {number} [rightSpace] space the glyph extends beyond the content
+ * right
+ * @property {number} [bottomSpace] space the glyph extends beyond the content
+ * bottom
+ * @property {number} [leftSpace] space the glyph extends beyond the content
+ * left
+ * @example
+ * annotate: {
+ *   content: 'a',
+ *   glyphs: {
+ *     encompass: {
+ *       symbol: 'box',
+ *       space: 0,        // e.g. only, this will be overwritten by next props
+ *       topSpace: 0.4,
+ *       rightSpace: 0.2,
+ *       bottomSpace: 0.3,
+ *       leftSpace: 0.1,
+ *     },
+ *   },
+ *   inSize: false,
+ * },
+ */
+export type TypeEncompassGlyph = {
+  symbol?: string,
+  annotation?: TypeAnnotation,
+  annotations?: Array<TypeAnnotation>,
+  space: number;
+  topSpace?: number;
+  rightSpace?: number;
+  bottomSpace?: number;
+  leftSpace?: number;
+};
+
+
+export type TypeLeftRightGlyph = {
+  symbol?: string,
+  annotation?: TypeAnnotation,
+  annotations?: Array<TypeAnnotation>,
+  space: number;
+  overhang: number,
+  topSpace?: number;
+  bottomSpace?: number;
+  minContentHeight?: number,
+  minContentDescent?: number;
+  minContentAscent?: number,
+  descent?: number,
+  height?: number,
+  yOffset: number,
+  annotationsOverContent?: boolean,
+};
+
+export type TypeTopBottomGlyph = {
+  symbol?: string,
+  annotation?: TypeAnnotation,
+  annotations?: Array<TypeAnnotation>,
+  space: number;
+  overhang: number,
+  width?: number,
+  leftSpace?: number,
+  rightSpace?: number,
+  xOffset: number,
+  annotationsOverContent?: boolean,
+};
+
+export type TypeGlyphs = {
+  left?: TypeLeftRightGlyph;
+  right?: TypeLeftRightGlyph;
+  top?: TypeTopBottomGlyph;
+  bottom?: TypeTopBottomGlyph;
+  encompass?: TypeEncompassGlyph;
+};
+
+
+/**
+ * Equation annotation
+ *
+ * An annotation is an equation phrase ('annotation') which is laid out relative
+ * to another equation phrase ('content'). For example:
+ * <pre>
+ *                  AAAA
+ *                  AAAA
+ *          CCCCCCCC
+ *          CCCCCCCC
+ *          CCCCCCCC
+ *          CCCCCCCC
+ * </pre>
+ *
+ * The options for defining how to annotate one equation phrase with another is
+ * {@link TypeAnnotation}
+ *
+ * Content can also be annotated with a glyph (that itself may also be
+ * annotated). The glyph can either encompass the content, or can be to the
+ * top, bottom, left or right of the content
+ *
+ * <pre>
+ *                         Top Glyph
+ *                  GGGGGGGGGGGGGGGGGGGGGGG
+ *                  GGGGGGGGGGGGGGGGGGGGGGG     Encompassing Glyph
+ *                                            /
+ *                                          /
+ *        GGG       GGGGGGGGGGGGGGGGGGGGGGG        GGG
+ *        GGG       GGG                 GGG        GGG
+ *        GGG       GGG     CCCCCCC     GGG        GGG
+ * Left   GGG       GGG     CCCCCCC     GGG        GGG   Right
+ * Glyph  GGG       GGG     CCCCCCC     GGG        GGG   Glyph
+ *        GGG       GGG                 GGG        GGG
+ *        GGG       GGGGGGGGGGGGGGGGGGGGGGG        GGG
+ *
+ *
+ *                  GGGGGGGGGGGGGGGGGGGGGGG
+ *                  GGGGGGGGGGGGGGGGGGGGGGG
+ *                       Bottom Glyph
+ * </pre>
+ * @property {TypeEquationPhrase} content
+ * @property {TypeAnnotation} [annotation] use for just one annotation
+ * @property {Array<TypeAnnotation>} [annotations] use for multiple annotations
+ * @property {boolean} [inSize]
+ * @property {number} [space]
+ * @property {number} [topSpace]
+ * @property {number} [bottomSpace]
+ * @property {number} [leftSpace]
+ * @property {number} [rightSpace]
+ * @property {number} [contentScale]
+ * @property {TypeGlyphs} [glyphs]
+ * @property {boolean} [fullContentBounds] use full bounds of content,
+ * overriding any `inSize=false` properties in the content (`false`)
+ * @property {boolean} [useFullBounds] 
+ * @example
+ * // The following examples use left and right square brackets as symbols:
+ * eqn.addElements({
+ *   lb: { symbol: 'squareBracket', side: 'left' },
+ *   rb: { symbol: 'squareBracket', side: 'right' },
+ * });
+ * @example
+ * // Full object definition
+ * {
+ *   matrix: {
+ *     order: [2, 2],
+ *     left: 'lb',
+ *     content: ['a', 'b', 'c', 'd'],
+ *     right: 'rb',
+ *     scale: 1,
+ *     fit: 'min',
+ *     space: [0.1, 0.1],
+ *     yAlign: 'baseline',
+ *     brac: {
+ *       inSize: true,
+ *       insideSpace: 0.1,
+ *       outsideSpace: 0.1,
+ *       topSpace: 0.1,
+ *       bottomSpace: 0.1,
+ *       minContentHeight: null,
+ *       minContentDescent: null,
+ *       height: null,
+ *       descent: null,
+ *     },
+ *   },
+ * },
+ * @example
+ * // Array example
+ *  { matrix: [[2, 2], 'lb', ['a', 'b', 'c', 'd'], 'rb'] }
+ */
 export type TypeAnnotateObject = {
   content: TypeEquationPhrase,
   annotation?: TypeAnnotation,
@@ -1429,67 +1676,11 @@ export type TypeAnnotateObject = {
   fullContentBounds?: boolean,
   useFullBounds?: boolean,
   glyphs?: {
-    encompass?: {
-      symbol?: string,
-      annotations?: Array<TypeAnnotation>,
-      space?: number;
-      topSpace?: number;
-      leftSpace?: number;
-      bottomSpace?: number;
-      rightSpace?: number;
-    },
-    left?: {
-      symbol?: string,
-      annotations?: Array<TypeAnnotation>,
-      space?: number;
-      overhang?: number,
-      topSpace?: number;
-      bottomSpace?: number;
-      minContentHeight?: number,
-      minContentDescent?: number;
-      minContentAscent?: number,
-      descent?: number,
-      height?: number,
-      yOffset?: number,
-      annotationsOverContent?: boolean,
-    },
-    right?: {
-      symbol?: string,
-      annotations?: Array<TypeAnnotation>,
-      space?: number;
-      overhang?: number,
-      topSpace?: number;
-      bottomSpace?: number;
-      minContentHeight?: number,
-      minContentDescent?: number;
-      minContentAscent?: number,
-      descent?: number,
-      height?: number,
-      yOffset?: number,
-      annotationsOverContent?: boolean,
-    },
-    top?: {
-      symbol?: string,
-      annotations?: Array<TypeAnnotation>,
-      space?: number;
-      overhang?: number,
-      width?: number,
-      leftSpace?: number,
-      rightSpace?: number,
-      xOffset?: number,
-      annotationsOverContent?: boolean,
-    },
-    bottom?: {
-      symbol?: string,
-      annotations?: Array<TypeAnnotation>,
-      space?: number;
-      overhang?: number,
-      width?: number,
-      leftSpace?: number,
-      rightSpace?: number,
-      xOffset?: number,
-      annotationsOverContent?: boolean,
-    },
+    encompass?: TypeEncompassGlyph,
+    left?: TypeLeftRightGlyph,
+    right?: TypeLeftRightGlyph,
+    top?: TypeTopBottomGlyph,
+    bottom?: TypeTopBottomGlyph,
   },
   inSize?: boolean,
   space?: number,
@@ -2030,8 +2221,8 @@ export class EquationFunctions {
       glyphsToUse[side] = {};
       let glyphAnnotationsToProcess = glyphSide.annotations;
       // $FlowFixMe
-      if (glyphSide.annotate != null) {      // $FlowFixMe
-        glyphAnnotationsToProcess = [glyphSide.annotate];
+      if (glyphSide.annotation != null) {      // $FlowFixMe
+        glyphAnnotationsToProcess = [glyphSide.annotation];
       }
       const glyphAnnotationsToUse = fillAnnotations(glyphAnnotationsToProcess);
       glyphsToUse[side] = joinObjects({}, defaultOptions[side], glyphSide);
