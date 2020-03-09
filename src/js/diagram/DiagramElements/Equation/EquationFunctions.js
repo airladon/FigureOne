@@ -91,8 +91,8 @@ export type TypeEquationPhrase =
   | { container: TypeEquationFunctionContainer }
   | { matrix: TypeMatrixObject } | TypeMatrixArray
   | { int: TypeEquationFunctionIntegral }
-  | { sumOf: TypeEquationSumOf }
-  | { prodOf: TypeEquationProdOf }
+  | { sumOf: TypeEquationFunctionSumOf }
+  | { prodOf: TypeEquationFunctionProdOf }
   | Array<TypeEquationPhrase>
   | DiagramElementPrimitive
   | DiagramElementCollection
@@ -910,7 +910,7 @@ export type TypeEquationFunctionIntegral = {
  * // Example array definition
  *  { sumOf: ['s', 'a', 'b', 'c'] }
  */
-export type TypeEquationSumOf = {
+export type TypeEquationFunctionSumOf = {
   symbol?: string,
   content: TypeEquationPhrase,
   from?: TypeEquationPhrase,
@@ -1013,7 +1013,7 @@ export type TypeEquationSumOf = {
  * // Example array definition
  *  { prodOf: ['s', 'a', 'b', 'c'] }
  */
-export type TypeEquationProdOf = {
+export type TypeEquationFunctionProdOf = {
   symbol?: string,
   content: TypeEquationPhrase,
   from?: TypeEquationPhrase,
@@ -2596,16 +2596,16 @@ export class EquationFunctions {
     });
   }
 
-  sumOf(options: TypeEquationSumOf) {
+  sumOf(options: TypeEquationFunctionSumOf) {
     return this.sumProd(options);
   }
 
-  prodOf(options: TypeEquationProdOf) {
+  prodOf(options: TypeEquationFunctionProdOf) {
     return this.sumProd(options);
   }
 
   sumProd(
-    optionsOrArray: TypeEquationSumOf | TypeEquationProdOf,
+    optionsOrArray: TypeEquationFunctionSumOf | TypeEquationFunctionProdOf,
   ) {
     let content;
     let symbol;
