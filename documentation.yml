@@ -13,8 +13,8 @@ toc:
   - TypeEquationFunctionBox
   - TypeEquationFunctionBar
   - TypeEquationFunctionIntegral
-  - TypeEquationSumOf
-  - TypeEquationProdOf
+  - TypeEquationFunctionSumOf
+  - TypeEquationFunctionProdOf
   - TypeEquationFunctionSubcript
   - TypeEquationFunctionSuperscript
   - TypeEquationFunctionSuperscriptSubscript
