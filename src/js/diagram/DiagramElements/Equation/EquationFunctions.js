@@ -1197,7 +1197,7 @@ export type TypeEquationFunctionSuperscriptSubscript = {
  * the full bounds of the content even if `fullContentBounds=false` and the
  * brackets only surround a portion of the content (`false`)
  * @example
- * // For examples, a sum of symbol (pi) is defined as an equation element
+ * // For following examples, a bottom brace is defined as an equation element
  * eqn.addElements({
  *   brace: { symbol: 'brace', side: 'bottom }
  * });
@@ -2928,25 +2928,25 @@ export class EquationFunctions {
     let content;
     let comment;
     let symbol;
-    let space;
+    let commentSpace;
     let scale;
     let overhang;
     let inSize;
     if (Array.isArray(optionsOrContent)) {             // $FlowFixMe
-      [content, symbol, comment, inSize, space, scale, overhang] = optionsOrContent;
+      [content, symbol, comment, inSize, commentSpace, scale, overhang] = optionsOrContent;
     } else {
       ({                                                      // $FlowFixMe
-        content, comment, symbol, inSize, space, scale, overhang,
+        content, comment, symbol, inSize, commentSpace, scale, overhang,
       } = optionsOrContent);
     }
     const optionsIn = {
       inSize,
-      space,
+      commentSpace,
       scale,
       overhang,
     };
     const defaultOptions = {
-      space: 0.1,
+      commentSpace: 0.1,
       overhang: 0,
       scale: 0.5,
       inSize: true,
@@ -2954,7 +2954,7 @@ export class EquationFunctions {
     const options = joinObjects(defaultOptions, optionsIn);
     return [
       content, symbol, comment, options.inSize,
-      options.space, options.scale, options.overhang,
+      options.commentSpace, options.scale, options.overhang,
     ];
   }
 
@@ -2962,7 +2962,7 @@ export class EquationFunctions {
   topStrike(...args) {
     const [
       content, symbol, comment, inSize,
-      space, scale, overhang,
+      commentSpace, scale, overhang,
     ] = this.processStrike(...args);
     const annotations = [
       {
@@ -2971,7 +2971,7 @@ export class EquationFunctions {
         yPosition: 'top',
         xAlign: 'center',
         yAlign: 'bottom',
-        offset: [0, space],
+        offset: [0, commentSpace],
         scale,
       },
     ];
@@ -2992,7 +2992,7 @@ export class EquationFunctions {
   bottomStrike(...args) {
     const [
       content, symbol, comment, inSize,
-      space, scale, overhang,
+      commentSpace, scale, overhang,
     ] = this.processStrike(...args);
     const annotations = [
       {
@@ -3001,7 +3001,7 @@ export class EquationFunctions {
         yPosition: 'bottom',
         xAlign: 'center',
         yAlign: 'top',
-        offset: [0, -space],
+        offset: [0, -commentSpace],
         scale,
       },
     ];
