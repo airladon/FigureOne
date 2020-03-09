@@ -85,7 +85,7 @@ export type TypeEquationPhrase =
   | { annotate: TypeAnnotateObject }
   | { topComment: TypeEquationFunctionComment }
   | { bottomComment: TypeEquationFunctionComment }
-  | { padding: TypePaddingObject } | TypePaddingArray
+  | { pad: TypeEquationFunctionPad }
   | { bar: TypeEquationFunctionBar }
   | { scale: TypeEquationFunctionScale }
   | { container: TypeEquationFunctionContainer }
@@ -1304,14 +1304,36 @@ export type TypeEquationFunctionStrikeComment = {
 ];
 
 
-export type TypePaddingObject = {
+/**
+ * Equation padding options
+ *
+ * @property {TypeEquationPhrase} content
+ * @property {number} [top] (`0`)
+ * @property {number} [right] (`0`)
+ * @property {number} [bottom] (`0`)
+ * @property {number} [left] (`0`)
+ * @example
+ * // Full object definition
+ * {
+ *   pad: {
+ *     content: 'a',,
+ *     top: 0.1,
+ *     right: 0.2,
+ *     bottom: 0.3,
+ *     left: 0.4,
+ *   },
+ * },
+ * @example
+ * // Array example
+ *  { pad: ['a', 0.1, 0.2, 0.3, 0.4] }
+ */
+export type TypeEquationFunctionPad = {
   content: TypeEquationPhrase;
   top?: number,
   right?: number,
   bottom?: number,
   left?: number,
-};
-export type TypePaddingArray = [
+} | [
   TypeEquationPhrase,
   ?number,
   ?number,
@@ -2336,7 +2358,7 @@ export class EquationFunctions {
   }
 
   pad(
-    optionsOrContent: TypePaddingObject | TypePaddingArray,
+    optionsOrContent: TypeEquationFunctionPad,
   ) {
     let content;
     let top;

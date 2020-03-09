@@ -20,6 +20,7 @@ toc:
   - TypeEquationFunctionSuperscriptSubscript
   - TypeEquationFunctionComment
   - TypeEquationFunctionStrikeComment
+  - TypeEquationFunctionPad
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment
