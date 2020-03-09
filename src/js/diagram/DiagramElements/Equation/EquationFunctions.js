@@ -2930,31 +2930,31 @@ export class EquationFunctions {
     let symbol;
     let commentSpace;
     let scale;
-    let overhang;
+    let space;
     let inSize;
     if (Array.isArray(optionsOrContent)) {             // $FlowFixMe
-      [content, symbol, comment, inSize, overhang, scale, commentSpace] = optionsOrContent;
+      [content, symbol, comment, inSize, space, scale, commentSpace] = optionsOrContent;
     } else {
       ({                                                      // $FlowFixMe
-        content, comment, symbol, inSize, overhang, scale, commentSpace,
+        content, comment, symbol, inSize, space, scale, commentSpace,
       } = optionsOrContent);
     }
     const optionsIn = {
       inSize,
       commentSpace,
       scale,
-      overhang,
+      space,
     };
     const defaultOptions = {
       commentSpace: 0.1,
-      overhang: 0,
+      space: 0,
       scale: 0.5,
       inSize: true,
     };
     const options = joinObjects(defaultOptions, optionsIn);
     return [
       content, symbol, comment, options.inSize,
-      options.commentSpace, options.scale, options.overhang,
+      options.commentSpace, options.scale, options.space,
     ];
   }
 
@@ -2962,7 +2962,7 @@ export class EquationFunctions {
   topStrike(...args) {
     const [
       content, symbol, comment, inSize,
-      commentSpace, scale, overhang,
+      commentSpace, scale, space,
     ] = this.processStrike(...args);
     const annotations = [
       {
@@ -2981,7 +2981,7 @@ export class EquationFunctions {
       glyphs: {
         encompass: {    // $FlowFixMe
           symbol,
-          space: overhang,    // $FlowFixMe
+          space,    // $FlowFixMe
           annotations,
         },
       },
@@ -2992,7 +2992,7 @@ export class EquationFunctions {
   bottomStrike(...args) {
     const [
       content, symbol, comment, inSize,
-      commentSpace, scale, overhang,
+      commentSpace, scale, space,
     ] = this.processStrike(...args);
     const annotations = [
       {
@@ -3011,7 +3011,7 @@ export class EquationFunctions {
       glyphs: {
         encompass: {    // $FlowFixMe
           symbol,
-          space: overhang,    // $FlowFixMe
+          space,    // $FlowFixMe
           annotations,
         },
       },
