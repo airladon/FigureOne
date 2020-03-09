@@ -1543,7 +1543,6 @@ export type TypeAnnotation = {
  *       leftSpace: 0.1,
  *     },
  *   },
- *   inSize: false,
  * },
  */
 export type TypeEncompassGlyph = {
@@ -1602,10 +1601,15 @@ export type TypeEncompassGlyph = {
  *       symbol: 'lb',
  *       space: 0.1,
  *       overhang: 0.2,
- *       topSpace: 0,
+ *       topSpace: 0.1,
+ *       bottomSpace: 0.1,
+ *       minContentHeight: 0.3,
+ *       minContentDescent: 0.1,
+ *       descent: 0.1,
+ *       height: 0.3,
+ *       yOffset: 0,
  *       annotationsOverContent: true,
  *   },
- *   inSize: false,
  * },
  */
 export type TypeLeftRightGlyph = {
@@ -1625,6 +1629,58 @@ export type TypeLeftRightGlyph = {
   annotationsOverContent?: boolean,
 };
 
+/**
+ * A glyph can be to the top or bottom of an equation phrase (*content*).
+ * The glyph can also be annotated.
+ * <pre>
+ *
+ *          gggggggg
+ *          gggggggg
+ *
+ *          CCCCCCCC
+ *          CCCCCCCC
+ *          CCCCCCCC
+ *          CCCCCCCC
+ *
+ *          gggggggg
+ *          gggggggg
+ *
+ * </pre>
+ * @property {string} symbol
+ * @property {TypeAnnotation} [annotation] use for one annotation only instead
+ * of property `annotations`
+ * @property {Array<TypeAnnotation>} [annotations] use for one or more
+ * annotations
+ * @property {number} [space] vertical space between glyph and content (`0`)
+ * @property {number} [overhang] amount glyph extends above content top and
+ * below content bottom (`0`)
+ * @property {number} [width] force width of glyph
+ * @property {number} [leftSpace] amount glyph extends beyond content left
+ * @property {number} [rightSpace] amount glyph extends beyond content right
+ * @property {number} [xOffset] offset glyph in x (`0`)
+ * @property {boolean} [annotationsOverContent] `true` means only glyph is
+ * separated from content by `space` and not annotations (false`)
+ * @example
+ * // Define glyph symbol
+ * eqn.addElements({
+ *   lb: { symbol: 'squareBracket', side: 'left' },
+ * });
+ *  // surrounding content with a box glyph
+ * annotate: {
+ *   content: 'a',
+ *   glyphs: {
+ *     left: {
+ *       symbol: 'lb',
+ *       space: 0.1,
+ *       overhang: 0.2,
+ *       width: 0.3,
+ *       leftSpace: 0.1,
+ *       rightSpace: 0.1,
+ *       xOffset: 0,
+ *       annotationsOverContent: true,
+ *   },
+ * },
+ */
 export type TypeTopBottomGlyph = {
   symbol?: string,
   annotation?: TypeAnnotation,
@@ -1638,6 +1694,17 @@ export type TypeTopBottomGlyph = {
   annotationsOverContent?: boolean,
 };
 
+/**
+ * Object defining all the glyphs annotating some content.
+ *
+ * Multiple glyphs are ok, but only one per position.
+ *
+ * @property {TypeEncompassGlyph} [encompass]
+ * @property {TypeTopBottomGlyph} [top]
+ * @property {TypeLeftRightGlyph} [right]
+ * @property {TypeTopBottomGlyph} [bottom]
+ * @property {TypeLeftRightGlyph} [left]
+ */
 export type TypeGlyphs = {
   left?: TypeLeftRightGlyph;
   right?: TypeLeftRightGlyph;
@@ -1690,51 +1757,78 @@ export type TypeGlyphs = {
  * @property {TypeEquationPhrase} content
  * @property {TypeAnnotation} [annotation] use for just one annotation
  * @property {Array<TypeAnnotation>} [annotations] use for multiple annotations
- * @property {boolean} [inSize]
- * @property {number} [space]
- * @property {number} [topSpace]
- * @property {number} [bottomSpace]
- * @property {number} [leftSpace]
- * @property {number} [rightSpace]
- * @property {number} [contentScale]
- * @property {TypeGlyphs} [glyphs]
+ * @property {boolean} [inSize] `true` means resulting size includes
+ * annotations (`true`)
+ * @property {number} [space] extend resulting equation phrase size by space on
+ * top, right, bottom and left sides (`0`)
+ * @property {number} [topSpace] extend resulting equation phrase size by space
+ * on top
+ * @property {number} [bottomSpace] extend resulting equation phrase size by
+ * space on bottom
+ * @property {number} [leftSpace] extend resulting equation phrase size by space
+ * on left
+ * @property {number} [rightSpace] extend resulting equation phrase size by
+ * space on right
+ * @property {number} [contentScale] scale content (`1`)
+ * @property {TypeGlyphs} [glyphs] glyphs to annotate content with
  * @property {boolean} [fullContentBounds] use full bounds of content,
  * overriding any `inSize=false` properties in the content (`false`)
- * @property {boolean} [useFullBounds] 
+ * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
+ * the full bounds of the content even if `fullContentBounds=false` and the
+ * brackets only surround a portion of the content (`false`)
  * @example
- * // The following examples use left and right square brackets as symbols:
- * eqn.addElements({
- *   lb: { symbol: 'squareBracket', side: 'left' },
- *   rb: { symbol: 'squareBracket', side: 'right' },
- * });
+ * // Simple annotation
+ *  annotate: {
+ *    content: 'a',
+ *    annotation: {
+ *      content: 'b',
+ *      yPosition: 'top',
+ *      yAlign: 'bottom',
+ *      xPosition: 'right',
+ *      xAlign: 'left',
+ *    },
+ *  },
+ *
  * @example
- * // Full object definition
- * {
- *   matrix: {
- *     order: [2, 2],
- *     left: 'lb',
- *     content: ['a', 'b', 'c', 'd'],
- *     right: 'rb',
- *     scale: 1,
- *     fit: 'min',
- *     space: [0.1, 0.1],
- *     yAlign: 'baseline',
- *     brac: {
- *       inSize: true,
- *       insideSpace: 0.1,
- *       outsideSpace: 0.1,
- *       topSpace: 0.1,
- *       bottomSpace: 0.1,
- *       minContentHeight: null,
- *       minContentDescent: null,
- *       height: null,
- *       descent: null,
- *     },
- *   },
- * },
+ * // Multiple Annotations
+ *  annotate: {
+ *    content: 'a',
+ *    annotations: [
+ *      {
+ *        content: 'b',
+ *        xPosition: 'right',
+ *        yPosition: 'top',
+ *        xAlign: 'left',
+ *        yAlign: 'bottom',
+ *      },
+ *      {
+ *        content: 'c',
+ *        xPosition: 'right',
+ *        yPosition: 'bottom',
+ *        xAlign: 'left',
+ *        yAlign: 'top',
+ *      },
+ *    ],
+ *  },
  * @example
- * // Array example
- *  { matrix: [[2, 2], 'lb', ['a', 'b', 'c', 'd'], 'rb'] }
+ * // left glyph with annotation
+ *  annotate: {
+ *    content: 'a',
+ *    glyphs: {
+ *      left:{
+ *        symbol: 'bar',
+ *        overhang: 0.1,
+ *        annotation: {
+ *          content: 'bbb',
+ *          xPosition: 'right',
+ *          yPosition: 'bottom',
+ *          xAlign: 'left',
+ *          yAlign: 'middle',
+ *          scale: 0.5,
+ *        },
+ *      },
+ *    },
+ *  },
  */
 export type TypeAnnotateObject = {
   content: TypeEquationPhrase,
@@ -1742,13 +1836,7 @@ export type TypeAnnotateObject = {
   annotations?: Array<TypeAnnotation>,
   fullContentBounds?: boolean,
   useFullBounds?: boolean,
-  glyphs?: {
-    encompass?: TypeEncompassGlyph,
-    left?: TypeLeftRightGlyph,
-    right?: TypeLeftRightGlyph,
-    top?: TypeTopBottomGlyph,
-    bottom?: TypeTopBottomGlyph,
-  },
+  glyphs?: TypeGlyphs,
   inSize?: boolean,
   space?: number,
   topSpace?: number,
