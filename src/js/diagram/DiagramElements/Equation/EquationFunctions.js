@@ -89,7 +89,7 @@ export type TypeEquationPhrase =
   | { bar: TypeEquationFunctionBar }
   | { scale: TypeEquationFunctionScale }
   | { container: TypeEquationFunctionContainer }
-  | { matrix: TypeMatrixObject } | TypeMatrixArray
+  | { matrix: TypeEquationFunctionMatrix }
   | { int: TypeEquationFunctionIntegral }
   | { sumOf: TypeEquationFunctionSumOf }
   | { prodOf: TypeEquationFunctionProdOf }
@@ -1341,20 +1341,75 @@ export type TypeEquationFunctionPad = {
   ?number,
 ];
 
-export type TypeMatrixObject = {
+/**
+ * Equation matrix
+ *
+ * @property {[number, number]} [order] (`[1, length-of-content]`)
+ * @property {string} [left] left bracket symbol
+ * @property {Array<TypeEquationPhrase>} [content] Array of equation phrases
+ * where each element is a matrix element
+ * @property {string} [right] right bracket symbol
+ * @property {number} [scale] scale of matrix elements (`0.7`)
+ * @property {'max' | 'min' | TypeParsablePoint} [fit] size of each cell -
+ * `max` makes each cell a square of the largest length or width of any cell -
+ * `min` makes each cell a rectangle with width equal to largest width in its
+ * column, and height equal to largest height in its row - `point` makes each
+ * cell a rectangle with width point.x and height point.y (`min`)
+ * @property {TypeParsablePoint} [space] space between each cell
+ * (`[0.05, 0.05]`)
+ * @property {'baseline' | 'middle'} [yAlign] align cells in a row with the
+ * text baseline, or middle of the cell (`baseline`)
+ * @property {TypeEquationFunctionBracket} [brac] bracket options not including
+ * the symbols (`{}`)
+ * @property {boolean} [fullContentBounds] use full bounds of content,
+ * overriding any `inSize=false` properties in the content (`false`)
+ * @example
+ * // The following examples use left and right square brackets as symbols:
+ * eqn.addElements({
+ *   lb: { symbol: 'squareBracket', side: 'left' },
+ *   rb: { symbol: 'squareBracket', side: 'right' },
+ * });
+ * @example
+ * // Full object definition
+ * {
+ *   matrix: {
+ *     order: [2, 2],
+ *     left: 'lb',
+ *     content: ['a', 'b', 'c', 'd'],
+ *     right: 'rb',
+ *     scale: 1,
+ *     fit: 'min',
+ *     space: [0.1, 0.1],
+ *     yAlign: 'baseline',
+ *     brac: {
+ *       inSize: true,
+ *       insideSpace: 0.1,
+ *       outsideSpace: 0.1,
+ *       topSpace: 0.1,
+ *       bottomSpace: 0.1,
+ *       minContentHeight: null,
+ *       minContentDescent: null,
+ *       height: null,
+ *       descent: null,
+ *     },
+ *   },
+ * },
+ * @example
+ * // Array example
+ *  { matrix: [[2, 2], 'lb', ['a', 'b', 'c', 'd'], 'rb'] }
+ */
+export type TypeEquationFunctionMatrix = {
   order?: [number, number],
   left?: string,
   content: TypeEquationPhrase,
-  right?: string,                       // $FlowFixM: ,
+  right?: string,
   scale?: number,
-  fit?: 'max' | 'min',
+  fit?: 'max' | 'min' | TypeParsablePoint,
   space?: TypeParsablePoint,
   yAlign?: 'baseline' | 'middle',
   brac?: TypeEquationFunctionBracket,
   fullContentBounds?: boolean,
-};
-
-export type TypeMatrixArray = [
+} | [
   ?[number, number],
   ?string,
   TypeEquationPhrase,
@@ -2405,7 +2460,7 @@ export class EquationFunctions {
   }
 
 
-  matrix(optionsOrArray: TypeMatrixObject | TypeMatrixArray) {
+  matrix(optionsOrArray: TypeEquationFunctionMatrix) {
     let content;
     let left;
     let right;
@@ -2417,11 +2472,11 @@ export class EquationFunctions {
     let brac;
     let fullContentBounds;
     const defaultOptions = {
-      space: [0.05, 0.05],
-      fit: 'min',
       contentScale: 0.7,
-      brac: {},
+      fit: 'min',
+      space: [0.05, 0.05],
       yAlign: 'baseline',
+      brac: {},
       fullContentBounds: false,
     };
     if (Array.isArray(optionsOrArray)) {
