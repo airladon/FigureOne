@@ -937,7 +937,7 @@ type TypeBar = {
  * square bracket ('left')
  * @property {number} [lineWidth] (`0.01`)
  * @property {number} [tipWidth] (`0.01`)
- * @property {number} [lineWidth] (`0.01`)
+ * @property {number} [width] (depends on lineWidth)
  * @property {number} [radius] optional curved corner radius (`0`)
  * @property {number} [sides] number of sides in curve (`5`)
  * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
@@ -958,6 +958,7 @@ type TypeBar = {
  *      side: 'right',
  *      lineWidth: 0.01,
  *      tipWidth: 0.01,
+ *      width: 0.03
  *      radius: 0.05,
  *      sides: 10,
  *      draw: 'static',
