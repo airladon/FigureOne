@@ -13,7 +13,7 @@ diagram.addElement(
       // Equation elements are the individual terms in the equation
       elements: {
         arrow: { symbol: 'arrow', direction: 'left' },
-        lb: { symbol: 'bracket', side: 'left', lineWidth: 0.02, width: 0.1, tipWidth: 0.02, },
+        lb: { symbol: 'squareBracket', side: 'left', radius: 0.05, },
         rb: { symbol: 'squareBracket', side: 'right' },
         bb: { symbol :'box', fill: true, color: [1, 0, 0, 0.5]},
         box: { symbol: 'box', color: [1, 0, 0, 1] },
