@@ -218,6 +218,68 @@ type TypeArrow = {
   staticHeight?: number | 'first',
 };
 
+/**
+ * Sum equation symbol
+ * <pre>
+
+*          ---------- 00000000000000000000000000000000000
+*          A            0000000           \         000000
+*          |              0000000          \           000
+*          |                0000000         thick2       00
+*          |                  0000000
+*          |                    0000000
+*          |                      0000000     3 x lineWidth
+*          |                        0000000    /
+*          |                          0000000 /
+*          |                            0000000
+*          |                              0000000
+*          |                                000000
+*          |                                  000
+*          |                                0000
+*   height |                              0000
+*          |                            0000   \
+*          |                          0000      \
+*          |                        0000         linWidth
+*          |                      0000
+*          |                    0000
+*          |                  0000
+*          |                0000       2 x lineWidth      00
+*          |              0000        /                 000|
+*          |            0000         /               000000|
+*          V          000000000000000000000000000000000000 |
+*          --------  000000000000000000000000000000000000  |
+*                   |                                      |
+*                   |                                      |
+*                   |                 width                |
+*                   |<------------------------------------>|
+ * </pre>
+ * @property {'sum'} symbol
+ * @property {Array<number>} [color] (equation color)
+ * @property {number} [lineWidth] (`height * 0.88 / (25 * height + 15)`)
+ * @property {number} [sides] number of sides that make up serif curve(`5`)
+ * @property {'static' | 'dynamic'} [draw] `'dynamic'` updates vertices on
+ * resize, `'static'` only changes scale transform (`dynamic`)
+ * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
+ * `number` sets height of static symbol - `'first'` calculates and sets height
+ * based on first use (`'first'`)
+ *
+ * @example
+ * eqn.addElements({
+ *   s: {
+ *     symbol: 'sum',
+ *     color: [1, 0, 0, 1],
+ *     lineWidth: 0.01
+ *   },
+ * })
+ */
+type TypeSum ={
+  color?: Array<number>,
+  lineWidth?: number,
+  sides?: number,
+  draw?: 'static' | 'dynamic',
+  staticHeight?: number | 'first',
+};
+
 export default class EquationSymbols {
   shapes: DiagramPrimitives;
   defaultColor: Array<number>;
