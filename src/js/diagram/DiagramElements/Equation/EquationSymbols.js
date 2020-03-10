@@ -81,7 +81,7 @@ import Radical from './Symbols/Radical';
  *   },
  * })
  */
-type OBJ_EqnSymbol_Vinculum = {
+type OBJEqnSymbol_Vinculum = {
   color?: Array<number>,
   lineWidth?: number,
   draw?: 'static' | 'dynamic',
@@ -138,7 +138,7 @@ type OBJ_EqnSymbol_Vinculum = {
  *   },
  * })
  */
-type OBJ_EqnSymbol_Box = {
+type OBJEqnSymbol_Box = {
   color?: Array<number>,
   fill?: boolean,
   width?: number,
@@ -208,7 +208,7 @@ type OBJ_EqnSymbol_Box = {
  *   },
  * })
  */
-type OBJ_EqnSymbol_Arrow = {
+type OBJEqnSymbol_Arrow = {
   color?: Array<number>,
   direction?: 'up' | 'down' | 'left' | 'right',
   lineWidth?: number,
@@ -272,7 +272,7 @@ type OBJ_EqnSymbol_Arrow = {
  *   },
  * })
  */
-type OBJ_EqnSymbol_Sum ={
+type OBJEqnSymbol_Sum ={
   color?: Array<number>,
   lineWidth?: number,
   sides?: number,
@@ -281,7 +281,7 @@ type OBJ_EqnSymbol_Sum ={
 };
 
 /**
- * Product equation symbol used in {@link OBJ_EqnLayout_ProdOf}
+ * Product equation symbol used in {@link OBJEqnLayout_ProdOf}
  * <pre>
  *                                          width
  *                |<--------------------------------------------------------->|
@@ -339,7 +339,7 @@ type OBJ_EqnSymbol_Sum ={
  *   },
  * })
  */
-type OBJ_EqnSymbol_Prod = {
+type OBJEqnSymbol_Prod = {
   color?: Array<number>,
   lineWidth?: number,
   sides?: number,
@@ -348,7 +348,7 @@ type OBJ_EqnSymbol_Prod = {
 };
 
 /**
- * Integral equation symbol used in {@link OBJ_EqnLayout_Integral}
+ * Integral equation symbol used in {@link OBJEqnLayout_Integral}
  * <pre>
  //     --------------------------------------------------   0000000
   //     A                                              000000011111111
@@ -420,7 +420,7 @@ type OBJ_EqnSymbol_Prod = {
  *   staticHeight: 'first',
  * },
  */
-type OBJ_EqnSymbol_Integral = {
+type OBJEqnSymbol_Integral = {
   color?: Array<number>,
   lineWidth?: number,
   sides?: number,
@@ -436,7 +436,7 @@ type OBJ_EqnSymbol_Integral = {
 };
 
 /**
- * Radical equation symbol used in {@link OBJ_EqnLayout_Root}.
+ * Radical equation symbol used in {@link OBJEqnLayout_Root}.
  *
  * The radical symbol allows customization on how to draw the radical. Mostly
  * it will not be needed, but for edge case equation layouts it may be useful.
@@ -523,7 +523,7 @@ type OBJ_EqnSymbol_Integral = {
  *    },
  *  });
  */
-type OBJ_EqnSymbol_Radical = {
+type OBJEqnSymbol_Radical = {
   color?: Array<number>,
   lineWidth?: number,
   width?: number,
@@ -543,7 +543,7 @@ type OBJ_EqnSymbol_Radical = {
 };
 
 /**
- * Strike equation symbol used in {@link OBJ_EqnLayout_Strike}.
+ * Strike equation symbol used in {@link OBJEqnLayout_Strike}.
  *
  * Four styles of strike symbol are available:
  * <pre>
@@ -606,7 +606,7 @@ type OBJ_EqnSymbol_Radical = {
  *    },
  *  });
  */
-type OBJ_EqnSymbol_Strike = {
+type OBJEqnSymbol_Strike = {
   color?: Array<number>,
   style?: 'cross' | 'forward' | 'back' | 'horizontal',
   lineWidth?: number,
@@ -678,7 +678,7 @@ type OBJ_EqnSymbol_Strike = {
  *    },
  *  });
  */
-type OBJ_EqnSymbol_Bracket = {
+type OBJEqnSymbol_Bracket = {
   side?: 'left' | 'right' | 'top' | 'bottom',
   color?: Array<number>,
   lineWidth?: number,
@@ -742,7 +742,7 @@ type OBJ_EqnSymbol_Bracket = {
  *    },
  *  });
  */
- type OBJ_EqnSymbol_AngleBracket = {
+ type OBJEqnSymbol_AngleBracket = {
   side?: 'left' | 'right' | 'top' | 'bottom',
   color?: Array<number>,
   lineWidth?: number,
@@ -829,7 +829,7 @@ type OBJ_EqnSymbol_Bracket = {
  *    },
  *  });
  */
-type OBJ_EqnSymbol_Brace = {
+type OBJEqnSymbol_Brace = {
   side?: 'left' | 'right' | 'top' | 'bottom',
   color?: Array<number>,
   lineWidth?: number,
@@ -889,7 +889,7 @@ type OBJ_EqnSymbol_Brace = {
  *    },
  *  });
  */
-type OBJ_EqnSymbol_Bar = {
+type OBJEqnSymbol_Bar = {
   side?: 'left' | 'right' | 'top' | 'bottom',
   color?: Array<number>,
   lineWidth?: number,
@@ -966,7 +966,7 @@ type OBJ_EqnSymbol_Bar = {
  *    },
  *  });
  */
-type OBJ_EqnSymbol_SquareBracket = {
+type OBJEqnSymbol_SquareBracket = {
   color?: Array<number>,
   side?: 'left' | 'right' | 'top' | 'bottom',
   lineWidth?: number,
@@ -978,19 +978,19 @@ type OBJ_EqnSymbol_SquareBracket = {
   staticHeight?: number | 'first',
 }
 
-export type TypeSymbolOptions = OBJ_EqnSymbol_Vinculum
-  & OBJ_EqnSymbol_Vinculum
-  & OBJ_EqnSymbol_Box
-  & OBJ_EqnSymbol_Arrow
-  & OBJ_EqnSymbol_Sum
-  & OBJ_EqnSymbol_Prod
-  & OBJ_EqnSymbol_Integral
-  & OBJ_EqnSymbol_Strike
-  & OBJ_EqnSymbol_Bracket
-  & OBJ_EqnSymbol_AngleBracket
-  & OBJ_EqnSymbol_Brace
-  & OBJ_EqnSymbol_Bar
-  & OBJ_EqnSymbol_SquareBracket;
+export type TypeSymbolOptions = OBJEqnSymbol_Vinculum
+  & OBJEqnSymbol_Vinculum
+  & OBJEqnSymbol_Box
+  & OBJEqnSymbol_Arrow
+  & OBJEqnSymbol_Sum
+  & OBJEqnSymbol_Prod
+  & OBJEqnSymbol_Integral
+  & OBJEqnSymbol_Strike
+  & OBJEqnSymbol_Bracket
+  & OBJEqnSymbol_AngleBracket
+  & OBJEqnSymbol_Brace
+  & OBJEqnSymbol_Bar
+  & OBJEqnSymbol_SquareBracket;
 
 
 export default class EquationSymbols {
@@ -1064,7 +1064,7 @@ export default class EquationSymbols {
   //   );
   // }
 
-  vinculum(options: OBJ_EqnSymbol_Vinculum) {
+  vinculum(options: OBJEqnSymbol_Vinculum) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
@@ -1083,7 +1083,7 @@ export default class EquationSymbols {
     ));
   }
 
-  box(optionsIn: OBJ_EqnSymbol_Box) {
+  box(optionsIn: OBJEqnSymbol_Box) {
     const defaultOptions = {
       color: this.defaultColor,
       fill: false,
@@ -1105,7 +1105,7 @@ export default class EquationSymbols {
     ));
   }
 
-  arrow(options: OBJ_EqnSymbol_Arrow) {
+  arrow(options: OBJEqnSymbol_Arrow) {
     const defaultOptions = {
       color: this.defaultColor,
       direction: 'right',
@@ -1132,7 +1132,7 @@ export default class EquationSymbols {
     ));
   }
 
-  sum(options: OBJ_EqnSymbol_Sum) {
+  sum(options: OBJEqnSymbol_Sum) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
@@ -1153,7 +1153,7 @@ export default class EquationSymbols {
     ));
   }
 
-  product(options: OBJ_EqnSymbol_Prod) {
+  product(options: OBJEqnSymbol_Prod) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
@@ -1174,7 +1174,7 @@ export default class EquationSymbols {
     ));
   }
 
-  integral(options: OBJ_EqnSymbol_Integral) {
+  integral(options: OBJEqnSymbol_Integral) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
@@ -1214,7 +1214,7 @@ export default class EquationSymbols {
     );
   }
 
-  radical(optionsIn: OBJ_EqnSymbol_Radical) {
+  radical(optionsIn: OBJEqnSymbol_Radical) {
     const defaultOptions: {
       color: Array<number>,
       lineWidth: number,
@@ -1259,7 +1259,7 @@ export default class EquationSymbols {
     );
   }
 
-  strike(options: OBJ_EqnSymbol_Strike) {
+  strike(options: OBJEqnSymbol_Strike) {
     const defaultOptions = {
       style: 'cross',
       color: this.defaultColor,
@@ -1311,7 +1311,7 @@ export default class EquationSymbols {
   //   return cross;
   // }
 
-  bracket(options: OBJ_EqnSymbol_Bracket) {
+  bracket(options: OBJEqnSymbol_Bracket) {
     const defaultOptions = {
       side: 'left',
       color: this.defaultColor,
@@ -1334,7 +1334,7 @@ export default class EquationSymbols {
     ));
   }
 
-  angleBracket(options: OBJ_EqnSymbol_AngleBracket) {
+  angleBracket(options: OBJEqnSymbol_AngleBracket) {
     const defaultOptions = {
       side: 'left',
       lineWidth: null,
@@ -1354,7 +1354,7 @@ export default class EquationSymbols {
     ));
   }
 
-  brace(options: OBJ_EqnSymbol_Brace) {
+  brace(options: OBJEqnSymbol_Brace) {
     const defaultOptions = {
       side: 'left',
       color: this.defaultColor,
@@ -1377,7 +1377,7 @@ export default class EquationSymbols {
     ));
   }
 
-  bar(options: OBJ_EqnSymbol_Bar) {
+  bar(options: OBJEqnSymbol_Bar) {
     const defaultOptions = {
       side: 'left',
       lineWidth: 0.01,
@@ -1396,7 +1396,7 @@ export default class EquationSymbols {
     ));
   }
 
-  squareBracket(options: OBJ_EqnSymbol_SquareBracket) {
+  squareBracket(options: OBJEqnSymbol_SquareBracket) {
     const defaultOptions = {
       side: 'left',
       lineWidth: null,
