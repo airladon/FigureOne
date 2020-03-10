@@ -4,44 +4,44 @@ toc:
   - TypeEquationElement
   - TypeEquationElements
   - name: Equation Layout OBJECTS
-  - OBJEqnLayout_Container
-  - OBJEqnLayout_Fraction
-  - OBJEqnLayout_Scale
-  - OBJEqnLayout_Bracket
-  - OBJEqnLayout_Root
-  - OBJEqnLayout_Strike
-  - OBJEqnLayout_Box
-  - OBJEqnLayout_Bar
-  - OBJEqnLayout_Integral
-  - OBJEqnLayout_SumOf
-  - OBJEqnLayout_ProdOf
-  - OBJEqnLayout_Subcript
-  - OBJEqnLayout_Superscript
-  - OBJEqnLayout_SuperscriptSubscript
-  - OBJEqnLayout_Comment
-  - OBJEqnLayout_StrikeComment
-  - OBJEqnLayout_Pad
-  - OBJEqnLayout_Matrix
-  - OBJEqnLayout_Annotate
-  - OBJEqnLayout_Annotation
-  - OBJEqnLayout_EncompassGlyph
-  - OBJEqnLayout_LeftRightGlyph
-  - OBJEqnLayout_TopBottomGlyph
-  - OBJEqnLayout_Glyphs
+  - EQN_Container
+  - EQN_Fraction
+  - EQN_Scale
+  - EQN_Bracket
+  - EQN_Root
+  - EQN_Strike
+  - EQN_Box
+  - EQN_Bar
+  - EQN_Integral
+  - EQN_SumOf
+  - EQN_ProdOf
+  - EQN_Subcript
+  - EQN_Superscript
+  - EQN_SuperscriptSubscript
+  - EQN_Comment
+  - EQN_StrikeComment
+  - EQN_Pad
+  - EQN_Matrix
+  - EQN_Annotate
+  - EQN_Annotation
+  - EQN_EncompassGlyph
+  - EQN_LeftRightGlyph
+  - EQN_TopBottomGlyph
+  - EQN_Glyphs
   - name: Equation Symbol OBJECTS
-  - OBJEqnSymbol_Vinculum
-  - OBJEqnSymbol_Box
-  - OBJEqnSymbol_Arrow
-  - OBJEqnSymbol_Sum
-  - OBJEqnSymbol_Prod
-  - OBJEqnSymbol_Integral
-  - OBJEqnSymbol_Strike
-  - OBJEqnSymbol_Bracket
-  - OBJEqnSymbol_AngleBracket
-  - OBJEqnSymbol_Brace
-  - OBJEqnSymbol_Bar
-  - OBJEqnSymbol_SquareBracket
-  - OBJEqnSymbol_Radical
+  - EQNSymbol_Vinculum
+  - EQNSymbol_Box
+  - EQNSymbol_Arrow
+  - EQNSymbol_Sum
+  - EQNSymbol_Prod
+  - EQNSymbol_Integral
+  - EQNSymbol_Strike
+  - EQNSymbol_Bracket
+  - EQNSymbol_AngleBracket
+  - EQNSymbol_Brace
+  - EQNSymbol_Bar
+  - EQNSymbol_SquareBracket
+  - EQNSymbol_Radical
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment

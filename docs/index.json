@@ -2810,7 +2810,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_Container",
+    "name": "EQN_Container",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -3087,7 +3087,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_Container",
+        "name": "EQN_Container",
         "kind": "typedef"
       }
     ],
@@ -3098,7 +3098,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_Container"
+    "namespace": "EQN_Container"
   },
   {
     "description": {
@@ -3993,7 +3993,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_Fraction",
+    "name": "EQN_Fraction",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -4156,7 +4156,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_Fraction",
+        "name": "EQN_Fraction",
         "kind": "typedef"
       }
     ],
@@ -4167,7 +4167,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_Fraction"
+    "namespace": "EQN_Fraction"
   },
   {
     "description": {
@@ -4551,7 +4551,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_Scale",
+    "name": "EQN_Scale",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -4618,7 +4618,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_Scale",
+        "name": "EQN_Scale",
         "kind": "typedef"
       }
     ],
@@ -4629,7 +4629,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_Scale"
+    "namespace": "EQN_Scale"
   },
   {
     "description": {
@@ -6374,7 +6374,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_Bracket",
+    "name": "EQN_Bracket",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -6629,7 +6629,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_Bracket",
+        "name": "EQN_Bracket",
         "kind": "typedef"
       }
     ],
@@ -6640,7 +6640,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_Bracket"
+    "namespace": "EQN_Bracket"
   },
   {
     "description": {
@@ -8192,7 +8192,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_Root",
+    "name": "EQN_Root",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -8430,7 +8430,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_Root",
+        "name": "EQN_Root",
         "kind": "typedef"
       }
     ],
@@ -8441,7 +8441,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_Root"
+    "namespace": "EQN_Root"
   },
   {
     "description": {
@@ -9774,7 +9774,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_Strike",
+    "name": "EQN_Strike",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -9961,7 +9961,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_Strike",
+        "name": "EQN_Strike",
         "kind": "typedef"
       }
     ],
@@ -9972,7 +9972,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_Strike"
+    "namespace": "EQN_Strike"
   },
   {
     "description": {
@@ -11305,7 +11305,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_Box",
+    "name": "EQN_Box",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -11492,7 +11492,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_Box",
+        "name": "EQN_Box",
         "kind": "typedef"
       }
     ],
@@ -11503,7 +11503,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_Box"
+    "namespace": "EQN_Box"
   },
   {
     "description": {
@@ -14058,7 +14058,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_Bar",
+    "name": "EQN_Bar",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -14411,7 +14411,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_Bar",
+        "name": "EQN_Bar",
         "kind": "typedef"
       }
     ],
@@ -14422,7 +14422,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_Bar"
+    "namespace": "EQN_Bar"
   },
   {
     "description": {
@@ -19495,7 +19495,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_Integral",
+    "name": "EQN_Integral",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -20330,7 +20330,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_Integral",
+        "name": "EQN_Integral",
         "kind": "typedef"
       }
     ],
@@ -20341,7 +20341,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_Integral"
+    "namespace": "EQN_Integral"
   },
   {
     "description": {
@@ -22572,7 +22572,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_SumOf",
+    "name": "EQN_SumOf",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -22943,7 +22943,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_SumOf",
+        "name": "EQN_SumOf",
         "kind": "typedef"
       }
     ],
@@ -22954,7 +22954,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_SumOf"
+    "namespace": "EQN_SumOf"
   },
   {
     "description": {
@@ -25185,7 +25185,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_ProdOf",
+    "name": "EQN_ProdOf",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -25556,7 +25556,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_ProdOf",
+        "name": "EQN_ProdOf",
         "kind": "typedef"
       }
     ],
@@ -25567,7 +25567,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_ProdOf"
+    "namespace": "EQN_ProdOf"
   },
   {
     "description": {
@@ -26067,7 +26067,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_Subcript",
+    "name": "EQN_Subcript",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -26161,7 +26161,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_Subcript",
+        "name": "EQN_Subcript",
         "kind": "typedef"
       }
     ],
@@ -26172,7 +26172,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_Subcript"
+    "namespace": "EQN_Subcript"
   },
   {
     "description": {
@@ -26672,7 +26672,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_Superscript",
+    "name": "EQN_Superscript",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -26766,7 +26766,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_Superscript",
+        "name": "EQN_Superscript",
         "kind": "typedef"
       }
     ],
@@ -26777,7 +26777,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_Superscript"
+    "namespace": "EQN_Superscript"
   },
   {
     "description": {
@@ -27407,7 +27407,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_SuperscriptSubscript",
+    "name": "EQN_SuperscriptSubscript",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -27534,7 +27534,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_SuperscriptSubscript",
+        "name": "EQN_SuperscriptSubscript",
         "kind": "typedef"
       }
     ],
@@ -27545,7 +27545,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_SuperscriptSubscript"
+    "namespace": "EQN_SuperscriptSubscript"
   },
   {
     "description": {
@@ -28657,7 +28657,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_Comment",
+    "name": "EQN_Comment",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -28823,7 +28823,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_Comment",
+        "name": "EQN_Comment",
         "kind": "typedef"
       }
     ],
@@ -28834,7 +28834,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_Comment"
+    "namespace": "EQN_Comment"
   },
   {
     "description": {
@@ -29608,7 +29608,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_StrikeComment",
+    "name": "EQN_StrikeComment",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -29753,7 +29753,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_StrikeComment",
+        "name": "EQN_StrikeComment",
         "kind": "typedef"
       }
     ],
@@ -29764,7 +29764,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_StrikeComment"
+    "namespace": "EQN_StrikeComment"
   },
   {
     "description": {
@@ -30335,7 +30335,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_Pad",
+    "name": "EQN_Pad",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -30438,7 +30438,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_Pad",
+        "name": "EQN_Pad",
         "kind": "typedef"
       }
     ],
@@ -30449,7 +30449,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_Pad"
+    "namespace": "EQN_Pad"
   },
   {
     "description": {
@@ -30657,7 +30657,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_Bracket"
+            "name": "EQN_Bracket"
           }
         },
         "name": "brac"
@@ -31817,7 +31817,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_Bracket"
+            "name": "EQN_Bracket"
           }
         }
       },
@@ -31963,7 +31963,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_Matrix",
+    "name": "EQN_Matrix",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -32094,7 +32094,7 @@
                 "type": "OptionalType",
                 "expression": {
                   "type": "NameExpression",
-                  "name": "OBJEqnLayout_Bracket"
+                  "name": "EQN_Bracket"
                 }
               }
             },
@@ -32198,7 +32198,7 @@
               "type": "NullableType",
               "expression": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Bracket"
+                "name": "EQN_Bracket"
               }
             },
             {
@@ -32214,7 +32214,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_Matrix",
+        "name": "EQN_Matrix",
         "kind": "typedef"
       }
     ],
@@ -32225,7 +32225,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_Matrix"
+    "namespace": "EQN_Matrix"
   },
   {
     "description": {
@@ -32354,13 +32354,13 @@
             },
             {
               "type": "link",
-              "url": "OBJEqnLayout_Annotation",
+              "url": "EQN_Annotation",
               "title": null,
               "jsdoc": true,
               "children": [
                 {
                   "type": "text",
-                  "value": "OBJEqnLayout_Annotation"
+                  "value": "EQN_Annotation"
                 }
               ],
               "position": {
@@ -32504,7 +32504,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_Annotation"
+            "name": "EQN_Annotation"
           }
         },
         "name": "annotation"
@@ -32524,7 +32524,7 @@
             "applications": [
               {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Annotation"
+                "name": "EQN_Annotation"
               }
             ]
           }
@@ -32630,7 +32630,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_Glyphs"
+            "name": "EQN_Glyphs"
           }
         },
         "name": "glyphs"
@@ -32784,7 +32784,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_Annotation"
+            "name": "EQN_Annotation"
           }
         }
       },
@@ -32855,7 +32855,7 @@
             "applications": [
               {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Annotation"
+                "name": "EQN_Annotation"
               }
             ]
           }
@@ -33512,7 +33512,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_Glyphs"
+            "name": "EQN_Glyphs"
           }
         }
       },
@@ -33797,7 +33797,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_Annotate",
+    "name": "EQN_Annotate",
     "kind": "typedef",
     "type": {
       "type": "RecordType",
@@ -33817,7 +33817,7 @@
             "type": "OptionalType",
             "expression": {
               "type": "NameExpression",
-              "name": "OBJEqnLayout_Annotation"
+              "name": "EQN_Annotation"
             }
           }
         },
@@ -33835,7 +33835,7 @@
               "applications": [
                 {
                   "type": "NameExpression",
-                  "name": "OBJEqnLayout_Annotation"
+                  "name": "EQN_Annotation"
                 }
               ]
             }
@@ -33870,7 +33870,7 @@
             "type": "OptionalType",
             "expression": {
               "type": "NameExpression",
-              "name": "OBJEqnLayout_Glyphs"
+              "name": "EQN_Glyphs"
             }
           }
         },
@@ -33955,7 +33955,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_Annotate",
+        "name": "EQN_Annotate",
         "kind": "typedef"
       }
     ],
@@ -33966,7 +33966,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_Annotate"
+    "namespace": "EQN_Annotate"
   },
   {
     "description": {
@@ -36228,7 +36228,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_Annotation",
+    "name": "EQN_Annotation",
     "kind": "typedef",
     "type": {
       "type": "RecordType",
@@ -36396,7 +36396,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_Annotation",
+        "name": "EQN_Annotation",
         "kind": "typedef"
       }
     ],
@@ -36407,7 +36407,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_Annotation"
+    "namespace": "EQN_Annotation"
   },
   {
     "description": {
@@ -36564,7 +36564,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_Annotation"
+            "name": "EQN_Annotation"
           }
         },
         "name": "annotation"
@@ -36584,7 +36584,7 @@
             "applications": [
               {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Annotation"
+                "name": "EQN_Annotation"
               }
             ]
           }
@@ -36784,7 +36784,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_Annotation"
+            "name": "EQN_Annotation"
           }
         }
       },
@@ -36859,7 +36859,7 @@
             "applications": [
               {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Annotation"
+                "name": "EQN_Annotation"
               }
             ]
           }
@@ -37241,7 +37241,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_EncompassGlyph",
+    "name": "EQN_EncompassGlyph",
     "kind": "typedef",
     "type": {
       "type": "RecordType",
@@ -37264,7 +37264,7 @@
             "type": "OptionalType",
             "expression": {
               "type": "NameExpression",
-              "name": "OBJEqnLayout_Annotation"
+              "name": "EQN_Annotation"
             }
           }
         },
@@ -37282,7 +37282,7 @@
               "applications": [
                 {
                   "type": "NameExpression",
-                  "name": "OBJEqnLayout_Annotation"
+                  "name": "EQN_Annotation"
                 }
               ]
             }
@@ -37344,7 +37344,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_EncompassGlyph",
+        "name": "EQN_EncompassGlyph",
         "kind": "typedef"
       }
     ],
@@ -37355,7 +37355,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_EncompassGlyph"
+    "namespace": "EQN_EncompassGlyph"
   },
   {
     "description": {
@@ -37510,7 +37510,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_Annotation"
+            "name": "EQN_Annotation"
           }
         },
         "name": "annotation"
@@ -37530,7 +37530,7 @@
             "applications": [
               {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Annotation"
+                "name": "EQN_Annotation"
               }
             ]
           }
@@ -37808,7 +37808,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_Annotation"
+            "name": "EQN_Annotation"
           }
         }
       },
@@ -37883,7 +37883,7 @@
             "applications": [
               {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Annotation"
+                "name": "EQN_Annotation"
               }
             ]
           }
@@ -38772,7 +38772,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_LeftRightGlyph",
+    "name": "EQN_LeftRightGlyph",
     "kind": "typedef",
     "type": {
       "type": "RecordType",
@@ -38795,7 +38795,7 @@
             "type": "OptionalType",
             "expression": {
               "type": "NameExpression",
-              "name": "OBJEqnLayout_Annotation"
+              "name": "EQN_Annotation"
             }
           }
         },
@@ -38813,7 +38813,7 @@
               "applications": [
                 {
                   "type": "NameExpression",
-                  "name": "OBJEqnLayout_Annotation"
+                  "name": "EQN_Annotation"
                 }
               ]
             }
@@ -38944,7 +38944,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_LeftRightGlyph",
+        "name": "EQN_LeftRightGlyph",
         "kind": "typedef"
       }
     ],
@@ -38955,7 +38955,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_LeftRightGlyph"
+    "namespace": "EQN_LeftRightGlyph"
   },
   {
     "description": {
@@ -39116,7 +39116,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_Annotation"
+            "name": "EQN_Annotation"
           }
         },
         "name": "annotation"
@@ -39136,7 +39136,7 @@
             "applications": [
               {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Annotation"
+                "name": "EQN_Annotation"
               }
             ]
           }
@@ -39362,7 +39362,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_Annotation"
+            "name": "EQN_Annotation"
           }
         }
       },
@@ -39437,7 +39437,7 @@
             "applications": [
               {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Annotation"
+                "name": "EQN_Annotation"
               }
             ]
           }
@@ -40058,7 +40058,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_TopBottomGlyph",
+    "name": "EQN_TopBottomGlyph",
     "kind": "typedef",
     "type": {
       "type": "RecordType",
@@ -40081,7 +40081,7 @@
             "type": "OptionalType",
             "expression": {
               "type": "NameExpression",
-              "name": "OBJEqnLayout_Annotation"
+              "name": "EQN_Annotation"
             }
           }
         },
@@ -40099,7 +40099,7 @@
               "applications": [
                 {
                   "type": "NameExpression",
-                  "name": "OBJEqnLayout_Annotation"
+                  "name": "EQN_Annotation"
                 }
               ]
             }
@@ -40186,7 +40186,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_TopBottomGlyph",
+        "name": "EQN_TopBottomGlyph",
         "kind": "typedef"
       }
     ],
@@ -40197,7 +40197,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_TopBottomGlyph"
+    "namespace": "EQN_TopBottomGlyph"
   },
   {
     "description": {
@@ -40296,7 +40296,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_EncompassGlyph"
+            "name": "EQN_EncompassGlyph"
           }
         },
         "name": "encompass"
@@ -40309,7 +40309,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_TopBottomGlyph"
+            "name": "EQN_TopBottomGlyph"
           }
         },
         "name": "top"
@@ -40322,7 +40322,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_LeftRightGlyph"
+            "name": "EQN_LeftRightGlyph"
           }
         },
         "name": "right"
@@ -40335,7 +40335,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_TopBottomGlyph"
+            "name": "EQN_TopBottomGlyph"
           }
         },
         "name": "bottom"
@@ -40348,7 +40348,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_LeftRightGlyph"
+            "name": "EQN_LeftRightGlyph"
           }
         },
         "name": "left"
@@ -40390,7 +40390,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_EncompassGlyph"
+            "name": "EQN_EncompassGlyph"
           }
         }
       },
@@ -40402,7 +40402,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_TopBottomGlyph"
+            "name": "EQN_TopBottomGlyph"
           }
         }
       },
@@ -40414,7 +40414,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_LeftRightGlyph"
+            "name": "EQN_LeftRightGlyph"
           }
         }
       },
@@ -40426,7 +40426,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_TopBottomGlyph"
+            "name": "EQN_TopBottomGlyph"
           }
         }
       },
@@ -40438,7 +40438,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "OBJEqnLayout_LeftRightGlyph"
+            "name": "EQN_LeftRightGlyph"
           }
         }
       }
@@ -40448,7 +40448,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "OBJEqnLayout_Glyphs",
+    "name": "EQN_Glyphs",
     "kind": "typedef",
     "type": {
       "type": "RecordType",
@@ -40460,7 +40460,7 @@
             "type": "OptionalType",
             "expression": {
               "type": "NameExpression",
-              "name": "OBJEqnLayout_LeftRightGlyph"
+              "name": "EQN_LeftRightGlyph"
             }
           }
         },
@@ -40471,7 +40471,7 @@
             "type": "OptionalType",
             "expression": {
               "type": "NameExpression",
-              "name": "OBJEqnLayout_LeftRightGlyph"
+              "name": "EQN_LeftRightGlyph"
             }
           }
         },
@@ -40482,7 +40482,7 @@
             "type": "OptionalType",
             "expression": {
               "type": "NameExpression",
-              "name": "OBJEqnLayout_TopBottomGlyph"
+              "name": "EQN_TopBottomGlyph"
             }
           }
         },
@@ -40493,7 +40493,7 @@
             "type": "OptionalType",
             "expression": {
               "type": "NameExpression",
-              "name": "OBJEqnLayout_TopBottomGlyph"
+              "name": "EQN_TopBottomGlyph"
             }
           }
         },
@@ -40504,7 +40504,7 @@
             "type": "OptionalType",
             "expression": {
               "type": "NameExpression",
-              "name": "OBJEqnLayout_EncompassGlyph"
+              "name": "EQN_EncompassGlyph"
             }
           }
         }
@@ -40512,7 +40512,7 @@
     },
     "path": [
       {
-        "name": "OBJEqnLayout_Glyphs",
+        "name": "EQN_Glyphs",
         "kind": "typedef"
       }
     ],
@@ -40523,7 +40523,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "OBJEqnLayout_Glyphs"
+    "namespace": "EQN_Glyphs"
   },
   {
     "description": {
@@ -40551,13 +40551,13 @@
             },
             {
               "type": "link",
-              "url": "OBJEqnLayout_Root",
+              "url": "EQN_Root",
               "title": null,
               "jsdoc": true,
               "children": [
                 {
                   "type": "text",
-                  "value": "OBJEqnLayout_Root"
+                  "value": "EQN_Root"
                 }
               ],
               "position": {
@@ -47922,13 +47922,13 @@
             },
             {
               "type": "link",
-              "url": "OBJEqnLayout_ProdOf",
+              "url": "EQN_ProdOf",
               "title": null,
               "jsdoc": true,
               "children": [
                 {
                   "type": "text",
-                  "value": "OBJEqnLayout_ProdOf"
+                  "value": "EQN_ProdOf"
                 }
               ],
               "position": {
@@ -48961,13 +48961,13 @@
             },
             {
               "type": "link",
-              "url": "OBJEqnLayout_Integral",
+              "url": "EQN_Integral",
               "title": null,
               "jsdoc": true,
               "children": [
                 {
                   "type": "text",
-                  "value": "OBJEqnLayout_Integral"
+                  "value": "EQN_Integral"
                 }
               ],
               "position": {
@@ -50762,13 +50762,13 @@
             },
             {
               "type": "link",
-              "url": "OBJEqnLayout_Strike",
+              "url": "EQN_Strike",
               "title": null,
               "jsdoc": true,
               "children": [
                 {
                   "type": "text",
-                  "value": "OBJEqnLayout_Strike"
+                  "value": "EQN_Strike"
                 }
               ],
               "position": {
@@ -58861,13 +58861,13 @@
                     },
                     {
                       "type": "link",
-                      "url": "OBJEqnLayout_Fraction",
+                      "url": "EQN_Fraction",
                       "title": null,
                       "jsdoc": true,
                       "children": [
                         {
                           "type": "text",
-                          "value": "OBJEqnLayout_Fraction"
+                          "value": "EQN_Fraction"
                         }
                       ],
                       "position": {
@@ -59163,7 +59163,7 @@
               "key": "frac",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Fraction"
+                "name": "EQN_Fraction"
               }
             }
           ]
@@ -59176,7 +59176,7 @@
               "key": "strike",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Strike"
+                "name": "EQN_Strike"
               }
             }
           ]
@@ -59189,7 +59189,7 @@
               "key": "box",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Box"
+                "name": "EQN_Box"
               }
             }
           ]
@@ -59202,7 +59202,7 @@
               "key": "root",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Root"
+                "name": "EQN_Root"
               }
             }
           ]
@@ -59215,7 +59215,7 @@
               "key": "brac",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Bracket"
+                "name": "EQN_Bracket"
               }
             }
           ]
@@ -59228,7 +59228,7 @@
               "key": "sub",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Subcript"
+                "name": "EQN_Subcript"
               }
             }
           ]
@@ -59241,7 +59241,7 @@
               "key": "sup",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Superscript"
+                "name": "EQN_Superscript"
               }
             }
           ]
@@ -59254,7 +59254,7 @@
               "key": "supSub",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_SuperscriptSubscript"
+                "name": "EQN_SuperscriptSubscript"
               }
             }
           ]
@@ -59267,7 +59267,7 @@
               "key": "topBar",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Bar"
+                "name": "EQN_Bar"
               }
             }
           ]
@@ -59280,7 +59280,7 @@
               "key": "bottomBar",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Bar"
+                "name": "EQN_Bar"
               }
             }
           ]
@@ -59293,7 +59293,7 @@
               "key": "annotate",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Annotate"
+                "name": "EQN_Annotate"
               }
             }
           ]
@@ -59306,7 +59306,7 @@
               "key": "topComment",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Comment"
+                "name": "EQN_Comment"
               }
             }
           ]
@@ -59319,7 +59319,7 @@
               "key": "bottomComment",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Comment"
+                "name": "EQN_Comment"
               }
             }
           ]
@@ -59332,7 +59332,7 @@
               "key": "pad",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Pad"
+                "name": "EQN_Pad"
               }
             }
           ]
@@ -59345,7 +59345,7 @@
               "key": "bar",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Bar"
+                "name": "EQN_Bar"
               }
             }
           ]
@@ -59358,7 +59358,7 @@
               "key": "scale",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Scale"
+                "name": "EQN_Scale"
               }
             }
           ]
@@ -59371,7 +59371,7 @@
               "key": "container",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Container"
+                "name": "EQN_Container"
               }
             }
           ]
@@ -59384,7 +59384,7 @@
               "key": "matrix",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Matrix"
+                "name": "EQN_Matrix"
               }
             }
           ]
@@ -59397,7 +59397,7 @@
               "key": "int",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_Integral"
+                "name": "EQN_Integral"
               }
             }
           ]
@@ -59410,7 +59410,7 @@
               "key": "sumOf",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_SumOf"
+                "name": "EQN_SumOf"
               }
             }
           ]
@@ -59423,7 +59423,7 @@
               "key": "prodOf",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_ProdOf"
+                "name": "EQN_ProdOf"
               }
             }
           ]
@@ -59436,7 +59436,7 @@
               "key": "topStrike",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_StrikeComment"
+                "name": "EQN_StrikeComment"
               }
             }
           ]
@@ -59449,7 +59449,7 @@
               "key": "bottomStrike",
               "value": {
                 "type": "NameExpression",
-                "name": "OBJEqnLayout_StrikeComment"
+                "name": "EQN_StrikeComment"
               }
             }
           ]
@@ -78762,7 +78762,7 @@
         "lineNumber": 2020,
         "type": {
           "type": "NameExpression",
-          "name": "OBJEqnLayout_Container"
+          "name": "EQN_Container"
         }
       }
     ],
@@ -78889,7 +78889,7 @@
         "lineNumber": 2451,
         "type": {
           "type": "NameExpression",
-          "name": "OBJEqnLayout_Fraction"
+          "name": "EQN_Fraction"
         }
       }
     ],

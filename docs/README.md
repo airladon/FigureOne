@@ -13,115 +13,115 @@
     -   [Properties][9]
 -   [TypeEquationElements][10]
 -   [Equation Layout OBJECTS][11]
--   [OBJEqnLayout_Container][12]
+-   [EQN_Container][12]
     -   [Properties][13]
     -   [Examples][14]
--   [OBJEqnLayout_Fraction][15]
+-   [EQN_Fraction][15]
     -   [Properties][16]
     -   [Examples][17]
--   [OBJEqnLayout_Scale][18]
+-   [EQN_Scale][18]
     -   [Properties][19]
     -   [Examples][20]
--   [OBJEqnLayout_Bracket][21]
+-   [EQN_Bracket][21]
     -   [Properties][22]
     -   [Examples][23]
--   [OBJEqnLayout_Root][24]
+-   [EQN_Root][24]
     -   [Properties][25]
     -   [Examples][26]
--   [OBJEqnLayout_Strike][27]
+-   [EQN_Strike][27]
     -   [Properties][28]
     -   [Examples][29]
--   [OBJEqnLayout_Box][30]
+-   [EQN_Box][30]
     -   [Properties][31]
     -   [Examples][32]
--   [OBJEqnLayout_Bar][33]
+-   [EQN_Bar][33]
     -   [Properties][34]
     -   [Examples][35]
--   [OBJEqnLayout_Integral][36]
+-   [EQN_Integral][36]
     -   [Properties][37]
     -   [Examples][38]
--   [OBJEqnLayout_SumOf][39]
+-   [EQN_SumOf][39]
     -   [Properties][40]
     -   [Examples][41]
--   [OBJEqnLayout_ProdOf][42]
+-   [EQN_ProdOf][42]
     -   [Properties][43]
     -   [Examples][44]
--   [OBJEqnLayout_Subcript][45]
+-   [EQN_Subcript][45]
     -   [Properties][46]
     -   [Examples][47]
--   [OBJEqnLayout_Superscript][48]
+-   [EQN_Superscript][48]
     -   [Properties][49]
     -   [Examples][50]
--   [OBJEqnLayout_SuperscriptSubscript][51]
+-   [EQN_SuperscriptSubscript][51]
     -   [Properties][52]
     -   [Examples][53]
--   [OBJEqnLayout_Comment][54]
+-   [EQN_Comment][54]
     -   [Properties][55]
     -   [Examples][56]
--   [OBJEqnLayout_StrikeComment][57]
+-   [EQN_StrikeComment][57]
     -   [Properties][58]
     -   [Examples][59]
--   [OBJEqnLayout_Pad][60]
+-   [EQN_Pad][60]
     -   [Properties][61]
     -   [Examples][62]
--   [OBJEqnLayout_Matrix][63]
+-   [EQN_Matrix][63]
     -   [Properties][64]
     -   [Examples][65]
--   [OBJEqnLayout_Annotate][66]
+-   [EQN_Annotate][66]
     -   [Properties][67]
     -   [Examples][68]
--   [OBJEqnLayout_Annotation][69]
+-   [EQN_Annotation][69]
     -   [Properties][70]
     -   [Examples][71]
--   [OBJEqnLayout_EncompassGlyph][72]
+-   [EQN_EncompassGlyph][72]
     -   [Properties][73]
     -   [Examples][74]
--   [OBJEqnLayout_LeftRightGlyph][75]
+-   [EQN_LeftRightGlyph][75]
     -   [Properties][76]
     -   [Examples][77]
--   [OBJEqnLayout_TopBottomGlyph][78]
+-   [EQN_TopBottomGlyph][78]
     -   [Properties][79]
     -   [Examples][80]
--   [OBJEqnLayout_Glyphs][81]
+-   [EQN_Glyphs][81]
     -   [Properties][82]
 -   [Equation Symbol OBJECTS][83]
--   [OBJEqnSymbol_Vinculum][84]
+-   [EQNSymbol_Vinculum][84]
     -   [Properties][85]
     -   [Examples][86]
--   [OBJEqnSymbol_Box][87]
+-   [EQNSymbol_Box][87]
     -   [Properties][88]
     -   [Examples][89]
--   [OBJEqnSymbol_Arrow][90]
+-   [EQNSymbol_Arrow][90]
     -   [Properties][91]
     -   [Examples][92]
--   [OBJEqnSymbol_Sum][93]
+-   [EQNSymbol_Sum][93]
     -   [Properties][94]
     -   [Examples][95]
--   [OBJEqnSymbol_Prod][96]
+-   [EQNSymbol_Prod][96]
     -   [Properties][97]
     -   [Examples][98]
--   [OBJEqnSymbol_Integral][99]
+-   [EQNSymbol_Integral][99]
     -   [Properties][100]
     -   [Examples][101]
--   [OBJEqnSymbol_Strike][102]
+-   [EQNSymbol_Strike][102]
     -   [Properties][103]
     -   [Examples][104]
--   [OBJEqnSymbol_Bracket][105]
+-   [EQNSymbol_Bracket][105]
     -   [Properties][106]
     -   [Examples][107]
--   [OBJEqnSymbol_AngleBracket][108]
+-   [EQNSymbol_AngleBracket][108]
     -   [Properties][109]
     -   [Examples][110]
--   [OBJEqnSymbol_Brace][111]
+-   [EQNSymbol_Brace][111]
     -   [Properties][112]
     -   [Examples][113]
--   [OBJEqnSymbol_Bar][114]
+-   [EQNSymbol_Bar][114]
     -   [Properties][115]
     -   [Examples][116]
--   [OBJEqnSymbol_SquareBracket][117]
+-   [EQNSymbol_SquareBracket][117]
     -   [Properties][118]
     -   [Examples][119]
--   [OBJEqnSymbol_Radical][120]
+-   [EQNSymbol_Radical][120]
     -   [Properties][121]
     -   [Examples][122]
 -   [Equation Form Types][123]
@@ -297,7 +297,7 @@ Type: {}
 
 
 
-## OBJEqnLayout_Container
+## EQN_Container
 
 Equation container
 
@@ -343,7 +343,7 @@ Type: ({content: [TypeEquationPhrase][232], width: [number][230]?, descent: [num
  { container: ['a', 1, 0.2, 0.5] }
 ```
 
-## OBJEqnLayout_Fraction
+## EQN_Fraction
 
 Equation fraction
 
@@ -393,7 +393,7 @@ eqn.addElements({
 { frac: ['a', 'v', 'b'] }
 ```
 
-## OBJEqnLayout_Scale
+## EQN_Scale
 
 Equation scale
 
@@ -425,7 +425,7 @@ Type: ({content: [TypeEquationPhrase][232], scale: [number][230]?, fullContentBo
  { scale: [['a', 'b'], 0.5] }
 ```
 
-## OBJEqnLayout_Bracket
+## EQN_Bracket
 
 Equation bracket
 
@@ -498,7 +498,7 @@ eqn.addElements({
  { brac: ['lb', 'a', 'rb'] }
 ```
 
-## OBJEqnLayout_Root
+## EQN_Root
 
 Equation root
 
@@ -567,7 +567,7 @@ eqn.addElements({
  { root: ['radical', 'a'] }
 ```
 
-## OBJEqnLayout_Strike
+## EQN_Strike
 
 Equation strike-through
 
@@ -629,7 +629,7 @@ eqn.addElements({
  { strike: ['a', 'x'] }
 ```
 
-## OBJEqnLayout_Box
+## EQN_Box
 
 Equation box
 
@@ -691,7 +691,7 @@ eqn.addElements({
  { box: ['a', 'box'] }
 ```
 
-## OBJEqnLayout_Bar
+## EQN_Bar
 
 Equation bar
 
@@ -788,7 +788,7 @@ eqn.addElements({
  { bar: ['a', 'hBar', 'top'] }
 ```
 
-## OBJEqnLayout_Integral
+## EQN_Integral
 
 Equation integral
 
@@ -896,7 +896,7 @@ eqn.addElements({
  { int: ['integral', 'a', 'b', 'c'] }
 ```
 
-## OBJEqnLayout_SumOf
+## EQN_SumOf
 
 Equation sum of
 
@@ -970,7 +970,7 @@ eqn.addElements({
  { sumOf: ['s', 'a', 'b', 'c'] }
 ```
 
-## OBJEqnLayout_ProdOf
+## EQN_ProdOf
 
 Equation product of
 
@@ -1044,7 +1044,7 @@ eqn.addElements({
  { prodOf: ['s', 'a', 'b', 'c'] }
 ```
 
-## OBJEqnLayout_Subcript
+## EQN_Subcript
 
 Equation subscript
 
@@ -1079,7 +1079,7 @@ Type: ({content: [TypeEquationPhrase][232], subscript: [TypeEquationPhrase][232]
  { sub: ['a', 'b'] }
 ```
 
-## OBJEqnLayout_Superscript
+## EQN_Superscript
 
 Equation superscript
 
@@ -1114,7 +1114,7 @@ Type: ({content: [TypeEquationPhrase][232], superscript: [TypeEquationPhrase][23
  { sup: ['a', 'b'] }
 ```
 
-## OBJEqnLayout_SuperscriptSubscript
+## EQN_SuperscriptSubscript
 
 Equation superscript and subscript
 
@@ -1153,7 +1153,7 @@ Type: ({content: [TypeEquationPhrase][232], subscript: [TypeEquationPhrase][232]
  { supSub: ['a', 'b', 'c'] }
 ```
 
-## OBJEqnLayout_Comment
+## EQN_Comment
 
 Equation comment options used with `topComment` and `bottomComment`
 functions.
@@ -1214,7 +1214,7 @@ eqn.addElements({
  { bottomComment: ['a', 'b', 'brace'] }
 ```
 
-## OBJEqnLayout_StrikeComment
+## EQN_StrikeComment
 
 Equation strike with comment options used with `topStrike` and `bottomStrike`
 functions.
@@ -1267,7 +1267,7 @@ eqn.addElements({
  { bottomStrike: ['a', 'x', 'b'] }
 ```
 
-## OBJEqnLayout_Pad
+## EQN_Pad
 
 Equation padding options
 
@@ -1301,11 +1301,11 @@ Type: ({content: [TypeEquationPhrase][232], top: [number][230]?, right: [number]
  { pad: ['a', 0.1, 0.2, 0.3, 0.4] }
 ```
 
-## OBJEqnLayout_Matrix
+## EQN_Matrix
 
 Equation matrix
 
-Type: ({order: \[[number][230], [number][230]]?, left: [string][228]?, content: [TypeEquationPhrase][232], right: [string][228]?, scale: [number][230]?, fit: (`"max"` \| `"min"` | TypeParsablePoint)?, space: TypeParsablePoint?, yAlign: (`"baseline"` \| `"middle"`)?, brac: [OBJEqnLayout_Bracket][234]?, fullContentBounds: [boolean][233]?} | \[\[[number][230], [number][230]]?, [string][228]?, [TypeEquationPhrase][232], [string][228]?, [number][230]?, (`"max"`? | `"min"`), TypeParsablePoint?, (`"baseline"`? | `"middle"`), [OBJEqnLayout_Bracket][234]?, [boolean][233]?])
+Type: ({order: \[[number][230], [number][230]]?, left: [string][228]?, content: [TypeEquationPhrase][232], right: [string][228]?, scale: [number][230]?, fit: (`"max"` \| `"min"` | TypeParsablePoint)?, space: TypeParsablePoint?, yAlign: (`"baseline"` \| `"middle"`)?, brac: [EQN_Bracket][234]?, fullContentBounds: [boolean][233]?} | \[\[[number][230], [number][230]]?, [string][228]?, [TypeEquationPhrase][232], [string][228]?, [number][230]?, (`"max"`? | `"min"`), TypeParsablePoint?, (`"baseline"`? | `"middle"`), [EQN_Bracket][234]?, [boolean][233]?])
 
 ### Properties
 
@@ -1326,7 +1326,7 @@ Type: ({order: \[[number][230], [number][230]]?, left: [string][228]?, content: 
     (`[0.05, 0.05]`)
 -   `yAlign` **(`"baseline"` \| `"middle"`)?** align cells in a row with the
     text baseline, or middle of the cell (`baseline`)
--   `brac` **[OBJEqnLayout_Bracket][234]?** bracket options not including
+-   `brac` **[EQN_Bracket][234]?** bracket options not including
     the symbols (`{}`)
 -   `fullContentBounds` **[boolean][233]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
@@ -1373,7 +1373,7 @@ eqn.addElements({
  { matrix: [[2, 2], 'lb', ['a', 'b', 'c', 'd'], 'rb'] }
 ```
 
-## OBJEqnLayout_Annotate
+## EQN_Annotate
 
 Equation annotation
 
@@ -1390,7 +1390,7 @@ to another equation phrase ('content'). For example:
 </pre>
 
 The options for defining how to annotate one equation phrase with another is
-[OBJEqnLayout_Annotation][69]
+[EQN_Annotation][69]
 
 Content can also be annotated with a glyph (that itself may also be
 annotated). The glyph can either encompass the content, or can be to the
@@ -1416,13 +1416,13 @@ Glyph  GGG       GGG     CCCCCCC     GGG        GGG   Glyph
                       Bottom Glyph
 </pre>
 
-Type: {content: [TypeEquationPhrase][232], annotation: [OBJEqnLayout_Annotation][235]?, annotations: [Array][229]&lt;[OBJEqnLayout_Annotation][235]>?, fullContentBounds: [boolean][233]?, useFullBounds: [boolean][233]?, glyphs: [OBJEqnLayout_Glyphs][236]?, inSize: [boolean][233]?, space: [number][230]?, topSpace: [number][230]?, bottomSpace: [number][230]?, leftSpace: [number][230]?, rightSpace: [number][230]?, contentScale: [number][230]?}
+Type: {content: [TypeEquationPhrase][232], annotation: [EQN_Annotation][235]?, annotations: [Array][229]&lt;[EQN_Annotation][235]>?, fullContentBounds: [boolean][233]?, useFullBounds: [boolean][233]?, glyphs: [EQN_Glyphs][236]?, inSize: [boolean][233]?, space: [number][230]?, topSpace: [number][230]?, bottomSpace: [number][230]?, leftSpace: [number][230]?, rightSpace: [number][230]?, contentScale: [number][230]?}
 
 ### Properties
 
 -   `content` **[TypeEquationPhrase][232]** 
--   `annotation` **[OBJEqnLayout_Annotation][235]?** use for just one annotation
--   `annotations` **[Array][229]&lt;[OBJEqnLayout_Annotation][235]>?** use for multiple annotations
+-   `annotation` **[EQN_Annotation][235]?** use for just one annotation
+-   `annotations` **[Array][229]&lt;[EQN_Annotation][235]>?** use for multiple annotations
 -   `inSize` **[boolean][233]?** `true` means resulting size includes
     annotations (`true`)
 -   `space` **[number][230]?** extend resulting equation phrase size by space on
@@ -1436,7 +1436,7 @@ Type: {content: [TypeEquationPhrase][232], annotation: [OBJEqnLayout_Annotation]
 -   `rightSpace` **[number][230]?** extend resulting equation phrase size by
     space on right
 -   `contentScale` **[number][230]?** scale content (`1`)
--   `glyphs` **[OBJEqnLayout_Glyphs][236]?** glyphs to annotate content with
+-   `glyphs` **[EQN_Glyphs][236]?** glyphs to annotate content with
 -   `fullContentBounds` **[boolean][233]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
 -   `useFullBounds` **[boolean][233]?** make the bounds of this phrase equal to
@@ -1510,7 +1510,7 @@ eqn.addForms({
 });
 ```
 
-## OBJEqnLayout_Annotation
+## EQN_Annotation
 
 An annotation's layout is defined by its _position_ and _alignement_.
 For instance, an annotation at the top right of the content:
@@ -1584,7 +1584,7 @@ annotate: {
  },
 ```
 
-## OBJEqnLayout_EncompassGlyph
+## EQN_EncompassGlyph
 
 A glyph can encompass (surround or overlay) an equation phrase (_content_). The glyph
 can also be annotated.
@@ -1600,14 +1600,14 @@ can also be annotated.
 
 </pre>
 
-Type: {symbol: [string][228]?, annotation: [OBJEqnLayout_Annotation][235]?, annotations: [Array][229]&lt;[OBJEqnLayout_Annotation][235]>?, space: [number][230], topSpace: [number][230]?, rightSpace: [number][230]?, bottomSpace: [number][230]?, leftSpace: [number][230]?}
+Type: {symbol: [string][228]?, annotation: [EQN_Annotation][235]?, annotations: [Array][229]&lt;[EQN_Annotation][235]>?, space: [number][230], topSpace: [number][230]?, rightSpace: [number][230]?, bottomSpace: [number][230]?, leftSpace: [number][230]?}
 
 ### Properties
 
 -   `symbol` **[string][228]** 
--   `annotation` **[OBJEqnLayout_Annotation][235]?** use for one annotation only instead
+-   `annotation` **[EQN_Annotation][235]?** use for one annotation only instead
     of property `annotations`
--   `annotations` **[Array][229]&lt;[OBJEqnLayout_Annotation][235]>?** use for one or more
+-   `annotations` **[Array][229]&lt;[EQN_Annotation][235]>?** use for one or more
     annotations
 -   `space` **[number][230]?** default space the glyph should extend beyond the
     top, right, left and bottom sides of the content (`0`)
@@ -1638,7 +1638,7 @@ annotate: {
 },
 ```
 
-## OBJEqnLayout_LeftRightGlyph
+## EQN_LeftRightGlyph
 
 A glyph can be to the left or right of an equation phrase (_content_).
 The glyph can also be annotated.
@@ -1652,14 +1652,14 @@ The glyph can also be annotated.
 
 </pre>
 
-Type: {symbol: [string][228]?, annotation: [OBJEqnLayout_Annotation][235]?, annotations: [Array][229]&lt;[OBJEqnLayout_Annotation][235]>?, space: [number][230]?, overhang: [number][230]?, topSpace: [number][230]?, bottomSpace: [number][230]?, minContentHeight: [number][230]?, minContentDescent: [number][230]?, minContentAscent: [number][230]?, descent: [number][230]?, height: [number][230]?, yOffset: [number][230]?, annotationsOverContent: [boolean][233]?}
+Type: {symbol: [string][228]?, annotation: [EQN_Annotation][235]?, annotations: [Array][229]&lt;[EQN_Annotation][235]>?, space: [number][230]?, overhang: [number][230]?, topSpace: [number][230]?, bottomSpace: [number][230]?, minContentHeight: [number][230]?, minContentDescent: [number][230]?, minContentAscent: [number][230]?, descent: [number][230]?, height: [number][230]?, yOffset: [number][230]?, annotationsOverContent: [boolean][233]?}
 
 ### Properties
 
 -   `symbol` **[string][228]** 
--   `annotation` **[OBJEqnLayout_Annotation][235]?** use for one annotation only instead
+-   `annotation` **[EQN_Annotation][235]?** use for one annotation only instead
     of property `annotations`
--   `annotations` **[Array][229]&lt;[OBJEqnLayout_Annotation][235]>?** use for one or more
+-   `annotations` **[Array][229]&lt;[EQN_Annotation][235]>?** use for one or more
     annotations
 -   `space` **[number][230]?** horizontal space between glyph and content (`0`)
 -   `overhang` **[number][230]?** amount glyph extends above content top and
@@ -1705,7 +1705,7 @@ annotate: {
 },
 ```
 
-## OBJEqnLayout_TopBottomGlyph
+## EQN_TopBottomGlyph
 
 A glyph can be to the top or bottom of an equation phrase (_content_).
 The glyph can also be annotated.
@@ -1725,14 +1725,14 @@ The glyph can also be annotated.
 
 </pre>
 
-Type: {symbol: [string][228]?, annotation: [OBJEqnLayout_Annotation][235]?, annotations: [Array][229]&lt;[OBJEqnLayout_Annotation][235]>?, space: [number][230]?, overhang: [number][230]?, width: [number][230]?, leftSpace: [number][230]?, rightSpace: [number][230]?, xOffset: [number][230]?, annotationsOverContent: [boolean][233]?}
+Type: {symbol: [string][228]?, annotation: [EQN_Annotation][235]?, annotations: [Array][229]&lt;[EQN_Annotation][235]>?, space: [number][230]?, overhang: [number][230]?, width: [number][230]?, leftSpace: [number][230]?, rightSpace: [number][230]?, xOffset: [number][230]?, annotationsOverContent: [boolean][233]?}
 
 ### Properties
 
 -   `symbol` **[string][228]** 
--   `annotation` **[OBJEqnLayout_Annotation][235]?** use for one annotation only instead
+-   `annotation` **[EQN_Annotation][235]?** use for one annotation only instead
     of property `annotations`
--   `annotations` **[Array][229]&lt;[OBJEqnLayout_Annotation][235]>?** use for one or more
+-   `annotations` **[Array][229]&lt;[EQN_Annotation][235]>?** use for one or more
     annotations
 -   `space` **[number][230]?** vertical space between glyph and content (`0`)
 -   `overhang` **[number][230]?** amount glyph extends above content top and
@@ -1768,28 +1768,28 @@ annotate: {
 },
 ```
 
-## OBJEqnLayout_Glyphs
+## EQN_Glyphs
 
 Object defining all the glyphs annotating some content.
 
 Multiple glyphs are ok, but only one per position.
 
-Type: {left: [OBJEqnLayout_LeftRightGlyph][238]?, right: [OBJEqnLayout_LeftRightGlyph][238]?, top: [OBJEqnLayout_TopBottomGlyph][239]?, bottom: [OBJEqnLayout_TopBottomGlyph][239]?, encompass: [OBJEqnLayout_EncompassGlyph][240]?}
+Type: {left: [EQN_LeftRightGlyph][238]?, right: [EQN_LeftRightGlyph][238]?, top: [EQN_TopBottomGlyph][239]?, bottom: [EQN_TopBottomGlyph][239]?, encompass: [EQN_EncompassGlyph][240]?}
 
 ### Properties
 
--   `encompass` **[OBJEqnLayout_EncompassGlyph][240]?** 
--   `top` **[OBJEqnLayout_TopBottomGlyph][239]?** 
--   `right` **[OBJEqnLayout_LeftRightGlyph][238]?** 
--   `bottom` **[OBJEqnLayout_TopBottomGlyph][239]?** 
--   `left` **[OBJEqnLayout_LeftRightGlyph][238]?** 
+-   `encompass` **[EQN_EncompassGlyph][240]?** 
+-   `top` **[EQN_TopBottomGlyph][239]?** 
+-   `right` **[EQN_LeftRightGlyph][238]?** 
+-   `bottom` **[EQN_TopBottomGlyph][239]?** 
+-   `left` **[EQN_LeftRightGlyph][238]?** 
 
 ## Equation Symbol OBJECTS
 
 
 
 
-## OBJEqnSymbol_Vinculum
+## EQNSymbol_Vinculum
 
 Vinculum equation symbol
 
@@ -1830,7 +1830,7 @@ eqn.addElements({
 })
 ```
 
-## OBJEqnSymbol_Box
+## EQNSymbol_Box
 
 Box equation symbol
 
@@ -1887,7 +1887,7 @@ eqn.addElements({
 })
 ```
 
-## OBJEqnSymbol_Arrow
+## EQNSymbol_Arrow
 
 Arrow equation symbol
 
@@ -1956,7 +1956,7 @@ eqn.addElements({
 })
 ```
 
-## OBJEqnSymbol_Sum
+## EQNSymbol_Sum
 
 Sum equation symbol
 
@@ -2020,9 +2020,9 @@ eqn.addElements({
 })
 ```
 
-## OBJEqnSymbol_Prod
+## EQNSymbol_Prod
 
-Product equation symbol used in [OBJEqnLayout_ProdOf][42]
+Product equation symbol used in [EQN_ProdOf][42]
 
 <pre>
                                          width
@@ -2089,9 +2089,9 @@ eqn.addElements({
 })
 ```
 
-## OBJEqnSymbol_Integral
+## EQNSymbol_Integral
 
-Integral equation symbol used in [OBJEqnLayout_Integral][36]
+Integral equation symbol used in [EQN_Integral][36]
 
 <pre>
 //     --------------------------------------------------   0000000
@@ -2171,9 +2171,9 @@ int: {
 },
 ```
 
-## OBJEqnSymbol_Strike
+## EQNSymbol_Strike
 
-Strike equation symbol used in [OBJEqnLayout_Strike][27].
+Strike equation symbol used in [EQN_Strike][27].
 
 Four styles of strike symbol are available:
 
@@ -2247,7 +2247,7 @@ eqn.addElements({
  });
 ```
 
-## OBJEqnSymbol_Bracket
+## EQNSymbol_Bracket
 
 Bracket equation symbol
 
@@ -2320,7 +2320,7 @@ eqn.addElements({
  });
 ```
 
-## OBJEqnSymbol_AngleBracket
+## EQNSymbol_AngleBracket
 
 Angle bracket equation symbol
 
@@ -2384,7 +2384,7 @@ eqn.addElements({
  });
 ```
 
-## OBJEqnSymbol_Brace
+## EQNSymbol_Brace
 
 Brace equation symbol
 
@@ -2473,7 +2473,7 @@ eqn.addElements({
  });
 ```
 
-## OBJEqnSymbol_Bar
+## EQNSymbol_Bar
 
 Bar equation symbol
 
@@ -2533,7 +2533,7 @@ eqn.addElements({
  });
 ```
 
-## OBJEqnSymbol_SquareBracket
+## EQNSymbol_SquareBracket
 
 Square bracket equation symbol
 
@@ -2612,9 +2612,9 @@ eqn.addElements({
  });
 ```
 
-## OBJEqnSymbol_Radical
+## EQNSymbol_Radical
 
-Radical equation symbol used in [OBJEqnLayout_Root][24].
+Radical equation symbol used in [EQN_Root][24].
 
 The radical symbol allows customization on how to draw the radical. Mostly
 it will not be needed, but for edge case equation layouts it may be useful.
@@ -2722,11 +2722,11 @@ An equation phrase is used to define an equation form. An equation phrase
 can either be the entirety of the form definition, or a series of nested
 phrases.
 
--   An object or array definition (e.g. [OBJEqnLayout_Fraction][15])
+-   An object or array definition (e.g. [EQN_Fraction][15])
 -   A string that represents an equation element
 -   An array of [TypeEquationPhrase][124]
 
-Type: ([string][228] \| [number][230] | {frac: [OBJEqnLayout_Fraction][241]} | {strike: [OBJEqnLayout_Strike][242]} | {box: [OBJEqnLayout_Box][243]} | {root: [OBJEqnLayout_Root][244]} | {brac: [OBJEqnLayout_Bracket][234]} | {sub: [OBJEqnLayout_Subcript][245]} | {sup: [OBJEqnLayout_Superscript][246]} | {supSub: [OBJEqnLayout_SuperscriptSubscript][247]} | {topBar: [OBJEqnLayout_Bar][248]} | {bottomBar: [OBJEqnLayout_Bar][248]} | {annotate: [OBJEqnLayout_Annotate][249]} | {topComment: [OBJEqnLayout_Comment][250]} | {bottomComment: [OBJEqnLayout_Comment][250]} | {pad: [OBJEqnLayout_Pad][251]} | {bar: [OBJEqnLayout_Bar][248]} | {scale: [OBJEqnLayout_Scale][252]} | {container: [OBJEqnLayout_Container][253]} | {matrix: [OBJEqnLayout_Matrix][254]} | {int: [OBJEqnLayout_Integral][255]} | {sumOf: [OBJEqnLayout_SumOf][256]} | {prodOf: [OBJEqnLayout_ProdOf][257]} | {topStrike: [OBJEqnLayout_StrikeComment][258]} | {bottomStrike: [OBJEqnLayout_StrikeComment][258]} | [Array][229]&lt;[TypeEquationPhrase][232]> | DiagramElementPrimitive | DiagramElementCollection | Elements | [Element][259] | BaseAnnotationFunction)
+Type: ([string][228] \| [number][230] | {frac: [EQN_Fraction][241]} | {strike: [EQN_Strike][242]} | {box: [EQN_Box][243]} | {root: [EQN_Root][244]} | {brac: [EQN_Bracket][234]} | {sub: [EQN_Subcript][245]} | {sup: [EQN_Superscript][246]} | {supSub: [EQN_SuperscriptSubscript][247]} | {topBar: [EQN_Bar][248]} | {bottomBar: [EQN_Bar][248]} | {annotate: [EQN_Annotate][249]} | {topComment: [EQN_Comment][250]} | {bottomComment: [EQN_Comment][250]} | {pad: [EQN_Pad][251]} | {bar: [EQN_Bar][248]} | {scale: [EQN_Scale][252]} | {container: [EQN_Container][253]} | {matrix: [EQN_Matrix][254]} | {int: [EQN_Integral][255]} | {sumOf: [EQN_SumOf][256]} | {prodOf: [EQN_ProdOf][257]} | {topStrike: [EQN_StrikeComment][258]} | {bottomStrike: [EQN_StrikeComment][258]} | [Array][229]&lt;[TypeEquationPhrase][232]> | DiagramElementPrimitive | DiagramElementCollection | Elements | [Element][259] | BaseAnnotationFunction)
 
 ### Examples
 
@@ -3585,7 +3585,7 @@ Equation container function
 
 ### Parameters
 
--   `optionsOrArray` **[OBJEqnLayout_Container][253]** 
+-   `optionsOrArray` **[EQN_Container][253]** 
 
 ### Examples
 
@@ -3606,7 +3606,7 @@ Equation fraction function
 
 ### Parameters
 
--   `optionsOrArray` **[OBJEqnLayout_Fraction][241]** 
+-   `optionsOrArray` **[EQN_Fraction][241]** 
 
 ### Examples
 
@@ -3643,223 +3643,223 @@ eqn.addForms({
 
 [11]: #equation-layout-objects
 
-[12]: #objeqnlayout_container
+[12]: #eqn_container
 
 [13]: #properties-1
 
 [14]: #examples-1
 
-[15]: #objeqnlayout_fraction
+[15]: #eqn_fraction
 
 [16]: #properties-2
 
 [17]: #examples-2
 
-[18]: #objeqnlayout_scale
+[18]: #eqn_scale
 
 [19]: #properties-3
 
 [20]: #examples-3
 
-[21]: #objeqnlayout_bracket
+[21]: #eqn_bracket
 
 [22]: #properties-4
 
 [23]: #examples-4
 
-[24]: #objeqnlayout_root
+[24]: #eqn_root
 
 [25]: #properties-5
 
 [26]: #examples-5
 
-[27]: #objeqnlayout_strike
+[27]: #eqn_strike
 
 [28]: #properties-6
 
 [29]: #examples-6
 
-[30]: #objeqnlayout_box
+[30]: #eqn_box
 
 [31]: #properties-7
 
 [32]: #examples-7
 
-[33]: #objeqnlayout_bar
+[33]: #eqn_bar
 
 [34]: #properties-8
 
 [35]: #examples-8
 
-[36]: #objeqnlayout_integral
+[36]: #eqn_integral
 
 [37]: #properties-9
 
 [38]: #examples-9
 
-[39]: #objeqnlayout_sumof
+[39]: #eqn_sumof
 
 [40]: #properties-10
 
 [41]: #examples-10
 
-[42]: #objeqnlayout_prodof
+[42]: #eqn_prodof
 
 [43]: #properties-11
 
 [44]: #examples-11
 
-[45]: #objeqnlayout_subcript
+[45]: #eqn_subcript
 
 [46]: #properties-12
 
 [47]: #examples-12
 
-[48]: #objeqnlayout_superscript
+[48]: #eqn_superscript
 
 [49]: #properties-13
 
 [50]: #examples-13
 
-[51]: #objeqnlayout_superscriptsubscript
+[51]: #eqn_superscriptsubscript
 
 [52]: #properties-14
 
 [53]: #examples-14
 
-[54]: #objeqnlayout_comment
+[54]: #eqn_comment
 
 [55]: #properties-15
 
 [56]: #examples-15
 
-[57]: #objeqnlayout_strikecomment
+[57]: #eqn_strikecomment
 
 [58]: #properties-16
 
 [59]: #examples-16
 
-[60]: #objeqnlayout_pad
+[60]: #eqn_pad
 
 [61]: #properties-17
 
 [62]: #examples-17
 
-[63]: #objeqnlayout_matrix
+[63]: #eqn_matrix
 
 [64]: #properties-18
 
 [65]: #examples-18
 
-[66]: #objeqnlayout_annotate
+[66]: #eqn_annotate
 
 [67]: #properties-19
 
 [68]: #examples-19
 
-[69]: #objeqnlayout_annotation
+[69]: #eqn_annotation
 
 [70]: #properties-20
 
 [71]: #examples-20
 
-[72]: #objeqnlayout_encompassglyph
+[72]: #eqn_encompassglyph
 
 [73]: #properties-21
 
 [74]: #examples-21
 
-[75]: #objeqnlayout_leftrightglyph
+[75]: #eqn_leftrightglyph
 
 [76]: #properties-22
 
 [77]: #examples-22
 
-[78]: #objeqnlayout_topbottomglyph
+[78]: #eqn_topbottomglyph
 
 [79]: #properties-23
 
 [80]: #examples-23
 
-[81]: #objeqnlayout_glyphs
+[81]: #eqn_glyphs
 
 [82]: #properties-24
 
 [83]: #equation-symbol-objects
 
-[84]: #objeqnsymbol_vinculum
+[84]: #eqnsymbol_vinculum
 
 [85]: #properties-25
 
 [86]: #examples-24
 
-[87]: #objeqnsymbol_box
+[87]: #eqnsymbol_box
 
 [88]: #properties-26
 
 [89]: #examples-25
 
-[90]: #objeqnsymbol_arrow
+[90]: #eqnsymbol_arrow
 
 [91]: #properties-27
 
 [92]: #examples-26
 
-[93]: #objeqnsymbol_sum
+[93]: #eqnsymbol_sum
 
 [94]: #properties-28
 
 [95]: #examples-27
 
-[96]: #objeqnsymbol_prod
+[96]: #eqnsymbol_prod
 
 [97]: #properties-29
 
 [98]: #examples-28
 
-[99]: #objeqnsymbol_integral
+[99]: #eqnsymbol_integral
 
 [100]: #properties-30
 
 [101]: #examples-29
 
-[102]: #objeqnsymbol_strike
+[102]: #eqnsymbol_strike
 
 [103]: #properties-31
 
 [104]: #examples-30
 
-[105]: #objeqnsymbol_bracket
+[105]: #eqnsymbol_bracket
 
 [106]: #properties-32
 
 [107]: #examples-31
 
-[108]: #objeqnsymbol_anglebracket
+[108]: #eqnsymbol_anglebracket
 
 [109]: #properties-33
 
 [110]: #examples-32
 
-[111]: #objeqnsymbol_brace
+[111]: #eqnsymbol_brace
 
 [112]: #properties-34
 
 [113]: #examples-33
 
-[114]: #objeqnsymbol_bar
+[114]: #eqnsymbol_bar
 
 [115]: #properties-35
 
 [116]: #examples-34
 
-[117]: #objeqnsymbol_squarebracket
+[117]: #eqnsymbol_squarebracket
 
 [118]: #properties-36
 
 [119]: #examples-35
 
-[120]: #objeqnsymbol_radical
+[120]: #eqnsymbol_radical
 
 [121]: #properties-37
 
@@ -4087,55 +4087,55 @@ eqn.addForms({
 
 [233]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[234]: #objeqnlayout_bracket
+[234]: #eqn_bracket
 
-[235]: #objeqnlayout_annotation
+[235]: #eqn_annotation
 
-[236]: #objeqnlayout_glyphs
+[236]: #eqn_glyphs
 
 [237]: #point
 
-[238]: #objeqnlayout_leftrightglyph
+[238]: #eqn_leftrightglyph
 
-[239]: #objeqnlayout_topbottomglyph
+[239]: #eqn_topbottomglyph
 
-[240]: #objeqnlayout_encompassglyph
+[240]: #eqn_encompassglyph
 
-[241]: #objeqnlayout_fraction
+[241]: #eqn_fraction
 
-[242]: #objeqnlayout_strike
+[242]: #eqn_strike
 
-[243]: #objeqnlayout_box
+[243]: #eqn_box
 
-[244]: #objeqnlayout_root
+[244]: #eqn_root
 
-[245]: #objeqnlayout_subcript
+[245]: #eqn_subcript
 
-[246]: #objeqnlayout_superscript
+[246]: #eqn_superscript
 
-[247]: #objeqnlayout_superscriptsubscript
+[247]: #eqn_superscriptsubscript
 
-[248]: #objeqnlayout_bar
+[248]: #eqn_bar
 
-[249]: #objeqnlayout_annotate
+[249]: #eqn_annotate
 
-[250]: #objeqnlayout_comment
+[250]: #eqn_comment
 
-[251]: #objeqnlayout_pad
+[251]: #eqn_pad
 
-[252]: #objeqnlayout_scale
+[252]: #eqn_scale
 
-[253]: #objeqnlayout_container
+[253]: #eqn_container
 
-[254]: #objeqnlayout_matrix
+[254]: #eqn_matrix
 
-[255]: #objeqnlayout_integral
+[255]: #eqn_integral
 
-[256]: #objeqnlayout_sumof
+[256]: #eqn_sumof
 
-[257]: #objeqnlayout_prodof
+[257]: #eqn_prodof
 
-[258]: #objeqnlayout_strikecomment
+[258]: #eqn_strikecomment
 
 [259]: https://developer.mozilla.org/docs/Web/API/Element
 
