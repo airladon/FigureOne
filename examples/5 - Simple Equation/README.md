@@ -63,20 +63,43 @@ An `Equation` object is a `DiagramElementCollection` that groups all the equatio
 
 In this example, the *equation elements* (TERMS and OPERATORS) are first defined in `options.elements`, then a *form* is defined in `options.forms.base` .
 
-Some operators are either not in unicode, or are more convient to drawn directly. In this example the *vinculum* of the fraction is a symbol.
+Some operators are either not in unicode, or are more convient to draw directly. In this example the *vinculum* of the fraction is a *symbol*.
 
-Available symbols include:
+Available *symbols* are:
 
-* [vinculum](../../docs/README.md#EQN_VinculumSymbol)
-* [radical](../../docs/README.md#EQN_RadicalSymbol)
-* [integral](../../docs/README.md#EQN_IntegralSymbol)
-* [sum](../../docs/README.md#EQN_SumSymbol)
-* [product](../../docs/README.md#EQN_ProdSymbol)
-* [bracket](../../docs/README.md#EQN_BracketSymbol)
-* [square bracket](../../docs/README.md#EQN_SquareBracketSymbol)
-* [angle bracket](../../docs/README.md#EQN_AngleBracketSymbol)
-* [bar](../../docs/README.md#EQN_BarSymbol)
-* [brace](../../docs/README.md#EQN_BraceSymbol)
-* [arrow](../../docs/README.md#EQN_ArrowSymbol)
-* [box](../../docs/README.md#EQN_BoxSymbol)
-* [strike](../../docs/README.md#EQN_StrikeSymbol)
+* [Vinculum](../../docs/README.md#EQN_VinculumSymbol)
+* [Radical](../../docs/README.md#EQN_RadicalSymbol)
+* [Integral](../../docs/README.md#EQN_IntegralSymbol)
+* [Sum](../../docs/README.md#EQN_SumSymbol)
+* [Product](../../docs/README.md#EQN_ProdSymbol)
+* [Bracket](../../docs/README.md#EQN_BracketSymbol)
+* [Square bracket](../../docs/README.md#EQN_SquareBracketSymbol)
+* [Angle bracket](../../docs/README.md#EQN_AngleBracketSymbol)
+* [Brace](../../docs/README.md#EQN_BraceSymbol)
+* [Bar](../../docs/README.md#EQN_BarSymbol)
+* [Arrow](../../docs/README.md#EQN_ArrowSymbol)
+* [Box](../../docs/README.md#EQN_BoxSymbol)
+* [Strike](../../docs/README.md#EQN_StrikeSymbol)
+
+The fraction is a layout function. The available layout functions are:
+
+* [Container](../../docs/README.md#EQN_Container)
+* [Fraction](../../docs/README.md#EQN_Fraction)
+* [Scale](../../docs/README.md#EQN_Scale)
+* [Bracket](../../docs/README.md#EQN_Bracket)
+* [Root](../../docs/README.md#EQN_Root)
+* [Strike](../../docs/README.md#EQN_Strike)
+* [Box](../../docs/README.md#EQN_Box)
+* [Bar](../../docs/README.md#EQN_Bar)
+* [Integral](../../docs/README.md#EQN_Integral)
+* [SumOf](../../docs/README.md#EQN_SumOf)
+* [ProdOf](../../docs/README.md#EQN_ProdOf)
+* [Subcript](../../docs/README.md#EQN_Subcript)
+* [Superscript](../../docs/README.md#EQN_Superscript)
+* [SuperscriptSubscript](../../docs/README.md#EQN_SuperscriptSubscript)
+* [Comment](../../docs/README.md#EQN_Comment)
+* [StrikeComment](../../docs/README.md#EQN_StrikeComment)
+* [Pad](../../docs/README.md#EQN_Pad)
+* [Matrix](../../docs/README.md#EQN_Matrix)
+* [Annotate](../../docs/README.md#EQN_Annotate)
+
