@@ -53,6 +53,16 @@ export type TypeSymbolOptions = {
 /**
  * Vinculum equation symbol
  *
+ * <pre>
+ *                          width
+ *       |<---------------------------------------->|
+ *       |                                          |
+ *       |                                          | ____
+ *       00000000000000000000000000000000000000000000   A
+ *       00000000000000000000000000000000000000000000   |  lineWidth
+ *       00000000000000000000000000000000000000000000 __V_
+ *
+ * </pre>
  * @property {'vinculum'} symbol
  * @property {Array<number>} [color] (equation color)
  * @property {number} [lineWidth] (`0.01`)
@@ -60,10 +70,7 @@ export type TypeSymbolOptions = {
  * resize, `'static'` only changes scale transform (`dynamic`)
  * @property {number | 'first'} [staticWidth] used when `draw`=`static`.
  * `number` sets width of static symbol - `'first'` calculates and sets width
- * based on first use
- * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
- * `number` sets height of static symbol - `'first'` calculates and sets height
- * based on first use
+ * based on first use (`'first'`)
  *
  * @example
  * eqn.addElements({
@@ -85,12 +92,33 @@ type TypeVinculum = {
 /**
  * Box equation symbol
  *
+ * <pre>
+ *                                          width
+ *                 |<--------------------------------------------------->|
+ *                 |                                                     |
+ *                 |                                                     |
+ *
+ *         ------- 0000000000000000000000000000000000000000000000000000000
+ *         A       0000000000000000000000000000000000000000000000000000000
+ *         |       0000                                               0000
+ *         |       0000                                               0000
+ *         |       0000                                               0000
+ *  height |       0000                                               0000
+ *         |       0000                                               0000
+ *         |       0000                                               0000
+ *         |       0000                                               0000
+ *         |       0000                                               0000
+ *         |       0000000000000000000000000000000000000000000000000000000
+ *         V______ 0000000000000000000000000000000000000000000000000000000
+ *
+ * </pre>
+ *
  * @property {'box'} symbol
  * @property {Array<number>} [color] (equation color)
+ * @property {number} [lineWidth] (`0.01`)
  * @property {boolean} [fill] (`false`)
  * @property {number} [width] force width instead of auto calculation
  * @property {number} [height] force height instead of auto calculationg
- * @property {number} [lineWidth] (`0.01`)
  * @property {'static' | 'dynamic'} [draw] `'dynamic'` updates vertices on
  * resize, `'static'` only changes scale transform (`dynamic`)
  * @property {number | 'first'} [staticWidth] used when `draw`=`static`.
@@ -120,6 +148,75 @@ type TypeBox = {
   staticWidth?: number | 'first',
   staticHeight?: number | 'first',
 }
+
+/**
+ * Arrow equation symbol
+ * <pre>
+ *                             arrowWidth
+ *                         |<--------------->|
+ *                         |                 |
+ *                         |                 |
+ *                  -------|------- 0        |
+ *                  A      |      00000      |
+ *    arrowHeight   |      |     0000000     |
+ *                  |      |   00000000000   |
+ *                  V      | 000000000000000 |
+ *                  ------ 0000000000000000000
+ *                               0000000
+ *                               0000000
+ *                               0000000
+ *                               0000000
+ *                               0000000
+ *                               0000000
+ *                               0000000
+ *                               0000000
+ *                               0000000
+ *                               0000000
+ *                               0000000
+ *                               0000000
+ *                               0000000
+ *                               0000000
+ *                               0000000
+ *                               0000000
+ *                               |     |
+ *                               |     |
+ *                               |<--->|
+ *                              lineWidth
+ * </pre>
+ * @property {'arrow'} symbol
+ * @property {Array<number>} [color] (equation color)
+ * @property {'up' | 'down' | 'left' | 'right'} [direction] (`'right'`)
+ * @property {number} [lineWidth] (`0.01`)
+ * @property {number} [arrowWidth] (`0.01`)
+ * @property {number} [arrowHeight] (`0.04`)
+ * @property {number} [lineWidth] (`0.01`)
+ * @property {'static' | 'dynamic'} [draw] `'dynamic'` updates vertices on
+ * resize, `'static'` only changes scale transform (`dynamic`)
+ * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
+ * `number` sets height of static symbol - `'first'` calculates and sets height
+ * based on first use (`'first'`)
+ *
+ * @example
+ * eqn.addElements({
+ *   a: {
+ *     symbol: 'arrow',
+ *     color: [1, 0, 0, 1],
+ *     direction: 'right'
+ *     lineWidth: 0.01,
+ *     arrowHeight: 0.02,
+ *     arrowWidth: 0.02,
+ *   },
+ * })
+ */
+type TypeArrow = {
+  color?: Array<number>,
+  direction?: 'up' | 'down' | 'left' | 'right',
+  lineWidth?: number,
+  arrowHeight?: number,
+  arrowWidth?: number,
+  draw?: 'static' | 'dynamic',
+  staticHeight?: number | 'first',
+};
 
 export default class EquationSymbols {
   shapes: DiagramPrimitives;
@@ -239,48 +336,10 @@ export default class EquationSymbols {
     ));
   }
 
-  // simpleIntegral(optionsIn: {
-  //   color?: Array<number>,
-  //   lineWidth?: number,
-  //   staticSize?: ?(Point | [number, number]),
-  // }) {
-  //   const defaultOptions: {
-  //     color: this.defaultColor,
-  //     lineWidth: 0.01,
-  //   }
-  // }
-
-  // simpleIntegral(options: {
-  //   color?: Array<number>,
-  //   lineWidth?: number,
-  //   staticSize?: boolean,
-  // }) {
-  //   const defaultOptions = {
-  //     color: this.defaultColor,
-  //     lineWidth: 0.012,
-  //     staticSize: null,
-  //   };
-  //   const optionsToUse = joinObjects(defaultOptions, options);
-
-  //   return (new SimpleIntegral(
-  //     this.shapes.webgl,
-  //     optionsToUse.color,
-  //     new Transform('brace').scale(1, 1).translate(0, 0),
-  //     this.shapes.limits,
-  //     optionsToUse,
-  //   )).symbol;
-  // }
-
-  arrow(options: {
-    color?: Array<number>,
-    lineWidth?: number,
-    arrowHeight?: number,
-    arrowWidth?: number,
-    draw?: 'static' | 'dynamic',
-    staticHeight?: number | 'first',
-  }) {
+  arrow(options: TypeArrow) {
     const defaultOptions = {
       color: this.defaultColor,
+      direction: 'right',
       lineWidth: 0.01,
       arrowWidth: 0.03,
       arrowHeight: 0.04,
