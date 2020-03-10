@@ -461,9 +461,9 @@ type TypeIntegral = {
  *   V___V______|__|____X           |
  *              |  |    |           |
  *              |  |    |           |
- *        tick >|--|<   |           |
- *       width  |  |    |           |
- *              |  |<-->|down width |
+ *   tickWidth >|--|<   |           |
+ *              |  |    |           |
+ *              |  |<-->|downWidth  |
  *              |                   |
  *              |<----------------->|
  *                     startWidth
@@ -481,9 +481,11 @@ type TypeIntegral = {
  * @property {number} [tickHeight]
  * @property {number} [tickWidth]
  * @property {number} [downWidth]
- * @property {boolean} [proportionalToHeight] `true` makes `startHeight`, `startWidth`, `tickHeight`, `tickWidth`, and `downWidth` a percentage of height instead of absolute (`true`)
+ * @property {boolean} [proportionalToHeight] `true` makes `startHeight`,
+ * `startWidth`, `tickHeight`, `tickWidth`, and `downWidth` a percentage of
+ * height instead of absolute (`true`)
  * @property {number} [lineWidth2] lineWidth of down stroke (`2 x lineWidth`)
-  * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
+ * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
  * resize, `'static'` only changes scale transform (`dynamic`)
  * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
  * `number` sets height of static symbol - `'first'` calculates and sets height
@@ -540,6 +542,80 @@ type TypeRadical = {
   staticWidth?: number | 'first',
 };
 
+/**
+ * Strike equation symbol used in {@link TypeEquationFunctionStrike}.
+ *
+ * Four styles of strike symbol are available:
+ *
+ *
+ *          000         000
+ *            000     000
+ *              000 000
+ *                000                       0000000000000000
+ *              000 000
+ *            000     000
+ *          000         000
+ *               cross                         horizontal
+ *
+ *
+ *                      000                 000
+ *                    000                     000
+ *                  000                         000
+ *                000                             000
+ *              000                                 000
+ *            000                                     000
+ *          000                                         000
+ *             forward                        backward
+ *
+ * </pre>
+ *
+ * @property {'strike'} symbol
+ * @property {Array<number>} [color] (equation default)
+ * @property {'cross' | 'forward' | 'back' | 'horizontal'} [style] (`'cross'`)
+ * @property {number} [lineWidth] (`0.015`)
+ * @property {number} [width] force width of strike (normally defined by
+ * content size)
+ * @property {number} [height] force height of strike (normally defined by
+ * content size)
+ * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
+ * resize, `'static'` only changes scale transform (`dynamic`)
+ * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
+ * `number` sets height of static symbol - `'first'` calculates and sets height
+ * based on first use (`'first'`)
+ * @property {number | 'first'} [staticWidth] used when `draw`=`static`.
+ * `number` sets width of static symbol - `'first'` calculates and sets width
+ * based on first use (`'first'`)
+ * @example
+ * // Typical
+ * eqn.addElements({
+ *   s: { symbol: 'strike', style: 'forward' },
+ * });
+ * @example
+ * // All options
+ *  eqn.addElements({
+      s: {
+        symbol: 'strike',
+        style: 'cross',
+        lineWidth: 0.01,
+        width: 0.5,
+        height: 0.5,
+        draw: 'static',
+        staticHeight: 'first',
+        staticWidth: 'first',
+      },
+ *  });
+ */
+type TypeStrike = {
+  color?: Array<number>,
+  style?: 'cross' | 'forward' | 'back' | 'horizontal',
+  lineWidth?: number,
+  width?: number,
+  height?: number,
+  draw: 'static' | 'dynamic',
+  staticHeight?: number | 'first',
+  staticWidth?: number | 'first',
+}
+
 
 export default class EquationSymbols {
   shapes: DiagramPrimitives;
@@ -566,9 +642,9 @@ export default class EquationSymbols {
     if (name === 'strike') {                // $FlowFixMe
       return this.strike(options);
     }
-    if (name === 'xStrike') {
-      return this.xStrike(options);
-    }
+    // if (name === 'xStrike') {
+    //   return this.xStrike(options);
+    // }
     if (name === 'bracket') {               // $FlowFixMe
       return this.bracket(options);
     }
@@ -813,16 +889,7 @@ export default class EquationSymbols {
     );
   }
 
-  strike(options: {
-    color?: Array<number>,
-    style?: 'cross' | 'forward' | 'backward' | 'horizontal',
-    lineWidth?: number,
-    width?: number,
-    height?: number,
-    draw: 'static' | 'dynamic',
-    staticHeight?: number | 'first',
-    staticWidth?: number | 'first',
-  }) {
+  strike(options: TypeStrike) {
     const defaultOptions = {
       style: 'cross',
       color: this.defaultColor,
@@ -854,24 +921,25 @@ export default class EquationSymbols {
     // );
   }
 
-  xStrike(options: { color?: Array<number> } = {}) {
-    let { color } = options;
-    if (color == null) {
-      color = this.defaultColor;
-    }
-    const cross = this.shapes.collection(new Transform('xStrike').scale(1, 1).rotate(0).translate(0, 0));
-    cross.color = color;
-    const strike1 = this.shapes.horizontalLine(
-      new Point(0, 0),
-      1, 1, 0,
-      color,
-      new Transform('strikeLine').scale(1, 1).rotate(0).translate(0, 0),
-    );
-    const strike2 = strike1._dup();
-    cross.add('s1', strike1);
-    cross.add('s2', strike2);
-    return cross;
-  }
+  // xStrike(options: { color?: Array<number> } = {}) {
+  //   let { color } = options;
+  //   if (color == null) {
+  //     color = this.defaultColor;
+  //   }
+  //   const cross = this.shapes.collection(new Transform('xStrike')
+  //     .scale(1, 1).rotate(0).translate(0, 0));
+  //   cross.color = color;
+  //   const strike1 = this.shapes.horizontalLine(
+  //     new Point(0, 0),
+  //     1, 1, 0,
+  //     color,
+  //     new Transform('strikeLine').scale(1, 1).rotate(0).translate(0, 0),
+  //   );
+  //   const strike2 = strike1._dup();
+  //   cross.add('s1', strike1);
+  //   cross.add('s2', strike2);
+  //   return cross;
+  // }
 
   bracket(options: {
     side?: 'left' | 'right' | 'top' | 'bottom',
