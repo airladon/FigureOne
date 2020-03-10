@@ -67,13 +67,16 @@ Some operators are either not in unicode, or are more convient to drawn directly
 
 Available symbols include:
 
-* [vinculum](../../docs/README.md#EQN_VinculumSymbol) - for fractions
-* *radical* - for roots
-* *integral* - with multiple and path integral options
-* *sum* - sigma
-* *product* - pi
-* *brackets, square brackets, angle brackets, bar brackets and braces* - can have left, right, top or bottom orientations
-* *arrow* - can be oriented left, right, bottom or top
-* *box*
-* *strike out* - single diagonal line and cross
-* *bar*
+* [vinculum](../../docs/README.md#EQN_VinculumSymbol)
+* [radical](../../docs/README.md#EQN_RadicalSymbol)
+* [integral](../../docs/README.md#EQN_IntegralSymbol)
+* [sum](../../docs/README.md#EQN_SumSymbol)
+* [product](../../docs/README.md#EQN_ProdSymbol)
+* [bracket](../../docs/README.md#EQN_BracketSymbol)
+* [square bracket](../../docs/README.md#EQN_SquareBracketSymbol)
+* [angle bracket](../../docs/README.md#EQN_AngleBracketSymbol)
+* [bar](../../docs/README.md#EQN_BarSymbol)
+* [brace](../../docs/README.md#EQN_BraceSymbol)
+* [arrow](../../docs/README.md#EQN_ArrowSymbol)
+* [box](../../docs/README.md#EQN_BoxSymbol)
+* [strike](../../docs/README.md#EQN_StrikeSymbol)
