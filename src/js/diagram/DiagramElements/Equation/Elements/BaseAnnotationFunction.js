@@ -6,7 +6,7 @@ import {
 import Bounds from './Bounds';
 // import BaseEquationFunction from './BaseEquationFunction';
 // import type { TypeParsablePoint } from '../../../../tools/g2';
-// import type {OBJEqnLayout_Annotation } from './Base'
+// import type {EQN_Annotation } from './Base'
 
 // import {
 //   DiagramElementPrimitive, DiagramElementCollection,
@@ -20,7 +20,7 @@ import SymbolNew from '../Symbols/SymbolNew';
 // eslint-disable-next-line import/no-cycle
 // import type { TypeEquationPhrase } from '../EquationFunctions';
 
-export type OBJEqnLayout_Annotation = {
+export type EQN_Annotation = {
   xPosition: 'left' | 'center' | 'right' | number,
   yPosition: 'bottom' | 'baseline' | 'middle' | 'top' | number,
   xAlign: 'left' | 'center' | 'right' | number,
@@ -33,18 +33,18 @@ export type OBJEqnLayout_Annotation = {
   reference?: string,
 };
 
-export type OBJEqnLayout_EncompassGlyph = {
+export type EQN_EncompassGlyph = {
   symbol?: string,
-  annotations?: Array<OBJEqnLayout_Annotation>,
+  annotations?: Array<EQN_Annotation>,
   space: number;
   topSpace?: number;
   leftSpace?: number;
   bottomSpace?: number;
   rightSpace?: number;
 };
-export type OBJEqnLayout_LeftRightGlyph = {
+export type EQN_LeftRightGlyph = {
   symbol?: string,
-  annotations?: Array<OBJEqnLayout_Annotation>,
+  annotations?: Array<EQN_Annotation>,
   space: number;
   overhang: number,
   topSpace?: number;
@@ -58,9 +58,9 @@ export type OBJEqnLayout_LeftRightGlyph = {
   annotationsOverContent?: boolean,
 };
 
-export type OBJEqnLayout_TopBottomGlyph = {
+export type EQN_TopBottomGlyph = {
   symbol?: string,
-  annotations?: Array<OBJEqnLayout_Annotation>,
+  annotations?: Array<EQN_Annotation>,
   space: number;
   overhang: number,
   width?: number,
@@ -72,13 +72,13 @@ export type OBJEqnLayout_TopBottomGlyph = {
 
 export type TypeAnnotatedGlyph = {
   glyph: SymbolNew,
-  annotations: Array<OBJEqnLayout_Annotation>,
+  annotations: Array<EQN_Annotation>,
   width: number,
   height: number,
   location: Point,
 };
 
-// export type OBJEqnLayout_EncompassGlyph = {
+// export type EQN_EncompassGlyph = {
 //   space: number,
 //   leftSpace: number,
 //   bottomSpace: number,
@@ -86,23 +86,23 @@ export type TypeAnnotatedGlyph = {
 //   rightSpace: number,
 // } & TypeAnnotatedGlyph;
 
-export type OBJEqnLayout_Glyphs = {
-  left?: TypeAnnotatedGlyph & OBJEqnLayout_LeftRightGlyph;
-  right?: TypeAnnotatedGlyph & OBJEqnLayout_LeftRightGlyph;
-  top?: TypeAnnotatedGlyph & OBJEqnLayout_TopBottomGlyph;
-  bottom?: TypeAnnotatedGlyph & OBJEqnLayout_TopBottomGlyph;
-  encompass?: TypeAnnotatedGlyph & OBJEqnLayout_EncompassGlyph;
+export type EQN_Glyphs = {
+  left?: TypeAnnotatedGlyph & EQN_LeftRightGlyph;
+  right?: TypeAnnotatedGlyph & EQN_LeftRightGlyph;
+  top?: TypeAnnotatedGlyph & EQN_TopBottomGlyph;
+  bottom?: TypeAnnotatedGlyph & EQN_TopBottomGlyph;
+  encompass?: TypeAnnotatedGlyph & EQN_EncompassGlyph;
 };
 
-// export type OBJEqnLayout_GlyphsIn = {
+// export type EQN_GlyphsIn = {
 //   left?: TypeAnnotatedGlyph;
 //   right?: TypeAnnotatedGlyph;
 //   top?: TypeAnnotatedGlyph;
 //   bottom?: TypeAnnotatedGlyph;
-//   encompass?: OBJEqnLayout_EncompassGlyphIn;
+//   encompass?: EQN_EncompassGlyphIn;
 // };
 
-function copyAnnotation(annotation: OBJEqnLayout_Annotation, namedCollection?: Object) {
+function copyAnnotation(annotation: EQN_Annotation, namedCollection?: Object) {
   return {
     xPosition: annotation.xPosition,
     yPosition: annotation.yPosition,
@@ -117,7 +117,7 @@ function copyAnnotation(annotation: OBJEqnLayout_Annotation, namedCollection?: O
 }
 
 function copyAnnotations(
-  annotations: Array<OBJEqnLayout_Annotation>,
+  annotations: Array<EQN_Annotation>,
   namedCollection?: Object,
 ) {
   const copy = [];
@@ -128,7 +128,7 @@ function copyAnnotations(
 }
 
 function copyGlyphs(
-  glyphs: OBJEqnLayout_Glyphs,
+  glyphs: EQN_Glyphs,
   namedCollection?: Object,
 ) {
   const copy = {};
@@ -150,7 +150,7 @@ function copyGlyphs(
   return copy;
 }
 
-function getAllElementsFromAnnotations(annotations: Array<OBJEqnLayout_Annotation>) {
+function getAllElementsFromAnnotations(annotations: Array<EQN_Annotation>) {
   let elements = [];
   annotations.forEach((annotation) => {
     elements = [...elements, ...annotation.content.getAllElements()];
@@ -158,7 +158,7 @@ function getAllElementsFromAnnotations(annotations: Array<OBJEqnLayout_Annotatio
   return elements;
 }
 
-function getAllElementsFromGlyphs(glyphs: OBJEqnLayout_Glyphs) {
+function getAllElementsFromGlyphs(glyphs: EQN_Glyphs) {
   let elements = [];
   Object.keys(glyphs).forEach((key) => {
     const glyph = glyphs[key];
@@ -174,19 +174,19 @@ function getAllElementsFromGlyphs(glyphs: OBJEqnLayout_Glyphs) {
   return elements;
 }
 
-function setPositionsForAnnotations(annotations: Array<OBJEqnLayout_Annotation>) {
+function setPositionsForAnnotations(annotations: Array<EQN_Annotation>) {
   annotations.forEach((annotation) => {
     annotation.content.setPositions();
   });
 }
 
-function offsetLocationForAnnotations(annotations: Array<OBJEqnLayout_Annotation>, offset: Point) {
+function offsetLocationForAnnotations(annotations: Array<EQN_Annotation>, offset: Point) {
   annotations.forEach((annotation) => {
     annotation.content.offsetLocation(offset);
   });
 }
 
-function setPositionsForGlyphs(glyphs: OBJEqnLayout_Glyphs) {
+function setPositionsForGlyphs(glyphs: EQN_Glyphs) {
   Object.keys(glyphs).forEach((key) => {
     if (glyphs[key] == null) {
       return;
@@ -200,7 +200,7 @@ function setPositionsForGlyphs(glyphs: OBJEqnLayout_Glyphs) {
   });
 }
 
-function offsetLocationForGlyphs(glyphs: OBJEqnLayout_Glyphs, offset: Point) {
+function offsetLocationForGlyphs(glyphs: EQN_Glyphs, offset: Point) {
   Object.keys(glyphs).forEach((key) => {
     if (glyphs[key] == null) {
       return;
@@ -227,14 +227,14 @@ export default class BaseAnnotationFunction implements ElementInterface {
   };
 
   content: ElementInterface;
-  annotations: Array<OBJEqnLayout_Annotation>;
-  glyphs: OBJEqnLayout_Glyphs;
+  annotations: Array<EQN_Annotation>;
+  glyphs: EQN_Glyphs;
   options: Object;
 
   constructor(
     content: ElementInterface,
-    annotations: Array<OBJEqnLayout_Annotation>,
-    glyphs: OBJEqnLayout_Glyphs,
+    annotations: Array<EQN_Annotation>,
+    glyphs: EQN_Glyphs,
     options: Object,
   ) {
     this.glyphs = glyphs;
@@ -710,7 +710,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
   // eslint-disable-next-line class-methods-use-this
   setAnnotationPosition(
     contentToAnnotateBounds: Bounds,
-    annotation: OBJEqnLayout_Annotation,
+    annotation: EQN_Annotation,
     scale: number,
   ) {
     let {

@@ -21,7 +21,7 @@ import Container from './Elements/Container';
 import BaseAnnotationFunction from './Elements/BaseAnnotationFunction';
 // eslint-disable-next-line import/no-cycle
 // import type {
-//   OBJEqnLayout_Annotation, OBJEqnLayout_EncompassGlyph, OBJEqnLayout_LeftRightGlyph, OBJEqnLayout_TopBottomGlyph,
+//   EQN_Annotation, EQN_EncompassGlyph, EQN_LeftRightGlyph, EQN_TopBottomGlyph,
 // } from './Elements/BaseAnnotationFunction';
 
 export function getDiagramElement(
@@ -54,7 +54,7 @@ export function getDiagramElement(
  * can either be the entirety of the form definition, or a series of nested
  * phrases.
  *
- *  * An object or array definition (e.g. {@link OBJEqnLayout_Fraction})
+ *  * An object or array definition (e.g. {@link EQN_Fraction})
  *  * A string that represents an equation element
  *  * An array of {@link TypeEquationPhrase}
  *
@@ -75,29 +75,29 @@ export function getDiagramElement(
 export type TypeEquationPhrase =
   string
   | number
-  | { frac: OBJEqnLayout_Fraction }
-  | { strike: OBJEqnLayout_Strike }
-  | { box: OBJEqnLayout_Box }
-  | { root: OBJEqnLayout_Root }
-  | { brac: OBJEqnLayout_Bracket }
-  | { sub: OBJEqnLayout_Subcript }
-  | { sup: OBJEqnLayout_Superscript }
-  | { supSub: OBJEqnLayout_SuperscriptSubscript }
-  | { topBar: OBJEqnLayout_Bar }
-  | { bottomBar: OBJEqnLayout_Bar }
-  | { annotate: OBJEqnLayout_Annotate }
-  | { topComment: OBJEqnLayout_Comment }
-  | { bottomComment: OBJEqnLayout_Comment }
-  | { pad: OBJEqnLayout_Pad }
-  | { bar: OBJEqnLayout_Bar }
-  | { scale: OBJEqnLayout_Scale }
-  | { container: OBJEqnLayout_Container }
-  | { matrix: OBJEqnLayout_Matrix }
-  | { int: OBJEqnLayout_Integral }
-  | { sumOf: OBJEqnLayout_SumOf }
-  | { prodOf: OBJEqnLayout_ProdOf }
-  | { topStrike: OBJEqnLayout_StrikeComment }
-  | { bottomStrike: OBJEqnLayout_StrikeComment }
+  | { frac: EQN_Fraction }
+  | { strike: EQN_Strike }
+  | { box: EQN_Box }
+  | { root: EQN_Root }
+  | { brac: EQN_Bracket }
+  | { sub: EQN_Subcript }
+  | { sup: EQN_Superscript }
+  | { supSub: EQN_SuperscriptSubscript }
+  | { topBar: EQN_Bar }
+  | { bottomBar: EQN_Bar }
+  | { annotate: EQN_Annotate }
+  | { topComment: EQN_Comment }
+  | { bottomComment: EQN_Comment }
+  | { pad: EQN_Pad }
+  | { bar: EQN_Bar }
+  | { scale: EQN_Scale }
+  | { container: EQN_Container }
+  | { matrix: EQN_Matrix }
+  | { int: EQN_Integral }
+  | { sumOf: EQN_SumOf }
+  | { prodOf: EQN_ProdOf }
+  | { topStrike: EQN_StrikeComment }
+  | { bottomStrike: EQN_StrikeComment }
   | Array<TypeEquationPhrase>
   | DiagramElementPrimitive
   | DiagramElementCollection
@@ -140,7 +140,7 @@ export type TypeEquationPhrase =
  * // Example array definition
  *  { container: ['a', 1, 0.2, 0.5] }
  */
-export type OBJEqnLayout_Container = {
+export type EQN_Container = {
   content: TypeEquationPhrase,
   width?: number,
   descent?: number,
@@ -199,7 +199,7 @@ export type OBJEqnLayout_Container = {
  * // Array definition example
  * { frac: ['a', 'v', 'b'] }
  */
-export type OBJEqnLayout_Fraction = {
+export type EQN_Fraction = {
   numerator: TypeEquationPhrase;
   symbol: string;
   denominator: TypeEquationPhrase;
@@ -242,7 +242,7 @@ export type OBJEqnLayout_Fraction = {
  * // Example array definition
  *  { scale: [['a', 'b'], 0.5] }
  */
-export type OBJEqnLayout_Scale = {
+export type EQN_Scale = {
   content: TypeEquationPhrase,
   scale?: number,
   fullContentBounds?: boolean,
@@ -313,7 +313,7 @@ export type OBJEqnLayout_Scale = {
  *  { brac: ['lb', 'a', 'rb'] }
  */
 
-export type OBJEqnLayout_Bracket = {
+export type EQN_Bracket = {
   left?: string;
   content: TypeEquationPhrase;
   right?: string;
@@ -401,7 +401,7 @@ export type OBJEqnLayout_Bracket = {
  *  { root: ['radical', 'a'] }
  */
 
-export type OBJEqnLayout_Root = {
+export type EQN_Root = {
   symbol: string;
   content: TypeEquationPhrase;
   inSize?: boolean;
@@ -480,7 +480,7 @@ export type OBJEqnLayout_Root = {
  * // Example array definition
  *  { strike: ['a', 'x'] }
  */
-export type OBJEqnLayout_Strike = {
+export type EQN_Strike = {
   content: TypeEquationPhrase;
   symbol: string;
   inSize?: boolean;
@@ -553,7 +553,7 @@ export type OBJEqnLayout_Strike = {
  * // Example array definition
  *  { box: ['a', 'box'] }
  */
-export type OBJEqnLayout_Box = {
+export type EQN_Box = {
   content: TypeEquationPhrase,
   symbol: string,
   inSize?: boolean,
@@ -659,7 +659,7 @@ export type OBJEqnLayout_Box = {
  * // Example array definition
  *  { bar: ['a', 'hBar', 'top'] }
  */
-export type OBJEqnLayout_Bar = {
+export type EQN_Bar = {
   content: TypeEquationPhrase;
   symbol?: string;
   inSize?: boolean,
@@ -796,7 +796,7 @@ export type OBJEqnLayout_Bar = {
  * // Example array definition
  *  { int: ['integral', 'a', 'b', 'c'] }
  */
-export type OBJEqnLayout_Integral = {
+export type EQN_Integral = {
   symbol?: string,
   content?: TypeEquationPhrase,
   from?: TypeEquationPhrase,
@@ -915,7 +915,7 @@ export type OBJEqnLayout_Integral = {
  * // Example array definition
  *  { sumOf: ['s', 'a', 'b', 'c'] }
  */
-export type OBJEqnLayout_SumOf = {
+export type EQN_SumOf = {
   symbol?: string,
   content: TypeEquationPhrase,
   from?: TypeEquationPhrase,
@@ -1018,7 +1018,7 @@ export type OBJEqnLayout_SumOf = {
  * // Example array definition
  *  { prodOf: ['s', 'a', 'b', 'c'] }
  */
-export type OBJEqnLayout_ProdOf = {
+export type EQN_ProdOf = {
   symbol?: string,
   content: TypeEquationPhrase,
   from?: TypeEquationPhrase,
@@ -1084,7 +1084,7 @@ export type OBJEqnLayout_ProdOf = {
  * // Example array definition
  *  { sub: ['a', 'b'] }
  */
-export type OBJEqnLayout_Subcript = {
+export type EQN_Subcript = {
   content: TypeEquationPhrase;
   subscript: TypeEquationPhrase;
   scale?: number,
@@ -1122,7 +1122,7 @@ export type OBJEqnLayout_Subcript = {
  * // Example array definition
  *  { sup: ['a', 'b'] }
  */
-export type OBJEqnLayout_Superscript = {
+export type EQN_Superscript = {
   content: TypeEquationPhrase;
   superscript: TypeEquationPhrase;
   scale?: number,
@@ -1164,7 +1164,7 @@ export type OBJEqnLayout_Superscript = {
  * // Example array definition
  *  { supSub: ['a', 'b', 'c'] }
  */
-export type OBJEqnLayout_SuperscriptSubscript = {
+export type EQN_SuperscriptSubscript = {
   content: TypeEquationPhrase;
   subscript: TypeEquationPhrase;
   superscript: TypeEquationPhrase;
@@ -1228,7 +1228,7 @@ export type OBJEqnLayout_SuperscriptSubscript = {
  * // Bottom comment example with symbol
  *  { bottomComment: ['a', 'b', 'brace'] }
  */
-export type OBJEqnLayout_Comment = {
+export type EQN_Comment = {
   content: TypeEquationPhrase;
   comment: TypeEquationPhrase;
   symbol?: string;
@@ -1288,7 +1288,7 @@ export type OBJEqnLayout_Comment = {
  * // Bottom strike array examples
  *  { bottomStrike: ['a', 'x', 'b'] }
  */
-export type OBJEqnLayout_StrikeComment = {
+export type EQN_StrikeComment = {
   content?: TypeEquationPhrase,
   symbol?: string,
   comment?: TypeEquationPhrase,
@@ -1330,7 +1330,7 @@ export type OBJEqnLayout_StrikeComment = {
  * // Array example
  *  { pad: ['a', 0.1, 0.2, 0.3, 0.4] }
  */
-export type OBJEqnLayout_Pad = {
+export type EQN_Pad = {
   content: TypeEquationPhrase;
   top?: number,
   right?: number,
@@ -1364,7 +1364,7 @@ export type OBJEqnLayout_Pad = {
  * (`[0.05, 0.05]`)
  * @property {'baseline' | 'middle'} [yAlign] align cells in a row with the
  * text baseline, or middle of the cell (`baseline`)
- * @property {OBJEqnLayout_Bracket} [brac] bracket options not including
+ * @property {EQN_Bracket} [brac] bracket options not including
  * the symbols (`{}`)
  * @property {boolean} [fullContentBounds] use full bounds of content,
  * overriding any `inSize=false` properties in the content (`false`)
@@ -1403,7 +1403,7 @@ export type OBJEqnLayout_Pad = {
  * // Array example
  *  { matrix: [[2, 2], 'lb', ['a', 'b', 'c', 'd'], 'rb'] }
  */
-export type OBJEqnLayout_Matrix = {
+export type EQN_Matrix = {
   order?: [number, number],
   left?: string,
   content: TypeEquationPhrase,
@@ -1412,7 +1412,7 @@ export type OBJEqnLayout_Matrix = {
   fit?: 'max' | 'min' | TypeParsablePoint,
   space?: TypeParsablePoint,
   yAlign?: 'baseline' | 'middle',
-  brac?: OBJEqnLayout_Bracket,
+  brac?: EQN_Bracket,
   fullContentBounds?: boolean,
 } | [
   ?[number, number],
@@ -1423,7 +1423,7 @@ export type OBJEqnLayout_Matrix = {
   ?'max' | 'min',
   ?TypeParsablePoint,
   ?'baseline' | 'middle',
-  ?OBJEqnLayout_Bracket,
+  ?EQN_Bracket,
   ?boolean,
 ];
 
@@ -1489,7 +1489,7 @@ export type OBJEqnLayout_Matrix = {
  *    },
  *  },
  */
-export type OBJEqnLayout_Annotation = {
+export type EQN_Annotation = {
   xPosition: 'left' | 'center' | 'right' | number,
   yPosition: 'bottom' | 'baseline' | 'middle' | 'top' | number,
   xAlign: 'left' | 'center' | 'right' | number,
@@ -1516,9 +1516,9 @@ export type OBJEqnLayout_Annotation = {
  *
  * </pre>
  * @property {string} symbol
- * @property {OBJEqnLayout_Annotation} [annotation] use for one annotation only instead
+ * @property {EQN_Annotation} [annotation] use for one annotation only instead
  * of property `annotations`
- * @property {Array<OBJEqnLayout_Annotation>} [annotations] use for one or more
+ * @property {Array<EQN_Annotation>} [annotations] use for one or more
  * annotations
  * @property {number} [space] default space the glyph should extend beyond the
  * top, right, left and bottom sides of the content (`0`)
@@ -1545,10 +1545,10 @@ export type OBJEqnLayout_Annotation = {
  *   },
  * },
  */
-export type OBJEqnLayout_EncompassGlyph = {
+export type EQN_EncompassGlyph = {
   symbol?: string,
-  annotation?: OBJEqnLayout_Annotation,
-  annotations?: Array<OBJEqnLayout_Annotation>,
+  annotation?: EQN_Annotation,
+  annotations?: Array<EQN_Annotation>,
   space: number;
   topSpace?: number;
   rightSpace?: number;
@@ -1568,9 +1568,9 @@ export type OBJEqnLayout_EncompassGlyph = {
  *
  * </pre>
  * @property {string} symbol
- * @property {OBJEqnLayout_Annotation} [annotation] use for one annotation only instead
+ * @property {EQN_Annotation} [annotation] use for one annotation only instead
  * of property `annotations`
- * @property {Array<OBJEqnLayout_Annotation>} [annotations] use for one or more
+ * @property {Array<EQN_Annotation>} [annotations] use for one or more
  * annotations
  * @property {number} [space] horizontal space between glyph and content (`0`)
  * @property {number} [overhang] amount glyph extends above content top and
@@ -1612,10 +1612,10 @@ export type OBJEqnLayout_EncompassGlyph = {
  *   },
  * },
  */
-export type OBJEqnLayout_LeftRightGlyph = {
+export type EQN_LeftRightGlyph = {
   symbol?: string,
-  annotation?: OBJEqnLayout_Annotation,
-  annotations?: Array<OBJEqnLayout_Annotation>,
+  annotation?: EQN_Annotation,
+  annotations?: Array<EQN_Annotation>,
   space?: number;
   overhang?: number,
   topSpace?: number;
@@ -1647,9 +1647,9 @@ export type OBJEqnLayout_LeftRightGlyph = {
  *
  * </pre>
  * @property {string} symbol
- * @property {OBJEqnLayout_Annotation} [annotation] use for one annotation only instead
+ * @property {EQN_Annotation} [annotation] use for one annotation only instead
  * of property `annotations`
- * @property {Array<OBJEqnLayout_Annotation>} [annotations] use for one or more
+ * @property {Array<EQN_Annotation>} [annotations] use for one or more
  * annotations
  * @property {number} [space] vertical space between glyph and content (`0`)
  * @property {number} [overhang] amount glyph extends above content top and
@@ -1681,10 +1681,10 @@ export type OBJEqnLayout_LeftRightGlyph = {
  *   },
  * },
  */
-export type OBJEqnLayout_TopBottomGlyph = {
+export type EQN_TopBottomGlyph = {
   symbol?: string,
-  annotation?: OBJEqnLayout_Annotation,
-  annotations?: Array<OBJEqnLayout_Annotation>,
+  annotation?: EQN_Annotation,
+  annotations?: Array<EQN_Annotation>,
   space?: number;
   overhang?: number,
   width?: number,
@@ -1699,18 +1699,18 @@ export type OBJEqnLayout_TopBottomGlyph = {
  *
  * Multiple glyphs are ok, but only one per position.
  *
- * @property {OBJEqnLayout_EncompassGlyph} [encompass]
- * @property {OBJEqnLayout_TopBottomGlyph} [top]
- * @property {OBJEqnLayout_LeftRightGlyph} [right]
- * @property {OBJEqnLayout_TopBottomGlyph} [bottom]
- * @property {OBJEqnLayout_LeftRightGlyph} [left]
+ * @property {EQN_EncompassGlyph} [encompass]
+ * @property {EQN_TopBottomGlyph} [top]
+ * @property {EQN_LeftRightGlyph} [right]
+ * @property {EQN_TopBottomGlyph} [bottom]
+ * @property {EQN_LeftRightGlyph} [left]
  */
-export type OBJEqnLayout_Glyphs = {
-  left?: OBJEqnLayout_LeftRightGlyph;
-  right?: OBJEqnLayout_LeftRightGlyph;
-  top?: OBJEqnLayout_TopBottomGlyph;
-  bottom?: OBJEqnLayout_TopBottomGlyph;
-  encompass?: OBJEqnLayout_EncompassGlyph;
+export type EQN_Glyphs = {
+  left?: EQN_LeftRightGlyph;
+  right?: EQN_LeftRightGlyph;
+  top?: EQN_TopBottomGlyph;
+  bottom?: EQN_TopBottomGlyph;
+  encompass?: EQN_EncompassGlyph;
 };
 
 
@@ -1729,7 +1729,7 @@ export type OBJEqnLayout_Glyphs = {
  * </pre>
  *
  * The options for defining how to annotate one equation phrase with another is
- * {@link OBJEqnLayout_Annotation}
+ * {@link EQN_Annotation}
  *
  * Content can also be annotated with a glyph (that itself may also be
  * annotated). The glyph can either encompass the content, or can be to the
@@ -1755,8 +1755,8 @@ export type OBJEqnLayout_Glyphs = {
  *                       Bottom Glyph
  * </pre>
  * @property {TypeEquationPhrase} content
- * @property {OBJEqnLayout_Annotation} [annotation] use for just one annotation
- * @property {Array<OBJEqnLayout_Annotation>} [annotations] use for multiple annotations
+ * @property {EQN_Annotation} [annotation] use for just one annotation
+ * @property {Array<EQN_Annotation>} [annotations] use for multiple annotations
  * @property {boolean} [inSize] `true` means resulting size includes
  * annotations (`true`)
  * @property {number} [space] extend resulting equation phrase size by space on
@@ -1770,7 +1770,7 @@ export type OBJEqnLayout_Glyphs = {
  * @property {number} [rightSpace] extend resulting equation phrase size by
  * space on right
  * @property {number} [contentScale] scale content (`1`)
- * @property {OBJEqnLayout_Glyphs} [glyphs] glyphs to annotate content with
+ * @property {EQN_Glyphs} [glyphs] glyphs to annotate content with
  * @property {boolean} [fullContentBounds] use full bounds of content,
  * overriding any `inSize=false` properties in the content (`false`)
  * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
@@ -1837,13 +1837,13 @@ export type OBJEqnLayout_Glyphs = {
  *   },
  * });
  */
-export type OBJEqnLayout_Annotate = {
+export type EQN_Annotate = {
   content: TypeEquationPhrase,
-  annotation?: OBJEqnLayout_Annotation,
-  annotations?: Array<OBJEqnLayout_Annotation>,
+  annotation?: EQN_Annotation,
+  annotations?: Array<EQN_Annotation>,
   fullContentBounds?: boolean,
   useFullBounds?: boolean,
-  glyphs?: OBJEqnLayout_Glyphs,
+  glyphs?: EQN_Glyphs,
   inSize?: boolean,
   space?: number,
   topSpace?: number,
@@ -2017,7 +2017,7 @@ export class EquationFunctions {
    * });
    */
   container(
-    optionsOrArray: OBJEqnLayout_Container,
+    optionsOrArray: EQN_Container,
   ) {
     let content;
     let scale;
@@ -2069,7 +2069,7 @@ export class EquationFunctions {
   }
 
   brac(
-    optionsOrArray: OBJEqnLayout_Bracket,
+    optionsOrArray: EQN_Bracket,
   ) {
     let content;
     let left;
@@ -2164,7 +2164,7 @@ export class EquationFunctions {
   }
 
   bar(
-    optionsOrArray: OBJEqnLayout_Bar,
+    optionsOrArray: EQN_Bar,
     forceOptions: Object = {},
   ) {
     let content;
@@ -2293,7 +2293,7 @@ export class EquationFunctions {
     });
   }
 
-  annotate(optionsIn: OBJEqnLayout_Annotate) {
+  annotate(optionsIn: EQN_Annotate) {
     const defaultOptions = {
       inSize: true,
       useFullBounds: false,
@@ -2405,7 +2405,7 @@ export class EquationFunctions {
 
 
   scale(
-    optionsOrArray: OBJEqnLayout_Scale,
+    optionsOrArray: EQN_Scale,
   ) {
     let content;
     let scale;
@@ -2448,7 +2448,7 @@ export class EquationFunctions {
    * });
    */
   frac(
-    optionsOrArray: OBJEqnLayout_Fraction,
+    optionsOrArray: EQN_Fraction,
   ) {
     let numerator;
     let denominator;
@@ -2502,7 +2502,7 @@ export class EquationFunctions {
     );
   }
 
-  root(optionsOrArray: OBJEqnLayout_Root) {
+  root(optionsOrArray: EQN_Root) {
     let content;
     let root;
     let symbol;
@@ -2580,7 +2580,7 @@ export class EquationFunctions {
     });
   }
 
-  supSub(optionsOrArray: OBJEqnLayout_SuperscriptSubscript) {
+  supSub(optionsOrArray: EQN_SuperscriptSubscript) {
     let content;
     let superscript = null;
     let subscript = null;
@@ -2645,7 +2645,7 @@ export class EquationFunctions {
     });
   }
 
-  sup(optionsOrArray: OBJEqnLayout_Superscript) {
+  sup(optionsOrArray: EQN_Superscript) {
     let content;
     let superscript;
     let scale;
@@ -2671,7 +2671,7 @@ export class EquationFunctions {
     });
   }
 
-  sub(optionsOrArray: OBJEqnLayout_Subcript) {
+  sub(optionsOrArray: EQN_Subcript) {
     let content;
     let subscript;
     let scale;
@@ -2698,7 +2698,7 @@ export class EquationFunctions {
 
 
   box(
-    optionsOrArray: OBJEqnLayout_Box,
+    optionsOrArray: EQN_Box,
   ) {
     let content;
     let symbol;
@@ -2763,7 +2763,7 @@ export class EquationFunctions {
   }
 
   pad(
-    optionsOrContent: OBJEqnLayout_Pad,
+    optionsOrContent: EQN_Pad,
   ) {
     let content;
     let top;
@@ -2801,16 +2801,16 @@ export class EquationFunctions {
     });
   }
 
-  topBar(optionsOrArray: OBJEqnLayout_Bar) {
+  topBar(optionsOrArray: EQN_Bar) {
     return this.bar(optionsOrArray, { side: 'top' });
   }
 
-  bottomBar(optionsOrArray: OBJEqnLayout_Bar) {
+  bottomBar(optionsOrArray: EQN_Bar) {
     return this.bar(optionsOrArray, { side: 'bottom' });
   }
 
 
-  matrix(optionsOrArray: OBJEqnLayout_Matrix) {
+  matrix(optionsOrArray: EQN_Matrix) {
     let content;
     let left;
     let right;
@@ -2882,7 +2882,7 @@ export class EquationFunctions {
 
 
   int(
-    optionsOrArray: OBJEqnLayout_Integral,
+    optionsOrArray: EQN_Integral,
   ) {
     let content;
     let symbol;
@@ -3060,16 +3060,16 @@ export class EquationFunctions {
     });
   }
 
-  sumOf(options: OBJEqnLayout_SumOf) {
+  sumOf(options: EQN_SumOf) {
     return this.sumProd(options);
   }
 
-  prodOf(options: OBJEqnLayout_ProdOf) {
+  prodOf(options: EQN_ProdOf) {
     return this.sumProd(options);
   }
 
   sumProd(
-    optionsOrArray: OBJEqnLayout_SumOf | OBJEqnLayout_ProdOf,
+    optionsOrArray: EQN_SumOf | EQN_ProdOf,
   ) {
     let content;
     let symbol;
@@ -3186,7 +3186,7 @@ export class EquationFunctions {
 
   // eslint-disable-next-line class-methods-use-this
   processComment(
-    optionsOrArray: OBJEqnLayout_Comment,
+    optionsOrArray: EQN_Comment,
   ) {
     let content;
     let comment;
@@ -3314,7 +3314,7 @@ export class EquationFunctions {
 
 
   strike(
-    optionsOrArray: OBJEqnLayout_Strike,
+    optionsOrArray: EQN_Strike,
   ) {
     let content;
     let symbol;
@@ -3387,7 +3387,7 @@ export class EquationFunctions {
 
   // eslint-disable-next-line class-methods-use-this
   processStrike(
-    optionsOrContent: OBJEqnLayout_StrikeComment,
+    optionsOrContent: EQN_StrikeComment,
   ) {
     let content;
     let comment;
