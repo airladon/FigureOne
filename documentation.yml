@@ -31,6 +31,7 @@ toc:
   - name: Equation Symbols
   - TypeVinculum
   - TypeBox
+  - TypeArrow
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment

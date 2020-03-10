@@ -12,68 +12,20 @@ diagram.addElement(
       position: [-0.2, 0],
       // Equation elements are the individual terms in the equation
       elements: {
-        bar: { symbol: 'bar', side: 'right' },
+        arrow: { symbol: 'arrow', direction: 'left' },
         lb: { symbol: 'squareBracket', side: 'left' },
         rb: { symbol: 'squareBracket', side: 'right' },
         bb: { symbol :'box', fill: true, color: [1, 0, 0, 0.5]},
         box: { symbol: 'box', color: [1, 0, 0, 1] },
+        v: { symbol: 'vinculum' },
       },
       forms: {
         base: {
-          box: {
-            content: {
-              // annotate: {
-              //   content: 'a',
-              //   topSpace: 0.1,
-              //   // annotation: {
-              //   //   content: 'b',
-              //   //   yPosition: 'top',
-              //   //   yAlign: 'bottom',
-              //   //   xPosition: 'right',
-              //   //   xAlign: 'left',
-              //   // },
-              //   contentScale: 2,
-              //   glyphs: {
-              //     left: {
-              //       symbol: 'lb',
-              //       annotation: {
-              //         content: 'casdf',
-              //         yPosition: 'top',
-              //         yAlign: 'bottom',
-              //         xPosition: 'right',
-              //         xAlign: 'left',
-              //       },
-              //       // space: 0.1,
-              //       overhang: 0.2,
-              //       topSpace: 0,
-              //       annotationsOverContent: true,
-              //       // topSpace: 0.05,
-              //       // rightSpace: 0.05,
-              //       // leftSpace: 0.05,
-              //       // bottomSpace: 0.05,
-              //     },
-              //   },
-              //   inSize: false,
-              // },
-              annotate: {
-                content: 'a',
-                glyphs: {
-                  left:{
-                    symbol: 'bar',
-                    overhang: 0.1,
-                    annotation: {
-                      content: 'bbb',
-                      xPosition: 'right',
-                      yPosition: 'bottom',
-                      xAlign: 'left',
-                      yAlign: 'middle',
-                      scale: 0.5,
-                    },
-                  },
-                },
-              },
-            },
-            symbol: 'box',
+          frac: {
+            numerator: 'a',
+            symbol: 'v',
+            denominator: 'b',
+            overhang: 0.2,
           },
           // root: { symbol: 'radical', content: 'a', root: '_2'}
         },

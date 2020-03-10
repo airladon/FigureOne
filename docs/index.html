@@ -370,6 +370,16 @@
               
                 
                 <li><a
+                  href='#typearrow'
+                  class="">
+                  TypeArrow
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#equation-form-types'
                   class="h5 bold black caps">
                   Equation Form Types
@@ -5832,6 +5842,16 @@ annotate: {
   
 
   <p>Vinculum equation symbol</p>
+<pre>
+                         width
+      |<---------------------------------------->|
+      |                                          |
+      |                                          | ____
+      00000000000000000000000000000000000000000000   A
+      00000000000000000000000000000000000000000000   |  lineWidth
+      00000000000000000000000000000000000000000000 __V_
+
+</pre>
 
     <div class='pre p1 fill-light mt0'>TypeVinculum</div>
   
@@ -5902,25 +5922,16 @@ resize,
  sets width of static symbol - 
 <code>'first'</code>
  calculates and sets width
-based on first use
+based on first use (
+<code>'first'</code>
+)
 
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>staticHeight</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
-          : used when 
-<code>draw</code>
-=
-<code>static</code>
-.
-
-<code>number</code>
- sets height of static symbol - 
-<code>'first'</code>
- calculates and sets height
-based on first use
-
+          
           
         </div>
       
@@ -5971,6 +5982,26 @@ based on first use
   
 
   <p>Box equation symbol</p>
+<pre>
+                                         width
+                |<--------------------------------------------------->|
+                |                                                     |
+                |                                                     |
+
+        ------- 0000000000000000000000000000000000000000000000000000000
+        A       0000000000000000000000000000000000000000000000000000000
+        |       0000                                               0000
+        |       0000                                               0000
+        |       0000                                               0000
+ height |       0000                                               0000
+        |       0000                                               0000
+        |       0000                                               0000
+        |       0000                                               0000
+        |       0000                                               0000
+        |       0000000000000000000000000000000000000000000000000000000
+        V______ 0000000000000000000000000000000000000000000000000000000
+
+</pre>
 
     <div class='pre p1 fill-light mt0'>TypeBox</div>
   
@@ -6008,6 +6039,15 @@ based on first use
         </div>
       
         <div class='space-bottom0'>
+          <span class='code bold'>lineWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>0.01</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
           <span class='code bold'>fill</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
           : (
 <code>false</code>
@@ -6026,15 +6066,6 @@ based on first use
         <div class='space-bottom0'>
           <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : force height instead of auto calculationg
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>lineWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>0.01</code>
-)
 
           
         </div>
@@ -6103,6 +6134,202 @@ based on first use
     <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
     <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>,
     <span class="hljs-attr">fill</span>: <span class="hljs-literal">false</span>,
+  },
+})</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typearrow'>
+      TypeArrow
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Arrow equation symbol</p>
+<pre>
+                            arrowWidth
+                        |<--------------->|
+                        |                 |
+                        |                 |
+                 -------|------- 0        |
+                 A      |      00000      |
+   arrowHeight   |      |     0000000     |
+                 |      |   00000000000   |
+                 V      | 000000000000000 |
+                 ------ 0000000000000000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+
+                              |     |
+                              |     |
+                              |<--->|
+                             lineWidth
+</pre>
+
+    <div class='pre p1 fill-light mt0'>TypeArrow</div>
+  
+    <p>
+      Type:
+      {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, direction: (<code>"up"</code> | <code>"down"</code> | <code>"left"</code> | <code>"right"</code>)?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, arrowHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, arrowWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<code>"arrow"</code>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (equation color)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>direction</span> <code class='quiet'>((<code>"up"</code> | <code>"down"</code> | <code>"left"</code> | <code>"right"</code>)?)</code>
+          : (
+<code>'right'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>0.01</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>arrowWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>0.01</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>arrowHeight</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>0.04</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>0.01</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>draw</span> <code class='quiet'>((<code>"static"</code> | <code>"dynamic"</code>)?)</code>
+          : <code>'dynamic'</code>
+ updates vertices on
+resize, 
+<code>'static'</code>
+ only changes scale transform (
+<code>dynamic</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>staticHeight</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
+          : used when 
+<code>draw</code>
+=
+<code>static</code>
+.
+
+<code>number</code>
+ sets height of static symbol - 
+<code>'first'</code>
+ calculates and sets height
+based on first use (
+<code>'first'</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>eqn.addElements({
+  <span class="hljs-attr">a</span>: {
+    <span class="hljs-attr">symbol</span>: <span class="hljs-string">'arrow'</span>,
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">direction</span>: <span class="hljs-string">'right'</span>
+    <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>,
+    <span class="hljs-attr">arrowHeight</span>: <span class="hljs-number">0.02</span>,
+    <span class="hljs-attr">arrowWidth</span>: <span class="hljs-number">0.02</span>,
   },
 })</pre>
     
