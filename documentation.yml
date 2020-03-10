@@ -3,45 +3,45 @@ toc:
   - name: Equation Elements Types
   - TypeEquationElement
   - TypeEquationElements
-  - name: Equation Functions Types
-  - OBJ_EqnLayout_Container
-  - OBJ_EqnLayout_Fraction
-  - OBJ_EqnLayout_Scale
-  - OBJ_EqnLayout_Bracket
-  - OBJ_EqnLayout_Root
-  - OBJ_EqnLayout_Strike
-  - OBJ_EqnLayout_Box
-  - OBJ_EqnLayout_Bar
-  - OBJ_EqnLayout_Integral
-  - OBJ_EqnLayout_SumOf
-  - OBJ_EqnLayout_ProdOf
-  - OBJ_EqnLayout_Subcript
-  - OBJ_EqnLayout_Superscript
-  - OBJ_EqnLayout_SuperscriptSubscript
-  - OBJ_EqnLayout_Comment
-  - OBJ_EqnLayout_StrikeComment
-  - OBJ_EqnLayout_Pad
-  - OBJ_EqnLayout_Matrix
-  - OBJ_EqnLayout_Annotate
-  - TypeAnnotation
-  - TypeEncompassGlyph
-  - TypeLeftRightGlyph
-  - TypeTopBottomGlyph
-  - TypeGlyphs
-  - name: Equation Symbols
-  - OBJ_EqnSymbol_Vinculum
-  - OBJ_EqnSymbol_Box
-  - OBJ_EqnSymbol_Arrow
-  - OBJ_EqnSymbol_Sum
-  - OBJ_EqnSymbol_Prod
-  - OBJ_EqnSymbol_Integral
-  - OBJ_EqnSymbol_Strike
-  - OBJ_EqnSymbol_Bracket
-  - OBJ_EqnSymbol_AngleBracket
-  - OBJ_EqnSymbol_Brace
-  - OBJ_EqnSymbol_Bar
-  - OBJ_EqnSymbol_SquareBracket
-  - OBJ_EqnSymbol_Radical
+  - name: Equation Layout OBJECTS
+  - OBJEqnLayout_Container
+  - OBJEqnLayout_Fraction
+  - OBJEqnLayout_Scale
+  - OBJEqnLayout_Bracket
+  - OBJEqnLayout_Root
+  - OBJEqnLayout_Strike
+  - OBJEqnLayout_Box
+  - OBJEqnLayout_Bar
+  - OBJEqnLayout_Integral
+  - OBJEqnLayout_SumOf
+  - OBJEqnLayout_ProdOf
+  - OBJEqnLayout_Subcript
+  - OBJEqnLayout_Superscript
+  - OBJEqnLayout_SuperscriptSubscript
+  - OBJEqnLayout_Comment
+  - OBJEqnLayout_StrikeComment
+  - OBJEqnLayout_Pad
+  - OBJEqnLayout_Matrix
+  - OBJEqnLayout_Annotate
+  - OBJEqnLayout_Annotation
+  - OBJEqnLayout_EncompassGlyph
+  - OBJEqnLayout_LeftRightGlyph
+  - OBJEqnLayout_TopBottomGlyph
+  - OBJEqnLayout_Glyphs
+  - name: Equation Symbol OBJECTS
+  - OBJEqnSymbol_Vinculum
+  - OBJEqnSymbol_Box
+  - OBJEqnSymbol_Arrow
+  - OBJEqnSymbol_Sum
+  - OBJEqnSymbol_Prod
+  - OBJEqnSymbol_Integral
+  - OBJEqnSymbol_Strike
+  - OBJEqnSymbol_Bracket
+  - OBJEqnSymbol_AngleBracket
+  - OBJEqnSymbol_Brace
+  - OBJEqnSymbol_Bar
+  - OBJEqnSymbol_SquareBracket
+  - OBJEqnSymbol_Radical
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment
