@@ -17,21 +17,13 @@ diagram.addElement(
         rb: { symbol: 'squareBracket', side: 'right' },
         bb: { symbol :'box', fill: true, color: [1, 0, 0, 0.5]},
         box: { symbol: 'box', color: [1, 0, 0, 1] },
-        int: { symbol: 'int', num: 4, type: 'line'},
+        radical: { symbol: 'radical', tickHeight: 0.08, tickWidth: 0.05, startWidth: 0.3, downWidth: 0.03, proportionalToHeight: true},
       },
       forms: {
         base: {
-          int: {
-            content: 'a',
-            symbol: 'int',
-            height: 0.7,
-            bottomSpace: 0.2,
-            // minContentHeight: 0.4,
-            // radius: 0.2,
-            // topSpace: 0.2,
-            // bottomSpace: 0.2,
-            // denominator: 'b',
-            // overhang: 0.2,
+          root: {
+            content: { frac: ['aasdf', 'vinculum', 'b'] },
+            symbol: 'radical',
           },
           // root: { symbol: 'radical', content: 'a', root: '_2'}
         },

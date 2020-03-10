@@ -435,6 +435,111 @@ type TypeIntegral = {
   lineIntegralSides?: number,
 };
 
+/**
+ * Radical equation symbol used in {@link TypeEquationFunctionRoot}.
+ *
+ * The radical symbol allows customization on how to draw the radical. Mostly
+ * it will not be needed, but for edge case equation layouts it may be useful.
+ *
+ * <pre>
+ *
+ *   height
+ *   |
+ *   |
+ *   |_____________________________ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+ *   A                             X|
+ *   |   startHeight              X |   CCCCCCCCCCCCCCCCCCCCCCC
+ *   |   |                       X  |   CCCCCCCCCCCCCCCCCCCCCCC
+ *   |   |    tickHeight        X   |   CCCCCCCCCCCCCCCCCCCCCCC
+ *   |   |    |                X    |   CCCCCCCCCCCCCCCCCCCCCCC
+ *   |   |____V____           X     |   CCCCCCCCCCCCCCCCCCCCCCC
+ *   |   A    |    X         X      |   CCCCCCCCCCCCCCCCCCCCCCC
+ *   |   |    |__X |X       X       |   CCCCCCCCCCCCCCCCCCCCCCC
+ *   |   |    A |  | X     X        |   CCCCCCCCCCCCCCCCCCCCCCC
+ *   |   |      |  |  X   X         |   CCCCCCCCCCCCCCCCCCCCCCC
+ *   |   |      |  |   X X          |   CCCCCCCCCCCCCCCCCCCCCCC
+ *   V___V______|__|____X           |
+ *              |  |    |           |
+ *              |  |    |           |
+ *        tick >|--|<   |           |
+ *       width  |  |    |           |
+ *              |  |<-->|down width |
+ *              |                   |
+ *              |<----------------->|
+ *                     startWidth
+* </pre>
+
+ * @property {'radical'} symbol
+ * @property {Array<number>} [color]
+ * @property {number} [lineWidth] (`0.01`)
+ * @property {number} [width] force width of content area (normally defined by content size)
+ * @property {number} [height] force height of content area (normally defined by content size)
+ * @property {number} [startWidth] (`0.5`)
+ * @property {number} [startHeight] (`0.5`)
+ * @property {?number} [maxStartWidth] (`0.15`)
+ * @property {?number} [maxStartHeight] (`0.15`)
+ * @property {number} [tickHeight]
+ * @property {number} [tickWidth]
+ * @property {number} [downWidth]
+ * @property {boolean} [proportionalToHeight] `true` makes `startHeight`, `startWidth`, `tickHeight`, `tickWidth`, and `downWidth` a percentage of height instead of absolute (`true`)
+ * @property {number} [lineWidth2] lineWidth of down stroke (`2 x lineWidth`)
+  * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
+ * resize, `'static'` only changes scale transform (`dynamic`)
+ * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
+ * `number` sets height of static symbol - `'first'` calculates and sets height
+ * based on first use (`'first'`)
+ * @property {number | 'first'} [staticWidth] used when `draw`=`static`.
+ * `number` sets width of static symbol - `'first'` calculates and sets width
+ * based on first use (`'first'`)
+ * @example
+ * // Typical
+ * eqn.addElements({
+ *   rad: {
+ *     symbol: 'radical',
+ *     color: [1, 0, 0, 1],
+ *   },
+ * });
+ * @example
+ * // All options
+ *  eqn.addElements({
+      rad: {
+        symbol: 'radical',
+        color: [1, 0, 0, 1],
+        lineWidth: 0.01,
+        lineWidth2: 0.02,
+        width: 1.2,
+        height: 0.8,
+        startWidth: 0.04,
+        startHeight: 0.04,
+        tickHeight: 0.01,
+        tickWidth: 0.01,
+        downWidth: 0.01,
+        maxStartWidth: 0.03,
+        maxStartHeight: 0.03,
+        proportionalToHeight: false,
+        draw: 'dynamic',
+      },
+ *  });
+ */
+type TypeRadical = {
+  color?: Array<number>,
+  lineWidth?: number,
+  width?: number,
+  height?: number,
+  startWidth?: number,
+  startHeight?: number,
+  proportionalToHeight?: boolean,
+  maxStartWidth?: ?number,
+  maxStartHeight?: ?number,
+  lineWidth2?: number,
+  tickWidth?: number,
+  tickHeight?: number,
+  downWidth?: number,
+  draw: 'static' | 'dynamic',
+  staticHeight?: number | 'first',
+  staticWidth?: number | 'first',
+};
+
 
 export default class EquationSymbols {
   shapes: DiagramPrimitives;
@@ -663,24 +768,7 @@ export default class EquationSymbols {
     );
   }
 
-  radical(optionsIn: {
-    color?: Array<number>,
-    lineWidth?: number,
-    startHeight?: number,
-    startWidth?: number,
-    proportionalToHeight?: boolean,
-    maxStartWidth?: ?number,
-    maxStartHeight?: ?number,
-    width?: number,             // contentWidth
-    height?: number,            // contentHeight
-    draw: 'static' | 'dynamic',
-    staticHeight?: number | 'first',
-    staticWidth?: number | 'first',
-    lineWidth2?: number,
-    tickWidth?: number,
-    tickHeight?: number,
-    downWidth?: number,
-  }) {
+  radical(optionsIn: TypeRadical) {
     const defaultOptions: {
       color: Array<number>,
       lineWidth: number,

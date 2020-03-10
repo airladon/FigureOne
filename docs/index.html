@@ -340,6 +340,16 @@
               
                 
                 <li><a
+                  href='#typeradical'
+                  class="">
+                  TypeRadical
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#equation-symbols'
                   class="h5 bold black caps">
                   Equation Symbols
@@ -5609,7 +5619,7 @@ The glyph can also be annotated.</p>
   
     <p>
       Type:
-      {symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, annotation: <a href="#typeannotation">TypeAnnotation</a>?, annotations: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeannotation">TypeAnnotation</a>>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, overhang: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, xOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, annotationsOverContent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}
+      {symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, annotation: <a href="#typeannotation">TypeAnnotation</a>?, annotations: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeannotation">TypeAnnotation</a>>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, overhang: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, xOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, annotationsOverContent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}
     </p>
   
   
@@ -5830,6 +5840,296 @@ annotate: {
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeradical'>
+      TypeRadical
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Radical equation symbol used in <a href="#typeequationfunctionroot">TypeEquationFunctionRoot</a>.</p>
+<p>The radical symbol allows customization on how to draw the radical. Mostly
+it will not be needed, but for edge case equation layouts it may be useful.</p>
+<pre>
+
+  height
+  |
+  |
+  |_____________________________ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  A                             X|
+  |   startHeight              X |   CCCCCCCCCCCCCCCCCCCCCCC
+  |   |                       X  |   CCCCCCCCCCCCCCCCCCCCCCC
+  |   |    tickHeight        X   |   CCCCCCCCCCCCCCCCCCCCCCC
+  |   |    |                X    |   CCCCCCCCCCCCCCCCCCCCCCC
+  |   |____V____           X     |   CCCCCCCCCCCCCCCCCCCCCCC
+  |   A    |    X         X      |   CCCCCCCCCCCCCCCCCCCCCCC
+  |   |    |__X |X       X       |   CCCCCCCCCCCCCCCCCCCCCCC
+  |   |    A |  | X     X        |   CCCCCCCCCCCCCCCCCCCCCCC
+  |   |      |  |  X   X         |   CCCCCCCCCCCCCCCCCCCCCCC
+  |   |      |  |   X X          |   CCCCCCCCCCCCCCCCCCCCCCC
+  V___V______|__|____X           |
+             |  |    |           |
+             |  |    |           |
+       tick >|--|<   |           |
+      width  |  |    |           |
+             |  |<-->|down width |
+             |                   |
+             |<----------------->|
+                    startWidth
+</pre>
+
+    <div class='pre p1 fill-light mt0'>TypeRadical</div>
+  
+    <p>
+      Type:
+      {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, startWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, startHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, proportionalToHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, maxStartWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, maxStartHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, lineWidth2: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, tickWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, tickHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, downWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>), staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?, staticWidth: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<code>"radical"</code>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>0.01</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : force width of content area (normally defined by content size)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : force height of content area (normally defined by content size)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>startWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>0.5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>startHeight</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>0.5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>maxStartWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??)</code>
+          : (
+<code>0.15</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>maxStartHeight</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??)</code>
+          : (
+<code>0.15</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>tickHeight</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>tickWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>downWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>proportionalToHeight</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ makes 
+<code>startHeight</code>
+, 
+<code>startWidth</code>
+, 
+<code>tickHeight</code>
+, 
+<code>tickWidth</code>
+, and 
+<code>downWidth</code>
+ a percentage of height instead of absolute (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineWidth2</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : lineWidth of down stroke (
+<code>2 x lineWidth</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>draw</span> <code class='quiet'>((<code>"static"</code> | <code>"dynamic"</code>)?)</code>
+          : <code>'static'</code>
+ updates vertices on
+resize, 
+<code>'static'</code>
+ only changes scale transform (
+<code>dynamic</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>staticHeight</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
+          : used when 
+<code>draw</code>
+=
+<code>static</code>
+.
+
+<code>number</code>
+ sets height of static symbol - 
+<code>'first'</code>
+ calculates and sets height
+based on first use (
+<code>'first'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>staticWidth</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
+          : used when 
+<code>draw</code>
+=
+<code>static</code>
+.
+
+<code>number</code>
+ sets width of static symbol - 
+<code>'first'</code>
+ calculates and sets width
+based on first use (
+<code>'first'</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Typical</span>
+eqn.addElements({
+  <span class="hljs-attr">rad</span>: {
+    <span class="hljs-attr">symbol</span>: <span class="hljs-string">'radical'</span>,
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// All options</span>
+ eqn.addElements({
+<span class="hljs-attr">rad</span>: {
+<span class="hljs-attr">symbol</span>: <span class="hljs-string">'radical'</span>,
+<span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+<span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>,
+<span class="hljs-attr">lineWidth2</span>: <span class="hljs-number">0.02</span>,
+<span class="hljs-attr">width</span>: <span class="hljs-number">1.2</span>,
+<span class="hljs-attr">height</span>: <span class="hljs-number">0.8</span>,
+<span class="hljs-attr">startWidth</span>: <span class="hljs-number">0.04</span>,
+<span class="hljs-attr">startHeight</span>: <span class="hljs-number">0.04</span>,
+<span class="hljs-attr">tickHeight</span>: <span class="hljs-number">0.01</span>,
+<span class="hljs-attr">tickWidth</span>: <span class="hljs-number">0.01</span>,
+<span class="hljs-attr">downWidth</span>: <span class="hljs-number">0.01</span>,
+<span class="hljs-attr">maxStartWidth</span>: <span class="hljs-number">0.03</span>,
+<span class="hljs-attr">maxStartHeight</span>: <span class="hljs-number">0.03</span>,
+<span class="hljs-attr">proportionalToHeight</span>: <span class="hljs-literal">false</span>,
+<span class="hljs-attr">draw</span>: <span class="hljs-string">'dynamic'</span>,
+},
+ });</pre>
+    
   
 
   
@@ -6825,7 +7125,8 @@ based on first use (
         <div class='space-bottom0'>
           <span class='code bold'>type</span> <code class='quiet'>((<code>"line"</code> | <code>"generic"</code>)?)</code>
           : <code>line</code>
- draws a circle through the symbols denoting a line integral (
+ draws a circle through the
+symbols denoting a line integral (
 <code>generic</code>
 )
 
