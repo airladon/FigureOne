@@ -29,26 +29,26 @@ import Radical from './Symbols/Radical';
 // import BraceNew from './Symbols/BraceNew';
 
 // import { Annotation, AnnotationInformation } from './Elements/Annotation';
-export type TypeSymbolOptions = {
-  color?: Array<number>,
-  numLines?: number,
-  side?: 'left' | 'right' | 'bottom' | 'top',
-  width?: number,
-  fill?: boolean,
-  staticSize?: ?(Point | [number, number] | number),
-  startWidth?: number,
-  lineWidth?: number,
-  startHeight?: number,
-  maxStartWidth?: ?number,
-  maxStartHeight?: ?number,
-  proportionalToHeight?: boolean,
-  endLength?: number,
-  sides?: number,
-  tipWidth?: number,
-  radius?: number,
-  arrowWidth?: number,
-  arrowHeight?: number,
-}
+// export type TypeSymbolOptions = {
+//   color?: Array<number>,
+//   numLines?: number,
+//   side?: 'left' | 'right' | 'bottom' | 'top',
+//   width?: number,
+//   fill?: boolean,
+//   staticSize?: ?(Point | [number, number] | number),
+//   startWidth?: number,
+//   lineWidth?: number,
+//   startHeight?: number,
+//   maxStartWidth?: ?number,
+//   maxStartHeight?: ?number,
+//   proportionalToHeight?: boolean,
+//   endLength?: number,
+//   sides?: number,
+//   tipWidth?: number,
+//   radius?: number,
+//   arrowWidth?: number,
+//   arrowHeight?: number,
+// }
 
 /**
  * Vinculum equation symbol
@@ -81,7 +81,7 @@ export type TypeSymbolOptions = {
  *   },
  * })
  */
-type TypeVinculum = {
+type OBJ_EqnSymbol_Vinculum = {
   color?: Array<number>,
   lineWidth?: number,
   draw?: 'static' | 'dynamic',
@@ -138,7 +138,7 @@ type TypeVinculum = {
  *   },
  * })
  */
-type TypeBox = {
+type OBJ_EqnSymbol_Box = {
   color?: Array<number>,
   fill?: boolean,
   width?: number,
@@ -208,7 +208,7 @@ type TypeBox = {
  *   },
  * })
  */
-type TypeArrow = {
+type OBJ_EqnSymbol_Arrow = {
   color?: Array<number>,
   direction?: 'up' | 'down' | 'left' | 'right',
   lineWidth?: number,
@@ -272,7 +272,7 @@ type TypeArrow = {
  *   },
  * })
  */
-type TypeSum ={
+type OBJ_EqnSymbol_Sum ={
   color?: Array<number>,
   lineWidth?: number,
   sides?: number,
@@ -281,7 +281,7 @@ type TypeSum ={
 };
 
 /**
- * Product equation symbol used in {@link TypeEquationFunctionProdOf}
+ * Product equation symbol used in {@link OBJ_EqnLayout_ProdOf}
  * <pre>
  *                                          width
  *                |<--------------------------------------------------------->|
@@ -339,7 +339,7 @@ type TypeSum ={
  *   },
  * })
  */
-type TypeProd = {
+type OBJ_EqnSymbol_Prod = {
   color?: Array<number>,
   lineWidth?: number,
   sides?: number,
@@ -348,7 +348,7 @@ type TypeProd = {
 };
 
 /**
- * Integral equation symbol used in {@link TypeEquationFunctionIntegral}
+ * Integral equation symbol used in {@link OBJ_EqnLayout_Integral}
  * <pre>
  //     --------------------------------------------------   0000000
   //     A                                              000000011111111
@@ -420,7 +420,7 @@ type TypeProd = {
  *   staticHeight: 'first',
  * },
  */
-type TypeIntegral = {
+type OBJ_EqnSymbol_Integral = {
   color?: Array<number>,
   lineWidth?: number,
   sides?: number,
@@ -436,7 +436,7 @@ type TypeIntegral = {
 };
 
 /**
- * Radical equation symbol used in {@link TypeEquationFunctionRoot}.
+ * Radical equation symbol used in {@link OBJ_EqnLayout_Root}.
  *
  * The radical symbol allows customization on how to draw the radical. Mostly
  * it will not be needed, but for edge case equation layouts it may be useful.
@@ -523,7 +523,7 @@ type TypeIntegral = {
  *    },
  *  });
  */
-type TypeRadical = {
+type OBJ_EqnSymbol_Radical = {
   color?: Array<number>,
   lineWidth?: number,
   width?: number,
@@ -543,7 +543,7 @@ type TypeRadical = {
 };
 
 /**
- * Strike equation symbol used in {@link TypeEquationFunctionStrike}.
+ * Strike equation symbol used in {@link OBJ_EqnLayout_Strike}.
  *
  * Four styles of strike symbol are available:
  * <pre>
@@ -606,7 +606,7 @@ type TypeRadical = {
  *    },
  *  });
  */
-type TypeStrike = {
+type OBJ_EqnSymbol_Strike = {
   color?: Array<number>,
   style?: 'cross' | 'forward' | 'back' | 'horizontal',
   lineWidth?: number,
@@ -678,7 +678,7 @@ type TypeStrike = {
  *    },
  *  });
  */
-type TypeBracket = {
+type OBJ_EqnSymbol_Bracket = {
   side?: 'left' | 'right' | 'top' | 'bottom',
   color?: Array<number>,
   lineWidth?: number,
@@ -742,7 +742,7 @@ type TypeBracket = {
  *    },
  *  });
  */
- type TypeAngleBracket = {
+ type OBJ_EqnSymbol_AngleBracket = {
   side?: 'left' | 'right' | 'top' | 'bottom',
   color?: Array<number>,
   lineWidth?: number,
@@ -829,7 +829,7 @@ type TypeBracket = {
  *    },
  *  });
  */
-type TypeBrace = {
+type OBJ_EqnSymbol_Brace = {
   side?: 'left' | 'right' | 'top' | 'bottom',
   color?: Array<number>,
   lineWidth?: number,
@@ -889,7 +889,7 @@ type TypeBrace = {
  *    },
  *  });
  */
-type TypeBar = {
+type OBJ_EqnSymbol_Bar = {
   side?: 'left' | 'right' | 'top' | 'bottom',
   color?: Array<number>,
   lineWidth?: number,
@@ -931,7 +931,7 @@ type TypeBar = {
  *
  * </pre>
  *
- * @property {'bar'} symbol
+ * @property {'squareBracket'} symbol
  * @property {Array<number>} [color] (equation default)
  * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
  * square bracket ('left')
@@ -966,7 +966,7 @@ type TypeBar = {
  *    },
  *  });
  */
-type TypeSquareBracket = {
+type OBJ_EqnSymbol_SquareBracket = {
   color?: Array<number>,
   side?: 'left' | 'right' | 'top' | 'bottom',
   lineWidth?: number,
@@ -977,6 +977,21 @@ type TypeSquareBracket = {
   draw?: 'dynamic' | 'static',
   staticHeight?: number | 'first',
 }
+
+export type TypeSymbolOptions = OBJ_EqnSymbol_Vinculum
+  & OBJ_EqnSymbol_Vinculum
+  & OBJ_EqnSymbol_Box
+  & OBJ_EqnSymbol_Arrow
+  & OBJ_EqnSymbol_Sum
+  & OBJ_EqnSymbol_Prod
+  & OBJ_EqnSymbol_Integral
+  & OBJ_EqnSymbol_Strike
+  & OBJ_EqnSymbol_Bracket
+  & OBJ_EqnSymbol_AngleBracket
+  & OBJ_EqnSymbol_Brace
+  & OBJ_EqnSymbol_Bar
+  & OBJ_EqnSymbol_SquareBracket;
+
 
 export default class EquationSymbols {
   shapes: DiagramPrimitives;
@@ -994,18 +1009,12 @@ export default class EquationSymbols {
     name: string,
     options: TypeSymbolOptions,
   ) {
-    // if (name === 'vinculumOld') {
-    //   return this.vinculum(options);
-    // }
     if (name === 'vinculum') {              // $FlowFixMe
       return this.vinculum(options);
     }
     if (name === 'strike') {                // $FlowFixMe
       return this.strike(options);
     }
-    // if (name === 'xStrike') {
-    //   return this.xStrike(options);
-    // }
     if (name === 'bracket') {               // $FlowFixMe
       return this.bracket(options);
     }
@@ -1055,7 +1064,7 @@ export default class EquationSymbols {
   //   );
   // }
 
-  vinculum(options: TypeVinculum) {
+  vinculum(options: OBJ_EqnSymbol_Vinculum) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
@@ -1074,7 +1083,7 @@ export default class EquationSymbols {
     ));
   }
 
-  box(optionsIn: TypeBox) {
+  box(optionsIn: OBJ_EqnSymbol_Box) {
     const defaultOptions = {
       color: this.defaultColor,
       fill: false,
@@ -1096,7 +1105,7 @@ export default class EquationSymbols {
     ));
   }
 
-  arrow(options: TypeArrow) {
+  arrow(options: OBJ_EqnSymbol_Arrow) {
     const defaultOptions = {
       color: this.defaultColor,
       direction: 'right',
@@ -1123,7 +1132,7 @@ export default class EquationSymbols {
     ));
   }
 
-  sum(options: TypeSum) {
+  sum(options: OBJ_EqnSymbol_Sum) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
@@ -1144,7 +1153,7 @@ export default class EquationSymbols {
     ));
   }
 
-  product(options: TypeProd) {
+  product(options: OBJ_EqnSymbol_Prod) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
@@ -1165,7 +1174,7 @@ export default class EquationSymbols {
     ));
   }
 
-  integral(options: TypeIntegral) {
+  integral(options: OBJ_EqnSymbol_Integral) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
@@ -1205,7 +1214,7 @@ export default class EquationSymbols {
     );
   }
 
-  radical(optionsIn: TypeRadical) {
+  radical(optionsIn: OBJ_EqnSymbol_Radical) {
     const defaultOptions: {
       color: Array<number>,
       lineWidth: number,
@@ -1250,7 +1259,7 @@ export default class EquationSymbols {
     );
   }
 
-  strike(options: TypeStrike) {
+  strike(options: OBJ_EqnSymbol_Strike) {
     const defaultOptions = {
       style: 'cross',
       color: this.defaultColor,
@@ -1302,7 +1311,7 @@ export default class EquationSymbols {
   //   return cross;
   // }
 
-  bracket(options: TypeBracket) {
+  bracket(options: OBJ_EqnSymbol_Bracket) {
     const defaultOptions = {
       side: 'left',
       color: this.defaultColor,
@@ -1325,7 +1334,7 @@ export default class EquationSymbols {
     ));
   }
 
-  angleBracket(options: TypeAngleBracket) {
+  angleBracket(options: OBJ_EqnSymbol_AngleBracket) {
     const defaultOptions = {
       side: 'left',
       lineWidth: null,
@@ -1345,7 +1354,7 @@ export default class EquationSymbols {
     ));
   }
 
-  brace(options: TypeBrace) {
+  brace(options: OBJ_EqnSymbol_Brace) {
     const defaultOptions = {
       side: 'left',
       color: this.defaultColor,
@@ -1368,7 +1377,7 @@ export default class EquationSymbols {
     ));
   }
 
-  bar(options: TypeBar) {
+  bar(options: OBJ_EqnSymbol_Bar) {
     const defaultOptions = {
       side: 'left',
       lineWidth: 0.01,
@@ -1387,7 +1396,7 @@ export default class EquationSymbols {
     ));
   }
 
-  squareBracket(options: TypeSquareBracket) {
+  squareBracket(options: OBJ_EqnSymbol_SquareBracket) {
     const defaultOptions = {
       side: 'left',
       lineWidth: null,

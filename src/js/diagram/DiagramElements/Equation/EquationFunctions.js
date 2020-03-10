@@ -54,7 +54,7 @@ export function getDiagramElement(
  * can either be the entirety of the form definition, or a series of nested
  * phrases.
  *
- *  * An object or array definition (e.g. {@link TypeEquationFunctionFraction})
+ *  * An object or array definition (e.g. {@link OBJ_EqnLayout_Fraction})
  *  * A string that represents an equation element
  *  * An array of {@link TypeEquationPhrase}
  *
@@ -75,29 +75,29 @@ export function getDiagramElement(
 export type TypeEquationPhrase =
   string
   | number
-  | { frac: TypeEquationFunctionFraction }
-  | { strike: TypeEquationFunctionStrike }
-  | { box: TypeEquationFunctionBox }
-  | { root: TypeEquationFunctionRoot }
-  | { brac: TypeEquationFunctionBracket }
-  | { sub: TypeEquationFunctionSubcript }
-  | { sup: TypeEquationFunctionSuperscript }
-  | { supSub: TypeEquationFunctionSuperscriptSubscript }
-  | { topBar: TypeEquationFunctionBar }
-  | { bottomBar: TypeEquationFunctionBar }
-  | { annotate: TypeEquationFunctionAnnotate }
-  | { topComment: TypeEquationFunctionComment }
-  | { bottomComment: TypeEquationFunctionComment }
-  | { pad: TypeEquationFunctionPad }
-  | { bar: TypeEquationFunctionBar }
-  | { scale: TypeEquationFunctionScale }
-  | { container: TypeEquationFunctionContainer }
-  | { matrix: TypeEquationFunctionMatrix }
-  | { int: TypeEquationFunctionIntegral }
-  | { sumOf: TypeEquationFunctionSumOf }
-  | { prodOf: TypeEquationFunctionProdOf }
-  | { topStrike: TypeEquationFunctionStrikeComment }
-  | { bottomStrike: TypeEquationFunctionStrikeComment }
+  | { frac: OBJ_EqnLayout_Fraction }
+  | { strike: OBJ_EqnLayout_Strike }
+  | { box: OBJ_EqnLayout_Box }
+  | { root: OBJ_EqnLayout_Root }
+  | { brac: OBJ_EqnLayout_Bracket }
+  | { sub: OBJ_EqnLayout_Subcript }
+  | { sup: OBJ_EqnLayout_Superscript }
+  | { supSub: OBJ_EqnLayout_SuperscriptSubscript }
+  | { topBar: OBJ_EqnLayout_Bar }
+  | { bottomBar: OBJ_EqnLayout_Bar }
+  | { annotate: OBJ_EqnLayout_Annotate }
+  | { topComment: OBJ_EqnLayout_Comment }
+  | { bottomComment: OBJ_EqnLayout_Comment }
+  | { pad: OBJ_EqnLayout_Pad }
+  | { bar: OBJ_EqnLayout_Bar }
+  | { scale: OBJ_EqnLayout_Scale }
+  | { container: OBJ_EqnLayout_Container }
+  | { matrix: OBJ_EqnLayout_Matrix }
+  | { int: OBJ_EqnLayout_Integral }
+  | { sumOf: OBJ_EqnLayout_SumOf }
+  | { prodOf: OBJ_EqnLayout_ProdOf }
+  | { topStrike: OBJ_EqnLayout_StrikeComment }
+  | { bottomStrike: OBJ_EqnLayout_StrikeComment }
   | Array<TypeEquationPhrase>
   | DiagramElementPrimitive
   | DiagramElementCollection
@@ -140,7 +140,7 @@ export type TypeEquationPhrase =
  * // Example array definition
  *  { container: ['a', 1, 0.2, 0.5] }
  */
-export type TypeEquationFunctionContainer = {
+export type OBJ_EqnLayout_Container = {
   content: TypeEquationPhrase,
   width?: number,
   descent?: number,
@@ -199,7 +199,7 @@ export type TypeEquationFunctionContainer = {
  * // Array definition example
  * { frac: ['a', 'v', 'b'] }
  */
-export type TypeEquationFunctionFraction = {
+export type OBJ_EqnLayout_Fraction = {
   numerator: TypeEquationPhrase;
   symbol: string;
   denominator: TypeEquationPhrase;
@@ -242,7 +242,7 @@ export type TypeEquationFunctionFraction = {
  * // Example array definition
  *  { scale: [['a', 'b'], 0.5] }
  */
-export type TypeEquationFunctionScale = {
+export type OBJ_EqnLayout_Scale = {
   content: TypeEquationPhrase,
   scale?: number,
   fullContentBounds?: boolean,
@@ -313,7 +313,7 @@ export type TypeEquationFunctionScale = {
  *  { brac: ['lb', 'a', 'rb'] }
  */
 
-export type TypeEquationFunctionBracket = {
+export type OBJ_EqnLayout_Bracket = {
   left?: string;
   content: TypeEquationPhrase;
   right?: string;
@@ -401,7 +401,7 @@ export type TypeEquationFunctionBracket = {
  *  { root: ['radical', 'a'] }
  */
 
-export type TypeEquationFunctionRoot = {
+export type OBJ_EqnLayout_Root = {
   symbol: string;
   content: TypeEquationPhrase;
   inSize?: boolean;
@@ -480,7 +480,7 @@ export type TypeEquationFunctionRoot = {
  * // Example array definition
  *  { strike: ['a', 'x'] }
  */
-export type TypeEquationFunctionStrike = {
+export type OBJ_EqnLayout_Strike = {
   content: TypeEquationPhrase;
   symbol: string;
   inSize?: boolean;
@@ -553,7 +553,7 @@ export type TypeEquationFunctionStrike = {
  * // Example array definition
  *  { box: ['a', 'box'] }
  */
-export type TypeEquationFunctionBox = {
+export type OBJ_EqnLayout_Box = {
   content: TypeEquationPhrase,
   symbol: string,
   inSize?: boolean,
@@ -659,7 +659,7 @@ export type TypeEquationFunctionBox = {
  * // Example array definition
  *  { bar: ['a', 'hBar', 'top'] }
  */
-export type TypeEquationFunctionBar = {
+export type OBJ_EqnLayout_Bar = {
   content: TypeEquationPhrase;
   symbol?: string;
   inSize?: boolean,
@@ -796,7 +796,7 @@ export type TypeEquationFunctionBar = {
  * // Example array definition
  *  { int: ['integral', 'a', 'b', 'c'] }
  */
-export type TypeEquationFunctionIntegral = {
+export type OBJ_EqnLayout_Integral = {
   symbol?: string,
   content?: TypeEquationPhrase,
   from?: TypeEquationPhrase,
@@ -915,7 +915,7 @@ export type TypeEquationFunctionIntegral = {
  * // Example array definition
  *  { sumOf: ['s', 'a', 'b', 'c'] }
  */
-export type TypeEquationFunctionSumOf = {
+export type OBJ_EqnLayout_SumOf = {
   symbol?: string,
   content: TypeEquationPhrase,
   from?: TypeEquationPhrase,
@@ -1018,7 +1018,7 @@ export type TypeEquationFunctionSumOf = {
  * // Example array definition
  *  { prodOf: ['s', 'a', 'b', 'c'] }
  */
-export type TypeEquationFunctionProdOf = {
+export type OBJ_EqnLayout_ProdOf = {
   symbol?: string,
   content: TypeEquationPhrase,
   from?: TypeEquationPhrase,
@@ -1084,7 +1084,7 @@ export type TypeEquationFunctionProdOf = {
  * // Example array definition
  *  { sub: ['a', 'b'] }
  */
-export type TypeEquationFunctionSubcript = {
+export type OBJ_EqnLayout_Subcript = {
   content: TypeEquationPhrase;
   subscript: TypeEquationPhrase;
   scale?: number,
@@ -1122,7 +1122,7 @@ export type TypeEquationFunctionSubcript = {
  * // Example array definition
  *  { sup: ['a', 'b'] }
  */
-export type TypeEquationFunctionSuperscript = {
+export type OBJ_EqnLayout_Superscript = {
   content: TypeEquationPhrase;
   superscript: TypeEquationPhrase;
   scale?: number,
@@ -1164,7 +1164,7 @@ export type TypeEquationFunctionSuperscript = {
  * // Example array definition
  *  { supSub: ['a', 'b', 'c'] }
  */
-export type TypeEquationFunctionSuperscriptSubscript = {
+export type OBJ_EqnLayout_SuperscriptSubscript = {
   content: TypeEquationPhrase;
   subscript: TypeEquationPhrase;
   superscript: TypeEquationPhrase;
@@ -1228,7 +1228,7 @@ export type TypeEquationFunctionSuperscriptSubscript = {
  * // Bottom comment example with symbol
  *  { bottomComment: ['a', 'b', 'brace'] }
  */
-export type TypeEquationFunctionComment = {
+export type OBJ_EqnLayout_Comment = {
   content: TypeEquationPhrase;
   comment: TypeEquationPhrase;
   symbol?: string;
@@ -1288,7 +1288,7 @@ export type TypeEquationFunctionComment = {
  * // Bottom strike array examples
  *  { bottomStrike: ['a', 'x', 'b'] }
  */
-export type TypeEquationFunctionStrikeComment = {
+export type OBJ_EqnLayout_StrikeComment = {
   content?: TypeEquationPhrase,
   symbol?: string,
   comment?: TypeEquationPhrase,
@@ -1330,7 +1330,7 @@ export type TypeEquationFunctionStrikeComment = {
  * // Array example
  *  { pad: ['a', 0.1, 0.2, 0.3, 0.4] }
  */
-export type TypeEquationFunctionPad = {
+export type OBJ_EqnLayout_Pad = {
   content: TypeEquationPhrase;
   top?: number,
   right?: number,
@@ -1364,7 +1364,7 @@ export type TypeEquationFunctionPad = {
  * (`[0.05, 0.05]`)
  * @property {'baseline' | 'middle'} [yAlign] align cells in a row with the
  * text baseline, or middle of the cell (`baseline`)
- * @property {TypeEquationFunctionBracket} [brac] bracket options not including
+ * @property {OBJ_EqnLayout_Bracket} [brac] bracket options not including
  * the symbols (`{}`)
  * @property {boolean} [fullContentBounds] use full bounds of content,
  * overriding any `inSize=false` properties in the content (`false`)
@@ -1403,7 +1403,7 @@ export type TypeEquationFunctionPad = {
  * // Array example
  *  { matrix: [[2, 2], 'lb', ['a', 'b', 'c', 'd'], 'rb'] }
  */
-export type TypeEquationFunctionMatrix = {
+export type OBJ_EqnLayout_Matrix = {
   order?: [number, number],
   left?: string,
   content: TypeEquationPhrase,
@@ -1412,7 +1412,7 @@ export type TypeEquationFunctionMatrix = {
   fit?: 'max' | 'min' | TypeParsablePoint,
   space?: TypeParsablePoint,
   yAlign?: 'baseline' | 'middle',
-  brac?: TypeEquationFunctionBracket,
+  brac?: OBJ_EqnLayout_Bracket,
   fullContentBounds?: boolean,
 } | [
   ?[number, number],
@@ -1423,7 +1423,7 @@ export type TypeEquationFunctionMatrix = {
   ?'max' | 'min',
   ?TypeParsablePoint,
   ?'baseline' | 'middle',
-  ?TypeEquationFunctionBracket,
+  ?OBJ_EqnLayout_Bracket,
   ?boolean,
 ];
 
@@ -1837,7 +1837,7 @@ export type TypeGlyphs = {
  *   },
  * });
  */
-export type TypeEquationFunctionAnnotate = {
+export type OBJ_EqnLayout_Annotate = {
   content: TypeEquationPhrase,
   annotation?: TypeAnnotation,
   annotations?: Array<TypeAnnotation>,
@@ -2017,7 +2017,7 @@ export class EquationFunctions {
    * });
    */
   container(
-    optionsOrArray: TypeEquationFunctionContainer,
+    optionsOrArray: OBJ_EqnLayout_Container,
   ) {
     let content;
     let scale;
@@ -2069,7 +2069,7 @@ export class EquationFunctions {
   }
 
   brac(
-    optionsOrArray: TypeEquationFunctionBracket,
+    optionsOrArray: OBJ_EqnLayout_Bracket,
   ) {
     let content;
     let left;
@@ -2164,7 +2164,7 @@ export class EquationFunctions {
   }
 
   bar(
-    optionsOrArray: TypeEquationFunctionBar,
+    optionsOrArray: OBJ_EqnLayout_Bar,
     forceOptions: Object = {},
   ) {
     let content;
@@ -2293,7 +2293,7 @@ export class EquationFunctions {
     });
   }
 
-  annotate(optionsIn: TypeEquationFunctionAnnotate) {
+  annotate(optionsIn: OBJ_EqnLayout_Annotate) {
     const defaultOptions = {
       inSize: true,
       useFullBounds: false,
@@ -2405,7 +2405,7 @@ export class EquationFunctions {
 
 
   scale(
-    optionsOrArray: TypeEquationFunctionScale,
+    optionsOrArray: OBJ_EqnLayout_Scale,
   ) {
     let content;
     let scale;
@@ -2448,7 +2448,7 @@ export class EquationFunctions {
    * });
    */
   frac(
-    optionsOrArray: TypeEquationFunctionFraction,
+    optionsOrArray: OBJ_EqnLayout_Fraction,
   ) {
     let numerator;
     let denominator;
@@ -2502,7 +2502,7 @@ export class EquationFunctions {
     );
   }
 
-  root(optionsOrArray: TypeEquationFunctionRoot) {
+  root(optionsOrArray: OBJ_EqnLayout_Root) {
     let content;
     let root;
     let symbol;
@@ -2580,7 +2580,7 @@ export class EquationFunctions {
     });
   }
 
-  supSub(optionsOrArray: TypeEquationFunctionSuperscriptSubscript) {
+  supSub(optionsOrArray: OBJ_EqnLayout_SuperscriptSubscript) {
     let content;
     let superscript = null;
     let subscript = null;
@@ -2645,7 +2645,7 @@ export class EquationFunctions {
     });
   }
 
-  sup(optionsOrArray: TypeEquationFunctionSuperscript) {
+  sup(optionsOrArray: OBJ_EqnLayout_Superscript) {
     let content;
     let superscript;
     let scale;
@@ -2671,7 +2671,7 @@ export class EquationFunctions {
     });
   }
 
-  sub(optionsOrArray: TypeEquationFunctionSubcript) {
+  sub(optionsOrArray: OBJ_EqnLayout_Subcript) {
     let content;
     let subscript;
     let scale;
@@ -2698,7 +2698,7 @@ export class EquationFunctions {
 
 
   box(
-    optionsOrArray: TypeEquationFunctionBox,
+    optionsOrArray: OBJ_EqnLayout_Box,
   ) {
     let content;
     let symbol;
@@ -2763,7 +2763,7 @@ export class EquationFunctions {
   }
 
   pad(
-    optionsOrContent: TypeEquationFunctionPad,
+    optionsOrContent: OBJ_EqnLayout_Pad,
   ) {
     let content;
     let top;
@@ -2801,16 +2801,16 @@ export class EquationFunctions {
     });
   }
 
-  topBar(optionsOrArray: TypeEquationFunctionBar) {
+  topBar(optionsOrArray: OBJ_EqnLayout_Bar) {
     return this.bar(optionsOrArray, { side: 'top' });
   }
 
-  bottomBar(optionsOrArray: TypeEquationFunctionBar) {
+  bottomBar(optionsOrArray: OBJ_EqnLayout_Bar) {
     return this.bar(optionsOrArray, { side: 'bottom' });
   }
 
 
-  matrix(optionsOrArray: TypeEquationFunctionMatrix) {
+  matrix(optionsOrArray: OBJ_EqnLayout_Matrix) {
     let content;
     let left;
     let right;
@@ -2882,7 +2882,7 @@ export class EquationFunctions {
 
 
   int(
-    optionsOrArray: TypeEquationFunctionIntegral,
+    optionsOrArray: OBJ_EqnLayout_Integral,
   ) {
     let content;
     let symbol;
@@ -3060,16 +3060,16 @@ export class EquationFunctions {
     });
   }
 
-  sumOf(options: TypeEquationFunctionSumOf) {
+  sumOf(options: OBJ_EqnLayout_SumOf) {
     return this.sumProd(options);
   }
 
-  prodOf(options: TypeEquationFunctionProdOf) {
+  prodOf(options: OBJ_EqnLayout_ProdOf) {
     return this.sumProd(options);
   }
 
   sumProd(
-    optionsOrArray: TypeEquationFunctionSumOf | TypeEquationFunctionProdOf,
+    optionsOrArray: OBJ_EqnLayout_SumOf | OBJ_EqnLayout_ProdOf,
   ) {
     let content;
     let symbol;
@@ -3186,7 +3186,7 @@ export class EquationFunctions {
 
   // eslint-disable-next-line class-methods-use-this
   processComment(
-    optionsOrArray: TypeEquationFunctionComment,
+    optionsOrArray: OBJ_EqnLayout_Comment,
   ) {
     let content;
     let comment;
@@ -3314,7 +3314,7 @@ export class EquationFunctions {
 
 
   strike(
-    optionsOrArray: TypeEquationFunctionStrike,
+    optionsOrArray: OBJ_EqnLayout_Strike,
   ) {
     let content;
     let symbol;
@@ -3387,7 +3387,7 @@ export class EquationFunctions {
 
   // eslint-disable-next-line class-methods-use-this
   processStrike(
-    optionsOrContent: TypeEquationFunctionStrikeComment,
+    optionsOrContent: OBJ_EqnLayout_StrikeComment,
   ) {
     let content;
     let comment;

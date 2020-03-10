@@ -2810,7 +2810,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionContainer",
+    "name": "OBJ_EqnLayout_Container",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -3087,7 +3087,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionContainer",
+        "name": "OBJ_EqnLayout_Container",
         "kind": "typedef"
       }
     ],
@@ -3098,7 +3098,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionContainer"
+    "namespace": "OBJ_EqnLayout_Container"
   },
   {
     "description": {
@@ -3993,7 +3993,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionFraction",
+    "name": "OBJ_EqnLayout_Fraction",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -4156,7 +4156,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionFraction",
+        "name": "OBJ_EqnLayout_Fraction",
         "kind": "typedef"
       }
     ],
@@ -4167,7 +4167,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionFraction"
+    "namespace": "OBJ_EqnLayout_Fraction"
   },
   {
     "description": {
@@ -4551,7 +4551,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionScale",
+    "name": "OBJ_EqnLayout_Scale",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -4618,7 +4618,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionScale",
+        "name": "OBJ_EqnLayout_Scale",
         "kind": "typedef"
       }
     ],
@@ -4629,7 +4629,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionScale"
+    "namespace": "OBJ_EqnLayout_Scale"
   },
   {
     "description": {
@@ -6374,7 +6374,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionBracket",
+    "name": "OBJ_EqnLayout_Bracket",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -6629,7 +6629,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionBracket",
+        "name": "OBJ_EqnLayout_Bracket",
         "kind": "typedef"
       }
     ],
@@ -6640,7 +6640,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionBracket"
+    "namespace": "OBJ_EqnLayout_Bracket"
   },
   {
     "description": {
@@ -8192,7 +8192,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionRoot",
+    "name": "OBJ_EqnLayout_Root",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -8430,7 +8430,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionRoot",
+        "name": "OBJ_EqnLayout_Root",
         "kind": "typedef"
       }
     ],
@@ -8441,7 +8441,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionRoot"
+    "namespace": "OBJ_EqnLayout_Root"
   },
   {
     "description": {
@@ -9774,7 +9774,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionStrike",
+    "name": "OBJ_EqnLayout_Strike",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -9961,7 +9961,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionStrike",
+        "name": "OBJ_EqnLayout_Strike",
         "kind": "typedef"
       }
     ],
@@ -9972,7 +9972,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionStrike"
+    "namespace": "OBJ_EqnLayout_Strike"
   },
   {
     "description": {
@@ -11305,7 +11305,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionBox",
+    "name": "OBJ_EqnLayout_Box",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -11492,7 +11492,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionBox",
+        "name": "OBJ_EqnLayout_Box",
         "kind": "typedef"
       }
     ],
@@ -11503,7 +11503,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionBox"
+    "namespace": "OBJ_EqnLayout_Box"
   },
   {
     "description": {
@@ -14058,7 +14058,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionBar",
+    "name": "OBJ_EqnLayout_Bar",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -14411,7 +14411,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionBar",
+        "name": "OBJ_EqnLayout_Bar",
         "kind": "typedef"
       }
     ],
@@ -14422,7 +14422,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionBar"
+    "namespace": "OBJ_EqnLayout_Bar"
   },
   {
     "description": {
@@ -19495,7 +19495,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionIntegral",
+    "name": "OBJ_EqnLayout_Integral",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -20330,7 +20330,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionIntegral",
+        "name": "OBJ_EqnLayout_Integral",
         "kind": "typedef"
       }
     ],
@@ -20341,7 +20341,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionIntegral"
+    "namespace": "OBJ_EqnLayout_Integral"
   },
   {
     "description": {
@@ -22572,7 +22572,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionSumOf",
+    "name": "OBJ_EqnLayout_SumOf",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -22943,7 +22943,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionSumOf",
+        "name": "OBJ_EqnLayout_SumOf",
         "kind": "typedef"
       }
     ],
@@ -22954,7 +22954,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionSumOf"
+    "namespace": "OBJ_EqnLayout_SumOf"
   },
   {
     "description": {
@@ -25185,7 +25185,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionProdOf",
+    "name": "OBJ_EqnLayout_ProdOf",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -25556,7 +25556,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionProdOf",
+        "name": "OBJ_EqnLayout_ProdOf",
         "kind": "typedef"
       }
     ],
@@ -25567,7 +25567,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionProdOf"
+    "namespace": "OBJ_EqnLayout_ProdOf"
   },
   {
     "description": {
@@ -26067,7 +26067,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionSubcript",
+    "name": "OBJ_EqnLayout_Subcript",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -26161,7 +26161,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionSubcript",
+        "name": "OBJ_EqnLayout_Subcript",
         "kind": "typedef"
       }
     ],
@@ -26172,7 +26172,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionSubcript"
+    "namespace": "OBJ_EqnLayout_Subcript"
   },
   {
     "description": {
@@ -26672,7 +26672,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionSuperscript",
+    "name": "OBJ_EqnLayout_Superscript",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -26766,7 +26766,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionSuperscript",
+        "name": "OBJ_EqnLayout_Superscript",
         "kind": "typedef"
       }
     ],
@@ -26777,7 +26777,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionSuperscript"
+    "namespace": "OBJ_EqnLayout_Superscript"
   },
   {
     "description": {
@@ -27407,7 +27407,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionSuperscriptSubscript",
+    "name": "OBJ_EqnLayout_SuperscriptSubscript",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -27534,7 +27534,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionSuperscriptSubscript",
+        "name": "OBJ_EqnLayout_SuperscriptSubscript",
         "kind": "typedef"
       }
     ],
@@ -27545,7 +27545,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionSuperscriptSubscript"
+    "namespace": "OBJ_EqnLayout_SuperscriptSubscript"
   },
   {
     "description": {
@@ -28657,7 +28657,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionComment",
+    "name": "OBJ_EqnLayout_Comment",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -28823,7 +28823,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionComment",
+        "name": "OBJ_EqnLayout_Comment",
         "kind": "typedef"
       }
     ],
@@ -28834,7 +28834,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionComment"
+    "namespace": "OBJ_EqnLayout_Comment"
   },
   {
     "description": {
@@ -29608,7 +29608,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionStrikeComment",
+    "name": "OBJ_EqnLayout_StrikeComment",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -29753,7 +29753,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionStrikeComment",
+        "name": "OBJ_EqnLayout_StrikeComment",
         "kind": "typedef"
       }
     ],
@@ -29764,7 +29764,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionStrikeComment"
+    "namespace": "OBJ_EqnLayout_StrikeComment"
   },
   {
     "description": {
@@ -30335,7 +30335,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionPad",
+    "name": "OBJ_EqnLayout_Pad",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -30438,7 +30438,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionPad",
+        "name": "OBJ_EqnLayout_Pad",
         "kind": "typedef"
       }
     ],
@@ -30449,7 +30449,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionPad"
+    "namespace": "OBJ_EqnLayout_Pad"
   },
   {
     "description": {
@@ -30657,7 +30657,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "TypeEquationFunctionBracket"
+            "name": "OBJ_EqnLayout_Bracket"
           }
         },
         "name": "brac"
@@ -31817,7 +31817,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "TypeEquationFunctionBracket"
+            "name": "OBJ_EqnLayout_Bracket"
           }
         }
       },
@@ -31963,7 +31963,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionMatrix",
+    "name": "OBJ_EqnLayout_Matrix",
     "kind": "typedef",
     "type": {
       "type": "UnionType",
@@ -32094,7 +32094,7 @@
                 "type": "OptionalType",
                 "expression": {
                   "type": "NameExpression",
-                  "name": "TypeEquationFunctionBracket"
+                  "name": "OBJ_EqnLayout_Bracket"
                 }
               }
             },
@@ -32198,7 +32198,7 @@
               "type": "NullableType",
               "expression": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionBracket"
+                "name": "OBJ_EqnLayout_Bracket"
               }
             },
             {
@@ -32214,7 +32214,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionMatrix",
+        "name": "OBJ_EqnLayout_Matrix",
         "kind": "typedef"
       }
     ],
@@ -32225,7 +32225,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionMatrix"
+    "namespace": "OBJ_EqnLayout_Matrix"
   },
   {
     "description": {
@@ -33797,7 +33797,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationFunctionAnnotate",
+    "name": "OBJ_EqnLayout_Annotate",
     "kind": "typedef",
     "type": {
       "type": "RecordType",
@@ -33955,7 +33955,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationFunctionAnnotate",
+        "name": "OBJ_EqnLayout_Annotate",
         "kind": "typedef"
       }
     ],
@@ -33966,7 +33966,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationFunctionAnnotate"
+    "namespace": "OBJ_EqnLayout_Annotate"
   },
   {
     "description": {
@@ -40551,13 +40551,13 @@
             },
             {
               "type": "link",
-              "url": "TypeEquationFunctionRoot",
+              "url": "OBJ_EqnLayout_Root",
               "title": null,
               "jsdoc": true,
               "children": [
                 {
                   "type": "text",
-                  "value": "TypeEquationFunctionRoot"
+                  "value": "OBJ_EqnLayout_Root"
                 }
               ],
               "position": {
@@ -47922,13 +47922,13 @@
             },
             {
               "type": "link",
-              "url": "TypeEquationFunctionProdOf",
+              "url": "OBJ_EqnLayout_ProdOf",
               "title": null,
               "jsdoc": true,
               "children": [
                 {
                   "type": "text",
-                  "value": "TypeEquationFunctionProdOf"
+                  "value": "OBJ_EqnLayout_ProdOf"
                 }
               ],
               "position": {
@@ -48961,13 +48961,13 @@
             },
             {
               "type": "link",
-              "url": "TypeEquationFunctionIntegral",
+              "url": "OBJ_EqnLayout_Integral",
               "title": null,
               "jsdoc": true,
               "children": [
                 {
                   "type": "text",
-                  "value": "TypeEquationFunctionIntegral"
+                  "value": "OBJ_EqnLayout_Integral"
                 }
               ],
               "position": {
@@ -50762,13 +50762,13 @@
             },
             {
               "type": "link",
-              "url": "TypeEquationFunctionStrike",
+              "url": "OBJ_EqnLayout_Strike",
               "title": null,
               "jsdoc": true,
               "children": [
                 {
                   "type": "text",
-                  "value": "TypeEquationFunctionStrike"
+                  "value": "OBJ_EqnLayout_Strike"
                 }
               ],
               "position": {
@@ -58861,13 +58861,13 @@
                     },
                     {
                       "type": "link",
-                      "url": "TypeEquationFunctionFraction",
+                      "url": "OBJ_EqnLayout_Fraction",
                       "title": null,
                       "jsdoc": true,
                       "children": [
                         {
                           "type": "text",
-                          "value": "TypeEquationFunctionFraction"
+                          "value": "OBJ_EqnLayout_Fraction"
                         }
                       ],
                       "position": {
@@ -59163,7 +59163,7 @@
               "key": "frac",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionFraction"
+                "name": "OBJ_EqnLayout_Fraction"
               }
             }
           ]
@@ -59176,7 +59176,7 @@
               "key": "strike",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionStrike"
+                "name": "OBJ_EqnLayout_Strike"
               }
             }
           ]
@@ -59189,7 +59189,7 @@
               "key": "box",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionBox"
+                "name": "OBJ_EqnLayout_Box"
               }
             }
           ]
@@ -59202,7 +59202,7 @@
               "key": "root",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionRoot"
+                "name": "OBJ_EqnLayout_Root"
               }
             }
           ]
@@ -59215,7 +59215,7 @@
               "key": "brac",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionBracket"
+                "name": "OBJ_EqnLayout_Bracket"
               }
             }
           ]
@@ -59228,7 +59228,7 @@
               "key": "sub",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionSubcript"
+                "name": "OBJ_EqnLayout_Subcript"
               }
             }
           ]
@@ -59241,7 +59241,7 @@
               "key": "sup",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionSuperscript"
+                "name": "OBJ_EqnLayout_Superscript"
               }
             }
           ]
@@ -59254,7 +59254,7 @@
               "key": "supSub",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionSuperscriptSubscript"
+                "name": "OBJ_EqnLayout_SuperscriptSubscript"
               }
             }
           ]
@@ -59267,7 +59267,7 @@
               "key": "topBar",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionBar"
+                "name": "OBJ_EqnLayout_Bar"
               }
             }
           ]
@@ -59280,7 +59280,7 @@
               "key": "bottomBar",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionBar"
+                "name": "OBJ_EqnLayout_Bar"
               }
             }
           ]
@@ -59293,7 +59293,7 @@
               "key": "annotate",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionAnnotate"
+                "name": "OBJ_EqnLayout_Annotate"
               }
             }
           ]
@@ -59306,7 +59306,7 @@
               "key": "topComment",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionComment"
+                "name": "OBJ_EqnLayout_Comment"
               }
             }
           ]
@@ -59319,7 +59319,7 @@
               "key": "bottomComment",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionComment"
+                "name": "OBJ_EqnLayout_Comment"
               }
             }
           ]
@@ -59332,7 +59332,7 @@
               "key": "pad",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionPad"
+                "name": "OBJ_EqnLayout_Pad"
               }
             }
           ]
@@ -59345,7 +59345,7 @@
               "key": "bar",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionBar"
+                "name": "OBJ_EqnLayout_Bar"
               }
             }
           ]
@@ -59358,7 +59358,7 @@
               "key": "scale",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionScale"
+                "name": "OBJ_EqnLayout_Scale"
               }
             }
           ]
@@ -59371,7 +59371,7 @@
               "key": "container",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionContainer"
+                "name": "OBJ_EqnLayout_Container"
               }
             }
           ]
@@ -59384,7 +59384,7 @@
               "key": "matrix",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionMatrix"
+                "name": "OBJ_EqnLayout_Matrix"
               }
             }
           ]
@@ -59397,7 +59397,7 @@
               "key": "int",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionIntegral"
+                "name": "OBJ_EqnLayout_Integral"
               }
             }
           ]
@@ -59410,7 +59410,7 @@
               "key": "sumOf",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionSumOf"
+                "name": "OBJ_EqnLayout_SumOf"
               }
             }
           ]
@@ -59423,7 +59423,7 @@
               "key": "prodOf",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionProdOf"
+                "name": "OBJ_EqnLayout_ProdOf"
               }
             }
           ]
@@ -59436,7 +59436,7 @@
               "key": "topStrike",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionStrikeComment"
+                "name": "OBJ_EqnLayout_StrikeComment"
               }
             }
           ]
@@ -59449,7 +59449,7 @@
               "key": "bottomStrike",
               "value": {
                 "type": "NameExpression",
-                "name": "TypeEquationFunctionStrikeComment"
+                "name": "OBJ_EqnLayout_StrikeComment"
               }
             }
           ]
@@ -78762,7 +78762,7 @@
         "lineNumber": 2020,
         "type": {
           "type": "NameExpression",
-          "name": "TypeEquationFunctionContainer"
+          "name": "OBJ_EqnLayout_Container"
         }
       }
     ],
@@ -78889,7 +78889,7 @@
         "lineNumber": 2451,
         "type": {
           "type": "NameExpression",
-          "name": "TypeEquationFunctionFraction"
+          "name": "OBJ_EqnLayout_Fraction"
         }
       }
     ],
