@@ -50,6 +50,77 @@ export type TypeSymbolOptions = {
   arrowHeight?: number,
 }
 
+/**
+ * Vinculum equation symbol
+ *
+ * @property {'vinculum'} symbol
+ * @property {Array<number>} [color] (equation color)
+ * @property {number} [lineWidth] (`0.01`)
+ * @property {'static' | 'dynamic'} [draw] `'dynamic'` updates vertices on
+ * resize, `'static'` only changes scale transform (`dynamic`)
+ * @property {number | 'first'} [staticWidth] used when `draw`=`static`.
+ * `number` sets width of static symbol - `'first'` calculates and sets width
+ * based on first use
+ * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
+ * `number` sets height of static symbol - `'first'` calculates and sets height
+ * based on first use
+ *
+ * @example
+ * eqn.addElements({
+ *   v: {
+ *     symbol: 'vinculum',
+ *     color: [1, 0, 0, 1],
+ *     lineWidth: 0.01,
+ *   },
+ * })
+ */
+type TypeVinculum = {
+  color?: Array<number>,
+  lineWidth?: number,
+  draw?: 'static' | 'dynamic',
+  staticWidth?: number | 'first',
+  staticHeight?: number | 'first',
+}
+
+/**
+ * Box equation symbol
+ *
+ * @property {'box'} symbol
+ * @property {Array<number>} [color] (equation color)
+ * @property {boolean} [fill] (`false`)
+ * @property {number} [width] force width instead of auto calculation
+ * @property {number} [height] force height instead of auto calculationg
+ * @property {number} [lineWidth] (`0.01`)
+ * @property {'static' | 'dynamic'} [draw] `'dynamic'` updates vertices on
+ * resize, `'static'` only changes scale transform (`dynamic`)
+ * @property {number | 'first'} [staticWidth] used when `draw`=`static`.
+ * `number` sets width of static symbol - `'first'` calculates and sets width
+ * based on first use
+ * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
+ * `number` sets height of static symbol - `'first'` calculates and sets height
+ * based on first use
+ *
+ * @example
+ * eqn.addElements({
+ *   b: {
+ *     symbol: 'box',
+ *     color: [1, 0, 0, 1],
+ *     lineWidth: 0.01,
+ *     fill: false,
+ *   },
+ * })
+ */
+type TypeBox = {
+  color?: Array<number>,
+  fill?: boolean,
+  width?: number,
+  height?: number,
+  lineWidth?: number,
+  draw?: 'static' | 'dynamic',
+  staticWidth?: number | 'first',
+  staticHeight?: number | 'first',
+}
+
 export default class EquationSymbols {
   shapes: DiagramPrimitives;
   defaultColor: Array<number>;
@@ -127,13 +198,7 @@ export default class EquationSymbols {
   //   );
   // }
 
-  vinculum(options: {
-    color?: Array<number>,
-    lineWidth?: number,
-    draw?: 'static' | 'dynamic',
-    staticWidth?: number | 'first',
-    staticHeight?: number | 'first',
-  }) {
+  vinculum(options: TypeVinculum) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
@@ -152,16 +217,7 @@ export default class EquationSymbols {
     ));
   }
 
-  box(optionsIn: {
-    color?: Array<number>,
-    fill?: boolean,
-    width?: number,
-    height?: number,
-    lineWidth?: number,
-    draw?: 'static' | 'dynamic',
-    staticWidth?: number | 'first',
-    staticHeight?: number | 'first',
-  }) {
+  box(optionsIn: TypeBox) {
     const defaultOptions = {
       color: this.defaultColor,
       fill: false,

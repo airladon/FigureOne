@@ -23,6 +23,14 @@ toc:
   - TypeEquationFunctionPad
   - TypeEquationFunctionMatrix
   - TypeEquationFunctionAnnotate
+  - TypeAnnotation
+  - TypeEncompassGlyph
+  - TypeLeftRightGlyph
+  - TypeTopBottomGlyph
+  - TypeGlyphs
+  - name: Equation Symbols
+  - TypeVinculum
+  - TypeBox
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment
