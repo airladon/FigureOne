@@ -13,18 +13,20 @@ diagram.addElement(
       // Equation elements are the individual terms in the equation
       elements: {
         arrow: { symbol: 'arrow', direction: 'left' },
-        lb: { symbol: 'squareBracket', side: 'left' },
+        lb: { symbol: 'bracket', side: 'left', lineWidth: 0.02, width: 0.1, tipWidth: 0.02, },
         rb: { symbol: 'squareBracket', side: 'right' },
         bb: { symbol :'box', fill: true, color: [1, 0, 0, 0.5]},
         box: { symbol: 'box', color: [1, 0, 0, 1] },
         radical: { symbol: 'radical', tickHeight: 0.08, tickWidth: 0.05, startWidth: 0.3, downWidth: 0.03, proportionalToHeight: true},
+        // b: { symbol: 'bracket', width: 0.1}
       },
       forms: {
         base: {
-          root: {
-            content: { frac: ['aasdf', 'vinculum', 'b'] },
-            symbol: 'radical',
-          },
+          // root: {
+          //   content: { frac: ['aasdf', 'vinculum', 'b'] },
+          //   symbol: 'radical',
+          // },
+          brac: { left: 'lb', content: 'a', topSpace: 0.3, bottomSpace: 0.3 }
           // root: { symbol: 'radical', content: 'a', root: '_2'}
         },
       },
