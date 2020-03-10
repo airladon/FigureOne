@@ -41,6 +41,7 @@ toc:
   - TypeAngleBracket
   - TypeBrace
   - TypeBar
+  - TypeSquareBracket
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment

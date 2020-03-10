@@ -897,6 +897,86 @@ type TypeBar = {
   staticHeight?: number | 'first',
 }
 
+
+/**
+ * Square bracket equation symbol
+ *
+ * <pre>
+ *
+ *                            width
+ *                  |<--------------------->|
+ *                  |                       |
+ *            ___                              ____
+ *           A      0000000000000000000000000     A
+ *           |      0000000000000000000000000     | tipWidth
+ *           |      0000000000000000000000000  ___V
+ *           |      00000000
+ *           |      00000000
+ *           |      00000000
+ *           |      00000000
+ *  height   |      00000000
+ *           |      00000000
+ *           |      00000000
+ *           |      00000000
+ *           |      00000000
+ *           |      00000000
+ *           |      0000000000000000000000000
+ *           |      0000000000000000000000000
+ *           V___   0000000000000000000000000
+ *
+ *                  |      |
+ *                  |      |
+ *                  |<---->|
+ *                 line width
+ *
+ * </pre>
+ *
+ * @property {'bar'} symbol
+ * @property {Array<number>} [color] (equation default)
+ * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
+ * square bracket ('left')
+ * @property {number} [lineWidth] (`0.01`)
+ * @property {number} [tipWidth] (`0.01`)
+ * @property {number} [lineWidth] (`0.01`)
+ * @property {number} [radius] optional curved corner radius (`0`)
+ * @property {number} [sides] number of sides in curve (`5`)
+ * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
+ * resize, `'static'` only changes scale transform (`dynamic`)
+ * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
+ * `number` sets height of static symbol - `'first'` calculates and sets height
+ * based on first use (`'first'`)
+ * @example
+ * // Typical
+ * eqn.addElements({
+ *   lb: { symbol: 'squareBracket', side: 'left' },
+ * });
+ * @example
+ * // All options
+ *  eqn.addElements({
+ *    rb: {
+ *      symbol: 'squareBracket',
+ *      side: 'right',
+ *      lineWidth: 0.01,
+ *      tipWidth: 0.01,
+ *      radius: 0.05,
+ *      sides: 10,
+ *      draw: 'static',
+ *      staticHeight: 0.5,
+ *    },
+ *  });
+ */
+type TypeSquareBracket = {
+  color?: Array<number>,
+  side?: 'left' | 'right' | 'top' | 'bottom',
+  lineWidth?: number,
+  width?: number,
+  tipWidth?: number,
+  radius?: number,
+  sides?: number,
+  draw?: 'dynamic' | 'static',
+  staticHeight?: number | 'first',
+}
+
 export default class EquationSymbols {
   shapes: DiagramPrimitives;
   defaultColor: Array<number>;
@@ -1306,17 +1386,7 @@ export default class EquationSymbols {
     ));
   }
 
-  squareBracket(options: {
-    side?: 'left' | 'right' | 'top' | 'bottom',
-    color?: Array<number>,
-    lineWidth?: number,
-    width?: number,
-    tipWidth?: number,
-    draw?: 'dynamic' | 'static',
-    staticHeight?: number | 'first',
-    radius?: number,
-    sides?: number,
-  }) {
+  squareBracket(options: TypeSquareBracket) {
     const defaultOptions = {
       side: 'left',
       lineWidth: null,
