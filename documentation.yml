@@ -36,6 +36,8 @@ toc:
   - TypeSum
   - TypeProd
   - TypeIntegral
+  - TypeStrike
+  - TypeBracket
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment

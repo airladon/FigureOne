@@ -420,6 +420,26 @@
               
                 
                 <li><a
+                  href='#typestrike'
+                  class="">
+                  TypeStrike
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typebracket'
+                  class="">
+                  TypeBracket
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#equation-form-types'
                   class="h5 bold black caps">
                   Equation Form Types
@@ -714,9 +734,9 @@
               
                 
                 <li><a
-                  href='#typestrike'
+                  href='#typeanglebracket'
                   class="">
-                  TypeStrike
+                  TypeAngleBracket
                   
                 </a>
                 
@@ -7253,6 +7273,400 @@ based on first use (
           
         
           
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typestrike'>
+      TypeStrike
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Strike equation symbol used in <a href="#typeequationfunctionstrike">TypeEquationFunctionStrike</a>.</p>
+<p>Four styles of strike symbol are available:</p>
+<pre>
+
+
+         000         000
+           000     000
+             000 000
+               000                       0000000000000000
+             000 000
+           000     000
+         000         000
+              cross                         horizontal
+
+
+                     000                 000
+                   000                     000
+                 000                         000
+               000                             000
+             000                                 000
+           000                                     000
+         000                                         000
+            forward                        backward
+
+</pre>
+
+    <div class='pre p1 fill-light mt0'>TypeStrike</div>
+  
+    <p>
+      Type:
+      {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, style: (<code>"cross"</code> | <code>"forward"</code> | <code>"back"</code> | <code>"horizontal"</code>)?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>), staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?, staticWidth: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<code>"strike"</code>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (equation default)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>style</span> <code class='quiet'>((<code>"cross"</code> | <code>"forward"</code> | <code>"back"</code> | <code>"horizontal"</code>)?)</code>
+          : (
+<code>'cross'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>0.015</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : force width of strike (normally defined by
+content size)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : force height of strike (normally defined by
+content size)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>draw</span> <code class='quiet'>((<code>"static"</code> | <code>"dynamic"</code>)?)</code>
+          : <code>'static'</code>
+ updates vertices on
+resize, 
+<code>'static'</code>
+ only changes scale transform (
+<code>dynamic</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>staticHeight</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
+          : used when 
+<code>draw</code>
+=
+<code>static</code>
+.
+
+<code>number</code>
+ sets height of static symbol - 
+<code>'first'</code>
+ calculates and sets height
+based on first use (
+<code>'first'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>staticWidth</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
+          : used when 
+<code>draw</code>
+=
+<code>static</code>
+.
+
+<code>number</code>
+ sets width of static symbol - 
+<code>'first'</code>
+ calculates and sets width
+based on first use (
+<code>'first'</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Typical</span>
+eqn.addElements({
+  <span class="hljs-attr">s</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'strike'</span>, <span class="hljs-attr">style</span>: <span class="hljs-string">'forward'</span> },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// All options</span>
+ eqn.addElements({
+<span class="hljs-attr">s</span>: {
+<span class="hljs-attr">symbol</span>: <span class="hljs-string">'strike'</span>,
+<span class="hljs-attr">style</span>: <span class="hljs-string">'cross'</span>,
+<span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>,
+<span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
+<span class="hljs-attr">height</span>: <span class="hljs-number">0.5</span>,
+<span class="hljs-attr">draw</span>: <span class="hljs-string">'static'</span>,
+<span class="hljs-attr">staticHeight</span>: <span class="hljs-string">'first'</span>,
+<span class="hljs-attr">staticWidth</span>: <span class="hljs-string">'first'</span>,
+},
+ });</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typebracket'>
+      TypeBracket
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Bracket equation symbol used in <a href="#typeequationfunctionbracket">TypeEquationFunctionBracket</a>.</p>
+<pre>
+                   tipWidth
+                     ----->| |<---
+                           | |
+                           | |
+                           000
+                         0000
+                       00000
+                     000000
+                    000000
+                    000000
+       lineWidth   000000
+            ------>000000<---
+                   000000
+                   |000000
+                   |000000
+                   | 000000
+                   |   00000
+                   |     0000
+                   |       000
+                   |         |
+                   |         |
+                   |<------->|
+                      width
+</pre>
+
+    <div class='pre p1 fill-light mt0'>TypeBracket</div>
+  
+    <p>
+      Type:
+      {side: (<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, tipWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<code>"bracket"</code>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (equation default)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>side</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?)</code>
+          : how to orient the
+bracket ('left')
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides in bracket curve (
+<code>10</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (depends on height)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>tipWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (depends on lineWidth)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : force width bracket (normally depends on height)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>draw</span> <code class='quiet'>((<code>"static"</code> | <code>"dynamic"</code>)?)</code>
+          : <code>'static'</code>
+ updates vertices on
+resize, 
+<code>'static'</code>
+ only changes scale transform (
+<code>dynamic</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>staticHeight</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
+          : used when 
+<code>draw</code>
+=
+<code>static</code>
+.
+
+<code>number</code>
+ sets height of static symbol - 
+<code>'first'</code>
+ calculates and sets height
+based on first use (
+<code>'first'</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Typical</span>
+eqn.addElements({
+  <span class="hljs-attr">lb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span> },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// All options</span>
+ eqn.addElements({
+<span class="hljs-attr">lb</span>: {
+<span class="hljs-attr">symbol</span>: <span class="hljs-string">'bracket'</span>,
+<span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span>,
+<span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
+<span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>,
+<span class="hljs-attr">tipWidth</span>: <span class="hljs-number">0.05</span>,
+<span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
+<span class="hljs-attr">draw</span>: <span class="hljs-string">'static'</span>,
+<span class="hljs-attr">staticHeight</span>: <span class="hljs-string">'first'</span>,
+},
+ });</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
   <h2 id='equation-form-types' class='mt0'>
@@ -11028,42 +11442,40 @@ corner at (-1, -1), width 1, height 1
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='typestrike'>
-      TypeStrike
+    <h3 class='fl m0' id='typeanglebracket'>
+      TypeAngleBracket
     </h3>
     
     
   </div>
   
 
-  <p>Strike equation symbol used in <a href="#typeequationfunctionstrike">TypeEquationFunctionStrike</a>.</p>
-<p>Four styles of strike symbol are available:</p>
-<pre><code>     000         000
-       000     000
-         000 000
-           000                       0000000000000000
-         000 000
-       000     000
-     000         000
-          cross                         horizontal
-
-
-                 000                 000
-               000                     000
-             000                         000
-           000                             000
-         000                                 000
-       000                                     000
-     000                                         000
-        forward                        backward
+  <p>Angle bracket equation symbol used in <a href="#typeequationfunctionbracket">TypeEquationFunctionBracket</a>.</p>
+<pre><code>                 width
+              |&#x3C;------->|
+              |         |
+      --------|----- 0000
+      A       |     0000
+      |       |    0000
+      |       |   0000
+      |       |  0000
+      |         0000
 </code></pre>
+<p>   height |        0000
+|        0000
+|         0000
+|          0000
+|           0000
+|            0000
+|             0000
+V<strong><strong><strong>_</strong></strong></strong> 0000</p>
 </pre>
 
-    <div class='pre p1 fill-light mt0'>TypeStrike</div>
+    <div class='pre p1 fill-light mt0'>TypeAngleBracket</div>
   
     <p>
       Type:
-      {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, style: (<code>"cross"</code> | <code>"forward"</code> | <code>"back"</code> | <code>"horizontal"</code>)?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>), staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?, staticWidth: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
+      {side: (<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"dynamic"</code> | <code>"static"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
     </p>
   
   
@@ -11082,7 +11494,7 @@ corner at (-1, -1), width 1, height 1
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>symbol</span> <code class='quiet'>(<code>"strike"</code>)</code>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<code>"bracket"</code>)</code>
           
           
         </div>
@@ -11095,35 +11507,23 @@ corner at (-1, -1), width 1, height 1
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>style</span> <code class='quiet'>((<code>"cross"</code> | <code>"forward"</code> | <code>"back"</code> | <code>"horizontal"</code>)?)</code>
-          : (
-<code>'cross'</code>
-)
+          <span class='code bold'>side</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?)</code>
+          : how to orient the
+bracket ('left')
 
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>lineWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>0.015</code>
-)
+          : (depends on height)
 
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : force width of strike (normally defined by
-content size)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : force height of strike (normally defined by
-content size)
+          : force width bracket (normally depends on height)
 
           
         </div>
@@ -11160,25 +11560,6 @@ based on first use (
           
         </div>
       
-        <div class='space-bottom0'>
-          <span class='code bold'>staticWidth</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
-          : used when 
-<code>draw</code>
-=
-<code>static</code>
-.
-
-<code>number</code>
- sets width of static symbol - 
-<code>'first'</code>
- calculates and sets width
-based on first use (
-<code>'first'</code>
-)
-
-          
-        </div>
-      
     </div>
   
 
@@ -11192,21 +11573,19 @@ based on first use (
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Typical</span>
 eqn.addElements({
-  <span class="hljs-attr">s</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'strike'</span>, <span class="hljs-attr">style</span>: <span class="hljs-string">'forward'</span> },
+  <span class="hljs-attr">lb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'angleBracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span> },
 });</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// All options</span>
  eqn.addElements({
-<span class="hljs-attr">s</span>: {
-<span class="hljs-attr">symbol</span>: <span class="hljs-string">'strike'</span>,
-<span class="hljs-attr">style</span>: <span class="hljs-string">'cross'</span>,
+<span class="hljs-attr">lb</span>: {
+<span class="hljs-attr">symbol</span>: <span class="hljs-string">'angleBracket'</span>,
+<span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span>,
 <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>,
 <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
-<span class="hljs-attr">height</span>: <span class="hljs-number">0.5</span>,
 <span class="hljs-attr">draw</span>: <span class="hljs-string">'static'</span>,
 <span class="hljs-attr">staticHeight</span>: <span class="hljs-string">'first'</span>,
-<span class="hljs-attr">staticWidth</span>: <span class="hljs-string">'first'</span>,
 },
  });</pre>
     

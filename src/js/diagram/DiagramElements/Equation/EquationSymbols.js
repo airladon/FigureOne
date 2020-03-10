@@ -546,6 +546,7 @@ type TypeRadical = {
  * Strike equation symbol used in {@link TypeEquationFunctionStrike}.
  *
  * Four styles of strike symbol are available:
+ * <pre>
  *
  *
  *          000         000
@@ -616,6 +617,138 @@ type TypeStrike = {
   staticWidth?: number | 'first',
 }
 
+/**
+ * Bracket equation symbol used in {@link TypeEquationFunctionBracket}.
+ *<pre>
+ *                    tipWidth
+ *                      ----->| |<---
+ *                            | |
+ *                            | |
+ *                            000
+ *                          0000
+ *                        00000
+ *                      000000
+ *                     000000
+ *                     000000
+ *        lineWidth   000000
+ *             ------>000000<---
+ *                    000000
+ *                    |000000
+ *                    |000000
+ *                    | 000000
+ *                    |   00000
+ *                    |     0000
+ *                    |       000
+ *                    |         |
+ *                    |         |
+ *                    |<------->|
+ *                       width
+ * </pre>
+ *
+ * @property {'bracket'} symbol
+ * @property {Array<number>} [color] (equation default)
+ * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
+ * bracket ('left')
+ * @property {number} [sides] number of sides in bracket curve (`10`)
+ * @property {number} [lineWidth] (depends on height)
+ * @property {number} [tipWidth] (depends on lineWidth)
+ * @property {number} [width] force width bracket (normally depends on height)
+ * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
+ * resize, `'static'` only changes scale transform (`dynamic`)
+ * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
+ * `number` sets height of static symbol - `'first'` calculates and sets height
+ * based on first use (`'first'`)
+ * @example
+ * // Typical
+ * eqn.addElements({
+ *   lb: { symbol: 'bracket', side: 'left' },
+ * });
+ * @example
+ * // All options
+ *  eqn.addElements({
+      lb: {
+        symbol: 'bracket',
+        side: 'right',
+        sides: 20,
+        lineWidth: 0.01,
+        tipWidth: 0.05,
+        width: 0.5,
+        draw: 'static',
+        staticHeight: 'first',
+      },
+ *  });
+ */
+type TypeBracket = {
+  side?: 'left' | 'right' | 'top' | 'bottom',
+  color?: Array<number>,
+  lineWidth?: number,
+  sides?: number,
+  width?: number,
+  tipWidth?: number,
+  draw?: 'static' | 'dynamic',
+  staticHeight?: number | 'first',
+}
+
+/**
+ * Angle bracket equation symbol used in {@link TypeEquationFunctionBracket}.
+ *
+ *                      width
+ *                   |<------->|
+ *                   |         |
+ *           --------|----- 0000
+ *           A       |     0000
+ *           |       |    0000
+ *           |       |   0000
+ *           |       |  0000
+ *           |         0000
+ *    height |        0000
+ *           |        0000
+ *           |         0000
+ *           |          0000
+ *           |           0000
+ *           |            0000
+ *           |             0000
+ *           V_____________ 0000
+ *
+ * </pre>
+ *
+ * @property {'bracket'} symbol
+ * @property {Array<number>} [color] (equation default)
+ * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
+ * bracket ('left')
+ * @property {number} [lineWidth] (depends on height)
+ * @property {number} [width] force width bracket (normally depends on height)
+ * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
+ * resize, `'static'` only changes scale transform (`dynamic`)
+ * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
+ * `number` sets height of static symbol - `'first'` calculates and sets height
+ * based on first use (`'first'`)
+ * @example
+ * // Typical
+ * eqn.addElements({
+ *   lb: { symbol: 'angleBracket', side: 'left' },
+ * });
+ * @example
+ * // All options
+ *  eqn.addElements({
+      lb: {
+        symbol: 'angleBracket',
+        side: 'right',
+        lineWidth: 0.01,
+        width: 0.5,
+        draw: 'static',
+        staticHeight: 'first',
+      },
+ *  });
+ */
+ type TypeAngleBracket = {
+  side?: 'left' | 'right' | 'top' | 'bottom',
+  color?: Array<number>,
+  lineWidth?: number,
+  width?: number,
+  draw?: 'dynamic' | 'static',
+  staticHeight?: number | 'first',
+}
 
 export default class EquationSymbols {
   shapes: DiagramPrimitives;
@@ -941,16 +1074,7 @@ export default class EquationSymbols {
   //   return cross;
   // }
 
-  bracket(options: {
-    side?: 'left' | 'right' | 'top' | 'bottom',
-    color?: Array<number>,
-    lineWidth?: number,
-    sides?: number,
-    width?: number,
-    tipWidth?: number,
-    draw?: 'static' | 'dynamic',
-    staticHeight?: number | 'first',
-  }) {
+  bracket(options: TypeBracket) {
     const defaultOptions = {
       side: 'left',
       color: this.defaultColor,
@@ -973,14 +1097,7 @@ export default class EquationSymbols {
     ));
   }
 
-  angleBracket(options: {
-    side?: 'left' | 'right' | 'top' | 'bottom',
-    color?: Array<number>,
-    lineWidth?: number,
-    width?: number,
-    draw?: 'dynamic' | 'static',
-    staticHeight?: number | 'first',
-  }) {
+  angleBracket(options: TypeAngleBracket) {
     const defaultOptions = {
       side: 'left',
       lineWidth: null,
