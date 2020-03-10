@@ -380,6 +380,26 @@
               
                 
                 <li><a
+                  href='#typesum'
+                  class="">
+                  TypeSum
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeprod'
+                  class="">
+                  TypeProd
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#equation-form-types'
                   class="h5 bold black caps">
                   Equation Form Types
@@ -6192,7 +6212,6 @@ based on first use
                               0000000
                               0000000
                               0000000
-
                               |     |
                               |     |
                               |<--->|
@@ -6330,6 +6349,343 @@ based on first use (
     <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>,
     <span class="hljs-attr">arrowHeight</span>: <span class="hljs-number">0.02</span>,
     <span class="hljs-attr">arrowWidth</span>: <span class="hljs-number">0.02</span>,
+  },
+})</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typesum'>
+      TypeSum
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Sum equation symbol</p>
+<pre>
+         ---------- 00000000000000000000000000000000000
+         A            0000000           \         000000
+         |              0000000          \           000
+         |                0000000         thick2       00
+         |                  0000000
+         |                    0000000
+         |                      0000000     3 x lineWidth
+         |                        0000000    /
+         |                          0000000 /
+         |                            0000000
+         |                              0000000
+         |                                000000
+         |                                  000
+         |                                0000
+  height |                              0000
+         |                            0000   \
+         |                          0000      \
+         |                        0000         lineWidth
+         |                      0000
+         |                    0000
+         |                  0000
+         |                0000       2 x lineWidth      00
+         |              0000        /                 000|
+         |            0000         /               000000|
+         V          000000000000000000000000000000000000 |
+         --------  000000000000000000000000000000000000  |
+                  |                                      |
+                  |                                      |
+                  |                 width                |
+                  |<------------------------------------>|
+</pre>
+
+    <div class='pre p1 fill-light mt0'>TypeSum</div>
+  
+    <p>
+      Type:
+      {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<code>"sum"</code>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (equation color)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>height * 0.88 / (25 * height + 15)</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides that make up serif curve (
+<code>5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>draw</span> <code class='quiet'>((<code>"static"</code> | <code>"dynamic"</code>)?)</code>
+          : <code>'static'</code>
+ updates vertices on
+resize, 
+<code>'static'</code>
+ only changes scale transform (
+<code>dynamic</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>staticHeight</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
+          : used when 
+<code>draw</code>
+=
+<code>static</code>
+.
+
+<code>number</code>
+ sets height of static symbol - 
+<code>'first'</code>
+ calculates and sets height
+based on first use (
+<code>'first'</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>eqn.addElements({
+  <span class="hljs-attr">s</span>: {
+    <span class="hljs-attr">symbol</span>: <span class="hljs-string">'sum'</span>,
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">5</span>,
+  },
+})</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeprod'>
+      TypeProd
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Product equation symbol</p>
+<pre>
+                                         width
+               |<--------------------------------------------------------->|
+               |                                                           |
+               |                                                           |
+               |                                                           |
+               |                         1.2 x lineWidth                   |
+               |                            /                              |
+               |                           /                               |
+         ---- 00000000000000000000000000000000000000000000000000000000000000
+         A         000000000000000000000000000000000000000000000000000000
+         |           00000000000000000000000000000000000000000000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000   \                 /   00000000000
+ height  |            00000000000    \              /     00000000000
+         |            00000000000      \          /       00000000000
+         |            00000000000        \      /         00000000000
+         |            00000000000     3 x lineWidth       00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |           0000000000000                       00000000000000
+         V         00000000000000000                   000000000000000000
+         ----- 0000000000000000000000000           00000000000000000000000000
+</pre>
+
+    <div class='pre p1 fill-light mt0'>TypeProd</div>
+  
+    <p>
+      Type:
+      {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<code>"prod"</code>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (equation color)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>height * 0.88 / (25 * height + 15)</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides that make up serif curve (
+<code>5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>draw</span> <code class='quiet'>((<code>"static"</code> | <code>"dynamic"</code>)?)</code>
+          : <code>'static'</code>
+ updates vertices on
+resize, 
+<code>'static'</code>
+ only changes scale transform (
+<code>dynamic</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>staticHeight</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
+          : used when 
+<code>draw</code>
+=
+<code>static</code>
+.
+
+<code>number</code>
+ sets height of static symbol - 
+<code>'first'</code>
+ calculates and sets height
+based on first use (
+<code>'first'</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>eqn.addElements({
+  <span class="hljs-attr">p</span>: {
+    <span class="hljs-attr">symbol</span>: <span class="hljs-string">'prod'</span>,
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">5</span>,
   },
 })</pre>
     
