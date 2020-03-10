@@ -84,44 +84,44 @@
     -   [Examples][80]
 -   [TypeGlyphs][81]
     -   [Properties][82]
--   [TypeRadical][83]
-    -   [Properties][84]
-    -   [Examples][85]
--   [Equation Symbols][86]
--   [TypeVinculum][87]
+-   [Equation Symbols][83]
+-   [OBJ_EqnSymbol_Vinculum][84]
+    -   [Properties][85]
+    -   [Examples][86]
+-   [OBJ_EqnSymbol_Box][87]
     -   [Properties][88]
     -   [Examples][89]
--   [TypeBox][90]
+-   [OBJ_EqnSymbol_Arrow][90]
     -   [Properties][91]
     -   [Examples][92]
--   [TypeArrow][93]
+-   [OBJ_EqnSymbol_Sum][93]
     -   [Properties][94]
     -   [Examples][95]
--   [TypeSum][96]
+-   [OBJ_EqnSymbol_Prod][96]
     -   [Properties][97]
     -   [Examples][98]
--   [TypeProd][99]
+-   [OBJ_EqnSymbol_Integral][99]
     -   [Properties][100]
     -   [Examples][101]
--   [TypeIntegral][102]
+-   [OBJ_EqnSymbol_Strike][102]
     -   [Properties][103]
     -   [Examples][104]
--   [TypeStrike][105]
+-   [OBJ_EqnSymbol_Bracket][105]
     -   [Properties][106]
     -   [Examples][107]
--   [TypeBracket][108]
+-   [OBJ_EqnSymbol_AngleBracket][108]
     -   [Properties][109]
     -   [Examples][110]
--   [TypeAngleBracket][111]
+-   [OBJ_EqnSymbol_Brace][111]
     -   [Properties][112]
     -   [Examples][113]
--   [TypeBrace][114]
+-   [OBJ_EqnSymbol_Bar][114]
     -   [Properties][115]
     -   [Examples][116]
--   [TypeBar][117]
+-   [OBJ_EqnSymbol_SquareBracket][117]
     -   [Properties][118]
     -   [Examples][119]
--   [TypeSquareBracket][120]
+-   [OBJ_EqnSymbol_Radical][120]
     -   [Properties][121]
     -   [Examples][122]
 -   [Equation Form Types][123]
@@ -1784,7 +1784,835 @@ Type: {left: [TypeLeftRightGlyph][238]?, right: [TypeLeftRightGlyph][238]?, top:
 -   `bottom` **[TypeTopBottomGlyph][239]?** 
 -   `left` **[TypeLeftRightGlyph][238]?** 
 
-## TypeRadical
+## Equation Symbols
+
+
+
+
+## OBJ_EqnSymbol_Vinculum
+
+Vinculum equation symbol
+
+<pre>
+                         width
+      |<---------------------------------------->|
+      |                                          |
+      |                                          | ____
+      00000000000000000000000000000000000000000000   A
+      00000000000000000000000000000000000000000000   |  lineWidth
+      00000000000000000000000000000000000000000000 __V_
+
+</pre>
+
+Type: {color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticWidth: ([number][230] \| `"first"`)?, staticHeight: ([number][230] \| `"first"`)?}
+
+### Properties
+
+-   `symbol` **`"vinculum"`** 
+-   `color` **[Array][229]&lt;[number][230]>?** (equation color)
+-   `lineWidth` **[number][230]?** (`0.01`)
+-   `draw` **(`"static"` \| `"dynamic"`)?** `'dynamic'` updates vertices on
+    resize, `'static'` only changes scale transform (`dynamic`)
+-   `staticWidth` **([number][230] \| `"first"`)?** used when `draw`=`static`.
+    `number` sets width of static symbol - `'first'` calculates and sets width
+    based on first use (`'first'`)
+-   `staticHeight` **([number][230] \| `"first"`)?** 
+
+### Examples
+
+```javascript
+eqn.addElements({
+  v: {
+    symbol: 'vinculum',
+    color: [1, 0, 0, 1],
+    lineWidth: 0.01,
+  },
+})
+```
+
+## OBJ_EqnSymbol_Box
+
+Box equation symbol
+
+<pre>
+                                         width
+                |<--------------------------------------------------->|
+                |                                                     |
+                |                                                     |
+
+        ------- 0000000000000000000000000000000000000000000000000000000
+        A       0000000000000000000000000000000000000000000000000000000
+        |       0000                                               0000
+        |       0000                                               0000
+        |       0000                                               0000
+ height |       0000                                               0000
+        |       0000                                               0000
+        |       0000                                               0000
+        |       0000                                               0000
+        |       0000                                               0000
+        |       0000000000000000000000000000000000000000000000000000000
+        V______ 0000000000000000000000000000000000000000000000000000000
+
+</pre>
+
+Type: {color: [Array][229]&lt;[number][230]>?, fill: [boolean][233]?, width: [number][230]?, height: [number][230]?, lineWidth: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticWidth: ([number][230] \| `"first"`)?, staticHeight: ([number][230] \| `"first"`)?}
+
+### Properties
+
+-   `symbol` **`"box"`** 
+-   `color` **[Array][229]&lt;[number][230]>?** (equation color)
+-   `lineWidth` **[number][230]?** (`0.01`)
+-   `fill` **[boolean][233]?** (`false`)
+-   `width` **[number][230]?** force width instead of auto calculation
+-   `height` **[number][230]?** force height instead of auto calculationg
+-   `draw` **(`"static"` \| `"dynamic"`)?** `'dynamic'` updates vertices on
+    resize, `'static'` only changes scale transform (`dynamic`)
+-   `staticWidth` **([number][230] \| `"first"`)?** used when `draw`=`static`.
+    `number` sets width of static symbol - `'first'` calculates and sets width
+    based on first use
+-   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
+    `number` sets height of static symbol - `'first'` calculates and sets height
+    based on first use
+
+### Examples
+
+```javascript
+eqn.addElements({
+  b: {
+    symbol: 'box',
+    color: [1, 0, 0, 1],
+    lineWidth: 0.01,
+    fill: false,
+  },
+})
+```
+
+## OBJ_EqnSymbol_Arrow
+
+Arrow equation symbol
+
+<pre>
+                            arrowWidth
+                        |<--------------->|
+                        |                 |
+                        |                 |
+                 -------|------- 0        |
+                 A      |      00000      |
+   arrowHeight   |      |     0000000     |
+                 |      |   00000000000   |
+                 V      | 000000000000000 |
+                 ------ 0000000000000000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              0000000
+                              |     |
+                              |     |
+                              |<--->|
+                             lineWidth
+</pre>
+
+Type: {color: [Array][229]&lt;[number][230]>?, direction: (`"up"` \| `"down"` \| `"left"` \| `"right"`)?, lineWidth: [number][230]?, arrowHeight: [number][230]?, arrowWidth: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticHeight: ([number][230] \| `"first"`)?}
+
+### Properties
+
+-   `symbol` **`"arrow"`** 
+-   `color` **[Array][229]&lt;[number][230]>?** (equation color)
+-   `direction` **(`"up"` \| `"down"` \| `"left"` \| `"right"`)?** (`'right'`)
+-   `lineWidth` **[number][230]?** (`0.01`)
+-   `arrowWidth` **[number][230]?** (`0.01`)
+-   `arrowHeight` **[number][230]?** (`0.04`)
+-   `lineWidth` **[number][230]?** (`0.01`)
+-   `draw` **(`"static"` \| `"dynamic"`)?** `'dynamic'` updates vertices on
+    resize, `'static'` only changes scale transform (`dynamic`)
+-   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
+    `number` sets height of static symbol - `'first'` calculates and sets height
+    based on first use (`'first'`)
+
+### Examples
+
+```javascript
+eqn.addElements({
+  a: {
+    symbol: 'arrow',
+    color: [1, 0, 0, 1],
+    direction: 'right'
+    lineWidth: 0.01,
+    arrowHeight: 0.02,
+    arrowWidth: 0.02,
+  },
+})
+```
+
+## OBJ_EqnSymbol_Sum
+
+Sum equation symbol
+
+<pre>
+         ---------- 00000000000000000000000000000000000
+         A            0000000                     000000
+         |              0000000                      000
+         |                0000000                      00
+         |                  0000000
+         |                    0000000
+         |                      0000000
+         |                        0000000
+         |                          0000000
+         |                            0000000
+         |                              0000000
+         |                                000000
+         |                                  000
+         |                                0000
+  height |                              0000
+         |                            0000   \
+         |                          0000      \
+         |                        0000         lineWidth
+         |                      0000
+         |                    0000
+         |                  0000
+         |                0000                          00
+         |              0000                          000|
+         |            0000                         000000|
+         V          000000000000000000000000000000000000 |
+         --------  000000000000000000000000000000000000  |
+                  |                                      |
+                  |                                      |
+                  |                 width                |
+                  |<------------------------------------>|
+</pre>
+
+Type: {color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, sides: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticHeight: ([number][230] \| `"first"`)?}
+
+### Properties
+
+-   `symbol` **`"sum"`** 
+-   `color` **[Array][229]&lt;[number][230]>?** (equation color)
+-   `lineWidth` **[number][230]?** (`height * 0.88 / (25 * height + 15)`)
+-   `sides` **[number][230]?** number of sides that make up serif curve (`5`)
+-   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
+    resize, `'static'` only changes scale transform (`dynamic`)
+-   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
+    `number` sets height of static symbol - `'first'` calculates and sets height
+    based on first use (`'first'`)
+
+### Examples
+
+```javascript
+eqn.addElements({
+  s: {
+    symbol: 'sum',
+    color: [1, 0, 0, 1],
+    lineWidth: 0.01
+    sides: 5,
+  },
+})
+```
+
+## OBJ_EqnSymbol_Prod
+
+Product equation symbol used in [OBJ_EqnLayout_ProdOf][42]
+
+<pre>
+                                         width
+               |<--------------------------------------------------------->|
+               |                                                           |
+               |                                                           |
+               |                                                           |
+               |                          lineWidth                        |
+               |                            /                              |
+               |                           /                               |
+         ---- 00000000000000000000000000000000000000000000000000000000000000
+         A         000000000000000000000000000000000000000000000000000000
+         |           00000000000000000000000000000000000000000000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+ height  |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |           0000000000000                       00000000000000
+         V         00000000000000000                   000000000000000000
+         ----- 0000000000000000000000000           00000000000000000000000000
+</pre>
+
+Type: {color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, sides: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticHeight: ([number][230] \| `"first"`)?}
+
+### Properties
+
+-   `symbol` **`"prod"`** 
+-   `color` **[Array][229]&lt;[number][230]>?** (equation color)
+-   `lineWidth` **[number][230]?** (related to height)
+-   `sides` **[number][230]?** number of sides that make up serif curve (`5`)
+-   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
+    resize, `'static'` only changes scale transform (`dynamic`)
+-   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
+    `number` sets height of static symbol - `'first'` calculates and sets height
+    based on first use (`'first'`)
+
+### Examples
+
+```javascript
+eqn.addElements({
+  p: {
+    symbol: 'prod',
+    color: [1, 0, 0, 1],
+    lineWidth: 0.01
+    sides: 5,
+  },
+})
+```
+
+## OBJ_EqnSymbol_Integral
+
+Integral equation symbol used in [OBJ_EqnLayout_Integral][36]
+
+<pre>
+//     --------------------------------------------------   0000000
+//     A                                              000000011111111
+//     |                                         0000000   111111111111
+//     |                                       0000000    11111111111111
+//     |                                      0000000     11111111111111
+//     |                                     0000000       111111111111
+//     |                                   000000000         11111111
+//     |                                  000000000
+//     |                                 0000000000
+//     |    S curve gradient = k         000000000
+//     |                                0000000000
+//     |                                0000000000
+//     |                               00000000000
+//     |                              00000000000
+//     |                              000000000000
+//     |                             000000000000      lineWidth
+//   h |                     ------->000000000000<----------
+//     |                             000000000000
+//     |                             000000000000
+//     |                            000000000000
+//     |                             00000000000
+//     |                            00000000000
+//     |                            0000000000
+//     |                            0000000000
+//     |                            000000000
+//     |                           000000000
+//     |                          0000000000
+//     |      11111111           000000000
+//     |    111111111111       00000000
+//     |   11111111111111     0000000
+//     |   11111111111111   0000000
+//     |    111111111111   0000000
+//     V      111111110000000
+//     -------  0000000
+</pre>
+
+Type: {color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, sides: [number][230]?, tipWidth: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticHeight: ([number][230] \| `"first"`)?, serif: [boolean][233]?, num: [number][230]?, type: (`"line"` \| `"generic"`)?, serifSides: [number][230]?, lineIntegralSides: [number][230]?}
+
+### Properties
+
+-   `symbol` **`"int"`** 
+-   `color` **[Array][229]&lt;[number][230]>?** (equation color)
+-   `lineWidth` **[number][230]?** (related to height)
+-   `sides` **[number][230]?** number of sides that make up s curve (`30`)
+-   `num` **[number][230]?** number of integral symbols (`1`)
+-   `type` **(`"line"` \| `"generic"`)?** `line` draws a circle through the
+     symbols denoting a line integral (`generic`)
+-   `tipWidth` **[number][230]?** width of s curve tip (related to lineWidth)
+-   `serif` **[boolean][233]?** `false` to remove serifs (`true`)
+-   `serifSides` **[number][230]?** number of sides in serif circles (`10`)
+-   `lineIntegralSides` **[number][230]?** number of sides in line integral circle (`20`)
+-   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
+    resize, `'static'` only changes scale transform (`dynamic`)
+-   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
+    `number` sets height of static symbol - `'first'` calculates and sets height
+    based on first use (`'first'`)
+
+### Examples
+
+```javascript
+eqn.addElements({
+int: {
+  symbol: 'int',
+  color: [0.95, 0, 0, 1],
+  lineWidth: 0.01,
+  sides: 20,
+  num: 2,
+  type: 'generic',
+  tipWidth: null,
+  serif: true,
+  serifSides: 10,
+  lineIntegralSides: 20,
+  draw: 'static',
+  staticHeight: 'first',
+},
+```
+
+## OBJ_EqnSymbol_Strike
+
+Strike equation symbol used in [OBJ_EqnLayout_Strike][27].
+
+Four styles of strike symbol are available:
+
+<pre>
+
+
+         000         000
+           000     000
+             000 000
+               000                       0000000000000000
+             000 000
+           000     000
+         000         000
+              cross                         horizontal
+
+
+                     000                 000
+                   000                     000
+                 000                         000
+               000                             000
+             000                                 000
+           000                                     000
+         000                                         000
+            forward                        backward
+
+</pre>
+
+Type: {color: [Array][229]&lt;[number][230]>?, style: (`"cross"` \| `"forward"` \| `"back"` \| `"horizontal"`)?, lineWidth: [number][230]?, width: [number][230]?, height: [number][230]?, draw: (`"static"` \| `"dynamic"`), staticHeight: ([number][230] \| `"first"`)?, staticWidth: ([number][230] \| `"first"`)?}
+
+### Properties
+
+-   `symbol` **`"strike"`** 
+-   `color` **[Array][229]&lt;[number][230]>?** (equation default)
+-   `style` **(`"cross"` \| `"forward"` \| `"back"` \| `"horizontal"`)?** (`'cross'`)
+-   `lineWidth` **[number][230]?** (`0.015`)
+-   `width` **[number][230]?** force width of strike (normally defined by
+    content size)
+-   `height` **[number][230]?** force height of strike (normally defined by
+    content size)
+-   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
+    resize, `'static'` only changes scale transform (`dynamic`)
+-   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
+    `number` sets height of static symbol - `'first'` calculates and sets height
+    based on first use (`'first'`)
+-   `staticWidth` **([number][230] \| `"first"`)?** used when `draw`=`static`.
+    `number` sets width of static symbol - `'first'` calculates and sets width
+    based on first use (`'first'`)
+
+### Examples
+
+```javascript
+// Typical
+eqn.addElements({
+  s: { symbol: 'strike', style: 'forward' },
+});
+```
+
+```javascript
+// All options
+ eqn.addElements({
+   s: {
+     symbol: 'strike',
+     style: 'cross',
+     lineWidth: 0.01,
+     width: 0.5,
+     height: 0.5,
+     draw: 'static',
+     staticHeight: 'first',
+     staticWidth: 'first',
+   },
+ });
+```
+
+## OBJ_EqnSymbol_Bracket
+
+Bracket equation symbol
+
+<pre>
+                   tipWidth
+                     ----->| |<---
+                           | |
+                           | |
+                           000
+                         0000
+                       00000
+                     000000
+                    000000
+                    000000
+       lineWidth   000000
+            ------>000000<---
+                   000000
+                   |000000
+                   |000000
+                   | 000000
+                   |   00000
+                   |     0000
+                   |       000
+                   |         |
+                   |         |
+                   |<------->|
+                      width
+</pre>
+
+Type: {side: (`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?, color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, sides: [number][230]?, width: [number][230]?, tipWidth: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticHeight: ([number][230] \| `"first"`)?}
+
+### Properties
+
+-   `symbol` **`"bracket"`** 
+-   `color` **[Array][229]&lt;[number][230]>?** (equation default)
+-   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
+    bracket ('left')
+-   `sides` **[number][230]?** number of sides in bracket curve (`10`)
+-   `lineWidth` **[number][230]?** (depends on height)
+-   `tipWidth` **[number][230]?** (depends on lineWidth)
+-   `width` **[number][230]?** force width bracket (normally depends on height)
+-   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
+    resize, `'static'` only changes scale transform (`dynamic`)
+-   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
+    `number` sets height of static symbol - `'first'` calculates and sets height
+    based on first use (`'first'`)
+
+### Examples
+
+```javascript
+// Typical
+eqn.addElements({
+  lb: { symbol: 'bracket', side: 'left' },
+});
+```
+
+```javascript
+// All options
+ eqn.addElements({
+   rb: {
+     symbol: 'bracket',
+     side: 'right',
+     sides: 20,
+     lineWidth: 0.01,
+     tipWidth: 0.05,
+     width: 0.5,
+     draw: 'static',
+     staticHeight: 'first',
+   },
+ });
+```
+
+## OBJ_EqnSymbol_AngleBracket
+
+Angle bracket equation symbol
+
+<pre>
+                     width
+                  |<------->|
+                  |         |
+          --------|----- 0000
+          A       |     0000
+          |       |    0000
+          |       |   0000
+          |       |  0000
+          |         0000
+   height |        0000
+          |        0000
+          |         0000
+          |          0000
+          |           0000
+          |            0000
+          |             0000
+          V_____________ 0000
+
+</pre>
+
+Type: {side: (`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?, color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, width: [number][230]?, draw: (`"dynamic"` \| `"static"`)?, staticHeight: ([number][230] \| `"first"`)?}
+
+### Properties
+
+-   `symbol` **`"angleBracket"`** 
+-   `color` **[Array][229]&lt;[number][230]>?** (equation default)
+-   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
+    angle bracket ('left')
+-   `lineWidth` **[number][230]?** (depends on height)
+-   `width` **[number][230]?** force width bracket (normally depends on height)
+-   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
+    resize, `'static'` only changes scale transform (`dynamic`)
+-   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
+    `number` sets height of static symbol - `'first'` calculates and sets height
+    based on first use (`'first'`)
+
+### Examples
+
+```javascript
+// Typical
+eqn.addElements({
+  lb: { symbol: 'angleBracket', side: 'left' },
+});
+```
+
+```javascript
+// All options
+ eqn.addElements({
+   rb: {
+     symbol: 'angleBracket',
+     side: 'right',
+     lineWidth: 0.01,
+     width: 0.5,
+     draw: 'static',
+     staticHeight: 'first',
+   },
+ });
+```
+
+## OBJ_EqnSymbol_Brace
+
+Brace equation symbol
+
+<pre>
+               width
+            |<------>|
+            |        |
+            |        |
+            |      000
+            |    000
+            |   000
+            |  0000
+            |  0000
+            |  0000
+            |  0000
+            |  000
+            | 000
+            000
+              000
+               000
+               0000
+               0000
+               0000
+               0000
+          - - -0000 - - - -
+         |      000        |
+         |       000       |
+         |         000     |
+          - - - - - - - - -
+                       \
+                        \
+                         \
+     - - - - - - - - - - - - - - - - - - - - - - - - -
+    |       00000000000000                            |
+    |        00000000000000                           |
+    |          000000000000                 tipWidth  |
+    |            000000000000               |         |
+    |              000000000000             |         |
+    |                 0000000000000  _______V_        |
+    |                     00000000000                 |
+    |                         0000000_________        |
+    |                                       A         |
+     - - - - - - - - - - - - - - - - - - - - - - - - -
+
+</pre>
+
+Type: {side: (`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?, color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, sides: [number][230]?, width: [number][230]?, tipWidth: [number][230]?, draw: (`"dynamic"` \| `"static"`)?, staticHeight: ([number][230] \| `"first"`)?}
+
+### Properties
+
+-   `symbol` **`"brace"`** 
+-   `color` **[Array][229]&lt;[number][230]>?** (equation default)
+-   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
+    brace ('left')
+-   `lineWidth` **[number][230]?** (depends on height)
+-   `tipWidth` **[number][230]?** (depends on lineWidth)
+-   `width` **[number][230]?** force width bracket (normally depends on height)
+-   `sides` **[number][230]?** number of sides in curved sections (`10`)
+-   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
+    resize, `'static'` only changes scale transform (`dynamic`)
+-   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
+    `number` sets height of static symbol - `'first'` calculates and sets height
+    based on first use (`'first'`)
+
+### Examples
+
+```javascript
+// Typical
+eqn.addElements({
+  lb: { symbol: 'brace', side: 'left' },
+});
+```
+
+```javascript
+// All options
+ eqn.addElements({
+   rb: {
+     symbol: 'brace',
+     side: 'right',
+     lineWidth: 0.01,
+     tipWidth: 0.01,
+     width: 0.5,
+     draw: 'static',
+     staticHeight: 0.5,
+   },
+ });
+```
+
+## OBJ_EqnSymbol_Bar
+
+Bar equation symbol
+
+<pre>
+
+       >| |<---- lineWidth
+        | |
+        | |
+        000
+        000
+        000
+        000
+        000
+        000
+        000
+        000
+        000
+        000
+        000
+
+</pre>
+
+Type: {side: (`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?, color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, draw: (`"dynamic"` \| `"static"`)?, staticHeight: ([number][230] \| `"first"`)?}
+
+### Properties
+
+-   `symbol` **`"bar"`** 
+-   `color` **[Array][229]&lt;[number][230]>?** (equation default)
+-   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
+    bar ('left')
+-   `lineWidth` **[number][230]?** (`0.01`)
+-   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
+    resize, `'static'` only changes scale transform (`dynamic`)
+-   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
+    `number` sets height of static symbol - `'first'` calculates and sets height
+    based on first use (`'first'`)
+
+### Examples
+
+```javascript
+// Typical
+eqn.addElements({
+  lb: { symbol: 'bar', side: 'left' },
+});
+```
+
+```javascript
+// All options
+ eqn.addElements({
+   rb: {
+     symbol: 'bar',
+     side: 'right',
+     lineWidth: 0.01,
+     draw: 'static',
+     staticHeight: 0.5,
+   },
+ });
+```
+
+## OBJ_EqnSymbol_SquareBracket
+
+Square bracket equation symbol
+
+<pre>
+
+                           width
+                 |<--------------------->|
+                 |                       |
+           ___                              ____
+          A      0000000000000000000000000     A
+          |      0000000000000000000000000     | tipWidth
+          |      0000000000000000000000000  ___V
+          |      00000000
+          |      00000000
+          |      00000000
+          |      00000000
+ height   |      00000000
+          |      00000000
+          |      00000000
+          |      00000000
+          |      00000000
+          |      00000000
+          |      0000000000000000000000000
+          |      0000000000000000000000000
+          V___   0000000000000000000000000
+
+                 |      |
+                 |      |
+                 |<---->|
+                line width
+
+</pre>
+
+Type: {color: [Array][229]&lt;[number][230]>?, side: (`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?, lineWidth: [number][230]?, width: [number][230]?, tipWidth: [number][230]?, radius: [number][230]?, sides: [number][230]?, draw: (`"dynamic"` \| `"static"`)?, staticHeight: ([number][230] \| `"first"`)?}
+
+### Properties
+
+-   `symbol` **`"squareBracket"`** 
+-   `color` **[Array][229]&lt;[number][230]>?** (equation default)
+-   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
+    square bracket ('left')
+-   `lineWidth` **[number][230]?** (`0.01`)
+-   `tipWidth` **[number][230]?** (`0.01`)
+-   `width` **[number][230]?** (depends on lineWidth)
+-   `radius` **[number][230]?** optional curved corner radius (`0`)
+-   `sides` **[number][230]?** number of sides in curve (`5`)
+-   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
+    resize, `'static'` only changes scale transform (`dynamic`)
+-   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
+    `number` sets height of static symbol - `'first'` calculates and sets height
+    based on first use (`'first'`)
+
+### Examples
+
+```javascript
+// Typical
+eqn.addElements({
+  lb: { symbol: 'squareBracket', side: 'left' },
+});
+```
+
+```javascript
+// All options
+ eqn.addElements({
+   rb: {
+     symbol: 'squareBracket',
+     side: 'right',
+     lineWidth: 0.01,
+     tipWidth: 0.01,
+     width: 0.03
+     radius: 0.05,
+     sides: 10,
+     draw: 'static',
+     staticHeight: 0.5,
+   },
+ });
+```
+
+## OBJ_EqnSymbol_Radical
 
 Radical equation symbol used in [OBJ_EqnLayout_Root][24].
 
@@ -1879,834 +2707,6 @@ eqn.addElements({
      maxStartHeight: 0.03,
      proportionalToHeight: false,
      draw: 'dynamic',
-   },
- });
-```
-
-## Equation Symbols
-
-
-
-
-## TypeVinculum
-
-Vinculum equation symbol
-
-<pre>
-                         width
-      |<---------------------------------------->|
-      |                                          |
-      |                                          | ____
-      00000000000000000000000000000000000000000000   A
-      00000000000000000000000000000000000000000000   |  lineWidth
-      00000000000000000000000000000000000000000000 __V_
-
-</pre>
-
-Type: {color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticWidth: ([number][230] \| `"first"`)?, staticHeight: ([number][230] \| `"first"`)?}
-
-### Properties
-
--   `symbol` **`"vinculum"`** 
--   `color` **[Array][229]&lt;[number][230]>?** (equation color)
--   `lineWidth` **[number][230]?** (`0.01`)
--   `draw` **(`"static"` \| `"dynamic"`)?** `'dynamic'` updates vertices on
-    resize, `'static'` only changes scale transform (`dynamic`)
--   `staticWidth` **([number][230] \| `"first"`)?** used when `draw`=`static`.
-    `number` sets width of static symbol - `'first'` calculates and sets width
-    based on first use (`'first'`)
--   `staticHeight` **([number][230] \| `"first"`)?** 
-
-### Examples
-
-```javascript
-eqn.addElements({
-  v: {
-    symbol: 'vinculum',
-    color: [1, 0, 0, 1],
-    lineWidth: 0.01,
-  },
-})
-```
-
-## TypeBox
-
-Box equation symbol
-
-<pre>
-                                         width
-                |<--------------------------------------------------->|
-                |                                                     |
-                |                                                     |
-
-        ------- 0000000000000000000000000000000000000000000000000000000
-        A       0000000000000000000000000000000000000000000000000000000
-        |       0000                                               0000
-        |       0000                                               0000
-        |       0000                                               0000
- height |       0000                                               0000
-        |       0000                                               0000
-        |       0000                                               0000
-        |       0000                                               0000
-        |       0000                                               0000
-        |       0000000000000000000000000000000000000000000000000000000
-        V______ 0000000000000000000000000000000000000000000000000000000
-
-</pre>
-
-Type: {color: [Array][229]&lt;[number][230]>?, fill: [boolean][233]?, width: [number][230]?, height: [number][230]?, lineWidth: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticWidth: ([number][230] \| `"first"`)?, staticHeight: ([number][230] \| `"first"`)?}
-
-### Properties
-
--   `symbol` **`"box"`** 
--   `color` **[Array][229]&lt;[number][230]>?** (equation color)
--   `lineWidth` **[number][230]?** (`0.01`)
--   `fill` **[boolean][233]?** (`false`)
--   `width` **[number][230]?** force width instead of auto calculation
--   `height` **[number][230]?** force height instead of auto calculationg
--   `draw` **(`"static"` \| `"dynamic"`)?** `'dynamic'` updates vertices on
-    resize, `'static'` only changes scale transform (`dynamic`)
--   `staticWidth` **([number][230] \| `"first"`)?** used when `draw`=`static`.
-    `number` sets width of static symbol - `'first'` calculates and sets width
-    based on first use
--   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
-    `number` sets height of static symbol - `'first'` calculates and sets height
-    based on first use
-
-### Examples
-
-```javascript
-eqn.addElements({
-  b: {
-    symbol: 'box',
-    color: [1, 0, 0, 1],
-    lineWidth: 0.01,
-    fill: false,
-  },
-})
-```
-
-## TypeArrow
-
-Arrow equation symbol
-
-<pre>
-                            arrowWidth
-                        |<--------------->|
-                        |                 |
-                        |                 |
-                 -------|------- 0        |
-                 A      |      00000      |
-   arrowHeight   |      |     0000000     |
-                 |      |   00000000000   |
-                 V      | 000000000000000 |
-                 ------ 0000000000000000000
-                              0000000
-                              0000000
-                              0000000
-                              0000000
-                              0000000
-                              0000000
-                              0000000
-                              0000000
-                              0000000
-                              0000000
-                              0000000
-                              0000000
-                              0000000
-                              0000000
-                              0000000
-                              0000000
-                              |     |
-                              |     |
-                              |<--->|
-                             lineWidth
-</pre>
-
-Type: {color: [Array][229]&lt;[number][230]>?, direction: (`"up"` \| `"down"` \| `"left"` \| `"right"`)?, lineWidth: [number][230]?, arrowHeight: [number][230]?, arrowWidth: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticHeight: ([number][230] \| `"first"`)?}
-
-### Properties
-
--   `symbol` **`"arrow"`** 
--   `color` **[Array][229]&lt;[number][230]>?** (equation color)
--   `direction` **(`"up"` \| `"down"` \| `"left"` \| `"right"`)?** (`'right'`)
--   `lineWidth` **[number][230]?** (`0.01`)
--   `arrowWidth` **[number][230]?** (`0.01`)
--   `arrowHeight` **[number][230]?** (`0.04`)
--   `lineWidth` **[number][230]?** (`0.01`)
--   `draw` **(`"static"` \| `"dynamic"`)?** `'dynamic'` updates vertices on
-    resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
-    `number` sets height of static symbol - `'first'` calculates and sets height
-    based on first use (`'first'`)
-
-### Examples
-
-```javascript
-eqn.addElements({
-  a: {
-    symbol: 'arrow',
-    color: [1, 0, 0, 1],
-    direction: 'right'
-    lineWidth: 0.01,
-    arrowHeight: 0.02,
-    arrowWidth: 0.02,
-  },
-})
-```
-
-## TypeSum
-
-Sum equation symbol
-
-<pre>
-         ---------- 00000000000000000000000000000000000
-         A            0000000                     000000
-         |              0000000                      000
-         |                0000000                      00
-         |                  0000000
-         |                    0000000
-         |                      0000000
-         |                        0000000
-         |                          0000000
-         |                            0000000
-         |                              0000000
-         |                                000000
-         |                                  000
-         |                                0000
-  height |                              0000
-         |                            0000   \
-         |                          0000      \
-         |                        0000         lineWidth
-         |                      0000
-         |                    0000
-         |                  0000
-         |                0000                          00
-         |              0000                          000|
-         |            0000                         000000|
-         V          000000000000000000000000000000000000 |
-         --------  000000000000000000000000000000000000  |
-                  |                                      |
-                  |                                      |
-                  |                 width                |
-                  |<------------------------------------>|
-</pre>
-
-Type: {color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, sides: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticHeight: ([number][230] \| `"first"`)?}
-
-### Properties
-
--   `symbol` **`"sum"`** 
--   `color` **[Array][229]&lt;[number][230]>?** (equation color)
--   `lineWidth` **[number][230]?** (`height * 0.88 / (25 * height + 15)`)
--   `sides` **[number][230]?** number of sides that make up serif curve (`5`)
--   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
-    resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
-    `number` sets height of static symbol - `'first'` calculates and sets height
-    based on first use (`'first'`)
-
-### Examples
-
-```javascript
-eqn.addElements({
-  s: {
-    symbol: 'sum',
-    color: [1, 0, 0, 1],
-    lineWidth: 0.01
-    sides: 5,
-  },
-})
-```
-
-## TypeProd
-
-Product equation symbol used in [OBJ_EqnLayout_ProdOf][42]
-
-<pre>
-                                         width
-               |<--------------------------------------------------------->|
-               |                                                           |
-               |                                                           |
-               |                                                           |
-               |                          lineWidth                        |
-               |                            /                              |
-               |                           /                               |
-         ---- 00000000000000000000000000000000000000000000000000000000000000
-         A         000000000000000000000000000000000000000000000000000000
-         |           00000000000000000000000000000000000000000000000000
-         |            00000000000                         00000000000
-         |            00000000000                         00000000000
-         |            00000000000                         00000000000
-         |            00000000000                         00000000000
-         |            00000000000                         00000000000
-         |            00000000000                         00000000000
-         |            00000000000                         00000000000
-         |            00000000000                         00000000000
-         |            00000000000                         00000000000
- height  |            00000000000                         00000000000
-         |            00000000000                         00000000000
-         |            00000000000                         00000000000
-         |            00000000000                         00000000000
-         |            00000000000                         00000000000
-         |            00000000000                         00000000000
-         |            00000000000                         00000000000
-         |            00000000000                         00000000000
-         |            00000000000                         00000000000
-         |            00000000000                         00000000000
-         |            00000000000                         00000000000
-         |            00000000000                         00000000000
-         |           0000000000000                       00000000000000
-         V         00000000000000000                   000000000000000000
-         ----- 0000000000000000000000000           00000000000000000000000000
-</pre>
-
-Type: {color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, sides: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticHeight: ([number][230] \| `"first"`)?}
-
-### Properties
-
--   `symbol` **`"prod"`** 
--   `color` **[Array][229]&lt;[number][230]>?** (equation color)
--   `lineWidth` **[number][230]?** (related to height)
--   `sides` **[number][230]?** number of sides that make up serif curve (`5`)
--   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
-    resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
-    `number` sets height of static symbol - `'first'` calculates and sets height
-    based on first use (`'first'`)
-
-### Examples
-
-```javascript
-eqn.addElements({
-  p: {
-    symbol: 'prod',
-    color: [1, 0, 0, 1],
-    lineWidth: 0.01
-    sides: 5,
-  },
-})
-```
-
-## TypeIntegral
-
-Integral equation symbol used in [OBJ_EqnLayout_Integral][36]
-
-<pre>
-//     --------------------------------------------------   0000000
-//     A                                              000000011111111
-//     |                                         0000000   111111111111
-//     |                                       0000000    11111111111111
-//     |                                      0000000     11111111111111
-//     |                                     0000000       111111111111
-//     |                                   000000000         11111111
-//     |                                  000000000
-//     |                                 0000000000
-//     |    S curve gradient = k         000000000
-//     |                                0000000000
-//     |                                0000000000
-//     |                               00000000000
-//     |                              00000000000
-//     |                              000000000000
-//     |                             000000000000      lineWidth
-//   h |                     ------->000000000000<----------
-//     |                             000000000000
-//     |                             000000000000
-//     |                            000000000000
-//     |                             00000000000
-//     |                            00000000000
-//     |                            0000000000
-//     |                            0000000000
-//     |                            000000000
-//     |                           000000000
-//     |                          0000000000
-//     |      11111111           000000000
-//     |    111111111111       00000000
-//     |   11111111111111     0000000
-//     |   11111111111111   0000000
-//     |    111111111111   0000000
-//     V      111111110000000
-//     -------  0000000
-</pre>
-
-Type: {color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, sides: [number][230]?, tipWidth: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticHeight: ([number][230] \| `"first"`)?, serif: [boolean][233]?, num: [number][230]?, type: (`"line"` \| `"generic"`)?, serifSides: [number][230]?, lineIntegralSides: [number][230]?}
-
-### Properties
-
--   `symbol` **`"int"`** 
--   `color` **[Array][229]&lt;[number][230]>?** (equation color)
--   `lineWidth` **[number][230]?** (related to height)
--   `sides` **[number][230]?** number of sides that make up s curve (`30`)
--   `num` **[number][230]?** number of integral symbols (`1`)
--   `type` **(`"line"` \| `"generic"`)?** `line` draws a circle through the
-     symbols denoting a line integral (`generic`)
--   `tipWidth` **[number][230]?** width of s curve tip (related to lineWidth)
--   `serif` **[boolean][233]?** `false` to remove serifs (`true`)
--   `serifSides` **[number][230]?** number of sides in serif circles (`10`)
--   `lineIntegralSides` **[number][230]?** number of sides in line integral circle (`20`)
--   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
-    resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
-    `number` sets height of static symbol - `'first'` calculates and sets height
-    based on first use (`'first'`)
-
-### Examples
-
-```javascript
-eqn.addElements({
-int: {
-  symbol: 'int',
-  color: [0.95, 0, 0, 1],
-  lineWidth: 0.01,
-  sides: 20,
-  num: 2,
-  type: 'generic',
-  tipWidth: null,
-  serif: true,
-  serifSides: 10,
-  lineIntegralSides: 20,
-  draw: 'static',
-  staticHeight: 'first',
-},
-```
-
-## TypeStrike
-
-Strike equation symbol used in [OBJ_EqnLayout_Strike][27].
-
-Four styles of strike symbol are available:
-
-<pre>
-
-
-         000         000
-           000     000
-             000 000
-               000                       0000000000000000
-             000 000
-           000     000
-         000         000
-              cross                         horizontal
-
-
-                     000                 000
-                   000                     000
-                 000                         000
-               000                             000
-             000                                 000
-           000                                     000
-         000                                         000
-            forward                        backward
-
-</pre>
-
-Type: {color: [Array][229]&lt;[number][230]>?, style: (`"cross"` \| `"forward"` \| `"back"` \| `"horizontal"`)?, lineWidth: [number][230]?, width: [number][230]?, height: [number][230]?, draw: (`"static"` \| `"dynamic"`), staticHeight: ([number][230] \| `"first"`)?, staticWidth: ([number][230] \| `"first"`)?}
-
-### Properties
-
--   `symbol` **`"strike"`** 
--   `color` **[Array][229]&lt;[number][230]>?** (equation default)
--   `style` **(`"cross"` \| `"forward"` \| `"back"` \| `"horizontal"`)?** (`'cross'`)
--   `lineWidth` **[number][230]?** (`0.015`)
--   `width` **[number][230]?** force width of strike (normally defined by
-    content size)
--   `height` **[number][230]?** force height of strike (normally defined by
-    content size)
--   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
-    resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
-    `number` sets height of static symbol - `'first'` calculates and sets height
-    based on first use (`'first'`)
--   `staticWidth` **([number][230] \| `"first"`)?** used when `draw`=`static`.
-    `number` sets width of static symbol - `'first'` calculates and sets width
-    based on first use (`'first'`)
-
-### Examples
-
-```javascript
-// Typical
-eqn.addElements({
-  s: { symbol: 'strike', style: 'forward' },
-});
-```
-
-```javascript
-// All options
- eqn.addElements({
-   s: {
-     symbol: 'strike',
-     style: 'cross',
-     lineWidth: 0.01,
-     width: 0.5,
-     height: 0.5,
-     draw: 'static',
-     staticHeight: 'first',
-     staticWidth: 'first',
-   },
- });
-```
-
-## TypeBracket
-
-Bracket equation symbol
-
-<pre>
-                   tipWidth
-                     ----->| |<---
-                           | |
-                           | |
-                           000
-                         0000
-                       00000
-                     000000
-                    000000
-                    000000
-       lineWidth   000000
-            ------>000000<---
-                   000000
-                   |000000
-                   |000000
-                   | 000000
-                   |   00000
-                   |     0000
-                   |       000
-                   |         |
-                   |         |
-                   |<------->|
-                      width
-</pre>
-
-Type: {side: (`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?, color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, sides: [number][230]?, width: [number][230]?, tipWidth: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticHeight: ([number][230] \| `"first"`)?}
-
-### Properties
-
--   `symbol` **`"bracket"`** 
--   `color` **[Array][229]&lt;[number][230]>?** (equation default)
--   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
-    bracket ('left')
--   `sides` **[number][230]?** number of sides in bracket curve (`10`)
--   `lineWidth` **[number][230]?** (depends on height)
--   `tipWidth` **[number][230]?** (depends on lineWidth)
--   `width` **[number][230]?** force width bracket (normally depends on height)
--   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
-    resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
-    `number` sets height of static symbol - `'first'` calculates and sets height
-    based on first use (`'first'`)
-
-### Examples
-
-```javascript
-// Typical
-eqn.addElements({
-  lb: { symbol: 'bracket', side: 'left' },
-});
-```
-
-```javascript
-// All options
- eqn.addElements({
-   rb: {
-     symbol: 'bracket',
-     side: 'right',
-     sides: 20,
-     lineWidth: 0.01,
-     tipWidth: 0.05,
-     width: 0.5,
-     draw: 'static',
-     staticHeight: 'first',
-   },
- });
-```
-
-## TypeAngleBracket
-
-Angle bracket equation symbol
-
-<pre>
-                     width
-                  |<------->|
-                  |         |
-          --------|----- 0000
-          A       |     0000
-          |       |    0000
-          |       |   0000
-          |       |  0000
-          |         0000
-   height |        0000
-          |        0000
-          |         0000
-          |          0000
-          |           0000
-          |            0000
-          |             0000
-          V_____________ 0000
-
-</pre>
-
-Type: {side: (`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?, color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, width: [number][230]?, draw: (`"dynamic"` \| `"static"`)?, staticHeight: ([number][230] \| `"first"`)?}
-
-### Properties
-
--   `symbol` **`"angleBracket"`** 
--   `color` **[Array][229]&lt;[number][230]>?** (equation default)
--   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
-    angle bracket ('left')
--   `lineWidth` **[number][230]?** (depends on height)
--   `width` **[number][230]?** force width bracket (normally depends on height)
--   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
-    resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
-    `number` sets height of static symbol - `'first'` calculates and sets height
-    based on first use (`'first'`)
-
-### Examples
-
-```javascript
-// Typical
-eqn.addElements({
-  lb: { symbol: 'angleBracket', side: 'left' },
-});
-```
-
-```javascript
-// All options
- eqn.addElements({
-   rb: {
-     symbol: 'angleBracket',
-     side: 'right',
-     lineWidth: 0.01,
-     width: 0.5,
-     draw: 'static',
-     staticHeight: 'first',
-   },
- });
-```
-
-## TypeBrace
-
-Brace equation symbol
-
-<pre>
-               width
-            |<------>|
-            |        |
-            |        |
-            |      000
-            |    000
-            |   000
-            |  0000
-            |  0000
-            |  0000
-            |  0000
-            |  000
-            | 000
-            000
-              000
-               000
-               0000
-               0000
-               0000
-               0000
-          - - -0000 - - - -
-         |      000        |
-         |       000       |
-         |         000     |
-          - - - - - - - - -
-                       \
-                        \
-                         \
-     - - - - - - - - - - - - - - - - - - - - - - - - -
-    |       00000000000000                            |
-    |        00000000000000                           |
-    |          000000000000                 tipWidth  |
-    |            000000000000               |         |
-    |              000000000000             |         |
-    |                 0000000000000  _______V_        |
-    |                     00000000000                 |
-    |                         0000000_________        |
-    |                                       A         |
-     - - - - - - - - - - - - - - - - - - - - - - - - -
-
-</pre>
-
-Type: {side: (`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?, color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, sides: [number][230]?, width: [number][230]?, tipWidth: [number][230]?, draw: (`"dynamic"` \| `"static"`)?, staticHeight: ([number][230] \| `"first"`)?}
-
-### Properties
-
--   `symbol` **`"brace"`** 
--   `color` **[Array][229]&lt;[number][230]>?** (equation default)
--   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
-    brace ('left')
--   `lineWidth` **[number][230]?** (depends on height)
--   `tipWidth` **[number][230]?** (depends on lineWidth)
--   `width` **[number][230]?** force width bracket (normally depends on height)
--   `sides` **[number][230]?** number of sides in curved sections (`10`)
--   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
-    resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
-    `number` sets height of static symbol - `'first'` calculates and sets height
-    based on first use (`'first'`)
-
-### Examples
-
-```javascript
-// Typical
-eqn.addElements({
-  lb: { symbol: 'brace', side: 'left' },
-});
-```
-
-```javascript
-// All options
- eqn.addElements({
-   rb: {
-     symbol: 'brace',
-     side: 'right',
-     lineWidth: 0.01,
-     tipWidth: 0.01,
-     width: 0.5,
-     draw: 'static',
-     staticHeight: 0.5,
-   },
- });
-```
-
-## TypeBar
-
-Bar equation symbol
-
-<pre>
-
-       >| |<---- lineWidth
-        | |
-        | |
-        000
-        000
-        000
-        000
-        000
-        000
-        000
-        000
-        000
-        000
-        000
-
-</pre>
-
-Type: {side: (`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?, color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, draw: (`"dynamic"` \| `"static"`)?, staticHeight: ([number][230] \| `"first"`)?}
-
-### Properties
-
--   `symbol` **`"bar"`** 
--   `color` **[Array][229]&lt;[number][230]>?** (equation default)
--   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
-    bar ('left')
--   `lineWidth` **[number][230]?** (`0.01`)
--   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
-    resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
-    `number` sets height of static symbol - `'first'` calculates and sets height
-    based on first use (`'first'`)
-
-### Examples
-
-```javascript
-// Typical
-eqn.addElements({
-  lb: { symbol: 'bar', side: 'left' },
-});
-```
-
-```javascript
-// All options
- eqn.addElements({
-   rb: {
-     symbol: 'bar',
-     side: 'right',
-     lineWidth: 0.01,
-     draw: 'static',
-     staticHeight: 0.5,
-   },
- });
-```
-
-## TypeSquareBracket
-
-Square bracket equation symbol
-
-<pre>
-
-                           width
-                 |<--------------------->|
-                 |                       |
-           ___                              ____
-          A      0000000000000000000000000     A
-          |      0000000000000000000000000     | tipWidth
-          |      0000000000000000000000000  ___V
-          |      00000000
-          |      00000000
-          |      00000000
-          |      00000000
- height   |      00000000
-          |      00000000
-          |      00000000
-          |      00000000
-          |      00000000
-          |      00000000
-          |      0000000000000000000000000
-          |      0000000000000000000000000
-          V___   0000000000000000000000000
-
-                 |      |
-                 |      |
-                 |<---->|
-                line width
-
-</pre>
-
-Type: {color: [Array][229]&lt;[number][230]>?, side: (`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?, lineWidth: [number][230]?, width: [number][230]?, tipWidth: [number][230]?, radius: [number][230]?, sides: [number][230]?, draw: (`"dynamic"` \| `"static"`)?, staticHeight: ([number][230] \| `"first"`)?}
-
-### Properties
-
--   `symbol` **`"bar"`** 
--   `color` **[Array][229]&lt;[number][230]>?** (equation default)
--   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
-    square bracket ('left')
--   `lineWidth` **[number][230]?** (`0.01`)
--   `tipWidth` **[number][230]?** (`0.01`)
--   `width` **[number][230]?** (depends on lineWidth)
--   `radius` **[number][230]?** optional curved corner radius (`0`)
--   `sides` **[number][230]?** number of sides in curve (`5`)
--   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
-    resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][230] \| `"first"`)?** used when `draw`=`static`.
-    `number` sets height of static symbol - `'first'` calculates and sets height
-    based on first use (`'first'`)
-
-### Examples
-
-```javascript
-// Typical
-eqn.addElements({
-  lb: { symbol: 'squareBracket', side: 'left' },
-});
-```
-
-```javascript
-// All options
- eqn.addElements({
-   rb: {
-     symbol: 'squareBracket',
-     side: 'right',
-     lineWidth: 0.01,
-     tipWidth: 0.01,
-     width: 0.03
-     radius: 0.05,
-     sides: 10,
-     draw: 'static',
-     staticHeight: 0.5,
    },
  });
 ```
@@ -3643,115 +3643,115 @@ eqn.addForms({
 
 [11]: #equation-functions-types
 
-[12]: #obejct_eqn_layout_container
+[12]: #obj_eqnlayout_container
 
 [13]: #properties-1
 
 [14]: #examples-1
 
-[15]: #obejct_eqn_layout_fraction
+[15]: #obj_eqnlayout_fraction
 
 [16]: #properties-2
 
 [17]: #examples-2
 
-[18]: #obejct_eqn_layout_scale
+[18]: #obj_eqnlayout_scale
 
 [19]: #properties-3
 
 [20]: #examples-3
 
-[21]: #obejct_eqn_layout_bracket
+[21]: #obj_eqnlayout_bracket
 
 [22]: #properties-4
 
 [23]: #examples-4
 
-[24]: #obejct_eqn_layout_root
+[24]: #obj_eqnlayout_root
 
 [25]: #properties-5
 
 [26]: #examples-5
 
-[27]: #obejct_eqn_layout_strike
+[27]: #obj_eqnlayout_strike
 
 [28]: #properties-6
 
 [29]: #examples-6
 
-[30]: #obejct_eqn_layout_box
+[30]: #obj_eqnlayout_box
 
 [31]: #properties-7
 
 [32]: #examples-7
 
-[33]: #obejct_eqn_layout_bar
+[33]: #obj_eqnlayout_bar
 
 [34]: #properties-8
 
 [35]: #examples-8
 
-[36]: #obejct_eqn_layout_integral
+[36]: #obj_eqnlayout_integral
 
 [37]: #properties-9
 
 [38]: #examples-9
 
-[39]: #obejct_eqn_layout_sumof
+[39]: #obj_eqnlayout_sumof
 
 [40]: #properties-10
 
 [41]: #examples-10
 
-[42]: #obejct_eqn_layout_prodof
+[42]: #obj_eqnlayout_prodof
 
 [43]: #properties-11
 
 [44]: #examples-11
 
-[45]: #obejct_eqn_layout_subcript
+[45]: #obj_eqnlayout_subcript
 
 [46]: #properties-12
 
 [47]: #examples-12
 
-[48]: #obejct_eqn_layout_superscript
+[48]: #obj_eqnlayout_superscript
 
 [49]: #properties-13
 
 [50]: #examples-13
 
-[51]: #obejct_eqn_layout_superscriptsubscript
+[51]: #obj_eqnlayout_superscriptsubscript
 
 [52]: #properties-14
 
 [53]: #examples-14
 
-[54]: #obejct_eqn_layout_comment
+[54]: #obj_eqnlayout_comment
 
 [55]: #properties-15
 
 [56]: #examples-15
 
-[57]: #obejct_eqn_layout_strikecomment
+[57]: #obj_eqnlayout_strikecomment
 
 [58]: #properties-16
 
 [59]: #examples-16
 
-[60]: #obejct_eqn_layout_pad
+[60]: #obj_eqnlayout_pad
 
 [61]: #properties-17
 
 [62]: #examples-17
 
-[63]: #obejct_eqn_layout_matrix
+[63]: #obj_eqnlayout_matrix
 
 [64]: #properties-18
 
 [65]: #examples-18
 
-[66]: #obejct_eqn_layout_annotate
+[66]: #obj_eqnlayout_annotate
 
 [67]: #properties-19
 
@@ -3785,81 +3785,81 @@ eqn.addForms({
 
 [82]: #properties-24
 
-[83]: #typeradical
+[83]: #equation-symbols
 
-[84]: #properties-25
+[84]: #obj_eqnsymbol_vinculum
 
-[85]: #examples-24
+[85]: #properties-25
 
-[86]: #equation-symbols
+[86]: #examples-24
 
-[87]: #typevinculum
+[87]: #obj_eqnsymbol_box
 
 [88]: #properties-26
 
 [89]: #examples-25
 
-[90]: #typebox
+[90]: #obj_eqnsymbol_arrow
 
 [91]: #properties-27
 
 [92]: #examples-26
 
-[93]: #typearrow
+[93]: #obj_eqnsymbol_sum
 
 [94]: #properties-28
 
 [95]: #examples-27
 
-[96]: #typesum
+[96]: #obj_eqnsymbol_prod
 
 [97]: #properties-29
 
 [98]: #examples-28
 
-[99]: #typeprod
+[99]: #obj_eqnsymbol_integral
 
 [100]: #properties-30
 
 [101]: #examples-29
 
-[102]: #typeintegral
+[102]: #obj_eqnsymbol_strike
 
 [103]: #properties-31
 
 [104]: #examples-30
 
-[105]: #typestrike
+[105]: #obj_eqnsymbol_bracket
 
 [106]: #properties-32
 
 [107]: #examples-31
 
-[108]: #typebracket
+[108]: #obj_eqnsymbol_anglebracket
 
 [109]: #properties-33
 
 [110]: #examples-32
 
-[111]: #typeanglebracket
+[111]: #obj_eqnsymbol_brace
 
 [112]: #properties-34
 
 [113]: #examples-33
 
-[114]: #typebrace
+[114]: #obj_eqnsymbol_bar
 
 [115]: #properties-35
 
 [116]: #examples-34
 
-[117]: #typebar
+[117]: #obj_eqnsymbol_squarebracket
 
 [118]: #properties-36
 
 [119]: #examples-35
 
-[120]: #typesquarebracket
+[120]: #obj_eqnsymbol_radical
 
 [121]: #properties-37
 
@@ -4087,7 +4087,7 @@ eqn.addForms({
 
 [233]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[234]: #obejct_eqn_layout_bracket
+[234]: #obj_eqnlayout_bracket
 
 [235]: #typeannotation
 
@@ -4101,41 +4101,41 @@ eqn.addForms({
 
 [240]: #typeencompassglyph
 
-[241]: #obejct_eqn_layout_fraction
+[241]: #obj_eqnlayout_fraction
 
-[242]: #obejct_eqn_layout_strike
+[242]: #obj_eqnlayout_strike
 
-[243]: #obejct_eqn_layout_box
+[243]: #obj_eqnlayout_box
 
-[244]: #obejct_eqn_layout_root
+[244]: #obj_eqnlayout_root
 
-[245]: #obejct_eqn_layout_subcript
+[245]: #obj_eqnlayout_subcript
 
-[246]: #obejct_eqn_layout_superscript
+[246]: #obj_eqnlayout_superscript
 
-[247]: #obejct_eqn_layout_superscriptsubscript
+[247]: #obj_eqnlayout_superscriptsubscript
 
-[248]: #obejct_eqn_layout_bar
+[248]: #obj_eqnlayout_bar
 
-[249]: #obejct_eqn_layout_annotate
+[249]: #obj_eqnlayout_annotate
 
-[250]: #obejct_eqn_layout_comment
+[250]: #obj_eqnlayout_comment
 
-[251]: #obejct_eqn_layout_pad
+[251]: #obj_eqnlayout_pad
 
-[252]: #obejct_eqn_layout_scale
+[252]: #obj_eqnlayout_scale
 
-[253]: #obejct_eqn_layout_container
+[253]: #obj_eqnlayout_container
 
-[254]: #obejct_eqn_layout_matrix
+[254]: #obj_eqnlayout_matrix
 
-[255]: #obejct_eqn_layout_integral
+[255]: #obj_eqnlayout_integral
 
-[256]: #obejct_eqn_layout_sumof
+[256]: #obj_eqnlayout_sumof
 
-[257]: #obejct_eqn_layout_prodof
+[257]: #obj_eqnlayout_prodof
 
-[258]: #obejct_eqn_layout_strikecomment
+[258]: #obj_eqnlayout_strikecomment
 
 [259]: https://developer.mozilla.org/docs/Web/API/Element
 
