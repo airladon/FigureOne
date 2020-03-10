@@ -22,6 +22,7 @@ toc:
   - TypeEquationFunctionStrikeComment
   - TypeEquationFunctionPad
   - TypeEquationFunctionMatrix
+  - TypeEquationFunctionAnnotate
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment
@@ -36,7 +37,6 @@ toc:
   - TypeEquationGoToFormOptions
   - name: Equations
   - Equation
-  - EquationFunctions
   - name: tools
     description: These are generic tools
     children:
