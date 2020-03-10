@@ -81,7 +81,7 @@ import Radical from './Symbols/Radical';
  *   },
  * })
  */
-type EQNSymbol_Vinculum = {
+type EQN_VinculumSymbol = {
   color?: Array<number>,
   lineWidth?: number,
   draw?: 'static' | 'dynamic',
@@ -138,7 +138,7 @@ type EQNSymbol_Vinculum = {
  *   },
  * })
  */
-type EQNSymbol_Box = {
+type EQN_BoxSymbol = {
   color?: Array<number>,
   fill?: boolean,
   width?: number,
@@ -208,7 +208,7 @@ type EQNSymbol_Box = {
  *   },
  * })
  */
-type EQNSymbol_Arrow = {
+type EQN_ArrowSymbol = {
   color?: Array<number>,
   direction?: 'up' | 'down' | 'left' | 'right',
   lineWidth?: number,
@@ -272,7 +272,7 @@ type EQNSymbol_Arrow = {
  *   },
  * })
  */
-type EQNSymbol_Sum ={
+type EQN_SumSymbol ={
   color?: Array<number>,
   lineWidth?: number,
   sides?: number,
@@ -339,7 +339,7 @@ type EQNSymbol_Sum ={
  *   },
  * })
  */
-type EQNSymbol_Prod = {
+type EQN_ProdSymbol = {
   color?: Array<number>,
   lineWidth?: number,
   sides?: number,
@@ -420,7 +420,7 @@ type EQNSymbol_Prod = {
  *   staticHeight: 'first',
  * },
  */
-type EQNSymbol_Integral = {
+type EQN_IntegralSymbol = {
   color?: Array<number>,
   lineWidth?: number,
   sides?: number,
@@ -523,7 +523,7 @@ type EQNSymbol_Integral = {
  *    },
  *  });
  */
-type EQNSymbol_Radical = {
+type EQN_RadicalSymbol = {
   color?: Array<number>,
   lineWidth?: number,
   width?: number,
@@ -606,7 +606,7 @@ type EQNSymbol_Radical = {
  *    },
  *  });
  */
-type EQNSymbol_Strike = {
+type EQN_StrikeSymbol = {
   color?: Array<number>,
   style?: 'cross' | 'forward' | 'back' | 'horizontal',
   lineWidth?: number,
@@ -678,7 +678,7 @@ type EQNSymbol_Strike = {
  *    },
  *  });
  */
-type EQNSymbol_Bracket = {
+type EQN_BracketSymbol = {
   side?: 'left' | 'right' | 'top' | 'bottom',
   color?: Array<number>,
   lineWidth?: number,
@@ -742,7 +742,7 @@ type EQNSymbol_Bracket = {
  *    },
  *  });
  */
- type EQNSymbol_AngleBracket = {
+ type EQN_AngleBracketSymbol = {
   side?: 'left' | 'right' | 'top' | 'bottom',
   color?: Array<number>,
   lineWidth?: number,
@@ -829,7 +829,7 @@ type EQNSymbol_Bracket = {
  *    },
  *  });
  */
-type EQNSymbol_Brace = {
+type EQN_BraceSymbol = {
   side?: 'left' | 'right' | 'top' | 'bottom',
   color?: Array<number>,
   lineWidth?: number,
@@ -889,7 +889,7 @@ type EQNSymbol_Brace = {
  *    },
  *  });
  */
-type EQNSymbol_Bar = {
+type EQN_BarSymbol = {
   side?: 'left' | 'right' | 'top' | 'bottom',
   color?: Array<number>,
   lineWidth?: number,
@@ -966,7 +966,7 @@ type EQNSymbol_Bar = {
  *    },
  *  });
  */
-type EQNSymbol_SquareBracket = {
+type EQN_SquareBracketSymbol = {
   color?: Array<number>,
   side?: 'left' | 'right' | 'top' | 'bottom',
   lineWidth?: number,
@@ -978,19 +978,19 @@ type EQNSymbol_SquareBracket = {
   staticHeight?: number | 'first',
 }
 
-export type TypeSymbolOptions = EQNSymbol_Vinculum
-  & EQNSymbol_Vinculum
-  & EQNSymbol_Box
-  & EQNSymbol_Arrow
-  & EQNSymbol_Sum
-  & EQNSymbol_Prod
-  & EQNSymbol_Integral
-  & EQNSymbol_Strike
-  & EQNSymbol_Bracket
-  & EQNSymbol_AngleBracket
-  & EQNSymbol_Brace
-  & EQNSymbol_Bar
-  & EQNSymbol_SquareBracket;
+export type TypeSymbolOptions = EQN_VinculumSymbol
+  & EQN_VinculumSymbol
+  & EQN_BoxSymbol
+  & EQN_ArrowSymbol
+  & EQN_SumSymbol
+  & EQN_ProdSymbol
+  & EQN_IntegralSymbol
+  & EQN_StrikeSymbol
+  & EQN_BracketSymbol
+  & EQN_AngleBracketSymbol
+  & EQN_BraceSymbol
+  & EQN_BarSymbol
+  & EQN_SquareBracketSymbol;
 
 
 export default class EquationSymbols {
@@ -1064,7 +1064,7 @@ export default class EquationSymbols {
   //   );
   // }
 
-  vinculum(options: EQNSymbol_Vinculum) {
+  vinculum(options: EQN_VinculumSymbol) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
@@ -1083,7 +1083,7 @@ export default class EquationSymbols {
     ));
   }
 
-  box(optionsIn: EQNSymbol_Box) {
+  box(optionsIn: EQN_BoxSymbol) {
     const defaultOptions = {
       color: this.defaultColor,
       fill: false,
@@ -1105,7 +1105,7 @@ export default class EquationSymbols {
     ));
   }
 
-  arrow(options: EQNSymbol_Arrow) {
+  arrow(options: EQN_ArrowSymbol) {
     const defaultOptions = {
       color: this.defaultColor,
       direction: 'right',
@@ -1132,7 +1132,7 @@ export default class EquationSymbols {
     ));
   }
 
-  sum(options: EQNSymbol_Sum) {
+  sum(options: EQN_SumSymbol) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
@@ -1153,7 +1153,7 @@ export default class EquationSymbols {
     ));
   }
 
-  product(options: EQNSymbol_Prod) {
+  product(options: EQN_ProdSymbol) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
@@ -1174,7 +1174,7 @@ export default class EquationSymbols {
     ));
   }
 
-  integral(options: EQNSymbol_Integral) {
+  integral(options: EQN_IntegralSymbol) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
@@ -1214,7 +1214,7 @@ export default class EquationSymbols {
     );
   }
 
-  radical(optionsIn: EQNSymbol_Radical) {
+  radical(optionsIn: EQN_RadicalSymbol) {
     const defaultOptions: {
       color: Array<number>,
       lineWidth: number,
@@ -1259,7 +1259,7 @@ export default class EquationSymbols {
     );
   }
 
-  strike(options: EQNSymbol_Strike) {
+  strike(options: EQN_StrikeSymbol) {
     const defaultOptions = {
       style: 'cross',
       color: this.defaultColor,
@@ -1311,7 +1311,7 @@ export default class EquationSymbols {
   //   return cross;
   // }
 
-  bracket(options: EQNSymbol_Bracket) {
+  bracket(options: EQN_BracketSymbol) {
     const defaultOptions = {
       side: 'left',
       color: this.defaultColor,
@@ -1334,7 +1334,7 @@ export default class EquationSymbols {
     ));
   }
 
-  angleBracket(options: EQNSymbol_AngleBracket) {
+  angleBracket(options: EQN_AngleBracketSymbol) {
     const defaultOptions = {
       side: 'left',
       lineWidth: null,
@@ -1354,7 +1354,7 @@ export default class EquationSymbols {
     ));
   }
 
-  brace(options: EQNSymbol_Brace) {
+  brace(options: EQN_BraceSymbol) {
     const defaultOptions = {
       side: 'left',
       color: this.defaultColor,
@@ -1377,7 +1377,7 @@ export default class EquationSymbols {
     ));
   }
 
-  bar(options: EQNSymbol_Bar) {
+  bar(options: EQN_BarSymbol) {
     const defaultOptions = {
       side: 'left',
       lineWidth: 0.01,
@@ -1396,7 +1396,7 @@ export default class EquationSymbols {
     ));
   }
 
-  squareBracket(options: EQNSymbol_SquareBracket) {
+  squareBracket(options: EQN_SquareBracketSymbol) {
     const defaultOptions = {
       side: 'left',
       lineWidth: null,

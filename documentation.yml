@@ -29,19 +29,19 @@ toc:
   - EQN_TopBottomGlyph
   - EQN_Glyphs
   - name: Equation Symbol OBJECTS
-  - EQNSymbol_Vinculum
-  - EQNSymbol_Box
-  - EQNSymbol_Arrow
-  - EQNSymbol_Sum
-  - EQNSymbol_Prod
-  - EQNSymbol_Integral
-  - EQNSymbol_Strike
-  - EQNSymbol_Bracket
-  - EQNSymbol_AngleBracket
-  - EQNSymbol_Brace
-  - EQNSymbol_Bar
-  - EQNSymbol_SquareBracket
-  - EQNSymbol_Radical
+  - EQN_VinculumSymbol
+  - EQN_BoxSymbol
+  - EQN_ArrowSymbol
+  - EQN_SumSymbol
+  - EQN_ProdSymbol
+  - EQN_IntegralSymbol
+  - EQN_StrikeSymbol
+  - EQN_BracketSymbol
+  - EQN_AngleBracketSymbol
+  - EQN_BraceSymbol
+  - EQN_BarSymbol
+  - EQN_SquareBracketSymbol
+  - EQN_RadicalSymbol
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment

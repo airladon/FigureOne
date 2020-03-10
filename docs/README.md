@@ -3,231 +3,102 @@
 ### Table of Contents
 
 -   [Diagram][1]
-    -   [Parameters][2]
     -   [htmlId][3]
     -   [addElements][4]
-        -   [Parameters][5]
-        -   [Examples][6]
 -   [Equation Elements Types][7]
 -   [TypeEquationElement][8]
-    -   [Properties][9]
 -   [TypeEquationElements][10]
 -   [Equation Layout OBJECTS][11]
 -   [EQN_Container][12]
-    -   [Properties][13]
-    -   [Examples][14]
 -   [EQN_Fraction][15]
-    -   [Properties][16]
-    -   [Examples][17]
 -   [EQN_Scale][18]
-    -   [Properties][19]
-    -   [Examples][20]
 -   [EQN_Bracket][21]
-    -   [Properties][22]
-    -   [Examples][23]
 -   [EQN_Root][24]
-    -   [Properties][25]
-    -   [Examples][26]
 -   [EQN_Strike][27]
-    -   [Properties][28]
-    -   [Examples][29]
 -   [EQN_Box][30]
-    -   [Properties][31]
-    -   [Examples][32]
 -   [EQN_Bar][33]
-    -   [Properties][34]
-    -   [Examples][35]
 -   [EQN_Integral][36]
-    -   [Properties][37]
-    -   [Examples][38]
 -   [EQN_SumOf][39]
-    -   [Properties][40]
-    -   [Examples][41]
 -   [EQN_ProdOf][42]
-    -   [Properties][43]
-    -   [Examples][44]
 -   [EQN_Subcript][45]
-    -   [Properties][46]
-    -   [Examples][47]
 -   [EQN_Superscript][48]
-    -   [Properties][49]
-    -   [Examples][50]
 -   [EQN_SuperscriptSubscript][51]
-    -   [Properties][52]
-    -   [Examples][53]
 -   [EQN_Comment][54]
-    -   [Properties][55]
-    -   [Examples][56]
 -   [EQN_StrikeComment][57]
-    -   [Properties][58]
-    -   [Examples][59]
 -   [EQN_Pad][60]
-    -   [Properties][61]
-    -   [Examples][62]
 -   [EQN_Matrix][63]
-    -   [Properties][64]
-    -   [Examples][65]
 -   [EQN_Annotate][66]
-    -   [Properties][67]
-    -   [Examples][68]
 -   [EQN_Annotation][69]
-    -   [Properties][70]
-    -   [Examples][71]
 -   [EQN_EncompassGlyph][72]
-    -   [Properties][73]
-    -   [Examples][74]
 -   [EQN_LeftRightGlyph][75]
-    -   [Properties][76]
-    -   [Examples][77]
 -   [EQN_TopBottomGlyph][78]
-    -   [Properties][79]
-    -   [Examples][80]
 -   [EQN_Glyphs][81]
-    -   [Properties][82]
 -   [Equation Symbol OBJECTS][83]
--   [EQNSymbol_Vinculum][84]
-    -   [Properties][85]
-    -   [Examples][86]
--   [EQNSymbol_Box][87]
-    -   [Properties][88]
-    -   [Examples][89]
--   [EQNSymbol_Arrow][90]
-    -   [Properties][91]
-    -   [Examples][92]
--   [EQNSymbol_Sum][93]
-    -   [Properties][94]
-    -   [Examples][95]
--   [EQNSymbol_Prod][96]
-    -   [Properties][97]
-    -   [Examples][98]
--   [EQNSymbol_Integral][99]
-    -   [Properties][100]
-    -   [Examples][101]
--   [EQNSymbol_Strike][102]
-    -   [Properties][103]
-    -   [Examples][104]
--   [EQNSymbol_Bracket][105]
-    -   [Properties][106]
-    -   [Examples][107]
--   [EQNSymbol_AngleBracket][108]
-    -   [Properties][109]
-    -   [Examples][110]
--   [EQNSymbol_Brace][111]
-    -   [Properties][112]
-    -   [Examples][113]
--   [EQNSymbol_Bar][114]
-    -   [Properties][115]
-    -   [Examples][116]
--   [EQNSymbol_SquareBracket][117]
-    -   [Properties][118]
-    -   [Examples][119]
--   [EQNSymbol_Radical][120]
-    -   [Properties][121]
-    -   [Examples][122]
+-   [EQN_VinculumSymbol][84]
+-   [EQN_BoxSymbol][87]
+-   [EQN_ArrowSymbol][90]
+-   [EQN_SumSymbol][93]
+-   [EQN_ProdSymbol][96]
+-   [EQN_IntegralSymbol][99]
+-   [EQN_StrikeSymbol][102]
+-   [EQN_BracketSymbol][105]
+-   [EQN_AngleBracketSymbol][108]
+-   [EQN_BraceSymbol][111]
+-   [EQN_BarSymbol][114]
+-   [EQN_SquareBracketSymbol][117]
+-   [EQN_RadicalSymbol][120]
 -   [Equation Form Types][123]
 -   [TypeEquationPhrase][124]
-    -   [Examples][125]
 -   [TypeFormAlignment][126]
-    -   [Properties][127]
 -   [TypeFormAnimationProperties][128]
-    -   [Properties][129]
-    -   [Examples][130]
 -   [TypeFormTranslationProperties][131]
-    -   [Properties][132]
 -   [TypeEquationFormObject][133]
-    -   [Properties][134]
-    -   [Examples][135]
 -   [TypeEquationForm][136]
 -   [TypeEquationForms][137]
 -   [TypeFormRestart][138]
-    -   [Properties][139]
 -   [Equation Option Types][140]
 -   [TypeEquationOptions][141]
-    -   [Properties][142]
 -   [TypeEquationGoToFormOptions][143]
-    -   [Properties][144]
 -   [Equations][145]
 -   [Equation][146]
-    -   [Parameters][147]
-    -   [Examples][148]
     -   [eqn][149]
-        -   [Properties][150]
     -   [setFormSeries][151]
-        -   [Parameters][152]
     -   [getFormSeries][153]
     -   [addElements][154]
-        -   [Parameters][155]
     -   [addForms][156]
-        -   [Parameters][157]
     -   [getCurrentForm][158]
     -   [setCurrentForm][159]
-        -   [Parameters][160]
     -   [showForm][161]
-        -   [Parameters][162]
     -   [getForm][163]
-        -   [Parameters][164]
     -   [goToForm][165]
-        -   [Parameters][166]
     -   [prevForm][167]
-        -   [Parameters][168]
     -   [nextForm][169]
-        -   [Parameters][170]
     -   [replayCurrentForm][171]
-        -   [Parameters][172]
 -   [tools][173]
     -   [g2][174]
         -   [Point][175]
-            -   [Parameters][176]
             -   [x][177]
             -   [y][178]
             -   [\_dup][179]
             -   [scale][180]
-                -   [Parameters][181]
-                -   [Examples][182]
             -   [sub][183]
-                -   [Parameters][184]
-                -   [Examples][185]
             -   [add][186]
-                -   [Parameters][187]
-                -   [Examples][188]
             -   [distance][189]
-                -   [Examples][190]
             -   [round][191]
-                -   [Parameters][192]
-                -   [Examples][193]
             -   [clip][194]
-                -   [Parameters][195]
-                -   [Examples][196]
             -   [transformBy][197]
-                -   [Parameters][198]
-                -   [Examples][199]
             -   [rotate][200]
-                -   [Parameters][201]
-                -   [Examples][202]
             -   [isEqualTo][203]
-                -   [Parameters][204]
-                -   [Examples][205]
             -   [isNotEqualTo][206]
-                -   [Parameters][207]
-                -   [Examples][208]
             -   [zero][209]
             -   [Unity][210]
         -   [Rect][211]
-            -   [Parameters][212]
     -   [range][213]
-        -   [Parameters][214]
 -   [tools][215]
-    -   [Properties][216]
 -   [round][217]
-    -   [Parameters][218]
 -   [TypeDiagramOptions][219]
-    -   [Properties][220]
 -   [container][221]
-    -   [Parameters][222]
-    -   [Examples][223]
 -   [frac][224]
-    -   [Parameters][225]
-    -   [Examples][226]
 
 ## Diagram
 
@@ -274,7 +145,6 @@ Definition of a text or symbol equation element. Symbol properties take
 receive priority over text properties, so if 'symbol' is defined, then 'text'
 will be ignored.
 
-Type: ([string][228] | {text: [string][228]?, font: DiagramFont?, style: (`"italic"` \| `"normal"` | null)?, symbol: [string][228]?, numLines: [number][230]?, side: (`"top"` \| `"left"` \| `"bottom"` \| `"right"`)?, color: [Array][229]&lt;[number][230]>?, mods: {}?} | DiagramElementPrimitive | DiagramElementCollection)
 
 ### Properties
 
@@ -290,7 +160,6 @@ Type: ([string][228] | {text: [string][228]?, font: DiagramFont?, style: (`"ital
 
 Object with multiple equation elements.
 
-Type: {}
 
 ## Equation Layout OBJECTS
 
@@ -304,7 +173,6 @@ Equation container
 A container is useful to fix spacing around content as it changes between
 equation forms.
 
-Type: ({content: [TypeEquationPhrase][232], width: [number][230]?, descent: [number][230]?, ascent: [number][230]?, xAlign: (`"left"` \| `"center"` \| `"right"` \| [number][230])?, yAlign: (`"bottom"` \| `"middle"` \| `"top"` \| `"baseline"` \| [number][230])?, fit: (`"width"` \| `"height"` \| `"contain"`)?, scale: [number][230]?, fullContentBounds: [boolean][233]?} | \[[TypeEquationPhrase][232], [number][230]?, [number][230]?, [number][230]?, (`"left"`? | `"center"` \| `"right"` \| [number][230]), (`"bottom"`? | `"middle"` \| `"top"` \| `"baseline"` \| [number][230]), (`"width"`? | `"height"` \| `"contain"`), [number][230]?, [boolean][233]?])
 
 ### Properties
 
@@ -347,7 +215,6 @@ Type: ({content: [TypeEquationPhrase][232], width: [number][230]?, descent: [num
 
 Equation fraction
 
-Type: ({numerator: [TypeEquationPhrase][232], symbol: [string][228], denominator: [TypeEquationPhrase][232], scale: [number][230]?, numeratorSpace: [number][230]?, denominatorSpace: [number][230]?, overhang: [number][230]?, offsetY: [number][230]?, fullContentBounds: [boolean][233]?} | \[[TypeEquationPhrase][232], [string][228], [TypeEquationPhrase][232], [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [boolean][233]?])
 
 ### Properties
 
@@ -399,7 +266,6 @@ Equation scale
 
 Scale an equation phrase
 
-Type: ({content: [TypeEquationPhrase][232], scale: [number][230]?, fullContentBounds: [boolean][233]?} | \[[TypeEquationPhrase][232], [number][230]?, [boolean][233]?])
 
 ### Properties
 
@@ -431,7 +297,6 @@ Equation bracket
 
 Surround an equation phrase with brackets
 
-Type: ({left: [string][228]?, content: [TypeEquationPhrase][232], right: [string][228]?, inSize: [boolean][233]?, insideSpace: [number][230]?, outsideSpace: [number][230]?, topSpace: [number][230]?, bottomSpace: [number][230]?, minContentHeight: [number][230]?, minContentDescent: [number][230]?, height: [number][230]?, descent: [number][230]?, fullContentBounds: [boolean][233]?, useFullBounds: [boolean][233]?} | \[[string][228], [TypeEquationPhrase][232], [string][228]?, [boolean][233]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [boolean][233]?, [boolean][233]?])
 
 ### Properties
 
@@ -505,7 +370,6 @@ Equation root
 Surround an equation phrase with a radical symbol and add a custom root if
 needed
 
-Type: ({symbol: [string][228], content: [TypeEquationPhrase][232], inSize: [boolean][233]?, space: [number][230]?, topSpace: [number][230]?, rightSpace: [number][230]?, bottomSpace: [number][230]?, leftSpace: [number][230]?, root: [TypeEquationPhrase][232], rootOffset: [number][230]?, rootScale: [number][230]?, fullContentBounds: [boolean][233]?, useFullBounds: [boolean][233]?} | \[[string][228], [TypeEquationPhrase][232], [boolean][233]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [TypeEquationPhrase][232]?, [number][230]?, [number][230]?, [boolean][233]?, [boolean][233]?])
 
 ### Properties
 
@@ -573,7 +437,6 @@ Equation strike-through
 
 Overlay a strike symbol on an equation phrase
 
-Type: ({content: [TypeEquationPhrase][232], symbol: [string][228], inSize: [boolean][233]?, space: [number][230]?, topSpace: [number][230]?, rightSpace: [number][230]?, bottomSpace: [number][230]?, leftSpace: [number][230]?, fullContentBounds: [boolean][233]?, useFullBounds: [boolean][233]?} | \[[TypeEquationPhrase][232], [string][228], [boolean][233]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [boolean][233]?, [boolean][233]?])
 
 ### Properties
 
@@ -635,7 +498,6 @@ Equation box
 
 Place a box symbol around an equation phrase
 
-Type: ({content: [TypeEquationPhrase][232], symbol: [string][228], inSize: [boolean][233]?, space: [number][230]?, topSpace: [number][230]?, rightSpace: [number][230]?, bottomSpace: [number][230]?, leftSpace: [number][230]?, fullContentBounds: [boolean][233]?, useFullBounds: [boolean][233]?} | \[[TypeEquationPhrase][232], [string][228], [boolean][233]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [boolean][233]?, [boolean][233]?])
 
 ### Properties
 
@@ -697,7 +559,6 @@ Equation bar
 
 Place a bar (or bracket) symbol to the side of an equation phrase
 
-Type: ({content: [TypeEquationPhrase][232], symbol: [string][228]?, inSize: [boolean][233]?, space: [number][230]?, overhang: [number][230]?, length: [number][230]?, left: [number][230]?, right: [number][230]?, top: [number][230]?, bottom: [number][230]?, side: (`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?, minContentHeight: [number][230]?, minContentDescent: [number][230]?, minContentAscent: [number][230]?, descent: [number][230]?, fullContentBounds: [boolean][233]?, useFullBounds: [boolean][233]?} | \[[TypeEquationPhrase][232], [string][228]?, [boolean][233]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, (`"left"`? | `"right"` \| `"top"` \| `"bottom"`), [number][230]?, [number][230]?, [number][230]?, [number][230]?, [boolean][233]?, [boolean][233]?])
 
 ### Properties
 
@@ -794,7 +655,6 @@ Equation integral
 
 Place an integral (with optional limits) before an equation phrase
 
-Type: ({symbol: [string][228]?, content: [TypeEquationPhrase][232]?, from: [TypeEquationPhrase][232]?, to: [TypeEquationPhrase][232]?, inSize: [boolean][233]?, space: [number][230]?, topSpace: [number][230]?, bottomSpace: [number][230]?, height: [number][230]?, yOffset: [number][230]?, scale: [number][230]?, fromScale: [number][230]?, toScale: [number][230]?, fromOffset: TypeParsablePoint?, toOffset: TypeParsablePoint?, limitsPosition: (`"side"` \| `"topBottom"` \| `"topBottomCenter"`)?, limitsAroundContent: [boolean][233]?, fromXPosition: (`"left"` \| `"center"` \| `"right"` \| [number][230])?, fromYPosition: (`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][230])?, fromXAlign: (`"left"` \| `"center"` \| `"right"` \| [number][230])?, fromYAlign: (`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][230])?, toXPosition: (`"left"` \| `"center"` \| `"right"` \| [number][230])?, toYPosition: (`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][230])?, toXAlign: (`"left"` \| `"center"` \| `"right"` \| [number][230])?, toYAlign: (`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][230])?, fullBoundsContent: [boolean][233]?, useFullBounds: [boolean][233]?} | \[[string][228]?, [TypeEquationPhrase][232]?, [TypeEquationPhrase][232]?, [TypeEquationPhrase][232]?, [boolean][233]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, TypeParsablePoint?, TypeParsablePoint?, (`"side"`? | `"topBottom"` \| `"topBottomCenter"`), [boolean][233]?, (`"left"`? | `"center"` \| `"right"` \| [number][230]), (`"bottom"`? | `"top"` \| `"middle"` \| `"baseline"` \| [number][230]), (`"left"`? | `"center"` \| `"right"` \| [number][230]), (`"bottom"`? | `"top"` \| `"middle"` \| `"baseline"` \| [number][230]), (`"left"`? | `"center"` \| `"right"` \| [number][230]), (`"bottom"`? | `"top"` \| `"middle"` \| `"baseline"` \| [number][230]), (`"left"`? | `"center"` \| `"right"` \| [number][230]), (`"bottom"`? | `"top"` \| `"middle"` \| `"baseline"` \| [number][230]), [boolean][233]?, [boolean][233]?])
 
 ### Properties
 
@@ -902,7 +762,6 @@ Equation sum of
 
 Place an equation phrase in a sum of operation
 
-Type: ({symbol: [string][228]?, content: [TypeEquationPhrase][232], from: [TypeEquationPhrase][232]?, to: [TypeEquationPhrase][232]?, inSize: [boolean][233]?, space: [number][230]?, topSpace: [number][230]?, bottomSpace: [number][230]?, height: [number][230]?, yOffset: [number][230]?, scale: [number][230]?, fromScale: [number][230]?, toScale: [number][230]?, fromSpace: [number][230]?, toSpace: [number][230]?, fromOffset: TypeParsablePoint?, toOffset: TypeParsablePoint?, fullBoundsContent: [boolean][233]?, useFullBounds: [boolean][233]?} | \[[string][228]?, [TypeEquationPhrase][232], [TypeEquationPhrase][232]?, [TypeEquationPhrase][232]?, [boolean][233]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, (TypeParsablePoint? | null), (TypeParsablePoint? | null), [boolean][233]?, [boolean][233]?])
 
 ### Properties
 
@@ -976,7 +835,6 @@ Equation product of
 
 Place an equation phrase in a product of operation
 
-Type: ({symbol: [string][228]?, content: [TypeEquationPhrase][232], from: [TypeEquationPhrase][232]?, to: [TypeEquationPhrase][232]?, inSize: [boolean][233]?, space: [number][230]?, topSpace: [number][230]?, bottomSpace: [number][230]?, height: [number][230]?, yOffset: [number][230]?, scale: [number][230]?, fromScale: [number][230]?, toScale: [number][230]?, fromSpace: [number][230]?, toSpace: [number][230]?, fromOffset: TypeParsablePoint?, toOffset: TypeParsablePoint?, fullBoundsContent: [boolean][233]?, useFullBounds: [boolean][233]?} | \[[string][228]?, [TypeEquationPhrase][232], [TypeEquationPhrase][232]?, [TypeEquationPhrase][232]?, [boolean][233]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, [number][230]?, (TypeParsablePoint? | null), (TypeParsablePoint? | null), [boolean][233]?, [boolean][233]?])
 
 ### Properties
 
@@ -1048,7 +906,6 @@ eqn.addElements({
 
 Equation subscript
 
-Type: ({content: [TypeEquationPhrase][232], subscript: [TypeEquationPhrase][232], scale: [number][230]?, offset: TypeParsablePoint?, inSize: [boolean][233]} | \[[TypeEquationPhrase][232], [TypeEquationPhrase][232], [number][230]?, TypeParsablePoint?, [boolean][233]?])
 
 ### Properties
 
@@ -1083,7 +940,6 @@ Type: ({content: [TypeEquationPhrase][232], subscript: [TypeEquationPhrase][232]
 
 Equation superscript
 
-Type: ({content: [TypeEquationPhrase][232], superscript: [TypeEquationPhrase][232], scale: [number][230]?, offset: TypeParsablePoint?, inSize: [boolean][233]} | \[[TypeEquationPhrase][232], [TypeEquationPhrase][232], [number][230]?, TypeParsablePoint?, [boolean][233]?])
 
 ### Properties
 
@@ -1118,7 +974,6 @@ Type: ({content: [TypeEquationPhrase][232], superscript: [TypeEquationPhrase][23
 
 Equation superscript and subscript
 
-Type: ({content: [TypeEquationPhrase][232], subscript: [TypeEquationPhrase][232], superscript: [TypeEquationPhrase][232], scale: [number][230]?, superscriptOffset: TypeParsablePoint?, subscriptOffset: TypeParsablePoint?, inSize: [boolean][233]?} | \[[TypeEquationPhrase][232], [TypeEquationPhrase][232], [TypeEquationPhrase][232], [number][230]?, TypeParsablePoint?, TypeParsablePoint?, [boolean][233]?])
 
 ### Properties
 
@@ -1160,7 +1015,6 @@ functions.
 
 A symbol between the content and comment is optional.
 
-Type: ({content: [TypeEquationPhrase][232], comment: [TypeEquationPhrase][232], symbol: [string][228]?, contentSpace: [number][230]?, commentSpace: [number][230]?, scale: [number][230]?, inSize: [boolean][233]?, fullContentBounds: [boolean][233]?, useFullBounds: [boolean][233]?} | \[[TypeEquationPhrase][232], [TypeEquationPhrase][232], [string][228], [number][230]?, [number][230]?, [number][230]?, [boolean][233]?, [boolean][233]?, [boolean][233]?])
 
 ### Properties
 
@@ -1219,7 +1073,6 @@ eqn.addElements({
 Equation strike with comment options used with `topStrike` and `bottomStrike`
 functions.
 
-Type: ({content: [TypeEquationPhrase][232]?, symbol: [string][228]?, comment: [TypeEquationPhrase][232]?, inSize: [boolean][233]?, space: [number][230]?, scale: [number][230]?, commentSpace: [number][230]?} | \[[TypeEquationPhrase][232]?, [string][228]?, [TypeEquationPhrase][232]?, [boolean][233]?, [number][230]?, [number][230]?, [number][230]?])
 
 ### Properties
 
@@ -1271,7 +1124,6 @@ eqn.addElements({
 
 Equation padding options
 
-Type: ({content: [TypeEquationPhrase][232], top: [number][230]?, right: [number][230]?, bottom: [number][230]?, left: [number][230]?} | \[[TypeEquationPhrase][232], [number][230]?, [number][230]?, [number][230]?, [number][230]?])
 
 ### Properties
 
@@ -1305,7 +1157,6 @@ Type: ({content: [TypeEquationPhrase][232], top: [number][230]?, right: [number]
 
 Equation matrix
 
-Type: ({order: \[[number][230], [number][230]]?, left: [string][228]?, content: [TypeEquationPhrase][232], right: [string][228]?, scale: [number][230]?, fit: (`"max"` \| `"min"` | TypeParsablePoint)?, space: TypeParsablePoint?, yAlign: (`"baseline"` \| `"middle"`)?, brac: [EQN_Bracket][234]?, fullContentBounds: [boolean][233]?} | \[\[[number][230], [number][230]]?, [string][228]?, [TypeEquationPhrase][232], [string][228]?, [number][230]?, (`"max"`? | `"min"`), TypeParsablePoint?, (`"baseline"`? | `"middle"`), [EQN_Bracket][234]?, [boolean][233]?])
 
 ### Properties
 
@@ -1416,7 +1267,6 @@ Glyph  GGG       GGG     CCCCCCC     GGG        GGG   Glyph
                       Bottom Glyph
 </pre>
 
-Type: {content: [TypeEquationPhrase][232], annotation: [EQN_Annotation][235]?, annotations: [Array][229]&lt;[EQN_Annotation][235]>?, fullContentBounds: [boolean][233]?, useFullBounds: [boolean][233]?, glyphs: [EQN_Glyphs][236]?, inSize: [boolean][233]?, space: [number][230]?, topSpace: [number][230]?, bottomSpace: [number][230]?, leftSpace: [number][230]?, rightSpace: [number][230]?, contentScale: [number][230]?}
 
 ### Properties
 
@@ -1543,7 +1393,6 @@ In comparison, if `yAlign` were equal to `'top'`, then it would result in:
          CCCCCCCC
 </pre>
 
-Type: {xPosition: (`"left"` \| `"center"` \| `"right"` \| [number][230]), yPosition: (`"bottom"` \| `"baseline"` \| `"middle"` \| `"top"` \| [number][230]), xAlign: (`"left"` \| `"center"` \| `"right"` \| [number][230]), yAlign: (`"bottom"` \| `"baseline"` \| `"middle"` \| `"top"` \| [number][230]), offset: [Point][237], scale: [number][230], content: [TypeEquationPhrase][232], inSize: [boolean][233], fullContentBounds: [boolean][233], reference: [string][228]?}
 
 ### Properties
 
@@ -1600,7 +1449,6 @@ can also be annotated.
 
 </pre>
 
-Type: {symbol: [string][228]?, annotation: [EQN_Annotation][235]?, annotations: [Array][229]&lt;[EQN_Annotation][235]>?, space: [number][230], topSpace: [number][230]?, rightSpace: [number][230]?, bottomSpace: [number][230]?, leftSpace: [number][230]?}
 
 ### Properties
 
@@ -1652,7 +1500,6 @@ The glyph can also be annotated.
 
 </pre>
 
-Type: {symbol: [string][228]?, annotation: [EQN_Annotation][235]?, annotations: [Array][229]&lt;[EQN_Annotation][235]>?, space: [number][230]?, overhang: [number][230]?, topSpace: [number][230]?, bottomSpace: [number][230]?, minContentHeight: [number][230]?, minContentDescent: [number][230]?, minContentAscent: [number][230]?, descent: [number][230]?, height: [number][230]?, yOffset: [number][230]?, annotationsOverContent: [boolean][233]?}
 
 ### Properties
 
@@ -1725,7 +1572,6 @@ The glyph can also be annotated.
 
 </pre>
 
-Type: {symbol: [string][228]?, annotation: [EQN_Annotation][235]?, annotations: [Array][229]&lt;[EQN_Annotation][235]>?, space: [number][230]?, overhang: [number][230]?, width: [number][230]?, leftSpace: [number][230]?, rightSpace: [number][230]?, xOffset: [number][230]?, annotationsOverContent: [boolean][233]?}
 
 ### Properties
 
@@ -1774,7 +1620,6 @@ Object defining all the glyphs annotating some content.
 
 Multiple glyphs are ok, but only one per position.
 
-Type: {left: [EQN_LeftRightGlyph][238]?, right: [EQN_LeftRightGlyph][238]?, top: [EQN_TopBottomGlyph][239]?, bottom: [EQN_TopBottomGlyph][239]?, encompass: [EQN_EncompassGlyph][240]?}
 
 ### Properties
 
@@ -1789,7 +1634,7 @@ Type: {left: [EQN_LeftRightGlyph][238]?, right: [EQN_LeftRightGlyph][238]?, top:
 
 
 
-## EQNSymbol_Vinculum
+## EQN_VinculumSymbol
 
 Vinculum equation symbol
 
@@ -1804,7 +1649,6 @@ Vinculum equation symbol
 
 </pre>
 
-Type: {color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticWidth: ([number][230] \| `"first"`)?, staticHeight: ([number][230] \| `"first"`)?}
 
 ### Properties
 
@@ -1830,7 +1674,7 @@ eqn.addElements({
 })
 ```
 
-## EQNSymbol_Box
+## EQN_BoxSymbol
 
 Box equation symbol
 
@@ -1855,7 +1699,6 @@ Box equation symbol
 
 </pre>
 
-Type: {color: [Array][229]&lt;[number][230]>?, fill: [boolean][233]?, width: [number][230]?, height: [number][230]?, lineWidth: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticWidth: ([number][230] \| `"first"`)?, staticHeight: ([number][230] \| `"first"`)?}
 
 ### Properties
 
@@ -1887,7 +1730,7 @@ eqn.addElements({
 })
 ```
 
-## EQNSymbol_Arrow
+## EQN_ArrowSymbol
 
 Arrow equation symbol
 
@@ -1924,7 +1767,6 @@ Arrow equation symbol
                              lineWidth
 </pre>
 
-Type: {color: [Array][229]&lt;[number][230]>?, direction: (`"up"` \| `"down"` \| `"left"` \| `"right"`)?, lineWidth: [number][230]?, arrowHeight: [number][230]?, arrowWidth: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticHeight: ([number][230] \| `"first"`)?}
 
 ### Properties
 
@@ -1956,7 +1798,7 @@ eqn.addElements({
 })
 ```
 
-## EQNSymbol_Sum
+## EQN_SumSymbol
 
 Sum equation symbol
 
@@ -1993,7 +1835,6 @@ Sum equation symbol
                   |<------------------------------------>|
 </pre>
 
-Type: {color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, sides: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticHeight: ([number][230] \| `"first"`)?}
 
 ### Properties
 
@@ -2020,7 +1861,7 @@ eqn.addElements({
 })
 ```
 
-## EQNSymbol_Prod
+## EQN_ProdSymbol
 
 Product equation symbol used in [EQN_ProdOf][42]
 
@@ -2062,7 +1903,6 @@ Product equation symbol used in [EQN_ProdOf][42]
          ----- 0000000000000000000000000           00000000000000000000000000
 </pre>
 
-Type: {color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, sides: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticHeight: ([number][230] \| `"first"`)?}
 
 ### Properties
 
@@ -2089,7 +1929,7 @@ eqn.addElements({
 })
 ```
 
-## EQNSymbol_Integral
+## EQN_IntegralSymbol
 
 Integral equation symbol used in [EQN_Integral][36]
 
@@ -2130,7 +1970,6 @@ Integral equation symbol used in [EQN_Integral][36]
 //     -------  0000000
 </pre>
 
-Type: {color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, sides: [number][230]?, tipWidth: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticHeight: ([number][230] \| `"first"`)?, serif: [boolean][233]?, num: [number][230]?, type: (`"line"` \| `"generic"`)?, serifSides: [number][230]?, lineIntegralSides: [number][230]?}
 
 ### Properties
 
@@ -2171,7 +2010,7 @@ int: {
 },
 ```
 
-## EQNSymbol_Strike
+## EQN_StrikeSymbol
 
 Strike equation symbol used in [EQN_Strike][27].
 
@@ -2201,7 +2040,6 @@ Four styles of strike symbol are available:
 
 </pre>
 
-Type: {color: [Array][229]&lt;[number][230]>?, style: (`"cross"` \| `"forward"` \| `"back"` \| `"horizontal"`)?, lineWidth: [number][230]?, width: [number][230]?, height: [number][230]?, draw: (`"static"` \| `"dynamic"`), staticHeight: ([number][230] \| `"first"`)?, staticWidth: ([number][230] \| `"first"`)?}
 
 ### Properties
 
@@ -2247,7 +2085,7 @@ eqn.addElements({
  });
 ```
 
-## EQNSymbol_Bracket
+## EQN_BracketSymbol
 
 Bracket equation symbol
 
@@ -2277,7 +2115,6 @@ Bracket equation symbol
                       width
 </pre>
 
-Type: {side: (`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?, color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, sides: [number][230]?, width: [number][230]?, tipWidth: [number][230]?, draw: (`"static"` \| `"dynamic"`)?, staticHeight: ([number][230] \| `"first"`)?}
 
 ### Properties
 
@@ -2320,7 +2157,7 @@ eqn.addElements({
  });
 ```
 
-## EQNSymbol_AngleBracket
+## EQN_AngleBracketSymbol
 
 Angle bracket equation symbol
 
@@ -2345,7 +2182,6 @@ Angle bracket equation symbol
 
 </pre>
 
-Type: {side: (`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?, color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, width: [number][230]?, draw: (`"dynamic"` \| `"static"`)?, staticHeight: ([number][230] \| `"first"`)?}
 
 ### Properties
 
@@ -2384,7 +2220,7 @@ eqn.addElements({
  });
 ```
 
-## EQNSymbol_Brace
+## EQN_BraceSymbol
 
 Brace equation symbol
 
@@ -2431,7 +2267,6 @@ Brace equation symbol
 
 </pre>
 
-Type: {side: (`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?, color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, sides: [number][230]?, width: [number][230]?, tipWidth: [number][230]?, draw: (`"dynamic"` \| `"static"`)?, staticHeight: ([number][230] \| `"first"`)?}
 
 ### Properties
 
@@ -2473,7 +2308,7 @@ eqn.addElements({
  });
 ```
 
-## EQNSymbol_Bar
+## EQN_BarSymbol
 
 Bar equation symbol
 
@@ -2496,7 +2331,6 @@ Bar equation symbol
 
 </pre>
 
-Type: {side: (`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?, color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, draw: (`"dynamic"` \| `"static"`)?, staticHeight: ([number][230] \| `"first"`)?}
 
 ### Properties
 
@@ -2533,7 +2367,7 @@ eqn.addElements({
  });
 ```
 
-## EQNSymbol_SquareBracket
+## EQN_SquareBracketSymbol
 
 Square bracket equation symbol
 
@@ -2567,7 +2401,6 @@ Square bracket equation symbol
 
 </pre>
 
-Type: {color: [Array][229]&lt;[number][230]>?, side: (`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?, lineWidth: [number][230]?, width: [number][230]?, tipWidth: [number][230]?, radius: [number][230]?, sides: [number][230]?, draw: (`"dynamic"` \| `"static"`)?, staticHeight: ([number][230] \| `"first"`)?}
 
 ### Properties
 
@@ -2612,7 +2445,7 @@ eqn.addElements({
  });
 ```
 
-## EQNSymbol_Radical
+## EQN_RadicalSymbol
 
 Radical equation symbol used in [EQN_Root][24].
 
@@ -2647,7 +2480,6 @@ it will not be needed, but for edge case equation layouts it may be useful.
                     startWidth
 </pre>
 
-Type: {color: [Array][229]&lt;[number][230]>?, lineWidth: [number][230]?, width: [number][230]?, height: [number][230]?, startWidth: [number][230]?, startHeight: [number][230]?, proportionalToHeight: [boolean][233]?, maxStartWidth: [number][230]??, maxStartHeight: [number][230]??, lineWidth2: [number][230]?, tickWidth: [number][230]?, tickHeight: [number][230]?, downWidth: [number][230]?, draw: (`"static"` \| `"dynamic"`), staticHeight: ([number][230] \| `"first"`)?, staticWidth: ([number][230] \| `"first"`)?}
 
 ### Properties
 
@@ -2726,7 +2558,6 @@ phrases.
 -   A string that represents an equation element
 -   An array of [TypeEquationPhrase][124]
 
-Type: ([string][228] \| [number][230] | {frac: [EQN_Fraction][241]} | {strike: [EQN_Strike][242]} | {box: [EQN_Box][243]} | {root: [EQN_Root][244]} | {brac: [EQN_Bracket][234]} | {sub: [EQN_Subcript][245]} | {sup: [EQN_Superscript][246]} | {supSub: [EQN_SuperscriptSubscript][247]} | {topBar: [EQN_Bar][248]} | {bottomBar: [EQN_Bar][248]} | {annotate: [EQN_Annotate][249]} | {topComment: [EQN_Comment][250]} | {bottomComment: [EQN_Comment][250]} | {pad: [EQN_Pad][251]} | {bar: [EQN_Bar][248]} | {scale: [EQN_Scale][252]} | {container: [EQN_Container][253]} | {matrix: [EQN_Matrix][254]} | {int: [EQN_Integral][255]} | {sumOf: [EQN_SumOf][256]} | {prodOf: [EQN_ProdOf][257]} | {topStrike: [EQN_StrikeComment][258]} | {bottomStrike: [EQN_StrikeComment][258]} | [Array][229]&lt;[TypeEquationPhrase][232]> | DiagramElementPrimitive | DiagramElementCollection | Elements | [Element][259] | BaseAnnotationFunction)
 
 ### Examples
 
@@ -2750,7 +2581,6 @@ forms: {
 
 Defines how to align a form
 
-Type: {fixTo: (DiagramElementPrimitive | DiagramElementCollection | [Point][237]), xAlign: TypeHAlign, yAlign: TypeVAlign}
 
 ### Properties
 
@@ -2762,7 +2592,6 @@ Type: {fixTo: (DiagramElementPrimitive | DiagramElementCollection | [Point][237]
 
 Duration and translation options for form animation
 
-Type: {duration: [number][230]??, translation: {}?}
 
 ### Properties
 
@@ -2796,7 +2625,6 @@ duration or shouldn't have a linear path
 
 Form translation properties
 
-Type: {style: (`"curved"` \| `"linear"`), direction: (`"up"` \| `"down"`)?, mag: [number][230]}
 
 ### Properties
 
@@ -2839,7 +2667,6 @@ See the examples below for how to define subForms.
 
 [Equation#addForms][261].
 
-Type: {content: [TypeEquationPhrase][232], scale: [number][230]?, alignment: [TypeFormAlignment][262]?, subForm: [string][228]?, description: [string][228]?, modifiers: {}?, fromPrev: [TypeFormAnimationProperties][263]?, fromNext: [TypeFormAnimationProperties][263]?, duration: [number][230]??, translation: [TypeFormTranslationProperties][260]?, elementMods: {}?}
 
 ### Properties
 
@@ -2973,14 +2800,12 @@ A single form definition can either be:
         subform2: ...
      },
 
-Type: ([TypeEquationPhrase][232] \| [TypeEquationFormObject][264] \| [Object][231]&lt;([TypeEquationFormObject][264] \| [TypeEquationPhrase][232])>)
 
 ## TypeEquationForms
 
 An object of equation forms where each key is the form name and each value
 is a form defintion [TypeEquationForm][136]
 
-Type: [Object][231]&lt;[TypeEquationForm][265]>
 
 ## TypeFormRestart
 
@@ -2995,7 +2820,6 @@ The default values in the pulse object are are:
 -   `duration`: 1s
 -   `scale`: 1.1
 
-Type: {formRestart: {moveFrom: ([Point][237]? | DiagramElementCollection)?, pulse: {duration: [number][230]?, scale: [number][230]?, element: DiagramElement??}?}?}
 
 ### Properties
 
@@ -3010,7 +2834,6 @@ Type: {formRestart: {moveFrom: ([Point][237]? | DiagramElementCollection)?, puls
 
 Options objects to construct an [Equation][146] class. All properties are optional.
 
-Type: {color: [Array][229]&lt;[number][230]>?, scale: [number][230]?, elements: [TypeEquationElements][266]?, defaultFormAlignment: [TypeFormAlignment][262]?, forms: [TypeEquationForms][267]?, formSeries: ([Array][229]&lt;[string][228]> | {})?, defaultFormSeries: [string][228]?, formRestart: [TypeFormRestart][268]?, fontMath: DiagramFont?, position: [Point][237]?}
 
 ### Properties
 
@@ -3071,7 +2894,6 @@ the behavior of the animation:
 -   `cancelGoTo: false`, `skipToTarget: false`: Current animation will stop in
     its current state, and current goTo call will be executed
 
-Type: {name: [string][228]?, index: [number][230]?, animate: (`"move"` \| `"dissolve"` \| `"moveFrom"` \| `"pulse"` \| `"dissolveInThenMove"`)?, delay: [number][230]?, dissolveOutTime: [number][230]?, duration: [number][230]??, dissolveInTime: [number][230]?, blankTime: [number][230]?, prioritizeFormDuration: [boolean][233]?, fromWhere: (`"fromPrev"`? | `"fromNext"`)?, ifAnimating: {cancelGoTo: [boolean][233]?, skipToTarget: [boolean][233]?}?, callback: function (): void??}
 
 ### Properties
 
@@ -3571,7 +3393,6 @@ Returns **([number][230] \| [Array][229]&lt;[number][230]>)** Rounded value or a
 
 Diagram Input Options
 
-Type: {htmlId: [string][228]?, limits: [Rect][273]?}
 
 ### Properties
 
@@ -3787,79 +3608,79 @@ eqn.addForms({
 
 [83]: #equation-symbol-objects
 
-[84]: #eqnsymbol_vinculum
+[84]: #eqn_vinculumsymbol
 
 [85]: #properties-25
 
 [86]: #examples-24
 
-[87]: #eqnsymbol_box
+[87]: #eqn_boxsymbol
 
 [88]: #properties-26
 
 [89]: #examples-25
 
-[90]: #eqnsymbol_arrow
+[90]: #eqn_arrowsymbol
 
 [91]: #properties-27
 
 [92]: #examples-26
 
-[93]: #eqnsymbol_sum
+[93]: #eqn_sumsymbol
 
 [94]: #properties-28
 
 [95]: #examples-27
 
-[96]: #eqnsymbol_prod
+[96]: #eqn_prodsymbol
 
 [97]: #properties-29
 
 [98]: #examples-28
 
-[99]: #eqnsymbol_integral
+[99]: #eqn_integralsymbol
 
 [100]: #properties-30
 
 [101]: #examples-29
 
-[102]: #eqnsymbol_strike
+[102]: #eqn_strikesymbol
 
 [103]: #properties-31
 
 [104]: #examples-30
 
-[105]: #eqnsymbol_bracket
+[105]: #eqn_bracketsymbol
 
 [106]: #properties-32
 
 [107]: #examples-31
 
-[108]: #eqnsymbol_anglebracket
+[108]: #eqn_anglebracketsymbol
 
 [109]: #properties-33
 
 [110]: #examples-32
 
-[111]: #eqnsymbol_brace
+[111]: #eqn_bracesymbol
 
 [112]: #properties-34
 
 [113]: #examples-33
 
-[114]: #eqnsymbol_bar
+[114]: #eqn_barsymbol
 
 [115]: #properties-35
 
 [116]: #examples-34
 
-[117]: #eqnsymbol_squarebracket
+[117]: #eqn_squarebracketsymbol
 
 [118]: #properties-36
 
 [119]: #examples-35
 
-[120]: #eqnsymbol_radical
+[120]: #eqn_radicalsymbol
 
 [121]: #properties-37
 
