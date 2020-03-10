@@ -109,3 +109,5 @@ If the digram is changed in the future and drawing needs to be drawing needs to 
 ```js
 diagram.animateNextFrame()
 ```
+
+[link here](docs/readme.md#TypeEquationPhrase)
