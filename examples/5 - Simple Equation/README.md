@@ -67,7 +67,7 @@ Some operators are either not in unicode, or are more convient to drawn directly
 
 Available symbols include:
 
-* *vinculum* - for fractions
+* [vinculum](../../docs/README.md#EQN_VinculumSymbol) - for fractions
 * *radical* - for roots
 * *integral* - with multiple and path integral options
 * *sum* - sigma
