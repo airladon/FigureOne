@@ -510,40 +510,6 @@
               
                 
                 <li><a
-                  href='#equationfunctions'
-                  class=" toggle-sibling">
-                  EquationFunctions
-                  <span class='icon'>▸</span>
-                </a>
-                
-                <div class='toggle-target display-none'>
-                  
-                  
-                    <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'><span>Instance members</span></li>
-                      
-                      <li><a
-                        href='#equationfunctionscontainer'
-                        class='regular pre-open'>
-                        #container
-                      </a></li>
-                      
-                      <li><a
-                        href='#equationfunctionsfrac'
-                        class='regular pre-open'>
-                        #frac
-                      </a></li>
-                      
-                    </ul>
-                  
-                  
-                  
-                </div>
-                
-                </li>
-              
-                
-                <li><a
                   href='#tools'
                   class="h5 bold black caps toggle-sibling">
                   tools
@@ -661,6 +627,26 @@
                   href='#typeannotateobject'
                   class="">
                   TypeAnnotateObject
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#container'
+                  class="">
+                  container
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#frac'
+                  class="">
+                  frac
                   
                 </a>
                 
@@ -5972,7 +5958,7 @@ eqn.addElements({
   
     <p>
       Type:
-      {forms: {}, functions: <a href="#equationfunctions">EquationFunctions</a>, symbols: EquationSymbols, currentForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, currentSubForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, fontMath: DiagramFont, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, subFormPriority: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, formSeries: {}, currentFormSeries: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, currentFormSeriesName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, defaultFormAlignment: {fixTo: (DiagramElementPrimitive | DiagramElementCollection | <a href="#point">Point</a>), xAlign: TypeHAlign, yAlign: TypeVAlign}, isAnimating: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, descriptionElement: (DiagramElementPrimitive | null), descriptionPosition: <a href="#point">Point</a>, formRestart: {moveFrom: (<a href="#point">Point</a> | DiagramElementCollection)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, element: DiagramElement}?}?}
+      {forms: {}, functions: EquationFunctions, symbols: EquationSymbols, currentForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, currentSubForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, fontMath: DiagramFont, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, subFormPriority: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, formSeries: {}, currentFormSeries: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, currentFormSeriesName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, defaultFormAlignment: {fixTo: (DiagramElementPrimitive | DiagramElementCollection | <a href="#point">Point</a>), xAlign: TypeHAlign, yAlign: TypeVAlign}, isAnimating: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, descriptionElement: (DiagramElementPrimitive | null), descriptionPosition: <a href="#point">Point</a>, formRestart: {moveFrom: (<a href="#point">Point</a> | DiagramElementCollection)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, element: DiagramElement}?}?}
     </p>
   
   
@@ -5991,7 +5977,7 @@ eqn.addElements({
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>functions</span> <code class='quiet'>(<a href="#equationfunctions">EquationFunctions</a>)</code>
+          <span class='code bold'>functions</span> <code class='quiet'>(EquationFunctions)</code>
           : equation functions
 
           
@@ -6769,235 +6755,6 @@ eqn.addElements({
 
   
 
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='equationfunctions'>
-      EquationFunctions
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Functions used in making equation forms</p>
-
-    <div class='pre p1 fill-light mt0'>new EquationFunctions(elements: {}, addElementFromKey: function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): DiagramElementPrimitive?, getExistingOrAddSymbol: function ((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)): DiagramElementPrimitive?)</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>elements</span> <code class='quiet'>({})</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>addElementFromKey</span> <code class='quiet'>(function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): DiagramElementPrimitive?)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>getExistingOrAddSymbol</span> <code class='quiet'>(function ((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)): DiagramElementPrimitive?)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='equationfunctionscontainer'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>container(optionsOrArray)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Equation container function</p>
-
-    <div class='pre p1 fill-light mt0'>container(optionsOrArray: <a href="#typeequationfunctioncontainer">TypeEquationFunctionContainer</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>optionsOrArray</span> <code class='quiet'>(<a href="#typeequationfunctioncontainer">TypeEquationFunctionContainer</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'>e = <span class="hljs-keyword">new</span> Equation();
-e.addElements({
-  <span class="hljs-attr">v</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
-});
-frac = e.eqn.functions.frac;
-eqn.addForms({
-  <span class="hljs-attr">base</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, frac([<span class="hljs-string">'b'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'c'</span>])],
-});</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='equationfunctionsfrac'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>frac(optionsOrArray)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Equation fraction function</p>
-
-    <div class='pre p1 fill-light mt0'>frac(optionsOrArray: <a href="#typeequationfunctionfraction">TypeEquationFunctionFraction</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>optionsOrArray</span> <code class='quiet'>(<a href="#typeequationfunctionfraction">TypeEquationFunctionFraction</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'>e = <span class="hljs-keyword">new</span> Equation();
-e.addElements({
-  <span class="hljs-attr">v</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
-});
-frac = e.eqn.functions.frac;
-eqn.addForms({
-  <span class="hljs-attr">base</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, frac([<span class="hljs-string">'b'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'c'</span>])],
-});</pre>
-    
   
 
   
@@ -9748,23 +9505,178 @@ brackets only surround a portion of the content (
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// left glyph with annotation</span>
- <span class="hljs-attr">annotate</span>: {
-   <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-   <span class="hljs-attr">glyphs</span>: {
-     <span class="hljs-attr">left</span>:{
-       <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bar'</span>,
-       <span class="hljs-attr">overhang</span>: <span class="hljs-number">0.1</span>,
-       <span class="hljs-attr">annotation</span>: {
-         <span class="hljs-attr">content</span>: <span class="hljs-string">'bbb'</span>,
-         <span class="hljs-attr">xPosition</span>: <span class="hljs-string">'right'</span>,
-         <span class="hljs-attr">yPosition</span>: <span class="hljs-string">'bottom'</span>,
-         <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'left'</span>,
-         <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'middle'</span>,
-         <span class="hljs-attr">scale</span>: <span class="hljs-number">0.5</span>,
-       },
-     },
-   },
- },</pre>
+eqn.addElements([
+  { <span class="hljs-attr">bar</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bar'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span> },
+])
+eqn.addForms({
+  <span class="hljs-attr">form1</span>: {
+    <span class="hljs-attr">annotate</span>: {
+      <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
+      <span class="hljs-attr">glyphs</span>: {
+        <span class="hljs-attr">left</span>:{
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bar'</span>,
+          <span class="hljs-attr">overhang</span>: <span class="hljs-number">0.1</span>,
+          <span class="hljs-attr">annotation</span>: {
+            <span class="hljs-attr">content</span>: <span class="hljs-string">'bbb'</span>,
+            <span class="hljs-attr">xPosition</span>: <span class="hljs-string">'right'</span>,
+            <span class="hljs-attr">yPosition</span>: <span class="hljs-string">'bottom'</span>,
+            <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'left'</span>,
+            <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'middle'</span>,
+            <span class="hljs-attr">scale</span>: <span class="hljs-number">0.5</span>,
+          },
+        },
+      },
+    },
+  },
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='container'>
+      container
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation container function</p>
+
+    <div class='pre p1 fill-light mt0'>container(optionsOrArray: <a href="#typeequationfunctioncontainer">TypeEquationFunctionContainer</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>optionsOrArray</span> <code class='quiet'>(<a href="#typeequationfunctioncontainer">TypeEquationFunctionContainer</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>e = <span class="hljs-keyword">new</span> Equation();
+e.addElements({
+  <span class="hljs-attr">v</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
+});
+frac = e.eqn.functions.frac;
+eqn.addForms({
+  <span class="hljs-attr">base</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, frac([<span class="hljs-string">'b'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'c'</span>])],
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='frac'>
+      frac
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation fraction function</p>
+
+    <div class='pre p1 fill-light mt0'>frac(optionsOrArray: <a href="#typeequationfunctionfraction">TypeEquationFunctionFraction</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>optionsOrArray</span> <code class='quiet'>(<a href="#typeequationfunctionfraction">TypeEquationFunctionFraction</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>e = <span class="hljs-keyword">new</span> Equation();
+e.addElements({
+  <span class="hljs-attr">v</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
+});
+frac = e.eqn.functions.frac;
+eqn.addForms({
+  <span class="hljs-attr">base</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, frac([<span class="hljs-string">'b'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'c'</span>])],
+});</pre>
     
   
 

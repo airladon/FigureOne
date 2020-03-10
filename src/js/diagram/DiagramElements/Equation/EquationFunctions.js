@@ -85,7 +85,7 @@ export type TypeEquationPhrase =
   | { supSub: TypeEquationFunctionSuperscriptSubscript }
   | { topBar: TypeEquationFunctionBar }
   | { bottomBar: TypeEquationFunctionBar }
-  | { annotate: TypeAnnotateObject }
+  | { annotate: TypeEquationFunctionAnnotate }
   | { topComment: TypeEquationFunctionComment }
   | { bottomComment: TypeEquationFunctionComment }
   | { pad: TypeEquationFunctionPad }
@@ -1812,25 +1812,32 @@ export type TypeGlyphs = {
  *  },
  * @example
  * // left glyph with annotation
- *  annotate: {
- *    content: 'a',
- *    glyphs: {
- *      left:{
- *        symbol: 'bar',
- *        overhang: 0.1,
- *        annotation: {
- *          content: 'bbb',
- *          xPosition: 'right',
- *          yPosition: 'bottom',
- *          xAlign: 'left',
- *          yAlign: 'middle',
- *          scale: 0.5,
- *        },
- *      },
- *    },
- *  },
+ * eqn.addElements([
+ *   { bar: { symbol: 'bar', side: 'right' },
+ * ])
+ * eqn.addForms({
+ *   form1: {
+ *     annotate: {
+ *       content: 'a',
+ *       glyphs: {
+ *         left:{
+ *           symbol: 'bar',
+ *           overhang: 0.1,
+ *           annotation: {
+ *             content: 'bbb',
+ *             xPosition: 'right',
+ *             yPosition: 'bottom',
+ *             xAlign: 'left',
+ *             yAlign: 'middle',
+ *             scale: 0.5,
+ *           },
+ *         },
+ *       },
+ *     },
+ *   },
+ * });
  */
-export type TypeAnnotateObject = {
+export type TypeEquationFunctionAnnotate = {
   content: TypeEquationPhrase,
   annotation?: TypeAnnotation,
   annotations?: Array<TypeAnnotation>,
@@ -1854,9 +1861,6 @@ export type TypeAnnotateObject = {
 // are subsets of the other, then when its parameters are extracted, their type
 // is all confused.
 
-/**
- * Functions used in making equation forms
- */
 export class EquationFunctions {
   // eslint-disable-next-line no-use-before-define
   elements: { [name: string]: DiagramElementCollection | DiagramElementPrimitive };
@@ -2289,7 +2293,7 @@ export class EquationFunctions {
     });
   }
 
-  annotate(optionsIn: TypeAnnotateObject) {
+  annotate(optionsIn: TypeEquationFunctionAnnotate) {
     const defaultOptions = {
       inSize: true,
       useFullBounds: false,
