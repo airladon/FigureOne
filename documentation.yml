@@ -4,25 +4,25 @@ toc:
   - TypeEquationElement
   - TypeEquationElements
   - name: Equation Functions Types
-  - TypeEquationFunctionContainer
-  - TypeEquationFunctionFraction
-  - TypeEquationFunctionScale
-  - TypeEquationFunctionBracket
-  - TypeEquationFunctionRoot
-  - TypeEquationFunctionStrike
-  - TypeEquationFunctionBox
-  - TypeEquationFunctionBar
-  - TypeEquationFunctionIntegral
-  - TypeEquationFunctionSumOf
-  - TypeEquationFunctionProdOf
-  - TypeEquationFunctionSubcript
-  - TypeEquationFunctionSuperscript
-  - TypeEquationFunctionSuperscriptSubscript
-  - TypeEquationFunctionComment
-  - TypeEquationFunctionStrikeComment
-  - TypeEquationFunctionPad
-  - TypeEquationFunctionMatrix
-  - TypeEquationFunctionAnnotate
+  - OBJ_EqnLayout_Container
+  - OBJ_EqnLayout_Fraction
+  - OBJ_EqnLayout_Scale
+  - OBJ_EqnLayout_Bracket
+  - OBJ_EqnLayout_Root
+  - OBJ_EqnLayout_Strike
+  - OBJ_EqnLayout_Box
+  - OBJ_EqnLayout_Bar
+  - OBJ_EqnLayout_Integral
+  - OBJ_EqnLayout_SumOf
+  - OBJ_EqnLayout_ProdOf
+  - OBJ_EqnLayout_Subcript
+  - OBJ_EqnLayout_Superscript
+  - OBJ_EqnLayout_SuperscriptSubscript
+  - OBJ_EqnLayout_Comment
+  - OBJ_EqnLayout_StrikeComment
+  - OBJ_EqnLayout_Pad
+  - OBJ_EqnLayout_Matrix
+  - OBJ_EqnLayout_Annotate
   - TypeAnnotation
   - TypeEncompassGlyph
   - TypeLeftRightGlyph

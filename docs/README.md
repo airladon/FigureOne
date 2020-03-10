@@ -13,61 +13,61 @@
     -   [Properties][9]
 -   [TypeEquationElements][10]
 -   [Equation Functions Types][11]
--   [TypeEquationFunctionContainer][12]
+-   [OBJ_EqnLayout_Container][12]
     -   [Properties][13]
     -   [Examples][14]
--   [TypeEquationFunctionFraction][15]
+-   [OBJ_EqnLayout_Fraction][15]
     -   [Properties][16]
     -   [Examples][17]
--   [TypeEquationFunctionScale][18]
+-   [OBJ_EqnLayout_Scale][18]
     -   [Properties][19]
     -   [Examples][20]
--   [TypeEquationFunctionBracket][21]
+-   [OBJ_EqnLayout_Bracket][21]
     -   [Properties][22]
     -   [Examples][23]
--   [TypeEquationFunctionRoot][24]
+-   [OBJ_EqnLayout_Root][24]
     -   [Properties][25]
     -   [Examples][26]
--   [TypeEquationFunctionStrike][27]
+-   [OBJ_EqnLayout_Strike][27]
     -   [Properties][28]
     -   [Examples][29]
--   [TypeEquationFunctionBox][30]
+-   [OBJ_EqnLayout_Box][30]
     -   [Properties][31]
     -   [Examples][32]
--   [TypeEquationFunctionBar][33]
+-   [OBJ_EqnLayout_Bar][33]
     -   [Properties][34]
     -   [Examples][35]
--   [TypeEquationFunctionIntegral][36]
+-   [OBJ_EqnLayout_Integral][36]
     -   [Properties][37]
     -   [Examples][38]
--   [TypeEquationFunctionSumOf][39]
+-   [OBJ_EqnLayout_SumOf][39]
     -   [Properties][40]
     -   [Examples][41]
--   [TypeEquationFunctionProdOf][42]
+-   [OBJ_EqnLayout_ProdOf][42]
     -   [Properties][43]
     -   [Examples][44]
--   [TypeEquationFunctionSubcript][45]
+-   [OBJ_EqnLayout_Subcript][45]
     -   [Properties][46]
     -   [Examples][47]
--   [TypeEquationFunctionSuperscript][48]
+-   [OBJ_EqnLayout_Superscript][48]
     -   [Properties][49]
     -   [Examples][50]
--   [TypeEquationFunctionSuperscriptSubscript][51]
+-   [OBJ_EqnLayout_SuperscriptSubscript][51]
     -   [Properties][52]
     -   [Examples][53]
--   [TypeEquationFunctionComment][54]
+-   [OBJ_EqnLayout_Comment][54]
     -   [Properties][55]
     -   [Examples][56]
--   [TypeEquationFunctionStrikeComment][57]
+-   [OBJ_EqnLayout_StrikeComment][57]
     -   [Properties][58]
     -   [Examples][59]
--   [TypeEquationFunctionPad][60]
+-   [OBJ_EqnLayout_Pad][60]
     -   [Properties][61]
     -   [Examples][62]
--   [TypeEquationFunctionMatrix][63]
+-   [OBJ_EqnLayout_Matrix][63]
     -   [Properties][64]
     -   [Examples][65]
--   [TypeEquationFunctionAnnotate][66]
+-   [OBJ_EqnLayout_Annotate][66]
     -   [Properties][67]
     -   [Examples][68]
 -   [TypeAnnotation][69]
@@ -297,7 +297,7 @@ Type: {}
 
 
 
-## TypeEquationFunctionContainer
+## OBJ_EqnLayout_Container
 
 Equation container
 
@@ -343,7 +343,7 @@ Type: ({content: [TypeEquationPhrase][232], width: [number][230]?, descent: [num
  { container: ['a', 1, 0.2, 0.5] }
 ```
 
-## TypeEquationFunctionFraction
+## OBJ_EqnLayout_Fraction
 
 Equation fraction
 
@@ -393,7 +393,7 @@ eqn.addElements({
 { frac: ['a', 'v', 'b'] }
 ```
 
-## TypeEquationFunctionScale
+## OBJ_EqnLayout_Scale
 
 Equation scale
 
@@ -425,7 +425,7 @@ Type: ({content: [TypeEquationPhrase][232], scale: [number][230]?, fullContentBo
  { scale: [['a', 'b'], 0.5] }
 ```
 
-## TypeEquationFunctionBracket
+## OBJ_EqnLayout_Bracket
 
 Equation bracket
 
@@ -498,7 +498,7 @@ eqn.addElements({
  { brac: ['lb', 'a', 'rb'] }
 ```
 
-## TypeEquationFunctionRoot
+## OBJ_EqnLayout_Root
 
 Equation root
 
@@ -567,7 +567,7 @@ eqn.addElements({
  { root: ['radical', 'a'] }
 ```
 
-## TypeEquationFunctionStrike
+## OBJ_EqnLayout_Strike
 
 Equation strike-through
 
@@ -629,7 +629,7 @@ eqn.addElements({
  { strike: ['a', 'x'] }
 ```
 
-## TypeEquationFunctionBox
+## OBJ_EqnLayout_Box
 
 Equation box
 
@@ -691,7 +691,7 @@ eqn.addElements({
  { box: ['a', 'box'] }
 ```
 
-## TypeEquationFunctionBar
+## OBJ_EqnLayout_Bar
 
 Equation bar
 
@@ -788,7 +788,7 @@ eqn.addElements({
  { bar: ['a', 'hBar', 'top'] }
 ```
 
-## TypeEquationFunctionIntegral
+## OBJ_EqnLayout_Integral
 
 Equation integral
 
@@ -896,7 +896,7 @@ eqn.addElements({
  { int: ['integral', 'a', 'b', 'c'] }
 ```
 
-## TypeEquationFunctionSumOf
+## OBJ_EqnLayout_SumOf
 
 Equation sum of
 
@@ -970,7 +970,7 @@ eqn.addElements({
  { sumOf: ['s', 'a', 'b', 'c'] }
 ```
 
-## TypeEquationFunctionProdOf
+## OBJ_EqnLayout_ProdOf
 
 Equation product of
 
@@ -1044,7 +1044,7 @@ eqn.addElements({
  { prodOf: ['s', 'a', 'b', 'c'] }
 ```
 
-## TypeEquationFunctionSubcript
+## OBJ_EqnLayout_Subcript
 
 Equation subscript
 
@@ -1079,7 +1079,7 @@ Type: ({content: [TypeEquationPhrase][232], subscript: [TypeEquationPhrase][232]
  { sub: ['a', 'b'] }
 ```
 
-## TypeEquationFunctionSuperscript
+## OBJ_EqnLayout_Superscript
 
 Equation superscript
 
@@ -1114,7 +1114,7 @@ Type: ({content: [TypeEquationPhrase][232], superscript: [TypeEquationPhrase][23
  { sup: ['a', 'b'] }
 ```
 
-## TypeEquationFunctionSuperscriptSubscript
+## OBJ_EqnLayout_SuperscriptSubscript
 
 Equation superscript and subscript
 
@@ -1153,7 +1153,7 @@ Type: ({content: [TypeEquationPhrase][232], subscript: [TypeEquationPhrase][232]
  { supSub: ['a', 'b', 'c'] }
 ```
 
-## TypeEquationFunctionComment
+## OBJ_EqnLayout_Comment
 
 Equation comment options used with `topComment` and `bottomComment`
 functions.
@@ -1214,7 +1214,7 @@ eqn.addElements({
  { bottomComment: ['a', 'b', 'brace'] }
 ```
 
-## TypeEquationFunctionStrikeComment
+## OBJ_EqnLayout_StrikeComment
 
 Equation strike with comment options used with `topStrike` and `bottomStrike`
 functions.
@@ -1267,7 +1267,7 @@ eqn.addElements({
  { bottomStrike: ['a', 'x', 'b'] }
 ```
 
-## TypeEquationFunctionPad
+## OBJ_EqnLayout_Pad
 
 Equation padding options
 
@@ -1301,11 +1301,11 @@ Type: ({content: [TypeEquationPhrase][232], top: [number][230]?, right: [number]
  { pad: ['a', 0.1, 0.2, 0.3, 0.4] }
 ```
 
-## TypeEquationFunctionMatrix
+## OBJ_EqnLayout_Matrix
 
 Equation matrix
 
-Type: ({order: \[[number][230], [number][230]]?, left: [string][228]?, content: [TypeEquationPhrase][232], right: [string][228]?, scale: [number][230]?, fit: (`"max"` \| `"min"` | TypeParsablePoint)?, space: TypeParsablePoint?, yAlign: (`"baseline"` \| `"middle"`)?, brac: [TypeEquationFunctionBracket][234]?, fullContentBounds: [boolean][233]?} | \[\[[number][230], [number][230]]?, [string][228]?, [TypeEquationPhrase][232], [string][228]?, [number][230]?, (`"max"`? | `"min"`), TypeParsablePoint?, (`"baseline"`? | `"middle"`), [TypeEquationFunctionBracket][234]?, [boolean][233]?])
+Type: ({order: \[[number][230], [number][230]]?, left: [string][228]?, content: [TypeEquationPhrase][232], right: [string][228]?, scale: [number][230]?, fit: (`"max"` \| `"min"` | TypeParsablePoint)?, space: TypeParsablePoint?, yAlign: (`"baseline"` \| `"middle"`)?, brac: [OBJ_EqnLayout_Bracket][234]?, fullContentBounds: [boolean][233]?} | \[\[[number][230], [number][230]]?, [string][228]?, [TypeEquationPhrase][232], [string][228]?, [number][230]?, (`"max"`? | `"min"`), TypeParsablePoint?, (`"baseline"`? | `"middle"`), [OBJ_EqnLayout_Bracket][234]?, [boolean][233]?])
 
 ### Properties
 
@@ -1326,7 +1326,7 @@ Type: ({order: \[[number][230], [number][230]]?, left: [string][228]?, content: 
     (`[0.05, 0.05]`)
 -   `yAlign` **(`"baseline"` \| `"middle"`)?** align cells in a row with the
     text baseline, or middle of the cell (`baseline`)
--   `brac` **[TypeEquationFunctionBracket][234]?** bracket options not including
+-   `brac` **[OBJ_EqnLayout_Bracket][234]?** bracket options not including
     the symbols (`{}`)
 -   `fullContentBounds` **[boolean][233]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
@@ -1373,7 +1373,7 @@ eqn.addElements({
  { matrix: [[2, 2], 'lb', ['a', 'b', 'c', 'd'], 'rb'] }
 ```
 
-## TypeEquationFunctionAnnotate
+## OBJ_EqnLayout_Annotate
 
 Equation annotation
 
@@ -1786,7 +1786,7 @@ Type: {left: [TypeLeftRightGlyph][238]?, right: [TypeLeftRightGlyph][238]?, top:
 
 ## TypeRadical
 
-Radical equation symbol used in [TypeEquationFunctionRoot][24].
+Radical equation symbol used in [OBJ_EqnLayout_Root][24].
 
 The radical symbol allows customization on how to draw the radical. Mostly
 it will not be needed, but for edge case equation layouts it may be useful.
@@ -2121,7 +2121,7 @@ eqn.addElements({
 
 ## TypeProd
 
-Product equation symbol used in [TypeEquationFunctionProdOf][42]
+Product equation symbol used in [OBJ_EqnLayout_ProdOf][42]
 
 <pre>
                                          width
@@ -2190,7 +2190,7 @@ eqn.addElements({
 
 ## TypeIntegral
 
-Integral equation symbol used in [TypeEquationFunctionIntegral][36]
+Integral equation symbol used in [OBJ_EqnLayout_Integral][36]
 
 <pre>
 //     --------------------------------------------------   0000000
@@ -2272,7 +2272,7 @@ int: {
 
 ## TypeStrike
 
-Strike equation symbol used in [TypeEquationFunctionStrike][27].
+Strike equation symbol used in [OBJ_EqnLayout_Strike][27].
 
 Four styles of strike symbol are available:
 
@@ -2722,11 +2722,11 @@ An equation phrase is used to define an equation form. An equation phrase
 can either be the entirety of the form definition, or a series of nested
 phrases.
 
--   An object or array definition (e.g. [TypeEquationFunctionFraction][15])
+-   An object or array definition (e.g. [OBJ_EqnLayout_Fraction][15])
 -   A string that represents an equation element
 -   An array of [TypeEquationPhrase][124]
 
-Type: ([string][228] \| [number][230] | {frac: [TypeEquationFunctionFraction][241]} | {strike: [TypeEquationFunctionStrike][242]} | {box: [TypeEquationFunctionBox][243]} | {root: [TypeEquationFunctionRoot][244]} | {brac: [TypeEquationFunctionBracket][234]} | {sub: [TypeEquationFunctionSubcript][245]} | {sup: [TypeEquationFunctionSuperscript][246]} | {supSub: [TypeEquationFunctionSuperscriptSubscript][247]} | {topBar: [TypeEquationFunctionBar][248]} | {bottomBar: [TypeEquationFunctionBar][248]} | {annotate: [TypeEquationFunctionAnnotate][249]} | {topComment: [TypeEquationFunctionComment][250]} | {bottomComment: [TypeEquationFunctionComment][250]} | {pad: [TypeEquationFunctionPad][251]} | {bar: [TypeEquationFunctionBar][248]} | {scale: [TypeEquationFunctionScale][252]} | {container: [TypeEquationFunctionContainer][253]} | {matrix: [TypeEquationFunctionMatrix][254]} | {int: [TypeEquationFunctionIntegral][255]} | {sumOf: [TypeEquationFunctionSumOf][256]} | {prodOf: [TypeEquationFunctionProdOf][257]} | {topStrike: [TypeEquationFunctionStrikeComment][258]} | {bottomStrike: [TypeEquationFunctionStrikeComment][258]} | [Array][229]&lt;[TypeEquationPhrase][232]> | DiagramElementPrimitive | DiagramElementCollection | Elements | [Element][259] | BaseAnnotationFunction)
+Type: ([string][228] \| [number][230] | {frac: [OBJ_EqnLayout_Fraction][241]} | {strike: [OBJ_EqnLayout_Strike][242]} | {box: [OBJ_EqnLayout_Box][243]} | {root: [OBJ_EqnLayout_Root][244]} | {brac: [OBJ_EqnLayout_Bracket][234]} | {sub: [OBJ_EqnLayout_Subcript][245]} | {sup: [OBJ_EqnLayout_Superscript][246]} | {supSub: [OBJ_EqnLayout_SuperscriptSubscript][247]} | {topBar: [OBJ_EqnLayout_Bar][248]} | {bottomBar: [OBJ_EqnLayout_Bar][248]} | {annotate: [OBJ_EqnLayout_Annotate][249]} | {topComment: [OBJ_EqnLayout_Comment][250]} | {bottomComment: [OBJ_EqnLayout_Comment][250]} | {pad: [OBJ_EqnLayout_Pad][251]} | {bar: [OBJ_EqnLayout_Bar][248]} | {scale: [OBJ_EqnLayout_Scale][252]} | {container: [OBJ_EqnLayout_Container][253]} | {matrix: [OBJ_EqnLayout_Matrix][254]} | {int: [OBJ_EqnLayout_Integral][255]} | {sumOf: [OBJ_EqnLayout_SumOf][256]} | {prodOf: [OBJ_EqnLayout_ProdOf][257]} | {topStrike: [OBJ_EqnLayout_StrikeComment][258]} | {bottomStrike: [OBJ_EqnLayout_StrikeComment][258]} | [Array][229]&lt;[TypeEquationPhrase][232]> | DiagramElementPrimitive | DiagramElementCollection | Elements | [Element][259] | BaseAnnotationFunction)
 
 ### Examples
 
@@ -3585,7 +3585,7 @@ Equation container function
 
 ### Parameters
 
--   `optionsOrArray` **[TypeEquationFunctionContainer][253]** 
+-   `optionsOrArray` **[OBJ_EqnLayout_Container][253]** 
 
 ### Examples
 
@@ -3606,7 +3606,7 @@ Equation fraction function
 
 ### Parameters
 
--   `optionsOrArray` **[TypeEquationFunctionFraction][241]** 
+-   `optionsOrArray` **[OBJ_EqnLayout_Fraction][241]** 
 
 ### Examples
 
@@ -3643,115 +3643,115 @@ eqn.addForms({
 
 [11]: #equation-functions-types
 
-[12]: #typeequationfunctioncontainer
+[12]: #obejct_eqn_layout_container
 
 [13]: #properties-1
 
 [14]: #examples-1
 
-[15]: #typeequationfunctionfraction
+[15]: #obejct_eqn_layout_fraction
 
 [16]: #properties-2
 
 [17]: #examples-2
 
-[18]: #typeequationfunctionscale
+[18]: #obejct_eqn_layout_scale
 
 [19]: #properties-3
 
 [20]: #examples-3
 
-[21]: #typeequationfunctionbracket
+[21]: #obejct_eqn_layout_bracket
 
 [22]: #properties-4
 
 [23]: #examples-4
 
-[24]: #typeequationfunctionroot
+[24]: #obejct_eqn_layout_root
 
 [25]: #properties-5
 
 [26]: #examples-5
 
-[27]: #typeequationfunctionstrike
+[27]: #obejct_eqn_layout_strike
 
 [28]: #properties-6
 
 [29]: #examples-6
 
-[30]: #typeequationfunctionbox
+[30]: #obejct_eqn_layout_box
 
 [31]: #properties-7
 
 [32]: #examples-7
 
-[33]: #typeequationfunctionbar
+[33]: #obejct_eqn_layout_bar
 
 [34]: #properties-8
 
 [35]: #examples-8
 
-[36]: #typeequationfunctionintegral
+[36]: #obejct_eqn_layout_integral
 
 [37]: #properties-9
 
 [38]: #examples-9
 
-[39]: #typeequationfunctionsumof
+[39]: #obejct_eqn_layout_sumof
 
 [40]: #properties-10
 
 [41]: #examples-10
 
-[42]: #typeequationfunctionprodof
+[42]: #obejct_eqn_layout_prodof
 
 [43]: #properties-11
 
 [44]: #examples-11
 
-[45]: #typeequationfunctionsubcript
+[45]: #obejct_eqn_layout_subcript
 
 [46]: #properties-12
 
 [47]: #examples-12
 
-[48]: #typeequationfunctionsuperscript
+[48]: #obejct_eqn_layout_superscript
 
 [49]: #properties-13
 
 [50]: #examples-13
 
-[51]: #typeequationfunctionsuperscriptsubscript
+[51]: #obejct_eqn_layout_superscriptsubscript
 
 [52]: #properties-14
 
 [53]: #examples-14
 
-[54]: #typeequationfunctioncomment
+[54]: #obejct_eqn_layout_comment
 
 [55]: #properties-15
 
 [56]: #examples-15
 
-[57]: #typeequationfunctionstrikecomment
+[57]: #obejct_eqn_layout_strikecomment
 
 [58]: #properties-16
 
 [59]: #examples-16
 
-[60]: #typeequationfunctionpad
+[60]: #obejct_eqn_layout_pad
 
 [61]: #properties-17
 
 [62]: #examples-17
 
-[63]: #typeequationfunctionmatrix
+[63]: #obejct_eqn_layout_matrix
 
 [64]: #properties-18
 
 [65]: #examples-18
 
-[66]: #typeequationfunctionannotate
+[66]: #obejct_eqn_layout_annotate
 
 [67]: #properties-19
 
@@ -4087,7 +4087,7 @@ eqn.addForms({
 
 [233]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[234]: #typeequationfunctionbracket
+[234]: #obejct_eqn_layout_bracket
 
 [235]: #typeannotation
 
@@ -4101,41 +4101,41 @@ eqn.addForms({
 
 [240]: #typeencompassglyph
 
-[241]: #typeequationfunctionfraction
+[241]: #obejct_eqn_layout_fraction
 
-[242]: #typeequationfunctionstrike
+[242]: #obejct_eqn_layout_strike
 
-[243]: #typeequationfunctionbox
+[243]: #obejct_eqn_layout_box
 
-[244]: #typeequationfunctionroot
+[244]: #obejct_eqn_layout_root
 
-[245]: #typeequationfunctionsubcript
+[245]: #obejct_eqn_layout_subcript
 
-[246]: #typeequationfunctionsuperscript
+[246]: #obejct_eqn_layout_superscript
 
-[247]: #typeequationfunctionsuperscriptsubscript
+[247]: #obejct_eqn_layout_superscriptsubscript
 
-[248]: #typeequationfunctionbar
+[248]: #obejct_eqn_layout_bar
 
-[249]: #typeequationfunctionannotate
+[249]: #obejct_eqn_layout_annotate
 
-[250]: #typeequationfunctioncomment
+[250]: #obejct_eqn_layout_comment
 
-[251]: #typeequationfunctionpad
+[251]: #obejct_eqn_layout_pad
 
-[252]: #typeequationfunctionscale
+[252]: #obejct_eqn_layout_scale
 
-[253]: #typeequationfunctioncontainer
+[253]: #obejct_eqn_layout_container
 
-[254]: #typeequationfunctionmatrix
+[254]: #obejct_eqn_layout_matrix
 
-[255]: #typeequationfunctionintegral
+[255]: #obejct_eqn_layout_integral
 
-[256]: #typeequationfunctionsumof
+[256]: #obejct_eqn_layout_sumof
 
-[257]: #typeequationfunctionprodof
+[257]: #obejct_eqn_layout_prodof
 
-[258]: #typeequationfunctionstrikecomment
+[258]: #obejct_eqn_layout_strikecomment
 
 [259]: https://developer.mozilla.org/docs/Web/API/Element
 
