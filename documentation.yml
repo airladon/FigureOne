@@ -28,20 +28,20 @@ toc:
   - TypeLeftRightGlyph
   - TypeTopBottomGlyph
   - TypeGlyphs
-  - TypeRadical
   - name: Equation Symbols
-  - TypeVinculum
-  - TypeBox
-  - TypeArrow
-  - TypeSum
-  - TypeProd
-  - TypeIntegral
-  - TypeStrike
-  - TypeBracket
-  - TypeAngleBracket
-  - TypeBrace
-  - TypeBar
-  - TypeSquareBracket
+  - OBJ_EqnSymbol_Vinculum
+  - OBJ_EqnSymbol_Box
+  - OBJ_EqnSymbol_Arrow
+  - OBJ_EqnSymbol_Sum
+  - OBJ_EqnSymbol_Prod
+  - OBJ_EqnSymbol_Integral
+  - OBJ_EqnSymbol_Strike
+  - OBJ_EqnSymbol_Bracket
+  - OBJ_EqnSymbol_AngleBracket
+  - OBJ_EqnSymbol_Brace
+  - OBJ_EqnSymbol_Bar
+  - OBJ_EqnSymbol_SquareBracket
+  - OBJ_EqnSymbol_Radical
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment
