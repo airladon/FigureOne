@@ -32,6 +32,8 @@ toc:
   - TypeVinculum
   - TypeBox
   - TypeArrow
+  - TypeSum
+  - TypeProd
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment

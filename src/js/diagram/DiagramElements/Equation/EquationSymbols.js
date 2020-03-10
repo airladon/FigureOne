@@ -221,43 +221,42 @@ type TypeArrow = {
 /**
  * Sum equation symbol
  * <pre>
-
-*          ---------- 00000000000000000000000000000000000
-*          A            0000000           \         000000
-*          |              0000000          \           000
-*          |                0000000         thick2       00
-*          |                  0000000
-*          |                    0000000
-*          |                      0000000     3 x lineWidth
-*          |                        0000000    /
-*          |                          0000000 /
-*          |                            0000000
-*          |                              0000000
-*          |                                000000
-*          |                                  000
-*          |                                0000
-*   height |                              0000
-*          |                            0000   \
-*          |                          0000      \
-*          |                        0000         linWidth
-*          |                      0000
-*          |                    0000
-*          |                  0000
-*          |                0000       2 x lineWidth      00
-*          |              0000        /                 000|
-*          |            0000         /               000000|
-*          V          000000000000000000000000000000000000 |
-*          --------  000000000000000000000000000000000000  |
-*                   |                                      |
-*                   |                                      |
-*                   |                 width                |
-*                   |<------------------------------------>|
+ *          ---------- 00000000000000000000000000000000000
+ *          A            0000000                     000000
+ *          |              0000000                      000
+ *          |                0000000                      00
+ *          |                  0000000
+ *          |                    0000000
+ *          |                      0000000
+ *          |                        0000000
+ *          |                          0000000
+ *          |                            0000000
+ *          |                              0000000
+ *          |                                000000
+ *          |                                  000
+ *          |                                0000
+ *   height |                              0000
+ *          |                            0000   \
+ *          |                          0000      \
+ *          |                        0000         lineWidth
+ *          |                      0000
+ *          |                    0000
+ *          |                  0000
+ *          |                0000                          00
+ *          |              0000                          000|
+ *          |            0000                         000000|
+ *          V          000000000000000000000000000000000000 |
+ *          --------  000000000000000000000000000000000000  |
+ *                   |                                      |
+ *                   |                                      |
+ *                   |                 width                |
+ *                   |<------------------------------------>|
  * </pre>
  * @property {'sum'} symbol
  * @property {Array<number>} [color] (equation color)
  * @property {number} [lineWidth] (`height * 0.88 / (25 * height + 15)`)
- * @property {number} [sides] number of sides that make up serif curve(`5`)
- * @property {'static' | 'dynamic'} [draw] `'dynamic'` updates vertices on
+ * @property {number} [sides] number of sides that make up serif curve (`5`)
+ * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
  * resize, `'static'` only changes scale transform (`dynamic`)
  * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
  * `number` sets height of static symbol - `'first'` calculates and sets height
@@ -269,6 +268,7 @@ type TypeArrow = {
  *     symbol: 'sum',
  *     color: [1, 0, 0, 1],
  *     lineWidth: 0.01
+ *     sides: 5,
  *   },
  * })
  */
@@ -279,6 +279,161 @@ type TypeSum ={
   draw?: 'static' | 'dynamic',
   staticHeight?: number | 'first',
 };
+
+/**
+ * Product equation symbol
+ * <pre>
+ *                                          width
+ *                |<--------------------------------------------------------->|
+ *                |                                                           |
+ *                |                                                           |
+ *                |                                                           |
+ *                |                          lineWidth                        |
+ *                |                            /                              |
+ *                |                           /                               |
+ *          ---- 00000000000000000000000000000000000000000000000000000000000000
+ *          A         000000000000000000000000000000000000000000000000000000
+ *          |           00000000000000000000000000000000000000000000000000
+ *          |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *  height  |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *          |            00000000000                         00000000000
+ *          |           0000000000000                       00000000000000
+ *          V         00000000000000000                   000000000000000000
+ *          ----- 0000000000000000000000000           00000000000000000000000000
+ * </pre>
+ * @property {'prod'} symbol
+ * @property {Array<number>} [color] (equation color)
+ * @property {number} [lineWidth] (related to height)
+ * @property {number} [sides] number of sides that make up serif curve (`5`)
+ * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
+ * resize, `'static'` only changes scale transform (`dynamic`)
+ * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
+ * `number` sets height of static symbol - `'first'` calculates and sets height
+ * based on first use (`'first'`)
+ *
+ * @example
+ * eqn.addElements({
+ *   p: {
+ *     symbol: 'prod',
+ *     color: [1, 0, 0, 1],
+ *     lineWidth: 0.01
+ *     sides: 5,
+ *   },
+ * })
+ */
+type TypeProd = {
+  color?: Array<number>,
+  lineWidth?: number,
+  sides?: number,
+  draw?: 'static' | 'dynamic',
+  staticHeight?: number | 'first',
+};
+
+/**
+ * Integral equation symbol
+ * <pre>
+ //     --------------------------------------------------   0000000
+  //     A                                              000000011111111
+  //     |                                         0000000   111111111111
+  //     |                                       0000000    11111111111111
+  //     |                                      0000000     11111111111111
+  //     |                                     0000000       111111111111
+  //     |                                   000000000         11111111
+  //     |                                  000000000
+  //     |                                 0000000000
+  //     |    S curve gradient = k         000000000
+  //     |                                0000000000
+  //     |                                0000000000
+  //     |                               00000000000
+  //     |                              00000000000
+  //     |                              000000000000
+  //     |                             000000000000      lineWidth
+  //   h |                     ------->000000000000<----------
+  //     |                             000000000000
+  //     |                             000000000000
+  //     |                            000000000000
+  //     |                             00000000000
+  //     |                            00000000000
+  //     |                            0000000000
+  //     |                            0000000000
+  //     |                            000000000
+  //     |                           000000000
+  //     |                          0000000000
+  //     |      11111111           000000000
+  //     |    111111111111       00000000
+  //     |   11111111111111     0000000
+  //     |   11111111111111   0000000
+  //     |    111111111111   0000000
+  //     V      111111110000000
+  //     -------  0000000
+* </pre>
+ * @property {'int'} symbol
+ * @property {Array<number>} [color] (equation color)
+ * @property {number} [lineWidth] (related to height)
+ * @property {number} [sides] number of sides that make up s curve (`30`)
+ * @property {number} [num] number of integral symbols (`1`)
+ * @property {'line' | 'generic'} [type] `line` draws a circle through the symbols denoting a line integral (`generic`)
+ * @property {number} [tipWidth] width of s curve tip (related to lineWidth)
+ * @property {boolean} [serif] `false` to remove serifs (`true`)
+ * @property {number} [serifSides] number of sides in serif circles (`10`)
+ * @property {number} [lineIntegralSides] number of sides in line integral circle (`20`)
+
+ * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
+ * resize, `'static'` only changes scale transform (`dynamic`)
+ * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
+ * `number` sets height of static symbol - `'first'` calculates and sets height
+ * based on first use (`'first'`)
+ *
+ * @example
+ * eqn.addElements({
+ * int: {
+ *   symbol: 'int',
+ *   color: [0.95, 0, 0, 1],
+ *   lineWidth: 0.01,
+ *   sides: 20,
+ *   num: 2,
+ *   type: 'generic',
+ *   tipWidth: null,
+ *   serif: true,
+ *   serifSides: 10,
+ *   lineIntegralSides: 20,
+ *   draw: 'static',
+ *   staticHeight: 'first',
+ * },
+ */
+type TypeIntegral = {
+  color?: Array<number>,
+  lineWidth?: number,
+  sides?: number,
+  // width?: ?number,
+  tipWidth?: number, 
+  draw?: 'static' | 'dynamic',
+  staticHeight?: number | 'first',
+  serif?: boolean,
+  num?: number,
+  type?: 'line' | 'generic',
+  serifSides?: number,
+  lineIntegralSides?: number,
+};
+
 
 export default class EquationSymbols {
   shapes: DiagramPrimitives;
@@ -425,13 +580,7 @@ export default class EquationSymbols {
     ));
   }
 
-  sum(options: {
-    color?: Array<number>,
-    lineWidth?: number,
-    sides?: number,
-    draw?: 'static' | 'dynamic',
-    staticHeight?: number | 'first',
-  }) {
+  sum(options: TypeSum) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
@@ -452,13 +601,7 @@ export default class EquationSymbols {
     ));
   }
 
-  product(options: {
-    color?: Array<number>,
-    lineWidth?: number,
-    sides?: number,
-    draw?: 'static' | 'dynamic',
-    staticHeight?: number | 'first',
-  }) {
+  product(options: TypeProd) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
@@ -479,30 +622,16 @@ export default class EquationSymbols {
     ));
   }
 
-  integral(options: {
-    color?: Array<number>,
-    lineWidth?: number,
-    sides?: number,
-    width?: ?number,
-    tipWidth?: number,
-    // percentage?: number,
-    draw?: 'static' | 'dynamic',
-    staticHeight?: number | 'first',
-    serif?: boolean,
-    num?: number,
-    type?: 'line' | 'generic',
-    serifSides?: number,
-    lineIntegralSides?: number,
-  }) {
+  integral(TypeIntegral) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
       width: null,
       tipWidth: null,
-      percentage: 0.95,
-      sides: 5,
+      // percentage: 0.95,
+      sides: 30,
       // staticSize: 'first',
-      radius: 0.03,
+      // radius: 0.03,
       serif: true,
       staticHeight: 'first',
       draw: 'static',
