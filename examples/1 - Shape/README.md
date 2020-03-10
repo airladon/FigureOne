@@ -110,4 +110,4 @@ If the digram is changed in the future and drawing needs to be drawing needs to 
 diagram.animateNextFrame()
 ```
 
-[link here](docs/readme.md#TypeEquationPhrase)
+[link here](../docs/readme.md#TypeEquationPhrase)
