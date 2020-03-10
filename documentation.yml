@@ -38,6 +38,7 @@ toc:
   - TypeIntegral
   - TypeStrike
   - TypeBracket
+  - TypeAngleBracket
   - name: Equation Form Types
   - TypeEquationPhrase
   - TypeFormAlignment

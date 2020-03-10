@@ -504,23 +504,23 @@ type TypeIntegral = {
  * @example
  * // All options
  *  eqn.addElements({
-      rad: {
-        symbol: 'radical',
-        color: [1, 0, 0, 1],
-        lineWidth: 0.01,
-        lineWidth2: 0.02,
-        width: 1.2,
-        height: 0.8,
-        startWidth: 0.04,
-        startHeight: 0.04,
-        tickHeight: 0.01,
-        tickWidth: 0.01,
-        downWidth: 0.01,
-        maxStartWidth: 0.03,
-        maxStartHeight: 0.03,
-        proportionalToHeight: false,
-        draw: 'dynamic',
-      },
+ *    rad: {
+ *      symbol: 'radical',
+ *      color: [1, 0, 0, 1],
+ *      lineWidth: 0.01,
+ *      lineWidth2: 0.02,
+ *      width: 1.2,
+ *      height: 0.8,
+ *      startWidth: 0.04,
+ *      startHeight: 0.04,
+ *      tickHeight: 0.01,
+ *      tickWidth: 0.01,
+ *      downWidth: 0.01,
+ *      maxStartWidth: 0.03,
+ *      maxStartHeight: 0.03,
+ *      proportionalToHeight: false,
+ *      draw: 'dynamic',
+ *    },
  *  });
  */
 type TypeRadical = {
@@ -594,16 +594,16 @@ type TypeRadical = {
  * @example
  * // All options
  *  eqn.addElements({
-      s: {
-        symbol: 'strike',
-        style: 'cross',
-        lineWidth: 0.01,
-        width: 0.5,
-        height: 0.5,
-        draw: 'static',
-        staticHeight: 'first',
-        staticWidth: 'first',
-      },
+ *    s: {
+ *      symbol: 'strike',
+ *      style: 'cross',
+ *      lineWidth: 0.01,
+ *      width: 0.5,
+ *      height: 0.5,
+ *      draw: 'static',
+ *      staticHeight: 'first',
+ *      staticWidth: 'first',
+ *    },
  *  });
  */
 type TypeStrike = {
@@ -618,7 +618,7 @@ type TypeStrike = {
 }
 
 /**
- * Bracket equation symbol used in {@link TypeEquationFunctionBracket}.
+ * Bracket equation symbol
  *<pre>
  *                    tipWidth
  *                      ----->| |<---
@@ -666,16 +666,16 @@ type TypeStrike = {
  * @example
  * // All options
  *  eqn.addElements({
-      lb: {
-        symbol: 'bracket',
-        side: 'right',
-        sides: 20,
-        lineWidth: 0.01,
-        tipWidth: 0.05,
-        width: 0.5,
-        draw: 'static',
-        staticHeight: 'first',
-      },
+ *    lb: {
+ *      symbol: 'bracket',
+ *      side: 'right',
+ *      sides: 20,
+ *      lineWidth: 0.01,
+ *      tipWidth: 0.05,
+ *      width: 0.5,
+ *      draw: 'static',
+ *      staticHeight: 'first',
+ *    },
  *  });
  */
 type TypeBracket = {
@@ -690,8 +690,9 @@ type TypeBracket = {
 }
 
 /**
- * Angle bracket equation symbol used in {@link TypeEquationFunctionBracket}.
+ * Angle bracket equation symbol
  *
+ * <pre>
  *                      width
  *                   |<------->|
  *                   |         |
@@ -712,7 +713,7 @@ type TypeBracket = {
  *
  * </pre>
  *
- * @property {'bracket'} symbol
+ * @property {'angleBracket'} symbol
  * @property {Array<number>} [color] (equation default)
  * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
  * bracket ('left')
@@ -731,14 +732,14 @@ type TypeBracket = {
  * @example
  * // All options
  *  eqn.addElements({
-      lb: {
-        symbol: 'angleBracket',
-        side: 'right',
-        lineWidth: 0.01,
-        width: 0.5,
-        draw: 'static',
-        staticHeight: 'first',
-      },
+ *    lb: {
+ *      symbol: 'angleBracket',
+ *      side: 'right',
+ *      lineWidth: 0.01,
+ *      width: 0.5,
+ *      draw: 'static',
+ *      staticHeight: 'first',
+ *    },
  *  });
  */
  type TypeAngleBracket = {
@@ -746,6 +747,95 @@ type TypeBracket = {
   color?: Array<number>,
   lineWidth?: number,
   width?: number,
+  draw?: 'dynamic' | 'static',
+  staticHeight?: number | 'first',
+}
+
+/**
+ * Brace equation symbol
+ *
+ * <pre>
+ *                width
+ *             |<------>|
+ *             |        |
+ *             |        |
+ *             |      000
+ *             |    000
+ *             |   000
+ *             |  0000
+ *             |  0000
+ *             |  0000
+ *             |  0000
+ *             |  000
+ *             | 000
+ *             000
+ *               000
+ *                000
+ *                0000
+ *                0000
+ *                0000
+ *                0000
+ *           - - -0000 - - - -
+ *          |      000        |
+ *          |       000       |
+ *          |         000     |
+ *           - - - - - - - - -
+ *                        \
+ *                         \
+ *                          \
+ *      - - - - - - - - - - - - - - - - - - - - - - - - -
+ *     |       00000000000000                            |
+ *     |        00000000000000                           |
+ *     |          000000000000                 tipWidth  |
+ *     |            000000000000               |         |
+ *     |              000000000000             |         |
+ *     |                 0000000000000  _______V_        |
+ *     |                     00000000000                 |
+ *     |                         0000000_________        |
+ *     |                                       A         |
+ *      - - - - - - - - - - - - - - - - - - - - - - - - -
+ *
+ * </pre>
+ *
+ * @property {'brace'} symbol
+ * @property {Array<number>} [color] (equation default)
+ * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
+ * bracket ('left')
+ * @property {number} [lineWidth] (depends on height)
+ * @property {number} [tipWidth] (depends on lineWidth)
+ * @property {number} [width] force width bracket (normally depends on height)
+ * @property {number} [sides] number of sides in curved sections (`10`)
+ * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
+ * resize, `'static'` only changes scale transform (`dynamic`)
+ * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
+ * `number` sets height of static symbol - `'first'` calculates and sets height
+ * based on first use (`'first'`)
+ * @example
+ * // Typical
+ * eqn.addElements({
+ *   lb: { symbol: 'brace', side: 'left' },
+ * });
+ * @example
+ * // All options
+ *  eqn.addElements({
+ *    lb: {
+ *      symbol: 'brace',
+ *      side: 'right',
+ *      lineWidth: 0.01,
+ *      tipWidth: 0.01,
+ *      width: 0.5,
+ *      draw: 'static',
+ *      staticHeight: 0.5,
+ *    },
+ *  });
+ */
+type TypeBrace = {
+  side?: 'left' | 'right' | 'top' | 'bottom',
+  color?: Array<number>,
+  lineWidth?: number,
+  sides?: number,
+  width?: number,
+  tipWidth?: number,
   draw?: 'dynamic' | 'static',
   staticHeight?: number | 'first',
 }
@@ -1117,16 +1207,7 @@ export default class EquationSymbols {
     ));
   }
 
-  brace(options: {
-    side?: 'left' | 'right' | 'top' | 'bottom',
-    color?: Array<number>,
-    lineWidth?: number,
-    sides?: number,
-    width?: number,
-    tipWidth?: number,
-    draw?: 'dynamic' | 'static',
-    staticHeight?: number | 'first',
-  }) {
+  brace(options: TypeBrace) {
     const defaultOptions = {
       side: 'left',
       color: this.defaultColor,
