@@ -450,6 +450,26 @@
               
                 
                 <li><a
+                  href='#typebrace'
+                  class="">
+                  TypeBrace
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typebar'
+                  class="">
+                  TypeBar
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#equation-form-types'
                   class="h5 bold black caps">
                   Equation Form Types
@@ -737,16 +757,6 @@
                   href='#typediagramoptions'
                   class="">
                   TypeDiagramOptions
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#typebrace'
-                  class="">
-                  TypeBrace
                   
                 </a>
                 
@@ -7651,7 +7661,7 @@ eqn.addElements({
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// All options</span>
  eqn.addElements({
-   <span class="hljs-attr">lb</span>: {
+   <span class="hljs-attr">rb</span>: {
      <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bracket'</span>,
      <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span>,
      <span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
@@ -7750,7 +7760,7 @@ eqn.addElements({
         <div class='space-bottom0'>
           <span class='code bold'>side</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?)</code>
           : how to orient the
-bracket ('left')
+angle bracket ('left')
 
           
         </div>
@@ -7820,13 +7830,378 @@ eqn.addElements({
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// All options</span>
  eqn.addElements({
-   <span class="hljs-attr">lb</span>: {
+   <span class="hljs-attr">rb</span>: {
      <span class="hljs-attr">symbol</span>: <span class="hljs-string">'angleBracket'</span>,
      <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span>,
      <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>,
      <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
      <span class="hljs-attr">draw</span>: <span class="hljs-string">'static'</span>,
      <span class="hljs-attr">staticHeight</span>: <span class="hljs-string">'first'</span>,
+   },
+ });</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typebrace'>
+      TypeBrace
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Brace equation symbol</p>
+<pre>
+               width
+            |<------>|
+            |        |
+            |        |
+            |      000
+            |    000
+            |   000
+            |  0000
+            |  0000
+            |  0000
+            |  0000
+            |  000
+            | 000
+            000
+              000
+               000
+               0000
+               0000
+               0000
+               0000
+          - - -0000 - - - -
+         |      000        |
+         |       000       |
+         |         000     |
+          - - - - - - - - -
+                       \
+                        \
+                         \
+     - - - - - - - - - - - - - - - - - - - - - - - - -
+    |       00000000000000                            |
+    |        00000000000000                           |
+    |          000000000000                 tipWidth  |
+    |            000000000000               |         |
+    |              000000000000             |         |
+    |                 0000000000000  _______V_        |
+    |                     00000000000                 |
+    |                         0000000_________        |
+    |                                       A         |
+     - - - - - - - - - - - - - - - - - - - - - - - - -
+
+</pre>
+
+    <div class='pre p1 fill-light mt0'>TypeBrace</div>
+  
+    <p>
+      Type:
+      {side: (<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, tipWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"dynamic"</code> | <code>"static"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<code>"brace"</code>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (equation default)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>side</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?)</code>
+          : how to orient the
+brace ('left')
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (depends on height)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>tipWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (depends on lineWidth)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : force width bracket (normally depends on height)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides in curved sections (
+<code>10</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>draw</span> <code class='quiet'>((<code>"static"</code> | <code>"dynamic"</code>)?)</code>
+          : <code>'static'</code>
+ updates vertices on
+resize, 
+<code>'static'</code>
+ only changes scale transform (
+<code>dynamic</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>staticHeight</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
+          : used when 
+<code>draw</code>
+=
+<code>static</code>
+.
+
+<code>number</code>
+ sets height of static symbol - 
+<code>'first'</code>
+ calculates and sets height
+based on first use (
+<code>'first'</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Typical</span>
+eqn.addElements({
+  <span class="hljs-attr">lb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'brace'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span> },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// All options</span>
+ eqn.addElements({
+   <span class="hljs-attr">rb</span>: {
+     <span class="hljs-attr">symbol</span>: <span class="hljs-string">'brace'</span>,
+     <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span>,
+     <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>,
+     <span class="hljs-attr">tipWidth</span>: <span class="hljs-number">0.01</span>,
+     <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
+     <span class="hljs-attr">draw</span>: <span class="hljs-string">'static'</span>,
+     <span class="hljs-attr">staticHeight</span>: <span class="hljs-number">0.5</span>,
+   },
+ });</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typebar'>
+      TypeBar
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Bar equation symbol</p>
+<pre>
+
+       >| |<---- lineWidth
+        | |
+        | |
+        000
+        000
+        000
+        000
+        000
+        000
+        000
+        000
+        000
+        000
+        000
+
+</pre>
+
+    <div class='pre p1 fill-light mt0'>TypeBar</div>
+  
+    <p>
+      Type:
+      {side: (<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"dynamic"</code> | <code>"static"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<code>"bar"</code>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (equation default)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>side</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?)</code>
+          : how to orient the
+bar ('left')
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>0.01</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>draw</span> <code class='quiet'>((<code>"static"</code> | <code>"dynamic"</code>)?)</code>
+          : <code>'static'</code>
+ updates vertices on
+resize, 
+<code>'static'</code>
+ only changes scale transform (
+<code>dynamic</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>staticHeight</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
+          : used when 
+<code>draw</code>
+=
+<code>static</code>
+.
+
+<code>number</code>
+ sets height of static symbol - 
+<code>'first'</code>
+ calculates and sets height
+based on first use (
+<code>'first'</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Typical</span>
+eqn.addElements({
+  <span class="hljs-attr">lb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bar'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span> },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// All options</span>
+ eqn.addElements({
+   <span class="hljs-attr">rb</span>: {
+     <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bar'</span>,
+     <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span>,
+     <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>,
+     <span class="hljs-attr">draw</span>: <span class="hljs-string">'static'</span>,
+     <span class="hljs-attr">staticHeight</span>: <span class="hljs-number">0.5</span>,
    },
  });</pre>
     
@@ -11600,212 +11975,6 @@ corner at (-1, -1), width 1, height 1
 
   
 
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='typebrace'>
-      TypeBrace
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Brace equation symbol</p>
-<pre>
-               width
-            |<------>|
-            |        |
-            |        |
-            |      000
-            |    000
-            |   000
-            |  0000
-            |  0000
-            |  0000
-            |  0000
-            |  000
-            | 000
-            000
-              000
-               000
-               0000
-               0000
-               0000
-               0000
-          - - -0000 - - - -
-         |      000        |
-         |       000       |
-         |         000     |
-          - - - - - - - - -
-                       \
-                        \
-                         \
-     - - - - - - - - - - - - - - - - - - - - - - - - -
-    |       00000000000000                            |
-    |        00000000000000                           |
-    |          000000000000                 tipWidth  |
-    |            000000000000               |         |
-    |              000000000000             |         |
-    |                 0000000000000  _______V_        |
-    |                     00000000000                 |
-    |                         0000000_________        |
-    |                                       A         |
-     - - - - - - - - - - - - - - - - - - - - - - - - -
-
-</pre>
-
-    <div class='pre p1 fill-light mt0'>TypeBrace</div>
-  
-    <p>
-      Type:
-      {side: (<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, tipWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"dynamic"</code> | <code>"static"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>symbol</span> <code class='quiet'>(<code>"brace"</code>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
-          : (equation default)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>side</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?)</code>
-          : how to orient the
-bracket ('left')
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>lineWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (depends on height)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>tipWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (depends on lineWidth)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : force width bracket (normally depends on height)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : number of sides in curved sections (
-<code>10</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>draw</span> <code class='quiet'>((<code>"static"</code> | <code>"dynamic"</code>)?)</code>
-          : <code>'static'</code>
- updates vertices on
-resize, 
-<code>'static'</code>
- only changes scale transform (
-<code>dynamic</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>staticHeight</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
-          : used when 
-<code>draw</code>
-=
-<code>static</code>
-.
-
-<code>number</code>
- sets height of static symbol - 
-<code>'first'</code>
- calculates and sets height
-based on first use (
-<code>'first'</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Typical</span>
-eqn.addElements({
-  <span class="hljs-attr">lb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'brace'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span> },
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// All options</span>
- eqn.addElements({
-   <span class="hljs-attr">lb</span>: {
-     <span class="hljs-attr">symbol</span>: <span class="hljs-string">'brace'</span>,
-     <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span>,
-     <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>,
-     <span class="hljs-attr">tipWidth</span>: <span class="hljs-number">0.01</span>,
-     <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
-     <span class="hljs-attr">draw</span>: <span class="hljs-string">'static'</span>,
-     <span class="hljs-attr">staticHeight</span>: <span class="hljs-number">0.5</span>,
-   },
- });</pre>
-    
   
 
   

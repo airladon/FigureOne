@@ -666,7 +666,7 @@ type TypeStrike = {
  * @example
  * // All options
  *  eqn.addElements({
- *    lb: {
+ *    rb: {
  *      symbol: 'bracket',
  *      side: 'right',
  *      sides: 20,
@@ -716,7 +716,7 @@ type TypeBracket = {
  * @property {'angleBracket'} symbol
  * @property {Array<number>} [color] (equation default)
  * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
- * bracket ('left')
+ * angle bracket ('left')
  * @property {number} [lineWidth] (depends on height)
  * @property {number} [width] force width bracket (normally depends on height)
  * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
@@ -732,7 +732,7 @@ type TypeBracket = {
  * @example
  * // All options
  *  eqn.addElements({
- *    lb: {
+ *    rb: {
  *      symbol: 'angleBracket',
  *      side: 'right',
  *      lineWidth: 0.01,
@@ -800,7 +800,7 @@ type TypeBracket = {
  * @property {'brace'} symbol
  * @property {Array<number>} [color] (equation default)
  * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
- * bracket ('left')
+ * brace ('left')
  * @property {number} [lineWidth] (depends on height)
  * @property {number} [tipWidth] (depends on lineWidth)
  * @property {number} [width] force width bracket (normally depends on height)
@@ -818,7 +818,7 @@ type TypeBracket = {
  * @example
  * // All options
  *  eqn.addElements({
- *    lb: {
+ *    rb: {
  *      symbol: 'brace',
  *      side: 'right',
  *      lineWidth: 0.01,
@@ -836,6 +836,63 @@ type TypeBrace = {
   sides?: number,
   width?: number,
   tipWidth?: number,
+  draw?: 'dynamic' | 'static',
+  staticHeight?: number | 'first',
+}
+
+/**
+ * Bar equation symbol
+ *
+ * <pre>
+ *
+ *        >| |<---- lineWidth
+ *         | |
+ *         | |
+ *         000
+ *         000
+ *         000
+ *         000
+ *         000
+ *         000
+ *         000
+ *         000
+ *         000
+ *         000
+ *         000
+ *
+ * </pre>
+ *
+ * @property {'bar'} symbol
+ * @property {Array<number>} [color] (equation default)
+ * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
+ * bar ('left')
+ * @property {number} [lineWidth] (`0.01`)
+ * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
+ * resize, `'static'` only changes scale transform (`dynamic`)
+ * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
+ * `number` sets height of static symbol - `'first'` calculates and sets height
+ * based on first use (`'first'`)
+ * @example
+ * // Typical
+ * eqn.addElements({
+ *   lb: { symbol: 'bar', side: 'left' },
+ * });
+ * @example
+ * // All options
+ *  eqn.addElements({
+ *    rb: {
+ *      symbol: 'bar',
+ *      side: 'right',
+ *      lineWidth: 0.01,
+ *      draw: 'static',
+ *      staticHeight: 0.5,
+ *    },
+ *  });
+ */
+type TypeBar = {
+  side?: 'left' | 'right' | 'top' | 'bottom',
+  color?: Array<number>,
+  lineWidth?: number,
   draw?: 'dynamic' | 'static',
   staticHeight?: number | 'first',
 }
@@ -1230,13 +1287,7 @@ export default class EquationSymbols {
     ));
   }
 
-  bar(options: {
-    side?: 'left' | 'right' | 'top' | 'bottom',
-    color?: Array<number>,
-    lineWidth?: number,
-    draw?: 'dynamic' | 'static',
-    staticHeight?: number | 'first',
-  }) {
+  bar(options: TypeBar) {
     const defaultOptions = {
       side: 'left',
       lineWidth: 0.01,
