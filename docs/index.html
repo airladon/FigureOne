@@ -400,6 +400,16 @@
               
                 
                 <li><a
+                  href='#typeintegral'
+                  class="">
+                  TypeIntegral
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#equation-form-types'
                   class="h5 bold black caps">
                   Equation Form Types
@@ -6382,14 +6392,14 @@ based on first use (
   <p>Sum equation symbol</p>
 <pre>
          ---------- 00000000000000000000000000000000000
-         A            0000000           \         000000
-         |              0000000          \           000
-         |                0000000         thick2       00
+         A            0000000                     000000
+         |              0000000                      000
+         |                0000000                      00
          |                  0000000
          |                    0000000
-         |                      0000000     3 x lineWidth
-         |                        0000000    /
-         |                          0000000 /
+         |                      0000000
+         |                        0000000
+         |                          0000000
          |                            0000000
          |                              0000000
          |                                000000
@@ -6402,9 +6412,9 @@ based on first use (
          |                      0000
          |                    0000
          |                  0000
-         |                0000       2 x lineWidth      00
-         |              0000        /                 000|
-         |            0000         /               000000|
+         |                0000                          00
+         |              0000                          000|
+         |            0000                         000000|
          V          000000000000000000000000000000000000 |
          --------  000000000000000000000000000000000000  |
                   |                                      |
@@ -6545,14 +6555,14 @@ based on first use (
   </div>
   
 
-  <p>Product equation symbol</p>
+  <p>Product equation symbol used in <a href="#typeequationfunctionprodof">TypeEquationFunctionProdOf</a></p>
 <pre>
                                          width
                |<--------------------------------------------------------->|
                |                                                           |
                |                                                           |
                |                                                           |
-               |                         1.2 x lineWidth                   |
+               |                          lineWidth                        |
                |                            /                              |
                |                           /                               |
          ---- 00000000000000000000000000000000000000000000000000000000000000
@@ -6566,11 +6576,11 @@ based on first use (
          |            00000000000                         00000000000
          |            00000000000                         00000000000
          |            00000000000                         00000000000
-         |            00000000000   \                 /   00000000000
- height  |            00000000000    \              /     00000000000
-         |            00000000000      \          /       00000000000
-         |            00000000000        \      /         00000000000
-         |            00000000000     3 x lineWidth       00000000000
+         |            00000000000                         00000000000
+ height  |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
+         |            00000000000                         00000000000
          |            00000000000                         00000000000
          |            00000000000                         00000000000
          |            00000000000                         00000000000
@@ -6621,9 +6631,7 @@ based on first use (
       
         <div class='space-bottom0'>
           <span class='code bold'>lineWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>height * 0.88 / (25 * height + 15)</code>
-)
+          : (related to height)
 
           
         </div>
@@ -6688,6 +6696,235 @@ based on first use (
     <span class="hljs-attr">sides</span>: <span class="hljs-number">5</span>,
   },
 })</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeintegral'>
+      TypeIntegral
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Integral equation symbol used in <a href="#typeequationfunctionintegral">TypeEquationFunctionIntegral</a></p>
+<pre>
+//     --------------------------------------------------   0000000
+//     A                                              000000011111111
+//     |                                         0000000   111111111111
+//     |                                       0000000    11111111111111
+//     |                                      0000000     11111111111111
+//     |                                     0000000       111111111111
+//     |                                   000000000         11111111
+//     |                                  000000000
+//     |                                 0000000000
+//     |    S curve gradient = k         000000000
+//     |                                0000000000
+//     |                                0000000000
+//     |                               00000000000
+//     |                              00000000000
+//     |                              000000000000
+//     |                             000000000000      lineWidth
+//   h |                     ------->000000000000<----------
+//     |                             000000000000
+//     |                             000000000000
+//     |                            000000000000
+//     |                             00000000000
+//     |                            00000000000
+//     |                            0000000000
+//     |                            0000000000
+//     |                            000000000
+//     |                           000000000
+//     |                          0000000000
+//     |      11111111           000000000
+//     |    111111111111       00000000
+//     |   11111111111111     0000000
+//     |   11111111111111   0000000
+//     |    111111111111   0000000
+//     V      111111110000000
+//     -------  0000000
+</pre>
+
+    <div class='pre p1 fill-light mt0'>TypeIntegral</div>
+  
+    <p>
+      Type:
+      {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, tipWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?, serif: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, num: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, type: (<code>"line"</code> | <code>"generic"</code>)?, serifSides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, lineIntegralSides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<code>"int"</code>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (equation color)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (related to height)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides that make up s curve (
+<code>30</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>num</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of integral symbols (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>type</span> <code class='quiet'>((<code>"line"</code> | <code>"generic"</code>)?)</code>
+          : <code>line</code>
+ draws a circle through the symbols denoting a line integral (
+<code>generic</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>tipWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : width of s curve tip (related to lineWidth)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>serif</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>false</code>
+ to remove serifs (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>serifSides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides in serif circles (
+<code>10</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineIntegralSides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides in line integral circle (
+<code>20</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>draw</span> <code class='quiet'>((<code>"static"</code> | <code>"dynamic"</code>)?)</code>
+          : <code>'static'</code>
+ updates vertices on
+resize, 
+<code>'static'</code>
+ only changes scale transform (
+<code>dynamic</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>staticHeight</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
+          : used when 
+<code>draw</code>
+=
+<code>static</code>
+.
+
+<code>number</code>
+ sets height of static symbol - 
+<code>'first'</code>
+ calculates and sets height
+based on first use (
+<code>'first'</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>eqn.addElements({
+<span class="hljs-attr">int</span>: {
+  <span class="hljs-attr">symbol</span>: <span class="hljs-string">'int'</span>,
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">0.95</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+  <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>,
+  <span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
+  <span class="hljs-attr">num</span>: <span class="hljs-number">2</span>,
+  <span class="hljs-attr">type</span>: <span class="hljs-string">'generic'</span>,
+  <span class="hljs-attr">tipWidth</span>: <span class="hljs-literal">null</span>,
+  <span class="hljs-attr">serif</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">serifSides</span>: <span class="hljs-number">10</span>,
+  <span class="hljs-attr">lineIntegralSides</span>: <span class="hljs-number">20</span>,
+  <span class="hljs-attr">draw</span>: <span class="hljs-string">'static'</span>,
+  <span class="hljs-attr">staticHeight</span>: <span class="hljs-string">'first'</span>,
+},</pre>
     
   
 

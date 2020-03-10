@@ -1685,12 +1685,12 @@ export type TypeTopBottomGlyph = {
   symbol?: string,
   annotation?: TypeAnnotation,
   annotations?: Array<TypeAnnotation>,
-  space: number;
-  overhang: number,
+  space?: number;
+  overhang?: number,
   width?: number,
   leftSpace?: number,
   rightSpace?: number,
-  xOffset: number,
+  xOffset?: number,
   annotationsOverContent?: boolean,
 };
 

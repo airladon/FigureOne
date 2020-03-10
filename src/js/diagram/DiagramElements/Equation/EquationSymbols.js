@@ -281,7 +281,7 @@ type TypeSum ={
 };
 
 /**
- * Product equation symbol
+ * Product equation symbol used in {@link TypeEquationFunctionProdOf}
  * <pre>
  *                                          width
  *                |<--------------------------------------------------------->|
@@ -348,7 +348,7 @@ type TypeProd = {
 };
 
 /**
- * Integral equation symbol
+ * Integral equation symbol used in {@link TypeEquationFunctionIntegral}
  * <pre>
  //     --------------------------------------------------   0000000
   //     A                                              000000011111111
@@ -390,7 +390,8 @@ type TypeProd = {
  * @property {number} [lineWidth] (related to height)
  * @property {number} [sides] number of sides that make up s curve (`30`)
  * @property {number} [num] number of integral symbols (`1`)
- * @property {'line' | 'generic'} [type] `line` draws a circle through the symbols denoting a line integral (`generic`)
+ * @property {'line' | 'generic'} [type] `line` draws a circle through the
+ *  symbols denoting a line integral (`generic`)
  * @property {number} [tipWidth] width of s curve tip (related to lineWidth)
  * @property {boolean} [serif] `false` to remove serifs (`true`)
  * @property {number} [serifSides] number of sides in serif circles (`10`)
@@ -424,7 +425,7 @@ type TypeIntegral = {
   lineWidth?: number,
   sides?: number,
   // width?: ?number,
-  tipWidth?: number, 
+  tipWidth?: number,
   draw?: 'static' | 'dynamic',
   staticHeight?: number | 'first',
   serif?: boolean,
@@ -622,7 +623,7 @@ export default class EquationSymbols {
     ));
   }
 
-  integral(TypeIntegral) {
+  integral(options: TypeIntegral) {
     const defaultOptions = {
       color: this.defaultColor,
       lineWidth: null,
