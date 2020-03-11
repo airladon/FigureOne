@@ -42,7 +42,9 @@ import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { TypeSpaceTransforms } from '../Diagram';
 
 /**
- * Polygon shape
+ * Polygon or partial polygon shape
+ *
+ * ![](./assets1/polygon.png)
  *
  * @property {number} [sides] (`4`)
  * @property {number} [radius] (`1`)
@@ -54,22 +56,51 @@ import type { TypeSpaceTransforms } from '../Diagram';
  * the definition (2π)
  * @property {Array<number>} [color] (`[1, 0, 0, 1`])
  * @property {boolean} [fill] (`false`)
+ * @property {TypeParsablePoint} [center] vertex space location of polygon
+ * center. This is different to position or transform as these translate the
+ * vertices on each draw. (`[0, 0]`)
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('polygon').standard()`)
  * @property {string} [textureLocation] location of the texture file
  * @property {Rect} [textureCoords] normalized coordinates of the texture
  * within the file (`Rect(0, 0, 1, 1)`)
  * @property {Function} [onLoad] callback to exectute after textures have loaded
- * @property {TypeParsablePoint} [center] vertex space location of polygon center
  * (`[0, 0]`)
- * @property {boolean} [trianglePrimitives] `true` to use GL `TRIANGLES`
- * instead of GL `TRIANGLE_STRIP` ('false`)
- * @property {boolean} [linePrimitives] `true` to use GL `LINES` instead of GL
- * `TRIANGLE_STRIP` (`false`)
+ * @property {boolean} [trianglePrimitives] `true` to use `TRIANGLES`
+ * instead of `TRIANGLE_STRIP` as GL primitive ('false`)
+ * @property {boolean} [linePrimitives] `true` to use `LINES` instead of
+ * `TRIANGLE_STRIP` as GL primitive - this will disable width (`false`)
  * used with filled polygons
+ * @property {number} [pulse] set the default pulse scale
  * @example
- * // Typical polygon
- * 
+ * // Simple filled polygon
+ * diagram.addElement(
+ *   {
+ *     name: 'p',
+ *     method: 'polygon',
+ *     options: {
+ *       radius: 0.4,
+ *       sides: 10,
+ *       width: 0.08,
+ *       fill: true,
+ *     },
+ *   },
+ * );
+ * @example
+ * // Quarter circle
+ * diagram.addElement(
+ *   {
+ *     name: 'p',
+ *     method: 'polygon',
+ *     options: {
+ *       radius: 0.4,
+ *       sides: 100,
+ *       width: 0.08,
+ *       angleToDraw: Math.PI / 2,
+ *       color: [1, 1, 0, 1],
+ *     },
+ *   },
+ * );
  */
 export type OBJ_Polygon = {
   sides?: number,

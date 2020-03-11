@@ -42,6 +42,7 @@ diagram.addElements([
       angleToDraw: Math.PI / 2,
       clockwise: true,
       fill: true,
+      position: [0, 0.2],
     },
   },
   {
