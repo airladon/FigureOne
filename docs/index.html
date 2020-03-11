@@ -710,6 +710,26 @@
               
                 
                 <li><a
+                  href='#shapes'
+                  class="h5 bold black caps">
+                  Shapes
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_polygon'
+                  class="">
+                  OBJ_Polygon
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#tools'
                   class="h5 bold black caps toggle-sibling">
                   tools
@@ -767,16 +787,6 @@
                   href='#typediagramoptions'
                   class="">
                   TypeDiagramOptions
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_polygon'
-                  class="">
-                  OBJ_Polygon
                   
                 </a>
                 
@@ -10442,6 +10452,281 @@ eqn.addElements({
           
         
           
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='shapes' class='mt0'>
+    Shapes
+  </h2>
+
+  
+    
+
+  
+</section></div>
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_polygon'>
+      OBJ_Polygon
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Polygon or partial polygon shape</p>
+<p><img src="./assets1/polygon.png"></p>
+
+  
+    <p style="display: none;">      Type:
+      {sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, radius: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rotation: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, clockwise: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, sidesToDraw: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, fill: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, transform: Transform?, position: TypeParsablePoint?, textureLocation: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, textureCoords: <a href="#rect">Rect</a>?, onLoad: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, trianglePrimitives: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, linePrimitives: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, center: TypeParsablePoint?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>4</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>radius</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : line width - line will be drawn on inside of radius (
+<code>0.01</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>clockwise</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sidesToDraw</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides to draw (all sides)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>angleToDraw</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : same as 
+<code>sidesToDraw</code>
+ but using angle for
+the definition (2π)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (
+<code>[1, 0, 0, 1</code>
+])
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fill</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>center</span> <code class='quiet'>(TypeParsablePoint?)</code>
+          : vertex space location of polygon
+center. This is different to position or transform as these translate the
+vertices on each draw. (
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          : convenience to override Transform translation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(Transform?)</code>
+          : (
+<code>Transform('polygon').standard()</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>textureLocation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : location of the texture file
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>textureCoords</span> <code class='quiet'>(<a href="#rect">Rect</a>?)</code>
+          : normalized coordinates of the texture
+within the file (
+<code>Rect(0, 0, 1, 1)</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onLoad</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>?)</code>
+          : callback to exectute after textures have loaded
+(
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>trianglePrimitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ to use 
+<code>TRIANGLES</code>
+
+instead of 
+<code>TRIANGLE_STRIP</code>
+ as GL primitive ('false`)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>linePrimitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ to use 
+<code>LINES</code>
+ instead of
+
+<code>TRIANGLE_STRIP</code>
+ as GL primitive - this will disable width (
+<code>false</code>
+)
+used with filled polygons
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pulse</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : set the default pulse scale
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple filled polygon</span>
+diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">radius</span>: <span class="hljs-number">0.4</span>,
+      <span class="hljs-attr">sides</span>: <span class="hljs-number">10</span>,
+      <span class="hljs-attr">width</span>: <span class="hljs-number">0.08</span>,
+      <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
+    },
+  },
+);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Quarter circle</span>
+diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">radius</span>: <span class="hljs-number">0.4</span>,
+      <span class="hljs-attr">sides</span>: <span class="hljs-number">100</span>,
+      <span class="hljs-attr">width</span>: <span class="hljs-number">0.08</span>,
+      <span class="hljs-attr">angleToDraw</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>,
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    },
+  },
+);</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
           <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
@@ -12060,267 +12345,6 @@ corner at (-1, -1), width 1, height 1
 
   
 
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_polygon'>
-      OBJ_Polygon
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Polygon shape</p>
-<p><img src="./assets1/polygon.png"></p>
-
-  
-    <p style="display: none;">      Type:
-      {sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, radius: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rotation: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, clockwise: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, sidesToDraw: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, fill: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, transform: Transform?, position: TypeParsablePoint?, textureLocation: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, textureCoords: <a href="#rect">Rect</a>?, onLoad: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, trianglePrimitives: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, linePrimitives: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, center: TypeParsablePoint?}
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>4</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>radius</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : line width - line will be drawn on inside of radius (
-<code>0.01</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>0</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>clockwise</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>sidesToDraw</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : number of sides to draw (all sides)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>angleToDraw</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : same as 
-<code>sidesToDraw</code>
- but using angle for
-the definition (2π)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
-          : (
-<code>[1, 0, 0, 1</code>
-])
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fill</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>center</span> <code class='quiet'>(TypeParsablePoint?)</code>
-          : vertex space location of polygon
-center. This is different to position or transform as these translate the
-vertices on each draw. (
-<code>[0, 0]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
-          : convenience to override Transform translation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(Transform?)</code>
-          : (
-<code>Transform('polygon').standard()</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>textureLocation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          : location of the texture file
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>textureCoords</span> <code class='quiet'>(<a href="#rect">Rect</a>?)</code>
-          : normalized coordinates of the texture
-within the file (
-<code>Rect(0, 0, 1, 1)</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>onLoad</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>?)</code>
-          : callback to exectute after textures have loaded
-(
-<code>[0, 0]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>trianglePrimitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>true</code>
- to use 
-<code>TRIANGLES</code>
-
-instead of 
-<code>TRIANGLE_STRIP</code>
- as GL primitive ('false`)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>linePrimitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>true</code>
- to use 
-<code>LINES</code>
- instead of
-
-<code>TRIANGLE_STRIP</code>
- as GL primitive - this will disable width (
-<code>false</code>
-)
-used with filled polygons
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pulse</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : set the default pulse scale
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple filled polygon</span>
-diagram.addElement(
-  {
-    <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
-    <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
-    <span class="hljs-attr">options</span>: {
-      <span class="hljs-attr">radius</span>: <span class="hljs-number">0.4</span>,
-      <span class="hljs-attr">sides</span>: <span class="hljs-number">10</span>,
-      <span class="hljs-attr">width</span>: <span class="hljs-number">0.08</span>,
-      <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
-    },
-  },
-);</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Quarter circle</span>
-diagram.addElement(
-  {
-    <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
-    <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
-    <span class="hljs-attr">options</span>: {
-      <span class="hljs-attr">radius</span>: <span class="hljs-number">0.4</span>,
-      <span class="hljs-attr">sides</span>: <span class="hljs-number">100</span>,
-      <span class="hljs-attr">width</span>: <span class="hljs-number">0.08</span>,
-      <span class="hljs-attr">angleToDraw</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>,
-      <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-    },
-  },
-);</pre>
-    
   
 
   

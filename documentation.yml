@@ -56,6 +56,8 @@ toc:
   - TypeEquationGoToFormOptions
   - name: Equations
   - Equation
+  - name: Shapes
+  - OBJ_Polygon
   - name: tools
     description: These are generic tools
     children:
