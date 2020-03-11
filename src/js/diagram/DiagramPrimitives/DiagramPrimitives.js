@@ -41,7 +41,37 @@ import {
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { TypeSpaceTransforms } from '../Diagram';
 
-export type TypePolygonOptions = {
+/**
+ * Polygon shape
+ *
+ * @property {number} [sides] (`4`)
+ * @property {number} [radius] (`1`)
+ * @property {number} [width] line width - line will be drawn on inside of radius (`0.01`)
+ * @property {number} [rotation] (`0`)
+ * @property {boolean} [clockwise] (`false`)
+ * @property {number} [sidesToDraw] number of sides to draw (all sides)
+ * @property {number} [angleToDraw] same as `sidesToDraw` but using angle for
+ * the definition (2π)
+ * @property {Array<number>} [color] (`[1, 0, 0, 1`])
+ * @property {boolean} [fill] (`false`)
+ * @property {Point} [position] convenience to override Transform translation
+ * @property {Transform} [transform] (`Transform('polygon').standard()`)
+ * @property {string} [textureLocation] location of the texture file
+ * @property {Rect} [textureCoords] normalized coordinates of the texture
+ * within the file (`Rect(0, 0, 1, 1)`)
+ * @property {Function} [onLoad] callback to exectute after textures have loaded
+ * @property {TypeParsablePoint} [center] vertex space location of polygon center
+ * (`[0, 0]`)
+ * @property {boolean} [trianglePrimitives] `true` to use GL `TRIANGLES`
+ * instead of GL `TRIANGLE_STRIP` ('false`)
+ * @property {boolean} [linePrimitives] `true` to use GL `LINES` instead of GL
+ * `TRIANGLE_STRIP` (`false`)
+ * used with filled polygons
+ * @example
+ * // Typical polygon
+ * 
+ */
+export type OBJ_Polygon = {
   sides?: number,
   radius?: number,
   width?: number,
@@ -51,12 +81,14 @@ export type TypePolygonOptions = {
   color?: Array<number>,
   fill?: boolean,
   transform?: Transform,
-  position?: Point,
+  position?: TypeParsablePoint,
   textureLocation?: string,
   textureCoords?: Rect,
   onLoad?: Function,
   pulse?: number;
-  mods?: {},
+  trianglePrimitives?: boolean,
+  linePrimitives?: boolean,
+  center?: TypeParsablePoint,
 };
 
 export type TypeTextOptions = {
@@ -650,7 +682,7 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  polygon(...optionsIn: Array<TypePolygonOptions>) {
+  polygon(...optionsIn: Array<OBJ_Polygon>) {
     const defaultOptions = {
       sides: 4,
       radius: 1,
@@ -692,6 +724,7 @@ export default class DiagramPrimitives {
         0, Math.floor(options.angleToDraw / Math.PI / 2 * options.sides),
       );
     }
+
     let direction = 1;
     if (options.clockwise) {
       direction = -1;
@@ -716,6 +749,7 @@ export default class DiagramPrimitives {
         options.sides,
         options.radius,
         options.rotation,
+        direction,
         options.sidesToDraw,
         options.center,
         options.color,
@@ -741,6 +775,13 @@ export default class DiagramPrimitives {
         options.trianglePrimitives,
       );
     }
+    // const defaultOptions = {
+//       mods: {},
+//       center: new Point(0, 0),
+//       trianglePrimitives: false,
+//       linePrimitives: false,
+//       angleToDraw: null,
+//     };
 
     if (options.pulse != null && typeof element.pulseDefault !== 'function') {
       element.pulseDefault.scale = options.pulse;
