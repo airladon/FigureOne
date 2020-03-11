@@ -9,7 +9,7 @@ import {
 import { joinObjects } from '../../tools/tools';
 import DrawContext2D from '../DrawContext2D';
 import { Equation } from '../DiagramElements/Equation/Equation';
-import type { TypeEquationOptions } from '../DiagramElements/Equation/Equation';
+import type { EQN_Equation } from '../DiagramElements/Equation/Equation';
 import type { TypeNavigatorOptions } from '../DiagramObjects/EqnNavigator';
 import EqnNavigator from '../DiagramObjects/EqnNavigator';
 
@@ -84,7 +84,7 @@ export default class DiagramEquation {
   }
 
   equation(
-    options: TypeEquationOptions,
+    options: EQN_Equation,
   ) {
     const equation = new Equation(this.shapes, options);
     return equation;
@@ -93,7 +93,7 @@ export default class DiagramEquation {
   addEquation(
     parent: DiagramElementCollection,
     name: string,
-    options: TypeEquationOptions = {},
+    options: EQN_Equation = {},
   ) {
     // $FlowFixMe
     const equation = new Equation(this.shapes, options);

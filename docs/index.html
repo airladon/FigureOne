@@ -580,9 +580,9 @@
               
                 
                 <li><a
-                  href='#typeequationoptions'
+                  href='#eqn_equation'
                   class="">
-                  TypeEquationOptions
+                  EQN_Equation
                   
                 </a>
                 
@@ -817,7 +817,6 @@
 
   <p>Diagram Class</p>
 
-    <div class='pre p1 fill-light mt0'>new Diagram(options: <a href="#typediagramoptions">TypeDiagramOptions</a>)</div>
   
   
 
@@ -871,10 +870,8 @@
 
   <p>id of DIV that diagram is tied to</p>
 
-    <div class='pre p1 fill-light mt0'>htmlId</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
     </p>
   
@@ -923,7 +920,6 @@
 
   <p>Add elements to diagram</p>
 
-    <div class='pre p1 fill-light mt0'>addElements(elementsToAdd: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeAddElementObject>, collection: DiagramElementCollection, addElementsKey: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
   
   
 
@@ -1043,10 +1039,8 @@ collection to add elements to
 receive priority over text properties, so if 'symbol' is defined, then 'text'
 will be ignored.</p>
 
-    <div class='pre p1 fill-light mt0'>TypeEquationElement</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, font: DiagramFont?, style: (<code>"italic"</code> | <code>"normal"</code> | null)?, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, numLines: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, side: (<code>"top"</code> | <code>"left"</code> | <code>"bottom"</code> | <code>"right"</code>)?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, mods: {}?} | DiagramElementPrimitive | DiagramElementCollection)
     </p>
   
@@ -1150,10 +1144,8 @@ will be ignored.</p>
 
   <p>Object with multiple equation elements.</p>
 
-    <div class='pre p1 fill-light mt0'>TypeEquationElements</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {}
     </p>
   
@@ -1219,10 +1211,8 @@ will be ignored.</p>
 <p>A container is useful to fix spacing around content as it changes between
 equation forms.</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_Container</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, descent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, ascent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, xAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, yAlign: (<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fit: (<code>"width"</code> | <code>"height"</code> | <code>"contain"</code>)?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"width"</code>? | <code>"height"</code> | <code>"contain"</code>), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
@@ -1379,10 +1369,8 @@ ascent and descent to either match width, height or fully contain the content (
 
   <p>Equation fraction</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_Fraction</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       ({numerator: <a href="#typeequationphrase">TypeEquationPhrase</a>, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, denominator: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, numeratorSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, denominatorSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, overhang: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, offsetY: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
@@ -1541,10 +1529,8 @@ eqn.addElements({
   <p>Equation scale</p>
 <p>Scale an equation phrase</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_Scale</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
@@ -1641,10 +1627,8 @@ eqn.addElements({
   <p>Equation bracket</p>
 <p>Surround an equation phrase with brackets</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_Bracket</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       ({left: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, content: <a href="#typeequationphrase">TypeEquationPhrase</a>, right: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, insideSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, outsideSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, minContentHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, minContentDescent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, descent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
@@ -1875,10 +1859,8 @@ eqn.addElements({
 <p>Surround an equation phrase with a radical symbol and add a custom root if
 needed</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_Root</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       ({symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, content: <a href="#typeequationphrase">TypeEquationPhrase</a>, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, root: <a href="#typeequationphrase">TypeEquationPhrase</a>, rootOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rootScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
@@ -2091,10 +2073,8 @@ eqn.addElements({
   <p>Equation strike-through</p>
 <p>Overlay a strike symbol on an equation phrase</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_Strike</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
@@ -2286,10 +2266,8 @@ eqn.addElements({
   <p>Equation box</p>
 <p>Place a box symbol around an equation phrase</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_Box</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
@@ -2481,10 +2459,8 @@ eqn.addElements({
   <p>Equation bar</p>
 <p>Place a bar (or bracket) symbol to the side of an equation phrase</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_Bar</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, overhang: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, length: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, left: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, right: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, top: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottom: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, side: (<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?, minContentHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, minContentDescent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, minContentAscent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, descent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, (<code>"left"</code>? | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
@@ -2789,10 +2765,8 @@ eqn.addElements({
   <p>Equation integral</p>
 <p>Place an integral (with optional limits) before an equation phrase</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_Integral</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       ({symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, content: <a href="#typeequationphrase">TypeEquationPhrase</a>?, from: <a href="#typeequationphrase">TypeEquationPhrase</a>?, to: <a href="#typeequationphrase">TypeEquationPhrase</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, yOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, toScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromOffset: TypeParsablePoint?, toOffset: TypeParsablePoint?, limitsPosition: (<code>"side"</code> | <code>"topBottom"</code> | <code>"topBottomCenter"</code>)?, limitsAroundContent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, fromXPosition: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fromYPosition: (<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fromXAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fromYAlign: (<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, toXPosition: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, toYPosition: (<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, toXAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, toYAlign: (<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fullBoundsContent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, TypeParsablePoint?, TypeParsablePoint?, (<code>"side"</code>? | <code>"topBottom"</code> | <code>"topBottomCenter"</code>), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
@@ -3251,10 +3225,8 @@ eqn.addElements({
   <p>Equation sum of</p>
 <p>Place an equation phrase in a sum of operation</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_SumOf</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       ({symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, content: <a href="#typeequationphrase">TypeEquationPhrase</a>, from: <a href="#typeequationphrase">TypeEquationPhrase</a>?, to: <a href="#typeequationphrase">TypeEquationPhrase</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, yOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, toScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, toSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromOffset: TypeParsablePoint?, toOffset: TypeParsablePoint?, fullBoundsContent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, (TypeParsablePoint? | null), (TypeParsablePoint? | null), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
@@ -3527,10 +3499,8 @@ eqn.addElements({
   <p>Equation product of</p>
 <p>Place an equation phrase in a product of operation</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_ProdOf</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       ({symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, content: <a href="#typeequationphrase">TypeEquationPhrase</a>, from: <a href="#typeequationphrase">TypeEquationPhrase</a>?, to: <a href="#typeequationphrase">TypeEquationPhrase</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, yOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, toScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, toSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromOffset: TypeParsablePoint?, toOffset: TypeParsablePoint?, fullBoundsContent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, (TypeParsablePoint? | null), (TypeParsablePoint? | null), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
@@ -3802,10 +3772,8 @@ eqn.addElements({
 
   <p>Equation subscript</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_Subcript</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, subscript: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, offset: TypeParsablePoint?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, TypeParsablePoint?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
@@ -3920,10 +3888,8 @@ resulting phrase (
 
   <p>Equation superscript</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_Superscript</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, superscript: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, offset: TypeParsablePoint?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, TypeParsablePoint?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
@@ -4038,10 +4004,8 @@ resulting phrase (
 
   <p>Equation superscript and subscript</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_SuperscriptSubscript</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, subscript: <a href="#typeequationphrase">TypeEquationPhrase</a>, superscript: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, superscriptOffset: TypeParsablePoint?, subscriptOffset: TypeParsablePoint?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, TypeParsablePoint?, TypeParsablePoint?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
@@ -4175,10 +4139,8 @@ resulting phrase (
 functions.</p>
 <p>A symbol between the content and comment is optional.</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_Comment</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, comment: <a href="#typeequationphrase">TypeEquationPhrase</a>, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, contentSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, commentSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
@@ -4349,10 +4311,8 @@ eqn.addElements({
   <p>Equation strike with comment options used with <code>topStrike</code> and <code>bottomStrike</code>
 functions.</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_StrikeComment</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>?, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, comment: <a href="#typeequationphrase">TypeEquationPhrase</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, commentSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?])
     </p>
   
@@ -4496,10 +4456,8 @@ eqn.addElements({
 
   <p>Equation padding options</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_Pad</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, top: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, right: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottom: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, left: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?])
     </p>
   
@@ -4615,10 +4573,8 @@ eqn.addElements({
 
   <p>Equation matrix</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_Matrix</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       ({order: [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]?, left: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, content: <a href="#typeequationphrase">TypeEquationPhrase</a>, right: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fit: (<code>"max"</code> | <code>"min"</code> | TypeParsablePoint)?, space: TypeParsablePoint?, yAlign: (<code>"baseline"</code> | <code>"middle"</code>)?, brac: <a href="#eqn_bracket">EQN_Bracket</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, (<code>"max"</code>? | <code>"min"</code>), TypeParsablePoint?, (<code>"baseline"</code>? | <code>"middle"</code>), <a href="#eqn_bracket">EQN_Bracket</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
@@ -4858,10 +4814,8 @@ Glyph  GGG       GGG     CCCCCCC     GGG        GGG   Glyph
                       Bottom Glyph
 </pre>
 
-    <div class='pre p1 fill-light mt0'>EQN_Annotate</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {content: <a href="#typeequationphrase">TypeEquationPhrase</a>, annotation: <a href="#eqn_annotation">EQN_Annotation</a>?, annotations: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#eqn_annotation">EQN_Annotation</a>>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, glyphs: <a href="#eqn_glyphs">EQN_Glyphs</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, contentScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}
     </p>
   
@@ -5121,10 +5075,8 @@ For instance, an annotation at the top right of the content:</p>
          CCCCCCCC
 </pre>
 
-    <div class='pre p1 fill-light mt0'>EQN_Annotation</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {xPosition: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), yPosition: (<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), xAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), yAlign: (<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), offset: <a href="#point">Point</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, content: <a href="#typeequationphrase">TypeEquationPhrase</a>, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, reference: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?}
     </p>
   
@@ -5311,10 +5263,8 @@ can also be annotated.</p>
 
 </pre>
 
-    <div class='pre p1 fill-light mt0'>EQN_EncompassGlyph</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, annotation: <a href="#eqn_annotation">EQN_Annotation</a>?, annotations: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#eqn_annotation">EQN_Annotation</a>>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}
     </p>
   
@@ -5461,10 +5411,8 @@ The glyph can also be annotated.</p>
 
 </pre>
 
-    <div class='pre p1 fill-light mt0'>EQN_LeftRightGlyph</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, annotation: <a href="#eqn_annotation">EQN_Annotation</a>?, annotations: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#eqn_annotation">EQN_Annotation</a>>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, overhang: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, minContentHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, minContentDescent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, minContentAscent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, descent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, yOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, annotationsOverContent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}
     </p>
   
@@ -5675,10 +5623,8 @@ The glyph can also be annotated.</p>
 
 </pre>
 
-    <div class='pre p1 fill-light mt0'>EQN_TopBottomGlyph</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, annotation: <a href="#eqn_annotation">EQN_Annotation</a>?, annotations: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#eqn_annotation">EQN_Annotation</a>>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, overhang: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, xOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, annotationsOverContent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}
     </p>
   
@@ -5841,10 +5787,8 @@ annotate: {
   <p>Object defining all the glyphs annotating some content.</p>
 <p>Multiple glyphs are ok, but only one per position.</p>
 
-    <div class='pre p1 fill-light mt0'>EQN_Glyphs</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {left: <a href="#eqn_leftrightglyph">EQN_LeftRightGlyph</a>?, right: <a href="#eqn_leftrightglyph">EQN_LeftRightGlyph</a>?, top: <a href="#eqn_topbottomglyph">EQN_TopBottomGlyph</a>?, bottom: <a href="#eqn_topbottomglyph">EQN_TopBottomGlyph</a>?, encompass: <a href="#eqn_encompassglyph">EQN_EncompassGlyph</a>?}
     </p>
   
@@ -5953,10 +5897,8 @@ annotate: {
 
 </pre>
 
-    <div class='pre p1 fill-light mt0'>EQN_VinculumSymbol</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticWidth: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
     </p>
   
@@ -6103,10 +6045,8 @@ based on first use (
 
 </pre>
 
-    <div class='pre p1 fill-light mt0'>EQN_BoxSymbol</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, fill: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticWidth: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
     </p>
   
@@ -6298,10 +6238,8 @@ based on first use
                              lineWidth
 </pre>
 
-    <div class='pre p1 fill-light mt0'>EQN_ArrowSymbol</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, direction: (<code>"up"</code> | <code>"down"</code> | <code>"left"</code> | <code>"right"</code>)?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, arrowHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, arrowWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
     </p>
   
@@ -6493,10 +6431,8 @@ based on first use (
                   |<------------------------------------>|
 </pre>
 
-    <div class='pre p1 fill-light mt0'>EQN_SumSymbol</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
     </p>
   
@@ -6664,10 +6600,8 @@ based on first use (
          ----- 0000000000000000000000000           00000000000000000000000000
 </pre>
 
-    <div class='pre p1 fill-light mt0'>EQN_ProdSymbol</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
     </p>
   
@@ -6805,14 +6739,14 @@ based on first use (
 //     |                                   000000000         11111111
 //     |                                  000000000
 //     |                                 0000000000
-//     |    S curve gradient = k         000000000
+//     |                                 000000000
 //     |                                0000000000
 //     |                                0000000000
 //     |                               00000000000
 //     |                              00000000000
 //     |                              000000000000
 //     |                             000000000000      lineWidth
-//   h |                     ------->000000000000<----------
+//     | height              ------->000000000000<----------
 //     |                             000000000000
 //     |                             000000000000
 //     |                            000000000000
@@ -6820,9 +6754,9 @@ based on first use (
 //     |                            00000000000
 //     |                            0000000000
 //     |                            0000000000
-//     |                            000000000
-//     |                           000000000
-//     |                          0000000000
+//     |     Serif                  000000000
+//     |       \                   000000000
+//     |        \                 0000000000
 //     |      11111111           000000000
 //     |    111111111111       00000000
 //     |   11111111111111     0000000
@@ -6832,10 +6766,8 @@ based on first use (
 //     -------  0000000
 </pre>
 
-    <div class='pre p1 fill-light mt0'>EQN_IntegralSymbol</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, tipWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?, serif: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, num: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, type: (<code>"line"</code> | <code>"generic"</code>)?, serifSides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, lineIntegralSides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}
     </p>
   
@@ -7050,10 +6982,8 @@ based on first use (
 
 </pre>
 
-    <div class='pre p1 fill-light mt0'>EQN_StrikeSymbol</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, style: (<code>"cross"</code> | <code>"forward"</code> | <code>"back"</code> | <code>"horizontal"</code>)?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>), staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?, staticWidth: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
     </p>
   
@@ -7255,10 +7185,8 @@ eqn.addElements({
                       width
 </pre>
 
-    <div class='pre p1 fill-light mt0'>EQN_BracketSymbol</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {side: (<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, tipWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
     </p>
   
@@ -7440,10 +7368,8 @@ eqn.addElements({
 
 </pre>
 
-    <div class='pre p1 fill-light mt0'>EQN_AngleBracketSymbol</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {side: (<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"dynamic"</code> | <code>"static"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
     </p>
   
@@ -7629,10 +7555,8 @@ eqn.addElements({
 
 </pre>
 
-    <div class='pre p1 fill-light mt0'>EQN_BraceSymbol</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {side: (<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, tipWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"dynamic"</code> | <code>"static"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
     </p>
   
@@ -7811,10 +7735,8 @@ eqn.addElements({
 
 </pre>
 
-    <div class='pre p1 fill-light mt0'>EQN_BarSymbol</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {side: (<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"dynamic"</code> | <code>"static"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
     </p>
   
@@ -7981,10 +7903,8 @@ eqn.addElements({
 
 </pre>
 
-    <div class='pre p1 fill-light mt0'>EQN_SquareBracketSymbol</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, side: (<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, tipWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, radius: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"dynamic"</code> | <code>"static"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
     </p>
   
@@ -8189,10 +8109,8 @@ it will not be needed, but for edge case equation layouts it may be useful.</p>
                     startWidth
 </pre>
 
-    <div class='pre p1 fill-light mt0'>EQN_RadicalSymbol</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, startWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, startHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, proportionalToHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, maxStartWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, maxStartHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, lineWidth2: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, tickWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, tickHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, downWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>), staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?, staticWidth: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
     </p>
   
@@ -8473,10 +8391,8 @@ phrases.</p>
 <li>An array of <a href="#typeequationphrase">TypeEquationPhrase</a></li>
 </ul>
 
-    <div class='pre p1 fill-light mt0'>TypeEquationPhrase</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#eqn_fraction">EQN_Fraction</a>} | {strike: <a href="#eqn_strike">EQN_Strike</a>} | {box: <a href="#eqn_box">EQN_Box</a>} | {root: <a href="#eqn_root">EQN_Root</a>} | {brac: <a href="#eqn_bracket">EQN_Bracket</a>} | {sub: <a href="#eqn_subcript">EQN_Subcript</a>} | {sup: <a href="#eqn_superscript">EQN_Superscript</a>} | {supSub: <a href="#eqn_superscriptsubscript">EQN_SuperscriptSubscript</a>} | {topBar: <a href="#eqn_bar">EQN_Bar</a>} | {bottomBar: <a href="#eqn_bar">EQN_Bar</a>} | {annotate: <a href="#eqn_annotate">EQN_Annotate</a>} | {topComment: <a href="#eqn_comment">EQN_Comment</a>} | {bottomComment: <a href="#eqn_comment">EQN_Comment</a>} | {pad: <a href="#eqn_pad">EQN_Pad</a>} | {bar: <a href="#eqn_bar">EQN_Bar</a>} | {scale: <a href="#eqn_scale">EQN_Scale</a>} | {container: <a href="#eqn_container">EQN_Container</a>} | {matrix: <a href="#eqn_matrix">EQN_Matrix</a>} | {int: <a href="#eqn_integral">EQN_Integral</a>} | {sumOf: <a href="#eqn_sumof">EQN_SumOf</a>} | {prodOf: <a href="#eqn_prodof">EQN_ProdOf</a>} | {topStrike: <a href="#eqn_strikecomment">EQN_StrikeComment</a>} | {bottomStrike: <a href="#eqn_strikecomment">EQN_StrikeComment</a>} | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | DiagramElementPrimitive | DiagramElementCollection | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
     </p>
   
@@ -8544,10 +8460,8 @@ forms: {
 
   <p>Defines how to align a form</p>
 
-    <div class='pre p1 fill-light mt0'>TypeFormAlignment</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {fixTo: (DiagramElementPrimitive | DiagramElementCollection | <a href="#point">Point</a>), xAlign: TypeHAlign, yAlign: TypeVAlign}
     </p>
   
@@ -8620,10 +8534,8 @@ forms: {
 
   <p>Duration and translation options for form animation</p>
 
-    <div class='pre p1 fill-light mt0'>TypeFormAnimationProperties</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: {}?}
     </p>
   
@@ -8714,10 +8626,8 @@ duration or shouldn<span class="hljs-string">'t have a linear path</span></pre>
 
   <p>Form translation properties</p>
 
-    <div class='pre p1 fill-light mt0'>TypeFormTranslationProperties</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {style: (<code>"curved"</code> | <code>"linear"</code>), direction: (<code>"up"</code> | <code>"down"</code>)?, mag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>}
     </p>
   
@@ -8816,10 +8726,8 @@ complicating the overall equation navigation logic.</p>
 <p>See the examples below for how to define subForms.</p>
 <p><a href="#equationaddforms">Equation#addForms</a>.</p>
 
-    <div class='pre p1 fill-light mt0'>TypeEquationFormObject</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {content: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, alignment: <a href="#typeformalignment">TypeFormAlignment</a>?, subForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, description: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, modifiers: {}?, fromPrev: <a href="#typeformanimationproperties">TypeFormAnimationProperties</a>?, fromNext: <a href="#typeformanimationproperties">TypeFormAnimationProperties</a>?, duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: <a href="#typeformtranslationproperties">TypeFormTranslationProperties</a>?, elementMods: {}?}
     </p>
   
@@ -9069,10 +8977,8 @@ subform2: ...
 </li>
 </ul>
 
-    <div class='pre p1 fill-light mt0'>TypeEquationForm</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       (<a href="#typeequationphrase">TypeEquationPhrase</a> | <a href="#typeequationformobject">TypeEquationFormObject</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&#x3C;(<a href="#typeequationformobject">TypeEquationFormObject</a> | <a href="#typeequationphrase">TypeEquationPhrase</a>)>)
     </p>
   
@@ -9123,10 +9029,8 @@ subform2: ...
   <p>An object of equation forms where each key is the form name and each value
 is a form defintion <a href="#typeequationform">TypeEquationForm</a></p>
 
-    <div class='pre p1 fill-light mt0'>TypeEquationForms</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&#x3C;<a href="#typeequationform">TypeEquationForm</a>>
     </p>
   
@@ -9186,10 +9090,8 @@ in the series, then two special animations can be defined with this object:</p>
 <li><code>scale</code>: 1.1</li>
 </ul>
 
-    <div class='pre p1 fill-light mt0'>TypeFormRestart</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {formRestart: {moveFrom: (<a href="#point">Point</a>? | DiagramElementCollection)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, element: DiagramElement??}?}?}
     </p>
   
@@ -9254,8 +9156,8 @@ in the series, then two special animations can be defined with this object:</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='typeequationoptions'>
-      TypeEquationOptions
+    <h3 class='fl m0' id='eqn_equation'>
+      EQN_Equation
     </h3>
     
     
@@ -9264,10 +9166,8 @@ in the series, then two special animations can be defined with this object:</p>
 
   <p>Options objects to construct an <a href="#equation">Equation</a> class. All properties are optional.</p>
 
-    <div class='pre p1 fill-light mt0'>TypeEquationOptions</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, elements: <a href="#typeequationelements">TypeEquationElements</a>?, defaultFormAlignment: <a href="#typeformalignment">TypeFormAlignment</a>?, forms: <a href="#typeequationforms">TypeEquationForms</a>?, formSeries: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>> | {})?, defaultFormSeries: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, formRestart: <a href="#typeformrestart">TypeFormRestart</a>?, fontMath: DiagramFont?, position: <a href="#point">Point</a>?}
     </p>
   
@@ -9423,10 +9323,10 @@ elements that need to be shown in the correct locations of the form, then
 move existing elements to their correct locations</li>
 <li><code>'dissolve'</code>: Dissolve out the entire current form, and then dissolve in the entire new form</li>
 <li><code>'moveFrom'</code>: Shows the desired form at the position defined in the
-formRestart property of <a href="#typeequationoptions">TypeEquationOptions</a>, then moves it to the
+formRestart property of <a href="#eqn_equation">EQN_Equation</a>, then moves it to the
 current location</li>
 <li><code>'pulse'</code>: Same as <code>'dissolve'</code>, but once finished will pulse the element
-defined in the pulse object in the formRestart property of <a href="#typeequationoptions">TypeEquationOptions</a></li>
+defined in the pulse object in the formRestart property of <a href="#eqn_equation">EQN_Equation</a></li>
 </ul>
 <p>If a form is already animating, then the <code>ifAnimating</code> property will define
 the behavior of the animation:</p>
@@ -9441,10 +9341,8 @@ the end, and current goTo call will then be executed</li>
 its current state, and current goTo call will be executed</li>
 </ul>
 
-    <div class='pre p1 fill-light mt0'>TypeEquationGoToFormOptions</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, animate: (<code>"move"</code> | <code>"dissolve"</code> | <code>"moveFrom"</code> | <code>"pulse"</code> | <code>"dissolveInThenMove"</code>)?, delay: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, dissolveOutTime: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, dissolveInTime: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, blankTime: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, prioritizeFormDuration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, fromWhere: (<code>"fromPrev"</code>? | <code>"fromNext"</code>)?, ifAnimating: {cancelGoTo: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, skipToTarget: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}?, callback: function (): void??}
     </p>
   
@@ -9620,7 +9518,6 @@ Default:
   <p>An Equation is a collection of elements that can be arranged into different
 forms.</p>
 
-    <div class='pre p1 fill-light mt0'>new Equation(shapes: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, options: <a href="#typeequationoptions">TypeEquationOptions</a>)</div>
   
   
     <p>
@@ -9652,7 +9549,7 @@ forms.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="#typeequationoptions">TypeEquationOptions</a>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#eqn_equation">EQN_Equation</a>
             = <code>{}</code>)</code>
 	    
           </div>
@@ -9722,10 +9619,8 @@ eqn.addElements({
 
   <p>Equation parameters and functions</p>
 
-    <div class='pre p1 fill-light mt0'>eqn</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {forms: {}, functions: EquationFunctions, symbols: EquationSymbols, currentForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, currentSubForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, fontMath: DiagramFont, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, subFormPriority: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, formSeries: {}, currentFormSeries: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, currentFormSeriesName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, defaultFormAlignment: {fixTo: (DiagramElementPrimitive | DiagramElementCollection | <a href="#point">Point</a>), xAlign: TypeHAlign, yAlign: TypeVAlign}, isAnimating: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, descriptionElement: (DiagramElementPrimitive | null), descriptionPosition: <a href="#point">Point</a>, formRestart: {moveFrom: (<a href="#point">Point</a> | DiagramElementCollection)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, element: DiagramElement}?}?}
     </p>
   
@@ -9786,7 +9681,6 @@ eqn.addElements({
 
   <p>Set the current form series to 'name'</p>
 
-    <div class='pre p1 fill-light mt0'>setFormSeries(name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
   
   
 
@@ -9846,7 +9740,6 @@ eqn.addElements({
 
   <p>Get the current form series name</p>
 
-    <div class='pre p1 fill-light mt0'>getFormSeries(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
   
   
 
@@ -9898,7 +9791,6 @@ eqn.addElements({
 
   <p>Add elements to equation.</p>
 
-    <div class='pre p1 fill-light mt0'>addElements(elems: <a href="#typeequationelements">TypeEquationElements</a>)</div>
   
   
 
@@ -9958,7 +9850,6 @@ eqn.addElements({
 
   <p>Add forms to equation.</p>
 
-    <div class='pre p1 fill-light mt0'>addForms(forms: <a href="#typeequationforms">TypeEquationForms</a>)</div>
   
   
 
@@ -10018,7 +9909,6 @@ eqn.addElements({
 
   <p>Get the current equation form</p>
 
-    <div class='pre p1 fill-light mt0'>getCurrentForm(): EquationForm?</div>
   
   
 
@@ -10070,7 +9960,6 @@ eqn.addElements({
 
   <p>Set current equation form - Note, this does not show the form.</p>
 
-    <div class='pre p1 fill-light mt0'>setCurrentForm(formOrName: (EquationForm | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>), subForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
   
   
 
@@ -10139,7 +10028,6 @@ eqn.addElements({
 
   <p>Show equation form</p>
 
-    <div class='pre p1 fill-light mt0'>showForm(formOrName: (EquationForm | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>), subForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, animationStop: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</div>
   
   
 
@@ -10217,7 +10105,6 @@ eqn.addElements({
 
   <p>Get an equation form object from a form name</p>
 
-    <div class='pre p1 fill-light mt0'>getForm(formOrName: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | EquationForm), subForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?): (null | EquationForm)</div>
   
   
 
@@ -10290,7 +10177,6 @@ eqn.addElements({
 
   <p>Start an animation to an equation form</p>
 
-    <div class='pre p1 fill-light mt0'>goToForm(optionsIn: <a href="#typeequationgotoformoptions">TypeEquationGoToFormOptions</a>)</div>
   
   
 
@@ -10351,7 +10237,6 @@ eqn.addElements({
 
   <p>Animate to previous form in the current form series</p>
 
-    <div class='pre p1 fill-light mt0'>prevForm(duration: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null), delay: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
   
   
 
@@ -10421,7 +10306,6 @@ eqn.addElements({
 
   <p>Animate to next form in the current form series</p>
 
-    <div class='pre p1 fill-light mt0'>nextForm(duration: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null), delay: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
   
   
 
@@ -10491,7 +10375,6 @@ eqn.addElements({
 
   <p>Start from previous form and animate to current form</p>
 
-    <div class='pre p1 fill-light mt0'>replayCurrentForm(duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
   
   
 
@@ -10564,7 +10447,6 @@ eqn.addElements({
 
   <p>These are generic tools</p>
 
-    <div class='pre p1 fill-light mt0'>tools</div>
   
   
 
@@ -10603,7 +10485,6 @@ eqn.addElements({
 
   <p>2D geometry tools</p>
 
-    <div class='pre p1 fill-light mt0'>g2</div>
   
   
 
@@ -10642,7 +10523,6 @@ eqn.addElements({
 
   <p>Point class</p>
 
-    <div class='pre p1 fill-light mt0'>new Point(x: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, y: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
   
   
 
@@ -10704,7 +10584,6 @@ eqn.addElements({
 
   <p>Return a point at (0, 0)</p>
 
-    <div class='pre p1 fill-light mt0'>zero(): <a href="#point">Point</a></div>
   
   
 
@@ -10756,7 +10635,6 @@ eqn.addElements({
 
   <p>Return a point at (1, 1)</p>
 
-    <div class='pre p1 fill-light mt0'>Unity(): <a href="#point">Point</a></div>
   
   
 
@@ -10816,10 +10694,8 @@ eqn.addElements({
 
   <p>x value of point</p>
 
-    <div class='pre p1 fill-light mt0'>x</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
     </p>
   
@@ -10868,10 +10744,8 @@ eqn.addElements({
 
   <p>y value of point</p>
 
-    <div class='pre p1 fill-light mt0'>y</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
     </p>
   
@@ -10920,7 +10794,6 @@ eqn.addElements({
 
   <p>Return a duplicate of the <a href="#point">Point</a> object</p>
 
-    <div class='pre p1 fill-light mt0'>_dup(): <a href="#point">Point</a></div>
   
   
 
@@ -10972,7 +10845,6 @@ eqn.addElements({
 
   <p>Scale x and y values of point by scalar</p>
 
-    <div class='pre p1 fill-light mt0'>scale(scalar: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="#point">Point</a></div>
   
   
 
@@ -11045,7 +10917,6 @@ s = p.scale(<span class="hljs-number">3</span>);
 
   <p>Subtract (x, y) values or a <a href="#point">Point</a> and return the difference as a new <a href="#point">Point</a></p>
 
-    <div class='pre p1 fill-light mt0'>sub(pointOrX: (<a href="#point">Point</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), y: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="#point">Point</a></div>
   
   
 
@@ -11132,7 +11003,6 @@ d = p.sub(q)
 
   <p>Add (x, y) values or a <a href="#point">Point</a> and return the sum as a new <a href="#point">Point</a></p>
 
-    <div class='pre p1 fill-light mt0'>add(pointOrX: (<a href="#point">Point</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), y: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="#point">Point</a></div>
   
   
 
@@ -11219,7 +11089,6 @@ d = p.add(q)
 
   <p>Return the distance between the point and the origin</p>
 
-    <div class='pre p1 fill-light mt0'>distance(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
   
   
 
@@ -11279,7 +11148,6 @@ d = p.distance();
 
   <p>Return a new point with (x, y) values rounded to some precision</p>
 
-    <div class='pre p1 fill-light mt0'>round(precision: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="#point">Point</a></div>
   
   
 
@@ -11356,7 +11224,6 @@ q = p.round(<span class="hljs-number">2</span>);
 a number to define the same (x, y) min/max values, or null to have no
 min/max values.</p>
 
-    <div class='pre p1 fill-light mt0'>clip(min: (<a href="#point">Point</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null), max: (<a href="#point">Point</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null)): <a href="#point">Point</a></div>
   
   
 
@@ -11446,7 +11313,6 @@ q = p.clip(minClip, <span class="hljs-literal">null</span>);
 
   <p>Transform the point with a 3x3 matrix (2 dimensional transform)</p>
 
-    <div class='pre p1 fill-light mt0'>transformBy(matrix: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>): <a href="#point">Point</a></div>
   
   
 
@@ -11522,7 +11388,6 @@ q = p.transformBy(m)
 
   <p>Rotate a point some angle around a center point</p>
 
-    <div class='pre p1 fill-light mt0'>rotate(angle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, center: <a href="#point">Point</a>): <a href="#point">Point</a></div>
   
   
 
@@ -11611,7 +11476,6 @@ q = p.rotate(<span class="hljs-built_in">Math</span>.PI, <span class="hljs-keywo
 
   <p>Compare two points for equality to some precision</p>
 
-    <div class='pre p1 fill-light mt0'>isEqualTo(p: <a href="#point">Point</a>, precision: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
   
   
 
@@ -11692,7 +11556,6 @@ p.isEqualTo(q, <span class="hljs-number">2</span>)
 
   <p>Compare two points for unequality to some precision</p>
 
-    <div class='pre p1 fill-light mt0'>isNotEqualTo(p: <a href="#point">Point</a>, precision: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</div>
   
   
 
@@ -11784,7 +11647,6 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
 
   <p>Rect</p>
 
-    <div class='pre p1 fill-light mt0'>new Rect(left: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, bottom: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
   
   
 
@@ -11885,7 +11747,6 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
 
   <p>Creates an array with a range of number</p>
 
-    <div class='pre p1 fill-light mt0'>range(start: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, stop: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, step: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>></div>
   
   
 
@@ -11988,7 +11849,6 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
 
   <p>Tools object that is so great</p>
 
-    <div class='pre p1 fill-light mt0'>tools</div>
   
   
 
@@ -12069,7 +11929,6 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
 
   <p>Rounds a number or numbers in an array</p>
 
-    <div class='pre p1 fill-light mt0'>round(arrayOrValue: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>), precision: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)</div>
   
   
 
@@ -12149,10 +12008,8 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
 
   <p>Diagram Input Options</p>
 
-    <div class='pre p1 fill-light mt0'>TypeDiagramOptions</div>
   
-    <p>
-      Type:
+    <p style="display: none;">      Type:
       {htmlId: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, limits: <a href="#rect">Rect</a>?}
     </p>
   
@@ -12222,7 +12079,6 @@ corner at (-1, -1), width 1, height 1
 
   <p>Equation container function</p>
 
-    <div class='pre p1 fill-light mt0'>container(optionsOrArray: <a href="#eqn_container">EQN_Container</a>)</div>
   
   
 
@@ -12296,7 +12152,6 @@ eqn.addForms({
 
   <p>Equation fraction function</p>
 
-    <div class='pre p1 fill-light mt0'>frac(optionsOrArray: <a href="#eqn_fraction">EQN_Fraction</a>)</div>
   
   
 

@@ -8,3 +8,5 @@ documentation build src/index.js -f md -o ./docs/temp.md --config documentation.
 python ./docs/tools/markdown_cleaner.py
 
 rm ./docs/temp.md
+
+python ./docs/tools/html_cleaner.py

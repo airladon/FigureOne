@@ -366,7 +366,7 @@ type TypeFormRestart = {
  * New Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)
  * @property {Point} [position] - default: new {@link Point}(0, 0)
  */
-export type TypeEquationOptions = {
+export type EQN_Equation = {
   color?: Array<number>;
   scale?: number,
   elements?: TypeEquationElements;
@@ -398,10 +398,10 @@ export type TypeEquationOptions = {
  * move existing elements to their correct locations
  * * `'dissolve'`: Dissolve out the entire current form, and then dissolve in the entire new form
  * * `'moveFrom'`: Shows the desired form at the position defined in the
- * formRestart property of {@link TypeEquationOptions}, then moves it to the
+ * formRestart property of {@link EQN_Equation}, then moves it to the
  * current location
  * * `'pulse'`: Same as `'dissolve'`, but once finished will pulse the element
- *  defined in the pulse object in the formRestart property of {@link TypeEquationOptions}
+ *  defined in the pulse object in the formRestart property of {@link EQN_Equation}
  *
  * If a form is already animating, then the `ifAnimating` property will define
  * the behavior of the animation:
@@ -464,7 +464,7 @@ type TypeEquationGoToFormOptions = {
 /**
  * An Equation is a collection of elements that can be arranged into different
  * forms.
- * @param {TypeEquationOptions} options
+ * @param {EQN_Equation} options
  * @example
  * // Create with options object
  * eqn = new Equation({
@@ -552,7 +552,7 @@ export class Equation extends DiagramElementCollection {
 
   constructor(
     shapes: Object,
-    options: TypeEquationOptions = {},
+    options: EQN_Equation = {},
   ) {
     let { color } = options;
     if (color == null) {
