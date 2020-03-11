@@ -21,6 +21,7 @@ class PolygonFilled extends VertexObject {
     numSidesToDraw: number = numSides,
     textureLocation: string = '',
     textureCoords: Rect = new Rect(0, 0, 1, 1),
+    direction: 1 | -1 = 1,
   ) {
     if (textureLocation !== '') {
       super(webgl, 'withTexture', 'withTexture');
@@ -59,8 +60,12 @@ class PolygonFilled extends VertexObject {
       // b = 1;
     }
     for (i = 0; i < sidesToDraw + 1; i += 1) {
-      this.points[j] = center.x + radius * Math.cos(i * this.dAngle + rotation);
-      this.points[j + 1] = center.y + radius * Math.sin(i * this.dAngle + rotation);
+      this.points[j] = center.x + radius * Math.cos(
+        i * this.dAngle * direction + rotation * direction,
+      );
+      this.points[j + 1] = center.y + radius * Math.sin(
+        i * this.dAngle * direction + rotation * direction,
+      );
       this.border[0].push(new Point(this.points[j], this.points[j + 1]));
       // b += 1;
       j += 2;

@@ -48,6 +48,7 @@ function PolygonFilled(
   numSides: number,
   radius: number,
   rotation: number,
+  direction: -1 | 1,
   numSidesToDraw: number,
   center: Point,
   color: Array<number>,
@@ -66,6 +67,7 @@ function PolygonFilled(
     numSidesToDraw,
     textureLocation,
     textureCoords,
+    direction,
   );
   if (textureLocation) {
     vertexLineCorners.onLoad = onLoad;
