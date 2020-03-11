@@ -2040,13 +2040,13 @@ function getBoundingRect(pointArrays: Array<Point> | Array<Array<Point>>) {
   );
 }
 
-// Finds the min angle between three points
-function threePointAngleMin(p2: Point, p1: Point, p3: Point) {
-  const p12 = distance(p1, p2);
-  const p13 = distance(p1, p3);
-  const p23 = distance(p2, p3);
-  return Math.acos((p12 ** 2 + p13 ** 2 - p23 ** 2) / (2 * p12 * p13));
-}
+// // Finds the min angle between three points
+// function threePointAngleMin(p2: Point, p1: Point, p3: Point) {
+//   const p12 = distance(p1, p2);
+//   const p13 = distance(p1, p3);
+//   const p23 = distance(p2, p3);
+//   return Math.acos((p12 ** 2 + p13 ** 2 - p23 ** 2) / (2 * p12 * p13));
+// }
 
 // Finds the angle between three points for p12 to p13 in the positive
 // angle direction
@@ -2062,6 +2062,18 @@ function threePointAngle(p2: Point, p1: Point, p3: Point) {
   angle13 -= angle12;
   angle12 = 0;
   return clipAngle(angle13, '0to360');
+}
+
+function threePointAngleMin(p2: Point, p1: Point, p3: Point) {
+  const a12 = clipAngle(Math.atan2(p2.y - p1.y, p2.x - p1.x), '0to360');
+  const a13 = clipAngle(Math.atan2(p3.y - p1.y, p3.x - p1.x), '0to360');
+  let delta = a13 - a12;
+  if (delta > Math.PI) {
+    delta = -(Math.PI * 2 - delta);
+  } else if (delta < -Math.PI) {
+    delta = Math.PI * 2 + delta;
+  }
+  return delta;
 }
 
 function randomPoint(withinRect: Rect) {
@@ -2219,12 +2231,12 @@ function circleCorner(p2in: Point, p1: Point, p3in: Point, sides: number): Array
     return [p2in._dup(), p3in._dup()];
   }
 
-  let p2 = p2in._dup();
-  let p3 = p3in._dup();
+  const p2 = p2in._dup();
+  const p3 = p3in._dup();
   const points: Array<Point> = [];
 
-  const angle12To13 = threePointAngle(p2, p1, p3);
-  if (angle12To13 === Math.PI || angle12To13 === 0) {
+  const _2a = threePointAngleMin(p2, p1, p3);
+  if (_2a === Math.PI || _2a === 0) {
     points.push(p2in._dup());
     for (let i = 0; i < sides - 2; i += 1) {
       points.push(p1._dup());
@@ -2232,32 +2244,23 @@ function circleCorner(p2in: Point, p1: Point, p3in: Point, sides: number): Array
     points.push(p3in._dup());
     return points;
   }
-
-  let reverse = false;
-  if (angle12To13 > Math.PI) {
-    p2 = p3in;
-    p3 = p2in;
-    reverse = true;
-  }
+  const direction = _2a / Math.abs(_2a);
 
   const line12 = new Line(p1, p2);
-  let _2a = threePointAngle(p2, p1, p3);
-  if (_2a > Math.PI) {
-    _2a = Math.PI - _2a;
-  }
-  const a = _2a / 2;
+  const a = Math.abs(_2a / 2);
   const c = Math.PI / 2;
+  const b = Math.PI - a - c;
   const B = line12.length();
-  const C = Math.sin(c) / Math.sin(a) * B;
+  const C = Math.sin(c) / Math.sin(b) * B;
+  // const C = B / Math.cos(a);
   const center = new Point(
-    p1.x + C * Math.cos(a + line12.angle()),
-    p1.y + C * Math.sin(a + line12.angle()),
+    p1.x + C * Math.cos(a * direction + line12.angle()),
+    p1.y + C * Math.sin(a * direction + line12.angle()),
   );
-  let _2b = threePointAngle(p2, center, p3);
-  if (_2b > Math.PI) {
-    _2b = Math.PI - _2b;
-  }
-  const delta = _2b / sides;
+
+  const _2b = b * 2;
+  const delta = _2b / sides * direction * -1;
+
   const lineC2 = new Line(center, p2);
   const angleC2 = lineC2.angle();
   const magC2 = lineC2.length();
@@ -2270,9 +2273,9 @@ function circleCorner(p2in: Point, p1: Point, p3in: Point, sides: number): Array
     ));
   }
   points.push(p3);
-  if (reverse) {
-    return points.reverse();
-  }
+  // if (reverse) {
+  //   return points.reverse();
+  // }
   return points;
 }
 

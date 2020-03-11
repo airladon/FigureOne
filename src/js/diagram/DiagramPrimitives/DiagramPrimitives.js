@@ -386,6 +386,30 @@ export default class DiagramPrimitives {
     return element;
   }
 
+  general(...optionsIn: Array<{
+    points: Array<Point>,
+    lineWidth?: number,
+    dash?: Array<number>, // [0.01, 0.01]
+    cornerRadius?: number,  // 0
+    cornerSides?: number, // 1
+    pointsPosition?: 'center' | 'outside' | 'inside',
+    maxCornerExtension?: number,
+    maxCornerClip?: 'straight' | { radius: number, sides: number} | 'radius',
+    color?: Array<number>
+  }>) {
+    const defaultOptions = {
+      points: [],
+      color: [1, 0, 0, 1],
+      lineWidth: 0.01,
+      dash: [1],
+      cornerRadius: 0,
+      cornerSides: 1,
+      pointsPosition: 'center',
+      maxCornerWidth: null,
+      cornerClip?: 'straight',
+    }
+  } 
+
   fan(...optionsIn: Array<{
     points?: Array<Point>,
     color?: Array<number>,
