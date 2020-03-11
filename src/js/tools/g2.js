@@ -959,6 +959,9 @@ class Line {
     return true;
   }
 
+  // left, right, top, bottom is relative to cartesian coordinates
+  // 'outside' is the outside of a polygon defined in the positive direction
+  // (CCW).
   offset(
     direction: 'left' | 'right' | 'top' | 'bottom' | 'outside' | 'inside',
     space: number,
@@ -2305,9 +2308,48 @@ function cutCorner(
   return circleCorner(p2Max, p1, p3Max, sides);
 }
 
-// function thickenCorner(p2: Point, p1: Point, p3: Point, width: number) {
-//   const line12 = new Line(p1, p2);
-// }
+function thickenCorner(
+  p2: Point, p1: Point, p3: Point,
+  width: number, minAngle: number = Math.PI / 7,
+) {
+  const line21 = new Line(p2, p1);
+  const out21 = line21.offset('outside', width);
+
+  const line13 = new Line(p1, p3);
+  const out13 = line13.offset('outside', width);
+
+  const angle = threePointAngleMin(p2, p1, p3);
+  if (angle === Math.PI) {
+    return [p1, out13.p1];
+  }
+  
+  const angleMag = Math.abs(angle);
+  let position = 'outside';
+  if (angleMag / angle > 0) {
+    position = 'inside';
+  }
+
+  if (angleMag > minAngle) {
+    const p = out21.intersectsWith(out13).intersect;
+    return [p1, p];
+  }
+
+  // make a tangent line to the corner
+  const tangent = new Line(p1, 1, line13.angle() + angle / 2);
+
+  // if angle is -ve, then the thicken line is outside an acute angle
+  // if angle is +ve, then the thicken line is inside an acute angle
+  if (position === 'outside') {
+    const out2 = out21.intersectsWith(tangent).intersect;
+    const out3 = out13.intersectsWith(tangent).intersect;
+    return [p1, out2, p1, out3];
+  }
+
+  // otherwise position is on the inside
+  const out2 = out21.intersectsWith(line13).intersect;
+  const out3 = out13.intersectsWith(line21).intersect;
+  return [p1, out2, p1, out3];
+}
 
 export {
   point,
@@ -2346,5 +2388,5 @@ export {
   quadBezierPoints,
   circleCorner,
   cutCorner,
-  // cornerToWidth
+  thickenCorner
 };
