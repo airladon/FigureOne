@@ -960,7 +960,7 @@ class Line {
   }
 
   offset(
-    direction: 'left' | 'right' | 'top' | 'bottom',
+    direction: 'left' | 'right' | 'top' | 'bottom' | 'outside' | 'inside',
     space: number,
   ) {
     let normalizedAngle = this.ang;
@@ -971,7 +971,11 @@ class Line {
       normalizedAngle += Math.PI;
     }
     let offsetAngle = normalizedAngle - Math.PI / 2;
-    if (normalizedAngle < Math.PI / 2) {
+    if (direction === 'inside') {
+      offsetAngle = clipAngle(this.ang, '0to360') + Math.PI / 2;
+    } else if (direction === 'outside') {
+      offsetAngle = clipAngle(this.ang, '0to360') - Math.PI / 2;
+    } else if (normalizedAngle < Math.PI / 2) {
       if (direction === 'left' || direction === 'top') {
         offsetAngle = normalizedAngle + Math.PI / 2;
       }
@@ -2301,6 +2305,10 @@ function cutCorner(
   return circleCorner(p2Max, p1, p3Max, sides);
 }
 
+// function thickenCorner(p2: Point, p1: Point, p3: Point, width: number) {
+//   const line12 = new Line(p1, p2);
+// }
+
 export {
   point,
   Point,
@@ -2338,4 +2346,5 @@ export {
   quadBezierPoints,
   circleCorner,
   cutCorner,
+  // cornerToWidth
 };
