@@ -1,5 +1,5 @@
 import {
-  Point, circleCorner, radiusCorner,
+  Point, circleCorner, cutCorner, polarToRect,
 } from './g2';
 import { round } from './math';
 
@@ -16,6 +16,8 @@ describe('g2 corner tests', () => {
   let getRadiusCorner;
   let q145;
   let q145Reverse;
+  let _60;
+  let _60Reverse;
   beforeEach(() => {
     q1Right = [new Point(1, 0), new Point(0, 0), new Point(0, 1)];
     q1RightReverse = q1Right.slice().reverse();
@@ -30,9 +32,15 @@ describe('g2 corner tests', () => {
       new Point(0, 0),
       new Point(Math.cos(Math.PI / 4), Math.sin(Math.PI / 4)),
     ];
+    _60 = [
+      new Point(1, 0),
+      new Point(0, 0),
+      new Point(Math.cos(Math.PI / 3), Math.sin(Math.PI / 3)),
+    ];
+    _60Reverse = _60.slice().reverse();
     q145Reverse = q145.slice().reverse();
     getCorner = (p, sides) => circleCorner(p[0], p[1], p[2], sides);
-    getRadiusCorner = (p, r, s) => radiusCorner(p[0], p[1], p[2], r, s);
+    getRadiusCorner = (p, s, style, v) => cutCorner(p[0], p[1], p[2], s, style, v);
   });
   describe('circelCorner', () => {
     test('0 sides', () => {
@@ -149,12 +157,75 @@ describe('g2 corner tests', () => {
     });
   });
   describe('radiusCorner', () => {
-    test('q1Right 0.5 chamfer', () => {
-      const points = getRadiusCorner(q1Right, 0.5, 1);
+    test('q1Right 0.6 chamfer', () => {
+      const points = getRadiusCorner(q1Right, 1, 'fromVertex', 0.6);
       expect(round(points)).toEqual([
-        new Point(0.5, 0),
-        new Point(0, 0.5),
+        new Point(0.6, 0),
+        new Point(0, 0.6),
       ]);
     });
+    test('q1Right Reverse 0.6 chamfer', () => {
+      const points = getRadiusCorner(q1RightReverse, 1, 'fromVertex', 0.6);
+      expect(round(points)).toEqual([
+        new Point(0, 0.6),
+        new Point(0.6, 0),
+      ]);
+    });
+    test('q1Right 0.6 radius chamfer', () => {
+      const points = getRadiusCorner(q1Right, 1, 'radius', 0.6);
+      const value = 0.6 / Math.tan(Math.PI / 4);
+      expect(round(points)).toEqual(round([
+        new Point(value, 0),
+        new Point(0, value),
+      ]));
+    });
+    test('_60 0.6 chamfer', () => {
+      const points = getRadiusCorner(_60, 1, 'fromVertex', 0.6);
+      expect(round(points)).toEqual(round([
+        new Point(0.6, 0),
+        polarToRect(0.6, Math.PI / 3),
+      ]));
+    });
+    test('_60 0.2 radius', () => {
+      const points = getRadiusCorner(_60, 2, 'radius', 0.2);
+      const center = new Point(0.2 / Math.tan(Math.PI / 6), 0.2);
+
+      expect(round(points)).toEqual(round([
+        new Point(center.x, 0),
+        polarToRect(0.2, -150 * Math.PI / 180).add(center),
+        polarToRect(0.2, -210 * Math.PI / 180).add(center),
+      ]));
+    });
+    test('_60 reversed 0.2 radius', () => {
+      const points = getRadiusCorner(_60Reverse, 2, 'radius', 0.2);
+      const center = new Point(0.2 / Math.tan(Math.PI / 6), 0.2);
+
+      expect(round(points)).toEqual(round([
+        polarToRect(0.2, -210 * Math.PI / 180).add(center),
+        polarToRect(0.2, -150 * Math.PI / 180).add(center),
+        new Point(center.x, 0),
+      ]));
+    });
+    test('_60 max', () => {
+      const points = getRadiusCorner(_60, 2, 'max');
+      const center = new Point(1, 1 * Math.tan(Math.PI / 6));
+      const mag = center.y;
+
+      expect(round(points)).toEqual(round([
+        new Point(center.x, 0),
+        polarToRect(mag, -150 * Math.PI / 180).add(center),
+        polarToRect(mag, -210 * Math.PI / 180).add(center),
+      ]));
+    });
+    // test('q1 45 0.6 chamfer', () => {
+    //   const points = getRadiusCorner(q145, 0.5, 1);
+    //   const _225 = Math.PI / 8;
+    //   const C = 1 / Math.cos(_225);
+    //   const center = new Point(C * Math.cos(_225), C * Math.sin(_225));
+    //   expect(round(points)).toEqual([
+    //     new Point(0.5, 0),
+    //     new Point(0.5, 0),
+    //   ]);
+    // });
   });
 });
