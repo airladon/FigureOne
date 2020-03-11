@@ -52,7 +52,7 @@ toc:
   - TypeEquationForms
   - TypeFormRestart
   - name: Equation Option Types
-  - TypeEquationOptions
+  - EQN_Equation
   - TypeEquationGoToFormOptions
   - name: Equations
   - Equation

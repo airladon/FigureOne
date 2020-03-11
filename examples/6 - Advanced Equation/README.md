@@ -160,7 +160,7 @@ Especially in larger, more complicated equations, doing inline form definition o
 
 In the example code then, we have several elements including `f`, `x`, `dx`, `a` and `b` to name just a few that are defined in the form itself.
 
-### Equation Functions
+### Equation Layout Functions
 
 An equation form is a series of equation elements that are laid out sequentially in an array.
 

@@ -64548,7 +64548,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationOptions",
+    "name": "EQN_Equation",
     "kind": "typedef",
     "type": {
       "type": "RecordType",
@@ -64694,7 +64694,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationOptions",
+        "name": "EQN_Equation",
         "kind": "typedef"
       }
     ],
@@ -64705,7 +64705,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationOptions"
+    "namespace": "EQN_Equation"
   },
   {
     "description": {
@@ -65413,13 +65413,13 @@
                     },
                     {
                       "type": "link",
-                      "url": "TypeEquationOptions",
+                      "url": "EQN_Equation",
                       "title": null,
                       "jsdoc": true,
                       "children": [
                         {
                           "type": "text",
-                          "value": "TypeEquationOptions"
+                          "value": "EQN_Equation"
                         }
                       ],
                       "position": {
@@ -65571,13 +65571,13 @@
                     },
                     {
                       "type": "link",
-                      "url": "TypeEquationOptions",
+                      "url": "EQN_Equation",
                       "title": null,
                       "jsdoc": true,
                       "children": [
                         {
                           "type": "text",
-                          "value": "TypeEquationOptions"
+                          "value": "EQN_Equation"
                         }
                       ],
                       "position": {
@@ -67841,7 +67841,7 @@
         "lineNumber": 3,
         "type": {
           "type": "NameExpression",
-          "name": "TypeEquationOptions"
+          "name": "EQN_Equation"
         },
         "name": "options"
       },
@@ -67910,7 +67910,7 @@
         "lineNumber": 3,
         "type": {
           "type": "NameExpression",
-          "name": "TypeEquationOptions"
+          "name": "EQN_Equation"
         },
         "default": "{}"
       }
