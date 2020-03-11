@@ -31,6 +31,9 @@ const roundNum = (value: number, precision: number = 5): number => {
   return result;
 };
 
+type TypeRoundObject = {
+  round?: (number) => TypeRoundObject;
+} & Object;
 /**
  * Rounds a number or numbers in an array
  * @method
@@ -38,7 +41,7 @@ const roundNum = (value: number, precision: number = 5): number => {
  * @param {number} precision - Number of decimal places to round to
  * @returns {number | Array<number>} Rounded value or array of values
  */
-function round<T: number | Array<number>>(
+function round<T: number | TypeRoundObject | Array<number | TypeRoundObject>>(
   arrayOrValue: T,
   precision: number = 5,
 ): T {
@@ -48,6 +51,8 @@ function round<T: number | Array<number>>(
   }
   if (typeof arrayOrValue === 'number') {
     result = roundNum(arrayOrValue, precision);
+  } else if (arrayOrValue.round != null) {
+    result = arrayOrValue.round(precision);
   }
   // $FlowFixMe
   return result;

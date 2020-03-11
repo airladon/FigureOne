@@ -2186,6 +2186,113 @@ function quadBezierPoints(p0: Point, p1: Point, p2: Point, sides: number) {
   return points;
 }
 
+//
+// Make a circular corner between points - P2 and p3 must be the same
+// distance from p1
+//
+//               .....................................
+//          p3  0                                     0 center
+//              0                                  0  .
+//              0                               0   b .
+//              0                            0        .
+//              0                         0           .
+//              0                C     0              .
+//              0                   0                 .
+//              0                0                    .  A
+//              0             0                       .
+//              0          0                          .
+//              0       0                             .
+//              0    0                                .
+//              0 0  a                              c .
+//              000000000000000000000000000000000000000
+//          p1                     B                    p2
+//
+//
+function circleCorner(p2in: Point, p1: Point, p3in: Point, sides: number): Array<Point> {
+  // If sides is 0 or negative, then return the original points
+  if (sides < 1) {
+    return [p2in._dup(), p1._dup(), p3in._dup()];
+  }
+
+  // If sides is 1, then return the chamfer
+  if (sides === 1) {
+    return [p2in._dup(), p3in._dup()];
+  }
+
+  let p2 = p2in._dup();
+  let p3 = p3in._dup();
+  const points: Array<Point> = [];
+
+  const angle12To13 = threePointAngle(p2, p1, p3);
+  if (angle12To13 === Math.PI || angle12To13 === 0) {
+    points.push(p2in._dup());
+    for (let i = 0; i < sides - 2; i += 1) {
+      points.push(p1._dup());
+    }
+    points.push(p3in._dup());
+    return points;
+  }
+
+  let reverse = false;
+  if (angle12To13 > Math.PI) {
+    p2 = p3in;
+    p3 = p2in;
+    reverse = true;
+  }
+
+  const line12 = new Line(p1, p2);
+  let _2a = threePointAngle(p2, p1, p3);
+  if (_2a > Math.PI) {
+    _2a = Math.PI - _2a;
+  }
+  const a = _2a / 2;
+  const c = Math.PI / 2;
+  const B = line12.length();
+  const C = Math.sin(c) / Math.sin(a) * B;
+  const center = new Point(
+    p1.x + C * Math.cos(a + line12.angle()),
+    p1.y + C * Math.sin(a + line12.angle()),
+  );
+  let _2b = threePointAngle(p2, center, p3);
+  if (_2b > Math.PI) {
+    _2b = Math.PI - _2b;
+  }
+  const delta = _2b / sides;
+  const lineC2 = new Line(center, p2);
+  const angleC2 = lineC2.angle();
+  const magC2 = lineC2.length();
+  points.push(p2);
+  for (let i = 0; i < sides - 1; i += 1) {
+    const angle = angleC2 + (i + 1) * delta;
+    points.push(new Point(
+      center.x + magC2 * Math.cos(angle),
+      center.y + magC2 * Math.sin(angle),
+    ));
+  }
+  points.push(p3);
+  if (reverse) {
+    return points.reverse();
+  }
+  return points;
+}
+
+function radiusCorner(
+  p2: Point, p1: Point, p3: Point,
+  radiusIn: number | 'max', sides: number,
+): Array<Point> {
+  const line12 = new Line(p1, p2);
+  const line13 = new Line(p1, p3);
+  let radius;
+  if (radiusIn === 'max') {
+    radius = Math.min(line12.length(), line13.length());
+  } else {
+    radius = radiusIn;
+  }
+  const p2Max = line12.pointAtPercent(radius / line12.length());
+  const p3Max = line13.pointAtPercent(radius / line13.length());
+  // console.log(p2Max, p3Max)
+  return circleCorner(p2Max, p1, p3Max, sides);
+}
 
 export {
   point,
@@ -2222,4 +2329,6 @@ export {
   spaceToSpaceScale,
   getPoint,
   quadBezierPoints,
+  circleCorner,
+  radiusCorner,
 };
