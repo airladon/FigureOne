@@ -117,20 +117,33 @@ describe('g2 corner tests', () => {
       ]));
     });
     test('q1 45', () => {
+      // console.log(q145)
       const points = getCorner(q145, 2);
-      const _45 = Math.PI / 4;
+      const _225 = Math.PI / 8;
+      const C = 1 / Math.cos(_225);
+      const center = new Point(C * Math.cos(_225), C * Math.sin(_225));
+      const r = center.y;
       expect(round(points)).toEqual(round([
         q145[0],
-        new Point(1 / Math.cos(_45) - 1 / Math.sqrt(2), 1 / Math.sin(_45) - 1 / Math.sqrt(2)),
+        center.add(new Point(
+          r * Math.cos(_225 * -7),
+          r * Math.sin(_225 * -7),
+        )),
         q145[2],
       ]));
     });
     test('q1 45 Reverse', () => {
       const points = getCorner(q145Reverse, 2);
-      const _45 = Math.PI / 4;
+      const _225 = Math.PI / 8;
+      const C = 1 / Math.cos(_225);
+      const center = new Point(C * Math.cos(_225), C * Math.sin(_225));
+      const r = center.y;
       expect(round(points)).toEqual(round([
         q145Reverse[0],
-        new Point(1 / Math.cos(_45) - 1 / Math.sqrt(2), 1 / Math.sin(_45) - 1 / Math.sqrt(2)),
+        center.add(new Point(
+          r * Math.cos(_225 * -7),
+          r * Math.sin(_225 * -7),
+        )),
         q145Reverse[2],
       ]));
     });

@@ -2058,7 +2058,61 @@ describe('g2 tests', () => {
     test('right angle at origin other way', () => {
       const points = [new Point(0, 1), new Point(0, 0), new Point(1, 0)];
       const angle = threePointAngleMin(points[0], points[1], points[2]);
-      expect(round(angle)).toBe(round(Math.PI / 2));
+      expect(round(angle)).toBe(round(-Math.PI / 2));
+    });
+    test('30, 270', () => {
+      const points = [
+        new Point(1, 0).rotate(Math.PI / 6),
+        new Point(0, 0),
+        new Point(1, 0).rotate(Math.PI / 2 * 3),
+      ];
+      const angle = threePointAngleMin(points[0], points[1], points[2]);
+      expect(round(angle)).toBe(round(-120 * Math.PI / 180));
+    });
+    test('270, 30', () => {
+      const points = [
+        new Point(1, 0).rotate(Math.PI / 2 * 3),
+        new Point(0, 0),
+        new Point(1, 0).rotate(Math.PI / 6),
+      ];
+      const angle = threePointAngleMin(points[0], points[1], points[2]);
+      expect(round(angle)).toBe(round(120 * Math.PI / 180));
+    });
+    test('120, 200', () => {
+      const points = [
+        new Point(1, 0).rotate(120 * Math.PI / 180),
+        new Point(0, 0),
+        new Point(1, 0).rotate(200 * Math.PI / 180),
+      ];
+      const angle = threePointAngleMin(points[0], points[1], points[2]);
+      expect(round(angle)).toBe(round(80 * Math.PI / 180));
+    });
+    test('200, 120', () => {
+      const points = [
+        new Point(1, 0).rotate(200 * Math.PI / 180),
+        new Point(0, 0),
+        new Point(1, 0).rotate(120 * Math.PI / 180),
+      ];
+      const angle = threePointAngleMin(points[0], points[1], points[2]);
+      expect(round(angle)).toBe(round(-80 * Math.PI / 180));
+    });
+    test('270, 0', () => {
+      const points = [
+        new Point(1, 0).rotate(270 * Math.PI / 180),
+        new Point(0, 0),
+        new Point(1, 0).rotate(0 * Math.PI / 180),
+      ];
+      const angle = threePointAngleMin(points[0], points[1], points[2]);
+      expect(round(angle)).toBe(round(90 * Math.PI / 180));
+    });
+    test('0, 270', () => {
+      const points = [
+        new Point(1, 0).rotate(0 * Math.PI / 180),
+        new Point(0, 0),
+        new Point(1, 0).rotate(270 * Math.PI / 180),
+      ];
+      const angle = threePointAngleMin(points[0], points[1], points[2]);
+      expect(round(angle)).toBe(round(-90 * Math.PI / 180));
     });
   });
 });
