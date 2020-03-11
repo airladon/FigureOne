@@ -217,15 +217,5 @@ describe('g2 corner tests', () => {
         polarToRect(mag, -210 * Math.PI / 180).add(center),
       ]));
     });
-    // test('q1 45 0.6 chamfer', () => {
-    //   const points = getRadiusCorner(q145, 0.5, 1);
-    //   const _225 = Math.PI / 8;
-    //   const C = 1 / Math.cos(_225);
-    //   const center = new Point(C * Math.cos(_225), C * Math.sin(_225));
-    //   expect(round(points)).toEqual([
-    //     new Point(0.5, 0),
-    //     new Point(0.5, 0),
-    //   ]);
-    // });
   });
 });

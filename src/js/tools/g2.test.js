@@ -614,6 +614,54 @@ describe('g2 tests', () => {
         expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, 0));
         expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, 0));
       });
+      test('Offset 45 to outside', () => {
+        const l = new Line(new Point(0, 0), 1, Math.PI / 4);
+        const o = l.offset('outside', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, -Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, -Math.PI / 4));
+      });
+      test('Offset 135 to outside', () => {
+        const l = new Line(new Point(0, 0), 1, Math.PI / 4 * 3);
+        const o = l.offset('outside', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, Math.PI / 4));
+      });
+      test('Offset 225 to outside', () => {
+        const l = new Line(new Point(0, 0), 1, Math.PI / 4 * 5);
+        const o = l.offset('outside', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, Math.PI / 4 * 3));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, Math.PI / 4 * 3));
+      });
+      test('Offset 315 to outside', () => {
+        const l = new Line(new Point(0, 0), 1, Math.PI / 4 * 7);
+        const o = l.offset('outside', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, Math.PI / 4 * 5));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, Math.PI / 4 * 5));
+      });
+      test('Offset 45 to inside', () => {
+        const l = new Line(new Point(0, 0), 1, Math.PI / 4);
+        const o = l.offset('inside', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, Math.PI / 4 * 3));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, Math.PI / 4 * 3));
+      });
+      test('Offset 135 to inside', () => {
+        const l = new Line(new Point(0, 0), 1, Math.PI / 4 * 3);
+        const o = l.offset('inside', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, Math.PI / 4 * 5));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, Math.PI / 4 * 5));
+      });
+      test('Offset 225 to inside', () => {
+        const l = new Line(new Point(0, 0), 1, Math.PI / 4 * 5);
+        const o = l.offset('inside', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, Math.PI / 4 * 7));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, Math.PI / 4 * 7));
+      });
+      test('Offset 315 to inside', () => {
+        const l = new Line(new Point(0, 0), 1, Math.PI / 4 * 7);
+        const o = l.offset('inside', 0.1);
+        expect(o.p1.round()).toEqual(offsetter(l.p1, 0.1, Math.PI / 4));
+        expect(o.p2.round()).toEqual(offsetter(l.p2, 0.1, Math.PI / 4));
+      });
     });
     describe('Lines can have points within them', () => {
       test('Line <0, 0 2, 0> has point 1, 0 within it', () => {
