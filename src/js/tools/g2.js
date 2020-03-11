@@ -2279,21 +2279,25 @@ function circleCorner(p2in: Point, p1: Point, p3in: Point, sides: number): Array
   return points;
 }
 
-function radiusCorner(
+function cutCorner(
   p2: Point, p1: Point, p3: Point,
-  radiusIn: number | 'max', sides: number,
+  sides: number, style: 'radius' | 'fromVertex' | 'max', value: number,
 ): Array<Point> {
   const line12 = new Line(p1, p2);
   const line13 = new Line(p1, p3);
-  let radius;
-  if (radiusIn === 'max') {
-    radius = Math.min(line12.length(), line13.length());
-  } else {
-    radius = radiusIn;
+  let cut;
+  if (style === 'fromVertex') {
+    cut = value;
+  } else if (style === 'radius') {
+    const angle = Math.abs(threePointAngleMin(p2, p1, p3)) / 2;
+    cut = value / Math.tan(angle);
+  } else if (style === 'max') {
+    cut = Math.min(line12.length(), line13.length());
   }
-  const p2Max = line12.pointAtPercent(radius / line12.length());
-  const p3Max = line13.pointAtPercent(radius / line13.length());
-  // console.log(p2Max, p3Max)
+  cut = Math.min(cut, line12.length(), line13.length());
+  const p2Max = line12.pointAtPercent(cut / line12.length());
+  const p3Max = line13.pointAtPercent(cut / line13.length());
+
   return circleCorner(p2Max, p1, p3Max, sides);
 }
 
@@ -2333,5 +2337,5 @@ export {
   getPoint,
   quadBezierPoints,
   circleCorner,
-  radiusCorner,
+  cutCorner,
 };
