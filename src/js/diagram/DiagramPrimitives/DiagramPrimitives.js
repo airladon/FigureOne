@@ -28,6 +28,7 @@ import RadialLines from '../DiagramElements/RadialLines';
 import HorizontalLine from '../DiagramElements/HorizontalLine';
 import DashedLine from '../DiagramElements/DashedLine';
 import RectangleFilled from '../DiagramElements/RectangleFilled';
+import Rectangle from '../DiagramElements/Rectangle';
 import Box from '../DiagramElements/Box';
 // import type { TypeRectangleFilledReference } from '../DiagramElements/RectangleFilled';
 import Lines from '../DiagramElements/Lines';
@@ -121,6 +122,61 @@ export type OBJ_Polygon = {
   linePrimitives?: boolean,
   center?: TypeParsablePoint,
 };
+
+/**
+  Curved Corner Definition
+ */
+export type OBJ_CurvedCorner = {
+  radius?: number,
+  sides?: number,
+};
+
+/**
+ * Rectangle shape options object
+ *
+ * ![](./assets1/rectangle.png)
+ *
+ * @property {'bottom' | 'middle' | 'top' | number} [yAlign] (`'middle'`)
+ * @property {'left' | 'center' | 'right' | number} [xAlign] (`'center'`)
+ * @property {number} [width] (`1`)
+ * @property {number} [height] (`1`)
+ * @property {boolean} [fill] (`false`)
+ * @property {OBJ_CurvedCorner} [corner] define for rounded corners
+ * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
+ * @property {Point} [position] convenience to override Transform translation
+ * @property {Transform} [transform] (`Transform('rectangle').standard()`)
+ * @property {number} [pulse] set the default pulse scale
+ * @example
+ * // Filled rectangle
+ * diagram.addElement(
+ *  {
+ *    name: 'r',
+ *    method: 'rectangle',
+ *    options: {
+ *      width: 0.4,
+ *      height: 0.2,
+ *      fill: true,
+ *    },
+ *  },
+ * );
+ * @example
+ * // Rectangle with rounded corners
+ */
+export type OBJ_Rectangle = {
+  yAlign?: 'bottom' | 'middle' | 'top' | number,
+  xAlign?: 'left' | 'center' | 'right' | number,
+  width?: number,
+  height?: number,
+  fill?: boolean,
+  corner?: {
+    radius?: number,
+    sides?: number,
+  },
+  color?: Array<number>,
+  transform?: Transform,
+  position?: Point,
+  pulse?: number,
+}
 
 export type TypeTextOptions = {
   text?: string;
@@ -806,13 +862,6 @@ export default class DiagramPrimitives {
         options.trianglePrimitives,
       );
     }
-    // const defaultOptions = {
-//       mods: {},
-//       center: new Point(0, 0),
-//       trianglePrimitives: false,
-//       linePrimitives: false,
-//       angleToDraw: null,
-//     };
 
     if (options.pulse != null && typeof element.pulseDefault !== 'function') {
       element.pulseDefault.scale = options.pulse;
@@ -904,33 +953,20 @@ export default class DiagramPrimitives {
   //   );
   // }
 
-  rectangle(...optionsIn: Array<{
-    yAlign?: 'bottom' | 'middle' | 'top' | number,
-    xAlign?: 'left' | 'center' | 'right' | number,
-    width?: number,
-    height?: number,
-    fill?: boolean,
-    corner?: {
-      radius?: number,
-      sides?: number,
-    },
-    colors?: Array<number>,
-    transform?: Transform,
-    position?: Point,
-    pulse?: number,
-  }>) {
+  rectangle(...optionsIn: Array<OBJ_Rectangle>) {
     const defaultOptions = {
       yAlign: 'middle',
       xAlign: 'center',
       width: 1,
       height: 1,
+      lineWidth: 0.01,
       corner: {
         radius: 0,
         sides: 1,
       },
       fill: false,
       color: [1, 0, 0, 1],
-      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
+      transform: new Transform('rectangle').scale(1, 1).rotate(0).translate(0, 0),
       position: null,
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -940,10 +976,20 @@ export default class DiagramPrimitives {
     if (typeof options.reference !== 'string') {
       options.reference = getPoint(options.reference);
     }
-    const element = RectangleFilled(
-      this.webgl, options.xAlign, options.yAlign, options.width, options.height,
-      options.corner.radius, options.corner.sides, options.color, options.transform, this.limits,
-    );
+    let element;
+    if (options.fill) {
+      element = RectangleFilled(
+        this.webgl, options.xAlign, options.yAlign, options.width, options.height,
+        options.corner.radius, options.corner.sides, options.color, options.transform, this.limits,
+      );
+    } else {
+      element = Rectangle(
+        this.webgl, options.xAlign, options.yAlign, options.width,
+        options.height, options.lineWidth, options.corner.radius,
+        options.corner.sides, options.color, options.transform, this.limits,
+      );
+    }
+
     if (options.pulse != null && typeof element.pulseDefault !== 'function') {
       element.pulseDefault.scale = options.pulse;
     }
