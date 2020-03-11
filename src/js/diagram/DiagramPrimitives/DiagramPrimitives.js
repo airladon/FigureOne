@@ -42,7 +42,7 @@ import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { TypeSpaceTransforms } from '../Diagram';
 
 /**
- * Polygon or partial polygon shape
+ * Polygon or partial polygon shape options object
  *
  * ![](./assets1/polygon.png)
  *

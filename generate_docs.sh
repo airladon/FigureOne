@@ -5,7 +5,7 @@ mv docs/assets/style1.css docs/assets/style.css
 
 python ./docs/tools/html_cleaner.py
 
-if [ $1 = 'html' ];
+if [ "$1" = "html" ];
 then
   exit
 fi
