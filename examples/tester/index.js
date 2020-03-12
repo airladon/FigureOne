@@ -5,7 +5,7 @@ const { thickenCorner, thickenLine } = Fig.tools.g2;
 
 const line = [
   new Point(1.5, 0),
-  new Point(0.75, 0.000000001),
+  new Point(0.75, 0.05),
   new Point(0, 0),
 ];
 // const thickLine = [
@@ -18,13 +18,13 @@ const line = [
 
 // console.log(thickLine)
 // Add elements to the diagram
-console.log(thickenLine(line, 0.06, false, 'mid'))
+// console.log(thickenLine(line, 0.06, false, 'mid'))
 diagram.addElements([
   {
     name: 'r',
     method: 'shapes.generic',
     options: {
-      points: thickenLine(line, 0.06, true, 'mid'),
+      points: thickenLine(line, 0.06, true, 'inside'),
       drawType: 'strip',
       position: [-0.7, -0.5],
     },

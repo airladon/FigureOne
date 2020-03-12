@@ -2410,28 +2410,25 @@ function thickenCorner(
   //   For open line: want out2 to be (1, offset perp from 1)
   //
   // console.log(out2, offset21, line13)
-  if (out2 == null || !out2.isOnLine(offset21, 8) || !out2.isOnLine(line13, 8)) {
+  if (out2 == null) {
+    out2 = p2._dup();
+  } else if (!out2.isOnLine(offset21, 8) || !out2.isOnLine(line13, 8)) {
     const perpendicular1 = new Line(p1, width, line21.angle() - Math.PI / 2);
-    if (openLine && out2 != null) {
+    if (openLine) {
       out2 = perpendicular1.p2;
-    } else if (out2 != null && out2.isOnLine(line13, 8)) {
+    } else if (out2.isOnLine(line13, 8)) {
       const perpendicular2 = new Line(p2, 1, line21.angle() - Math.PI / 2);
       const perpIntersect = perpendicular2.intersectsWith(line13).intersect;
       out2 = perpIntersect;
     } else {
       out2 = p3._dup();
     }
-    // const perpendicular2 = new Line(p2, 1, line21.angle() - Math.PI / 2);
-    // const perpIntersect = perpendicular2.intersectsWith(line13).intersect;
-    // if (perpIntersect.isOnLine(line13, 8)) {
-    //   out2 = perpIntersect.intersect;
-    // } else {
-    //   out2 = p3._dup();
-    // }
   }
 
   let out3 = offset13.intersectsWith(line21).intersect;
-  if (out3 == null || !out3.isOnLine(offset13, 8) || !out3.isOnLine(line21, 8)) {
+  if (out3 == null) {
+    out3 = p1._dup();
+  } else if (!out3.isOnLine(offset13, 8) || !out3.isOnLine(line21, 8)) {
     const perpendicular1 = new Line(p1, width, line13.angle() - Math.PI / 2);
     if (openLine && out3 != null) {
       out3 = perpendicular1.p2;
@@ -2442,23 +2439,8 @@ function thickenCorner(
     } else {
       out3 = p2._dup();
     }
-    // const perpendicular2 = new Line(p2, 1, line21.angle() - Math.PI / 2);
-    // const perpIntersect = perpendicular2.intersectsWith(line13).intersect;
-    // if (perpIntersect.isOnLine(line13, 8)) {
-    //   out2 = perpIntersect.intersect;
-    // } else {
-    //   out2 = p3._dup();
-    // }
   }
-  // if (!out3.isOnLine(offset13, 8) || !out3.isOnLine(line21, 8)) {
-  //   const perpendicular3 = new Line(p3, 1, line13.angle() - Math.PI / 2);
-  //   const perpIntersect = perpendicular3.intersectsWith(line13).intersect;
-  //   if (perpIntersect.isOnLine(line21, 8)) {
-  //     out3 = perpIntersect.intersect;
-  //   } else {
-  //     out3 = p2._dup();
-  //   }
-  // }
+
   return [p1._dup(), out2, p1._dup(), out3];
 }
 
