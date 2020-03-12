@@ -2367,10 +2367,12 @@ function makeThickLine(
   return out;
 }
 
+/* eslint-disable yoda */
 function makeThickLineMid(
   points: Array<Point>,
   width: number = 0.01,
   close: boolean = false,
+  minAngleIn: ?number = Math.PI / 7,
 ) {
   const out = [];
   const lineSegments = [];
@@ -2389,24 +2391,52 @@ function makeThickLineMid(
     makeLineSegment(points[points.length - 1], points[0]);
   }
 
+  const joinLinesInPoint = (line1, lineNext) => {
+    const intersect = line1.intersectsWith(lineNext);
+    if (intersect.intersect != null) {
+      line1.setP2(intersect.intersect._dup());
+      lineNext.setP1(intersect.intersect._dup());
+    }
+  };
+
+  const joinLinesInTangent = (inside, insideNext, mid, midNext, outside, outsideNext) => {
+    const angle = threePointAngleMin(mid.p1, mid.p2, midNext.p2);
+    const tangent = new Line(mid.p2, 1, mid.angle() + angle / 2 + Math.PI / 2);
+    let intercept = tangent.intersectsWith(outside);
+    if (intercept.intersect != null) {
+      outside.setP2(intercept.intersect);
+    }
+    intercept = tangent.intersectsWith(inside);
+    if (intercept.intersect != null) {
+      inside.setP2(intercept.intersect);
+    }
+
+    intercept = tangent.intersectsWith(outsideNext);
+    if (intercept.intersect != null) {
+      outsideNext.setP1(intercept.intersect);
+    }
+    intercept = tangent.intersectsWith(insideNext);
+    if (intercept.intersect != null) {
+      insideNext.setP1(intercept.intersect);
+    }
+  };
+
+  const minAngle = minAngleIn == null ? 0 : minAngleIn;
   const joinLineSegments = (current, next) => {
     const [inside, mid, outside] = lineSegments[current];
     const [insideNext, midNext, outsideNext] = lineSegments[next];
     const angle = threePointAngle(mid.p1, mid.p2, midNext.p2);
-    if (angle > 0 && angle < Math.PI) {
-      const intersect = inside.intersectsWith(insideNext);
-      if (intersect.intersect !== undefined) {
-        inside.setP2(intersect.intersect._dup());
-        insideNext.setP1(intersect.intersect._dup());
-      }
-    } else if (angle > Math.PI && angle < Math.PI * 2) {
-      const intersect = outside.intersectsWith(outsideNext);
-      if (intersect.intersect !== undefined) {
-        outside.setP2(intersect.intersect._dup());
-        outsideNext.setP1(intersect.intersect._dup());
-      }
+    if (0 < angle && angle < minAngle) {
+      joinLinesInTangent(outside, outsideNext, mid, midNext, inside, insideNext);
+    } else if (minAngle < angle && angle < Math.PI) {
+      joinLinesInPoint(inside, insideNext);
+    } else if (Math.PI < angle && angle < Math.PI * 2 - minAngle) {
+      joinLinesInPoint(outside, outsideNext);
+    } else if (Math.PI * 2 - minAngle < angle && angle < Math.PI * 2) {
+      joinLinesInTangent(inside, insideNext, mid, midNext, outside, outsideNext);
     }
-  }
+  };
+
   for (let i = 0; i < lineSegments.length - 1; i += 1) {
     joinLineSegments(i, i + 1);
   }
