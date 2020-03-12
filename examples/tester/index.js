@@ -6,6 +6,7 @@ const {
   makeThickLineMid,
   makeThickLineInside,
   makeThickLineOutside,
+  makePolyLine,
 } = Fig.tools.g2;
 
 const line = [
@@ -13,17 +14,7 @@ const line = [
   new Point(0.75, 0.2),
   new Point(0, 0),
 ];
-// const thickLine = [
-//   new Point(1, 0),
-//   new Point(1, 0.1),
-//   ...thickenCorner(line[0], line[1], line[2], 0.1),
-//   new Point(0, 1),
-//   new Point(0.1, 1),
-// ];
 
-// console.log(thickLine)
-// Add elements to the diagram
-// console.log(thickenLine(line, 0.06, false, 'mid'))
 const thick = makeThickLineMid(line, 0.1, true);
 console.log(thick)
 diagram.addElements([
@@ -75,7 +66,7 @@ diagram.addElements([
       width: 0.005,
       color: [0.5, 0.5, 0.5, 0.5],
     }
-  }
+  },
 ]);
 
 // Show the equation form
@@ -87,7 +78,7 @@ pad.setTransformCallback = () => {
   const p = pad.getPosition().sub(-0.7, -0.5);
   line[1] = p._dup();
   const r = diagram.getElement('r');
-  const thick = makeThickLineInside(line, 0.1, true, true);
+  const thick = makePolyLine(line, 0.1, true, 'mid', true);
   r.drawingObject.change(thick);
   diagram.animateNextFrame();
 }
