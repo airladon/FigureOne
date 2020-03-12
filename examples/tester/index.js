@@ -1,7 +1,12 @@
 // Create diagram
 const diagram = new Fig.Diagram();
 const { Point } = Fig;
-const { thickenCorner, thickenLine, makeThickLine } = Fig.tools.g2;
+const {
+  thickenCorner, thickenLine,
+  makeThickLineMid,
+  makeThickLineInside,
+  makeThickLineOutside,
+} = Fig.tools.g2;
 
 const line = [
   new Point(1.5, 0),
@@ -19,7 +24,7 @@ const line = [
 // console.log(thickLine)
 // Add elements to the diagram
 // console.log(thickenLine(line, 0.06, false, 'mid'))
-const thick = makeThickLine(line, 0.1, true, 'inside');
+const thick = makeThickLineMid(line, 0.1, true);
 console.log(thick)
 diagram.addElements([
   {
@@ -82,7 +87,7 @@ pad.setTransformCallback = () => {
   const p = pad.getPosition().sub(-0.7, -0.5);
   line[1] = p._dup();
   const r = diagram.getElement('r');
-  const thick = makeThickLine(line, 0.1, true, 'outside');
+  const thick = makeThickLineMid(line, 0.1, true);
   r.drawingObject.change(thick);
   diagram.animateNextFrame();
 }

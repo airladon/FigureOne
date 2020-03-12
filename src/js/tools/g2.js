@@ -763,6 +763,14 @@ class Line {
       );
       this.ang = angle;
     }
+    // this.A = this.p2.y - this.p1.y;
+    // this.B = this.p1.x - this.p2.x;
+    // this.C = this.A * this.p1.x + this.B * this.p1.y;
+    // this.distance = distance(this.p1, this.p2);
+    this.setupLine();
+  }
+
+  setupLine() {
     this.A = this.p2.y - this.p1.y;
     this.B = this.p1.x - this.p2.x;
     this.C = this.A * this.p1.x + this.B * this.p1.y;
@@ -771,6 +779,18 @@ class Line {
 
   _dup() {
     return new Line(this.p1, this.p2);
+  }
+
+  setP1(p1: Point | [number, number]) {
+    this.p1 = getPoint(p1);
+    this.ang = Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
+    this.setupLine();
+  }
+
+  setP2(p2: Point | [number, number]) {
+    this.p2 = getPoint(p2);
+    this.ang = Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
+    this.setupLine();
   }
 
   getPoint(index: number = 1) {
@@ -2346,6 +2366,123 @@ function makeThickLine(
   }
   return out;
 }
+
+function makeThickLineMid(
+  points: Array<Point>,
+  width: number = 0.01,
+  close: boolean = false,
+) {
+  const out = [];
+  const lineSegments = [];
+
+  const makeLineSegment = (p1, p2) => {
+    const lineSegment = new Line(p1, p2);
+    const outsideOffset = lineSegment.offset('outside', width / 2);
+    const insideOffset = lineSegment.offset('inside', width / 2);
+    lineSegments.push([insideOffset, lineSegment, outsideOffset]);
+  };
+
+  for (let i = 0; i < points.length - 1; i += 1) {
+    makeLineSegment(points[i], points[i + 1]);
+  }
+  if (close) {
+    makeLineSegment(points[points.length - 1], points[0]);
+  }
+
+  const joinLineSegments = (current, next) => {
+    const [inside, mid, outside] = lineSegments[current];
+    const [insideNext, midNext, outsideNext] = lineSegments[next];
+    const angle = threePointAngle(mid.p1, mid.p2, midNext.p2);
+    if (angle > 0 && angle < Math.PI) {
+      const intersect = inside.intersectsWith(insideNext);
+      if (intersect.intersect !== undefined) {
+        inside.setP2(intersect.intersect._dup());
+        insideNext.setP1(intersect.intersect._dup());
+      }
+    } else if (angle > Math.PI && angle < Math.PI * 2) {
+      const intersect = outside.intersectsWith(outsideNext);
+      if (intersect.intersect !== undefined) {
+        outside.setP2(intersect.intersect._dup());
+        outsideNext.setP1(intersect.intersect._dup());
+      }
+    }
+  }
+  for (let i = 0; i < lineSegments.length - 1; i += 1) {
+    joinLineSegments(i, i + 1);
+  }
+  if (close) {
+    joinLineSegments(lineSegments.length - 1, 0);
+  }
+
+
+  // Got through each line segment and cornerize
+  lineSegments.forEach((lineSegment) => {
+    const [inside, , outside] = lineSegment;
+    out.push(inside.p1._dup());
+    out.push(outside.p1._dup());
+    out.push(inside.p2._dup());
+    out.push(outside.p1._dup());
+    out.push(inside.p2._dup());
+    out.push(outside.p2._dup());
+  });
+  return out;
+}
+
+function makeThickLineInside(
+  points: Array<Point>,
+  width: number = 0.01,
+  close: boolean = false,
+) {
+  const out = [];
+
+  const makeLineSegment = (p1, p2) => {
+    const lineSegment = new Line(p1, p2);
+    const outsideOffset = lineSegment;
+    const insideOffset = lineSegment.offset('inside', width);
+    out.push(outsideOffset.p1._dup());
+    out.push(insideOffset.p1._dup());
+    out.push(outsideOffset.p2._dup());
+    out.push(insideOffset.p1._dup());
+    out.push(insideOffset.p2._dup());
+    out.push(outsideOffset.p2._dup());
+  }
+
+  for (let i = 0; i < points.length - 1; i += 1) {
+    makeLineSegment(points[i], points[i + 1]);
+  }
+  if (close) {
+    makeLineSegment(points[points.length - 1], points[0]);
+  }
+  return out;
+}
+
+function makeThickLineOutside(
+  points: Array<Point>,
+  width: number = 0.01,
+  close: boolean = false,
+) {
+  const out = [];
+
+  const makeLineSegment = (p1, p2) => {
+    const lineSegment = new Line(p1, p2);
+    const outsideOffset = lineSegment.offset('outside', width);
+    const insideOffset = lineSegment;
+    out.push(outsideOffset.p1._dup());
+    out.push(insideOffset.p1._dup());
+    out.push(outsideOffset.p2._dup());
+    out.push(insideOffset.p1._dup());
+    out.push(insideOffset.p2._dup());
+    out.push(outsideOffset.p2._dup());
+  }
+
+  for (let i = 0; i < points.length - 1; i += 1) {
+    makeLineSegment(points[i], points[i + 1]);
+  }
+  if (close) {
+    makeLineSegment(points[points.length - 1], points[0]);
+  }
+  return out;
+}
 // function thickenCorner(
 //   p2: Point, p1: Point, p3: Point,
 //   width: number = 0.01, minAngle: number = Math.PI / 7,
@@ -2635,5 +2772,7 @@ export {
   cutCorner,
   thickenCorner,
   thickenLine,
-  makeThickLine,
+  makeThickLineMid,
+  makeThickLineInside,
+  makeThickLineOutside,
 };
