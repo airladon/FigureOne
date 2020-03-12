@@ -1,7 +1,7 @@
 // Create diagram
 const diagram = new Fig.Diagram();
 const { Point } = Fig;
-const { thickenCorner, thickenLine } = Fig.tools.g2;
+const { thickenCorner, thickenLine, makeThickLine } = Fig.tools.g2;
 
 const line = [
   new Point(1.5, 0),
@@ -19,13 +19,15 @@ const line = [
 // console.log(thickLine)
 // Add elements to the diagram
 // console.log(thickenLine(line, 0.06, false, 'mid'))
+const thick = makeThickLine(line, 0.1, true, 'inside');
+console.log(thick)
 diagram.addElements([
   {
     name: 'r',
     method: 'shapes.generic',
     options: {
-      points: thickenLine(line, 0.06, true, 'inside'),
-      drawType: 'strip',
+      points: thick,
+      drawType: 'triangles',
       position: [-0.7, -0.5],
     },
   },
@@ -43,8 +45,8 @@ diagram.addElements([
     name: 'x',
     method: 'line',
     options: {
-      p1: [-1, -0.5],
-      p2: [1, -0.5],
+      p1: [-1, -0.4],
+      p2: [1, -0.4],
       width: 0.005,
       color: [0.5, 0.5, 0.5, 0.5],
     }
@@ -53,8 +55,8 @@ diagram.addElements([
     name: 'x2',
     method: 'line',
     options: {
-      p1: [-1, -0.44],
-      p2: [1, -0.44],
+      p1: [-1, -0.5],
+      p2: [1, -0.5],
       width: 0.005,
       color: [0.5, 0.5, 0.5, 0.5],
     }
@@ -63,8 +65,8 @@ diagram.addElements([
     name: 'x3',
     method: 'line',
     options: {
-      p1: [-1, -0.3],
-      p2: [1, -0.3],
+      p1: [-1, -0.55],
+      p2: [1, -0.55],
       width: 0.005,
       color: [0.5, 0.5, 0.5, 0.5],
     }
@@ -80,8 +82,7 @@ pad.setTransformCallback = () => {
   const p = pad.getPosition().sub(-0.7, -0.5);
   line[1] = p._dup();
   const r = diagram.getElement('r');
-  const thick = thickenLine(line, 0.02, true, 'mid');
-  // console.log(thick)
+  const thick = makeThickLine(line, 0.1, true, 'outside');
   r.drawingObject.change(thick);
   diagram.animateNextFrame();
 }

@@ -2308,10 +2308,55 @@ function cutCorner(
   return circleCorner(p2Max, p1, p3Max, sides);
 }
 
+function makeThickLine(
+  points: Array<Point>,
+  width: number = 0.01,
+  close: boolean = false,
+  style: 'inside' | 'outside' | 'mid' = 'mid',
+) {
+  const out = [];
+
+  const makeLineSegment = (p1, p2) => {
+    const lineSegment = new Line(p1, p2);
+    let outsideOffset;
+    let insideOffset;
+    if (style === 'mid') {
+      outsideOffset = lineSegment.offset('outside', width / 2);
+      insideOffset = lineSegment.offset('inside', width / 2);
+    } else if (style === 'inside') {
+      outsideOffset = lineSegment;
+      insideOffset = lineSegment.offset('inside', width);
+    } else if (style === 'outside') {
+      outsideOffset = lineSegment.offset('outside', width);
+      insideOffset = lineSegment;
+    }
+    out.push(outsideOffset.p1._dup());
+    out.push(insideOffset.p1._dup());
+    out.push(outsideOffset.p2._dup());
+    out.push(insideOffset.p1._dup());
+    out.push(insideOffset.p2._dup());
+    out.push(outsideOffset.p2._dup());
+  }
+
+  for (let i = 0; i < points.length - 1; i += 1) {
+    makeLineSegment(points[i], points[i + 1]);
+  }
+  if (close) {
+    makeLineSegment(points[points.length - 1], points[0]);
+  }
+  return out;
+}
+// function thickenCorner(
+//   p2: Point, p1: Point, p3: Point,
+//   width: number = 0.01, minAngle: number = Math.PI / 7,
+//   close: boolean: true,
+
+// )
+
 function thickenCorner(
   p2: Point, p1: Point, p3: Point,
   width: number = 0.01, minAngle: number = Math.PI / 7,
-  openLine: boolean = true,
+  close: boolean = false,
 ) {
   const line21 = new Line(p2, p1);
   const offset21 = line21.offset('outside', width);
@@ -2414,7 +2459,7 @@ function thickenCorner(
     out2 = p2._dup();
   } else if (!out2.isOnLine(offset21, 8) || !out2.isOnLine(line13, 8)) {
     const perpendicular1 = new Line(p1, width, line21.angle() - Math.PI / 2);
-    if (openLine) {
+    if (close === false) {
       out2 = perpendicular1.p2;
     } else if (out2.isOnLine(line13, 8)) {
       const perpendicular2 = new Line(p2, 1, line21.angle() - Math.PI / 2);
@@ -2430,9 +2475,9 @@ function thickenCorner(
     out3 = p1._dup();
   } else if (!out3.isOnLine(offset13, 8) || !out3.isOnLine(line21, 8)) {
     const perpendicular1 = new Line(p1, width, line13.angle() - Math.PI / 2);
-    if (openLine && out3 != null) {
+    if (close === false) {
       out3 = perpendicular1.p2;
-    } else if (out3 != null && out3.isOnLine(line21, 8)) {
+    } else if (out3.isOnLine(line21, 8)) {
       const perpendicular3 = new Line(p3, 1, line13.angle() - Math.PI / 2);
       const perpIntersect = perpendicular3.intersectsWith(line21).intersect;
       out3 = perpIntersect;
@@ -2590,4 +2635,5 @@ export {
   cutCorner,
   thickenCorner,
   thickenLine,
+  makeThickLine,
 };
