@@ -2336,7 +2336,8 @@ function thickenCorner(
   }
 
   // make a tangent line to the corner
-  const tangent = new Line(p1, 1, line13.angle() + angle / 2);
+  const tangent = new Line(p1, 1, line13.angle() - angle / 2 + Math.PI / 2);
+
 
   // if angle is -ve, then the thicken line is outside an angle
   // if angle is +ve, then the thicken line is inside an angle
@@ -2378,7 +2379,6 @@ function thickenLine(
     out.push(...thickenCorner(points[points.length - 2], points[points.length - 1], points[0], width));
     out.push(...thickenCorner(points[points.length - 1], points[0], points[1], width));
   }
-  console.log(out)
   return out;
 }
 

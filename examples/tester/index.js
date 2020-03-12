@@ -4,9 +4,9 @@ const { Point } = Fig;
 const { thickenCorner, thickenLine } = Fig.tools.g2;
 
 const line = [
-  new Point(0, 1),
+  new Point(0.75, 0.2),
   new Point(0, 0),
-  new Point(1, 0),
+  new Point(1.5, 0),
 ];
 // const thickLine = [
 //   new Point(1, 0),
@@ -23,8 +23,9 @@ diagram.addElement(
     name: 'r',
     method: 'shapes.generic',
     options: {
-      points: thickenLine(line, 0.1, true),
+      points: thickenLine(line, 0.06, true),
       drawType: 'strip',
+      position: [-0.7, -0.5],
     },
   },
 );
