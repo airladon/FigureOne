@@ -29,6 +29,7 @@ import HorizontalLine from '../DiagramElements/HorizontalLine';
 import DashedLine from '../DiagramElements/DashedLine';
 import RectangleFilled from '../DiagramElements/RectangleFilled';
 import Rectangle from '../DiagramElements/Rectangle';
+import Generic from '../DiagramElements/Generic';
 import Box from '../DiagramElements/Box';
 // import type { TypeRectangleFilledReference } from '../DiagramElements/RectangleFilled';
 import Lines from '../DiagramElements/Lines';
@@ -386,29 +387,91 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  general(...optionsIn: Array<{
-    points: Array<Point>,
-    lineWidth?: number,
-    dash?: Array<number>, // [0.01, 0.01]
-    cornerRadius?: number,  // 0
-    cornerSides?: number, // 1
-    pointsPosition?: 'center' | 'outside' | 'inside',
-    maxCornerExtension?: number,
-    maxCornerClip?: 'straight' | { radius: number, sides: number} | 'radius',
-    color?: Array<number>
+  // general(...optionsIn: Array<{
+  //   points: Array<Point>,
+  //   lineWidth?: number,
+  //   dash?: Array<number>, // [0.01, 0.01]
+  //   cornerRadius?: number,  // 0
+  //   cornerSides?: number, // 1
+  //   pointsPosition?: 'center' | 'outside' | 'inside',
+  //   maxCornerExtension?: number,
+  //   maxCornerClip?: 'straight' | { radius: number, sides: number} | 'radius',
+  //   color?: Array<number>
+  // }>) {
+  //   const defaultOptions = {
+  //     points: [],
+  //     color: [1, 0, 0, 1],
+  //     lineWidth: 0.01,
+  //     dash: [1],
+  //     cornerRadius: 0,
+  //     cornerSides: 1,
+  //     pointsPosition: 'center',
+  //     maxCornerWidth: null,
+  //     cornerClip?: 'straight',
+  //   }
+  // }
+
+  generic(...optionsIn: Array<{
+    points: Array<TypeParsablePoint>,
+    border: ?Array<Array<TypeParsablePoint>>,
+    holeBorder: ?Array<Array<TypeParsablePoint>>,
+    drawType: 'triangles' | 'strip' | 'fan' | 'lines',
+    color?: Array<number>,
+    position?: TypeParsablePoint,
+    transform?: Transform,
+    pulse?: number,
   }>) {
     const defaultOptions = {
       points: [],
+      border: null,
+      holeBorder: null,
+      drawType: 'triangles',
       color: [1, 0, 0, 1],
-      lineWidth: 0.01,
-      dash: [1],
-      cornerRadius: 0,
-      cornerSides: 1,
-      pointsPosition: 'center',
-      maxCornerWidth: null,
-      cornerClip?: 'straight',
+      transform: new Transform('generic').standard(),
+      position: null,
+    };
+
+    const options = joinObjects(defaultOptions, ...optionsIn);
+
+    if (options.position != null) {
+      const p = getPoint(options.position);
+      options.transform.updateTranslation(p);
     }
-  } 
+    const parsedPoints = options.points.map(p => getPoint(p));
+    const parseBorder = (borders) => {
+      if (borders == null) {
+        return null;
+      }
+      const borderOut = [];
+      borders.forEach((b) => {
+        if (Array.isArray(b)) {
+          borderOut.push(b.map(bElement => getPoint(bElement)));
+        }
+      });
+      return borderOut;
+    };
+    const parsedBorder = parseBorder(options.border);
+    const parsedBorderHoles = parseBorder(options.borderHoles);
+    // console.log(parsedPoints)
+    const element = Generic(
+      this.webgl,
+      parsedPoints,
+      parsedBorder,
+      parsedBorderHoles,
+      options.drawType,
+      options.color,
+      options.transform,
+      this.limits,
+    );
+
+    if (options.pulse != null) {
+      if (typeof element.pulseDefault !== 'function') {
+        element.pulseDefault.scale = options.pulse;
+      }
+    }
+
+    return element;
+  }
 
   fan(...optionsIn: Array<{
     points?: Array<Point>,
