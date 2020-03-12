@@ -87,7 +87,7 @@ pad.setTransformCallback = () => {
   const p = pad.getPosition().sub(-0.7, -0.5);
   line[1] = p._dup();
   const r = diagram.getElement('r');
-  const thick = makeThickLineMid(line, 0.1, true, true);
+  const thick = makeThickLineInside(line, 0.1, true, true);
   r.drawingObject.change(thick);
   diagram.animateNextFrame();
 }

@@ -2474,20 +2474,15 @@ function makeThickLineInside(
   points: Array<Point>,
   width: number = 0.01,
   close: boolean = false,
+  makeCorner: boolean = true,
+  minAngleIn: ?number = Math.PI / 7,
 ) {
-  const out = [];
-
+  const lineSegments = [];
   const makeLineSegment = (p1, p2) => {
     const lineSegment = new Line(p1, p2);
-    const outsideOffset = lineSegment;
     const insideOffset = lineSegment.offset('inside', width);
-    out.push(outsideOffset.p1._dup());
-    out.push(insideOffset.p1._dup());
-    out.push(outsideOffset.p2._dup());
-    out.push(insideOffset.p1._dup());
-    out.push(insideOffset.p2._dup());
-    out.push(outsideOffset.p2._dup());
-  }
+    lineSegments.push([insideOffset, lineSegment]);
+  };
 
   for (let i = 0; i < points.length - 1; i += 1) {
     makeLineSegment(points[i], points[i + 1]);
@@ -2495,7 +2490,7 @@ function makeThickLineInside(
   if (close) {
     makeLineSegment(points[points.length - 1], points[0]);
   }
-  return out;
+  return lineSegmentsToPoints(lineSegments);
 }
 
 function makeThickLineOutside(
