@@ -10,7 +10,7 @@ const {
 
 const line = [
   new Point(1.5, 0),
-  new Point(0.75, 0.05),
+  new Point(0.75, 0.2),
   new Point(0, 0),
 ];
 // const thickLine = [
