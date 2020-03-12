@@ -2311,17 +2311,18 @@ function cutCorner(
 function thickenCorner(
   p2: Point, p1: Point, p3: Point,
   width: number = 0.01, minAngle: number = Math.PI / 7,
+  openLine: boolean = true,
 ) {
   const line21 = new Line(p2, p1);
-  const out21 = line21.offset('outside', width);
+  const offset21 = line21.offset('outside', width);
 
   const line13 = new Line(p1, p3);
-  const out13 = line13.offset('outside', width);
+  const offset13 = line13.offset('outside', width);
 
   const angle = threePointAngleMin(p2, p1, p3);
 
   if (angle === Math.PI) {
-    return [p1, out13.p1];
+    return [p1, offset13.p1];
   }
 
   const angleMag = Math.abs(angle);
@@ -2331,8 +2332,11 @@ function thickenCorner(
   }
 
   if (angleMag > minAngle) {
-    const p = out21.intersectsWith(out13).intersect;
-    return [p1, p];
+    const p = offset21.intersectsWith(offset13).intersect;
+    if (p == null) {
+      return [p1, offset13.p1];
+    }
+    return [p1._dup(), p];
   }
 
   // make a tangent line to the corner
@@ -2342,14 +2346,119 @@ function thickenCorner(
   // if angle is -ve, then the thicken line is outside an angle
   // if angle is +ve, then the thicken line is inside an angle
   if (position === 'outside') {
-    const out2 = out21.intersectsWith(tangent).intersect;
-    const out3 = out13.intersectsWith(tangent).intersect;
+    const out2 = offset21.intersectsWith(tangent).intersect;
+    const out3 = offset13.intersectsWith(tangent).intersect;
     return [p1._dup(), out2, p1._dup(), out3];
   }
 
   // otherwise position is on the inside
-  const out2 = out21.intersectsWith(line13).intersect;
-  const out3 = out13.intersectsWith(line21).intersect;
+  // When on the inside, there are several possibilities:
+  //
+  //
+  // Easy case
+  //    out 2     0  3
+  //      \     0
+  //       \  0
+  //    o o 0 o o o o o o o o offset21
+  //      0
+  //    000000000000000000000
+  //   1                     2
+  //
+  let out2 = offset21.intersectsWith(line13).intersect;
+  //
+  // A. Intersect is not on offset21 (as line13 angle is too shallow)
+  //                                       0 3
+  //    o o o o o o o o o o o . . . . 0 . . . .
+  //                            0    \
+  //                      0           \
+  //                0                 out2
+  //          0
+  //    000000000000000000000
+  //   1                     2
+  //
+  // Wanted:
+  //   For closed line: want out2 to be (1, intersect of perp2 and line13)
+  //   For open line: want out2 to be (1, offset perp from 1)
+  //
+  // B. Intersect is not on line13 (as line13 is too short)
+  //                .
+  //    o o o o o o o o o o o
+  //            .  \
+  //          0     \
+  //        0  3     out2
+  //      0
+  //    000000000000000000000
+  //   1                     2
+  //
+  // Wanted:
+  //   For closed line: want out2 to be (1, 3)
+  //   For open line: want out2 to be (1, offset perp from 1)
+  //
+  // C. Intersect is not on either offset21 or line13 (angle too shallow and
+  // line13 too short)
+  //                                       .
+  //    o o o o o o o o o o o . . . . . . . . .
+  //                            .    \
+  //              3       .           \
+  //                0                 out2
+  //          0
+  //    000000000000000000000
+  //   1                     2
+  //
+  // Wanted:
+  //   For closed line: want out2 to be (1, 3)
+  //   For open line: want out2 to be (1, offset perp from 1)
+  //
+  // console.log(out2, offset21, line13)
+  if (out2 == null || !out2.isOnLine(offset21, 8) || !out2.isOnLine(line13, 8)) {
+    const perpendicular1 = new Line(p1, width, line21.angle() - Math.PI / 2);
+    if (openLine && out2 != null) {
+      out2 = perpendicular1.p2;
+    } else if (out2 != null && out2.isOnLine(line13, 8)) {
+      const perpendicular2 = new Line(p2, 1, line21.angle() - Math.PI / 2);
+      const perpIntersect = perpendicular2.intersectsWith(line13).intersect;
+      out2 = perpIntersect;
+    } else {
+      out2 = p3._dup();
+    }
+    // const perpendicular2 = new Line(p2, 1, line21.angle() - Math.PI / 2);
+    // const perpIntersect = perpendicular2.intersectsWith(line13).intersect;
+    // if (perpIntersect.isOnLine(line13, 8)) {
+    //   out2 = perpIntersect.intersect;
+    // } else {
+    //   out2 = p3._dup();
+    // }
+  }
+
+  let out3 = offset13.intersectsWith(line21).intersect;
+  if (out3 == null || !out3.isOnLine(offset13, 8) || !out3.isOnLine(line21, 8)) {
+    const perpendicular1 = new Line(p1, width, line13.angle() - Math.PI / 2);
+    if (openLine && out3 != null) {
+      out3 = perpendicular1.p2;
+    } else if (out3 != null && out3.isOnLine(line21, 8)) {
+      const perpendicular3 = new Line(p3, 1, line13.angle() - Math.PI / 2);
+      const perpIntersect = perpendicular3.intersectsWith(line21).intersect;
+      out3 = perpIntersect;
+    } else {
+      out3 = p2._dup();
+    }
+    // const perpendicular2 = new Line(p2, 1, line21.angle() - Math.PI / 2);
+    // const perpIntersect = perpendicular2.intersectsWith(line13).intersect;
+    // if (perpIntersect.isOnLine(line13, 8)) {
+    //   out2 = perpIntersect.intersect;
+    // } else {
+    //   out2 = p3._dup();
+    // }
+  }
+  // if (!out3.isOnLine(offset13, 8) || !out3.isOnLine(line21, 8)) {
+  //   const perpendicular3 = new Line(p3, 1, line13.angle() - Math.PI / 2);
+  //   const perpIntersect = perpendicular3.intersectsWith(line13).intersect;
+  //   if (perpIntersect.isOnLine(line21, 8)) {
+  //     out3 = perpIntersect.intersect;
+  //   } else {
+  //     out3 = p2._dup();
+  //   }
+  // }
   return [p1._dup(), out2, p1._dup(), out3];
 }
 
@@ -2359,16 +2468,17 @@ function makeThickCorner(
   p3: Point,
   widthIn: number,
   type: 'outside' | 'inside' | 'mid',
+  openLine: boolean,
 ) {
   let width = widthIn;
   if (type === 'mid') {
     width /= 2;
   }
-  const outside = thickenCorner(p2, p1, p3, width);
+  const outside = thickenCorner(p2, p1, p3, width, openLine);
   if (type === 'outside') {
     return outside;
   }
-  const inside = thickenCorner(p3, p1, p2, width);
+  const inside = thickenCorner(p3, p1, p2, width, openLine);
   if (type === 'inside') {
     return inside.reverse();
   }
@@ -2414,12 +2524,12 @@ function thickenLine(
     out.push(...makeEnd(points[0], points[1], points[0], width, type));
   } else {
     out.push(...makeThickCorner(
-      points[points.length - 1], points[0], points[1], width, type,
+      points[points.length - 1], points[0], points[1], width, type, close,
     ));
   }
   for (let i = 0; i < points.length - 2; i += 1) {
     out.push(...makeThickCorner(
-      points[i], points[i + 1], points[i + 2], width, type,
+      points[i], points[i + 1], points[i + 2], width, type, close,
     ));
   }
   if (close === false) {
@@ -2428,10 +2538,10 @@ function thickenLine(
     ));
   } else {
     out.push(...makeThickCorner(
-      points[points.length - 2], points[points.length - 1], points[0], width, type,
+      points[points.length - 2], points[points.length - 1], points[0], width, type, close,
     ));
     out.push(...makeThickCorner(
-      points[points.length - 1], points[0], points[1], width, type,
+      points[points.length - 1], points[0], points[1], width, type, close,
     ));
   }
 

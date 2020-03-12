@@ -5,7 +5,7 @@ const { thickenCorner, thickenLine } = Fig.tools.g2;
 
 const line = [
   new Point(1.5, 0),
-  new Point(0.75, 0.2),
+  new Point(0.75, 0.000000001),
   new Point(0, 0),
 ];
 // const thickLine = [
@@ -18,14 +18,25 @@ const line = [
 
 // console.log(thickLine)
 // Add elements to the diagram
+console.log(thickenLine(line, 0.06, false, 'mid'))
 diagram.addElements([
   {
     name: 'r',
     method: 'shapes.generic',
     options: {
-      points: thickenLine(line, 0.02, true, 'outside'),
+      points: thickenLine(line, 0.06, true, 'mid'),
       drawType: 'strip',
       position: [-0.7, -0.5],
+    },
+  },
+  {
+    name: 'pad',
+    method: 'polygon',
+    options: {
+      radius: 0.2,
+      color: [0.5, 0.5, 0.5, 0.5],
+      sides: 100,
+      fill: true,
     },
   },
   {
@@ -63,4 +74,15 @@ diagram.addElements([
 // Show the equation form
 // diagram.getElement('eqn').showForm('base');
 console.log(diagram.getElement('r'))
+const pad = diagram.getElement('pad');
+pad.setMovable();
+pad.setTransformCallback = () => {
+  const p = pad.getPosition().sub(-0.7, -0.5);
+  line[1] = p._dup();
+  const r = diagram.getElement('r');
+  const thick = thickenLine(line, 0.02, true, 'mid');
+  // console.log(thick)
+  r.drawingObject.change(thick);
+  diagram.animateNextFrame();
+}
 diagram.initialize();
