@@ -4,9 +4,9 @@ const { Point } = Fig;
 const { thickenCorner, thickenLine } = Fig.tools.g2;
 
 const line = [
+  new Point(1.5, 0),
   new Point(0.75, 0.2),
   new Point(0, 0),
-  new Point(1.5, 0),
 ];
 // const thickLine = [
 //   new Point(1, 0),
@@ -18,17 +18,47 @@ const line = [
 
 // console.log(thickLine)
 // Add elements to the diagram
-diagram.addElement(
+diagram.addElements([
   {
     name: 'r',
     method: 'shapes.generic',
     options: {
-      points: thickenLine(line, 0.06, true),
+      points: thickenLine(line, 0.02, true, 'outside'),
       drawType: 'strip',
       position: [-0.7, -0.5],
     },
   },
-);
+  {
+    name: 'x',
+    method: 'line',
+    options: {
+      p1: [-1, -0.5],
+      p2: [1, -0.5],
+      width: 0.005,
+      color: [0.5, 0.5, 0.5, 0.5],
+    }
+  },
+  {
+    name: 'x2',
+    method: 'line',
+    options: {
+      p1: [-1, -0.44],
+      p2: [1, -0.44],
+      width: 0.005,
+      color: [0.5, 0.5, 0.5, 0.5],
+    }
+  },
+  {
+    name: 'x3',
+    method: 'line',
+    options: {
+      p1: [-1, -0.3],
+      p2: [1, -0.3],
+      width: 0.005,
+      color: [0.5, 0.5, 0.5, 0.5],
+    }
+  }
+]);
 
 // Show the equation form
 // diagram.getElement('eqn').showForm('base');

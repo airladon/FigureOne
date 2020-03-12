@@ -2353,32 +2353,109 @@ function thickenCorner(
   return [p1._dup(), out2, p1._dup(), out3];
 }
 
+function makeThickCorner(
+  p2: Point,
+  p1: Point,
+  p3: Point,
+  widthIn: number,
+  type: 'outside' | 'inside' | 'mid',
+) {
+  let width = widthIn;
+  if (type === 'mid') {
+    width /= 2;
+  }
+  const outside = thickenCorner(p2, p1, p3, width);
+  if (type === 'outside') {
+    return outside;
+  }
+  const inside = thickenCorner(p3, p1, p2, width);
+  if (type === 'inside') {
+    return inside.reverse();
+  }
+  const mid = [];
+  for (let i = 1; i < outside.length; i += 2) {
+    mid.push(inside[outside.length - i]);
+    mid.push(outside[i]);
+  }
+  return mid;
+}
+
+function makeEnd(
+  p1: Point,
+  p2: Point,
+  fromPoint: Point,
+  widthIn: number,
+  type: 'outside' | 'inside' | 'mid',
+) {
+  let width = widthIn;
+  if (type === 'mid') {
+    width /= 2;
+  }
+  const lineAngle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+  const outside = polarToRect(width, lineAngle - Math.PI / 2).add(fromPoint);
+  if (type === 'outside') {
+    return [fromPoint, outside];
+  }
+  const inside = polarToRect(width, lineAngle + Math.PI / 2).add(fromPoint);
+  if (type === 'inside') {
+    return [fromPoint, inside];
+  }
+  return [inside, outside];
+}
+
 function thickenLine(
   points: Array<Point>,
   width: number = 0.01,
   close: boolean = false,
+  type: 'outside' | 'inside' | 'mid' = 'outside',
 ) {
   const out = [];
   if (close === false) {
-    const startLine = new Line(points[0], points[1]);
-    const offsetStart = polarToRect(width, startLine.angle() - Math.PI / 2).add(points[0]);
-    out.push(points[0]._dup());
-    out.push(offsetStart);
+    out.push(...makeEnd(points[0], points[1], points[0], width, type));
   } else {
-    out.push(...thickenCorner(points[points.length - 1], points[0], points[1], width));
+    out.push(...makeThickCorner(
+      points[points.length - 1], points[0], points[1], width, type,
+    ));
   }
   for (let i = 0; i < points.length - 2; i += 1) {
-    out.push(...thickenCorner(points[i], points[i + 1], points[i + 2], width));
+    out.push(...makeThickCorner(
+      points[i], points[i + 1], points[i + 2], width, type,
+    ));
   }
   if (close === false) {
-    const endLine = new Line(points[points.length - 2], points[points.length - 1]);
-    const offsetEnd = polarToRect(width, endLine.angle() - Math.PI / 2).add(points[points.length - 1]);
-    out.push(points[points.length - 1]._dup());
-    out.push(offsetEnd);
+    out.push(...makeEnd(
+      points[points.length - 2], points[points.length - 1], points[points.length - 1], width, type,
+    ));
   } else {
-    out.push(...thickenCorner(points[points.length - 2], points[points.length - 1], points[0], width));
-    out.push(...thickenCorner(points[points.length - 1], points[0], points[1], width));
+    out.push(...makeThickCorner(
+      points[points.length - 2], points[points.length - 1], points[0], width, type,
+    ));
+    out.push(...makeThickCorner(
+      points[points.length - 1], points[0], points[1], width, type,
+    ));
   }
+
+
+  // if (close === false) {
+  //   const startLine = new Line(points[0], points[1]);
+  //   const offsetStart = polarToRect(width, startLine.angle() - Math.PI / 2).add(points[0]);
+  //   out.push(points[0]._dup());
+  //   out.push(offsetStart);
+  // } else {
+  //   out.push(...thickenCorner(points[points.length - 1], points[0], points[1], width));
+  // }
+  // for (let i = 0; i < points.length - 2; i += 1) {
+  //   out.push(...thickenCorner(points[i], points[i + 1], points[i + 2], width));
+  // }
+  // if (close === false) {
+  //   const endLine = new Line(points[points.length - 2], points[points.length - 1]);
+  //   const offsetEnd = polarToRect(width, endLine.angle() - Math.PI / 2).add(points[points.length - 1]);
+  //   out.push(points[points.length - 1]._dup());
+  //   out.push(offsetEnd);
+  // } else {
+  //   out.push(...thickenCorner(points[points.length - 2], points[points.length - 1], points[0], width));
+  //   out.push(...thickenCorner(points[points.length - 1], points[0], points[1], width));
+  // }
   return out;
 }
 
