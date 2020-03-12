@@ -2310,7 +2310,7 @@ function cutCorner(
 
 function thickenCorner(
   p2: Point, p1: Point, p3: Point,
-  width: number, minAngle: number = Math.PI / 7,
+  width: number = 0.01, minAngle: number = Math.PI / 7,
 ) {
   const line21 = new Line(p2, p1);
   const out21 = line21.offset('outside', width);
@@ -2343,13 +2343,43 @@ function thickenCorner(
   if (position === 'outside') {
     const out2 = out21.intersectsWith(tangent).intersect;
     const out3 = out13.intersectsWith(tangent).intersect;
-    return [p1, out2, p1, out3];
+    return [p1._dup(), out2, p1._dup(), out3];
   }
 
   // otherwise position is on the inside
   const out2 = out21.intersectsWith(line13).intersect;
   const out3 = out13.intersectsWith(line21).intersect;
-  return [p1, out2, p1, out3];
+  return [p1._dup(), out2, p1._dup(), out3];
+}
+
+function thickenLine(
+  points: Array<Point>,
+  width: number = 0.01,
+  close: boolean = false,
+) {
+  const out = [];
+  if (close === false) {
+    const startLine = new Line(points[0], points[1]);
+    const offsetStart = polarToRect(width, startLine.angle() - Math.PI / 2).add(points[0]);
+    out.push(points[0]._dup());
+    out.push(offsetStart);
+  } else {
+    out.push(...thickenCorner(points[points.length - 1], points[0], points[1], width));
+  }
+  for (let i = 0; i < points.length - 2; i += 1) {
+    out.push(...thickenCorner(points[i], points[i + 1], points[i + 2], width));
+  }
+  if (close === false) {
+    const endLine = new Line(points[points.length - 2], points[points.length - 1]);
+    const offsetEnd = polarToRect(width, endLine.angle() - Math.PI / 2).add(points[points.length - 1]);
+    out.push(points[points.length - 1]._dup());
+    out.push(offsetEnd);
+  } else {
+    out.push(...thickenCorner(points[points.length - 2], points[points.length - 1], points[0], width));
+    out.push(...thickenCorner(points[points.length - 1], points[0], points[1], width));
+  }
+  console.log(out)
+  return out;
 }
 
 export {
@@ -2389,5 +2419,6 @@ export {
   quadBezierPoints,
   circleCorner,
   cutCorner,
-  thickenCorner
+  thickenCorner,
+  thickenLine,
 };
