@@ -3,7 +3,6 @@ import {
   Point, polarToRect, minAngleDiff,
 } from '../../../tools/g2';
 
-
 // function simpleIntersect(p1: Point, p2: Point, q1: Point, q2: Point) {
 //   const lineP = new Line(p1, p2);
 //   const lineQ = new Line(q1, q2);

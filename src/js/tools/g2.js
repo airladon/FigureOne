@@ -2319,10 +2319,11 @@ function thickenCorner(
   const out13 = line13.offset('outside', width);
 
   const angle = threePointAngleMin(p2, p1, p3);
+
   if (angle === Math.PI) {
     return [p1, out13.p1];
   }
-  
+
   const angleMag = Math.abs(angle);
   let position = 'outside';
   if (angleMag / angle > 0) {
@@ -2337,8 +2338,8 @@ function thickenCorner(
   // make a tangent line to the corner
   const tangent = new Line(p1, 1, line13.angle() + angle / 2);
 
-  // if angle is -ve, then the thicken line is outside an acute angle
-  // if angle is +ve, then the thicken line is inside an acute angle
+  // if angle is -ve, then the thicken line is outside an angle
+  // if angle is +ve, then the thicken line is inside an angle
   if (position === 'outside') {
     const out2 = out21.intersectsWith(tangent).intersect;
     const out3 = out13.intersectsWith(tangent).intersect;
