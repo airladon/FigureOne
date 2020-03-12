@@ -2475,7 +2475,6 @@ function makeThickLineInside(
   width: number = 0.01,
   close: boolean = false,
   makeCorner: boolean = true,
-  minAngleIn: ?number = Math.PI / 7,
 ) {
   const lineSegments = [];
   const makeLineSegment = (p1, p2) => {
@@ -2490,6 +2489,30 @@ function makeThickLineInside(
   if (close) {
     makeLineSegment(points[points.length - 1], points[0]);
   }
+
+  // const minAngle = minAngleIn == null ? 0 : minAngleIn;
+  const joinLineSegments = (current, next) => {
+    const [inside, outside] = lineSegments[current];
+    const [insideNext, outsideNext] = lineSegments[next];
+    let intercept = inside.intersectsWith(outsideNext);
+    if (intercept.intersect != null && intercept.intersect.isOnLine(outsideNext, 8)) {
+      inside.setP2(intercept.intersect);
+    }
+    intercept = insideNext.intersectsWith(outside);
+    if (intercept.intersect != null && intercept.intersect.isOnLine(outside, 8)) {
+      insideNext.setP1(intercept.intersect);
+    }
+  };
+
+  if (makeCorner) {
+    for (let i = 0; i < lineSegments.length - 1; i += 1) {
+      joinLineSegments(i, i + 1);
+    }
+    if (close) {
+      joinLineSegments(lineSegments.length - 1, 0);
+    }
+  }
+
   return lineSegmentsToPoints(lineSegments);
 }
 
