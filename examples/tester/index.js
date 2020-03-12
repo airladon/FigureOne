@@ -15,18 +15,11 @@ const line = [
   new Point(0, 0),
 ];
 
-const thick = makeThickLineMid(line, 0.1, true);
+const makeLine = (lineIn) => makePolyLine(lineIn, 0.01, true, 'outside', 'radius', 0.005, 4)
+const thick = makeLine(line);
+
 console.log(thick)
 diagram.addElements([
-  {
-    name: 'r',
-    method: 'shapes.generic',
-    options: {
-      points: thick,
-      drawType: 'triangles',
-      position: [-0.7, -0.5],
-    },
-  },
   {
     name: 'pad',
     method: 'polygon',
@@ -35,6 +28,15 @@ diagram.addElements([
       color: [0.5, 0.5, 0.5, 0.5],
       sides: 100,
       fill: true,
+    },
+  },
+  {
+    name: 'r',
+    method: 'shapes.generic',
+    options: {
+      points: thick,
+      drawType: 'triangles',
+      position: [-0.7, -0.5],
     },
   },
   {
@@ -78,7 +80,8 @@ pad.setTransformCallback = () => {
   const p = pad.getPosition().sub(-0.7, -0.5);
   line[1] = p._dup();
   const r = diagram.getElement('r');
-  const thick = makePolyLine(line, 0.1, true, 'mid', true);
+  // const thick = makePolyLine(line, 0.1, true, 'mid', 'chamfer');
+  const thick = makeLine(line);
   r.drawingObject.change(thick);
   diagram.animateNextFrame();
 }

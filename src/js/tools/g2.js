@@ -2321,7 +2321,8 @@ function cutCorner(
   } else if (style === 'max') {
     cut = Math.min(line12.length(), line13.length());
   }
-  cut = Math.min(cut, line12.length(), line13.length());
+  cut = Math.min(cut, line12.length() / 2 * 0.99, line13.length() / 2 * 0.99);
+
   const p2Max = line12.pointAtPercent(cut / line12.length());
   const p3Max = line13.pointAtPercent(cut / line13.length());
 
@@ -2424,6 +2425,7 @@ function makeThickLineMid(
   width: number = 0.01,
   close: boolean = false,
   makeCorner: boolean = true,
+  cornerStyle: 'autoPoint' | 'fill',
   minAngleIn: ?number = Math.PI / 7,
 ) {
   const lineSegments = [];
@@ -2458,16 +2460,36 @@ function makeThickLineMid(
     }
   };
 
+  const cornerFills = [];
+  const createFill = (current, next) => {
+    const [inside, outside, mid] = lineSegments[current];
+    const [insideNext, outsideNext] = lineSegments[next];
+    cornerFills.push(outside.p2._dup());
+    cornerFills.push(mid.p2._dup());
+    cornerFills.push(outsideNext.p1._dup());
+    cornerFills.push(inside.p2._dup());
+    cornerFills.push(mid.p2._dup());
+    cornerFills.push(insideNext.p1._dup());
+  };
+
   if (makeCorner) {
     for (let i = 0; i < lineSegments.length - 1; i += 1) {
-      joinLineSegments(i, i + 1);
+      if (cornerStyle === 'autoPoint') {
+        joinLineSegments(i, i + 1);
+      } else {
+        createFill(i, i + 1)
+      }
     }
     if (close) {
-      joinLineSegments(lineSegments.length - 1, 0);
+      if (cornerStyle === 'autoPoint') {
+        joinLineSegments(lineSegments.length - 1, 0);
+      } else {
+        createFill(lineSegments.length - 1, 0);
+      }
     }
   }
 
-  return lineSegmentsToPoints(lineSegments);
+  return [...lineSegmentsToPoints(lineSegments), ...cornerFills];
 }
 
 function makeThickLineInside(
@@ -2565,23 +2587,79 @@ function makeThickLineOutside(
   return lineSegmentsToPoints(lineSegments);
 }
 
+function cornerLine(
+  pointsIn: Array<Point>,
+  close: boolean,
+  type: 'fromVertex' | 'radius',
+  sides: number,
+  size: number,
+) {
+  let points = [];
+  if (close) {
+    points = cutCorner(
+      pointsIn[pointsIn.length - 1], pointsIn[0], pointsIn[1],
+      sides, type, size,
+    );
+  } else {
+    points.push(pointsIn[0]);
+  }
+
+  for (let i = 1; i < pointsIn.length - 1; i += 1) {
+    const corner = cutCorner(
+      pointsIn[i - 1], pointsIn[i], pointsIn[i + 1],
+      sides, type, size,
+    );
+    points = [...points, ...corner];
+  }
+
+  if (close) {
+    points = [...points, ...cutCorner(
+      pointsIn[pointsIn.length - 2], pointsIn[pointsIn.length - 1], pointsIn[0],
+      sides, type, size,
+    )];
+  } else {
+    points.push(pointsIn[pointsIn.length - 1]._dup());
+  }
+  return points;
+}
+
 function makePolyLine(
-  points: Array<Point>,
+  pointsIn: Array<Point>,
   width: number = 0.01,
   close: boolean = false,
   pointsAre: 'mid' | 'outside' | 'inside' = 'mid',
-  makeCorners: boolean = true,
-  minMakeCornerAngle: number = Math.PI / 7,
+  corners: 'auto' | 'none' | 'radius' | 'chamfer',
+  cornerSize: number,
+  cornerSides: number,
+  minAutoCornerAngle: number = Math.PI / 7,
 ) {
+  let points = [];
+  let autoCorners = true;
+  let pointStyle = 'fill';
+  if (corners === 'auto') {
+    points = pointsIn.map(p => p._dup());
+    pointStyle = 'autoPoint';
+  } else if (corners === 'chamfer') {
+    points = cornerLine(pointsIn, close, 'fromVertex', 1, cornerSize);
+  } else if (corners === 'radius') {
+    points = cornerLine(pointsIn, close, 'fromVertex', cornerSides, cornerSize);
+    autoCorners = true;
+  } else {
+    autoCorners = false;
+    points = pointsIn.map(p => p._dup());
+  }
+
   if (pointsAre === 'mid') {
-    return makeThickLineMid(points, width, close, makeCorners, minMakeCornerAngle);
+    return makeThickLineMid(
+      points, width, close, autoCorners, pointStyle, minAutoCornerAngle,
+    );
   }
 
-  if (pointsAre === 'outisde') {
-    return makeThickLineOutside(points, width, close, makeCorners, minMakeCornerAngle);
+  if (pointsAre === 'outside') {
+    return makeThickLineOutside(points, width, close, autoCorners, minAutoCornerAngle);
   }
 
-  return makeThickLineInside(points, width, close, makeCorners);
+  return makeThickLineInside(points, width, close, autoCorners);
 }
 // function thickenCorner(
 //   p2: Point, p1: Point, p3: Point,
