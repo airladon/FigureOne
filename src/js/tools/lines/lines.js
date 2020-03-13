@@ -1,4 +1,4 @@
-import { cornerLine } from './corners';
+import { cornerLine, lineToCorners } from './corners';
 import { lineToDash } from './dashes';
 import {
   Line, Point, threePointAngleMin, threePointAngle,
@@ -326,6 +326,7 @@ function makePolyLineCorners(
   width: number = 0.01,
   close: boolean = false,
   cornerLength: number,
+  forceCornerLength: boolean,
   pointsAre: 'mid' | 'outside' | 'inside' = 'mid',
   cornerStyle: 'auto' | 'none' | 'radius' | 'fill',
   cornerSize: number,
@@ -333,36 +334,13 @@ function makePolyLineCorners(
   minAutoCornerAngle: number = Math.PI / 7,
 ) {
   // split line into corners
-  
-  let points = [];
-  let cornerStyleToUse = cornerStyle;
-  // Convert line to line with corners
-  if (cornerStyle === 'auto') {
-    points = pointsIn.map(p => p._dup());
-  } else if (cornerStyle === 'radius') {
-    points = cornerLine(pointsIn, close, 'fromVertex', cornerSides, cornerSize);
-    cornerStyleToUse = 'fill';
-  } else {
-    // autoCorners = 'none';
-    points = pointsIn.map(p => p._dup());
-  }
-  
-  // Convert line to dashed line
-  if (dash.length > 1) {
-    let dashes;
-    dashes = lineToDash(points, dash, close, 0);
-    let closeDashes = false;
-    if (dashes.length === 1) {
-      closeDashes = close;
-    }
-    let dashedTris = [];
-    dashes.forEach((d) => {
-      dashedTris = [...dashedTris, ...makeThickLine(
-        d, width, pointsAre, closeDashes, cornerStyleToUse, minAutoCornerAngle,
-      )];
-    });
-    return dashedTris;
-  }
+  const corners = lineToCorners(pointsIn, close, cornerLength, forceCornerLength);
+
+  let tris = [];
+  corners.forEach((corner) => {
+    tris = [...tris, ...makePolyLine(corner, width, false, pointsAre, cornerStyle, cornerSize, cornerSides, minAutoCornerAngle)];
+  });
+  return tris;
 }
 
 export {
@@ -372,4 +350,5 @@ export {
   makeThickLineMid,
   makeThickLineInsideOutside,
   makePolyLine,
+  makePolyLineCorners,
 };

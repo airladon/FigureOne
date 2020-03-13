@@ -177,9 +177,21 @@ function lineToCorners(
   length: number,
   forceLength: boolean = false,
 ) {
-  for (let i = 0; i < pointsIn.length - 1; i += 1) {
-
+  const corners = [];
+  for (let i = 1; i < pointsIn.length - 1; i += 1) {
+    corners.push(makeCorner(
+      pointsIn[i - 1], pointsIn[i], pointsIn[i + 1], length, forceLength,
+    ));
   }
+  if (close) {
+    corners.push(makeCorner(
+      pointsIn[pointsIn.length - 2], pointsIn[pointsIn.length - 1], pointsIn[0], length, forceLength,
+    ));
+    corners.push(makeCorner(
+      pointsIn[pointsIn.length - 1], pointsIn[0], pointsIn[1], length, forceLength,
+    ));
+  }
+  return corners;
 }
 
 export {
@@ -187,4 +199,5 @@ export {
   cutCorner,
   cornerLine,
   makeCorner,
+  lineToCorners,
 };
