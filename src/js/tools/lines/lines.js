@@ -217,22 +217,38 @@ function makeThickLineInsideOutside(
         outsideNext.setP1(intercept.intersect);
       }
     // otherwise its an outside angle
-    } else if (Math.PI < angle && angle < Math.PI * 2 - minAngle) {
+    } else if (corner === 'auto' && Math.PI < angle && angle < Math.PI * 2 - minAngle) {
       joinLinesInPoint(outside, outsideNext);
-    } else if (Math.PI * 2 - minAngle < angle && angle < Math.PI * 2) {
+    } else if (corner === 'auto' && Math.PI * 2 - minAngle < angle && angle < Math.PI * 2) {
       joinLinesInTangent(inside, insideNext, inside, insideNext, outside, outsideNext);
     }
+  };
+  
+  // Create fill triangles between the inside & mid, and outside and mid lines
+  const cornerFills = [];
+  const createFill = (current, next) => {
+    const [, mid, outside] = lineSegments[current];
+    const [, , outsideNext] = lineSegments[next];
+    cornerFills.push(outside.p2._dup());
+    cornerFills.push(mid.p2._dup());
+    cornerFills.push(outsideNext.p1._dup());
   };
 
   if (corner != 'none') {
     for (let i = 0; i < lineSegments.length - 1; i += 1) {
       joinLineSegments(i, i + 1);
+      if (corner === 'fill') {
+        createFill(i ,i + 1);
+      }
     }
     if (close) {
       joinLineSegments(lineSegments.length - 1, 0);
+      if (corner === 'fill') {
+        createFill(lineSegments.length - 1, 0);
+      }
     }
   }
-  return lineSegmentsToPoints(lineSegments, 1, 2);
+  return [...lineSegmentsToPoints(lineSegments, 1, 2), ...cornerFills];
 }
 
 function makeThickLine(
