@@ -1,5 +1,6 @@
 import {
-  Point, circleCorner, cutCorner, polarToRect,
+  Point, circleCorner, cutCorner, polarToRect, lineToDashed,
+  getDashElementAndRemainder, makeDashDefinition, makeDashes,
 } from './g2';
 import { round } from './math';
 
@@ -157,33 +158,33 @@ describe('g2 corner tests', () => {
     });
   });
   describe('radiusCorner', () => {
-    test('q1Right 0.6 chamfer', () => {
-      const points = getRadiusCorner(q1Right, 1, 'fromVertex', 0.6);
+    test('q1Right 0.4 chamfer', () => {
+      const points = getRadiusCorner(q1Right, 1, 'fromVertex', 0.4);
       expect(round(points)).toEqual([
-        new Point(0.6, 0),
-        new Point(0, 0.6),
+        new Point(0.4, 0),
+        new Point(0, 0.4),
       ]);
     });
-    test('q1Right Reverse 0.6 chamfer', () => {
-      const points = getRadiusCorner(q1RightReverse, 1, 'fromVertex', 0.6);
+    test('q1Right Reverse 0.4 chamfer', () => {
+      const points = getRadiusCorner(q1RightReverse, 1, 'fromVertex', 0.4);
       expect(round(points)).toEqual([
-        new Point(0, 0.6),
-        new Point(0.6, 0),
+        new Point(0, 0.4),
+        new Point(0.4, 0),
       ]);
     });
-    test('q1Right 0.6 radius chamfer', () => {
-      const points = getRadiusCorner(q1Right, 1, 'radius', 0.6);
-      const value = 0.6 / Math.tan(Math.PI / 4);
+    test('q1Right 0.4 radius chamfer', () => {
+      const points = getRadiusCorner(q1Right, 1, 'radius', 0.4);
+      const value = 0.4 / Math.tan(Math.PI / 4);
       expect(round(points)).toEqual(round([
         new Point(value, 0),
         new Point(0, value),
       ]));
     });
-    test('_60 0.6 chamfer', () => {
-      const points = getRadiusCorner(_60, 1, 'fromVertex', 0.6);
+    test('_60 0.4 chamfer', () => {
+      const points = getRadiusCorner(_60, 1, 'fromVertex', 0.4);
       expect(round(points)).toEqual(round([
-        new Point(0.6, 0),
-        polarToRect(0.6, Math.PI / 3),
+        new Point(0.4, 0),
+        polarToRect(0.4, Math.PI / 3),
       ]));
     });
     test('_60 0.2 radius', () => {
@@ -216,6 +217,93 @@ describe('g2 corner tests', () => {
         polarToRect(mag, -150 * Math.PI / 180).add(center),
         polarToRect(mag, -210 * Math.PI / 180).add(center),
       ]));
+    });
+  });
+  describe('dash', () => {
+    describe('makeDashDefinition', () => {
+      test('create', () => {
+        const dd = makeDashDefinition([1, 0.4, 0.2, 0.1]);
+        expect(round(dd.sum)).toBe(1.7);
+        expect(round(dd.cum)).toEqual([1, 1.4, 1.6, 1.7]);
+        expect(dd.definition).toEqual([1, 0.4, 0.2, 0.1]);
+      })
+    });
+    describe('getDashElementAndRemainder', () => {
+      let calcSumAndCum;
+      beforeEach(() => {
+        calcSumAndCum = (dd) => {
+          const cum = [];
+          const cycleLength = dd.reduce((p, sum) => {
+            cum.push(p + sum)
+            return p +sum;
+          }, 0);
+          return [cycleLength, cum]
+        }
+      })
+      test('basic', () => {
+        const dd = makeDashDefinition([1, 0.5]);
+        const [index, remainder] = getDashElementAndRemainder(dd, 0.5);
+        expect(index).toBe(0);
+        expect(round(remainder)).toBe(0.5);
+      });
+      test('in second', () => {
+        const dd = makeDashDefinition([1, 0.5]);
+        const [index, remainder] = getDashElementAndRemainder(dd, 1.25);
+        expect(index).toBe(1);
+        expect(round(remainder)).toBe(0.25);
+      });
+      test('Over cycle', () => {
+        const dd = makeDashDefinition([1, 0.5]);
+        const [index, remainder] = getDashElementAndRemainder(dd, 1.75);
+        expect(index).toBe(0);
+        expect(round(remainder)).toBe(0.75);
+      });
+      test('Four part over cycle', () => {
+        const dd = makeDashDefinition([1, 0.5, 1, 0.5]);
+        const [index, remainder] = getDashElementAndRemainder(dd, 7.2);
+        expect(index).toBe(1);
+        expect(round(remainder)).toBe(0.3);
+      });
+    });
+    describe('makeDashes', () => {
+      test('dash shorter than line', () => {
+        const dd = makeDashDefinition([1, 1]);
+        const dashes = makeDashes(dd, new Point(0, 0), new Point(4, 0), 0);
+        expect(round(dashes[0][0])).toEqual(new Point(0, 0));
+        expect(round(dashes[0][1])).toEqual(new Point(1, 0));
+        expect(round(dashes[1][0])).toEqual(new Point(2, 0));
+        expect(round(dashes[1][1])).toEqual(new Point(3, 0));
+      });
+      test('dash longer than line', () => {
+        const dd = makeDashDefinition([1, 1]);
+        const dashes = makeDashes(dd, new Point(0, 0), new Point(0.5, 0), 0);
+        expect(round(dashes[0][0])).toEqual(new Point(0, 0));
+        expect(round(dashes[0][1])).toEqual(new Point(0.5, 0));
+      });
+      test('dash longer than line 2', () => {
+        const dd = makeDashDefinition([0.5, 0.4, 0.5, 0.3]);
+        const dashes = makeDashes(dd, new Point(0, 0), new Point(1.2, 0), 0);
+        expect(round(dashes[0][0])).toEqual(new Point(0, 0));
+        expect(round(dashes[0][1])).toEqual(new Point(0.5, 0));
+        expect(round(dashes[1][0])).toEqual(new Point(0.9, 0));
+        expect(round(dashes[1][1])).toEqual(new Point(1.2, 0));
+      });
+      test('offset in dash', () => {
+        const dd = makeDashDefinition([0.5, 0.4, 0.5, 0.3]);
+        const dashes = makeDashes(dd, new Point(0, 0), new Point(1.2, 0), 1);
+        expect(round(dashes[0][0])).toEqual(new Point(0, 0));
+        expect(round(dashes[0][1])).toEqual(new Point(0.4, 0));
+        expect(round(dashes[1][0])).toEqual(new Point(0.7, 0));
+        expect(round(dashes[1][1])).toEqual(new Point(1.2, 0));
+      });
+      test('offset in gap', () => {
+        const dd = makeDashDefinition([0.5, 0.4, 0.5, 0.3]);
+        const dashes = makeDashes(dd, new Point(0, 0), new Point(1.2, 0), 0.6);
+        expect(round(dashes[0][0])).toEqual(new Point(0.3, 0));
+        expect(round(dashes[0][1])).toEqual(new Point(0.8, 0));
+        expect(round(dashes[1][0])).toEqual(new Point(1.1, 0));
+        expect(round(dashes[1][1])).toEqual(new Point(1.2, 0));
+      });
     });
   });
 });
