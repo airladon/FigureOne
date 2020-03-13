@@ -2795,6 +2795,7 @@ function makePolyLine(
   cornerSize: number,
   cornerSides: number,
   minAutoCornerAngle: number = Math.PI / 7,
+  dash: Array<number> = [],
 ) {
   let points = [];
   let autoCorners = true;
@@ -2815,6 +2816,17 @@ function makePolyLine(
   }
   
   // Convert line to dashed line
+  let dashes;
+  if (dash.length > 1) {
+    dashes = lineToDash(points, dash, close, 0);
+    let dashedTris = [];
+    dashes.forEach((d) => {
+      dashedTris = [...dashedTris, ...makeThickLineMid(
+        d, width, false, autoCorners, pointStyle, minAutoCornerAngle,
+      )];
+    });
+    return dashedTris;
+  }
 
   if (pointsAre === 'mid') {
     return makeThickLineMid(

@@ -15,7 +15,7 @@ const line = [
   new Point(0, 0),
 ];
 
-const makeLine = (lineIn) => makePolyLine(lineIn, 0.08, true, 'mid', 'radius', 0.005, 10)
+const makeLine = (lineIn) => makePolyLine(lineIn, 0.02, true, 'mid', 'auto', 0.005, 10, Math.PI / 7, [0.2, 0.05, 0.01, 0.05])
 const thick = makeLine(line);
 
 console.log(thick)
