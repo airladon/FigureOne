@@ -1,5 +1,890 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Tools Lines makePolyLine Inside auto 1`] = `
+Array [
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": -0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": -0,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.1,
+    "y": 1,
+  },
+]
+`;
+
+exports[`Tools Lines makePolyLine Inside dash 1`] = `
+Array [
+  Point {
+    "_type": "point",
+    "x": 0.2,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.2,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.2,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 6.123233995736766e-18,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 5.633375276077826e-17,
+    "y": 0.07999999999999974,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 5.633375276077826e-17,
+    "y": 0.07999999999999974,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.10000000000000006,
+    "y": 0.07999999999999967,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.48000000000000004,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.48000000000000004,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.28,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.48000000000000004,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.28,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.28,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.76,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.76,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.56,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.76,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.56,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.56,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.04000000000000009,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 0.040000000000000105,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 0.040000000000000105,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": -0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.84,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.84,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.84,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.3200000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 0.3200000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.12000000000000009,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 0.3200000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.12000000000000009,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 0.1200000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.6000000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 0.6000000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.40000000000000013,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 0.6000000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.40000000000000013,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 0.40000000000000013,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.8800000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 0.8800000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.68,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 0.8800000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.68,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 0.68,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.8399999999999999,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.8399999999999999,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.8399999999999999,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.9600000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.9600000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 0.9600000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.5599999999999998,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.5599999999999998,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.7599999999999998,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.5599999999999998,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.7599999999999998,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.7599999999999998,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.2799999999999998,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.2799999999999998,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.47999999999999976,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.2799999999999998,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.47999999999999976,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.47999999999999976,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.699538841808614e-32,
+    "y": 0.9999999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.1,
+    "y": 0.9999999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.1,
+    "y": 0.9999999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 6.123233995736766e-18,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.19999999999999984,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 6.123233995736766e-18,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.19999999999999984,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.19999999999999984,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.7145055188062962e-17,
+    "y": 0.7199999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.10000000000000002,
+    "y": 0.7199999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": 4.89858719658943e-18,
+    "y": 0.9199999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.10000000000000002,
+    "y": 0.7199999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": 4.89858719658943e-18,
+    "y": 0.9199999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.1,
+    "y": 0.9199999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 3.4290110376125906e-17,
+    "y": 0.4399999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.10000000000000003,
+    "y": 0.4399999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 2.2043642384652377e-17,
+    "y": 0.6399999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.10000000000000003,
+    "y": 0.4399999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 2.2043642384652377e-17,
+    "y": 0.6399999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.10000000000000003,
+    "y": 0.6399999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 5.143516556418885e-17,
+    "y": 0.1599999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.10000000000000006,
+    "y": 0.15999999999999973,
+  },
+  Point {
+    "_type": "point",
+    "x": 3.9188697572715314e-17,
+    "y": 0.35999999999999976,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.10000000000000006,
+    "y": 0.15999999999999973,
+  },
+  Point {
+    "_type": "point",
+    "x": 3.9188697572715314e-17,
+    "y": 0.35999999999999976,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.10000000000000005,
+    "y": 0.35999999999999976,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.1,
+    "y": -6.66133814775094e-17,
+  },
+  Point {
+    "_type": "point",
+    "x": 5.633375276077826e-17,
+    "y": 0.07999999999999974,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.1,
+    "y": -6.66133814775094e-17,
+  },
+  Point {
+    "_type": "point",
+    "x": 5.633375276077826e-17,
+    "y": 0.07999999999999974,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.10000000000000006,
+    "y": 0.07999999999999967,
+  },
+]
+`;
+
+exports[`Tools Lines makePolyLine Inside fill 1`] = `
+Array [
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": -0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": -0,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.9,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.9,
+    "y": -0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": -0,
+    "y": 0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0.9,
+  },
+]
+`;
+
 exports[`Tools Lines makePolyLine Inside radius 1`] = `
 Array [
   Point {
@@ -1981,6 +2866,951 @@ Array [
     "_type": "point",
     "x": 0.09969173337331286,
     "y": 0.9771540904272161,
+  },
+]
+`;
+
+exports[`Tools Lines makePolyLine Mid auto 1`] = `
+Array [
+  Point {
+    "_type": "point",
+    "x": 3.061616997868383e-18,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.05,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.05,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 6.123233995736766e-18,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": -9.184850993605149e-18,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": -9.184850993605149e-18,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.05,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.05,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05,
+    "y": -1.2246467991473533e-17,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.05,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05,
+    "y": -1.2246467991473533e-17,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.05,
+    "y": -0.05,
+  },
+]
+`;
+
+exports[`Tools Lines makePolyLine Mid dash 1`] = `
+Array [
+  Point {
+    "_type": "point",
+    "x": 0.05000000000000006,
+    "y": 0.07999999999999968,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.04999999999999995,
+    "y": 0.0799999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05,
+    "y": -5.665538897647979e-17,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.04999999999999995,
+    "y": 0.0799999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05,
+    "y": -5.665538897647979e-17,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.05000000000000004,
+    "y": -0.05000000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 3.061616997868383e-18,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.05000000000000004,
+    "y": -0.05000000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.2,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.05000000000000004,
+    "y": -0.05000000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.2,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.2,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.28,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.28,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.48000000000000004,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.28,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.48000000000000004,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.48000000000000004,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.56,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.56,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.76,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.56,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.76,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.76,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.84,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.84,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.84,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": -0.049999999999999996,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 6.123233995736766e-18,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": -0.049999999999999996,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 0.0400000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": -0.049999999999999996,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 0.0400000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 0.04000000000000009,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 0.12000000000000009,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 0.12000000000000009,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 0.3200000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 0.12000000000000009,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 0.3200000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 0.3200000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 0.40000000000000013,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 0.40000000000000013,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 0.6000000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 0.40000000000000013,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 0.6000000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 0.6000000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 0.68,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 0.68,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 0.8800000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 0.68,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 0.8800000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 0.8800000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 0.9600000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 0.9600000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 0.9600000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.8399999999999999,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.8399999999999999,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.8399999999999999,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.7599999999999998,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.7599999999999998,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.5599999999999998,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.7599999999999998,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.5599999999999998,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.5599999999999998,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.47999999999999976,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.47999999999999976,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.2799999999999998,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.47999999999999976,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.2799999999999998,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.2799999999999998,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.19999999999999984,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.19999999999999984,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": -9.184850993605149e-18,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.19999999999999984,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": -9.184850993605149e-18,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 3.061616997868383e-18,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.05,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05,
+    "y": 0.9999999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.05,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05,
+    "y": 0.9999999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.05,
+    "y": 0.9999999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05000000000000001,
+    "y": 0.9199999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.049999999999999996,
+    "y": 0.9199999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05000000000000002,
+    "y": 0.7199999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.049999999999999996,
+    "y": 0.9199999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05000000000000002,
+    "y": 0.7199999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.04999999999999999,
+    "y": 0.7199999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.050000000000000024,
+    "y": 0.6399999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.04999999999999998,
+    "y": 0.6399999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05000000000000004,
+    "y": 0.4399999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.04999999999999998,
+    "y": 0.6399999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05000000000000004,
+    "y": 0.4399999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.04999999999999997,
+    "y": 0.4399999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.050000000000000044,
+    "y": 0.35999999999999976,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.04999999999999996,
+    "y": 0.35999999999999976,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05000000000000005,
+    "y": 0.1599999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.04999999999999996,
+    "y": 0.35999999999999976,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05000000000000005,
+    "y": 0.1599999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.049999999999999954,
+    "y": 0.1599999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05000000000000006,
+    "y": 0.07999999999999968,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.04999999999999995,
+    "y": 0.0799999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05,
+    "y": -5.665538897647979e-17,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.04999999999999995,
+    "y": 0.0799999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05,
+    "y": -5.665538897647979e-17,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.05,
+    "y": 5.053215498074303e-17,
+  },
+]
+`;
+
+exports[`Tools Lines makePolyLine Mid fill 1`] = `
+Array [
+  Point {
+    "_type": "point",
+    "x": 3.061616997868383e-18,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 3.061616997868383e-18,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 3.061616997868383e-18,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 6.123233995736766e-18,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": -9.184850993605149e-18,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": -9.184850993605149e-18,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 3.061616997868383e-18,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.05,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05,
+    "y": -1.2246467991473533e-17,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.05,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05,
+    "y": -1.2246467991473533e-17,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.05,
+    "y": 6.123233995736766e-18,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 6.123233995736766e-18,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.05,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.95,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 3.061616997868383e-18,
+    "y": 1.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.05,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": -9.184850993605149e-18,
+    "y": 0.95,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.05,
+    "y": 6.123233995736766e-18,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 3.061616997868383e-18,
+    "y": -0.05,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.05,
+    "y": -1.2246467991473533e-17,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 3.061616997868383e-18,
+    "y": 0.05,
   },
 ]
 `;
@@ -4626,6 +6456,891 @@ Array [
     "_type": "point",
     "x": 0.0498458666866564,
     "y": 0.018922954786392256,
+  },
+]
+`;
+
+exports[`Tools Lines makePolyLine Outside auto 1`] = `
+Array [
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.1,
+    "y": -0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.1,
+    "y": -0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": -0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": -0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": -0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.1,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.1,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.1,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.1,
+    "y": -0.1,
+  },
+]
+`;
+
+exports[`Tools Lines makePolyLine Outside dash 1`] = `
+Array [
+  Point {
+    "_type": "point",
+    "x": 5.633375276077826e-17,
+    "y": 0.07999999999999974,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.09999999999999995,
+    "y": 0.07999999999999984,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.09999999999999995,
+    "y": 0.07999999999999984,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.10000000000000007,
+    "y": -0.10000000000000002,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.10000000000000007,
+    "y": -0.10000000000000002,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.2,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.10000000000000007,
+    "y": -0.10000000000000002,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.2,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.2,
+    "y": -0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.28,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.28,
+    "y": -0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.48000000000000004,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.28,
+    "y": -0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.48000000000000004,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.48000000000000004,
+    "y": -0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.56,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.56,
+    "y": -0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.76,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.56,
+    "y": -0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.76,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.76,
+    "y": -0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.84,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.84,
+    "y": -0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.84,
+    "y": -0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": -0.09999999999999999,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": -0.09999999999999999,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.04000000000000009,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": -0.09999999999999999,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.04000000000000009,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 0.04000000000000009,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.12000000000000009,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 0.12000000000000009,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.3200000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 0.12000000000000009,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.3200000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 0.3200000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.40000000000000013,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 0.40000000000000013,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.6000000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 0.40000000000000013,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.6000000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 0.6000000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.68,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 0.68,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.8800000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 0.68,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.8800000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 0.8800000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0.9600000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 0.9600000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 0.9600000000000001,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 1.1000000000000003,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 1.1000000000000003,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.8399999999999999,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 1.1000000000000003,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.8399999999999999,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.8399999999999999,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.7599999999999998,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.7599999999999998,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.5599999999999998,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.7599999999999998,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.5599999999999998,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.5599999999999998,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.47999999999999976,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.47999999999999976,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.2799999999999998,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.47999999999999976,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.2799999999999998,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.2799999999999998,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.19999999999999984,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.19999999999999984,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0.19999999999999984,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 6.123233995736766e-18,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.699538841808614e-32,
+    "y": 0.9999999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.699538841808614e-32,
+    "y": 0.9999999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.1,
+    "y": 0.9999999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": 4.89858719658943e-18,
+    "y": 0.9199999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.1,
+    "y": 0.9199999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.7145055188062962e-17,
+    "y": 0.7199999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.1,
+    "y": 0.9199999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.7145055188062962e-17,
+    "y": 0.7199999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.09999999999999999,
+    "y": 0.7199999999999998,
+  },
+  Point {
+    "_type": "point",
+    "x": 2.2043642384652377e-17,
+    "y": 0.6399999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.09999999999999998,
+    "y": 0.6399999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 3.4290110376125906e-17,
+    "y": 0.4399999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.09999999999999998,
+    "y": 0.6399999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 3.4290110376125906e-17,
+    "y": 0.4399999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.09999999999999998,
+    "y": 0.4399999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 3.9188697572715314e-17,
+    "y": 0.35999999999999976,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.09999999999999996,
+    "y": 0.35999999999999976,
+  },
+  Point {
+    "_type": "point",
+    "x": 5.143516556418885e-17,
+    "y": 0.1599999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.09999999999999996,
+    "y": 0.35999999999999976,
+  },
+  Point {
+    "_type": "point",
+    "x": 5.143516556418885e-17,
+    "y": 0.1599999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.09999999999999995,
+    "y": 0.1599999999999997,
+  },
+  Point {
+    "_type": "point",
+    "x": 5.633375276077826e-17,
+    "y": 0.07999999999999974,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.09999999999999995,
+    "y": 0.07999999999999984,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.09999999999999995,
+    "y": 0.07999999999999984,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.1,
+    "y": 1.0106430996148606e-16,
+  },
+]
+`;
+
+exports[`Tools Lines makePolyLine Outside fill 1`] = `
+Array [
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 6.123233995736766e-18,
+    "y": -0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 6.123233995736766e-18,
+    "y": -0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": -0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 6.123233995736766e-18,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.1,
+    "y": 1.2246467991473533e-17,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": -0.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 1.1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 6.123233995736766e-18,
+    "y": 1.1,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.1,
+    "y": 1,
+  },
+  Point {
+    "_type": "point",
+    "x": -0.1,
+    "y": 1.2246467991473533e-17,
+  },
+  Point {
+    "_type": "point",
+    "x": 0,
+    "y": 0,
+  },
+  Point {
+    "_type": "point",
+    "x": 6.123233995736766e-18,
+    "y": -0.1,
   },
 ]
 `;

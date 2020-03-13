@@ -68,6 +68,18 @@ describe('Tools Lines', () => {
         const out = makePolyLine(points, 0.1, true, 'outside', 'radius', 0.015, 10);
         expect(out).toMatchSnapshot();
       });
+      test('fill', () => {
+        const out = makePolyLine(points, 0.1, true, 'outside', 'fill');
+        expect(out).toMatchSnapshot();
+      });
+      test('auto', () => {
+        const out = makePolyLine(points, 0.1, true, 'outside', 'auto');
+        expect(out).toMatchSnapshot();
+      });
+      test('dash', () => {
+        const out = makePolyLine(points, 0.1, true, 'outside', 'auto', 0.015, 10, Math.PI / 7, [0.2, 0.08]);
+        expect(out).toMatchSnapshot();
+      });
     });
     describe('Inside', () =>{
       test('Unclosed', () => {
@@ -120,6 +132,18 @@ describe('Tools Lines', () => {
         const out = makePolyLine(points, 0.1, true, 'inside', 'radius', 0.015, 10);
         expect(out).toMatchSnapshot();
       });
+      test('fill', () => {
+        const out = makePolyLine(points, 0.1, true, 'inside', 'fill');
+        expect(out).toMatchSnapshot();
+      });
+      test('auto', () => {
+        const out = makePolyLine(points, 0.1, true, 'inside', 'auto');
+        expect(out).toMatchSnapshot();
+      });
+      test('dash', () => {
+        const out = makePolyLine(points, 0.1, true, 'inside', 'auto', 0.015, 10, Math.PI / 7, [0.2, 0.08]);
+        expect(out).toMatchSnapshot();
+      });
     });
     describe('Mid', () =>{
       test('Unclosed', () => {
@@ -170,6 +194,18 @@ describe('Tools Lines', () => {
       });
       test('radius', () => {
         const out = makePolyLine(points, 0.1, true, 'mid', 'radius', 0.015, 10);
+        expect(out).toMatchSnapshot();
+      });
+      test('fill', () => {
+        const out = makePolyLine(points, 0.1, true, 'mid', 'fill');
+        expect(out).toMatchSnapshot();
+      });
+      test('auto', () => {
+        const out = makePolyLine(points, 0.1, true, 'mid', 'auto');
+        expect(out).toMatchSnapshot();
+      });
+      test('dash', () => {
+        const out = makePolyLine(points, 0.1, true, 'mid', 'auto', 0.015, 10, Math.PI / 7, [0.2, 0.08]);
         expect(out).toMatchSnapshot();
       });
     });
