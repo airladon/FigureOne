@@ -321,6 +321,50 @@ function makePolyLine(
   );
 }
 
+function makePolyLineCorners(
+  pointsIn: Array<Point>,
+  width: number = 0.01,
+  close: boolean = false,
+  cornerLength: number,
+  pointsAre: 'mid' | 'outside' | 'inside' = 'mid',
+  cornerStyle: 'auto' | 'none' | 'radius' | 'fill',
+  cornerSize: number,
+  cornerSides: number,
+  minAutoCornerAngle: number = Math.PI / 7,
+) {
+  // split line into corners
+  
+  let points = [];
+  let cornerStyleToUse = cornerStyle;
+  // Convert line to line with corners
+  if (cornerStyle === 'auto') {
+    points = pointsIn.map(p => p._dup());
+  } else if (cornerStyle === 'radius') {
+    points = cornerLine(pointsIn, close, 'fromVertex', cornerSides, cornerSize);
+    cornerStyleToUse = 'fill';
+  } else {
+    // autoCorners = 'none';
+    points = pointsIn.map(p => p._dup());
+  }
+  
+  // Convert line to dashed line
+  if (dash.length > 1) {
+    let dashes;
+    dashes = lineToDash(points, dash, close, 0);
+    let closeDashes = false;
+    if (dashes.length === 1) {
+      closeDashes = close;
+    }
+    let dashedTris = [];
+    dashes.forEach((d) => {
+      dashedTris = [...dashedTris, ...makeThickLine(
+        d, width, pointsAre, closeDashes, cornerStyleToUse, minAutoCornerAngle,
+      )];
+    });
+    return dashedTris;
+  }
+}
+
 export {
   joinLinesInPoint,
   lineSegmentsToPoints,
