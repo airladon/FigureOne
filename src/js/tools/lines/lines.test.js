@@ -64,6 +64,10 @@ describe('Tools Lines', () => {
         expect(round(line4.bottom)).toBe(0);
         expect(round(line4.height)).toBe(1);
       });
+      test('radius', () => {
+        const out = makePolyLine(points, 0.1, true, 'outside', 'radius', 0.015, 10);
+        expect(out).toMatchSnapshot();
+      });
     });
     describe('Inside', () =>{
       test('Unclosed', () => {
@@ -112,6 +116,10 @@ describe('Tools Lines', () => {
         expect(round(line4.bottom)).toBe(0);
         expect(round(line4.height)).toBe(1);
       });
+      test('radius', () => {
+        const out = makePolyLine(points, 0.1, true, 'inside', 'radius', 0.015, 10);
+        expect(out).toMatchSnapshot();
+      });
     });
     describe('Mid', () =>{
       test('Unclosed', () => {
@@ -159,6 +167,10 @@ describe('Tools Lines', () => {
         expect(round(line4.width)).toBe(0.1);
         expect(round(line4.bottom)).toBe(0);
         expect(round(line4.height)).toBe(1);
+      });
+      test('radius', () => {
+        const out = makePolyLine(points, 0.1, true, 'mid', 'radius', 0.015, 10);
+        expect(out).toMatchSnapshot();
       });
     });
   });
