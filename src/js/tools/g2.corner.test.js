@@ -327,6 +327,48 @@ describe('g2 corner tests', () => {
         expect(round(d[0][1])).toEqual(new Point(0.25, 0));
         expect(round(d[1][0])).toEqual(new Point(0.5, 0));
         expect(round(d[1][1])).toEqual(new Point(0.75, 0));
+      });
+      test('Three Points', () => {
+        const d = lineToDash(
+          [new Point(0, 0), new Point(1, 0), new Point(1, 1)],
+          [0.3, 0.3], false, 0,
+        );
+        expect(round(d[0][0])).toEqual(new Point(0, 0));
+        expect(round(d[0][1])).toEqual(new Point(0.3, 0));
+        expect(round(d[1][0])).toEqual(new Point(0.6, 0));
+        expect(round(d[1][1])).toEqual(new Point(0.9, 0));
+        expect(round(d[2][0])).toEqual(new Point(1, 0.2));
+        expect(round(d[2][1])).toEqual(new Point(1, 0.5));
+        expect(round(d[3][0])).toEqual(new Point(1, 0.8));
+        expect(round(d[3][1])).toEqual(new Point(1, 1));
+      });
+      test('Three Points with offset', () => {
+        const d = lineToDash(
+          [new Point(0, 0), new Point(1, 0), new Point(1, 1)],
+          [0.3, 0.3], false, 0.05,
+        );
+        expect(round(d[0][0])).toEqual(new Point(0, 0));
+        expect(round(d[0][1])).toEqual(new Point(0.25, 0));
+        expect(round(d[1][0])).toEqual(new Point(0.55, 0));
+        expect(round(d[1][1])).toEqual(new Point(0.85, 0));
+        expect(round(d[2][0])).toEqual(new Point(1, 0.15));
+        expect(round(d[2][1])).toEqual(new Point(1, 0.45));
+        expect(round(d[3][0])).toEqual(new Point(1, 0.75));
+        expect(round(d[3][1])).toEqual(new Point(1, 1));
+      });
+      test('Four Points with close', () => {
+        const d = lineToDash(
+          [new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(0, 1)],
+          [0.6, 0.6], true, 0,
+        );
+        expect(round(d[0][0])).toEqual(new Point(0, 0));
+        expect(round(d[0][1])).toEqual(new Point(0.6, 0));
+        expect(round(d[1][0])).toEqual(new Point(1, 0.2));
+        expect(round(d[1][1])).toEqual(new Point(1, 0.8));
+        expect(round(d[2][0])).toEqual(new Point(0.6, 1));
+        expect(round(d[2][1])).toEqual(new Point(0, 1));
+        expect(round(d[3][0])).toEqual(new Point(0, 0.4));
+        expect(round(d[3][1])).toEqual(new Point(0, 0));
       })
     });
   });
