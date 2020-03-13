@@ -48,18 +48,18 @@ function lineSegmentsToPoints(lineSegments: Array<[Line, Line, Line]>) {
   });
   return out;
 }
-
-//                    N 2   o N  2     N 2
+//                    2       2        2
+//                    N     o N        N
 //                       No      N        N
 //                      o   N       N        N
 //                    o        N       N        N
 //                   o            N       N        N
 //            angle o                N       N        N
 //                 o                    N       N        N        / Tangent
-//                 o                       N       N        N    /
-//                o                           N 1     N      1 N/
-//  in   000000000o000000000000000000000000000000        N 1   /
-//       1        o                            2          N   /
+//                 o                       N  1    N        N  1 /
+//                o                           N       N        N/
+//  in   000000000o000000000000000000000000000000        N  1  /
+//       1        o                            2            N /
 //  mid  0000000000000000000000000000000000000000000000000000/
 //       1                                                2 /
 //  out  00000000000000000000000000000000000000000000000000/
