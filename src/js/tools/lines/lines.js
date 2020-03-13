@@ -4,6 +4,18 @@ import {
   Line, Point, threePointAngleMin, threePointAngle,
 } from '../g2';
 
+/* eslint-disable yoda */
+
+// A thick line is defined from:
+//  * A reference line
+//  * A width
+//  * Where the reference line is relative to the width
+//    ('mid', 'inside', 'outside')
+//  * How to deal with the corners in the line
+//
+
+
+// Extend two lines to their intersection point
 function joinLinesInPoint(line1: Line, lineNext: Line) {
   const intersect = line1.intersectsWith(lineNext);
   if (intersect.intersect != null) {
@@ -12,6 +24,17 @@ function joinLinesInPoint(line1: Line, lineNext: Line) {
   }
 }
 
+// Convert line segments that define the outer boundaries of a line into
+// triangles for drawing in WebGL
+//
+//                        outside
+// p1    ----------------------------------------------   p2
+//       2, 4
+//
+//       1                                         3, 5
+// p1    ----------------------------------------------   p2
+//                        inside
+//
 function lineSegmentsToPoints(lineSegments: Array<[Line, Line, Line]>) {
   const out = [];
   lineSegments.forEach((lineSegment) => {
@@ -26,6 +49,25 @@ function lineSegmentsToPoints(lineSegments: Array<[Line, Line, Line]>) {
   return out;
 }
 
+//                    N 2   o N  2     N 2
+//                       No      N        N
+//                      o   N       N        N
+//                    o        N       N        N
+//                   o            N       N        N
+//            angle o                N       N        N
+//                 o                    N       N        N        / Tangent
+//                 o                       N       N        N    /
+//                o                           N 1     N      1 N/
+//  in   000000000o000000000000000000000000000000        N 1   /
+//       1        o                            2          N   /
+//  mid  0000000000000000000000000000000000000000000000000000/
+//       1                                                2 /
+//  out  00000000000000000000000000000000000000000000000000/
+//       1                                              2 /
+//                                                       /
+//
+// Note, for simplicity, both inside and outside can intercept with tangent
+// and geometry is valid.
 function joinLinesInTangent(
   inside: Line,
   insideNext: Line,
@@ -55,7 +97,6 @@ function joinLinesInTangent(
   }
 }
 
-/* eslint-disable yoda */
 function makeThickLineMid(
   points: Array<Point>,
   width: number = 0.01,
