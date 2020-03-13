@@ -266,6 +266,13 @@ function makeThickLine(
   if (pointsAre === 'outside') {
     return makeThickLineInsideOutside(points, width, close, corner, minAngle);
   }
+  if (pointsAre === 'inside') {
+    const reversedCopy = [];
+    for (let i = points.length - 1; i >= 0; i -= 1) {
+      reversedCopy.push(points[i]._dup());
+    }
+    return makeThickLineInsideOutside(reversedCopy, width, close, corner, minAngle);
+  }
 }
 
 function makePolyLine(
@@ -280,16 +287,10 @@ function makePolyLine(
   dash: Array<number> = [],
 ) {
   let points = [];
-  // let autoCorners = true;
-  // let pointStyle = 'fill';
   let cornerStyleToUse = cornerStyle;
   // Convert line to line with corners
   if (cornerStyle === 'auto') {
     points = pointsIn.map(p => p._dup());
-    // pointStyle = 'autoPoint';
-  // } else if (cornerStyle === 'chamfer') {
-  //   points = cornerLine(pointsIn, close, 'fromVertex', 1, cornerSize);
-  //   cornerStyleToUse = 'fill';
   } else if (cornerStyle === 'radius') {
     points = cornerLine(pointsIn, close, 'fromVertex', cornerSides, cornerSize);
     cornerStyleToUse = 'fill';
@@ -318,17 +319,6 @@ function makePolyLine(
   return makeThickLine(
     points, width, pointsAre, close, cornerStyleToUse, minAutoCornerAngle,
   );
-  // if (pointsAre === 'mid') {
-  //   return makeThickLineMid(
-  //     points, width, close, autoCorners, pointStyle, minAutoCornerAngle,
-  //   );
-  // }
-
-  // if (pointsAre === 'outside') {
-  //   return makeThickLineInsideOutside(points, width, close, autoCorners, minAutoCornerAngle);
-  // }
-
-  // return makeThickLineInside(points, width, close, autoCorners);
 }
 
 export {

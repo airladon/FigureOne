@@ -101,8 +101,8 @@ function lineToDash(
     const dashes = makeDashes(dd, p1, p2, cumLength);
     const dashLines = dashes.points;
     const dashContinues = dashes.continues;
-    if (lastContinue) {
-      out[out.length-1] = [...out[out.length-1], ...dashLines[0].slice(1)];
+    if (lastContinue && dashLines[0] != null) {
+      out[out.length - 1] = [...out[out.length - 1], ...dashLines[0].slice(1)];
       out = [...out, ...dashLines.slice(1)];
     } else {
       out = [...out, ...dashLines];
