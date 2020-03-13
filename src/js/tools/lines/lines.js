@@ -106,6 +106,7 @@ function makeLineSegments(
   points: Array<Point>,
   insideWidth:number,
   outsideWidth: number,
+  close: boolean,
 ) {
   const lineSegments = [];
   const makeLineSegment = (p1, p2) => {
@@ -134,7 +135,7 @@ function makeThickLineMid(
   corner: 'auto' | 'fill' | 'none',
   minAngleIn: ?number = Math.PI / 7,
 ) {
-  const lineSegments = makeLineSegments(points, width / 2, width / 2);
+  const lineSegments = makeLineSegments(points, width / 2, width / 2, close);
 
   // Join line segments based on the angle between them
   const minAngle = minAngleIn == null ? 0 : minAngleIn;
@@ -199,7 +200,7 @@ function makeThickLineInsideOutside(
   corner: 'auto' | 'fill' | 'none',
   minAngleIn: ?number = Math.PI / 7,
 ) {
-  const lineSegments = makeLineSegments(points, width, width)
+  const lineSegments = makeLineSegments(points, width, width, close);
 
   const minAngle = minAngleIn == null ? 0 : minAngleIn;
   const joinLineSegments = (current, next) => {
@@ -279,6 +280,7 @@ function makePolyLine(
   dash: Array<number> = [],
 ) {
   let points = [];
+  console.log(close)
   // let autoCorners = true;
   // let pointStyle = 'fill';
   let cornerStyleToUse = cornerStyle;
