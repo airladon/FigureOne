@@ -310,7 +310,6 @@ describe('g2 corner tests', () => {
         const dashes = makeDashes(dd, new Point(0, 0), new Point(1, 1), 0);
         const c45 = Math.cos(Math.PI / 4);
         const s45 = Math.sin(Math.PI / 4);
-        console.log(dashes)
         expect(round(dashes[0][0])).toEqual(round(new Point(0, 0)));
         expect(round(dashes[0][1])).toEqual(round(new Point(0.5 * c45, 0.5 * s45)));
         expect(round(dashes[1][0])).toEqual(round(new Point(0.9 * c45, 0.9 * s45)));
