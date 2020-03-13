@@ -35,10 +35,15 @@ function joinLinesInPoint(line1: Line, lineNext: Line) {
 // p1    ----------------------------------------------   p2
 //                        inside
 //
-function lineSegmentsToPoints(lineSegments: Array<[Line, Line, Line]>) {
+function lineSegmentsToPoints(
+  lineSegments: Array<[Line, Line, Line]>,
+  insideIndex: number,
+  outsideIndex: number,
+) {
   const out = [];
   lineSegments.forEach((lineSegment) => {
-    const [inside, outside] = lineSegment;
+    const inside = lineSegment[insideIndex];
+    const outside = lineSegment[outsideIndex];
     out.push(inside.p1._dup());
     out.push(outside.p1._dup());
     out.push(inside.p2._dup());
@@ -105,9 +110,9 @@ function makeLineSegments(
   const lineSegments = [];
   const makeLineSegment = (p1, p2) => {
     const lineSegment = new Line(p1, p2);
-    const outsideOffset = lineSegment.offset('outside', outsideWidth);
     const insideOffset = lineSegment.offset('inside', insideWidth);
-    lineSegments.push([insideOffset, outsideOffset, lineSegment]);
+    const outsideOffset = lineSegment.offset('outside', outsideWidth);
+    lineSegments.push([insideOffset, lineSegment, outsideOffset]);
   };
 
   // Go through all points, and generate inside, mid and outside line segments
@@ -129,31 +134,13 @@ function makeThickLineMid(
   corner: 'auto' | 'fill' | 'none',
   minAngleIn: ?number = Math.PI / 7,
 ) {
-  // const lineSegments = [];
-
-  // // from a line defined by p1 and p2, generate an outside and inside offset
-  // // line
-  // const makeLineSegment = (p1, p2) => {
-  //   const lineSegment = new Line(p1, p2);
-  //   const outsideOffset = lineSegment.offset('outside', width / 2);
-  //   const insideOffset = lineSegment.offset('inside', width / 2);
-  //   lineSegments.push([insideOffset, outsideOffset, lineSegment]);
-  // };
-
-  // // Go through all points, and generate inside, mid and outside line segments
-  // for (let i = 0; i < points.length - 1; i += 1) {
-  //   makeLineSegment(points[i], points[i + 1]);
-  // }
-  // if (close) {
-  //   makeLineSegment(points[points.length - 1], points[0]);
-  // }
   const lineSegments = makeLineSegments(points, width / 2, width / 2);
 
   // Join line segments based on the angle between them
   const minAngle = minAngleIn == null ? 0 : minAngleIn;
   const joinLineSegments = (current, next) => {
-    const [inside, outside, mid] = lineSegments[current];
-    const [insideNext, outsideNext, midNext] = lineSegments[next];
+    const [inside, mid, outside] = lineSegments[current];
+    const [insideNext, midNext, outsideNext] = lineSegments[next];
     const angle = threePointAngle(mid.p1, mid.p2, midNext.p2);
     // If the angle is less than 180, then the 'inside' line segments are
     // actually on the outside.
@@ -173,8 +160,8 @@ function makeThickLineMid(
   // Create fill triangles between the inside & mid, and outside and mid lines
   const cornerFills = [];
   const createFill = (current, next) => {
-    const [inside, outside, mid] = lineSegments[current];
-    const [insideNext, outsideNext] = lineSegments[next];
+    const [inside, mid, outside] = lineSegments[current];
+    const [insideNext, , outsideNext] = lineSegments[next];
     cornerFills.push(outside.p2._dup());
     cornerFills.push(mid.p2._dup());
     cornerFills.push(outsideNext.p1._dup());
@@ -202,7 +189,7 @@ function makeThickLineMid(
     }
   }
 
-  return [...lineSegmentsToPoints(lineSegments), ...cornerFills];
+  return [...lineSegmentsToPoints(lineSegments, 0, 2), ...cornerFills];
 }
 
 function makeThickLineInsideOutside(
@@ -212,21 +199,6 @@ function makeThickLineInsideOutside(
   corner: 'auto' | 'fill' | 'none',
   minAngleIn: ?number = Math.PI / 7,
 ) {
-  // const lineSegments = [];
-
-  // // Go through each line segment 
-  // const makeLineSegment = (p1, p2) => {
-  //   const lineSegment = new Line(p1, p2);
-  //   const outsideOffset = lineSegment.offset('outside', width);
-  //   lineSegments.push([lineSegment, outsideOffset]);
-  // };
-
-  // for (let i = 0; i < points.length - 1; i += 1) {
-  //   makeLineSegment(points[i], points[i + 1]);
-  // }
-  // if (close) {
-  //   makeLineSegment(points[points.length - 1], points[0]);
-  // }
   const lineSegments = makeLineSegments(points, width, width)
 
   const minAngle = minAngleIn == null ? 0 : minAngleIn;
@@ -260,7 +232,7 @@ function makeThickLineInsideOutside(
       joinLineSegments(lineSegments.length - 1, 0);
     }
   }
-  return lineSegmentsToPoints(lineSegments);
+  return lineSegmentsToPoints(lineSegments, 1, 2);
 }
 
 function makeThickLine(
@@ -298,10 +270,10 @@ function makePolyLine(
   if (cornerStyle === 'auto') {
     points = pointsIn.map(p => p._dup());
     // pointStyle = 'autoPoint';
-  } else if (cornersIn === 'chamfer') {
+  } else if (cornerStyle === 'chamfer') {
     points = cornerLine(pointsIn, close, 'fromVertex', 1, cornerSize);
     cornerStyleToUse = 'fill';
-  } else if (cornersIn === 'radius') {
+  } else if (cornerStyle === 'radius') {
     points = cornerLine(pointsIn, close, 'fromVertex', cornerSides, cornerSize);
     cornerStyleToUse = 'fill';
   } else {
