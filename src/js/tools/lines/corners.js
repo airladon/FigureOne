@@ -153,8 +153,38 @@ function cornerLine(
   return points;
 }
 
+function makeCorner(
+  p2: Point, p1: Point, p3: Point, length: number, forceLength: boolean = false,
+) {
+  const line12 = new Line(p1, p2);
+  const line13 = new Line(p1, p3);
+  let newP2 = line12.pointAtPercent(length / line12.length());
+  let newP3 = line13.pointAtPercent(length / line13.length());
+  if (forceLength === false) {
+    if (length > line12.length()) {
+      newP2 = p2._dup();
+    }
+    if (length > line13.length()) {
+      newP3 = p3._dup();
+    }
+  }
+  return [newP2, p1._dup(), newP3];
+}
+
+function lineToCorners(
+  pointsIn: Array<Point>,
+  close: boolean,
+  length: number,
+  forceLength: boolean = false,
+) {
+  for (let i = 0; i < pointsIn.length - 1; i += 1) {
+
+  }
+}
+
 export {
   circleCorner,
   cutCorner,
   cornerLine,
+  makeCorner,
 };

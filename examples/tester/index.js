@@ -87,3 +87,4 @@ pad.setTransformCallback = () => {
   diagram.animateNextFrame();
 }
 diagram.initialize();
+

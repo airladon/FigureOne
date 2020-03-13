@@ -211,3 +211,33 @@ describe('Tools Lines', () => {
     });
   });
 });
+
+// Use below code to show different poly line tests replacing `out =...` with
+// with the `out` line from the test
+//
+// const diagram = new Fig.Diagram();
+// const { Point } = Fig;
+// const { makePolyLine } = Fig.tools.lines;
+
+// const line = [
+//   new Point(0, 0),
+//   new Point(1, 0),
+//   new Point(1, 1),
+//   new Point(0, 1),
+// ];
+
+// const out = makePolyLine(line, 0.01, true, 'inside', 'auto', 0.015, 10, Math.PI / 7, [0.2, 0.08]);
+
+// diagram.addElements([
+//   {
+//     name: 'r',
+//     method: 'shapes.generic',
+//     options: {
+//       points: out,
+//       drawType: 'triangles',
+//       position: [-0.7, -0.5],
+//     },
+//   },
+// ]);
+
+// diagram.initialize();

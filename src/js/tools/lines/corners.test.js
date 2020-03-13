@@ -3,7 +3,7 @@ import {
 } from '../g2';
 import { round } from '../math';
 import {
-  circleCorner, cutCorner,
+  circleCorner, cutCorner, makeCorner,
 } from './corners';
 
 describe('g2 corner tests', () => {
@@ -219,6 +219,32 @@ describe('g2 corner tests', () => {
         polarToRect(mag, -150 * Math.PI / 180).add(center),
         polarToRect(mag, -210 * Math.PI / 180).add(center),
       ]));
+    });
+  });
+  describe('makeCorner', () => {
+    test('simple', () => {
+      const [p2, p1, p3] = makeCorner(
+        new Point(0, 0), new Point(1, 0), new Point(1, 1), 0.5, false,
+      );
+      expect(round(p2)).toEqual(new Point(0.5, 0));
+      expect(round(p1)).toEqual(new Point(1, 0));
+      expect(round(p3)).toEqual(new Point(1, 0.5));
+    });
+    test('No force', () => {
+      const [p2, p1, p3] = makeCorner(
+        new Point(0, 0), new Point(1, 0), new Point(1, 0.2), 0.5, false,
+      );
+      expect(round(p2)).toEqual(new Point(0.5, 0));
+      expect(round(p1)).toEqual(new Point(1, 0));
+      expect(round(p3)).toEqual(new Point(1, 0.2));
+    });
+    test('Force', () => {
+      const [p2, p1, p3] = makeCorner(
+        new Point(0, 0), new Point(1, 0), new Point(1, 0.2), 0.5, true,
+      );
+      expect(round(p2)).toEqual(new Point(0.5, 0));
+      expect(round(p1)).toEqual(new Point(1, 0));
+      expect(round(p3)).toEqual(new Point(1, 0.5));
     });
   });
 });
