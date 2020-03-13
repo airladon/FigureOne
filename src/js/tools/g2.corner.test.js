@@ -1,6 +1,7 @@
 import {
   Point, circleCorner, cutCorner, polarToRect, lineToDashed,
   getDashElementAndRemainder, makeDashDefinition, makeDashes,
+  lineToDash,
 } from './g2';
 import { round } from './math';
 
@@ -304,6 +305,29 @@ describe('g2 corner tests', () => {
         expect(round(dashes[1][0])).toEqual(new Point(1.1, 0));
         expect(round(dashes[1][1])).toEqual(new Point(1.2, 0));
       });
+      test('45 deg line', () => {
+        const dd = makeDashDefinition([0.5, 0.4, 0.5, 0.3]);
+        const dashes = makeDashes(dd, new Point(0, 0), new Point(1, 1), 0);
+        const c45 = Math.cos(Math.PI / 4);
+        const s45 = Math.sin(Math.PI / 4);
+        console.log(dashes)
+        expect(round(dashes[0][0])).toEqual(round(new Point(0, 0)));
+        expect(round(dashes[0][1])).toEqual(round(new Point(0.5 * c45, 0.5 * s45)));
+        expect(round(dashes[1][0])).toEqual(round(new Point(0.9 * c45, 0.9 * s45)));
+        expect(round(dashes[1][1])).toEqual(round(new Point(1.4 * c45, 1.4 * s45)));
+      });
+    });
+    describe('lineToDash', () => {
+      test('Two Points', () => {
+        const d = lineToDash(
+          [new Point(0, 0), new Point(1, 0)],
+          [0.25, 0.25], false, 0,
+        );
+        expect(round(d[0][0])).toEqual(new Point(0, 0));
+        expect(round(d[0][1])).toEqual(new Point(0.25, 0));
+        expect(round(d[1][0])).toEqual(new Point(0.5, 0));
+        expect(round(d[1][1])).toEqual(new Point(0.75, 0));
+      })
     });
   });
 });

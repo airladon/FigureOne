@@ -2756,51 +2756,34 @@ function makeDashes(
   return points;
 }
 
-function lineToDashes(
-  p1: Point,
-  p2: Point,
-  dashDefinition: Array<number> = [1, 0.2, 0.4, 0.2],
-  dashOffset: number = 0,
+function lineToDash(
+  points: Array<Points>,
+  dash: Array<number>,
+  close: boolean = false,
+  offset: number = 0,
 ) {
-  // const dashes = [];
+  let out = [];
+  const dd = makeDashDefinition(dash);
+  let cumLength = offset;
 
-  // let currentLength = dashOffset;
-  // const cum = [];
-  // const cycleLength = dashDefinition.reduce((p, sum) => {
-  //   cum.push(p + sum)
-  //   return p +sum;
-  // }, 0);
+  const processLine = (p1, p2) => {
+    const dashLines = makeDashes(dd, p1, p2, cumLength);
+    out = [...out, ...dashLines];
+    cumLength += distance(p1, p2);
+  }
 
-  // let [index, remainder] = getDashElementAndRemainder(
-  //   dashDefinition, cum, sum, dashOffset
-  // );
+  for (let i = 0; i < points.length - 1; i += 1) {
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    processLine(p1, p2);
+  }
+  if (close) {
+    const p1 = points[points.length - 1];
+    const p2 = points[0];
+    processLine(p1, p2);
+  }
 
-  // const line12 = new Line(p1, p2);
-  // let remainingPointLength = line12.length();
-
-  // while (remainingPointLength > 0) {
-  //   const isLine = index % 2 === 0 ? true : false;
-  //   const currentDashLength
-  //   if (!isLine) {
-  //     if (remainingPointLength < )
-  //   }
-  // }
-  // return distance(p)
-  // // const makeDashes = (p1, p2, offset) => {
-
-  // // }
-  // // console.log(cycleLength, cum)
-  // // makeDashes
-  // // for (let i = 0; i < pointsIn.length - 1; i += 1) {
-
-  // // }
-
-  // let cumDistance = 0;
-  // for (let i = 0; i < points.length - 1; i += 1) {
-  //   const p1 = points[i];
-  //   const p2 = points[i + 1];
-
-  // }
+  return out;
 }
 
 function makePolyLine(
@@ -3142,4 +3125,5 @@ export {
   getDashElementAndRemainder,
   makeDashDefinition,
   makeDashes,
+  lineToDash,
 };
