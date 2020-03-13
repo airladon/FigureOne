@@ -2315,13 +2315,15 @@ function cutCorner(
   let cut;
   if (style === 'fromVertex') {
     cut = value;
+    cut = Math.min(cut, line12.length() / 2 * 0.99, line13.length() / 2 * 0.99);
   } else if (style === 'radius') {
     const angle = Math.abs(threePointAngleMin(p2, p1, p3)) / 2;
     cut = value / Math.tan(angle);
+    cut = Math.min(cut, line12.length() / 2 * 0.99, line13.length() / 2 * 0.99);
   } else if (style === 'max') {
     cut = Math.min(line12.length(), line13.length());
   }
-  cut = Math.min(cut, line12.length() / 2 * 0.99, line13.length() / 2 * 0.99);
+  // cut = Math.min(cut, line12.length() / 2 * 0.99, line13.length() / 2 * 0.99);
 
   const p2Max = line12.pointAtPercent(cut / line12.length());
   const p3Max = line13.pointAtPercent(cut / line13.length());
@@ -2538,6 +2540,60 @@ function makeThickLineInside(
   return lineSegmentsToPoints(lineSegments);
 }
 
+function makeThickLineInsideOutside(
+  points: Array<Point>,
+  width: number = 0.01,
+  close: boolean = false,
+  makeCorner: boolean = true,
+  minAngleIn: ?number = Math.PI / 7,
+) {
+  // const out = [];
+  const lineSegments = [];
+  const makeLineSegment = (p1, p2) => {
+    const lineSegment = new Line(p1, p2);
+    const outsideOffset = lineSegment.offset('outside', width);
+    lineSegments.push([lineSegment, outsideOffset]);
+  };
+
+  for (let i = 0; i < points.length - 1; i += 1) {
+    makeLineSegment(points[i], points[i + 1]);
+  }
+  if (close) {
+    makeLineSegment(points[points.length - 1], points[0]);
+  }
+
+  const minAngle = minAngleIn == null ? 0 : minAngleIn;
+  const joinLineSegments = (current, next) => {
+    const [inside, outside] = lineSegments[current];
+    const [insideNext, outsideNext] = lineSegments[next];
+    const angle = threePointAngle(inside.p1, inside.p2, insideNext.p2);
+    if (0 < angle && angle < Math.PI) {
+      let intercept = outside.intersectsWith(insideNext);
+      if (intercept.intersect != null && intercept.intersect.isOnLine(insideNext, 8)) {
+        outside.setP2(intercept.intersect);
+      }
+      intercept = outsideNext.intersectsWith(inside);
+      if (intercept.intersect != null && intercept.intersect.isOnLine(inside, 8)) {
+        outsideNext.setP1(intercept.intersect);
+      }
+    } else if (Math.PI < angle && angle < Math.PI * 2 - minAngle) {
+      joinLinesInPoint(outside, outsideNext);
+    } else if (Math.PI * 2 - minAngle < angle && angle < Math.PI * 2) {
+      joinLinesInTangent(inside, insideNext, inside, insideNext, outside, outsideNext);
+    }
+  };
+
+  if (makeCorner) {
+    for (let i = 0; i < lineSegments.length - 1; i += 1) {
+      joinLineSegments(i, i + 1);
+    }
+    if (close) {
+      joinLineSegments(lineSegments.length - 1, 0);
+    }
+  }
+  return lineSegmentsToPoints(lineSegments);
+}
+
 function makeThickLineOutside(
   points: Array<Point>,
   width: number = 0.01,
@@ -2623,6 +2679,130 @@ function cornerLine(
   return points;
 }
 
+function makeDashDefinition(dashes: Array<number>) {
+  const cum = [];
+  const cycleLength = dashes.reduce((p, sum) => {
+    cum.push(p + sum)
+    return p +sum;
+  }, 0);
+  return {
+    definition: dashes,
+    sum: cycleLength,
+    cum,
+  };
+}
+
+function getDashElementAndRemainder(
+  dash: {
+    definition: Array<number>,
+    cum: Array<number>,
+    sum: number,
+  },
+  offset: number,
+ ) {
+  let singleCycleOffset;
+  if (offset > dash.sum) {
+    singleCycleOffset = offset % dash.sum;
+  } else {
+    singleCycleOffset = offset;
+  }
+
+  for (let i = 0; i < dash.definition.length; i += 1) {
+    if (singleCycleOffset <= dash.cum[i]) {
+      return [i, dash.cum[i] - singleCycleOffset];
+    }
+  }
+  return [0, 0];
+}
+
+function makeDashes(
+  dash: {
+    definition: Array<number>,
+    cum: Array<number>,
+    sum: number,
+  },
+  p1: Point,
+  p2: Point,
+  offset: number,
+) {
+  const points = [];
+  let cumDistance = 0;
+  let [index, remainder] = getDashElementAndRemainder(
+    dash, offset
+  );
+
+  const line12 = new Line(p1, p2);
+  const totLength = line12.length();
+  let dashLength = remainder;
+  while (cumDistance < totLength) {
+    let isOnLine = index % 2 === 0 ? true : false;
+    if (isOnLine) {
+      const q1 = line12.pointAtPercent(cumDistance / totLength);
+      let q2;
+      if (cumDistance + dashLength <= totLength) {
+        q2 = line12.pointAtPercent((cumDistance + dashLength) / totLength),
+        cumDistance += dashLength;
+      } else {
+        q2 = p2._dup();
+        cumDistance = totLength;
+      }
+      points.push([q1, q2]);
+    } else {
+      cumDistance += dashLength;
+    }
+    index = (index + 1) % dash.definition.length;
+    dashLength = dash.definition[index];
+  }
+  return points;
+}
+
+function lineToDashes(
+  p1: Point,
+  p2: Point,
+  dashDefinition: Array<number> = [1, 0.2, 0.4, 0.2],
+  dashOffset: number = 0,
+) {
+  // const dashes = [];
+
+  // let currentLength = dashOffset;
+  // const cum = [];
+  // const cycleLength = dashDefinition.reduce((p, sum) => {
+  //   cum.push(p + sum)
+  //   return p +sum;
+  // }, 0);
+
+  // let [index, remainder] = getDashElementAndRemainder(
+  //   dashDefinition, cum, sum, dashOffset
+  // );
+
+  // const line12 = new Line(p1, p2);
+  // let remainingPointLength = line12.length();
+
+  // while (remainingPointLength > 0) {
+  //   const isLine = index % 2 === 0 ? true : false;
+  //   const currentDashLength
+  //   if (!isLine) {
+  //     if (remainingPointLength < )
+  //   }
+  // }
+  // return distance(p)
+  // // const makeDashes = (p1, p2, offset) => {
+
+  // // }
+  // // console.log(cycleLength, cum)
+  // // makeDashes
+  // // for (let i = 0; i < pointsIn.length - 1; i += 1) {
+
+  // // }
+
+  // let cumDistance = 0;
+  // for (let i = 0; i < points.length - 1; i += 1) {
+  //   const p1 = points[i];
+  //   const p2 = points[i + 1];
+
+  // }
+}
+
 function makePolyLine(
   pointsIn: Array<Point>,
   width: number = 0.01,
@@ -2636,6 +2816,8 @@ function makePolyLine(
   let points = [];
   let autoCorners = true;
   let pointStyle = 'fill';
+
+  // Convert line to line with corners
   if (corners === 'auto') {
     points = pointsIn.map(p => p._dup());
     pointStyle = 'autoPoint';
@@ -2648,6 +2830,8 @@ function makePolyLine(
     autoCorners = false;
     points = pointsIn.map(p => p._dup());
   }
+  
+  // Convert line to dashed line
 
   if (pointsAre === 'mid') {
     return makeThickLineMid(
@@ -2656,7 +2840,7 @@ function makePolyLine(
   }
 
   if (pointsAre === 'outside') {
-    return makeThickLineOutside(points, width, close, autoCorners, minAutoCornerAngle);
+    return makeThickLineInsideOutside(points, width, close, autoCorners, minAutoCornerAngle);
   }
 
   return makeThickLineInside(points, width, close, autoCorners);
@@ -2954,4 +3138,8 @@ export {
   makeThickLineInside,
   makeThickLineOutside,
   makePolyLine,
+  // lineToDashed,
+  getDashElementAndRemainder,
+  makeDashDefinition,
+  makeDashes,
 };
