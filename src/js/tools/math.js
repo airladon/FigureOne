@@ -51,7 +51,7 @@ function round<T: number | TypeRoundObject | Array<number | TypeRoundObject>>(
   }
   if (typeof arrayOrValue === 'number') {
     result = roundNum(arrayOrValue, precision);
-  } else if (arrayOrValue.round != null) {
+  } else if (arrayOrValue != null && arrayOrValue.round != null) {
     result = arrayOrValue.round(precision);
   }
   // $FlowFixMe
