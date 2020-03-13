@@ -2734,6 +2734,7 @@ function makeDashes(
   const line12 = new Line(p1, p2);
   const totLength = line12.length();
   let dashLength = remainder;
+  let lastIndex = index;
   while (cumDistance < totLength) {
     let isOnLine = index % 2 === 0 ? true : false;
     if (isOnLine) {
@@ -2744,16 +2745,21 @@ function makeDashes(
         cumDistance += dashLength;
       } else {
         q2 = p2._dup();
-        cumDistance = totLength;
+        cumDistance += dashLength;
       }
       points.push([q1, q2]);
     } else {
       cumDistance += dashLength;
     }
+    lastIndex = index;
     index = (index + 1) % dash.definition.length;
     dashLength = dash.definition[index];
   }
-  return points;
+
+  return {
+    points,
+    continues: cumDistance > totLength && lastIndex % 2 === 0 ? true : false,
+  };
 }
 
 function lineToDash(
@@ -2765,10 +2771,19 @@ function lineToDash(
   let out = [];
   const dd = makeDashDefinition(dash);
   let cumLength = offset;
+  let lastContinue = false;
 
   const processLine = (p1, p2) => {
-    const dashLines = makeDashes(dd, p1, p2, cumLength);
-    out = [...out, ...dashLines];
+    const dashes = makeDashes(dd, p1, p2, cumLength);
+    const dashLines = dashes.points;
+    const dashContinues = dashes.continues;
+    if (lastContinue) {
+      out[out.length-1] = [...out[out.length-1], ...dashLines[0].slice(1)];
+      out = [...out, ...dashLines.slice(1)];
+    } else {
+      out = [...out, ...dashLines];
+    }
+    lastContinue = dashContinues;
     cumLength += distance(p1, p2);
   }
 
@@ -2781,6 +2796,11 @@ function lineToDash(
     const p1 = points[points.length - 1];
     const p2 = points[0];
     processLine(p1, p2);
+    const [startIndex, ] = getDashElementAndRemainder(dd, offset);
+    const startIsOnLine = startIndex % 2 === 0 ? true : false;
+    if (lastContinue && startIndex % 2 === 0 && out.length > 1) {
+      out[0] = [...out[out.length-1], ...out[0].slice(1)];
+    }
   }
 
   return out;
@@ -2819,10 +2839,14 @@ function makePolyLine(
   let dashes;
   if (dash.length > 1) {
     dashes = lineToDash(points, dash, close, 0);
+    let closeDashes = false;
+    if (dashes.length === 1) {
+      closeDashes = close;
+    }
     let dashedTris = [];
     dashes.forEach((d) => {
       dashedTris = [...dashedTris, ...makeThickLineMid(
-        d, width, false, autoCorners, pointStyle, minAutoCornerAngle,
+        d, width, closeDashes, autoCorners, pointStyle, minAutoCornerAngle,
       )];
     });
     return dashedTris;
