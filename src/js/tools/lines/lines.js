@@ -273,14 +273,13 @@ function makePolyLine(
   width: number = 0.01,
   close: boolean = false,
   pointsAre: 'mid' | 'outside' | 'inside' = 'mid',
-  cornerStyle: 'auto' | 'none' | 'radius' | 'fill' | 'chamfer',
+  cornerStyle: 'auto' | 'none' | 'radius' | 'fill',
   cornerSize: number,
   cornerSides: number,
   minAutoCornerAngle: number = Math.PI / 7,
   dash: Array<number> = [],
 ) {
   let points = [];
-  console.log(close)
   // let autoCorners = true;
   // let pointStyle = 'fill';
   let cornerStyleToUse = cornerStyle;
@@ -288,9 +287,9 @@ function makePolyLine(
   if (cornerStyle === 'auto') {
     points = pointsIn.map(p => p._dup());
     // pointStyle = 'autoPoint';
-  } else if (cornerStyle === 'chamfer') {
-    points = cornerLine(pointsIn, close, 'fromVertex', 1, cornerSize);
-    cornerStyleToUse = 'fill';
+  // } else if (cornerStyle === 'chamfer') {
+  //   points = cornerLine(pointsIn, close, 'fromVertex', 1, cornerSize);
+  //   cornerStyleToUse = 'fill';
   } else if (cornerStyle === 'radius') {
     points = cornerLine(pointsIn, close, 'fromVertex', cornerSides, cornerSize);
     cornerStyleToUse = 'fill';

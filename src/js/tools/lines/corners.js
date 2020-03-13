@@ -40,14 +40,21 @@ function circleCorner(p2in: Point, p1: Point, p3in: Point, sides: number): Array
   const p3 = p3in._dup();
   const points: Array<Point> = [];
 
-  const _2a = threePointAngleMin(p2, p1, p3);
-  if (_2a === Math.PI || _2a === 0) {
+  let _2a = threePointAngleMin(p2, p1, p3);
+  if (_2a === Math.PI) {
     points.push(p2in._dup());
     for (let i = 0; i < sides - 2; i += 1) {
       points.push(p1._dup());
     }
     points.push(p3in._dup());
     return points;
+  }
+
+  // if equal to 0, that means the lines are going back on top of each other
+  // in which case we still want a radius at the end, so make it small and
+  // unnoticable
+  if (_2a === 0) {
+    _2a = 0.00000001;
   }
   const direction = _2a / Math.abs(_2a);
 
