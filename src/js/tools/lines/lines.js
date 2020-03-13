@@ -97,39 +97,72 @@ function joinLinesInTangent(
   }
 }
 
-function makeThickLineMid(
+function makeLineSegments(
   points: Array<Point>,
-  width: number = 0.01,
-  close: boolean = false,
-  makeCorner: boolean = true,
-  cornerStyle: 'autoPoint' | 'fill',
-  minAngleIn: ?number = Math.PI / 7,
+  insideWidth:number,
+  outsideWidth: number,
 ) {
   const lineSegments = [];
-
   const makeLineSegment = (p1, p2) => {
     const lineSegment = new Line(p1, p2);
-    const outsideOffset = lineSegment.offset('outside', width / 2);
-    const insideOffset = lineSegment.offset('inside', width / 2);
+    const outsideOffset = lineSegment.offset('outside', outsideWidth);
+    const insideOffset = lineSegment.offset('inside', insideWidth);
     lineSegments.push([insideOffset, outsideOffset, lineSegment]);
   };
 
+  // Go through all points, and generate inside, mid and outside line segments
   for (let i = 0; i < points.length - 1; i += 1) {
     makeLineSegment(points[i], points[i + 1]);
   }
   if (close) {
     makeLineSegment(points[points.length - 1], points[0]);
   }
+  return lineSegments;
+}
 
+function makeThickLineMid(
+  points: Array<Point>,
+  width: number = 0.01,
+  close: boolean = false,
+  // makeCorner: boolean = true,
+  // cornerStyle: 'autoPoint' | 'fill',
+  corner: 'auto' | 'fill' | 'none',
+  minAngleIn: ?number = Math.PI / 7,
+) {
+  // const lineSegments = [];
+
+  // // from a line defined by p1 and p2, generate an outside and inside offset
+  // // line
+  // const makeLineSegment = (p1, p2) => {
+  //   const lineSegment = new Line(p1, p2);
+  //   const outsideOffset = lineSegment.offset('outside', width / 2);
+  //   const insideOffset = lineSegment.offset('inside', width / 2);
+  //   lineSegments.push([insideOffset, outsideOffset, lineSegment]);
+  // };
+
+  // // Go through all points, and generate inside, mid and outside line segments
+  // for (let i = 0; i < points.length - 1; i += 1) {
+  //   makeLineSegment(points[i], points[i + 1]);
+  // }
+  // if (close) {
+  //   makeLineSegment(points[points.length - 1], points[0]);
+  // }
+  const lineSegments = makeLineSegments(points, width / 2, width / 2);
+
+  // Join line segments based on the angle between them
   const minAngle = minAngleIn == null ? 0 : minAngleIn;
   const joinLineSegments = (current, next) => {
     const [inside, outside, mid] = lineSegments[current];
     const [insideNext, outsideNext, midNext] = lineSegments[next];
     const angle = threePointAngle(mid.p1, mid.p2, midNext.p2);
+    // If the angle is less than 180, then the 'inside' line segments are
+    // actually on the outside.
     if (0 < angle && angle < minAngle) {
       joinLinesInTangent(outside, outsideNext, mid, midNext, inside, insideNext);
     } else if (minAngle < angle && angle < Math.PI) {
       joinLinesInPoint(inside, insideNext);
+    // If the angle is greater than 180, then the 'inside' line segments are
+    // properly on the inside.
     } else if (Math.PI < angle && angle < Math.PI * 2 - minAngle) {
       joinLinesInPoint(outside, outsideNext);
     } else if (Math.PI * 2 - minAngle < angle && angle < Math.PI * 2) {
@@ -137,6 +170,7 @@ function makeThickLineMid(
     }
   };
 
+  // Create fill triangles between the inside & mid, and outside and mid lines
   const cornerFills = [];
   const createFill = (current, next) => {
     const [inside, outside, mid] = lineSegments[current];
@@ -149,16 +183,18 @@ function makeThickLineMid(
     cornerFills.push(insideNext.p1._dup());
   };
 
-  if (makeCorner) {
+  // NB: this all assumes the GL primitive is TRIANGLES. Thus the order the
+  // triangles is drawn is not important, and so fills can happen in chunks.
+  if (corner !== 'none') {
     for (let i = 0; i < lineSegments.length - 1; i += 1) {
-      if (cornerStyle === 'autoPoint') {
+      if (corner === 'auto') {
         joinLineSegments(i, i + 1);
       } else {
         createFill(i, i + 1)
       }
     }
     if (close) {
-      if (cornerStyle === 'autoPoint') {
+      if (corner === 'auto') {
         joinLineSegments(lineSegments.length - 1, 0);
       } else {
         createFill(lineSegments.length - 1, 0);
@@ -173,28 +209,30 @@ function makeThickLineInsideOutside(
   points: Array<Point>,
   width: number = 0.01,
   close: boolean = false,
-  makeCorner: boolean = true,
+  corner: 'auto' | 'fill' | 'none',
   minAngleIn: ?number = Math.PI / 7,
 ) {
-  // const out = [];
-  const lineSegments = [];
-  const makeLineSegment = (p1, p2) => {
-    const lineSegment = new Line(p1, p2);
-    const outsideOffset = lineSegment.offset('outside', width);
-    lineSegments.push([lineSegment, outsideOffset]);
-  };
+  // const lineSegments = [];
 
-  for (let i = 0; i < points.length - 1; i += 1) {
-    makeLineSegment(points[i], points[i + 1]);
-  }
-  if (close) {
-    makeLineSegment(points[points.length - 1], points[0]);
-  }
+  // // Go through each line segment 
+  // const makeLineSegment = (p1, p2) => {
+  //   const lineSegment = new Line(p1, p2);
+  //   const outsideOffset = lineSegment.offset('outside', width);
+  //   lineSegments.push([lineSegment, outsideOffset]);
+  // };
+
+  // for (let i = 0; i < points.length - 1; i += 1) {
+  //   makeLineSegment(points[i], points[i + 1]);
+  // }
+  // if (close) {
+  //   makeLineSegment(points[points.length - 1], points[0]);
+  // }
+  const lineSegments = makeLineSegments(points, width, width)
 
   const minAngle = minAngleIn == null ? 0 : minAngleIn;
   const joinLineSegments = (current, next) => {
-    const [inside, outside] = lineSegments[current];
-    const [insideNext, outsideNext] = lineSegments[next];
+    const [, inside, outside] = lineSegments[current];
+    const [, insideNext, outsideNext] = lineSegments[next];
     const angle = threePointAngle(inside.p1, inside.p2, insideNext.p2);
     // If angle is 0 to 180, then it is an inside angle
     if (0 < angle && angle < Math.PI) {
@@ -214,7 +252,7 @@ function makeThickLineInsideOutside(
     }
   };
 
-  if (makeCorner) {
+  if (corner != 'none') {
     for (let i = 0; i < lineSegments.length - 1; i += 1) {
       joinLineSegments(i, i + 1);
     }
@@ -225,38 +263,55 @@ function makeThickLineInsideOutside(
   return lineSegmentsToPoints(lineSegments);
 }
 
+function makeThickLine(
+  points: Array<Point>,
+  width: number = 0.01,
+  pointsAre: 'mid' | 'outside' | 'inside',
+  close: boolean = false,
+  corner: 'auto' | 'fill' | 'none',
+  minAngle: ?number = Math.PI / 7,
+) {
+  if (pointsAre === 'mid') {
+    return makeThickLineMid(points, width, close, corner, minAngle);
+  }
+  if (pointsAre === 'outside') {
+    return makeThickLineInsideOutside(points, width, close, corner, minAngle);
+  }
+}
+
 function makePolyLine(
   pointsIn: Array<Point>,
   width: number = 0.01,
   close: boolean = false,
   pointsAre: 'mid' | 'outside' | 'inside' = 'mid',
-  corners: 'auto' | 'none' | 'radius' | 'chamfer',
+  cornerStyle: 'auto' | 'none' | 'radius' | 'fill' | 'chamfer',
   cornerSize: number,
   cornerSides: number,
   minAutoCornerAngle: number = Math.PI / 7,
   dash: Array<number> = [],
 ) {
   let points = [];
-  let autoCorners = true;
-  let pointStyle = 'fill';
-
+  // let autoCorners = true;
+  // let pointStyle = 'fill';
+  let cornerStyleToUse = cornerStyle;
   // Convert line to line with corners
-  if (corners === 'auto') {
+  if (cornerStyle === 'auto') {
     points = pointsIn.map(p => p._dup());
-    pointStyle = 'autoPoint';
-  } else if (corners === 'chamfer') {
+    // pointStyle = 'autoPoint';
+  } else if (cornersIn === 'chamfer') {
     points = cornerLine(pointsIn, close, 'fromVertex', 1, cornerSize);
-  } else if (corners === 'radius') {
+    cornerStyleToUse = 'fill';
+  } else if (cornersIn === 'radius') {
     points = cornerLine(pointsIn, close, 'fromVertex', cornerSides, cornerSize);
-    autoCorners = true;
+    cornerStyleToUse = 'fill';
   } else {
-    autoCorners = false;
+    // autoCorners = 'none';
     points = pointsIn.map(p => p._dup());
   }
   
   // Convert line to dashed line
-  let dashes;
   if (dash.length > 1) {
+    let dashes;
     dashes = lineToDash(points, dash, close, 0);
     let closeDashes = false;
     if (dashes.length === 1) {
@@ -264,24 +319,27 @@ function makePolyLine(
     }
     let dashedTris = [];
     dashes.forEach((d) => {
-      dashedTris = [...dashedTris, ...makeThickLineMid(
-        d, width, closeDashes, autoCorners, pointStyle, minAutoCornerAngle,
+      dashedTris = [...dashedTris, ...makeThickLine(
+        d, width, pointsAre, closeDashes, cornerStyleToUse, minAutoCornerAngle,
       )];
     });
     return dashedTris;
   }
 
-  if (pointsAre === 'mid') {
-    return makeThickLineMid(
-      points, width, close, autoCorners, pointStyle, minAutoCornerAngle,
-    );
-  }
+  return makeThickLine(
+    points, width, pointsAre, close, cornerStyleToUse, minAutoCornerAngle,
+  );
+  // if (pointsAre === 'mid') {
+  //   return makeThickLineMid(
+  //     points, width, close, autoCorners, pointStyle, minAutoCornerAngle,
+  //   );
+  // }
 
-  if (pointsAre === 'outside') {
-    return makeThickLineInsideOutside(points, width, close, autoCorners, minAutoCornerAngle);
-  }
+  // if (pointsAre === 'outside') {
+  //   return makeThickLineInsideOutside(points, width, close, autoCorners, minAutoCornerAngle);
+  // }
 
-  return makeThickLineInside(points, width, close, autoCorners);
+  // return makeThickLineInside(points, width, close, autoCorners);
 }
 
 export {
