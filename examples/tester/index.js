@@ -2,12 +2,12 @@
 const diagram = new Fig.Diagram();
 const { Point } = Fig;
 const {
-  thickenCorner, thickenLine,
-  makeThickLineMid,
-  makeThickLineInside,
-  makeThickLineOutside,
+  // thickenCorner, thickenLine,
+  // makeThickLineMid,
+  // makeThickLineInside,
+  // makeThickLineOutside,
   makePolyLine,
-} = Fig.tools.g2;
+} = Fig.tools.lines;
 
 const line = [
   new Point(1.5, 0),
