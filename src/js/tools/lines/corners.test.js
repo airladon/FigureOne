@@ -3,7 +3,7 @@ import {
 } from '../g2';
 import { round } from '../math';
 import {
-  circleCorner, cutCorner, makeCorner,
+  circleCorner, cutCorner, makeCorner, lineToCorners,
 } from './corners';
 
 describe('g2 corner tests', () => {
@@ -245,6 +245,52 @@ describe('g2 corner tests', () => {
       expect(round(p2)).toEqual(new Point(0.5, 0));
       expect(round(p1)).toEqual(new Point(1, 0));
       expect(round(p3)).toEqual(new Point(1, 0.5));
+    });
+  });
+  describe('lineToCorners', () => {
+    test('simple', () => {
+      const corners = lineToCorners(
+        [new Point(0, 0), new Point(1, 0), new Point(1, 1)], false, 0.5, false,
+      );
+      expect(round(corners[0][0])).toEqual(new Point(0.5, 0));
+      expect(round(corners[0][1])).toEqual(new Point(1, 0));
+      expect(round(corners[0][2])).toEqual(new Point(1, 0.5));
+    });
+    test('No force', () => {
+      const corners = lineToCorners(
+        [new Point(0, 0), new Point(1, 0), new Point(1, 0.2)], false, 0.5, false,
+      );
+      expect(round(corners[0][0])).toEqual(new Point(0.5, 0));
+      expect(round(corners[0][1])).toEqual(new Point(1, 0));
+      expect(round(corners[0][2])).toEqual(new Point(1, 0.2));
+    });
+    test('Force', () => {
+      const corners = lineToCorners(
+        [new Point(0, 0), new Point(1, 0), new Point(1, 0.2)], false, 0.5, true,
+      );
+      expect(round(corners[0][0])).toEqual(new Point(0.5, 0));
+      expect(round(corners[0][1])).toEqual(new Point(1, 0));
+      expect(round(corners[0][2])).toEqual(new Point(1, 0.5));
+    });
+    test('Close', () => {
+      const corners = lineToCorners(
+        [new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(0, 1)], true, 0.5, true,
+      );
+      expect(round(corners[0][0])).toEqual(new Point(0.5, 0));
+      expect(round(corners[0][1])).toEqual(new Point(1, 0));
+      expect(round(corners[0][2])).toEqual(new Point(1, 0.5));
+
+      expect(round(corners[1][0])).toEqual(new Point(1, 0.5));
+      expect(round(corners[1][1])).toEqual(new Point(1, 1));
+      expect(round(corners[1][2])).toEqual(new Point(0.5, 1));
+
+      expect(round(corners[2][0])).toEqual(new Point(0.5, 1));
+      expect(round(corners[2][1])).toEqual(new Point(0, 1));
+      expect(round(corners[2][2])).toEqual(new Point(0, 0.5));
+
+      expect(round(corners[3][0])).toEqual(new Point(0, 0.5));
+      expect(round(corners[3][1])).toEqual(new Point(0, 0));
+      expect(round(corners[3][2])).toEqual(new Point(0.5, 0));
     });
   });
 });
