@@ -104,10 +104,10 @@ export default function Radical(
   staticSize: ?(Point | [number, number]),
 ) {
   const radical = shapes.collection({ color, transform: new Transform('radical').scale(1, 1).translate(0, 0) });
-  radical.add('left', shapes.polyLine(poly(color)));
-  radical.add('down', shapes.polyLine(poly(color)));
-  radical.add('up', shapes.polyLine(poly(color)));
-  radical.add('top', shapes.polyLine(poly(color)));
+  radical.add('left', shapes.polyLineLegacy(poly(color)));
+  radical.add('down', shapes.polyLineLegacy(poly(color)));
+  radical.add('up', shapes.polyLineLegacy(poly(color)));
+  radical.add('top', shapes.polyLineLegacy(poly(color)));
   updateStaticLinePoints(radical, 0.2, 0.2, 1, 1, 0.01, true, null, null);
   radical.custom.startWidth = startWidth;
   radical.custom.startHeight = startHeight;
