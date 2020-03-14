@@ -394,6 +394,7 @@ export default class DiagramPrimitives {
 
     const options = processOptions(defaultOptions, ...optionsIn);
     parsePoints(options, 'points');
+    // const [triangles, borders, holes] = makePolyLine
 
     // const element = 
   }
