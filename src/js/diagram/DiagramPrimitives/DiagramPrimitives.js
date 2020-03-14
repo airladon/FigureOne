@@ -218,13 +218,31 @@ export type TypeRepeatPatternVertex = {
   transform?: Transform,
 };
 
-function processOptions(
-  pointsToParse: Array<string>,
-  defaultOptions: Object,
-  ...optionsIn: Object,
+function parsePoints(
+  options: Object,
+  keysToParsePointsOrPointArrays: Array<string>,
 ) {
-  const options = joinObjects({}, defaultOptions, ...optionsIn);
+  const parseKey = (key) => {
+    const value = options[key];
+    if (value == null) {
+      return;
+    }
+    if (Array.isArray(value) && !(typeof value[0] === 'number')) {
+      options[key] = value.map(p => getPoint(p));
+    } else {
+      options[key] = getPoint(p);
+    }
+  };
 
+  if (typeof keysToParsePointsOrPointArrays === 'string') {
+    parseKey(keysToParsePointsOrPointArrays)
+  } else {
+    keysToParsePointsOrPointArrays.forEach(key => parseKey(key));
+  }
+}
+
+function processOptions(...optionsIn: Array<Object>) {
+  const options = joinObjects({}, defaultOptions, ...optionsIn);
   if (options.position != null) {
     const p = getPoint(options.position);
     if (options.transform == null) {
@@ -232,17 +250,9 @@ function processOptions(
     }
     options.transform.updateTranslation(p);
   }
-
-  pointsToParse.forEach((key) => {
-    const value = options[key];
-    if (Array.isArray(value) && !(typeof value[0] === 'number')) {
-      options.key = value.map(p => getPoint(p));
-    } else {
-      options.key = getPoint(p);
-    }
-  });
   return options;
 }
+
 export default class DiagramPrimitives {
   webgl: Array<WebGLInstance>;
   draw2D: Array<DrawContext2D>;
@@ -279,33 +289,33 @@ export default class DiagramPrimitives {
     // this.draw2DFigures = draw2DFigures;
   }
 
-  polyLineLegacy(
-    points: Array<Point>,
-    close: boolean,
-    lineWidth: number,
-    color: Array<number>,
-    borderToPoint: TypePolyLineBorderToPoint = 'never',
-    transform: Transform | Point = new Transform(),
-  ) {
-    return PolyLine(
-      this.webgl, points, close, lineWidth,
-      color, borderToPoint, transform, this.limits,
-    );
-  }
+  // polyLineLegacy(
+  //   points: Array<Point>,
+  //   close: boolean,
+  //   lineWidth: number,
+  //   color: Array<number>,
+  //   borderToPoint: TypePolyLineBorderToPoint = 'never',
+  //   transform: Transform | Point = new Transform(),
+  // ) {
+  //   return PolyLine(
+  //     this.webgl, points, close, lineWidth,
+  //     color, borderToPoint, transform, this.limits,
+  //   );
+  // }
 
-  polyLineCornersLegacy(
-    points: Array<Point>,
-    close: boolean,
-    cornerLength: number,
-    lineWidth: number,
-    color: Array<number>,
-    transform: Transform | Point = new Transform(),
-  ) {
-    return PolyLineCorners(
-      this.webgl, points, close,
-      cornerLength, lineWidth, color, transform, this.limits,
-    );
-  }
+  // polyLineCornersLegacy(
+  //   points: Array<Point>,
+  //   close: boolean,
+  //   cornerLength: number,
+  //   lineWidth: number,
+  //   color: Array<number>,
+  //   transform: Transform | Point = new Transform(),
+  // ) {
+  //   return PolyLineCorners(
+  //     this.webgl, points, close,
+  //     cornerLength, lineWidth, color, transform, this.limits,
+  //   );
+  // }
 
   polyLineCorners(...optionsIn: Array<{
     points: Array<Point>,
@@ -364,7 +374,7 @@ export default class DiagramPrimitives {
     cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',
     cornerSize?: number,
     cornerSides?: number,
-    minAutoCornerAngle?: number = Math.PI / 7,
+    minAutoCornerAngle?: number,
     dash?: Array<number>,
     pulse?: number,
     position?: Point,
@@ -377,14 +387,15 @@ export default class DiagramPrimitives {
       cornerStyle: 'auto',
       cornerSize: 0.01,
       cornerSides: 10,
-      minAutoCornerAngle: number = Math.PI / 7,
+      minAutoCornerAngle: Math.PI / 7,
       dash: [],
       transform: new Transform('polyLine').standard(),
     };
 
-    const options = processOptions(
-      ['points', 'position'], defaultOptions, ...optionsIn,
-    );
+    const options = processOptions(defaultOptions, ...optionsIn);
+    parsePoints(options, 'points');
+
+    // const element = 
   }
 
   // borderToPoint options: 'alwaysOn' | 'onSharpAnglesOnly' | 'never'

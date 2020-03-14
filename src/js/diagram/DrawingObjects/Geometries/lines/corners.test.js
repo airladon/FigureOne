@@ -1,7 +1,7 @@
 import {
   Point, polarToRect,
-} from '../g2';
-import { round } from '../math';
+} from '../../../../tools/g2';
+import { round } from '../../../../tools/math';
 import {
   circleCorner, cutCorner, makeCorner, lineToCorners,
 } from './corners';

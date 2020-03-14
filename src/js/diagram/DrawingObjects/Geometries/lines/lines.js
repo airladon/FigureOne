@@ -2,7 +2,7 @@ import { cornerLine, lineToCorners } from './corners';
 import { lineToDash } from './dashes';
 import {
   Line, Point, threePointAngleMin, threePointAngle,
-} from '../g2';
+} from '../../../../tools/g2';
 
 /* eslint-disable yoda */
 
