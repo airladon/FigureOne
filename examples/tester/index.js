@@ -24,10 +24,10 @@ diagram.addElements([
     name: 'p',
     method: 'shapes.polyLine',
     options: {
-      points: [[0, 0], [0.5, 0], [0.5, 0.5]],
+      points: [[0, 0], [0.5, 0], [0.5, 0.5], [0, 0.5]],
       width: 0.01,
       color: [0, 1, 0, 1],
-      dash: [0.01, 0.01],
+      dash: [0.03, 0.01, 0.01, 0.01],
       close: true,
       cornerStyle: 'radius',
       cornerSize: 0.1,

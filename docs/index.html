@@ -10930,6 +10930,44 @@ short gap, short dash, short gap and then repeats.
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple square</span>
+diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'shapes.polyLine'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>]],
+      <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span>,
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+      <span class="hljs-attr">close</span>: <span class="hljs-literal">true</span>,
+    },
+  },
+);
+![](./assets1/polyline.png)</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Square with rounded corners, dot-dash dashed line and  </span>
+diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'shapes.polyLine'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>]],
+      <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span>,
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+      <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.03</span>, <span class="hljs-number">0.01</span>, <span class="hljs-number">0.01</span>, <span class="hljs-number">0.01</span>],
+      <span class="hljs-attr">close</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">cornerStyle</span>: <span class="hljs-string">'radius'</span>,
+      <span class="hljs-attr">cornerSize</span>: <span class="hljs-number">0.1</span>,
+      <span class="hljs-attr">pointsAt</span>: <span class="hljs-string">'mid'</span>,
+    },
+  },
+);</pre>
+    
+  
 
   
 
