@@ -21,6 +21,34 @@ const [thick, ,] = makeLine(line);
 
 diagram.addElements([
   {
+    name: 'p',
+    method: 'shapes.polyLine',
+    options: {
+      points: [[0, 0], [0.5, 0], [0.5, 0.5]],
+      width: 0.01,
+      color: [0, 1, 0, 1],
+      dash: [0.01, 0.01],
+      close: true,
+      cornerStyle: 'radius',
+      cornerSize: 0.1,
+      pointsAt: 'outside',
+    },
+  },
+  {
+    name: 'p1',
+    method: 'shapes.polyLine',
+    options: {
+      points: [[0, 0], [0.5, 0], [0.5, 0.5]],
+      width: 0.005,
+      color: [0, 1, 1, 1],
+      // dash: [0.01, 0.01],
+      close: true,
+      cornerStyle: 'radius',
+      cornerSize: 0.1,
+      pointsAt: 'mid',
+    },
+  },
+  {
     name: 'pad',
     method: 'polygon',
     options: {

@@ -42,6 +42,7 @@ import {
 } from '../DrawingObjects/TextObject/TextObject';
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { TypeSpaceTransforms } from '../Diagram';
+import { makePolyLine } from '../DrawingObjects/Geometries/lines/lines';
 
 /**
  * Polygon or partial polygon shape options object
@@ -242,7 +243,7 @@ function parsePoints(
 }
 
 function processOptions(...optionsIn: Array<Object>) {
-  const options = joinObjects({}, defaultOptions, ...optionsIn);
+  const options = joinObjects({}, ...optionsIn);
   if (options.position != null) {
     const p = getPoint(options.position);
     if (options.transform == null) {
@@ -370,7 +371,7 @@ export default class DiagramPrimitives {
     points: Array<TypeParsablePoint>,
     width?: number,
     close?: boolean,
-    pointsAre?: 'mid' | 'outside' | 'inside',
+    pointsAt?: 'mid' | 'outside' | 'inside',
     cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',
     cornerSize?: number,
     cornerSides?: number,
@@ -383,7 +384,7 @@ export default class DiagramPrimitives {
     const defaultOptions = {
       width: 0.01,
       close: false,
-      pointsAre: 'mid',
+      pointsAt: 'mid',
       cornerStyle: 'auto',
       cornerSize: 0.01,
       cornerSides: 10,
@@ -394,8 +395,37 @@ export default class DiagramPrimitives {
 
     const options = processOptions(defaultOptions, ...optionsIn);
     parsePoints(options, 'points');
-    // const [triangles, borders, holes] = makePolyLine
 
+    const [triangles, borders, holes] = makePolyLine(
+      options.points,
+      options.width,
+      options.close,
+      options.pointsAt,
+      options.cornerStyle,
+      options.cornerSize,
+      options.cornerSides,
+      options.minAutoCornerAngle,
+      options.dash,
+    );
+
+    const element = Generic(
+      this.webgl,
+      triangles,
+      borders,
+      holes,
+      'triangles',
+      options.color,
+      options.transform,
+      this.limits,
+    );
+
+    if (options.pulse != null) {
+      if (typeof element.pulseDefault !== 'function') {
+        element.pulseDefault.scale = options.pulse;
+      }
+    }
+
+    return element;
     // const element = 
   }
 
