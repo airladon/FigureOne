@@ -180,6 +180,49 @@ export type OBJ_Rectangle = {
   pulse?: number,
 }
 
+/**
+ * PolyLine shape options object
+ *
+ * ![](./assets1/polyline.png)
+ *
+ * @property {Array<TypeParsablePoint>} points
+ * @property {number} [width] (`0.01`)
+ * @property {boolean} [close] close the polyLine on itself (`false`)
+ * @property {'mid' | 'outside' | 'inside'} [pointsAt] the `points` should be
+ * in the middle (`mid`), on the 'outside' or on the 'inside' of the line width
+ * (`mid`)
+ * @property {'auto' | 'none' | 'radius' | 'fill'} [cornerStyle] `auto`
+ * makes the corners sharp is the angle is less than `minAutoCornerAngle`
+ * - `none` is no corners - `radius` makes each corner a curve - `fill`
+ * fills the gapes between the lines in `none` and effectivly adds a chamfer
+ * (`auto`)
+ * @property {number} [cornerSize] only used when `cornerStyle` = `radius` (`0.01`)
+ * @property {number} [cornerSides] number of sides in curve - only used when `cornerStyle` = `radius` (`10`)
+ * @property {number} [minAutoCornerAngle] see `cornerStyle` = `auto` (`π/7`)
+ * @property {Array<number>} [dash] leave empty for solid line - use array of
+ * numbers for dash line where first number is length of line, second number is
+ * length of gap and then the pattern repeats - can use more than one dash length
+ * and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
+ * short gap, short dash, short gap and then repeats.
+ * @property {number} [pulse] set the default pulse scale
+ * @property {Point} [position] convenience to override Transform translation
+ * @property {Transform} [transform] (`Transform('polyLine').standard()`)
+ */
+export type OBJ_PolyLine = {
+  points: Array<TypeParsablePoint>,
+  width?: number,
+  close?: boolean,
+  pointsAt?: 'mid' | 'outside' | 'inside',
+  cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',
+  cornerSize?: number,
+  cornerSides?: number,
+  minAutoCornerAngle?: number,
+  dash?: Array<number>,
+  pulse?: number,
+  position?: Point,
+  transform?: Transform,
+};
+
 export type TypeTextOptions = {
   text?: string;
   transform?: Transform;
@@ -367,20 +410,7 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  polyLine(...optionsIn: Array<{
-    points: Array<TypeParsablePoint>,
-    width?: number,
-    close?: boolean,
-    pointsAt?: 'mid' | 'outside' | 'inside',
-    cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',
-    cornerSize?: number,
-    cornerSides?: number,
-    minAutoCornerAngle?: number,
-    dash?: Array<number>,
-    pulse?: number,
-    position?: Point,
-    transform?: Transform,
-  }>) {
+  polyLine(...optionsIn: Array<OBJ_PolyLine>) {
     const defaultOptions = {
       width: 0.01,
       close: false,

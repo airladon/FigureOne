@@ -730,6 +730,16 @@
               
                 
                 <li><a
+                  href='#obj_polyline'
+                  class="">
+                  OBJ_PolyLine
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#tools'
                   class="h5 bold black caps toggle-sibling">
                   tools
@@ -787,6 +797,26 @@
                   href='#typediagramoptions'
                   class="">
                   TypeDiagramOptions
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_curvedcorner'
+                  class="">
+                  OBJ_CurvedCorner
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_rectangle'
+                  class="">
+                  OBJ_Rectangle
                   
                 </a>
                 
@@ -10479,7 +10509,7 @@ eqn.addElements({
   </div>
   
 
-  <p>Polygon or partial polygon shape</p>
+  <p>Polygon or partial polygon shape options object</p>
 <p><img src="./assets1/polygon.png"></p>
 
   
@@ -10713,6 +10743,192 @@ diagram.addElement(
   },
 );</pre>
     
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_polyline'>
+      OBJ_PolyLine
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>PolyLine shape options object</p>
+<p><img src="./assets1/polyline.png"></p>
+
+  
+    <p style="display: none;">      Type:
+      {points: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeParsablePoint>, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, close: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, pointsAt: (<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code>)?, cornerStyle: (<code>"auto"</code> | <code>"none"</code> | <code>"radius"</code> | <code>"fill"</code>)?, cornerSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, cornerSides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, minAutoCornerAngle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, dash: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, position: <a href="#point">Point</a>?, transform: Transform?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>points</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeParsablePoint>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>0.01</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>close</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : close the polyLine on itself (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pointsAt</span> <code class='quiet'>((<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code>)?)</code>
+          : the 
+<code>points</code>
+ should be
+in the middle (
+<code>mid</code>
+), on the 'outside' or on the 'inside' of the line width
+(
+<code>mid</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>cornerStyle</span> <code class='quiet'>((<code>"auto"</code> | <code>"none"</code> | <code>"radius"</code> | <code>"fill"</code>)?)</code>
+          : <code>auto</code>
+
+makes the corners sharp is the angle is less than 
+<code>minAutoCornerAngle</code>
+<ul>
+<li><code>none</code> is no corners - <code>radius</code> makes each corner a curve - <code>fill</code>
+fills the gapes between the lines in <code>none</code> and effectivly adds a chamfer
+(<code>auto</code>)</li>
+</ul>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>cornerSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : only used when 
+<code>cornerStyle</code>
+ = 
+<code>radius</code>
+ (
+<code>0.01</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>cornerSides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides in curve - only used when 
+<code>cornerStyle</code>
+ = 
+<code>radius</code>
+ (
+<code>10</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>minAutoCornerAngle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : see 
+<code>cornerStyle</code>
+ = 
+<code>auto</code>
+ (
+<code>π/7</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dash</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : leave empty for solid line - use array of
+numbers for dash line where first number is length of line, second number is
+length of gap and then the pattern repeats - can use more than one dash length
+and gap  - e.g. 
+[0.1, 0.01, 0.02, 0.01]
+ produces a lines with a long dash,
+short gap, short dash, short gap and then repeats.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pulse</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : set the default pulse scale
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          : convenience to override Transform translation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(Transform?)</code>
+          : (
+<code>Transform('polyLine').standard()</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
   
 
   
@@ -12345,6 +12561,235 @@ corner at (-1, -1), width 1, height 1
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_curvedcorner'>
+      OBJ_CurvedCorner
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Curved Corner Definition</p>
+
+  
+    <p style="display: none;">      Type:
+      {radius: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>radius</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_rectangle'>
+      OBJ_Rectangle
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Rectangle shape options object</p>
+<p><img src="./assets1/rectangle.png"></p>
+
+  
+    <p style="display: none;">      Type:
+      {yAlign: (<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, xAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fill: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, corner: {radius: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, transform: Transform?, position: <a href="#point">Point</a>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : (
+<code>'middle'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : (
+<code>'center'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fill</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>corner</span> <code class='quiet'>(<a href="#obj_curvedcorner">OBJ_CurvedCorner</a>?)</code>
+          : define for rounded corners
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (
+<code>[1, 0, 0, 1]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          : convenience to override Transform translation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(Transform?)</code>
+          : (
+<code>Transform('rectangle').standard()</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pulse</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : set the default pulse scale
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Filled rectangle</span>
+diagram.addElement(
+ {
+   <span class="hljs-attr">name</span>: <span class="hljs-string">'r'</span>,
+   <span class="hljs-attr">method</span>: <span class="hljs-string">'rectangle'</span>,
+   <span class="hljs-attr">options</span>: {
+     <span class="hljs-attr">width</span>: <span class="hljs-number">0.4</span>,
+     <span class="hljs-attr">height</span>: <span class="hljs-number">0.2</span>,
+     <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
+   },
+ },
+);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Rectangle with rounded corners</span></pre>
+    
   
 
   
