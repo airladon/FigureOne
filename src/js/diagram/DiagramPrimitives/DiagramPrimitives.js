@@ -218,6 +218,31 @@ export type TypeRepeatPatternVertex = {
   transform?: Transform,
 };
 
+function processOptions(
+  pointsToParse: Array<string>,
+  defaultOptions: Object,
+  ...optionsIn: Object,
+) {
+  const options = joinObjects({}, defaultOptions, ...optionsIn);
+
+  if (options.position != null) {
+    const p = getPoint(options.position);
+    if (options.transform == null) {
+      options.transform = new Transform('processOptions').translate();
+    }
+    options.transform.updateTranslation(p);
+  }
+
+  pointsToParse.forEach((key) => {
+    const value = options[key];
+    if (Array.isArray(value) && !(typeof value[0] === 'number')) {
+      options.key = value.map(p => getPoint(p));
+    } else {
+      options.key = getPoint(p);
+    }
+  });
+  return options;
+}
 export default class DiagramPrimitives {
   webgl: Array<WebGLInstance>;
   draw2D: Array<DrawContext2D>;
@@ -331,8 +356,39 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  // borderToPoint options: 'alwaysOn' | 'onSharpAnglesOnly' | 'never'
   polyLine(...optionsIn: Array<{
+    points: Array<TypeParsablePoint>,
+    width?: number,
+    close?: boolean,
+    pointsAre?: 'mid' | 'outside' | 'inside',
+    cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',
+    cornerSize?: number,
+    cornerSides?: number,
+    minAutoCornerAngle?: number = Math.PI / 7,
+    dash?: Array<number>,
+    pulse?: number,
+    position?: Point,
+    transform?: Transform,
+  }>) {
+    const defaultOptions = {
+      width: 0.01,
+      close: false,
+      pointsAre: 'mid',
+      cornerStyle: 'auto',
+      cornerSize: 0.01,
+      cornerSides: 10,
+      minAutoCornerAngle: number = Math.PI / 7,
+      dash: [],
+      transform: new Transform('polyLine').standard(),
+    };
+
+    const options = processOptions(
+      ['points', 'position'], defaultOptions, ...optionsIn,
+    );
+  }
+
+  // borderToPoint options: 'alwaysOn' | 'onSharpAnglesOnly' | 'never'
+  polyLineLegacy(...optionsIn: Array<{
       points: Array<Point>,
       color?: Array<number>,
       close?: boolean,
