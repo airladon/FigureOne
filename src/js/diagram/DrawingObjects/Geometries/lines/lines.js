@@ -303,6 +303,12 @@ function makePolyLine(
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Points>>] {
   let points = [];
   let cornerStyleToUse = cornerStyle;
+  let pointsAreToUse = pointsAre;
+  // if (pointsAre === 'outside') {
+  //   pointsAreToUse = 'inside';
+  // } else if (pointsAre === 'inside') {
+  //   pointsAreToUse = 'outside';
+  // }
   // Convert line to line with corners
   if (cornerStyle === 'auto') {
     points = pointsIn.map(p => p._dup());
@@ -327,7 +333,7 @@ function makePolyLine(
     let dashedHole = [[]];
     dashes.forEach((d) => {
       let [tris, border, hole] = makeThickLine(
-        d, width, pointsAre, closeDashes, cornerStyleToUse, minAutoCornerAngle,
+        d, width, pointsAreToUse, closeDashes, cornerStyleToUse, minAutoCornerAngle,
       );
       dashedTris = [...dashedTris, ...tris];
       dashedBorder = [[...dashedBorder[0], ...border[0]]];
@@ -337,7 +343,7 @@ function makePolyLine(
   }
 
   return makeThickLine(
-    points, width, pointsAre, close, cornerStyleToUse, minAutoCornerAngle,
+    points, width, pointsAreToUse, close, cornerStyleToUse, minAutoCornerAngle,
   );
 }
 
@@ -353,6 +359,7 @@ function makePolyLineCorners(
   cornerSides: number,
   minAutoCornerAngle: number = Math.PI / 7,
 ) {
+
   // split line into corners
   const corners = lineToCorners(pointsIn, close, cornerLength, forceCornerLength);
 
