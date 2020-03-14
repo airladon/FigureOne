@@ -3201,22 +3201,22 @@ diagram.addElement(
     name: 'p',
     method: 'shapes.polyLine',
     options: {
-    points: [[-0.5, -0.5], [-0.1, 0.5], [0.3, -0.2], [0.5, 0.5]],
-    width: 0.05,
+      points: [[-0.5, -0.5], [-0.1, 0.5], [0.3, -0.2], [0.5, 0.5]],
+      width: 0.05,
   },
 );
 ```
 
 ```javascript
-// Square
+// Triangle
 diagram.addElement(
   {
     name: 'p',
     method: 'shapes.polyLine',
     options: {
-     points: [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]],
-     width: 0.05,
-     close: true,
+       points: [[-0.5, -0.5], [0.5, -0.5], [0, 0.5]],
+       width: 0.05,
+       close: true,
     },
   },
 );
