@@ -204,39 +204,48 @@ export type OBJ_Rectangle = {
  * length of gap and then the pattern repeats - can use more than one dash length
  * and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
  * short gap, short dash, short gap and then repeats.
+ * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
  * @property {number} [pulse] set the default pulse scale
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('polyLine').standard()`)
  * @example
- * // Simple square
+ * // Line
  * diagram.addElement(
  *   {
  *     name: 'p',
  *     method: 'shapes.polyLine',
  *     options: {
- *       points: [[0, 0], [0.5, 0], [0.5, 0.5], [0, 0.5]],
- *       width: 0.01,
- *       color: [0, 1, 0, 1],
- *       close: true,
- *     },
+ *       points: [[-0.5, -0.5], [-0.1, 0.5], [0.3, -0.2], [0.5, 0.5]],
+ *       width: 0.05,
  *   },
  * );
  * 
  * @example
- * // Square with rounded corners, dot-dash dashed line and  
+ * // Triangle
  * diagram.addElement(
  *   {
  *     name: 'p',
  *     method: 'shapes.polyLine',
  *     options: {
- *       points: [[0, 0], [0.5, 0], [0.5, 0.5], [0, 0.5]],
- *       width: 0.01,
- *       color: [0, 1, 0, 1],
- *       dash: [0.03, 0.01, 0.01, 0.01],
+ *        points: [[-0.5, -0.5], [0.5, -0.5], [0, 0.5]],
+ *        width: 0.05,
+ *        close: true,
+ *     },
+ *   },
+ * );
+ * @example
+ * // Square with rounded corners and dot-dash line
+ * diagram.addElement(
+ *   {
+ *     name: 'p',
+ *     method: 'shapes.polyLine',
+ *     options: {
+ *       points: [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]],
+ *       width: 0.05,
+ *       dash: [0.17, 0.05, 0.05, 0.05],
  *       close: true,
  *       cornerStyle: 'radius',
  *       cornerSize: 0.1,
- *       pointsAt: 'mid',
  *     },
  *   },
  * );
@@ -251,6 +260,7 @@ export type OBJ_PolyLine = {
   cornerSides?: number,
   minAutoCornerAngle?: number,
   dash?: Array<number>,
+  color?: Array<number>,
   pulse?: number,
   position?: Point,
   transform?: Transform,
@@ -446,6 +456,7 @@ export default class DiagramPrimitives {
   polyLine(...optionsIn: Array<OBJ_PolyLine>) {
     const defaultOptions = {
       width: 0.01,
+      color: [1, 0, 0, 1],
       close: false,
       pointsAt: 'mid',
       cornerStyle: 'auto',

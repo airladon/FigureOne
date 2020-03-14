@@ -10775,7 +10775,7 @@ diagram.addElement(
 
   
     <p style="display: none;">      Type:
-      {points: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeParsablePoint>, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, close: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, pointsAt: (<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code>)?, cornerStyle: (<code>"auto"</code> | <code>"none"</code> | <code>"radius"</code> | <code>"fill"</code>)?, cornerSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, cornerSides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, minAutoCornerAngle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, dash: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, position: <a href="#point">Point</a>?, transform: Transform?}
+      {points: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeParsablePoint>, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, close: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, pointsAt: (<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code>)?, cornerStyle: (<code>"auto"</code> | <code>"none"</code> | <code>"radius"</code> | <code>"fill"</code>)?, cornerSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, cornerSides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, minAutoCornerAngle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, dash: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, position: <a href="#point">Point</a>?, transform: Transform?}
     </p>
   
   
@@ -10900,6 +10900,15 @@ short gap, short dash, short gap and then repeats.
         </div>
       
         <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (
+<code>[1, 0, 0, 1]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
           <span class='code bold'>pulse</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : set the default pulse scale
 
@@ -10933,36 +10942,44 @@ short gap, short dash, short gap and then repeats.
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple square</span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line</span>
 diagram.addElement(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'shapes.polyLine'</span>,
     <span class="hljs-attr">options</span>: {
-      <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>]],
-      <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span>,
-      <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-      <span class="hljs-attr">close</span>: <span class="hljs-literal">true</span>,
-    },
+    <span class="hljs-attr">points</span>: [[<span class="hljs-number">-0.5</span>, <span class="hljs-number">-0.5</span>], [<span class="hljs-number">-0.1</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">0.3</span>, <span class="hljs-number">-0.2</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>]],
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.05</span>,
   },
-);
-![](./assets1/polyline.png)</pre>
+);</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Square with rounded corners, dot-dash dashed line and  </span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Square</span>
 diagram.addElement(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'shapes.polyLine'</span>,
     <span class="hljs-attr">options</span>: {
-      <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>]],
-      <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span>,
-      <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-      <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.03</span>, <span class="hljs-number">0.01</span>, <span class="hljs-number">0.01</span>, <span class="hljs-number">0.01</span>],
+     <span class="hljs-attr">points</span>: [[<span class="hljs-number">-0.5</span>, <span class="hljs-number">-0.5</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">-0.5</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">-0.5</span>, <span class="hljs-number">0.5</span>]],
+     <span class="hljs-attr">width</span>: <span class="hljs-number">0.05</span>,
+     <span class="hljs-attr">close</span>: <span class="hljs-literal">true</span>,
+    },
+  },
+);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Square with rounded corners and dot-dash line</span>
+diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'shapes.polyLine'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">points</span>: [[<span class="hljs-number">-0.5</span>, <span class="hljs-number">-0.5</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">-0.5</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">-0.5</span>, <span class="hljs-number">0.5</span>]],
+      <span class="hljs-attr">width</span>: <span class="hljs-number">0.05</span>,
+      <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.17</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.05</span>],
       <span class="hljs-attr">close</span>: <span class="hljs-literal">true</span>,
       <span class="hljs-attr">cornerStyle</span>: <span class="hljs-string">'radius'</span>,
       <span class="hljs-attr">cornerSize</span>: <span class="hljs-number">0.1</span>,
-      <span class="hljs-attr">pointsAt</span>: <span class="hljs-string">'mid'</span>,
     },
   },
 );</pre>

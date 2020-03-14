@@ -3165,7 +3165,7 @@ PolyLine shape options object
 
 ![][288]
 
-Type: {points: [Array][241]&lt;TypeParsablePoint>, width: [number][242]?, close: [boolean][245]?, pointsAt: (`"mid"` \| `"outside"` \| `"inside"`)?, cornerStyle: (`"auto"` \| `"none"` \| `"radius"` \| `"fill"`)?, cornerSize: [number][242]?, cornerSides: [number][242]?, minAutoCornerAngle: [number][242]?, dash: [Array][241]&lt;[number][242]>?, pulse: [number][242]?, position: [Point][249]?, transform: Transform?}
+Type: {points: [Array][241]&lt;TypeParsablePoint>, width: [number][242]?, close: [boolean][245]?, pointsAt: (`"mid"` \| `"outside"` \| `"inside"`)?, cornerStyle: (`"auto"` \| `"none"` \| `"radius"` \| `"fill"`)?, cornerSize: [number][242]?, cornerSides: [number][242]?, minAutoCornerAngle: [number][242]?, dash: [Array][241]&lt;[number][242]>?, color: [Array][241]&lt;[number][242]>?, pulse: [number][242]?, position: [Point][249]?, transform: Transform?}
 
 ### Properties
 
@@ -3187,6 +3187,7 @@ Type: {points: [Array][241]&lt;TypeParsablePoint>, width: [number][242]?, close:
     length of gap and then the pattern repeats - can use more than one dash length
     and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
     short gap, short dash, short gap and then repeats.
+-   `color` **[Array][241]&lt;[number][242]>?** (`[1, 0, 0, 1]`)
 -   `pulse` **[number][242]?** set the default pulse scale
 -   `position` **[Point][249]?** convenience to override Transform translation
 -   `transform` **Transform?** (`Transform('polyLine').standard()`)
@@ -3194,37 +3195,46 @@ Type: {points: [Array][241]&lt;TypeParsablePoint>, width: [number][242]?, close:
 ### Examples
 
 ```javascript
-// Simple square
+// Line
 diagram.addElement(
   {
     name: 'p',
     method: 'shapes.polyLine',
     options: {
-      points: [[0, 0], [0.5, 0], [0.5, 0.5], [0, 0.5]],
-      width: 0.01,
-      color: [0, 1, 0, 1],
-      close: true,
-    },
+    points: [[-0.5, -0.5], [-0.1, 0.5], [0.3, -0.2], [0.5, 0.5]],
+    width: 0.05,
   },
 );
-![](./assets1/polyline.png)
 ```
 
 ```javascript
-// Square with rounded corners, dot-dash dashed line and  
+// Square
 diagram.addElement(
   {
     name: 'p',
     method: 'shapes.polyLine',
     options: {
-      points: [[0, 0], [0.5, 0], [0.5, 0.5], [0, 0.5]],
-      width: 0.01,
-      color: [0, 1, 0, 1],
-      dash: [0.03, 0.01, 0.01, 0.01],
+     points: [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]],
+     width: 0.05,
+     close: true,
+    },
+  },
+);
+```
+
+```javascript
+// Square with rounded corners and dot-dash line
+diagram.addElement(
+  {
+    name: 'p',
+    method: 'shapes.polyLine',
+    options: {
+      points: [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]],
+      width: 0.05,
+      dash: [0.17, 0.05, 0.05, 0.05],
       close: true,
       cornerStyle: 'radius',
       cornerSize: 0.1,
-      pointsAt: 'mid',
     },
   },
 );
