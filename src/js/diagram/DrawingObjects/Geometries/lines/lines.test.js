@@ -1,7 +1,7 @@
 import {
   Point, getBoundingRect
-} from '../g2';
-import { round } from '../math';
+} from '../../../../tools/g2';
+import { round } from '../../../../tools/math';
 import {
   makePolyLine,
 } from './lines';

@@ -1,6 +1,6 @@
 import {
   Point, Line, threePointAngleMin,
-} from '../g2';
+} from '../../../../tools/g2';
 
 
 //

@@ -1,6 +1,6 @@
 import {
   Point, Line, distance,
-} from '../g2';
+} from '../../../../tools/g2';
 
 
 function makeDashDefinition(dashes: Array<number>) {
