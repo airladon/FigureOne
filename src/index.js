@@ -7,7 +7,7 @@ import * as color from './js/tools/color';
 import * as html from './js/tools/htmlGenerator';
 import * as misc from './js/tools/tools';
 import * as css from './js/tools/styleSheets';
-import * as lines from './js/tools/lines/lines';
+import * as lines from './js/diagram/DrawingObjects/Geometries/lines/lines';
 import {
   DiagramElement, DiagramElementPrimitive, DiagramElementCollection,
 } from './js/diagram/Element';

@@ -39,19 +39,25 @@ function lineSegmentsToPoints(
   lineSegments: Array<[Line, Line, Line]>,
   insideIndex: number,
   outsideIndex: number,
-) {
-  const out = [];
+): [Array<Point>, Array<Array<Point>>, Array<Array<Points>>] {
+  const tris = [];
+  const border = [];
+  const hole = [];
   lineSegments.forEach((lineSegment) => {
     const inside = lineSegment[insideIndex];
     const outside = lineSegment[outsideIndex];
-    out.push(inside.p1._dup());
-    out.push(outside.p1._dup());
-    out.push(inside.p2._dup());
-    out.push(outside.p1._dup());
-    out.push(inside.p2._dup());
-    out.push(outside.p2._dup());
+    border.push(lineSegment[outsideIndex].p1._dup());
+    border.push(lineSegment[outsideIndex].p2._dup());
+    hole.push(lineSegment[insideIndex].p1._dup());
+    hole.push(lineSegment[insideIndex].p2._dup());
+    tris.push(inside.p1._dup());
+    tris.push(outside.p1._dup());
+    tris.push(inside.p2._dup());
+    tris.push(outside.p1._dup());
+    tris.push(inside.p2._dup());
+    tris.push(outside.p2._dup());
   });
-  return out;
+  return [tris, [border], [hole]];
 }
 //                    2       2        2
 //                    N     o N        N
@@ -134,7 +140,7 @@ function makeThickLineMid(
   // cornerStyle: 'autoPoint' | 'fill',
   corner: 'auto' | 'fill' | 'none',
   minAngleIn: ?number = Math.PI / 7,
-) {
+): [Array<Point>, Array<Array<Point>>, Array<Array<Points>>] {
   const lineSegments = makeLineSegments(points, width / 2, width / 2, close);
 
   // Join line segments based on the angle between them
@@ -189,8 +195,12 @@ function makeThickLineMid(
       }
     }
   }
-
-  return [...lineSegmentsToPoints(lineSegments, 0, 2), ...cornerFills];
+  const [tris, border, hole] = lineSegmentsToPoints(lineSegments, 0, 2);
+  if (close === false) {
+    return [[...tris, ...cornerFills], [[...border[0], ...hole[0].reverse()]], [[]]];
+  }
+  return [[...tris, ...cornerFills], border, hole]
+  // return [...lineSegmentsToPoints(lineSegments, 0, 2), ...cornerFills];
 }
 
 function makeThickLineInsideOutside(
@@ -199,7 +209,7 @@ function makeThickLineInsideOutside(
   close: boolean = false,
   corner: 'auto' | 'fill' | 'none',
   minAngleIn: ?number = Math.PI / 7,
-) {
+): [Array<Point>, Array<Array<Point>>, Array<Array<Points>>] {
   const lineSegments = makeLineSegments(points, width, width, close);
 
   const minAngle = minAngleIn == null ? 0 : minAngleIn;
@@ -249,7 +259,12 @@ function makeThickLineInsideOutside(
       }
     }
   }
-  return [...lineSegmentsToPoints(lineSegments, 1, 2), ...cornerFills];
+  const [tris, border, hole] = lineSegmentsToPoints(lineSegments, 1, 2);
+  if (close === false) {
+    return [[...tris, ...cornerFills], [[...border[0], ...hole[0].reverse()]], [[]]];
+  }
+  return [[...tris, ...cornerFills], border, hole];
+  // return [...lineSegmentsToPoints(lineSegments, 1, 2), ...cornerFills];
 }
 
 function makeThickLine(
@@ -259,7 +274,7 @@ function makeThickLine(
   close: boolean = false,
   corner: 'auto' | 'fill' | 'none',
   minAngle: ?number = Math.PI / 7,
-) {
+): [Array<Point>, Array<Array<Point>>, Array<Array<Points>>] {
   if (pointsAre === 'mid') {
     return makeThickLineMid(points, width, close, corner, minAngle);
   }
@@ -285,7 +300,7 @@ function makePolyLine(
   cornerSides: number,
   minAutoCornerAngle: number = Math.PI / 7,
   dash: Array<number> = [],
-) {
+): [Array<Point>, Array<Array<Point>>, Array<Array<Points>>] {
   let points = [];
   let cornerStyleToUse = cornerStyle;
   // Convert line to line with corners
@@ -308,12 +323,17 @@ function makePolyLine(
       closeDashes = close;
     }
     let dashedTris = [];
+    let dashedBorder = [[]];
+    let dashedHole = [[]];
     dashes.forEach((d) => {
-      dashedTris = [...dashedTris, ...makeThickLine(
+      let [tris, border, hole] = makeThickLine(
         d, width, pointsAre, closeDashes, cornerStyleToUse, minAutoCornerAngle,
-      )];
+      );
+      dashedTris = [...dashedTris, ...tris];
+      dashedBorder = [[...dashedBorder[0], ...border[0]]];
+      dashedHole = [[...dashedHole[0], ...hole[0]]];
     });
-    return dashedTris;
+    return [dashedTris, dashedBorder, dashedHole];
   }
 
   return makeThickLine(
@@ -337,10 +357,19 @@ function makePolyLineCorners(
   const corners = lineToCorners(pointsIn, close, cornerLength, forceCornerLength);
 
   let tris = [];
+  let borders = [];
+  let holes = [];
   corners.forEach((corner) => {
-    tris = [...tris, ...makePolyLine(corner, width, false, pointsAre, cornerStyle, cornerSize, cornerSides, minAutoCornerAngle)];
+    const [t, b, h] = makePolyLine(
+      corner, width, false, pointsAre, cornerStyle, cornerSize,
+      cornerSides, minAutoCornerAngle,
+      );
+    tris = [...tris, ...t];
+    borders = [...borders, ...b];
+    holes = [...holes, ...h];
+    // tris = [...tris, ...makePolyLine(corner, width, false, pointsAre, cornerStyle, cornerSize, cornerSides, minAutoCornerAngle)];
   });
-  return tris;
+  return [tris, borders, holes];
 }
 
 export {

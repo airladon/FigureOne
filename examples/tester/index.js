@@ -17,7 +17,7 @@ const line = [
 ];
 
 const makeLine = (lineIn) => makePolyLineCorners(lineIn, 0.03, true, 0.3, false, 'outside', 'radius', 0.05, 10, Math.PI / 7); // , [0.2, 0.05, 0.01, 0.05])
-const thick = makeLine(line);
+const [thick, ,] = makeLine(line);
 
 diagram.addElements([
   {
@@ -81,7 +81,7 @@ pad.setTransformCallback = () => {
   line[1] = p._dup();
   const r = diagram.getElement('r');
   // const thick = makePolyLine(line, 0.1, true, 'mid', 'chamfer');
-  const thick = makeLine(line);
+  const [thick] = makeLine(line);
   r.drawingObject.change(thick);
   diagram.animateNextFrame();
 }
