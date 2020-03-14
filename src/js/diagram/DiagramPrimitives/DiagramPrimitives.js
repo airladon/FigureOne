@@ -207,6 +207,39 @@ export type OBJ_Rectangle = {
  * @property {number} [pulse] set the default pulse scale
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('polyLine').standard()`)
+ * @example
+ * // Simple square
+ * diagram.addElement(
+ *   {
+ *     name: 'p',
+ *     method: 'shapes.polyLine',
+ *     options: {
+ *       points: [[0, 0], [0.5, 0], [0.5, 0.5], [0, 0.5]],
+ *       width: 0.01,
+ *       color: [0, 1, 0, 1],
+ *       close: true,
+ *     },
+ *   },
+ * );
+ * 
+ * @example
+ * // Square with rounded corners, dot-dash dashed line and  
+ * diagram.addElement(
+ *   {
+ *     name: 'p',
+ *     method: 'shapes.polyLine',
+ *     options: {
+ *       points: [[0, 0], [0.5, 0], [0.5, 0.5], [0, 0.5]],
+ *       width: 0.01,
+ *       color: [0, 1, 0, 1],
+ *       dash: [0.03, 0.01, 0.01, 0.01],
+ *       close: true,
+ *       cornerStyle: 'radius',
+ *       cornerSize: 0.1,
+ *       pointsAt: 'mid',
+ *     },
+ *   },
+ * );
  */
 export type OBJ_PolyLine = {
   points: Array<TypeParsablePoint>,
