@@ -10,10 +10,10 @@ const {
 } = Fig.tools.lines;
 
 const line = [
-  new Point(0, 0),
-        new Point(1, 0),
-        new Point(1, 1),
-        new Point(0, 1),
+    new Point(1, 0),
+    new Point(0.5, 0.024286),
+    new Point(0, 0),
+    // new Point(0, 1),
 ];
 
 const makeLine = (lineIn) => makePolyLine(lineIn, 0.03, true, 'inside', 'auto', 0.05, 10, Math.PI / 7); // , [0.2, 0.05, 0.01, 0.05])
@@ -118,6 +118,7 @@ const pad = diagram.getElement('pad');
 pad.setMovable();
 pad.setTransformCallback = () => {
   const p = pad.getPosition().sub(-0.7, -0.5);
+  console.log(p)
   line[1] = p._dup();
   const r = diagram.getElement('r');
   // const thick = makePolyLine(line, 0.1, true, 'mid', 'chamfer');
