@@ -153,16 +153,18 @@ function makeLineSegmentsOutside(
     if (prev != null) {
       const prevAngle = threePointAngle(prev.p1, current.p1, current.p2);
       const minPrevOffset = current.distanceToPoint(prev.p1);
-      if (prevAngle < Math.PI) {
-        minOffset = Math.min(minOffset, minPrevOffset);
+      if (prevAngle < Math.PI / 2) {
+        minOffset = Math.min(minOffset, minPrevOffset, Math.tan(prevAngle) * current.length());
       }
+      // console.log(minOffset, minPrevOffset, current.p1, current.p2)
     }
     if (next != null) {
       const nextAngle = threePointAngle(current.p1, current.p2, next.p2);
       const minNextOffset = current.distanceToPoint(next.p2);
-      if (nextAngle < Math.PI) {
-        minOffset = Math.min(minOffset, minNextOffset);
+      if (nextAngle < Math.PI / 2) {
+        minOffset = Math.min(minOffset, minNextOffset, Math.tan(nextAngle) * current.length());
       }
+      // console.log(minOffset, minNextOffset, current.p1, current.p2)
     }
     const outsideLine = current.offset('outside', minOffset);
     lineSegments.push([current, current, outsideLine]);
@@ -263,7 +265,12 @@ function makeThickLineInsideOutside(
   corner: 'auto' | 'fill' | 'none',
   minAngleIn: ?number = Math.PI / 7,
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
-  const lineSegments = makeLineSegments(points, width, width, close);
+  let lineSegments;
+  if (corner === 'none') {
+    lineSegments = makeLineSegments(points, width, width, close);
+  } else {
+    lineSegments = makeLineSegmentsOutside(points, width, close);
+  }
 
   const minAngle = minAngleIn == null ? 0 : minAngleIn;
   const joinLineSegments = (current, next) => {
@@ -273,11 +280,11 @@ function makeThickLineInsideOutside(
     // If angle is 0 to 180, then it is an inside angle
     if (0 < angle && angle < Math.PI) {
       let intercept = outside.intersectsWith(insideNext);
-      if (intercept.intersect != null && intercept.intersect.isOnLine(insideNext, 8)) {
+      if (intercept.intersect != null) {
         outside.setP2(intercept.intersect);
       }
       intercept = outsideNext.intersectsWith(inside);
-      if (intercept.intersect != null && intercept.intersect.isOnLine(inside, 8)) {
+      if (intercept.intersect != null) {
         outsideNext.setP1(intercept.intersect);
       }
     // otherwise its an outside angle
