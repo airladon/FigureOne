@@ -21,6 +21,7 @@ import DiagramPrimitives from '../DiagramPrimitives/DiagramPrimitives';
 // eslint-disable-next-line import/no-cycle
 import DiagramObjects from './DiagramObjects';
 import DiagramEquation from '../DiagramEquation/DiagramEquation';
+import type { OBJ_PolyLine } from '../DiagramPrimitives/DiagramPrimitives';
 
 export type TypePadOptions = {
   color?: Array<number>,
@@ -38,7 +39,8 @@ export type TypePolyLineOptions = {
   close?: boolean,
   showLine?: boolean,
   color?: Array<number>,
-  borderToPoint?: TypePolyLineBorderToPoint,
+  // line?: OBJ_PolyLine,
+  // borderToPoint?: TypePolyLineBorderToPoint,
   width?: number,
   angle?: TypeAngleOptions | Array<TypeAngleOptions>,
   side?: TypeLineOptions | Array<TypeLineOptions>,
@@ -52,7 +54,7 @@ export type TypePolyLineOptions = {
       minSide?: ?number,
     },
   };
-};
+} & OBJ_PolyLine;
 
 function makeArray<T>(
   possibleArray: T | Array<T>,
@@ -152,7 +154,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       points: [new Point(1, 0), new Point(0, 0), new Point(0, 1)],
       close: false,
       showLine: true,
-      borderToPoint: 'never',
+      // borderToPoint: 'never',
       width: 0.01,
       reverse: false,
       transform: new Transform('PolyLine').scale(1, 1).rotate(0).translate(0, 0),
@@ -341,12 +343,22 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
 
     // Add Line
     if (optionsToUse.showLine) {
-      const line = this.shapes.polyLineLegacy({
+      const line = this.shapes.polyLine({
         points: this.points,
-        color: optionsToUse.color,
-        close: optionsToUse.close,
-        borderToPoint: optionsToUse.borderToPoint,
-        width: optionsToUse.width,
+        // color: optionsToUse.color,
+        // close: optionsToUse.close,
+        // // borderToPoint: optionsToUse.borderToPoint,
+        // width: optionsToUse.width,
+        width: options.width,
+        close: options.close,
+        pointsAt: options.pointsAt,
+        cornerStyle: options.cornerStyle,
+        cornerSize: options.cornerSize,
+        cornerSides: options.cornerSides,
+        minAutoCornerAngle: options.minAutoCornerAngle,
+        dash: options.dash,
+        color: options.color,
+        pulse: options.pulse,
       });
       this.add('line', line);
     }
@@ -430,7 +442,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
   updatePoints(newPointsIn: Array<Point>, skipCallback: boolean = false) {
     const newPoints = newPointsIn.map(p => getPoint(p));
     if (this._line != null) {
-      this._line.drawingObject.change(newPoints);
+      this._line.custom.updatePoints(newPoints);
     }
 
     // Add Pads
