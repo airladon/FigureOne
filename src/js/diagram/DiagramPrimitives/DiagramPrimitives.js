@@ -82,10 +82,9 @@ import { makePolyLine } from '../DrawingObjects/Geometries/lines/lines';
  *     name: 'p',
  *     method: 'polygon',
  *     options: {
- *       radius: 0.4,
- *       sides: 10,
- *       width: 0.08,
+ *       radius: 0.5,
  *       fill: true,
+ *       sides: 6,
  *     },
  *   },
  * );
@@ -468,10 +467,10 @@ export default class DiagramPrimitives {
     };
 
     const options = processOptions(defaultOptions, ...optionsIn);
-    parsePoints(options, 'points');
+    parsePoints(options, ['points']);
 
-    const [triangles, borders, holes] = makePolyLine(
-      options.points,
+    const getTris = points => makePolyLine(
+      points,
       options.width,
       options.close,
       options.pointsAt,
@@ -481,6 +480,7 @@ export default class DiagramPrimitives {
       options.minAutoCornerAngle,
       options.dash,
     );
+    const [triangles, borders, holes] = getTris(options.points);
 
     const element = Generic(
       this.webgl,
@@ -492,6 +492,10 @@ export default class DiagramPrimitives {
       options.transform,
       this.limits,
     );
+
+    element.custom.updatePoints = (points) => {
+      element.drawingObject.change(...getTris(points));
+    };
 
     if (options.pulse != null) {
       if (typeof element.pulseDefault !== 'function') {

@@ -9,7 +9,7 @@ export type TypeVertexPolyLineBorderToPoint = TypeBorderToPoint;
 class VertexGeneric extends VertexObject {
   width: number;
   close: boolean;
-  borderToPoint: TypeBorderToPoint;
+  // borderToPoint: TypeBorderToPoint;
 
   constructor(
     webgl: Array<WebGLInstance>,

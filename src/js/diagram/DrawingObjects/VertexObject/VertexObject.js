@@ -227,7 +227,7 @@ class VertexObject extends DrawingObject {
   }
 
   // eslint-disable-next-line no-unused-vars
-  change(coords: Array<g2.Point>) {
+  change(coords: Array<g2.Point>, border: Array<Array<g2.Point>>, holes: Array<Array<Point>>) {
     this.resetBuffer();
   }
 
