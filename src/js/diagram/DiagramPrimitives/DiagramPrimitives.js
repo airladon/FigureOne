@@ -184,14 +184,42 @@ export type OBJ_Rectangle = {
  *
  * ![](./assets1/polyline.png)
  *
+ * A polyline is a series of lines that are connected end to end. It is defined
+ * by a series of points which are the ends and corners of the polyline.
+ *
+ * The series of points is a zero width polyline, and so to see it we must
+ * give it some width. This width can either be grown on one side of the
+ * ideal polyline or grown on both sides of it equally.
+ *
+ * Here we define a line's side as either the *positive* side, or *negative*
+ * side. If a line is defined from p1 to p2, then the *positive* side is the
+ * side where the line moves if it is rotated around p1 in the positive (counter
+ * clockwise) direction. Thus the order of the points that define the line
+ * defines which side is positive and negative. A polyline is made up of many
+ * lines end to end, and thus itself will have a positive and negative side
+ * dependent on the order of points.
+ *
+ * Each point, or line connection, creates a corner that will have an *inside*
+ * angle (<180º) and an *outside* angle (>180º or reflex angle).
+ *
+ * Growing width on an outside corner can be challenging. As the corner becomes
+ * sharper, the outside width joins at a point further and further from the
+ * ideal corner. Eventually trucating the corner makes more visual sense
+ * and therefore, a minimum angle (`minAutoCornerAngle`) is used to
+ * specify when the corner should be drawn, and when it should be truncated.
+ *
+ *
  * @property {Array<TypeParsablePoint>} points
  * @property {number} [width] (`0.01`)
  * @property {boolean} [close] close the polyLine on itself (`false`)
- * @property {'mid' | 'outside' | 'inside'} [pointsAt] the `points` should be
- * in the middle (`mid`), on the 'outside' or on the 'inside' of the line width
- * (`mid`)
+ * @property {'mid' | 'outside' | 'inside' | 'autoOutside' | 'autoInside'} [pointsAt]
+ * defines where the `points` should be relative to the width of the line.
+ * Note 1: `pos` and `neg` are dependent on what order the polyLine points
+ * are defined. Note 2: only `mid` is fully compatible with all options in
+ * `cornerStyle` and `dash`. Inside corners do not fully support dash and
+ * 
  * @property {'auto' | 'none' | 'radius' | 'fill'} [cornerStyle] `auto`
- * makes the corners sharp is the angle is less than `minAutoCornerAngle`
+ * makes the corners sharp if the angle is less than `minAutoCornerAngle`
  * - `none` is no corners - `radius` makes each corner a curve - `fill`
  * fills the gapes between the lines in `none` and effectivly adds a chamfer
  * (`auto`)
