@@ -8,9 +8,10 @@ import { round } from '../../tools/math';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
-import type {
-  TypePolyLineBorderToPoint,
-} from '../DiagramElements/PolyLine';
+// import type {
+//   TypePolyLineBorderToPoint,
+// } from '../DiagramElements/PolyLine';
+import type { TypeParsablePoint } from '../../tools/g2';
 import type {
   TypeLineLabelOptions, TypeLineOptions,
 } from './Line';
@@ -35,7 +36,7 @@ export type TypePadOptions = {
 };
 export type TypePolyLineOptions = {
   position?: ?Point,
-  points?: Array<Point>,
+  points: Array<TypeParsablePoint>,
   close?: boolean,
   showLine?: boolean,
   color?: Array<number>,

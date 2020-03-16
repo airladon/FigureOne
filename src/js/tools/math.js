@@ -47,7 +47,7 @@ function round<T: number | TypeRoundObject | Array<number | TypeRoundObject>>(
 ): T {
   let result = 0;
   if (Array.isArray(arrayOrValue)) {
-    result = arrayOrValue.map(elem => round(elem, precision));
+    return arrayOrValue.map(elem => round(elem, precision));
   }
   if (typeof arrayOrValue === 'number') {
     result = roundNum(arrayOrValue, precision);

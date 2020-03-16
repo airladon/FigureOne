@@ -1,5 +1,5 @@
 import {
-  Point, getBoundingRect
+  Point, getBoundingRect,
 } from '../../../../tools/g2';
 import { round } from '../../../../tools/math';
 import {
@@ -16,8 +16,8 @@ describe('Tools Lines', () => {
         new Point(1, 1),
         new Point(0, 1),
       ];
-    })
-    describe('Outside', () =>{
+    });
+    describe('Outside', () => {
       test('Unclosed', () => {
         const [tris, border, hole] = makePolyLine(points, 0.1, false, 'outside', 'none');
         const line1 = getBoundingRect(tris.slice(0, 6));
@@ -101,7 +101,6 @@ describe('Tools Lines', () => {
           new Point(0, 1),
           new Point(0, 0),
         ]);
-
       });
       test('radius', () => {
         const out = makePolyLine(points, 0.1, true, 'outside', 'radius', 0.015, 10);
@@ -120,7 +119,7 @@ describe('Tools Lines', () => {
         expect(out).toMatchSnapshot();
       });
     });
-    describe('Inside', () =>{
+    describe('Inside', () => {
       test('Unclosed', () => {
         const [out] = makePolyLine(points, 0.1, false, 'inside', 'none');
         const line3 = getBoundingRect(out.slice(0, 6));
@@ -184,7 +183,7 @@ describe('Tools Lines', () => {
         expect(out).toMatchSnapshot();
       });
     });
-    describe('Mid', () =>{
+    describe('Mid', () => {
       test('Unclosed', () => {
         const [out] = makePolyLine(points, 0.1, false, 'mid', 'none');
         const line1 = getBoundingRect(out.slice(0, 6));
@@ -265,7 +264,9 @@ describe('Tools Lines', () => {
 //   new Point(0, 1),
 // ];
 
-// const out = makePolyLine(line, 0.01, true, 'inside', 'auto', 0.015, 10, Math.PI / 7, [0.2, 0.08]);
+// const out = makePolyLine(
+//   line, 0.01, true, 'inside', 'auto', 0.015, 10, Math.PI / 7, [0.2, 0.08],
+// );
 
 // diagram.addElements([
 //   {
