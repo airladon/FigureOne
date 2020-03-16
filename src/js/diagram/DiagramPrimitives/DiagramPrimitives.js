@@ -196,7 +196,8 @@ export type OBJ_Rectangle = {
  * fills the gapes between the lines in `none` and effectivly adds a chamfer
  * (`auto`)
  * @property {number} [cornerSize] only used when `cornerStyle` = `radius` (`0.01`)
- * @property {number} [cornerSides] number of sides in curve - only used when `cornerStyle` = `radius` (`10`)
+ * @property {number} [cornerSides] number of sides in curve - only used when
+ *  `cornerStyle` = `radius` (`10`)
  * @property {number} [minAutoCornerAngle] see `cornerStyle` = `auto` (`π/7`)
  * @property {Array<number>} [dash] leave empty for solid line - use array of
  * numbers for dash line where first number is length of line, second number is
@@ -218,7 +219,7 @@ export type OBJ_Rectangle = {
  *       width: 0.05,
  *   },
  * );
- * 
+ *
  * @example
  * // Triangle
  * diagram.addElement(
@@ -261,7 +262,7 @@ export type OBJ_PolyLine = {
   dash?: Array<number>,
   color?: Array<number>,
   pulse?: number,
-  position?: Point,
+  position?: ?Point,
   transform?: Transform,
 };
 
@@ -314,14 +315,16 @@ function parsePoints(
       return;
     }
     if (Array.isArray(value) && !(typeof value[0] === 'number')) {
+      // eslint-disable-next-line no-param-reassign
       options[key] = value.map(p => getPoint(p));
     } else {
-      options[key] = getPoint(p);
+      // eslint-disable-next-line no-param-reassign
+      options[key] = getPoint(value);
     }
   };
 
   if (typeof keysToParsePointsOrPointArrays === 'string') {
-    parseKey(keysToParsePointsOrPointArrays)
+    parseKey(keysToParsePointsOrPointArrays);
   } else {
     keysToParsePointsOrPointArrays.forEach(key => parseKey(key));
   }
@@ -332,7 +335,7 @@ function processOptions(...optionsIn: Array<Object>) {
   if (options.position != null) {
     const p = getPoint(options.position);
     if (options.transform == null) {
-      options.transform = new Transform('processOptions').translate();
+      options.transform = new Transform('processOptions').translate(0, 0);
     }
     options.transform.updateTranslation(p);
   }
@@ -504,7 +507,6 @@ export default class DiagramPrimitives {
     }
 
     return element;
-    // const element = 
   }
 
   // borderToPoint options: 'alwaysOn' | 'onSharpAnglesOnly' | 'never'

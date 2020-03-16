@@ -25,7 +25,7 @@ class DrawingObject {
   border: Array<Array<Point>>; // Border vertices
   location: Point;
   holeBorder: Array<Array<Point>>;  // Border of any holes inside of main border
-  +change: (any, any) => void;
+  +change: (any, any, any) => void;
   onLoad: Function | null;   // Only used for drawing objects with asynchronous
   //                            loading (like textures)
   type: string;
