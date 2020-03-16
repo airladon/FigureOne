@@ -339,7 +339,7 @@ function makeThickLineInsideOutside(
 function setPointOrder(
   points: Array<Point>,
   close: boolean,
-  pointsAre: 'inside' | 'outside' | 'autoInside' | 'autoOutside',
+  pointsAre: 'inside' | 'outside' | 'autoInside' | 'autoOutside' | 'mid',
 ) {
   const reversePoints = () => {
     const reversedCopy = [];
@@ -347,8 +347,8 @@ function setPointOrder(
       reversedCopy.push(points[i]._dup());
     }
     return reversedCopy;
-  }
-  if (pointsAre === 'outside') {
+  };
+  if (pointsAre === 'outside' || pointsAre === 'mid') {
     return points;
   }
   if (pointsAre === 'inside') {
@@ -400,42 +400,37 @@ function makeThickLine(
     return makeThickLineMid(points, width, close, corner, minAngle);
   }
   return makeThickLineInsideOutside(
-    setPointOrder(points, close, pointsAre),
+    points,
     width, close, corner, minAngle,
   );
-  // if (pointsAre === 'outside') {
-  //   return makeThickLineInsideOutside(points, width, close, corner, minAngle);
-  // }
-  // const reversedCopy = [];
-  // for (let i = points.length - 1; i >= 0; i -= 1) {
-  //   reversedCopy.push(points[i]._dup());
-  // }
-  // return makeThickLineInsideOutside(reversedCopy, width, close, corner, minAngle);
 }
 
 function makePolyLine(
   pointsIn: Array<Point>,
   width: number = 0.01,
   close: boolean = false,
-  pointsAre: 'mid' | 'outside' | 'inside' = 'mid',
+  pointsAre: 'mid' | 'outside' | 'inside' | 'autoInside' | 'autoOutside' = 'mid',
   cornerStyle: 'auto' | 'none' | 'radius' | 'fill',
   cornerSize: number,
   cornerSides: number,
   minAutoCornerAngle: number = Math.PI / 7,
   dash: Array<number> = [],
-): [Array<Point>, Array<Array<Point>>, Array<Array<Points>>] {
+): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   let points = [];
-  let cornerStyleToUse = cornerStyle;
+  let cornerStyleToUse;
 
+  const orderedPoints = setPointOrder(pointsIn, close, pointsAre);
   // Convert line to line with corners
   if (cornerStyle === 'auto') {
-    points = pointsIn.map(p => p._dup());
+    points = orderedPoints.map(p => p._dup());
+    cornerStyleToUse = 'auto';
   } else if (cornerStyle === 'radius') {
-    points = cornerLine(pointsIn, close, 'fromVertex', cornerSides, cornerSize);
+    points = cornerLine(orderedPoints, close, 'fromVertex', cornerSides, cornerSize);
     cornerStyleToUse = 'fill';
   } else {
     // autoCorners = 'none';
-    points = pointsIn.map(p => p._dup());
+    cornerStyleToUse = cornerStyle;
+    points = orderedPoints.map(p => p._dup());
   }
 
   // Convert line to dashed line
@@ -470,13 +465,12 @@ function makePolyLineCorners(
   close: boolean = false,
   cornerLength: number,
   forceCornerLength: boolean,
-  pointsAre: 'mid' | 'outside' | 'inside' = 'mid',
+  pointsAre: 'mid' | 'outside' | 'inside' | 'autoInside' | 'autoOutside' = 'mid',
   cornerStyle: 'auto' | 'none' | 'radius' | 'fill',
   cornerSize: number,
   cornerSides: number,
   minAutoCornerAngle: number = Math.PI / 7,
 ) {
-
   // split line into corners
   const corners = lineToCorners(pointsIn, close, cornerLength, forceCornerLength);
 
@@ -491,7 +485,6 @@ function makePolyLineCorners(
     tris = [...tris, ...t];
     borders = [...borders, ...b];
     holes = [...holes, ...h];
-    // tris = [...tris, ...makePolyLine(corner, width, false, pointsAre, cornerStyle, cornerSize, cornerSides, minAutoCornerAngle)];
   });
   return [tris, borders, holes];
 }

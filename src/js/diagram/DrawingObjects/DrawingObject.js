@@ -153,7 +153,7 @@ class DrawingObject {
   }
 
   // eslint-disable-next-line no-unused-vars, class-methods-use-this
-  change(drawingPrimitive: any, border: Array<Array<g2.Point>>, holes: Array<Array<Point>>) {
+  change(drawingPrimitive: any, border: Array<Array<Point>>, holes: Array<Array<Point>>) {
   }
 }
 
