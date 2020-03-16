@@ -16,7 +16,7 @@ const line = [
     // new Point(0, 1),
 ];
 
-const makeLine = (lineIn) => makePolyLine(lineIn, 0.03, true, 'autoInside', 'auto', 0.05, 10, Math.PI / 7); // , [0.2, 0.05, 0.01, 0.05])
+const makeLine = (lineIn) => makePolyLineCorners(lineIn, 0.03, true, 0.1, false, 'inside', 'radius', 0.05, 10, Math.PI / 7); // , [0.2, 0.05, 0.01, 0.05])
 const [thick, ,] = makeLine(line);
 
 diagram.addElements([

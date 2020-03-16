@@ -4,7 +4,7 @@ import { Point, getBoundingRect } from '../../../tools/g2';
 import WebGLInstance from '../../webgl/webgl';
 import VertexObject from './VertexObject';
 
-export type TypeVertexPolyLineBorderToPoint = TypeBorderToPoint;
+// export type TypeVertexPolyLineBorderToPoint = TypeBorderToPoint;
 
 class VertexGeneric extends VertexObject {
   width: number;
