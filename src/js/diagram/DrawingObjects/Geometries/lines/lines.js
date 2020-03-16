@@ -278,13 +278,22 @@ function makeThickLineInsideOutside(
     const [, insideNext, outsideNext] = lineSegments[next];
     const angle = threePointAngle(inside.p1, inside.p2, insideNext.p2);
     // If angle is 0 to 180, then it is an inside angle
-    if (0 < angle && angle < Math.PI) {
+    if (0 < angle && angle < Math.PI / 2) {
       let intercept = outside.intersectsWith(insideNext);
       if (intercept.intersect != null) {
         outside.setP2(intercept.intersect);
       }
       intercept = outsideNext.intersectsWith(inside);
       if (intercept.intersect != null) {
+        outsideNext.setP1(intercept.intersect);
+      }
+    } else if (Math.PI / 2 <= angle && angle <= Math.PI) {
+      let intercept = outside.intersectsWith(insideNext);
+      if (intercept.intersect != null && intercept.intersect.isOnLine(insideNext, 8)) {
+        outside.setP2(intercept.intersect);
+      }
+      intercept = outsideNext.intersectsWith(inside);
+      if (intercept.intersect != null && intercept.intersect.isOnLine(inside, 8)) {
         outsideNext.setP1(intercept.intersect);
       }
     // otherwise its an outside angle
@@ -327,25 +336,81 @@ function makeThickLineInsideOutside(
   // return [...lineSegmentsToPoints(lineSegments, 1, 2), ...cornerFills];
 }
 
+function setPointOrder(
+  points: Array<Point>,
+  close: boolean,
+  pointsAre: 'inside' | 'outside' | 'autoInside' | 'autoOutside',
+) {
+  const reversePoints = () => {
+    const reversedCopy = [];
+    for (let i = points.length - 1; i >= 0; i -= 1) {
+      reversedCopy.push(points[i]._dup());
+    }
+    return reversedCopy;
+  }
+  if (pointsAre === 'outside') {
+    return points;
+  }
+  if (pointsAre === 'inside') {
+    return reversePoints();
+  }
+
+  let numInsideAngles = 0;
+  let totAngles = close ? points.length : points.length - 2;
+  const testAngle = (p2: Point, p1: Point, p3: Point) => {
+    const angle = threePointAngle(p2, p1, p3);
+    if (angle < Math.PI) {
+      numInsideAngles += 1;
+    }
+    if (angle === Math.PI) {
+      totAngles -= 1;
+    }
+  };
+  for (let i = 1; i < points.length - 1; i += 1) {
+    testAngle(points[i - 1], points[i], points[i + 1]);
+  }
+  if (close) {
+    testAngle(points[points.length - 1], points[0], points[1]);
+    testAngle(points[points.length - 2], points[points.length - 1], points[0]);
+  }
+
+  if (pointsAre === 'autoOutside') {
+    if (numInsideAngles <= totAngles / 2) {
+      return points;
+    }
+    return reversePoints();
+  }
+  if (pointsAre === 'autoInside') {
+    if (numInsideAngles <= totAngles / 2) {
+      return reversePoints();
+    }
+  }
+  return points;
+}
+
 function makeThickLine(
   points: Array<Point>,
   width: number = 0.01,
-  pointsAre: 'mid' | 'outside' | 'inside',
+  pointsAre: 'mid' | 'outside' | 'inside' | 'autoOutside' | 'autoInside',
   close: boolean = false,
   corner: 'auto' | 'fill' | 'none',
   minAngle: ?number = Math.PI / 7,
-): [Array<Point>, Array<Array<Point>>, Array<Array<Points>>] {
+): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   if (pointsAre === 'mid') {
     return makeThickLineMid(points, width, close, corner, minAngle);
   }
-  if (pointsAre === 'outside') {
-    return makeThickLineInsideOutside(points, width, close, corner, minAngle);
-  }
-  const reversedCopy = [];
-  for (let i = points.length - 1; i >= 0; i -= 1) {
-    reversedCopy.push(points[i]._dup());
-  }
-  return makeThickLineInsideOutside(reversedCopy, width, close, corner, minAngle);
+  return makeThickLineInsideOutside(
+    setPointOrder(points, close, pointsAre),
+    width, close, corner, minAngle,
+  );
+  // if (pointsAre === 'outside') {
+  //   return makeThickLineInsideOutside(points, width, close, corner, minAngle);
+  // }
+  // const reversedCopy = [];
+  // for (let i = points.length - 1; i >= 0; i -= 1) {
+  //   reversedCopy.push(points[i]._dup());
+  // }
+  // return makeThickLineInsideOutside(reversedCopy, width, close, corner, minAngle);
 }
 
 function makePolyLine(
@@ -422,7 +487,7 @@ function makePolyLineCorners(
     const [t, b, h] = makePolyLine(
       corner, width, false, pointsAre, cornerStyle, cornerSize,
       cornerSides, minAutoCornerAngle,
-      );
+    );
     tris = [...tris, ...t];
     borders = [...borders, ...b];
     holes = [...holes, ...h];
