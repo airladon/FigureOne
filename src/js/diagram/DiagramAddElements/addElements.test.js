@@ -190,7 +190,7 @@ describe('Diagram Equations From Object', () => {
             addElements: [
               {
                 name: 'line',
-                method: 'polyLine',
+                method: 'polyline',
                 options: tri,
                 mods: { isTouchable: true },
               },

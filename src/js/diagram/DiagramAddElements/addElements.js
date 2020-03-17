@@ -38,8 +38,8 @@ function addElements(
   const getMethod = (method: string) => {
     const methods = {
       collection: shapes.collection.bind(shapes),
-      polyLine: objects.polyLine.bind(objects),
-      polyLineCorners: shapes.polyLineCorners.bind(shapes),
+      polyline: objects.polyline.bind(objects),
+      polylineCorners: shapes.polylineCorners.bind(shapes),
       polygon: shapes.polygon.bind(shapes),
       arrow: shapes.arrow.bind(shapes),
       fan: shapes.fan.bind(shapes),

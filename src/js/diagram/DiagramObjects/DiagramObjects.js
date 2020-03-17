@@ -70,7 +70,7 @@ export default class DiagramObjects {
     );
   }
 
-  polyLine(...options: Array<TypePolyLineOptions>) {
+  polyline(...options: Array<TypePolyLineOptions>) {
     const optionsToUse = joinObjects({}, ...options);
     return new DiagramObjectPolyLine(
       this.shapes, this.equation, this,

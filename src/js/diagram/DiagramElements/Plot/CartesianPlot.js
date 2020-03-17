@@ -45,9 +45,9 @@ class CartesianPlot extends DiagramElementCollection {
           this.props.axes[1].valueToClip(trace.points[j].y),
         ));
       }
-      const polyLine = new VertexPolyLine(webgl, line, false, 0.01);
+      const polyline = new VertexPolyLine(webgl, line, false, 0.01);
       this.add(trace.name, new DiagramElementPrimitive(
-        polyLine,
+        polyline,
         new Transform().scale(1, 1).rotate(0).translate(0, 0),
         trace.color,
         diagramLimits,
