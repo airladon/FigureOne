@@ -344,7 +344,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
 
     // Add Line
     if (optionsToUse.showLine) {
-      const line = this.shapes.polyLine({
+      const line = this.shapes.polyline({
         points: this.points,
         // color: optionsToUse.color,
         // close: optionsToUse.close,

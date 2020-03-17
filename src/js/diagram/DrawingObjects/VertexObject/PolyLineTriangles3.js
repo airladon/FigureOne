@@ -12,7 +12,7 @@ export type TypeBorderToPoint = 'alwaysOn' | 'onSharpAnglesOnly' | 'never';
 // Generate a thick line assuming gl.TRIANGLES where corners are sharp.
 // Input:
 //   * coords: an array of points that will define the center of the line
-export default function polyLineTriangles3(
+export default function polylineTriangles3(
   coords: Array<Point>,
   close: boolean,
   width: number,
@@ -552,4 +552,4 @@ export default function polyLineTriangles3(
   };
 }
 
-// export default polyLineTriangles;
+// export default polylineTriangles;

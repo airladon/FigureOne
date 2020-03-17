@@ -211,10 +211,10 @@ export type OBJ_Rectangle = {
  *
  * @property {Array<TypeParsablePoint>} points
  * @property {number} [width] (`0.01`)
- * @property {boolean} [close] close the polyLine on itself (`false`)
+ * @property {boolean} [close] close the polyline on itself (`false`)
  * @property {'mid' | 'outside' | 'inside' | 'autoOutside' | 'autoInside'} [pointsAt]
  * defines where the `points` should be relative to the width of the line.
- * Note 1: `pos` and `neg` are dependent on what order the polyLine points
+ * Note 1: `pos` and `neg` are dependent on what order the polyline points
  * are defined. Note 2: only `mid` is fully compatible with all options in
  * `cornerStyle` and `dash`. Inside corners do not fully support dash and
  * 
@@ -235,13 +235,13 @@ export type OBJ_Rectangle = {
  * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
  * @property {number} [pulse] set the default pulse scale
  * @property {Point} [position] convenience to override Transform translation
- * @property {Transform} [transform] (`Transform('polyLine').standard()`)
+ * @property {Transform} [transform] (`Transform('polyline').standard()`)
  * @example
  * // Line
  * diagram.addElement(
  *   {
  *     name: 'p',
- *     method: 'shapes.polyLine',
+ *     method: 'shapes.polyline',
  *     options: {
  *       points: [[-0.5, -0.5], [-0.1, 0.5], [0.3, -0.2], [0.5, 0.5]],
  *       width: 0.05,
@@ -253,7 +253,7 @@ export type OBJ_Rectangle = {
  * diagram.addElement(
  *   {
  *     name: 'p',
- *     method: 'shapes.polyLine',
+ *     method: 'shapes.polyline',
  *     options: {
  *        points: [[-0.5, -0.5], [0.5, -0.5], [0, 0.5]],
  *        width: 0.05,
@@ -266,7 +266,7 @@ export type OBJ_Rectangle = {
  * diagram.addElement(
  *   {
  *     name: 'p',
- *     method: 'shapes.polyLine',
+ *     method: 'shapes.polyline',
  *     options: {
  *       points: [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]],
  *       width: 0.05,
@@ -406,7 +406,7 @@ export default class DiagramPrimitives {
     // this.draw2DFigures = draw2DFigures;
   }
 
-  // polyLineLegacy(
+  // polylineLegacy(
   //   points: Array<Point>,
   //   close: boolean,
   //   lineWidth: number,
@@ -420,7 +420,7 @@ export default class DiagramPrimitives {
   //   );
   // }
 
-  // polyLineCornersLegacy(
+  // polylineCornersLegacy(
   //   points: Array<Point>,
   //   close: boolean,
   //   cornerLength: number,
@@ -434,7 +434,7 @@ export default class DiagramPrimitives {
   //   );
   // }
 
-  polyLineCorners(...optionsIn: Array<{
+  polylineCorners(...optionsIn: Array<{
     points: Array<Point>,
     color?: Array<number>,
     close?: boolean,
@@ -449,7 +449,7 @@ export default class DiagramPrimitives {
       close: true,
       width: 0.01,
       cornerLength: 0.1,
-      transform: new Transform('polyLineCorners').standard(),
+      transform: new Transform('polylineCorners').standard(),
     };
 
     const options = Object.assign({}, defaultOptions, ...optionsIn);
@@ -483,7 +483,7 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  polyLine(...optionsIn: Array<OBJ_PolyLine>) {
+  polyline(...optionsIn: Array<OBJ_PolyLine>) {
     const defaultOptions = {
       width: 0.01,
       color: [1, 0, 0, 1],
@@ -494,7 +494,7 @@ export default class DiagramPrimitives {
       cornerSides: 10,
       minAutoCornerAngle: Math.PI / 7,
       dash: [],
-      transform: new Transform('polyLine').standard(),
+      transform: new Transform('polyline').standard(),
     };
 
     const options = processOptions(defaultOptions, ...optionsIn);
@@ -538,7 +538,7 @@ export default class DiagramPrimitives {
   }
 
   // borderToPoint options: 'alwaysOn' | 'onSharpAnglesOnly' | 'never'
-  polyLineLegacy(...optionsIn: Array<{
+  polylineLegacy(...optionsIn: Array<{
       points: Array<Point>,
       color?: Array<number>,
       close?: boolean,
@@ -554,7 +554,7 @@ export default class DiagramPrimitives {
       close: true,
       width: 0.01,
       borderToPoint: 'never',
-      transform: new Transform('polyLine').standard(),
+      transform: new Transform('polyline').standard(),
     };
 
     const options = Object.assign({}, defaultOptions, ...optionsIn);

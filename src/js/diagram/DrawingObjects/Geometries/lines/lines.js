@@ -529,7 +529,7 @@ export {
 //   },
 //   {
 //     name: 'r',
-//     method: 'polyLine',
+//     method: 'polyline',
 //     options: {
 //       points: line,
 //       width: 0.03,
@@ -567,7 +567,7 @@ export {
 // Inside and dash
 // {
 //   name: 'r',
-//   method: 'polyLine',
+//   method: 'polyline',
 //   options: {
 //     points: line,
 //     width: 0.03,

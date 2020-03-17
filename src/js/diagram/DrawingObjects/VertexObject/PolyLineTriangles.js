@@ -12,7 +12,7 @@ function simpleIntersect(p1, p2, q1, q2) {
 // Generate a thick line assuming gl.TRIANGLES where corners are sharp.
 // Input:
 //   * coords: an array of points that will define the center of the line
-function polyLineTriangles(coords, close, width) {
+function polylineTriangles(coords, close, width) {
   const points = [];
   const innerBorder = [];
   const outerBorder = [];
@@ -178,4 +178,4 @@ function polyLineTriangles(coords, close, width) {
   };
 }
 
-export default polyLineTriangles;
+export default polylineTriangles;

@@ -21,7 +21,7 @@ diagram.addElements([
   },
   {
     name: 'r',
-    method: 'polyLine',
+    method: 'polyline',
     options: {
       points: line,
       width: 0.03,

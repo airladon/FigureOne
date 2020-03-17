@@ -36,15 +36,15 @@ describe('Diagram Objects PolyLine', () => {
       new Point(1, 1),
     ];
     ways = {
-      numPointsClose: () => diagram.objects.polyLine({
+      numPointsClose: () => diagram.objects.polyline({
         points,
         close: true,
       }),
-      numPointsOpen: () => diagram.objects.polyLine({
+      numPointsOpen: () => diagram.objects.polyline({
         points,
         close: false,
       }),
-      SideLabelsClose: () => diagram.objects.polyLine({
+      SideLabelsClose: () => diagram.objects.polyline({
         points,
         close: true,
         side: {
@@ -53,7 +53,7 @@ describe('Diagram Objects PolyLine', () => {
           },
         },
       }),
-      SideLabelsOpen: () => diagram.objects.polyLine({
+      SideLabelsOpen: () => diagram.objects.polyline({
         points,
         close: false,
         side: {
@@ -62,7 +62,7 @@ describe('Diagram Objects PolyLine', () => {
           },
         },
       }),
-      SideLabelsFullDefine: () => diagram.objects.polyLine({
+      SideLabelsFullDefine: () => diagram.objects.polyline({
         points,
         close: true,
         side: [
@@ -71,7 +71,7 @@ describe('Diagram Objects PolyLine', () => {
           { label: { text: null } },
         ],
       }),
-      SideLabelsUnderDefine: () => diagram.objects.polyLine({
+      SideLabelsUnderDefine: () => diagram.objects.polyline({
         points,
         close: true,
         side: [
@@ -79,7 +79,7 @@ describe('Diagram Objects PolyLine', () => {
           { label: { text: 'b' } },
         ],
       }),
-      SideLabelsOverDefine: () => diagram.objects.polyLine({
+      SideLabelsOverDefine: () => diagram.objects.polyline({
         points,
         close: true,
         side: [
@@ -89,17 +89,17 @@ describe('Diagram Objects PolyLine', () => {
           { label: { text: 'd' } },
         ],
       }),
-      SideLabelsSingleDefine: () => diagram.objects.polyLine({
+      SideLabelsSingleDefine: () => diagram.objects.polyline({
         points,
         close: true,
         side: { label: { text: 'a' } },
       }),
-      SideLabelsActualLength: () => diagram.objects.polyLine({
+      SideLabelsActualLength: () => diagram.objects.polyline({
         points,
         close: true,
         side: { label: { text: null } },
       }),
-      AngleLabelsClose: () => diagram.objects.polyLine({
+      AngleLabelsClose: () => diagram.objects.polyline({
         points,
         close: true,
         angle: {
@@ -108,7 +108,7 @@ describe('Diagram Objects PolyLine', () => {
           },
         },
       }),
-      AngleLabelsOpen: () => diagram.objects.polyLine({
+      AngleLabelsOpen: () => diagram.objects.polyline({
         points,
         close: false,
         angle: {
@@ -117,7 +117,7 @@ describe('Diagram Objects PolyLine', () => {
           },
         },
       }),
-      AngleLabelsFullDefine: () => diagram.objects.polyLine({
+      AngleLabelsFullDefine: () => diagram.objects.polyline({
         points,
         close: true,
         angle: [
@@ -126,14 +126,14 @@ describe('Diagram Objects PolyLine', () => {
           { label: { text: null } },
         ],
       }),
-      PadSimple: () => diagram.objects.polyLine({
+      PadSimple: () => diagram.objects.polyline({
         points,
         close: true,
         pad: {
           radius: 0.2,
         },
       }),
-      PadBoundary: () => diagram.objects.polyLine({
+      PadBoundary: () => diagram.objects.polyline({
         points,
         close: true,
         pad: {
@@ -142,7 +142,7 @@ describe('Diagram Objects PolyLine', () => {
           isMovable: true,
         },
       }),
-      PadBoundaryWithoutTouchRadius: () => diagram.objects.polyLine({
+      PadBoundaryWithoutTouchRadius: () => diagram.objects.polyline({
         points,
         close: true,
         pad: {
@@ -152,7 +152,7 @@ describe('Diagram Objects PolyLine', () => {
           touchRadius: 0.4,
         },
       }),
-      PadBoundaryWithTouchRadius: () => diagram.objects.polyLine({
+      PadBoundaryWithTouchRadius: () => diagram.objects.polyline({
         points,
         close: true,
         pad: {
@@ -163,7 +163,7 @@ describe('Diagram Objects PolyLine', () => {
           touchRadiusInBoundary: true,
         },
       }),
-      Misc: () => diagram.objects.polyLine({
+      Misc: () => diagram.objects.polyline({
         points,
         close: true,
         color: [1, 0, 0, 1],

@@ -4,7 +4,7 @@
 import { Point } from '../../../tools/g2';
 import WebGLInstance from '../../webgl/webgl';
 import VertexObject from './VertexObject';
-import polyLineTriangles from './PolyLineTriangles';
+import polylineTriangles from './PolyLineTriangles';
 
 function cornerLength(coords, length, forceLength = true) {
   const center = coords[1];
@@ -47,7 +47,7 @@ class PolyLineCorners extends VertexObject {
         length,
         true,
       );
-      const cornerTriangles = polyLineTriangles(
+      const cornerTriangles = polylineTriangles(
         cornerPoints,
         false,
         width,

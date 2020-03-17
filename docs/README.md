@@ -3171,7 +3171,7 @@ Type: {points: [Array][241]&lt;TypeParsablePoint>, width: [number][242]?, close:
 
 -   `points` **[Array][241]&lt;TypeParsablePoint>** 
 -   `width` **[number][242]?** (`0.01`)
--   `close` **[boolean][245]?** close the polyLine on itself (`false`)
+-   `close` **[boolean][245]?** close the polyline on itself (`false`)
 -   `pointsAt` **(`"mid"` \| `"outside"` \| `"inside"`)?** the `points` should be
     in the middle (`mid`), on the 'outside' or on the 'inside' of the line width
     (`mid`)
@@ -3190,7 +3190,7 @@ Type: {points: [Array][241]&lt;TypeParsablePoint>, width: [number][242]?, close:
 -   `color` **[Array][241]&lt;[number][242]>?** (`[1, 0, 0, 1]`)
 -   `pulse` **[number][242]?** set the default pulse scale
 -   `position` **[Point][249]?** convenience to override Transform translation
--   `transform` **Transform?** (`Transform('polyLine').standard()`)
+-   `transform` **Transform?** (`Transform('polyline').standard()`)
 
 ### Examples
 
@@ -3199,7 +3199,7 @@ Type: {points: [Array][241]&lt;TypeParsablePoint>, width: [number][242]?, close:
 diagram.addElement(
   {
     name: 'p',
-    method: 'shapes.polyLine',
+    method: 'shapes.polyline',
     options: {
       points: [[-0.5, -0.5], [-0.1, 0.5], [0.3, -0.2], [0.5, 0.5]],
       width: 0.05,
@@ -3212,7 +3212,7 @@ diagram.addElement(
 diagram.addElement(
   {
     name: 'p',
-    method: 'shapes.polyLine',
+    method: 'shapes.polyline',
     options: {
        points: [[-0.5, -0.5], [0.5, -0.5], [0, 0.5]],
        width: 0.05,
@@ -3227,7 +3227,7 @@ diagram.addElement(
 diagram.addElement(
   {
     name: 'p',
-    method: 'shapes.polyLine',
+    method: 'shapes.polyline',
     options: {
       points: [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]],
       width: 0.05,
