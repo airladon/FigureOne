@@ -177,7 +177,7 @@ export type OBJ_Rectangle = {
 }
 
 /**
- * PolyLine shape options object
+ * Polyline shape options object
  *
  * ![](./assets1/polyline.png)
  *
@@ -247,19 +247,6 @@ export type OBJ_Rectangle = {
  * );
  *
  * @example
- * // Triangle
- * diagram.addElement(
- *   {
- *     name: 'p',
- *     method: 'shapes.polyline',
- *     options: {
- *        points: [[-0.5, -0.5], [0.5, -0.5], [0, 0.5]],
- *        width: 0.05,
- *        close: true,
- *     },
- *   },
- * );
- * @example
  * // Square with rounded corners and dot-dash line
  * diagram.addElement(
  *   {
@@ -275,6 +262,21 @@ export type OBJ_Rectangle = {
  *     },
  *   },
  * );
+ * @example
+ * // Corners only of a triangle
+ * diagram.addElement(
+ *  {
+ *    name: 'p',
+ *    method: 'shapes.polyline',
+ *    options: {
+ *      points: [[-0.5, -0.5], [0.5, -0.5], [0, 0.5]],
+ *      width: 0.05,
+ *      close: true,
+ *      cornersOnly: true,
+ *      cornerLength: 0.2,
+ *    },
+ *  },
+ *);
  */
 export type OBJ_Polyline = {
   points: Array<TypeParsablePoint>,
