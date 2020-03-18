@@ -39,7 +39,7 @@ function addElements(
     const methods = {
       collection: shapes.collection.bind(shapes),
       polyline: objects.polyline.bind(objects),
-      polylineCorners: shapes.polylineCorners.bind(shapes),
+      // polylineCorners: shapes.polylineCorners.bind(shapes),
       polygon: shapes.polygon.bind(shapes),
       arrow: shapes.arrow.bind(shapes),
       fan: shapes.fan.bind(shapes),

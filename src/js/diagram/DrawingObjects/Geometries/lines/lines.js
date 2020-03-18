@@ -464,7 +464,7 @@ function makePolyLineCorners(
   width: number = 0.01,
   close: boolean = false,
   cornerLength: number,
-  forceCornerLength: boolean,
+  // forceCornerLength: boolean,
   pointsAre: 'mid' | 'outside' | 'inside' | 'autoInside' | 'autoOutside' = 'mid',
   cornerStyle: 'auto' | 'none' | 'radius' | 'fill',
   cornerSize: number,
@@ -472,7 +472,7 @@ function makePolyLineCorners(
   minAutoCornerAngle: number = Math.PI / 7,
 ) {
   // split line into corners
-  const corners = lineToCorners(pointsIn, close, cornerLength, forceCornerLength);
+  const corners = lineToCorners(pointsIn, close, cornerLength, false);
 
   let tris = [];
   let borders = [];

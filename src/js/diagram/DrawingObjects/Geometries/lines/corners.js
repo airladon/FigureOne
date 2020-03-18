@@ -1,3 +1,5 @@
+// @flow
+
 import {
   Point, Line, threePointAngleMin,
 } from '../../../../tools/g2';
@@ -105,7 +107,7 @@ function cutCorner(
     const angle = Math.abs(threePointAngleMin(p2, p1, p3)) / 2;
     cut = value / Math.tan(angle);
     cut = Math.min(cut, line12.length() / 2 * 0.99, line13.length() / 2 * 0.99);
-  } else if (style === 'max') {
+  } else { // if (style === 'max')
     cut = Math.min(line12.length(), line13.length());
   }
   // cut = Math.min(cut, line12.length() / 2 * 0.99, line13.length() / 2 * 0.99);
@@ -185,10 +187,14 @@ function lineToCorners(
   }
   if (close) {
     corners.push(makeCorner(
-      pointsIn[pointsIn.length - 2], pointsIn[pointsIn.length - 1], pointsIn[0], length, forceLength,
+      pointsIn[pointsIn.length - 2],
+      pointsIn[pointsIn.length - 1],
+      pointsIn[0], length, forceLength,
     ));
     corners.push(makeCorner(
-      pointsIn[pointsIn.length - 1], pointsIn[0], pointsIn[1], length, forceLength,
+      pointsIn[pointsIn.length - 1],
+      pointsIn[0],
+      pointsIn[1], length, forceLength,
     ));
   }
   return corners;

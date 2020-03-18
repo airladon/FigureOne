@@ -22,7 +22,7 @@ import DiagramPrimitives from '../DiagramPrimitives/DiagramPrimitives';
 // eslint-disable-next-line import/no-cycle
 import DiagramObjects from './DiagramObjects';
 import DiagramEquation from '../DiagramEquation/DiagramEquation';
-import type { OBJ_PolyLine } from '../DiagramPrimitives/DiagramPrimitives';
+import type { OBJ_Polyline } from '../DiagramPrimitives/DiagramPrimitives';
 
 export type TypePadOptions = {
   color?: Array<number>,
@@ -55,7 +55,7 @@ export type TypePolyLineOptions = {
       minSide?: ?number,
     },
   };
-} & OBJ_PolyLine;
+} & OBJ_Polyline;
 
 function makeArray<T>(
   possibleArray: T | Array<T>,
