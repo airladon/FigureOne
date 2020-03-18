@@ -14,13 +14,10 @@ import DrawContext2D from '../DrawContext2D';
 import * as tools from '../../tools/math';
 import { generateUniqueId, joinObjects } from '../../tools/tools';
 import VertexObject from '../DrawingObjects/VertexObject/VertexObject';
-import {
-  PolyLine, PolyLineCorners,
-} from '../DiagramElements/PolyLine';
+// import {
+//   PolyLine, PolyLineCorners,
+// } from '../DiagramElements/PolyLine';
 import Fan from '../DiagramElements/Fan';
-import type {
-  TypePolyLineBorderToPoint,
-} from '../DiagramElements/PolyLine';
 import {
   Polygon, PolygonFilled, PolygonLine,
 } from '../DiagramElements/Polygon';
@@ -42,7 +39,7 @@ import {
 } from '../DrawingObjects/TextObject/TextObject';
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { TypeSpaceTransforms } from '../Diagram';
-import { makePolyLine } from '../DrawingObjects/Geometries/lines/lines';
+import { makePolyLine, makePolyLineCorners } from '../DrawingObjects/Geometries/lines/lines';
 
 /**
  * Polygon or partial polygon shape options object
@@ -187,7 +184,7 @@ export type OBJ_Rectangle = {
  * A polyline is a series of lines that are connected end to end. It is defined
  * by a series of points which are the ends and corners of the polyline.
  *
- * The series of points is a zero width polyline, and so to see it we must
+ * The series of points is a zero width ideal polyline, and so to see it we must
  * give it some width. This width can either be grown on one side of the
  * ideal polyline or grown on both sides of it equally.
  *
@@ -214,10 +211,8 @@ export type OBJ_Rectangle = {
  * @property {boolean} [close] close the polyline on itself (`false`)
  * @property {'mid' | 'outside' | 'inside' | 'autoOutside' | 'autoInside'} [pointsAt]
  * defines where the `points` should be relative to the width of the line.
- * Note 1: `pos` and `neg` are dependent on what order the polyline points
- * are defined. Note 2: only `mid` is fully compatible with all options in
- * `cornerStyle` and `dash`. Inside corners do not fully support dash and
- * 
+ * Note: only `mid` is fully compatible with all options in
+ * `cornerStyle` and `dash`.
  * @property {'auto' | 'none' | 'radius' | 'fill'} [cornerStyle] `auto`
  * makes the corners sharp if the angle is less than `minAutoCornerAngle`
  * - `none` is no corners - `radius` makes each corner a curve - `fill`
@@ -226,6 +221,9 @@ export type OBJ_Rectangle = {
  * @property {number} [cornerSize] only used when `cornerStyle` = `radius` (`0.01`)
  * @property {number} [cornerSides] number of sides in curve - only used when
  *  `cornerStyle` = `radius` (`10`)
+ * @property {boolean} [cornersOnly] draw only the corners with size `cornerSize` (`false`)
+ * @property {number} [cornerLength] use only with `cornersOnly` = `true` -
+ * length of corner to draw (`0.1`)
  * @property {number} [minAutoCornerAngle] see `cornerStyle` = `auto` (`π/7`)
  * @property {Array<number>} [dash] leave empty for solid line - use array of
  * numbers for dash line where first number is length of line, second number is
@@ -278,7 +276,7 @@ export type OBJ_Rectangle = {
  *   },
  * );
  */
-export type OBJ_PolyLine = {
+export type OBJ_Polyline = {
   points: Array<TypeParsablePoint>,
   width?: number,
   close?: boolean,
@@ -286,6 +284,9 @@ export type OBJ_PolyLine = {
   cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',
   cornerSize?: number,
   cornerSides?: number,
+  cornersOnly?: boolean,
+  cornerLength?: number,
+  forceCornerLength?: boolean,
   minAutoCornerAngle?: number,
   dash?: Array<number>,
   color?: Array<number>,
@@ -434,56 +435,56 @@ export default class DiagramPrimitives {
   //   );
   // }
 
-  polylineCorners(...optionsIn: Array<{
-    points: Array<Point>,
-    color?: Array<number>,
-    close?: boolean,
-    cornerLength?: number,
-    width?: number,
-    pulse?: number,
-    transform?: Transform,
-    position?: Point,
-    }>) {
-    const defaultOptions = {
-      color: [1, 0, 0, 1],
-      close: true,
-      width: 0.01,
-      cornerLength: 0.1,
-      transform: new Transform('polylineCorners').standard(),
-    };
+  // polylineCorners(...optionsIn: Array<{
+  //   points: Array<Point>,
+  //   color?: Array<number>,
+  //   close?: boolean,
+  //   cornerLength?: number,
+  //   width?: number,
+  //   pulse?: number,
+  //   transform?: Transform,
+  //   position?: Point,
+  //   }>) {
+  //   const defaultOptions = {
+  //     color: [1, 0, 0, 1],
+  //     close: true,
+  //     width: 0.01,
+  //     cornerLength: 0.1,
+  //     transform: new Transform('polylineCorners').standard(),
+  //   };
 
-    const options = Object.assign({}, defaultOptions, ...optionsIn);
+  //   const options = Object.assign({}, defaultOptions, ...optionsIn);
 
-    if (options.position != null) {
-      const p = getPoint(options.position);
-      options.transform.updateTranslation(p);
-    }
+  //   if (options.position != null) {
+  //     const p = getPoint(options.position);
+  //     options.transform.updateTranslation(p);
+  //   }
 
-    let points = [];
-    if (options.points) {
-      points = options.points.map(p => getPoint(p));
-    }
+  //   let points = [];
+  //   if (options.points) {
+  //     points = options.points.map(p => getPoint(p));
+  //   }
 
-    const element = PolyLineCorners(
-      this.webgl, points, options.close,
-      options.cornerLength, options.width,
-      options.color, options.transform, this.limits,
-    );
+  //   const element = PolyLineCorners(
+  //     this.webgl, points, options.close,
+  //     options.cornerLength, options.width,
+  //     options.color, options.transform, this.limits,
+  //   );
 
-    if (options.pulse != null) {
-      if (typeof element.pulseDefault !== 'function') {
-        element.pulseDefault.scale = options.pulse;
-      }
-    }
+  //   if (options.pulse != null) {
+  //     if (typeof element.pulseDefault !== 'function') {
+  //       element.pulseDefault.scale = options.pulse;
+  //     }
+  //   }
 
-    if (options.mods != null && options.mods !== {}) {
-      element.setProperties(options.mods);
-    }
+  //   if (options.mods != null && options.mods !== {}) {
+  //     element.setProperties(options.mods);
+  //   }
 
-    return element;
-  }
+  //   return element;
+  // }
 
-  polyline(...optionsIn: Array<OBJ_PolyLine>) {
+  polyline(...optionsIn: Array<OBJ_Polyline>) {
     const defaultOptions = {
       width: 0.01,
       color: [1, 0, 0, 1],
@@ -492,25 +493,43 @@ export default class DiagramPrimitives {
       cornerStyle: 'auto',
       cornerSize: 0.01,
       cornerSides: 10,
+      cornersOnly: false,
+      cornerLength: 0.1,
+      // forceCornerLength: false,
       minAutoCornerAngle: Math.PI / 7,
       dash: [],
       transform: new Transform('polyline').standard(),
     };
-
     const options = processOptions(defaultOptions, ...optionsIn);
     parsePoints(options, ['points']);
 
-    const getTris = points => makePolyLine(
-      points,
-      options.width,
-      options.close,
-      options.pointsAt,
-      options.cornerStyle,
-      options.cornerSize,
-      options.cornerSides,
-      options.minAutoCornerAngle,
-      options.dash,
-    );
+    let getTris;
+    if (options.cornersOnly) {
+      getTris = points => makePolyLineCorners(
+        points,
+        options.width,
+        options.close,
+        options.cornerLength,
+        // options.forceCornerLength,
+        options.pointsAt,
+        options.cornerStyle,
+        options.cornerSize,
+        options.cornerSides,
+        options.minAutoCornerAngle,
+      );
+    } else {
+      getTris = points => makePolyLine(
+        points,
+        options.width,
+        options.close,
+        options.pointsAt,
+        options.cornerStyle,
+        options.cornerSize,
+        options.cornerSides,
+        options.minAutoCornerAngle,
+        options.dash,
+      );
+    }
     const [triangles, borders, holes] = getTris(options.points);
 
     const element = Generic(
@@ -536,86 +555,6 @@ export default class DiagramPrimitives {
 
     return element;
   }
-
-  // borderToPoint options: 'alwaysOn' | 'onSharpAnglesOnly' | 'never'
-  polylineLegacy(...optionsIn: Array<{
-      points: Array<Point>,
-      color?: Array<number>,
-      close?: boolean,
-      width?: number,
-      borderToPoint?: TypePolyLineBorderToPoint,
-      pulse?: number,
-      position?: Point,
-      transform?: Transform,
-      mods?: {},
-    }>) {
-    const defaultOptions = {
-      color: [1, 0, 0, 1],
-      close: true,
-      width: 0.01,
-      borderToPoint: 'never',
-      transform: new Transform('polyline').standard(),
-    };
-
-    const options = Object.assign({}, defaultOptions, ...optionsIn);
-
-    if (options.position != null) {
-      const p = getPoint(options.position);
-      options.transform.updateTranslation(p);
-    }
-
-    let points = [];
-    if (options.points) {
-      points = options.points.map(p => getPoint(p));
-    }
-
-    const element = PolyLine(
-      this.webgl,
-      points,
-      options.close,
-      options.width,
-      options.color,
-      options.borderToPoint,
-      options.transform,
-      this.limits,
-    );
-
-    if (options.pulse != null) {
-      if (typeof element.pulseDefault !== 'function') {
-        element.pulseDefault.scale = options.pulse;
-      }
-    }
-
-    if (options.mods != null && options.mods !== {}) {
-      element.setProperties(options.mods);
-    }
-
-    return element;
-  }
-
-  // general(...optionsIn: Array<{
-  //   points: Array<Point>,
-  //   lineWidth?: number,
-  //   dash?: Array<number>, // [0.01, 0.01]
-  //   cornerRadius?: number,  // 0
-  //   cornerSides?: number, // 1
-  //   pointsPosition?: 'center' | 'outside' | 'inside',
-  //   maxCornerExtension?: number,
-  //   maxCornerClip?: 'straight' | { radius: number, sides: number} | 'radius',
-  //   color?: Array<number>
-  // }>) {
-  //   const defaultOptions = {
-  //     points: [],
-  //     color: [1, 0, 0, 1],
-  //     lineWidth: 0.01,
-  //     dash: [1],
-  //     cornerRadius: 0,
-  //     cornerSides: 1,
-  //     pointsPosition: 'center',
-  //     maxCornerWidth: null,
-  //     cornerClip?: 'straight',
-  //   }
-  // }
 
   generic(...optionsIn: Array<{
     points: Array<TypeParsablePoint>,

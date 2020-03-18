@@ -3,7 +3,7 @@ const { Point } = Fig;
 
 const line = [
     new Point(0.5, 0),
-    new Point(0, 0.024286),
+    new Point(0, 0.5),
     new Point(-0.5, 0),
     // new Point(0, 1),
 ];
@@ -21,13 +21,18 @@ diagram.addElements([
   },
   {
     name: 'r',
-    method: 'polyline',
+    method: 'shapes.polyline',
     options: {
       points: line,
-      width: 0.03,
+      width: 0.04,
       close: true,
-      pointsAt: 'inside',
-      dash: [0.1, 0.03],
+      // fill: false,
+      cornersOnly: true,
+      cornerLength: 0.1,
+      // forceCornerLength: true,
+      // asdfasdf: false,
+      pointsAt: 'mid',
+      // dash: [0.1, 0.03],
     },
   },
   {
@@ -47,8 +52,8 @@ pad.setMovable();
 pad.setTransformCallback = () => {
   line[1] = pad.getPosition();
   const r = diagram.getElement('r');
-  r.updatePoints(line);
+  r.custom.updatePoints(line);
   diagram.animateNextFrame();
 }
 diagram.initialize();
-pad.setPosition(0, 0.5);
+// pad.setPosition(0, 0.5);
