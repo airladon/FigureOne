@@ -176,6 +176,82 @@ export type OBJ_Rectangle = {
   pulse?: number,
 }
 
+
+/**
+ * Texture definition object
+ *
+ * A texture file is an image file like a jpg, or png.
+ *
+ * Textures can be used instead of colors to fill a shape in WebGL.
+ *
+ * Textures are effectively overlaid on a shape. Therefore, to overlay the
+ * texture with the correct offset, magnification and aspect ratio the texture
+ * must be mapped to the space the shape's vertices are defined in
+ * (vertex space).
+ *
+ * This is done by defining a window, or rectangle, for the texture file
+ * (`mapFrom`) and a similar window in vertex space (`mapTo`).
+ * The texture is then offset and scaled such that its window aligns with the
+ * vertex space window.
+ *
+ * The texture file has coordinates of (0, 0) in the bottom left corner and
+ * (1, 1) in the top right corner.
+ *
+ * Therefore, to make a 1000 x 500 image fill a 2 x 1 rectangle in vertex space
+ * centered at (0, 0) you would define:
+ *
+ * ```
+ * mapFrom: new Rect(0, 0, 1, 1)
+ * mapTo: new Rect(-1, -0.5, 2, 1)
+ * ```
+ *
+ * If instead you wanted to zoom the image in the same rectange by a factor of 2
+ * you could either:
+ *
+ * ```
+ * mapFrom: new Rect(0.25, 0.25, 0.5, 0.5)
+ * mapTo: new Rect(-1, -0.5, 2, 1)
+ * ```
+ *
+ * or
+ *
+ * ```
+ * mapFrom: new Rect(0, 0, 1, 1)
+ * mapTo: new Rect(-2, -1, 4, 2)
+ * ```
+ *
+ * Two ways of doing this are provided as sometimes it is more convenient to
+ * think about the window on the image, and other times the window in vertex
+ * space.
+ *
+ * If the shape has fill outside the texture boundaries then either the
+ * texture can be repeated, or a pixel from the border of the image is used
+ * (called clamping to edge).
+ * WebGL only allows images that are square with a side length that is a
+ * power of 2 (such as 16, 32, 64, 128 etc) to be repeated. All other images
+ * can only be clamped to their edge.
+ *
+ * To repeat all other image resolutions, a texture can be mapped to a rectangle
+ * and then the rectangle repeated throughout the diagram.
+
+ * @property {string} src The url or location of the image
+ * @property {Rect} [mapTo] vertex space window (`new Rect(-1, -1, 2, 2)`)
+ * @property {Rect} [mapFrom] image space window (`new Rect(0, 0, 1, 1)`)
+ * @property {boolean} [repeat] `true` will tile the image. Only works with
+ * images that are square whose number of side pixels is a power of 2 (`false`)
+ * @property {() => void} [onLoad] textures are loaded asynchronously, so this
+ * callback can be used to execute code after the texture is loaded. At a
+ * minimum, any custom function here should include a call to animate the next
+ * frame (`diagram.animateNextFrame`)
+ */
+export type OBJ_Texture = {
+  src?: string,
+  mapTo?: Rect,
+  mapFrom?: Rect,
+  repeat?: boolean,
+  onLoad?: () => void,
+}
+
 /**
  * Polyline shape options object
  *
@@ -210,7 +286,7 @@ export type OBJ_Rectangle = {
  * @property {number} [width] (`0.01`)
  * @property {boolean} [close] close the polyline on itself (`false`)
  * @property {'mid' | 'outside' | 'inside' | 'positive' | 'negative'} [widthIs]
- * defines where the `points` should be relative to the width of the line.
+ * defines how the width is grown from the polyline's points.
  * Only `"mid"` is fully compatible with all options in
  * `cornerStyle` and `dash`. (`"mid"`)
  * @property {'auto' | 'none' | 'radius' | 'fill'} [cornerStyle] - `"auto"`:
@@ -230,6 +306,7 @@ export type OBJ_Rectangle = {
  * and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
  * short gap, short dash, short gap and then repeats.
  * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
+ * @property {OBJ_Texture} [texture] Override color with a texture
  * @property {number} [pulse] set the default pulse scale
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('polyline').standard()`)
@@ -291,6 +368,7 @@ export type OBJ_Polyline = {
   minAutoCornerAngle?: number,
   dash?: Array<number>,
   color?: Array<number>,
+  texture?: OBJ_Texture,
   pulse?: number,
   position?: ?Point,
   transform?: Transform,
