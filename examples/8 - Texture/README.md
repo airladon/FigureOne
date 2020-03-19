@@ -7,7 +7,7 @@ Open `index.html` in a browser to view example.
 ![](example.gif)
 
 ```
-python server.py
+python -m http.server 8000
 ```
 
 ## Code
