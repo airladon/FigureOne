@@ -209,7 +209,7 @@ export type OBJ_Rectangle = {
  * @property {Array<TypeParsablePoint>} points
  * @property {number} [width] (`0.01`)
  * @property {boolean} [close] close the polyline on itself (`false`)
- * @property {'mid' | 'outside' | 'inside' | 'autoOutside' | 'autoInside'} [pointsAt]
+ * @property {'mid' | 'outside' | 'inside' | 'positive' | 'negative'} [pointsAt]
  * defines where the `points` should be relative to the width of the line.
  * Only `"mid"` is fully compatible with all options in
  * `cornerStyle` and `dash`. (`"mid"`)
@@ -281,7 +281,7 @@ export type OBJ_Polyline = {
   points: Array<TypeParsablePoint>,
   width?: number,
   close?: boolean,
-  pointsAt?: 'mid' | 'outside' | 'inside',
+  pointsAt?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
   cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',
   cornerSize?: number,
   cornerSides?: number,
