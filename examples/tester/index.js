@@ -31,7 +31,7 @@ diagram.addElements([
       // cornerLength: 0.1,
       // forceCornerLength: true,
       // asdfasdf: false,
-      pointsAt: 'inside',
+      widthIs: 'negative',
       // dash: [0.1, 0.03],
     },
   },

@@ -352,7 +352,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         // width: optionsToUse.width,
         width: options.width,
         close: options.close,
-        pointsAt: options.pointsAt,
+        widthIs: options.widthIs,
         cornerStyle: options.cornerStyle,
         cornerSize: options.cornerSize,
         cornerSides: options.cornerSides,

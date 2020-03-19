@@ -339,7 +339,7 @@ function makeThickLineInsideOutside(
 function setPointOrder(
   points: Array<Point>,
   close: boolean,
-  pointsAre: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
+  widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
 ) {
   const reversePoints = () => {
     const reversedCopy = [];
@@ -348,10 +348,10 @@ function setPointOrder(
     }
     return reversedCopy;
   };
-  if (pointsAre === 'negative' || pointsAre === 'mid') {
+  if (widthIs === 'negative' || widthIs === 'mid') {
     return points;
   }
-  if (pointsAre === 'positive') {
+  if (widthIs === 'positive') {
     return reversePoints();
   }
 
@@ -374,13 +374,13 @@ function setPointOrder(
     testAngle(points[points.length - 2], points[points.length - 1], points[0]);
   }
 
-  if (pointsAre === 'inside') {
+  if (widthIs === 'outside') {
     if (numInsideAngles <= totAngles / 2) {
       return points;
     }
     return reversePoints();
   }
-  if (pointsAre === 'outside') {
+  if (widthIs === 'inside') {
     if (numInsideAngles <= totAngles / 2) {
       return reversePoints();
     }
@@ -391,12 +391,12 @@ function setPointOrder(
 function makeThickLine(
   points: Array<Point>,
   width: number = 0.01,
-  pointsAre: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
+  widthIs: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
   close: boolean = false,
   corner: 'auto' | 'fill' | 'none',
   minAngle: ?number = Math.PI / 7,
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
-  if (pointsAre === 'mid') {
+  if (widthIs === 'mid') {
     return makeThickLineMid(points, width, close, corner, minAngle);
   }
   return makeThickLineInsideOutside(
@@ -409,7 +409,7 @@ function makePolyLine(
   pointsIn: Array<Point>,
   width: number = 0.01,
   close: boolean = false,
-  pointsAre: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' = 'mid',
+  widthIs: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' = 'mid',
   cornerStyle: 'auto' | 'none' | 'radius' | 'fill',
   cornerSize: number,
   cornerSides: number,
@@ -419,7 +419,7 @@ function makePolyLine(
   let points = [];
   let cornerStyleToUse;
 
-  const orderedPoints = setPointOrder(pointsIn, close, pointsAre);
+  const orderedPoints = setPointOrder(pointsIn, close, widthIs);
   // Convert line to line with corners
   if (cornerStyle === 'auto') {
     points = orderedPoints.map(p => p._dup());
@@ -445,7 +445,7 @@ function makePolyLine(
     let dashedHole = [[]];
     dashes.forEach((d) => {
       const [tris, border, hole] = makeThickLine(
-        d, width, pointsAre, closeDashes, cornerStyleToUse, minAutoCornerAngle,
+        d, width, widthIs, closeDashes, cornerStyleToUse, minAutoCornerAngle,
       );
       dashedTris = [...dashedTris, ...tris];
       dashedBorder = [[...dashedBorder[0], ...border[0]]];
@@ -455,7 +455,7 @@ function makePolyLine(
   }
 
   return makeThickLine(
-    points, width, pointsAre, close, cornerStyleToUse, minAutoCornerAngle,
+    points, width, widthIs, close, cornerStyleToUse, minAutoCornerAngle,
   );
 }
 
@@ -465,7 +465,7 @@ function makePolyLineCorners(
   close: boolean = false,
   cornerLength: number,
   // forceCornerLength: boolean,
-  pointsAre: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' = 'mid',
+  widthIs: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' = 'mid',
   cornerStyle: 'auto' | 'none' | 'radius' | 'fill',
   cornerSize: number,
   cornerSides: number,
@@ -479,7 +479,7 @@ function makePolyLineCorners(
   let holes = [];
   corners.forEach((corner) => {
     const [t, b, h] = makePolyLine(
-      corner, width, false, pointsAre, cornerStyle, cornerSize,
+      corner, width, false, widthIs, cornerStyle, cornerSize,
       cornerSides, minAutoCornerAngle,
     );
     tris = [...tris, ...t];
