@@ -374,13 +374,13 @@ function setPointOrder(
     testAngle(points[points.length - 2], points[points.length - 1], points[0]);
   }
 
-  if (pointsAre === 'outside') {
+  if (pointsAre === 'inside') {
     if (numInsideAngles <= totAngles / 2) {
       return points;
     }
     return reversePoints();
   }
-  if (pointsAre === 'inside') {
+  if (pointsAre === 'outside') {
     if (numInsideAngles <= totAngles / 2) {
       return reversePoints();
     }
