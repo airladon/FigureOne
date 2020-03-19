@@ -6,8 +6,13 @@ Open `index.html` in a browser to view example.
 
 ![](example.gif)
 
+From the 
 ```
-python -m http.server 8000
+python -m http.server 8080
+```
+
+```
+http-server examples/8 - Texture
 ```
 
 ## Code

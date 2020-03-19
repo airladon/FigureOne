@@ -40,7 +40,7 @@ diagram.addElement(
       // // textureMapFrom: new Rect(0.25, 0.333, 0.5, 0.333),
       // textureRepeat: true,
       texture: {
-        src: 'http://localhost:8000/texture-rect.jpg',
+        src: 'texture-rect.jpg',
         // mapTo: new Rect(-0.5, -0.333, 1, 0.667),
         repeat: true,
       },
