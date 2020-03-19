@@ -1,6 +1,6 @@
 // @flow
 
-import { Point, getBoundingRect } from '../../../tools/g2';
+import { Point, getBoundingRect, Rect } from '../../../tools/g2';
 import WebGLInstance from '../../webgl/webgl';
 import VertexObject from './VertexObject';
 
@@ -17,8 +17,17 @@ class VertexGeneric extends VertexObject {
     border: ?Array<Array<Point>>,
     holeBorder: ?Array<Array<Point>>,
     drawType: 'triangles' | 'strip' | 'fan' | 'lines',
+    textureLocation: string = '',
+    textureVertexSpace: Rect = new Rect(-1, -1, 2, 2),
+    textureCoords: Rect = new Rect(0, 0, 1, 1),
+    textureRepeat: boolean = false,
   ): void {
-    super(webgl);
+    if (textureLocation !== '') {
+      super(webgl, 'withTexture', 'withTexture');
+    } else {
+      super(webgl);
+    }
+    // super(webgl);
     if (drawType === 'lines') {
       this.glPrimitive = this.gl[0].LINES;
     } else if (drawType === 'strip') {
@@ -28,6 +37,7 @@ class VertexGeneric extends VertexObject {
     }
 
     this.setupPoints(vertices, border, holeBorder);
+    this.setupTexture(textureLocation, textureVertexSpace, textureCoords, textureRepeat);
     this.setupBuffer();
   }
 
@@ -38,6 +48,30 @@ class VertexGeneric extends VertexObject {
   ) {
     this.setupPoints(vertices, border, holeBorder);
     this.resetBuffer();
+  }
+
+  setupTexture(
+    textureLocation: string = '',
+    textureVertexSpace: Rect = new Rect(-1, -1, 2, 2),
+    textureCoords: Rect = new Rect(0, 0, 1, 1),
+    textureRepeat: boolean = false,
+  ) {
+    if (textureLocation) {
+      this.texture = {
+        id: textureLocation,
+        src: textureLocation,
+        type: 'image',
+        points: [],
+        repeat: textureRepeat,
+      };
+
+      this.createTextureMap(
+        textureVertexSpace.left, textureVertexSpace.right,
+        textureVertexSpace.bottom, textureVertexSpace.top,
+        textureCoords.left, textureCoords.right,
+        textureCoords.bottom, textureCoords.top,
+      );
+    }
   }
 
   setupPoints(

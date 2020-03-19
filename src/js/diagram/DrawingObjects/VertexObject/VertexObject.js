@@ -31,6 +31,7 @@ class VertexObject extends DrawingObject {
     points: Array<number>;
     buffer?: Array<WebGLBuffer>;
     type: 'canvasText' | 'image';
+    repeat?: boolean;
   };
 
   state: 'loading' | 'loaded';
@@ -68,6 +69,7 @@ class VertexObject extends DrawingObject {
     glIndex: number,
     glTexture: WebGLTexture,
     image: Object, // image data
+    repeat?: boolean,
   ) {
     function isPowerOf2(value) {
       // eslint-disable-next-line no-bitwise
@@ -85,16 +87,22 @@ class VertexObject extends DrawingObject {
         gl.TEXTURE_2D, 0, gl.RGBA,
         gl.RGBA, gl.UNSIGNED_BYTE, image,
       );
-
       // Check if the image is a power of 2 in both dimensions.
       if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
         // Yes, it's a power of 2. Generate mips.
         gl.generateMipmap(gl.TEXTURE_2D);
+        if (repeat != null && repeat === true) {
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+        } else {
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        }
       } else {
         // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
       }
     }
   }
@@ -125,11 +133,9 @@ class VertexObject extends DrawingObject {
         if (texture.points.length === 0) {
           this.createTextureMap();
         }
-
         if (texture.buffer == null) {
           texture.buffer = this.gl.map(() => null);
         }
-
         // $FlowFixMe
         texture.buffer[glIndex] = gl.createBuffer();
         // $FlowFixMe
@@ -139,7 +145,6 @@ class VertexObject extends DrawingObject {
           new Float32Array(texture.points),
           gl.STATIC_DRAW,
         );
-
         if (
           !(texture.id in webgl.textures)
           || (
@@ -162,13 +167,16 @@ class VertexObject extends DrawingObject {
             );
             const image = new Image();
             image.src = src;
+
             this.state = 'loading';
             webgl.textures[texture.id].state = 'loading';
             webgl.textures[texture.id].onLoad.push(this.executeOnLoad.bind(this));
             image.addEventListener('load', () => {
               // Now that the image has loaded make copy it to the texture.
               texture.data = image;
-              this.addTextureToBuffer(glIndex, glTexture, texture.data);
+              this.addTextureToBuffer(
+                glIndex, glTexture, texture.data, texture.repeat,
+              );
               // if (this.onLoad != null) {
               webgl.onLoad(texture.id);
               // this.onLoad();
@@ -177,7 +185,9 @@ class VertexObject extends DrawingObject {
               webgl.textures[texture.id].state = 'loaded';
             });
           } else if (texture.data != null) {
-            this.addTextureToBuffer(glIndex, glTexture, texture.data);
+            this.addTextureToBuffer(
+              glIndex, glTexture, texture.data, texture.repeat,
+            );
           }
         } else if (texture.id in webgl.textures) {
           if (webgl.textures[texture.id].state === 'loading') {

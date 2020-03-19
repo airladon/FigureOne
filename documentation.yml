@@ -58,7 +58,7 @@ toc:
   - Equation
   - name: Shapes
   - OBJ_Polygon
-  - OBJ_PolyLine
+  - OBJ_Polyline
   - name: tools
     description: These are generic tools
     children:

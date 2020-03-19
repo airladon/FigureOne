@@ -16,19 +16,31 @@ export default function Generic(
   color: Array<number>,
   transformOrLocation: Transform | Point,
   diagramLimits: Rect,
+  textureLocation: string = '',
+  textureVertexSpace: Rect = new Rect(-1, -1, 2, 2),
+  textureCoords: Rect = new Rect(0, 0, 1, 1),
+  textureRepeat: boolean = false,
+  onLoad: ?() => void = null,
 ) {
-  const vertexLine = new VertexGeneric(
+  const generic = new VertexGeneric(
     webgl,
     vertices,
     border,
     holeBorder,
     drawType,
+    textureLocation,
+    textureVertexSpace,
+    textureCoords,
+    textureRepeat,
   );
+  if (textureLocation) {
+    generic.onLoad = onLoad;
+  }
   let transform = new Transform();
   if (transformOrLocation instanceof Point) {
     transform = transform.translate(transformOrLocation.x, transformOrLocation.y);
   } else {
     transform = transformOrLocation._dup();
   }
-  return new DiagramElementPrimitive(vertexLine, transform, color, diagramLimits);
+  return new DiagramElementPrimitive(generic, transform, color, diagramLimits);
 }
