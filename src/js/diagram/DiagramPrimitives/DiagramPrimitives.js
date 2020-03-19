@@ -211,13 +211,12 @@ export type OBJ_Rectangle = {
  * @property {boolean} [close] close the polyline on itself (`false`)
  * @property {'mid' | 'outside' | 'inside' | 'autoOutside' | 'autoInside'} [pointsAt]
  * defines where the `points` should be relative to the width of the line.
- * Note: only `mid` is fully compatible with all options in
- * `cornerStyle` and `dash`.
- * @property {'auto' | 'none' | 'radius' | 'fill'} [cornerStyle] `auto`
- * makes the corners sharp if the angle is less than `minAutoCornerAngle`
- * - `none` is no corners - `radius` makes each corner a curve - `fill`
- * fills the gapes between the lines in `none` and effectivly adds a chamfer
- * (`auto`)
+ * Only `"mid"` is fully compatible with all options in
+ * `cornerStyle` and `dash`. (`"mid"`)
+ * @property {'auto' | 'none' | 'radius' | 'fill'} [cornerStyle] - `"auto"`:
+ * sharp corners sharp when angle is less than `minAutoCornerAngle`, `"none"`: no
+ * corners, `"radius"`: curved corners, `"fill"`: fills the gapes between the line
+ * ends, (`"auto"`)
  * @property {number} [cornerSize] only used when `cornerStyle` = `radius` (`0.01`)
  * @property {number} [cornerSides] number of sides in curve - only used when
  *  `cornerStyle` = `radius` (`10`)
@@ -409,82 +408,86 @@ export default class DiagramPrimitives {
     // this.draw2DFigures = draw2DFigures;
   }
 
-  // polylineLegacy(
-  //   points: Array<Point>,
-  //   close: boolean,
-  //   lineWidth: number,
-  //   color: Array<number>,
-  //   borderToPoint: TypePolyLineBorderToPoint = 'never',
-  //   transform: Transform | Point = new Transform(),
-  // ) {
-  //   return PolyLine(
-  //     this.webgl, points, close, lineWidth,
-  //     color, borderToPoint, transform, this.limits,
-  //   );
-  // }
+  generic(...optionsIn: Array<{
+    points?: Array<TypeParsablePoint> | Array<Point>,
+    border?: Array<Array<TypeParsablePoint>> | Array<Array<Point>>,
+    holeBorder?: Array<Array<TypeParsablePoint>> | Array<Array<Point>>,
+    drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
+    color?: Array<number>,
+    texture?: {
+      src?: string,
+      mapTo?: Rect,
+      mapFrom?: Rect,
+      repeat?: boolean,
+      onLoad?: () => void,
+    },
+    position?: TypeParsablePoint,
+    transform?: Transform,
+    pulse?: number,
+  }>) {
+    const defaultOptions = {
+      points: [],
+      border: null,
+      holeBorder: null,
+      drawType: 'triangles',
+      color: [1, 0, 0, 1],
+      transform: new Transform('generic').standard(),
+      position: null,
+      texture: {
+        src: '',
+        mapTo: new Rect(-1, -1, 2, 2),
+        mapFrom: new Rect(0, 0, 1, 1),
+        repeat: false,
+        onLoad: this.animateNextFrame,
+      },
+    };
 
-  // polylineCornersLegacy(
-  //   points: Array<Point>,
-  //   close: boolean,
-  //   cornerLength: number,
-  //   lineWidth: number,
-  //   color: Array<number>,
-  //   transform: Transform | Point = new Transform(),
-  // ) {
-  //   return PolyLineCorners(
-  //     this.webgl, points, close,
-  //     cornerLength, lineWidth, color, transform, this.limits,
-  //   );
-  // }
+    const options = joinObjects(defaultOptions, ...optionsIn);
 
-  // polylineCorners(...optionsIn: Array<{
-  //   points: Array<Point>,
-  //   color?: Array<number>,
-  //   close?: boolean,
-  //   cornerLength?: number,
-  //   width?: number,
-  //   pulse?: number,
-  //   transform?: Transform,
-  //   position?: Point,
-  //   }>) {
-  //   const defaultOptions = {
-  //     color: [1, 0, 0, 1],
-  //     close: true,
-  //     width: 0.01,
-  //     cornerLength: 0.1,
-  //     transform: new Transform('polylineCorners').standard(),
-  //   };
+    if (options.position != null) {
+      const p = getPoint(options.position);
+      options.transform.updateTranslation(p);
+    }
+    const parsedPoints = options.points.map(p => getPoint(p));
+    const parseBorder = (borders) => {
+      if (borders == null) {
+        return null;
+      }
+      const borderOut = [];
+      borders.forEach((b) => {
+        if (Array.isArray(b)) {
+          borderOut.push(b.map(bElement => getPoint(bElement)));
+        }
+      });
+      return borderOut;
+    };
+    const parsedBorder = parseBorder(options.border);
+    const parsedBorderHoles = parseBorder(options.borderHoles);
+    // console.log(parsedPoints)
+    const element = Generic(
+      this.webgl,
+      parsedPoints,
+      parsedBorder,
+      parsedBorderHoles,
+      options.drawType,
+      options.color,
+      options.transform,
+      this.limits,
+      options.texture.src,
+      options.texture.mapTo,
+      options.texture.mapFrom,
+      options.texture.repeat,
+      options.texture.onLoad,
+    );
 
-  //   const options = Object.assign({}, defaultOptions, ...optionsIn);
+    if (options.pulse != null) {
+      if (typeof element.pulseDefault !== 'function') {
+        element.pulseDefault.scale = options.pulse;
+      }
+    }
 
-  //   if (options.position != null) {
-  //     const p = getPoint(options.position);
-  //     options.transform.updateTranslation(p);
-  //   }
-
-  //   let points = [];
-  //   if (options.points) {
-  //     points = options.points.map(p => getPoint(p));
-  //   }
-
-  //   const element = PolyLineCorners(
-  //     this.webgl, points, options.close,
-  //     options.cornerLength, options.width,
-  //     options.color, options.transform, this.limits,
-  //   );
-
-  //   if (options.pulse != null) {
-  //     if (typeof element.pulseDefault !== 'function') {
-  //       element.pulseDefault.scale = options.pulse;
-  //     }
-  //   }
-
-  //   if (options.mods != null && options.mods !== {}) {
-  //     element.setProperties(options.mods);
-  //   }
-
-  //   return element;
-  // }
+    return element;
+  }
 
   polyline(...optionsIn: Array<OBJ_Polyline>) {
     const defaultOptions = {
@@ -533,83 +536,29 @@ export default class DiagramPrimitives {
       );
     }
     const [triangles, borders, holes] = getTris(options.points);
-
-    const element = Generic(
-      this.webgl,
-      triangles,
-      borders,
-      holes,
-      'triangles',
-      options.color,
-      options.transform,
-      this.limits,
-    );
+    // const element = Generic(
+    //   this.webgl,
+    //   triangles,
+    //   borders,
+    //   holes,
+    //   'triangles',
+    //   options.color,
+    //   options.transform,
+    //   this.limits,
+    //   options.textureLocation,
+    //   options.textureVertexSpace,
+    //   options.textureCoords,
+    // );
+    const element = this.generic(options, {
+      drawType: 'triangles',
+      points: triangles,
+      border: borders,
+      holeBorder: holes,
+    });
 
     element.custom.updatePoints = (points) => {
       element.drawingObject.change(...getTris(points));
     };
-
-    if (options.pulse != null) {
-      if (typeof element.pulseDefault !== 'function') {
-        element.pulseDefault.scale = options.pulse;
-      }
-    }
-
-    return element;
-  }
-
-  generic(...optionsIn: Array<{
-    points: Array<TypeParsablePoint>,
-    border: ?Array<Array<TypeParsablePoint>>,
-    holeBorder: ?Array<Array<TypeParsablePoint>>,
-    drawType: 'triangles' | 'strip' | 'fan' | 'lines',
-    color?: Array<number>,
-    position?: TypeParsablePoint,
-    transform?: Transform,
-    pulse?: number,
-  }>) {
-    const defaultOptions = {
-      points: [],
-      border: null,
-      holeBorder: null,
-      drawType: 'triangles',
-      color: [1, 0, 0, 1],
-      transform: new Transform('generic').standard(),
-      position: null,
-    };
-
-    const options = joinObjects(defaultOptions, ...optionsIn);
-
-    if (options.position != null) {
-      const p = getPoint(options.position);
-      options.transform.updateTranslation(p);
-    }
-    const parsedPoints = options.points.map(p => getPoint(p));
-    const parseBorder = (borders) => {
-      if (borders == null) {
-        return null;
-      }
-      const borderOut = [];
-      borders.forEach((b) => {
-        if (Array.isArray(b)) {
-          borderOut.push(b.map(bElement => getPoint(bElement)));
-        }
-      });
-      return borderOut;
-    };
-    const parsedBorder = parseBorder(options.border);
-    const parsedBorderHoles = parseBorder(options.borderHoles);
-    // console.log(parsedPoints)
-    const element = Generic(
-      this.webgl,
-      parsedPoints,
-      parsedBorder,
-      parsedBorderHoles,
-      options.drawType,
-      options.color,
-      options.transform,
-      this.limits,
-    );
 
     if (options.pulse != null) {
       if (typeof element.pulseDefault !== 'function') {
