@@ -17,9 +17,9 @@ describe('Tools Lines', () => {
         new Point(0, 1),
       ];
     });
-    describe('Outside', () => {
+    describe('Negative', () => {
       test('Unclosed', () => {
-        const [tris, border, hole] = makePolyLine(points, 0.1, false, 'outside', 'none');
+        const [tris, border, hole] = makePolyLine(points, 0.1, false, 'negative', 'none');
         const line1 = getBoundingRect(tris.slice(0, 6));
         const line2 = getBoundingRect(tris.slice(6, 12));
         const line3 = getBoundingRect(tris.slice(12));
@@ -56,7 +56,7 @@ describe('Tools Lines', () => {
       });
       test('closed', () => {
         // const out = makePolyLine(points, 0.1, true, 'outside', 'none');
-        const [tris, border, hole] = makePolyLine(points, 0.1, true, 'outside', 'none');
+        const [tris, border, hole] = makePolyLine(points, 0.1, true, 'negative', 'none');
         const line1 = getBoundingRect(tris.slice(0, 6));
         const line2 = getBoundingRect(tris.slice(6, 12));
         const line3 = getBoundingRect(tris.slice(12, 18));
@@ -103,25 +103,25 @@ describe('Tools Lines', () => {
         ]);
       });
       test('radius', () => {
-        const out = makePolyLine(points, 0.1, true, 'outside', 'radius', 0.015, 10);
+        const out = makePolyLine(points, 0.1, true, 'negative', 'radius', 0.015, 10);
         expect(out).toMatchSnapshot();
       });
       test('fill', () => {
-        const out = makePolyLine(points, 0.1, true, 'outside', 'fill');
+        const out = makePolyLine(points, 0.1, true, 'negative', 'fill');
         expect(out).toMatchSnapshot();
       });
       test('auto', () => {
-        const out = makePolyLine(points, 0.1, true, 'outside', 'auto');
+        const out = makePolyLine(points, 0.1, true, 'negative', 'auto');
         expect(out).toMatchSnapshot();
       });
       test('dash', () => {
-        const out = makePolyLine(points, 0.1, true, 'outside', 'auto', 0.015, 10, Math.PI / 7, [0.2, 0.08]);
+        const out = makePolyLine(points, 0.1, true, 'negative', 'auto', 0.015, 10, Math.PI / 7, [0.2, 0.08]);
         expect(out).toMatchSnapshot();
       });
     });
-    describe('Inside', () => {
+    describe('Positive', () => {
       test('Unclosed', () => {
-        const [out] = makePolyLine(points, 0.1, false, 'inside', 'none');
+        const [out] = makePolyLine(points, 0.1, false, 'positive', 'none');
         const line3 = getBoundingRect(out.slice(0, 6));
         const line2 = getBoundingRect(out.slice(6, 12));
         const line1 = getBoundingRect(out.slice(12));
@@ -141,7 +141,7 @@ describe('Tools Lines', () => {
         expect(round(line3.height)).toBe(0.1);
       });
       test('closed', () => {
-        const [out] = makePolyLine(points, 0.1, true, 'inside', 'none');
+        const [out] = makePolyLine(points, 0.1, true, 'positive', 'none');
         const line3 = getBoundingRect(out.slice(0, 6));
         const line2 = getBoundingRect(out.slice(6, 12));
         const line1 = getBoundingRect(out.slice(12, 18));
@@ -167,19 +167,19 @@ describe('Tools Lines', () => {
         expect(round(line4.height)).toBe(1);
       });
       test('radius', () => {
-        const out = makePolyLine(points, 0.1, true, 'inside', 'radius', 0.015, 10);
+        const out = makePolyLine(points, 0.1, true, 'positive', 'radius', 0.015, 10);
         expect(out).toMatchSnapshot();
       });
       test('fill', () => {
-        const out = makePolyLine(points, 0.1, true, 'inside', 'fill');
+        const out = makePolyLine(points, 0.1, true, 'positive', 'fill');
         expect(out).toMatchSnapshot();
       });
       test('auto', () => {
-        const out = makePolyLine(points, 0.1, true, 'inside', 'auto');
+        const out = makePolyLine(points, 0.1, true, 'positive', 'auto');
         expect(out).toMatchSnapshot();
       });
       test('dash', () => {
-        const out = makePolyLine(points, 0.1, true, 'inside', 'auto', 0.015, 10, Math.PI / 7, [0.2, 0.08]);
+        const out = makePolyLine(points, 0.1, true, 'positive', 'auto', 0.015, 10, Math.PI / 7, [0.2, 0.08]);
         expect(out).toMatchSnapshot();
       });
     });

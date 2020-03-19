@@ -118,8 +118,8 @@ function makeLineSegments(
   const lineSegments = [];
   const makeLineSegment = (p1, p2) => {
     const lineSegment = new Line(p1, p2);
-    const insideOffset = lineSegment.offset('inside', insideWidth);
-    const outsideOffset = lineSegment.offset('outside', outsideWidth);
+    const insideOffset = lineSegment.offset('positive', insideWidth);
+    const outsideOffset = lineSegment.offset('negative', outsideWidth);
     lineSegments.push([insideOffset, lineSegment, outsideOffset]);
   };
 
@@ -133,7 +133,7 @@ function makeLineSegments(
   return lineSegments;
 }
 
-function makeLineSegmentsOutside(
+function makeLineSegmentsNegative(
   points: Array<Point>,
   offset: number,
   close: boolean,
@@ -166,7 +166,7 @@ function makeLineSegmentsOutside(
       }
       // console.log(minOffset, minNextOffset, current.p1, current.p2)
     }
-    const outsideLine = current.offset('outside', minOffset);
+    const outsideLine = current.offset('negative', minOffset);
     lineSegments.push([current, current, outsideLine]);
   };
 
@@ -269,7 +269,7 @@ function makeThickLineInsideOutside(
   if (corner === 'none') {
     lineSegments = makeLineSegments(points, width, width, close);
   } else {
-    lineSegments = makeLineSegmentsOutside(points, width, close);
+    lineSegments = makeLineSegmentsNegative(points, width, close);
   }
 
   const minAngle = minAngleIn == null ? 0 : minAngleIn;
@@ -339,7 +339,7 @@ function makeThickLineInsideOutside(
 function setPointOrder(
   points: Array<Point>,
   close: boolean,
-  pointsAre: 'inside' | 'outside' | 'autoInside' | 'autoOutside' | 'mid',
+  pointsAre: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
 ) {
   const reversePoints = () => {
     const reversedCopy = [];
@@ -348,10 +348,10 @@ function setPointOrder(
     }
     return reversedCopy;
   };
-  if (pointsAre === 'outside' || pointsAre === 'mid') {
+  if (pointsAre === 'negative' || pointsAre === 'mid') {
     return points;
   }
-  if (pointsAre === 'inside') {
+  if (pointsAre === 'positive') {
     return reversePoints();
   }
 
@@ -374,13 +374,13 @@ function setPointOrder(
     testAngle(points[points.length - 2], points[points.length - 1], points[0]);
   }
 
-  if (pointsAre === 'autoOutside') {
+  if (pointsAre === 'outside') {
     if (numInsideAngles <= totAngles / 2) {
       return points;
     }
     return reversePoints();
   }
-  if (pointsAre === 'autoInside') {
+  if (pointsAre === 'inside') {
     if (numInsideAngles <= totAngles / 2) {
       return reversePoints();
     }
@@ -391,7 +391,7 @@ function setPointOrder(
 function makeThickLine(
   points: Array<Point>,
   width: number = 0.01,
-  pointsAre: 'mid' | 'outside' | 'inside' | 'autoOutside' | 'autoInside',
+  pointsAre: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
   close: boolean = false,
   corner: 'auto' | 'fill' | 'none',
   minAngle: ?number = Math.PI / 7,
@@ -409,7 +409,7 @@ function makePolyLine(
   pointsIn: Array<Point>,
   width: number = 0.01,
   close: boolean = false,
-  pointsAre: 'mid' | 'outside' | 'inside' | 'autoInside' | 'autoOutside' = 'mid',
+  pointsAre: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' = 'mid',
   cornerStyle: 'auto' | 'none' | 'radius' | 'fill',
   cornerSize: number,
   cornerSides: number,
@@ -465,7 +465,7 @@ function makePolyLineCorners(
   close: boolean = false,
   cornerLength: number,
   // forceCornerLength: boolean,
-  pointsAre: 'mid' | 'outside' | 'inside' | 'autoInside' | 'autoOutside' = 'mid',
+  pointsAre: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' = 'mid',
   cornerStyle: 'auto' | 'none' | 'radius' | 'fill',
   cornerSize: number,
   cornerSides: number,

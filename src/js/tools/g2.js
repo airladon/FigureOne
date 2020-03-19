@@ -983,7 +983,7 @@ class Line {
   // 'outside' is the outside of a polygon defined in the positive direction
   // (CCW).
   offset(
-    direction: 'left' | 'right' | 'top' | 'bottom' | 'outside' | 'inside',
+    direction: 'left' | 'right' | 'top' | 'bottom' | 'positive' | 'negative',
     space: number,
   ) {
     let normalizedAngle = this.ang;
@@ -994,9 +994,9 @@ class Line {
       normalizedAngle += Math.PI;
     }
     let offsetAngle = normalizedAngle - Math.PI / 2;
-    if (direction === 'inside') {
+    if (direction === 'positive') {
       offsetAngle = clipAngle(this.ang, '0to360') + Math.PI / 2;
-    } else if (direction === 'outside') {
+    } else if (direction === 'negative') {
       offsetAngle = clipAngle(this.ang, '0to360') - Math.PI / 2;
     } else if (normalizedAngle < Math.PI / 2) {
       if (direction === 'left' || direction === 'top') {
