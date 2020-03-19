@@ -31,7 +31,7 @@ diagram.addElement(
     options: {
       points: line,
       width: 0.667,
-      pointsAt: 'mid',
+      widthIs: 'mid',
       // close: true,
       // textureLocation: 'http://localhost:8000/texture-rect.jpg',
       // // textureMapTo: new Rect(-0.1, -0.1, 0.2, 0.2),

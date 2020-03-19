@@ -209,7 +209,7 @@ export type OBJ_Rectangle = {
  * @property {Array<TypeParsablePoint>} points
  * @property {number} [width] (`0.01`)
  * @property {boolean} [close] close the polyline on itself (`false`)
- * @property {'mid' | 'outside' | 'inside' | 'positive' | 'negative'} [pointsAt]
+ * @property {'mid' | 'outside' | 'inside' | 'positive' | 'negative'} [widthIs]
  * defines where the `points` should be relative to the width of the line.
  * Only `"mid"` is fully compatible with all options in
  * `cornerStyle` and `dash`. (`"mid"`)
@@ -281,7 +281,7 @@ export type OBJ_Polyline = {
   points: Array<TypeParsablePoint>,
   width?: number,
   close?: boolean,
-  pointsAt?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
+  widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
   cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',
   cornerSize?: number,
   cornerSides?: number,
@@ -494,7 +494,7 @@ export default class DiagramPrimitives {
       width: 0.01,
       color: [1, 0, 0, 1],
       close: false,
-      pointsAt: 'mid',
+      widthIs: 'mid',
       cornerStyle: 'auto',
       cornerSize: 0.01,
       cornerSides: 10,
@@ -516,7 +516,7 @@ export default class DiagramPrimitives {
         options.close,
         options.cornerLength,
         // options.forceCornerLength,
-        options.pointsAt,
+        options.widthIs,
         options.cornerStyle,
         options.cornerSize,
         options.cornerSides,
@@ -527,7 +527,7 @@ export default class DiagramPrimitives {
         points,
         options.width,
         options.close,
-        options.pointsAt,
+        options.widthIs,
         options.cornerStyle,
         options.cornerSize,
         options.cornerSides,
