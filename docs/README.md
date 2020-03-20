@@ -75,34 +75,34 @@
     -   [nextForm][169]
     -   [replayCurrentForm][171]
 -   [Shapes][173]
--   [OBJ_Polygon][174]
--   [OBJ_Polyline][177]
--   [tools][180]
-    -   [g2][181]
-        -   [Point][182]
-            -   [x][184]
-            -   [y][185]
-            -   [\_dup][186]
-            -   [scale][187]
-            -   [sub][190]
-            -   [add][193]
-            -   [distance][196]
-            -   [round][198]
-            -   [clip][201]
-            -   [transformBy][204]
-            -   [rotate][207]
-            -   [isEqualTo][210]
-            -   [isNotEqualTo][213]
-            -   [zero][216]
-            -   [Unity][217]
-        -   [Rect][218]
-    -   [range][220]
--   [tools][222]
--   [round][224]
--   [TypeDiagramOptions][226]
--   [OBJ_CurvedCorner][228]
--   [OBJ_Rectangle][230]
--   [OBJ_Texture][233]
+-   [OBJ_Texture][174]
+-   [OBJ_Polygon][176]
+-   [OBJ_Polyline][179]
+-   [tools][182]
+    -   [g2][183]
+        -   [Point][184]
+            -   [x][186]
+            -   [y][187]
+            -   [\_dup][188]
+            -   [scale][189]
+            -   [sub][192]
+            -   [add][195]
+            -   [distance][198]
+            -   [round][200]
+            -   [clip][203]
+            -   [transformBy][206]
+            -   [rotate][209]
+            -   [isEqualTo][212]
+            -   [isNotEqualTo][215]
+            -   [zero][218]
+            -   [Unity][219]
+        -   [Rect][220]
+    -   [range][222]
+-   [tools][224]
+-   [round][226]
+-   [TypeDiagramOptions][228]
+-   [OBJ_CurvedCorner][230]
+-   [OBJ_Rectangle][232]
 -   [container][235]
 -   [frac][238]
 
@@ -2847,7 +2847,7 @@ Options objects to construct an [Equation][146] class. All properties are option
 -   `scale` **[number][244]?** default: 0.7
 -   `elements` **[TypeEquationElements][280]?** default: {}
 -   `defaultFormAlignment` **[TypeFormAlignment][276]?** default:
-    { fixTo: new [Point][182](0, 0), xAlign: 'left', yAlign: 'baseline}
+    { fixTo: new [Point][184](0, 0), xAlign: 'left', yAlign: 'baseline}
 -   `forms` **[TypeEquationForms][281]?** default: {}
 -   `formSeries` **([Array][243]&lt;[string][242]> | [Object][245]&lt;[Array][243]&lt;[string][242]>>)?** an object
     with each key being a form series name, and each value an array for form
@@ -2859,7 +2859,7 @@ Options objects to construct an [Equation][146] class. All properties are option
 -   `formRestart` **[TypeFormRestart][282]?** default: null
 -   `fontMath` **DiagramFont?** default [DiagramFont][283]('Times
     New Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)
--   `position` **[Point][251]?** default: new [Point][182](0, 0)
+-   `position` **[Point][251]?** default: new [Point][184](0, 0)
 
 ## TypeEquationGoToFormOptions
 
@@ -3088,13 +3088,76 @@ Start from previous form and animate to current form
 
 
 
+## OBJ_Texture
+
+Texture definition object
+
+A texture file is an image file like a jpg, or png.
+
+Textures can be used instead of colors to fill a shape in WebGL.
+
+Textures are effectively overlaid on a shape. Therefore, to overlay the
+texture with the correct offset, magnification and aspect ratio the texture
+must be mapped to the space the shape's vertices are defined in
+(vertex space).
+
+This is done by defining a window, or rectangle, for the texture file
+(`mapFrom`) and a similar window in vertex space (`mapTo`).
+The texture is then offset and scaled such that its window aligns with the
+vertex space window.
+
+The texture file has coordinates of (0, 0) in the bottom left corner and
+(1, 1) in the top right corner.
+
+Therefore, to make a 1000 x 500 image fill a 2 x 1 rectangle in vertex space
+centered at (0, 0) you would define:
+
+    mapFrom: new Rect(0, 0, 1, 1)
+    mapTo: new Rect(-1, -0.5, 2, 1)
+
+If instead you wanted to zoom the image in the same rectange by a factor of 2
+you could either:
+
+    mapFrom: new Rect(0.25, 0.25, 0.5, 0.5)
+    mapTo: new Rect(-1, -0.5, 2, 1)
+
+or
+
+    mapFrom: new Rect(0, 0, 1, 1)
+    mapTo: new Rect(-2, -1, 4, 2)
+
+Two ways of doing this are provided as sometimes it is more convenient to
+think about the window on the image, and other times the window in vertex
+space.
+
+If the shape has fill outside the texture boundaries then either the
+texture can be repeated, or a pixel from the border of the image is used
+(called clamping to edge).
+WebGL only allows images that are square with a side length that is a
+power of 2 (such as 16, 32, 64, 128 etc) to be repeated. All other images
+can only be clamped to their edge.
+
+To repeat all other image resolutions, a texture can be mapped to a rectangle
+and then the rectangle repeated throughout the diagram.
+
+Type: {src: [string][242]?, mapTo: [Rect][287]?, mapFrom: [Rect][287]?, repeat: [boolean][247]?, onLoad: function (): void?}
+
+### Properties
+
+-   `src` **[string][242]** The url or location of the image
+-   `mapTo` **[Rect][287]?** vertex space window (`new Rect(-1, -1, 2, 2)`)
+-   `mapFrom` **[Rect][287]?** image space window (`new Rect(0, 0, 1, 1)`)
+-   `repeat` **[boolean][247]?** `true` will tile the image. Only works with
+    images that are square whose number of side pixels is a power of 2 (`false`)
+-   `onLoad` **function (): void?** 
+
 ## OBJ_Polygon
 
 Polygon or partial polygon shape options object
 
-![][287]
+![][288]
 
-Type: {sides: [number][244]?, radius: [number][244]?, width: [number][244]?, rotation: [number][244]?, clockwise: [boolean][247]?, sidesToDraw: [number][244]?, color: [Array][243]&lt;[number][244]>?, fill: [boolean][247]?, transform: Transform?, position: TypeParsablePoint?, textureLocation: [string][242]?, textureCoords: [Rect][288]?, onLoad: [Function][289]?, pulse: [number][244]?, trianglePrimitives: [boolean][247]?, linePrimitives: [boolean][247]?, center: TypeParsablePoint?}
+Type: {sides: [number][244]?, radius: [number][244]?, width: [number][244]?, rotation: [number][244]?, clockwise: [boolean][247]?, sidesToDraw: [number][244]?, color: [Array][243]&lt;[number][244]>?, fill: [boolean][247]?, transform: Transform?, position: TypeParsablePoint?, textureLocation: [string][242]?, textureCoords: [Rect][287]?, onLoad: [Function][289]?, pulse: [number][244]?, trianglePrimitives: [boolean][247]?, linePrimitives: [boolean][247]?, center: TypeParsablePoint?}
 
 ### Properties
 
@@ -3114,7 +3177,7 @@ Type: {sides: [number][244]?, radius: [number][244]?, width: [number][244]?, rot
 -   `position` **[Point][251]?** convenience to override Transform translation
 -   `transform` **Transform?** (`Transform('polygon').standard()`)
 -   `textureLocation` **[string][242]?** location of the texture file
--   `textureCoords` **[Rect][288]?** normalized coordinates of the texture
+-   `textureCoords` **[Rect][287]?** normalized coordinates of the texture
     within the file (`Rect(0, 0, 1, 1)`)
 -   `onLoad` **[Function][289]?** callback to exectute after textures have loaded
     (`[0, 0]`)
@@ -3189,7 +3252,7 @@ ideal corner. Eventually trucating the corner makes more visual sense
 and therefore, a minimum angle (`minAutoCornerAngle`) is used to
 specify when the corner should be drawn, and when it should be truncated.
 
-Type: {points: [Array][243]&lt;TypeParsablePoint>, width: [number][244]?, close: [boolean][247]?, widthIs: (`"mid"` \| `"outside"` \| `"inside"` \| `"positive"` \| `"negative"`)?, cornerStyle: (`"auto"` \| `"none"` \| `"radius"` \| `"fill"`)?, cornerSize: [number][244]?, cornerSides: [number][244]?, cornersOnly: [boolean][247]?, cornerLength: [number][244]?, forceCornerLength: [boolean][247]?, minAutoCornerAngle: [number][244]?, dash: [Array][243]&lt;[number][244]>?, color: [Array][243]&lt;[number][244]>?, pulse: [number][244]?, position: [Point][251]??, transform: Transform?}
+Type: {points: [Array][243]&lt;TypeParsablePoint>, width: [number][244]?, close: [boolean][247]?, widthIs: (`"mid"` \| `"outside"` \| `"inside"` \| `"positive"` \| `"negative"`)?, cornerStyle: (`"auto"` \| `"none"` \| `"radius"` \| `"fill"`)?, cornerSize: [number][244]?, cornerSides: [number][244]?, cornersOnly: [boolean][247]?, cornerLength: [number][244]?, forceCornerLength: [boolean][247]?, minAutoCornerAngle: [number][244]?, dash: [Array][243]&lt;[number][244]>?, color: [Array][243]&lt;[number][244]>?, texture: [OBJ_Texture][291]?, pulse: [number][244]?, position: [Point][251]??, transform: Transform?}
 
 ### Properties
 
@@ -3216,6 +3279,7 @@ Type: {points: [Array][243]&lt;TypeParsablePoint>, width: [number][244]?, close:
     and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
     short gap, short dash, short gap and then repeats.
 -   `color` **[Array][243]&lt;[number][244]>?** (`[1, 0, 0, 1]`)
+-   `texture` **[OBJ_Texture][291]?** Override color with a texture
 -   `pulse` **[number][244]?** set the default pulse scale
 -   `position` **[Point][251]?** convenience to override Transform translation
 -   `transform` **Transform?** (`Transform('polyline').standard()`)
@@ -3304,7 +3368,7 @@ Type: [number][244]
 
 ##### \_dup
 
-Return a duplicate of the [Point][182] object
+Return a duplicate of the [Point][184] object
 
 Returns **[Point][251]** 
 
@@ -3328,7 +3392,7 @@ Returns **[Point][251]**
 
 ##### sub
 
-Subtract (x, y) values or a [Point][182] and return the difference as a new [Point][182]
+Subtract (x, y) values or a [Point][184] and return the difference as a new [Point][184]
 
 ###### Parameters
 
@@ -3352,7 +3416,7 @@ Returns **[Point][251]**
 
 ##### add
 
-Add (x, y) values or a [Point][182] and return the sum as a new [Point][182]
+Add (x, y) values or a [Point][184] and return the sum as a new [Point][184]
 
 ###### Parameters
 
@@ -3591,7 +3655,7 @@ Diagram Input Options
 ### Properties
 
 -   `htmlId` **[string][242]?** HTML div tag id - default: 'figureOneId'
--   `limits` **[Rect][288]** Diagram coordinate limits - default: bottom left
+-   `limits` **[Rect][287]** Diagram coordinate limits - default: bottom left
      corner at (-1, -1), width 1, height 1
 
 ## OBJ_CurvedCorner
@@ -3609,7 +3673,7 @@ Type: {radius: [number][244]?, sides: [number][244]?}
 
 Rectangle shape options object
 
-![][291]
+![][292]
 
 Type: {yAlign: (`"bottom"` \| `"middle"` \| `"top"` \| [number][244])?, xAlign: (`"left"` \| `"center"` \| `"right"` \| [number][244])?, width: [number][244]?, height: [number][244]?, fill: [boolean][247]?, corner: {radius: [number][244]?, sides: [number][244]?}?, color: [Array][243]&lt;[number][244]>?, transform: Transform?, position: [Point][251]?, pulse: [number][244]?}
 
@@ -3620,7 +3684,7 @@ Type: {yAlign: (`"bottom"` \| `"middle"` \| `"top"` \| [number][244])?, xAlign: 
 -   `width` **[number][244]?** (`1`)
 -   `height` **[number][244]?** (`1`)
 -   `fill` **[boolean][247]?** (`false`)
--   `corner` **[OBJ_CurvedCorner][292]?** define for rounded corners
+-   `corner` **[OBJ_CurvedCorner][293]?** define for rounded corners
 -   `color` **[Array][243]&lt;[number][244]>?** (`[1, 0, 0, 1]`)
 -   `position` **[Point][251]?** convenience to override Transform translation
 -   `transform` **Transform?** (`Transform('rectangle').standard()`)
@@ -3646,65 +3710,6 @@ diagram.addElement(
 ```javascript
 // Rectangle with rounded corners
 ```
-
-## OBJ_Texture
-
-Texture definition object
-
-A texture file is an image file like a jpg, or png.
-
-Textures can be used instead of colors to fill a shape in WebGL.
-
-Textures are effectively overlaid on a shape. Therefore, to overlay the
-texture with the correct offset, magnification and aspect ratio the texture
-must be mapped to the space the shape's vertices are defined in
-(vertex space).
-
-This is done by defining a window, or rectangle, for the texture file
-(`mapFrom`) and a similar window in vertex space (`mapTo`).
-The texture is then offset and scaled such that its window aligns with the
-vertex space window.
-
-The texture file has coordinates of (0, 0) in the bottom left corner and
-(1, 1) in the top right corner.
-
-Therefore, to make a 1000 x 500 image fill a 2 x 1 rectangle in vertex space
-centered at (0, 0) you would define:
-
-    mapFrom: new Rect(0, 0, 1, 1)
-    mapTo: new Rect(-1, -0.5, 2, 1)
-
-If instead you wanted to zoom the image in the same rectange by a factor of 2
-you could either:
-
-    mapFrom: new Rect(0.25, 0.25, 0.5, 0.5)
-    mapTo: new Rect(-1, -0.5, 2, 1)
-
-or
-
-    mapFrom: new Rect(0, 0, 1, 1)
-    mapTo: new Rect(-2, -1, 4, 2)
-
-Two ways of doing this are provided as sometimes it is more convenient to
-think about the window on the image, and other times the window in vertex
-space.
-
-If the shapes has fill outside the texture boundaries then either the
-texture can be repeated, or a pixel from the border of the image is used
-(called clamping to edge).
-WebGL only allows images that are square with a side length that is a
-power of 2 (such as 16, 32, 64, 128 etc) to be repeated. All other images
-can only be clamped to their edge.
-
-Type: {src: [string][242]?, mapTo: [Rect][288]?, mapFrom: [Rect][288]?, repeat: [boolean][247]?, onLoad: function (): void?}
-
-### Properties
-
--   `src` **[string][242]?** 
--   `mapTo` **[Rect][288]?** 
--   `mapFrom` **[Rect][288]?** 
--   `repeat` **[boolean][247]?** 
--   `onLoad` **function (): void?** 
 
 ## container
 
@@ -4094,127 +4099,127 @@ eqn.addForms({
 
 [173]: #shapes
 
-[174]: #obj_polygon
+[174]: #obj_texture
 
 [175]: #properties-46
 
-[176]: #examples-41
+[176]: #obj_polygon
 
-[177]: #obj_polyline
+[177]: #properties-47
 
-[178]: #properties-47
+[178]: #examples-41
 
-[179]: #examples-42
+[179]: #obj_polyline
 
-[180]: #tools
+[180]: #properties-48
 
-[181]: #g2
+[181]: #examples-42
 
-[182]: #point
+[182]: #tools
 
-[183]: #parameters-13
+[183]: #g2
 
-[184]: #x
+[184]: #point
 
-[185]: #y
+[185]: #parameters-13
 
-[186]: #_dup
+[186]: #x
 
-[187]: #scale
+[187]: #y
 
-[188]: #parameters-14
+[188]: #_dup
 
-[189]: #examples-43
+[189]: #scale
 
-[190]: #sub
+[190]: #parameters-14
 
-[191]: #parameters-15
+[191]: #examples-43
 
-[192]: #examples-44
+[192]: #sub
 
-[193]: #add
+[193]: #parameters-15
 
-[194]: #parameters-16
+[194]: #examples-44
 
-[195]: #examples-45
+[195]: #add
 
-[196]: #distance
+[196]: #parameters-16
 
-[197]: #examples-46
+[197]: #examples-45
 
-[198]: #round
+[198]: #distance
 
-[199]: #parameters-17
+[199]: #examples-46
 
-[200]: #examples-47
+[200]: #round
 
-[201]: #clip
+[201]: #parameters-17
 
-[202]: #parameters-18
+[202]: #examples-47
 
-[203]: #examples-48
+[203]: #clip
 
-[204]: #transformby
+[204]: #parameters-18
 
-[205]: #parameters-19
+[205]: #examples-48
 
-[206]: #examples-49
+[206]: #transformby
 
-[207]: #rotate
+[207]: #parameters-19
 
-[208]: #parameters-20
+[208]: #examples-49
 
-[209]: #examples-50
+[209]: #rotate
 
-[210]: #isequalto
+[210]: #parameters-20
 
-[211]: #parameters-21
+[211]: #examples-50
 
-[212]: #examples-51
+[212]: #isequalto
 
-[213]: #isnotequalto
+[213]: #parameters-21
 
-[214]: #parameters-22
+[214]: #examples-51
 
-[215]: #examples-52
+[215]: #isnotequalto
 
-[216]: #zero
+[216]: #parameters-22
 
-[217]: #unity
+[217]: #examples-52
 
-[218]: #rect
+[218]: #zero
 
-[219]: #parameters-23
+[219]: #unity
 
-[220]: #range
+[220]: #rect
 
-[221]: #parameters-24
+[221]: #parameters-23
 
-[222]: #tools-1
+[222]: #range
 
-[223]: #properties-48
+[223]: #parameters-24
 
-[224]: #round-1
+[224]: #tools-1
 
-[225]: #parameters-25
+[225]: #properties-49
 
-[226]: #typediagramoptions
+[226]: #round-1
 
-[227]: #properties-49
+[227]: #parameters-25
 
-[228]: #obj_curvedcorner
+[228]: #typediagramoptions
 
 [229]: #properties-50
 
-[230]: #obj_rectangle
+[230]: #obj_curvedcorner
 
 [231]: #properties-51
 
-[232]: #examples-53
+[232]: #obj_rectangle
 
-[233]: #obj_texture
+[233]: #properties-52
 
-[234]: #properties-52
+[234]: #examples-53
 
 [235]: #container
 
@@ -4320,14 +4325,16 @@ eqn.addForms({
 
 [286]: #typeequationgotoformoptions
 
-[287]: ./assets1/polygon.png
+[287]: #rect
 
-[288]: #rect
+[288]: ./assets1/polygon.png
 
 [289]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
 
 [290]: ./assets1/polyline.png
 
-[291]: ./assets1/rectangle.png
+[291]: #obj_texture
 
-[292]: #obj_curvedcorner
+[292]: ./assets1/rectangle.png
+
+[293]: #obj_curvedcorner
