@@ -170,7 +170,9 @@ function makeLineSegments(
       const prevAngle = threePointAngle(prev.p1, current.p1, current.p2);
       const minPrevAngle = threePointAngleMin(prev.p1, current.p1, current.p2);
       const minPrevOffset = current.distanceToPoint(prev.p1);
-      const minOffset = Math.min(minPrevOffset, Math.tan(Math.abs(minPrevAngle)) * current.length());
+      const minOffset = Math.min(
+        minPrevOffset, Math.tan(Math.abs(minPrevAngle)) * current.length(),
+      );
       // Negative side is inside angle
       if (prevAngle < Math.PI / 2) {
         minNegativeOffset = Math.min(minNegativeOffset, minOffset);
@@ -182,7 +184,9 @@ function makeLineSegments(
       const nextAngle = threePointAngle(current.p1, current.p2, next.p2);
       const minNextAngle = threePointAngleMin(current.p1, current.p2, next.p2);
       const minNextOffset = current.distanceToPoint(next.p2);
-      const minOffset = Math.min(minNextOffset, Math.tan(Math.abs(minNextAngle)) * current.length());
+      const minOffset = Math.min(
+        minNextOffset, Math.tan(Math.abs(minNextAngle)) * current.length(),
+      );
       if (nextAngle < Math.PI / 2) {
         minNegativeOffset = Math.min(minNegativeOffset, minOffset);
       } else if (nextAngle > Math.PI / 2 * 3) {
@@ -449,6 +453,7 @@ function makePolyLine(
   } else if (cornerStyle === 'radius') {
     points = cornerLine(orderedPoints, close, 'fromVertex', cornerSides, cornerSize);
     cornerStyleToUse = 'fill';
+    // console.log(points)
   } else {
     // autoCorners = 'none';
     cornerStyleToUse = cornerStyle;
