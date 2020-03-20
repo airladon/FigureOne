@@ -31,8 +31,10 @@ diagram.addElements([
       // cornerLength: 0.1,
       // forceCornerLength: true,
       // asdfasdf: false,
-      widthIs: 'mid',
-      cornerStyle: 'radius',
+      widthIs: 'outside',
+      // cornerStyle: 'radius',
+      // cornerSize: 0.1,
+      // cornersOnly: true,
 
       // dash: [0.1, 0.03],
     },
