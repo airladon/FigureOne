@@ -57,6 +57,7 @@ toc:
   - name: Equations
   - Equation
   - name: Shapes
+  - OBJ_Texture
   - OBJ_Polygon
   - OBJ_Polyline
   - name: tools

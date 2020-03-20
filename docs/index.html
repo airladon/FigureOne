@@ -720,6 +720,16 @@
               
                 
                 <li><a
+                  href='#obj_texture'
+                  class="">
+                  OBJ_Texture
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_polygon'
                   class="">
                   OBJ_Polygon
@@ -817,16 +827,6 @@
                   href='#obj_rectangle'
                   class="">
                   OBJ_Rectangle
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_textures'
-                  class="">
-                  OBJ_Textures
                   
                 </a>
                 
@@ -10511,6 +10511,141 @@ eqn.addElements({
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='obj_texture'>
+      OBJ_Texture
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Texture definition object</p>
+<p>A texture file is an image file like a jpg, or png.</p>
+<p>Textures can be used instead of colors to fill a shape in WebGL.</p>
+<p>Textures are effectively overlaid on a shape. Therefore, to overlay the
+texture with the correct offset, magnification and aspect ratio the texture
+must be mapped to the space the shape's vertices are defined in
+(vertex space).</p>
+<p>This is done by defining a window, or rectangle, for the texture file
+(<code>mapFrom</code>) and a similar window in vertex space (<code>mapTo</code>).
+The texture is then offset and scaled such that its window aligns with the
+vertex space window.</p>
+<p>The texture file has coordinates of (0, 0) in the bottom left corner and
+(1, 1) in the top right corner.</p>
+<p>Therefore, to make a 1000 x 500 image fill a 2 x 1 rectangle in vertex space
+centered at (0, 0) you would define:</p>
+<pre><code>mapFrom: new Rect(0, 0, 1, 1)
+mapTo: new Rect(-1, -0.5, 2, 1)
+</code></pre>
+<p>If instead you wanted to zoom the image in the same rectange by a factor of 2
+you could either:</p>
+<pre><code>mapFrom: new Rect(0.25, 0.25, 0.5, 0.5)
+mapTo: new Rect(-1, -0.5, 2, 1)
+</code></pre>
+<p>or</p>
+<pre><code>mapFrom: new Rect(0, 0, 1, 1)
+mapTo: new Rect(-2, -1, 4, 2)
+</code></pre>
+<p>Two ways of doing this are provided as sometimes it is more convenient to
+think about the window on the image, and other times the window in vertex
+space.</p>
+<p>If the shape has fill outside the texture boundaries then either the
+texture can be repeated, or a pixel from the border of the image is used
+(called clamping to edge).
+WebGL only allows images that are square with a side length that is a
+power of 2 (such as 16, 32, 64, 128 etc) to be repeated. All other images
+can only be clamped to their edge.</p>
+<p>To repeat all other image resolutions, a texture can be mapped to a rectangle
+and then the rectangle repeated throughout the diagram.</p>
+
+  
+    <p style="display: none;">      Type:
+      {src: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, mapTo: <a href="#rect">Rect</a>?, mapFrom: <a href="#rect">Rect</a>?, repeat: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, onLoad: function (): void?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>src</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          : The url or location of the image
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>mapTo</span> <code class='quiet'>(<a href="#rect">Rect</a>?)</code>
+          : vertex space window (
+<code>new Rect(-1, -1, 2, 2)</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>mapFrom</span> <code class='quiet'>(<a href="#rect">Rect</a>?)</code>
+          : image space window (
+<code>new Rect(0, 0, 1, 1)</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>repeat</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ will tile the image. Only works with
+images that are square whose number of side pixels is a power of 2 (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onLoad</span> <code class='quiet'>(function (): void?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='obj_polygon'>
       OBJ_Polygon
     </h3>
@@ -10803,7 +10938,7 @@ specify when the corner should be drawn, and when it should be truncated.</p>
 
   
     <p style="display: none;">      Type:
-      {points: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeParsablePoint>, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, close: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, widthIs: (<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)?, cornerStyle: (<code>"auto"</code> | <code>"none"</code> | <code>"radius"</code> | <code>"fill"</code>)?, cornerSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, cornerSides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, cornersOnly: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, cornerLength: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, forceCornerLength: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, minAutoCornerAngle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, dash: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, position: <a href="#point">Point</a>??, transform: Transform?}
+      {points: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeParsablePoint>, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, close: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, widthIs: (<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)?, cornerStyle: (<code>"auto"</code> | <code>"none"</code> | <code>"radius"</code> | <code>"fill"</code>)?, cornerSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, cornerSides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, cornersOnly: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, cornerLength: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, forceCornerLength: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, minAutoCornerAngle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, dash: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, texture: <a href="#obj_texture">OBJ_Texture</a>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, position: <a href="#point">Point</a>??, transform: Transform?}
     </p>
   
   
@@ -10966,6 +11101,13 @@ short gap, short dash, short gap and then repeats.
           : (
 <code>[1, 0, 0, 1]</code>
 )
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
+          : Override color with a texture
 
           
         </div>
@@ -12915,127 +13057,6 @@ diagram.addElement(
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Rectangle with rounded corners</span></pre>
     
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_textures'>
-      OBJ_Textures
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Texture definition object</p>
-<p>A texture file is an image file like a jpg, or png.</p>
-<p>Textures can be used instead of colors to fill a shape in WebGL.</p>
-<p>Textures are effectively overlaid on a shape. Therefore, to overlay the
-texture with the correct offset, magnification and aspect ratio the texture
-must be mapped to the space the shape's vertices are defined in
-(vertex space).</p>
-<p>This is done by defining a window, or rectangle, for the texture file
-(<code>mapFrom</code>) and a similar window in vertex space (<code>mapTo</code>).
-The texture is then offset and scaled such that its window aligns with the
-vertex space window.</p>
-<p>The texture file has coordinates of (0, 0) in the bottom left corner and
-(1, 1) in the top right corner.</p>
-<p>Therefore, to make a 1000 x 500 image fill a 2 x 1 rectangle in vertex space
-centered at (0, 0) you would define:</p>
-<pre><code>mapFrom: new Rect(0, 0, 1, 1)
-mapTo: new Rect(-1, -0.5, 2, 1)
-</code></pre>
-<p>If instead you wanted to zoom the image in the same rectange by a factor of 2
-you could either:</p>
-<pre><code>mapFrom: new Rect(0.25, 0.25, 0.5, 0.5)
-mapTo: new Rect(-1, -0.5, 2, 1)
-</code></pre>
-<p>or</p>
-<pre><code>mapFrom: new Rect(0, 0, 1, 1)
-mapTo: new Rect(-2, -1, 4, 2)
-</code></pre>
-<p>Two ways of doing this are provided as sometimes it is more convenient to
-think about the window on the image, and other times the window in vertex
-space.</p>
-<p>If the shapes has fill outside the texture boundaries then either the
-texture can be repeated, or a pixel from the border of the image is used
-(called clamping to edge).
-WebGL only allows images that are square with a side length that is a
-power of 2 (such as 16, 32, 64, 128 etc) to be repeated. All other images
-can only be clamped to their edge.</p>
-
-  
-    <p style="display: none;">      Type:
-      {src: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, mapTo: <a href="#rect">Rect</a>?, mapFrom: <a href="#rect">Rect</a>?, repeat: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, onLoad: function (): void?}
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>src</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>mapTo</span> <code class='quiet'>(<a href="#rect">Rect</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>mapFrom</span> <code class='quiet'>(<a href="#rect">Rect</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>repeat</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>onLoad</span> <code class='quiet'>(function (): void?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
   
 
   

@@ -40,6 +40,7 @@ import {
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { TypeSpaceTransforms } from '../Diagram';
 import { makePolyLine, makePolyLineCorners } from '../DrawingObjects/Geometries/lines/lines';
+import { getPolygonPoints, getFanTrisPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
 
 /**
  * Polygon or partial polygon shape options object
@@ -175,6 +176,18 @@ export type OBJ_Rectangle = {
   position?: Point,
   pulse?: number,
 }
+
+// generic
+// polyline
+// rectangle
+// polygon
+// polygonPortion
+// repeat
+// grid
+
+// Special
+// box (surround)
+// shape
 
 
 /**
@@ -644,6 +657,76 @@ export default class DiagramPrimitives {
       }
     }
 
+    return element;
+  }
+
+  polygonNew(...optionsIn: Array<{
+    radius?: number,
+    rotation?: number,
+    sides?: number,
+    sidesToDraw?: number,
+    angleToDraw?: number,
+    offset?: TypeParsablePoint,
+    width?: number,
+    direction?: -1 | 1,
+    // angle?: number,
+    line?: {
+      widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
+      cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',
+      cornerSize?: number,
+      cornerSides?: number,
+      cornersOnly?: boolean,
+      cornerLength?: number,
+      forceCornerLength?: boolean,
+      minAutoCornerAngle?: number,
+      dash?: Array<number>,
+    },
+    fill?: boolean,
+    color?: Array<number>,
+    texture?: OBJ_Texture,
+    position?: TypeParsablePoint,
+    transform?: Transform,
+    pulse?: number,
+  }>) {
+    const defaultOptions = {
+      radius: 1,
+      sides: 4,
+      direction: 1,
+      // sidesToDraw: 4,
+      rotation: 0,
+      width: 0.01,
+      // angle: Math.PI * 2,
+      offset: new Point(0, 0),
+      transform: new Transform('polygon').standard(),
+    };
+    const options = processOptions(defaultOptions, ...optionsIn);
+    parsePoints(options, ['offset']);
+    let element;
+    if (options.angleToDraw != null) {
+      options.sidesToDraw = Math.floor(
+        options.angleToDraw / (Math.PI * 2 / options.sides),
+      );
+    }
+    if (options.sidesToDraw == null) {
+      options.sidesToDraw = options.sides;
+    }
+    if (options.fill) {
+      const fan = getFanTrisPolygon(
+        options.radius, options.rotation, options.offset, options.sides, options.sidesToDraw, options.direction,
+      );
+      element = this.generic(options, {
+        drawType: 'fan',
+        points: fan,
+        border: [fan.slice(1)],
+      });
+    } else {
+      element = this.polyline(options, options.line, {
+        points: getPolygonPoints(
+          options.radius, options.rotation, options.offset, options.sides, options.sidesToDraw, options.direction,
+        ),
+        close: options.sides === options.sidesToDraw,
+      });
+    }
     return element;
   }
 
