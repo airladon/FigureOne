@@ -76,10 +76,18 @@ const line = [
 diagram.addElements([
   {
     name: 'p1',
-    method: 'shapes.polygonSweep',
+    method: 'shapes.polygon',
     options: {
-      sides: 4,
+      sides: 6,
       width: 0.05,
+      line: {
+        widthIs: 'mid',
+      },
+      // angleToDraw: 3,
+      sidesToDraw: 3,
+      // line: {
+      //   cornersOnly: true,
+      // },
       // line: {
       //   widthIs: 'mid',
       //   cornerStyle: 'fill',
@@ -98,9 +106,9 @@ diagram.addElements([
   },
   {
     name: 'p',
-    method: 'shapes.polygonNew',
+    method: 'polygon',
     options: {
-      sides: 4,
+      sides: 8,
       width: 0.005,
       radius: 0.9,
       // fill: true,

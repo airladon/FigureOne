@@ -285,8 +285,10 @@ class VertexObject extends DrawingObject {
   }
 
   // Abstract method - should be reimplemented for any vertexObjects that
+  // eslint-disable-next-line no-unused-vars
   getPointCountForAngle(drawAngle: number = Math.PI * 2) {
-    return this.numPoints * drawAngle / (Math.PI * 2);
+    // return this.numPoints * drawAngle / (Math.PI * 2);
+    return this.numPoints;
   }
 
   // Abstract method - should be reimplemented for any vertexObjects that
