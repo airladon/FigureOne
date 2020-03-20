@@ -32,6 +32,7 @@ diagram.addElements([
       // forceCornerLength: true,
       // asdfasdf: false,
       widthIs: 'mid',
+      cornerStyle: 'radius',
 
       // dash: [0.1, 0.03],
     },
