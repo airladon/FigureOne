@@ -29,7 +29,7 @@ describe('Tools Lines', () => {
         new Point(1, 0.9),
       ]);
     });
-    test.only('simple negative 45º', () => {
+    test('simple negative 45º', () => {
       const line1 = new Line(new Point(0, 0), new Point(0, 1));
       const line2 = new Line(line1.p2._dup(), 1, Math.PI / 2 - Math.PI / 4 * 3);
       const offsetLine1 = line1.offset('negative', 0.1);
@@ -46,21 +46,6 @@ describe('Tools Lines', () => {
 
       const insideCorner2 = tris[8];
       expect(round(insideCorner2)).toEqual(round(offsetLine2.intersectsWith(line1).intersect));
-      // expect(round(tris)).toEqual([
-      //   new Point(0, 0),
-      //   new Point(0, 1),  // outside corner
-      //   new Point(0.1, 0),
-      //   new Point(0.1, 0),
-      //   new Point(0, 1),
-      //   new Point(0.1, 1),
-      //   //
-      //   new Point(0, 1),
-      //   new Point(1, 1),
-      //   new Point(0, 0.9),
-      //   new Point(0, 0.9),
-      //   new Point(1, 1),
-      //   new Point(1, 0.9),
-      // ]);
     });
   });
   describe('makePolyLine', () => {
