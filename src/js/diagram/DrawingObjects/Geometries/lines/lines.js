@@ -115,6 +115,11 @@ function joinLinesAcuteInside(
   inside: Line,
   insideNext: Line,
 ) {
+  // const intercept = inside.intersectsWith(insideNext);
+  // if (intercept.intersect != null) {
+  //   inside.setP2(intercept.intersect);
+  //   insideNext.setP1(intercept.intersect);
+  // }
   let intercept = inside.intersectsWith(midNext);
   if (intercept.intersect != null) {
     inside.setP2(intercept.intersect);
@@ -382,6 +387,14 @@ function makeThickLine(
         cornerFills.push(negativeNext.p1._dup());
       }
     }
+    // if (widthIsIn !== 'inside') {
+    //   cornerFills.push(positive.p2._dup());
+    //   cornerFills.push(mid.p2._dup());
+    //   cornerFills.push(positiveNext.p1._dup());
+    //   cornerFills.push(negative.p2._dup());
+    //   cornerFills.push(mid.p2._dup());
+    //   cornerFills.push(negativeNext.p1._dup());
+    // }
   };
 
   // NB: this all assumes the GL primitive is TRIANGLES. Thus the order the
