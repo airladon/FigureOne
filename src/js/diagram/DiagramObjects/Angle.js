@@ -647,7 +647,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       {}, defaultCurveOptions, curveOptions,
     );
     for (let i = 0; i < optionsToUse.num; i += 1) {
-      const curve = this.shapes.polygon({
+      const curve = this.shapes.polygonSweep({
         sides: optionsToUse.sides,
         radius: optionsToUse.radius + i * optionsToUse.step,
         width: optionsToUse.width,

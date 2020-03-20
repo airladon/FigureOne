@@ -46,7 +46,9 @@ function getFanTrisPolygon(
   sidesToDraw: number,
   direction: -1 | 1,
 ): Array<Point> {
-  const fan = [offset._dup(), ...getPolygonPoints(radius, rotation, offset, sides, sidesToDraw, direction)];
+  const fan = [offset._dup(), ...getPolygonPoints(
+    radius, rotation, offset, sides, sidesToDraw, direction,
+  )];
   if (sides === sidesToDraw) {
     fan.push(fan[1]._dup());
   }

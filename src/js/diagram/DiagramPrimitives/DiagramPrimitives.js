@@ -42,85 +42,6 @@ import type { TypeSpaceTransforms } from '../Diagram';
 import { makePolyLine, makePolyLineCorners } from '../DrawingObjects/Geometries/lines/lines';
 import { getPolygonPoints, getFanTrisPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
 
-/**
- * Polygon or partial polygon shape options object
- *
- * ![](./assets1/polygon.png)
- *
- * @property {number} [sides] (`4`)
- * @property {number} [radius] (`1`)
- * @property {number} [width] line width - line will be drawn on inside of radius (`0.01`)
- * @property {number} [rotation] (`0`)
- * @property {boolean} [clockwise] (`false`)
- * @property {number} [sidesToDraw] number of sides to draw (all sides)
- * @property {number} [angleToDraw] same as `sidesToDraw` but using angle for
- * the definition (2π)
- * @property {Array<number>} [color] (`[1, 0, 0, 1`])
- * @property {boolean} [fill] (`false`)
- * @property {TypeParsablePoint} [center] vertex space location of polygon
- * center. This is different to position or transform as these translate the
- * vertices on each draw. (`[0, 0]`)
- * @property {Point} [position] convenience to override Transform translation
- * @property {Transform} [transform] (`Transform('polygon').standard()`)
- * @property {string} [textureLocation] location of the texture file
- * @property {Rect} [textureCoords] normalized coordinates of the texture
- * within the file (`Rect(0, 0, 1, 1)`)
- * @property {Function} [onLoad] callback to exectute after textures have loaded
- * (`[0, 0]`)
- * @property {boolean} [trianglePrimitives] `true` to use `TRIANGLES`
- * instead of `TRIANGLE_STRIP` as GL primitive ('false`)
- * @property {boolean} [linePrimitives] `true` to use `LINES` instead of
- * `TRIANGLE_STRIP` as GL primitive - this will disable width (`false`)
- * used with filled polygons
- * @property {number} [pulse] set the default pulse scale
- * @example
- * // Simple filled polygon
- * diagram.addElement(
- *   {
- *     name: 'p',
- *     method: 'polygon',
- *     options: {
- *       radius: 0.5,
- *       fill: true,
- *       sides: 6,
- *     },
- *   },
- * );
- * @example
- * // Quarter circle
- * diagram.addElement(
- *   {
- *     name: 'p',
- *     method: 'polygon',
- *     options: {
- *       radius: 0.4,
- *       sides: 100,
- *       width: 0.08,
- *       angleToDraw: Math.PI / 2,
- *       color: [1, 1, 0, 1],
- *     },
- *   },
- * );
- */
-export type OBJ_Polygon = {
-  sides?: number,
-  radius?: number,
-  width?: number,
-  rotation?: number,
-  clockwise?: boolean,
-  sidesToDraw?: number,
-  color?: Array<number>,
-  fill?: boolean,
-  transform?: Transform,
-  position?: TypeParsablePoint,
-  textureLocation?: string,
-  textureCoords?: Rect,
-  onLoad?: Function,
-  pulse?: number;
-  trianglePrimitives?: boolean,
-  linePrimitives?: boolean,
-  center?: TypeParsablePoint,
-};
 
 /**
   Curved Corner Definition
@@ -386,6 +307,151 @@ export type OBJ_Polyline = {
   position?: ?Point,
   transform?: Transform,
 };
+
+/**
+ * Line style object
+ *
+ * These properties are a subset of {@link OBJ_Polyline} which has more details
+ * on how a line is defined.
+ *
+ * @property {'mid' | 'outside' | 'inside' | 'positive' | 'negative'} [widthIs]
+ * defines how the width is grown from the polyline's points.
+ * Only `"mid"` is fully compatible with all options in
+ * `cornerStyle` and `dash`. (`"mid"`)
+ * @property {'auto' | 'none' | 'radius' | 'fill'} [cornerStyle] - `"auto"`:
+ * sharp corners sharp when angle is less than `minAutoCornerAngle`, `"none"`: no
+ * corners, `"radius"`: curved corners, `"fill"`: fills the gapes between the line
+ * ends, (`"auto"`)
+ * @property {number} [cornerSize] only used when `cornerStyle` = `radius` (`0.01`)
+ * @property {number} [cornerSides] number of sides in curve - only used when
+ *  `cornerStyle` = `radius` (`10`)
+ * @property {boolean} [cornersOnly] draw only the corners with size `cornerSize` (`false`)
+ * @property {number} [cornerLength] use only with `cornersOnly` = `true` -
+ * length of corner to draw (`0.1`)
+ * @property {number} [minAutoCornerAngle] see `cornerStyle` = `auto` (`π/7`)
+ * @property {Array<number>} [dash] leave empty for solid line - use array of
+ * numbers for dash line where first number is length of line, second number is
+ * length of gap and then the pattern repeats - can use more than one dash length
+ * and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
+ * short gap, short dash, short gap and then repeats.
+ */
+export type OBJ_LineStyle = {
+  widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
+  cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',
+  cornerSize?: number,
+  cornerSides?: number,
+  cornersOnly?: boolean,
+  cornerLength?: number,
+  forceCornerLength?: boolean,
+  minAutoCornerAngle?: number,
+  dash?: Array<number>,
+};
+
+/**
+ * Polygon or partial polygon shape options object
+ *
+ * ![](./assets1/polygon.png)
+ *
+ * @property {number} [sides] (`4`)
+ * @property {number} [radius] (`1`)
+ * @property {number} [width] line width - line will be drawn on inside of radius (`0.01`)
+ * @property {number} [rotation] (`0`)
+ * @property {boolean} [clockwise] (`false`)
+ * @property {number} [sidesToDraw] number of sides to draw (all sides)
+ * @property {number} [angleToDraw] same as `sidesToDraw` but using angle for
+ * the definition (2π)
+ * @property {Array<number>} [color] (`[1, 0, 0, 1`])
+ * @property {boolean} [fill] (`false`)
+ * @property {TypeParsablePoint} [center] vertex space location of polygon
+ * center. This is different to position or transform as these translate the
+ * vertices on each draw. (`[0, 0]`)
+ * @property {Point} [position] convenience to override Transform translation
+ * @property {Transform} [transform] (`Transform('polygon').standard()`)
+ * @property {string} [textureLocation] location of the texture file
+ * @property {Rect} [textureCoords] normalized coordinates of the texture
+ * within the file (`Rect(0, 0, 1, 1)`)
+ * @property {Function} [onLoad] callback to exectute after textures have loaded
+ * (`[0, 0]`)
+ * @property {boolean} [trianglePrimitives] `true` to use `TRIANGLES`
+ * instead of `TRIANGLE_STRIP` as GL primitive ('false`)
+ * @property {boolean} [linePrimitives] `true` to use `LINES` instead of
+ * `TRIANGLE_STRIP` as GL primitive - this will disable width (`false`)
+ * used with filled polygons
+ * @property {number} [pulse] set the default pulse scale
+ * @example
+ * // Simple filled polygon
+ * diagram.addElement(
+ *   {
+ *     name: 'p',
+ *     method: 'polygon',
+ *     options: {
+ *       radius: 0.5,
+ *       fill: true,
+ *       sides: 6,
+ *     },
+ *   },
+ * );
+ * @example
+ * // Quarter circle
+ * diagram.addElement(
+ *   {
+ *     name: 'p',
+ *     method: 'polygon',
+ *     options: {
+ *       radius: 0.4,
+ *       sides: 100,
+ *       width: 0.08,
+ *       angleToDraw: Math.PI / 2,
+ *       color: [1, 1, 0, 1],
+ *     },
+ *   },
+ * );
+ */
+export type OBJ_Polygon = {
+  sides?: number,
+  radius?: number,
+  width?: number,
+  rotation?: number,
+  clockwise?: boolean,
+  sidesToDraw?: number,
+  color?: Array<number>,
+  fill?: boolean,
+  transform?: Transform,
+  position?: TypeParsablePoint,
+  textureLocation?: string,
+  textureCoords?: Rect,
+  onLoad?: Function,
+  pulse?: number;
+  trianglePrimitives?: boolean,
+  linePrimitives?: boolean,
+  center?: TypeParsablePoint,
+};
+// radius?: number,
+//     rotation?: number,
+//     sides?: number,
+//     sidesToDraw?: number,
+//     angleToDraw?: number,
+//     offset?: TypeParsablePoint,
+//     width?: number,
+//     direction?: -1 | 1,
+//     // angle?: number,
+//     line?: {
+//       widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
+//       cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',
+//       cornerSize?: number,
+//       cornerSides?: number,
+//       cornersOnly?: boolean,
+//       cornerLength?: number,
+//       forceCornerLength?: boolean,
+//       minAutoCornerAngle?: number,
+//       dash?: Array<number>,
+//     },
+//     fill?: boolean,
+//     color?: Array<number>,
+//     texture?: OBJ_Texture,
+//     position?: TypeParsablePoint,
+//     transform?: Transform,
+//     pulse?: number,
 
 export type TypeTextOptions = {
   text?: string;
@@ -660,43 +726,7 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  polygonSweep(...optionsIn: Array<{
-    radius?: number,
-    rotation?: number,
-    sides?: number,
-    offset?: TypeParsablePoint,
-    width?: number,
-    direction?: -1 | 1,
-    fill?: boolean,
-    color?: Array<number>,
-    texture?: OBJ_Texture,
-    position?: TypeParsablePoint,
-    transform?: Transform,
-    pulse?: number,
-  }>) {
-    const defaultOptions = {
-      sides: 4,
-      fill: false,
-    };
-    const forceOptions = {
-      line: {
-        cornerStyle: 'auto',
-      },
-    };
-    const options = processOptions(defaultOptions, ...optionsIn, forceOptions);
-    // const options = joinObjects(defaultOptions, optionsIn);
-    const element = this.polygonNew(options);
-    element.drawingObject.getPointCountForAngle = (angle: number) => {
-      const sidesToDraw = Math.floor(tools.round(angle) / tools.round(Math.PI * 2) * options.sides);
-      if (options.fill) {
-        return sidesToDraw + 2;
-      }
-      return sidesToDraw * 6;
-    };
-    return element;
-  }
-
-  polygonNew(...optionsIn: Array<{
+  polygon(...optionsIn: Array<{
     radius?: number,
     rotation?: number,
     sides?: number,
@@ -731,6 +761,9 @@ export default class DiagramPrimitives {
       // sidesToDraw: 4,
       rotation: 0,
       width: 0.01,
+      line: {
+        widthIs: 'inside',
+      },
       // angle: Math.PI * 2,
       offset: new Point(0, 0),
       transform: new Transform('polygon').standard(),
@@ -748,7 +781,8 @@ export default class DiagramPrimitives {
     }
     if (options.fill) {
       const fan = getFanTrisPolygon(
-        options.radius, options.rotation, options.offset, options.sides, options.sidesToDraw, options.direction,
+        options.radius, options.rotation, options.offset,
+        options.sides, options.sidesToDraw, options.direction,
       );
       element = this.generic(options, {
         drawType: 'fan',
@@ -756,13 +790,56 @@ export default class DiagramPrimitives {
         border: [fan.slice(1)],
       });
     } else {
+      let polygonPoints = getPolygonPoints(
+        options.radius, options.rotation, options.offset,
+        options.sides, options.sidesToDraw, options.direction,
+      );
+      // if (options.line.widthIs === 'inside') {
+      //   polygonPoints = [polygonPoints[0], ...polygonPoints.slice(1).reverse()];
+      // }
+
       element = this.polyline(options, options.line, {
-        points: getPolygonPoints(
-          options.radius, options.rotation, options.offset, options.sides, options.sidesToDraw, options.direction,
-        ),
+        points: polygonPoints,
         close: options.sides === options.sidesToDraw,
       });
     }
+    return element;
+  }
+
+  polygonSweep(...optionsIn: Array<{
+    radius?: number,
+    rotation?: number,
+    sides?: number,
+    offset?: TypeParsablePoint,
+    width?: number,
+    direction?: -1 | 1,
+    fill?: boolean,
+    color?: Array<number>,
+    texture?: OBJ_Texture,
+    position?: TypeParsablePoint,
+    transform?: Transform,
+    pulse?: number,
+  }>) {
+    const defaultOptions = {
+      sides: 4,
+      fill: false,
+    };
+    const forceOptions = {
+      line: {
+        cornerStyle: 'auto',
+        cornersOnly: false,
+      },
+    };
+    const options = processOptions(defaultOptions, ...optionsIn, forceOptions);
+    // const options = joinObjects(defaultOptions, optionsIn);
+    const element = this.polygon(options);
+    element.drawingObject.getPointCountForAngle = (angle: number) => {
+      const sidesToDraw = Math.floor(tools.round(angle) / tools.round(Math.PI * 2) * options.sides);
+      if (options.fill) {
+        return sidesToDraw + 2;
+      }
+      return sidesToDraw * 6;
+    };
     return element;
   }
 
@@ -1149,7 +1226,7 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  polygon(...optionsIn: Array<OBJ_Polygon>) {
+  polygonLegacy(...optionsIn: Array<OBJ_Polygon>) {
     const defaultOptions = {
       sides: 4,
       radius: 1,
