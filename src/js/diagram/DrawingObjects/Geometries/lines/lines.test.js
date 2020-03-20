@@ -1,5 +1,5 @@
 import {
-  Point, getBoundingRect,
+  Point, getBoundingRect, Line,
 } from '../../../../tools/g2';
 import { round } from '../../../../tools/math';
 import {
@@ -15,41 +15,52 @@ describe('Tools Lines', () => {
       );
       expect(round(tris)).toEqual([
         new Point(0, 0),
-        new Point(0, 1),
+        new Point(0, 1),  // 1 - outside corner
         new Point(0.1, 0),
         new Point(0.1, 0),
         new Point(0, 1),
-        new Point(0.1, 1),
+        new Point(0.1, 1), // 5 - inside corner line 1
         //
         new Point(0, 1),
         new Point(1, 1),
-        new Point(0, 0.9),
+        new Point(0, 0.9),  // 8 - inside corner line 1
         new Point(0, 0.9),
         new Point(1, 1),
         new Point(1, 0.9),
       ]);
     });
     test.only('simple negative 45º', () => {
+      const line1 = new Line(new Point(0, 0), new Point(0, 1));
+      const line2 = new Line(line1.p2._dup(), 1, Math.PI / 2 - Math.PI / 4 * 3);
+      const offsetLine1 = line1.offset('negative', 0.1);
+      const offsetLine2 = line2.offset('negative', 0.1);
       const [tris] = makePolyLine(
-        [new Point(0, 0), new Point(0, 1), new Point(1, 0)],
+        [line1.p1, line1.p2, line2.p2],
         0.1, false, 'negative', 'auto',
       );
-      console.log(tris)
-      expect(round(tris)).toEqual([
-        new Point(0, 0),
-        new Point(0, 1),
-        new Point(0.1, 0),
-        new Point(0.1, 0),
-        new Point(0, 1),
-        new Point(0.1, 1),
-        //
-        new Point(0, 1),
-        new Point(1, 1),
-        new Point(0, 0.9),
-        new Point(0, 0.9),
-        new Point(1, 1),
-        new Point(1, 0.9),
-      ]);
+      const outsideCorner = tris[1];
+      expect(round(outsideCorner)).toEqual(round(line1.intersectsWith(line2).intersect));
+
+      const insideCorner1 = tris[5];
+      expect(round(insideCorner1)).toEqual(round(offsetLine1.intersectsWith(line2).intersect));
+
+      const insideCorner2 = tris[8];
+      expect(round(insideCorner2)).toEqual(round(offsetLine2.intersectsWith(line1).intersect));
+      // expect(round(tris)).toEqual([
+      //   new Point(0, 0),
+      //   new Point(0, 1),  // outside corner
+      //   new Point(0.1, 0),
+      //   new Point(0.1, 0),
+      //   new Point(0, 1),
+      //   new Point(0.1, 1),
+      //   //
+      //   new Point(0, 1),
+      //   new Point(1, 1),
+      //   new Point(0, 0.9),
+      //   new Point(0, 0.9),
+      //   new Point(1, 1),
+      //   new Point(1, 0.9),
+      // ]);
     });
   });
   describe('makePolyLine', () => {

@@ -6,7 +6,7 @@ const line = [
     // new Point(0, 0.5),
     // new Point(-0.5, 0),
     // new Point(0, 1),
-    new Point(0, 0), new Point(0, 1), new Point(1, 0)
+    new Point(0, 0), new Point(0, 1), new Point(-0.1, 0)
 ];
 
 diagram.addElements([
