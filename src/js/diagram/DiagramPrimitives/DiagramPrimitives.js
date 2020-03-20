@@ -678,7 +678,12 @@ export default class DiagramPrimitives {
       sides: 4,
       fill: false,
     };
-    const options = processOptions(defaultOptions, ...optionsIn);
+    const forceOptions = {
+      line: {
+        cornerStyle: 'auto',
+      },
+    };
+    const options = processOptions(defaultOptions, ...optionsIn, forceOptions);
     // const options = joinObjects(defaultOptions, optionsIn);
     const element = this.polygonNew(options);
     element.drawingObject.getPointCountForAngle = (angle: number) => {

@@ -210,10 +210,12 @@ function makeThickLineMid(
       joinLinesInTangent(outside, outsideNext, mid, midNext, inside, insideNext);
     } else if (minAngle < angle && angle < Math.PI) {
       joinLinesInPoint(inside, insideNext);
+      joinLinesInPoint(outside, outsideNext);
     // If the angle is greater than 180, then the 'inside' line segments are
     // properly on the inside.
     } else if (Math.PI < angle && angle < Math.PI * 2 - minAngle) {
       joinLinesInPoint(outside, outsideNext);
+      joinLinesInPoint(inside, insideNext);
     } else if (Math.PI * 2 - minAngle < angle && angle < Math.PI * 2) {
       joinLinesInTangent(inside, insideNext, mid, midNext, outside, outsideNext);
     }
