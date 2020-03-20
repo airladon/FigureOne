@@ -56,7 +56,7 @@ function circleCorner(p2in: Point, p1: Point, p3in: Point, sides: number): Array
   // in which case we still want a radius at the end, so make it small and
   // unnoticable
   if (_2a === 0) {
-    _2a = 0.00000001;
+    _2a = 0.00001;
   }
   const direction = _2a / Math.abs(_2a);
 
