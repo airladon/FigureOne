@@ -212,82 +212,6 @@ function makeLineSegments(
   return lineSegments;
 }
 
-function makeThickLineMid(
-  points: Array<Point>,
-  width: number = 0.01,
-  close: boolean = false,
-  // makeCorner: boolean = true,
-  // cornerStyle: 'autoPoint' | 'fill',
-  corner: 'auto' | 'fill' | 'none',
-  minAngleIn: ?number = Math.PI / 7,
-): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
-  const lineSegments = makeLineSegments(points, width / 2, close, corner);
-
-  // Join line segments based on the angle between them
-  const minAngle = minAngleIn == null ? 0 : minAngleIn;
-  const joinLineSegments = (current, next) => {
-    const [positive, mid, negative] = lineSegments[current];
-    const [positiveNext, midNext, negativeNext] = lineSegments[next];
-    const angle = threePointAngle(mid.p1, mid.p2, midNext.p2);
-    // If the angle is less than 180, then the 'negative' line segments are
-    // on the outside of the angle.
-    if (0 < angle && angle < minAngle) {
-      joinLinesInTangent(mid, midNext, negative, negativeNext);
-      joinLinesInTangent(mid, midNext, positive, positiveNext);
-    // If the angle is greater than the minAngle, then the line segments can
-    // be connected directly
-    } else if (minAngle < angle && angle < Math.PI * 2 - minAngle) {
-      joinLinesInPoint(positive, positiveNext);
-      joinLinesInPoint(negative, negativeNext);
-    // If the angle is greater than 180, then the 'positive' line segments are
-    // on the outside of the angle.
-    } else if (Math.PI * 2 - minAngle < angle && angle < Math.PI * 2) {
-      joinLinesInTangent(mid, midNext, positive, positiveNext);
-      joinLinesInTangent(mid, midNext, negative, negativeNext);
-      // joinLinesInPoint(negative, negativeNext);
-    }
-  };
-
-  // Create fill triangles between the positive & mid, and negative and mid lines
-  const cornerFills = [];
-  const createFill = (current, next) => {
-    const [positive, mid, negative] = lineSegments[current];
-    const [positiveNext, , negativeNext] = lineSegments[next];
-    cornerFills.push(negative.p2._dup());
-    cornerFills.push(mid.p2._dup());
-    cornerFills.push(negativeNext.p1._dup());
-    cornerFills.push(positive.p2._dup());
-    cornerFills.push(mid.p2._dup());
-    cornerFills.push(positiveNext.p1._dup());
-  };
-
-  // NB: this all assumes the GL primitive is TRIANGLES. Thus the order the
-  // triangles is drawn is not important, and so fills can happen in chunks.
-  if (corner !== 'none') {
-    for (let i = 0; i < lineSegments.length - 1; i += 1) {
-      if (corner === 'auto') {
-        joinLineSegments(i, i + 1);
-      } else {
-        createFill(i, i + 1);
-      }
-    }
-    if (close) {
-      if (corner === 'auto') {
-        joinLineSegments(lineSegments.length - 1, 0);
-      } else {
-        createFill(lineSegments.length - 1, 0);
-      }
-    }
-  }
-  const [tris, border, hole] = lineSegmentsToPoints(lineSegments, 0, 2);
-  if (close === false) {
-    return [[...tris, ...cornerFills], [[...border[0], ...hole[0].reverse()]], [[]]];
-  }
-  return [[...tris, ...cornerFills], border, hole];
-  // return [...lineSegmentsToPoints(lineSegments, 0, 2), ...cornerFills];
-}
-
-
 function getWidthIs(
   points: Array<Point>,
   close: boolean,
@@ -363,7 +287,7 @@ function makeThickLine(
       }
     // If the angle is greater than the minAngle, then the line segments can
     // be connected directly
-    } else if (minAngle <= angle && angle <= Math.PI) {
+    } else if (minAngle <= angle && angle < Math.PI) {
       if (widthIs === 'mid') {
         joinLinesInPoint(negative, negativeNext);
         joinLinesInPoint(positive, positiveNext);
@@ -371,6 +295,20 @@ function makeThickLine(
         joinLinesObtuseInside(mid, midNext, negative, negativeNext);
       } else if (widthIs === 'positive') {
         joinLinesInPoint(positive, positiveNext);
+      }
+    } else if (angle === Math.PI) {
+      if (widthIs === 'negative') {
+        if (widthIsIn === 'inside') {
+          joinLinesObtuseInside(mid, midNext, negative, negativeNext);
+        } else {
+          joinLinesInPoint(negative, negativeNext);
+        }
+      } else if (widthIs === 'positive') {
+        if (widthIsIn === 'inside') {
+          joinLinesObtuseInside(mid, midNext, positive, positiveNext);
+        } else {
+          joinLinesInPoint(positive, positiveNext);
+        }
       }
     // If the angle is greater than 180, then the positive side is on the
     // inside of the angle
@@ -403,13 +341,17 @@ function makeThickLine(
     const [positiveNext, midNext, negativeNext] = lineSegments[next];
     const angle = threePointAngle(mid.p1, mid.p2, midNext.p2);
     if (angle < Math.PI) {
-      cornerFills.push(positive.p2._dup());
-      cornerFills.push(mid.p2._dup());
-      cornerFills.push(positiveNext.p1._dup());
-    } else {
-      cornerFills.push(negative.p2._dup());
-      cornerFills.push(mid.p2._dup());
-      cornerFills.push(negativeNext.p1._dup());
+      if (widthIsIn !== 'inside') {
+        cornerFills.push(positive.p2._dup());
+        cornerFills.push(mid.p2._dup());
+        cornerFills.push(positiveNext.p1._dup());
+      }
+    } else if (angle > Math.PI) {
+      if (widthIsIn !== 'inside') {
+        cornerFills.push(negative.p2._dup());
+        cornerFills.push(mid.p2._dup());
+        cornerFills.push(negativeNext.p1._dup());
+      }
     }
   };
 
@@ -451,131 +393,131 @@ function makeThickLine(
   // return [...lineSegmentsToPoints(lineSegments, 0, 2), ...cornerFills];
 }
 
-function makeThickLineInsideOutside(
-  points: Array<Point>,
-  width: number = 0.01,
-  close: boolean = false,
-  corner: 'auto' | 'fill' | 'none',
-  minAngleIn: ?number = Math.PI / 7,
-  widthIs: 'positive' | 'negative',
-): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
-  const lineSegments = makeLineSegments(points, width, close, corner);
+// function makeThickLineInsideOutside(
+//   points: Array<Point>,
+//   width: number = 0.01,
+//   close: boolean = false,
+//   corner: 'auto' | 'fill' | 'none',
+//   minAngleIn: ?number = Math.PI / 7,
+//   widthIs: 'positive' | 'negative',
+// ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
+//   const lineSegments = makeLineSegments(points, width, close, corner);
 
-  const minAngle = minAngleIn == null ? 0 : minAngleIn;
-  const joinLineSegments = (current, next) => {
-    const [, mid, negative] = lineSegments[current];
-    const [, midNext, negativeNext] = lineSegments[next];
-    const angle = threePointAngle(mid.p1, mid.p2, midNext.p2);
-    // If angle is 0 to 180, then it is an inside angle on the negative side
-    if (0 < angle && angle < Math.PI / 2) {
-      let intercept = negative.intersectsWith(midNext);
-      if (intercept.intersect != null) {
-        negative.setP2(intercept.intersect);
-      }
-      intercept = negativeNext.intersectsWith(mid);
-      if (intercept.intersect != null) {
-        negativeNext.setP1(intercept.intersect);
-      }
-    } else if (Math.PI / 2 <= angle && angle <= Math.PI) {
-      let intercept = negative.intersectsWith(midNext);
-      if (intercept.intersect != null && intercept.intersect.isOnLine(midNext, 8)) {
-        negative.setP2(intercept.intersect);
-      }
-      intercept = negativeNext.intersectsWith(mid);
-      if (intercept.intersect != null && intercept.intersect.isOnLine(mid, 8)) {
-        negativeNext.setP1(intercept.intersect);
-      }
-    // otherwise its an outside angle on the negative side
-    } else if (corner === 'auto' && Math.PI < angle && angle < Math.PI * 2 - minAngle) {
-      joinLinesInPoint(negative, negativeNext);
-    } else if (corner === 'auto' && Math.PI * 2 - minAngle < angle && angle < Math.PI * 2) {
-      joinLinesInTangent(mid, midNext, mid, midNext, negative, negativeNext);
-    }
-  };
+//   const minAngle = minAngleIn == null ? 0 : minAngleIn;
+//   const joinLineSegments = (current, next) => {
+//     const [, mid, negative] = lineSegments[current];
+//     const [, midNext, negativeNext] = lineSegments[next];
+//     const angle = threePointAngle(mid.p1, mid.p2, midNext.p2);
+//     // If angle is 0 to 180, then it is an inside angle on the negative side
+//     if (0 < angle && angle < Math.PI / 2) {
+//       let intercept = negative.intersectsWith(midNext);
+//       if (intercept.intersect != null) {
+//         negative.setP2(intercept.intersect);
+//       }
+//       intercept = negativeNext.intersectsWith(mid);
+//       if (intercept.intersect != null) {
+//         negativeNext.setP1(intercept.intersect);
+//       }
+//     } else if (Math.PI / 2 <= angle && angle <= Math.PI) {
+//       let intercept = negative.intersectsWith(midNext);
+//       if (intercept.intersect != null && intercept.intersect.isOnLine(midNext, 8)) {
+//         negative.setP2(intercept.intersect);
+//       }
+//       intercept = negativeNext.intersectsWith(mid);
+//       if (intercept.intersect != null && intercept.intersect.isOnLine(mid, 8)) {
+//         negativeNext.setP1(intercept.intersect);
+//       }
+//     // otherwise its an outside angle on the negative side
+//     } else if (corner === 'auto' && Math.PI < angle && angle < Math.PI * 2 - minAngle) {
+//       joinLinesInPoint(negative, negativeNext);
+//     } else if (corner === 'auto' && Math.PI * 2 - minAngle < angle && angle < Math.PI * 2) {
+//       joinLinesInTangent(mid, midNext, mid, midNext, negative, negativeNext);
+//     }
+//   };
 
-  // Create fill triangles between the mid & mid, and negative and mid lines
-  const cornerFills = [];
-  const createFill = (current, next) => {
-    const [, mid, negative] = lineSegments[current];
-    const [, , negativeNext] = lineSegments[next];
-    cornerFills.push(negative.p2._dup());
-    cornerFills.push(mid.p2._dup());
-    cornerFills.push(negativeNext.p1._dup());
-  };
+//   // Create fill triangles between the mid & mid, and negative and mid lines
+//   const cornerFills = [];
+//   const createFill = (current, next) => {
+//     const [, mid, negative] = lineSegments[current];
+//     const [, , negativeNext] = lineSegments[next];
+//     cornerFills.push(negative.p2._dup());
+//     cornerFills.push(mid.p2._dup());
+//     cornerFills.push(negativeNext.p1._dup());
+//   };
 
-  if (corner !== 'none') {
-    for (let i = 0; i < lineSegments.length - 1; i += 1) {
-      joinLineSegments(i, i + 1);
-      if (corner === 'fill') {
-        createFill(i, i + 1);
-      }
-    }
-    if (close) {
-      joinLineSegments(lineSegments.length - 1, 0);
-      if (corner === 'fill') {
-        createFill(lineSegments.length - 1, 0);
-      }
-    }
-  }
-  const [tris, border, hole] = lineSegmentsToPoints(lineSegments, 1, 2);
-  if (close === false) {
-    return [[...tris, ...cornerFills], [[...border[0], ...hole[0].reverse()]], [[]]];
-  }
-  return [[...tris, ...cornerFills], border, hole];
-  // return [...lineSegmentsToPoints(lineSegments, 1, 2), ...cornerFills];
-}
+//   if (corner !== 'none') {
+//     for (let i = 0; i < lineSegments.length - 1; i += 1) {
+//       joinLineSegments(i, i + 1);
+//       if (corner === 'fill') {
+//         createFill(i, i + 1);
+//       }
+//     }
+//     if (close) {
+//       joinLineSegments(lineSegments.length - 1, 0);
+//       if (corner === 'fill') {
+//         createFill(lineSegments.length - 1, 0);
+//       }
+//     }
+//   }
+//   const [tris, border, hole] = lineSegmentsToPoints(lineSegments, 1, 2);
+//   if (close === false) {
+//     return [[...tris, ...cornerFills], [[...border[0], ...hole[0].reverse()]], [[]]];
+//   }
+//   return [[...tris, ...cornerFills], border, hole];
+//   // return [...lineSegmentsToPoints(lineSegments, 1, 2), ...cornerFills];
+// }
 
-function setPointOrder(
-  points: Array<Point>,
-  close: boolean,
-  widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
-) {
-  const reversePoints = () => {
-    const reversedCopy = [];
-    for (let i = points.length - 1; i >= 0; i -= 1) {
-      reversedCopy.push(points[i]._dup());
-    }
-    return reversedCopy;
-  };
-  if (widthIs === 'negative' || widthIs === 'mid') {
-    return points;
-  }
-  if (widthIs === 'positive') {
-    return reversePoints();
-  }
+// function setPointOrder(
+//   points: Array<Point>,
+//   close: boolean,
+//   widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
+// ) {
+//   const reversePoints = () => {
+//     const reversedCopy = [];
+//     for (let i = points.length - 1; i >= 0; i -= 1) {
+//       reversedCopy.push(points[i]._dup());
+//     }
+//     return reversedCopy;
+//   };
+//   if (widthIs === 'negative' || widthIs === 'mid') {
+//     return points;
+//   }
+//   if (widthIs === 'positive') {
+//     return reversePoints();
+//   }
 
-  let numInsideAngles = 0;
-  let totAngles = close ? points.length : points.length - 2;
-  const testAngle = (p2: Point, p1: Point, p3: Point) => {
-    const angle = threePointAngle(p2, p1, p3);
-    if (angle < Math.PI) {
-      numInsideAngles += 1;
-    }
-    if (angle === Math.PI) {
-      totAngles -= 1;
-    }
-  };
-  for (let i = 1; i < points.length - 1; i += 1) {
-    testAngle(points[i - 1], points[i], points[i + 1]);
-  }
-  if (close) {
-    testAngle(points[points.length - 1], points[0], points[1]);
-    testAngle(points[points.length - 2], points[points.length - 1], points[0]);
-  }
+//   let numInsideAngles = 0;
+//   let totAngles = close ? points.length : points.length - 2;
+//   const testAngle = (p2: Point, p1: Point, p3: Point) => {
+//     const angle = threePointAngle(p2, p1, p3);
+//     if (angle < Math.PI) {
+//       numInsideAngles += 1;
+//     }
+//     if (angle === Math.PI) {
+//       totAngles -= 1;
+//     }
+//   };
+//   for (let i = 1; i < points.length - 1; i += 1) {
+//     testAngle(points[i - 1], points[i], points[i + 1]);
+//   }
+//   if (close) {
+//     testAngle(points[points.length - 1], points[0], points[1]);
+//     testAngle(points[points.length - 2], points[points.length - 1], points[0]);
+//   }
 
-  if (widthIs === 'outside') {
-    if (numInsideAngles <= totAngles / 2) {
-      return points;
-    }
-    return reversePoints();
-  }
-  if (widthIs === 'inside') {
-    if (numInsideAngles <= totAngles / 2) {
-      return reversePoints();
-    }
-  }
-  return points;
-}
+//   if (widthIs === 'outside') {
+//     if (numInsideAngles <= totAngles / 2) {
+//       return points;
+//     }
+//     return reversePoints();
+//   }
+//   if (widthIs === 'inside') {
+//     if (numInsideAngles <= totAngles / 2) {
+//       return reversePoints();
+//     }
+//   }
+//   return points;
+// }
 
 // function makeThickLine(
 //   points: Array<Point>,
@@ -682,7 +624,7 @@ export {
   joinLinesInPoint,
   lineSegmentsToPoints,
   joinLinesInTangent,
-  makeThickLineMid,
+  // makeThickLineMid,
   makeThickLineInsideOutside,
   makePolyLine,
   makePolyLineCorners,
