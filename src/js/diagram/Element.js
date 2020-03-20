@@ -2052,10 +2052,15 @@ class DiagramElementPrimitive extends DiagramElement {
           pointCount = this.pointsToDraw;
         }
       }
+
       const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity];
-      pulseTransforms.forEach((t) => {
-        this.drawingObject.drawWithTransformMatrix(t.matrix(), colorToUse, canvasIndex, pointCount);
-      });
+      if (pointCount > 0) {
+        pulseTransforms.forEach((t) => {
+          this.drawingObject.drawWithTransformMatrix(
+            t.matrix(), colorToUse, canvasIndex, pointCount,
+          );
+        });
+      }
       if (this.unrenderNextDraw) {
         this.clearRender();
         this.unrenderNextDraw = false;

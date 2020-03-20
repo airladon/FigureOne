@@ -660,6 +660,37 @@ export default class DiagramPrimitives {
     return element;
   }
 
+  polygonSweep(...optionsIn: Array<{
+    radius?: number,
+    rotation?: number,
+    sides?: number,
+    offset?: TypeParsablePoint,
+    width?: number,
+    direction?: -1 | 1,
+    fill?: boolean,
+    color?: Array<number>,
+    texture?: OBJ_Texture,
+    position?: TypeParsablePoint,
+    transform?: Transform,
+    pulse?: number,
+  }>) {
+    const defaultOptions = {
+      sides: 4,
+      fill: false,
+    };
+    const options = processOptions(defaultOptions, ...optionsIn);
+    // const options = joinObjects(defaultOptions, optionsIn);
+    const element = this.polygonNew(options);
+    element.drawingObject.getPointCountForAngle = (angle: number) => {
+      const sidesToDraw = Math.floor(tools.round(angle) / tools.round(Math.PI * 2) * options.sides);
+      if (options.fill) {
+        return sidesToDraw + 2;
+      }
+      return sidesToDraw * 6;
+    };
+    return element;
+  }
+
   polygonNew(...optionsIn: Array<{
     radius?: number,
     rotation?: number,
