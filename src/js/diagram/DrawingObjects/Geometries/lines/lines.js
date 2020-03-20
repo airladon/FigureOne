@@ -42,8 +42,8 @@ function lineSegmentsToPoints(
     hole.push(lineSegment[insideIndex].p1._dup());
     hole.push(lineSegment[insideIndex].p2._dup());
     tris.push(inside.p1._dup());
-    tris.push(outside.p1._dup());
     tris.push(inside.p2._dup());
+    tris.push(outside.p1._dup());
     tris.push(outside.p1._dup());
     tris.push(inside.p2._dup());
     tris.push(outside.p2._dup());
@@ -146,6 +146,7 @@ function makeLineSegments(
   offset: number,
   close: boolean,
   cornerStyle: 'auto' | 'none' | 'fill',
+  widthIs: 'mid' | 'inside' | 'outside' | 'positive' | 'negative',
 ) {
   const mainLines = [];
   const makeLine = (p1, p2) => new Line(p1, p2);
@@ -185,7 +186,7 @@ function makeLineSegments(
     }
     let negativeLine;
     let positiveLine;
-    if (cornerStyle === 'auto') {
+    if (cornerStyle === 'auto' && widthIs !== 'mid') {
       negativeLine = current.offset('negative', minNegativeOffset);
       positiveLine = current.offset('positive', minPositiveOffset);
     } else {
@@ -265,7 +266,7 @@ function makeThickLine(
   if (widthIsIn === 'mid') {
     widthToUse = width / 2;
   }
-  const lineSegments = makeLineSegments(points, widthToUse, close, corner);
+  const lineSegments = makeLineSegments(points, widthToUse, close, corner, widthIsIn);
   const widthIs = getWidthIs(points, close, widthIsIn);
 
   // Join line segments based on the angle between them
@@ -285,9 +286,18 @@ function makeThickLine(
       } else if (widthIs === 'positive') {
         joinLinesInTangent(mid, midNext, positive, positiveNext);
       }
+    } else if (minAngle <= angle && angle <= Math.PI / 2) {
+      if (widthIs === 'mid') {
+        joinLinesInPoint(negative, negativeNext);
+        joinLinesInPoint(positive, positiveNext);
+      } else if (widthIs === 'negative') {
+        joinLinesAcuteInside(mid, midNext, negative, negativeNext);
+      } else if (widthIs === 'positive') {
+        joinLinesInPoint(positive, positiveNext);
+      }
     // If the angle is greater than the minAngle, then the line segments can
     // be connected directly
-    } else if (minAngle <= angle && angle < Math.PI) {
+    } else if (Math.PI / 2 <= angle && angle < Math.PI) {
       if (widthIs === 'mid') {
         joinLinesInPoint(negative, negativeNext);
         joinLinesInPoint(positive, positiveNext);
@@ -312,7 +322,7 @@ function makeThickLine(
       }
     // If the angle is greater than 180, then the positive side is on the
     // inside of the angle
-    } else if (Math.PI < angle && angle <= Math.PI * 2 - minAngle) {
+    } else if (Math.PI < angle && angle < Math.PI / 2 * 3) {
       if (widthIs === 'mid') {
         joinLinesInPoint(negative, negativeNext);
         joinLinesInPoint(positive, positiveNext);
@@ -320,6 +330,16 @@ function makeThickLine(
         joinLinesInPoint(negative, negativeNext);
       } else if (widthIs === 'positive') {
         joinLinesObtuseInside(mid, midNext, positive, positiveNext);
+      }
+    //
+    } else if (Math.PI / 2 * 3 <= angle && angle <= Math.PI * 2 - minAngle) {
+      if (widthIs === 'mid') {
+        joinLinesInPoint(negative, negativeNext);
+        joinLinesInPoint(positive, positiveNext);
+      } else if (widthIs === 'negative') {
+        joinLinesInPoint(negative, negativeNext);
+      } else if (widthIs === 'positive') {
+        joinLinesAcuteInside(mid, midNext, positive, positiveNext);
       }
     //
     } else if (Math.PI * 2 - minAngle < angle && angle < Math.PI * 2) {
@@ -330,6 +350,15 @@ function makeThickLine(
         joinLinesInTangent(mid, midNext, negative, negativeNext);
       } else if (widthIs === 'positive') {
         joinLinesAcuteInside(mid, midNext, positive, positiveNext);
+      }
+    } else if ((angle === Math.PI * 2 || angle === 0)) {
+      if (widthIs === 'mid') {
+        joinLinesInPoint(negative, negativeNext);
+        joinLinesInPoint(positive, positiveNext);
+      } else if (widthIs === 'negative') {
+        joinLinesInPoint(negative, negativeNext);
+      } else if (widthIs === 'positive') {
+        joinLinesInPoint(positive, positiveNext);
       }
     }
   };
@@ -625,7 +654,7 @@ export {
   lineSegmentsToPoints,
   joinLinesInTangent,
   // makeThickLineMid,
-  makeThickLineInsideOutside,
+  // makeThickLineInsideOutside,
   makePolyLine,
   makePolyLineCorners,
 };

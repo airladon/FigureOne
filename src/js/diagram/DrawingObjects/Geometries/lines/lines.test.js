@@ -7,6 +7,51 @@ import {
 } from './lines';
 
 describe('Tools Lines', () => {
+  describe('makePolyLine Corners', () => {
+    test('simple negative 90º', () => {
+      const [tris] = makePolyLine(
+        [new Point(0, 0), new Point(0, 1), new Point(1, 1)],
+        0.1, false, 'negative', 'auto',
+      );
+      expect(round(tris)).toEqual([
+        new Point(0, 0),
+        new Point(0, 1),
+        new Point(0.1, 0),
+        new Point(0.1, 0),
+        new Point(0, 1),
+        new Point(0.1, 1),
+        //
+        new Point(0, 1),
+        new Point(1, 1),
+        new Point(0, 0.9),
+        new Point(0, 0.9),
+        new Point(1, 1),
+        new Point(1, 0.9),
+      ]);
+    });
+    test.only('simple negative 45º', () => {
+      const [tris] = makePolyLine(
+        [new Point(0, 0), new Point(0, 1), new Point(1, 0)],
+        0.1, false, 'negative', 'auto',
+      );
+      console.log(tris)
+      expect(round(tris)).toEqual([
+        new Point(0, 0),
+        new Point(0, 1),
+        new Point(0.1, 0),
+        new Point(0.1, 0),
+        new Point(0, 1),
+        new Point(0.1, 1),
+        //
+        new Point(0, 1),
+        new Point(1, 1),
+        new Point(0, 0.9),
+        new Point(0, 0.9),
+        new Point(1, 1),
+        new Point(1, 0.9),
+      ]);
+    });
+  });
   describe('makePolyLine', () => {
     let points;
     beforeEach(() => {
@@ -122,9 +167,9 @@ describe('Tools Lines', () => {
     describe('Positive', () => {
       test('Unclosed', () => {
         const [out] = makePolyLine(points, 0.1, false, 'positive', 'none');
-        const line3 = getBoundingRect(out.slice(0, 6));
+        const line1 = getBoundingRect(out.slice(0, 6));
         const line2 = getBoundingRect(out.slice(6, 12));
-        const line1 = getBoundingRect(out.slice(12));
+        const line3 = getBoundingRect(out.slice(12));
         expect(round(line1.left)).toBe(0);
         expect(round(line1.width)).toBe(1);
         expect(round(line1.bottom)).toBe(0);
@@ -142,9 +187,9 @@ describe('Tools Lines', () => {
       });
       test('closed', () => {
         const [out] = makePolyLine(points, 0.1, true, 'positive', 'none');
-        const line3 = getBoundingRect(out.slice(0, 6));
+        const line1 = getBoundingRect(out.slice(0, 6));
         const line2 = getBoundingRect(out.slice(6, 12));
-        const line1 = getBoundingRect(out.slice(12, 18));
+        const line3 = getBoundingRect(out.slice(12, 18));
         const line4 = getBoundingRect(out.slice(18, 24));
         expect(round(line1.left)).toBe(0);
         expect(round(line1.width)).toBe(1);
