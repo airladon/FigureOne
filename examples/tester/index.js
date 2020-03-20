@@ -2,10 +2,11 @@ const diagram = new Fig.Diagram();
 const { Point } = Fig;
 
 const line = [
-    new Point(0.5, 0),
-    new Point(0, 0.5),
-    new Point(-0.5, 0),
+    // new Point(0.5, 0),
+    // new Point(0, 0.5),
+    // new Point(-0.5, 0),
     // new Point(0, 1),
+    new Point(0, 0), new Point(0, 1), new Point(1, 0)
 ];
 
 diagram.addElements([
@@ -25,14 +26,14 @@ diagram.addElements([
     options: {
       points: line,
       width: 0.04,
-      close: true,
+      // close: true,
       // fill: false,
       // cornersOnly: true,
       // cornerLength: 0.1,
       // forceCornerLength: true,
       // asdfasdf: false,
-      widthIs: 'outside',
-      // cornerStyle: 'radius',
+      widthIs: 'negative',
+      cornerStyle: 'auto',
       // cornerSize: 0.1,
       // cornersOnly: true,
 
@@ -49,6 +50,16 @@ diagram.addElements([
       color: [0.5, 0.5, 0.5, 0.5],
     }
   },
+  {
+    name: 'x3',
+    method: 'line',
+    options: {
+      p1: [0.5, -1],
+      p2: [0.5, 1],
+      width: 0.005,
+      color: [0.5, 0.5, 0.5, 0.5],
+    }
+  },
 ]);
 
 const pad = diagram.getElement('pad');
@@ -60,7 +71,7 @@ pad.setTransformCallback = () => {
   diagram.animateNextFrame();
 }
 diagram.initialize();
-pad.setPosition(0, 0.5);
+// pad.setPosition(0, 0.5);
 
 // diagram.addElements([
 //   {
