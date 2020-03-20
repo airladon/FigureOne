@@ -76,9 +76,9 @@ const line = [
 diagram.addElements([
   {
     name: 'p1',
-    method: 'shapes.polygonNew',
+    method: 'shapes.polygonSweep',
     options: {
-      sides: 6,
+      sides: 4,
       width: 0.05,
       // line: {
       //   widthIs: 'mid',
@@ -88,10 +88,10 @@ diagram.addElements([
       //   // cornerStyle: 'radius',
       // },
       // angle: Math.PI / 3,
-      sidesToDraw: 4,
-      direction: -1,
+      // sidesToDraw: 4,
+      // direction: -1,
       radius: 0.9,
-      fill: true,
+      // fill: true,
       position: [0, 0],
       // textureLocation: 'example.png',
     },
@@ -100,7 +100,7 @@ diagram.addElements([
     name: 'p',
     method: 'shapes.polygonNew',
     options: {
-      sides: 6,
+      sides: 4,
       width: 0.005,
       radius: 0.9,
       // fill: true,
@@ -110,4 +110,5 @@ diagram.addElements([
     },
   },
 ]);
+diagram.getElement('p1').angleToDraw = Math.PI;
 diagram.initialize();
