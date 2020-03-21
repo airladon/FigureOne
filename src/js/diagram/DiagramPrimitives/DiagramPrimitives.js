@@ -355,28 +355,27 @@ export type OBJ_LineStyle = {
  * @property {number} [sides] (`4`)
  * @property {number} [radius] (`1`)
  * @property {number} [width] line width - line will be drawn on inside of radius (`0.01`)
- * @property {number} [rotation] (`0`)
- * @property {boolean} [clockwise] (`false`)
+ * @property {number} [rotation] shape rotation during vertex definition
+ * (different to a rotation step in a trasform) (`0`)
+ * @property {TypeParsablePoint} [offset] shape center offset from origin
+ * during vertex definition (different to a translation step in a transform)
+ * (`[0, 0]`)
  * @property {number} [sidesToDraw] number of sides to draw (all sides)
  * @property {number} [angleToDraw] same as `sidesToDraw` but using angle for
- * the definition (2π)
- * @property {Array<number>} [color] (`[1, 0, 0, 1`])
- * @property {boolean} [fill] (`false`)
- * @property {TypeParsablePoint} [center] vertex space location of polygon
+ * the definition (`2π`)
+ * @property {-1 | 1} [direction] direction to draw polygon where 1 is
+ * counter clockwise and -1 is clockwise (`1`)
  * center. This is different to position or transform as these translate the
  * vertices on each draw. (`[0, 0]`)
+ * @property {OBJ_LineStyle} [line] line style options
+ * @property {boolean} [fill] (`false`)
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('polygon').standard()`)
- * @property {string} [textureLocation] location of the texture file
- * @property {Rect} [textureCoords] normalized coordinates of the texture
- * within the file (`Rect(0, 0, 1, 1)`)
- * @property {Function} [onLoad] callback to exectute after textures have loaded
- * (`[0, 0]`)
- * @property {boolean} [trianglePrimitives] `true` to use `TRIANGLES`
- * instead of `TRIANGLE_STRIP` as GL primitive ('false`)
- * @property {boolean} [linePrimitives] `true` to use `LINES` instead of
- * `TRIANGLE_STRIP` as GL primitive - this will disable width (`false`)
- * used with filled polygons
+ * @property {Array<number>} [color] (`[1, 0, 0, 1`])
+ * @property {OBJ_Texture} [texture] Override color with a texture
+//  * @property {boolean} [linePrimitives] `true` to use `LINES` instead of
+//  * `TRIANGLE_STRIP` as GL primitive - this will disable width (`false`)
+//  * used with filled polygons
  * @property {number} [pulse] set the default pulse scale
  * @example
  * // Simple filled polygon
@@ -412,24 +411,24 @@ export type OBJ_Polygon = {
   radius?: number,
   width?: number,
   rotation?: number,
-  clockwise?: boolean,
+  direction?: -1 | 1,
+  line?: OBJ_LineStyle,
+  // clockwise?: boolean,
   sidesToDraw?: number,
+  angleToDraw?: number,
   color?: Array<number>,
   fill?: boolean,
   transform?: Transform,
   position?: TypeParsablePoint,
-  textureLocation?: string,
-  textureCoords?: Rect,
+  texture?: OBJ_Texture,
+  // textureLocation?: string,
+  // textureCoords?: Rect,
   onLoad?: Function,
   pulse?: number;
   trianglePrimitives?: boolean,
   linePrimitives?: boolean,
-  center?: TypeParsablePoint,
+  offset?: TypeParsablePoint,
 };
-//     angleToDraw?: number,
-//     offset?: TypeParsablePoint,
-//     direction?: -1 | 1,
-//     // angle?: number,
 //     line?: {
 //       widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
 //       cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',
@@ -441,12 +440,6 @@ export type OBJ_Polygon = {
 //       minAutoCornerAngle?: number,
 //       dash?: Array<number>,
 //     },
-//     fill?: boolean,
-//     color?: Array<number>,
-//     texture?: OBJ_Texture,
-//     position?: TypeParsablePoint,
-//     transform?: Transform,
-//     pulse?: number,
 
 export type TypeTextOptions = {
   text?: string;
@@ -743,6 +736,7 @@ export default class DiagramPrimitives {
       dash?: Array<number>,
     },
     fill?: boolean,
+    linePrimitives?: boolean,
     color?: Array<number>,
     texture?: OBJ_Texture,
     position?: TypeParsablePoint,
