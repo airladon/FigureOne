@@ -2051,6 +2051,8 @@ class DiagramElementPrimitive extends DiagramElement {
         if (this.pointsToDraw !== -1) {
           pointCount = this.pointsToDraw;
         }
+      } else {
+        pointCount = 1;
       }
 
       const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity];
