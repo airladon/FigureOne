@@ -426,13 +426,8 @@ export type OBJ_Polygon = {
   linePrimitives?: boolean,
   center?: TypeParsablePoint,
 };
-// radius?: number,
-//     rotation?: number,
-//     sides?: number,
-//     sidesToDraw?: number,
 //     angleToDraw?: number,
 //     offset?: TypeParsablePoint,
-//     width?: number,
 //     direction?: -1 | 1,
 //     // angle?: number,
 //     line?: {
@@ -823,6 +818,7 @@ export default class DiagramPrimitives {
     const defaultOptions = {
       sides: 4,
       fill: false,
+      transform: new Transform('polygonSweep').standard(),
     };
     const forceOptions = {
       line: {
