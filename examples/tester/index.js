@@ -26,7 +26,7 @@ diagram.addElements([
     method: 'shapes.polyline',
     options: {
       points: line,
-      width: 0.04,
+      width: 0.08,
       close: true,
       // fill: false,
       // cornersOnly: true,
@@ -36,8 +36,8 @@ diagram.addElements([
       widthIs: 'mid',
       // cornerStyle: 'radius',
       cornerSize: 0.1,
-      cornerSides: 10,
-      // linePrimitives: true,
+      cornerSides: 4,
+      linePrimitives: true,
       lineNum: 2,
       // cornersOnly: true,
 
