@@ -459,15 +459,25 @@ function makeThickLine(
     const angle = threePointAngle(mid.p1, mid.p2, midNext.p2);
     if (angle < Math.PI) {
       if (widthIsIn !== 'inside') {
-        cornerFills.push(positive.p2._dup());
-        cornerFills.push(mid.p2._dup());
-        cornerFills.push(positiveNext.p1._dup());
+        if (linePrimitives) {
+          cornerFills.push(positive.p2._dup());
+          cornerFills.push(positiveNext.p1._dup());
+        } else {
+          cornerFills.push(positive.p2._dup());
+          cornerFills.push(mid.p2._dup());
+          cornerFills.push(positiveNext.p1._dup());
+        }
       }
     } else if (angle > Math.PI) {
       if (widthIsIn !== 'inside') {
-        cornerFills.push(negative.p2._dup());
-        cornerFills.push(mid.p2._dup());
-        cornerFills.push(negativeNext.p1._dup());
+        if (linePrimitives) {
+          cornerFills.push(negative.p2._dup());
+          cornerFills.push(negativeNext.p1._dup());
+        } else {
+          cornerFills.push(negative.p2._dup());
+          cornerFills.push(mid.p2._dup());
+          cornerFills.push(negativeNext.p1._dup());
+        }
       }
     }
   };
