@@ -654,6 +654,9 @@ export default class DiagramPrimitives {
     };
     const options = processOptions(defaultOptions, ...optionsIn);
     parsePoints(options, ['points']);
+    if (options.linePrimitives === false) {
+      options.lineNum = 2;
+    }
 
     let getTris;
     if (options.cornersOnly) {
