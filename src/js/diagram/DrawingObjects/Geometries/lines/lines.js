@@ -28,49 +28,28 @@ import {
 //
 function lineSegmentsToPoints(
   lineSegments: Array<[Line, Line, Line]>,
-  positiveIndex: number,
-  negativeIndex: number,
-  width: number,
+  // positiveIndex: number,
+  // negativeIndex: number,
+  // width: number,
+  // close: boolean,
   linePrimitives: boolean,
-  lineNum: number,
-  fixTo: 'mid' | 'negative' | 'positive',
+  // lineNum: number,
+  // fixTo: 'mid' | 'negative' | 'positive',
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   const tris = [];
   const border = [];
-  const hole = [];
+  // const hole = [];
   lineSegments.forEach((lineSegment) => {
-    const positive = lineSegment[positiveIndex];
-    const negative = lineSegment[negativeIndex];
-    border.push(lineSegment[negativeIndex].p1._dup());
-    border.push(lineSegment[negativeIndex].p2._dup());
-    hole.push(lineSegment[positiveIndex].p1._dup());
-    hole.push(lineSegment[positiveIndex].p2._dup());
+    // border.push(lineSegment[negativeIndex].p1._dup());
+    // border.push(lineSegment[negativeIndex].p2._dup());
+    // hole.push(lineSegment[positiveIndex].p1._dup());
+    // hole.push(lineSegment[positiveIndex].p2._dup());
+    const negative = lineSegment[0];
+    const positive = lineSegment.slice(-1)[0];
     if (linePrimitives) {
-      const step = width / (lineNum - 1);
-      for (let i = 0; i < lineNum; i += 1) {
-        if (i === 0 && lineNum > 1) {
-          tris.push(negative.p1._dup());
-          tris.push(negative.p2._dup());
-        } else if (i === 0 && lineNum === 1) {
-          if (fixTo === 'negative') {
-            tris.push(negative.p1._dup());
-            tris.push(negative.p2._dup());
-          } else if (fixTo === 'positive') {
-            tris.push(positive.p1._dup());
-            tris.push(positive.p2._dup());
-          } else {
-            const offset = negative.offset('positive', width / 2);
-            tris.push(offset.p1._dup());
-            tris.push(offset.p2._dup());
-          }
-        } else if (i === lineNum - 1) {
-          tris.push(positive.p1._dup());
-          tris.push(positive.p2._dup());
-        } else {
-          const offset = negative.offset('positive', step * i);
-          tris.push(offset.p1._dup());
-          tris.push(offset.p2._dup());
-        }
+      for (let l = 0; l < lineSegment.length; l += 1) {
+        tris.push(lineSegment[l].p1._dup());
+        tris.push(lineSegment[l].p2._dup());
       }
     } else {
       tris.push(positive.p1._dup());
@@ -80,8 +59,14 @@ function lineSegmentsToPoints(
       tris.push(positive.p2._dup());
       tris.push(negative.p2._dup());
     }
+    border.push([
+      negative.p1._dup(),
+      negative.p2._dup(),
+      positive.p2._dup(),
+      positive.p1._dup(),
+    ]);
   });
-  return [tris, [border], [hole]];
+  return [tris, border, [[]]];
 }
 
 // Extend two lines to their intersection point
@@ -181,22 +166,24 @@ function joinLinesObtuseInside(
 
 function makeLineSegments(
   points: Array<Point>,
-  offset: number,
+  width: number,
   close: boolean,
   cornerStyle: 'auto' | 'none' | 'fill',
-  widthIs: 'mid' | 'inside' | 'outside' | 'positive' | 'negative',
+  widthIs: 'mid' | 'positive' | 'negative',
+  numLines: number = 2,
 ) {
-  const mainLines = [];
+  const idealLines = [];
   const makeLine = (p1, p2) => new Line(p1, p2);
   for (let i = 0; i < points.length - 1; i += 1) {
-    mainLines.push(makeLine(points[i], points[i + 1]));
+    idealLines.push(makeLine(points[i], points[i + 1]));
   }
   if (close) {
-    mainLines.push(makeLine(points[points.length - 1], points[0]));
+    idealLines.push(makeLine(points[points.length - 1], points[0]));
   }
 
+  // lineSegments should be more negative to more positive
   const lineSegments = [];
-  const makeOffsets = (prev, current, next) => {
+  const makeOffset = (prev, current, next, offset: number, index: number) => {
     let minNegativeOffset = offset;
     let minPositiveOffset = offset;
     if (prev != null) {
@@ -226,33 +213,63 @@ function makeLineSegments(
         minPositiveOffset = Math.min(minPositiveOffset, minOffset);
       }
     }
-    let negativeLine;
-    let positiveLine;
-    if (cornerStyle === 'auto' && widthIs !== 'mid') {
-      negativeLine = current.offset('negative', minNegativeOffset);
-      positiveLine = current.offset('positive', minPositiveOffset);
-    } else {
-      negativeLine = current.offset('negative', offset);
-      positiveLine = current.offset('positive', offset);
+    // let negativeLine;
+    // let positiveLine;
+    let offsetLine;
+    if (widthIs === 'negative') {
+      if (cornerStyle === 'auto') {
+        offsetLine = current.offset('negative', minNegativeOffset);
+      } else {
+        offsetLine = current.offset('negative', offset);
+      }
+    } else if (widthIs === 'positive') {
+      if (cornerStyle === 'auto') {
+        offsetLine = current.offset('positive', minPositiveOffset);
+      } else {
+        offsetLine = current.offset('positive', offset);
+      }
+    } else if (widthIs === 'mid') {
+      offsetLine = current.offset('positive', offset);
     }
-    lineSegments.push([positiveLine, current, negativeLine]);
+    // if (cornerStyle === 'auto' && widthIs !== 'mid') {
+    //   negativeLine = current.offset('negative', minNegativeOffset);
+    //   positiveLine = current.offset('positive', minPositiveOffset);
+    // } else {
+    //   negativeLine = current.offset('negative', offset);
+    //   positiveLine = current.offset('positive', offset);
+    // }
+    lineSegments[index].push(offsetLine);
   };
 
-  for (let i = 0; i < mainLines.length; i += 1) {
-    let prev = i > 0 ? mainLines[i - 1] : null;
-    const current = mainLines[i];
-    let next = i < mainLines.length - 1 ? mainLines[i + 1] : null;
+  const step = width / (numLines - 1);
+  for (let i = 0; i < idealLines.length; i += 1) {
+    let prev = i > 0 ? idealLines[i - 1] : null;
+    const current = idealLines[i];
+    let next = i < idealLines.length - 1 ? idealLines[i + 1] : null;
     if (close && i === 0) {
-      prev = mainLines[mainLines.length - 1];
+      prev = idealLines[idealLines.length - 1];
     }
-    if (close && i === mainLines.length - 1) {
+    if (close && i === idealLines.length - 1) {
       // eslint-disable-next-line prefer-destructuring
-      next = mainLines[0];
+      next = idealLines[0];
     }
-    makeOffsets(prev, current, next);
+    lineSegments.push([]);
+    if (widthIs === 'negative' || widthIs === 'positive') {
+      lineSegments[i].push(current);
+    } else {
+      const offsetLine = current.offset('negative', width);
+      lineSegments[i].push(offsetLine);
+    }
+    for (let l = 1; l < numLines; l += 1) {
+      makeOffset(prev, current, next, l * step, i);
+    }
+    if (widthIs === 'negative') {
+      lineSegments[i].reverse();
+    }
+    // makeOffsets(prev, current, next, width);
   }
 
-  return lineSegments;
+  return [idealLines, lineSegments];
 }
 
 function getWidthIs(
@@ -304,114 +321,123 @@ function makeThickLine(
   corner: 'auto' | 'fill' | 'none',
   minAngleIn: ?number = Math.PI / 7,
   linePrimitives: boolean = false,
-  lineNum: number,
+  lineNum: number = 1,
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   let widthToUse = width;
   if (widthIsIn === 'mid') {
     widthToUse = width / 2;
   }
-  const lineSegments = makeLineSegments(points, widthToUse, close, corner, widthIsIn);
   const widthIs = getWidthIs(points, close, widthIsIn);
+  const [idealLines, lineSegments] = makeLineSegments(points, widthToUse, close, corner, widthIs, lineNum);
 
   // Join line segments based on the angle between them
   const minAngle = minAngleIn == null ? 0 : minAngleIn;
-  const joinLineSegments = (current, next) => {
-    const [positive, mid, negative] = lineSegments[current];
-    const [positiveNext, midNext, negativeNext] = lineSegments[next];
+  const joinLineSegments = (currentIndex: number, nextIndex: number, lineIndex: number) => {
+    const mid = idealLines[currentIndex];
+    const midNext = idealLines[nextIndex];
+    const lineSegment = lineSegments[currentIndex][lineIndex];
+    const lineSegmentNext = lineSegments[nextIndex][lineIndex];
+    // const 
+    // const [positive, mid, negative] = lineSegments[current];
+    // const [positiveNext, midNext, negativeNext] = lineSegments[next];
     const angle = threePointAngle(mid.p1, mid.p2, midNext.p2);
     // If the angle is less than 180, then the 'negative' line segments are
     // on the outside of the angle.
     if (0 < angle && angle < minAngle) {
       if (widthIs === 'mid') {
-        joinLinesInTangent(mid, midNext, negative, negativeNext);
-        joinLinesInTangent(mid, midNext, positive, positiveNext);
+        joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext);
+        // joinLinesInTangent(mid, midNext, positive, positiveNext);
       } else if (widthIs === 'negative') {
-        joinLinesAcuteInside(mid, midNext, negative, negativeNext);
+        joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
       } else if (widthIs === 'positive') {
-        joinLinesInTangent(mid, midNext, positive, positiveNext);
+        joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext);
       }
     } else if (minAngle <= angle && angle <= Math.PI / 2) {
       if (widthIs === 'mid') {
-        joinLinesInPoint(negative, negativeNext);
-        joinLinesInPoint(positive, positiveNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext);
+        // joinLinesInPoint(lineSegment, lineSegmentNext);
       } else if (widthIs === 'negative') {
-        joinLinesAcuteInside(mid, midNext, negative, negativeNext);
+        joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
       } else if (widthIs === 'positive') {
-        joinLinesInPoint(positive, positiveNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext);
       }
     // If the angle is greater than the minAngle, then the line segments can
     // be connected directly
     } else if (Math.PI / 2 <= angle && angle < Math.PI) {
       if (widthIs === 'mid') {
-        joinLinesInPoint(negative, negativeNext);
-        joinLinesInPoint(positive, positiveNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext);
+        // joinLinesInPoint(lineSegment, lineSegmentNext);
       } else if (widthIs === 'negative') {
-        joinLinesObtuseInside(mid, midNext, negative, negativeNext);
+        joinLinesObtuseInside(mid, midNext, lineSegment, lineSegmentNext);
       } else if (widthIs === 'positive') {
-        joinLinesInPoint(positive, positiveNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext);
       }
     } else if (angle === Math.PI) {
       if (widthIs === 'negative') {
         if (widthIsIn === 'inside') {
-          joinLinesObtuseInside(mid, midNext, negative, negativeNext);
+          joinLinesObtuseInside(mid, midNext, lineSegment, lineSegmentNext);
         } else {
-          joinLinesInPoint(negative, negativeNext);
+          joinLinesInPoint(lineSegment, lineSegmentNext);
         }
       } else if (widthIs === 'positive') {
         if (widthIsIn === 'inside') {
-          joinLinesObtuseInside(mid, midNext, positive, positiveNext);
+          joinLinesObtuseInside(mid, midNext, lineSegment, lineSegmentNext);
         } else {
-          joinLinesInPoint(positive, positiveNext);
+          joinLinesInPoint(lineSegment, lineSegmentNext);
         }
       }
     // If the angle is greater than 180, then the positive side is on the
     // inside of the angle
     } else if (Math.PI < angle && angle < Math.PI / 2 * 3) {
       if (widthIs === 'mid') {
-        joinLinesInPoint(negative, negativeNext);
-        joinLinesInPoint(positive, positiveNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext);
       } else if (widthIs === 'negative') {
-        joinLinesInPoint(negative, negativeNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext);
       } else if (widthIs === 'positive') {
-        joinLinesObtuseInside(mid, midNext, positive, positiveNext);
+        joinLinesObtuseInside(mid, midNext, lineSegment, lineSegmentNext);
       }
     //
     } else if (Math.PI / 2 * 3 <= angle && angle <= Math.PI * 2 - minAngle) {
       if (widthIs === 'mid') {
-        joinLinesInPoint(negative, negativeNext);
-        joinLinesInPoint(positive, positiveNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext);
+        // joinLinesInPoint(lineSegment, lineSegmentNext);
       } else if (widthIs === 'negative') {
-        joinLinesInPoint(negative, negativeNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext);
       } else if (widthIs === 'positive') {
-        joinLinesAcuteInside(mid, midNext, positive, positiveNext);
+        joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
       }
     //
     } else if (Math.PI * 2 - minAngle < angle && angle < Math.PI * 2) {
       if (widthIs === 'mid') {
-        joinLinesInTangent(mid, midNext, negative, negativeNext);
-        joinLinesInTangent(mid, midNext, positive, positiveNext);
+        joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext);
+        // joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext);
       } else if (widthIs === 'negative') {
-        joinLinesInTangent(mid, midNext, negative, negativeNext);
+        joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext);
       } else if (widthIs === 'positive') {
-        joinLinesAcuteInside(mid, midNext, positive, positiveNext);
+        joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
       }
     } else if ((angle === Math.PI * 2 || angle === 0)) {
       if (widthIs === 'mid') {
-        joinLinesInPoint(negative, negativeNext);
-        joinLinesInPoint(positive, positiveNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext);
+        // joinLinesInPoint(lineSegment, lineSegmentNext);
       } else if (widthIs === 'negative') {
-        joinLinesInPoint(negative, negativeNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext);
       } else if (widthIs === 'positive') {
-        joinLinesInPoint(positive, positiveNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext);
       }
     }
   };
 
   // Create fill triangles between the positive & mid, and negative and mid lines
   const cornerFills = [];
-  const createFill = (current, next) => {
-    const [positive, mid, negative] = lineSegments[current];
-    const [positiveNext, midNext, negativeNext] = lineSegments[next];
+  const createFill = (currentIndex, nextIndex, lineIndex) => {
+    const mid = idealLines[currentIndex];
+    const midNext = idealLines[nextIndex];
+    const positive = lineSegments[currentIndex].slice(-1)[0];
+    const positiveNext = lineSegments[nextIndex].slice(-1)[0];
+    const negative = lineSegments[currentIndex][0];
+    const negativeNext = lineSegments[nextIndex][0];
     const angle = threePointAngle(mid.p1, mid.p2, midNext.p2);
     if (angle < Math.PI) {
       if (widthIsIn !== 'inside') {
@@ -431,18 +457,20 @@ function makeThickLine(
   // NB: this all assumes the GL primitive is TRIANGLES. Thus the order the
   // triangles is drawn is not important, and so fills can happen in chunks.
   if (corner !== 'none') {
-    for (let i = 0; i < lineSegments.length - 1; i += 1) {
-      if (corner === 'auto') {
-        joinLineSegments(i, i + 1);
-      } else {
-        createFill(i, i + 1);
+    for (let l = 0; l < lineNum; l += 1) {
+      for (let i = 0; i < lineSegments.length - 1; i += 1) {
+        if (corner === 'auto') {
+          joinLineSegments(i, i + 1, l);
+        } else {
+          createFill(i, i + 1, l);
+        }
       }
-    }
-    if (close) {
-      if (corner === 'auto') {
-        joinLineSegments(lineSegments.length - 1, 0);
-      } else {
-        createFill(lineSegments.length - 1, 0);
+      if (close) {
+        if (corner === 'auto') {
+          joinLineSegments(lineSegments.length - 1, 0, l);
+        } else {
+          createFill(lineSegments.length - 1, 0, l);
+        }
       }
     }
   }
@@ -456,8 +484,7 @@ function makeThickLine(
     negativeSegmentIndex = 1;
   }
   const [tris, border, hole] = lineSegmentsToPoints(
-    lineSegments, positiveSegmentIndex, negativeSegmentIndex,
-    width, linePrimitives, lineNum, widthIs,
+    lineSegments, linePrimitives,
   );
   // const [tris, border, hole] = lineSegmentsToPoints(lineSegments, 0, 2);
   if (close === false) {
