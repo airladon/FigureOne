@@ -3,6 +3,7 @@ const { Point } = Fig;
 
 const line = [
     new Point(0.5, 0),
+    // new Point(0, 0.5),
     new Point(0, 0.5),
     new Point(-0.5, 0),
     // new Point(0, 1),
@@ -25,8 +26,8 @@ diagram.addElements([
     method: 'shapes.polyline',
     options: {
       points: line,
-      width: 0.08,
-      // close: true,
+      width: 0.04,
+      close: true,
       // fill: false,
       // cornersOnly: true,
       // cornerLength: 0.1,
@@ -36,8 +37,8 @@ diagram.addElements([
       // cornerStyle: 'radius',
       cornerSize: 0.1,
       cornerSides: 10,
-      linePrimitives: true,
-      lineNum: 5,
+      // linePrimitives: true,
+      lineNum: 2,
       // cornersOnly: true,
 
       // dash: [0.1, 0.03],
@@ -74,7 +75,7 @@ pad.setTransformCallback = () => {
   diagram.animateNextFrame();
 }
 diagram.initialize();
-pad.setPosition(0, 0.5);
+// pad.setPosition(0.1, 0);
 
 // diagram.addElements([
 //   {
