@@ -170,6 +170,7 @@ function makeLineSegments(
   close: boolean,
   cornerStyle: 'auto' | 'none' | 'fill',
   widthIs: 'mid' | 'positive' | 'negative',
+  isInside: boolean,
   numLines: number = 2,
 ): [Array<Line>, Array<Array<Line>>] {
   const idealLines = [];
@@ -180,14 +181,14 @@ function makeLineSegments(
   if (close) {
     idealLines.push(makeLine(points[points.length - 1], points[0]));
   }
-
   // lineSegments should be more negative to more positive
   const lineSegments: Array<Array<Line>> = [];
   const makeOffset = (prev, current, next, offset: number, index: number) => {
     let minNegativeOffset = offset;
     let minPositiveOffset = offset;
+    let prevAngle = Math.PI;
     if (prev != null) {
-      const prevAngle = threePointAngle(prev.p1, current.p1, current.p2);
+      prevAngle = threePointAngle(prev.p1, current.p1, current.p2);
       const minPrevAngle = threePointAngleMin(prev.p1, current.p1, current.p2);
       const minPrevOffset = current.distanceToPoint(prev.p1);
       const minOffset = Math.min(
@@ -200,8 +201,9 @@ function makeLineSegments(
         minPositiveOffset = Math.min(minPositiveOffset, minOffset);
       }
     }
+    let nextAngle = Math.PI;
     if (next != null) {
-      const nextAngle = threePointAngle(current.p1, current.p2, next.p2);
+      nextAngle = threePointAngle(current.p1, current.p2, next.p2);
       const minNextAngle = threePointAngleMin(current.p1, current.p2, next.p2);
       const minNextOffset = current.distanceToPoint(next.p2);
       const minOffset = Math.min(
@@ -216,14 +218,17 @@ function makeLineSegments(
     // let negativeLine;
     // let positiveLine;
     let offsetLine;
+    // console.log(widthIs)
+    // console.log(prevAngle, nextAngle)
     if (widthIs === 'negative') {
-      if (cornerStyle === 'auto') {
+      if (cornerStyle === 'auto' && (isInside || prevAngle < Math.PI || nextAngle < Math.PI)) {
         offsetLine = current.offset('negative', minNegativeOffset);
       } else {
         offsetLine = current.offset('negative', offset);
       }
     } else if (widthIs === 'positive') {
-      if (cornerStyle === 'auto') {
+      if (cornerStyle === 'auto' && (isInside || prevAngle > Math.PI || nextAngle > Math.PI)) {
+        // console.log('min')
         offsetLine = current.offset('positive', minPositiveOffset);
       } else {
         offsetLine = current.offset('positive', offset);
@@ -256,7 +261,7 @@ function makeLineSegments(
     }
     lineSegments.push([]);
     if (widthIs === 'negative' || widthIs === 'positive') {
-      lineSegments[i].push(current);
+      lineSegments[i].push(current._dup());
     } else {
       const offsetLine = current.offset('negative', width / 2);
       lineSegments[i].push(offsetLine);
@@ -273,7 +278,6 @@ function makeLineSegments(
     }
     // makeOffsets(prev, current, next, width);
   }
-
   return [idealLines, lineSegments];
 }
 
@@ -334,7 +338,7 @@ function makeThickLine(
   // }
   const widthIs = getWidthIs(points, close, widthIsIn);
   const [idealLines, lineSegments] = makeLineSegments(
-    points, widthToUse, close, corner, widthIs, lineNum,
+    points, widthToUse, close, corner, widthIs, widthIsIn === 'inside', lineNum,
   );
 
   // Join line segments based on the angle between them
@@ -349,6 +353,7 @@ function makeThickLine(
     const angle = threePointAngle(mid.p1, mid.p2, midNext.p2);
     // If the angle is less than 180, then the 'negative' line segments are
     // on the outside of the angle.
+    // console.log(currentIndex, lineIndex, angle)
     if (0 < angle && angle < minAngle) {
       if (widthIs === 'mid') {
         joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext);
@@ -424,15 +429,18 @@ function makeThickLine(
         joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
       }
     } else if ((angle === Math.PI * 2 || angle === 0)) {
-      if (widthIs === 'mid') {
-        joinLinesInPoint(lineSegment, lineSegmentNext);
-        // joinLinesInPoint(lineSegment, lineSegmentNext);
-      } else if (widthIs === 'negative') {
-        joinLinesInPoint(lineSegment, lineSegmentNext);
-      } else if (widthIs === 'positive') {
-        joinLinesInPoint(lineSegment, lineSegmentNext);
-      }
+      // if (widthIs === 'mid') {
+      //   joinLinesInPoint(lineSegment, lineSegmentNext);
+      //   // joinLinesInPoint(lineSegment, lineSegmentNext);
+      // } else if (widthIs === 'negative') {
+      //   joinLinesInPoint(lineSegment, lineSegmentNext);
+      // } else if (widthIs === 'positive') {
+      //   joinLinesInPoint(lineSegment, lineSegmentNext);
+      // }
     }
+    // if (lineSegments.length >= 2) {
+    //   console.log(currentIndex, lineIndex, lineSegments[2][0]._dup())
+    // }
   };
 
   // Create fill triangles between the positive & mid, and negative and mid lines
@@ -470,17 +478,18 @@ function makeThickLine(
         } else if (l === 0) {
           createFill(i, i + 1);
         }
-        if (close) {
-          if (corner === 'auto') {
-            joinLineSegments(lineSegments.length - 1, 0, l);
-          } else if (l === 0) {
-            createFill(lineSegments.length - 1, 0);
-          }
+      }
+      if (close) {
+        if (corner === 'auto') {
+          joinLineSegments(lineSegments.length - 1, 0, l);
+        } else if (l === 0) {
+          createFill(lineSegments.length - 1, 0);
         }
       }
     }
   }
-
+  // console.log(lineSegments[1][0]._dup())
+  // console.log(lineSegments[1][1]._dup())
   // let positiveSegmentIndex = 0;
   // let negativeSegmentIndex = 2;
   // if (widthIs === 'negative') {
