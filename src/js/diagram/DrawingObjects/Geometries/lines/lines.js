@@ -28,25 +28,58 @@ import {
 //
 function lineSegmentsToPoints(
   lineSegments: Array<[Line, Line, Line]>,
-  insideIndex: number,
-  outsideIndex: number,
+  positiveIndex: number,
+  negativeIndex: number,
+  width: number,
+  linePrimitives: boolean,
+  lineNum: number,
+  fixTo: 'mid' | 'negative' | 'positive',
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   const tris = [];
   const border = [];
   const hole = [];
   lineSegments.forEach((lineSegment) => {
-    const inside = lineSegment[insideIndex];
-    const outside = lineSegment[outsideIndex];
-    border.push(lineSegment[outsideIndex].p1._dup());
-    border.push(lineSegment[outsideIndex].p2._dup());
-    hole.push(lineSegment[insideIndex].p1._dup());
-    hole.push(lineSegment[insideIndex].p2._dup());
-    tris.push(inside.p1._dup());
-    tris.push(inside.p2._dup());
-    tris.push(outside.p1._dup());
-    tris.push(outside.p1._dup());
-    tris.push(inside.p2._dup());
-    tris.push(outside.p2._dup());
+    const positive = lineSegment[positiveIndex];
+    const negative = lineSegment[negativeIndex];
+    border.push(lineSegment[negativeIndex].p1._dup());
+    border.push(lineSegment[negativeIndex].p2._dup());
+    hole.push(lineSegment[positiveIndex].p1._dup());
+    hole.push(lineSegment[positiveIndex].p2._dup());
+    if (linePrimitives) {
+      const step = width / (lineNum - 1);
+      for (let i = 0; i < lineNum; i += 1) {
+        if (i === 0 && lineNum > 1) {
+          tris.push(negative.p1._dup());
+          tris.push(negative.p2._dup());
+        } else if (i === 0 && lineNum === 1) {
+          if (fixTo === 'negative') {
+            tris.push(negative.p1._dup());
+            tris.push(negative.p2._dup());
+          } else if (fixTo === 'positive') {
+            tris.push(positive.p1._dup());
+            tris.push(positive.p2._dup());
+          } else {
+            const offset = negative.offset('positive', width / 2);
+            tris.push(offset.p1._dup());
+            tris.push(offset.p2._dup());
+          }
+        } else if (i === lineNum - 1) {
+          tris.push(positive.p1._dup());
+          tris.push(positive.p2._dup());
+        } else {
+          const offset = negative.offset('positive', step * i);
+          tris.push(offset.p1._dup());
+          tris.push(offset.p2._dup());
+        }
+      }
+    } else {
+      tris.push(positive.p1._dup());
+      tris.push(positive.p2._dup());
+      tris.push(negative.p1._dup());
+      tris.push(negative.p1._dup());
+      tris.push(positive.p2._dup());
+      tris.push(negative.p2._dup());
+    }
   });
   return [tris, [border], [hole]];
 }
@@ -270,6 +303,8 @@ function makeThickLine(
   close: boolean = false,
   corner: 'auto' | 'fill' | 'none',
   minAngleIn: ?number = Math.PI / 7,
+  linePrimitives: boolean = false,
+  lineNum: number,
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   let widthToUse = width;
   if (widthIsIn === 'mid') {
@@ -412,16 +447,17 @@ function makeThickLine(
     }
   }
 
-  let insideSegmentIndex = 0;
-  let outsideSegmentIndex = 2;
+  let positiveSegmentIndex = 0;
+  let negativeSegmentIndex = 2;
   if (widthIs === 'negative') {
-    insideSegmentIndex = 1;
+    positiveSegmentIndex = 1;
   }
   if (widthIs === 'positive') {
-    outsideSegmentIndex = 1;
+    negativeSegmentIndex = 1;
   }
   const [tris, border, hole] = lineSegmentsToPoints(
-    lineSegments, insideSegmentIndex, outsideSegmentIndex,
+    lineSegments, positiveSegmentIndex, negativeSegmentIndex,
+    width, linePrimitives, lineNum, widthIs,
   );
   // const [tris, border, hole] = lineSegmentsToPoints(lineSegments, 0, 2);
   if (close === false) {
@@ -441,6 +477,8 @@ function makePolyLine(
   cornerSides: number,
   minAutoCornerAngle: number = Math.PI / 7,
   dash: Array<number> = [],
+  linePrimitives: boolean = false,
+  lineNum: number = 1,
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   let points = [];
   let cornerStyleToUse;
@@ -473,6 +511,7 @@ function makePolyLine(
     dashes.forEach((d) => {
       const [tris, border, hole] = makeThickLine(
         d, width, widthIs, closeDashes, cornerStyleToUse, minAutoCornerAngle,
+        linePrimitives, lineNum,
       );
       dashedTris = [...dashedTris, ...tris];
       dashedBorder = [[...dashedBorder[0], ...border[0]]];
@@ -483,6 +522,7 @@ function makePolyLine(
 
   return makeThickLine(
     points, width, widthIs, close, cornerStyleToUse, minAutoCornerAngle,
+    linePrimitives, lineNum,
   );
 }
 
@@ -497,6 +537,8 @@ function makePolyLineCorners(
   cornerSize: number,
   cornerSides: number,
   minAutoCornerAngle: number = Math.PI / 7,
+  linePrimitives: boolean = false,
+  lineNum: number = 1,
 ) {
   // split line into corners
   const corners = lineToCorners(pointsIn, close, cornerLength, false);
@@ -507,7 +549,7 @@ function makePolyLineCorners(
   corners.forEach((corner) => {
     const [t, b, h] = makePolyLine(
       corner, width, false, widthIs, cornerStyle, cornerSize,
-      cornerSides, minAutoCornerAngle,
+      cornerSides, minAutoCornerAngle, [], linePrimitives, lineNum,
     );
     tris = [...tris, ...t];
     borders = [...borders, ...b];

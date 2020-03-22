@@ -648,6 +648,8 @@ export default class DiagramPrimitives {
       // forceCornerLength: false,
       minAutoCornerAngle: Math.PI / 7,
       dash: [],
+      linePrimitives: false,
+      lineNum: 1,
       transform: new Transform('polyline').standard(),
     };
     const options = processOptions(defaultOptions, ...optionsIn);
@@ -666,6 +668,8 @@ export default class DiagramPrimitives {
         options.cornerSize,
         options.cornerSides,
         options.minAutoCornerAngle,
+        options.linePrimitives,
+        options.lineNum,
       );
     } else {
       getTris = points => makePolyLine(
@@ -678,6 +682,8 @@ export default class DiagramPrimitives {
         options.cornerSides,
         options.minAutoCornerAngle,
         options.dash,
+        options.linePrimitives,
+        options.lineNum,
       );
     }
     const [triangles, borders, holes] = getTris(options.points);
@@ -695,7 +701,7 @@ export default class DiagramPrimitives {
     //   options.textureCoords,
     // );
     const element = this.generic(options, {
-      drawType: 'triangles',
+      drawType: options.linePrimitives ? 'lines' : 'triangles',
       points: triangles,
       border: borders,
       holeBorder: holes,
