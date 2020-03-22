@@ -27,7 +27,7 @@ import {
 //                        inside
 //
 function lineSegmentsToPoints(
-  lineSegments: Array<[Line, Line, Line]>,
+  lineSegments: Array<Array<Line>>,
   // positiveIndex: number,
   // negativeIndex: number,
   // width: number,
@@ -171,7 +171,7 @@ function makeLineSegments(
   cornerStyle: 'auto' | 'none' | 'fill',
   widthIs: 'mid' | 'positive' | 'negative',
   numLines: number = 2,
-) {
+): [Array<Line>, Array<Array<Line>>] {
   const idealLines = [];
   const makeLine = (p1, p2) => new Line(p1, p2);
   for (let i = 0; i < points.length - 1; i += 1) {
@@ -182,7 +182,7 @@ function makeLineSegments(
   }
 
   // lineSegments should be more negative to more positive
-  const lineSegments = [];
+  const lineSegments: Array<Array<Line>> = [];
   const makeOffset = (prev, current, next, offset: number, index: number) => {
     let minNegativeOffset = offset;
     let minPositiveOffset = offset;
@@ -228,7 +228,8 @@ function makeLineSegments(
       } else {
         offsetLine = current.offset('positive', offset);
       }
-    } else if (widthIs === 'mid') {
+    // otherwise widthIs === 'mid'
+    } else {
       offsetLine = current.offset('positive', offset);
     }
     // if (cornerStyle === 'auto' && widthIs !== 'mid') {
@@ -328,7 +329,9 @@ function makeThickLine(
     widthToUse = width / 2;
   }
   const widthIs = getWidthIs(points, close, widthIsIn);
-  const [idealLines, lineSegments] = makeLineSegments(points, widthToUse, close, corner, widthIs, lineNum);
+  const [idealLines, lineSegments] = makeLineSegments(
+    points, widthToUse, close, corner, widthIs, lineNum,
+  );
 
   // Join line segments based on the angle between them
   const minAngle = minAngleIn == null ? 0 : minAngleIn;
@@ -337,7 +340,6 @@ function makeThickLine(
     const midNext = idealLines[nextIndex];
     const lineSegment = lineSegments[currentIndex][lineIndex];
     const lineSegmentNext = lineSegments[nextIndex][lineIndex];
-    // const 
     // const [positive, mid, negative] = lineSegments[current];
     // const [positiveNext, midNext, negativeNext] = lineSegments[next];
     const angle = threePointAngle(mid.p1, mid.p2, midNext.p2);
@@ -431,7 +433,7 @@ function makeThickLine(
 
   // Create fill triangles between the positive & mid, and negative and mid lines
   const cornerFills = [];
-  const createFill = (currentIndex, nextIndex, lineIndex) => {
+  const createFill = (currentIndex, nextIndex) => {
     const mid = idealLines[currentIndex];
     const midNext = idealLines[nextIndex];
     const positive = lineSegments[currentIndex].slice(-1)[0];
@@ -461,28 +463,28 @@ function makeThickLine(
       for (let i = 0; i < lineSegments.length - 1; i += 1) {
         if (corner === 'auto') {
           joinLineSegments(i, i + 1, l);
-        } else {
-          createFill(i, i + 1, l);
+        } else if (l === 0) {
+          createFill(i, i + 1);
         }
-      }
-      if (close) {
-        if (corner === 'auto') {
-          joinLineSegments(lineSegments.length - 1, 0, l);
-        } else {
-          createFill(lineSegments.length - 1, 0, l);
+        if (close) {
+          if (corner === 'auto') {
+            joinLineSegments(lineSegments.length - 1, 0, l);
+          } else if (l === 0) {
+            createFill(lineSegments.length - 1, 0);
+          }
         }
       }
     }
   }
 
-  let positiveSegmentIndex = 0;
-  let negativeSegmentIndex = 2;
-  if (widthIs === 'negative') {
-    positiveSegmentIndex = 1;
-  }
-  if (widthIs === 'positive') {
-    negativeSegmentIndex = 1;
-  }
+  // let positiveSegmentIndex = 0;
+  // let negativeSegmentIndex = 2;
+  // if (widthIs === 'negative') {
+  //   positiveSegmentIndex = 1;
+  // }
+  // if (widthIs === 'positive') {
+  //   negativeSegmentIndex = 1;
+  // }
   const [tris, border, hole] = lineSegmentsToPoints(
     lineSegments, linePrimitives,
   );
