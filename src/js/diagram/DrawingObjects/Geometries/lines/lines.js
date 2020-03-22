@@ -262,6 +262,8 @@ function makeLineSegments(
     lineSegments.push([]);
     if (widthIs === 'negative' || widthIs === 'positive') {
       lineSegments[i].push(current._dup());
+    } else if (numLines === 1) {
+      lineSegments[i].push(current._dup());
     } else {
       const offsetLine = current.offset('negative', width / 2);
       lineSegments[i].push(offsetLine);
@@ -429,6 +431,8 @@ function makeThickLine(
         joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
       }
     } else if ((angle === Math.PI * 2 || angle === 0)) {
+      // do nothing
+
       // if (widthIs === 'mid') {
       //   joinLinesInPoint(lineSegment, lineSegmentNext);
       //   // joinLinesInPoint(lineSegment, lineSegmentNext);
