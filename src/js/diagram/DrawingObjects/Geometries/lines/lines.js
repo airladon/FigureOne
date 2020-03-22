@@ -258,11 +258,15 @@ function makeLineSegments(
     if (widthIs === 'negative' || widthIs === 'positive') {
       lineSegments[i].push(current);
     } else {
-      const offsetLine = current.offset('negative', width);
+      const offsetLine = current.offset('negative', width / 2);
       lineSegments[i].push(offsetLine);
     }
     for (let l = 1; l < numLines; l += 1) {
-      makeOffset(prev, current, next, l * step, i);
+      if (widthIs === 'negative' || widthIs === 'positive') {
+        makeOffset(prev, current, next, l * step, i);
+      } else {
+        makeOffset(prev, current, next, -width / 2 + l * step, i);
+      }
     }
     if (widthIs === 'negative') {
       lineSegments[i].reverse();
@@ -324,10 +328,10 @@ function makeThickLine(
   linePrimitives: boolean = false,
   lineNum: number = 1,
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
-  let widthToUse = width;
-  if (widthIsIn === 'mid') {
-    widthToUse = width / 2;
-  }
+  const widthToUse = width;
+  // if (widthIsIn === 'mid') {
+  //   widthToUse = width / 2;
+  // }
   const widthIs = getWidthIs(points, close, widthIsIn);
   const [idealLines, lineSegments] = makeLineSegments(
     points, widthToUse, close, corner, widthIs, lineNum,

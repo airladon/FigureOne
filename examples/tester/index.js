@@ -37,7 +37,7 @@ diagram.addElements([
       cornerSize: 0.1,
       cornerSides: 10,
       linePrimitives: true,
-      lineNum: 3,
+      lineNum: 5,
       // cornersOnly: true,
 
       // dash: [0.1, 0.03],
