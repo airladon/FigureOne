@@ -6,7 +6,7 @@ const line = [
     new Point(0, 0.5),
     // new Point(0.6, 0),
     new Point(-0.5, 0),
-    new Point(0, 1),
+    // new Point(0, 1),
     // new Point(0, 0), new Point(0, 1), new Point(-0.1, 0)
 ];
 
@@ -33,13 +33,13 @@ diagram.addElements([
       // cornerLength: 0.1,
       // forceCornerLength: true,
       // asdfasdf: false,
-      widthIs: 'inside',
+      widthIs: 'mid',
       cornerStyle: 'radius',
       // cornerStyle: 'none',
       cornerSize: 0.1,
       cornerSides: 10,
       // linePrimitives: true,
-      lineNum: 2,
+      // lineNum: 200,
       // cornersOnly: true,
 
       // dash: [0.1, 0.03],
@@ -74,9 +74,10 @@ pad.setTransformCallback = () => {
   const r = diagram.getElement('r');
   r.custom.updatePoints(line);
   diagram.animateNextFrame();
+  // console.log(line[1])
 }
 diagram.initialize();
-pad.setPosition(0, 0.5);
+pad.setPosition(-0.7, 0);
 
 // diagram.addElements([
 //   {
