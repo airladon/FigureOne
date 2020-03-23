@@ -460,27 +460,22 @@ function makeThickLine(
     const negative = lineSegments[currentIndex][0];
     const negativeNext = lineSegments[nextIndex][0];
     const angle = threePointAngle(mid.p1, mid.p2, midNext.p2);
-    if (angle < Math.PI) {
+    if (linePrimitives) {
+      for (let i = 0; i < lineSegments[currentIndex].length; i += 1) {
+        cornerFills.push(lineSegments[currentIndex][i].p2._dup());
+        cornerFills.push(lineSegments[nextIndex][i].p1._dup());
+      }
+    } else if (angle < Math.PI) {
       if (widthIsIn !== 'inside') {
-        if (linePrimitives) {
-          cornerFills.push(positive.p2._dup());
-          cornerFills.push(positiveNext.p1._dup());
-        } else {
-          cornerFills.push(positive.p2._dup());
-          cornerFills.push(mid.p2._dup());
-          cornerFills.push(positiveNext.p1._dup());
-        }
+        cornerFills.push(positive.p2._dup());
+        cornerFills.push(mid.p2._dup());
+        cornerFills.push(positiveNext.p1._dup());
       }
     } else if (angle > Math.PI) {
       if (widthIsIn !== 'inside') {
-        if (linePrimitives) {
-          cornerFills.push(negative.p2._dup());
-          cornerFills.push(negativeNext.p1._dup());
-        } else {
-          cornerFills.push(negative.p2._dup());
-          cornerFills.push(mid.p2._dup());
-          cornerFills.push(negativeNext.p1._dup());
-        }
+        cornerFills.push(negative.p2._dup());
+        cornerFills.push(mid.p2._dup());
+        cornerFills.push(negativeNext.p1._dup());
       }
     }
   };
