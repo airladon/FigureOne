@@ -119,14 +119,19 @@ diagram.addElements([
     method: 'polygon',
     options: {
       sides: 8,
-      width: 0.005,
-      radius: 0.9,
+      width: 0.05,
+      radius: 0.2,
       // fill: true,
       color: [0, 1, 1, 1],
       position: [0, 0],
+      touchableLineOnly: true,
       // textureLocation: 'example.png',
     },
   },
 ]);
 diagram.getElement('p1').angleToDraw = 1;
 diagram.initialize();
+console.log(diagram.getElement('p1'))
+diagram.getElement('p').setMovable();
+console.log(diagram.getElement('p'))
+// diagram.getElement('p').cannotTouchHole = true;
