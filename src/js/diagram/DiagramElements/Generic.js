@@ -42,5 +42,6 @@ export default function Generic(
   } else {
     transform = transformOrLocation._dup();
   }
+  // $FlowFixMe
   return new DiagramElementPrimitive(generic, transform, color, diagramLimits);
 }
