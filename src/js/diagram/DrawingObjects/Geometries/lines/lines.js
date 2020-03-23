@@ -181,6 +181,7 @@ function makeLineSegments(
   if (close) {
     idealLines.push(makeLine(points[points.length - 1], points[0]));
   }
+
   // lineSegments should be more negative to more positive
   const lineSegments: Array<Array<Line>> = [];
   const makeOffset = (prev, current, next, offset: number, index: number) => {
@@ -280,6 +281,8 @@ function makeLineSegments(
     }
     // makeOffsets(prev, current, next, width);
   }
+  // console.log(idealLines)
+  // console.log(lineSegments)
   return [idealLines, lineSegments];
 }
 

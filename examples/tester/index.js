@@ -3,10 +3,10 @@ const { Point } = Fig;
 
 const line = [
     new Point(0.5, 0),
-    // new Point(0, 0.5),
     new Point(0, 0.5),
+    // new Point(0.6, 0),
     new Point(-0.5, 0),
-    // new Point(0, 1),
+    new Point(0, 1),
     // new Point(0, 0), new Point(0, 1), new Point(-0.1, 0)
 ];
 
@@ -27,18 +27,18 @@ diagram.addElements([
     options: {
       points: line,
       width: 0.08,
-      // close: true,
+      close: true,
       // fill: false,
       // cornersOnly: true,
       // cornerLength: 0.1,
       // forceCornerLength: true,
       // asdfasdf: false,
-      widthIs: 'mid',
+      widthIs: 'inside',
       cornerStyle: 'radius',
       // cornerStyle: 'none',
       cornerSize: 0.1,
-      cornerSides: 2,
-      linePrimitives: true,
+      cornerSides: 10,
+      // linePrimitives: true,
       lineNum: 2,
       // cornersOnly: true,
 
@@ -76,7 +76,7 @@ pad.setTransformCallback = () => {
   diagram.animateNextFrame();
 }
 diagram.initialize();
-// pad.setPosition(0.1, 0);
+pad.setPosition(0, 0.5);
 
 // diagram.addElements([
 //   {

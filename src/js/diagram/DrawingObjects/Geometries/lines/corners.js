@@ -55,7 +55,10 @@ function circleCorner(p2in: Point, p1: Point, p3in: Point, sides: number): Array
   // if equal to 0, that means the lines are going back on top of each other
   // in which case we still want a radius at the end, so make it small and
   // unnoticable
+  let isZero = false;
+  // let zeroMag = 0.0001;
   if (_2a === 0) {
+    isZero = true;
     _2a = 0.00001;
   }
   const direction = _2a / Math.abs(_2a);
@@ -74,17 +77,30 @@ function circleCorner(p2in: Point, p1: Point, p3in: Point, sides: number): Array
 
   const _2b = b * 2;
   const delta = _2b / sides * direction * -1;
-
   const lineC2 = new Line(center, p2);
   const angleC2 = lineC2.angle();
   const magC2 = lineC2.length();
   points.push(p2);
-  for (let i = 0; i < sides - 1; i += 1) {
-    const angle = angleC2 + (i + 1) * delta;
-    points.push(new Point(
-      center.x + magC2 * Math.cos(angle),
-      center.y + magC2 * Math.sin(angle),
-    ));
+  // If the angle is zero, then we want to draw a pho (very small) polyline
+  // that will simulate a radius at the end
+  if (isZero) {
+    const mag = 0.0001;
+    const ang12 = line12.angle() + Math.PI / 2;
+    const deltaZero = Math.PI / sides;
+    for (let i = 0; i <= sides; i += 1) {
+      points.push(new Point(
+        center.x + mag * Math.cos(ang12 + deltaZero * i),
+        center.y + mag * Math.sin(ang12 + deltaZero * i),
+      ));
+    }
+  } else {
+    for (let i = 0; i < sides - 1; i += 1) {
+      const angle = angleC2 + (i + 1) * delta;
+      points.push(new Point(
+        center.x + magC2 * Math.cos(angle),
+        center.y + magC2 * Math.sin(angle),
+      ));
+    }
   }
   points.push(p3);
   // if (reverse) {
