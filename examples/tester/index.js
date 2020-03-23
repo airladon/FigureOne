@@ -121,11 +121,17 @@ diagram.addElements([
       sides: 8,
       width: 0.05,
       radius: 0.2,
-      // fill: true,
+      fill: true,
       color: [0, 1, 1, 1],
       position: [0, 0],
       touchableLineOnly: true,
       // textureLocation: 'example.png',
+      line: {
+        // linePrimitives: true,
+        // lineNum: 5,
+        widthIs: 'mid',
+        dash: [0.02, 0.02],
+      }
     },
   },
 ]);
@@ -134,4 +140,4 @@ diagram.initialize();
 console.log(diagram.getElement('p1'))
 diagram.getElement('p').setMovable();
 console.log(diagram.getElement('p'))
-// diagram.getElement('p').cannotTouchHole = true;
+diagram.getElement('p').cannotTouchHole = true;
