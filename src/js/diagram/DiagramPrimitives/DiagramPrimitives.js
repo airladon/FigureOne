@@ -822,6 +822,10 @@ export default class DiagramPrimitives {
       sides: 4,
       fill: false,
       transform: new Transform('polygonSweep').standard(),
+      line: {
+        linePrimitives: false,
+        lineNum: 2,
+      },
     };
     const forceOptions = {
       line: {
@@ -836,6 +840,9 @@ export default class DiagramPrimitives {
       const sidesToDraw = Math.floor(tools.round(angle) / tools.round(Math.PI * 2) * options.sides);
       if (options.fill) {
         return sidesToDraw + 2;
+      }
+      if (options.line && options.line.linePrimitives) {
+        return sidesToDraw * options.line.lineNum * 2;
       }
       return sidesToDraw * 6;
     };
