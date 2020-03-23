@@ -785,10 +785,10 @@ export default class DiagramPrimitives {
       element = this.generic(options, {
         drawType: 'fan',
         points: fan,
-        border: [fan.slice(1)],
+        border: [...fan.slice(1)],
       });
     } else {
-      let polygonPoints = getPolygonPoints(
+      const polygonPoints = getPolygonPoints(
         options.radius, options.rotation, options.offset,
         options.sides, options.sidesToDraw, options.direction,
       );
@@ -836,6 +836,7 @@ export default class DiagramPrimitives {
     const options = processOptions(defaultOptions, ...optionsIn, forceOptions);
     // const options = joinObjects(defaultOptions, optionsIn);
     const element = this.polygon(options);
+    // $FlowFixMe
     element.drawingObject.getPointCountForAngle = (angle: number) => {
       const sidesToDraw = Math.floor(tools.round(angle) / tools.round(Math.PI * 2) * options.sides);
       if (options.fill) {

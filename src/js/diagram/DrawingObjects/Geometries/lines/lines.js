@@ -28,22 +28,11 @@ import {
 //
 function lineSegmentsToPoints(
   lineSegments: Array<Array<Line>>,
-  // positiveIndex: number,
-  // negativeIndex: number,
-  // width: number,
-  // close: boolean,
   linePrimitives: boolean,
-  // lineNum: number,
-  // fixTo: 'mid' | 'negative' | 'positive',
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   const tris = [];
   const border = [];
-  // const hole = [];
   lineSegments.forEach((lineSegment) => {
-    // border.push(lineSegment[negativeIndex].p1._dup());
-    // border.push(lineSegment[negativeIndex].p2._dup());
-    // hole.push(lineSegment[positiveIndex].p1._dup());
-    // hole.push(lineSegment[positiveIndex].p2._dup());
     const negative = lineSegment[0];
     const positive = lineSegment.slice(-1)[0];
     if (linePrimitives) {
@@ -112,19 +101,11 @@ function joinLinesInTangent(
   if (intercept.intersect != null) {
     outside.setP2(intercept.intersect);
   }
-  // intercept = tangent.intersectsWith(inside);
-  // if (intercept.intersect != null) {
-  //   inside.setP2(intercept.intersect);
-  // }
 
   intercept = tangent.intersectsWith(outsideNext);
   if (intercept.intersect != null) {
     outsideNext.setP1(intercept.intersect);
   }
-  // intercept = tangent.intersectsWith(insideNext);
-  // if (intercept.intersect != null) {
-  //   insideNext.setP1(intercept.intersect);
-  // }
 }
 
 function joinLinesAcuteInside(
@@ -133,11 +114,6 @@ function joinLinesAcuteInside(
   inside: Line,
   insideNext: Line,
 ) {
-  // const intercept = inside.intersectsWith(insideNext);
-  // if (intercept.intersect != null) {
-  //   inside.setP2(intercept.intersect);
-  //   insideNext.setP1(intercept.intersect);
-  // }
   let intercept = inside.intersectsWith(midNext);
   if (intercept.intersect != null) {
     inside.setP2(intercept.intersect);
@@ -279,10 +255,7 @@ function makeLineSegments(
     if (widthIs === 'negative') {
       lineSegments[i].reverse();
     }
-    // makeOffsets(prev, current, next, width);
   }
-  // console.log(idealLines)
-  // console.log(lineSegments)
   return [idealLines, lineSegments];
 }
 
@@ -500,25 +473,13 @@ function makeThickLine(
       }
     }
   }
-  // console.log(lineSegments[1][0]._dup())
-  // console.log(lineSegments[1][1]._dup())
-  // let positiveSegmentIndex = 0;
-  // let negativeSegmentIndex = 2;
-  // if (widthIs === 'negative') {
-  //   positiveSegmentIndex = 1;
-  // }
-  // if (widthIs === 'positive') {
-  //   negativeSegmentIndex = 1;
-  // }
   const [tris, border, hole] = lineSegmentsToPoints(
     lineSegments, linePrimitives,
   );
-  // const [tris, border, hole] = lineSegmentsToPoints(lineSegments, 0, 2);
   if (close === false) {
     return [[...tris, ...cornerFills], [[...border[0], ...hole[0].reverse()]], [[]]];
   }
   return [[...tris, ...cornerFills], border, hole];
-  // return [...lineSegmentsToPoints(lineSegments, 0, 2), ...cornerFills];
 }
 
 function makePolyLine(
