@@ -244,6 +244,8 @@ export type OBJ_Texture = {
  * @property {number} [pulse] set the default pulse scale
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('polyline').standard()`)
+ * @property {'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [border] (`line`)
+ * @property {'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [hole] (`none`)
  * @example
  * // Line
  * diagram.addElement(
@@ -306,6 +308,8 @@ export type OBJ_Polyline = {
   pulse?: number,
   position?: ?Point,
   transform?: Transform,
+  border?: 'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
+  hole?: 'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
 };
 
 /**
@@ -489,9 +493,24 @@ function parsePoints(
     if (value == null) {
       return;
     }
+    if (typeof value === 'string') {
+      return;
+    }
+    const processArray = (a) => {
+      for (let i = 0; i < a.length; i += 1) {
+        if (Array.isArray(a[i]) && !(typeof a[i][0] === 'number')) {
+          // eslint-disable-next-line no-param-reassign
+          a[i] = processArray(a[i]);
+        } else {
+          // eslint-disable-next-line no-param-reassign
+          a[i] = getPoint(a[i]);
+        }
+      }
+      return a;
+    };
     if (Array.isArray(value) && !(typeof value[0] === 'number')) {
       // eslint-disable-next-line no-param-reassign
-      options[key] = value.map(p => getPoint(p));
+      options[key] = processArray(value); // value.map(p => getPoint(p));
     } else {
       // eslint-disable-next-line no-param-reassign
       options[key] = getPoint(value);
@@ -607,7 +626,7 @@ export default class DiagramPrimitives {
       return borderOut;
     };
     const parsedBorder = parseBorder(options.border);
-    const parsedBorderHoles = parseBorder(options.borderHoles);
+    const parsedBorderHoles = parseBorder(options.holeBorder);
     // console.log(parsedPoints)
     const element = Generic(
       this.webgl,
@@ -651,9 +670,11 @@ export default class DiagramPrimitives {
       linePrimitives: false,
       lineNum: 1,
       transform: new Transform('polyline').standard(),
+      border: 'line',
+      hole: 'none',
     };
     const options = processOptions(defaultOptions, ...optionsIn);
-    parsePoints(options, ['points']);
+    parsePoints(options, ['points', 'border', 'hole']);
     if (options.linePrimitives === false) {
       options.lineNum = 2;
     }
@@ -687,6 +708,8 @@ export default class DiagramPrimitives {
         options.dash,
         options.linePrimitives,
         options.lineNum,
+        options.border,
+        options.hole,
       );
     }
     const [triangles, borders, holes] = getTris(options.points);
@@ -706,8 +729,8 @@ export default class DiagramPrimitives {
     const element = this.generic(options, {
       drawType: options.linePrimitives ? 'lines' : 'triangles',
       points: triangles,
-      border: borders,
-      holeBorder: holes,
+      border: Array.isArray(options.border) ? options.border : borders,
+      holeBorder: Array.isArray(options.hole) ? options.hole : holes,
     });
 
     element.custom.updatePoints = (points) => {
@@ -732,7 +755,6 @@ export default class DiagramPrimitives {
     offset?: TypeParsablePoint,
     width?: number,
     direction?: -1 | 1,
-    // angle?: number,
     line?: {
       widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
       cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',
@@ -765,6 +787,7 @@ export default class DiagramPrimitives {
       // angle: Math.PI * 2,
       offset: new Point(0, 0),
       transform: new Transform('polygon').standard(),
+      touchableLineOnly: false,
     };
     const options = processOptions(defaultOptions, ...optionsIn);
     parsePoints(options, ['offset']);
@@ -792,13 +815,21 @@ export default class DiagramPrimitives {
         options.radius, options.rotation, options.offset,
         options.sides, options.sidesToDraw, options.direction,
       );
-      // if (options.line.widthIs === 'inside') {
-      //   polygonPoints = [polygonPoints[0], ...polygonPoints.slice(1).reverse()];
-      // }
-
+      let border = 'line';
+      let hole;
+      if (options.direction === 1) {
+        border = 'negative';
+        hole = 'positive';
+      }
+      if (options.direction === -1) {
+        border = 'positive';
+        hole = 'negative';
+      }
       element = this.polyline(options, options.line, {
         points: polygonPoints,
         close: options.sides === options.sidesToDraw,
+        border,
+        hole,
       });
     }
     return element;

@@ -2188,9 +2188,12 @@ class DiagramElementPrimitive extends DiagramElement {
       }
     }
     if (this.drawingObject instanceof VertexObject) {
-      for (let i = 0; i < this.drawingObject.border[0].length; i += 1) {
-        this.drawingObject.border[0][i].x *= xMulToUse;
-        this.drawingObject.border[0][i].y *= yMulToUse;
+      for (let b = 0; b < this.drawingObject.border.length; b += 1) {
+        const border = this.drawingObject.border[b];
+        for (let i = 0; i < border.length; i += 1) {
+          border[i].x *= xMulToUse;
+          border[i].y *= yMulToUse;
+        }
       }
     }
   }

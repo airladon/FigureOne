@@ -29,9 +29,12 @@ import {
 function lineSegmentsToPoints(
   lineSegments: Array<Array<Line>>,
   linePrimitives: boolean,
+  borderIs: 'negative' | 'positive' | 'line' | Array<Array<Point>> = 'line',
+  holeIs: 'negative' | 'positive' | 'none' | Array<Array<Point>> = 'none',
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   const tris = [];
-  const border = [];
+  let border = [];
+  let hole = [[]];
   lineSegments.forEach((lineSegment) => {
     const negative = lineSegment[0];
     const positive = lineSegment.slice(-1)[0];
@@ -48,14 +51,43 @@ function lineSegmentsToPoints(
       tris.push(positive.p2._dup());
       tris.push(negative.p2._dup());
     }
-    border.push([
-      negative.p1._dup(),
-      negative.p2._dup(),
-      positive.p2._dup(),
-      positive.p1._dup(),
-    ]);
+    if (borderIs === 'line') {
+      border.push([
+        negative.p1._dup(),
+        negative.p2._dup(),
+        positive.p2._dup(),
+        positive.p1._dup(),
+      ]);
+    } else if (borderIs === 'negative') {
+      if (border.length === 0) {
+        border.push([]);
+      }
+      border[0].push(
+        negative.p1._dup(),
+        negative.p2._dup(),
+      );
+    } else if (borderIs === 'positive') {
+      if (border.length === 0) {
+        border.push([]);
+      }
+      border[0].push(
+        positive.p1._dup(),
+        positive.p2._dup(),
+      );
+    }
+    if (holeIs === 'positive') {
+      hole[0].push(positive.p1._dup(), positive.p2._dup());
+    } else if (holeIs === 'negative') {
+      hole[0].push(negative.p1._dup(), negative.p2._dup());
+    }
   });
-  return [tris, border, [[]]];
+  if (Array.isArray(borderIs)) {
+    border = borderIs;
+  }
+  if (Array.isArray(holeIs)) {
+    hole = holeIs;
+  }
+  return [tris, border, hole];
 }
 
 // Extend two lines to their intersection point
@@ -309,6 +341,8 @@ function makeThickLine(
   minAngleIn: ?number = Math.PI / 7,
   linePrimitives: boolean = false,
   lineNum: number = 1,
+  borderIs: 'negative' | 'positive' | 'line' | Array<Array<Point>> = 'line',
+  holeIs: 'negative' | 'positive' | 'none' | Array<Array<Point>> = 'none',
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   const widthToUse = width;
   // if (widthIsIn === 'mid') {
@@ -474,11 +508,11 @@ function makeThickLine(
     }
   }
   const [tris, border, hole] = lineSegmentsToPoints(
-    lineSegments, linePrimitives,
+    lineSegments, linePrimitives, borderIs, holeIs,
   );
-  if (close === false) {
-    return [[...tris, ...cornerFills], [[...border[0], ...hole[0].reverse()]], [[]]];
-  }
+  // if (close === false) {
+  //   return [[...tris, ...cornerFills], [[...border[0]], [...hole]];
+  // }
   return [[...tris, ...cornerFills], border, hole];
 }
 
@@ -494,6 +528,8 @@ function makePolyLine(
   dash: Array<number> = [],
   linePrimitives: boolean = false,
   lineNum: number = 1,
+  borderIs: 'positive' | 'negative' | 'line' | Array<Array<Point>>,
+  holeIs: 'positive' | 'negative' | 'none' | Array<Array<Point>>,
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   let points = [];
   let cornerStyleToUse;
@@ -526,7 +562,7 @@ function makePolyLine(
     dashes.forEach((d) => {
       const [tris, border, hole] = makeThickLine(
         d, width, widthIs, closeDashes, cornerStyleToUse, minAutoCornerAngle,
-        linePrimitives, lineNum,
+        linePrimitives, lineNum, borderIs, holeIs,
       );
       dashedTris = [...dashedTris, ...tris];
       dashedBorder = [[...dashedBorder[0], ...border[0]]];
@@ -537,7 +573,7 @@ function makePolyLine(
 
   return makeThickLine(
     points, width, widthIs, close, cornerStyleToUse, minAutoCornerAngle,
-    linePrimitives, lineNum,
+    linePrimitives, lineNum, borderIs, holeIs,
   );
 }
 
@@ -564,7 +600,7 @@ function makePolyLineCorners(
   corners.forEach((corner) => {
     const [t, b, h] = makePolyLine(
       corner, width, false, widthIs, cornerStyle, cornerSize,
-      cornerSides, minAutoCornerAngle, [], linePrimitives, lineNum,
+      cornerSides, minAutoCornerAngle, [], linePrimitives, lineNum, 'line', 'none',
     );
     tris = [...tris, ...t];
     borders = [...borders, ...b];
