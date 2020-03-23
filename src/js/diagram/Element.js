@@ -1863,9 +1863,11 @@ class DiagramElementPrimitive extends DiagramElement {
         if (this.cannotTouchHole) {
           for (let j = 0; j < holeBoundaries.length; j += 1) {
             const holeBoundary = holeBoundaries[j];
-            if (glLocation.isInPolygon(holeBoundary)) {
-              isTouched = false;
-              j = holeBoundaries.length;
+            if (Array.isArray(holeBoundary) && holeBoundary.length > 2) {
+              if (glLocation.isInPolygon(holeBoundary)) {
+                isTouched = false;
+                j = holeBoundaries.length;
+              }
             }
           }
         }

@@ -239,12 +239,17 @@ export type OBJ_Texture = {
  * length of gap and then the pattern repeats - can use more than one dash length
  * and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
  * short gap, short dash, short gap and then repeats.
+ * @property {boolean} [linePrimitives] Use WebGL line primitives instead of
+ * triangle primitives to draw the line (`false`)
+ * @property {boolean} [lineNum] Number of line primitives to use when
+ * `linePrimitivs`: `true` (`2`)
  * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
  * @property {OBJ_Texture} [texture] Override color with a texture
  * @property {number} [pulse] set the default pulse scale
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('polyline').standard()`)
- * @property {'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [border] (`line`)
+ * @property {'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [border]
+ * (`line`)
  * @property {'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [hole] (`none`)
  * @example
  * // Line
@@ -310,6 +315,8 @@ export type OBJ_Polyline = {
   transform?: Transform,
   border?: 'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
   hole?: 'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
+  linePrimitives?: boolean,
+  lineNum?: number,
 };
 
 /**
@@ -807,8 +814,8 @@ export default class DiagramPrimitives {
       );
       element = this.generic(options, {
         drawType: 'fan',
-        points: fan,
-        border: [...fan.slice(1)],
+        points: fan, // $FlowFixMe
+        border: [[...fan.slice(1, -1)]],
       });
     } else {
       const polygonPoints = getPolygonPoints(
