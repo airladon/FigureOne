@@ -102,7 +102,7 @@ export type OBJ_Rectangle = {
 // polyline
 // rectangle
 // polygon
-// polygonPortion
+// polygonSweep
 // repeat
 // grid
 
@@ -159,15 +159,15 @@ export type OBJ_Rectangle = {
  * space.
  *
  * If the shape has fill outside the texture boundaries then either the
- * texture can be repeated, or a pixel from the border of the image is used
- * (called clamping to edge).
+ * texture can be repeated, or a pixel from the border (edge) of the image is
+ * used (called clamping to edge).
  * WebGL only allows images that are square with a side length that is a
  * power of 2 (such as 16, 32, 64, 128 etc) to be repeated. All other images
  * can only be clamped to their edge.
  *
  * To repeat all other image resolutions, a texture can be mapped to a rectangle
  * and then the rectangle repeated throughout the diagram.
-
+ *
  * @property {string} src The url or location of the image
  * @property {Rect} [mapTo] vertex space window (`new Rect(-1, -1, 2, 2)`)
  * @property {Rect} [mapFrom] image space window (`new Rect(0, 0, 1, 1)`)
@@ -249,8 +249,11 @@ export type OBJ_Texture = {
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('polyline').standard()`)
  * @property {'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [border]
- * (`line`)
- * @property {'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [hole] (`none`)
+ * touch border of the line can be the points on the `positive`, `negative`
+ * or boths sides (`line`) of the line, or completely custom (`line`)
+ * @property {'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [hole]
+ * hole border of the line can be the points on the `positive` or `negative`
+ * side of the line or completely custom (`none`)
  * @example
  * // Line
  * diagram.addElement(
@@ -345,6 +348,10 @@ export type OBJ_Polyline = {
  * length of gap and then the pattern repeats - can use more than one dash length
  * and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
  * short gap, short dash, short gap and then repeats.
+ * @property {boolean} [linePrimitives] Use WebGL line primitives instead of
+ * triangle primitives to draw the line (`false`)
+ * @property {boolean} [lineNum] Number of line primitives to use when
+ * `linePrimitivs`: `true` (`2`)
  */
 export type OBJ_LineStyle = {
   widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
@@ -356,6 +363,8 @@ export type OBJ_LineStyle = {
   forceCornerLength?: boolean,
   minAutoCornerAngle?: number,
   dash?: Array<number>,
+  linePrimitives?: boolean,
+  lineNum?: number,
 };
 
 /**
@@ -582,7 +591,7 @@ export default class DiagramPrimitives {
   generic(...optionsIn: Array<{
     points?: Array<TypeParsablePoint> | Array<Point>,
     border?: Array<Array<TypeParsablePoint>> | Array<Array<Point>>,
-    holeBorder?: Array<Array<TypeParsablePoint>> | Array<Array<Point>>,
+    hole?: Array<Array<TypeParsablePoint>> | Array<Array<Point>>,
     drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
     color?: Array<number>,
     texture?: {
@@ -599,7 +608,7 @@ export default class DiagramPrimitives {
     const defaultOptions = {
       points: [],
       border: null,
-      holeBorder: null,
+      hole: null,
       drawType: 'triangles',
       color: [1, 0, 0, 1],
       transform: new Transform('generic').standard(),
@@ -633,7 +642,7 @@ export default class DiagramPrimitives {
       return borderOut;
     };
     const parsedBorder = parseBorder(options.border);
-    const parsedBorderHoles = parseBorder(options.holeBorder);
+    const parsedBorderHoles = parseBorder(options.hole);
     // console.log(parsedPoints)
     const element = Generic(
       this.webgl,
@@ -720,19 +729,6 @@ export default class DiagramPrimitives {
       );
     }
     const [triangles, borders, holes] = getTris(options.points);
-    // const element = Generic(
-    //   this.webgl,
-    //   triangles,
-    //   borders,
-    //   holes,
-    //   'triangles',
-    //   options.color,
-    //   options.transform,
-    //   this.limits,
-    //   options.textureLocation,
-    //   options.textureVertexSpace,
-    //   options.textureCoords,
-    // );
     const element = this.generic(options, {
       drawType: options.linePrimitives ? 'lines' : 'triangles',
       points: triangles,
