@@ -41,12 +41,13 @@ function linearCopy(
     copy.angle = 0;
   }
 
+
   if (copy.angle !== 0 && copy.step == null) {
     copy.step = Math.abs(bounds.height / Math.sin(copy.angle));
   }
 
   const out = [];
-  for (let i = 0; i < copy.num; i += 1) {
+  for (let i = 0; i < copy.num + 1; i += 1) {
     const step = copy.step * i;
     points.forEach((p) => {
       out.push(p.add(polarToRect(step, copy.angle)));

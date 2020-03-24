@@ -54,7 +54,10 @@ describe('Diagram Primitive Generic Copy', () => {
       pointPointArray: [[1, 0], [2, 0]],
       moveOffset: { offset: [1, 0] },
       moveTransform: { offset: new Transform().translate(1, 0) },
-      xAxis: { num: 1, axis: 'x', step: 2 },
+      xAxis: { num: 1, axis: 'x', step: 1 },
+      yAxis: { num: 1, axis: 'y', step: 1 },
+      angle: { num: 1, angle: Math.PI, step: 1 },
+      xAxis2: { num: 2, axis: 'x', step: 1 },
     };
   });
   test('Point', () => {
@@ -109,5 +112,36 @@ describe('Diagram Primitive Generic Copy', () => {
     expect(points[0]).toEqual(new Point(1, 0));
     expect(points[1]).toEqual(new Point(1.1, 0.1));
     expect(points).toHaveLength(2);
+  });
+  test('x Axis', () => {
+    addElement(copy.xAxis);
+    expect(points[0]).toEqual(new Point(0, 0));
+    expect(points[1]).toEqual(new Point(0.1, 0.1));
+    expect(points[2]).toEqual(new Point(1, 0));
+    expect(points[3]).toEqual(new Point(1.1, 0.1));
+  });
+  test('y Axis', () => {
+    addElement(copy.yAxis);
+    expect(round(points[0])).toEqual(new Point(0, 0));
+    expect(round(points[1])).toEqual(new Point(0.1, 0.1));
+    expect(round(points[2])).toEqual(new Point(0, 1));
+    expect(round(points[3])).toEqual(new Point(0.1, 1.1));
+  });
+  test('angle', () => {
+    addElement(copy.angle);
+    expect(round(points[0])).toEqual(new Point(0, 0));
+    expect(round(points[1])).toEqual(new Point(0.1, 0.1));
+    expect(round(points[2])).toEqual(new Point(-1, 0));
+    expect(round(points[3])).toEqual(new Point(-0.9, 0.1));
+  });
+  test('x Axis 2', () => {
+    addElement(copy.xAxis2);
+    expect(points[0]).toEqual(new Point(0, 0));
+    expect(points[1]).toEqual(new Point(0.1, 0.1));
+    expect(points[2]).toEqual(new Point(1, 0));
+    expect(points[3]).toEqual(new Point(1.1, 0.1));
+    expect(points[4]).toEqual(new Point(2, 0));
+    expect(points[5]).toEqual(new Point(2.1, 0.1));
+    expect(true).toBe(true);
   });
 });
