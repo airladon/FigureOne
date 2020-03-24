@@ -1,19 +1,38 @@
-# Example 8 - Texture Loading
+# Example 8 - Textures
 
-Animating between two forms of an equation.
+Shapes can either be filled with colors or textures where textures come from an image file.
 
-Open `index.html` in a browser to view example.
+As loading images into local html can be inhibited by web browser security settings, this example needs to be loaded from a web server.
 
-![](example.gif)
+You can create a local web server and hosting the example by navigating to the examples folder then either use python or node to start a server:
 
-From the 
+This can all be done after cloning this repository:
+
+```bash
+git clone https://github.com/airladon/FigureOne
 ```
+
+Then, from the repository root, start the development container (you will need to install docker if you don't already have it installed):
+```bash
+./start.sh dev
+```
+
+The container will start and present a command prompt:
+```bash
+cd examples/8\ -\ Texture/
 python -m http.server 8080
 ```
 
+Alternately, a node server can also be used from the initial path
 ```
 http-server examples/8 - Texture
 ```
+
+You can then open a browser and go to http://localhost:8080.
+
+
+![](example.png)
+
 
 ## Code
 `index.js`
@@ -22,91 +41,33 @@ const diagram = new Fig.Diagram();
 
 diagram.addElement(
   {
-    name: 'eqn',
-    method: 'equation',
+    name: 'flower',
+    method: 'polygon',
     options: {
-      color: [0.95, 0.95, 0.6, 1],
-      position: [0, 0],
-      elements: {
-        v: { symbol: 'vinculum'},
-        equals: ' = ',
-        times: ' \u00D7 ',
-        c: { color: [1, 0, 0, 1] },
-      },
-
-      // Align all forms to the 'equals' diagram element
-      defaultFormAlignment: { fixTo: 'equals' },
-
-      // Define two different forms of the equation
-      forms: {
-        '1': ['a', 'equals', { frac: ['b', 'v', 'c'] }],
-        '2': {
-          content: ['c', 'times', 'a', 'equals', 'b'],
-          // Define how the 'c' element will move to this form
-          translation: {
-            c: { style: 'curved', direction: 'down', mag: 0.5 },
-          }
-        },
+      radius: 0.8,
+      sides: 6,
+      fill: true,
+      texture: {
+        src: 'texture-rect.jpg',
+        mapTo: new Fig.Rect(-1, -0.667, 2, 1.333),
       },
     },
   },
 );
+
 diagram.initialize();
-
-const eqn = diagram.getElement('eqn');
-
-// Show the equation form
-eqn.showForm('1');
-
-// Animate to the next form
-eqn.goToForm({
-  name: '2',
-  delay: 1,
-  duration: 1.5,
-  animate: 'move',
-});
-
-// Queue drawing on the next animation frame
-diagram.animateNextFrame();
 ```
 
 ## Explanation
 
-In this example we are defining two different forms of the same equation.
-```js
-        '1': ['a', 'equals', { frac: ['b', 'v', 'c'] }],
-```
+Most shapes can use a [Texture Object](../../docs/README.md#OBJ_Texture) to define a texture instead of a color.
+
+Here we are using the `texture-rect.jpg` image. The image will be mapped directly to the shape, so if the shape's aspect ratio is different to that of the image you will need to either define a rectangle in the image to map to the shape (`mapFrom`), define the coordinates in the space the shape is defined in that you want to map the image to (`mapTo`).
 
 ```js
-        '2': {
-          content: ['c', 'times', 'a', 'equals', 'b'],
-          // Define how the 'c' element will move to this form
-          translation: {
-            c: { style: 'curved', direction: 'down', mag: 0.5 },
-          }
-        },
+      texture: {
+        src: 'texture-rect.jpg',
+        mapTo: new Fig.Rect(-1, -0.667, 2, 1.333),
+      },
 ```
-
-The first form is defined in shorthand *Array* notation. The second form is defined in longer hand *Object* notation as we wish to include the form parameter `translation`.
-
-This parameter defines how elements will move when translated in an animation. In this case we want the element `c` to follow a `curved` path, in the `down` direction where the curve has a magnitude of `0.5`.
-
-We can then show the first form of the equation:
-```js
-eqn.showForm('1');
-```
-
-And animate to the second form:
-```js
-eqn.goToForm({
-  name: '2',
-  delay: 1,
-  duration: 1.5,
-  animate: 'move',
-});
-```
-
-Finally we need to queue an animation frame to the form animation can start:
-```js
-diagram.animateNextFrame();
-```
+Here we are mapping to the shape shape space with a rectangle that is a little larger than the shape.
