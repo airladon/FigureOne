@@ -4,7 +4,7 @@
 import {
   round,
 } from '../../tools/math';
-import { Point } from '../../tools/g2';
+import { Point, Transform } from '../../tools/g2';
 import * as tools from '../../tools/tools';
 import makeDiagram from '../../__mocks__/makeDiagram';
 
@@ -22,7 +22,7 @@ function processPoints(points: Array<number>) {
   return out;
 }
 
-describe('Equation Functions - Box', () => {
+describe('Diagram Primitive Generic Copy', () => {
   let diagram;
   let copy;
   let points;
@@ -34,7 +34,7 @@ describe('Equation Functions - Box', () => {
         name: 'a',
         method: 'shapes.generic',
         options: {
-          points: [[0, 0]],
+          points: [[0, 0], [0.1, 0.1]],
           copy: copyOption,
         },
       });
@@ -43,13 +43,71 @@ describe('Equation Functions - Box', () => {
     };
 
     copy = {
-      xAxis: () => ({ num: 1, axis: 'x', step: 2 }),
+      point: new Point(1, 0),
+      arrayPoint: [1, 0],
+      numberPoint: 1,
+      transform: new Transform().translate(1, 0),
+      transformArray: [
+        new Transform().translate(1, 0), new Transform().translate(2, 0),
+      ],
+      pointArray: [new Point(1, 0), new Point(2, 0)],
+      pointPointArray: [[1, 0], [2, 0]],
+      moveOffset: { offset: [1, 0] },
+      moveTransform: { offset: new Transform().translate(1, 0) },
+      xAxis: { num: 1, axis: 'x', step: 2 },
     };
   });
-  test('Simple Tri', () => {
-    // const a = diagram.elements._a.getBoundingRect('diagram');
-    addElement(copy.xAxis);
-    // const a = diagram.getElement('a').drawingObject.points;
-    console.log(points);
+  test('Point', () => {
+    addElement(copy.point);
+    expect(points[2]).toEqual(new Point(1, 0));
+    expect(points[3]).toEqual(new Point(1.1, 0.1));
+  });
+  test('Array Point', () => {
+    addElement(copy.arrayPoint);
+    expect(points[2]).toEqual(new Point(1, 0));
+    expect(points[3]).toEqual(new Point(1.1, 0.1));
+  });
+  test('Number Point', () => {
+    addElement(copy.numberPoint);
+    expect(points[2]).toEqual(new Point(1, 1));
+    expect(points[3]).toEqual(new Point(1.1, 1.1));
+  });
+  test('Transform', () => {
+    addElement(copy.transform);
+    expect(points[2]).toEqual(new Point(1, 0));
+    expect(points[3]).toEqual(new Point(1.1, 0.1));
+  });
+  test('Transform Array', () => {
+    addElement(copy.transformArray);
+    expect(points[2]).toEqual(new Point(1, 0));
+    expect(points[3]).toEqual(new Point(1.1, 0.1));
+    expect(points[4]).toEqual(new Point(2, 0));
+    expect(points[5]).toEqual(new Point(2.1, 0.1));
+  });
+  test('Point Array', () => {
+    addElement(copy.pointArray);
+    expect(points[2]).toEqual(new Point(1, 0));
+    expect(points[3]).toEqual(new Point(1.1, 0.1));
+    expect(points[4]).toEqual(new Point(2, 0));
+    expect(points[5]).toEqual(new Point(2.1, 0.1));
+  });
+  test('Array Point Array', () => {
+    addElement(copy.pointPointArray);
+    expect(points[2]).toEqual(new Point(1, 0));
+    expect(points[3]).toEqual(new Point(1.1, 0.1));
+    expect(points[4]).toEqual(new Point(2, 0));
+    expect(points[5]).toEqual(new Point(2.1, 0.1));
+  });
+  test('Move Offset', () => {
+    addElement(copy.moveOffset);
+    expect(points[0]).toEqual(new Point(1, 0));
+    expect(points[1]).toEqual(new Point(1.1, 0.1));
+    expect(points).toHaveLength(2);
+  });
+  test('Move Transform', () => {
+    addElement(copy.moveTransform);
+    expect(points[0]).toEqual(new Point(1, 0));
+    expect(points[1]).toEqual(new Point(1.1, 0.1));
+    expect(points).toHaveLength(2);
   });
 });
