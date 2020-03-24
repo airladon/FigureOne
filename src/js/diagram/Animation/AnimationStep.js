@@ -113,7 +113,7 @@ export default class AnimationStep {
   }
 
   finishIfZeroDuration() {
-    if (this.duration === 0) {
+    if (this.duration === 0 && this.startDelay === 0) {
       this.finish();
     }
   }
