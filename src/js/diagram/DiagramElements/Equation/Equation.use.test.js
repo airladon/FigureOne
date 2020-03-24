@@ -284,7 +284,7 @@ describe('Different ways to make an equation', () => {
             '_c_2',
             { d: { color: color2 } },
             { _e: { color: color2 } },
-            { _f_: { color: color2 } },
+            { _f_: { color: color2 } }, // eslint-disable-next-line camelcase
             { _g_1: { color: color2 } },
           ],
         });
@@ -310,7 +310,7 @@ describe('Different ways to make an equation', () => {
       },
       autoSymbolsObjectID: () => {
         eqn = new Equation(diagram.shapes, { color: color1, scale: 0.95 });
-        eqn.addForms({
+        eqn.addForms({  // eslint-disable-next-line camelcase
           0: { frac: ['a', { v_vinculum: { color: color2 } }, 'b'] },
         });
       },
