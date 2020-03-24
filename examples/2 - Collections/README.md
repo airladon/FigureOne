@@ -9,11 +9,9 @@ Open `index.html` in a browser to view example.
 ## Code
 `index.js`
 ```js
-// Create diagram and make it able to be touched
 const diagram = new Fig.Diagram();
-diagram.setTouchable();
 
-// Add circle to diagram
+// Add a collection with a circle and triangle in it to the diagram
 diagram.addElement(
   {
     name: 'shapes',
@@ -49,8 +47,8 @@ diagram.addElement(
 // This will reduce the size of both the circle and triangle
 diagram.getElement('shapes').setScale(0.5),
 
-// Initialize diagram
 diagram.initialize();
+
 ```
 
 ## Explanation
