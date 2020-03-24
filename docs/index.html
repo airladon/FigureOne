@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>figureone 0.1.21 | Documentation</title>
+  <title>figureone 0.1.22 | Documentation</title>
   <meta name='description' content='Interactive Diagram Builder'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>figureone</h3>
-          <div class='mb1'><code>0.1.21</code></div>
+          <div class='mb1'><code>0.1.22</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -827,6 +827,16 @@
                   href='#obj_rectangle'
                   class="">
                   OBJ_Rectangle
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_linestyle'
+                  class="">
+                  OBJ_LineStyle
                   
                 </a>
                 
@@ -10550,8 +10560,8 @@ mapTo: new Rect(-2, -1, 4, 2)
 think about the window on the image, and other times the window in vertex
 space.</p>
 <p>If the shape has fill outside the texture boundaries then either the
-texture can be repeated, or a pixel from the border of the image is used
-(called clamping to edge).
+texture can be repeated, or a pixel from the border (edge) of the image is
+used (called clamping to edge).
 WebGL only allows images that are square with a side length that is a
 power of 2 (such as 16, 32, 64, 128 etc) to be repeated. All other images
 can only be clamped to their edge.</p>
@@ -10659,7 +10669,7 @@ images that are square whose number of side pixels is a power of 2 (
 
   
     <p style="display: none;">      Type:
-      {sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, radius: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rotation: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, clockwise: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, sidesToDraw: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, fill: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, transform: Transform?, position: TypeParsablePoint?, textureLocation: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, textureCoords: <a href="#rect">Rect</a>?, onLoad: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, trianglePrimitives: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, linePrimitives: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, center: TypeParsablePoint?}
+      {sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, radius: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rotation: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, direction: (<code>-1</code> | <code>1</code>)?, line: <a href="#obj_linestyle">OBJ_LineStyle</a>?, sidesToDraw: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, angleToDraw: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, fill: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, transform: Transform?, position: TypeParsablePoint?, texture: <a href="#obj_texture">OBJ_Texture</a>?, onLoad: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, trianglePrimitives: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, offset: TypeParsablePoint?}
     </p>
   
   
@@ -10706,7 +10716,8 @@ images that are square whose number of side pixels is a power of 2 (
       
         <div class='space-bottom0'>
           <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
+          : shape rotation during vertex definition
+(different to a rotation step in a trasform) (
 <code>0</code>
 )
 
@@ -10714,9 +10725,11 @@ images that are square whose number of side pixels is a power of 2 (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>clockwise</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : (
-<code>false</code>
+          <span class='code bold'>offset</span> <code class='quiet'>(TypeParsablePoint?)</code>
+          : shape center offset from origin
+during vertex definition (different to a translation step in a transform)
+(
+<code>[0, 0]</code>
 )
 
           
@@ -10734,16 +10747,30 @@ images that are square whose number of side pixels is a power of 2 (
           : same as 
 <code>sidesToDraw</code>
  but using angle for
-the definition (2π)
+the definition (
+<code>2π</code>
+)
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
-          : (
-<code>[1, 0, 0, 1</code>
-])
+          <span class='code bold'>direction</span> <code class='quiet'>((<code>-1</code> | <code>1</code>)?)</code>
+          : direction to draw polygon where 1 is
+counter clockwise and -1 is clockwise (
+<code>1</code>
+)
+center. This is different to position or transform as these translate the
+vertices on each draw. (
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestyle">OBJ_LineStyle</a>?)</code>
+          : line style options
 
           
         </div>
@@ -10752,17 +10779,6 @@ the definition (2π)
           <span class='code bold'>fill</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
           : (
 <code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>center</span> <code class='quiet'>(TypeParsablePoint?)</code>
-          : vertex space location of polygon
-center. This is different to position or transform as these translate the
-vertices on each draw. (
-<code>[0, 0]</code>
 )
 
           
@@ -10785,57 +10801,17 @@ vertices on each draw. (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>textureLocation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          : location of the texture file
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (
+<code>[1, 0, 0, 1</code>
+])
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>textureCoords</span> <code class='quiet'>(<a href="#rect">Rect</a>?)</code>
-          : normalized coordinates of the texture
-within the file (
-<code>Rect(0, 0, 1, 1)</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>onLoad</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>?)</code>
-          : callback to exectute after textures have loaded
-(
-<code>[0, 0]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>trianglePrimitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>true</code>
- to use 
-<code>TRIANGLES</code>
-
-instead of 
-<code>TRIANGLE_STRIP</code>
- as GL primitive ('false`)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>linePrimitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>true</code>
- to use 
-<code>LINES</code>
- instead of
-
-<code>TRIANGLE_STRIP</code>
- as GL primitive - this will disable width (
-<code>false</code>
-)
-used with filled polygons
+          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
+          : Override color with a texture
 
           
         </div>
@@ -10844,6 +10820,18 @@ used with filled polygons
           <span class='code bold'>pulse</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : set the default pulse scale
 
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onLoad</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>trianglePrimitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          
           
         </div>
       
@@ -10938,7 +10926,7 @@ specify when the corner should be drawn, and when it should be truncated.</p>
 
   
     <p style="display: none;">      Type:
-      {points: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeParsablePoint>, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, close: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, widthIs: (<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)?, cornerStyle: (<code>"auto"</code> | <code>"none"</code> | <code>"radius"</code> | <code>"fill"</code>)?, cornerSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, cornerSides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, cornersOnly: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, cornerLength: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, forceCornerLength: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, minAutoCornerAngle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, dash: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, texture: <a href="#obj_texture">OBJ_Texture</a>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, position: <a href="#point">Point</a>??, transform: Transform?}
+      {points: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeParsablePoint>, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, close: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, widthIs: (<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)?, cornerStyle: (<code>"auto"</code> | <code>"none"</code> | <code>"radius"</code> | <code>"fill"</code>)?, cornerSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, cornerSides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, cornersOnly: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, cornerLength: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, forceCornerLength: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, minAutoCornerAngle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, dash: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, texture: <a href="#obj_texture">OBJ_Texture</a>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, position: <a href="#point">Point</a>??, transform: Transform?, border: (<code>"line"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeParsablePoint>>)?, hole: (<code>"none"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeParsablePoint>>)?, linePrimitives: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, lineNum: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}
     </p>
   
   
@@ -11097,6 +11085,30 @@ short gap, short dash, short gap and then repeats.
         </div>
       
         <div class='space-bottom0'>
+          <span class='code bold'>linePrimitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Use WebGL line primitives instead of
+triangle primitives to draw the line (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineNum</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Number of line primitives to use when
+
+<code>linePrimitivs</code>
+: 
+<code>true</code>
+ (
+<code>2</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
           <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
           : (
 <code>[1, 0, 0, 1]</code>
@@ -11130,6 +11142,36 @@ short gap, short dash, short gap and then repeats.
           <span class='code bold'>transform</span> <code class='quiet'>(Transform?)</code>
           : (
 <code>Transform('polyline').standard()</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>((<code>"line"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeParsablePoint>>)?)</code>
+          : touch border of the line can be the points on the 
+<code>positive</code>
+, 
+<code>negative</code>
+
+or boths sides (
+<code>line</code>
+) of the line, or completely custom (
+<code>line</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>hole</span> <code class='quiet'>((<code>"none"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeParsablePoint>>)?)</code>
+          : hole border of the line can be the points on the 
+<code>positive</code>
+ or 
+<code>negative</code>
+
+side of the line or completely custom (
+<code>none</code>
 )
 
           
@@ -13057,6 +13099,210 @@ diagram.addElement(
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Rectangle with rounded corners</span></pre>
     
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_linestyle'>
+      OBJ_LineStyle
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Line style object</p>
+<p>These properties are a subset of <a href="#obj_polyline">OBJ_Polyline</a> which has more details
+on how a line is defined.</p>
+
+  
+    <p style="display: none;">      Type:
+      {widthIs: (<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)?, cornerStyle: (<code>"auto"</code> | <code>"none"</code> | <code>"radius"</code> | <code>"fill"</code>)?, cornerSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, cornerSides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, cornersOnly: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, cornerLength: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, forceCornerLength: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, minAutoCornerAngle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, dash: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, linePrimitives: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, lineNum: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>widthIs</span> <code class='quiet'>((<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)?)</code>
+          : defines how the width is grown from the polyline's points.
+Only 
+<code>"mid"</code>
+ is fully compatible with all options in
+
+<code>cornerStyle</code>
+ and 
+<code>dash</code>
+. (
+<code>"mid"</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>cornerStyle</span> <code class='quiet'>((<code>"auto"</code> | <code>"none"</code> | <code>"radius"</code> | <code>"fill"</code>)?)</code>
+          : <code>"auto"</code>
+:
+sharp corners sharp when angle is less than 
+<code>minAutoCornerAngle</code>
+, 
+<code>"none"</code>
+: no
+corners, 
+<code>"radius"</code>
+: curved corners, 
+<code>"fill"</code>
+: fills the gapes between the line
+ends, (
+<code>"auto"</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>cornerSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : only used when 
+<code>cornerStyle</code>
+ = 
+<code>radius</code>
+ (
+<code>0.01</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>cornerSides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides in curve - only used when
+
+<code>cornerStyle</code>
+ = 
+<code>radius</code>
+ (
+<code>10</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>cornersOnly</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : draw only the corners with size 
+<code>cornerSize</code>
+ (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>cornerLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : use only with 
+<code>cornersOnly</code>
+ = 
+<code>true</code>
+ -
+length of corner to draw (
+<code>0.1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>minAutoCornerAngle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : see 
+<code>cornerStyle</code>
+ = 
+<code>auto</code>
+ (
+<code>π/7</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dash</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : leave empty for solid line - use array of
+numbers for dash line where first number is length of line, second number is
+length of gap and then the pattern repeats - can use more than one dash length
+and gap  - e.g. 
+[0.1, 0.01, 0.02, 0.01]
+ produces a lines with a long dash,
+short gap, short dash, short gap and then repeats.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>linePrimitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Use WebGL line primitives instead of
+triangle primitives to draw the line (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineNum</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Number of line primitives to use when
+
+<code>linePrimitivs</code>
+: 
+<code>true</code>
+ (
+<code>2</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>forceCornerLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
   
 
   
