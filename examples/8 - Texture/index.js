@@ -15,3 +15,5 @@ diagram.addElement(
     },
   },
 );
+
+diagram.initialize();
