@@ -1,6 +1,7 @@
 
 const webgl = {
   locations: {
+    // eslint-disable-next-line camelcase
     a_position: '',
   },
   gl: {
@@ -29,6 +30,7 @@ const webgl = {
   resize: () => {},
   getProgram: () => {},
   useProgram: () => ({
+    // eslint-disable-next-line camelcase
     a_position: '',
   }),
   programs: [],
