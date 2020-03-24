@@ -6,6 +6,7 @@ import {
   Point, Transform, Rect,
 } from '../../tools/g2';
 import WebGLInstance from '../webgl/webgl';
+import type { OBJ_Copy } from '../DiagramPrimitives/DiagramPrimitiveTypes';
 
 export default function Generic(
   webgl: Array<WebGLInstance>,
@@ -21,6 +22,7 @@ export default function Generic(
   textureCoords: Rect = new Rect(0, 0, 1, 1),
   textureRepeat: boolean = false,
   onLoad: ?() => void = null,
+  copy: ?Array<OBJ_Copy>,
 ) {
   const generic = new VertexGeneric(
     webgl,
@@ -32,6 +34,7 @@ export default function Generic(
     textureVertexSpace,
     textureCoords,
     textureRepeat,
+    copy,
   );
   if (textureLocation) {
     generic.onLoad = onLoad;

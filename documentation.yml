@@ -58,8 +58,8 @@ toc:
   - Equation
   - name: Shapes
   - OBJ_Texture
-  - OBJ_Polygon
   - OBJ_Polyline
+  - OBJ_Polygon
   - name: tools
     description: These are generic tools
     children:
