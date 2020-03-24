@@ -1,8 +1,8 @@
 import {
-  Point, polarToRect,
+  Point,
 } from '../../../../tools/g2';
 import {
-  lineToDashed, getDashElementAndRemainder, makeDashDefinition, makeDashes,
+  getDashElementAndRemainder, makeDashDefinition, makeDashes,
   lineToDash,
 } from './dashes';
 import { round } from '../../../../tools/math';
@@ -14,20 +14,20 @@ describe('Dash tests', () => {
       expect(round(dd.sum)).toBe(1.7);
       expect(round(dd.cum)).toEqual([1, 1.4, 1.6, 1.7]);
       expect(dd.definition).toEqual([1, 0.4, 0.2, 0.1]);
-    })
+    });
   });
   describe('getDashElementAndRemainder', () => {
-    let calcSumAndCum;
-    beforeEach(() => {
-      calcSumAndCum = (dd) => {
-        const cum = [];
-        const cycleLength = dd.reduce((p, sum) => {
-          cum.push(p + sum)
-          return p +sum;
-        }, 0);
-        return [cycleLength, cum]
-      }
-    })
+    // let calcSumAndCum;
+    // beforeEach(() => {
+    //   calcSumAndCum = (dd) => {
+    //     const cum = [];
+    //     const cycleLength = dd.reduce((p, sum) => {
+    //       cum.push(p + sum)
+    //       return p +sum;
+    //     }, 0);
+    //     return [cycleLength, cum]
+    //   }
+    // })
     test('basic', () => {
       const dd = makeDashDefinition([1, 0.5]);
       const [index, remainder] = getDashElementAndRemainder(dd, 0.5);
@@ -109,7 +109,7 @@ describe('Dash tests', () => {
       const s45 = Math.sin(Math.PI / 4);
       const dashes = makeDashes(dd, new Point(0, 0), new Point(1.5 * c45, 1.5 * s45), 0);
       const { points, continues } = dashes;
-      
+
       expect(round(points[0][0])).toEqual(round(new Point(0, 0)));
       expect(round(points[0][1])).toEqual(round(new Point(0.5 * c45, 0.5 * s45)));
       expect(round(points[1][0])).toEqual(round(new Point(0.9 * c45, 0.9 * s45)));
@@ -182,7 +182,7 @@ describe('Dash tests', () => {
       expect(round(d[2][1])).toEqual(new Point(0.2, 1));
       expect(round(d[3][0])).toEqual(new Point(0, 0.7));
       expect(round(d[3][1])).toEqual(new Point(0, 0.1));
-    })
+    });
     test('Four Points with close on dash', () => {
       const d = lineToDash(
         [new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(0, 1)],
@@ -195,6 +195,6 @@ describe('Dash tests', () => {
       expect(round(d[1][1])).toEqual(new Point(1, 0.8));
       expect(round(d[2][0])).toEqual(new Point(0.6, 1));
       expect(round(d[2][1])).toEqual(new Point(0, 1));
-    })
+    });
   });
 });
