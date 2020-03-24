@@ -299,7 +299,7 @@ export type OBJ_Texture = {
  *);
  */
 export type OBJ_Polyline = {
-  points: Array<TypeParsablePoint>,
+  points: Array<TypeParsablePoint> | Array<Point>,
   width?: number,
   close?: boolean,
   widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
