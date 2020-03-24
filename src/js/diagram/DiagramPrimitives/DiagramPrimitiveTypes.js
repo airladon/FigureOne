@@ -21,13 +21,9 @@ export type TypeCopyAngle = {
 }
 
 export type TypeCopyOffset = {
-  offset: TypeParsablePoint,
+  offset: TypeParsablePoint | Transform,
 };
-
-export type TypeCopyTransform = {
-  transform: Transform;
-}
 
 export type OBJ_Copy = Array<Transform> | Array<TypeParsablePoint>
                        | TypeCopyAngle | TypeCopyLinear | TypeParsablePoint
-                       | Transform | TypeCopyOffset | TypeCopyTransform;
+                       | Transform | TypeCopyOffset;
