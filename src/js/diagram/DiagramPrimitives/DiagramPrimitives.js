@@ -393,9 +393,6 @@ export type OBJ_LineStyle = {
  * @property {Transform} [transform] (`Transform('polygon').standard()`)
  * @property {Array<number>} [color] (`[1, 0, 0, 1`])
  * @property {OBJ_Texture} [texture] Override color with a texture
-//  * @property {boolean} [linePrimitives] `true` to use `LINES` instead of
-//  * `TRIANGLE_STRIP` as GL primitive - this will disable width (`false`)
-//  * used with filled polygons
  * @property {number} [pulse] set the default pulse scale
  * @example
  * // Simple filled polygon
@@ -433,7 +430,6 @@ export type OBJ_Polygon = {
   rotation?: number,
   direction?: -1 | 1,
   line?: OBJ_LineStyle,
-  // clockwise?: boolean,
   sidesToDraw?: number,
   angleToDraw?: number,
   color?: Array<number>,
@@ -441,25 +437,12 @@ export type OBJ_Polygon = {
   transform?: Transform,
   position?: TypeParsablePoint,
   texture?: OBJ_Texture,
-  // textureLocation?: string,
-  // textureCoords?: Rect,
   onLoad?: Function,
   pulse?: number;
   trianglePrimitives?: boolean,
-  linePrimitives?: boolean,
   offset?: TypeParsablePoint,
 };
-//     line?: {
-//       widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
-//       cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',
-//       cornerSize?: number,
-//       cornerSides?: number,
-//       cornersOnly?: boolean,
-//       cornerLength?: number,
-//       forceCornerLength?: boolean,
-//       minAutoCornerAngle?: number,
-//       dash?: Array<number>,
-//     },
+
 
 export type TypeTextOptions = {
   text?: string;
@@ -630,7 +613,7 @@ export default class DiagramPrimitives {
     }
     const parsedPoints = options.points.map(p => getPoint(p));
     const parseBorder = (borders) => {
-      if (borders == null) {
+      if (borders == null || !Array.isArray(borders)) {
         return null;
       }
       const borderOut = [];
@@ -1267,125 +1250,125 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  polygonLegacy(...optionsIn: Array<OBJ_Polygon>) {
-    const defaultOptions = {
-      sides: 4,
-      radius: 1,
-      width: 0.01,
-      rotation: 0,
-      clockwise: false,
-      sidesToDraw: null,
-      color: [1, 0, 0, 1],
-      fill: false,
-      textureLocation: '',        // If including a texture, make sure to use
-      textureCoords: new Rect(0, 0, 1, 1),  // correct shader in diagram
-      onLoad: this.animateNextFrame,
-      mods: {},
-      transform: new Transform('polygon').standard(),
-      position: null,
-      center: new Point(0, 0),
-      trianglePrimitives: false,
-      linePrimitives: false,
-      angleToDraw: null,
-    };
-    const options = Object.assign({}, defaultOptions, ...optionsIn);
-    // const o = optionsToUse;
-    // let { transform } = options;
-    // if (transform == null) {
-    //   transform = new Transform('polygon').scale(1, 1).rotate(0).translate(0, 0);
-    // }
-    if (options.position != null) {
-      const point = getPoint(options.position);
-      options.transform.updateTranslation(point);
-    }
-    if (options.center != null) {
-      options.center = getPoint(options.center);
-    }
-    if (options.sidesToDraw == null) {
-      options.sidesToDraw = options.sides;
-    }
-    if (options.angleToDraw != null) {
-      options.sidesToDraw = Math.max(
-        0, Math.floor(options.angleToDraw / Math.PI / 2 * options.sides),
-      );
-    }
+  // polygonLegacy(...optionsIn: Array<OBJ_Polygon>) {
+  //   const defaultOptions = {
+  //     sides: 4,
+  //     radius: 1,
+  //     width: 0.01,
+  //     rotation: 0,
+  //     clockwise: false,
+  //     sidesToDraw: null,
+  //     color: [1, 0, 0, 1],
+  //     fill: false,
+  //     textureLocation: '',        // If including a texture, make sure to use
+  //     textureCoords: new Rect(0, 0, 1, 1),  // correct shader in diagram
+  //     onLoad: this.animateNextFrame,
+  //     mods: {},
+  //     transform: new Transform('polygon').standard(),
+  //     position: null,
+  //     center: new Point(0, 0),
+  //     trianglePrimitives: false,
+  //     linePrimitives: false,
+  //     angleToDraw: null,
+  //   };
+  //   const options = Object.assign({}, defaultOptions, ...optionsIn);
+  //   // const o = optionsToUse;
+  //   // let { transform } = options;
+  //   // if (transform == null) {
+  //   //   transform = new Transform('polygon').scale(1, 1).rotate(0).translate(0, 0);
+  //   // }
+  //   if (options.position != null) {
+  //     const point = getPoint(options.position);
+  //     options.transform.updateTranslation(point);
+  //   }
+  //   if (options.center != null) {
+  //     options.center = getPoint(options.center);
+  //   }
+  //   if (options.sidesToDraw == null) {
+  //     options.sidesToDraw = options.sides;
+  //   }
+  //   if (options.angleToDraw != null) {
+  //     options.sidesToDraw = Math.max(
+  //       0, Math.floor(options.angleToDraw / Math.PI / 2 * options.sides),
+  //     );
+  //   }
 
-    let direction = 1;
-    if (options.clockwise) {
-      direction = -1;
-    }
-    let element;
-    if (options.linePrimitives) {
-      element = PolygonLine(
-        this.webgl,
-        options.sides,
-        options.radius,
-        options.rotation,
-        direction,
-        options.sidesToDraw,
-        options.width,
-        options.color,
-        options.transform,
-        this.limits,
-      );
-    } else if (options.fill) {
-      element = PolygonFilled(
-        this.webgl,
-        options.sides,
-        options.radius,
-        options.rotation,
-        direction,
-        options.sidesToDraw,
-        options.center,
-        options.color,
-        options.transform,
-        this.limits,
-        options.textureLocation,
-        options.textureCoords,
-        options.onLoad,
-      );
-    } else {
-      element = Polygon(
-        this.webgl,
-        options.sides,
-        options.radius,
-        options.width,
-        options.rotation,
-        direction,
-        options.sidesToDraw,
-        options.center,
-        options.color,
-        options.transform,
-        this.limits,
-        options.trianglePrimitives,
-      );
-    }
+  //   let direction = 1;
+  //   if (options.clockwise) {
+  //     direction = -1;
+  //   }
+  //   let element;
+  //   if (options.linePrimitives) {
+  //     element = PolygonLine(
+  //       this.webgl,
+  //       options.sides,
+  //       options.radius,
+  //       options.rotation,
+  //       direction,
+  //       options.sidesToDraw,
+  //       options.width,
+  //       options.color,
+  //       options.transform,
+  //       this.limits,
+  //     );
+  //   } else if (options.fill) {
+  //     element = PolygonFilled(
+  //       this.webgl,
+  //       options.sides,
+  //       options.radius,
+  //       options.rotation,
+  //       direction,
+  //       options.sidesToDraw,
+  //       options.center,
+  //       options.color,
+  //       options.transform,
+  //       this.limits,
+  //       options.textureLocation,
+  //       options.textureCoords,
+  //       options.onLoad,
+  //     );
+  //   } else {
+  //     element = Polygon(
+  //       this.webgl,
+  //       options.sides,
+  //       options.radius,
+  //       options.width,
+  //       options.rotation,
+  //       direction,
+  //       options.sidesToDraw,
+  //       options.center,
+  //       options.color,
+  //       options.transform,
+  //       this.limits,
+  //       options.trianglePrimitives,
+  //     );
+  //   }
 
-    if (options.pulse != null && typeof element.pulseDefault !== 'function') {
-      element.pulseDefault.scale = options.pulse;
-    }
+  //   if (options.pulse != null && typeof element.pulseDefault !== 'function') {
+  //     element.pulseDefault.scale = options.pulse;
+  //   }
 
-    if (options.mods != null && options.mods !== {}) {
-      element.setProperties(options.mods);
-    }
-    return element;
-  }
+  //   if (options.mods != null && options.mods !== {}) {
+  //     element.setProperties(options.mods);
+  //   }
+  //   return element;
+  // }
 
-  polygonLine(
-    numSides: number,
-    radius: number,
-    rotation: number,
-    direction: -1 | 1,
-    numSidesToDraw: number,
-    numLines: number,     // equivalent to thickness - integer
-    color: Array<number>,
-    transform: Transform | Point = new Transform(),
-  ) {
-    return PolygonLine(
-      this.webgl, numSides, radius,
-      rotation, direction, numSidesToDraw, numLines, color, transform, this.limits,
-    );
-  }
+  // polygonLine(
+  //   numSides: number,
+  //   radius: number,
+  //   rotation: number,
+  //   direction: -1 | 1,
+  //   numSidesToDraw: number,
+  //   numLines: number,     // equivalent to thickness - integer
+  //   color: Array<number>,
+  //   transform: Transform | Point = new Transform(),
+  // ) {
+  //   return PolygonLine(
+  //     this.webgl, numSides, radius,
+  //     rotation, direction, numSidesToDraw, numLines, color, transform, this.limits,
+  //   );
+  // }
 
   horizontalLine(
     start: Point,
