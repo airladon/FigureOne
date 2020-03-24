@@ -18,9 +18,9 @@ import VertexObject from '../DrawingObjects/VertexObject/VertexObject';
 //   PolyLine, PolyLineCorners,
 // } from '../DiagramElements/PolyLine';
 import Fan from '../DiagramElements/Fan';
-import {
-  Polygon, PolygonFilled, PolygonLine,
-} from '../DiagramElements/Polygon';
+// import {
+//   Polygon, PolygonFilled, PolygonLine,
+// } from '../DiagramElements/Polygon';
 import RadialLines from '../DiagramElements/RadialLines';
 import HorizontalLine from '../DiagramElements/HorizontalLine';
 import DashedLine from '../DiagramElements/DashedLine';

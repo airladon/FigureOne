@@ -45,12 +45,12 @@ describe('Extract From Object', () => {
         b2: 3,
         b3: {
           b31: 4,
-          b32: (i, j) => i + j,
+          b32: (i, j) => i + j, // eslint-disable-next-line camelcase
           b_33: 5,
         },
       },
       c: i => i + 1,
-      d: (i, j) => i + j,
+      d: (i, j) => i + j,  // eslint-disable-next-line camelcase
       e_1: 6,
     };
   });
@@ -187,12 +187,12 @@ describe('Extract From Collection', () => {
         _b2: 3,
         _b3: {
           _b31: 4,
-          _b32: (i, j) => i + j,
+          _b32: (i, j) => i + j,  // eslint-disable-next-line camelcase
           _b_33: 5,
         },
       },
       _c: i => i + 1,
-      _d: (i, j) => i + j,
+      _d: (i, j) => i + j,  // eslint-disable-next-line camelcase
       _e_1: 6,
     };
   });
