@@ -1,7 +1,6 @@
-// Create diagram and make it touchable
 const diagram = new Fig.Diagram();
 
-// Add elements to the diagram
+// Add a simple shape to the diagram
 diagram.addElements([
   {
     name: 'hexagon',
@@ -28,5 +27,4 @@ diagram.getElement('hexagon').animations.new()
   .position({ target: [0, 0], velocity: 0.3 })
   .start();
 
-// Initialize diagram
 diagram.initialize();

@@ -131,7 +131,23 @@ diagram.addElements([
         // lineNum: 5,
         widthIs: 'mid',
         dash: [0.02, 0.02],
-      }
+      },
+      copyChain
+      // copy: [
+      //   { offset: [-1, -1] },
+      //   { transform: new Transform },
+      //   { num: 5, direction: 'x', step: 3 },
+      //   { num: 5, direction: 'y', step: 3 },
+      //   { numAngle: 3, step: }
+      // ],
+      // repeat: [
+      //   { num: 5, axis: 'x', step: 0.1 },
+      //   { num: 4, axis: 'y', step: 0.1 },
+      // ],
+      // repeat: [
+      //   { num: 5, angle: 'x', step: 0.1 },
+      //   { num: 4, axis: 'y', step: 0.1 },
+      // ] 
     },
   },
 ]);

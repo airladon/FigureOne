@@ -41,6 +41,9 @@ import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { TypeSpaceTransforms } from '../Diagram';
 import { makePolyLine, makePolyLineCorners } from '../DrawingObjects/Geometries/lines/lines';
 import { getPolygonPoints, getFanTrisPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
+import type {
+  OBJ_Copy,
+} from './DiagramPrimitiveTypes';
 
 
 /**
@@ -483,6 +486,71 @@ export type TypeRepeatPatternVertex = {
   transform?: Transform,
 };
 
+// export type TypePointTransforms = {
+//   offset?: TypeParsablePoint,
+//   transform?: Transform,
+//   repeatRect?: {
+//     xNum?: number,
+//     xStep?: number,
+//     yNum?: number,
+//     yStep?: number,
+//   },
+//   repeatPolar?: {
+//     magNum?: number,
+//     magStep?: number,
+//     angleNum?: number,
+//     angleStep?: number,
+//     angleStart?: number,
+//   },
+//   repeatTransforms?: Array<Transform>,
+// };
+
+// export type TypeCopyLinear = {
+//   num?: number,
+//   step?: number,
+//   angle?: number,
+//   axis?: 'x' | 'y',
+// }
+
+// export type TypeCopyRadial = {
+//   numMag?: number,
+//   numAngle?: number,
+//   stepMag?: number,
+//   stepAngle?: number,
+//   startAngle?: number,
+// }
+
+// export type TypeCopyOffset = {
+//   offset: TypeParsablePoint,
+// };
+
+// export type TypeCopyTransform = {
+//   transform: Transform;
+// }
+
+// export type TypeCopy = Array<Transform> | Array<Point> | TypeCopyRadial
+//                        | TypeCopyLinear | Point | Transform | TypeCopyOffset
+//                        | TypeCopyTransform;
+
+// export type TypePointTransforms1 = {
+//   offset?: TypeParsablePoint,
+//   transform?: Transform,
+//   copy: {
+//     xNum?: number,
+//     xStep?: number,
+//     yNum?: number,
+//     yStep?: number,
+//     magNum?: number,
+//     magStep?: number,
+//     angleNum?: number,
+//     angleStep?: number,
+//     angleStart?: number,
+//     transforms?: Array<Transform>,
+//   },
+//   copy: TypeCopy | Array<TypeCopy>,
+// };
+
+
 function parsePoints(
   options: Object,
   keysToParsePointsOrPointArrays: Array<string>,
@@ -584,6 +652,8 @@ export default class DiagramPrimitives {
       repeat?: boolean,
       onLoad?: () => void,
     },
+    copy?: OBJ_Copy,
+    copyChain?: Array<OBJ_Copy>,
     position?: TypeParsablePoint,
     transform?: Transform,
     pulse?: number,
@@ -603,7 +673,25 @@ export default class DiagramPrimitives {
         repeat: false,
         onLoad: this.animateNextFrame,
       },
+      // copy: null,
+      // copyChain: [],
     };
+    // const defaultPointTransforms = {
+    //   // offset: new Point(0, 0),
+    //   transform: new Transform().translate(0, 0),
+    //   repeatXY: {
+    //     xNum: 1,
+    //     xStep: 0.1,
+    //     yNum: 1,
+    //     yStep: 0.1,
+    //   },
+    //   repeatPolar: {
+    //     magNum: 1,
+    //     magStep: 0.1,
+    //     angleNum: 1,
+    //     angleStep: Math.PI / 4,
+    //   },
+    // };
 
     const options = joinObjects(defaultOptions, ...optionsIn);
 
@@ -624,9 +712,15 @@ export default class DiagramPrimitives {
       });
       return borderOut;
     };
+
     const parsedBorder = parseBorder(options.border);
     const parsedBorderHoles = parseBorder(options.hole);
     // console.log(parsedPoints)
+    let copyToUse = options.copyChain;
+    if (options.copy != null) {
+      copyToUse = [options.copy];
+    }
+    // console.log(copyToUse)
     const element = Generic(
       this.webgl,
       parsedPoints,
@@ -641,6 +735,7 @@ export default class DiagramPrimitives {
       options.texture.mapFrom,
       options.texture.repeat,
       options.texture.onLoad,
+      copyToUse,
     );
 
     if (options.pulse != null) {
@@ -671,6 +766,7 @@ export default class DiagramPrimitives {
       transform: new Transform('polyline').standard(),
       border: 'line',
       hole: 'none',
+      repeat: null,
     };
     const options = processOptions(defaultOptions, ...optionsIn);
     parsePoints(options, ['points', 'border', 'hole']);
@@ -717,6 +813,7 @@ export default class DiagramPrimitives {
       points: triangles,
       border: Array.isArray(options.border) ? options.border : borders,
       holeBorder: Array.isArray(options.hole) ? options.hole : holes,
+      repeat: options.repeat,
     });
 
     element.custom.updatePoints = (points) => {

@@ -36,5 +36,4 @@ diagram.addElement(
 // This will reduce the size of both the circle and triangle
 diagram.getElement('shapes').setScale(0.5),
 
-// Initialize diagram
 diagram.initialize();
