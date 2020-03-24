@@ -9,10 +9,8 @@ Open `index.html` in a browser to view example.
 ## Code
 `index.js`
 ```js
-// Create diagram
 const diagram = new Fig.Diagram();
 
-// Add elements to the diagram
 diagram.addElement(
   // Add equation element
   {

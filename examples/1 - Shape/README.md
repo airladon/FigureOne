@@ -61,7 +61,10 @@ In this case, the library is loaded from a CDN, but you could also run it from a
 ```
 
 Finally, the javascript file which will use the FigureOne library to create the diagram is executed.
+
+```html
 <script type="text/javascript" src='./index.js'></script>
+```
 
 All other examples have the same, or very similar HTML index file.
 

@@ -8,10 +8,9 @@ Open `index.html` in a browser to view example.
 
 ## Code
 ```js
-// Create diagram and make it touchable
 const diagram = new Fig.Diagram();
 
-// Add elements to the diagram
+// Add a simple shape to the diagram
 diagram.addElements([
   {
     name: 'hexagon',
@@ -38,7 +37,6 @@ diagram.getElement('hexagon').animations.new()
   .position({ target: [0, 0], velocity: 0.3 })
   .start();
 
-// Initialize diagram
 diagram.initialize();
 ```
 
@@ -46,7 +44,7 @@ diagram.initialize();
 
 Each `DiagramElement` can manage its own animation, or another element's animation.
 
-A set of animation steps can be created using a builder pattern. For instance the below code will animate an element to position (1, 1) over 1s, and then to (0, 0) over the next second.
+A set of animation steps can be created using a fluid api (builder pattern). For instance the below code will animate an element to position (1, 1) over 1s, and then to (0, 0) over the next second.
 
 ```js
 element.animations.new()

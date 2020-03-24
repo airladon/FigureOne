@@ -1,8 +1,6 @@
-// Create diagram and make it able to be touched
 const diagram = new Fig.Diagram();
-diagram.setTouchable();
 
-// Add circle to diagram
+// Add a collection with a circle and triangle in it to the diagram
 diagram.addElement(
   {
     name: 'shapes',
