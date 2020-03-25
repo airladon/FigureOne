@@ -145,7 +145,7 @@ function getPointsToCopy(
 
 function copyOffset(
   points: Array<Point>,
-  copy: CPY_Location,
+  copy: CPY_Offset,
   marks: CPY_Marks,
 ) {
   const defaultOptions = {
@@ -178,6 +178,47 @@ function copyOffset(
   return out;
 }
 
+// function copyLinear(
+//   points: Array<Point>,
+//   copy: CPY_Offset,
+//   marks: CPY_Marks,
+// ) {
+//   const defaultOptions = {
+//     start: 0,
+//     end: 'end',
+//     original: true,
+//     to: [],
+//   };
+
+//   const bounds = getBoundingRect(points);
+//   const defaultCopy = {
+//     num: 1,
+//     angle: 0,
+//   };
+//   const copy = joinObjects({}, defaultCopy, copyIn);
+
+//   if (copy.axis != null && copy.axis === 'y') {
+//     copy.angle = Math.PI / 2;
+//   }
+//   if (copy.axis != null && copy.axis === 'x') {
+//     copy.angle = 0;
+//   }
+
+
+//   if (copy.angle !== 0 && copy.step == null) {
+//     copy.step = Math.abs(bounds.height / Math.sin(copy.angle));
+//   }
+
+//   const out = [];
+//   for (let i = 0; i < copy.num + 1; i += 1) {
+//     const step = copy.step * i;
+//     points.forEach((p) => {
+//       out.push(p.add(polarToRect(step, copy.angle)));
+//     });
+//   }
+//   return out;
+// }
+
 function copyStep(
   points: Array<Point>,
   copyStyle: 'linear' | 'offset' | 'arc' | 'angle' | 'transform',
@@ -187,6 +228,10 @@ function copyStep(
   if (copyStyle === 'offset') {
     return copyOffset(points, copy, marks);
   }
+
+  // if (copyStyle === 'linear') {
+  //   return copyLinear(points, copy, marks);
+  // }
   return points;
   // if (copy instanceof Point) {
   //   return [
