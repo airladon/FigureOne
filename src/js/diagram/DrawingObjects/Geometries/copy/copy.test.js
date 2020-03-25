@@ -1,5 +1,5 @@
 import {
-  Point,
+  Point, Transform,
 } from '../../../../tools/g2';
 import {
   copyPoints,
@@ -123,6 +123,30 @@ describe('Copy tests', () => {
       expect(round(points[1])).toEqual(new Point(1, 1));
       expect(round(points[2])).toEqual(new Point(2, 1));
       expect(round(points[3])).toEqual(new Point(3, 1));
+    });
+  });
+  describe('Copy Transform', () => {
+    test('Simple', () => {
+      const points = copyPoints([[0, 0]], [
+        {
+          transform: new Transform().translate(1, 0),
+        },
+      ]);
+      expect(round(points[0])).toEqual(new Point(0, 0));
+      expect(round(points[1])).toEqual(new Point(1, 0));
+    });
+    test('Multi', () => {
+      const points = copyPoints([[0, 0]], [
+        {
+          transform: [
+            new Transform().translate(1, 0),
+            new Transform().translate(2, 0),
+          ],
+        },
+      ]);
+      expect(round(points[0])).toEqual(new Point(0, 0));
+      expect(round(points[1])).toEqual(new Point(1, 0));
+      expect(round(points[2])).toEqual(new Point(2, 0));
     });
   });
   describe('Copy Linear', () => {
