@@ -2,7 +2,7 @@
 // @flow
 /* eslint-disable camelcase */
 import {
-  Transform, Point, polarToRect, getBoundingRect, getPoints,
+  Transform, Point, polarToRect, getBoundingRect, getPoints, getPoint,
 } from '../../../../tools/g2';
 
 import type { TypeParsablePoint } from '../../../../tools/g2';
@@ -51,35 +51,35 @@ type CPY_Step = { linear: CPY_Linear }
 type CPY_Steps = Array<CPY_Step>;
 
 
-function angleCopy(
-  points: Array<Point>,
-  copyIn: TypeCopyAngle,
-) {
-  const defaultCopy = {
-    numAngle: 1,
-    step: Math.PI / 4,
-    center: [0, 0],
-    skip: 0,
-  };
+// function angleCopy(
+//   points: Array<Point>,
+//   copyIn: TypeCopyAngle,
+// ) {
+//   const defaultCopy = {
+//     numAngle: 1,
+//     step: Math.PI / 4,
+//     center: [0, 0],
+//     skip: 0,
+//   };
 
-  const copy = joinObjects({}, defaultCopy, copyIn);
-  copy.center = getPoint(copy.center);
-  const out = [];
-  const skipPoints = Math.floor(copy.skip ? points.length * copy.skip : 0);
+//   const copy = joinObjects({}, defaultCopy, copyIn);
+//   copy.center = getPoint(copy.center);
+//   const out = [];
+//   const skipPoints = Math.floor(copy.skip ? points.length * copy.skip : 0);
 
-  for (let i = 0; i < copy.numAngle + 1; i += 1) {
-    const matrix = new Transform()
-      .translate(-copy.center.x, -copy.center.y)
-      .rotate(i * copy.step)
-      .translate(copy.center.x, copy.center.y)
-      .matrix();
-    const startPoint = i === 0 ? 0 : skipPoints;
-    for (let p = startPoint; p < points.length; p += 1) {
-      out.push(points[p].transformBy(matrix));
-    }
-  }
-  return out;
-}
+//   for (let i = 0; i < copy.numAngle + 1; i += 1) {
+//     const matrix = new Transform()
+//       .translate(-copy.center.x, -copy.center.y)
+//       .rotate(i * copy.step)
+//       .translate(copy.center.x, copy.center.y)
+//       .matrix();
+//     const startPoint = i === 0 ? 0 : skipPoints;
+//     for (let p = startPoint; p < points.length; p += 1) {
+//       out.push(points[p].transformBy(matrix));
+//     }
+//   }
+//   return out;
+// }
 
 // Array<Transform> | Array<Point> | TypeCopyAngle
 // | TypeCopyLinear | Point | Transform | TypeCopyOffset
@@ -141,7 +141,7 @@ function copyOffset(
 function copyTransform(
   pointsToCopy: Array<Point>,
   initialPoints: Array<Point>,
-  optionsIn: CPY_Offset,
+  optionsIn: CPY_Transform,
 ) {
   const defaultOptions = {
     to: [],
@@ -198,6 +198,33 @@ function copyLinear(
   return out;
 }
 
+function copyAngle(
+  pointsToCopy: Array<Point>,
+  initialPoints: Array<Point>,
+  optionsIn: CPY_Angle,
+) {
+  const defaultOptions = {
+    num: 1,
+    step: Math.PI / 4,
+    center: [0, 0],
+  };
+
+  const options = joinObjects({}, defaultOptions, optionsIn);
+  options.center = getPoint(options.center);
+
+  let out = initialPoints;
+  const { center } = options;
+  for (let i = 1; i < options.num + 1; i += 1) {
+    const matrix = new Transform()
+      .translate(-center.x, -center.y)
+      .rotate(i * options.step)
+      .translate(center.x, center.y)
+      .matrix();
+    out = [...out, ...pointsToCopy.map(p => p.transformBy(matrix))];
+  }
+  return out;
+}
+
 function copyStep(
   points: Array<Point>,
   copyStyle: 'linear' | 'offset' | 'arc' | 'angle' | 'transform',
@@ -236,6 +263,10 @@ function copyStep(
 
   if (copyStyle === 'transform') {
     return copyTransform(pointsToCopy, out, copy);
+  }
+
+  if (copyStyle === 'angle') {
+    return copyAngle(pointsToCopy, out, copy);
   }
   return points;
   // if (copy instanceof Point) {
