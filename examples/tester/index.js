@@ -81,79 +81,29 @@ const line = [
 
 diagram.addElements([
   {
-    name: 'p1',
-    method: 'shapes.polygonSweep',
-    options: {
-      sides: 100,
-      width: 0.05,
-      line: {
-        widthIs: 'outside',
-      },
-      // angleToDraw: 3,
-      // sidesToDraw: 3,
-      // line: {
-      //   cornersOnly: true,
-      // },
-      // line: {
-      //   widthIs: 'mid',
-      //   cornerStyle: 'fill',
-      //   // dash: [0.1, 0.04],
-      //   // cornerSize: 0.2,
-      //   // cornerStyle: 'radius',
-      // },
-      // angle: Math.PI / 3,
-      // sidesToDraw: 4,
-      direction: -1,
-      radius: 0.9,
-      // fill: true,
-      position: [0, 0],
-      line: {
-        linePrimitives: true,
-        lineNum: 10,
-      },
-      // textureLocation: 'example.png',
-    },
-  },
-  {
     name: 'p',
-    method: 'polygon',
+    method: 'shapes.polygon',
     options: {
-      sides: 8,
-      width: 0.05,
-      radius: 0.2,
-      fill: true,
-      color: [0, 1, 1, 1],
-      position: [0, 0],
-      touchableLineOnly: true,
-      // textureLocation: 'example.png',
+      sides: 3,
+      width: 0.004,
+      radius: 0.1,
       line: {
-        // linePrimitives: true,
-        // lineNum: 5,
         widthIs: 'mid',
-        dash: [0.02, 0.02],
+        cornerStyle: 'radius',
+        cornerSize: 0.01,
+        cornerSides: 5,
+        dash: [0.01, 0.01],
       },
-      copyChain
       // copy: [
-      //   { offset: [-1, -1] },
-      //   { transform: new Transform },
-      //   { num: 5, direction: 'x', step: 3 },
-      //   { num: 5, direction: 'y', step: 3 },
-      //   { numAngle: 3, step: }
-      // ],
-      // repeat: [
-      //   { num: 5, axis: 'x', step: 0.1 },
-      //   { num: 4, axis: 'y', step: 0.1 },
-      // ],
-      // repeat: [
-      //   { num: 5, angle: 'x', step: 0.1 },
-      //   { num: 4, axis: 'y', step: 0.1 },
-      // ] 
+      //   { point: }
+      //   { transform: }
+      //   { }
+      // ]
+      copyChain: [
+        { num: 1, step: 0.3, angle: 0 },
+        { numAngle: 10, step: Math.PI * 2 / 9, skip: 1/2 }
+      ],
     },
   },
 ]);
-diagram.getElement('p1').angleToDraw = 1;
 diagram.initialize();
-console.log(diagram.getElement('p1'))
-diagram.getElement('p').setMovable();
-console.log(diagram.getElement('p'))
-diagram.getElement('p').cannotTouchHole = true;
