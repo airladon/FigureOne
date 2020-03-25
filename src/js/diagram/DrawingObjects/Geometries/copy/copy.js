@@ -250,7 +250,7 @@ function copyStep(
 
   let out = [];
   if (options.original) {
-    out = [...pointsToCopy];
+    out = [...points];
   }
 
   if (copyStyle === 'offset') {
@@ -369,7 +369,7 @@ function copyPoints(
       const copyStyle = Object.keys(c)[0];
       out = copyStep(nextPoints, copyStyle, c[copyStyle], marks);
       nextPoints = out;
-      marks[`${index + 1}`] = out.length;
+      marks[`${index + 2}`] = out.length;
     }
   });
   return out;

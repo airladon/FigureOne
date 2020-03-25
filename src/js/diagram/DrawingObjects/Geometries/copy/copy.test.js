@@ -71,13 +71,15 @@ describe('Copy tests', () => {
         [
           { offset: { to: [1, 0] } },
           { offset: { to: [0, 1] } },
-          { offset: { to: [2, 0], start: 1, end: 2 } },
+          { offset: { to: [2, 0], start: 2, end: 3 } },
         ],
       );
-      expect(round(points[0])).toEqual(new Point(0, 1));
-      expect(round(points[1])).toEqual(new Point(1, 1));
-      expect(round(points[2])).toEqual(new Point(2, 1));
-      expect(round(points[3])).toEqual(new Point(3, 1));
+      expect(round(points[0])).toEqual(new Point(0, 0));
+      expect(round(points[1])).toEqual(new Point(1, 0));
+      expect(round(points[2])).toEqual(new Point(0, 1));
+      expect(round(points[3])).toEqual(new Point(1, 1));
+      expect(round(points[4])).toEqual(new Point(2, 1));
+      expect(round(points[5])).toEqual(new Point(3, 1));
     });
     test('Three chain - selcted copy only with mark', () => {
       const points = copyPoints(
@@ -86,13 +88,15 @@ describe('Copy tests', () => {
           { offset: { to: [1, 0] } },
           { offset: { to: [0, 1] } },
           'a',
-          { offset: { to: [2, 0], start: 1, end: 'a' } },
+          { offset: { to: [2, 0], start: 2, end: 'a' } },
         ],
       );
-      expect(round(points[0])).toEqual(new Point(0, 1));
-      expect(round(points[1])).toEqual(new Point(1, 1));
-      expect(round(points[2])).toEqual(new Point(2, 1));
-      expect(round(points[3])).toEqual(new Point(3, 1));
+      expect(round(points[0])).toEqual(new Point(0, 0));
+      expect(round(points[1])).toEqual(new Point(1, 0));
+      expect(round(points[2])).toEqual(new Point(0, 1));
+      expect(round(points[3])).toEqual(new Point(1, 1));
+      expect(round(points[4])).toEqual(new Point(2, 1));
+      expect(round(points[5])).toEqual(new Point(3, 1));
     });
     test('Three chain - selcted copy only with two marks', () => {
       const points = copyPoints(
@@ -105,10 +109,12 @@ describe('Copy tests', () => {
           { offset: { to: [2, 0], start: 'a', end: 'b' } },
         ],
       );
-      expect(round(points[0])).toEqual(new Point(0, 1));
-      expect(round(points[1])).toEqual(new Point(1, 1));
-      expect(round(points[2])).toEqual(new Point(2, 1));
-      expect(round(points[3])).toEqual(new Point(3, 1));
+      expect(round(points[0])).toEqual(new Point(0, 0));
+      expect(round(points[1])).toEqual(new Point(1, 0));
+      expect(round(points[2])).toEqual(new Point(0, 1));
+      expect(round(points[3])).toEqual(new Point(1, 1));
+      expect(round(points[4])).toEqual(new Point(2, 1));
+      expect(round(points[5])).toEqual(new Point(3, 1));
     });
     test('Three chain - no original', () => {
       const points = copyPoints(
@@ -161,6 +167,23 @@ describe('Copy tests', () => {
       ]);
       expect(round(points[0])).toEqual(new Point(0, 1));
       expect(round(points[1])).toEqual(new Point(-1, 0));
+    });
+    test('Radial', () => {
+      const points = copyPoints([[0, 0]], [
+        { linear: { num: 2, axis: 'y', step: 1 } },
+        {
+          angle: {
+            num: 1,
+            step: Math.PI / 2,
+            start: 1,
+          },
+        },
+      ]);
+      expect(round(points[0])).toEqual(new Point(0, 0));
+      expect(round(points[1])).toEqual(new Point(0, 1));
+      expect(round(points[2])).toEqual(new Point(0, 2));
+      expect(round(points[3])).toEqual(new Point(-1, 0));
+      expect(round(points[4])).toEqual(new Point(-2, 0));
     });
   });
   describe('Copy Linear', () => {
