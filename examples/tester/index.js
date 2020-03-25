@@ -90,18 +90,33 @@ diagram.addElements([
       line: {
         widthIs: 'mid',
         cornerStyle: 'radius',
-        cornerSize: 0.01,
+        cornerSize: 0.02,
         cornerSides: 5,
-        dash: [0.01, 0.01],
+        dash: [0.02, 0.005, 0.005, 0.005],
       },
-      // copy: [
-      //   { point: }
-      //   { transform: }
-      //   { }
-      // ]
+      copy: [
+        { point: [0, 1], from: 0, tostep: 1 }
+        'a',
+        { transform: }
+        { linear: { }, from: 0, to: 1 }
+        { angle: { }, : false }
+        { arc: { }, cum: true }
+      copy: [
+        { linear: { num: 5, }}
+      ]
+        new Copy()
+          .point()
+          .points()
+          .transform()
+          .transforms()
+          .mark()
+          .angle()
+          .linear()
+          .arc({ fromMark: 'a', toMark: 'b',})
+      ]
       copyChain: [
-        { num: 1, step: 0.3, angle: 0 },
-        { numAngle: 10, step: Math.PI * 2 / 9, skip: 1/2 }
+        { num: 2, step: 0.3, angle: 0 },
+        { numAngle: 20, step: Math.PI * 2 / 18, skip: 1/3 }
       ],
     },
   },

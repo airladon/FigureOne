@@ -534,6 +534,16 @@ function getPoint(p: TypeParsablePoint): Point {
   return parsedPoint;
 }
 
+function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<Point> { 
+  if (Array.isArray(points) && points.length > 0 && typeof points[0] === 'number') {
+    return [getPoint(points)];
+  }
+  if (Array.isArray(points)) {
+    return points.map(p => getPoint(p));
+  }
+  return [getPoint(points)];
+}
+
 function linearPath(
   start: Point,
   delta: Point,
@@ -2259,5 +2269,6 @@ export {
   clipAngle,
   spaceToSpaceScale,
   getPoint,
+  getPoints,
   quadBezierPoints,
 };
