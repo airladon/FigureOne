@@ -84,10 +84,39 @@ describe('Copy tests', () => {
         [[0, 0]],
         [
           { offset: { to: [1, 0] } },
+          { offset: { to: [0, 1] } },
+          'a',
+          { offset: { to: [2, 0], start: 1, end: 'a' } },
+        ],
+      );
+      expect(round(points[0])).toEqual(new Point(0, 1));
+      expect(round(points[1])).toEqual(new Point(1, 1));
+      expect(round(points[2])).toEqual(new Point(2, 1));
+      expect(round(points[3])).toEqual(new Point(3, 1));
+    });
+    test('Three chain - selcted copy only with two marks', () => {
+      const points = copyPoints(
+        [[0, 0]],
+        [
+          { offset: { to: [1, 0] } },
           'a',
           { offset: { to: [0, 1] } },
           'b',
           { offset: { to: [2, 0], start: 'a', end: 'b' } },
+        ],
+      );
+      expect(round(points[0])).toEqual(new Point(0, 1));
+      expect(round(points[1])).toEqual(new Point(1, 1));
+      expect(round(points[2])).toEqual(new Point(2, 1));
+      expect(round(points[3])).toEqual(new Point(3, 1));
+    });
+    test('Three chain - no original', () => {
+      const points = copyPoints(
+        [[0, 0]],
+        [
+          { offset: { to: [1, 0] } },
+          { offset: { to: [0, 1], original: false } },
+          { offset: { to: [2, 0] } },
         ],
       );
       expect(round(points[0])).toEqual(new Point(0, 1));
