@@ -70,7 +70,7 @@ describe('Diagram Primitive Generic Copy', () => {
       ],
       radialLine: [
         { num: 2, angle: Math.PI / 2, step: 1 },
-        { numAngle: 2, step: Math.PI / 2, numSkip: 2 },
+        { numAngle: 2, step: Math.PI / 2, skip: 1 / 3 },
       ],
     };
   });

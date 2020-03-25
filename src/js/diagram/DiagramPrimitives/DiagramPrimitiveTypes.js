@@ -17,7 +17,7 @@ export type TypeCopyAngle = {
   numAngle: number,
   step?: number,
   center?: TypeParsablePoint,
-  numSkip?: number,
+  skipFirst?: boolean,
 }
 
 export type TypeCopyOffset = {

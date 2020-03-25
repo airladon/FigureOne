@@ -720,7 +720,6 @@ export default class DiagramPrimitives {
     if (options.copy != null) {
       copyToUse = [options.copy];
     }
-    // console.log(copyToUse)
     const element = Generic(
       this.webgl,
       parsedPoints,
