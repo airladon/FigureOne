@@ -61,22 +61,22 @@ function angleCopy(
   copyIn: TypeCopyAngle,
 ) {
   const defaultCopy = {
-    num: 1,
+    numAngle: 1,
     step: Math.PI / 4,
     center: [0, 0],
-    skipPoints: 0,
+    numSkip: 0,
   };
 
   const copy = joinObjects({}, defaultCopy, copyIn);
   copy.center = getPoint(copy.center);
   const out = [];
-  for (let i = 0; i < copy.num; i += 1) {
+  for (let i = 0; i < copy.numAngle + 1; i += 1) {
     const matrix = new Transform()
       .translate(-copy.center.x, -copy.center.y)
       .rotate(i * copy.step)
       .translate(copy.center.x, copy.center.y)
       .matrix();
-    const startPoint = i === 0 ? 0 : copy.skipPoints;
+    const startPoint = i === 0 ? 0 : copy.numSkip;
     for (let p = startPoint; p < points.length; p += 1) {
       out.push(points[p].transformBy(matrix));
     }
@@ -182,7 +182,7 @@ function copyPoints(
     return points;
   }
   copyChain.forEach((c) => {
-    out = [...out, ...processCopy(nextPoints, c)];
+    out = processCopy(nextPoints, c);
     nextPoints = out;
   });
   return out;
