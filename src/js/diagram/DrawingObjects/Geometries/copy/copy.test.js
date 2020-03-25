@@ -149,6 +149,20 @@ describe('Copy tests', () => {
       expect(round(points[2])).toEqual(new Point(2, 0));
     });
   });
+  describe('Copy Angle', () => {
+    test('Simple', () => {
+      const points = copyPoints([[0, 1]], [
+        {
+          angle: {
+            num: 1,
+            step: Math.PI / 2,
+          },
+        },
+      ]);
+      expect(round(points[0])).toEqual(new Point(0, 1));
+      expect(round(points[1])).toEqual(new Point(-1, 0));
+    });
+  });
   describe('Copy Linear', () => {
     test('Simple', () => {
       const points = copyPoints([[0, 0]], [
