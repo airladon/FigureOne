@@ -178,46 +178,46 @@ function copyOffset(
   return out;
 }
 
-// function copyLinear(
-//   points: Array<Point>,
-//   copy: CPY_Offset,
-//   marks: CPY_Marks,
-// ) {
-//   const defaultOptions = {
-//     start: 0,
-//     end: 'end',
-//     original: true,
-//     to: [],
-//   };
+function copyLinear(
+  points: Array<Point>,
+  optionsIn: CPY_Linear,
+  marks: CPY_Marks,
+) {
+  const defaultOptions = {
+    start: 0,
+    end: 'end',
+    original: true,
+    num: 1,
+    angle: 0,
+  };
 
-//   const bounds = getBoundingRect(points);
-//   const defaultCopy = {
-//     num: 1,
-//     angle: 0,
-//   };
-//   const copy = joinObjects({}, defaultCopy, copyIn);
+  const options = joinObjects({}, defaultOptions, optionsIn);
 
-//   if (copy.axis != null && copy.axis === 'y') {
-//     copy.angle = Math.PI / 2;
-//   }
-//   if (copy.axis != null && copy.axis === 'x') {
-//     copy.angle = 0;
-//   }
+  if (options.axis != null && options.axis === 'y') {
+    options.angle = Math.PI / 2;
+  }
+  if (options.axis != null && options.axis === 'x') {
+    options.angle = 0;
+  }
 
 
-//   if (copy.angle !== 0 && copy.step == null) {
-//     copy.step = Math.abs(bounds.height / Math.sin(copy.angle));
-//   }
+  if (options.angle !== 0 && options.step == null) {
+    const bounds = getBoundingRect(points);
+    options.step = Math.abs(bounds.height / Math.sin(options.angle));
+  }
 
-//   const out = [];
-//   for (let i = 0; i < copy.num + 1; i += 1) {
-//     const step = copy.step * i;
-//     points.forEach((p) => {
-//       out.push(p.add(polarToRect(step, copy.angle)));
-//     });
-//   }
-//   return out;
-// }
+  const pointsToCopy = getPointsToCopy(points, options.start, options.end, marks);
+
+  let out = [];
+  if (options.original) {
+    out = [...pointsToCopy];
+  }
+  for (let i = 1; i < options.num + 1; i += 1) {
+    const step = options.step * i;
+    out = [...out, ...pointsToCopy.map(p => p.add(polarToRect(step, options.angle)))];
+  }
+  return out;
+}
 
 function copyStep(
   points: Array<Point>,
@@ -229,9 +229,9 @@ function copyStep(
     return copyOffset(points, copy, marks);
   }
 
-  // if (copyStyle === 'linear') {
-  //   return copyLinear(points, copy, marks);
-  // }
+  if (copyStyle === 'linear') {
+    return copyLinear(points, copy, marks);
+  }
   return points;
   // if (copy instanceof Point) {
   //   return [

@@ -125,4 +125,72 @@ describe('Copy tests', () => {
       expect(round(points[3])).toEqual(new Point(3, 1));
     });
   });
+  describe('Copy Linear', () => {
+    test('Simple', () => {
+      const points = copyPoints([[0, 0]], [
+        {
+          linear: {
+            num: 1,
+            step: 1,
+            angle: 0,
+          },
+        },
+      ]);
+      expect(round(points[0])).toEqual(new Point(0, 0));
+      expect(round(points[1])).toEqual(new Point(1, 0));
+    });
+    test('Two step', () => {
+      const points = copyPoints([[0, 0]], [
+        {
+          linear: {
+            num: 2,
+            step: 1,
+            angle: 0,
+          },
+        },
+      ]);
+      expect(round(points[0])).toEqual(new Point(0, 0));
+      expect(round(points[1])).toEqual(new Point(1, 0));
+      expect(round(points[2])).toEqual(new Point(2, 0));
+    });
+    test('X Axis', () => {
+      const points = copyPoints([[0, 0]], [
+        {
+          linear: {
+            num: 1,
+            step: 1,
+            axis: 'x',
+          },
+        },
+      ]);
+      expect(round(points[0])).toEqual(new Point(0, 0));
+      expect(round(points[1])).toEqual(new Point(1, 0));
+    });
+    test('Y Axis', () => {
+      const points = copyPoints([[0, 0]], [
+        {
+          linear: {
+            num: 1,
+            step: 1,
+            axis: 'y',
+          },
+        },
+      ]);
+      expect(round(points[0])).toEqual(new Point(0, 0));
+      expect(round(points[1])).toEqual(new Point(0, 1));
+    });
+    test('Angle', () => {
+      const points = copyPoints([[0, 0]], [
+        {
+          linear: {
+            num: 1,
+            step: 1,
+            angle: Math.PI,
+          },
+        },
+      ]);
+      expect(round(points[0])).toEqual(new Point(0, 0));
+      expect(round(points[1])).toEqual(new Point(-1, 0));
+    });
+  });
 });
