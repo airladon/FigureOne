@@ -4,7 +4,7 @@ Draws a circle.
 
 Download `index.html` and `index.js` into the same folder and open `index.html` in a browser to view example.
 
-![example](./example.png)
+![](./example.png)
 
 ## Code
 `index.html`
