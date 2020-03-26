@@ -10,6 +10,7 @@ describe('Copy tests', () => {
   describe('Copy Offset', () => {
     test('Simple', () => {
       const points = copyPoints([[0, 0]], [{ offset: [1, 0] }]);
+      // console.log(points)
       expect(round(points[0])).toEqual(new Point(0, 0));
       expect(round(points[1])).toEqual(new Point(1, 0));
     });
@@ -65,7 +66,7 @@ describe('Copy tests', () => {
       expect(round(points[6])).toEqual(new Point(2, 1));
       expect(round(points[7])).toEqual(new Point(3, 1));
     });
-    test('Three chain - selcted copy only', () => {
+    test('Three chain - selected copy only', () => {
       const points = copyPoints(
         [[0, 0]],
         [
@@ -129,6 +130,19 @@ describe('Copy tests', () => {
       expect(round(points[1])).toEqual(new Point(1, 1));
       expect(round(points[2])).toEqual(new Point(2, 1));
       expect(round(points[3])).toEqual(new Point(3, 1));
+    });
+    test('Copy first element in parallel', () => {
+      const points = copyPoints(
+        [[0, 0]],
+        [
+          { offset: { to: [1, 0], start: 0, end: 1, original: false } },
+          { offset: { to: [0, 1], start: 0, end: 1 } },
+          // { offset: { to: [2, 0] } },
+        ],
+      );
+      expect(round(points[0])).toEqual(new Point(1, 0));
+      expect(round(points[1])).toEqual(new Point(0, 1));
+      expect(points).toHaveLength(2);
     });
   });
   describe('Copy Transform', () => {
