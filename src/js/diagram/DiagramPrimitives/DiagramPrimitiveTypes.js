@@ -6,6 +6,12 @@ import type {
   TypeParsablePoint,
 } from '../../tools/g2';
 
+export type TypeCopyPoint = {
+  point: TypeParsablePoint,
+  points: Array<TypeParsablePoint>,
+  cum: 'first' | ''
+}
+
 export type TypeCopyLinear = {
   num: number,
   step?: number,
