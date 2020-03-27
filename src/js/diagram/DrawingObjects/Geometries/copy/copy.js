@@ -18,6 +18,7 @@ type CPY_Generic = {
 };
 
 type CPY_Linear = {
+  // type: 'linear',
   num?: number,
   angle?: number,
   axis?: 'x' | 'y',
@@ -97,15 +98,16 @@ function copyOffset(
   let options;
   if (optionsIn instanceof Point
      || typeof optionsIn === 'number'
-     || optionsIn.x != null || optionsIn.y != null
+     //  || (typeof options === 'object' && (optionsIn.x != null || optionsIn.y != null))
      || Array.isArray(optionsIn)
   ) {
     options = defaultOptions;
-    options.to = optionsIn;
+    options.to = getPoints(optionsIn);
   } else {
     options = joinObjects({}, defaultOptions, optionsIn);
+    options.to = getPoints(options.to);
   }
-  options.to = getPoints(options.to);
+  // options.to = getPoints(options.to);
 
   let out = initialPoints;
   for (let i = 0; i < options.to.length; i += 1) {
@@ -236,7 +238,7 @@ function copyAngle(
 function copyStep(
   points: Array<Point>,
   copyStyle: 'linear' | 'offset' | 'arc' | 'angle' | 'transform',
-  options: CPY_Linear | CPY_Offset,
+  options: CPY_Linear | CPY_Offset | CPY_Angle | CPY_Transform,
   // marks: CPY_Marks,
 ) {
   const out = [];
@@ -263,7 +265,7 @@ function copyStep(
 
 function copyPoints(
   points: Array<TypeParsablePoint>,
-  chain: ?Array<CPY_Steps>,
+  chain: ?CPY_Steps,
 ) {
   const marks = {};
   // let out = [];
