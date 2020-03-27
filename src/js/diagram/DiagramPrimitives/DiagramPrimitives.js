@@ -44,6 +44,7 @@ import { getPolygonPoints, getFanTrisPolygon } from '../DrawingObjects/Geometrie
 import type {
   OBJ_Copy,
 } from './DiagramPrimitiveTypes';
+import { copyPoints } from '../DrawingObjects/Geometries/copy/copy';
 
 
 /**
@@ -720,6 +721,7 @@ export default class DiagramPrimitives {
     if (options.copy != null) {
       copyToUse = [options.copy];
     }
+    console.log(copyToUse);
     const element = Generic(
       this.webgl,
       parsedPoints,
