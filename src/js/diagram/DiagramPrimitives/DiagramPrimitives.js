@@ -653,8 +653,8 @@ export default class DiagramPrimitives {
       repeat?: boolean,
       onLoad?: () => void,
     },
-    copy?: OBJ_Copy,
-    copyChain?: Array<OBJ_Copy>,
+    copy?: Array<OBJ_Copy> | OBJ_Copy,
+    // copyChain?: Array<OBJ_Copy>,
     position?: TypeParsablePoint,
     transform?: Transform,
     pulse?: number,
@@ -717,11 +717,11 @@ export default class DiagramPrimitives {
     const parsedBorder = parseBorder(options.border);
     const parsedBorderHoles = parseBorder(options.hole);
     // console.log(parsedPoints)
-    let copyToUse = options.copyChain;
-    if (options.copy != null) {
+    let copyToUse = options.copy;
+    if (options.copy != null && !Array.isArray(options.copy)) {
       copyToUse = [options.copy];
     }
-    console.log(copyToUse);
+
     const element = Generic(
       this.webgl,
       parsedPoints,
@@ -767,7 +767,7 @@ export default class DiagramPrimitives {
       transform: new Transform('polyline').standard(),
       border: 'line',
       hole: 'none',
-      repeat: null,
+      // repeat: null,
     };
     const options = processOptions(defaultOptions, ...optionsIn);
     parsePoints(options, ['points', 'border', 'hole']);
@@ -814,7 +814,7 @@ export default class DiagramPrimitives {
       points: triangles,
       border: Array.isArray(options.border) ? options.border : borders,
       holeBorder: Array.isArray(options.hole) ? options.hole : holes,
-      repeat: options.repeat,
+      // repeat: options.repeat,
     });
 
     element.custom.updatePoints = (points) => {
@@ -916,6 +916,89 @@ export default class DiagramPrimitives {
         hole,
       });
     }
+    return element;
+  }
+
+  grid1(...optionsIn: Array<{
+    xStep?: number,
+    yStep?: number,
+    xNum?: number,
+    yNum?: number,
+    width?: number,
+    start?: TypeParsablePoint,
+    // stop?: TypeParsablePoint,
+    texture?: OBJ_Texture,
+    // line?: OBJ_LineStyle,
+    dash?: Array<number>,
+    linePrimitives?: boolean,
+    lineNum?: number,
+  }>) {
+    const defaultOptions = {
+      xStep: 0.1,
+      yStep: 0.1,
+      xNum: 2,
+      yNum: 2,
+      width: 0.005,
+      start: [0, 0],
+      // stop: [1, 1],
+      transform: new Transform('polygon').standard(),
+      touchableLineOnly: false,
+      dash: [],
+      linePrimitives: false,
+      lineNum: 2,
+    };
+    const options = processOptions(defaultOptions, ...optionsIn);
+    parsePoints(options, ['start', 'stop']);
+    const getTris = points => makePolyLine(
+      points,
+      options.width,
+      false,
+      'mid',
+      'auto', // cornerStyle doesn't matter
+      0.1,    // cornerSize doesn't matter
+      1,      // cornerSides,
+      Math.PI / 7, // minAutoCornerAngle,
+      options.dash,
+      options.linePrimitives,
+      options.lineNum,
+      [[]],
+      [[]],
+    );
+    const {
+      xNum, yNum, xStep, yStep, width, start,
+    } = options;
+    const totWidth = (xNum - 1) * xStep;
+    const totHeight = (yNum - 1) * yStep;
+    let xLineStart = start.add(-width / 2, 0);
+    let xLineStop = start.add(totWidth + width / 2, 0);
+    let yLineStart = start.add(0, -width / 2);
+    let yLineStop = start.add(0, totHeight + width / 2);
+    if (options.linePrimitives && options.lineNum === 1) {
+      xLineStart = start.add(0, 0);
+      xLineStop = start.add(totWidth, 0);
+      yLineStart = start.add(0, 0);
+      yLineStop = start.add(0, totHeight);
+    }
+
+    const [xLine] = getTris([xLineStart, xLineStop]);
+    const [yLine] = getTris([yLineStart, yLineStop]);
+
+    const xTris = copyPoints(xLine, [
+      { linear: { num: yNum - 1, step: yStep, axis: 'y' } },
+    ]);
+    const yTris = copyPoints(yLine, [
+      { linear: { num: xNum - 1, step: xStep, axis: 'x' } },
+    ]);
+    const element = this.generic(options, {
+      drawType: options.linePrimitives ? 'lines' : 'triangles',
+      points: [...xTris, ...yTris],
+      border: [[
+        start._dup(),
+        start.add(totWidth, 0),
+        start.add(totWidth, totHeight),
+        start.add(0, totHeight),
+      ]],
+    });
     return element;
   }
 
