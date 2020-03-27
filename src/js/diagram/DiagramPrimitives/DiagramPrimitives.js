@@ -642,7 +642,7 @@ export default class DiagramPrimitives {
 
   generic(...optionsIn: Array<{
     points?: Array<TypeParsablePoint> | Array<Point>,
-    border?: Array<Array<TypeParsablePoint>> | Array<Array<Point>>,
+    border?: Array<Array<TypeParsablePoint>>,
     hole?: Array<Array<TypeParsablePoint>> | Array<Array<Point>>,
     drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
     color?: Array<number>,
@@ -940,7 +940,6 @@ export default class DiagramPrimitives {
       yNum: 2,
       width: 0.005,
       start: [0, 0],
-      // stop: [1, 1],
       transform: new Transform('polygon').standard(),
       touchableLineOnly: false,
       dash: [],
