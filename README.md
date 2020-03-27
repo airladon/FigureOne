@@ -75,6 +75,8 @@ Source code of this and other examples is provided:
 
 ![](examples/7%20-%20Animation%20between%20Equation%20Forms/example.gif)
 
+Documentation is a work in progress.
+
 ## NPM Package
 
 On projects that are bundled with tools such as Webpack, it can be useful to use the FigureOne NPM package:
