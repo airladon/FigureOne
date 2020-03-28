@@ -80,30 +80,26 @@ const line = [
 // pad.setPosition(-0.7, 0);
 
 diagram.addElements([
-  // {
-  //   name: 'g',
-  //   method: 'shapes.grid1',
-  //   options: {
-  //     start: [-0.8, -0.8],
-  //     xNum: 5,
-  //     xStep: 0.1,
-  //     yNum: 5,
-  //     yStep: 0.1,
-  //     width: 0.05,
-  //     // color: [0.5, 0.5, 0.5, 1],
-  //     // linePrimitives: true,
-  //     // lineNum: 1,
-  //     copy: [
-  //       { along: 'x', num: 2, step: 0.1, },
-  //       // { to: 'y', num: 2, step: 0.3, },
-  //       // { to: Math.PI, num: 2, step: 0.4 },
-  //       // { to: 'rot', num: 5, step: 0.4, center: [0, 0]}
-  //       // { linear: { num: 2, step: 0.5 }},
-  //       // { linear: { num: 2, step: 0.5, axis: 'y' }}
-  //     ],
-  //     // dash: [0.02, 0.003, 0.003, 0.003]
-  //   },
-  // },
+  {
+    name: 'g',
+    method: 'shapes.grid1',
+    options: {
+      start: [-0.8, -0.8],
+      xNum: 5,
+      xStep: 0.1,
+      yNum: 5,
+      yStep: 0.1,
+      width: 0.01,
+      color: [0.5, 0.5, 0.5, 1],
+      linePrimitives: true,
+      lineNum: 1,
+      copy: [
+        { along: 'x', num: 2, step: 0.5, },
+        { along: 'y', num: 2, step: 0.5, },
+      ],
+      dash: [0.02, 0.003, 0.003, 0.003]
+    },
+  },
   {
     name: 'p',
     method: 'shapes.polygon',
