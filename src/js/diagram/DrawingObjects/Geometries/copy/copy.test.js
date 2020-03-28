@@ -9,13 +9,13 @@ import { round } from '../../../../tools/math';
 describe('Copy tests', () => {
   describe('Copy Offset', () => {
     test('Simple', () => {
-      const points = copyPoints([[0, 0]], [{ offset: [1, 0] }]);
+      const points = copyPoints([[0, 0]], [{ to: [1, 0] }]);
       // console.log(points)
       expect(round(points[0])).toEqual(new Point(0, 0));
       expect(round(points[1])).toEqual(new Point(1, 0));
     });
     test('Multi', () => {
-      const points = copyPoints([[0, 0]], [{ offset: [[1, 0], [2, 0]] }]);
+      const points = copyPoints([[0, 0]], [{ to: [[1, 0], [2, 0]] }]);
       expect(round(points[0])).toEqual(new Point(0, 0));
       expect(round(points[1])).toEqual(new Point(1, 0));
       expect(round(points[2])).toEqual(new Point(2, 0));
@@ -23,7 +23,7 @@ describe('Copy tests', () => {
     test('Multi Three', () => {
       const points = copyPoints(
         [[0, 0], [0.1, 0], [0.2, 0]],
-        [{ offset: [[1, 0], [2, 0]] }],
+        [{ to: [[1, 0], [2, 0]] }],
       );
       expect(round(points[0])).toEqual(new Point(0, 0));
       expect(round(points[1])).toEqual(new Point(0.1, 0));
@@ -39,8 +39,8 @@ describe('Copy tests', () => {
       const points = copyPoints(
         [[0, 0]],
         [
-          { offset: [1, 0] },
-          { offset: [0, 1] },
+          { to: [1, 0] },
+          { to: [0, 1] },
         ],
       );
       expect(round(points[0])).toEqual(new Point(0, 0));
@@ -52,9 +52,9 @@ describe('Copy tests', () => {
       const points = copyPoints(
         [[0, 0]],
         [
-          { offset: [1, 0] },
-          { offset: [0, 1] },
-          { offset: [2, 0] },
+          { to: [1, 0] },
+          { to: [0, 1] },
+          { to: [2, 0] },
         ],
       );
       expect(round(points[0])).toEqual(new Point(0, 0));
@@ -70,9 +70,9 @@ describe('Copy tests', () => {
       const points = copyPoints(
         [[0, 0]],
         [
-          { offset: { to: [1, 0] } },
-          { offset: { to: [0, 1] } },
-          { offset: { to: [2, 0], start: 2, end: 3 } },
+          { to: [1, 0] },
+          { to: [0, 1] },
+          { to: [2, 0], start: 2, end: 3 },
         ],
       );
       expect(round(points[0])).toEqual(new Point(0, 0));
@@ -86,10 +86,10 @@ describe('Copy tests', () => {
       const points = copyPoints(
         [[0, 0]],
         [
-          { offset: { to: [1, 0] } },
-          { offset: { to: [0, 1] } },
+          { to: [1, 0] },
+          { to: [0, 1] },
           'a',
-          { offset: { to: [2, 0], start: 2, end: 'a' } },
+          { to: [2, 0], start: 2, end: 'a' },
         ],
       );
       expect(round(points[0])).toEqual(new Point(0, 0));
@@ -103,11 +103,11 @@ describe('Copy tests', () => {
       const points = copyPoints(
         [[0, 0]],
         [
-          { offset: { to: [1, 0] } },
+          { to: [1, 0] },
           'a',
-          { offset: { to: [0, 1] } },
+          { to: [0, 1] },
           'b',
-          { offset: { to: [2, 0], start: 'a', end: 'b' } },
+          { to: [2, 0], start: 'a', end: 'b' },
         ],
       );
       expect(round(points[0])).toEqual(new Point(0, 0));
@@ -121,9 +121,9 @@ describe('Copy tests', () => {
       const points = copyPoints(
         [[0, 0]],
         [
-          { offset: { to: [1, 0] } },
-          { offset: { to: [0, 1], original: false } },
-          { offset: { to: [2, 0] } },
+          { to: [1, 0] },
+          { to: [0, 1], original: false },
+          { to: [2, 0] },
         ],
       );
       expect(round(points[0])).toEqual(new Point(0, 1));
@@ -135,8 +135,10 @@ describe('Copy tests', () => {
       const points = copyPoints(
         [[0, 0]],
         [
-          { offset: { to: [1, 0], start: 0, end: 1, original: false } },
-          { offset: { to: [0, 1], start: 0, end: 1 } },
+          {
+            to: [1, 0], start: 0, end: 1, original: false,
+          },
+          { to: [0, 1], start: 0, end: 1 },
           // { offset: { to: [2, 0] } },
         ],
       );
@@ -149,7 +151,7 @@ describe('Copy tests', () => {
     test('Simple', () => {
       const points = copyPoints([[0, 0]], [
         {
-          transform: new Transform().translate(1, 0),
+          to: new Transform().translate(1, 0),
         },
       ]);
       expect(round(points[0])).toEqual(new Point(0, 0));
@@ -158,7 +160,7 @@ describe('Copy tests', () => {
     test('Multi', () => {
       const points = copyPoints([[0, 0]], [
         {
-          transform: [
+          to: [
             new Transform().translate(1, 0),
             new Transform().translate(2, 0),
           ],
@@ -173,10 +175,9 @@ describe('Copy tests', () => {
     test('Simple', () => {
       const points = copyPoints([[0, 1]], [
         {
-          angle: {
-            num: 1,
-            step: Math.PI / 2,
-          },
+          along: 'rotation',
+          num: 1,
+          step: Math.PI / 2,
         },
       ]);
       expect(round(points[0])).toEqual(new Point(0, 1));
@@ -184,13 +185,12 @@ describe('Copy tests', () => {
     });
     test('Radial', () => {
       const points = copyPoints([[0, 0]], [
-        { linear: { num: 2, axis: 'y', step: 1 } },
+        { along: 'y', num: 2, step: 1 },
         {
-          angle: {
-            num: 1,
-            step: Math.PI / 2,
-            start: 1,
-          },
+          along: 'rotation',
+          num: 1,
+          step: Math.PI / 2,
+          start: 1,
         },
       ]);
       expect(round(points[0])).toEqual(new Point(0, 0));
@@ -204,11 +204,9 @@ describe('Copy tests', () => {
     test('Simple', () => {
       const points = copyPoints([[0, 0]], [
         {
-          linear: {
-            num: 1,
-            step: 1,
-            angle: 0,
-          },
+          along: 0,
+          num: 1,
+          step: 1,
         },
       ]);
       expect(round(points[0])).toEqual(new Point(0, 0));
@@ -217,11 +215,9 @@ describe('Copy tests', () => {
     test('Two step', () => {
       const points = copyPoints([[0, 0]], [
         {
-          linear: {
-            num: 2,
-            step: 1,
-            angle: 0,
-          },
+          along: 0,
+          num: 2,
+          step: 1,
         },
       ]);
       expect(round(points[0])).toEqual(new Point(0, 0));
@@ -231,11 +227,9 @@ describe('Copy tests', () => {
     test('X Axis', () => {
       const points = copyPoints([[0, 0]], [
         {
-          linear: {
-            num: 1,
-            step: 1,
-            axis: 'x',
-          },
+          along: 'x',
+          num: 1,
+          step: 1,
         },
       ]);
       expect(round(points[0])).toEqual(new Point(0, 0));
@@ -244,11 +238,9 @@ describe('Copy tests', () => {
     test('Y Axis', () => {
       const points = copyPoints([[0, 0]], [
         {
-          linear: {
-            num: 1,
-            step: 1,
-            axis: 'y',
-          },
+          along: 'y',
+          num: 1,
+          step: 1,
         },
       ]);
       expect(round(points[0])).toEqual(new Point(0, 0));
@@ -257,11 +249,9 @@ describe('Copy tests', () => {
     test('Angle', () => {
       const points = copyPoints([[0, 0]], [
         {
-          linear: {
-            num: 1,
-            step: 1,
-            angle: Math.PI,
-          },
+          along: Math.PI,
+          num: 1,
+          step: 1,
         },
       ]);
       expect(round(points[0])).toEqual(new Point(0, 0));

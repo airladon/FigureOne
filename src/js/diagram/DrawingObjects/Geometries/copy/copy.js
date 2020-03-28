@@ -11,53 +11,17 @@ import {
   joinObjects,
 } from '../../../../tools/tools';
 
-type CPY_Generic = {
+type CPY_Step = {
   start?: number | string,
   end?: number | string,
   original?: boolean,
+  along?: 'x' | 'y' | number | 'rotation' | 'moveOnly',
+  to?: Point | [number, number] | Transform
+    | Array<Point | [number, number] | Transform> | Transform,
+  num?: number,
+  step?: number,
+  center?: TypeParsablePoint,
 };
-
-type CPY_Linear = {
-  // type: 'linear',
-  num?: number,
-  angle?: number,
-  axis?: 'x' | 'y',
-  step?: number,
-} & CPY_Generic;
-
-type CPY_Angle = {
-  num?: number,
-  step?: number,
-  center?: number,
-} & CPY_Generic;
-
-// type CPY_Arc = {
-//   arcStep?: number,
-//   angleStep?: number,
-//   startAngle?: number,
-//   stopAngle?: number,
-//   step?: number,
-//   num?: number,
-//   center?: TypeParsablePoint,
-// }
-
-// type CPY_Location = TypeParsablePoint | Array<TypeParsablePoint> | {
-//   to?: TypeParsablePoint | Array<TypeParsablePoint>,
-// } & CPY_Generic;
-
-type CPY_Offset = TypeParsablePoint | Array<TypeParsablePoint> | {
-  to?: TypeParsablePoint | Array<TypeParsablePoint>,
-} & CPY_Generic;
-
-type CPY_Transform = Transform | Array<Transform> | {
-  to?: Transform | Array<Transform>,
-} & CPY_Generic;
-
-type CPY_Step = { linear: CPY_Linear }
-              | { angle: CPY_Angle }
-              | { offset: CPY_Offset }
-              // | { arc: CPY_Arc }
-              | { transform: CPY_Transform };
 
 type CPY_Steps = Array<CPY_Step>;
 
@@ -90,24 +54,13 @@ function getPointsToCopy(
 function copyOffset(
   pointsToCopy: Array<Point>,
   initialPoints: Array<Point>,
-  optionsIn: CPY_Offset,
+  optionsIn: CPY_Step,
 ) {
   const defaultOptions = {
     to: [],
   };
-  let options;
-  if (optionsIn instanceof Point
-     || typeof optionsIn === 'number'
-     //  || (typeof options === 'object' && (optionsIn.x != null || optionsIn.y != null))
-     || Array.isArray(optionsIn)
-  ) {
-    options = defaultOptions;
-    options.to = getPoints(optionsIn);
-  } else {
-    options = joinObjects({}, defaultOptions, optionsIn);
-    options.to = getPoints(options.to);
-  }
-  // options.to = getPoints(options.to);
+  const options = joinObjects({}, defaultOptions, optionsIn);
+  options.to = getPoints(options.to);
 
   let out = initialPoints;
   for (let i = 0; i < options.to.length; i += 1) {
@@ -119,21 +72,15 @@ function copyOffset(
 function copyTransform(
   pointsToCopy: Array<Point>,
   initialPoints: Array<Point>,
-  optionsIn: CPY_Transform,
+  optionsIn: CPY_Step,
 ) {
   const defaultOptions = {
     to: [],
   };
-  let options;
-  if (optionsIn instanceof Transform
+  const options = joinObjects({}, defaultOptions, optionsIn);
+  if (options.to instanceof Transform
   ) {
-    options = defaultOptions;
-    options.to = [optionsIn];
-  } else if (Array.isArray(optionsIn)) {
-    options = defaultOptions;
-    options.to = optionsIn;
-  } else {
-    options = joinObjects({}, defaultOptions, optionsIn);
+    options.to = [optionsIn.to];
   }
 
   let out = initialPoints;
@@ -147,31 +94,35 @@ function copyTransform(
 function copyLinear(
   pointsToCopy: Array<Point>,
   initialPoints: Array<Point>,
-  optionsIn: CPY_Linear,
+  optionsIn: CPY_Step,
 ) {
+  if (optionsIn.along == null) {
+    return [];
+  }
   const defaultOptions = {
     num: 1,
-    angle: 0,
   };
+  let angle = 0;
 
   const options = joinObjects({}, defaultOptions, optionsIn);
 
-  if (options.axis != null && options.axis === 'y') {
-    options.angle = Math.PI / 2;
-  }
-  if (options.axis != null && options.axis === 'x') {
-    options.angle = 0;
+  if (options.along === 'y') {
+    angle = Math.PI / 2;
+  } else if (options.along === 'x') {
+    angle = 0;
+  } else if (typeof options.along === 'number') {
+    angle = options.along;
   }
 
-  if (options.angle !== 0 && options.step == null) {
+  if (options.step == null) {
     const bounds = getBoundingRect(pointsToCopy);
-    options.step = Math.abs(bounds.height / Math.sin(options.angle));
+    options.step = Math.abs(bounds.height / Math.sin(angle));
   }
 
   let out = initialPoints;
   for (let i = 1; i < options.num + 1; i += 1) {
     const step = options.step * i;
-    out = [...out, ...pointsToCopy.map(p => p.add(polarToRect(step, options.angle)))];
+    out = [...out, ...pointsToCopy.map(p => p.add(polarToRect(step, angle)))];
   }
   return out;
 }
@@ -179,7 +130,7 @@ function copyLinear(
 function copyAngle(
   pointsToCopy: Array<Point>,
   initialPoints: Array<Point>,
-  optionsIn: CPY_Angle,
+  optionsIn: CPY_Step,
 ) {
   const defaultOptions = {
     num: 1,
@@ -237,27 +188,48 @@ function copyAngle(
 
 function copyStep(
   points: Array<Point>,
-  copyStyle: 'linear' | 'offset' | 'arc' | 'angle' | 'transform',
-  options: CPY_Linear | CPY_Offset | CPY_Angle | CPY_Transform,
+  copyStyle: 'linear' | 'to' | 'rotation' | 'x' | 'y' | number,
+  options: CPY_Step,
   // marks: CPY_Marks,
 ) {
   const out = [];
   // if (copyStyle === 'move') {
   //   return move(points, out, options);
   // }
-  if (copyStyle === 'offset') {
-    return copyOffset(points, out, options);
-  }
+  // if (copyStyle === 'offset') {
+  //   return copyOffset(points, out, options);
+  // }
 
-  if (copyStyle === 'linear') {
+  if (copyStyle === 'linear' || copyStyle === 'x' || copyStyle === 'y' || typeof copyStyle === 'number') {
     return copyLinear(points, out, options);
   }
 
-  if (copyStyle === 'transform') {
-    return copyTransform(points, out, options);
+  // if (typeof copyStyle === 'number') {
+  //   return copyAngle(points, out, options);
+  // }
+
+  if (copyStyle === 'to') {
+    if (options.to == null) {
+      return points;
+    }
+    if (Array.isArray(options.to) && options.to.length === 0) {
+      return points;
+    }
+
+    if (options.to instanceof Transform) {
+      return copyTransform(points, out, options);
+    }
+    if (Array.isArray(options.to) && options.to[0] instanceof Transform) {
+      return copyTransform(points, out, options);
+    }
+    return copyOffset(points, out, options);
   }
 
-  if (copyStyle === 'angle') {
+  // if (copyStyle === 'transform') {
+  //   return copyTransform(points, out, options);
+  // }
+
+  if (copyStyle === 'rotation') {
     return copyAngle(points, out, options);
   }
   return points;
@@ -282,28 +254,25 @@ function copyPoints(
     if (typeof c === 'string') {
       marks[c] = out.length;
     } else {
-      const options = {
+      const defaultOptions = {
         start: startIndex,
         end: 'end',
         original: true,
       };
-      const copyStyle = Object.keys(c)[0];
-      const copyOptions = c[copyStyle];
-      if (copyOptions.start != null) { options.start = copyOptions.start; }
-      if (copyOptions.end != null) { options.end = copyOptions.end; }
-      if (copyOptions.original != null) { options.original = copyOptions.original; }
-
+      const options = joinObjects({}, defaultOptions, c);
+      let copyStyle = 'to';
+      if (options.along != null) {
+        copyStyle = options.along;
+      }
 
       const pointsToCopy = getPointsToCopy(out, options.start, options.end, marks);
 
 
-      // out = [...nextPoints];
       if (options.original === false) {
         startIndex = out.length;
       }
 
-      out = [...out, ...copyStep(pointsToCopy, copyStyle, c[copyStyle])];
-      // nextPoints = out.slice(startIndex);
+      out = [...out, ...copyStep(pointsToCopy, copyStyle, options)];
       marks[`${index + 2}`] = out.length;
     }
   });
