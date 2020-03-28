@@ -983,10 +983,10 @@ export default class DiagramPrimitives {
     const [yLine] = getTris([yLineStart, yLineStop]);
 
     const xTris = copyPoints(xLine, [
-      { linear: { num: yNum - 1, step: yStep, axis: 'y' } },
+      { along: 'y', num: yNum - 1, step: yStep },
     ]);
     const yTris = copyPoints(yLine, [
-      { linear: { num: xNum - 1, step: xStep, axis: 'x' } },
+      { along: 'x', num: xNum - 1, step: xStep },
     ]);
     const element = this.generic(options, {
       drawType: options.linePrimitives ? 'lines' : 'triangles',
