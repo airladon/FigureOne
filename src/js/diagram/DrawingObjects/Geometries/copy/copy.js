@@ -223,7 +223,7 @@ function copyStep(
 }
 
 function copyPoints(
-  points: Array<TypeParsablePoint>,
+  points: Array<TypeParsablePoint> | Array<Point>,
   chain: ?CPY_Step | CPY_Steps,
 ) {
   const marks = {};
