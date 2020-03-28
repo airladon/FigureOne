@@ -97,7 +97,7 @@ diagram.addElements([
         { along: 'x', num: 2, step: 0.5, },
         { along: 'y', num: 2, step: 0.5, },
       ],
-      dash: [0.02, 0.003, 0.003, 0.003]
+      dash: [0.02, 0.003, 0.003, 0.003],
     },
   },
   {
