@@ -674,25 +674,7 @@ export default class DiagramPrimitives {
         repeat: false,
         onLoad: this.animateNextFrame,
       },
-      // copy: null,
-      // copyChain: [],
     };
-    // const defaultPointTransforms = {
-    //   // offset: new Point(0, 0),
-    //   transform: new Transform().translate(0, 0),
-    //   repeatXY: {
-    //     xNum: 1,
-    //     xStep: 0.1,
-    //     yNum: 1,
-    //     yStep: 0.1,
-    //   },
-    //   repeatPolar: {
-    //     magNum: 1,
-    //     magStep: 0.1,
-    //     angleNum: 1,
-    //     angleStep: Math.PI / 4,
-    //   },
-    // };
 
     const options = joinObjects(defaultOptions, ...optionsIn);
 
@@ -716,7 +698,6 @@ export default class DiagramPrimitives {
 
     const parsedBorder = parseBorder(options.border);
     const parsedBorderHoles = parseBorder(options.hole);
-    // console.log(parsedPoints)
     let copyToUse = options.copy;
     if (options.copy != null && !Array.isArray(options.copy)) {
       copyToUse = [options.copy];
@@ -1427,126 +1408,6 @@ export default class DiagramPrimitives {
     }
     return element;
   }
-
-  // polygonLegacy(...optionsIn: Array<OBJ_Polygon>) {
-  //   const defaultOptions = {
-  //     sides: 4,
-  //     radius: 1,
-  //     width: 0.01,
-  //     rotation: 0,
-  //     clockwise: false,
-  //     sidesToDraw: null,
-  //     color: [1, 0, 0, 1],
-  //     fill: false,
-  //     textureLocation: '',        // If including a texture, make sure to use
-  //     textureCoords: new Rect(0, 0, 1, 1),  // correct shader in diagram
-  //     onLoad: this.animateNextFrame,
-  //     mods: {},
-  //     transform: new Transform('polygon').standard(),
-  //     position: null,
-  //     center: new Point(0, 0),
-  //     trianglePrimitives: false,
-  //     linePrimitives: false,
-  //     angleToDraw: null,
-  //   };
-  //   const options = Object.assign({}, defaultOptions, ...optionsIn);
-  //   // const o = optionsToUse;
-  //   // let { transform } = options;
-  //   // if (transform == null) {
-  //   //   transform = new Transform('polygon').scale(1, 1).rotate(0).translate(0, 0);
-  //   // }
-  //   if (options.position != null) {
-  //     const point = getPoint(options.position);
-  //     options.transform.updateTranslation(point);
-  //   }
-  //   if (options.center != null) {
-  //     options.center = getPoint(options.center);
-  //   }
-  //   if (options.sidesToDraw == null) {
-  //     options.sidesToDraw = options.sides;
-  //   }
-  //   if (options.angleToDraw != null) {
-  //     options.sidesToDraw = Math.max(
-  //       0, Math.floor(options.angleToDraw / Math.PI / 2 * options.sides),
-  //     );
-  //   }
-
-  //   let direction = 1;
-  //   if (options.clockwise) {
-  //     direction = -1;
-  //   }
-  //   let element;
-  //   if (options.linePrimitives) {
-  //     element = PolygonLine(
-  //       this.webgl,
-  //       options.sides,
-  //       options.radius,
-  //       options.rotation,
-  //       direction,
-  //       options.sidesToDraw,
-  //       options.width,
-  //       options.color,
-  //       options.transform,
-  //       this.limits,
-  //     );
-  //   } else if (options.fill) {
-  //     element = PolygonFilled(
-  //       this.webgl,
-  //       options.sides,
-  //       options.radius,
-  //       options.rotation,
-  //       direction,
-  //       options.sidesToDraw,
-  //       options.center,
-  //       options.color,
-  //       options.transform,
-  //       this.limits,
-  //       options.textureLocation,
-  //       options.textureCoords,
-  //       options.onLoad,
-  //     );
-  //   } else {
-  //     element = Polygon(
-  //       this.webgl,
-  //       options.sides,
-  //       options.radius,
-  //       options.width,
-  //       options.rotation,
-  //       direction,
-  //       options.sidesToDraw,
-  //       options.center,
-  //       options.color,
-  //       options.transform,
-  //       this.limits,
-  //       options.trianglePrimitives,
-  //     );
-  //   }
-
-  //   if (options.pulse != null && typeof element.pulseDefault !== 'function') {
-  //     element.pulseDefault.scale = options.pulse;
-  //   }
-
-  //   if (options.mods != null && options.mods !== {}) {
-  //     element.setProperties(options.mods);
-  //   }
-  //   return element;
-  // }
-
-  // polygonLine(
-  //   numSides: number,
-  //   radius: number,
-  //   rotation: number,
-  //   direction: -1 | 1,
-  //   numSidesToDraw: number,
-  //   numLines: number,     // equivalent to thickness - integer
-  //   color: Array<number>,
-  //   transform: Transform | Point = new Transform(),
-  // ) {
-  //   return PolygonLine(
-  //     this.webgl, numSides, radius,
-  //     rotation, direction, numSidesToDraw, numLines, color, transform, this.limits,
-  //   );
-  // }
 
   horizontalLine(
     start: Point,

@@ -534,8 +534,8 @@ function getPoint(p: TypeParsablePoint): Point {
   return parsedPoint;
 }
 
-function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<Point> { 
-  if (Array.isArray(points) && points.length > 0 && typeof points[0] === 'number') {
+function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<Point> {
+  if (Array.isArray(points) && points.length > 0 && typeof points[0] === 'number') {  // $FlowFixMe
     return [getPoint(points)];
   }
   if (Array.isArray(points)) {
