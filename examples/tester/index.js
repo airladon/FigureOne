@@ -80,73 +80,83 @@ const line = [
 // pad.setPosition(-0.7, 0);
 
 diagram.addElements([
-  {
-    name: 'g',
-    method: 'shapes.grid1',
-    options: {
-      start: [-0.8, -0.8],
-      xNum: 5,
-      xStep: 0.1,
-      yNum: 5,
-      yStep: 0.1,
-      width: 0.005,
-      color: [0.5, 0.5, 0.5, 1],
-      linePrimitives: true,
-      lineNum: 1,
-      copy: [
-        { linear: { num: 2, step: 0.5 }},
-        { linear: { num: 2, step: 0.5, axis: 'y' }}
-      ],
-      dash: [0.02, 0.003, 0.003, 0.003]
-    },
-  },
   // {
-  //   name: 'p',
-  //   method: 'shapes.polygon',
+  //   name: 'g',
+  //   method: 'shapes.grid1',
   //   options: {
-  //     sides: 4,
-  //     width: 0.004,
-  //     radius: 0.1,
-  //     rotation: Math.PI / 4,
-  //     line: {
-  //       widthIs: 'mid',
-  //       cornerStyle: 'radius',
-  //       cornerSize: 0.02,
-  //       cornerSides: 5,
-  //       dash: [0.02, 0.005, 0.005, 0.005],
-  //     },
-  //     offset: [-0.5, -0.5],
-  //     copyChain: [
-  //       { linear: { num: 5, step: 0.2 } },
-  //       { linear: { num: 5, step: 0.2, axis: 'y' } },
-  //       // { angle: { num: 5, step: Math.PI / 3, start: 1 } },
+  //     start: [-0.8, -0.8],
+  //     xNum: 5,
+  //     xStep: 0.1,
+  //     yNum: 5,
+  //     yStep: 0.1,
+  //     width: 0.05,
+  //     // color: [0.5, 0.5, 0.5, 1],
+  //     // linePrimitives: true,
+  //     // lineNum: 1,
+  //     copy: [
+  //       { along: 'x', num: 2, step: 0.1, },
+  //       // { to: 'y', num: 2, step: 0.3, },
+  //       // { to: Math.PI, num: 2, step: 0.4 },
+  //       // { to: 'rot', num: 5, step: 0.4, center: [0, 0]}
+  //       // { linear: { num: 2, step: 0.5 }},
+  //       // { linear: { num: 2, step: 0.5, axis: 'y' }}
   //     ],
-  //     // copy: [
-  //     //   { point: [0, 1], from: 0, tostep: 1 }
-  //     //   'a',
-  //     //   { transform: }
-  //     //   { linear: { }, from: 0, to: 1 }
-  //     //   { angle: { }, : false }
-  //     //   { arc: { }, cum: true }
-  //     // copy: [
-  //     //   { linear: { num: 5, }}
-  //     // ]
-  //     //   new Copy()
-  //     //     .point()
-  //     //     .points()
-  //     //     .transform()
-  //     //     .transforms()
-  //     //     .mark()
-  //     //     .angle()
-  //     //     .linear()
-  //     //     .arc({ fromMark: 'a', toMark: 'b',})
-  //     // ]
-  //     // copyChain: [
-  //     //   { num: 2, step: 0.3, angle: 0 },
-  //     //   { numAngle: 20, step: Math.PI * 2 / 18, skip: 1/3 }
-  //     // ],
+  //     // dash: [0.02, 0.003, 0.003, 0.003]
   //   },
   // },
+  {
+    name: 'p',
+    method: 'shapes.polygon',
+    options: {
+      sides: 4,
+      width: 0.004,
+      radius: 0.1,
+      rotation: Math.PI / 4,
+      line: {
+        widthIs: 'mid',
+        cornerStyle: 'radius',
+        cornerSize: 0.02,
+        cornerSides: 5,
+        dash: [0.02, 0.005, 0.005, 0.005],
+      },
+      offset: [-0.5, -0.5],
+      copy: [
+        { along: 'y', num: 2, step: 0.2 },
+        { along: 'rotation', num: 2, step: 1, center: [-0.5, -0.5], start: 1 },
+        // { along: 'y', num: 2, step: 0.2 },
+        // {}
+      ],
+      // copyChain: [
+      //   { linear: { num: 5, step: 0.2 } },
+      //   { linear: { num: 5, step: 0.2, axis: 'y' } },
+      //   // { angle: { num: 5, step: Math.PI / 3, start: 1 } },
+      // ],
+      // copy: [
+      //   { point: [0, 1], from: 0, tostep: 1 }
+      //   'a',
+      //   { transform: }
+      //   { linear: { }, from: 0, to: 1 }
+      //   { angle: { }, : false }
+      //   { arc: { }, cum: true }
+      // copy: [
+      //   { linear: { num: 5, }}
+      // ]
+      //   new Copy()
+      //     .point()
+      //     .points()
+      //     .transform()
+      //     .transforms()
+      //     .mark()
+      //     .angle()
+      //     .linear()
+      //     .arc({ fromMark: 'a', toMark: 'b',})
+      // ]
+      // copyChain: [
+      //   { num: 2, step: 0.3, angle: 0 },
+      //   { numAngle: 20, step: Math.PI * 2 / 18, skip: 1/3 }
+      // ],
+    },
+  },
 ]);
 
 // diagram.addElement(
