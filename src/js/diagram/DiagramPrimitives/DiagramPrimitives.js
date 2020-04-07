@@ -792,7 +792,7 @@ export default class DiagramPrimitives {
     const [triangles, borders, holes] = getTris(options.points);
     const element = this.generic(options, {
       drawType: options.linePrimitives ? 'lines' : 'triangles',
-      points: triangles,
+      points: triangles,    // $FlowFixMe
       border: Array.isArray(options.border) ? options.border : borders,
       holeBorder: Array.isArray(options.hole) ? options.hole : holes,
       // repeat: options.repeat,
@@ -978,7 +978,7 @@ export default class DiagramPrimitives {
       { along: 'x', num: xNum - 1, step: xStep },
     ]);
     const element = this.generic(options, {
-      drawType: options.linePrimitives ? 'lines' : 'triangles',
+      drawType: options.linePrimitives ? 'lines' : 'triangles',    // $FlowFixMe
       points: [...xTris, ...yTris],
       border: [[
         start._dup(),
