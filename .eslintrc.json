@@ -25,7 +25,7 @@
             "exceptAfterSingleLine": true
           }
         ],
-        "camelcase": ["error", {"allow": ["EQN", "OBJ"]}],
+        "camelcase": ["error", {"allow": ["EQN", "OBJ", "CPY"]}],
         "class-methods-use-this": [
           "error",
           { 
