@@ -11,7 +11,7 @@ import {
   joinObjects,
 } from '../../../../tools/tools';
 
-type CPY_Step = {
+export type CPY_Step = {
   start?: number | string,
   end?: number | string,
   original?: boolean,
@@ -230,6 +230,7 @@ function copyPoints(
   // let out = [];
   let startIndex = 0;
   // let all = [];
+  // $FlowFixMe
   let out = getPoints(points);
   if (chain == null) {
     return out;

@@ -6,7 +6,7 @@ import {
   Point, Transform, Rect,
 } from '../../tools/g2';
 import WebGLInstance from '../webgl/webgl';
-import type { OBJ_Copy } from '../DiagramPrimitives/DiagramPrimitiveTypes';
+import type { CPY_Step } from '../DrawingObjects/Geometries/copy/copy';
 
 export default function Generic(
   webgl: Array<WebGLInstance>,
@@ -22,7 +22,7 @@ export default function Generic(
   textureCoords: Rect = new Rect(0, 0, 1, 1),
   textureRepeat: boolean = false,
   onLoad: ?() => void = null,
-  copy: ?Array<OBJ_Copy>,
+  copy: ?Array<CPY_Step>,
 ) {
   const generic = new VertexGeneric(
     webgl,
