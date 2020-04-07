@@ -900,7 +900,7 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  grid1(...optionsIn: Array<{
+  grid(...optionsIn: Array<{
     bounds?: Rect,
     xStep?: number,
     yStep?: number,
@@ -1380,7 +1380,7 @@ export default class DiagramPrimitives {
     return Lines(this.webgl, linePairs, numLinesThick, color, transform, this.limits);
   }
 
-  grid(...optionsIn: Array<TypeGridOptions>) {
+  gridLegacy(...optionsIn: Array<TypeGridOptions>) {
     const defaultOptions = {
       bounds: new Rect(-1, -1, 2, 2),
       xStep: 0.1,
