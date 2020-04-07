@@ -1,5 +1,5 @@
 const diagram = new Fig.Diagram();
-const { Point } = Fig;
+const { Point, Rect } = Fig;
 
 const line = [
     new Point(0.5, 0),
@@ -84,15 +84,16 @@ diagram.addElements([
     name: 'g',
     method: 'shapes.grid1',
     options: {
-      start: [-0.8, -0.8],
+      // start: [-0.8, -0.8],
+      bounds: new Rect(-0.8, -0.8, 0.5, 0.5),
       xNum: 5,
-      xStep: 0.1,
+      // xStep: 0.1,
       yNum: 5,
-      yStep: 0.1,
-      width: 0.01,
-      color: [0.5, 0.5, 0.5, 1],
-      linePrimitives: true,
-      lineNum: 1,
+      // yStep: 0.1,
+      width: 0.002,
+      color: [1, 0.5, 0.5, 1],
+      // linePrimitives: true,
+      // lineNum: 1,
       copy: [
         { along: 'x', num: 2, step: 0.5, },
         { along: 'y', num: 2, step: 0.5, },
@@ -106,7 +107,7 @@ diagram.addElements([
     options: {
       sides: 4,
       width: 0.004,
-      radius: 0.1,
+      radius: 0.05,
       rotation: Math.PI / 4,
       line: {
         widthIs: 'mid',
@@ -117,8 +118,8 @@ diagram.addElements([
       },
       offset: [-0.5, -0.5],
       copy: [
-        { along: 'y', num: 2, step: 0.2 },
-        { along: 'rotation', num: 2, step: 1, center: [-0.5, -0.5], start: 1 },
+        { along: 'y', num: 4, step: 0.1 },
+        { along: 'rotation', num: 5, step: 1, center: [-0.5, -0.5], start: 1 },
         // { along: 'y', num: 2, step: 0.2 },
         // {}
       ],

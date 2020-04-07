@@ -901,6 +901,7 @@ export default class DiagramPrimitives {
   }
 
   grid1(...optionsIn: Array<{
+    bounds?: Rect,
     xStep?: number,
     yStep?: number,
     xNum?: number,
@@ -908,25 +909,23 @@ export default class DiagramPrimitives {
     width?: number,
     start?: TypeParsablePoint,
     texture?: OBJ_Texture,
+    copy?: OBJ_Copy | Array<OBJ_Copy>,
     dash?: Array<number>,
     linePrimitives?: boolean,
     lineNum?: number,
   }>) {
     const defaultOptions = {
-      xStep: 0.1,
-      yStep: 0.1,
-      xNum: 2,
-      yNum: 2,
+      bounds: new Rect(-1, -1, 2, 2),
+      xNum: 10,
+      yNum: 10,
       width: 0.005,
-      start: [0, 0],
-      transform: new Transform('polygon').standard(),
-      touchableLineOnly: false,
+      transform: new Transform('grid').standard(),
       dash: [],
       linePrimitives: false,
       lineNum: 2,
     };
     const options = processOptions(defaultOptions, ...optionsIn);
-    parsePoints(options, ['start', 'stop']);
+    parsePoints(options, []);
     const getTris = points => makePolyLine(
       points,
       options.width,
@@ -942,9 +941,21 @@ export default class DiagramPrimitives {
       [[]],
       [[]],
     );
+    if (options.xStep != null) {
+      options.xNum = Math.floor(options.bounds.width / options.xStep);
+    } else {
+      options.xStep = options.bounds.width / options.xNum;
+    }
+    if (options.yStep != null) {
+      options.yNum = Math.floor(options.bounds.height / options.yStep);
+    } else {
+      options.yStep = options.bounds.height / options.yNum;
+    }
+
     const {
-      xNum, yNum, xStep, yStep, width, start,
+      xNum, yNum, xStep, yStep, width,
     } = options;
+    const start = new Point(options.bounds.left, options.bounds.bottom);
     const totWidth = (xNum - 1) * xStep;
     const totHeight = (yNum - 1) * yStep;
     let xLineStart = start.add(-width / 2, 0);
@@ -960,7 +971,6 @@ export default class DiagramPrimitives {
 
     const [xLine] = getTris([xLineStart, xLineStop]);
     const [yLine] = getTris([yLineStart, yLineStop]);
-
     const xTris = copyPoints(xLine, [
       { along: 'y', num: yNum - 1, step: yStep },
     ]);
