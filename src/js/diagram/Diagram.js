@@ -11,6 +11,7 @@ import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
+import Recorder from './Recorder';
 // eslint-disable-next-line import/no-cycle
 import Gesture from './Gesture';
 import DrawContext2D from './DrawContext2D';
@@ -110,6 +111,7 @@ class Diagram {
 
   elements: DiagramElementCollection;
   globalAnimation: GlobalAnimation;
+  recorder: Recorder;
   gesture: Gesture;
   inTransition: boolean;
   beingMovedElements: Array<DiagramElementPrimitive |
@@ -289,6 +291,7 @@ class Diagram {
     this.beingTouchedElements = [];
     this.moveTopElementOnly = true;
     this.globalAnimation = new GlobalAnimation();
+    this.recorder = new Recorder();
     this.shapesLow = this.getShapes();
     // this.shapesHigh = this.getShapes(true);
     this.shapes = this.shapesLow;
@@ -322,6 +325,8 @@ class Diagram {
     this.drawTimeoutId = null;
     this.oldScroll = window.pageYOffset;
     this.drawAnimationFrames = 0;
+    this.recorded = [];
+    this.isRecording = false;
   }
 
   scrollEvent() {
@@ -500,6 +505,14 @@ class Diagram {
       glToPixel: spaceToSpaceTransform(glSpace, pixelSpace),
       diagramToCSSPercent: spaceToSpaceTransform(diagramSpace, percentSpace),
     };
+  }
+
+  startRecording() {
+    this.isRecording = true;
+  }
+
+  stopRecording() {
+    this.isRecording = false;
   }
 
   initialize() {
@@ -683,11 +696,36 @@ class Diagram {
     }
   }
 
+  simulateTouchDown(diagramPoint: Point, pointerElement: string = 'pointer') {
+    const pixelPoint = diagramPoint.transformBy(this.spaceTransforms.diagramToPixel.matrix());
+    const clientPoint = this.pixelToClient(pixelPoint);
+    this.touchDownHandler(clientPoint);
+
+    const pointer = this.getElement(pointerElement);
+    if (pointer == null) {
+      return;
+    }
+    const up = pointer.getElement('up');
+    const down = pointer.getElement('down');
+    if (up == null || down == null) {
+      return;
+    }
+    up.hide();
+    down.show();
+    pointer.setPosition(diagramPoint);
+  }
+
   // Handle touch down, or mouse click events within the canvas.
   // The default behavior is to be able to move objects that are touched
   // and dragged, then when they are released, for them to move freely before
   // coming to a stop.
   touchDownHandler(clientPoint: Point) {
+    if (this.recorder.isRecording) {
+      const pixelP = this.clientToPixel(clientPoint);
+      const diagramPoint = pixelP.transformBy(this.spaceTransforms.pixelToDiagram.matrix());
+      this.recorder.recordPointer(diagramPoint.x, diagramPoint.y, 'down');
+    }
+
     if (this.inTransition) {
       return false;
     }
@@ -730,10 +768,28 @@ class Diagram {
     return false;
   }
 
+  simulateTouchUp(pointerElement: string = 'pointer') {
+    this.touchUpHandler();
+    const pointer = this.getElement(pointerElement);
+    if (pointer == null) {
+      return;
+    }
+    const up = pointer.getElement('up');
+    const down = pointer.getElement('down');
+    if (up == null || down == null) {
+      return;
+    }
+    up.show();
+    down.hide();
+  }
+
   // Handle touch up, or mouse click up events in the canvas. When an UP even
   // happens, the default behavior is to let any elements being moved to move
   // freely until they decelerate to 0.
   touchUpHandler() {
+    if (this.recorder.isRecording) {
+      this.recorder.recordPointer(null, null, 'up');
+    }
     // console.log("before", this.elements._circle.transform.t())
     // console.log(this.beingMovedElements)
     for (let i = 0; i < this.beingMovedElements.length; i += 1) {
@@ -746,6 +802,22 @@ class Diagram {
     this.beingMovedElements = [];
     this.beingTouchedElements = [];
     // console.log("after", this.elements._circle.transform.t())
+  }
+
+  simulateTouchFree(diagramPoint: Point, pointerElement: string = 'pointer') {
+    const pointer = this.getElement(pointerElement);
+    if (pointer == null) {
+      return;
+    }
+    pointer.setPosition(diagramPoint);
+  }
+
+  touchFreeHandler(clientPoint: Point) {
+    if (this.recorder.isRecording) {
+      const pixelP = this.clientToPixel(clientPoint);
+      const diagramPoint = pixelP.transformBy(this.spaceTransforms.pixelToDiagram.matrix());
+      this.recorder.recordPointer(diagramPoint.x, diagramPoint.y, 'free');
+    }
   }
 
   rotateElement(
@@ -865,6 +937,26 @@ class Diagram {
     }
   }
 
+  simulateTouchMove(
+    previousDiagramPoint: Point,
+    currentDiagramPoint: Point,
+    pointerElement: string = 'pointer',
+  ) {
+    const previousPixelPoint = previousDiagramPoint
+      .transformBy(this.spaceTransforms.diagramToPixel.matrix());
+    const previousClientPoint = this.pixelToClient(previousPixelPoint);
+    const currentPixelPoint = currentDiagramPoint
+      .transformBy(this.spaceTransforms.diagramToPixel.matrix());
+    const currentClientPoint = this.pixelToClient(currentPixelPoint);
+    this.touchMoveHandler(previousClientPoint, currentClientPoint);
+
+    const pointer = this.getElement(pointerElement);
+    if (pointer == null) {
+      return;
+    }
+    pointer.setPosition(currentDiagramPoint);
+  }
+
   // Handle touch/mouse move events in the canvas. These events will only be
   // sent if the initial touch down happened in the canvas.
   // The default behavior is to drag (move) any objects that were touched in
@@ -874,6 +966,13 @@ class Diagram {
   // normally scroll the screen. Typically, you would want to move the diagram
   // element and not the screen, so a true would be returned.
   touchMoveHandler(previousClientPoint: Point, currentClientPoint: Point): boolean {
+    if (this.recorder.isRecording) {
+      const currentPixelPoint = this.clientToPixel(currentClientPoint);
+      const diagramPoint = currentPixelPoint
+        .transformBy(this.spaceTransforms.pixelToDiagram.matrix());
+      this.recorder.recordPointer(diagramPoint.x, diagramPoint.y, 'move');
+    }
+
     if (this.inTransition) {
       return false;
     }
@@ -885,6 +984,7 @@ class Diagram {
 
     const previousGLPoint =
       previousPixelPoint.transformBy(this.spaceTransforms.pixelToGL.matrix());
+
     // Go through each element being moved, get the current translation
     for (let i = 0; i < this.beingMovedElements.length; i += 1) {
       const element = this.beingMovedElements[i];
@@ -1115,6 +1215,14 @@ class Diagram {
     return new Point(
       clientLocation.x - canvas.left,
       clientLocation.y - canvas.top,
+    );
+  }
+
+  pixelToClient(pixelLocation: Point): Point {
+    const canvas = this.canvasLow.getBoundingClientRect();
+    return new Point(
+      pixelLocation.x + canvas.left,
+      pixelLocation.y + canvas.top,
     );
   }
 }

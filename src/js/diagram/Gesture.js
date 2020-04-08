@@ -12,6 +12,7 @@ class Gesture {
   start: (Point) => boolean;
   end: void => void;
   move: (Point, Point) => boolean;
+  free: (Point) => void;
 
   constructor(diagram: Diagram) {
     this.diagram = diagram;
@@ -44,6 +45,7 @@ class Gesture {
     this.start = this.diagram.touchDownHandler.bind(this.diagram);
     this.end = this.diagram.touchUpHandler.bind(this.diagram);
     this.move = this.diagram.touchMoveHandler.bind(this.diagram);
+    this.free = this.diagram.touchFreeHandler.bind(this.diagram);
   }
 
   addEvent(event: string, method: Object, flag: boolean) {
@@ -83,6 +85,8 @@ class Gesture {
         event.preventDefault();
       }
       this.previousPoint = point;
+    } else {
+      this.free(point);
     }
     // event.preventDefault();
   }

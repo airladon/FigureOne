@@ -82,10 +82,10 @@ const line = [
 diagram.addElements([
   {
     name: 'g',
-    method: 'shapes.grid1',
+    method: 'shapes.grid',
     options: {
       // start: [-0.8, -0.8],
-      bounds: new Rect(-0.8, -0.8, 0.5, 0.5),
+      bounds: new Rect(-0.8, -0.8, 0.4, 0.4),
       xNum: 5,
       // xStep: 0.1,
       yNum: 5,
@@ -109,51 +109,47 @@ diagram.addElements([
       width: 0.004,
       radius: 0.05,
       rotation: Math.PI / 4,
-      line: {
-        widthIs: 'mid',
-        cornerStyle: 'radius',
-        cornerSize: 0.02,
-        cornerSides: 5,
-        dash: [0.02, 0.005, 0.005, 0.005],
-      },
+      fill: true,
+      // line: {
+      //   widthIs: 'mid',
+      //   cornerStyle: 'radius',
+      //   cornerSize: 0.02,
+      //   cornerSides: 5,
+      //   dash: [0.02, 0.005, 0.005, 0.005],
+      // },
       offset: [-0.5, -0.5],
-      copy: [
-        { along: 'y', num: 4, step: 0.1 },
-        { along: 'rotation', num: 5, step: 1, center: [-0.5, -0.5], start: 1 },
-        // { along: 'y', num: 2, step: 0.2 },
-        // {}
-      ],
-      // copyChain: [
-      //   { linear: { num: 5, step: 0.2 } },
-      //   { linear: { num: 5, step: 0.2, axis: 'y' } },
-      //   // { angle: { num: 5, step: Math.PI / 3, start: 1 } },
-      // ],
       // copy: [
-      //   { point: [0, 1], from: 0, tostep: 1 }
-      //   'a',
-      //   { transform: }
-      //   { linear: { }, from: 0, to: 1 }
-      //   { angle: { }, : false }
-      //   { arc: { }, cum: true }
-      // copy: [
-      //   { linear: { num: 5, }}
-      // ]
-      //   new Copy()
-      //     .point()
-      //     .points()
-      //     .transform()
-      //     .transforms()
-      //     .mark()
-      //     .angle()
-      //     .linear()
-      //     .arc({ fromMark: 'a', toMark: 'b',})
-      // ]
-      // copyChain: [
-      //   { num: 2, step: 0.3, angle: 0 },
-      //   { numAngle: 20, step: Math.PI * 2 / 18, skip: 1/3 }
+      //   { along: 'y', num: 4, step: 0.1 },
+      //   { along: 'rotation', num: 5, step: 1, center: [-0.5, -0.5], start: 1 },
       // ],
     },
   },
+  {
+    name: 'pointer',
+    method: 'collection',
+    addElements: [
+      {
+        name: 'up',
+        method: 'polygon',
+        options: {
+          fill: true,
+          color: [1, 0, 0, 1],
+          sides: 50,
+          radius: 0.1,
+        },
+      },
+      {
+        name: 'down',
+        method: 'polygon',
+        options: {
+          fill: true,
+          color: [1, 1, 0, 1],
+          sides: 50,
+          radius: 0.1,
+        },
+      },
+    ]
+  }
 ]);
 
 // diagram.addElement(
@@ -182,5 +178,9 @@ diagram.addElements([
 
 // Show the equation form
 // diagram.getElement('eqn').showForm('base');
-
+diagram.recorder.start();
+const p = diagram.getElement('p');
+p.makeTouchable();
+diagram.getElement('p').onClick = () => { diagram.recorder.show() }
+// diagram.getElement('p').onClick = () => console.log('adsf')
 diagram.initialize();
