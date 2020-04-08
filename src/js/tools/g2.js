@@ -534,6 +534,31 @@ function getPoint(p: TypeParsablePoint): Point {
   return parsedPoint;
 }
 
+export type TypeParsableRect = [number, number, number, number] | Rect;
+
+function parseRect<T>(r: TypeParsableRect, onFail: T): Rect | T | null {
+  if (r instanceof Rect) {
+    return r;
+  }
+  let onFailToUse = onFail;
+  if (onFailToUse == null) {
+    onFailToUse = null;
+  }
+
+  if (Array.isArray(r) && r.length === 4) {
+    return new Rect(r[0], r[1], r[2], r[3]);
+  }
+  return onFailToUse;
+}
+
+function getRect(r: TypeParsableRect): Rect {
+  let parsedRect = parseRect(r);
+  if (parsedRect == null) {
+    parsedRect = new Rect(0, 0, 1, 1);
+  }
+  return parsedRect;
+}
+
 function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<Point> {
   if (Array.isArray(points) && points.length > 0 && typeof points[0] === 'number') {  // $FlowFixMe
     return [getPoint(points)];
@@ -2271,4 +2296,5 @@ export {
   getPoint,
   getPoints,
   quadBezierPoints,
+  getRect,
 };
