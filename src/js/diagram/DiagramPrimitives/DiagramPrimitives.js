@@ -2,9 +2,9 @@
 import {
   Rect, Point, Transform, getPoint, getRect,
 } from '../../tools/g2';
-import {
-  round
-} from '../../tools/math';
+// import {
+//   round
+// } from '../../tools/math';
 import type {
   TypeParsablePoint, TypeParsableRect,
 } from '../../tools/g2';
@@ -1401,44 +1401,44 @@ export default class DiagramPrimitives {
     return Lines(this.webgl, linePairs, numLinesThick, color, transform, this.limits);
   }
 
-  gridLegacy(...optionsIn: Array<TypeGridOptions>) {
-    const defaultOptions = {
-      bounds: new Rect(-1, -1, 2, 2),
-      xStep: 0.1,
-      yStep: 0.1,
-      xOffset: 0,
-      yOffset: 0,
-      numLinesThick: 1,
-      color: [1, 0, 0, 1],
-      position: null,
-      transform: new Transform('grid').standard(),
-    };
-    const options = joinObjects({}, defaultOptions, ...optionsIn);
-    if (options.position != null) {
-      const point = getPoint(options.position);
-      options.transform.updateTranslation(point);
-    }
-    const linePairs = [];
-    // const xLimit = tools.roundNum(bounds.righ + xStep);
-    const {
-      bounds, xStep, xOffset, yStep, yOffset, color, numLinesThick, transform,
-    } = options;
-    if (options.xStep !== 0) {
-      for (let x = bounds.left + xOffset; tools.roundNum(x, 8) <= bounds.right; x += xStep) {
-        linePairs.push([new Point(x, bounds.top), new Point(x, bounds.bottom)]);
-      }
-    }
-    if (yStep !== 0) {
-      for (let y = bounds.bottom + yOffset; tools.roundNum(y, 8) <= bounds.top; y += yStep) {
-        linePairs.push([new Point(bounds.left, y), new Point(bounds.right, y)]);
-      }
-    }
-    const element = this.lines(linePairs, numLinesThick, color, transform);
-    if (options.pulse != null && typeof element.pulseDefault !== 'function') {
-      element.pulseDefault.scale = options.pulse;
-    }
-    return element;
-  }
+  // gridLegacy(...optionsIn: Array<TypeGridOptions>) {
+  //   const defaultOptions = {
+  //     bounds: new Rect(-1, -1, 2, 2),
+  //     xStep: 0.1,
+  //     yStep: 0.1,
+  //     xOffset: 0,
+  //     yOffset: 0,
+  //     numLinesThick: 1,
+  //     color: [1, 0, 0, 1],
+  //     position: null,
+  //     transform: new Transform('grid').standard(),
+  //   };
+  //   const options = joinObjects({}, defaultOptions, ...optionsIn);
+  //   if (options.position != null) {
+  //     const point = getPoint(options.position);
+  //     options.transform.updateTranslation(point);
+  //   }
+  //   const linePairs = [];
+  //   // const xLimit = tools.roundNum(bounds.righ + xStep);
+  //   const {
+  //     bounds, xStep, xOffset, yStep, yOffset, color, numLinesThick, transform,
+  //   } = options;
+  //   if (options.xStep !== 0) {
+  //     for (let x = bounds.left + xOffset; tools.roundNum(x, 8) <= bounds.right; x += xStep) {
+  //       linePairs.push([new Point(x, bounds.top), new Point(x, bounds.bottom)]);
+  //     }
+  //   }
+  //   if (yStep !== 0) {
+  //     for (let y = bounds.bottom + yOffset; tools.roundNum(y, 8) <= bounds.top; y += yStep) {
+  //       linePairs.push([new Point(bounds.left, y), new Point(bounds.right, y)]);
+  //     }
+  //   }
+  //   const element = this.lines(linePairs, numLinesThick, color, transform);
+  //   if (options.pulse != null && typeof element.pulseDefault !== 'function') {
+  //     element.pulseDefault.scale = options.pulse;
+  //   }
+  //   return element;
+  // }
 
   horizontalLine(
     start: Point,
@@ -1927,11 +1927,14 @@ export default class DiagramPrimitives {
     }
     const xy = this.collection(transform);
     if (showGrid) {
-      const gridLines = this.gridLegacy({
+      const gridLines = this.grid({
         bounds: new Rect(0, 0, width, height),
-        stepX: tools.roundNum(stepX * width / limits.width, 8),
-        stepY: tools.roundNum(stepY * height / limits.height, 8),
+        xStep: tools.roundNum(stepX * width / limits.width, 8),
+        yStep: tools.roundNum(stepY * height / limits.height, 8),
         numThickLines: 1,
+        // linePrimitives: true,
+        // lineNum: 2,
+        width: options.lineWidth * 0.6,
         color: gridColor,
         transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       });
