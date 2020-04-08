@@ -132,10 +132,11 @@ diagram.addElements([
         name: 'up',
         method: 'polygon',
         options: {
-          fill: true,
-          color: [1, 0, 0, 1],
+          // fill: true,
+          width: 0.01,
+          color: [1, 1, 0, 1],
           sides: 50,
-          radius: 0.1,
+          radius: 0.05,
         },
       },
       {
@@ -145,7 +146,7 @@ diagram.addElements([
           fill: true,
           color: [1, 1, 0, 1],
           sides: 50,
-          radius: 0.1,
+          radius: 0.05,
         },
       },
     ]
