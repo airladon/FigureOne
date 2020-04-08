@@ -947,6 +947,7 @@ export default class DiagramPrimitives {
       [[]],
     );
 
+    // Prioritize Num over Step. Only define Num from Step if Num is undefined.
     const { bounds } = options;
     let {
       xStep, xNum, yStep, yNum, width,
@@ -981,7 +982,7 @@ export default class DiagramPrimitives {
     const xLineStop = start.add(totWidth + width / 2, 0);
     const yLineStart = start.add(0, -width / 2);
     const yLineStop = start.add(0, totHeight + width / 2);
-    
+
     let xTris = [];
     let yTris = [];
     if (xNum > 0) {
@@ -1041,7 +1042,6 @@ export default class DiagramPrimitives {
       },
     };
     const options = processOptions(defaultOptions, ...optionsIn, forceOptions);
-    // const options = joinObjects(defaultOptions, optionsIn);
     const element = this.polygon(options);
     // $FlowFixMe
     element.drawingObject.getPointCountForAngle = (angle: number) => {

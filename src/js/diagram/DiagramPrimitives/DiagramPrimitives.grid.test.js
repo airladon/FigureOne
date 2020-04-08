@@ -24,6 +24,19 @@ const toLines = (points) => {
   return lines;
 };
 
+const toPoints = (points) => {
+  const p = [];
+  for (let i = 0; i < points.length; i += 12) {
+    p.push(new Point(points[0], points[1]));
+    p.push(new Point(points[2], points[3]));
+    p.push(new Point(points[4], points[5]));
+    p.push(new Point(points[6], points[7]));
+    p.push(new Point(points[8], points[9]));
+    p.push(new Point(points[10], points[11]));
+  }
+  return p;
+};
+
 describe('Equation Functions - Box', () => {
   let diagram;
   let makeGrid;
@@ -74,6 +87,41 @@ describe('Equation Functions - Box', () => {
           lineNum: 1,
         },
       },
+      stepZero: {
+        name: 'grid',
+        method: 'grid',
+        options: {
+          bounds: new Rect(0, 0, 1, 1),
+          xStep: 0,
+          yStep: 0,
+          linePrimitives: true,
+          lineNum: 1,
+        },
+      },
+      stepLargerThanBounds: {
+        name: 'grid',
+        method: 'grid',
+        options: {
+          bounds: new Rect(0, 0, 1, 1),
+          xStep: 2,
+          yStep: 2,
+          linePrimitives: true,
+          lineNum: 1,
+        },
+      },
+      numOverrideStep: {
+        name: 'grid',
+        method: 'grid',
+        options: {
+          bounds: new Rect(0, 0, 1, 1),
+          xStep: 0.1,
+          yStep: 0.1,
+          xNum: 1,
+          yNum: 1,
+          linePrimitives: true,
+          lineNum: 1,
+        },
+      },
       defaultNum: {
         name: 'grid',
         method: 'grid',
@@ -92,6 +140,30 @@ describe('Equation Functions - Box', () => {
           yNum: 1,
           linePrimitives: true,
           lineNum: 1,
+        },
+      },
+      multiLine: {
+        name: 'grid',
+        method: 'grid',
+        options: {
+          bounds: new Rect(0, 0, 1, 1),
+          xNum: 1,
+          yNum: 1,
+          width: 0.1,
+          linePrimitives: true,
+          lineNum: 2,
+        },
+      },
+      triangles: {
+        name: 'grid',
+        method: 'grid',
+        options: {
+          bounds: new Rect(0, 0, 1, 1),
+          xNum: 1,
+          yNum: 1,
+          width: 0.1,
+          linePrimitives: true,
+          lineNum: 2,
         },
       },
     };
@@ -171,5 +243,57 @@ describe('Equation Functions - Box', () => {
     expect(round(lines[0].p2)).toEqual(new Point(1, 0));
     expect(round(lines[1].p1)).toEqual(new Point(0, 0));
     expect(round(lines[1].p2)).toEqual(new Point(0, 1));
+  });
+  test('StepZero', () => {
+    makeGrid('stepZero');
+    const lines = toLines(diagram.getElement('grid').drawingObject.points);
+    expect(round(lines[0].p1)).toEqual(new Point(0, 0));
+    expect(round(lines[0].p2)).toEqual(new Point(1, 0));
+    expect(round(lines[1].p1)).toEqual(new Point(0, 0));
+    expect(round(lines[1].p2)).toEqual(new Point(0, 1));
+  });
+  test('Step Larger than Bounds', () => {
+    makeGrid('stepLargerThanBounds');
+    const lines = toLines(diagram.getElement('grid').drawingObject.points);
+    expect(round(lines[0].p1)).toEqual(new Point(0, 0));
+    expect(round(lines[0].p2)).toEqual(new Point(1, 0));
+    expect(round(lines[1].p1)).toEqual(new Point(0, 0));
+    expect(round(lines[1].p2)).toEqual(new Point(0, 1));
+  });
+  test('Num Override Step', () => {
+    makeGrid('numOverrideStep');
+    const lines = toLines(diagram.getElement('grid').drawingObject.points);
+    expect(round(lines[0].p1)).toEqual(new Point(0, 0));
+    expect(round(lines[0].p2)).toEqual(new Point(1, 0));
+    expect(round(lines[1].p1)).toEqual(new Point(0, 0));
+    expect(round(lines[1].p2)).toEqual(new Point(0, 1));
+  });
+  test('Multi Line', () => {
+    makeGrid('multiLine');
+    const lines = toLines(diagram.getElement('grid').drawingObject.points);
+    expect(round(lines[0].p1)).toEqual(new Point(-0.05, -0.05));
+    expect(round(lines[0].p2)).toEqual(new Point(1.05, -0.05));
+    expect(round(lines[1].p1)).toEqual(new Point(-0.05, 0.05));
+    expect(round(lines[1].p2)).toEqual(new Point(1.05, 0.05));
+    expect(round(lines[2].p1)).toEqual(new Point(0.05, -0.05));
+    expect(round(lines[2].p2)).toEqual(new Point(0.05, 1.05));
+    expect(round(lines[3].p1)).toEqual(new Point(-0.05, -0.05));
+    expect(round(lines[3].p2)).toEqual(new Point(-0.05, 1.05));
+  });
+  test('Triangles', () => {
+    makeGrid('triangles');
+    const points = toPoints(diagram.getElement('grid').drawingObject.points);
+    expect(round(points[0])).toEqual(new Point(-0.05, -0.05));
+    expect(round(points[1])).toEqual(new Point(1.05, -0.05));
+    expect(round(points[2])).toEqual(new Point(-0.05, 0.05));
+    expect(round(points[3])).toEqual(new Point(1.05, 0.05));
+    expect(round(points[4])).toEqual(new Point(0.05, -0.05));
+    expect(round(points[5])).toEqual(new Point(0.05, 1.05));
+    expect(round(points[6])).toEqual(new Point(-0.05, -0.05));
+    expect(round(points[7])).toEqual(new Point(1.05, -0.05));
+    expect(round(points[8])).toEqual(new Point(-0.05, 0.05));
+    expect(round(points[9])).toEqual(new Point(1.05, 0.05));
+    expect(round(points[10])).toEqual(new Point(0.05, -0.05));
+    expect(round(points[11])).toEqual(new Point(0.05, 1.05));
   });
 });
