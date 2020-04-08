@@ -1,9 +1,12 @@
 // @flow
 import {
-  Rect, Point, Transform, getPoint,
+  Rect, Point, Transform, getPoint, getRect,
 } from '../../tools/g2';
+import {
+  round
+} from '../../tools/math';
 import type {
-  TypeParsablePoint,
+  TypeParsablePoint, TypeParsableRect,
 } from '../../tools/g2';
 import { setHTML } from '../../tools/htmlGenerator';
 import {
@@ -901,23 +904,24 @@ export default class DiagramPrimitives {
   }
 
   grid(...optionsIn: Array<{
-    bounds?: Rect,
+    bounds?: TypeParsableRect,
     xStep?: number,
     yStep?: number,
     xNum?: number,
     yNum?: number,
+    // start?: TypeParsablePoint,
     width?: number,
-    start?: TypeParsablePoint,
-    texture?: OBJ_Texture,
-    copy?: OBJ_Copy | Array<OBJ_Copy>,
-    dash?: Array<number>,
     linePrimitives?: boolean,
     lineNum?: number,
+    dash?: Array<number>,
+    texture?: OBJ_Texture,
+    color?: Array<number>,
+    position?: TypeParsablePoint,
+    transform?: Transform,
+    copy?: OBJ_Copy | Array<OBJ_Copy>,
   }>) {
     const defaultOptions = {
       bounds: new Rect(-1, -1, 2, 2),
-      xNum: 10,
-      yNum: 10,
       width: 0.005,
       transform: new Transform('grid').standard(),
       dash: [],
@@ -926,6 +930,7 @@ export default class DiagramPrimitives {
     };
     const options = processOptions(defaultOptions, ...optionsIn);
     parsePoints(options, []);
+    options.bounds = getRect(options.bounds);
     const getTris = points => makePolyLine(
       points,
       options.width,
@@ -941,50 +946,66 @@ export default class DiagramPrimitives {
       [[]],
       [[]],
     );
-    if (options.xStep != null) {
-      options.xNum = Math.floor(options.bounds.width / options.xStep);
-    } else {
-      options.xStep = options.bounds.width / options.xNum;
-    }
-    if (options.yStep != null) {
-      options.yNum = Math.floor(options.bounds.height / options.yStep);
-    } else {
-      options.yStep = options.bounds.height / options.yNum;
-    }
 
-    const {
-      xNum, yNum, xStep, yStep, width,
+    const { bounds } = options;
+    let {
+      xStep, xNum, yStep, yNum, width,
     } = options;
-    const start = new Point(options.bounds.left, options.bounds.bottom);
-    const totWidth = (xNum - 1) * xStep;
-    const totHeight = (yNum - 1) * yStep;
-    let xLineStart = start.add(-width / 2, 0);
-    let xLineStop = start.add(totWidth + width / 2, 0);
-    let yLineStart = start.add(0, -width / 2);
-    let yLineStop = start.add(0, totHeight + width / 2);
     if (options.linePrimitives && options.lineNum === 1) {
-      xLineStart = start.add(0, 0);
-      xLineStop = start.add(totWidth, 0);
-      yLineStart = start.add(0, 0);
-      yLineStop = start.add(0, totHeight);
+      width = 0;
+    }
+    const totWidth = bounds.width;
+    const totHeight = bounds.height;
+    if (xStep != null && xNum == null) {
+      xNum = xStep === 0 ? 1 : 1 + Math.floor((totWidth + xStep * 0.1) / xStep);
+    }
+    if (yStep != null && yNum == null) {
+      yNum = yStep === 0 ? 1 : 1 + Math.floor((totHeight + yStep * 0.1) / yStep);
     }
 
-    const [xLine] = getTris([xLineStart, xLineStop]);
-    const [yLine] = getTris([yLineStart, yLineStop]);
-    const xTris = copyPoints(xLine, [
-      { along: 'y', num: yNum - 1, step: yStep },
-    ]);
-    const yTris = copyPoints(yLine, [
-      { along: 'x', num: xNum - 1, step: xStep },
-    ]);
+    if (xNum == null) {
+      xNum = 2;
+    }
+    if (yNum == null) {
+      yNum = 2;
+    }
+
+    xStep = xNum < 2 ? 0 : totWidth / (xNum - 1);
+    yStep = yNum < 2 ? 0 : totHeight / (yNum - 1);
+
+    const start = new Point(
+      bounds.left,
+      bounds.bottom,
+    );
+    const xLineStart = start.add(-width / 2, 0);
+    const xLineStop = start.add(totWidth + width / 2, 0);
+    const yLineStart = start.add(0, -width / 2);
+    const yLineStop = start.add(0, totHeight + width / 2);
+    
+    let xTris = [];
+    let yTris = [];
+    if (xNum > 0) {
+      const [yLine] = getTris([yLineStart, yLineStop]);
+      yTris = copyPoints(yLine, [
+        { along: 'x', num: xNum - 1, step: xStep },
+      ]);
+    }
+
+    if (yNum > 0) {
+      const [xLine] = getTris([xLineStart, xLineStop]);
+      xTris = copyPoints(xLine, [
+        { along: 'y', num: yNum - 1, step: yStep },
+      ]);
+    }
+
     const element = this.generic(options, {
       drawType: options.linePrimitives ? 'lines' : 'triangles',    // $FlowFixMe
       points: [...xTris, ...yTris],
       border: [[
-        start._dup(),
-        start.add(totWidth, 0),
-        start.add(totWidth, totHeight),
-        start.add(0, totHeight),
+        start.add(-width / 2, -width / 2),
+        start.add(totWidth + width / 2, -width / 2),
+        start.add(totWidth + width / 2, totHeight + width / 2),
+        start.add(-width / 2, totHeight + width / 2),
       ]],
     });
     return element;
@@ -1906,7 +1927,7 @@ export default class DiagramPrimitives {
     }
     const xy = this.collection(transform);
     if (showGrid) {
-      const gridLines = this.grid({
+      const gridLines = this.gridLegacy({
         bounds: new Rect(0, 0, width, height),
         stepX: tools.roundNum(stepX * width / limits.width, 8),
         stepY: tools.roundNum(stepY * height / limits.height, 8),
