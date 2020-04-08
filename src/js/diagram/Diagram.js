@@ -291,7 +291,13 @@ class Diagram {
     this.beingTouchedElements = [];
     this.moveTopElementOnly = true;
     this.globalAnimation = new GlobalAnimation();
-    this.recorder = new Recorder();
+    this.recorder = new Recorder(
+      this.simulateTouchDown.bind(this),
+      this.simulateTouchUp.bind(this),
+      this.simulateTouchMove.bind(this),
+      this.simulateTouchFree.bind(this),
+      this.animateNextFrame.bind(this),
+    );
     this.shapesLow = this.getShapes();
     // this.shapesHigh = this.getShapes(true);
     this.shapes = this.shapesLow;
@@ -723,7 +729,7 @@ class Diagram {
     if (this.recorder.isRecording) {
       const pixelP = this.clientToPixel(clientPoint);
       const diagramPoint = pixelP.transformBy(this.spaceTransforms.pixelToDiagram.matrix());
-      this.recorder.recordPointer(diagramPoint.x, diagramPoint.y, 'down');
+      this.recorder.recordPointer(diagramPoint.x, diagramPoint.y, 'd');
     }
 
     if (this.inTransition) {
@@ -788,7 +794,7 @@ class Diagram {
   // freely until they decelerate to 0.
   touchUpHandler() {
     if (this.recorder.isRecording) {
-      this.recorder.recordPointer(null, null, 'up');
+      this.recorder.recordPointer(null, null, 'u');
     }
     // console.log("before", this.elements._circle.transform.t())
     // console.log(this.beingMovedElements)
@@ -816,7 +822,7 @@ class Diagram {
     if (this.recorder.isRecording) {
       const pixelP = this.clientToPixel(clientPoint);
       const diagramPoint = pixelP.transformBy(this.spaceTransforms.pixelToDiagram.matrix());
-      this.recorder.recordPointer(diagramPoint.x, diagramPoint.y, 'free');
+      this.recorder.recordPointer(diagramPoint.x, diagramPoint.y, 'f');
     }
   }
 
@@ -970,7 +976,7 @@ class Diagram {
       const currentPixelPoint = this.clientToPixel(currentClientPoint);
       const diagramPoint = currentPixelPoint
         .transformBy(this.spaceTransforms.pixelToDiagram.matrix());
-      this.recorder.recordPointer(diagramPoint.x, diagramPoint.y, 'move');
+      this.recorder.recordPointer(diagramPoint.x, diagramPoint.y, 'm');
     }
 
     if (this.inTransition) {
