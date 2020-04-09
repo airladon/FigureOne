@@ -511,4 +511,4 @@ const data = [
 ];
 
 diagram.recorder.events = data;
-diagram.recorder.startPlayback();
+diagram.recorder.startPlayback(1.5);
