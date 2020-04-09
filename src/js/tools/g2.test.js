@@ -3,7 +3,7 @@ import {
   TransformLimit, spaceToSpaceTransform, Rect,
   getBoundingRect, polarToRect, rectToPolar, getDeltaAngle,
   normAngleTo90, deg, curvedPath, parsePoint, threePointAngle,
-  threePointAngleMin,
+  threePointAngleMin, getTransform,
 } from './g2';
 import { round } from './math';
 
@@ -2161,6 +2161,46 @@ describe('g2 tests', () => {
       ];
       const angle = threePointAngleMin(points[0], points[1], points[2]);
       expect(round(angle)).toBe(round(-90 * Math.PI / 180));
+    });
+  });
+  describe('Get Transform', () => {
+    test('Array', () => {
+      const t = getTransform([['t', 1, 2]]);
+      expect(t.t()).toEqual(new Point(1, 2));
+      expect(t.order).toHaveLength(1);
+    });
+    test('Named Array', () => {
+      const t = getTransform([['t', 1], 'Name1', ['s', 0.5]]);
+      expect(t.t()).toEqual(new Point(1, 1));
+      expect(t.s()).toEqual(new Point(0.5, 0.5));
+      expect(t.order).toHaveLength(2);
+      expect(t.name).toBe('Name1');
+    });
+    test('String', () => {
+      const tIn = new Transform().translate(1, 0.5).scale(1, 1).rotate(0.5);
+      const t = getTransform(tIn.toString());
+      expect(t.t()).toEqual(new Point(1, 0.5));
+      expect(t.s()).toEqual(new Point(1, 1));
+      expect(t.r()).toEqual(0.5);
+      expect(t.order).toHaveLength(3);
+    });
+    test('Named String', () => {
+      const tIn = new Transform('Name1').translate(1, 0.5).scale(1, 1).rotate(0.5);
+      const t = getTransform(tIn.toString());
+      expect(t.t()).toEqual(new Point(1, 0.5));
+      expect(t.s()).toEqual(new Point(1, 1));
+      expect(t.r()).toEqual(0.5);
+      expect(t.order).toHaveLength(3);
+      expect(t.name).toBe('Name1');
+    });
+    test('Named String from String', () => {
+      const tIn = '["Name1", ["t", 1, 0.5], ["s", 1, 1], ["r", 0.5]]';
+      const t = getTransform(tIn);
+      expect(t.t()).toEqual(new Point(1, 0.5));
+      expect(t.s()).toEqual(new Point(1, 1));
+      expect(t.r()).toEqual(0.5);
+      expect(t.order).toHaveLength(3);
+      expect(t.name).toBe('Name1');
     });
   });
 });

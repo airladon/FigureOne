@@ -1200,6 +1200,10 @@ class Rotation {
     this.name = name;
   }
 
+  toString(precision: number = 8) {
+    return `["r",${roundNum(this.r, precision)}]`;
+  }
+
   matrix(): Array<number> {
     return m2.rotationMatrix(this.r);
   }
@@ -1241,6 +1245,10 @@ class Translation extends Point {
       // this.y = ty;
     }
     this.name = name;
+  }
+
+  toString(precision: number = 8) {
+    return `["t",${roundNum(this.x, precision)},${roundNum(this.y, precision)}]`;
   }
 
   matrix(): Array<number> {
@@ -1318,6 +1326,10 @@ class Scale extends Point {
       // this.y = sy;
     }
     this.name = name;
+  }
+
+  toString(precision: number = 8) {
+    return `["s",${roundNum(this.x, precision)},${roundNum(this.y, precision)}]`;
   }
 
   matrix(): Array<number> {
@@ -1425,6 +1437,17 @@ class Transform {
     this.index = this.order.length;
     this._type = 'transform';
     this.calcMatrix();
+  }
+
+  toString(precision: number = 8) {
+    const out = [];
+    this.order.forEach((transformElement) => {
+      out.push(transformElement.toString(precision));
+    });
+    if (this.name !== '') {
+      return `["${this.name}",${out.join(',')}]`;
+    }
+    return `[${out.join(',')}]`;
   }
 
   standard() {
@@ -1994,6 +2017,65 @@ class Transform {
   }
 }
 
+
+export type TypeParsableTransform = Array<string | ['s', number, number] | ['r', number] | ['t', number, number]> | string | Transform;
+
+function parseTransform<T>(inTransform: TypeParsableTransform, onFail: T): Transform | T | null {
+  if (inTransform instanceof Transform) {
+    return inTransform;
+  }
+  let onFailToUse = onFail;
+  if (onFailToUse == null) {
+    onFailToUse = null;
+  }
+  let tToUse = inTransform;
+  if (typeof inTransform === 'string') {
+    tToUse = JSON.parse(inTransform);
+  }
+  if (!Array.isArray(tToUse)) {
+    return onFailToUse;
+  }
+  if (tToUse.length === 0) {
+    return new Transform();
+  }
+  if (tToUse.length === 1 && typeof tToUse[0] === 'string') {
+    return new Transform(tToUse[0]);
+  }
+  let t = new Transform();
+  tToUse.forEach((transformElement) => {
+    if (typeof transformElement === 'string') {
+      t.name = transformElement;
+      return;
+    }
+    if (transformElement.length === 3) {
+      const [type, x, y] = transformElement;
+      if (type === 's') {
+        t = t.scale(x, y);
+      } else {
+        t = t.translate(x, y);
+      }
+      return;
+    }
+    const [type, value] = transformElement;
+    if (type === 's') {
+      t = t.scale(value, value);
+    } else if (type === 't') {
+      t = t.translate(value, value);
+    } else {
+      t = t.rotate(value);
+    }
+  });
+  return t;
+}
+
+function getTransform(t: TypeParsableTransform): Transform {
+  let parsedTransform = parseTransform(t);
+  if (parsedTransform == null) {
+    parsedTransform = new Transform();
+  }
+  return parsedTransform;
+}
+
 function spaceToSpaceTransform(
   s1: {
     x: {bottomLeft: number, width: number},
@@ -2297,4 +2379,5 @@ export {
   getPoints,
   quadBezierPoints,
   getRect,
+  getTransform,
 };

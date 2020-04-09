@@ -7,6 +7,7 @@ import {
   getPoint,
 } from '../tools/g2';
 import type { TypeParsablePoint } from '../tools/g2';
+import Recorder from './Recorder';
 import * as m2 from '../tools/m2';
 // import type { pathOptionsType, TypeRotationDirection } from '../tools/g2';
 import * as tools from '../tools/math';
@@ -121,7 +122,7 @@ class DiagramElement {
   noRotationFromParent: boolean;
 
   interactiveLocation: Point;   // this is in vertex space
-
+  recorder: Recorder;
   move: {
     maxTransform: Transform,
     minTransform: Transform,
@@ -278,6 +279,7 @@ class DiagramElement {
       parentCount: 0,
       elementCount: 0,
     };
+    this.recorder = new Recorder();
     this.custom = {};
     this.parent = parent;
     this.drawPriority = 1;
@@ -1020,6 +1022,16 @@ class DiagramElement {
     return new Transform(this.lastDrawTransform.order.slice(-parentCount));
   }
 
+  getPath() {
+    if (this.parent == null) {
+      return this.name;
+    }
+    if (this.parent.name === 'diagramRoot') {
+      return this.name;
+    }
+    return `${this.parent.getPath()}.${this.name}`;
+  }
+
   // Being Moved
   startBeingMoved(): void {
     // this.stopAnimating();
@@ -1030,11 +1042,21 @@ class DiagramElement {
     this.state.movement.previousTime = Date.now() / 1000;
     this.state.isBeingMoved = true;
     this.unrender();
+    if (this.recorder.isRecording) {
+      this.recorder.recordStartBeingMoved(this.getPath());
+    }
   }
 
   moved(newTransform: Transform): void {
     this.calcVelocity(newTransform);
     this.setTransform(newTransform._dup());
+    if (this.recorder.isRecording) {
+      this.recorder.recordMoved(
+        this.getPath(),
+        this.transform,
+        // this.state.movement.velocity.toString(),
+      );
+    }
   }
 
   stopBeingMoved(): void {
@@ -1048,6 +1070,14 @@ class DiagramElement {
     }
     this.state.isBeingMoved = false;
     this.state.movement.previousTime = -1;
+    if (this.recorder.isRecording) {
+      this.recorder.recordStopBeingMoved(
+        this.getPath(),
+        this.transform,
+        this.state.movement.velocity,
+        // this.state.movement.velocity.toString(),
+      );
+    }
   }
 
   calcVelocity(newTransform: Transform): void {
@@ -1086,6 +1116,14 @@ class DiagramElement {
       this.move.freely.zeroVelocityThreshold,
       this.move.maxVelocity,
     );
+    if (this.recorder.isRecording) {
+      this.recorder.recordStartMovingFreely(
+        this.getPath(),
+        this.transform,
+        this.state.movement.velocity,
+        // this.state.movement.velocity.toString(),
+      );
+    }
   }
 
   stopMovingFreely(result: boolean = true): void {
