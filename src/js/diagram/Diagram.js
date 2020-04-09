@@ -294,9 +294,10 @@ class Diagram {
     this.recorder = new Recorder(
       this.simulateTouchDown.bind(this),
       this.simulateTouchUp.bind(this),
-      this.simulateTouchMove.bind(this),
-      this.simulateTouchFree.bind(this),
+      // this.simulateTouchMove.bind(this),
+      this.simulateCursorMove.bind(this),
       this.animateNextFrame.bind(this),
+      this.getElement.bind(this),
     );
     this.shapesLow = this.getShapes();
     // this.shapesHigh = this.getShapes(true);
@@ -729,7 +730,7 @@ class Diagram {
     if (this.recorder.isRecording) {
       const pixelP = this.clientToPixel(clientPoint);
       const diagramPoint = pixelP.transformBy(this.spaceTransforms.pixelToDiagram.matrix());
-      this.recorder.recordPointer(diagramPoint.x, diagramPoint.y, 'd');
+      this.recorder.recordEvent('touchDown', diagramPoint.x, diagramPoint.y);
     }
 
     if (this.inTransition) {
@@ -794,7 +795,7 @@ class Diagram {
   // freely until they decelerate to 0.
   touchUpHandler() {
     if (this.recorder.isRecording) {
-      this.recorder.recordPointer(null, null, 'u');
+      this.recorder.recordEvent('touchUp');
     }
     // console.log("before", this.elements._circle.transform.t())
     // console.log(this.beingMovedElements)
@@ -810,7 +811,7 @@ class Diagram {
     // console.log("after", this.elements._circle.transform.t())
   }
 
-  simulateTouchFree(diagramPoint: Point, pointerElement: string = 'pointer') {
+  simulateCursorMove(diagramPoint: Point, pointerElement: string = 'pointer') {
     const pointer = this.getElement(pointerElement);
     if (pointer == null) {
       return;
@@ -822,7 +823,7 @@ class Diagram {
     if (this.recorder.isRecording) {
       const pixelP = this.clientToPixel(clientPoint);
       const diagramPoint = pixelP.transformBy(this.spaceTransforms.pixelToDiagram.matrix());
-      this.recorder.recordPointer(diagramPoint.x, diagramPoint.y, 'f');
+      this.recorder.recordEvent('cursorMove', diagramPoint.x, diagramPoint.y);
     }
   }
 
@@ -943,25 +944,25 @@ class Diagram {
     }
   }
 
-  simulateTouchMove(
-    previousDiagramPoint: Point,
-    currentDiagramPoint: Point,
-    pointerElement: string = 'pointer',
-  ) {
-    // const previousPixelPoint = previousDiagramPoint
-    //   .transformBy(this.spaceTransforms.diagramToPixel.matrix());
-    // const previousClientPoint = this.pixelToClient(previousPixelPoint);
-    // const currentPixelPoint = currentDiagramPoint
-    //   .transformBy(this.spaceTransforms.diagramToPixel.matrix());
-    // const currentClientPoint = this.pixelToClient(currentPixelPoint);
-    // this.touchMoveHandler(previousClientPoint, currentClientPoint);
+  // simulateTouchMove(
+  //   previousDiagramPoint: Point,
+  //   currentDiagramPoint: Point,
+  //   pointerElement: string = 'pointer',
+  // ) {
+  //   // const previousPixelPoint = previousDiagramPoint
+  //   //   .transformBy(this.spaceTransforms.diagramToPixel.matrix());
+  //   // const previousClientPoint = this.pixelToClient(previousPixelPoint);
+  //   // const currentPixelPoint = currentDiagramPoint
+  //   //   .transformBy(this.spaceTransforms.diagramToPixel.matrix());
+  //   // const currentClientPoint = this.pixelToClient(currentPixelPoint);
+  //   // this.touchMoveHandler(previousClientPoint, currentClientPoint);
 
-    const pointer = this.getElement(pointerElement);
-    if (pointer == null) {
-      return;
-    }
-    pointer.setPosition(currentDiagramPoint);
-  }
+  //   const pointer = this.getElement(pointerElement);
+  //   if (pointer == null) {
+  //     return;
+  //   }
+  //   pointer.setPosition(currentDiagramPoint);
+  // }
 
   // Handle touch/mouse move events in the canvas. These events will only be
   // sent if the initial touch down happened in the canvas.
@@ -976,7 +977,7 @@ class Diagram {
       const currentPixelPoint = this.clientToPixel(currentClientPoint);
       const diagramPoint = currentPixelPoint
         .transformBy(this.spaceTransforms.pixelToDiagram.matrix());
-      this.recorder.recordPointer(diagramPoint.x, diagramPoint.y, 'm');
+      this.recorder.recordEvent('cursorMove', diagramPoint.x, diagramPoint.y);
     }
 
     if (this.inTransition) {
