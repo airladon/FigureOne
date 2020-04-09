@@ -5,7 +5,7 @@ import GlobalAnimation from './webgl/GlobalAnimation';
 // Singleton class that contains projects global variables
 class Recorder {
   // Method for requesting the next animation frame
-  events: Array<[number, number | null, number | null, 'd' | 'u' | 'm' | 'f'] | [number, string]>
+  events: Array<Array<number | string | null>>
   isRecording: boolean;
   isPlaying: boolean;
   startTime: number;
@@ -94,23 +94,25 @@ class Recorder {
     //     return;
     //   }
     // }
-    this.events.push([this.now() / 1000, xRound, yRound, state]);
+    this.events.push([this.now() / 1000, state, xRound, yRound]);
   }
 
   recordMoved(element: string, transform: Transform) {
-    this.events.push(['moved', element, transform.toString(5)]);
+    this.events.push(
+      [this.now() / 1000, 'moved', element, transform.toString(5)],
+    );
   }
 
   recordStartBeingMoved(element: string) {
-    this.events.push(['startMove', element]);
+    this.events.push([this.now() / 1000, 'startMove', element]);
   }
 
   recordStopBeingMoved(element: string, transform: Transform, velocity: Transform) {
-    this.events.push(['stopMove', element, transform.toString(5), velocity.toString(5)]);
+    this.events.push([this.now() / 1000, 'stopMove', element, transform.toString(5), velocity.toString(5)]);
   }
 
   recordStartMovingFreely(element: string, transform: Transform, velocity: Transform) {
-    this.events.push(['startMovingFreely', element, transform.toString(5), velocity.toString(5)]);
+    this.events.push([this.now() / 1000, 'startMovingFreely', element, transform.toString(5), velocity.toString(5)]);
   }
 
   show() {  // eslint-disable-line class-methods-use-this
