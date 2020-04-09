@@ -21,6 +21,7 @@ class Recorder {
   previousPoint: ?Point;
   animateNextFrame: () => void;
   getElement: () => DiagramElement;
+  nextTimeout: TimeoutID;
 
   // requestNextAnimationFrame: (()=>mixed) => AnimationFrameID;
   // animationId: AnimationFrameID;    // used to cancel animation frames
@@ -101,42 +102,6 @@ class Recorder {
     this.events.push([this.now() / 1000, ...out]);
   }
 
-  // recordPointer(x: number | null, y: number | null, event: 'd' | 'u' | 'm' | 'f') {
-  //   const xRound = x == null ? null : round(x, this.precision);
-  //   const yRound = y == null ? null : round(y, this.precision);
-  //   // if (this.events.length > 0) {
-  //   //   const lastPoint = this.events[this.events.length - 1];
-  //   //   let lastX;
-  //   //   let lastY;
-  //   //   let lastState;
-  //   //   if (lastPoint.length === 4) {
-  //   //     [, lastX, lastY, lastState] = lastPoint;
-  //   //   }
-  //   //   if (xRound === lastX && yRound === lastY && state === lastState) {
-  //   //     return;
-  //   //   }
-  //   // }
-  //   this.events.push([this.now() / 1000, event, xRound, yRound]);
-  // }
-
-  // recordMoved(element: string, transform: Transform) {
-  //   this.events.push(
-  //     [this.now() / 1000, 'moved', element, transform.toString(5)],
-  //   );
-  // }
-
-  // recordStartBeingMoved(element: string) {
-  //   this.events.push([this.now() / 1000, 'startMove', element]);
-  // }
-
-  // recordStopBeingMoved(element: string, transform: Transform, velocity: Transform) {
-  //   this.events.push([this.now() / 1000, 'stopMove', element, transform.toString(5), velocity.toString(5)]);
-  // }
-
-  // recordStartMovingFreely(element: string, transform: Transform, velocity: Transform) {
-  //   this.events.push([this.now() / 1000, 'startMovingFreely', element, transform.toString(5), velocity.toString(5)]);
-  // }
-
   show() {  // eslint-disable-line class-methods-use-this
     const wnd = window.open('about:blank', '', '_blank');
     this.events.forEach((event) => {
@@ -148,7 +113,7 @@ class Recorder {
     this.events.push([this.now(), id]);
   }
 
-  startPlayback() {
+  startPlayback(fromTime: number = 0) {
     this.isRecording = false;
     this.isPlaying = true;
     this.eventIndex = 0;
@@ -157,8 +122,46 @@ class Recorder {
     this.playbackEvent();
   }
 
+  getNextIndexForTime(
+    time: number,
+    startSearch: number = 0,
+    endSearch: number = this.events.length - 1,
+  ) {
+    if (time === 0) {
+      return 0;
+    }
+    const endTime = parseFloat(this.events[endSearch][0]);
+    if (time > endTime) {
+      return -1;
+    }
+    const searchRange = endSearch - startSearch;
+    let midSearch = startSearch;
+    if (searchRange > 1) {
+      midSearch = Math.floor(startSearch + searchRange / 2);
+    } else if (searchRange === 1) {
+      midSearch = endSearch;
+    }
+    // console.log(startSearch, endSearch, midSearch)
+    if (midSearch === 0) {
+      return 0;
+    }
+    const prevTime = parseFloat(this.events[midSearch - 1][0]);
+    const midTime = parseFloat(this.events[midSearch][0]);
+    if (time === midTime) {
+      return midSearch;
+    }
+    if (time <= midTime && time > prevTime) {
+      return midSearch;
+    }
+    if (time < midTime) {
+      return this.getNextIndexForTime(time, startSearch, midSearch);
+    }
+    return this.getNextIndexForTime(time, midSearch, endSearch);
+  }
+
   stopPlayback() {
     this.isPlaying = false;
+    clearTimeout(this.nextTimeout);
   }
 
   processEvent(event: Array<string | number>) {
@@ -217,6 +220,14 @@ class Recorder {
     }
   }
 
+  queuePlaybackEvent(time: number) {
+    this.nextTimeout = setTimeout(() => {
+      if (this.isPlaying) {
+        this.playbackEvent();
+      }
+    }, time);
+  }
+
   playbackEvent() {
     const event = this.events[this.eventIndex];
     const [currentTime] = event;
@@ -228,9 +239,7 @@ class Recorder {
       return;
     }
     const nextTime = (this.events[this.eventIndex][0] - currentTime) * 1000;
-    setTimeout(() => {
-      this.playbackEvent();
-    }, nextTime);
+    this.queuePlaybackEvent(nextTime);
   }
 
   // playbackClick() { // eslint-disable-line class-methods-use-this
