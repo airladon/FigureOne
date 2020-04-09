@@ -703,9 +703,9 @@ class Diagram {
   }
 
   simulateTouchDown(diagramPoint: Point, pointerElement: string = 'pointer') {
-    const pixelPoint = diagramPoint.transformBy(this.spaceTransforms.diagramToPixel.matrix());
-    const clientPoint = this.pixelToClient(pixelPoint);
-    this.touchDownHandler(clientPoint);
+    // const pixelPoint = diagramPoint.transformBy(this.spaceTransforms.diagramToPixel.matrix());
+    // const clientPoint = this.pixelToClient(pixelPoint);
+    // this.touchDownHandler(clientPoint);
 
     const pointer = this.getElement(pointerElement);
     if (pointer == null) {
@@ -775,7 +775,7 @@ class Diagram {
   }
 
   simulateTouchUp(pointerElement: string = 'pointer') {
-    this.touchUpHandler();
+    // this.touchUpHandler();
     const pointer = this.getElement(pointerElement);
     if (pointer == null) {
       return;
@@ -948,13 +948,13 @@ class Diagram {
     currentDiagramPoint: Point,
     pointerElement: string = 'pointer',
   ) {
-    const previousPixelPoint = previousDiagramPoint
-      .transformBy(this.spaceTransforms.diagramToPixel.matrix());
-    const previousClientPoint = this.pixelToClient(previousPixelPoint);
-    const currentPixelPoint = currentDiagramPoint
-      .transformBy(this.spaceTransforms.diagramToPixel.matrix());
-    const currentClientPoint = this.pixelToClient(currentPixelPoint);
-    this.touchMoveHandler(previousClientPoint, currentClientPoint);
+    // const previousPixelPoint = previousDiagramPoint
+    //   .transformBy(this.spaceTransforms.diagramToPixel.matrix());
+    // const previousClientPoint = this.pixelToClient(previousPixelPoint);
+    // const currentPixelPoint = currentDiagramPoint
+    //   .transformBy(this.spaceTransforms.diagramToPixel.matrix());
+    // const currentClientPoint = this.pixelToClient(currentPixelPoint);
+    // this.touchMoveHandler(previousClientPoint, currentClientPoint);
 
     const pointer = this.getElement(pointerElement);
     if (pointer == null) {

@@ -1,5 +1,5 @@
 // @flow
-
+import { Transform } from '../tools/g2';
 import { round } from '../tools/math';
 import GlobalAnimation from './webgl/GlobalAnimation';
 // Singleton class that contains projects global variables
@@ -26,11 +26,11 @@ class Recorder {
   // nextDrawQueue: Array<(number) => void>;
 
   constructor(
-    diagramTouchDown: (Point) => boolean,
-    diagramTouchUp: void => void,
-    diagramTouchMoveDown: (Point, Point) => boolean,
-    diagramTouchMoveUp: (Point) => void,
-    animateNextFrame: () => void,
+    diagramTouchDown?: (Point) => boolean,
+    diagramTouchUp?: void => void,
+    diagramTouchMoveDown?: (Point, Point) => boolean,
+    diagramTouchMoveUp?: (Point) => void,
+    animateNextFrame?: () => void,
   ) {
     // If the instance alread exists, then don't create a new instance.
     // If it doesn't, then setup some default values.
@@ -39,13 +39,23 @@ class Recorder {
       this.events = [];
       this.isRecording = false;
       this.precision = 5;
-      this.touchDown = diagramTouchDown;
-      this.touchUp = diagramTouchUp;
-      this.touchMoveDown = diagramTouchMoveDown;
-      this.touchMoveUp = diagramTouchMoveUp;
+      if (diagramTouchDown) {
+        this.touchDown = diagramTouchDown;
+      }
+      if (diagramTouchUp) {
+        this.touchUp = diagramTouchUp;
+      }
+      if (diagramTouchMoveDown) {
+        this.touchMoveDown = diagramTouchMoveDown;
+      }
+      if (diagramTouchMoveUp) {
+        this.touchMoveUp = diagramTouchMoveUp;
+      }
       this.queueNextFrame = new GlobalAnimation();
       this.previousPoint = null;
-      this.animateNextFrame = animateNextFrame;
+      if (animateNextFrame) {
+        this.animateNextFrame = animateNextFrame;
+      }
       // this.drawScene = this.draw.bind(this);
     }
     return Recorder.instance;
@@ -72,31 +82,48 @@ class Recorder {
   recordPointer(x: number | null, y: number | null, state: 'd' | 'u' | 'm' | 'f') {
     const xRound = x == null ? null : round(x, this.precision);
     const yRound = y == null ? null : round(y, this.precision);
-    if (this.events.length > 0) {
-      const lastPoint = this.events[this.events.length - 1];
-      let lastX;
-      let lastY;
-      let lastState;
-      if (lastPoint.length === 4) {
-        [, lastX, lastY, lastState] = lastPoint;
-      }
-      if (xRound === lastX && yRound === lastY && state === lastState) {
-        return;
-      }
-    }
+    // if (this.events.length > 0) {
+    //   const lastPoint = this.events[this.events.length - 1];
+    //   let lastX;
+    //   let lastY;
+    //   let lastState;
+    //   if (lastPoint.length === 4) {
+    //     [, lastX, lastY, lastState] = lastPoint;
+    //   }
+    //   if (xRound === lastX && yRound === lastY && state === lastState) {
+    //     return;
+    //   }
+    // }
     this.events.push([this.now() / 1000, xRound, yRound, state]);
+  }
+
+  recordMoved(element: string, transform: Transform) {
+    this.events.push(['moved', element, transform.toString(5)]);
+  }
+
+  recordStartBeingMoved(element: string) {
+    this.events.push(['startMove', element]);
+  }
+
+  recordStopBeingMoved(element: string, transform: Transform, velocity: Transform) {
+    this.events.push(['stopMove', element, transform.toString(5), velocity.toString(5)]);
+  }
+
+  recordStartMovingFreely(element: string, transform: Transform, velocity: Transform) {
+    this.events.push(['startMovingFreely', element, transform.toString(5), velocity.toString(5)]);
   }
 
   show() {  // eslint-disable-line class-methods-use-this
     const wnd = window.open('about:blank', '', '_blank');
     this.events.forEach((event) => {
-      if (event.length === 4) {
-        const [time, x, y, state] = event;
-        wnd.document.write(`[${time}, ${x || 'null'}, ${y || 'null'}, '${state}'],<br>`);
-      } else {
-        const [time, id] = event;
-        wnd.document.write(`[${time}, ${id}],<br>`);
-      }
+      // if (event.length === 4) {
+      //   const [time, x, y, state] = event;
+      //   wnd.document.write(`[${time}, ${x || 'null'}, ${y || 'null'}, '${state}'],<br>`);
+      // } else {
+      //   const [time, id] = event;
+      //   wnd.document.write(`[${time}, ${id}],<br>`);
+      // }
+      wnd.document.write(event, '<br>');
     });
     // wnd.document.write(this.events);
   }
@@ -156,6 +183,7 @@ class Recorder {
         break;
       case 'm':
         this.touchMoveDown(this.previousPoint, new Point(x, y));
+        this.previousPoint = new Point(x, y);
         break;
       default:
         this.touchMoveUp(new Point(x, y));
