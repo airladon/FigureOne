@@ -1043,7 +1043,7 @@ class DiagramElement {
     this.state.isBeingMoved = true;
     this.unrender();
     if (this.recorder.isRecording) {
-      this.recorder.recordStartBeingMoved(this.getPath());
+      this.recorder.recordEvent('startBeingMoved', this.getPath());
     }
   }
 
@@ -1051,7 +1051,8 @@ class DiagramElement {
     this.calcVelocity(newTransform);
     this.setTransform(newTransform._dup());
     if (this.recorder.isRecording) {
-      this.recorder.recordMoved(
+      this.recorder.recordEvent(
+        'moved',
         this.getPath(),
         this.transform,
         // this.state.movement.velocity.toString(),
@@ -1071,7 +1072,8 @@ class DiagramElement {
     this.state.isBeingMoved = false;
     this.state.movement.previousTime = -1;
     if (this.recorder.isRecording) {
-      this.recorder.recordStopBeingMoved(
+      this.recorder.recordEvent(
+        'stopBeingMoved',
         this.getPath(),
         this.transform,
         this.state.movement.velocity,
@@ -1101,6 +1103,12 @@ class DiagramElement {
     this.state.movement.previousTime = currentTime;
   }
 
+  simulateStartMovingFreely(transform: Transform, velocity: Transform) {
+    this.transform = transform;
+    this.state.movement.velocity = velocity;
+    this.startMovingFreely();
+  }
+
   // Moving Freely
   startMovingFreely(callback: ?(boolean) => void = null): void {
     // this.stopAnimating();
@@ -1117,7 +1125,8 @@ class DiagramElement {
       this.move.maxVelocity,
     );
     if (this.recorder.isRecording) {
-      this.recorder.recordStartMovingFreely(
+      this.recorder.recordEvent(
+        'startMovingFreely',
         this.getPath(),
         this.transform,
         this.state.movement.velocity,
