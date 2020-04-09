@@ -119,7 +119,17 @@ class Recorder {
     this.eventIndex = 0;
     this.previousPoint = null;
     this.touchUp();
-    this.playbackEvent();
+    this.eventIndex = this.getNextIndexForTime(fromTime);
+    this.queuePlaybackEvent(this.getTimeToIndex(fromTime));
+    // this.playbackEvent(this.getTimeToIndex);
+  }
+
+  getTimeToIndex(time: number) {
+    if (this.eventIndex === -1 || this.eventIndex > this.events.length) {
+      return -1;
+    }
+    const nextTime = this.events[this.eventIndex][0];
+    return nextTime - time;
   }
 
   getNextIndexForTime(
@@ -145,8 +155,8 @@ class Recorder {
     if (midSearch === 0) {
       return 0;
     }
-    const prevTime = parseFloat(this.events[midSearch - 1][0]);
-    const midTime = parseFloat(this.events[midSearch][0]);
+    const prevTime = this.events[midSearch - 1][0];
+    const midTime = this.events[midSearch][0];
     if (time === midTime) {
       return midSearch;
     }
@@ -220,7 +230,11 @@ class Recorder {
     }
   }
 
-  queuePlaybackEvent(time: number) {
+  queuePlaybackEvent(time: number = 0) {
+    if (time === 0) {
+      this.playbackEvent();
+      return;
+    }
     this.nextTimeout = setTimeout(() => {
       if (this.isPlaying) {
         this.playbackEvent();
