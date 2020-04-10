@@ -4,9 +4,9 @@ import {
   Transform, Point, TransformLimit, Rect,
   Translation, spaceToSpaceTransform, getBoundingRect,
   Scale, Rotation, Line, getMaxTimeFromVelocity, clipAngle,
-  getPoint,
+  getPoint, getTransform,
 } from '../tools/g2';
-import type { TypeParsablePoint } from '../tools/g2';
+import type { TypeParsablePoint, TypeParsableTransform } from '../tools/g2';
 import Recorder from './Recorder';
 import * as m2 from '../tools/m2';
 // import type { pathOptionsType, TypeRotationDirection } from '../tools/g2';
@@ -16,7 +16,7 @@ import DrawingObject from './DrawingObjects/DrawingObject';
 import VertexObject from './DrawingObjects/VertexObject/VertexObject';
 import { TextObject } from './DrawingObjects/TextObject/TextObject';
 import { duplicateFromTo, joinObjects, joinObjectsWithOptions } from '../tools/tools';
-import { colorArrayToRGBA } from '../tools/color';
+import { colorArrayToRGBA, areColorsSame } from '../tools/color';
 // import GlobalAnimation from './webgl/GlobalAnimation';
 // import DrawContext2D from './DrawContext2D';
 
@@ -49,6 +49,9 @@ export type TypeScenario = {
   position?: TypeParsablePoint,
   rotation?: number,
   scale?: TypeParsablePoint,
+  transform?: TypeParsableTransform,
+  color?: Array<number>,
+  isShown?: boolean,
 };
 
 
@@ -374,25 +377,85 @@ class DiagramElement {
       // eslint-disable-next-line max-len
       builder: (...optionsIn: Array<TypeAnimationBuilderInputOptions>) => new animations.AnimationBuilder(this, ...optionsIn),
       // eslint-disable-next-line max-len
-      scenario: (...optionsIn: Array<TypeTransformAnimationStepInputOptions & { scenario: string }>) => {
+      scenarioNew: (...optionsIn: Array<TypeTransformAnimationStepInputOptions
+                                  & {
+                                      start?: TypeScenario,
+                                      target: TypeScenario,
+                                     }>) => {
+        const defaultOptions = { element: this };
+        const options = joinObjects({}, defaultOptions, ...optionsIn);
+        if (options.target != null && options.target in options.element.scenarios) {
+          const target = options.element.getScenarioTarget(options.target);
+          options.target = target;
+        }
+        if (options.start != null && options.start in options.element.scenarios) {
+          const start = options.element.getScenarioTarget(options.start);
+          options.start = start;
+        }
+        const [start, target, element] = options;
+        const steps = [];
+        const timeOptions = { delay: options.delay, duration: options.duration };
+        const duration = this.getTimeToMoveToScenario(target, options, start || '');
+        options.duration = duration;
+        options.velocity = undefined;
+        // if (options.velocity) {
+        //   const duration = getTimeToMoveToScenario()
+        let startColor;
+        let startTransform;
+        let startIsShown;
+        if (start == null) {
+          startColor = this.color.slice();
+          startTransform = this.transform._dup();
+          startIsShown = this.isShown;
+        } else {
+          startColor = start.color.slice();
+          startTransform = start.transform._dup();
+          startIsShown = start.isShown;
+        }
+
+        if (target.isShown === true && startIsShown === false) {
+          steps.push(element.anim.dissolveIn({ duration: options.duration }));
+        }
+        if (target.isShown === false && startIsShown === true) {
+          steps.push(element.anim.dissolveOut({ duration: options.duration }));
+        }
+        if (target.isShown === true && startIsShown === true) {
+          steps.push(element.anim.dissolveIn({ duration: 0 }));
+        }
+        if (target.isShown === false && startIsShown === false) {
+          steps.push(element.anim.dissolveOut({ duration: 0 }));
+        }
+        steps.push(element.anim.color({
+          start: startColor,
+          target: target.color,
+          duration: options.duration,
+        }));
+        steps.push(element.anim.transform(options, {
+          start: startTransform,
+          target: target.transform,
+        }));
+        return new animations.ParallelAnimationStep(timeOptions, { steps });
+      },
+      scenario: (...optionsIn: Array<TypeTransformAnimationStepInputOptions
+                               & { scenario: string }>) => {
         const defaultOptions = { element: this };
         const options = joinObjects({}, defaultOptions, ...optionsIn);
         if (options.target != null
           && options.target in options.element.scenarios
         ) {
-          const target = options.element.getScenarioTarget(options.target);
+          const target = options.element.getScenarioTargetLegacy(options.target);
           options.target = target;
         }
         if (options.start != null
           && options.start in options.element.scenarios
         ) {
-          const start = options.element.getScenarioTarget(options.start);
+          const start = options.element.getScenarioTargetLegacy(options.start);
           options.start = start;
         }
         if (options.delta != null
           && options.delta in options.element.scenarios
         ) {
-          const delta = options.element.getScenarioTarget(options.delta);
+          const delta = options.element.getScenarioTargetLegacy(options.delta);
           options.delta = delta;
         }
         return new animations.TransformAnimationStep(options);
@@ -888,12 +951,15 @@ class DiagramElement {
     this.opacity = opacity;
   }
 
-  getScenarioTarget(
+  getScenarioTargetLegacy(
     scenarioName: string,
   ) {
-    const target = this.transform._dup();
+    let target = this.transform._dup();
     if (scenarioName in this.scenarios) {
       const scenario = this.scenarios[scenarioName];
+      if (scenario.transform != null) {
+        target = getTransform(scenario.transform);
+      }
       if (scenario.position != null) {
         target.updateTranslation(getPoint(scenario.position));
       }
@@ -908,10 +974,56 @@ class DiagramElement {
     return target;
   }
 
+  getScenarioTarget(
+    scenarioName: string,
+  ) {
+    let transform = this.transform._dup();
+    let color = this.color.slice();
+    let opacity = this.opacity; // eslint-disable-line prefer-destructuring
+    let isShown = this.isShown; // eslint-disable-line prefer-destructuring
+    if (scenarioName in this.scenarios) {
+      const scenario = this.scenarios[scenarioName];
+      if (scenario.transform != null) {
+        transform = getTransform(scenario.transform);
+      }
+      if (scenario.position != null) {
+        transform.updateTranslation(getPoint(scenario.position));
+      }
+
+      if (scenario.rotation != null) {
+        transform.updateRotation(scenario.rotation);
+      }
+      if (scenario.scale != null) {
+        transform.updateScale(getPoint(scenario.scale));
+      }
+      if (scenario.color) {
+        color = scenario.color.slice();
+      }
+      if (scenario.opacity) {
+        ({ opacity } = scenario);
+      }
+      if (scenario.isShown) {
+        ({ isShown } = scenario);
+      }
+    }
+    return {
+      transform,
+      color,
+      opacity,
+      isShown,
+    };
+  }
+
   setScenario(scenarioName: string) {
     if (this.scenarios[scenarioName] != null) {
       const target = this.getScenarioTarget(scenarioName);
-      this.setTransform(target._dup());
+      this.setTransform(target.transform._dup());
+      // this.setColor(target.color.slice());
+      if (target.isShown) {
+        this.show();
+      } else {
+        this.hide();
+      }
     }
   }
 
@@ -921,6 +1033,18 @@ class DiagramElement {
     }
   }
 
+  saveScenario(scenarioName: string) {
+    this.scenarios[scenarioName] = {
+      transform: this.transform._dup(),
+      color: this.color.slice(),
+      isShown: this.isShown,
+    };
+  }
+
+  saveScenarios(scenarioName: string) {
+    this.saveScenario(scenarioName);
+  }
+
   getAllElementsWithScenario(scenarioName: string) {
     if (this.scenarios[scenarioName] != null) {
       return [this];
@@ -928,17 +1052,77 @@ class DiagramElement {
     return [];
   }
 
-  getTimeToMoveToScenario(
+  // deprecate
+  getTimeToMoveToScenarioLegacy(
     scenarioName: string,
     rotDirection: -1 | 1 | 0 | 2 = 0,
   ) {
-    const target = this.getScenarioTarget(scenarioName);
+    const target = this.getScenarioTargetLegacy(scenarioName);
     const velocity = this.transform.constant(0);
     velocity.updateTranslation(new Point(1 / 2, 1 / 2));
     velocity.updateRotation(2 * Math.PI / 6);
     velocity.updateScale(1, 1);
     const time = getMaxTimeFromVelocity(this.transform._dup(), target, velocity, rotDirection);
     return time;
+  }
+
+  getTimeToMoveToScenario(
+    scenarioName: string,
+    optionsIn: {
+      minTime?: number,
+      velocity?: {
+        translation?: TypeParsablePoint,
+        rotation?: number,
+        scale?: TypeParsablePoint,
+        transform?: TypeParsableTransform,
+      },
+      duration?: number,
+      rotDirection?: -1 | 1 | 0 | 2,
+    },
+    startScenario: string = '',
+  ) {
+    const defaultOptions = {
+      rotDirection: 0,
+      minTime: 0,
+      velocity: {
+        translation: new Point(1 / 2, 1 / 2),
+        rotation: 2 * Math.PI / 6,
+        scale: new Point(1, 1),
+      },
+    };
+    const options = joinObjects({}, defaultOptions, optionsIn);
+    const target = this.getScenarioTarget(scenarioName);
+    let start = this;
+    if (startScenario) {
+      start = this.getScenarioTarget(scenarioName);
+    }
+    let velocity = this.transform.constant(0);
+    if (options.transform != null) {
+      velocity = options.transform;
+    }
+    if (options.velocity.translation) {
+      velocity.updateTranslation(options.velocity.translation);
+    }
+    if (options.velocity.rotation) {
+      velocity.updateRotation(options.velocity.rotation);
+    }
+    if (options.velocity.scale) {
+      velocity.updateScale(options.velocity.scale);
+    }
+    // const velocity = this.transform.constant(0);
+    // velocity.updateTranslation(new Point(1 / 2, 1 / 2));
+    // velocity.updateRotation(2 * Math.PI / 6);
+    // velocity.updateScale(1, 1);
+    const time = getMaxTimeFromVelocity(
+      start.transform._dup(), target.transform, velocity, options.rotDirection,
+    );
+    if (start.isShown !== target.isShown) {
+      options.minTime = 0.8;
+    }
+    if (!areColorsSame(start.color, target.color)) {
+      options.minTime = 0.8;
+    }
+    return Math.min(time, options.minTime);
   }
 
   // Decelerate over some time when moving freely to get a new element
@@ -1893,6 +2077,14 @@ class DiagramElementPrimitive extends DiagramElement {
 
   setAngleToDraw(intputAngle: number = -1) {
     this.angleToDraw = intputAngle;
+  }
+
+  setScenario(scenarioName: string) {
+    super.setScenario(scenarioName);
+    if (this.scenarios[scenarioName] != null) {
+      const target = this.getScenarioTarget(scenarioName);
+      this.setColor(target.color.slice());
+    }
   }
 
   isBeingTouched(glLocation: Point): boolean {
@@ -3372,6 +3564,14 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
+  setScenario(scenarioName: string) {
+    super.setScenario(scenarioName);
+    if (this.scenarios[scenarioName] != null) {
+      const target = this.getScenarioTarget(scenarioName);
+      this.color = target.color.slice();
+    }
+  }
+
   setScenarios(scenarioName: string, onlyIfVisible: boolean = false) {
     super.setScenarios(scenarioName);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
@@ -3379,6 +3579,14 @@ class DiagramElementCollection extends DiagramElement {
       if ((onlyIfVisible && element.isShown) || onlyIfVisible === false) {
         element.setScenarios(scenarioName, onlyIfVisible);
       }
+    }
+  }
+
+  saveScenarios(scenarioName: string) {
+    super.saveScenarios(scenarioName);
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.saveScenarios(scenarioName);
     }
   }
 }
