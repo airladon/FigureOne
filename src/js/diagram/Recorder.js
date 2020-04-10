@@ -94,7 +94,9 @@ class Recorder {
       if (arg instanceof Transform) {
         out.push(arg.toString(5));
       } else if (typeof arg === 'string') {
-        out.push(`"${arg}"`)
+        out.push(`"${arg}"`);
+      } else if (typeof arg === 'number') {
+        out.push(round(arg, this.precision));
       } else {
         out.push(arg);
       }
