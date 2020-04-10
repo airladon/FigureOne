@@ -1,9 +1,9 @@
-import {
-  Point, Rect, Line,
-} from '../tools/g2';
-import {
-  round,
-} from '../tools/math';
+// import {
+//   Point, Rect, Line,
+// } from '../tools/g2';
+// import {
+//   round,
+// } from '../tools/math';
 import * as tools from '../tools/tools';
 import makeDiagram from '../__mocks__/makeDiagram';
 

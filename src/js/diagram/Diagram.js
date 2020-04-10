@@ -332,8 +332,6 @@ class Diagram {
     this.drawTimeoutId = null;
     this.oldScroll = window.pageYOffset;
     this.drawAnimationFrames = 0;
-    this.recorded = [];
-    this.isRecording = false;
   }
 
   scrollEvent() {
@@ -514,13 +512,13 @@ class Diagram {
     };
   }
 
-  startRecording() {
-    this.isRecording = true;
-  }
+  // startRecording() {
+  //   this.isRecording = true;
+  // }
 
-  stopRecording() {
-    this.isRecording = false;
-  }
+  // stopRecording() {
+  //   this.isRecording = false;
+  // }
 
   initialize() {
     this.setFirstTransform();
