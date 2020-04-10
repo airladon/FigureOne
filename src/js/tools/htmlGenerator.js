@@ -1,6 +1,7 @@
 // @flow
 import { colorArrayToRGBA } from './color';
 import { generateUniqueId, joinObjects } from './tools';
+import Recorder from '../diagram/Recorder';
 
 function convertTextArrayToParagraphs(
   text: string | Array<string>,
@@ -394,42 +395,50 @@ function onClickId(
         element.classList.add(classString);
       }
     });
-    if (bind.length === 1) {
-      element.onclick = actionMethod.bind(bind[0]);
-    }
-    if (bind.length === 2) {
-      element.onclick = actionMethod.bind(bind[0], bind[1]);
-    }
-    if (bind.length === 3) {
-      element.onclick = actionMethod.bind(bind[0], bind[1], bind[2]);
-    }
-    if (bind.length === 4) {
-      element.onclick = actionMethod.bind(bind[0], bind[1], bind[2], bind[3]);
-    }
-    if (bind.length === 5) {
-      element.onclick = actionMethod.bind(bind[0], bind[1], bind[2], bind[3], bind[4]);
-    }
-    if (bind.length === 6) {
-      element.onclick = actionMethod.bind(bind[0], bind[1], bind[2], bind[3], bind[4], bind[5]);
-    }
-    if (bind.length === 7) {
-      element.onclick = actionMethod.bind(
-        bind[0], bind[1], bind[2], bind[3], bind[4],
-        bind[5], bind[6],
-      );
-    }
-    if (bind.length === 8) {
-      element.onclick = actionMethod.bind(
-        bind[0], bind[1], bind[2], bind[3], bind[4],
-        bind[5], bind[6], bind[7],
-      );
-    }
-    if (bind.length === 9) {
-      element.onclick = actionMethod.bind(
-        bind[0], bind[1], bind[2], bind[3], bind[4],
-        bind[5], bind[6], bind[7], bind[8],
-      );
-    }
+    const onClickFn = () => {
+      const recorder = new Recorder();
+      if (recorder.isRecording) {
+        recorder.recordEvent('click', 'id');
+      }
+      actionMethod.bind(...bind)();
+    };
+    element.onclick = onClickFn;
+    // if (bind.length === 1) {
+    //   element.onclick = actionMethod.bind(bind[0]);
+    // }
+    // if (bind.length === 2) {
+    //   element.onclick = actionMethod.bind(bind[0], bind[1]);
+    // }
+    // if (bind.length === 3) {
+    //   element.onclick = actionMethod.bind(bind[0], bind[1], bind[2]);
+    // }
+    // if (bind.length === 4) {
+    //   element.onclick = actionMethod.bind(bind[0], bind[1], bind[2], bind[3]);
+    // }
+    // if (bind.length === 5) {
+    //   element.onclick = actionMethod.bind(bind[0], bind[1], bind[2], bind[3], bind[4]);
+    // }
+    // if (bind.length === 6) {
+    //   element.onclick = actionMethod.bind(bind[0], bind[1], bind[2], bind[3], bind[4], bind[5]);
+    // }
+    // if (bind.length === 7) {
+    //   element.onclick = actionMethod.bind(
+    //     bind[0], bind[1], bind[2], bind[3], bind[4],
+    //     bind[5], bind[6],
+    //   );
+    // }
+    // if (bind.length === 8) {
+    //   element.onclick = actionMethod.bind(
+    //     bind[0], bind[1], bind[2], bind[3], bind[4],
+    //     bind[5], bind[6], bind[7],
+    //   );
+    // }
+    // if (bind.length === 9) {
+    //   element.onclick = actionMethod.bind(
+    //     bind[0], bind[1], bind[2], bind[3], bind[4],
+    //     bind[5], bind[6], bind[7], bind[8],
+    //   );
+    // }
   }
 }
 

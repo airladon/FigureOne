@@ -89,7 +89,19 @@ function colorArrayToRGB(color: Array<number>) {
     Math.floor(color[2] * 255)})`;
 }
 
+function areColorsSame(color1: Array<number>, color2: Array<number>) {
+  if (color1.length !== color2.length) {
+    return false;
+  }
+  for (let i = 0; i < color1.length; i += 1) {
+    if (color1[i] !== color2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
 export {
   RGBToArray, HexToArray, cssColorToArray, colorArrayToRGB,
-  colorArrayToRGBA, getCSSColors,
+  colorArrayToRGBA, getCSSColors, areColorsSame,
 };
