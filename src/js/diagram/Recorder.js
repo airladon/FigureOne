@@ -89,25 +89,37 @@ class Recorder {
   }
 
   recordEvent(...args: Array<number | string | Transform>) {
-    const out = [];
-    args.forEach((arg) => {
-      if (arg instanceof Transform) {
-        out.push(arg.toString(5));
-      } else if (typeof arg === 'string') {
-        out.push(`"${arg}"`);
-      } else if (typeof arg === 'number') {
-        out.push(round(arg, this.precision));
-      } else {
-        out.push(arg);
-      }
-    });
-    this.events.push([this.now() / 1000, ...out]);
+    // const out = [];
+    // args.forEach((arg) => {
+    //   if (arg instanceof Transform) {
+    //     out.push(arg.toString(5));
+    //   } else if (typeof arg === 'string') {
+    //     out.push(`${arg}`);
+    //   } else if (typeof arg === 'number') {
+    //     out.push(round(arg, this.precision));
+    //   } else {
+    //     out.push(arg);
+    //   }
+    // });
+    this.events.push([this.now() / 1000, ...args]);
   }
 
   show() {  // eslint-disable-line class-methods-use-this
     const wnd = window.open('about:blank', '', '_blank');
     this.events.forEach((event) => {
-      wnd.document.write(`[${event.join(',')}],`, '<br>');
+      const out = [];
+      event.forEach((arg) => {
+        if (arg instanceof Transform) {
+          out.push(arg.toString(5));
+        } else if (typeof arg === 'string') {
+          out.push(`"${arg}"`);
+        } else if (typeof arg === 'number') {
+          out.push(round(arg, this.precision));
+        } else {
+          out.push(arg);
+        }
+      });
+      wnd.document.write(`[${out.join(',')}],`, '<br>');
     });
   }
 
@@ -178,6 +190,7 @@ class Recorder {
 
   processEvent(event: Array<string | number>) {
     const [eventType] = event;
+    console.log(eventType)
     switch (eventType) {
       case 'touchDown': {
         const [, x, y] = event;
@@ -203,6 +216,17 @@ class Recorder {
         const element = this.getElement(elementPath);
         const transform = getTransform(transformDefinition);
         element.moved(transform);
+        break;
+      }
+      case 'click': {
+        const [, id] = event;
+        const element = document.getElementById(id);
+        console.log(id)
+        console.log(element)
+        console.log(id,'asdfasdfasdf');
+        if (element != null) {
+          element.click();
+        }
         break;
       }
       // case 'cursorMoved': {
