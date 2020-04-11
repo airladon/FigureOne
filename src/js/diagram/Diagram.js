@@ -355,6 +355,10 @@ class Diagram {
     );
   }
 
+  getState() {
+    return this.elements._getState();
+  }
+
   /**
    * Add elements to diagram
    * @param {Array<TypeAddElementObject>} elementsToAdd - array of element definitions
