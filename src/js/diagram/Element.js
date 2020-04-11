@@ -4,7 +4,7 @@ import {
   Transform, Point, TransformLimit, Rect,
   Translation, spaceToSpaceTransform, getBoundingRect,
   Scale, Rotation, Line, getMaxTimeFromVelocity, clipAngle,
-  getPoint, getTransform,
+  getPoint, getTransform, getState,
 } from '../tools/g2';
 import type { TypeParsablePoint, TypeParsableTransform } from '../tools/g2';
 import Recorder from './Recorder';
@@ -15,7 +15,9 @@ import HTMLObject from './DrawingObjects/HTMLObject/HTMLObject';
 import DrawingObject from './DrawingObjects/DrawingObject';
 import VertexObject from './DrawingObjects/VertexObject/VertexObject';
 import { TextObject } from './DrawingObjects/TextObject/TextObject';
-import { duplicateFromTo, joinObjects, joinObjectsWithOptions } from '../tools/tools';
+import {
+  duplicateFromTo, joinObjects, joinObjectsWithOptions,
+} from '../tools/tools';
 import { colorArrayToRGBA, areColorsSame } from '../tools/color';
 // import GlobalAnimation from './webgl/GlobalAnimation';
 // import DrawContext2D from './DrawContext2D';
@@ -122,7 +124,7 @@ class DiagramElement {
   defaultColor: Array<number>;
   dimColor: Array<number>;
   opacity: number;
-  noRotationFromParent: boolean;
+  // noRotationFromParent: boolean;
 
   interactiveLocation: Point;   // this is in vertex space
   recorder: Recorder;
@@ -286,7 +288,7 @@ class DiagramElement {
     this.custom = {};
     this.parent = parent;
     this.drawPriority = 1;
-    this.noRotationFromParent = false;
+    // this.noRotationFromParent = false;
     // this.pulseDefault = (callback: ?() => void = null) => {
     //   this.pulseScaleNow(1, 2, 0, callback);
     // };
@@ -549,6 +551,64 @@ class DiagramElement {
     }, this, properties);
   }
 
+
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [
+      'animations',
+      'color',
+      'opacity',
+      'dimColor',
+      'defaultColor',
+      'transform',
+      'isShown',
+      'isMovable',
+      'isTouchable',
+    ];
+  }
+
+  _getState() {
+    // const stateProperties = this._getStateProperties();
+    const path = this.getPath();
+    // const state = { path };
+    // const processValue = (value) => {
+    //   if (typeof value === 'string') {
+    //     return value;
+    //   }
+    //   if (typeof value === 'number') {
+    //     return value;
+    //   }
+    //   if (typeof value === 'boolean') {
+    //     return value;
+    //   }
+    //   if (Array.isArray(value)) {
+    //     const dupArray = [];
+    //     value.forEach((v) => {
+    //       dupArray.push(processValue(v));
+    //     });
+    //     return dupArray;
+    //   }
+    //   if (value._getState != null) {
+    //     return value._getState();
+    //   }
+    //   if (value._dup != null) {
+    //     return value._dup();
+    //   }
+    //   const obj = {};
+    //   Object.keys(value).forEach((key) => {
+    //     obj[key] = processValue(value[key]);
+    //   });
+    //   return obj;
+    //   // return joinObjects({}, value);
+    // };
+
+    // stateProperties.forEach((prop) => {
+    //   state[prop] = processValue(this[prop]);
+    // });
+    // return state;
+    const state = getState(this, this._getStateProperties());
+    state.path = path;
+    return state;
+  }
   // Space definition:
   //   * Pixel space: css pixels
   //   * GL Space: x,y = -1 to 1
@@ -2047,8 +2107,8 @@ class DiagramElement {
 // ***************************************************************
 class DiagramElementPrimitive extends DiagramElement {
   drawingObject: DrawingObject;
-  color: Array<number>;
-  opacity: number;
+  // color: Array<number>;
+  // opacity: number;
   pointsToDraw: number;
   angleToDraw: number;
   lengthToDraw: number;
@@ -2073,6 +2133,15 @@ class DiagramElementPrimitive extends DiagramElement {
     this.cannotTouchHole = false;
     this.type = 'primitive';
     // this.setMoveBoundaryToDiagram();
+  }
+
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'pointsToDraw',
+      'angleToDraw',
+      'lengthToDraw',
+      'cannotTouchHole',
+    ];
   }
 
   setAngleToDraw(intputAngle: number = -1) {
@@ -2476,6 +2545,13 @@ class DiagramElementCollection extends DiagramElement {
     this.touchInBoundingRect = false;
     this.eqns = {};
     this.type = 'collection';
+  }
+
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'touchInBoundingRect',
+      'elements',
+    ];
   }
 
   _dup() {

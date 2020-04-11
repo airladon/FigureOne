@@ -11,6 +11,7 @@ import { DiagramElement } from '../Element';
 // eslint-disable-next-line import/no-cycle
 import * as anim from './Animation';
 import { joinObjects, duplicateFromTo } from '../../tools/tools';
+import { getState } from '../../tools/g2';
 
 export type TypeAnimationManagerInputOptions = {
   element?: DiagramElement;
@@ -48,6 +49,14 @@ export default class AnimationManager {
     this.state = 'idle';      // $FlowFixMe
     this.options = { translation: {} };
     return this;
+  }
+
+  _getState() {
+    return getState(this, [
+      'animations',
+      'state',
+      'options',
+    ]);
   }
 
   willStartAnimating() {

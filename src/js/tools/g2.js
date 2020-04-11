@@ -96,6 +96,15 @@ class Rect {
   _dup() {
     return new Rect(this.left, this.bottom, this.width, this.height);
   }
+
+  toString(precision: number = 5) {
+    return [
+      roundNum(this.left, precision),
+      roundNum(this.bottom, precision),
+      roundNum(this.width, precision),
+      roundNum(this.height, precision),
+    ];
+  }
 }
 
 
@@ -139,6 +148,10 @@ class Point {
     this.x = x;
     this.y = y;
     this._type = 'point';
+  }
+
+  toString(precision: number = 8) {
+    return [roundNum(this.x, precision), roundNum(this.y, precision)];
   }
 
   /**
@@ -2342,6 +2355,56 @@ function quadBezierPoints(p0: Point, p1: Point, p2: Point, sides: number) {
   return points;
 }
 
+function getState(obj: Object, stateProperties: Array<string>, precision: number = 5) {
+  // const stateProperties = this._getStateProperties();
+  // const path = this.getPath();
+  const state = {};
+  const processValue = (value) => {
+    if (typeof value === 'string') {
+      return value;
+    }
+    if (typeof value === 'number') {
+      return value;
+    }
+    if (typeof value === 'boolean') {
+      return value;
+    }
+    if (value instanceof Point) {
+      return value.toString(precision);
+    }
+    if (value instanceof Transform) {
+      return value.toString(precision);
+    }
+    if (value instanceof Rect) {
+      return value.toString(precision);
+    }
+    if (Array.isArray(value)) {
+      const dupArray = [];
+      value.forEach((v) => {
+        dupArray.push(processValue(v));
+      });
+      return dupArray;
+    }
+    if (value._getState != null) {
+      return value._getState();
+    }
+    if (value._dup != null) {
+      return value._dup();
+    }
+    const out = {};
+    Object.keys(value).forEach((key) => {
+      out[key] = processValue(value[key]);
+    });
+    return out;
+    // return joinObjects({}, value);
+  };
+
+  stateProperties.forEach((prop) => {
+    state[prop] = processValue(obj[prop]);
+  });
+  return state;
+}
+
 export {
   point,
   Point,
@@ -2380,4 +2443,5 @@ export {
   quadBezierPoints,
   getRect,
   getTransform,
+  getState,
 };
