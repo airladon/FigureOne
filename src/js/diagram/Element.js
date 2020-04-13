@@ -563,6 +563,7 @@ class DiagramElement {
       'isShown',
       'isMovable',
       'isTouchable',
+      'state',
     ];
   }
 
@@ -571,47 +572,19 @@ class DiagramElement {
   // }
 
   _getState() {
-    // const stateProperties = this._getStateProperties();
-    // const path = this.getPath();
-    // const state = { path };
-    // const processValue = (value) => {
-    //   if (typeof value === 'string') {
-    //     return value;
-    //   }
-    //   if (typeof value === 'number') {
-    //     return value;
-    //   }
-    //   if (typeof value === 'boolean') {
-    //     return value;
-    //   }
-    //   if (Array.isArray(value)) {
-    //     const dupArray = [];
-    //     value.forEach((v) => {
-    //       dupArray.push(processValue(v));
-    //     });
-    //     return dupArray;
-    //   }
-    //   if (value._getState != null) {
-    //     return value._getState();
-    //   }
-    //   if (value._dup != null) {
-    //     return value._dup();
-    //   }
-    //   const obj = {};
-    //   Object.keys(value).forEach((key) => {
-    //     obj[key] = processValue(value[key]);
-    //   });
-    //   return obj;
-    //   // return joinObjects({}, value);
-    // };
+    return getState(this, this._getStateProperties());
+  }
 
-    // stateProperties.forEach((prop) => {
-    //   state[prop] = processValue(this[prop]);
-    // });
-    // return state;
-    const state = getState(this, this._getStateProperties());
-    // state.path = path;
-    return state;
+  setTimeDelta(delta: number) {
+    if (this.animations.state === 'animating') {
+      this.animations.setTimeDelta(delta);
+    }
+    if (this.state.isPulsing) {
+      this.state.pulse.startTime += delta;
+    }
+    if (this.state.movement.previousTime > 0) {
+      this.state.movement.previousTime += delta / 1000;
+    }
   }
   // Space definition:
   //   * Pixel space: css pixels

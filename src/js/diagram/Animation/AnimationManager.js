@@ -59,6 +59,12 @@ export default class AnimationManager {
     ]);
   }
 
+  setTimeDelta(delta: number) {
+    this.animations.forEach((animation) => {
+      animation.setTimeDelta(delta);
+    });
+  }
+
   willStartAnimating() {
     if (this.state === 'animating') {
       return true;
