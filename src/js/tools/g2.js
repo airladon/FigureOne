@@ -5,6 +5,7 @@ import {
 } from './math';
 // import { Console } from '../../tools/tools';
 import * as m2 from './m2';
+import { joinObjects } from './tools';
 
 
 function quadraticBezier(P0: number, P1: number, P2: number, t: number) {
@@ -2732,6 +2733,18 @@ function getState(
   return state;
 }
 
+function setState(obj: Object, state: Object) {
+  joinObjects(obj, getDef(state));
+
+  // Object.keys(state).forEach((prop) => {
+  //   if (obj[prop] != null && obj[prop]._setState != null) {
+  //     obj[prop]._setState(getDef(state[prop]));
+  //   } else {
+  //     setState(obj[prop], def())
+  //   }
+  // });
+}
+
 export {
   point,
   Point,
@@ -2773,4 +2786,5 @@ export {
   getState,
   getDef,
   getLine,
+  setState,
 };

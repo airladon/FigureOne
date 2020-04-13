@@ -566,9 +566,13 @@ class DiagramElement {
     ];
   }
 
+  // _setState(state: Object) {
+  //   setState(this, state);
+  // }
+
   _getState() {
     // const stateProperties = this._getStateProperties();
-    const path = this.getPath();
+    // const path = this.getPath();
     // const state = { path };
     // const processValue = (value) => {
     //   if (typeof value === 'string') {
@@ -606,7 +610,7 @@ class DiagramElement {
     // });
     // return state;
     const state = getState(this, this._getStateProperties());
-    state.path = path;
+    // state.path = path;
     return state;
   }
   // Space definition:

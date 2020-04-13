@@ -4,7 +4,7 @@ import WebGLInstance from './webgl/webgl';
 
 import {
   Rect, Point, Transform,
-  spaceToSpaceTransform, minAngleDiff,
+  spaceToSpaceTransform, minAngleDiff, setState,
 } from '../tools/g2';
 import { isTouchDevice, joinObjects } from '../tools/tools';
 import {
@@ -357,6 +357,11 @@ class Diagram {
 
   getState() {
     return this.elements._getState();
+  }
+
+  setState(state: Object) {
+    setState(this.elements, state);
+    this.animateNextFrame();
   }
 
   /**
