@@ -2368,12 +2368,13 @@ function getDef(def: any) {
   if (def == null) {
     return def;
   }
+
   if (Array.isArray(def)) {
     const out = [];
     def.forEach((defElement) => {
       out.push(getDef(defElement));
     });
-    return def;
+    return out;
   }
   if (def.f1Type != null) {
     if (def.f1Type === 'rect') {
@@ -2393,6 +2394,9 @@ function getDef(def: any) {
     }
     if (def.f1Type === 'r') {
       return new Rotation(def);
+    }
+    if (def.f1Type === 'l') {
+      return getLine(def);
     }
   }
   const out = {};
@@ -2668,7 +2672,11 @@ function quadBezierPoints(p0: Point, p1: Point, p2: Point, sides: number) {
   return points;
 }
 
-function getState(obj: Object, stateProperties: Array<string>, precision: number = 5) {
+function getState(
+  obj: Object,
+  stateProperties: Array<string>,
+  precision: number = 5,
+) {
   // const stateProperties = this._getStateProperties();
   // const path = this.getPath();
   const state = {};
@@ -2682,15 +2690,21 @@ function getState(obj: Object, stateProperties: Array<string>, precision: number
     if (typeof value === 'boolean') {
       return value;
     }
-    if (value instanceof Point) {
+    if (value == null) {
+      return value;
+    }
+    if (value._def != null) {
       return value._def(precision);
     }
-    if (value instanceof Transform) {
-      return value._def(precision);
-    }
-    if (value instanceof Rect) {
-      return value._def(precision);
-    }
+    // if (value instanceof Point) {
+    //   return value._def(precision);
+    // }
+    // if (value instanceof Transform) {
+    //   return value._def(precision);
+    // }
+    // if (value instanceof Rect) {
+    //   return value._def(precision);
+    // }
     if (Array.isArray(value)) {
       const dupArray = [];
       value.forEach((v) => {
