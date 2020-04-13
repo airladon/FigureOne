@@ -1,9 +1,9 @@
 import {
-  Point, Transform, minAngleDiff, normAngle,
-  TransformLimit, spaceToSpaceTransform, Rect, getRect,
+  Point, minAngleDiff, normAngle,
+  spaceToSpaceTransform, Rect, getRect,
   getBoundingRect, polarToRect, rectToPolar, getDeltaAngle,
   normAngleTo90, deg, curvedPath, threePointAngle,
-  threePointAngleMin, getTransform,
+  threePointAngleMin,
 } from './g2';
 import { round } from './math';
 
@@ -223,6 +223,11 @@ describe('g2 tests', () => {
       test('Def definition', () => {
         const r1Def = new Rect(-1, -1, 4, 2)._def();
         const r1 = getRect(r1Def);
+        const r2 = new Rect(-1, -1, 4, 2);
+        expect(r1).toEqual(r2);
+      });
+      test('JSON definition', () => {
+        const r1 = getRect('{ "f1Type": "rect", "def": [-1, -1, 4, 2] }');
         const r2 = new Rect(-1, -1, 4, 2);
         expect(r1).toEqual(r2);
       });

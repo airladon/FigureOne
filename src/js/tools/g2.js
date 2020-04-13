@@ -88,11 +88,12 @@ type TypeF1DefRect = {
 
 export type TypeParsableRect = [number, number, number, number]
                                | Rect
-                               | TypeF1DefRect;
+                               | TypeF1DefRect
+                               | string;
 
-function parseRect<T>(r: TypeParsableRect, onFail: T): Rect | T | null {
-  if (r instanceof Rect) {
-    return r;
+function parseRect<T>(rIn: TypeParsableRect, onFail: T): Rect | T | null {
+  if (rIn instanceof Rect) {
+    return rIn;
   }
 
   let onFailToUse = onFail;
@@ -100,8 +101,13 @@ function parseRect<T>(r: TypeParsableRect, onFail: T): Rect | T | null {
     onFailToUse = null;
   }
 
-  if (r == null) {
+  if (rIn == null) {
     return onFailToUse;
+  }
+
+  let r = rIn;
+  if (typeof r === 'string') {
+    r = JSON.parse(r);
   }
 
   if (Array.isArray(r) && r.length === 4) {
@@ -543,23 +549,28 @@ type TypeF1DefPoint = {
 export type TypeParsablePoint = [number, number]
                                 | Point
                                 // | { x: number, y: number}
-                                // | number
+                                | string
                                 | TypeF1DefPoint;
 // point can be defined as:
 //    - Point instance
 //    - [1, 1]
 //    - { f1Type: 'p', def: [1, 1]}
 
-function parsePoint<T>(p: TypeParsablePoint, onFail: T): Point | T | null {
-  if (p instanceof Point) {
-    return p;
+function parsePoint<T>(pIn: TypeParsablePoint, onFail: T): Point | T | null {
+  if (pIn instanceof Point) {
+    return pIn;
   }
   let onFailToUse = onFail;
   if (onFailToUse == null) {
     onFailToUse = null;
   }
-  if (p == null) {
+  if (pIn == null) {
     return onFailToUse;
+  }
+
+  let p = pIn;
+  if (typeof p === 'string') {
+    p = JSON.parse(p);
   }
 
   if (Array.isArray(p)) {
