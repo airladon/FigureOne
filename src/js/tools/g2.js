@@ -97,7 +97,7 @@ class Rect {
     return new Rect(this.left, this.bottom, this.width, this.height);
   }
 
-  toString(precision: number = 5) {
+  _def(precision: number = 5) {
     return [
       roundNum(this.left, precision),
       roundNum(this.bottom, precision),
@@ -150,7 +150,7 @@ class Point {
     this._type = 'point';
   }
 
-  toString(precision: number = 8) {
+  _def(precision: number = 8) {
     return [roundNum(this.x, precision), roundNum(this.y, precision)];
   }
 
@@ -1213,8 +1213,8 @@ class Rotation {
     this.name = name;
   }
 
-  toString(precision: number = 8) {
-    return `["r",${roundNum(this.r, precision)}]`;
+  _def(precision: number = 8) {
+    return ['r', roundNum(this.r, precision)];
   }
 
   matrix(): Array<number> {
@@ -1260,8 +1260,8 @@ class Translation extends Point {
     this.name = name;
   }
 
-  toString(precision: number = 8) {
-    return `["t",${roundNum(this.x, precision)},${roundNum(this.y, precision)}]`;
+  _def(precision: number = 8) {
+    return ['t', roundNum(this.x, precision), roundNum(this.y, precision)];
   }
 
   matrix(): Array<number> {
@@ -1341,8 +1341,8 @@ class Scale extends Point {
     this.name = name;
   }
 
-  toString(precision: number = 8) {
-    return `["s",${roundNum(this.x, precision)},${roundNum(this.y, precision)}]`;
+  _def(precision: number = 8) {
+    return ['s', roundNum(this.x, precision), roundNum(this.y, precision)];
   }
 
   matrix(): Array<number> {
@@ -1452,15 +1452,15 @@ class Transform {
     this.calcMatrix();
   }
 
-  toString(precision: number = 8) {
+  _def(precision: number = 8) {
     const out = [];
     this.order.forEach((transformElement) => {
-      out.push(transformElement.toString(precision));
+      out.push(transformElement._def(precision));
     });
     if (this.name !== '') {
-      return `["${this.name}",${out.join(',')}]`;
+      return [this.name, ...out];
     }
-    return `[${out.join(',')}]`;
+    return [out];
   }
 
   standard() {
@@ -2370,13 +2370,13 @@ function getState(obj: Object, stateProperties: Array<string>, precision: number
       return value;
     }
     if (value instanceof Point) {
-      return value.toString(precision);
+      return value._def(precision);
     }
     if (value instanceof Transform) {
-      return value.toString(precision);
+      return value._def(precision);
     }
     if (value instanceof Rect) {
-      return value.toString(precision);
+      return value._def(precision);
     }
     if (Array.isArray(value)) {
       const dupArray = [];
