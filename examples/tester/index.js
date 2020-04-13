@@ -195,12 +195,21 @@ diagram.getElement('b').setMovable();
 // p.makeTouchable();
 // diagram.getElement('p').onClick = () => { diagram.recorder.show() }
 diagram.initialize();
-const state = diagram.getState();
-console.log(state)
+diagram.getElement('pointer').animations.new()
+  .position({ target: [0.5, 0], duration: 4 })
+  .start();
+// const state = diagram.getState();
+let state;
+// console.log(state)
 setTimeout(() => {
-  console.log('asdf')
+  state = diagram.getState();
+  console.log(state);
+}, 1000)
+setTimeout(() => {
+  console.log('1')
   diagram.setState(state);
-}, 2000);
+  console.log('2')
+}, 3000);
 // const data = [
 // ];
 

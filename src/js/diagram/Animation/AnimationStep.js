@@ -69,6 +69,10 @@ export default class AnimationStep {
     return this;
   }
 
+  setTimeDelta(delta: number) {
+    this.startTime += delta;
+  }
+
   // returns remaining time if this step completes
   // Return of 0 means this step is still going
   nextFrame(now: number) {

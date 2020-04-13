@@ -4,7 +4,7 @@ import WebGLInstance from './webgl/webgl';
 
 import {
   Rect, Point, Transform,
-  spaceToSpaceTransform, minAngleDiff, setState,
+  spaceToSpaceTransform, minAngleDiff, setState, getState,
 } from '../tools/g2';
 import { isTouchDevice, joinObjects } from '../tools/tools';
 import {
@@ -123,6 +123,7 @@ class Diagram {
   moveTopElementOnly: boolean;
 
   limits: Rect;
+  stateTime: DOMHighResTimeStamp;
 
   // gestureElement: HTMLElement;
   shapes: Object;
@@ -313,6 +314,7 @@ class Diagram {
     if (this.elements.name === '') {
       this.elements.name = 'diagramRoot';
     }
+    this.stateTime = performance.now();
 
     // this.updateFontSize = optionsToUse.updateFontSize;
 
@@ -356,11 +358,17 @@ class Diagram {
   }
 
   getState() {
-    return this.elements._getState();
+    this.stateTime = performance.now();
+    return getState(this, [
+      'lastDrawTime',
+      'elements',
+      'stateTime',
+    ]);
   }
 
   setState(state: Object) {
-    setState(this.elements, state);
+    setState(this, state);
+    this.elements.setTimeDelta(performance.now() - this.stateTime);
     this.animateNextFrame();
   }
 
