@@ -1,6 +1,6 @@
 import {
   Point, Transform, Line, minAngleDiff, normAngle,
-  TransformLimit, spaceToSpaceTransform, Rect,
+  TransformLimit, spaceToSpaceTransform, Rect, getRect,
   getBoundingRect, polarToRect, rectToPolar, getDeltaAngle,
   normAngleTo90, deg, curvedPath, parsePoint, threePointAngle,
   threePointAngleMin, getTransform,
@@ -1692,7 +1692,7 @@ describe('g2 tests', () => {
       });
     });
   });
-  describe('Rect', () => {
+  describe.only('Rect', () => {
     describe('Creation', () => {
       test('(0,0) (4,2)', () => {
         const r = new Rect(0, 0, 4, 2);
@@ -1713,11 +1713,34 @@ describe('g2 tests', () => {
         expect(r.top).toBe(1);
       });
     });
+    describe('getRect', () => {
+      test('Array definition', () => {
+        const r1 = getRect([-1, -1, 4, 2]);
+        const r2 = new Rect(-1, -1, 4, 2);
+        expect(r1).toEqual(r2);
+      });
+      test('Def definition', () => {
+        const r1Def = new Rect(-1, -1, 4, 2)._def();
+        const r1 = getRect(r1Def);
+        const r2 = new Rect(-1, -1, 4, 2);
+        expect(r1).toEqual(r2);
+      });
+      test('Fail', () => {
+        const r1 = getRect();
+        expect(r1).toEqual(new Rect(0, 0, 1, 1));
+      });
+    });
     test('copy', () => {
       const r = new Rect(0, 0, 4, 2);
       const c = r._dup();
       expect(r).toEqual(c);
       expect(r).not.toBe(c);
+    });
+    test('def', () => {
+      const r = new Rect(0, 0, 4, 2);
+      const c = r._def();
+      expect(c.f1Type).toBe('rect');
+      expect(c.def).toEqual([0, 0, 4, 2]);
     });
   });
   describe('getMinMaxPoints', () => {

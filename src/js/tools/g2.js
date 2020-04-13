@@ -1,41 +1,12 @@
 // @flow
 
-// 2D geometry functions including:
-//  - Point
-//  - Line
-//  - minAngleDiff
-//  - normAngle
-
 import {
   roundNum, decelerate, clipMag, clipValue, rand2D,
 } from './math';
 // import { Console } from '../../tools/tools';
 import * as m2 from './m2';
 
-// function nullDefaultNum(input: number | null, defaultValue: number): number {
-//   if (input === null) {
-//     return defaultValue;
-//   }
-//   return input;
-// }
 
-// export type PointType = {
-//   x: number;
-//   y: number;
-//   _dup(): PointType;
-//   // sub(): PointType;
-//   // add(): PointType;
-//   // distance(): number;
-//   // round(): PointType;
-//   // rotate(): PointType;
-//   // isEqualTo: boolean;
-//   // isNotEqualTo: boolean;
-//   // isOnLine: boolean;
-//   // isOnUnboundLine: boolean;
-//   // console: void;
-//   // isInPolygon: boolean;
-//   // isOnPolygon: boolean;
-// };
 function quadraticBezier(P0: number, P1: number, P2: number, t: number) {
   return (1 - t) * ((1 - t) * P0 + t * P1) + t * ((1 - t) * P1 + t * P2);
 }
@@ -108,6 +79,55 @@ class Rect {
       ],
     };
   }
+}
+
+type TypeF1DefRect = {
+  f1Type: 'rect',
+  def: [number, number, number, number],
+};
+
+export type TypeParsableRect = [number, number, number, number]
+                               | Rect
+                               | TypeF1DefRect;
+
+function parseRect<T>(r: TypeParsableRect, onFail: T): Rect | T | null {
+  if (r instanceof Rect) {
+    return r;
+  }
+
+  let onFailToUse = onFail;
+  if (onFailToUse == null) {
+    onFailToUse = null;
+  }
+
+  if (r == null) {
+    return onFailToUse;
+  }
+
+  if (Array.isArray(r) && r.length === 4) {
+    return new Rect(r[0], r[1], r[2], r[3]);
+  }
+  const { f1Type, def } = r;
+
+  if (f1Type != null
+      && f1Type === 'rect'
+      && def != null
+      && Array.isArray([def])
+      && def.length === 4
+  ) {
+    const [l, b, w, h] = def;
+    return new Rect(l, b, w, h);
+  }
+
+  return onFailToUse;
+}
+
+function getRect(r: TypeParsableRect): Rect {
+  let parsedRect = parseRect(r);
+  if (parsedRect == null) {
+    parsedRect = new Rect(0, 0, 1, 1);
+  }
+  return parsedRect;
 }
 
 
@@ -522,13 +542,14 @@ type TypeF1DefPoint = {
 
 export type TypeParsablePoint = [number, number]
                                 | Point
-                                | { x: number, y: number}
-                                | number
+                                // | { x: number, y: number}
+                                // | number
                                 | TypeF1DefPoint;
 // point can be defined as:
 //    - Point instance
 //    - [1, 1]
-//    - { x: 1, y: 1 }
+//    - { f1Type: 'p', def: [1, 1]}
+
 function parsePoint<T>(p: TypeParsablePoint, onFail: T): Point | T | null {
   if (p instanceof Point) {
     return p;
@@ -575,51 +596,6 @@ function getPoint(p: TypeParsablePoint): Point {
     parsedPoint = new Point(0, 0);
   }
   return parsedPoint;
-}
-
-type TypeF1DefRect = {
-  f1Type: 'rect',
-  def: [number, number, number, number],
-};
-
-export type TypeParsableRect = [number, number, number, number]
-                               | Rect
-                               | TypeF1DefRect;
-
-function parseRect<T>(r: TypeParsableRect, onFail: T): Rect | T | null {
-  if (r instanceof Rect) {
-    return r;
-  }
-  let onFailToUse = onFail;
-  if (onFailToUse == null) {
-    onFailToUse = null;
-  }
-
-  if (r.f1Type != null) {
-    if (
-      r.f1Type === 'rect'
-      && r.def != null
-      && Array.isArray([r.def])
-      && r.def.length === 2
-    ) {
-      const [l, b, w, h] = r.def;
-      return new Rect(l, b, w, h);
-    }
-    return onFailToUse;
-  }
-
-  if (Array.isArray(r) && r.length === 4) {
-    return new Rect(r[0], r[1], r[2], r[3]);
-  }
-  return onFailToUse;
-}
-
-function getRect(r: TypeParsableRect): Rect {
-  let parsedRect = parseRect(r);
-  if (parsedRect == null) {
-    parsedRect = new Rect(0, 0, 1, 1);
-  }
-  return parsedRect;
 }
 
 function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<Point> {
@@ -846,31 +822,27 @@ class Line {
   distance: number;
 
   constructor(
-    p1: Point | [number, number],
-    p2OrMag: Point | [number, number] | number,
+    p1: TypeParsablePoint,
+    p2OrMag: TypeParsablePoint | number,
     angle: number = 0,
   ) {
     this.p1 = getPoint(p1);
-    if (p2OrMag instanceof Point || Array.isArray(p2OrMag)) {
-      this.p2 = getPoint(p2OrMag);
-      this.ang = Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
-    } else {
+    if (typeof p2OrMag === 'number') {
       this.p2 = this.p1.add(
         p2OrMag * Math.cos(angle),
         p2OrMag * Math.sin(angle),
       );
       this.ang = angle;
+    } else {
+      this.p2 = getPoint(p2OrMag);
+      this.ang = Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
     }
-    // this.A = this.p2.y - this.p1.y;
-    // this.B = this.p1.x - this.p2.x;
-    // this.C = this.A * this.p1.x + this.B * this.p1.y;
-    // this.distance = distance(this.p1, this.p2);
     this.setupLine();
   }
 
   _def(precision: number = 8) {
     return {
-      f1Type: 'p',
+      f1Type: 'l',
       def: [
         [roundNum(this.p1.x, precision), roundNum(this.p1.y, precision)],
         [roundNum(this.p2.x, precision), roundNum(this.p2.y, precision)],
@@ -1263,6 +1235,61 @@ class Line {
 
 function line(p1: Point, p2: Point) {
   return new Line(p1, p2);
+}
+
+
+type TypeF1DefLine = {
+  f1Type: 'p',
+  def: [[number, number], [number, number]],
+};
+
+export type TypeParsableLine = [TypeParsablePoint, TypeParsablePoint]
+                                | [Point, number, number]
+                                | TypeF1DefLine
+                                | Line;
+// line can be defined as:
+//    - [[0, 0], [1, 0]]
+//    - [[0, 0], 1, 0]
+//    - 
+function parseLine<T>(l: TypeParsableLine, onFail: T): Line | T | null {
+  if (l instanceof Line) {
+    return l;
+  }
+  let onFailToUse = onFail;
+  if (onFailToUse == null) {
+    onFailToUse = null;
+  }
+
+  if (Array.isArray(l)) {
+    if (l.length === 3) {
+      return new Line(getPoint(l[0]), l[1], l[2]);
+    }
+    if (l.length === 2) {
+      return new Line(getPoint(l[0]), getPoint(l[1]));
+    }
+    return onFailToUse;
+  }
+  if (l.f1Type != null) {
+    if (
+      l.f1Type === 'l'
+      && l.def != null
+      && Array.isArray([l.def])
+      && l.def.length === 2
+    ) {
+      const [p1, p2] = l.def;
+      return new Line(getPoint(p1), getPoint(p2));
+    }
+    return onFailToUse;
+  }
+  return onFailToUse;
+}
+
+function getLine(p: TypeParsableLine): Line {
+  let parsedLine = parseLine(p);
+  if (parsedLine == null) {
+    parsedLine = new Line(new Point(0, 0), new Point(1, 0));
+  }
+  return parsedLine;
 }
 
 type TypeF1DefRotation = {
@@ -2653,4 +2680,5 @@ export {
   getTransform,
   getState,
   getDef,
+  getLine,
 };
