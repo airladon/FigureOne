@@ -558,6 +558,9 @@ function parsePoint<T>(p: TypeParsablePoint, onFail: T): Point | T | null {
   if (onFailToUse == null) {
     onFailToUse = null;
   }
+  if (p == null) {
+    return onFailToUse;
+  }
 
   if (Array.isArray(p)) {
     if (p.length === 2) {
@@ -1258,6 +1261,10 @@ function parseLine<T>(l: TypeParsableLine, onFail: T): Line | T | null {
   let onFailToUse = onFail;
   if (onFailToUse == null) {
     onFailToUse = null;
+  }
+
+  if (l == null) {
+    return onFailToUse;
   }
 
   if (Array.isArray(l)) {

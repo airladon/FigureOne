@@ -1,7 +1,7 @@
 import {
   Point, Line, getPoint, getPoints,
 } from './g2';
-import { round } from './math';
+// import { round } from './math';
 
 describe('g2 Point', () => {
   describe('Point Creation', () => {
@@ -387,6 +387,9 @@ describe('g2 Point', () => {
     });
     test('Fail', () => {
       expect(getPoint('hello')).toEqual(new Point(0, 0));
+    });
+    test('Fail nothing', () => {
+      expect(getPoint()).toEqual(new Point(0, 0));
     });
   });
   describe('getPoints', () => {
