@@ -195,8 +195,12 @@ diagram.getElement('b').setMovable();
 // p.makeTouchable();
 // diagram.getElement('p').onClick = () => { diagram.recorder.show() }
 diagram.initialize();
-console.log(diagram.getState())
-
+const state = diagram.getState();
+console.log(state)
+setTimeout(() => {
+  console.log('asdf')
+  diagram.setState(state);
+}, 2000);
 // const data = [
 // ];
 
