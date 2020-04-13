@@ -1692,7 +1692,7 @@ describe('g2 tests', () => {
       });
     });
   });
-  describe.only('Rect', () => {
+  describe('Rect', () => {
     describe('Creation', () => {
       test('(0,0) (4,2)', () => {
         const r = new Rect(0, 0, 4, 2);
