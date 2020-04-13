@@ -1253,7 +1253,7 @@ export type TypeParsableLine = [TypeParsablePoint, TypeParsablePoint]
 // line can be defined as:
 //    - [[0, 0], [1, 0]]
 //    - [[0, 0], 1, 0]
-//    - 
+
 function parseLine<T>(l: TypeParsableLine, onFail: T): Line | T | null {
   if (l instanceof Line) {
     return l;
@@ -1317,7 +1317,7 @@ class Rotation {
       && Array.isArray(angle.def)
       && angle.def.length === 2
     ) {
-      const [n, r] = angle;
+      const [n, r] = angle.def;
       name = n;
       this.r = r;
     } else {
@@ -1382,7 +1382,7 @@ class Translation extends Point {
       && tx.f1Type === 't'
       && tx.def != null
       && Array.isArray(tx.def)
-      && tx.def.length === 2
+      && tx.def.length === 3
     ) {
       const [n, x, y] = tx.def;
       name = n;
@@ -1476,10 +1476,12 @@ class Scale extends Point {
     let name: string = nameIn;
     if (sx instanceof Point) {
       super(sx.x, sx.y);
-    } else if (typeof sx === 'number' && sy != null) {
-      super(sx, sy);
-    } else if (typeof sx === 'number' && sy == null) {
-      super(sx, sx);
+    } else if (typeof sx === 'number') {
+      if (sy != null) {
+        super(sx, sy);
+      } else {
+        super(sx, sx);
+      }
     } else if (
       sx.f1Type != null
       && sx.f1Type === 't'
@@ -1636,7 +1638,7 @@ class Transform {
     return this.scale(1, 1).rotate(0).translate(0, 0);
   }
 
-  translate(x: number | Point, y: number = 0) {
+  translate(x: number | Point | TypeF1DefTranslation, y: number = 0) {
     const translation = new Translation(x, y, this.name);
     const order = this.order.slice();
 
@@ -1651,7 +1653,7 @@ class Transform {
     return new Transform(order, this.name);
   }
 
-  rotate(r: number) {
+  rotate(r: number | TypeF1DefRotation) {
     const rotation = new Rotation(r, this.name);
     rotation.name = this.name;
     const order = this.order.slice();
@@ -1668,7 +1670,7 @@ class Transform {
     return new Transform(order, this.name);
   }
 
-  scale(x: number | Point, y: number = 0) {
+  scale(x: number | Point | TypeF1DefScale, y: number = 0) {
     const scale = new Scale(x, y, this.name);
     const order = this.order.slice();
 
@@ -2214,9 +2216,13 @@ function parseTransform<T>(inTransform: TypeParsableTransform, onFail: T): Trans
   if (onFailToUse == null) {
     onFailToUse = null;
   }
+  if (inTransform == null) {
+    return onFailToUse;
+  }
+
   let tToUse = inTransform;
-  if (typeof inTransform === 'string') {
-    tToUse = JSON.parse(inTransform);
+  if (typeof tToUse === 'string') {
+    tToUse = JSON.parse(tToUse);
   }
 
   if (Array.isArray(tToUse)) {
@@ -2246,11 +2252,12 @@ function parseTransform<T>(inTransform: TypeParsableTransform, onFail: T): Trans
     });
     return t;
   }
+  const { f1Type, def } = tToUse;
   if (
-    tToUse.f1Type != null
-    && tToUse.f1Type === 'tf'
-    && tToUse.def != null
-    && Array.isArray(tToUse.def)
+    f1Type != null
+    && f1Type === 'tf'
+    && def != null
+    && Array.isArray(def)
   ) {
     let t = new Transform();
     tToUse.def.forEach((transformElement) => {
@@ -2258,16 +2265,14 @@ function parseTransform<T>(inTransform: TypeParsableTransform, onFail: T): Trans
         t.name = transformElement;
         return;
       }
-      if (transformElement.f1Type != null) {
-        if (transformElement.f1Type === 's') {
-          const s = new Scale(transformElement);
-          t = t.scale(s.x, s.y);
-        } else if (transformElement.f1Type === 't') {
-          const tr = new Translation(transformElement);
-          t = t.translate(tr.x, tr.y);
-        } else if (transformElement.f1Type === 'r') {
-          const r = new Rotation(transformElement);
-          t = t.rotate(r.r);
+      const teF1Type = transformElement.f1Type;
+      if (teF1Type != null) {
+        if (teF1Type === 's') {
+          t = t.scale(transformElement);
+        } else if (teF1Type === 't') {
+          t = t.translate(transformElement);
+        } else if (teF1Type === 'r') {
+          t = t.rotate(transformElement);
         }
       }
     });
@@ -2284,7 +2289,7 @@ function getTransform(t: TypeParsableTransform): Transform {
   return parsedTransform;
 }
 
-function getDef(def) {
+function getDef(def: any) {
   if (typeof def === 'number') {
     return def;
   }
