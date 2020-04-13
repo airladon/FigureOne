@@ -88,7 +88,7 @@ class Recorder {
     this.isRecording = false;
   }
 
-  recordEvent(...args: Array<number | string | Transform>) {
+  recordEvent(...args: Array<number | string>) {
     // const out = [];
     // args.forEach((arg) => {
     //   if (arg instanceof Transform) {
