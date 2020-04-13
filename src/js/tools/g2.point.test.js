@@ -385,8 +385,12 @@ describe('g2 Point', () => {
       const def = new Point(1, 1)._def();
       expect(getPoint(def)).toEqual(new Point(1, 1));
     });
+    test('JSON', () => {
+      const json = '{ "f1Type": "p", "def": [1, 1] }';
+      expect(getPoint(json)).toEqual(new Point(1, 1));
+    });
     test('Fail', () => {
-      expect(getPoint('hello')).toEqual(new Point(0, 0));
+      expect(getPoint(1)).toEqual(new Point(0, 0));
     });
     test('Fail nothing', () => {
       expect(getPoint()).toEqual(new Point(0, 0));
