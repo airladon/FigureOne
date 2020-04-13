@@ -488,7 +488,7 @@ describe('g2 Line', () => {
       const l = new Line([0, 0], [1, 1]);
       expect(getLine([[0, 0], [1, 1]])).toEqual(l);
     });
-    test('Line one points', () => {
+    test('Line one point', () => {
       const l1 = new Line([0, 0], [0, 1]);
       const l2 = getLine([[0, 0], 1, Math.PI / 2]);
       expect(l2.round().A).toBe(l1.round().A);
