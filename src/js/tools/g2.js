@@ -559,6 +559,13 @@ function parsePoint<T>(p: TypeParsablePoint, onFail: T): Point | T | null {
     onFailToUse = null;
   }
 
+  if (Array.isArray(p)) {
+    if (p.length === 2) {
+      return new Point(p[0], p[1]);
+    }
+    return onFailToUse;
+  }
+
   if (p.f1Type != null) {
     if (
       p.f1Type === 'p'
@@ -571,22 +578,15 @@ function parsePoint<T>(p: TypeParsablePoint, onFail: T): Point | T | null {
     }
     return onFailToUse;
   }
-
-  if (Array.isArray(p)) {
-    if (p.length === 2) {
-      return new Point(p[0], p[1]);
-    }
-    return onFailToUse;
-  }
-  if (typeof p === 'number') {
-    return new Point(p, p);
-  }
-  if (typeof (p) === 'object') {
-    const keys = Object.keys(p);
-    if (keys.indexOf('x') > -1 && keys.indexOf('y') > -1) {
-      return new Point(p.x, p.y);
-    }
-  }
+  // if (typeof p === 'number') {
+  //   return new Point(p, p);
+  // }
+  // if (typeof (p) === 'object') {
+  //   const keys = Object.keys(p);
+  //   if (keys.indexOf('x') > -1 && keys.indexOf('y') > -1) {
+  //     return new Point(p.x, p.y);
+  //   }
+  // }
   return onFailToUse;
 }
 
