@@ -671,18 +671,42 @@ describe('Transform', () => {
       expect(t.x).toBe(1);
       expect(t.y).toBe(1);
     });
+    test('JSON Def', () => {
+      const json = '{ "f1Type": "t", "def": ["", 1, 1] }';
+      const t = new Translation(json);
+      expect(t.x).toBe(1);
+      expect(t.y).toBe(1);
+    });
+    test('JSON', () => {
+      const json = '[1, 1]';
+      const t = new Translation(json);
+      expect(t.x).toBe(1);
+      expect(t.y).toBe(1);
+    });
   });
   describe('Scale', () => {
     test('Simple', () => {
-      const s = new Scale(1, 1);
-      expect(s.x).toBe(1);
-      expect(s.y).toBe(1);
+      const s = new Scale(2, 3);
+      expect(s.x).toBe(2);
+      expect(s.y).toBe(3);
     });
     test('Def', () => {
-      const sDef = new Scale(1, 1)._def();
+      const sDef = new Scale(2, 3)._def();
       const s = new Scale(sDef);
-      expect(s.x).toBe(1);
-      expect(s.y).toBe(1);
+      expect(s.x).toBe(2);
+      expect(s.y).toBe(3);
+    });
+    test('JSON Def', () => {
+      const json = '{ "f1Type": "s", "def": ["", 2, 3] }';
+      const s = new Scale(json);
+      expect(s.x).toBe(2);
+      expect(s.y).toBe(3);
+    });
+    test('JSON', () => {
+      const json = '[2, 3]';
+      const s = new Scale(json);
+      expect(s.x).toBe(2);
+      expect(s.y).toBe(3);
     });
   });
   describe('Rotation', () => {
@@ -693,6 +717,16 @@ describe('Transform', () => {
     test('Def', () => {
       const rDef = new Rotation(1)._def();
       const r = new Rotation(rDef);
+      expect(r.r).toBe(1);
+    });
+    test('JSON Def', () => {
+      const json = '{ "f1Type": "r", "def": ["", 1] }';
+      const r = new Rotation(json);
+      expect(r.r).toBe(1);
+    });
+    test('JSON', () => {
+      const json = '1';
+      const r = new Rotation(json);
       expect(r.r).toBe(1);
     });
   });
@@ -734,6 +768,18 @@ describe('Transform', () => {
       expect(t.r()).toEqual(0.5);
       expect(t.order).toHaveLength(3);
       expect(t.name).toBe('Name1');
+    });
+    test('Fail undefined', () => {
+      const t = getTransform();
+      expect(t.order).toHaveLength(0);
+    });
+    test('Fail bad json', () => {
+      const t = getTransform('asdf');
+      expect(t.order).toHaveLength(0);
+    });
+    test('Fail bad value', () => {
+      const t = getTransform(1);
+      expect(t.order).toHaveLength(0);
     });
   });
 });

@@ -107,7 +107,11 @@ function parseRect<T>(rIn: TypeParsableRect, onFail: T): Rect | T | null {
 
   let r = rIn;
   if (typeof r === 'string') {
-    r = JSON.parse(r);
+    try {
+      r = JSON.parse(r);
+    } catch {
+      return onFailToUse;
+    }
   }
 
   if (Array.isArray(r) && r.length === 4) {
@@ -570,7 +574,11 @@ function parsePoint<T>(pIn: TypeParsablePoint, onFail: T): Point | T | null {
 
   let p = pIn;
   if (typeof p === 'string') {
-    p = JSON.parse(p);
+    try {
+      p = JSON.parse(p);
+    } catch {
+      return onFailToUse;
+    }
   }
 
   if (Array.isArray(p)) {
@@ -1265,17 +1273,26 @@ export type TypeParsableLine = [TypeParsablePoint, TypeParsablePoint]
 //    - [[0, 0], [1, 0]]
 //    - [[0, 0], 1, 0]
 
-function parseLine<T>(l: TypeParsableLine, onFail: T): Line | T | null {
-  if (l instanceof Line) {
-    return l;
+function parseLine<T>(lIn: TypeParsableLine, onFail: T): Line | T | null {
+  if (lIn instanceof Line) {
+    return lIn;
   }
   let onFailToUse = onFail;
   if (onFailToUse == null) {
     onFailToUse = null;
   }
 
-  if (l == null) {
+  if (lIn == null) {
     return onFailToUse;
+  }
+
+  let l = lIn;
+  if (typeof l === 'string') {
+    try {
+      l = JSON.parse(l);
+    } catch {
+      return onFailToUse;
+    }
   }
 
   if (Array.isArray(l)) {
@@ -1317,8 +1334,17 @@ type TypeF1DefRotation = {
 class Rotation {
   r: number;
   name: string;
-  constructor(angle: number | TypeF1DefRotation, nameIn: string = '') {
+  constructor(angleIn: number | TypeF1DefRotation | string, nameIn: string = '') {
     let name: string = nameIn;
+    let angle = angleIn;
+    if (typeof angle === 'string') {
+      try {
+        angle = JSON.parse(angle);
+      } catch {
+        angle = 0;
+      }
+    }
+
     if (typeof angle === 'number') {
       this.r = angle;
     } else if (
@@ -1379,11 +1405,23 @@ class Translation extends Point {
   name: string;
 
   constructor(
-    tx: Point | number | TypeF1DefTranslation,
-    ty: number = 0,
+    txIn: Point | number | TypeF1DefTranslation,
+    tyIn: number = 0,
     nameIn: string = '',
   ) {
     let name: string = nameIn;
+    let tx = txIn;
+    let ty = tyIn;
+    if (typeof tx === 'string') {
+      try {
+        tx = JSON.parse(tx);
+      } catch {
+        tx = 0;
+      }
+      if (Array.isArray(tx) && tx.length === 2) {
+        [tx, ty] = tx;
+      }
+    }
     if (tx instanceof Point) {
       super(tx.x, tx.y);
     } else if (typeof tx === 'number') {
@@ -1483,8 +1521,21 @@ class Scale extends Point {
   y: number;
   name: string;
 
-  constructor(sx: Point | number | TypeF1DefScale, sy: ?number, nameIn: string = '') {
+  constructor(sxIn: Point | number | TypeF1DefScale, syIn: ?number, nameIn: string = '') {
     let name: string = nameIn;
+    let sx = sxIn;
+    let sy = syIn;
+    if (typeof sx === 'string') {
+      try {
+        sx = JSON.parse(sx);
+      } catch {
+        sx = 0;
+      }
+      if (Array.isArray(sx) && sx.length === 2) {
+        [sx, sy] = sx;
+      }
+    }
+
     if (sx instanceof Point) {
       super(sx.x, sx.y);
     } else if (typeof sx === 'number') {
@@ -1495,10 +1546,10 @@ class Scale extends Point {
       }
     } else if (
       sx.f1Type != null
-      && sx.f1Type === 't'
+      && sx.f1Type === 's'
       && sx.def != null
       && Array.isArray(sx.def)
-      && sx.def.length === 2
+      && sx.def.length === 3
     ) {
       const [n, x, y] = sx.def;
       name = n;
@@ -1628,7 +1679,7 @@ class Transform {
   }
 
   _def(precision: number = 8) {
-    let out = [];
+    const out = [];
     this.order.forEach((transformElement) => {
       out.push(transformElement._def(precision));
     });
@@ -2233,7 +2284,11 @@ function parseTransform<T>(inTransform: TypeParsableTransform, onFail: T): Trans
 
   let tToUse = inTransform;
   if (typeof tToUse === 'string') {
-    tToUse = JSON.parse(tToUse);
+    try {
+      tToUse = JSON.parse(tToUse);
+    } catch {
+      return onFailToUse;
+    }
   }
 
   if (Array.isArray(tToUse)) {
