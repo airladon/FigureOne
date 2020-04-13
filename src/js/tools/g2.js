@@ -98,18 +98,20 @@ class Rect {
   }
 
   _def(precision: number = 5) {
-    return [
-      roundNum(this.left, precision),
-      roundNum(this.bottom, precision),
-      roundNum(this.width, precision),
-      roundNum(this.height, precision),
-    ];
+    return {
+      f1Type: 'rect',
+      def: [
+        roundNum(this.left, precision),
+        roundNum(this.bottom, precision),
+        roundNum(this.width, precision),
+        roundNum(this.height, precision),
+      ],
+    };
   }
 }
 
 
 /* eslint-disable comma-dangle */
-
 /**
  * Point class
  *
@@ -151,7 +153,13 @@ class Point {
   }
 
   _def(precision: number = 8) {
-    return [roundNum(this.x, precision), roundNum(this.y, precision)];
+    return {
+      f1Type: 'p',
+      def: [
+        roundNum(this.x, precision),
+        roundNum(this.y, precision),
+      ],
+    };
   }
 
   /**
@@ -507,7 +515,16 @@ class Point {
   }
 }
 
-export type TypeParsablePoint = [number, number] | Point | { x: number, y: number} | number;
+type TypeF1DefPoint = {
+  f1Type: 'p',
+  def: [number, number],
+};
+
+export type TypeParsablePoint = [number, number]
+                                | Point
+                                | { x: number, y: number}
+                                | number
+                                | TypeF1DefPoint;
 // point can be defined as:
 //    - Point instance
 //    - [1, 1]
@@ -519,6 +536,19 @@ function parsePoint<T>(p: TypeParsablePoint, onFail: T): Point | T | null {
   let onFailToUse = onFail;
   if (onFailToUse == null) {
     onFailToUse = null;
+  }
+
+  if (p.f1Type != null) {
+    if (
+      p.f1Type === 'p'
+      && p.def != null
+      && Array.isArray([p.def])
+      && p.def.length === 2
+    ) {
+      const [x, y] = p.def;
+      return new Point(x, y);
+    }
+    return onFailToUse;
   }
 
   if (Array.isArray(p)) {
@@ -547,7 +577,14 @@ function getPoint(p: TypeParsablePoint): Point {
   return parsedPoint;
 }
 
-export type TypeParsableRect = [number, number, number, number] | Rect;
+type TypeF1DefRect = {
+  f1Type: 'rect',
+  def: [number, number, number, number],
+};
+
+export type TypeParsableRect = [number, number, number, number]
+                               | Rect
+                               | TypeF1DefRect;
 
 function parseRect<T>(r: TypeParsableRect, onFail: T): Rect | T | null {
   if (r instanceof Rect) {
@@ -556,6 +593,19 @@ function parseRect<T>(r: TypeParsableRect, onFail: T): Rect | T | null {
   let onFailToUse = onFail;
   if (onFailToUse == null) {
     onFailToUse = null;
+  }
+
+  if (r.f1Type != null) {
+    if (
+      r.f1Type === 'rect'
+      && r.def != null
+      && Array.isArray([r.def])
+      && r.def.length === 2
+    ) {
+      const [l, b, w, h] = r.def;
+      return new Rect(l, b, w, h);
+    }
+    return onFailToUse;
   }
 
   if (Array.isArray(r) && r.length === 4) {
@@ -816,6 +866,16 @@ class Line {
     // this.C = this.A * this.p1.x + this.B * this.p1.y;
     // this.distance = distance(this.p1, this.p2);
     this.setupLine();
+  }
+
+  _def(precision: number = 8) {
+    return {
+      f1Type: 'p',
+      def: [
+        [roundNum(this.p1.x, precision), roundNum(this.p1.y, precision)],
+        [roundNum(this.p2.x, precision), roundNum(this.p2.y, precision)],
+      ],
+    };
   }
 
   setupLine() {
@@ -1205,16 +1265,38 @@ function line(p1: Point, p2: Point) {
   return new Line(p1, p2);
 }
 
+type TypeF1DefRotation = {
+  f1Type: 'r',
+  def: [string, number],
+};
 class Rotation {
   r: number;
   name: string;
-  constructor(angle: number, name: string = '') {
-    this.r = angle;
+  constructor(angle: number | TypeF1DefRotation, nameIn: string = '') {
+    let name: string = nameIn;
+    if (typeof angle === 'number') {
+      this.r = angle;
+    } else if (
+      angle.f1Type != null
+      && angle.f1Type === 'r'
+      && angle.def != null
+      && Array.isArray(angle.def)
+      && angle.def.length === 2
+    ) {
+      const [n, r] = angle;
+      name = n;
+      this.r = r;
+    } else {
+      this.r = 0;
+    }
     this.name = name;
   }
 
   _def(precision: number = 8) {
-    return ['r', roundNum(this.r, precision)];
+    return {
+      f1Type: 'r',
+      def: [this.name, roundNum(this.r, precision)],
+    };
   }
 
   matrix(): Array<number> {
@@ -1242,26 +1324,50 @@ class Rotation {
   }
 }
 
+type TypeF1DefTranslation = {
+  f1Type: 't',
+  def: [string, number, number],
+};
 class Translation extends Point {
   x: number;
   y: number;
   name: string;
 
-  constructor(tx: Point | number, ty: number = 0, name: string = '') {
+  constructor(
+    tx: Point | number | TypeF1DefTranslation,
+    ty: number = 0,
+    nameIn: string = '',
+  ) {
+    let name: string = nameIn;
     if (tx instanceof Point) {
       super(tx.x, tx.y);
-      // this.x = tx.x;
-      // this.y = tx.y;
-    } else {
+    } else if (typeof tx === 'number') {
       super(tx, ty);
-      // this.x = tx;
-      // this.y = ty;
+    } else if (
+      tx.f1Type != null
+      && tx.f1Type === 't'
+      && tx.def != null
+      && Array.isArray(tx.def)
+      && tx.def.length === 2
+    ) {
+      const [n, x, y] = tx.def;
+      name = n;
+      super(x, y);
+    } else {
+      super(0, 0);
     }
     this.name = name;
   }
 
   _def(precision: number = 8) {
-    return ['t', roundNum(this.x, precision), roundNum(this.y, precision)];
+    return {
+      f1Type: 't',
+      def: [
+        this.name,
+        roundNum(this.x, precision),
+        roundNum(this.y, precision),
+      ],
+    };
   }
 
   matrix(): Array<number> {
@@ -1323,26 +1429,48 @@ class Translation extends Point {
   }
 }
 
+type TypeF1DefScale = {
+  f1Type: 't',
+  def: [string, number, number],
+};
 class Scale extends Point {
   x: number;
   y: number;
   name: string;
 
-  constructor(sx: Point | number, sy: number, name: string = '') {
+  constructor(sx: Point | number | TypeF1DefScale, sy: ?number, nameIn: string = '') {
+    let name: string = nameIn;
     if (sx instanceof Point) {
       super(sx.x, sx.y);
-      // this.x = sx.x;
-      // this.y = sx.y;
-    } else {
+    } else if (typeof sx === 'number' && sy != null) {
       super(sx, sy);
-      // this.x = sx;
-      // this.y = sy;
+    } else if (typeof sx === 'number' && sy == null) {
+      super(sx, sx);
+    } else if (
+      sx.f1Type != null
+      && sx.f1Type === 't'
+      && sx.def != null
+      && Array.isArray(sx.def)
+      && sx.def.length === 2
+    ) {
+      const [n, x, y] = sx.def;
+      name = n;
+      super(x, y);
+    } else {
+      super(1, 1);
     }
     this.name = name;
   }
 
   _def(precision: number = 8) {
-    return ['s', roundNum(this.x, precision), roundNum(this.y, precision)];
+    return {
+      f1Type: 's',
+      def: [
+        this.name,
+        roundNum(this.x, precision),
+        roundNum(this.y, precision),
+      ],
+    };
   }
 
   matrix(): Array<number> {
@@ -1453,14 +1581,21 @@ class Transform {
   }
 
   _def(precision: number = 8) {
-    const out = [];
+    let out = [];
     this.order.forEach((transformElement) => {
       out.push(transformElement._def(precision));
     });
-    if (this.name !== '') {
-      return [this.name, ...out];
-    }
-    return [out];
+    // if (this.name !== '') {
+    //   // return [this.name, ...out];
+    //   out = [this.name, ...out];
+    // }
+    return {
+      f1Type: 'tf',
+      def: [
+        this.name,
+        ...out,
+      ],
+    };
   }
 
   standard() {
@@ -2030,8 +2165,12 @@ class Transform {
   }
 }
 
+export type TypeF1DefTransform = {
+  f1Type: 'tf',
+  def: Array<string | TypeF1DefTranslation | TypeF1DefRotation | TypeF1DefScale>,
+};
 
-export type TypeParsableTransform = Array<string | ['s', number, number] | ['r', number] | ['t', number, number]> | string | Transform;
+export type TypeParsableTransform = Array<string | ['s', number, number] | ['r', number] | ['t', number, number]> | string | Transform | TypeF1DefTransform;
 
 function parseTransform<T>(inTransform: TypeParsableTransform, onFail: T): Transform | T | null {
   if (inTransform instanceof Transform) {
@@ -2045,40 +2184,62 @@ function parseTransform<T>(inTransform: TypeParsableTransform, onFail: T): Trans
   if (typeof inTransform === 'string') {
     tToUse = JSON.parse(inTransform);
   }
-  if (!Array.isArray(tToUse)) {
-    return onFailToUse;
-  }
-  if (tToUse.length === 0) {
-    return new Transform();
-  }
-  if (tToUse.length === 1 && typeof tToUse[0] === 'string') {
-    return new Transform(tToUse[0]);
-  }
-  let t = new Transform();
-  tToUse.forEach((transformElement) => {
-    if (typeof transformElement === 'string') {
-      t.name = transformElement;
-      return;
-    }
-    if (transformElement.length === 3) {
-      const [type, x, y] = transformElement;
-      if (type === 's') {
-        t = t.scale(x, y);
-      } else {
-        t = t.translate(x, y);
+
+  if (Array.isArray(tToUse)) {
+    let t = new Transform();
+    tToUse.forEach((transformElement) => {
+      if (typeof transformElement === 'string') {
+        t.name = transformElement;
+        return;
       }
-      return;
-    }
-    const [type, value] = transformElement;
-    if (type === 's') {
-      t = t.scale(value, value);
-    } else if (type === 't') {
-      t = t.translate(value, value);
-    } else {
-      t = t.rotate(value);
-    }
-  });
-  return t;
+      if (transformElement.length === 3) {
+        const [type, x, y] = transformElement;
+        if (type === 's') {
+          t = t.scale(x, y);
+        } else {
+          t = t.translate(x, y);
+        }
+        return;
+      }
+      const [type, value] = transformElement;
+      if (type === 's') {
+        t = t.scale(value, value);
+      } else if (type === 't') {
+        t = t.translate(value, value);
+      } else {
+        t = t.rotate(value);
+      }
+    });
+    return t;
+  }
+  if (
+    tToUse.f1Type != null
+    && tToUse.f1Type === 'tf'
+    && tToUse.def != null
+    && Array.isArray(tToUse.def)
+  ) {
+    let t = new Transform();
+    tToUse.def.forEach((transformElement) => {
+      if (typeof transformElement === 'string') {
+        t.name = transformElement;
+        return;
+      }
+      if (transformElement.f1Type != null) {
+        if (transformElement.f1Type === 's') {
+          const s = new Scale(transformElement);
+          t = t.scale(s.x, s.y);
+        } else if (transformElement.f1Type === 't') {
+          const tr = new Translation(transformElement);
+          t = t.translate(tr.x, tr.y);
+        } else if (transformElement.f1Type === 'r') {
+          const r = new Rotation(transformElement);
+          t = t.rotate(r.r);
+        }
+      }
+    });
+    return t;
+  }
+  return onFailToUse;
 }
 
 function getTransform(t: TypeParsableTransform): Transform {
@@ -2087,6 +2248,53 @@ function getTransform(t: TypeParsableTransform): Transform {
     parsedTransform = new Transform();
   }
   return parsedTransform;
+}
+
+function getDef(def) {
+  if (typeof def === 'number') {
+    return def;
+  }
+  if (typeof def === 'string') {
+    return def;
+  }
+  if (typeof def === 'boolean') {
+    return def;
+  }
+  if (def == null) {
+    return def;
+  }
+  if (Array.isArray(def)) {
+    const out = [];
+    def.forEach((defElement) => {
+      out.push(getDef(defElement));
+    });
+    return def;
+  }
+  if (def.f1Type != null) {
+    if (def.f1Type === 'rect') {
+      return getRect(def);
+    }
+    if (def.f1Type === 'p') {
+      return getPoint(def);
+    }
+    if (def.f1Type === 'tf') {
+      return getTransform(def);
+    }
+    if (def.f1Type === 't') {
+      return new Translation(def);
+    }
+    if (def.f1Type === 's') {
+      return new Scale(def);
+    }
+    if (def.f1Type === 'r') {
+      return new Rotation(def);
+    }
+  }
+  const out = {};
+  Object.keys(def).forEach((property) => {
+    out[property] = getDef(def[property]);
+  });
+  return out;
 }
 
 function spaceToSpaceTransform(
@@ -2444,4 +2652,5 @@ export {
   getRect,
   getTransform,
   getState,
+  getDef,
 };
