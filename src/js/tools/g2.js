@@ -621,10 +621,10 @@ function getPoint(p: TypeParsablePoint): Point {
 }
 
 function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<Point> {
-  if (Array.isArray(points) && points.length > 0 && typeof points[0] === 'number') {  // $FlowFixMe
-    return [getPoint(points)];
-  }
   if (Array.isArray(points)) {
+    if (points.length === 2 && typeof points[0] === 'number') { // $FlowFixMe
+      return [getPoint(points)];
+    } // $FlowFixMe
     return points.map(p => getPoint(p));
   }
   return [getPoint(points)];
@@ -2333,11 +2333,11 @@ function parseTransform<T>(inTransform: TypeParsableTransform, onFail: T): Trans
       }
       const teF1Type = transformElement.f1Type;
       if (teF1Type != null) {
-        if (teF1Type === 's') {
+        if (teF1Type === 's') {  // $FlowFixMe
           t = t.scale(transformElement);
-        } else if (teF1Type === 't') {
+        } else if (teF1Type === 't') {  // $FlowFixMe
           t = t.translate(transformElement);
-        } else if (teF1Type === 'r') {
+        } else if (teF1Type === 'r') {  // $FlowFixMe
           t = t.rotate(transformElement);
         }
       }
