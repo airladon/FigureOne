@@ -1,13 +1,14 @@
 // @flow
-import {
-  PositionAnimationStep, AnimationBuilder,
-} from './Animation/Animation';
+// import {
+//   PositionAnimationStep, AnimationBuilder,
+// } from './Animation/Animation';
 
-import type Diagram from './Diagram';
+// import type Diagram from './Diagram';
 
-import {
-  getPoint, getTransform, getRect, getLine, Translation, Rotation, Scale,
-} from '../tools/g2';
+// import {
+//   getPoint, getTransform, getRect, getLine, Translation, Rotation, Scale,
+// } from '../tools/g2';
+// import parseState from './parseState';
 
 import {
   joinObjects,
@@ -71,71 +72,71 @@ function getState(
   return state;
 }
 
-function parseState(state: Object, diagram: Diagram) {
-  if (typeof state === 'number') {
-    return state;
-  }
-  if (typeof state === 'string') {
-    return state;
-  }
-  if (typeof state === 'boolean') {
-    return state;
-  }
-  if (state == null) {
-    return state;
-  }
+// function parseState(state: Object, diagram: Diagram) {
+//   if (typeof state === 'number') {
+//     return state;
+//   }
+//   if (typeof state === 'string') {
+//     return state;
+//   }
+//   if (typeof state === 'boolean') {
+//     return state;
+//   }
+//   if (state == null) {
+//     return state;
+//   }
 
-  if (Array.isArray(state)) {
-    const out = [];
-    state.forEach((stateElement) => {
-      out.push(parseState(stateElement, diagram));
-    });
-    return out;
-  }
-  if (state.f1Type != null) {
-    if (state.f1Type === 'rect') {
-      return getRect(state);
-    }
-    if (state.f1Type === 'p') {
-      return getPoint(state);
-    }
-    if (state.f1Type === 'tf') {
-      return getTransform(state);
-    }
-    if (state.f1Type === 't') {
-      return new Translation(state);
-    }
-    if (state.f1Type === 's') {
-      return new Scale(state);
-    }
-    if (state.f1Type === 'r') {
-      return new Rotation(state);
-    }
-    if (state.f1Type === 'l') {
-      return getLine(state);
-    }
-    if (state.f1Type === 'de') {
-      return diagram.getElement(state.state);
-    }
-    if (state.f1Type === 'positionAnimationStep') {
-      return new PositionAnimationStep()._fromState(
-        parseState(state.state, diagram),
-        diagram.getElement.bind(diagram),
-      );
-    }
-    if (state.f1Type === 'animationBuilder') {
-      return new AnimationBuilder()._fromState(
-        parseState(state.state, diagram),
-        diagram.getElement.bind(diagram),
-      );
-    }
-  }
-  const out = {};
-  Object.keys(state).forEach((property) => {
-    out[property] = parseState(state[property], diagram);
-  });
-  return out;
-}
+//   if (Array.isArray(state)) {
+//     const out = [];
+//     state.forEach((stateElement) => {
+//       out.push(parseState(stateElement, diagram));
+//     });
+//     return out;
+//   }
+//   if (state.f1Type != null) {
+//     if (state.f1Type === 'rect') {
+//       return getRect(state);
+//     }
+//     if (state.f1Type === 'p') {
+//       return getPoint(state);
+//     }
+//     if (state.f1Type === 'tf') {
+//       return getTransform(state);
+//     }
+//     if (state.f1Type === 't') {
+//       return new Translation(state);
+//     }
+//     if (state.f1Type === 's') {
+//       return new Scale(state);
+//     }
+//     if (state.f1Type === 'r') {
+//       return new Rotation(state);
+//     }
+//     if (state.f1Type === 'l') {
+//       return getLine(state);
+//     }
+//     if (state.f1Type === 'de') {
+//       return diagram.getElement(state.state);
+//     }
+//     if (state.f1Type === 'positionAnimationStep') {
+//       return new PositionAnimationStep()._fromState(
+//         parseState(state.state, diagram),
+//         diagram.getElement.bind(diagram),
+//       );
+//     }
+//     if (state.f1Type === 'animationBuilder') {
+//       return new AnimationBuilder()._fromState(
+//         parseState(state.state, diagram),
+//         diagram.getElement.bind(diagram),
+//       );
+//     }
+//   }
+//   const out = {};
+//   Object.keys(state).forEach((property) => {
+//     out[property] = parseState(state[property], diagram);
+//   });
+//   return out;
+// }
 
 function setState(obj: Object, stateIn: Object) {
   joinObjects(obj, stateIn);
@@ -208,4 +209,4 @@ function setState(obj: Object, stateIn: Object) {
 //   });
 // }
 
-export { setState, getState, parseState };
+export { setState, getState };

@@ -12,6 +12,7 @@ import {
 } from '../../tools/tools';
 import { getState } from '../state';
 import type { DiagramElement } from '../Element';
+import FunctionMap from '../FunctionMap';
 // import * as anim from './Animation';
 
 export type TypeAnimationStepInputOptions = {
@@ -37,6 +38,7 @@ export default class AnimationStep {
   beforeFrame: ?(number) => void;
   afterFrame: ?(number) => void;
   _stepType: string;
+  fnMap: FunctionMap;
 
   constructor(optionsIn: TypeAnimationStepInputOptions = {}) {
     const defaultOptions = {
@@ -70,6 +72,7 @@ export default class AnimationStep {
     // will still go to 1, but will be reduced in duration by startTimeOffset.
     // When progressions aren't linear, then this time is non-trival.
     this.startTimeOffset = 0;
+    this.fnMap = new FunctionMap();
     return this;
   }
 
@@ -124,11 +127,11 @@ export default class AnimationStep {
 
   setTimeDelta(delta: number) {
     this.startTime += delta;
-    if (this.steps != null) {
-      this.steps.forEach((step) => {
-        step.setTimeDelta(delta);
-      });
-    }
+    // if (this.steps != null) {
+    //   this.steps.forEach((step) => {
+    //     step.setTimeDelta(delta);
+    //   });
+    // }
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this

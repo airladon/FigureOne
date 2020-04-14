@@ -1,9 +1,10 @@
 // @flow
-import * as tools from '../../../tools/math';
+// import * as tools from '../../../tools/math';
 // import { DiagramElement } from '../../Element';
 import type { TypeAnimationStepInputOptions } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
+import type { DiagramElement } from '../../Element';
 
 export type TypeElementAnimationStepInputOptions = {
   element?: Object; // Can't use DiagramElement as importing it makes a loop
@@ -15,7 +16,7 @@ export default class ElementAnimationStep extends AnimationStep {
   element: ?Object;
   type: 'transform' | 'color' | 'custom' | 'position' | 'setPosition';
   duration: number;
-  progression: (number) => number;
+  progression: ((number) => number) | string;
 
   constructor(optionsIn: TypeElementAnimationStepInputOptions = {}) {
     super(optionsIn);
@@ -36,17 +37,17 @@ export default class ElementAnimationStep extends AnimationStep {
     this.onFinish = options.onFinish;
     this.duration = options.duration;
     this.progression = options.progression;
-    // if (options.progression === 'linear') {
-    //   this.progression = tools.linear;
-    // } else if (options.progression === 'easein') {
-    //   this.progression = tools.easein;
-    // } else if (options.progression === 'easeout') {
-    //   this.progression = tools.easeout;
-    // } else if (options.progression === 'easeinout') {
-    //   this.progression = tools.easeinout;
-    // } else {
-    //   this.progression = options.progression;
-    // }
+    if (this.progression === 'linear') {
+      this.progression = 'tools.math.linear';
+    } else if (options.progression === 'easein') {
+      this.progression = 'tools.math.easein';
+    } else if (options.progression === 'easeout') {
+      this.progression = 'tools.math.easeout';
+    } else if (options.progression === 'easeinout') {
+      this.progression = 'tools.math.easeinout';
+    } else {
+      this.progression = options.progression;
+    }
   }
 
   _getDefProperties() {  // eslint-disable-line class-methods-use-this
@@ -73,7 +74,7 @@ export default class ElementAnimationStep extends AnimationStep {
       state.state.element = {
         f1Type: 'de',
         state: this.element.getPath(),
-      }
+      };
     }
     // if (this.element != null) {
     //   definition.state.element = this.element.getPath();
@@ -85,16 +86,7 @@ export default class ElementAnimationStep extends AnimationStep {
     if (typeof this.progression === 'function') {
       return (this.progression(percentTime));
     }
-    if (this.progression === 'linear') {
-      return tools.linear(percentTime);
-    }
-    if (this.progression === 'easein') {
-      return tools.easein(percentTime);
-    }
-    if (this.progression === 'easeout') {
-      return tools.easeout(percentTime);
-    }
-    return tools.easeinout(percentTime);
+    return this.fnMap.exec(this.progression, percentTime);
   }
 
   _dup() {
