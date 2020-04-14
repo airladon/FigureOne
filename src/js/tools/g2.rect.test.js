@@ -31,13 +31,13 @@ describe('Rect', () => {
       expect(r1).toEqual(r2);
     });
     test('Def definition', () => {
-      const r1Def = new Rect(-1, -1, 4, 2)._def();
+      const r1Def = new Rect(-1, -1, 4, 2)._state();
       const r1 = getRect(r1Def);
       const r2 = new Rect(-1, -1, 4, 2);
       expect(r1).toEqual(r2);
     });
     test('JSON definition', () => {
-      const r1 = getRect('{ "f1Type": "rect", "def": [-1, -1, 4, 2] }');
+      const r1 = getRect('{ "f1Type": "rect", "state": [-1, -1, 4, 2] }');
       const r2 = new Rect(-1, -1, 4, 2);
       expect(r1).toEqual(r2);
     });
@@ -67,8 +67,8 @@ describe('Rect', () => {
   });
   test('def', () => {
     const r = new Rect(0, 0, 4, 2);
-    const c = r._def();
+    const c = r._state();
     expect(c.f1Type).toBe('rect');
-    expect(c.def).toEqual([0, 0, 4, 2]);
+    expect(c.state).toEqual([0, 0, 4, 2]);
   });
 });

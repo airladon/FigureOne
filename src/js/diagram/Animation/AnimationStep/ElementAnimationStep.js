@@ -49,6 +49,38 @@ export default class ElementAnimationStep extends AnimationStep {
     // }
   }
 
+  _getDefProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'element',
+      'type',
+      'duration',
+      'progression',
+    ];
+  }
+
+  _fromState(state: Object, getElement: ?(string) => DiagramElement) {
+    // const obj = new this.constructor();
+    joinObjects(this, state);
+    if (this.element != null && typeof this.element === 'string' && getElement != null) {
+      this.element = getElement(this.element);
+    }
+    return this;
+  }
+
+  _state() {
+    const state = super._state();
+    if (this.element != null) {
+      state.state.element = {
+        f1Type: 'de',
+        state: this.element.getPath(),
+      }
+    }
+    // if (this.element != null) {
+    //   definition.state.element = this.element.getPath();
+    // }
+    return state;
+  }
+
   getPercentComplete(percentTime: number) {
     if (typeof this.progression === 'function') {
       return (this.progression(percentTime));

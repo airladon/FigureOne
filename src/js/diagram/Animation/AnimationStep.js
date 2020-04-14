@@ -76,20 +76,20 @@ export default class AnimationStep {
   // _getStateProperties(): Array<string> {  // eslint-disable-line class-methods-use-this
   //   return Object.keys(this);
   // }
-  _getState() {
-    const keys = [];
-    Object.keys(this).forEach((key) => {
-      if (key !== 'element') {
-        keys.push(key);
-      }
-    });
-
-    const state = getState(this, keys);
-    return state;
-  }
+  // _getState() {
+  //   const keys = [];
+  //   Object.keys(this).forEach((key) => {
+  //     if (key !== 'element') {
+  //       keys.push(key);
+  //     }
+  //   });
+  //   console.log(keys)
+  //   const state = getState(this, keys);
+  //   return state;
+  // }
 
   // eslint-disable-next-line no-unused-vars
-  _fromDef(definition: Object, getElement: (string) => DiagramElement) {
+  _fromDef(definition: Object, getElement: ?(string) => DiagramElement = null) {
     joinObjects(this, definition);
     return this;
   }
@@ -131,23 +131,46 @@ export default class AnimationStep {
     }
   }
 
-  _def() {
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [
+      'startTime',
+      'duration',
+      'onFinish',
+      'completeOnCancel',
+      'state',
+      'startTimeOffset',
+      'removeOnFinish',
+      'name',
+      'startDelay',
+      'beforeFrame',
+      'afterFrame',
+      '_stepType',
+    ];
+  }
+
+  _getStateName() {  // eslint-disable-line class-methods-use-this
+    return 'animationStep';
+  }
+
+  _state(precision: number = 5) {
+    // console.log(this._getStateProperties())
     return {
-      f1Type: 'animationStep',
-      def: {
-        startTime: this.startTime,
-        duration: this.duration,
-        onFinish: this.onFinish,
-        completeOnCancel: this.completeOnCancel,
-        state: this.state,
-        startTimeOffset: this.startTimeOffset,
-        removeOnFinish: this.removeOnFinish,
-        name: this.name,
-        startDelay: this.startDelay,
-        beforeFrame: this.beforeFrame,
-        afterFrame: this.afterFrame,
-        _stepType: this._stepType,
-      },
+      f1Type: this._getStateName(),
+      // def: {
+      //   startTime: this.startTime,
+      //   duration: this.duration,
+      //   onFinish: this.onFinish,
+      //   completeOnCancel: this.completeOnCancel,
+      //   state: this.state,
+      //   startTimeOffset: this.startTimeOffset,
+      //   removeOnFinish: this.removeOnFinish,
+      //   name: this.name,
+      //   startDelay: this.startDelay,
+      //   beforeFrame: this.beforeFrame,
+      //   afterFrame: this.afterFrame,
+      //   _stepType: this._stepType,
+      // },
+      state: getState(this, this._getStateProperties(), precision),
     };
   }
 

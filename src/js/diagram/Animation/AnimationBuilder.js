@@ -54,32 +54,51 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   //   }
   // }
 
-  _getState() {
-    const state = super._getState();
+  // _getState() {
+  //   const state = super._getState();
 
-    // const state = getState(this, keys);
-    if (this.element != null) {
-      state.element = this.element.getPath();
-    }
-    return state;
-  }
+  //   // const state = getState(this, keys);
+  //   if (this.element != null) {
+  //     state.element = this.element.getPath();
+  //   }
+  //   return state;
+  // }
 
-  _fromDef(definition: Object, getElement: (string) => DiagramElement) {
+  _fromState(state: Object, getElement: ?(string) => DiagramElement) {
     // const obj = new this.constructor();
-    joinObjects(this, definition);
-    if (this.element != null && typeof this.element === 'string') {
+    joinObjects(this, state);
+    if (this.element != null && typeof this.element === 'string' && getElement != null) {
       this.element = getElement(this.element);
     }
     return this;
   }
 
-  _def() {
-    const def = super._def();
-    def.f1Type = 'animationBuilder';
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'steps',
+    ];
+  }
+
+  _getStateName() {  // eslint-disable-line class-methods-use-this
+    return 'animationBuilder';
+  }
+
+  _state() {
+    const state = super._state();
+    // definition.f1Type = 'animationBuilder';
+    // if (this.element != null) {
+    //   definition.state.element = this.element.getPath();
+    // }
     if (this.element != null) {
-      def.def.element = this.element.getPath();
+      state.state.element = {
+        f1Type: 'de',
+        state: this.element.getPath(),
+      };
     }
-    return def;
+    // if (this.steps.length > 0) {
+    //   definition.def.steps = getState()
+    // }
+    return state;
   }
 
   custom(...optionsIn: Array<TypeCustomAnimationStepInputOptions>) {

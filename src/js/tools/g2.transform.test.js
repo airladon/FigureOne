@@ -666,13 +666,13 @@ describe('Transform', () => {
       expect(t.y).toBe(1);
     });
     test('Def', () => {
-      const tDef = new Translation(1, 1)._def();
+      const tDef = new Translation(1, 1)._state();
       const t = new Translation(tDef);
       expect(t.x).toBe(1);
       expect(t.y).toBe(1);
     });
     test('JSON Def', () => {
-      const json = '{ "f1Type": "t", "def": ["", 1, 1] }';
+      const json = '{ "f1Type": "t", "state": ["", 1, 1] }';
       const t = new Translation(json);
       expect(t.x).toBe(1);
       expect(t.y).toBe(1);
@@ -691,13 +691,13 @@ describe('Transform', () => {
       expect(s.y).toBe(3);
     });
     test('Def', () => {
-      const sDef = new Scale(2, 3)._def();
+      const sDef = new Scale(2, 3)._state();
       const s = new Scale(sDef);
       expect(s.x).toBe(2);
       expect(s.y).toBe(3);
     });
     test('JSON Def', () => {
-      const json = '{ "f1Type": "s", "def": ["", 2, 3] }';
+      const json = '{ "f1Type": "s", "state": ["", 2, 3] }';
       const s = new Scale(json);
       expect(s.x).toBe(2);
       expect(s.y).toBe(3);
@@ -715,12 +715,12 @@ describe('Transform', () => {
       expect(r.r).toBe(1);
     });
     test('Def', () => {
-      const rDef = new Rotation(1)._def();
+      const rDef = new Rotation(1)._state();
       const r = new Rotation(rDef);
       expect(r.r).toBe(1);
     });
     test('JSON Def', () => {
-      const json = '{ "f1Type": "r", "def": ["", 1] }';
+      const json = '{ "f1Type": "r", "state": ["", 1] }';
       const r = new Rotation(json);
       expect(r.r).toBe(1);
     });
@@ -745,7 +745,7 @@ describe('Transform', () => {
     });
     test('Def', () => {
       const tIn = new Transform().translate(1, 0.5).scale(1, 1).rotate(0.5);
-      const t = getTransform(tIn._def());
+      const t = getTransform(tIn._state());
       expect(t.t()).toEqual(new Point(1, 0.5));
       expect(t.s()).toEqual(new Point(1, 1));
       expect(t.r()).toEqual(0.5);
@@ -753,7 +753,7 @@ describe('Transform', () => {
     });
     test('Named String Def', () => {
       const tIn = new Transform('Name1').translate(1, 0.5).scale(1, 1).rotate(0.5);
-      const t = getTransform(tIn._def());
+      const t = getTransform(tIn._state());
       expect(t.t()).toEqual(new Point(1, 0.5));
       expect(t.s()).toEqual(new Point(1, 1));
       expect(t.r()).toEqual(0.5);

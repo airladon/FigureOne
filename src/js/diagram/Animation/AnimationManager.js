@@ -12,7 +12,7 @@ import { DiagramElement } from '../Element';
 import * as anim from './Animation';
 import { joinObjects, duplicateFromTo } from '../../tools/tools';
 import { getState } from '../state';
-import type Diagram from '../Diagram';
+// import type Diagram from '../Diagram';
 
 export type TypeAnimationManagerInputOptions = {
   element?: DiagramElement;
@@ -52,12 +52,20 @@ export default class AnimationManager {
     return this;
   }
 
-  _getState() {
-    return getState(this, [
+  _state() {
+    // console.log('Manager get state')
+    const state = getState(this, [
       'animations',
       'state',
       'options',
     ]);
+    if (this.element != null) {
+      state.element = {
+        f1Type: 'de',
+        state: this.element.getPath(),
+      };
+    }
+    return state;
   }
 
   // _finishSetState(diagram: Diagram) {

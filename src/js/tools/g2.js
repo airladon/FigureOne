@@ -69,10 +69,10 @@ class Rect {
     return new Rect(this.left, this.bottom, this.width, this.height);
   }
 
-  _def(precision: number = 5) {
+  _state(precision: number = 5) {
     return {
       f1Type: 'rect',
-      def: [
+      state: [
         roundNum(this.left, precision),
         roundNum(this.bottom, precision),
         roundNum(this.width, precision),
@@ -84,7 +84,7 @@ class Rect {
 
 type TypeF1DefRect = {
   f1Type: 'rect',
-  def: [number, number, number, number],
+  state: [number, number, number, number],
 };
 
 export type TypeParsableRect = [number, number, number, number]
@@ -118,15 +118,15 @@ function parseRect<T>(rIn: TypeParsableRect, onFail: T): Rect | T | null {
   if (Array.isArray(r) && r.length === 4) {
     return new Rect(r[0], r[1], r[2], r[3]);
   }
-  const { f1Type, def } = r;
+  const { f1Type, state } = r;
 
   if (f1Type != null
       && f1Type === 'rect'
-      && def != null
-      && Array.isArray([def])
-      && def.length === 4
+      && state != null
+      && Array.isArray([state])
+      && state.length === 4
   ) {
-    const [l, b, w, h] = def;
+    const [l, b, w, h] = state;
     return new Rect(l, b, w, h);
   }
 
@@ -183,10 +183,10 @@ class Point {
     this._type = 'point';
   }
 
-  _def(precision: number = 8) {
+  _state(precision: number = 8) {
     return {
       f1Type: 'p',
-      def: [
+      state: [
         roundNum(this.x, precision),
         roundNum(this.y, precision),
       ],
@@ -548,7 +548,7 @@ class Point {
 
 type TypeF1DefPoint = {
   f1Type: 'p',
-  def: [number, number],
+  state: [number, number],
 };
 
 export type TypeParsablePoint = [number, number]
@@ -592,11 +592,11 @@ function parsePoint<T>(pIn: TypeParsablePoint, onFail: T): Point | T | null {
   if (p.f1Type != null) {
     if (
       p.f1Type === 'p'
-      && p.def != null
-      && Array.isArray([p.def])
-      && p.def.length === 2
+      && p.state != null
+      && Array.isArray([p.state])
+      && p.state.length === 2
     ) {
-      const [x, y] = p.def;
+      const [x, y] = p.state;
       return new Point(x, y);
     }
     return onFailToUse;
@@ -863,10 +863,10 @@ class Line {
     this.setupLine();
   }
 
-  _def(precision: number = 8) {
+  _state(precision: number = 8) {
     return {
       f1Type: 'l',
-      def: [
+      state: [
         [roundNum(this.p1.x, precision), roundNum(this.p1.y, precision)],
         [roundNum(this.p2.x, precision), roundNum(this.p2.y, precision)],
       ],
@@ -1263,7 +1263,7 @@ function line(p1: Point, p2: Point) {
 
 type TypeF1DefLine = {
   f1Type: 'p',
-  def: [[number, number], [number, number]],
+  state: [[number, number], [number, number]],
 };
 
 export type TypeParsableLine = [TypeParsablePoint, TypeParsablePoint]
@@ -1308,11 +1308,11 @@ function parseLine<T>(lIn: TypeParsableLine, onFail: T): Line | T | null {
   if (l.f1Type != null) {
     if (
       l.f1Type === 'l'
-      && l.def != null
-      && Array.isArray([l.def])
-      && l.def.length === 2
+      && l.state != null
+      && Array.isArray([l.state])
+      && l.state.length === 2
     ) {
-      const [p1, p2] = l.def;
+      const [p1, p2] = l.state;
       return new Line(getPoint(p1), getPoint(p2));
     }
     return onFailToUse;
@@ -1330,7 +1330,7 @@ function getLine(p: TypeParsableLine): Line {
 
 type TypeF1DefRotation = {
   f1Type: 'r',
-  def: [string, number],
+  state: [string, number],
 };
 class Rotation {
   r: number;
@@ -1351,11 +1351,11 @@ class Rotation {
     } else if (
       angle.f1Type != null
       && angle.f1Type === 'r'
-      && angle.def != null
-      && Array.isArray(angle.def)
-      && angle.def.length === 2
+      && angle.state != null
+      && Array.isArray(angle.state)
+      && angle.state.length === 2
     ) {
-      const [n, r] = angle.def;
+      const [n, r] = angle.state;
       name = n;
       this.r = r;
     } else {
@@ -1364,10 +1364,10 @@ class Rotation {
     this.name = name;
   }
 
-  _def(precision: number = 8) {
+  _state(precision: number = 8) {
     return {
       f1Type: 'r',
-      def: [this.name, roundNum(this.r, precision)],
+      state: [this.name, roundNum(this.r, precision)],
     };
   }
 
@@ -1398,7 +1398,7 @@ class Rotation {
 
 type TypeF1DefTranslation = {
   f1Type: 't',
-  def: [string, number, number],
+  state: [string, number, number],
 };
 class Translation extends Point {
   x: number;
@@ -1430,11 +1430,11 @@ class Translation extends Point {
     } else if (
       tx.f1Type != null
       && tx.f1Type === 't'
-      && tx.def != null
-      && Array.isArray(tx.def)
-      && tx.def.length === 3
+      && tx.state != null
+      && Array.isArray(tx.state)
+      && tx.state.length === 3
     ) {
-      const [n, x, y] = tx.def;
+      const [n, x, y] = tx.state;
       name = n;
       super(x, y);
     } else {
@@ -1443,10 +1443,10 @@ class Translation extends Point {
     this.name = name;
   }
 
-  _def(precision: number = 8) {
+  _state(precision: number = 8) {
     return {
       f1Type: 't',
-      def: [
+      state: [
         this.name,
         roundNum(this.x, precision),
         roundNum(this.y, precision),
@@ -1515,7 +1515,7 @@ class Translation extends Point {
 
 type TypeF1DefScale = {
   f1Type: 't',
-  def: [string, number, number],
+  state: [string, number, number],
 };
 class Scale extends Point {
   x: number;
@@ -1548,11 +1548,11 @@ class Scale extends Point {
     } else if (
       sx.f1Type != null
       && sx.f1Type === 's'
-      && sx.def != null
-      && Array.isArray(sx.def)
-      && sx.def.length === 3
+      && sx.state != null
+      && Array.isArray(sx.state)
+      && sx.state.length === 3
     ) {
-      const [n, x, y] = sx.def;
+      const [n, x, y] = sx.state;
       name = n;
       super(x, y);
     } else {
@@ -1561,10 +1561,10 @@ class Scale extends Point {
     this.name = name;
   }
 
-  _def(precision: number = 8) {
+  _state(precision: number = 8) {
     return {
       f1Type: 's',
-      def: [
+      state: [
         this.name,
         roundNum(this.x, precision),
         roundNum(this.y, precision),
@@ -1679,10 +1679,10 @@ class Transform {
     this.calcMatrix();
   }
 
-  _def(precision: number = 8) {
+  _state(precision: number = 8) {
     const out = [];
     this.order.forEach((transformElement) => {
-      out.push(transformElement._def(precision));
+      out.push(transformElement._state(precision));
     });
     // if (this.name !== '') {
     //   // return [this.name, ...out];
@@ -1690,7 +1690,7 @@ class Transform {
     // }
     return {
       f1Type: 'tf',
-      def: [
+      state: [
         this.name,
         ...out,
       ],
@@ -2266,7 +2266,7 @@ class Transform {
 
 export type TypeF1DefTransform = {
   f1Type: 'tf',
-  def: Array<string | TypeF1DefTranslation | TypeF1DefRotation | TypeF1DefScale>,
+  state: Array<string | TypeF1DefTranslation | TypeF1DefRotation | TypeF1DefScale>,
 };
 
 export type TypeParsableTransform = Array<string | ['s', number, number] | ['r', number] | ['t', number, number]> | string | Transform | TypeF1DefTransform;
@@ -2319,15 +2319,15 @@ function parseTransform<T>(inTransform: TypeParsableTransform, onFail: T): Trans
     });
     return t;
   }
-  const { f1Type, def } = tToUse;
+  const { f1Type, state } = tToUse;
   if (
     f1Type != null
     && f1Type === 'tf'
-    && def != null
-    && Array.isArray(def)
+    && state != null
+    && Array.isArray(state)
   ) {
     let t = new Transform();
-    tToUse.def.forEach((transformElement) => {
+    tToUse.state.forEach((transformElement) => {
       if (typeof transformElement === 'string') {
         t.name = transformElement;
         return;

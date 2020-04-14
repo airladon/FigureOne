@@ -2,52 +2,52 @@ import {
   Point, Rect, Transform, Line,
 } from '../tools/g2';
 import {
-  getState, getDef,
+  getState, parseState,
 } from './state';
 // import { round } from '../tools/math';
 
 describe('state', () => {
   describe('getDef', () => {
     test('number', () => {
-      const value = getDef(1);
+      const value = parseState(1);
       expect(value).toBe(1);
     });
     test('string', () => {
-      const value = getDef('asdf');
+      const value = parseState('asdf');
       expect(value).toBe('asdf');
     });
     test('boolean', () => {
-      const value = getDef(false);
+      const value = parseState(false);
       expect(value).toBe(false);
     });
     test('undefined', () => {
-      const value = getDef();
+      const value = parseState();
       expect(value).toBe(undefined);
     });
     test('null', () => {
-      const value = getDef(null);
+      const value = parseState(null);
       expect(value).toBe(null);
     });
     test('array', () => {
-      const ar = getDef([1, new Point(1, 1)._def()]);
+      const ar = parseState([1, new Point(1, 1)._state()]);
       expect(ar[0]).toBe(1);
       expect(ar[1]).toEqual(new Point(1, 1));
     });
     test('obj', () => {
-      const obj = getDef({
+      const obj = parseState({
         num: 1,
         str: 'asdf',
         bool: false,
         undef: undefined,
         nul: null,
-        tf: new Transform().translate(1, 1)._def(),
-        p: new Point(1, 1)._def(),
-        r: new Rect(0, 0, 2, 2)._def(),
-        l: new Line([0, 0], [1, 1])._def(),
+        tf: new Transform().translate(1, 1)._state(),
+        p: new Point(1, 1)._state(),
+        r: new Rect(0, 0, 2, 2)._state(),
+        l: new Line([0, 0], [1, 1])._state(),
         obj: {
-          r: new Rect(0, 0, 3, 3)._def(),
+          r: new Rect(0, 0, 3, 3)._state(),
         },
-        ar: [1, new Point(1, 1)._def()],
+        ar: [1, new Point(1, 1)._state()],
       });
       expect(obj.num).toBe(1);
       expect(obj.str).toBe('asdf');
@@ -78,7 +78,7 @@ describe('state', () => {
         },
         ar: [1, new Point(1, 1)],
       };
-      const obj = getDef(getState(objIn, [
+      const obj = parseState(getState(objIn, [
         'num', 'str', 'bool', 'undef', 'nul', 'tf', 'p', 'r', 'l', 'obj', 'ar',
       ]));
       expect(obj.num).toBe(1);

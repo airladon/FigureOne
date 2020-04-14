@@ -200,21 +200,25 @@ diagram.getElement('pointer').animations.new()
   .start();
 // const state = diagram.getState();
 let state;
-console.log(diagram)
+// console.log(diagram)
 
 setTimeout(() => {
   state = diagram.getState();
-  console.log(state);
+  // console.log(state);
+  // console.log(diagram.elements._pointer.animations.animations[0].steps)
 }, 1000)
 setTimeout(() => {
   console.log('1')
   // console.log(diagram)
   diagram.setState(state);
+  console.log(diagram.elements._pointer.animations.animations[0].steps[0].position)
   // console.log(performance.now() - diagram.stateTime)
   // console.log(diagram.elements._pointer.animations.animations[0])
   // console.log(state)
-  console.log(diagram);
+  // console.log(diagram);
   diagram.animateNextFrame();
+  // console.log(diagram.elements._pointer.animations.animations[0].steps[0].state)
+  // console.log(diagram.elements._pointer.animations.animations[0].steps[0])
 }, 3000);
 // const data = [
 // ];

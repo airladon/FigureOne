@@ -6,7 +6,7 @@ import {
   Rect, Point, Transform,
   spaceToSpaceTransform, minAngleDiff,
 } from '../tools/g2';
-import { setState, getState, getDef } from './state';
+import { setState, getState, parseState } from './state';
 import { isTouchDevice, joinObjects } from '../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
@@ -368,7 +368,11 @@ class Diagram {
   }
 
   setState(stateIn: Object) {
-    const state = getDef(stateIn, this);
+    // console.log(stateIn.elements.elements.pointer.animations.animations[0].steps[0].position.delta)
+    console.log(stateIn.elements.elements.pointer.animations.animations[0].state.steps[0].state.position.delta)
+    const state = parseState(stateIn, this);
+    // console.log(state);
+    console.log(state.elements.elements.pointer.animations.animations[0].steps[0].position.delta)
     setState(this, state);
     // this.elements._finishSetState(this);
     // this.elements.setState(state.elements);
@@ -420,6 +424,9 @@ class Diagram {
   }
 
   getElement(elementName: string) {
+    if (elementName === this.elements.name) {
+      return this.elements;
+    }
     return this.elements.getElement(elementName);
   }
 

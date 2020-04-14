@@ -382,11 +382,11 @@ describe('g2 Point', () => {
       expect(getPoint(new Point(1, 1))).toEqual(new Point(1, 1));
     });
     test('Def', () => {
-      const def = new Point(1, 1)._def();
+      const def = new Point(1, 1)._state();
       expect(getPoint(def)).toEqual(new Point(1, 1));
     });
-    test('JSON def', () => {
-      const json = '{ "f1Type": "p", "def": [1, 1] }';
+    test('JSON state', () => {
+      const json = '{ "f1Type": "p", "state": [1, 1] }';
       expect(getPoint(json)).toEqual(new Point(1, 1));
     });
     test('JSON array', () => {
@@ -406,7 +406,7 @@ describe('g2 Point', () => {
   describe('getPoints', () => {
     test('Array', () => {
       const p0 = new Point(0, 0);
-      const p1 = new Point(1, 1)._def();
+      const p1 = new Point(1, 1)._state();
       const p2 = [2, 2];
       const points = getPoints([p0, p1, p2]);
       expect(points).toHaveLength(3);
