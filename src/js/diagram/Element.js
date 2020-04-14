@@ -577,14 +577,14 @@ class DiagramElement {
     return getState(this, this._getStateProperties());
   }
 
-  _finishSetState(diagram: Diagram) {
-    // Object.keys(this).forEach((prop) => {
-    //   if (this[prop]._finishSetState != null) {
-    //     this[prop]._finishSetState();
-    //   }
-    // });
-    this.animations._finishSetState(diagram);
-  }
+  // _finishSetState(diagram: Diagram) {
+  //   // Object.keys(this).forEach((prop) => {
+  //   //   if (this[prop]._finishSetState != null) {
+  //   //     this[prop]._finishSetState();
+  //   //   }
+  //   // });
+  //   this.animations._finishSetState(diagram);
+  // }
   // _setState(state: Object) {
   //   setState
   // }
@@ -3657,13 +3657,13 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  _finishSetState(diagram: Diagram) {
-    super._finishSetState(diagram);
-    for (let i = 0; i < this.drawOrder.length; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      element._finishSetState(diagram);
-    }
-  }
+  // _finishSetState(diagram: Diagram) {
+  //   super._finishSetState(diagram);
+  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     element._finishSetState(diagram);
+  //   }
+  // }
 
   setTimeDelta(delta: number) {
     super.setTimeDelta(delta);

@@ -6,7 +6,7 @@ import {
   Rect, Point, Transform,
   spaceToSpaceTransform, minAngleDiff,
 } from '../tools/g2';
-import { setState, getState } from './state';
+import { setState, getState, getDef } from './state';
 import { isTouchDevice, joinObjects } from '../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
@@ -367,9 +367,10 @@ class Diagram {
     ]);
   }
 
-  setState(state: Object) {
+  setState(stateIn: Object) {
+    const state = getDef(stateIn, this);
     setState(this, state);
-    this.elements._finishSetState(this);
+    // this.elements._finishSetState(this);
     // this.elements.setState(state.elements);
     this.elements.setTimeDelta(performance.now() / 1000 - this.stateTime);
     this.animateNextFrame();
