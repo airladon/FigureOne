@@ -42,17 +42,33 @@ export class CustomAnimationStep extends AnimationStep {
     this.callback = options.callback;
     this.startPercent = options.startPercent;
     if (typeof this.progression === 'function') {
-      this.startTimeOffset = this.progression(options.startPercent, true) * options.duration;
+      this.startTimeOffset = this.getPercentComplete(options.startPercent, true) * options.duration;
     }
     this.duration = options.duration;
   }
 
   setFrame(deltaTime: number) {
     const percentTime = deltaTime / this.duration;
-    const percentComplete = this.progression(percentTime);
+    const percentComplete = this.getPercentComplete(percentTime);
     if (this.callback != null) {
       this.callback(percentComplete);
     }
+  }
+
+  getPercentComplete(percentTime: number) {
+    if (typeof this.progression === 'function') {
+      return (this.progression(percentTime));
+    }
+    if (this.progression === 'linear') {
+      return tools.linear(percentTime);
+    }
+    if (this.progression === 'easein') {
+      return tools.easein(percentTime);
+    }
+    if (this.progression === 'easeout') {
+      return tools.easeout(percentTime);
+    }
+    return tools.easeinout(percentTime);
   }
 
   setToEnd() {
