@@ -114,7 +114,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
 
   setFrame(deltaTime: number) {
     const percentTime = deltaTime / this.duration;
-    const percentComplete = this.progression(percentTime);
+    const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;
 
     let nextR = this.rotation.start + this.rotation.delta * p;
