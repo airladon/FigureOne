@@ -87,7 +87,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
 
   _def() {
     const def = super._def();
-    def.f1Type = 'positionAnimStep';
+    def.f1Type = 'positionAnimationStep';
     def.def.position = joinObjectsWithOptions({ duplicate: true }, {}, this.position);
     return def;
   }

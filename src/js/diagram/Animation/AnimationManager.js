@@ -60,33 +60,33 @@ export default class AnimationManager {
     ]);
   }
 
-  _finishSetState(diagram: Diagram) {
-    for (let i = 0; i < this.animations.length; i += 1) {
-      const animationStepState = this.animations[i];
-      let animationStep = {};
-      if (animationStepState._stepType === 'builder') {
-        animationStep = new anim.AnimationBuilder();
-      }
-      if (animationStepState._stepType === 'position') {
-        animationStep = new anim.PositionAnimationStep();
-      }
-      joinObjects(animationStep, animationStepState);
-      animationStep._finishSetState(diagram);
-      this.animations[i] = animationStep;
-    }
-    // this.animations.forEach((animation) => {
-    //   let animationStep = {};
-    //   if (animation.type === 'builder') {
-    //     animationStep = new anim.AnimationBuilder();
-    //   }
-    //   if (animation.type === 'position') {
-    //     animationStep = new anim.PositionAnimationStep();
-    //   }
-    //   joinObjects(animationStep, animation);
-    //   animation._finishSetState(diagram);
-    //   // }
-    // });
-  }
+  // _finishSetState(diagram: Diagram) {
+  //   for (let i = 0; i < this.animations.length; i += 1) {
+  //     const animationStepState = this.animations[i];
+  //     let animationStep = {};
+  //     if (animationStepState._stepType === 'builder') {
+  //       animationStep = new anim.AnimationBuilder();
+  //     }
+  //     if (animationStepState._stepType === 'position') {
+  //       animationStep = new anim.PositionAnimationStep();
+  //     }
+  //     joinObjects(animationStep, animationStepState);
+  //     animationStep._finishSetState(diagram);
+  //     this.animations[i] = animationStep;
+  //   }
+  //   // this.animations.forEach((animation) => {
+  //   //   let animationStep = {};
+  //   //   if (animation.type === 'builder') {
+  //   //     animationStep = new anim.AnimationBuilder();
+  //   //   }
+  //   //   if (animation.type === 'position') {
+  //   //     animationStep = new anim.PositionAnimationStep();
+  //   //   }
+  //   //   joinObjects(animationStep, animation);
+  //   //   animation._finishSetState(diagram);
+  //   //   // }
+  //   // });
+  // }
 
   setTimeDelta(delta: number) {
     this.animations.forEach((animation) => {

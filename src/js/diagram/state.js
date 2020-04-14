@@ -1,11 +1,18 @@
 // @flow
 import {
+  PositionAnimationStep, AnimationBuilder,
+} from './Animation/Animation';
+
+import type Diagram from './Diagram';
+
+import {
   getPoint, getTransform, getRect, getLine, Translation, Rotation, Scale,
 } from '../tools/g2';
 
 import {
   joinObjects,
 } from '../tools/tools';
+
 
 function getState(
   obj: Object,
@@ -58,7 +65,7 @@ function getState(
   return state;
 }
 
-function getDef(def: any) {
+function getDef(def: Object, diagram: Diagram) {
   if (typeof def === 'number') {
     return def;
   }
@@ -75,7 +82,7 @@ function getDef(def: any) {
   if (Array.isArray(def)) {
     const out = [];
     def.forEach((defElement) => {
-      out.push(getDef(defElement));
+      out.push(getDef(defElement, diagram));
     });
     return out;
   }
@@ -101,16 +108,32 @@ function getDef(def: any) {
     if (def.f1Type === 'l') {
       return getLine(def);
     }
+    if (def.f1Type === 'positionAnimationStep') {
+      const step = new PositionAnimationStep();
+      joinObjects(step, getDef(def.def, diagram));
+      if (step.element != null && typeof step.element === 'string') {
+        step.element = diagram.getElement(step.element);
+      }
+      return step;
+    }
+    if (def.f1Type === 'animationBuilder') {
+      const builder = new AnimationBuilder();
+      joinObjects(builder, getDef(def.def, diagram));
+      if (builder.element != null && typeof builder.element === 'string') {
+        builder.element = diagram.getElement(builder.element);
+      }
+      return builder;
+    }
   }
   const out = {};
   Object.keys(def).forEach((property) => {
-    out[property] = getDef(def[property]);
+    out[property] = getDef(def[property], diagram);
   });
   return out;
 }
 
 function setState(obj: Object, stateIn: Object) {
-  joinObjects(obj, getDef(stateIn));
+  joinObjects(obj);
   // const state = getDef(stateIn);
 
   // Object.keys(state).forEach((prop) => {

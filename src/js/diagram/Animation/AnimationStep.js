@@ -93,29 +93,29 @@ export default class AnimationStep {
     return state;
   }
 
-  _finishSetState(diagram: Diagram) {
-    if (this.element != null && typeof this.element === 'string') {
-      const element = diagram.getElement(this.element);
-      if (element != null) {
-        this.element = element;
-      }
-    }
-    if (this.steps != null) {
-      for (let i = 0; i < this.steps.length; i += 1) {
-        const animationStepState = this.steps[i];
-        let animationStep = {};
-        if (animationStepState._stepType === 'builder') {
-          animationStep = new anim.AnimationBuilder();
-        }
-        if (animationStepState._stepType === 'position') {
-          animationStep = new anim.PositionAnimationStep();
-        }
-        joinObjects(animationStep, animationStepState);
-        animationStep._finishSetState(diagram);
-        this.steps[i] = animationStep;
-      }
-    }
-  }
+  // _finishSetState(diagram: Diagram) {
+  //   if (this.element != null && typeof this.element === 'string') {
+  //     const element = diagram.getElement(this.element);
+  //     if (element != null) {
+  //       this.element = element;
+  //     }
+  //   }
+  //   if (this.steps != null) {
+  //     for (let i = 0; i < this.steps.length; i += 1) {
+  //       const animationStepState = this.steps[i];
+  //       let animationStep = {};
+  //       if (animationStepState._stepType === 'builder') {
+  //         animationStep = new anim.AnimationBuilder();
+  //       }
+  //       if (animationStepState._stepType === 'position') {
+  //         animationStep = new anim.PositionAnimationStep();
+  //       }
+  //       joinObjects(animationStep, animationStepState);
+  //       animationStep._finishSetState(diagram);
+  //       this.steps[i] = animationStep;
+  //     }
+  //   }
+  // }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
   // _finishSetState(diagram: Diagram) {
