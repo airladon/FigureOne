@@ -11,7 +11,7 @@ import { DiagramElement } from '../Element';
 // eslint-disable-next-line import/no-cycle
 import * as anim from './Animation';
 import { joinObjects, duplicateFromTo } from '../../tools/tools';
-import { getState } from '../../tools/g2';
+import { getState } from '../state';
 import type Diagram from '../Diagram';
 
 export type TypeAnimationManagerInputOptions = {
