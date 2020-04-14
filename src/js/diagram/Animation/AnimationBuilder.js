@@ -40,6 +40,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     }
     super(options);
     this.element = options.element;
+    this._stepType = 'builder';
     return this;
   }
 

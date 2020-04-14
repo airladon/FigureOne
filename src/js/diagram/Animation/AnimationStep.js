@@ -14,6 +14,7 @@ import {
   getState,
 } from '../../tools/g2';
 import type Diagram from '../Diagram';
+import * as anim from './Animation';
 
 export type TypeAnimationStepInputOptions = {
   onFinish?: ?(boolean) => void;
@@ -37,6 +38,7 @@ export default class AnimationStep {
   startDelay: number;
   beforeFrame: ?(number) => void;
   afterFrame: ?(number) => void;
+  _stepType: string;
 
   constructor(optionsIn: TypeAnimationStepInputOptions = {}) {
     const defaultOptions = {
@@ -98,6 +100,21 @@ export default class AnimationStep {
         this.element = element;
       }
     }
+    if (this.steps != null) {
+      for (let i = 0; i < this.steps.length; i += 1) {
+        const animationStepState = this.steps[i];
+        let animationStep = {};
+        if (animationStepState._stepType === 'builder') {
+          animationStep = new anim.AnimationBuilder();
+        }
+        if (animationStepState._stepType === 'position') {
+          animationStep = new anim.PositionAnimationStep();
+        }
+        joinObjects(animationStep, animationStepState);
+        animationStep._finishSetState(diagram);
+        this.steps[i] = animationStep;
+      }
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
@@ -105,7 +122,13 @@ export default class AnimationStep {
   // }
 
   setTimeDelta(delta: number) {
+    console.log(this.startTime, delta, this.startTime + delta)
     this.startTime += delta;
+    if (this.steps != null) {
+      this.steps.forEach((step) => {
+        step.setTimeDelta(delta);
+      });
+    }
   }
 
   // returns remaining time if this step completes

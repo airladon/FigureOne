@@ -35,17 +35,34 @@ export default class ElementAnimationStep extends AnimationStep {
     this.type = options.type;
     this.onFinish = options.onFinish;
     this.duration = options.duration;
-    if (options.progression === 'linear') {
-      this.progression = tools.linear;
-    } else if (options.progression === 'easein') {
-      this.progression = tools.easein;
-    } else if (options.progression === 'easeout') {
-      this.progression = tools.easeout;
-    } else if (options.progression === 'easeinout') {
-      this.progression = tools.easeinout;
-    } else {
-      this.progression = options.progression;
+    this.progression = options.progression;
+    // if (options.progression === 'linear') {
+    //   this.progression = tools.linear;
+    // } else if (options.progression === 'easein') {
+    //   this.progression = tools.easein;
+    // } else if (options.progression === 'easeout') {
+    //   this.progression = tools.easeout;
+    // } else if (options.progression === 'easeinout') {
+    //   this.progression = tools.easeinout;
+    // } else {
+    //   this.progression = options.progression;
+    // }
+  }
+
+  getPercentComplete(percentTime: number) {
+    if (typeof this.progression === 'function') {
+      return (this.progression(percentTime));
     }
+    if (this.progression === 'linear') {
+      return tools.linear(percentTime);
+    }
+    if (this.progression === 'easein') {
+      return tools.easein(percentTime);
+    }
+    if (this.progression === 'easeout') {
+      return tools.easeout(percentTime);
+    }
+    return tools.easeinout(percentTime);
   }
 
   _dup() {

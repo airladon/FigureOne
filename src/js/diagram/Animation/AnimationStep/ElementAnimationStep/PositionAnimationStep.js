@@ -41,6 +41,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       'velocity', 'maxTime',
     ]);
     super(ElementAnimationStepOptionsIn);
+    this._stepType = 'position';
     const defaultPositionOptions = {
       start: null,
       target: null,
@@ -129,7 +130,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
 
   setFrame(deltaTime: number) {
     const percentTime = deltaTime / this.duration;
-    const percentComplete = this.progression(percentTime);
+    const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;
 
     if (this.position.delta != null && this.position.start != null) {
