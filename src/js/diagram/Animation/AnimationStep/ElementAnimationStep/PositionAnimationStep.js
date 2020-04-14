@@ -5,6 +5,7 @@ import {
 import type { pathOptionsType } from '../../../../tools/g2';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
+  joinObjectsWithOptions,
 } from '../../../../tools/tools';
 import type {
   TypeElementAnimationStepInputOptions,
@@ -82,6 +83,13 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       'velocity', 'maxTime',
     ]);
     duplicateFromTo(options.translationOptions, this.position.translationOptions);
+  }
+
+  _def() {
+    const def = super._def();
+    def.f1Type = 'positionAnimStep';
+    def.def.position = joinObjectsWithOptions({ duplicate: true }, {}, this.position);
+    return def;
   }
 
   // On start, calculate the duration, target and delta if not already present.

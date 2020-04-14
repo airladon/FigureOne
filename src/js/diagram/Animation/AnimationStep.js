@@ -12,7 +12,7 @@ import {
 } from '../../tools/tools';
 import {
   getState,
-} from '../../tools/g2';
+} from '../state';
 import type Diagram from '../Diagram';
 import * as anim from './Animation';
 
@@ -122,13 +122,32 @@ export default class AnimationStep {
   // }
 
   setTimeDelta(delta: number) {
-    console.log(this.startTime, delta, this.startTime + delta)
     this.startTime += delta;
     if (this.steps != null) {
       this.steps.forEach((step) => {
         step.setTimeDelta(delta);
       });
     }
+  }
+
+  _def() {
+    return {
+      f1Type: 'animationStep',
+      def: {
+        startTime: this.startTime,
+        duration: this.duration,
+        onFinish: this.onFinish,
+        completeOnCancel: this.completeOnCancel,
+        state: this.state,
+        startTimeOffset: this.startTimeOffset,
+        removeOnFinish: this.removeOnFinish,
+        name: this.name,
+        startDelay: this.startDelay,
+        beforeFrame: this.beforeFrame,
+        afterFrame: this.afterFrame,
+        _stepType: this._stepType,
+      },
+    };
   }
 
   // returns remaining time if this step completes

@@ -4,8 +4,9 @@ import {
   Transform, Point, TransformLimit, Rect,
   Translation, spaceToSpaceTransform, getBoundingRect,
   Scale, Rotation, Line, getMaxTimeFromVelocity, clipAngle,
-  getPoint, getTransform, getState,
+  getPoint, getTransform,
 } from '../tools/g2';
+import { getState } from './state';
 import type { TypeParsablePoint, TypeParsableTransform } from '../tools/g2';
 import Recorder from './Recorder';
 import * as m2 from '../tools/m2';

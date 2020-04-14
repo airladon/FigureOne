@@ -4,8 +4,9 @@ import WebGLInstance from './webgl/webgl';
 
 import {
   Rect, Point, Transform,
-  spaceToSpaceTransform, minAngleDiff, setState, getState,
+  spaceToSpaceTransform, minAngleDiff,
 } from '../tools/g2';
+import { setState, getState } from './state';
 import { isTouchDevice, joinObjects } from '../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
