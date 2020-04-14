@@ -21,7 +21,7 @@ function getState(
 ) {
   // const stateProperties = this._getStateProperties();
   // const path = this.getPath();
-  const state = {};
+  const state: Object = {};
   const processValue = (value) => {
     if (typeof value === 'string') {
       return value;
@@ -38,16 +38,21 @@ function getState(
     if (value._def != null) {
       return value._def(precision);
     }
+    if (value._state != null) {
+      return value._state(precision);
+    }
     if (Array.isArray(value)) {
       const dupArray = [];
       value.forEach((v) => {
+        // console.log('array v', v);
         dupArray.push(processValue(v));
       });
       return dupArray;
     }
-    if (value._getState != null) {
-      return value._getState();
-    }
+    // if (value._getState != null) {
+    //   console.log('v', value)
+    //   return value._getState();
+    // }
     if (value._dup != null) {
       return value._dup();
     }
@@ -58,90 +63,82 @@ function getState(
     return out;
     // return joinObjects({}, value);
   };
-
+  // console.log(stateProperties)
   stateProperties.forEach((prop) => {
+    // console.log('prop', prop)
     state[prop] = processValue(obj[prop]);
   });
   return state;
 }
 
-function getDef(def: Object, diagram: Diagram) {
-  if (typeof def === 'number') {
-    return def;
+function parseState(state: Object, diagram: Diagram) {
+  if (typeof state === 'number') {
+    return state;
   }
-  if (typeof def === 'string') {
-    return def;
+  if (typeof state === 'string') {
+    return state;
   }
-  if (typeof def === 'boolean') {
-    return def;
+  if (typeof state === 'boolean') {
+    return state;
   }
-  if (def == null) {
-    return def;
+  if (state == null) {
+    return state;
   }
 
-  if (Array.isArray(def)) {
+  if (Array.isArray(state)) {
     const out = [];
-    def.forEach((defElement) => {
-      out.push(getDef(defElement, diagram));
+    state.forEach((stateElement) => {
+      out.push(parseState(stateElement, diagram));
     });
     return out;
   }
-  if (def.f1Type != null) {
-    if (def.f1Type === 'rect') {
-      return getRect(def);
+  if (state.f1Type != null) {
+    if (state.f1Type === 'rect') {
+      return getRect(state);
     }
-    if (def.f1Type === 'p') {
-      return getPoint(def);
+    if (state.f1Type === 'p') {
+      return getPoint(state);
     }
-    if (def.f1Type === 'tf') {
-      return getTransform(def);
+    if (state.f1Type === 'tf') {
+      return getTransform(state);
     }
-    if (def.f1Type === 't') {
-      return new Translation(def);
+    if (state.f1Type === 't') {
+      return new Translation(state);
     }
-    if (def.f1Type === 's') {
-      return new Scale(def);
+    if (state.f1Type === 's') {
+      return new Scale(state);
     }
-    if (def.f1Type === 'r') {
-      return new Rotation(def);
+    if (state.f1Type === 'r') {
+      return new Rotation(state);
     }
-    if (def.f1Type === 'l') {
-      return getLine(def);
+    if (state.f1Type === 'l') {
+      return getLine(state);
     }
-    if (def.f1Type === 'positionAnimationStep') {
-      return new PositionAnimationStep()._fromDef(
-        getDef(def.def, diagram),
+    if (state.f1Type === 'de') {
+      return diagram.getElement(state.state);
+    }
+    if (state.f1Type === 'positionAnimationStep') {
+      return new PositionAnimationStep()._fromState(
+        parseState(state.state, diagram),
         diagram.getElement.bind(diagram),
       );
-      // const step = new PositionAnimationStep();
-      // joinObjects(step, getDef(def.def, diagram));
-      // if (step.element != null && typeof step.element === 'string') {
-      //   step.element = diagram.getElement(step.element);
-      // }
-      // return step;
     }
-    if (def.f1Type === 'animationBuilder') {
-      // const builder = new AnimationBuilder();
-      // joinObjects(builder, getDef(def.def, diagram));
-      // if (builder.element != null && typeof builder.element === 'string') {
-      //   builder.element = diagram.getElement(builder.element);
-      // }
-      // return builder;
-      return new AnimationBuilder()._fromDef(
-        getDef(def.def, diagram),
+    if (state.f1Type === 'animationBuilder') {
+      return new AnimationBuilder()._fromState(
+        parseState(state.state, diagram),
         diagram.getElement.bind(diagram),
       );
     }
   }
   const out = {};
-  Object.keys(def).forEach((property) => {
-    out[property] = getDef(def[property], diagram);
+  Object.keys(state).forEach((property) => {
+    out[property] = parseState(state[property], diagram);
   });
   return out;
 }
 
 function setState(obj: Object, stateIn: Object) {
-  joinObjects(obj);
+  joinObjects(obj, stateIn);
   // const state = getDef(stateIn);
 
   // Object.keys(state).forEach((prop) => {
@@ -211,4 +208,4 @@ function setState(obj: Object, stateIn: Object) {
 //   });
 // }
 
-export { setState, getState, getDef };
+export { setState, getState, parseState };

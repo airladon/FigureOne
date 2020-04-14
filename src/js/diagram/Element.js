@@ -573,7 +573,7 @@ class DiagramElement {
   //   setState(this, state);
   // }
 
-  _getState() {
+  _state() {
     return getState(this, this._getStateProperties());
   }
 

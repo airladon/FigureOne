@@ -499,14 +499,14 @@ describe('g2 Line', () => {
     });
     test('Def', () => {
       const l = new Line([0, 0], [1, 1]);
-      expect(getLine(l._def())).toEqual(l);
+      expect(getLine(l._state())).toEqual(l);
     });
     test('JSON array', () => {
       const json = '[[0, 0], [1, 1]]';
       expect(getLine(json)).toEqual(new Line([0, 0], [1, 1]));
     });
     test('JSON Def', () => {
-      const json = '{ "f1Type": "l", "def": [[0, 0], [1, 1]] }';
+      const json = '{ "f1Type": "l", "state": [[0, 0], [1, 1]] }';
       expect(getLine(json)).toEqual(new Line([0, 0], [1, 1]));
     });
     test('Fail Undefined', () => {
