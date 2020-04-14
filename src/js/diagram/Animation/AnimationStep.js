@@ -10,11 +10,9 @@
 import {
   joinObjects, duplicateFromTo, generateRandomString,
 } from '../../tools/tools';
-import {
-  getState,
-} from '../state';
-import type Diagram from '../Diagram';
-import * as anim from './Animation';
+import { getState } from '../state';
+import type { DiagramElement } from '../Element';
+// import * as anim from './Animation';
 
 export type TypeAnimationStepInputOptions = {
   onFinish?: ?(boolean) => void;
@@ -87,18 +85,12 @@ export default class AnimationStep {
     });
 
     const state = getState(this, keys);
-    if (this.element != null) {
-      state.element = this.element.getPath();
-    }
     return state;
   }
 
+  // eslint-disable-next-line no-unused-vars
   _fromDef(definition: Object, getElement: (string) => DiagramElement) {
-    // const obj = new this.constructor();
     joinObjects(this, definition);
-    if (this.element != null && typeof this.element === 'string') {
-      this.element = getElement(this.element);
-    }
     return this;
   }
 
