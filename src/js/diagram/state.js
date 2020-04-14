@@ -109,20 +109,28 @@ function getDef(def: Object, diagram: Diagram) {
       return getLine(def);
     }
     if (def.f1Type === 'positionAnimationStep') {
-      const step = new PositionAnimationStep();
-      joinObjects(step, getDef(def.def, diagram));
-      if (step.element != null && typeof step.element === 'string') {
-        step.element = diagram.getElement(step.element);
-      }
-      return step;
+      return new PositionAnimationStep()._fromDef(
+        getDef(def.def, diagram),
+        diagram.getElement.bind(diagram),
+      );
+      // const step = new PositionAnimationStep();
+      // joinObjects(step, getDef(def.def, diagram));
+      // if (step.element != null && typeof step.element === 'string') {
+      //   step.element = diagram.getElement(step.element);
+      // }
+      // return step;
     }
     if (def.f1Type === 'animationBuilder') {
-      const builder = new AnimationBuilder();
-      joinObjects(builder, getDef(def.def, diagram));
-      if (builder.element != null && typeof builder.element === 'string') {
-        builder.element = diagram.getElement(builder.element);
-      }
-      return builder;
+      // const builder = new AnimationBuilder();
+      // joinObjects(builder, getDef(def.def, diagram));
+      // if (builder.element != null && typeof builder.element === 'string') {
+      //   builder.element = diagram.getElement(builder.element);
+      // }
+      // return builder;
+      return new AnimationBuilder()._fromDef(
+        getDef(def.def, diagram),
+        diagram.getElement.bind(diagram),
+      );
     }
   }
   const out = {};

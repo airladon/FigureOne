@@ -93,6 +93,15 @@ export default class AnimationStep {
     return state;
   }
 
+  _fromDef(definition: Object, getElement: (string) => DiagramElement) {
+    // const obj = new this.constructor();
+    joinObjects(this, definition);
+    if (this.element != null && typeof this.element === 'string') {
+      this.element = getElement(this.element);
+    }
+    return this;
+  }
+
   // _finishSetState(diagram: Diagram) {
   //   if (this.element != null && typeof this.element === 'string') {
   //     const element = diagram.getElement(this.element);

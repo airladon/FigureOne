@@ -11,6 +11,7 @@ import type {
   TypeElementAnimationStepInputOptions,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
+import type { DiagramElement } from '../../../Element';
 
 export type TypePositionAnimationStepInputOptions = {
   start?: Point;      // default is element transform
@@ -91,6 +92,15 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     def.def.position = joinObjectsWithOptions({ duplicate: true }, {}, this.position);
     return def;
   }
+
+  // static _fromDef(definition: Object, getElement: (string) => DiagramElement) {
+  //   const obj = new PositionAnimationStep();
+  //   joinObjects(obj, definition);
+  //   if (obj.element != null && typeof obj.element == 'string') {
+  //     obj.element = getElement(obj.element);
+  //   }
+  //   return obj;
+  // }
 
   // On start, calculate the duration, target and delta if not already present.
   // This is done here in case the start is defined as null meaning it is
