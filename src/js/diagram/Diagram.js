@@ -6,7 +6,10 @@ import {
   Rect, Point, Transform,
   spaceToSpaceTransform, minAngleDiff,
 } from '../tools/g2';
-import { setState, getState, parseState } from './state';
+import * as math from '../tools/math';
+import FunctionMap from './FunctionMap';
+import { setState, getState } from './state';
+import parseState from './parseState';
 import { isTouchDevice, joinObjects } from '../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
@@ -368,14 +371,8 @@ class Diagram {
   }
 
   setState(stateIn: Object) {
-    // console.log(stateIn.elements.elements.pointer.animations.animations[0].steps[0].position.delta)
-    console.log(stateIn.elements.elements.pointer.animations.animations[0].state.steps[0].state.position.delta)
     const state = parseState(stateIn, this);
-    // console.log(state);
-    console.log(state.elements.elements.pointer.animations.animations[0].steps[0].position.delta)
     setState(this, state);
-    // this.elements._finishSetState(this);
-    // this.elements.setState(state.elements);
     this.elements.setTimeDelta(performance.now() / 1000 - this.stateTime);
     this.animateNextFrame();
   }
@@ -549,6 +546,11 @@ class Diagram {
   // }
 
   initialize() {
+    const map = new FunctionMap();
+    map.add('tools.math.easein', math.easein);
+    map.add('tools.math.easeout', math.easeout);
+    map.add('tools.math.easeinout', math.easeinout);
+    map.add('tools.math.linear', math.linear);
     this.setFirstTransform();
     this.animateNextFrame();
   }

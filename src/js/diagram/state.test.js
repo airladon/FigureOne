@@ -2,8 +2,9 @@ import {
   Point, Rect, Transform, Line,
 } from '../tools/g2';
 import {
-  getState, parseState,
+  getState,
 } from './state';
+import parseState from './parseState';
 // import { round } from '../tools/math';
 
 describe('state', () => {
