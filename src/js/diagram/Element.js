@@ -3656,11 +3656,19 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  _finishSetState(Diagram: diagram) {
+  _finishSetState(diagram: Diagram) {
     super._finishSetState(diagram);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       element._finishSetState(diagram);
+    }
+  }
+
+  setTimeDelta(delta: number) {
+    super.setTimeDelta(delta);
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.setTimeDelta(delta);
     }
   }
 }

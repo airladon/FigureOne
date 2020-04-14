@@ -314,7 +314,7 @@ class Diagram {
     if (this.elements.name === '') {
       this.elements.name = 'diagramRoot';
     }
-    this.stateTime = performance.now();
+    this.stateTime = performance.now() / 1000;
 
     // this.updateFontSize = optionsToUse.updateFontSize;
 
@@ -358,7 +358,7 @@ class Diagram {
   }
 
   getState() {
-    this.stateTime = performance.now();
+    this.stateTime = performance.now() / 1000;
     return getState(this, [
       'lastDrawTime',
       'elements',
@@ -368,10 +368,9 @@ class Diagram {
 
   setState(state: Object) {
     setState(this, state);
-    console.log(this)
     this.elements._finishSetState(this);
     // this.elements.setState(state.elements);
-    this.elements.setTimeDelta(performance.now() - this.stateTime);
+    this.elements.setTimeDelta(performance.now() / 1000 - this.stateTime);
     this.animateNextFrame();
   }
 
@@ -1158,7 +1157,6 @@ class Diagram {
     }
     this.drawQueued = false;
     this.clearContext(canvasIndex);
-
     // console.log('really drawing')
     this.elements.draw(
       this.spaceTransforms.diagramToGL,
