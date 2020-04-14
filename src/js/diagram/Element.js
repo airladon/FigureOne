@@ -33,6 +33,7 @@ import type {
 // eslint-disable-next-line import/no-cycle
 import * as animations from './Animation/Animation';
 import WebGLInstance from './webgl/webgl';
+import type Diagram from './Diagram';
 
 // eslint-disable-next-line import/no-cycle
 // import {
@@ -574,6 +575,18 @@ class DiagramElement {
   _getState() {
     return getState(this, this._getStateProperties());
   }
+
+  _finishSetState(diagram: Diagram) {
+    // Object.keys(this).forEach((prop) => {
+    //   if (this[prop]._finishSetState != null) {
+    //     this[prop]._finishSetState();
+    //   }
+    // });
+    this.animations._finishSetState(diagram);
+  }
+  // _setState(state: Object) {
+  //   setState
+  // }
 
   setTimeDelta(delta: number) {
     if (this.animations.state === 'animating') {
@@ -3640,6 +3653,14 @@ class DiagramElementCollection extends DiagramElement {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       element.saveScenarios(scenarioName);
+    }
+  }
+
+  _finishSetState(Diagram: diagram) {
+    super._finishSetState(diagram);
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element._finishSetState(diagram);
     }
   }
 }

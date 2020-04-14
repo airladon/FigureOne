@@ -12,6 +12,7 @@ import { DiagramElement } from '../Element';
 import * as anim from './Animation';
 import { joinObjects, duplicateFromTo } from '../../tools/tools';
 import { getState } from '../../tools/g2';
+import type Diagram from '../Diagram';
 
 export type TypeAnimationManagerInputOptions = {
   element?: DiagramElement;
@@ -57,6 +58,14 @@ export default class AnimationManager {
       'state',
       'options',
     ]);
+  }
+
+  _finishSetState(diagram: Diagram) {
+    this.animations.forEach((animation) => {
+      // if (animation._finishSetState != null) {
+      animation._finishSetState(diagram);
+      // }
+    });
   }
 
   setTimeDelta(delta: number) {

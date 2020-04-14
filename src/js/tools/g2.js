@@ -2733,10 +2733,23 @@ function getState(
   return state;
 }
 
-function setState(obj: Object, state: Object) {
-  joinObjects(obj, getDef(state));
-
+function setState(obj: Object, stateIn: Object) {
+  joinObjects(obj, getDef(stateIn));
+  // const state = getDef(stateIn);
+  
   // Object.keys(state).forEach((prop) => {
+  //   const value = state[prop];
+  //   if (
+  //     typeof value === 'string'
+  //     || typeof value === 'number'
+  //     || typeof value === 'boolean'
+  //     || value === null) {
+  //   ) {
+  //     obj[prop] = value;
+  //   }
+  //   if (Array.isArray(value) && Array.isArray) {
+  //     for (let i = 0; i < value.length; i += 1)
+  //   }
   //   if (obj[prop] != null && obj[prop]._setState != null) {
   //     obj[prop]._setState(getDef(state[prop]));
   //   } else {
@@ -2744,6 +2757,52 @@ function setState(obj: Object, state: Object) {
   //   }
   // });
 }
+
+// function setState(obj: Object, state: Object) {
+//   const processValue = (value) => {
+//     if (
+//       typeof value === 'number'
+//       || typeof value === 'string'
+//       || typeof value === 'boolean'
+//       || value == null
+//     ) {
+//       return value;
+//     }
+//     if (Array.isArray(value)) {
+//       const out = [];
+//       value.forEach((v) => {
+//         out.push(processValue);
+//       });
+//       return out;
+//     }
+//     if (value._setState)
+//   };
+
+//   Object.keys(state).forEach((prop) => {
+//     const value = state[prop];
+//     if (
+//       typeof value === 'number'
+//       || typeof value === 'string'
+//       || typeof value === 'boolean'
+//       || value == null
+//     ) {
+//       obj[prop] = value; // eslint-disable-line no-param-reassign
+//       return;
+//     }
+//     if (Array.isArray(value)) {
+//       for (let i = 0; i < obj[prop].length; i += 1) {
+//         // eslint-disable-next-line no-param-reassign
+//         obj[prop][i] = setState(obj[prop][i], value);
+//       }
+//       return;
+//     }
+//     if (obj[prop]._setState != null) {
+//       obj[prop]._setState(value);
+//       return;
+//     }
+//     obj[prop] = setState(obj[prop], value); // eslint-disable-line no-param-reassign
+//   });
+// }
 
 export {
   point,

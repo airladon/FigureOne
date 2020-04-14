@@ -16,6 +16,8 @@ import type {
 // eslint-disable-next-line import/no-cycle
 import * as animation from './Animation';
 import { joinObjects, duplicateFromTo } from '../../tools/tools';
+import { getState, setState } from '../../tools/g2';
+import type Diagram from '../Diagram';
 
 export type TypeAnimationBuilderInputOptions = {
   element?: DiagramElement;
@@ -40,6 +42,16 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     this.element = options.element;
     return this;
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  // _finishSetState(diagram: Diagram) {
+  //   if (this.element != null && typeof this.element === 'string') {
+  //     const element = diagram.getElement(this.element);
+  //     if (element != null) {
+  //       this.element = element;
+  //     }
+  //   }
+  // }
 
   custom(...optionsIn: Array<TypeCustomAnimationStepInputOptions>) {
     this.then(new animation.CustomAnimationStep(...optionsIn));

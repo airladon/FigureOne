@@ -10,6 +10,10 @@
 import {
   joinObjects, duplicateFromTo, generateRandomString,
 } from '../../tools/tools';
+import {
+  getState,
+} from '../../tools/g2';
+import type Diagram from '../Diagram';
 
 export type TypeAnimationStepInputOptions = {
   onFinish?: ?(boolean) => void;
@@ -68,6 +72,37 @@ export default class AnimationStep {
     this.startTimeOffset = 0;
     return this;
   }
+
+  // _getStateProperties(): Array<string> {  // eslint-disable-line class-methods-use-this
+  //   return Object.keys(this);
+  // }
+  _getState() {
+    const keys = [];
+    Object.keys(this).forEach((key) => {
+      if (key !== 'element') {
+        keys.push(key);
+      }
+    });
+
+    const state = getState(this, keys);
+    if (this.element != null) {
+      state.element = this.element.getPath();
+    }
+    return state;
+  }
+
+  _finishSetState(diagram: Diagram) {
+    if (this.element != null && typeof this.element === 'string') {
+      const element = diagram.getElement(this.element);
+      if (element != null) {
+        this.element = element;
+      }
+    }
+  }
+
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  // _finishSetState(diagram: Diagram) {
+  // }
 
   setTimeDelta(delta: number) {
     this.startTime += delta;

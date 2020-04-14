@@ -368,6 +368,9 @@ class Diagram {
 
   setState(state: Object) {
     setState(this, state);
+    console.log(this)
+    this.elements._finishSetState(this);
+    // this.elements.setState(state.elements);
     this.elements.setTimeDelta(performance.now() - this.stateTime);
     this.animateNextFrame();
   }
