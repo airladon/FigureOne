@@ -452,7 +452,7 @@ type TypeEquationGoToFormOptions = {
     cancelGoTo?: boolean;
     skipToTarget?: boolean;
   },
-  callback?: ?() => void,
+  callback?: ?(string | (() => void)),
 }
 
 // export const foo = () => {};
@@ -1463,16 +1463,18 @@ export class Equation extends DiagramElementCollection {
       }
       if (duration === 0) {
         this.showForm(subForm);
-        if (options.callback != null) {
-          options.callback();
-        }
+        this.execFn(options.callback);
+        // if (options.callback != null) {
+        //   options.callback();
+        // }
       } else {
         this.eqn.isAnimating = true;
         const end = () => {
           this.eqn.isAnimating = false;
-          if (options.callback != null) {
-            options.callback();
-          }
+          this.execFn(options.callback);
+          // if (options.callback != null) {
+          //   options.callback();
+          // }
         };
         if (options.animate === 'move') {
           // console.log('move', duration, options, subForm.duration)
@@ -1514,13 +1516,15 @@ export class Equation extends DiagramElementCollection {
           } else {  // $FlowFixMe
             start = getPoint(this.eqn.formRestart.moveFrom);
           }
+          const showFormCallback = () => {  // $FlowFixMe
+            this.showForm(subForm.name, subFormToUse, false);
+          };
+          this.fnMap.add('_equationShowFormCallback', showFormCallback());
           this.animations.new()
             .dissolveOut({ duration: options.dissolveOutTime })
             .position({ target: start, duration: 0 })
             .trigger({
-              callback: () => {   // $FlowFixMe
-                this.showForm(subForm.name, subFormToUse, false);
-              },
+              callback: 'showFormCallback',
               duration: 0.01,
             })
             .position({ target, duration })
@@ -1657,7 +1661,7 @@ export class Equation extends DiagramElementCollection {
     name: string,
     duration: number | null = null,
     delay: number = 0,
-    callback: null | () => void = null,
+    callback: null | string | (() => void) = null,
   ) {
     // this.stopAnimatingColor(true, true);
     // this.stopAnimatingColor(true, true);

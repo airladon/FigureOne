@@ -58,7 +58,7 @@ export type TypeCollectionMethods = {
     time?: number,
     delay?: number,
     rotDirection?: number,
-    callback?: ?(?mixed) => void,
+    callback?: ?(string | ((?mixed) => void)),
     easeFunction?: (number) => number): number,
 };
 
@@ -315,11 +315,12 @@ export default class EquationForm extends Elements {
     dissolve: 'in' | 'out' = 'in',
     delay: number = 0.01,
     time: number = 1,
-    callback: ?(boolean) => void = null,
+    callback: (?string | ((boolean) => void)) = null,
   ) {
     if (elements.length === 0) {
       if (callback) {
-        callback(false);
+        this.execFn(callback, false);
+        // callback(false);
         return;
       }
     }
@@ -329,7 +330,8 @@ export default class EquationForm extends Elements {
       completed += 1;
       if (completed === count) {
         if (callback) {
-          callback(cancelled);
+          // callback(cancelled);
+          this.execFn(callback, cancelled);
         }
       }
     };
@@ -508,7 +510,7 @@ export default class EquationForm extends Elements {
     dissolveOutTime: number,
     moveTime: number | null,
     dissolveInTime: number,
-    callback: ?(?mixed) => void = null,
+    callback: ?(string | ((?mixed) => void)) = null,
     fromWhere: ?'fromPrev' | 'fromNext' = null,
     dissolveInBeforeMove: boolean = false,
   ) {
@@ -592,7 +594,7 @@ export default class EquationForm extends Elements {
       this.dissolveElements(elementsToHide, 'out', delay, dissolveOutTime, dissolveOutCallback);
       cumTime += dissolveOutTime;
     } else if (dissolveOutCallback != null) {
-      dissolveOutCallback();
+      this.execFn(dissolveOutCallback);
     }
 
     this.applyElementMods();
