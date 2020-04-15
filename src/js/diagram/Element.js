@@ -1050,9 +1050,9 @@ class DiagramElement {
       if (scenario.color) {
         color = scenario.color.slice();
       }
-      if (scenario.opacity) {
-        ({ opacity } = scenario);
-      }
+      // if (scenario.opacity) {
+      //   ({ opacity } = scenario);
+      // }
       if (scenario.isShown) {
         ({ isShown } = scenario);
       }

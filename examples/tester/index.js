@@ -144,7 +144,7 @@ diagram.addElements([
           // fill: true,
           width: 0.01,
           color: [1, 1, 0, 1],
-          sides: 50,
+          sides: 5,
           radius: 0.05,
         },
       },
@@ -154,7 +154,7 @@ diagram.addElements([
         options: {
           fill: true,
           color: [1, 1, 0, 1],
-          sides: 50,
+          sides: 5,
           radius: 0.05,
         },
       },
@@ -197,6 +197,7 @@ diagram.getElement('b').setMovable();
 diagram.initialize();
 diagram.getElement('pointer').animations.new()
   .position({ target: [0.5, 0], duration: 4 })
+  .rotation({ target: 1, duration: 2 })
   .start();
 // const state = diagram.getState();
 let state;
@@ -204,6 +205,7 @@ let state;
 
 setTimeout(() => {
   state = diagram.getState();
+  console.log(state)
   // console.log(state);
   // console.log(diagram.elements._pointer.animations.animations[0].steps)
 }, 1000)

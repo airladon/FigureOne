@@ -1,6 +1,6 @@
 // @flow
 import {
-  PositionAnimationStep, AnimationBuilder,
+  PositionAnimationStep, AnimationBuilder, RotationAnimationStep,
 } from './Animation/Animation';
 
 import type Diagram from './Diagram';
@@ -57,6 +57,12 @@ function parseState(state: Object, diagram: Diagram) {
     }
     if (state.f1Type === 'positionAnimationStep') {
       return new PositionAnimationStep()._fromState(
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+    if (state.f1Type === 'rotationAnimationStep') {
+      return new RotationAnimationStep()._fromState(
         parseState(state.state, diagram),
         diagram.getElement.bind(diagram),
       );
