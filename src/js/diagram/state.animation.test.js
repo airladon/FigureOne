@@ -156,4 +156,39 @@ describe('Animation Step State', () => {
     expect(math.round(elem1.getPosition().x)).toBe(1);
     expect(math.round(elem1.getRotation())).toBe(1);
   });
+  test('Color', () => {
+    elem1.color = [0.3, 1, 1, 1];
+    elem1.animations.new()
+      .color({
+        target: [0.6, 1, 1, 1],
+        duration: 3,
+        progression: 'linear',
+      })
+      .start();
+    now = 0;
+    diagram.draw(now);
+    now = 0.5;
+    diagram.draw(now);
+    expect(math.round(elem1.color[0])).toBe(0.35);
+    const state = diagram.getState();
+    now = 1;
+    diagram.draw(now);
+    expect(math.round(elem1.color[0])).toBe(0.4);
+    elem1.stop();
+    expect(elem1.animations.animations).toHaveLength(0);
+
+    // now lets delay 10s
+    now = 11;
+    diagram.setState(state);
+    diagram.draw(now);
+    expect(math.round(elem1.color[0])).toBe(0.35);
+
+    now = 11.1;
+    diagram.draw(now);
+    expect(math.round(elem1.color[0])).toBe(0.36);
+
+    now = 11.5;
+    diagram.draw(now);
+    expect(math.round(elem1.color[0])).toBe(0.4);
+  });
 });
