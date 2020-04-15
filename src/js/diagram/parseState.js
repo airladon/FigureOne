@@ -1,7 +1,7 @@
 // @flow
 import {
   PositionAnimationStep, AnimationBuilder, RotationAnimationStep,
-  ScaleAnimationStep, TransformAnimationStep,
+  ScaleAnimationStep, TransformAnimationStep, ColorAnimationStep,
 } from './Animation/Animation';
 
 import type Diagram from './Diagram';
@@ -76,6 +76,12 @@ function parseState(state: Object, diagram: Diagram) {
     }
     if (state.f1Type === 'transformAnimationStep') {
       return new TransformAnimationStep()._fromState(
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+    if (state.f1Type === 'colorAnimationStep') {
+      return new ColorAnimationStep()._fromState(
         parseState(state.state, diagram),
         diagram.getElement.bind(diagram),
       );
