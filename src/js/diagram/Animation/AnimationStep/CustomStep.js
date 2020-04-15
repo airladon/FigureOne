@@ -62,13 +62,14 @@ export class CustomAnimationStep extends AnimationStep {
   setFrame(deltaTime: number) {
     const percentTime = deltaTime / this.duration;
     const percentComplete = this.getPercentComplete(percentTime);
-    if (this.callback != null) {
-      if (typeof this.callback === 'string') {
-        this.fnMap.exec(this.callback, percentComplete);
-      } else {
-        this.callback(percentComplete);
-      }
-    }
+    this.execFn(this.callback, percentComplete);
+    // if (this.callback != null) {
+    //   if (typeof this.callback === 'string') {
+    //     this.fnMap.exec(this.callback, percentComplete);
+    //   } else {
+    //     this.callback(percentComplete);
+    //   }
+    // }
   }
 
   getPercentComplete(percentTime: number, invert: boolean = false) {
@@ -86,14 +87,15 @@ export class CustomAnimationStep extends AnimationStep {
   }
 
   setToEnd() {
-    if (this.callback != null) {
-      // this.callback(1);
-      if (typeof this.callback === 'string') {
-        this.fnMap.exec(this.callback, 1);
-      } else {
-        this.callback(1);
-      }
-    }
+    // if (this.callback != null) {
+    //   // this.callback(1);
+    //   if (typeof this.callback === 'string') {
+    //     this.fnMap.exec(this.callback, 1);
+    //   } else {
+    //     this.callback(1);
+    //   }
+    // }
+    this.execFn(this.callback, 1);
   }
   // finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
   //   if (this.state === 'idle') {
