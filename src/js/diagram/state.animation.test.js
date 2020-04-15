@@ -379,4 +379,46 @@ describe('Animation Step State', () => {
     diagram.draw(now);
     expect(percentComplete).toBe(0.5);
   });
+  test('Delay', () => {
+    elem1.animations.new()
+      .position({ target: [1, 0], duration: 1 })
+      .delay(1)
+      .position({ target: [2, 0], duration: 1 })
+      .start();
+    now = 0;
+    diagram.draw(now);
+    now = 0.5;
+    diagram.draw(now);
+    expect(elem1.getPosition().round().x).toBe(0.5);
+    now = 1;
+    diagram.draw(now);
+    expect(elem1.getPosition().round().x).toBe(1);
+    now = 1.5;
+    diagram.draw(now);
+    expect(elem1.getPosition().round().x).toBe(1);
+    const state = diagram.getState();
+    now = 2;
+    diagram.draw(now);
+    expect(elem1.getPosition().round().x).toBe(1);
+    now = 2.5;
+    diagram.draw(now);
+    expect(elem1.getPosition().round().x).toBe(1.5);
+
+    elem1.stop();    
+    expect(elem1.animations.animations).toHaveLength(0);
+
+    // now lets delay 10s
+    now = 11.5;
+    diagram.setState(state);
+    diagram.draw(now);
+    expect(elem1.getPosition().round().x).toBe(1);
+
+    now = 12;
+    diagram.draw(now);
+    expect(elem1.getPosition().round().x).toBe(1);
+
+    now = 12.5;
+    diagram.draw(now);
+    expect(elem1.getPosition().round().x).toBe(1.5);
+  });
 });

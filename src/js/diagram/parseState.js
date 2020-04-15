@@ -3,6 +3,7 @@ import {
   PositionAnimationStep, AnimationBuilder, RotationAnimationStep,
   ScaleAnimationStep, TransformAnimationStep, ColorAnimationStep,
   OpacityAnimationStep, PulseAnimationStep, CustomAnimationStep,
+  DelayStep,
 } from './Animation/Animation';
 
 import type Diagram from './Diagram';
@@ -101,6 +102,12 @@ function parseState(state: Object, diagram: Diagram) {
     }
     if (state.f1Type === 'customAnimationStep') {
       return new CustomAnimationStep()._fromState(
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+    if (state.f1Type === 'delayAnimationStep') {
+      return new DelayStep()._fromState(
         parseState(state.state, diagram),
         diagram.getElement.bind(diagram),
       );
