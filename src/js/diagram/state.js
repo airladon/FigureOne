@@ -66,8 +66,25 @@ function getState(
   };
   // console.log(stateProperties)
   stateProperties.forEach((prop) => {
-    // console.log('prop', prop)
-    state[prop] = processValue(obj[prop]);
+    const processPath = (currentState, currentObj, remainingPath) => {
+      const [nextLevel] = remainingPath;
+      if (remainingPath.length === 1) {
+        return [currentState, currentObj, remainingPath[0]];
+      }
+      if (currentState[nextLevel] == null) {
+        currentState[nextLevel] = {}; // eslint-disable-line no-param-reassign
+      }
+      if (currentObj[nextLevel] == null) {
+        return null;
+      }
+      return processPath(currentState[nextLevel], currentObj[nextLevel], remainingPath.slice(1));
+    };
+    const result = processPath(state, obj, prop.split('.'));
+    if (result == null) {
+      return;
+    }
+    const [statePath, objPath, remainingProp] = result;
+    statePath[remainingProp] = processValue(objPath[remainingProp]);
   });
   return state;
 }
