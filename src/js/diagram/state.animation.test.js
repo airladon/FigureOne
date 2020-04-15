@@ -648,4 +648,46 @@ describe('Animation Step State', () => {
     expect(elem1.triggerFlag3).toBe(1);
     expect(elem1.triggerFlag4).toBe(1);
   });
+  test('When Finished', () => {
+    elem1.setRotation(0);
+    const callback = jest.fn(() => {});
+    diagram.fnMap.add('callback', callback);
+    elem1.animations.new()
+      .rotation({ target: 1, duration: 1, progression: 'linear' })
+      .whenFinished('callback')
+      .start();
+
+    now = 0;
+    diagram.draw(now);
+    now = 0.5;
+    diagram.draw(now);
+    expect(math.round(elem1.getRotation())).toBe(0.5);
+    expect(callback.mock.calls.length).toBe(0);
+    const state = diagram.getState();
+
+    now = 0.6;
+    diagram.draw(now);
+    expect(math.round(elem1.getRotation())).toBe(0.6);
+    expect(callback.mock.calls.length).toBe(0);
+    elem1.stop();
+    expect(elem1.animations.animations).toHaveLength(0);
+    expect(callback.mock.calls.length).toBe(1);
+
+    // now lets delay 10s
+    now = 10.6;
+    diagram.setState(state);
+    diagram.draw(now);
+    expect(math.round(elem1.getRotation())).toBe(0.5);
+    expect(callback.mock.calls.length).toBe(1);
+
+    now = 11;
+    diagram.draw(now);
+    expect(math.round(elem1.getRotation())).toBe(0.9);
+    expect(callback.mock.calls.length).toBe(1);
+
+    now = 11.1;
+    diagram.draw(now);
+    expect(math.round(elem1.getRotation())).toBe(1);
+    expect(callback.mock.calls.length).toBe(2);
+  });
 });
