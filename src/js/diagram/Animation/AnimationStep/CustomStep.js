@@ -1,5 +1,5 @@
 // @flow
-import * as tools from '../../../tools/math';
+// import * as tools from '../../../tools/math';
 import {
   joinObjects, duplicateFromTo,
 } from '../../../tools/tools';
@@ -17,7 +17,7 @@ export type TypeCustomAnimationStepInputOptions = {
 export class CustomAnimationStep extends AnimationStep {
   callback: ?(number) => void;
   startPercent: ?number;
-  progression: (number) => number;
+  progression: string | ((number) => number);
 
   constructor(...optionsIn: Array<TypeCustomAnimationStepInputOptions>) {
     const AnimationStepOptionsIn = joinObjects({}, ...optionsIn);
@@ -28,21 +28,20 @@ export class CustomAnimationStep extends AnimationStep {
       progression: 'linear',
     };
     const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
-    if (options.progression === 'linear') {
-      this.progression = tools.linear;
+    this.progression = options.progression;
+    if (this.progression === 'linear') {
+      this.progression = 'tools.math.linear';
     } else if (options.progression === 'easein') {
-      this.progression = tools.easein;
+      this.progression = 'tools.math.easein';
     } else if (options.progression === 'easeout') {
-      this.progression = tools.easeout;
+      this.progression = 'tools.math.easeout';
     } else if (options.progression === 'easeinout') {
-      this.progression = tools.easeinout;
-    } else {
-      this.progression = options.progression;
+      this.progression = 'tools.math.easeinout';
     }
     this.callback = options.callback;
     this.startPercent = options.startPercent;
     if (typeof this.progression === 'function') {
-      this.startTimeOffset = this.getPercentComplete(options.startPercent, true) * options.duration;
+      this.startTimeOffset = this.progression(options.startPercent, true) * options.duration;
     }
     this.duration = options.duration;
   }
@@ -59,16 +58,7 @@ export class CustomAnimationStep extends AnimationStep {
     if (typeof this.progression === 'function') {
       return (this.progression(percentTime));
     }
-    if (this.progression === 'linear') {
-      return tools.linear(percentTime);
-    }
-    if (this.progression === 'easein') {
-      return tools.easein(percentTime);
-    }
-    if (this.progression === 'easeout') {
-      return tools.easeout(percentTime);
-    }
-    return tools.easeinout(percentTime);
+    return this.fnMap.exec(this.progression, percentTime) || 1;
   }
 
   setToEnd() {

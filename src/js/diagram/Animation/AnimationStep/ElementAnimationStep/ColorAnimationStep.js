@@ -5,7 +5,7 @@
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
-import * as tools from '../../../../tools/math';
+// import * as tools from '../../../../tools/math';
 import type { TypeElementAnimationStepInputOptions } from '../ElementAnimationStep';
 import type { TypeOpacityAnimationStepInputOptions } from './OpacityAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
@@ -96,22 +96,6 @@ export class ColorAnimationStep extends ElementAnimationStep {
     } else {
       this.duration = 0;
     }
-  }
-
-  getPercentComplete(percentTime: number) {
-    if (typeof this.progression === 'function') {
-      return (this.progression(percentTime));
-    }
-    if (this.progression === 'linear') {
-      return tools.linear(percentTime);
-    }
-    if (this.progression === 'easein') {
-      return tools.easein(percentTime);
-    }
-    if (this.progression === 'easeout') {
-      return tools.easeout(percentTime);
-    }
-    return tools.easeinout(percentTime);
   }
 
   setFrame(deltaTime: number) {

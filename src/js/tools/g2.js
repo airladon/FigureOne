@@ -5,7 +5,7 @@ import {
 } from './math';
 // import { Console } from '../../tools/tools';
 import * as m2 from './m2';
-import { joinObjects } from './tools';
+// import { joinObjects } from './tools';
 
 
 function quadraticBezier(P0: number, P1: number, P2: number, t: number) {

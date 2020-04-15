@@ -2,7 +2,7 @@
 // import {
 //   Transform, Point, getMaxTimeFromVelocity,
 // } from '../../../../tools/g2';
-import * as tools from '../../../../tools/math';
+// import * as tools from '../../../../tools/math';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
@@ -96,22 +96,6 @@ export class OpacityAnimationStep extends ElementAnimationStep {
         element.opacity = 1;
       }
     }
-  }
-
-   getPercentComplete(percentTime: number) {
-    if (typeof this.progression === 'function') {
-      return (this.progression(percentTime));
-    }
-    if (this.progression === 'linear') {
-      return tools.linear(percentTime);
-    }
-    if (this.progression === 'easein') {
-      return tools.easein(percentTime);
-    }
-    if (this.progression === 'easeout') {
-      return tools.easeout(percentTime);
-    }
-    return tools.easeinout(percentTime);
   }
 
   setFrame(deltaTime: number) {
