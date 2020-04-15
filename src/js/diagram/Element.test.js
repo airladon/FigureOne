@@ -367,12 +367,12 @@ describe('Animationa and Movement', () => {
         expectM = m2.mul(element.transform.matrix(), pulseTransform.matrix());
         expect(element.lastDrawPulseTransform.matrix()).toEqual(expectM);
 
-        element.draw(identity, 1.0);
+        element.draw(identity, 1);
         pulseTransform = new Transform()
           .scale(1, 1).rotate(0).translate(0, 0);
         expectM = m2.mul(element.transform.matrix(), pulseTransform.matrix());
         expect(element.lastDrawPulseTransform.matrix()).toEqual(expectM);
-        expect(element.state.isPulsing).toBe(true);
+        expect(element.state.isPulsing).toBe(false);
 
         element.draw(identity, 1.1);
         expect(element.lastDrawPulseTransform.matrix()).toEqual(expectM);
