@@ -506,6 +506,7 @@ DiagramElementPrimitive {
       "startTime": -1,
     },
   },
+  "stateProperties": Array [],
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
