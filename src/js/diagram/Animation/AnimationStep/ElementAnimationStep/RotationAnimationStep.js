@@ -116,7 +116,6 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     const percentTime = deltaTime / this.duration;
     const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;
-
     let nextR = this.rotation.start + this.rotation.delta * p;
     nextR = clipAngle(nextR, this.rotation.clipTo);
     const { element } = this;

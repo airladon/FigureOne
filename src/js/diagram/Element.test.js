@@ -12,6 +12,12 @@ import {
   linear, round,
 } from '../tools/math';
 import * as m2 from '../tools/m2';
+import makeDiagram from '../__mocks__/makeDiagram';
+
+jest.mock('./Gesture');
+jest.mock('./webgl/webgl');
+jest.mock('./DrawContext2D');
+
 
 describe('Animationa and Movement', () => {
   describe('DiagramElementPrimitive', () => {
@@ -29,7 +35,9 @@ describe('Animationa and Movement', () => {
     describe('Animation', () => {
       let element;
       let identity;
+      // let diagram;
       beforeEach(() => {
+        makeDiagram();  // this is just initializing the global functions
         const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
         element = new DiagramElementPrimitive(
           square,
