@@ -17,7 +17,7 @@ export type TypeCustomAnimationStepInputOptions = {
 export class CustomAnimationStep extends AnimationStep {
   callback: ?(number) => void;
   startPercent: ?number;
-  progression: string | ((number) => number);
+  progression: string | ((number, ?boolean) => number);
 
   constructor(...optionsIn: Array<TypeCustomAnimationStepInputOptions>) {
     const AnimationStepOptionsIn = joinObjects({}, ...optionsIn);
@@ -40,9 +40,10 @@ export class CustomAnimationStep extends AnimationStep {
     }
     this.callback = options.callback;
     this.startPercent = options.startPercent;
-    if (typeof this.progression === 'function') {
-      this.startTimeOffset = this.progression(options.startPercent, true) * options.duration;
-    }
+    // if (typeof this.progression === 'function') {
+    //   this.startTimeOffset = this.progression(options.startPercent, true) * options.duration;
+    // }
+    this.startTimeOffset = this.getPercentComplete(options.startPercent, true) * options.duration;
     this.duration = options.duration;
   }
 
@@ -54,11 +55,18 @@ export class CustomAnimationStep extends AnimationStep {
     }
   }
 
-  getPercentComplete(percentTime: number) {
+  getPercentComplete(percentTime: number, invert: boolean = false) {
+    if (typeof this.progression === 'string') {
+      const result = this.fnMap.exec(this.progression, percentTime, invert);
+      if (result == null) {
+        return 0;
+      }
+      return result;
+    }
     if (typeof this.progression === 'function') {
       return (this.progression(percentTime));
     }
-    return this.fnMap.exec(this.progression, percentTime) || 1;
+    return 0;
   }
 
   setToEnd() {

@@ -37,7 +37,7 @@ describe('Position Animation', () => {
     });
     expect(step.onFinish).toBe(onFinish);
     expect(step.type).toBe('position');
-    expect(step.progression).toBe(math.easeinout);
+    expect(step.progression).toBe('tools.math.easeinout');
     expect(step.position.start).toBe(start);
     expect(step.position.target).toBe(target);
     expect(step.position.delta).toBe(null);

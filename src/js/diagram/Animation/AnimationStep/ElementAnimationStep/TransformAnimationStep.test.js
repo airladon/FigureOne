@@ -36,7 +36,7 @@ describe('Transfrom Animation Unit', () => {
     });
     expect(step.onFinish).toBe(onFinish);
     expect(step.type).toBe(type);
-    expect(step.progression).toBe(math.easeinout);
+    expect(step.progression).toBe('tools.math.easeinout');
     expect(step.transform.start).toBe(start);
     expect(step.transform.target).toBe(target);
     expect(step.transform.delta).toBe(null);

@@ -601,9 +601,9 @@ function parsePoint<T>(pIn: TypeParsablePoint, onFail: T): Point | T | null {
     }
     return onFailToUse;
   }
-  // if (typeof p === 'number') {
-  //   return new Point(p, p);
-  // }
+  if (typeof p === 'number') {
+    return new Point(p, p);
+  }
   // if (typeof (p) === 'object') {
   //   const keys = Object.keys(p);
   //   if (keys.indexOf('x') > -1 && keys.indexOf('y') > -1) {
