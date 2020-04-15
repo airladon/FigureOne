@@ -50,11 +50,12 @@ export default class ElementAnimationStep extends AnimationStep {
     }
   }
 
-  _getDefProperties() {  // eslint-disable-line class-methods-use-this
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    // console.log('elementstep');
     return [...super._getStateProperties(),
-      'element',
+      // 'element',
       'type',
-      'duration',
+      // 'duration',
       'progression',
     ];
   }

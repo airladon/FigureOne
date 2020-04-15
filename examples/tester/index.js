@@ -202,7 +202,7 @@ diagram.getElement('pointer').animations.new()
 // const state = diagram.getState();
 let state;
 // console.log(diagram)
-
+console.log(diagram)
 setTimeout(() => {
   state = diagram.getState();
   console.log(state)

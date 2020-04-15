@@ -67,9 +67,11 @@ export default class RotationAnimationStep extends ElementAnimationStep {
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
-    return [...super._getStateProperties(),
+    const a = [...super._getStateProperties(),
       'rotation',
     ];
+    // console.log('rotationStep')
+    return a;
   }
 
   _getStateName() {  // eslint-disable-line class-methods-use-this
