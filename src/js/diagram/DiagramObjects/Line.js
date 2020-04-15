@@ -295,8 +295,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   setLength: (number) => void;
   setEndPoints: (TypeParsablePoint, TypeParsablePoint, ?number) => void;
   // eslint-disable-next-line max-len
-  animateLengthTo: (?number, ?number, ?boolean, ?() => void, ?(number, number) => void, ?boolean) => void;
-  grow: (?number, ?number, ?boolean, ?() => void) => void;
+  animateLengthTo: (?number, ?number, ?boolean, ?(string | (() => void)), ?(string | ((number, number) => void)), ?boolean) => void;
+  grow: (?number, ?number, ?boolean, ?(string | (() => void))) => void;
   setMovable: (?boolean, ?('translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale'), ?number, ?Rect) => void;
   addArrow1: (?number, ?number) => void;
   addArrow2: (?number, ?number) => void;
@@ -1041,8 +1041,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     toLength: number = 1,
     time: number = 1,
     finishOnCancel: boolean = true,
-    callback: ?() => void = null,
-    onStepCallback: ?(number, number) => void = null,
+    callback: ?(string | (() => void)) = null,
+    onStepCallback: ?(string | ((number, number) => void)) = null,
     stop: ?boolean = true,
   ) {
     if (stop) {
@@ -1053,20 +1053,27 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     const func = (percent) => {
       this.setLength(initialLength + deltaLength * percent);
       if (onStepCallback != null) {
-        onStepCallback(percent, initialLength + deltaLength * percent);
+        this.execFn(onStepCallback, percent, initialLength + deltaLength * percent);
+        // onStepCallback(percent, initialLength + deltaLength * percent);
       }
     };
+    this.fnMap.add('_DiagramObjectsLineAnimateLengthToFunc', func);
     const done = () => {
       if (finishOnCancel) {
         this.setLength(initialLength + deltaLength);
       }
-      if (typeof callback === 'function' && callback) {
-        callback();
-      }
+      this.execFn(callback);
+      // if (typeof callback === 'function' && callback) {
+      //   callback();
+      // }
     };
+    this.fnMap.add('_DiagramObjectsLineAnimateLengthToCallback', done);
     this.animations.new('Line Length')
-      .custom({ callback: func, duration: time })
-      .whenFinished(done)
+      .custom({
+        callback: '_DiagramObjectsLineAnimateLengthToFunc',
+        duration: time,
+      })
+      .whenFinished('_DiagramObjectsLineAnimateLengthToCallback')
       .start();
     // this.animations.start();
     this.animateNextFrame();
@@ -1078,7 +1085,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     fromLength: number = 0,
     time: number = 1,
     finishOnCancel: boolean = true,
-    callback: ?() => void = null,
+    callback: ?(string | (() => void)) = null,
     onStepCallback: ?(number, number) => void = null,
   ) {
     this.stop();

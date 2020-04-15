@@ -656,11 +656,11 @@ export class Equation extends DiagramElementCollection {
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
-      'currentForm',
-      'currentSubForm',
-      'isAnimating',
-      'currentFormSeries',
-      'currentFormSeriesName',
+      'eqn.currentForm',
+      'eqn.currentSubForm',
+      'eqn.isAnimating',
+      'eqn.currentFormSeries',
+      'eqn.currentFormSeriesName',
     ];
   }
 
