@@ -53,7 +53,6 @@ export default class AnimationManager {
   }
 
   _state() {
-    // console.log('Manager get state')
     const state = getState(this, [
       'animations',
       'state',

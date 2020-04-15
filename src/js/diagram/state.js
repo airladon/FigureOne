@@ -20,6 +20,7 @@ function getState(
   stateProperties: Array<string>,
   precision: number = 5,
 ) {
+
   // const stateProperties = this._getStateProperties();
   // const path = this.getPath();
   const state: Object = {};

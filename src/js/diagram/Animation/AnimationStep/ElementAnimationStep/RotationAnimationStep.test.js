@@ -128,3 +128,48 @@ describe('Rotation Animation Step', () => {
     expect(elem1.animations.animations).toHaveLength(0);
   });
 });
+describe('Rotation Animation Step State', () => {
+  let elem1;
+  let diagram;
+  let now;
+  beforeEach(() => {
+    diagram = makeDiagram();
+    elem1 = diagram.objects.line();
+    elem1.setRotation(0);
+    diagram.elements.add('elem1', elem1);
+    global.performance.now = () => now * 1000;
+    // global.performance = {
+    //   now: () => now,
+    // };
+  });
+  test('Simple', () => {
+    elem1.animations.new()
+      .rotation({ target: 3, duration: 3, progression: 'linear'})
+      .start();
+    now = 0;
+    diagram.draw(now);
+    now = 0.5;
+    diagram.draw(now);
+    expect(elem1.getRotation()).toBe(0.5);
+    const state = diagram.getState();
+    now = 1;
+    diagram.draw(now);
+    expect(elem1.getRotation()).toBe(1);
+    elem1.stop();
+    expect(elem1.animations.animations).toHaveLength(0);
+
+    // now lets delay 10s
+    now = 11;
+    diagram.setState(state);
+    diagram.draw(now);
+    expect(math.round(elem1.getRotation())).toBe(0.5);
+
+    now = 11.1;
+    diagram.draw(now);
+    expect(math.round(elem1.getRotation())).toBe(0.6);
+
+    now = 11.5;
+    diagram.draw(now);
+    expect(math.round(elem1.getRotation())).toBe(1);
+  });
+});

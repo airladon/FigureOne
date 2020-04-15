@@ -135,6 +135,7 @@ export default class AnimationStep {
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  // console.log('animationStep')
     return [
       'startTime',
       'duration',
@@ -156,7 +157,6 @@ export default class AnimationStep {
   }
 
   _state(precision: number = 5) {
-    // console.log(this._getStateProperties())
     return {
       f1Type: this._getStateName(),
       // def: {
