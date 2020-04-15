@@ -2,6 +2,7 @@
 import {
   PositionAnimationStep, AnimationBuilder, RotationAnimationStep,
   ScaleAnimationStep, TransformAnimationStep, ColorAnimationStep,
+  OpacityAnimationStep, PulseAnimationStep,
 } from './Animation/Animation';
 
 import type Diagram from './Diagram';
@@ -82,6 +83,18 @@ function parseState(state: Object, diagram: Diagram) {
     }
     if (state.f1Type === 'colorAnimationStep') {
       return new ColorAnimationStep()._fromState(
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+    if (state.f1Type === 'opacityAnimationStep') {
+      return new OpacityAnimationStep()._fromState(
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+    if (state.f1Type === 'pulseAnimationStep') {
+      return new PulseAnimationStep()._fromState(
         parseState(state.state, diagram),
         diagram.getElement.bind(diagram),
       );

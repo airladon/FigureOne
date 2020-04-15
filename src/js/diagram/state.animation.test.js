@@ -191,4 +191,159 @@ describe('Animation Step State', () => {
     diagram.draw(now);
     expect(math.round(elem1.color[0])).toBe(0.4);
   });
+  test('Dim Color', () => {
+    elem1.color = [0.3, 1, 1, 1];
+    elem1.dimColor = [0.6, 1, 1, 1];
+    elem1.animations.new()
+      .dim(3)
+      .start();
+    now = 0;
+    diagram.draw(now);
+    now = 0.5;
+    diagram.draw(now);
+    expect(math.round(elem1.color[0])).toBe(0.35);
+    const state = diagram.getState();
+    now = 1;
+    diagram.draw(now);
+    expect(math.round(elem1.color[0])).toBe(0.4);
+    elem1.stop();
+    expect(elem1.animations.animations).toHaveLength(0);
+
+    // now lets delay 10s
+    now = 11;
+    diagram.setState(state);
+    diagram.draw(now);
+    expect(math.round(elem1.color[0])).toBe(0.35);
+
+    now = 11.1;
+    diagram.draw(now);
+    expect(math.round(elem1.color[0])).toBe(0.36);
+
+    now = 11.5;
+    diagram.draw(now);
+    expect(math.round(elem1.color[0])).toBe(0.4);
+  });
+  test('Undim Color', () => {
+    elem1.defaultColor = [0.6, 1, 1, 1];
+    elem1.color = [0.3, 1, 1, 1];
+    elem1.animations.new()
+      .undim(3)
+      .start();
+    now = 0;
+    diagram.draw(now);
+    now = 0.5;
+    diagram.draw(now);
+    expect(math.round(elem1.color[0])).toBe(0.35);
+    const state = diagram.getState();
+    now = 1;
+    diagram.draw(now);
+    expect(math.round(elem1.color[0])).toBe(0.4);
+    elem1.stop();
+    expect(elem1.animations.animations).toHaveLength(0);
+
+    // now lets delay 10s
+    now = 11;
+    diagram.setState(state);
+    diagram.draw(now);
+    expect(math.round(elem1.color[0])).toBe(0.35);
+
+    now = 11.1;
+    diagram.draw(now);
+    expect(math.round(elem1.color[0])).toBe(0.36);
+
+    now = 11.5;
+    diagram.draw(now);
+    expect(math.round(elem1.color[0])).toBe(0.4);
+  });
+  test('Dissolve In', () => {
+    elem1.animations.new()
+      .dissolveIn(3)
+      .start();
+    now = 0;
+    diagram.draw(now);
+    now = 0.5;
+    diagram.draw(now);
+    expect(math.round(elem1.opacity)).toBe(0.1675);
+    const state = diagram.getState();
+    now = 1;
+    diagram.draw(now);
+    expect(math.round(elem1.opacity)).toBe(0.334);
+    elem1.stop();
+    expect(elem1.animations.animations).toHaveLength(0);
+
+    // now lets delay 10s
+    now = 11;
+    diagram.setState(state);
+    diagram.draw(now);
+    expect(math.round(elem1.opacity)).toBe(0.1675);
+
+    now = 11.1;
+    diagram.draw(now);
+    expect(math.round(elem1.opacity)).toBe(0.2008);
+
+    now = 11.5;
+    diagram.draw(now);
+    expect(math.round(elem1.opacity)).toBe(0.334);
+  });
+  test('Dissolve Out', () => {
+    elem1.animations.new()
+      .dissolveOut(3)
+      .start();
+    now = 0;
+    diagram.draw(now);
+    now = 0.5;
+    diagram.draw(now);
+    expect(math.round(elem1.opacity)).toBe(0.8335);
+    const state = diagram.getState();
+    now = 1;
+    diagram.draw(now);
+    expect(math.round(elem1.opacity)).toBe(0.667);
+    elem1.stop();
+    expect(elem1.animations.animations).toHaveLength(0);
+
+    // now lets delay 10s
+    now = 11;
+    diagram.setState(state);
+    diagram.draw(now);
+    expect(math.round(elem1.opacity)).toBe(0.8335);
+
+    now = 11.1;
+    diagram.draw(now);
+    expect(math.round(elem1.opacity)).toBe(0.8002);
+
+    now = 11.5;
+    diagram.draw(now);
+    expect(math.round(elem1.opacity)).toBe(0.667);
+  });
+  test('Pulse', () => {
+    elem1.setScale(1);
+    elem1.animations.new()
+      .pulse({ scale: 2, duration: 2 })
+      .start();
+    now = 0;
+    diagram.draw(now);
+    now = 0.5;
+    diagram.draw(now);
+    expect(math.round(elem1.lastDrawPulseTransform.s().x)).toEqual(1.70711);
+    const state = diagram.getState();
+    now = 1;
+    diagram.draw(now);
+    expect(math.round(elem1.lastDrawPulseTransform.s().x)).toEqual(2);
+    elem1.stop();
+    expect(elem1.animations.animations).toHaveLength(0);
+
+    // now lets delay 10s
+    now = 11;
+    diagram.setState(state);
+    diagram.draw(now);
+    expect(math.round(elem1.lastDrawPulseTransform.s().x)).toEqual(1.70711);
+
+    now = 11.1;
+    diagram.draw(now);
+    expect(math.round(elem1.lastDrawPulseTransform.s().x)).toEqual(1.80902);
+
+    now = 11.5;
+    diagram.draw(now);
+    expect(math.round(elem1.lastDrawPulseTransform.s().x)).toEqual(2);
+  });
 });
