@@ -86,12 +86,6 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     duplicateFromTo(options.translationOptions, this.position.translationOptions);
   }
 
-  // _def() {
-  //   const def = super._def();
-  //   def.f1Type = 'positionAnimationStep';
-  //   def.def.position = joinObjectsWithOptions({ duplicate: true }, {}, this.position);
-  //   return def;
-  // }
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
       'position',
@@ -101,15 +95,6 @@ export default class PositionAnimationStep extends ElementAnimationStep {
   _getStateName() {  // eslint-disable-line class-methods-use-this
     return 'positionAnimationStep';
   }
-
-  // static _fromDef(definition: Object, getElement: (string) => DiagramElement) {
-  //   const obj = new PositionAnimationStep();
-  //   joinObjects(obj, definition);
-  //   if (obj.element != null && typeof obj.element == 'string') {
-  //     obj.element = getElement(obj.element);
-  //   }
-  //   return obj;
-  // }
 
   // On start, calculate the duration, target and delta if not already present.
   // This is done here in case the start is defined as null meaning it is
