@@ -1,4 +1,5 @@
 import * as tools from '../tools/tools';
+import { Transform } from '../tools/g2';
 import makeDiagram from '../__mocks__/makeDiagram';
 import * as math from '../tools/math';
 
@@ -109,5 +110,50 @@ describe('Animation Step State', () => {
     now = 11.5;
     diagram.draw(now);
     expect(math.round(elem1.getScale().x)).toBe(1);
+  });
+  test('Transform', () => {
+    elem1.transform = new Transform().scale(0, 0).rotate(0).translate(0, 0);
+    elem1.animations.new()
+      .transform({
+        target: new Transform().scale(3, 0).rotate(3).translate(3, 0),
+        duration: 3,
+        progression: 'linear',
+      })
+      .start();
+    now = 0;
+    diagram.draw(now);
+    now = 0.5;
+    diagram.draw(now);
+    expect(elem1.getScale().x).toBe(0.5);
+    expect(elem1.getPosition().x).toBe(0.5);
+    expect(elem1.getRotation()).toBe(0.5);
+    const state = diagram.getState();
+    now = 1;
+    diagram.draw(now);
+    expect(elem1.getScale().x).toBe(1);
+    expect(elem1.getPosition().x).toBe(1);
+    expect(elem1.getRotation()).toBe(1);
+    elem1.stop();
+    expect(elem1.animations.animations).toHaveLength(0);
+
+    // now lets delay 10s
+    now = 11;
+    diagram.setState(state);
+    diagram.draw(now);
+    expect(math.round(elem1.getScale().x)).toBe(0.5);
+    expect(math.round(elem1.getPosition().x)).toBe(0.5);
+    expect(math.round(elem1.getRotation())).toBe(0.5);
+
+    now = 11.1;
+    diagram.draw(now);
+    expect(math.round(elem1.getScale().x)).toBe(0.6);
+    expect(math.round(elem1.getPosition().x)).toBe(0.6);
+    expect(math.round(elem1.getRotation())).toBe(0.6);
+
+    now = 11.5;
+    diagram.draw(now);
+    expect(math.round(elem1.getScale().x)).toBe(1);
+    expect(math.round(elem1.getPosition().x)).toBe(1);
+    expect(math.round(elem1.getRotation())).toBe(1);
   });
 });

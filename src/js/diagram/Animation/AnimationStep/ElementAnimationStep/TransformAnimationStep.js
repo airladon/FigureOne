@@ -89,6 +89,16 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     duplicateFromTo(options.translationOptions, this.transform.translationOptions);
   }
 
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'transform',
+    ];
+  }
+
+  _getStateName() {  // eslint-disable-line class-methods-use-this
+    return 'transformAnimationStep';
+  }
+
   // On start, calculate the duration, target and delta if not already present.
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
