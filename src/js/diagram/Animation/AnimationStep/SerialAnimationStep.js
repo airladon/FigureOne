@@ -35,6 +35,17 @@ export class SerialAnimationStep extends AnimationStep {
     }
   }
 
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'steps',
+      'index',
+    ];
+  }
+
+  _getStateName() {  // eslint-disable-line class-methods-use-this
+    return 'serialAnimationStep';
+  }
+
   // constructor(optionsIn: TypeSerialAnimationStepInputOptions = {}) {
   //   super(optionsIn);
   //   this.index = 0;

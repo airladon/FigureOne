@@ -73,11 +73,11 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
-    return [...super._getStateProperties(),
-      'steps',
-    ];
-  }
+  // _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  //   return [...super._getStateProperties(),
+  //     'steps',
+  //   ];
+  // }
 
   _getStateName() {  // eslint-disable-line class-methods-use-this
     return 'animationBuilder';
