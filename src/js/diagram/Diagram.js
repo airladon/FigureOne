@@ -171,6 +171,7 @@ class Diagram {
   // updateFontSize: string;
 
   isTouchDevice: boolean;
+  fnMap: FunctionMap;
 
   constructor(options: TypeDiagramOptions) {
     const defaultOptions = {
@@ -324,6 +325,7 @@ class Diagram {
 
     window.addEventListener('resize', this.resize.bind(this));
     this.sizeHtmlText();
+    this.fnMap = new FunctionMap();
     this.initialize();
     this.isTouchDevice = isTouchDevice();
     this.animateNextFrame(true, 'first frame');
@@ -546,11 +548,10 @@ class Diagram {
   // }
 
   initialize() {
-    const map = new FunctionMap();
-    map.add('tools.math.easein', math.easein);
-    map.add('tools.math.easeout', math.easeout);
-    map.add('tools.math.easeinout', math.easeinout);
-    map.add('tools.math.linear', math.linear);
+    this.fnMap.add('tools.math.easein', math.easein);
+    this.fnMap.add('tools.math.easeout', math.easeout);
+    this.fnMap.add('tools.math.easeinout', math.easeinout);
+    this.fnMap.add('tools.math.linear', math.linear);
     this.setFirstTransform();
     this.animateNextFrame();
   }

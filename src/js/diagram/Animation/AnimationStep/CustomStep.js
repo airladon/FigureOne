@@ -9,7 +9,7 @@ import type {
 import AnimationStep from '../AnimationStep';
 
 export type TypeCustomAnimationStepInputOptions = {
-  callback?: (number) => void;
+  callback?: string | ((number) => void);
   startPercent?: number;
   progression?: 'linear' | 'easeinout' | 'easein' | 'easeout' | (number) => number;
 } & TypeAnimationStepInputOptions;
@@ -47,11 +47,27 @@ export class CustomAnimationStep extends AnimationStep {
     this.duration = options.duration;
   }
 
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'callback',
+      'startPercent',
+      'progression',
+    ];
+  }
+
+  _getStateName() {  // eslint-disable-line class-methods-use-this
+    return 'customAnimationStep';
+  }
+
   setFrame(deltaTime: number) {
     const percentTime = deltaTime / this.duration;
     const percentComplete = this.getPercentComplete(percentTime);
     if (this.callback != null) {
-      this.callback(percentComplete);
+      if (typeof this.callback === 'string') {
+        this.fnMap.exec(this.callback, percentComplete);
+      } else {
+        this.callback(percentComplete);
+      }
     }
   }
 
@@ -71,7 +87,12 @@ export class CustomAnimationStep extends AnimationStep {
 
   setToEnd() {
     if (this.callback != null) {
-      this.callback(1);
+      // this.callback(1);
+      if (typeof this.callback === 'string') {
+        this.fnMap.exec(this.callback, 1);
+      } else {
+        this.callback(1);
+      }
     }
   }
   // finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {

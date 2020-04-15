@@ -177,6 +177,12 @@ export default class AnimationStep {
     };
   }
 
+  // eslint-disable-next-line no-unused-vars
+  _fromState(state: Object, getElement: ?(string) => DiagramElement) {
+    joinObjects(this, state);
+    return this;
+  }
+
   // returns remaining time if this step completes
   // Return of 0 means this step is still going
   nextFrame(now: number) {
