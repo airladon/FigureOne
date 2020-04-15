@@ -554,4 +554,98 @@ describe('Animation Step State', () => {
     expect(math.round(elem1.getPosition().x)).toBe(1);
     expect(math.round(elem1.getRotation())).toBe(1);
   });
+  test('Trigger', () => {
+    elem1.triggerFlag1 = 0;
+    elem1.triggerFlag2 = 0;
+    elem1.triggerFlag3 = 0;
+    elem1.triggerFlag4 = 0;
+    const trigger1 = () => { elem1.triggerFlag1 = 1; };
+    const trigger2 = () => { elem1.triggerFlag2 = 1; };
+    const trigger3 = () => { elem1.triggerFlag3 = 1; };
+    const trigger4 = () => { elem1.triggerFlag4 = 1; };
+    diagram.fnMap.add('trigger1', trigger1);
+    diagram.fnMap.add('trigger2', trigger2);
+    diagram.fnMap.add('trigger3', trigger3);
+    diagram.fnMap.add('trigger4', trigger4);
+    elem1.stateProperties = [
+      'triggerFlag1', 'triggerFlag2', 'triggerFlag3', 'triggerFlag4',
+    ]
+    elem1.animations.new()
+      .delay(1)
+      .trigger('trigger1')
+      .delay(1)
+      .trigger({ callback: 'trigger2', duration: 1 })
+      .trigger('trigger3')
+      .delay(1)
+      .trigger('trigger4')
+      .start();
+
+    now = 0;
+    diagram.draw(now);
+    now = 0.5;
+    diagram.draw(now);
+    expect(elem1.triggerFlag1).toBe(0);
+    expect(elem1.triggerFlag2).toBe(0);
+    expect(elem1.triggerFlag3).toBe(0);
+    expect(elem1.triggerFlag4).toBe(0);
+
+    now = 1;
+    diagram.draw(now);
+    expect(elem1.triggerFlag1).toBe(1);
+    expect(elem1.triggerFlag2).toBe(0);
+    expect(elem1.triggerFlag3).toBe(0);
+    expect(elem1.triggerFlag4).toBe(0);
+
+    now = 2.1;
+    diagram.draw(now);
+    expect(elem1.triggerFlag1).toBe(1);
+    expect(elem1.triggerFlag2).toBe(1);
+    expect(elem1.triggerFlag3).toBe(0);
+    expect(elem1.triggerFlag4).toBe(0);
+    const state = diagram.getState();
+
+    now = 3;
+    diagram.draw(now);
+    expect(elem1.triggerFlag1).toBe(1);
+    expect(elem1.triggerFlag2).toBe(1);
+    expect(elem1.triggerFlag3).toBe(1);
+    expect(elem1.triggerFlag4).toBe(0);
+    elem1.stop();
+    expect(elem1.animations.animations).toHaveLength(0);
+    elem1.triggerFlag1 = 0;
+    elem1.triggerFlag2 = 0;
+    elem1.triggerFlag3 = 0;
+    elem1.triggerFlag4 = 0;
+
+    // now lets delay 10s
+    now = 13;
+    diagram.setState(state);
+    diagram.draw(now);
+
+    expect(elem1.triggerFlag1).toBe(1);
+    expect(elem1.triggerFlag2).toBe(1);
+    expect(elem1.triggerFlag3).toBe(0);
+    expect(elem1.triggerFlag4).toBe(0);
+
+    now = 13.8;
+    diagram.draw(now);
+    expect(elem1.triggerFlag1).toBe(1);
+    expect(elem1.triggerFlag2).toBe(1);
+    expect(elem1.triggerFlag3).toBe(0);
+    expect(elem1.triggerFlag4).toBe(0);
+
+    now = 13.9;
+    diagram.draw(now);
+    expect(elem1.triggerFlag1).toBe(1);
+    expect(elem1.triggerFlag2).toBe(1);
+    expect(elem1.triggerFlag3).toBe(1);
+    expect(elem1.triggerFlag4).toBe(0);
+
+    now = 14.9;
+    diagram.draw(now);
+    expect(elem1.triggerFlag1).toBe(1);
+    expect(elem1.triggerFlag2).toBe(1);
+    expect(elem1.triggerFlag3).toBe(1);
+    expect(elem1.triggerFlag4).toBe(1);
+  });
 });

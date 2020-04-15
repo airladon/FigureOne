@@ -11,7 +11,7 @@ export type TypeTriggerStepInputOptions = {
 } & TypeAnimationStepInputOptions;
 
 export class TriggerStep extends AnimationStep {
-  callback: ?Function;
+  callback: ?(string | Function);
   payload: ?Object;
 
   constructor(
@@ -23,7 +23,10 @@ export class TriggerStep extends AnimationStep {
       duration: 0,
     };
     let options;
-    if (typeof triggerOrOptionsIn === 'function') {
+    if (
+      typeof triggerOrOptionsIn === 'function'
+      || typeof triggerOrOptionsIn === 'string'
+    ) {
       options = joinObjects({}, defaultOptions, ...optionsIn);
       options.callback = triggerOrOptionsIn;
     } else {
@@ -35,18 +38,33 @@ export class TriggerStep extends AnimationStep {
     this.duration = options.duration;
   }
 
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'callback',
+      'payload',
+    ];
+  }
+
+  _getStateName() {  // eslint-disable-line class-methods-use-this
+    return 'triggerAnimationStep';
+  }
+
   setFrame() {
-    if (this.callback != null) {
-      this.callback(this.payload);
-      this.callback = null;
-    }
+    this.execFn(this.callback, this.payload);
+    this.callback = null;
+    // if (this.callback != null) {
+    //   this.callback(this.payload);
+    //   this.callback = null;
+    // }
   }
 
   setToEnd() {
-    if (this.callback != null) {
-      this.callback(this.payload);
-      this.callback = null;
-    }
+    // if (this.callback != null) {
+    //   this.callback(this.payload);
+    //   this.callback = null;
+    // }
+    this.execFn(this.callback, this.payload);
+    this.callback = null;
   }
 
   _dup() {

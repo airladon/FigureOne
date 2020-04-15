@@ -28,7 +28,8 @@ export default class AnimationStep {
   startTime: number;
   duration: number;
   // animations: Array<AnimationStep>;
-  onFinish: ?(boolean) => void;
+  // onFinish: ?(boolean) => void;
+  onFinish: ?(string | (boolean) => void);
   completeOnCancel: ?boolean;
   state: 'animating' | 'waitingToStart' | 'idle' | 'finished';
   startTimeOffset: number;
@@ -125,8 +126,21 @@ export default class AnimationStep {
   // _finishSetState(diagram: Diagram) {
   // }
 
+  execFn(fn: string | Function | null, ...args: Array<any>) {
+    if (fn == null) {
+      return null;
+    }
+    if (typeof fn === 'string') {
+      return this.fnMap.exec(fn, ...args);
+    }
+
+    return fn(...args);
+  }
+
   setTimeDelta(delta: number) {
-    this.startTime += delta;
+    if (this.startTime > -1) {
+      this.startTime += delta;
+    }
     // if (this.steps != null) {
     //   this.steps.forEach((step) => {
     //     step.setTimeDelta(delta);
@@ -269,7 +283,8 @@ export default class AnimationStep {
     }
 
     if (this.onFinish != null) {
-      this.onFinish(cancelled);
+      this.execFn(this.onFinish, cancelled);
+      // this.onFinish(cancelled);
     }
   }
 
@@ -287,7 +302,7 @@ export default class AnimationStep {
     return step;
   }
 
-  whenFinished(callback: (boolean) => void) {
+  whenFinished(callback: string | (boolean) => void) {
     this.onFinish = callback;
     return this;
   }

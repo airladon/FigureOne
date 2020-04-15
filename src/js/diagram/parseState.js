@@ -4,6 +4,7 @@ import {
   ScaleAnimationStep, TransformAnimationStep, ColorAnimationStep,
   OpacityAnimationStep, PulseAnimationStep, CustomAnimationStep,
   DelayStep, ParallelAnimationStep, SerialAnimationStep,
+  TriggerStep,
 } from './Animation/Animation';
 
 import type Diagram from './Diagram';
@@ -120,6 +121,12 @@ function parseState(state: Object, diagram: Diagram) {
     }
     if (state.f1Type === 'serialAnimationStep') {
       return new SerialAnimationStep()._fromState(
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+    if (state.f1Type === 'triggerAnimationStep') {
+      return new TriggerStep()._fromState(
         parseState(state.state, diagram),
         diagram.getElement.bind(diagram),
       );

@@ -241,6 +241,8 @@ class DiagramElement {
   unrenderNextDraw: boolean;
 
   custom: { [string]: any };
+
+  stateProperties: Array<string>
   // scenarioSet: {
   //   quiz1: [
   //     { element: xyz, position: (), scale: (), rotation: (), length: () }
@@ -290,6 +292,7 @@ class DiagramElement {
     this.custom = {};
     this.parent = parent;
     this.drawPriority = 1;
+    this.stateProperties = [];
     // this.noRotationFromParent = false;
     // this.pulseDefault = (callback: ?() => void = null) => {
     //   this.pulseScaleNow(1, 2, 0, callback);
@@ -566,6 +569,7 @@ class DiagramElement {
       'isMovable',
       'isTouchable',
       'state',
+      ...this.stateProperties,
     ];
   }
 
