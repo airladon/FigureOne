@@ -16,7 +16,7 @@ export default class ElementAnimationStep extends AnimationStep {
   element: ?Object;
   type: 'transform' | 'color' | 'custom' | 'position' | 'setPosition';
   duration: number;
-  progression: ((number) => number) | string;
+  progression: ((number, ?boolean) => number) | string;
 
   constructor(optionsIn: TypeElementAnimationStepInputOptions = {}) {
     super(optionsIn);
