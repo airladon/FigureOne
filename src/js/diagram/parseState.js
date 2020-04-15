@@ -3,7 +3,7 @@ import {
   PositionAnimationStep, AnimationBuilder, RotationAnimationStep,
   ScaleAnimationStep, TransformAnimationStep, ColorAnimationStep,
   OpacityAnimationStep, PulseAnimationStep, CustomAnimationStep,
-  DelayStep, ParallelAnimationStep,
+  DelayStep, ParallelAnimationStep, SerialAnimationStep,
 } from './Animation/Animation';
 
 import type Diagram from './Diagram';
@@ -114,6 +114,12 @@ function parseState(state: Object, diagram: Diagram) {
     }
     if (state.f1Type === 'parallelAnimationStep') {
       return new ParallelAnimationStep()._fromState(
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+    if (state.f1Type === 'serialAnimationStep') {
+      return new SerialAnimationStep()._fromState(
         parseState(state.state, diagram),
         diagram.getElement.bind(diagram),
       );
