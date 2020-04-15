@@ -8,6 +8,13 @@ import {
 } from '../../tools/g2';
 import webgl from '../../__mocks__/WebGLInstanceMock';
 import VertexPolygon from '../DrawingObjects/VertexObject/VertexPolygon';
+import makeDiagram from '../../__mocks__/makeDiagram';
+
+jest.mock('../Gesture');
+jest.mock('../webgl/webgl');
+jest.mock('../DrawContext2D');
+
+
 // import {
 //   linear, round,
 // } from '../tools/math';
@@ -41,6 +48,7 @@ const makeCollection = () => {
 describe('Pulse', () => {
   afterEach(() => {
     jest.clearAllMocks();
+    makeDiagram();
   });
   describe('Primitive', () => {
     test('Simple', () => {
