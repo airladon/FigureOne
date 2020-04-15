@@ -35,6 +35,16 @@ export class ParallelAnimationStep extends AnimationStep {
     }
   }
 
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'steps',
+    ];
+  }
+
+  _getStateName() {  // eslint-disable-line class-methods-use-this
+    return 'parallelAnimationStep';
+  }
+
   setTimeDelta(delta: number) {
     super.setTimeDelta(delta);
     if (this.steps != null) {

@@ -404,7 +404,7 @@ describe('Animation Step State', () => {
     diagram.draw(now);
     expect(elem1.getPosition().round().x).toBe(1.5);
 
-    elem1.stop();    
+    elem1.stop();
     expect(elem1.animations.animations).toHaveLength(0);
 
     // now lets delay 10s
@@ -420,5 +420,46 @@ describe('Animation Step State', () => {
     now = 12.5;
     diagram.draw(now);
     expect(elem1.getPosition().round().x).toBe(1.5);
+  });
+  test('Parallel', () => {
+    elem1.setPosition(0, 0);
+    elem1.setRotation(0);
+    elem1.animations.new()
+      .inParallel([
+        elem1.anim.position({ target: [2, 0], duration: 2, progression: 'linear' }),
+        elem1.anim.rotation({ target: 2, duration: 2, progression: 'linear' }),
+      ])
+      .start();
+
+    now = 0;
+    diagram.draw(now);
+    now = 0.5;
+    diagram.draw(now);
+    expect(math.round(elem1.getPosition().x)).toBe(0.5);
+    expect(math.round(elem1.getRotation())).toBe(0.5);
+    const state = diagram.getState();
+    now = 1;
+    diagram.draw(now);
+    expect(math.round(elem1.getPosition().x)).toBe(1);
+    expect(math.round(elem1.getRotation())).toBe(1);
+    elem1.stop();
+    expect(elem1.animations.animations).toHaveLength(0);
+
+    // now lets delay 10s
+    now = 11;
+    diagram.setState(state);
+    diagram.draw(now);
+    expect(math.round(elem1.getPosition().x)).toBe(0.5);
+    expect(math.round(elem1.getRotation())).toBe(0.5);
+
+    now = 11.1;
+    diagram.draw(now);
+    expect(math.round(elem1.getPosition().x)).toBe(0.6);
+    expect(math.round(elem1.getRotation())).toBe(0.6);
+
+    now = 11.5;
+    diagram.draw(now);
+    expect(math.round(elem1.getPosition().x)).toBe(1);
+    expect(math.round(elem1.getRotation())).toBe(1);
   });
 });
