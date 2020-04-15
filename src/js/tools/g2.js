@@ -1536,7 +1536,6 @@ class Scale extends Point {
         [sx, sy] = sx;
       }
     }
-
     if (sx instanceof Point) {
       super(sx.x, sx.y);
     } else if (typeof sx === 'number') {

@@ -166,13 +166,38 @@ DiagramElementPrimitive {
     ],
     "type": "drawingObject",
   },
+  "fnMap": FunctionMap {
+    "map": Object {
+      "_elementPulseSettingsTransformMethod": Object {
+        "fn": [Function],
+      },
+      "doNothing": Object {
+        "fn": [Function],
+      },
+      "tools.math.easein": Object {
+        "fn": [Function],
+      },
+      "tools.math.easeinout": Object {
+        "fn": [Function],
+      },
+      "tools.math.easeout": Object {
+        "fn": [Function],
+      },
+      "tools.math.linear": Object {
+        "fn": [Function],
+      },
+      "tools.math.sinusoid": Object {
+        "fn": [Function],
+      },
+    },
+  },
   "hasTouchableElements": false,
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
     "y": 0,
   },
-  "internalSetTransformCallback": [Function],
+  "internalSetTransformCallback": null,
   "isInteractive": undefined,
   "isMovable": false,
   "isRenderedAsImage": false,
@@ -400,9 +425,9 @@ DiagramElementPrimitive {
     },
     "frequency": 0.5,
     "num": 1,
-    "style": [Function],
+    "style": "tools.math.sinusoid",
     "time": 1,
-    "transformMethod": [Function],
+    "transformMethod": "_elementPulseSettingsTransformMethod",
   },
   "recorder": Recorder {
     "animateNextFrame": [Function],
@@ -426,7 +451,7 @@ DiagramElementPrimitive {
   },
   "renderedOnNextDraw": false,
   "scenarios": Object {},
-  "setTransformCallback": [Function],
+  "setTransformCallback": null,
   "state": Object {
     "isBeingMoved": false,
     "isMovingFreely": false,

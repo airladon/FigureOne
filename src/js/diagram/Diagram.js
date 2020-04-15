@@ -181,6 +181,13 @@ class Diagram {
       fontScale: 1,
       // updateFontSize: '',
     };
+    this.fnMap = new FunctionMap();
+    this.fnMap.add('tools.math.easein', math.easein);
+    this.fnMap.add('tools.math.easeout', math.easeout);
+    this.fnMap.add('tools.math.easeinout', math.easeinout);
+    this.fnMap.add('tools.math.linear', math.linear);
+    this.fnMap.add('tools.math.sinusoid', math.sinusoid);
+    this.fnMap.add('doNothing', () => {});
     this.scrolled = false;
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
@@ -325,7 +332,6 @@ class Diagram {
 
     window.addEventListener('resize', this.resize.bind(this));
     this.sizeHtmlText();
-    this.fnMap = new FunctionMap();
     this.initialize();
     this.isTouchDevice = isTouchDevice();
     this.animateNextFrame(true, 'first frame');
@@ -548,11 +554,6 @@ class Diagram {
   // }
 
   initialize() {
-    this.fnMap.add('tools.math.easein', math.easein);
-    this.fnMap.add('tools.math.easeout', math.easeout);
-    this.fnMap.add('tools.math.easeinout', math.easeinout);
-    this.fnMap.add('tools.math.linear', math.linear);
-    this.fnMap.add('tools.math.sinusoid', math.sinusoid);
     this.setFirstTransform();
     this.animateNextFrame();
   }
