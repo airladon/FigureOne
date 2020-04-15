@@ -164,10 +164,10 @@ class DiagramElement {
     A: number | Array<number>,
     B: number | Array<number>,
     C: number | Array<number>,
-    style: (number, number, number, number, number) => number,
+    style: string | ((number, number, number, number, number) => number),
     num: number,
     delta: TypeParsablePoint,
-    transformMethod: (number, ?Point) => Transform,
+    transformMethod: string | ((number, ?Point) => Transform),
     callback: ?(string | ((mixed) => void));
   };
 
@@ -506,24 +506,26 @@ class DiagramElement {
 
     this.scenarios = {};
 
+    const pulseTransformMethod = (s, d) => {
+      if (d == null || (d.x === 0 && d.y === 0)) {
+        return new Transform().scale(s, s);
+      }
+      return new Transform()
+        .translate(-d.x, -d.y)
+        .scale(s, s)
+        .translate(d.x, d.y);
+    };
+    this.fnMap.add('_elementPulseSettingsTransformMethod', pulseTransformMethod);
     this.pulseSettings = {
       time: 1,
       frequency: 0.5,
       A: 1,
       B: 0.5,
       C: 0,
-      style: tools.sinusoid,
+      style: 'tools.math.sinusoid',
       num: 1,
       delta: new Point(0, 0),
-      transformMethod: (s, d) => {
-        if (d == null || (d.x === 0 && d.y === 0)) {
-          return new Transform().scale(s, s);
-        }
-        return new Transform()
-          .translate(-d.x, -d.y)
-          .scale(s, s)
-          .translate(d.x, d.y);
-      },
+      transformMethod: '_elementPulseSettingsTransformMethod',
       callback: () => {},
     };
 
@@ -573,6 +575,9 @@ class DiagramElement {
       'isMovable',
       'isTouchable',
       'state',
+      'pulseSettings',
+      'setTransformCallback',
+      'move',
       ...this.stateProperties,
     ];
   }
@@ -1415,7 +1420,7 @@ class DiagramElement {
       // clip the elapsed time to the pulse time, and end pulsing (after this
       // draw). If the pulse time is 0, that means pulsing will loop
       // indefinitely.
-      if (deltaTime > this.pulseSettings.time && this.pulseSettings.time !== 0) {
+      if (deltaTime >= this.pulseSettings.time && this.pulseSettings.time !== 0) {
         // this.state.isPulsing = false;
         this.stopPulsing(true);
         deltaTime = this.pulseSettings.time;
@@ -1425,7 +1430,8 @@ class DiagramElement {
       // with the pulse.
       for (let i = 0; i < this.pulseSettings.num; i += 1) {
         // Get the current pulse magnitude
-        const pulseMag = this.pulseSettings.style(
+        const pulseMag = this.execFn(
+          this.pulseSettings.style,
           deltaTime,
           this.pulseSettings.frequency,
           this.pulseSettings.A instanceof Array ? this.pulseSettings.A[i] : this.pulseSettings.A,
@@ -1434,7 +1440,8 @@ class DiagramElement {
         );
 
         // Use the pulse magnitude to get the current pulse transform
-        const pTransform = this.pulseSettings.transformMethod(
+        const pTransform = this.execFn(
+          this.pulseSettings.transformMethod,
           pulseMag,
           getPoint(this.pulseSettings.delta),
         );
@@ -1443,8 +1450,10 @@ class DiagramElement {
         // Transform the current transformMatrix by the pulse transform matrix
         // const pMatrix = m2.mul(m2.copy(transform), pTransform.matrix());
 
-        // Push the pulse transformed matrix to the array of pulse matrices
-        pulseTransforms.push(transform.transform(pTransform));
+        // Push the pulse transformed matrix to the array of pulse matrices\
+        if (pTransform != null) {
+          pulseTransforms.push(transform.transform(pTransform));
+        }
       }
     // If not pulsing, then make no changes to the transformMatrix.
     } else {
