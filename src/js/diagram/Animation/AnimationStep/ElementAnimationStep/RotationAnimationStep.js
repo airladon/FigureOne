@@ -142,7 +142,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
       element.transform.updateRotation(clipAngle(
         this.rotation.target, this.rotation.clipTo,
       ));
-      element.setTransformCallback(element.transform);
+      this.execFn(element.setTransformCallback, element.transform);
     }
   }
 

@@ -11,7 +11,7 @@ import type { TypeParsablePoint, TypeParsableTransform } from '../tools/g2';
 import Recorder from './Recorder';
 import * as m2 from '../tools/m2';
 // import type { pathOptionsType, TypeRotationDirection } from '../tools/g2';
-import * as tools from '../tools/math';
+// import * as tools from '../tools/math';
 import HTMLObject from './DrawingObjects/HTMLObject/HTMLObject';
 import DrawingObject from './DrawingObjects/DrawingObject';
 import VertexObject from './DrawingObjects/VertexObject/VertexObject';
@@ -117,11 +117,11 @@ class DiagramElement {
   drawPriority: number;
 
   // Callbacks
-  onClick: ?(?mixed) => void;
-  setTransformCallback: string | ((Transform) => void); // element.transform is updated
-  internalSetTransformCallback: (Transform) => void;
-  beforeDrawCallback: ?(number) => void;
-  afterDrawCallback: ?(number) => void;
+  onClick: string | (?(?mixed) => void);
+  setTransformCallback: ?(string | ((Transform) => void)); // element.transform is updated
+  internalSetTransformCallback: ?(string | ((Transform) => void));
+  beforeDrawCallback: string | (?(number) => void);
+  afterDrawCallback: string | (?(number) => void);
 
   color: Array<number>;           // For the future when collections use color
   defaultColor: Array<number>;
@@ -136,7 +136,7 @@ class DiagramElement {
     minTransform: Transform,
     boundary: ?Rect | Array<number> | 'diagram',
     limitLine: null | Line,
-    transformClip: ?(Transform) => Transform;
+    transformClip: string | (?(Transform) => Transform);
     maxVelocity: TransformLimit;            // Maximum velocity allowed
     // When moving freely, the velocity decelerates until it reaches a threshold,
   // then it is considered 0 - at which point moving freely ends.
@@ -171,7 +171,7 @@ class DiagramElement {
     callback: ?(string | ((mixed) => void));
   };
 
-  pulseDefault: ((?() => void) => void) | {
+  pulseDefault: string | ((?() => void) => void) | {
     scale: number,
     time: number,
     frequency: number,
@@ -280,10 +280,10 @@ class DiagramElement {
     this.dimColor = [0.5, 0.5, 0.5, 1];
     this.defaultColor = this.color.slice();
     this.opacity = 1;
-    this.setTransformCallback = () => {};
+    this.setTransformCallback = null;
     this.beforeDrawCallback = null;
     this.afterDrawCallback = null;
-    this.internalSetTransformCallback = () => {};
+    this.internalSetTransformCallback = null;
     this.lastDrawTransform = this.transform._dup();
     this.lastDrawPulseTransform = this.transform._dup();
     this.onClick = null;
@@ -593,7 +593,6 @@ class DiagramElement {
     if (typeof fn === 'string') {
       return this.fnMap.exec(fn, ...args);
     }
-
     return fn(...args);
   }
 
@@ -815,7 +814,10 @@ class DiagramElement {
       time: 1,
       scale: 2,
     };
-    if (typeof this.pulseDefault !== 'function') {
+    if (
+      typeof this.pulseDefault !== 'function'
+      && typeof this.pulseDefault !== 'string'
+    ) {
       defaultPulseOptions.frequency = this.pulseDefault.frequency;
       defaultPulseOptions.time = this.pulseDefault.time;
       defaultPulseOptions.scale = this.pulseDefault.scale;
@@ -842,8 +844,11 @@ class DiagramElement {
       options = joinObjects({}, defaultOptions, optionsOrDone);
       ({ done } = options);
     }
-    if (typeof this.pulseDefault === 'function') {
-      this.pulseDefault(done);
+    if (
+      typeof this.pulseDefault === 'function'
+      || typeof this.pulseDefault === 'string'
+    ) {
+      this.execFn(this.pulseDefault, done);
     } else {
       // const { frequency, time, scale } = this.pulseDefault;
       // this.pulseScaleNow(time, scale, frequency, done);
@@ -860,14 +865,17 @@ class DiagramElement {
     }
   }
 
-  pulseLegacy(done: ?(mixed) => void = null) {
-    if (typeof this.pulseDefault === 'function') {
-      this.pulseDefault(done);
-    } else {
-      const { frequency, time, scale } = this.pulseDefault;
-      this.pulseScaleNow(time, scale, frequency, done);
-    }
-  }
+  // pulseLegacy(done: ?(mixed) => void = null) {
+  //   if (
+  //     typeof this.pulseDefault === 'function'
+  //     || typeof this.pulseDefault === 'string'
+  //   ) {
+  //     this.execFn(this.pulseDefault, done);
+  //   } else {
+  //     const { frequency, time, scale } = this.pulseDefault;
+  //     this.pulseScaleNow(time, scale, frequency, done);
+  //   }
+  // }
 
   getElement() {
     return this;
@@ -916,7 +924,7 @@ class DiagramElement {
   // connected that is tied to an update of the transform.
   setTransform(transform: Transform): void {
     if (this.move.transformClip != null) {
-      this.transform = this.move.transformClip(transform);
+      this.transform = this.execFn(this.move.transformClip, transform);
     } else {
       this.transform = transform._dup().clip(
         this.move.minTransform,
@@ -925,7 +933,7 @@ class DiagramElement {
       );
     }
     if (this.internalSetTransformCallback) {
-      this.internalSetTransformCallback(this.transform);
+      this.execFn(this.internalSetTransformCallback, this.transform);
     }
     this.execFn(this.setTransformCallback, this.transform);
     // if (this.setTransformCallback) {
@@ -1383,13 +1391,7 @@ class DiagramElement {
     this.state.isMovingFreely = false;
     this.state.movement.previousTime = -1;
     if (this.move.freely.callback) {
-      // this.move.freely.callback(result);
       this.execFn(this.move.freely.callback, result);
-      // if (result !== null && result !== undefined) {
-      //   this.animate.transform.callback(result);
-      // } else {
-      //   this.animate.transform.callback();
-      // }
       this.move.freely.callback = null;
     }
   }
@@ -2091,7 +2093,8 @@ class DiagramElement {
 
   click(): void {
     if (this.onClick !== null && this.onClick !== undefined) {
-      this.onClick(this);
+      // this.onClick(this);
+      this.execFn(this.onClick, this);
     }
   }
 
@@ -2333,7 +2336,7 @@ class DiagramElementPrimitive extends DiagramElement {
         }
       }
       if (this.beforeDrawCallback != null) {
-        this.beforeDrawCallback(now);
+        this.execFn(this.beforeDrawCallback, now);
       }
       this.animations.nextFrame(now);
       this.nextMovingFreelyFrame(now);
@@ -2387,7 +2390,7 @@ class DiagramElementPrimitive extends DiagramElement {
         this.renderedOnNextDraw = false;
       }
       if (this.afterDrawCallback != null) {
-        this.afterDrawCallback(now);
+        this.execFn(this.afterDrawCallback, now);
       }
     }
   }
@@ -2680,7 +2683,7 @@ class DiagramElementCollection extends DiagramElement {
         }
       }
       if (this.beforeDrawCallback != null) {
-        this.beforeDrawCallback(now);
+        this.execFn(this.beforeDrawCallback, now);
       }
       this.animations.nextFrame(now);
       this.nextMovingFreelyFrame(now);
@@ -2718,7 +2721,8 @@ class DiagramElementCollection extends DiagramElement {
         this.renderedOnNextDraw = false;
       }
       if (this.afterDrawCallback != null) {
-        this.afterDrawCallback(now);
+        // this.afterDrawCallback(now);
+        this.execFn(this.afterDrawCallback, now);
       }
     }
   }
@@ -2774,7 +2778,10 @@ class DiagramElementCollection extends DiagramElement {
       time: 1,
       scale: 2,
     };
-    if (typeof this.pulseDefault !== 'function') {
+    if (
+      typeof this.pulseDefault !== 'function'
+      && typeof this.pulseDefault !== 'string'
+    ) {
       defaultPulseOptions.frequency = this.pulseDefault.frequency;
       defaultPulseOptions.time = this.pulseDefault.time;
       defaultPulseOptions.scale = this.pulseDefault.scale;
@@ -2865,34 +2872,34 @@ class DiagramElementCollection extends DiagramElement {
     // }
   }
 
-  pulseLegacy(
-    elementsOrDone: ?(Array<string | DiagramElement> | (mixed) => void),
-    // elementsToPulse: Array<string | DiagramElement>,
-    done: ?(mixed) => void = null,
-  ) {
-    if (elementsOrDone == null || typeof elementsOrDone === 'function') {
-      super.pulse(elementsOrDone);
-      return;
-    }
+  // pulseLegacy(
+  //   elementsOrDone: ?(Array<string | DiagramElement> | (mixed) => void),
+  //   // elementsToPulse: Array<string | DiagramElement>,
+  //   done: ?(mixed) => void = null,
+  // ) {
+  //   if (elementsOrDone == null || typeof elementsOrDone === 'function') {
+  //     super.pulse(elementsOrDone);
+  //     return;
+  //   }
 
-    let doneToUse = done;
-    elementsOrDone.forEach((elementToPulse) => {
-      let element: ?DiagramElement;
-      if (typeof elementToPulse === 'string') {
-        element = this.getElement(elementToPulse);
-      } else {
-        element = elementToPulse;
-      }
-      if (element != null) {
-        // element.pulseDefault(doneToUse);
-        element.pulse(doneToUse);
-        doneToUse = null;
-      }
-    });
-    if (doneToUse != null) {
-      doneToUse();
-    }
-  }
+  //   let doneToUse = done;
+  //   elementsOrDone.forEach((elementToPulse) => {
+  //     let element: ?DiagramElement;
+  //     if (typeof elementToPulse === 'string') {
+  //       element = this.getElement(elementToPulse);
+  //     } else {
+  //       element = elementToPulse;
+  //     }
+  //     if (element != null) {
+  //       // element.pulseDefault(doneToUse);
+  //       element.pulse(doneToUse);
+  //       doneToUse = null;
+  //     }
+  //   });
+  //   if (doneToUse != null) {
+  //     doneToUse();
+  //   }
+  // }
 
   getElement(elementPath: ?(string | DiagramElement) = null) {
     if (elementPath == null) {
@@ -3412,7 +3419,7 @@ class DiagramElementCollection extends DiagramElement {
       if (element.name in elementTransforms) {
         element.transform = elementTransforms[element.name];
         if (element.internalSetTransformCallback) {
-          element.internalSetTransformCallback(element.transform);
+          this.execFn(element.internalSetTransformCallback, element.transform);
         }
       }
     }
@@ -3441,7 +3448,7 @@ class DiagramElementCollection extends DiagramElement {
     delay: number = 0,
     rotDirection: number = 0,
     callback: ?(string | ((?mixed) => void)) = null,
-    easeFunction: (number) => number = tools.easeinout,
+    easeFunction: string | ((number) => number) = 'tools.math.easeinout',
     // translationPath: (Point, Point, number) => Point = linearPath,
   ) {
     let callbackMethod = callback;
@@ -3468,7 +3475,7 @@ class DiagramElementCollection extends DiagramElement {
         } else {
           element.transform = elementTransforms[element.name]._dup();
           if (element.internalSetTransformCallback) {
-            element.internalSetTransformCallback(element.transform);
+            this.execFn(element.internalSetTransformCallback, element.transform);
           }
         }
       }

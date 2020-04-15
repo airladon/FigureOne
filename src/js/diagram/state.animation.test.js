@@ -24,6 +24,7 @@ describe('Animation Step State', () => {
     elem1.animations.new()
       .rotation({ target: 3, duration: 3, progression: 'linear' })
       .start();
+
     now = 0;
     diagram.draw(now);
     now = 0.5;
