@@ -552,6 +552,7 @@ class Diagram {
     this.fnMap.add('tools.math.easeout', math.easeout);
     this.fnMap.add('tools.math.easeinout', math.easeinout);
     this.fnMap.add('tools.math.linear', math.linear);
+    this.fnMap.add('tools.math.sinusoid', math.sinusoid);
     this.setFirstTransform();
     this.animateNextFrame();
   }

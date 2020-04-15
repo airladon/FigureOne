@@ -55,4 +55,39 @@ describe('Diagram Element State', () => {
     expect(math.round(elem1.getRotation())).toBe(0.5);
     expect(setTransformCallback.mock.calls.length).toBe(4);
   });
+  test('Pulse Callback', () => {
+    const pulseCallback = jest.fn(() => {});
+    diagram.fnMap.add('pulseCallback', pulseCallback);
+    expect(pulseCallback.mock.calls.length).toBe(0);
+
+    elem1.pulseScaleNow(2, 2, 0.5, 'pulseCallback');
+    
+    now = 0;
+    diagram.draw(now);
+    expect(pulseCallback.mock.calls.length).toBe(0);
+
+    now = 0.5;
+    diagram.draw(now);
+    expect(pulseCallback.mock.calls.length).toBe(0);
+
+    const state = diagram.getState();
+
+    now = 2;
+    diagram.draw(now);
+    expect(pulseCallback.mock.calls.length).toBe(1);
+
+    // now lets delay 10s
+    now = 11;
+    diagram.setState(state);
+    diagram.draw(now);
+    expect(pulseCallback.mock.calls.length).toBe(1);
+
+    now = 12.4;
+    diagram.draw(now);
+    expect(pulseCallback.mock.calls.length).toBe(1);
+
+    now = 12.5;
+    diagram.draw(now);
+    expect(pulseCallback.mock.calls.length).toBe(2);
+  });
 });
