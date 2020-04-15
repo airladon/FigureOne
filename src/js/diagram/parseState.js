@@ -1,6 +1,7 @@
 // @flow
 import {
   PositionAnimationStep, AnimationBuilder, RotationAnimationStep,
+  ScaleAnimationStep,
 } from './Animation/Animation';
 
 import type Diagram from './Diagram';
@@ -63,6 +64,12 @@ function parseState(state: Object, diagram: Diagram) {
     }
     if (state.f1Type === 'rotationAnimationStep') {
       return new RotationAnimationStep()._fromState(
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+    if (state.f1Type === 'scaleAnimationStep') {
+      return new ScaleAnimationStep()._fromState(
         parseState(state.state, diagram),
         diagram.getElement.bind(diagram),
       );
