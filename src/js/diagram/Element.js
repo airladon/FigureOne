@@ -35,6 +35,7 @@ import type {
 import * as animations from './Animation/Animation';
 import WebGLInstance from './webgl/webgl';
 import type Diagram from './Diagram';
+import FunctionMap from './FunctionMap';
 
 // eslint-disable-next-line import/no-cycle
 // import {
@@ -117,7 +118,7 @@ class DiagramElement {
 
   // Callbacks
   onClick: ?(?mixed) => void;
-  setTransformCallback: (Transform) => void; // element.transform is updated
+  setTransformCallback: string | ((Transform) => void); // element.transform is updated
   internalSetTransformCallback: (Transform) => void;
   beforeDrawCallback: ?(number) => void;
   afterDrawCallback: ?(number) => void;
@@ -142,7 +143,7 @@ class DiagramElement {
     freely: {                 // Moving Freely properties
       zeroVelocityThreshold: TransformLimit,  // Velocity considered 0
       deceleration: TransformLimit,           // Deceleration
-      callback: ?(boolean) => void,
+      callback: ?(string | ((boolean) => void)),
     };
     bounce: boolean;
     canBeMovedAfterLosingTouch: boolean;
@@ -167,7 +168,7 @@ class DiagramElement {
     num: number,
     delta: TypeParsablePoint,
     transformMethod: (number, ?Point) => Transform,
-    callback: ?(mixed) => void;
+    callback: ?(string | ((mixed) => void));
   };
 
   pulseDefault: ((?() => void) => void) | {
@@ -243,6 +244,8 @@ class DiagramElement {
   custom: { [string]: any };
 
   stateProperties: Array<string>
+  fnMap: FunctionMap;
+
   // scenarioSet: {
   //   quiz1: [
   //     { element: xyz, position: (), scale: (), rotation: (), length: () }
@@ -293,6 +296,7 @@ class DiagramElement {
     this.parent = parent;
     this.drawPriority = 1;
     this.stateProperties = [];
+    this.fnMap = new FunctionMap();
     // this.noRotationFromParent = false;
     // this.pulseDefault = (callback: ?() => void = null) => {
     //   this.pulseScaleNow(1, 2, 0, callback);
@@ -573,25 +577,20 @@ class DiagramElement {
     ];
   }
 
-  // _setState(state: Object) {
-  //   setState(this, state);
-  // }
-
   _state() {
     return getState(this, this._getStateProperties());
   }
 
-  // _finishSetState(diagram: Diagram) {
-  //   // Object.keys(this).forEach((prop) => {
-  //   //   if (this[prop]._finishSetState != null) {
-  //   //     this[prop]._finishSetState();
-  //   //   }
-  //   // });
-  //   this.animations._finishSetState(diagram);
-  // }
-  // _setState(state: Object) {
-  //   setState
-  // }
+  execFn(fn: string | Function | null, ...args: Array<any>) {
+    if (fn == null) {
+      return null;
+    }
+    if (typeof fn === 'string') {
+      return this.fnMap.exec(fn, ...args);
+    }
+
+    return fn(...args);
+  }
 
   setTimeDelta(delta: number) {
     if (this.animations.state === 'animating') {
@@ -923,9 +922,10 @@ class DiagramElement {
     if (this.internalSetTransformCallback) {
       this.internalSetTransformCallback(this.transform);
     }
-    if (this.setTransformCallback) {
-      this.setTransformCallback(this.transform);
-    }
+    this.execFn(this.setTransformCallback, this.transform);
+    // if (this.setTransformCallback) {
+    //   this.setTransformCallback(this.transform);
+    // }
   }
 
   // Set the next transform (and velocity if moving freely) for the next
@@ -1349,7 +1349,7 @@ class DiagramElement {
   }
 
   // Moving Freely
-  startMovingFreely(callback: ?(boolean) => void = null): void {
+  startMovingFreely(callback: ?(string | ((boolean) => void)) = null): void {
     // this.stopAnimating();
     this.animations.cancelAll('noComplete');
     this.stopBeingMoved();
@@ -1378,7 +1378,8 @@ class DiagramElement {
     this.state.isMovingFreely = false;
     this.state.movement.previousTime = -1;
     if (this.move.freely.callback) {
-      this.move.freely.callback(result);
+      // this.move.freely.callback(result);
+      this.execFn(this.move.freely.callback, result);
       // if (result !== null && result !== undefined) {
       //   this.animate.transform.callback(result);
       // } else {
@@ -1454,7 +1455,7 @@ class DiagramElement {
 
   pulseScaleNow(
     time: number, scale: number,
-    frequency: number = 0, callback: ?(?mixed) => void = null,
+    frequency: number = 0, callback: ?(string | ((?mixed) => void)) = null,
     delta: TypeParsablePoint = new Point(0, 0),
   ) {
     this.pulseSettings.time = time;
@@ -1484,7 +1485,7 @@ class DiagramElement {
     time: number,
     scale: number,
     frequency: number = 0,
-    callback: ?(?mixed) => void = null,
+    callback: ?(string | ((?mixed) => void)) = null,
   ) {
     const currentPosition = this.getPosition(space);
     const delta = getPoint(p).sub(currentPosition);
@@ -1499,7 +1500,7 @@ class DiagramElement {
     time: number,
     scale: number,
     frequency: number = 0,
-    callback: ?(?mixed) => void = null,
+    callback: ?(string | ((?mixed) => void)) = null,
   ) {
     let p;
     if (e == null) {
@@ -1518,7 +1519,7 @@ class DiagramElement {
     time: number,
     scale: number,
     frequency: number = 0,
-    callback: ?(?mixed) => void = null,
+    callback: ?(string | ((?mixed) => void)) = null,
   ) {
     if (e == null || e instanceof DiagramElement) {
       this.pulseScaleRelativeToElement(e, x, y, space, time, scale, frequency, callback);
@@ -1529,7 +1530,7 @@ class DiagramElement {
 
   pulseThickNow(
     time: number, scale: number,
-    num: number = 3, callback: ?(?mixed) => void = null,
+    num: number = 3, callback: ?(string | ((?mixed) => void)) = null,
   ) {
     let bArray = [scale];
     this.pulseSettings.num = num;
@@ -1568,7 +1569,7 @@ class DiagramElement {
     if (this.pulseSettings.callback) {
       const { callback } = this.pulseSettings;
       this.pulseSettings.callback = null;
-      callback(result);
+      this.execFn(callback, result);
     }
   }
 
@@ -3430,7 +3431,7 @@ class DiagramElementCollection extends DiagramElement {
     time: number = 1,
     delay: number = 0,
     rotDirection: number = 0,
-    callback: ?(?mixed) => void = null,
+    callback: ?(string | ((?mixed) => void)) = null,
     easeFunction: (number) => number = tools.easeinout,
     // translationPath: (Point, Point, number) => Point = linearPath,
   ) {
@@ -3464,7 +3465,8 @@ class DiagramElementCollection extends DiagramElement {
       }
     }
     if (timeToAnimate === 0 && callbackMethod != null) {
-      callbackMethod(true);
+      this.execFn(callbackMethod, true);
+      // callbackMethod(true);
     }
     return timeToAnimate;
   }

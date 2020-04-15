@@ -111,6 +111,16 @@ diagram.addElements([
     },
   },
   {
+    name: 'line',
+    method: 'line',
+    options: {
+      p1: [0, 0],
+      p2: [0.5, 0],
+      width: 0.01,
+      color: [0, 1, 1, 1],
+    }
+  },
+  {
     name: 'p',
     method: 'shapes.polygon',
     options: {
@@ -144,7 +154,7 @@ diagram.addElements([
           // fill: true,
           width: 0.01,
           color: [1, 1, 0, 1],
-          sides: 5,
+          sides: 50,
           radius: 0.05,
         },
       },
@@ -154,7 +164,7 @@ diagram.addElements([
         options: {
           fill: true,
           color: [1, 1, 0, 1],
-          sides: 5,
+          sides: 50,
           radius: 0.05,
         },
       },
@@ -195,11 +205,13 @@ diagram.getElement('b').setMovable();
 // p.makeTouchable();
 // diagram.getElement('p').onClick = () => { diagram.recorder.show() }
 diagram.initialize();
-diagram.getElement('pointer').animations.new()
-  .position({ target: [0.5, 0], duration: 4 })
-  .rotation({ target: 1, duration: 2 })
-  .start();
+// diagram.getElement('line').animations.new()
+//   // .position({ target: [0.5, 0], duration: 4 })
+//   .rotation({ target: 2, duration: 3 })
+//   .start();
+diagram.getElement('line').grow(0, 4)
 // const state = diagram.getState();
+
 let state;
 // console.log(diagram)
 console.log(diagram)
@@ -208,12 +220,12 @@ setTimeout(() => {
   console.log(state)
   // console.log(state);
   // console.log(diagram.elements._pointer.animations.animations[0].steps)
-}, 1000)
+}, 1500)
 setTimeout(() => {
   console.log('1')
   // console.log(diagram)
   diagram.setState(state);
-  console.log(diagram.elements._pointer.animations.animations[0].steps[0].position)
+  // console.log(diagram.elements._pointer.animations.animations[0].steps[0].position)
   // console.log(performance.now() - diagram.stateTime)
   // console.log(diagram.elements._pointer.animations.animations[0])
   // console.log(state)
@@ -221,7 +233,7 @@ setTimeout(() => {
   diagram.animateNextFrame();
   // console.log(diagram.elements._pointer.animations.animations[0].steps[0].state)
   // console.log(diagram.elements._pointer.animations.animations[0].steps[0])
-}, 3000);
+}, 2000);
 // const data = [
 // ];
 
