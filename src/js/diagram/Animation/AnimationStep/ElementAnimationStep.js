@@ -86,7 +86,7 @@ export default class ElementAnimationStep extends AnimationStep {
     if (typeof this.progression === 'function') {
       return (this.progression(percentTime));
     }
-    return this.fnMap.exec(this.progression, percentTime);
+    return this.fnMap.exec(this.progression, percentTime) || 1;
   }
 
   _dup() {

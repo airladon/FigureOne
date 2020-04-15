@@ -5,13 +5,13 @@ import {
 import type { pathOptionsType } from '../../../../tools/g2';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
-  joinObjectsWithOptions,
+  // joinObjectsWithOptions,
 } from '../../../../tools/tools';
 import type {
   TypeElementAnimationStepInputOptions,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
-import type { DiagramElement } from '../../../Element';
+// import type { DiagramElement } from '../../../Element';
 
 export type TypePositionAnimationStepInputOptions = {
   start?: Point;      // default is element transform
@@ -31,7 +31,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     rotDirection: 0 | 1 | -1 | 2;
     translationStyle: 'linear' | 'curved';
     translationOptions: pathOptionsType;
-    velocity: ?Point | number;
+    velocity: ?Point;
     maxTime: ?number;
   };
 
