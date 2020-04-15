@@ -346,4 +346,37 @@ describe('Animation Step State', () => {
     diagram.draw(now);
     expect(math.round(elem1.lastDrawPulseTransform.s().x)).toEqual(2);
   });
+  test('Custom', () => {
+    let percentComplete;
+    const custom = (p) => { percentComplete = p; };
+    diagram.fnMap.add('customFunction', custom);
+    elem1.animations.new()
+      .custom({ duration: 2, callback: 'customFunction' })
+      .start();
+    now = 0;
+    diagram.draw(now);
+    now = 0.5;
+    diagram.draw(now);
+    expect(percentComplete).toBe(0.25);
+    const state = diagram.getState();
+    now = 1;
+    diagram.draw(now);
+    expect(percentComplete).toBe(0.5);
+    elem1.stop();
+    expect(elem1.animations.animations).toHaveLength(0);
+
+    // now lets delay 10s
+    now = 11;
+    diagram.setState(state);
+    diagram.draw(now);
+    expect(percentComplete).toBe(0.25);
+
+    now = 11.1;
+    diagram.draw(now);
+    expect(math.round(percentComplete)).toBe(0.3);
+
+    now = 11.5;
+    diagram.draw(now);
+    expect(percentComplete).toBe(0.5);
+  });
 });
