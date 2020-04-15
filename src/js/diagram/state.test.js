@@ -2,7 +2,7 @@ import {
   Point, Rect, Transform, Line,
 } from '../tools/g2';
 import {
-  getState,
+  getState, setState,
 } from './state';
 import parseState from './parseState';
 // import { round } from '../tools/math';
@@ -94,6 +94,38 @@ describe('state', () => {
       expect(obj.obj.r).toEqual(new Rect(0, 0, 3, 3));
       expect(obj.ar[0]).toBe(1);
       expect(obj.ar[1]).toEqual(new Point(1, 1));
+    });
+    test('get state portion of object', () => {
+      const objIn = {
+        a: 1,
+        b: {
+          c: 2,
+          d: {
+            e: 3,
+            f: 4,
+          },
+        },
+      };
+      // g is an error that will return nothing
+      const state = getState(objIn, ['a', 'b.d.e', 'g']);
+      expect(state.a).toBe(1);
+      expect(state.b.d.e).toBe(3);
+      expect(state.b.c).toBe(undefined);
+      expect(state.b.d.f).toBe(undefined);
+
+      objIn.a = 10;
+      objIn.b.d.f = 5;
+      objIn.b.d.e = 1;
+      expect(objIn.a).toBe(10);
+      expect(objIn.b.d.e).toBe(1);
+      expect(objIn.b.c).toBe(2);
+      expect(objIn.b.d.f).toBe(5);
+
+      setState(objIn, state);
+      expect(objIn.a).toBe(1);
+      expect(objIn.b.d.e).toBe(3);
+      expect(objIn.b.c).toBe(2);
+      expect(objIn.b.d.f).toBe(5);
     });
   });
 });
