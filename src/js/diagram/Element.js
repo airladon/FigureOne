@@ -2559,6 +2559,7 @@ class DiagramElementCollection extends DiagramElement {
     return [...super._getStateProperties(),
       'touchInBoundingRect',
       'elements',
+      'hasTouchableElements',
     ];
   }
 

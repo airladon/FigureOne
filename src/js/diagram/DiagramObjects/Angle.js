@@ -508,6 +508,22 @@ class DiagramObjectAngle extends DiagramElementCollection {
     }
   }
 
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'angle',
+      'lastLabelRotationOffset',
+    ];
+  }
+
+  _fromState(state: Object) {
+    joinObjects(this, state);
+    this.setAngle({
+      angle: this.angle,
+      rotationOffset: this.lastLabelRotationOffset,
+    });
+    return this;
+  }
+
   setNextPositionAndRotation() {
     if (this.nextPosition != null) {
       this.transform.updateTranslation(this.nextPosition);
