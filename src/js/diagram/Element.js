@@ -1306,7 +1306,7 @@ class DiagramElement {
       this.recorder.recordEvent(
         'moved',
         this.getPath(),
-        this.transform,
+        this.transform.round(this.recorder.precision),
         // this.state.movement.velocity.toString(),
       );
     }

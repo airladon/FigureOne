@@ -208,7 +208,7 @@ diagram.recorder.start();
 const p = diagram.getElement('p');
 p.makeTouchable();
 diagram.getElement('p').onClick = () => {
-  diagram.recorder.show()
+  diagram.recorder.save()
   diagram.recorder.stop();
   diagram.setState(diagram.recorder.states[1][1]);
   console.log(diagram.recorder.states[1][1])
