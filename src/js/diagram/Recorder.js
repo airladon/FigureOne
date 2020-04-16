@@ -311,6 +311,10 @@ class Recorder {
     this.animateNextFrame();
   }
 
+  getCurrentTime() {
+    return this.now() / 1000;
+  }
+
   startPlayback(fromTime: number = 0, showPointer: boolean = true) {
     this.currentTime = 0;
     this.isRecording = false;
@@ -318,6 +322,7 @@ class Recorder {
     this.eventIndex = 0;
     this.stateIndex = 0;
     this.previousPoint = null;
+    this.startTime = this.timeStamp();
     this.touchUp();
     this.eventIndex = getNextIndexForTime(this.events, fromTime);
     this.queuePlaybackEvent(this.getTimeToIndex(this.events, this.eventIndex, fromTime));
@@ -480,7 +485,7 @@ class Recorder {
   playbackEvent() {
     const event = this.events[this.eventIndex];
     const [currentTime] = event;
-    console.log('event', currentTime)
+    console.log('event', this.getCurrentTime(), currentTime)
     this.processEvent(event.slice(1));
     this.animateNextFrame();
     this.eventIndex += 1;
@@ -498,7 +503,7 @@ class Recorder {
     }
     const state = this.states[this.stateIndex];
     const [currentTime] = state;
-    console.log('state**********', currentTime)
+    console.log('state**********', this.getCurrentTime(), currentTime)
     this.setState(state[1]);
     this.animateNextFrame();
     this.stateIndex += 1;
