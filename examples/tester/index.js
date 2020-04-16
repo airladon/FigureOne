@@ -149,31 +149,38 @@ diagram.addElements([
   },
   {
     name: 'pointer',
-    method: 'collection',
-    addElements: [
-      {
-        name: 'up',
-        method: 'polygon',
-        options: {
-          // fill: true,
-          width: 0.01,
-          color: [1, 1, 0, 1],
-          sides: 50,
-          radius: 0.05,
-        },
-      },
-      {
-        name: 'down',
-        method: 'polygon',
-        options: {
-          fill: true,
-          color: [1, 1, 0, 1],
-          sides: 50,
-          radius: 0.05,
-        },
-      },
-    ]
-  }
+    method: 'shapes.pointer',
+    options: {
+      color: [1, 0.5, 0.5, 1],
+    }
+  },
+  // {
+  //   name: 'pointer',
+  //   method: 'collection',
+  //   addElements: [
+  //     {
+  //       name: 'up',
+  //       method: 'polygon',
+  //       options: {
+  //         // fill: true,
+  //         width: 0.01,
+  //         color: [1, 1, 0, 1],
+  //         sides: 50,
+  //         radius: 0.05,
+  //       },
+  //     },
+  //     {
+  //       name: 'down',
+  //       method: 'polygon',
+  //       options: {
+  //         fill: true,
+  //         color: [1, 1, 0, 1],
+  //         sides: 50,
+  //         radius: 0.05,
+  //       },
+  //     },
+  //   ]
+  // }
 ]);
 
 // diagram.addElement(
@@ -208,10 +215,11 @@ diagram.recorder.start();
 const p = diagram.getElement('p');
 p.makeTouchable();
 diagram.getElement('p').onClick = () => {
-  diagram.recorder.save()
+  // diagram.recorder.save()
   diagram.recorder.stop();
   diagram.setState(diagram.recorder.states[1][1]);
   console.log(diagram.recorder.states[1][1])
+  diagram.recorder.startPlayback();
 }
 // diagram.initialize();
 // // diagram.getElement('line').animations.new()
