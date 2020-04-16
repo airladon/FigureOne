@@ -22,6 +22,56 @@ function download(filename, text) {
   }
 }
 
+function getNextIndexForTime(
+  events: Array<Array<number | string | null> | [number, number | 'next' | 'prev'] | [number, Object]>,
+  time: number,
+  startSearch: number = 0,
+  endSearch: number = events.length - 1,
+) {
+  if (time === 0 || events.length === 0) {
+    return 0;
+  }
+  const endTime = parseFloat(events[endSearch][0]);
+  if (time > endTime) {
+    return -1;
+  }
+  const searchRange = endSearch - startSearch;
+  let midSearch = startSearch;
+  if (searchRange > 1) {
+    midSearch = Math.floor(startSearch + searchRange / 2);
+  } else if (searchRange === 1) {
+    midSearch = endSearch;
+  }
+  // console.log(startSearch, endSearch, midSearch)
+  if (midSearch === 0) {
+    return 0;
+  }
+  const prevTime = events[midSearch - 1][0];
+  const midTime = events[midSearch][0];
+  if (time === midTime) {
+    return midSearch;
+  }
+  if (time <= midTime && time > prevTime) {
+    return midSearch;
+  }
+  if (time < midTime) {
+    return getNextIndexForTime(events, time, startSearch, midSearch);
+  }
+  return getNextIndexForTime(events, midSearch, endSearch);
+}
+
+function getTimeToIndex(
+  events: Array<Array<number | string | null> | [number, number | 'next' | 'prev'] | [number, Object]>,
+  eventIndex: number,
+  time: number,
+) {
+  if (eventIndex === -1 || eventIndex > events.length) {
+    return -1;
+  }
+  const nextTime = events[eventIndex][0];
+  return nextTime - time;
+}
+
 class Recorder {
   // Method for requesting the next animation frame
   events: Array<Array<number | string | null>>;
@@ -36,14 +86,18 @@ class Recorder {
   // touchMoveDown: (Point, Point) => boolean;
   cursorMove: (Point) => void;
   getState: () => Object;
+  setState: (Object) => void;
   eventIndex: number;
+  stateIndex: number;
   queueNextFrame: GlobalAnimation;
   previousPoint: ?Point;
   animateNextFrame: () => void;
   getElement: () => DiagramElement;
-  nextTimeout: TimeoutID;
+  nextEventTimeout: TimeoutID;
+  nextStateTimeout: TimeoutID;
   stateTimeout: TimeoutID;
   stateTimeStep: number;
+  currentTime: number;
 
   // requestNextAnimationFrame: (()=>mixed) => AnimationFrameID;
   // animationId: AnimationFrameID;    // used to cancel animation frames
@@ -60,6 +114,7 @@ class Recorder {
     animateNextFrame?: () => void,
     getElement?: () => DiagramElement,
     getState?: () => Object,
+    setState?: (Object) => void,
   ) {
     // If the instance alread exists, then don't create a new instance.
     // If it doesn't, then setup some default values.
@@ -91,6 +146,9 @@ class Recorder {
       }
       if (getState) {
         this.getState = getState;
+      }
+      if (setState) {
+        this.setState = setState;
       }
       // this.drawScene = this.draw.bind(this);
     }
@@ -139,53 +197,33 @@ class Recorder {
     this.slides.push([this.now() / 1000, slide]);
   }
 
-  show() {  // eslint-disable-line class-methods-use-this
-    // this.showState();
-    // this.showEvents();
-    this.showAll();
-  }
+  // showEvents() {
+  //   const wnd = window.open('about:blank', '', '_blank');
+  //   this.events.forEach((event) => {
+  //     const out = [];
+  //     event.forEach((arg) => {
+  //       if (arg instanceof Transform) {
+  //         out.push(arg.toString(5));
+  //       } else if (typeof arg === 'string') {
+  //         out.push(`"${arg}"`);
+  //       } else if (typeof arg === 'number') {
+  //         out.push(round(arg, this.precision));
+  //       } else {
+  //         out.push(arg);
+  //       }
+  //     });
+  //     wnd.document.write(`[${out.join(',')}],`, '<br>');
+  //   });
+  // }
 
-  showEvents() {
-    const wnd = window.open('about:blank', '', '_blank');
-    this.events.forEach((event) => {
-      const out = [];
-      event.forEach((arg) => {
-        if (arg instanceof Transform) {
-          out.push(arg.toString(5));
-        } else if (typeof arg === 'string') {
-          out.push(`"${arg}"`);
-        } else if (typeof arg === 'number') {
-          out.push(round(arg, this.precision));
-        } else {
-          out.push(arg);
-        }
-      });
-      wnd.document.write(`[${out.join(',')}],`, '<br>');
-    });
-  }
-
-  showState() {
-    const wnd = window.open('about:blank', '', '_blank');
-    this.states.forEach((state) => {
-      // const out = [];
-      // event.forEach((arg) => {
-      //   if (arg instanceof Transform) {
-      //     out.push(arg.toString(5));
-      //   } else if (typeof arg === 'string') {
-      //     out.push(`"${arg}"`);
-      //   } else if (typeof arg === 'number') {
-      //     out.push(round(arg, this.precision));
-      //   } else {
-      //     out.push(arg);
-      //   }
-      // });
-      // wnd.document.write(`[${out.join(',')}],`, '<br>');
-      wnd.document.write(JSON.stringify(state), '<br>');
-    });
-  }
+  // showState() {
+  //   const wnd = window.open('about:blank', '', '_blank');
+  //   this.states.forEach((state) => {
+  //     wnd.document.write(JSON.stringify(state), '<br>');
+  //   });
+  // }
 
   save() {
-
     const slidesOut = [];
     this.slides.forEach((slide) => {
       slidesOut.push(JSON.stringify(slide));
@@ -208,7 +246,7 @@ class Recorder {
     download(`${dateStr} ${location} states.txt`, statesOut.join('\n'));
   }
 
-  showAll() {
+  show() {
     const wnd = window.open('about:blank', '', '_blank');
     this.slides.forEach((slide) => {
       wnd.document.write(JSON.stringify(slide), '<br>');
@@ -220,19 +258,6 @@ class Recorder {
     wnd.document.write('<br><br>');
 
     this.events.forEach((event) => {
-      // const out = [];
-      // event.forEach((arg) => {
-      //   if (arg instanceof Transform) {
-      //     out.push(arg.toString(5));
-      //   } else if (typeof arg === 'string') {
-      //     out.push(`"${arg}"`);
-      //   } else if (typeof arg === 'number') {
-      //     out.push(round(arg, this.precision));
-      //   } else {
-      //     out.push(arg);
-      //   }
-      // });
-      // wnd.document.write(`[${out.join(',')}],`, '<br>');
       const rounded = event.map((e) => {
         if (typeof e === 'number') {
           return round(e, this.precision);
@@ -254,14 +279,53 @@ class Recorder {
     this.events.push([this.now(), id]);
   }
 
-  startPlayback(fromTime: number = 0) {
+  getTotalTime() {
+    let time = 0;
+    if (this.slides.length > 0) {
+      const endTime = this.slides.slice(-1)[0][0];
+      time = Math.max(time, endTime);
+    }
+    if (this.events.length > 0) {
+      const endTime = this.events.slice(-1)[0][0];
+      time = Math.max(time, endTime);
+    }
+    if (this.states.length > 0) {
+      const endTime = this.states.slice(-1)[0][0];
+      time = Math.max(time, endTime);
+    }
+    return time;
+  }
+
+  scrub(percentTime: number) {
+    this.stopPlayback();
+    const totalTime = this.getTotalTime();
+    const timeTarget = percentTime * totalTime;
+    this.setToTime(timeTarget);
+  }
+
+  setToTime(time: number) {
+    this.currentTime = time;
+    this.stateIndex = Math.max(getNextIndexForTime(this.states, time) - 1, 0);
+    // this.playbackState();
+    this.setState(this.states[this.stateIndex][1]);
+    this.animateNextFrame();
+  }
+
+  startPlayback(fromTime: number = 0, showPointer: boolean = true) {
+    this.currentTime = 0;
     this.isRecording = false;
     this.isPlaying = true;
     this.eventIndex = 0;
+    this.stateIndex = 0;
     this.previousPoint = null;
     this.touchUp();
-    this.eventIndex = this.getNextIndexForTime(fromTime);
-    this.queuePlaybackEvent(this.getTimeToIndex(fromTime));
+    this.eventIndex = getNextIndexForTime(this.events, fromTime);
+    this.queuePlaybackEvent(this.getTimeToIndex(this.events, this.eventIndex, fromTime));
+    this.queuePlaybackState(this.getTimeToIndex(this.states, this.stateIndex, fromTime));
+    const pointer = this.getElement('pointer.up');
+    if (pointer != null && showPointer) {
+      pointer.show();
+    }
     // this.playbackEvent(this.getTimeToIndex);
   }
 
@@ -312,7 +376,12 @@ class Recorder {
 
   stopPlayback() {
     this.isPlaying = false;
-    clearTimeout(this.nextTimeout);
+    clearTimeout(this.nextEventTimeout);
+    clearTimeout(this.stateTimeout);
+    const pointer = this.getElement('pointer');
+    if (pointer != null) {
+      pointer.hide();
+    }
   }
 
   processEvent(event: Array<string | number>) {
@@ -380,21 +449,26 @@ class Recorder {
   }
 
   queuePlaybackEvent(time: number = 0) {
-    if (time === 0) {
-      this.playbackEvent();
-      return;
-    }
-    this.nextTimeout = setTimeout(() => {
+    // if (time === 0) {
+    //   this.playbackEvent();
+    //   return;
+    // }
+    this.nextEventTimeout = setTimeout(() => {
       if (this.isPlaying) {
         this.playbackEvent();
       }
     }, time);
   }
 
+  queuePlaybackState(time: number = 0) {
+    this.nextStateTimeout = setTimeout(() => {
+      if (this.isPlaying) {
+        this.playbackState();
+      }
+    }, time);
+  }
+
   queueRecordState(time: number = 0) {
-    // if (time === 0) {
-    //   this.recordState(this.getState());
-    // }
     this.stateTimeout = setTimeout(() => {
       if (this.isRecording) {
         this.recordState(this.getState());
@@ -406,6 +480,7 @@ class Recorder {
   playbackEvent() {
     const event = this.events[this.eventIndex];
     const [currentTime] = event;
+    console.log('event', currentTime)
     this.processEvent(event.slice(1));
     this.animateNextFrame();
     this.eventIndex += 1;
@@ -415,6 +490,24 @@ class Recorder {
     }
     const nextTime = (this.events[this.eventIndex][0] - currentTime) * 1000;
     this.queuePlaybackEvent(nextTime);
+  }
+
+  playbackState() {
+    if (this.states.length === 0 || this.stateIndex > this.states.length - 1) {
+      return;
+    }
+    const state = this.states[this.stateIndex];
+    const [currentTime] = state;
+    console.log('state**********', currentTime)
+    this.setState(state[1]);
+    this.animateNextFrame();
+    this.stateIndex += 1;
+    if (this.stateIndex === this.states.length) {
+      this.stopPlayback();
+      return;
+    }
+    const nextTime = (this.states[this.stateIndex][0] - currentTime) * 1000;
+    this.queuePlaybackState(nextTime);
   }
 
   // playbackClick() { // eslint-disable-line class-methods-use-this

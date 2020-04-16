@@ -217,11 +217,14 @@ diagram.recorder.start();
 const p = diagram.getElement('p');
 p.makeTouchable();
 diagram.getElement('p').onClick = () => {
-  // diagram.recorder.save()
   diagram.recorder.stop();
-  diagram.setState(diagram.recorder.states[0][1]);
-  console.log(diagram.recorder.states[1][1])
+  // diagram.recorder.save()
+  // diagram.setState(diagram.recorder.states[0][1]);
+  console.log(diagram.recorder.states)
+  console.log(diagram.recorder.events)
+  diagram.recorder.getTotalTime();
   diagram.recorder.startPlayback();
+  // diagram.recorder.setToTime(1);
 }
 // diagram.initialize();
 // // diagram.getElement('line').animations.new()
