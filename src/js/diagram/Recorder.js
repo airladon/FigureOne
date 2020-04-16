@@ -22,42 +22,145 @@ function download(filename, text) {
   }
 }
 
+function getIndexOfEarliestTime(
+  events: Array<Array<number | string | null> | [number, number | 'next' | 'prev'] | [number, Object]>,
+  index: number,
+) {
+  if (index < 1) {
+    return index;
+  }
+  let i = index;
+  let same = true;
+  const time = events[index][0];
+  while (i > 0 && same) {
+    const prevTime = events[i - 1][0];
+    if (prevTime !== time) {
+      same = false;
+    } else {
+      i -= 1;
+    }
+  }
+  return i;
+}
+
+function getIndexRangeForTime(
+  events: Array<Array<number | string | null> | [number, number | 'next' | 'prev'] | [number, Object]>,
+  time: number,
+  startSearch: number = 0,
+  endSearch: number = events.length - 1,
+) {
+  if (events.length === 0) {
+    return [-1, -1];
+  }
+  const startTime = parseFloat(events[startSearch][0]);
+  if (time === startTime) {
+    return [startSearch, startSearch];
+  }
+  if (time < startTime) {
+    return [-1, startSearch];
+  }
+
+  const endTime = parseFloat(events[endSearch][0]);
+  if (time === endTime) {
+    return [endSearch, endSearch];
+  }
+  if (time > endTime) {
+    return [endSearch, -1];
+  }
+
+  const searchRange = endSearch - startSearch;
+
+  if (searchRange < 2) {
+    return [startSearch, endSearch];
+  }
+
+  const midSearch = startSearch + Math.floor(searchRange / 2);
+  const midTime = parseFloat(events[midSearch][0]);
+  if (time === midTime) {
+    return [midSearch, midSearch];
+  }
+  if (time < midTime) {
+    return getIndexRangeForTime(events, time, startSearch, midSearch);
+  }
+  return getIndexRangeForTime(events, time, midSearch, endSearch)
+}
+
 function getNextIndexForTime(
   events: Array<Array<number | string | null> | [number, number | 'next' | 'prev'] | [number, Object]>,
   time: number,
   startSearch: number = 0,
   endSearch: number = events.length - 1,
 ) {
-  if (time === 0 || events.length === 0) {
-    return 0;
-  }
-  const endTime = parseFloat(events[endSearch][0]);
-  if (time > endTime) {
-    return -1;
-  }
-  const searchRange = endSearch - startSearch;
-  let midSearch = startSearch;
-  if (searchRange > 1) {
-    midSearch = Math.floor(startSearch + searchRange / 2);
-  } else if (searchRange === 1) {
-    midSearch = endSearch;
-  }
-  // console.log(startSearch, endSearch, midSearch)
-  if (midSearch === 0) {
-    return 0;
-  }
-  const prevTime = events[midSearch - 1][0];
-  const midTime = events[midSearch][0];
-  if (time === midTime) {
-    return midSearch;
-  }
-  if (time <= midTime && time > prevTime) {
-    return midSearch;
-  }
-  if (time < midTime) {
-    return getNextIndexForTime(events, time, startSearch, midSearch);
-  }
-  return getNextIndexForTime(events, midSearch, endSearch);
+  // // console.log(startSearch, endSearch)
+  // if (events.length === 0) {
+  //   return -1;
+  // }
+  // if (time === 0) {
+  //   return 0;
+  // }
+  // const startTime = parseFloat(events[startSearch][0]);
+  // if (time <= startTime) {
+  //   return startSearch;
+  // }
+
+  // const endTime = parseFloat(events[endSearch][0]);
+  // if (time > endTime) {
+  //   return -1;
+  // }
+
+  // if (startSearch === endSearch) {
+  //   return startSearch;
+  // }
+
+  // const searchRange = endSearch - startSearch;
+  // let midSearch = startSearch;
+  // if (searchRange > 1) {
+  //   midSearch = Math.floor(startSearch + searchRange / 2);
+  // } else if (searchRange === 1) {
+  //   midSearch = endSearch;
+  // }
+
+  // // console.log(startSearch, endSearch, midSearch)
+  // if (midSearch === 0) {
+  //   return 0;
+  // }
+
+  // const prevTime = events[midSearch - 1][0];
+  // const midTime = events[midSearch][0];
+  // if (time === midTime) {
+  //   return midSearch;
+  // }
+  // if (time <= midTime && time > prevTime) {
+  //   return midSearch;
+  // }
+  // if (time < midTime) {
+  //   return getNextIndexForTime(events, time, startSearch, midSearch);
+  // }
+  // return getNextIndexForTime(events, midSearch, endSearch);
+  const nextIndex = getIndexRangeForTime(events, time, startSearch, endSearch)[1];
+  return getIndexOfEarliestTime(events, nextIndex);
+}
+
+function getPrevIndexForTime(
+  events: Array<Array<number | string | null> | [number, number | 'next' | 'prev'] | [number, Object]>,
+  time: number,
+  startSearch: number = 0,
+  endSearch: number = events.length - 1,
+) {
+  // if (events.length === 0) {
+  //   return -1;
+  // }
+  // if (events.length < startSearch || events.length < endSearch) {
+  //   return -1;
+  // }
+  // console.log(time, events)
+  // const index = getNextIndexForTime(events, time, startSearch, endSearch);
+  // if (index === 0 || index === -1) {
+  //   return index;
+  // }
+  // return index - 1;
+  const prevIndex = getIndexRangeForTime(events, time, startSearch, endSearch)[0];
+  return getIndexOfEarliestTime(events, prevIndex);
 }
 
 function getTimeToIndex(
@@ -89,15 +192,19 @@ class Recorder {
   setState: (Object) => void;
   eventIndex: number;
   stateIndex: number;
-  queueNextFrame: GlobalAnimation;
+  animation: GlobalAnimation;
   previousPoint: ?Point;
-  animateNextFrame: () => void;
+  animateDiagramNextFrame: () => void;
   getElement: () => DiagramElement;
   nextEventTimeout: TimeoutID;
   nextStateTimeout: TimeoutID;
   stateTimeout: TimeoutID;
   stateTimeStep: number;
-  currentTime: number;
+  // currentTime: number;
+
+  lastShownEventIndex: number;
+  lastShownStateIndex: number;
+  lastShownSlideIndex: number;
 
   // requestNextAnimationFrame: (()=>mixed) => AnimationFrameID;
   // animationId: AnimationFrameID;    // used to cancel animation frames
@@ -111,7 +218,7 @@ class Recorder {
     // diagramCursorMove?: (Point) => void,
     // diagramTouchMoveDown?: (Point, Point) => boolean,
     diagramCursorMove?: (Point) => void,
-    animateNextFrame?: () => void,
+    animateDiagramNextFrame?: () => void,
     getElement?: () => DiagramElement,
     getState?: () => Object,
     setState?: (Object) => void,
@@ -124,6 +231,9 @@ class Recorder {
       this.isRecording = false;
       this.precision = 5;
       this.stateTimeStep = 1000;
+      this.lastShownEventIndex = -1;
+      this.lastShownStateIndex = -1;
+      this.lastShownSlideIndex = -1;
       if (diagramTouchDown) {
         this.touchDown = diagramTouchDown;
       }
@@ -136,10 +246,10 @@ class Recorder {
       if (diagramCursorMove) {
         this.cursorMove = diagramCursorMove;
       }
-      this.queueNextFrame = new GlobalAnimation();
+      this.animation = new GlobalAnimation();
       this.previousPoint = null;
-      if (animateNextFrame) {
-        this.animateNextFrame = animateNextFrame;
+      if (animateDiagramNextFrame) {
+        this.animateDiagramNextFrame = animateDiagramNextFrame;
       }
       if (getElement) {
         this.getElement = getElement;
@@ -175,6 +285,14 @@ class Recorder {
   stop() {
     this.isRecording = false;
     clearTimeout(this.stateTimeout);
+  }
+
+  getNextEventIndexForTime(time: number,) {
+    return getNextIndexForTime(this.events, time);
+  }
+
+  getPrevEventIndexForTime(time: number,) {
+    return getPrevIndexForTime(this.events, time);
   }
 
   recordEvent(...args: Array<number | string>) {
@@ -308,30 +426,73 @@ class Recorder {
     this.stateIndex = Math.max(getNextIndexForTime(this.states, time) - 1, 0);
     // this.playbackState();
     this.setState(this.states[this.stateIndex][1]);
-    this.animateNextFrame();
+    this.animateDiagramNextFrame();
   }
 
   getCurrentTime() {
     return this.now() / 1000;
   }
 
+  setStartTime(fromTime: number = 0) {
+    this.startTime = this.timeStamp() - fromTime * 1000;
+  }
+
   startPlayback(fromTime: number = 0, showPointer: boolean = true) {
-    this.currentTime = 0;
+    this.lastShownEventIndex = -1;
+    this.lastShownStateIndex = -1;
+    this.lastShownSlideIndex = -1;
     this.isRecording = false;
     this.isPlaying = true;
+    // const prevEventIndex = getPrevIndexForTime(this.events, fromTime);
+    // const prevStateIndex = getPrevIndexForTime(this.states, fromTime);
+    // const prevSlideIndex = getPrevIndexForTime(this.slides, fromTime);
+
+    // this.currentTime = 0;
     this.eventIndex = 0;
     this.stateIndex = 0;
     this.previousPoint = null;
-    this.startTime = this.timeStamp();
+    this.setStartTime(fromTime);
     this.touchUp();
-    this.eventIndex = getNextIndexForTime(this.events, fromTime);
-    this.queuePlaybackEvent(this.getTimeToIndex(this.events, this.eventIndex, fromTime));
-    this.queuePlaybackState(this.getTimeToIndex(this.states, this.stateIndex, fromTime));
+    this.animation.queueNextFrame(this.playFrame.bind(this));
+    // this.eventIndex = getNextIndexForTime(this.events, fromTime);
+    // this.queuePlaybackEvent(this.getTimeToIndex(this.events, this.eventIndex, fromTime));
+    // this.queuePlaybackState(this.getTimeToIndex(this.states, this.stateIndex, fromTime));
     const pointer = this.getElement('pointer.up');
     if (pointer != null && showPointer) {
       pointer.show();
     }
     // this.playbackEvent(this.getTimeToIndex);
+  }
+
+  playFrame() {
+    const time = this.getCurrentTime();
+    const prevEventIndex = getPrevIndexForTime(this.events, time);
+    if (prevEventIndex > this.lastShownEventIndex) {
+      this.processEvent(this.events[prevEventIndex]);
+      this.lastShownEventIndex = prevEventIndex;
+    }
+    const prevStateIndex = getPrevIndexForTime(this.states, time);
+    if (prevStateIndex > this.lastShownStateIndex) {
+      this.setState(this.states[prevStateIndex][1]);
+      this.lastShownStateIndex = prevStateIndex;
+      // this.processState(this.states[prevStateIndex]);
+    }
+    if (
+      (
+        this.lastShownEventIndex >= this.events.length - 1
+        || this.lastShownEventIndex === -1
+      )
+      && (
+        this.lastShownStateIndex >= this.states.length - 1
+        || this.lastShownStateIndex === -1
+      )
+    ) {
+      this.stopPlayback();
+    } else {
+      this.animation.queueNextFrame(this.playFrame.bind(this));
+    }
+    this.animateDiagramNextFrame();
+    // const prevSlideIndex = getPrevIndexForTime(this.slides, time);
   }
 
   getTimeToIndex(time: number) {
@@ -342,42 +503,42 @@ class Recorder {
     return nextTime - time;
   }
 
-  getNextIndexForTime(
-    time: number,
-    startSearch: number = 0,
-    endSearch: number = this.events.length - 1,
-  ) {
-    if (time === 0) {
-      return 0;
-    }
-    const endTime = parseFloat(this.events[endSearch][0]);
-    if (time > endTime) {
-      return -1;
-    }
-    const searchRange = endSearch - startSearch;
-    let midSearch = startSearch;
-    if (searchRange > 1) {
-      midSearch = Math.floor(startSearch + searchRange / 2);
-    } else if (searchRange === 1) {
-      midSearch = endSearch;
-    }
-    // console.log(startSearch, endSearch, midSearch)
-    if (midSearch === 0) {
-      return 0;
-    }
-    const prevTime = this.events[midSearch - 1][0];
-    const midTime = this.events[midSearch][0];
-    if (time === midTime) {
-      return midSearch;
-    }
-    if (time <= midTime && time > prevTime) {
-      return midSearch;
-    }
-    if (time < midTime) {
-      return this.getNextIndexForTime(time, startSearch, midSearch);
-    }
-    return this.getNextIndexForTime(time, midSearch, endSearch);
-  }
+  // getNextIndexForTime(
+  //   time: number,
+  //   startSearch: number = 0,
+  //   endSearch: number = this.events.length - 1,
+  // ) {
+  //   if (time === 0) {
+  //     return 0;
+  //   }
+  //   const endTime = parseFloat(this.events[endSearch][0]);
+  //   if (time > endTime) {
+  //     return -1;
+  //   }
+  //   const searchRange = endSearch - startSearch;
+  //   let midSearch = startSearch;
+  //   if (searchRange > 1) {
+  //     midSearch = Math.floor(startSearch + searchRange / 2);
+  //   } else if (searchRange === 1) {
+  //     midSearch = endSearch;
+  //   }
+  //   // console.log(startSearch, endSearch, midSearch)
+  //   if (midSearch === 0) {
+  //     return 0;
+  //   }
+  //   const prevTime = this.events[midSearch - 1][0];
+  //   const midTime = this.events[midSearch][0];
+  //   if (time === midTime) {
+  //     return midSearch;
+  //   }
+  //   if (time <= midTime && time > prevTime) {
+  //     return midSearch;
+  //   }
+  //   if (time < midTime) {
+  //     return this.getNextIndexForTime(time, startSearch, midSearch);
+  //   }
+  //   return this.getNextIndexForTime(time, midSearch, endSearch);
+  // }
 
   stopPlayback() {
     this.isPlaying = false;
@@ -487,7 +648,7 @@ class Recorder {
     const [currentTime] = event;
     console.log('event', this.getCurrentTime(), currentTime)
     this.processEvent(event.slice(1));
-    this.animateNextFrame();
+    this.animateDiagramNextFrame();
     this.eventIndex += 1;
     if (this.eventIndex === this.events.length) {
       this.stopPlayback();
@@ -505,7 +666,7 @@ class Recorder {
     const [currentTime] = state;
     console.log('state**********', this.getCurrentTime(), currentTime)
     this.setState(state[1]);
-    this.animateNextFrame();
+    this.animateDiagramNextFrame();
     this.stateIndex += 1;
     if (this.stateIndex === this.states.length) {
       this.stopPlayback();
