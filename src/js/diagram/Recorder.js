@@ -9,7 +9,7 @@ class Recorder {
   // Method for requesting the next animation frame
   events: Array<Array<number | string | null>>;
   states: Array<[number, Object]>;
-  slides: Array<[number, number]>;
+  slides: Array<[number, number | 'next' | 'prev']>;
   isRecording: boolean;
   isPlaying: boolean;
   startTime: number;
@@ -26,6 +26,7 @@ class Recorder {
   getElement: () => DiagramElement;
   nextTimeout: TimeoutID;
   stateTimeout: TimeoutID;
+  stateTimeStep: number;
 
   // requestNextAnimationFrame: (()=>mixed) => AnimationFrameID;
   // animationId: AnimationFrameID;    // used to cancel animation frames
@@ -50,6 +51,7 @@ class Recorder {
       this.events = [];
       this.isRecording = false;
       this.precision = 5;
+      this.stateTimeStep = 1000;
       if (diagramTouchDown) {
         this.touchDown = diagramTouchDown;
       }
@@ -108,7 +110,7 @@ class Recorder {
     this.states.push([this.now() / 1000, state]);
   }
 
-  recordSlide(slide: number) {
+  recordSlide(slide: number | 'next' | 'prev') {
     this.slides.push([this.now() / 1000, slide]);
   }
 
@@ -304,7 +306,7 @@ class Recorder {
     this.stateTimeout = setTimeout(() => {
       if (this.isRecording) {
         this.recordState(this.getState());
-        this.queueRecordState(1000);
+        this.queueRecordState(this.stateTimeStep);
       }
     }, time);
   }
