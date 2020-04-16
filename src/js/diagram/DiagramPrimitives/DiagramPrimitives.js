@@ -1677,10 +1677,10 @@ export default class DiagramPrimitives {
     },
   ) {
     const defaultOptions = {
-      color: [1, 0, 0, 1],
+      color: [1, 1, 0, 0.5],
       width: 0.01,
       radius: 0.05,
-    }
+    };
     const options = joinObjects(defaultOptions, optionsIn);
     const pointer = this.collection();
     const polygon = {
