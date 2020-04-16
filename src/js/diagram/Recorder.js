@@ -115,8 +115,9 @@ class Recorder {
   }
 
   show() {  // eslint-disable-line class-methods-use-this
-    this.showState();
+    // this.showState();
     // this.showEvents();
+    this.showAll();
   }
 
   showEvents() {
@@ -154,6 +155,41 @@ class Recorder {
       //   }
       // });
       // wnd.document.write(`[${out.join(',')}],`, '<br>');
+      wnd.document.write(JSON.stringify(state), '<br>');
+    });
+  }
+
+  showAll() {
+    const wnd = window.open('about:blank', '', '_blank');
+    this.slides.forEach((slide) => {
+      wnd.document.write(JSON.stringify(slide), '<br>');
+    });
+
+    wnd.document.write('<br><br>');
+    wnd.document.write(`// ${'/'.repeat(500)}<br>`);
+    wnd.document.write(`// ${'/'.repeat(500)}<br>`);
+    wnd.document.write('<br><br>');
+
+    this.events.forEach((event) => {
+      const out = [];
+      event.forEach((arg) => {
+        if (arg instanceof Transform) {
+          out.push(arg.toString(5));
+        } else if (typeof arg === 'string') {
+          out.push(`"${arg}"`);
+        } else if (typeof arg === 'number') {
+          out.push(round(arg, this.precision));
+        } else {
+          out.push(arg);
+        }
+      });
+      wnd.document.write(`[${out.join(',')}],`, '<br>');
+    });
+    wnd.document.write('<br><br>');
+    wnd.document.write(`// ${'/'.repeat(500)}<br>`);
+    wnd.document.write(`// ${'/'.repeat(500)}<br>`);
+    wnd.document.write('<br><br>');
+    this.states.forEach((state) => {
       wnd.document.write(JSON.stringify(state), '<br>');
     });
   }
