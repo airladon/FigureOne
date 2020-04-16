@@ -312,6 +312,7 @@ class Diagram {
       this.animateNextFrame.bind(this),
       this.getElement.bind(this),
       this.getState.bind(this),
+      this.setState.bind(this),
     );
     this.shapesLow = this.getShapes();
     // this.shapesHigh = this.getShapes(true);
