@@ -130,7 +130,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
   close: boolean;
   _line: ?DiagramElementPrimitive;
   options: TypePolyLineOptions;
-  updatePointsCallback: ?() => void;
+  updatePointsCallback: ?(string | (() => void));
   reverse: boolean;
   makeValid: ?{
     shape: 'triangle';
@@ -292,14 +292,19 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
             );
           }
           padShape.setMoveBoundaryToDiagram(boundary);
-          padShape.setTransformCallback = (transform) => {
-            const index = parseInt(padShape.name.slice(3), 10);
-            const translation = transform.t();
-            if (translation != null) {
-              this.points[index] = translation._dup();
-              this.updatePoints(this.points);
-            }
-          };
+          const fnName = `_polyline_${this.getPath()}_pad${i}`;
+          this.fnMap.add(
+            fnName,
+            (transform) => {
+              const index = parseInt(padShape.name.slice(3), 10);
+              const translation = transform.t();
+              if (translation != null) {
+                this.points[index] = translation._dup();
+                this.updatePoints(this.points);
+              }
+            },
+          );
+          padShape.setTransformCallback = fnName;
         }
         this.add(name, padShape);
       }
@@ -392,6 +397,18 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         this.add(name, sideLine);
       }
     }
+  }
+
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'points',
+    ];
+  }
+
+  _fromState(state: Object) {
+    joinObjects(this, state);
+    this.updatePoints(this.points);
+    return this;
   }
 
   updateSideLabels(rotationOffset: number = 0) {
@@ -525,7 +542,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       this.makeValidTriangle();
     }
     if (this.updatePointsCallback != null && !skipCallback) {
-      this.updatePointsCallback();
+      this.execFn(this.updatePointsCallback);
     }
   }
 

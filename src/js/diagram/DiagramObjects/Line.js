@@ -571,6 +571,21 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     }
   }
 
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'offset',
+      'angle',
+      'length',
+      'position',
+    ];
+  }
+
+  _fromState(state: Object) {
+    joinObjects(this, state);
+    this.setLineDimensions();
+    return this;
+  }
+
   pulseWidth(optionsIn?: {
       line?: number,
       label?: number,

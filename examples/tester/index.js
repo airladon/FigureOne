@@ -118,6 +118,10 @@ diagram.addElements([
       p2: [0.5, 0],
       width: 0.01,
       color: [0, 1, 1, 1],
+      label: {
+        text: 'abc',
+        offset: 0.1,
+      }
     }
   },
   {
