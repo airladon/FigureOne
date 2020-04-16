@@ -151,8 +151,10 @@ diagram.addElements([
     name: 'pointer',
     method: 'shapes.pointer',
     options: {
-      color: [1, 0.5, 0.5, 1],
-    }
+      color: [1, 1, 0, 0.4],
+      radius: 0.05,
+      width: 0.02,
+    },
   },
   // {
   //   name: 'pointer',
@@ -217,7 +219,7 @@ p.makeTouchable();
 diagram.getElement('p').onClick = () => {
   // diagram.recorder.save()
   diagram.recorder.stop();
-  diagram.setState(diagram.recorder.states[1][1]);
+  diagram.setState(diagram.recorder.states[0][1]);
   console.log(diagram.recorder.states[1][1])
   diagram.recorder.startPlayback();
 }
