@@ -7,7 +7,9 @@ import GlobalAnimation from './webgl/GlobalAnimation';
 // Singleton class that contains projects global variables
 class Recorder {
   // Method for requesting the next animation frame
-  events: Array<Array<number | string | null>>
+  events: Array<Array<number | string | null>>;
+  states: Array<[number, Object]>;
+  slides: Array<[number, number]>;
   isRecording: boolean;
   isPlaying: boolean;
   startTime: number;
@@ -16,12 +18,14 @@ class Recorder {
   touchUp: void => void;
   // touchMoveDown: (Point, Point) => boolean;
   cursorMove: (Point) => void;
+  getState: () => Object;
   eventIndex: number;
   queueNextFrame: GlobalAnimation;
   previousPoint: ?Point;
   animateNextFrame: () => void;
   getElement: () => DiagramElement;
   nextTimeout: TimeoutID;
+  stateTimeout: TimeoutID;
 
   // requestNextAnimationFrame: (()=>mixed) => AnimationFrameID;
   // animationId: AnimationFrameID;    // used to cancel animation frames
@@ -37,6 +41,7 @@ class Recorder {
     diagramCursorMove?: (Point) => void,
     animateNextFrame?: () => void,
     getElement?: () => DiagramElement,
+    getState?: () => Object,
   ) {
     // If the instance alread exists, then don't create a new instance.
     // If it doesn't, then setup some default values.
@@ -65,6 +70,9 @@ class Recorder {
       if (getElement) {
         this.getElement = getElement;
       }
+      if (getState) {
+        this.getState = getState;
+      }
       // this.drawScene = this.draw.bind(this);
     }
     return Recorder.instance;
@@ -79,32 +87,37 @@ class Recorder {
   }
 
   start() {
+    this.events = [];
+    this.slides = [];
+    this.states = [];
     this.startTime = this.timeStamp();
     this.isRecording = true;
-    this.events = [];
+    this.queueRecordState(0);
   }
 
   stop() {
     this.isRecording = false;
+    clearTimeout(this.stateTimeout);
   }
 
   recordEvent(...args: Array<number | string>) {
-    // const out = [];
-    // args.forEach((arg) => {
-    //   if (arg instanceof Transform) {
-    //     out.push(arg.toString(5));
-    //   } else if (typeof arg === 'string') {
-    //     out.push(`${arg}`);
-    //   } else if (typeof arg === 'number') {
-    //     out.push(round(arg, this.precision));
-    //   } else {
-    //     out.push(arg);
-    //   }
-    // });
     this.events.push([this.now() / 1000, ...args]);
   }
 
+  recordState(state: Object) {
+    this.states.push([this.now() / 1000, state]);
+  }
+
+  recordSlide(slide: number) {
+    this.slides.push([this.now() / 1000, slide]);
+  }
+
   show() {  // eslint-disable-line class-methods-use-this
+    this.showState();
+    // this.showEvents();
+  }
+
+  showEvents() {
     const wnd = window.open('about:blank', '', '_blank');
     this.events.forEach((event) => {
       const out = [];
@@ -120,6 +133,26 @@ class Recorder {
         }
       });
       wnd.document.write(`[${out.join(',')}],`, '<br>');
+    });
+  }
+
+  showState() {
+    const wnd = window.open('about:blank', '', '_blank');
+    this.states.forEach((state) => {
+      // const out = [];
+      // event.forEach((arg) => {
+      //   if (arg instanceof Transform) {
+      //     out.push(arg.toString(5));
+      //   } else if (typeof arg === 'string') {
+      //     out.push(`"${arg}"`);
+      //   } else if (typeof arg === 'number') {
+      //     out.push(round(arg, this.precision));
+      //   } else {
+      //     out.push(arg);
+      //   }
+      // });
+      // wnd.document.write(`[${out.join(',')}],`, '<br>');
+      wnd.document.write(JSON.stringify(state), '<br>');
     });
   }
 
@@ -190,7 +223,6 @@ class Recorder {
 
   processEvent(event: Array<string | number>) {
     const [eventType] = event;
-    console.log(eventType)
     switch (eventType) {
       case 'touchDown': {
         const [, x, y] = event;
@@ -221,9 +253,6 @@ class Recorder {
       case 'click': {
         const [, id] = event;
         const element = document.getElementById(id);
-        console.log(id)
-        console.log(element)
-        console.log(id,'asdfasdfasdf');
         if (element != null) {
           element.click();
         }
@@ -264,6 +293,18 @@ class Recorder {
     this.nextTimeout = setTimeout(() => {
       if (this.isPlaying) {
         this.playbackEvent();
+      }
+    }, time);
+  }
+
+  queueRecordState(time: number = 0) {
+    // if (time === 0) {
+    //   this.recordState(this.getState());
+    // }
+    this.stateTimeout = setTimeout(() => {
+      if (this.isRecording) {
+        this.recordState(this.getState());
+        this.queueRecordState(1000);
       }
     }, time);
   }
