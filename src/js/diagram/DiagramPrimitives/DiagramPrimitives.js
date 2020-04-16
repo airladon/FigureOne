@@ -1669,6 +1669,33 @@ export default class DiagramPrimitives {
     return copy;
   }
 
+  pointer(
+    optionsIn: {
+      color: Array<number>,
+      width: number,
+      radius: number,
+    },
+  ) {
+    const defaultOptions = {
+      color: [1, 0, 0, 1],
+      width: 0.01,
+      radius: 0.05,
+    }
+    const options = joinObjects(defaultOptions, optionsIn);
+    const pointer = this.collection();
+    const polygon = {
+      width: options.width,
+      color: options.color,
+      radius: options.radius,
+      sides: 50,
+    };
+    const up = this.polygon(polygon);
+    const down = this.polygon(joinObjects({}, polygon, { fill: true }));
+    pointer.add('up', up);
+    pointer.add('down', down);
+    return pointer;
+  }
+
   collection(
     transformOrPointOrOptions: Transform | Point | {
       transform?: Transform,
