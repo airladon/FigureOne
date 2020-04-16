@@ -5,6 +5,23 @@ import { round } from '../tools/math';
 import type { DiagramElement } from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
 // Singleton class that contains projects global variables
+
+function download(filename, text) {
+  const element = document.createElement('a');
+  element.setAttribute(
+    'href', 
+    `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`,
+  );
+  element.setAttribute('download', filename);
+  element.style.display = 'none';
+  const { body } = document;
+  if (body != null) {
+    body.appendChild(element);
+    element.click();
+    body.removeChild(element);
+  }
+}
+
 class Recorder {
   // Method for requesting the next animation frame
   events: Array<Array<number | string | null>>;
@@ -103,7 +120,15 @@ class Recorder {
   }
 
   recordEvent(...args: Array<number | string>) {
-    this.events.push([this.now() / 1000, ...args]);
+    const out = [];
+    args.forEach((arg) => {
+      if (typeof arg === 'number' && this.precision > -1) {
+        out.push(round(arg, this.precision));
+        return;
+      }
+      out.push(arg);
+    })
+    this.events.push([this.now() / 1000, ...out]);
   }
 
   recordState(state: Object) {
@@ -159,6 +184,30 @@ class Recorder {
     });
   }
 
+  save() {
+
+    const slidesOut = [];
+    this.slides.forEach((slide) => {
+      slidesOut.push(JSON.stringify(slide));
+    });
+
+    const eventsOut = [];
+    this.events.forEach((event) => {
+      eventsOut.push(JSON.stringify(event));
+    });
+
+    const statesOut = [];
+    this.states.forEach((state) => {
+      statesOut.push(JSON.stringify(state));
+    });
+
+    const dateStr = new Date().toISOString();
+    const location = (window.location.pathname).replace('/', '_');
+    download(`${dateStr} ${location} slides.txt`, slidesOut.join('\n'));
+    download(`${dateStr} ${location} events.txt`, eventsOut.join('\n'));
+    download(`${dateStr} ${location} states.txt`, statesOut.join('\n'));
+  }
+
   showAll() {
     const wnd = window.open('about:blank', '', '_blank');
     this.slides.forEach((slide) => {
@@ -171,19 +220,26 @@ class Recorder {
     wnd.document.write('<br><br>');
 
     this.events.forEach((event) => {
-      const out = [];
-      event.forEach((arg) => {
-        if (arg instanceof Transform) {
-          out.push(arg.toString(5));
-        } else if (typeof arg === 'string') {
-          out.push(`"${arg}"`);
-        } else if (typeof arg === 'number') {
-          out.push(round(arg, this.precision));
-        } else {
-          out.push(arg);
+      // const out = [];
+      // event.forEach((arg) => {
+      //   if (arg instanceof Transform) {
+      //     out.push(arg.toString(5));
+      //   } else if (typeof arg === 'string') {
+      //     out.push(`"${arg}"`);
+      //   } else if (typeof arg === 'number') {
+      //     out.push(round(arg, this.precision));
+      //   } else {
+      //     out.push(arg);
+      //   }
+      // });
+      // wnd.document.write(`[${out.join(',')}],`, '<br>');
+      const rounded = event.map((e) => {
+        if (typeof e === 'number') {
+          return round(e, this.precision);
         }
+        return e;
       });
-      wnd.document.write(`[${out.join(',')}],`, '<br>');
+      wnd.document.write(JSON.stringify(rounded), '<br>');
     });
     wnd.document.write('<br><br>');
     wnd.document.write(`// ${'/'.repeat(500)}<br>`);
