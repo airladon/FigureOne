@@ -311,6 +311,7 @@ class Diagram {
       this.simulateCursorMove.bind(this),
       this.animateNextFrame.bind(this),
       this.getElement.bind(this),
+      this.getState.bind(this),
     );
     this.shapesLow = this.getShapes();
     // this.shapesHigh = this.getShapes(true);

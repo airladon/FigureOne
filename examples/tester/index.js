@@ -204,42 +204,47 @@ diagram.addElements([
 // diagram.getElement('eqn').showForm('base');
 diagram.getElement('b').setMovable();
 
-// diagram.recorder.start();
-// const p = diagram.getElement('p');
-// p.makeTouchable();
-// diagram.getElement('p').onClick = () => { diagram.recorder.show() }
-diagram.initialize();
-// diagram.getElement('line').animations.new()
-//   // .position({ target: [0.5, 0], duration: 4 })
-//   .rotation({ target: 2, duration: 3 })
-//   .start();
-diagram.getElement('line').grow(0, 4)
-// const state = diagram.getState();
+diagram.recorder.start();
+const p = diagram.getElement('p');
+p.makeTouchable();
+diagram.getElement('p').onClick = () => {
+  // diagram.recorder.show()
+  diagram.recorder.stop();
+  diagram.setState(diagram.recorder.states[1][1]);
+  console.log(diagram.recorder.states[1][1])
+}
+// diagram.initialize();
+// // diagram.getElement('line').animations.new()
+// //   // .position({ target: [0.5, 0], duration: 4 })
+// //   .rotation({ target: 2, duration: 3 })
+// //   .start();
+// diagram.getElement('line').grow(0, 4)
+// // const state = diagram.getState();
 
-let state;
+// let state;
+// // console.log(diagram)
 // console.log(diagram)
-console.log(diagram)
-setTimeout(() => {
-  state = diagram.getState();
-  console.log(state)
-  // console.log(state);
-  // console.log(diagram.elements._pointer.animations.animations[0].steps)
-}, 1500)
-setTimeout(() => {
-  console.log('1')
-  // console.log(diagram)
-  diagram.setState(state);
-  // console.log(diagram.elements._pointer.animations.animations[0].steps[0].position)
-  // console.log(performance.now() - diagram.stateTime)
-  // console.log(diagram.elements._pointer.animations.animations[0])
-  // console.log(state)
-  // console.log(diagram);
-  diagram.animateNextFrame();
-  // console.log(diagram.elements._pointer.animations.animations[0].steps[0].state)
-  // console.log(diagram.elements._pointer.animations.animations[0].steps[0])
-}, 2000);
-// const data = [
-// ];
+// setTimeout(() => {
+//   state = diagram.getState();
+//   console.log(state)
+//   // console.log(state);
+//   // console.log(diagram.elements._pointer.animations.animations[0].steps)
+// }, 1500)
+// setTimeout(() => {
+//   console.log('1')
+//   // console.log(diagram)
+//   diagram.setState(state);
+//   // console.log(diagram.elements._pointer.animations.animations[0].steps[0].position)
+//   // console.log(performance.now() - diagram.stateTime)
+//   // console.log(diagram.elements._pointer.animations.animations[0])
+//   // console.log(state)
+//   // console.log(diagram);
+//   diagram.animateNextFrame();
+//   // console.log(diagram.elements._pointer.animations.animations[0].steps[0].state)
+//   // console.log(diagram.elements._pointer.animations.animations[0].steps[0])
+// }, 2000);
+// // const data = [
+// // ];
 
-// diagram.recorder.events = data;
-// diagram.recorder.startPlayback(1.5);
+// // diagram.recorder.events = data;
+// // diagram.recorder.startPlayback(1.5);
