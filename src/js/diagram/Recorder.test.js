@@ -6,6 +6,13 @@
 // } from '../tools/math';
 import * as tools from '../tools/tools';
 import makeDiagram from '../__mocks__/makeDiagram';
+import {
+  getNextIndexForTime,
+  getPrevIndexForTime,
+  getIndexOfEarliestTime,
+  getIndexOfLatestTime,
+  getLastUniqueIndeces,
+} from './Recorder';
 
 tools.isTouchDevice = jest.fn();
 
@@ -16,174 +23,244 @@ jest.mock('./DrawContext2D');
 describe('Diagram Recorder', () => {
   let diagram;
   let recorder;
+  let events;
   beforeEach(() => {
     diagram = makeDiagram();
     ({ recorder } = diagram);
-    recorder.events = [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9], [10]];
+    events = [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9], [10]];
   });
   describe('Find Index', () => {
     describe('Next', () => {
       test('start', () => {
-        const index = recorder.getNextEventIndexForTime(0);
+        const index = getNextIndexForTime(events, 0);
         expect(index).toBe(0);
       });
       test('end', () => {
-        const index = recorder.getNextEventIndexForTime(10);
+        const index = getNextIndexForTime(events, 10);
         expect(index).toBe(10);
       });
       test('beyondEnd', () => {
-        const index = recorder.getNextEventIndexForTime(11);
+        const index = getNextIndexForTime(events, 11);
         expect(index).toBe(-1);
       });
       test('between 0 and 1', () => {
-        const index = recorder.getNextEventIndexForTime(0.5);
+        const index = getNextIndexForTime(events, 0.5);
         expect(index).toBe(1);
       });
       test('on time', () => {
-        const index = recorder.getNextEventIndexForTime(5);
+        const index = getNextIndexForTime(events, 5);
         expect(index).toBe(5);
       });
       test('2nd Element', () => {
-        const index = recorder.getNextEventIndexForTime(2);
+        const index = getNextIndexForTime(events, 2);
         expect(index).toBe(2);
       });
       test('2nd last Element', () => {
-        const index = recorder.getNextEventIndexForTime(9);
+        const index = getNextIndexForTime(events, 9);
         expect(index).toBe(9);
       });
       test('random', () => {
-        const index = recorder.getNextEventIndexForTime(6.578);
+        const index = getNextIndexForTime(events, 6.578);
         expect(index).toBe(7);
       });
       test('double index', () => {
-        recorder.events = [[0], [1], [1], [2], [3], [4], [5]];
-        const index = recorder.getNextEventIndexForTime(0.45);
+        events = [[0], [1], [1], [2], [3], [4], [5]];
+        const index = getNextIndexForTime(events, 0.45);
         expect(index).toBe(1);
       });
       test('multi index', () => {
-        recorder.events = [[0], [1], [1], [1], [2]];
-        let index = recorder.getNextEventIndexForTime(0.45);
+        events = [[0], [1], [1], [1], [2]];
+        let index = getNextIndexForTime(events, 0.45);
         expect(index).toBe(1);
-        index = recorder.getNextEventIndexForTime(1.45);
+        index = getNextIndexForTime(events, 1.45);
         expect(index).toBe(4);
-        index = recorder.getNextEventIndexForTime(2.45);
+        index = getNextIndexForTime(events, 2.45);
         expect(index).toBe(-1);
       });
       test('3 Event random', () => {
-        recorder.events = [[0], [1], [2]];
-        const index = recorder.getNextEventIndexForTime(0.45);
+        events = [[0], [1], [2]];
+        const index = getNextIndexForTime(events, 0.45);
         expect(index).toBe(1);
       });
       test('3 Event middle', () => {
-        recorder.events = [[0], [1], [2]];
-        const index = recorder.getNextEventIndexForTime(1);
+        events = [[0], [1], [2]];
+        const index = getNextIndexForTime(events, 1);
         expect(index).toBe(1);
       });
       test('4 Event random', () => {
-        recorder.events = [[0], [1], [2], [3]];
-        let index = recorder.getNextEventIndexForTime(0.45);
+        events = [[0], [1], [2], [3]];
+        let index = getNextIndexForTime(events, 0.45);
         expect(index).toBe(1);
-        index = recorder.getNextEventIndexForTime(1.45);
+        index = getNextIndexForTime(events, 1.45);
         expect(index).toBe(2);
       });
       test('4 Event middle', () => {
-        recorder.events = [[0], [1], [2], [3]];
-        let index = recorder.getNextEventIndexForTime(1);
+        events = [[0], [1], [2], [3]];
+        let index = getNextIndexForTime(events, 1);
         expect(index).toBe(1);
-        index = recorder.getNextEventIndexForTime(2);
+        index = getNextIndexForTime(events, 2);
         expect(index).toBe(2);
-        index = recorder.getNextEventIndexForTime(1.5);
+        index = getNextIndexForTime(events, 1.5);
         expect(index).toBe(2);
-        index = recorder.getNextEventIndexForTime(2.5);
+        index = getNextIndexForTime(events, 2.5);
         expect(index).toBe(3);
       });
       test('earlier than first', () => {
-        recorder.events = [[1], [2], [3]];
-        const index = recorder.getNextEventIndexForTime(0.45);
+        events = [[1], [2], [3]];
+        const index = getNextIndexForTime(events, 0.45);
         expect(index).toBe(0);
       });
     });
     describe('Prev', () => {
       test('start', () => {
-        const index = recorder.getPrevEventIndexForTime(0);
+        const index = getPrevIndexForTime(events, 0);
         expect(index).toBe(0);
       });
       test('end', () => {
-        const index = recorder.getPrevEventIndexForTime(10);
+        const index = getPrevIndexForTime(events, 10);
         expect(index).toBe(10);
       });
       test('beyondEnd', () => {
-        const index = recorder.getPrevEventIndexForTime(11);
+        const index = getPrevIndexForTime(events, 11);
         expect(index).toBe(10);
       });
       test('between 0 and 1', () => {
-        const index = recorder.getPrevEventIndexForTime(0.5);
+        const index = getPrevIndexForTime(events, 0.5);
         expect(index).toBe(0);
       });
       test('on time', () => {
-        const index = recorder.getPrevEventIndexForTime(5);
+        const index = getPrevIndexForTime(events, 5);
         expect(index).toBe(5);
       });
       test('2nd Element', () => {
-        const index = recorder.getPrevEventIndexForTime(2);
+        const index = getPrevIndexForTime(events, 2);
         expect(index).toBe(2);
       });
       test('2nd last Element', () => {
-        const index = recorder.getPrevEventIndexForTime(9);
+        const index = getPrevIndexForTime(events, 9);
         expect(index).toBe(9);
       });
       test('random', () => {
-        const index = recorder.getPrevEventIndexForTime(6.578);
+        const index = getPrevIndexForTime(events, 6.578);
         expect(index).toBe(6);
       });
       test('double index', () => {
-        recorder.events = [[0], [1], [1], [2], [3], [4], [5]];
-        let index = recorder.getPrevEventIndexForTime(0.45);
+        events = [[0], [1], [1], [2], [3], [4], [5]];
+        let index = getPrevIndexForTime(events, 0.45);
         expect(index).toBe(0);
-        index = recorder.getPrevEventIndexForTime(1.45);
+        index = getPrevIndexForTime(events, 1.45);
         expect(index).toBe(1);
       });
       test('multi index', () => {
-        recorder.events = [[0], [1], [1], [1], [2]];
-        let index = recorder.getPrevEventIndexForTime(0.45);
+        events = [[0], [1], [1], [1], [2]];
+        let index = getPrevIndexForTime(events, 0.45);
         expect(index).toBe(0);
-        index = recorder.getPrevEventIndexForTime(1.45);
+        index = getPrevIndexForTime(events, 1.45);
         expect(index).toBe(1);
-        index = recorder.getPrevEventIndexForTime(2.45);
+        index = getPrevIndexForTime(events, 2.45);
         expect(index).toBe(4);
       });
       test('earlier than first', () => {
-        recorder.events = [[1], [2], [3]];
-        const index = recorder.getPrevEventIndexForTime(0.45);
+        events = [[1], [2], [3]];
+        const index = getPrevIndexForTime(events, 0.45);
         expect(index).toBe(-1);
       });
       test('3 Event random', () => {
-        recorder.events = [[0], [1], [2]];
-        const index = recorder.getPrevEventIndexForTime(0.45);
+        events = [[0], [1], [2]];
+        const index = getPrevIndexForTime(events, 0.45);
         expect(index).toBe(0);
       });
       test('3 Event middle', () => {
-        recorder.events = [[0], [1], [2]];
-        const index = recorder.getPrevEventIndexForTime(1);
+        events = [[0], [1], [2]];
+        const index = getPrevIndexForTime(events, 1);
         expect(index).toBe(1);
       });
       test('4 Event random', () => {
-        recorder.events = [[0], [1], [2], [3]];
-        let index = recorder.getPrevEventIndexForTime(0.45);
+        events = [[0], [1], [2], [3]];
+        let index = getPrevIndexForTime(events, 0.45);
         expect(index).toBe(0);
-        index = recorder.getPrevEventIndexForTime(1.45);
+        index = getPrevIndexForTime(events, 1.45);
         expect(index).toBe(1);
       });
       test('4 Event middle', () => {
-        recorder.events = [[0], [1], [2], [3]];
-        let index = recorder.getPrevEventIndexForTime(1);
+        events = [[0], [1], [2], [3]];
+        let index = getPrevIndexForTime(events, 1);
         expect(index).toBe(1);
-        index = recorder.getPrevEventIndexForTime(2);
+        index = getPrevIndexForTime(events, 2);
         expect(index).toBe(2);
-        index = recorder.getPrevEventIndexForTime(1.5);
+        index = getPrevIndexForTime(events, 1.5);
         expect(index).toBe(1);
-        index = recorder.getPrevEventIndexForTime(2.5);
+        index = getPrevIndexForTime(events, 2.5);
         expect(index).toBe(2);
+      });
+    });
+    describe('Get index of earliest time', () => {
+      test('simple', () => {
+        events = [[0], [1], [1], [2]];
+        let index = getIndexOfEarliestTime(events, 2);
+        expect(index).toBe(1);
+        index = getIndexOfEarliestTime(events, 1);
+        expect(index).toBe(1);
+        index = getIndexOfEarliestTime(events, 3);
+        expect(index).toBe(3);
+      });
+      test('at start', () => {
+        events = [[0], [0], [1], [2]];
+        let index = getIndexOfEarliestTime(events, 1);
+        expect(index).toBe(0);
+        index = getIndexOfEarliestTime(events, 0);
+        expect(index).toBe(0);
+      });
+      test('at end', () => {
+        events = [[0], [1], [2], [2]];
+        let index = getIndexOfEarliestTime(events, 3);
+        expect(index).toBe(2);
+        index = getIndexOfEarliestTime(events, 2);
+        expect(index).toBe(2);
+      });
+    });
+    describe('Get index of latest time', () => {
+      test('simple', () => {
+        events = [[0], [1], [1], [2]];
+        let index = getIndexOfLatestTime(events, 2);
+        expect(index).toBe(2);
+        index = getIndexOfLatestTime(events, 1);
+        expect(index).toBe(2);
+        index = getIndexOfLatestTime(events, 0);
+        expect(index).toBe(0);
+        index = getIndexOfLatestTime(events, 3);
+        expect(index).toBe(3);
+      });
+      test('at start', () => {
+        events = [[0], [0], [1], [2]];
+        let index = getIndexOfLatestTime(events, 1);
+        expect(index).toBe(1);
+        index = getIndexOfLatestTime(events, 0);
+        expect(index).toBe(1);
+      });
+      test('at end', () => {
+        events = [[0], [1], [2], [2]];
+        let index = getIndexOfLatestTime(events, 3);
+        expect(index).toBe(3);
+        index = getIndexOfLatestTime(events, 2);
+        expect(index).toBe(3);
+      });
+    });
+    describe('Get last unique indeces', () => {
+      test('simple', () => {
+        events = [[0, 'a'], [1, 'a'], [1, 'b'], [2, 'a']];
+        const indeces = getLastUniqueIndeces(events, 1, 2);
+        expect(indeces).toEqual([1, 2]);
+      });
+      test('entire array', () => {
+        events = [[0, 'a'], [1, 'a'], [1, 'b'], [2, 'a']];
+        const indeces = getLastUniqueIndeces(events, 0, 3);
+        expect(indeces.sort()).toEqual([2, 3]);
+      });
+      test('three', () => {
+        events = [[0, 'a'], [1, 'b'], [1, 'b'], [2, 'c']];
+        const indeces = getLastUniqueIndeces(events, 0, 3);
+        expect(indeces.sort()).toEqual([0, 2, 3]);
       });
     });
   });

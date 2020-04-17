@@ -43,6 +43,44 @@ function getIndexOfEarliestTime(
   return i;
 }
 
+function getIndexOfLatestTime(
+  events: Array<Array<number | string | null> | [number, number | 'next' | 'prev'] | [number, Object]>,
+  index: number,
+) {
+  const time = events[index][0];
+  let i = index;
+  let loop = true;
+  while (loop) {
+    if (i === events.length - 1) {
+      loop = false;
+    } else if (events[i + 1][0] === time) {
+      i += 1;
+    } else {
+      loop = false;
+    }
+  }
+  return Math.max(i, index);
+}
+
+function getLastUniqueIndeces(
+  events: Array<Array<number | string | null> | [number, number | 'next' | 'prev'] | [number, Object]>,
+  startIndex: number,
+  endIndex: number,
+) {
+  // const indeces = [];
+  const types = {};
+  let start = startIndex;
+  if (start < 0) {
+    start = 0;
+  }
+  for (let i = start; i <= endIndex; i += 1) {
+    const event = events[i];
+    const [, type] = event;
+    types[type] = i;
+  }
+  return Object.values(types);
+}
+
 function getIndexRangeForTime(
   events: Array<Array<number | string | null> | [number, number | 'next' | 'prev'] | [number, Object]>,
   time: number,
@@ -466,17 +504,28 @@ class Recorder {
 
   playFrame() {
     const time = this.getCurrentTime();
-    const prevEventIndex = getPrevIndexForTime(this.events, time);
-    if (prevEventIndex > this.lastShownEventIndex) {
-      this.processEvent(this.events[prevEventIndex]);
-      this.lastShownEventIndex = prevEventIndex;
-    }
-    const prevStateIndex = getPrevIndexForTime(this.states, time);
+
+    const prevStateIndex = Math.max(getPrevIndexForTime(this.states, time), 0);
     if (prevStateIndex > this.lastShownStateIndex) {
-      this.setState(this.states[prevStateIndex][1]);
-      this.lastShownStateIndex = prevStateIndex;
+      // console.log('processState')
+      const lastIndexWithSameTime = getIndexOfLatestTime(this.states, prevStateIndex);
+      // const indexRange = getLastUniqueIndeces(this.lastShownStateIndex, lastIndexWithSameTime);
+      this.setState(this.states[lastIndexWithSameTime][1]);
+      this.lastShownStateIndex = lastIndexWithSameTime;
       // this.processState(this.states[prevStateIndex]);
     }
+    const prevEventIndex = Math.max(getPrevIndexForTime(this.events, time), 0);
+    if (prevEventIndex > this.lastShownEventIndex) {
+      const lastIndexWithSameTime = getIndexOfLatestTime(this.events, prevStateIndex);
+      console.log(prevEventIndex, lastIndexWithSameTime);
+      let indexRange = getLastUniqueIndeces(this.events, this.lastShownEventIndex, lastIndexWithSameTime);
+      for (let i = 0; i < indexRange.length; i += 1) {
+        // console.log(time, indexRange)
+        this.processEvent(this.events[i].slice(1));
+      }
+      this.lastShownEventIndex = indexRange[indexRange.length - 1];
+    }
+    // console.log(time, prevEventIndex, prevStateIndex);
     if (
       (
         this.lastShownEventIndex >= this.events.length - 1
@@ -562,8 +611,8 @@ class Recorder {
         this.touchUp();
         break;
       case 'cursorMove': {
-        const [, x, y] = event;
-        this.cursorMove(new Point(event[1], event[2]));
+        const [, x: number, y: number] = event;
+        this.cursorMove(new Point(x, y));
         break;
       }
       case 'startBeingMoved': {
@@ -708,4 +757,12 @@ class Recorder {
 // // const globalvars: Object = new GlobalVariables();
 // // Object.freeze(globalvars);
 
-export default Recorder;
+export {
+  Recorder,
+  getIndexOfEarliestTime,
+  download,
+  getIndexOfLatestTime,
+  getLastUniqueIndeces,
+  getNextIndexForTime,
+  getPrevIndexForTime,
+};
