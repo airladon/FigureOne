@@ -273,6 +273,8 @@ class Recorder {
     if (!Recorder.instance) {
       Recorder.instance = this;
       this.events = [];
+      this.slides = [];
+      this.states = [];
       this.isRecording = false;
       this.precision = 5;
       this.stateTimeStep = 1000;

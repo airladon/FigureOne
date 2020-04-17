@@ -609,8 +609,13 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         line.pulseSettings.transformMethod = oldTransformMethod;
         line.pulseSettings.callback = oldPulseCallback;
       };
+      const finishPulsingName = `${this.getPath()}_finishPulsing`;
+      this.fnMap.add(finishPulsingName, finishPulsing);
       line.pulseSettings.callback = finishPulsing;
-      line.pulseSettings.transformMethod = s => new Transform().scale(1, s);
+      const scaleTransformMethod = s => new Transform().scale(1, s);
+      const scaleTransformMethodName = `${this.getPath()}_transformMethod`;
+      this.fnMap.add(scaleTransformMethodName, scaleTransformMethod);
+      line.pulseSettings.transformMethod = scaleTransformMethodName;
       line.pulseScaleNow(1, options.line, 0, done);
       done = null;
     }
