@@ -516,12 +516,15 @@ class Recorder {
     }
     const prevEventIndex = Math.max(getPrevIndexForTime(this.events, time), 0);
     if (prevEventIndex > this.lastShownEventIndex) {
-      const lastIndexWithSameTime = getIndexOfLatestTime(this.events, prevStateIndex);
-      console.log(prevEventIndex, lastIndexWithSameTime);
-      let indexRange = getLastUniqueIndeces(this.events, this.lastShownEventIndex, lastIndexWithSameTime);
+      const lastIndexWithSameTime = getIndexOfLatestTime(this.events, prevEventIndex);
+      let indexRange = getLastUniqueIndeces(
+        this.events,
+        this.lastShownEventIndex,
+        lastIndexWithSameTime,
+      ).sort();
       for (let i = 0; i < indexRange.length; i += 1) {
         // console.log(time, indexRange)
-        this.processEvent(this.events[i].slice(1));
+        this.processEvent(this.events[indexRange[i]].slice(1));
       }
       this.lastShownEventIndex = indexRange[indexRange.length - 1];
     }
