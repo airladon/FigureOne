@@ -1278,7 +1278,7 @@ class DiagramElement {
     if (this.parent == null) {
       return this.name;
     }
-    if (this.parent.name === 'diagramRoot') {
+    if (this.parent.name === 'diagramRoot' || this.parent.parent == null) {
       return this.name;
     }
     return `${this.parent.getPath()}.${this.name}`;
