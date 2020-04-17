@@ -481,39 +481,29 @@ class Recorder {
     this.lastShownSlideIndex = -1;
     this.isRecording = false;
     this.isPlaying = true;
-    // const prevEventIndex = getPrevIndexForTime(this.events, fromTime);
-    // const prevStateIndex = getPrevIndexForTime(this.states, fromTime);
-    // const prevSlideIndex = getPrevIndexForTime(this.slides, fromTime);
 
-    // this.currentTime = 0;
     this.eventIndex = 0;
     this.stateIndex = 0;
     this.previousPoint = null;
     this.setStartTime(fromTime);
     this.touchUp();
-    this.animation.queueNextFrame(this.playFrame.bind(this));
-    // this.eventIndex = getNextIndexForTime(this.events, fromTime);
-    // this.queuePlaybackEvent(this.getTimeToIndex(this.events, this.eventIndex, fromTime));
-    // this.queuePlaybackState(this.getTimeToIndex(this.states, this.stateIndex, fromTime));
+    // this.animation.queueNextFrame(this.playFrame.bind(this));
     const pointer = this.getElement('pointer.up');
     if (pointer != null && showPointer) {
       pointer.show();
     }
-    // this.playbackEvent(this.getTimeToIndex);
+    this.setState(this.states[0][1]);
+    this.playbackEvent(getTimeToIndex(this.events, this.eventIndex, 0));
   }
 
   playFrame() {
     const time = this.getCurrentTime();
-    console.log(time)
 
     const prevStateIndex = Math.max(getPrevIndexForTime(this.states, time), 0);
     if (prevStateIndex > this.lastShownStateIndex) {
-      // console.log('processState')
       const lastIndexWithSameTime = getIndexOfLatestTime(this.states, prevStateIndex);
-      // const indexRange = getLastUniqueIndeces(this.lastShownStateIndex, lastIndexWithSameTime);
       this.setState(this.states[lastIndexWithSameTime][1]);
       this.lastShownStateIndex = lastIndexWithSameTime;
-      // this.processState(this.states[prevStateIndex]);
     }
     const prevEventIndex = Math.max(getPrevIndexForTime(this.events, time), 0);
     if (prevEventIndex > this.lastShownEventIndex) {
@@ -524,12 +514,10 @@ class Recorder {
         lastIndexWithSameTime,
       ).sort();
       for (let i = 0; i < indexRange.length; i += 1) {
-        // console.log(time, indexRange)
         this.processEvent(this.events[indexRange[i]].slice(1));
       }
       this.lastShownEventIndex = indexRange[indexRange.length - 1];
     }
-    // console.log(time, prevEventIndex, prevStateIndex);
     if (
       (
         this.lastShownEventIndex >= this.events.length - 1
@@ -545,6 +533,7 @@ class Recorder {
       this.animation.queueNextFrame(this.playFrame.bind(this));
     }
     this.animateDiagramNextFrame();
+    // console.log(this.getCurrentTime() - time);
     // const prevSlideIndex = getPrevIndexForTime(this.slides, time);
   }
 
@@ -699,7 +688,7 @@ class Recorder {
   playbackEvent() {
     const event = this.events[this.eventIndex];
     const [currentTime] = event;
-    console.log('event', this.getCurrentTime(), currentTime)
+    // console.log('event', this.getCurrentTime(), currentTime)
     this.processEvent(event.slice(1));
     this.animateDiagramNextFrame();
     this.eventIndex += 1;
@@ -707,8 +696,8 @@ class Recorder {
       this.stopPlayback();
       return;
     }
-    const nextTime = (this.events[this.eventIndex][0] - currentTime) * 1000;
-    this.queuePlaybackEvent(nextTime);
+    const nextTime = (this.events[this.eventIndex][0] - this.getCurrentTime()) * 1000;
+    this.queuePlaybackEvent(Math.max(nextTime, 0));
   }
 
   playbackState() {
