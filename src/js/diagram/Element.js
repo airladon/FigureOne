@@ -8,7 +8,7 @@ import {
 } from '../tools/g2';
 import { getState } from './state';
 import type { TypeParsablePoint, TypeParsableTransform } from '../tools/g2';
-import Recorder from './Recorder';
+import { Recorder } from './Recorder';
 import * as m2 from '../tools/m2';
 // import type { pathOptionsType, TypeRotationDirection } from '../tools/g2';
 // import * as tools from '../tools/math';
