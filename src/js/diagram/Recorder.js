@@ -504,6 +504,7 @@ class Recorder {
 
   playFrame() {
     const time = this.getCurrentTime();
+    console.log(time)
 
     const prevStateIndex = Math.max(getPrevIndexForTime(this.states, time), 0);
     if (prevStateIndex > this.lastShownStateIndex) {
