@@ -494,17 +494,16 @@ class Recorder {
     this.setStartTime(fromTime);
     this.touchUp();
     // this.animation.queueNextFrame(this.playFrame.bind(this));
-    const pointer = this.getElement('pointer');
-    if (pointer != null && showPointer) {
-      pointer.showAll();
-    }
-
     this.slideIndex = Math.max(getPrevIndexForTime(this.slides, fromTime), 0);
     this.stateIndex = Math.max(getPrevIndexForTime(this.states, fromTime), 0);
     this.eventIndex = Math.max(getPrevIndexForTime(this.events, fromTime), 0);
     this.queuePlaybackSlide(getTimeToIndex(this.slides, this.slideIndex, 0));
     this.setState(this.stateIndex);
     this.queuePlaybackEvent(getTimeToIndex(this.events, this.eventIndex, 0));
+    const pointer = this.getElement('pointer.up');
+    if (pointer != null && showPointer) {
+      pointer.showAll();
+    }
   }
 
   stopPlayback() {
