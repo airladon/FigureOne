@@ -228,6 +228,8 @@ class Recorder {
   cursorMove: (Point) => void;
   getState: () => Object;
   setDiagramState: (Object) => void;
+  pauseDiagram: () => void;
+  unpauseDiagram: () => void;
   eventIndex: number;
   stateIndex: number;
   slideIndex: number;
@@ -267,6 +269,8 @@ class Recorder {
     getElement?: (string) => DiagramElement,
     getState?: () => Object,
     setDiagramState?: (Object) => void,
+    pauseDiagram: () => void,
+    unpauseDiagram: () => void,
   ) {
     // If the instance alread exists, then don't create a new instance.
     // If it doesn't, then setup some default values.
@@ -303,6 +307,12 @@ class Recorder {
       }
       if (setDiagramState) {
         this.setDiagramState = setDiagramState;
+      }
+      if (pauseDiagram) {
+        this.pauseDiagram = pauseDiagram;
+      }
+      if (unpauseDiagram) {
+        this.unpauseDiagram = unpauseDiagram;
       }
       this.nextSlide = null;
       this.prevSlide = null;
@@ -361,6 +371,7 @@ class Recorder {
     this.startTime = this.timeStamp();
     this.isPlaying = false;
     this.isRecording = true;
+    this.unpauseDiagram();
     this.queueRecordState(0);
   }
 
@@ -404,26 +415,29 @@ class Recorder {
   }
 
   save() {
-    const slidesOut = [];
-    this.slides.forEach((slide) => {
-      slidesOut.push(JSON.stringify(slide));
-    });
+    // const slidesOut = [];
+    // this.slides.forEach((slide) => {
+    //   slidesOut.push(JSON.stringify(slide));
+    // });
 
-    const eventsOut = [];
-    this.events.forEach((event) => {
-      eventsOut.push(JSON.stringify(event));
-    });
+    // const eventsOut = [];
+    // this.events.forEach((event) => {
+    //   eventsOut.push(JSON.stringify(event));
+    // });
 
-    const statesOut = [];
-    this.states.forEach((state) => {
-      statesOut.push(JSON.stringify(state));
-    });
+    // const statesOut = [];
+    // this.states.forEach((state) => {
+    //   statesOut.push(JSON.stringify(state));
+    // });
 
     const dateStr = new Date().toISOString();
     const location = (window.location.pathname).replace('/', '_');
-    download(`${dateStr} ${location} slides.txt`, slidesOut.join('\n'));
-    download(`${dateStr} ${location} events.txt`, eventsOut.join('\n'));
-    download(`${dateStr} ${location} states.txt`, statesOut.join('\n'));
+    // download(`${dateStr} ${location} slides.txt`, slidesOut.join('\n'));
+    // download(`${dateStr} ${location} events.txt`, eventsOut.join('\n'));
+    // download(`${dateStr} ${location} states.txt`, statesOut.join('\n'));
+    download(`${dateStr} ${location} slides.json`, JSON.stringify(this.slides, null, 2));
+    download(`${dateStr} ${location} events.json`, JSON.stringify(this.events, null, 2));
+    download(`${dateStr} ${location} slides.json`, JSON.stringify(this.states, null, 2));
   }
 
   show() {
@@ -486,7 +500,6 @@ class Recorder {
     this.lastShownSlideIndex = -1;
     this.isRecording = false;
     this.isPlaying = true;
-
     // this.eventIndex = 0;
     // this.stateIndex = 0;
     // this.slideIndex = 0;
@@ -504,6 +517,7 @@ class Recorder {
     if (pointer != null && showPointer) {
       pointer.showAll();
     }
+    this.unpauseDiagram();
   }
 
   stopPlayback() {
@@ -514,6 +528,7 @@ class Recorder {
     if (pointer != null) {
       pointer.hide();
     }
+    this.pauseDiagram();
   }
 
   playFrame() {
