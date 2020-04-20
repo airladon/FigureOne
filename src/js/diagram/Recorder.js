@@ -221,6 +221,7 @@ class Recorder {
   isRecording: boolean;
   isPlaying: boolean;
   startTime: number;
+  currentTime: number;
   precision: number;
   touchDown: (Point) => boolean;
   touchUp: void => void;
@@ -253,6 +254,10 @@ class Recorder {
   prevSlide: ?() => void;
   goToSlide: ?(number) => void;
 
+  lastTime: number;
+
+  audio: ?HTMLAudioElement;
+
   // requestNextAnimationFrame: (()=>mixed) => AnimationFrameID;
   // animationId: AnimationFrameID;    // used to cancel animation frames
   static instance: Object;
@@ -279,6 +284,7 @@ class Recorder {
       this.events = [];
       this.slides = [];
       this.states = [];
+      this.currentTime = 0;
       this.isRecording = false;
       this.precision = 5;
       this.stateTimeStep = 1000;
@@ -317,6 +323,7 @@ class Recorder {
       this.nextSlide = null;
       this.prevSlide = null;
       this.goToSlide = null;
+      this.audio = null;
     }
     return Recorder.instance;
   }
@@ -335,7 +342,10 @@ class Recorder {
   }
 
   getCurrentTime() {
-    return this.now() / 1000;
+    if (this.isPlaying) {
+      return this.now() / 1000;
+    }
+    return this.currentTime;
   }
 
   setStartTime(fromTime: number = 0) {
@@ -356,6 +366,9 @@ class Recorder {
       const endTime = this.states.slice(-1)[0][0];
       time = Math.max(time, endTime);
     }
+    if (this.audio != null) {
+      time = Math.max(time, this.audio.duration);
+    }
     return time;
   }
 
@@ -374,6 +387,7 @@ class Recorder {
     // this.unpauseDiagram();
     this.recordSlide('goto', '', slideStart);
     this.queueRecordState(0);
+    this.recordEvent('start');
   }
 
   stop() {
@@ -475,7 +489,7 @@ class Recorder {
   // Scrubbing
   // ////////////////////////////////////
   // ////////////////////////////////////
-  scrub(percentTime: number) {
+  seek(percentTime: number) {
     this.stopPlayback();
     const totalTime = this.getTotalTime();
     const timeTarget = percentTime * totalTime;
@@ -485,9 +499,14 @@ class Recorder {
   setToTime(time: number) {
     this.slideIndex = Math.max(getPrevIndexForTime(this.slides, time), 0);
     this.stateIndex = Math.max(getPrevIndexForTime(this.states, time), 0);
+    this.eventIndex = Math.max(getPrevIndexForTime(this.events, time), 0);
     this.setSlide(this.slideIndex, true);
     this.setState(this.stateIndex);
     this.animateDiagramNextFrame();
+    if (this.audio) {
+      this.audio.currentTime = time;
+    }
+    this.currentTime = time;
   }
 
   // ////////////////////////////////////
@@ -501,33 +520,47 @@ class Recorder {
     this.lastShownSlideIndex = -1;
     this.isRecording = false;
     this.isPlaying = true;
-    // this.eventIndex = 0;
-    // this.stateIndex = 0;
-    // this.slideIndex = 0;
     this.previousPoint = null;
     this.setStartTime(fromTime);
     this.touchUp();
+    this.currentTime = fromTime;
+    // if (this.audio) {
+    //   this.audio.currentTime = fromTime;
+    // }
     // this.animation.queueNextFrame(this.playFrame.bind(this));
+    // this.slideIndex = Math.max(getPrevIndexForTime(this.slides, fromTime), 0);
+    // this.stateIndex = Math.max(getPrevIndexForTime(this.states, fromTime), 0);
+    // this.eventIndex = Math.max(getPrevIndexForTime(this.events, fromTime), 0);
     this.slideIndex = Math.max(getPrevIndexForTime(this.slides, fromTime), 0);
     this.stateIndex = Math.max(getPrevIndexForTime(this.states, fromTime), 0);
     this.eventIndex = Math.max(getPrevIndexForTime(this.events, fromTime), 0);
     this.queuePlaybackSlide(getTimeToIndex(this.slides, this.slideIndex, 0));
     this.setState(this.stateIndex);
     this.queuePlaybackEvent(getTimeToIndex(this.events, this.eventIndex, 0));
+    if (this.audio) {
+      this.audio.currentTime = fromTime;
+      this.audio.play();
+      console.log('playing')
+    }
     const pointer = this.getElement('pointer.up');
     if (pointer != null && showPointer) {
       pointer.showAll();
     }
+    this.animateDiagramNextFrame();
     // this.unpauseDiagram();
   }
 
   stopPlayback() {
+    this.currentTime = this.getCurrentTime();
     this.isPlaying = false;
     clearTimeout(this.nextEventTimeout);
     clearTimeout(this.stateTimeout);
     const pointer = this.getElement('pointer');
     if (pointer != null) {
       pointer.hide();
+    }
+    if (this.audio) {
+      this.audio.pause();
     }
     // this.pauseDiagram();
   }
@@ -587,6 +620,7 @@ class Recorder {
     }
     // const event = this.events[this.eventIndex];
     this.setEvent(this.eventIndex);
+    // this.lastTime = this.getCurrentTime();
     this.animateDiagramNextFrame();
     this.eventIndex += 1;
     if (this.eventIndex === this.events.length) {
