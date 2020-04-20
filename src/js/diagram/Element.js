@@ -583,7 +583,10 @@ class DiagramElement {
   }
 
   _state() {
-    return getState(this, this._getStateProperties());
+    if (this.isShown) {
+      return getState(this, this._getStateProperties());
+    }
+    return { isShown: false };
   }
 
   execFn(fn: string | Function | null, ...args: Array<any>) {

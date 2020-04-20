@@ -371,7 +371,7 @@ class Recorder {
     this.startTime = this.timeStamp();
     this.isPlaying = false;
     this.isRecording = true;
-    this.unpauseDiagram();
+    // this.unpauseDiagram();
     this.queueRecordState(0);
   }
 
@@ -435,9 +435,9 @@ class Recorder {
     // download(`${dateStr} ${location} slides.txt`, slidesOut.join('\n'));
     // download(`${dateStr} ${location} events.txt`, eventsOut.join('\n'));
     // download(`${dateStr} ${location} states.txt`, statesOut.join('\n'));
-    download(`${dateStr} ${location} slides.json`, JSON.stringify(this.slides, null, 2));
-    download(`${dateStr} ${location} events.json`, JSON.stringify(this.events, null, 2));
-    download(`${dateStr} ${location} slides.json`, JSON.stringify(this.states, null, 2));
+    download(`${dateStr} ${location} slides.json`, JSON.stringify(this.slides));
+    download(`${dateStr} ${location} events.json`, JSON.stringify(this.events));
+    download(`${dateStr} ${location} states.json`, JSON.stringify(this.states));
   }
 
   show() {
@@ -517,7 +517,7 @@ class Recorder {
     if (pointer != null && showPointer) {
       pointer.showAll();
     }
-    this.unpauseDiagram();
+    // this.unpauseDiagram();
   }
 
   stopPlayback() {
@@ -528,7 +528,7 @@ class Recorder {
     if (pointer != null) {
       pointer.hide();
     }
-    this.pauseDiagram();
+    // this.pauseDiagram();
   }
 
   playFrame() {
