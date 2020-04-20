@@ -173,6 +173,8 @@ class Diagram {
   isTouchDevice: boolean;
   fnMap: FunctionMap;
 
+  isPaused: boolean;
+
   constructor(options: TypeDiagramOptions) {
     const defaultOptions = {
       htmlId: 'figureOneContainer',
@@ -188,6 +190,7 @@ class Diagram {
     this.fnMap.add('tools.math.linear', math.linear);
     this.fnMap.add('tools.math.sinusoid', math.sinusoid);
     this.fnMap.add('doNothing', () => {});
+    this.isPaused = false;
     this.scrolled = false;
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
@@ -313,6 +316,8 @@ class Diagram {
       this.getElement.bind(this),
       this.getState.bind(this),
       this.setState.bind(this),
+      this.pause.bind(this),
+      this.unpause.bind(this),
     );
     this.shapesLow = this.getShapes();
     // this.shapesHigh = this.getShapes(true);
@@ -1136,7 +1141,19 @@ class Diagram {
     this.draw(time);
   }
 
+  pause() {
+    this.isPaused = true;
+  }
+
+  unpause() {
+    this.isPaused = false;
+    this.animateNextFrame();
+  }
+
   draw(nowIn: number, canvasIndex: number = 0): void {
+    if (this.isPaused) {
+      return;
+    }
     let now = nowIn;
     if (nowIn === -1) {
       now = this.lastDrawTime;
