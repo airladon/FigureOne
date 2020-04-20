@@ -217,7 +217,7 @@ class Recorder {
   // Method for requesting the next animation frame
   events: Array<Array<number | string | null>>;
   states: Array<[number, Object]>;
-  slides: Array<[number, 'goto' | 'next' | 'prev', number]>;
+  slides: Array<[number, 'goto' | 'next' | 'prev', string, number]>;
   isRecording: boolean;
   isPlaying: boolean;
   startTime: number;
@@ -364,7 +364,7 @@ class Recorder {
   // Recording
   // ////////////////////////////////////
   // ////////////////////////////////////
-  start() {
+  start(slideStart: number = 0) {
     this.events = [];
     this.slides = [];
     this.states = [];
@@ -372,6 +372,7 @@ class Recorder {
     this.isPlaying = false;
     this.isRecording = true;
     // this.unpauseDiagram();
+    this.recordSlide('goto', '', slideStart);
     this.queueRecordState(0);
   }
 
@@ -406,8 +407,8 @@ class Recorder {
     this.states.push([this.now() / 1000, state]);
   }
 
-  recordSlide(direction: 'goto' | 'next' | 'prev', slide: number) {
-    this.slides.push([this.now() / 1000, direction, slide]);
+  recordSlide(direction: 'goto' | 'next' | 'prev', message: string, slide: number) {
+    this.slides.push([this.now() / 1000, direction, message, slide]);
   }
 
   recordClick(id: string) {
@@ -727,14 +728,14 @@ class Recorder {
       return;
     }
     const slide = this.slides[index];
-    const [, direction, slideNumber] = slide;
+    const [, direction, message, slideNumber] = slide;
     if (direction === 'next' && forceGoTo === false) {
       if (this.nextSlide != null) {
-        this.nextSlide();
+        this.nextSlide(message);
       }
     } else if (direction === 'prev' && forceGoTo === false) {
       if (this.prevSlide != null) {
-        this.prevSlide();
+        this.prevSlide(message);
       }
     } else if (this.goToSlide != null) {
       this.goToSlide(slideNumber);

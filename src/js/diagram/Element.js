@@ -583,10 +583,11 @@ class DiagramElement {
   }
 
   _state() {
-    if (this.isShown) {
-      return getState(this, this._getStateProperties());
-    }
-    return { isShown: false };
+    return getState(this, this._getStateProperties());
+    // if (this.isShown) {
+    //   return getState(this, this._getStateProperties());
+    // }
+    // return { isShown: false };
   }
 
   execFn(fn: string | Function | null, ...args: Array<any>) {
@@ -1309,7 +1310,7 @@ class DiagramElement {
       this.recorder.recordEvent(
         'moved',
         this.getPath(),
-        this.transform.round(this.recorder.precision),
+        this.transform.round(this.recorder.precision)._state(),
         // this.state.movement.velocity.toString(),
       );
     }
@@ -1330,8 +1331,8 @@ class DiagramElement {
       this.recorder.recordEvent(
         'stopBeingMoved',
         this.getPath(),
-        this.transform,
-        this.state.movement.velocity,
+        this.transform._state(),
+        this.state.movement.velocity._state(),
         // this.state.movement.velocity.toString(),
       );
     }
@@ -1383,8 +1384,8 @@ class DiagramElement {
       this.recorder.recordEvent(
         'startMovingFreely',
         this.getPath(),
-        this.transform,
-        this.state.movement.velocity,
+        this.transform._state(),
+        this.state.movement.velocity._state(),
         // this.state.movement.velocity.toString(),
       );
     }
