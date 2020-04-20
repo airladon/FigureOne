@@ -514,7 +514,11 @@ class Recorder {
   // Playback
   // ////////////////////////////////////
   // ////////////////////////////////////
-  startPlayback(fromTime: number = 0, showPointer: boolean = true) {
+  startPlayback(fromTimeIn: number = this.getCurrentTime(), showPointer: boolean = true) {
+    let fromTime = fromTimeIn;
+    if (fromTimeIn === this.getTotalTime()) {
+      fromTime = 0;
+    }
     this.lastShownEventIndex = -1;
     this.lastShownStateIndex = -1;
     this.lastShownSlideIndex = -1;
