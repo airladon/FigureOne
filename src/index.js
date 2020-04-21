@@ -4,6 +4,7 @@ import * as g2 from './js/tools/g2';
 import * as math from './js/tools/math';
 import Diagram from './js/diagram/Diagram';
 import { Recorder } from './js/diagram/Recorder';
+import FunctionMap from './js/diagram/FunctionMap';
 import * as color from './js/tools/color';
 import * as html from './js/tools/htmlGenerator';
 import * as misc from './js/tools/tools';
@@ -83,6 +84,7 @@ const Fig = {
   tools,
   Diagram,
   Recorder,
+  FunctionMap,
   //
   DiagramElement,
   DiagramElementCollection,

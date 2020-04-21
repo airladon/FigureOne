@@ -88,13 +88,14 @@ class Element implements ElementInterface {
   }
 
   execFn(fn: string | Function | null, ...args: Array<any>) {
-    if (fn == null) {
-      return null;
-    }
-    if (typeof fn === 'string') {
-      return this.fnMap.exec(fn, ...args);
-    }
-    return fn(...args);
+    // if (fn == null) {
+    //   return null;
+    // }
+    // if (typeof fn === 'string') {
+    //   return this.fnMap.exec(fn, ...args);
+    // }
+    // return fn(...args);
+    return this.fnMap.exec(fn, ...args);
   }
 
   calcSize(location: Point, scale: number) {
@@ -250,13 +251,14 @@ class Elements implements ElementInterface {
   }
 
   execFn(fn: string | Function | null, ...args: Array<any>) {
-    if (fn == null) {
-      return null;
-    }
-    if (typeof fn === 'string') {
-      return this.fnMap.exec(fn, ...args);
-    }
-    return fn(...args);
+    // if (fn == null) {
+    //   return null;
+    // }
+    // if (typeof fn === 'string') {
+    //   return this.fnMap.exec(fn, ...args);
+    // }
+    // return fn(...args);
+    return this.fnMap.exec(fn, ...args);
   }
 
   _dup(namedCollection?: Object) {

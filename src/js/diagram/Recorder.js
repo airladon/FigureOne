@@ -249,10 +249,13 @@ class Recorder {
   lastShownEventIndex: number;
   lastShownStateIndex: number;
   lastShownSlideIndex: number;
+  isAudioPlaying: boolean;
 
   nextSlide: ?() => void;
   prevSlide: ?() => void;
   goToSlide: ?(number) => void;
+
+  playbackStopped: ?() =>void;
 
   lastTime: number;
 
@@ -324,6 +327,8 @@ class Recorder {
       this.prevSlide = null;
       this.goToSlide = null;
       this.audio = null;
+      this.isAudioPlaying = false;
+      this.playbackStopped = null;
     }
     return Recorder.instance;
   }
@@ -362,10 +367,10 @@ class Recorder {
       const endTime = this.events.slice(-1)[0][0];
       time = Math.max(time, endTime);
     }
-    if (this.states.length > 0) {
-      const endTime = this.states.slice(-1)[0][0];
-      time = Math.max(time, endTime);
-    }
+    // if (this.states.length > 0) {
+    //   const endTime = this.states.slice(-1)[0][0];
+    //   time = Math.max(time, endTime);
+    // }
     if (this.audio != null) {
       time = Math.max(time, this.audio.duration);
     }
@@ -542,9 +547,15 @@ class Recorder {
     this.setState(this.stateIndex);
     this.queuePlaybackEvent(getTimeToIndex(this.events, this.eventIndex, 0));
     if (this.audio) {
+      this.isAudioPlaying = true;
       this.audio.currentTime = fromTime;
       this.audio.play();
-      console.log('playing')
+      const audioEnded = () => {
+        this.isAudioPlaying = false;
+        this.checkStopPlayback();
+      };
+      this.audio.removeEventListener('ended', audioEnded.bind(this), false);
+      this.audio.addEventListener('ended', audioEnded.bind(this), false);
     }
     const pointer = this.getElement('pointer.up');
     if (pointer != null && showPointer) {
@@ -552,6 +563,23 @@ class Recorder {
     }
     this.animateDiagramNextFrame();
     // this.unpauseDiagram();
+  }
+
+  checkStopPlayback() {
+    // console.log(this.isAudioPlaying, this.eventIndex < this.events.length, this.slideIndex < this.slides.length, this.stateIndex < this.states.length)
+    if (this.isAudioPlaying) {
+      return;
+    }
+    if (this.eventIndex < this.events.length) {
+      return;
+    }
+    if (this.slideIndex < this.slides.length) {
+      return;
+    }
+    // if (this.stateIndex < this.states.length) {
+    //   return;
+    // }
+    this.stopPlayback();
   }
 
   stopPlayback() {
@@ -565,6 +593,10 @@ class Recorder {
     }
     if (this.audio) {
       this.audio.pause();
+      this.isAudioPlaying = false;
+    }
+    if (this.playbackStopped != null) {
+      this.playbackStopped();
     }
     // this.pauseDiagram();
   }
@@ -628,7 +660,7 @@ class Recorder {
     this.animateDiagramNextFrame();
     this.eventIndex += 1;
     if (this.eventIndex === this.events.length) {
-      this.stopPlayback();
+      this.checkStopPlayback();
       return;
     }
     const nextTime = (this.events[this.eventIndex][0] - this.getCurrentTime()) * 1000;
@@ -723,7 +755,7 @@ class Recorder {
     this.animateDiagramNextFrame();
     this.stateIndex += 1;
     if (this.stateIndex === this.states.length) {
-      this.stopPlayback();
+      this.checkStopPlayback();
       return;
     }
     const nextTime = (this.states[this.stateIndex][0] - this.getCurrentTime()) * 1000;
@@ -754,7 +786,7 @@ class Recorder {
     this.animateDiagramNextFrame();
     this.slideIndex += 1;
     if (this.slideIndex === this.slides.length) {
-      this.stopPlayback();
+      this.checkStopPlayback();
       return;
     }
     const nextTime = (this.slides[this.slideIndex][0] - this.getCurrentTime()) * 1000;

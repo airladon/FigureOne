@@ -127,14 +127,15 @@ export default class AnimationStep {
   // }
 
   execFn(fn: string | Function | null, ...args: Array<any>) {
-    if (fn == null) {
-      return null;
-    }
-    if (typeof fn === 'string') {
-      return this.fnMap.exec(fn, ...args);
-    }
-
-    return fn(...args);
+    // if (fn == null) {
+    //   return null;
+    // }
+    // if (typeof fn === 'string') {
+    //   return this.fnMap.exec(fn, ...args);
+    // }
+    // console.log(fn)
+    // return fn(...args);
+    return this.fnMap.exec(fn, ...args);
   }
 
   setTimeDelta(delta: number) {

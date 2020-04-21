@@ -30,14 +30,31 @@ class FunctionMap {
     };
   }
 
-  exec(id: string, ...args: any) {
-    if (this.map[id] != null) {
-      if (args.length === 0) {
-        return this.map[id].fn();
+  exec(idOrFn: string | Function | null, ...args: any) {
+    if (idOrFn == null) {
+      return null;
+    }
+    if (typeof idOrFn === 'string') {
+      // return this.fnMap.exec(fn, ...args);
+      if (this.map[idOrFn] != null) {
+        if (args.length === 0) {
+          return this.map[idOrFn].fn();
+        }
+        return this.map[idOrFn].fn(...args);
       }
-      return this.map[id].fn(...args);
+      return null;
+    }
+    if (typeof idOrFn === 'function') {
+      return idOrFn(...args);
     }
     return null;
+    // if (this.map[id] != null) {
+    //   if (args.length === 0) {
+    //     return this.map[id].fn();
+    //   }
+    //   return this.map[id].fn(...args);
+    // }
+    // return null;
   }
 }
 
