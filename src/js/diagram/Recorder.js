@@ -238,6 +238,7 @@ class Recorder {
   previousPoint: ?Point;
   animateDiagramNextFrame: () => void;
   getElement: (string) => DiagramElement;
+
   nextEventTimeout: TimeoutID;
   nextStateTimeout: TimeoutID;
   nextSlideTimeout: TimeoutID;
@@ -254,6 +255,7 @@ class Recorder {
   nextSlide: ?() => void;
   prevSlide: ?() => void;
   goToSlide: ?(number) => void;
+  getCurrentSlide: ?() => number;
 
   playbackStopped: ?() =>void;
 
@@ -329,6 +331,7 @@ class Recorder {
       this.audio = null;
       this.isAudioPlaying = false;
       this.playbackStopped = null;
+      this.getCurrentSlide = null;
     }
     return Recorder.instance;
   }
@@ -543,9 +546,10 @@ class Recorder {
     this.slideIndex = Math.max(getPrevIndexForTime(this.slides, fromTime), 0);
     this.stateIndex = Math.max(getPrevIndexForTime(this.states, fromTime), 0);
     this.eventIndex = Math.max(getPrevIndexForTime(this.events, fromTime), 0);
-    this.queuePlaybackSlide(getTimeToIndex(this.slides, this.slideIndex, 0));
+    this.setSlide(this.slideIndex, true);
+    this.queuePlaybackSlide(getTimeToIndex(this.slides, this.slideIndex + 1, fromTime));
     this.setState(this.stateIndex);
-    this.queuePlaybackEvent(getTimeToIndex(this.events, this.eventIndex, 0));
+    this.queuePlaybackEvent(getTimeToIndex(this.events, this.eventIndex, fromTime));
     if (this.audio) {
       this.isAudioPlaying = true;
       this.audio.currentTime = fromTime;
@@ -799,11 +803,12 @@ class Recorder {
     }
     const slide = this.slides[index];
     const [, direction, message, slideNumber] = slide;
-    if (direction === 'next' && forceGoTo === false) {
+    const currentSlide = this.getCurrentSlide();
+    if (direction === 'next' && forceGoTo === false && currentSlide === slideNumber - 1) {
       if (this.nextSlide != null) {
         this.nextSlide(message);
       }
-    } else if (direction === 'prev' && forceGoTo === false) {
+    } else if (direction === 'prev' && forceGoTo === false && currentSlide === slideNumber + 1) {
       if (this.prevSlide != null) {
         this.prevSlide(message);
       }
