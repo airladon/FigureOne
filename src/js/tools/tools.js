@@ -482,37 +482,50 @@ function getObjectPaths(obj: any, path: string = '', pathObj = {}) {
     || typeof obj === 'boolean'
     || typeof obj === 'function'
   ) {
-    // return [`${path}:${obj.toString()}`];
-    pathObj[`${path}`] = obj.toString();
+    pathObj[`${path}`] = obj.toString(); // eslint-disable-line no-param-reassign
     return pathObj;
   }
   if (obj === null) {
-    // return [`${path}:null`];
-    pathObj[`${path}`] = 'null';
+    pathObj[`${path}`] = 'null'; // eslint-disable-line no-param-reassign
     return pathObj;
   }
   if (obj === undefined) {
-    // return [`${path}:undefined`];
-    pathObj[`${path}`] = 'undefined';
+    pathObj[`${path}`] = 'undefined'; // eslint-disable-line no-param-reassign
     return pathObj;
   }
   if (Array.isArray(obj)) {
-    // let paths = [];
-    // obj.forEach((o, index) => {
-    //   paths = [...paths, ...getObjectPaths(o, `${path}.[${index}]`)];
-    // });
-    // return paths;
     obj.forEach((o, index) => {
       getObjectPaths(o, `${path}.[${index}]`, pathObj);
     });
     return pathObj;
   }
-  // let paths = [];
   Object.keys(obj).forEach((key) => {
-    // paths = [...paths, ...getObjectPaths(obj[key], `${path}.${key}`)];
     getObjectPaths(obj[key], `${path}.${key}`, pathObj);
   });
   return pathObj;
+}
+
+function getObjectDiff(obj1: Object, obj2: Object) {
+  const paths1 = getObjectPaths(obj1);
+  const paths2 = getObjectPaths(obj2);
+  const added = {};
+  const diff = {};
+  const removed = {};
+  Object.keys(paths1).forEach((key1) => {
+    if (paths2[key1] == null) {
+      removed[key1] = paths1[key1];
+      return;
+    }
+    if (paths1[key1] !== paths2[key1]) {
+      diff[key1] = `${paths1[key1]} :: ${paths2[key1]}`;
+    }
+  });
+  Object.keys(paths2).forEach((key2) => {
+    if (paths1[key2] == null) {
+      added[key2] = paths2[key2];
+    }
+  });
+  return { diff, added, removed };
 }
 
 // function objDiffOnly(val1: any, val2: any) {
@@ -589,5 +602,5 @@ export {
   generateUniqueId, joinObjects, cleanUIDs, loadRemote, loadRemoteCSS,
   deleteKeys, copyKeysFromTo, generateRandomString,
   duplicate, assignObjectFromTo, joinObjectsWithOptions,
-  getObjectPaths,
+  getObjectPaths, getObjectDiff,
 };
