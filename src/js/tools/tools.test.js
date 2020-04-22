@@ -586,3 +586,44 @@ describe('Get Object Paths', () => {
     expect(paths['.b.d.[2].[1]']).toBe('4');
   });
 });
+describe('Get Object Diff', () => {
+  test('No diff', () => {
+    const o1 = { a: 1, b: { c: 1, d: 1 } };
+    const o2 = { a: 1, b: { c: 1, d: 1 } };
+    const { diff, removed, added } = tools.getObjectDiff(o1, o2);
+    expect(diff).toEqual({});
+    expect(removed).toEqual({});
+    expect(added).toEqual({});
+  });
+  test('Diff', () => {
+    const o1 = { a: 1, b: { c: 1, d: 1 } };
+    const o2 = { a: 2, b: { c: 1, d: 2 } };
+    const { diff, removed, added } = tools.getObjectDiff(o1, o2);
+    expect(diff).toEqual({
+      '.a': '1 :: 2',
+      '.b.d': '1 :: 2',
+    });
+    expect(removed).toEqual({});
+    expect(added).toEqual({});
+  });
+  test('Added', () => {
+    const o1 = { a: 1, b: { c: 1, d: 1 } };
+    const o2 = { a: 1, b: { c: 1, d: 1, e: 1 } };
+    const { diff, removed, added } = tools.getObjectDiff(o1, o2);
+    expect(added).toEqual({
+      '.b.e': '1',
+    });
+    expect(removed).toEqual({});
+    expect(diff).toEqual({});
+  });
+  test('Removed', () => {
+    const o1 = { a: 1, b: { c: 1, d: 1 } };
+    const o2 = { a: 1, b: { c: 1 } };
+    const { diff, removed, added } = tools.getObjectDiff(o1, o2);
+    expect(removed).toEqual({
+      '.b.d': '1',
+    });
+    expect(added).toEqual({});
+    expect(diff).toEqual({});
+  });
+});
