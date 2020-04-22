@@ -626,4 +626,17 @@ describe('Get Object Diff', () => {
     expect(added).toEqual({});
     expect(diff).toEqual({});
   });
+  test.only('Nested', () => {
+    const o1 = { a: 1, b: { c: 1, d: 1, e: [{ f: 1 }, 2, [3, 4]] } };
+    const o2 = { a: 1, b: { c: 2, d: 1, e: [{ f: 1, g: 2 }, 2, [3, 4, 5]] } };
+    const { diff, removed, added } = tools.getObjectDiff(o1, o2);
+    expect(diff).toEqual({
+      '.b.c': '1 :: 2',
+    });
+    expect(added).toEqual({
+      '.b.e.[0].g': '2',
+      '.b.e.[2].[2]': '5',
+    });
+    expect(removed).toEqual({});
+  });
 });
