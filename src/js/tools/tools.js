@@ -475,6 +475,113 @@ function generateRandomString() {
   return (Math.random() * 1e18).toString(36);
 }
 
+function getObjectPaths(obj: any, path: string = '', pathObj = {}) {
+  if (
+    typeof obj === 'string'
+    || typeof obj === 'number'
+    || typeof obj === 'boolean'
+    || typeof obj === 'function'
+  ) {
+    // return [`${path}:${obj.toString()}`];
+    pathObj[`${path}`] = obj.toString();
+    return pathObj;
+  }
+  if (obj === null) {
+    // return [`${path}:null`];
+    pathObj[`${path}`] = 'null';
+    return pathObj;
+  }
+  if (obj === undefined) {
+    // return [`${path}:undefined`];
+    pathObj[`${path}`] = 'undefined';
+    return pathObj;
+  }
+  if (Array.isArray(obj)) {
+    // let paths = [];
+    // obj.forEach((o, index) => {
+    //   paths = [...paths, ...getObjectPaths(o, `${path}.[${index}]`)];
+    // });
+    // return paths;
+    obj.forEach((o, index) => {
+      getObjectPaths(o, `${path}.[${index}]`, pathObj);
+    });
+    return pathObj;
+  }
+  // let paths = [];
+  Object.keys(obj).forEach((key) => {
+    // paths = [...paths, ...getObjectPaths(obj[key], `${path}.${key}`)];
+    getObjectPaths(obj[key], `${path}.${key}`, pathObj);
+  });
+  return pathObj;
+}
+
+// function objDiffOnly(val1: any, val2: any) {
+//   if (
+//     typeof val1 === 'string'
+//     || typeof val1 === 'number'
+//     || typeof val1 === 'boolean'
+//     || val1 == null
+//     || typeof val1 === 'function'
+//   ) {
+//     if (val1 === val2) {
+//       return true;
+//     }
+//     return false;
+//   }
+//   if (Array.isArray(val1)) {
+//     if (!Array.isArray(val2)) {
+//       return false;
+//     }
+//     if (val1.length !== val2.length) {
+//       return false;
+//     }
+//     return val1.map((v, index) => objDiffOnly(v, val2[index]));
+//   }
+//   const diffObj = {};
+//   Object.keys(val1).forEach((key) => {
+//     const diff = objDiffOnly(val1[key], val2[key]);
+//     diffObj[key] = diff;
+//   });
+//   return diffObj;
+// }
+
+// function objDiff(obj1: Object, obj2: Object) {
+//   const diff = objDiffOnly(obj1, obj2);
+//   const summarizedDiff = {};
+//   Object.keys(diff).forEach((key) => {
+//     const valueDiff = diff[key];
+//     if (typeof valueDiff === 'boolean') {
+//       if (valueDiff === false) {
+//         summarizedDiff[key] = false;
+//       }
+//     } else if (Array.isArray(valueDiff)) {
+
+//     }
+//   });
+// }
+
+// // diff of obj2 relative to obj1
+// function objDiff(obj1, obj2) {
+//   const added = {};
+//   const diff = {};
+//   const removed = {};
+//   Object.keys(obj1).forEach((key) => {
+//     const value1 = obj1[key];
+//     const value2 = obj2[key];
+//     if (value2 === undefined) {
+//       removed[key] = obj1[key];
+//     }
+//     if (
+//       typeof value1 === 'string'
+//       || typeof value1 === 'boolean'
+//       || typeof value1 === 'number'
+//       || typeof value1 === null,
+//     ) {
+//       if ()
+//     }
+//   });
+// }
+
 export {
   divide, mulToString, add, Console,
   classify, extractFrom, ObjectKeyPointer, getElement,
@@ -482,4 +589,5 @@ export {
   generateUniqueId, joinObjects, cleanUIDs, loadRemote, loadRemoteCSS,
   deleteKeys, copyKeysFromTo, generateRandomString,
   duplicate, assignObjectFromTo, joinObjectsWithOptions,
+  getObjectPaths,
 };

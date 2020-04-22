@@ -533,3 +533,56 @@ describe('Join Objects', () => {
     expect(result).toEqual({ a: 2, b: { x: 2, y: undefined, z: 1 } });
   });
 });
+describe('Get Object Paths', () => {
+  test('Simple', () => {
+    const obj = { a: 1, b: 2 };
+    const paths = tools.getObjectPaths(obj);
+    expect(Object.keys(paths)).toEqual(['.a', '.b']);
+    expect(Object.values(paths)).toEqual(['1', '2']);
+  });
+  test('different tyeps', () => {
+    const obj = {
+      a: 1, b: 'h', c: false, d: null, e: undefined, f: () => {}, g: [1, 2],
+    };
+    const paths = tools.getObjectPaths(obj);
+    expect(Object.keys(paths)).toEqual([
+      '.a', '.b', '.c', '.d', '.e', '.f', '.g.[0]', '.g.[1]',
+    ]);
+    expect(Object.values(paths)).toEqual([
+      '1', 'h', 'false', 'null', 'undefined', 'function f() {}', '1', '2',
+    ]);
+  });
+  test('Nested', () => {
+    const obj = {
+      a: 1,
+      b: {
+        c: 1,
+        d: [
+          {
+            e: 1,
+            f: 2,
+          },
+          2,
+          [3, 4],
+        ],
+      },
+    };
+    const paths = tools.getObjectPaths(obj);
+    expect(Object.keys(paths)).toEqual([
+      '.a',
+      '.b.c',
+      '.b.d.[0].e',
+      '.b.d.[0].f',
+      '.b.d.[1]',
+      '.b.d.[2].[0]',
+      '.b.d.[2].[1]',
+    ]);
+    expect(paths['.a']).toBe('1');
+    expect(paths['.b.c']).toBe('1');
+    expect(paths['.b.d.[0].e']).toBe('1');
+    expect(paths['.b.d.[0].f']).toBe('2');
+    expect(paths['.b.d.[1]']).toBe('2');
+    expect(paths['.b.d.[2].[0]']).toBe('3');
+    expect(paths['.b.d.[2].[1]']).toBe('4');
+  });
+});
