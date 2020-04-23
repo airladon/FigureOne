@@ -10,9 +10,10 @@
 import {
   joinObjects, duplicateFromTo, generateRandomString,
 } from '../../tools/tools';
+import * as math from '../../tools/math';
 import { getState } from '../state';
 import type { DiagramElement } from '../Element';
-import FunctionMap from '../FunctionMap';
+import { FunctionMap } from '../FunctionMap';
 // import * as anim from './Animation';
 
 export type TypeAnimationStepInputOptions = {
@@ -74,6 +75,11 @@ export default class AnimationStep {
     // When progressions aren't linear, then this time is non-trival.
     this.startTimeOffset = 0;
     this.fnMap = new FunctionMap();
+    this.fnMap.add('tools.math.easein', math.easein);
+    this.fnMap.add('tools.math.easeout', math.easeout);
+    this.fnMap.add('tools.math.easeinout', math.easeinout);
+    this.fnMap.add('tools.math.linear', math.linear);
+    this.fnMap.add('tools.math.sinusoid', math.sinusoid);
     return this;
   }
 
@@ -98,6 +104,9 @@ export default class AnimationStep {
     return this;
   }
 
+  fnExec(idOrFn: string | Function | null, ...args: any) {
+    return this.fnMap.exec(idOrFn, ...args);
+  }
   // _finishSetState(diagram: Diagram) {
   //   if (this.element != null && typeof this.element === 'string') {
   //     const element = diagram.getElement(this.element);
@@ -126,17 +135,17 @@ export default class AnimationStep {
   // _finishSetState(diagram: Diagram) {
   // }
 
-  execFn(fn: string | Function | null, ...args: Array<any>) {
-    // if (fn == null) {
-    //   return null;
-    // }
-    // if (typeof fn === 'string') {
-    //   return this.fnMap.exec(fn, ...args);
-    // }
-    // console.log(fn)
-    // return fn(...args);
-    return this.fnMap.exec(fn, ...args);
-  }
+  // execFn(fn: string | Function | null, ...args: Array<any>) {
+  //   // if (fn == null) {
+  //   //   return null;
+  //   // }
+  //   // if (typeof fn === 'string') {
+  //   //   return this.fnMap.exec(fn, ...args);
+  //   // }
+  //   // console.log(fn)
+  //   // return fn(...args);
+  //   return this.fnMap.exec(fn, ...args);
+  // }
 
   setTimeDelta(delta: number) {
     if (this.startTime > -1) {
@@ -284,7 +293,7 @@ export default class AnimationStep {
     }
 
     if (this.onFinish != null) {
-      this.execFn(this.onFinish, cancelled);
+      this.fnExec(this.onFinish, cancelled);
       // this.onFinish(cancelled);
     }
   }

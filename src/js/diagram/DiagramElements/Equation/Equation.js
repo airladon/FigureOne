@@ -1463,7 +1463,7 @@ export class Equation extends DiagramElementCollection {
       }
       if (duration === 0) {
         this.showForm(subForm);
-        this.execFn(options.callback);
+        this.fnMap.exec(options.callback);
         // if (options.callback != null) {
         //   options.callback();
         // }
@@ -1471,7 +1471,7 @@ export class Equation extends DiagramElementCollection {
         this.eqn.isAnimating = true;
         const end = () => {
           this.eqn.isAnimating = false;
-          this.execFn(options.callback);
+          this.fnMap.exec(options.callback);
           // if (options.callback != null) {
           //   options.callback();
           // }
@@ -1519,7 +1519,7 @@ export class Equation extends DiagramElementCollection {
           const showFormCallback = () => {  // $FlowFixMe
             this.showForm(subForm.name, subFormToUse, false);
           };
-          this.fnMap.add('_equationShowFormCallback', showFormCallback());
+          this.fnMap.add('_equationShowFormCallback', showFormCallback);
           this.animations.new()
             .dissolveOut({ duration: options.dissolveOutTime })
             .position({ target: start, duration: 0 })

@@ -64,6 +64,27 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   //   return state;
   // }
 
+  // fnExec(idOrFn: string | Function | null, ...args: any) {
+  //   const result = this.fnMap.exec(idOrFn, ...args);
+  //   if (result == null && this.element != null) {
+  //     return this.element.fnMap.exec(idOrFn, ...args);
+  //   }
+  //   return result;
+  // }
+  fnExec(idOrFn: string | Function | null, ...args: any) {
+    // const result = this.fnMap.exec(idOrFn, ...args);
+    // if (result == null && this.element != null) {
+    //   return this.element.fnMap.exec(idOrFn, ...args);
+    // }
+    // return result;
+    if (this.element != null) {
+      return this.fnMap.execOnMaps(
+        idOrFn, [this.element.fnMap.map], ...args,
+      );
+    }
+    return this.fnMap.exec(idOrFn, ...args);
+  }
+
   _fromState(state: Object, getElement: ?(string) => DiagramElement) {
     // const obj = new this.constructor();
     joinObjects(this, state);
@@ -102,7 +123,13 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   }
 
   custom(...optionsIn: Array<TypeCustomAnimationStepInputOptions>) {
-    this.then(new animation.CustomAnimationStep(...optionsIn));
+    if (this.element != null) {
+      const defaultOptions = { element: this.element };
+      const options = joinObjects({}, defaultOptions, ...optionsIn);
+      this.then(new animation.CustomAnimationStep(options));
+    } else {
+      this.then(new animation.CustomAnimationStep(...optionsIn));
+    }
     return this;
   }
 
@@ -262,7 +289,14 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     triggerOrOptionsIn: Function | TypeTriggerStepInputOptions = {},
     ...optionsIn: Array<TypeTriggerStepInputOptions>
   ) {
-    this.then(animation.trigger(triggerOrOptionsIn, ...optionsIn));
+    if (this.element != null) {
+      const defaultOptions = { element: this.element };
+      const options = joinObjects({}, defaultOptions, ...optionsIn);
+      this.then(animation.trigger(triggerOrOptionsIn, options));
+    } else {
+      this.then(animation.trigger(triggerOrOptionsIn, ...optionsIn));
+    }
+    // this.then(animation.trigger(triggerOrOptionsIn, ...optionsIn));
     return this;
   }
 

@@ -350,7 +350,7 @@ describe('Animation Step State', () => {
   test('Custom', () => {
     let percentComplete;
     const custom = (p) => { percentComplete = p; };
-    diagram.fnMap.add('customFunction', custom);
+    elem1.fnMap.add('customFunction', custom);
     elem1.animations.new()
       .custom({ duration: 2, callback: 'customFunction' })
       .start();
@@ -564,10 +564,10 @@ describe('Animation Step State', () => {
     const trigger2 = () => { elem1.triggerFlag2 = 1; };
     const trigger3 = () => { elem1.triggerFlag3 = 1; };
     const trigger4 = () => { elem1.triggerFlag4 = 1; };
-    diagram.fnMap.add('trigger1', trigger1);
-    diagram.fnMap.add('trigger2', trigger2);
-    diagram.fnMap.add('trigger3', trigger3);
-    diagram.fnMap.add('trigger4', trigger4);
+    elem1.fnMap.add('trigger1', trigger1);
+    elem1.fnMap.add('trigger2', trigger2);
+    elem1.fnMap.add('trigger3', trigger3);
+    elem1.fnMap.add('trigger4', trigger4);
     elem1.stateProperties = [
       'triggerFlag1', 'triggerFlag2', 'triggerFlag3', 'triggerFlag4',
     ];
@@ -652,7 +652,7 @@ describe('Animation Step State', () => {
   test('When Finished', () => {
     elem1.setRotation(0);
     const callback = jest.fn(() => {});
-    diagram.fnMap.add('callback', callback);
+    elem1.fnMap.add('callback', callback);
     elem1.animations.new()
       .rotation({ target: 1, duration: 1, progression: 'linear' })
       .whenFinished('callback')
@@ -694,7 +694,7 @@ describe('Animation Step State', () => {
   test('onFinish in step', () => {
     elem1.setRotation(0);
     const callback = jest.fn(() => {});
-    diagram.fnMap.add('callback', callback);
+    elem1.fnMap.add('callback', callback);
     elem1.animations.new()
       .rotation({
         target: 1, duration: 1, progression: 'linear', onFinish: 'callback',

@@ -15,6 +15,7 @@ export type TypeCustomAnimationStepInputOptions = {
 } & TypeAnimationStepInputOptions;
 
 export class CustomAnimationStep extends AnimationStep {
+  element: ?Object;
   callback: ?(number) => void;
   startPercent: ?number;
   progression: string | ((number, ?boolean) => number);
@@ -23,11 +24,13 @@ export class CustomAnimationStep extends AnimationStep {
     const AnimationStepOptionsIn = joinObjects({}, ...optionsIn);
     super(AnimationStepOptionsIn);
     const defaultPositionOptions = {
+      element: null,
       callback: null,
       startPercent: 0,
       progression: 'linear',
     };
     const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
+    this.element = options.element;
     this.progression = options.progression;
     if (this.progression === 'linear') {
       this.progression = 'tools.math.linear';
@@ -47,12 +50,52 @@ export class CustomAnimationStep extends AnimationStep {
     this.duration = options.duration;
   }
 
+  // fnExec(idOrFn: string | Function | null, ...args: any) {
+  //   const result = this.fnMap.exec(idOrFn, ...args);
+  //   if (result == null && this.element != null) {
+  //     return this.element.fnMap.exec(idOrFn, ...args);
+  //   }
+  //   return result;
+  // }
+  fnExec(idOrFn: string | Function | null, ...args: any) {
+    // const result = this.fnMap.exec(idOrFn, ...args);
+    // if (result == null && this.element != null) {
+    //   return this.element.fnMap.exec(idOrFn, ...args);
+    // }
+    // return result;
+    if (this.element != null) {
+      return this.fnMap.execOnMaps(
+        idOrFn, [this.element.fnMap.map], ...args,
+      );
+    }
+    return this.fnMap.exec(idOrFn, ...args);
+  }
+
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
       'callback',
       'startPercent',
       'progression',
     ];
+  }
+
+  _fromState(state: Object, getElement: ?(string) => DiagramElement) {
+    joinObjects(this, state);
+    if (this.element != null && typeof this.element === 'string' && getElement != null) {
+      this.element = getElement(this.element);
+    }
+    return this;
+  }
+
+  _state() {
+    const state = super._state();
+    if (this.element != null) {
+      state.state.element = {
+        f1Type: 'de',
+        state: this.element.getPath(),
+      };
+    }
+    return state;
   }
 
   _getStateName() {  // eslint-disable-line class-methods-use-this
@@ -62,19 +105,12 @@ export class CustomAnimationStep extends AnimationStep {
   setFrame(deltaTime: number) {
     const percentTime = deltaTime / this.duration;
     const percentComplete = this.getPercentComplete(percentTime);
-    this.execFn(this.callback, percentComplete);
-    // if (this.callback != null) {
-    //   if (typeof this.callback === 'string') {
-    //     this.fnMap.exec(this.callback, percentComplete);
-    //   } else {
-    //     this.callback(percentComplete);
-    //   }
-    // }
+    this.fnExec(this.callback, percentComplete);
   }
 
   getPercentComplete(percentTime: number, invert: boolean = false) {
     if (typeof this.progression === 'string') {
-      const result = this.fnMap.exec(this.progression, percentTime, invert);
+      const result = this.fnExec(this.progression, percentTime, invert);
       if (result == null) {
         return 0;
       }
@@ -87,15 +123,7 @@ export class CustomAnimationStep extends AnimationStep {
   }
 
   setToEnd() {
-    // if (this.callback != null) {
-    //   // this.callback(1);
-    //   if (typeof this.callback === 'string') {
-    //     this.fnMap.exec(this.callback, 1);
-    //   } else {
-    //     this.callback(1);
-    //   }
-    // }
-    this.execFn(this.callback, 1);
+    this.fnExec(this.callback, 1);
   }
   // finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
   //   if (this.state === 'idle') {

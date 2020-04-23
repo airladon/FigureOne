@@ -157,7 +157,7 @@ export class SerialAnimationStep extends AnimationStep {
       }
     });
     if (this.onFinish != null) {
-      this.execFn(this.onFinish, cancelled);
+      this.fnExec(this.onFinish, cancelled);
     }
   }
 

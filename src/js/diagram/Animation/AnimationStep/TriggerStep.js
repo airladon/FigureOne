@@ -11,6 +11,7 @@ export type TypeTriggerStepInputOptions = {
 } & TypeAnimationStepInputOptions;
 
 export class TriggerStep extends AnimationStep {
+  element: ?Object;
   callback: ?(string | Function);
   payload: ?Object;
 
@@ -33,9 +34,50 @@ export class TriggerStep extends AnimationStep {
       options = joinObjects({}, defaultOptions, triggerOrOptionsIn, ...optionsIn);
     }
     super(options);
+    this.element = options.element;
     this.callback = options.callback;
     this.payload = options.payload;
     this.duration = options.duration;
+  }
+
+  // fnExec(idOrFn: string | Function | null, ...args: any) {
+  //   const result = this.fnMap.exec(idOrFn, ...args);
+  //   if (result == null && this.element != null) {
+  //     return this.element.fnMap.exec(idOrFn, ...args);
+  //   }
+  //   return result;
+  // }
+  fnExec(idOrFn: string | Function | null, ...args: any) {
+    // const result = this.fnMap.exec(idOrFn, ...args);
+    // if (result == null && this.element != null) {
+    //   return this.element.fnMap.exec(idOrFn, ...args);
+    // }
+    // return result;
+    if (this.element != null) {
+      return this.fnMap.execOnMaps(
+        idOrFn, [this.element.fnMap.map], ...args,
+      );
+    }
+    return this.fnMap.exec(idOrFn, ...args);
+  }
+
+  _fromState(state: Object, getElement: ?(string) => DiagramElement) {
+    joinObjects(this, state);
+    if (this.element != null && typeof this.element === 'string' && getElement != null) {
+      this.element = getElement(this.element);
+    }
+    return this;
+  }
+
+  _state() {
+    const state = super._state();
+    if (this.element != null) {
+      state.state.element = {
+        f1Type: 'de',
+        state: this.element.getPath(),
+      };
+    }
+    return state;
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
@@ -50,7 +92,7 @@ export class TriggerStep extends AnimationStep {
   }
 
   setFrame() {
-    this.execFn(this.callback, this.payload);
+    this.fnExec(this.callback, this.payload);
     this.callback = null;
     // if (this.callback != null) {
     //   this.callback(this.payload);
@@ -63,7 +105,7 @@ export class TriggerStep extends AnimationStep {
     //   this.callback(this.payload);
     //   this.callback = null;
     // }
-    this.execFn(this.callback, this.payload);
+    this.fnExec(this.callback, this.payload);
     this.callback = null;
   }
 

@@ -11,7 +11,7 @@ import type { TypeParsablePoint, TypeParsableTransform } from '../tools/g2';
 import { Recorder } from './Recorder';
 import * as m2 from '../tools/m2';
 // import type { pathOptionsType, TypeRotationDirection } from '../tools/g2';
-// import * as tools from '../tools/math';
+import * as math from '../tools/math';
 import HTMLObject from './DrawingObjects/HTMLObject/HTMLObject';
 import DrawingObject from './DrawingObjects/DrawingObject';
 import VertexObject from './DrawingObjects/VertexObject/VertexObject';
@@ -34,8 +34,8 @@ import type {
 // eslint-disable-next-line import/no-cycle
 import * as animations from './Animation/Animation';
 import WebGLInstance from './webgl/webgl';
-import type Diagram from './Diagram';
-import FunctionMap from './FunctionMap';
+// import type Diagram from './Diagram';
+import { FunctionMap } from './FunctionMap';
 
 // eslint-disable-next-line import/no-cycle
 // import {
@@ -516,6 +516,9 @@ class DiagramElement {
         .translate(d.x, d.y);
     };
     this.fnMap.add('_elementPulseSettingsTransformMethod', pulseTransformMethod);
+    this.fnMap.add('tools.math.easeinout', math.easeinout);
+    this.fnMap.add('tools.math.linear', math.linear);
+    this.fnMap.add('tools.math.sinusoid', math.sinusoid);
     this.pulseSettings = {
       time: 1,
       frequency: 0.5,
@@ -590,15 +593,15 @@ class DiagramElement {
     // return { isShown: false };
   }
 
-  execFn(fn: string | Function | null, ...args: Array<any>) {
-    if (fn == null) {
-      return null;
-    }
-    if (typeof fn === 'string') {
-      return this.fnMap.exec(fn, ...args);
-    }
-    return fn(...args);
-  }
+  // execFn(fn: string | Function | null, ...args: Array<any>) {
+  //   if (fn == null) {
+  //     return null;
+  //   }
+  //   if (typeof fn === 'string') {
+  //     return this.fnMap.exec(fn, ...args);
+  //   }
+  //   return fn(...args);
+  // }
 
   setTimeDelta(delta: number) {
     if (this.animations.state === 'animating') {
@@ -852,7 +855,7 @@ class DiagramElement {
       typeof this.pulseDefault === 'function'
       || typeof this.pulseDefault === 'string'
     ) {
-      this.execFn(this.pulseDefault, done);
+      this.fnMap.exec(this.pulseDefault, done);
     } else {
       // const { frequency, time, scale } = this.pulseDefault;
       // this.pulseScaleNow(time, scale, frequency, done);
@@ -928,7 +931,7 @@ class DiagramElement {
   // connected that is tied to an update of the transform.
   setTransform(transform: Transform): void {
     if (this.move.transformClip != null) {
-      this.transform = this.execFn(this.move.transformClip, transform);
+      this.transform = this.fnMap.exec(this.move.transformClip, transform);
     } else {
       this.transform = transform._dup().clip(
         this.move.minTransform,
@@ -937,9 +940,9 @@ class DiagramElement {
       );
     }
     if (this.internalSetTransformCallback) {
-      this.execFn(this.internalSetTransformCallback, this.transform);
+      this.fnMap.exec(this.internalSetTransformCallback, this.transform);
     }
-    this.execFn(this.setTransformCallback, this.transform);
+    this.fnMap.exec(this.setTransformCallback, this.transform);
     // if (this.setTransformCallback) {
     //   this.setTransformCallback(this.transform);
     // }
@@ -1051,7 +1054,7 @@ class DiagramElement {
   ) {
     let transform = this.transform._dup();
     let color = this.color.slice();
-    let opacity = this.opacity; // eslint-disable-line prefer-destructuring
+    const opacity = this.opacity; // eslint-disable-line prefer-destructuring
     let isShown = this.isShown; // eslint-disable-line prefer-destructuring
     if (scenarioName in this.scenarios) {
       const scenario = this.scenarios[scenarioName];
@@ -1395,7 +1398,7 @@ class DiagramElement {
     this.state.isMovingFreely = false;
     this.state.movement.previousTime = -1;
     if (this.move.freely.callback) {
-      this.execFn(this.move.freely.callback, result);
+      this.fnMap.exec(this.move.freely.callback, result);
       this.move.freely.callback = null;
     }
   }
@@ -1436,7 +1439,7 @@ class DiagramElement {
       // with the pulse.
       for (let i = 0; i < this.pulseSettings.num; i += 1) {
         // Get the current pulse magnitude
-        const pulseMag = this.execFn(
+        const pulseMag = this.fnMap.exec(
           this.pulseSettings.style,
           deltaTime,
           this.pulseSettings.frequency,
@@ -1446,7 +1449,7 @@ class DiagramElement {
         );
 
         // Use the pulse magnitude to get the current pulse transform
-        const pTransform = this.execFn(
+        const pTransform = this.fnMap.exec(
           this.pulseSettings.transformMethod,
           pulseMag,
           getPoint(this.pulseSettings.delta),
@@ -1584,7 +1587,7 @@ class DiagramElement {
     if (this.pulseSettings.callback) {
       const { callback } = this.pulseSettings;
       this.pulseSettings.callback = null;
-      this.execFn(callback, result);
+      this.fnMap.exec(callback, result);
     }
   }
 
@@ -2098,7 +2101,7 @@ class DiagramElement {
   click(): void {
     if (this.onClick !== null && this.onClick !== undefined) {
       // this.onClick(this);
-      this.execFn(this.onClick, this);
+      this.fnMap.exec(this.onClick, this);
     }
   }
 
@@ -2340,7 +2343,7 @@ class DiagramElementPrimitive extends DiagramElement {
         }
       }
       if (this.beforeDrawCallback != null) {
-        this.execFn(this.beforeDrawCallback, now);
+        this.fnMap.exec(this.beforeDrawCallback, now);
       }
       this.animations.nextFrame(now);
       this.nextMovingFreelyFrame(now);
@@ -2394,7 +2397,7 @@ class DiagramElementPrimitive extends DiagramElement {
         this.renderedOnNextDraw = false;
       }
       if (this.afterDrawCallback != null) {
-        this.execFn(this.afterDrawCallback, now);
+        this.fnMap.exec(this.afterDrawCallback, now);
       }
     }
   }
@@ -2688,7 +2691,7 @@ class DiagramElementCollection extends DiagramElement {
         }
       }
       if (this.beforeDrawCallback != null) {
-        this.execFn(this.beforeDrawCallback, now);
+        this.fnMap.exec(this.beforeDrawCallback, now);
       }
       this.animations.nextFrame(now);
       this.nextMovingFreelyFrame(now);
@@ -2727,7 +2730,7 @@ class DiagramElementCollection extends DiagramElement {
       }
       if (this.afterDrawCallback != null) {
         // this.afterDrawCallback(now);
-        this.execFn(this.afterDrawCallback, now);
+        this.fnMap.exec(this.afterDrawCallback, now);
       }
     }
   }
@@ -3424,7 +3427,7 @@ class DiagramElementCollection extends DiagramElement {
       if (element.name in elementTransforms) {
         element.transform = elementTransforms[element.name];
         if (element.internalSetTransformCallback) {
-          this.execFn(element.internalSetTransformCallback, element.transform);
+          this.fnMap.exec(element.internalSetTransformCallback, element.transform);
         }
       }
     }
@@ -3480,13 +3483,13 @@ class DiagramElementCollection extends DiagramElement {
         } else {
           element.transform = elementTransforms[element.name]._dup();
           if (element.internalSetTransformCallback) {
-            this.execFn(element.internalSetTransformCallback, element.transform);
+            this.fnMap.exec(element.internalSetTransformCallback, element.transform);
           }
         }
       }
     }
     if (timeToAnimate === 0 && callbackMethod != null) {
-      this.execFn(callbackMethod, true);
+      this.fnMap.exec(callbackMethod, true);
       // callbackMethod(true);
     }
     return timeToAnimate;
