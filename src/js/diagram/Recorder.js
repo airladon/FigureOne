@@ -508,8 +508,13 @@ class Recorder {
     this.slideIndex = Math.max(getPrevIndexForTime(this.slides, time), 0);
     this.stateIndex = Math.max(getPrevIndexForTime(this.states, time), 0);
     this.eventIndex = Math.max(getPrevIndexForTime(this.events, time), 0);
+    if (this.states[this.stateIndex][0] < this.slides[this.slideIndex][0]) {
+      this.setState(this.stateIndex);
+    }
     this.setSlide(this.slideIndex, true);
-    this.setState(this.stateIndex);
+    if (this.states[this.stateIndex][0] >= this.slides[this.slideIndex][0]) {
+      this.setState(this.stateIndex);
+    }
     this.animateDiagramNextFrame();
     if (this.audio) {
       this.audio.currentTime = time;
