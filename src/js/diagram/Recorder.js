@@ -498,10 +498,11 @@ class Recorder {
   // ////////////////////////////////////
   // ////////////////////////////////////
   seek(percentTime: number) {
-    this.stopPlayback();
+    this.pausePlayback();
     const totalTime = this.getTotalTime();
     const timeTarget = percentTime * totalTime;
     this.setToTime(timeTarget);
+    this.pauseDiagram();
   }
 
   setToTime(time: number) {
@@ -541,6 +542,7 @@ class Recorder {
     this.setStartTime(fromTime);
     this.touchUp();
     this.currentTime = fromTime;
+    this.unpauseDiagram();
     // if (this.audio) {
     //   this.audio.currentTime = fromTime;
     // }
@@ -588,10 +590,11 @@ class Recorder {
     // if (this.stateIndex < this.states.length) {
     //   return;
     // }
-    this.stopPlayback();
+    this.pausePlayback();
   }
 
-  stopPlayback() {
+  pausePlayback() {
+    this.pauseDiagram();
     this.currentTime = this.getCurrentTime();
     this.isPlaying = false;
     clearTimeout(this.nextEventTimeout);
@@ -642,7 +645,7 @@ class Recorder {
         || this.lastShownStateIndex === -1
       )
     ) {
-      this.stopPlayback();
+      this.pausePlayback();
     } else {
       this.animation.queueNextFrame(this.playFrame.bind(this));
     }
