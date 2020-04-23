@@ -21,7 +21,7 @@ describe('Diagram Element State', () => {
   });
   test('Transform Callback', () => {
     const setTransformCallback = jest.fn(() => {});
-    diagram.fnMap.add('setTransformCallback', setTransformCallback);
+    elem1.fnMap.add('setTransformCallback', setTransformCallback);
 
     elem1.setRotation(0);
     elem1.animations.new()
@@ -57,11 +57,11 @@ describe('Diagram Element State', () => {
   });
   test('Pulse Callback', () => {
     const pulseCallback = jest.fn(() => {});
-    diagram.fnMap.add('pulseCallback', pulseCallback);
+    elem1.fnMap.add('pulseCallback', pulseCallback);
     expect(pulseCallback.mock.calls.length).toBe(0);
 
     elem1.pulseScaleNow(2, 2, 0.5, 'pulseCallback');
-    
+
     now = 0;
     diagram.draw(now);
     expect(pulseCallback.mock.calls.length).toBe(0);

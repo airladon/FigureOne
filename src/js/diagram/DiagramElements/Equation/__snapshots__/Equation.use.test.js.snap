@@ -167,20 +167,14 @@ DiagramElementPrimitive {
     "type": "drawingObject",
   },
   "fnMap": FunctionMap {
+    "global": GlobalFunctionMap {
+      "map": Object {},
+    },
     "map": Object {
       "_elementPulseSettingsTransformMethod": Object {
         "fn": [Function],
       },
-      "doNothing": Object {
-        "fn": [Function],
-      },
-      "tools.math.easein": Object {
-        "fn": [Function],
-      },
       "tools.math.easeinout": Object {
-        "fn": [Function],
-      },
-      "tools.math.easeout": Object {
         "fn": [Function],
       },
       "tools.math.linear": Object {
@@ -430,14 +424,8 @@ DiagramElementPrimitive {
     "transformMethod": "_elementPulseSettingsTransformMethod",
   },
   "recorder": Recorder {
-    "animateNextFrame": [Function],
-    "cursorMove": [Function],
-    "events": Array [],
-    "getElement": [Function],
-    "isRecording": false,
-    "precision": 5,
-    "previousPoint": null,
-    "queueNextFrame": GlobalAnimation {
+    "animateDiagramNextFrame": [Function],
+    "animation": GlobalAnimation {
       "animationId": 1,
       "drawQueue": Array [],
       "nextDrawQueue": Array [
@@ -446,8 +434,32 @@ DiagramElementPrimitive {
       ],
       "requestNextAnimationFrame": [Function],
     },
+    "audio": null,
+    "currentTime": 0,
+    "cursorMove": [Function],
+    "events": Array [],
+    "getCurrentSlide": null,
+    "getElement": [Function],
+    "getState": [Function],
+    "goToSlide": null,
+    "isAudioPlaying": false,
+    "isRecording": false,
+    "lastShownEventIndex": -1,
+    "lastShownSlideIndex": -1,
+    "lastShownStateIndex": -1,
+    "nextSlide": null,
+    "pauseDiagram": [Function],
+    "playbackStopped": null,
+    "precision": 5,
+    "prevSlide": null,
+    "previousPoint": null,
+    "setDiagramState": [Function],
+    "slides": Array [],
+    "stateTimeStep": 1000,
+    "states": Array [],
     "touchDown": [Function],
     "touchUp": [Function],
+    "unpauseDiagram": [Function],
   },
   "renderedOnNextDraw": false,
   "scenarios": Object {},
