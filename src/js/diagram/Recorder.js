@@ -2,7 +2,7 @@
 // import type { Transform } from '../tools/g2';
 import { Point, getTransform, Transform } from '../tools/g2';
 import { round } from '../tools/math';
-import { getObjectDiff } from '../tools/tools';
+import { getObjectDiff, toObj } from '../tools/tools';
 import type { DiagramElement } from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
 // Singleton class that contains projects global variables
@@ -225,6 +225,11 @@ class Recorder {
     states: Array<[number, Object]>,
   };
 
+  statesNew1: {
+    reference: Object,
+    states: Array<[number, Object]>,
+  };
+
   isRecording: boolean;
   isPlaying: boolean;
   startTime: number;
@@ -400,6 +405,9 @@ class Recorder {
     this.statesNew = {
       states: [],
     };
+    this.statesNew1 = {
+      states: [],
+    };
     this.startTime = this.timeStamp();
     this.isPlaying = false;
     this.isRecording = true;
@@ -441,7 +449,19 @@ class Recorder {
       this.statesNew.reference = state;
     }
     this.states.push([this.now() / 1000, state]);
-    this.statesNew.states.push([this.now() / 1000, getObjectDiff(this.statesNew.reference, state)]);
+    const diff = getObjectDiff(this.statesNew.reference, state);
+    this.statesNew1.states.push([this.now() / 1000, diff]);
+    
+    this.statesNew.states.push([
+      this.now() / 1000,
+      {
+        diff: toObj(diff.diff),
+        removed: toObj(diff.removed),
+        added: toObj(diff.added),
+      },
+    ]);
+    // console.log(getObjectDiff(this.statesNew.reference, state));
+    // console.log(toObj(getObjectDiff(this.statesNew.reference, state)));
   }
 
   recordSlide(direction: 'goto' | 'next' | 'prev', message: string, slide: number) {
@@ -477,6 +497,7 @@ class Recorder {
     download(`${dateStr} ${location} events.json`, JSON.stringify(this.events));
     download(`${dateStr} ${location} states.json`, JSON.stringify(this.states));
     download(`${dateStr} ${location} statesNew.json`, JSON.stringify(this.statesNew));
+    download(`${dateStr} ${location} statesNew1.json`, JSON.stringify(this.statesNew1));
   }
 
   show() {
