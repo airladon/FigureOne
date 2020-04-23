@@ -499,6 +499,7 @@ class Recorder {
   // ////////////////////////////////////
   seek(percentTime: number) {
     this.pausePlayback();
+    // this.unpauseDiagram();
     const totalTime = this.getTotalTime();
     const timeTarget = percentTime * totalTime;
     this.setToTime(timeTarget);
