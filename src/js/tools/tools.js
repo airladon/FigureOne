@@ -482,20 +482,20 @@ function getObjectPaths(obj: any, path: string = '', pathObj = {}) {
     || typeof obj === 'boolean'
     || typeof obj === 'function'
   ) {
-    pathObj[`${path}`] = obj.toString(); // eslint-disable-line no-param-reassign
+    pathObj[`${path}`] = obj; // eslint-disable-line no-param-reassign
     return pathObj;
   }
   if (obj === null) {
-    pathObj[`${path}`] = 'null'; // eslint-disable-line no-param-reassign
+    pathObj[`${path}`] = null; // eslint-disable-line no-param-reassign
     return pathObj;
   }
   if (obj === undefined) {
-    pathObj[`${path}`] = 'undefined'; // eslint-disable-line no-param-reassign
+    pathObj[`${path}`] = undefined; // eslint-disable-line no-param-reassign
     return pathObj;
   }
   if (Array.isArray(obj)) {
     obj.forEach((o, index) => {
-      getObjectPaths(o, `${path}.[${index}]`, pathObj);
+      getObjectPaths(o, `${path}[${index}]`, pathObj);
     });
     return pathObj;
   }
@@ -517,7 +517,7 @@ function getObjectDiff(obj1: Object, obj2: Object) {
       return;
     }
     if (paths1[key1] !== paths2[key1]) {
-      diff[key1] = `${paths1[key1]} :: ${paths2[key1]}`;
+      diff[key1] = [paths1[key1], paths2[key1]];
     }
   });
   Object.keys(paths2).forEach((key2) => {
@@ -526,6 +526,72 @@ function getObjectDiff(obj1: Object, obj2: Object) {
     }
   });
   return { diff, added, removed };
+}
+
+function updateObjFromPath(
+  remainingPath: Array<string>,
+  obj: Object,
+  value: any,
+  remove: boolean = false,
+) {
+  // if (remainingPath.length === 1) {
+  //   return;
+  // }
+  const fullP = remainingPath[0];
+  const arrayStringIndeces = fullP.match(/\[[^\]]*\]/g);
+  const p = fullP.replace(/\[.*/, '');
+  if (arrayStringIndeces) {
+    const arrayIndeces = arrayStringIndeces.map(e => parseInt(e.replace(/\[|\]/g, '')));
+    // console.log(arrayIndeces)
+    // return;
+    if (obj[p] == null) {
+      obj[p] = [];
+    }
+    // console.log(obj)
+    // return
+    let currentArray = obj[p];
+    let index = 0;
+    for (let i = 0; i < arrayIndeces.length; i += 1) {
+      index = arrayIndeces[i];
+      if (currentArray.length <= index) {
+        for (let j = 0; j < index - currentArray.length + 1; j += 1) {
+          currentArray.push(undefined);
+        }
+      }
+      if (i < arrayIndeces.length - 1) {
+        currentArray[index] = [];
+        currentArray = currentArray[index];
+      }
+    }
+    if (remainingPath.length === 1) {
+      currentArray[index] = value;
+      return;
+    }
+    if (currentArray[index] == null || typeof currentArray[index] !== 'object') {
+      currentArray[index] = {};
+    }
+    updateObjFromPath(remainingPath.slice(1), currentArray[index], value);
+    return;
+  }
+
+  if (remainingPath.length === 1) {
+    obj[p] = value;
+    return;
+  }
+  if (obj[p] == null) {
+    obj[p] = {};
+  }
+  updateObjFromPath(remainingPath.slice(1), obj[p], value);
+}
+
+function diffToObj(diff: Object) {
+  const obj = {};
+  Object.keys(diff).forEach((key) => {
+    const path = key.split('.').filter(p => p.length > 0);
+    const value = diff[key][1];
+    updateObjFromPath(path, obj, value);
+  });
+  return obj;
 }
 
 // function objDiffOnly(val1: any, val2: any) {
@@ -602,5 +668,5 @@ export {
   generateUniqueId, joinObjects, cleanUIDs, loadRemote, loadRemoteCSS,
   deleteKeys, copyKeysFromTo, generateRandomString,
   duplicate, assignObjectFromTo, joinObjectsWithOptions,
-  getObjectPaths, getObjectDiff,
+  getObjectPaths, getObjectDiff, updateObjFromPath, diffToObj,
 };

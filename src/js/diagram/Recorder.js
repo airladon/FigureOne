@@ -2,6 +2,7 @@
 // import type { Transform } from '../tools/g2';
 import { Point, getTransform, Transform } from '../tools/g2';
 import { round } from '../tools/math';
+import { getObjectDiff } from '../tools/tools';
 import type { DiagramElement } from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
 // Singleton class that contains projects global variables
@@ -218,6 +219,12 @@ class Recorder {
   events: Array<Array<number | string | null>>;
   states: Array<[number, Object]>;
   slides: Array<[number, 'goto' | 'next' | 'prev', string, number]>;
+
+  statesNew: {
+    reference: Object,
+    states: Array<[number, Object]>,
+  };
+
   isRecording: boolean;
   isPlaying: boolean;
   startTime: number;
@@ -289,6 +296,7 @@ class Recorder {
       this.events = [];
       this.slides = [];
       this.states = [];
+      this.statesNew = {};
       this.currentTime = 0;
       this.isRecording = false;
       this.precision = 5;
@@ -389,6 +397,9 @@ class Recorder {
     this.events = [];
     this.slides = [];
     this.states = [];
+    this.statesNew = {
+      states: [],
+    };
     this.startTime = this.timeStamp();
     this.isPlaying = false;
     this.isRecording = true;
@@ -426,7 +437,11 @@ class Recorder {
   }
 
   recordState(state: Object) {
+    if (this.statesNew.reference == null) {
+      this.statesNew.reference = state;
+    }
     this.states.push([this.now() / 1000, state]);
+    this.statesNew.states.push([this.now() / 1000, getObjectDiff(this.statesNew.reference, state)]);
   }
 
   recordSlide(direction: 'goto' | 'next' | 'prev', message: string, slide: number) {
@@ -461,6 +476,7 @@ class Recorder {
     download(`${dateStr} ${location} slides.json`, JSON.stringify(this.slides));
     download(`${dateStr} ${location} events.json`, JSON.stringify(this.events));
     download(`${dateStr} ${location} states.json`, JSON.stringify(this.states));
+    download(`${dateStr} ${location} statesNew.json`, JSON.stringify(this.statesNew));
   }
 
   show() {
