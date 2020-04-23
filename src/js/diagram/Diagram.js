@@ -174,6 +174,8 @@ class Diagram {
   fnMap: FunctionMap;
 
   isPaused: boolean;
+  pauseTime: number;
+  // pauseAfterNextDrawFlag: boolean;
 
   constructor(options: TypeDiagramOptions) {
     const defaultOptions = {
@@ -298,6 +300,7 @@ class Diagram {
       this.gesture = new Gesture(this);
     }
 
+    // this.pauseAfterNextDrawFlag = false;
     this.fontScale = optionsToUse.fontScale;
     this.updateLimits(limits);
     this.drawQueued = false;
@@ -316,9 +319,11 @@ class Diagram {
       this.getElement.bind(this),
       this.getState.bind(this),
       this.setState.bind(this),
+      // this.pauseAfterNextDraw.bind(this),
       this.pause.bind(this),
       this.unpause.bind(this),
     );
+    this.pauseTime = performance.now() / 1000;
     this.shapesLow = this.getShapes();
     // this.shapesHigh = this.getShapes(true);
     this.shapes = this.shapesLow;
@@ -771,6 +776,9 @@ class Diagram {
       this.recorder.recordEvent('touchDown', diagramPoint.x, diagramPoint.y);
     }
 
+    if (this.isPaused) {
+      this.unpause();
+    }
     if (this.inTransition) {
       return false;
     }
@@ -1142,18 +1150,21 @@ class Diagram {
   }
 
   pause() {
+    this.pauseTime = performance.now() / 1000;
     this.isPaused = true;
   }
 
+  // pauseAfterNextDraw() {
+  //   this.pauseAfterNextDrawFlag = true;
+  // }
+
   unpause() {
     this.isPaused = false;
+    this.elements.setTimeDelta(performance.now() / 1000 - this.pauseTime);
     this.animateNextFrame();
   }
 
   draw(nowIn: number, canvasIndex: number = 0): void {
-    if (this.isPaused) {
-      return;
-    }
     let now = nowIn;
     if (nowIn === -1) {
       now = this.lastDrawTime;
@@ -1197,7 +1208,14 @@ class Diagram {
       canvasIndex,
     );
     // console.log('really done')
+    // if (this.pauseAfterNextDrawFlag) {
+    //   this.pause();
+    //   this.pauseAfterNextDrawFlag = false;
+    // }
 
+    if (this.isPaused) {
+      return;
+    }
 
     if (this.elements.isMoving()) {
       this.animateNextFrame(true, 'is moving');
