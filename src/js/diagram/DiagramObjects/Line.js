@@ -296,6 +296,9 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   setEndPoints: (TypeParsablePoint, TypeParsablePoint, ?number) => void;
   // eslint-disable-next-line max-len
   animateLengthTo: (?number, ?number, ?boolean, ?(string | (() => void)), ?(string | ((number, number) => void)), ?boolean) => void;
+  animateLengthToStepFunctionName: string;
+  animateLengthToDoneFunctionName: string;
+  pulseWidthDoneCallbackName: string;
   grow: (?number, ?number, ?boolean, ?(string | (() => void))) => void;
   setMovable: (?boolean, ?('translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale'), ?number, ?Rect) => void;
   addArrow1: (?number, ?number) => void;
@@ -326,6 +329,19 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   multiMove: {
     vertexSpaceMidLength: number;
     bounds: Rect,
+  };
+
+  animateLengthToOptions: {
+    initialLength: number,
+    delaLength: number,
+    callback: ?(string | (() => void)),
+    onStepCallback: ?(string | ((number, number) => void)),
+    finishOnCancel: boolean,
+  };
+
+  pulseWidthOptions: {
+    oldCallback: ?(string | (() => void)),
+    oldTransformMethod: ?(string | ((number, ?Point) => Transform)),
   };
 
   calculateFromP1LengthAngle(
@@ -405,6 +421,26 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.animateNextFrame = animateNextFrame;
     this.dashStyle = dashStyle;
 
+    this.animateLengthToOptions = {
+      initialLength: 0,
+      deltaLength: 1,
+      finishOnCancel: true,
+    };
+
+    this.pulseWidthOptions = {
+      oldCallback: null,
+      oldTransformMethod: null,
+    };
+
+    const scaleTransformMethod = s => new Transform().scale(1, s);
+    this.scaleTransformMethodName = '_transformMethod';
+    this.fnMap.add(this.scaleTransformMethodName, scaleTransformMethod);
+    this.animateLengthToStepFunctionName = '_animateToLengthStep';
+    this.fnMap.add(this.animateLengthToStepFunctionName, this.animateLengthToStep.bind(this));
+    this.animateLengthToDoneFunctionName = '_animateToLengthDone';
+    this.fnMap.add(this.animateLengthToDoneFunctionName, this.animateLengthToDone.bind(this));
+    this.pulseWidthDoneCallbackName = '_pulseWidthDone';
+    this.fnMap.add(this.pulseWidthDoneCallbackName, this.pulseWidthDone.bind(this));
     // Calculate and store the line geometry
     //    The length, angle, p1 and p2 properties also exist in this.line,
     //    but are at this level for convenience
@@ -577,6 +613,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       'angle',
       'length',
       'position',
+      'animateLengthToOptions',
+      'pulseWidthOptions',
     ];
   }
 
@@ -584,6 +622,17 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     joinObjects(this, state);
     this.setLineDimensions();
     return this;
+  }
+
+  pulseWidthDone() {
+    const line = this._line;
+    if (line == null) {
+      return;
+    }
+    if (this.pulseWidthOptions.oldTransformMethod) {
+      line.pulseSettings.transformMethod = this.pulseWidthOptions.oldTransformMethod;
+    }
+    line.pulseSettings.callback = this.pulseWidthOptions.oldCallback;
   }
 
   pulseWidth(optionsIn?: {
@@ -603,19 +652,23 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     const line = this._line;
     if (line != null) {
       line.stopPulsing();
-      const oldTransformMethod = line.pulseSettings.transformMethod;
-      const oldPulseCallback = line.pulseSettings.callback;
-      const finishPulsing = () => {
-        line.pulseSettings.transformMethod = oldTransformMethod;
-        line.pulseSettings.callback = oldPulseCallback;
+      this.pulseWidthOptions = {
+        oldTransformMethod: line.pulseSettings.transformMethod,
+        oldCallback: line.pulseSettings.callback,
       };
-      const finishPulsingName = `${this.getPath()}_finishPulsing`;
-      this.fnMap.add(finishPulsingName, finishPulsing);
-      line.pulseSettings.callback = finishPulsing;
-      const scaleTransformMethod = s => new Transform().scale(1, s);
-      const scaleTransformMethodName = `${this.getPath()}_transformMethod`;
-      this.fnMap.add(scaleTransformMethodName, scaleTransformMethod);
-      line.pulseSettings.transformMethod = scaleTransformMethodName;
+      // const oldTransformMethod = line.pulseSettings.transformMethod;
+      // const oldPulseCallback = line.pulseSettings.callback;
+      // const finishPulsing = () => {
+      //   line.pulseSettings.transformMethod = oldTransformMethod;
+      //   line.pulseSettings.callback = oldPulseCallback;
+      // };
+      // const finishPulsingName = `${this.getPath()}_finishPulsing`;
+      // this.fnMap.add(finishPulsingName, finishPulsing);
+      line.pulseSettings.callback = this.pulseWidthDoneCallbackName;
+      // const scaleTransformMethod = s => new Transform().scale(1, s);
+      // const scaleTransformMethodName = `${this.getPath()}_transformMethod`;
+      // this.fnMap.add(scaleTransformMethodName, scaleTransformMethod);
+      line.pulseSettings.transformMethod = this.scaleTransformMethodName;
       line.pulseScaleNow(1, options.line, 0, done);
       done = null;
     }
@@ -1057,6 +1110,28 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     // this.updateLabel();
   }
 
+  animateLengthToStep(percent: number) {
+    const { initialLength, deltaLength, onStepCallback } = this.animateLengthToOptions;
+    this.setLength(initialLength + deltaLength * percent);
+    if (onStepCallback != null) {
+      this.fnMap.exec(onStepCallback, percent, initialLength + deltaLength * percent);
+      // onStepCallback(percent, initialLength + deltaLength * percent);
+    }
+  }
+
+  animateLengthToDone() {
+    const {
+      initialLength, callback, deltaLength, finishOnCancel,
+    } = this.animateLengthToOptions;
+    if (finishOnCancel) {
+      this.setLength(initialLength + deltaLength);
+    }
+    this.fnMap.exec(callback);
+    // if (typeof callback === 'function' && callback) {
+    //   callback();
+    // }
+  }
+
   animateLengthTo(
     toLength: number = 1,
     time: number = 1,
@@ -1068,32 +1143,39 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     if (stop) {
       this.stop();
     }
-    const initialLength = this.currentLength;
-    const deltaLength = toLength - this.currentLength;
-    const func = (percent) => {
-      this.setLength(initialLength + deltaLength * percent);
-      if (onStepCallback != null) {
-        this.execFn(onStepCallback, percent, initialLength + deltaLength * percent);
-        // onStepCallback(percent, initialLength + deltaLength * percent);
-      }
+    this.animateToOptions = {
+      initialLength: this.currentLength,
+      delaLength: toLength - this.currentLength,
+      callback,
+      onStepCallback,
+      finishOnCancel,
     };
-    this.fnMap.add('_DiagramObjectsLineAnimateLengthToFunc', func);
-    const done = () => {
-      if (finishOnCancel) {
-        this.setLength(initialLength + deltaLength);
-      }
-      this.execFn(callback);
-      // if (typeof callback === 'function' && callback) {
-      //   callback();
-      // }
-    };
-    this.fnMap.add('_DiagramObjectsLineAnimateLengthToCallback', done);
+    // const initialLength = this.currentLength;
+    // const deltaLength = toLength - this.currentLength;
+    // const func = (percent) => {
+    //   this.setLength(initialLength + deltaLength * percent);
+    //   if (onStepCallback != null) {
+    //     this.execFn(onStepCallback, percent, initialLength + deltaLength * percent);
+    //     // onStepCallback(percent, initialLength + deltaLength * percent);
+    //   }
+    // };
+    // this.fnMap.add('_DiagramObjectsLineAnimateLengthToFunc', func);
+    // const done = () => {
+    //   if (finishOnCancel) {
+    //     this.setLength(initialLength + deltaLength);
+    //   }
+    //   this.execFn(callback);
+    //   // if (typeof callback === 'function' && callback) {
+    //   //   callback();
+    //   // }
+    // };
+    // this.fnMap.add('_DiagramObjectsLineAnimateLengthToCallback', done);
     this.animations.new('Line Length')
       .custom({
-        callback: '_DiagramObjectsLineAnimateLengthToFunc',
+        callback: this.animateLengthToStepFunctionName,
         duration: time,
       })
-      .whenFinished('_DiagramObjectsLineAnimateLengthToCallback')
+      .whenFinished(this.animateLengthToDoneFunctionName)
       .start();
     // this.animations.start();
     this.animateNextFrame();

@@ -7,24 +7,19 @@
 
 // Singleton class that contains projects global functions
 
-class FunctionMap {
+class GeneralFunctionMap {
   map: { [id: string]: {
     fn: Function,
   }}
 
-  static instance: Object;
-
   constructor() {
-    // If the instance alread exists, then don't create a new instance.
-    // If it doesn't, then setup some default values.
-    if (!FunctionMap.instance) {
-      FunctionMap.instance = this;
-      this.map = {};
-    }
-    return FunctionMap.instance;
+    this.map = {};
   }
 
   add(id: string, fn: Function) {
+    if (this.map == null) {
+      this.map = {};
+    }
     this.map[id] = {
       fn,
     };
@@ -42,20 +37,75 @@ class FunctionMap {
         }
         return this.map[idOrFn].fn(...args);
       }
-      return null;
     }
     if (typeof idOrFn === 'function') {
       return idOrFn(...args);
     }
     return null;
-    // if (this.map[id] != null) {
-    //   if (args.length === 0) {
-    //     return this.map[id].fn();
-    //   }
-    //   return this.map[id].fn(...args);
-    // }
-    // return null;
+  }
+
+  execOnMaps(idOrFn: string | Function | null, mapsIn: Array<Object>, ...args: any) {
+    if (idOrFn == null) {
+      return null;
+    }
+    if (typeof idOrFn === 'string') {
+      const maps = [this.map, ...mapsIn];
+      for (let i = 0; i < maps.length; i += 1) {
+        const map = maps[i];
+        if (map[idOrFn] != null) {
+          if (args.length === 0) {
+            return map[idOrFn].fn();
+          }
+          return map[idOrFn].fn(...args);
+        }
+      }
+    }
+    if (typeof idOrFn === 'function') {
+      return idOrFn(...args);
+    }
+    return null;
   }
 }
 
-export default FunctionMap;
+
+class GlobalFunctionMap extends GeneralFunctionMap {
+  static instance: Object;
+  constructor() {
+    // If the instance alread exists, then don't create a new instance.
+    // If it doesn't, then setup some default values.
+    if (!GlobalFunctionMap.instance) {
+      super();
+      GlobalFunctionMap.instance = this;
+      this.map = {};
+    }
+    return GlobalFunctionMap.instance;
+  }
+}
+
+class FunctionMap extends GeneralFunctionMap {
+  map: { [id: string]: {
+    fn: Function,
+  }}
+
+  global: GlbalFunctionMap;
+
+  constructor() {
+    super();
+    this.global = new GlobalFunctionMap();
+  }
+
+  exec(idOrFn: string | Function | null, ...args: any) {
+    // const result = super.exec(idOrFn, ...args);
+    // if (result === null) {
+    //   return this.global.exec(idOrFn, ...args);
+    // }
+    // return result;
+    return this.execOnMaps(idOrFn, [this.global.map], ...args);
+  }
+
+  execOnMaps(idOrFn: string | Function | null, mapsIn: Array<Object>, ...args: any) {
+    return super.execOnMaps(idOrFn, [...mapsIn, this.global.map], ...args);
+  }
+}
+
+export { FunctionMap, GlobalFunctionMap };

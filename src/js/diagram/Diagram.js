@@ -7,7 +7,7 @@ import {
   spaceToSpaceTransform, minAngleDiff,
 } from '../tools/g2';
 import * as math from '../tools/math';
-import FunctionMap from './FunctionMap';
+import { FunctionMap } from './FunctionMap';
 import { setState, getState } from './state';
 import parseState from './parseState';
 import { isTouchDevice, joinObjects } from '../tools/tools';
@@ -184,12 +184,12 @@ class Diagram {
       // updateFontSize: '',
     };
     this.fnMap = new FunctionMap();
-    this.fnMap.add('tools.math.easein', math.easein);
-    this.fnMap.add('tools.math.easeout', math.easeout);
-    this.fnMap.add('tools.math.easeinout', math.easeinout);
-    this.fnMap.add('tools.math.linear', math.linear);
-    this.fnMap.add('tools.math.sinusoid', math.sinusoid);
-    this.fnMap.add('doNothing', () => {});
+    // this.fnMap.global.add('tools.math.easein', math.easein);
+    // this.fnMap.global.add('tools.math.easeout', math.easeout);
+    // this.fnMap.global.add('tools.math.easeinout', math.easeinout);
+    // this.fnMap.global.add('tools.math.linear', math.linear);
+    // this.fnMap.global.add('tools.math.sinusoid', math.sinusoid);
+    // this.fnMap.add('doNothing', () => {});
     this.isPaused = false;
     this.scrolled = false;
     // this.oldScrollY = 0;

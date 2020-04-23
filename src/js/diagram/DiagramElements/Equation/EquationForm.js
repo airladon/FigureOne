@@ -319,7 +319,7 @@ export default class EquationForm extends Elements {
   ) {
     if (elements.length === 0) {
       if (callback) {
-        this.execFn(callback, false);
+        this.fnMap.exec(callback, false);
         // callback(false);
         return;
       }
@@ -331,7 +331,7 @@ export default class EquationForm extends Elements {
       if (completed === count) {
         if (callback) {
           // callback(cancelled);
-          this.execFn(callback, cancelled);
+          this.fnMap.exec(callback, cancelled);
         }
       }
     };
@@ -594,7 +594,7 @@ export default class EquationForm extends Elements {
       this.dissolveElements(elementsToHide, 'out', delay, dissolveOutTime, dissolveOutCallback);
       cumTime += dissolveOutTime;
     } else if (dissolveOutCallback != null) {
-      this.execFn(dissolveOutCallback);
+      this.fnMap.exec(dissolveOutCallback);
     }
 
     this.applyElementMods();

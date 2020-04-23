@@ -292,7 +292,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
             );
           }
           padShape.setMoveBoundaryToDiagram(boundary);
-          const fnName = `_polyline_${this.getPath()}_pad${i}`;
+          const fnName = `_polyline_pad${i}`;
           this.fnMap.add(
             fnName,
             (transform) => {
@@ -542,7 +542,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       this.makeValidTriangle();
     }
     if (this.updatePointsCallback != null && !skipCallback) {
-      this.execFn(this.updatePointsCallback);
+      this.fnMap.exec(this.updatePointsCallback);
     }
   }
 

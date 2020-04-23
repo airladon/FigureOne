@@ -7,7 +7,7 @@ import Bounds from './Bounds';
 import {
   DiagramElementPrimitive, DiagramElementCollection,
 } from '../../../Element';
-import FunctionMap from '../../../FunctionMap';
+import { FunctionMap } from '../../../FunctionMap';
 
 export interface ElementInterface {
   ascent: number;
@@ -87,16 +87,16 @@ class Element implements ElementInterface {
     this.fnMap = new FunctionMap();
   }
 
-  execFn(fn: string | Function | null, ...args: Array<any>) {
-    // if (fn == null) {
-    //   return null;
-    // }
-    // if (typeof fn === 'string') {
-    //   return this.fnMap.exec(fn, ...args);
-    // }
-    // return fn(...args);
-    return this.fnMap.exec(fn, ...args);
-  }
+  // execFn(fn: string | Function | null, ...args: Array<any>) {
+  //   // if (fn == null) {
+  //   //   return null;
+  //   // }
+  //   // if (typeof fn === 'string') {
+  //   //   return this.fnMap.exec(fn, ...args);
+  //   // }
+  //   // return fn(...args);
+  //   return this.fnMap.exec(fn, ...args);
+  // }
 
   calcSize(location: Point, scale: number) {
     const { content } = this;
@@ -115,7 +115,7 @@ class Element implements ElementInterface {
       content.transform.updateScale(scale, scale);
       content.updateLastDrawTransform();
       if (content.internalSetTransformCallback != null) {
-        this.execFn(content.internalSetTransformCallback, content.transform);
+        this.fnMap.exec(content.internalSetTransformCallback, content.transform);
       }
 
       // Get the boundaries of element
@@ -250,16 +250,16 @@ class Elements implements ElementInterface {
     this.fnMap = new FunctionMap();
   }
 
-  execFn(fn: string | Function | null, ...args: Array<any>) {
-    // if (fn == null) {
-    //   return null;
-    // }
-    // if (typeof fn === 'string') {
-    //   return this.fnMap.exec(fn, ...args);
-    // }
-    // return fn(...args);
-    return this.fnMap.exec(fn, ...args);
-  }
+  // execFn(fn: string | Function | null, ...args: Array<any>) {
+  //   // if (fn == null) {
+  //   //   return null;
+  //   // }
+  //   // if (typeof fn === 'string') {
+  //   //   return this.fnMap.exec(fn, ...args);
+  //   // }
+  //   // return fn(...args);
+  //   return this.fnMap.exec(fn, ...args);
+  // }
 
   _dup(namedCollection?: Object) {
     const contentCopy = [];
