@@ -432,9 +432,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       oldTransformMethod: null,
     };
 
-    const scaleTransformMethod = s => new Transform().scale(1, s);
-    this.scaleTransformMethodName = '_transformMethod';
-    this.fnMap.add(this.scaleTransformMethodName, scaleTransformMethod);
     this.animateLengthToStepFunctionName = '_animateToLengthStep';
     this.fnMap.add(this.animateLengthToStepFunctionName, this.animateLengthToStep.bind(this));
     this.animateLengthToDoneFunctionName = '_animateToLengthDone';
@@ -482,6 +479,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     };
     this._midLine = null;
 
+    this.scaleTransformMethodName = '_transformMethod';
     // If the line is to be shown (and not just a label) then make it
     this._line = null;
     if (optionsToUse.showLine) {
@@ -495,6 +493,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         optionsToUse.color, this.dashStyle,
         optionsToUse.largerTouchBorder, isTouchDevice,
       );
+      const scaleTransformMethod = s => new Transform().scale(1, s);
+      straightLine.fnMap.add(this.scaleTransformMethodName, scaleTransformMethod);
       this.add('line', straightLine);
     }
 
