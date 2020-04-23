@@ -584,15 +584,29 @@ function updateObjFromPath(
   updateObjFromPath(remainingPath.slice(1), obj[p], value);
 }
 
-function diffToObj(diff: Object) {
+function toObj(diff: Object) {
   const obj = {};
   Object.keys(diff).forEach((key) => {
     const path = key.split('.').filter(p => p.length > 0);
-    const value = diff[key][1];
-    updateObjFromPath(path, obj, value);
+    const value = diff[key];
+    if (Array.isArray(value)) {
+      updateObjFromPath(path, obj, value.slice(-1)[0]);
+    } else {
+      updateObjFromPath(path, obj, value);
+    }
   });
   return obj;
 }
+
+// function addedOrRemovedToObj(addedOrRemoved: Object) {
+//   const obj = {};
+//   Object.keys(addedOrRemoved).forEach((key) => {
+//     const path = key.split('.').filter(p => p.length > 0);
+//     const value = addedOrRemoved[key];
+//     updateObjFromPath(path, obj, value);
+//   });
+//   return obj;
+// }
 
 // function objDiffOnly(val1: any, val2: any) {
 //   if (
@@ -668,5 +682,5 @@ export {
   generateUniqueId, joinObjects, cleanUIDs, loadRemote, loadRemoteCSS,
   deleteKeys, copyKeysFromTo, generateRandomString,
   duplicate, assignObjectFromTo, joinObjectsWithOptions,
-  getObjectPaths, getObjectDiff, updateObjFromPath, diffToObj,
+  getObjectPaths, getObjectDiff, updateObjFromPath, toObj,
 };

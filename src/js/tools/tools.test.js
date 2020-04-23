@@ -650,7 +650,7 @@ describe('Get Object Diff', () => {
 describe('diffToObj', () => {
   test('Simple', () => {
     const diff = { '.a': [1, 2] };
-    const obj = tools.diffToObj(diff);
+    const obj = tools.toObj(diff);
     expect(Object.keys(obj)).toHaveLength(1);
     expect(obj.a).toBe(2);
   });
@@ -659,7 +659,7 @@ describe('diffToObj', () => {
       '.a[0]': [1, 2],
       '.a[2]': [3, 4],
     };
-    const obj = tools.diffToObj(diff);
+    const obj = tools.toObj(diff);
     expect(Object.keys(obj)).toHaveLength(1);
     expect(Array.isArray(obj.a)).toBe(true);
     expect(obj.a).toHaveLength(3);
@@ -673,7 +673,7 @@ describe('diffToObj', () => {
       '.a[1]': [3, 4],
       '.b': [1, 9],
     };
-    const obj = tools.diffToObj(diff);
+    const obj = tools.toObj(diff);
     expect(Object.keys(obj)).toHaveLength(2);
     expect(Array.isArray(obj.a)).toBe(true);
     expect(obj.a).toHaveLength(2);
@@ -685,7 +685,51 @@ describe('diffToObj', () => {
     const diff = {
       '.a.b[0][1].c[0].d': [1, 2],
     };
-    const obj = tools.diffToObj(diff);
+    const obj = tools.toObj(diff);
+    expect(Object.keys(obj)).toHaveLength(1);
+    expect(obj.a.b[0][1].c[0].d).toBe(2);
+    expect(obj.a.b[0][0]).toBe(undefined);
+  });
+});
+describe('addedOrRemovedToObj', () => {
+  test('Simple', () => {
+    const aOrR = { '.a': 2 };
+    const obj = tools.toObj(aOrR);
+    expect(Object.keys(obj)).toHaveLength(1);
+    expect(obj.a).toBe(2);
+  });
+  test('Simple Array', () => {
+    const aOrR = {
+      '.a[0]': 2,
+      '.a[2]': 4,
+    };
+    const obj = tools.toObj(aOrR);
+    expect(Object.keys(obj)).toHaveLength(1);
+    expect(Array.isArray(obj.a)).toBe(true);
+    expect(obj.a).toHaveLength(3);
+    expect(obj.a[0]).toBe(2);
+    expect(obj.a[1]).toBe(undefined);
+    expect(obj.a[2]).toBe(4);
+  });
+  test('Simple Array and values', () => {
+    const aOrR = {
+      '.a[0]': 2,
+      '.a[1]': 4,
+      '.b': 9,
+    };
+    const obj = tools.toObj(aOrR);
+    expect(Object.keys(obj)).toHaveLength(2);
+    expect(Array.isArray(obj.a)).toBe(true);
+    expect(obj.a).toHaveLength(2);
+    expect(obj.a[0]).toBe(2);
+    expect(obj.a[1]).toBe(4);
+    expect(obj.b).toBe(9);
+  });
+  test('Nesting', () => {
+    const aOrR = {
+      '.a.b[0][1].c[0].d': 2,
+    };
+    const obj = tools.toObj(aOrR);
     expect(Object.keys(obj)).toHaveLength(1);
     expect(obj.a.b[0][1].c[0].d).toBe(2);
     expect(obj.a.b[0][0]).toBe(undefined);
