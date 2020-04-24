@@ -829,4 +829,65 @@ describe.only('compress object', () => {
     expect(map.inverseMap.b).toBe('x');
     expect(map.inverseMap.c).toBe('key2');
   });
+  test('Nested', () => {
+    const o = {
+      key1: 1,
+      key2: [
+        1,
+        'x',
+        {
+          key21: 1,
+          key22: [1, 'x'],
+          key23: 'asdf',
+        },
+      ],
+      key3: {
+        key31: [
+          1,
+          [
+            1,
+            {
+              key21: 2,
+              key312: [1, 'qwerty'],
+              key313: 'x',
+            },
+            false,
+          ],
+        ],
+      },
+    };
+    const map = new tools.UniqueMap();
+    const c = tools.compressObject(o, map, true, true, null, false);
+    expect(c.a).toBe(1);
+    expect(map.map.key1).toBe('a');
+    expect(map.map.x).toBe('b');
+    expect(map.map.key21).toBe('c');
+    expect(map.map.key22).toBe('d');
+    expect(map.map.asdf).toBe('e');
+    expect(map.map.key23).toBe('f');
+    expect(map.map.key2).toBe('g');
+    expect(map.map.qwerty).toBe('h');
+    expect(map.map.key312).toBe('i');
+    expect(map.map.key313).toBe('j');
+    expect(map.map.key31).toBe('k');
+    expect(map.map.key3).toBe('l');
+
+    expect(c.a).toBe(1);
+    expect(c.g[0]).toBe(1);
+    expect(c.g[1]).toBe('b');
+    expect(c.g[2].c).toBe(1);
+    expect(c.g[2].d).toEqual([1, 'b']);
+    expect(c.g[2].f).toBe('e');
+
+    map.makeInverseMap();
+    const d = tools.compressObject(c, map, true, true, null, true);
+    expect(d.key1).toBe(1);
+    expect(d.key2[0]).toEqual(1);
+    expect(d.key2[1]).toEqual('x');
+    expect(d.key2[2].key21).toBe(1);
+    expect(d.key2[2].key22).toEqual([1, 'x']);
+    expect(d.key2[2].key23).toBe('asdf');
+    expect(d.key3.key31[1][1].key21).toBe(2);
+    expect(d.key3.key31[1][1].key312).toEqual([1, 'qwerty']);
+  });
 });
