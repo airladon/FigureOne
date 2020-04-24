@@ -274,51 +274,6 @@ function joinObjectsWithOptions(options: {
 // joins objects like object.assign but goes as many levels deep as the object
 // is. Objects later in the arrawy overwrite objects earlier.
 function joinObjects(...objects: Array<Object>): Object {
-  // if (typeof objects === 'object') {
-  //   return objects;
-  // }
-  // const assignObjectFromTo1 = (fromObject: Object, toObject: Object) => {
-  //   Object.keys(fromObject).forEach((key) => {
-  //     const value = fromObject[key];
-  //     if (typeof value === 'number'
-  //       || typeof value === 'boolean'
-  //       || typeof value === 'string'
-  //       || value == null
-  //       || typeof value === 'function'
-  //       || typeof value._dup === 'function'
-  //       || Array.isArray(value)
-  //     ) {
-  //       // console.log(value, toObject[key])
-  //       if (value !== undefined || toObject[key] === undefined) {
-  //         // eslint-disable-next-line no-param-reassign
-  //         toObject[key] = value;
-  //       }
-  //     } else {
-  //       const toValue = toObject[key];
-  //       if (typeof toValue === 'number'
-  //         || typeof toValue === 'boolean'
-  //         || typeof toValue === 'string'
-  //         || toValue == null
-  //         || typeof toValue === 'function'
-  //         || Array.isArray(toValue)
-  //       ) {
-  //         // eslint-disable-next-line no-param-reassign
-  //         toObject[key] = {};
-  //       }
-  //       assignObjectFromTo1(value, toObject[key]);
-  //     }
-  //   });
-  // };
-
-  // const num = objects.length;
-  // const out = objects[0];
-  // for (let i = 1; i < num; i += 1) {
-  //   const o = objects[i];
-  //   if (o != null) {
-  //     assignObjectFromTo1(o, out);
-  //   }
-  // }
-  // return out;
   return joinObjectsWithOptions({}, ...objects);
 }
 
@@ -582,46 +537,19 @@ function compressObject(
         obj2[map.get(k)] = obj[k];
       } else if (keys) {
         obj2[map.add(k)] = obj[k];
+      } else {
+        obj2[k] = obj[k];
       }
     }
     if (keys) {
       return obj2;
     }
-    return obj;
+    return obj2;
   }
   return obj;
-  // if (Array.isArray(obj)) {
-  //   for (let i = 0; i < obj.length; i += 1) {
-  //     const value = obj[i];
-  //     if (typeof value === 'string' && strValues) {
-  //       const uniqueStr = map.add(value);
-  //       obj[i] = uniqueStr;
-  //     }
-  //     if (typeof value === 'object') {
-  //       compressObject(obj[i], map, keys, strValues);
-  //     }
-  //     if (Array.isArray(value)) {
-  //       obj[i] = compressObject(value, map, keys, strValues);
-  //     }
-  //   }
-  //   return obj;
-  // }
-  // if (typeof obj === 'object') {
-  //   const k = Object.keys(obj);
-  //   for (let i = 0; i < k.length; i += 1) {
-  //     const value = obj[k[i]];
-  //     if (typeof value === 'string' && strValues) {
-  //       const uniqueStr = map.add(value);
-  //       obj[k[i]] = uniqueStr;
-  //     }
-  //     if (Array.isArray(value)) {
-  //       obj[k[i]]
-  //     }
-  //   }
-  // }
 }
 
-function getObjectPaths(obj: any, path: string = '', pathObj = {}, pathMap = Object) {
+function objectToPaths(obj: any, path: string = '', pathObj = {}, pathMap = Object) {
   if (
     typeof obj === 'string'
     || typeof obj === 'number'
@@ -641,20 +569,20 @@ function getObjectPaths(obj: any, path: string = '', pathObj = {}, pathMap = Obj
   }
   if (Array.isArray(obj)) {
     obj.forEach((o, index) => {
-      getObjectPaths(o, `${path}[${index}]`, pathObj);
+      objectToPaths(o, `${path}[${index}]`, pathObj);
     });
     return pathObj;
   }
   Object.keys(obj).forEach((key) => {
-    getObjectPaths(obj[key], `${path}.${key}`, pathObj);
+    objectToPaths(obj[key], `${path}.${key}`, pathObj);
   });
   return pathObj;
 }
 
-function getObjectDiff(obj1: Object, obj2: Object) {
-  const pathMap = {};
-  const paths1 = getObjectPaths(obj1);
-  const paths2 = getObjectPaths(obj2);
+function getObjectDiff(obj1: Object, obj2: Object, debug: boolean = false) {
+  // const pathMap = {};
+  const paths1 = objectToPaths(obj1);
+  const paths2 = objectToPaths(obj2);
   const added = {};
   const diff = {};
   const removed = {};
@@ -664,7 +592,11 @@ function getObjectDiff(obj1: Object, obj2: Object) {
       return;
     }
     if (paths1[key1] !== paths2[key1]) {
-      diff[key1] = [paths1[key1], paths2[key1]];
+      if (debug) {
+        diff[key1] = [paths1[key1], paths2[key1]];
+      } else {
+        diff[key1] = paths2[key1];
+      }
     }
   });
   Object.keys(paths2).forEach((key2) => {
@@ -681,6 +613,7 @@ function updateObjFromPath(
   value: any,
   remove: boolean = false,
 ) {
+  // console.log(remainingPath)
   const fullP = remainingPath[0];
   const arrayStringIndeces = fullP.match(/\[[^\]]*\]/g);
   const p = fullP.replace(/\[.*/, '');
@@ -689,7 +622,7 @@ function updateObjFromPath(
     return;
   }
   if (arrayStringIndeces) {
-    const arrayIndeces = arrayStringIndeces.map(e => parseInt(e.replace(/\[|\]/g, '')));
+    const arrayIndeces = arrayStringIndeces.map(e => parseInt(e.replace(/\[|\]/g, ''), 10));
     // console.log(arrayIndeces)
     // return;
     if (obj[p] == null || !Array.isArray(obj[p])) {
@@ -732,11 +665,11 @@ function updateObjFromPath(
   updateObjFromPath(remainingPath.slice(1), obj[p], value);
 }
 
-function toObj(diff: Object) {
+function pathsToObj(paths: Object) {
   const obj = {};
-  Object.keys(diff).forEach((key) => {
+  Object.keys(paths).forEach((key) => {
     const path = key.split('.').filter(p => p.length > 0);
-    const value = diff[key];
+    const value = paths[key];
     if (Array.isArray(value)) {
       updateObjFromPath(path, obj, value.slice(-1)[0]);
     } else {
@@ -744,6 +677,35 @@ function toObj(diff: Object) {
     }
   });
   return obj;
+}
+
+function refAndDiffToObject(
+  referenceIn: Object,
+  ...diffsIn: Array<{
+    added: Object,
+    diff: Object,
+    removed: Object,
+  }>
+) {
+  const ref = duplicate(referenceIn);
+  diffsIn.forEach((diffIn) => {
+    const { added, removed, diff } = diffIn;
+    const processPaths = (paths: Object, remove: boolean = false) => {
+      Object.keys(paths).forEach((pathStr) => {
+        const path = pathStr.split('.').filter(p => p.length > 0);
+        const value = paths[pathStr];
+        if (Array.isArray(value)) {
+          updateObjFromPath(path, ref, value.slice(-1)[0], remove);
+        } else {
+          updateObjFromPath(path, ref, value, remove);
+        }
+      });
+    };
+    processPaths(removed, true);
+    processPaths(added);
+    processPaths(diff);
+  });
+  return ref;
 }
 
 // function diffToObj(diff: Object, obj: object) {
@@ -835,6 +797,6 @@ export {
   generateUniqueId, joinObjects, cleanUIDs, loadRemote, loadRemoteCSS,
   deleteKeys, copyKeysFromTo, generateRandomString,
   duplicate, assignObjectFromTo, joinObjectsWithOptions,
-  getObjectPaths, getObjectDiff, updateObjFromPath, toObj,
-  UniqueMap, compressObject, 
+  objectToPaths, getObjectDiff, updateObjFromPath, pathsToObj,
+  UniqueMap, compressObject, refAndDiffToObject,
 };
