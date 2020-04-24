@@ -457,6 +457,24 @@ DiagramElementPrimitive {
     "slides": Array [],
     "stateTimeStep": 1000,
     "states": Array [],
+    "statesNew": Object {
+      "map": UniqueMap {
+        "index": 1,
+        "inverseMap": Object {},
+        "letters": "0abcdefghijklmnopqrstuvwxz",
+        "map": Object {},
+      },
+      "states": Array [],
+    },
+    "statesNew1": Object {
+      "map": UniqueMap {
+        "index": 1,
+        "inverseMap": Object {},
+        "letters": "0abcdefghijklmnopqrstuvwxz",
+        "map": Object {},
+      },
+      "states": Array [],
+    },
     "touchDown": [Function],
     "touchUp": [Function],
     "unpauseDiagram": [Function],

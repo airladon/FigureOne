@@ -536,7 +536,7 @@ describe('Join Objects', () => {
 describe('Get Object Paths', () => {
   test('Simple', () => {
     const obj = { a: 1, b: 2 };
-    const paths = tools.getObjectPaths(obj);
+    const paths = tools.objectToPaths(obj);
     expect(Object.keys(paths)).toEqual(['.a', '.b']);
     expect(Object.values(paths)).toEqual([1, 2]);
   });
@@ -544,7 +544,7 @@ describe('Get Object Paths', () => {
     const obj = {
       a: 1, b: 'h', c: false, d: null, e: undefined, f: () => {}, g: [1, 2],
     };
-    const paths = tools.getObjectPaths(obj);
+    const paths = tools.objectToPaths(obj);
     expect(Object.keys(paths)).toEqual([
       '.a', '.b', '.c', '.d', '.e', '.f', '.g[0]', '.g[1]',
     ]);
@@ -574,7 +574,7 @@ describe('Get Object Paths', () => {
         ],
       },
     };
-    const paths = tools.getObjectPaths(obj);
+    const paths = tools.objectToPaths(obj);
     expect(Object.keys(paths)).toEqual([
       '.a',
       '.b.c',
@@ -597,7 +597,7 @@ describe('Get Object Diff', () => {
   test('No diff', () => {
     const o1 = { a: 1, b: { c: 1, d: 1 } };
     const o2 = { a: 1, b: { c: 1, d: 1 } };
-    const { diff, removed, added } = tools.getObjectDiff(o1, o2);
+    const { diff, removed, added } = tools.getObjectDiff(o1, o2, true);
     expect(diff).toEqual({});
     expect(removed).toEqual({});
     expect(added).toEqual({});
@@ -605,7 +605,7 @@ describe('Get Object Diff', () => {
   test('Diff', () => {
     const o1 = { a: 1, b: { c: 1, d: 1 } };
     const o2 = { a: 2, b: { c: 1, d: 2 } };
-    const { diff, removed, added } = tools.getObjectDiff(o1, o2);
+    const { diff, removed, added } = tools.getObjectDiff(o1, o2, true);
     expect(diff).toEqual({
       '.a': [1, 2],
       '.b.d': [1, 2],
@@ -616,7 +616,7 @@ describe('Get Object Diff', () => {
   test('Added', () => {
     const o1 = { a: 1, b: { c: 1, d: 1 } };
     const o2 = { a: 1, b: { c: 1, d: 1, e: 1 } };
-    const { diff, removed, added } = tools.getObjectDiff(o1, o2);
+    const { diff, removed, added } = tools.getObjectDiff(o1, o2, true);
     expect(added).toEqual({
       '.b.e': 1,
     });
@@ -626,7 +626,7 @@ describe('Get Object Diff', () => {
   test('Removed', () => {
     const o1 = { a: 1, b: { c: 1, d: 1 } };
     const o2 = { a: 1, b: { c: 1 } };
-    const { diff, removed, added } = tools.getObjectDiff(o1, o2);
+    const { diff, removed, added } = tools.getObjectDiff(o1, o2, true);
     expect(removed).toEqual({
       '.b.d': 1,
     });
@@ -636,7 +636,7 @@ describe('Get Object Diff', () => {
   test('Nested', () => {
     const o1 = { a: 1, b: { c: 1, d: 1, e: [{ f: 1 }, 2, [3, 4]] } };
     const o2 = { a: 1, b: { c: 2, d: 1, e: [{ f: 1, g: 2 }, 2, [3, 4, 5]] } };
-    const { diff, removed, added } = tools.getObjectDiff(o1, o2);
+    const { diff, removed, added } = tools.getObjectDiff(o1, o2, true);
     expect(diff).toEqual({
       '.b.c': [1, 2],
     });
@@ -650,7 +650,7 @@ describe('Get Object Diff', () => {
 describe('diffToObj', () => {
   test('Simple', () => {
     const diff = { '.a': [1, 2] };
-    const obj = tools.toObj(diff);
+    const obj = tools.pathsToObj(diff);
     expect(Object.keys(obj)).toHaveLength(1);
     expect(obj.a).toBe(2);
   });
@@ -659,7 +659,7 @@ describe('diffToObj', () => {
       '.a[0]': [1, 2],
       '.a[2]': [3, 4],
     };
-    const obj = tools.toObj(diff);
+    const obj = tools.pathsToObj(diff);
     expect(Object.keys(obj)).toHaveLength(1);
     expect(Array.isArray(obj.a)).toBe(true);
     expect(obj.a).toHaveLength(3);
@@ -673,7 +673,7 @@ describe('diffToObj', () => {
       '.a[1]': [3, 4],
       '.b': [1, 9],
     };
-    const obj = tools.toObj(diff);
+    const obj = tools.pathsToObj(diff);
     expect(Object.keys(obj)).toHaveLength(2);
     expect(Array.isArray(obj.a)).toBe(true);
     expect(obj.a).toHaveLength(2);
@@ -685,7 +685,7 @@ describe('diffToObj', () => {
     const diff = {
       '.a.b[0][1].c[0].d': [1, 2],
     };
-    const obj = tools.toObj(diff);
+    const obj = tools.pathsToObj(diff);
     expect(Object.keys(obj)).toHaveLength(1);
     expect(obj.a.b[0][1].c[0].d).toBe(2);
     expect(obj.a.b[0][0]).toBe(undefined);
@@ -694,7 +694,7 @@ describe('diffToObj', () => {
 describe('addedOrRemovedToObj', () => {
   test('Simple', () => {
     const aOrR = { '.a': 2 };
-    const obj = tools.toObj(aOrR);
+    const obj = tools.pathsToObj(aOrR);
     expect(Object.keys(obj)).toHaveLength(1);
     expect(obj.a).toBe(2);
   });
@@ -703,7 +703,7 @@ describe('addedOrRemovedToObj', () => {
       '.a[0]': 2,
       '.a[2]': 4,
     };
-    const obj = tools.toObj(aOrR);
+    const obj = tools.pathsToObj(aOrR);
     expect(Object.keys(obj)).toHaveLength(1);
     expect(Array.isArray(obj.a)).toBe(true);
     expect(obj.a).toHaveLength(3);
@@ -717,7 +717,7 @@ describe('addedOrRemovedToObj', () => {
       '.a[1]': 4,
       '.b': 9,
     };
-    const obj = tools.toObj(aOrR);
+    const obj = tools.pathsToObj(aOrR);
     expect(Object.keys(obj)).toHaveLength(2);
     expect(Array.isArray(obj.a)).toBe(true);
     expect(obj.a).toHaveLength(2);
@@ -729,7 +729,7 @@ describe('addedOrRemovedToObj', () => {
     const aOrR = {
       '.a.b[0][1].c[0].d': 2,
     };
-    const obj = tools.toObj(aOrR);
+    const obj = tools.pathsToObj(aOrR);
     expect(Object.keys(obj)).toHaveLength(1);
     expect(obj.a.b[0][1].c[0].d).toBe(2);
     expect(obj.a.b[0][0]).toBe(undefined);
@@ -772,7 +772,7 @@ describe('UniqueMap', () => {
     tester(map, 'a00a');
   });
 });
-describe.only('compress object', () => {
+describe('compress object', () => {
   test('Simple Compress', () => {
     const o = { key1: 1, key2: 'x' };
     const map = new tools.UniqueMap();
@@ -890,4 +890,14 @@ describe.only('compress object', () => {
     expect(d.key3.key31[1][1].key21).toBe(2);
     expect(d.key3.key31[1][1].key312).toEqual([1, 'qwerty']);
   });
+});
+describe('Ref and Diff to object', () => {
+  test.only('Simple', () => {
+    const o1 = { a: 1, b: 2 };
+    const o2 = { a: 1, b: 3 };
+    const d = tools.getObjectDiff(o1, o2);
+    expect(d.diff['.b']).toBe(3);
+    const o3 = tools.refAndDiffToObject(o1, d);
+    console.log(o3);
+  })
 });

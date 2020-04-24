@@ -2,7 +2,7 @@
 // import type { Transform } from '../tools/g2';
 import { Point, getTransform, Transform } from '../tools/g2';
 import { round } from '../tools/math';
-import { getObjectDiff, toObj } from '../tools/tools';
+import { getObjectDiff, toObj, UniqueMap, compressObject } from '../tools/tools';
 import type { DiagramElement } from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
 // Singleton class that contains projects global variables
@@ -228,6 +228,7 @@ class Recorder {
   statesNew1: {
     reference: Object,
     states: Array<[number, Object]>,
+    map: UniqueMap;
   };
 
   isRecording: boolean;
@@ -301,7 +302,14 @@ class Recorder {
       this.events = [];
       this.slides = [];
       this.states = [];
-      this.statesNew = {};
+      this.statesNew = {
+        states: [],
+        map: new UniqueMap(),
+      };
+      this.statesNew1 = {
+        states: [],
+        map: new UniqueMap(),
+      }
       this.currentTime = 0;
       this.isRecording = false;
       this.precision = 5;
@@ -402,12 +410,10 @@ class Recorder {
     this.events = [];
     this.slides = [];
     this.states = [];
-    this.statesNew = {
-      states: [],
-    };
-    this.statesNew1 = {
-      states: [],
-    };
+    this.statesNew.states = [];
+    this.statesNew1.states = [];
+    this.statesNew1.map.reset();
+    this.statesNew.map.reset();
     this.startTime = this.timeStamp();
     this.isPlaying = false;
     this.isRecording = true;
@@ -445,16 +451,22 @@ class Recorder {
   }
 
   recordState(state: Object) {
+    const compressNew = compressObject(state, this.statesNew.map);
+    const compressNew1 = compressObject(state, this.statesNew1.map);
     if (this.statesNew.reference == null) {
-      this.statesNew.reference = state;
+      this.statesNew.reference = compressNew;
     }
     if (this.statesNew1.reference == null) {
-      this.statesNew1.reference = state;
+      // this.statesNew1.reference = state;
+      this.statesNew1.reference = compressNew1;
     }
     this.states.push([this.now() / 1000, state]);
-    const diff = getObjectDiff(this.statesNew.reference, state);
-    this.statesNew1.states.push([this.now() / 1000, diff]);
 
+    // StatesNew
+    const diffNew1 = getObjectDiff(this.statesNew1.reference, compressNew1);
+    this.statesNew1.states.push([this.now() / 1000, diffNew1]);
+
+    const diff = getObjectDiff(this.statesNew.referece, compressNew);
     this.statesNew.states.push([
       this.now() / 1000,
       {
