@@ -512,7 +512,7 @@ function getObjectDiff(obj1: Object, obj2: Object) {
   const diff = {};
   const removed = {};
   Object.keys(paths1).forEach((key1) => {
-    if (paths2[key1] == null) {
+    if (paths2[key1] === undefined) {
       removed[key1] = paths1[key1];
       return;
     }
@@ -521,7 +521,7 @@ function getObjectDiff(obj1: Object, obj2: Object) {
     }
   });
   Object.keys(paths2).forEach((key2) => {
-    if (paths1[key2] == null) {
+    if (paths1[key2] === undefined) {
       added[key2] = paths2[key2];
     }
   });

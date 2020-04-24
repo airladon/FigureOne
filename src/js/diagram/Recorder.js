@@ -448,10 +448,13 @@ class Recorder {
     if (this.statesNew.reference == null) {
       this.statesNew.reference = state;
     }
+    if (this.statesNew1.reference == null) {
+      this.statesNew1.reference = state;
+    }
     this.states.push([this.now() / 1000, state]);
     const diff = getObjectDiff(this.statesNew.reference, state);
     this.statesNew1.states.push([this.now() / 1000, diff]);
-    
+
     this.statesNew.states.push([
       this.now() / 1000,
       {
