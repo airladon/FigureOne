@@ -1,4 +1,5 @@
 // @flow
+import { roundNum } from './math';
 
 const Console = (text: string) => {
   console.log(text); // eslint-disable-line no-console
@@ -483,15 +484,22 @@ class UniqueMap {
   constructor() {
     this.map = {};
     this.index = 1;
+    this.inverseMap = {};
     this.letters = '0abcdefghijklmnopqrstuvwxz';
+  }
+
+  reset() {
+    this.index = 1;
+    this.map = {};
   }
 
   add(pathStr: string) {
     if (this.map[pathStr] != null) {
       return this.map[pathStr];
     }
-    this.map[pathStr] = this.getNextUniqueString();
-    return this.map[pathStr];
+    const unique = this.getNextUniqueString();
+    this.map[pathStr] = unique;
+    return unique;
   }
 
   getNextUniqueString() {
@@ -508,6 +516,108 @@ class UniqueMap {
     }
     this.index += 1;
     return out;
+  }
+
+  makeInverseMap() {
+    this.inverseMap = {};
+    Object.keys(this.map).forEach((key) => {
+      const uniqueStr = this.map[key];
+      this.inverseMap[uniqueStr] = key;
+    })
+  }
+
+  get(uniqueStr: string) {
+    if (this.inverseMap[uniqueStr] != null) {
+      return this.inverseMap[uniqueStr];
+    }
+    return null;
+  }
+}
+
+function compressObject(
+  obj: any,
+  map: UniqueMap,
+  keys: boolean = true,
+  strValues: boolean = false,
+  precision: ?number,
+  uncompress: boolean = false,
+) {
+  if (typeof obj === 'string') {
+    if (strValues && uncompress) {
+      return map.get(obj);
+    }
+    if (strValues) {
+      return map.add(obj);
+    }
+    return obj;
+  }
+  if (typeof obj === 'number') {
+    if (precision == null || uncompress) {
+      return obj;
+    }
+    return roundNum(obj, precision);
+  }
+  if (
+    typeof obj === 'boolean'
+    || typeof obj === 'function'
+    || obj == null
+  ) {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    for (let i = 0; i < obj.length; i += 1) {
+      obj[i] = compressObject(obj[i], map, keys, strValues, precision, uncompress);
+    }
+    return obj;
+  }
+
+  if (typeof obj === 'object') {
+    const objKeys = Object.keys(obj);
+    const obj2 = {};
+    for (let i = 0; i < objKeys.length; i += 1) {
+      const k = objKeys[i];
+      obj[k] = compressObject(obj[k], map, keys, strValues, precision, uncompress);
+      if (keys && uncompress) {
+        obj2[map.get(k)] = obj[k];
+      } else if (keys) {
+        obj2[map.add(k)] = obj[k];
+      }
+    }
+    if (keys) {
+      return obj2;
+    }
+    return obj;
+  }
+  return obj;
+  // if (Array.isArray(obj)) {
+  //   for (let i = 0; i < obj.length; i += 1) {
+  //     const value = obj[i];
+  //     if (typeof value === 'string' && strValues) {
+  //       const uniqueStr = map.add(value);
+  //       obj[i] = uniqueStr;
+  //     }
+  //     if (typeof value === 'object') {
+  //       compressObject(obj[i], map, keys, strValues);
+  //     }
+  //     if (Array.isArray(value)) {
+  //       obj[i] = compressObject(value, map, keys, strValues);
+  //     }
+  //   }
+  //   return obj;
+  // }
+  if (typeof obj === 'object') {
+    const k = Object.keys(obj);
+    for (let i = 0; i < k.length; i += 1) {
+      const value = obj[k[i]];
+      if (typeof value === 'string' && strValues) {
+        const uniqueStr = map.add(value);
+        obj[k[i]] = uniqueStr;
+      }
+      if (Array.isArray(value)) {
+        obj[k[i]]
+      }
+    }
   }
 }
 
@@ -726,5 +836,5 @@ export {
   deleteKeys, copyKeysFromTo, generateRandomString,
   duplicate, assignObjectFromTo, joinObjectsWithOptions,
   getObjectPaths, getObjectDiff, updateObjFromPath, toObj,
-  UniqueMap,
+  UniqueMap, compressObject, 
 };
