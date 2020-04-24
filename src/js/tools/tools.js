@@ -475,7 +475,43 @@ function generateRandomString() {
   return (Math.random() * 1e18).toString(36);
 }
 
-function getObjectPaths(obj: any, path: string = '', pathObj = {}) {
+class UniqueMap {
+  map: Object;
+  index: number;
+  letters: string;
+
+  constructor() {
+    this.map = {};
+    this.index = 1;
+    this.letters = '0abcdefghijklmnopqrstuvwxz';
+  }
+
+  add(pathStr: string) {
+    if (this.map[pathStr] != null) {
+      return this.map[pathStr];
+    }
+    this.map[pathStr] = this.getNextUniqueString();
+    return this.map[pathStr];
+  }
+
+  getNextUniqueString() {
+    if (this.index === 0) {
+      return 'a';
+    }
+    const order = Math.floor(Math.log(this.index) / Math.log(this.letters.length));
+    let remainder = this.index;
+    let out = '';
+    for (let i = order; i >= 0; i -= 1) {
+      const factor = Math.floor(remainder / this.letters.length ** i);
+      remainder -= factor * this.letters.length ** i;
+      out = `${out}${this.letters[factor]}`;
+    }
+    this.index += 1;
+    return out;
+  }
+}
+
+function getObjectPaths(obj: any, path: string = '', pathObj = {}, pathMap = Object) {
   if (
     typeof obj === 'string'
     || typeof obj === 'number'
@@ -506,6 +542,7 @@ function getObjectPaths(obj: any, path: string = '', pathObj = {}) {
 }
 
 function getObjectDiff(obj1: Object, obj2: Object) {
+  const pathMap = {};
   const paths1 = getObjectPaths(obj1);
   const paths2 = getObjectPaths(obj2);
   const added = {};
@@ -599,10 +636,10 @@ function toObj(diff: Object) {
   return obj;
 }
 
-function diffToObj(diff: Object, obj: object) {
-  const { added, diff, removed } = diff;
+// function diffToObj(diff: Object, obj: object) {
+//   const { added, diff, removed } = diff;
 
-}
+// }
 
 // function addedOrRemovedToObj(addedOrRemoved: Object) {
 //   const obj = {};
@@ -689,4 +726,5 @@ export {
   deleteKeys, copyKeysFromTo, generateRandomString,
   duplicate, assignObjectFromTo, joinObjectsWithOptions,
   getObjectPaths, getObjectDiff, updateObjFromPath, toObj,
+  UniqueMap,
 };

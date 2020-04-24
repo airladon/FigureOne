@@ -735,3 +735,40 @@ describe('addedOrRemovedToObj', () => {
     expect(obj.a.b[0][0]).toBe(undefined);
   });
 });
+describe('UniqueMap', () => {
+  let tester;
+  beforeEach(() => {
+    tester = (map, inStr) => {
+      map.add(inStr);
+      expect(map.map[inStr]).toBe(inStr);
+    };
+  });
+  test('Simple', () => {
+    const map = new tools.UniqueMap();
+    tester(map, 'a');
+    tester(map, 'b')
+    // map.add('hello');
+    // map.add('there');
+    // expect(map.map['hello']).toBe('a');
+    // expect(map.map['there']).toBe('b');
+  });
+  test('ends', () => {
+    const map = new tools.UniqueMap();
+    tester(map, 'a');
+    tester(map, 'b');
+    map.index = 25;
+    tester(map, 'z');
+    tester(map, 'a0');
+    tester(map, 'aa');
+
+    map.index = 675;
+    tester(map, 'zz');
+    tester(map, 'a00');
+    tester(map, 'a0a');
+
+    map.index = 17575;
+    tester(map, 'zzz');
+    tester(map, 'a000');
+    tester(map, 'a00a');
+  });
+});
