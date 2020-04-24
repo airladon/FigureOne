@@ -772,3 +772,61 @@ describe('UniqueMap', () => {
     tester(map, 'a00a');
   });
 });
+describe.only('compress object', () => {
+  test('Simple Compress', () => {
+    const o = { key1: 1, key2: 'x' };
+    const map = new tools.UniqueMap();
+    const c = tools.compressObject(o, map, true, false, null, false);
+    expect(c.a).toBe(1);
+    expect(c.b).toBe('x');
+    expect(map.map.key1).toBe('a');
+    expect(map.map.key2).toBe('b');
+  });
+  test('Simple Decompress', () => {
+    const o = { key1: 1, key2: 'x' };
+    const map = new tools.UniqueMap();
+    const c = tools.compressObject(o, map, true, false, null, false);
+    map.makeInverseMap();
+    const d = tools.compressObject(c, map, true, false, null, true);
+    expect(d.key1).toBe(1);
+    expect(d.key2).toBe('x');
+    expect(map.inverseMap.a).toBe('key1');
+    expect(map.inverseMap.b).toBe('key2');
+  });
+  test('Compress Strings as well', () => {
+    const o = { key1: 1, key2: 'x' };
+    const map = new tools.UniqueMap();
+    const c = tools.compressObject(o, map, true, true, null, false);
+    expect(c.a).toBe(1);
+    expect(c.c).toBe('b');
+    expect(map.map.key1).toBe('a');
+    expect(map.map.key2).toBe('c');
+    expect(map.map.x).toBe('b');
+
+    map.makeInverseMap();
+    const d = tools.compressObject(c, map, true, true, null, true);
+    expect(d.key1).toBe(1);
+    expect(d.key2).toBe('x');
+    expect(map.inverseMap.a).toBe('key1');
+    expect(map.inverseMap.b).toBe('x');
+    expect(map.inverseMap.c).toBe('key2');
+  });
+  test('Array', () => {
+    const o = { key1: 1, key2: [1, 2, 'x'] };
+    const map = new tools.UniqueMap();
+    const c = tools.compressObject(o, map, true, true, null, false);
+    expect(c.a).toBe(1);
+    expect(c.c).toEqual([1, 2, 'b']);
+    expect(map.map.key1).toBe('a');
+    expect(map.map.key2).toBe('c');
+    expect(map.map.x).toBe('b');
+
+    map.makeInverseMap();
+    const d = tools.compressObject(c, map, true, true, null, true);
+    expect(d.key1).toBe(1);
+    expect(d.key2).toEqual([1, 2, 'x']);
+    expect(map.inverseMap.a).toBe('key1');
+    expect(map.inverseMap.b).toBe('x');
+    expect(map.inverseMap.c).toBe('key2');
+  });
+});
