@@ -439,7 +439,7 @@ class Recorder {
     this.stateTimeout = setTimeout(() => {
       if (this.isRecording) {
         this.recordState(this.getState());
-        this.queueRecordState(this.stateTimeStep);
+        this.queueRecordState(this.stateTimeStep * 1000);
       }
     }, time);
   }

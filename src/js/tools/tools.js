@@ -534,17 +534,18 @@ function updateObjFromPath(
   value: any,
   remove: boolean = false,
 ) {
-  // if (remainingPath.length === 1) {
-  //   return;
-  // }
   const fullP = remainingPath[0];
   const arrayStringIndeces = fullP.match(/\[[^\]]*\]/g);
   const p = fullP.replace(/\[.*/, '');
+  if (remainingPath.length === 1 && remove) {
+    obj[p] = undefined;
+    return;
+  }
   if (arrayStringIndeces) {
     const arrayIndeces = arrayStringIndeces.map(e => parseInt(e.replace(/\[|\]/g, '')));
     // console.log(arrayIndeces)
     // return;
-    if (obj[p] == null) {
+    if (obj[p] == null || !Array.isArray(obj[p])) {
       obj[p] = [];
     }
     // console.log(obj)
@@ -596,6 +597,11 @@ function toObj(diff: Object) {
     }
   });
   return obj;
+}
+
+function diffToObj(diff: Object, obj: object) {
+  const { added, diff, removed } = diff;
+
 }
 
 // function addedOrRemovedToObj(addedOrRemoved: Object) {
