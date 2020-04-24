@@ -606,19 +606,19 @@ function compressObject(
   //   }
   //   return obj;
   // }
-  if (typeof obj === 'object') {
-    const k = Object.keys(obj);
-    for (let i = 0; i < k.length; i += 1) {
-      const value = obj[k[i]];
-      if (typeof value === 'string' && strValues) {
-        const uniqueStr = map.add(value);
-        obj[k[i]] = uniqueStr;
-      }
-      if (Array.isArray(value)) {
-        obj[k[i]]
-      }
-    }
-  }
+  // if (typeof obj === 'object') {
+  //   const k = Object.keys(obj);
+  //   for (let i = 0; i < k.length; i += 1) {
+  //     const value = obj[k[i]];
+  //     if (typeof value === 'string' && strValues) {
+  //       const uniqueStr = map.add(value);
+  //       obj[k[i]] = uniqueStr;
+  //     }
+  //     if (Array.isArray(value)) {
+  //       obj[k[i]]
+  //     }
+  //   }
+  // }
 }
 
 function getObjectPaths(obj: any, path: string = '', pathObj = {}, pathMap = Object) {
