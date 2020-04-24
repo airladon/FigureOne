@@ -538,8 +538,8 @@ function compressObject(
   obj: any,
   map: UniqueMap,
   keys: boolean = true,
-  strValues: boolean = false,
-  precision: ?number,
+  strValues: boolean = true,
+  precision: ?number = null,
   uncompress: boolean = false,
 ) {
   if (typeof obj === 'string') {
