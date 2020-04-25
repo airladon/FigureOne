@@ -579,8 +579,12 @@ function objectToPaths(obj: any, path: string = '', pathObj = {}, pathMap = Obje
   return pathObj;
 }
 
-function getObjectDiff(obj1: Object, obj2: Object, debug: boolean = false) {
+function getObjectDiff(obj1In: Object, diffs: Array<Object>, obj2: Object, debug: boolean = false) {
   // const pathMap = {};
+  let obj1 = obj1In;
+  if (diffs.length > 0) {
+    obj1 = refAndDiffToObject(obj1In, ...diffs);
+  }
   const paths1 = objectToPaths(obj1);
   const paths2 = objectToPaths(obj2);
   const added = {};
@@ -617,8 +621,8 @@ function updateObjFromPath(
   const fullP = remainingPath[0];
   const arrayStringIndeces = fullP.match(/\[[^\]]*\]/g);
   const p = fullP.replace(/\[.*/, '');
-  if (remainingPath.length === 1 && remove) {
-    obj[p] = undefined;
+  if (remainingPath.length === 1 && remove && !arrayStringIndeces) {
+    delete obj[p];
     return;
   }
   if (arrayStringIndeces) {
@@ -635,14 +639,21 @@ function updateObjFromPath(
     for (let i = 0; i < arrayIndeces.length; i += 1) {
       index = arrayIndeces[i];
       if (currentArray.length <= index) {
-        for (let j = 0; j < index - currentArray.length + 1; j += 1) {
+        for (let j = currentArray.length; j < index - currentArray.length + 1; j += 1) {
           currentArray.push(undefined);
         }
       }
       if (i < arrayIndeces.length - 1) {
-        currentArray[index] = [];
+        // currentArray[index] = currentArray[index][i];
+        if (!Array.isArray(currentArray[index])) {
+          currentArray[index] = [];
+        }
         currentArray = currentArray[index];
       }
+    }
+    if (remainingPath.length === 1 && remove) {
+      currentArray[index] = undefined;
+      return;
     }
     if (remainingPath.length === 1) {
       currentArray[index] = value;
@@ -651,10 +662,14 @@ function updateObjFromPath(
     if (currentArray[index] == null || typeof currentArray[index] !== 'object') {
       currentArray[index] = {};
     }
-    updateObjFromPath(remainingPath.slice(1), currentArray[index], value);
+    updateObjFromPath(remainingPath.slice(1), currentArray[index], value, remove);
     return;
   }
 
+  // if (remainingPath.length === 1 && remove) {
+  //   console.log('asdf')
+  //   obj[p] = undefined;
+  // }
   if (remainingPath.length === 1) {
     obj[p] = value;
     return;
@@ -662,7 +677,7 @@ function updateObjFromPath(
   if (obj[p] == null) {
     obj[p] = {};
   }
-  updateObjFromPath(remainingPath.slice(1), obj[p], value);
+  updateObjFromPath(remainingPath.slice(1), obj[p], value, remove);
 }
 
 function pathsToObj(paths: Object) {
