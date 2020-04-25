@@ -597,7 +597,7 @@ describe('Get Object Diff', () => {
   test('No diff', () => {
     const o1 = { a: 1, b: { c: 1, d: 1 } };
     const o2 = { a: 1, b: { c: 1, d: 1 } };
-    const { diff, removed, added } = tools.getObjectDiff(o1, o2, true);
+    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, true);
     expect(diff).toEqual({});
     expect(removed).toEqual({});
     expect(added).toEqual({});
@@ -605,7 +605,7 @@ describe('Get Object Diff', () => {
   test('Diff', () => {
     const o1 = { a: 1, b: { c: 1, d: 1 } };
     const o2 = { a: 2, b: { c: 1, d: 2 } };
-    const { diff, removed, added } = tools.getObjectDiff(o1, o2, true);
+    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, true);
     expect(diff).toEqual({
       '.a': [1, 2],
       '.b.d': [1, 2],
@@ -616,7 +616,7 @@ describe('Get Object Diff', () => {
   test('Added', () => {
     const o1 = { a: 1, b: { c: 1, d: 1 } };
     const o2 = { a: 1, b: { c: 1, d: 1, e: 1 } };
-    const { diff, removed, added } = tools.getObjectDiff(o1, o2, true);
+    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, true);
     expect(added).toEqual({
       '.b.e': 1,
     });
@@ -626,7 +626,7 @@ describe('Get Object Diff', () => {
   test('Removed', () => {
     const o1 = { a: 1, b: { c: 1, d: 1 } };
     const o2 = { a: 1, b: { c: 1 } };
-    const { diff, removed, added } = tools.getObjectDiff(o1, o2, true);
+    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, true);
     expect(removed).toEqual({
       '.b.d': 1,
     });
@@ -636,7 +636,7 @@ describe('Get Object Diff', () => {
   test('Nested', () => {
     const o1 = { a: 1, b: { c: 1, d: 1, e: [{ f: 1 }, 2, [3, 4]] } };
     const o2 = { a: 1, b: { c: 2, d: 1, e: [{ f: 1, g: 2 }, 2, [3, 4, 5]] } };
-    const { diff, removed, added } = tools.getObjectDiff(o1, o2, true);
+    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, true);
     expect(diff).toEqual({
       '.b.c': [1, 2],
     });
@@ -892,12 +892,103 @@ describe('compress object', () => {
   });
 });
 describe('Ref and Diff to object', () => {
-  test.only('Simple', () => {
+  test('Simple', () => {
     const o1 = { a: 1, b: 2 };
     const o2 = { a: 1, b: 3 };
-    const d = tools.getObjectDiff(o1, o2);
+    const d = tools.getObjectDiff(o1, [], o2);
     expect(d.diff['.b']).toBe(3);
     const o3 = tools.refAndDiffToObject(o1, d);
-    console.log(o3);
-  })
+    expect(o3.a).toBe(1);
+    expect(o3.b).toBe(3);
+  });
+  test('Simple Array', () => {
+    const o1 = { a: [1, 2] };
+    const o2 = { a: [1, 3] };
+    const d = tools.getObjectDiff(o1, [], o2);
+    expect(d.diff['.a[1]']).toBe(3);
+    const o3 = tools.refAndDiffToObject(o1, d);
+    expect(o3.a[0]).toBe(1);
+    expect(o3.a[1]).toBe(3);
+  });
+  test('Simple Nested Array', () => {
+    const o1 = { a: [1, [2, 3]] };
+    const o2 = { a: [1, [2, 4]] };
+    const d = tools.getObjectDiff(o1, [], o2);
+    expect(d.diff['.a[1][1]']).toBe(4);
+    const o3 = tools.refAndDiffToObject(o1, d);
+    expect(o3.a[0]).toBe(1);
+    expect(o3.a[1]).toEqual([2, 4]);
+  });
+  test('RemoveArray', () => {
+    const o1 = { a: [2, 3] };
+    const o2 = { a: 1 };
+    const d = tools.getObjectDiff(o1, [], o2);
+    expect(d.removed['.a[0]']).toBe(2);
+    expect(d.removed['.a[1]']).toBe(3);
+    expect(d.added['.a']).toBe(1);
+    const o3 = tools.refAndDiffToObject(o1, d);
+    expect(o3.a).toBe(1);
+  });
+  test('MultiDiff Simple', () => {
+    const o1 = { a: 1 };
+    const o2 = { a: 2 };
+    const o3 = { a: 3 };
+    const d2 = tools.getObjectDiff(o1, [], o2);
+    const d3 = tools.getObjectDiff(o1, [d2], o3);
+    expect(d3.diff['.a']).toBe(3);
+    const o4 = tools.refAndDiffToObject(o1, d2, d3);
+    expect(o4.a).toBe(3);
+  });
+  test('Nested Array', () => {
+    const o1 = { a: [1, 2] };
+    const o2 = { a: [1, [3, 4]] };
+    const d = tools.getObjectDiff(o1, [], o2);
+    const o3 = tools.refAndDiffToObject(o1, d);
+    expect(o3.a).toEqual([1, [3, 4]]);
+  });
+  test('MultiDiff Complex', () => {
+    const o1 = { a: 1, b: [1, 2], c: { d: 1, e: [1, 2] } };
+    const o2 = { a: 1, b: [1, 3], c: { d: 1, e: [1, 2], f: 4 } };
+    const o3 = { b: [1, 3], c: { d: 1, e: [1, [3, 4]] } };
+    const d2 = tools.getObjectDiff(o1, [], o2);
+    const d3 = tools.getObjectDiff(o1, [d2], o3);
+    // expect(d3.diff['.a']).toBe(3);
+    const o4 = tools.refAndDiffToObject(o1, d2, d3);
+    expect(o4.a).toBe(undefined);
+    expect(o4.b).toEqual([1, 3]);
+    expect(o4.c).toEqual({ d: 1, e: [1, [3, 4]] });
+  });
+  test('Nested', () => {
+    const o1 = {
+      a: 1,
+      b: [
+        {
+          c: 1,
+          e: 1,
+        },
+        2,
+        [1, 2],
+      ],
+    };
+    const o2 = {
+      a: 1,
+      b: [
+        {
+          c: 3,
+          d: 1,
+        },
+        4,
+        [1, 5],
+      ],
+    };
+    const d = tools.getObjectDiff(o1, [], o2);
+    expect(d.diff['.b[0].c']).toBe(3);
+    expect(d.added['.b[0].d']).toBe(1);
+    expect(d.diff['.b[1]']).toBe(4);
+    expect(d.diff['.b[2][1]']).toBe(5);
+    expect(d.removed['.b[0].e']).toBe(1);
+    const o3 = tools.refAndDiffToObject(o1, d);
+    expect(o3.a).toBe(1);
+    expect(o3.b).toEqual([{ c: 3, d: 1 }, 4, [1, 5]]);
+  });
 });
