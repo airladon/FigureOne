@@ -619,6 +619,9 @@ function updateObjFromPath(
 ) {
   // console.log(remainingPath)
   const fullP = remainingPath[0];
+  if (fullP.length === 0) {
+    return;
+  } 
   const arrayStringIndeces = fullP.match(/\[[^\]]*\]/g);
   const p = fullP.replace(/\[.*/, '');
   if (remainingPath.length === 1 && remove && !arrayStringIndeces) {
@@ -815,3 +818,4 @@ export {
   objectToPaths, getObjectDiff, updateObjFromPath, pathsToObj,
   UniqueMap, compressObject, refAndDiffToObject,
 };
+
