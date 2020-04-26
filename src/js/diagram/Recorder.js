@@ -2,7 +2,10 @@
 // import type { Transform } from '../tools/g2';
 import { Point, getTransform, Transform } from '../tools/g2';
 import { round } from '../tools/math';
-import { getObjectDiff, toObj, UniqueMap, compressObject } from '../tools/tools';
+import {
+  getObjectDiff, pathsToObj, UniqueMap, compressObject,
+  duplicate,
+} from '../tools/tools';
 import type { DiagramElement } from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
 // Singleton class that contains projects global variables
@@ -451,8 +454,8 @@ class Recorder {
   }
 
   recordState(state: Object) {
-    const compressNew = compressObject(state, this.statesNew.map);
-    const compressNew1 = compressObject(state, this.statesNew1.map);
+    const compressNew = compressObject(duplicate(state), this.statesNew.map);
+    const compressNew1 = compressObject(duplicate(state), this.statesNew1.map);
     if (this.statesNew.reference == null) {
       this.statesNew.reference = compressNew;
     }
@@ -463,16 +466,16 @@ class Recorder {
     this.states.push([this.now() / 1000, state]);
 
     // StatesNew
-    const diffNew1 = getObjectDiff(this.statesNew1.reference, compressNew1);
+    const diffNew1 = getObjectDiff(this.statesNew1.reference, [], compressNew1);
     this.statesNew1.states.push([this.now() / 1000, diffNew1]);
 
-    const diff = getObjectDiff(this.statesNew.referece, compressNew);
+    const diff = getObjectDiff(this.statesNew.reference, [], compressNew);
     this.statesNew.states.push([
       this.now() / 1000,
       {
-        diff: toObj(diff.diff),
-        removed: toObj(diff.removed),
-        added: toObj(diff.added),
+        diff: pathsToObj(diff.diff),
+        removed: pathsToObj(diff.removed),
+        added: pathsToObj(diff.added),
       },
     ]);
     // console.log(getObjectDiff(this.statesNew.reference, state));
