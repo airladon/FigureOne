@@ -485,7 +485,7 @@ class UniqueMap {
     if (this.inverseMap[uniqueStr] != null) {
       return this.inverseMap[uniqueStr];
     }
-    return null;
+    return uniqueStr;
   }
 }
 
@@ -547,6 +547,15 @@ function compressObject(
     return obj2;
   }
   return obj;
+}
+
+function uncompressObject(
+  obj: any,
+  map: UniqueMap,
+  keys: boolean = true,
+  strValues: boolean = true,
+) {
+  return compressObject(obj, map, keys, strValues, null, true);
 }
 
 function objectToPaths(obj: any, path: string = '', pathObj = {}, pathMap = Object) {
@@ -816,6 +825,6 @@ export {
   deleteKeys, copyKeysFromTo, generateRandomString,
   duplicate, assignObjectFromTo, joinObjectsWithOptions,
   objectToPaths, getObjectDiff, updateObjFromPath, pathsToObj,
-  UniqueMap, compressObject, refAndDiffToObject,
+  UniqueMap, compressObject, refAndDiffToObject, uncompressObject,
 };
 
