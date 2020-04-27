@@ -461,8 +461,9 @@ class Recorder {
     map: UniqueMap,
     reference: Object,
   }) {
-    this.states.map.map = states.map;
-    this.states.map.index = Object.keys(states.map);
+    this.states.map.map = states.map.map;
+    this.states.map.index = states.map.index;
+    this.states.map.letters = states.map.letters;
     this.states.map.makeInverseMap();
     this.states.reference = uncompressObject(states.reference, this.states.map, true, null, true);
     this.states.states = states.states.map(s => [
@@ -595,13 +596,13 @@ class Recorder {
 
   setToTime(time: number) {
     this.slideIndex = Math.max(getPrevIndexForTime(this.slides, time), 0);
-    this.stateIndex = Math.max(getPrevIndexForTime(this.states, time), 0);
+    this.stateIndex = Math.max(getPrevIndexForTime(this.states.states, time), 0);
     this.eventIndex = Math.max(getPrevIndexForTime(this.events, time), 0);
-    if (this.states[this.stateIndex][0] < this.slides[this.slideIndex][0]) {
+    if (this.states.states[this.stateIndex][0] < this.slides[this.slideIndex][0]) {
       this.setState(this.stateIndex);
     }
     this.setSlide(this.slideIndex, true);
-    if (this.states[this.stateIndex][0] >= this.slides[this.slideIndex][0]) {
+    if (this.states.states[this.stateIndex][0] >= this.slides[this.slideIndex][0]) {
       this.setState(this.stateIndex);
     }
     this.animateDiagramNextFrame();
@@ -638,9 +639,13 @@ class Recorder {
     // this.slideIndex = Math.max(getPrevIndexForTime(this.slides, fromTime), 0);
     // this.stateIndex = Math.max(getPrevIndexForTime(this.states, fromTime), 0);
     // this.eventIndex = Math.max(getPrevIndexForTime(this.events, fromTime), 0);
+    console.log(1)
     this.slideIndex = Math.max(getPrevIndexForTime(this.slides, fromTime), 0);
-    this.stateIndex = Math.max(getPrevIndexForTime(this.states, fromTime), 0);
+    console.log(2, this.states.states)
+    this.stateIndex = Math.max(getPrevIndexForTime(this.states.states, fromTime), 0);
+    console.log(3)
     this.eventIndex = Math.max(getPrevIndexForTime(this.events, fromTime), 0);
+    console.log(4)
     this.setSlide(this.slideIndex, true);
     this.queuePlaybackSlide(getTimeToIndex(this.slides, this.slideIndex + 1, fromTime));
     this.setState(this.stateIndex);
@@ -704,9 +709,9 @@ class Recorder {
   playFrame() {
     const time = this.getCurrentTime();
 
-    const prevStateIndex = Math.max(getPrevIndexForTime(this.states, time), 0);
+    const prevStateIndex = Math.max(getPrevIndexForTime(this.states.states, time), 0);
     if (prevStateIndex > this.lastShownStateIndex) {
-      const lastIndexWithSameTime = getIndexOfLatestTime(this.states, prevStateIndex);
+      const lastIndexWithSameTime = getIndexOfLatestTime(this.states.states, prevStateIndex);
       this.setState(lastIndexWithSameTime);
       this.lastShownStateIndex = lastIndexWithSameTime;
     }
@@ -729,7 +734,7 @@ class Recorder {
         || this.lastShownEventIndex === -1
       )
       && (
-        this.lastShownStateIndex >= this.states.length - 1
+        this.lastShownStateIndex >= this.states.states.length - 1
         || this.lastShownStateIndex === -1
       )
     ) {
@@ -848,28 +853,28 @@ class Recorder {
   }
 
   playbackState() {
-    if (this.stateIndex > this.states.length - 1) {
+    if (this.stateIndex > this.states.states.length - 1) {
       return;
     }
     this.setState(this.stateIndex);
     this.animateDiagramNextFrame();
     this.stateIndex += 1;
-    if (this.stateIndex === this.states.length) {
+    if (this.stateIndex === this.states.states.length) {
       this.checkStopPlayback();
       return;
     }
-    const nextTime = (this.states[this.stateIndex][0] - this.getCurrentTime()) * 1000;
+    const nextTime = (this.states.states[this.stateIndex][0] - this.getCurrentTime()) * 1000;
     this.queuePlaybackState(nextTime);
   }
 
   setState(index: number) {
-    if (index > this.states.length - 1) {
+    if (index > this.states.states.length - 1) {
       return;
     }
+    console.log(index)
     const state = refAndDiffToObject(
       this.states.reference,
-      [],
-      this.states[index][1],
+      this.states.states[index][1],
     );
     this.setDiagramState(state);
   }
