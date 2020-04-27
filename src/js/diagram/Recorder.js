@@ -4,7 +4,7 @@ import { Point, getTransform, Transform } from '../tools/g2';
 import { round } from '../tools/math';
 import {
   getObjectDiff, pathsToObj, UniqueMap, compressObject,
-  duplicate,
+  uncompressObject, duplicate, refAndDiffToObject,
 } from '../tools/tools';
 import type { DiagramElement } from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
@@ -220,19 +220,20 @@ function getTimeToIndex(
 class Recorder {
   // Method for requesting the next animation frame
   events: Array<Array<number | string | null>>;
-  states: Array<[number, Object]>;
+  // states: Array<[number, Object]>;
   slides: Array<[number, 'goto' | 'next' | 'prev', string, number]>;
 
-  statesNew: {
+  states: {
     reference: Object,
+    map: UniqueMap,
     states: Array<[number, Object]>,
   };
 
-  statesNew1: {
-    reference: Object,
-    states: Array<[number, Object]>,
-    map: UniqueMap;
-  };
+  // statesNew1: {
+  //   reference: Object,
+  //   states: Array<[number, Object]>,
+  //   map: UniqueMap;
+  // };
 
   isRecording: boolean;
   isPlaying: boolean;
@@ -304,15 +305,19 @@ class Recorder {
       Recorder.instance = this;
       this.events = [];
       this.slides = [];
-      this.states = [];
-      this.statesNew = {
+      this.states = {
         states: [],
         map: new UniqueMap(),
+        reference: null,
       };
-      this.statesNew1 = {
-        states: [],
-        map: new UniqueMap(),
-      }
+      // this.statesNew = {
+      //   states: [],
+      //   map: new UniqueMap(),
+      // };
+      // this.statesNew1 = {
+      //   states: [],
+      //   map: new UniqueMap(),
+      // }
       this.currentTime = 0;
       this.isRecording = false;
       this.precision = 5;
@@ -412,11 +417,9 @@ class Recorder {
   start(slideStart: number = 0) {
     this.events = [];
     this.slides = [];
-    this.states = [];
-    this.statesNew.states = [];
-    this.statesNew1.states = [];
-    this.statesNew1.map.reset();
-    this.statesNew.map.reset();
+    this.states.states = [];
+    this.states.map.reset();
+    this.states.reference = null;
     this.startTime = this.timeStamp();
     this.isPlaying = false;
     this.isRecording = true;
@@ -453,31 +456,60 @@ class Recorder {
     }, time);
   }
 
-  recordState(state: Object) {
-    const compressNew = compressObject(duplicate(state), this.statesNew.map);
-    const compressNew1 = compressObject(duplicate(state), this.statesNew1.map);
-    if (this.statesNew.reference == null) {
-      this.statesNew.reference = compressNew;
+  loadStates(states: {
+    states: Array<Object>,
+    map: UniqueMap,
+    reference: Object,
+  }) {
+    this.states.map.map = states.map;
+    this.states.map.index = Object.keys(states.map);
+    this.states.map.makeInverseMap();
+    this.states.reference = uncompressObject(states.reference, this.states.map, true, null, true);
+    this.states.states = states.states.map(s => [
+      s[0],
+      uncompressObject(s[1], this.states.map, true, true),
+    ]);
+  }
+
+  recordState(state: Object, precision: number = 4) {
+
+    const compressed = compressObject(state, this.states.map, true, true, precision);
+    // const compressed = duplicate(state);
+    // const compressNew1 = compressObject(duplicate(state), this.statesNew1.map);
+    if (this.states.reference == null) {
+      this.states.reference = duplicate(compressed);
     }
-    if (this.statesNew1.reference == null) {
-      // this.statesNew1.reference = state;
-      this.statesNew1.reference = compressNew1;
-    }
-    this.states.push([this.now() / 1000, state]);
+    // if (this.statesNew1.reference == null) {
+    //   // this.statesNew1.reference = state;
+    //   this.statesNew1.reference = compressNew1;
+    // }
+    // this.states.push([this.now() / 1000, state]);
 
     // StatesNew
-    const diffNew1 = getObjectDiff(this.statesNew1.reference, [], compressNew1);
-    this.statesNew1.states.push([this.now() / 1000, diffNew1]);
-
-    const diff = getObjectDiff(this.statesNew.reference, [], compressNew);
-    this.statesNew.states.push([
+    // const diffNew1 = getObjectDiff(this.statesNew1.reference, [], compressNew1);
+    // this.statesNew1.states.push([this.now() / 1000, diffNew1]);
+    const diff = getObjectDiff(this.states.reference, [], compressed);
+    // console.log(this.states.reference, state, compressed, diff);
+    const diffKey = this.states.map.add('diff');
+    const removedKey = this.states.map.add('removed');
+    const addedKey = this.states.map.add('added');
+    const stateToSave = {};
+    stateToSave[diffKey] = pathsToObj(diff.diff);
+    stateToSave[removedKey] = pathsToObj(diff.removed);
+    stateToSave[addedKey] = pathsToObj(diff.added);
+    // console.log(diff, stateToSave)
+    this.states.states.push([
       this.now() / 1000,
-      {
-        diff: pathsToObj(diff.diff),
-        removed: pathsToObj(diff.removed),
-        added: pathsToObj(diff.added),
-      },
+      // {
+      //   diff: pathsToObj(diff.diff),
+      //   removed: pathsToObj(diff.removed),
+      //   added: pathsToObj(diff.added),
+      // },
+      stateToSave,
     ]);
+    // console.log(this.states.states.slice(-1)[0][1])
+    // this.states.map.makeInverseMap();
+    // console.log(uncompressObject(this.states.states.slice(-1)[0][1], this.states.map));
     // console.log(getObjectDiff(this.statesNew.reference, state));
     // console.log(toObj(getObjectDiff(this.statesNew.reference, state)));
   }
@@ -514,8 +546,8 @@ class Recorder {
     download(`${dateStr} ${location} slides.json`, JSON.stringify(this.slides));
     download(`${dateStr} ${location} events.json`, JSON.stringify(this.events));
     download(`${dateStr} ${location} states.json`, JSON.stringify(this.states));
-    download(`${dateStr} ${location} statesNew.json`, JSON.stringify(this.statesNew));
-    download(`${dateStr} ${location} statesNew1.json`, JSON.stringify(this.statesNew1));
+    // download(`${dateStr} ${location} statesNew.json`, JSON.stringify(this.statesNew));
+    // download(`${dateStr} ${location} statesNew1.json`, JSON.stringify(this.statesNew1));
   }
 
   show() {
@@ -834,7 +866,12 @@ class Recorder {
     if (index > this.states.length - 1) {
       return;
     }
-    this.setDiagramState(this.states[index][1]);
+    const state = refAndDiffToObject(
+      this.states.reference,
+      [],
+      this.states[index][1],
+    );
+    this.setDiagramState(state);
   }
 
   queuePlaybackSlide(delay: number = 0) {
