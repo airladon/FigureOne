@@ -478,7 +478,7 @@ class UniqueMap {
     Object.keys(this.map).forEach((key) => {
       const uniqueStr = this.map[key];
       this.inverseMap[uniqueStr] = key;
-    })
+    });
   }
 
   get(uniqueStr: string) {
@@ -715,21 +715,27 @@ function refAndDiffToObject(
   }>
 ) {
   const ref = duplicate(referenceIn);
+  const processPaths = (paths: Object, remove: boolean = false) => {
+    // console.log(paths)
+    Object.keys(paths).forEach((pathStr) => {
+      // console.log(pathStr)
+      const path = pathStr.split('.').filter(p => p.length > 0);
+      const value = paths[pathStr];
+      if (Array.isArray(value)) {
+        updateObjFromPath(path, ref, value.slice(-1)[0], remove);
+      } else {
+        updateObjFromPath(path, ref, value, remove);
+      }
+    });
+  };
+  // console.log(diffsIn)
   diffsIn.forEach((diffIn) => {
     const { added, removed, diff } = diffIn;
-    const processPaths = (paths: Object, remove: boolean = false) => {
-      Object.keys(paths).forEach((pathStr) => {
-        const path = pathStr.split('.').filter(p => p.length > 0);
-        const value = paths[pathStr];
-        if (Array.isArray(value)) {
-          updateObjFromPath(path, ref, value.slice(-1)[0], remove);
-        } else {
-          updateObjFromPath(path, ref, value, remove);
-        }
-      });
-    };
+    // console.log(1, removed)
     processPaths(removed, true);
+    // console.log(2)
     processPaths(added);
+    // console.log(3)
     processPaths(diff);
   });
   return ref;
