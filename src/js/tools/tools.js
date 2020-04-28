@@ -561,7 +561,7 @@ function uncompressObject(
   return compressObject(obj, map, keys, strValues, null, true);
 }
 
-function objectToPaths(obj: any, path: string = '', pathObj = {}, pathMap = Object, precision: ?number = null) {
+function objectToPaths(obj: any, path: string = '', pathObj = {}, precision: ?number = null) {
   if (
     typeof obj === 'string'
     // || typeof obj === 'number'
@@ -589,24 +589,24 @@ function objectToPaths(obj: any, path: string = '', pathObj = {}, pathMap = Obje
   }
   if (Array.isArray(obj)) {
     obj.forEach((o, index) => {
-      objectToPaths(o, `${path}[${index}]`, pathObj);
+      objectToPaths(o, `${path}[${index}]`, pathObj, precision);
     });
     return pathObj;
   }
   Object.keys(obj).forEach((key) => {
-    objectToPaths(obj[key], `${path}.${key}`, pathObj);
+    objectToPaths(obj[key], `${path}.${key}`, pathObj, precision);
   });
   return pathObj;
 }
 
-function getObjectDiff(obj1In: Object, diffs: Array<Object>, obj2: Object, debug: boolean = false) {
+function getObjectDiff(obj1In: Object, diffs: Array<Object>, obj2: Object, precision: ?number = null, debug: boolean = false) {
   // const pathMap = {};
   let obj1 = obj1In;
   if (diffs.length > 0) {
     obj1 = refAndDiffToObject(obj1In, ...diffs);
   }
-  const paths1 = objectToPaths(obj1);
-  const paths2 = objectToPaths(obj2);
+  const paths1 = objectToPaths(obj1, '', {}, precision);
+  const paths2 = objectToPaths(obj2, '', {}, precision);
   const added = {};
   const diff = {};
   const removed = {};
@@ -747,11 +747,17 @@ function refAndDiffToObject(
   diffsIn.forEach((diffIn) => {
     const { added, removed, diff } = diffIn;
     // console.log(1, removed)
-    processPaths(removed, true);
+    if (removed != null) {
+      processPaths(removed, true);
+    }
     // console.log(2)
-    processPaths(added);
+    if (added != null) {
+      processPaths(added);
+    }
     // console.log(3)
-    processPaths(diff);
+    if (diff != null) {
+      processPaths(diff);
+    }
     console.log(added, removed, diff)
   });
   console.log(ref, referenceIn)

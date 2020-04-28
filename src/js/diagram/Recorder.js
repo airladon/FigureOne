@@ -5,7 +5,7 @@ import { round } from '../tools/math';
 import {
   getObjectDiff, pathsToObj, UniqueMap, compressObject,
   uncompressObject, duplicate, refAndDiffToObject,
-  objectToPaths,
+  objectToPaths, diffPathsToObj,
 } from '../tools/tools';
 import type { DiagramElement } from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
@@ -225,7 +225,7 @@ class Recorder {
   slides: Array<[number, 'goto' | 'next' | 'prev', string, number]>;
 
   states: {
-    reference: Object,
+    ref: Array<Object>,
     map: UniqueMap,
     states: Array<[number, Object]>,
   };
@@ -509,6 +509,124 @@ class Recorder {
       // },
       stateToSave,
     ]);
+    // console.log(this.states.states.slice(-1)[0][1])
+    // this.states.map.makeInverseMap();
+    // console.log(uncompressObject(this.states.states.slice(-1)[0][1], this.states.map));
+    // console.log(getObjectDiff(this.statesNew.reference, state));
+    // console.log(toObj(getObjectDiff(this.statesNew.reference, state)));
+  }
+
+  addReferenceState(state: Object, precision: ?number = 4) {
+    if (this.states.reference == null) {
+      this.states.reference = [];
+      this.states.reference.push(duplicate(state));
+      return;
+    }
+    const diff = getObjectDiff(this.states.reference[0], [], state, precision);
+    console.log(diff)
+    console.log(state)
+    this.states.reference.push(diff);
+  }
+
+  getReferenceState(index: number = 0) {
+    if (index === 0) {
+      return this.states.reference[0];
+    }
+    if (index === -1) {
+      return refAndDiffToObject(
+        this.states.reference[0],
+        this.states.reference[this.states.reference.length - 1],
+      );
+    }
+    return refAndDiffToObject(this.states.reference[0], this.states.referenc[index]);
+  }
+
+  addState(state: Object, precision: ?number = 4) {
+    const ref = this.getReferenceState(-1);
+    const diff = getObjectDiff(ref, [], state, precision);
+    this.states.states.push([
+      this.now() / 1000,
+      this.states.reference.length - 1,
+      diff,
+    ]);
+  }
+
+  getState(index: number) {
+    const state = this.states.states[index];
+    const [time, refIndex, diff] = state;
+    const ref = this.getReferenceState(refIndex);
+    const stateObj = refAndDiffToObject(ref, diff);
+    return [time, stateObj];
+  }
+
+  minifyStates(asObject: boolean = false, precision: ?number = 4) {
+    const map = new UniqueMap();
+    const ref = duplicate(this.states.reference[0]);
+    const refsDiffPaths = this.states.reference.slice(1);
+    const statesDiffPaths = this.states.states;
+
+    let refDiff;
+    let statesDiff;
+
+    if (asObject) {
+      refDiff = refsDiffPaths.map(d => diffPathsToObj(d));
+      statesDiff = statesDiffPaths.map(d => diffPathsToObj(d));
+    } else {
+      refDiff = refsDiffPaths.map(d => duplicate(d));
+      statesDiff = statesDiffPaths.map(d => duplicate(d));
+    }
+
+    const states = {
+      reference: [ref, ...refDiff],
+      states: statesDiff,
+      isObject: asObject,
+    };
+    return {
+      states: compressObject(states, map, true, true, precision),
+      map,
+    };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  unminifyStates(compressedStates: Object) {
+    const cStates = compressedStates.states;
+    const { map } = compressedStates;
+    const states = uncompressObject(cStates, map, true, true);
+    const ref = states.reference[0];
+    let refDiff = states.reference.slice(1);
+    let statesDiff = states.states;
+    if (cStates.isObject) {
+      refDiff = objectToPaths(states.reference.slice(1));
+      statesDiff = objectToPaths(states.states);
+    }
+    return {
+      reference: [ref, ...refDiff],
+      states: statesDiff,
+    };
+  }
+
+  recordStateNew(state: Object, precision: number = 4) {
+    this.addState(state, precision);
+    // const referenceState = 
+    // const diff = getObjectDiff(this.states.reference, [], compressed);
+    // // console.log(this.states.reference, state, compressed, diff);
+    // const diffKey = this.states.map.add('diff');
+    // const removedKey = this.states.map.add('removed');
+    // const addedKey = this.states.map.add('added');
+    // const stateToSave = {};
+    // stateToSave[diffKey] = pathsToObj(diff.diff);
+    // stateToSave[removedKey] = pathsToObj(diff.removed);
+    // stateToSave[addedKey] = pathsToObj(diff.added);
+    // // console.log(diff, stateToSave)
+    // this.states.states.push([
+    //   this.now() / 1000,
+    //   // {
+    //   //   diff: pathsToObj(diff.diff),
+    //   //   removed: pathsToObj(diff.removed),
+    //   //   added: pathsToObj(diff.added),
+    //   // },
+    //   stateToSave,
+    // ]);
     // console.log(this.states.states.slice(-1)[0][1])
     // this.states.map.makeInverseMap();
     // console.log(uncompressObject(this.states.states.slice(-1)[0][1], this.states.map));
