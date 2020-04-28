@@ -726,9 +726,7 @@ function refAndDiffToObject(
   }>
 ) {
   const ref = duplicate(referenceIn);
-  console.log('before All', Object.keys(ref.elements).length);
   const processPaths = (paths: Object, remove: boolean = false) => {
-    console.log('before', remove, paths, Object.keys(ref.elements).length)
     // console.log(paths)
     Object.keys(paths).forEach((pathStr) => {
       // console.log(pathStr)
@@ -740,8 +738,6 @@ function refAndDiffToObject(
         updateObjFromPath(path, ref, value, remove);
       }
     });
-    console.log('asdf');
-    console.log('after', Object.keys(ref))
   };
   // console.log(diffsIn)
   diffsIn.forEach((diffIn) => {
@@ -758,9 +754,7 @@ function refAndDiffToObject(
     if (diff != null) {
       processPaths(diff);
     }
-    console.log(added, removed, diff)
   });
-  console.log(ref, referenceIn)
   return ref;
 }
 

@@ -268,8 +268,9 @@ describe('Diagram Recorder', () => {
   describe('State cycle', () => {
     let state1;
     let state2;
+    let state3;
     let line;
-    let recorder;
+    // let recorder;
     beforeEach(() => {
       diagram.addElement({
         name: 'line',
@@ -289,7 +290,10 @@ describe('Diagram Recorder', () => {
       line.transform.updateTranslation(0, 1);
       state2 = diagram.getState();
 
-      ({ recorder } = diagram);
+      line.transform.updateTranslation(0, 2);
+      state3 = diagram.getState();
+
+      // ({ recorder } = diagram);
     });
     test('addReferenceState', () => {
       line.setEndPoints([1, 1], [2, 1]);
@@ -299,10 +303,11 @@ describe('Diagram Recorder', () => {
 
       recorder.addReferenceState(state1);
       recorder.addReferenceState(state2);
+      recorder.states.reference[1].diff['.stateTime'] = 3;
       expect(recorder.states.reference[1]).toEqual({
         diff: {
           '.elements.elements.line.transform.state[3].state[2]': 1,
-          '.stateTime': 3.482,
+          '.stateTime': 3,
         },
         added: {},
         removed: {},
@@ -319,6 +324,83 @@ describe('Diagram Recorder', () => {
       diagram.setState(ref2);
       expect(line.transform.t().x).toBe(0);
       expect(line.transform.t().y).toBe(1);
+    });
+    test('add State to 0 reference', () => {
+      recorder.addReferenceState(state1);
+      recorder.addState(state2);
+      recorder.states.states[0][2].diff['.stateTime'] = 3;
+      expect(recorder.states.states[0][1]).toBe(0);
+      expect(recorder.states.states[0][2]).toEqual({
+        diff: {
+          '.elements.elements.line.transform.state[3].state[2]': 1,
+          '.stateTime': 3,
+        },
+        added: {},
+        removed: {},
+      });
+      expect(recorder.states.states).toHaveLength(1);
+      diagram.setState(state1);
+      expect(line.transform.t().x).toBe(0);
+      expect(line.transform.t().y).toBe(0);
+
+      const s = recorder.getState(0);
+      diagram.setState(s[1]);
+      expect(line.transform.t().x).toBe(0);
+      expect(line.transform.t().y).toBe(1);
+    });
+    test('add State to 1 reference', () => {
+      recorder.addReferenceState(state1);
+      recorder.addReferenceState(state2);
+      recorder.addState(state3);
+      recorder.states.states[0][2].diff['.stateTime'] = 3;
+      expect(recorder.states.states[0][1]).toBe(1);
+      expect(recorder.states.states[0][2]).toEqual({
+        diff: {
+          '.elements.elements.line.transform.state[3].state[2]': 2,
+          '.stateTime': 3,
+        },
+        added: {},
+        removed: {},
+      });
+      expect(recorder.states.states).toHaveLength(1);
+      diagram.setState(state1);
+      expect(line.transform.t().x).toBe(0);
+      expect(line.transform.t().y).toBe(0);
+
+      const s = recorder.getState(0);
+      diagram.setState(s[1]);
+      expect(line.transform.t().x).toBe(0);
+      expect(line.transform.t().y).toBe(2);
+    });
+    test.only('minify state', () => {
+      recorder.addReferenceState(state1);
+      recorder.addState(state2);
+      recorder.addState(state3);
+      const mini = recorder.minifyStates(false);
+      const statesUnmini = recorder.unminifyStates(mini);
+      const { reference, states } = statesUnmini;
+      console.log(reference)
+      console.log(recorder.states.reference)
+      expect(reference).toEqual(recorder.states.reference);
+      // recorder.states.states[0][2].diff['.stateTime'] = 3;
+      // expect(recorder.states.states[0][1]).toBe(1);
+      // expect(recorder.states.states[0][2]).toEqual({
+      //   diff: {
+      //     '.elements.elements.line.transform.state[3].state[2]': 2,
+      //     '.stateTime': 3,
+      //   },
+      //   added: {},
+      //   removed: {},
+      // });
+      // expect(recorder.states.states).toHaveLength(1);
+      // diagram.setState(state1);
+      // expect(line.transform.t().x).toBe(0);
+      // expect(line.transform.t().y).toBe(0);
+
+      // const s = recorder.getState(0);
+      // diagram.setState(s[1]);
+      // expect(line.transform.t().x).toBe(0);
+      // expect(line.transform.t().y).toBe(2);
     });
   });
 });

@@ -245,7 +245,7 @@ class Recorder {
   touchUp: void => void;
   // touchMoveDown: (Point, Point) => boolean;
   cursorMove: (Point) => void;
-  getState: () => Object;
+  getDiagramState: () => Object;
   setDiagramState: (Object) => void;
   pauseDiagram: () => void;
   unpauseDiagram: () => void;
@@ -295,7 +295,7 @@ class Recorder {
     diagramCursorMove?: (Point) => void,
     animateDiagramNextFrame?: () => void,
     getElement?: (string) => DiagramElement,
-    getState?: () => Object,
+    getDiagramState?: () => Object,
     setDiagramState?: (Object) => void,
     pauseDiagram: () => void,
     unpauseDiagram: () => void,
@@ -343,8 +343,8 @@ class Recorder {
       if (getElement) {
         this.getElement = getElement;
       }
-      if (getState) {
-        this.getState = getState;
+      if (getDiagramState) {
+        this.getDiagramState = getDiagramState;
       }
       if (setDiagramState) {
         this.setDiagramState = setDiagramState;
@@ -362,6 +362,7 @@ class Recorder {
       this.isAudioPlaying = false;
       this.playbackStopped = null;
       this.getCurrentSlide = null;
+      this.startTime = this.timeStamp();
     }
     return Recorder.instance;
   }
@@ -451,7 +452,7 @@ class Recorder {
   queueRecordState(time: number = 0) {
     this.stateTimeout = setTimeout(() => {
       if (this.isRecording) {
-        this.recordState(this.getState());
+        this.recordState(this.getDiagramState());
         this.queueRecordState(this.stateTimeStep * 1000);
       }
     }, time);
@@ -592,6 +593,7 @@ class Recorder {
   unminifyStates(compressedStates: Object) {
     const cStates = compressedStates.states;
     const { map } = compressedStates;
+    map.makeInverseMap();
     const states = uncompressObject(cStates, map, true, true);
     const ref = states.reference[0];
     let refDiff = states.reference.slice(1);
