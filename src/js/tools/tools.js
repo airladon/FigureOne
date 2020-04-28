@@ -628,7 +628,17 @@ function getObjectDiff(obj1In: Object, diffs: Array<Object>, obj2: Object, preci
       added[key2] = paths2[key2];
     }
   });
-  return { diff, added, removed };
+  const out = {};
+  if (Object.keys(diff).length > 0) {
+    out.diff = diff;
+  }
+  if (Object.keys(added).length > 0) {
+    out.added = added;
+  }
+  if (Object.keys(removed).length > 0) {
+    out.removed = removed;
+  }
+  return out;
 }
 
 function updateObjFromPath(

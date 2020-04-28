@@ -561,7 +561,18 @@ class Recorder {
     return [time, stateObj];
   }
 
-  minifyStates(asObject: boolean = false, precision: ?number = 4) {
+  minifyStates(
+    asObject: boolean = false,
+    precision: ?number = 4,
+  ): {
+    [reference: string]: Object,
+    [isObject: string]: boolean,
+    [states: string]: {
+      [diff: string]: Object,
+      [added: string]: Object,
+      [removed: string]: Object,
+    }
+  } {
     const map = new UniqueMap();
     const ref = duplicate(this.states.reference[0]);
     const refsDiffPaths = this.states.reference.slice(1);

@@ -292,7 +292,11 @@ describe('Diagram Recorder', () => {
 
       line.transform.updateTranslation(0, 2);
       state3 = diagram.getState();
-
+      recorder.states = {
+        states: [],
+        map: new tools.UniqueMap(),
+        reference: null,
+      };
       // ({ recorder } = diagram);
     });
     test('addReferenceState', () => {
@@ -309,8 +313,8 @@ describe('Diagram Recorder', () => {
           '.elements.elements.line.transform.state[3].state[2]': 1,
           '.stateTime': 3,
         },
-        added: {},
-        removed: {},
+        // added: {},
+        // removed: {},
       });
     });
     test('getReferenceState', () => {
@@ -335,8 +339,8 @@ describe('Diagram Recorder', () => {
           '.elements.elements.line.transform.state[3].state[2]': 1,
           '.stateTime': 3,
         },
-        added: {},
-        removed: {},
+        // added: {},
+        // removed: {},
       });
       expect(recorder.states.states).toHaveLength(1);
       diagram.setState(state1);
@@ -359,8 +363,8 @@ describe('Diagram Recorder', () => {
           '.elements.elements.line.transform.state[3].state[2]': 2,
           '.stateTime': 3,
         },
-        added: {},
-        removed: {},
+        // added: {},
+        // removed: {},
       });
       expect(recorder.states.states).toHaveLength(1);
       diagram.setState(state1);
@@ -372,35 +376,71 @@ describe('Diagram Recorder', () => {
       expect(line.transform.t().x).toBe(0);
       expect(line.transform.t().y).toBe(2);
     });
-    test.only('minify state', () => {
-      recorder.addReferenceState(state1);
-      recorder.addState(state2);
-      recorder.addState(state3);
+    test('minify simple', () => {
+      recorder.addReferenceState({ elements: 1 });
+      recorder.addState({ elements: 2 });
       const mini = recorder.minifyStates(false);
-      const statesUnmini = recorder.unminifyStates(mini);
-      const { reference, states } = statesUnmini;
-      console.log(reference)
-      console.log(recorder.states.reference)
-      expect(reference).toEqual(recorder.states.reference);
-      // recorder.states.states[0][2].diff['.stateTime'] = 3;
-      // expect(recorder.states.states[0][1]).toBe(1);
-      // expect(recorder.states.states[0][2]).toEqual({
-      //   diff: {
-      //     '.elements.elements.line.transform.state[3].state[2]': 2,
-      //     '.stateTime': 3,
-      //   },
-      //   added: {},
-      //   removed: {},
-      // });
-      // expect(recorder.states.states).toHaveLength(1);
-      // diagram.setState(state1);
-      // expect(line.transform.t().x).toBe(0);
-      // expect(line.transform.t().y).toBe(0);
-
-      // const s = recorder.getState(0);
-      // diagram.setState(s[1]);
-      // expect(line.transform.t().x).toBe(0);
-      // expect(line.transform.t().y).toBe(2);
+      expect(mini.map.map).toEqual({
+        elements: 'a',
+        reference: 'b',
+        '.elements': 'c',
+        diff: 'd',
+        states: 'e',
+        isObject: 'f',
+      });
+      const state = recorder.getState(0);
+      const [time] = state;
+      expect(mini.states.b).toEqual([{ a: 1 }]);
+      expect(mini.states.f).toBe(false);
+      expect(mini.states.e[0][0]).toBe(time);
+      expect(mini.states.e[0][1]).toBe(0);
+      expect(mini.states.e[0][2]).toEqual({
+        d: { c: 2 },
+      });
+      
+      const unmini = recorder.unminifyStates(mini);
+      expect(unmini.reference).toEqual([{ elements: 1 }]);
+      expect(unmini.states[0][0]).toBe(time);
+      expect(unmini.states[0][1]).toBe(0);
+      expect(unmini.states[0][2]).toEqual({
+        diff: { '.elements': 2 },
+      });
     });
+    // test('minify nested', () => {
+    //   recorder.addReferenceState({ elements: { e1: 1, e2: 2 } });
+    //   recorder.addState({ elements: { e1: 1, e2: 3 } });
+    //   const mini = recorder.minifyStates(false);
+    //   const unmini = recorder.unminifyStates(mini);
+    //   console.log(unmini)
+    //   expect(unmini.reference).toEqual({ elements: { e1: 1, e2: 2 } });
+    //   // recorder.addReferenceState(state1);
+    //   // recorder.addState(state2);
+    //   // recorder.addState(state3);
+    //   // const mini = recorder.minifyStates(false);
+    //   // const statesUnmini = recorder.unminifyStates(mini);
+    //   // const { reference, states } = statesUnmini;
+    //   // console.log(reference)
+    //   // console.log(recorder.states.reference)
+    //   // expect(reference).toEqual(recorder.states.reference);
+    //   // recorder.states.states[0][2].diff['.stateTime'] = 3;
+    //   // expect(recorder.states.states[0][1]).toBe(1);
+    //   // expect(recorder.states.states[0][2]).toEqual({
+    //   //   diff: {
+    //   //     '.elements.elements.line.transform.state[3].state[2]': 2,
+    //   //     '.stateTime': 3,
+    //   //   },
+    //   //   added: {},
+    //   //   removed: {},
+    //   // });
+    //   // expect(recorder.states.states).toHaveLength(1);
+    //   // diagram.setState(state1);
+    //   // expect(line.transform.t().x).toBe(0);
+    //   // expect(line.transform.t().y).toBe(0);
+
+    //   // const s = recorder.getState(0);
+    //   // diagram.setState(s[1]);
+    //   // expect(line.transform.t().x).toBe(0);
+    //   // expect(line.transform.t().y).toBe(2);
+    // });
   });
 });
