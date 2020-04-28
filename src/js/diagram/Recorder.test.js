@@ -266,7 +266,11 @@ describe('Diagram Recorder', () => {
     });
   });
   describe('State cycle', () => {
-    test.only('Partial Array', () => {
+    let state1;
+    let state2;
+    let line;
+    let recorder;
+    beforeEach(() => {
       diagram.addElement({
         name: 'line',
         method: 'line',
@@ -274,41 +278,35 @@ describe('Diagram Recorder', () => {
           width: 0.01,
           p1: [0, 0],
           p2: [0, 1],
-          transform: new Transform('lineT').translate(0, 0).rotate(0).scale(1, 1)
+          transform: new Transform('lineT')
+            .translate(0, 0).rotate(0).scale(1, 1),
         },
       });
       diagram.initialize();
-      const state1 = diagram.getState();
+      state1 = diagram.getState();
 
-      const line = diagram.getElement('line');
+      line = diagram.getElement('line');
       line.transform.updateTranslation(0, 1);
-      const state2 = diagram.getState();
+      state2 = diagram.getState();
 
-      const diffPaths = tools.getObjectDiff(state1, [], state2, false);
-      console.log(diffPaths);
-      // const o1 = { aa: [1, new Transform().translate(1, 1).rotate(2).scale(3, 3), 3] };
-      // const o2 = { aa: [1, new Transform().translate(1, 2).rotate(2).scale(3, 3), 3] };
-      const map = new tools.UniqueMap();
-      // const o1C = tools.compressObject(o1, map, true, true);
-      // const o2C = tools.compressObject(o2, map, true, true);
-      // const diffPaths = tools.getObjectDiff(o1, [], o2, false);
-      const diffObj = tools.diffPathsToObj(diffPaths);
+      ({ recorder } = diagram);
+    });
+    test.only('addReferenceState', () => {
+      line.setEndPoints([1, 1], [2, 1]);
+      diagram.setState(state1);
+      const state3 = diagram.getState();
+      expect(state3.elements).toEqual(state1.elements);
 
-      // const { diff, removed, added } = diffMaster;
-      // console.log(diffMaster)
-      // expect(diff['.aa[1]']).toBe(4);
-      // const map = new tools.UniqueMap();
-      // const diffObj = tools.pathsToObj(diffMaster);
-      // const compressed = tools.compressObject(diffObj, map, true, true);
-      // map.makeInverseMap();
-      // const uncompressed = tools.uncompressObject(compressed, map, true, true);
-      // const remake = tools.refAndDiffToObject(o1, diffMaster);
-      // console.log(o1C);
-      // console.log(o2C)
-      console.log(diffPaths)
-      console.log(diffObj)
-      console.log(diffObj.diff.aa)
-      // console.log(remake);
+      recorder.addReferenceState(state1);
+      recorder.addReferenceState(state2);
+      expect(recorder.states.reference[1]).toEqual({
+        diff: {
+          '.elements.elements.line.transform.state[3].state[2]': 1,
+          '.stateTime': 3.482,
+        },
+        added: {},
+        removed: {},
+      });
     });
   });
 });
