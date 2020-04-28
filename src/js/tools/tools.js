@@ -751,6 +751,7 @@ function refAndDiffToObject(
   };
   // console.log(diffsIn)
   diffsIn.forEach((diffIn) => {
+    // console.log(diffIn)
     const { added, removed, diff } = diffIn;
     // console.log(1, removed)
     if (removed != null) {
@@ -769,19 +770,31 @@ function refAndDiffToObject(
 }
 
 function diffPathsToObj(diff: { added: Object, removed: Object, diff: Object }) {
-  return {
-    diff: pathsToObj(diff.diff),
-    added: pathsToObj(diff.added),
-    removed: pathsToObj(diff.removed),
-  };
+  const out = {};
+  if (diff.diff && Object.keys(diff.diff).length > 0) {
+    out.diff = pathsToObj(diff.diff);
+  }
+  if (diff.added && Object.keys(diff.added).length > 0) {
+    out.added = pathsToObj(diff.added);
+  }
+  if (diff.removed && Object.keys(diff.removed).length > 0) {
+    out.removed = pathsToObj(diff.removed);
+  }
+  return out;
 }
 
 function diffObjToPaths(diff: { added: Object, removed: Object, diff: Object }) {
-  return {
-    diff: objectToPaths(diff.diff),
-    added: objectToPaths(diff.added),
-    removed: objectToPaths(diff.removed),
-  };
+  const out = {};
+  if (diff.diff && Object.keys(diff.diff).length > 0) {
+    out.diff = objectToPaths(diff.diff);
+  }
+  if (diff.added && Object.keys(diff.added).length > 0) {
+    out.added = objectToPaths(diff.added);
+  }
+  if (diff.removed && Object.keys(diff.removed).length > 0) {
+    out.removed = objectToPaths(diff.removed);
+  }
+  return out;
 }
 
 // function diffToObj(diff: Object, obj: object) {
