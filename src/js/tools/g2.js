@@ -2271,6 +2271,7 @@ export type TypeF1DefTransform = {
 export type TypeParsableTransform = Array<string | ['s', number, number] | ['r', number] | ['t', number, number]> | string | Transform | TypeF1DefTransform;
 
 function parseTransform<T>(inTransform: TypeParsableTransform, onFail: T): Transform | T | null {
+  console.log(inTransform)
   if (inTransform instanceof Transform) {
     return inTransform;
   }

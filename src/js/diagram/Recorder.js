@@ -5,6 +5,7 @@ import { round } from '../tools/math';
 import {
   getObjectDiff, pathsToObj, UniqueMap, compressObject,
   uncompressObject, duplicate, refAndDiffToObject,
+  objectToPaths,
 } from '../tools/tools';
 import type { DiagramElement } from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
@@ -465,7 +466,7 @@ class Recorder {
     this.states.map.index = states.map.index;
     this.states.map.letters = states.map.letters;
     this.states.map.makeInverseMap();
-    this.states.reference = uncompressObject(states.reference, this.states.map, true, null, true);
+    this.states.reference = uncompressObject(states.reference, this.states.map, true, true);
     this.states.states = states.states.map(s => [
       s[0],
       uncompressObject(s[1], this.states.map, true, true),
@@ -639,13 +640,9 @@ class Recorder {
     // this.slideIndex = Math.max(getPrevIndexForTime(this.slides, fromTime), 0);
     // this.stateIndex = Math.max(getPrevIndexForTime(this.states, fromTime), 0);
     // this.eventIndex = Math.max(getPrevIndexForTime(this.events, fromTime), 0);
-    console.log(1)
     this.slideIndex = Math.max(getPrevIndexForTime(this.slides, fromTime), 0);
-    console.log(2, this.states.states)
     this.stateIndex = Math.max(getPrevIndexForTime(this.states.states, fromTime), 0);
-    console.log(3)
     this.eventIndex = Math.max(getPrevIndexForTime(this.events, fromTime), 0);
-    console.log(4)
     this.setSlide(this.slideIndex, true);
     this.queuePlaybackSlide(getTimeToIndex(this.slides, this.slideIndex + 1, fromTime));
     this.setState(this.stateIndex);
@@ -871,11 +868,20 @@ class Recorder {
     if (index > this.states.states.length - 1) {
       return;
     }
-    console.log(index)
+    const diff = this.states.states[index][1];
+    const removed = objectToPaths(diff.removed);
+    const added = objectToPaths(diff.added);
+    const diffPaths = objectToPaths(diff.diff);
     const state = refAndDiffToObject(
       this.states.reference,
-      this.states.states[index][1],
+      // this.states.states[index][1],
+      {
+        removed,
+        added,
+        diff: diffPaths,
+      },
     );
+    console.log(index, this.states.states[index], state)
     this.setDiagramState(state);
   }
 

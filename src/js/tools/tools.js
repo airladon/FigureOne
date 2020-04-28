@@ -498,6 +498,9 @@ function compressObject(
   uncompress: boolean = false,
 ) {
   if (typeof obj === 'string') {
+    // if (obj === 'do') {
+    //   console.log(obj, strValues, uncompress, map.get(obj))
+    // }
     if (strValues && uncompress) {
       return map.get(obj);
     }
@@ -558,14 +561,22 @@ function uncompressObject(
   return compressObject(obj, map, keys, strValues, null, true);
 }
 
-function objectToPaths(obj: any, path: string = '', pathObj = {}, pathMap = Object) {
+function objectToPaths(obj: any, path: string = '', pathObj = {}, pathMap = Object, precision: ?number = null) {
   if (
     typeof obj === 'string'
-    || typeof obj === 'number'
+    // || typeof obj === 'number'
     || typeof obj === 'boolean'
     || typeof obj === 'function'
   ) {
     pathObj[`${path}`] = obj; // eslint-disable-line no-param-reassign
+    return pathObj;
+  }
+  if (typeof obj === 'number') {
+    if (precision != null) {
+      pathObj[`${path}`] = roundNum(obj, precision); // eslint-disable-line no-param-reassign
+    } else {
+      pathObj[`${path}`] = obj; // eslint-disable-line no-param-reassign
+    }
     return pathObj;
   }
   if (obj === null) {
@@ -715,7 +726,9 @@ function refAndDiffToObject(
   }>
 ) {
   const ref = duplicate(referenceIn);
+  console.log('before All', Object.keys(ref.elements).length);
   const processPaths = (paths: Object, remove: boolean = false) => {
+    console.log('before', remove, paths, Object.keys(ref.elements).length)
     // console.log(paths)
     Object.keys(paths).forEach((pathStr) => {
       // console.log(pathStr)
@@ -727,6 +740,8 @@ function refAndDiffToObject(
         updateObjFromPath(path, ref, value, remove);
       }
     });
+    console.log('asdf');
+    console.log('after', Object.keys(ref))
   };
   // console.log(diffsIn)
   diffsIn.forEach((diffIn) => {
@@ -737,8 +752,26 @@ function refAndDiffToObject(
     processPaths(added);
     // console.log(3)
     processPaths(diff);
+    console.log(added, removed, diff)
   });
+  console.log(ref, referenceIn)
   return ref;
+}
+
+function diffPathsToObj(diff: { added: Object, removed: Object, diff: Object }) {
+  return {
+    diff: pathsToObj(diff.diff),
+    added: pathsToObj(diff.added),
+    removed: pathsToObj(diff.removed),
+  };
+}
+
+function diffObjToPaths(diff: { added: Object, removed: Object, diff: Object }) {
+  return {
+    diff: objectToPaths(diff.diff),
+    added: objectToPaths(diff.added),
+    removed: objectToPaths(diff.removed),
+  };
 }
 
 // function diffToObj(diff: Object, obj: object) {
@@ -824,6 +857,7 @@ function refAndDiffToObject(
 // }
 
 export {
+  diffPathsToObj, diffObjToPaths,
   divide, mulToString, add, Console,
   classify, extractFrom, ObjectKeyPointer, getElement,
   addToObject, duplicateFromTo, isTouchDevice,
