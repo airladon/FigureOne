@@ -291,7 +291,7 @@ describe('Diagram Recorder', () => {
 
       ({ recorder } = diagram);
     });
-    test.only('addReferenceState', () => {
+    test('addReferenceState', () => {
       line.setEndPoints([1, 1], [2, 1]);
       diagram.setState(state1);
       const state3 = diagram.getState();
@@ -307,6 +307,18 @@ describe('Diagram Recorder', () => {
         added: {},
         removed: {},
       });
+    });
+    test('getReferenceState', () => {
+      recorder.addReferenceState(state1);
+      recorder.addReferenceState(state2);
+      const ref1 = recorder.getReferenceState(0);
+      const ref2 = recorder.getReferenceState(1);
+      diagram.setState(ref1);
+      expect(line.transform.t().x).toBe(0);
+      expect(line.transform.t().y).toBe(0);
+      diagram.setState(ref2);
+      expect(line.transform.t().x).toBe(0);
+      expect(line.transform.t().y).toBe(1);
     });
   });
 });

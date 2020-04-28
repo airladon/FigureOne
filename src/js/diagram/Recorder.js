@@ -523,13 +523,14 @@ class Recorder {
       return;
     }
     const diff = getObjectDiff(this.states.reference[0], [], state, precision);
-    console.log(diff)
-    console.log(state)
     this.states.reference.push(diff);
   }
 
   getReferenceState(index: number = 0) {
-    if (index === 0) {
+    if (this.states.reference.length === 0) {
+      return {};
+    }
+    if (index === 0 && this.states.reference.length === 1) {
       return this.states.reference[0];
     }
     if (index === -1) {
@@ -538,7 +539,7 @@ class Recorder {
         this.states.reference[this.states.reference.length - 1],
       );
     }
-    return refAndDiffToObject(this.states.reference[0], this.states.referenc[index]);
+    return refAndDiffToObject(this.states.reference[0], this.states.reference[index]);
   }
 
   addState(state: Object, precision: ?number = 4) {
