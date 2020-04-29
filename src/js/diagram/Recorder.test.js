@@ -272,6 +272,7 @@ describe('Diagram Recorder', () => {
     let line;
     // let recorder;
     beforeEach(() => {
+      recorder.resetStates();
       diagram.addElement({
         name: 'line',
         method: 'line',
@@ -448,7 +449,7 @@ describe('Diagram Recorder', () => {
 
       expect(unmini.reference[0]).toEqual({ elements: { e1: 1, e2: 2 } });
       expect(unmini.reference[1]).toEqual({ diff: { '.elements.e1': 2 } });
-      
+
       recorder.loadStates(unmini);
       const state0New = recorder.getState(0);
       expect(state0Old).toEqual(state0New);
@@ -474,8 +475,9 @@ describe('Diagram Recorder', () => {
       const state1New = recorder.getState(1);
       expect(state1Old).toEqual(state1New);
     });
-    test('diagram simple', () => {
-      recorder.resetStates();
+    test('diagram simple 1', () => {
+      // recorder.resetStates();
+      diagram.htmlId = 'aaa'
       line.setPosition(0, 0);
       global.performance.now = () => 1000;
       const ref1 = diagram.getState();
@@ -504,7 +506,45 @@ describe('Diagram Recorder', () => {
 
       const mini = recorder.minifyStates(false, 4);
       const unmini = recorder.unminifyStates(mini);
+      recorder.loadStates(unmini);
+      line.setPosition(10, 10);
+      
+      
+      recorder.setState(0);
+      expect(line.getPosition().y).toBe(0);
+      recorder.setState(1);
+      expect(line.getPosition().y).toBe(1);
+    });
+    test('diagram simple 2', () => {
+      // recorder.resetStates();
+      line.setPosition(0, 0);
+      global.performance.now = () => 1000;
+      const ref1 = diagram.getState();
+      global.performance.now = () => 2000;
+      const s1 = diagram.getState();
+      recorder.addReferenceState(ref1);
+      recorder.recordStateNew(s1);
 
+      line.setPosition(0, 1);
+      global.performance.now = () => 3000;
+      const s2 = diagram.getState();
+      recorder.recordStateNew(s2);
+
+      expect(recorder.states.states[0][2]).toEqual({
+        diff: {
+          '.stateTime': 2,
+        },
+      });
+
+      expect(recorder.states.states[1][2]).toEqual({
+        diff: {
+          '.elements.elements.line.transform.state[3].state[2]': 1,
+          '.stateTime': 3,
+        },
+      });
+
+      const mini = recorder.minifyStates(false, 4);
+      const unmini = recorder.unminifyStates(mini);
       recorder.loadStates(unmini);
       line.setPosition(10, 10);
       recorder.setState(0);
@@ -512,93 +552,130 @@ describe('Diagram Recorder', () => {
       recorder.setState(1);
       expect(line.getPosition().y).toBe(1);
     });
-    test.only('diagram', () => {
-      line.setPosition(0, 0);
-      recorder.resetStates();
-      global.performance.now = () => 1000;
-      const ref1 = diagram.getState();
-      global.performance.now = () => 2000;
-      const s1 = diagram.getState();
-      recorder.addReferenceState(ref1);
-      recorder.recordStateNew(s1);
+    // test('diagram simple', () => {
+    //   // recorder.resetStates();
+    //   line.setPosition(0, 0);
+    //   global.performance.now = () => 1000;
+    //   const ref1 = diagram.getState();
+    //   global.performance.now = () => 2000;
+    //   const s1 = diagram.getState();
+    //   recorder.addReferenceState(ref1);
+    //   recorder.recordStateNew(s1);
 
-      line.setPosition(0, 1);
-      global.performance.now = () => 3000;
-      const s2 = diagram.getState();
-      recorder.recordStateNew(s2);
+    //   line.setPosition(0, 1);
+    //   global.performance.now = () => 3000;
+    //   const s2 = diagram.getState();
+    //   recorder.recordStateNew(s2);
 
-      line.setPosition(1, 2);
-      global.performance.now = () => 4000;
-      const s3 = diagram.getState();
-      global.performance.now = () => 5000;
-      const ref2 = diagram.getState();
-      recorder.recordStateNew(s3);
-      recorder.addReferenceState(ref2);
+    //   expect(recorder.states.states[0][2]).toEqual({
+    //     diff: {
+    //       '.stateTime': 2,
+    //     },
+    //   });
 
-      line.setPosition(1, 3);
-      global.performance.now = () => 6000;
-      const s4 = diagram.getState();
-      recorder.recordStateNew(s4);
+    //   expect(recorder.states.states[1][2]).toEqual({
+    //     diff: {
+    //       '.elements.elements.line.transform.state[3].state[2]': 1,
+    //       '.stateTime': 3,
+    //     },
+    //   });
 
-      expect(recorder.states.reference[1]).toEqual({
-        diff: {
-          '.elements.elements.line.transform.state[3].state[1]': 1,
-          '.elements.elements.line.transform.state[3].state[2]': 2,
-          '.stateTime': 5,
-        },
-      });
+    //   const mini = recorder.minifyStates(false, 4);
+    //   const unmini = recorder.unminifyStates(mini);
 
-      expect(recorder.states.states[0][2]).toEqual({
-        diff: {
-          '.stateTime': 2,
-        },
-      });
+    //   recorder.loadStates(unmini);
+    //   line.setPosition(10, 10);
+    //   recorder.setState(0);
+    //   expect(line.getPosition().y).toBe(0);
+    //   recorder.setState(1);
+    //   expect(line.getPosition().y).toBe(1);
+    // });
+    // test('diagram', () => {
+    //   line.setPosition(0, 0);
+    //   global.performance.now = () => 1000;
+    //   const ref1 = diagram.getState();
+    //   global.performance.now = () => 2000;
+    //   const s1 = diagram.getState();
+    //   recorder.addReferenceState(ref1);
+    //   recorder.recordStateNew(s1);
 
-      expect(recorder.states.states[1][2]).toEqual({
-        diff: {
-          '.elements.elements.line.transform.state[3].state[2]': 1,
-          '.stateTime': 3,
-        },
-      });
+    //   line.setPosition(0, 1);
+    //   global.performance.now = () => 3000;
+    //   const s2 = diagram.getState();
+    //   recorder.recordStateNew(s2);
 
-      expect(recorder.states.states[2][2]).toEqual({
-        diff: {
-          '.elements.elements.line.transform.state[3].state[1]': 1,
-          '.elements.elements.line.transform.state[3].state[2]': 2,
-          '.stateTime': 4,
-        },
-      });
+    //   line.setPosition(1, 2);
+    //   global.performance.now = () => 4000;
+    //   const s3 = diagram.getState();
+    //   global.performance.now = () => 5000;
+    //   const ref2 = diagram.getState();
+    //   recorder.recordStateNew(s3);
+    //   recorder.addReferenceState(ref2);
 
-      expect(recorder.states.states[3][2]).toEqual({
-        diff: {
-          '.elements.elements.line.transform.state[3].state[2]': 3,
-          '.stateTime': 6,
-        },
-      });
+    //   line.setPosition(1, 3);
+    //   global.performance.now = () => 6000;
+    //   const s4 = diagram.getState();
+    //   recorder.recordStateNew(s4);
 
-      // recorder.addState(state3);
+    //   expect(recorder.states.reference[1]).toEqual({
+    //     diff: {
+    //       '.elements.elements.line.transform.state[3].state[1]': 1,
+    //       '.elements.elements.line.transform.state[3].state[2]': 2,
+    //       '.stateTime': 5,
+    //     },
+    //   });
 
-      const mini = recorder.minifyStates(false, 4);
-      const unmini = recorder.unminifyStates(mini);
+    //   expect(recorder.states.states[0][2]).toEqual({
+    //     diff: {
+    //       '.stateTime': 2,
+    //     },
+    //   });
 
-      recorder.loadStates(unmini);
-      recorder.setState(0);
+    //   expect(recorder.states.states[1][2]).toEqual({
+    //     diff: {
+    //       '.elements.elements.line.transform.state[3].state[2]': 1,
+    //       '.stateTime': 3,
+    //     },
+    //   });
 
-      expect(line.getPosition().x).toBe(0);
-      expect(line.getPosition().y).toBe(0);
+    //   expect(recorder.states.states[2][2]).toEqual({
+    //     diff: {
+    //       '.elements.elements.line.transform.state[3].state[1]': 1,
+    //       '.elements.elements.line.transform.state[3].state[2]': 2,
+    //       '.stateTime': 4,
+    //     },
+    //   });
 
-      recorder.setState(1);
-      expect(line.getPosition().x).toBe(0);
-      expect(line.getPosition().y).toBe(1);
+    //   expect(recorder.states.states[3][2]).toEqual({
+    //     diff: {
+    //       '.elements.elements.line.transform.state[3].state[2]': 3,
+    //       '.stateTime': 6,
+    //     },
+    //   });
 
-      recorder.setState(2);
-      expect(line.getPosition().x).toBe(1);
-      expect(line.getPosition().y).toBe(2);
+    //   // recorder.addState(state3);
 
-      recorder.setState(3);
-      expect(line.getPosition().x).toBe(1);
-      expect(line.getPosition().y).toBe(3);
-    });
+    //   const mini = recorder.minifyStates(false, 4);
+    //   const unmini = recorder.unminifyStates(mini);
+
+    //   recorder.loadStates(unmini);
+    //   recorder.setState(0);
+
+    //   expect(line.getPosition().x).toBe(0);
+    //   expect(line.getPosition().y).toBe(0);
+
+    //   recorder.setState(1);
+    //   expect(line.getPosition().x).toBe(0);
+    //   expect(line.getPosition().y).toBe(1);
+
+    //   recorder.setState(2);
+    //   expect(line.getPosition().x).toBe(1);
+    //   expect(line.getPosition().y).toBe(2);
+
+    //   recorder.setState(3);
+    //   expect(line.getPosition().x).toBe(1);
+    //   expect(line.getPosition().y).toBe(3);
+    // });
     // test('diagram as Object', () => {
     //   line.setPosition(0, 0);
     //   recorder.resetStates();
@@ -647,6 +724,23 @@ describe('Diagram Recorder', () => {
     //   recorder.setState(3);
     //   expect(line.getPosition().x).toBe(1);
     //   expect(line.getPosition().y).toBe(3);
+    // });
+    // describe.only('testing', () => {
+    //   test('1', () => {
+    //     console.log(1, diagram.elements.elements.line.isShown);
+    //     diagram.elements.elements.line.isShown = false;
+    //     console.log(1, diagram.elements.elements.line.isShown);
+    //   });
+    //   test('2', () => {
+    //     console.log(2, diagram.elements.elements.line.isShown);
+    //     diagram.elements.elements.line.isShown = false;
+    //     console.log(2, diagram.elements.elements.line.isShown);
+    //   });
+    //   test('3', () => {
+    //     console.log(3, diagram.elements.elements.line.isShown);
+    //     diagram.elements.elements.line.isShown = false;
+    //     console.log(3, diagram.elements.elements.line.isShown);
+    //   });
     // });
   });
 });

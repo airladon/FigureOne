@@ -13,6 +13,13 @@ import {
   getPoint, getTransform, getRect, getLine, Translation, Rotation, Scale,
 } from '../tools/g2';
 
+function assignAsLinkOnly(obj: Object) {
+  if (obj != null) {
+    obj._assignAsLinkOnly = true;
+  }
+  return obj;
+}
+
 function parseState(state: Object, diagram: Diagram) {
   if (typeof state === 'number') {
     return state;
@@ -57,7 +64,7 @@ function parseState(state: Object, diagram: Diagram) {
       return getLine(state);
     }
     if (state.f1Type === 'de') {
-      return diagram.getElement(state.state);
+      return assignAsLinkOnly(diagram.getElement(state.state));
     }
     if (state.f1Type === 'positionAnimationStep') {
       return new PositionAnimationStep()._fromState(
@@ -144,6 +151,7 @@ function parseState(state: Object, diagram: Diagram) {
     // if (property === 'element') {
     //   console.log(state[property].name)
     // }
+    // console.log(property)
     out[property] = parseState(state[property], diagram);
   });
   return out;

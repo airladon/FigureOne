@@ -310,19 +310,21 @@ class Diagram {
     this.beingTouchedElements = [];
     this.moveTopElementOnly = true;
     this.globalAnimation = new GlobalAnimation();
-    this.recorder = new Recorder(
-      this.simulateTouchDown.bind(this),
-      this.simulateTouchUp.bind(this),
-      // this.simulateTouchMove.bind(this),
-      this.simulateCursorMove.bind(this),
-      this.animateNextFrame.bind(this),
-      this.getElement.bind(this),
-      this.getState.bind(this),
-      this.setState.bind(this),
-      // this.pauseAfterNextDraw.bind(this),
-      this.pause.bind(this),
-      this.unpause.bind(this),
-    );
+    // this.recorder = new Recorder(
+    //   this.simulateTouchDown.bind(this),
+    //   this.simulateTouchUp.bind(this),
+    //   // this.simulateTouchMove.bind(this),
+    //   this.simulateCursorMove.bind(this),
+    //   this.animateNextFrame.bind(this),
+    //   this.getElement.bind(this),
+    //   this.getState.bind(this),
+    //   this.setState.bind(this),
+    //   // this.pauseAfterNextDraw.bind(this),
+    //   this.pause.bind(this),
+    //   this.unpause.bind(this),
+    // );
+    this.recorder = new Recorder();
+    this.bindRecorder();
     this.pauseTime = performance.now() / 1000;
     this.shapesLow = this.getShapes();
     // this.shapesHigh = this.getShapes(true);
@@ -360,6 +362,20 @@ class Diagram {
     this.drawAnimationFrames = 0;
   }
 
+  bindRecorder() {
+    this.recorder.diagramTouchDown = this.simulateTouchDown.bind(this);
+    this.recorder.diagramTouchUp = this.simulateTouchUp.bind(this);
+    // this.simulateTouchMove.bind(this),
+    this.recorder.diagramCursorMove = this.simulateCursorMove.bind(this);
+    this.recorder.animateDiagramNextFrame = this.animateNextFrame.bind(this);
+    this.recorder.getElement = this.getElement.bind(this);
+    this.recorder.getDiagramState = this.getState.bind(this);
+    this.recorder.setDiagramState = this.setState.bind(this);
+    // this.pauseAfterNextDraw.bind(this),
+    this.recorder.pauseDiagram = this.pause.bind(this);
+    this.recorder.unpauseDiagram = this.unpause.bind(this);
+  }
+
   scrollEvent() {
     this.scrolled = true;
     this.animateNextFrame(false, 'scroll event');
@@ -392,6 +408,7 @@ class Diagram {
 
   setState(stateIn: Object) {
     const state = parseState(stateIn, this);
+    // console.log(state)
     setState(this, state);
     this.elements.setTimeDelta(performance.now() / 1000 - this.stateTime);
     this.animateNextFrame();

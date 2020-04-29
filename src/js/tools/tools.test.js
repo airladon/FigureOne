@@ -598,46 +598,55 @@ describe('Get Object Diff', () => {
   test('No diff', () => {
     const o1 = { a: 1, b: { c: 1, d: 1 } };
     const o2 = { a: 1, b: { c: 1, d: 1 } };
-    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, true);
-    expect(diff).toEqual({});
-    expect(removed).toEqual({});
-    expect(added).toEqual({});
+    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, 5, true);
+    // expect(diff).toEqual();
+    // expect(removed).toEqual({});
+    // expect(added).toEqual({});
+    expect(diff == null).toBe(true);
+    expect(removed == null).toBe(true);
+    expect(added == null).toBe(true);
   });
   test('Diff', () => {
     const o1 = { a: 1, b: { c: 1, d: 1 } };
     const o2 = { a: 2, b: { c: 1, d: 2 } };
-    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, true);
+    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, 5, true);
     expect(diff).toEqual({
       '.a': [1, 2],
       '.b.d': [1, 2],
     });
-    expect(removed).toEqual({});
-    expect(added).toEqual({});
+    expect(removed == null).toBe(true);
+    expect(added == null).toBe(true);
+    // expect(removed).toEqual({});
+    // expect(added).toEqual({});
   });
   test('Added', () => {
     const o1 = { a: 1, b: { c: 1, d: 1 } };
     const o2 = { a: 1, b: { c: 1, d: 1, e: 1 } };
-    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, true);
+    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, 5, true);
     expect(added).toEqual({
       '.b.e': 1,
     });
-    expect(removed).toEqual({});
-    expect(diff).toEqual({});
+    expect(removed == null).toBe(true);
+    expect(diff == null).toBe(true);
+    // expect(removed).toEqual({});
+    // expect(diff).toEqual({});
   });
   test('Removed', () => {
     const o1 = { a: 1, b: { c: 1, d: 1 } };
     const o2 = { a: 1, b: { c: 1 } };
-    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, true);
+    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, 5, true);
     expect(removed).toEqual({
       '.b.d': 1,
     });
-    expect(added).toEqual({});
-    expect(diff).toEqual({});
+    expect(diff == null).toBe(true);
+    expect(added == null).toBe(true);
+    // expect(added).toEqual({});
+    // expect(diff).toEqual({});
   });
   test('Nested', () => {
     const o1 = { a: 1, b: { c: 1, d: 1, e: [{ f: 1 }, 2, [3, 4]] } };
     const o2 = { a: 1, b: { c: 2, d: 1, e: [{ f: 1, g: 2 }, 2, [3, 4, 5]] } };
-    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, true);
+    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, 5, true);
     expect(diff).toEqual({
       '.b.c': [1, 2],
     });
@@ -645,7 +654,8 @@ describe('Get Object Diff', () => {
       '.b.e[0].g': 2,
       '.b.e[2][2]': 5,
     });
-    expect(removed).toEqual({});
+    expect(removed == null).toBe(true);
+    // expect(removed).toEqual({});
   });
 });
 describe('diffToObj', () => {
