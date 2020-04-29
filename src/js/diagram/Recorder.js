@@ -691,9 +691,11 @@ class Recorder {
     // download(`${dateStr} ${location} slides.txt`, slidesOut.join('\n'));
     // download(`${dateStr} ${location} events.txt`, eventsOut.join('\n'));
     // download(`${dateStr} ${location} states.txt`, statesOut.join('\n'));
+    const minifiedStates = this.minifyStates(true, 4);
+    // const minifiedEvents = this.minifyEvents(true, 4);
     download(`${dateStr} ${location} slides.json`, JSON.stringify(this.slides));
     download(`${dateStr} ${location} events.json`, JSON.stringify(this.events));
-    download(`${dateStr} ${location} states.json`, JSON.stringify(this.states));
+    download(`${dateStr} ${location} states.json`, JSON.stringify(minifiedStates));
     // download(`${dateStr} ${location} statesNew.json`, JSON.stringify(this.statesNew));
     // download(`${dateStr} ${location} statesNew1.json`, JSON.stringify(this.statesNew1));
   }
