@@ -1015,6 +1015,10 @@ class Recorder {
       return;
     }
     const state = this.getState(index);
+    // console.log(state[1].elements.elements.line.animations.element)
+    // delete state[1].elements.elements.line.animations.element
+    // delete state[1].elements.elements.line.elements.line.animations.element
+
     // console.log(this.states.states[index])
     // console.log(state)
     // console.log(state[1].elements.elements.line.transform.state[3])

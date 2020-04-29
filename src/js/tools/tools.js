@@ -210,6 +210,11 @@ function assignObjectFromTo(
       return;
     }
     const value = fromObject[key];
+    if (typeof value === 'object' && value != null && value._assignAsLinkOnly) {
+      // eslint-disable-next-line no-param-reassign
+      toObject[key] = fromObject[key];
+      return;
+    }
     if (typeof value === 'number'
       || typeof value === 'boolean'
       || typeof value === 'string'

@@ -5,7 +5,13 @@ import {
   getState, setState,
 } from './state';
 import parseState from './parseState';
+import makeDiagram from '../__mocks__/makeDiagram';
 // import { round } from '../tools/math';
+
+
+jest.mock('./Gesture');
+jest.mock('./webgl/webgl');
+jest.mock('./DrawContext2D');
 
 describe('state', () => {
   describe('getDef', () => {
@@ -128,4 +134,27 @@ describe('state', () => {
       expect(objIn.b.d.f).toBe(5);
     });
   });
+  // describe('In Diagram', () => {
+  //   let diagram;
+  //   beforeEach(() => {
+  //     diagram = makeDiagram();
+  //     diagram.addElement({
+  //       name: 'line',
+  //       method: 'line',
+  //     });
+  //   });
+  //   test('', () => {
+  //     let state = diagram.getState();
+  //     diagram.setState(state);
+  //     //  state = diagram.getState();
+  //     // diagram.setState(state);
+  //     //  state = diagram.getState();
+  //     // diagram.setState(state);
+  //     // console.log(state.elements.elements.line.animations)
+  //   });
+  //   test('', () => {
+  //     let state = diagram.getState();
+  //     diagram.setState(state);
+  //   });
+  // })
 });
