@@ -417,9 +417,14 @@ class Recorder {
   // ////////////////////////////////////
   // ////////////////////////////////////
   resetStates() {
-    this.states.states = [];
-    this.states.map.reset();
-    this.states.reference = null;
+    this.states = {
+      states: [],
+      map: new UniqueMap(),
+      reference: null,
+    };
+    // this.states.states = [];
+    // this.states.map.reset();
+    // this.states.reference = null;
   }
 
   start(slideStart: number = 0) {
