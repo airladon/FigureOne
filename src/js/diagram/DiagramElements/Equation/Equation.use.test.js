@@ -356,6 +356,7 @@ describe('Different ways to make an equation', () => {
     tools.cleanUIDs(eqn);
     eqn._a.parent = null;
     // console.log(eqn._a)
+    eqn._a.startTime = 10;
     expect(eqn._a).toMatchSnapshot();
   });
   test('Separate All Text', () => {
