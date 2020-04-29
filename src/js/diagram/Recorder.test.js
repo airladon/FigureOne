@@ -713,5 +713,91 @@ describe('Diagram Recorder', () => {
       recorder.setState(1);
       expect(line.getPosition().y).toBe(1);
     });
+    test('diagram as object', () => {
+      line.setPosition(0, 0);
+      global.performance.now = () => 1000;
+      const ref1 = diagram.getState();
+      global.performance.now = () => 2000;
+      const s1 = diagram.getState();
+      recorder.addReferenceState(ref1);
+      recorder.recordStateNew(s1);
+
+      line.setPosition(0, 1);
+      global.performance.now = () => 3000;
+      const s2 = diagram.getState();
+      recorder.recordStateNew(s2);
+
+      line.setPosition(1, 2);
+      global.performance.now = () => 4000;
+      const s3 = diagram.getState();
+      global.performance.now = () => 5000;
+      const ref2 = diagram.getState();
+      recorder.recordStateNew(s3);
+      recorder.addReferenceState(ref2);
+
+      line.setPosition(1, 3);
+      global.performance.now = () => 6000;
+      const s4 = diagram.getState();
+      recorder.recordStateNew(s4);
+
+      expect(recorder.states.reference[1]).toEqual({
+        diff: {
+          '.elements.elements.line.transform.state[3].state[1]': 1,
+          '.elements.elements.line.transform.state[3].state[2]': 2,
+          '.stateTime': 5,
+        },
+      });
+
+      expect(recorder.states.states[0][2]).toEqual({
+        diff: {
+          '.stateTime': 2,
+        },
+      });
+
+      expect(recorder.states.states[1][2]).toEqual({
+        diff: {
+          '.elements.elements.line.transform.state[3].state[2]': 1,
+          '.stateTime': 3,
+        },
+      });
+
+      expect(recorder.states.states[2][2]).toEqual({
+        diff: {
+          '.elements.elements.line.transform.state[3].state[1]': 1,
+          '.elements.elements.line.transform.state[3].state[2]': 2,
+          '.stateTime': 4,
+        },
+      });
+
+      expect(recorder.states.states[3][2]).toEqual({
+        diff: {
+          '.elements.elements.line.transform.state[3].state[2]': 3,
+          '.stateTime': 6,
+        },
+      });
+
+      // recorder.addState(state3);
+
+      const mini = recorder.minifyStates(true, 4);
+      const unmini = recorder.unminifyStates(mini);
+
+      recorder.loadStates(unmini);
+      recorder.setState(0);
+
+      expect(line.getPosition().x).toBe(0);
+      expect(line.getPosition().y).toBe(0);
+
+      recorder.setState(1);
+      expect(line.getPosition().x).toBe(0);
+      expect(line.getPosition().y).toBe(1);
+
+      recorder.setState(2);
+      expect(line.getPosition().x).toBe(1);
+      expect(line.getPosition().y).toBe(2);
+
+      recorder.setState(3);
+      expect(line.getPosition().x).toBe(1);
+      expect(line.getPosition().y).toBe(3);
+    });
   });
 });
