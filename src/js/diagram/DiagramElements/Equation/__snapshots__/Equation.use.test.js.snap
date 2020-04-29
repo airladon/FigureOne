@@ -457,7 +457,7 @@ DiagramElementPrimitive {
     "previousPoint": null,
     "setDiagramState": [Function],
     "slides": Array [],
-    "startTime": 1588181807544,
+    "startTime": 0,
     "stateTimeStep": 1000,
     "states": Object {
       "map": UniqueMap {
@@ -474,7 +474,6 @@ DiagramElementPrimitive {
   "renderedOnNextDraw": false,
   "scenarios": Object {},
   "setTransformCallback": null,
-  "startTime": 10,
   "state": Object {
     "isBeingMoved": false,
     "isMovingFreely": false,

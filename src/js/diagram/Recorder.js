@@ -362,7 +362,7 @@ class Recorder {
       this.isAudioPlaying = false;
       this.playbackStopped = null;
       this.getCurrentSlide = null;
-      this.startTime = this.timeStamp();
+      this.startTime = 0;
     }
     return Recorder.instance;
   }
@@ -465,16 +465,21 @@ class Recorder {
     }, time);
   }
 
-  loadStates(states: {
-    states: Array<Array<number, number, Object>>,
-    reference: Array<Object>,
-    // states: Array<Object>,
-    // map: UniqueMap,
-    // reference: Object,
-  }) {
+  loadStates(
+    states: {
+      states: Array<Array<number, number, Object>>,
+      reference: Array<Object>,
+      map?: UniqueMap,
+    },
+    unminify: boolean = false,
+  ) {
     this.resetStates();
-    this.states.states = states.states;
-    this.states.reference = states.reference;
+    if (unminify) {
+      this.states = this.unminifyStates(states);
+    } else {
+      this.states.states = states.states;
+      this.states.reference = states.reference;
+    }
     // this.states.map.map = states.map.map;
     // this.states.map.index = states.map.index;
     // this.states.map.letters = states.map.letters;
@@ -486,48 +491,48 @@ class Recorder {
     // ]);
   }
 
-  recordState(state: Object, precision: number = 4) {
+  // recordState(state: Object, precision: number = 4) {
 
-    const compressed = compressObject(state, this.states.map, true, true, precision);
-    // const compressed = duplicate(state);
-    // const compressNew1 = compressObject(duplicate(state), this.statesNew1.map);
-    if (this.states.reference == null) {
-      this.states.reference = duplicate(compressed);
-    }
-    // if (this.statesNew1.reference == null) {
-    //   // this.statesNew1.reference = state;
-    //   this.statesNew1.reference = compressNew1;
-    // }
-    // this.states.push([this.now() / 1000, state]);
+  //   const compressed = compressObject(state, this.states.map, true, true, precision);
+  //   // const compressed = duplicate(state);
+  //   // const compressNew1 = compressObject(duplicate(state), this.statesNew1.map);
+  //   if (this.states.reference == null) {
+  //     this.states.reference = duplicate(compressed);
+  //   }
+  //   // if (this.statesNew1.reference == null) {
+  //   //   // this.statesNew1.reference = state;
+  //   //   this.statesNew1.reference = compressNew1;
+  //   // }
+  //   // this.states.push([this.now() / 1000, state]);
 
-    // StatesNew
-    // const diffNew1 = getObjectDiff(this.statesNew1.reference, [], compressNew1);
-    // this.statesNew1.states.push([this.now() / 1000, diffNew1]);
-    const diff = getObjectDiff(this.states.reference, [], compressed);
-    // console.log(this.states.reference, state, compressed, diff);
-    const diffKey = this.states.map.add('diff');
-    const removedKey = this.states.map.add('removed');
-    const addedKey = this.states.map.add('added');
-    const stateToSave = {};
-    stateToSave[diffKey] = pathsToObj(diff.diff);
-    stateToSave[removedKey] = pathsToObj(diff.removed);
-    stateToSave[addedKey] = pathsToObj(diff.added);
-    // console.log(diff, stateToSave)
-    this.states.states.push([
-      this.now() / 1000,
-      // {
-      //   diff: pathsToObj(diff.diff),
-      //   removed: pathsToObj(diff.removed),
-      //   added: pathsToObj(diff.added),
-      // },
-      stateToSave,
-    ]);
-    // console.log(this.states.states.slice(-1)[0][1])
-    // this.states.map.makeInverseMap();
-    // console.log(uncompressObject(this.states.states.slice(-1)[0][1], this.states.map));
-    // console.log(getObjectDiff(this.statesNew.reference, state));
-    // console.log(toObj(getObjectDiff(this.statesNew.reference, state)));
-  }
+  //   // StatesNew
+  //   // const diffNew1 = getObjectDiff(this.statesNew1.reference, [], compressNew1);
+  //   // this.statesNew1.states.push([this.now() / 1000, diffNew1]);
+  //   const diff = getObjectDiff(this.states.reference, [], compressed);
+  //   // console.log(this.states.reference, state, compressed, diff);
+  //   const diffKey = this.states.map.add('diff');
+  //   const removedKey = this.states.map.add('removed');
+  //   const addedKey = this.states.map.add('added');
+  //   const stateToSave = {};
+  //   stateToSave[diffKey] = pathsToObj(diff.diff);
+  //   stateToSave[removedKey] = pathsToObj(diff.removed);
+  //   stateToSave[addedKey] = pathsToObj(diff.added);
+  //   // console.log(diff, stateToSave)
+  //   this.states.states.push([
+  //     this.now() / 1000,
+  //     // {
+  //     //   diff: pathsToObj(diff.diff),
+  //     //   removed: pathsToObj(diff.removed),
+  //     //   added: pathsToObj(diff.added),
+  //     // },
+  //     stateToSave,
+  //   ]);
+  //   // console.log(this.states.states.slice(-1)[0][1])
+  //   // this.states.map.makeInverseMap();
+  //   // console.log(uncompressObject(this.states.states.slice(-1)[0][1], this.states.map));
+  //   // console.log(getObjectDiff(this.statesNew.reference, state));
+  //   // console.log(toObj(getObjectDiff(this.statesNew.reference, state)));
+  // }
 
   addReferenceState(state: Object, precision: ?number = 4) {
     if (this.states.reference == null) {
@@ -617,9 +622,19 @@ class Recorder {
   // eslint-disable-next-line class-methods-use-this
   unminifyStates(compressedStates: Object) {
     const cStates = compressedStates.states;
-    const { map } = compressedStates;
+    let { map } = compressedStates;
+    if (!(map instanceof UniqueMap)) {
+      const uMap = new UniqueMap();
+      uMap.map = map.map;
+      uMap.index = map.index;
+      uMap.letters = map.letters;
+      map = uMap;
+    }
     map.makeInverseMap();
+    console.log(compressedStates)
+    console.log(map)
     const states = uncompressObject(cStates, map, true, true);
+    console.log(states)
     const ref = states.reference[0];
     let refDiff = states.reference.slice(1);
     let statesDiff = states.states;
@@ -633,7 +648,10 @@ class Recorder {
     };
   }
 
-  recordStateNew(state: Object, precision: number = 4) {
+  recordState(state: Object, precision: number = 4) {
+    if (this.states.reference == null) {
+      this.addReferenceState(state);
+    }
     this.addState(state, precision);
     // const referenceState = 
     // const diff = getObjectDiff(this.states.reference, [], compressed);
