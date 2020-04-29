@@ -631,10 +631,7 @@ class Recorder {
       map = uMap;
     }
     map.makeInverseMap();
-    console.log(compressedStates)
-    console.log(map)
     const states = uncompressObject(cStates, map, true, true);
-    console.log(states)
     const ref = states.reference[0];
     let refDiff = states.reference.slice(1);
     let statesDiff = states.states;

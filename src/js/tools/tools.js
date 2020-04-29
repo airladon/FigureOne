@@ -446,6 +446,7 @@ class UniqueMap {
     this.index = 1;
     this.inverseMap = {};
     this.letters = '0abcdefghijklmnopqrstuvwxz';
+    this.undefinedCode = '.a';
   }
 
   reset() {
@@ -487,6 +488,9 @@ class UniqueMap {
   }
 
   get(uniqueStr: string) {
+    if (uniqueStr === this.undefinedCode) {
+      return undefined;
+    }
     if (this.inverseMap[uniqueStr] != null) {
       return this.inverseMap[uniqueStr];
     }
@@ -515,7 +519,7 @@ function compressObject(
     return obj;
   }
   if (typeof obj === 'number') {
-    if (precision == null || uncompress) {
+    if (precision === null || uncompress) {
       return obj;
     }
     return roundNum(obj, precision);
@@ -523,9 +527,13 @@ function compressObject(
   if (
     typeof obj === 'boolean'
     || typeof obj === 'function'
-    || obj == null
+    || obj === null
   ) {
     return obj;
+  }
+
+  if (obj === undefined) {
+    return map.undefinedCode;
   }
 
   if (Array.isArray(obj)) {

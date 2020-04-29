@@ -484,12 +484,12 @@ describe('Diagram Recorder', () => {
     //   global.performance.now = () => 2000;
     //   const s1 = diagram.getState();
     //   recorder.addReferenceState(ref1);
-    //   recorder.recordStateNew(s1);
+    //   recorder.recordState(s1);
 
     //   line.setPosition(0, 1);
     //   global.performance.now = () => 3000;
     //   const s2 = diagram.getState();
-    //   recorder.recordStateNew(s2);
+    //   recorder.recordState(s2);
 
     //   expect(recorder.states.states[0][2]).toEqual({
     //     diff: {
@@ -523,12 +523,12 @@ describe('Diagram Recorder', () => {
     //   global.performance.now = () => 2000;
     //   const s1 = diagram.getState();
     //   recorder.addReferenceState(ref1);
-    //   recorder.recordStateNew(s1);
+    //   recorder.recordState(s1);
 
     //   line.setPosition(0, 1);
     //   global.performance.now = () => 3000;
     //   const s2 = diagram.getState();
-    //   recorder.recordStateNew(s2);
+    //   recorder.recordState(s2);
 
     //   expect(recorder.states.states[0][2]).toEqual({
     //     diff: {
@@ -560,12 +560,12 @@ describe('Diagram Recorder', () => {
       global.performance.now = () => 2000;
       const s1 = diagram.getState();
       recorder.addReferenceState(ref1);
-      recorder.recordStateNew(s1);
+      recorder.recordState(s1);
 
       line.setPosition(0, 1);
       global.performance.now = () => 3000;
       const s2 = diagram.getState();
-      recorder.recordStateNew(s2);
+      recorder.recordState(s2);
 
       expect(recorder.states.states[0][2]).toEqual({
         diff: {
@@ -597,25 +597,25 @@ describe('Diagram Recorder', () => {
       global.performance.now = () => 2000;
       const s1 = diagram.getState();
       recorder.addReferenceState(ref1);
-      recorder.recordStateNew(s1);
+      recorder.recordState(s1);
 
       line.setPosition(0, 1);
       global.performance.now = () => 3000;
       const s2 = diagram.getState();
-      recorder.recordStateNew(s2);
+      recorder.recordState(s2);
 
       line.setPosition(1, 2);
       global.performance.now = () => 4000;
       const s3 = diagram.getState();
       global.performance.now = () => 5000;
       const ref2 = diagram.getState();
-      recorder.recordStateNew(s3);
+      recorder.recordState(s3);
       recorder.addReferenceState(ref2);
 
       line.setPosition(1, 3);
       global.performance.now = () => 6000;
       const s4 = diagram.getState();
-      recorder.recordStateNew(s4);
+      recorder.recordState(s4);
 
       expect(recorder.states.reference[1]).toEqual({
         diff: {
@@ -683,12 +683,12 @@ describe('Diagram Recorder', () => {
       global.performance.now = () => 2000;
       const s1 = diagram.getState();
       recorder.addReferenceState(ref1);
-      recorder.recordStateNew(s1);
+      recorder.recordState(s1);
 
       line.setPosition(0, 1);
       global.performance.now = () => 3000;
       const s2 = diagram.getState();
-      recorder.recordStateNew(s2);
+      recorder.recordState(s2);
 
       expect(recorder.states.states[0][2]).toEqual({
         diff: {
@@ -720,25 +720,25 @@ describe('Diagram Recorder', () => {
       global.performance.now = () => 2000;
       const s1 = diagram.getState();
       recorder.addReferenceState(ref1);
-      recorder.recordStateNew(s1);
+      recorder.recordState(s1);
 
       line.setPosition(0, 1);
       global.performance.now = () => 3000;
       const s2 = diagram.getState();
-      recorder.recordStateNew(s2);
+      recorder.recordState(s2);
 
       line.setPosition(1, 2);
       global.performance.now = () => 4000;
       const s3 = diagram.getState();
       global.performance.now = () => 5000;
       const ref2 = diagram.getState();
-      recorder.recordStateNew(s3);
+      recorder.recordState(s3);
       recorder.addReferenceState(ref2);
 
       line.setPosition(1, 3);
       global.performance.now = () => 6000;
       const s4 = diagram.getState();
-      recorder.recordStateNew(s4);
+      recorder.recordState(s4);
 
       expect(recorder.states.reference[1]).toEqual({
         diff: {
@@ -798,6 +798,32 @@ describe('Diagram Recorder', () => {
       recorder.setState(3);
       expect(line.getPosition().x).toBe(1);
       expect(line.getPosition().y).toBe(3);
+    });
+    test('diagram Simple as stringified object', () => {
+      line.setPosition(0, 0);
+      global.performance.now = () => 1000;
+      const ref1 = diagram.getState();
+      global.performance.now = () => 2000;
+      const s1 = diagram.getState();
+      recorder.addReferenceState(ref1);
+      recorder.recordState(s1);
+
+      line.setPosition(0, 1);
+      global.performance.now = () => 3000;
+      const s2 = diagram.getState();
+      recorder.recordState(s2);
+
+      const mini = recorder.minifyStates(true, 4);
+      const jsonMini = JSON.stringify(mini);
+      const parsedJSON = JSON.parse(jsonMini);
+      const unmini = recorder.unminifyStates(parsedJSON);
+
+      recorder.loadStates(unmini);
+      line.setPosition(10, 10);
+      recorder.setState(0);
+      expect(line.getPosition().y).toBe(0);
+      recorder.setState(1);
+      expect(line.getPosition().y).toBe(1);
     });
   });
 });
