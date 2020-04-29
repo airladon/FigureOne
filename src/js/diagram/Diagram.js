@@ -363,10 +363,10 @@ class Diagram {
   }
 
   bindRecorder() {
-    this.recorder.diagramTouchDown = this.simulateTouchDown.bind(this);
-    this.recorder.diagramTouchUp = this.simulateTouchUp.bind(this);
+    this.recorder.touchDown = this.simulateTouchDown.bind(this);
+    this.recorder.touchUp = this.simulateTouchUp.bind(this);
     // this.simulateTouchMove.bind(this),
-    this.recorder.diagramCursorMove = this.simulateCursorMove.bind(this);
+    this.recorder.cursorMove = this.simulateCursorMove.bind(this);
     this.recorder.animateDiagramNextFrame = this.animateNextFrame.bind(this);
     this.recorder.getElement = this.getElement.bind(this);
     this.recorder.getDiagramState = this.getState.bind(this);
