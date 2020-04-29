@@ -407,6 +407,7 @@ class Diagram {
   }
 
   setState(stateIn: Object) {
+    // console.log(stateIn)
     const state = parseState(stateIn, this);
     // console.log(state)
     setState(this, state);

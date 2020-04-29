@@ -589,7 +589,7 @@ function objectToPaths(obj: any, path: string = '', pathObj = {}, precision: ?nu
     return pathObj;
   }
   if (obj === undefined) {
-    pathObj[`${path}`] = undefined; // eslint-disable-line no-param-reassign
+    // pathObj[`${path}`] = undefined; // eslint-disable-line no-param-reassign
     return pathObj;
   }
   if (Array.isArray(obj)) {
@@ -604,10 +604,16 @@ function objectToPaths(obj: any, path: string = '', pathObj = {}, precision: ?nu
   return pathObj;
 }
 
-function getObjectDiff(obj1In: Object, diffs: Array<Object>, obj2: Object, precision: ?number = null, debug: boolean = false) {
+function getObjectDiff(
+  obj1In: Object,
+  diffs: Array<Object>,
+  obj2: Object,
+  precision: ?number = null,
+  debug: boolean = false,
+) {
   // const pathMap = {};
   let obj1 = obj1In;
-  if (diffs.length > 0) {
+  if (diffs.length > 0) { // eslint-disable-next-line no-use-before-define
     obj1 = refAndDiffToObject(obj1In, ...diffs);
   }
   const paths1 = objectToPaths(obj1, '', {}, precision);
