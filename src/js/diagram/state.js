@@ -157,55 +157,55 @@ function getState(
 //   return out;
 // }
 
-function assignStateToObject(
-  state: Object,
-  obj: Object,
-  exceptIn: Array<string> | string = [],
-  parentPath: string = '',
-  diagram: Diagram,
-) {
-  const except = typeof exceptIn === 'string' ? [exceptIn] : exceptIn;
-  Object.keys(state).forEach((key) => {
-    const keyPath = parentPath !== '' ? `${parentPath}.${key}` : key;
-    if (except.indexOf(keyPath) !== -1) {
-      return;
-    }
-    const value = state[key];
-    if (typeof value === 'number'
-      || typeof value === 'boolean'
-      || typeof value === 'string'
-      || value == null
-      || typeof value === 'function'
-      || Array.isArray(value)
-    ) {
-      // Only assign the value if:
-      //    * Value is not undefined OR
-      //    * Value is undefined and toObject[key] is undefined
-      if (value !== undefined || obj[key] === undefined) {
-        obj[key] = value;
-      }
-      return;
-    }
-    if (value.f1Type != null) {
-      obj[key] = parseState(value, diagram);
-      return;
-    }
-    // If the fromObject[key] value is an object, but the toObject[key] value
-    // is not an object, but then make toObject[key] an empty object
-    const toValue = obj[key];
-    if (typeof toValue === 'number'
-      || typeof toValue === 'boolean'
-      || typeof toValue === 'string'
-      || toValue == null
-      || typeof toValue === 'function'
-      || Array.isArray(toValue)
-    ) {
-      // eslint-disable-next-line no-param-reassign
-      obj[key] = {};
-    }
-    assignStateToObject(value, obj[key], except, keyPath, diagram);
-  });
-}
+// function assignStateToObject(
+//   state: Object,
+//   obj: Object,
+//   exceptIn: Array<string> | string = [],
+//   parentPath: string = '',
+//   diagram: Diagram,
+// ) {
+//   const except = typeof exceptIn === 'string' ? [exceptIn] : exceptIn;
+//   Object.keys(state).forEach((key) => {
+//     const keyPath = parentPath !== '' ? `${parentPath}.${key}` : key;
+//     if (except.indexOf(keyPath) !== -1) {
+//       return;
+//     }
+//     const value = state[key];
+//     if (typeof value === 'number'
+//       || typeof value === 'boolean'
+//       || typeof value === 'string'
+//       || value == null
+//       || typeof value === 'function'
+//       || Array.isArray(value)
+//     ) {
+//       // Only assign the value if:
+//       //    * Value is not undefined OR
+//       //    * Value is undefined and toObject[key] is undefined
+//       if (value !== undefined || obj[key] === undefined) {
+//         obj[key] = value;
+//       }
+//       return;
+//     }
+//     if (value.f1Type != null) {
+//       obj[key] = parseState(value, diagram);
+//       return;
+//     }
+//     // If the fromObject[key] value is an object, but the toObject[key] value
+//     // is not an object, but then make toObject[key] an empty object
+//     const toValue = obj[key];
+//     if (typeof toValue === 'number'
+//       || typeof toValue === 'boolean'
+//       || typeof toValue === 'string'
+//       || toValue == null
+//       || typeof toValue === 'function'
+//       || Array.isArray(toValue)
+//     ) {
+//       // eslint-disable-next-line no-param-reassign
+//       obj[key] = {};
+//     }
+//     assignStateToObject(value, obj[key], except, keyPath, diagram);
+//   });
+// }
 function setState(obj: Object, stateIn: Object) {
   joinObjects(obj, stateIn);
   // assignStateToObject(stateIn, obj, [], '', diagram);
