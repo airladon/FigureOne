@@ -1037,6 +1037,13 @@ class Recorder {
       return;
     }
     const state = this.getState(index);
+    console.log(index, state, state[1].elements.elements.circle.elements.line1.transform.state[2].state)
+    // try {
+    //   console.log();
+    // } catch {
+    //   console.log('fail');
+    // }
+
     // console.log(state[1].elements.elements.line.animations.element)
     // delete state[1].elements.elements.line.animations.element
     // delete state[1].elements.elements.line.elements.line.animations.element
