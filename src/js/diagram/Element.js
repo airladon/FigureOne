@@ -245,6 +245,7 @@ class DiagramElement {
 
   stateProperties: Array<string>
   fnMap: FunctionMap;
+  isPaused: boolean;
 
   // scenarioSet: {
   //   quiz1: [
@@ -306,6 +307,7 @@ class DiagramElement {
       scale: 2,
       time: 1,
     };
+    this.isPaused = false;
 
     // Rename to animate in future
     this.anim = {
@@ -611,7 +613,7 @@ class DiagramElement {
       this.state.pulse.startTime += delta;
     }
     if (this.state.movement.previousTime > 0) {
-      this.state.movement.previousTime += delta / 1000;
+      this.state.movement.previousTime += delta;
     }
   }
   // Space definition:
@@ -895,6 +897,14 @@ class DiagramElement {
   // eslint-disable-next-line no-unused-vars, class-methods-use-this
   highlight() {
     this.undim();
+  }
+
+  pause() {
+    this.isPaused = true;
+  }
+
+  unpause() {
+    this.isPaused = false;
   }
 
   setPosition(pointOrX: Point | number, y: number = 0) {
@@ -2345,8 +2355,10 @@ class DiagramElementPrimitive extends DiagramElement {
       if (this.beforeDrawCallback != null) {
         this.fnMap.exec(this.beforeDrawCallback, now);
       }
-      this.animations.nextFrame(now);
-      this.nextMovingFreelyFrame(now);
+      if (!this.isPaused) {
+        this.animations.nextFrame(now);
+        this.nextMovingFreelyFrame(now);
+      }
 
       if (!this.isShown) {
         return;
@@ -2693,8 +2705,11 @@ class DiagramElementCollection extends DiagramElement {
       if (this.beforeDrawCallback != null) {
         this.fnMap.exec(this.beforeDrawCallback, now);
       }
-      this.animations.nextFrame(now);
-      this.nextMovingFreelyFrame(now);
+
+      if (!this.isPaused) {
+        this.animations.nextFrame(now);
+        this.nextMovingFreelyFrame(now);
+      }
 
       // set next color can end up hiding an element when disolving out
       if (!this.isShown) {
@@ -3700,6 +3715,22 @@ class DiagramElementCollection extends DiagramElement {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       element.setTimeDelta(delta);
+    }
+  }
+
+  pause() {
+    super.pause();
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.pause();
+    }
+  }
+
+  unpause() {
+    super.unpause();
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.unpause();
     }
   }
 }

@@ -1168,6 +1168,7 @@ class Diagram {
   }
 
   pause() {
+    this.elements.pause();
     this.pauseTime = performance.now() / 1000;
     this.isPaused = true;
   }
@@ -1177,6 +1178,7 @@ class Diagram {
   // }
 
   unpause() {
+    this.elements.unpause();
     this.isPaused = false;
     this.elements.setTimeDelta(performance.now() / 1000 - this.pauseTime);
     this.animateNextFrame();
