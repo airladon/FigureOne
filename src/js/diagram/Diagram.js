@@ -1237,6 +1237,7 @@ class Diagram {
       return;
     }
 
+    console.log('isMoving', this.elements.isMoving());
     if (this.elements.isMoving()) {
       this.animateNextFrame(true, 'is moving');
     }

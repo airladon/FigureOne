@@ -768,10 +768,12 @@ class Recorder {
     this.stateIndex = Math.max(getPrevIndexForTime(this.states.states, time), 0);
     this.eventIndex = Math.max(getPrevIndexForTime(this.events, time), 0);
     if (this.states.states[this.stateIndex][0] < this.slides[this.slideIndex][0]) {
+      console.log('state before')
       this.setState(this.stateIndex);
     }
     this.setSlide(this.slideIndex, true);
     if (this.states.states[this.stateIndex][0] >= this.slides[this.slideIndex][0]) {
+      console.log('state after')
       this.setState(this.stateIndex);
     }
     this.animateDiagramNextFrame();
@@ -811,8 +813,9 @@ class Recorder {
     this.slideIndex = Math.max(getPrevIndexForTime(this.slides, fromTime), 0);
     this.stateIndex = Math.max(getPrevIndexForTime(this.states.states, fromTime), 0);
     this.eventIndex = Math.max(getPrevIndexForTime(this.events, fromTime), 0);
-    this.setSlide(this.slideIndex, true);
-    this.queuePlaybackSlide(getTimeToIndex(this.slides, this.slideIndex + 1, fromTime));
+    // this.setSlide(this.slideIndex, true);
+    // this.queuePlaybackSlide(getTimeToIndex(this.slides, this.slideIndex + 1, fromTime));
+    this.playbackSlide();
     this.setState(this.stateIndex);
     this.queuePlaybackEvent(getTimeToIndex(this.events, this.eventIndex, fromTime));
     if (this.audio) {
@@ -1033,11 +1036,12 @@ class Recorder {
   }
 
   setState(index: number) {
+    console.log('setting state')
     if (index > this.states.states.length - 1) {
       return;
     }
     const state = this.getState(index);
-    console.log(index, state, state[1].elements.elements.circle.elements.line1.transform.state[2].state)
+    // console.log(index, state, state[1].elements.elements.circle.elements.line1.transform.state[2].state)
     // try {
     //   console.log();
     // } catch {
@@ -1077,12 +1081,12 @@ class Recorder {
     }, delay);
   }
 
-  playbackSlide() {
+  playbackSlide(forceGoTo: boolean = false) {
     if (this.slideIndex > this.slides.length - 1) {
       return;
     }
     // const event = this.events[this.slideIndex];
-    this.setSlide(this.slideIndex);
+    this.setSlide(this.slideIndex, forceGoTo);
     this.animateDiagramNextFrame();
     this.slideIndex += 1;
     if (this.slideIndex === this.slides.length) {
@@ -1094,6 +1098,7 @@ class Recorder {
   }
 
   setSlide(index: number, forceGoTo: boolean = false) {
+    console.log('setting slide')
     if (index > this.slides.length - 1) {
       return;
     }
