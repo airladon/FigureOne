@@ -186,7 +186,7 @@ class DiagramElement {
     isBeingMoved: boolean,
     isMovingFreely: boolean,
     movement: {
-      previousTime: number,
+      previousTime: ?number,
       previousTransform: Transform,
       velocity: Transform,           // current velocity - will be clipped
                                         // at max if element is being moved
@@ -538,7 +538,7 @@ class DiagramElement {
       isBeingMoved: false,
       isMovingFreely: false,
       movement: {
-        previousTime: -1,
+        previousTime: null,
         previousTransform: this.transform._dup(),
         velocity: this.transform.zero(),
       },
@@ -610,9 +610,9 @@ class DiagramElement {
       this.animations.setTimeDelta(delta);
     }
     if (this.state.isPulsing) {
-      this.state.pulse.startTime += delta;
+      this.state.pulse.startTime += delta * 1000;
     }
-    if (this.state.movement.previousTime > 0) {
+    if (this.state.movement.previousTime !== null) {
       this.state.movement.previousTime += delta;
     }
   }
@@ -978,7 +978,8 @@ class DiagramElement {
     if (this.state.isMovingFreely) {
       // If this is the first frame of moving freely, then record the current
       // time so can calculate velocity on next frame
-      if (this.state.movement.previousTime < 0) {
+      if (this.state.movement.previousTime === null) {
+        console.log('reset');
         this.state.movement.previousTime = now;
         return;
       }
@@ -987,12 +988,14 @@ class DiagramElement {
       const deltaTime = now - this.state.movement.previousTime;
       // Calculate the new velocity and position
       const next = this.decelerate(deltaTime);
+      console.log('freely', now, this.state.movement.previousTime, deltaTime, next, this.transform._dup());
       this.state.movement.velocity = next.velocity;
       this.state.movement.previousTime = now;
 
       // If the velocity is 0, then stop moving freely and return the current
       // transform
       if (this.state.movement.velocity.isZero()) {
+        console.log('stopped')
         this.state.movement.velocity = this.state.movement.velocity.zero();
         this.stopMovingFreely(false);
       }
@@ -1308,7 +1311,7 @@ class DiagramElement {
     this.stopMovingFreely();
     this.state.movement.velocity = this.transform.zero();
     this.state.movement.previousTransform = this.transform._dup();
-    this.state.movement.previousTime = Date.now() / 1000;
+    this.state.movement.previousTime = performance.now() / 1000;
     this.state.isBeingMoved = true;
     this.unrender();
     if (this.recorder.isRecording) {
@@ -1330,16 +1333,16 @@ class DiagramElement {
   }
 
   stopBeingMoved(): void {
-    const currentTime = Date.now() / 1000;
+    const currentTime = performance.now() / 1000;
     // Check wether last movement was a long time ago, if it was, then make
     // velocity 0 as the user has stopped moving before releasing touch/click
-    if (this.state.movement.previousTime !== -1) {
+    if (this.state.movement.previousTime !== null) {
       if ((currentTime - this.state.movement.previousTime) > 0.05) {
         this.state.movement.velocity = this.transform.zero();
       }
     }
     this.state.isBeingMoved = false;
-    this.state.movement.previousTime = -1;
+    this.state.movement.previousTime = null;
     if (this.recorder.isRecording) {
       this.recorder.recordEvent(
         'stopBeingMoved',
@@ -1353,7 +1356,7 @@ class DiagramElement {
 
   calcVelocity(newTransform: Transform): void {
     const currentTime = Date.now() / 1000;
-    if (this.state.movement.previousTime < 0) {
+    if (this.state.movement.previousTime === null) {
       this.state.movement.previousTime = currentTime;
       return;
     }
@@ -1388,7 +1391,7 @@ class DiagramElement {
       this.move.freely.callback = callback;
     }
     this.state.isMovingFreely = true;
-    this.state.movement.previousTime = -1;
+    this.state.movement.previousTime = null;
     this.state.movement.velocity = this.state.movement.velocity.clipMag(
       this.move.freely.zeroVelocityThreshold,
       this.move.maxVelocity,
@@ -1405,8 +1408,9 @@ class DiagramElement {
   }
 
   stopMovingFreely(result: boolean = true): void {
+    // console.trace()
     this.state.isMovingFreely = false;
-    this.state.movement.previousTime = -1;
+    this.state.movement.previousTime = null;
     if (this.move.freely.callback) {
       this.fnMap.exec(this.move.freely.callback, result);
       this.move.freely.callback = null;
