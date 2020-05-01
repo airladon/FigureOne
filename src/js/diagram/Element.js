@@ -979,7 +979,6 @@ class DiagramElement {
       // If this is the first frame of moving freely, then record the current
       // time so can calculate velocity on next frame
       if (this.state.movement.previousTime === null) {
-        console.log('reset');
         this.state.movement.previousTime = now;
         return;
       }
@@ -988,14 +987,12 @@ class DiagramElement {
       const deltaTime = now - this.state.movement.previousTime;
       // Calculate the new velocity and position
       const next = this.decelerate(deltaTime);
-      console.log('freely', now, this.state.movement.previousTime, deltaTime, next, this.transform._dup());
       this.state.movement.velocity = next.velocity;
       this.state.movement.previousTime = now;
 
       // If the velocity is 0, then stop moving freely and return the current
       // transform
       if (this.state.movement.velocity.isZero()) {
-        console.log('stopped')
         this.state.movement.velocity = this.state.movement.velocity.zero();
         this.stopMovingFreely(false);
       }
@@ -1341,9 +1338,7 @@ class DiagramElement {
         this.state.movement.velocity = this.transform.zero();
       }
     }
-    this.state.isBeingMoved = false;
-    this.state.movement.previousTime = null;
-    if (this.recorder.isRecording) {
+    if (this.recorder.isRecording && this.state.isBeingMoved) {
       this.recorder.recordEvent(
         'stopBeingMoved',
         this.getPath(),
@@ -1352,6 +1347,8 @@ class DiagramElement {
         // this.state.movement.velocity.toString(),
       );
     }
+    this.state.isBeingMoved = false;
+    this.state.movement.previousTime = null;
   }
 
   calcVelocity(newTransform: Transform): void {
