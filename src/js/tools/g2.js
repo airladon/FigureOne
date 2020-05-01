@@ -16,7 +16,7 @@ function clipAngle(
   angleToClip: number,
   clipTo: '0to360' | '-180to180' | null,
 ) {
-  let angle = angleToClip;
+  let angle = angleToClip % (Math.PI * 2);
   if (clipTo === '0to360') {
     if (angle < 0) {
       angle += Math.PI * 2;
