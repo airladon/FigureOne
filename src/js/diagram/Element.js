@@ -194,7 +194,7 @@ class DiagramElement {
     },
     isPulsing: boolean,
     pulse: {
-      startTime: number,
+      startTime: ?number,
     },
   };
 
@@ -545,7 +545,7 @@ class DiagramElement {
 
       isPulsing: false,
       pulse: {
-        startTime: -1,
+        startTime: null,
       },
     };
     this.interactiveLocation = new Point(0, 0);
@@ -610,7 +610,7 @@ class DiagramElement {
       this.animations.setTimeDelta(delta);
     }
     if (this.state.isPulsing) {
-      this.state.pulse.startTime += delta * 1000;
+      this.state.pulse.startTime += delta;
     }
     if (this.state.movement.previousTime !== null) {
       this.state.movement.previousTime += delta;
@@ -1430,7 +1430,7 @@ class DiagramElement {
     // pulse magnitude, and transform the input matrix by the pulse
     if (this.state.isPulsing) {
       // If this is the first pulse frame, then set the startTime
-      if (this.state.pulse.startTime === -1) {
+      if (this.state.pulse.startTime === null) {
         this.state.pulse.startTime = now;
       }
       // Calculate how much time has elapsed between this frame and the first
@@ -1589,7 +1589,7 @@ class DiagramElement {
 
   pulseNow() {
     this.state.isPulsing = true;
-    this.state.pulse.startTime = -1;
+    this.state.pulse.startTime = null;
     this.unrender();
   }
 
