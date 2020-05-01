@@ -56,7 +56,7 @@ describe('Position Animation', () => {
     step.start();
     expect(step.state).toBe('animating');
     expect(step.position.delta).toEqual(target);
-    expect(step.startTime).toBe(-1);
+    expect(step.startTime).toBe(null);
   });
   test('Target calculation with start transform not defined', () => {
     const delta = new Point(1, 1);
@@ -97,7 +97,7 @@ describe('Position Animation', () => {
       target,
     });
     step.start();
-    expect(step.startTime).toBe(-1);
+    expect(step.startTime).toBe(null);
 
     step.nextFrame(100);
     expect(step.startTime).toBe(100);

@@ -55,7 +55,7 @@ describe('Transfrom Animation Unit', () => {
     step.start();
     expect(step.state).toBe('animating');
     expect(step.transform.delta).toEqual(target);
-    expect(step.startTime).toBe(-1);
+    expect(step.startTime).toBe(null);
   });
   test('Target calculation with start transform not defined', () => {
     const delta = element.transform.constant(1);
@@ -117,7 +117,7 @@ describe('Transfrom Animation Unit', () => {
       target,
     });
     step.start();
-    expect(step.startTime).toBe(-1);
+    expect(step.startTime).toBe(null);
 
     step.nextFrame(100);
     expect(step.startTime).toBe(100);

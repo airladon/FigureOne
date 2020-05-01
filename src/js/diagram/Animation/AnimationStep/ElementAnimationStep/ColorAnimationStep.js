@@ -81,7 +81,7 @@ export class ColorAnimationStep extends ElementAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime?: number) {
+  start(startTime: ?number = null) {
     const { element } = this;
     if (element != null) {
       super.start(startTime);

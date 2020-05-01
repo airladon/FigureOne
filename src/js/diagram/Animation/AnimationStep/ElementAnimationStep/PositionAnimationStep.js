@@ -100,7 +100,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime?: number) {
+  start(startTime: ?number = null) {
     super.start(startTime);
     if (this.position.start === null) {
       if (this.element != null) {

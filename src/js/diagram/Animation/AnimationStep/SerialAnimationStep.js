@@ -81,7 +81,7 @@ export class SerialAnimationStep extends AnimationStep {
     });
   }
 
-  start(startTime?: number) {
+  start(startTime: ?number = null) {
     if (this.state !== 'animating') {
       this.startWaiting();
       super.start(startTime);

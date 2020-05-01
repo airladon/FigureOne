@@ -551,7 +551,7 @@ DiagramElementPrimitive {
       },
     },
     "pulse": Object {
-      "startTime": -1,
+      "startTime": null,
     },
   },
   "stateProperties": Array [],

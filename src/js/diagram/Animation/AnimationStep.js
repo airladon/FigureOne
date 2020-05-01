@@ -26,7 +26,7 @@ export type TypeAnimationStepInputOptions = {
 };
 
 export default class AnimationStep {
-  startTime: number;
+  startTime: ?number;
   duration: number;
   // animations: Array<AnimationStep>;
   // onFinish: ?(boolean) => void;
@@ -57,7 +57,7 @@ export default class AnimationStep {
     this.onFinish = options.onFinish;
     this.completeOnCancel = options.completeOnCancel;
     this.duration = options.duration;
-    this.startTime = -1;
+    this.startTime = null;
     this.state = 'idle';
     this.name = options.name;
     this.afterFrame = options.afterFrame;
@@ -148,7 +148,7 @@ export default class AnimationStep {
   // }
 
   setTimeDelta(delta: number) {
-    if (this.startTime > -1) {
+    if (this.startTime != null) {
       this.startTime += delta;
     }
     // if (this.steps != null) {
@@ -210,7 +210,7 @@ export default class AnimationStep {
   // returns remaining time if this step completes
   // Return of 0 means this step is still going
   nextFrame(now: number) {
-    if (this.startTime === -1) {
+    if (this.startTime === null) {
       this.startTime = now - this.startTimeOffset;
     }
 
@@ -245,7 +245,7 @@ export default class AnimationStep {
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  start(startTime: number = -1) {
+  start(startTime: ?number = null) {
     this.startTime = startTime;
     this.state = 'animating';
   }
