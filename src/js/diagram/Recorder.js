@@ -559,6 +559,7 @@ class Recorder {
     if (this.states.reference == null) {
       this.states.reference = [];
       this.states.reference.push(duplicate(state));
+      // console.log(state)
       return;
     }
     const diff = getObjectDiff(this.states.reference[0], [], state, precision);
