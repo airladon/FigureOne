@@ -430,6 +430,7 @@ class Recorder {
   start(slideStart: number = 0) {
     this.events = [];
     this.slides = [];
+    this.unpauseDiagram();
     // this.states.states = [];
     // this.states.map.reset();
     // this.states.reference = null;
