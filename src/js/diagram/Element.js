@@ -561,6 +561,7 @@ class DiagramElement {
     this.isRenderedAsImage = false;
     this.unrenderNextDraw = false;
     this.renderedOnNextDraw = false;
+    this.pulseTransforms = [];
   }
 
   setProperties(properties: Object, except: Array<string> | string = []) {
@@ -2346,7 +2347,7 @@ class DiagramElementPrimitive extends DiagramElement {
     }
   }
 
-  draw(parentTransform: Transform = new Transform(), now: number = 0, canvasIndex: number = 0) {
+  setupDraw(parentTransform: Transform = new Transform(), now: number = 0, canvasIndex: number = 0) {
     if (this.isShown) {
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {
@@ -2373,12 +2374,55 @@ class DiagramElementPrimitive extends DiagramElement {
 
       const newTransform = parentTransform.transform(this.getTransform());
       this.lastDrawTransform = newTransform._dup();
-      const pulseTransforms = this.transformWithPulse(now, newTransform);
+      this.pulseTransforms = this.transformWithPulse(now, newTransform);
 
       // eslint-disable-next-line prefer-destructuring
-      this.lastDrawPulseTransform = pulseTransforms[0];
+      this.lastDrawPulseTransform = this.pulseTransforms[0];
       // this.lastDrawTransform = pulseTransforms[0];
 
+      // let pointCount = -1;
+      // if (this.drawingObject instanceof VertexObject) {
+      //   pointCount = this.drawingObject.numPoints;
+      //   if (this.angleToDraw !== -1) {
+      //     pointCount = this.drawingObject.getPointCountForAngle(this.angleToDraw);
+      //   }
+      //   if (this.lengthToDraw !== -1) {
+      //     pointCount = this.drawingObject.getPointCountForLength(this.lengthToDraw);
+      //   }
+      //   if (this.pointsToDraw !== -1) {
+      //     pointCount = this.pointsToDraw;
+      //   }
+      // } else {
+      //   pointCount = 1;
+      // }
+
+      // const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity];
+      // if (pointCount > 0) {
+      //   this.pulseTransforms.forEach((t) => {
+      //     this.drawingObject.drawWithTransformMatrix(
+      //       t.matrix(), colorToUse, canvasIndex, pointCount,
+      //     );
+      //   });
+      // }
+      // if (this.unrenderNextDraw) {
+      //   this.clearRender();
+      //   this.unrenderNextDraw = false;
+      // }
+      // if (this.renderedOnNextDraw) {
+      //   this.isRenderedAsImage = true;
+      //   this.renderedOnNextDraw = false;
+      // }
+      // // this.redrawElements.forEach((element) => {
+      // //   element.draw(element.getParentLastDrawTransform(), now);
+      // // })
+      // if (this.afterDrawCallback != null) {
+      //   this.fnMap.exec(this.afterDrawCallback, now);
+      // }
+    }
+  }
+
+  draw(now: number, canvasIndex: number = 0) {
+    if (this.isShown) {
       let pointCount = -1;
       if (this.drawingObject instanceof VertexObject) {
         pointCount = this.drawingObject.numPoints;
@@ -2397,7 +2441,9 @@ class DiagramElementPrimitive extends DiagramElement {
 
       const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity];
       if (pointCount > 0) {
-        pulseTransforms.forEach((t) => {
+        // console.log(this.pulseTransforms, pointCount)
+        this.pulseTransforms.forEach((t) => {
+          // console.log(t.matrix(), colorToUse, canvasIndex, pointCount)
           this.drawingObject.drawWithTransformMatrix(
             t.matrix(), colorToUse, canvasIndex, pointCount,
           );
@@ -2699,7 +2745,7 @@ class DiagramElementCollection extends DiagramElement {
     return false;
   }
 
-  draw(parentTransform: Transform = new Transform(), now: number = 0, canvasIndex: number = 0) {
+  setupDraw(parentTransform: Transform = new Transform(), now: number = 0, canvasIndex: number = 0) {
     if (this.isShown) {
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {
@@ -2728,19 +2774,44 @@ class DiagramElementCollection extends DiagramElement {
       };
       const newTransform = parentTransform.transform(this.getTransform());
       this.lastDrawTransform = newTransform._dup();
-      const pulseTransforms = this.transformWithPulse(now, newTransform);
-
+      this.pulseTransforms = this.transformWithPulse(now, newTransform);
+      // this.pulseTransforms
       // eslint-disable-next-line prefer-destructuring
-      this.lastDrawPulseTransform = pulseTransforms[0];
+      this.lastDrawPulseTransform = this.pulseTransforms[0];
       // this.lastDrawTransform = pulseTransforms[0];
 
       // this.lastDrawPulseTransform = pulseTransforms[0]._dup();
 
-      for (let k = 0; k < pulseTransforms.length; k += 1) {
+      for (let k = 0; k < this.pulseTransforms.length; k += 1) {
         for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-          this.elements[this.drawOrder[i]].draw(pulseTransforms[k], now, canvasIndex);
+          this.elements[this.drawOrder[i]].setupDraw(this.pulseTransforms[k], now, canvasIndex);
         }
       }
+      // if (this.unrenderNextDraw) {
+      //   this.clearRender();
+      //   this.unrenderNextDraw = false;
+      // }
+      // if (this.renderedOnNextDraw) {
+      //   this.isRenderedAsImage = true;
+      //   this.renderedOnNextDraw = false;
+      // }
+      // // this.redrawElements.forEach((element) => {
+      // //   element.draw(element.getParentLastDrawTransform(), now);
+      // // })
+      // if (this.afterDrawCallback != null) {
+      //   // this.afterDrawCallback(now);
+      //   this.fnMap.exec(this.afterDrawCallback, now);
+      // }
+    }
+  }
+
+  draw(now: number, canvasIndex: number = 0) {
+    if (this.isShown) {
+      // for (let k = 0; k < this.pulseTransforms.length; k += 1) {
+      for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+        this.elements[this.drawOrder[i]].draw(now, canvasIndex);
+      }
+      // }
       if (this.unrenderNextDraw) {
         this.clearRender();
         this.unrenderNextDraw = false;
@@ -2758,6 +2829,31 @@ class DiagramElementCollection extends DiagramElement {
       }
     }
   }
+
+  // drawNew() {
+  //   if (this.isShown) {
+  //     for (let k = 0; k < this.pulseTransforms.length; k += 1) {
+  //       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+  //         this.elements[this.drawOrder[i]].draw(this.pulseTransforms[k], now, canvasIndex);
+  //       }
+  //     }
+  //     if (this.unrenderNextDraw) {
+  //       this.clearRender();
+  //       this.unrenderNextDraw = false;
+  //     }
+  //     if (this.renderedOnNextDraw) {
+  //       this.isRenderedAsImage = true;
+  //       this.renderedOnNextDraw = false;
+  //     }
+  //     // this.redrawElements.forEach((element) => {
+  //     //   element.draw(element.getParentLastDrawTransform(), now);
+  //     // })
+  //     if (this.afterDrawCallback != null) {
+  //       // this.afterDrawCallback(now);
+  //       this.fnMap.exec(this.afterDrawCallback, now);
+  //     }
+  //   }
+  // }
 
   exec(
     execFunctionAndArgs: string | Array<string | Object>,
