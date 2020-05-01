@@ -574,6 +574,30 @@ function uncompressObject(
   return compressObject(obj, map, keys, strValues, null, true);
 }
 
+function minify(objectOrArray: any, precision: ?number = 4) {
+  const map = new UniqueMap();
+  return {
+    minified: compressObject(objectOrArray, map, true, true, precision),
+    map,
+  };
+}
+
+function unminify(minObjectOrArray: {
+  map: Object | UniqueMap,
+  minified: Object,
+}) {
+  let { map } = minObjectOrArray;
+  if (!(map instanceof UniqueMap)) {
+    const uMap = new UniqueMap();
+    uMap.map = map.map;
+    uMap.index = map.index;
+    uMap.letters = map.letters;
+    map = uMap;
+  }
+  map.makeInverseMap();
+  return uncompressObject(minObjectOrArray.minified, map, true, true);
+}
+
 function objectToPaths(obj: any, path: string = '', pathObj = {}, precision: ?number = null) {
   if (
     typeof obj === 'string'
@@ -908,5 +932,6 @@ export {
   duplicate, assignObjectFromTo, joinObjectsWithOptions,
   objectToPaths, getObjectDiff, updateObjFromPath, pathsToObj,
   UniqueMap, compressObject, refAndDiffToObject, uncompressObject,
+  unminify, minify,
 };
 
