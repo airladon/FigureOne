@@ -5,7 +5,7 @@ import { round } from '../tools/math';
 import {
   getObjectDiff, pathsToObj, UniqueMap, compressObject,
   uncompressObject, duplicate, refAndDiffToObject,
-  objectToPaths, diffPathsToObj, diffObjToPaths,
+  objectToPaths, diffPathsToObj, diffObjToPaths, minify, unminify,
 } from '../tools/tools';
 import type { DiagramElement } from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
@@ -470,6 +470,21 @@ class Recorder {
     }, time);
   }
 
+  loadEvents(
+    minifiedEvents: {
+      map: UniqueMap | Object,
+      minified: Object,
+    } | Array<Array<number | string>>,
+    isMinified: boolean = false,
+  ) {
+    this.events = [];
+    if (isMinified) {
+      this.events = unminify(minifiedEvents);
+    } else {
+      this.events = minifiedEvents;
+    }
+  }
+
   loadStates(
     states: {
       states: Array<Array<number, number, Object>>,
@@ -584,6 +599,14 @@ class Recorder {
     const stateObj = refAndDiffToObject(ref, diff);
     return [time, stateObj];
   }
+
+  // minifyEvents(precision: ?number = 4) {
+  //   const map = new UniqueMap();
+  //   return {
+  //     events: compressObject(this.events, map, true, true, precision),
+  //     map,
+  //   };
+  // }
 
   minifyStates(
     asObject: boolean = false,
@@ -714,7 +737,7 @@ class Recorder {
     const minifiedStates = this.minifyStates(true, 4);
     // const minifiedEvents = this.minifyEvents(true, 4);
     download(`${dateStr} ${location} slides.json`, JSON.stringify(this.slides));
-    download(`${dateStr} ${location} events.json`, JSON.stringify(this.events));
+    download(`${dateStr} ${location} events.json`, JSON.stringify(minify(this.events)));
     download(`${dateStr} ${location} states.json`, JSON.stringify(minifiedStates));
     // download(`${dateStr} ${location} statesNew.json`, JSON.stringify(this.statesNew));
     // download(`${dateStr} ${location} statesNew1.json`, JSON.stringify(this.statesNew1));
