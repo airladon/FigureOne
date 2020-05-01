@@ -107,7 +107,7 @@ export class ParallelAnimationStep extends AnimationStep {
     });
   }
 
-  start(startTime?: number) {
+  start(startTime: ?number = null) {
     this.startWaiting();
     super.start(startTime);
     this.steps.forEach((step) => {
