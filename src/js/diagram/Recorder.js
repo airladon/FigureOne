@@ -620,7 +620,7 @@ class Recorder {
       [removed: string]: Object,
     }
   } {
-    const map = new UniqueMap();
+    // const map = new UniqueMap();
     const ref = duplicate(this.states.reference[0]);
     const refsDiffPaths = this.states.reference.slice(1);
     const statesDiffPaths = this.states.states;
@@ -641,25 +641,28 @@ class Recorder {
       states: statesDiff,
       isObject: asObject,
     };
-    return {
-      states: compressObject(states, map, true, true, precision),
-      map,
-    };
+    // return {
+    //   states: compressObject(states, map, true, true, precision),
+    //   map,
+    // };
+    return minify(states);
   }
 
   // eslint-disable-next-line class-methods-use-this
   unminifyStates(compressedStates: Object) {
-    const cStates = compressedStates.states;
-    let { map } = compressedStates;
-    if (!(map instanceof UniqueMap)) {
-      const uMap = new UniqueMap();
-      uMap.map = map.map;
-      uMap.index = map.index;
-      uMap.letters = map.letters;
-      map = uMap;
-    }
-    map.makeInverseMap();
-    const states = uncompressObject(cStates, map, true, true);
+    const states = unminify(compressedStates);
+    // const cStates = compressedStates.states;
+    // let { map } = compressedStates;
+    // if (!(map instanceof UniqueMap)) {
+    //   const uMap = new UniqueMap();
+    //   uMap.map = map.map;
+    //   uMap.index = map.index;
+    //   uMap.letters = map.letters;
+    //   map = uMap;
+    // }
+    // map.makeInverseMap();
+    // const states = uncompressObject(cStates, map, true, true);
+    // console.log(states)
     const ref = states.reference[0];
     let refDiff = states.reference.slice(1);
     let statesDiff = states.states;
@@ -778,6 +781,9 @@ class Recorder {
   // ////////////////////////////////////
   // ////////////////////////////////////
   seek(percentTime: number) {
+    if (this.states.states.length === 0) {
+      return;
+    }
     this.pausePlayback();
     // this.unpauseDiagram();
     const totalTime = this.getTotalTime();
@@ -871,6 +877,12 @@ class Recorder {
   }
 
   showPointer() {
+    if (this.isRecording) {
+      return;
+    }
+    if (this.slides.length === 0 || this.states.states.length === 0 || this.events.length === 0) {
+      return;
+    }
     // const pos = this.getMostRecentPointPosition();
     // if (pos == null) {
     //   return;
@@ -899,6 +911,9 @@ class Recorder {
   }
 
   getMostRecentPointerPosition(): ?Point {
+    if (this.isRecording) {
+      return null;
+    }
     let i = this.eventIndex;
     while (i >= 0 && i < this.events.length) {
       const eventAction = this.events[i][1];
@@ -926,6 +941,9 @@ class Recorder {
   }
 
   getIsPointerUp() {
+    if (this.isRecording) {
+      return;
+    }
     const slideTime = this.slides[this.slideIndex][0];
     let i = this.eventIndex;
     let eventTime;
