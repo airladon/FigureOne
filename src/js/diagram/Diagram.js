@@ -1222,11 +1222,12 @@ class Diagram {
     this.drawQueued = false;
     this.clearContext(canvasIndex);
     // console.log('really drawing')
-    this.elements.draw(
+    this.elements.setupDraw(
       this.spaceTransforms.diagramToGL,
       now,
       canvasIndex,
     );
+    this.elements.draw(now, canvasIndex);
     // console.log('really done')
     // if (this.pauseAfterNextDrawFlag) {
     //   this.pause();
