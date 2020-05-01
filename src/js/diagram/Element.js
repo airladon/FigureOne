@@ -122,6 +122,7 @@ class DiagramElement {
   internalSetTransformCallback: ?(string | ((Transform) => void));
   beforeDrawCallback: string | (?(number) => void);
   afterDrawCallback: string | (?(number) => void);
+  // redrawElements: Array<DiagramElement>;
 
   color: Array<number>;           // For the future when collections use color
   defaultColor: Array<number>;
@@ -292,6 +293,7 @@ class DiagramElement {
       parentCount: 0,
       elementCount: 0,
     };
+    // this.redrawElements = [];
     this.recorder = new Recorder();
     this.custom = {};
     this.parent = parent;
@@ -2409,6 +2411,9 @@ class DiagramElementPrimitive extends DiagramElement {
         this.isRenderedAsImage = true;
         this.renderedOnNextDraw = false;
       }
+      // this.redrawElements.forEach((element) => {
+      //   element.draw(element.getParentLastDrawTransform(), now);
+      // })
       if (this.afterDrawCallback != null) {
         this.fnMap.exec(this.afterDrawCallback, now);
       }
@@ -2744,6 +2749,9 @@ class DiagramElementCollection extends DiagramElement {
         this.isRenderedAsImage = true;
         this.renderedOnNextDraw = false;
       }
+      // this.redrawElements.forEach((element) => {
+      //   element.draw(element.getParentLastDrawTransform(), now);
+      // })
       if (this.afterDrawCallback != null) {
         // this.afterDrawCallback(now);
         this.fnMap.exec(this.afterDrawCallback, now);
