@@ -55,6 +55,8 @@ describe('Equation Functions - Fraction', () => {
                 denominatorSpace: 0.02,
                 overhang: 0.03,
                 offsetY: 0.04,
+                baseline: 'vinculum',
+                fullContentBounds: false,
               },
             },
           },
@@ -69,12 +71,14 @@ describe('Equation Functions - Fraction', () => {
               denominatorSpace: 0.02,
               overhang: 0.03,
               offsetY: 0.04,
+              baseline: 'vinculum',
+              fullContentBounds: false,
             },
           },
           // Method Array
-          2: { frac: ['a', 'v', 'b', s, 0.01, 0.02, 0.03, 0.04] },
+          2: { frac: ['a', 'v', 'b', s, 0.01, 0.02, 0.03, 0.04, 'vinculum', false] },
           // Function with Method Array
-          3: e.frac(['a', 'v', 'b', s, 0.01, 0.02, 0.03, 0.04]),
+          3: e.frac(['a', 'v', 'b', s, 0.01, 0.02, 0.03, 0.04, 'vinculum', false]),
         });
       },
       scaling: () => {
@@ -199,6 +203,14 @@ describe('Equation Functions - Fraction', () => {
             content: { frac: ['a', 'v', 'b', 1, 0.01, 0.01, 0.01, 0.02] },
             scale: 1,
           },
+          numeratorBaseline: {
+            content: { frac: ['a', 'v', 'b', 1, 0.01, 0.01, 0.01, 0.02, 'numerator'] },
+            scale: 1,
+          },
+          denominatorBaseline: {
+            content: { frac: ['a', 'v', 'b', 1, 0.01, 0.01, 0.01, 0.02, 'denominator'] },
+            scale: 1,
+          },
         });
       },
     };
@@ -257,6 +269,26 @@ describe('Equation Functions - Fraction', () => {
       diagram.setFirstTransform();
       const newV = eqn._v.getBoundingRect('diagram');
       expect(round(newV.bottom)).toBe(round(offsetY));
+    });
+    test('Numerator baseline', () => {
+      eqn.showForm('numeratorBaseline');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      const newV = eqn._v.getBoundingRect('diagram');
+      expect(round(newA.bottom)).toBe(-0.008);
+      expect(round(newV.top)).toBe(round(newA.bottom - space));
+      expect(round(newB.top)).toBe(round(newV.bottom - space));
+    });
+    test('Denominator baseline', () => {
+      eqn.showForm('denominatorBaseline');
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newB = eqn._b.getBoundingRect('diagram');
+      const newV = eqn._v.getBoundingRect('diagram');
+      expect(round(newB.bottom)).toBe(-0.008);
+      expect(round(newV.bottom)).toBe(round(newB.top + space));
+      expect(round(newA.bottom)).toBe(round(newV.top + space));
     });
   });
   test('Single Fraction', () => {
