@@ -846,7 +846,8 @@ class DiagramElement {
     };
     let done;
     let options = defaultOptions;
-    if (typeof optionsOrDone === 'function') {
+
+    if (typeof optionsOrDone === 'function' || typeof optionsOrDone === 'string') {
       options = defaultOptions;
       done = optionsOrDone;
     } else if (optionsOrDone == null) {
@@ -1355,11 +1356,12 @@ class DiagramElement {
   }
 
   calcVelocity(newTransform: Transform): void {
-    const currentTime = Date.now() / 1000;
+    const currentTime = performance.now() / 1000;
     if (this.state.movement.previousTime === null) {
       this.state.movement.previousTime = currentTime;
       return;
     }
+    // console.log(currentTime, this.state.movement.previousTime)
     const deltaTime = currentTime - this.state.movement.previousTime;
 
     // If the time is too small, weird calculations may happen
@@ -2347,7 +2349,7 @@ class DiagramElementPrimitive extends DiagramElement {
     }
   }
 
-  setupDraw(parentTransform: Transform = new Transform(), now: number = 0, canvasIndex: number = 0) {
+  setupDraw(parentTransform: Transform = new Transform(), now: number = 0) {
     if (this.isShown) {
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {
@@ -2897,6 +2899,7 @@ class DiagramElementCollection extends DiagramElement {
   ) {
     if (optionsOrElementsOrDone == null
       || typeof optionsOrElementsOrDone === 'function'
+      || typeof optionsOrElementsOrDone === 'string'
     ) {
       super.pulse(optionsOrElementsOrDone);
       return;

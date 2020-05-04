@@ -194,6 +194,7 @@ DiagramElementPrimitive {
   "internalSetTransformCallback": null,
   "isInteractive": undefined,
   "isMovable": false,
+  "isPaused": false,
   "isRenderedAsImage": false,
   "isShown": true,
   "isTouchable": false,
@@ -423,6 +424,7 @@ DiagramElementPrimitive {
     "time": 1,
     "transformMethod": "_elementPulseSettingsTransformMethod",
   },
+  "pulseTransforms": Array [],
   "recorder": Recorder {
     "animateDiagramNextFrame": [Function],
     "animation": GlobalAnimation {
@@ -437,6 +439,7 @@ DiagramElementPrimitive {
     "audio": null,
     "currentTime": 0,
     "cursorMove": [Function],
+    "diagramIsInTransition": [Function],
     "events": Array [],
     "getCurrentSlide": null,
     "getDiagramState": [Function],
@@ -480,7 +483,7 @@ DiagramElementPrimitive {
     "isMovingFreely": false,
     "isPulsing": false,
     "movement": Object {
-      "previousTime": -1,
+      "previousTime": null,
       "previousTransform": Transform {
         "_type": "transform",
         "index": 3,
