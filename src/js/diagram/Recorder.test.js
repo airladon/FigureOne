@@ -391,14 +391,14 @@ describe('Diagram Recorder', () => {
       });
       const state = recorder.getState(0);
       const [time] = state;
-      expect(mini.states.b).toEqual([{ a: 1 }]);
-      expect(mini.states.f).toBe(false);
-      expect(mini.states.e[0][0]).toBe(time);
-      expect(mini.states.e[0][1]).toBe(0);
-      expect(mini.states.e[0][2]).toEqual({
+      expect(mini.minified.b).toEqual([{ a: 1 }]);
+      expect(mini.minified.f).toBe(false);
+      expect(mini.minified.e[0][0]).toBe(time);
+      expect(mini.minified.e[0][1]).toBe(0);
+      expect(mini.minified.e[0][2]).toEqual({
         d: { c: 2 },
       });
-      
+
       const unmini = recorder.unminifyStates(mini);
       expect(unmini.reference).toEqual([{ elements: 1 }]);
       expect(unmini.states[0][0]).toBe(time);
@@ -419,13 +419,14 @@ describe('Diagram Recorder', () => {
         states: 'd',
         isObject: 'e',
       });
+      // console.log(mini.minified)
       const state = recorder.getState(0);
       const [time] = state;
-      expect(mini.states.b).toEqual([{ a: 1 }]);
-      expect(mini.states.e).toBe(true);
-      expect(mini.states.d[0][0]).toBe(time);
-      expect(mini.states.d[0][1]).toBe(0);
-      expect(mini.states.d[0][2]).toEqual({
+      expect(mini.minified.b).toEqual([{ a: 1 }]);
+      expect(mini.minified.e).toBe(true);
+      expect(mini.minified.d[0][0]).toBe(time);
+      expect(mini.minified.d[0][1]).toBe(0);
+      expect(mini.minified.d[0][2]).toEqual({
         c: { a: 2 },
       });
       const unmini = recorder.unminifyStates(mini);
