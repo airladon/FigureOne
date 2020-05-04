@@ -419,7 +419,6 @@ describe('Diagram Recorder', () => {
         states: 'd',
         isObject: 'e',
       });
-      // console.log(mini.minified)
       const state = recorder.getState(0);
       const [time] = state;
       expect(mini.minified.b).toEqual([{ a: 1 }]);
