@@ -72,21 +72,21 @@ export default class Fraction extends BaseEquationFunction {
     // const yDenominator = denominatorBounds.ascent
     //                      + vSpaceDenom - lineVAboveBaseline;
 
-    let yOffset = 0;
+    let baselineOffset = 0;
     if (baseline === 'numerator' && numerator != null) {
-      yOffset = numerator.location.y - loc.y;
+      baselineOffset = loc.y - numeratorLoc.y;
     } else if (baseline === 'denominator' && denominator != null) {
-      yOffset = denominator.location.y - loc.y;
+      baselineOffset = loc.y - denominatorLoc.y;
     }
 
     if (numerator != null) {
       numerator.offsetLocation(
-        numeratorLoc.sub(numerator.location.x, numerator.location.y + yOffset),
+        numeratorLoc.sub(numerator.location.x, numerator.location.y - baselineOffset),
       );
     }
     if (denominator != null) {
       denominator.offsetLocation(
-        denominatorLoc.sub(denominator.location.x, denominator.location.y + yOffset),
+        denominatorLoc.sub(denominator.location.x, denominator.location.y - baselineOffset),
       );
     }
 
@@ -104,7 +104,7 @@ export default class Fraction extends BaseEquationFunction {
     //               + numeratorBounds.descent;
     this.height = this.descent + this.ascent;
 
-    this.glyphLocations[0] = new Point(this.location.x, this.location.y + lineVAboveBaseline);
+    this.glyphLocations[0] = new Point(this.location.x, this.location.y + lineVAboveBaseline + baselineOffset);
     this.glyphWidths[0] = vinculumBounds.width;
     this.glyphHeights[0] = vinculumBounds.height;
 
@@ -120,7 +120,7 @@ export default class Fraction extends BaseEquationFunction {
 
     if (vinculum) {
       vinculum.custom.setSize(
-        this.glyphLocations[0].add(0, yOffset),
+        this.glyphLocations[0],
         vinculumBounds.width,
         vinculumBounds.height,
       );
