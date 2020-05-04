@@ -16,7 +16,7 @@ export default class Fraction extends BaseEquationFunction {
     const [numerator, denominator] = this.contents;
     const {
       scaleModifier, numeratorSpace, denominatorSpace, overhang,
-      offsetY, fullContentBounds,
+      offsetY, fullContentBounds, baseline,
     } = this.options;
     const scale = incomingScale * scaleModifier;
     const vinculumBounds = new Bounds();
@@ -72,12 +72,22 @@ export default class Fraction extends BaseEquationFunction {
     // const yDenominator = denominatorBounds.ascent
     //                      + vSpaceDenom - lineVAboveBaseline;
 
+    let yOffset = 0;
+    if (baseline === 'numerator' && numerator != null) {
+      yOffset = numerator.location.y - loc.y;
+    } else if (baseline === 'denominator' && denominator != null) {
+      yOffset = denominator.location.y - loc.y;
+    }
 
     if (numerator != null) {
-      numerator.offsetLocation(numeratorLoc.sub(numerator.location));
+      numerator.offsetLocation(
+        numeratorLoc.sub(numerator.location.x, numerator.location.y + yOffset),
+      );
     }
     if (denominator != null) {
-      denominator.offsetLocation(denominatorLoc.sub(denominator.location));
+      denominator.offsetLocation(
+        denominatorLoc.sub(denominator.location.x, denominator.location.y + yOffset),
+      );
     }
 
     this.width = vinculumBounds.width;
@@ -110,7 +120,7 @@ export default class Fraction extends BaseEquationFunction {
 
     if (vinculum) {
       vinculum.custom.setSize(
-        this.glyphLocations[0],
+        this.glyphLocations[0].add(0, yOffset),
         vinculumBounds.width,
         vinculumBounds.height,
       );

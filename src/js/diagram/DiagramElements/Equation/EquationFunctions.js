@@ -208,6 +208,7 @@ export type EQN_Fraction = {
   denominatorSpace?: number;
   overhang?: number;
   offsetY?: number;
+  baseline?: 'numerator' | 'denominator' | 'vinculum',
   fullContentBounds?: boolean,
 } | [
   TypeEquationPhrase,
@@ -218,6 +219,7 @@ export type EQN_Fraction = {
   ?number,
   ?number,
   ?number,
+  ?('numerator' | 'denominator' | 'vinculum'),
   ?boolean,
 ];
 
@@ -2459,6 +2461,7 @@ export class EquationFunctions {
     let denominatorSpace;
     let offsetY;
     let fullContentBounds;
+    let baseline;
 
     // This is imperfect type checking, as the assumption is if den, sym
     // and fractionScale is null, then they weren't defined by the caller
@@ -2472,18 +2475,19 @@ export class EquationFunctions {
       offsetY: 0.07,
       overhang: 0.05,
       fullContentBounds: false,
+      baseline: 'vinculum',
     };
     if (Array.isArray(optionsOrArray)) {
       [
         numerator, symbol, denominator, scale,
         numeratorSpace, denominatorSpace, overhang,
-        offsetY, fullContentBounds,
+        offsetY, baseline, fullContentBounds,
       ] = optionsOrArray;
     } else {
       ({
         numerator, symbol, denominator, scale,
         numeratorSpace, denominatorSpace, overhang,
-        offsetY, fullContentBounds,
+        offsetY, baseline, fullContentBounds,
       } = optionsOrArray);
     }
     const optionsIn = {
@@ -2493,6 +2497,7 @@ export class EquationFunctions {
       denominatorSpace,
       offsetY,
       fullContentBounds,
+      baseline,
     };
     const options = joinObjects(defaultOptions, optionsIn);
     return new Fraction(

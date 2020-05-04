@@ -68,17 +68,17 @@ describe('Pulse', () => {
       element.pulse(mockDone);
 
       // First time stamp
-      element.draw(new Transform(), 0);
+      element.setupDraw(new Transform(), 0);
       expect(element.state.isPulsing).toBe(true);
       expect(mockDone.mock.calls).toHaveLength(0);
 
       // After 0.5s
-      element.draw(new Transform(), 0.5);
+      element.setupDraw(new Transform(), 0.5);
       expect(element.state.isPulsing).toBe(true);
       expect(mockDone.mock.calls).toHaveLength(0);
 
       // When complete
-      element.draw(new Transform(), 1.1);
+      element.setupDraw(new Transform(), 1.1);
       expect(mockDone.mock.calls).toHaveLength(1);
       expect(element.state.isPulsing).toBe(false);
     });
@@ -97,8 +97,8 @@ describe('Pulse', () => {
     test('Callback', () => {
       expect(mockDone.mock.calls).toHaveLength(0);
       collection.pulse(mockDone);
-      collection.draw(new Transform(), 0);
-      collection.draw(new Transform(), 1.1);
+      collection.setupDraw(new Transform(), 0);
+      collection.setupDraw(new Transform(), 1.1);
       expect(mockDone.mock.calls).toHaveLength(1);
     });
     test('Specific Elements', () => {
@@ -108,8 +108,8 @@ describe('Pulse', () => {
       expect(collection._s3.state.isPulsing).toBe(true);
       expect(collection._squares._s1.state.isPulsing).toBe(true);
       expect(collection._squares._s2.state.isPulsing).toBe(false);
-      collection.draw(new Transform(), 0);
-      collection.draw(new Transform(), 1.1);
+      collection.setupDraw(new Transform(), 0);
+      collection.setupDraw(new Transform(), 1.1);
       expect(mockDone.mock.calls).toHaveLength(1);
     });
   });

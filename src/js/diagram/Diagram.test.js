@@ -627,7 +627,7 @@ describe('Diagram', () => {
   });
   describe('Touch move freely', () => {
     test('Move A and let go', () => {
-      const RealDate = Date.now;
+      const RealDate = global.performance.now;
       // canvasW=1000, canvasH=500, clipL=-1, clipW=2, clipT=1, clipH=2
       const d = diagrams.landscapeCenter;
       d.initialize();
@@ -665,19 +665,19 @@ describe('Diagram', () => {
       const a4 = new Point(0.75, 0.75);
 
       // Start at time 0
-      Date.now = () => 0;
+      global.performance.now = () => 0;
       d.draw(0);
       d.touchDownHandler(t0);
 
       // Initial small movement to get center at 0,0 for easier math
-      Date.now = () => 1;
+      global.performance.now = () => 1;
       d.touchMoveHandler(t0, t1);
       expect(d.beingMovedElements).toHaveLength(1);
       expect(d.beingMovedElements[0]).toBe(a);
       d.draw(0.001);
 
       // Move to (0.1, 0.1) in 0.1s, velocity should be approx 1
-      Date.now = () => 101;
+      global.performance.now = () => 101;
       d.touchMoveHandler(t1, t2);
       expect(d.beingMovedElements).toHaveLength(1);
       expect(d.beingMovedElements[0]).toBe(a);
@@ -706,7 +706,7 @@ describe('Diagram', () => {
       expect(a.transform.t().round(3)).toEqual(a4);
       expect(a.state.isMovingFreely).toBe(false);
 
-      Date.now = RealDate;
+      global.performance.now = RealDate;
     });
   });
 });
