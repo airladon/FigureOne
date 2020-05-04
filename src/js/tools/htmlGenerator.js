@@ -67,6 +67,7 @@ function style(
     centerH?: boolean,
     list?: ?'ordered' | 'unordered',
     listStyleType?: string,  // css styes
+    id?: string,
   } = 0,
   text: string | Array<string> = '',
 ) {
@@ -78,6 +79,7 @@ function style(
   let className = '';
   let color = '';
   let listStyleType = '';
+  let id = '';
   if (typeof options === 'number') {
     marginTop = `margin-top:${options}%`;
   } else {
@@ -108,14 +110,17 @@ function style(
     if (options.listStyleType) {
       listStyleType = `list-style-type:${options.listStyleType};`;
     }
+    if (options.id) {
+      id = `id="${options.id}"`;
+    }
   }
 
   const p = `<p style="${marginLeft}${marginRight}${marginLine}${size}${color}"${className}>`;
-  const pFirst = `<p style="${marginLeft}${marginRight}${marginTop}${size}${color}"${className}>`;
+  const pFirst = `<p style="${marginLeft}${marginRight}${marginTop}${size}${color}"${className}${id}>`;
 
   const li = `<li style="${marginLeft}${marginRight}${marginLine}${size}${color}${listStyleType}"${className}>`;
-  const ul = `<ul style="${marginLeft}${marginRight}${marginTop}${size}${color}"${className}>`;
-  const ol = `<ol style="${marginLeft}${marginRight}${marginTop}${size}${color}"${className}>`;
+  const ul = `<ul style="${marginLeft}${marginRight}${marginTop}${size}${color}"${className}${id}>`;
+  const ol = `<ol style="${marginLeft}${marginRight}${marginTop}${size}${color}"${className}${id}>`;
 
   let textToUse;
   if (options.list != null) {

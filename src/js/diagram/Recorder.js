@@ -256,6 +256,7 @@ class Recorder {
   previousPoint: ?Point;
   animateDiagramNextFrame: () => void;
   getElement: (string) => DiagramElement;
+  diagramIsInTransition: () => boolean;
 
   nextEventTimeout: TimeoutID;
   nextStateTimeout: TimeoutID;
@@ -363,6 +364,7 @@ class Recorder {
       this.playbackStopped = null;
       this.getCurrentSlide = null;
       this.startTime = 0;
+      this.diagramIsInTransition = () => {};
     }
     return Recorder.instance;
   }
@@ -465,7 +467,9 @@ class Recorder {
   queueRecordState(time: number = 0) {
     this.stateTimeout = setTimeout(() => {
       if (this.isRecording) {
-        this.recordState(this.getDiagramState());
+        if (this.diagramIsInTransition === false) {
+          this.recordState(this.getDiagramState());
+        }
         this.queueRecordState(this.stateTimeStep * 1000);
       }
     }, time);
