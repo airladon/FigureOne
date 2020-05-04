@@ -374,6 +374,7 @@ class Diagram {
     // this.pauseAfterNextDraw.bind(this),
     this.recorder.pauseDiagram = this.pause.bind(this);
     this.recorder.unpauseDiagram = this.unpause.bind(this);
+    this.recorder.diagramIsInTransition = this.getIsInTransition.bind(this);
   }
 
   scrollEvent() {
@@ -1006,6 +1007,10 @@ class Diagram {
       }
       element.moved(currentTransform);
     }
+  }
+
+  getIsInTransition() {
+    return this.inTransition;
   }
 
   // simulateTouchMove(
