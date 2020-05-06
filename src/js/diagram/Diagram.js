@@ -175,6 +175,9 @@ class Diagram {
 
   isPaused: boolean;
   pauseTime: number;
+  cursorShown: boolean;
+  pointerElementName: string;
+  isTouchDown: boolean;
   // pauseAfterNextDrawFlag: boolean;
 
   constructor(options: TypeDiagramOptions) {
@@ -194,6 +197,7 @@ class Diagram {
     // this.fnMap.add('doNothing', () => {});
     this.isPaused = false;
     this.scrolled = false;
+    this.pointerElementName = 'pointer';
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
@@ -300,6 +304,8 @@ class Diagram {
       this.gesture = new Gesture(this);
     }
 
+    this.previousCursorPoint = new Point(0, 0);
+    this.isTouchDown = false;
     // this.pauseAfterNextDrawFlag = false;
     this.fontScale = optionsToUse.fontScale;
     this.updateLimits(limits);
@@ -360,13 +366,14 @@ class Diagram {
     this.drawTimeoutId = null;
     this.oldScroll = window.pageYOffset;
     this.drawAnimationFrames = 0;
+    this.cursorShown = false;
   }
 
   bindRecorder() {
     this.recorder.touchDown = this.simulateTouchDown.bind(this);
     this.recorder.touchUp = this.simulateTouchUp.bind(this);
     // this.simulateTouchMove.bind(this),
-    this.recorder.cursorMove = this.simulateCursorMove.bind(this);
+    this.recorder.cursorMove = this.setCursor.bind(this);
     this.recorder.animateDiagramNextFrame = this.animateNextFrame.bind(this);
     this.recorder.getElement = this.getElement.bind(this);
     this.recorder.getDiagramState = this.getState.bind(this);
@@ -375,6 +382,7 @@ class Diagram {
     this.recorder.pauseDiagram = this.pause.bind(this);
     this.recorder.unpauseDiagram = this.unpause.bind(this);
     this.recorder.diagramIsInTransition = this.getIsInTransition.bind(this);
+    this.recorder.diagramShowCursor = this.showCursor.bind(this);
   }
 
   scrollEvent() {
@@ -765,12 +773,12 @@ class Diagram {
     }
   }
 
-  simulateTouchDown(diagramPoint: Point, pointerElement: string = 'pointer') {
+  simulateTouchDown(diagramPoint: Point) {
     // const pixelPoint = diagramPoint.transformBy(this.spaceTransforms.diagramToPixel.matrix());
     // const clientPoint = this.pixelToClient(pixelPoint);
     // this.touchDownHandler(clientPoint);
 
-    const pointer = this.getElement(pointerElement);
+    const pointer = this.getElement(this.pointerElementName);
     if (pointer == null) {
       return;
     }
@@ -784,6 +792,44 @@ class Diagram {
     pointer.setPosition(diagramPoint);
   }
 
+  toggleCursor() {
+    this.cursorShown = !this.cursorShown;
+    if (this.recorder.isRecording) {
+      if (this.cursorShown) {
+        this.recorder.recordEvent('showCursor', this.previousCursorPoint.x, this.previousCursorPoint.y);
+        if (this.isTouchDown) {
+          this.showCursor('down');
+        } else {
+          this.showCursor('up');
+        }
+        console.log(this.previousCursorPoint)
+        this.setCursor(this.previousCursorPoint);
+      } else {
+        this.recorder.recordEvent('hideCursor');
+        this.showCursor('hide');
+      }
+    }
+  }
+
+  showCursor(show: 'up' | 'down' | 'hide') {
+    const pointer = this.getElement(this.pointerElementName);
+    if (pointer == null) {
+      return;
+    }
+    const up = pointer.getElement('up');
+    const down = pointer.getElement('down');
+    if (show === 'up') {
+      up.showAll();
+      down.hide();
+    } else if (show === 'down') {
+      up.hide();
+      down.showAll();
+    } else {
+      pointer.hide();
+    }
+    this.animateNextFrame();
+  }
+
   // Handle touch down, or mouse click events within the canvas.
   // The default behavior is to be able to move objects that are touched
   // and dragged, then when they are released, for them to move freely before
@@ -793,14 +839,22 @@ class Diagram {
       const pixelP = this.clientToPixel(clientPoint);
       const diagramPoint = pixelP.transformBy(this.spaceTransforms.pixelToDiagram.matrix());
       this.recorder.recordEvent('touchDown', diagramPoint.x, diagramPoint.y);
+      if (this.cursorShown) {
+        this.showCursor('down');
+      }
     }
 
     if (this.isPaused) {
       this.unpause();
     }
+    if (this.recorder.isPlaying) {
+      this.recorder.pausePlayback();
+      this.showCursor('hide')
+    }
     if (this.inTransition) {
       return false;
     }
+    this.isTouchDown = true;
 
     // Get the touched point in clip space
     const pixelPoint = this.clientToPixel(clientPoint);
@@ -840,9 +894,9 @@ class Diagram {
     return false;
   }
 
-  simulateTouchUp(pointerElement: string = 'pointer') {
+  simulateTouchUp() {
     // this.touchUpHandler();
-    const pointer = this.getElement(pointerElement);
+    const pointer = this.getElement(this.pointerElementName);
     if (pointer == null) {
       return;
     }
@@ -861,6 +915,9 @@ class Diagram {
   touchUpHandler() {
     if (this.recorder.isRecording) {
       this.recorder.recordEvent('touchUp');
+      if (this.cursorShown) {
+        this.showCursor('up');
+      }
     }
     // console.log("before", this.elements._circle.transform.t())
     // console.log(this.beingMovedElements)
@@ -871,24 +928,39 @@ class Diagram {
         element.startMovingFreely();
       }
     }
+    this.isTouchDown = false;
     this.beingMovedElements = [];
     this.beingTouchedElements = [];
     // console.log("after", this.elements._circle.transform.t())
   }
 
-  simulateCursorMove(diagramPoint: Point, pointerElement: string = 'pointer') {
-    const pointer = this.getElement(pointerElement);
+  // simulateCursorMove(diagramPoint: Point) {
+  //   const pointer = this.getElement(this.pointerElementName);
+  //   if (pointer == null) {
+  //     return;
+  //   }
+  //   pointer.setPosition(diagramPoint);
+  // }
+
+  setCursor(p: Point) {
+    const pointer = this.getElement(this.pointerElementName);
     if (pointer == null) {
       return;
     }
-    pointer.setPosition(diagramPoint);
+    pointer.setPosition(p);
+    // console.log(p, pointer.isShown, pointer._up.isShown, pointer);
+    this.animateNextFrame();
   }
 
   touchFreeHandler(clientPoint: Point) {
     if (this.recorder.isRecording) {
       const pixelP = this.clientToPixel(clientPoint);
       const diagramPoint = pixelP.transformBy(this.spaceTransforms.pixelToDiagram.matrix());
-      this.recorder.recordEvent('cursorMove', diagramPoint.x, diagramPoint.y);
+      this.previousCursorPoint = diagramPoint;
+      if (this.cursorShown) {
+        this.recorder.recordEvent('cursorMove', diagramPoint.x, diagramPoint.y);
+        this.setCursor(diagramPoint);
+      }
     }
   }
 
@@ -1047,6 +1119,9 @@ class Diagram {
       const diagramPoint = currentPixelPoint
         .transformBy(this.spaceTransforms.pixelToDiagram.matrix());
       this.recorder.recordEvent('cursorMove', diagramPoint.x, diagramPoint.y);
+      if (this.cursorShown) {
+        this.setCursor(diagramPoint);
+      }
     }
 
     if (this.inTransition) {

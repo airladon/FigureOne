@@ -13,6 +13,7 @@ class Gesture {
   end: void => void;
   move: (Point, Point) => boolean;
   free: (Point) => void;
+  cursor: () => void;
 
   constructor(diagram: Diagram) {
     this.diagram = diagram;
@@ -20,6 +21,12 @@ class Gesture {
     // this.diagram.canvas.onmousedown = this.mouseDownHandler.bind(this);
     // this.diagram.canvas.onmouseup = this.mouseUpHandler.bind(this);
     // this.diagram.canvas.onmousemove = this.mouseMoveHandler.bind(this);
+    // Override these if you want to use your own touch handlers
+    this.start = this.diagram.touchDownHandler.bind(this.diagram);
+    this.end = this.diagram.touchUpHandler.bind(this.diagram);
+    this.move = this.diagram.touchMoveHandler.bind(this.diagram);
+    this.free = this.diagram.touchFreeHandler.bind(this.diagram);
+    this.toggleCursor = this.diagram.toggleCursor.bind(this.diagram);
 
     this.addEvent('mousedown', this.mouseDownHandler, false);
     this.addEvent('mouseup', this.mouseUpHandler, false);
@@ -27,6 +34,8 @@ class Gesture {
     this.addEvent('touchstart', this.touchStartHandler, false);
     this.addEvent('touchend', this.touchEndHandler, false);
     this.addEvent('touchmove', this.touchMoveHandler, false);
+    // this.addEvent('keypress', this.keypressHandler, false);
+    document.addEventListener('keypress', this.toggleCursor, false);
     // this.diagram.canvas.addEventListener(
     //   'touchstart',
     //   this.touchStartHandler.bind(this), false,
@@ -40,12 +49,6 @@ class Gesture {
     //   this.touchMoveHandler.bind(this), false,
     // );
     this.enable = true;
-
-    // Override these if you want to use your own touch handlers
-    this.start = this.diagram.touchDownHandler.bind(this.diagram);
-    this.end = this.diagram.touchUpHandler.bind(this.diagram);
-    this.move = this.diagram.touchMoveHandler.bind(this.diagram);
-    this.free = this.diagram.touchFreeHandler.bind(this.diagram);
   }
 
   addEvent(event: string, method: Object, flag: boolean) {
@@ -123,6 +126,15 @@ class Gesture {
     this.endHandler();
   }
 
+  keypressHandler(event: KepressEvent) {
+    console.log(event.code, event.keyCode, String.fromCharCode(event.keyCode))
+    console.log(this.toggleCursor)
+    if (String.fromCharCode(event.keyCode) === 'n' && this.toggleCursor) {
+      console.log('toggling')
+      this.toggleCursor();
+    }
+  }
+
   destroy() {
     this.removeEvent('mousedown', this.mouseDownHandler, false);
     this.removeEvent('mouseup', this.mouseUpHandler, false);
@@ -130,6 +142,8 @@ class Gesture {
     this.removeEvent('touchstart', this.touchStartHandler, false);
     this.removeEvent('touchend', this.touchEndHandler, false);
     this.removeEvent('touchmove', this.touchMoveHandler, false);
+    // this.removeEvent('keypress', this.keypressHandler, false);
+    document.removeEvent('keypress', this.keypressHandler, false);
   }
 }
 

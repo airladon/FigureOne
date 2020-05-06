@@ -218,6 +218,45 @@ function getTimeToIndex(
   return nextTime - time;
 }
 
+function getCursorState(
+  events: Array<Array<number | string | null> | [number, number | 'next' | 'prev'] | [number, Object]>,
+  eventIndex: number,
+) {
+  let i = eventIndex;
+  let touchUp = null;
+  let cursorPosition = null;
+  let showCursor = null;
+  while (i >= 0 && (cursorPosition == null || touchUp == null || showCursor == null)) {
+    const [, eventType] = events[i];
+    if (cursorPosition == null && eventType === 'cursorMove') {
+      const [, , x, y] = events[i];
+      cursorPosition = new Point(x, y);
+    }
+    if (touchUp == null && eventType === 'touchUp') {
+      touchUp = true;
+    }
+    if (touchUp == null && eventType === 'touchDown') {
+      touchUp = false;
+      if (cursorPosition == null) {
+        const [, , x, y] = events[i];
+        cursorPosition = new Point(x, y);
+      }
+    }
+    if (showCursor == null && eventType === 'showCursor') {
+      showCursor = true;
+    }
+    if (showCursor == null && eventType === 'hideCursor') {
+      showCursor = false;
+    }
+    i -= 1;
+  }
+  return {
+    show: showCursor == null ? false : showCursor,
+    up: touchUp == null ? true : touchUp,
+    position: cursorPosition == null ? new Point(0, 0) : cursorPosition,
+  };
+}
+
 class Recorder {
   // Method for requesting the next animation frame
   events: Array<Array<number | string | null>>;
@@ -257,6 +296,7 @@ class Recorder {
   animateDiagramNextFrame: () => void;
   getElement: (string) => DiagramElement;
   diagramIsInTransition: () => boolean;
+  diagramShowCursor: (boolean) => void;
 
   nextEventTimeout: TimeoutID;
   nextStateTimeout: TimeoutID;
@@ -365,6 +405,7 @@ class Recorder {
       this.getCurrentSlide = null;
       this.startTime = 0;
       this.diagramIsInTransition = () => {};
+      this.diagramShowCursor = () => {};
     }
     return Recorder.instance;
   }
@@ -467,7 +508,7 @@ class Recorder {
   queueRecordState(time: number = 0) {
     this.stateTimeout = setTimeout(() => {
       if (this.isRecording) {
-        if (this.diagramIsInTransition === false) {
+        if (this.diagramIsInTransition() === false) {
           this.recordState(this.getDiagramState());
         }
         this.queueRecordState(this.stateTimeStep * 1000);
@@ -496,10 +537,10 @@ class Recorder {
       reference: Array<Object>,
       map?: UniqueMap,
     },
-    unminify: boolean = false,
+    unminifyFlag: boolean = false,
   ) {
     this.resetStates();
-    if (unminify) {
+    if (unminifyFlag) {
       this.states = this.unminifyStates(states);
     } else {
       this.states.states = states.states;
@@ -723,6 +764,7 @@ class Recorder {
   }
 
   save() {
+    this.show();
     // const slidesOut = [];
     // this.slides.forEach((slide) => {
     //   slidesOut.push(JSON.stringify(slide));
@@ -776,7 +818,7 @@ class Recorder {
     wnd.document.write(`// ${'/'.repeat(500)}<br>`);
     wnd.document.write(`// ${'/'.repeat(500)}<br>`);
     wnd.document.write('<br><br>');
-    this.states.forEach((state) => {
+    this.states.states.forEach((state) => {
       wnd.document.write(JSON.stringify(state), '<br>');
     });
   }
@@ -802,6 +844,7 @@ class Recorder {
     this.slideIndex = Math.max(getPrevIndexForTime(this.slides, time), 0);
     this.stateIndex = Math.max(getPrevIndexForTime(this.states.states, time), 0);
     this.eventIndex = Math.max(getPrevIndexForTime(this.events, time), 0);
+    const cursorState = getCursorState(this.events, this.eventIndex);
     if (this.states.states[this.stateIndex][0] < this.slides[this.slideIndex][0]) {
       this.setState(this.stateIndex);
     }
@@ -815,7 +858,15 @@ class Recorder {
       this.audio.currentTime = time;
     }
     this.currentTime = time;
-    this.showPointer();
+    if (cursorState.show && cursorState.up) {
+      this.diagramShowCursor('up');
+      this.cursorMove(cursorState.position);
+    } else if (cursorState.show && cursorState.up === false) {
+      this.diagramShowCursor('down');
+      this.cursorMove(cursorState.position);
+    } else {
+      this.diagramShowCursor('hide');
+    }
   }
 
   // ////////////////////////////////////
@@ -852,7 +903,7 @@ class Recorder {
     // this.queuePlaybackSlide(getTimeToIndex(this.slides, this.slideIndex + 1, fromTime));
     this.playbackSlide();
     this.setState(this.stateIndex);
-    this.showPointer();
+    // this.showPointer();
     this.queuePlaybackEvent(getTimeToIndex(this.events, this.eventIndex, fromTime));
     if (this.audio) {
       this.isAudioPlaying = true;
@@ -1120,6 +1171,17 @@ class Recorder {
         }
         break;
       }
+      case 'showCursor': {
+        const [, , x: number, y: number] = event;
+        this.diagramShowCursor('up');
+        this.cursorMove(new Point(x, y));
+        break;
+      }
+      case 'hideCursor': {
+        this.diagramShowCursor('hide');
+        break;
+      }
+
       // case 'cursorMoved': {
       //   const [, x, y] = event;
       //   this.
