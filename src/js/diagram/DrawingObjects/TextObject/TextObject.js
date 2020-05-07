@@ -553,6 +553,12 @@ class TextObject extends DrawingObject {
     });
     return glBoundary;
   }
+
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [
+      ...super._getStateProperties(),
+    ];
+  }
 }
 
 export { TextObject, DiagramText, DiagramFont };

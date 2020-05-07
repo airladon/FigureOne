@@ -2172,6 +2172,7 @@ class DiagramElementPrimitive extends DiagramElement {
       'angleToDraw',
       'lengthToDraw',
       'cannotTouchHole',
+      'drawingObject',
     ];
   }
 

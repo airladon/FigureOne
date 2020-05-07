@@ -178,6 +178,7 @@ class Diagram {
   cursorShown: boolean;
   pointerElementName: string;
   isTouchDown: boolean;
+  setStateCallback: ?(string | (() => void));
   // pauseAfterNextDrawFlag: boolean;
 
   constructor(options: TypeDiagramOptions) {
@@ -198,6 +199,7 @@ class Diagram {
     this.isPaused = false;
     this.scrolled = false;
     this.pointerElementName = 'pointer';
+    this.setStateCallback = null;
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
@@ -421,6 +423,9 @@ class Diagram {
     // console.log(state)
     setState(this, state);
     this.elements.setTimeDelta(performance.now() / 1000 - this.stateTime);
+    if (this.setStateCallback != null) {
+      this.fnMap.exec(this.setStateCallback);
+    }
     this.animateNextFrame();
   }
 
@@ -802,7 +807,6 @@ class Diagram {
         } else {
           this.showCursor('up');
         }
-        console.log(this.previousCursorPoint)
         this.setCursor(this.previousCursorPoint);
       } else {
         this.recorder.recordEvent('hideCursor');
