@@ -3,6 +3,7 @@
 import {
   Point, Rect, getBoundingRect,
 } from '../../tools/g2';
+import { getState } from '../state';
 
 // A Drawing object can be:
 //  - GL primitive vertices
@@ -154,6 +155,14 @@ class DrawingObject {
 
   // eslint-disable-next-line no-unused-vars, class-methods-use-this
   change(drawingPrimitive: any, border: Array<Array<Point>>, holes: Array<Array<Point>>) {
+  }
+
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [];
+  }
+
+  _state() {
+    return getState(this, this._getStateProperties());
   }
 }
 
