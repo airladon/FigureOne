@@ -504,13 +504,18 @@ class Recorder {
     this.events.push([this.now() / 1000, ...out]);
   }
 
+  recordCurrentState() {
+    this.recordState(this.getDiagramState());
+  }
+
   // States are recorded every second
   queueRecordState(time: number = 0) {
     this.stateTimeout = setTimeout(() => {
       if (this.isRecording) {
-        if (this.diagramIsInTransition() === false) {
-          this.recordState(this.getDiagramState());
-        }
+        // if (this.diagramIsInTransition() === false) {
+        //   this.recordState(this.getDiagramState());
+        // }
+        this.recordCurrentState();
         this.queueRecordState(this.stateTimeStep * 1000);
       }
     }, time);
@@ -764,7 +769,7 @@ class Recorder {
   }
 
   save() {
-    this.show();
+    // this.show();
     // const slidesOut = [];
     // this.slides.forEach((slide) => {
     //   slidesOut.push(JSON.stringify(slide));
@@ -787,9 +792,9 @@ class Recorder {
     // download(`${dateStr} ${location} states.txt`, statesOut.join('\n'));
     const minifiedStates = this.minifyStates(true, 4);
     // const minifiedEvents = this.minifyEvents(true, 4);
-    download(`${dateStr} ${location} slides.json`, JSON.stringify(this.slides));
-    download(`${dateStr} ${location} events.json`, JSON.stringify(minify(this.events)));
-    download(`${dateStr} ${location} states.json`, JSON.stringify(minifiedStates));
+    download(`${dateStr} ${location}.vidslides.json`, JSON.stringify(this.slides));
+    download(`${dateStr} ${location}.videvents.json`, JSON.stringify(minify(this.events)));
+    download(`${dateStr} ${location}.vidstates.json`, JSON.stringify(minifiedStates));
     // download(`${dateStr} ${location} statesNew.json`, JSON.stringify(this.statesNew));
     // download(`${dateStr} ${location} statesNew1.json`, JSON.stringify(this.statesNew1));
   }

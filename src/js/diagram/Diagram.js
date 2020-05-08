@@ -853,7 +853,7 @@ class Diagram {
     }
     if (this.recorder.isPlaying) {
       this.recorder.pausePlayback();
-      this.showCursor('hide')
+      this.showCursor('hide');
     }
     if (this.inTransition) {
       return false;
