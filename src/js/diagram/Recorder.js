@@ -11,6 +11,26 @@ import type { DiagramElement } from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
 // Singleton class that contains projects global variables
 
+type TypeEvent = ['touchUp']
+                 | ['touchDown', number, number]
+                 | ['start']
+                 | ['startBeingMoved', string]
+                 | ['moved', string, Object]
+                 | ['startMovingFreely', string, Object, Object]
+                 | ['stopBeingMoved', string, Object, Object]
+                 | ['cursorMove', number, number]
+                 | ['showCursor', number, number]
+                 | ['hideCursor']
+                 | ['click', string];
+
+type TypeState = [number, Object];
+
+type TypeSlide = ['goto' | 'next' | 'prev', string, number];
+
+type TypeEvents = Array<[number, TypeEvent]>;
+type TypeSlides = Array<[number, TypeSlide]>;
+type TypeStates = Array<[number, TypeState]>;
+
 function download(filename: string, text: string) {
   const element = document.createElement('a');
   element.setAttribute(
@@ -28,7 +48,7 @@ function download(filename: string, text: string) {
 }
 
 function getIndexOfEarliestTime(
-  events: Array<Array<number | string | null> | [number, number | 'next' | 'prev'] | [number, Object]>,
+  recordedData: TypeEvents | TypeSlides | TypeStates,
   index: number,
 ) {
   if (index < 1) {
@@ -36,9 +56,9 @@ function getIndexOfEarliestTime(
   }
   let i = index;
   let same = true;
-  const time = events[index][0];
+  const time = recordedData[index][0];
   while (i > 0 && same) {
-    const prevTime = events[i - 1][0];
+    const prevTime = recordedData[i - 1][0];
     if (prevTime !== time) {
       same = false;
     } else {
@@ -49,16 +69,16 @@ function getIndexOfEarliestTime(
 }
 
 function getIndexOfLatestTime(
-  events: Array<Array<number | string | null> | [number, number | 'next' | 'prev'] | [number, Object]>,
+  recordedData: TypeEvents | TypeSlides | TypeStates,
   index: number,
 ) {
-  const time = events[index][0];
+  const time = recordedData[index][0];
   let i = index;
   let loop = true;
   while (loop) {
-    if (i === events.length - 1) {
+    if (i === recordedData.length - 1) {
       loop = false;
-    } else if (events[i + 1][0] === time) {
+    } else if (recordedData[i + 1][0] === time) {
       i += 1;
     } else {
       loop = false;
@@ -68,7 +88,7 @@ function getIndexOfLatestTime(
 }
 
 function getLastUniqueIndeces(
-  events: Array<Array<number | string | null> | [number, number | 'next' | 'prev'] | [number, Object]>,
+  recordedData: TypeEvents,
   startIndex: number,
   endIndex: number,
 ) {
@@ -79,23 +99,24 @@ function getLastUniqueIndeces(
     start = 0;
   }
   for (let i = start; i <= endIndex; i += 1) {
-    const event = events[i];
-    const [, type] = event;
+    const data = recordedData[i];
+    const [, event] = data;
+    const [type] = event;
     types[type] = i;
   }
   return Object.values(types);
 }
 
 function getIndexRangeForTime(
-  events: Array<Array<number | string | null> | [number, number | 'next' | 'prev'] | [number, Object]>,
+  recordedData: TypeEvents | TypeSlides | TypeStates,
   time: number,
   startSearch: number = 0,
-  endSearch: number = events.length - 1,
+  endSearch: number = recordedData.length - 1,
 ) {
-  if (events.length === 0) {
+  if (recordedData.length === 0) {
     return [-1, -1];
   }
-  const startTime = parseFloat(events[startSearch][0]);
+  const startTime = parseFloat(recordedData[startSearch][0]);
   if (time === startTime) {
     return [startSearch, startSearch];
   }
@@ -103,7 +124,7 @@ function getIndexRangeForTime(
     return [-1, startSearch];
   }
 
-  const endTime = parseFloat(events[endSearch][0]);
+  const endTime = parseFloat(recordedData[endSearch][0]);
   if (time === endTime) {
     return [endSearch, endSearch];
   }
@@ -118,50 +139,50 @@ function getIndexRangeForTime(
   }
 
   const midSearch = startSearch + Math.floor(searchRange / 2);
-  const midTime = parseFloat(events[midSearch][0]);
+  const midTime = parseFloat(recordedData[midSearch][0]);
   if (time === midTime) {
     return [midSearch, midSearch];
   }
   if (time < midTime) {
-    return getIndexRangeForTime(events, time, startSearch, midSearch);
+    return getIndexRangeForTime(recordedData, time, startSearch, midSearch);
   }
-  return getIndexRangeForTime(events, time, midSearch, endSearch)
+  return getIndexRangeForTime(recordedData, time, midSearch, endSearch);
 }
 
 function getNextIndexForTime(
-  events: Array<Array<number | string | null> | [number, number | 'next' | 'prev'] | [number, Object]>,
+  recordedData: TypeEvents | TypeSlides | TypeStates,
   time: number,
   startSearch: number = 0,
-  endSearch: number = events.length - 1,
+  endSearch: number = recordedData.length - 1,
 ) {
-  const nextIndex = getIndexRangeForTime(events, time, startSearch, endSearch)[1];
-  return getIndexOfEarliestTime(events, nextIndex);
+  const nextIndex = getIndexRangeForTime(recordedData, time, startSearch, endSearch)[1];
+  return getIndexOfEarliestTime(recordedData, nextIndex);
 }
 
 function getPrevIndexForTime(
-  events: Array<Array<number | string | null> | [number, number | 'next' | 'prev'] | [number, Object]>,
+  recordedData: TypeEvents | TypeSlides | TypeStates,
   time: number,
   startSearch: number = 0,
-  endSearch: number = events.length - 1,
+  endSearch: number = recordedData.length - 1,
 ) {
-  const prevIndex = getIndexRangeForTime(events, time, startSearch, endSearch)[0];
-  return getIndexOfEarliestTime(events, prevIndex);
+  const prevIndex = getIndexRangeForTime(recordedData, time, startSearch, endSearch)[0];
+  return getIndexOfEarliestTime(recordedData, prevIndex);
 }
 
 function getTimeToIndex(
-  events: Array<Array<number | string | null> | [number, number | 'next' | 'prev'] | [number, Object]>,
+  recordedData: TypeEvents | TypeSlides | TypeStates,
   eventIndex: number,
   time: number,
 ) {
-  if (eventIndex === -1 || eventIndex > events.length - 1) {
+  if (eventIndex === -1 || eventIndex > recordedData.length - 1) {
     return -1;
   }
-  const nextTime = events[eventIndex][0];
+  const nextTime = recordedData[eventIndex][0];
   return nextTime - time;
 }
 
 function getCursorState(
-  events: Array<Array<number | string | null> | [number, number | 'next' | 'prev'] | [number, Object]>,
+  recordedData: TypeEvents | TypeSlides | TypeStates,
   eventIndex: number,
 ) {
   let i = eventIndex;
@@ -169,9 +190,9 @@ function getCursorState(
   let cursorPosition = null;
   let showCursor = null;
   while (i >= 0 && (cursorPosition == null || touchUp == null || showCursor == null)) {
-    const [, eventType] = events[i];
-    if (cursorPosition == null && eventType === 'cursorMove') {
-      const [, , x, y] = events[i];
+    const [, eventType] = recordedData[i];
+    if (cursorPosition == null && eventType === 'cursorMove') { // $FlowFixMe
+      const [, , x, y] = recordedData[i];
       cursorPosition = new Point(x, y);
     }
     if (touchUp == null && eventType === 'touchUp') {
@@ -179,8 +200,8 @@ function getCursorState(
     }
     if (touchUp == null && eventType === 'touchDown') {
       touchUp = false;
-      if (cursorPosition == null) {
-        const [, , x, y] = events[i];
+      if (cursorPosition == null) {  // $FlowFixMe
+        const [, , x, y] = recordedData[i];
         cursorPosition = new Point(x, y);
       }
     }
@@ -200,19 +221,17 @@ function getCursorState(
 }
 
 class Recorder {
-  // Method for requesting the next animation frame
-  events: Array<Array<number | string | null>>;
-  // states: Array<[number, Object]>;
-  slides: Array<[number, 'goto' | 'next' | 'prev', string, number]>;
+  events: Array<[number, TypeEvent]>;
+  slides: Array<[number, TypeSlide]>;
   states: {
-    ref: Array<Object>,
+    reference: Array<Object>,
     map: UniqueMap,
-    states: Array<[number, Object]>,
+    states: Array<[number, TypeState]>,
   };
 
-  eventsCache: Array<Array<number | string | null>>;
-  slidesCache: Array<[number, 'goto' | 'next' | 'prev', string, number]>;
-  statesCache: Array<[number, Object]>;
+  eventsCache: Array<[number, TypeEvent]>;
+  slidesCache: Array<[number, TypeSlide]>;
+  statesCache: Array<[number, TypeState]>;
 
   isRecording: boolean;
   isPlaying: boolean;
@@ -220,7 +239,7 @@ class Recorder {
   currentTime: number;
   precision: number;
 
-  touchDown: (Point) => boolean;
+  touchDown: (Point) => void;
   touchUp: void => void;
   // touchMoveDown: (Point, Point) => boolean;
   cursorMove: (Point) => void;
@@ -236,9 +255,9 @@ class Recorder {
   animation: GlobalAnimation;
   previousPoint: ?Point;
   animateDiagramNextFrame: () => void;
-  getDiagramElement: (string) => DiagramElement;
+  getDiagramElement: (string) => ?DiagramElement;
   diagramIsInTransition: () => boolean;
-  diagramShowCursor: (boolean) => void;
+  diagramShowCursor: ('up' | 'down' | 'hide') => void;
 
   nextEventTimeout: TimeoutID;
   nextStateTimeout: TimeoutID;
@@ -287,7 +306,7 @@ class Recorder {
       this.states = {
         states: [],
         map: new UniqueMap(),
-        ref: {},
+        reference: [],
       };
       this.currentTime = 0;
       this.isRecording = false;
@@ -302,7 +321,7 @@ class Recorder {
       this.touchUp = () => {};
       this.cursorMove = () => {};
       this.animateDiagramNextFrame = () => {};
-      this.getDiagramElement = () => {};
+      this.getDiagramElement = () => null;
       this.getDiagramState = () => {};
       this.setDiagramState = () => {};
       this.pauseDiagram = () => {};
@@ -315,13 +334,11 @@ class Recorder {
       this.playbackStopped = null;
       this.getCurrentSlide = null;
       this.startTime = 0;
-      this.diagramIsInTransition = () => {};
+      this.diagramIsInTransition = () => false;
       this.diagramShowCursor = () => {};
     }
     return Recorder.instance;
   }
-
-  
 
   // ////////////////////////////////////
   // ////////////////////////////////////
@@ -361,6 +378,7 @@ class Recorder {
     //   const endTime = this.states.slice(-1)[0][0];
     //   time = Math.max(time, endTime);
     // }
+    // eslint-disable-next-line no-restricted-globals
     if (this.audio != null && !isNaN(this.audio.duration)) {
       time = Math.max(time, this.audio.duration);
     }
@@ -376,7 +394,7 @@ class Recorder {
     this.states = {
       states: [],
       map: new UniqueMap(),
-      reference: null,
+      reference: [],
     };
   }
 
@@ -408,8 +426,9 @@ class Recorder {
         return;
       }
       out.push(arg);
-    })
-    this.eventsCache.push([this.now() / 1000, ...out]);
+    });
+    // $FlowFixMe
+    this.eventsCache.push([this.now() / 1000, [...out]]);
   }
 
   recordCurrentState() {
@@ -433,20 +452,20 @@ class Recorder {
     minifiedEvents: {
       map: UniqueMap | Object,
       minified: Object,
-    } | Array<Array<number | string>>,
+    } | Array<TypeEvents>,
     isMinified: boolean = false,
   ) {
     this.events = [];
-    if (isMinified) {
+    if (isMinified) { // $FlowFixMe
       this.events = unminify(minifiedEvents);
-    } else {
+    } else {  // $FlowFixMe
       this.events = minifiedEvents;
     }
   }
 
   loadStates(
     states: {
-      states: Array<Array<number, number, Object>>,
+      states: TypeStates,
       reference: Array<Object>,
       map?: UniqueMap,
     },
@@ -463,10 +482,8 @@ class Recorder {
 
 
   addReferenceState(state: Object, precision: ?number = 4) {
-    if (this.states.reference == null) {
-      this.states.reference = [];
+    if (this.states.reference.length === 0) {
       this.states.reference.push(duplicate(state));
-      // console.log(state)
       return;
     }
     const diff = getObjectDiff(this.states.reference[0], [], state, precision);
@@ -494,14 +511,18 @@ class Recorder {
     const diff = getObjectDiff(ref, [], state, precision);
     this.states.states.push([
       this.now() / 1000,
-      this.states.reference.length - 1,
-      diff,
+      [
+        this.states.reference.length - 1,
+        diff,
+      ],
     ]);
   }
 
   getState(index: number) {
     const state = this.states.states[index];
-    const [time, refIndex, diff] = state;
+    const [time, stateTimeAndObject] = state;
+    const [refIndex, diff] = stateTimeAndObject;
+    // const [time, refIndex, diff] = state;
     // console.log('Index', refIndex)
     const ref = this.getReferenceState(refIndex);
     // console.log(diff)
@@ -539,10 +560,10 @@ class Recorder {
 
     if (asObject) {
       refDiff = refsDiffPaths.map(d => diffPathsToObj(d));
-      statesDiff = statesDiffPaths.map(d => [d[0], d[1], diffPathsToObj(d[2])]);
+      statesDiff = statesDiffPaths.map(d => [d[0], d[1][0], diffPathsToObj(d[1][1])]);
     } else {
       refDiff = refsDiffPaths.map(d => duplicate(d));
-      statesDiff = statesDiffPaths.map(d => duplicate(d));
+      statesDiff = statesDiffPaths.map(d => [d[0], d[1][0], duplicate(d[1][1])]);
     }
 
     const states = {
@@ -560,12 +581,20 @@ class Recorder {
   // eslint-disable-next-line class-methods-use-this
   unminifyStates(compressedStates: Object) {
     const states = unminify(compressedStates);
+    if (typeof states !== 'object' || states.reference == null || states.states == null) {
+      return {
+        reference: [],
+        states: [],
+      };
+    }
     const ref = states.reference[0];
     let refDiff = states.reference.slice(1);
     let statesDiff = states.states;
     if (states.isObject) {
       refDiff = refDiff.map(d => diffObjToPaths(d));
-      statesDiff = statesDiff.map(d => [d[0], d[1], diffObjToPaths(d[2])]);
+      statesDiff = statesDiff.map(d => [d[0], [d[1], diffObjToPaths(d[2])]]);
+    } else {
+      statesDiff = statesDiff.map(d => [d[0], [d[1], d[2]]]);
     }
     return {
       reference: [ref, ...refDiff],
@@ -581,12 +610,12 @@ class Recorder {
   }
 
   recordSlide(direction: 'goto' | 'next' | 'prev', message: string, slide: number) {
-    this.slidesCache.push([this.now() / 1000, direction, message, slide]);
+    this.slidesCache.push([this.now() / 1000, [direction, message, slide]]);
   }
 
-  recordClick(id: string) {
-    this.eventsCache.push([this.now(), id]);
-  }
+  // recordClick(id: string) {
+  //   this.eventsCache.push([this.now(), [id]]);
+  // }
 
   save() {
     const dateStr = new Date().toISOString();
@@ -707,8 +736,11 @@ class Recorder {
         this.isAudioPlaying = false;
         this.checkStopPlayback();
       };
-      this.audio.removeEventListener('ended', audioEnded.bind(this), false);
-      this.audio.addEventListener('ended', audioEnded.bind(this), false);
+      const { audio } = this;
+      if (audio != null) {
+        audio.removeEventListener('ended', audioEnded.bind(this), false);
+        audio.addEventListener('ended', audioEnded.bind(this), false);
+      }
     }
 
     this.animateDiagramNextFrame();
@@ -851,7 +883,7 @@ class Recorder {
     const prevEventIndex = Math.max(getPrevIndexForTime(this.events, time), 0);
     if (prevEventIndex > this.lastShownEventIndex) {
       const lastIndexWithSameTime = getIndexOfLatestTime(this.events, prevEventIndex);
-      let indexRange = getLastUniqueIndeces(
+      const indexRange = getLastUniqueIndeces(
         this.events,
         this.lastShownEventIndex,
         lastIndexWithSameTime,
@@ -911,11 +943,11 @@ class Recorder {
     if (index > this.events.length - 1) {
       return;
     }
-    const event = this.events[index];
-    const [, eventType] = event;
+    const event = this.events[index][1];
+    const [eventType] = event;
     switch (eventType) {
       case 'touchDown': {
-        const [, , x, y] = event;
+        const [, x, y] = event;
         this.touchDown(new Point(x, y));
         break;
       }
@@ -923,12 +955,12 @@ class Recorder {
         this.touchUp();
         break;
       case 'cursorMove': {
-        const [, , x: number, y: number] = event;
+        const [, x: number, y: number] = event;
         this.cursorMove(new Point(x, y));
         break;
       }
       case 'startBeingMoved': {
-        const [, , elementPath] = event;
+        const [, elementPath] = event;
         const element = this.getDiagramElement(elementPath);
         if (element != null) {
           element.startBeingMoved();
@@ -936,7 +968,7 @@ class Recorder {
         break;
       }
       case 'moved': {
-        const [, , elementPath, transformDefinition] = event;
+        const [, elementPath, transformDefinition] = event;
         const element = this.getDiagramElement(elementPath);
         if (element != null) {
           const transform = getTransform(transformDefinition);
@@ -945,7 +977,7 @@ class Recorder {
         break;
       }
       case 'click': {
-        const [, , id] = event;
+        const [, id] = event;
         const element = document.getElementById(id);
         if (element != null) {
           element.click();
@@ -953,7 +985,7 @@ class Recorder {
         break;
       }
       case 'showCursor': {
-        const [, , x: number, y: number] = event;
+        const [, x: number, y: number] = event;
         this.diagramShowCursor('up');
         this.cursorMove(new Point(x, y));
         break;
@@ -968,7 +1000,7 @@ class Recorder {
       //   this.
       // }
       case 'stopBeingMoved': {
-        const [, , elementPath, transformDefinition, velocityDefinition] = event;
+        const [, elementPath, transformDefinition, velocityDefinition] = event;
         const element = this.getDiagramElement(elementPath);
         const transform = getTransform(transformDefinition);
         const velocity = getTransform(velocityDefinition);
@@ -978,7 +1010,7 @@ class Recorder {
         break;
       }
       case 'startMovingFreely': {
-        const [, , elementPath, transformDefinition, velocityDefinition] = event;
+        const [, elementPath, transformDefinition, velocityDefinition] = event;
         const element = this.getDiagramElement(elementPath);
         const transform = getTransform(transformDefinition);
         const velocity = getTransform(velocityDefinition);
@@ -1053,8 +1085,8 @@ class Recorder {
     if (index > this.slides.length - 1) {
       return;
     }
-    const slide = this.slides[index];
-    const [, direction, message, slideNumber] = slide;
+    const slide = this.slides[index][1];
+    const [direction, message, slideNumber] = slide;
     const currentSlide = this.getCurrentSlide();
     if (direction === 'next' && forceGoTo === false && currentSlide === slideNumber - 1) {
       if (this.nextSlide != null) {
