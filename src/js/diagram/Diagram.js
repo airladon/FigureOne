@@ -377,7 +377,7 @@ class Diagram {
     // this.simulateTouchMove.bind(this),
     this.recorder.cursorMove = this.setCursor.bind(this);
     this.recorder.animateDiagramNextFrame = this.animateNextFrame.bind(this);
-    this.recorder.getElement = this.getElement.bind(this);
+    this.recorder.getDiagramElement = this.getElement.bind(this);
     this.recorder.getDiagramState = this.getState.bind(this);
     this.recorder.setDiagramState = this.setState.bind(this);
     // this.pauseAfterNextDraw.bind(this),
