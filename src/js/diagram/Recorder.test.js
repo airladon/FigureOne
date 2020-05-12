@@ -249,17 +249,17 @@ describe('Diagram Recorder', () => {
     });
     describe('Get last unique indeces', () => {
       test('simple', () => {
-        events = [[0, 'a'], [1, 'a'], [1, 'b'], [2, 'a']];
+        events = [[0, ['a']], [1, ['a']], [1, ['b']], [2, ['a']]];
         const indeces = getLastUniqueIndeces(events, 1, 2);
         expect(indeces).toEqual([1, 2]);
       });
       test('entire array', () => {
-        events = [[0, 'a'], [1, 'a'], [1, 'b'], [2, 'a']];
+        events = [[0, ['a']], [1, ['a']], [1, ['b']], [2, ['a']]];
         const indeces = getLastUniqueIndeces(events, 0, 3);
         expect(indeces.sort()).toEqual([2, 3]);
       });
       test('three', () => {
-        events = [[0, 'a'], [1, 'b'], [1, 'b'], [2, 'c']];
+        events = [[0, ['a']], [1, ['b']], [1, ['b']], [2, ['c']]];
         const indeces = getLastUniqueIndeces(events, 0, 3);
         expect(indeces.sort()).toEqual([0, 2, 3]);
       });
@@ -296,7 +296,7 @@ describe('Diagram Recorder', () => {
       recorder.states = {
         states: [],
         map: new tools.UniqueMap(),
-        reference: null,
+        reference: [],
       };
       // ({ recorder } = diagram);
     });
@@ -333,9 +333,9 @@ describe('Diagram Recorder', () => {
     test('add State to 0 reference', () => {
       recorder.addReferenceState(state1);
       recorder.addState(state2);
-      recorder.states.states[0][2].diff['.stateTime'] = 3;
-      expect(recorder.states.states[0][1]).toBe(0);
-      expect(recorder.states.states[0][2]).toEqual({
+      recorder.states.states[0][1][1].diff['.stateTime'] = 3;
+      expect(recorder.states.states[0][1][0]).toBe(0);
+      expect(recorder.states.states[0][1][1]).toEqual({
         diff: {
           '.elements.elements.line.transform.state[3].state[2]': 1,
           '.stateTime': 3,
@@ -357,9 +357,9 @@ describe('Diagram Recorder', () => {
       recorder.addReferenceState(state1);
       recorder.addReferenceState(state2);
       recorder.addState(state3);
-      recorder.states.states[0][2].diff['.stateTime'] = 3;
-      expect(recorder.states.states[0][1]).toBe(1);
-      expect(recorder.states.states[0][2]).toEqual({
+      recorder.states.states[0][1][1].diff['.stateTime'] = 3;
+      expect(recorder.states.states[0][1][0]).toBe(1);
+      expect(recorder.states.states[0][1][1]).toEqual({
         diff: {
           '.elements.elements.line.transform.state[3].state[2]': 2,
           '.stateTime': 3,
@@ -402,8 +402,8 @@ describe('Diagram Recorder', () => {
       const unmini = recorder.unminifyStates(mini);
       expect(unmini.reference).toEqual([{ elements: 1 }]);
       expect(unmini.states[0][0]).toBe(time);
-      expect(unmini.states[0][1]).toBe(0);
-      expect(unmini.states[0][2]).toEqual({
+      expect(unmini.states[0][1][0]).toBe(0);
+      expect(unmini.states[0][1][1]).toEqual({
         diff: { '.elements': 2 },
       });
     });
@@ -431,8 +431,8 @@ describe('Diagram Recorder', () => {
       const unmini = recorder.unminifyStates(mini);
       expect(unmini.reference).toEqual([{ elements: 1 }]);
       expect(unmini.states[0][0]).toBe(time);
-      expect(unmini.states[0][1]).toBe(0);
-      expect(unmini.states[0][2]).toEqual({
+      expect(unmini.states[0][1][0]).toBe(0);
+      expect(unmini.states[0][1][1]).toEqual({
         diff: { '.elements': 2 },
       });
     });
@@ -567,13 +567,13 @@ describe('Diagram Recorder', () => {
       const s2 = diagram.getState();
       recorder.recordState(s2);
 
-      expect(recorder.states.states[0][2]).toEqual({
+      expect(recorder.states.states[0][1][1]).toEqual({
         diff: {
           '.stateTime': 2,
         },
       });
 
-      expect(recorder.states.states[1][2]).toEqual({
+      expect(recorder.states.states[1][1][1]).toEqual({
         diff: {
           '.elements.elements.line.transform.state[3].state[2]': 1,
           '.stateTime': 3,
@@ -625,20 +625,20 @@ describe('Diagram Recorder', () => {
         },
       });
 
-      expect(recorder.states.states[0][2]).toEqual({
+      expect(recorder.states.states[0][1][1]).toEqual({
         diff: {
           '.stateTime': 2,
         },
       });
 
-      expect(recorder.states.states[1][2]).toEqual({
+      expect(recorder.states.states[1][1][1]).toEqual({
         diff: {
           '.elements.elements.line.transform.state[3].state[2]': 1,
           '.stateTime': 3,
         },
       });
 
-      expect(recorder.states.states[2][2]).toEqual({
+      expect(recorder.states.states[2][1][1]).toEqual({
         diff: {
           '.elements.elements.line.transform.state[3].state[1]': 1,
           '.elements.elements.line.transform.state[3].state[2]': 2,
@@ -646,7 +646,7 @@ describe('Diagram Recorder', () => {
         },
       });
 
-      expect(recorder.states.states[3][2]).toEqual({
+      expect(recorder.states.states[3][1][1]).toEqual({
         diff: {
           '.elements.elements.line.transform.state[3].state[2]': 3,
           '.stateTime': 6,
@@ -690,13 +690,13 @@ describe('Diagram Recorder', () => {
       const s2 = diagram.getState();
       recorder.recordState(s2);
 
-      expect(recorder.states.states[0][2]).toEqual({
+      expect(recorder.states.states[0][1][1]).toEqual({
         diff: {
           '.stateTime': 2,
         },
       });
 
-      expect(recorder.states.states[1][2]).toEqual({
+      expect(recorder.states.states[1][1][1]).toEqual({
         diff: {
           '.elements.elements.line.transform.state[3].state[2]': 1,
           '.stateTime': 3,
@@ -748,20 +748,20 @@ describe('Diagram Recorder', () => {
         },
       });
 
-      expect(recorder.states.states[0][2]).toEqual({
+      expect(recorder.states.states[0][1][1]).toEqual({
         diff: {
           '.stateTime': 2,
         },
       });
 
-      expect(recorder.states.states[1][2]).toEqual({
+      expect(recorder.states.states[1][1][1]).toEqual({
         diff: {
           '.elements.elements.line.transform.state[3].state[2]': 1,
           '.stateTime': 3,
         },
       });
 
-      expect(recorder.states.states[2][2]).toEqual({
+      expect(recorder.states.states[2][1][1]).toEqual({
         diff: {
           '.elements.elements.line.transform.state[3].state[1]': 1,
           '.elements.elements.line.transform.state[3].state[2]': 2,
@@ -769,7 +769,7 @@ describe('Diagram Recorder', () => {
         },
       });
 
-      expect(recorder.states.states[3][2]).toEqual({
+      expect(recorder.states.states[3][1][1]).toEqual({
         diff: {
           '.elements.elements.line.transform.state[3].state[2]': 3,
           '.stateTime': 6,
