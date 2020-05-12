@@ -262,18 +262,11 @@ class Recorder {
   events: Array<Array<number | string | null>>;
   // states: Array<[number, Object]>;
   slides: Array<[number, 'goto' | 'next' | 'prev', string, number]>;
-  touchEvents: Array<Array<number, string>>
   states: {
     ref: Array<Object>,
     map: UniqueMap,
     states: Array<[number, Object]>,
   };
-
-  // statesNew1: {
-  //   reference: Object,
-  //   states: Array<[number, Object]>,
-  //   map: UniqueMap;
-  // };
 
   isRecording: boolean;
   isPlaying: boolean;
@@ -288,9 +281,11 @@ class Recorder {
   setDiagramState: (Object) => void;
   pauseDiagram: () => void;
   unpauseDiagram: () => void;
+
   eventIndex: number;
   stateIndex: number;
   slideIndex: number;
+
   animation: GlobalAnimation;
   previousPoint: ?Point;
   animateDiagramNextFrame: () => void;
@@ -304,7 +299,6 @@ class Recorder {
 
   stateTimeout: TimeoutID;
   stateTimeStep: number;
-  // currentTime: number;
 
   lastShownEventIndex: number;
   lastShownStateIndex: number;
@@ -322,11 +316,7 @@ class Recorder {
 
   audio: ?HTMLAudioElement;
 
-  // requestNextAnimationFrame: (()=>mixed) => AnimationFrameID;
-  // animationId: AnimationFrameID;    // used to cancel animation frames
   static instance: Object;
-  // drawQueue: Array<(number) => void>;
-  // nextDrawQueue: Array<(number) => void>;
 
   constructor(
     diagramTouchDown?: (Point) => boolean,
@@ -465,26 +455,21 @@ class Recorder {
       map: new UniqueMap(),
       reference: null,
     };
-    // this.states.states = [];
-    // this.states.map.reset();
-    // this.states.reference = null;
   }
 
-  start(slideStart: number = 0) {
+  start(startTime: number = 0) {
     this.events = [];
     this.slides = [];
     this.unpauseDiagram();
-    // this.states.states = [];
-    // this.states.map.reset();
-    // this.states.reference = null;
     this.resetStates();
     this.startTime = this.timeStamp();
     this.isPlaying = false;
     this.isRecording = true;
-    // this.unpauseDiagram();
-    this.recordSlide('goto', '', slideStart);
+    if (startTime === 0) {
+      this.recordSlide('goto', '', 0);
+      this.recordEvent('start');
+    }
     this.queueRecordState(0);
-    this.recordEvent('start');
   }
 
   stop() {
