@@ -391,6 +391,18 @@ class Recorder {
   // Recording
   // ////////////////////////////////////
   // ////////////////////////////////////
+  reset() {
+    this.resetStates();
+    this.eventsCache = [];
+    this.slidesCache = [];
+    this.statesCache = [];
+    this.events = [];
+    this.slides = [];
+    this.startTime = 0;
+    this.isPlaying = false;
+    this.isRecording = false;
+  }
+
   resetStates() {
     this.states = {
       states: [],
