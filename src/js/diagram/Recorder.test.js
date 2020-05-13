@@ -217,7 +217,7 @@ describe('Diagram Recorder', () => {
       // let cursorEvents;
       beforeEach(() => {
         global.performance.now = () => 0;
-        recorder.start();
+        recorder.startRecording();
         global.performance.now = () => 1000;
         recorder.recordEvent('showCursor', 0, 0);
         global.performance.now = () => 2000;
@@ -240,7 +240,7 @@ describe('Diagram Recorder', () => {
         recorder.recordEvent('hideCursor');
         global.performance.now = () => 11000;
         recorder.recordEvent('doNothing');
-        recorder.stop();
+        recorder.stopRecording();
       });
       test('Negative Index', () => {
         const result = getCursorState(recorder.events, -1);
@@ -860,7 +860,7 @@ describe('Diagram Recorder', () => {
   describe('Recorder Flow', () => {
     test('Events', () => {
       global.performance.now = () => 0;
-      recorder.start();
+      recorder.startRecording();
       global.performance.now = () => 100;
       recorder.recordEvent('showCursor', 1, 1);
       global.performance.now = () => 200;
@@ -871,7 +871,7 @@ describe('Diagram Recorder', () => {
       recorder.recordEvent('TouchUp');
       global.performance.now = () => 700;
       recorder.recordEvent('hideCursor');
-      recorder.stop();
+      recorder.stopRecording();
       expect(recorder.events[0]).toEqual([0, ['start']]);
       expect(recorder.events[1]).toEqual([0.1, ['showCursor', 1, 1]]);
       expect(recorder.events[2]).toEqual([0.2, ['TouchDown', 1, 1]]);
@@ -883,12 +883,12 @@ describe('Diagram Recorder', () => {
     test('States', () => {
       global.performance.now = () => 0;
       recorder.stateTimeStep = 0.5;
-      recorder.start();
+      recorder.startRecording();
       global.performance.now = () => 500;
       jest.advanceTimersByTime(500);
       global.performance.now = () => 1000;
       jest.advanceTimersByTime(500);
-      recorder.stop();
+      recorder.stopRecording();
       expect(recorder.states.reference).toHaveLength(1);
       expect(recorder.states.reference[0].elements.elements.a.isShown).toBe(true);
       expect(recorder.states.states).toHaveLength(3);
@@ -899,12 +899,12 @@ describe('Diagram Recorder', () => {
     test('Slides', () => {
       global.performance.now = () => 0;
       recorder.stateTimeStep = 0.5;
-      recorder.start();
+      recorder.startRecording();
       global.performance.now = () => 500;
       recorder.recordSlide('next', '', 1);
       global.performance.now = () => 1000;
       recorder.recordSlide('next', '', 2);
-      recorder.stop();
+      recorder.stopRecording();
       expect(recorder.slides).toHaveLength(3);
       expect(recorder.slides[0]).toEqual([0, ['goto', '', 0]]);
       expect(recorder.slides[1]).toEqual([0.5, ['next', '', 1]]);
