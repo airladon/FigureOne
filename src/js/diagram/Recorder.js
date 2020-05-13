@@ -182,7 +182,7 @@ function getTimeToIndex(
 }
 
 function getCursorState(
-  recordedData: TypeEvents | TypeSlides | TypeStates,
+  recordedData: TypeEvents,
   eventIndex: number,
 ) {
   let i = eventIndex;
@@ -190,9 +190,10 @@ function getCursorState(
   let cursorPosition = null;
   let showCursor = null;
   while (i >= 0 && (cursorPosition == null || touchUp == null || showCursor == null)) {
-    const [, eventType] = recordedData[i];
+    const [, event] = recordedData[i];
+    const [eventType] = event;
     if (cursorPosition == null && eventType === 'cursorMove') { // $FlowFixMe
-      const [, , x, y] = recordedData[i];
+      const [, x, y] = event;
       cursorPosition = new Point(x, y);
     }
     if (touchUp == null && eventType === 'touchUp') {
@@ -201,7 +202,7 @@ function getCursorState(
     if (touchUp == null && eventType === 'touchDown') {
       touchUp = false;
       if (cursorPosition == null) {  // $FlowFixMe
-        const [, , x, y] = recordedData[i];
+        const [, x, y] = event;
         cursorPosition = new Point(x, y);
       }
     }
@@ -284,6 +285,9 @@ class Recorder {
 
   static instance: Object;
 
+  // All slides, events and states are relative to 0, where 0 is the start of a recording.
+  // Slides, events and states do not have to have a 0 time, maybe the first event will not happen till 1s in
+  //
   constructor(
     // diagramTouchDown?: (Point) => boolean,
     // diagramTouchUp?: void => void,
@@ -685,9 +689,19 @@ class Recorder {
   }
 
   setToTime(time: number) {
-    this.slideIndex = Math.max(getPrevIndexForTime(this.slides, time), 0);
-    this.stateIndex = Math.max(getPrevIndexForTime(this.states.states, time), 0);
-    this.eventIndex = Math.max(getPrevIndexForTime(this.events, time), 0);
+    this.slideIndex = getPrevIndexForTime(this.slides, time);
+    this.stateIndex = getPrevIndexForTime(this.states.states, time);
+    this.eventIndex = getPrevIndexForTime(this.events, time);
+
+    let slideTime = null;
+    if (this.slideIndex > -1) {
+      [slideTime] = this.slides[this.slideIndex];
+    }
+    let stateTime = null;
+    if (this.stateIndex > -1) {
+      [stateTime] = this.states.states[this.stateIndex];
+    }
+
     const cursorState = getCursorState(this.events, this.eventIndex);
     if (this.states.states[this.stateIndex][0] < this.slides[this.slideIndex][0]) {
       this.setState(this.stateIndex);
@@ -1127,4 +1141,5 @@ export {
   getLastUniqueIndeces,
   getNextIndexForTime,
   getPrevIndexForTime,
+  getCursorState,
 };

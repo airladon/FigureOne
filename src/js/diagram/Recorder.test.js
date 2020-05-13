@@ -1,6 +1,6 @@
-// import {
-//   Point, Rect, Line,
-// } from '../tools/g2';
+import {
+  Point,
+} from '../tools/g2';
 // import {
 //   round,
 // } from '../tools/math';
@@ -13,6 +13,7 @@ import {
   getIndexOfEarliestTime,
   getIndexOfLatestTime,
   getLastUniqueIndeces,
+  getCursorState,
 } from './Recorder';
 
 tools.isTouchDevice = jest.fn();
@@ -178,6 +179,11 @@ describe('Diagram Recorder', () => {
         const index = getPrevIndexForTime(events, 0.45);
         expect(index).toBe(-1);
       });
+      test('Empty events', () => {
+        events = [];
+        const index = getPrevIndexForTime(events, 0.45);
+        expect(index).toBe(-1);
+      });
       test('3 Event random', () => {
         events = [[0], [1], [2]];
         const index = getPrevIndexForTime(events, 0.45);
@@ -205,6 +211,96 @@ describe('Diagram Recorder', () => {
         expect(index).toBe(1);
         index = getPrevIndexForTime(events, 2.5);
         expect(index).toBe(2);
+      });
+    });
+    describe.only('Get Cursor State', () => {
+      // let cursorEvents;
+      beforeEach(() => {
+        global.performance.now = () => 0;
+        recorder.start();
+        global.performance.now = () => 1000;
+        recorder.recordEvent('showCursor', 0, 0);
+        global.performance.now = () => 2000;
+        recorder.recordEvent('cursorMove', 1, 1);
+        global.performance.now = () => 3000;
+        recorder.recordEvent('cursorMove', 2, 2);
+        global.performance.now = () => 4000;
+        recorder.recordEvent('touchDown', 3, 3);
+        global.performance.now = () => 5000;
+        recorder.recordEvent('cursorMove', 4, 4);
+        global.performance.now = () => 6000;
+        recorder.recordEvent('cursorMove', 5, 5);
+        global.performance.now = () => 7000;
+        recorder.recordEvent('touchUp');
+        global.performance.now = () => 8000;
+        recorder.recordEvent('cursorMove', 7, 7);
+        global.performance.now = () => 9000;
+        recorder.recordEvent('cursorMove', 8, 8);
+        global.performance.now = () => 10000;
+        recorder.recordEvent('hideCursor');
+        global.performance.now = () => 11000;
+        recorder.recordEvent('doNothing');
+        recorder.stop();
+      });
+      test('Negative Index', () => {
+        const result = getCursorState(recorder.events, -1);
+        expect(result).toEqual({
+          show: false, up: true, position: new Point(0, 0),
+        });
+      });
+      test('Start', () => {
+        const result = getCursorState(recorder.events, 0);
+        expect(result).toEqual({
+          show: false, up: true, position: new Point(0, 0),
+        });
+      });
+      test('On Show', () => {
+        const result = getCursorState(recorder.events, 1);
+        expect(result).toEqual({
+          show: true, up: true, position: new Point(0, 0),
+        });
+      });
+      test('Between Show and Down', () => {
+        const result = getCursorState(recorder.events, 2);
+        expect(result).toEqual({
+          show: true, up: true, position: new Point(1, 1),
+        });
+      });
+      test('On Down', () => {
+        const result = getCursorState(recorder.events, 4);
+        expect(result).toEqual({
+          show: true, up: false, position: new Point(3, 3),
+        });
+      });
+      test('Between Down and Up', () => {
+        const result = getCursorState(recorder.events, 5);
+        expect(result).toEqual({
+          show: true, up: false, position: new Point(4, 4),
+        });
+      });
+      test('On Up', () => {
+        const result = getCursorState(recorder.events, 7);
+        expect(result).toEqual({
+          show: true, up: true, position: new Point(5, 5),
+        });
+      });
+      test('Between up and hide', () => {
+        const result = getCursorState(recorder.events, 8);
+        expect(result).toEqual({
+          show: true, up: true, position: new Point(7, 7),
+        });
+      });
+      test('On hide', () => {
+        const result = getCursorState(recorder.events, 10);
+        expect(result).toEqual({
+          show: false, up: true, position: new Point(8, 8),
+        });
+      });
+      test('After hide', () => {
+        const result = getCursorState(recorder.events, 11);
+        expect(result).toEqual({
+          show: false, up: true, position: new Point(8, 8),
+        });
       });
     });
     describe('Get index of earliest time', () => {
@@ -487,83 +583,6 @@ describe('Diagram Recorder', () => {
       const state1New = recorder.getState(1);
       expect(state1Old).toEqual(state1New);
     });
-    // test('diagram simple 1', () => {
-    //   // recorder.resetStates();
-    //   diagram.htmlId = 'aaa'
-    //   line.setPosition(0, 0);
-    //   global.performance.now = () => 1000;
-    //   const ref1 = diagram.getState();
-    //   global.performance.now = () => 2000;
-    //   const s1 = diagram.getState();
-    //   recorder.addReferenceState(ref1);
-    //   recorder.recordState(s1);
-
-    //   line.setPosition(0, 1);
-    //   global.performance.now = () => 3000;
-    //   const s2 = diagram.getState();
-    //   recorder.recordState(s2);
-
-    //   expect(recorder.states.states[0][2]).toEqual({
-    //     diff: {
-    //       '.stateTime': 2,
-    //     },
-    //   });
-
-    //   expect(recorder.states.states[1][2]).toEqual({
-    //     diff: {
-    //       '.elements.elements.line.transform.state[3].state[2]': 1,
-    //       '.stateTime': 3,
-    //     },
-    //   });
-
-    //   const mini = recorder.minifyStates(false, 4);
-    //   const unmini = recorder.unminifyStates(mini);
-    //   recorder.loadStates(unmini);
-    //   line.setPosition(10, 10);
-      
-      
-    //   recorder.setState(0);
-    //   expect(line.getPosition().y).toBe(0);
-    //   recorder.setState(1);
-    //   expect(line.getPosition().y).toBe(1);
-    // });
-    // test('diagram simple 2', () => {
-    //   // recorder.resetStates();
-    //   line.setPosition(0, 0);
-    //   global.performance.now = () => 1000;
-    //   const ref1 = diagram.getState();
-    //   global.performance.now = () => 2000;
-    //   const s1 = diagram.getState();
-    //   recorder.addReferenceState(ref1);
-    //   recorder.recordState(s1);
-
-    //   line.setPosition(0, 1);
-    //   global.performance.now = () => 3000;
-    //   const s2 = diagram.getState();
-    //   recorder.recordState(s2);
-
-    //   expect(recorder.states.states[0][2]).toEqual({
-    //     diff: {
-    //       '.stateTime': 2,
-    //     },
-    //   });
-
-    //   expect(recorder.states.states[1][2]).toEqual({
-    //     diff: {
-    //       '.elements.elements.line.transform.state[3].state[2]': 1,
-    //       '.stateTime': 3,
-    //     },
-    //   });
-
-    //   const mini = recorder.minifyStates(false, 4);
-    //   const unmini = recorder.unminifyStates(mini);
-    //   recorder.loadStates(unmini);
-    //   line.setPosition(10, 10);
-    //   recorder.setState(0);
-    //   expect(line.getPosition().y).toBe(0);
-    //   recorder.setState(1);
-    //   expect(line.getPosition().y).toBe(1);
-    // });
     test('diagram simple', () => {
       // recorder.resetStates();
       line.setPosition(0, 0);
@@ -853,7 +872,6 @@ describe('Diagram Recorder', () => {
       global.performance.now = () => 700;
       recorder.recordEvent('hideCursor');
       recorder.stop();
-
       expect(recorder.events[0]).toEqual([0, ['start']]);
       expect(recorder.events[1]).toEqual([0.1, ['showCursor', 1, 1]]);
       expect(recorder.events[2]).toEqual([0.2, ['TouchDown', 1, 1]]);
@@ -887,7 +905,6 @@ describe('Diagram Recorder', () => {
       global.performance.now = () => 1000;
       recorder.recordSlide('next', '', 2);
       recorder.stop();
-      console.log(recorder.slides)
       expect(recorder.slides).toHaveLength(3);
       expect(recorder.slides[0]).toEqual([0, ['goto', '', 0]]);
       expect(recorder.slides[1]).toEqual([0.5, ['next', '', 1]]);
