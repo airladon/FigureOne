@@ -346,7 +346,8 @@ class Recorder {
   // ////////////////////////////////////
   // ////////////////////////////////////
   timeStamp() {   // eslint-disable-line class-methods-use-this
-    return (new Date()).getTime();
+    // return (new Date()).getTime();
+    return performance.now();
   }
 
   now() {   // eslint-disable-line class-methods-use-this
