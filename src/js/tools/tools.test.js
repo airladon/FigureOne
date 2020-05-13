@@ -1003,3 +1003,77 @@ describe('Ref and Diff to object', () => {
     expect(o3.b).toEqual([{ c: 3, d: 1 }, 4, [1, 5]]);
   });
 });
+describe('ObjectTracker', () => {
+  test('Add Reference', () => {
+    const tracker = new tools.ObjectTracker();
+    const obj = { a: 1 };
+    tracker.addReference(obj);
+    expect(tracker.baseReference).toEqual({ a: 1 });
+  });
+  test('Add Reference Chain', () => {
+    const tracker = new tools.ObjectTracker();
+    const obj = { a: 1, b: 2 };
+    const obj1 = { a: 1, b: 3 };
+    tracker.setBaseReference(obj);
+    tracker.addReference(obj1, 'ref1');
+    expect(tracker.baseReference).toEqual({ a: 1, b: 2 });
+    expect(tracker.references.ref1).toEqual({
+      diff: { diff: { '.b': 3 } },
+      basedOn: '__base',
+    });
+    const getRef = tracker.getReference('ref1');
+    expect(getRef).toEqual({ a: 1, b: 3 });
+  });
+  test('Add Reference Chain - 3 Links', () => {
+    const tracker = new tools.ObjectTracker();
+    const obj = { a: 1, b: 2 };
+    const obj1 = { a: 1, b: 3, c: 1 };
+    const obj2 = { a: 2, b: 3, c: 1 };
+    tracker.setBaseReference(obj);
+    tracker.addReference(obj1, 'ref1');
+    tracker.addReference(obj2, 'ref2', 'ref1');
+    expect(tracker.baseReference).toEqual({ a: 1, b: 2 });
+    expect(tracker.references.ref1).toEqual({
+      diff: {
+        diff: { '.b': 3 },
+        added: { '.c': 1 },
+      },
+      basedOn: '__base',
+    });
+    expect(tracker.references.ref2).toEqual({
+      diff: { diff: { '.a': 2 } },
+      basedOn: 'ref1',
+    });
+
+    const getRef = tracker.getReference('ref2');
+    expect(getRef).toEqual({ a: 2, b: 3, c: 1 });
+  });
+  test('Add Object', () => {
+    const tracker = new tools.ObjectTracker();
+    const obj = { a: 1, b: 1 };
+    tracker.addReference(obj);
+
+    const obj1 = { a: 1, b: 2 };
+    tracker.add(1, obj1);
+    expect(tracker.diffs[0]).toEqual([1, '__base', { diff: { '.b': 2 } }]);
+
+    const getObj = tracker.getFromIndex(0);
+    expect(getObj).toEqual({ a: 1, b: 2 });
+  });
+  test('Add Object based on secondary ref', () => {
+    const tracker = new tools.ObjectTracker();
+    const ref = { a: 1, b: 1 };
+    tracker.addReference(ref);
+
+    const ref1 = { a: 1, b: 2, c: 1 };
+    tracker.addReference(ref1, 'ref1', '__base');
+
+    const obj1 = { a: 1, b: 3, c: 1 };
+    tracker.add(1, obj1, 'ref1');
+    expect(tracker.diffs[0]).toEqual([1, 'ref1', { diff: { '.b': 3 } }]);
+
+    const getObj = tracker.getFromIndex(0);
+    expect(getObj).toEqual({ a: 1, b: 3, c: 1 });
+  });
+});
+

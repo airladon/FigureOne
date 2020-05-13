@@ -225,8 +225,11 @@ class Recorder {
   events: Array<[number, TypeEvent]>;
   slides: Array<[number, TypeSlide]>;
   states: {
-    reference: Array<Object>,
-    map: UniqueMap,
+    referenceBase: Object;
+    reference: {
+      [referenceName: string]: [string, Object];  // diff objects to another reference
+    };
+    // map: UniqueMap,
     states: Array<[number, TypeState]>,
   };
 
@@ -435,7 +438,7 @@ class Recorder {
     this.states = {
       states: [],
       map: new UniqueMap(),
-      reference: [],
+      reference: {},
     };
   }
 
@@ -474,7 +477,7 @@ class Recorder {
   loadStates(
     states: {
       states: TypeStates,
-      reference: Array<Object>,
+      reference: { [referenceName: string]: Object },
       map?: UniqueMap,
     },
     unminifyFlag: boolean = false,
@@ -493,7 +496,7 @@ class Recorder {
     asObject: boolean = false,
     precision: ?number = this.precision,
   ) {
-    const ref = duplicate(this.states.reference[0]);
+    const ref = duplicate(this.states.reference.base);
     const refsDiffPaths = this.states.reference.slice(1);
     const statesDiffPaths = this.states.states;
 
@@ -571,7 +574,7 @@ class Recorder {
   addState(state: Object, precision: ?number = this.precision) {
     const ref = this.getReferenceState(-1);
     const diff = getObjectDiff(ref, [], state, precision);
-    this.states.states.push([
+    this.statesCache.push([
       this.now(),
       [
         this.states.reference.length - 1,
