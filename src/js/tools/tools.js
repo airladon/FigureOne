@@ -840,6 +840,99 @@ function diffObjToPaths(diff: { added: Object, removed: Object, diff: Object }) 
   return out;
 }
 
+// Class that can track an object's differences over time
+class ObjectTracker {
+  baseReference: ?Object;
+  references: {
+    [refName: string]: {
+      basedOn: string,
+      diff: Object,
+    },
+  };
+
+  precision: number;
+
+  //             time   refName  diff
+  diffs: Array<[number, string, Object]>
+
+  constructor(precision: number = 5) {
+    this.baseReference = null;
+    this.references = {};
+    this.diffs = [];
+    this.precision = precision;
+  }
+
+  setBaseReference(obj: Object) {
+    this.baseReference = duplicate(obj);
+  }
+
+  addReference(
+    obj: Object,
+    refName: string,
+    basedOn: string = '__base',
+  ) {
+    if (this.baseReference == null || refName === '__base') {
+      this.setBaseReference(obj);
+    }
+    if (refName !== '__base') {
+      this.references[refName] = {
+        diff: this.getDiffToReference(obj, basedOn),
+        basedOn,
+      };
+    }
+  }
+
+  getReferenceChain(name: string, chain: Array<Object>) {
+    if (name === '__base') {
+      return chain;
+    }
+    if (this.references[name] == null) {
+      return chain;
+    }
+    return this.getReferenceChain(
+      this.references[name].basedOn, [this.references[name].diff, ...chain],
+    );
+  }
+
+  getReference(refName: string) {
+    const referenceChain = this.getReferenceChain(refName, []);
+    return refAndDiffToObject(this.baseReference, ...referenceChain);
+  }
+
+  getDiffToReference(
+    obj: Object,
+    refName: string,
+  ) {
+    const referenceChain = this.getReferenceChain(refName, []);
+    return getObjectDiff(this.baseReference, referenceChain, obj, this.precision);
+  }
+
+  getObjFromDiffAndReference(
+    diff: Object,
+    refName: string,
+  ) {
+    const referenceChain = this.getReferenceChain(refName, []);
+    const diffs = [...referenceChain, diff];
+    return refAndDiffToObject(this.baseReference, ...diffs);
+  }
+
+  add(time: number, obj: Object, refName = '__base') {
+    if (this.baseReference == null) {
+      this.addReference(obj, '__base');
+    }
+    const diff = this.getDiffToReference(obj, refName);
+    this.diffs.push([time, refName, diff]);
+  }
+
+  getFromIndex(index: number) {
+    if (index > this.diffs.length) {
+      return null;
+    }
+    const [, basedOn, diff] = this.diffs[index];
+    return this.getObjFromDiffAndReference(diff, basedOn);
+  }
+}
+
 // function diffToObj(diff: Object, obj: object) {
 //   const { added, diff, removed } = diff;
 
@@ -932,6 +1025,6 @@ export {
   duplicate, assignObjectFromTo, joinObjectsWithOptions,
   objectToPaths, getObjectDiff, updateObjFromPath, pathsToObj,
   UniqueMap, compressObject, refAndDiffToObject, uncompressObject,
-  unminify, minify,
+  unminify, minify, ObjectTracker,
 };
 
