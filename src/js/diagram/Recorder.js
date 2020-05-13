@@ -416,6 +416,9 @@ class Recorder {
   stop() {
     this.isRecording = false;
     clearTimeout(this.stateTimeout);
+    this.events = this.eventsCache;
+    this.states.state = this.statesCache;
+    this.slides = this.slidesCache;
   }
 
   recordEvent(...args: Array<number | string>) {
@@ -437,15 +440,19 @@ class Recorder {
 
   // States are recorded every second
   queueRecordState(time: number = 0) {
-    this.stateTimeout = setTimeout(() => {
+    const recordAndQueue = () => {
       if (this.isRecording) {
-        // if (this.diagramIsInTransition() === false) {
-        //   this.recordState(this.getDiagramState());
-        // }
         this.recordCurrentState();
         this.queueRecordState(this.stateTimeStep * 1000);
       }
-    }, time);
+    };
+    if (time === 0) {
+      recordAndQueue();
+    } else {
+      this.stateTimeout = setTimeout(() => {
+        recordAndQueue();
+      }, time);
+    }
   }
 
   loadEvents(
@@ -541,15 +548,7 @@ class Recorder {
   minifyStates(
     asObject: boolean = false,
     precision: ?number = 4,
-  ): {
-    [reference: string]: Object,
-    [isObject: string]: boolean,
-    [states: string]: {
-      [diff: string]: Object,
-      [added: string]: Object,
-      [removed: string]: Object,
-    }
-  } {
+  ) {
     // const map = new UniqueMap();
     const ref = duplicate(this.states.reference[0]);
     const refsDiffPaths = this.states.reference.slice(1);
@@ -581,7 +580,7 @@ class Recorder {
   // eslint-disable-next-line class-methods-use-this
   unminifyStates(compressedStates: Object) {
     const states = unminify(compressedStates);
-    if (typeof states !== 'object' || states.reference == null || states.states == null) {
+    if (typeof states !== 'object' || states.reference.length == null || states.states == null) {
       return {
         reference: [],
         states: [],
@@ -603,7 +602,7 @@ class Recorder {
   }
 
   recordState(state: Object, precision: number = 4) {
-    if (this.states.reference == null) {
+    if (this.states.reference.length === 0) {
       this.addReferenceState(state);
     }
     this.addState(state, precision);

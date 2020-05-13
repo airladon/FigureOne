@@ -29,6 +29,16 @@ describe('Diagram Recorder', () => {
     diagram = makeDiagram();
     ({ recorder } = diagram);
     events = [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9], [10]];
+    diagram.addElement({
+      name: 'a',
+      method: 'polygon',
+      options: {
+        color: [1, 0, 0, 1],
+        radius: 1,
+        width: 0.1,
+      },
+    });
+    diagram.initialize();
   });
   describe('Find Index', () => {
     describe('Next', () => {
@@ -824,6 +834,20 @@ describe('Diagram Recorder', () => {
       expect(line.getPosition().y).toBe(0);
       recorder.setState(1);
       expect(line.getPosition().y).toBe(1);
+    });
+  });
+  describe('Recorder Flow', () => {
+    test.only('Initial', () => {
+      global.performance.now = () => 0;
+      recorder.start();
+      global.performance.now = () => 1000;
+      recorder.stop();
+      console.log(recorder.events)
+      console.log(recorder.states)
+      console.log(recorder.slides)
+      // console.log(recorder.eventsCache)
+      // console.log(recorder.statesCache)
+      // console.log(recorder.slidesCache)
     });
   });
 });
