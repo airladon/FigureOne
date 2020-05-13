@@ -234,11 +234,21 @@ class Recorder {
   slidesCache: Array<[number, TypeSlide]>;
   statesCache: Array<[number, TypeState]>;
 
-  isRecording: boolean;
-  isPlaying: boolean;
-  startTime: number;
-  currentTime: number;
-  precision: number;
+  state: 'recording' | 'playing' | 'idle';
+  isAudioPlaying: boolean;
+  videoToNowDelta: number;     // performance.now() - deltaToNow = video time
+  currentTime: number;    // The current video time location
+  duration: number;       // The duration of the video
+  precision: number;      // The precision with which to record numbers
+
+  eventIndex: number;
+  stateIndex: number;
+  slideIndex: number;
+  lastShownEventIndex: number;
+  lastShownStateIndex: number;
+  lastShownSlideIndex: number;
+
+  stateTimeStep: number;      // in seconds
 
   touchDown: (Point) => void;
   touchUp: void => void;
@@ -248,10 +258,6 @@ class Recorder {
   setDiagramState: (Object) => void;
   pauseDiagram: () => void;
   unpauseDiagram: () => void;
-
-  eventIndex: number;
-  stateIndex: number;
-  slideIndex: number;
 
   animation: GlobalAnimation;
   previousPoint: ?Point;
@@ -265,12 +271,6 @@ class Recorder {
   nextSlideTimeout: TimeoutID;
 
   stateTimeout: TimeoutID;
-  stateTimeStep: number;
-
-  lastShownEventIndex: number;
-  lastShownStateIndex: number;
-  lastShownSlideIndex: number;
-  isAudioPlaying: boolean;
 
   nextSlide: ?() => void;
   prevSlide: ?() => void;
@@ -279,7 +279,7 @@ class Recorder {
 
   playbackStopped: ?() =>void;
 
-  lastTime: number;
+  // lastTime: number;
 
   audio: ?HTMLAudioElement;
 
@@ -288,39 +288,20 @@ class Recorder {
   // All slides, events and states are relative to 0, where 0 is the start of a recording.
   // Slides, events and states do not have to have a 0 time, maybe the first event will not happen till 1s in
   //
-  constructor(
-    // diagramTouchDown?: (Point) => boolean,
-    // diagramTouchUp?: void => void,
-    // diagramCursorMove?: (Point) => void,
-    // diagramTouchMoveDown?: (Point, Point) => boolean,
-    // diagramCursorMove?: (Point) => void,
-    // animateDiagramNextFrame?: () => void,
-    // getDiagramElement?: (string) => DiagramElement,
-    // getDiagramState?: () => Object,
-    // setDiagramState?: (Object) => void,
-    // pauseDiagram: () => void,
-    // unpauseDiagram: () => void,
-  ) {
+  constructor() {
     // If the instance alread exists, then don't create a new instance.
     // If it doesn't, then setup some default values.
     if (!Recorder.instance) {
       Recorder.instance = this;
-      this.events = [];
-      this.slides = [];
-      this.states = {
-        states: [],
-        map: new UniqueMap(),
-        reference: [],
-      };
-      this.currentTime = 0;
-      this.isRecording = false;
-      this.precision = 5;
-      this.stateTimeStep = 1000;
-      this.lastShownEventIndex = -1;
-      this.lastShownStateIndex = -1;
-      this.lastShownSlideIndex = -1;
+      // reset all data
+      this.reset();
+
+      // default recording values
+      this.precision = 4;
+      this.stateTimeStep = 1;
+
+      // diagram and topic functions
       this.animation = new GlobalAnimation();
-      this.previousPoint = null;
       this.touchDown = () => {};
       this.touchUp = () => {};
       this.cursorMove = () => {};
@@ -334,10 +315,8 @@ class Recorder {
       this.prevSlide = null;
       this.goToSlide = null;
       this.audio = null;
-      this.isAudioPlaying = false;
       this.playbackStopped = null;
       this.getCurrentSlide = null;
-      this.startTime = 0;
       this.diagramIsInTransition = () => false;
       this.diagramShowCursor = () => {};
     }
@@ -355,44 +334,81 @@ class Recorder {
   }
 
   now() {   // eslint-disable-line class-methods-use-this
-    return this.timeStamp() - this.startTime;
+    return (this.timeStamp() - this.videoToNowDelta) / 1000;
   }
 
   getCurrentTime() {
-    if (this.isPlaying) {
-      return this.now() / 1000;
+    if (this.state !== 'idle') {
+      return this.now();
     }
     return this.currentTime;
   }
 
-  setStartTime(fromTime: number = 0) {
-    this.startTime = this.timeStamp() - fromTime * 1000;
+  setVideoToNowDeltaTime(fromTime: number = 0) {
+    this.videoToNowDelta = this.timeStamp() - fromTime * 1000;
   }
 
-  getTotalTime() {
-    let time = 0;
+  calcDuration() {
+    let slidesTime = 0;
+    let statesTime = 0;
+    let audioTime = 0;
+    let eventsTime = 0;
+    let slidesCacheTime = 0;
+    let eventsCacheTime = 0;
+    let statesCacheTime = 0;
+
     if (this.slides.length > 0) {
-      const endTime = this.slides.slice(-1)[0][0];
-      time = Math.max(time, endTime);
+      [slidesTime] = this.slides[this.slides.length - 1];
     }
     if (this.events.length > 0) {
-      const endTime = this.events.slice(-1)[0][0];
-      time = Math.max(time, endTime);
+      [eventsTime] = this.events[this.events.length - 1];
     }
-    // if (this.states.length > 0) {
-    //   const endTime = this.states.slice(-1)[0][0];
-    //   time = Math.max(time, endTime);
-    // }
+    if (this.states.states.length > 0) {
+      [statesTime] = this.states.states[this.states.states.length - 1];
+    }
+    if (this.slidesCache.length > 0) {
+      [slidesCacheTime] = this.slidesCache[this.slides.length - 1];
+    }
+    if (this.eventsCache.length > 0) {
+      [eventsCacheTime] = this.eventsCache[this.events.length - 1];
+    }
+    if (this.statesCache.length > 0) {
+      [statesCacheTime] = this.statesCache[this.statesCache.length - 1];
+    }
     // eslint-disable-next-line no-restricted-globals
     if (this.audio != null && !isNaN(this.audio.duration)) {
-      time = Math.max(time, this.audio.duration);
+      audioTime = this.audio.duration;
     }
-    return time;
+    return Math.max(
+      slidesTime, audioTime, statesTime, eventsTime, slidesCacheTime,
+      statesCacheTime, eventsCacheTime,
+    );
   }
+
+  // getTotalTime() {
+  //   let time = 0;
+  //   if (this.slides.length > 0) {
+  //     const endTime = this.slides.slice(-1)[0][0];
+  //     time = Math.max(time, endTime);
+  //   }
+  //   if (this.events.length > 0) {
+  //     const endTime = this.events.slice(-1)[0][0];
+  //     time = Math.max(time, endTime);
+  //   }
+  //   // if (this.states.length > 0) {
+  //   //   const endTime = this.states.slice(-1)[0][0];
+  //   //   time = Math.max(time, endTime);
+  //   // }
+  //   // eslint-disable-next-line no-restricted-globals
+  //   if (this.audio != null && !isNaN(this.audio.duration)) {
+  //     time = Math.max(time, this.audio.duration);
+  //   }
+  //   return time;
+  // }
 
   // ////////////////////////////////////
   // ////////////////////////////////////
-  // Recording
+  // Initialization
   // ////////////////////////////////////
   // ////////////////////////////////////
   reset() {
@@ -402,9 +418,17 @@ class Recorder {
     this.statesCache = [];
     this.events = [];
     this.slides = [];
-    this.startTime = 0;
-    this.isPlaying = false;
-    this.isRecording = false;
+    this.videoToNowDelta = 0;
+    this.state = 'idle';
+    this.lastShownEventIndex = -1;
+    this.lastShownStateIndex = -1;
+    this.lastShownSlideIndex = -1;
+    this.previousPoint = null;
+    this.isAudioPlaying = false;
+    this.currentTime = 0;
+    this.duration = 0;
+    // this.isPlaying = false;
+    // this.isRecording = false;
   }
 
   resetStates() {
@@ -413,63 +437,6 @@ class Recorder {
       map: new UniqueMap(),
       reference: [],
     };
-  }
-
-  start(startTime: number = 0) {
-    this.eventsCache = [];
-    this.slidesCache = [];
-    this.unpauseDiagram();
-    this.statesCache = [];
-    this.startTime = this.timeStamp();
-    this.isPlaying = false;
-    this.isRecording = true;
-    if (startTime === 0) {
-      this.recordSlide('goto', '', 0);
-      this.recordEvent('start');
-    }
-    this.queueRecordState(0);
-  }
-
-  stop() {
-    this.isRecording = false;
-    clearTimeout(this.stateTimeout);
-    this.events = this.eventsCache;
-    this.states.state = this.statesCache;
-    this.slides = this.slidesCache;
-  }
-
-  recordEvent(...args: Array<number | string>) {
-    const out = [];
-    args.forEach((arg) => {
-      if (typeof arg === 'number' && this.precision > -1) {
-        out.push(round(arg, this.precision));
-        return;
-      }
-      out.push(arg);
-    });
-    // $FlowFixMe
-    this.eventsCache.push([this.now() / 1000, [...out]]);
-  }
-
-  recordCurrentState() {
-    this.recordState(this.getDiagramState());
-  }
-
-  // States are recorded every second
-  queueRecordState(time: number = 0) {
-    const recordAndQueue = () => {
-      if (this.isRecording) {
-        this.recordCurrentState();
-        this.queueRecordState(this.stateTimeStep * 1000);
-      }
-    };
-    if (time === 0) {
-      recordAndQueue();
-    } else {
-      this.stateTimeout = setTimeout(() => {
-        recordAndQueue();
-      }, time);
-    }
   }
 
   loadEvents(
@@ -485,6 +452,23 @@ class Recorder {
     } else {  // $FlowFixMe
       this.events = minifiedEvents;
     }
+    this.duration = this.calcDuration();
+  }
+
+  loadSlides(
+    minifiedSlides: {
+      map: UniqueMap | Object,
+      minified: Object,
+    } | Array<TypeEvents>,
+    isMinified: boolean = false,
+  ) {
+    this.slides = [];
+    if (isMinified) { // $FlowFixMe
+      this.slides = unminify(minifiedSlides);
+    } else {  // $FlowFixMe
+      this.slides = minifiedSlides;
+    }
+    this.duration = this.calcDuration();
   }
 
   loadStates(
@@ -496,77 +480,19 @@ class Recorder {
     unminifyFlag: boolean = false,
   ) {
     this.resetStates();
-    if (unminifyFlag) {
+    if (unminifyFlag) {  // $FlowFixMe
       this.states = this.unminifyStates(states);
     } else {
       this.states.states = states.states;
       this.states.reference = states.reference;
     }
+    this.duration = this.calcDuration();
   }
-
-
-  addReferenceState(state: Object, precision: ?number = 4) {
-    if (this.states.reference.length === 0) {
-      this.states.reference.push(duplicate(state));
-      return;
-    }
-    const diff = getObjectDiff(this.states.reference[0], [], state, precision);
-    this.states.reference.push(diff);
-  }
-
-  getReferenceState(index: number = 0) {
-    if (this.states.reference.length === 0) {
-      return {};
-    }
-    if (index === 0 || this.states.reference.length === 1) {
-      return this.states.reference[0];
-    }
-    if (index === -1) {
-      return refAndDiffToObject(
-        this.states.reference[0],
-        this.states.reference[this.states.reference.length - 1],
-      );
-    }
-    return refAndDiffToObject(this.states.reference[0], this.states.reference[index]);
-  }
-
-  addState(state: Object, precision: ?number = 4) {
-    const ref = this.getReferenceState(-1);
-    const diff = getObjectDiff(ref, [], state, precision);
-    this.states.states.push([
-      this.now() / 1000,
-      [
-        this.states.reference.length - 1,
-        diff,
-      ],
-    ]);
-  }
-
-  getState(index: number) {
-    const state = this.states.states[index];
-    const [time, stateTimeAndObject] = state;
-    const [refIndex, diff] = stateTimeAndObject;
-    // const [time, refIndex, diff] = state;
-    // console.log('Index', refIndex)
-    const ref = this.getReferenceState(refIndex);
-    // console.log(diff)
-    const stateObj = refAndDiffToObject(ref, diff);
-    return [time, stateObj];
-  }
-
-  // minifyEvents(precision: ?number = 4) {
-  //   const map = new UniqueMap();
-  //   return {
-  //     events: compressObject(this.events, map, true, true, precision),
-  //     map,
-  //   };
-  // }
 
   minifyStates(
     asObject: boolean = false,
-    precision: ?number = 4,
+    precision: ?number = this.precision,
   ) {
-    // const map = new UniqueMap();
     const ref = duplicate(this.states.reference[0]);
     const refsDiffPaths = this.states.reference.slice(1);
     const statesDiffPaths = this.states.states;
@@ -587,11 +513,7 @@ class Recorder {
       states: statesDiff,
       isObject: asObject,
     };
-    // return {
-    //   states: compressObject(states, map, true, true, precision),
-    //   map,
-    // };
-    return minify(states);
+    return minify(states, precision);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -618,20 +540,129 @@ class Recorder {
     };
   }
 
-  recordState(state: Object, precision: number = 4) {
+  // ////////////////////////////////////
+  // ////////////////////////////////////
+  // Recording
+  // ////////////////////////////////////
+  // ////////////////////////////////////
+  startRecording(startTime: number = 0) {
+    this.eventsCache = [];
+    this.slidesCache = [];
+    this.statesCache = [];
+    this.unpauseDiagram();
+    this.setVideoToNowDeltaTime(startTime);
+    this.state = 'recording';
+    if (startTime === 0) {
+      this.recordSlide('goto', '', 0);
+      this.recordEvent('start');
+    }
+    this.queueRecordState(0);
+  }
+
+  stopRecording() {
+    this.state = 'idle';
+    clearTimeout(this.stateTimeout);
+    this.events = this.eventsCache;
+    this.states.states = this.statesCache;
+    this.slides = this.slidesCache;
+    this.duration = this.calcDuration();
+  }
+
+  addState(state: Object, precision: ?number = this.precision) {
+    const ref = this.getReferenceState(-1);
+    const diff = getObjectDiff(ref, [], state, precision);
+    this.states.states.push([
+      this.now(),
+      [
+        this.states.reference.length - 1,
+        diff,
+      ],
+    ]);
+    this.duration = this.calcDuration();
+  }
+
+  recordState(state: Object, precision: number = this.precision) {
     if (this.states.reference.length === 0) {
       this.addReferenceState(state);
     }
     this.addState(state, precision);
   }
 
-  recordSlide(direction: 'goto' | 'next' | 'prev', message: string, slide: number) {
-    this.slidesCache.push([this.now() / 1000, [direction, message, slide]]);
+  recordCurrentState() {
+    this.recordState(this.getDiagramState());
   }
 
-  // recordClick(id: string) {
-  //   this.eventsCache.push([this.now(), [id]]);
-  // }
+  recordSlide(
+    direction: 'goto' | 'next' | 'prev',
+    message: string,
+    slide: number,
+  ) {
+    this.slidesCache.push([this.now(), [direction, message, slide]]);
+  }
+
+  recordEvent(...args: Array<number | string>) {
+    const out = [];
+    args.forEach((arg) => {
+      if (typeof arg === 'number' && this.precision > -1) {
+        out.push(round(arg, this.precision));
+        return;
+      }
+      out.push(arg);
+    });
+    // $FlowFixMe
+    this.eventsCache.push([this.now(), [...out]]);
+  }
+
+  // States are recorded every second
+  queueRecordState(time: number = 0) {
+    const recordAndQueue = () => {
+      if (this.state === 'recording') {
+        this.recordCurrentState();
+        this.queueRecordState(this.stateTimeStep * 1000);
+      }
+    };
+    if (time === 0) {
+      recordAndQueue();
+    } else {
+      this.stateTimeout = setTimeout(() => {
+        recordAndQueue();
+      }, time);
+    }
+  }
+
+  addReferenceState(state: Object, precision: ?number = 4) {
+    if (this.states.reference.length === 0) {
+      this.states.reference.push(duplicate(state));
+      return;
+    }
+    const diff = getObjectDiff(this.states.reference[0], [], state, precision);
+    this.states.reference.push(diff);
+  }
+
+  getReferenceState(index: number = 0) {
+    if (this.states.reference.length === 0) {
+      return {};
+    }
+    if (index === 0 || this.states.reference.length === 1) {
+      return this.states.reference[0];
+    }
+    if (index === -1) {
+      return refAndDiffToObject(
+        this.states.reference[0],
+        this.states.reference[this.states.reference.length - 1],
+      );
+    }
+    return refAndDiffToObject(this.states.reference[0], this.states.reference[index]);
+  }
+
+  getState(index: number) {
+    const state = this.states.states[index];
+    const [time, stateTimeAndObject] = state;
+    const [refIndex, diff] = stateTimeAndObject;
+    const ref = this.getReferenceState(refIndex);
+    const stateObj = refAndDiffToObject(ref, diff);
+    return [time, stateObj];
+  }
 
   save() {
     const dateStr = new Date().toISOString();
@@ -681,8 +712,7 @@ class Recorder {
       return;
     }
     this.pausePlayback();
-    // this.unpauseDiagram();
-    const totalTime = this.getTotalTime();
+    const duration = this.calcDuration();
     const timeTarget = percentTime * totalTime;
     this.setToTime(timeTarget);
     this.pauseDiagram();
@@ -692,6 +722,7 @@ class Recorder {
     this.slideIndex = getPrevIndexForTime(this.slides, time);
     this.stateIndex = getPrevIndexForTime(this.states.states, time);
     this.eventIndex = getPrevIndexForTime(this.events, time);
+    const cursorState = getCursorState(this.events, this.eventIndex);
 
     let slideTime = null;
     if (this.slideIndex > -1) {
@@ -702,20 +733,18 @@ class Recorder {
       [stateTime] = this.states.states[this.stateIndex];
     }
 
-    const cursorState = getCursorState(this.events, this.eventIndex);
-    if (this.states.states[this.stateIndex][0] < this.slides[this.slideIndex][0]) {
+    if (slideTime != null && stateTime != null && stateTime < slideTime) {
+      this.setState(this.stateIndex);
+      this.setSlide(this.slideIndex);
+    } else if (slideTime != null && stateTime != null && stateTime >= slideTime) {
+      this.setSlide(this.slideIndex);
+      this.setState(this.stateIndex);
+    } else if (slideTime != null) {
+      this.setSlide(this.slideIndex);
+    } else if (stateTime != null) {
       this.setState(this.stateIndex);
     }
-    this.setSlide(this.slideIndex, true);
-    if (this.states.states[this.stateIndex][0] >= this.slides[this.slideIndex][0]) {
-      this.setState(this.stateIndex);
-    }
-    this.animateDiagramNextFrame();
-    // console.log(time)
-    if (this.audio) {
-      this.audio.currentTime = time;
-    }
-    this.currentTime = time;
+
     if (cursorState.show && cursorState.up) {
       this.diagramShowCursor('up');
       this.cursorMove(cursorState.position);
@@ -725,6 +754,13 @@ class Recorder {
     } else {
       this.diagramShowCursor('hide');
     }
+
+    if (this.audio) {
+      this.audio.currentTime = time;
+    }
+    this.currentTime = time;
+
+    this.animateDiagramNextFrame();
   }
 
   // ////////////////////////////////////
@@ -732,7 +768,7 @@ class Recorder {
   // Playback
   // ////////////////////////////////////
   // ////////////////////////////////////
-  startPlayback(fromTimeIn: number = this.getCurrentTime()) {
+  startPlayback(fromTimeIn: number = 0) {
     let fromTime = fromTimeIn;
     if (fromTimeIn === this.getTotalTime()) {
       fromTime = 0;
@@ -743,16 +779,17 @@ class Recorder {
     this.isRecording = false;
     this.isPlaying = true;
     this.previousPoint = null;
-    this.setStartTime(fromTime);
     this.touchUp();
+    this.setStartTime(fromTime);
     this.currentTime = fromTime;
     this.unpauseDiagram();
 
-    this.slideIndex = Math.max(getPrevIndexForTime(this.slides, fromTime), 0);
-    this.stateIndex = Math.max(getPrevIndexForTime(this.states.states, fromTime), 0);
-    this.eventIndex = Math.max(getPrevIndexForTime(this.events, fromTime), 0);
-    this.playbackSlide();
-    this.setState(this.stateIndex);
+    this.setToTime(fromTime);
+    // this.slideIndex = getPrevIndexForTime(this.slides, fromTime);
+    // this.stateIndex = getPrevIndexForTime(this.states.states, fromTime);
+    // this.eventIndex = getPrevIndexForTime(this.events, fromTime);
+    // this.playbackSlide();
+    // this.setState(this.stateIndex);
     this.queuePlaybackEvent(getTimeToIndex(this.events, this.eventIndex, fromTime));
     if (this.audio) {
       this.isAudioPlaying = true;
@@ -1082,6 +1119,9 @@ class Recorder {
   }
 
   queuePlaybackSlide(delay: number = 0) {
+    if (this.slideIndex + 1 > this.slides.length - 1) {
+      return;
+    }
     this.nextSlideTimeout = setTimeout(() => {
       if (this.isPlaying) {
         this.slideIndex += 1;
