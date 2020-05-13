@@ -26,6 +26,7 @@ describe('Diagram Recorder', () => {
   let recorder;
   let events;
   beforeEach(() => {
+    jest.useFakeTimers();
     diagram = makeDiagram();
     ({ recorder } = diagram);
     events = [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9], [10]];
@@ -839,15 +840,21 @@ describe('Diagram Recorder', () => {
   describe('Recorder Flow', () => {
     test.only('Initial', () => {
       global.performance.now = () => 0;
+      recorder.stateTimeStep = 0.5;
       recorder.start();
+      global.performance.now = () => 500;
+      jest.advanceTimersByTime(500);
       global.performance.now = () => 1000;
+      jest.advanceTimersByTime(500);
       recorder.stop();
-      console.log(recorder.events)
-      console.log(recorder.states)
-      console.log(recorder.slides)
-      // console.log(recorder.eventsCache)
-      // console.log(recorder.statesCache)
-      // console.log(recorder.slidesCache)
+      expect(recorder.events).toEqual([[0, ['start']]]);
+      expect(recorder.slides).toEqual([[0, ['goto', '', 0]]]);
+      expect(recorder.states.reference).toHaveLength(1);
+      expect(recorder.states.reference[0].elements.elements.a.isShown).toBe(true);
+      expect(recorder.states.states).toHaveLength(3);
+      expect(recorder.states.states[0][0]).toBe(0);
+      expect(recorder.states.states[1][0]).toBe(0.5);
+      expect(recorder.states.states[2][0]).toBe(1);
     });
   });
 });
