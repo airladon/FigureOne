@@ -29,6 +29,7 @@ describe('Diagram Recorder', () => {
     jest.useFakeTimers();
     diagram = makeDiagram();
     ({ recorder } = diagram);
+    recorder.reset();
     events = [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9], [10]];
     diagram.addElement({
       name: 'a',
@@ -838,7 +839,30 @@ describe('Diagram Recorder', () => {
     });
   });
   describe('Recorder Flow', () => {
-    test.only('Initial', () => {
+    test('Events', () => {
+      global.performance.now = () => 0;
+      recorder.start();
+      global.performance.now = () => 100;
+      recorder.recordEvent('showCursor', 1, 1);
+      global.performance.now = () => 200;
+      recorder.recordEvent('TouchDown', 1, 1);
+      global.performance.now = () => 250;
+      recorder.recordEvent('CursorMove', 1.5, 1.5);
+      global.performance.now = () => 600;
+      recorder.recordEvent('TouchUp');
+      global.performance.now = () => 700;
+      recorder.recordEvent('hideCursor');
+      recorder.stop();
+
+      expect(recorder.events[0]).toEqual([0, ['start']]);
+      expect(recorder.events[1]).toEqual([0.1, ['showCursor', 1, 1]]);
+      expect(recorder.events[2]).toEqual([0.2, ['TouchDown', 1, 1]]);
+      expect(recorder.events[3]).toEqual([0.25, ['CursorMove', 1.5, 1.5]]);
+      expect(recorder.events[4]).toEqual([0.6, ['TouchUp']]);
+      expect(recorder.events[5]).toEqual([0.7, ['hideCursor']]);
+      expect(recorder.events).toHaveLength(6);
+    });
+    test('States', () => {
       global.performance.now = () => 0;
       recorder.stateTimeStep = 0.5;
       recorder.start();
@@ -847,14 +871,27 @@ describe('Diagram Recorder', () => {
       global.performance.now = () => 1000;
       jest.advanceTimersByTime(500);
       recorder.stop();
-      expect(recorder.events).toEqual([[0, ['start']]]);
-      expect(recorder.slides).toEqual([[0, ['goto', '', 0]]]);
       expect(recorder.states.reference).toHaveLength(1);
       expect(recorder.states.reference[0].elements.elements.a.isShown).toBe(true);
       expect(recorder.states.states).toHaveLength(3);
       expect(recorder.states.states[0][0]).toBe(0);
       expect(recorder.states.states[1][0]).toBe(0.5);
       expect(recorder.states.states[2][0]).toBe(1);
+    });
+    test('Slides', () => {
+      global.performance.now = () => 0;
+      recorder.stateTimeStep = 0.5;
+      recorder.start();
+      global.performance.now = () => 500;
+      recorder.recordSlide('next', '', 1);
+      global.performance.now = () => 1000;
+      recorder.recordSlide('next', '', 2);
+      recorder.stop();
+      console.log(recorder.slides)
+      expect(recorder.slides).toHaveLength(3);
+      expect(recorder.slides[0]).toEqual([0, ['goto', '', 0]]);
+      expect(recorder.slides[1]).toEqual([0.5, ['next', '', 1]]);
+      expect(recorder.slides[2]).toEqual([1, ['next', '', 2]]);
     });
   });
 });
