@@ -213,7 +213,8 @@ describe('Diagram Recorder', () => {
         expect(index).toBe(2);
       });
     });
-    describe.only('Get Cursor State', () => {
+    // broken
+    describe('Get Cursor State', () => {
       // let cursorEvents;
       beforeEach(() => {
         global.performance.now = () => 0;
@@ -370,6 +371,21 @@ describe('Diagram Recorder', () => {
         events = [[0, ['a']], [1, ['b']], [1, ['b']], [2, ['c']]];
         const indeces = getLastUniqueIndeces(events, 0, 3);
         expect(indeces.sort()).toEqual([0, 2, 3]);
+      });
+    });
+  });
+  describe('Cache', () => {
+    describe('Get Cache Start Time', () => {
+      test.only('simple', () => {
+        recorder.addEventType('cursorMove', () => {}, false);
+        global.performance.now = () => 10;
+        recorder.start();
+        global.performance.now = () => 12;
+        recorder.recordEvent('cursorMove', [1, 1]);
+        global.performance.now = () => 13;
+        recorder.recordEvent('cursorMove', [1, 1]);
+        recorder.stop();
+        console.log(recorder.events);
       });
     });
   });
