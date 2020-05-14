@@ -856,10 +856,14 @@ class ObjectTracker {
   diffs: Array<[number, string, Object]>
 
   constructor(precision: number = 5) {
+    this.precision = precision;
+    this.reset();
+  }
+
+  reset() {
     this.baseReference = null;
     this.references = {};
     this.diffs = [];
-    this.precision = precision;
   }
 
   setBaseReference(obj: Object) {
@@ -916,7 +920,7 @@ class ObjectTracker {
     return refAndDiffToObject(this.baseReference, ...diffs);
   }
 
-  add(time: number, obj: Object, refName = '__base') {
+  add(time: number, obj: Object, refName: string = '__base') {
     if (this.baseReference == null) {
       this.addReference(obj, '__base');
     }
