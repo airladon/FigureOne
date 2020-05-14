@@ -538,7 +538,53 @@ describe('Diagram Recorder', () => {
           '.stateTime': 25,
         });
       });
-      test.only('New states from after 0 to before end', () => {
+      test('New states from 0 to before end', () => {
+        const { a } = diagram.elements.elements;
+        global.performance.now = () => 10000;
+        a.setRotation(0);
+        recorder.startRecording();
+        global.performance.now = () => 13000;
+        a.setRotation(1);
+        recorder.recordCurrentState();
+        global.performance.now = () => 14000;
+        a.setRotation(2);
+        recorder.recordCurrentState();
+        recorder.stopRecording();
+
+        global.performance.now = () => 20000;
+        a.setRotation(0.5);
+        recorder.startRecording(0);
+        global.performance.now = () => 20500;
+        a.setRotation(1.5);
+        recorder.recordCurrentState();
+        global.performance.now = () => 23000;
+        a.setRotation(2.5);
+        recorder.recordCurrentState();
+        recorder.stopRecording();
+
+        expect(recorder.states.diffs[0][0]).toBe(0);
+        expect(recorder.states.diffs[0][2].diff).toEqual({
+          '.elements.elements.a.transform.state[2].state[1]': 0.5,
+          '.stateTime': 20,
+        });
+
+        expect(recorder.states.diffs[1][0]).toBe(0.5);
+        expect(recorder.states.diffs[1][2].diff).toEqual({
+          '.elements.elements.a.transform.state[2].state[1]': 1.5,
+          '.stateTime': 20.5,
+        });
+        expect(recorder.states.diffs[2][0]).toBe(3);
+        expect(recorder.states.diffs[2][2].diff).toEqual({
+          '.elements.elements.a.transform.state[2].state[1]': 2.5,
+          '.stateTime': 23,
+        });
+        expect(recorder.states.diffs[3][0]).toBe(4);
+        expect(recorder.states.diffs[3][2].diff).toEqual({
+          '.elements.elements.a.transform.state[2].state[1]': 2,
+          '.stateTime': 14,
+        });
+      });
+      test('New states from after 0 to before end', () => {
         const { a } = diagram.elements.elements;
         global.performance.now = () => 10000;
         a.setRotation(0);
@@ -584,6 +630,49 @@ describe('Diagram Recorder', () => {
           '.elements.elements.a.transform.state[2].state[1]': 2,
           '.stateTime': 14,
         });
+      });
+      test('New states from after 0 to beyond end', () => {
+        const { a } = diagram.elements.elements;
+        global.performance.now = () => 10000;
+        a.setRotation(0);
+        recorder.startRecording();
+        global.performance.now = () => 13000;
+        a.setRotation(1);
+        recorder.recordCurrentState();
+        global.performance.now = () => 14000;
+        a.setRotation(2);
+        recorder.recordCurrentState();
+        recorder.stopRecording();
+
+        global.performance.now = () => 20000;
+        a.setRotation(0.5);
+        recorder.startRecording(0.5);
+        global.performance.now = () => 20500;
+        a.setRotation(1.5);
+        recorder.recordCurrentState();
+        global.performance.now = () => 26000;
+        a.setRotation(2.5);
+        recorder.recordCurrentState();
+        recorder.stopRecording();
+
+        expect(recorder.states.diffs[0]).toEqual([0, '__base', {}]);
+
+        expect(recorder.states.diffs[1][0]).toBe(0.5);
+        expect(recorder.states.diffs[1][2].diff).toEqual({
+          '.elements.elements.a.transform.state[2].state[1]': 0.5,
+          '.stateTime': 20,
+        });
+        expect(recorder.states.diffs[2][0]).toBe(1);
+        expect(recorder.states.diffs[2][2].diff).toEqual({
+          '.elements.elements.a.transform.state[2].state[1]': 1.5,
+          '.stateTime': 20.5,
+        });
+        expect(recorder.states.diffs[3][0]).toBe(6.5);
+        expect(recorder.states.diffs[3][2].diff).toEqual({
+          '.elements.elements.a.transform.state[2].state[1]': 2.5,
+          '.stateTime': 26,
+        });
+        expect(recorder.states.diffs).toHaveLength(4);
       });
     });
     describe('Merge Cache', () => {
