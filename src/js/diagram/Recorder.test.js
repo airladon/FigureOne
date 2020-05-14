@@ -375,17 +375,54 @@ describe('Diagram Recorder', () => {
     });
   });
   describe('Cache', () => {
-    describe('Get Cache Start Time', () => {
-      test.only('simple', () => {
-        recorder.addEventType('cursorMove', () => {}, false);
-        global.performance.now = () => 10;
-        recorder.start();
-        global.performance.now = () => 12;
+    describe('Cache recording', () => {
+      test('simple', () => {
+        recorder.addEventType('cursorMove', () => {}, true);
+
+        // Starting at 10 seconds global time
+        global.performance.now = () => 10000;
+        recorder.startRecording();
+        global.performance.now = () => 13000;
         recorder.recordEvent('cursorMove', [1, 1]);
-        global.performance.now = () => 13;
+        global.performance.now = () => 14000;
+        recorder.recordEvent('cursorMove', [2, 2]);
+
+        const cache = recorder.eventsCache.cursorMove.list;
+        expect(cache[0]).toEqual([3, [1, 1]]);
+        expect(cache[1]).toEqual([4, [2, 2]]);
+      });
+      test('Two event types', () => {
+        recorder.addEventType('cursorMove', () => {}, true);
+        recorder.addEventType('touchDown', () => {}, false);
+
+        // Starting at 10 seconds global time
+        global.performance.now = () => 10000;
+        recorder.startRecording();
+        global.performance.now = () => 12000;
+        recorder.recordEvent('touchDown', [0.5, 0.5]);
+        global.performance.now = () => 13000;
         recorder.recordEvent('cursorMove', [1, 1]);
-        recorder.stop();
-        console.log(recorder.events);
+        global.performance.now = () => 14000;
+        recorder.recordEvent('cursorMove', [2, 2]);
+        const cursorMoveCache = recorder.eventsCache.cursorMove.list;
+        expect(cursorMoveCache[0]).toEqual([3, [1, 1]]);
+        expect(cursorMoveCache[1]).toEqual([4, [2, 2]]);
+        const touchDownCache = recorder.eventsCache.touchDown.list;
+        expect(touchDownCache[0]).toEqual([2, [0.5, 0.5]]);
+      });
+      test('Event type not in events', () => {
+        recorder.addEventType('cursorMove', () => {}, true);
+
+        // Starting at 10 seconds global time
+        global.performance.now = () => 10000;
+        recorder.startRecording();
+        global.performance.now = () => 12000;
+        recorder.recordEvent('touchDown', [0.5, 0.5]);
+        global.performance.now = () => 13000;
+        recorder.recordEvent('cursorMove', [1, 1]);
+        expect(recorder.eventsCache.touchDown).toBe(undefined);
+        const cursorMoveCache = recorder.eventsCache.cursorMove.list;
+        expect(cursorMoveCache[0]).toEqual([3, [1, 1]]);
       });
     });
   });

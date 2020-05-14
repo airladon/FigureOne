@@ -305,14 +305,14 @@ class Recorder {
   diagramShowCursor: ('up' | 'down' | 'hide') => void;
 
   nextEventTimeout: {
-    [eventName: string]: TimeoutID;
+    [eventName: string]: ?TimeoutID;
   };
 
   // nextEventTimeout: TimeoutID;
-  nextStateTimeout: TimeoutID;
+  nextStateTimeout: ?TimeoutID;
   // nextSlideTimeout: TimeoutID;
 
-  recordStateTimeout: TimeoutID;
+  recordStateTimeout: ?TimeoutID;
 
   // nextSlide: ?() => void;
   // prevSlide: ?() => void;
@@ -458,6 +458,11 @@ class Recorder {
     this.statesCache = new ObjectTracker();
     this.events = {};
     this.eventsCache = {};
+    this.stateIndex = -1;
+    this.eventIndex = {};
+    this.nextEventTimeout = {};
+    this.recordStateTimeout = null;
+    this.nextStateTimeout = null;
     // this.slides = [];
     this.videoToNowDelta = 0;
     this.state = 'idle';
@@ -690,8 +695,11 @@ class Recorder {
 
   stopRecording() {
     this.state = 'idle';
-    clearTimeout(this.recordStateTimeout);
-    this.events = this.eventsCache;
+    if (this.recordStateTimeout != null) {
+      clearTimeout(this.recordStateTimeout);
+      this.recordStateTimeout = null;
+    }
+    this.mergeEventsCache();
     this.states = this.statesCache;
     // this.slides = this.slidesCache;
     this.duration = this.calcDuration();
@@ -708,7 +716,7 @@ class Recorder {
       playbackAction,
     };
     this.eventIndex[eventName] = -1;
-    this.nextEventTimout[eventName] = null;
+    this.nextEventTimeout[eventName] = null;
   }
 
   recordState(state: Object, precision: ?number = this.precision) {
@@ -732,7 +740,7 @@ class Recorder {
         list: [],
       };
     }
-    this.eventsCache.list.push([this.now(), payload]);
+    this.eventsCache[eventName].list.push([this.now(), payload]);
   }
 
   // recordEvent(...args: Array<number | string>) {
@@ -1062,6 +1070,7 @@ class Recorder {
       const timeoutId = this.nextEventTimeout[eventName];
       if (timeoutId != null) {
         clearTimeout(timeoutId);
+        this.nextEventTimeout[eventName] = null;
       }
     });
   }
