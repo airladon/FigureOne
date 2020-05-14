@@ -674,6 +674,7 @@ class Recorder {
   ) {
     const startTime = this.getCacheStartTime();
     const endTime = this.getCacheEndTime();
+    console.log(startTime, endTime)
     if (startTime == null || endTime === 0) {
       return [];
     }
@@ -733,7 +734,8 @@ class Recorder {
       this.recordStateTimeout = null;
     }
     this.mergeEventsCache();
-    this.states = this.statesCache;
+    this.mergeStatesCache();
+    // this.states = this.statesCache;
     // this.slides = this.slidesCache;
     this.duration = this.calcDuration();
   }
