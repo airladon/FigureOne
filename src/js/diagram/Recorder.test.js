@@ -459,6 +459,33 @@ describe('Diagram Recorder', () => {
         expect(endTime).toBe(6);
       });
     });
+    describe('Merge States', () => {
+      test.only('Empty States', () => {
+        const { a } = diagram.elements.elements;
+        global.performance.now = () => 10000;
+        a.setRotation(0);
+        recorder.startRecording();
+
+        global.performance.now = () => 13000;
+        a.setRotation(1);
+        recorder.recordCurrentState();
+        global.performance.now = () => 14000;
+        a.setRotation(2);
+        recorder.recordCurrentState();
+
+        recorder.stopRecording();
+
+        expect(recorder.states.diffs[1][2].diff).toEqual({
+          '.elements.elements.a.transform.state[2].state[1]': 1,
+          '.stateTime': 13,
+        });
+
+        expect(recorder.states.diffs[2][2].diff).toEqual({
+          '.elements.elements.a.transform.state[2].state[1]': 2,
+          '.stateTime': 14,
+        });
+      });
+    });
     describe('Merge Cache', () => {
       test('Empty Events', () => {
         recorder.addEventType('cursorMove', () => {}, true);
