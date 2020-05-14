@@ -163,6 +163,7 @@ function getNextIndexForTime(
   endSearch: number = recordedData.length - 1,
 ) {
   const nextIndex = getIndexRangeForTime(recordedData, time, startSearch, endSearch)[1];
+  // console.log(nextIndex)
   return getIndexOfEarliestTime(recordedData, nextIndex);
 }
 
@@ -677,15 +678,27 @@ class Recorder {
       if (this.events[eventName] == null) {
         return;
       }
-      const spliceStart = getPrevIndexForTime(this.events[eventName].list, startTime);
-      const spliceEnd = getNextIndexForTime(this.events[eventName].list, startTime);
+      let sliceStart = getPrevIndexForTime(this.events[eventName].list, startTime);
+      if (sliceStart > -1 && this.events[eventName].list[sliceStart][0] === startTime) {
+        sliceStart = getIndexOfEarliestTime(this.events[eventName].list, sliceStart) - 1;
+        if (sliceStart < 0) {
+          sliceStart = -1;
+        }
+      }
+      let sliceEnd = getNextIndexForTime(this.events[eventName].list, endTime);
+      if (sliceEnd > -1 && this.events[eventName].list[sliceEnd][0] === endTime) {
+        sliceEnd = getIndexOfLatestTime(this.events[eventName].list, sliceEnd) + 1;
+        if (sliceEnd > this.events[eventName].list.length - 1) {
+          sliceEnd = -1;
+        }
+      }
       let beforeEvents = [];
       let afterEvents = [];
-      if (spliceStart > 0) {
-        beforeEvents = this.events[eventName].list.slice(0, spliceStart + 1);
+      if (sliceStart >= 0) {
+        beforeEvents = this.events[eventName].list.slice(0, sliceStart + 1);
       }
-      if (spliceEnd > 0) {
-        afterEvents = this.events[eventName].list.slice(spliceEnd);
+      if (sliceEnd >= 0) {
+        afterEvents = this.events[eventName].list.slice(sliceEnd);
       }
       this.events[eventName].list = [
         ...beforeEvents, ...this.eventsCache[eventName].list, ...afterEvents,
@@ -720,7 +733,7 @@ class Recorder {
   }
 
   recordState(state: Object, precision: ?number = this.precision) {
-    this.states.add(this.now(), state);
+    this.statesCache.add(this.now(), state);
     this.duration = this.calcDuration();
   }
 
@@ -766,11 +779,11 @@ class Recorder {
     };
     if (time === 0) {
       recordAndQueue();
-    } else {
-      this.recordStateTimeout = setTimeout(() => {
-        recordAndQueue();
-      }, time);
+      return;
     }
+    this.recordStateTimeout = setTimeout(() => {
+      recordAndQueue();
+    }, time);
   }
 
   // addReferenceState(state: Object, precision: ?number = 4) {
