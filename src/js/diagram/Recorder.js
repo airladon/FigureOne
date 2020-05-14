@@ -668,75 +668,60 @@ class Recorder {
     return this.calcDuration(true);
   }
 
-  mergeEventsCache() {
+  getMergedCacheArray(
+    eventListOrStatesDiff: TypeEvents | TypeStateDiffs,
+    cacheArray: TypeEvents | TypeStateDiffs,
+  ) {
     const startTime = this.getCacheStartTime();
     const endTime = this.getCacheEndTime();
     if (startTime == null || endTime === 0) {
-      return;
+      return [];
     }
-    Object.keys(this.eventsCache).forEach((eventName) => {
-      if (this.events[eventName] == null) {
-        return;
-      }
-      let sliceStart = getPrevIndexForTime(this.events[eventName].list, startTime);
-      if (sliceStart > -1 && this.events[eventName].list[sliceStart][0] === startTime) {
-        sliceStart = getIndexOfEarliestTime(this.events[eventName].list, sliceStart) - 1;
-        if (sliceStart < 0) {
-          sliceStart = -1;
-        }
-      }
-      let sliceEnd = getNextIndexForTime(this.events[eventName].list, endTime);
-      if (sliceEnd > -1 && this.events[eventName].list[sliceEnd][0] === endTime) {
-        sliceEnd = getIndexOfLatestTime(this.events[eventName].list, sliceEnd) + 1;
-        if (sliceEnd > this.events[eventName].list.length - 1) {
-          sliceEnd = -1;
-        }
-      }
-      let beforeEvents = [];
-      let afterEvents = [];
-      if (sliceStart >= 0) {
-        beforeEvents = this.events[eventName].list.slice(0, sliceStart + 1);
-      }
-      if (sliceEnd >= 0) {
-        afterEvents = this.events[eventName].list.slice(sliceEnd);
-      }
-      this.events[eventName].list = [
-        ...beforeEvents, ...this.eventsCache[eventName].list, ...afterEvents,
-      ];
-    });
-  }
-
-  mergeStatesCache() {
-    const startTime = this.getCacheStartTime();
-    const endTime = this.getCacheEndTime();
-    if (startTime == null || endTime === 0) {
-      return;
-    }
-    let sliceStart = getPrevIndexForTime(this.states.diffs, startTime);
-    if (sliceStart > -1 && this.states.diffs[sliceStart][0] === startTime) {
-      sliceStart = getIndexOfEarliestTime(this.states.diffs, sliceStart) - 1;
+    let sliceStart = getPrevIndexForTime(eventListOrStatesDiff, startTime);
+    if (sliceStart > -1 && eventListOrStatesDiff[sliceStart][0] === startTime) {
+      sliceStart = getIndexOfEarliestTime(eventListOrStatesDiff, sliceStart) - 1;
       if (sliceStart < 0) {
         sliceStart = -1;
       }
     }
-    let sliceEnd = getNextIndexForTime(this.states.diffs, endTime);
-    if (sliceEnd > -1 && this.states.diffs[sliceEnd][0] === endTime) {
-      sliceEnd = getIndexOfLatestTime(this.states.diffs, sliceEnd) + 1;
-      if (sliceEnd > this.states.diffs.length - 1) {
+    let sliceEnd = getNextIndexForTime(eventListOrStatesDiff, endTime);
+    if (sliceEnd > -1 && eventListOrStatesDiff[sliceEnd][0] === endTime) {
+      sliceEnd = getIndexOfLatestTime(eventListOrStatesDiff, sliceEnd) + 1;
+      if (sliceEnd > eventListOrStatesDiff.length - 1) {
         sliceEnd = -1;
       }
     }
     let beforeEvents = [];
     let afterEvents = [];
     if (sliceStart >= 0) {
-      beforeEvents = this.states.diffs.slice(0, sliceStart + 1);
+      beforeEvents = eventListOrStatesDiff.slice(0, sliceStart + 1);
     }
     if (sliceEnd >= 0) {
-      afterEvents = this.states.diffs.slice(sliceEnd);
+      afterEvents = eventListOrStatesDiff.slice(sliceEnd);
     }
-    this.states.diffs = [
-      ...beforeEvents, ...this.statesCache.diffs, ...afterEvents,
-    ];
+    return [...beforeEvents, ...cacheArray, ...afterEvents];
+  }
+
+  mergeEventsCache() {
+    Object.keys(this.eventsCache).forEach((eventName) => {
+      const merged = this.getMergedCacheArray(
+        this.events[eventName].list, this.eventsCache[eventName].list,
+      );
+      if (merged.length === 0) {
+        return;
+      }
+      this.events[eventName].list = merged;
+    });
+  }
+
+  mergeStatesCache() {
+    const merged = this.getMergedCacheArray(
+      this.states.diffs, this.statesCache.diffs,
+    );
+    if (merged.length === 0) {
+      return;
+    }
+    this.states.diffs = merged;
     this.states.baseReference = duplicate(this.statesCache.baseReference);
     this.states.references = duplicate(this.statesCache.references);
   }
