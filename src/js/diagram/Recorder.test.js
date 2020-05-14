@@ -374,7 +374,7 @@ describe('Diagram Recorder', () => {
       });
     });
   });
-  describe('Cache', () => {
+  describe.only('Cache', () => {
     describe('Cache recording', () => {
       test('simple', () => {
         recorder.addEventType('cursorMove', () => {}, true);
@@ -423,6 +423,181 @@ describe('Diagram Recorder', () => {
         expect(recorder.eventsCache.touchDown).toBe(undefined);
         const cursorMoveCache = recorder.eventsCache.cursorMove.list;
         expect(cursorMoveCache[0]).toEqual([3, [1, 1]]);
+      });
+    });
+    describe('Cache start and end times', () => {
+      test('Simple Start and End', () => {
+        recorder.addEventType('cursorMove', () => {}, true);
+
+        // Starting at 10 seconds global time
+        global.performance.now = () => 10000;
+        recorder.startRecording();
+        global.performance.now = () => 13000;
+        recorder.recordEvent('cursorMove', [1, 1]);
+        global.performance.now = () => 14000;
+        recorder.recordEvent('cursorMove', [2, 2]);
+        const startTime = recorder.getCacheStartTime();
+        const endTime = recorder.getCacheEndTime();
+
+        expect(startTime).toBe(0);
+        expect(endTime).toBe(4);
+      });
+      test('Non zero start', () => {
+        recorder.addEventType('cursorMove', () => {}, true);
+
+        // Starting at 10 seconds global time
+        global.performance.now = () => 10000;
+        recorder.startRecording(2);
+        global.performance.now = () => 13000;
+        recorder.recordEvent('cursorMove', [1, 1]);
+        global.performance.now = () => 14000;
+        recorder.recordEvent('cursorMove', [2, 2]);
+        const startTime = recorder.getCacheStartTime();
+        const endTime = recorder.getCacheEndTime();
+
+        expect(startTime).toBe(2);
+        expect(endTime).toBe(6);
+      });
+    });
+    describe('Merge Cache', () => {
+      test('Empty Events', () => {
+        recorder.addEventType('cursorMove', () => {}, true);
+
+        // Starting at 10 seconds global time
+        global.performance.now = () => 10000;
+        recorder.startRecording();
+        global.performance.now = () => 13000;
+        recorder.recordEvent('cursorMove', [1, 1]);
+        global.performance.now = () => 14000;
+        recorder.recordEvent('cursorMove', [2, 2]);
+        recorder.stopRecording();
+        const cursorMoveEvents = recorder.events.cursorMove.list;
+        expect(cursorMoveEvents[0]).toEqual([3, [1, 1]]);
+        expect(cursorMoveEvents[1]).toEqual([4, [2, 2]]);
+      });
+      test('New events from start to beyond', () => {
+        recorder.addEventType('cursorMove', () => {}, true);
+
+        // Starting at 10 seconds global time
+        global.performance.now = () => 10000;
+        recorder.startRecording();
+        global.performance.now = () => 13000;
+        recorder.recordEvent('cursorMove', [1, 1]);
+        global.performance.now = () => 14000;
+        recorder.recordEvent('cursorMove', [2, 2]);
+        recorder.stopRecording();
+
+        let cursorMoveEvents = recorder.events.cursorMove.list;
+        expect(cursorMoveEvents[0]).toEqual([3, [1, 1]]);
+        expect(cursorMoveEvents[1]).toEqual([4, [2, 2]]);
+
+        global.performance.now = () => 20000;
+        recorder.startRecording(0);
+        global.performance.now = () => 22000;
+        recorder.recordEvent('cursorMove', [3, 3]);
+        global.performance.now = () => 26000;
+        recorder.recordEvent('cursorMove', [4, 4]);
+        recorder.stopRecording();
+
+
+        cursorMoveEvents = recorder.events.cursorMove.list;
+        expect(cursorMoveEvents[0]).toEqual([2, [3, 3]]);
+        expect(cursorMoveEvents[1]).toEqual([6, [4, 4]]);
+      });
+      test('New events from start to before end', () => {
+        recorder.addEventType('cursorMove', () => {}, true);
+
+        // Starting at 10 seconds global time
+        global.performance.now = () => 10000;
+        recorder.startRecording();
+        global.performance.now = () => 13000;
+        recorder.recordEvent('cursorMove', [1, 1]);
+        global.performance.now = () => 14000;
+        recorder.recordEvent('cursorMove', [2, 2]);
+        recorder.stopRecording();
+
+        let cursorMoveEvents = recorder.events.cursorMove.list;
+        expect(cursorMoveEvents[0]).toEqual([3, [1, 1]]);
+        expect(cursorMoveEvents[1]).toEqual([4, [2, 2]]);
+
+        global.performance.now = () => 20000;
+        recorder.startRecording(0);
+        global.performance.now = () => 21000;
+        recorder.recordEvent('cursorMove', [3, 3]);
+        global.performance.now = () => 23000;
+        recorder.recordEvent('cursorMove', [4, 4]);
+        recorder.stopRecording();
+
+
+        cursorMoveEvents = recorder.events.cursorMove.list;
+        expect(cursorMoveEvents[0]).toEqual([1, [3, 3]]);
+        expect(cursorMoveEvents[1]).toEqual([3, [4, 4]]);
+        expect(cursorMoveEvents[2]).toEqual([4, [2, 2]]);
+      });
+      test('New events after start to before end', () => {
+        recorder.addEventType('cursorMove', () => {}, true);
+
+        // Starting at 10 seconds global time
+        global.performance.now = () => 10000;
+        recorder.startRecording();
+        global.performance.now = () => 13000;
+        recorder.recordEvent('cursorMove', [1, 1]);
+        global.performance.now = () => 14000;
+        recorder.recordEvent('cursorMove', [2, 2]);
+        global.performance.now = () => 15000;
+        recorder.recordEvent('cursorMove', [3, 3]);
+        recorder.stopRecording();
+
+        let cursorMoveEvents = recorder.events.cursorMove.list;
+        expect(cursorMoveEvents[0]).toEqual([3, [1, 1]]);
+        expect(cursorMoveEvents[1]).toEqual([4, [2, 2]]);
+        expect(cursorMoveEvents[2]).toEqual([5, [3, 3]]);
+
+        global.performance.now = () => 20000;
+        recorder.startRecording(3.5);
+        global.performance.now = () => 20500;
+        recorder.recordEvent('cursorMove', [6, 6]);
+        global.performance.now = () => 21000;
+        recorder.recordEvent('cursorMove', [7, 7]);
+        recorder.stopRecording();
+
+        cursorMoveEvents = recorder.events.cursorMove.list;
+        expect(cursorMoveEvents[0]).toEqual([3, [1, 1]]);
+        expect(cursorMoveEvents[1]).toEqual([4, [6, 6]]);
+        expect(cursorMoveEvents[2]).toEqual([4.5, [7, 7]]);
+        expect(cursorMoveEvents[3]).toEqual([5, [3, 3]]);
+      });
+      test('New events after start to after end', () => {
+        recorder.addEventType('cursorMove', () => {}, true);
+
+        // Starting at 10 seconds global time
+        global.performance.now = () => 10000;
+        recorder.startRecording();
+        global.performance.now = () => 13000;
+        recorder.recordEvent('cursorMove', [1, 1]);
+        global.performance.now = () => 14000;
+        recorder.recordEvent('cursorMove', [2, 2]);
+        global.performance.now = () => 15000;
+        recorder.recordEvent('cursorMove', [3, 3]);
+        recorder.stopRecording();
+
+        let cursorMoveEvents = recorder.events.cursorMove.list;
+        expect(cursorMoveEvents[0]).toEqual([3, [1, 1]]);
+        expect(cursorMoveEvents[1]).toEqual([4, [2, 2]]);
+        expect(cursorMoveEvents[2]).toEqual([5, [3, 3]]);
+
+        global.performance.now = () => 20000;
+        recorder.startRecording(4);
+        global.performance.now = () => 21000;
+        recorder.recordEvent('cursorMove', [6, 6]);
+        global.performance.now = () => 23000;
+        recorder.recordEvent('cursorMove', [7, 7]);
+        recorder.stopRecording();
+
+        cursorMoveEvents = recorder.events.cursorMove.list;
+        expect(cursorMoveEvents[0]).toEqual([3, [1, 1]]);
+        expect(cursorMoveEvents[1]).toEqual([5, [6, 6]]);
+        expect(cursorMoveEvents[2]).toEqual([7, [7, 7]]);
       });
     });
   });
