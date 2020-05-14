@@ -6,6 +6,7 @@ import {
   getObjectDiff, UniqueMap,
   duplicate, refAndDiffToObject,
   diffPathsToObj, diffObjToPaths, minify, unminify,
+  ObjectTracker,
 } from '../tools/tools';
 import type { DiagramElement } from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
@@ -224,18 +225,23 @@ function getCursorState(
 class Recorder {
   events: Array<[number, TypeEvent]>;
   slides: Array<[number, TypeSlide]>;
-  states: {
-    referenceBase: Object;
-    reference: {
-      [referenceName: string]: [string, Object];  // diff objects to another reference
-    };
-    // map: UniqueMap,
-    states: Array<[number, TypeState]>,
-  };
+  states: ObjectTracker;
+
+  events: {
+    [eventName: string]: Array<[number, Array<number | string | Object>]>;
+  }
+  // states: {
+  //   referenceBase: Object;
+  //   reference: {
+  //     [referenceName: string]: [string, Object];  // diff objects to another reference
+  //   };
+  //   // map: UniqueMap,
+  //   states: Array<[number, TypeState]>,
+  // };
 
   eventsCache: Array<[number, TypeEvent]>;
   slidesCache: Array<[number, TypeSlide]>;
-  statesCache: Array<[number, TypeState]>;
+  statesCache: ObjectTracker;
 
   state: 'recording' | 'playing' | 'idle';
   isAudioPlaying: boolean;
@@ -366,8 +372,8 @@ class Recorder {
     if (this.events.length > 0) {
       [eventsTime] = this.events[this.events.length - 1];
     }
-    if (this.states.states.length > 0) {
-      [statesTime] = this.states.states[this.states.states.length - 1];
+    if (this.states.diffs.length > 0) {
+      [statesTime] = this.states.diffs[this.states.diffs.length - 1];
     }
     if (this.slidesCache.length > 0) {
       [slidesCacheTime] = this.slidesCache[this.slides.length - 1];
@@ -375,8 +381,8 @@ class Recorder {
     if (this.eventsCache.length > 0) {
       [eventsCacheTime] = this.eventsCache[this.events.length - 1];
     }
-    if (this.statesCache.length > 0) {
-      [statesCacheTime] = this.statesCache[this.statesCache.length - 1];
+    if (this.statesCache.diffs.length > 0) {
+      [statesCacheTime] = this.statesCache.diffs[this.statesCache.diffs.length - 1];
     }
     // eslint-disable-next-line no-restricted-globals
     if (this.audio != null && !isNaN(this.audio.duration)) {
@@ -415,10 +421,10 @@ class Recorder {
   // ////////////////////////////////////
   // ////////////////////////////////////
   reset() {
-    this.resetStates();
+    this.states = new ObjectTracker();
     this.eventsCache = [];
     this.slidesCache = [];
-    this.statesCache = [];
+    this.statesCache = new ObjectTracker();
     this.events = [];
     this.slides = [];
     this.videoToNowDelta = 0;
@@ -434,13 +440,9 @@ class Recorder {
     // this.isRecording = false;
   }
 
-  resetStates() {
-    this.states = {
-      states: [],
-      map: new UniqueMap(),
-      reference: {},
-    };
-  }
+  // resetStates() {
+  //   this.states.reset();
+  // }
 
   loadEvents(
     minifiedEvents: {
@@ -482,7 +484,7 @@ class Recorder {
     },
     unminifyFlag: boolean = false,
   ) {
-    this.resetStates();
+    // this.resetStates();
     if (unminifyFlag) {  // $FlowFixMe
       this.states = this.unminifyStates(states);
     } else {
@@ -545,13 +547,55 @@ class Recorder {
 
   // ////////////////////////////////////
   // ////////////////////////////////////
+  // Editing
+  // ////////////////////////////////////
+  // ////////////////////////////////////
+  deleteFromTime(time: number) {
+    if (time === 0) {
+      this.reset();
+      return;
+    }
+    const slidesIndex = getNextIndexForTime(this.slides, time);
+    const eventsIndex = getNextIndexForTime(this.events, time);
+    const statesIndex = getNextIndexForTime(this.states.diffs, time);
+    if (slidesIndex > 1) {
+      this.slides = this.slides.slice(0, slidesIndex);
+    } else if (slidesIndex === 0) {
+      this.slides = [];
+    }
+    if (eventsIndex > 1) {
+      this.events = this.events.slice(0, eventsIndex);
+    } else if (eventsIndex === 0) {
+      this.events = [];
+    }
+    if (statesIndex > 1) {
+      this.states.diffs = this.states.diffs.slice(0, statesIndex);
+    } else if (statesIndex === 0) {
+      this.states.diffs = [];
+    }
+  }
+
+  insert(
+    fromTime: number,
+    toTime: number,
+    events: TypeEvents,
+    slides: TypeSlides,
+    states: ObjectTracker,
+  ) {
+    if (fromTime === 0)
+  }
+
+  // ////////////////////////////////////
+  // ////////////////////////////////////
   // Recording
   // ////////////////////////////////////
   // ////////////////////////////////////
   startRecording(startTime: number = 0) {
     this.eventsCache = [];
     this.slidesCache = [];
-    this.statesCache = [];
+    this.statesCache = new ObjectTracker();
+    this.statesCache.baseReference = duplicate(this.states.baseReference);
+    this.statesCache.references = duplicate(this.states.references);
     this.unpauseDiagram();
     this.setVideoToNowDeltaTime(startTime);
     this.state = 'recording';
