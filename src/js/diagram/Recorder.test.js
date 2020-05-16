@@ -999,36 +999,58 @@ describe('Diagram Recorder', () => {
       };
       expect(decoded).toEqual(decodeExpected);
     });
-    test.only('minify simple as object', () => {
-      recorder.addReferenceState({ elements: 1 });
-      recorder.addState({ elements: 2 });
-      const mini = recorder.minifyStates(true);
+    test('minify simple as object', () => {
+      recorder.getDiagramState = () => ({ elements: 1 });
+      global.performance.now = () => 10000;
+      recorder.startRecording();
+      recorder.getDiagramState = () => ({ elements: 2.1234567 });
+      global.performance.now = () => 11000;
+      jest.advanceTimersByTime(1000);
+      recorder.stopRecording();
 
-      expect(mini.map.map).toEqual({
-        elements: 'a',
-        reference: 'b',
-        diff: 'c',
-        states: 'd',
-        isObject: 'e',
-      });
-      const state = recorder.getState(0);
-      const [time] = state;
-      expect(mini.minified.b).toEqual([{ a: 1 }]);
-      expect(mini.minified.e).toBe(true);
-      expect(mini.minified.d[0][0]).toBe(time);
-      expect(mini.minified.d[0][1]).toBe(0);
-      expect(mini.minified.d[0][2]).toEqual({
-        c: { a: 2 },
-      });
-      const unmini = recorder.unminifyStates(mini);
-      expect(unmini.reference).toEqual([{ elements: 1 }]);
-      expect(unmini.states[0][0]).toBe(time);
-      expect(unmini.states[0][1][0]).toBe(0);
-      expect(unmini.states[0][1][1]).toEqual({
-        diff: { '.elements': 2 },
-      });
+      const encoded = recorder.encodeStates(true, true, 3);
+      const expected = {
+        map: {
+          map: {
+            elements: 'a',
+            baseReference: 'b',
+            __base: 'c',
+            diff: 'd',
+            diffs: 'e',
+            references: 'f',
+            precision: 'g',
+          },
+          index: 8,
+          inverseMap: {},
+          letters: '0abcdefghijklmnopqrstuvwxz',
+          undefinedCode: '.a',
+        },
+        minified: {
+          b: { a: 1 },
+          e: [
+            [0, 'c', {}],
+            [1, 'c', { d: { a: 2.124 } }],
+          ],
+          f: {},
+          g: 4,
+        },
+      };
+
+      expect(encoded).toEqual(expected);
+
+      const decoded = recorder.decodeStates(encoded, true, true);
+      const decodeExpected = {
+        precision: 4,
+        baseReference: { elements: 1 },
+        references: {},
+        diffs: [
+          [0, '__base', {}],
+          [1, '__base', { diff: { '.elements': 2.124 } }],
+        ],
+      };
+      expect(decoded).toEqual(decodeExpected);
     });
-    test('minify nested', () => {
+    test.only('minify nested', () => {
       recorder.addReferenceState({ elements: { e1: 1, e2: 2 } });
       recorder.addReferenceState({ elements: { e1: 2, e2: 2 } });
       recorder.addState({ elements: { e1: 2, e2: 3, e3: 5 } });

@@ -545,11 +545,12 @@ class Recorder {
   ) {
     let statesToUse = statesIn;
     if (isMinified) {
-      statesToUse = unminify(statesIn)
+      statesToUse = unminify(statesIn);
     }
     if (asObject) {
-      statesToUse = new ObjectTracker();
-      statesToUse.setFromObj(statesIn);
+      const states1 = new ObjectTracker();
+      states1.setFromObj(statesToUse);
+      statesToUse = states1;
     }
     const states = new ObjectTracker();
     states.diffs = statesToUse.diffs;
