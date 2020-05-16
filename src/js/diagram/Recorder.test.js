@@ -31,6 +31,7 @@ describe('Diagram Recorder', () => {
     diagram = makeDiagram();
     ({ recorder } = diagram);
     recorder.reset();
+    recorder.stateTimeStep = 1;
     events = [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9], [10]];
     diagram.addElement({
       name: 'a',
@@ -1115,7 +1116,7 @@ describe('Diagram Recorder', () => {
       recorder.loadStates(encoded, true, false);
       expect(recorder.states).toEqual(expectedDecoded);
     });
-    test.only('minify nested as object', () => {
+    test('minify nested as object', () => {
       recorder.getDiagramState = () => ({ elements: { e1: 1, e2: 2 } });
       global.performance.now = () => 10000;
       recorder.startRecording();
@@ -1179,38 +1180,48 @@ describe('Diagram Recorder', () => {
       recorder.loadStates(encoded, true, true);
       expect(recorder.states).toEqual(expectedDecoded);
     });
-    test('diagram simple', () => {
-      // recorder.resetStates();
+    test.only('diagram simple', () => {
       line.setPosition(0, 0);
-      global.performance.now = () => 1000;
-      const ref1 = diagram.getState();
-      global.performance.now = () => 2000;
-      const s1 = diagram.getState();
-      recorder.addReferenceState(ref1);
-      recorder.recordState(s1);
+      global.performance.now = () => 10000;
+      recorder.startRecording();
 
       line.setPosition(0, 1);
-      global.performance.now = () => 3000;
-      const s2 = diagram.getState();
-      recorder.recordState(s2);
+      global.performance.now = () => 11000;
+      jest.advanceTimersByTime(1000);
+      recorder.stopRecording();
 
-      expect(recorder.states.states[0][1][1]).toEqual({
-        diff: {
-          '.stateTime': 2,
-        },
-      });
+      // // recorder.resetStates();
+      // line.setPosition(0, 0);
+      // global.performance.now = () => 1000;
+      // const ref1 = diagram.getState();
+      // global.performance.now = () => 2000;
+      // const s1 = diagram.getState();
+      // recorder.addReferenceState(ref1);
+      // recorder.recordState(s1);
 
-      expect(recorder.states.states[1][1][1]).toEqual({
-        diff: {
-          '.elements.elements.line.transform.state[3].state[2]': 1,
-          '.stateTime': 3,
-        },
-      });
+      // line.setPosition(0, 1);
+      // global.performance.now = () => 3000;
+      // const s2 = diagram.getState();
+      // recorder.recordState(s2);
+      const expectedDiffs = [
+        [0, '__base', {}],
+        [1, '__base', {
+          diff: {
+            '.elements.elements.line.transform.state[3].state[2]': 1,
+            '.stateTime': 11,
+          },
+        }],
+      ];
+      expect(recorder.states.diffs).toEqual(expectedDiffs);
+      
+      const encoded = recorder.encodeStates(true, true, 4);
+      // const decoded = recorder.decodeStates(encoded, true, true);
+      recorder.reset();
+      recorder.loadStates(encoded, true, true);
+      // const mini = recorder.minifyStates(false, 4);
+      // const unmini = recorder.unminifyStates(mini);
 
-      const mini = recorder.minifyStates(false, 4);
-      const unmini = recorder.unminifyStates(mini);
-
-      recorder.loadStates(unmini);
+      // recorder.setState(0);
       line.setPosition(10, 10);
       recorder.setState(0);
       expect(line.getPosition().y).toBe(0);
