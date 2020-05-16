@@ -169,7 +169,7 @@ function addToObject(
 //   });
 // }
 
-function duplicate(value: ?number | boolean | string | Object) {
+function duplicate(value: ?(number | boolean | string | Object)) {
   if (typeof value === 'number'
       || typeof value === 'boolean'
       || typeof value === 'string'
@@ -855,9 +855,40 @@ class ObjectTracker {
   //             time   refName  diff
   diffs: Array<[number, string, Object]>
 
-  constructor(precision: number = 5) {
+  constructor(precision: number = 8) {
     this.precision = precision;
     this.reset();
+  }
+
+  toObj() {
+    const references = {};
+    Object.keys(this.references).forEach((refName) => {
+      references[refName] = {
+        basedOn: this.references[refName].basedOn,
+        diff: diffPathsToObj(this.references[refName].diff),
+      };
+    });
+    const diffs = this.diffs.map(d => [d[0], d[1], diffPathsToObj(d[2])]);
+    return {
+      baseReference: duplicate(this.baseReference),
+      diffs,
+      references,
+      precision: this.precision,
+    };
+  }
+
+  setFromObj(obj: Object) {
+    const references = {};
+    Object.keys(obj.references).forEach((refName) => {
+      references[refName] = {
+        basedOn: obj.references[refName].basedOn,
+        diff: diffObjToPaths(obj.references[refName].diff),
+      };
+    });
+    this.references = references;
+    this.baseReference = duplicate(obj.baseReference);
+    this.precision = obj.precision;
+    this.diffs = obj.diffs.map(d => [d[0], d[1], diffObjToPaths(d[2])]);
   }
 
   reset() {

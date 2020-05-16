@@ -455,8 +455,8 @@ class Recorder {
   // ////////////////////////////////////
   // ////////////////////////////////////
   reset() {
-    this.states = new ObjectTracker();
-    this.statesCache = new ObjectTracker();
+    this.states = new ObjectTracker(this.precision);
+    this.statesCache = new ObjectTracker(this.precision);
     this.events = {};
     this.eventsCache = {};
     this.stateIndex = -1;
@@ -483,104 +483,80 @@ class Recorder {
   // }
 
   loadEvents(
-    minifiedEvents: {
-      map: UniqueMap | Object,
-      minified: Object,
-    } | Array<TypeEvents>,
+    encodedEventsList: Object | Array<TypeEvents>,
     isMinified: boolean = false,
   ) {
-    this.events = {};
-    if (isMinified) { // $FlowFixMe
-      this.events = unminify(minifiedEvents);
-    } else {  // $FlowFixMe
-      this.events = minifiedEvents;
-    }
+    this.events.list = this.decodeEvents(encodedEventsList, isMinified);
     this.duration = this.calcDuration();
   }
-
-  // loadSlides(
-  //   minifiedSlides: {
-  //     map: UniqueMap | Object,
-  //     minified: Object,
-  //   } | Array<TypeEvents>,
-  //   isMinified: boolean = false,
-  // ) {
-  //   this.slides = [];
-  //   if (isMinified) { // $FlowFixMe
-  //     this.slides = unminify(minifiedSlides);
-  //   } else {  // $FlowFixMe
-  //     this.slides = minifiedSlides;
-  //   }
-  //   this.duration = this.calcDuration();
-  // }
 
   loadStates(
-    states: {
-      states: TypeStates,
-      reference: { [referenceName: string]: Object },
-      map?: UniqueMap,
-    },
-    unminifyFlag: boolean = false,
+    statesIn: Object,
+    isMinified: boolean = true,
+    isObjectForm: boolean = true,
   ) {
-    // this.resetStates();
-    if (unminifyFlag) {  // $FlowFixMe
-      this.states = this.unminifyStates(states);
-    } else {
-      this.states.states = states.states;
-      this.states.reference = states.reference;
-    }
+    this.states = this.decodeStates(statesIn, isMinified, isObjectForm);
     this.duration = this.calcDuration();
   }
 
-  minifyStates(
-    asObject: boolean = false,
-    precision: ?number = this.precision,
+  encodeEvents(
+    minifyEvents: boolean = true,
   ) {
-    const ref = duplicate(this.states.reference.base);
-    const refsDiffPaths = this.states.reference.slice(1);
-    const statesDiffPaths = this.states.states;
-
-    let refDiff;
-    let statesDiff;
-
-    if (asObject) {
-      refDiff = refsDiffPaths.map(d => diffPathsToObj(d));
-      statesDiff = statesDiffPaths.map(d => [d[0], d[1][0], diffPathsToObj(d[1][1])]);
-    } else {
-      refDiff = refsDiffPaths.map(d => duplicate(d));
-      statesDiff = statesDiffPaths.map(d => [d[0], d[1][0], duplicate(d[1][1])]);
+    if (minifyEvents) {
+      return minify(this.events.list);
     }
-
-    const states = {
-      reference: [ref, ...refDiff],
-      states: statesDiff,
-      isObject: asObject,
-    };
-    return minify(states, precision);
+    return duplicate(this.events.list);
   }
 
   // eslint-disable-next-line class-methods-use-this
-  unminifyStates(compressedStates: Object) {
-    const states = unminify(compressedStates);
-    if (typeof states !== 'object' || states.reference.length == null || states.states == null) {
-      return {
-        reference: [],
-        states: [],
-      };
+  decodeEvents(
+    eventsList: Object | Array<TypeEvents>,
+    isMinified: boolean = true,
+  ) {
+    if (isMinified && !Array.isArray(eventsList)) {
+      return unminify(eventsList);
     }
-    const ref = states.reference[0];
-    let refDiff = states.reference.slice(1);
-    let statesDiff = states.states;
-    if (states.isObject) {
-      refDiff = refDiff.map(d => diffObjToPaths(d));
-      statesDiff = statesDiff.map(d => [d[0], [d[1], diffObjToPaths(d[2])]]);
+    return eventsList;
+  }
+
+
+  encodeStates(
+    minifyStates: boolean = true,
+    asObject: boolean = true,
+    precision: ?number = this.precision,
+  ) {
+    let states;
+    if (asObject) {
+      states = this.states.toObj();
     } else {
-      statesDiff = statesDiff.map(d => [d[0], [d[1], d[2]]]);
+      states = duplicate(this.states);
     }
-    return {
-      reference: [ref, ...refDiff],
-      states: statesDiff,
-    };
+    if (minifyStates) {
+      return minify(states, precision);
+    }
+    return states;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  decodeStates(
+    statesIn: Object,
+    isMinified: boolean = true,
+    asObject: boolean = true,
+  ) {
+    let statesToUse = statesIn;
+    if (isMinified) {
+      statesToUse = unminify(statesIn)
+    }
+    if (asObject) {
+      statesToUse = new ObjectTracker();
+      statesToUse.setFromObj(statesIn);
+    }
+    const states = new ObjectTracker();
+    states.diffs = statesToUse.diffs;
+    states.baseReference = statesToUse.baseReference;
+    states.references = statesToUse.references;
+    states.precision = statesToUse.precision;
+    return states;
   }
 
   // ////////////////////////////////////
@@ -629,9 +605,10 @@ class Recorder {
   // ////////////////////////////////////
   // ////////////////////////////////////
   startRecording(startTime: number = 0) {
+    this.states.precision = this.precision;
     this.eventsCache = {};
     // this.slidesCache = [];
-    this.statesCache = new ObjectTracker();
+    this.statesCache = new ObjectTracker(this.precision);
     this.statesCache.baseReference = duplicate(this.states.baseReference);
     this.statesCache.references = duplicate(this.states.references);
     this.unpauseDiagram();
@@ -753,7 +730,7 @@ class Recorder {
     this.nextEventTimeout[eventName] = null;
   }
 
-  recordState(state: Object, precision: ?number = this.precision) {
+  recordState(state: Object) {
     this.statesCache.add(this.now(), state);
     this.duration = this.calcDuration();
   }

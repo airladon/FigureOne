@@ -757,7 +757,7 @@ describe('UniqueMap', () => {
   test('Simple', () => {
     const map = new tools.UniqueMap();
     tester(map, 'a');
-    tester(map, 'b')
+    tester(map, 'b');
     // map.add('hello');
     // map.add('there');
     // expect(map.map['hello']).toBe('a');
@@ -1074,6 +1074,37 @@ describe('ObjectTracker', () => {
 
     const getObj = tracker.getFromIndex(0);
     expect(getObj).toEqual({ a: 1, b: 3, c: 1 });
+  });
+  test('Create Object', () => {
+    const tracker = new tools.ObjectTracker();
+    const ref = { a: 1, b: 1 };
+    tracker.addReference(ref);
+    const ref1 = { a: 1, b: 1, c: 2 };
+    tracker.addReference(ref1, 'ref1', '__base');
+    expect(tracker.references.ref1).toEqual({
+      basedOn: '__base',
+      diff: { added: { '.c': 2 } },
+    });
+
+    const obj1 = { a: 1, b: 2, c: 2 };
+    tracker.add(1, obj1, 'ref1');
+    expect(tracker.diffs[0]).toEqual([1, 'ref1', { diff: { '.b': 2 } }]);
+
+    const asObj = tracker.toObj();
+    expect(asObj.references.ref1).toEqual({
+      basedOn: '__base',
+      diff: { added: { c: 2 } },
+    });
+    expect(asObj.diffs[0]).toEqual([1, 'ref1', { diff: { b: 2 } }]);
+
+    const tracker1 = new tools.ObjectTracker();
+    tracker1.setFromObj(asObj);
+    expect(tracker1.references.ref1).toEqual({
+      basedOn: '__base',
+      diff: { added: { '.c': 2 } },
+    });
+    expect(tracker1.diffs[0]).toEqual([1, 'ref1', { diff: { '.b': 2 } }]);
+    expect(tracker1).toEqual(tracker);
   });
 });
 
