@@ -374,7 +374,7 @@ describe('Diagram Recorder', () => {
       });
     });
   });
-  describe.only('Cache', () => {
+  describe('Cache', () => {
     describe('Cache recording', () => {
       test('simple', () => {
         recorder.addEventType('cursorMove', () => {}, true);
@@ -824,7 +824,7 @@ describe('Diagram Recorder', () => {
     let line;
     // let recorder;
     beforeEach(() => {
-      recorder.resetStates();
+      recorder.reset();
       diagram.addElement({
         name: 'line',
         method: 'line',
@@ -837,19 +837,22 @@ describe('Diagram Recorder', () => {
         },
       });
       diagram.initialize();
+      global.performance.now = () => 1000;
       state1 = diagram.getState();
 
       line = diagram.getElement('line');
       line.transform.updateTranslation(0, 1);
+      global.performance.now = () => 2000;
       state2 = diagram.getState();
 
       line.transform.updateTranslation(0, 2);
+      global.performance.now = () => 3000;
       state3 = diagram.getState();
-      recorder.states = {
-        states: [],
-        map: new tools.UniqueMap(),
-        reference: [],
-      };
+      // recorder.states = {
+      //   states: [],
+      //   map: new tools.UniqueMap(),
+      //   reference: [],
+      // };
       // ({ recorder } = diagram);
     });
     test('addReferenceState', () => {
@@ -858,23 +861,20 @@ describe('Diagram Recorder', () => {
       const state4 = diagram.getState();
       expect(state4.elements).toEqual(state1.elements);
 
-      recorder.addReferenceState(state1);
-      recorder.addReferenceState(state2);
-      recorder.states.reference[1].diff['.stateTime'] = 3;
-      expect(recorder.states.reference[1]).toEqual({
+      recorder.states.setBaseReference(state1);
+      recorder.states.addReference(state2, 'ref1');
+      expect(recorder.states.references.ref1.diff).toEqual({
         diff: {
           '.elements.elements.line.transform.state[3].state[2]': 1,
-          '.stateTime': 3,
+          '.stateTime': 2,
         },
-        // added: {},
-        // removed: {},
       });
     });
     test('getReferenceState', () => {
-      recorder.addReferenceState(state1);
-      recorder.addReferenceState(state2);
-      const ref1 = recorder.getReferenceState(0);
-      const ref2 = recorder.getReferenceState(1);
+      recorder.states.setBaseReference(state1);
+      recorder.states.addReference(state2, 'ref1');
+      const ref1 = recorder.states.getReference('__base');
+      const ref2 = recorder.states.getReference('ref1');
       diagram.setState(ref1);
       expect(line.transform.t().x).toBe(0);
       expect(line.transform.t().y).toBe(0);
@@ -883,83 +883,123 @@ describe('Diagram Recorder', () => {
       expect(line.transform.t().y).toBe(1);
     });
     test('add State to 0 reference', () => {
-      recorder.addReferenceState(state1);
-      recorder.addState(state2);
-      recorder.states.states[0][1][1].diff['.stateTime'] = 3;
-      expect(recorder.states.states[0][1][0]).toBe(0);
-      expect(recorder.states.states[0][1][1]).toEqual({
-        diff: {
-          '.elements.elements.line.transform.state[3].state[2]': 1,
-          '.stateTime': 3,
-        },
-        // added: {},
-        // removed: {},
-      });
-      expect(recorder.states.states).toHaveLength(1);
       diagram.setState(state1);
+      recorder.stateTimeStep = 1;
+      global.performance.now = () => 10000;
+      recorder.startRecording();
+      diagram.setState(state2);
+      global.performance.now = () => 11000;
+      jest.advanceTimersByTime(1000);
+      global.performance.now = () => 12000;
+      // jest.advanceTimersByTime(1000);
+      recorder.stopRecording();
+
+      expect(recorder.states.diffs[0]).toEqual([0, '__base', {}]);
+      expect(recorder.states.diffs[1]).toEqual([
+        1,
+        '__base',
+        {
+          diff: {
+            '.elements.elements.line.transform.state[3].state[2]': 1,
+            '.stateTime': 11,
+          },
+        },
+      ]);
+      expect(recorder.states.diffs).toHaveLength(2);
+      diagram.setState(recorder.states.getFromIndex(0));
       expect(line.transform.t().x).toBe(0);
       expect(line.transform.t().y).toBe(0);
 
-      const s = recorder.getState(0);
-      diagram.setState(s[1]);
+      diagram.setState(recorder.states.getFromIndex(1));
       expect(line.transform.t().x).toBe(0);
       expect(line.transform.t().y).toBe(1);
     });
     test('add State to 1 reference', () => {
-      recorder.addReferenceState(state1);
-      recorder.addReferenceState(state2);
-      recorder.addState(state3);
-      recorder.states.states[0][1][1].diff['.stateTime'] = 3;
-      expect(recorder.states.states[0][1][0]).toBe(1);
-      expect(recorder.states.states[0][1][1]).toEqual({
-        diff: {
-          '.elements.elements.line.transform.state[3].state[2]': 2,
-          '.stateTime': 3,
+      diagram.setState(state1);
+      recorder.stateTimeStep = 1;
+      global.performance.now = () => 10000;
+      recorder.states.setBaseReference(state1);
+      recorder.states.addReference(state2, 'ref1');
+      recorder.startRecording();
+      diagram.setState(state3);
+      global.performance.now = () => 11000;
+      jest.advanceTimersByTime(1000);
+      global.performance.now = () => 12000;
+      recorder.stopRecording();
+
+      expect(recorder.states.diffs[1]).toEqual([
+        1,
+        '__base',
+        {
+          diff: {
+            '.elements.elements.line.transform.state[3].state[2]': 2,
+            '.stateTime': 11,
+          },
         },
-        // added: {},
-        // removed: {},
-      });
-      expect(recorder.states.states).toHaveLength(1);
+      ]);
+
+      expect(recorder.states.diffs).toHaveLength(2);
       diagram.setState(state1);
       expect(line.transform.t().x).toBe(0);
       expect(line.transform.t().y).toBe(0);
 
-      const s = recorder.getState(0);
-      diagram.setState(s[1]);
+      diagram.setState(recorder.states.getFromIndex(1));
       expect(line.transform.t().x).toBe(0);
       expect(line.transform.t().y).toBe(2);
     });
     test('minify simple', () => {
-      recorder.addReferenceState({ elements: 1 });
-      recorder.addState({ elements: 2 });
-      const mini = recorder.minifyStates(false);
-      expect(mini.map.map).toEqual({
-        elements: 'a',
-        reference: 'b',
-        '.elements': 'c',
-        diff: 'd',
-        states: 'e',
-        isObject: 'f',
-      });
-      const state = recorder.getState(0);
-      const [time] = state;
-      expect(mini.minified.b).toEqual([{ a: 1 }]);
-      expect(mini.minified.f).toBe(false);
-      expect(mini.minified.e[0][0]).toBe(time);
-      expect(mini.minified.e[0][1]).toBe(0);
-      expect(mini.minified.e[0][2]).toEqual({
-        d: { c: 2 },
-      });
+      recorder.getDiagramState = () => ({ elements: 1 });
+      global.performance.now = () => 10000;
+      recorder.startRecording();
+      recorder.getDiagramState = () => ({ elements: 2.1234567 });
+      global.performance.now = () => 11000;
+      jest.advanceTimersByTime(1000);
+      recorder.stopRecording();
 
-      const unmini = recorder.unminifyStates(mini);
-      expect(unmini.reference).toEqual([{ elements: 1 }]);
-      expect(unmini.states[0][0]).toBe(time);
-      expect(unmini.states[0][1][0]).toBe(0);
-      expect(unmini.states[0][1][1]).toEqual({
-        diff: { '.elements': 2 },
-      });
+      const encoded = recorder.encodeStates(true, false, 3);
+      const expected = {
+        map: {
+          map: {
+            precision: 'a',
+            elements: 'b',
+            baseReference: 'c',
+            references: 'd',
+            __base: 'e',
+            '.elements': 'f',
+            diff: 'g',
+            diffs: 'h',
+          },
+          index: 9,
+          inverseMap: {},
+          letters: '0abcdefghijklmnopqrstuvwxz',
+          undefinedCode: '.a',
+        },
+        minified: {
+          a: 4,
+          c: { b: 1 },
+          d: {},
+          h: [
+            [0, 'e', {}],
+            [1, 'e', { g: { f: 2.124 } }],
+          ],
+        },
+      };
+
+      expect(encoded).toEqual(expected);
+
+      const decoded = recorder.decodeStates(encoded, true, false);
+      const decodeExpected = {
+        precision: 4,
+        baseReference: { elements: 1 },
+        references: {},
+        diffs: [
+          [0, '__base', {}],
+          [1, '__base', { diff: { '.elements': 2.124 } }],
+        ],
+      };
+      expect(decoded).toEqual(decodeExpected);
     });
-    test('minify simple as object', () => {
+    test.only('minify simple as object', () => {
       recorder.addReferenceState({ elements: 1 });
       recorder.addState({ elements: 2 });
       const mini = recorder.minifyStates(true);
