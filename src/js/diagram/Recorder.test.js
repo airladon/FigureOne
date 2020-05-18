@@ -1190,19 +1190,6 @@ describe('Diagram Recorder', () => {
       jest.advanceTimersByTime(1000);
       recorder.stopRecording();
 
-      // // recorder.resetStates();
-      // line.setPosition(0, 0);
-      // global.performance.now = () => 1000;
-      // const ref1 = diagram.getState();
-      // global.performance.now = () => 2000;
-      // const s1 = diagram.getState();
-      // recorder.addReferenceState(ref1);
-      // recorder.recordState(s1);
-
-      // line.setPosition(0, 1);
-      // global.performance.now = () => 3000;
-      // const s2 = diagram.getState();
-      // recorder.recordState(s2);
       const expectedDiffs = [
         [0, '__base', {}],
         [1, '__base', {
@@ -1215,13 +1202,9 @@ describe('Diagram Recorder', () => {
       expect(recorder.states.diffs).toEqual(expectedDiffs);
       
       const encoded = recorder.encodeStates(true, true, 4);
-      // const decoded = recorder.decodeStates(encoded, true, true);
       recorder.reset();
       recorder.loadStates(encoded, true, true);
-      // const mini = recorder.minifyStates(false, 4);
-      // const unmini = recorder.unminifyStates(mini);
-
-      // recorder.setState(0);
+      
       line.setPosition(10, 10);
       recorder.setState(0);
       expect(line.getPosition().y).toBe(0);
@@ -1230,17 +1213,39 @@ describe('Diagram Recorder', () => {
     });
     test('diagram', () => {
       line.setPosition(0, 0);
-      global.performance.now = () => 1000;
-      const ref1 = diagram.getState();
-      global.performance.now = () => 2000;
-      const s1 = diagram.getState();
-      recorder.addReferenceState(ref1);
-      recorder.recordState(s1);
+      global.performance.now = () => 10000;
+      recorder.startRecording();
 
       line.setPosition(0, 1);
-      global.performance.now = () => 3000;
-      const s2 = diagram.getState();
-      recorder.recordState(s2);
+      global.performance.now = () => 11000;
+      jest.advanceTimersByTime(1000);
+      
+      line.setPosition(1, 2);
+      global.performance.now = () => 12000;
+      jest.advanceTimersByTime(1000);
+      recorder.
+
+      // const s3 = diagram.getState();
+      // global.performance.now = () => 5000;
+      const ref2 = diagram.getState();
+      recorder.recordState(s3);
+      recorder.addReferenceState(ref2);
+      
+      recorder.stopRecording();
+
+
+      // line.setPosition(0, 0);
+      // global.performance.now = () => 1000;
+      // const ref1 = diagram.getState();
+      // global.performance.now = () => 2000;
+      // const s1 = diagram.getState();
+      // recorder.addReferenceState(ref1);
+      // recorder.recordState(s1);
+
+      // line.setPosition(0, 1);
+      // global.performance.now = () => 3000;
+      // const s2 = diagram.getState();
+      // recorder.recordState(s2);
 
       line.setPosition(1, 2);
       global.performance.now = () => 4000;
