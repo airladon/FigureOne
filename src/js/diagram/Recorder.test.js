@@ -1438,29 +1438,71 @@ describe('Diagram Recorder', () => {
       expect(line.getPosition().y).toBe(1);
     });
   });
-  describe('Recorder Flow', () => {
-    test('Events', () => {
+  describe.only('Recorder Events', () => {
+    test('Event Simple', () => {
+      let x = 0;
+      let y = 0;
+      const onPlayback = jest.fn((xIn, yIn) => {
+        x = xIn;
+        y = yIn;
+      });
+      recorder.addEventType('cursorMove', onPlayback);
       global.performance.now = () => 0;
       recorder.startRecording();
       global.performance.now = () => 100;
-      recorder.recordEvent('showCursor', 1, 1);
+      recorder.recordEvent('cursorMove', [1, 1]);
       global.performance.now = () => 200;
-      recorder.recordEvent('TouchDown', 1, 1);
-      global.performance.now = () => 250;
-      recorder.recordEvent('CursorMove', 1.5, 1.5);
-      global.performance.now = () => 600;
-      recorder.recordEvent('TouchUp');
-      global.performance.now = () => 700;
-      recorder.recordEvent('hideCursor');
+      recorder.recordEvent('cursorMove', [2, 2]);
       recorder.stopRecording();
-      expect(recorder.events[0]).toEqual([0, ['start']]);
-      expect(recorder.events[1]).toEqual([0.1, ['showCursor', 1, 1]]);
-      expect(recorder.events[2]).toEqual([0.2, ['TouchDown', 1, 1]]);
-      expect(recorder.events[3]).toEqual([0.25, ['CursorMove', 1.5, 1.5]]);
-      expect(recorder.events[4]).toEqual([0.6, ['TouchUp']]);
-      expect(recorder.events[5]).toEqual([0.7, ['hideCursor']]);
-      expect(recorder.events).toHaveLength(6);
+
+      expect(recorder.events.cursorMove.list).toEqual([
+        [0.1, [1, 1]],
+        [0.2, [2, 2]],
+      ]);
+
+      expect(onPlayback.mock.calls.length).toBe(0);
+      expect(x).toBe(0);
+      expect(y).toBe(0);
+      recorder.startPlayback();
+      jest.advanceTimersByTime(100);
+      expect(onPlayback.mock.calls.length).toBe(1);
+      expect(x).toBe(1);
+      expect(y).toBe(1);
+      // jest.advanceTimersByTime(100);
+
+      // console.log(recorder.events);
+      // console.log(recorder.eventsCache);
     });
+    // test('Events', () => {
+    //   recorder.addEventType('start', () => {});
+    //   recorder.addEventType('showCursor', () => {});
+    //   recorder.addEventType('TouchDown', () => {});
+    //   recorder.addEventType('CursorMove', () => {});
+    //   recorder.addEventType('TouchUp', () => {});
+    //   recorder.addEventType('hideCursor', () => {});
+    //   global.performance.now = () => 0;
+    //   recorder.startRecording();
+    //   global.performance.now = () => 100;
+    //   recorder.recordEvent('showCursor', [1, 1]);
+    //   global.performance.now = () => 200;
+    //   recorder.recordEvent('TouchDown', [1, 1]);
+    //   global.performance.now = () => 250;
+    //   recorder.recordEvent('CursorMove', [1.5, 1.5]);
+    //   global.performance.now = () => 600;
+    //   recorder.recordEvent('TouchUp');
+    //   global.performance.now = () => 700;
+    //   recorder.recordEvent('hideCursor');
+    //   recorder.stopRecording();
+    //   console.log(recorder.events);
+    //   console.log(recorder.eventsCache);
+    //   expect(recorder.events[0]).toEqual([0, ['start']]);
+    //   expect(recorder.events[1]).toEqual([0.1, ['showCursor', 1, 1]]);
+    //   expect(recorder.events[2]).toEqual([0.2, ['TouchDown', 1, 1]]);
+    //   expect(recorder.events[3]).toEqual([0.25, ['CursorMove', 1.5, 1.5]]);
+    //   expect(recorder.events[4]).toEqual([0.6, ['TouchUp']]);
+    //   expect(recorder.events[5]).toEqual([0.7, ['hideCursor']]);
+    //   expect(recorder.events).toHaveLength(6);
+    // });
     // test('States', () => {
     //   global.performance.now = () => 0;
     //   recorder.stateTimeStep = 0.5;
