@@ -818,7 +818,7 @@ describe('Diagram Recorder', () => {
       });
     });
   });
-  describe.only('State cycle', () => {
+  describe('State cycle', () => {
     let state1;
     let state2;
     let state3;
@@ -1076,6 +1076,7 @@ describe('Diagram Recorder', () => {
             [0, 'g', {}],
             [1, 'g', { i: { h: 2 } }],
           ],
+          k: 'g',
         },
         map: {
           map: {
@@ -1089,8 +1090,9 @@ describe('Diagram Recorder', () => {
             '.elements.e1': 'h',
             diff: 'i',
             diffs: 'j',
+            lastReferenceName: 'k',
           },
-          index: 11,
+          index: 12,
           inverseMap: {},
           letters: '0abcdefghijklmnopqrstuvwxz',
           undefinedCode: '.a',
@@ -1100,6 +1102,7 @@ describe('Diagram Recorder', () => {
       const decoded = recorder.decodeStates(encoded, true, false);
 
       const expectedDecoded = {
+        lastReferenceName: '__base',
         precision: 4,
         baseReference: { elements: { e1: 1, e2: 2 } },
         references: {},
@@ -1112,6 +1115,7 @@ describe('Diagram Recorder', () => {
 
       recorder.reset();
       const expectedReset = {
+        lastReferenceName: '__base',
         precision: 4,
         baseReference: null,
         references: {},
@@ -1141,6 +1145,7 @@ describe('Diagram Recorder', () => {
           ],
           h: {},
           i: 4,
+          j: 'e',
         },
         map: {
           map: {
@@ -1153,8 +1158,9 @@ describe('Diagram Recorder', () => {
             diffs: 'g',
             references: 'h',
             precision: 'i',
+            lastReferenceName: 'j',
           },
-          index: 10,
+          index: 11,
           inverseMap: {},
           letters: '0abcdefghijklmnopqrstuvwxz',
           undefinedCode: '.a',
@@ -1164,6 +1170,7 @@ describe('Diagram Recorder', () => {
       const decoded = recorder.decodeStates(encoded, true, true);
 
       const expectedDecoded = {
+        lastReferenceName: '__base',
         precision: 4,
         baseReference: { elements: { e1: 1, e2: 2 } },
         references: {},
@@ -1176,6 +1183,7 @@ describe('Diagram Recorder', () => {
 
       recorder.reset();
       const expectedReset = {
+        lastReferenceName: '__base',
         precision: 4,
         baseReference: null,
         references: {},
