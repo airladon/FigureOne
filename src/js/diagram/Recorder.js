@@ -325,6 +325,7 @@ class Recorder {
   // lastTime: number;
 
   audio: ?HTMLAudioElement;
+  reference: string;
 
   static instance: Object;
 
@@ -474,6 +475,7 @@ class Recorder {
     this.isAudioPlaying = false;
     this.currentTime = 0;
     this.duration = 0;
+    this.reference = '__base';
     // this.isPlaying = false;
     // this.isRecording = false;
   }
@@ -732,12 +734,16 @@ class Recorder {
   }
 
   recordState(state: Object) {
-    this.statesCache.add(this.now(), state);
+    this.statesCache.add(this.now(), state, this.reference);
     this.duration = this.calcDuration();
   }
 
   recordCurrentState() {
     this.recordState(this.getDiagramState());
+  }
+
+  recordCurrentStateAsReference(refName: string, basedOn: '__base') {
+    this.statesCache.addReference(this.getDiagramState(), refName, basedOn);
   }
 
   recordEvent(
@@ -754,19 +760,6 @@ class Recorder {
     }
     this.eventsCache[eventName].list.push([this.now(), payload]);
   }
-
-  // recordEvent(...args: Array<number | string>) {
-  //   const out = [];
-  //   args.forEach((arg) => {
-  //     if (typeof arg === 'number' && this.precision > -1) {
-  //       out.push(round(arg, this.precision));
-  //       return;
-  //     }
-  //     out.push(arg);
-  //   });
-    // $FlowFixMe
-    // this.eventsCache.push([this.now(), [...out]]);
-  // }
 
   // States are recorded every second
   queueRecordState(time: number = 0) {
