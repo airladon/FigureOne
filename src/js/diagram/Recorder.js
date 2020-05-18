@@ -879,7 +879,6 @@ class Recorder {
       const event = this.events[eventName];
       this.eventIndex[eventName] = getPrevIndexForTime(event.list, time);
       if (event.setOnSeek && this.eventIndex[eventName] > -1) {
-        console.log(event.list, this.eventIndex)
         const [eventTime] = event.list[this.eventIndex[eventName]];
         if (eventTime <= stateTime) {
           eventsBeforeState.push(eventName);
@@ -893,8 +892,8 @@ class Recorder {
     const playEvents = (eventName) => {
       const event = this.events[eventName];
       let index = this.eventIndex[eventName];
-      const [eventTime] = event.list[index]
-      while (index < event.list.length && eventTime === event.list[index]) {
+      const [eventTime] = event.list[index];
+      while (index < event.list.length && eventTime === event.list[index][0]) {
         this.setEvent(eventName, index);
         index += 1;
       }
@@ -1237,7 +1236,6 @@ class Recorder {
     if (event == null) {
       return;
     }
-    console.log('setting')
     event.playbackAction(event.list[index][1], event.list[index][0]);
   }
 
