@@ -1204,6 +1204,7 @@ describe('Diagram Recorder', () => {
       const encoded = recorder.encodeStates(true, true, 4);
       recorder.reset();
       recorder.loadStates(encoded, true, true);
+
       line.setPosition(10, 10);
       recorder.setState(0);
       expect(line.getPosition().y).toBe(0);
