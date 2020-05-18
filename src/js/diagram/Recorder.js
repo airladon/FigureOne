@@ -871,32 +871,61 @@ class Recorder {
   }
 
   setToTime(time: number) {
+    const eventsBeforeState = [];
+    const eventsAfterState = [];
     this.stateIndex = getPrevIndexForTime(this.states.diffs, time);
+    const [stateTime] = this.states.diffs[this.stateIndex]
     Object.keys(this.events).forEach((eventName) => {
-      this.eventIndex[eventName] = getPrevIndexForTime(this.events[eventNames].list, time);
+      const event = this.events[eventName];
+      this.eventIndex[eventName] = getPrevIndexForTime(event.list, time);
+      if (event.setOnSeek) {
+        const [eventTime] = event.list[this.eventIndex[eventName]];
+        if (eventTime <= stateTime) {
+          eventsBeforeState.push(eventName);
+        }
+        if (eventTime > stateTime) {
+          eventsAfterState.push(eventName);
+        }
+      }
     });
-    // const cursorState = getCursorState(this.events, this.eventIndex);
 
-    let slideTime = null;
-    if (this.slideIndex > -1) {
-      [slideTime] = this.slides[this.slideIndex];
-    }
-    let stateTime = null;
-    if (this.stateIndex > -1) {
-      [stateTime] = this.states.states[this.stateIndex];
-    }
+    const playEvents = (eventName) => {
+      const event = this.events[eventName];
+      let index = this.eventIndex[eventName];
+      const [eventTime] = event.list[index]
+      while (index < event.list.length && eventTime === event.list[index]) {
+        this.setEvent(eventName, index);
+        index += 1;
+      }
+    };
+    eventsBeforeState.forEach(eventName => playEvents(eventName));
+    this.setState(this.stateIndex);
+    eventsAfterState.forEach(eventName => playEvents(eventName));
 
-    if (slideTime != null && stateTime != null && stateTime < slideTime) {
-      this.setState(this.stateIndex);
-      this.setSlide(this.slideIndex);
-    } else if (slideTime != null && stateTime != null && stateTime >= slideTime) {
-      this.setSlide(this.slideIndex);
-      this.setState(this.stateIndex);
-    } else if (slideTime != null) {
-      this.setSlide(this.slideIndex);
-    } else if (stateTime != null) {
-      this.setState(this.stateIndex);
-    }
+
+    
+    // // const cursorState = getCursorState(this.events, this.eventIndex);
+
+    // let slideTime = null;
+    // if (this.slideIndex > -1) {
+    //   [slideTime] = this.slides[this.slideIndex];
+    // }
+    // let stateTime = null;
+    // if (this.stateIndex > -1) {
+    //   [stateTime] = this.states.states[this.stateIndex];
+    // }
+
+    // if (slideTime != null && stateTime != null && stateTime < slideTime) {
+    //   this.setState(this.stateIndex);
+    //   this.setSlide(this.slideIndex);
+    // } else if (slideTime != null && stateTime != null && stateTime >= slideTime) {
+    //   this.setSlide(this.slideIndex);
+    //   this.setState(this.stateIndex);
+    // } else if (slideTime != null) {
+    //   this.setSlide(this.slideIndex);
+    // } else if (stateTime != null) {
+    //   this.setState(this.stateIndex);
+    // }
 
     // if (cursorState.show && cursorState.up) {
     //   this.diagramShowCursor('up');
@@ -922,18 +951,15 @@ class Recorder {
   // ////////////////////////////////////
   // ////////////////////////////////////
   startPlayback(fromTimeIn: number = 0) {
+
     let fromTime = fromTimeIn;
-    if (fromTimeIn === this.getTotalTime()) {
+    if (fromTimeIn === this.duration) {
       fromTime = 0;
     }
-    this.lastShownEventIndex = -1;
-    this.lastShownStateIndex = -1;
-    this.lastShownSlideIndex = -1;
-    this.isRecording = false;
-    this.isPlaying = true;
-    this.previousPoint = null;
-    this.touchUp();
-    this.setStartTime(fromTime);
+
+    this.state = 'playing';
+    // this.touchUp();
+    // this.setStartTime(fromTime);
     this.currentTime = fromTime;
     this.unpauseDiagram();
 
@@ -943,7 +969,8 @@ class Recorder {
     // this.eventIndex = getPrevIndexForTime(this.events, fromTime);
     // this.playbackSlide();
     // this.setState(this.stateIndex);
-    this.queuePlaybackEvent(getTimeToIndex(this.events, this.eventIndex, fromTime));
+    // this.queuePlaybackEvent(getTimeToIndex(this.events, this.eventIndex, fromTime));
+    this.queuePlaybackEvents(fromTime);
     if (this.audio) {
       this.isAudioPlaying = true;
       this.audio.currentTime = fromTime;
@@ -960,6 +987,15 @@ class Recorder {
     }
 
     this.animateDiagramNextFrame();
+  }
+
+  queuePlaybackEvents(fromTime: number) {
+    Object.keys(this.events).forEach((eventName) => {
+      const event = this.events[eventName];
+      // const prevIndex = getPrevIndexForTime(event.list, fromTime);
+      const delay = getTimeToIndex(event.list, this.eventIndex[eventName], fromTime);
+      this.queuePlaybackEvent(eventName, delay);
+    });
   }
 
   setPointerPosition(pos: Point) {
@@ -1058,12 +1094,14 @@ class Recorder {
     if (this.isAudioPlaying) {
       return;
     }
-    if (this.eventIndex < this.events.length) {
-      return;
+    const eventNames = Object.keys(this.eventIndex)
+    for (let i = 0; i < eventNames.length; i += 1) {
+      const eventName = eventNames[i];
+      if (this.eventIndex[eventName] < this.events[eventName].list.length) {
+        return;
+      }
     }
-    if (this.slideIndex < this.slides.length) {
-      return;
-    }
+
     this.pausePlayback();
   }
 
