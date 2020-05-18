@@ -1479,10 +1479,130 @@ describe('Diagram Recorder', () => {
       expect(onPlayback.mock.calls.length).toBe(1);
       expect(x).toBe(1);
       expect(y).toBe(1);
-      // jest.advanceTimersByTime(100);
 
-      // console.log(recorder.events);
-      // console.log(recorder.eventsCache);
+      global.performance.now = () => 1200;
+      jest.advanceTimersByTime(100);
+
+      expect(onPlayback.mock.calls.length).toBe(2);
+      expect(x).toBe(2);
+      expect(y).toBe(2);
+    });
+    test('Seek to on event', () => {
+      let x = 0;
+      let y = 0;
+      const onPlayback = jest.fn((payload) => {
+        [x, y] = payload;
+      });
+      recorder.addEventType('cursorMove', onPlayback, true);
+      global.performance.now = () => 0;
+      recorder.startRecording();
+      global.performance.now = () => 100;
+      recorder.recordEvent('cursorMove', [1, 1]);
+      global.performance.now = () => 200;
+      recorder.recordEvent('cursorMove', [2, 2]);
+      recorder.stopRecording();
+
+      expect(onPlayback.mock.calls.length).toBe(0);
+      expect(x).toBe(0);
+      expect(y).toBe(0);
+
+      global.performance.now = () => 1000;
+      recorder.startPlayback(0.1);
+      expect(onPlayback.mock.calls.length).toBe(1);
+      expect(x).toBe(1);
+      expect(y).toBe(1);
+
+      global.performance.now = () => 1090;
+      jest.advanceTimersByTime(90);
+
+      expect(onPlayback.mock.calls.length).toBe(1);
+      expect(x).toBe(1);
+      expect(y).toBe(1);
+
+      global.performance.now = () => 1100;
+      jest.advanceTimersByTime(10);
+
+      expect(onPlayback.mock.calls.length).toBe(2);
+      expect(x).toBe(2);
+      expect(y).toBe(2);
+    });
+    test.only('Seek to after event without set on seek', () => {
+      let x = 0;
+      let y = 0;
+      const onPlayback = jest.fn((payload) => {
+        [x, y] = payload;
+      });
+      recorder.addEventType('cursorMove', onPlayback, false);
+      global.performance.now = () => 0;
+      recorder.startRecording();
+      global.performance.now = () => 100;
+      recorder.recordEvent('cursorMove', [1, 1]);
+      global.performance.now = () => 200;
+      recorder.recordEvent('cursorMove', [2, 2]);
+      recorder.stopRecording();
+
+      expect(onPlayback.mock.calls.length).toBe(0);
+      expect(x).toBe(0);
+      expect(y).toBe(0);
+
+      global.performance.now = () => 1000;
+      recorder.startPlayback(0.15);
+      expect(onPlayback.mock.calls.length).toBe(0);
+      expect(x).toBe(0);
+      expect(y).toBe(0);
+
+      global.performance.now = () => 1040;
+      jest.advanceTimersByTime(40);
+
+      expect(onPlayback.mock.calls.length).toBe(0);
+      expect(x).toBe(0);
+      expect(y).toBe(0);
+
+      global.performance.now = () => 1050;
+      jest.advanceTimersByTime(10);
+
+      expect(onPlayback.mock.calls.length).toBe(1);
+      expect(x).toBe(2);
+      expect(y).toBe(2);
+    });
+    test('Seek to after event with set on seek', () => {
+      let x = 0;
+      let y = 0;
+      const onPlayback = jest.fn((payload) => {
+        [x, y] = payload;
+      });
+      recorder.addEventType('cursorMove', onPlayback, true);
+      global.performance.now = () => 0;
+      recorder.startRecording();
+      global.performance.now = () => 100;
+      recorder.recordEvent('cursorMove', [1, 1]);
+      global.performance.now = () => 200;
+      recorder.recordEvent('cursorMove', [2, 2]);
+      recorder.stopRecording();
+
+      expect(onPlayback.mock.calls.length).toBe(0);
+      expect(x).toBe(0);
+      expect(y).toBe(0);
+
+      global.performance.now = () => 1000;
+      recorder.startPlayback(0.15);
+      expect(onPlayback.mock.calls.length).toBe(1);
+      expect(x).toBe(1);
+      expect(y).toBe(1);
+
+      global.performance.now = () => 1040;
+      jest.advanceTimersByTime(40);
+
+      expect(onPlayback.mock.calls.length).toBe(1);
+      expect(x).toBe(1);
+      expect(y).toBe(1);
+
+      global.performance.now = () => 1050;
+      jest.advanceTimersByTime(10);
+
+      expect(onPlayback.mock.calls.length).toBe(2);
+      expect(x).toBe(2);
+      expect(y).toBe(2);
     });
     // test('Events', () => {
     //   recorder.addEventType('start', () => {});
