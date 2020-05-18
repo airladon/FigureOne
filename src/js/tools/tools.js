@@ -876,6 +876,7 @@ class ObjectTracker {
       diffs,
       references,
       precision: this.precision,
+      lastReferenceName: this.lastReferenceName,
     };
   }
 
