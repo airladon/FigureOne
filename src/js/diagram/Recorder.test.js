@@ -1446,7 +1446,7 @@ describe('Diagram Recorder', () => {
         x = xIn;
         y = yIn;
       });
-      recorder.addEventType('cursorMove', onPlayback);
+      recorder.addEventType('cursorMove', onPlayback, true);
       global.performance.now = () => 0;
       recorder.startRecording();
       global.performance.now = () => 100;
@@ -1463,8 +1463,21 @@ describe('Diagram Recorder', () => {
       expect(onPlayback.mock.calls.length).toBe(0);
       expect(x).toBe(0);
       expect(y).toBe(0);
-      recorder.startPlayback();
-      jest.advanceTimersByTime(100);
+
+      global.performance.now = () => 1000;
+      recorder.startPlayback(0);
+      expect(onPlayback.mock.calls.length).toBe(0);
+      console.log(recorder.events.cursorMove.list)
+      global.performance.now = () => 1090;
+      jest.advanceTimersByTime(90);
+
+      expect(onPlayback.mock.calls.length).toBe(0);
+      expect(x).toBe(0);
+      expect(y).toBe(0);
+
+      global.performance.now = () => 1100;
+      jest.advanceTimersByTime(10);
+
       expect(onPlayback.mock.calls.length).toBe(1);
       expect(x).toBe(1);
       expect(y).toBe(1);
