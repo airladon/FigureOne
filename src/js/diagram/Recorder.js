@@ -878,7 +878,8 @@ class Recorder {
     Object.keys(this.events).forEach((eventName) => {
       const event = this.events[eventName];
       this.eventIndex[eventName] = getPrevIndexForTime(event.list, time);
-      if (event.setOnSeek) {
+      if (event.setOnSeek && this.eventIndex[eventName] > -1) {
+        console.log(event.list, this.eventIndex)
         const [eventTime] = event.list[this.eventIndex[eventName]];
         if (eventTime <= stateTime) {
           eventsBeforeState.push(eventName);
@@ -970,7 +971,7 @@ class Recorder {
     // this.playbackSlide();
     // this.setState(this.stateIndex);
     // this.queuePlaybackEvent(getTimeToIndex(this.events, this.eventIndex, fromTime));
-    this.queuePlaybackEvents(fromTime);
+    this.startEventsPlayback(fromTime);
     if (this.audio) {
       this.isAudioPlaying = true;
       this.audio.currentTime = fromTime;
@@ -989,12 +990,11 @@ class Recorder {
     this.animateDiagramNextFrame();
   }
 
-  queuePlaybackEvents(fromTime: number) {
+  startEventsPlayback(fromTime: number) {
     Object.keys(this.events).forEach((eventName) => {
       const event = this.events[eventName];
-      // const prevIndex = getPrevIndexForTime(event.list, fromTime);
-      const delay = getTimeToIndex(event.list, this.eventIndex[eventName], fromTime);
-      this.queuePlaybackEvent(eventName, delay);
+      this.eventIndex[eventName] = getNextIndexForTime(event.list, fromTime);
+      this.playbackEvent(eventName);
     });
   }
 
@@ -1180,44 +1180,61 @@ class Recorder {
   //   // const prevSlideIndex = getPrevIndexForTime(this.slides, time);
   // }
 
-  queuePlaybackEvent(eventName: string, delay: number = 0) {
-    const incrementIndexAndPlayEvent = () => {
-      if (this.state === 'playing') {
-        this.eventIndex[eventName] += 1;
-        this.playbackEvent(eventName);
-      }
-    }
-    if (delay === 0) {
-      incrementIndexAndPlayEvent();
+  playbackEvent(eventName: string) {
+    const index = this.eventIndex[eventName];
+    const delay = this.events[eventName].list[index][0] - this.getCurrentTime();
+    console.log(index, delay);
+    if (delay > 0) {
+      this.nextEventTimeout[eventName] = setTimeout(this.playbackEvent.bind(this, eventName), delay);
       return;
     }
-    this.nextEventTimeout[eventName] = setTimeout(incrementIndexAndPlayEvent, delay);
+    this.setEvent(eventName, index);
+    this.animateDiagramNextFrame();
+    if (index + 1 === this.events[eventName].list.length) {
+      this.checkStopPlayback();
+      return;
+    }
+    this.eventIndex[eventName] = index + 1;
+    this.playbackEvent(eventName);
   }
 
-  playbackEvent(eventName: string) {
-    if (this.eventIndex[eventName] > this.events[eventName].list.length - 1) {
-      this.checkStopPlayback();
-      return;
-    }
-    // const event = this.events[this.eventIndex];
-    this.setEvent(eventName, this.eventIndex[eventName]);
-    // this.lastTime = this.getCurrentTime();
-    this.animateDiagramNextFrame();
-    // this.eventIndex += 1;
-    const nextIndex = this.eventIndex[eventName] + 1;
-    if (nextIndex === this.events[eventName].list.length) {
-      this.checkStopPlayback();
-      return;
-    }
-    const nextTime = (this.events[eventName].list[nextIndex][0] - this.getCurrentTime()) * 1000;
-    this.queuePlaybackEvent(eventName, Math.max(nextTime, 0));
-  }
+  // queuePlaybackEvent(eventName: string, delay: number = 0) {
+  //   const incrementIndexAndPlayEvent = () => {
+  //     if (this.state === 'playing') {
+  //       // this.eventIndex[eventName] += 1;
+  //       this.playbackEvent(eventName);
+  //     }
+  //   }
+  //   if (delay === 0) {
+  //     incrementIndexAndPlayEvent();
+  //     return;
+  //   }
+  //   this.nextEventTimeout[eventName] = setTimeout(incrementIndexAndPlayEvent, delay);
+  // }
+
+  // playbackEvent(eventName: string) {
+  //   if (this.eventIndex[eventName] > this.events[eventName].list.length - 1) {
+  //     this.checkStopPlayback();
+  //     return;
+  //   }
+  //   this.setEvent(eventName, this.eventIndex[eventName]);
+  //   this.animateDiagramNextFrame();
+  //   const nextIndex = this.eventIndex[eventName] + 1;
+  //   if (nextIndex === this.events[eventName].list.length) {
+  //     this.checkStopPlayback();
+  //     return;
+  //   }
+  //   this.eventIndex[eventName] = nextIndex;
+  //   const nextTime = (this.events[eventName].list[nextIndex][0] - this.getCurrentTime()) * 1000;
+  //   this.queuePlaybackEvent(eventName, Math.max(nextTime, 0));
+  // }
 
   setEvent(eventName: string, index: number) {
     const event = this.events[eventName];
     if (event == null) {
       return;
     }
+    console.log('setting')
     event.playbackAction(event.list[index][1], event.list[index][0]);
   }
 
