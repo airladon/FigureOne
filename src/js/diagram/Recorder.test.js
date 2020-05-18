@@ -1442,9 +1442,8 @@ describe('Diagram Recorder', () => {
     test('Event Simple', () => {
       let x = 0;
       let y = 0;
-      const onPlayback = jest.fn((xIn, yIn) => {
-        x = xIn;
-        y = yIn;
+      const onPlayback = jest.fn((payload) => {
+        [x, y] = payload;
       });
       recorder.addEventType('cursorMove', onPlayback, true);
       global.performance.now = () => 0;
@@ -1467,7 +1466,6 @@ describe('Diagram Recorder', () => {
       global.performance.now = () => 1000;
       recorder.startPlayback(0);
       expect(onPlayback.mock.calls.length).toBe(0);
-      console.log(recorder.events.cursorMove.list)
       global.performance.now = () => 1090;
       jest.advanceTimersByTime(90);
 

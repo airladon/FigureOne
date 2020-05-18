@@ -388,8 +388,8 @@ class Recorder {
     return this.currentTime;
   }
 
-  setVideoToNowDeltaTime(fromTime: number = 0) {
-    this.videoToNowDelta = this.timeStamp() - fromTime * 1000;
+  setVideoToNowDeltaTime(videoSeekTime: number = 0) {
+    this.videoToNowDelta = this.timeStamp() - videoSeekTime * 1000;
   }
 
   calcDuration(cache: boolean = false) {
@@ -959,6 +959,8 @@ class Recorder {
     }
 
     this.state = 'playing';
+    this.setVideoToNowDeltaTime(fromTime);
+
     // this.touchUp();
     // this.setStartTime(fromTime);
     this.currentTime = fromTime;
@@ -1183,9 +1185,10 @@ class Recorder {
   playbackEvent(eventName: string) {
     const index = this.eventIndex[eventName];
     const delay = this.events[eventName].list[index][0] - this.getCurrentTime();
-    console.log(index, delay);
     if (delay > 0) {
-      this.nextEventTimeout[eventName] = setTimeout(this.playbackEvent.bind(this, eventName), delay);
+      this.nextEventTimeout[eventName] = setTimeout(
+        this.playbackEvent.bind(this, eventName), delay * 1000,
+      );
       return;
     }
     this.setEvent(eventName, index);
