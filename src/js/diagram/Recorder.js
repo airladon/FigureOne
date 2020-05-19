@@ -629,6 +629,7 @@ class Recorder {
     this.unpauseDiagram();
     this.setVideoToNowDeltaTime(startTime);
     this.state = 'recording';
+    this.lastRecordTime = null;
     // if (startTime === 0) {
     //   this.recordSlide('goto', '', 0);
     //   this.recordEvent('start');
