@@ -885,14 +885,26 @@ class Recorder {
   // Seeking
   // ////////////////////////////////////
   // ////////////////////////////////////
-  seek(percentTime: number) {
+  seekToPercent(percentTime: number) {
+    // if (this.states.diffs.length === 0) {
+    //   return;
+    // }
+    // this.pausePlayback();
+    const duration = this.calcDuration();
+    this.seek(duration * percentTime);
+    // const timeTarget = percentTime * duration;
+    // this.setToTime(timeTarget);
+    // this.pauseDiagram();
+  }
+
+  seek(time: number) {
     if (this.states.diffs.length === 0) {
       return;
     }
     this.pausePlayback();
-    const duration = this.calcDuration();
-    const timeTarget = percentTime * duration;
-    this.setToTime(timeTarget);
+    // const duration = this.calcDuration();
+    // const timeTarget = percentTime * duration;
+    this.setToTime(time);
     this.pauseDiagram();
   }
 
@@ -900,7 +912,7 @@ class Recorder {
     // const eventsBeforeState = [];
     // const eventsAfterState = [];
     this.stateIndex = getPrevIndexForTime(this.states.diffs, time);
-    const [stateTime, , stateTimeCount] = this.states.diffs[this.stateIndex];
+    const [stateTime, , , stateTimeCount] = this.states.diffs[this.stateIndex];
 
     // For each eventName, if it is to be set on seek, then get the previous
     // index (or multiple indexes if multiple are set for the same time)
@@ -957,7 +969,6 @@ class Recorder {
     playEvents(eventsToSetBeforeState);
     this.setState(this.stateIndex);
     playEvents(eventsToSetAfterState);
-
     if (this.audio) {
       this.audio.currentTime = time;
     }
@@ -1219,16 +1230,17 @@ class Recorder {
   }
 
   clearPlaybackTimeouts() {
-    if (this.nextStateTimeout != null) {
-      clearTimeout(this.nextStateTimeout);
-    }
-    Object.keys(this.nextEventTimeout).forEach((eventName) => {
-      const timeoutId = this.nextEventTimeout[eventName];
-      if (timeoutId != null) {
-        clearTimeout(timeoutId);
-        this.nextEventTimeout[eventName] = null;
-      }
-    });
+    // if (this.nextStateTimeout != null) {
+    //   clearTimeout(this.nextStateTimeout);
+    // }
+    // Object.keys(this.nextEventTimeout).forEach((eventName) => {
+    //   const timeoutId = this.nextEventTimeout[eventName];
+    //   if (timeoutId != null) {
+    //     clearTimeout(timeoutId);
+    //     this.nextEventTimeout[eventName] = null;
+    //   }
+    // });
+    this.nextEventTimeout = null;
   }
 
   pausePlayback() {
