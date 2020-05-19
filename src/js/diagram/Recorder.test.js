@@ -1604,6 +1604,38 @@ describe('Diagram Recorder', () => {
       expect(x).toBe(2);
       expect(y).toBe(2);
     });
+    test('Seek to event with same time as state', () => {
+      const a = diagram.getElement('a');
+      const onPlayback = jest.fn((payload) => {
+        a.setPosition(payload[0], payload[1]);
+      });
+      recorder.addEventType('setPosition', onPlayback, true);
+      global.performance.now = () => 0;
+      recorder.startRecording();
+      global.performance.now = () => 100;
+      recorder.recordEvent('setPosition', [1, 1]);
+      a.setPosition(-1, -1);
+      recorder.recordCurrentState();
+
+      global.performance.now = () => 200;
+      a.setPosition(-2, -2);
+      recorder.recordCurrentState();
+      recorder.recordEvent('setPosition', [2, 2]);
+
+      global.performance.now = () => 300;
+      recorder.recordEvent('setPosition', [3, 3]);
+      recorder.stopRecording();
+
+      // state comes AFTER event
+      recorder.seek(0.15);
+      expect(onPlayback.mock.calls.length).toBe(1);
+      expect(a.getPosition().x).toBe(-1);
+
+      // state comes BEFORE event
+      recorder.seek(0.25);
+      expect(onPlayback.mock.calls.length).toBe(2);
+      expect(a.getPosition().x).toBe(2);
+    });
     // test('Events', () => {
     //   recorder.addEventType('start', () => {});
     //   recorder.addEventType('showCursor', () => {});
