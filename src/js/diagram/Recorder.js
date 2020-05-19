@@ -30,6 +30,7 @@ type TypeStateDiff = [number, string, Object];
 type TypeEvent = [
   number,
   ?(Array<number | string | Object> | string | number | Object),
+  number,
 ];
 type TypeEvents = Array<TypeEvent>;
 type TypeStateDiffs = Array<TypeStateDiff>;
@@ -322,6 +323,9 @@ class Recorder {
 
   playbackStopped: ?() =>void;
 
+  lastRecordTime: number;
+  lastRecordTimeCount: number;
+
   // lastTime: number;
 
   audio: ?HTMLAudioElement;
@@ -476,6 +480,7 @@ class Recorder {
     this.currentTime = 0;
     this.duration = 0;
     this.reference = '__base';
+    this.lastRecordTimeCount = 0;
     // this.isPlaying = false;
     // this.isRecording = false;
   }
@@ -734,7 +739,14 @@ class Recorder {
   }
 
   recordState(state: Object) {
-    this.statesCache.add(this.now(), state, this.reference);
+    const now = this.now();
+    if (now > this.lastRecordTime) {
+      this.lastRecordTime = 0;
+      this.lastRecordTimeCount = 0;
+    } else {
+      this.lastRecordTimeCount += 1;
+    }
+    this.statesCache.add(now, state, this.reference, this.lastRecordTimeCount);
     this.duration = this.calcDuration();
   }
 
@@ -758,7 +770,16 @@ class Recorder {
         list: [],
       };
     }
-    this.eventsCache[eventName].list.push([this.now(), payload]);
+    const now = this.now();
+    if (now > this.lastRecordTime) {
+      this.lastRecordTime = 0;
+      this.lastRecordTimeCount = 0;
+    } else {
+      this.lastRecordTimeCount += 1;
+    }
+    this.eventsCache[eventName].list.push(
+      [now, payload, this.lastRecordTimeCount],
+    );
   }
 
   // States are recorded every second
@@ -874,21 +895,57 @@ class Recorder {
     const eventsBeforeState = [];
     const eventsAfterState = [];
     this.stateIndex = getPrevIndexForTime(this.states.diffs, time);
-    const [stateTime] = this.states.diffs[this.stateIndex]
+    const [stateTime, , stateTimeCount] = this.states.diffs[this.stateIndex];
+
+    // For each eventName, if it is to be set on seek, then get the previous
+    // index (or multiple indexes if multiple are set for the same time)
+    // and add them to an eventsToExecuteArray
+    const eventsToSetBeforeState = [];
+    const eventsToSetAfterState = [];
     Object.keys(this.events).forEach((eventName) => {
       const event = this.events[eventName];
-      this.eventIndex[eventName] = getPrevIndexForTime(event.list, time);
-      if (event.setOnSeek && this.eventIndex[eventName] > -1) {
-        const [eventTime] = event.list[this.eventIndex[eventName]];
-        if (eventTime <= stateTime) {
-          eventsBeforeState.push(eventName);
+      if (event.setOnSeek === false) {
+        return;
+      }
+      const firstIndex = getPrevIndexForTime(event.list, time);
+      if (firstIndex === -1) {
+        return;
+      }
+      const lastIndex = getIndexOfLatestTime(event.list, firstIndex);
+      for (let i = firstIndex; i <= lastIndex; i += 1) {
+        const [eventTime, , timeCount] = event.list[i];
+        if (
+          eventTime < stateTime
+          || (eventTime === stateTime && timeCount < stateTimeCount)
+        ) {
+          eventsToSetBeforeState.push([eventName, i, eventTime, timeCount]);
         }
-        if (eventTime > stateTime) {
-          eventsAfterState.push(eventName);
+        if (
+          eventTime > stateTime
+          || (eventTime === stateTime && timeCount > stateTimeCount)
+        ) {
+          eventsToSetAfterState.push([eventName, i, eventTime, timeCount]);
         }
       }
     });
 
+    const sortTimes = arrayToSort => arrayToSort.sort((a, b) => {
+      if (a[2] < b[2] || (a[2] === b[2] && a[3] < b[3])) {
+        return -1;
+      }
+      if (a[2] > b[2] || (a[2] === b[2] && a[3] > b[3])) {
+        return 1;
+      }
+      return 0;
+    });
+
+    // Sort the eventsToSet arrays in time
+    sortTimes(eventsToSetBeforeState);
+    sortTimes(eventsToSetAfterState);
+
+    const playEvents = (events) => {
+      
+    }
     const playEvents = (eventName) => {
       const event = this.events[eventName];
       let index = this.eventIndex[eventName];
@@ -902,8 +959,6 @@ class Recorder {
     this.setState(this.stateIndex);
     eventsAfterState.forEach(eventName => playEvents(eventName));
 
-
-    
     // // const cursorState = getCursorState(this.events, this.eventIndex);
 
     // let slideTime = null;
