@@ -375,7 +375,7 @@ describe('Diagram Recorder', () => {
       });
     });
   });
-  describe('Cache', () => {
+  describe.only('Cache', () => {
     describe('Cache recording', () => {
       test('simple', () => {
         recorder.addEventType('cursorMove', () => {}, true);
@@ -389,8 +389,8 @@ describe('Diagram Recorder', () => {
         recorder.recordEvent('cursorMove', [2, 2]);
 
         const cache = recorder.eventsCache.cursorMove.list;
-        expect(cache[0]).toEqual([3, [1, 1]]);
-        expect(cache[1]).toEqual([4, [2, 2]]);
+        expect(cache[0]).toEqual([3, [1, 1], 0]);
+        expect(cache[1]).toEqual([4, [2, 2], 0]);
       });
       test('Two event types', () => {
         recorder.addEventType('cursorMove', () => {}, true);
@@ -406,10 +406,10 @@ describe('Diagram Recorder', () => {
         global.performance.now = () => 14000;
         recorder.recordEvent('cursorMove', [2, 2]);
         const cursorMoveCache = recorder.eventsCache.cursorMove.list;
-        expect(cursorMoveCache[0]).toEqual([3, [1, 1]]);
-        expect(cursorMoveCache[1]).toEqual([4, [2, 2]]);
+        expect(cursorMoveCache[0]).toEqual([3, [1, 1], 0]);
+        expect(cursorMoveCache[1]).toEqual([4, [2, 2], 0]);
         const touchDownCache = recorder.eventsCache.touchDown.list;
-        expect(touchDownCache[0]).toEqual([2, [0.5, 0.5]]);
+        expect(touchDownCache[0]).toEqual([2, [0.5, 0.5], 0]);
       });
       test('Event type not in events', () => {
         recorder.addEventType('cursorMove', () => {}, true);
@@ -423,7 +423,7 @@ describe('Diagram Recorder', () => {
         recorder.recordEvent('cursorMove', [1, 1]);
         expect(recorder.eventsCache.touchDown).toBe(undefined);
         const cursorMoveCache = recorder.eventsCache.cursorMove.list;
-        expect(cursorMoveCache[0]).toEqual([3, [1, 1]]);
+        expect(cursorMoveCache[0]).toEqual([3, [1, 1], 0]);
       });
     });
     describe('Cache start and end times', () => {
@@ -499,7 +499,7 @@ describe('Diagram Recorder', () => {
         recorder.recordCurrentState();
         recorder.stopRecording();
 
-        expect(recorder.states.diffs[0]).toEqual([0, '__base', {}]);
+        expect(recorder.states.diffs[0]).toEqual([0, '__base', {}, 0]);
         expect(recorder.states.diffs[1][0]).toBe(3);
         expect(recorder.states.diffs[1][2].diff).toEqual({
           '.elements.elements.a.transform.state[2].state[1]': 1,
@@ -609,7 +609,7 @@ describe('Diagram Recorder', () => {
         recorder.recordCurrentState();
         recorder.stopRecording();
 
-        expect(recorder.states.diffs[0]).toEqual([0, '__base', {}]);
+        expect(recorder.states.diffs[0]).toEqual([0, '__base', {}, 0]);
 
         expect(recorder.states.diffs[1][0]).toBe(0.5);
         expect(recorder.states.diffs[1][2].diff).toEqual({
@@ -656,7 +656,7 @@ describe('Diagram Recorder', () => {
         recorder.recordCurrentState();
         recorder.stopRecording();
 
-        expect(recorder.states.diffs[0]).toEqual([0, '__base', {}]);
+        expect(recorder.states.diffs[0]).toEqual([0, '__base', {}, 0]);
 
         expect(recorder.states.diffs[1][0]).toBe(0.5);
         expect(recorder.states.diffs[1][2].diff).toEqual({
@@ -689,8 +689,8 @@ describe('Diagram Recorder', () => {
         recorder.recordEvent('cursorMove', [2, 2]);
         recorder.stopRecording();
         const cursorMoveEvents = recorder.events.cursorMove.list;
-        expect(cursorMoveEvents[0]).toEqual([3, [1, 1]]);
-        expect(cursorMoveEvents[1]).toEqual([4, [2, 2]]);
+        expect(cursorMoveEvents[0]).toEqual([3, [1, 1], 0]);
+        expect(cursorMoveEvents[1]).toEqual([4, [2, 2], 0]);
       });
       test('New events from start to beyond', () => {
         recorder.addEventType('cursorMove', () => {}, true);
@@ -705,8 +705,8 @@ describe('Diagram Recorder', () => {
         recorder.stopRecording();
 
         let cursorMoveEvents = recorder.events.cursorMove.list;
-        expect(cursorMoveEvents[0]).toEqual([3, [1, 1]]);
-        expect(cursorMoveEvents[1]).toEqual([4, [2, 2]]);
+        expect(cursorMoveEvents[0]).toEqual([3, [1, 1], 0]);
+        expect(cursorMoveEvents[1]).toEqual([4, [2, 2], 0]);
 
         global.performance.now = () => 20000;
         recorder.startRecording(0);
@@ -718,8 +718,8 @@ describe('Diagram Recorder', () => {
 
 
         cursorMoveEvents = recorder.events.cursorMove.list;
-        expect(cursorMoveEvents[0]).toEqual([2, [3, 3]]);
-        expect(cursorMoveEvents[1]).toEqual([6, [4, 4]]);
+        expect(cursorMoveEvents[0]).toEqual([2, [3, 3], 0]);
+        expect(cursorMoveEvents[1]).toEqual([6, [4, 4], 0]);
       });
       test('New events from start to before end', () => {
         recorder.addEventType('cursorMove', () => {}, true);
@@ -734,8 +734,8 @@ describe('Diagram Recorder', () => {
         recorder.stopRecording();
 
         let cursorMoveEvents = recorder.events.cursorMove.list;
-        expect(cursorMoveEvents[0]).toEqual([3, [1, 1]]);
-        expect(cursorMoveEvents[1]).toEqual([4, [2, 2]]);
+        expect(cursorMoveEvents[0]).toEqual([3, [1, 1], 0]);
+        expect(cursorMoveEvents[1]).toEqual([4, [2, 2], 0]);
 
         global.performance.now = () => 20000;
         recorder.startRecording(0);
@@ -747,9 +747,9 @@ describe('Diagram Recorder', () => {
 
 
         cursorMoveEvents = recorder.events.cursorMove.list;
-        expect(cursorMoveEvents[0]).toEqual([1, [3, 3]]);
-        expect(cursorMoveEvents[1]).toEqual([3, [4, 4]]);
-        expect(cursorMoveEvents[2]).toEqual([4, [2, 2]]);
+        expect(cursorMoveEvents[0]).toEqual([1, [3, 3], 0]);
+        expect(cursorMoveEvents[1]).toEqual([3, [4, 4], 0]);
+        expect(cursorMoveEvents[2]).toEqual([4, [2, 2], 0]);
       });
       test('New events after start to before end', () => {
         recorder.addEventType('cursorMove', () => {}, true);
@@ -766,9 +766,9 @@ describe('Diagram Recorder', () => {
         recorder.stopRecording();
 
         let cursorMoveEvents = recorder.events.cursorMove.list;
-        expect(cursorMoveEvents[0]).toEqual([3, [1, 1]]);
-        expect(cursorMoveEvents[1]).toEqual([4, [2, 2]]);
-        expect(cursorMoveEvents[2]).toEqual([5, [3, 3]]);
+        expect(cursorMoveEvents[0]).toEqual([3, [1, 1], 0]);
+        expect(cursorMoveEvents[1]).toEqual([4, [2, 2], 0]);
+        expect(cursorMoveEvents[2]).toEqual([5, [3, 3], 0]);
 
         global.performance.now = () => 20000;
         recorder.startRecording(3.5);
@@ -779,10 +779,10 @@ describe('Diagram Recorder', () => {
         recorder.stopRecording();
 
         cursorMoveEvents = recorder.events.cursorMove.list;
-        expect(cursorMoveEvents[0]).toEqual([3, [1, 1]]);
-        expect(cursorMoveEvents[1]).toEqual([4, [6, 6]]);
-        expect(cursorMoveEvents[2]).toEqual([4.5, [7, 7]]);
-        expect(cursorMoveEvents[3]).toEqual([5, [3, 3]]);
+        expect(cursorMoveEvents[0]).toEqual([3, [1, 1], 0]);
+        expect(cursorMoveEvents[1]).toEqual([4, [6, 6], 0]);
+        expect(cursorMoveEvents[2]).toEqual([4.5, [7, 7], 0]);
+        expect(cursorMoveEvents[3]).toEqual([5, [3, 3], 0]);
       });
       test('New events after start to after end', () => {
         recorder.addEventType('cursorMove', () => {}, true);
@@ -799,9 +799,9 @@ describe('Diagram Recorder', () => {
         recorder.stopRecording();
 
         let cursorMoveEvents = recorder.events.cursorMove.list;
-        expect(cursorMoveEvents[0]).toEqual([3, [1, 1]]);
-        expect(cursorMoveEvents[1]).toEqual([4, [2, 2]]);
-        expect(cursorMoveEvents[2]).toEqual([5, [3, 3]]);
+        expect(cursorMoveEvents[0]).toEqual([3, [1, 1], 0]);
+        expect(cursorMoveEvents[1]).toEqual([4, [2, 2], 0]);
+        expect(cursorMoveEvents[2]).toEqual([5, [3, 3], 0]);
 
         global.performance.now = () => 20000;
         recorder.startRecording(4);
@@ -812,9 +812,9 @@ describe('Diagram Recorder', () => {
         recorder.stopRecording();
 
         cursorMoveEvents = recorder.events.cursorMove.list;
-        expect(cursorMoveEvents[0]).toEqual([3, [1, 1]]);
-        expect(cursorMoveEvents[1]).toEqual([5, [6, 6]]);
-        expect(cursorMoveEvents[2]).toEqual([7, [7, 7]]);
+        expect(cursorMoveEvents[0]).toEqual([3, [1, 1], 0]);
+        expect(cursorMoveEvents[1]).toEqual([5, [6, 6], 0]);
+        expect(cursorMoveEvents[2]).toEqual([7, [7, 7], 0]);
       });
     });
   });
@@ -1438,7 +1438,7 @@ describe('Diagram Recorder', () => {
       expect(line.getPosition().y).toBe(1);
     });
   });
-  describe.only('Recorder Events', () => {
+  describe('Recorder Events', () => {
     test('Event Simple', () => {
       let x = 0;
       let y = 0;
