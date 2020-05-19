@@ -1439,7 +1439,7 @@ describe('Diagram Recorder', () => {
     });
   });
   describe.only('Recorder Events', () => {
-    test('Event Simple', () => {
+    test.only('Event Simple', () => {
       let x = 0;
       let y = 0;
       const onPlayback = jest.fn((payload) => {
@@ -1455,8 +1455,8 @@ describe('Diagram Recorder', () => {
       recorder.stopRecording();
 
       expect(recorder.events.cursorMove.list).toEqual([
-        [0.1, [1, 1]],
-        [0.2, [2, 2]],
+        [0.1, [1, 1], 0],
+        [0.2, [2, 2], 0],
       ]);
 
       expect(onPlayback.mock.calls.length).toBe(0);
