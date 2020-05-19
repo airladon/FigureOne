@@ -1604,6 +1604,44 @@ describe('Diagram Recorder', () => {
       expect(x).toBe(2);
       expect(y).toBe(2);
     });
+    test('Multiple events at same time', () => {
+      let x = 5;
+      const onPlaybackMul = jest.fn((payload) => {
+        x *= payload;
+      });
+      const onPlaybackSum = jest.fn((payload) => {
+        x += payload;
+      });
+      recorder.addEventType('mul', onPlaybackMul, true);
+      recorder.addEventType('sum', onPlaybackSum, true);
+      global.performance.now = () => 0;
+      recorder.startRecording();
+      global.performance.now = () => 100;
+      recorder.recordEvent('sum', 1);
+      recorder.recordEvent('mul', 2);
+      recorder.recordEvent('sum', -3);
+
+      global.performance.now = () => 200;
+      recorder.recordEvent('mul', 3);
+      recorder.recordEvent('sum', 10);
+      recorder.stopRecording();
+      expect(x).toBe(5);
+
+      global.performance.now = () => 1000;
+      recorder.startPlayback(0);
+      expect(x).toBe(5);
+
+      global.performance.now = () => 1100;
+      jest.advanceTimersByTime(100);
+      expect(x).toBe(9);
+
+      global.performance.now = () => 1200;
+      jest.advanceTimersByTime(100);
+      expect(x).toBe(37);
+
+      expect(onPlaybackMul.mock.calls.length).toBe(2);
+      expect(onPlaybackSum.mock.calls.length).toBe(3);
+    });
     test('Seek to event with same time as state', () => {
       const a = diagram.getElement('a');
       const onPlayback = jest.fn((payload) => {
