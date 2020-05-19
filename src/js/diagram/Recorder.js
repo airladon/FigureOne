@@ -481,6 +481,7 @@ class Recorder {
     this.duration = 0;
     this.reference = '__base';
     this.lastRecordTimeCount = 0;
+    this.lastRecordTime = null;
     // this.isPlaying = false;
     // this.isRecording = false;
   }
@@ -740,14 +741,13 @@ class Recorder {
 
   recordState(state: Object) {
     const now = this.now();
-    if (now > this.lastRecordTime) {
-      this.lastRecordTime = 0;
+    if (this.lastRecordTime == null || now > this.lastRecordTime) {
+      this.lastRecordTime = now;
       this.lastRecordTimeCount = 0;
-    } else {
-      this.lastRecordTimeCount += 1;
     }
     this.statesCache.add(now, state, this.reference, this.lastRecordTimeCount);
     this.duration = this.calcDuration();
+    this.lastRecordTimeCount += 1;
   }
 
   recordCurrentState() {
@@ -771,15 +771,14 @@ class Recorder {
       };
     }
     const now = this.now();
-    if (now > this.lastRecordTime) {
-      this.lastRecordTime = 0;
+    if (this.lastRecordTime == null || now > this.lastRecordTime) {
+      this.lastRecordTime = now;
       this.lastRecordTimeCount = 0;
-    } else {
-      this.lastRecordTimeCount += 1;
     }
     this.eventsCache[eventName].list.push(
       [now, payload, this.lastRecordTimeCount],
     );
+    this.lastRecordTimeCount += 1;
   }
 
   // States are recorded every second
@@ -1031,7 +1030,7 @@ class Recorder {
       if (this.eventIndex[eventName] === -1) {
         return;
       }
-      const [time, , timeCount] = this.events[eventName][this.eventIndex[eventName]];
+      const [time, , timeCount] = this.events[eventName].list[this.eventIndex[eventName]];
       if (
         nextTime == null
         || time < nextTime
