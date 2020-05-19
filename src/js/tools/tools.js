@@ -853,7 +853,7 @@ class ObjectTracker {
   precision: number;
 
   //             time   refName  diff
-  diffs: Array<[number, string, Object]>
+  diffs: Array<[number, string, Object, number]>
 
   lastReferenceName: string;
 
@@ -957,12 +957,12 @@ class ObjectTracker {
     return refAndDiffToObject(this.baseReference, ...diffs);
   }
 
-  add(time: number, obj: Object, refName: string = this.lastReferenceName) {
+  add(time: number, obj: Object, refName: string = this.lastReferenceName, timeCount: number = 0) {
     if (this.baseReference == null) {
       this.setBaseReference(obj);
     }
     const diff = this.getDiffToReference(obj, refName);
-    this.diffs.push([time, refName, diff]);
+    this.diffs.push([time, refName, diff, timeCount]);
   }
 
   getFromIndex(index: number) {
