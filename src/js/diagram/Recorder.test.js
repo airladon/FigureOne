@@ -1439,7 +1439,7 @@ describe('Diagram Recorder', () => {
     });
   });
   describe.only('Recorder Events', () => {
-    test.only('Event Simple', () => {
+    test('Event Simple', () => {
       let x = 0;
       let y = 0;
       const onPlayback = jest.fn((payload) => {
@@ -1526,7 +1526,7 @@ describe('Diagram Recorder', () => {
       expect(x).toBe(2);
       expect(y).toBe(2);
     });
-    test.only('Seek to after event without set on seek', () => {
+    test('Seek to after event without set on seek', () => {
       let x = 0;
       let y = 0;
       const onPlayback = jest.fn((payload) => {
