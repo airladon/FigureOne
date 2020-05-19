@@ -162,10 +162,14 @@ function getNextIndexForTime(
   time: number,
   startSearch: number = 0,
   endSearch: number = recordedData.length - 1,
+  earliestTime: boolean = true,
 ) {
   const nextIndex = getIndexRangeForTime(recordedData, time, startSearch, endSearch)[1];
   // console.log(nextIndex)
-  return getIndexOfEarliestTime(recordedData, nextIndex);
+  if (earliestTime) {
+    return getIndexOfEarliestTime(recordedData, nextIndex);
+  }
+  return getIndexOfLatestTime(recordedData, nextIndex);
 }
 
 function getPrevIndexForTime(
@@ -173,9 +177,13 @@ function getPrevIndexForTime(
   time: number,
   startSearch: number = 0,
   endSearch: number = recordedData.length - 1,
+  earliestTime: boolean = true,
 ) {
   const prevIndex = getIndexRangeForTime(recordedData, time, startSearch, endSearch)[0];
-  return getIndexOfEarliestTime(recordedData, prevIndex);
+  if (earliestTime) {
+    return getIndexOfEarliestTime(recordedData, prevIndex);
+  }
+  return getIndexOfLatestTime(recordedData, prevIndex);
 }
 
 function getTimeToIndex(
@@ -306,12 +314,10 @@ class Recorder {
   // diagramIsInTransition: () => boolean;
   diagramShowCursor: ('up' | 'down' | 'hide') => void;
 
-  nextEventTimeout: {
-    [eventName: string]: ?TimeoutID;
-  };
+  nextEventTimeout: ?TimeoutID;
 
   // nextEventTimeout: TimeoutID;
-  nextStateTimeout: ?TimeoutID;
+  // nextStateTimeout: ?TimeoutID;
   // nextSlideTimeout: TimeoutID;
 
   recordStateTimeout: ?TimeoutID;
@@ -466,9 +472,9 @@ class Recorder {
     this.eventsCache = {};
     this.stateIndex = -1;
     this.eventIndex = {};
-    this.nextEventTimeout = {};
+    this.nextEventTimeout = null;
     this.recordStateTimeout = null;
-    this.nextStateTimeout = null;
+    // this.nextStateTimeout = null;
     // this.slides = [];
     this.videoToNowDelta = 0;
     this.state = 'idle';
@@ -736,7 +742,7 @@ class Recorder {
       playbackAction,
     };
     this.eventIndex[eventName] = -1;
-    this.nextEventTimeout[eventName] = null;
+    // this.nextEventTimeout[eventName] = null;
   }
 
   recordState(state: Object) {
@@ -1003,7 +1009,16 @@ class Recorder {
   startEventsPlayback(fromTime: number) {
     Object.keys(this.events).forEach((eventName) => {
       const event = this.events[eventName];
-      this.eventIndex[eventName] = getNextIndexForTime(event.list, fromTime);
+      let index = getNextIndexForTime(event.list, fromTime);
+      const [eventTime] = event.list[index];
+      if (eventTime === fromTime) {
+        index = getIndexOfLatestTime(event.list, index) + 1;
+      }
+      if (index > event.list.length - 1) {
+        this.eventIndex[eventName] = -1;
+      } else {
+        this.eventIndex[eventName] = index;
+      }
     });
     this.playbackEvent(this.getNextEvent());
   }
@@ -1041,18 +1056,51 @@ class Recorder {
         nextEventName = eventName;
       }
     });
+    // if (this.stateIndex !== -1) {
+    //   const [stateTime, , , stateTimeCount] = this.states.diffs[this.stateIndex];
+    //   if (
+    //     nextTime == null
+    //     || stateTime < nextTime
+    //     || (stateTime === nextTime && stateTimeCount < nextTimeCount)
+    //   ) {
+    //     nextTime = stateTime;
+    //     nextTimeCount = stateTimeCount;
+    //     nextEventName = '';
+    //   }
+    // }
     return nextEventName;
   }
 
   playbackEvent(eventName: string) {
-    const index = this.eventIndex[eventName];
-    const delay = this.events[eventName].list[index][0] - this.getCurrentTime();
+    // let delay;
+    // // if eventName is nothing, then a state should be set next
+    // if (eventName === '' && this.stateIndex !== -1) {
+    //   delay = this.states.diffs[this.stateIndex][0] - this.getCurrentTime();
+    // } else if (
+    //   this.events[eventName] != null
+    //   && this.eventIndex[eventName] != null
+    //   && this.eventIndex[eventName] > -1
+    // ) {
+    const delay = this.events[eventName].list[this.eventIndex[eventName]][0] - this.getCurrentTime();
+    // } else {
+    //   return;
+    // }
+
     if (delay > 0) {
-      this.nextEventTimeout[eventName] = setTimeout(
+      this.nextEventTimeout = setTimeout(
         this.playbackEvent.bind(this, eventName), delay * 1000,
       );
       return;
     }
+
+    // if (eventName === '') {
+    //   this.setState(this.stateIndex);
+    //   this.animateDiagramNextFrame();
+    //   this.stateIndex = -1;
+    //   this.playbackEvent(this.getNextEvent());
+    //   return;
+    // }
+    const index = this.eventIndex[eventName];
     this.setEvent(eventName, index);
     this.animateDiagramNextFrame();
     if (index + 1 === this.events[eventName].list.length) {
@@ -1060,8 +1108,7 @@ class Recorder {
       return;
     }
     this.eventIndex[eventName] = index + 1;
-    const nextEventName = this.getNextEvent();
-    this.playbackEvent(nextEventName);
+    this.playbackEvent(this.getNextEvent());
   }
 
   setPointerPosition(pos: Point) {
