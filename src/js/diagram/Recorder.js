@@ -1005,7 +1005,7 @@ class Recorder {
       this.audio.play();
       const audioEnded = () => {
         this.isAudioPlaying = false;
-        this.checkStopPlayback();
+        this.isPlayingFinished();
       };
       const { audio } = this;
       if (audio != null) {
@@ -1017,6 +1017,8 @@ class Recorder {
     this.animateDiagramNextFrame();
   }
 
+  // this assumes setToTime is already called, which in turn sets all the
+  // this.eventIndex values
   startEventsPlayback(fromTime: number) {
     Object.keys(this.events).forEach((eventName) => {
       const event = this.events[eventName];
@@ -1034,18 +1036,11 @@ class Recorder {
     this.playbackEvent(this.getNextEvent());
   }
 
-  getFirstEvent() {
-    Object.keys(this.eventIndex).forEach((eventName) => {
-      this.eventIndex[eventName] = 0;
-    });
-    return this.getNextEvent();
-  }
-
-  // currentEvent(eventName: string) {
-  //   if (this.eventIndex[eventName] === -1) {
-  //     return null;
-  //   }
-  //   return this.events[eventName][this.eventIndex[eventName]];
+  // getFirstEvent() {
+  //   Object.keys(this.eventIndex).forEach((eventName) => {
+  //     this.eventIndex[eventName] = 0;
+  //   });
+  //   return this.getNextEvent();
   // }
 
   getNextEvent() {
@@ -1067,35 +1062,11 @@ class Recorder {
         nextEventName = eventName;
       }
     });
-    // if (this.stateIndex !== -1) {
-    //   const [stateTime, , , stateTimeCount] = this.states.diffs[this.stateIndex];
-    //   if (
-    //     nextTime == null
-    //     || stateTime < nextTime
-    //     || (stateTime === nextTime && stateTimeCount < nextTimeCount)
-    //   ) {
-    //     nextTime = stateTime;
-    //     nextTimeCount = stateTimeCount;
-    //     nextEventName = '';
-    //   }
-    // }
     return nextEventName;
   }
 
   playbackEvent(eventName: string) {
-    // let delay;
-    // // if eventName is nothing, then a state should be set next
-    // if (eventName === '' && this.stateIndex !== -1) {
-    //   delay = this.states.diffs[this.stateIndex][0] - this.getCurrentTime();
-    // } else if (
-    //   this.events[eventName] != null
-    //   && this.eventIndex[eventName] != null
-    //   && this.eventIndex[eventName] > -1
-    // ) {
     const delay = this.events[eventName].list[this.eventIndex[eventName]][0] - this.getCurrentTime();
-    // } else {
-    //   return;
-    // }
 
     if (delay > 0) {
       this.nextEventTimeout = setTimeout(
@@ -1104,21 +1075,17 @@ class Recorder {
       return;
     }
 
-    // if (eventName === '') {
-    //   this.setState(this.stateIndex);
-    //   this.animateDiagramNextFrame();
-    //   this.stateIndex = -1;
-    //   this.playbackEvent(this.getNextEvent());
-    //   return;
-    // }
     const index = this.eventIndex[eventName];
     this.setEvent(eventName, index);
     this.animateDiagramNextFrame();
     if (index + 1 === this.events[eventName].list.length) {
-      this.checkStopPlayback();
-      return;
+      this.eventIndex[eventName] = -1;
+      if (this.isPlayingFinished()) {
+        return;
+      }
+    } else {
+      this.eventIndex[eventName] = index + 1;
     }
-    this.eventIndex[eventName] = index + 1;
     this.playbackEvent(this.getNextEvent());
   }
 
@@ -1214,19 +1181,23 @@ class Recorder {
     return true;
   }
 
-  checkStopPlayback() {
+  isPlayingFinished() {
     if (this.isAudioPlaying) {
-      return;
+      return false;
     }
     const eventNames = Object.keys(this.eventIndex)
     for (let i = 0; i < eventNames.length; i += 1) {
       const eventName = eventNames[i];
-      if (this.eventIndex[eventName] < this.events[eventName].list.length) {
-        return;
+      if (
+        this.eventIndex[eventName] < this.events[eventName].list.length
+        && this.eventIndex[eventName] > -1
+      ) {
+        return false;
       }
     }
 
     this.pausePlayback();
+    return true;
   }
 
   clearPlaybackTimeouts() {
@@ -1444,13 +1415,13 @@ class Recorder {
 
   playbackState() {
     if (this.stateIndex > this.states.diffs.length - 1) {
-      this.checkStopPlayback();
+      this.isPlayingFinished();
       return;
     }
     this.setState(this.stateIndex);
     this.animateDiagramNextFrame();
     if (this.stateIndex + 1 === this.states.diffs.length) {
-      this.checkStopPlayback();
+      this.isPlayingFinished();
       return;
     }
     const nextTime = (this.states.diffs[this.stateIndex + 1][0] - this.getCurrentTime()) * 1000;
