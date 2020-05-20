@@ -464,7 +464,6 @@ class Recorder {
     this.state = 'recording';
     this.lastRecordTime = null;
     this.duration = this.calcDuration();
-    console.log(this.videoToNowDelta);
     this.queueRecordState(0);
   }
 
@@ -620,7 +619,7 @@ class Recorder {
       [now, payload, this.lastRecordTimeCount],
     );
     this.lastRecordTimeCount += 1;
-    console.log(now, this.duration, performance.now())
+    // console.log(now, this.duration, performance.now(), this.videoToNowDelta)
     if (now > this.duration) {
       this.duration = now;
     }
