@@ -375,7 +375,7 @@ describe('Diagram Recorder', () => {
       });
     });
   });
-  describe.only('Cache', () => {
+  describe('Cache', () => {
     describe('Cache recording', () => {
       test('simple', () => {
         recorder.addEventType('cursorMove', () => {}, true);
@@ -818,7 +818,7 @@ describe('Diagram Recorder', () => {
       });
     });
   });
-  describe('State cycle', () => {
+  describe.only('State cycle', () => {
     let state1;
     let state2;
     let state3;
@@ -895,7 +895,7 @@ describe('Diagram Recorder', () => {
       // jest.advanceTimersByTime(1000);
       recorder.stopRecording();
 
-      expect(recorder.states.diffs[0]).toEqual([0, '__base', {}]);
+      expect(recorder.states.diffs[0]).toEqual([0, '__base', {}, 0]);
       expect(recorder.states.diffs[1]).toEqual([
         1,
         '__base',
@@ -905,6 +905,7 @@ describe('Diagram Recorder', () => {
             '.stateTime': 11,
           },
         },
+        0,
       ]);
       expect(recorder.states.diffs).toHaveLength(2);
       diagram.setState(recorder.states.getFromIndex(0));
@@ -937,6 +938,7 @@ describe('Diagram Recorder', () => {
             '.stateTime': 11,
           },
         },
+        0,
       ]);
 
       expect(recorder.states.diffs).toHaveLength(2);
@@ -981,8 +983,8 @@ describe('Diagram Recorder', () => {
           c: { b: 1 },
           d: {},
           h: [
-            [0, 'e', {}],
-            [1, 'e', { g: { f: 2.124 } }],
+            [0, 'e', {}, 0],
+            [1, 'e', { g: { f: 2.124 } }, 0],
           ],
           i: 'e',
         },
@@ -997,8 +999,8 @@ describe('Diagram Recorder', () => {
         baseReference: { elements: 1 },
         references: {},
         diffs: [
-          [0, '__base', {}],
-          [1, '__base', { diff: { '.elements': 2.124 } }],
+          [0, '__base', {}, 0],
+          [1, '__base', { diff: { '.elements': 2.124 } }, 0],
         ],
       };
       expect(decoded).toEqual(decodeExpected);
@@ -1033,8 +1035,8 @@ describe('Diagram Recorder', () => {
         minified: {
           b: { a: 1 },
           e: [
-            [0, 'c', {}],
-            [1, 'c', { d: { a: 2.124 } }],
+            [0, 'c', {}, 0],
+            [1, 'c', { d: { a: 2.124 } }, 0],
           ],
           f: {},
           g: 4,
@@ -1051,8 +1053,8 @@ describe('Diagram Recorder', () => {
         baseReference: { elements: 1 },
         references: {},
         diffs: [
-          [0, '__base', {}],
-          [1, '__base', { diff: { '.elements': 2.124 } }],
+          [0, '__base', {}, 0],
+          [1, '__base', { diff: { '.elements': 2.124 } }, 0],
         ],
       };
       expect(decoded).toEqual(decodeExpected);
@@ -1073,8 +1075,8 @@ describe('Diagram Recorder', () => {
           e: { d: { b: 1, c: 2 } },
           f: {},
           j: [
-            [0, 'g', {}],
-            [1, 'g', { i: { h: 2 } }],
+            [0, 'g', {}, 0],
+            [1, 'g', { i: { h: 2 } }, 0],
           ],
           k: 'g',
         },
@@ -1107,8 +1109,8 @@ describe('Diagram Recorder', () => {
         baseReference: { elements: { e1: 1, e2: 2 } },
         references: {},
         diffs: [
-          [0, '__base', {}],
-          [1, '__base', { diff: { '.elements.e1': 2 } }],
+          [0, '__base', {}, 0],
+          [1, '__base', { diff: { '.elements.e1': 2 } }, 0],
         ],
       };
       expect(decoded).toEqual(expectedDecoded);
@@ -1140,8 +1142,8 @@ describe('Diagram Recorder', () => {
         minified: {
           d: { c: { a: 1, b: 2 } },
           g: [
-            [0, 'e', {}],
-            [1, 'e', { f: { c: { a: 2 } } }],
+            [0, 'e', {}, 0],
+            [1, 'e', { f: { c: { a: 2 } } }, 0],
           ],
           h: {},
           i: 4,
@@ -1175,8 +1177,8 @@ describe('Diagram Recorder', () => {
         baseReference: { elements: { e1: 1, e2: 2 } },
         references: {},
         diffs: [
-          [0, '__base', {}],
-          [1, '__base', { diff: { '.elements.e1': 2 } }],
+          [0, '__base', {}, 0],
+          [1, '__base', { diff: { '.elements.e1': 2 } }, 0],
         ],
       };
       expect(decoded).toEqual(expectedDecoded);
@@ -1205,13 +1207,13 @@ describe('Diagram Recorder', () => {
       recorder.stopRecording();
 
       const expectedDiffs = [
-        [0, '__base', {}],
+        [0, '__base', {}, 0],
         [1, '__base', {
           diff: {
             '.elements.elements.line.transform.state[3].state[2]': 1,
             '.stateTime': 11,
           },
-        }],
+        }, 0],
       ];
       expect(recorder.states.diffs).toEqual(expectedDiffs);
 
@@ -1259,26 +1261,26 @@ describe('Diagram Recorder', () => {
         },
       });
       expect(recorder.states.diffs).toEqual([
-        [0, '__base', {}],
+        [0, '__base', {}, 0],
         [1, '__base', {
           diff: {
             '.elements.elements.line.transform.state[3].state[2]': 1,
             '.stateTime': 11,
           },
-        }],
+        }, 0],
         [2, '__base', {
           diff: {
             '.elements.elements.line.transform.state[3].state[1]': 1,
             '.elements.elements.line.transform.state[3].state[2]': 2,
             '.stateTime': 12,
           },
-        }],
+        }, 0],
         [3, 'ref1', {
           diff: {
             '.elements.elements.line.transform.state[3].state[2]': 3,
             '.stateTime': 13,
           },
-        }],
+        }, 0],
       ]);
 
       const encoded = recorder.encodeStates(true, false, 4);
@@ -1310,13 +1312,13 @@ describe('Diagram Recorder', () => {
       recorder.stopRecording();
 
       const expectedDiffs = [
-        [0, '__base', {}],
+        [0, '__base', {}, 0],
         [1, '__base', {
           diff: {
             '.elements.elements.line.transform.state[3].state[2]': 1,
             '.stateTime': 11,
           },
-        }],
+        }, 0],
       ];
       expect(recorder.states.diffs).toEqual(expectedDiffs);
 
@@ -1364,26 +1366,26 @@ describe('Diagram Recorder', () => {
         },
       });
       expect(recorder.states.diffs).toEqual([
-        [0, '__base', {}],
+        [0, '__base', {}, 0],
         [1, '__base', {
           diff: {
             '.elements.elements.line.transform.state[3].state[2]': 1,
             '.stateTime': 11,
           },
-        }],
+        }, 0],
         [2, '__base', {
           diff: {
             '.elements.elements.line.transform.state[3].state[1]': 1,
             '.elements.elements.line.transform.state[3].state[2]': 2,
             '.stateTime': 12,
           },
-        }],
+        }, 0],
         [3, 'ref1', {
           diff: {
             '.elements.elements.line.transform.state[3].state[2]': 3,
             '.stateTime': 13,
           },
-        }],
+        }, 0],
       ]);
 
       const encoded = recorder.encodeStates(true, true, 4);
@@ -1415,13 +1417,13 @@ describe('Diagram Recorder', () => {
       recorder.stopRecording();
 
       const expectedDiffs = [
-        [0, '__base', {}],
+        [0, '__base', {}, 0],
         [1, '__base', {
           diff: {
             '.elements.elements.line.transform.state[3].state[2]': 1,
             '.stateTime': 11,
           },
-        }],
+        }, 0],
       ];
       expect(recorder.states.diffs).toEqual(expectedDiffs);
 
