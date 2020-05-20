@@ -390,7 +390,7 @@ describe('Diagram Recorder', () => {
       });
     });
   });
-  describe.only('Cache', () => {
+  describe('Cache', () => {
     describe('Cache recording', () => {
       test('simple', () => {
         recorder.addEventType('cursorMove', () => {}, true);
@@ -455,6 +455,7 @@ describe('Diagram Recorder', () => {
         recorder.recordEvent('cursorMove', [1, 1]);
         global.performance.now = () => 14000;
         recorder.recordEvent('cursorMove', [2, 2]);
+        recorder.stopRecording();
         const startTime = recorder.getCacheStartTime();
         const endTime = recorder.getCacheEndTime();
 
@@ -471,6 +472,7 @@ describe('Diagram Recorder', () => {
         recorder.recordEvent('cursorMove', [1, 1]);
         global.performance.now = () => 14000;
         recorder.recordEvent('cursorMove', [2, 2]);
+        recorder.stopRecording();
         const startTime = recorder.getCacheStartTime();
         const endTime = recorder.getCacheEndTime();
 
@@ -836,7 +838,7 @@ describe('Diagram Recorder', () => {
       });
     });
   });
-  describe.only('State cycle', () => {
+  describe('State cycle', () => {
     let state1;
     let state2;
     let state3;
@@ -1424,7 +1426,7 @@ describe('Diagram Recorder', () => {
       expect(line.getPosition().x).toBe(1);
       expect(line.getPosition().y).toBe(3);
     });
-    test.only('diagram Simple as stringified object', () => {
+    test('diagram Simple as stringified object', () => {
       line.setPosition(0, 0);
       global.performance.now = () => 10000;
       console.log(recorder.states)
