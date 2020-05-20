@@ -1716,6 +1716,7 @@ describe('Diagram Recorder', () => {
         global.performance.now = () => duration + delta + initialTime;
         jest.advanceTimersByTime(delta);
         duration += delta;
+        console.log('duration', duration)
       };
       // cursor = diagram.getElement('cursor');
     });
@@ -1726,31 +1727,31 @@ describe('Diagram Recorder', () => {
       timeStep(1000);
       recorder.recordEvent('cursor', ['show', 0, 0]);   // 1
       expect(recorder.duration).toBe(1);
-      timeStep(1000);
-      recorder.recordEvent('cursorMove', [2, 2]);       // 2
-      expect(recorder.duration).toBe(2);
-      timeStep(1000);
-      recorder.recordEvent('touch', ['down', 3, 3]);    // 3
-      expect(recorder.duration).toBe(3);
-      timeStep(1000);
-      recorder.recordEvent('cursorMove', [4, 4]);       // 4
-      expect(recorder.duration).toBe(4);
-      timeStep(1000);
-      recorder.recordEvent('cursorMove', [5, 5]);       // 5
-      expect(recorder.duration).toBe(5);
-      timeStep(1000);
-      recorder.recordEvent('touch', 'up');              // 6
-      expect(recorder.duration).toBe(6);
-      timeStep(1000);
-      recorder.recordEvent('cursorMove', [7, 7]);       // 7
-      expect(recorder.duration).toBe(7);
-      timeStep(1000);
-      recorder.recordEvent('cursorMove', [8, 8]);       // 8
-      expect(recorder.duration).toBe(8);
-      timeStep(1000);
-      recorder.recordEvent('cursor', ['hide']);         // 9
-      expect(recorder.duration).toBe(9);
-      timeStep(3000);
+      // timeStep(1000);
+      // recorder.recordEvent('cursorMove', [2, 2]);       // 2
+      // expect(recorder.duration).toBe(2);
+      // timeStep(1000);
+      // recorder.recordEvent('touch', ['down', 3, 3]);    // 3
+      // expect(recorder.duration).toBe(3);
+      // timeStep(1000);
+      // recorder.recordEvent('cursorMove', [4, 4]);       // 4
+      // expect(recorder.duration).toBe(4);
+      // timeStep(1000);
+      // recorder.recordEvent('cursorMove', [5, 5]);       // 5
+      // expect(recorder.duration).toBe(5);
+      // timeStep(1000);
+      // recorder.recordEvent('touch', 'up');              // 6
+      // expect(recorder.duration).toBe(6);
+      // timeStep(1000);
+      // recorder.recordEvent('cursorMove', [7, 7]);       // 7
+      // expect(recorder.duration).toBe(7);
+      // timeStep(1000);
+      // recorder.recordEvent('cursorMove', [8, 8]);       // 8
+      // expect(recorder.duration).toBe(8);
+      // timeStep(1000);
+      // recorder.recordEvent('cursor', ['hide']);         // 9
+      // expect(recorder.duration).toBe(9);
+      // timeStep(3000);
       recorder.stopRecording();                         // 12
       expect(recorder.duration).toBe(12);
     });
