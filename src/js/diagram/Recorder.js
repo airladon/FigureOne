@@ -204,9 +204,9 @@ class Recorder {
     animateNextFrame: () => void,
   }
 
-  nextEventTimeout: ?TimeoutID;
+  // timeoutID: ?TimeoutID;
 
-  recordStateTimeout: ?TimeoutID;
+  timeoutID: ?TimeoutID;
 
   playbackStoppedCallback: ?() =>void;
 
@@ -317,8 +317,7 @@ class Recorder {
     this.eventsCache = {};
     this.stateIndex = -1;
     this.eventIndex = {};
-    this.nextEventTimeout = null;
-    this.recordStateTimeout = null;
+    this.timeoutID = null;
     this.videoToNowDelta = 0;
     this.state = 'idle';
     this.isAudioPlaying = false;
@@ -551,9 +550,9 @@ class Recorder {
 
   stopRecording() {
     this.state = 'idle';
-    if (this.recordStateTimeout != null) {
-      clearTimeout(this.recordStateTimeout);
-      this.recordStateTimeout = null;
+    if (this.timeoutID != null) {
+      clearTimeout(this.timeoutID);
+      this.timeoutID = null;
     }
     this.mergeEventsCache();
     this.mergeStatesCache();
@@ -573,7 +572,7 @@ class Recorder {
       playbackAction,
     };
     this.eventIndex[eventName] = -1;
-    // this.nextEventTimeout[eventName] = null;
+    // this.timeoutID[eventName] = null;
   }
 
   recordState(state: Object) {
@@ -630,7 +629,7 @@ class Recorder {
       recordAndQueue();
       return;
     }
-    this.recordStateTimeout = setTimeout(() => {
+    this.timeoutID = setTimeout(() => {
       recordAndQueue();
     }, time);
   }
@@ -937,7 +936,7 @@ class Recorder {
     const delay = this.events[eventName].list[this.eventIndex[eventName]][0] - this.getCurrentTime();
 
     if (delay > 0) {
-      this.nextEventTimeout = setTimeout(
+      this.timeoutID = setTimeout(
         this.playbackEvent.bind(this, eventName), delay * 1000,
       );
       return;
@@ -977,7 +976,7 @@ class Recorder {
   }
 
   clearPlaybackTimeouts() {
-    this.nextEventTimeout = null;
+    this.timeoutID = null;
   }
 
   pausePlayback() {

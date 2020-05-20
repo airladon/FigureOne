@@ -1429,7 +1429,6 @@ describe('Diagram Recorder', () => {
     test('diagram Simple as stringified object', () => {
       line.setPosition(0, 0);
       global.performance.now = () => 10000;
-      console.log(recorder.states)
       recorder.startRecording();
 
       line.setPosition(0, 1);
