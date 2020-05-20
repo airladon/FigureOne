@@ -1669,7 +1669,7 @@ export default class DiagramPrimitives {
     return copy;
   }
 
-  pointer(
+  cursor(
     optionsIn: {
       color: Array<number>,
       width: number,
@@ -1682,7 +1682,7 @@ export default class DiagramPrimitives {
       radius: 0.05,
     };
     const options = joinObjects(defaultOptions, optionsIn);
-    const pointer = this.collection();
+    const cursor = this.collection();
     const polygon = {
       width: options.width,
       color: options.color,
@@ -1691,9 +1691,9 @@ export default class DiagramPrimitives {
     };
     const up = this.polygon(polygon);
     const down = this.polygon(joinObjects({}, polygon, { fill: true }));
-    pointer.add('up', up);
-    pointer.add('down', down);
-    return pointer;
+    cursor.add('up', up);
+    cursor.add('down', down);
+    return cursor;
   }
 
   collection(

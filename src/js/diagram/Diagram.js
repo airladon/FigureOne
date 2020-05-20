@@ -198,7 +198,7 @@ class Diagram {
     // this.fnMap.add('doNothing', () => {});
     this.isPaused = false;
     this.scrolled = false;
-    this.cursorElementName = 'pointer';
+    this.cursorElementName = 'cursor';
     this.setStateCallback = null;
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
@@ -372,19 +372,28 @@ class Diagram {
   }
 
   bindRecorder() {
-    this.recorder.touchDown = this.simulateTouchDown.bind(this);
-    this.recorder.touchUp = this.simulateTouchUp.bind(this);
+    this.recorder.diagram = {
+      animateNextFrame: this.animateNextFrame.bind(this),
+      setState: this.setState.bind(this),
+      getState: this.getState.bind(this),
+      getElement: this.getElement.bind(this),
+      showCursor: this.showCursor.bind(this),
+      pause: this.pause.bind(this),
+      unpause: this.unpause.bind(this),
+    };
+    // this.recorder.touchDown = this.simulateTouchDown.bind(this);
+    // this.recorder.touchUp = this.simulateTouchUp.bind(this);
     // this.simulateTouchMove.bind(this),
-    this.recorder.cursorMove = this.setCursor.bind(this);
-    this.recorder.animateDiagramNextFrame = this.animateNextFrame.bind(this);
-    this.recorder.getDiagramElement = this.getElement.bind(this);
-    this.recorder.getDiagramState = this.getState.bind(this);
-    this.recorder.setDiagramState = this.setState.bind(this);
+    // this.recorder.cursorMove = this.setCursor.bind(this);
+    // this.recorder.animateDiagramNextFrame = this.animateNextFrame.bind(this);
+    // this.recorder.getDiagramElement = this.getElement.bind(this);
+    // this.recorder.getDiagramState = this.getState.bind(this);
+    // this.recorder.setDiagramState = this.setState.bind(this);
     // this.pauseAfterNextDraw.bind(this),
-    this.recorder.pauseDiagram = this.pause.bind(this);
-    this.recorder.unpauseDiagram = this.unpause.bind(this);
-    this.recorder.diagramIsInTransition = this.getIsInTransition.bind(this);
-    this.recorder.diagramShowCursor = this.showCursor.bind(this);
+    // this.recorder.pauseDiagram = this.pause.bind(this);
+    // this.recorder.unpauseDiagram = this.unpause.bind(this);
+    // this.recorder.diagramIsInTransition = this.getIsInTransition.bind(this);
+    // this.recorder.diagramShowCursor = this.showCursor.bind(this);
   }
 
   scrollEvent() {
@@ -815,13 +824,16 @@ class Diagram {
     }
   }
 
-  showCursor(show: 'up' | 'down' | 'hide') {
-    const pointer = this.getElement(this.cursorElementName);
-    if (pointer == null) {
+  showCursor(show: 'up' | 'down' | 'hide', position: ?Point = null) {
+    const cursor = this.getElement(this.cursorElementName);
+    if (cursor == null) {
       return;
     }
-    const up = pointer.getElement('up');
-    const down = pointer.getElement('down');
+    const up = cursor.getElement('up');
+    const down = cursor.getElement('down');
+    if (up == null || down == null) {
+      return;
+    }
     if (show === 'up') {
       up.showAll();
       down.hide();
@@ -829,7 +841,10 @@ class Diagram {
       up.hide();
       down.showAll();
     } else {
-      pointer.hide();
+      cursor.hide();
+    }
+    if (position != null) {
+      this.setCursor(position);
     }
     this.animateNextFrame();
   }

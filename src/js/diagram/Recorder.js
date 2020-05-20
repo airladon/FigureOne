@@ -29,7 +29,7 @@ type TypeStateDiff = [number, string, Object];
 // type TypeSlide = ['goto' | 'next' | 'prev', string, number];
 type TypeEvent = [
   number,
-  ?(Array<number | string | Object> | string | number | Object),
+  (Array<number | string | Object> | string | number | Object),
   number,
 ];
 type TypeEvents = Array<TypeEvent>;
@@ -199,47 +199,6 @@ function getTimeToIndex(
 }
 
 
-// revist
-// function getCursorState(
-//   recordedData: TypeEvents,
-//   eventIndex: number,
-// ) {
-//   let i = eventIndex;
-//   let touchUp = null;
-//   let cursorPosition = null;
-//   let showCursor = null;
-//   while (i >= 0 && (cursorPosition == null || touchUp == null || showCursor == null)) {
-//     const [, event] = recordedData[i];
-//     const [eventType] = event;
-//     if (cursorPosition == null && eventType === 'cursorMove') { // $FlowFixMe
-//       const [, x, y] = event;
-//       cursorPosition = new Point(x, y);
-//     }
-//     if (touchUp == null && eventType === 'touchUp') {
-//       touchUp = true;
-//     }
-//     if (touchUp == null && eventType === 'touchDown') {
-//       touchUp = false;
-//       if (cursorPosition == null) {  // $FlowFixMe
-//         const [, x, y] = event;
-//         cursorPosition = new Point(x, y);
-//       }
-//     }
-//     if (showCursor == null && eventType === 'showCursor') {
-//       showCursor = true;
-//     }
-//     if (showCursor == null && eventType === 'hideCursor') {
-//       showCursor = false;
-//     }
-//     i -= 1;
-//   }
-//   return {
-//     show: showCursor == null ? false : showCursor,
-//     up: touchUp == null ? true : touchUp,
-//     position: cursorPosition == null ? new Point(0, 0) : cursorPosition,
-//   };
-// }
-
 
 class Recorder {
   states: ObjectTracker;
@@ -302,17 +261,24 @@ class Recorder {
   // touchUp: void => void;
   // touchMoveDown: (Point, Point) => boolean;
   // cursorMove: (Point) => void;
-  getDiagramState: () => Object;
-  setDiagramState: (Object) => void;
-  pauseDiagram: () => void;
-  unpauseDiagram: () => void;
+  // diagram.getState: () => Object;
+  // diagram.setState: (Object) => void;
+  // diagram.pause: () => void;
+  // diagram.unpause: () => void;
 
   // animation: GlobalAnimation;
   // previousPoint: ?Point;
-  animateDiagramNextFrame: () => void;
-  getDiagramElement: (string) => ?DiagramElement;
+  // diagram.animateNextFrame: () => void;
   // diagramIsInTransition: () => boolean;
-  diagramShowCursor: ('up' | 'down' | 'hide') => void;
+  diagram: {
+    showCursor: ('up' | 'down' | 'hide', ?Point) => void,
+    getElement: (string) => ?DiagramElement,
+    pause: () => void,
+    unpause: () => void,
+    getState: () => Object,
+    setState: (Object) => void,
+    animateNextFrame: () => void,
+  }
 
   nextEventTimeout: ?TimeoutID;
 
@@ -367,13 +333,13 @@ class Recorder {
         pause: () => {},
         unpause: () => {},
         showCursor: () => {},
-      }
-      this.animateDiagramNextFrame = () => {};
-      this.getDiagramElement = () => null;
-      this.getDiagramState = () => {};
-      this.setDiagramState = () => {};
-      this.pauseDiagram = () => {};
-      this.unpauseDiagram = () => {};
+      };
+      // this.diagram.animateNextFrame = () => {};
+      // this.diagram.getElement = () => null;
+      // this.diagram.getState = () => {};
+      // this.diagram.setState = () => {};
+      // this.diagram.pause = () => {};
+      // this.diagram.unpause = () => {};
       // this.nextSlide = null;
       // this.prevSlide = null;
       // this.goToSlide = null;
@@ -381,7 +347,7 @@ class Recorder {
       this.playbackStopped = null;
       // this.getCurrentSlide = null;
       // this.diagramIsInTransition = () => false;
-      this.diagramShowCursor = () => {};
+      // this.diagram.showCursor = () => {};
     }
     return Recorder.instance;
   }
@@ -635,7 +601,7 @@ class Recorder {
     this.statesCache = new ObjectTracker(this.precision);
     this.statesCache.baseReference = duplicate(this.states.baseReference);
     this.statesCache.references = duplicate(this.states.references);
-    this.unpauseDiagram();
+    this.diagram.unpause();
     this.setVideoToNowDeltaTime(startTime);
     this.state = 'recording';
     this.lastRecordTime = null;
@@ -767,11 +733,11 @@ class Recorder {
   }
 
   recordCurrentState() {
-    this.recordState(this.getDiagramState());
+    this.recordState(this.diagram.getState());
   }
 
   recordCurrentStateAsReference(refName: string, basedOn: '__base') {
-    this.statesCache.addReference(this.getDiagramState(), refName, basedOn);
+    this.statesCache.addReference(this.diagram.getState(), refName, basedOn);
   }
 
   recordEvent(
@@ -904,10 +870,14 @@ class Recorder {
     this.seek(duration * percentTime);
     // const timeTarget = percentTime * duration;
     // this.setToTime(timeTarget);
-    // this.pauseDiagram();
+    // this.diagram.pause();
   }
 
-  seek(time: number) {
+  seek(timeIn: number) {
+    let time = timeIn;
+    if (time < 0) {
+      time = 0;
+    }
     if (this.states.diffs.length === 0) {
       return;
     }
@@ -915,13 +885,11 @@ class Recorder {
     // const duration = this.calcDuration();
     // const timeTarget = percentTime * duration;
     this.setToTime(time);
-    this.getCursorState();
-    this.pauseDiagram();
+    // this.getCursorState();
+    this.diagram.pause();
   }
 
   setToTime(time: number) {
-    // const eventsBeforeState = [];
-    // const eventsAfterState = [];
     this.stateIndex = getPrevIndexForTime(this.states.diffs, time);
     const [stateTime, , , stateTimeCount] = this.states.diffs[this.stateIndex];
 
@@ -985,43 +953,58 @@ class Recorder {
     }
     this.currentTime = time;
 
-    this.animateDiagramNextFrame();
+    this.setCursor(time);
+    this.diagram.animateNextFrame();
   }
 
-  getCursorState() {
+  setCursor(time: number) {
+    const cursorState = this.getCursorState(time);
+    if (cursorState == null) {
+      return;
+    }
+    const { show, up, position } = cursorState;
+    if (show && up) {
+      this.diagram.showCursor('up', position);
+    } else if (show && up === false) {
+      this.diagram.showCursor('down', position);
+    } else {
+      this.diagram.showCursor('hide');
+    }
+  }
+
+  getCursorState(atTime: number) {
     if (
-      this.eventTypes.touch == null
-      || this.eventTypes.cursor == null
-      || this.eventTypes.cursorMove == null
+      this.events.touch == null
+      || this.events.cursor == null
+      || this.events.cursorMove == null
     ) {
       return null;
     }
+
+    const cursorIndex = getPrevIndexForTime(this.events.cursor.list, atTime);
+    const touchIndex = getPrevIndexForTime(this.events.touch.list, atTime);
+    const cursorMoveIndex = getPrevIndexForTime(this.events.cursorMove.list, atTime);
 
     let touchUp = null;
     let showCursor = null;
     let cursorPosition = null;
     let cursorTime = null;
     let cursorTimeCount = null;
-    // let cursorX = null;
-    // let cursorY = null;
-
-    if (this.eventIndex['touch'] !== -1) {
-      const event = this.events[this.eventIndex['touch']];
+    if (touchIndex !== -1) {
+      const event = this.events.touch.list[touchIndex];
       const [time, [upOrDown, x, y], timeCount] = event;
       if (upOrDown === 'down') {
         touchUp = false;
         cursorTime = time;
         cursorTimeCount = timeCount;
         cursorPosition = new Point(x, y);
-        // cursorX = x;
-        // cursorY = y;
       } else {
         touchUp = true;
       }
     }
 
-    if (this.eventIndex['cursor'] !== -1) {
-      const event = this.events[this.eventIndex['cursor']];
+    if (cursorIndex !== -1) {
+      const event = this.events.cursor.list[cursorIndex];
       const [time, [showOrHide, x, y], timeCount] = event;
       if (showOrHide === 'show') {
         showCursor = true;
@@ -1033,63 +1016,24 @@ class Recorder {
           cursorTime = time;
           cursorTimeCount = timeCount;
           cursorPosition = new Point(x, y);
-          // cursorX = x;
-          // cursorY = y;
         }
       } else {
         showCursor = false;
       }
     }
 
-    if (this.eventIndex['cursorMove'] !== -1) {
-      const event = this.events[this.eventIndex['cursorMove']];
+    if (cursorMoveIndex !== -1) {
+      const event = this.events.cursorMove.list[cursorMoveIndex];
       const [time, [x, y], timeCount] = event;
       if (
         cursorTime == null
         || time > cursorTime
         || (time === cursorTime && timeCount > cursorTimeCount)
       ) {
-        // cursorX = x;
-        // cursorY = y;
         cursorPosition = new Point(x, y);
       }
     }
 
-    // let touchDownTime = null;
-    // let touchUpTime = null;
-    // let showCursorTime = null;
-    // let hideCursorTime = null
-    // if (this.removeEventListener)
-
-    // let i = eventIndex;
-    // let touchUp = null;
-    // let cursorPosition = null;
-    // let showCursor = null;
-    // while (i >= 0 && (cursorPosition == null || touchUp == null || showCursor == null)) {
-    //   const [, event] = recordedData[i];
-    //   const [eventType] = event;
-    //   if (cursorPosition == null && eventType === 'cursorMove') { // $FlowFixMe
-    //     const [, x, y] = event;
-    //     cursorPosition = new Point(x, y);
-    //   }
-    //   if (touchUp == null && eventType === 'touchUp') {
-    //     touchUp = true;
-    //   }
-    //   if (touchUp == null && eventType === 'touchDown') {
-    //     touchUp = false;
-    //     if (cursorPosition == null) {  // $FlowFixMe
-    //       const [, x, y] = event;
-    //       cursorPosition = new Point(x, y);
-    //     }
-    //   }
-    //   if (showCursor == null && eventType === 'showCursor') {
-    //     showCursor = true;
-    //   }
-    //   if (showCursor == null && eventType === 'hideCursor') {
-    //     showCursor = false;
-    //   }
-    //   i -= 1;
-    // }
     return {
       show: showCursor == null ? false : showCursor,
       up: touchUp == null ? true : touchUp,
@@ -1115,7 +1059,7 @@ class Recorder {
 
     // this.touchUp();
     this.currentTime = fromTime;
-    this.unpauseDiagram();
+    this.diagram.unpause();
 
     this.setToTime(fromTime);
 
@@ -1135,11 +1079,9 @@ class Recorder {
       }
     }
 
-    this.animateDiagramNextFrame();
+    this.diagram.animateNextFrame();
   }
 
-  // this assumes setToTime is already called, which in turn sets all the
-  // this.eventIndex values
   startEventsPlayback(fromTime: number) {
     Object.keys(this.events).forEach((eventName) => {
       const event = this.events[eventName];
@@ -1198,7 +1140,7 @@ class Recorder {
 
     const index = this.eventIndex[eventName];
     this.setEvent(eventName, index);
-    this.animateDiagramNextFrame();
+    this.diagram.animateNextFrame();
     if (index + 1 === this.events[eventName].list.length) {
       this.eventIndex[eventName] = -1;
       if (this.isPlayingFinished()) {
@@ -1210,98 +1152,98 @@ class Recorder {
     this.playbackEvent(this.getNextEvent());
   }
 
-  setPointerPosition(pos: Point) {
-    const pointer = this.getDiagramElement('pointer');
-    if (pointer == null) {
-      return;
-    }
-    pointer.setPosition(pos);
-  }
+  // setPointerPosition(pos: Point) {
+  //   const pointer = this.diagram.getElement('pointer');
+  //   if (pointer == null) {
+  //     return;
+  //   }
+  //   pointer.setPosition(pos);
+  // }
 
-  showPointer() {
-    if (this.isRecording) {
-      return;
-    }
-    if (this.slides.length === 0 || this.states.states.length === 0 || this.events.length === 0) {
-      return;
-    }
-    if (
-      this.slideIndex > this.slides.length - 1
-      || this.eventIndex > this.events.length - 1
-    ) {
-      return;
-    }
-    const p = this.getMostRecentPointerPosition();
-    const pointer = this.getDiagramElement('pointer');
-    if (pointer == null) {
-      return;
-    }
+  // showPointer() {
+  //   if (this.isRecording) {
+  //     return;
+  //   }
+  //   if (this.slides.length === 0 || this.states.states.length === 0 || this.events.length === 0) {
+  //     return;
+  //   }
+  //   if (
+  //     this.slideIndex > this.slides.length - 1
+  //     || this.eventIndex > this.events.length - 1
+  //   ) {
+  //     return;
+  //   }
+  //   const p = this.getMostRecentPointerPosition();
+  //   const pointer = this.diagram.getElement('pointer');
+  //   if (pointer == null) {
+  //     return;
+  //   }
 
-    this.setPointerPosition(p);
-    const isPointerUp = this.getIsPointerUp();
+  //   this.setPointerPosition(p);
+  //   const isPointerUp = this.getIsPointerUp();
 
-    if (pointer != null && pointer._up != null && isPointerUp) {
-      pointer._up.showAll();
-    }
-    if (pointer != null && pointer._down != null && !isPointerUp) {
-      pointer._down.showAll();
-    }
-  }
+  //   if (pointer != null && pointer._up != null && isPointerUp) {
+  //     pointer._up.showAll();
+  //   }
+  //   if (pointer != null && pointer._down != null && !isPointerUp) {
+  //     pointer._down.showAll();
+  //   }
+  // }
 
-  getMostRecentPointerPosition(): ?Point {
-    // if (this.isRecording) {
-    //   return null;
-    // }
-    const touchDownTime
-    let i = this.eventIndex;
-    while (i >= 0 && i < this.events.length) {
-      const eventAction = this.events[i][1];
-      if (
-        eventAction === 'touchDown'
-        || eventAction === 'touchUp'
-        || eventAction === 'cursorMove'
-      ) {
-        const [, , x, y] = this.events[i];
-        if (x != null && y != null) {
-          return new Point(x, y);
-        }
-        return null;
-      }
-      if (i <= this.eventIndex) {
-        i -= 1;
-      } else {
-        i += 1;
-      }
-      if (i === -1) {
-        i = this.eventIndex + 1;
-      }
-    }
-    return null;
-  }
+  // getMostRecentPointerPosition(): ?Point {
+  //   // if (this.isRecording) {
+  //   //   return null;
+  //   // }
+  //   // const touchDownTime
+  //   let i = this.eventIndex;
+  //   while (i >= 0 && i < this.events.length) {
+  //     const eventAction = this.events[i][1];
+  //     if (
+  //       eventAction === 'touchDown'
+  //       || eventAction === 'touchUp'
+  //       || eventAction === 'cursorMove'
+  //     ) {
+  //       const [, , x, y] = this.events[i];
+  //       if (x != null && y != null) {
+  //         return new Point(x, y);
+  //       }
+  //       return null;
+  //     }
+  //     if (i <= this.eventIndex) {
+  //       i -= 1;
+  //     } else {
+  //       i += 1;
+  //     }
+  //     if (i === -1) {
+  //       i = this.eventIndex + 1;
+  //     }
+  //   }
+  //   return null;
+  // }
 
-  getIsPointerUp() {
-    if (this.isRecording) {
-      return false;
-    }
-    const slideTime = this.slides[this.slideIndex][0];
-    let i = this.eventIndex;
-    let eventTime;
-    while (i > 0) {
-      const eventAction = this.events[i][1];
-      ([eventTime] = this.events[i]);
-      if (eventTime < slideTime) {
-        return true;
-      }
-      if (eventAction === 'touchDown') {
-        return false;
-      }
-      if (eventAction === 'touchUp') {
-        return true;
-      }
-      i -= 1;
-    }
-    return true;
-  }
+  // getIsPointerUp() {
+  //   if (this.isRecording) {
+  //     return false;
+  //   }
+  //   const slideTime = this.slides[this.slideIndex][0];
+  //   let i = this.eventIndex;
+  //   let eventTime;
+  //   while (i > 0) {
+  //     const eventAction = this.events[i][1];
+  //     ([eventTime] = this.events[i]);
+  //     if (eventTime < slideTime) {
+  //       return true;
+  //     }
+  //     if (eventAction === 'touchDown') {
+  //       return false;
+  //     }
+  //     if (eventAction === 'touchUp') {
+  //       return true;
+  //     }
+  //     i -= 1;
+  //   }
+  //   return true;
+  // }
 
   isPlayingFinished() {
     if (this.isAudioPlaying) {
@@ -1337,13 +1279,13 @@ class Recorder {
   }
 
   pausePlayback() {
-    this.pauseDiagram();
+    this.diagram.pause();
     this.currentTime = this.getCurrentTime();
     this.state = 'idle';
     // clearTimeout(this.nextEventTimeout);
     // clearTimeout(this.nextStateTimeout);
     this.clearPlaybackTimeouts();
-    const pointer = this.getDiagramElement('pointer');
+    const pointer = this.diagram.getElement('pointer');
     if (pointer != null) {
       pointer.hide();
     }
@@ -1354,7 +1296,7 @@ class Recorder {
     if (this.playbackStopped != null) {
       this.playbackStopped();
     }
-    // this.pauseDiagram();
+    // this.diagram.pause();
   }
 
   // playFrame() {
@@ -1393,7 +1335,7 @@ class Recorder {
   //   } else {
   //     this.animation.queueNextFrame(this.playFrame.bind(this));
   //   }
-  //   this.animateDiagramNextFrame();
+  //   this.diagram.animateNextFrame();
   //   // console.log(this.getCurrentTime() - time);
   //   // const prevSlideIndex = getPrevIndexForTime(this.slides, time);
   // }
@@ -1419,7 +1361,7 @@ class Recorder {
   //     return;
   //   }
   //   this.setEvent(eventName, this.eventIndex[eventName]);
-  //   this.animateDiagramNextFrame();
+  //   this.diagram.animateNextFrame();
   //   const nextIndex = this.eventIndex[eventName] + 1;
   //   if (nextIndex === this.events[eventName].list.length) {
   //     this.checkStopPlayback();
@@ -1438,88 +1380,88 @@ class Recorder {
     event.playbackAction(event.list[index][1], event.list[index][0]);
   }
 
-  setEventLegacy(index: number = this.eventIndex) {
-    if (index > this.events.length - 1) {
-      return;
-    }
-    const event = this.events[index][1];
-    const [eventType] = event;
-    switch (eventType) {
-      case 'touchDown': {
-        const [, x, y] = event;
-        this.touchDown(new Point(x, y));
-        break;
-      }
-      case 'touchUp':
-        this.touchUp();
-        break;
-      case 'cursorMove': {
-        const [, x: number, y: number] = event;
-        this.cursorMove(new Point(x, y));
-        break;
-      }
-      case 'startBeingMoved': {
-        const [, elementPath] = event;
-        const element = this.getDiagramElement(elementPath);
-        if (element != null) {
-          element.startBeingMoved();
-        }
-        break;
-      }
-      case 'moved': {
-        const [, elementPath, transformDefinition] = event;
-        const element = this.getDiagramElement(elementPath);
-        if (element != null) {
-          const transform = getTransform(transformDefinition);
-          element.moved(transform);
-        }
-        break;
-      }
-      case 'click': {
-        const [, id] = event;
-        const element = document.getElementById(id);
-        if (element != null) {
-          element.click();
-        }
-        break;
-      }
-      case 'showCursor': {
-        const [, x: number, y: number] = event;
-        this.diagramShowCursor('up');
-        this.cursorMove(new Point(x, y));
-        break;
-      }
-      case 'hideCursor': {
-        this.diagramShowCursor('hide');
-        break;
-      }
+  // setEventLegacy(index: number = this.eventIndex) {
+  //   if (index > this.events.length - 1) {
+  //     return;
+  //   }
+  //   const event = this.events[index][1];
+  //   const [eventType] = event;
+  //   switch (eventType) {
+  //     case 'touchDown': {
+  //       const [, x, y] = event;
+  //       this.touchDown(new Point(x, y));
+  //       break;
+  //     }
+  //     case 'touchUp':
+  //       this.touchUp();
+  //       break;
+  //     case 'cursorMove': {
+  //       const [, x: number, y: number] = event;
+  //       this.cursorMove(new Point(x, y));
+  //       break;
+  //     }
+  //     case 'startBeingMoved': {
+  //       const [, elementPath] = event;
+  //       const element = this.diagram.getElement(elementPath);
+  //       if (element != null) {
+  //         element.startBeingMoved();
+  //       }
+  //       break;
+  //     }
+  //     case 'moved': {
+  //       const [, elementPath, transformDefinition] = event;
+  //       const element = this.diagram.getElement(elementPath);
+  //       if (element != null) {
+  //         const transform = getTransform(transformDefinition);
+  //         element.moved(transform);
+  //       }
+  //       break;
+  //     }
+  //     case 'click': {
+  //       const [, id] = event;
+  //       const element = document.getElementById(id);
+  //       if (element != null) {
+  //         element.click();
+  //       }
+  //       break;
+  //     }
+  //     case 'showCursor': {
+  //       const [, x: number, y: number] = event;
+  //       this.diagram.showCursor('up');
+  //       this.cursorMove(new Point(x, y));
+  //       break;
+  //     }
+  //     case 'hideCursor': {
+  //       this.diagram.showCursor('hide');
+  //       break;
+  //     }
 
-      // case 'cursorMoved': {
-      //   const [, x, y] = event;
-      //   this.
-      // }
-      case 'stopBeingMoved': {
-        const [, elementPath, transformDefinition, velocityDefinition] = event;
-        const element = this.getDiagramElement(elementPath);
-        const transform = getTransform(transformDefinition);
-        const velocity = getTransform(velocityDefinition);
-        element.transform = transform;
-        element.state.movement.velocity = velocity;
-        element.stopBeingMoved();
-        break;
-      }
-      case 'startMovingFreely': {
-        const [, elementPath, transformDefinition, velocityDefinition] = event;
-        const element = this.getDiagramElement(elementPath);
-        const transform = getTransform(transformDefinition);
-        const velocity = getTransform(velocityDefinition);
-        element.simulateStartMovingFreely(transform, velocity);
-        break;
-      }
-      default:
-        break;
-    }
-  }
+  //     // case 'cursorMoved': {
+  //     //   const [, x, y] = event;
+  //     //   this.
+  //     // }
+  //     case 'stopBeingMoved': {
+  //       const [, elementPath, transformDefinition, velocityDefinition] = event;
+  //       const element = this.diagram.getElement(elementPath);
+  //       const transform = getTransform(transformDefinition);
+  //       const velocity = getTransform(velocityDefinition);
+  //       element.transform = transform;
+  //       element.state.movement.velocity = velocity;
+  //       element.stopBeingMoved();
+  //       break;
+  //     }
+  //     case 'startMovingFreely': {
+  //       const [, elementPath, transformDefinition, velocityDefinition] = event;
+  //       const element = this.diagram.getElement(elementPath);
+  //       const transform = getTransform(transformDefinition);
+  //       const velocity = getTransform(velocityDefinition);
+  //       element.simulateStartMovingFreely(transform, velocity);
+  //       break;
+  //     }
+  //     default:
+  //       break;
+  //   }
+  // }
 
   queuePlaybackState(delay: number = 0) {
     const incrementIndexAndPlayState = () => {
@@ -1541,7 +1483,7 @@ class Recorder {
       return;
     }
     this.setState(this.stateIndex);
-    this.animateDiagramNextFrame();
+    this.diagram.animateNextFrame();
     if (this.stateIndex + 1 === this.states.diffs.length) {
       this.isPlayingFinished();
       return;
@@ -1555,7 +1497,7 @@ class Recorder {
       return;
     }
     const state = this.states.getFromIndex(index);
-    this.setDiagramState(state);
+    this.diagram.setState(state);
   }
 
   // queuePlaybackSlide(delay: number = 0) {
@@ -1577,7 +1519,7 @@ class Recorder {
   //   }
   //   // const event = this.events[this.slideIndex];
   //   this.setSlide(this.slideIndex, forceGoTo);
-  //   this.animateDiagramNextFrame();
+  //   this.diagram.animateNextFrame();
 
   //   if (this.slideIndex + 1 === this.slides.length) {
   //     this.checkStopPlayback();
@@ -1621,5 +1563,5 @@ export {
   getLastUniqueIndeces,
   getNextIndexForTime,
   getPrevIndexForTime,
-  getCursorState,
+  // getCursorState,
 };
