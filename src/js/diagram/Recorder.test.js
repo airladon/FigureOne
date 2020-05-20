@@ -1711,18 +1711,14 @@ describe('Diagram Recorder', () => {
       recorder.addEventType('touch', onTouch);
       recorder.stateTimeStep = 2;
       duration = 0;
-      // priorDuration = 0;
       const initialTime = 1000;
 
       timeStep = (delta) => {
-        // priorDuration = duration;
-        // console.log('duration', duration, delta, duration + delta + initialTime)
         const newNow = duration + delta + initialTime;
         global.performance.now = () => newNow;
         jest.advanceTimersByTime(delta);
         duration += delta;
       };
-      // cursor = diagram.getElement('cursor');
     });
     test.only('Track Duration', () => {
       timeStep(0);
