@@ -870,7 +870,7 @@ class ObjectTracker {
         diff: diffPathsToObj(this.references[refName].diff),
       };
     });
-    const diffs = this.diffs.map(d => [d[0], d[1], diffPathsToObj(d[2])]);
+    const diffs = this.diffs.map(d => [d[0], d[1], diffPathsToObj(d[2]), d[3]]);
     return {
       baseReference: duplicate(this.baseReference),
       diffs,
@@ -891,7 +891,7 @@ class ObjectTracker {
     this.references = references;
     this.baseReference = duplicate(obj.baseReference);
     this.precision = obj.precision;
-    this.diffs = obj.diffs.map(d => [d[0], d[1], diffObjToPaths(d[2])]);
+    this.diffs = obj.diffs.map(d => [d[0], d[1], diffObjToPaths(d[2]), d[3]]);
   }
 
   reset() {
