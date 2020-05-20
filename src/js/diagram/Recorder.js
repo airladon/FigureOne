@@ -200,45 +200,45 @@ function getTimeToIndex(
 
 
 // revist
-function getCursorState(
-  recordedData: TypeEvents,
-  eventIndex: number,
-) {
-  let i = eventIndex;
-  let touchUp = null;
-  let cursorPosition = null;
-  let showCursor = null;
-  while (i >= 0 && (cursorPosition == null || touchUp == null || showCursor == null)) {
-    const [, event] = recordedData[i];
-    const [eventType] = event;
-    if (cursorPosition == null && eventType === 'cursorMove') { // $FlowFixMe
-      const [, x, y] = event;
-      cursorPosition = new Point(x, y);
-    }
-    if (touchUp == null && eventType === 'touchUp') {
-      touchUp = true;
-    }
-    if (touchUp == null && eventType === 'touchDown') {
-      touchUp = false;
-      if (cursorPosition == null) {  // $FlowFixMe
-        const [, x, y] = event;
-        cursorPosition = new Point(x, y);
-      }
-    }
-    if (showCursor == null && eventType === 'showCursor') {
-      showCursor = true;
-    }
-    if (showCursor == null && eventType === 'hideCursor') {
-      showCursor = false;
-    }
-    i -= 1;
-  }
-  return {
-    show: showCursor == null ? false : showCursor,
-    up: touchUp == null ? true : touchUp,
-    position: cursorPosition == null ? new Point(0, 0) : cursorPosition,
-  };
-}
+// function getCursorState(
+//   recordedData: TypeEvents,
+//   eventIndex: number,
+// ) {
+//   let i = eventIndex;
+//   let touchUp = null;
+//   let cursorPosition = null;
+//   let showCursor = null;
+//   while (i >= 0 && (cursorPosition == null || touchUp == null || showCursor == null)) {
+//     const [, event] = recordedData[i];
+//     const [eventType] = event;
+//     if (cursorPosition == null && eventType === 'cursorMove') { // $FlowFixMe
+//       const [, x, y] = event;
+//       cursorPosition = new Point(x, y);
+//     }
+//     if (touchUp == null && eventType === 'touchUp') {
+//       touchUp = true;
+//     }
+//     if (touchUp == null && eventType === 'touchDown') {
+//       touchUp = false;
+//       if (cursorPosition == null) {  // $FlowFixMe
+//         const [, x, y] = event;
+//         cursorPosition = new Point(x, y);
+//       }
+//     }
+//     if (showCursor == null && eventType === 'showCursor') {
+//       showCursor = true;
+//     }
+//     if (showCursor == null && eventType === 'hideCursor') {
+//       showCursor = false;
+//     }
+//     i -= 1;
+//   }
+//   return {
+//     show: showCursor == null ? false : showCursor,
+//     up: touchUp == null ? true : touchUp,
+//     position: cursorPosition == null ? new Point(0, 0) : cursorPosition,
+//   };
+// }
 
 
 class Recorder {
@@ -978,6 +978,105 @@ class Recorder {
     this.animateDiagramNextFrame();
   }
 
+  getCursorState() {
+    if (
+      this.eventTypes.touch == null
+      || this.eventTypes.cursor == null
+      || this.eventTypes.cursorMove == null
+    ) {
+      return null;
+    }
+
+    let touchUp = null;
+    let showCursor = null;
+    let cursorPosition = null;
+    let cursorTime = null;
+    let cursorTimeCount = null;
+    let cursorX = null;
+    let cursorY = null;
+
+    if (this.eventIndex['touch'] !== -1) {
+      const event = this.events[this.eventIndex['touch']];
+      const [time, [upOrDown, x, y], timeCount] = event;
+      if (upOrDown === 'down') {
+        touchUp = false;
+        cursorTime = time;
+        cursorTimeCount = timeCount;
+        cursorX = x;
+        cursorY = y;
+      } else {
+        touchUp = true;
+      }
+    }
+
+    if (this.eventIndex['cursor'] !== -1) {
+      const event = this.events[this.eventIndex['cursor']];
+      const [time, [showOrHide, x, y], timeCount] = event;
+      if (showOrHide === 'show') {
+        showCursor = true;
+        if (
+          cursorTime == null
+          || time > cursorTime
+          || (time === cursorTime && timeCount > cursorTimeCount)
+        ) {
+          cursorTime = time;
+          cursorTimeCount = timeCount;
+          cursorX = x;
+          cursorY = y;
+        }
+      } else {
+        showCursor = false;
+      }
+    }
+
+    if (this.eventIndex['cursorMove'] !== -1) {
+      const event = this.events[this.eventIndex['cursorMove']];
+      const [cursorMoveTime, [x, y], cursorMoveTimeCount] = event;
+    }
+
+    let touchDownTime = null;
+    let touchUpTime = null;
+    let showCursorTime = null;
+    let hideCursorTime = null
+    if (this.removeEventListener)
+
+    let i = eventIndex;
+    let touchUp = null;
+    let cursorPosition = null;
+    let showCursor = null;
+    while (i >= 0 && (cursorPosition == null || touchUp == null || showCursor == null)) {
+      const [, event] = recordedData[i];
+      const [eventType] = event;
+      if (cursorPosition == null && eventType === 'cursorMove') { // $FlowFixMe
+        const [, x, y] = event;
+        cursorPosition = new Point(x, y);
+      }
+      if (touchUp == null && eventType === 'touchUp') {
+        touchUp = true;
+      }
+      if (touchUp == null && eventType === 'touchDown') {
+        touchUp = false;
+        if (cursorPosition == null) {  // $FlowFixMe
+          const [, x, y] = event;
+          cursorPosition = new Point(x, y);
+        }
+      }
+      if (showCursor == null && eventType === 'showCursor') {
+        showCursor = true;
+      }
+      if (showCursor == null && eventType === 'hideCursor') {
+        showCursor = false;
+      }
+      i -= 1;
+    }
+    return {
+      show: showCursor == null ? false : showCursor,
+      up: touchUp == null ? true : touchUp,
+      position: cursorPosition == null ? new Point(0, 0) : cursorPosition,
+    };
+  }
+  
+
   // ////////////////////////////////////
   // ////////////////////////////////////
   // Playback
@@ -1129,9 +1228,10 @@ class Recorder {
   }
 
   getMostRecentPointerPosition(): ?Point {
-    if (this.isRecording) {
-      return null;
-    }
+    // if (this.isRecording) {
+    //   return null;
+    // }
+    const touchDownTime
     let i = this.eventIndex;
     while (i >= 0 && i < this.events.length) {
       const eventAction = this.events[i][1];

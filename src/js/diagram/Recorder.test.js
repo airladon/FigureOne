@@ -218,28 +218,34 @@ describe('Diagram Recorder', () => {
     describe('Get Cursor State', () => {
       // let cursorEvents;
       beforeEach(() => {
+        recorder.addEventType('showCurosr', () => {}, true);
+        recorder.addEventType('cursorMove', () => {}, true);
+        recorder.addEventType('touchDown', () => {}, true);
+        recorder.addEventType('touchUp', () => {}, true);
+        recorder.addEventType('hideCursor', () => {}, true);
+        recorder.addEventType('doNothing', () => {}, true);
         global.performance.now = () => 0;
         recorder.startRecording();
         global.performance.now = () => 1000;
-        recorder.recordEvent('showCursor', 0, 0);
+        recorder.recordEvent('cursor', ['show', 0, 0]);
         global.performance.now = () => 2000;
-        recorder.recordEvent('cursorMove', 1, 1);
+        recorder.recordEvent('cursorMove', [1, 1]);
         global.performance.now = () => 3000;
-        recorder.recordEvent('cursorMove', 2, 2);
+        recorder.recordEvent('cursorMove', [2, 2]);
         global.performance.now = () => 4000;
-        recorder.recordEvent('touchDown', 3, 3);
+        recorder.recordEvent('touch', 'down', [3, 3]);
         global.performance.now = () => 5000;
-        recorder.recordEvent('cursorMove', 4, 4);
+        recorder.recordEvent('cursorMove', [4, 4]);
         global.performance.now = () => 6000;
-        recorder.recordEvent('cursorMove', 5, 5);
+        recorder.recordEvent('cursorMove', [5, 5]);
         global.performance.now = () => 7000;
-        recorder.recordEvent('touchUp');
+        recorder.recordEvent('touch', 'up');
         global.performance.now = () => 8000;
-        recorder.recordEvent('cursorMove', 7, 7);
+        recorder.recordEvent('cursorMove', [7, 7]);
         global.performance.now = () => 9000;
-        recorder.recordEvent('cursorMove', 8, 8);
+        recorder.recordEvent('cursorMove', [8, 8]);
         global.performance.now = () => 10000;
-        recorder.recordEvent('hideCursor');
+        recorder.recordEvent('cursor', 'hide');
         global.performance.now = () => 11000;
         recorder.recordEvent('doNothing');
         recorder.stopRecording();
@@ -818,7 +824,7 @@ describe('Diagram Recorder', () => {
       });
     });
   });
-  describe.only('State cycle', () => {
+  describe('State cycle', () => {
     let state1;
     let state2;
     let state3;
