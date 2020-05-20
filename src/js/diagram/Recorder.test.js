@@ -833,7 +833,7 @@ describe('Diagram Recorder', () => {
       });
     });
   });
-  describe('State cycle', () => {
+  describe.only('State cycle', () => {
     let state1;
     let state2;
     let state3;
