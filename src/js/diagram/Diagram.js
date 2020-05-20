@@ -176,7 +176,7 @@ class Diagram {
   isPaused: boolean;
   pauseTime: number;
   cursorShown: boolean;
-  pointerElementName: string;
+  cursorElementName: string;
   isTouchDown: boolean;
   setStateCallback: ?(string | (() => void));
   // pauseAfterNextDrawFlag: boolean;
@@ -198,7 +198,7 @@ class Diagram {
     // this.fnMap.add('doNothing', () => {});
     this.isPaused = false;
     this.scrolled = false;
-    this.pointerElementName = 'pointer';
+    this.cursorElementName = 'pointer';
     this.setStateCallback = null;
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
@@ -783,7 +783,7 @@ class Diagram {
     // const clientPoint = this.pixelToClient(pixelPoint);
     // this.touchDownHandler(clientPoint);
 
-    const pointer = this.getElement(this.pointerElementName);
+    const pointer = this.getElement(this.cursorElementName);
     if (pointer == null) {
       return;
     }
@@ -816,7 +816,7 @@ class Diagram {
   }
 
   showCursor(show: 'up' | 'down' | 'hide') {
-    const pointer = this.getElement(this.pointerElementName);
+    const pointer = this.getElement(this.cursorElementName);
     if (pointer == null) {
       return;
     }
@@ -900,7 +900,7 @@ class Diagram {
 
   simulateTouchUp() {
     // this.touchUpHandler();
-    const pointer = this.getElement(this.pointerElementName);
+    const pointer = this.getElement(this.cursorElementName);
     if (pointer == null) {
       return;
     }
@@ -939,7 +939,7 @@ class Diagram {
   }
 
   // simulateCursorMove(diagramPoint: Point) {
-  //   const pointer = this.getElement(this.pointerElementName);
+  //   const pointer = this.getElement(this.cursorElementName);
   //   if (pointer == null) {
   //     return;
   //   }
@@ -947,7 +947,7 @@ class Diagram {
   // }
 
   setCursor(p: Point) {
-    const pointer = this.getElement(this.pointerElementName);
+    const pointer = this.getElement(this.cursorElementName);
     if (pointer == null) {
       return;
     }

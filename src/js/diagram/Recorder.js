@@ -356,9 +356,18 @@ class Recorder {
 
       // diagram and topic functions
       // this.animation = new GlobalAnimation();
-      this.touchDown = () => {};
-      this.touchUp = () => {};
-      this.cursorMove = () => {};
+      // this.touchDown = () => {};
+      // this.touchUp = () => {};
+      // this.cursorMove = () => {};
+      this.diagram = {
+        animateNextFrame: () => {},
+        getElement: () => null,
+        getState: () => {},
+        setState: () => {},
+        pause: () => {},
+        unpause: () => {},
+        showCursor: () => {},
+      }
       this.animateDiagramNextFrame = () => {};
       this.getDiagramElement = () => null;
       this.getDiagramState = () => {};
@@ -906,6 +915,7 @@ class Recorder {
     // const duration = this.calcDuration();
     // const timeTarget = percentTime * duration;
     this.setToTime(time);
+    this.getCursorState();
     this.pauseDiagram();
   }
 
@@ -992,8 +1002,8 @@ class Recorder {
     let cursorPosition = null;
     let cursorTime = null;
     let cursorTimeCount = null;
-    let cursorX = null;
-    let cursorY = null;
+    // let cursorX = null;
+    // let cursorY = null;
 
     if (this.eventIndex['touch'] !== -1) {
       const event = this.events[this.eventIndex['touch']];
@@ -1002,8 +1012,9 @@ class Recorder {
         touchUp = false;
         cursorTime = time;
         cursorTimeCount = timeCount;
-        cursorX = x;
-        cursorY = y;
+        cursorPosition = new Point(x, y);
+        // cursorX = x;
+        // cursorY = y;
       } else {
         touchUp = true;
       }
@@ -1021,8 +1032,9 @@ class Recorder {
         ) {
           cursorTime = time;
           cursorTimeCount = timeCount;
-          cursorX = x;
-          cursorY = y;
+          cursorPosition = new Point(x, y);
+          // cursorX = x;
+          // cursorY = y;
         }
       } else {
         showCursor = false;
@@ -1031,44 +1043,53 @@ class Recorder {
 
     if (this.eventIndex['cursorMove'] !== -1) {
       const event = this.events[this.eventIndex['cursorMove']];
-      const [cursorMoveTime, [x, y], cursorMoveTimeCount] = event;
-    }
-
-    let touchDownTime = null;
-    let touchUpTime = null;
-    let showCursorTime = null;
-    let hideCursorTime = null
-    if (this.removeEventListener)
-
-    let i = eventIndex;
-    let touchUp = null;
-    let cursorPosition = null;
-    let showCursor = null;
-    while (i >= 0 && (cursorPosition == null || touchUp == null || showCursor == null)) {
-      const [, event] = recordedData[i];
-      const [eventType] = event;
-      if (cursorPosition == null && eventType === 'cursorMove') { // $FlowFixMe
-        const [, x, y] = event;
+      const [time, [x, y], timeCount] = event;
+      if (
+        cursorTime == null
+        || time > cursorTime
+        || (time === cursorTime && timeCount > cursorTimeCount)
+      ) {
+        // cursorX = x;
+        // cursorY = y;
         cursorPosition = new Point(x, y);
       }
-      if (touchUp == null && eventType === 'touchUp') {
-        touchUp = true;
-      }
-      if (touchUp == null && eventType === 'touchDown') {
-        touchUp = false;
-        if (cursorPosition == null) {  // $FlowFixMe
-          const [, x, y] = event;
-          cursorPosition = new Point(x, y);
-        }
-      }
-      if (showCursor == null && eventType === 'showCursor') {
-        showCursor = true;
-      }
-      if (showCursor == null && eventType === 'hideCursor') {
-        showCursor = false;
-      }
-      i -= 1;
     }
+
+    // let touchDownTime = null;
+    // let touchUpTime = null;
+    // let showCursorTime = null;
+    // let hideCursorTime = null
+    // if (this.removeEventListener)
+
+    // let i = eventIndex;
+    // let touchUp = null;
+    // let cursorPosition = null;
+    // let showCursor = null;
+    // while (i >= 0 && (cursorPosition == null || touchUp == null || showCursor == null)) {
+    //   const [, event] = recordedData[i];
+    //   const [eventType] = event;
+    //   if (cursorPosition == null && eventType === 'cursorMove') { // $FlowFixMe
+    //     const [, x, y] = event;
+    //     cursorPosition = new Point(x, y);
+    //   }
+    //   if (touchUp == null && eventType === 'touchUp') {
+    //     touchUp = true;
+    //   }
+    //   if (touchUp == null && eventType === 'touchDown') {
+    //     touchUp = false;
+    //     if (cursorPosition == null) {  // $FlowFixMe
+    //       const [, x, y] = event;
+    //       cursorPosition = new Point(x, y);
+    //     }
+    //   }
+    //   if (showCursor == null && eventType === 'showCursor') {
+    //     showCursor = true;
+    //   }
+    //   if (showCursor == null && eventType === 'hideCursor') {
+    //     showCursor = false;
+    //   }
+    //   i -= 1;
+    // }
     return {
       show: showCursor == null ? false : showCursor,
       up: touchUp == null ? true : touchUp,
