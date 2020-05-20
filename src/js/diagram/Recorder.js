@@ -198,28 +198,9 @@ class Recorder {
   statesCache: ObjectTracker;
   eventsCache: {
     [eventName: string]: {
-      // setOnSeek: boolean,
-      // playbackAction: () => void,
       list: TypeEvents;
     };
   };
-
-  
-  // events: {
-  //   [eventName: string]: Array<[number, Array<number | string | Object>]>;
-  // }
-  // states: {
-  //   referenceBase: Object;
-  //   reference: {
-  //     [referenceName: string]: [string, Object];  // diff objects to another reference
-  //   };
-  //   // map: UniqueMap,
-  //   states: Array<[number, TypeState]>,
-  // };
-
-  // eventsCache: Array<[number, TypeEvent]>;
-  // slidesCache: Array<[number, TypeSlide]>;
-  // statesCache: ObjectTracker;
 
   state: 'recording' | 'playing' | 'idle';
   isAudioPlaying: boolean;
@@ -232,29 +213,8 @@ class Recorder {
   eventIndex: {
     [eventName: string]: number;
   };
-  // eventIndex: number;
-  // stateIndex: number;
-  // slideIndex: number;
-
-  // lastShownEventIndex: number;
-  // lastShownStateIndex: number;
-  // lastShownSlideIndex: number;
 
   stateTimeStep: number;      // in seconds
-
-  // touchDown: (Point) => void;
-  // touchUp: void => void;
-  // touchMoveDown: (Point, Point) => boolean;
-  // cursorMove: (Point) => void;
-  // diagram.getState: () => Object;
-  // diagram.setState: (Object) => void;
-  // diagram.pause: () => void;
-  // diagram.unpause: () => void;
-
-  // animation: GlobalAnimation;
-  // previousPoint: ?Point;
-  // diagram.animateNextFrame: () => void;
-  // diagramIsInTransition: () => boolean;
   diagram: {
     showCursor: ('up' | 'down' | 'hide', ?Point) => void,
     getElement: (string) => ?DiagramElement,
@@ -267,23 +227,12 @@ class Recorder {
 
   nextEventTimeout: ?TimeoutID;
 
-  // nextEventTimeout: TimeoutID;
-  // nextStateTimeout: ?TimeoutID;
-  // nextSlideTimeout: TimeoutID;
-
   recordStateTimeout: ?TimeoutID;
 
-  // nextSlide: ?() => void;
-  // prevSlide: ?() => void;
-  // goToSlide: ?(number) => void;
-  // getCurrentSlide: ?() => number;
-
-  playbackStopped: ?() =>void;
+  playbackStoppedCallback: ?() =>void;
 
   lastRecordTime: ?number;
   lastRecordTimeCount: number;
-
-  // lastTime: number;
 
   audio: ?HTMLAudioElement;
   reference: string;
@@ -305,11 +254,6 @@ class Recorder {
       this.precision = 4;
       this.stateTimeStep = 1;
 
-      // diagram and topic functions
-      // this.animation = new GlobalAnimation();
-      // this.touchDown = () => {};
-      // this.touchUp = () => {};
-      // this.cursorMove = () => {};
       this.diagram = {
         animateNextFrame: () => {},
         getElement: () => null,
@@ -319,20 +263,8 @@ class Recorder {
         unpause: () => {},
         showCursor: () => {},
       };
-      // this.diagram.animateNextFrame = () => {};
-      // this.diagram.getElement = () => null;
-      // this.diagram.getState = () => {};
-      // this.diagram.setState = () => {};
-      // this.diagram.pause = () => {};
-      // this.diagram.unpause = () => {};
-      // this.nextSlide = null;
-      // this.prevSlide = null;
-      // this.goToSlide = null;
       this.audio = null;
-      this.playbackStopped = null;
-      // this.getCurrentSlide = null;
-      // this.diagramIsInTransition = () => false;
-      // this.diagram.showCursor = () => {};
+      this.playbackStoppedCallback = null;
     }
     return Recorder.instance;
   }
@@ -343,7 +275,6 @@ class Recorder {
   // ////////////////////////////////////
   // ////////////////////////////////////
   timeStamp() {   // eslint-disable-line class-methods-use-this
-    // return (new Date()).getTime();
     return performance.now();
   }
 
@@ -363,7 +294,6 @@ class Recorder {
   }
 
   calcDuration(cache: boolean = false) {
-    // let time = 0;
     let eventsTime = 0;
     let eventsCacheTime = 0;
     let statesTime = 0;
@@ -383,11 +313,9 @@ class Recorder {
     });
     if (this.states.diffs.length > 0) {
       [statesTime] = this.states.diffs[this.states.diffs.length - 1];
-      // time = Math.max(time, statesTime);
     }
     if (this.statesCache.diffs.length > 0) {
       [statesCacheTime] = this.statesCache.diffs[this.statesCache.diffs.length - 1];
-      // time = Math.max(time, statesCacheTime);
     }
     // eslint-disable-next-line no-restricted-globals
     if (this.audio != null && !isNaN(this.audio.duration)) {
@@ -398,27 +326,6 @@ class Recorder {
     }
     return Math.max(eventsTime, eventsCacheTime, statesTime, statesCacheTime, audioTime);
   }
-
-  // getTotalTime() {
-  //   let time = 0;
-  //   if (this.slides.length > 0) {
-  //     const endTime = this.slides.slice(-1)[0][0];
-  //     time = Math.max(time, endTime);
-  //   }
-  //   if (this.events.length > 0) {
-  //     const endTime = this.events.slice(-1)[0][0];
-  //     time = Math.max(time, endTime);
-  //   }
-  //   // if (this.states.length > 0) {
-  //   //   const endTime = this.states.slice(-1)[0][0];
-  //   //   time = Math.max(time, endTime);
-  //   // }
-  //   // eslint-disable-next-line no-restricted-globals
-  //   if (this.audio != null && !isNaN(this.audio.duration)) {
-  //     time = Math.max(time, this.audio.duration);
-  //   }
-  //   return time;
-  // }
 
   // ////////////////////////////////////
   // ////////////////////////////////////
@@ -444,9 +351,6 @@ class Recorder {
     this.lastRecordTime = null;
   }
 
-  // resetStates() {
-  //   this.states.reset();
-  // }
 
   loadEvents(
     encodedEventsList: Object | Array<TypeEvents>,
@@ -756,10 +660,14 @@ class Recorder {
   save() {
     const dateStr = new Date().toISOString();
     const location = (window.location.pathname).replace('/', '_');
-    const minifiedStates = this.minifyStates(true, 4);
-    // download(`${dateStr} ${location}.vidslides.json`, JSON.stringify(this.slides));
-    download(`${dateStr} ${location}.videvents.json`, JSON.stringify(minify(this.events)));
-    download(`${dateStr} ${location}.vidstates.json`, JSON.stringify(minifiedStates));
+    const encodedStates = this.encodeStates();
+    const encodedEvents = this.encodeEvents();
+    if (encodedStates != null) {
+      download(`${dateStr} ${location}.vidstates.json`, JSON.stringify(encodedStates));
+    }
+    if (encodedEvents != null) {
+      download(`${dateStr} ${location}.videvents.json`, JSON.stringify(encodedEvents));
+    }
   }
 
   show() {
@@ -1107,8 +1015,8 @@ class Recorder {
       this.audio.pause();
       this.isAudioPlaying = false;
     }
-    if (this.playbackStopped != null) {
-      this.playbackStopped();
+    if (this.playbackStoppedCallback != null) {
+      this.playbackStoppedCallback();
     }
   }
 
