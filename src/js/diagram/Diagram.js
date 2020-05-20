@@ -381,19 +381,30 @@ class Diagram {
       pause: this.pause.bind(this),
       unpause: this.unpause.bind(this),
     };
-    // this.recorder.touchDown = this.simulateTouchDown.bind(this);
-    // this.recorder.touchUp = this.simulateTouchUp.bind(this);
-    // this.simulateTouchMove.bind(this),
-    // this.recorder.cursorMove = this.setCursor.bind(this);
-    // this.recorder.animateDiagramNextFrame = this.animateNextFrame.bind(this);
-    // this.recorder.getDiagramElement = this.getElement.bind(this);
-    // this.recorder.getDiagramState = this.getState.bind(this);
-    // this.recorder.setDiagramState = this.setState.bind(this);
-    // this.pauseAfterNextDraw.bind(this),
-    // this.recorder.pauseDiagram = this.pause.bind(this);
-    // this.recorder.unpauseDiagram = this.unpause.bind(this);
-    // this.recorder.diagramIsInTransition = this.getIsInTransition.bind(this);
-    // this.recorder.diagramShowCursor = this.showCursor.bind(this);
+    const onCursor = (payload) => {
+      const [action, x, y] = payload;
+      if (action === 'show') {
+        this.showCursor('up', new Point(x, y));
+      } else {
+        this.showCursor('hide');
+      }
+    };
+    const onTouch = (payload) => {
+      const [action, x, y] = payload;
+      if (action === 'down') {
+        this.showCursor('down', new Point(x, y));
+      } else {
+        this.showCursor('up');
+      }
+    };
+    const onCursorMove = (payload) => {
+      const [x, y] = payload;
+      this.setCursor(new Point(x, y));
+    };
+
+    this.recorder.addEventType('cursor', onCursor);
+    this.recorder.addEventType('cursorMove', onCursorMove);
+    this.recorder.addEventType('touch', onTouch);
   }
 
   scrollEvent() {
@@ -787,30 +798,30 @@ class Diagram {
     }
   }
 
-  simulateTouchDown(diagramPoint: Point) {
-    // const pixelPoint = diagramPoint.transformBy(this.spaceTransforms.diagramToPixel.matrix());
-    // const clientPoint = this.pixelToClient(pixelPoint);
-    // this.touchDownHandler(clientPoint);
+  // simulateTouchDown(diagramPoint: Point) {
+  //   // const pixelPoint = diagramPoint.transformBy(this.spaceTransforms.diagramToPixel.matrix());
+  //   // const clientPoint = this.pixelToClient(pixelPoint);
+  //   // this.touchDownHandler(clientPoint);
 
-    const pointer = this.getElement(this.cursorElementName);
-    if (pointer == null) {
-      return;
-    }
-    const up = pointer.getElement('up');
-    const down = pointer.getElement('down');
-    if (up == null || down == null) {
-      return;
-    }
-    up.hide();
-    down.show();
-    pointer.setPosition(diagramPoint);
-  }
+  //   const pointer = this.getElement(this.cursorElementName);
+  //   if (pointer == null) {
+  //     return;
+  //   }
+  //   const up = pointer.getElement('up');
+  //   const down = pointer.getElement('down');
+  //   if (up == null || down == null) {
+  //     return;
+  //   }
+  //   up.hide();
+  //   down.show();
+  //   pointer.setPosition(diagramPoint);
+  // }
 
   toggleCursor() {
     this.cursorShown = !this.cursorShown;
-    if (this.recorder.isRecording) {
+    if (this.recorder.state === 'recording') {
       if (this.cursorShown) {
-        this.recorder.recordEvent('showCursor', this.previousCursorPoint.x, this.previousCursorPoint.y);
+        this.recorder.recordEvent('cursor', ['show', this.previousCursorPoint.x, this.previousCursorPoint.y]);
         if (this.isTouchDown) {
           this.showCursor('down');
         } else {
@@ -818,7 +829,7 @@ class Diagram {
         }
         this.setCursor(this.previousCursorPoint);
       } else {
-        this.recorder.recordEvent('hideCursor');
+        this.recorder.recordEvent('cursor', ['hide']);
         this.showCursor('hide');
       }
     }
@@ -854,10 +865,10 @@ class Diagram {
   // and dragged, then when they are released, for them to move freely before
   // coming to a stop.
   touchDownHandler(clientPoint: Point) {
-    if (this.recorder.isRecording) {
+    if (this.recorder.state === 'recording') {
       const pixelP = this.clientToPixel(clientPoint);
       const diagramPoint = pixelP.transformBy(this.spaceTransforms.pixelToDiagram.matrix());
-      this.recorder.recordEvent('touchDown', diagramPoint.x, diagramPoint.y);
+      this.recorder.recordEvent('touch', ['down', diagramPoint.x, diagramPoint.y]);
       if (this.cursorShown) {
         this.showCursor('down');
       }
@@ -913,27 +924,27 @@ class Diagram {
     return false;
   }
 
-  simulateTouchUp() {
-    // this.touchUpHandler();
-    const pointer = this.getElement(this.cursorElementName);
-    if (pointer == null) {
-      return;
-    }
-    const up = pointer.getElement('up');
-    const down = pointer.getElement('down');
-    if (up == null || down == null) {
-      return;
-    }
-    up.show();
-    down.hide();
-  }
+  // simulateTouchUp() {
+  //   // this.touchUpHandler();
+  //   const pointer = this.getElement(this.cursorElementName);
+  //   if (pointer == null) {
+  //     return;
+  //   }
+  //   const up = pointer.getElement('up');
+  //   const down = pointer.getElement('down');
+  //   if (up == null || down == null) {
+  //     return;
+  //   }
+  //   up.show();
+  //   down.hide();
+  // }
 
   // Handle touch up, or mouse click up events in the canvas. When an UP even
   // happens, the default behavior is to let any elements being moved to move
   // freely until they decelerate to 0.
   touchUpHandler() {
-    if (this.recorder.isRecording) {
-      this.recorder.recordEvent('touchUp');
+    if (this.recorder.state === 'recording') {
+      this.recorder.recordEvent('touch', ['up']);
       if (this.cursorShown) {
         this.showCursor('up');
       }
@@ -972,12 +983,12 @@ class Diagram {
   }
 
   touchFreeHandler(clientPoint: Point) {
-    if (this.recorder.isRecording) {
+    if (this.recorder.state === 'recording') {
       const pixelP = this.clientToPixel(clientPoint);
       const diagramPoint = pixelP.transformBy(this.spaceTransforms.pixelToDiagram.matrix());
       this.previousCursorPoint = diagramPoint;
       if (this.cursorShown) {
-        this.recorder.recordEvent('cursorMove', diagramPoint.x, diagramPoint.y);
+        this.recorder.recordEvent('cursorMove', [diagramPoint.x, diagramPoint.y]);
         this.setCursor(diagramPoint);
       }
     }
@@ -1133,11 +1144,11 @@ class Diagram {
   // normally scroll the screen. Typically, you would want to move the diagram
   // element and not the screen, so a true would be returned.
   touchMoveHandler(previousClientPoint: Point, currentClientPoint: Point): boolean {
-    if (this.recorder.isRecording) {
+    if (this.recorder.state === 'recording') {
       const currentPixelPoint = this.clientToPixel(currentClientPoint);
       const diagramPoint = currentPixelPoint
         .transformBy(this.spaceTransforms.pixelToDiagram.matrix());
-      this.recorder.recordEvent('cursorMove', diagramPoint.x, diagramPoint.y);
+      this.recorder.recordEvent('cursorMove', [diagramPoint.x, diagramPoint.y]);
       if (this.cursorShown) {
         this.setCursor(diagramPoint);
       }

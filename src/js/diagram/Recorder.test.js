@@ -1697,18 +1697,36 @@ describe('Diagram Recorder', () => {
       expect(a.getPosition().x).toBe(2);
     });
   });
-  describe('Record', () => {
+  describe('General Record and Playback', () => {
     // let cursor;
     let duration;
-    let priorDuration;
+    // let priorDuration;
     let timeStep;
     beforeEach(() => {
-      const onCursor = jest.fn(() => {});
-      const onCursorMove = jest.fn(() => {});
-      const onTouch = jest.fn(() => {});
-      recorder.addEventType('cursor', onCursor);
-      recorder.addEventType('cursorMove', onCursorMove);
-      recorder.addEventType('touch', onTouch);
+      // const onCursor = jest.fn((payload) => {
+      //   const [action, x, y] = payload;
+      //   if (action === 'show') {
+      //     diagram.showCursor('up', new Point(x, y));
+      //   } else {
+      //     diagram.showCursor('hide');
+      //   }
+      // });
+      // const onTouch = jest.fn((payload) => {
+      //   const [action, x, y] = payload;
+      //   if (action === 'down') {
+      //     diagram.showCursor('down', new Point(x, y));
+      //   } else {
+      //     diagram.showCursor('up');
+      //   }
+      // });
+      // const onCursorMove = jest.fn((payload) => {
+      //   const [x, y] = payload;
+      //   diagram.setCursor(new Point(x, y));
+      // });
+      // // const onTouch = jest.fn(() => {});
+      // recorder.addEventType('cursor', onCursor);
+      // recorder.addEventType('cursorMove', onCursorMove);
+      // recorder.addEventType('touch', onTouch);
       recorder.stateTimeStep = 2;
       duration = 0;
       const initialTime = 1000;
@@ -1719,12 +1737,15 @@ describe('Diagram Recorder', () => {
         jest.advanceTimersByTime(delta);
         duration += delta;
       };
+      cursor = diagram.getElement('cursor');
     });
-    test.only('Track Duration', () => {
+    test('Track Duration during record', () => {
       timeStep(0);
       expect(recorder.duration).toBe(0);
       recorder.startRecording();
+      expect(recorder.getCurrentTime()).toBe(0);
       timeStep(1000);
+      expect(recorder.getCurrentTime()).toBe(1);
       recorder.recordEvent('cursor', ['show', 0, 0]);   // 1
       expect(recorder.duration).toBe(1);
       timeStep(1000);
@@ -1749,11 +1770,85 @@ describe('Diagram Recorder', () => {
       recorder.recordEvent('cursorMove', [8, 8]);       // 8
       expect(recorder.duration).toBe(8);
       timeStep(1000);
+      expect(recorder.getCurrentTime()).toBe(9);
       recorder.recordEvent('cursor', ['hide']);         // 9
       expect(recorder.duration).toBe(9);
       timeStep(3000);
       recorder.stopRecording();                         // 12
+      expect(recorder.getCurrentTime()).toBe(12);
       expect(recorder.duration).toBe(12);
+    });
+    test('Playback from 0', () => {
+      timeStep(0);
+      recorder.startRecording();
+      timeStep(1000);
+      recorder.recordEvent('cursor', ['show', 1, 1]);   // 1
+      timeStep(1000);
+      recorder.recordEvent('cursorMove', [2, 2]);       // 2
+      timeStep(1000);
+      recorder.recordEvent('touch', ['down', 3, 3]);    // 3
+      timeStep(1000);
+      recorder.recordEvent('cursorMove', [4, 4]);       // 4
+      timeStep(1000);
+      recorder.recordEvent('cursorMove', [5, 5]);       // 5
+      timeStep(1000);
+      recorder.recordEvent('touch', 'up');              // 6
+      timeStep(1000);
+      recorder.recordEvent('cursorMove', [7, 7]);       // 7
+      timeStep(1000);
+      recorder.recordEvent('cursorMove', [8, 8]);       // 8
+      timeStep(1000);
+      recorder.recordEvent('cursor', ['hide']);         // 9
+      timeStep(3000);
+      recorder.stopRecording();                         // 12
+      expect(recorder.states.diffs).toHaveLength(7);
+      expect(recorder.states.diffs[6][0]).toBe(12);
+
+      const check = (isShown, up, down, x, y, currentTime) => {
+        expect(cursor.isShown).toBe(isShown);
+        if (up != null) {
+          expect(cursor._up.isShown).toBe(up);
+        }
+        if (down != null) {
+          expect(cursor._down.isShown).toBe(down);
+        }
+        if (x != null && y != null) {
+          expect(cursor.getPosition()).toEqual(new Point(x, y));
+        }
+        expect(currentTime).toEqual(recorder.getCurrentTime());
+      };
+
+      expect(recorder.state).toBe('idle');
+      timeStep(10000);
+      recorder.startPlayback(0);
+      expect(recorder.state).toBe('playing');
+      check(false, null, null, 0, 0, 0);
+      timeStep(1000);
+      check(true, true, false, 1, 1, 1);
+      timeStep(1000);
+      check(true, true, false, 2, 2, 2);
+      timeStep(1000);
+      check(true, false, true, 3, 3, 3);
+      timeStep(1000);
+      check(true, false, true, 4, 4, 4);
+      timeStep(1000);
+      check(true, false, true, 5, 5, 5);
+      timeStep(1000);
+      check(true, true, false, null, null, 6);
+      timeStep(1000);
+      check(true, true, false, 7, 7, 7);
+      timeStep(1000);
+      check(true, true, false, 8, 8, 8);
+      timeStep(1000);
+      check(false, null, null, null, null, 9);
+
+      expect(recorder.state).toBe('playing');
+      timeStep(1000);
+      check(false, null, null, null, null, 10);
+      expect(recorder.state).toBe('playing');
+      timeStep(2000);
+      check(false, null, null, null, null, 12);
+      expect(recorder.state).toBe('idle');
     });
   });
 });

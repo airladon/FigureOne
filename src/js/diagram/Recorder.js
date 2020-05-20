@@ -226,6 +226,8 @@ class Recorder {
     if (!Recorder.instance) {
       Recorder.instance = this;
       // reset all data
+      this.events = {};
+      this.eventsCache = {};
       this.reset();
 
       // default recording values
@@ -313,7 +315,10 @@ class Recorder {
   reset() {
     this.states = new ObjectTracker(this.precision);
     this.statesCache = new ObjectTracker(this.precision);
-    this.events = {};
+    Object.keys(this.events).forEach((eventName) => {
+      this.events[eventName].list = [];
+    });
+    // this.events.list = [];
     this.eventsCache = {};
     this.stateIndex = -1;
     this.eventIndex = {};
@@ -548,12 +553,17 @@ class Recorder {
     this.states.references = duplicate(this.statesCache.references);
   }
 
-  stopRecording() {
-    this.state = 'idle';
+  stopTimeouts() {
     if (this.timeoutID != null) {
       clearTimeout(this.timeoutID);
       this.timeoutID = null;
     }
+  }
+
+  stopRecording() {
+    this.currentTime = this.getCurrentTime();
+    this.state = 'idle';
+    this.stopTimeouts();
     this.mergeEventsCache();
     this.mergeStatesCache();
     // this.states = this.statesCache;
@@ -655,35 +665,35 @@ class Recorder {
     }
   }
 
-  show() {
-    // const wnd = window.open('about:blank', '', '_blank');
-    // // this.slides.forEach((slide) => {
-    // //   wnd.document.write(JSON.stringify(slide), '<br>');
-    // // });
+  // show() {
+  //   // const wnd = window.open('about:blank', '', '_blank');
+  //   // // this.slides.forEach((slide) => {
+  //   // //   wnd.document.write(JSON.stringify(slide), '<br>');
+  //   // // });
 
-    // wnd.document.write('<br><br>');
-    // wnd.document.write(`// ${'/'.repeat(500)}<br>`);
-    // wnd.document.write(`// ${'/'.repeat(500)}<br>`);
-    // wnd.document.write('<br><br>');
+  //   // wnd.document.write('<br><br>');
+  //   // wnd.document.write(`// ${'/'.repeat(500)}<br>`);
+  //   // wnd.document.write(`// ${'/'.repeat(500)}<br>`);
+  //   // wnd.document.write('<br><br>');
 
-    // Object.keys(this.events).forEach((eventName) => {
-    //   const event = this.events[eventName];
-    //   const rounded = event.map((e) => {
-    //     if (typeof e === 'number') {
-    //       return round(e, this.precision);
-    //     }
-    //     return e;
-    //   });
-    //   wnd.document.write(JSON.stringify(rounded), '<br>');
-    // });
-    // wnd.document.write('<br><br>');
-    // wnd.document.write(`// ${'/'.repeat(500)}<br>`);
-    // wnd.document.write(`// ${'/'.repeat(500)}<br>`);
-    // wnd.document.write('<br><br>');
-    // this.states.states.forEach((state) => {
-    //   wnd.document.write(JSON.stringify(state), '<br>');
-    // });
-  }
+  //   // Object.keys(this.events).forEach((eventName) => {
+  //   //   const event = this.events[eventName];
+  //   //   const rounded = event.map((e) => {
+  //   //     if (typeof e === 'number') {
+  //   //       return round(e, this.precision);
+  //   //     }
+  //   //     return e;
+  //   //   });
+  //   //   wnd.document.write(JSON.stringify(rounded), '<br>');
+  //   // });
+  //   // wnd.document.write('<br><br>');
+  //   // wnd.document.write(`// ${'/'.repeat(500)}<br>`);
+  //   // wnd.document.write(`// ${'/'.repeat(500)}<br>`);
+  //   // wnd.document.write('<br><br>');
+  //   // this.states.states.forEach((state) => {
+  //   //   wnd.document.write(JSON.stringify(state), '<br>');
+  //   // });
+  // }
 
   // ////////////////////////////////////
   // ////////////////////////////////////
@@ -867,7 +877,6 @@ class Recorder {
   // ////////////////////////////////////
   // ////////////////////////////////////
   startPlayback(fromTimeIn: number = 0) {
-
     let fromTime = fromTimeIn;
     if (fromTimeIn === this.duration) {
       fromTime = 0;
@@ -889,7 +898,7 @@ class Recorder {
       this.audio.play();
       const audioEnded = () => {
         this.isAudioPlaying = false;
-        this.isPlayingFinished();
+        this.finishPlaying();
       };
       const { audio } = this;
       if (audio != null) {
@@ -941,7 +950,8 @@ class Recorder {
   }
 
   playbackEvent(eventName: string) {
-    const delay = this.events[eventName].list[this.eventIndex[eventName]][0] - this.getCurrentTime();
+    const index = this.eventIndex[eventName];
+    const delay = this.events[eventName].list[index][0] - this.getCurrentTime();
 
     if (delay > 0) {
       this.timeoutID = setTimeout(
@@ -950,12 +960,13 @@ class Recorder {
       return;
     }
 
-    const index = this.eventIndex[eventName];
+    // const index = this.eventIndex[eventName];
     this.setEvent(eventName, index);
     this.diagram.animateNextFrame();
     if (index + 1 === this.events[eventName].list.length) {
       this.eventIndex[eventName] = -1;
-      if (this.isPlayingFinished()) {
+      if (this.areEventsPlaying() === false) {
+        this.finishPlaying();
         return;
       }
     } else {
@@ -964,10 +975,7 @@ class Recorder {
     this.playbackEvent(this.getNextEvent());
   }
 
-  isPlayingFinished() {
-    if (this.isAudioPlaying) {
-      return false;
-    }
+  areEventsPlaying() {
     const eventNames = Object.keys(this.eventIndex)
     for (let i = 0; i < eventNames.length; i += 1) {
       const eventName = eventNames[i];
@@ -975,23 +983,43 @@ class Recorder {
         this.eventIndex[eventName] < this.events[eventName].list.length
         && this.eventIndex[eventName] > -1
       ) {
-        return false;
+        return true;
       }
     }
+    return false;
+  }
+
+  finishPlaying() {
+    if (this.areEventsPlaying()) {
+      return false;
+    }
+
+    const remainingTime = this.duration - this.getCurrentTime();
+    if (remainingTime > 0) {
+      this.timeoutID = setTimeout(() => {
+        this.finishPlaying();
+      }, remainingTime);
+      return false;
+    }
+
+    // if (this.isAudioPlaying) {
+    //   return false;
+    // }
 
     this.pausePlayback();
     return true;
   }
 
-  clearPlaybackTimeouts() {
-    this.timeoutID = null;
-  }
+  // clearPlaybackTimeouts() {
+  //   this.timeoutID = null;
+  // }
 
   pausePlayback() {
-    this.diagram.pause();
     this.currentTime = this.getCurrentTime();
+    this.diagram.pause();
     this.state = 'idle';
-    this.clearPlaybackTimeouts();
+    // this.clearPlaybackTimeouts();
+    this.stopTimeouts();
     const pointer = this.diagram.getElement('pointer');
     if (pointer != null) {
       pointer.hide();
@@ -1031,13 +1059,13 @@ class Recorder {
 
   playbackState() {
     if (this.stateIndex > this.states.diffs.length - 1) {
-      this.isPlayingFinished();
+      this.finishPlaying();
       return;
     }
     this.setState(this.stateIndex);
     this.diagram.animateNextFrame();
     if (this.stateIndex + 1 === this.states.diffs.length) {
-      this.isPlayingFinished();
+      this.finishPlaying();
       return;
     }
     const nextTime = (this.states.diffs[this.stateIndex + 1][0] - this.getCurrentTime()) * 1000;
