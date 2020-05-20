@@ -1,0 +1,789 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for diagram/DiagramElements/Equation/Symbols/Brace.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">All files</a> / <a href="index.html">diagram/DiagramElements/Equation/Symbols</a> Brace.js
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import {
+  Point, Transform,
+} from '../../../../tools/g2';
+import Bracket from './Bracket';
+&nbsp;
+export default class Brace extends Bracket {
+  // eslint-disable-next-line class-methods-use-this
+  // getWidth() {
+  //   return (type: 'static' | 'dynamic', options: Object, height: number) =&gt; {
+  //     const { width } = options;
+  //     if (type === 'static') {
+  //       return height * width;
+  //     }
+  //     return width;
+  //   };
+  // }
+&nbsp;
+  //  - Curve R1 and R2 are repeated 4 times in brace
+  //  - Curve R1 is a full 90º circle
+  //  - Curve R2 &gt; R1 and is less than 90º
+  //                                       width
+  //                               |&lt;---------------&gt;|
+  //                               |                 |
+  //                               |                *|
+  //           A                   |              * *
+  //           |                   |       R1   *  *
+  //           |                   |          *   *  R2
+  //           |                   |        *    *
+  //           |                   |       *    *
+  //           |                   |       *    *
+  //           |                   |      *    *
+  //           |                   |      *    *
+  //           |                   |      *    *
+  //           |                   |      *    *
+  //           |                   |      *    *
+  //           |                   |      *    *
+  //           |                   |      *    *
+  //           |                   |      *    *
+  //           |                   |      *    *
+  //           |                   |      *    *
+  //           |                   |     *    *
+  //           |                   |     *    *
+  //           |                   |    *    *
+  //           |                      *   *
+  //   height  |                    *  *
+  //           |                   * *
+  //           |          A        * *
+  //           |          |          *  *
+  //           |          |        |   *   *
+  //           |          |        |     *    *
+  //           |          |        |      *    *
+  //           |          |        |      *    *
+  //           |          |        |       *    *
+  //           |          |        |       *    *
+  //           |          |        |       *    *
+  //           |          |        |       *    *
+  //           |    h / 2 |        |       *    *
+  //           |          |        |       *    *
+  //           |          |        |       *    *
+  //           |          |        |       *    *
+  //           |          |        |       *    *
+  //           |          |        |       *    *
+  //           |          |        |        *    *
+  //           |          |        |        *    *
+  //           |          |        |         *    *
+  //           |          |        |           *   *
+  //           |          |        |             *  *
+  //           V          V        |_______________ *
+  //                           (0,0)
+  //
+&nbsp;
+  // The solution to a circle that intersect at the same
+  //
+  //                       |OOO ooo
+  //                       |       OOo
+  //                       |         | OOo              A
+  //                       |         |    OOo           |
+  //                       |         |      OOo         |
+  //                       |         |        OOo       |
+  //                       |         |         OOo      | h
+  //                       |         |          OOo     |
+  //                       |         |           OOo    |
+  //                       |         |           OOo    |
+  //                       C---------|-----------OOo    V
+  //                       |         |      w      |
+  //                       |         |&lt;-----------&gt;|
+  //                       |                       |
+  //                       |          r            |
+  //                       |&lt;---------------------&gt;|
+  // Circle with radius r intersects a vertical line with height h
+  // a distance w from the circle horizontal.
+  //
+  // Calculate r:
+  //          w^2 + h^2
+  //     r = -----------
+  //              2w
+  //
+  // Calculate angle from center C to intersection with h:
+  //
+  //     theta = arcsin (h / r))
+  //
+  //
+  //
+  //  For the brace case, the outside radius is a full 90º arc
+  //  The inside arc is calculated from the top equations where
+  //
+  //       w = outsideRadius - lineWidth
+  //
+  //                              width
+  //                   &lt;----------------------&gt;
+  //
+  //           A       OOO ooo
+  //  TipWidth |       00o    OOo
+  //           V       00o        OOo   ---------------
+  //                     00o         OOo              A
+  //                       00o           OOo          |
+  //                        00o            OOo        |
+  //                         00o            OOo       | h
+  //                         00o             OOo      |
+  //                          00o            OOo      |
+  //  Ci              Co      00o            OOo      V
+  //  |                |
+  //  |                |     |  line width     |
+  //  |                |     |&lt;---------------&gt;|
+  //  |                |     |                 |
+  //  |  inside radius |     |                 |
+  //  |&lt;--------------------&gt;|                 |
+  //                   |                       |
+  //                   |    outside radius     |
+  //                   |&lt;---------------------&gt;|
+  //
+  //
+  // eslint-disable-next-line class-methods-use-this
+<span class="fstat-no" title="function not covered" >  ge</span>tLeftPoints(options: Object, widthIn: number, height: number) {
+    const {
+      sides,
+    } = <span class="cstat-no" title="statement not covered" >options;</span>
+&nbsp;
+    const { lineWidth, width, tipWidth } = <span class="cstat-no" title="statement not covered" >this.getVerticalDefaultValues(height, widthIn, options);</span>
+&nbsp;
+    const outsideRadius = (<span class="cstat-no" title="statement not covered" >width / 2 + lineWidth / 2)</span>;
+    const h = <span class="cstat-no" title="statement not covered" >outsideRadius - tipWidth;</span>
+    const w = <span class="cstat-no" title="statement not covered" >outsideRadius - lineWidth;</span>
+    // const w = lineWidth;
+    const insideRadius = <span class="cstat-no" title="statement not covered" >(w ** 2 + h ** 2) / (2 * w);</span>
+    const leftPoints = <span class="cstat-no" title="statement not covered" >[];</span>
+    const rightPoints = <span class="cstat-no" title="statement not covered" >[];</span>
+    const outsideStep = <span class="cstat-no" title="statement not covered" >Math.PI / 2 / sides;</span>
+&nbsp;
+    const insideStep = <span class="cstat-no" title="statement not covered" >Math.asin(h / insideRadius) / sides;</span>
+&nbsp;
+    const insidePoints = <span class="cstat-no" title="statement not covered" >[];</span>
+    const outsidePoints = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >    for (let i = 0; i &lt; sides + 1; i += 1) {</span>
+      const outsideAngle = <span class="cstat-no" title="statement not covered" >i * outsideStep;</span>
+      const insideAngle = <span class="cstat-no" title="statement not covered" >i * insideStep;</span>
+<span class="cstat-no" title="statement not covered" >      outsidePoints.push(new Point(</span>
+        outsideRadius * Math.cos(outsideAngle),
+        outsideRadius * Math.sin(outsideAngle),
+      ));
+<span class="cstat-no" title="statement not covered" >      insidePoints.push(new Point(</span>
+        insideRadius * Math.cos(insideAngle) - insideRadius + outsideRadius - lineWidth,
+        insideRadius * Math.sin(insideAngle),
+      ));
+    }
+&nbsp;
+    // const topCurveCenter = new Point(width, height - outsideRadius);
+    let m = <span class="cstat-no" title="statement not covered" >(new Transform().scale(-1, 1).translate(</span>
+      width, height - outsideRadius,
+    )).m();
+<span class="cstat-no" title="statement not covered" >    for (let i = 0; i &lt; sides + 1; i += 1) {</span>
+<span class="cstat-no" title="statement not covered" >      leftPoints.push(outsidePoints[sides - i].transformBy(m));</span>
+<span class="cstat-no" title="statement not covered" >      rightPoints.push(insidePoints[sides - i].transformBy(m));</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    m = (new Transform().scale(1, -1).translate(</span>
+      0,
+      height / 2 - tipWidth / 2 + outsideRadius,
+    )).m();
+<span class="cstat-no" title="statement not covered" >    for (let i = 0; i &lt; sides + 1; i += 1) {</span>
+<span class="cstat-no" title="statement not covered" >      leftPoints.push(insidePoints[i].transformBy(m));</span>
+<span class="cstat-no" title="statement not covered" >      rightPoints.push(outsidePoints[i].transformBy(m));</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    m = (new Transform().translate(</span>
+      0,
+      height / 2 + tipWidth / 2 - outsideRadius,
+    )).m();
+<span class="cstat-no" title="statement not covered" >    for (let i = 0; i &lt; sides + 1; i += 1) {</span>
+<span class="cstat-no" title="statement not covered" >      leftPoints.push(insidePoints[sides - i].transformBy(m));</span>
+<span class="cstat-no" title="statement not covered" >      rightPoints.push(outsidePoints[sides - i].transformBy(m));</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    m = (new Transform().scale(-1, -1).translate(</span>
+      width,
+      outsideRadius,
+    )).m();
+<span class="cstat-no" title="statement not covered" >    for (let i = 0; i &lt; sides + 1; i += 1) {</span>
+<span class="cstat-no" title="statement not covered" >      leftPoints.push(outsidePoints[i].transformBy(m));</span>
+<span class="cstat-no" title="statement not covered" >      rightPoints.push(insidePoints[i].transformBy(m));</span>
+    }
+&nbsp;
+    // if (side === 'top' || side === 'bottom') {
+    //   return this.getBracketPoints(leftPoints, rightPoints, side, height, width);
+    // }
+<span class="cstat-no" title="statement not covered" >    return [leftPoints, rightPoints, width, height];</span>
+  }
+&nbsp;
+  // Values that look good:
+  // height          width         lineWidth
+  //   2              0.2           0.04  0.03
+  //   1              0.1           0.03  0.02
+  //   0.5            0.05          0.015
+  //   0.3            0.05          0.015
+  //   0.2            0.03          0.012
+  // eslint-disable-next-line class-methods-use-this
+<span class="fstat-no" title="function not covered" >  ge</span>tVerticalDefaultValues(height: number, width: ?number, options: {
+      lineWidth?: number,
+      width?: number,
+      tipWidth?: number,
+    }) {
+    const out = <span class="cstat-no" title="statement not covered" >{};</span>
+<span class="cstat-no" title="statement not covered" >    if (width == null &amp;&amp; options.width == null) {</span>
+<span class="cstat-no" title="statement not covered" >      out.width = 97570.78 + (0.004958708 - 97570.78)</span>
+                  / (1 + (height / 2399858) ** 0.9383909);
+    }
+<span class="cstat-no" title="statement not covered" >    if (width != null) {</span>
+<span class="cstat-no" title="statement not covered" >      out.width = width;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (options.width != null) {</span>
+<span class="cstat-no" title="statement not covered" >      out.width = options.width;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (options.lineWidth == null) {</span>
+<span class="cstat-no" title="statement not covered" >      out.lineWidth = (0.2933614 + (0.0001418178 - 0.2933614)</span>
+                      / (1 + (height / 39.01413) ** 0.618041)) * 0.8;
+    } else {
+<span class="cstat-no" title="statement not covered" >      out.lineWidth = options.lineWidth;</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (options.tipWidth == null) {</span>
+<span class="cstat-no" title="statement not covered" >      out.tipWidth = out.lineWidth / 3;</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      out.tipWidth = options.tipWidth;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return out;</span>
+  }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed May 20 2020 23:46:31 GMT+0000 (Coordinated Universal Time)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

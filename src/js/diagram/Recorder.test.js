@@ -1697,6 +1697,36 @@ describe('Diagram Recorder', () => {
       expect(onPlayback.mock.calls.length).toBe(2);
       expect(a.getPosition().x).toBe(2);
     });
+    test('Encode Events', () => {
+      global.performance.now = () => 0;
+      recorder.startRecording();
+      global.performance.now = () => 100;
+      recorder.recordEvent('cursorMove', [1, 1]);
+      global.performance.now = () => 200;
+      recorder.recordEvent('cursorMove', [2, 2]);
+      recorder.stopRecording();
+
+      const expectedCursorMoveEventsList = [
+        [0.1, [1, 1], 0],
+        [0.2, [2, 2], 0],
+      ];
+
+
+      expect(recorder.events.cursorMove.list).toEqual(expectedCursorMoveEventsList);
+      expect(recorder.events.cursor.list).toEqual([]);
+      expect(recorder.events.touch.list).toEqual([]);
+
+      const encoded = recorder.encodeEvents();
+      recorder.reset();
+      expect(recorder.events.cursorMove.list).toEqual([]);
+      expect(recorder.events.cursor.list).toEqual([]);
+      expect(recorder.events.touch.list).toEqual([]);
+
+      recorder.loadEvents(encoded);
+      expect(recorder.events.cursorMove.list).toEqual(expectedCursorMoveEventsList);
+      expect(recorder.events.cursor.list).toEqual([]);
+      expect(recorder.events.touch.list).toEqual([]);
+    });
   });
   describe('General Record and Playback', () => {
     let duration;

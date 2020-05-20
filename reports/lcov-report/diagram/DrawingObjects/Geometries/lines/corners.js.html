@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for diagram/DrawingObjects/Geometries/lines/corners.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">All files</a> / <a href="index.html">diagram/DrawingObjects/Geometries/lines</a> corners.js
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+&nbsp;
+import {
+  Point, Line, threePointAngleMin,
+} from '../../../../tools/g2';
+&nbsp;
+&nbsp;
+//
+// Make a circular corner between points - P2 and p3 must be the same
+// distance from p1
+//
+//               .....................................
+//          p3  0                                     0 center
+//              0                                  0  .
+//              0                               0   b .
+//              0                            0        .
+//              0                         0           .
+//              0                C     0              .
+//              0                   0                 .
+//              0                0                    .  A
+//              0             0                       .
+//              0          0                          .
+//              0       0                             .
+//              0    0                                .
+//              0 0  a                              c .
+//              000000000000000000000000000000000000000
+//          p1                     B                    p2
+//
+//
+function <span class="fstat-no" title="function not covered" >circleCorner(</span>p2in: Point, p1: Point, p3in: Point, sides: number): Array&lt;Point&gt; {
+  // If sides is 0 or negative, then return the original points
+<span class="cstat-no" title="statement not covered" >  if (sides &lt; 1) {</span>
+<span class="cstat-no" title="statement not covered" >    return [p2in._dup(), p1._dup(), p3in._dup()];</span>
+  }
+&nbsp;
+  // If sides is 1, then return the chamfer
+<span class="cstat-no" title="statement not covered" >  if (sides === 1) {</span>
+<span class="cstat-no" title="statement not covered" >    return [p2in._dup(), p3in._dup()];</span>
+  }
+&nbsp;
+  const p2 = <span class="cstat-no" title="statement not covered" >p2in._dup();</span>
+  const p3 = <span class="cstat-no" title="statement not covered" >p3in._dup();</span>
+  const points: Array&lt;Point&gt; = <span class="cstat-no" title="statement not covered" >[];</span>
+&nbsp;
+  let _2a = <span class="cstat-no" title="statement not covered" >threePointAngleMin(p2, p1, p3);</span>
+<span class="cstat-no" title="statement not covered" >  if (_2a === Math.PI) {</span>
+<span class="cstat-no" title="statement not covered" >    points.push(p2in._dup());</span>
+<span class="cstat-no" title="statement not covered" >    for (let i = 0; i &lt; sides - 2; i += 1) {</span>
+<span class="cstat-no" title="statement not covered" >      points.push(p1._dup());</span>
+    }
+<span class="cstat-no" title="statement not covered" >    points.push(p3in._dup());</span>
+<span class="cstat-no" title="statement not covered" >    return points;</span>
+  }
+&nbsp;
+  // if equal to 0, that means the lines are going back on top of each other
+  // in which case we still want a radius at the end, so make it small and
+  // unnoticable
+  let isZero = <span class="cstat-no" title="statement not covered" >false;</span>
+  // let zeroMag = 0.0001;
+<span class="cstat-no" title="statement not covered" >  if (_2a === 0) {</span>
+<span class="cstat-no" title="statement not covered" >    isZero = true;</span>
+<span class="cstat-no" title="statement not covered" >    _2a = 0.00001;</span>
+  }
+  const direction = <span class="cstat-no" title="statement not covered" >_2a / Math.abs(_2a);</span>
+&nbsp;
+  const line12 = <span class="cstat-no" title="statement not covered" >new Line(p1, p2);</span>
+  const a = <span class="cstat-no" title="statement not covered" >Math.abs(_2a / 2);</span>
+  const c = <span class="cstat-no" title="statement not covered" >Math.PI / 2;</span>
+  const b = <span class="cstat-no" title="statement not covered" >Math.PI - a - c;</span>
+  const B = <span class="cstat-no" title="statement not covered" >line12.length();</span>
+  const C = <span class="cstat-no" title="statement not covered" >Math.sin(c) / Math.sin(b) * B;</span>
+  // const C = B / Math.cos(a);
+  const center = <span class="cstat-no" title="statement not covered" >new Point(</span>
+    p1.x + C * Math.cos(a * direction + line12.angle()),
+    p1.y + C * Math.sin(a * direction + line12.angle()),
+  );
+&nbsp;
+  const _2b = <span class="cstat-no" title="statement not covered" >b * 2;</span>
+  const delta = <span class="cstat-no" title="statement not covered" >_2b / sides * direction * -1;</span>
+  const lineC2 = <span class="cstat-no" title="statement not covered" >new Line(center, p2);</span>
+  const angleC2 = <span class="cstat-no" title="statement not covered" >lineC2.angle();</span>
+  const magC2 = <span class="cstat-no" title="statement not covered" >lineC2.length();</span>
+<span class="cstat-no" title="statement not covered" >  points.push(p2);</span>
+  // If the angle is zero, then we want to draw a pho (very small) polyline
+  // that will simulate a radius at the end
+<span class="cstat-no" title="statement not covered" >  if (isZero) {</span>
+    const mag = <span class="cstat-no" title="statement not covered" >0.0001;</span>
+    const ang12 = <span class="cstat-no" title="statement not covered" >line12.angle() + Math.PI / 2;</span>
+    const deltaZero = <span class="cstat-no" title="statement not covered" >Math.PI / sides;</span>
+<span class="cstat-no" title="statement not covered" >    for (let i = 0; i &lt;= sides; i += 1) {</span>
+<span class="cstat-no" title="statement not covered" >      points.push(new Point(</span>
+        center.x + mag * Math.cos(ang12 + deltaZero * i),
+        center.y + mag * Math.sin(ang12 + deltaZero * i),
+      ));
+    }
+  } else {
+<span class="cstat-no" title="statement not covered" >    for (let i = 0; i &lt; sides - 1; i += 1) {</span>
+      const angle = <span class="cstat-no" title="statement not covered" >angleC2 + (i + 1) * delta;</span>
+<span class="cstat-no" title="statement not covered" >      points.push(new Point(</span>
+        center.x + magC2 * Math.cos(angle),
+        center.y + magC2 * Math.sin(angle),
+      ));
+    }
+  }
+<span class="cstat-no" title="statement not covered" >  points.push(p3);</span>
+  // if (reverse) {
+  //   return points.reverse();
+  // }
+<span class="cstat-no" title="statement not covered" >  return points;</span>
+}
+&nbsp;
+function <span class="fstat-no" title="function not covered" >cutCorner(</span>
+  p2: Point, p1: Point, p3: Point,
+  sides: number, style: 'radius' | 'fromVertex' | 'max', value: number,
+): Array&lt;Point&gt; {
+  const line12 = <span class="cstat-no" title="statement not covered" >new Line(p1, p2);</span>
+  const line13 = <span class="cstat-no" title="statement not covered" >new Line(p1, p3);</span>
+  let cut;
+<span class="cstat-no" title="statement not covered" >  if (style === 'fromVertex') {</span>
+<span class="cstat-no" title="statement not covered" >    cut = value;</span>
+<span class="cstat-no" title="statement not covered" >    cut = Math.min(cut, line12.length() / 2 * 0.99, line13.length() / 2 * 0.99);</span>
+  } else <span class="cstat-no" title="statement not covered" >if (style === 'radius') {</span>
+    const angle = <span class="cstat-no" title="statement not covered" >Math.abs(threePointAngleMin(p2, p1, p3)) / 2;</span>
+<span class="cstat-no" title="statement not covered" >    cut = value / Math.tan(angle);</span>
+<span class="cstat-no" title="statement not covered" >    cut = Math.min(cut, line12.length() / 2 * 0.99, line13.length() / 2 * 0.99);</span>
+  } else { // if (style === 'max')
+<span class="cstat-no" title="statement not covered" >    cut = Math.min(line12.length(), line13.length());</span>
+  }
+  // cut = Math.min(cut, line12.length() / 2 * 0.99, line13.length() / 2 * 0.99);
+&nbsp;
+  const p2Max = <span class="cstat-no" title="statement not covered" >line12.pointAtPercent(cut / line12.length());</span>
+  const p3Max = <span class="cstat-no" title="statement not covered" >line13.pointAtPercent(cut / line13.length());</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return circleCorner(p2Max, p1, p3Max, sides);</span>
+}
+&nbsp;
+&nbsp;
+function <span class="fstat-no" title="function not covered" >cornerLine(</span>
+  pointsIn: Array&lt;Point&gt;,
+  close: boolean,
+  type: 'fromVertex' | 'radius',
+  sides: number,
+  size: number,
+) {
+  let points = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >  if (close) {</span>
+<span class="cstat-no" title="statement not covered" >    points = cutCorner(</span>
+      pointsIn[pointsIn.length - 1], pointsIn[0], pointsIn[1],
+      sides, type, size,
+    );
+  } else {
+<span class="cstat-no" title="statement not covered" >    points.push(pointsIn[0]);</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  for (let i = 1; i &lt; pointsIn.length - 1; i += 1) {</span>
+    const corner = <span class="cstat-no" title="statement not covered" >cutCorner(</span>
+      pointsIn[i - 1], pointsIn[i], pointsIn[i + 1],
+      sides, type, size,
+    );
+<span class="cstat-no" title="statement not covered" >    points = [...points, ...corner];</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (close) {</span>
+<span class="cstat-no" title="statement not covered" >    points = [...points, ...cutCorner(</span>
+      pointsIn[pointsIn.length - 2], pointsIn[pointsIn.length - 1], pointsIn[0],
+      sides, type, size,
+    )];
+  } else {
+<span class="cstat-no" title="statement not covered" >    points.push(pointsIn[pointsIn.length - 1]._dup());</span>
+  }
+<span class="cstat-no" title="statement not covered" >  return points;</span>
+}
+&nbsp;
+function <span class="fstat-no" title="function not covered" >makeCorner(</span>
+  p2: Point, p1: Point, p3: Point, length: number, forceLength: boolean = <span class="branch-0 cbranch-no" title="branch not covered" >false,</span>
+) {
+  const line12 = <span class="cstat-no" title="statement not covered" >new Line(p1, p2);</span>
+  const line13 = <span class="cstat-no" title="statement not covered" >new Line(p1, p3);</span>
+  let newP2 = <span class="cstat-no" title="statement not covered" >line12.pointAtPercent(length / line12.length());</span>
+  let newP3 = <span class="cstat-no" title="statement not covered" >line13.pointAtPercent(length / line13.length());</span>
+<span class="cstat-no" title="statement not covered" >  if (forceLength === false) {</span>
+<span class="cstat-no" title="statement not covered" >    if (length &gt; line12.length()) {</span>
+<span class="cstat-no" title="statement not covered" >      newP2 = p2._dup();</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (length &gt; line13.length()) {</span>
+<span class="cstat-no" title="statement not covered" >      newP3 = p3._dup();</span>
+    }
+  }
+<span class="cstat-no" title="statement not covered" >  return [newP2, p1._dup(), newP3];</span>
+}
+&nbsp;
+function <span class="fstat-no" title="function not covered" >lineToCorners(</span>
+  pointsIn: Array&lt;Point&gt;,
+  close: boolean,
+  length: number,
+  forceLength: boolean = <span class="branch-0 cbranch-no" title="branch not covered" >false,</span>
+) {
+  const corners = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >  for (let i = 1; i &lt; pointsIn.length - 1; i += 1) {</span>
+<span class="cstat-no" title="statement not covered" >    corners.push(makeCorner(</span>
+      pointsIn[i - 1], pointsIn[i], pointsIn[i + 1], length, forceLength,
+    ));
+  }
+<span class="cstat-no" title="statement not covered" >  if (close) {</span>
+<span class="cstat-no" title="statement not covered" >    corners.push(makeCorner(</span>
+      pointsIn[pointsIn.length - 2],
+      pointsIn[pointsIn.length - 1],
+      pointsIn[0], length, forceLength,
+    ));
+<span class="cstat-no" title="statement not covered" >    corners.push(makeCorner(</span>
+      pointsIn[pointsIn.length - 1],
+      pointsIn[0],
+      pointsIn[1], length, forceLength,
+    ));
+  }
+<span class="cstat-no" title="statement not covered" >  return corners;</span>
+}
+&nbsp;
+export {
+  circleCorner,
+  cutCorner,
+  cornerLine,
+  makeCorner,
+  lineToCorners,
+};
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed May 20 2020 23:46:31 GMT+0000 (Coordinated Universal Time)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

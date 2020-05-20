@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for diagram/webgl/GlobalAnimation.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">All files</a> / <a href="index.html">diagram/webgl</a> GlobalAnimation.js
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">85x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">85x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">85x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">85x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+&nbsp;
+// Singleton class that contains projects global variables
+class GlobalAnimation {
+  // Method for requesting the next animation frame
+  requestNextAnimationFrame: (()=&gt;mixed) =&gt; AnimationFrameID;
+  animationId: AnimationFrameID;    // used to cancel animation frames
+  static instance: Object;
+  drawQueue: Array&lt;(number) =&gt; void&gt;;
+  nextDrawQueue: Array&lt;(number) =&gt; void&gt;;
+&nbsp;
+  constructor() {
+    // If the instance alread exists, then don't create a new instance.
+    // If it doesn't, then setup some default values.
+    if (!GlobalAnimation.instance) {
+      this.requestNextAnimationFrame = (
+        window.requestAnimationFrame
+        || <span class="branch-1 cbranch-no" title="branch not covered" >window.mozRequestAnimationFrame</span>
+        || <span class="branch-2 cbranch-no" title="branch not covered" >window.webkitRequestAnimationFrame</span>
+        || <span class="branch-3 cbranch-no" title="branch not covered" >window.msRequestAnimationFrame</span>
+      );
+      GlobalAnimation.instance = this;
+      this.drawQueue = [];
+      this.nextDrawQueue = [];
+      // this.drawScene = this.draw.bind(this);
+    }
+    return GlobalAnimation.instance;
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  dr</span>aw(now: number) {
+<span class="cstat-no" title="statement not covered" >    this.drawQueue = this.nextDrawQueue;</span>
+<span class="cstat-no" title="statement not covered" >    this.nextDrawQueue = [];</span>
+    const nowSeconds = <span class="cstat-no" title="statement not covered" >now * 0.001;</span>
+<span class="cstat-no" title="statement not covered" >    for (let i = 0; i &lt; this.drawQueue.length; i += 1) {</span>
+<span class="cstat-no" title="statement not covered" >      this.drawQueue[i](nowSeconds);</span>
+    }
+<span class="cstat-no" title="statement not covered" >    this.drawQueue = [];</span>
+  }
+&nbsp;
+  queueNextFrame(func: (?number) =&gt; void) {
+    // if (!(func in this.nextDrawQueue)) {
+    this.nextDrawQueue.push(func);
+    // }
+&nbsp;
+    // if (triggerFrameRequest) {
+    //   this.animateNextFrame();
+    // }
+    if (this.nextDrawQueue.length === 1) {
+      this.animateNextFrame();
+    }
+  }
+&nbsp;
+  // Queue up an animation frame
+  animateNextFrame() {
+    cancelAnimationFrame(this.animationId);
+    // $FlowFixMe
+    const nextFrame = this.requestNextAnimationFrame.call(window, this.draw.bind(this));
+    this.animationId = nextFrame;
+  }
+}
+&nbsp;
+// Do not automatically create and instance and return it otherwise can't
+// mock elements in jest
+// // const globalvars: Object = new GlobalVariables();
+// // Object.freeze(globalvars);
+&nbsp;
+export default GlobalAnimation;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed May 20 2020 23:46:31 GMT+0000 (Coordinated Universal Time)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

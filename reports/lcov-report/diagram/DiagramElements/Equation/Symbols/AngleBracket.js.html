@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for diagram/DiagramElements/Equation/Symbols/AngleBracket.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">All files</a> / <a href="index.html">diagram/DiagramElements/Equation/Symbols</a> AngleBracket.js
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import {
+  Point, Line,
+} from '../../../../tools/g2';
+import Bracket from './Bracket';
+&nbsp;
+export default class Bar extends Bracket {
+  // eslint-disable-next-line class-methods-use-this
+&nbsp;
+  // Angle Bracket
+  //                         width
+  //                      |&lt;-------&gt;|
+  //                      |         |
+  //                      |      ___
+  //           A          |     /  /
+  //           |          |    /  /
+  //           |          |   /  /
+  //           |          |  /  /
+  //           |            /  /
+  //    height |           /  /
+  //           |           \  \
+  //           |            \  \
+  //           |             \  \
+  //           |              \  \
+  //           |               \  \
+  //           |                \  \
+  //           V                 \__\
+&nbsp;
+  // To calculate dimensions, need to solve the below where we know:
+  //   * height (h)
+  //   * width (w)
+  //
+  // Looking at the bottom half of the bracket:
+  //
+  //                                 width
+  //                   |&lt;------------------------------&gt;|
+  //                   |                                |
+  //                   |   tip width           Dh       |
+  //                   |&lt;--------------&gt;|&lt;-------------&gt;|
+  //
+  //          ______   __________________...............:
+  //          A        :\*               \              :
+  //          |        : \  *             \             :
+  //          |        :  \   *            \            :
+  //          |        :   \    *           \           :
+  //          |        :    \     *          \          :
+  //          |        :     \      *         \         :
+  //          |        :      \       * A      \ D      :
+  //   h / 2  |        :       \        *       \       :
+  //          |        :        \         *      \      :
+  //          |        :       C \          *     \     :
+  //          |        :          \           *    \    :
+  //          |        :           \            *   \   :
+  //          |        :            \             *  \  :
+  //          |        :             \              * \ :
+  //          |        :              \               *\:
+  //          V_____   :...............\________________\  B
+  //                                    \               *
+  //                        C extension  \          *
+  //                                      \      *   E
+  //                                     R \ *
+  //
+  //   - Draw a circle at B of radius lineWidth
+  //   - This circle will touch an extended line C at a right angle (R)
+  //   - Line E is the line from the circle center (B) to the tangent point (R)
+  //   - Line A is the secant and the extended line C is the tangent of the
+  //     the angle Theta which is angle between the line A and line E
+  //   - The angle between lines E and D is also a right angle (as C || D),
+  //     therefore we can calculate the angle between A and D (Beta)
+  //   - Calculate the angle from the horiontal to A: a = arctan2(h/2, w)
+  //   - Calculate the angle from the horizontal to D: alpha = a + Beta
+  //   - Calculate the horizontal component of D: Dh = h / 2 / tan(alpha)
+  //   - Calculate Tip Width = w - Dh
+&nbsp;
+  // eslint-disable-next-line class-methods-use-this
+<span class="fstat-no" title="function not covered" >  ge</span>tLeftPoints(options: Object, widthIn: number, height: number) {
+    // const { side } = options;
+    const { lineWidth, width } = <span class="cstat-no" title="statement not covered" >this.getVerticalDefaultValues(height, widthIn, options);</span>
+    const line = <span class="cstat-no" title="statement not covered" >new Line(new Point(0, 0), new Point(width, height / 2));</span>
+    const theta = <span class="cstat-no" title="statement not covered" >Math.acos(lineWidth / line.distance);</span>
+    const beta = <span class="cstat-no" title="statement not covered" >Math.PI / 2 - theta;</span>
+    const alpha = <span class="cstat-no" title="statement not covered" >line.ang + beta;</span>
+    const tipWidth = <span class="cstat-no" title="statement not covered" >width - height / 2 / Math.tan(alpha);</span>
+&nbsp;
+    const leftPoints = <span class="cstat-no" title="statement not covered" >[</span>
+      new Point(width - tipWidth, 0),
+      new Point(0, height / 2),
+      new Point(width - tipWidth, height),
+    ];
+    const rightPoints = <span class="cstat-no" title="statement not covered" >[</span>
+      new Point(width, 0),
+      new Point(tipWidth, height / 2),
+      new Point(width, height),
+    ];
+&nbsp;
+    // if (side === 'top' || side === 'bottom') {
+    //   return this.getBracketPoints(leftPoints, rightPoints, side, height, width);
+    // }
+<span class="cstat-no" title="statement not covered" >    return [leftPoints, rightPoints, width, height];</span>
+    // return this.getBracketPoints(leftPoints, rightPoints, side, width, height);
+  }
+&nbsp;
+  /* eslint-disable class-methods-use-this */
+  // $FlowFixMe
+<span class="fstat-no" title="function not covered" >  ge</span>tVerticalDefaultValues(height: number, width: ?number, options: {
+      lineWidth?: number,
+      width?: number,
+    }) {
+    const out = <span class="cstat-no" title="statement not covered" >{};</span>
+<span class="cstat-no" title="statement not covered" >    if (width == null &amp;&amp; options.width == null) {</span>
+<span class="cstat-no" title="statement not covered" >      out.width = 97570.78 + (0.004958708 - 97570.78)</span>
+                  / (1 + (height / 2399858) ** 0.9383909);
+    }
+<span class="cstat-no" title="statement not covered" >    if (width != null) {</span>
+<span class="cstat-no" title="statement not covered" >      out.width = width;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (options.width != null) {</span>
+<span class="cstat-no" title="statement not covered" >      out.width = options.width;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (options.lineWidth == null) {</span>
+<span class="cstat-no" title="statement not covered" >      out.lineWidth = (0.2933614 + (0.0001418178 - 0.2933614)</span>
+                      / (1 + (height / 39.01413) ** 0.618041)) * 0.7;
+    } else {
+<span class="cstat-no" title="statement not covered" >      out.lineWidth = options.lineWidth;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return out;</span>
+  }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed May 20 2020 23:46:31 GMT+0000 (Coordinated Universal Time)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,2547 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for diagram/DiagramElements/Equation/Elements/BaseAnnotationFunction.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">All files</a> / <a href="index.html">diagram/DiagramElements/Equation/Elements</a> BaseAnnotationFunction.js
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525
+526
+527
+528
+529
+530
+531
+532
+533
+534
+535
+536
+537
+538
+539
+540
+541
+542
+543
+544
+545
+546
+547
+548
+549
+550
+551
+552
+553
+554
+555
+556
+557
+558
+559
+560
+561
+562
+563
+564
+565
+566
+567
+568
+569
+570
+571
+572
+573
+574
+575
+576
+577
+578
+579
+580
+581
+582
+583
+584
+585
+586
+587
+588
+589
+590
+591
+592
+593
+594
+595
+596
+597
+598
+599
+600
+601
+602
+603
+604
+605
+606
+607
+608
+609
+610
+611
+612
+613
+614
+615
+616
+617
+618
+619
+620
+621
+622
+623
+624
+625
+626
+627
+628
+629
+630
+631
+632
+633
+634
+635
+636
+637
+638
+639
+640
+641
+642
+643
+644
+645
+646
+647
+648
+649
+650
+651
+652
+653
+654
+655
+656
+657
+658
+659
+660
+661
+662
+663
+664
+665
+666
+667
+668
+669
+670
+671
+672
+673
+674
+675
+676
+677
+678
+679
+680
+681
+682
+683
+684
+685
+686
+687
+688
+689
+690
+691
+692
+693
+694
+695
+696
+697
+698
+699
+700
+701
+702
+703
+704
+705
+706
+707
+708
+709
+710
+711
+712
+713
+714
+715
+716
+717
+718
+719
+720
+721
+722
+723
+724
+725
+726
+727
+728
+729
+730
+731
+732
+733
+734
+735
+736
+737
+738
+739
+740
+741
+742
+743
+744
+745
+746
+747
+748
+749
+750
+751
+752
+753
+754
+755
+756
+757
+758
+759
+760
+761
+762
+763
+764
+765
+766
+767
+768
+769
+770
+771
+772
+773
+774
+775
+776
+777
+778
+779
+780
+781
+782
+783
+784
+785
+786
+787
+788
+789
+790
+791
+792
+793
+794
+795
+796
+797
+798
+799
+800
+801
+802
+803
+804
+805
+806
+807
+808
+809
+810
+811
+812
+813
+814
+815
+816
+817
+818
+819
+820
+821
+822
+823
+824
+825
+826
+827
+828
+829
+830
+831
+832
+833
+834
+835</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import {
+  Point, getPoint,
+} from '../../../../tools/g2';
+// import { Elements } from './Element';
+import Bounds from './Bounds';
+// import BaseEquationFunction from './BaseEquationFunction';
+// import type { TypeParsablePoint } from '../../../../tools/g2';
+// import type {EQN_Annotation } from './Base'
+&nbsp;
+// import {
+//   DiagramElementPrimitive, DiagramElementCollection,
+// } from '../../../Element';
+import { duplicateFromTo } from '../../../../tools/tools';
+// import { Element, Elements } from './Element';
+&nbsp;
+import type { ElementInterface } from './Element';
+// import Symbol from '../Symbols/Symbol';
+import SymbolNew from '../Symbols/SymbolNew';
+// eslint-disable-next-line import/no-cycle
+// import type { TypeEquationPhrase } from '../EquationFunctions';
+&nbsp;
+export type EQN_Annotation = {
+  xPosition: 'left' | 'center' | 'right' | number,
+  yPosition: 'bottom' | 'baseline' | 'middle' | 'top' | number,
+  xAlign: 'left' | 'center' | 'right' | number,
+  yAlign: 'bottom' | 'baseline' | 'middle' | 'top' | number,
+  offset: Point,
+  scale: number,
+  content: ElementInterface,
+  inSize: boolean,
+  fullContentBounds: boolean,
+  reference?: string,
+};
+&nbsp;
+export type EQN_EncompassGlyph = {
+  symbol?: string,
+  annotations?: Array&lt;EQN_Annotation&gt;,
+  space: number;
+  topSpace?: number;
+  leftSpace?: number;
+  bottomSpace?: number;
+  rightSpace?: number;
+};
+export type EQN_LeftRightGlyph = {
+  symbol?: string,
+  annotations?: Array&lt;EQN_Annotation&gt;,
+  space: number;
+  overhang: number,
+  topSpace?: number;
+  bottomSpace?: number;
+  minContentHeight?: number,
+  minContentDescent?: number;
+  minContentAscent?: number,
+  descent?: number,
+  height?: number,
+  yOffset: number,
+  annotationsOverContent?: boolean,
+};
+&nbsp;
+export type EQN_TopBottomGlyph = {
+  symbol?: string,
+  annotations?: Array&lt;EQN_Annotation&gt;,
+  space: number;
+  overhang: number,
+  width?: number,
+  leftSpace?: number,
+  rightSpace?: number,
+  xOffset: number,
+  annotationsOverContent?: boolean,
+};
+&nbsp;
+export type TypeAnnotatedGlyph = {
+  glyph: SymbolNew,
+  annotations: Array&lt;EQN_Annotation&gt;,
+  width: number,
+  height: number,
+  location: Point,
+};
+&nbsp;
+// export type EQN_EncompassGlyph = {
+//   space: number,
+//   leftSpace: number,
+//   bottomSpace: number,
+//   topSpace: number,
+//   rightSpace: number,
+// } &amp; TypeAnnotatedGlyph;
+&nbsp;
+export type EQN_Glyphs = {
+  left?: TypeAnnotatedGlyph &amp; EQN_LeftRightGlyph;
+  right?: TypeAnnotatedGlyph &amp; EQN_LeftRightGlyph;
+  top?: TypeAnnotatedGlyph &amp; EQN_TopBottomGlyph;
+  bottom?: TypeAnnotatedGlyph &amp; EQN_TopBottomGlyph;
+  encompass?: TypeAnnotatedGlyph &amp; EQN_EncompassGlyph;
+};
+&nbsp;
+// export type EQN_GlyphsIn = {
+//   left?: TypeAnnotatedGlyph;
+//   right?: TypeAnnotatedGlyph;
+//   top?: TypeAnnotatedGlyph;
+//   bottom?: TypeAnnotatedGlyph;
+//   encompass?: EQN_EncompassGlyphIn;
+// };
+&nbsp;
+function <span class="fstat-no" title="function not covered" >copyAnnotation(</span>annotation: EQN_Annotation, namedCollection?: Object) {
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    xPosition: annotation.xPosition,
+    yPosition: annotation.yPosition,
+    xAlign: annotation.xAlign,
+    yAlign: annotation.yAlign,
+    offset: annotation.offset._dup(),
+    scale: annotation.scale,
+    content: annotation.content._dup(namedCollection),
+    inSize: annotation.inSize,
+    fullContentBounds: annotation.fullContentBounds,
+  };
+}
+&nbsp;
+function <span class="fstat-no" title="function not covered" >copyAnnotations(</span>
+  annotations: Array&lt;EQN_Annotation&gt;,
+  namedCollection?: Object,
+) {
+  const copy = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >  annotations.forEach(<span class="fstat-no" title="function not covered" >(a</span>nnotation) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    copy.push(copyAnnotation(annotation, namedCollection));</span>
+  });
+<span class="cstat-no" title="statement not covered" >  return copy;</span>
+}
+&nbsp;
+function <span class="fstat-no" title="function not covered" >copyGlyphs(</span>
+  glyphs: EQN_Glyphs,
+  namedCollection?: Object,
+) {
+  const copy = <span class="cstat-no" title="statement not covered" >{};</span>
+<span class="cstat-no" title="statement not covered" >  Object.keys(glyphs).forEach(<span class="fstat-no" title="function not covered" >(k</span>ey) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (glyphs[key] == null) {</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    }
+    const glyph = <span class="cstat-no" title="statement not covered" >glyphs[key];</span>
+    const copyGlyph = <span class="cstat-no" title="statement not covered" >{};</span>
+<span class="cstat-no" title="statement not covered" >    duplicateFromTo(glyph, copyGlyph, ['glyph', 'annotations']);</span>
+<span class="cstat-no" title="statement not covered" >    if (namedCollection != null) {</span>
+<span class="cstat-no" title="statement not covered" >      copyGlyph.glyph = namedCollection[glyph.glyph.name];</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      copyGlyph.glyph = glyph.glyph;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    copyGlyph.annotations = copyAnnotations(glyph.annotations, namedCollection);</span>
+<span class="cstat-no" title="statement not covered" >    copy[key] = copyGlyph;</span>
+  });
+<span class="cstat-no" title="statement not covered" >  return copy;</span>
+}
+&nbsp;
+function <span class="fstat-no" title="function not covered" >getAllElementsFromAnnotations(</span>annotations: Array&lt;EQN_Annotation&gt;) {
+  let elements = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >  annotations.forEach(<span class="fstat-no" title="function not covered" >(a</span>nnotation) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    elements = [...elements, ...annotation.content.getAllElements()];</span>
+  });
+<span class="cstat-no" title="statement not covered" >  return elements;</span>
+}
+&nbsp;
+function <span class="fstat-no" title="function not covered" >getAllElementsFromGlyphs(</span>glyphs: EQN_Glyphs) {
+  let elements = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >  Object.keys(glyphs).forEach(<span class="fstat-no" title="function not covered" >(k</span>ey) =&gt; {</span>
+    const glyph = <span class="cstat-no" title="statement not covered" >glyphs[key];</span>
+<span class="cstat-no" title="statement not covered" >    if (glyph == null) {</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    elements = [</span>
+      ...elements,
+      glyph.glyph,
+      ...getAllElementsFromAnnotations(glyph.annotations),
+    ];
+  });
+<span class="cstat-no" title="statement not covered" >  return elements;</span>
+}
+&nbsp;
+function <span class="fstat-no" title="function not covered" >setPositionsForAnnotations(</span>annotations: Array&lt;EQN_Annotation&gt;) {
+<span class="cstat-no" title="statement not covered" >  annotations.forEach(<span class="fstat-no" title="function not covered" >(a</span>nnotation) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    annotation.content.setPositions();</span>
+  });
+}
+&nbsp;
+function <span class="fstat-no" title="function not covered" >offsetLocationForAnnotations(</span>annotations: Array&lt;EQN_Annotation&gt;, offset: Point) {
+<span class="cstat-no" title="statement not covered" >  annotations.forEach(<span class="fstat-no" title="function not covered" >(a</span>nnotation) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    annotation.content.offsetLocation(offset);</span>
+  });
+}
+&nbsp;
+function <span class="fstat-no" title="function not covered" >setPositionsForGlyphs(</span>glyphs: EQN_Glyphs) {
+<span class="cstat-no" title="statement not covered" >  Object.keys(glyphs).forEach(<span class="fstat-no" title="function not covered" >(k</span>ey) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (glyphs[key] == null) {</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    }
+    const glyph = <span class="cstat-no" title="statement not covered" >glyphs[key];</span>
+    const t = <span class="cstat-no" title="statement not covered" >glyph.glyph.transform._dup();</span>
+<span class="cstat-no" title="statement not covered" >    t.updateScale(glyph.width, glyph.height);</span>
+<span class="cstat-no" title="statement not covered" >    t.updateTranslation(glyph.location.x, glyph.location.y);</span>
+<span class="cstat-no" title="statement not covered" >    glyph.glyph.setTransform(t);</span>
+<span class="cstat-no" title="statement not covered" >    setPositionsForAnnotations(glyph.annotations);</span>
+  });
+}
+&nbsp;
+function <span class="fstat-no" title="function not covered" >offsetLocationForGlyphs(</span>glyphs: EQN_Glyphs, offset: Point) {
+<span class="cstat-no" title="statement not covered" >  Object.keys(glyphs).forEach(<span class="fstat-no" title="function not covered" >(k</span>ey) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (glyphs[key] == null) {</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    }
+    const glyph = <span class="cstat-no" title="statement not covered" >glyphs[key];</span>
+<span class="cstat-no" title="statement not covered" >    glyph.location = glyph.location.add(offset);</span>
+<span class="cstat-no" title="statement not covered" >    offsetLocationForAnnotations(glyph.annotations, offset);</span>
+  });
+}
+&nbsp;
+export default class BaseAnnotationFunction implements ElementInterface {
+  ascent: number;
+  descent: number;
+  width: number;
+  location: Point;
+  height: number;
+  scale: number;
+  fullSize: {
+    leftOffset: number,
+    width: number,
+    descent: number,
+    ascent: number,
+    height: number,
+  };
+&nbsp;
+  content: ElementInterface;
+  annotations: Array&lt;EQN_Annotation&gt;;
+  glyphs: EQN_Glyphs;
+  options: Object;
+&nbsp;
+<span class="fstat-no" title="function not covered" >  co</span>nstructor(
+    content: ElementInterface,
+    annotations: Array&lt;EQN_Annotation&gt;,
+    glyphs: EQN_Glyphs,
+    options: Object,
+  ) {
+<span class="cstat-no" title="statement not covered" >    this.glyphs = glyphs;</span>
+<span class="cstat-no" title="statement not covered" >    this.content = content;</span>
+<span class="cstat-no" title="statement not covered" >    this.annotations = annotations;</span>
+<span class="cstat-no" title="statement not covered" >    this.options = options;</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  _d</span>up(namedCollection?: Object) {
+    const contentCopy = <span class="cstat-no" title="statement not covered" >this.content._dup(namedCollection);</span>
+    const glyphsCopy = <span class="cstat-no" title="statement not covered" >copyGlyphs(this.glyphs);</span>
+    const annotationsCopy = <span class="cstat-no" title="statement not covered" >copyAnnotations(this.annotations);</span>
+    const copy = <span class="cstat-no" title="statement not covered" >new this.constructor(  // $FlowFixMe</span>
+      contentCopy, annotationsCopy, glyphsCopy, this.options,
+    );
+<span class="cstat-no" title="statement not covered" >    duplicateFromTo(</span>
+      this, copy,
+      ['content', 'glyphs', 'annotations'],
+    );
+<span class="cstat-no" title="statement not covered" >    return copy;</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ge</span>tAllElements() {
+<span class="cstat-no" title="statement not covered" >    return [</span>
+      ...this.content.getAllElements(),
+      ...getAllElementsFromAnnotations(this.annotations),
+      ...getAllElementsFromGlyphs(this.glyphs),
+    ];
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  se</span>tPositions() {
+<span class="cstat-no" title="statement not covered" >    this.content.setPositions();</span>
+<span class="cstat-no" title="statement not covered" >    setPositionsForAnnotations(this.annotations);</span>
+<span class="cstat-no" title="statement not covered" >    setPositionsForGlyphs(this.glyphs);</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  of</span>fsetLocation(offset: Point = <span class="branch-0 cbranch-no" title="branch not covered" >new Point(0, 0))</span> {
+<span class="cstat-no" title="statement not covered" >    this.location = this.location.add(offset);</span>
+<span class="cstat-no" title="statement not covered" >    this.content.offsetLocation(offset);</span>
+<span class="cstat-no" title="statement not covered" >    offsetLocationForAnnotations(this.annotations, offset);</span>
+<span class="cstat-no" title="statement not covered" >    offsetLocationForGlyphs(this.glyphs, offset);</span>
+  }
+&nbsp;
+&nbsp;
+  //                               Top Glyph
+  //                  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+  //                  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG     Encompassing Glyph
+  //                                                      /
+  //                                                    /
+  //        GGG       GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG        GGG
+  //        GGG       GGG                           GGG        GGG
+  //        GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
+  //        GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
+  // Left   GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG   Right
+  // Glyph  GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG   Glyph
+  //        GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
+  //        GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
+  //        GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
+  //        GGG       GGG                           GGG        GGG
+  //        GGG       GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG        GGG
+  //
+  //
+  //                  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+  //                  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+  //                            Bottom Glyph
+  //
+  //
+  //
+  //
+  // |                          GGGGGGGGGGGGGGGGGGGGGGGG
+  // |                          GGGGGGGGGGGGGGGGGGGGGGGG
+  // |                          GGG                  GGG
+  // |                          GGG                  GGG
+  // |        GGG               GGG   CCCCCCCCCCCC   GGG               GGG
+  // |        GGG               GGG   CCCCCCCCCCCC   GGG               GGG
+  // |        GGG               GGG   CCCCCCCCCCCC   GGG               GGG
+  // |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
+  // |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
+  // |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
+  // |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
+  // |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
+  // | |   |  GGG  |   | |   |  GGG   CCCCCCCCCCCC   GGG               GGG
+  // | |   |  GGG  |   | |   |  GGG   CCCCCCCCCCCC   GGG               GGG
+  // | |   |  GGG  |   | |   |  GGG   CCCCCCCCCCCC   GGG               GGG
+  // | |   |  |  | |   | |   |  GGG   |              GGG
+  // | |   |  |  | |   | |   |  GGG   |              GGG
+  // | |   |  |  | |   | |   |  GGGGGGGGGGGGGGGGGGGGGGGG
+  // | |   |  |  | |   | |   |  GGGGGGGGGGGGGGGGGGGGGGGG
+  // | |   |  |  | |   | |   |  |  |  |
+  // | |   |  |  | |   | |   |  |  |--|&lt;----  contentEncompassGlyph Space
+  // | |   |  |  | |   | |   |  |
+  // | |   |  |  | |   | |   |--|&lt;----- EncompassGlyphAnnotation Space
+  // | |   |  |  | |   | |
+  // | |   |  |  | |   |-|&lt;----- ContentAnnotationGlyphInsideAnnotation Space
+  // | |   |  |  | |
+  // | |   |  |  |-|&lt;------- GlyphInsideAnnotationGlyph Space
+  // | |   |  |
+  // | |  &gt;|--|&lt;------ GlypgGlyphOutsideAnnotation Space
+  // | |
+  // |-|&lt;------ Outside Space
+&nbsp;
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ca</span>lcSize(location: Point, scale: number) {
+<span class="cstat-no" title="statement not covered" >    this.location = location._dup();</span>
+    const loc = <span class="cstat-no" title="statement not covered" >location._dup();</span>
+    // const [encompassGlyph, leftGlyph, bottomGlyph, rightGlyph, topGlyph] = this.glyphs;
+    const { content, annotations } = <span class="cstat-no" title="statement not covered" >this;</span>
+    const {
+      inSize, space, topSpace, bottomSpace, leftSpace, rightSpace,
+      contentScale, useFullBounds, fullContentBounds,
+    } = <span class="cstat-no" title="statement not covered" >this.options;</span>
+    const inSizeBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+    const fullBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+&nbsp;
+    const contentBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+<span class="cstat-no" title="statement not covered" >    content.calcSize(loc._dup(), scale * contentScale);</span>
+<span class="cstat-no" title="statement not covered" >    contentBounds.copyFrom(content.getBounds(fullContentBounds));</span>
+<span class="cstat-no" title="statement not covered" >    inSizeBounds.copyFrom(contentBounds);</span>
+<span class="cstat-no" title="statement not covered" >    fullBounds.copyFrom(contentBounds);</span>
+<span class="cstat-no" title="statement not covered" >    annotations.forEach(<span class="fstat-no" title="function not covered" >(a</span>nnotation) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      annotation.content.calcSize(loc, scale * annotation.scale);</span>
+<span class="cstat-no" title="statement not covered" >      this.setAnnotationPosition(contentBounds, annotation, scale);</span>
+      const annotationBounds = <span class="cstat-no" title="statement not covered" >annotation.content.getBounds();</span>
+<span class="cstat-no" title="statement not covered" >      inSizeBounds.growWithSameBaseline(annotationBounds);</span>
+      const fullSizeAnnotationBounds = <span class="cstat-no" title="statement not covered" >annotation.content.getBounds(true);</span>
+<span class="cstat-no" title="statement not covered" >      fullBounds.growWithSameBaseline(fullSizeAnnotationBounds);</span>
+    });
+    const [encompassBounds, encompassFullBounds] = <span class="cstat-no" title="statement not covered" >this.setEncompassGlyph(scale, contentBounds);</span>
+<span class="cstat-no" title="statement not covered" >    inSizeBounds.growWithSameBaseline(encompassBounds);</span>
+<span class="cstat-no" title="statement not covered" >    fullBounds.growWithSameBaseline(encompassFullBounds);</span>
+&nbsp;
+    const [leftBounds, leftFullBounds] = <span class="cstat-no" title="statement not covered" >this.setVerticalGlyph(scale, contentBounds, 'left');</span>
+<span class="cstat-no" title="statement not covered" >    inSizeBounds.growWithSameBaseline(leftBounds);</span>
+<span class="cstat-no" title="statement not covered" >    fullBounds.growWithSameBaseline(leftFullBounds);</span>
+    const [rightBounds, rightFullBounds] = <span class="cstat-no" title="statement not covered" >this.setVerticalGlyph(scale, contentBounds, 'right');</span>
+<span class="cstat-no" title="statement not covered" >    inSizeBounds.growWithSameBaseline(rightBounds);</span>
+<span class="cstat-no" title="statement not covered" >    fullBounds.growWithSameBaseline(rightFullBounds);</span>
+&nbsp;
+    const [topBounds, topFullBounds] = <span class="cstat-no" title="statement not covered" >this.setHorizontalGlyph(scale, contentBounds, 'top');</span>
+<span class="cstat-no" title="statement not covered" >    inSizeBounds.growWithSameBaseline(topBounds);</span>
+<span class="cstat-no" title="statement not covered" >    fullBounds.growWithSameBaseline(topFullBounds);</span>
+&nbsp;
+    const [bottomBounds, bottomFullBounds] = <span class="cstat-no" title="statement not covered" >this.setHorizontalGlyph(scale, contentBounds, 'bottom');</span>
+<span class="cstat-no" title="statement not covered" >    inSizeBounds.growWithSameBaseline(bottomBounds);</span>
+<span class="cstat-no" title="statement not covered" >    fullBounds.growWithSameBaseline(bottomFullBounds);</span>
+&nbsp;
+    let xLocationOffset = <span class="cstat-no" title="statement not covered" >0;</span>
+&nbsp;
+    const topSpaceToUse = <span class="cstat-no" title="statement not covered" >(topSpace != null ? topSpace : (space || 0)) * scale;</span>
+    const bottomSpaceToUse = <span class="cstat-no" title="statement not covered" >(bottomSpace != null ? bottomSpace : (space || 0)) * scale;</span>
+    const leftSpaceToUse = <span class="cstat-no" title="statement not covered" >(leftSpace != null ? leftSpace : (space || 0)) * scale;</span>
+    const rightSpaceToUse = <span class="cstat-no" title="statement not covered" >(rightSpace != null ? rightSpace : (space || 0)) * scale;</span>
+<span class="cstat-no" title="statement not covered" >    inSizeBounds.offset(topSpaceToUse, rightSpaceToUse, -bottomSpaceToUse, -leftSpaceToUse);</span>
+<span class="cstat-no" title="statement not covered" >    fullBounds.growWithSameBaseline(inSizeBounds);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (useFullBounds) {</span>
+<span class="cstat-no" title="statement not covered" >      inSizeBounds.copyFrom(fullBounds);</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (inSize) {</span>
+<span class="cstat-no" title="statement not covered" >      this.width = inSizeBounds.width;</span>
+<span class="cstat-no" title="statement not covered" >      this.ascent = inSizeBounds.ascent;</span>
+<span class="cstat-no" title="statement not covered" >      this.descent = inSizeBounds.descent;</span>
+<span class="cstat-no" title="statement not covered" >      this.height = inSizeBounds.height;</span>
+<span class="cstat-no" title="statement not covered" >      xLocationOffset = loc.x - inSizeBounds.left;</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      this.width = contentBounds.width;</span>
+<span class="cstat-no" title="statement not covered" >      this.ascent = contentBounds.ascent;</span>
+<span class="cstat-no" title="statement not covered" >      this.descent = contentBounds.descent;</span>
+<span class="cstat-no" title="statement not covered" >      this.height = contentBounds.height;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    this.fullSize = {</span>
+      leftOffset: this.location.x - fullBounds.left,
+      width: fullBounds.width,
+      ascent: fullBounds.ascent,
+      descent: fullBounds.descent,
+      height: fullBounds.height,
+    };
+<span class="cstat-no" title="statement not covered" >    if (xLocationOffset !== 0 &amp;&amp; content != null) {</span>
+      const locationOffset = <span class="cstat-no" title="statement not covered" >new Point(xLocationOffset, 0);</span>
+<span class="cstat-no" title="statement not covered" >      content.offsetLocation(locationOffset);</span>
+<span class="cstat-no" title="statement not covered" >      annotations.forEach(<span class="fstat-no" title="function not covered" >(a</span>nnotation) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        annotation.content.offsetLocation(locationOffset);</span>
+      });
+<span class="cstat-no" title="statement not covered" >      Object.keys(this.glyphs).forEach(<span class="fstat-no" title="function not covered" >(k</span>ey) =&gt; {</span>
+        const glyph = <span class="cstat-no" title="statement not covered" >this.glyphs[key];</span>
+<span class="cstat-no" title="statement not covered" >        if (glyph == null) {</span>
+<span class="cstat-no" title="statement not covered" >          return;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        glyph.location = glyph.location.add(locationOffset);</span>
+<span class="cstat-no" title="statement not covered" >        glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);</span>
+<span class="cstat-no" title="statement not covered" >        glyph.annotations.forEach(<span class="fstat-no" title="function not covered" >(a</span>nnotation) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          annotation.content.offsetLocation(locationOffset);</span>
+        });
+      });
+    }
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  se</span>tEncompassGlyph(scale: number, contentBoundsIn: Bounds) {
+<span class="cstat-no" title="statement not covered" >    if (this.glyphs.encompass == null) {</span>
+      const fullBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+<span class="cstat-no" title="statement not covered" >      fullBounds.copyFrom(contentBoundsIn);</span>
+<span class="cstat-no" title="statement not covered" >      return [contentBoundsIn, fullBounds];</span>
+    }
+    const {
+      leftSpace, rightSpace, bottomSpace, topSpace, space,
+    } = <span class="cstat-no" title="statement not covered" >this.glyphs.encompass;</span>
+    const glyph = <span class="cstat-no" title="statement not covered" >this.glyphs.encompass;</span>
+    const spaceToUse = <span class="cstat-no" title="statement not covered" >space != null ? space : 0;</span>
+    const left = <span class="cstat-no" title="statement not covered" >leftSpace != null ? leftSpace : spaceToUse;</span>
+    const right = <span class="cstat-no" title="statement not covered" >rightSpace != null ? rightSpace : spaceToUse;</span>
+    const top = <span class="cstat-no" title="statement not covered" >topSpace != null ? topSpace : spaceToUse;</span>
+    const bottom = <span class="cstat-no" title="statement not covered" >bottomSpace != null ? bottomSpace : spaceToUse;</span>
+    const contentBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+<span class="cstat-no" title="statement not covered" >    contentBounds.copyFrom(contentBoundsIn);</span>
+<span class="cstat-no" title="statement not covered" >    contentBounds.offset(top * scale, right * scale, -bottom * scale, -left * scale);</span>
+    const glyphBounds = <span class="cstat-no" title="statement not covered" >glyph.glyph.getBounds(</span>
+      glyph.glyph.custom.options,
+      contentBounds.left,
+      contentBounds.bottom,
+      contentBounds.width,
+      contentBounds.height,
+    );
+    const inSizeBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+    const fullBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+<span class="cstat-no" title="statement not covered" >    inSizeBounds.copyFrom(contentBounds);</span>
+<span class="cstat-no" title="statement not covered" >    inSizeBounds.growWithSameBaseline(glyphBounds);</span>
+<span class="cstat-no" title="statement not covered" >    fullBounds.copyFrom(inSizeBounds);</span>
+<span class="cstat-no" title="statement not covered" >    glyph.width = glyphBounds.width;</span>
+<span class="cstat-no" title="statement not covered" >    glyph.height = glyphBounds.height;</span>
+<span class="cstat-no" title="statement not covered" >    glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);</span>
+<span class="cstat-no" title="statement not covered" >    glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);</span>
+<span class="cstat-no" title="statement not covered" >    glyph.annotations.forEach(<span class="fstat-no" title="function not covered" >(a</span>nnotation) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      annotation.content.calcSize(glyph.location, scale * annotation.scale);</span>
+<span class="cstat-no" title="statement not covered" >      this.setAnnotationPosition(glyphBounds, annotation, scale);</span>
+      const annotationBounds = <span class="cstat-no" title="statement not covered" >annotation.content.getBounds();</span>
+<span class="cstat-no" title="statement not covered" >      inSizeBounds.growWithSameBaseline(annotationBounds);</span>
+      const fullAnnotationBounds = <span class="cstat-no" title="statement not covered" >annotation.content.getBounds(true);</span>
+<span class="cstat-no" title="statement not covered" >      fullBounds.growWithSameBaseline(fullAnnotationBounds);</span>
+    });
+<span class="cstat-no" title="statement not covered" >    return [inSizeBounds, fullBounds];</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  se</span>tVerticalGlyph(scale: number, contentBounds: Bounds, glyphName: 'left' | 'right') {
+<span class="cstat-no" title="statement not covered" >    if (this.glyphs[glyphName] == null) {</span>
+      const fullBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+<span class="cstat-no" title="statement not covered" >      fullBounds.copyFrom(contentBounds);</span>
+<span class="cstat-no" title="statement not covered" >      return [contentBounds, fullBounds];</span>
+    }
+    const {
+      space, overhang, topSpace, bottomSpace, minContentHeight,
+      minContentDescent, minContentAscent,
+      descent, height, yOffset,
+      annotationsOverContent,
+    } = <span class="cstat-no" title="statement not covered" >this.glyphs[glyphName];</span>
+&nbsp;
+    const glyph = <span class="cstat-no" title="statement not covered" >this.glyphs[glyphName];</span>
+    // const contentBounds = new Bounds();
+    // contentBounds.copyFrom(contentBounds);
+    let glyphHeight = <span class="cstat-no" title="statement not covered" >contentBounds.height;</span>
+    let contentX = <span class="cstat-no" title="statement not covered" >contentBounds.left;</span>
+    let glyphBottom = <span class="cstat-no" title="statement not covered" >contentBounds.bottom;</span>
+    // let glyphTop = contentBounds.top;
+    let glyphDescent = <span class="cstat-no" title="statement not covered" >contentBounds.descent;</span>
+    let glyphAscent = <span class="cstat-no" title="statement not covered" >contentBounds.ascent;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (minContentDescent != null) {</span>
+<span class="cstat-no" title="statement not covered" >      glyphDescent = Math.max(minContentDescent, glyphDescent);</span>
+<span class="cstat-no" title="statement not covered" >      glyphHeight = contentBounds.ascent + glyphDescent;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (minContentAscent != null) {</span>
+<span class="cstat-no" title="statement not covered" >      glyphAscent = Math.max(minContentAscent, glyphAscent);</span>
+<span class="cstat-no" title="statement not covered" >      glyphHeight = glyphAscent + glyphDescent;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (minContentHeight != null) {</span>
+<span class="cstat-no" title="statement not covered" >      glyphAscent = -glyphDescent</span>
+                             + Math.max(minContentHeight, glyphHeight);
+    }
+    const topSpaceToUse = <span class="cstat-no" title="statement not covered" >topSpace != null ? topSpace : overhang;</span>
+    const bottomSpaceToUse = <span class="cstat-no" title="statement not covered" >bottomSpace != null ? bottomSpace : overhang;</span>
+<span class="cstat-no" title="statement not covered" >    glyphDescent += scale * bottomSpaceToUse;</span>
+<span class="cstat-no" title="statement not covered" >    if (descent != null) {</span>
+<span class="cstat-no" title="statement not covered" >      glyphDescent = descent;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    glyphAscent += scale * topSpaceToUse;</span>
+<span class="cstat-no" title="statement not covered" >    glyphHeight = glyphDescent + glyphAscent;</span>
+<span class="cstat-no" title="statement not covered" >    if (height != null) {</span>
+<span class="cstat-no" title="statement not covered" >      glyphHeight = height;</span>
+<span class="cstat-no" title="statement not covered" >      glyphAscent = glyphHeight - glyphDescent;</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    glyphBottom = contentBounds.bottom</span>
+                           - (glyphDescent - contentBounds.descent);
+&nbsp;
+    // glyphTop = contentBoundsIn.top + (glyphAscent - contentBoundsIn.ascent);
+&nbsp;
+    // glyphLeft = contentBounds.left;
+<span class="cstat-no" title="statement not covered" >    if (glyphName === 'left') {</span>
+<span class="cstat-no" title="statement not covered" >      contentX -= space * scale;</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      contentX = contentBounds.left + contentBounds.width + space * scale;</span>
+    }
+&nbsp;
+    // let glyphBottom = contentBounds.bottom;
+<span class="cstat-no" title="statement not covered" >    if (descent == null &amp;&amp; bottomSpace == null &amp;&amp; height != null) {</span>
+<span class="cstat-no" title="statement not covered" >      glyphBottom = contentBounds.bottom + contentBounds.height / 2 - height / 2;</span>
+    }
+&nbsp;
+    const glyphBounds = <span class="cstat-no" title="statement not covered" >glyph.glyph.getBounds(</span>
+      glyph.glyph.custom.options,
+      contentX,
+      glyphBottom + yOffset,  // $FlowFixMe
+      null,
+      glyphHeight,
+      glyphName,
+    );
+&nbsp;
+    // const totalBounds = new Bounds();
+    const inSizeBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+    const fullBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+<span class="cstat-no" title="statement not covered" >    inSizeBounds.copyFrom(contentBounds);</span>
+<span class="cstat-no" title="statement not covered" >    inSizeBounds.growWithSameBaseline(glyphBounds);</span>
+<span class="cstat-no" title="statement not covered" >    fullBounds.copyFrom(inSizeBounds);</span>
+    const glyphAndAnnotationBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+<span class="cstat-no" title="statement not covered" >    glyphAndAnnotationBounds.copyFrom(glyphBounds);</span>
+<span class="cstat-no" title="statement not covered" >    glyph.width = glyphBounds.width;</span>
+<span class="cstat-no" title="statement not covered" >    glyph.height = glyphBounds.height;</span>
+<span class="cstat-no" title="statement not covered" >    glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);</span>
+<span class="cstat-no" title="statement not covered" >    glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);</span>
+<span class="cstat-no" title="statement not covered" >    glyph.annotations.forEach(<span class="fstat-no" title="function not covered" >(a</span>nnotation) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      annotation.content.calcSize(glyph.location, scale * annotation.scale);</span>
+<span class="cstat-no" title="statement not covered" >      this.setAnnotationPosition(glyphBounds, annotation, scale);</span>
+      const annotationBounds = <span class="cstat-no" title="statement not covered" >annotation.content.getBounds();</span>
+<span class="cstat-no" title="statement not covered" >      inSizeBounds.growWithSameBaseline(annotationBounds);</span>
+<span class="cstat-no" title="statement not covered" >      glyphAndAnnotationBounds.growWithSameBaseline(annotationBounds);</span>
+      const fullAnnotationBounds = <span class="cstat-no" title="statement not covered" >annotation.content.getBounds(true);</span>
+<span class="cstat-no" title="statement not covered" >      fullBounds.growWithSameBaseline(fullAnnotationBounds);</span>
+    });
+&nbsp;
+    let xOffset = <span class="cstat-no" title="statement not covered" >0;</span>
+<span class="cstat-no" title="statement not covered" >    if (glyphName === 'left'</span>
+      &amp;&amp; glyphAndAnnotationBounds.right &gt; contentX
+      &amp;&amp; annotationsOverContent === false
+    ) {
+<span class="cstat-no" title="statement not covered" >      xOffset = contentX - glyphAndAnnotationBounds.right;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (glyphName === 'right'</span>
+      &amp;&amp; glyphAndAnnotationBounds.left &lt; contentX
+      &amp;&amp; annotationsOverContent === false
+    ) {
+<span class="cstat-no" title="statement not covered" >      xOffset = contentX - glyphAndAnnotationBounds.left;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (xOffset !== 0) {</span>
+      const locationOffset = <span class="cstat-no" title="statement not covered" >new Point(xOffset, 0);</span>
+<span class="cstat-no" title="statement not covered" >      glyph.location = glyph.location.add(locationOffset);</span>
+<span class="cstat-no" title="statement not covered" >      glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);</span>
+<span class="cstat-no" title="statement not covered" >      glyph.annotations.forEach(<span class="fstat-no" title="function not covered" >(a</span>nnotation) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        annotation.content.offsetLocation(locationOffset);</span>
+      });
+<span class="cstat-no" title="statement not covered" >      inSizeBounds.left += xOffset;</span>
+<span class="cstat-no" title="statement not covered" >      inSizeBounds.right = Math.max(inSizeBounds.right + xOffset, contentBounds.right);</span>
+<span class="cstat-no" title="statement not covered" >      fullBounds.left += xOffset;</span>
+<span class="cstat-no" title="statement not covered" >      fullBounds.right = Math.max(inSizeBounds.right + xOffset, contentBounds.right);</span>
+    }
+    // console.log(inSizeBounds.left, inSizeBounds.width)
+<span class="cstat-no" title="statement not covered" >    return [inSizeBounds, fullBounds];</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  se</span>tHorizontalGlyph(scale: number, contentBoundsIn: Bounds, glyphName: 'top' | 'bottom') {
+<span class="cstat-no" title="statement not covered" >    if (this.glyphs[glyphName] == null) {</span>
+      const fullBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+<span class="cstat-no" title="statement not covered" >      fullBounds.copyFrom(contentBoundsIn);</span>
+<span class="cstat-no" title="statement not covered" >      return [contentBoundsIn, fullBounds];</span>
+    }
+    const {
+      space, overhang, width, leftSpace, rightSpace, xOffset,
+      annotationsOverContent,
+    } = <span class="cstat-no" title="statement not covered" >this.glyphs[glyphName];</span>
+&nbsp;
+    const glyph = <span class="cstat-no" title="statement not covered" >this.glyphs[glyphName];</span>
+    const contentBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+<span class="cstat-no" title="statement not covered" >    contentBounds.copyFrom(contentBoundsIn);</span>
+    let glyphLength = <span class="cstat-no" title="statement not covered" >contentBounds.width;</span>
+    let contentX = <span class="cstat-no" title="statement not covered" >contentBounds.left;</span>
+<span class="cstat-no" title="statement not covered" >    if (overhang != null) {</span>
+<span class="cstat-no" title="statement not covered" >      glyphLength += 2 * overhang * scale;</span>
+<span class="cstat-no" title="statement not covered" >      contentX = contentBounds.left - overhang * scale;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (width != null) {</span>
+<span class="cstat-no" title="statement not covered" >      glyphLength = width * scale;</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (leftSpace != null || rightSpace != null) {</span>
+<span class="cstat-no" title="statement not covered" >      glyphLength = (leftSpace || 0) * scale + contentBounds.width + (rightSpace || 0) * scale;</span>
+<span class="cstat-no" title="statement not covered" >      if (leftSpace != null) {</span>
+<span class="cstat-no" title="statement not covered" >        contentX = contentBounds.left - leftSpace * scale;</span>
+      }
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (leftSpace == null &amp;&amp; rightSpace == null &amp;&amp; width != null) {</span>
+<span class="cstat-no" title="statement not covered" >      contentX = contentBounds.left + (contentBounds.width - width) / 2;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (leftSpace == null &amp;&amp; rightSpace != null &amp;&amp; width != null) {</span>
+<span class="cstat-no" title="statement not covered" >      contentX = contentBounds.right + rightSpace * scale - width;</span>
+    }
+    let contentY;
+<span class="cstat-no" title="statement not covered" >    if (glyphName === 'top') {</span>
+<span class="cstat-no" title="statement not covered" >      contentY = contentBounds.top + space * scale;</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      contentY = contentBounds.bottom - space * scale;</span>
+    }
+&nbsp;
+    const glyphBounds = <span class="cstat-no" title="statement not covered" >glyph.glyph.getBounds(</span>
+      glyph.glyph.custom.options,
+      contentX + xOffset,
+      contentY,
+      glyphLength,  // $FlowFixMe
+      null,
+      glyphName,
+    );
+&nbsp;
+    const inSizeBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+    const fullBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+<span class="cstat-no" title="statement not covered" >    inSizeBounds.copyFrom(contentBounds);</span>
+<span class="cstat-no" title="statement not covered" >    inSizeBounds.growWithSameBaseline(glyphBounds);</span>
+<span class="cstat-no" title="statement not covered" >    fullBounds.copyFrom(inSizeBounds);</span>
+&nbsp;
+    const glyphAndAnnotationBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+<span class="cstat-no" title="statement not covered" >    glyphAndAnnotationBounds.copyFrom(glyphBounds);</span>
+<span class="cstat-no" title="statement not covered" >    glyph.width = glyphBounds.width;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    glyph.height = glyphBounds.height;</span>
+<span class="cstat-no" title="statement not covered" >    glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);</span>
+<span class="cstat-no" title="statement not covered" >    glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);</span>
+<span class="cstat-no" title="statement not covered" >    glyph.annotations.forEach(<span class="fstat-no" title="function not covered" >(a</span>nnotation) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      annotation.content.calcSize(glyph.location, scale * annotation.scale);</span>
+<span class="cstat-no" title="statement not covered" >      this.setAnnotationPosition(glyphBounds, annotation, scale);</span>
+      const annotationBounds = <span class="cstat-no" title="statement not covered" >annotation.content.getBounds();</span>
+<span class="cstat-no" title="statement not covered" >      inSizeBounds.growWithSameBaseline(annotationBounds);</span>
+<span class="cstat-no" title="statement not covered" >      glyphAndAnnotationBounds.growWithSameBaseline(annotationBounds);</span>
+      const fullAnnotationBounds = <span class="cstat-no" title="statement not covered" >annotation.content.getBounds(true);</span>
+<span class="cstat-no" title="statement not covered" >      fullBounds.growWithSameBaseline(fullAnnotationBounds);</span>
+    });
+&nbsp;
+    let yOffset = <span class="cstat-no" title="statement not covered" >0;</span>
+<span class="cstat-no" title="statement not covered" >    if (glyphName === 'top'</span>
+      &amp;&amp; glyphAndAnnotationBounds.bottom &lt; contentY
+      &amp;&amp; annotationsOverContent === false
+    ) {
+<span class="cstat-no" title="statement not covered" >      yOffset = contentY - glyphAndAnnotationBounds.bottom;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (glyphName === 'bottom'</span>
+      &amp;&amp; glyphAndAnnotationBounds.top &gt; contentY
+      &amp;&amp; annotationsOverContent === false
+    ) {
+<span class="cstat-no" title="statement not covered" >      yOffset = contentY - glyphAndAnnotationBounds.top;</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (yOffset !== 0) {</span>
+      const locationOffset = <span class="cstat-no" title="statement not covered" >new Point(0, yOffset);</span>
+<span class="cstat-no" title="statement not covered" >      glyph.location = glyph.location.add(locationOffset);</span>
+<span class="cstat-no" title="statement not covered" >      glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);</span>
+<span class="cstat-no" title="statement not covered" >      glyph.annotations.forEach(<span class="fstat-no" title="function not covered" >(a</span>nnotation) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        annotation.content.offsetLocation(locationOffset);</span>
+      });
+<span class="cstat-no" title="statement not covered" >      inSizeBounds.top += yOffset;</span>
+<span class="cstat-no" title="statement not covered" >      inSizeBounds.bottom += yOffset;</span>
+<span class="cstat-no" title="statement not covered" >      fullBounds.top += yOffset;</span>
+<span class="cstat-no" title="statement not covered" >      fullBounds.bottom += yOffset;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return [inSizeBounds, fullBounds];</span>
+  }
+&nbsp;
+  // eslint-disable-next-line class-methods-use-this
+<span class="fstat-no" title="function not covered" >  se</span>tAnnotationPosition(
+    contentToAnnotateBounds: Bounds,
+    annotation: EQN_Annotation,
+    scale: number,
+  ) {
+    let {
+      xPosition, yPosition, xAlign, yAlign, offset,
+    } = <span class="cstat-no" title="statement not covered" >annotation;</span>
+<span class="cstat-no" title="statement not covered" >    offset = getPoint(offset);</span>
+    const { content, fullContentBounds } = <span class="cstat-no" title="statement not covered" >annotation;</span>
+    const locationContentToAnnotate = <span class="cstat-no" title="statement not covered" >new Point(</span>
+      contentToAnnotateBounds.left,
+      contentToAnnotateBounds.bottom + contentToAnnotateBounds.descent,
+    );
+    let xPos;
+    let yPos;
+    // $FlowFixMe
+<span class="cstat-no" title="statement not covered" >    if (contentToAnnotateBounds.annotations != null</span>
+      &amp;&amp; annotation.reference != null) {
+      // $FlowFixMe
+      const reference = <span class="cstat-no" title="statement not covered" >contentToAnnotateBounds.annotations[annotation.reference];</span>
+<span class="cstat-no" title="statement not covered" >      if (reference.xPosition != null) {</span>
+<span class="cstat-no" title="statement not covered" >        ({ xPosition } = reference);</span>
+      }
+<span class="cstat-no" title="statement not covered" >      if (reference.yPosition != null) {</span>
+<span class="cstat-no" title="statement not covered" >        ({ yPosition } = reference);</span>
+      }
+<span class="cstat-no" title="statement not covered" >      if (reference.xAlign != null) {</span>
+<span class="cstat-no" title="statement not covered" >        ({ xAlign } = reference);</span>
+      }
+<span class="cstat-no" title="statement not covered" >      if (reference.yAlign != null) {</span>
+<span class="cstat-no" title="statement not covered" >        ({ yAlign } = reference);</span>
+      }
+<span class="cstat-no" title="statement not covered" >      if (reference.offset != null) {</span>
+<span class="cstat-no" title="statement not covered" >        offset = offset.add(getPoint(reference.offset));</span>
+      }
+    }
+<span class="cstat-no" title="statement not covered" >    if (xPosition === 'right') {</span>
+<span class="cstat-no" title="statement not covered" >      xPos = 1;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (xPosition === 'center') {</span>
+<span class="cstat-no" title="statement not covered" >      xPos = 0.5;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (typeof xPosition === 'number') {</span>
+<span class="cstat-no" title="statement not covered" >      xPos = xPosition;</span>
+    } else {  // left
+<span class="cstat-no" title="statement not covered" >      xPos = 0;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    xPos = xPos * contentToAnnotateBounds.width + locationContentToAnnotate.x;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (yPosition === 'bottom') {</span>
+<span class="cstat-no" title="statement not covered" >      yPos = 0;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (yPosition === 'middle') {</span>
+<span class="cstat-no" title="statement not covered" >      yPos = 0.5;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (yPosition === 'top') {</span>
+<span class="cstat-no" title="statement not covered" >      yPos = 1;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (typeof yPosition === 'number') {</span>
+<span class="cstat-no" title="statement not covered" >      yPos = yPosition;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (typeof yPosition === 'string' &amp;&amp; yPosition.slice(-1)[0] === 'a') {</span>
+      const ascentPercentage = <span class="cstat-no" title="statement not covered" >parseFloat(yPosition);</span>
+      const ascentPercentHeight = <span class="cstat-no" title="statement not covered" >contentToAnnotateBounds.ascent / contentToAnnotateBounds.height;</span>
+      const descentPercentHeight = <span class="cstat-no" title="statement not covered" >contentToAnnotateBounds.descent / contentToAnnotateBounds.height;</span>
+<span class="cstat-no" title="statement not covered" >      yPos = ascentPercentHeight * ascentPercentage + descentPercentHeight;</span>
+    } else {    // baseline
+<span class="cstat-no" title="statement not covered" >      yPos = contentToAnnotateBounds.descent / contentToAnnotateBounds.height;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    yPos = yPos * contentToAnnotateBounds.height</span>
+           + locationContentToAnnotate.y - contentToAnnotateBounds.descent;
+&nbsp;
+    const contentBounds = <span class="cstat-no" title="statement not covered" >content.getBounds(fullContentBounds);</span>
+<span class="cstat-no" title="statement not covered" >    if (xAlign === 'center') {</span>
+<span class="cstat-no" title="statement not covered" >      xPos -= contentBounds.width * 0.5;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (xAlign === 'right') {</span>
+<span class="cstat-no" title="statement not covered" >      xPos -= contentBounds.width;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (typeof xAlign === 'number') {</span>
+<span class="cstat-no" title="statement not covered" >      xPos -= contentBounds.width * xAlign;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (yAlign === 'bottom') {</span>
+<span class="cstat-no" title="statement not covered" >      yPos += contentBounds.descent;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (yAlign === 'middle') {</span>
+<span class="cstat-no" title="statement not covered" >      yPos = yPos + contentBounds.descent - contentBounds.height / 2;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (yAlign === 'top') {</span>
+<span class="cstat-no" title="statement not covered" >      yPos -= contentBounds.ascent;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (typeof yAlign === 'string' &amp;&amp; yAlign.slice(-1)[0] === 'a') {</span>
+      const ascentPercentage = <span class="cstat-no" title="statement not covered" >parseFloat(yAlign);</span>
+<span class="cstat-no" title="statement not covered" >      yPos -= contentBounds.ascent * ascentPercentage;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (typeof yAlign === 'number') {</span>
+<span class="cstat-no" title="statement not covered" >      yPos += contentBounds.descent - contentBounds.height * yAlign;</span>
+    }
+&nbsp;
+    const offsetToUse = <span class="cstat-no" title="statement not covered" >getPoint(offset);</span>
+<span class="cstat-no" title="statement not covered" >    xPos += offsetToUse.x * scale;</span>
+<span class="cstat-no" title="statement not covered" >    yPos += offsetToUse.y * scale;</span>
+&nbsp;
+    const locationOffset = <span class="cstat-no" title="statement not covered" >(new Point(xPos, yPos)).sub(</span>
+      contentBounds.left,
+      contentBounds.bottom + contentBounds.descent,
+    );
+<span class="cstat-no" title="statement not covered" >    content.offsetLocation(locationOffset);</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ge</span>tBounds(useFullSize: boolean = <span class="branch-0 cbranch-no" title="branch not covered" >false)</span> {
+<span class="cstat-no" title="statement not covered" >    if (useFullSize &amp;&amp; this.fullSize != null) {</span>
+<span class="cstat-no" title="statement not covered" >      return new Bounds({</span>
+        left: this.location.x + this.fullSize.leftOffset,
+        right: this.location.x + this.fullSize.leftOffset + this.fullSize.width,
+        top: this.location.y + this.fullSize.ascent,
+        bottom: this.location.y - this.fullSize.descent,
+        width: this.fullSize.width,
+        height: this.fullSize.height,
+        ascent: this.fullSize.ascent,
+        descent: this.fullSize.descent,
+      });
+    }
+<span class="cstat-no" title="statement not covered" >    return new Bounds({</span>
+      left: this.location.x,
+      right: this.location.x + this.width,
+      top: this.location.y + this.ascent,
+      bottom: this.location.y - this.descent,
+      width: this.width,
+      height: this.height,
+      ascent: this.ascent,
+      descent: this.descent,
+    });
+  }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed May 20 2020 23:46:31 GMT+0000 (Coordinated Universal Time)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

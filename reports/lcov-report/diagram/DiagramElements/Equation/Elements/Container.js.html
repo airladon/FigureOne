@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for diagram/DiagramElements/Equation/Elements/Container.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">All files</a> / <a href="index.html">diagram/DiagramElements/Equation/Elements</a> Container.js
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
+// @flow
+import {
+  Point,
+} from '../../../../tools/g2';
+import Bounds from './Bounds';
+import BaseEquationFunction from './BaseEquationFunction';
+&nbsp;
+&nbsp;
+export default class Container extends BaseEquationFunction {
+<span class="fstat-no" title="function not covered" >  ca</span>lcSize(location: Point, scale: number) {
+<span class="cstat-no" title="statement not covered" >    this.location = location._dup();</span>
+    const loc = <span class="cstat-no" title="statement not covered" >location._dup();</span>
+    const {
+      width, descent, ascent, xAlign, yAlign, fit, scaleModifier,
+      fullContentBounds,
+    } = <span class="cstat-no" title="statement not covered" >this.options;</span>
+    const [mainContent] = <span class="cstat-no" title="statement not covered" >this.contents;</span>
+    const contentBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+    const containerBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+    const fullBounds = <span class="cstat-no" title="statement not covered" >new Bounds();</span>
+<span class="cstat-no" title="statement not covered" >    if (mainContent != null) {</span>
+<span class="cstat-no" title="statement not covered" >      mainContent.calcSize(loc._dup(), scale * scaleModifier);</span>
+<span class="cstat-no" title="statement not covered" >      contentBounds.copyFrom(mainContent.getBounds(fullContentBounds));</span>
+      // contentBounds.copyFrom(mainContent);
+<span class="cstat-no" title="statement not covered" >      containerBounds.copyFrom(contentBounds);</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (width != null) {</span>
+<span class="cstat-no" title="statement not covered" >      containerBounds.width = width;</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (descent != null) {</span>
+<span class="cstat-no" title="statement not covered" >      containerBounds.descent = descent;</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (ascent != null) {</span>
+<span class="cstat-no" title="statement not covered" >      containerBounds.ascent = ascent;</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    containerBounds.height = containerBounds.descent + containerBounds.ascent;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (mainContent != null) {</span>
+<span class="cstat-no" title="statement not covered" >      if (fit === 'width') {</span>
+<span class="cstat-no" title="statement not covered" >        mainContent.calcSize(loc._dup(), containerBounds.width / contentBounds.width);</span>
+      } else <span class="cstat-no" title="statement not covered" >if (fit === 'height') {</span>
+<span class="cstat-no" title="statement not covered" >        mainContent.calcSize(loc._dup(), containerBounds.height / contentBounds.height);</span>
+      } else <span class="cstat-no" title="statement not covered" >if (fit === 'contain') {</span>
+        const newScale = <span class="cstat-no" title="statement not covered" >Math.min(</span>
+          containerBounds.width / contentBounds.width,
+          containerBounds.height / contentBounds.height,
+        );
+<span class="cstat-no" title="statement not covered" >        mainContent.calcSize(loc._dup(), newScale);</span>
+      }
+<span class="cstat-no" title="statement not covered" >      contentBounds.copyFrom(mainContent);</span>
+    }
+&nbsp;
+    const contentLoc = <span class="cstat-no" title="statement not covered" >loc._dup();</span>
+<span class="cstat-no" title="statement not covered" >    if (xAlign === 'center') {</span>
+<span class="cstat-no" title="statement not covered" >      contentLoc.x = loc.x + containerBounds.width / 2 - contentBounds.width / 2;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (xAlign === 'right') {</span>
+<span class="cstat-no" title="statement not covered" >      contentLoc.x = loc.x + containerBounds.width - contentBounds.width;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (typeof xAlign === 'number') {</span>
+<span class="cstat-no" title="statement not covered" >      contentLoc.x = loc.x + containerBounds.width * xAlign;</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (yAlign === 'bottom') {</span>
+<span class="cstat-no" title="statement not covered" >      contentLoc.y = loc.y - containerBounds.descent + contentBounds.descent;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (yAlign === 'middle') {</span>
+<span class="cstat-no" title="statement not covered" >      contentLoc.y = loc.y - containerBounds.descent</span>
+                     + containerBounds.height / 2 - contentBounds.height / 2
+                     + contentBounds.descent;
+    } else <span class="cstat-no" title="statement not covered" >if (yAlign === 'top') {</span>
+<span class="cstat-no" title="statement not covered" >      contentLoc.y = loc.y + containerBounds.ascent</span>
+                     - contentBounds.height + contentBounds.descent;
+    } else <span class="cstat-no" title="statement not covered" >if (typeof yAlign === 'number') {</span>
+<span class="cstat-no" title="statement not covered" >      contentLoc.y = loc.y - containerBounds.descent</span>
+                     + containerBounds.height * yAlign + contentBounds.descent;
+    }
+<span class="cstat-no" title="statement not covered" >    if (mainContent != null) {</span>
+<span class="cstat-no" title="statement not covered" >      mainContent.offsetLocation(contentLoc.sub(mainContent.location));</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (mainContent != null) {</span>
+<span class="cstat-no" title="statement not covered" >      fullBounds.copyFrom(mainContent.getBounds(true));</span>
+<span class="cstat-no" title="statement not covered" >      fullBounds.growWithSameBaseline(containerBounds);</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      fullBounds.copyFrom(containerBounds);</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    this.width = containerBounds.width;</span>
+<span class="cstat-no" title="statement not covered" >    this.height = containerBounds.height;</span>
+<span class="cstat-no" title="statement not covered" >    this.descent = containerBounds.descent;</span>
+<span class="cstat-no" title="statement not covered" >    this.ascent = containerBounds.ascent;</span>
+<span class="cstat-no" title="statement not covered" >    this.fullSize = {</span>
+      leftOffset: this.location.x - fullBounds.left,
+      width: fullBounds.width,
+      ascent: fullBounds.ascent,
+      descent: fullBounds.descent,
+      height: fullBounds.height,
+    };
+  }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed May 20 2020 23:46:31 GMT+0000 (Coordinated Universal Time)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>
