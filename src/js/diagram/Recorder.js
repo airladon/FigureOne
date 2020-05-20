@@ -79,26 +79,6 @@ function getIndexOfLatestTime(
   return Math.max(i, index);
 }
 
-// deprecated
-function getLastUniqueIndeces(
-  recordedData: TypeEvents,
-  startIndex: number,
-  endIndex: number,
-) {
-  // const indeces = [];
-  const types = {};
-  let start = startIndex;
-  if (start < 0) {
-    start = 0;
-  }
-  for (let i = start; i <= endIndex; i += 1) {
-    const data = recordedData[i];
-    const [, event] = data;
-    const [type] = event;
-    types[type] = i;
-  }
-  return Object.values(types);
-}
 
 function getIndexRangeForTime(
   recordedData: TypeEvents | TypeStateDiffs,
@@ -171,18 +151,17 @@ function getPrevIndexForTime(
   return getIndexOfLatestTime(recordedData, prevIndex);
 }
 
-function getTimeToIndex(
-  recordedData: TypeEvents | TypeStateDiffs,
-  eventIndex: number,
-  time: number,
-) {
-  if (eventIndex === -1 || eventIndex > recordedData.length - 1) {
-    return -1;
-  }
-  const nextTime = recordedData[eventIndex][0];
-  return nextTime - time;
-}
-
+// function getTimeToIndex(
+//   recordedData: TypeEvents | TypeStateDiffs,
+//   eventIndex: number,
+//   time: number,
+// ) {
+//   if (eventIndex === -1 || eventIndex > recordedData.length - 1) {
+//     return -1;
+//   }
+//   const nextTime = recordedData[eventIndex][0];
+//   return nextTime - time;
+// }
 
 
 class Recorder {
@@ -241,7 +220,6 @@ class Recorder {
 
   // All slides, events and states are relative to 0, where 0 is the start of a recording.
   // Slides, events and states do not have to have a 0 time, maybe the first event will not happen till 1s in
-  //
   constructor() {
     // If the instance alread exists, then don't create a new instance.
     // If it doesn't, then setup some default values.
@@ -1073,7 +1051,6 @@ export {
   getIndexOfEarliestTime,
   download,
   getIndexOfLatestTime,
-  getLastUniqueIndeces,
   getNextIndexForTime,
   getPrevIndexForTime,
 };
