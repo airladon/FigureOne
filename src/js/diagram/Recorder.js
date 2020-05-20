@@ -295,7 +295,7 @@ class Recorder {
 
   playbackStopped: ?() =>void;
 
-  lastRecordTime: number;
+  lastRecordTime: ?number;
   lastRecordTimeCount: number;
 
   // lastTime: number;
@@ -449,22 +449,14 @@ class Recorder {
     this.eventIndex = {};
     this.nextEventTimeout = null;
     this.recordStateTimeout = null;
-    // this.nextStateTimeout = null;
-    // this.slides = [];
     this.videoToNowDelta = 0;
     this.state = 'idle';
-    // this.lastShownEventIndex = -1;
-    // this.lastShownStateIndex = -1;
-    // this.lastShownSlideIndex = -1;
-    // this.previousPoint = null;
     this.isAudioPlaying = false;
     this.currentTime = 0;
     this.duration = 0;
     this.reference = '__base';
     this.lastRecordTimeCount = 0;
     this.lastRecordTime = null;
-    // this.isPlaying = false;
-    // this.isRecording = false;
   }
 
   // resetStates() {
@@ -474,7 +466,7 @@ class Recorder {
   loadEvents(
     encodedEventsList: Object | Array<TypeEvents>,
     isMinified: boolean = false,
-  ) {
+  ) { // $FlowFixMe
     this.events.list = this.decodeEvents(encodedEventsList, isMinified);
     this.duration = this.calcDuration();
   }
@@ -532,7 +524,7 @@ class Recorder {
     isMinified: boolean = true,
     asObject: boolean = true,
   ) {
-    let statesToUse = statesIn;
+    let statesToUse: Object = statesIn;
     if (isMinified) {
       statesToUse = unminify(statesIn);
     }
@@ -599,7 +591,7 @@ class Recorder {
     this.eventsCache = {};
     // this.slidesCache = [];
     this.statesCache = new ObjectTracker(this.precision);
-    this.statesCache.baseReference = duplicate(this.states.baseReference);
+    this.statesCache.baseReference = duplicate(this.states.baseReference);  // $FlowFixMe
     this.statesCache.references = duplicate(this.states.references);
     this.diagram.unpause();
     this.setVideoToNowDeltaTime(startTime);
@@ -779,43 +771,6 @@ class Recorder {
       recordAndQueue();
     }, time);
   }
-
-  // addReferenceState(state: Object, precision: ?number = 4) {
-  //   if (this.states.reference.length === 0) {
-  //     this.states.reference.push(duplicate(state));
-  //     return;
-  //   }
-  //   const diff = getObjectDiff(this.states.reference[0], [], state, precision);
-  //   this.states.reference.push(diff);
-  // }
-
-  // getReferenceState(index: number = 0) {
-  //   if (this.states.reference.length === 0) {
-  //     return {};
-  //   }
-  //   if (index === 0 || this.states.reference.length === 1) {
-  //     return this.states.reference[0];
-  //   }
-  //   if (index === -1) {
-  //     return refAndDiffToObject(
-  //       this.states.reference[0],
-  //       this.states.reference[this.states.reference.length - 1],
-  //     );
-  //   }
-  //   return refAndDiffToObject(this.states.reference[0], this.states.reference[index]);
-  // }
-
-  // getState(index: number) {
-  //   const state = this.states.getFromIndex(index);
-  //   const [time] = this.states.diffs[index];
-  //   return [time, state];
-  //   // const state = this.states.states[index];
-  //   // const [time, stateTimeAndObject] = state;
-  //   // const [refIndex, diff] = stateTimeAndObject;
-  //   // const ref = this.getReferenceState(refIndex);
-  //   // const stateObj = refAndDiffToObject(ref, diff);
-  //   // return [time, stateObj];
-  // }
 
   save() {
     const dateStr = new Date().toISOString();
