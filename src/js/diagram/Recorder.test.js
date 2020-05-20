@@ -57,7 +57,7 @@ describe('Diagram Recorder', () => {
     diagram.initialize();
     cursor = diagram.getElement('cursor');
   });
-  describe('Find Index', () => {
+  describe.only('Find Index', () => {
     describe('Next', () => {
       test('start', () => {
         const index = getNextIndexForTime(events, 0);
@@ -390,7 +390,7 @@ describe('Diagram Recorder', () => {
       });
     });
   });
-  describe('Cache', () => {
+  describe.only('Cache', () => {
     describe('Cache recording', () => {
       test('simple', () => {
         recorder.addEventType('cursorMove', () => {}, true);
@@ -966,10 +966,10 @@ describe('Diagram Recorder', () => {
       expect(line.transform.t().y).toBe(2);
     });
     test('minify simple', () => {
-      recorder.getDiagramState = () => ({ elements: 1 });
+      recorder.diagram.getState = () => ({ elements: 1 });
       global.performance.now = () => 10000;
       recorder.startRecording();
-      recorder.getDiagramState = () => ({ elements: 2.1234567 });
+      recorder.diagram.getState = () => ({ elements: 2.1234567 });
       global.performance.now = () => 11000;
       jest.advanceTimersByTime(1000);
       recorder.stopRecording();
@@ -1021,10 +1021,10 @@ describe('Diagram Recorder', () => {
       expect(decoded).toEqual(decodeExpected);
     });
     test('minify simple as object', () => {
-      recorder.getDiagramState = () => ({ elements: 1 });
+      recorder.diagram.getState = () => ({ elements: 1 });
       global.performance.now = () => 10000;
       recorder.startRecording();
-      recorder.getDiagramState = () => ({ elements: 2.1234567 });
+      recorder.diagram.getState = () => ({ elements: 2.1234567 });
       global.performance.now = () => 11000;
       jest.advanceTimersByTime(1000);
       recorder.stopRecording();
@@ -1075,10 +1075,10 @@ describe('Diagram Recorder', () => {
       expect(decoded).toEqual(decodeExpected);
     });
     test('minify nested', () => {
-      recorder.getDiagramState = () => ({ elements: { e1: 1, e2: 2 } });
+      recorder.diagram.getState = () => ({ elements: { e1: 1, e2: 2 } });
       global.performance.now = () => 10000;
       recorder.startRecording();
-      recorder.getDiagramState = () => ({ elements: { e1: 2, e2: 2 } });
+      recorder.diagram.getState = () => ({ elements: { e1: 2, e2: 2 } });
       global.performance.now = () => 11000;
       jest.advanceTimersByTime(1000);
       recorder.stopRecording();
@@ -1144,10 +1144,10 @@ describe('Diagram Recorder', () => {
       expect(recorder.states).toEqual(expectedDecoded);
     });
     test('minify nested as object', () => {
-      recorder.getDiagramState = () => ({ elements: { e1: 1, e2: 2 } });
+      recorder.diagram.getState = () => ({ elements: { e1: 1, e2: 2 } });
       global.performance.now = () => 10000;
       recorder.startRecording();
-      recorder.getDiagramState = () => ({ elements: { e1: 2, e2: 2 } });
+      recorder.diagram.getState = () => ({ elements: { e1: 2, e2: 2 } });
       global.performance.now = () => 11000;
       jest.advanceTimersByTime(1000);
       recorder.stopRecording();
