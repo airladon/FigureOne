@@ -566,8 +566,6 @@ class Recorder {
     this.stopTimeouts();
     this.mergeEventsCache();
     this.mergeStatesCache();
-    // this.states = this.statesCache;
-    // this.slides = this.slidesCache;
     this.duration = this.calcDuration();
   }
 
@@ -629,7 +627,6 @@ class Recorder {
       [now, payload, this.lastRecordTimeCount],
     );
     this.lastRecordTimeCount += 1;
-    // console.log(now, this.duration, performance.now(), this.videoToNowDelta)
     if (now > this.duration) {
       this.duration = now;
     }
@@ -912,6 +909,9 @@ class Recorder {
 
   startEventsPlayback(fromTime: number) {
     Object.keys(this.events).forEach((eventName) => {
+      if (this.events[eventName].list.length === 0) {
+        return;
+      }
       const event = this.events[eventName];
       let index = getNextIndexForTime(event.list, fromTime);
       const [eventTime] = event.list[index];
@@ -932,7 +932,11 @@ class Recorder {
     let nextTime = null;
     let nextTimeCount = null;
     Object.keys(this.events).forEach((eventName) => {
-      if (this.eventIndex[eventName] === -1) {
+      if (
+        this.eventIndex[eventName] == null
+        || this.eventIndex[eventName] === -1
+        || this.events[eventName].list.length <= this.eventIndex[eventName]
+      ) {
         return;
       }
       const [time, , timeCount] = this.events[eventName].list[this.eventIndex[eventName]];
