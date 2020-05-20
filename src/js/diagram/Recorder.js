@@ -584,6 +584,9 @@ class Recorder {
     this.statesCache.add(now, state, this.reference, this.lastRecordTimeCount);
     this.duration = this.calcDuration();
     this.lastRecordTimeCount += 1;
+    if (now > this.duration) {
+      this.duration = now;
+    }
   }
 
   recordCurrentState() {
@@ -615,6 +618,10 @@ class Recorder {
       [now, payload, this.lastRecordTimeCount],
     );
     this.lastRecordTimeCount += 1;
+    console.log(now, this.duration)
+    if (now > this.duration) {
+      this.duration = now;
+    }
   }
 
   // States are recorded every second
