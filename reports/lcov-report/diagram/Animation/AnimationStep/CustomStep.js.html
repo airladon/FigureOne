@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for diagram/Animation/AnimationStep/CustomStep.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">All files</a> / <a href="index.html">diagram/Animation/AnimationStep</a> CustomStep.js
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+// import * as tools from '../../../tools/math';
+import {
+  joinObjects, duplicateFromTo,
+} from '../../../tools/tools';
+import type {
+  TypeAnimationStepInputOptions,
+} from '../AnimationStep';
+import AnimationStep from '../AnimationStep';
+&nbsp;
+export type TypeCustomAnimationStepInputOptions = {
+  callback?: string | ((number) =&gt; void);
+  startPercent?: number;
+  progression?: 'linear' | 'easeinout' | 'easein' | 'easeout' | (number) =&gt; number;
+} &amp; TypeAnimationStepInputOptions;
+&nbsp;
+export class CustomAnimationStep extends AnimationStep {
+  element: ?Object;
+  callback: ?(number) =&gt; void;
+  startPercent: ?number;
+  progression: string | ((number, ?boolean) =&gt; number);
+&nbsp;
+<span class="fstat-no" title="function not covered" >  co</span>nstructor(...optionsIn: Array&lt;TypeCustomAnimationStepInputOptions&gt;) {
+    const AnimationStepOptionsIn = <span class="cstat-no" title="statement not covered" >joinObjects({}, ...optionsIn);</span>
+<span class="cstat-no" title="statement not covered" >    super(AnimationStepOptionsIn);</span>
+    const defaultPositionOptions = <span class="cstat-no" title="statement not covered" >{</span>
+      element: null,
+      callback: null,
+      startPercent: 0,
+      progression: 'linear',
+    };
+    const options = <span class="cstat-no" title="statement not covered" >joinObjects({}, defaultPositionOptions, ...optionsIn);</span>
+<span class="cstat-no" title="statement not covered" >    this.element = options.element;</span>
+<span class="cstat-no" title="statement not covered" >    this.progression = options.progression;</span>
+<span class="cstat-no" title="statement not covered" >    if (this.progression === 'linear') {</span>
+<span class="cstat-no" title="statement not covered" >      this.progression = 'tools.math.linear';</span>
+    } else <span class="cstat-no" title="statement not covered" >if (options.progression === 'easein') {</span>
+<span class="cstat-no" title="statement not covered" >      this.progression = 'tools.math.easein';</span>
+    } else <span class="cstat-no" title="statement not covered" >if (options.progression === 'easeout') {</span>
+<span class="cstat-no" title="statement not covered" >      this.progression = 'tools.math.easeout';</span>
+    } else <span class="cstat-no" title="statement not covered" >if (options.progression === 'easeinout') {</span>
+<span class="cstat-no" title="statement not covered" >      this.progression = 'tools.math.easeinout';</span>
+    }
+<span class="cstat-no" title="statement not covered" >    this.callback = options.callback;</span>
+<span class="cstat-no" title="statement not covered" >    this.startPercent = options.startPercent;</span>
+    // if (typeof this.progression === 'function') {
+    //   this.startTimeOffset = this.progression(options.startPercent, true) * options.duration;
+    // }
+<span class="cstat-no" title="statement not covered" >    this.startTimeOffset = this.getPercentComplete(options.startPercent, true) * options.duration;</span>
+<span class="cstat-no" title="statement not covered" >    this.duration = options.duration;</span>
+  }
+&nbsp;
+  // fnExec(idOrFn: string | Function | null, ...args: any) {
+  //   const result = this.fnMap.exec(idOrFn, ...args);
+  //   if (result == null &amp;&amp; this.element != null) {
+  //     return this.element.fnMap.exec(idOrFn, ...args);
+  //   }
+  //   return result;
+  // }
+<span class="fstat-no" title="function not covered" >  fn</span>Exec(idOrFn: string | Function | null, ...args: any) {
+    // const result = this.fnMap.exec(idOrFn, ...args);
+    // if (result == null &amp;&amp; this.element != null) {
+    //   return this.element.fnMap.exec(idOrFn, ...args);
+    // }
+    // return result;
+<span class="cstat-no" title="statement not covered" >    if (this.element != null) {</span>
+<span class="cstat-no" title="statement not covered" >      return this.fnMap.execOnMaps(</span>
+        idOrFn, [this.element.fnMap.map], ...args,
+      );
+    }
+<span class="cstat-no" title="statement not covered" >    return this.fnMap.exec(idOrFn, ...args);</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  _g</span>etStateProperties() {  // eslint-disable-line class-methods-use-this
+<span class="cstat-no" title="statement not covered" >    return [...super._getStateProperties(),</span>
+      'callback',
+      'startPercent',
+      'progression',
+    ];
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  _f</span>romState(state: Object, getElement: ?(string) =&gt; DiagramElement) {
+<span class="cstat-no" title="statement not covered" >    joinObjects(this, state);</span>
+<span class="cstat-no" title="statement not covered" >    if (this.element != null &amp;&amp; typeof this.element === 'string' &amp;&amp; getElement != null) {</span>
+<span class="cstat-no" title="statement not covered" >      this.element = getElement(this.element);</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return this;</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  _s</span>tate() {
+    const state = <span class="cstat-no" title="statement not covered" >super._state();</span>
+<span class="cstat-no" title="statement not covered" >    if (this.element != null) {</span>
+<span class="cstat-no" title="statement not covered" >      state.state.element = {</span>
+        f1Type: 'de',
+        state: this.element.getPath(),
+      };
+    }
+<span class="cstat-no" title="statement not covered" >    return state;</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  _g</span>etStateName() {  // eslint-disable-line class-methods-use-this
+<span class="cstat-no" title="statement not covered" >    return 'customAnimationStep';</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  se</span>tFrame(deltaTime: number) {
+    const percentTime = <span class="cstat-no" title="statement not covered" >deltaTime / this.duration;</span>
+    const percentComplete = <span class="cstat-no" title="statement not covered" >this.getPercentComplete(percentTime);</span>
+<span class="cstat-no" title="statement not covered" >    this.fnExec(this.callback, percentComplete);</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ge</span>tPercentComplete(percentTime: number, invert: boolean = <span class="branch-0 cbranch-no" title="branch not covered" >false)</span> {
+<span class="cstat-no" title="statement not covered" >    if (typeof this.progression === 'string') {</span>
+      const result = <span class="cstat-no" title="statement not covered" >this.fnExec(this.progression, percentTime, invert);</span>
+<span class="cstat-no" title="statement not covered" >      if (result == null) {</span>
+<span class="cstat-no" title="statement not covered" >        return 0;</span>
+      }
+<span class="cstat-no" title="statement not covered" >      return result;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (typeof this.progression === 'function') {</span>
+<span class="cstat-no" title="statement not covered" >      return (this.progression(percentTime));</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return 0;</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  se</span>tToEnd() {
+<span class="cstat-no" title="statement not covered" >    this.fnExec(this.callback, 1);</span>
+  }
+  // finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+  //   if (this.state === 'idle') {
+  //     return;
+  //   }
+  //   super.finish(cancelled, force);
+  //   const setToEnd = () =&gt; {
+  //     if (this.callback != null) {
+  //       this.callback(1);
+  //     }
+  //   };
+  //   if (cancelled &amp;&amp; force === 'complete') {
+  //     setToEnd();
+  //   }
+  //   if (cancelled &amp;&amp; force == null &amp;&amp; this.completeOnCancel === true) {
+  //     setToEnd();
+  //   }
+  //   if (cancelled === false) {
+  //     setToEnd();
+  //   }
+&nbsp;
+  //   if (this.onFinish != null) {
+  //     this.onFinish(cancelled);
+  //   }
+  // }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  _d</span>up() {
+    const step = <span class="cstat-no" title="statement not covered" >new CustomAnimationStep();</span>
+<span class="cstat-no" title="statement not covered" >    duplicateFromTo(this, step);</span>
+<span class="cstat-no" title="statement not covered" >    return step;</span>
+  }
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >custom(</span>...optionsIn: Array&lt;TypeCustomAnimationStepInputOptions&gt;) {
+<span class="cstat-no" title="statement not covered" >  return new CustomAnimationStep(...optionsIn);</span>
+}
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed May 20 2020 23:46:31 GMT+0000 (Coordinated Universal Time)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

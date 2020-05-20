@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for diagram/Animation/AnimationStep/ElementAnimationStep.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">All files</a> / <a href="index.html">diagram/Animation/AnimationStep</a> ElementAnimationStep.js
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+// import * as tools from '../../../tools/math';
+// import { DiagramElement } from '../../Element';
+import type { TypeAnimationStepInputOptions } from '../AnimationStep';
+import AnimationStep from '../AnimationStep';
+import { joinObjects, duplicateFromTo } from '../../../tools/tools';
+import type { DiagramElement } from '../../Element';
+&nbsp;
+export type TypeElementAnimationStepInputOptions = {
+  element?: Object; // Can't use DiagramElement as importing it makes a loop
+  type?: 'transform' | 'color' | 'custom' | 'position' | 'rotation' | 'scale';
+  progression?: 'linear' | 'easeinout' | 'easein' | 'easeout' | (number) =&gt; number; // default is easeinout except color and custom which is linear
+} &amp; TypeAnimationStepInputOptions;
+&nbsp;
+export default class ElementAnimationStep extends AnimationStep {
+  element: ?Object;
+  type: 'transform' | 'color' | 'custom' | 'position' | 'setPosition';
+  duration: number;
+  progression: ((number, ?boolean) =&gt; number) | string;
+&nbsp;
+<span class="fstat-no" title="function not covered" >  co</span>nstructor(optionsIn: TypeElementAnimationStepInputOptions = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span> {
+<span class="cstat-no" title="statement not covered" >    super(optionsIn);</span>
+    let defaultProgression = <span class="cstat-no" title="statement not covered" >'easeinout';</span>
+<span class="cstat-no" title="statement not covered" >    if (optionsIn.type === 'color' || optionsIn.type === 'custom') {</span>
+<span class="cstat-no" title="statement not covered" >      defaultProgression = 'linear';</span>
+    }
+    const defaultOptions = <span class="cstat-no" title="statement not covered" >{</span>
+      element: null,
+      type: 'custom',
+      progression: defaultProgression,
+      duration: 0,
+    };
+&nbsp;
+    const options = <span class="cstat-no" title="statement not covered" >joinObjects({}, defaultOptions, optionsIn);</span>
+<span class="cstat-no" title="statement not covered" >    this.element = options.element;</span>
+<span class="cstat-no" title="statement not covered" >    this.type = options.type;</span>
+<span class="cstat-no" title="statement not covered" >    this.onFinish = options.onFinish;</span>
+<span class="cstat-no" title="statement not covered" >    this.duration = options.duration;</span>
+<span class="cstat-no" title="statement not covered" >    this.progression = options.progression;</span>
+<span class="cstat-no" title="statement not covered" >    if (this.progression === 'linear') {</span>
+<span class="cstat-no" title="statement not covered" >      this.progression = 'tools.math.linear';</span>
+    } else <span class="cstat-no" title="statement not covered" >if (options.progression === 'easein') {</span>
+<span class="cstat-no" title="statement not covered" >      this.progression = 'tools.math.easein';</span>
+    } else <span class="cstat-no" title="statement not covered" >if (options.progression === 'easeout') {</span>
+<span class="cstat-no" title="statement not covered" >      this.progression = 'tools.math.easeout';</span>
+    } else <span class="cstat-no" title="statement not covered" >if (options.progression === 'easeinout') {</span>
+<span class="cstat-no" title="statement not covered" >      this.progression = 'tools.math.easeinout';</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      this.progression = options.progression;</span>
+    }
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  fn</span>Exec(idOrFn: string | Function | null, ...args: any) {
+    // const result = this.fnMap.exec(idOrFn, ...args);
+    // if (result == null &amp;&amp; this.element != null) {
+    //   return this.element.fnMap.exec(idOrFn, ...args);
+    // }
+    // return result;
+<span class="cstat-no" title="statement not covered" >    if (this.element != null) {</span>
+<span class="cstat-no" title="statement not covered" >      return this.fnMap.execOnMaps(</span>
+        idOrFn, [this.element.fnMap.map], ...args,
+      );
+    }
+<span class="cstat-no" title="statement not covered" >    return this.fnMap.exec(idOrFn, ...args);</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  _g</span>etStateProperties() {  // eslint-disable-line class-methods-use-this
+    // console.log('elementstep');
+<span class="cstat-no" title="statement not covered" >    return [...super._getStateProperties(),</span>
+      // 'element',
+      'type',
+      // 'duration',
+      'progression',
+    ];
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  _f</span>romState(state: Object, getElement: ?(string) =&gt; DiagramElement) {
+    // const obj = new this.constructor();
+<span class="cstat-no" title="statement not covered" >    joinObjects(this, state);</span>
+<span class="cstat-no" title="statement not covered" >    if (this.element != null &amp;&amp; typeof this.element === 'string' &amp;&amp; getElement != null) {</span>
+<span class="cstat-no" title="statement not covered" >      this.element = getElement(this.element);</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return this;</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  _s</span>tate() {
+    const state = <span class="cstat-no" title="statement not covered" >super._state();</span>
+<span class="cstat-no" title="statement not covered" >    if (this.element != null) {</span>
+<span class="cstat-no" title="statement not covered" >      state.state.element = {</span>
+        f1Type: 'de',
+        state: this.element.getPath(),
+      };
+    }
+    // if (this.element != null) {
+    //   definition.state.element = this.element.getPath();
+    // }
+<span class="cstat-no" title="statement not covered" >    return state;</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ge</span>tPercentComplete(percentTime: number) {
+<span class="cstat-no" title="statement not covered" >    if (typeof this.progression === 'string') {</span>
+      const result = <span class="cstat-no" title="statement not covered" >this.fnExec(this.progression, percentTime);</span>
+<span class="cstat-no" title="statement not covered" >      if (result == null) {</span>
+<span class="cstat-no" title="statement not covered" >        return 0;</span>
+      }
+<span class="cstat-no" title="statement not covered" >      return result;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (typeof this.progression === 'function') {</span>
+<span class="cstat-no" title="statement not covered" >      return (this.progression(percentTime));</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return 0;</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  _d</span>up() {
+    const step = <span class="cstat-no" title="statement not covered" >new ElementAnimationStep();</span>
+<span class="cstat-no" title="statement not covered" >    duplicateFromTo(this, step, ['element']);</span>
+<span class="cstat-no" title="statement not covered" >    step.element = this.element;</span>
+<span class="cstat-no" title="statement not covered" >    return step;</span>
+  }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed May 20 2020 23:46:31 GMT+0000 (Coordinated Universal Time)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

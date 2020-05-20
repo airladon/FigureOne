@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for diagram/webgl/shaders.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">All files</a> / <a href="index.html">diagram/webgl</a> shaders.js
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+&nbsp;
+const vertex = {
+  simple: {
+    source:
+        'attribute vec2 a_position;'
+        + 'uniform mat3 u_matrix;'
+        + 'uniform float u_z;'
+        + 'void main() {'
+          + 'gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, u_z, 1);'
+        + '}',
+    varNames: ['a_position', 'u_matrix', 'u_z'],
+  },
+  withTexture: {
+    source:
+        'attribute vec2 a_position;'
+        + 'attribute vec2 a_texcoord;'
+        + 'uniform mat3 u_matrix;'
+        + 'uniform float u_z;'
+        + 'varying vec2 v_texcoord;'
+        + 'void main() {'
+          + 'gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, u_z, 1);'
+          + 'v_texcoord = a_texcoord;'
+        + '}',
+    varNames: ['a_position', 'a_texcoord', 'u_matrix', 'u_z'],
+  },
+};
+&nbsp;
+const fragment = {
+  simple: {
+    source:
+      'precision mediump float;'
+      + 'uniform vec4 u_color;'
+      + 'void main() {'
+        + 'gl_FragColor = u_color;'
+      + '}',
+    varNames: ['u_color'],
+  },
+  withTexture: {
+    source:
+      'precision mediump float;'
+      + 'uniform vec4 u_color;'
+      + 'uniform int u_use_texture;'
+      + 'uniform sampler2D u_texture;'
+      + 'varying vec2 v_texcoord;'
+      + 'void main() {'
+        + 'if ( u_use_texture == 1) {'
+          + 'gl_FragColor = texture2D(u_texture, v_texcoord);'
+        + '} else {'
+          + 'gl_FragColor = u_color;'
+        + '}'
+      + '}',
+    varNames: ['u_color', 'u_use_texture', 'u_texture'],
+  },
+  text: {
+    source:
+      'precision mediump float;'
+      + 'uniform vec4 u_color;'
+      + 'uniform sampler2D u_texture;'
+      + 'varying vec2 v_texcoord;'
+      + 'void main() {'
+        // + 'float a = texture2D(u_texture, v_texcoord).a;'
+        // + 'if ( a &lt; 0.2 ) {'
+        //   + 'a = a / 1.2;'
+        // + '}'
+        // + 'gl_FragColor = vec4(u_color.rgb, min(a * 1.2, 1.0) * u_color.a);'
+        // + '}'
+        // + 'gl_FragColor = a * u_color;'
+        + 'vec4 c = texture2D(u_texture, v_texcoord);'
+        + 'gl_FragColor = vec4(c.a * u_color.rgb, c.a * u_color.a);'
+      + '}',
+    varNames: ['u_color', 'u_texture'],
+  },
+};
+&nbsp;
+const getShaders = <span class="fstat-no" title="function not covered" >(v</span>Name: string = <span class="branch-0 cbranch-no" title="branch not covered" >'simple',</span> fName: string = <span class="branch-0 cbranch-no" title="branch not covered" >'simple')</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >  if (Object.hasOwnProperty.call(vertex, vName) &amp;&amp; Object.hasOwnProperty.call(fragment, fName)) {</span>
+<span class="cstat-no" title="statement not covered" >    return {</span>
+      vertexSource: vertex[vName].source,
+      fragmentSource: fragment[fName].source,
+      varNames: vertex[vName].varNames.concat(fragment[fName].varNames),
+    };
+  }
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    vertexSource: '',
+    fragmentSource: '',
+    varNames: [],
+  };
+};
+&nbsp;
+export default getShaders;
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed May 20 2020 23:46:31 GMT+0000 (Coordinated Universal Time)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

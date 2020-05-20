@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for diagram/parseState.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">All files</a> / <a href="index.html">diagram</a> parseState.js
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">270x</span>
+<span class="cline-any cline-yes">270x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">270x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">21241x</span>
+<span class="cline-any cline-yes">8244x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12997x</span>
+<span class="cline-any cline-yes">1080x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11917x</span>
+<span class="cline-any cline-yes">2568x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9349x</span>
+<span class="cline-any cline-yes">2210x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7139x</span>
+<span class="cline-any cline-yes">1080x</span>
+<span class="cline-any cline-yes">1080x</span>
+<span class="cline-any cline-yes">3240x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1080x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6059x</span>
+<span class="cline-any cline-yes">1915x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1915x</span>
+<span class="cline-any cline-yes">295x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1620x</span>
+<span class="cline-any cline-yes">1350x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">270x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">270x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">270x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">270x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">270x</span>
+<span class="cline-any cline-yes">270x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4144x</span>
+<span class="cline-any cline-yes">4144x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17957x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4144x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import {
+  PositionAnimationStep, AnimationBuilder, RotationAnimationStep,
+  ScaleAnimationStep, TransformAnimationStep, ColorAnimationStep,
+  OpacityAnimationStep, PulseAnimationStep, CustomAnimationStep,
+  DelayStep, ParallelAnimationStep, SerialAnimationStep,
+  TriggerStep,
+} from './Animation/Animation';
+&nbsp;
+import type Diagram from './Diagram';
+&nbsp;
+import {
+  getPoint, getTransform, getRect, getLine, Translation, Rotation, Scale,
+} from '../tools/g2';
+&nbsp;
+function assignAsLinkOnly(obj: Object) {
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (obj != null) {
+    obj._assignAsLinkOnly = true;
+  }
+  return obj;
+}
+&nbsp;
+function parseState(state: Object, diagram: Diagram) {
+  if (typeof state === 'number') {
+    return state;
+  }
+  if (typeof state === 'string') {
+    return state;
+  }
+  if (typeof state === 'boolean') {
+    return state;
+  }
+  if (state == null) {
+    return state;
+  }
+&nbsp;
+  if (Array.isArray(state)) {
+    const out = [];
+    state.forEach((stateElement) =&gt; {
+      out.push(parseState(stateElement, diagram));
+    });
+    return out;
+  }
+  if (state.f1Type != null) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (state.f1Type === 'rect') {
+<span class="cstat-no" title="statement not covered" >      return getRect(state);</span>
+    }
+    if (state.f1Type === 'p') {
+      return getPoint(state);
+    }
+    if (state.f1Type === 'tf') {
+      return getTransform(state);
+    }
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (state.f1Type === 't') {
+<span class="cstat-no" title="statement not covered" >      return new Translation(state);</span>
+    }
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (state.f1Type === 's') {
+<span class="cstat-no" title="statement not covered" >      return new Scale(state);</span>
+    }
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (state.f1Type === 'r') {
+<span class="cstat-no" title="statement not covered" >      return new Rotation(state);</span>
+    }
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (state.f1Type === 'l') {
+<span class="cstat-no" title="statement not covered" >      return getLine(state);</span>
+    }
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (state.f1Type === 'de') {
+      return assignAsLinkOnly(diagram.getElement(state.state));
+    }
+<span class="cstat-no" title="statement not covered" >    if (state.f1Type === 'positionAnimationStep') {</span>
+<span class="cstat-no" title="statement not covered" >      return new PositionAnimationStep()._fromState(</span>
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+<span class="cstat-no" title="statement not covered" >    if (state.f1Type === 'rotationAnimationStep') {</span>
+<span class="cstat-no" title="statement not covered" >      return new RotationAnimationStep()._fromState(</span>
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+<span class="cstat-no" title="statement not covered" >    if (state.f1Type === 'scaleAnimationStep') {</span>
+<span class="cstat-no" title="statement not covered" >      return new ScaleAnimationStep()._fromState(</span>
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+<span class="cstat-no" title="statement not covered" >    if (state.f1Type === 'transformAnimationStep') {</span>
+<span class="cstat-no" title="statement not covered" >      return new TransformAnimationStep()._fromState(</span>
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+<span class="cstat-no" title="statement not covered" >    if (state.f1Type === 'colorAnimationStep') {</span>
+<span class="cstat-no" title="statement not covered" >      return new ColorAnimationStep()._fromState(</span>
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+<span class="cstat-no" title="statement not covered" >    if (state.f1Type === 'opacityAnimationStep') {</span>
+<span class="cstat-no" title="statement not covered" >      return new OpacityAnimationStep()._fromState(</span>
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+<span class="cstat-no" title="statement not covered" >    if (state.f1Type === 'pulseAnimationStep') {</span>
+<span class="cstat-no" title="statement not covered" >      return new PulseAnimationStep()._fromState(</span>
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+<span class="cstat-no" title="statement not covered" >    if (state.f1Type === 'customAnimationStep') {</span>
+<span class="cstat-no" title="statement not covered" >      return new CustomAnimationStep()._fromState(</span>
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+<span class="cstat-no" title="statement not covered" >    if (state.f1Type === 'delayAnimationStep') {</span>
+<span class="cstat-no" title="statement not covered" >      return new DelayStep()._fromState(</span>
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+<span class="cstat-no" title="statement not covered" >    if (state.f1Type === 'parallelAnimationStep') {</span>
+<span class="cstat-no" title="statement not covered" >      return new ParallelAnimationStep()._fromState(</span>
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+<span class="cstat-no" title="statement not covered" >    if (state.f1Type === 'serialAnimationStep') {</span>
+<span class="cstat-no" title="statement not covered" >      return new SerialAnimationStep()._fromState(</span>
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+<span class="cstat-no" title="statement not covered" >    if (state.f1Type === 'triggerAnimationStep') {</span>
+<span class="cstat-no" title="statement not covered" >      return new TriggerStep()._fromState(</span>
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+<span class="cstat-no" title="statement not covered" >    if (state.f1Type === 'animationBuilder') {</span>
+<span class="cstat-no" title="statement not covered" >      return new AnimationBuilder()._fromState(</span>
+        parseState(state.state, diagram),
+        diagram.getElement.bind(diagram),
+      );
+    }
+  }
+  const out = {};
+  Object.keys(state).forEach((property) =&gt; {
+    // console.log('prop', state, property)
+    // if (property === 'element') {
+    //   console.log(state[property].name)
+    // }
+    // console.log(property)
+    out[property] = parseState(state[property], diagram);
+  });
+  return out;
+}
+&nbsp;
+export default parseState;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed May 20 2020 23:46:31 GMT+0000 (Coordinated Universal Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

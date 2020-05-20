@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for diagram/DrawingObjects/VertexObject/VertexHorizontalLine.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">All files</a> / <a href="index.html">diagram/DrawingObjects/VertexObject</a> VertexHorizontalLine.js
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">52x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">52x</span>
+<span class="cline-any cline-yes">52x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+&nbsp;
+import {
+  Point, Transform,
+} from '../../../tools/g2';
+import WebGLInstance from '../../webgl/webgl';
+import VertexObject from './VertexObject';
+&nbsp;
+class VertexHorizontalLine extends VertexObject {
+  start: Point;
+  constructor(
+    webgl: Array&lt;WebGLInstance&gt;,
+    start: Point = <span class="branch-0 cbranch-no" title="branch not covered" >new Point(0, 0),</span>
+    length: number = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
+    width: number = <span class="branch-0 cbranch-no" title="branch not covered" >0.1,</span>
+    rotation: number = <span class="branch-0 cbranch-no" title="branch not covered" >0,</span>
+  ): void {
+    super(webgl);
+    const cx = 0;
+    const cy = 0 - width / 2.0;
+    const points = [];
+    this.glPrimitive = this.gl[0].TRIANGLE_STRIP;
+    points.push(new Point(cx, cy));
+    points.push(new Point(cx, cy + width));
+    points.push(new Point(cx + length, cy));
+    points.push(new Point(cx + length, cy + width));
+&nbsp;
+    // transform points
+    const t = new Transform().rotate(rotation).translate(start.x, start.y);
+    const transformedPoints = points.map(p =&gt; p.transformBy(t.matrix()));
+&nbsp;
+    transformedPoints.forEach((p) =&gt; {
+      this.points.push(p.x);
+      this.points.push(p.y);
+    });
+&nbsp;
+    this.border[0] = [
+      transformedPoints[0],
+      transformedPoints[1],
+      transformedPoints[transformedPoints.length - 1],
+      transformedPoints[transformedPoints.length - 2],
+    ];
+&nbsp;
+    this.border[0].push(this.border[0][0]._dup());
+    this.setupBuffer();
+  }
+}
+&nbsp;
+export default VertexHorizontalLine;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed May 20 2020 23:46:31 GMT+0000 (Coordinated Universal Time)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

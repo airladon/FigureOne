@@ -336,9 +336,16 @@ class Recorder {
 
   loadEvents(
     encodedEventsList: Object | Array<TypeEvents>,
-    isMinified: boolean = false,
+    isMinified: boolean = true,
   ) { // $FlowFixMe
-    this.events.list = this.decodeEvents(encodedEventsList, isMinified);
+    const lists = this.decodeEvents(encodedEventsList, isMinified);
+    console.log(lists)
+    Object.keys(lists).forEach((eventName) => {
+      if (this.events[eventName] == null) {
+        return;
+      }
+      this.events[eventName].list = lists[eventName];
+    });
     this.duration = this.calcDuration();
   }
 
@@ -354,21 +361,25 @@ class Recorder {
   encodeEvents(
     minifyEvents: boolean = true,
   ) {
+    const lists = {};
+    Object.keys(this.events).forEach((eventName) => {
+      lists[eventName] = this.events[eventName].list;
+    });
     if (minifyEvents) {
-      return minify(this.events.list);
+      return minify(lists);
     }
-    return duplicate(this.events.list);
+    return duplicate(lists);
   }
 
   // eslint-disable-next-line class-methods-use-this
   decodeEvents(
-    eventsList: Object | Array<TypeEvents>,
+    lists: Object,
     isMinified: boolean = true,
   ) {
-    if (isMinified && !Array.isArray(eventsList)) {
-      return unminify(eventsList);
+    if (isMinified) {
+      return unminify(lists);
     }
-    return eventsList;
+    return duplicate(lists);
   }
 
 
@@ -1024,10 +1035,10 @@ class Recorder {
     this.state = 'idle';
     // this.clearPlaybackTimeouts();
     this.stopTimeouts();
-    const pointer = this.diagram.getElement('pointer');
-    if (pointer != null) {
-      pointer.hide();
-    }
+    // const pointer = this.diagram.getElement('pointer');
+    // if (pointer != null) {
+    //   pointer.hide();
+    // }
     if (this.audio) {
       this.audio.pause();
       this.isAudioPlaying = false;
@@ -1047,34 +1058,34 @@ class Recorder {
   }
 
 
-  queuePlaybackState(delay: number = 0) {
-    const incrementIndexAndPlayState = () => {
-      if (this.state === 'playing') {
-        this.stateIndex += 1;
-        this.playbackState();
-      }
-    }
-    if (delay === 0) {
-      incrementIndexAndPlayState();
-      return;
-    }
-    this.nextStateTimeout = setTimeout(incrementIndexAndPlayState, delay);
-  }
+  // queuePlaybackState(delay: number = 0) {
+  //   const incrementIndexAndPlayState = () => {
+  //     if (this.state === 'playing') {
+  //       this.stateIndex += 1;
+  //       this.playbackState();
+  //     }
+  //   }
+  //   if (delay === 0) {
+  //     incrementIndexAndPlayState();
+  //     return;
+  //   }
+  //   this.nextStateTimeout = setTimeout(incrementIndexAndPlayState, delay);
+  // }
 
-  playbackState() {
-    if (this.stateIndex > this.states.diffs.length - 1) {
-      this.finishPlaying();
-      return;
-    }
-    this.setState(this.stateIndex);
-    this.diagram.animateNextFrame();
-    if (this.stateIndex + 1 === this.states.diffs.length) {
-      this.finishPlaying();
-      return;
-    }
-    const nextTime = (this.states.diffs[this.stateIndex + 1][0] - this.getCurrentTime()) * 1000;
-    this.queuePlaybackState(nextTime);
-  }
+  // playbackState() {
+  //   if (this.stateIndex > this.states.diffs.length - 1) {
+  //     this.finishPlaying();
+  //     return;
+  //   }
+  //   this.setState(this.stateIndex);
+  //   this.diagram.animateNextFrame();
+  //   if (this.stateIndex + 1 === this.states.diffs.length) {
+  //     this.finishPlaying();
+  //     return;
+  //   }
+  //   const nextTime = (this.states.diffs[this.stateIndex + 1][0] - this.getCurrentTime()) * 1000;
+  //   this.queuePlaybackState(nextTime);
+  // }
 
   setState(index: number) {
     if (index > this.states.diffs.length - 1) {

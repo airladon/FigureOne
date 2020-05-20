@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for diagram/DrawingObjects/DrawingObject.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">All files</a> / <a href="index.html">diagram/DrawingObjects</a> DrawingObject.js
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">268x</span>
+<span class="cline-any cline-yes">268x</span>
+<span class="cline-any cline-yes">268x</span>
+<span class="cline-any cline-yes">268x</span>
+<span class="cline-any cline-yes">268x</span>
+<span class="cline-any cline-yes">268x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">483x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">483x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+&nbsp;
+import {
+  Point, Rect, getBoundingRect,
+} from '../../tools/g2';
+import { getState } from '../state';
+&nbsp;
+// A Drawing object can be:
+//  - GL primitive vertices
+//  - Text object for 2D drawing contexts
+//  - HTML Object in the diagram_html div
+//
+// It must have:
+//
+//   Properties:
+//     - location     A reference location where relative boundaries are
+//                    calculated from
+//     - border       Array of borders in Diagram Units
+//
+//   Methods:
+//     - drawWithTransformMatrix(transformMatrix)
+//     - calcBorder(lastDrawTransformMatrix, glToDiagramTransform)
+//
+class DrawingObject {
+  // numPoints: number;           // Number of primative vertices
+  border: Array&lt;Array&lt;Point&gt;&gt;; // Border vertices
+  location: Point;
+  holeBorder: Array&lt;Array&lt;Point&gt;&gt;;  // Border of any holes inside of main border
+  +change: (any, any, any) =&gt; void;
+  onLoad: Function | null;   // Only used for drawing objects with asynchronous
+  //                            loading (like textures)
+  type: string;
+  state: 'loading' | 'loaded';
+&nbsp;
+  constructor() {
+    // this.numPoints = 0;
+    this.location = new Point(0, 0);
+    this.border = [[]];
+    this.holeBorder = [[]];
+    this.onLoad = null;
+    this.type = 'drawingObject';
+    this.state = 'loading';
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  _d</span>up() {
+<span class="cstat-no" title="statement not covered" >    return this;</span>
+  }
+&nbsp;
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+<span class="fstat-no" title="function not covered" >  se</span>tText(text: string) {
+  }
+&nbsp;
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+<span class="fstat-no" title="function not covered" >  up</span>date(options: Object) {
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ge</span>tGLBoundaries(lastDrawTransformMatrix: Array&lt;number&gt;): Array&lt;Array&lt;Point&gt;&gt; {
+    const glBoundaries = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >    this.border.forEach(<span class="fstat-no" title="function not covered" >(b</span>oundary) =&gt; {</span>
+      const glBorder = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >      boundary.forEach(<span class="fstat-no" title="function not covered" >(p</span>oint) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        glBorder.push(point.transformBy(lastDrawTransformMatrix));</span>
+      });
+<span class="cstat-no" title="statement not covered" >      glBoundaries.push(glBorder);</span>
+    });
+<span class="cstat-no" title="statement not covered" >    return glBoundaries;</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ge</span>tGLBoundaryHoles(lastDrawTransformMatrix: Array&lt;number&gt;): Array&lt;Array&lt;Point&gt;&gt; {
+    const glBoundaries = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >    this.holeBorder.forEach(<span class="fstat-no" title="function not covered" >(b</span>oundary) =&gt; {</span>
+      const glBorder = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >      boundary.forEach(<span class="fstat-no" title="function not covered" >(p</span>oint) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        glBorder.push(point.transformBy(lastDrawTransformMatrix));</span>
+      });
+<span class="cstat-no" title="statement not covered" >      glBoundaries.push(glBorder);</span>
+    });
+<span class="cstat-no" title="statement not covered" >    return glBoundaries;</span>
+  }
+  /* eslint-enable */
+&nbsp;
+  /* eslint-disable class-methods-use-this, no-unused-vars */
+<span class="fstat-no" title="function not covered" >  dr</span>awWithTransformMatrix(
+    transformMatrix: Array&lt;number&gt;,
+    color: Array&lt;number&gt;,
+    canvasIndex: number,
+    numPoints: number,
+  ) {
+  }
+  /* eslint-enable */
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ge</span>tGLBoundingRect(lastDrawTransformMatrix: Array&lt;number&gt;): Rect {
+    const boundaries = <span class="cstat-no" title="statement not covered" >this.getGLBoundaries(lastDrawTransformMatrix);</span>
+    // const min = new Point(0, 0);
+    // const max = new Point(0, 0);
+    // let firstPoint = true;
+&nbsp;
+    // boundaries.forEach((boundary) =&gt; {
+    //   boundary.forEach((point) =&gt; {
+    //     if (firstPoint) {
+    //       min.x = point.x;
+    //       min.y = point.y;
+    //       max.x = point.x;
+    //       max.y = point.y;
+    //       firstPoint = false;
+    //     } else {
+    //       min.x = point.x &lt; min.x ? point.x : min.x;
+    //       min.y = point.y &lt; min.y ? point.y : min.y;
+    //       max.x = point.x &gt; max.x ? point.x : max.x;
+    //       max.y = point.y &gt; max.y ? point.y : max.y;
+    //     }
+    //   });
+    // });
+    // return new Rect(min.x, min.y, max.x - min.x, max.y - min.y);
+<span class="cstat-no" title="statement not covered" >    return getBoundingRect(boundaries);</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ge</span>tVertexSpaceBoundingRect() {
+<span class="cstat-no" title="statement not covered" >    return getBoundingRect(this.border);</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ge</span>tLocation(): Point {
+<span class="cstat-no" title="statement not covered" >    return this.location;</span>
+  }
+&nbsp;
+  // eslint-disable-next-line class-methods-use-this
+<span class="fstat-no" title="function not covered" >  ge</span>tGLLocation(lastDrawTransformMatrix: Array&lt;number&gt;): Point {
+<span class="cstat-no" title="statement not covered" >    return this.getLocation().transformBy(lastDrawTransformMatrix);</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ge</span>tRelativeGLBoundingRect(lastDrawTransformMatrix: Array&lt;number&gt;): Rect {
+    const glLocation = <span class="cstat-no" title="statement not covered" >this.getGLLocation(lastDrawTransformMatrix);</span>
+    const glAbsoluteBoundaries =
+<span class="cstat-no" title="statement not covered" >      this.getGLBoundingRect(lastDrawTransformMatrix);</span>
+    const glRelativeBoundaries = <span class="cstat-no" title="statement not covered" >new Rect(</span>
+      glAbsoluteBoundaries.left - glLocation.x,
+      glAbsoluteBoundaries.bottom - glLocation.y,
+      glAbsoluteBoundaries.width,
+      glAbsoluteBoundaries.height,
+    );
+<span class="cstat-no" title="statement not covered" >    return glRelativeBoundaries;</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ge</span>tRelativeVertexSpaceBoundingRect() {
+    const absoluteBoundaries =
+<span class="cstat-no" title="statement not covered" >      this.getVertexSpaceBoundingRect();</span>
+    const relativeBoundaries = <span class="cstat-no" title="statement not covered" >new Rect(</span>
+      absoluteBoundaries.left - this.location.x,
+      absoluteBoundaries.bottom - this.location.y,
+      absoluteBoundaries.width,
+      absoluteBoundaries.height,
+    );
+<span class="cstat-no" title="statement not covered" >    return relativeBoundaries;</span>
+  }
+&nbsp;
+  // eslint-disable-next-line no-unused-vars, class-methods-use-this
+<span class="fstat-no" title="function not covered" >  ch</span>ange(drawingPrimitive: any, border: Array&lt;Array&lt;Point&gt;&gt;, holes: Array&lt;Array&lt;Point&gt;&gt;) {
+  }
+&nbsp;
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [];
+  }
+&nbsp;
+  _state() {
+    return getState(this, this._getStateProperties());
+  }
+}
+&nbsp;
+export default DrawingObject;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed May 20 2020 23:46:31 GMT+0000 (Coordinated Universal Time)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

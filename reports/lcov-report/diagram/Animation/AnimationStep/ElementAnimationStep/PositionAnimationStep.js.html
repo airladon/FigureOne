@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for diagram/Animation/AnimationStep/ElementAnimationStep/PositionAnimationStep.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">All files</a> / <a href="index.html">diagram/Animation/AnimationStep/ElementAnimationStep</a> PositionAnimationStep.js
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import {
+  Transform, Point, getMaxTimeFromVelocity, getPoint,
+} from '../../../../tools/g2';
+import type { pathOptionsType } from '../../../../tools/g2';
+import {
+  joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
+  // joinObjectsWithOptions,
+} from '../../../../tools/tools';
+import type {
+  TypeElementAnimationStepInputOptions,
+} from '../ElementAnimationStep';
+import ElementAnimationStep from '../ElementAnimationStep';
+// import type { DiagramElement } from '../../../Element';
+&nbsp;
+export type TypePositionAnimationStepInputOptions = {
+  start?: Point;      // default is element transform
+  target?: Point;     // Either target or delta must be defined
+  delta?: Point;      // delta overrides target if both are defined
+  translationStyle?: 'linear' | 'curved'; // default is linear
+  translationOptions?: pathOptionsType;
+  velocity?: Point;
+  maxTime?: number;
+} &amp; TypeElementAnimationStepInputOptions;
+&nbsp;
+export default class PositionAnimationStep extends ElementAnimationStep {
+  position: {
+    start: ?Point;  // null means use element transform when unit is started
+    delta: ?Point;
+    target: ?Point;
+    rotDirection: 0 | 1 | -1 | 2;
+    translationStyle: 'linear' | 'curved';
+    translationOptions: pathOptionsType;
+    velocity: ?Point;
+    maxTime: ?number;
+  };
+&nbsp;
+<span class="fstat-no" title="function not covered" >  co</span>nstructor(...optionsIn: Array&lt;TypePositionAnimationStepInputOptions&gt;) {
+    const ElementAnimationStepOptionsIn =
+<span class="cstat-no" title="statement not covered" >      joinObjects({}, { type: 'position' }, ...optionsIn);</span>
+<span class="cstat-no" title="statement not covered" >    deleteKeys(ElementAnimationStepOptionsIn, [</span>
+      'start', 'delta', 'target', 'translationStyle', 'translationOptions',
+      'velocity', 'maxTime',
+    ]);
+<span class="cstat-no" title="statement not covered" >    super(ElementAnimationStepOptionsIn);</span>
+<span class="cstat-no" title="statement not covered" >    this._stepType = 'position';</span>
+    const defaultPositionOptions = <span class="cstat-no" title="statement not covered" >{</span>
+      start: null,
+      target: null,
+      delta: null,
+      translationStyle: 'linear',
+      translationOptions: {
+        rot: 1,
+        magnitude: 0.5,
+        offset: 0.5,
+        controlPoint: null,
+        direction: '',
+        maxTime: null,
+      },
+      velocity: null,
+    };
+<span class="cstat-no" title="statement not covered" >    if (this.element &amp;&amp; this.element.animations.options.tranlsation) {</span>
+      const translationOptions = <span class="cstat-no" title="statement not covered" >this.element.animations.options.tranlsation;</span>
+<span class="cstat-no" title="statement not covered" >      if (translationOptions.style != null) {</span>
+        // $FlowFixMe - this is messy, but deal with it
+<span class="cstat-no" title="statement not covered" >        defaultPositionOptions.style = translationOptions.style;</span>
+      }
+<span class="cstat-no" title="statement not covered" >      joinObjects(defaultPositionOptions.translationOptions, translationOptions);</span>
+    }
+    const options = <span class="cstat-no" title="statement not covered" >joinObjects({}, defaultPositionOptions, ...optionsIn);</span>
+<span class="cstat-no" title="statement not covered" >    if (options.start != null) {</span>
+<span class="cstat-no" title="statement not covered" >      options.start = getPoint(options.start);</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (options.target != null) {</span>
+<span class="cstat-no" title="statement not covered" >      options.target = getPoint(options.target);</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (options.delta != null) {</span>
+<span class="cstat-no" title="statement not covered" >      options.delta = getPoint(options.delta);</span>
+    }
+    // $FlowFixMe
+<span class="cstat-no" title="statement not covered" >    this.position = { translationOptions: {} };</span>
+<span class="cstat-no" title="statement not covered" >    copyKeysFromTo(options, this.position, [</span>
+      'start', 'delta', 'target', 'translationStyle',
+      'velocity', 'maxTime',
+    ]);
+<span class="cstat-no" title="statement not covered" >    duplicateFromTo(options.translationOptions, this.position.translationOptions);</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  _g</span>etStateProperties() {  // eslint-disable-line class-methods-use-this
+<span class="cstat-no" title="statement not covered" >    return [...super._getStateProperties(),</span>
+      'position',
+    ];
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  _g</span>etStateName() {  // eslint-disable-line class-methods-use-this
+<span class="cstat-no" title="statement not covered" >    return 'positionAnimationStep';</span>
+  }
+&nbsp;
+  // On start, calculate the duration, target and delta if not already present.
+  // This is done here in case the start is defined as null meaning it is
+  // going to start from present transform.
+  // Setting a duration to 0 will effectively skip this animation step
+<span class="fstat-no" title="function not covered" >  st</span>art(startTime: ?number = <span class="branch-0 cbranch-no" title="branch not covered" >null)</span> {
+<span class="cstat-no" title="statement not covered" >    super.start(startTime);</span>
+<span class="cstat-no" title="statement not covered" >    if (this.position.start === null) {</span>
+<span class="cstat-no" title="statement not covered" >      if (this.element != null) {</span>
+<span class="cstat-no" title="statement not covered" >        this.position.start = this.element.getPosition();</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        this.duration = 0;</span>
+<span class="cstat-no" title="statement not covered" >        return;</span>
+      }
+    }
+    // if delta is null, then calculate it from start and target
+<span class="cstat-no" title="statement not covered" >    if (this.position.delta == null</span>
+      &amp;&amp; this.position.target != null
+      &amp;&amp; this.position.start != null
+    ) {
+      const delta = <span class="cstat-no" title="statement not covered" >this.position.target.sub(this.position.start);</span>
+<span class="cstat-no" title="statement not covered" >      this.position.delta = delta;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (this.position.delta != null &amp;&amp; this.position.start != null) {</span>
+<span class="cstat-no" title="statement not covered" >      this.position.target = this.position.start.add(this.position.delta);</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      this.duration = 0;</span>
+    }
+&nbsp;
+    // If Velocity is defined, then use it to calculate duration
+    const { target, start, velocity } = <span class="cstat-no" title="statement not covered" >this.position;</span>
+<span class="cstat-no" title="statement not covered" >    if (velocity != null &amp;&amp; start != null &amp;&amp; target != null) {</span>
+      const velocityToUse = <span class="cstat-no" title="statement not covered" >getPoint(velocity);</span>
+<span class="cstat-no" title="statement not covered" >      this.duration = getMaxTimeFromVelocity(</span>
+        new Transform().translate(start),
+        new Transform().translate(target),
+        new Transform().translate(velocityToUse),
+      );
+    }
+<span class="cstat-no" title="statement not covered" >    if (this.position.maxTime != null) {</span>
+<span class="cstat-no" title="statement not covered" >      if (this.duration &gt; this.position.maxTime) {</span>
+<span class="cstat-no" title="statement not covered" >        this.duration = this.position.maxTime;</span>
+      }
+    }
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  se</span>tFrame(deltaTime: number) {
+    const percentTime = <span class="cstat-no" title="statement not covered" >deltaTime / this.duration;</span>
+    const percentComplete = <span class="cstat-no" title="statement not covered" >this.getPercentComplete(percentTime);</span>
+    const p = <span class="cstat-no" title="statement not covered" >percentComplete;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (this.position.delta != null &amp;&amp; this.position.start != null) {</span>
+      const next = <span class="cstat-no" title="statement not covered" >this.position.start.toDelta(</span>
+        this.position.delta, p,
+        this.position.translationStyle,
+        this.position.translationOptions,
+      );
+<span class="cstat-no" title="statement not covered" >      if (this.element != null) {</span>
+<span class="cstat-no" title="statement not covered" >        this.element.setPosition(next);</span>
+      }
+    }
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  se</span>tToEnd() {
+<span class="cstat-no" title="statement not covered" >    if (this.element != null) {</span>
+<span class="cstat-no" title="statement not covered" >      this.element.setPosition(this.position.target);</span>
+    }
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  _d</span>up() {
+    const step = <span class="cstat-no" title="statement not covered" >new PositionAnimationStep();</span>
+<span class="cstat-no" title="statement not covered" >    duplicateFromTo(this, step, ['element']);</span>
+<span class="cstat-no" title="statement not covered" >    step.element = this.element;</span>
+<span class="cstat-no" title="statement not covered" >    return step;</span>
+  }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed May 20 2020 23:46:31 GMT+0000 (Coordinated Universal Time)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>
