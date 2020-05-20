@@ -57,7 +57,7 @@ describe('Diagram Recorder', () => {
     diagram.initialize();
     cursor = diagram.getElement('cursor');
   });
-  describe.only('Find Index', () => {
+  describe('Find Index', () => {
     describe('Next', () => {
       test('start', () => {
         const index = getNextIndexForTime(events, 0);
@@ -402,6 +402,7 @@ describe('Diagram Recorder', () => {
         recorder.recordEvent('cursorMove', [1, 1]);
         global.performance.now = () => 14000;
         recorder.recordEvent('cursorMove', [2, 2]);
+        recorder.stopRecording();
 
         const cache = recorder.eventsCache.cursorMove.list;
         expect(cache[0]).toEqual([3, [1, 1], 0]);
@@ -420,6 +421,7 @@ describe('Diagram Recorder', () => {
         recorder.recordEvent('cursorMove', [1, 1]);
         global.performance.now = () => 14000;
         recorder.recordEvent('cursorMove', [2, 2]);
+        recorder.stopRecording();
         const cursorMoveCache = recorder.eventsCache.cursorMove.list;
         expect(cursorMoveCache[0]).toEqual([3, [1, 1], 0]);
         expect(cursorMoveCache[1]).toEqual([4, [2, 2], 0]);
@@ -436,6 +438,7 @@ describe('Diagram Recorder', () => {
         recorder.recordEvent('touchDown', [0.5, 0.5]);
         global.performance.now = () => 13000;
         recorder.recordEvent('cursorMove', [1, 1]);
+        recorder.stopRecording();
         expect(recorder.eventsCache.touchDown).toBe(undefined);
         const cursorMoveCache = recorder.eventsCache.cursorMove.list;
         expect(cursorMoveCache[0]).toEqual([3, [1, 1], 0]);
@@ -1421,9 +1424,10 @@ describe('Diagram Recorder', () => {
       expect(line.getPosition().x).toBe(1);
       expect(line.getPosition().y).toBe(3);
     });
-    test('diagram Simple as stringified object', () => {
+    test.only('diagram Simple as stringified object', () => {
       line.setPosition(0, 0);
       global.performance.now = () => 10000;
+      console.log(recorder.states)
       recorder.startRecording();
 
       line.setPosition(0, 1);
