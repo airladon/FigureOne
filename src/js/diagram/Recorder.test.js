@@ -26,6 +26,7 @@ describe('Diagram Recorder', () => {
   let diagram;
   let recorder;
   let events;
+  let cursor;
   beforeEach(() => {
     jest.useFakeTimers();
     diagram = makeDiagram();
@@ -33,16 +34,28 @@ describe('Diagram Recorder', () => {
     recorder.reset();
     recorder.stateTimeStep = 1;
     events = [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9], [10]];
-    diagram.addElement({
-      name: 'a',
-      method: 'polygon',
-      options: {
-        color: [1, 0, 0, 1],
-        radius: 1,
-        width: 0.1,
+    diagram.addElements([
+      {
+        name: 'a',
+        method: 'polygon',
+        options: {
+          color: [1, 0, 0, 1],
+          radius: 1,
+          width: 0.1,
+        },
       },
-    });
+      {
+        name: 'cursor',
+        method: 'shapes.cursor',
+        options: {
+          width: 0.01,
+          color: [0, 1, 0, 1],
+          radius: 0.1,
+        },
+      },
+    ]);
     diagram.initialize();
+    cursor = diagram.getElement('cursor');
   });
   describe('Find Index', () => {
     describe('Next', () => {
@@ -218,11 +231,9 @@ describe('Diagram Recorder', () => {
     describe('Get Cursor State', () => {
       // let cursorEvents;
       beforeEach(() => {
-        recorder.addEventType('showCurosr', () => {}, true);
+        recorder.addEventType('cursor', () => {}, true);
         recorder.addEventType('cursorMove', () => {}, true);
-        recorder.addEventType('touchDown', () => {}, true);
-        recorder.addEventType('touchUp', () => {}, true);
-        recorder.addEventType('hideCursor', () => {}, true);
+        recorder.addEventType('touch', () => {}, true);
         recorder.addEventType('doNothing', () => {}, true);
         global.performance.now = () => 0;
         recorder.startRecording();
@@ -233,7 +244,7 @@ describe('Diagram Recorder', () => {
         global.performance.now = () => 3000;
         recorder.recordEvent('cursorMove', [2, 2]);
         global.performance.now = () => 4000;
-        recorder.recordEvent('touch', 'down', [3, 3]);
+        recorder.recordEvent('touch', ['down', 3, 3]);
         global.performance.now = () => 5000;
         recorder.recordEvent('cursorMove', [4, 4]);
         global.performance.now = () => 6000;
@@ -245,70 +256,68 @@ describe('Diagram Recorder', () => {
         global.performance.now = () => 9000;
         recorder.recordEvent('cursorMove', [8, 8]);
         global.performance.now = () => 10000;
-        recorder.recordEvent('cursor', 'hide');
+        recorder.recordEvent('cursor', ['hide']);
         global.performance.now = () => 11000;
         recorder.recordEvent('doNothing');
         recorder.stopRecording();
       });
       test('Negative Index', () => {
-        const result = getCursorState(recorder.events, -1);
-        expect(result).toEqual({
-          show: false, up: true, position: new Point(0, 0),
-        });
+        recorder.seek(-1);
+        expect(cursor.isShown).toBe(false);
       });
       test('Start', () => {
-        const result = getCursorState(recorder.events, 0);
-        expect(result).toEqual({
-          show: false, up: true, position: new Point(0, 0),
-        });
+        recorder.seek(0);
+        expect(cursor.isShown).toBe(false);
       });
       test('On Show', () => {
-        const result = getCursorState(recorder.events, 1);
-        expect(result).toEqual({
-          show: true, up: true, position: new Point(0, 0),
-        });
+        recorder.seek(1);
+        expect(cursor.isShown).toBe(true);
+        expect(cursor._up.isShown).toBe(true);
+        expect(cursor._down.isShown).toBe(false);
+        expect(cursor.getPosition()).toEqual(new Point(0, 0));
       });
       test('Between Show and Down', () => {
-        const result = getCursorState(recorder.events, 2);
-        expect(result).toEqual({
-          show: true, up: true, position: new Point(1, 1),
-        });
+        recorder.seek(2);
+        expect(cursor.isShown).toBe(true);
+        expect(cursor._up.isShown).toBe(true);
+        expect(cursor._down.isShown).toBe(false);
+        expect(cursor.getPosition()).toEqual(new Point(1, 1));
       });
       test('On Down', () => {
-        const result = getCursorState(recorder.events, 4);
-        expect(result).toEqual({
-          show: true, up: false, position: new Point(3, 3),
-        });
+        recorder.seek(4);
+        expect(cursor.isShown).toBe(true);
+        expect(cursor._up.isShown).toBe(false);
+        expect(cursor._down.isShown).toBe(true);
+        expect(cursor.getPosition()).toEqual(new Point(3, 3));
       });
       test('Between Down and Up', () => {
-        const result = getCursorState(recorder.events, 5);
-        expect(result).toEqual({
-          show: true, up: false, position: new Point(4, 4),
-        });
+        recorder.seek(5);
+        expect(cursor.isShown).toBe(true);
+        expect(cursor._up.isShown).toBe(false);
+        expect(cursor._down.isShown).toBe(true);
+        expect(cursor.getPosition()).toEqual(new Point(4, 4));
       });
       test('On Up', () => {
-        const result = getCursorState(recorder.events, 7);
-        expect(result).toEqual({
-          show: true, up: true, position: new Point(5, 5),
-        });
+        recorder.seek(7);
+        expect(cursor.isShown).toBe(true);
+        expect(cursor._up.isShown).toBe(true);
+        expect(cursor._down.isShown).toBe(false);
+        expect(cursor.getPosition()).toEqual(new Point(5, 5));
       });
       test('Between up and hide', () => {
-        const result = getCursorState(recorder.events, 8);
-        expect(result).toEqual({
-          show: true, up: true, position: new Point(7, 7),
-        });
+        recorder.seek(8);
+        expect(cursor.isShown).toBe(true);
+        expect(cursor._up.isShown).toBe(true);
+        expect(cursor._down.isShown).toBe(false);
+        expect(cursor.getPosition()).toEqual(new Point(7, 7));
       });
       test('On hide', () => {
-        const result = getCursorState(recorder.events, 10);
-        expect(result).toEqual({
-          show: false, up: true, position: new Point(8, 8),
-        });
+        recorder.seek(10);
+        expect(cursor.isShown).toBe(false);
       });
       test('After hide', () => {
-        const result = getCursorState(recorder.events, 11);
-        expect(result).toEqual({
-          show: false, up: true, position: new Point(8, 8),
-        });
+        recorder.seek(11);
+        expect(cursor.isShown).toBe(false);
       });
     });
     describe('Get index of earliest time', () => {
