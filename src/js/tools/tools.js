@@ -974,87 +974,21 @@ class ObjectTracker {
   }
 }
 
-// function diffToObj(diff: Object, obj: object) {
-//   const { added, diff, removed } = diff;
-
-// }
-
-// function addedOrRemovedToObj(addedOrRemoved: Object) {
-//   const obj = {};
-//   Object.keys(addedOrRemoved).forEach((key) => {
-//     const path = key.split('.').filter(p => p.length > 0);
-//     const value = addedOrRemoved[key];
-//     updateObjFromPath(path, obj, value);
-//   });
-//   return obj;
-// }
-
-// function objDiffOnly(val1: any, val2: any) {
-//   if (
-//     typeof val1 === 'string'
-//     || typeof val1 === 'number'
-//     || typeof val1 === 'boolean'
-//     || val1 == null
-//     || typeof val1 === 'function'
-//   ) {
-//     if (val1 === val2) {
-//       return true;
-//     }
-//     return false;
-//   }
-//   if (Array.isArray(val1)) {
-//     if (!Array.isArray(val2)) {
-//       return false;
-//     }
-//     if (val1.length !== val2.length) {
-//       return false;
-//     }
-//     return val1.map((v, index) => objDiffOnly(v, val2[index]));
-//   }
-//   const diffObj = {};
-//   Object.keys(val1).forEach((key) => {
-//     const diff = objDiffOnly(val1[key], val2[key]);
-//     diffObj[key] = diff;
-//   });
-//   return diffObj;
-// }
-
-// function objDiff(obj1: Object, obj2: Object) {
-//   const diff = objDiffOnly(obj1, obj2);
-//   const summarizedDiff = {};
-//   Object.keys(diff).forEach((key) => {
-//     const valueDiff = diff[key];
-//     if (typeof valueDiff === 'boolean') {
-//       if (valueDiff === false) {
-//         summarizedDiff[key] = false;
-//       }
-//     } else if (Array.isArray(valueDiff)) {
-
-//     }
-//   });
-// }
-
-// // diff of obj2 relative to obj1
-// function objDiff(obj1, obj2) {
-//   const added = {};
-//   const diff = {};
-//   const removed = {};
-//   Object.keys(obj1).forEach((key) => {
-//     const value1 = obj1[key];
-//     const value2 = obj2[key];
-//     if (value2 === undefined) {
-//       removed[key] = obj1[key];
-//     }
-//     if (
-//       typeof value1 === 'string'
-//       || typeof value1 === 'boolean'
-//       || typeof value1 === 'number'
-//       || typeof value1 === null,
-//     ) {
-//       if ()
-//     }
-//   });
-// }
+function download(filename: string, text: string) {
+  const element = document.createElement('a');
+  element.setAttribute(
+    'href',
+    `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`,
+  );
+  element.setAttribute('download', filename);
+  element.style.display = 'none';
+  const { body } = document;
+  if (body != null) {
+    body.appendChild(element);
+    element.click();
+    body.removeChild(element);
+  }
+}
 
 export {
   diffPathsToObj, diffObjToPaths,
@@ -1067,5 +1001,6 @@ export {
   objectToPaths, getObjectDiff, updateObjFromPath, pathsToObj,
   UniqueMap, compressObject, refAndDiffToObject, uncompressObject,
   unminify, minify, ObjectTracker,
+  download,
 };
 
