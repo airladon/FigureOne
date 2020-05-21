@@ -1,9 +1,9 @@
 import {
   Point,
 } from '../tools/g2';
-// import {
-//   round,
-// } from '../tools/math';
+import {
+  round,
+} from '../tools/math';
 import * as tools from '../tools/tools';
 import { Transform } from '../tools/g2';
 import makeDiagram from '../__mocks__/makeDiagram';
@@ -24,6 +24,9 @@ describe('Diagram Recorder', () => {
   let recorder;
   let events;
   let cursor;
+  let timeStep;
+  let initialTime;
+  let duration;
   beforeEach(() => {
     jest.useFakeTimers();
     diagram = makeDiagram();
@@ -53,6 +56,16 @@ describe('Diagram Recorder', () => {
     ]);
     diagram.initialize();
     cursor = diagram.getElement('cursor');
+
+    duration = 0;
+    initialTime = 1;
+
+    timeStep = (deltaTimeInSeconds) => {
+      const newNow = (duration + deltaTimeInSeconds + initialTime) * 1000;
+      global.performance.now = () => newNow;
+      jest.advanceTimersByTime((deltaTimeInSeconds * 1000));
+      duration += deltaTimeInSeconds;
+    };
   });
   describe('Find Index', () => {
     describe('Next', () => {
@@ -464,11 +477,12 @@ describe('Diagram Recorder', () => {
         recorder.addEventType('cursorMove', () => {}, true);
 
         // Starting at 10 seconds global time
-        global.performance.now = () => 10000;
+        initialTime = 10;
+        timeStep(0);
         recorder.startRecording(2);
-        global.performance.now = () => 13000;
+        timeStep(3);
         recorder.recordEvent('cursorMove', [1, 1]);
-        global.performance.now = () => 14000;
+        timeStep(1);
         recorder.recordEvent('cursorMove', [2, 2]);
         recorder.stopRecording();
         const startTime = recorder.getCacheStartTime();
@@ -504,58 +518,81 @@ describe('Diagram Recorder', () => {
           '.stateTime': 14,
         });
       });
-      test.only('New states from 0 to beyond end', () => {
+      // only
+      test('New states from 0 to beyond end', () => {
         const { a } = diagram.elements.elements;
-        global.performance.now = () => 10000;
+        initialTime = 10;
+        timeStep(0);
         a.setRotation(0);
         recorder.startRecording();
-        global.performance.now = () => 13000;
         a.setRotation(1);
-        recorder.recordCurrentState();
-        global.performance.now = () => 14000;
+        timeStep(1);
+        timeStep(1);
         a.setRotation(2);
-        recorder.recordCurrentState();
+        timeStep(1);
         recorder.stopRecording();
 
         expect(recorder.states.diffs[0]).toEqual([0, '__base', {}, 0]);
-        expect(recorder.states.diffs[1][0]).toBe(3);
+        expect(recorder.states.diffs[1][0]).toBe(1);
         expect(recorder.states.diffs[1][2].diff).toEqual({
           '.elements.elements.a.transform.state[2].state[1]': 1,
+          '.stateTime': 11,
+        });
+        expect(recorder.states.diffs[2][0]).toBe(2);
+        expect(recorder.states.diffs[2][2].diff).toEqual({
+          '.elements.elements.a.transform.state[2].state[1]': 1,
+          '.stateTime': 12,
+        });
+        expect(recorder.states.diffs[3][0]).toBe(3);
+        expect(recorder.states.diffs[3][2].diff).toEqual({
+          '.elements.elements.a.transform.state[2].state[1]': 2,
           '.stateTime': 13,
         });
-        expect(recorder.states.diffs[2][0]).toBe(4);
-        expect(recorder.states.diffs[2][2].diff).toEqual({
-          '.elements.elements.a.transform.state[2].state[1]': 2,
-          '.stateTime': 14,
-        });
+        expect(recorder.states.diffs).toHaveLength(4);
 
-        global.performance.now = () => 20000;
-        a.setRotation(0.5);
+
+        initialTime = 20;
+        duration = 0;
+        // global.performance.now = () => 20000;
+        timeStep(0);
         recorder.startRecording();
-        global.performance.now = () => 24000;
+        a.setRotation(0.5);
+        timeStep(1);
         a.setRotation(1.5);
-        recorder.recordCurrentState();
-        global.performance.now = () => 25000;
+        timeStep(1);
+        timeStep(1);
         a.setRotation(2.5);
-        recorder.recordCurrentState();
+        timeStep(1);
+        // recorder.recordCurrentState();
         recorder.stopRecording();
 
         expect(recorder.states.diffs[0][0]).toBe(0);
         expect(recorder.states.diffs[0][2].diff).toEqual({
-          '.elements.elements.a.transform.state[2].state[1]': 0.5,
+          // '.elements.elements.a.transform.state[2].state[1]': 0.5,
           '.stateTime': 20,
         });
 
-        expect(recorder.states.diffs[1][0]).toBe(4);
+        expect(recorder.states.diffs[1][0]).toBe(1);
         expect(recorder.states.diffs[1][2].diff).toEqual({
+          '.elements.elements.a.transform.state[2].state[1]': 0.5,
+          '.stateTime': 21,
+        });
+        expect(recorder.states.diffs[2][0]).toBe(2);
+        expect(recorder.states.diffs[2][2].diff).toEqual({
           '.elements.elements.a.transform.state[2].state[1]': 1.5,
+          '.stateTime': 22,
+        });
+        expect(recorder.states.diffs[3][0]).toBe(3);
+        expect(recorder.states.diffs[3][2].diff).toEqual({
+          '.elements.elements.a.transform.state[2].state[1]': 1.5,
+          '.stateTime': 23,
+        });
+        expect(recorder.states.diffs[4][0]).toBe(4);
+        expect(recorder.states.diffs[4][2].diff).toEqual({
+          '.elements.elements.a.transform.state[2].state[1]': 2.5,
           '.stateTime': 24,
         });
-        expect(recorder.states.diffs[2][0]).toBe(5);
-        expect(recorder.states.diffs[2][2].diff).toEqual({
-          '.elements.elements.a.transform.state[2].state[1]': 2.5,
-          '.stateTime': 25,
-        });
+        expect(recorder.states.diffs).toHaveLength(5);
       });
       test('New states from 0 to before end', () => {
         const { a } = diagram.elements.elements;
@@ -571,8 +608,8 @@ describe('Diagram Recorder', () => {
         recorder.stopRecording();
 
         global.performance.now = () => 20000;
-        a.setRotation(0.5);
         recorder.startRecording(0);
+        a.setRotation(0.5);
         global.performance.now = () => 20500;
         a.setRotation(1.5);
         recorder.recordCurrentState();
@@ -583,7 +620,7 @@ describe('Diagram Recorder', () => {
 
         expect(recorder.states.diffs[0][0]).toBe(0);
         expect(recorder.states.diffs[0][2].diff).toEqual({
-          '.elements.elements.a.transform.state[2].state[1]': 0.5,
+          // '.elements.elements.a.transform.state[2].state[1]': 0.5,
           '.stateTime': 20,
         });
 
@@ -617,8 +654,8 @@ describe('Diagram Recorder', () => {
         recorder.stopRecording();
 
         global.performance.now = () => 20000;
-        a.setRotation(0.5);
         recorder.startRecording(0.5);
+        // a.setRotation(0.5);
         global.performance.now = () => 20500;
         a.setRotation(1.5);
         recorder.recordCurrentState();
@@ -631,7 +668,7 @@ describe('Diagram Recorder', () => {
 
         expect(recorder.states.diffs[1][0]).toBe(0.5);
         expect(recorder.states.diffs[1][2].diff).toEqual({
-          '.elements.elements.a.transform.state[2].state[1]': 0.5,
+          // '.elements.elements.a.transform.state[2].state[1]': 0.5,
           '.stateTime': 20,
         });
         expect(recorder.states.diffs[2][0]).toBe(1);
@@ -664,7 +701,7 @@ describe('Diagram Recorder', () => {
         recorder.stopRecording();
 
         global.performance.now = () => 20000;
-        a.setRotation(0.5);
+        // a.setRotation(0.5);
         recorder.startRecording(0.5);
         global.performance.now = () => 20500;
         a.setRotation(1.5);
@@ -678,7 +715,7 @@ describe('Diagram Recorder', () => {
 
         expect(recorder.states.diffs[1][0]).toBe(0.5);
         expect(recorder.states.diffs[1][2].diff).toEqual({
-          '.elements.elements.a.transform.state[2].state[1]': 0.5,
+          // '.elements.elements.a.transform.state[2].state[1]': 0.5,
           '.stateTime': 20,
         });
         expect(recorder.states.diffs[2][0]).toBe(1);
@@ -919,6 +956,7 @@ describe('Diagram Recorder', () => {
         '__base',
         {
           diff: {
+            '.elements.elements.cursor.isShown': true,
             '.elements.elements.line.transform.state[3].state[2]': 1,
             '.stateTime': 11,
           },
@@ -1726,20 +1764,10 @@ describe('Diagram Recorder', () => {
     });
   });
   describe('General Record and Playback', () => {
-    let duration;
-    let timeStep;
     let check;
     beforeEach(() => {
       recorder.stateTimeStep = 2;
-      duration = 0;
-      const initialTime = 1000;
-
-      timeStep = (delta) => {
-        const newNow = duration + delta + initialTime;
-        global.performance.now = () => newNow;
-        jest.advanceTimersByTime(delta);
-        duration += delta;
-      };
+      // duration = 0;
       cursor = diagram.getElement('cursor');
     });
     describe('Record', () => {
@@ -1748,36 +1776,36 @@ describe('Diagram Recorder', () => {
         expect(recorder.duration).toBe(0);
         recorder.startRecording();
         expect(recorder.getCurrentTime()).toBe(0);
-        timeStep(1000);
+        timeStep(1);
         expect(recorder.getCurrentTime()).toBe(1);
         recorder.recordEvent('cursor', ['show', 0, 0]);   // 1
         expect(recorder.duration).toBe(1);
-        timeStep(1000);
+        timeStep(1);
         recorder.recordEvent('cursorMove', [2, 2]);       // 2
         expect(recorder.duration).toBe(2);
-        timeStep(1000);
+        timeStep(1);
         recorder.recordEvent('touch', ['down', 3, 3]);    // 3
         expect(recorder.duration).toBe(3);
-        timeStep(1000);
+        timeStep(1);
         recorder.recordEvent('cursorMove', [4, 4]);       // 4
         expect(recorder.duration).toBe(4);
-        timeStep(1000);
+        timeStep(1);
         recorder.recordEvent('cursorMove', [5, 5]);       // 5
         expect(recorder.duration).toBe(5);
-        timeStep(1000);
+        timeStep(1);
         recorder.recordEvent('touch', 'up');              // 6
         expect(recorder.duration).toBe(6);
-        timeStep(1000);
+        timeStep(1);
         recorder.recordEvent('cursorMove', [7, 7]);       // 7
         expect(recorder.duration).toBe(7);
-        timeStep(1000);
+        timeStep(1);
         recorder.recordEvent('cursorMove', [8, 8]);       // 8
         expect(recorder.duration).toBe(8);
-        timeStep(1000);
+        timeStep(1);
         expect(recorder.getCurrentTime()).toBe(9);
         recorder.recordEvent('cursor', ['hide']);         // 9
         expect(recorder.duration).toBe(9);
-        timeStep(3000);
+        timeStep(3);
         recorder.stopRecording();                         // 12
         expect(recorder.getCurrentTime()).toBe(12);
         expect(recorder.duration).toBe(12);
@@ -1787,25 +1815,25 @@ describe('Diagram Recorder', () => {
       beforeEach(() => {
         timeStep(0);
         recorder.startRecording();
-        timeStep(1000);
+        timeStep(1);
         recorder.recordEvent('cursor', ['show', 1, 1]);   // 1
-        timeStep(1000);
+        timeStep(1);
         recorder.recordEvent('cursorMove', [2, 2]);       // 2
-        timeStep(1000);
+        timeStep(1);
         recorder.recordEvent('touch', ['down', 3, 3]);    // 3
-        timeStep(1000);
+        timeStep(1);
         recorder.recordEvent('cursorMove', [4, 4]);       // 4
-        timeStep(1000);
+        timeStep(1);
         recorder.recordEvent('cursorMove', [5, 5]);       // 5
-        timeStep(1000);
+        timeStep(1);
         recorder.recordEvent('touch', 'up');              // 6
-        timeStep(1000);
+        timeStep(1);
         recorder.recordEvent('cursorMove', [7, 7]);       // 7
-        timeStep(1000);
+        timeStep(1);
         recorder.recordEvent('cursorMove', [8, 8]);       // 8
-        timeStep(1000);
+        timeStep(1);
         recorder.recordEvent('cursor', ['hide']);         // 9
-        timeStep(3000);
+        timeStep(3);
         recorder.stopRecording();                         // 12
 
         check = (isShown, up, down, x, y, currentTime) => {
@@ -1819,42 +1847,41 @@ describe('Diagram Recorder', () => {
           if (x != null && y != null) {
             expect(cursor.getPosition()).toEqual(new Point(x, y));
           }
-          expect(currentTime).toEqual(recorder.getCurrentTime());
+          expect(round(recorder.getCurrentTime(), 3)).toEqual(currentTime);
         };
       });
       test('Playback from 0', () => {
         expect(recorder.states.diffs).toHaveLength(7);
         expect(recorder.states.diffs[6][0]).toBe(12);
-
         expect(recorder.state).toBe('idle');
-        timeStep(10000);
+        timeStep(0.01);
         recorder.startPlayback(0);
         expect(recorder.state).toBe('playing');
         check(false, null, null, 0, 0, 0);
-        timeStep(1000);
+        timeStep(1);
         check(true, true, false, 1, 1, 1);
-        timeStep(1000);
+        timeStep(1);
         check(true, true, false, 2, 2, 2);
-        timeStep(1000);
+        timeStep(1);
         check(true, false, true, 3, 3, 3);
-        timeStep(1000);
+        timeStep(1);
         check(true, false, true, 4, 4, 4);
-        timeStep(1000);
+        timeStep(1);
         check(true, false, true, 5, 5, 5);
-        timeStep(1000);
+        timeStep(1);
         check(true, true, false, null, null, 6);
-        timeStep(1000);
+        timeStep(1);
         check(true, true, false, 7, 7, 7);
-        timeStep(1000);
+        timeStep(1);
         check(true, true, false, 8, 8, 8);
-        timeStep(1000);
+        timeStep(1);
         check(false, null, null, null, null, 9);
 
         expect(recorder.state).toBe('playing');
-        timeStep(1000);
+        timeStep(1);
         check(false, null, null, null, null, 10);
         expect(recorder.state).toBe('playing');
-        timeStep(2000);
+        timeStep(2);
         check(false, null, null, null, null, 12);
         expect(recorder.state).toBe('idle');
       });
@@ -1862,29 +1889,29 @@ describe('Diagram Recorder', () => {
         recorder.startPlayback(0, ['cursor', 'touch']);
         expect(recorder.state).toBe('playing');
         check(false, null, null, 0, 0, 0);
-        timeStep(1000);
+        timeStep(1);
         check(true, true, false, 1, 1, 1);
-        timeStep(1000);
+        timeStep(1);
         check(true, true, false, 1, 1, 2);
-        timeStep(1000);
+        timeStep(1);
         check(true, false, true, 3, 3, 3);
-        timeStep(1000);
+        timeStep(1);
         check(true, false, true, 3, 3, 4);
-        timeStep(1000);
+        timeStep(1);
         check(true, false, true, 3, 3, 5);
-        timeStep(1000);
+        timeStep(1);
         check(true, true, false, 3, 3, 6);
-        timeStep(1000);
+        timeStep(1);
         check(true, true, false, 3, 3, 7);
-        timeStep(1000);
+        timeStep(1);
         check(true, true, false, 3, 3, 8);
-        timeStep(1000);
+        timeStep(1);
         check(false, null, null, null, null, 9);
         expect(recorder.state).toBe('playing');
-        timeStep(1000);
+        timeStep(1);
         check(false, null, null, null, null, 10);
         expect(recorder.state).toBe('playing');
-        timeStep(2000);
+        timeStep(2);
         check(false, null, null, null, null, 12);
         expect(recorder.state).toBe('idle');
       });
@@ -1893,28 +1920,28 @@ describe('Diagram Recorder', () => {
         expect(recorder.states.diffs[6][0]).toBe(12);
 
         expect(recorder.state).toBe('idle');
-        timeStep(10000);
+        timeStep(0.01);
         recorder.startPlayback(3.5);            // Diff start (comp last test)
         expect(recorder.state).toBe('playing'); //
         check(true, false, true, 3, 3, 3.5);    //
-        timeStep(500);                          // Diff end
+        timeStep(0.5);                          // Diff end
         check(true, false, true, 4, 4, 4);
-        timeStep(1000);
+        timeStep(1);
         check(true, false, true, 5, 5, 5);
-        timeStep(1000);
+        timeStep(1);
         check(true, true, false, null, null, 6);
-        timeStep(1000);
+        timeStep(1);
         check(true, true, false, 7, 7, 7);
-        timeStep(1000);
+        timeStep(1);
         check(true, true, false, 8, 8, 8);
-        timeStep(1000);
+        timeStep(1);
         check(false, null, null, null, null, 9);
 
         expect(recorder.state).toBe('playing');
-        timeStep(1000);
+        timeStep(1);
         check(false, null, null, null, null, 10);
         expect(recorder.state).toBe('playing');
-        timeStep(2000);
+        timeStep(2);
         check(false, null, null, null, null, 12);
         expect(recorder.state).toBe('idle');
       });
