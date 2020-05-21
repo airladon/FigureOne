@@ -504,7 +504,7 @@ describe('Diagram Recorder', () => {
           '.stateTime': 14,
         });
       });
-      test('New states from 0 to beyond end', () => {
+      test.only('New states from 0 to beyond end', () => {
         const { a } = diagram.elements.elements;
         global.performance.now = () => 10000;
         a.setRotation(0);
@@ -1889,28 +1889,6 @@ describe('Diagram Recorder', () => {
         expect(recorder.state).toBe('idle');
       });
       test('Playback from after 0', () => {
-        // timeStep(0);
-        // recorder.startRecording();
-        // timeStep(1000);
-        // recorder.recordEvent('cursor', ['show', 1, 1]);   // 1
-        // timeStep(1000);
-        // recorder.recordEvent('cursorMove', [2, 2]);       // 2
-        // timeStep(1000);
-        // recorder.recordEvent('touch', ['down', 3, 3]);    // 3
-        // timeStep(1000);
-        // recorder.recordEvent('cursorMove', [4, 4]);       // 4
-        // timeStep(1000);
-        // recorder.recordEvent('cursorMove', [5, 5]);       // 5
-        // timeStep(1000);
-        // recorder.recordEvent('touch', 'up');              // 6
-        // timeStep(1000);
-        // recorder.recordEvent('cursorMove', [7, 7]);       // 7
-        // timeStep(1000);
-        // recorder.recordEvent('cursorMove', [8, 8]);       // 8
-        // timeStep(1000);
-        // recorder.recordEvent('cursor', ['hide']);         // 9
-        // timeStep(3000);
-        // recorder.stopRecording();                         // 12
         expect(recorder.states.diffs).toHaveLength(7);
         expect(recorder.states.diffs[6][0]).toBe(12);
 
