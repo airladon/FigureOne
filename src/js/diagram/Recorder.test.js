@@ -740,70 +740,94 @@ describe('Diagram Recorder', () => {
             '.stateTime': 15,
           },
         }, 0]);
-
-        // expect(recorder.states.diffs[1][0]).toBe(1);
-        // expect(recorder.states.diffs[1][2].diff).toEqual({
-        //   // '.elements.elements.a.transform.state[2].state[1]': 0.5,
-        //   '.stateTime': 11,
-        // });
-        // expect(recorder.states.diffs[2][0]).toBe(1);
-        // expect(recorder.states.diffs[2][2].diff).toEqual({
-        //   '.elements.elements.a.transform.state[2].state[1]': 1.5,
-        //   '.stateTime': 20.5,
-        // });
-        // expect(recorder.states.diffs[3][0]).toBe(3.5);
-        // expect(recorder.states.diffs[3][2].diff).toEqual({
-        //   '.elements.elements.a.transform.state[2].state[1]': 2.5,
-        //   '.stateTime': 23,
-        // });
-        // expect(recorder.states.diffs[4][0]).toBe(4);
-        // expect(recorder.states.diffs[4][2].diff).toEqual({
-        //   '.elements.elements.a.transform.state[2].state[1]': 2,
-        //   '.stateTime': 14,
-        // });
       });
-      test('New states from after 0 to beyond end', () => {
+      test.only('New states from after 0 to beyond end', () => {
         const { a } = diagram.elements.elements;
-        global.performance.now = () => 10000;
+        recorder.stateTimeStep = 1;
+        initialTime = 10;
+        duration = 0;
+        timeStep(0);
         a.setRotation(0);
         recorder.startRecording();
-        global.performance.now = () => 13000;
-        a.setRotation(1);
-        recorder.recordCurrentState();
-        global.performance.now = () => 14000;
-        a.setRotation(2);
-        recorder.recordCurrentState();
+        timeStep(1);
+        timeStep(1);
+        timeStep(1);
+        a.setRotation(1);                 // 4
+        timeStep(1);
+        a.setRotation(2);                 // 5
+        timeStep(1);
         recorder.stopRecording();
 
-        global.performance.now = () => 20000;
-        // a.setRotation(0.5);
+        initialTime = 20;
+        duration = 0;
+        timeStep(0);
         recorder.startRecording(0.5);
-        global.performance.now = () => 20500;
-        a.setRotation(1.5);
-        recorder.recordCurrentState();
-        global.performance.now = () => 26000;
-        a.setRotation(2.5);
-        recorder.recordCurrentState();
+        timeStep(0.5);
+        timeStep(1);
+        a.setRotation(5);   // 3
+        timeStep(1);
+        timeStep(1);
+        timeStep(1);
+        a.setRotation(1.6);   // 6
+        timeStep(1);
         recorder.stopRecording();
+        // global.performance.now = () => 10000;
+        // a.setRotation(0);
+        // recorder.startRecording();
+        // global.performance.now = () => 13000;
+        // a.setRotation(1);
+        // recorder.recordCurrentState();
+        // global.performance.now = () => 14000;
+        // a.setRotation(2);
+        // recorder.recordCurrentState();
+        // recorder.stopRecording();
+
+        // global.performance.now = () => 20000;
+        // // a.setRotation(0.5);
+        // recorder.startRecording(0.5);
+        // global.performance.now = () => 20500;
+        // a.setRotation(1.5);
+        // recorder.recordCurrentState();
+        // global.performance.now = () => 26000;
+        // a.setRotation(2.5);
+        // recorder.recordCurrentState();
+        // recorder.stopRecording();
 
         expect(recorder.states.diffs[0]).toEqual([0, '__base', {}, 0]);
-
-        expect(recorder.states.diffs[1][0]).toBe(0.5);
-        expect(recorder.states.diffs[1][2].diff).toEqual({
-          // '.elements.elements.a.transform.state[2].state[1]': 0.5,
-          '.stateTime': 20,
-        });
-        expect(recorder.states.diffs[2][0]).toBe(1);
-        expect(recorder.states.diffs[2][2].diff).toEqual({
-          '.elements.elements.a.transform.state[2].state[1]': 1.5,
-          '.stateTime': 20.5,
-        });
-        expect(recorder.states.diffs[3][0]).toBe(6.5);
-        expect(recorder.states.diffs[3][2].diff).toEqual({
-          '.elements.elements.a.transform.state[2].state[1]': 2.5,
-          '.stateTime': 26,
-        });
-        expect(recorder.states.diffs).toHaveLength(4);
+        expect(recorder.states.diffs[1]).toEqual([1, '__base', {
+          diff: {
+            '.stateTime': 20.5,
+          },
+        }, 0]);
+        expect(recorder.states.diffs[2]).toEqual([2, '__base', {
+          diff: {
+            '.stateTime': 21.5,
+          },
+        }, 0]);
+        expect(recorder.states.diffs[3]).toEqual([3, '__base', {
+          diff: {
+            '.elements.elements.a.transform.state[2].state[1]': 5,
+            '.stateTime': 22.5,
+          },
+        }, 0]);
+        expect(recorder.states.diffs[4]).toEqual([4, '__base', {
+          diff: {
+            '.elements.elements.a.transform.state[2].state[1]': 5,
+            '.stateTime': 23.5,
+          },
+        }, 0]);
+        expect(recorder.states.diffs[5]).toEqual([5, '__base', {
+          diff: {
+            '.elements.elements.a.transform.state[2].state[1]': 5,
+            '.stateTime': 24.5,
+          },
+        }, 0]);
+        expect(recorder.states.diffs[6]).toEqual([6, '__base', {
+          diff: {
+            '.elements.elements.a.transform.state[2].state[1]': 1.6,
+            '.stateTime': 25.5,
+          },
+        }, 0]);
       });
     });
     describe('Merge Events', () => {
