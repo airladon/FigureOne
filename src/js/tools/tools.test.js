@@ -260,6 +260,24 @@ describe('Generate Unique ID', () => {
     expect(s.length < 17).toBe(true);
   });
 });
+describe('Is Touch Device', () => {
+  test('Simple', () => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation(query => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(), // deprecated
+        removeListener: jest.fn(), // deprecated
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })),
+    });
+    expect(tools.isTouchDevice()).toBe(false);
+  });
+});
 describe('Duplicate Values', () => {
   test('number', () => {
     const dup = tools.duplicate(3);
