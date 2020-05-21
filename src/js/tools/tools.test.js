@@ -246,10 +246,28 @@ describe('Extract From Collection', () => {
     });
   });
 });
+describe('Generate Unique ID', () => {
+  test('With seed', () => {
+    const s = tools.generateUniqueId('test');
+    expect(s.startsWith('test')).toBe(true);
+    expect(s.length > 4).toBe(true);
+    expect(s.length < 11).toBe(true);
+  });
+  test('Without seed', () => {
+    const s = tools.generateUniqueId();
+    expect(s.startsWith('id_random_')).toBe(true);
+    expect(s.length > 10).toBe(true);
+    expect(s.length < 17).toBe(true);
+  });
+});
 describe('Duplicate Values', () => {
   test('number', () => {
     const dup = tools.duplicate(3);
     expect(dup).toBe(3);
+  });
+  test('NaN', () => {
+    const dup = tools.duplicate(NaN);
+    expect(dup).toBe(NaN);
   });
   test('string', () => {
     const dup = tools.duplicate('test');
