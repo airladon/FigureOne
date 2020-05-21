@@ -452,7 +452,10 @@ class Recorder {
   // Recording
   // ////////////////////////////////////
   // ////////////////////////////////////
-  startRecording(startTime: number = 0, whilePlaying: Array<string>) {
+  startRecording(fromTime: number = 0, whilePlaying: Array<string> = []) {
+    if (fromTime > 0) {
+      this.setToTime(fromTime);
+    }
     this.states.precision = this.precision;
     this.eventsCache = {};
     // this.slidesCache = [];
@@ -460,11 +463,16 @@ class Recorder {
     this.statesCache.baseReference = duplicate(this.states.baseReference);  // $FlowFixMe
     this.statesCache.references = duplicate(this.states.references);
     this.diagram.unpause();
-    this.setVideoToNowDeltaTime(startTime);
+    this.setVideoToNowDeltaTime(fromTime);
+
     this.state = 'recording';
     this.lastRecordTime = null;
     this.duration = this.calcDuration();
     this.queueRecordState(0);
+    this.eventsToPlay = whilePlaying;
+    // this.initializePlayback(fromTime);
+    this.startEventsPlayback(fromTime);
+    this.startAudioPlayback(fromTime);
   }
 
   getCacheStartTime() {
@@ -711,8 +719,15 @@ class Recorder {
   }
 
   setToTime(time: number) {
+    // if (this.states.diffs.length === 0) {
+    //   return;
+    // }
     this.stateIndex = getPrevIndexForTime(this.states.diffs, time);
-    const [stateTime, , , stateTimeCount] = this.states.diffs[this.stateIndex];
+    let stateTime = 0;
+    let stateTimeCount = 0;
+    if (this.stateIndex !== -1) {
+      [stateTime, , , stateTimeCount] = this.states.diffs[this.stateIndex];
+    }
 
     // For each eventName, if it is to be set on seek, then get the previous
     // index (or multiple indexes if multiple are set for the same time)
@@ -732,12 +747,12 @@ class Recorder {
       for (let i = firstIndex; i <= lastIndex; i += 1) {
         const [eventTime, , timeCount] = event.list[i];
         if (
-          eventTime < stateTime
+          this.stateIndex === -1
+          || eventTime < stateTime
           || (eventTime === stateTime && timeCount < stateTimeCount)
         ) {
           eventsToSetBeforeState.push([eventName, i, eventTime, timeCount]);
-        }
-        if (
+        } else if (
           eventTime > stateTime
           || (eventTime === stateTime && timeCount > stateTimeCount)
         ) {
@@ -767,7 +782,9 @@ class Recorder {
       });
     };
     playEvents(eventsToSetBeforeState);
-    this.setState(this.stateIndex);
+    if (this.stateIndex !== -1) {
+      this.setState(this.stateIndex);
+    }
     playEvents(eventsToSetAfterState);
     if (this.audio) {
       this.audio.currentTime = time;
@@ -881,21 +898,32 @@ class Recorder {
 
     this.state = 'playing';
     this.setVideoToNowDeltaTime(fromTime);
-
-    // this.touchUp();
     this.currentTime = fromTime;
     this.diagram.unpause();
-
     this.setToTime(fromTime);
-
     this.startEventsPlayback(fromTime);
+    this.startAudioPlayback(fromTime);
+    this.diagram.animateNextFrame();
+  }
+
+  // initializePlayback(fromTime: number) {
+  //   this.currentTime = fromTime;
+  //   this.diagram.unpause();
+  //   this.setToTime(fromTime);
+  //   this.startEventsPlayback(fromTime);
+  //   this.startAudioPlayback(fromTime);
+  // }
+
+  startAudioPlayback(fromTime: number) {
     if (this.audio) {
       this.isAudioPlaying = true;
       this.audio.currentTime = fromTime;
       this.audio.play();
       const audioEnded = () => {
         this.isAudioPlaying = false;
-        this.finishPlaying();
+        if (this.state === 'playing') {
+          this.finishPlaying();
+        }
       };
       const { audio } = this;
       if (audio != null) {
@@ -903,8 +931,6 @@ class Recorder {
         audio.addEventListener('ended', audioEnded.bind(this), false);
       }
     }
-
-    this.diagram.animateNextFrame();
   }
 
   startEventsPlayback(fromTime: number) {
@@ -924,7 +950,10 @@ class Recorder {
         this.eventIndex[eventName] = index;
       }
     });
-    this.playbackEvent(this.getNextEvent());
+    const nextEventName = this.getNextEvent();
+    if (this.events[nextEventName] != null) {
+      this.playbackEvent(nextEventName);
+    }
   }
 
   getNextEvent() {
