@@ -1051,11 +1051,11 @@ describe('ObjectTracker', () => {
   test('Add Object', () => {
     const tracker = new tools.ObjectTracker();
     const obj = { a: 1, b: 1 };
-    tracker.addReference(obj);
+    tracker.addReference(obj, 'ref');
 
     const obj1 = { a: 1, b: 2 };
     tracker.add(1, obj1);
-    expect(tracker.diffs[0]).toEqual([1, '__base', { diff: { '.b': 2 } }]);
+    expect(tracker.diffs[0]).toEqual([1, 'ref', { diff: { '.b': 2 } }, 0]);
 
     const getObj = tracker.getFromIndex(0);
     expect(getObj).toEqual({ a: 1, b: 2 });
@@ -1070,7 +1070,7 @@ describe('ObjectTracker', () => {
 
     const obj1 = { a: 1, b: 3, c: 1 };
     tracker.add(1, obj1, 'ref1');
-    expect(tracker.diffs[0]).toEqual([1, 'ref1', { diff: { '.b': 3 } }]);
+    expect(tracker.diffs[0]).toEqual([1, 'ref1', { diff: { '.b': 3 } }, 0]);
 
     const getObj = tracker.getFromIndex(0);
     expect(getObj).toEqual({ a: 1, b: 3, c: 1 });

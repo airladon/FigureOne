@@ -892,6 +892,7 @@ class ObjectTracker {
     this.baseReference = duplicate(obj.baseReference);
     this.precision = obj.precision;
     this.diffs = obj.diffs.map(d => [d[0], d[1], diffObjToPaths(d[2]), d[3]]);
+    this.lastReferenceName = obj.lastReferenceName;
   }
 
   reset() {
