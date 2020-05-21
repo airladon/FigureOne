@@ -1,7 +1,7 @@
 // @flow
 // import type { Transform } from '../tools/g2';
 import { Point } from '../tools/g2';
-// import { round } from '../tools/math';
+import { round } from '../tools/math';
 import {
   duplicate, minify, unminify,
   ObjectTracker, download,
@@ -453,9 +453,11 @@ class Recorder {
   // ////////////////////////////////////
   // ////////////////////////////////////
   startRecording(fromTime: number = 0, whilePlaying: Array<string> = []) {
-    if (fromTime > 0) {
-      this.setToTime(fromTime);
-    }
+    // if (fromTime > 0) {
+    this.state = 'recording';
+    this.setVideoToNowDeltaTime(fromTime);
+    this.setToTime(fromTime);
+    // }
     this.states.precision = this.precision;
     this.eventsCache = {};
     // this.slidesCache = [];
@@ -463,9 +465,7 @@ class Recorder {
     this.statesCache.baseReference = duplicate(this.states.baseReference);  // $FlowFixMe
     this.statesCache.references = duplicate(this.states.references);
     this.diagram.unpause();
-    this.setVideoToNowDeltaTime(fromTime);
 
-    this.state = 'recording';
     this.lastRecordTime = null;
     this.duration = this.calcDuration();
     this.queueRecordState(0);
@@ -588,7 +588,6 @@ class Recorder {
 
   recordState(state: Object) {
     const now = this.now();
-
     if (this.lastRecordTime == null || now > this.lastRecordTime) {
       this.lastRecordTime = now;
       this.lastRecordTimeCount = 0;
@@ -640,16 +639,19 @@ class Recorder {
     const recordAndQueue = () => {
       if (this.state === 'recording') {
         this.recordCurrentState();
-        this.queueRecordState(this.stateTimeStep * 1000);
+        this.queueRecordState(this.stateTimeStep);
       }
     };
-    if (time === 0) {
+    if (round(time, 4) === 0) {
       recordAndQueue();
       return;
     }
+    // if (time < 1) {
+    //   return
+    // }
     this.timeoutID = setTimeout(() => {
       recordAndQueue();
-    }, time);
+    }, round(time * 1000, 0));
   }
 
   save() {
@@ -986,9 +988,9 @@ class Recorder {
     const index = this.eventIndex[eventName];
     const delay = this.events[eventName].list[index][0] - this.getCurrentTime();
 
-    if (delay > 0) {
+    if (delay > 0.0001) {
       this.timeoutID = setTimeout(
-        this.playbackEvent.bind(this, eventName), delay * 1000,
+        this.playbackEvent.bind(this, eventName), round(delay * 1000, 0),
       );
       return;
     }
@@ -1028,10 +1030,10 @@ class Recorder {
     }
 
     const remainingTime = this.duration - this.getCurrentTime();
-    if (remainingTime > 0) {
+    if (remainingTime > 0.0001) {
       this.timeoutID = setTimeout(() => {
         this.finishPlaying();
-      }, remainingTime);
+      }, round(remainingTime * 1000, 0));
       return false;
     }
 
