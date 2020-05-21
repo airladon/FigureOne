@@ -412,6 +412,11 @@ class Recorder {
   // Editing
   // ////////////////////////////////////
   // ////////////////////////////////////
+  // Remove selected events in time range
+  // set all state diffs to be the same in time range
+  clear(startTime: number, stopTime: number, events: ?Array<string> = null) {
+
+  }
   // deleteFromTime(time: number) {
   //   if (time === 0) {
   //     this.reset();
@@ -468,7 +473,7 @@ class Recorder {
 
     this.lastRecordTime = null;
     this.duration = this.calcDuration();
-    this.queueRecordState(0);
+    this.queueRecordState(fromTime % this.stateTimeStep);
     this.eventsToPlay = whilePlaying;
     // this.initializePlayback(fromTime);
     this.startEventsPlayback(fromTime);
