@@ -162,6 +162,8 @@ class Recorder {
     };
   };
 
+  eventsToPlay: Array<string>;
+
   state: 'recording' | 'playing' | 'idle';
   isAudioPlaying: boolean;
   videoToNowDelta: number;     // performance.now() - deltaToNow = video time
@@ -303,7 +305,7 @@ class Recorder {
     this.eventsCache = {};
     this.stateIndex = -1;
     this.eventIndex = {};
-    this.timeoutID = null;
+    this.stopTimeouts();
     this.videoToNowDelta = 0;
     this.state = 'idle';
     this.isAudioPlaying = false;
@@ -312,6 +314,7 @@ class Recorder {
     this.reference = '__base';
     this.lastRecordTimeCount = 0;
     this.lastRecordTime = null;
+    this.eventsToPlay = [];
   }
 
 
@@ -449,7 +452,7 @@ class Recorder {
   // Recording
   // ////////////////////////////////////
   // ////////////////////////////////////
-  startRecording(startTime: number = 0) {
+  startRecording(startTime: number = 0, whilePlaying: Array<string>) {
     this.states.precision = this.precision;
     this.eventsCache = {};
     // this.slidesCache = [];
@@ -865,10 +868,15 @@ class Recorder {
   // Playback
   // ////////////////////////////////////
   // ////////////////////////////////////
-  startPlayback(fromTimeIn: number = 0) {
+  startPlayback(fromTimeIn: number = 0, events: ?Array<string> = null) {
     let fromTime = fromTimeIn;
     if (fromTimeIn === this.duration) {
       fromTime = 0;
+    }
+    if (events == null) {
+      this.eventsToPlay = Object.keys(this.events);
+    } else {
+      this.eventsToPlay = events;
     }
 
     this.state = 'playing';
@@ -900,7 +908,7 @@ class Recorder {
   }
 
   startEventsPlayback(fromTime: number) {
-    Object.keys(this.events).forEach((eventName) => {
+    this.eventsToPlay.forEach((eventName) => {
       if (this.events[eventName].list.length === 0) {
         return;
       }
@@ -923,7 +931,7 @@ class Recorder {
     let nextEventName = '';
     let nextTime = null;
     let nextTimeCount = null;
-    Object.keys(this.events).forEach((eventName) => {
+    this.eventsToPlay.forEach((eventName) => {
       if (
         this.eventIndex[eventName] == null
         || this.eventIndex[eventName] === -1
@@ -972,9 +980,9 @@ class Recorder {
   }
 
   areEventsPlaying() {
-    const eventNames = Object.keys(this.eventIndex)
-    for (let i = 0; i < eventNames.length; i += 1) {
-      const eventName = eventNames[i];
+    // const eventNames = Object.keys(this.eventIndex)
+    for (let i = 0; i < this.eventsToPlay.length; i += 1) {
+      const eventName = this.eventsToPlay[i];
       if (
         this.eventIndex[eventName] < this.events[eventName].list.length
         && this.eventIndex[eventName] > -1
