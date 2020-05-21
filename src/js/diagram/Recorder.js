@@ -1,15 +1,13 @@
 // @flow
 // import type { Transform } from '../tools/g2';
-import { Point, getTransform } from '../tools/g2';
-import { round } from '../tools/math';
+import { Point } from '../tools/g2';
+// import { round } from '../tools/math';
 import {
-  getObjectDiff, UniqueMap,
-  duplicate, refAndDiffToObject,
-  diffPathsToObj, diffObjToPaths, minify, unminify,
-  ObjectTracker,
+  duplicate, minify, unminify,
+  ObjectTracker, download,
 } from '../tools/tools';
 import type { DiagramElement } from './Element';
-import GlobalAnimation from './webgl/GlobalAnimation';
+// import GlobalAnimation from './webgl/GlobalAnimation';
 // Singleton class that contains projects global variables
 
 type TypeStateDiff = [number, string, Object];
@@ -21,23 +19,6 @@ type TypeEvent = [
 ];
 type TypeEvents = Array<TypeEvent>;
 type TypeStateDiffs = Array<TypeStateDiff>;
-
-
-function download(filename: string, text: string) {
-  const element = document.createElement('a');
-  element.setAttribute(
-    'href',
-    `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`,
-  );
-  element.setAttribute('download', filename);
-  element.style.display = 'none';
-  const { body } = document;
-  if (body != null) {
-    body.appendChild(element);
-    element.click();
-    body.removeChild(element);
-  }
-}
 
 function getIndexOfEarliestTime(
   recordedData: TypeEvents | TypeStateDiffs,
@@ -339,7 +320,7 @@ class Recorder {
     isMinified: boolean = true,
   ) { // $FlowFixMe
     const lists = this.decodeEvents(encodedEventsList, isMinified);
-    console.log(lists)
+
     Object.keys(lists).forEach((eventName) => {
       if (this.events[eventName] == null) {
         return;

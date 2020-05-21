@@ -12,15 +12,12 @@ import {
   getPrevIndexForTime,
   getIndexOfEarliestTime,
   getIndexOfLatestTime,
-  getLastUniqueIndeces,
-  getCursorState,
 } from './Recorder';
 
 tools.isTouchDevice = jest.fn();
 
-jest.mock('./Gesture');
-jest.mock('./webgl/webgl');
-jest.mock('./DrawContext2D');
+// jest.mock('./webgl/webgl');
+// jest.mock('./DrawContext2D');
 
 describe('Diagram Recorder', () => {
   let diagram;
@@ -1924,6 +1921,48 @@ describe('Diagram Recorder', () => {
         check(false, null, null, null, null, 12);
         expect(recorder.state).toBe('idle');
       });
+    });
+  });
+  describe('Save File', () => {
+    test('Simple', () => {
+      const original = tools.download;
+      const names = [];
+      const data = [];
+      tools.download = (name, jsonified) => {
+        names.push(name);
+        data.push(jsonified);
+      };
+
+      global.performance.now = () => 0;
+      recorder.startRecording();
+      global.performance.now = () => 100;
+      recorder.recordEvent('cursorMove', [1, 1]);
+      global.performance.now = () => 200;
+      recorder.recordEvent('cursorMove', [2, 2]);
+      recorder.stopRecording();
+
+      const expectedCursorMoveEventsList = [
+        [0.1, [1, 1], 0],
+        [0.2, [2, 2], 0],
+      ];
+      const expectedStates = tools.duplicate(recorder.states);
+
+      expect(recorder.events.cursorMove.list).toEqual(expectedCursorMoveEventsList);
+
+      recorder.save();
+      recorder.reset();
+      expect(recorder.events.cursorMove.list).toEqual([]);
+
+      const [jsonStates, jsonEvents] = data;
+      const encodedStates = JSON.parse(jsonStates);
+      const encodedEvents = JSON.parse(jsonEvents);
+
+      recorder.loadEvents(encodedEvents);
+      recorder.loadStates(encodedStates);
+      expect(recorder.events.cursorMove.list).toEqual(expectedCursorMoveEventsList);
+      expect(recorder.states).toEqual(expectedStates);
+
+      tools.download = original;
     });
   });
 });
