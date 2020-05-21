@@ -116,3 +116,12 @@ When it is time to deploy the build to NPM, exit the container and from the repo
 `./build.sh deploy`
 
 This will start a container, run all linting and tests, and then build and deploy the package.
+
+## Update Packages
+
+To update all packages
+
+```
+npx npm-check-updates -u
+npm install
+```
