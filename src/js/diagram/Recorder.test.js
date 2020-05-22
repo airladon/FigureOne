@@ -1,11 +1,10 @@
 import {
-  Point,
+  Point, Transform,
 } from '../tools/g2';
 import {
   round,
 } from '../tools/math';
 import * as tools from '../tools/tools';
-import { Transform } from '../tools/g2';
 import makeDiagram from '../__mocks__/makeDiagram';
 import {
   getNextIndexForTime,
@@ -32,7 +31,7 @@ describe('Diagram Recorder', () => {
     jest.useFakeTimers();
     diagram = makeDiagram();
     ({ recorder } = diagram);
-    recorder.reset(); 
+    recorder.reset();
     recorder.stateTimeStep = 1;
     events = [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9], [10]];
     diagram.addElements([
@@ -741,7 +740,7 @@ describe('Diagram Recorder', () => {
           },
         }, 0]);
       });
-      test.only('New states from after 0 to beyond end', () => {
+      test('New states from after 0 to beyond end', () => {
         const { a } = diagram.elements.elements;
         recorder.stateTimeStep = 1;
         initialTime = 10;
@@ -2094,7 +2093,7 @@ describe('Diagram Recorder', () => {
       timeStep(1);
       recorder.recordEvent('cursorMove', [3, 3]);
       recorder.stopRecording();
-    })
+    });
     test('Clear after start to end', () => {
       expect(recorder.events.cursorMove.list).toHaveLength(3);
       expect(recorder.states.diffs).toHaveLength(4);
