@@ -577,6 +577,12 @@ class Recorder {
     this.mergeEventsCache();
     this.mergeStatesCache();
     this.duration = this.calcDuration();
+    if (this.duration % 1 > 0) {
+      const lastIndex = this.states.diffs.length - 1;
+      const [, ref, diff] = this.states.diffs[lastIndex];
+      this.states.diffs.push([Math.ceil(this.duration), ref, duplicate(diff), 0]);
+    }
+    this.duration = this.calcDuration();
   }
 
   addEventType(
@@ -646,7 +652,7 @@ class Recorder {
     const recordAndQueue = () => {
       if (this.state === 'recording') {
         this.recordCurrentState();
-        this.queueRecordState(this.stateTimeStep);
+        this.queueRecordState(this.stateTimeStep - this.getCurrentTime() % this.stateTimeStep);
       }
     };
     if (round(time, 4) === 0) {
@@ -674,35 +680,46 @@ class Recorder {
     }
   }
 
-  // show() {
-  //   // const wnd = window.open('about:blank', '', '_blank');
-  //   // // this.slides.forEach((slide) => {
-  //   // //   wnd.document.write(JSON.stringify(slide), '<br>');
-  //   // // });
+  show() {
+    const toJsonHtml = (obj) => {
+      let s = JSON.stringify(obj, null, 2);
+      s = s.replace(/\n/g, '<br>');
+      s = s.replace(/ /g, '&nbsp');
+      return s;
+    };
+    const wnd = window.open('about:blank', '', '_blank');
+    // this.slides.forEach((slide) => {
+    //   wnd.document.write(JSON.stringify(slide), '<br>');
+    // });
 
-  //   // wnd.document.write('<br><br>');
-  //   // wnd.document.write(`// ${'/'.repeat(500)}<br>`);
-  //   // wnd.document.write(`// ${'/'.repeat(500)}<br>`);
-  //   // wnd.document.write('<br><br>');
+    wnd.document.write('<br><br>');
+    wnd.document.write(`// ${'/'.repeat(500)}<br>`);
+    wnd.document.write(`// ${'/'.repeat(500)}<br>`);
+    wnd.document.write('<br><br>');
 
-  //   // Object.keys(this.events).forEach((eventName) => {
-  //   //   const event = this.events[eventName];
-  //   //   const rounded = event.map((e) => {
-  //   //     if (typeof e === 'number') {
-  //   //       return round(e, this.precision);
-  //   //     }
-  //   //     return e;
-  //   //   });
-  //   //   wnd.document.write(JSON.stringify(rounded), '<br>');
-  //   // });
-  //   // wnd.document.write('<br><br>');
-  //   // wnd.document.write(`// ${'/'.repeat(500)}<br>`);
-  //   // wnd.document.write(`// ${'/'.repeat(500)}<br>`);
-  //   // wnd.document.write('<br><br>');
-  //   // this.states.states.forEach((state) => {
-  //   //   wnd.document.write(JSON.stringify(state), '<br>');
-  //   // });
-  // }
+    // Object.keys(this.events).forEach((eventName) => {
+    //   const event = this.events[eventName];
+    //   // const rounded = event.map((e) => {
+    //   //   if (typeof e === 'number') {
+    //   //     return round(e, this.precision);
+    //   //   }
+    //   //   return e;
+    //   // });
+    //   wnd.document.write('<br><br>');
+    //   wnd.document.write(`${eventName}`);
+    //   wnd.document.write(JSON.stringify(event, null, 2), '<br>');
+    // });
+    wnd.document.write(toJsonHtml(this.events), '<br>');
+    wnd.document.write('<br><br>');
+    wnd.document.write(`// ${'/'.repeat(500)}<br>`);
+    wnd.document.write(`// ${'/'.repeat(500)}<br>`);
+    wnd.document.write('<br><br>');
+    wnd.document.write(toJsonHtml(this.states.diffs), '<br>');
+    wnd.document.write(toJsonHtml(this.states.references), '<br>');
+    // this.states.diffs.forEach((state) => {
+    //   wnd.document.write(JSON.stringify(state, null, 2), '<br>');
+    // });
+  }
 
   // ////////////////////////////////////
   // ////////////////////////////////////
@@ -722,7 +739,11 @@ class Recorder {
     if (this.states.diffs.length === 0) {
       return;
     }
-    this.pausePlayback();
+    if (this.state === 'recording') {
+      this.stopRecording();
+    } else if (this.state === 'playing') {
+      this.pausePlayback();
+    }
     this.setToTime(time);
     this.diagram.pause();
   }
