@@ -2,7 +2,7 @@ const path = require('path');
 // eslint-disable-next-line import/no-unresolved
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 // eslint-disable-next-line import/no-unresolved
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 // eslint-disable-next-line import/no-unresolved
 // const webpack = require('webpack');
 // eslint-disable-next-line import/no-unresolved
@@ -10,7 +10,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies
 const Autoprefixer = require('autoprefixer');
 // eslint-disable-next-line import/no-unresolved
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+// const CopyWebpackPlugin = require('copy-webpack-plugin');
 // eslint-disable-next-line import/no-unresolved
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
@@ -90,7 +90,7 @@ module.exports = (env) => {
     toClean = false;
   }
   if (toClean) {
-    clean = new CleanWebpackPlugin([buildPath]);
+    clean = new CleanWebpackPlugin();
   }
 
   const extract = new MiniCssExtractPlugin({
@@ -100,15 +100,15 @@ module.exports = (env) => {
     chunkFilename: '[id].css',
   });
 
-  const copy = new CopyWebpackPlugin(
-    [
-      {
-        from: '/opt/app/src/Lessons/*/*/topic.png',
-        to: '/opt/app/app/app/static/dist/[1][name].[ext]',
-        test: /\/opt\/app\/src\/(.*)topic\.png$/,
-      },
-    ],
-  );
+  // const copy = new CopyWebpackPlugin({
+  //   patterns: [
+  //     {
+  //       from: '/opt/app/src/Lessons/*/*/topic.png',
+  //       to: '/opt/app/app/app/static/dist/[1][name].[ext]',
+  //       // test: /\/opt\/app\/src\/(.*)topic\.png$/,
+  //     },
+  //   ],
+  // });
 
   let cssMini = '';
   if (e.uglify) {
@@ -125,7 +125,7 @@ module.exports = (env) => {
   const pluginArray = [
     uglify,
     extract,
-    copy,
+    // copy,
     clean,
     cssMini].filter(elem => elem !== '');
 
