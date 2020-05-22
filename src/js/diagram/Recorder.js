@@ -414,8 +414,42 @@ class Recorder {
   // ////////////////////////////////////
   // Remove selected events in time range
   // set all state diffs to be the same in time range
-  clear(startTime: number, stopTime: number, events: ?Array<string> = null) {
+  // eslint-disable-next-line class-methods-use-this
+  clearListOrDiffs(
+    listOrDiffs: TypeEvents | TypeStateDiffs,
+    startTime: number,
+    stopTime: number,
+  ) {
+    const startIndex = getNextIndexForTime(listOrDiffs, startTime);
+    const stopIndex = getPrevIndexForTime(listOrDiffs, stopTime);
+    let newListOrDiffs = [];
+    if (startIndex > 0) {
+      newListOrDiffs = listOrDiffs.slice(0, startIndex);
+    }
+    if (stopIndex > -1 && stopIndex + 1 <= listOrDiffs.length - 1) {
+      newListOrDiffs = [...newListOrDiffs, ...listOrDiffs.slice(stopIndex + 1)];
+    }
+    return newListOrDiffs;
+  }
 
+  clear(startTime: number, stopTime: number) {
+    Object.keys(this.events).forEach((eventName) => {
+      const event = this.events[eventName];
+      event.list = this.clearListOrDiffs(event.list, startTime, stopTime);
+    });
+    this.states.diffs = this.clearListOrDiffs(this.states.diffs, startTime, stopTime);
+    // const copyStateIndex = getPrevIndexForTime(this.states.diffs, startTime);
+    // const replaceStartIndex = getNextIndexForTime(this.states.diffs, startTime);
+    // const replaceStopIndex = getPrevIndexForTime(this.states.diffs, startTime);
+    // if (copyStateIndex === -1 || replaceStartIndex === -1 || replaceStopIndex === -1) {
+    //   return;
+    // }
+    // const copy = duplicate(this.states.diffs[copyStateIndex]);
+    // for (let i = replaceStartIndex; i <= replaceStopIndex; i += 1) {
+    //   const [time] = this.states.diffs[i];
+    //   this.states.diffs[i] = duplicate(copy);
+    //   this.states.diffs[i][0] = time;
+    // }
   }
   // deleteFromTime(time: number) {
   //   if (time === 0) {
