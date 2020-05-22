@@ -182,7 +182,7 @@ class Recorder {
     getElement: (string) => ?DiagramElement,
     pause: () => void,
     unpause: () => void,
-    getState: () => Object,
+    getState: (number, any) => Object,
     setState: (Object) => void,
     animateNextFrame: () => void,
   }
@@ -466,6 +466,9 @@ class Recorder {
     this.setToTime(fromTime);
     // }
     this.states.precision = this.precision;
+    if (fromTime === 0 && this.states.baseReference == null) {
+      this.states.setBaseReference(this.diagram.getState(this.precision, true));
+    }
     this.eventsCache = {};
     // this.slidesCache = [];
     this.statesCache = new ObjectTracker(this.precision);
@@ -583,6 +586,7 @@ class Recorder {
       this.states.diffs.push([Math.ceil(this.duration), ref, duplicate(diff), 0]);
     }
     this.duration = this.calcDuration();
+    console.log(this)
   }
 
   addEventType(
@@ -605,7 +609,9 @@ class Recorder {
       this.lastRecordTime = now;
       this.lastRecordTimeCount = 0;
     }
+    // const start = performance.now();
     this.statesCache.add(now, state, this.reference, this.lastRecordTimeCount);
+    // console.log('add', performance.now() - start);
     this.duration = this.calcDuration();
     this.lastRecordTimeCount += 1;
     if (now > this.duration) {
@@ -614,11 +620,22 @@ class Recorder {
   }
 
   recordCurrentState() {
-    this.recordState(this.diagram.getState());
+    // const start = performance.now();
+    const state = this.diagram.getState(this.precision);
+    // console.log('getState', performance.now() - start);
+    // const start1 = performance.now();
+    // const str = JSON.stringify(state);
+    // console.log('stringify', str.length, performance.now() - start);
+    // console.log(state)
+    // console.log(str)
+    // const unStr = JSON.parse(str)
+    // console.log(unStr)
+    // console.log(unStr == state)
+    this.recordState(state);
   }
 
   recordCurrentStateAsReference(refName: string, basedOn: '__base') {
-    this.statesCache.addReference(this.diagram.getState(), refName, basedOn);
+    this.statesCache.addReference(this.diagram.getState(this.precision), refName, basedOn);
   }
 
   recordEvent(

@@ -21,6 +21,7 @@ function getState(
   obj: Object,
   stateProperties: Array<string>,
   precision: number = 5,
+  payload: any,
 ) {
   // const stateProperties = this._getStateProperties();
   // const path = this.getPath();
@@ -42,7 +43,7 @@ function getState(
       return value._def(precision);
     }
     if (value._state != null) {
-      return value._state(precision);
+      return value._state(precision, payload);
     }
     if (Array.isArray(value)) {
       const dupArray = [];
