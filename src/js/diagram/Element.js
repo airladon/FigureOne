@@ -571,27 +571,33 @@ class DiagramElement {
   }
 
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  _getStateProperties(ignoreShown: boolean = false) {  // eslint-disable-line class-methods-use-this
+    if (this.isShown || ignoreShown) {
+      return [
+        'animations',
+        'color',
+        'opacity',
+        'dimColor',
+        'defaultColor',
+        'transform',
+        'isShown',
+        'isMovable',
+        'isTouchable',
+        'state',
+        'pulseSettings',
+        'setTransformCallback',
+        'move',
+        ...this.stateProperties,
+      ];
+    }
     return [
-      'animations',
-      'color',
-      'opacity',
-      'dimColor',
-      'defaultColor',
-      'transform',
       'isShown',
-      'isMovable',
-      'isTouchable',
-      'state',
-      'pulseSettings',
-      'setTransformCallback',
-      'move',
-      ...this.stateProperties,
+      'transform',
     ];
   }
 
-  _state() {
-    return getState(this, this._getStateProperties());
+  _state(precision: number = 5, ignoreShown: boolean = false) {
+    return getState(this, this._getStateProperties(ignoreShown), precision, ignoreShown);
     // if (this.isShown) {
     //   return getState(this, this._getStateProperties());
     // }
@@ -2166,13 +2172,19 @@ class DiagramElementPrimitive extends DiagramElement {
     // this.setMoveBoundaryToDiagram();
   }
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
-    return [...super._getStateProperties(),
-      'pointsToDraw',
-      'angleToDraw',
-      'lengthToDraw',
-      'cannotTouchHole',
-      'drawingObject',
+  _getStateProperties(ignoreShown: boolean = false) {  // eslint-disable-line class-methods-use-this
+    if (this.isShown || ignoreShown) {
+      return [...super._getStateProperties(ignoreShown),
+        'pointsToDraw',
+        'angleToDraw',
+        'lengthToDraw',
+        'cannotTouchHole',
+        'drawingObject',
+      ];
+    }
+    return [
+      'isShown',
+      'transform',
     ];
   }
 
@@ -2629,11 +2641,18 @@ class DiagramElementCollection extends DiagramElement {
     this.type = 'collection';
   }
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
-    return [...super._getStateProperties(),
-      'touchInBoundingRect',
+  _getStateProperties(ignoreShown: boolean = false) {  // eslint-disable-line class-methods-use-this
+    if (this.isShown || ignoreShown) {
+      return [...super._getStateProperties(ignoreShown),
+        'touchInBoundingRect',
+        'elements',
+        'hasTouchableElements',
+      ];
+    }
+    return [
+      'isShown',
+      'transform',
       'elements',
-      'hasTouchableElements',
     ];
   }
 
