@@ -452,38 +452,6 @@ class Recorder {
     // }
   }
   // deleteFromTime(time: number) {
-  //   if (time === 0) {
-  //     this.reset();
-  //     return;
-  //   }
-  //   const slidesIndex = getNextIndexForTime(this.slides, time);
-  //   const eventsIndex = getNextIndexForTime(this.events, time);
-  //   const statesIndex = getNextIndexForTime(this.states.diffs, time);
-  //   if (slidesIndex > 1) {
-  //     this.slides = this.slides.slice(0, slidesIndex);
-  //   } else if (slidesIndex === 0) {
-  //     this.slides = [];
-  //   }
-  //   if (eventsIndex > 1) {
-  //     this.events = this.events.slice(0, eventsIndex);
-  //   } else if (eventsIndex === 0) {
-  //     this.events = [];
-  //   }
-  //   if (statesIndex > 1) {
-  //     this.states.diffs = this.states.diffs.slice(0, statesIndex);
-  //   } else if (statesIndex === 0) {
-  //     this.states.diffs = [];
-  //   }
-  // }
-
-  // insert(
-  //   fromTime: number,
-  //   toTime: number,
-  //   events: TypeEvents,
-  //   slides: TypeSlides,
-  //   states: ObjectTracker,
-  // ) {
-  //   if (fromTime === 0)
   // }
 
   // ////////////////////////////////////
