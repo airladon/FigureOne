@@ -2081,6 +2081,56 @@ describe('Diagram Recorder', () => {
       });
     });
   });
+  describe('Editing', () => {
+    beforeEach(() => {
+      initialTime = 1000;
+      recorder.stateTimeStep = 1;
+      timeStep(0);
+      recorder.startRecording();
+      timeStep(1);
+      recorder.recordEvent('cursorMove', [1, 1]);
+      timeStep(1);
+      recorder.recordEvent('cursorMove', [2, 2]);
+      timeStep(1);
+      recorder.recordEvent('cursorMove', [3, 3]);
+      recorder.stopRecording();
+    })
+    test('Clear after start to end', () => {
+      expect(recorder.events.cursorMove.list).toHaveLength(3);
+      expect(recorder.states.diffs).toHaveLength(4);
+      recorder.clear(1.5, 3);
+      expect(recorder.events.cursorMove.list).toHaveLength(1);
+      expect(recorder.states.diffs).toHaveLength(2);
+    });
+    test('Clear start to end', () => {
+      expect(recorder.events.cursorMove.list).toHaveLength(3);
+      expect(recorder.states.diffs).toHaveLength(4);
+      recorder.clear(0, 3);
+      expect(recorder.events.cursorMove.list).toHaveLength(0);
+      expect(recorder.states.diffs).toHaveLength(0);
+    });
+    test('Clear start to before end', () => {
+      expect(recorder.events.cursorMove.list).toHaveLength(3);
+      expect(recorder.states.diffs).toHaveLength(4);
+      recorder.clear(0, 2);
+      expect(recorder.events.cursorMove.list).toHaveLength(1);
+      expect(recorder.states.diffs).toHaveLength(1);
+    });
+    test('Clear after start to before end', () => {
+      expect(recorder.events.cursorMove.list).toHaveLength(3);
+      expect(recorder.states.diffs).toHaveLength(4);
+      recorder.clear(1.5, 2);
+      expect(recorder.events.cursorMove.list).toHaveLength(2);
+      expect(recorder.states.diffs).toHaveLength(3);
+    });
+    test('Clear after start to before end same time', () => {
+      expect(recorder.events.cursorMove.list).toHaveLength(3);
+      expect(recorder.states.diffs).toHaveLength(4);
+      recorder.clear(2, 2);
+      expect(recorder.events.cursorMove.list).toHaveLength(2);
+      expect(recorder.states.diffs).toHaveLength(3);
+    });
+  });
   describe('Save File', () => {
     test('Simple', () => {
       const original = tools.download;
