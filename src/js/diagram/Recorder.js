@@ -7,6 +7,7 @@ import {
   ObjectTracker, download,
 } from '../tools/tools';
 import type { DiagramElement } from './Element';
+import Worker from './recorder.worker.js';
 // import GlobalAnimation from './webgl/GlobalAnimation';
 // Singleton class that contains projects global variables
 
@@ -499,6 +500,27 @@ class Recorder {
     this.startAudioPlayback(fromTime);
   }
 
+  startWorker() {
+    // if (this.worker != null) {
+    //   return;
+    // }
+    // this.worker = new Worker('./worker.js');
+    // this.worker.addEventListener("message", event => {
+    //   console.log(event.data);
+    // });
+    // this.worker.postMessage([40, 2]);
+    this.worker = new Worker();
+
+    this.worker.postMessage([4, 5]);
+    this.worker.onmessage = function (event) {
+      console.log('asdfasdf')
+    };
+
+    this.worker.addEventListener("message", function (event) {
+      console.log(event)
+    });
+  }
+
   addCurrentStateAsReference() {
     this.referenceIndex += 1;
     this.reference = `ref${this.referenceIndex}`;
@@ -651,10 +673,10 @@ class Recorder {
   recordCurrentState() {
     const start = performance.now();
     const state = this.diagram.getState({ precision: this.precision, ignoreShown: true });
-    console.log('getState', performance.now() - start);
-    const start1 = performance.now();
-    const str = JSON.stringify(state);
-    console.log('stringify', str.length, performance.now() - start);
+    // console.log('getState', performance.now() - start);
+    // const start1 = performance.now();
+    // const str = JSON.stringify(state);
+    // console.log('stringify', str.length, performance.now() - start);
     // console.log(state)
     // console.log(str)
     // const unStr = JSON.parse(str)
