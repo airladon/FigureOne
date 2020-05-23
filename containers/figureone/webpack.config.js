@@ -156,6 +156,13 @@ module.exports = (env) => {
           use: 'babel-loader',
         },
         {
+          test: /\.worker\.js$/,
+          use: {
+            loader: 'worker-loader',
+            options: { publicPath: '/static/workers/' },
+          },
+        },
+        {
           test: /\.(css|sass|scss)$/,
           use: [
             MiniCssExtractPlugin.loader,
