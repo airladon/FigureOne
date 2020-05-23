@@ -5,6 +5,6 @@ addEventListener("message", event => {
   // console.log('in worker')
   // // Do stuff with the message
   // postMessage(a + b);
-  console.log('worker', event);
-  postMessage('from Worker!!')
+  console.log('worker', event.data);
+  postMessage(`From Worker: ${event.data[0] + event.data[1]}`)
 });
