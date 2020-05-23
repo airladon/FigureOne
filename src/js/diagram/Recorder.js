@@ -509,9 +509,12 @@ class Recorder {
     //   console.log(event.data);
     // });
     // this.worker.postMessage([40, 2]);
+    if (this.worker != null) {
+      return;
+    }
     this.worker = new Worker();
 
-    this.worker.postMessage([4, 5]);
+    // this.worker.postMessage([4, 5]);
     // this.worker.onmessage = function (event) {
     //   console.log('asdfasdf')
     // };
@@ -661,6 +664,9 @@ class Recorder {
       this.lastRecordTimeCount = 0;
     }
     const start = performance.now();
+    if (this.worker != null) {
+      this.worker.postMessage(state);
+    }
     this.statesCache.add(now, state, this.reference, this.lastRecordTimeCount);
     console.log('add', performance.now() - start);
     this.duration = this.calcDuration();
