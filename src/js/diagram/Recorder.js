@@ -512,9 +512,9 @@ class Recorder {
     this.worker = new Worker();
 
     this.worker.postMessage([4, 5]);
-    this.worker.onmessage = function (event) {
-      console.log('asdfasdf')
-    };
+    // this.worker.onmessage = function (event) {
+    //   console.log('asdfasdf')
+    // };
 
     this.worker.addEventListener("message", function (event) {
       console.log(event.data)
