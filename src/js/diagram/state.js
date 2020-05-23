@@ -20,11 +20,21 @@ import {
 function getState(
   obj: Object,
   stateProperties: Array<string>,
-  precision: number = 5,
-  payload: any,
+  optionsIn: {
+    precision?: number,
+    ignoreShown?: boolean,
+  },
+  // precision: number = 5,
+  // payload: any,
 ) {
   // const stateProperties = this._getStateProperties();
   // const path = this.getPath();
+  const defaultOptions = {
+    precision: 5,
+    ignoreShown: false,
+  };
+  const options = joinObjects({}, defaultOptions, optionsIn)
+  const { precision } = options;
   const state: Object = {};
   const processValue = (value) => {
     if (typeof value === 'string') {
@@ -43,7 +53,7 @@ function getState(
       return value._def(precision);
     }
     if (value._state != null) {
-      return value._state(precision, payload);
+      return value._state(options);
     }
     if (Array.isArray(value)) {
       const dupArray = [];

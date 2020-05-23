@@ -182,7 +182,7 @@ class Recorder {
     getElement: (string) => ?DiagramElement,
     pause: () => void,
     unpause: () => void,
-    getState: (number, any) => Object,
+    getState: ({ precision: number, ignoreShown: boolean }) => Object,
     setState: (Object) => void,
     animateNextFrame: () => void,
   }
@@ -198,6 +198,7 @@ class Recorder {
 
   audio: ?HTMLAudioElement;
   reference: string;
+  referenceIndex: number;
 
   static instance: Object;
 
@@ -466,9 +467,20 @@ class Recorder {
     this.setToTime(fromTime);
     // }
     this.states.precision = this.precision;
+
     if (fromTime === 0 && this.states.baseReference == null) {
-      this.states.setBaseReference(this.diagram.getState(this.precision, true));
+      this.states.setBaseReference(this.diagram.getState({
+        precision: this.precision,
+        ignoreShown: true,
+      }));
+      // this.states.addReference(this.diagram.getState({
+      //   precision: this.precision,
+      //   ignoreShown: false,
+      // }), 'ref1');
+      // this.referenceIndex = 1;
+      // this.reference = 'ref1';
     }
+
     this.eventsCache = {};
     // this.slidesCache = [];
     this.statesCache = new ObjectTracker(this.precision);
@@ -478,11 +490,27 @@ class Recorder {
 
     this.lastRecordTime = null;
     this.duration = this.calcDuration();
+
     this.queueRecordState(fromTime % this.stateTimeStep);
+
     this.eventsToPlay = whilePlaying;
     // this.initializePlayback(fromTime);
     this.startEventsPlayback(fromTime);
     this.startAudioPlayback(fromTime);
+  }
+
+  addCurrentStateAsReference() {
+    this.referenceIndex += 1;
+    this.reference = `ref${this.referenceIndex}`;
+    const state = this.diagram.getState({
+      precision: this.precision,
+      ignoreShown: false,
+    });
+    if (this.state === 'recording') {
+      this.statesCache.addReference(state, this.reference);
+    } else {
+      this.states.addReference(state, this.reference);
+    }
   }
 
   getCacheStartTime() {
@@ -562,7 +590,7 @@ class Recorder {
       return;
     }
     this.states.diffs = merged;
-    this.states.baseReference = duplicate(this.statesCache.baseReference);
+    // this.states.baseReference = duplicate(this.statesCache.baseReference);
     this.states.references = duplicate(this.statesCache.references);
   }
 
@@ -577,6 +605,7 @@ class Recorder {
     this.currentTime = this.getCurrentTime();
     this.state = 'idle';
     this.stopTimeouts();
+
     this.mergeEventsCache();
     this.mergeStatesCache();
     this.duration = this.calcDuration();
@@ -609,9 +638,9 @@ class Recorder {
       this.lastRecordTime = now;
       this.lastRecordTimeCount = 0;
     }
-    // const start = performance.now();
+    const start = performance.now();
     this.statesCache.add(now, state, this.reference, this.lastRecordTimeCount);
-    // console.log('add', performance.now() - start);
+    console.log('add', performance.now() - start);
     this.duration = this.calcDuration();
     this.lastRecordTimeCount += 1;
     if (now > this.duration) {
@@ -620,12 +649,12 @@ class Recorder {
   }
 
   recordCurrentState() {
-    // const start = performance.now();
-    const state = this.diagram.getState(this.precision);
-    // console.log('getState', performance.now() - start);
-    // const start1 = performance.now();
-    // const str = JSON.stringify(state);
-    // console.log('stringify', str.length, performance.now() - start);
+    const start = performance.now();
+    const state = this.diagram.getState({ precision: this.precision, ignoreShown: true });
+    console.log('getState', performance.now() - start);
+    const start1 = performance.now();
+    const str = JSON.stringify(state);
+    console.log('stringify', str.length, performance.now() - start);
     // console.log(state)
     // console.log(str)
     // const unStr = JSON.parse(str)
@@ -635,7 +664,10 @@ class Recorder {
   }
 
   recordCurrentStateAsReference(refName: string, basedOn: '__base') {
-    this.statesCache.addReference(this.diagram.getState(this.precision), refName, basedOn);
+    this.statesCache.addReference(this.diagram.getState({
+      precision: this.precision,
+      ignoreShown: false,
+    }), refName, basedOn);
   }
 
   recordEvent(

@@ -87,8 +87,8 @@ export class CustomAnimationStep extends AnimationStep {
     return this;
   }
 
-  _state() {
-    const state = super._state();
+  _state(options: Object) {
+    const state = super._state(options);
     if (this.element != null) {
       state.state.element = {
         f1Type: 'de',

@@ -104,8 +104,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return 'animationBuilder';
   }
 
-  _state() {
-    const state = super._state();
+  _state(options: Object) {
+    const state = super._state(options);
     // definition.f1Type = 'animationBuilder';
     // if (this.element != null) {
     //   definition.state.element = this.element.getPath();
