@@ -428,13 +428,13 @@ class Diagram {
     );
   }
 
-  getState(precision: number = 5, ignoreShown: boolean = false) {    
+  getState(options: { precision: number, ignoreShown: boolean }) {
     this.stateTime = performance.now() / 1000;
     return getState(this, [
       'lastDrawTime',
       'elements',
       'stateTime',
-    ], precision, ignoreShown);
+    ], options);
   }
 
   setState(stateIn: Object) {

@@ -52,12 +52,12 @@ export default class AnimationManager {
     return this;
   }
 
-  _state() {
+  _state(options: Object) {
     const state = getState(this, [
       'animations',
       'state',
       'options',
-    ]);
+    ], options);
     if (this.element != null) {
       state.element = {
         f1Type: 'de',

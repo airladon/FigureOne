@@ -161,8 +161,8 @@ class DrawingObject {
     return [];
   }
 
-  _state() {
-    return getState(this, this._getStateProperties());
+  _state(options: Object) {
+    return getState(this, this._getStateProperties(), options);
   }
 }
 

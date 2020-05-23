@@ -571,7 +571,12 @@ class DiagramElement {
   }
 
 
-  _getStateProperties(ignoreShown: boolean = false) {  // eslint-disable-line class-methods-use-this
+  _getStateProperties(options: { ignoreShown: boolean }) {
+    let { ignoreShown } = options;
+    if (ignoreShown == null) {
+      ignoreShown = false;
+    }
+    // console.log('element', options, this.name, this.getPath(), this.isShown, ignoreShown, this.isShown || ignoreShown);
     if (this.isShown || ignoreShown) {
       return [
         'animations',
@@ -596,12 +601,8 @@ class DiagramElement {
     ];
   }
 
-  _state(precision: number = 5, ignoreShown: boolean = false) {
-    return getState(this, this._getStateProperties(ignoreShown), precision, ignoreShown);
-    // if (this.isShown) {
-    //   return getState(this, this._getStateProperties());
-    // }
-    // return { isShown: false };
+  _state(options: { precision: number, ignoreShown: boolean }) {
+    return getState(this, this._getStateProperties(options), options);
   }
 
   // execFn(fn: string | Function | null, ...args: Array<any>) {
@@ -2172,9 +2173,13 @@ class DiagramElementPrimitive extends DiagramElement {
     // this.setMoveBoundaryToDiagram();
   }
 
-  _getStateProperties(ignoreShown: boolean = false) {  // eslint-disable-line class-methods-use-this
+  _getStateProperties(options: { ignoreShown: boolean }) {
+    let { ignoreShown } = options;
+    if (ignoreShown == null) {
+      ignoreShown = false;
+    }
     if (this.isShown || ignoreShown) {
-      return [...super._getStateProperties(ignoreShown),
+      return [...super._getStateProperties(options),
         'pointsToDraw',
         'angleToDraw',
         'lengthToDraw',
@@ -2182,10 +2187,7 @@ class DiagramElementPrimitive extends DiagramElement {
         'drawingObject',
       ];
     }
-    return [
-      'isShown',
-      'transform',
-    ];
+    return super._getStateProperties(options);
   }
 
   setAngleToDraw(intputAngle: number = -1) {
@@ -2641,17 +2643,20 @@ class DiagramElementCollection extends DiagramElement {
     this.type = 'collection';
   }
 
-  _getStateProperties(ignoreShown: boolean = false) {  // eslint-disable-line class-methods-use-this
+  _getStateProperties(options: { ignoreShown: boolean }) {
+    let { ignoreShown } = options;
+    if (ignoreShown == null) {
+      ignoreShown = false;
+    }
     if (this.isShown || ignoreShown) {
-      return [...super._getStateProperties(ignoreShown),
+      return [...super._getStateProperties(options),
         'touchInBoundingRect',
         'elements',
         'hasTouchableElements',
       ];
     }
     return [
-      'isShown',
-      'transform',
+      ...super._getStateProperties(options),
       'elements',
     ];
   }

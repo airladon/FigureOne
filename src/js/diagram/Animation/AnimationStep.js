@@ -180,7 +180,7 @@ export default class AnimationStep {
     return 'animationStep';
   }
 
-  _state(precision: number = 5) {
+  _state(options: Object) {
     return {
       f1Type: this._getStateName(),
       // def: {
@@ -197,7 +197,7 @@ export default class AnimationStep {
       //   afterFrame: this.afterFrame,
       //   _stepType: this._stepType,
       // },
-      state: getState(this, this._getStateProperties(), precision),
+      state: getState(this, this._getStateProperties(), options),
     };
   }
 

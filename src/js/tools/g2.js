@@ -69,7 +69,8 @@ class Rect {
     return new Rect(this.left, this.bottom, this.width, this.height);
   }
 
-  _state(precision: number = 5) {
+  _state(options: { precision: number}) {
+    const { precision } = options;
     return {
       f1Type: 'rect',
       state: [
@@ -183,7 +184,8 @@ class Point {
     this._type = 'point';
   }
 
-  _state(precision: number = 8) {
+  _state(options: { precision: number }) {
+    const { precision } = options;
     return {
       f1Type: 'p',
       state: [
@@ -863,7 +865,8 @@ class Line {
     this.setupLine();
   }
 
-  _state(precision: number = 8) {
+  _state(options: { precision: number }) {
+    const { precision } = options;
     return {
       f1Type: 'l',
       state: [
@@ -1364,7 +1367,8 @@ class Rotation {
     this.name = name;
   }
 
-  _state(precision: number = 8) {
+  _state(options: { precision: number }) {
+    const { precision } = options;
     return {
       f1Type: 'r',
       state: [this.name, roundNum(this.r, precision)],
@@ -1443,7 +1447,8 @@ class Translation extends Point {
     this.name = name;
   }
 
-  _state(precision: number = 8) {
+  _state(options: { precision: number }) {
+    const { precision } = options;
     return {
       f1Type: 't',
       state: [
@@ -1560,7 +1565,8 @@ class Scale extends Point {
     this.name = name;
   }
 
-  _state(precision: number = 8) {
+  _state(options: { precision: number }) {
+    const { precision } = options;
     return {
       f1Type: 's',
       state: [
@@ -1678,10 +1684,11 @@ class Transform {
     this.calcMatrix();
   }
 
-  _state(precision: number = 8) {
+  _state(options: { precision: number }) {
+    // const { precision } = options;
     const out = [];
     this.order.forEach((transformElement) => {
-      out.push(transformElement._state(precision));
+      out.push(transformElement._state(options));
     });
     // if (this.name !== '') {
     //   // return [this.name, ...out];

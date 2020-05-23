@@ -399,8 +399,8 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     }
   }
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
-    return [...super._getStateProperties(),
+  _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(options),
       'points',
     ];
   }
