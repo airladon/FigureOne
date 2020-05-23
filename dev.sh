@@ -74,6 +74,7 @@ FAIL=0
 DEV_PATH=../thisiget
 DEV_FIGUREONE=$DEV_PATH/src/figureone
 DEV_STATIC=$DEV_PATH/app/app/static
+DEV_WORKER=$DEV_PATH/app/app/static/workers
 docker_run "Dev Packaging" npm run webpack
 docker_run "Dev Flow Packaging" npm run flowcopysource
 
@@ -82,3 +83,7 @@ rm -rf $DEV_FIGUREONE/*
 cp -r package $DEV_FIGUREONE/
 cp package/index.js $DEV_STATIC/
 cp package/index.js.map $DEV_STATIC/
+
+rm -rf $DEV_WORKER/*
+cp package/*worker.js $DEV_WORKER/
+cp package/*worker.js.map $DEV_WORKER/
