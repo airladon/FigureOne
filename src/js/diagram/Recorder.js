@@ -484,7 +484,13 @@ class Recorder {
     }
 
     this.startWorker();
-    this.worker.postMessage({ message: 'reset' });
+    this.worker.postMessage({
+      message: 'reset',
+      payload: {
+        baseReference: this.statesCache.baseReference,
+        references: this.statesCache.references,
+      },
+    });
 
     this.eventsCache = {};
     // this.slidesCache = [];
@@ -507,14 +513,14 @@ class Recorder {
   startWorker() {
     if (this.worker == null) {
       this.worker = new Worker();
-      this.worker.onmessage(event => console.log('from Worker: ', event.data))
+      // this.worker.onmessage(event => console.log('from Worker: ', event.data))
+      this.worker.addEventListener("message", event => {
+        console.log(event.data)
+      });
     }
     // this.worker = new Worker();
     
 
-    // this.worker.addEventListener("message", function (event) {
-    //   console.log(event.data)
-    // });
   }
 
   // startWorker() {
@@ -684,6 +690,17 @@ class Recorder {
     // if (this.worker != null) {
     //   this.worker.postMessage(state);
     // }
+    if (this.worker != null) {
+      this.worker.postMessage({
+        message: 'add',
+        payload: {
+          now,
+          state,
+          reference: this.reference,
+          lastRecordTimeCount: this.lastRecordTimeCount,
+        },
+      });
+    }
     this.statesCache.add(now, state, this.reference, this.lastRecordTimeCount);
     console.log('add', performance.now() - start);
     this.duration = this.calcDuration();
