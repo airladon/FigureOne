@@ -7,6 +7,7 @@ import {
   ObjectTracker, download,
 } from '../tools/tools';
 import type { DiagramElement } from './Element';
+import Worker from './recorder.worker.js';
 // import GlobalAnimation from './webgl/GlobalAnimation';
 // Singleton class that contains projects global variables
 
@@ -229,6 +230,7 @@ class Recorder {
       };
       this.audio = null;
       this.playbackStoppedCallback = null;
+      this.worker = null;
     }
     return Recorder.instance;
   }
@@ -481,6 +483,9 @@ class Recorder {
       // this.reference = 'ref1';
     }
 
+    this.startWorker();
+    this.worker.postMessage({ message: 'reset' });
+
     this.eventsCache = {};
     // this.slidesCache = [];
     this.statesCache = new ObjectTracker(this.precision);
@@ -497,6 +502,19 @@ class Recorder {
     // this.initializePlayback(fromTime);
     this.startEventsPlayback(fromTime);
     this.startAudioPlayback(fromTime);
+  }
+
+  startWorker() {
+    if (this.worker == null) {
+      this.worker = new Worker();
+      this.worker.onmessage(event => console.log('from Worker: ', event.data))
+    }
+    // this.worker = new Worker();
+    
+
+    // this.worker.addEventListener("message", function (event) {
+    //   console.log(event.data)
+    // });
   }
 
   // startWorker() {
