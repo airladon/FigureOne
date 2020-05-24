@@ -1,5 +1,6 @@
 // @flow
 import { roundNum } from './math';
+import Worker from './recorder.worker.js';
 
 const Console = (text: string) => {
   console.log(text); // eslint-disable-line no-console
@@ -946,8 +947,13 @@ class ObjectTracker {
     obj: Object,
     refName: string,
   ) {
+    const s1 = performance.now()
     const referenceChain = this.getReferenceChain(refName, []);
-    return getObjectDiff(this.baseReference, referenceChain, obj, this.precision);
+    console.log('ref Chain', performance.now() - s1);
+    const s2 = performance.now()
+    const diff = getObjectDiff(this.baseReference, referenceChain, obj, this.precision);
+    console.log('s2', performance.now() - s2);
+    return diff;
   }
 
   getObjFromDiffAndReference(
@@ -965,6 +971,27 @@ class ObjectTracker {
     }
     const diff = this.getDiffToReference(obj, refName);
     this.diffs.push([time, refName, diff, timeCount]);
+  }
+
+  addWithWorker(time: number, obj: Object, refName: string = this.lastReferenceName, timeCount: number = 0) {
+    if (this.baseReference == null) {
+      this.setBaseReference(obj);
+    }
+    this.startWorker();
+    if (this.worker != null) {
+      this.worker.postMessage([time, refName, obj, timeCount]);
+    }
+  }
+
+  startWorker() {
+    if (this.worker != null) {
+      return;
+    }
+    this.worker = new Worker();
+
+    this.worker.addEventListener("message", function (event) {
+      console.log(event.data)
+    });
   }
 
   getFromIndex(index: number) {
