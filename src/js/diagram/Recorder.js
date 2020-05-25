@@ -473,7 +473,7 @@ class Recorder {
     if (fromTime === 0 && this.states.baseReference == null) {
       this.states.setBaseReference(this.diagram.getState({
         precision: this.precision,
-        ignoreShown: true,
+        ignoreShown: false,
       }));
       // this.states.addReference(this.diagram.getState({
       //   precision: this.precision,
@@ -530,6 +530,7 @@ class Recorder {
             this.states.diffs.push([Math.ceil(this.duration), ref, duplicate(diff), 0]);
           }
           this.duration = this.calcDuration();
+          console.log(this)
         }
       });
     }
@@ -702,7 +703,7 @@ class Recorder {
       this.lastRecordTime = now;
       this.lastRecordTimeCount = 0;
     }
-    const start = performance.now();
+    // const start = performance.now();
     // if (this.worker != null) {
     //   this.worker.postMessage(state);
     // }
@@ -718,7 +719,7 @@ class Recorder {
       });
     }
     // this.statesCache.add(now, state, this.reference, this.lastRecordTimeCount);
-    console.log('add', performance.now() - start);
+    // console.log('add', performance.now() - start);
     // this.duration = this.calcDuration();
     // if (now > this.duration) {
     //   this.duration = now;
@@ -731,8 +732,7 @@ class Recorder {
 
   recordCurrentState() {
     const start = performance.now();
-    const state = this.diagram.getState({ precision: this.precision, ignoreShown: true });
-    console.log('getState', performance.now() - start);
+    const state = this.diagram.getState({ precision: this.precision, ignoreShown: false });
     // const start1 = performance.now();
     // const str = JSON.stringify(state);
     // console.log('stringify', str.length, performance.now() - start);
@@ -742,6 +742,7 @@ class Recorder {
     // console.log(unStr)
     // console.log(unStr == state)
     this.recordState(state);
+    console.log('recordState', performance.now() - start);
   }
 
   recordCurrentStateAsReference(refName: string, basedOn: '__base') {
