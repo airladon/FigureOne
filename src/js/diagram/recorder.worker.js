@@ -17,17 +17,20 @@ addEventListener("message", (event) => {
     cache.references = payload.references;
   } else if (message === 'get') {
     postMessage({
-      baseReferece: cache.baseReference,
-      references: cache.references,
-      diffs: cache.diffs,
+      message: 'cache',
+      payload: {
+        baseReferece: cache.baseReference,
+        references: cache.references,
+        diffs: cache.diffs,
+      },
     });
   } else if (message === 'add') {
     // add(payload.now, payload.state, payload.reference, payload.lastRecordTimeCount);
     cache.add(payload.now, payload.state, payload.reference, payload.lastRecordTimeCount);
-    postMessage({
-      message: 'cacheDuration',
-      duration: cache.diffs[cache.diffs.length - 1],
-    });
+    // postMessage({
+    //   message: 'cacheDuration',
+    //   duration: cache.diffs[cache.diffs.length - 1],
+    // });
   }
   // console.log('worker', event.data);
   // postMessage(`From Worker: ${event.data[0] + 2 * event.data[1]}`)
