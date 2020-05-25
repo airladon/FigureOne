@@ -200,6 +200,7 @@ class Recorder {
   audio: ?HTMLAudioElement;
   reference: string;
   referenceIndex: number;
+  lastSeekTime: ?number;
 
   static instance: Object;
 
@@ -318,6 +319,7 @@ class Recorder {
     this.lastRecordTimeCount = 0;
     this.lastRecordTime = null;
     this.eventsToPlay = [];
+    this.lastSeekTime = null;
   }
 
 
@@ -875,7 +877,10 @@ class Recorder {
     } else if (this.state === 'playing') {
       this.pausePlayback();
     }
+    const s = performance.now()
+    // console.log(s)
     this.setToTime(time);
+    console.log(performance.now() - s)
     this.diagram.pause();
   }
 
@@ -889,6 +894,11 @@ class Recorder {
     if (this.stateIndex !== -1) {
       [stateTime, , , stateTimeCount] = this.states.diffs[this.stateIndex];
     }
+
+    if (stateTime === this.lastSeekTime) {
+      return;
+    }
+    this.lastSeekTime = stateTime;
 
     // For each eventName, if it is to be set on seek, then get the previous
     // index (or multiple indexes if multiple are set for the same time)
