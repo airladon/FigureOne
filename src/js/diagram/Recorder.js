@@ -515,7 +515,22 @@ class Recorder {
       this.worker = new Worker();
       // this.worker.onmessage(event => console.log('from Worker: ', event.data))
       this.worker.addEventListener("message", event => {
-        console.log(event.data)
+        const { message, payload } = event.data;
+        // if (message === 'duration')
+        if (message === 'cache') {
+          this.statesCache.diffs = payload.diffs;
+          this.statesCache.baseReference = payload.baseReference;
+          this.statesCache.references = payload.references;
+          this.mergeEventsCache();
+          this.mergeStatesCache();
+          this.duration = this.calcDuration();
+          if (this.duration % 1 > 0) {
+            const lastIndex = this.states.diffs.length - 1;
+            const [, ref, diff] = this.states.diffs[lastIndex];
+            this.states.diffs.push([Math.ceil(this.duration), ref, duplicate(diff), 0]);
+          }
+          this.duration = this.calcDuration();
+        }
       });
     }
     // this.worker = new Worker();
@@ -654,16 +669,17 @@ class Recorder {
     this.state = 'idle';
     this.stopTimeouts();
 
-    this.mergeEventsCache();
-    this.mergeStatesCache();
-    this.duration = this.calcDuration();
-    if (this.duration % 1 > 0) {
-      const lastIndex = this.states.diffs.length - 1;
-      const [, ref, diff] = this.states.diffs[lastIndex];
-      this.states.diffs.push([Math.ceil(this.duration), ref, duplicate(diff), 0]);
-    }
-    this.duration = this.calcDuration();
-    console.log(this)
+    this.worker.postMessage({ message: 'get' });
+    // this.mergeEventsCache();
+    // this.mergeStatesCache();
+    // this.duration = this.calcDuration();
+    // if (this.duration % 1 > 0) {
+    //   const lastIndex = this.states.diffs.length - 1;
+    //   const [, ref, diff] = this.states.diffs[lastIndex];
+    //   this.states.diffs.push([Math.ceil(this.duration), ref, duplicate(diff), 0]);
+    // }
+    // this.duration = this.calcDuration();
+    // console.log(this)
   }
 
   addEventType(
@@ -701,9 +717,12 @@ class Recorder {
         },
       });
     }
-    this.statesCache.add(now, state, this.reference, this.lastRecordTimeCount);
+    // this.statesCache.add(now, state, this.reference, this.lastRecordTimeCount);
     console.log('add', performance.now() - start);
-    this.duration = this.calcDuration();
+    // this.duration = this.calcDuration();
+    // if (now > this.duration) {
+    //   this.duration = now;
+    // }
     this.lastRecordTimeCount += 1;
     if (now > this.duration) {
       this.duration = now;
@@ -713,7 +732,7 @@ class Recorder {
   recordCurrentState() {
     const start = performance.now();
     const state = this.diagram.getState({ precision: this.precision, ignoreShown: true });
-    // console.log('getState', performance.now() - start);
+    console.log('getState', performance.now() - start);
     // const start1 = performance.now();
     // const str = JSON.stringify(state);
     // console.log('stringify', str.length, performance.now() - start);

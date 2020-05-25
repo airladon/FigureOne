@@ -949,10 +949,10 @@ class ObjectTracker {
   ) {
     const s1 = performance.now()
     const referenceChain = this.getReferenceChain(refName, []);
-    console.log('ref Chain', performance.now() - s1);
+    // console.log('ref Chain', performance.now() - s1);
     const s2 = performance.now()
     const diff = getObjectDiff(this.baseReference, referenceChain, obj, this.precision);
-    console.log('s2', performance.now() - s2);
+    // console.log('s2', performance.now() - s2);
     return diff;
   }
 
