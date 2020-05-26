@@ -489,8 +489,8 @@ class Recorder {
     this.worker.postMessage({
       message: 'reset',
       payload: {
-        baseReference: this.statesCache.baseReference,
-        references: this.statesCache.references,
+        baseReference: this.states.baseReference,
+        references: this.states.references,
       },
     });
 
@@ -516,29 +516,48 @@ class Recorder {
     if (this.worker == null) {
       this.worker = new Worker();
       // this.worker.onmessage(event => console.log('from Worker: ', event.data))
-      this.worker.addEventListener("message", event => {
-        const { message, payload } = event.data;
-        // if (message === 'duration')
-        if (message === 'cache') {
-          this.statesCache.diffs = payload.diffs;
-          this.statesCache.baseReference = payload.baseReference;
-          this.statesCache.references = payload.references;
-          this.mergeEventsCache();
-          this.mergeStatesCache();
-          this.duration = this.calcDuration();
-          if (this.duration % 1 > 0) {
-            const lastIndex = this.states.diffs.length - 1;
-            const [, ref, diff] = this.states.diffs[lastIndex];
-            this.states.diffs.push([Math.ceil(this.duration), ref, duplicate(diff), 0]);
-          }
-          this.duration = this.calcDuration();
-          console.log(this)
-        }
-      });
+      // this.worker.addEventListener("message", event => {
+      //   const { message, payload } = event.data;
+      //   // if (message === 'duration')
+      //   if (message === 'cache') {
+      //     this.statesCache.diffs = payload.diffs;
+      //     this.statesCache.baseReference = payload.baseReference;
+      //     this.statesCache.references = payload.references;
+      //     this.mergeEventsCache();
+      //     this.mergeStatesCache();
+      //     this.duration = this.calcDuration();
+      //     if (this.duration % 1 > 0) {
+      //       const lastIndex = this.states.diffs.length - 1;
+      //       const [, ref, diff] = this.states.diffs[lastIndex];
+      //       this.states.diffs.push([Math.ceil(this.duration), ref, duplicate(diff), 0]);
+      //     }
+      //     this.duration = this.calcDuration();
+      //     console.log(this)
+      //   }
+      // });
+      this.worker.addEventListener("message", this.parseMessage.bind(this));
     }
     // this.worker = new Worker();
-    
+  }
 
+  parseMessage(event) {
+    const { message, payload } = event.data;
+    // if (message === 'duration')
+    if (message === 'cache') {
+      this.statesCache.diffs = payload.diffs;
+      this.statesCache.baseReference = payload.baseReference;
+      this.statesCache.references = payload.references;
+      this.mergeEventsCache();
+      this.mergeStatesCache();
+      this.duration = this.calcDuration();
+      if (this.duration % 1 > 0) {
+        const lastIndex = this.states.diffs.length - 1;
+        const [, ref, diff] = this.states.diffs[lastIndex];
+        this.states.diffs.push([Math.ceil(this.duration), ref, duplicate(diff), 0]);
+      }
+      this.duration = this.calcDuration();
+      // console.log(this)
+    }
   }
 
   // startWorker() {
@@ -733,7 +752,7 @@ class Recorder {
   }
 
   recordCurrentState() {
-    const start = performance.now();
+    // const start = performance.now();
     const state = this.diagram.getState({ precision: this.precision, ignoreShown: true });
     // const start1 = performance.now();
     // const str = JSON.stringify(state);
@@ -744,7 +763,7 @@ class Recorder {
     // console.log(unStr)
     // console.log(unStr == state)
     this.recordState(state);
-    console.log('recordState', performance.now() - start);
+    // console.log('recordState', performance.now() - start);
   }
 
   recordCurrentStateAsReference(refName: string, basedOn: '__base') {
@@ -877,14 +896,11 @@ class Recorder {
     } else if (this.state === 'playing') {
       this.pausePlayback();
     }
-    const s = performance.now()
-    // console.log(s)
     this.setToTime(time);
-    console.log(performance.now() - s)
     this.diagram.pause();
   }
 
-  setToTime(time: number) {
+  setToTime(timeIn: number) {
     // if (this.states.diffs.length === 0) {
     //   return;
     // }
@@ -898,6 +914,7 @@ class Recorder {
     if (stateTime === this.lastSeekTime) {
       return;
     }
+    const time = stateTime;
     this.lastSeekTime = stateTime;
 
     // For each eventName, if it is to be set on seek, then get the previous

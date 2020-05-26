@@ -12,11 +12,12 @@ import {
   getIndexOfEarliestTime,
   getIndexOfLatestTime,
 } from './Recorder';
+import Worker from '../__mocks__/recorder.worker.mock';
 
 tools.isTouchDevice = jest.fn();
 
 // jest.mock('./webgl/webgl');
-// jest.mock('./DrawContext2D');
+jest.mock('./recorder.worker');
 
 describe('Diagram Recorder', () => {
   let diagram;
@@ -32,6 +33,8 @@ describe('Diagram Recorder', () => {
     diagram = makeDiagram();
     ({ recorder } = diagram);
     recorder.reset();
+    recorder.worker = new Worker();
+    recorder.worker.recorder = recorder;
     recorder.stateTimeStep = 1;
     events = [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9], [10]];
     diagram.addElements([
@@ -532,7 +535,7 @@ describe('Diagram Recorder', () => {
         });
       });
       // only
-      test('New states from 0 to beyond end', () => {
+      test.only('New states from 0 to beyond end', () => {
         const { a } = diagram.elements.elements;
         initialTime = 10;
         timeStep(0);
@@ -578,6 +581,8 @@ describe('Diagram Recorder', () => {
         timeStep(1);
         // recorder.recordCurrentState();
         recorder.stopRecording();
+        console.log(recorder.worker.cache.diffs[0])
+        console.log(recorder.states.diffs[0])
 
         expect(recorder.states.diffs[0][0]).toBe(0);
         expect(recorder.states.diffs[0][2].diff).toEqual({
