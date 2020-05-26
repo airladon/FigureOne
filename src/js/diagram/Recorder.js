@@ -1123,6 +1123,10 @@ class Recorder {
     this.startEventsPlayback(fromTime);
     this.startAudioPlayback(fromTime);
     this.diagram.animateNextFrame();
+    if (this.areEventsPlaying() === false) {
+      this.finishPlaying();
+      return;
+    }
   }
 
   // initializePlayback(fromTime: number) {
@@ -1258,9 +1262,9 @@ class Recorder {
       return false;
     }
 
-    // if (this.isAudioPlaying) {
-    //   return false;
-    // }
+    if (this.isAudioPlaying) {
+      return false;
+    }
 
     this.pausePlayback();
     return true;
