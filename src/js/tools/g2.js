@@ -70,7 +70,8 @@ class Rect {
   }
 
   _state(options: { precision: number}) {
-    const { precision } = options;
+    // const { precision } = options;
+    const precision = getPrecision(options);
     return {
       f1Type: 'rect',
       state: [
@@ -185,7 +186,8 @@ class Point {
   }
 
   _state(options: { precision: number }) {
-    const { precision } = options;
+    // const { precision } = options;
+    const precision = getPrecision(options);
     return {
       f1Type: 'p',
       state: [
@@ -866,7 +868,8 @@ class Line {
   }
 
   _state(options: { precision: number }) {
-    const { precision } = options;
+    // const { precision } = options;
+    const precision = getPrecision(options);
     return {
       f1Type: 'l',
       state: [
@@ -1368,7 +1371,8 @@ class Rotation {
   }
 
   _state(options: { precision: number }) {
-    const { precision } = options;
+    // const { precision } = options;
+    const precision = getPrecision(options);
     return {
       f1Type: 'r',
       state: [this.name, roundNum(this.r, precision)],
@@ -1398,6 +1402,21 @@ class Rotation {
   _dup() {
     return new Rotation(this.r, this.name);
   }
+}
+
+function getPrecision(
+  options?: { precision: number },
+  defaultPrecision: number = 8,
+) {
+  let precision;
+  if (options) {
+    ({ precision } = options);
+  }
+  let precisionToUse = defaultPrecision;
+  if (precision != null) {
+    precisionToUse = precision;
+  }
+  return precisionToUse;
 }
 
 type TypeF1DefTranslation = {
@@ -1448,7 +1467,7 @@ class Translation extends Point {
   }
 
   _state(options: { precision: number }) {
-    const { precision } = options;
+    const precision = getPrecision(options);
     return {
       f1Type: 't',
       state: [
@@ -1566,7 +1585,8 @@ class Scale extends Point {
   }
 
   _state(options: { precision: number }) {
-    const { precision } = options;
+    // const { precision } = options;
+    const precision = getPrecision(options);
     return {
       f1Type: 's',
       state: [
