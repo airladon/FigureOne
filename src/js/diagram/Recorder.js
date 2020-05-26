@@ -488,13 +488,15 @@ class Recorder {
     }
 
     this.startWorker();
-    this.worker.postMessage({
-      message: 'reset',
-      payload: {
-        baseReference: this.states.baseReference,
-        references: this.states.references,
-      },
-    });
+    if (this.worker != null) {
+      this.worker.postMessage({
+        message: 'reset',
+        payload: {
+          baseReference: this.states.baseReference,
+          references: this.states.references,
+        },
+      });
+    }
 
     this.eventsCache = {};
     // this.slidesCache = [];

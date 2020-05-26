@@ -261,29 +261,31 @@ describe('Diagram Recorder', () => {
         recorder.addEventType('cursorMove', () => {}, true);
         recorder.addEventType('touch', () => {}, true);
         recorder.addEventType('doNothing', () => {}, true);
+        initialTime = 0;
+        timeStep(0);
         global.performance.now = () => 0;
         recorder.startRecording();
-        global.performance.now = () => 1000;
+        timeStep(1);
         recorder.recordEvent('cursor', ['show', 0, 0]);
-        global.performance.now = () => 2000;
+        timeStep(1);
         recorder.recordEvent('cursorMove', [1, 1]);
-        global.performance.now = () => 3000;
+        timeStep(1);
         recorder.recordEvent('cursorMove', [2, 2]);
-        global.performance.now = () => 4000;
+        timeStep(1);
         recorder.recordEvent('touch', ['down', 3, 3]);
-        global.performance.now = () => 5000;
+        timeStep(1);
         recorder.recordEvent('cursorMove', [4, 4]);
-        global.performance.now = () => 6000;
+        timeStep(1);
         recorder.recordEvent('cursorMove', [5, 5]);
-        global.performance.now = () => 7000;
+        timeStep(1);
         recorder.recordEvent('touch', 'up');
-        global.performance.now = () => 8000;
+        timeStep(1);
         recorder.recordEvent('cursorMove', [7, 7]);
-        global.performance.now = () => 9000;
+        timeStep(1);
         recorder.recordEvent('cursorMove', [8, 8]);
-        global.performance.now = () => 10000;
+        timeStep(1);
         recorder.recordEvent('cursor', ['hide']);
-        global.performance.now = () => 11000;
+        timeStep(1);
         recorder.recordEvent('doNothing');
         recorder.stopRecording();
       });
@@ -1653,12 +1655,17 @@ describe('Diagram Recorder', () => {
       const onPlayback = jest.fn((payload) => {
         [x, y] = payload;
       });
+      initialTime = 0;
+      recorder.stateTimeStep = 0.1;
+      timeStep(0);
       recorder.addEventType('cursorMove', onPlayback, true);
-      global.performance.now = () => 0;
+      // global.performance.now = () => 0;
       recorder.startRecording();
-      global.performance.now = () => 100;
+      // global.performance.now = () => 100;
+      timeStep(0.1);
       recorder.recordEvent('cursorMove', [1, 1]);
-      global.performance.now = () => 200;
+      timeStep(0.1);
+      // global.performance.now = () => 200;
       recorder.recordEvent('cursorMove', [2, 2]);
       recorder.stopRecording();
 
@@ -1666,21 +1673,26 @@ describe('Diagram Recorder', () => {
       expect(x).toBe(0);
       expect(y).toBe(0);
 
-      global.performance.now = () => 1000;
+      // global.performance.now = () => 1000;
+      initialTime = 1;
+      duration = 0;
+      timeStep(0);
       recorder.startPlayback(0.1);
       expect(onPlayback.mock.calls.length).toBe(1);
       expect(x).toBe(1);
       expect(y).toBe(1);
 
-      global.performance.now = () => 1090;
-      jest.advanceTimersByTime(90);
+      // global.performance.now = () => 1090;
+      // jest.advanceTimersByTime(90);
+      timeStep(0.09);
 
       expect(onPlayback.mock.calls.length).toBe(1);
       expect(x).toBe(1);
       expect(y).toBe(1);
 
-      global.performance.now = () => 1100;
-      jest.advanceTimersByTime(10);
+      // global.performance.now = () => 1100;
+      // jest.advanceTimersByTime(10);
+      timeStep(0.01);
 
       expect(onPlayback.mock.calls.length).toBe(2);
       expect(x).toBe(2);
@@ -1731,12 +1743,14 @@ describe('Diagram Recorder', () => {
       const onPlayback = jest.fn((payload) => {
         [x, y] = payload;
       });
+      initialTime = 0;
+      recorder.stateTimeStep = 0.1;
+      timeStep(0);
       recorder.addEventType('cursorMove', onPlayback, true);
-      global.performance.now = () => 0;
       recorder.startRecording();
-      global.performance.now = () => 100;
+      timeStep(0.1);
       recorder.recordEvent('cursorMove', [1, 1]);
-      global.performance.now = () => 200;
+      timeStep(0.1);
       recorder.recordEvent('cursorMove', [2, 2]);
       recorder.stopRecording();
 
@@ -1744,21 +1758,21 @@ describe('Diagram Recorder', () => {
       expect(x).toBe(0);
       expect(y).toBe(0);
 
-      global.performance.now = () => 1000;
+      initialTime = 1;
+      duration = 0;
+      timeStep(0);
       recorder.startPlayback(0.15);
       expect(onPlayback.mock.calls.length).toBe(1);
       expect(x).toBe(1);
       expect(y).toBe(1);
 
-      global.performance.now = () => 1040;
-      jest.advanceTimersByTime(40);
+      timeStep(0.04);
 
       expect(onPlayback.mock.calls.length).toBe(1);
       expect(x).toBe(1);
       expect(y).toBe(1);
 
-      global.performance.now = () => 1050;
-      jest.advanceTimersByTime(10);
+      timeStep(0.01);
 
       expect(onPlayback.mock.calls.length).toBe(2);
       expect(x).toBe(2);
@@ -1913,6 +1927,7 @@ describe('Diagram Recorder', () => {
         expect(recorder.duration).toBe(12);
       });
       test('Playback some events during record', () => {
+        recorder.stateTimeStep = 0.5;
         timeStep(0);
         expect(recorder.duration).toBe(0);
         recorder.startRecording();
@@ -1964,6 +1979,7 @@ describe('Diagram Recorder', () => {
     });
     describe('Playback', () => {
       beforeEach(() => {
+        recorder.stateTimeStep = 0.5;
         timeStep(0);
         recorder.startRecording();
         timeStep(1);
@@ -1988,8 +2004,8 @@ describe('Diagram Recorder', () => {
         recorder.stopRecording();                         // 12
       });
       test('Playback from 0', () => {
-        expect(recorder.states.diffs).toHaveLength(7);
-        expect(recorder.states.diffs[6][0]).toBe(12);
+        expect(recorder.states.diffs).toHaveLength(25);
+        expect(recorder.states.diffs[24][0]).toBe(12);
         expect(recorder.state).toBe('idle');
         timeStep(0.01);
         recorder.startPlayback(0);
@@ -2053,8 +2069,8 @@ describe('Diagram Recorder', () => {
         expect(recorder.state).toBe('idle');
       });
       test('Playback from after 0', () => {
-        expect(recorder.states.diffs).toHaveLength(7);
-        expect(recorder.states.diffs[6][0]).toBe(12);
+        expect(recorder.states.diffs).toHaveLength(25);
+        expect(recorder.states.diffs[24][0]).toBe(12);
 
         expect(recorder.state).toBe('idle');
         timeStep(0.01);
