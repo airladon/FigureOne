@@ -1322,8 +1322,8 @@ class DiagramElement {
     this.state.movement.previousTime = performance.now() / 1000;
     this.state.isBeingMoved = true;
     this.unrender();
-    if (this.recorder.isRecording) {
-      this.recorder.recordEvent('startBeingMoved', this.getPath());
+    if (this.recorder.state === 'recording') {
+      this.recorder.recordEvent('startBeingMoved', [this.getPath()]);
     }
   }
 
