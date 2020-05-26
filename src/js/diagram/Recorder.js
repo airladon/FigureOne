@@ -1159,6 +1159,10 @@ class Recorder {
       }
       const event = this.events[eventName];
       let index = getNextIndexForTime(event.list, fromTime);
+      if (index === -1) {
+        this.eventIndex[eventName] = -1;
+        return;
+      }
       const [eventTime] = event.list[index];
       if (eventTime === fromTime) {
         index = getIndexOfLatestTime(event.list, index) + 1;
