@@ -535,7 +535,7 @@ describe('Diagram Recorder', () => {
         });
       });
       // only
-      test.only('New states from 0 to beyond end', () => {
+      test('New states from 0 to beyond end', () => {
         const { a } = diagram.elements.elements;
         initialTime = 10;
         timeStep(0);
@@ -566,7 +566,6 @@ describe('Diagram Recorder', () => {
         });
         expect(recorder.states.diffs).toHaveLength(4);
 
-
         initialTime = 20;
         duration = 0;
         // global.performance.now = () => 20000;
@@ -581,8 +580,8 @@ describe('Diagram Recorder', () => {
         timeStep(1);
         // recorder.recordCurrentState();
         recorder.stopRecording();
-        console.log(recorder.worker.cache.diffs[0])
-        console.log(recorder.states.diffs[0])
+        // console.log(recorder.worker.cache.diffs[0])
+        // console.log(recorder.states.diffs[0])
 
         expect(recorder.states.diffs[0][0]).toBe(0);
         expect(recorder.states.diffs[0][2].diff).toEqual({
@@ -1143,7 +1142,7 @@ describe('Diagram Recorder', () => {
           d: {},
           h: [
             [0, 'e', {}, 0],
-            [1, 'e', { g: { f: 2.124 } }, 0],
+            [1, 'e', { g: { f: 2.123 } }, 0],
           ],
           i: 'e',
         },
@@ -1159,7 +1158,7 @@ describe('Diagram Recorder', () => {
         references: {},
         diffs: [
           [0, '__base', {}, 0],
-          [1, '__base', { diff: { '.elements': 2.124 } }, 0],
+          [1, '__base', { diff: { '.elements': 2.123 } }, 0],
         ],
       };
       expect(decoded).toEqual(decodeExpected);
@@ -1195,7 +1194,7 @@ describe('Diagram Recorder', () => {
           b: { a: 1 },
           e: [
             [0, 'c', {}, 0],
-            [1, 'c', { d: { a: 2.124 } }, 0],
+            [1, 'c', { d: { a: 2.123 } }, 0],
           ],
           f: {},
           g: 4,
@@ -1213,7 +1212,7 @@ describe('Diagram Recorder', () => {
         references: {},
         diffs: [
           [0, '__base', {}, 0],
-          [1, '__base', { diff: { '.elements': 2.124 } }, 0],
+          [1, '__base', { diff: { '.elements': 2.123 } }, 0],
         ],
       };
       expect(decoded).toEqual(decodeExpected);
