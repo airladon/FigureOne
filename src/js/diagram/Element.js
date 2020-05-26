@@ -1330,11 +1330,13 @@ class DiagramElement {
   moved(newTransform: Transform): void {
     this.calcVelocity(newTransform);
     this.setTransform(newTransform._dup());
-    if (this.recorder.isRecording) {
+    if (this.recorder.state === 'recording') {
       this.recorder.recordEvent(
         'moved',
-        this.getPath(),
-        this.transform.round(this.recorder.precision)._state(),
+        [
+          this.getPath(),
+          this.transform.round(this.recorder.precision)._state(),
+        ],
         // this.state.movement.velocity.toString(),
       );
     }
@@ -1349,12 +1351,14 @@ class DiagramElement {
         this.state.movement.velocity = this.transform.zero();
       }
     }
-    if (this.recorder.isRecording && this.state.isBeingMoved) {
+    if (this.recorder.state === 'recording' && this.state.isBeingMoved) {
       this.recorder.recordEvent(
         'stopBeingMoved',
-        this.getPath(),
-        this.transform._state(),
-        this.state.movement.velocity._state(),
+        [
+          this.getPath(),
+          this.transform._state(),
+          this.state.movement.velocity._state(),
+        ],
         // this.state.movement.velocity.toString(),
       );
     }
@@ -1405,12 +1409,14 @@ class DiagramElement {
       this.move.freely.zeroVelocityThreshold,
       this.move.maxVelocity,
     );
-    if (this.recorder.isRecording) {
+    if (this.recorder.state === 'recording') {
       this.recorder.recordEvent(
         'startMovingFreely',
-        this.getPath(),
-        this.transform._state(),
-        this.state.movement.velocity._state(),
+        [
+          this.getPath(),
+          this.transform._state(),
+          this.state.movement.velocity._state(),
+        ],
         // this.state.movement.velocity.toString(),
       );
     }

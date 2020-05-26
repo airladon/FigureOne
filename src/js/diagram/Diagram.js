@@ -4,7 +4,7 @@ import WebGLInstance from './webgl/webgl';
 
 import {
   Rect, Point, Transform,
-  spaceToSpaceTransform, minAngleDiff,
+  spaceToSpaceTransform, minAngleDiff, getTransform,
 } from '../tools/g2';
 import * as math from '../tools/math';
 import { FunctionMap } from './FunctionMap';
@@ -401,10 +401,52 @@ class Diagram {
       const [x, y] = payload;
       this.setCursor(new Point(x, y));
     };
+    const moved = (payload) => {
+      const [elementPath, transform] = payload;
+      const element = this.getElement(elementPath);
+      if (element == null) {
+        return;
+      }
+      element.moved(getTransform(transform));
+    };
 
+    const startBeingMoved = (payload) => {
+      const [elementPath] = payload;
+      const element = this.getElement(elementPath);
+      if (element == null) {
+        return;
+      }
+      element.startBeingMoved();
+    };
+
+    const stopBeingMoved = (payload) => {
+      const [elementPath, transform, velocity] = payload;
+      const element = this.getElement(elementPath);
+      if (element == null) {
+        return;
+      }
+      element.stopBeingMoved();
+      element.state.movement.velocity = getTransform(velocity);
+      element.transform = getTransform(transform);
+    };
+
+    const startMovingFreely = (payload) => {
+      const [elementPath, transform, velocity] = payload;
+      const element = this.getElement(elementPath);
+      if (element == null) {
+        return;
+      }
+      element.transform = getTransform(transform);
+      element.state.movement.velocity = getTransform(velocity);
+      element.startMovingFreely();
+    }
     this.recorder.addEventType('cursor', onCursor);
     this.recorder.addEventType('cursorMove', onCursorMove);
     this.recorder.addEventType('touch', onTouch);
+    this.recorder.addEventType('moved', moved);
+    this.recorder.addEventType('stopBeingMoved', stopBeingMoved);
+    this.recorder.addEventType('startMovingFreely', startMovingFreely);
+    this.recorder.addEventType('startBeingMoved', startBeingMoved);
   }
 
   scrollEvent() {
