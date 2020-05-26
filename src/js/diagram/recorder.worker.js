@@ -31,6 +31,8 @@ addEventListener("message", (event) => {
     //   message: 'cacheDuration',
     //   duration: cache.diffs[cache.diffs.length - 1],
     // });
+  } else if (message === 'addReferece') {
+    cache.addReference(payload.state, payload.refName, payload.basedOn);
   }
   // console.log('worker', event.data);
   // postMessage(`From Worker: ${event.data[0] + 2 * event.data[1]}`)

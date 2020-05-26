@@ -467,9 +467,11 @@ class Recorder {
   startRecording(fromTime: number = 0, whilePlaying: Array<string> = []) {
     // if (fromTime > 0) {
     this.state = 'recording';
+    this.lastSeekTime = null;
     this.setVideoToNowDeltaTime(fromTime);
     this.setToTime(fromTime);
     // }
+    // console.log(this.stateIndex);
     this.states.precision = this.precision;
 
     if (fromTime === 0 && this.states.baseReference == null) {
@@ -496,9 +498,9 @@ class Recorder {
 
     this.eventsCache = {};
     // this.slidesCache = [];
-    this.statesCache = new ObjectTracker(this.precision);
-    this.statesCache.baseReference = duplicate(this.states.baseReference);  // $FlowFixMe
-    this.statesCache.references = duplicate(this.states.references);
+    // this.statesCache = new ObjectTracker(this.precision);
+    // this.statesCache.baseReference = duplicate(this.states.baseReference);  // $FlowFixMe
+    // this.statesCache.references = duplicate(this.states.references);
     this.diagram.unpause();
 
     this.lastRecordTime = null;
@@ -544,6 +546,7 @@ class Recorder {
     const { message, payload } = event.data;
     // if (message === 'duration')
     if (message === 'cache') {
+      this.statesCache = new ObjectTracker();
       this.statesCache.diffs = payload.diffs;
       this.statesCache.baseReference = payload.baseReference;
       this.statesCache.references = payload.references;
@@ -592,7 +595,17 @@ class Recorder {
       ignoreShown: true,
     });
     if (this.state === 'recording') {
-      this.statesCache.addReference(state, this.reference);
+      // this.statesCache.addReference(state, this.reference);
+      if (this.worker != null) {
+        this.worker.postMessage({
+          message: 'addReference',
+          payload: {
+            state,
+            refName: this.reference,
+            basedOn: '__base',
+          },
+        });
+      }
     } else {
       this.states.addReference(state, this.reference);
     }
@@ -767,10 +780,24 @@ class Recorder {
   }
 
   recordCurrentStateAsReference(refName: string, basedOn: '__base') {
-    this.statesCache.addReference(this.diagram.getState({
+    const state = this.diagram.getState({
       precision: this.precision,
       ignoreShown: true,
-    }), refName, basedOn);
+    });
+    if (this.worker != null) {
+      this.worker.postMessage({
+        message: 'addReference',
+        payload: {
+          state,
+          refName,
+          basedOn,
+        },
+      });
+    }
+    // this.statesCache.addReference(this.diagram.getState({
+    //   precision: this.precision,
+    //   ignoreShown: true,
+    // }), refName, basedOn);
   }
 
   recordEvent(
@@ -904,7 +931,8 @@ class Recorder {
     // if (this.states.diffs.length === 0) {
     //   return;
     // }
-    this.stateIndex = getPrevIndexForTime(this.states.diffs, time);
+    this.stateIndex = getPrevIndexForTime(this.states.diffs, timeIn);
+    // console.log(this.stateIndex)
     let stateTime = 0;
     let stateTimeCount = 0;
     if (this.stateIndex !== -1) {
@@ -981,6 +1009,7 @@ class Recorder {
 
     this.setCursor(time);
     this.diagram.animateNextFrame();
+    // console.log(this.diagram.getElement('a').getRotation())
   }
 
   setCursor(time: number) {
