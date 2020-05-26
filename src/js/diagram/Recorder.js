@@ -475,7 +475,7 @@ class Recorder {
     if (fromTime === 0 && this.states.baseReference == null) {
       this.states.setBaseReference(this.diagram.getState({
         precision: this.precision,
-        ignoreShown: false,
+        ignoreShown: true,
       }));
       // this.states.addReference(this.diagram.getState({
       //   precision: this.precision,
@@ -570,7 +570,7 @@ class Recorder {
     this.reference = `ref${this.referenceIndex}`;
     const state = this.diagram.getState({
       precision: this.precision,
-      ignoreShown: false,
+      ignoreShown: true,
     });
     if (this.state === 'recording') {
       this.statesCache.addReference(state, this.reference);
@@ -734,7 +734,7 @@ class Recorder {
 
   recordCurrentState() {
     const start = performance.now();
-    const state = this.diagram.getState({ precision: this.precision, ignoreShown: false });
+    const state = this.diagram.getState({ precision: this.precision, ignoreShown: true });
     // const start1 = performance.now();
     // const str = JSON.stringify(state);
     // console.log('stringify', str.length, performance.now() - start);
@@ -750,7 +750,7 @@ class Recorder {
   recordCurrentStateAsReference(refName: string, basedOn: '__base') {
     this.statesCache.addReference(this.diagram.getState({
       precision: this.precision,
-      ignoreShown: false,
+      ignoreShown: true,
     }), refName, basedOn);
   }
 
