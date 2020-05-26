@@ -439,7 +439,15 @@ class Diagram {
       element.transform = getTransform(transform);
       element.state.movement.velocity = getTransform(velocity);
       element.startMovingFreely();
-    }
+    };
+    const click = (payload) => {
+      const [id] = payload;
+      const element = document.getElementById(id);
+      if (element != null) {
+        element.click();
+      }
+    };
+
     this.recorder.addEventType('cursor', onCursor);
     this.recorder.addEventType('cursorMove', onCursorMove);
     this.recorder.addEventType('touch', onTouch);
@@ -447,6 +455,7 @@ class Diagram {
     this.recorder.addEventType('stopBeingMoved', stopBeingMoved);
     this.recorder.addEventType('startMovingFreely', startMovingFreely);
     this.recorder.addEventType('startBeingMoved', startBeingMoved);
+    this.recorder.addEventType('click', click);
   }
 
   scrollEvent() {

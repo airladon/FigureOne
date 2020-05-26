@@ -402,8 +402,8 @@ function onClickId(
     });
     const onClickFn = () => {
       const recorder = new Recorder();
-      if (recorder.isRecording) {
-        recorder.recordEvent('click', id);
+      if (recorder.state === 'recording') {
+        recorder.recordEvent('click', [id]);
       }
       actionMethod.bind(...bind)();
     };
