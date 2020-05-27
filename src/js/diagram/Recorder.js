@@ -733,8 +733,9 @@ class Recorder {
     // this.timeoutID[eventName] = null;
   }
 
-  recordState(state: Object) {
-    const now = this.now();
+  recordState(state: Object, time: number = this.getCurrentTime()) {
+    // const now = this.now();
+    const now = time;
     if (this.lastRecordTime == null || now > this.lastRecordTime) {
       this.lastRecordTime = now;
       this.lastRecordTimeCount = 0;
@@ -766,7 +767,7 @@ class Recorder {
     }
   }
 
-  recordCurrentState() {
+  recordCurrentState(time: number = this.getCurrentTime()) {
     // const start = performance.now();
     const state = this.diagram.getState({ precision: this.precision, ignoreShown: true });
     // const start1 = performance.now();
@@ -777,7 +778,7 @@ class Recorder {
     // const unStr = JSON.parse(str)
     // console.log(unStr)
     // console.log(unStr == state)
-    this.recordState(state);
+    this.recordState(state, time);
     // console.log('recordState', performance.now() - start);
   }
 
@@ -805,6 +806,7 @@ class Recorder {
   recordEvent(
     eventName: string,
     payload: Array<string | number | Object>,
+    time: number = this.now()
   ) {
     if (this.events[eventName] == null) {
       return;
@@ -814,17 +816,17 @@ class Recorder {
         list: [],
       };
     }
-    const now = this.now();
-    if (this.lastRecordTime == null || now > this.lastRecordTime) {
-      this.lastRecordTime = now;
+    // const now = this.now();
+    if (this.lastRecordTime == null || time > this.lastRecordTime) {
+      this.lastRecordTime = time;
       this.lastRecordTimeCount = 0;
     }
     this.eventsCache[eventName].list.push(
-      [now, payload, this.lastRecordTimeCount],
+      [time, payload, this.lastRecordTimeCount],
     );
     this.lastRecordTimeCount += 1;
-    if (now > this.duration) {
-      this.duration = now;
+    if (time > this.duration) {
+      this.duration = time;
     }
   }
 
@@ -933,7 +935,11 @@ class Recorder {
     // if (this.states.diffs.length === 0) {
     //   return;
     // }
-    this.stateIndex = getPrevIndexForTime(this.states.diffs, timeIn);
+    if (timeIn === 0 && this.states.diffs.length > 0) {
+      this.stateIndex = 0;
+    } else {
+      this.stateIndex = getPrevIndexForTime(this.states.diffs, timeIn);
+    }
     // console.log(this.stateIndex)
     let stateTime = 0;
     let stateTimeCount = 0;
@@ -945,6 +951,7 @@ class Recorder {
       return;
     }
     const time = stateTime;
+
     this.lastSeekTime = stateTime;
 
     // For each eventName, if it is to be set on seek, then get the previous
