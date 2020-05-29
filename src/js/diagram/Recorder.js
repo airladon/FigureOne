@@ -357,8 +357,9 @@ class Recorder {
     minifyEvents: boolean = true,
   ) {
     const lists = {};
-    Object.keys(this.events).forEach((eventName) => {
-      lists[eventName] = this.events[eventName].list;
+    const events = duplicate(this.events);
+    Object.keys(events).forEach((eventName) => {
+      lists[eventName] = events[eventName].list;
     });
     if (minifyEvents) {
       return minify(lists);
