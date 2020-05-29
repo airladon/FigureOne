@@ -75,5 +75,10 @@ export default function Box(
       maxBounds.bottom + maxBounds.height / 2,
     );
   };
+  // $FlowFixMe
+  element.setSize = (widthIn: number, heightIn: number) => {
+    // $FlowFixMe
+    element.drawingObject.updateBox(widthIn, heightIn);
+  };
   return element;
 }
