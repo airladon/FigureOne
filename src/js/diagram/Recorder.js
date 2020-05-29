@@ -322,6 +322,12 @@ class Recorder {
     this.lastSeekTime = null;
   }
 
+  loadAudio(audio: HTMLAudioElement) {
+    this.audio = audio;
+    this.audio.onloadedmetadata = () => {
+      this.duration = this.calcDuration();
+    }
+  }
 
   loadEvents(
     encodedEventsList: Object | Array<TypeEvents>,
@@ -707,6 +713,10 @@ class Recorder {
     this.stopTimeouts();
 
     this.worker.postMessage({ message: 'get' });
+    if (this.audio) {
+      this.audio.pause();
+      this.isAudioPlaying = false;
+    }
     // this.mergeEventsCache();
     // this.mergeStatesCache();
     // this.duration = this.calcDuration();
