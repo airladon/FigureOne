@@ -2129,7 +2129,9 @@ class DiagramElement {
 
   click(): void {
     if (this.onClick !== null && this.onClick !== undefined) {
-      // this.onClick(this);
+      if (this.recorder.state === 'recording') {
+        this.recorder.recordEvent('elementClick', [this.getPath()]);
+      }
       this.fnMap.exec(this.onClick, this);
     }
   }

@@ -611,18 +611,36 @@ export default class EqnNavigator extends DiagramElementCollection {
   // }
 
   clickNext() {
+    if (this.onClick !== null && this.onClick !== undefined) {
+      if (this.recorder.state === 'recording') {
+        this.recorder.recordEvent('eqnNavClick', ['next', this.getPath()]);
+      }
+      this.fnMap.exec(this.onClick, this);
+    }
     this.eqn.nextForm(1.5);
     this.updateButtons();
     this.animateNextFrame();
   }
 
   clickPrev() {
+    if (this.onClick !== null && this.onClick !== undefined) {
+      if (this.recorder.state === 'recording') {
+        this.recorder.recordEvent('eqnNavClick', ['prev', this.getPath()]);
+      }
+      this.fnMap.exec(this.onClick, this);
+    }
     this.eqn.prevForm(1.5);
     this.updateButtons();
     this.animateNextFrame();
   }
 
   clickRefresh() {
+    if (this.onClick !== null && this.onClick !== undefined) {
+      if (this.recorder.state === 'recording') {
+        this.recorder.recordEvent('eqnNavClick', ['refresh', this.getPath()]);
+      }
+      this.fnMap.exec(this.onClick, this);
+    }
     const currentForm = this.eqn.getCurrentForm();
     if (currentForm != null) {
       const index = this.eqn.getFormIndex(currentForm);
