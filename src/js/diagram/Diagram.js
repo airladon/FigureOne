@@ -447,6 +447,30 @@ class Diagram {
         element.click();
       }
     };
+    const elementClick = (payload) => {
+      const [elementPath] = payload;
+      const element = this.getElement(elementPath);
+      if (element != null) {
+        element.click();
+      }
+    };
+    const eqnNavClick = (payload) => {
+      const [direction, elementPath] = payload;
+      const element = this.getElement(elementPath);
+      if (element == null) {
+        // element.click();
+        return;
+      }
+      if (direction === 'next') {
+        element.clickNext();
+      }
+      if (direction === 'prev') {
+        element.clickPrevt();
+      }
+      if (direction === 'refresh') {
+        element.clickRefresh();
+      }
+    };
 
     this.recorder.addEventType('cursor', onCursor);
     this.recorder.addEventType('cursorMove', onCursorMove);
@@ -456,6 +480,8 @@ class Diagram {
     this.recorder.addEventType('startMovingFreely', startMovingFreely);
     this.recorder.addEventType('startBeingMoved', startBeingMoved);
     this.recorder.addEventType('click', click);
+    this.recorder.addEventType('elementClick', elementClick);
+    this.recorder.addEventType('eqnNavClick', eqnNavClick);
   }
 
   scrollEvent() {
