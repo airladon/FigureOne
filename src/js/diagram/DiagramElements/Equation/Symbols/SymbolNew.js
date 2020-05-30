@@ -48,6 +48,11 @@ export default class Symbol extends DiagramElementPrimitive {
 
     // eslint-disable-next-line max-len
     this.custom.setSize = (location: Point, widthIn: number, heightIn: number) => {
+      this.pointsDefinition = {
+        location,
+        width: widthIn,
+        height: heightIn,
+      };
       const t = this.transform._dup();
       if (
         this.custom.options.draw === 'static'
@@ -89,6 +94,14 @@ export default class Symbol extends DiagramElementPrimitive {
       }
       t.updateTranslation(location.x, location.y);
       this.setTransform(t);
+    };
+
+    this.setPointsFromDefinition = () => {
+      const { location, width, height } = this.pointsDefinition;
+      // if (width == null || height == null || location == null) {
+      //   return;
+      // }
+      this.custom.setSize(location, width, height);
     };
   }
 
