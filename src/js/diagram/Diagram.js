@@ -391,6 +391,9 @@ class Diagram {
     };
     const onTouch = (payload) => {
       const [action, x, y] = payload;
+      if (!this.isCursorShown()) {
+        return;
+      }
       if (action === 'down') {
         this.showCursor('down', new Point(x, y));
       } else {
@@ -936,6 +939,14 @@ class Diagram {
       this.setCursor(position);
     }
     this.animateNextFrame();
+  }
+
+  isCursorShown() {
+    const cursor = this.getElement(this.cursorElementName);
+    if (cursor == null) {
+      return;
+    }
+    return cursor.isShown;
   }
 
   // Handle touch down, or mouse click events within the canvas.
