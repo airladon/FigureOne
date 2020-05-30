@@ -74,11 +74,27 @@ export default function Box(
       maxBounds.left + maxBounds.width / 2,
       maxBounds.bottom + maxBounds.height / 2,
     );
+    element.pointsDefinition = {
+      width: maxBounds.width,
+      height: maxBounds.height,
+    };
   };
   // $FlowFixMe
   element.setSize = (widthIn: number, heightIn: number) => {
     // $FlowFixMe
     element.drawingObject.updateBox(widthIn, heightIn);
+    element.pointsDefinition = {
+      width: widthIn,
+      height: heightIn,
+    };
+  };
+
+  element.setPointsFromDefinition = () => {
+    const { width, height } = element.pointsDefinition;
+    if (width == null || height == null) {
+      return;
+    }
+    element.setSize(width, height);
   };
   return element;
 }

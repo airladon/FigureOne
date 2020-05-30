@@ -520,6 +520,7 @@ class Diagram {
     // console.log(state)
     setState(this, state);
     this.elements.setTimeDelta(performance.now() / 1000 - this.stateTime);
+    this.elements.setPointsFromDefinition();
     if (this.setStateCallback != null) {
       this.fnMap.exec(this.setStateCallback);
     }

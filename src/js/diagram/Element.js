@@ -2159,6 +2159,8 @@ class DiagramElementPrimitive extends DiagramElement {
   angleToDraw: number;
   lengthToDraw: number;
   cannotTouchHole: boolean;
+  pointsDefinition: Object;
+  setPointsFromDefinition: ?(() => void);
   +pulse: (?(mixed) => void) => void;
 
   constructor(
@@ -2178,6 +2180,8 @@ class DiagramElementPrimitive extends DiagramElement {
     this.lengthToDraw = -1;
     this.cannotTouchHole = false;
     this.type = 'primitive';
+    this.pointsDefinition = {};
+    this.setPointsFromDefinition = null;
     // this.setMoveBoundaryToDiagram();
   }
 
@@ -2193,6 +2197,7 @@ class DiagramElementPrimitive extends DiagramElement {
         'lengthToDraw',
         'cannotTouchHole',
         'drawingObject',
+        'pointsDefinition',
       ];
     }
     return super._getStateProperties(options);
@@ -3803,6 +3808,17 @@ class DiagramElementCollection extends DiagramElement {
       }
     }
     return elems;
+  }
+
+  setPointsFromDefinition() {
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element instanceof DiagramElementPrimitive) {
+        if (element.setPointsFromDefinition != null) {
+          element.setPointsFromDefinition();
+        }
+      }
+    }
   }
 
   unrenderAll() {
