@@ -2470,6 +2470,10 @@ class DiagramElementPrimitive extends DiagramElement {
       }
 
       const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity];
+      // if (this.getPath().endsWith('eqn.elements._1')) {
+      // console.log(this.getPath(), this.opacity, colorToUse);
+      // colorToUse = [1, 0, 0, 1];
+      // }
       if (pointCount > 0) {
         // console.log(this.pulseTransforms, pointCount)
         this.pulseTransforms.forEach((t) => {
@@ -3816,6 +3820,21 @@ class DiagramElementCollection extends DiagramElement {
       if (element.setPointsFromDefinition != null) {
         element.setPointsFromDefinition();
       }
+    }
+  }
+
+  setPrimitiveColors() {
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element instanceof DiagramElementPrimitive) {
+        element.setColor(element.color);
+        element.setOpacity(element.opacity);
+      } else {
+        element.setPrimitiveColors();
+      }
+      // if (element.setPointsFromDefinition != null) {
+      //   element.setPointsFromDefinition();
+      // }
     }
   }
 
