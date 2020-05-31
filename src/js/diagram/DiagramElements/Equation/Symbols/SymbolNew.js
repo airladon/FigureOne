@@ -3,6 +3,9 @@ import { DiagramElementPrimitive } from '../../../Element';
 import {
   Point, Transform, Rect,
 } from '../../../../tools/g2';
+import {
+  duplicate,
+} from '../../../../tools/tools';
 import VertexSymbol from './VertexSymbol';
 import WebGLInstance from '../../../webgl/webgl';
 import Bounds from '../Elements/Bounds';
@@ -35,6 +38,11 @@ export default class Symbol extends DiagramElementPrimitive {
           const [
             pointsNew, widthNew, heightNew,
           ] = this.getPoints(this.custom.options, s.x, s.y);
+          this.pointsDefinition = {
+            points: duplicate(pointsNew),
+            width: widthNew,
+            height: heightNew,
+          };
           // $FlowFixMe
           this.drawingObject.updatePoints(
             pointsNew,
@@ -48,11 +56,6 @@ export default class Symbol extends DiagramElementPrimitive {
 
     // eslint-disable-next-line max-len
     this.custom.setSize = (location: Point, widthIn: number, heightIn: number) => {
-      this.pointsDefinition = {
-        location,
-        width: widthIn,
-        height: heightIn,
-      };
       const t = this.transform._dup();
       if (
         this.custom.options.draw === 'static'
@@ -74,15 +77,26 @@ export default class Symbol extends DiagramElementPrimitive {
             this.custom.options.staticHeight,
           ));
         }
+        this.pointsDefinition = {
+          points: duplicate(points),
+          width,
+          height,
+        };
         // $FlowFixMe
         this.drawingObject.updatePoints(points, width, height);
         this.custom.options.staticHeight = height;
         this.custom.options.staticWidth = width;
+        // console.log('a', width, height)
         t.updateScale(width, height);
       } else {
         const [
           pointsNew, widthNew, heightNew,
         ] = this.getPoints(this.custom.options, widthIn, heightIn);
+        this.pointsDefinition = {
+          points: duplicate(pointsNew),
+          width: widthNew,
+          height: heightNew,
+        };
         // $FlowFixMe
         this.drawingObject.updatePoints(
           pointsNew,
@@ -90,6 +104,7 @@ export default class Symbol extends DiagramElementPrimitive {
           heightNew,
         );
         this.custom.scale = new Point(widthIn, heightIn);
+        // console.log('b', widthIn, heightIn, this.getPath())
         t.updateScale(widthIn, heightIn);
       }
       t.updateTranslation(location.x, location.y);
@@ -97,13 +112,22 @@ export default class Symbol extends DiagramElementPrimitive {
     };
 
     this.setPointsFromDefinition = () => {
-      const { location, width, height } = this.pointsDefinition;
-      // if (width == null || height == null || location == null) {
-      //   return;
-      // }
-      this.custom.setSize(location, width, height);
+      if (Object.keys(this.pointsDefinition).length === 0) {
+        return;
+      }
+      const { points, width, height } = this.pointsDefinition;
+      // $FlowFixMe
+      this.drawingObject.updatePoints(points, width, height);
+      // // if (width == null || height == null || location == null) {
+      // //   return;
+      // // }
+      // this.custom.setSize(this.getPosition(), width, height);
     };
   }
+
+  // // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  // updatePoints(points: Array<Point>, width: Number, height: number) {
+  // }
 
   getTransform() {
     if (this.custom.options.draw === 'static') {
