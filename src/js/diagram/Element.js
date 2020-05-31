@@ -3813,10 +3813,8 @@ class DiagramElementCollection extends DiagramElement {
   setPointsFromDefinition() {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      if (element instanceof DiagramElementPrimitive) {
-        if (element.setPointsFromDefinition != null) {
-          element.setPointsFromDefinition();
-        }
+      if (element.setPointsFromDefinition != null) {
+        element.setPointsFromDefinition();
       }
     }
   }
