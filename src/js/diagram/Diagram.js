@@ -380,6 +380,7 @@ class Diagram {
       showCursor: this.showCursor.bind(this),
       pause: this.pause.bind(this),
       unpause: this.unpause.bind(this),
+      getIsInTransition: this.getIsInTransition.bind(this),
     };
     const onCursor = (payload) => {
       const [action, x, y] = payload;

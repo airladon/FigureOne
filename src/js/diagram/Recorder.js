@@ -186,6 +186,7 @@ class Recorder {
     getState: ({ precision: number, ignoreShown: boolean }) => Object,
     setState: (Object) => void,
     animateNextFrame: () => void,
+    getIsInTransition: () => boolean,
   }
 
   // timeoutID: ?TimeoutID;
@@ -845,7 +846,9 @@ class Recorder {
   queueRecordState(time: number = 0) {
     const recordAndQueue = () => {
       if (this.state === 'recording') {
-        this.recordCurrentState();
+        if (this.diagram.getIsInTransition() === false) {
+          this.recordCurrentState();
+        }
         this.queueRecordState(this.stateTimeStep - this.getCurrentTime() % this.stateTimeStep);
       }
     };
@@ -938,6 +941,7 @@ class Recorder {
     } else if (this.state === 'playing') {
       this.pausePlayback();
     }
+    console.log(time)
     this.setToTime(time);
     this.diagram.pause();
   }
