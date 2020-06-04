@@ -3,6 +3,7 @@
 import colorNames from './colorNames';  // official css color names
 // eslint-disable-next-line import/no-cycle
 import getCSSColors from './getCssColors';
+import { round } from './math';
 // Function that converts any rgb or rgba string to an array of rgba numbers
 // between 0 and 1
 function RGBToArray(color: string): Array<number> {
@@ -89,12 +90,12 @@ function colorArrayToRGB(color: Array<number>) {
     Math.floor(color[2] * 255)})`;
 }
 
-function areColorsSame(color1: Array<number>, color2: Array<number>) {
+function areColorsSame(color1: Array<number>, color2: Array<number>, precision: number = 5) {
   if (color1.length !== color2.length) {
     return false;
   }
   for (let i = 0; i < color1.length; i += 1) {
-    if (color1[i] !== color2[i]) {
+    if (round(color1[i], precision) !== round(color2[i], precision)) {
       return false;
     }
   }

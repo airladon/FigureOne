@@ -83,6 +83,7 @@ export class ColorAnimationStep extends ElementAnimationStep {
   // Setting a duration to 0 will effectively skip this animation step
   start(startTime: ?number = null) {
     const { element } = this;
+    // console.log('starting', element)
     if (element != null) {
       super.start(startTime);
       if (this.color.start == null) {
@@ -124,6 +125,7 @@ export class ColorAnimationStep extends ElementAnimationStep {
       return newColor;
     });
     if (this.element != null) {
+      // console.log(this.element.name, next)
       this.element.setColor(next, this.color.setDefault);
     }
   }
