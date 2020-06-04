@@ -248,6 +248,8 @@ class DiagramElement {
   fnMap: FunctionMap;
   isPaused: boolean;
 
+  transformUpdatesIndependantly: boolean;
+
   // scenarioSet: {
   //   quiz1: [
   //     { element: xyz, position: (), scale: (), rotation: (), length: () }
@@ -274,6 +276,7 @@ class DiagramElement {
     this.uid = (Math.random() * 1e18).toString(36);
     this.isShown = true;
     this.transform = transform._dup();
+    this.transformUpdatesIndependantly = true;
     this.isMovable = false;
     this.isTouchable = false;
     this.isInteractive = undefined;
@@ -330,7 +333,7 @@ class DiagramElement {
         return new animations.PositionAnimationStep(options);
       },
       color: (...optionsIn: Array<TypeColorAnimationStepInputOptions>) => {
-        const options = joinObjects({}, { elements: this }, ...optionsIn);
+        const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.ColorAnimationStep(options);
       },
       opacity: (...optionsIn: Array<TypeOpacityAnimationStepInputOptions>) => {
@@ -399,19 +402,21 @@ class DiagramElement {
                                      }>) => {
         const defaultOptions = { element: this };
         const options = joinObjects({}, defaultOptions, ...optionsIn);
+        // console.log(options)
         if (options.target != null && options.target in options.element.scenarios) {
           const target = options.element.getScenarioTarget(options.target);
           options.target = target;
         }
+        // console.log(options.target)
         if (options.start != null && options.start in options.element.scenarios) {
           const start = options.element.getScenarioTarget(options.start);
           options.start = start;
         }
-        const [start, target, element] = options;
+        const { start, target, element } = options;
         const steps = [];
-        const timeOptions = { delay: options.delay, duration: options.duration };
         const duration = this.getTimeToMoveToScenario(target, options, start || '');
         options.duration = duration;
+        const timeOptions = { delay: options.delay, duration: options.duration };
         options.velocity = undefined;
         // if (options.velocity) {
         //   const duration = getTimeToMoveToScenario()
@@ -434,21 +439,25 @@ class DiagramElement {
         if (target.isShown === false && startIsShown === true) {
           steps.push(element.anim.dissolveOut({ duration: options.duration }));
         }
-        if (target.isShown === true && startIsShown === true) {
-          steps.push(element.anim.dissolveIn({ duration: 0 }));
+        // if (target.isShown === true && startIsShown === true) {
+        //   steps.push(element.anim.dissolveIn({ duration: 0 }));
+        // }
+        // if (target.isShown === false && startIsShown === false) {
+        //   steps.push(element.anim.dissolveOut({ duration: 0 }));
+        // }
+        if (startColor != target.color) {
+          steps.push(element.anim.color({
+            start: startColor,
+            target: target.color,
+            duration: options.duration,
+          }));
         }
-        if (target.isShown === false && startIsShown === false) {
-          steps.push(element.anim.dissolveOut({ duration: 0 }));
+        if (!startTransform.isEqualTo(target.transform)) {
+          steps.push(element.anim.transform(options, {
+            start: startTransform,
+            target: target.transform,
+          }));
         }
-        steps.push(element.anim.color({
-          start: startColor,
-          target: target.color,
-          duration: options.duration,
-        }));
-        steps.push(element.anim.transform(options, {
-          start: startTransform,
-          target: target.transform,
-        }));
         return new animations.ParallelAnimationStep(timeOptions, { steps });
       },
       scenario: (...optionsIn: Array<TypeTransformAnimationStepInputOptions
@@ -1075,7 +1084,7 @@ class DiagramElement {
   ) {
     let transform = this.transform._dup();
     let color = this.color.slice();
-    const opacity = this.opacity; // eslint-disable-line prefer-destructuring
+    // const opacity = this.opacity; // eslint-disable-line prefer-destructuring
     let isShown = this.isShown; // eslint-disable-line prefer-destructuring
     if (scenarioName in this.scenarios) {
       const scenario = this.scenarios[scenarioName];
@@ -1098,14 +1107,14 @@ class DiagramElement {
       // if (scenario.opacity) {
       //   ({ opacity } = scenario);
       // }
-      if (scenario.isShown) {
+      if (scenario.isShown != null) {
         ({ isShown } = scenario);
       }
     }
     return {
       transform,
       color,
-      opacity,
+      // opacity,
       isShown,
     };
   }
@@ -1148,19 +1157,19 @@ class DiagramElement {
     return [];
   }
 
-  // deprecate
-  getTimeToMoveToScenarioLegacy(
-    scenarioName: string,
-    rotDirection: -1 | 1 | 0 | 2 = 0,
-  ) {
-    const target = this.getScenarioTargetLegacy(scenarioName);
-    const velocity = this.transform.constant(0);
-    velocity.updateTranslation(new Point(1 / 2, 1 / 2));
-    velocity.updateRotation(2 * Math.PI / 6);
-    velocity.updateScale(1, 1);
-    const time = getMaxTimeFromVelocity(this.transform._dup(), target, velocity, rotDirection);
-    return time;
-  }
+  // // deprecate
+  // getTimeToMoveToScenarioLegacy(
+  //   scenarioName: string,
+  //   rotDirection: -1 | 1 | 0 | 2 = 0,
+  // ) {
+  //   const target = this.getScenarioTargetLegacy(scenarioName);
+  //   const velocity = this.transform.constant(0);
+  //   velocity.updateTranslation(new Point(1 / 2, 1 / 2));
+  //   velocity.updateRotation(2 * Math.PI / 6);
+  //   velocity.updateScale(1, 1);
+  //   const time = getMaxTimeFromVelocity(this.transform._dup(), target, velocity, rotDirection);
+  //   return time;
+  // }
 
   getTimeToMoveToScenario(
     scenarioName: string,
@@ -1177,6 +1186,10 @@ class DiagramElement {
     },
     startScenario: string = '',
   ) {
+    if (optionsIn.duration != null) {
+      return optionsIn.duration;
+    }
+
     const defaultOptions = {
       rotDirection: 0,
       minTime: 0,
@@ -3615,6 +3628,27 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
+  // animateTo(
+  //   elements: {
+  //     transform?: Transform,
+  //     color?: Array<number>,
+  //     show?: boolean,
+  //   },
+  //   options: {
+  //     delay?: number,
+  //     time?: {
+  //       fadeIn?: number,
+  //       move?: number,
+  //       fadeOut?: number,
+  //     },
+  //     order: Array<Array<'fadeIn' | 'fadeOut' | 'move'>>,
+  //     rotDirection?: number,
+  //     callback?: ?(string | ((?mixed) => void)),
+  //     easeFunction: string | ((number) => number),
+  //   }
+  // ) {
+
+  // }
   animateToTransforms(
     elementTransforms: Object,
     time: number = 1,

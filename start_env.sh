@@ -2,7 +2,7 @@ CMD=''
 PROJECT_PATH=`pwd`
 
 cp containers/figureone/Dockerfile Dockerfile
-docker build -t figureone-dev .
+docker build -t figureone_dev .
 rm Dockerfile
 
 docker run -it --rm \
@@ -21,5 +21,5 @@ docker run -it --rm \
   -v $PROJECT_PATH/jsdoc-conf.json:/opt/app/jsdoc-conf.json \
   -v $PROJECT_PATH/.stylelintrc:/opt/app/.stylelintrc \
   -p 8080:8080 \
-  --name figureone-dev \
-  figureone-dev $CMD
+  --name figureone_dev \
+  figureone_dev $CMD

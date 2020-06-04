@@ -941,7 +941,7 @@ class Recorder {
     } else if (this.state === 'playing') {
       this.pausePlayback();
     }
-    console.log(time)
+    // console.log(time)
     this.setToTime(time);
     this.diagram.pause();
   }
