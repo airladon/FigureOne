@@ -968,7 +968,7 @@ class Diagram {
     if (this.isPaused) {
       this.unpause();
     }
-    if (this.recorder.isPlaying) {
+    if (this.recorder.state === 'playing') {
       this.recorder.pausePlayback();
       this.showCursor('hide');
     }
