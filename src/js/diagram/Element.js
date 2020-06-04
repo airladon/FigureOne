@@ -6,6 +6,7 @@ import {
   Scale, Rotation, Line, getMaxTimeFromVelocity, clipAngle,
   getPoint, getTransform,
 } from '../tools/g2';
+// import { areColorsSame } from '../tools/color';
 import { getState } from './state';
 import type { TypeParsablePoint, TypeParsableTransform } from '../tools/g2';
 import { Recorder } from './Recorder';
@@ -445,7 +446,8 @@ class DiagramElement {
         // if (target.isShown === false && startIsShown === false) {
         //   steps.push(element.anim.dissolveOut({ duration: 0 }));
         // }
-        if (startColor != target.color) {
+        console.log(startColor, target.color, element.name, !areColorsSame(startColor, target.color))
+        if (!areColorsSame(startColor, target.color)) {
           steps.push(element.anim.color({
             start: startColor,
             target: target.color,
