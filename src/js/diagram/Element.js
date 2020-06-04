@@ -54,7 +54,7 @@ import { FunctionMap } from './FunctionMap';
 export type TypeScenario = {
   position?: TypeParsablePoint,
   rotation?: number,
-  scale?: TypeParsablePoint,
+  scale?: TypeParsablePoint | number,
   transform?: TypeParsableTransform,
   color?: Array<number>,
   isShown?: boolean,
@@ -462,6 +462,204 @@ class DiagramElement {
         }
         return new animations.ParallelAnimationStep(timeOptions, { steps });
       },
+      scenarioNew: (...optionsIn: Array<TypeTransformAnimationStepInputOptions
+                                  & {
+                                      start?: TypeScenario,
+                                      target: TypeScenario,
+                                     }>) => {
+        const defaultOptions = { element: this };
+        const options = joinObjects({}, defaultOptions, ...optionsIn);
+        // console.log(options)
+        if (options.target != null && options.target in options.element.scenarios) {
+          const target = options.element.getScenarioTarget(options.target);
+          options.target = target;
+        }
+        // console.log(options.target)
+        if (options.start != null && options.start in options.element.scenarios) {
+          const start = options.element.getScenarioTarget(options.start);
+          options.start = start;
+        }
+        const { start, target, element } = options;
+        const steps = [];
+        const duration = this.getTimeToMoveToScenario(target, options, start || '');
+        options.duration = duration;
+        const timeOptions = { delay: options.delay, duration: options.duration };
+        options.velocity = undefined;
+        // if (options.velocity) {
+        //   const duration = getTimeToMoveToScenario()
+        let startColor;
+        let startTransform;
+        let startIsShown;
+        if (start == null) {
+          startColor = this.color.slice();
+          startTransform = this.transform._dup();
+          startIsShown = this.isShown;
+        } else {
+          startColor = start.color.slice();
+          startTransform = start.transform._dup();
+          startIsShown = start.isShown;
+        }
+
+        if (target.isShown === true && startIsShown === false) {
+          steps.push(element.anim.dissolveIn({ duration: options.duration }));
+        }
+        if (target.isShown === false && startIsShown === true) {
+          steps.push(element.anim.dissolveOut({ duration: options.duration }));
+        }
+        // if (target.isShown === true && startIsShown === true) {
+        //   steps.push(element.anim.dissolveIn({ duration: 0 }));
+        // }
+        // if (target.isShown === false && startIsShown === false) {
+        //   steps.push(element.anim.dissolveOut({ duration: 0 }));
+        // }
+        console.log(startColor, target.color, element.name, !areColorsSame(startColor, target.color))
+        if (!areColorsSame(startColor, target.color)) {
+          steps.push(element.anim.color({
+            start: startColor,
+            target: target.color,
+            duration: options.duration,
+          }));
+        }
+        if (!startTransform.isEqualTo(target.transform)) {
+          steps.push(element.anim.transform(options, {
+            start: startTransform,
+            target: target.transform,
+          }));
+        }
+        return new animations.ParallelAnimationStep(timeOptions, { steps });
+      },
+      scenarioNew: (...optionsIn: Array<TypeTransformAnimationStepInputOptions
+                                  & {
+                                      start?: TypeScenario,
+                                      target: TypeScenario,
+                                     }>) => {
+        const defaultOptions = { element: this };
+        const options = joinObjects({}, defaultOptions, ...optionsIn);
+        // console.log(options)
+        if (options.target != null && options.target in options.element.scenarios) {
+          const target = options.element.getScenarioTarget(options.target);
+          options.target = target;
+        }
+        // console.log(options.target)
+        if (options.start != null && options.start in options.element.scenarios) {
+          const start = options.element.getScenarioTarget(options.start);
+          options.start = start;
+        }
+        const { start, target, element } = options;
+        const steps = [];
+        const duration = this.getTimeToMoveToScenario(target, options, start || '');
+        options.duration = duration;
+        const timeOptions = { delay: options.delay, duration: options.duration };
+        options.velocity = undefined;
+        // if (options.velocity) {
+        //   const duration = getTimeToMoveToScenario()
+        let startColor;
+        let startTransform;
+        let startIsShown;
+        if (start == null) {
+          startColor = this.color.slice();
+          startTransform = this.transform._dup();
+          startIsShown = this.isShown;
+        } else {
+          startColor = start.color.slice();
+          startTransform = start.transform._dup();
+          startIsShown = start.isShown;
+        }
+
+        if (target.isShown === true && startIsShown === false) {
+          steps.push(element.anim.dissolveIn({ duration: options.duration }));
+        }
+        if (target.isShown === false && startIsShown === true) {
+          steps.push(element.anim.dissolveOut({ duration: options.duration }));
+        }
+        // if (target.isShown === true && startIsShown === true) {
+        //   steps.push(element.anim.dissolveIn({ duration: 0 }));
+        // }
+        // if (target.isShown === false && startIsShown === false) {
+        //   steps.push(element.anim.dissolveOut({ duration: 0 }));
+        // }
+        console.log(startColor, target.color, element.name, !areColorsSame(startColor, target.color))
+        if (!areColorsSame(startColor, target.color)) {
+          steps.push(element.anim.color({
+            start: startColor,
+            target: target.color,
+            duration: options.duration,
+          }));
+        }
+        if (!startTransform.isEqualTo(target.transform)) {
+          steps.push(element.anim.transform(options, {
+            start: startTransform,
+            target: target.transform,
+          }));
+        }
+        return new animations.ParallelAnimationStep(timeOptions, { steps });
+      },
+      scenarioNew: (...optionsIn: Array<TypeTransformAnimationStepInputOptions
+                                  & {
+                                      start?: TypeScenario,
+                                      target: TypeScenario,
+                                     }>) => {
+        const defaultOptions = { element: this };
+        const options = joinObjects({}, defaultOptions, ...optionsIn);
+        // console.log(options)
+        if (options.target != null && options.target in options.element.scenarios) {
+          const target = options.element.getScenarioTarget(options.target);
+          options.target = target;
+        }
+        // console.log(options.target)
+        if (options.start != null && options.start in options.element.scenarios) {
+          const start = options.element.getScenarioTarget(options.start);
+          options.start = start;
+        }
+        const { start, target, element } = options;
+        const steps = [];
+        const duration = this.getTimeToMoveToScenario(target, options, start || '');
+        options.duration = duration;
+        const timeOptions = { delay: options.delay, duration: options.duration };
+        options.velocity = undefined;
+        // if (options.velocity) {
+        //   const duration = getTimeToMoveToScenario()
+        let startColor;
+        let startTransform;
+        let startIsShown;
+        if (start == null) {
+          startColor = this.color.slice();
+          startTransform = this.transform._dup();
+          startIsShown = this.isShown;
+        } else {
+          startColor = start.color.slice();
+          startTransform = start.transform._dup();
+          startIsShown = start.isShown;
+        }
+
+        if (target.isShown === true && startIsShown === false) {
+          steps.push(element.anim.dissolveIn({ duration: options.duration }));
+        }
+        if (target.isShown === false && startIsShown === true) {
+          steps.push(element.anim.dissolveOut({ duration: options.duration }));
+        }
+        // if (target.isShown === true && startIsShown === true) {
+        //   steps.push(element.anim.dissolveIn({ duration: 0 }));
+        // }
+        // if (target.isShown === false && startIsShown === false) {
+        //   steps.push(element.anim.dissolveOut({ duration: 0 }));
+        // }
+        console.log(startColor, target.color, element.name, !areColorsSame(startColor, target.color))
+        if (!areColorsSame(startColor, target.color)) {
+          steps.push(element.anim.color({
+            start: startColor,
+            target: target.color,
+            duration: options.duration,
+          }));
+        }
+        if (!startTransform.isEqualTo(target.transform)) {
+          steps.push(element.anim.transform(options, {
+            start: startTransform,
+            target: target.transform,
+          }));
+        }
+        return new animations.ParallelAnimationStep(timeOptions, { steps });
+      },
       scenario: (...optionsIn: Array<TypeTransformAnimationStepInputOptions
                                & { scenario: string }>) => {
         const defaultOptions = { element: this };
@@ -637,6 +835,8 @@ class DiagramElement {
       this.state.movement.previousTime += delta;
     }
   }
+
+ 
   // Space definition:
   //   * Pixel space: css pixels
   //   * GL Space: x,y = -1 to 1
@@ -1151,6 +1351,10 @@ class DiagramElement {
   saveScenarios(scenarioName: string) {
     this.saveScenario(scenarioName);
   }
+
+  // animateToScenario() {
+
+  // }
 
   getAllElementsWithScenario(scenarioName: string) {
     if (this.scenarios[scenarioName] != null) {
