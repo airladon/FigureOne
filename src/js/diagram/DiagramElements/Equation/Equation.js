@@ -664,6 +664,13 @@ export class Equation extends DiagramElementCollection {
     ];
   }
 
+  animateToState(state: Object, options: Object, independentOnly: boolean = false) {
+    super.animateToState(state, options, independentOnly);
+    if (this.eqn.currentForm !== state.eqn.currentForm || this.eqn.currentSubForm != state.eqn.currentSubForm) {
+      this.goToForm({ name: state.eqn.currentForm })
+    }
+  }
+
   /**
     * Set the current form series to 'name'
    */

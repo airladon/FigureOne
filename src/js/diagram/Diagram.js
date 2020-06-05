@@ -532,11 +532,12 @@ class Diagram {
     this.animateNextFrame();
   }
 
-  animateToState(state: Object, optionsIn: Object) {
+  animateToState(state: Object, optionsIn: Object, done: ?(string | (() => void))) {
     const defaultOptions = {
       delay: 0,
       duration: 1,
     };
+
     const options = joinObjects(defaultOptions, optionsIn);
     this.elements.animateToState(state.elements, options, true);
   }
