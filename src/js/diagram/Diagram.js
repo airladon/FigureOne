@@ -532,6 +532,15 @@ class Diagram {
     this.animateNextFrame();
   }
 
+  animateToState(state: Object, optionsIn: Object) {
+    const defaultOptions = {
+      delay: 0,
+      duration: 1,
+    };
+    const options = joinObjects(defaultOptions, optionsIn);
+    this.elements.animateToState(state.elements, options, true);
+  }
+
   /**
    * Add elements to diagram
    * @param {Array<TypeAddElementObject>} elementsToAdd - array of element definitions
