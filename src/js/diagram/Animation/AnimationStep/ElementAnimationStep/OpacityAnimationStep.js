@@ -15,7 +15,8 @@ export type TypeOpacityAnimationStepInputOptions = {
   start?: number;      // default is element transform
   target?: number;     // Either target or delta must be defined
   delta?: number;      // delta overrides target if both are defined
-  dissolve?: 'in' | 'out' | null
+  dissolve?: 'in' | 'out' | null,
+  dissolveFromCurrent?: boolean,
 } & TypeElementAnimationStepInputOptions;
 
 
@@ -26,13 +27,14 @@ export class OpacityAnimationStep extends ElementAnimationStep {
     target: number;
     whenComplete: number;  // Color after dissolving
     dissolve?: 'in' | 'out' | null;
+    dissolveFromCurrent: boolean,
   };
 
   constructor(...optionsIn: Array<TypeOpacityAnimationStepInputOptions>) {
     const ElementAnimationStepOptionsIn =
-      joinObjects({}, ...optionsIn, { type: 'color' });
+      joinObjects({}, ...optionsIn, { type: 'opacity' });
     deleteKeys(ElementAnimationStepOptionsIn, [
-      'start', 'delta', 'target', 'dissolve',
+      'start', 'delta', 'target', 'dissolve', 'dissolveFromCurrent',
     ]);
     super(ElementAnimationStepOptionsIn);
     const defaultPositionOptions = {
@@ -40,12 +42,13 @@ export class OpacityAnimationStep extends ElementAnimationStep {
       target: null,
       delta: null,
       dissolve: null,
+      dissolveFromCurrent: false,
     };
     const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
     // $FlowFixMe
     this.opacity = {};
     copyKeysFromTo(options, this.opacity, [
-      'start', 'delta', 'target', 'dissolve',
+      'start', 'delta', 'target', 'dissolve', 'dissolveFromCurrent',
     ]);
   }
 
@@ -77,16 +80,33 @@ export class OpacityAnimationStep extends ElementAnimationStep {
         this.opacity.target = this.opacity.start + this.opacity.delta;
       }
       this.opacity.whenComplete = this.opacity.target;
-
+      
       if (this.opacity.dissolve === 'out') {
-        // this.opacity.start = 1;
+        if (this.opacity.dissolveFromCurrent) {
+          if (element.isShown) {
+            this.opacity.start = 1;
+          } else {
+            this.opacity.start = 0.001;
+          }
+        } else {
+          this.opacity.start = 1;
+        }
         this.opacity.target = 0.001;
         this.opacity.whenComplete = 1;
         element.setOpacity(this.opacity.start);
         // this.opacity.target = 0.001;
       }
       if (this.opacity.dissolve === 'in') {
-        this.opacity.start = 0.001;
+        if (this.opacity.dissolveFromCurrent) {
+          if (element.isShown) {
+            this.opacity.start = 1;
+          } else {
+            this.opacity.start = 0.001;
+          }
+        } else {
+          this.opacity.start = 0.001;
+        }
+        // this.opacity.start = 0.001;
         this.opacity.target = 1;
         this.opacity.whenComplete = 1;
         element.showAll();

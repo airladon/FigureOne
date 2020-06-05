@@ -338,7 +338,7 @@ class DiagramElement {
         return new animations.ColorAnimationStep(options);
       },
       opacity: (...optionsIn: Array<TypeOpacityAnimationStepInputOptions>) => {
-        const options = joinObjects({}, { elements: this }, ...optionsIn);
+        const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.OpacityAnimationStep(options);
       },
       transform: (...optionsIn: Array<TypeTransformAnimationStepInputOptions>) => {
@@ -440,19 +440,14 @@ class DiagramElement {
           startIsShown = start.isShown;
         }
 
-        if (target.isShown != null) {
-          if (target.isShown) {
-            steps.push(element.anim.opacity({ duration: options.duration, target: 1, whenComplete: 1 }));
-          } else {
-            steps.push(element.anim.opacity({ duration: options.duration, target: 0.001, whenComplete: 1 }));
-          }
-        }
-        if (target.isShown != null && target.isShown === true && startIsShown === false) {
-          steps.push(element.anim.dissolveIn({ duration: options.duration }));
-        }
-        if (target.isShown != null && target.isShown === false && startIsShown === true) {
-          steps.push(element.anim.dissolveOut({ duration: options.duration }));
-        }
+        // console.log(this.name, target.isShown)
+        
+        // if (target.isShown != null && target.isShown === true && startIsShown === false) {
+        //   steps.push(element.anim.dissolveIn({ duration: options.duration }));
+        // }
+        // if (target.isShown != null && target.isShown === false && startIsShown === true) {
+        //   steps.push(element.anim.dissolveOut({ duration: options.duration }));
+        // }
         // if (target.isShown === true && startIsShown === true) {
         //   steps.push(element.anim.dissolveIn({ duration: 0 }));
         // }
@@ -474,6 +469,26 @@ class DiagramElement {
             start: startTransform,
             target: target.transform,
           }));
+        }
+        if (target.isShown != null) {
+          let dissolveFromCurrent = true;
+          if (options.dissolveFromCurrent != null && options.dissolveFromCurrent === false) {
+            dissolveFromCurrent = false;
+          }
+          if (target.isShown) {
+            steps.push(element.anim.opacity({
+              duration: options.duration,
+              dissolve: 'in',
+              dissolveFromCurrent,
+            }));
+
+          } else {
+            steps.push(element.anim.opacity({
+              duration: options.duration,
+              dissolve: 'out',
+              dissolveFromCurrent,
+            }));
+          }
         }
         return new animations.ParallelAnimationStep(timeOptions, { steps });
       },
@@ -808,8 +823,14 @@ class DiagramElement {
 
   animateToState(state: Object, options: Object, independentOnly: boolean = false) {
     const target = {};
+    let dissolveFromCurrent = true;
     if (this.isShown !== state.isShown) {
       target.isShown = state.isShown;
+      if (this.isShown === false) {
+        this.show();
+        this.opacity = 0.001;
+        dissolveFromCurrent = false;
+      }
     }
     if (!areColorsSame(this.color, state.color)) {
       target.color = state.color;
@@ -829,7 +850,7 @@ class DiagramElement {
     // }
     if (Object.keys(target).length > 0) {
       this.animations.new()
-        .scenario(joinObjects({ target }, options))
+        .scenario(joinObjects({ target }, options, { dissolveFromCurrent }))
         .start();
     }
   }
