@@ -2479,9 +2479,6 @@ class DiagramElementPrimitive extends DiagramElement {
         this.nextMovingFreelyFrame(now);
       }
 
-      if (!this.isShown) {
-        return;
-      }
       this.lastDrawElementTransformPosition = {
         parentCount: parentTransform.order.length,
         elementCount: this.transform.order.length,
@@ -2489,7 +2486,16 @@ class DiagramElementPrimitive extends DiagramElement {
 
       const newTransform = parentTransform.transform(this.getTransform());
       this.lastDrawTransform = newTransform._dup();
+      if (!this.isShown) {
+        return;
+      }
       this.pulseTransforms = this.transformWithPulse(now, newTransform);
+
+      // if(now === 1 && this.name === 'p1') {
+      //   console.log(this.getPosition('diagram'))
+      //   console.log(this.getPosition('local'))
+      //   // window.aaa = 1;
+      // }
 
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.pulseTransforms[0];
