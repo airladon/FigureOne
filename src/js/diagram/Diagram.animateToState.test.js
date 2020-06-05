@@ -67,11 +67,20 @@ describe('Diagram Recorder', () => {
     diagram.setFirstTransform();
     diagram.animateToState(state, { duration: 1 });
     diagram.draw(0);
+    expect(p1.animations.animations).toHaveLength(1);
+    expect(p2.animations.animations).toHaveLength(1);
+    expect(p3.animations.animations).toHaveLength(0);
+    expect(c.animations.animations).toHaveLength(1);
     diagram.draw(0.5);
     expect(p1.getPosition('diagram').round(3)).toEqual(new Point(1, 1));
     expect(p2.getPosition('diagram').round(3)).toEqual(new Point(1, 1));
     expect(p3.getPosition('diagram').round(3)).toEqual(new Point(1, 1));
     expect(c.getPosition('diagram').round(3)).toEqual(new Point(0.5, 0.5));
 
+    diagram.draw(1);
+    expect(p1.getPosition('diagram').round(3)).toEqual(new Point(2, 2));
+    expect(p2.getPosition('diagram').round(3)).toEqual(new Point(2, 2));
+    expect(p3.getPosition('diagram').round(3)).toEqual(new Point(2, 2));
+    expect(c.getPosition('diagram').round(3)).toEqual(new Point(1, 1));
   });
 });
