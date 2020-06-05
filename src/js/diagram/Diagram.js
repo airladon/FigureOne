@@ -509,7 +509,7 @@ class Diagram {
     );
   }
 
-  getState(options: { precision: number, ignoreShown: boolean }) {
+  getState(options: { precision: number, ignoreShown: boolean, min: boolean }) {
     this.stateTime = performance.now() / 1000;
     return getState(this, [
       'lastDrawTime',

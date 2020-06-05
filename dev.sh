@@ -26,17 +26,17 @@ docker_run() {
     docker run -it --rm \
       -v $HOST_PATH/src:/opt/app/src \
       -v $HOST_PATH/package:/opt/app/package \
-      --name figureone_dev \
+      --name figureone-dev \
       --entrypoint $2 \
-      figureone_dev \
+      figureone-dev \
       -c $3 $4 $5 $6
     else
     docker run -it --rm \
       -v $HOST_PATH/package:/opt/app/package \
       -v $HOST_PATH/src:/opt/app/src \
-      --name figureone_dev \
+      --name figureone-dev \
       --entrypoint $2 \
-      figureone_dev
+      figureone-dev
   fi
 
   if [ $? != 0 ];
@@ -63,7 +63,7 @@ check_status() {
 # Build docker image
 echo "${bold}${cyan}================= Building Image ===================${reset}"
 cp containers/figureone/Dockerfile Dockerfile
-docker build -t figureone_dev .
+docker build -t figureone-dev .
 rm Dockerfile
 
 FAIL=0

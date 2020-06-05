@@ -408,6 +408,7 @@ class DiagramElement {
           const target = options.element.getScenarioTarget(options.target);
           options.target = target;
         }
+        console.log(options.target)
         // console.log(options.target)
         if (options.start != null && options.start in options.element.scenarios) {
           const start = options.element.getScenarioTarget(options.start);
@@ -481,7 +482,6 @@ class DiagramElement {
               dissolve: 'in',
               dissolveFromCurrent,
             }));
-
           } else {
             steps.push(element.anim.opacity({
               duration: options.duration,
@@ -642,7 +642,23 @@ class DiagramElement {
     ];
   }
 
-  _state(options: { precision: number, ignoreShown: boolean }) {
+  _getStatePropertiesMin() {
+    if (this.isShown) {
+      return [
+        'color',
+        'transform',
+        'isShown',
+      ];
+    }
+    return [
+      'isShown',
+    ];
+  }
+
+  _state(options: { precision: number, ignoreShown: boolean, min?: boolean }) {
+    if (options.min) {
+      return getState(this, this._getStatePropertiesMin(options), options);
+    }
     return getState(this, this._getStateProperties(options), options);
   }
 
@@ -1158,23 +1174,32 @@ class DiagramElement {
   getScenarioTarget(
     scenarioName: string,
   ) {
-    let transform = this.transform._dup();
-    let color = this.color.slice();
+    let transform; // = this.transform._dup();
+    let color; // = this.color.slice();
     // const opacity = this.opacity; // eslint-disable-line prefer-destructuring
-    let isShown = this.isShown; // eslint-disable-line prefer-destructuring
+    let isShown; // = this.isShown; // eslint-disable-line prefer-destructuring
     if (scenarioName in this.scenarios) {
       const scenario = this.scenarios[scenarioName];
       if (scenario.transform != null) {
         transform = getTransform(scenario.transform);
       }
       if (scenario.position != null) {
+        if (transform == null) {
+          transform = this.transform._dup();
+        }
         transform.updateTranslation(getPoint(scenario.position));
       }
 
       if (scenario.rotation != null) {
+        if (transform == null) {
+          transform = this.transform._dup();
+        }
         transform.updateRotation(scenario.rotation);
       }
       if (scenario.scale != null) {
+        if (transform == null) {
+          transform = this.transform._dup();
+        }
         transform.updateScale(getPoint(scenario.scale));
       }
       if (scenario.color) {
@@ -1198,12 +1223,19 @@ class DiagramElement {
   setScenario(scenarioName: string) {
     if (this.scenarios[scenarioName] != null) {
       const target = this.getScenarioTarget(scenarioName);
-      this.setTransform(target.transform._dup());
+      if (target.transform != null) {
+        this.setTransform(target.transform._dup());
+      }
       // this.setColor(target.color.slice());
-      if (target.isShown) {
-        this.show();
-      } else {
-        this.hide();
+      if (target.isShown != null) {
+        if (target.isShown) {
+          this.show();
+        } else {
+          this.hide();
+        }
+      }
+      if (target.color != null) {
+        this.setColor(target.color);
       }
     }
   }
@@ -2300,13 +2332,15 @@ class DiagramElementPrimitive extends DiagramElement {
     this.angleToDraw = intputAngle;
   }
 
-  setScenario(scenarioName: string) {
-    super.setScenario(scenarioName);
-    if (this.scenarios[scenarioName] != null) {
-      const target = this.getScenarioTarget(scenarioName);
-      this.setColor(target.color.slice());
-    }
-  }
+  // setScenario(scenarioName: string) {
+  //   super.setScenario(scenarioName);
+  //   if (this.scenarios[scenarioName] != null) {
+  //     const target = this.getScenarioTarget(scenarioName);
+  //     if (target.color != null) {
+  //       this.setColor(target.color.slice());
+  //     }
+  //   }
+  // }
 
   isBeingTouched(glLocation: Point): boolean {
     if (!this.isTouchable) {
@@ -2773,6 +2807,13 @@ class DiagramElementCollection extends DiagramElement {
     }
     return [
       ...super._getStateProperties(options),
+      'elements',
+    ];
+  }
+
+  _getStatePropertiesMin() {
+    return [
+      ...super._getStatePropertiesMin(),
       'elements',
     ];
   }
@@ -3970,13 +4011,13 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  setScenario(scenarioName: string) {
-    super.setScenario(scenarioName);
-    if (this.scenarios[scenarioName] != null) {
-      const target = this.getScenarioTarget(scenarioName);
-      this.color = target.color.slice();
-    }
-  }
+  // setScenario(scenarioName: string) {
+  //   super.setScenario(scenarioName);
+  //   if (this.scenarios[scenarioName] != null) {
+  //     const target = this.getScenarioTarget(scenarioName);
+  //     this.color = target.color.slice();
+  //   }
+  // }
 
   setScenarios(scenarioName: string, onlyIfVisible: boolean = false) {
     super.setScenarios(scenarioName);
@@ -4004,7 +4045,10 @@ class DiagramElementCollection extends DiagramElement {
     countEnd: () => void,
   ) {
     super.animateToState(state, options, independentOnly, countStart, countEnd);
-    if (this.transformUpdatesIndependantly && independentOnly || independentOnly === false) {
+    if (
+      (this.transformUpdatesIndependantly && independentOnly)
+      || independentOnly === false
+    ) {
       for (let i = 0; i < this.drawOrder.length; i += 1) {
         const element = this.elements[this.drawOrder[i]];
         if (state.elements != null && state.elements[this.drawOrder[i]] != null) {

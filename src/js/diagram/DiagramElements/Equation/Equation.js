@@ -664,6 +664,14 @@ export class Equation extends DiagramElementCollection {
     ];
   }
 
+  _getStatePropertiesMin() {
+    return [
+      ...super._getStatePropertiesMin(),
+      'eqn.currentForm',
+      'eqn.currentSubForm',
+    ];
+  }
+
   animateToState(
     state: Object,
     options: Object,
