@@ -1119,7 +1119,7 @@ class Recorder {
       position: cursorPosition == null ? new Point(0, 0) : cursorPosition,
     };
   }
-  
+
 
   // ////////////////////////////////////
   // ////////////////////////////////////
@@ -1128,7 +1128,7 @@ class Recorder {
   // ////////////////////////////////////
   startPlayback(fromTimeIn: number = 0, events: ?Array<string> = null) {
     let fromTime = fromTimeIn;
-    if (fromTimeIn === this.duration) {
+    if (fromTimeIn >= this.duration) {
       fromTime = 0;
     }
     if (events == null) {
