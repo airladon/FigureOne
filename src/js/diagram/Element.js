@@ -799,6 +799,33 @@ class DiagramElement {
   setFirstTransform(parentTransform: Transform) {
   }
 
+  animateToState(state: Object, options: Object, independentOnly: boolean = false) {
+    const target = {};
+    if (this.isShown !== state.isShown) {
+      target.isShown = state.isShown;
+    }
+    if (!areColorsSame(this.color, state.color)) {
+      target.color = state.color;
+    }
+    if (
+      !this.transform.isEqualTo(state.transform)
+      && (
+        (independentOnly && this.transformUpdatesIndependantly)
+        || independentOnly === false
+      )
+    ) {
+      target.transform = state.transform;
+    }
+    // if (!this.transform.isEqualTo(state.transform) && processTransform) {
+    //   target.transform = state.transform;
+    // }
+    if (Object.keys(target).length > 0) {
+      this.animations.new()
+        .scenario(joinObjects({ target }, options))
+        .start();
+    }
+  }
+
   exec(
     execFunctionAndArgs: string | Array<string | Object>,
   ) {
@@ -3923,6 +3950,18 @@ class DiagramElementCollection extends DiagramElement {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       element.saveScenarios(scenarioName);
+    }
+  }
+
+  animateToState(state: Object, options: Object, independentOnly: boolean = false) {
+    super.animateToState(state, options, independentOnly);
+    if (this.transformUpdatesIndependantly && independentOnly || independentOnly === false) {
+      for (let i = 0; i < this.drawOrder.length; i += 1) {
+        const element = this.elements[this.drawOrder[i]];
+        if (state.elements != null && state.elements[this.drawOrder[i]] != null) {
+          element.animateToState(state.elements[this.drawOrder[i]], options, independentOnly);
+        }
+      }
     }
   }
 
