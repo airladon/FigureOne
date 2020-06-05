@@ -16,7 +16,7 @@ DiagramElementPrimitive {
     "rotation": [Function],
     "scale": [Function],
     "scenario": [Function],
-    "scenarioNew": [Function],
+    "scenarioLegacy": [Function],
     "scenarios": [Function],
     "transform": [Function],
     "trigger": [Function],
@@ -402,6 +402,7 @@ DiagramElementPrimitive {
   "onClick": null,
   "opacity": 1,
   "parent": null,
+  "pointsDefinition": Object {},
   "pointsToDraw": -1,
   "pulseDefault": Object {
     "frequency": 0,
@@ -431,6 +432,7 @@ DiagramElementPrimitive {
     "diagram": Object {
       "animateNextFrame": [Function],
       "getElement": [Function],
+      "getIsInTransition": [Function],
       "getState": [Function],
       "pause": [Function],
       "setState": [Function],
@@ -439,17 +441,59 @@ DiagramElementPrimitive {
     },
     "duration": 0,
     "eventIndex": Object {
+      "click": -1,
       "cursor": -1,
       "cursorMove": -1,
+      "elementClick": -1,
+      "eqnNavClick": -1,
+      "moved": -1,
+      "startBeingMoved": -1,
+      "startMovingFreely": -1,
+      "stopBeingMoved": -1,
       "touch": -1,
     },
     "events": Object {
+      "click": Object {
+        "list": Array [],
+        "playbackAction": [Function],
+        "setOnSeek": false,
+      },
       "cursor": Object {
         "list": Array [],
         "playbackAction": [Function],
         "setOnSeek": false,
       },
       "cursorMove": Object {
+        "list": Array [],
+        "playbackAction": [Function],
+        "setOnSeek": false,
+      },
+      "elementClick": Object {
+        "list": Array [],
+        "playbackAction": [Function],
+        "setOnSeek": false,
+      },
+      "eqnNavClick": Object {
+        "list": Array [],
+        "playbackAction": [Function],
+        "setOnSeek": false,
+      },
+      "moved": Object {
+        "list": Array [],
+        "playbackAction": [Function],
+        "setOnSeek": false,
+      },
+      "startBeingMoved": Object {
+        "list": Array [],
+        "playbackAction": [Function],
+        "setOnSeek": false,
+      },
+      "startMovingFreely": Object {
+        "list": Array [],
+        "playbackAction": [Function],
+        "setOnSeek": false,
+      },
+      "stopBeingMoved": Object {
         "list": Array [],
         "playbackAction": [Function],
         "setOnSeek": false,
@@ -491,6 +535,7 @@ DiagramElementPrimitive {
   },
   "renderedOnNextDraw": false,
   "scenarios": Object {},
+  "setPointsFromDefinition": null,
   "setTransformCallback": null,
   "state": Object {
     "isBeingMoved": false,
@@ -619,6 +664,7 @@ DiagramElementPrimitive {
       },
     ],
   },
+  "transformUpdatesIndependantly": true,
   "type": "primitive",
   "uid": "0000000000",
   "unrenderNextDraw": false,

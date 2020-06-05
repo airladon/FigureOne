@@ -36,8 +36,9 @@ describe('Transfrom Animation Unit', () => {
     diagram.elements.add('elem2', elem2);
   });
   test('Simple', () => {
-    elem1.animations.new()
-      .scenario({ target: '1', duration: 1 });
+    // elem1.animations.new()
+    //   .scenario({ target: '1', duration: 1 })
+    //   .start();
     diagram.elements.animations.new()
       .scenarios({ target: '1', duration: 1 })
       .scenarios({ target: '2', duration: 1 })
