@@ -1296,6 +1296,10 @@ class Recorder {
   //   this.timeoutID = null;
   // }
 
+  // animateToState() {
+
+  // }
+
   pausePlayback() {
     this.currentTime = this.getCurrentTime();
     this.diagram.pause();
