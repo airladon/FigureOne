@@ -408,8 +408,7 @@ class DiagramElement {
           const target = options.element.getScenarioTarget(options.target);
           options.target = target;
         }
-        console.log(options.target)
-        // console.log(options.target)
+
         if (options.start != null && options.start in options.element.scenarios) {
           const start = options.element.getScenarioTarget(options.start);
           options.start = start;
@@ -449,12 +448,6 @@ class DiagramElement {
         // if (target.isShown != null && target.isShown === false && startIsShown === true) {
         //   steps.push(element.anim.dissolveOut({ duration: options.duration }));
         // }
-        // if (target.isShown === true && startIsShown === true) {
-        //   steps.push(element.anim.dissolveIn({ duration: 0 }));
-        // }
-        // if (target.isShown === false && startIsShown === false) {
-        //   steps.push(element.anim.dissolveOut({ duration: 0 }));
-        // }
         // console.log(startColor, target.color, element.name, !areColorsSame(startColor, target.color))
         // if (!areColorsSame(startColor, target.color)) {
         if (target.color != null) {
@@ -472,22 +465,31 @@ class DiagramElement {
           }));
         }
         if (target.isShown != null) {
-          let dissolveFromCurrent = true;
-          if (options.dissolveFromCurrent != null && options.dissolveFromCurrent === false) {
-            dissolveFromCurrent = false;
-          }
-          if (target.isShown) {
-            steps.push(element.anim.opacity({
-              duration: options.duration,
-              dissolve: 'in',
-              dissolveFromCurrent,
-            }));
+          if (startIsShown != null) {
+            if (target.isShown === true && startIsShown === true) {
+              steps.push(element.anim.dissolveIn({ duration: 0 }));
+            }
+            if (target.isShown === false && startIsShown === false) {
+              steps.push(element.anim.dissolveOut({ duration: 0 }));
+            }
           } else {
-            steps.push(element.anim.opacity({
-              duration: options.duration,
-              dissolve: 'out',
-              dissolveFromCurrent,
-            }));
+            let dissolveFromCurrent = true;
+            if (options.dissolveFromCurrent != null && options.dissolveFromCurrent === false) {
+              dissolveFromCurrent = false;
+            }
+            if (target.isShown) {
+              steps.push(element.anim.opacity({
+                duration: options.duration,
+                dissolve: 'in',
+                dissolveFromCurrent,
+              }));
+            } else {
+              steps.push(element.anim.opacity({
+                duration: options.duration,
+                dissolve: 'out',
+                dissolveFromCurrent,
+              }));
+            }
           }
         }
         return new animations.ParallelAnimationStep(timeOptions, { steps });
