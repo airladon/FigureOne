@@ -807,14 +807,15 @@ class DiagramElement {
     if (!areColorsSame(this.color, state.color)) {
       target.color = state.color;
     }
+    const stateTransform = getTransform(state.transform);
     if (
-      !this.transform.isEqualTo(state.transform)
+      !this.transform.isEqualTo(stateTransform)
       && (
         (independentOnly && this.transformUpdatesIndependantly)
         || independentOnly === false
       )
     ) {
-      target.transform = state.transform;
+      target.transform = stateTransform;
     }
     // if (!this.transform.isEqualTo(state.transform) && processTransform) {
     //   target.transform = state.transform;
