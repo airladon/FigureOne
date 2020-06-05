@@ -440,6 +440,13 @@ class DiagramElement {
           startIsShown = start.isShown;
         }
 
+        if (target.isShown != null) {
+          if (target.isShown) {
+            steps.push(element.anim.opacity({ duration: options.duration, target: 1, whenComplete: 1 }));
+          } else {
+            steps.push(element.anim.opacity({ duration: options.duration, target: 0.001, whenComplete: 1 }));
+          }
+        }
         if (target.isShown != null && target.isShown === true && startIsShown === false) {
           steps.push(element.anim.dissolveIn({ duration: options.duration }));
         }
