@@ -98,16 +98,11 @@ describe('Diagram Recorder', () => {
     diagram.setFirstTransform();
     diagram.animateToState(state, { duration: 1 });
     expect(p3.animations.animations).toHaveLength(1);
-    // console.log(p3.animations.animations[0].steps[0].steps)
     diagram.draw(0);
-    // expect(p1.animations.animations).toHaveLength(1);
     expect(p1.animations.animations[0].steps[0].steps).toHaveLength(2);
     expect(p2.animations.animations[0].steps[0].steps).toHaveLength(1);
     expect(p3.animations.animations[0].steps[0].steps).toHaveLength(1);
     expect(c.animations.animations[0].steps[0].steps).toHaveLength(1);
-    // expect(p2.animations.animations).toHaveLength(1);
-    // expect(p3.animations.animations).toHaveLength(1);
-    // expect(c.animations.animations).toHaveLength(1);
     diagram.draw(0.5);
     expect(p1.getPosition('diagram').round(3)).toEqual(new Point(1, 1));
     expect(p2.getPosition('diagram').round(3)).toEqual(new Point(1, 1));
@@ -120,7 +115,7 @@ describe('Diagram Recorder', () => {
 
     // diagram.draw(0.9);
     diagram.draw(1);
-    expect(p1.getPosition('diagram').round(3)).toEqual(new Point(2, 2));
+    expect(p1.getPosition('local').round(3)).toEqual(new Point(2, 2));
     expect(p2.getPosition('diagram').round(3)).toEqual(new Point(2, 2));
     expect(p3.getPosition('diagram').round(3)).toEqual(new Point(2, 2));
     expect(c.getPosition('diagram').round(3)).toEqual(new Point(1, 1));

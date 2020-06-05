@@ -213,7 +213,6 @@ export default class AnimationStep {
     if (this.startTime === null) {
       this.startTime = now - this.startTimeOffset;
     }
-
     const deltaTime = now - this.startTime;
     let remainingTime = -(this.duration + this.startDelay - deltaTime);
     if (deltaTime >= this.startDelay) {

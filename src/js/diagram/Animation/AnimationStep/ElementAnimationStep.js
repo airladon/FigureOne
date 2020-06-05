@@ -8,20 +8,20 @@ import type { DiagramElement } from '../../Element';
 
 export type TypeElementAnimationStepInputOptions = {
   element?: Object; // Can't use DiagramElement as importing it makes a loop
-  type?: 'transform' | 'color' | 'custom' | 'position' | 'rotation' | 'scale';
+  type?: 'transform' | 'color' | 'custom' | 'position' | 'rotation' | 'scale' | 'opacity';
   progression?: 'linear' | 'easeinout' | 'easein' | 'easeout' | (number) => number; // default is easeinout except color and custom which is linear
 } & TypeAnimationStepInputOptions;
 
 export default class ElementAnimationStep extends AnimationStep {
   element: ?Object;
-  type: 'transform' | 'color' | 'custom' | 'position' | 'setPosition';
+  type: 'transform' | 'color' | 'custom' | 'position' | 'setPosition' | 'opacity';
   duration: number;
   progression: ((number, ?boolean) => number) | string;
 
   constructor(optionsIn: TypeElementAnimationStepInputOptions = {}) {
     super(optionsIn);
     let defaultProgression = 'easeinout';
-    if (optionsIn.type === 'color' || optionsIn.type === 'custom') {
+    if (optionsIn.type === 'color' || optionsIn.type === 'custom' || optionsIn.type === 'opacity') {
       defaultProgression = 'linear';
     }
     const defaultOptions = {
