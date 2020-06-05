@@ -80,7 +80,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
         this.opacity.target = this.opacity.start + this.opacity.delta;
       }
       this.opacity.whenComplete = this.opacity.target;
-      
+
       if (this.opacity.dissolve === 'out') {
         if (this.opacity.dissolveFromCurrent) {
           if (element.isShown) {

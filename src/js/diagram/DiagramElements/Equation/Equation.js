@@ -664,10 +664,17 @@ export class Equation extends DiagramElementCollection {
     ];
   }
 
-  animateToState(state: Object, options: Object, independentOnly: boolean = false) {
-    super.animateToState(state, options, independentOnly);
-    if (this.eqn.currentForm !== state.eqn.currentForm || this.eqn.currentSubForm != state.eqn.currentSubForm) {
-      this.goToForm({ name: state.eqn.currentForm })
+  animateToState(
+    state: Object,
+    options: Object,
+    independentOnly: boolean = false,
+    countStart: () => void,
+    countEnd: () => void,
+  ) {
+    super.animateToState(state, options, independentOnly, countStart, countEnd);
+    if (this.eqn.currentForm !== state.eqn.currentForm) {
+      countStart();
+      this.goToForm({ name: state.eqn.currentForm, callback: countEnd });
     }
   }
 

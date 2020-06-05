@@ -821,7 +821,13 @@ class DiagramElement {
   setFirstTransform(parentTransform: Transform) {
   }
 
-  animateToState(state: Object, options: Object, independentOnly: boolean = false) {
+  animateToState(
+    state: Object,
+    options: Object,
+    independentOnly: boolean = false,
+    countStart: () => void,
+    countEnd: () => void,
+  ) {
     const target = {};
     let dissolveFromCurrent = true;
     if (this.isShown !== state.isShown) {
@@ -849,8 +855,10 @@ class DiagramElement {
     //   target.transform = state.transform;
     // }
     if (Object.keys(target).length > 0) {
+      countStart();
       this.animations.new()
         .scenario(joinObjects({ target }, options, { dissolveFromCurrent }))
+        .whenFinished(countEnd)
         .start();
     }
   }
@@ -3988,13 +3996,22 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  animateToState(state: Object, options: Object, independentOnly: boolean = false) {
-    super.animateToState(state, options, independentOnly);
+  animateToState(
+    state: Object,
+    options: Object,
+    independentOnly: boolean = false,
+    countStart: () => void,
+    countEnd: () => void,
+  ) {
+    super.animateToState(state, options, independentOnly, countStart, countEnd);
     if (this.transformUpdatesIndependantly && independentOnly || independentOnly === false) {
       for (let i = 0; i < this.drawOrder.length; i += 1) {
         const element = this.elements[this.drawOrder[i]];
         if (state.elements != null && state.elements[this.drawOrder[i]] != null) {
-          element.animateToState(state.elements[this.drawOrder[i]], options, independentOnly);
+          element.animateToState(
+            state.elements[this.drawOrder[i]], options,
+            independentOnly, countStart, countEnd,
+          );
         }
       }
     }
