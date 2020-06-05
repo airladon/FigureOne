@@ -538,8 +538,21 @@ class Diagram {
       duration: 1,
     };
 
+    let counter = 0;
+    const countStart = () => {
+      counter += 1;
+    };
+    const countEnd = () => {
+      counter -= 1;
+      if (counter === 0 && done != null) {
+        this.fnMap.exec(done);
+      }
+    };
+
     const options = joinObjects(defaultOptions, optionsIn);
-    this.elements.animateToState(state.elements, options, true);
+    countStart();
+    this.elements.animateToState(state.elements, options, true, countStart, countEnd);
+    countEnd();
   }
 
   /**
