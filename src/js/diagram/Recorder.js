@@ -983,7 +983,11 @@ class Recorder {
       if (firstIndex === -1) {
         return;
       }
-      const lastIndex = getIndexOfLatestTime(event.list, firstIndex);
+      const lastIndex = getIndexOfLatestTime(
+        event.list,
+        getPrevIndexForTime(event.list, timeIn),
+      );
+      // const lastIndex = getIndexOfLatestTime(event.list, firstIndex);
       for (let i = firstIndex; i <= lastIndex; i += 1) {
         const [eventTime, , timeCount] = event.list[i];
         if (
