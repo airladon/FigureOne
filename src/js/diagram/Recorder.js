@@ -818,7 +818,7 @@ class Recorder {
   recordEvent(
     eventName: string,
     payload: Array<string | number | Object>,
-    time: number = this.now()
+    time: number = this.now(),
   ) {
     if (this.events[eventName] == null) {
       return;
@@ -1152,6 +1152,18 @@ class Recorder {
     if (this.areEventsPlaying() === false) {
       this.finishPlaying();
       return;
+    }
+  }
+
+  unpausePlayback() {
+    this.state = 'playing';
+    this.setVideoToNowDeltaTime(this.currentTime);
+    this.diagram.unpause();
+    this.startEventsPlayback(this.currentTime);
+    this.startAudioPlayback(this.currentTime);
+    this.diagram.animateNextFrame();
+    if (this.areEventsPlaying() === false) {
+      this.finishPlaying();
     }
   }
 
