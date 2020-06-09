@@ -22,9 +22,16 @@ DiagramElementPrimitive {
     "trigger": [Function],
     "undim": [Function],
   },
+  "animationFinishedCallback": null,
   "animations": AnimationManager {
     "animations": Array [],
     "element": [Circular],
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {},
+    },
     "options": Object {
       "translation": Object {},
     },

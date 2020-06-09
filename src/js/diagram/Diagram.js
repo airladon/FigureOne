@@ -168,6 +168,8 @@ class Diagram {
   oldWidth: number;
 
   drawAnimationFrames: number;
+
+  animationFinishedCallback: ?(string | (() => void));
   // updateFontSize: string;
 
   isTouchDevice: boolean;
@@ -206,6 +208,7 @@ class Diagram {
       htmlId, limits,
     } = optionsToUse;
     this.htmlId = htmlId;
+    this.animationFinishedCallback = null;
     // this.layout = layout;
     if (typeof htmlId === 'string') {
       const container = document.getElementById(htmlId);
@@ -725,7 +728,21 @@ class Diagram {
 
   initialize() {
     this.setFirstTransform();
+    const elements = this.elements.getAllElements();
+    elements.forEach((element) => {
+      element.animationFinishedCallback = this.animationFinished.bind(this, element);
+    })
     this.animateNextFrame();
+  }
+
+  
+
+  // eslint-disable-next-line class-methods-use-this
+  animationFinished(element: DiagramElementPrimitive | DiagramElementCollection) {
+    if (this.isAnimating()) {
+      return;
+    }
+    this.fnMap.exec(this.animationFinishedCallback);
   }
 
   setFirstTransform() {
@@ -1526,7 +1543,7 @@ class Diagram {
   }
 
   isAnimating(): boolean {
-    return this.elements.isMoving();
+    return this.elements.isAnimatingOrMovingFreely();
   }
 
   clientToPixel(clientLocation: Point): Point {

@@ -12,16 +12,19 @@ import { DiagramElement } from '../Element';
 import * as anim from './Animation';
 import { joinObjects, duplicateFromTo } from '../../tools/tools';
 import { getState } from '../state';
+import { FunctionMap } from '../FunctionMap';
 // import type Diagram from '../Diagram';
 
 export type TypeAnimationManagerInputOptions = {
   element?: DiagramElement;
+  finishedCallback?: ?(string | (() => void)),
 };
 
 export default class AnimationManager {
   element: ?DiagramElement;
   animations: Array<anim.AnimationStep>;
   state: 'animating' | 'idle';
+  fnMap: FunctionMap;
   options: {
     translation?: {
       style: 'curve' | 'linear',
@@ -30,14 +33,17 @@ export default class AnimationManager {
       offset: number,
       controlPoint: number | null,
       direction: '' | 'up' | 'down' | 'left' | 'right',
-    }
+    },
   }
+  finishedCallback: ?(string | (() => void));
 
   constructor(
     elementOrOptionsIn: DiagramElement | TypeAnimationManagerInputOptions = {},
     ...optionsIn: Array<TypeAnimationManagerInputOptions>
   ) {
-    const defaultOptions = {};
+    const defaultOptions = {
+      finishedCallback: null,
+    };
     let options;
     if (elementOrOptionsIn instanceof DiagramElement) {
       options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -49,6 +55,8 @@ export default class AnimationManager {
     this.animations = [];
     this.state = 'idle';      // $FlowFixMe
     this.options = { translation: {} };
+    this.fnMap = new FunctionMap();
+    this.finishedCallback = options.finishedCallback;
     return this;
   }
 
@@ -115,6 +123,19 @@ export default class AnimationManager {
     return isAnimating;
   }
 
+  isAnimating() {
+    if (this.state === 'animating' || this.state === 'waitingToStart') {
+      return true;
+    }
+    for (let i = 0; i < this.animations.length; i += 1) {
+      const animation = this.animations[i];
+      if (animation.state === 'waitingToStart' || animation.state === 'animating') {
+        return true;
+      }
+    }
+    return false;
+  }
+
   nextFrame(now: number) {
     // console.log('animation manager', now)
     const animationsToRemove = [];
@@ -143,6 +164,9 @@ export default class AnimationManager {
     if (isAnimating) {
       this.state = 'animating';
     } else {
+      if (this.state === 'animating') {
+        this.fnMap.exec(this.finishedCallback);
+      }
       this.state = 'idle';
     }
     for (let i = animationsToRemove.length - 1; i >= 0; i -= 1) {
@@ -173,6 +197,9 @@ export default class AnimationManager {
     if (isAnimating) {
       this.state = 'animating';
     } else {
+      if (this.state === 'animating') {
+        this.fnMap.exec(this.finishedCallback);
+      }
       this.state = 'idle';
     }
   }
@@ -217,6 +244,9 @@ export default class AnimationManager {
         }
       }
     }
+    if (this.state === 'idle') {
+      this.fnMap.exec(this.finishedCallback);
+    }
   }
 
   startAll() {
@@ -229,6 +259,9 @@ export default class AnimationManager {
           this.state = 'animating';
         }
       }
+    }
+    if (this.state === 'idle') {
+      this.fnMap.exec(this.finishedCallback);
     }
   }
 
