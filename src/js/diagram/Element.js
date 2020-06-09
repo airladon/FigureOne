@@ -201,6 +201,7 @@ class DiagramElement {
   };
 
   animations: animations.AnimationManager;
+  animationFinishedCallback: ?(string | (() => void));
 
   // pulse: Object;                  // Pulse animation state
 
@@ -594,7 +595,11 @@ class DiagramElement {
       },
     };
     this.interactiveLocation = new Point(0, 0);
-    this.animations = new animations.AnimationManager(this);
+    this.animationFinishedCallback = null;
+    this.animations = new animations.AnimationManager({
+      element: this,
+      finishedCallback: this.animationFinished.bind(this),
+    });
     this.tieToHTML = {
       element: null,
       scale: 'fit',
@@ -606,6 +611,16 @@ class DiagramElement {
     this.renderedOnNextDraw = false;
     this.pulseTransforms = [];
   }
+
+  animationFinished() {
+    this.fnMap.exec(this.animationFinishedCallback);
+  }
+
+  // animationsFinishedCallback(element: DiagramElement) {
+  //   if (this.parent != null) {
+  //     this.parent.animationsFinishedCallback(element);
+  //   }
+  // }
 
   setProperties(properties: Object, except: Array<string> | string = []) {
     joinObjectsWithOptions({
@@ -1557,6 +1572,7 @@ class DiagramElement {
       this.fnMap.exec(this.move.freely.callback, result);
       this.move.freely.callback = null;
     }
+    this.fnMap.exec(this.animationFinishedCallback);
   }
 
   // Take an input transform matrix, and output a list of transform matrices
@@ -2664,6 +2680,20 @@ class DiagramElementPrimitive extends DiagramElement {
     return false;
   }
 
+  isAnimatingOrMovingFreely(): boolean {
+    if (this.isShown === false) {
+      return false;
+    }
+    if (
+      this.state.isMovingFreely
+      || this.state.isPulsing
+      || this.animations.isAnimating()
+    ) {
+      return true
+    }
+    return false;
+  }
+
   // setupWebGLBuffers(newWebgl: WebGLInstance) {
   //   const { drawingObject } = this;
   //   if (drawingObject instanceof VertexObject) {
@@ -2890,6 +2920,26 @@ class DiagramElementCollection extends DiagramElement {
           return true;
         }
       } else if (element.isShown && element.color[3] > 0 && element.isMoving()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  isAnimatingOrMovingFreely(): boolean {
+    if (this.isShown === false) {
+      return false;
+    }
+    if (
+      this.state.isMovingFreely
+      || this.state.isPulsing
+      || this.animations.state === 'animating'
+    ) {
+      return true
+    }
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element.isAnimatingOrMovingFreely()) {
         return true;
       }
     }
