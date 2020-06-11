@@ -265,6 +265,28 @@ export default class AnimationManager {
     }
   }
 
+  getTotalDuration() {
+    let duration = 0;
+    this.animations.forEach((animation) => {
+      const animationDuration = animation.getTotalDuration();
+      if (animationDuration > duration) {
+        duration = animationDuration;
+      }
+    });
+    return duration; 
+  }
+
+  getRemainingTime(now: number = performance.now()) {
+    let remainingTime = 0;
+    this.animations.forEach((animation) => {
+      const animationRemainingTime = animation.getRemainingTime(now);
+      if (animationRemainingTime > remainingTime) {
+        remainingTime = animationRemainingTime;
+      }
+    });
+    return remainingTime;
+  }
+
   addTo(name: string) {
     for (let i = 0; i < this.animations.length; i += 1) {
       const animation = this.animations[i];
