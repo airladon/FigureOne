@@ -26,6 +26,7 @@ DiagramElementPrimitive {
   "animations": AnimationManager {
     "animations": Array [],
     "element": [Circular],
+    "finishedCallback": [Function],
     "fnMap": FunctionMap {
       "global": GlobalFunctionMap {
         "map": Object {},

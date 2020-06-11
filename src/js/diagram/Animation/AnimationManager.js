@@ -124,6 +124,7 @@ export default class AnimationManager {
   }
 
   isAnimating() {
+    // console.log(this.state)
     if (this.state === 'animating' || this.state === 'waitingToStart') {
       return true;
     }
@@ -138,6 +139,7 @@ export default class AnimationManager {
 
   nextFrame(now: number) {
     // console.log('animation manager', now)
+    // console.log(this.element.name, this.state)
     const animationsToRemove = [];
     let remaining = null;
     let isAnimating = false;
@@ -161,10 +163,12 @@ export default class AnimationManager {
         isAnimating = true;
       }
     });
+
     if (isAnimating) {
       this.state = 'animating';
     } else {
       if (this.state === 'animating') {
+        this.state = 'idle';
         this.fnMap.exec(this.finishedCallback);
       }
       this.state = 'idle';
@@ -172,11 +176,6 @@ export default class AnimationManager {
     for (let i = animationsToRemove.length - 1; i >= 0; i -= 1) {
       this.animations.splice(animationsToRemove[i], 1);
     }
-    // if (initialState !== 'animating' && this.state === 'animating') {
-    //   if (this.element != null) {
-    //     this.element.unrender();
-    //   }
-    // }
     return remaining;
   }
 
@@ -198,6 +197,7 @@ export default class AnimationManager {
       this.state = 'animating';
     } else {
       if (this.state === 'animating') {
+        this.state = 'idle';
         this.fnMap.exec(this.finishedCallback);
       }
       this.state = 'idle';

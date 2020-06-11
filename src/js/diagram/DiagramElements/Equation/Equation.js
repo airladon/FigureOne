@@ -1073,7 +1073,7 @@ export class Equation extends DiagramElementCollection {
     return new EquationForm(
       elements,
       {
-        getAllElements: this.getAllElements.bind(this),
+        getAllElements: this.getChildren.bind(this),
         hideAll: this.hideAll.bind(this),
         show: this.show.bind(this),
         showOnly: this.showOnly.bind(this),
