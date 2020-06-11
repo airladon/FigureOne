@@ -112,6 +112,9 @@ export class SerialAnimationStep extends AnimationStep {
   }
 
   nextFrame(now: number) {
+    if (this.startTime === null) {
+      this.startTime = now - this.startTimeOffset;
+    }
     let remaining = -1;
     if (this.beforeFrame != null) {
       this.beforeFrame(now - this.startTime);
@@ -165,16 +168,20 @@ export class SerialAnimationStep extends AnimationStep {
     let totalDuration = 0;
     this.steps.forEach((step) => {
       totalDuration += step.getTotalDuration();
-    })
+    });
     return totalDuration;
   }
 
   getRemainingTime(now: number = performance.now()) {
+    const totalDuration = this.getTotalDuration();
     if (this.startTime == null) {
-      return 0;
+      if (this.state === 'animating' || this.state === 'waitingToStart') {
+        return totalDuration;
+      } else {
+        return 0;
+      }
     }
     const deltaTime = now - this.startTime;
-    const totalDuration = this.getTotalDuration();
     return totalDuration - deltaTime;
   }
 

@@ -284,6 +284,7 @@ export default class AnimationManager {
         remainingTime = animationRemainingTime;
       }
     });
+    // console.log(this.element.name, remainingTime, this.animations);
     return remainingTime;
   }
 
