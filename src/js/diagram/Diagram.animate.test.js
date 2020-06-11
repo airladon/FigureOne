@@ -138,7 +138,7 @@ describe('Animate To State', () => {
         .position({ target: [1, 1], duration: 1 })
         .start();
       expect(diagram.isAnimating()).toBe(true);
-      // expect(diagram.getRemainingAnimationTime()).toBe(1);
+      expect(diagram.getRemainingAnimationTime()).toBe(1);
       diagram.draw(0);
       expect(diagram.getRemainingAnimationTime(0)).toBe(1);
       diagram.draw(0.5);
@@ -156,7 +156,7 @@ describe('Animate To State', () => {
         .position({ target: [1, 1], delay: 1, duration: 1 })
         .start();
       expect(diagram.isAnimating()).toBe(true);
-      // expect(diagram.getRemainingAnimationTime()).toBe(1);
+      expect(diagram.getRemainingAnimationTime()).toBe(2);
       diagram.draw(0);
       expect(diagram.getRemainingAnimationTime(0)).toBe(2);
       diagram.draw(0.5);
