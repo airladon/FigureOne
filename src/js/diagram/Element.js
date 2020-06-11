@@ -613,6 +613,7 @@ class DiagramElement {
   }
 
   animationFinished() {
+    // console.log(this.name, this.animationFinishedCallback)
     this.fnMap.exec(this.animationFinishedCallback);
   }
 
@@ -2684,6 +2685,7 @@ class DiagramElementPrimitive extends DiagramElement {
     if (this.isShown === false) {
       return false;
     }
+    // console.log(this.name, this.state.isMovingFreely, this.state.isPulsing, this.animations.isAnimating())
     if (
       this.state.isMovingFreely
       || this.state.isPulsing
@@ -3878,7 +3880,7 @@ class DiagramElementCollection extends DiagramElement {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       if (element instanceof DiagramElementCollection) {
-        elements = [...elements, ...element.getAllElements()];
+        elements = [...elements, ...element.getAllPrimitives()];
       } else {
         elements.push(element);
       }
@@ -3887,6 +3889,19 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   getAllElements() {
+    const elements = [];
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element instanceof DiagramElementPrimitive) {
+        elements.push(element);
+      } else {
+        elements.push(...elements, ...element.getAllElements());
+      }
+    }
+    return elements;
+  }
+
+  getChildren(directChildrenOnly: boolean = true) {
     const elements = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];

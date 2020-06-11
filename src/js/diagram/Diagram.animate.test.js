@@ -138,17 +138,59 @@ describe('Animate To State', () => {
       callback = jest.fn(() => {});
       diagram.animationFinishedCallback = callback;
     })
-    test.only('Simple', () => {
+    test('Simple', () => {
       p1.animations.new()
         .position({ target: [1, 1], duration: 1 })
         .start();
-      console.log(p1.animations.state)
       expect(diagram.isAnimating()).toBe(true);
       diagram.draw(0);
       diagram.draw(0.5);
       expect(diagram.isAnimating()).toBe(true);
       expect(callback.mock.calls).toHaveLength(0);
       diagram.draw(1);
+      expect(callback.mock.calls).toHaveLength(1);
+    });
+    test('Multiple animations with same durations', () => {
+      p1.animations.new()
+        .position({ target: [1, 1], duration: 1 })
+        .start();
+      p2.animations.new()
+        .position({ target: [1, 1], duration: 1 })
+        .start();
+      expect(diagram.isAnimating()).toBe(true);
+      
+      diagram.draw(0);
+      diagram.draw(0.5);
+      expect(diagram.isAnimating()).toBe(true);
+      expect(callback.mock.calls).toHaveLength(0);
+      
+      diagram.draw(1);
+      expect(diagram.isAnimating()).toBe(false);
+      expect(callback.mock.calls).toHaveLength(1);
+    });
+    test('Multiple animations with different durations', () => {
+      p1.animations.new()
+        .position({ target: [1, 1], duration: 1 })
+        .start();
+      p2.animations.new()
+        .position({ target: [1, 1], duration: 2 })
+        .start();
+      expect(diagram.isAnimating()).toBe(true);
+      
+      diagram.draw(0);
+      diagram.draw(0.5);
+      expect(diagram.isAnimating()).toBe(true);
+      expect(callback.mock.calls).toHaveLength(0);
+      
+      diagram.draw(1);
+      expect(diagram.isAnimating()).toBe(true);
+      expect(callback.mock.calls).toHaveLength(0);
+      
+      diagram.draw(1.5);
+      expect(diagram.isAnimating()).toBe(true);
+      expect(callback.mock.calls).toHaveLength(0);
+      
+      diagram.draw(2);
       expect(callback.mock.calls).toHaveLength(1);
     });
   });
