@@ -235,13 +235,26 @@ export default class AnimationStep {
     return remainingTime;
   }
 
-  getRemainingTime(now: number = performance.now()){
+  getRemainingTime(now: number = performance.now()) {
+    const totalDuration = this.getTotalDuration();
     if (this.startTime == null) {
-      return 0;
+      if (this.state === 'animating' || this.state === 'waitingToStart') {
+        return totalDuration;
+      } else {
+        return 0;
+      }
     }
     const deltaTime = now - this.startTime;
     return this.duration + this.startDelay - deltaTime;
   }
+
+  // getRemainingTime(now: number = performance.now()){
+  //   if (this.startTime == null) {
+  //     return 0;
+  //   }
+  //   const deltaTime = now - this.startTime;
+  //   return this.duration + this.startDelay - deltaTime;
+  // }
 
   getTotalDuration() {
     return this.duration + this.startDelay;
