@@ -731,10 +731,20 @@ class Diagram {
     const elements = this.elements.getAllElements();
     elements.forEach((element) => {
       element.animationFinishedCallback = this.animationFinished.bind(this, element);
-    })
+    });
     this.animateNextFrame();
   }
 
+  getRemainingAnimationTime(now: number = performance.now()) {
+    const elements = this.elements.getAllElements();
+    let remainingTime = 0;
+    elements.forEach((element) => {
+      const elementRemainingTime = element.animations.getRemainingTime(now);    });
+      if (elementRemainingTime > remainingTime) {
+        remainingTime = elementRemainingTime;
+      }
+    return remainingTime;
+  }
   
 
   // eslint-disable-next-line class-methods-use-this

@@ -235,6 +235,18 @@ export default class AnimationStep {
     return remainingTime;
   }
 
+  getRemainingTime(now: number = performance.now()){
+    if (this.startTime == null) {
+      return 0;
+    }
+    const deltaTime = now - this.startTime;
+    return this.duration + this.startDelay - deltaTime;
+  }
+
+  getTotalDuration() {
+    return this.duration + this.startDelay;
+  }
+
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
   setFrame(deltaTime: number) {
   }

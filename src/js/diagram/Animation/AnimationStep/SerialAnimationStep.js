@@ -161,6 +161,23 @@ export class SerialAnimationStep extends AnimationStep {
     }
   }
 
+  getTotalDuration() {
+    let totalDuration = 0;
+    this.steps.forEach((step) => {
+      totalDuration += step.getTotalDuration();
+    })
+    return totalDuration;
+  }
+
+  getRemainingTime(now: number = performance.now()) {
+    if (this.startTime == null) {
+      return 0;
+    }
+    const deltaTime = now - this.startTime;
+    const totalDuration = this.getTotalDuration();
+    return totalDuration - deltaTime;
+  }
+
   _dup() {
     const step = new SerialAnimationStep();
     duplicateFromTo(this, step);
