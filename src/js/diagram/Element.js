@@ -2696,6 +2696,13 @@ class DiagramElementPrimitive extends DiagramElement {
     return false;
   }
 
+  isAnimating(): boolean {
+    if (this.isShown === false) {
+      return false;
+    }
+    return this.animations.isAnimating();
+  }
+
   // setupWebGLBuffers(newWebgl: WebGLInstance) {
   //   const { drawingObject } = this;
   //   if (drawingObject instanceof VertexObject) {
