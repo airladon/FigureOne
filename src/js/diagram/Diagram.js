@@ -384,6 +384,9 @@ class Diagram {
       pause: this.pause.bind(this),
       unpause: this.unpause.bind(this),
       getIsInTransition: this.getIsInTransition.bind(this),
+      animateToState: this.animateToState.bind(this),
+      isAnimating: this.isAnimating.bind(this),
+      setAnimationFinishedCallback: this.setAnimationFinishedCallback.bind(this),
     };
     const onCursor = (payload) => {
       const [action, x, y] = payload;
@@ -747,6 +750,9 @@ class Diagram {
     return remainingTime;
   }
   
+  setAnimationFinishedCallback(callback: ?(string | (() => void))) {
+    this.animationFinishedCallback = callback;
+  }
 
   // eslint-disable-next-line class-methods-use-this
   animationFinished(element: DiagramElementPrimitive | DiagramElementCollection) {
@@ -1554,7 +1560,7 @@ class Diagram {
   }
 
   isAnimating(): boolean {
-    return this.elements.isAnimatingOrMovingFreely();
+    return this.elements.isAnimating();
   }
 
   clientToPixel(clientLocation: Point): Point {

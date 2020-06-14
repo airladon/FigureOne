@@ -330,6 +330,10 @@ class DiagramElement {
         const options = joinObjects({}, ...optionsIn);
         return new animations.TriggerStep(options);
       },
+      translation: (...optionsIn: Array<TypePositionAnimationStepInputOptions>) => {
+        const options = joinObjects({}, { element: this }, ...optionsIn);
+        return new animations.PositionAnimationStep(options);
+      },
       position: (...optionsIn: Array<TypePositionAnimationStepInputOptions>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.PositionAnimationStep(options);
@@ -2290,6 +2294,14 @@ class DiagramElement {
   getTransform() {
     return this.transform;
   }
+
+  isAnimating(): boolean {
+    console.log(this.name, this.isShown, this.animations.isAnimating())
+    if (this.isShown === false) {
+      return false;
+    }
+    return this.animations.isAnimating();
+  }
 }
 
 // ***************************************************************
@@ -2696,13 +2708,6 @@ class DiagramElementPrimitive extends DiagramElement {
     return false;
   }
 
-  isAnimating(): boolean {
-    if (this.isShown === false) {
-      return false;
-    }
-    return this.animations.isAnimating();
-  }
-
   // setupWebGLBuffers(newWebgl: WebGLInstance) {
   //   const { drawingObject } = this;
   //   if (drawingObject instanceof VertexObject) {
@@ -2949,6 +2954,20 @@ class DiagramElementCollection extends DiagramElement {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       if (element.isAnimatingOrMovingFreely()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  isAnimating(): boolean {
+    const isThisAnimating = super.isAnimating();
+    if (isThisAnimating) {
+      return true;
+    }
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element.isAnimating()) {
         return true;
       }
     }
