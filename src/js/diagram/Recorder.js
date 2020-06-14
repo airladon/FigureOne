@@ -177,6 +177,8 @@ class Recorder {
     [eventName: string]: number;
   };
 
+  pauseState: ?Object;
+
   stateTimeStep: number;      // in seconds
   diagram: {
     showCursor: ('up' | 'down' | 'hide', ?Point) => void,
@@ -187,6 +189,9 @@ class Recorder {
     setState: (Object) => void,
     animateNextFrame: () => void,
     getIsInTransition: () => boolean,
+    animateToState: (Object, Object, ?(string | (() => void))) => void,
+    isAnimating: () => boolean,
+    setAnimationFinishedCallback: ?(string | (() => void)) => void,
   }
 
   // timeoutID: ?TimeoutID;
@@ -233,6 +238,7 @@ class Recorder {
       this.audio = null;
       this.playbackStoppedCallback = null;
       this.worker = null;
+      this.pauseState = null;
     }
     return Recorder.instance;
   }
@@ -929,6 +935,7 @@ class Recorder {
   }
 
   seek(timeIn: number) {
+    this.pauseState = null;
     let time = timeIn;
     if (time < 0) {
       time = 0;
@@ -1156,6 +1163,13 @@ class Recorder {
   }
 
   unpausePlayback() {
+    if (this.pauseState == null) {
+      this.startPlayback(this.currentTime);
+      return;
+    }
+    this.diagram.animateToState(this.pauseState, { duration: 1 }, () => {
+      this.diagram.setState(this.pauseState);
+    });
     this.state = 'playing';
     this.setVideoToNowDeltaTime(this.currentTime);
     this.diagram.unpause();
@@ -1318,20 +1332,32 @@ class Recorder {
 
   pausePlayback() {
     this.currentTime = this.getCurrentTime();
-    this.diagram.pause();
-    this.state = 'idle';
-    // this.clearPlaybackTimeouts();
-    this.stopTimeouts();
-    // const pointer = this.diagram.getElement('pointer');
-    // if (pointer != null) {
-    //   pointer.hide();
-    // }
-    if (this.audio) {
-      this.audio.pause();
-      this.isAudioPlaying = false;
+    this.pauseState =this.diagram.getState({
+      precision: this.precision,
+      ignoreShown: true,
+    });
+
+    const pause = () => {
+      this.diagram.pause();
+      this.state = 'idle';
+      // this.clearPlaybackTimeouts();
+      this.stopTimeouts();
+      // const pointer = this.diagram.getElement('pointer');
+      // if (pointer != null) {
+      //   pointer.hide();
+      // }
+      if (this.audio) {
+        this.audio.pause();
+        this.isAudioPlaying = false;
+      }
+      if (this.playbackStoppedCallback != null) {
+        this.playbackStoppedCallback();
+      }
     }
-    if (this.playbackStoppedCallback != null) {
-      this.playbackStoppedCallback();
+    if (this.diagram.isAnimating()) {
+      this.diagram.setAnimationFinishedCallback(pause);
+    } else {
+      pause();
     }
   }
 

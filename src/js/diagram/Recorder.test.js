@@ -68,6 +68,7 @@ describe('Diagram Recorder', () => {
       global.performance.now = () => newNow;
       jest.advanceTimersByTime((deltaTimeInSeconds * 1000));
       duration += deltaTimeInSeconds;
+      diagram.draw(newNow);
     };
     check = (isShown, up, down, x, y, currentTime) => {
       expect(cursor.isShown).toBe(isShown);
@@ -560,11 +561,13 @@ describe('Diagram Recorder', () => {
         expect(recorder.states.diffs[2][2].diff).toEqual({
           '.elements.elements.a.transform.state[2].state[1]': 1,
           '.stateTime': 12,
+          '.lastDrawTime': 11000,
         });
         expect(recorder.states.diffs[3][0]).toBe(3);
         expect(recorder.states.diffs[3][2].diff).toEqual({
           '.elements.elements.a.transform.state[2].state[1]': 2,
           '.stateTime': 13,
+          '.lastDrawTime': 12000,
         });
         expect(recorder.states.diffs).toHaveLength(4);
 
@@ -600,16 +603,19 @@ describe('Diagram Recorder', () => {
         expect(recorder.states.diffs[2][2].diff).toEqual({
           '.elements.elements.a.transform.state[2].state[1]': 1.5,
           '.stateTime': 22,
+          '.lastDrawTime': 21000,
         });
         expect(recorder.states.diffs[3][0]).toBe(3);
         expect(recorder.states.diffs[3][2].diff).toEqual({
           '.elements.elements.a.transform.state[2].state[1]': 1.5,
           '.stateTime': 23,
+          '.lastDrawTime': 22000,
         });
         expect(recorder.states.diffs[4][0]).toBe(4);
         expect(recorder.states.diffs[4][2].diff).toEqual({
           '.elements.elements.a.transform.state[2].state[1]': 2.5,
           '.stateTime': 24,
+          '.lastDrawTime': 23000,
         });
         expect(recorder.states.diffs).toHaveLength(5);
       });
@@ -686,23 +692,27 @@ describe('Diagram Recorder', () => {
         expect(recorder.states.diffs[2]).toEqual([2, '__base', {
           diff: {
             '.stateTime': 12,
+            '.lastDrawTime': 11000,
           },
         }, 0]);
         expect(recorder.states.diffs[3]).toEqual([3, '__base', {
           diff: {
             '.stateTime': 13,
+            '.lastDrawTime': 12000,
           },
         }, 0]);
         expect(recorder.states.diffs[4]).toEqual([4, '__base', {
           diff: {
             '.elements.elements.a.transform.state[2].state[1]': 1,
             '.stateTime': 14,
+            '.lastDrawTime': 13000,
           },
         }, 0]);
         expect(recorder.states.diffs[5]).toEqual([5, '__base', {
           diff: {
             '.elements.elements.a.transform.state[2].state[1]': 2,
             '.stateTime': 15,
+            '.lastDrawTime': 14000,
           },
         }, 0]);
 
@@ -725,24 +735,28 @@ describe('Diagram Recorder', () => {
         expect(recorder.states.diffs[2]).toEqual([2, '__base', {
           diff: {
             '.stateTime': 21.5,
+            '.lastDrawTime': 20500,
           },
         }, 0]);
         expect(recorder.states.diffs[3]).toEqual([3, '__base', {
           diff: {
             '.elements.elements.a.transform.state[2].state[1]': 1.6,
             '.stateTime': 22.5,
+            '.lastDrawTime': 21500,
           },
         }, 0]);
         expect(recorder.states.diffs[4]).toEqual([4, '__base', {
           diff: {
             '.elements.elements.a.transform.state[2].state[1]': 1,
             '.stateTime': 14,
+            '.lastDrawTime': 13000,
           },
         }, 0]);
         expect(recorder.states.diffs[5]).toEqual([5, '__base', {
           diff: {
             '.elements.elements.a.transform.state[2].state[1]': 2,
             '.stateTime': 15,
+            '.lastDrawTime': 14000,
           },
         }, 0]);
       });
@@ -807,30 +821,35 @@ describe('Diagram Recorder', () => {
         expect(recorder.states.diffs[2]).toEqual([2, '__base', {
           diff: {
             '.stateTime': 21.5,
+            '.lastDrawTime': 20500,
           },
         }, 0]);
         expect(recorder.states.diffs[3]).toEqual([3, '__base', {
           diff: {
             '.elements.elements.a.transform.state[2].state[1]': 5,
             '.stateTime': 22.5,
+            '.lastDrawTime': 21500,
           },
         }, 0]);
         expect(recorder.states.diffs[4]).toEqual([4, '__base', {
           diff: {
             '.elements.elements.a.transform.state[2].state[1]': 5,
             '.stateTime': 23.5,
+            '.lastDrawTime': 22500,
           },
         }, 0]);
         expect(recorder.states.diffs[5]).toEqual([5, '__base', {
           diff: {
             '.elements.elements.a.transform.state[2].state[1]': 5,
             '.stateTime': 24.5,
+            '.lastDrawTime': 23500,
           },
         }, 0]);
         expect(recorder.states.diffs[6]).toEqual([6, '__base', {
           diff: {
             '.elements.elements.a.transform.state[2].state[1]': 1.6,
             '.stateTime': 25.5,
+            '.lastDrawTime': 24500,
           },
         }, 0]);
       });
@@ -2098,6 +2117,28 @@ describe('Diagram Recorder', () => {
         check(false, null, null, null, null, 12);
         expect(recorder.state).toBe('idle');
       });
+    });
+  });
+  describe('Playback Pausing', () => {
+    test.only('Simple', () => {
+      initialTime = 0;
+      recorder.stateTimeStep = 1;
+      const a = diagram.getElement('a');
+      timeStep(0);
+      diagram.draw(0);
+      recorder.startRecording();
+
+      timeStep(1);
+      diagram.draw(1);
+      a.animations.new()
+        .translation({ start: [0, 0], target: [1, 1], duration: 2 })
+        .start();
+      diagram.draw(1.1);
+      expect(diagram.isAnimating()).toBe(true);
+      timeStep(1.5);
+      diagram.draw(1.5);
+      expect(diagram.isAnimating()).toBe(true);
+      expect(a.getPosition()).toEqual(new Point(0.25, 0.25));
     });
   });
   describe('Editing', () => {
