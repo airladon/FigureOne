@@ -725,6 +725,7 @@ class Recorder {
       this.audio.pause();
       this.isAudioPlaying = false;
     }
+    this.lastSeekTime = null;
     // this.mergeEventsCache();
     // this.mergeStatesCache();
     // this.duration = this.calcDuration();
@@ -850,11 +851,13 @@ class Recorder {
 
   // States are recorded every second
   queueRecordState(time: number = 0) {
+    // console.log(time)
     const recordAndQueue = () => {
       if (this.state === 'recording') {
         if (this.diagram.getIsInTransition() === false) {
           this.recordCurrentState();
         }
+        // console.log('recording', time, this.stateTimeStep - this.getCurrentTime() % this.stateTimeStep)
         this.queueRecordState(this.stateTimeStep - this.getCurrentTime() % this.stateTimeStep);
       }
     };
@@ -954,6 +957,7 @@ class Recorder {
   }
 
   setToTime(timeIn: number) {
+    // console.log(timeIn)
     // if (this.states.diffs.length === 0) {
     //   return;
     // }
@@ -1033,6 +1037,7 @@ class Recorder {
       });
     };
     playEvents(eventsToSetBeforeState);
+    // console.log(this.stateIndex)
     if (this.stateIndex !== -1) {
       this.setState(this.stateIndex);
     }
