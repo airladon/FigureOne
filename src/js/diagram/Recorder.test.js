@@ -68,6 +68,7 @@ describe('Diagram Recorder', () => {
       global.performance.now = () => newNow;
       jest.advanceTimersByTime((deltaTimeInSeconds * 1000));
       duration += deltaTimeInSeconds;
+      diagram.animateNextFrame();
       diagram.draw(newNow);
     };
     check = (isShown, up, down, x, y, currentTime) => {
@@ -2124,19 +2125,28 @@ describe('Diagram Recorder', () => {
       initialTime = 0;
       recorder.stateTimeStep = 1;
       const a = diagram.getElement('a');
+      console.log('1asdf')
+      console.log(diagram.elements._cursor.isShown)
       timeStep(0);
+      console.log(diagram.elements._cursor.isShown)
+      console.log('2asdf')
       diagram.draw(0);
+      console.log('3asdf')
       recorder.startRecording();
 
       timeStep(1);
-      diagram.draw(1);
+      console.log('4asdf')
+      // diagram.draw(1);
       a.animations.new()
-        .translation({ start: [0, 0], target: [1, 1], duration: 2 })
+        .position({ start: [0, 0], target: [1, 1], duration: 2 })
         .start();
-      diagram.draw(1.1);
       expect(diagram.isAnimating()).toBe(true);
+      expect(a.getPosition()).toEqual(new Point(0, 0));
+      console.log(a.animations.animations[0].startTime, a.animations.animations[0].steps[0].startTime)
+      diagram.draw(1.1);
+      console.log(a.animations.animations[0].startTime, a.animations.animations[0].steps[0].startTime)
       timeStep(1.5);
-      diagram.draw(1.5);
+      // diagram.draw(1.5);
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0.25, 0.25));
     });

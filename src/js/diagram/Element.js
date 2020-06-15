@@ -2296,7 +2296,7 @@ class DiagramElement {
   }
 
   isAnimating(): boolean {
-    console.log(this.name, this.isShown, this.animations.isAnimating())
+    // console.log(this.name, this.isShown, this.animations.isAnimating())
     if (this.isShown === false) {
       return false;
     }
@@ -2536,6 +2536,7 @@ class DiagramElementPrimitive extends DiagramElement {
   }
 
   setupDraw(parentTransform: Transform = new Transform(), now: number = 0) {
+    console.log('draw', this.name)
     if (this.isShown) {
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {
@@ -2547,6 +2548,7 @@ class DiagramElementPrimitive extends DiagramElement {
       if (this.beforeDrawCallback != null) {
         this.fnMap.exec(this.beforeDrawCallback, now);
       }
+      // console.log(this.name, this.isShown, this.isPaused)
       if (!this.isPaused) {
         this.animations.nextFrame(now);
         this.nextMovingFreelyFrame(now);
@@ -3010,6 +3012,7 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   setupDraw(parentTransform: Transform = new Transform(), now: number = 0, canvasIndex: number = 0) {
+    console.log('draw', this.name)
     if (this.isShown) {
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {
