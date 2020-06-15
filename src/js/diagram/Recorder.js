@@ -1158,7 +1158,7 @@ class Recorder {
     this.diagram.animateNextFrame();
     if (this.areEventsPlaying() === false) {
       this.finishPlaying();
-      return;
+      // return;
     }
   }
 

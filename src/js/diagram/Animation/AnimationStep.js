@@ -214,6 +214,7 @@ export default class AnimationStep {
       this.startTime = now - this.startTimeOffset;
     }
     const deltaTime = now - this.startTime;
+    // console.log(now, this.startTime, deltaTime, this.startDelay);
     let remainingTime = -(this.duration + this.startDelay - deltaTime);
     if (deltaTime >= this.startDelay) {
       let deltaTimeAfterDelay = deltaTime - this.startDelay;
@@ -224,6 +225,7 @@ export default class AnimationStep {
       if (this.beforeFrame) {
         this.beforeFrame(deltaTimeAfterDelay / this.duration);
       }
+      // console.log(deltaTimeAfterDelay)
       this.setFrame(deltaTimeAfterDelay);
       if (this.afterFrame) {
         this.afterFrame(deltaTimeAfterDelay / this.duration);

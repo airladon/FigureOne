@@ -2536,7 +2536,6 @@ class DiagramElementPrimitive extends DiagramElement {
   }
 
   setupDraw(parentTransform: Transform = new Transform(), now: number = 0) {
-    console.log('draw', this.name)
     if (this.isShown) {
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {
@@ -3012,7 +3011,7 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   setupDraw(parentTransform: Transform = new Transform(), now: number = 0, canvasIndex: number = 0) {
-    console.log('draw', this.name)
+    // console.log('draw', this.name)
     if (this.isShown) {
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {

@@ -139,13 +139,13 @@ export default class AnimationManager {
 
   nextFrame(now: number) {
     // console.log('animation manager', now)
-    console.log(this.element.name, this.state, this.animations)
+    // console.log(this.element.name, this.state, this.animations)
     const animationsToRemove = [];
     let remaining = null;
     let isAnimating = false;
     this.animations.forEach((animation, index) => {
       let animationIsAnimating = false;
-      console.log(this.element.name, animation.state)
+      // console.log(this.element.name, animation.state)
       if (animation.state === 'waitingToStart' || animation.state === 'animating') {
         const stepRemaining = animation.nextFrame(now);
         if (remaining === null) {
