@@ -1443,6 +1443,7 @@ class Diagram {
   }
 
   draw(nowIn: number, canvasIndex: number = 0): void {
+    console.log('Draw draw drawey draw draw', nowIn, this.drawQueued)
     let now = nowIn;
     if (nowIn === -1) {
       now = this.lastDrawTime;
