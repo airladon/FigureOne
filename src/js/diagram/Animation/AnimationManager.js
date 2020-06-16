@@ -173,9 +173,17 @@ export default class AnimationManager {
     } else {
       if (this.state === 'animating') {
         this.state = 'idle';
+        if (window.asdf) {
+          console.log('finishcallback')
+          // debugger;
+        }
         this.fnMap.exec(this.finishedCallback);
       }
       this.state = 'idle';
+    }
+    if (window.asdf) {
+      console.log('removing')
+      // debugger;
     }
     for (let i = animationsToRemove.length - 1; i >= 0; i -= 1) {
       this.animations.splice(animationsToRemove[i], 1);
