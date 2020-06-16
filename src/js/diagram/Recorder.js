@@ -1182,6 +1182,7 @@ class Recorder {
     this.state = 'preparingToPlay';
     this.diagram.animateToState(this.pauseState, { duration: 1 }, () => {
       console.log('setting')
+      // debugger;
       this.diagram.setState(this.pauseState);
       // console.log(this.pauseState.elements.elements.a.animations)
       console.log(this.diagram.getElement('a').animations.animations[0].state)

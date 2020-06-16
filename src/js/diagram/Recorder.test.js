@@ -2253,14 +2253,15 @@ describe('Diagram Recorder', () => {
       timeStep(0);
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(1, 1));
+      window.asdf = true;
       timeStep(0.5);
       expect(recorder.state = 'preparingToPlay');
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
       console.log('start')
+      
       timeStep(0.5);
       expect(recorder.state = 'playing');
-      window.asdf = true;
       console.log('asdfasdfasdf');
       console.log(a.animations.finishedCallback, a.animationFinishedCallback)
       expect(diagram.isAnimating()).toBe(true);
