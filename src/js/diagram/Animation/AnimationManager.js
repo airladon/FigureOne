@@ -178,6 +178,7 @@ export default class AnimationManager {
       this.state = 'idle';
     }
     for (let i = animationsToRemove.length - 1; i >= 0; i -= 1) {
+      debugger;
       this.animations.splice(animationsToRemove[i], 1);
     }
     return remaining;
