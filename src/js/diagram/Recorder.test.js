@@ -2121,35 +2121,82 @@ describe('Diagram Recorder', () => {
     });
   });
   describe('Playback Pausing', () => {
-    test.only('Simple', () => {
-      const a = diagram.getElement('a');
+    let a;
+    beforeEach(() => {
+      a = diagram.getElement('a');
+      const startAnimation = () => {
+        a.animations.new()
+          .position({ start: [0, 0], target: [1, 1], duration: 2 })
+          .start();
+      };
+      recorder.addEventType('startAnimation', startAnimation.bind(this));
 
       // setup
       initialTime = 0;
       recorder.stateTimeStep = 1;
-      a.animations.new()
-        .position({ start: [0, 0], target: [1, 1], duration: 2 })
-        .start();
       timeStep(0);
       diagram.pause();
       expect(a.getPosition()).toEqual(new Point(0, 0));
+      recorder.playbackStoppedCallback = jest.fn(() => {});
 
       // recording
       recorder.startRecording();
+      // expect(diagram.isAnimating()).toBe(false);
+      timeStep(1);
+      // expect(diagram.isAnimating()).toBe(true);
+      startAnimation();
+      recorder.recordEvent('startAnimation');
+      timeStep(1);
+      // expect(diagram.isAnimating()).toBe(true);
+      // expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+      timeStep(1);
+      // expect(diagram.isAnimating()).toBe(false);
+      // expect(a.getPosition()).toEqual(new Point(1, 1));
+      recorder.stopRecording();
+    });
+    test('No Pausing', () => {
+      recorder.startPlayback(0);
+      expect(diagram.isAnimating()).toBe(false);
+      expect(a.getPosition()).toEqual(new Point(0, 0));
+      timeStep(1);
       expect(diagram.isAnimating()).toBe(true);
+      expect(a.getPosition()).toEqual(new Point(0, 0));
       timeStep(1);
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
       timeStep(1);
       expect(diagram.isAnimating()).toBe(false);
       expect(a.getPosition()).toEqual(new Point(1, 1));
-      recorder.stopRecording();
-
-      // start playback
+    });
+    test.only('Pause before animation', () => {
       recorder.startPlayback(0);
+      expect(diagram.isAnimating()).toBe(false);
+      expect(a.getPosition()).toEqual(new Point(0, 0));
+      timeStep(0.5);
+      expect(diagram.isAnimating()).toBe(false);
+      expect(a.getPosition()).toEqual(new Point(0, 0));
+      expect(recorder.playbackStoppedCallback.mock.calls.length).toBe(0);
+
+      // Pause Test
+      recorder.pausePlayback();
+      expect(diagram.isAnimating()).toBe(false);
+      expect(a.getPosition()).toEqual(new Point(0, 0));
+      expect(recorder.playbackStoppedCallback.mock.calls.length).toBe(1);
+      recorder.resumePlayback();
+      expect(diagram.isAnimating()).toBe(false);
+      expect(a.getPosition()).toEqual(new Point(0, 0));
+      expect(recorder.playbackStoppedCallback.mock.calls.length).toBe(1);
+
+      //
+      timeStep(0.5);
+      expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0, 0));
       timeStep(1);
+      expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+      timeStep(1);
+      expect(diagram.isAnimating()).toBe(false);
+      expect(a.getPosition()).toEqual(new Point(1, 1));
     });
   });
   describe('Editing', () => {

@@ -522,7 +522,7 @@ class Recorder {
     // this.statesCache.baseReference = duplicate(this.states.baseReference);  // $FlowFixMe
     // this.statesCache.references = duplicate(this.states.references);
     this.diagram.unpause();
-    console.log('asdf3', this.diagram.getElement('a').animations.animations[0].steps[0].startTime)
+    // console.log('asdf3', this.diagram.getElement('a').animations.animations[0].steps[0].startTime)
 
     this.lastRecordTime = null;
     this.duration = this.calcDuration();
@@ -1172,7 +1172,7 @@ class Recorder {
     }
   }
 
-  unpausePlayback() {
+  resumePlayback() {
     if (this.pauseState == null) {
       this.startPlayback(this.currentTime);
       return;
@@ -1342,7 +1342,7 @@ class Recorder {
 
   pausePlayback() {
     this.currentTime = this.getCurrentTime();
-    this.pauseState =this.diagram.getState({
+    this.pauseState = this.diagram.getState({
       precision: this.precision,
       ignoreShown: true,
     });
