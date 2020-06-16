@@ -482,8 +482,12 @@ class Recorder {
     // if (fromTime > 0) {
     this.state = 'recording';
     this.lastSeekTime = null;
+    // console.log('asdf1', this.diagram.getElement('a').animations.animations[0].steps[0].startTime)
     this.setVideoToNowDeltaTime(fromTime);
-    this.setToTime(fromTime);
+    if (this.states.diffs.length > 0) {
+      this.setToTime(fromTime);
+    }
+    // console.log('asdf2', this.diagram.getElement('a').animations.animations[0].steps[0].startTime)
     // }
     // console.log(this.stateIndex);
     this.states.precision = this.precision;
@@ -518,6 +522,7 @@ class Recorder {
     // this.statesCache.baseReference = duplicate(this.states.baseReference);  // $FlowFixMe
     // this.statesCache.references = duplicate(this.states.references);
     this.diagram.unpause();
+    console.log('asdf3', this.diagram.getElement('a').animations.animations[0].steps[0].startTime)
 
     this.lastRecordTime = null;
     this.duration = this.calcDuration();
@@ -1142,9 +1147,9 @@ class Recorder {
   // Playback
   // ////////////////////////////////////
   // ////////////////////////////////////
-  startPlayback(fromTimeIn: number = 0, events: ?Array<string> = null) {
+  startPlayback(fromTimeIn: number = this.lastSeekTime, events: ?Array<string> = null) {
     let fromTime = fromTimeIn;
-    if (fromTimeIn >= this.duration) {
+    if (fromTimeIn == null || fromTimeIn >= this.duration) {
       fromTime = 0;
     }
     if (events == null) {

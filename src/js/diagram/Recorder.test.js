@@ -2122,32 +2122,32 @@ describe('Diagram Recorder', () => {
   });
   describe('Playback Pausing', () => {
     test.only('Simple', () => {
+      const a = diagram.getElement('a');
+
+      // setup
       initialTime = 0;
       recorder.stateTimeStep = 1;
-      const a = diagram.getElement('a');
-      timeStep(0);
-      expect(a.getPosition()).toEqual(new Point(0, 0));
-      recorder.startRecording();
-      timeStep(0.9);
-      timeStep(0.1);
       a.animations.new()
         .position({ start: [0, 0], target: [1, 1], duration: 2 })
         .start();
-      expect(diagram.isAnimating()).toBe(true);
+      timeStep(0);
+      diagram.pause();
       expect(a.getPosition()).toEqual(new Point(0, 0));
-      timeStep(1);
+
+      // recording
+      recorder.startRecording();
+      expect(diagram.isAnimating()).toBe(true);
       timeStep(1);
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
       timeStep(1);
+      expect(diagram.isAnimating()).toBe(false);
       expect(a.getPosition()).toEqual(new Point(1, 1));
       recorder.stopRecording();
 
-      recorder.seek(0);
+      // start playback
+      recorder.startPlayback(0);
       expect(a.getPosition()).toEqual(new Point(0, 0));
-      recorder.startPlayback();
-      expect(a.getPosition()).toEqual(new Point(0, 0));
-      timeStep(1);
       timeStep(1);
       expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
     });
