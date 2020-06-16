@@ -129,7 +129,7 @@ npm install
 ## Jest debugger
 
 ```
-node --inspect-brk node_modules/.bin/jest --runInBand <jest options>
+npm run jest-debug <jest options>
 ```
 
 In chrome go to:
