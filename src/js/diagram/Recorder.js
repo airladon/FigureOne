@@ -1180,12 +1180,10 @@ class Recorder {
   
     this.diagram.unpause();
     this.state = 'preparingToPlay';
-    this.diagram.animateToState(this.pauseState, { duration: 1 }, () => {
-      console.log('setting')
-      // debugger;
+    this.diagram.animateToState(this.pauseState, { duration: 1 });
+
+    const finished = () => {
       this.diagram.setState(this.pauseState);
-      // console.log(this.pauseState.elements.elements.a.animations)
-      console.log(this.diagram.getElement('a').animations.animations[0].state)
       this.state = 'playing';
       this.setVideoToNowDeltaTime(this.currentTime);
       this.startEventsPlayback(this.currentTime);
@@ -1194,11 +1192,8 @@ class Recorder {
       if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
         this.finishPlaying();
       }
-      console.log(this.diagram.getElement('a').animations.animations[0].state)
-      console.log(this.diagram.getElement('a').isAnimating())
-      console.log(this.diagram.isAnimating())
-      // debugger;
-    });
+    };
+    this.diagram.subscriptions.subscribe('animationsFinished', finished, 1);
   }
 
   // initializePlayback(fromTime: number) {

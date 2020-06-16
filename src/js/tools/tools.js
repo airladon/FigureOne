@@ -1021,10 +1021,10 @@ class Subscriber {
     this.order = [];
   }
 
-  subscribe(callback: () => void, numberOfCallbacks: number = -1) {
+  subscribe(callback: () => void, numberOfSubscriptions: number = -1) {
     this.subscribers[`${this.nextId}`] = {
       callback,
-      num: numberOfCallbacks,
+      num: numberOfSubscriptions,
     };
     this.order.push(`${this.nextId}`);
     this.nextId += 1;
@@ -1072,12 +1072,12 @@ class SubscriptionManager {
   subscribe(
     subscriptionName: string,
     callback: () => void,
-    numberOfCallbacks: number = -1,
+    numberOfSubscriptions: number = -1,
   ) {
     if (this.subscriptions[subscriptionName] == null) {
       this.subscriptions[subscriptionName] = new Subscriber();
     }
-    return this.subscriptions[subscriptionName].subscribe(callback, numberOfCallbacks);
+    return this.subscriptions[subscriptionName].subscribe(callback, numberOfSubscriptions);
   }
 
   trigger(subscriptionName: string, payload: any) {
