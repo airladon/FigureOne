@@ -10,7 +10,7 @@ import * as math from '../tools/math';
 import { FunctionMap } from './FunctionMap';
 import { setState, getState } from './state';
 import parseState from './parseState';
-import { isTouchDevice, joinObjects } from '../tools/tools';
+import { isTouchDevice, joinObjects, SubscriptionManager } from '../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from './Element';
@@ -181,6 +181,7 @@ class Diagram {
   cursorElementName: string;
   isTouchDown: boolean;
   setStateCallback: ?(string | (() => void));
+  subscriptions: SubscriptionManager;
   // pauseAfterNextDrawFlag: boolean;
 
   constructor(options: TypeDiagramOptions) {
@@ -321,6 +322,7 @@ class Diagram {
     this.beingTouchedElements = [];
     this.moveTopElementOnly = true;
     this.globalAnimation = new GlobalAnimation();
+    this.subscriptions = new SubscriptionManager();
     // this.recorder = new Recorder(
     //   this.simulateTouchDown.bind(this),
     //   this.simulateTouchUp.bind(this),
@@ -749,18 +751,18 @@ class Diagram {
     });
     return remainingTime;
   }
-  
+
   setAnimationFinishedCallback(callback: ?(string | (() => void))) {
     this.animationFinishedCallback = callback;
   }
 
   // eslint-disable-next-line class-methods-use-this
   animationFinished(element: DiagramElementPrimitive | DiagramElementCollection) {
-    console.log('finished', this.isAnimating());
     if (this.isAnimating()) {
       return;
     }
     this.fnMap.exec(this.animationFinishedCallback);
+    this.subscriptions.trigger('animationsFinished');
   }
 
   setFirstTransform() {
