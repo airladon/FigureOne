@@ -2221,7 +2221,7 @@ describe('Diagram Recorder', () => {
     //   expect(a.getPosition()).toEqual(new Point(1.5, 1.5));
     // });
     test.only('Pause at start of animation', () => {
-      expect(recorder.state = 'idle');
+      expect(recorder.state).toBe('idle');
       recorder.startPlayback(0);
       expect(diagram.isAnimating()).toBe(false);
       expect(a.getPosition()).toEqual(new Point(0, 0));
@@ -2229,11 +2229,11 @@ describe('Diagram Recorder', () => {
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0, 0));
       expect(recorder.playbackStoppedCallback.mock.calls.length).toBe(0);
-      expect(recorder.state = 'playing');
+      expect(recorder.state).toBe('playing');
 
       // Pause Test at 1s in, just as animation starts
       recorder.pausePlayback();
-      expect(recorder.state = 'preparingToPause');
+      expect(recorder.state).toBe('preparingToPause');
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0, 0));
       expect(recorder.playbackStoppedCallback.mock.calls.length).toBe(0);
@@ -2245,26 +2245,21 @@ describe('Diagram Recorder', () => {
       expect(diagram.isAnimating()).toBe(false);
       expect(a.getPosition()).toEqual(new Point(1, 1));
       expect(recorder.playbackStoppedCallback.mock.calls.length).toBe(1);
-      expect(recorder.state = 'idle');
+      expect(recorder.state).toBe('idle');
 
       recorder.resumePlayback();
-      expect(recorder.state = 'preparingToPlay');
+      expect(recorder.state).toBe('preparingToPlay');
       // animate back to paused state
       timeStep(0);
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(1, 1));
-      window.asdf = true;
       timeStep(0.5);
-      expect(recorder.state = 'preparingToPlay');
+      expect(recorder.state).toBe('preparingToPlay');
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
-      console.log('start')
-      
+
       timeStep(0.5);
-      expect(recorder.state = 'playing');
-      timeStep(0);
-      console.log('asdfasdfasdf');
-      console.log(a.animations.finishedCallback, a.animationFinishedCallback)
+      expect(recorder.state).toBe('playing');
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0, 0));
 

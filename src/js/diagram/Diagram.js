@@ -389,6 +389,7 @@ class Diagram {
       animateToState: this.animateToState.bind(this),
       isAnimating: this.isAnimating.bind(this),
       setAnimationFinishedCallback: this.setAnimationFinishedCallback.bind(this),
+      subscriptions: this.subscriptions,
     };
     const onCursor = (payload) => {
       const [action, x, y] = payload;
