@@ -125,3 +125,20 @@ To update all packages
 npx npm-check-updates -u
 npm install
 ```
+
+## Jest debugger
+
+```
+node --inspect-brk node_modules/.bin/jest --runInBand <jest options>
+```
+
+In chrome go to:
+```
+chrome://inspect
+```
+
+and click on link
+```
+Open dedicated DevTools for Node
+```
+
