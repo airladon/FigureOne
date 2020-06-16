@@ -1003,6 +1003,100 @@ class ObjectTracker {
   }
 }
 
+class Subscriber {
+  subscribers: {
+    [id: string]: {
+      callback: () => void;
+      num: number;
+    }
+  };
+
+  order: Array<number>;
+
+  nextId: number;
+
+  constructor() {
+    this.subscribers = {};
+    this.nextId = 0;
+    this.order = [];
+  }
+
+  subscribe(callback: () => void, numberOfCallbacks: number = -1) {
+    this.subscribers[`${this.nextId}`] = {
+      callback,
+      num: numberOfCallbacks,
+    };
+    this.order.push(`${this.nextId}`);
+    this.nextId += 1;
+    return this.nextId - 1;
+  }
+
+  trigger(payload: any) {
+    const subscribersToRemove = [];
+    for (let i = 0; i < this.order.length; i += 1) {
+      const id = this.order[i];
+      const { callback, num } = this.subscribers[`${id}`];
+      if (callback != null) {
+        callback(payload);
+      }
+      if (num === 1) {
+        subscribersToRemove.push(id);
+      } else if (num > 1) {
+        this.subscribers[`${id}`].num = num - 1;
+      }
+    }
+    subscribersToRemove.forEach((id) => { this.unsubscribe(id); });
+  }
+
+  unsubscribe(idIn: string | number) {
+    const id = `${idIn}`;
+    if (this.subscribers[id] != null) {
+      delete this.subscribers[id];
+    }
+    const index = this.order.indexOf(id);
+    if (index > -1) {
+      this.order.splice(index, 1);
+    }
+  }
+}
+
+class SubscriptionManager {
+  subscriptions: {
+    [subscriptionName: string]: Subscriber;
+  }
+
+  constructor() {
+    this.subscriptions = {};
+  }
+
+  subscribe(
+    subscriptionName: string,
+    callback: () => void,
+    numberOfCallbacks: number = -1,
+  ) {
+    if (this.subscriptions[subscriptionName] == null) {
+      this.subscriptions[subscriptionName] = new Subscriber();
+    }
+    return this.subscriptions[subscriptionName].subscribe(callback, numberOfCallbacks);
+  }
+
+  trigger(subscriptionName: string, payload: any) {
+    if (this.subscriptions[subscriptionName] != null) {
+      this.subscriptions[subscriptionName].trigger(payload);
+    }
+  }
+
+  unsubscribe(subscriptionName: string, id: string | number) {
+    if (this.subscriptions[subscriptionName] != null) {
+      const subscription = this.subscriptions[subscriptionName];
+      subscription.unsubscribe(id);
+      if (subscription.order.length === 0) {
+        delete this.subscriptions[subscriptionName];
+      }
+    }
+  }
+}
+
 function download(filename: string, text: string) {
   const element = document.createElement('a');
   element.setAttribute(
@@ -1031,5 +1125,7 @@ export {
   UniqueMap, compressObject, refAndDiffToObject, uncompressObject,
   unminify, minify, ObjectTracker,
   download,
+  Subscriber,
+  SubscriptionManager,
 };
 

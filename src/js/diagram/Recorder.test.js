@@ -2262,6 +2262,7 @@ describe('Diagram Recorder', () => {
       
       timeStep(0.5);
       expect(recorder.state = 'playing');
+      timeStep(0);
       console.log('asdfasdfasdf');
       console.log(a.animations.finishedCallback, a.animationFinishedCallback)
       expect(diagram.isAnimating()).toBe(true);
