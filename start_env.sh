@@ -21,5 +21,6 @@ docker run -it --rm \
   -v $PROJECT_PATH/jsdoc-conf.json:/opt/app/jsdoc-conf.json \
   -v $PROJECT_PATH/.stylelintrc:/opt/app/.stylelintrc \
   -p 8080:8080 \
+  -p 9229:9229 \
   --name figureone_dev \
   figureone_dev $CMD
