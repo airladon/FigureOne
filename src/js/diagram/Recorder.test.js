@@ -2200,7 +2200,27 @@ describe('Diagram Recorder', () => {
       expect(diagram.isAnimating()).toBe(false);
       expect(a.getPosition()).toEqual(new Point(1, 1));
     });
-    test.only('Pause at start of animation', () => {
+    test.only('Diagram Animation nest', () => {
+      initialTime = 0;
+      const animate = () => {
+        a.animations.new()
+          .position({ target: [2, 2], duration: 1 })
+          .start();
+      }
+      a.animations.new()
+        .position({ start: [0, 0], target: [1, 1], duration: 1 })
+        .whenFinished(animate)
+        .start();
+      timeStep(0);
+      timeStep(0.5);
+      expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+      timeStep(0.5);
+      expect(a.getPosition()).toEqual(new Point(1, 1));
+      timeStep(0.5);
+      console.log(diagram.isAnimating())
+      expect(a.getPosition()).toEqual(new Point(1.5, 1.5));
+    });
+    test('Pause at start of animation', () => {
       expect(recorder.state = 'idle');
       recorder.startPlayback(0);
       expect(diagram.isAnimating()).toBe(false);
