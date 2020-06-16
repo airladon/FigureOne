@@ -13,7 +13,8 @@
     "jest": "jest",
     "lint": "eslint src",
     "css": "stylelint src/css",
-    "flowcopysource": "flow-copy-source src package"
+    "flowcopysource": "flow-copy-source src package",
+    "jest-debug": "node --inspect-brk=0.0.0.0 node_modules/.bin/jest --runInBand"
   },
   "keywords": [
     "interactive",
