@@ -1179,16 +1179,16 @@ class Recorder {
     }
     this.diagram.animateToState(this.pauseState, { duration: 1 }, () => {
       this.diagram.setState(this.pauseState);
+      this.state = 'playing';
+      this.setVideoToNowDeltaTime(this.currentTime);
+      this.diagram.unpause();
+      this.startEventsPlayback(this.currentTime);
+      this.startAudioPlayback(this.currentTime);
+      this.diagram.animateNextFrame();
+      if (this.areEventsPlaying() === false) {
+        this.finishPlaying();
+      }
     });
-    this.state = 'playing';
-    this.setVideoToNowDeltaTime(this.currentTime);
-    this.diagram.unpause();
-    this.startEventsPlayback(this.currentTime);
-    this.startAudioPlayback(this.currentTime);
-    this.diagram.animateNextFrame();
-    if (this.areEventsPlaying() === false) {
-      this.finishPlaying();
-    }
   }
 
   // initializePlayback(fromTime: number) {
