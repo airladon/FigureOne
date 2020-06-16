@@ -2152,6 +2152,8 @@ describe('Diagram Recorder', () => {
       timeStep(1);
       // expect(diagram.isAnimating()).toBe(false);
       // expect(a.getPosition()).toEqual(new Point(1, 1));
+      timeStep(1);
+      recorder.recordEvent('touch', ['up']);
       recorder.stopRecording();
     });
     test('No Pausing', () => {
@@ -2199,6 +2201,7 @@ describe('Diagram Recorder', () => {
       expect(a.getPosition()).toEqual(new Point(1, 1));
     });
     test.only('Pause at start of animation', () => {
+      expect(recorder.state = 'idle');
       recorder.startPlayback(0);
       expect(diagram.isAnimating()).toBe(false);
       expect(a.getPosition()).toEqual(new Point(0, 0));
@@ -2206,9 +2209,11 @@ describe('Diagram Recorder', () => {
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0, 0));
       expect(recorder.playbackStoppedCallback.mock.calls.length).toBe(0);
+      expect(recorder.state = 'playing');
 
-      // Pause Test
+      // Pause Test at 1s in, just as animation starts
       recorder.pausePlayback();
+      expect(recorder.state = 'preparingToPause');
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0, 0));
       expect(recorder.playbackStoppedCallback.mock.calls.length).toBe(0);
@@ -2220,18 +2225,27 @@ describe('Diagram Recorder', () => {
       expect(diagram.isAnimating()).toBe(false);
       expect(a.getPosition()).toEqual(new Point(1, 1));
       expect(recorder.playbackStoppedCallback.mock.calls.length).toBe(1);
+      expect(recorder.state = 'idle');
 
       recorder.resumePlayback();
+      expect(recorder.state = 'preparingToPlay');
+      // animate back to paused state
+      timeStep(0);
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(1, 1));
       timeStep(0.5);
+      expect(recorder.state = 'preparingToPlay');
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+      console.log('start')
       timeStep(0.5);
+      expect(recorder.state = 'playing');
+      window.asdf = true;
+      console.log('asdfasdfasdf');
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0, 0));
 
-      //
+      // start playing
       timeStep(1);
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0.5, 0.5));

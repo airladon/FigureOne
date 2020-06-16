@@ -165,7 +165,7 @@ class Recorder {
 
   eventsToPlay: Array<string>;
 
-  state: 'recording' | 'playing' | 'idle';
+  state: 'recording' | 'playing' | 'idle' | 'preparingToPlay' | 'preparingToPause';
   isAudioPlaying: boolean;
   videoToNowDelta: number;     // performance.now() - deltaToNow = video time
   currentTime: number;    // The current video time location
@@ -954,7 +954,7 @@ class Recorder {
     if (this.state === 'recording') {
       this.stopRecording();
     } else if (this.state === 'playing') {
-      this.pausePlayback();
+      this.pausePlayback(false);
     }
     // console.log(time)
     this.setToTime(time);
@@ -1166,7 +1166,7 @@ class Recorder {
     this.startEventsPlayback(fromTime);
     this.startAudioPlayback(fromTime);
     this.diagram.animateNextFrame();
-    if (this.areEventsPlaying() === false) {
+    if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
       this.finishPlaying();
       // return;
     }
@@ -1177,17 +1177,26 @@ class Recorder {
       this.startPlayback(this.currentTime);
       return;
     }
+  
+    this.diagram.unpause();
+    this.state = 'preparingToPlay';
     this.diagram.animateToState(this.pauseState, { duration: 1 }, () => {
+      console.log('setting')
       this.diagram.setState(this.pauseState);
+      // console.log(this.pauseState.elements.elements.a.animations)
+      console.log(this.diagram.getElement('a').animations.animations[0].state)
       this.state = 'playing';
       this.setVideoToNowDeltaTime(this.currentTime);
-      this.diagram.unpause();
       this.startEventsPlayback(this.currentTime);
       this.startAudioPlayback(this.currentTime);
       this.diagram.animateNextFrame();
-      if (this.areEventsPlaying() === false) {
+      if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
         this.finishPlaying();
       }
+      console.log(this.diagram.getElement('a').animations.animations[0].state)
+      console.log(this.diagram.getElement('a').isAnimating())
+      console.log(this.diagram.isAnimating())
+      debugger;
     });
   }
 
@@ -1287,7 +1296,7 @@ class Recorder {
     this.diagram.animateNextFrame();
     if (index + 1 === this.events[eventName].list.length) {
       this.eventIndex[eventName] = -1;
-      if (this.areEventsPlaying() === false) {
+      if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
         this.finishPlaying();
         return;
       }
@@ -1328,7 +1337,7 @@ class Recorder {
       return false;
     }
 
-    this.pausePlayback();
+    this.pausePlayback(false);
     return true;
   }
 
@@ -1340,12 +1349,14 @@ class Recorder {
 
   // }
 
-  pausePlayback() {
+  pausePlayback(savePauseState: boolean = true) {
     this.currentTime = this.getCurrentTime();
-    this.pauseState = this.diagram.getState({
-      precision: this.precision,
-      ignoreShown: true,
-    });
+    if (savePauseState) {
+      this.pauseState = this.diagram.getState({
+        precision: this.precision,
+        ignoreShown: true,
+      });
+    }
 
     const pause = () => {
       this.diagram.pause();
@@ -1365,6 +1376,7 @@ class Recorder {
       }
     }
     if (this.diagram.isAnimating()) {
+      this.state = 'preparingToPause';
       this.diagram.setAnimationFinishedCallback(pause);
     } else {
       pause();
