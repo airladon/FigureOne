@@ -168,6 +168,7 @@ export default class AnimationManager {
       }
     });
 
+    let callback = null;
     if (isAnimating) {
       this.state = 'animating';
     } else {
@@ -177,7 +178,8 @@ export default class AnimationManager {
           console.log('finishcallback')
           // debugger;
         }
-        this.fnMap.exec(this.finishedCallback);
+        callback = this.finishedCallback;
+        // this.fnMap.exec(this.finishedCallback);
       }
       this.state = 'idle';
     }
@@ -188,6 +190,7 @@ export default class AnimationManager {
     for (let i = animationsToRemove.length - 1; i >= 0; i -= 1) {
       this.animations.splice(animationsToRemove[i], 1);
     }
+    this.fnMap.exec(callback);
     return remaining;
   }
 
