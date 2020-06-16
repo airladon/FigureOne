@@ -2296,6 +2296,9 @@ class DiagramElement {
   }
 
   isAnimating(): boolean {
+    // if (window.asdf && this.name === 'a') {
+    //   console.log(this.name, this.isShown, this.animations.isAnimating())
+    // }
     // console.log(this.name, this.isShown, this.animations.isAnimating())
     if (this.isShown === false) {
       return false;
@@ -2962,6 +2965,9 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   isAnimating(): boolean {
+    if (this.isShown === false) {
+      return false;
+    }
     const isThisAnimating = super.isAnimating();
     if (isThisAnimating) {
       return true;
