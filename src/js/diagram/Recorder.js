@@ -1196,7 +1196,7 @@ class Recorder {
       console.log(this.diagram.getElement('a').animations.animations[0].state)
       console.log(this.diagram.getElement('a').isAnimating())
       console.log(this.diagram.isAnimating())
-      debugger;
+      // debugger;
     });
   }
 

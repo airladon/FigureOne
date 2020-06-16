@@ -756,6 +756,7 @@ class Diagram {
 
   // eslint-disable-next-line class-methods-use-this
   animationFinished(element: DiagramElementPrimitive | DiagramElementCollection) {
+    console.log('finished');
     if (this.isAnimating()) {
       return;
     }
