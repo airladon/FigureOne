@@ -2125,6 +2125,7 @@ describe('Diagram Recorder', () => {
     beforeEach(() => {
       a = diagram.getElement('a');
       const startAnimation = () => {
+        console.log(performance.now())
         a.animations.new()
           .position({ start: [0, 0], target: [1, 1], duration: 2 })
           .start();
@@ -2141,17 +2142,11 @@ describe('Diagram Recorder', () => {
 
       // recording
       recorder.startRecording();
-      // expect(diagram.isAnimating()).toBe(false);
       timeStep(1);
-      // expect(diagram.isAnimating()).toBe(true);
       startAnimation();
       recorder.recordEvent('startAnimation');
       timeStep(1);
-      // expect(diagram.isAnimating()).toBe(true);
-      // expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
       timeStep(1);
-      // expect(diagram.isAnimating()).toBe(false);
-      // expect(a.getPosition()).toEqual(new Point(1, 1));
       timeStep(1);
       recorder.recordEvent('touch', ['up']);
       recorder.stopRecording();
@@ -2188,7 +2183,6 @@ describe('Diagram Recorder', () => {
       expect(diagram.isAnimating()).toBe(false);
       expect(a.getPosition()).toEqual(new Point(0, 0));
       expect(recorder.playbackStoppedCallback.mock.calls.length).toBe(1);
-
       //
       timeStep(0.5);
       expect(diagram.isAnimating()).toBe(true);
@@ -2271,7 +2265,7 @@ describe('Diagram Recorder', () => {
       expect(diagram.isAnimating()).toBe(false);
       expect(a.getPosition()).toEqual(new Point(1, 1));
     });
-    test('Pause during animation', () => {
+    test.only('Pause during animation', () => {
       recorder.startPlayback(0);
       expect(diagram.isAnimating()).toBe(false);
       expect(a.getPosition()).toEqual(new Point(0, 0));
@@ -2280,7 +2274,7 @@ describe('Diagram Recorder', () => {
       expect(a.getPosition()).toEqual(new Point(0, 0));
 
       timeStep(1);
-      expect(diagram.isAnimating()).toBe(false);
+      expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
       expect(recorder.playbackStoppedCallback.mock.calls.length).toBe(0);
 
@@ -2299,7 +2293,7 @@ describe('Diagram Recorder', () => {
       expect(a.getPosition()).toEqual(new Point(1, 1));
       timeStep(0.5);
       expect(diagram.isAnimating()).toBe(true);
-      expect(a.getPosition()).toEqual(new Point(0.9, 0.9));
+      expect(a.getPosition()).toEqual(new Point(0.75, 0.75));
       timeStep(0.5);
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
