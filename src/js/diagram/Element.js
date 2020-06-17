@@ -862,8 +862,8 @@ class DiagramElement {
     state: Object,
     options: Object,
     independentOnly: boolean = false,
-    countStart: () => void,
-    countEnd: () => void,
+    // countStart: () => void,
+    // countEnd: () => void,
   ) {
     const target = {};
     let dissolveFromCurrent = true;
@@ -892,10 +892,10 @@ class DiagramElement {
     //   target.transform = state.transform;
     // }
     if (Object.keys(target).length > 0) {
-      countStart();
+      // countStart();
       this.animations.new()
         .scenario(joinObjects({ target }, options, { dissolveFromCurrent }))
-        .whenFinished(countEnd)
+        // .whenFinished(countEnd)
         .start();
     }
   }
@@ -4141,10 +4141,10 @@ class DiagramElementCollection extends DiagramElement {
     state: Object,
     options: Object,
     independentOnly: boolean = false,
-    countStart: () => void,
-    countEnd: () => void,
+    // countStart: () => void,
+    // countEnd: () => void,
   ) {
-    super.animateToState(state, options, independentOnly, countStart, countEnd);
+    super.animateToState(state, options, independentOnly); // , countStart, countEnd);
     if (
       (this.transformUpdatesIndependantly && independentOnly)
       || independentOnly === false
@@ -4154,7 +4154,7 @@ class DiagramElementCollection extends DiagramElement {
         if (state.elements != null && state.elements[this.drawOrder[i]] != null) {
           element.animateToState(
             state.elements[this.drawOrder[i]], options,
-            independentOnly, countStart, countEnd,
+            independentOnly, // countStart, countEnd,
           );
         }
       }

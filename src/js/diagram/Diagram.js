@@ -547,21 +547,28 @@ class Diagram {
       duration: 1,
     };
 
-    let counter = 0;
-    const countStart = () => {
-      counter += 1;
-    };
-    const countEnd = () => {
-      counter -= 1;
-      if (counter === 0 && done != null) {
-        this.fnMap.exec(done);
-      }
-    };
+    // let counter = 1;
+    // const countStart = () => {
+    //   counter += 1;
+    // };
+    // const countEnd = () => {
+    //   counter -= 1;
+    //   // if (counter === 0 && done != null) {
+    //   //   this.fnMap.exec(done);
+    //   // }
+    // };
 
     const options = joinObjects(defaultOptions, optionsIn);
-    countStart();
-    this.elements.animateToState(state.elements, options, true, countStart, countEnd);
-    countEnd();
+    // countStart();
+    this.elements.animateToState(state.elements, options, true);
+    // countEnd();
+    if (done != null) {
+      if (this.isAnimating() === false) {
+        this.fnMap.exec(done);
+      } else {
+        this.subscriptions.subscribe('animationsFinished', done, 1);
+      }
+    }
   }
 
   /**
