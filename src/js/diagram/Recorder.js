@@ -1177,11 +1177,10 @@ class Recorder {
       this.startPlayback(this.currentTime);
       return;
     }
-  
+
     this.diagram.unpause();
     this.state = 'preparingToPlay';
     this.diagram.animateToState(this.pauseState, { duration: 1 });
-
     const finished = () => {
       this.diagram.setState(this.pauseState);
       this.state = 'playing';
@@ -1373,7 +1372,8 @@ class Recorder {
     }
     if (this.diagram.isAnimating()) {
       this.state = 'preparingToPause';
-      this.diagram.setAnimationFinishedCallback(pause);
+      // this.diagram.setAnimationFinishedCallback(pause);
+      this.diagram.subscriptions.subscribe('animationsFinished', pause, 1);
     } else {
       pause();
     }

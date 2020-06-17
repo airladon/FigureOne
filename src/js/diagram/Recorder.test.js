@@ -2220,7 +2220,7 @@ describe('Diagram Recorder', () => {
     //   console.log(diagram.isAnimating())
     //   expect(a.getPosition()).toEqual(new Point(1.5, 1.5));
     // });
-    test.only('Pause at start of animation', () => {
+    test('Pause at start of animation', () => {
       expect(recorder.state).toBe('idle');
       recorder.startPlayback(0);
       expect(diagram.isAnimating()).toBe(false);
@@ -2257,13 +2257,13 @@ describe('Diagram Recorder', () => {
       expect(recorder.state).toBe('preparingToPlay');
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
-
+      // finish animating back to pause state and start playing
       timeStep(0.5);
       expect(recorder.state).toBe('playing');
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0, 0));
 
-      // start playing
+      // Starting to move through to 1, 1
       timeStep(1);
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0.5, 0.5));

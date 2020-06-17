@@ -1430,6 +1430,9 @@ class Diagram {
   }
 
   pause() {
+    // if (window.asdf) {
+    //   debugger;
+    // }
     this.elements.pause();
     this.pauseTime = performance.now() / 1000;
     this.isPaused = true;
