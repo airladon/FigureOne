@@ -2193,26 +2193,53 @@ describe('Diagram Recorder', () => {
       expect(diagram.isAnimating()).toBe(false);
       expect(a.getPosition()).toEqual(new Point(1, 1));
     });
-    // test.only('Diagram Animation nest', () => {
-    //   initialTime = 0;
-    //   const animate = () => {
-    //     a.animations.new()
-    //       .position({ target: [2, 2], duration: 1 })
-    //       .start();
-    //   }
-    //   a.animations.new()
-    //     .position({ start: [0, 0], target: [1, 1], duration: 1 })
-    //     .whenFinished(animate)
-    //     .start();
-    //   timeStep(0);
-    //   timeStep(0.5);
-    //   expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
-    //   timeStep(0.5);
-    //   expect(a.getPosition()).toEqual(new Point(1, 1));
-    //   timeStep(0.5);
-    //   console.log(diagram.isAnimating())
-    //   expect(a.getPosition()).toEqual(new Point(1.5, 1.5));
-    // });
+    test.only('Pause before animation and move element', () => {
+      recorder.startPlayback(0);
+      expect(diagram.isAnimating()).toBe(false);
+      expect(a.getPosition()).toEqual(new Point(0, 0));
+      timeStep(0.5);
+      expect(diagram.isAnimating()).toBe(false);
+      expect(a.getPosition()).toEqual(new Point(0, 0));
+      expect(recorder.playbackStoppedCallback.mock.calls.length).toBe(0);
+
+      // Pause Test
+      recorder.pausePlayback();
+      expect(diagram.isAnimating()).toBe(false);
+      expect(a.getPosition()).toEqual(new Point(0, 0));
+      expect(recorder.playbackStoppedCallback.mock.calls.length).toBe(1);
+
+      // Manipulate diagram
+      a.setPosition(2, 2);
+
+      // Resume diagram - will animate to state over 1s
+      recorder.resumePlayback();
+      timeStep(0);
+      expect(recorder.state).toBe('preparingToPlay');
+      expect(diagram.isAnimating()).toBe(true);
+      expect(a.getPosition()).toEqual(new Point(2, 2));
+
+      timeStep(0.5);
+      expect(recorder.state).toBe('preparingToPlay');
+      expect(diagram.isAnimating()).toBe(true);
+      expect(a.getPosition()).toEqual(new Point(1, 1));
+
+      // Finish animating to state, and resume playing
+      timeStep(0.5);
+      expect(recorder.state).toBe('playing');
+      expect(diagram.isAnimating()).toBe(false);
+      expect(a.getPosition()).toEqual(new Point(0, 0));
+      expect(recorder.playbackStoppedCallback.mock.calls.length).toBe(1);
+      //
+      timeStep(0.5);
+      expect(diagram.isAnimating()).toBe(true);
+      expect(a.getPosition()).toEqual(new Point(0, 0));
+      timeStep(1);
+      expect(diagram.isAnimating()).toBe(true);
+      expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+      timeStep(1);
+      expect(diagram.isAnimating()).toBe(false);
+      expect(a.getPosition()).toEqual(new Point(1, 1));
+    });
     test('Pause at start of animation', () => {
       expect(recorder.state).toBe('idle');
       recorder.startPlayback(0);

@@ -1313,7 +1313,9 @@ class DiagramElement {
         rotation?: number,
         scale?: TypeParsablePoint,
         transform?: TypeParsableTransform,
+        color?: number,
       },
+      dissolveTime: number,
       duration?: number,
       rotDirection?: -1 | 1 | 0 | 2,
     },
@@ -1358,11 +1360,26 @@ class DiagramElement {
     const time = getMaxTimeFromVelocity(
       start.transform._dup(), target.transform, velocity, options.rotDirection,
     );
+    let colorTime = options.minTime;
     if (start.isShown !== target.isShown) {
       options.minTime = 0.8;
     }
-    if (!areColorsSame(start.color, target.color)) {
-      options.minTime = 0.8;
+    if (target.color != null) {
+      let startColor = start.color;
+      if (startColor == null) {
+        startColor = this.color.slice();
+      }
+      if (!areColorsSame(startColor, target.color)) {
+      // options.minTime = 0.8;
+        if (options.velocity.color != null) {
+          const v = options.velocity.color;
+          const r = Math.abs((target.color[0] - startColor[0]) / v);
+          const g = Math.abs((target.color[1] - startColor[1]) / v);
+          const b = Math.abs((target.color[2] - startColor[2]) / v);
+          const a = Math.abs((target.color[3] - startColor[3]) / v);
+          colorTime = Math.max(r, g, b, a);
+        }
+      }
     }
     return Math.min(time, options.minTime);
   }
