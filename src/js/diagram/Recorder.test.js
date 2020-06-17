@@ -2125,7 +2125,6 @@ describe('Diagram Recorder', () => {
     beforeEach(() => {
       a = diagram.getElement('a');
       const startAnimation = () => {
-        console.log(performance.now())
         a.animations.new()
           .position({ start: [0, 0], target: [1, 1], duration: 2 })
           .start();
@@ -2244,7 +2243,7 @@ describe('Diagram Recorder', () => {
       recorder.resumePlayback();
       expect(recorder.state).toBe('preparingToPlay');
       // animate back to paused state
-      timeStep(0);
+      timeStep(0);  // Required to kick off the aniamteToState animation
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(1, 1));
       timeStep(0.5);
@@ -2265,7 +2264,7 @@ describe('Diagram Recorder', () => {
       expect(diagram.isAnimating()).toBe(false);
       expect(a.getPosition()).toEqual(new Point(1, 1));
     });
-    test.only('Pause during animation', () => {
+    test('Pause during animation', () => {
       recorder.startPlayback(0);
       expect(diagram.isAnimating()).toBe(false);
       expect(a.getPosition()).toEqual(new Point(0, 0));
@@ -2289,6 +2288,7 @@ describe('Diagram Recorder', () => {
       expect(recorder.playbackStoppedCallback.mock.calls.length).toBe(1);
 
       recorder.resumePlayback();
+      timeStep(0);  // Required to kick off the aniamteToState animation
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(1, 1));
       timeStep(0.5);

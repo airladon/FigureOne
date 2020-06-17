@@ -1181,7 +1181,6 @@ class Recorder {
     this.diagram.unpause();
     this.state = 'preparingToPlay';
     const finished = () => {
-      console.log('asdfasdf', this.currentTime)
       this.diagram.setState(this.pauseState);
       this.state = 'playing';
       this.setVideoToNowDeltaTime(this.currentTime);
