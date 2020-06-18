@@ -1193,45 +1193,50 @@ class DiagramElement {
   }
 
   getScenarioTarget(
-    scenarioName: string,
+    scenarioIn: string | TypeScenario,
   ) {
-    let transform; // = this.transform._dup();
-    let color; // = this.color.slice();
+    let transform;
+    let color;
     // const opacity = this.opacity; // eslint-disable-line prefer-destructuring
-    let isShown; // = this.isShown; // eslint-disable-line prefer-destructuring
-    if (scenarioName in this.scenarios) {
-      const scenario = this.scenarios[scenarioName];
-      if (scenario.transform != null) {
-        transform = getTransform(scenario.transform);
+    let isShown;
+    let scenario;;
+    if (typeof scenarioIn === 'string') {
+      if (scenarioIn in this.scenarios) {
+        scenario = this.scenarios[scenarioIn];
+      } else {
+        scenario = {};
       }
-      if (scenario.position != null) {
-        if (transform == null) {
-          transform = this.transform._dup();
-        }
-        transform.updateTranslation(getPoint(scenario.position));
-      }
+    } else {
+      scenario = scenarioIn;
+    }
 
-      if (scenario.rotation != null) {
-        if (transform == null) {
-          transform = this.transform._dup();
-        }
-        transform.updateRotation(scenario.rotation);
+    if (scenario.transform != null) {
+      transform = getTransform(scenario.transform);
+    }
+    if (scenario.position != null) {
+      if (transform == null) {
+        transform = this.transform._dup();
       }
-      if (scenario.scale != null) {
-        if (transform == null) {
-          transform = this.transform._dup();
-        }
-        transform.updateScale(getPoint(scenario.scale));
+      transform.updateTranslation(getPoint(scenario.position));
+    }
+
+    if (scenario.rotation != null) {
+      if (transform == null) {
+        transform = this.transform._dup();
       }
-      if (scenario.color) {
-        color = scenario.color.slice();
+      transform.updateRotation(scenario.rotation);
+    }
+    if (scenario.scale != null) {
+      if (transform == null) {
+        transform = this.transform._dup();
       }
-      // if (scenario.opacity) {
-      //   ({ opacity } = scenario);
-      // }
-      if (scenario.isShown != null) {
-        ({ isShown } = scenario);
-      }
+      transform.updateScale(getPoint(scenario.scale));
+    }
+    if (scenario.color) {
+      color = scenario.color.slice();
+    }
+    if (scenario.isShown != null) {
+      ({ isShown } = scenario);
     }
     return {
       transform,
@@ -1241,23 +1246,21 @@ class DiagramElement {
     };
   }
 
-  setScenario(scenarioName: string) {
-    if (this.scenarios[scenarioName] != null) {
-      const target = this.getScenarioTarget(scenarioName);
-      if (target.transform != null) {
-        this.setTransform(target.transform._dup());
+  setScenario(scenario: string | TypeScenario) {
+    const target = this.getScenarioTarget(scenario);
+    if (target.transform != null) {
+      this.setTransform(target.transform._dup());
+    }
+    // this.setColor(target.color.slice());
+    if (target.isShown != null) {
+      if (target.isShown) {
+        this.show();
+      } else {
+        this.hide();
       }
-      // this.setColor(target.color.slice());
-      if (target.isShown != null) {
-        if (target.isShown) {
-          this.show();
-        } else {
-          this.hide();
-        }
-      }
-      if (target.color != null) {
-        this.setColor(target.color);
-      }
+    }
+    if (target.color != null) {
+      this.setColor(target.color);
     }
   }
 
