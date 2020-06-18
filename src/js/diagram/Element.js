@@ -409,14 +409,20 @@ class DiagramElement {
         const defaultOptions = { element: this, delay: 0 };
         const options = joinObjects({}, defaultOptions, ...optionsIn);
         // console.log(options)
-        if (options.target != null && options.target in options.element.scenarios) {
+        if (options.target != null) {
           const target = options.element.getScenarioTarget(options.target);
-          options.target = target;
+          if (Object.keys(target).length > 0) {
+            options.target = target;
+          }
         }
 
         if (options.start != null && options.start in options.element.scenarios) {
+          // const start = options.element.getScenarioTarget(options.start);
+          // options.start = start;
           const start = options.element.getScenarioTarget(options.start);
-          options.start = start;
+          if (Object.keys(start).length > 0) {
+            options.start = start;
+          }
         }
         const { start, target, element } = options;
         const steps = [];
@@ -1199,7 +1205,7 @@ class DiagramElement {
     let color;
     // const opacity = this.opacity; // eslint-disable-line prefer-destructuring
     let isShown;
-    let scenario;;
+    let scenario;
     if (typeof scenarioIn === 'string') {
       if (scenarioIn in this.scenarios) {
         scenario = this.scenarios[scenarioIn];
@@ -1270,16 +1276,33 @@ class DiagramElement {
     }
   }
 
-  saveScenario(scenarioName: string) {
-    this.scenarios[scenarioName] = {
-      transform: this.transform._dup(),
-      color: this.color.slice(),
-      isShown: this.isShown,
-    };
+  saveScenario(
+    scenarioName: string,
+    keys: Array<string> = ['transform', 'color', 'isShown'],
+  ) {
+    const scenario = {};
+    keys.forEach((key) => {
+      if (key === 'transform') {
+        scenario.transform = this.transform._dup();
+      } else if (key === 'position') {
+        scenario.position = this.getPosition();
+      } else if (key === 'rotation') {
+        scenario.rotation = this.getRotation();
+      } else if (key === 'scale') {
+        scenario.scale = this.getScale();
+      } else if (key === 'color') {
+        scenario.color = this.color.slice();
+      } else if (key === 'isShown') {
+        scenario.isShown = this.isShown;
+      }
+    });
+    if (Object.keys(scenario).length > 0) {
+      this.scenarios[scenarioName] = scenario;
+    }
   }
 
-  saveScenarios(scenarioName: string) {
-    this.saveScenario(scenarioName);
+  saveScenarios(scenarioName: string, keys: Array<string>) {
+    this.saveScenario(scenarioName, keys);
   }
 
   // animateToScenario() {
@@ -4149,11 +4172,11 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  saveScenarios(scenarioName: string) {
-    super.saveScenarios(scenarioName);
+  saveScenarios(scenarioName: string, keys: Array<string>) {
+    super.saveScenarios(scenarioName, keys);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.saveScenarios(scenarioName);
+      element.saveScenarios(scenarioName, keys);
     }
   }
 
