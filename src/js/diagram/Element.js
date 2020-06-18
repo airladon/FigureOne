@@ -408,7 +408,6 @@ class DiagramElement {
                                      }>) => {
         const defaultOptions = { element: this, delay: 0 };
         const options = joinObjects({}, defaultOptions, ...optionsIn);
-        // console.log(options)
         if (options.target != null) {
           const target = options.element.getScenarioTarget(options.target);
           if (Object.keys(target).length > 0) {
@@ -416,9 +415,7 @@ class DiagramElement {
           }
         }
 
-        if (options.start != null && options.start in options.element.scenarios) {
-          // const start = options.element.getScenarioTarget(options.start);
-          // options.start = start;
+        if (options.start != null) {
           const start = options.element.getScenarioTarget(options.start);
           if (Object.keys(start).length > 0) {
             options.start = start;
@@ -431,36 +428,22 @@ class DiagramElement {
         const timeOptions = { delay: options.delay, duration: options.duration };
         options.delay = 0;
         options.velocity = undefined;
-        // if (options.velocity) {
-        //   const duration = getTimeToMoveToScenario()
         let startColor;
         let startTransform;
         let startIsShown;
-        // if (start == null) {
-        //   startColor = this.color.slice();
-        //   startTransform = this.transform._dup();
-        //   startIsShown = this.isShown;
-        // } else {
-        //   startColor = start.color.slice();
-        //   startTransform = start.transform._dup();
-        //   startIsShown = start.isShown;
-        // }
-        if (startColor != null) {
-          startColor = start.color.slice();
-          startTransform = start.transform._dup();
-          startIsShown = start.isShown;
+
+        if (start != null) {
+          if (start.color != null) {
+            startColor = start.color.slice();
+          }
+          if (start.transform != null) {
+            startTransform = start.transform._dup();
+          }
+          if (start.isShown != null) {
+            startIsShown = start.isShown;
+          }
         }
 
-        // console.log(this.name, target.isShown)
-        
-        // if (target.isShown != null && target.isShown === true && startIsShown === false) {
-        //   steps.push(element.anim.dissolveIn({ duration: options.duration }));
-        // }
-        // if (target.isShown != null && target.isShown === false && startIsShown === true) {
-        //   steps.push(element.anim.dissolveOut({ duration: options.duration }));
-        // }
-        // console.log(startColor, target.color, element.name, !areColorsSame(startColor, target.color))
-        // if (!areColorsSame(startColor, target.color)) {
         if (target.color != null) {
           steps.push(element.anim.color({
             start: startColor,
@@ -468,7 +451,7 @@ class DiagramElement {
             duration: options.duration,
           }));
         }
-        // if (!startTransform.isEqualTo(target.transform)) {
+
         if (target.transform != null) {
           steps.push(element.anim.transform(options, {
             start: startTransform,
@@ -482,6 +465,12 @@ class DiagramElement {
             }
             if (target.isShown === false && startIsShown === false) {
               steps.push(element.anim.dissolveOut({ duration: 0 }));
+            }
+            if (target.isShown === false && startIsShown === true) {
+              steps.push(element.anim.dissolveOut({ duration: options.duration }));
+            }
+            if (target.isShown === true && startIsShown === false) {
+              steps.push(element.anim.dissolveIn({ duration: options.duration }));
             }
           } else {
             let dissolveFromCurrent = true;
