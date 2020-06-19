@@ -12,6 +12,7 @@ import type {
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 // import type { DiagramElement } from '../../../Element';
+import { areColorsSame } from '../../../../tools/color';
 
 export type TypeScenario = {
   position?: TypeParsablePoint,
@@ -54,7 +55,8 @@ export default class ScenarioAnimationStep extends ElementAnimationStep {
     translationOptions: pathOptionsType;
     velocity: ?TypeScenarioVelocity;
     maxTime: ?number;
-    zeroDurationThreshold: ?number;
+    allDurationsSame: boolean;
+    zeroDurationThreshold: number;
   };
 
   constructor(...optionsIn: Array<TypeScenarioAnimationStepInputOptions>) {
@@ -116,7 +118,7 @@ export default class ScenarioAnimationStep extends ElementAnimationStep {
   }
 
   getDuration(
-    start: { transform?: Transform, color?: color, isShown?: boolean },
+    start: { transform?: Transform, color?: color, isShown?: boolean, opacity?: number },
     target: { transform?: Transform, color?: color, isShown?: boolean },
   ) {
     const { element } = this;
@@ -164,11 +166,42 @@ export default class ScenarioAnimationStep extends ElementAnimationStep {
       colorDuration = deltaColor / colorVelocity;
     }
     let opacityDuration = 0;
-    if (start.isShown != null && target.isShown != null) {
-      if (start.isShown == target.isShown)
-      const deltaColor = Math.abs(target.color - start.color);
-      colorDuration = deltaColor / colorVelocity;
+    if (target.isShown != null && target.isShown != null) {
+      if (start.opacity != null && target.isShown === true) {
+        const opacityDelta = 1 - start.opacity;
+        opacityDuration = opacityDelta / opacityVelocity;
+      } else if (start.opacity != null && target.isShown === false) {
+        opacityDuration = start.opacity / opacityVelocity;
+      } else if (start.isShown != target.isShown) {
+        opacityDuration = 1 / opacityVelocity;
+      }
     }
+
+    if (this.scenario.maxTime != null) {
+      colorDuration = Math.min(colorDuration, this.scenario.maxTime);
+      opacityDuration = Math.min(opacityDuration, this.scenario.maxTime);
+      transformDuration = Math.min(transformDuration, this.scenario.maxTime);
+    }
+
+    if (colorDuration < this.scenario.zeroDurationThreshold) {
+      colorDuration = 0;
+    }
+
+    if (opacityDuration < this.scenario.zeroDurationThreshold) {
+      opacityDuration = 0;
+    }
+
+    if (transformDuration < this.scenario.zeroDurationThreshold) {
+      transformDuration = 0;
+    }
+
+    if (this.scenario.allDurationsSame != null) {
+      const maxDuration = Math.max(colorDuration, opacityDuration, transformDuration);
+      colorDuration = maxDuration;
+      opacityDuration = maxDuration;
+      transformDuration = maxDuration;
+    }
+    return [transformDuration, colorDuration, opacityDuration];
   }
 
   // On start, calculate the duration, target and delta if not already present.
@@ -192,9 +225,25 @@ export default class ScenarioAnimationStep extends ElementAnimationStep {
     }
     if (Object.keys(start).length === 0) {
       start = element.getCurrentScenario();
+      if (element.opacity !== 1) {
+        start.opacity = element.opacity;
+      }
     }
 
-    const [transformDuration, colorDuration, opacityDuration] = this.getDuration();
+    let animateOpacity = null;
+    if (
+      (start.opacity != null || start.isShown === false)
+       && target.isShown === true
+    ) {
+      animateOpacity = 'dissolveIn'
+    } else if (
+      (start.opacity != null || start.isShown === true)
+      && target.isShown === false
+    ) {
+      animateOpacity = 'dissolveOut';
+    }
+
+    const [transformDuration, colorDuration, opacityDuration] = this.getDuration(start, target);
 
     if (this.position.start === null) {
       if (this.element != null) {
