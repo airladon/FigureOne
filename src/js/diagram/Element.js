@@ -400,104 +400,108 @@ class DiagramElement {
       },
       // eslint-disable-next-line max-len
       builder: (...optionsIn: Array<TypeAnimationBuilderInputOptions>) => new animations.AnimationBuilder(this, ...optionsIn),
-      // eslint-disable-next-line max-len
-      scenario: (...optionsIn: Array<TypeTransformAnimationStepInputOptions
-                                  & {
-                                      start?: TypeScenario,
-                                      target: TypeScenario,
-                                     }>) => {
-        const defaultOptions = { element: this, delay: 0 };
-        const options = joinObjects({}, defaultOptions, ...optionsIn);
-
-        // Retrieve the target scenario
-        if (options.target != null) {
-          const target = options.element.getScenarioTarget(options.target);
-          if (Object.keys(target).length > 0) {
-            options.target = target;
-          }
-        }
-        // Retrieve the start scenario (if it doesn't exist, then the element's values
-        // at the time the animation starts will be used).
-        if (options.start != null) {
-          const start = options.element.getScenarioTarget(options.start);
-          if (Object.keys(start).length > 0) {
-            options.start = start;
-          }
-        }
-
-        const { start, target, element } = options;
-        const steps = [];
-        const duration = this.getTimeToMoveToScenario(target, options, start || '');
-        options.duration = duration;
-        const timeOptions = { delay: options.delay, duration: options.duration };
-        options.delay = 0;
-        options.velocity = undefined;
-        let startColor;
-        let startTransform;
-        let startIsShown;
-
-        if (start != null) {
-          if (start.color != null) {
-            startColor = start.color.slice();
-          }
-          if (start.transform != null) {
-            startTransform = start.transform._dup();
-          }
-          if (start.isShown != null) {
-            startIsShown = start.isShown;
-          }
-        }
-
-        if (target.color != null) {
-          steps.push(element.anim.color({
-            start: startColor,
-            target: target.color,
-            duration: options.duration,
-          }));
-        }
-
-        if (target.transform != null) {
-          steps.push(element.anim.transform(options, {
-            start: startTransform,
-            target: target.transform,
-          }));
-        }
-        if (target.isShown != null) {
-          if (startIsShown != null) {
-            if (target.isShown === true && startIsShown === true) {
-              steps.push(element.anim.dissolveIn({ duration: 0 }));
-            }
-            if (target.isShown === false && startIsShown === false) {
-              steps.push(element.anim.dissolveOut({ duration: 0 }));
-            }
-            if (target.isShown === false && startIsShown === true) {
-              steps.push(element.anim.dissolveOut({ duration: options.duration }));
-            }
-            if (target.isShown === true && startIsShown === false) {
-              steps.push(element.anim.dissolveIn({ duration: options.duration }));
-            }
-          } else {
-            let dissolveFromCurrent = true;
-            if (options.dissolveFromCurrent != null && options.dissolveFromCurrent === false) {
-              dissolveFromCurrent = false;
-            }
-            if (target.isShown) {
-              steps.push(element.anim.opacity({
-                duration: options.duration,
-                dissolve: 'in',
-                dissolveFromCurrent,
-              }));
-            } else {
-              steps.push(element.anim.opacity({
-                duration: options.duration,
-                dissolve: 'out',
-                dissolveFromCurrent,
-              }));
-            }
-          }
-        }
-        return new animations.ParallelAnimationStep(timeOptions, { steps });
+      scenario: (...optionsIn: Array<TypeScenarioAnimationStepInputOptions>) => {
+        const options = joinObjects({}, { element: this }, ...optionsIn);
+        return new animations.ScenarioAnimationStep(options);
       },
+      // eslint-disable-next-line max-len
+      // scenario: (...optionsIn: Array<TypeTransformAnimationStepInputOptions
+      //                             & {
+      //                                 start?: TypeScenario,
+      //                                 target: TypeScenario,
+      //                                }>) => {
+      //   const defaultOptions = { element: this, delay: 0 };
+      //   const options = joinObjects({}, defaultOptions, ...optionsIn);
+
+      //   // Retrieve the target scenario
+      //   if (options.target != null) {
+      //     const target = options.element.getScenarioTarget(options.target);
+      //     if (Object.keys(target).length > 0) {
+      //       options.target = target;
+      //     }
+      //   }
+      //   // Retrieve the start scenario (if it doesn't exist, then the element's values
+      //   // at the time the animation starts will be used).
+      //   if (options.start != null) {
+      //     const start = options.element.getScenarioTarget(options.start);
+      //     if (Object.keys(start).length > 0) {
+      //       options.start = start;
+      //     }
+      //   }
+
+      //   const { start, target, element } = options;
+      //   const steps = [];
+      //   const duration = this.getTimeToMoveToScenario(target, options, start || '');
+      //   options.duration = duration;
+      //   const timeOptions = { delay: options.delay, duration: options.duration };
+      //   options.delay = 0;
+      //   options.velocity = undefined;
+      //   let startColor;
+      //   let startTransform;
+      //   let startIsShown;
+
+      //   if (start != null) {
+      //     if (start.color != null) {
+      //       startColor = start.color.slice();
+      //     }
+      //     if (start.transform != null) {
+      //       startTransform = start.transform._dup();
+      //     }
+      //     if (start.isShown != null) {
+      //       startIsShown = start.isShown;
+      //     }
+      //   }
+
+      //   if (target.color != null) {
+      //     steps.push(element.anim.color({
+      //       start: startColor,
+      //       target: target.color,
+      //       duration: options.duration,
+      //     }));
+      //   }
+
+      //   if (target.transform != null) {
+      //     steps.push(element.anim.transform(options, {
+      //       start: startTransform,
+      //       target: target.transform,
+      //     }));
+      //   }
+      //   if (target.isShown != null) {
+      //     if (startIsShown != null) {
+      //       if (target.isShown === true && startIsShown === true) {
+      //         steps.push(element.anim.dissolveIn({ duration: 0 }));
+      //       }
+      //       if (target.isShown === false && startIsShown === false) {
+      //         steps.push(element.anim.dissolveOut({ duration: 0 }));
+      //       }
+      //       if (target.isShown === false && startIsShown === true) {
+      //         steps.push(element.anim.dissolveOut({ duration: options.duration }));
+      //       }
+      //       if (target.isShown === true && startIsShown === false) {
+      //         steps.push(element.anim.dissolveIn({ duration: options.duration }));
+      //       }
+      //     } else {
+      //       let dissolveFromCurrent = true;
+      //       if (options.dissolveFromCurrent != null && options.dissolveFromCurrent === false) {
+      //         dissolveFromCurrent = false;
+      //       }
+      //       if (target.isShown) {
+      //         steps.push(element.anim.opacity({
+      //           duration: options.duration,
+      //           dissolve: 'in',
+      //           dissolveFromCurrent,
+      //         }));
+      //       } else {
+      //         steps.push(element.anim.opacity({
+      //           duration: options.duration,
+      //           dissolve: 'out',
+      //           dissolveFromCurrent,
+      //         }));
+      //       }
+      //     }
+      //   }
+      //   return new animations.ParallelAnimationStep(timeOptions, { steps });
+      // },
       // scenarioLegacy: (...optionsIn: Array<TypeTransformAnimationStepInputOptions
       //                          & { scenario: string }>) => {
       //   const defaultOptions = { element: this };
@@ -1345,87 +1349,87 @@ class DiagramElement {
   //   return time;
   // }
 
-  getTimeToMoveToScenario(
-    targetScenario: string | TypeScenario,
-    optionsIn: {
-      minTime?: number,
-      velocity?: {
-        translation?: TypeParsablePoint,
-        rotation?: number,
-        scale?: TypeParsablePoint,
-        transform?: TypeParsableTransform,
-        color?: number,
-      },
-      dissolveTime: number,
-      duration?: number,
-      rotDirection?: -1 | 1 | 0 | 2,
-    },
-    startScenario: string | TypeScenario = '',
-  ) {
-    if (optionsIn.duration != null) {
-      return optionsIn.duration;
-    }
-    const defaultOptions = {
-      rotDirection: 0,
-      minTime: 0,
-      velocity: {
-        translation: new Point(1 / 2, 1 / 2),
-        rotation: 2 * Math.PI / 6,
-        scale: new Point(1, 1),
-        color: 1,
-      },
-    };
-    const options = joinObjects({}, defaultOptions, optionsIn);
-    const target = this.getScenarioTarget(targetScenario);
-    let start = this;
-    if (startScenario) {
-      start = this.getScenarioTarget(startScenario);
-    }
-    let velocity = this.transform.constant(0);
-    if (options.transform != null) {
-      velocity = options.transform;
-    }
-    if (options.velocity.translation) {
-      velocity.updateTranslation(options.velocity.translation);
-    }
-    if (options.velocity.rotation) {
-      velocity.updateRotation(options.velocity.rotation);
-    }
-    if (options.velocity.scale) {
-      velocity.updateScale(options.velocity.scale);
-    }
-    // const velocity = this.transform.constant(0);
-    // velocity.updateTranslation(new Point(1 / 2, 1 / 2));
-    // velocity.updateRotation(2 * Math.PI / 6);
-    // velocity.updateScale(1, 1);
-    // console.log(velocity)
-    // console.log(options.velocity)
-    const time = getMaxTimeFromVelocity(
-      start.transform._dup(), target.transform, velocity, options.rotDirection,
-    );
-    let colorTime = options.minTime;
-    if (start.isShown !== target.isShown) {
-      options.minTime = 0.8;
-    }
-    if (target.color != null) {
-      let startColor = start.color;
-      if (startColor == null) {
-        startColor = this.color.slice();
-      }
-      if (!areColorsSame(startColor, target.color)) {
-      // options.minTime = 0.8;
-        if (options.velocity.color != null) {
-          const v = options.velocity.color;
-          const r = Math.abs((target.color[0] - startColor[0]) / v);
-          const g = Math.abs((target.color[1] - startColor[1]) / v);
-          const b = Math.abs((target.color[2] - startColor[2]) / v);
-          const a = Math.abs((target.color[3] - startColor[3]) / v);
-          colorTime = Math.max(r, g, b, a);
-        }
-      }
-    }
-    return Math.min(time, options.minTime);
-  }
+  // getTimeToMoveToScenario(
+  //   targetScenario: string | TypeScenario,
+  //   optionsIn: {
+  //     minTime?: number,
+  //     velocity?: {
+  //       translation?: TypeParsablePoint,
+  //       rotation?: number,
+  //       scale?: TypeParsablePoint,
+  //       transform?: TypeParsableTransform,
+  //       color?: number,
+  //     },
+  //     dissolveTime: number,
+  //     duration?: number,
+  //     rotDirection?: -1 | 1 | 0 | 2,
+  //   },
+  //   startScenario: string | TypeScenario = '',
+  // ) {
+  //   if (optionsIn.duration != null) {
+  //     return optionsIn.duration;
+  //   }
+  //   const defaultOptions = {
+  //     rotDirection: 0,
+  //     minTime: 0,
+  //     velocity: {
+  //       translation: new Point(1 / 2, 1 / 2),
+  //       rotation: 2 * Math.PI / 6,
+  //       scale: new Point(1, 1),
+  //       color: 1,
+  //     },
+  //   };
+  //   const options = joinObjects({}, defaultOptions, optionsIn);
+  //   const target = this.getScenarioTarget(targetScenario);
+  //   let start = this;
+  //   if (startScenario) {
+  //     start = this.getScenarioTarget(startScenario);
+  //   }
+  //   let velocity = this.transform.constant(0);
+  //   if (options.transform != null) {
+  //     velocity = options.transform;
+  //   }
+  //   if (options.velocity.translation) {
+  //     velocity.updateTranslation(options.velocity.translation);
+  //   }
+  //   if (options.velocity.rotation) {
+  //     velocity.updateRotation(options.velocity.rotation);
+  //   }
+  //   if (options.velocity.scale) {
+  //     velocity.updateScale(options.velocity.scale);
+  //   }
+  //   // const velocity = this.transform.constant(0);
+  //   // velocity.updateTranslation(new Point(1 / 2, 1 / 2));
+  //   // velocity.updateRotation(2 * Math.PI / 6);
+  //   // velocity.updateScale(1, 1);
+  //   // console.log(velocity)
+  //   // console.log(options.velocity)
+  //   const time = getMaxTimeFromVelocity(
+  //     start.transform._dup(), target.transform, velocity, options.rotDirection,
+  //   );
+  //   let colorTime = options.minTime;
+  //   if (start.isShown !== target.isShown) {
+  //     options.minTime = 0.8;
+  //   }
+  //   if (target.color != null) {
+  //     let startColor = start.color;
+  //     if (startColor == null) {
+  //       startColor = this.color.slice();
+  //     }
+  //     if (!areColorsSame(startColor, target.color)) {
+  //     // options.minTime = 0.8;
+  //       if (options.velocity.color != null) {
+  //         const v = options.velocity.color;
+  //         const r = Math.abs((target.color[0] - startColor[0]) / v);
+  //         const g = Math.abs((target.color[1] - startColor[1]) / v);
+  //         const b = Math.abs((target.color[2] - startColor[2]) / v);
+  //         const a = Math.abs((target.color[3] - startColor[3]) / v);
+  //         colorTime = Math.max(r, g, b, a);
+  //       }
+  //     }
+  //   }
+  //   return Math.min(time, options.minTime);
+  // }
 
   // Decelerate over some time when moving freely to get a new element
   // transform and movement velocity
