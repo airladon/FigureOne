@@ -240,5 +240,17 @@ describe('Diagram Recorder', () => {
       expect(a.color).toEqual([0, 1, 0, 1]);
       expect(diagram.isAnimating()).toBe(false);
     });
+    test.only('Velocity Position', () => {
+      a.animations.new()
+        .scenario({ target: { position: [1, 1] }, velocity: { translation: new Point(0.5, 0.5) } })
+        .start();
+      timeStep(0);
+      expect(a.getPosition()).toEqual(new Point(0, 0));
+      timeStep(1);
+      expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+      timeStep(2);
+      expect(a.getPosition()).toEqual(new Point(1, 1));
+      expect(diagram.isAnimating()).toBe(false);
+    });
   });
 });
