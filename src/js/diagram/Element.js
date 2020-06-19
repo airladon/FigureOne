@@ -1212,6 +1212,7 @@ class DiagramElement {
 
     if (scenario.transform != null) {
       transform = getTransform(scenario.transform);
+      console.log(Transform)
     }
     if (scenario.position != null) {
       if (transform == null) {
