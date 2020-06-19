@@ -29,7 +29,8 @@ export type TypeScenario = {
 };
 
 export type TypeScenarioVelocity = {
-  position?: TypeParsablePoint,
+  position?: TypeParsablePoint | number,
+  translation?: TypeParsablePoint | number,
   rotation?: number,
   scale?: TypeParsablePoint | number,
   transform?: TypeParsableTransform,
@@ -147,7 +148,10 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       transformVelocity = getTransform(velocity.transform)._dup();
     }
     if (velocity.position != null) {
-      transformVelocity.updateTranslation(getPoint(velocity.position));
+      transformVelocity.updateTranslation(getScale(velocity.position));
+    }
+    if (velocity.translation != null) {
+      transformVelocity.updateTranslation(getScale(velocity.translation));
     }
     if (velocity.scale != null) {
       transformVelocity.updateScale(getScale(velocity.scale));
@@ -257,7 +261,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     }
 
     const [transformDuration, colorDuration, opacityDuration] = this.getDuration(start, target);
-    console.log(transformDuration)
+
     const steps = [];
     if (target.transform != null) {
       steps.push(element.anim.transform({
