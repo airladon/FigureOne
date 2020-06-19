@@ -34,6 +34,24 @@ describe('Diagram Recorder', () => {
     diagram.mock.timeStep(1);
     expect(a.getPosition()).toEqual(new Point(1, 1));
   });
+  test('Transform', () => {
+    a.animations.new()
+      .scenario({ target: new Transform().scale(2, 2).rotate(1).translate(1, 1), duration: 1 })
+      .start();
+      diagram.mock.timeStep(0);
+      debugger;
+      expect(a.getPosition()).toEqual(new Point(0, 0));
+      expect(a.getScale()).toEqual(new Point(1, 1));
+      expect(a.getRotation()).toBe(0);
+      diagram.mock.timeStep(0.5);
+      expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+      expect(a.getScale()).toEqual(new Point(1.5, 1.5));
+      expect(a.getRotation()).toBe(0.5);
+      diagram.mock.timeStep(1);
+      expect(a.getPosition()).toEqual(new Point(1, 1));
+      expect(a.getScale()).toEqual(new Point(2, 2));
+      expect(a.getRotation()).toBe(1);
+  });
   test('Position, Rotation, Scale, Color, isShown', () => {
     a.animations.new()
       .scenario({
@@ -125,4 +143,17 @@ describe('Diagram Recorder', () => {
     expect(a.getPosition()).toEqual(new Point(1, 1));
     expect(diagram.isAnimating()).toBe(false);
   });
+  
+  test('Velocity Rotation', () => {});
+  test('Velocity Scale', () => {});
+  test('Velocity Transform', () => {});
+  test('Velocity Color', () => {});
+  test('Velocity Opacity', () => {});
+  test('Velocity all same duration', () => {});
+  test('Velocity different durations', () => {});
+  test('Velocity zero threshold', () => {});
+  test('Velocity maxTime', () => {});
+  test('Velocity 0 movement', () => {});
+  test('Mid dissolve out', () => {});
+  test('Mid dissolve in', () => {});
 });
