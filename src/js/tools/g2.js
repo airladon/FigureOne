@@ -638,7 +638,7 @@ function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<
 function getScale(s: TypeParsablePoint | number) {
   let parsedPoint;
   if (typeof s === 'number') {
-    parsedPoint = new Point(0, 0);
+    parsedPoint = new Point(s, s);
   } else {
     parsedPoint = getPoint(s);
   }
