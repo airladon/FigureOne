@@ -51,6 +51,7 @@ export type TypeScenarioAnimationStepInputOptions = {
   translationOptions?: pathOptionsType;
   rotDirection: 0 | 1 | -1 | 2;
   clipRotationTo: '0to360' | '-180to180' | null;
+  progression: ((number, ?boolean) => number) | string;
 } & TypeElementAnimationStepInputOptions;
 
 export default class ScenarioAnimationStep extends ParallelAnimationStep {
@@ -65,7 +66,8 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     maxTime: ?number;
     allDurationsSame: boolean;
     zeroDurationThreshold: number;
-    clipRotationTo:  '0to360' | '-180to180' | null;
+    clipRotationTo: '0to360' | '-180to180' | null;
+    progression: ((number, ?boolean) => number) | string;
   };
 
   constructor(...optionsIn: Array<TypeScenarioAnimationStepInputOptions>) {
@@ -74,7 +76,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     deleteKeys(AnimationStepOptionsIn, [
       'start', 'target', 'translationStyle', 'translationOptions',
       'velocity', 'maxTime', 'allDurationsSame', 'rotDirection',
-      'clipRotationTo', 'element',
+      'clipRotationTo', 'element', 'progression',
     ]);
     super(AnimationStepOptionsIn);
     this._stepType = 'position';
@@ -97,6 +99,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       maxTime: null,
       allDurationsSame: true,
       zeroDurationThreshold: 0,
+      progression: 'tools.math.easeinout',
     };
     if (this.element && this.element.animations.options.translation) {
       const translationOptions = this.element.animations.options.translation;
@@ -114,7 +117,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     copyKeysFromTo(options, this.scenario, [
       'start', 'target', 'translationStyle',
       'velocity', 'maxTime', 'allDurationsSame', 'zeroDurationThreshold',
-      'rotDirection', 'clipRotationTo',
+      'rotDirection', 'clipRotationTo', 'progression',
     ]);
     duplicateFromTo(options.translationOptions, this.scenario.translationOptions);
   }
@@ -281,6 +284,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
         translationStyle: this.scenario.translationStyle,
         translationOptions: this.scenario.translationOptions,
         clipRotationTo: this.scenario.clipRotationTo,
+        progression: this.scenario.progression,
       }));
     }
     // debugger;
@@ -290,6 +294,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
         start: start.color,
         target: target.color,
         duration: colorDuration,
+        progression: this.scenario.progression,
       }));
     }
 
@@ -298,6 +303,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
         dissolve,
         dissolveFromCurrent,
         duration: opacityDuration,
+        progression: this.scenario.progression,
       }));
     }
 
