@@ -416,7 +416,6 @@ class DiagramElement {
             options.target = target;
           }
         }
-
         // Retrieve the start scenario (if it doesn't exist, then the element's values
         // at the time the animation starts will be used).
         if (options.start != null) {
@@ -1212,7 +1211,6 @@ class DiagramElement {
 
     if (scenario.transform != null) {
       transform = getTransform(scenario.transform);
-      console.log(Transform)
     }
     if (scenario.position != null) {
       if (transform == null) {
@@ -1367,7 +1365,7 @@ class DiagramElement {
     if (optionsIn.duration != null) {
       return optionsIn.duration;
     }
-
+    console.log('asdfasdf')
     const defaultOptions = {
       rotDirection: 0,
       minTime: 0,
@@ -1401,8 +1399,8 @@ class DiagramElement {
     // velocity.updateTranslation(new Point(1 / 2, 1 / 2));
     // velocity.updateRotation(2 * Math.PI / 6);
     // velocity.updateScale(1, 1);
-    console.log(velocity)
-    console.log(options.velocity)
+    // console.log(velocity)
+    // console.log(options.velocity)
     const time = getMaxTimeFromVelocity(
       start.transform._dup(), target.transform, velocity, options.rotDirection,
     );
