@@ -433,4 +433,27 @@ describe('Diagram Recorder', () => {
     expect(a.getPosition()).toEqual(new Point(0, 0));
     expect(diagram.isAnimating()).toBe(false);
   });
+  test('Element anim', () => {
+    diagram.elements.animations.new()
+      .then(a.anim.scenario({ target: { position: [1, 1] }, duration: 1 }))
+      .start();
+    diagram.mock.timeStep(0);
+    expect(a.getPosition()).toEqual(new Point(0, 0));
+    diagram.mock.timeStep(0.5);
+    expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+    diagram.mock.timeStep(1);
+    expect(a.getPosition()).toEqual(new Point(1, 1));
+  });
+  test('Scenario Name', () => {
+    a.scenarios.s1 = { position: [1, 1] };
+    a.animations.new()
+      .scenario({ target: 's1', duration: 1 })
+      .start();
+    diagram.mock.timeStep(0);
+    expect(a.getPosition()).toEqual(new Point(0, 0));
+    diagram.mock.timeStep(0.5);
+    expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+    diagram.mock.timeStep(1);
+    expect(a.getPosition()).toEqual(new Point(1, 1));
+  });
 });
