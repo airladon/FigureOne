@@ -4,7 +4,7 @@ import {
   Transform, Point, TransformLimit, Rect,
   Translation, spaceToSpaceTransform, getBoundingRect,
   Scale, Rotation, Line, getMaxTimeFromVelocity, clipAngle,
-  getPoint, getTransform,
+  getPoint, getTransform, getScale,
 } from '../tools/g2';
 // import { areColorsSame } from '../tools/color';
 import { getState } from './state';
@@ -408,6 +408,8 @@ class DiagramElement {
                                      }>) => {
         const defaultOptions = { element: this, delay: 0 };
         const options = joinObjects({}, defaultOptions, ...optionsIn);
+
+        // Retrieve the target scenario
         if (options.target != null) {
           const target = options.element.getScenarioTarget(options.target);
           if (Object.keys(target).length > 0) {
@@ -415,12 +417,15 @@ class DiagramElement {
           }
         }
 
+        // Retrieve the start scenario (if it doesn't exist, then the element's values
+        // at the time the animation starts will be used).
         if (options.start != null) {
           const start = options.element.getScenarioTarget(options.start);
           if (Object.keys(start).length > 0) {
             options.start = start;
           }
         }
+
         const { start, target, element } = options;
         const steps = [];
         const duration = this.getTimeToMoveToScenario(target, options, start || '');
@@ -494,30 +499,30 @@ class DiagramElement {
         }
         return new animations.ParallelAnimationStep(timeOptions, { steps });
       },
-      scenarioLegacy: (...optionsIn: Array<TypeTransformAnimationStepInputOptions
-                               & { scenario: string }>) => {
-        const defaultOptions = { element: this };
-        const options = joinObjects({}, defaultOptions, ...optionsIn);
-        if (options.target != null
-          && options.target in options.element.scenarios
-        ) {
-          const target = options.element.getScenarioTargetLegacy(options.target);
-          options.target = target;
-        }
-        if (options.start != null
-          && options.start in options.element.scenarios
-        ) {
-          const start = options.element.getScenarioTargetLegacy(options.start);
-          options.start = start;
-        }
-        if (options.delta != null
-          && options.delta in options.element.scenarios
-        ) {
-          const delta = options.element.getScenarioTargetLegacy(options.delta);
-          options.delta = delta;
-        }
-        return new animations.TransformAnimationStep(options);
-      },
+      // scenarioLegacy: (...optionsIn: Array<TypeTransformAnimationStepInputOptions
+      //                          & { scenario: string }>) => {
+      //   const defaultOptions = { element: this };
+      //   const options = joinObjects({}, defaultOptions, ...optionsIn);
+      //   if (options.target != null
+      //     && options.target in options.element.scenarios
+      //   ) {
+      //     const target = options.element.getScenarioTargetLegacy(options.target);
+      //     options.target = target;
+      //   }
+      //   if (options.start != null
+      //     && options.start in options.element.scenarios
+      //   ) {
+      //     const start = options.element.getScenarioTargetLegacy(options.start);
+      //     options.start = start;
+      //   }
+      //   if (options.delta != null
+      //     && options.delta in options.element.scenarios
+      //   ) {
+      //     const delta = options.element.getScenarioTargetLegacy(options.delta);
+      //     options.delta = delta;
+      //   }
+      //   return new animations.TransformAnimationStep(options);
+      // },
       // eslint-disable-next-line max-len
       scenarios: (...optionsIn: Array<TypeParallelAnimationStepInputOptions & TypeTransformAnimationStepInputOptions>) => {
         const defaultOptions = {};
@@ -1181,18 +1186,18 @@ class DiagramElement {
         target.updateRotation(scenario.rotation);
       }
       if (scenario.scale != null) {
-        target.updateScale(getPoint(scenario.scale));
+        target.updateScale(getScale(scenario.scale));
       }
     }
     return target;
   }
 
+  // retrieve a scenario
   getScenarioTarget(
     scenarioIn: string | TypeScenario,
-  ) {
+  ): { transform?: Transform, color?: Array<number>, isShown?: boolean } {
     let transform;
     let color;
-    // const opacity = this.opacity; // eslint-disable-line prefer-destructuring
     let isShown;
     let scenario;
     if (typeof scenarioIn === 'string') {
@@ -1225,7 +1230,7 @@ class DiagramElement {
       if (transform == null) {
         transform = this.transform._dup();
       }
-      transform.updateScale(getPoint(scenario.scale));
+      transform.updateScale(getScale(scenario.scale));
     }
     if (scenario.color) {
       color = scenario.color.slice();
@@ -1236,7 +1241,6 @@ class DiagramElement {
     return {
       transform,
       color,
-      // opacity,
       isShown,
     };
   }
@@ -1320,7 +1324,7 @@ class DiagramElement {
   // }
 
   getTimeToMoveToScenario(
-    scenarioName: string,
+    targetScenario: string | TypeScenario,
     optionsIn: {
       minTime?: number,
       velocity?: {
@@ -1334,7 +1338,7 @@ class DiagramElement {
       duration?: number,
       rotDirection?: -1 | 1 | 0 | 2,
     },
-    startScenario: string = '',
+    startScenario: string | TypeScenario = '',
   ) {
     if (optionsIn.duration != null) {
       return optionsIn.duration;
@@ -1347,13 +1351,14 @@ class DiagramElement {
         translation: new Point(1 / 2, 1 / 2),
         rotation: 2 * Math.PI / 6,
         scale: new Point(1, 1),
+        color: 1,
       },
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
-    const target = this.getScenarioTarget(scenarioName);
+    const target = this.getScenarioTarget(targetScenario);
     let start = this;
     if (startScenario) {
-      start = this.getScenarioTarget(scenarioName);
+      start = this.getScenarioTarget(startScenario);
     }
     let velocity = this.transform.constant(0);
     if (options.transform != null) {
@@ -1372,6 +1377,8 @@ class DiagramElement {
     // velocity.updateTranslation(new Point(1 / 2, 1 / 2));
     // velocity.updateRotation(2 * Math.PI / 6);
     // velocity.updateScale(1, 1);
+    console.log(velocity)
+    console.log(options.velocity)
     const time = getMaxTimeFromVelocity(
       start.transform._dup(), target.transform, velocity, options.rotDirection,
     );

@@ -13,41 +13,62 @@ import type {
 import ElementAnimationStep from '../ElementAnimationStep';
 // import type { DiagramElement } from '../../../Element';
 
-export type TypePositionAnimationStepInputOptions = {
-  start?: Point;      // default is element transform
-  target?: Point;     // Either target or delta must be defined
-  delta?: Point;      // delta overrides target if both are defined
+export type TypeScenario = {
+  position?: TypeParsablePoint,
+  rotation?: number,
+  scale?: TypeParsablePoint | number,
+  transform?: TypeParsableTransform,
+  color?: Array<number>,
+  isShown?: boolean,
+};
+
+export type TypeScenarioVelocity = {
+  position?: TypeParsablePoint,
+  rotation?: Number,
+  scale?: TypeParsablePoint | number,
+  transform?: TypeParsableTransform,
+  color?: number,
+  opacity?: number,
+} | number | TypeParsablePoint;
+
+export type TypeScenarioAnimationStepInputOptions = {
+  start?: string | TypeScenario;
+  target?: string | TypeScenario;
+  velocity?: TypeScenarioVelocity;
+  // minTime?: number,
+  maxTime?: number,
+  zeroDurationThreshold?: number,
+  allDurationsSame?: boolean,
   translationStyle?: 'linear' | 'curved'; // default is linear
   translationOptions?: pathOptionsType;
-  velocity?: Point;
-  maxTime?: number;
+  rotDirection: 0 | 1 | -1 | 2;
+  clipRotationTo: '0to360' | '-180to180' | null;
 } & TypeElementAnimationStepInputOptions;
 
-export default class PositionAnimationStep extends ElementAnimationStep {
-  position: {
-    start: ?Point;  // null means use element transform when unit is started
-    delta: ?Point;
-    target: ?Point;
+export default class ScenarioAnimationStep extends ElementAnimationStep {
+  scenario: {
+    start: ?(string | TypeScenario);  // null means use element props when unit is started
+    target: ?(string | TypeScenario);
     rotDirection: 0 | 1 | -1 | 2;
     translationStyle: 'linear' | 'curved';
     translationOptions: pathOptionsType;
-    velocity: ?Point;
+    velocity: ?TypeScenarioVelocity;
     maxTime: ?number;
+    zeroDurationThreshold: ?number;
   };
 
-  constructor(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
+  constructor(...optionsIn: Array<TypeScenarioAnimationStepInputOptions>) {
     const ElementAnimationStepOptionsIn =
-      joinObjects({}, { type: 'position' }, ...optionsIn);
+      joinObjects({}, { type: 'scenario' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
-      'start', 'delta', 'target', 'translationStyle', 'translationOptions',
-      'velocity', 'maxTime',
+      'start', 'target', 'translationStyle', 'translationOptions',
+      'velocity', 'maxTime', 'allDurationsSame', 'rotDirection', 'clipRotationTo'
     ]);
     super(ElementAnimationStepOptionsIn);
     this._stepType = 'position';
-    const defaultPositionOptions = {
+    const defaultScenarioOptions = {
       start: null,
       target: null,
-      delta: null,
       translationStyle: 'linear',
       translationOptions: {
         rot: 1,
@@ -55,35 +76,40 @@ export default class PositionAnimationStep extends ElementAnimationStep {
         offset: 0.5,
         controlPoint: null,
         direction: '',
-        maxTime: null,
       },
+      rotDirection: 0,
+      maxTime: null,
+      clipRotationTo: null,
       velocity: null,
+      allDurationsSame: true,
+      zeroDurationThreshold: 0,
     };
     if (this.element && this.element.animations.options.translation) {
       const translationOptions = this.element.animations.options.translation;
       if (translationOptions.style != null) {
         // $FlowFixMe - this is messy, but deal with it
-        defaultPositionOptions.style = translationOptions.style;
+        defaultScenarioOptions.translationStyle = translationOptions.style;
       }
-      joinObjects(defaultPositionOptions.translationOptions, translationOptions);
+      joinObjects(defaultScenarioOptions.translationOptions, translationOptions);
     }
-    const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
-    if (options.start != null) {
-      options.start = getPoint(options.start);
-    }
-    if (options.target != null) {
-      options.target = getPoint(options.target);
-    }
-    if (options.delta != null) {
-      options.delta = getPoint(options.delta);
-    }
+    const options = joinObjects({}, defaultScenarioOptions, ...optionsIn);
+    // if (options.start != null) {
+    //   options.start = getPoint(options.start);
+    // }
+    // if (options.target != null) {
+    //   options.target = getPoint(options.target);
+    // }
+    // if (options.delta != null) {
+    //   options.delta = getPoint(options.delta);
+    // }
     // $FlowFixMe
-    this.position = { translationOptions: {} };
-    copyKeysFromTo(options, this.position, [
-      'start', 'delta', 'target', 'translationStyle',
-      'velocity', 'maxTime',
+    this.scenario = { translationOptions: {} };
+    copyKeysFromTo(options, this.scenario, [
+      'start', 'target', 'translationStyle',
+      'velocity', 'maxTime', 'allDurationsSame', 'zeroDurationThreshold',
+      'rotDirection', 'clipRotationTo',
     ]);
-    duplicateFromTo(options.translationOptions, this.position.translationOptions);
+    duplicateFromTo(options.translationOptions, this.scenario.translationOptions);
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
