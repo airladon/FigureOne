@@ -207,11 +207,60 @@ describe('Diagram Recorder', () => {
     expect(a.color).toEqual([0, 1, 0, 1]);
     expect(diagram.isAnimating()).toBe(false);
   });
-  test('Velocity Opacity', () => {
+  test('Velocity Opacity Show', () => {
+    a.hide();
+    expect(a.opacity).toEqual(1);
+    expect(a.isShown).toBe(false);
+    a.animations.new()
+      .scenario({ target: { isShown: true }, velocity: { opacity: 0.5 } })
+      .start();
+    diagram.mock.timeStep(0);
+    expect(a.opacity).toEqual(0.001);
+    expect(a.isShown).toBe(true);
+    diagram.mock.timeStep(1);
+    expect(a.opacity).toEqual(0.5005);
+    expect(a.isShown).toBe(true);
+    diagram.mock.timeStep(2);
+    expect(a.opacity).toEqual(1);
+    expect(a.isShown).toBe(true);
+    expect(diagram.isAnimating()).toBe(false);
+  });
+  test('Velocity opacity hide', () => {
+    a.animations.new()
+      .scenario({ target: { isShown: false }, velocity: { opacity: 0.5 } })
+      .start();
+    diagram.mock.timeStep(0);
+    expect(a.opacity).toEqual(1);
+    expect(a.isShown).toBe(true);
+    diagram.mock.timeStep(1);
+    expect(a.opacity).toEqual(0.5005);
+    expect(a.isShown).toBe(true);
+    diagram.mock.timeStep(2);
+    expect(a.opacity).toEqual(1);
+    expect(a.isShown).toBe(false);
+    expect(diagram.isAnimating()).toBe(false);
+  });
+  test('Mid dissolve out', () => {
+    a.setOpacity(0.2);
+    a.animations.new()
+      .scenario({ target: { isShown: false }, velocity: { opacity: 0.1 } })
+      .start();
+    diagram.mock.timeStep(0);
+    expect(a.opacity).toEqual(0.2);
+    expect(a.isShown).toBe(true);
+    diagram.mock.timeStep(1);
+    expect(a.opacity).toEqual(0.1005);
+    expect(a.isShown).toBe(true);
+    diagram.mock.timeStep(2);
+    expect(a.opacity).toEqual(1);
+    expect(a.isShown).toBe(false);
+    expect(diagram.isAnimating()).toBe(false);
+  });
+  test('Mid dissolve in', () => {
+    a.setOpacity(0.8);
     a.animations.new()
       .scenario({ target: { isShown: true }, velocity: { opacity: 0.1 } })
       .start();
-    a.setOpacity(0.8);
     diagram.mock.timeStep(0);
     expect(a.opacity).toEqual(0.8);
     diagram.mock.timeStep(1);
@@ -225,6 +274,4 @@ describe('Diagram Recorder', () => {
   test('Velocity zero threshold', () => {});
   test('Velocity maxTime', () => {});
   test('Velocity 0 movement', () => {});
-  test('Mid dissolve out', () => {});
-  test('Mid dissolve in', () => {});
 });

@@ -190,7 +190,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       colorDuration = deltaColor / colorVelocity;
     }
     let opacityDuration = 0;
-    if (target.isShown != null && target.isShown != null) {
+    if (start.isShown != null && target.isShown != null) {
       if (start.opacity != null && target.isShown === true) {
         const opacityDelta = 1 - start.opacity;
         opacityDuration = opacityDelta / opacityVelocity;

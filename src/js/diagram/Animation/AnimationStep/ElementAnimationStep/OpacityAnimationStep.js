@@ -84,9 +84,9 @@ export class OpacityAnimationStep extends ElementAnimationStep {
       if (this.opacity.dissolve === 'out') {
         if (this.opacity.dissolveFromCurrent) {
           if (element.isShown) {
-            this.opacity.start = 1;
+            this.opacity.start = this.element.opacity;
           } else {
-            this.opacity.start = 0.001;
+            this.opacity.start = 1;
           }
         } else {
           this.opacity.start = 1;
@@ -94,12 +94,11 @@ export class OpacityAnimationStep extends ElementAnimationStep {
         this.opacity.target = 0.001;
         this.opacity.whenComplete = 1;
         element.setOpacity(this.opacity.start);
-        // this.opacity.target = 0.001;
       }
       if (this.opacity.dissolve === 'in') {
         if (this.opacity.dissolveFromCurrent) {
           if (element.isShown) {
-            this.opacity.start = 1;
+            this.opacity.start = this.element.opacity;
           } else {
             this.opacity.start = 0.001;
           }
