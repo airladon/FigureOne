@@ -1273,6 +1273,31 @@ class DiagramElement {
     scenarioName: string,
     keys: Array<string> = ['transform', 'color', 'isShown'],
   ) {
+    // const scenario = {};
+    // keys.forEach((key) => {
+    //   if (key === 'transform') {
+    //     scenario.transform = this.transform._dup();
+    //   } else if (key === 'position') {
+    //     scenario.position = this.getPosition();
+    //   } else if (key === 'rotation') {
+    //     scenario.rotation = this.getRotation();
+    //   } else if (key === 'scale') {
+    //     scenario.scale = this.getScale();
+    //   } else if (key === 'color') {
+    //     scenario.color = this.color.slice();
+    //   } else if (key === 'isShown') {
+    //     scenario.isShown = this.isShown;
+    //   }
+    // });
+    const scenario = this.getCurrentScenario(keys);
+    if (Object.keys(scenario).length > 0) {
+      this.scenarios[scenarioName] = scenario;
+    }
+  }
+
+  getCurrentScenario(
+    keys: Array<string> = ['transform', 'color', 'isShown'],
+  ) {
     const scenario = {};
     keys.forEach((key) => {
       if (key === 'transform') {
@@ -1289,9 +1314,7 @@ class DiagramElement {
         scenario.isShown = this.isShown;
       }
     });
-    if (Object.keys(scenario).length > 0) {
-      this.scenarios[scenarioName] = scenario;
-    }
+    return scenario;
   }
 
   saveScenarios(scenarioName: string, keys: Array<string>) {
