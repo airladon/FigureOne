@@ -140,10 +140,9 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     }
 
     let transformVelocity = element.transform._dup().constant(1);
-    let colorVelocity = velocity.color == null ? 1 : velocity.color;
-    let opacityVelocity = velocity.opacity == null ? 1 : velocity.opacity;
+    const colorVelocity = velocity.color == null ? 1 : velocity.color;
+    const opacityVelocity = velocity.opacity == null ? 1 : velocity.opacity;
 
-    if (velocity)
     if (velocity.transform != null) {
       transformVelocity = getTransform(velocity.transform)._dup();
     }
@@ -159,9 +158,13 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     if (velocity.rotation != null) {
       transformVelocity.updateRotation(velocity.rotation);
     }
-    if (velocity.color != null) {
-      colorVelocity = velocity.color;
-    }
+    // if (velocity.color != null) {
+    //   colorVelocity = velocity.color;
+    // }
+
+    // if (velocity.opacity != null) {
+    //   opacityVelocity = velocity.color;
+    // }
 
     let transformDuration = 0;
     if (start.transform != null && target.transform != null) {
@@ -177,7 +180,13 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       && target.color != null
       && !areColorsSame(target.color, start.color)
     ) {
-      const deltaColor = Math.abs(target.color - start.color);
+      const deltaColor = Math.max(
+        Math.abs(target.color[0] - start.color[0]),
+        Math.abs(target.color[1] - start.color[1]),
+        Math.abs(target.color[2] - start.color[2]),
+        Math.abs(target.color[3] - start.color[3]),
+      );
+      // const deltaColor = Math.abs(target.color - start.color);
       colorDuration = deltaColor / colorVelocity;
     }
     let opacityDuration = 0;
