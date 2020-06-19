@@ -286,7 +286,7 @@ describe('Diagram Recorder', () => {
           color: 0.4,
           opacity: 0.5,
         },
-        allSameDuration: true,
+        allDurationsSame: true,
       })
       .start();
 
@@ -330,11 +330,12 @@ describe('Diagram Recorder', () => {
           color: 0.4,
           opacity: 0.5,
         },
-        allSameDuration: false,
+        allDurationsSame: false,
         progression: 'linear',
       })
       .start();
-
+    // Note, all transform velocities (position, scale, rotation)
+    // will be the same as the slowest one
     diagram.mock.timeStep(0);
     expect(a.getPosition()).toEqual(new Point(0, 0));
     expect(a.getScale()).toEqual(new Point(1, 1));
@@ -344,8 +345,8 @@ describe('Diagram Recorder', () => {
     expect(a.color).toEqual([1, 0, 0, 1]);
     diagram.mock.timeStep(1);
     expect(a.getPosition()).toEqual(new Point(0.1, 0.1));
-    expect(a.getScale()).toEqual(new Point(1.2, 1.2));
-    expect(a.getRotation()).toBe(0.3);
+    expect(a.getScale()).toEqual(new Point(1.1, 1.1));
+    expect(a.getRotation()).toBe(0.1);
     expect(a.opacity).toBe(0.5005);
     expect(a.isShown).toBe(true);
     expect(a.color).toEqual([0.6, 0.4, 0, 1]);
@@ -358,7 +359,78 @@ describe('Diagram Recorder', () => {
     expect(a.color).toEqual([0, 1, 0, 1]);
     expect(diagram.isAnimating()).toBe(false);
   });
-  test('Velocity zero threshold', () => {});
-  test('Velocity maxTime', () => {});
-  test('Velocity 0 movement', () => {});
+  test('Velocity zero threshold - just above', () => {
+    a.animations.new()
+      .scenario({
+        target: { position: [1, 1] },
+        velocity: { translation: 9 },
+        zeroDurationThreshold: 0.1,
+      })
+      .start();
+    diagram.mock.timeStep(0);
+    expect(a.getPosition()).toEqual(new Point(0, 0));
+    diagram.mock.timeStep(0.1);
+    expect(a.getPosition().round(2)).toEqual(new Point(0.99, 0.99));
+    diagram.mock.timeStep(1);
+    expect(a.getPosition()).toEqual(new Point(1, 1));
+    expect(diagram.isAnimating()).toBe(false);
+  });
+  test('Velocity zero threshold - on', () => {
+    a.animations.new()
+      .scenario({
+        target: { position: [1, 1] },
+        velocity: { translation: 10 },
+        zeroDurationThreshold: 0.1,
+      })
+      .start();
+    diagram.mock.timeStep(0);
+    expect(a.getPosition()).toEqual(new Point(1, 1));
+    expect(diagram.isAnimating()).toBe(false);
+  });
+  test('Velocity zero threshold - just below', () => {
+    a.animations.new()
+      .scenario({
+        target: { position: [1, 1] },
+        velocity: { translation: 11 },
+        zeroDurationThreshold: 0.1,
+      })
+      .start();
+    diagram.mock.timeStep(0);
+    expect(a.getPosition()).toEqual(new Point(1, 1));
+    expect(diagram.isAnimating()).toBe(false);
+  });
+  test('Velocity maxTime', () => {
+    a.animations.new()
+      .scenario({
+        target: { position: [1, 1] },
+        velocity: { translation: 0.1 },
+        maxTime: 2,
+      })
+      .start();
+    diagram.mock.timeStep(0);
+    expect(a.getPosition()).toEqual(new Point(0, 0));
+    diagram.mock.timeStep(1);
+    expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+    diagram.mock.timeStep(2);
+    expect(a.getPosition()).toEqual(new Point(1, 1));
+    expect(diagram.isAnimating()).toBe(false);
+  });
+  test('No Change', () => {
+    a.animations.new()
+      .scenario({ target: { position: [0, 0] }, duration: 1 })
+      .start();
+    diagram.mock.timeStep(0);
+    expect(a.getPosition()).toEqual(new Point(0, 0));
+    expect(diagram.isAnimating()).toBe(true);
+    diagram.mock.timeStep(1);
+    expect(a.getPosition()).toEqual(new Point(0, 0));
+    expect(diagram.isAnimating()).toBe(false);
+  });
+  test('Velocity No Change', () => {
+    a.animations.new()
+      .scenario({ target: { position: [0, 0] }, velocity: { position: 1 } })
+      .start();
+    expect(a.getPosition()).toEqual(new Point(0, 0));
+    expect(diagram.isAnimating()).toBe(false);
+  });
 });

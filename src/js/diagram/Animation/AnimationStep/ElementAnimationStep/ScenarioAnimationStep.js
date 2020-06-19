@@ -210,24 +210,25 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       transformDuration = Math.min(transformDuration, this.scenario.maxTime);
     }
 
-    if (colorDuration < this.scenario.zeroDurationThreshold) {
+    if (colorDuration <= this.scenario.zeroDurationThreshold) {
       colorDuration = 0;
     }
 
-    if (opacityDuration < this.scenario.zeroDurationThreshold) {
+    if (opacityDuration <= this.scenario.zeroDurationThreshold) {
       opacityDuration = 0;
     }
 
-    if (transformDuration < this.scenario.zeroDurationThreshold) {
+    if (transformDuration <= this.scenario.zeroDurationThreshold) {
       transformDuration = 0;
     }
 
-    if (this.scenario.allDurationsSame != null) {
+    if (this.scenario.allDurationsSame) {
       const maxDuration = Math.max(colorDuration, opacityDuration, transformDuration);
       colorDuration = maxDuration;
       opacityDuration = maxDuration;
       transformDuration = maxDuration;
     }
+
     return [transformDuration, colorDuration, opacityDuration];
   }
 
@@ -306,7 +307,6 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
         progression: this.scenario.progression,
       }));
     }
-
     this.steps = steps;
     super.start(startTime);
   }
