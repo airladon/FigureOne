@@ -98,6 +98,17 @@ export default function makeDiagram(
   diagram.objectsHigh = diagram.getObjects(true);
   diagram.objects = diagram.objectsLow;
   diagram.setSpaceTransforms();
+  diagram.mock = {
+    initialTime: 0,
+    duration: 0,
+    timeStep: (deltaTimeInSeconds) => {
+      const { duration, initialTime } = diagram.mock;
+      const newNow = (duration + deltaTimeInSeconds + initialTime) * 1000;
+      global.performance.now = () => newNow;
+      diagram.animateNextFrame();
+      diagram.draw(newNow / 1000);
+    }
+  }
   return diagram;
 }
 
