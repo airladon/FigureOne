@@ -29,7 +29,7 @@ export type TypeScenarioVelocity = {
   transform?: TypeParsableTransform,
   color?: number,
   opacity?: number,
-} | number | TypeParsablePoint;
+};
 
 export type TypeScenarioAnimationStepInputOptions = {
   start?: string | TypeScenario;
@@ -62,7 +62,8 @@ export default class ScenarioAnimationStep extends ElementAnimationStep {
       joinObjects({}, { type: 'scenario' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
       'start', 'target', 'translationStyle', 'translationOptions',
-      'velocity', 'maxTime', 'allDurationsSame', 'rotDirection', 'clipRotationTo'
+      'velocity', 'maxTime', 'allDurationsSame', 'rotDirection',
+      'clipRotationTo',
     ]);
     super(ElementAnimationStepOptionsIn);
     this._stepType = 'position';
@@ -78,9 +79,9 @@ export default class ScenarioAnimationStep extends ElementAnimationStep {
         direction: '',
       },
       rotDirection: 0,
-      maxTime: null,
       clipRotationTo: null,
       velocity: null,
+      maxTime: null,
       allDurationsSame: true,
       zeroDurationThreshold: 0,
     };
@@ -93,15 +94,7 @@ export default class ScenarioAnimationStep extends ElementAnimationStep {
       joinObjects(defaultScenarioOptions.translationOptions, translationOptions);
     }
     const options = joinObjects({}, defaultScenarioOptions, ...optionsIn);
-    // if (options.start != null) {
-    //   options.start = getPoint(options.start);
-    // }
-    // if (options.target != null) {
-    //   options.target = getPoint(options.target);
-    // }
-    // if (options.delta != null) {
-    //   options.delta = getPoint(options.delta);
-    // }
+
     // $FlowFixMe
     this.scenario = { translationOptions: {} };
     copyKeysFromTo(options, this.scenario, [
@@ -114,12 +107,68 @@ export default class ScenarioAnimationStep extends ElementAnimationStep {
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
-      'position',
+      'scenario',
     ];
   }
 
   _getStateName() {  // eslint-disable-line class-methods-use-this
-    return 'positionAnimationStep';
+    return 'scenarioAnimationStep';
+  }
+
+  getDuration(
+    start: { transform?: Transform, color?: color, isShown?: boolean },
+    target: { transform?: Transform, color?: color, isShown?: boolean },
+  ) {
+    const { element } = this;
+    const { velocity } = this.scenario;
+    if (velocity == null || element == null) {
+      return [this.duration, this.duration, this.duration];
+    }
+
+    let transformVelocity = element.transform._dup().constant(1);
+    let colorVelocity = velocity.color == null ? 1 : velocity.color;
+    let opacityVelocity = velocity.opacity == null ? 1 : velocity.opacity;
+
+    if (velocity)
+    if (velocity.transform != null) {
+      transformVelocity = velocity.transform._dup();
+    }
+    if (velocity.position != null) {
+      transformVelocity.updateTranslation(velocity.position);
+    }
+    if (velocity.scale != null) {
+      transformVelocity.updateScale(velocity.scale);
+    }
+    if (velocity.rotation != null) {
+      transformVelocity.updateRotation(velocity.rotation);
+    }
+    if (velocity.color != null) {
+      colorVelocity = velocity.color;
+    }
+
+    let transformDuration = 0;
+    if (start.transform != null && target.transform != null) {
+      transformDuration = getMaxTimeFromVelocity(
+        start.transform._dup(), target.transform._dup(),
+        transformVelocity, this.scenario.rotDirection,
+      );
+    }
+
+    let colorDuration = 0;
+    if (
+      start.color != null
+      && target.color != null
+      && !areColorsSame(target.color, start.color)
+    ) {
+      const deltaColor = Math.abs(target.color - start.color);
+      colorDuration = deltaColor / colorVelocity;
+    }
+    let opacityDuration = 0;
+    if (start.isShown != null && target.isShown != null) {
+      if (start.isShown == target.isShown)
+      const deltaColor = Math.abs(target.color - start.color);
+      colorDuration = deltaColor / colorVelocity;
+    }
   }
 
   // On start, calculate the duration, target and delta if not already present.
@@ -128,6 +177,25 @@ export default class ScenarioAnimationStep extends ElementAnimationStep {
   // Setting a duration to 0 will effectively skip this animation step
   start(startTime: ?number = null) {
     super.start(startTime);
+    const { element } = this;
+    if (element == null) {
+      throw new Error('Missing Element in animation');
+    }
+    let target = element.getScenarioTarget(this.scenario.target);
+    if (Object.keys(target).length === 0) {
+      target = element.getCurrentScenario();
+    }
+
+    let start = {};
+    if (this.scenario.start != null) {
+      start = element.getScenarioTarget(this.scenario.start);
+    }
+    if (Object.keys(start).length === 0) {
+      start = element.getCurrentScenario();
+    }
+
+    const [transformDuration, colorDuration, opacityDuration] = this.getDuration();
+
     if (this.position.start === null) {
       if (this.element != null) {
         this.position.start = this.element.getPosition();
