@@ -57,6 +57,7 @@ export default class ScenarioAnimationStep extends ElementAnimationStep {
     maxTime: ?number;
     allDurationsSame: boolean;
     zeroDurationThreshold: number;
+    clipRotationTo:  '0to360' | '-180to180' | null;
   };
 
   constructor(...optionsIn: Array<TypeScenarioAnimationStepInputOptions>) {
@@ -230,20 +231,55 @@ export default class ScenarioAnimationStep extends ElementAnimationStep {
       }
     }
 
-    let animateOpacity = null;
-    if (
-      (start.opacity != null || start.isShown === false)
-       && target.isShown === true
-    ) {
+    let animateOpacity = false;
+    let dissolve = null;
+    let dissolveFromCurrent = false;
+    if (start.isShown === false && target.isShown === true && start.opacity == null) {
       animateOpacity = 'dissolveIn'
-    } else if (
-      (start.opacity != null || start.isShown === true)
-      && target.isShown === false
-    ) {
+    } else if (start.isShown === false && target.isShown === true && start.opacity != null) {
+      animateOpacity = 'dissolveInFromCurrent'
+    } else if (start.isShown === true && target.isShown === false) {
       animateOpacity = 'dissolveOut';
+    }
+    if (start.opacity != null) {
+      animateOpacity = 'opacity';
     }
 
     const [transformDuration, colorDuration, opacityDuration] = this.getDuration(start, target);
+
+    const steps = [];
+    if (target.transform != null) {
+      steps.push(element.anim.transform({
+        start: start.transform,
+        target: target.transform,
+        duration: transformDuration,
+        rotDirection: this.scenario.rotDirection,
+        translationStyle: this.scenario.translationStyle,
+        translationOptions: this.scenario.translationOptions,
+        clipRotationTo: this.scenario.clipRotationTo,
+      }));
+    }
+
+    if (target.color != null) {
+      steps.push(element.anim.color({
+        start: start.color,
+        target: target.color,
+        duration: colorDuration,
+      }));
+    }
+
+    if (animateOpacity === 'dissolveIn') {
+      steps.push(element.anim.dissolveIn({ duration: opacityDuration }));
+    }
+    if (animateOpacity === 'dissolveOut') {
+      steps.push(element.anim.dissolveOut({ duration: opacityDuration }));
+    }
+    if (animateOpacity === 'opacity') {
+      steps.push(element.anim.opacity({
+        start: start.opacity,
+        target: 1,
+        duration: opacityDuration }));
+    }
 
     if (this.position.start === null) {
       if (this.element != null) {
