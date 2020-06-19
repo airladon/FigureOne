@@ -1365,7 +1365,6 @@ class DiagramElement {
     if (optionsIn.duration != null) {
       return optionsIn.duration;
     }
-    console.log('asdfasdf')
     const defaultOptions = {
       rotDirection: 0,
       minTime: 0,
