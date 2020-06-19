@@ -1,8 +1,11 @@
 // @flow
 import {
-  Transform, Point, getMaxTimeFromVelocity, getPoint,
+  Transform, Point, getMaxTimeFromVelocity, getPoint, getScale, getTransform,
 } from '../../../../tools/g2';
-import type { pathOptionsType } from '../../../../tools/g2';
+import type {
+  pathOptionsType, TypeParsableTransform, TypeParsablePoint,
+
+} from '../../../../tools/g2';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
   // joinObjectsWithOptions,
@@ -13,6 +16,8 @@ import type {
 import ElementAnimationStep from '../ElementAnimationStep';
 // import type { DiagramElement } from '../../../Element';
 import { areColorsSame } from '../../../../tools/color';
+import { ParallelAnimationStep } from  '../ParallelAnimationStep';
+import type { DiagramElement } from '../../../Element';
 
 export type TypeScenario = {
   position?: TypeParsablePoint,
@@ -25,7 +30,7 @@ export type TypeScenario = {
 
 export type TypeScenarioVelocity = {
   position?: TypeParsablePoint,
-  rotation?: Number,
+  rotation?: number,
   scale?: TypeParsablePoint | number,
   transform?: TypeParsableTransform,
   color?: number,
@@ -33,6 +38,7 @@ export type TypeScenarioVelocity = {
 };
 
 export type TypeScenarioAnimationStepInputOptions = {
+  element: ?DiagramElement;
   start?: string | TypeScenario;
   target?: string | TypeScenario;
   velocity?: TypeScenarioVelocity;
@@ -46,7 +52,8 @@ export type TypeScenarioAnimationStepInputOptions = {
   clipRotationTo: '0to360' | '-180to180' | null;
 } & TypeElementAnimationStepInputOptions;
 
-export default class ScenarioAnimationStep extends ElementAnimationStep {
+export default class ScenarioAnimationStep extends ParallelAnimationStep {
+  element: ?DiagramElement;
   scenario: {
     start: ?(string | TypeScenario);  // null means use element props when unit is started
     target: ?(string | TypeScenario);
@@ -61,16 +68,18 @@ export default class ScenarioAnimationStep extends ElementAnimationStep {
   };
 
   constructor(...optionsIn: Array<TypeScenarioAnimationStepInputOptions>) {
-    const ElementAnimationStepOptionsIn =
+    const AnimationStepOptionsIn =
       joinObjects({}, { type: 'scenario' }, ...optionsIn);
-    deleteKeys(ElementAnimationStepOptionsIn, [
+    deleteKeys(AnimationStepOptionsIn, [
       'start', 'target', 'translationStyle', 'translationOptions',
       'velocity', 'maxTime', 'allDurationsSame', 'rotDirection',
-      'clipRotationTo',
+      'clipRotationTo', 'element',
     ]);
-    super(ElementAnimationStepOptionsIn);
+    super(AnimationStepOptionsIn);
     this._stepType = 'position';
+
     const defaultScenarioOptions = {
+      element: null,
       start: null,
       target: null,
       translationStyle: 'linear',
@@ -97,6 +106,7 @@ export default class ScenarioAnimationStep extends ElementAnimationStep {
       joinObjects(defaultScenarioOptions.translationOptions, translationOptions);
     }
     const options = joinObjects({}, defaultScenarioOptions, ...optionsIn);
+    this.element = options.element;
 
     // $FlowFixMe
     this.scenario = { translationOptions: {} };
@@ -119,12 +129,12 @@ export default class ScenarioAnimationStep extends ElementAnimationStep {
   }
 
   getDuration(
-    start: { transform?: Transform, color?: color, isShown?: boolean, opacity?: number },
-    target: { transform?: Transform, color?: color, isShown?: boolean },
+    start: { transform?: Transform, color?: Array<number>, isShown?: boolean, opacity?: number },
+    target: { transform?: Transform, color?: Array<number>, isShown?: boolean },
   ) {
     const { element } = this;
     const { velocity } = this.scenario;
-    if (velocity == null || element == null) {
+    if (velocity == null || element == null || this.duration > 0) {
       return [this.duration, this.duration, this.duration];
     }
 
@@ -134,13 +144,13 @@ export default class ScenarioAnimationStep extends ElementAnimationStep {
 
     if (velocity)
     if (velocity.transform != null) {
-      transformVelocity = velocity.transform._dup();
+      transformVelocity = getTransform(velocity.transform)._dup();
     }
     if (velocity.position != null) {
-      transformVelocity.updateTranslation(velocity.position);
+      transformVelocity.updateTranslation(getPoint(velocity.position));
     }
     if (velocity.scale != null) {
-      transformVelocity.updateScale(velocity.scale);
+      transformVelocity.updateScale(getScale(velocity.scale));
     }
     if (velocity.rotation != null) {
       transformVelocity.updateRotation(velocity.rotation);
@@ -231,22 +241,23 @@ export default class ScenarioAnimationStep extends ElementAnimationStep {
       }
     }
 
-    let animateOpacity = false;
+    // let animateOpacity = false;
     let dissolve = null;
     let dissolveFromCurrent = false;
     if (start.isShown === false && target.isShown === true && start.opacity == null) {
-      animateOpacity = 'dissolveIn'
-    } else if (start.isShown === false && target.isShown === true && start.opacity != null) {
-      animateOpacity = 'dissolveInFromCurrent'
-    } else if (start.isShown === true && target.isShown === false) {
-      animateOpacity = 'dissolveOut';
-    }
-    if (start.opacity != null) {
-      animateOpacity = 'opacity';
+      dissolve = 'in';
+    } else if (target.isShown === true && start.opacity != null) {
+      dissolve = 'in';
+      dissolveFromCurrent = true;
+    } else if (start.isShown === true && target.isShown === false && start.opacity == null) {
+      dissolve = 'out';
+    } else if (target.isShown === false && start.opacity != null) {
+      dissolve = 'out';
+      dissolveFromCurrent = true;
     }
 
     const [transformDuration, colorDuration, opacityDuration] = this.getDuration(start, target);
-
+    console.log(transformDuration)
     const steps = [];
     if (target.transform != null) {
       steps.push(element.anim.transform({
@@ -259,6 +270,7 @@ export default class ScenarioAnimationStep extends ElementAnimationStep {
         clipRotationTo: this.scenario.clipRotationTo,
       }));
     }
+    // debugger;
 
     if (target.color != null) {
       steps.push(element.anim.color({
@@ -268,83 +280,20 @@ export default class ScenarioAnimationStep extends ElementAnimationStep {
       }));
     }
 
-    if (animateOpacity === 'dissolveIn') {
-      steps.push(element.anim.dissolveIn({ duration: opacityDuration }));
-    }
-    if (animateOpacity === 'dissolveOut') {
-      steps.push(element.anim.dissolveOut({ duration: opacityDuration }));
-    }
-    if (animateOpacity === 'opacity') {
+    if (dissolve != null) {
       steps.push(element.anim.opacity({
-        start: start.opacity,
-        target: 1,
-        duration: opacityDuration }));
+        dissolve,
+        dissolveFromCurrent,
+        duration: opacityDuration,
+      }));
     }
 
-    if (this.position.start === null) {
-      if (this.element != null) {
-        this.position.start = this.element.getPosition();
-      } else {
-        this.duration = 0;
-        return;
-      }
-    }
-    // if delta is null, then calculate it from start and target
-    if (this.position.delta == null
-      && this.position.target != null
-      && this.position.start != null
-    ) {
-      const delta = this.position.target.sub(this.position.start);
-      this.position.delta = delta;
-    } else if (this.position.delta != null && this.position.start != null) {
-      this.position.target = this.position.start.add(this.position.delta);
-    } else {
-      this.duration = 0;
-    }
-
-    // If Velocity is defined, then use it to calculate duration
-    const { target, start, velocity } = this.position;
-    if (velocity != null && start != null && target != null) {
-      const velocityToUse = getPoint(velocity);
-      this.duration = getMaxTimeFromVelocity(
-        new Transform().translate(start),
-        new Transform().translate(target),
-        new Transform().translate(velocityToUse),
-      );
-    }
-    if (this.position.maxTime != null) {
-      if (this.duration > this.position.maxTime) {
-        this.duration = this.position.maxTime;
-      }
-    }
-  }
-
-  setFrame(deltaTime: number) {
-    // console.log('setFrame', deltaTime);
-    const percentTime = deltaTime / this.duration;
-    const percentComplete = this.getPercentComplete(percentTime);
-    const p = percentComplete;
-
-    if (this.position.delta != null && this.position.start != null) {
-      const next = this.position.start.toDelta(
-        this.position.delta, p,
-        this.position.translationStyle,
-        this.position.translationOptions,
-      );
-      if (this.element != null) {
-        this.element.setPosition(next);
-      }
-    }
-  }
-
-  setToEnd() {
-    if (this.element != null) {
-      this.element.setPosition(this.position.target);
-    }
+    this.steps = steps;
+    super.start(startTime);
   }
 
   _dup() {
-    const step = new PositionAnimationStep();
+    const step = new ScenarioAnimationStep();
     duplicateFromTo(this, step, ['element']);
     step.element = this.element;
     return step;

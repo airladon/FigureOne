@@ -184,10 +184,16 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   scenario(
     ...optionsIn: Array<TypeTransformAnimationStepInputOptions & { scenario: string }>
   ) {
+    // if (this.element != null) {
+    //   const defaultOptions = { element: this.element };
+    //   const options = joinObjects({}, defaultOptions, ...optionsIn);
+    //   this.then(options.element.anim.scenario(options));
+    // }
+    // return this;
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
-      this.then(options.element.anim.scenario(options));
+      this.then(new animation.ScenarioAnimationStep(options));
     }
     return this;
   }
