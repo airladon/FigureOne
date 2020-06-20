@@ -2217,6 +2217,7 @@ describe('Diagram Recorder', () => {
 
       // Resume diagram - will animate to state over 1s
       recorder.resumePlayback();
+      expect(diagram.getRemainingAnimationTime()).toBe(1);
       timeStep(0);
       expect(recorder.state).toBe('preparingToPlay');
       expect(diagram.isAnimating()).toBe(true);
@@ -2257,6 +2258,7 @@ describe('Diagram Recorder', () => {
 
       // Pause Test at 1s in, just as animation starts
       recorder.pausePlayback();
+      expect(diagram.getRemainingAnimationTime()).toBe(2);
       expect(recorder.state).toBe('preparingToPause');
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0, 0));
