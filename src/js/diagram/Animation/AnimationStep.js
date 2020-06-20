@@ -210,7 +210,6 @@ export default class AnimationStep {
   // returns remaining time if this step completes
   // Return of 0 means this step is still going
   nextFrame(now: number) {
-    console.log(now)
     if (this.startTime === null) {
       // console.log('new Start', this.startTime, now, this.startTimeOffset)
       this.startTime = now - this.startTimeOffset;
