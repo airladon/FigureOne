@@ -214,36 +214,41 @@ class Recorder {
 
   // All slides, events and states are relative to 0, where 0 is the start of a recording.
   // Slides, events and states do not have to have a 0 time, maybe the first event will not happen till 1s in
-  constructor() {
+  constructor(singleton: boolean = false) {
     // If the instance alread exists, then don't create a new instance.
     // If it doesn't, then setup some default values.
-    if (!Recorder.instance) {
-      Recorder.instance = this;
-      // reset all data
-      this.events = {};
-      this.eventsCache = {};
-      this.reset();
-
-      // default recording values
-      this.precision = 4;
-      this.stateTimeStep = 1;
-      this.subscriptions = new SubscriptionManager();
-
-      this.diagram = {
-        animateNextFrame: () => {},
-        getElement: () => null,
-        getState: () => {},
-        setState: () => {},
-        pause: () => {},
-        unpause: () => {},
-        showCursor: () => {},
-      };
-      this.audio = null;
-      this.playbackStoppedCallback = null;
-      this.worker = null;
-      this.pauseState = null;
+    if (singleton) {
+      if (!Recorder.instance) {
+        this.initialize();
+      }
+      return Recorder.instance;
     }
-    return Recorder.instance;
+    this.initialize();
+  }
+
+  initialize() {
+    this.events = {};
+    this.eventsCache = {};
+    this.reset();
+
+    // default recording values
+    this.precision = 4;
+    this.stateTimeStep = 1;
+    this.subscriptions = new SubscriptionManager();
+
+    this.diagram = {
+      animateNextFrame: () => {},
+      getElement: () => null,
+      getState: () => {},
+      setState: () => {},
+      pause: () => {},
+      unpause: () => {},
+      showCursor: () => {},
+    };
+    this.audio = null;
+    this.playbackStoppedCallback = null;
+    this.worker = null;
+    this.pauseState = null;
   }
 
   // ////////////////////////////////////
@@ -1387,7 +1392,7 @@ class Recorder {
         this.playbackStoppedCallback();
       }
       this.subscriptions.trigger('pausePlayback');
-    }
+    };
     if (this.diagram.isAnimating()) {
       this.state = 'preparingToPause';
       // this.diagram.setAnimationFinishedCallback(pause);

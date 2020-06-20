@@ -2212,7 +2212,7 @@ describe('Diagram Recorder', () => {
       timeStep(1);
       expect(pausePlaybackCallback.mock.calls.length).toBe(2);
     });
-    test.only('Pause before animation and move element', () => {
+    test('Pause before animation and move element', () => {
       recorder.startPlayback(0);
       expect(diagram.isAnimating()).toBe(false);
       expect(a.getPosition()).toEqual(new Point(0, 0));
