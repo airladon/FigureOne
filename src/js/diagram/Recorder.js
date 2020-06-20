@@ -183,17 +183,18 @@ class Recorder {
 
   stateTimeStep: number;      // in seconds
   diagram: {
-    showCursor: ('up' | 'down' | 'hide', ?Point) => void,
+    animateNextFrame: () => void,
+    setState: (Object) => void,
+    getState: ({ precision: number, ignoreShown: boolean }) => Object,
     getElement: (string) => ?DiagramElement,
+    showCursor: ('up' | 'down' | 'hide', ?Point) => void,
     pause: () => void,
     unpause: () => void,
-    getState: ({ precision: number, ignoreShown: boolean }) => Object,
-    setState: (Object) => void,
-    animateNextFrame: () => void,
     getIsInTransition: () => boolean,
     animateToState: (Object, Object, ?(string | (() => void))) => void,
     isAnimating: () => boolean,
     setAnimationFinishedCallback: ?(string | (() => void)) => void,
+    subscriptions: SubscriptionManager,
   }
 
   // timeoutID: ?TimeoutID;
@@ -213,7 +214,8 @@ class Recorder {
   static instance: Object;
 
   // All slides, events and states are relative to 0, where 0 is the start of a recording.
-  // Slides, events and states do not have to have a 0 time, maybe the first event will not happen till 1s in
+  // Slides, events and states do not have to have a 0 time,
+  // maybe the first event will not happen till 1s in
   constructor(singleton: boolean = false) {
     // If the instance alread exists, then don't create a new instance.
     // If it doesn't, then setup some default values.
@@ -236,15 +238,27 @@ class Recorder {
     this.stateTimeStep = 1;
     this.subscriptions = new SubscriptionManager();
 
-    this.diagram = {
-      animateNextFrame: () => {},
-      getElement: () => null,
-      getState: () => {},
-      setState: () => {},
-      pause: () => {},
-      unpause: () => {},
-      showCursor: () => {},
-    };
+    // this.diagram = {
+    //   animateNextFrame: () => {},
+    //   getElement: () => null,
+    //   getState: () => {},
+    //   setState: () => {},
+    //   pause: () => {},
+    //   unpause: () => {},
+    //   showCursor: () => {},
+    //   animateNextFrame: () => void,
+    //   setState: (Object) => void,
+    //   getState: ({ precision: number, ignoreShown: boolean }) => Object,
+    //   getElement: (string) => ?DiagramElement,
+    //   showCursor: ('up' | 'down' | 'hide', ?Point) => void,
+    //   pause: () => void,
+    //   unpause: () => void,
+    //   getIsInTransition: () => boolean,
+    //   animateToState: (Object, Object, ?(string | (() => void))) => void,
+    //   isAnimating: () => boolean,
+    //   setAnimationFinishedCallback: ?(string | (() => void)) => void,
+    //   subscriptions: SubscriptionManager
+    // };
     this.audio = null;
     this.playbackStoppedCallback = null;
     this.worker = null;
