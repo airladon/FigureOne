@@ -886,6 +886,7 @@ class DiagramElement {
     ) {
       target.transform = stateTransform;
     }
+
     if (Object.keys(target).length > 0) {
       this.animations.new()
         .scenario(joinObjects({ target }, options))

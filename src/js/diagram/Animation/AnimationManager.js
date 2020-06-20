@@ -286,7 +286,7 @@ export default class AnimationManager {
     return duration; 
   }
 
-  getRemainingTime(now: number = performance.now()) {
+  getRemainingTime(now: number = performance.now() / 1000) {
     let remainingTime = 0;
     this.animations.forEach((animation) => {
       const animationRemainingTime = animation.getRemainingTime(now);
