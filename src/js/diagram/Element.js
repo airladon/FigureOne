@@ -865,18 +865,13 @@ class DiagramElement {
     state: Object,
     options: Object,
     independentOnly: boolean = false,
-    // countStart: () => void,
-    // countEnd: () => void,
   ) {
     const target = {};
-    let dissolveFromCurrent = true;
-    if (this.isShown !== state.isShown) {
+    if (
+      (this.isShown !== state.isShown && this.opacity === 1) 
+      || this.opacity !== 1
+    ) {
       target.isShown = state.isShown;
-      if (this.isShown === false) {
-        this.show();
-        this.opacity = 0.001;
-        dissolveFromCurrent = false;
-      }
     }
     if (!areColorsSame(this.color, state.color)) {
       target.color = state.color;
@@ -891,14 +886,9 @@ class DiagramElement {
     ) {
       target.transform = stateTransform;
     }
-    // if (!this.transform.isEqualTo(state.transform) && processTransform) {
-    //   target.transform = state.transform;
-    // }
     if (Object.keys(target).length > 0) {
-      // countStart();
       this.animations.new()
-        .scenario(joinObjects({ target }, options, { dissolveFromCurrent }))
-        // .whenFinished(countEnd)
+        .scenario(joinObjects({ target }, options))
         .start();
     }
   }
