@@ -4,7 +4,7 @@ import { Point } from '../tools/g2';
 import { round } from '../tools/math';
 import {
   duplicate, minify, unminify,
-  ObjectTracker, download,
+  ObjectTracker, download, SubscriptionManager,
 } from '../tools/tools';
 import type { DiagramElement } from './Element';
 import Worker from './recorder.worker.js';
@@ -163,6 +163,8 @@ class Recorder {
     };
   };
 
+  subscriptions: SubscriptionManager;
+
   eventsToPlay: Array<string>;
 
   state: 'recording' | 'playing' | 'idle' | 'preparingToPlay' | 'preparingToPause';
@@ -225,6 +227,7 @@ class Recorder {
       // default recording values
       this.precision = 4;
       this.stateTimeStep = 1;
+      this.subscriptions = new SubscriptionManager();
 
       this.diagram = {
         animateNextFrame: () => {},
@@ -482,14 +485,12 @@ class Recorder {
     // if (fromTime > 0) {
     this.state = 'recording';
     this.lastSeekTime = null;
-    // console.log('asdf1', this.diagram.getElement('a').animations.animations[0].steps[0].startTime)
+
     this.setVideoToNowDeltaTime(fromTime);
     if (this.states.diffs.length > 0) {
       this.setToTime(fromTime);
     }
-    // console.log('asdf2', this.diagram.getElement('a').animations.animations[0].steps[0].startTime)
-    // }
-    // console.log(this.stateIndex);
+
     this.states.precision = this.precision;
 
     if (fromTime === 0 && this.states.baseReference == null) {
@@ -497,12 +498,6 @@ class Recorder {
         precision: this.precision,
         ignoreShown: true,
       }));
-      // this.states.addReference(this.diagram.getState({
-      //   precision: this.precision,
-      //   ignoreShown: false,
-      // }), 'ref1');
-      // this.referenceIndex = 1;
-      // this.reference = 'ref1';
     }
 
     this.startWorker();
@@ -533,6 +528,7 @@ class Recorder {
     // this.initializePlayback(fromTime);
     this.startEventsPlayback(fromTime);
     this.startAudioPlayback(fromTime);
+    this.subscriptions.trigger('startRecording');
   }
 
   startWorker() {
@@ -731,6 +727,7 @@ class Recorder {
       this.isAudioPlaying = false;
     }
     this.lastSeekTime = null;
+    this.subscriptions.trigger('stopRecording');
     // this.mergeEventsCache();
     // this.mergeStatesCache();
     // this.duration = this.calcDuration();
@@ -1170,6 +1167,7 @@ class Recorder {
       this.finishPlaying();
       // return;
     }
+    this.subscriptions.trigger('startPlayback');
   }
 
   resumePlayback() {
@@ -1190,6 +1188,7 @@ class Recorder {
       if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
         this.finishPlaying();
       }
+      this.subscriptions.trigger('startPlayback');
     };
     // const id = this.diagram.subscriptions.subscribe('animationsFinished', finished, 1);
     this.diagram.animateToState(
@@ -1350,7 +1349,6 @@ class Recorder {
     if (this.isAudioPlaying) {
       return false;
     }
-
     this.pausePlayback(false);
     return true;
   }
@@ -1388,6 +1386,7 @@ class Recorder {
       if (this.playbackStoppedCallback != null) {
         this.playbackStoppedCallback();
       }
+      this.subscriptions.trigger('pausePlayback');
     }
     if (this.diagram.isAnimating()) {
       this.state = 'preparingToPause';
