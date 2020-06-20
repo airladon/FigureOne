@@ -355,7 +355,8 @@ class Recorder {
     this.audio = audio;
     this.audio.onloadedmetadata = () => {
       this.duration = this.calcDuration();
-    }
+    };
+    this.subscriptions.trigger('audioLoaded');
   }
 
   loadEvents(
@@ -371,6 +372,7 @@ class Recorder {
       this.events[eventName].list = lists[eventName];
     });
     this.duration = this.calcDuration();
+    this.subscriptions.trigger('eventsLoaded');
   }
 
   loadStates(
@@ -380,6 +382,7 @@ class Recorder {
   ) {
     this.states = this.decodeStates(statesIn, isMinified, isObjectForm);
     this.duration = this.calcDuration();
+    this.subscriptions.trigger('statesLoaded');
   }
 
   encodeEvents(
@@ -573,7 +576,7 @@ class Recorder {
       //     console.log(this)
       //   }
       // });
-      this.worker.addEventListener("message", this.parseMessage.bind(this));
+      this.worker.addEventListener('message', this.parseMessage.bind(this));
     }
     // this.worker = new Worker();
   }
