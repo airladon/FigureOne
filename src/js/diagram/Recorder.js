@@ -1192,7 +1192,22 @@ class Recorder {
       }
     };
     // const id = this.diagram.subscriptions.subscribe('animationsFinished', finished, 1);
-    this.diagram.animateToState(this.pauseState, { duration: 1 }, finished);
+    this.diagram.animateToState(
+      this.pauseState,
+      {
+        maxTime: 1,
+        velocity: {
+          position: 2,
+          rotation: Math.PI * 2 / 2,
+          scale: 1,
+          opacity: 0.8,
+          color: 0.8,
+        },
+        allDurationsSame: true,
+        zeroDurationThreshold: 0.1,
+      },
+      finished,
+    );
     // if (animationCount === 0) {
     //   this.diagram.subscriptions.unsubscribe('animationsFinished', id);
     //   finished();

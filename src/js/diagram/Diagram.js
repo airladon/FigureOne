@@ -546,6 +546,9 @@ class Diagram {
       delay: 0,
       duration: 1,
     };
+    if (optionsIn.velocity != null) {
+      defaultOptions.duration = 0;
+    }
 
     // let counter = 1;
     // const countStart = () => {
@@ -748,7 +751,7 @@ class Diagram {
     this.animateNextFrame();
   }
 
-  getRemainingAnimationTime(now: number = performance.now()) {
+  getRemainingAnimationTime(now: number = performance.now() / 1000) {
     const elements = this.elements.getAllElements();
     let remainingTime = 0;
     elements.forEach((element) => {

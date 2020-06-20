@@ -172,7 +172,7 @@ export class SerialAnimationStep extends AnimationStep {
     return totalDuration;
   }
 
-  getRemainingTime(now: number = performance.now()) {
+  getRemainingTime(now: number = performance.now() / 1000) {
     const totalDuration = this.getTotalDuration();
     if (this.startTime == null) {
       if (this.state === 'animating' || this.state === 'waitingToStart') {
