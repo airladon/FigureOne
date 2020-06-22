@@ -201,7 +201,7 @@ class Recorder {
 
   timeoutID: ?TimeoutID;
 
-  playbackStoppedCallback: ?() =>void;
+  // playbackStoppedCallback: ?() =>void;
 
   lastRecordTime: ?number;
   lastRecordTimeCount: number;
@@ -260,7 +260,7 @@ class Recorder {
     //   subscriptions: SubscriptionManager
     // };
     this.audio = null;
-    this.playbackStoppedCallback = null;
+    // this.playbackStoppedCallback = null;
     this.worker = null;
     this.pauseState = null;
   }
@@ -1189,7 +1189,7 @@ class Recorder {
       this.finishPlaying();
       // return;
     }
-    this.subscriptions.trigger('startPlayback');
+    this.subscriptions.trigger('playbackStarted');
   }
 
   resumePlayback() {
@@ -1210,7 +1210,7 @@ class Recorder {
       if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
         this.finishPlaying();
       }
-      this.subscriptions.trigger('startPlayback');
+      this.subscriptions.trigger('playbackStarted');
     };
     // const id = this.diagram.subscriptions.subscribe('animationsFinished', finished, 1);
     this.diagram.animateToState(
@@ -1229,6 +1229,9 @@ class Recorder {
       },
       finished,
     );
+    if (this.diagram.isAnimating()) {
+      this.subscriptions.trigger('preparingToPlay');
+    }
     // if (animationCount === 0) {
     //   this.diagram.subscriptions.unsubscribe('animationsFinished', id);
     //   finished();
@@ -1395,22 +1398,18 @@ class Recorder {
     const pause = () => {
       this.diagram.pause();
       this.state = 'idle';
-      // this.clearPlaybackTimeouts();
       this.stopTimeouts();
-      // const pointer = this.diagram.getElement('pointer');
-      // if (pointer != null) {
-      //   pointer.hide();
-      // }
       if (this.audio) {
         this.audio.pause();
         this.isAudioPlaying = false;
       }
-      if (this.playbackStoppedCallback != null) {
-        this.playbackStoppedCallback();
-      }
-      this.subscriptions.trigger('pausePlayback');
+      // if (this.playbackStoppedCallback != null) {
+      //   this.playbackStoppedCallback();
+      // }
+      this.subscriptions.trigger('playbackStopped');
     };
     if (this.diagram.isAnimating()) {
+      this.subscriptions.trigger('preparingToPause');
       this.state = 'preparingToPause';
       // this.diagram.setAnimationFinishedCallback(pause);
       this.diagram.subscriptions.subscribe('animationsFinished', pause, 1);
