@@ -770,8 +770,10 @@ class Diagram {
   // eslint-disable-next-line class-methods-use-this
   animationFinished(element: DiagramElementPrimitive | DiagramElementCollection) {
     if (this.isAnimating()) {
+      console.log('animation finished but still animating')
       return;
     }
+    console.log('animation finished')
     this.fnMap.exec(this.animationFinishedCallback);
     this.subscriptions.trigger('animationsFinished');
   }
