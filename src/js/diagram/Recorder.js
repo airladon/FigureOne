@@ -1396,6 +1396,7 @@ class Recorder {
     }
 
     const pause = () => {
+      console.log('recorder pause')
       this.diagram.pause();
       this.state = 'idle';
       this.stopTimeouts();
@@ -1412,6 +1413,7 @@ class Recorder {
       this.subscriptions.trigger('preparingToPause');
       this.state = 'preparingToPause';
       // this.diagram.setAnimationFinishedCallback(pause);
+      console.log('recorder prep to pause')
       this.diagram.subscriptions.subscribe('animationsFinished', pause, 1);
     } else {
       pause();

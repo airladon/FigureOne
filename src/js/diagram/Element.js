@@ -3980,6 +3980,10 @@ class DiagramElementCollection extends DiagramElement {
     const elements = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
+      console.log(element.name, element.getPath())
+      // if (element.getPath() === 'ex3.d_5') {
+      //   debugger;
+      // }
       if (element instanceof DiagramElementPrimitive) {
         elements.push(element);
       } else {
@@ -3990,6 +3994,7 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   getChildren(directChildrenOnly: boolean = true) {
+    console.log('huh?', this.name)
     const elements = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
