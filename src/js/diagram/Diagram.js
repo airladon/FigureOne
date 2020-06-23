@@ -746,7 +746,9 @@ class Diagram {
     this.setFirstTransform();
     const elements = this.elements.getAllElements();
     elements.forEach((element) => {
+      // console.log(element.name)
       element.animationFinishedCallback = this.animationFinished.bind(this, element);
+      // console.log(element.name, element.animationFinishedCallback)
     });
     this.animateNextFrame();
   }
@@ -769,6 +771,7 @@ class Diagram {
 
   // eslint-disable-next-line class-methods-use-this
   animationFinished(element: DiagramElementPrimitive | DiagramElementCollection) {
+    console.log('diagram finished', this.isAnimating(), element.name)
     if (this.isAnimating()) {
       console.log('animation finished but still animating')
       return;

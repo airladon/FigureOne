@@ -620,6 +620,7 @@ class DiagramElement {
   }
 
   animationFinished() {
+    console.log('element', this.name, this.animationFinishedCallback)
     this.fnMap.exec(this.animationFinishedCallback);
   }
 
