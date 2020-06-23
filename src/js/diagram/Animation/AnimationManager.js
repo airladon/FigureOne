@@ -185,6 +185,9 @@ export default class AnimationManager {
     for (let i = animationsToRemove.length - 1; i >= 0; i -= 1) {
       this.animations.splice(animationsToRemove[i], 1);
     }
+    if (callback != null) {
+      console.log('finished', this.element.name, callback)
+    }
     this.fnMap.exec(callback);
     return remaining;
   }
