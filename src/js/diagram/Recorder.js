@@ -1399,16 +1399,13 @@ class Recorder {
       console.log('recorder pause')
       this.diagram.pause();
       this.state = 'idle';
-      this.stopTimeouts();
-      if (this.audio) {
-        this.audio.pause();
-        this.isAudioPlaying = false;
-      }
-      // if (this.playbackStoppedCallback != null) {
-      //   this.playbackStoppedCallback();
-      // }
       this.subscriptions.trigger('playbackStopped');
     };
+    this.stopTimeouts();
+    if (this.audio) {
+      this.audio.pause();
+      this.isAudioPlaying = false;
+    }
     if (this.diagram.isAnimating()) {
       this.subscriptions.trigger('preparingToPause');
       this.state = 'preparingToPause';
