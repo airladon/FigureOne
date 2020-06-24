@@ -1626,9 +1626,10 @@ class DiagramElement {
 
   stopMovingFreely(result: boolean = true): void {
     // console.trace()
+    // console.log('was moving freely', this.name, this.state.isMovingFreely)
     let wasMovingFreely = false;
     if (this.state.isMovingFreely === true) {
-      wasMovingFreely = false;
+      wasMovingFreely = true;
     }
     this.state.isMovingFreely = false;
     this.state.movement.previousTime = null;
@@ -1637,6 +1638,7 @@ class DiagramElement {
       this.move.freely.callback = null;
     }
     if (wasMovingFreely) {
+      console.log('stop moving freely callback', this.animationFinishedCallback)
       this.fnMap.exec(this.animationFinishedCallback);
     }
   }
