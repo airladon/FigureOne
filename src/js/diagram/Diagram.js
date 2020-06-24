@@ -1584,6 +1584,7 @@ class Diagram {
   }
 
   isAnimating(): boolean {
+    // console.log('asdf')
     return this.elements.isAnimatingOrMovingFreely();
   }
 
