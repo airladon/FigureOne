@@ -747,7 +747,7 @@ class Diagram {
     const elements = this.elements.getAllElements();
     elements.forEach((element) => {
       // console.log(element.name)
-      console.log(element.name, element.asdf)
+      // console.log(element.name, element.getPath(), element.asdf)
       element.animationFinishedCallback = this.animationFinished.bind(this, element);
       // console.log(element.name, element.animationFinishedCallback)
     });

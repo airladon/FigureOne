@@ -3989,11 +3989,15 @@ class DiagramElementCollection extends DiagramElement {
     const elements = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      if (element instanceof DiagramElementPrimitive) {
-        elements.push(element);
-      } else {
+      elements.push(element);
+      if (element instanceof DiagramElementCollection) {
         elements.push(...element.getAllElements());
       }
+      // if (element instanceof DiagramElementPrimitive) {
+      //   elements.push(element);
+      // } else {
+      //   elements.push(...element.getAllElements());
+      // }
     }
     return elements;
   }
