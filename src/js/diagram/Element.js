@@ -1626,13 +1626,19 @@ class DiagramElement {
 
   stopMovingFreely(result: boolean = true): void {
     // console.trace()
+    let wasMovingFreely = false;
+    if (this.state.isMovingFreely === true) {
+      wasMovingFreely = false;
+    }
     this.state.isMovingFreely = false;
     this.state.movement.previousTime = null;
     if (this.move.freely.callback) {
       this.fnMap.exec(this.move.freely.callback, result);
       this.move.freely.callback = null;
     }
-    this.fnMap.exec(this.animationFinishedCallback);
+    if (wasMovingFreely) {
+      this.fnMap.exec(this.animationFinishedCallback);
+    }
   }
 
   // Take an input transform matrix, and output a list of transform matrices
