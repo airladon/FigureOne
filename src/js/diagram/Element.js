@@ -620,7 +620,7 @@ class DiagramElement {
   }
 
   animationFinished() {
-    console.log('element', this.name, this.animationFinishedCallback)
+    // console.log('element', this.name, this.animationFinishedCallback)
     this.fnMap.exec(this.animationFinishedCallback);
   }
 
@@ -1638,7 +1638,7 @@ class DiagramElement {
       this.move.freely.callback = null;
     }
     if (wasMovingFreely) {
-      console.log('stop moving freely callback', this.animationFinishedCallback)
+      // console.log('stop moving freely callback', this.animationFinishedCallback)
       this.fnMap.exec(this.animationFinishedCallback);
     }
   }

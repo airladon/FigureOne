@@ -185,9 +185,9 @@ export default class AnimationManager {
     for (let i = animationsToRemove.length - 1; i >= 0; i -= 1) {
       this.animations.splice(animationsToRemove[i], 1);
     }
-    if (callback != null) {
-      console.log('finished', this.element.name, callback)
-    }
+    // if (callback != null) {
+    //   console.log('finished', this.element.name, callback)
+    // }
     this.fnMap.exec(callback);
     return remaining;
   }
@@ -211,7 +211,7 @@ export default class AnimationManager {
     } else {
       if (this.state === 'animating') {
         this.state = 'idle';
-        console.log('clean finished', this.element.name, this.finishedCallback)
+        // console.log('clean finished', this.element.name, this.finishedCallback)
         this.fnMap.exec(this.finishedCallback);
       }
       this.state = 'idle';
