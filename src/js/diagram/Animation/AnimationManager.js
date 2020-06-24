@@ -199,7 +199,7 @@ export default class AnimationManager {
       const animation = this.animations[i];
       if (animation.state === 'finished' && animation.removeOnFinish) {
         animationsToRemove.push(i);
-      } else {
+      } else if (animation.state === 'animating' || animation.state === 'waitingToStart') {
         isAnimating = true;
       }
     }
@@ -211,6 +211,7 @@ export default class AnimationManager {
     } else {
       if (this.state === 'animating') {
         this.state = 'idle';
+        console.log('clean finished', this.element.name, this.finishedCallback)
         this.fnMap.exec(this.finishedCallback);
       }
       this.state = 'idle';
