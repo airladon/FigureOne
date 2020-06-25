@@ -647,7 +647,6 @@ class DiagramElement {
     if (ignoreShown == null) {
       ignoreShown = false;
     }
-    // console.log('element', options, this.name, this.getPath(), this.isShown, ignoreShown, this.isShown || ignoreShown);
     if (this.isShown || ignoreShown) {
       return [
         'animations',
@@ -664,6 +663,7 @@ class DiagramElement {
         'setTransformCallback',
         'move',
         'subscriptions',
+        'finishAnimationOnPause',
         ...this.stateProperties,
       ];
     }
