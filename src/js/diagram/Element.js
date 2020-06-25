@@ -250,7 +250,9 @@ class DiagramElement {
   fnMap: FunctionMap;
   isPaused: boolean;
 
-  transformUpdatesIndependantly: boolean;
+  finishAnimationOnPause: boolean;
+
+  immediateStopOnPause: boolean;
 
   // scenarioSet: {
   //   quiz1: [
@@ -305,6 +307,7 @@ class DiagramElement {
     this.drawPriority = 1;
     this.stateProperties = [];
     this.fnMap = new FunctionMap();
+    this.finishAnimationOnPause = false;
     // this.noRotationFromParent = false;
     // this.pulseDefault = (callback: ?() => void = null) => {
     //   this.pulseScaleNow(1, 2, 0, callback);
