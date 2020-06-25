@@ -66,7 +66,7 @@ describe('Animationa and Movement', () => {
           expect(t).toEqual(new Transform().scale(1, 1).rotate(0).translate(0, 0));
 
           expect(element.animations.state).toBe('idle');
-          expect(element.isMoving()).toBe(true);
+          expect(element.isAnimating()).toBe(true);
 
           element.setupDraw(new Transform(), 10);
           expect(t.r()).toBe(0);
@@ -74,15 +74,15 @@ describe('Animationa and Movement', () => {
           element.setupDraw(new Transform(), 10.5);
           expect(element.transform.r()).toBe(0.5);
           expect(element.animations.state).toBe('animating');
-          expect(element.isMoving()).toBe(true);
+          expect(element.isAnimating()).toBe(true);
 
           element.setupDraw(new Transform(), 11);
           expect(element.transform.r()).toBe(1);
           expect(element.animations.state).toBe('idle');
-          expect(element.isMoving()).toBe(false);
+          expect(element.isAnimating()).toBe(false);
         });
         test('translate (0, 0) to (1, 0), 1 second, linear movement', () => {
-          expect(element.isMoving()).toBe(false);
+          expect(element.isAnimating()).toBe(false);
 
           // Setup the animation
           element.animations.new()
@@ -92,7 +92,7 @@ describe('Animationa and Movement', () => {
           expect(t).toEqual(new Transform().scale(1, 1).rotate(0).translate(0, 0));
 
           expect(element.animations.state).toBe('idle');
-          expect(element.isMoving()).toBe(true);
+          expect(element.isAnimating()).toBe(true);
 
           // Initial draw setting start time
           element.setupDraw(new Transform(), 0);
@@ -102,13 +102,13 @@ describe('Animationa and Movement', () => {
           element.setupDraw(new Transform(), 0.5);
           expect(element.transform.t()).toEqual(new Point(0.5, 0));
           expect(element.animations.state).toBe('animating');
-          expect(element.isMoving()).toBe(true);
+          expect(element.isAnimating()).toBe(true);
 
           // Draw at last time
           element.setupDraw(new Transform(), 1);
           expect(element.transform.t()).toEqual(new Point(1.0, 0));
           expect(element.animations.state).toBe('idle');
-          expect(element.isMoving()).toBe(false);
+          expect(element.isAnimating()).toBe(false);
         });
         test('Callback', () => {
           const callback = jest.fn();         // Callback mock
@@ -180,7 +180,7 @@ describe('Animationa and Movement', () => {
           element.setupDraw(identity, 0);          // Give animation an initial time
 
           // Check initial values
-          expect(element.isMoving()).toBe(true);
+          expect(element.isAnimating()).toBe(true);
 
           // Half way through first phase
           element.setupDraw(identity, 0.5);
@@ -206,7 +206,7 @@ describe('Animationa and Movement', () => {
           element.setupDraw(identity, 3.1);
           expect(round(element.transform.r())).toBe(-1);
           expect(callback.mock.calls).toHaveLength(1);
-          expect(element.isMoving()).toBe(false);
+          expect(element.isAnimating()).toBe(false);
         });
       });
     });
