@@ -1033,7 +1033,7 @@ class DiagramElement {
     this.undim();
   }
 
-  pause(forcePause: boolean = false) {
+  pause(forcePause: boolean = false, clearAnimations: boolean = false) {
     const pause = () => {
       this.isPaused = true;
     };
@@ -1045,6 +1045,9 @@ class DiagramElement {
     ) {
       this.subscriptions.subscribe('animationFinished', pause, 1);
     } else {
+      if (clearAnimations) {
+        this.stop(true, 'noComplete');
+      }
       pause();
     }
   }
@@ -2395,6 +2398,19 @@ class DiagramElement {
   //   return this.animations.isAnimating();
   // }
 
+  isMoving(): boolean {
+    if (this.isShown === false) {
+      return false;
+    }
+    if (this.isAnimating()) {
+      return true;
+    }
+    if (this.state.isBeingMoved) {
+      return true;
+    }
+    return false;
+  }
+
   isAnimating(): boolean {
     if (this.isShown === false) {
       return false;
@@ -2407,6 +2423,14 @@ class DiagramElement {
       return true;
     }
     return false;
+  }
+
+  isAnyElementAnimating() {
+    return this.isAnimating();
+  }
+
+  isAnyElementMoving() {
+    return this.isMoving();
   }
 }
 
@@ -2787,20 +2811,20 @@ class DiagramElementPrimitive extends DiagramElement {
     this.setMoveBoundaryToDiagram();
   }
 
-  isMoving(): boolean {
-    if (
-      // this.state.isAnimating
-      this.state.isMovingFreely
-      || this.state.isBeingMoved
-      || this.state.isPulsing
-      // || this.state.isAnimatingColor
-      // || this.state.isAnimatingCustom
-      || this.animations.willStartAnimating()
-    ) {
-      return true;
-    }
-    return false;
-  }
+  // isMoving(): boolean {
+  //   if (
+  //     // this.state.isAnimating
+  //     this.state.isMovingFreely
+  //     || this.state.isBeingMoved
+  //     || this.state.isPulsing
+  //     // || this.state.isAnimatingColor
+  //     // || this.state.isAnimatingCustom
+  //     || this.animations.willStartAnimating()
+  //   ) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   // setupWebGLBuffers(newWebgl: WebGLInstance) {
   //   const { drawingObject } = this;
@@ -3011,41 +3035,55 @@ class DiagramElementCollection extends DiagramElement {
     this.drawOrder = [...names.reverse(), ...newOrder];
   }
 
-  isMoving(): boolean {
+  // isChildMoving(): boolean {
+  //   if (this.isShown === false) {
+  //     return false;
+  //   }
+  //   if (this.state.isMovingFreely
+  //       || this.state.isBeingMoved
+  //       || this.state.isPulsing
+  //       || this.animations.state === 'animating') {
+  //     return true;
+  //   }
+  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     if (element instanceof DiagramElementCollection) {
+  //       if (element.isMoving()) {
+  //         return true;
+  //       }
+  //     } else if (element.isShown && element.color[3] > 0 && element.isMoving()) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
+
+  isAnyElementMoving(): boolean {
     if (this.isShown === false) {
       return false;
     }
-    if (this.state.isMovingFreely
-        || this.state.isBeingMoved
-        || this.state.isPulsing
-        || this.animations.state === 'animating') {
+    if (this.isMoving()) {
       return true;
     }
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      if (element instanceof DiagramElementCollection) {
-        if (element.isMoving()) {
-          return true;
-        }
-      } else if (element.isShown && element.color[3] > 0 && element.isMoving()) {
+      if (element.isAnyElementMoving()) {
         return true;
       }
     }
     return false;
   }
 
-  isAnimating(): boolean {
+  isAnyElementAnimating(): boolean {
     if (this.isShown === false) {
       return false;
     }
-    const isThisAnimatingPulsingOrMovingFreely = super.isAnimating();
-    if (isThisAnimatingPulsingOrMovingFreely) {
+    if (this.isAnimating()) {
       return true;
     }
-
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      if (element.isAnimating()) {
+      if (element.isAnyElementAnimating()) {
         return true;
       }
     }
@@ -4274,11 +4312,11 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  pause(forcePause: boolean = false) {
+  pause(forcePause: boolean = false, clearAnimations: boolean = false) {
     super.pause(forcePause);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.pause(forcePause);
+      element.pause(forcePause, clearAnimations);
     }
   }
 

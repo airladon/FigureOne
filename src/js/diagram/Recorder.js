@@ -1408,7 +1408,8 @@ class Recorder {
       this.audio.pause();
       this.isAudioPlaying = false;
     }
-    this.diagram.pause(false);
+    this.diagram.pause(false, true);
+    console.log(this.diagram.isAnimating())
     if (this.diagram.isAnimating()) {
       this.subscriptions.trigger('preparingToPause');
       this.state = 'preparingToPause';

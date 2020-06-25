@@ -1445,11 +1445,11 @@ class Diagram {
     this.draw(time);
   }
 
-  pause(forcePause: boolean = true) {
+  pause(forcePause: boolean = true, clearAnimations: boolean = false) {
     // if (window.asdf) {
     //   debugger;
     // }
-    this.elements.pause(forcePause);
+    this.elements.pause(forcePause, clearAnimations);
     this.pauseTime = performance.now() / 1000;
     this.isPaused = true;
   }
@@ -1520,7 +1520,7 @@ class Diagram {
       return;
     }
 
-    if (this.elements.isMoving()) {
+    if (this.elements.isAnyElementMoving()) {
       this.animateNextFrame(true, 'is moving');
     }
 
@@ -1585,7 +1585,7 @@ class Diagram {
 
   isAnimating(): boolean {
     // console.log('asdf')
-    return this.elements.isAnimating();
+    return this.elements.isAnyElementAnimating();
   }
 
   clientToPixel(clientLocation: Point): Point {
