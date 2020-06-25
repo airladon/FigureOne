@@ -7,7 +7,7 @@ import {
   spaceToSpaceTransform, minAngleDiff, getTransform,
 } from '../tools/g2';
 import * as math from '../tools/math';
-import { FunctionMap } from './FunctionMap';
+import { FunctionMap } from '../tools/FunctionMap';
 import { setState, getState } from './state';
 import parseState from './parseState';
 import { isTouchDevice, joinObjects, SubscriptionManager } from '../tools/tools';
@@ -322,7 +322,7 @@ class Diagram {
     this.beingTouchedElements = [];
     this.moveTopElementOnly = true;
     this.globalAnimation = new GlobalAnimation();
-    this.subscriptions = new SubscriptionManager();
+    this.subscriptions = new SubscriptionManager(this.fnMap);
     // this.recorder = new Recorder(
     //   this.simulateTouchDown.bind(this),
     //   this.simulateTouchUp.bind(this),
@@ -772,12 +772,12 @@ class Diagram {
 
   // eslint-disable-next-line class-methods-use-this
   animationFinished(element: DiagramElementPrimitive | DiagramElementCollection) {
-    console.log('diagram finished', this.isAnimating(), element.name)
+    // console.log('diagram finished', this.isAnimating(), element.name)
     if (this.isAnimating()) {
-      console.log('animation finished but still animating')
+      // console.log('animation finished but still animating')
       return;
     }
-    console.log('animation finished')
+    // console.log('animation finished')
     this.fnMap.exec(this.animationFinishedCallback);
     this.subscriptions.trigger('animationsFinished');
   }
@@ -1445,11 +1445,11 @@ class Diagram {
     this.draw(time);
   }
 
-  pause() {
+  pause(forcePause: boolean = true) {
     // if (window.asdf) {
     //   debugger;
     // }
-    this.elements.pause();
+    this.elements.pause(forcePause);
     this.pauseTime = performance.now() / 1000;
     this.isPaused = true;
   }
@@ -1585,7 +1585,7 @@ class Diagram {
 
   isAnimating(): boolean {
     // console.log('asdf')
-    return this.elements.isAnimatingOrMovingFreely();
+    return this.elements.isAnimating();
   }
 
   clientToPixel(clientLocation: Point): Point {

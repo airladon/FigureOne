@@ -127,10 +127,10 @@ class Gesture {
   }
 
   keypressHandler(event: KepressEvent) {
-    console.log(event.code, event.keyCode, String.fromCharCode(event.keyCode))
-    console.log(this.toggleCursor)
+    // console.log(event.code, event.keyCode, String.fromCharCode(event.keyCode))
+    // console.log(this.toggleCursor)
     if (String.fromCharCode(event.keyCode) === 'n' && this.toggleCursor) {
-      console.log('toggling')
+      // console.log('toggling')
       this.toggleCursor();
     }
   }

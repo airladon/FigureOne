@@ -1,5 +1,6 @@
 // @flow
 import { roundNum } from './math';
+import { FunctionMap } from './FunctionMap';
 // import Worker from '../diagram/recorder.worker.js';
 
 const Console = (text: string) => {
@@ -1004,6 +1005,7 @@ class ObjectTracker {
 }
 
 class Subscriber {
+  fnMap: FunctionMap;
   subscribers: {
     [id: string]: {
       callback: () => void;
@@ -1015,7 +1017,8 @@ class Subscriber {
 
   nextId: number;
 
-  constructor() {
+  constructor(fnMap: FunctionMap = new FunctionMap()) {
+    this.fnMap = fnMap;
     this.subscribers = {};
     this.nextId = 0;
     this.order = [];
@@ -1036,9 +1039,10 @@ class Subscriber {
     for (let i = 0; i < this.order.length; i += 1) {
       const id = this.order[i];
       const { callback, num } = this.subscribers[`${id}`];
-      if (callback != null) {
-        callback(payload);
-      }
+      // if (callback != null) {
+      //   callback(payload);
+      // }
+      this.fnMap.exec(callback, payload);
       if (num === 1) {
         subscribersToRemove.push(id);
       } else if (num > 1) {
@@ -1058,15 +1062,22 @@ class Subscriber {
       this.order.splice(index, 1);
     }
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  _excludeStateKeys() {
+    return ['fnMap'];
+  }
 }
 
 class SubscriptionManager {
+  fnMap: FunctionMap;
   subscriptions: {
     [subscriptionName: string]: Subscriber;
   }
 
-  constructor() {
+  constructor(fnMap: FunctionMap = new FunctionMap()) {
     this.subscriptions = {};
+    this.fnMap = fnMap;
   }
 
   subscribe(
@@ -1075,7 +1086,7 @@ class SubscriptionManager {
     numberOfSubscriptions: number = -1,
   ) {
     if (this.subscriptions[subscriptionName] == null) {
-      this.subscriptions[subscriptionName] = new Subscriber();
+      this.subscriptions[subscriptionName] = new Subscriber(this.fnMap);
     }
     return this.subscriptions[subscriptionName].subscribe(callback, numberOfSubscriptions);
   }
@@ -1094,6 +1105,11 @@ class SubscriptionManager {
         delete this.subscriptions[subscriptionName];
       }
     }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _excludeStateKeys() {
+    return ['fnMap'];
   }
 }
 

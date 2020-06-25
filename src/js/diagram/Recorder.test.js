@@ -2132,6 +2132,7 @@ describe('Diagram Recorder', () => {
     let playbackStoppedCallback;
     beforeEach(() => {
       a = diagram.getElement('a');
+      a.finishAnimationOnPause = true;
       const startAnimation = () => {
         a.animations.new()
           .position({ start: [0, 0], target: [1, 1], duration: 2 })

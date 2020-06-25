@@ -288,7 +288,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     }
 
     const [transformDuration, colorDuration, opacityDuration] = this.getDuration(start, target);
-    console.log(transformDuration, colorDuration, opacityDuration);
+    // console.log(transformDuration, colorDuration, opacityDuration);
     const steps = [];
     if (target.transform != null) {
       steps.push(element.anim.transform({
