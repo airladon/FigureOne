@@ -1193,6 +1193,7 @@ class Recorder {
   }
 
   resumePlayback() {
+    // console.log(this.pauseState);
     if (this.pauseState == null) {
       this.startPlayback(this.currentTime);
       return;
@@ -1217,7 +1218,7 @@ class Recorder {
     this.diagram.animateToState(
       this.pauseState,
       {
-        maxTime: 1,
+        maxTime: 2,
         velocity: {
           position: 2,
           rotation: Math.PI * 2 / 2,
@@ -1227,7 +1228,7 @@ class Recorder {
         },
         allDurationsSame: true,
         zeroDurationThreshold: 0.1,
-        minTime: 1,
+        minTime: 0.5,
       },
       finished,
     );
