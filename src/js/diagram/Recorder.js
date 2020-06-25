@@ -1218,6 +1218,7 @@ class Recorder {
     this.diagram.animateToState(
       this.pauseState,
       {
+        // delay: 1,
         maxTime: 2,
         velocity: {
           position: 2,
