@@ -12,7 +12,7 @@ import { DiagramElement } from '../Element';
 import * as anim from './Animation';
 import { joinObjects, duplicateFromTo } from '../../tools/tools';
 import { getState } from '../state';
-import { FunctionMap } from '../FunctionMap';
+import { FunctionMap } from '../../tools/FunctionMap';
 // import type Diagram from '../Diagram';
 
 export type TypeAnimationManagerInputOptions = {

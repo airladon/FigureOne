@@ -71,7 +71,21 @@ function getState(
       return value._dup();
     }
     const out = {};
-    Object.keys(value).forEach((key) => {
+    let keys = Object.keys(value)
+    if (value._stateKeys) {
+      keys = value._stateKeys();
+    }
+    let keysToUse = keys;
+    if (value._excludeStateKeys) {
+      keysToUse = [];
+      const excludedKeys = value._excludeStateKeys();
+      keys.forEach((key) => {
+        if (excludedKeys.indexOf(key) === -1) {
+          keysToUse.push(key);
+        }
+      });
+    }
+    keysToUse.forEach((key) => {
       out[key] = processValue(value[key]);
     });
     return out;

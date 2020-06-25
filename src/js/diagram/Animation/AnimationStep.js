@@ -13,7 +13,7 @@ import {
 import * as math from '../../tools/math';
 import { getState } from '../state';
 import type { DiagramElement } from '../Element';
-import { FunctionMap } from '../FunctionMap';
+import { FunctionMap } from '../../tools/FunctionMap';
 // import * as anim from './Animation';
 
 export type TypeAnimationStepInputOptions = {

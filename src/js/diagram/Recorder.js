@@ -1202,7 +1202,6 @@ class Recorder {
     this.diagram.unpause();
     this.state = 'preparingToPlay';
     const finished = () => {
-      console.log('finished!!!!')
       this.diagram.setState(this.pauseState);
       this.state = 'playing';
       this.setVideoToNowDeltaTime(this.currentTime);
@@ -1400,8 +1399,7 @@ class Recorder {
     }
 
     const pause = () => {
-      console.log('recorder pause')
-      this.diagram.pause();
+      console.log('recorder pause');
       this.state = 'idle';
       this.subscriptions.trigger('playbackStopped');
     };
@@ -1410,12 +1408,10 @@ class Recorder {
       this.audio.pause();
       this.isAudioPlaying = false;
     }
-
-    // console.log('pausePlayback before isAnimatingCheck', this.diagram.isAnimating())
+    this.diagram.pause(false);
     if (this.diagram.isAnimating()) {
       this.subscriptions.trigger('preparingToPause');
       this.state = 'preparingToPause';
-      // this.diagram.setAnimationFinishedCallback(pause);
       console.log('recorder prep to pause')
       this.diagram.subscriptions.subscribe('animationsFinished', pause, 1);
     } else {

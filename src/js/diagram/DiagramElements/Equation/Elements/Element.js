@@ -7,7 +7,7 @@ import Bounds from './Bounds';
 import {
   DiagramElementPrimitive, DiagramElementCollection,
 } from '../../../Element';
-import { FunctionMap } from '../../../FunctionMap';
+import { FunctionMap } from '../../../../tools/FunctionMap';
 
 export interface ElementInterface {
   ascent: number;

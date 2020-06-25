@@ -18,7 +18,7 @@ import DrawingObject from './DrawingObjects/DrawingObject';
 import VertexObject from './DrawingObjects/VertexObject/VertexObject';
 import { TextObject } from './DrawingObjects/TextObject/TextObject';
 import {
-  duplicateFromTo, joinObjects, joinObjectsWithOptions,
+  duplicateFromTo, joinObjects, joinObjectsWithOptions, SubscriptionManager,
 } from '../tools/tools';
 import { colorArrayToRGBA, areColorsSame } from '../tools/color';
 // import GlobalAnimation from './webgl/GlobalAnimation';
@@ -36,7 +36,7 @@ import type {
 import * as animations from './Animation/Animation';
 import WebGLInstance from './webgl/webgl';
 // import type Diagram from './Diagram';
-import { FunctionMap } from './FunctionMap';
+import { FunctionMap } from '../tools/FunctionMap';
 
 // eslint-disable-next-line import/no-cycle
 // import {
@@ -252,7 +252,7 @@ class DiagramElement {
 
   finishAnimationOnPause: boolean;
 
-  immediateStopOnPause: boolean;
+  subscriptions: SubscriptionManager;
 
   // scenarioSet: {
   //   quiz1: [
@@ -281,6 +281,8 @@ class DiagramElement {
     this.isShown = true;
     this.transform = transform._dup();
     this.transformUpdatesIndependantly = true;
+    this.fnMap = new FunctionMap();
+    this.subscriptions = new SubscriptionManager(this.fnMap);
     this.isMovable = false;
     this.isTouchable = false;
     this.isInteractive = undefined;
@@ -306,7 +308,6 @@ class DiagramElement {
     this.parent = parent;
     this.drawPriority = 1;
     this.stateProperties = [];
-    this.fnMap = new FunctionMap();
     this.finishAnimationOnPause = false;
     // this.noRotationFromParent = false;
     // this.pulseDefault = (callback: ?() => void = null) => {
@@ -622,9 +623,10 @@ class DiagramElement {
     this.pulseTransforms = [];
   }
 
-  animationFinished() {
+  animationFinished(typeOfAnimation: 'pulse' | 'movingFreely' | 'animation' = 'animation') {
     // console.log('element', this.name, this.animationFinishedCallback)
     this.fnMap.exec(this.animationFinishedCallback);
+    this.subscriptions.trigger('animationFinished', typeOfAnimation);
   }
 
   // animationsFinishedCallback(element: DiagramElement) {
@@ -661,6 +663,7 @@ class DiagramElement {
         'pulseSettings',
         'setTransformCallback',
         'move',
+        'subscriptions',
         ...this.stateProperties,
       ];
     }
@@ -1030,8 +1033,20 @@ class DiagramElement {
     this.undim();
   }
 
-  pause() {
-    this.isPaused = true;
+  pause(forcePause: boolean = false) {
+    const pause = () => {
+      this.isPaused = true;
+    };
+
+    if (
+      forcePause === false
+      && this.finishAnimationOnPause
+      && this.isAnimating()
+    ) {
+      this.subscriptions.subscribe('animationFinished', pause, 1);
+    } else {
+      pause();
+    }
   }
 
   unpause() {
@@ -1084,6 +1099,7 @@ class DiagramElement {
       this.fnMap.exec(this.internalSetTransformCallback, this.transform);
     }
     this.fnMap.exec(this.setTransformCallback, this.transform);
+    this.subscriptions.trigger('setTransform', [this.transform]);
     // if (this.setTransformCallback) {
     //   this.setTransformCallback(this.transform);
     // }
@@ -1643,6 +1659,8 @@ class DiagramElement {
     if (wasMovingFreely) {
       // console.log('stop moving freely callback', this.animationFinishedCallback)
       this.fnMap.exec(this.animationFinishedCallback);
+      // this.subscriptions.trigger('animationFinished', ['movingFreely']);
+      this.animationFinished('movingFreely');
     }
   }
 
@@ -1826,11 +1844,16 @@ class DiagramElement {
   }
 
   stopPulsing(result: ?mixed) {
+    const wasPulsing = this.state.isPulsing;
     this.state.isPulsing = false;
     if (this.pulseSettings.callback) {
       const { callback } = this.pulseSettings;
       this.pulseSettings.callback = null;
       this.fnMap.exec(callback, result);
+    }
+    if (wasPulsing) {
+      // this.subscriptions.trigger('animationFinished', )
+      this.animationFinished('pulsing');
     }
   }
 
@@ -2361,15 +2384,29 @@ class DiagramElement {
     return this.transform;
   }
 
+  // isAnimating(): boolean {
+  //   // if (window.asdf && this.name === 'a') {
+  //   //   console.log(this.name, this.isShown, this.animations.isAnimating())
+  //   // }
+  //   // console.log(this.name, this.isShown, this.animations.isAnimating())
+  //   if (this.isShown === false) {
+  //     return false;
+  //   }
+  //   return this.animations.isAnimating();
+  // }
+
   isAnimating(): boolean {
-    // if (window.asdf && this.name === 'a') {
-    //   console.log(this.name, this.isShown, this.animations.isAnimating())
-    // }
-    // console.log(this.name, this.isShown, this.animations.isAnimating())
     if (this.isShown === false) {
       return false;
     }
-    return this.animations.isAnimating();
+    if (
+      this.state.isMovingFreely
+      || this.state.isPulsing
+      || this.animations.isAnimating()
+    ) {
+      return true;
+    }
+    return false;
   }
 }
 
@@ -2613,6 +2650,7 @@ class DiagramElementPrimitive extends DiagramElement {
           return;
         }
       }
+      this.subscriptions.trigger('beforeDraw', [parentTransform, now]);
       if (this.beforeDrawCallback != null) {
         this.fnMap.exec(this.beforeDrawCallback, now);
       }
@@ -2728,6 +2766,7 @@ class DiagramElementPrimitive extends DiagramElement {
       // this.redrawElements.forEach((element) => {
       //   element.draw(element.getParentLastDrawTransform(), now);
       // })
+      this.subscriptions.trigger('afterDrawDraw', [now]);
       if (this.afterDrawCallback != null) {
         this.fnMap.exec(this.afterDrawCallback, now);
       }
@@ -2759,21 +2798,6 @@ class DiagramElementPrimitive extends DiagramElement {
       || this.animations.willStartAnimating()
     ) {
       return true;
-    }
-    return false;
-  }
-
-  isAnimatingOrMovingFreely(): boolean {
-    if (this.isShown === false) {
-      return false;
-    }
-    // console.log(this.name, this.state.isMovingFreely, this.state.isPulsing, this.animations.isAnimating())
-    if (
-      this.state.isMovingFreely
-      || this.state.isPulsing
-      || this.animations.isAnimating()
-    ) {
-      return true
     }
     return false;
   }
@@ -3010,34 +3034,15 @@ class DiagramElementCollection extends DiagramElement {
     return false;
   }
 
-  isAnimatingOrMovingFreely(): boolean {
-    if (this.isShown === false) {
-      return false;
-    }
-    if (
-      this.state.isMovingFreely
-      || this.state.isPulsing
-      || this.animations.state === 'animating'
-    ) {
-      return true
-    }
-    for (let i = 0; i < this.drawOrder.length; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      if (element.isAnimatingOrMovingFreely()) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   isAnimating(): boolean {
     if (this.isShown === false) {
       return false;
     }
-    const isThisAnimating = super.isAnimating();
-    if (isThisAnimating) {
+    const isThisAnimatingPulsingOrMovingFreely = super.isAnimating();
+    if (isThisAnimatingPulsingOrMovingFreely) {
       return true;
     }
+
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       if (element.isAnimating()) {
@@ -3046,6 +3051,23 @@ class DiagramElementCollection extends DiagramElement {
     }
     return false;
   }
+
+  // isAnimating(): boolean {
+  //   if (this.isShown === false) {
+  //     return false;
+  //   }
+  //   const isThisAnimating = super.isAnimating();
+  //   if (isThisAnimating) {
+  //     return true;
+  //   }
+  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     if (element.isAnimating()) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
   add(
     name: string,
@@ -3082,7 +3104,11 @@ class DiagramElementCollection extends DiagramElement {
     return false;
   }
 
-  setupDraw(parentTransform: Transform = new Transform(), now: number = 0, canvasIndex: number = 0) {
+  setupDraw(
+    parentTransform: Transform = new Transform(),
+    now: number = 0,
+    canvasIndex: number = 0,
+  ) {
     // console.log('draw', this.name)
     if (this.isShown) {
       if (this.isRenderedAsImage === true) {
@@ -4248,11 +4274,11 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  pause() {
-    super.pause();
+  pause(forcePause: boolean = false) {
+    super.pause(forcePause);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.pause();
+      element.pause(forcePause);
     }
   }
 

@@ -87,7 +87,7 @@ class FunctionMap extends GeneralFunctionMap {
     fn: Function,
   }}
 
-  global: GlbalFunctionMap;
+  global: GlobalFunctionMap;
 
   constructor() {
     super();
