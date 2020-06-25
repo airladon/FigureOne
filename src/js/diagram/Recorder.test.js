@@ -2390,6 +2390,33 @@ describe('Diagram Recorder', () => {
       expect(diagram.isAnimating()).toBe(false);
       expect(a.getPosition()).toEqual(new Point(1, 1));
     });
+    test('Pause during animation without completion', () => {
+      a.finishAnimationOnPause = false;
+      recorder.startPlayback(0);
+      expect(recorder.state).toBe('playing');
+      expect(diagram.isAnimating()).toBe(false);
+      expect(a.getPosition()).toEqual(new Point(0, 0));
+      timeStep(1);
+      expect(diagram.isAnimating()).toBe(true);
+      expect(a.getPosition()).toEqual(new Point(0, 0));
+
+      timeStep(1);
+      expect(diagram.isAnimating()).toBe(true);
+      expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+
+      // Pause Test
+      recorder.pausePlayback();
+      expect(recorder.state).toBe('idle');
+      expect(diagram.getRemainingAnimationTime()).toBe(0);
+      expect(diagram.isAnimating()).toBe(false);
+      recorder.resumePlayback();
+      expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+      //
+      expect(recorder.state).toBe('playing');
+      timeStep(1);
+      expect(diagram.isAnimating()).toBe(false);
+      expect(a.getPosition()).toEqual(new Point(1, 1));
+    });
   });
   describe('Editing', () => {
     beforeEach(() => {
