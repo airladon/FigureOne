@@ -415,6 +415,22 @@ describe('Diagram Recorder', () => {
     expect(a.getPosition()).toEqual(new Point(1, 1));
     expect(diagram.isAnimating()).toBe(false);
   });
+  test('Velocity minTime', () => {
+    a.animations.new()
+      .scenario({
+        target: { position: [1, 1] },
+        velocity: { translation: 10 },
+        minTime: 1,
+      })
+      .start();
+    diagram.mock.timeStep(0);
+    expect(a.getPosition()).toEqual(new Point(0, 0));
+    diagram.mock.timeStep(0.5);
+    expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+    diagram.mock.timeStep(1);
+    expect(a.getPosition()).toEqual(new Point(1, 1));
+    expect(diagram.isAnimating()).toBe(false);
+  });
   test('No Change', () => {
     a.animations.new()
       .scenario({ target: { position: [0, 0] }, duration: 1 })

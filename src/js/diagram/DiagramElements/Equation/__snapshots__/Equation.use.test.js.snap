@@ -437,15 +437,6 @@ DiagramElementPrimitive {
   "recorder": Recorder {
     "audio": null,
     "currentTime": 0,
-    "diagram": Object {
-      "animateNextFrame": [Function],
-      "getElement": [Function],
-      "getState": [Function],
-      "pause": [Function],
-      "setState": [Function],
-      "showCursor": [Function],
-      "unpause": [Function],
-    },
     "duration": 0,
     "eventIndex": Object {},
     "events": Object {},
@@ -456,7 +447,6 @@ DiagramElementPrimitive {
     "lastRecordTimeCount": 0,
     "lastSeekTime": null,
     "pauseState": null,
-    "playbackStoppedCallback": null,
     "precision": 4,
     "reference": "__base",
     "state": "idle",

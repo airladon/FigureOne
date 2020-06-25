@@ -68,6 +68,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     zeroDurationThreshold: number;
     clipRotationTo: '0to360' | '-180to180' | null;
     progression: ((number, ?boolean) => number) | string;
+    minTime: number;
   };
 
   constructor(...optionsIn: Array<TypeScenarioAnimationStepInputOptions>) {
@@ -76,7 +77,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     deleteKeys(AnimationStepOptionsIn, [
       'start', 'target', 'translationStyle', 'translationOptions',
       'velocity', 'maxTime', 'allDurationsSame', 'rotDirection',
-      'clipRotationTo', 'element', 'progression',
+      'clipRotationTo', 'element', 'progression', 'minTime',
     ]);
     super(AnimationStepOptionsIn);
     this._stepType = 'position';
@@ -100,6 +101,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       allDurationsSame: true,
       zeroDurationThreshold: 0,
       progression: 'tools.math.easeinout',
+      minTime: 0,
     };
     if (this.element && this.element.animations.options.translation) {
       const translationOptions = this.element.animations.options.translation;
@@ -117,7 +119,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     copyKeysFromTo(options, this.scenario, [
       'start', 'target', 'translationStyle',
       'velocity', 'maxTime', 'allDurationsSame', 'zeroDurationThreshold',
-      'rotDirection', 'clipRotationTo', 'progression',
+      'rotDirection', 'clipRotationTo', 'progression', 'minTime',
     ]);
     duplicateFromTo(options.translationOptions, this.scenario.translationOptions);
   }
@@ -214,12 +216,24 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       colorDuration = 0;
     }
 
+    if (colorDuration < this.scenario.minTime) {
+      colorDuration = this.scenario.minTime;
+    }
+
     if (opacityDuration <= this.scenario.zeroDurationThreshold) {
       opacityDuration = 0;
     }
 
+    if (opacityDuration < this.scenario.minTime) {
+      opacityDuration = this.scenario.minTime;
+    }
+
     if (transformDuration <= this.scenario.zeroDurationThreshold) {
       transformDuration = 0;
+    }
+
+    if (transformDuration < this.scenario.minTime) {
+      transformDuration = this.scenario.minTime;
     }
 
     if (this.scenario.allDurationsSame) {
@@ -274,7 +288,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     }
 
     const [transformDuration, colorDuration, opacityDuration] = this.getDuration(start, target);
-
+    console.log(transformDuration, colorDuration, opacityDuration);
     const steps = [];
     if (target.transform != null) {
       steps.push(element.anim.transform({

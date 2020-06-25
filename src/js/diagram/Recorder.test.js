@@ -2372,15 +2372,15 @@ describe('Diagram Recorder', () => {
 
       recorder.resumePlayback();
       expect(recorder.state).toBe('preparingToPlay');
-      expect(diagram.getRemainingAnimationTime()).toBe(0.25);
+      expect(diagram.getRemainingAnimationTime()).toBe(0.5);
 
       timeStep(0);  // Required to kick off the aniamteToState animation
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(1, 1));
-      timeStep(0.125);
+      timeStep(0.25);
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0.75, 0.75));
-      timeStep(0.125);
+      timeStep(0.25);
       expect(diagram.isAnimating()).toBe(true);
       expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
       //
