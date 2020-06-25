@@ -1227,6 +1227,7 @@ class Recorder {
         },
         allDurationsSame: true,
         zeroDurationThreshold: 0.1,
+        minTime: 1,
       },
       finished,
     );
