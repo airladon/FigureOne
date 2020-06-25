@@ -1399,7 +1399,7 @@ class Recorder {
     }
 
     const pause = () => {
-      console.log('recorder pause');
+      // console.log('recorder pause');
       this.state = 'idle';
       this.subscriptions.trigger('playbackStopped');
     };
@@ -1409,11 +1409,11 @@ class Recorder {
       this.isAudioPlaying = false;
     }
     this.diagram.pause(false, true);
-    console.log(this.diagram.isAnimating())
+    // console.log(this.diagram.isAnimating())
     if (this.diagram.isAnimating()) {
       this.subscriptions.trigger('preparingToPause');
       this.state = 'preparingToPause';
-      console.log('recorder prep to pause')
+      // console.log('recorder prep to pause')
       this.diagram.subscriptions.subscribe('animationsFinished', pause, 1);
     } else {
       pause();
