@@ -4313,7 +4313,7 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   pause(forcePause: boolean = false, clearAnimations: boolean = false) {
-    super.pause(forcePause);
+    super.pause(forcePause, clearAnimations);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       element.pause(forcePause, clearAnimations);
