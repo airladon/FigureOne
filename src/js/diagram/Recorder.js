@@ -1324,7 +1324,6 @@ class Recorder {
 
   playbackEvent(eventName: string) {
     const index = this.eventIndex[eventName];
-    // console.log(eventName, index)
     const delay = this.events[eventName].list[index][0] - this.getCurrentTime();
 
     if (delay > 0.0001) {
@@ -1346,7 +1345,10 @@ class Recorder {
     } else {
       this.eventIndex[eventName] = index + 1;
     }
-    this.playbackEvent(this.getNextEvent());
+    const nextEvent = this.getNextEvent();
+    if (nextEvent != null && this.events[nextEvent]) {
+      this.playbackEvent(nextEvent);
+    }
   }
 
   areEventsPlaying() {
