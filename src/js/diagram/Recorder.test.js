@@ -999,6 +999,35 @@ describe('Diagram Recorder', () => {
         expect(cursorMoveEvents[1]).toEqual([5, [6, 6], 0]);
         expect(cursorMoveEvents[2]).toEqual([7, [7, 7], 0]);
       });
+      test('New blank events', () => {
+        recorder.addEventType('cursorMove', () => {}, true);
+
+        // Starting at 10 seconds global time
+        global.performance.now = () => 10000;
+        recorder.startRecording();
+        global.performance.now = () => 13000;
+        recorder.recordEvent('cursorMove', [1, 1]);
+        global.performance.now = () => 14000;
+        recorder.recordEvent('cursorMove', [2, 2]);
+        global.performance.now = () => 15000;
+        recorder.recordEvent('cursorMove', [3, 3]);
+        recorder.stopRecording();
+
+        let cursorMoveEvents = recorder.events.cursorMove.list;
+        expect(cursorMoveEvents[0]).toEqual([3, [1, 1], 0]);
+        expect(cursorMoveEvents[1]).toEqual([4, [2, 2], 0]);
+        expect(cursorMoveEvents[2]).toEqual([5, [3, 3], 0]);
+
+        global.performance.now = () => 20000;
+        recorder.startRecording(3.5);
+        global.performance.now = () => 21000;
+        global.performance.now = () => 21400;
+        recorder.stopRecording();
+
+        cursorMoveEvents = recorder.events.cursorMove.list;
+        expect(cursorMoveEvents[0]).toEqual([3, [1, 1], 0]);
+        expect(cursorMoveEvents[1]).toEqual([5, [3, 3], 0]);
+      });
     });
   });
   describe('Reference States, Encoding, basic diagram', () => {

@@ -180,6 +180,7 @@ class Recorder {
   };
 
   pauseState: ?Object;
+  startRecordingTime: number;
 
   stateTimeStep: number;      // in seconds
   diagram: {
@@ -551,6 +552,7 @@ class Recorder {
     this.startEventsPlayback(fromTime);
     this.startAudioPlayback(fromTime);
     this.subscriptions.trigger('startRecording');
+    this.startRecordingTime = fromTime;
     // console.log('recorder is', this.state);
   }
 
@@ -678,8 +680,10 @@ class Recorder {
     eventListOrStatesDiff: TypeEvents | TypeStateDiffs,
     cacheArray: TypeEvents | TypeStateDiffs,
   ) {
-    const startTime = this.getCacheStartTime();
-    const endTime = this.getCacheEndTime();
+    // const startTime = this.getCacheStartTime();
+    // const endTime = this.getCacheEndTime();
+    const startTime = this.startRecordingTime;
+    const endTime = this.currentTime;
     if (startTime == null || endTime === 0) {
       return [];
     }
@@ -697,6 +701,7 @@ class Recorder {
         sliceEnd = -1;
       }
     }
+    // console.log(sliceStart, sliceEnd)
     let beforeEvents = [];
     let afterEvents = [];
     if (sliceStart >= 0) {
@@ -709,9 +714,34 @@ class Recorder {
   }
 
   mergeEventsCache() {
+    // Object.keys(this.eventsCache).forEach((eventName) => {
+    //   const merged = this.getMergedCacheArray(
+    //     this.events[eventName].list, this.eventsCache[eventName].list,
+    //   );
+    //   if (merged.length === 0) {
+    //     return;
+    //   }
+    //   this.events[eventName].list = merged;
+    // });
+    const allEventNames = {};
+    Object.keys(this.events).forEach((eventName) => {
+      allEventNames[eventName] = null;
+    });
     Object.keys(this.eventsCache).forEach((eventName) => {
+      allEventNames[eventName] = null;
+    });
+    Object.keys(allEventNames).forEach((eventName) => {
+      let eventsCacheList = [];
+      if (this.eventsCache[eventName] != null) {
+        eventsCacheList = this.eventsCache[eventName].list;
+      }
+      let eventsList = [];
+      if (this.events[eventName] != null) {
+        eventsList = this.events[eventName].list;
+      }
+      // console.log(eventName)
       const merged = this.getMergedCacheArray(
-        this.events[eventName].list, this.eventsCache[eventName].list,
+        eventsList, eventsCacheList,
       );
       if (merged.length === 0) {
         return;
