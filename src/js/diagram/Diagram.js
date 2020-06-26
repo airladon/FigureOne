@@ -749,6 +749,7 @@ class Diagram {
       // console.log(element.name)
       // console.log(element.name, element.getPath(), element.asdf)
       element.animationFinishedCallback = this.animationFinished.bind(this, element);
+      element.recorder = this.recorder;
       // console.log(element.name, element.animationFinishedCallback)
     });
     this.animateNextFrame();

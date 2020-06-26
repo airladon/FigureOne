@@ -551,6 +551,7 @@ class Recorder {
     this.startEventsPlayback(fromTime);
     this.startAudioPlayback(fromTime);
     this.subscriptions.trigger('startRecording');
+    // console.log('recorder is', this.state);
   }
 
   startWorker() {

@@ -391,6 +391,7 @@ function onClickId(
   actionMethod: Function,
   bind: Array<mixed>,
   additionalClassesToAdd: string = '',
+  recorder: Recorder = new Recorder(),
 ) {
   const element = document.getElementById(id);
   if (element) {
@@ -401,7 +402,7 @@ function onClickId(
       }
     });
     const onClickFn = () => {
-      const recorder = new Recorder();
+      // const recorder = new Recorder();
       if (recorder.state === 'recording') {
         recorder.recordEvent('click', [id]);
       }
@@ -439,7 +440,11 @@ function applyModifiers(
   return outText;
 }
 
-function setOnClicks(modifiers: Object, additionalClassesToAdd: string = '') {
+function setOnClicks(
+  modifiers: Object,
+  additionalClassesToAdd: string = '',
+  recorder: Recorder,
+) {
   Object.keys(modifiers).forEach((key) => {
     const mod = modifiers[key];
     if (typeof mod !== 'string' && 'actionMethod' in mod) {
@@ -448,6 +453,7 @@ function setOnClicks(modifiers: Object, additionalClassesToAdd: string = '') {
         mod.actionMethod,
         mod.bind,
         additionalClassesToAdd,
+        recorder,
       );
     }
   });

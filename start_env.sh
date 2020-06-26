@@ -20,6 +20,8 @@ docker run -it --rm \
   -v $PROJECT_PATH/generate_docs.sh:/opt/app/generate_docs.sh \
   -v $PROJECT_PATH/jsdoc-conf.json:/opt/app/jsdoc-conf.json \
   -v $PROJECT_PATH/.stylelintrc:/opt/app/.stylelintrc \
+  -v $PROJECT_PATH/.stylelintignore:/opt/app/.stylelintignore \
+  -v $PROJECT_PATH/.eslintignore:/opt/app/.eslintignore \
   -p 8080:8080 \
   -p 9229:9229 \
   --name figureone_dev \
