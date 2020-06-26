@@ -303,7 +303,7 @@ class DiagramElement {
       elementCount: 0,
     };
     // this.redrawElements = [];
-    this.recorder = new Recorder();
+    this.recorder = new Recorder(true);
     this.custom = {};
     this.parent = parent;
     this.drawPriority = 1;
