@@ -1033,7 +1033,7 @@ class DiagramElement {
     this.undim();
   }
 
-  pause(forcePause: boolean = false, clearAnimations: boolean = false) {
+  pause(forcePause: boolean = false, clearAnimations: boolean = false, elementOnly: boolean = false) {
     const pause = () => {
       this.isPaused = true;
     };
@@ -1046,7 +1046,7 @@ class DiagramElement {
       this.subscriptions.subscribe('animationFinished', pause, 1);
     } else {
       if (clearAnimations) {
-        this.stop(true, 'noComplete');
+        this.stop(true, 'noComplete', elementOnly);
       }
       pause();
     }
@@ -3830,8 +3830,15 @@ class DiagramElementCollection extends DiagramElement {
     return touched;
   }
 
-  stop(cancelled: boolean = true, forceSetToEndOfPlan: ?boolean | 'complete' | 'noComplete' = false) {
+  stop(
+    cancelled: boolean = true,
+    forceSetToEndOfPlan: ?boolean | 'complete' | 'noComplete' = false,
+    elementOnly: boolean = false,
+  ) {
     super.stop(cancelled, forceSetToEndOfPlan);
+    if (elementOnly) {
+      return;
+    }
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       element.stop(cancelled, forceSetToEndOfPlan);
@@ -4313,10 +4320,10 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   pause(forcePause: boolean = false, clearAnimations: boolean = false) {
-    super.pause(forcePause, clearAnimations);
+    super.pause(forcePause, clearAnimations, true);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.pause(forcePause, clearAnimations);
+      element.pause(forcePause, clearAnimations, true);
     }
   }
 

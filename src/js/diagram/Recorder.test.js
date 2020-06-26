@@ -2390,8 +2390,7 @@ describe('Diagram Recorder', () => {
       expect(diagram.isAnimating()).toBe(false);
       expect(a.getPosition()).toEqual(new Point(1, 1));
     });
-    test('Pause during animation without completion', () => {
-      a.finishAnimationOnPause = false;
+    test('Pause during animation without completion', () => {     
       recorder.startPlayback(0);
       expect(recorder.state).toBe('playing');
       expect(diagram.isAnimating()).toBe(false);
@@ -2405,6 +2404,7 @@ describe('Diagram Recorder', () => {
       expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
 
       // Pause Test
+      a.finishAnimationOnPause = false;
       recorder.pausePlayback();
       expect(recorder.state).toBe('idle');
       expect(diagram.getRemainingAnimationTime()).toBe(0);
