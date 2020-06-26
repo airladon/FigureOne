@@ -672,19 +672,19 @@ export class Equation extends DiagramElementCollection {
     ];
   }
 
-  animateToState(
-    state: Object,
-    options: Object,
-    independentOnly: boolean = false,
-    countStart: () => void,
-    countEnd: () => void,
-  ) {
-    super.animateToState(state, options, independentOnly, countStart, countEnd);
-    if (this.eqn.currentForm !== state.eqn.currentForm) {
-      countStart();
-      this.goToForm({ name: state.eqn.currentForm, callback: countEnd });
-    }
-  }
+  // animateToState(
+  //   state: Object,
+  //   options: Object,
+  //   independentOnly: boolean = false,
+  //   // countStart: () => void,
+  //   // countEnd: () => void,
+  // ) {
+  //   super.animateToState(state, options, independentOnly);
+  //   if (this.eqn.currentForm !== state.eqn.currentForm) {
+  //     // countStart();
+  //     this.goToForm({ name: state.eqn.currentForm, callback: countEnd });
+  //   }
+  // }
 
   /**
     * Set the current form series to 'name'
