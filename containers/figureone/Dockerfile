@@ -17,20 +17,20 @@ RUN mkdir src
 
 
 # Linting config files
-# ADD .eslintrc.json .
-# ADD .eslintignore .
-# ADD .flowconfig .
-# ADD .stylelintrc .
-# ADD .stylelintignore .
+ADD .eslintrc.json .
+ADD .eslintignore .
+ADD .flowconfig .
+ADD .stylelintrc .
+ADD .stylelintignore .
 
 
 # Testing config files
-# ADD jest.config.js .
+ADD jest.config.js .
 
 
 # Packaging
-# ADD containers/figureone/webpack.config.js .
-# ADD .babelrc .
+ADD containers/figureone/webpack.config.js .
+ADD .babelrc .
 
 
 # Update path so eslint can be run from anywhere
