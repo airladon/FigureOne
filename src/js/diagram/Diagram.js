@@ -541,7 +541,7 @@ class Diagram {
     this.animateNextFrame();
   }
 
-  animateToState(state: Object, optionsIn: Object, done: ?(string | (() => void))) {
+  animateToState(state: Object, optionsIn: Object = {}, done: ?(string | (() => void))) {
     const defaultOptions = {
       delay: 0,
       duration: 1,
@@ -563,7 +563,7 @@ class Diagram {
 
     const options = joinObjects(defaultOptions, optionsIn);
     // countStart();
-    this.elements.animateToState(state.elements, options, true);
+    this.elements.animateToState(state.elements, options, true, state.lastDrawTime);
     // countEnd();
     if (done != null) {
       if (this.isAnimating() === false) {

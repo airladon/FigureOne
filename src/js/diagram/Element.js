@@ -19,6 +19,7 @@ import VertexObject from './DrawingObjects/VertexObject/VertexObject';
 import { TextObject } from './DrawingObjects/TextObject/TextObject';
 import {
   duplicateFromTo, joinObjects, joinObjectsWithOptions, SubscriptionManager,
+  duplicate,
 } from '../tools/tools';
 import { colorArrayToRGBA, areColorsSame } from '../tools/color';
 // import GlobalAnimation from './webgl/GlobalAnimation';
@@ -31,6 +32,7 @@ import type {
   TypeRotationAnimationStepInputOptions, TypeScaleAnimationStepInputOptions,
   TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
   TypeParallelAnimationStepInputOptions, TypeTriggerStepInputOptions,
+  TypeDelayStepInputOptions,
 } from './Animation/Animation';
 // eslint-disable-next-line import/no-cycle
 import * as animations from './Animation/Animation';
@@ -254,6 +256,8 @@ class DiagramElement {
 
   subscriptions: SubscriptionManager;
 
+  lastDrawTime: number;
+
   // scenarioSet: {
   //   quiz1: [
   //     { element: xyz, position: (), scale: (), rotation: (), length: () }
@@ -309,6 +313,7 @@ class DiagramElement {
     this.drawPriority = 1;
     this.stateProperties = [];
     this.finishAnimationOnPause = false;
+    this.lastDrawTime = 0;
     // this.noRotationFromParent = false;
     // this.pulseDefault = (callback: ?() => void = null) => {
     //   this.pulseScaleNow(1, 2, 0, callback);
@@ -319,6 +324,7 @@ class DiagramElement {
       time: 1,
     };
     this.isPaused = false;
+    this.copies = [];
 
     // Rename to animate in future
     this.anim = {
@@ -333,6 +339,10 @@ class DiagramElement {
       trigger: (...optionsIn: Array<TypeTriggerStepInputOptions>) => {
         const options = joinObjects({}, ...optionsIn);
         return new animations.TriggerStep(options);
+      },
+      delay: (...optionsIn: Array<TypeDelayStepInputOptions>) => {
+        const options = joinObjects({}, ...optionsIn);
+        return new animations.DelayStep(options);
       },
       translation: (...optionsIn: Array<TypePositionAnimationStepInputOptions>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
@@ -664,6 +674,7 @@ class DiagramElement {
         'move',
         'subscriptions',
         'finishAnimationOnPause',
+        // 'lastDrawTime',
         ...this.stateProperties,
       ];
     }
@@ -868,10 +879,21 @@ class DiagramElement {
   setFirstTransform(parentTransform: Transform) {
   }
 
+  animateToPulseTransforms(pulseTranforms: Array<Transform>) {
+    let startTransforms = this.pulseTransforms;
+    if (pulseTransforms.length != this.startTransforms.length) {
+      startTransforms = [];
+      for (let i = 0; i < pulseTranforms.length; i += 1) {
+        startTransforms.push(this.transform._dup());
+      }
+    }
+  }
+
   animateToState(
     state: Object,
     options: Object,
     independentOnly: boolean = false,
+    lastDrawTime: number,
   ) {
     const target = {};
     if (
@@ -893,12 +915,38 @@ class DiagramElement {
     ) {
       target.transform = stateTransform;
     }
+    if (state.isPulsing) {
 
+    }
+
+    let scenarioAnimation = null;
     if (Object.keys(target).length > 0) {
+      scenarioAnimation = this.anim.scenario(joinObjects({ target }, options));
+    }
+    // let pulseAnimation = null;
+    let pulseTrigger = null;
+    let pulseDelay = null;
+    if (state.state.isPulsing) {
+      pulseTrigger = this.anim.trigger({
+        callback: () => {
+          this.pulseSettings = duplicate(state.pulseSettings);
+        }
+      });
+      const delay = lastDrawTime - state.state.pulse.startTime;
+      pulseDelay = this.anim.delay(delay);
+    }
+    if (scenarioAnimation != null || pulseTrigger != null) {
       this.animations.new()
-        .scenario(joinObjects({ target }, options))
+        .then(scenarioAnimation)
+        .then(pulseTrigger)
+        .then(pulseDelay)
         .start();
     }
+    // if (Object.keys(target).length > 0) {
+    //   this.animations.new()
+    //     .scenario(joinObjects({ target }, options))
+    //     .start();
+    // }
   }
 
   exec(
@@ -2667,6 +2715,7 @@ class DiagramElementPrimitive extends DiagramElement {
 
   setupDraw(parentTransform: Transform = new Transform(), now: number = 0) {
     if (this.isShown) {
+      this.lastDrawTime = now;
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {
           this.unrender();
@@ -3149,6 +3198,7 @@ class DiagramElementCollection extends DiagramElement {
   ) {
     // console.log('draw', this.name)
     if (this.isShown) {
+      this.lastDrawTime = now;
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {
           this.unrender();
@@ -4283,10 +4333,11 @@ class DiagramElementCollection extends DiagramElement {
     state: Object,
     options: Object,
     independentOnly: boolean = false,
+    lastDrawTime: number,
     // countStart: () => void,
     // countEnd: () => void,
   ) {
-    super.animateToState(state, options, independentOnly); // , countStart, countEnd);
+    super.animateToState(state, options, independentOnly, lastDrawTime); // , countStart, countEnd);
     if (
       (this.transformUpdatesIndependantly && independentOnly)
       || independentOnly === false
@@ -4297,6 +4348,7 @@ class DiagramElementCollection extends DiagramElement {
           element.animateToState(
             state.elements[this.drawOrder[i]], options,
             independentOnly, // countStart, countEnd,
+            lastDrawTime,
           );
         }
       }
