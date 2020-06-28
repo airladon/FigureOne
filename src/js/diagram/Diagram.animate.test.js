@@ -230,3 +230,48 @@ describe('Animate To State', () => {
     });
   });
 });
+describe('Animate To State with pulse', () => {
+  let diagram;
+  let a;
+  beforeEach(() => {
+    diagram = makeDiagram();
+    diagram.addElements([
+      {
+        name: 'a',
+        method: 'polygon',
+      }
+    ]);
+    a = diagram.elements._a;
+    diagram.initialize();
+  });
+  test('Simple', () => {
+    diagram.setFirstTransform();
+    a.setPosition(1, 1);
+    a.pulseScaleNow(1, 1.5);
+    diagram.draw(0);
+    diagram.draw(0.5);
+    expect(a.getPosition()).toEqual(new Point(1, 1));
+    expect(a.pulseTransforms[0].order[0].x).toEqual(1.5);
+    expect(a.pulseTransforms[0].order[0].y).toEqual(1.5);
+    const state = diagram.getState();
+
+    diagram.stop();
+    diagram.draw(1);
+    a.setPosition(0, 0);
+    diagram.draw(2);
+    diagram.animateToState(state);
+    expect(a.getPosition()).toEqual(new Point(0, 0));
+    expect(a.pulseTransforms[0].order[0].x).toEqual(1);
+    expect(a.pulseTransforms[0].order[0].y).toEqual(1);
+
+    diagram.draw(0.5);
+    expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+    expect(a.pulseTransforms[0].order[0].x).toEqual(1);
+    expect(a.pulseTransforms[0].order[0].y).toEqual(1);
+
+    diagram.draw(1);
+    expect(a.getPosition()).toEqual(new Point(1, 1));
+    expect(a.pulseTransforms[0].order[0].x).toEqual(1);
+    expect(a.pulseTransforms[0].order[0].y).toEqual(1);
+  })
+});

@@ -69,8 +69,10 @@ export class SerialAnimationStep extends AnimationStep {
     }
   }
 
-  then(step: AnimationStep) {
-    this.steps.push(step);
+  then(step: ?AnimationStep) {
+    if (step != null) {
+      this.steps.push(step);
+    }
     return this;
   }
 
