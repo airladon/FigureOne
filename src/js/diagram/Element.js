@@ -100,6 +100,7 @@ export type TypeScenario = {
 class DiagramElement {
   transform: Transform;        // Transform of diagram element
   pulseTransforms: Array<Transform>;
+  frozenPulseTransforms: Array<Transform>;
   copyTransforms: Array<Transform>;
   drawTransforms: Array<Transform>;
 
@@ -177,6 +178,7 @@ class DiagramElement {
     delta: TypeParsablePoint,
     transformMethod: string | ((number, ?Point) => Transform),
     callback: ?(string | ((mixed) => void));
+    allowFreezeOnStop: boolean,
   };
 
   pulseDefault: string | ((?() => void) => void) | {
@@ -603,6 +605,7 @@ class DiagramElement {
       delta: new Point(0, 0),
       transformMethod: '_elementPulseSettingsTransformMethod',
       callback: () => {},
+      allowFreezeOnStop: false,
     };
 
     this.state = {
@@ -635,6 +638,7 @@ class DiagramElement {
     this.unrenderNextDraw = false;
     this.renderedOnNextDraw = false;
     this.pulseTransforms = [];
+    this.frozenPulseTransforms = [];
     this.copyTransforms = [];
     this.drawTransforms = [];
   }
@@ -975,6 +979,7 @@ class DiagramElement {
 
     drawTransforms = transformBy([transform], this.copyTransforms);
     drawTransforms = transformBy(drawTransforms, this.pulseTransforms);
+    drawTransforms = transformBy(drawTransforms, this.frozenPulseTransforms);
     return drawTransforms;
   }
 
@@ -1919,10 +1924,21 @@ class DiagramElement {
     this.state.isPulsing = true;
     this.state.pulse.startTime = null;
     this.unrender();
+    this.frozenPulseTransforms = [];
   }
 
-  stopPulsing(result: ?mixed) {
+  stopPulsing(
+    result: ?mixed,
+    forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false,
+  ) {
     const wasPulsing = this.state.isPulsing;
+    if (
+      this.state.isPulsing
+      && this.pulseSettings.allowFreezeOnStop
+      && (forceSetToEndOfPlan === false || forceSetToEndOfPlan === 'noComplete')
+    ) {
+      this.frozenPulseTransforms = this.pulseTransforms.map(c => c._dup());
+    }
     this.state.isPulsing = false;
     if (this.pulseSettings.callback) {
       const { callback } = this.pulseSettings;
@@ -1948,7 +1964,7 @@ class DiagramElement {
     }
     this.stopMovingFreely(cancelled);
     this.stopBeingMoved();
-    this.stopPulsing(cancelled);
+    this.stopPulsing(cancelled, forceSetToEndOfPlan);
   }
 
   cancel(forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false) {
