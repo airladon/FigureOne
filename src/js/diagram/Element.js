@@ -264,6 +264,19 @@ class DiagramElement {
 
   lastDrawTime: number;
 
+  pauseSettings: {
+    animation: {
+      completeBeforePause: boolean,
+      complete: boolean,
+      clear: boolean,
+    },
+    pulse: {
+      completeBeforePause: boolean,
+      complete: boolean,
+      clear: boolean,
+    }
+  }
+
   // scenarioSet: {
   //   quiz1: [
   //     { element: xyz, position: (), scale: (), rotation: (), length: () }
@@ -330,7 +343,25 @@ class DiagramElement {
       time: 1,
     };
     this.isPaused = false;
-    this.copies = [];
+    // this.copies = [];
+
+    this.pauseSettings = {
+      animation: {
+        completeBeforePause: false,
+        complete: true,
+        clear: false,
+      },
+      pulse: {
+        completeBeforePause: false,
+        complete: true,
+        clear: false,
+      },
+      movingFreely: {
+        completeBeforePause: false,
+        complete: false,
+        clear: false,
+      }
+    }
 
     // Rename to animate in future
     this.anim = {
@@ -939,13 +970,14 @@ class DiagramElement {
     if (state.state.isPulsing) {
       pulseTrigger = this.anim.trigger({
         callback: () => {
-          this.pulseSettings = duplicate(state.pulseSettings);
-          this.state.isPulsing = true;
-          this.state.pulse.startTime = null
+          this.frozenPulseTransforms = [];
+          // this.pulseSettings = duplicate(state.pulseSettings);
+          // this.state.isPulsing = true;
+          // this.state.pulse.startTime = null
         }
       });
-      const delay = lastDrawTime - state.state.pulse.startTime;
-      pulseDelay = this.anim.delay({ duration: delay });
+      // const delay = lastDrawTime - state.state.pulse.startTime;
+      // pulseDelay = this.anim.delay({ duration: delay });
     }
 
     if (scenarioAnimation != null || pulseTrigger != null) {
@@ -1115,21 +1147,53 @@ class DiagramElement {
     this.undim();
   }
 
-  pause(forcePause: boolean = false, clearAnimations: boolean = false, elementOnly: boolean = false) {
+  pause(optionsIn: {
+    // animation: {
+    // completeBeforePause: boolean,
+    // complete: boolean,
+    // clear: boolean,
+    // },
+    // pulse: {
+    //   completeBeforePause: boolean,
+    //   complete: boolean,
+    //   clear: boolean,
+    // }
+  }) {
+    // forcePause: boolean = false, clearAnimations: boolean = false, elementOnly: boolean = false) {
     const pause = () => {
       this.isPaused = true;
     };
+    let pauseWhenFinished = false;
+    const { animation, pulse, movingFreely } = this.pauseSettings;
+    // console.log(this.name, animation, this.animations.state)
+    // if (this.name === 'a') {
+    //   debugger;
+    // }
+    if (this.animations.state === 'animating') {
+      if (animation.completeBeforePause) {
+        pauseWhenFinished = true;
+      } else if (animation.complete) {
+        this.animations.cancelAll('complete');
+      } else if (animation.clear) {
+        console.log('asdfasdf')
+        this.animations.cancelAll('noComplete');
+      }
+    }
+    // console.log(this.name, pauseWhenFinished)
+    if (this.state.isPulsing) {
+      if (pulse.completeBeforePause) {
+        pauseWhenFinished = true;
+      } else if (pulse.complete) {
+        this.stopPulsing(true, 'complete');
+      } else if (pulse.clear) {
+        this.stopPulsing(true, 'noComplete');
+      }
+    }
 
-    if (
-      forcePause === false
-      && this.finishAnimationOnPause
-      && this.isAnimating()
-    ) {
+    // console.log(this.name, pauseWhenFinished)
+    if (pauseWhenFinished) {
       this.subscriptions.subscribe('animationFinished', pause, 1);
     } else {
-      if (clearAnimations) {
-        this.stop(true, 'noComplete', elementOnly);
-      }
       pause();
     }
   }
@@ -4415,11 +4479,11 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  pause(forcePause: boolean = false, clearAnimations: boolean = false) {
-    super.pause(forcePause, clearAnimations, true);
+  pause() {
+    super.pause();
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.pause(forcePause, clearAnimations, true);
+      element.pause();
     }
   }
 

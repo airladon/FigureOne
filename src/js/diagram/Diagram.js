@@ -1446,11 +1446,12 @@ class Diagram {
     this.draw(time);
   }
 
-  pause(forcePause: boolean = true, clearAnimations: boolean = false) {
+  pause() {
+    // forcePause: boolean = true, clearAnimations: boolean = false) {
     // if (window.asdf) {
     //   debugger;
     // }
-    this.elements.pause(forcePause, clearAnimations);
+    this.elements.pause();
     this.pauseTime = performance.now() / 1000;
     this.isPaused = true;
   }
