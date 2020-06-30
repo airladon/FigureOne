@@ -48,6 +48,7 @@ DiagramElementPrimitive {
     1,
   ],
   "copies": Array [],
+  "copyTransforms": Array [],
   "custom": Object {},
   "defaultColor": Array [
     0.95,
@@ -70,6 +71,7 @@ DiagramElementPrimitive {
     1,
   ],
   "drawPriority": 1,
+  "drawTransforms": Array [],
   "drawingObject": TextObject {
     "border": Array [
       Array [
@@ -196,6 +198,7 @@ DiagramElementPrimitive {
       },
     },
   },
+  "frozenPulseTransforms": Array [],
   "hasTouchableElements": false,
   "interactiveLocation": Point {
     "_type": "point",
@@ -425,6 +428,7 @@ DiagramElementPrimitive {
     "A": 1,
     "B": 0.5,
     "C": 0,
+    "allowFreezeOnStop": false,
     "callback": [Function],
     "delta": Point {
       "_type": "point",

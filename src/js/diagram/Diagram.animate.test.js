@@ -252,8 +252,8 @@ describe('Animate To State with pulse', () => {
     diagram.mock.timeStep(0);
     diagram.mock.timeStep(0.5);
     expect(a.getPosition()).toEqual(new Point(1, 1));
-    expect(a.pulseTransforms[0].order[0].x).toEqual(1.5);
-    expect(a.pulseTransforms[0].order[0].y).toEqual(1.5);
+    expect(a.drawTransforms[0].order[0].x).toEqual(1.5);
+    expect(a.drawTransforms[0].order[0].y).toEqual(1.5);
     const state = diagram.getState();
     diagram.stop();
     diagram.mock.timeStep(1);
@@ -262,30 +262,30 @@ describe('Animate To State with pulse', () => {
     diagram.animateToState(state);
     diagram.mock.timeStep(0);
     expect(a.getPosition()).toEqual(new Point(0, 0));
-    expect(a.pulseTransforms[0].order[0].x).toEqual(1);
-    expect(a.pulseTransforms[0].order[0].y).toEqual(1);
+    expect(a.drawTransforms[0].order[0].x).toEqual(1);
+    expect(a.drawTransforms[0].order[0].y).toEqual(1);
 
     diagram.mock.timeStep(0.5);
     expect(diagram.isAnimating()).toBe(true);
     expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
-    expect(a.pulseTransforms[0].order[0].x).toEqual(1);
-    expect(a.pulseTransforms[0].order[0].y).toEqual(1);
+    expect(a.drawTransforms[0].order[0].x).toEqual(1);
+    expect(a.drawTransforms[0].order[0].y).toEqual(1);
 
     diagram.mock.timeStep(1);
     expect(diagram.isAnimating()).toBe(true);
     expect(a.getPosition()).toEqual(new Point(1, 1));
-    expect(a.pulseTransforms[0].order[0].x).toEqual(1);
-    expect(a.pulseTransforms[0].order[0].y).toEqual(1);
+    expect(a.drawTransforms[0].order[0].x).toEqual(1);
+    expect(a.drawTransforms[0].order[0].y).toEqual(1);
 
     diagram.mock.timeStep(0.25);
     expect(a.getPosition()).toEqual(new Point(1, 1));
-    expect(round(a.pulseTransforms[0].order[0].x, 3)).toEqual(1.354);
-    expect(round(a.pulseTransforms[0].order[0].y, 3)).toEqual(1.354);
+    expect(round(a.drawTransforms[0].order[0].x, 3)).toEqual(1.354);
+    expect(round(a.drawTransforms[0].order[0].y, 3)).toEqual(1.354);
 
     diagram.mock.timeStep(0.25);
     expect(a.getPosition()).toEqual(new Point(1, 1));
-    expect(round(a.pulseTransforms[0].order[0].x, 3)).toEqual(1.5);
-    expect(round(a.pulseTransforms[0].order[0].y, 3)).toEqual(1.5);
+    expect(round(a.drawTransforms[0].order[0].x, 3)).toEqual(1.5);
+    expect(round(a.drawTransforms[0].order[0].y, 3)).toEqual(1.5);
     expect(diagram.isAnimating()).toBe(true);
   })
 });
