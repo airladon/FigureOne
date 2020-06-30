@@ -7,6 +7,7 @@ DiagramElementPrimitive {
   "anim": Object {
     "builder": [Function],
     "color": [Function],
+    "delay": [Function],
     "dim": [Function],
     "dissolveIn": [Function],
     "dissolveOut": [Function],
@@ -46,6 +47,7 @@ DiagramElementPrimitive {
     0,
     1,
   ],
+  "copies": Array [],
   "custom": Object {},
   "defaultColor": Array [
     0.95,
@@ -245,6 +247,7 @@ DiagramElementPrimitive {
       },
     ],
   },
+  "lastDrawTime": 0,
   "lastDrawTransform": Transform {
     "_type": "transform",
     "index": 0,
