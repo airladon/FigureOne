@@ -1165,17 +1165,13 @@ class DiagramElement {
     };
     let pauseWhenFinished = false;
     const { animation, pulse, movingFreely } = this.pauseSettings;
-    // console.log(this.name, animation, this.animations.state)
-    // if (this.name === 'a') {
-    //   debugger;
-    // }
+
     if (this.animations.state === 'animating') {
       if (animation.completeBeforePause) {
         pauseWhenFinished = true;
       } else if (animation.complete) {
         this.animations.cancelAll('complete');
       } else if (animation.clear) {
-        console.log('asdfasdf')
         this.animations.cancelAll('noComplete');
       }
     }
@@ -2850,7 +2846,9 @@ class DiagramElementPrimitive extends DiagramElement {
       if (!this.isShown) {
         return;
       }
-      this.pulseTransforms = this.getPulseTransforms(now);
+      if (!this.isPaused) {
+        this.pulseTransforms = this.getPulseTransforms(now);
+      }
       this.drawTransforms = this.getDrawTransforms(newTransform);
       // if(now === 1 && this.name === 'p1') {
       //   console.log(this.getPosition('diagram'))
