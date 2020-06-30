@@ -101,7 +101,8 @@ class DiagramElement {
   transform: Transform;        // Transform of diagram element
   pulseTransforms: Array<Transform>;
   copyTransforms: Array<Transform>;
-  
+  drawTransforms: Array<Transform>;
+
   // presetTransforms: Object;       // Convenience dict of transform presets
   lastDrawTransform: Transform; // Transform matrix used in last draw
   lastDrawPulseTransform: Transform; // Transform matrix used in last draw
@@ -634,6 +635,8 @@ class DiagramElement {
     this.unrenderNextDraw = false;
     this.renderedOnNextDraw = false;
     this.pulseTransforms = [];
+    this.copyTransforms = [];
+    this.drawTransforms = [];
   }
 
   animationFinished(typeOfAnimation: 'pulse' | 'movingFreely' | 'animation' = 'animation') {
@@ -953,6 +956,26 @@ class DiagramElement {
     //     .scenario(joinObjects({ target }, options))
     //     .start();
     // }
+  }
+
+  getDrawTransforms(transform: Transform) {
+    let drawTransforms = [transform];
+    const transformBy = (inputTransforms, copyTransforms) => {
+      const newTransforms = [];
+      inputTransforms.forEach((it) => {
+        copyTransforms.forEach((t) => {
+          newTransforms.push(it.transform(t));
+        });
+      });
+      if (newTransforms.length > 0) {
+        return newTransforms;
+      }
+      return inputTransforms;
+    }
+
+    drawTransforms = transformBy([transform], this.copyTransforms);
+    drawTransforms = transformBy(drawTransforms, this.pulseTransforms);
+    return drawTransforms;
   }
 
   exec(
@@ -1730,7 +1753,7 @@ class DiagramElement {
   // new transform of the object. In contrast, pulsing is not saved as the
   // current transform of the object, and is used only in the current draw
   // of the element.
-  transformWithPulse(now: number, transform: Transform): Array<Transform> {
+  getPulseTransforms(now: number): Array<Transform> {
     const pulseTransforms = [];    // To output list of transform matrices
 
     // If the diagram element is currently pulsing, the calculate the current
@@ -1779,12 +1802,10 @@ class DiagramElement {
 
         // Push the pulse transformed matrix to the array of pulse matrices\
         if (pTransform != null) {
-          pulseTransforms.push(transform.transform(pTransform));
+          pulseTransforms.push(pTransform);
         }
       }
     // If not pulsing, then make no changes to the transformMatrix.
-    } else {
-      pulseTransforms.push(transform._dup());
     }
     return pulseTransforms;
   }
@@ -2749,8 +2770,8 @@ class DiagramElementPrimitive extends DiagramElement {
       if (!this.isShown) {
         return;
       }
-      this.pulseTransforms = this.transformWithPulse(now, newTransform);
-
+      this.pulseTransforms = this.getPulseTransforms(now);
+      this.drawTransforms = this.getDrawTransforms(newTransform);
       // if(now === 1 && this.name === 'p1') {
       //   console.log(this.getPosition('diagram'))
       //   console.log(this.getPosition('local'))
@@ -2758,7 +2779,7 @@ class DiagramElementPrimitive extends DiagramElement {
       // }
 
       // eslint-disable-next-line prefer-destructuring
-      this.lastDrawPulseTransform = this.pulseTransforms[0];
+      this.lastDrawPulseTransform = this.drawTransforms[0];
       // this.lastDrawTransform = pulseTransforms[0];
 
       // let pointCount = -1;
@@ -2827,7 +2848,7 @@ class DiagramElementPrimitive extends DiagramElement {
       // }
       if (pointCount > 0) {
         // console.log(this.pulseTransforms, pointCount)
-        this.pulseTransforms.forEach((t) => {
+        this.drawTransforms.forEach((t) => {
           // console.log(t.matrix(), colorToUse, canvasIndex, pointCount)
           this.drawingObject.drawWithTransformMatrix(
             t.matrix(), colorToUse, canvasIndex, pointCount,
@@ -3232,17 +3253,18 @@ class DiagramElementCollection extends DiagramElement {
       };
       const newTransform = parentTransform.transform(this.getTransform());
       this.lastDrawTransform = newTransform._dup();
-      this.pulseTransforms = this.transformWithPulse(now, newTransform);
+      this.pulseTransforms = this.getPulseTransforms(now);
+      this.drawTransforms = this.getDrawTransforms(newTransform);
       // this.pulseTransforms
       // eslint-disable-next-line prefer-destructuring
-      this.lastDrawPulseTransform = this.pulseTransforms[0];
+      this.lastDrawPulseTransform = this.drawTransforms[0];
       // this.lastDrawTransform = pulseTransforms[0];
 
       // this.lastDrawPulseTransform = pulseTransforms[0]._dup();
 
-      for (let k = 0; k < this.pulseTransforms.length; k += 1) {
+      for (let k = 0; k < this.drawTransforms.length; k += 1) {
         for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-          this.elements[this.drawOrder[i]].setupDraw(this.pulseTransforms[k], now, canvasIndex);
+          this.elements[this.drawOrder[i]].setupDraw(this.drawTransforms[k], now, canvasIndex);
         }
       }
       // if (this.unrenderNextDraw) {

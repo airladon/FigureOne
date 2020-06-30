@@ -1737,8 +1737,8 @@ class Transform {
     return this.scale(1, 1).rotate(0).translate(0, 0);
   }
 
-  translate(x: number | Point | TypeF1DefTranslation, y: number = 0) {
-    const translation = new Translation(x, y, this.name);
+  translate(x: number | Point | TypeF1DefTranslation, y: number = 0, name: string = this.name) {
+    const translation = new Translation(x, y, name);
     const order = this.order.slice();
 
     if (this.index === this.order.length) {
@@ -1749,12 +1749,12 @@ class Transform {
       this.calcMatrix();
       return this;
     }
-    return new Transform(order, this.name);
+    return new Transform(order, name);
   }
 
-  rotate(r: number | TypeF1DefRotation) {
-    const rotation = new Rotation(r, this.name);
-    rotation.name = this.name;
+  rotate(r: number | TypeF1DefRotation, name: string = this.name) {
+    const rotation = new Rotation(r, name);
+    // rotation.name = name;
     const order = this.order.slice();
     if (this.index === this.order.length) {
       order.push(rotation);
@@ -1766,11 +1766,11 @@ class Transform {
     }
     // this.order.push(new Rotation(r));
     // this.calcMatrix();
-    return new Transform(order, this.name);
+    return new Transform(order, name);
   }
 
-  scale(x: number | Point | TypeF1DefScale, y: number = 0) {
-    const scale = new Scale(x, y, this.name);
+  scale(x: number | Point | TypeF1DefScale, y: number = 0, name: string = this.name) {
+    const scale = new Scale(x, y, name);
     const order = this.order.slice();
 
     if (this.index === this.order.length) {
@@ -1781,7 +1781,7 @@ class Transform {
       this.calcMatrix();
       return this;
     }
-    return new Transform(order, this.name);
+    return new Transform(order, name);
   }
 
   remove(transformNames: string | Array<string>) {
