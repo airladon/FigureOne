@@ -3,7 +3,7 @@
 import { Point } from '../tools/g2';
 import { round } from '../tools/math';
 import {
-  duplicate, minify, unminify,
+  duplicate, minify, unminify, joinObjects,
   ObjectTracker, download, SubscriptionManager,
 } from '../tools/tools';
 import type { DiagramElement } from './Element';
@@ -1423,17 +1423,29 @@ class Recorder {
 
   // }
 
-  pausePlayback(savePauseState: boolean = true) {
+  // On pause, animations and pauses can complete and clear:
+  // Complete  Clear
+  // True      True     Animations finish and nextFrame nothing will happen
+  // True      False    Animations finish and nextFrame nothing will happen
+  //                    as by completing animations they will naturally clear
+  // False     True     Animations freeze and nextFrame nothing will happen
+  // False     False    Animations freeze and nextFrame will continue
+  //
+  // Pulse
+  // True      True     Pulse finish and nextFrame nothing will happen
+  // True      False    Pulse finish and nextFrame nothing will happen
+  //                    as by completing animations they will naturally clear
+  // False     True     Pulse freeze and nextFrame nothing will happen
+  // False     False    Pulse freeze and nextFrame will continue
+  pausePlayback() {
     this.currentTime = this.getCurrentTime();
-    if (savePauseState) {
-      this.pauseState = this.diagram.getState({
-        precision: this.precision,
-        ignoreShown: true,
-      });
-    }
+
+    this.pauseState = this.diagram.getState({
+      precision: this.precision,
+      ignoreShown: true,
+    });
 
     const pause = () => {
-      // console.log('recorder pause');
       this.state = 'idle';
       this.subscriptions.trigger('playbackStopped');
     };
@@ -1442,7 +1454,8 @@ class Recorder {
       this.audio.pause();
       this.isAudioPlaying = false;
     }
-    this.diagram.pause(false, true);
+    
+    this.diagram.pause();
     // console.log(this.diagram.isAnimating())
     if (this.diagram.isAnimating()) {
       this.subscriptions.trigger('preparingToPause');

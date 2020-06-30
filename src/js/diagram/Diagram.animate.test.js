@@ -289,3 +289,139 @@ describe('Animate To State with pulse', () => {
     expect(diagram.isAnimating()).toBe(true);
   })
 });
+describe.only('Pause Animations', () => {
+  let diagram;
+  let a;
+  beforeEach(() => {
+    diagram = makeDiagram();
+    diagram.addElements([
+      {
+        name: 'a',
+        method: 'polygon',
+      }
+    ]);
+    a = diagram.elements._a;
+    diagram.initialize();
+
+  });
+  test('Animation - Freeze on Pause, continue on next unpaused frame', () => {
+    a.animations.new()
+      .position({ target: [1, 0], duration: 1 })
+      .start();
+    a.pauseSettings.animation = {
+      animation: {
+        complete: false,
+        clear: false,
+        completeBeforePause: false,
+      }
+    };
+    diagram.mock.timeStep(0);
+    diagram.mock.timeStep(0.5);
+    expect(a.getPosition().x).toEqual(0.5);
+    expect(diagram.isAnimating()).toBe(true);
+
+    diagram.pause();
+    expect(diagram.isPaused).toBe(true);
+    expect(a.isPaused).toBe(true)
+    expect(a.getPosition().x).toEqual(0.5);
+    expect(diagram.isAnimating()).toBe(true);
+
+    diagram.mock.timeStep(0.5);
+    expect(a.getPosition().x).toEqual(0.5);
+    expect(diagram.isAnimating()).toBe(true);
+
+    diagram.unpause();
+    diagram.mock.timeStep(0.5);
+    expect(a.getPosition().x).toEqual(1);
+    expect(diagram.isAnimating()).toBe(false);
+  });
+  test('Animation - Freeze on Pause', () => {
+    a.animations.new()
+      .position({ target: [1, 0], duration: 1 })
+      .start();
+    a.pauseSettings.animation = {
+      complete: false,
+      clear: true,
+      completeBeforePause: false,
+    };
+    diagram.mock.timeStep(0);
+    diagram.mock.timeStep(0.5);
+    expect(a.getPosition().x).toEqual(0.5);
+    expect(diagram.isAnimating()).toBe(true);
+
+    diagram.pause();
+    expect(diagram.isPaused).toBe(true);
+    expect(a.isPaused).toBe(true)
+    expect(a.getPosition().x).toEqual(0.5);
+    expect(diagram.isAnimating()).toBe(false);
+
+    diagram.mock.timeStep(0.5);
+    expect(a.getPosition().x).toEqual(0.5);
+    expect(diagram.isAnimating()).toBe(false);
+
+    diagram.unpause();
+    diagram.mock.timeStep(0.5);
+    expect(a.getPosition().x).toEqual(0.5);
+    expect(diagram.isAnimating()).toBe(false);
+  });
+  test('Animation - Complete before pause', () => {
+    a.animations.new()
+      .position({ target: [1, 0], duration: 1 })
+      .start();
+    a.pauseSettings.animation = {
+      complete: false,
+      clear: false,
+      completeBeforePause: true,
+    };
+    diagram.mock.timeStep(0);
+    diagram.mock.timeStep(0.5);
+    expect(a.getPosition().x).toEqual(0.5);
+    expect(diagram.isAnimating()).toBe(true);
+
+    diagram.pause();
+    expect(diagram.isPaused).toBe(true);
+    expect(a.isPaused).toBe(false)
+    expect(a.getPosition().x).toEqual(0.5);
+    expect(diagram.isAnimating()).toBe(true);
+
+    diagram.mock.timeStep(0.5);
+    expect(a.getPosition().x).toEqual(1);
+    expect(diagram.isAnimating()).toBe(false);
+    expect(a.isPaused).toBe(true);
+
+    diagram.unpause();
+    diagram.mock.timeStep(0.5);
+    expect(a.getPosition().x).toEqual(1);
+    expect(diagram.isAnimating()).toBe(false);
+  });
+  test('Animation - Complete on pause', () => {
+    a.animations.new()
+      .position({ target: [1, 0], duration: 1 })
+      .start();
+    a.pauseSettings.animation = {
+      complete: true,
+      clear: false,
+      completeBeforePause: false,
+    };
+    diagram.mock.timeStep(0);
+    diagram.mock.timeStep(0.5);
+    expect(a.getPosition().x).toEqual(0.5);
+    expect(diagram.isAnimating()).toBe(true);
+
+    diagram.pause();
+    expect(diagram.isPaused).toBe(true);
+    expect(a.isPaused).toBe(true)
+    expect(a.getPosition().x).toEqual(1);
+    expect(diagram.isAnimating()).toBe(false);
+
+    diagram.mock.timeStep(0.5);
+    expect(a.getPosition().x).toEqual(1);
+    expect(diagram.isAnimating()).toBe(false);
+    expect(a.isPaused).toBe(true);
+
+    diagram.unpause();
+    diagram.mock.timeStep(0.5);
+    expect(a.getPosition().x).toEqual(1);
+    expect(diagram.isAnimating()).toBe(false);
+  });
+});
