@@ -915,9 +915,9 @@ class DiagramElement {
     ) {
       target.transform = stateTransform;
     }
-    if (state.isPulsing) {
+    // if (state.isPulsing) {
 
-    }
+    // }
 
     let scenarioAnimation = null;
     if (Object.keys(target).length > 0) {
@@ -930,11 +930,14 @@ class DiagramElement {
       pulseTrigger = this.anim.trigger({
         callback: () => {
           this.pulseSettings = duplicate(state.pulseSettings);
+          this.state.isPulsing = true;
+          this.state.pulse.startTime = null
         }
       });
       const delay = lastDrawTime - state.state.pulse.startTime;
-      pulseDelay = this.anim.delay(delay);
+      pulseDelay = this.anim.delay({ duration: delay });
     }
+
     if (scenarioAnimation != null || pulseTrigger != null) {
       this.animations.new()
         .then(scenarioAnimation)

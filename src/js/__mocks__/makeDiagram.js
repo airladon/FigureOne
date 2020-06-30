@@ -107,6 +107,7 @@ export default function makeDiagram(
       global.performance.now = () => newNow;
       diagram.animateNextFrame();
       diagram.draw(newNow / 1000);
+      diagram.mock.duration += deltaTimeInSeconds;
     }
   }
   return diagram;
