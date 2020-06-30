@@ -99,6 +99,9 @@ export type TypeScenario = {
 //
 class DiagramElement {
   transform: Transform;        // Transform of diagram element
+  pulseTransforms: Array<Transform>;
+  copyTransforms: Array<Transform>;
+  
   // presetTransforms: Object;       // Convenience dict of transform presets
   lastDrawTransform: Transform; // Transform matrix used in last draw
   lastDrawPulseTransform: Transform; // Transform matrix used in last draw
@@ -879,15 +882,15 @@ class DiagramElement {
   setFirstTransform(parentTransform: Transform) {
   }
 
-  animateToPulseTransforms(pulseTranforms: Array<Transform>) {
-    let startTransforms = this.pulseTransforms;
-    if (pulseTransforms.length != this.startTransforms.length) {
-      startTransforms = [];
-      for (let i = 0; i < pulseTranforms.length; i += 1) {
-        startTransforms.push(this.transform._dup());
-      }
-    }
-  }
+  // animateToPulseTransforms(pulseTranforms: Array<Transform>) {
+  //   let startTransforms = this.pulseTransforms;
+  //   if (pulseTransforms.length != this.startTransforms.length) {
+  //     startTransforms = [];
+  //     for (let i = 0; i < pulseTranforms.length; i += 1) {
+  //       startTransforms.push(this.transform._dup());
+  //     }
+  //   }
+  // }
 
   animateToState(
     state: Object,
