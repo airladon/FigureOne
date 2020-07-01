@@ -443,32 +443,25 @@ describe.only('Pause Animations', () => {
     expect(diagram.isPaused).toBe(true);
     expect(a.isPaused).toBe(true)
     expect(a.pulseTransforms[0].s().round(3).x).toEqual(1.707);
-    // expect(a.pulseTransforms.length).toEqual(1);
-    // expect(a.frozenPulseTransforms[0].s().round(3).x).toEqual(1.707);
     expect(diagram.isAnimating()).toBe(true);
-    // diagram.mock.timeStep(0);
-    // expect(a.pulseTransforms.length).toEqual(0);
-    // expect(a.frozenPulseTransforms[0].s().round(3).x).toEqual(1.707);
 
     diagram.mock.timeStep(0.5);
     expect(a.pulseTransforms[0].s().round(3).x).toEqual(1.707);
-    // expect(a.pulseTransforms.length).toEqual(0);
-    // expect(a.frozenPulseTransforms[0].s().round(3).x).toEqual(1.707);
     expect(diagram.isAnimating()).toBe(true);
 
     diagram.unpause();
     diagram.mock.timeStep(0.5);
     expect(a.pulseTransforms[0].s().round(3).x).toEqual(2);
-    // expect(a.frozenPulseTransforms.length).toEqual(0);
     expect(diagram.isAnimating()).toBe(true);
   });
-  test.only('Pulse - Freeze on Pause', () => {
+  test('Pulse - Freeze on Pause', () => {
     a.pulseScaleNow(2, 2);
     a.pauseSettings.pulse = {
       complete: false,
       clear: true,
       completeBeforePause: false,
     };
+    a.pulseSettings.allowFreezeOnStop = true;
     diagram.mock.timeStep(0);
     diagram.mock.timeStep(0.5);
     expect(a.pulseTransforms[0].s().round(3).x).toEqual(1.707);
@@ -477,26 +470,83 @@ describe.only('Pause Animations', () => {
     expect(diagram.isAnimating()).toBe(true);
 
     diagram.pause();
+
     expect(diagram.isPaused).toBe(true);
     expect(a.isPaused).toBe(true)
-    // expect(a.pulseTransforms[0].s().round(3).x).toEqual(1.707);
-    // expect(a.pulseTransforms.length).toEqual(1);
-    // expect(a.frozenPulseTransforms[0].s().round(3).x).toEqual(1.707);
-    expect(diagram.isAnimating()).toBe(true);
+    expect(diagram.isAnimating()).toBe(false);
     diagram.mock.timeStep(0);
     expect(a.pulseTransforms.length).toEqual(0);
     expect(a.frozenPulseTransforms[0].s().round(3).x).toEqual(1.707);
 
     diagram.mock.timeStep(0.5);
-    expect(a.pulseTransforms[0].s().round(3).x).toEqual(1.707);
-    // expect(a.pulseTransforms.length).toEqual(0);
-    // expect(a.frozenPulseTransforms[0].s().round(3).x).toEqual(1.707);
-    expect(diagram.isAnimating()).toBe(true);
+    expect(a.pulseTransforms.length).toEqual(0);
+    expect(a.frozenPulseTransforms[0].s().round(3).x).toEqual(1.707);
+    expect(diagram.isAnimating()).toBe(false);
 
     diagram.unpause();
     diagram.mock.timeStep(0.5);
-    expect(a.pulseTransforms[0].s().round(3).x).toEqual(2);
-    // expect(a.frozenPulseTransforms.length).toEqual(0);
+    expect(a.pulseTransforms.length).toEqual(0);
+    expect(a.frozenPulseTransforms[0].s().round(3).x).toEqual(1.707);
+    expect(diagram.isAnimating()).toBe(false);
+  });
+  test('Pulse - Complete before Pause', () => {
+    a.pulseScaleNow(2, 2);
+    a.pauseSettings.pulse = {
+      complete: false,
+      clear: false,
+      completeBeforePause: true,
+    };
+    a.pulseSettings.allowFreezeOnStop = true;
+    diagram.mock.timeStep(0);
+    diagram.mock.timeStep(0.5);
+    expect(a.pulseTransforms[0].s().round(3).x).toEqual(1.707);
+    expect(a.frozenPulseTransforms.length).toEqual(0);
+    expect(a.state.isPulsing).toBe(true);
     expect(diagram.isAnimating()).toBe(true);
+
+    diagram.pause();
+
+    diagram.mock.timeStep(0.5);
+    expect(a.pulseTransforms[0].s().round(3).x).toEqual(2);
+    expect(a.state.isPulsing).toBe(true);
+    expect(diagram.isAnimating()).toBe(true);
+
+    diagram.mock.timeStep(0.5);
+    expect(a.pulseTransforms[0].s().round(3).x).toEqual(1.707);
+    expect(a.state.isPulsing).toBe(true);
+    expect(diagram.isAnimating()).toBe(true);
+    expect(a.isPaused).toBe(false);
+    expect(diagram.isPaused).toBe(true);
+
+    diagram.mock.timeStep(0.5);
+    expect(a.pulseTransforms[0].s().round(3).x).toEqual(1);
+    expect(a.state.isPulsing).toBe(false);
+    expect(diagram.isAnimating()).toBe(false);
+    expect(a.isPaused).toBe(true);
+    expect(diagram.isPaused).toBe(true);
+  });
+  test('Pulse - Complete on Pause', () => {
+    a.pulseScaleNow(2, 2);
+    a.pauseSettings.pulse = {
+      complete: true,
+      clear: false,
+      completeBeforePause: false,
+    };
+    a.pulseSettings.allowFreezeOnStop = true;
+    diagram.mock.timeStep(0);
+    diagram.mock.timeStep(0.5);
+    expect(a.pulseTransforms[0].s().round(3).x).toEqual(1.707);
+    expect(a.frozenPulseTransforms.length).toEqual(0);
+    expect(a.state.isPulsing).toBe(true);
+    expect(diagram.isAnimating()).toBe(true);
+
+    diagram.pause();
+
+    diagram.mock.timeStep(0);
+    expect(a.pulseTransforms.length).toEqual(0);
+    expect(a.state.isPulsing).toBe(false);
+    expect(diagram.isAnimating()).toBe(false);
+    expect(a.isPaused).toBe(true);
+    expect(diagram.isPaused).toBe(true);
   });
 });

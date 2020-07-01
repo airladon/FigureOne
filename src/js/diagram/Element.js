@@ -1147,18 +1147,7 @@ class DiagramElement {
     this.undim();
   }
 
-  pause(optionsIn: {
-    // animation: {
-    // completeBeforePause: boolean,
-    // complete: boolean,
-    // clear: boolean,
-    // },
-    // pulse: {
-    //   completeBeforePause: boolean,
-    //   complete: boolean,
-    //   clear: boolean,
-    // }
-  }) {
+  pause() {
     // forcePause: boolean = false, clearAnimations: boolean = false, elementOnly: boolean = false) {
     const pause = () => {
       this.isPaused = true;
@@ -1181,6 +1170,7 @@ class DiagramElement {
         pauseWhenFinished = true;
       } else if (pulse.complete) {
         this.stopPulsing(true, 'complete');
+        // this.pulseTransforms = [];
       } else if (pulse.clear) {
         this.stopPulsing(true, 'noComplete');
       }
@@ -1998,6 +1988,11 @@ class DiagramElement {
       && (forceSetToEndOfPlan === false || forceSetToEndOfPlan === 'noComplete')
     ) {
       this.frozenPulseTransforms = this.pulseTransforms.map(c => c._dup());
+      // this.pulseTransforms = this.pulseTransforms;
+      this.pulseTransforms = [];
+    }
+    if (forceSetToEndOfPlan === 'complete' || forceSetToEndOfPlan === true) {
+      this.pulseTransforms = [];
     }
     this.state.isPulsing = false;
     if (this.pulseSettings.callback) {
