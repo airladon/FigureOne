@@ -418,18 +418,18 @@ DiagramElementPrimitive {
   "parent": null,
   "pauseSettings": Object {
     "animation": Object {
-      "clear": false,
-      "complete": true,
+      "clear": true,
+      "complete": false,
       "completeBeforePause": false,
     },
     "movingFreely": Object {
-      "clear": false,
+      "clear": true,
       "complete": false,
       "completeBeforePause": false,
     },
     "pulse": Object {
-      "clear": false,
-      "complete": true,
+      "clear": true,
+      "complete": false,
       "completeBeforePause": false,
     },
   },
