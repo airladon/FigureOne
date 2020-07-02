@@ -289,7 +289,7 @@ describe('Animate To State with pulse', () => {
     expect(diagram.isAnimating()).toBe(true);
   })
 });
-describe.only('Pause Animations', () => {
+describe('Pause Animations', () => {
   let diagram;
   let a;
   beforeEach(() => {

@@ -2161,7 +2161,8 @@ describe('Diagram Recorder', () => {
     let playbackStoppedCallback;
     beforeEach(() => {
       a = diagram.getElement('a');
-      a.finishAnimationOnPause = true;
+      a.pauseSettings.animation.complete = false;
+      a.pauseSettings.animation.clear = true;
       const startAnimation = () => {
         a.animations.new()
           .position({ start: [0, 0], target: [1, 1], duration: 2 })
@@ -2315,6 +2316,8 @@ describe('Diagram Recorder', () => {
       expect(a.getPosition()).toEqual(new Point(1, 1));
     });
     test('Pause at start of animation', () => {
+      a.pauseSettings.animation.completeBeforePause = true;
+      // a.pauseSettings.animation.clear = true;
       expect(recorder.state).toBe('idle');
       recorder.startPlayback(0);
       expect(preparingToPlayCallback.mock.calls.length).toBe(0);
@@ -2374,6 +2377,7 @@ describe('Diagram Recorder', () => {
       expect(a.getPosition()).toEqual(new Point(1, 1));
     });
     test('Pause during animation', () => {
+      a.pauseSettings.animation.completeBeforePause = true;
       recorder.startPlayback(0);
       expect(recorder.state).toBe('playing');
       expect(diagram.isAnimating()).toBe(false);
@@ -2433,7 +2437,8 @@ describe('Diagram Recorder', () => {
       expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
 
       // Pause Test
-      a.finishAnimationOnPause = false;
+      // a.finishAnimationOnPause = false;
+      a.asdf = true;
       recorder.pausePlayback();
       expect(recorder.state).toBe('idle');
       expect(diagram.getRemainingAnimationTime()).toBe(0);
