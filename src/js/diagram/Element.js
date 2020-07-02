@@ -348,18 +348,18 @@ class DiagramElement {
     this.pauseSettings = {
       animation: {
         completeBeforePause: false,
-        complete: true,
-        clear: false,
+        complete: false,
+        clear: true,
       },
       pulse: {
         completeBeforePause: false,
-        complete: true,
-        clear: false,
+        complete: false,
+        clear: true,
       },
       movingFreely: {
         completeBeforePause: false,
         complete: false,
-        clear: false,
+        clear: true,
       }
     }
 
@@ -947,6 +947,11 @@ class DiagramElement {
       target.color = state.color;
     }
     const stateTransform = getTransform(state.transform);
+    // if (this.name === 'a') {
+    //   console.log(stateTransform)
+    //   console.log(this.transform)
+    //   console.log(this.transform.isEqualTo(stateTransform))
+    // }
     if (
       !this.transform.isEqualTo(stateTransform)
       && (
@@ -956,8 +961,9 @@ class DiagramElement {
     ) {
       target.transform = stateTransform;
     }
-    // if (state.isPulsing) {
 
+    // if (this.name === 'a') {
+    //   console.log(target)
     // }
 
     let scenarioAnimation = null;
@@ -978,21 +984,24 @@ class DiagramElement {
       });
       const delay = lastDrawTime - state.state.pulse.startTime;
       pulseDelay = this.anim.delay({ duration: delay });
-    } else {
-      pulseTrigger = this.anim.trigger({
-        callback: () => {
-          this.frozenPulseTransforms = [];
-        }
-      });
     }
 
+    // if (this.name === 'a') {
+    //   console.log(scenarioAnimation)
+    //   console.log(pulseTrigger)
+    // }
     if (scenarioAnimation != null || pulseTrigger != null) {
       this.animations.new()
         .then(scenarioAnimation)
         .then(pulseTrigger)
         .then(pulseDelay)
         .start();
+    } else {
+      this.frozenPulseTransforms = [];
     }
+    // if (this.name === 'a') {
+    //   debugger;
+    // }
     // if (Object.keys(target).length > 0) {
     //   this.animations.new()
     //     .scenario(joinObjects({ target }, options))
