@@ -47,7 +47,6 @@ DiagramElementPrimitive {
     0,
     1,
   ],
-  "copies": Array [],
   "copyTransforms": Array [],
   "custom": Object {},
   "defaultColor": Array [
@@ -417,6 +416,23 @@ DiagramElementPrimitive {
   "onClick": null,
   "opacity": 1,
   "parent": null,
+  "pauseSettings": Object {
+    "animation": Object {
+      "clear": false,
+      "complete": true,
+      "completeBeforePause": false,
+    },
+    "movingFreely": Object {
+      "clear": false,
+      "complete": false,
+      "completeBeforePause": false,
+    },
+    "pulse": Object {
+      "clear": false,
+      "complete": true,
+      "completeBeforePause": false,
+    },
+  },
   "pointsDefinition": Object {},
   "pointsToDraw": -1,
   "pulseDefault": Object {
