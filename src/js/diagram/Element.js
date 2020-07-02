@@ -967,17 +967,23 @@ class DiagramElement {
     // let pulseAnimation = null;
     let pulseTrigger = null;
     let pulseDelay = null;
-    if (state.state.isPulsing) {
+    if (state.state.isPulsing && this.frozenPulseTransforms.length === 0) {
+      pulseTrigger = this.anim.trigger({
+        callback: () => {
+          // this.frozenPulseTransforms = [];
+          this.pulseSettings = duplicate(state.pulseSettings);
+          this.state.isPulsing = true;
+          this.state.pulse.startTime = null
+        }
+      });
+      const delay = lastDrawTime - state.state.pulse.startTime;
+      pulseDelay = this.anim.delay({ duration: delay });
+    } else {
       pulseTrigger = this.anim.trigger({
         callback: () => {
           this.frozenPulseTransforms = [];
-          // this.pulseSettings = duplicate(state.pulseSettings);
-          // this.state.isPulsing = true;
-          // this.state.pulse.startTime = null
         }
       });
-      // const delay = lastDrawTime - state.state.pulse.startTime;
-      // pulseDelay = this.anim.delay({ duration: delay });
     }
 
     if (scenarioAnimation != null || pulseTrigger != null) {
@@ -1154,8 +1160,10 @@ class DiagramElement {
     };
     let pauseWhenFinished = false;
     const { animation, pulse, movingFreely } = this.pauseSettings;
-
-    if (this.animations.state === 'animating') {
+    // if (this.name === 'a' && this.asdf) {
+    //   debugger;
+    // }
+    if (this.animations.isAnimating()) {
       if (animation.completeBeforePause) {
         pauseWhenFinished = true;
       } else if (animation.complete) {
@@ -1175,7 +1183,6 @@ class DiagramElement {
         this.stopPulsing(true, 'noComplete');
       }
     }
-
     // console.log(this.name, pauseWhenFinished)
     if (pauseWhenFinished) {
       this.subscriptions.subscribe('animationFinished', pause, 1);

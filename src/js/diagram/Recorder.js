@@ -1456,7 +1456,6 @@ class Recorder {
     }
     
     this.diagram.pause();
-    // console.log(this.diagram.isAnimating())
     if (this.diagram.isAnimating()) {
       this.subscriptions.trigger('preparingToPause');
       this.state = 'preparingToPause';
