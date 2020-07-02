@@ -1231,8 +1231,9 @@ class Recorder {
     }
 
     this.diagram.unpause();
-    this.state = 'preparingToPlay';
+    let finishedFlag = false;
     const finished = () => {
+      finishedFlag = true;
       this.diagram.setState(this.pauseState);
       this.state = 'playing';
       this.setVideoToNowDeltaTime(this.currentTime);
@@ -1263,7 +1264,8 @@ class Recorder {
       },
       finished,
     );
-    if (this.diagram.isAnimating()) {
+    if (this.diagram.isAnimating() && !finishedFlag) {
+      this.state = 'preparingToPlay';
       this.subscriptions.trigger('preparingToPlay');
     }
     // if (animationCount === 0) {
