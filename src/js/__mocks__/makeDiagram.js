@@ -105,6 +105,7 @@ export default function makeDiagram(
       const { duration, initialTime } = diagram.mock;
       const newNow = (duration + deltaTimeInSeconds + initialTime) * 1000;
       global.performance.now = () => newNow;
+      jest.advanceTimersByTime((deltaTimeInSeconds * 1000));
       diagram.animateNextFrame();
       diagram.draw(newNow / 1000);
       diagram.mock.duration += deltaTimeInSeconds;
