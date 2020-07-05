@@ -196,6 +196,7 @@ class Recorder {
     isAnimating: () => boolean,
     setAnimationFinishedCallback: ?(string | (() => void)) => void,
     subscriptions: SubscriptionManager,
+    getPauseState: () => 'paused' | 'unpaused' | 'preparingToPause' | 'preparingToPlay',
   }
 
   // timeoutID: ?TimeoutID;
@@ -1457,15 +1458,22 @@ class Recorder {
       this.isAudioPlaying = false;
     }
     
+    this.diagram.subscriptions.subscribe('paused', pause, 1);
     this.diagram.pause();
-    if (this.diagram.isAnimating()) {
+    if (this.diagram.getPauseState() === 'preparingToPause') {
       this.subscriptions.trigger('preparingToPause');
       this.state = 'preparingToPause';
       // console.log('recorder prep to pause')
-      this.diagram.subscriptions.subscribe('animationsFinished', pause, 1);
-    } else {
-      pause();
+      // this.diagram.subscriptions.subscribe('animationsFinished', pause, 1);
     }
+    // if (this.diagram.isAnimating()) {
+    //   this.subscriptions.trigger('preparingToPause');
+    //   this.state = 'preparingToPause';
+    //   // console.log('recorder prep to pause')
+    //   this.diagram.subscriptions.subscribe('animationsFinished', pause, 1);
+    // } else {
+    //   pause();
+    // }
   }
 
 
