@@ -206,6 +206,7 @@ class DiagramElement {
     pulse: {
       startTime: ?number,
     },
+    pause: 'paused' | 'preparingToPause' | 'preparingToUnpause' | 'unpaused';
   };
 
   animations: animations.AnimationManager;
@@ -652,6 +653,7 @@ class DiagramElement {
       pulse: {
         startTime: null,
       },
+      pause: 'unpaused',
     };
     this.interactiveLocation = new Point(0, 0);
     this.animationFinishedCallback = null;
@@ -967,12 +969,15 @@ class DiagramElement {
     // }
 
     let scenarioAnimation = null;
+    let duration = 0;
     if (Object.keys(target).length > 0) {
       scenarioAnimation = this.anim.scenario(joinObjects({ target }, options));
+      duration = scenarioAnimation.duration;
     }
     // let pulseAnimation = null;
     let pulseTrigger = null;
     let pulseDelay = null;
+    let delay = 0;
     if (state.state.isPulsing && this.frozenPulseTransforms.length === 0) {
       pulseTrigger = this.anim.trigger({
         callback: () => {
@@ -982,7 +987,7 @@ class DiagramElement {
           this.state.pulse.startTime = null
         }
       });
-      const delay = lastDrawTime - state.state.pulse.startTime;
+      delay = lastDrawTime - state.state.pulse.startTime;
       pulseDelay = this.anim.delay({ duration: delay });
     }
 
@@ -1007,6 +1012,7 @@ class DiagramElement {
     //     .scenario(joinObjects({ target }, options))
     //     .start();
     // }
+    return duration + delay;
   }
 
   getDrawTransforms(transform: Transform) {
@@ -1166,6 +1172,8 @@ class DiagramElement {
     // forcePause: boolean = false, clearAnimations: boolean = false, elementOnly: boolean = false) {
     const pause = () => {
       this.isPaused = true;
+      this.state.pause = 'paused';
+      this.subscriptions.trigger('paused');
     };
     let pauseWhenFinished = false;
     const { animation, pulse, movingFreely } = this.pauseSettings;
@@ -1194,6 +1202,8 @@ class DiagramElement {
     }
     // console.log(this.name, pauseWhenFinished)
     if (pauseWhenFinished) {
+      this.state.pause = 'preparingToPause';
+      this.subscriptions.trigger('preparingToPause');
       this.subscriptions.subscribe('animationFinished', pause, 1);
     } else {
       pause();
@@ -1202,6 +1212,10 @@ class DiagramElement {
 
   unpause() {
     this.isPaused = false;
+    if (this.state.pause !== 'unpaused') {
+      this.subscriptions.trigger('unpaused');
+    }
+    this.state.pause = 'unpaused';
   }
 
   setPosition(pointOrX: Point | number, y: number = 0) {
@@ -1682,6 +1696,10 @@ class DiagramElement {
       return this.name;
     }
     return `${this.parent.getPath()}.${this.name}`;
+  }
+  
+  getPause() {
+    return this.state.pause;
   }
 
   // Being Moved
@@ -2842,7 +2860,7 @@ class DiagramElementPrimitive extends DiagramElement {
         this.fnMap.exec(this.beforeDrawCallback, now);
       }
       // console.log(this.name, this.isShown, this.isPaused)
-      if (!this.isPaused) {
+      if (this.state.pause !== 'paused') {
         this.animations.nextFrame(now);
         this.nextMovingFreelyFrame(now);
       }
@@ -2857,7 +2875,7 @@ class DiagramElementPrimitive extends DiagramElement {
       if (!this.isShown) {
         return;
       }
-      if (!this.isPaused) {
+      if (this.state.pause !== 'paused') {
         this.pulseTransforms = this.getPulseTransforms(now);
       }
       this.drawTransforms = this.getDrawTransforms(newTransform);
@@ -3326,7 +3344,7 @@ class DiagramElementCollection extends DiagramElement {
         this.fnMap.exec(this.beforeDrawCallback, now);
       }
 
-      if (!this.isPaused) {
+      if (this.state.pause !== 'paused') {
         this.animations.nextFrame(now);
         this.nextMovingFreelyFrame(now);
       }
@@ -4454,7 +4472,8 @@ class DiagramElementCollection extends DiagramElement {
     // countStart: () => void,
     // countEnd: () => void,
   ) {
-    super.animateToState(state, options, independentOnly, lastDrawTime); // , countStart, countEnd);
+    let duration = 0;
+    duration = super.animateToState(state, options, independentOnly, lastDrawTime); // , countStart, countEnd);
     if (
       (this.transformUpdatesIndependantly && independentOnly)
       || independentOnly === false
@@ -4462,14 +4481,18 @@ class DiagramElementCollection extends DiagramElement {
       for (let i = 0; i < this.drawOrder.length; i += 1) {
         const element = this.elements[this.drawOrder[i]];
         if (state.elements != null && state.elements[this.drawOrder[i]] != null) {
-          element.animateToState(
+          const elementDuration = element.animateToState(
             state.elements[this.drawOrder[i]], options,
             independentOnly, // countStart, countEnd,
             lastDrawTime,
           );
+          if (elementDuration > duration) {
+            duration = elementDuration;
+          }
         }
       }
     }
+    return duration;
   }
 
   // _finishSetState(diagram: Diagram) {
@@ -4502,6 +4525,29 @@ class DiagramElementCollection extends DiagramElement {
       const element = this.elements[this.drawOrder[i]];
       element.unpause();
     }
+  }
+
+  // Priority order:
+  // unpaused,
+  // preparingToPause
+  // preparingToUnpause
+  // paused
+  getPause() {
+    let pause = this.state.pause;
+    if (this.state.pause === 'unpaused') {
+      return 'unpaused';
+    }
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      const elementPauseState = element.getPause();
+      if (elementPauseState === 'unpaused') {
+        return 'unpaused';
+      }
+      if (elementPauseState === 'preparingToPause' || elementPauseState === 'preparingToUnpause') {
+        pause = elementPauseState;
+      }
+    }
+    return pause;
   }
 }
 
