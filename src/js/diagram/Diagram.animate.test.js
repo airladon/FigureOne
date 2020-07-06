@@ -10,6 +10,7 @@ import makeDiagram from '../__mocks__/makeDiagram';
 tools.isTouchDevice = jest.fn();
 
 jest.mock('./recorder.worker');
+jest.useFakeTimers();
 
 describe('Animate To State', () => {
   let diagram;
@@ -379,15 +380,19 @@ describe('Pause Animations', () => {
     expect(diagram.isAnimating()).toBe(true);
 
     diagram.pause();
-    expect(diagram.isPaused).toBe(true);
-    expect(a.isPaused).toBe(false)
+    // expect(diagram.isPaused).toBe(true);
+    // expect(a.isPaused).toBe(false)
+    expect(diagram.state.pause).toBe('preparingToPause');
+    expect(a.state.pause).toBe('preparingToPause');
     expect(a.getPosition().x).toEqual(0.5);
     expect(diagram.isAnimating()).toBe(true);
 
     diagram.mock.timeStep(0.5);
     expect(a.getPosition().x).toEqual(1);
     expect(diagram.isAnimating()).toBe(false);
-    expect(a.isPaused).toBe(true);
+    // expect(a.isPaused).toBe(true);
+    expect(diagram.state.pause).toBe('paused');
+    expect(a.state.pause).toBe('paused');
 
     diagram.unpause();
     diagram.mock.timeStep(0.5);
@@ -516,7 +521,8 @@ describe('Pause Animations', () => {
     expect(a.state.isPulsing).toBe(true);
     expect(diagram.isAnimating()).toBe(true);
     expect(a.isPaused).toBe(false);
-    expect(diagram.isPaused).toBe(true);
+    // expect(diagram.isPaused).toBe(true);
+    expect(diagram.state.pause).toBe('preparingToPause')
 
     diagram.mock.timeStep(0.5);
     expect(a.pulseTransforms[0].s().round(3).x).toEqual(1);

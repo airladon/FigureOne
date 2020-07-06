@@ -8,6 +8,7 @@ import {
 } from '../tools/tools';
 import type { DiagramElement } from './Element';
 import Worker from './recorder.worker.js';
+import type Diagram from './Diagram';
 // import GlobalAnimation from './webgl/GlobalAnimation';
 // Singleton class that contains projects global variables
 
@@ -183,23 +184,7 @@ class Recorder {
   startRecordingTime: number;
 
   stateTimeStep: number;      // in seconds
-  diagram: {
-    animateNextFrame: () => void,
-    setState: (Object) => void,
-    getState: ({ precision: number, ignoreShown: boolean }) => Object,
-    getElement: (string) => ?DiagramElement,
-    showCursor: ('up' | 'down' | 'hide', ?Point) => void,
-    pause: () => void,
-    unpause: () => void,
-    getIsInTransition: () => boolean,
-    animateToState: (Object, Object, ?(string | (() => void))) => void,
-    isAnimating: () => boolean,
-    setAnimationFinishedCallback: ?(string | (() => void)) => void,
-    subscriptions: SubscriptionManager,
-    getPauseState: () => 'paused' | 'unpaused' | 'preparingToPause' | 'preparingToPlay',
-  }
-
-  // timeoutID: ?TimeoutID;
+  diagram: Diagram;
 
   timeoutID: ?TimeoutID;
 
@@ -1224,11 +1209,24 @@ class Recorder {
     this.subscriptions.trigger('playbackStarted');
   }
 
-  resumePlayback(maxTime: number = 0, minTime: number = 0) {
-    // console.log(this.pauseState);
+  resumePlayback(optionsIn: {
+    maxTime: number,
+    minTime: number,
+    duration: number,
+    dissolve: boolean,
+  }) {
     if (this.pauseState == null) {
       this.startPlayback(this.currentTime);
       return;
+    }
+    const defaultOptions = {
+      maxTime: 1,
+      minTime: 0,
+      dissolve: false,
+    }
+    const options = joinObjects({}, defaultOptions, optionsIn);
+    if (options.dissolve && options.duration == null) {
+      options.duration = 0.8;
     }
 
     this.diagram.unpause();
@@ -1247,24 +1245,29 @@ class Recorder {
       this.subscriptions.trigger('playbackStarted');
     };
     // const id = this.diagram.subscriptions.subscribe('animationsFinished', finished, 1);
-    this.diagram.animateToState(
-      this.pauseState,
-      {
-        // delay: 1,
-        maxTime,
-        velocity: {
-          position: 2,
-          rotation: Math.PI * 2 / 2,
-          scale: 1,
-          opacity: 0.8,
-          color: 0.8,
+    if (options.dissolve === true) {
+      this.diagram.dissolveToState(this.pauseState, options.duration, options.duration, finished);
+    } else {
+      this.diagram.animateToState(
+        this.pauseState,
+        {
+          // delay: 1,
+          maxTime: options.maxTime,
+          velocity: {
+            position: 2,
+            rotation: Math.PI * 2 / 2,
+            scale: 1,
+            opacity: 0.8,
+            color: 0.8,
+          },
+          allDurationsSame: true,
+          zeroDurationThreshold: 0.1,
+          minTime: options.minTime,
+          duration: options.duration,
         },
-        allDurationsSame: true,
-        zeroDurationThreshold: 0.1,
-        minTime,
-      },
-      finished,
-    );
+        finished,
+      );
+    }
 
     if (this.diagram.isAnimating() && !finishedFlag) {
       this.state = 'preparingToPlay';
