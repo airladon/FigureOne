@@ -575,30 +575,30 @@ class Diagram {
 
   dissolveToState(optionsIn: {
     state: Object,
-    durationOut: number,
-    durationIn: number,
+    dissolveOutDuration: number,
+    dissolveInDuration: number,
     delay: Number,
     done: ?(string | (() => void)),
   }) {
     const options = joinObjects({}, {
-      durationOut: 0.8,
-      durationIn: 0.8,
+      dissolveOutDuration: 0.8,
+      dissolveInDuration: 0.8,
       delay: 0.2,
       done: null,
     }, optionsIn);
 
     this.elements.animations.new()
-      .dissolveOut(options.durationOut)
+      .dissolveOut(options.dissolveOutDuration)
       .delay(0.2)
       .trigger({
         callback: () => {
           this.dissolveInToState( {
             state: options.state,
-            duration: options.durationIn,
+            duration: options.dissolveInDuration,
             done: options.done,
           });
         },
-        duration: options.durationIn,
+        duration: options.dissolveInDuration,
       })
       .start();
   }
@@ -793,15 +793,13 @@ class Diagram {
   // }
 
   initialize() {
-    this.setFirstTransform();
     const elements = this.elements.getAllElements();
     elements.forEach((element) => {
-      // console.log(element.name)
-      // console.log(element.name, element.getPath(), element.asdf)
-      element.animationFinishedCallback = this.animationFinished.bind(this, element);
+      element.diagram = this;
       element.recorder = this.recorder;
-      // console.log(element.name, element.animationFinishedCallback)
+      element.animationFinishedCallback = this.animationFinished.bind(this, element);
     });
+    this.setFirstTransform();
     this.animateNextFrame();
   }
 

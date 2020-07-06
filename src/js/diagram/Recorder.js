@@ -1214,6 +1214,7 @@ class Recorder {
     minTime: number,
     duration: number,
     dissolve: boolean,
+    delay: number,
   }) {
     if (this.pauseState == null) {
       this.startPlayback(this.currentTime);
@@ -1223,6 +1224,7 @@ class Recorder {
       maxTime: 1,
       minTime: 0,
       dissolve: false,
+      delay: 0.2,
     }
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (options.dissolve && options.duration == null) {
@@ -1246,7 +1248,13 @@ class Recorder {
     };
     // const id = this.diagram.subscriptions.subscribe('animationsFinished', finished, 1);
     if (options.dissolve === true) {
-      this.diagram.dissolveToState(this.pauseState, options.duration, options.duration, finished);
+      this.diagram.dissolveToState({
+        state: this.pauseState,
+        dissolveInDuration: options.duration,
+        dissolveOutDuration: options.duration,
+        done: finished,
+        delay: options.delay,
+      });
     } else {
       this.diagram.animateToState(
         this.pauseState,
