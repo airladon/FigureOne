@@ -1265,8 +1265,7 @@ class Recorder {
       },
       finished,
     );
-    
-    console.log(maxTime, minTime, finishedFlag);
+
     if (this.diagram.isAnimating() && !finishedFlag) {
       this.state = 'preparingToPlay';
       this.subscriptions.trigger('preparingToPlay');
