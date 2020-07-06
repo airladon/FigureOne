@@ -39,6 +39,7 @@ import * as animations from './Animation/Animation';
 import WebGLInstance from './webgl/webgl';
 // import type Diagram from './Diagram';
 import { FunctionMap } from '../tools/FunctionMap';
+import type Diagram from './Diagram';
 
 // eslint-disable-next-line import/no-cycle
 // import {
@@ -139,7 +140,8 @@ class DiagramElement {
   // noRotationFromParent: boolean;
 
   interactiveLocation: Point;   // this is in vertex space
-  recorder: Recorder;
+  // recorder: Recorder;
+  diagram: Diagram;
   move: {
     maxTransform: Transform,
     minTransform: Transform,
@@ -297,7 +299,7 @@ class DiagramElement {
 
   constructor(
     transform: Transform = new Transform(),
-    diagramLimits: Rect = new Rect(-1, -1, 2, 2),
+    diagramLimitsOrDiagram: Diagram | Rect = new Rect(-1, -1, 2, 2),
     parent: DiagramElement | null = null,
   ) {
     this.name = ''; // This is updated when an element is added to a collection
@@ -327,6 +329,7 @@ class DiagramElement {
       elementCount: 0,
     };
     // this.redrawElements = [];
+    // this.diagram = null;
     this.recorder = new Recorder(true);
     this.custom = {};
     this.parent = parent;
@@ -592,7 +595,11 @@ class DiagramElement {
         return new animations.ParallelAnimationStep(simpleOptions, { steps });
       },
     };
-    this.diagramLimits = diagramLimits;
+    if (diagramLimitsOrDiagram instanceof Rect) {
+      this.diagramLimits = diagramLimitsOrDiagram;
+    } else if (diagramLimitsOrDiagram != null) {
+      this.diagramLimits = this.diagram.limits._dup();
+    }
     this.move = {
       maxTransform: this.transform.constant(1000),
       minTransform: this.transform.constant(-1000),
@@ -2740,7 +2747,7 @@ class DiagramElementPrimitive extends DiagramElement {
     // primative.pointsToDraw = this.pointsToDraw;
     // primative.angleToDraw = this.angleToDraw;
     // primative.copyFrom(this);
-    duplicateFromTo(this, primative, ['parent']);
+    duplicateFromTo(this, primative, ['parent', 'diagram']);
     if (transform != null) {
       primative.transform = transform._dup();
     }
