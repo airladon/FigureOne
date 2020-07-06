@@ -581,6 +581,7 @@ DiagramElementPrimitive {
         ],
       },
     },
+    "pause": "unpaused",
     "pulse": Object {
       "startTime": null,
     },

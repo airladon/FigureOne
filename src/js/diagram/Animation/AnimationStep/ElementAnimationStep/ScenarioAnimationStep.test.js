@@ -4,6 +4,7 @@ import * as tools from '../../../../tools/tools';
 import makeDiagram from '../../../../__mocks__/makeDiagram';
 // import timeStep from '../../../../__mocks__/timeStep';
 
+jest.useFakeTimers();
 // tools.isTouchDevice = jest.fn();
 
 describe('Diagram Recorder', () => {

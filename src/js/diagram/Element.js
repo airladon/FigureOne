@@ -717,6 +717,7 @@ class DiagramElement {
         'move',
         'subscriptions',
         'finishAnimationOnPause',
+        'pulseTransforms',
         // 'lastDrawTime',
         ...this.stateProperties,
       ];
@@ -949,11 +950,6 @@ class DiagramElement {
       target.color = state.color;
     }
     const stateTransform = getTransform(state.transform);
-    // if (this.name === 'a') {
-    //   console.log(stateTransform)
-    //   console.log(this.transform)
-    //   console.log(this.transform.isEqualTo(stateTransform))
-    // }
     if (
       !this.transform.isEqualTo(stateTransform)
       && (
@@ -964,25 +960,17 @@ class DiagramElement {
       target.transform = stateTransform;
     }
 
-    // if (this.name === 'a') {
-    //   console.log(target)
-    // }
-
     let scenarioAnimation = null;
     let duration = 0;
     if (Object.keys(target).length > 0) {
       scenarioAnimation = this.anim.scenario(joinObjects({ target }, options));
-      // duration = scenarioAnimation.getTotalDuration();
-      // console.log(this.name, duration)
     }
-    // let pulseAnimation = null;
     let pulseTrigger = null;
     let pulseDelay = null;
     let delay = 0;
     if (state.state.isPulsing && this.frozenPulseTransforms.length === 0) {
       pulseTrigger = this.anim.trigger({
         callback: () => {
-          // this.frozenPulseTransforms = [];
           this.pulseSettings = duplicate(state.pulseSettings);
           this.state.isPulsing = true;
           this.state.pulse.startTime = null
@@ -992,10 +980,6 @@ class DiagramElement {
       pulseDelay = this.anim.delay({ duration: delay });
     }
 
-    // if (this.name === 'a') {
-    //   console.log(scenarioAnimation)
-    //   console.log(pulseTrigger)
-    // }
     if (scenarioAnimation != null || pulseTrigger != null) {
       this.animations.new()
         .then(scenarioAnimation)
@@ -1008,15 +992,35 @@ class DiagramElement {
     if (scenarioAnimation != null) {
       duration = scenarioAnimation.getTotalDuration();
     }
-    // if (this.name === 'a') {
-    //   debugger;
-    // }
-    // if (Object.keys(target).length > 0) {
-    //   this.animations.new()
-    //     .scenario(joinObjects({ target }, options))
-    //     .start();
-    // }
     return duration + delay;
+  }
+
+  dissolveInToState(
+    state: Object,
+    duration: number = 0.8,
+  ) {
+    if (state.isShown === false) {
+      return 0;
+    }
+    const target = {};
+    this.transform = getTransform(state.transform);
+    this.color = state.color.slice();
+    this.frozenPulseTransforms = [];
+    state.pulseTransforms.forEach((t) => this.frozenPulseTransforms.push(getTransform(t)));
+    this.animations.new()
+      .opacity({
+        target: state.target,
+        start: 0.001,
+        duration,
+      })
+      .trigger({
+        callback: () => {
+          this.frozenPulseTransforms = [];
+        },
+      })
+      .start();
+
+    return duration;
   }
 
   getDrawTransforms(transform: Transform) {
@@ -4493,6 +4497,29 @@ class DiagramElementCollection extends DiagramElement {
           if (elementDuration > duration) {
             duration = elementDuration;
           }
+        }
+      }
+    }
+    return duration;
+  }
+
+  dissolveInToState(
+    state: Object,
+    durationIn: number = 0.8,
+  ) {
+    let duration = 0;
+    duration = super.dissolveInToState(state, durationIn);
+    if (duration === 0) {
+      return 0;
+    }
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (state.elements != null && state.elements[this.drawOrder[i]] != null) {
+        const elementDuration = element.dissolveInToState(
+          state.elements[this.drawOrder[i]], durationIn,
+        );
+        if (elementDuration > duration) {
+          duration = elementDuration;
         }
       }
     }

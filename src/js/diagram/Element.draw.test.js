@@ -13,6 +13,7 @@ import makeDiagram from '../__mocks__/makeDiagram';
 tools.isTouchDevice = jest.fn();
 
 jest.mock('./recorder.worker');
+jest.useFakeTimers();
 
 describe('Element Drawing', () => {
   let diagram;

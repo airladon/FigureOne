@@ -341,6 +341,7 @@ class Diagram {
     //   this.unpause.bind(this),
     // );
     this.recorder = new Recorder();
+    this.recorder.diagram = this;
     this.bindRecorder();
     this.pauseTime = performance.now() / 1000;
     this.shapesLow = this.getShapes();
@@ -384,21 +385,22 @@ class Diagram {
   }
 
   bindRecorder() {
-    this.recorder.diagram = {
-      animateNextFrame: this.animateNextFrame.bind(this),
-      setState: this.setState.bind(this),
-      getState: this.getState.bind(this),
-      getElement: this.getElement.bind(this),
-      showCursor: this.showCursor.bind(this),
-      pause: this.pause.bind(this),
-      unpause: this.unpause.bind(this),
-      getIsInTransition: this.getIsInTransition.bind(this),
-      animateToState: this.animateToState.bind(this),
-      isAnimating: this.isAnimating.bind(this),
-      setAnimationFinishedCallback: this.setAnimationFinishedCallback.bind(this),
-      subscriptions: this.subscriptions,
-      getPauseState: this.getPauseState.bind(this),
-    };
+    // this.recorder.diagram = {
+    //   animateNextFrame: this.animateNextFrame.bind(this),
+    //   setState: this.setState.bind(this),
+    //   getState: this.getState.bind(this),
+    //   getElement: this.getElement.bind(this),
+    //   showCursor: this.showCursor.bind(this),
+    //   pause: this.pause.bind(this),
+    //   unpause: this.unpause.bind(this),
+    //   getIsInTransition: this.getIsInTransition.bind(this),
+    //   animateToState: this.animateToState.bind(this),
+    //   isAnimating: this.isAnimating.bind(this),
+    //   setAnimationFinishedCallback: this.setAnimationFinishedCallback.bind(this),
+    //   subscriptions: this.subscriptions,
+    //   getPauseState: this.getPauseState.bind(this),
+    //   dissolveToState: this.dissolveToState.bind(this),
+    // };
     const onCursor = (payload) => {
       const [action, x, y] = payload;
       if (action === 'show') {
@@ -564,6 +566,57 @@ class Diagram {
     // countEnd();
     if (done != null) {
       if (duration === 0) {
+        this.fnMap.exec(done);
+      } else if (done != null) {
+        this.subscriptions.subscribe('animationsFinished', done, 1);
+      }
+    }
+  }
+
+  dissolveToState(optionsIn: {
+    state: Object,
+    durationOut: number,
+    durationIn: number,
+    delay: Number,
+    done: ?(string | (() => void)),
+  }) {
+    const options = joinObjects({}, {
+      durationOut: 0.8,
+      durationIn: 0.8,
+      delay: 0.2,
+      done: null,
+    }, optionsIn);
+
+    this.elements.animations.new()
+      .dissolveOut(options.durationOut)
+      .delay(0.2)
+      .trigger({
+        callback: () => {
+          this.dissolveInToState( {
+            state: options.state,
+            duration: options.durationIn,
+            done: options.done,
+          });
+        },
+        duration: options.durationIn,
+      })
+      .start();
+  }
+
+  dissolveInToState(optionsIn: {
+    state: Object,
+    duration: number,
+    done: ?(string | (() => void)),
+  }) {
+    const options = joinObjects({}, {
+      duration: 0.8,
+      done: null,
+    }, optionsIn);
+    const { state, duration, done } = options;
+    const dissolveDuration = this.elements.dissolveInToState(state.elements, duration);
+
+    if (done != null) {
+      if (dissolveDuration === 0) {
         this.fnMap.exec(done);
       } else if (done != null) {
         this.subscriptions.subscribe('animationsFinished', done, 1);
