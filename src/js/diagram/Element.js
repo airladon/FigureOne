@@ -972,7 +972,8 @@ class DiagramElement {
     let duration = 0;
     if (Object.keys(target).length > 0) {
       scenarioAnimation = this.anim.scenario(joinObjects({ target }, options));
-      duration = scenarioAnimation.duration;
+      // duration = scenarioAnimation.getTotalDuration();
+      // console.log(this.name, duration)
     }
     // let pulseAnimation = null;
     let pulseTrigger = null;
@@ -1003,6 +1004,9 @@ class DiagramElement {
         .start();
     } else {
       this.frozenPulseTransforms = [];
+    }
+    if (scenarioAnimation != null) {
+      duration = scenarioAnimation.getTotalDuration();
     }
     // if (this.name === 'a') {
     //   debugger;
