@@ -1224,7 +1224,7 @@ class Recorder {
     this.subscriptions.trigger('playbackStarted');
   }
 
-  resumePlayback() {
+  resumePlayback(maxTime: number = 0, minTime: number = 0) {
     // console.log(this.pauseState);
     if (this.pauseState == null) {
       this.startPlayback(this.currentTime);
@@ -1251,7 +1251,7 @@ class Recorder {
       this.pauseState,
       {
         // delay: 1,
-        maxTime: 2,
+        maxTime,
         velocity: {
           position: 2,
           rotation: Math.PI * 2 / 2,
@@ -1261,10 +1261,12 @@ class Recorder {
         },
         allDurationsSame: true,
         zeroDurationThreshold: 0.1,
-        minTime: 0.5,
+        minTime,
       },
       finished,
     );
+    
+    console.log(maxTime, minTime, finishedFlag);
     if (this.diagram.isAnimating() && !finishedFlag) {
       this.state = 'preparingToPlay';
       this.subscriptions.trigger('preparingToPlay');
