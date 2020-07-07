@@ -22,6 +22,14 @@ type TypeEvent = [
 type TypeEvents = Array<TypeEvent>;
 type TypeStateDiffs = Array<TypeStateDiff>;
 
+export type TypeOnPause = 'freeze' | 'complete' | 'completeBeforePause';
+export type TypePauseSettings = {
+  default?: TypeOnPause;
+  animation?: TypeOnPause;
+  pulse?: TypeOnPause;
+  movingFreely?: TypeOnPause;
+} | TypeOnPause;
+
 function getIndexOfEarliestTime(
   recordedData: TypeEvents | TypeStateDiffs,
   index: number,
@@ -198,6 +206,20 @@ class Recorder {
   referenceIndex: number;
   lastSeekTime: ?number;
 
+  settings: {
+    pause: TypePauseSettings,
+    resume: {
+      action: 'dissolve' | 'animate' | 'instant',
+      // dissolve?: Boolean,
+      duration?: number,
+      velocity?: ?{
+
+      },
+      maxTime?: number,
+      minTime?: number,
+    },
+  };
+
   static instance: Object;
 
   // All slides, events and states are relative to 0, where 0 is the start of a recording.
@@ -250,6 +272,12 @@ class Recorder {
     // this.playbackStoppedCallback = null;
     this.worker = null;
     this.pauseState = null;
+    this.settings = {
+      pause: {
+        onPause: 'freeze',
+      },
+      resume: {        }
+    }
   }
 
   // ////////////////////////////////////
@@ -1477,7 +1505,7 @@ class Recorder {
     }
     
     this.diagram.subscriptions.subscribe('paused', pause, 1);
-    this.diagram.pause();
+    this.diagram.pause(this.settings.pause);
     if (this.diagram.getPauseState() === 'preparingToPause') {
       this.subscriptions.trigger('preparingToPause');
       this.state = 'preparingToPause';

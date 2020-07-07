@@ -24,7 +24,7 @@ import DiagramEquation from './DiagramEquation/DiagramEquation';
 import DiagramObjects from './DiagramObjects/DiagramObjects';
 import addElements from './DiagramAddElements/addElements';
 import type { TypeAddElementObject } from './DiagramAddElements/addElements';
-
+import type { TypePauseSettings } from './Recorder';
 /**
   * Diagram Input Options
   * @property {string} [htmlId] HTML div tag id - default: 'figureOneId'
@@ -1512,12 +1512,12 @@ class Diagram {
     return this.state.pause;
   }
 
-  pause() {
+  pause(pauseSettings: TypePauseSettings) {
     // forcePause: boolean = true, clearAnimations: boolean = false) {
     // if (window.asdf) {
     //   debugger;
     // }
-    this.elements.pause();
+    this.elements.pause(pauseSettings);
     const elements = this.elements.getAllElements();
     let preparingToPauseCounter = 0;
     const checkAllPaused = () => {
@@ -1543,8 +1543,6 @@ class Diagram {
       this.state.pause = 'preparingToPause';
       this.subscriptions.trigger('preparingToPause');
     }
-    // this.state.pause = this.elements.getPause();
-    // this.isPaused = true;
   }
 
   // pauseAfterNextDraw() {
