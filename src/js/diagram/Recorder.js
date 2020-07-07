@@ -1241,10 +1241,10 @@ class Recorder {
     this.subscriptions.trigger('playbackStarted');
   }
 
-  getResumeSettings(resumeSettings: TypeResumeSettings) {
+  getResumeSettings() {
     let onResume = {
       action: 'instant',
-      maxTime: 1,
+      maxTime: 6,
       velocity: {
         position: 2,
         rotation: Math.PI * 2 / 2,
@@ -1257,15 +1257,16 @@ class Recorder {
       minTime: 0,
       duration: null,
     }
-    if (typeof resumeSettings === 'string') {
-      onResume.action = resumeSettings;
+    // console.log(resumeSettings)
+    if (typeof this.settings.resume === 'string') {
+      onResume.action = this.settings.resume;
     } else {
-      onResume = joinObjects({}, onResume, resumeSettings);
+      onResume = joinObjects({}, onResume, this.settings.resume);
       // velocity trumps duration by default, but if only duration is defined by the
       // user, then remove velocity;
-      if (resumeSettings.duration != null && resumeSettings.velocity == null) {
-        onResume.velocity = undefined;
-      }
+      // if (this.settings.resume.duration != null && this.settings.resume.velocity == null) {
+      //   onResume.velocity = undefined;
+      // }
     }
     if (onResume.action === 'dissolve') {
       const defaultDuration = {
@@ -1290,23 +1291,22 @@ class Recorder {
     return onResume;
   }
 
-  resumePlayback(resumeSettingsIn: TypeResumeSettings) {
+  resumePlayback() {
     if (this.pauseState == null) {
       this.startPlayback(this.currentTime);
       return;
     }
-    const resumeSettings = this.getResumeSettings(resumeSettingsIn);
-    const defaultOptions = {
-      maxTime: 1,
-      minTime: 0,
-      dissolve: false,
-      delay: 0.2,
-    }
+    const resumeSettings = this.getResumeSettings();
+    // const defaultOptions = {
+    //   maxTime: 1,
+    //   minTime: 0,
+    //   dissolve: false,
+    //   delay: 0.2,
+    // }
     // const options = joinObjects({}, defaultOptions, optionsIn);
     // if (options.dissolve && options.duration == null) {
     //   options.duration = 0.8;
     // }
-
     this.diagram.unpause();
     let finishedFlag = false;
     const finished = () => {
@@ -1338,6 +1338,7 @@ class Recorder {
         delay: resumeSettings.duration.delay,
       });
     } else {
+      this.diagram.stop();
       this.diagram.animateToState(
         this.pauseState,
         // {

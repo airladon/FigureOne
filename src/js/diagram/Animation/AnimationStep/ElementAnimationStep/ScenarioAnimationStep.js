@@ -302,7 +302,6 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
         progression: this.scenario.progression,
       }));
     }
-    // debugger;
 
     if (target.color != null) {
       steps.push(element.anim.color({
