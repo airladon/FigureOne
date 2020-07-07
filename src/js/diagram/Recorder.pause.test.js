@@ -163,8 +163,16 @@ describe('Animate To State', () => {
       });
       describe('State Change', () => {
         test.only('Instant resume', () => {});
-        test.only('Animate to resume', () => {});
-        test.only('Dissolve to resume', () => {});
+        test.only('Animate to resume (default velocity)', () => {});
+        test.only('Animate to resume with velocity and duration', () => {});
+        test.only('Animate to resume with velocity and velocity', () => {});
+        test.only('Animate to resume with velocity and maxTime', () => {});
+        test.only('Animate to resume with velocity and minTime', () => {});
+        test.only('Animate to resume with velocity and zeroThreshold', () => {});
+        test.only('Animate to resume with velocity and allDurationsSame', () => {});
+        test.only('Animate to resume with duration', () => {});
+        test.only('Dissolve to resume with duration', () => {});
+        test.only('Dissolve to resume with velocity', () => {});
       });
     });
     test('Freeze on pause, continue on next frame after unpause', () => {
