@@ -1248,6 +1248,7 @@ class Recorder {
     };
     // const id = this.diagram.subscriptions.subscribe('animationsFinished', finished, 1);
     if (options.dissolve === true) {
+      this.diagram.stop();
       this.diagram.dissolveToState({
         state: this.pauseState,
         dissolveInDuration: options.duration,
@@ -1255,6 +1256,7 @@ class Recorder {
         done: finished,
         delay: options.delay,
       });
+      console.log(this.diagram.elements.elements.a.getPosition())
     } else {
       this.diagram.animateToState(
         this.pauseState,
@@ -1281,6 +1283,7 @@ class Recorder {
       this.state = 'preparingToPlay';
       this.subscriptions.trigger('preparingToPlay');
     }
+    console.log(this.diagram.elements.elements.a.getPosition())
     // if (animationCount === 0) {
     //   this.diagram.subscriptions.unsubscribe('animationsFinished', id);
     //   finished();

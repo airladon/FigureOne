@@ -1026,7 +1026,6 @@ class DiagramElement {
         },
       })
       .start();
-
     return duration;
   }
 
@@ -4260,18 +4259,15 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   getAllElements() {
-    const elements = [];
+    const elements = [this];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      elements.push(element);
+      // elements.push(element);
       if (element instanceof DiagramElementCollection) {
         elements.push(...element.getAllElements());
+      } else {
+        elements.push(element);
       }
-      // if (element instanceof DiagramElementPrimitive) {
-      //   elements.push(element);
-      // } else {
-      //   elements.push(...element.getAllElements());
-      // }
     }
     return elements;
   }
