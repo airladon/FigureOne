@@ -1883,6 +1883,15 @@ class DiagramElement {
     }
   }
 
+  getRemainingPulseTime(now: number) {
+    if (this.state.isPulsing === false) {
+      return 0;
+    }
+    if (this.state.pulse.startTime == null) {
+      return this.pulseSettings.time;
+    }
+    return this.pulseSettings.time - (now - this.state.pulse.startTime);
+  }
   // Take an input transform matrix, and output a list of transform matrices
   // that have been transformed by a pulse. The first matrix in the list
   // will be the largest, so when saving lastDrawTransformMatrix it can be

@@ -821,6 +821,10 @@ class Diagram {
       if (elementRemainingTime > remainingTime) {
         remainingTime = elementRemainingTime;
       }
+      const remainingPulseTime = element.getRemainingPulseTime(now);
+      if (remainingPulseTime > remainingTime) {
+        remainingTime = remainingPulseTime;
+      }
     });
     return remainingTime;
   }
