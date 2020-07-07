@@ -586,10 +586,11 @@ class Diagram {
       delay: 0.2,
       done: null,
     }, optionsIn);
-
     this.elements.animations.new()
-      .dissolveOut(options.dissolveOutDuration)
-      .delay(0.2)
+      .trigger({ callback: () => { console.log(1) }})
+      .dissolveOut({ duration: options.dissolveOutDuration })
+      .delay({ duration: options.delay })
+      .trigger({ callback: () => { console.log(2) }})
       .trigger({
         callback: () => {
           this.dissolveInToState( {
