@@ -587,7 +587,6 @@ class Diagram {
       done: null,
     }, optionsIn);
     this.elements.animations.new()
-      .trigger({ callback: () => { console.log(1) }})
       .opacity({ duration: options.dissolveOutDuration, start: 1, target: 0.001 })
       .trigger({ callback: () => {
         this.elements.hideAll();
@@ -595,7 +594,6 @@ class Diagram {
         this.elements.setOpacity(1);
       }})
       .delay({ duration: options.delay })
-      .trigger({ callback: () => { console.log(2) }})
       .trigger({
         callback: () => {
           this.dissolveInToState( {
@@ -604,7 +602,8 @@ class Diagram {
             done: options.done,
           });
         },
-        duration: options.dissolveInDuration,
+        // duration: options.dissolveInDuration,
+        duration: 0,
       })
       .start();
   }

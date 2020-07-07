@@ -8,6 +8,7 @@ class GlobalAnimation {
   static instance: Object;
   drawQueue: Array<(number) => void>;
   nextDrawQueue: Array<(number) => void>;
+  lastFrame: ?number;
 
   constructor() {
     // If the instance alread exists, then don't create a new instance.
@@ -22,6 +23,7 @@ class GlobalAnimation {
       GlobalAnimation.instance = this;
       this.drawQueue = [];
       this.nextDrawQueue = [];
+      this.lastFrame = null;
       // this.drawScene = this.draw.bind(this);
     }
     return GlobalAnimation.instance;
@@ -35,6 +37,7 @@ class GlobalAnimation {
       this.drawQueue[i](nowSeconds);
     }
     this.drawQueue = [];
+    this.lastFrame = now;
   }
 
   queueNextFrame(func: (?number) => void) {
