@@ -1541,6 +1541,7 @@ class Recorder {
     const pause = () => {
       this.state = 'idle';
       this.subscriptions.trigger('playbackStopped');
+      this.diagram.stop();
     };
     this.stopTimeouts();
     if (this.audio) {
