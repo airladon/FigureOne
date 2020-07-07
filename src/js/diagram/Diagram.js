@@ -552,15 +552,15 @@ class Diagram {
   }
 
   animateToState(state: Object, optionsIn: Object = {}, done: ?(string | (() => void))) {
-    const defaultOptions = {
-      delay: 0,
-      duration: 1,
-    };
-    if (optionsIn.velocity != null) {
-      defaultOptions.duration = 0;
-    }
+    // const defaultOptions = {
+    //   // delay: 0,
+    //   duration: 1,
+    // };
+    // if (optionsIn.velocity != null) {
+    //   defaultOptions.duration = null;
+    // }
 
-    const options = joinObjects(defaultOptions, optionsIn);
+    const options = joinObjects(optionsIn, optionsIn);
     // countStart();
     const duration = this.elements.animateToState(state.elements, options, true, state.lastDrawTime);
     // countEnd();
@@ -591,7 +591,7 @@ class Diagram {
       .trigger({ callback: () => {
         this.elements.hideAll();
         this.elements.show();
-        this.elements.setOpacity(1);
+        // this.elements.setOpacity(1);
       }})
       .delay({ duration: options.delay })
       .trigger({
