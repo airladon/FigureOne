@@ -532,7 +532,7 @@ describe('Animate To State', () => {
         playbackStoppedCallback.mock.calls.length,
       ];
     });
-    test.only('No Pausing', () => {
+    test('No Pausing', () => {
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
       recorder.startPlayback(0);
       diagram.mock.timeStep(0);
@@ -545,6 +545,42 @@ describe('Animate To State', () => {
       expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
       diagram.mock.timeStep(1);
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+    });
+    describe('Pause', () => {
+      beforeEach(() => {
+        expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+        recorder.startPlayback(0);
+        diagram.mock.timeStep(0);
+        expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
+        diagram.mock.timeStep(1);
+        expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 2, 1]);
+        diagram.mock.timeStep(1);
+        expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 2]);
+      });
+      test('Freeze', () => {
+        recorder.settings.pause = 'freeze';
+        recorder.pausePlayback();
+        expect(states()).toEqual(['idle', 'paused', 'paused', true, 1, 2]);
+        diagram.mock.timeStep(1);
+        expect(states()).toEqual(['idle', 'paused', 'paused', true, 1, 2]);
+      });
+      test('Complete', () => {
+        recorder.settings.pause = 'complete';
+        recorder.pausePlayback();
+        diagram.mock.timeStep(0);
+        expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+        diagram.mock.timeStep(1);
+        expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+      });
+      test('Complete before pause', () => {
+        recorder.settings.pause = 'completeBeforePause';
+        recorder.pausePlayback();
+        expect(states()).toEqual(['preparingToPause', 'preparingToPause', 'preparingToPause', true, 1, 2]);
+        diagram.mock.timeStep(1);
+        expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+        diagram.mock.timeStep(1);
+        expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+      });
     });
   });
 });
