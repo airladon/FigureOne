@@ -9,6 +9,7 @@ import {
 import type { DiagramElement } from './Element';
 import Worker from './recorder.worker.js';
 import type Diagram from './Diagram';
+import type { TypeScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 // import GlobalAnimation from './webgl/GlobalAnimation';
 // Singleton class that contains projects global variables
 
@@ -29,6 +30,20 @@ export type TypePauseSettings = {
   pulse?: TypeOnPause;
   movingFreely?: TypeOnPause;
 } | TypeOnPause;
+
+export type TypeResumeSettings = {
+  action: 'dissolve' | 'animate' | 'instant',
+  duration?: number | {
+    dissovlveOut: ?number,
+    dissovlveIn: ?number,
+    delay: ?number,
+  },
+  velocity?: TypeScenarioVelocity,
+  maxTime?: number,
+  minTime?: number,
+  zeroDurationThreshold?: boolean,
+  allDurationsSame?: boolean,
+} | 'dissolve' | 'animate' | 'instant';
 
 function getIndexOfEarliestTime(
   recordedData: TypeEvents | TypeStateDiffs,
@@ -208,16 +223,7 @@ class Recorder {
 
   settings: {
     pause: TypePauseSettings,
-    resume: {
-      action: 'dissolve' | 'animate' | 'instant',
-      // dissolve?: Boolean,
-      duration?: number,
-      velocity?: ?{
-
-      },
-      maxTime?: number,
-      minTime?: number,
-    },
+    resume: TypeResumeSettings,
   };
 
   static instance: Object;
@@ -273,10 +279,8 @@ class Recorder {
     this.worker = null;
     this.pauseState = null;
     this.settings = {
-      pause: {
-        onPause: 'freeze',
-      },
-      resume: {        }
+      pause: 'freeze',
+      resume: 'instant',
     }
   }
 
@@ -1237,27 +1241,71 @@ class Recorder {
     this.subscriptions.trigger('playbackStarted');
   }
 
-  resumePlayback(optionsIn: {
-    maxTime: number,
-    minTime: number,
-    duration: number,
-    dissolve: boolean,
-    delay: number,
-  }) {
+  getResumeSettings(resumeSettings: TypeResumeSettings) {
+    let onResume = {
+      action: 'instant',
+      maxTime: 1,
+      velocity: {
+        position: 2,
+        rotation: Math.PI * 2 / 2,
+        scale: 1,
+        opacity: 0.8,
+        color: 0.8,
+      },
+      allDurationsSame: true,
+      zeroDurationThreshold: 0.1,
+      minTime: 0,
+      duration: null,
+    }
+    if (typeof resumeSettings === 'string') {
+      onResume.action = resumeSettings;
+    } else {
+      onResume = joinObjects({}, onResume, resumeSettings);
+      // velocity trumps duration by default, but if only duration is defined by the
+      // user, then remove velocity;
+      if (resumeSettings.duration != null && resumeSettings.velocity == null) {
+        onResume.velocity = undefined;
+      }
+    }
+    if (onResume.action === 'dissolve') {
+      const defaultDuration = {
+        dissolveIn: 0.8,
+        dissolveOut: 0.8,
+        delay: 0.2,
+      }
+      if (onResume.duration == null) {
+        onResume.duration = defaultDuration;
+      } else if (typeof onResume.duration === 'number') {
+        onResume.duration = {
+          dissolveOut: onResume.duration / 10 * 4.5,
+          dissolveIn: onResume.duration / 10 * 4.5,
+          delay: onResume.duration / 10 * 1,
+        }
+      } else {
+        onResume.duration = joinObjects({}, defaultDuration, onResume.duration);
+      }
+    } else if (onResume.duration != null && typeof onResume.duration !== 'number') {
+      onResume.duration = 1;
+    }
+    return onResume;
+  }
+
+  resumePlayback(resumeSettingsIn: TypeResumeSettings) {
     if (this.pauseState == null) {
       this.startPlayback(this.currentTime);
       return;
     }
+    const resumeSettings = this.getResumeSettings(resumeSettingsIn);
     const defaultOptions = {
       maxTime: 1,
       minTime: 0,
       dissolve: false,
       delay: 0.2,
     }
-    const options = joinObjects({}, defaultOptions, optionsIn);
-    if (options.dissolve && options.duration == null) {
-      options.duration = 0.8;
-    }
+    // const options = joinObjects({}, defaultOptions, optionsIn);
+    // if (options.dissolve && options.duration == null) {
+    //   options.duration = 0.8;
+    // }
 
     this.diagram.unpause();
     let finishedFlag = false;
@@ -1275,38 +1323,33 @@ class Recorder {
       this.subscriptions.trigger('playbackStarted');
     };
 
-    if (this.diagram.elements.isStateSame(this.pauseState.elements)) {
+    if (resumeSettings.action === 'instant' || this.diagram.elements.isStateSame(this.pauseState.elements)) {
       finished();
       return;
     }
     // const id = this.diagram.subscriptions.subscribe('animationsFinished', finished, 1);
-    if (options.dissolve === true) {
+    if (resumeSettings.action === 'dissolve') {
       this.diagram.stop();
       this.diagram.dissolveToState({
         state: this.pauseState,
-        dissolveInDuration: options.duration,
-        dissolveOutDuration: options.duration,
+        dissolveInDuration: resumeSettings.duration.dissolveIn,
+        dissolveOutDuration: resumeSettings.duration.dissolveOut,
         done: finished,
-        delay: options.delay,
+        delay: resumeSettings.duration.delay,
       });
     } else {
       this.diagram.animateToState(
         this.pauseState,
-        {
-          // delay: 1,
-          maxTime: options.maxTime,
-          velocity: {
-            position: 2,
-            rotation: Math.PI * 2 / 2,
-            scale: 1,
-            opacity: 0.8,
-            color: 0.8,
-          },
-          allDurationsSame: true,
-          zeroDurationThreshold: 0.1,
-          minTime: options.minTime,
-          duration: options.duration,
-        },
+        // {
+        //   // delay: 1,
+        //   maxTime: resumeSettings.maxTime,
+        //   velocity: resumeSettings.velocity,
+        //   allDurationsSame: true,
+        //   zeroDurationThreshold: 0.1,
+        //   minTime: options.minTime,
+        //   duration: options.duration,
+        // },
+        resumeSettings,
         finished,
       );
     }
