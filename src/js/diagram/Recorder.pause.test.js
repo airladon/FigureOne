@@ -320,6 +320,35 @@ describe('Animate To State', () => {
       diagram.mock.timeStep(1);
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
     });
+    test('Freeze on pause, no state change, dissolve set', () => {
+      a.pauseSettings.animation = {
+        complete: false,
+        clear: false,
+        completeBeforePause: false,
+      }
+      expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 0]);
+      recorder.startPlayback(0);
+      diagram.mock.timeStep(0);
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 0]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 2, 0]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 0.5]);
+      
+      recorder.pausePlayback();
+      expect(states()).toEqual(['idle', 'paused', 'paused', true, 1, 0.5]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['idle', 'paused', 'paused', true, 1, 0.5]);
+
+      recorder.resumePlayback({ dissolve: true, duration: 1, delay: 1, });
+      diagram.mock.timeStep(0);
+
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 0.5]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+    });
     test('Freeze on pause, change state, dissolve out, then in', () => {
       a.pauseSettings.animation = {
         complete: false,

@@ -1246,6 +1246,11 @@ class Recorder {
       }
       this.subscriptions.trigger('playbackStarted');
     };
+
+    if (this.diagram.elements.isStateSame(this.pauseState.elements)) {
+      finished();
+      return;
+    }
     // const id = this.diagram.subscriptions.subscribe('animationsFinished', finished, 1);
     if (options.dissolve === true) {
       this.diagram.stop();

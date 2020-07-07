@@ -1030,6 +1030,19 @@ class DiagramElement {
     return duration;
   }
 
+  isStateSame(state: Object) {
+    if (this.isShown != state.isShown || this.opacity != state.opacity) {
+      return false;
+    }
+    if (!areColorsSame(this.color, state.color)) {
+      return false;
+    }
+    if (!this.transform.isEqualTo(getTransform(state.transform))) {
+      return false;
+    }
+    return true;
+  }
+
   getDrawTransforms(transform: Transform) {
     let drawTransforms = [transform];
     const transformBy = (inputTransforms, copyTransforms) => {
@@ -4583,6 +4596,23 @@ class DiagramElementCollection extends DiagramElement {
       }
     }
     return pause;
+  }
+
+  isStateSame(state: Object) {
+    const thisElementResult = super.isStateSame(state);
+    if (thisElementResult === false) {
+      return false;
+    }
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (state.elements != null && state.elements[this.drawOrder[i]] != null) {
+        const elementResult = element.isStateSame(state.elements[this.drawOrder[i]]);
+        if (elementResult === false) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 }
 
