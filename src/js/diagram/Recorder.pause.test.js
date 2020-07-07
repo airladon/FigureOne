@@ -496,6 +496,57 @@ describe('Animate To State', () => {
       });
     })
   });
+  describe('Pulse', () => {
+    let states;
+    let callbacks;
+    beforeEach(() => {
+      const startPulse = () => {
+        a.pulseScaleNow(2, 2);
+      };
+      recorder.addEventType('startPulse', startPulse.bind(this));
+
+      diagram.mock.timeStep(0);
+      recorder.startRecording();
+      diagram.mock.timeStep(1);
+      startPulse();
+      recorder.recordEvent('startPulse');
+      diagram.mock.timeStep(1);
+      diagram.mock.timeStep(1);
+      diagram.mock.timeStep(1);
+      recorder.recordEvent('touch', ['up']);
+      recorder.stopRecording();
+      recorder.seek(0);
+
+      const check = (recorderState, diagramIsPaused, aIsPaused, isAnimating, remainingAnimationTime, x) => {
+        expect(recorderState).toEqual(recorderState)
+      }
+      states = () => {
+        debugger;
+        const scale = a.drawTransforms[0].s().round(3).x;
+        return [recorder.state, diagram.state.pause, a.state.pause, diagram.isAnimating(), round(diagram.getRemainingAnimationTime()), scale];
+      };
+      callbacks = () => [
+        preparingToPlayCallback.mock.calls.length,
+        playbackStartedCallback.mock.calls.length,
+        preparingToPauseCallback.mock.calls.length,
+        playbackStoppedCallback.mock.calls.length,
+      ];
+    });
+    test.only('No Pausing', () => {
+      expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+      recorder.startPlayback(0);
+      diagram.mock.timeStep(0);
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 2, 1]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 2]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+    });
+  });
 });
 
 // import {
