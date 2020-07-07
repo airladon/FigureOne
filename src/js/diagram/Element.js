@@ -1014,9 +1014,10 @@ class DiagramElement {
     this.color = state.color.slice();
     this.frozenPulseTransforms = [];
     state.pulseTransforms.forEach((t) => this.frozenPulseTransforms.push(getTransform(t)));
+    this.show();
     this.animations.new()
       .opacity({
-        target: state.target,
+        target: state.opacity,
         start: 0.001,
         duration,
       })

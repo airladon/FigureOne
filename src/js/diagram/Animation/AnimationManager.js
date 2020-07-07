@@ -10,6 +10,7 @@ import { DiagramElement } from '../Element';
 // } from './Animation';
 // eslint-disable-next-line import/no-cycle
 import * as anim from './Animation';
+import GlobalAnimation from '../webgl/GlobalAnimation';
 import { joinObjects, duplicateFromTo } from '../../tools/tools';
 import { getState } from '../state';
 import { FunctionMap } from '../../tools/FunctionMap';
@@ -241,15 +242,31 @@ export default class AnimationManager {
     this.cleanAnimations();
   }
 
-  start(name?: string) {
+  getFrameTime(frame: 'next' | 'prev' | 'now') {
+    if (frame === 'prev') {
+      return new GlobalAnimation().lastFrame;
+    }
+    if (frame === 'now') {
+      return performance.now();
+    }
+    return null;
+  }
+
+  start(optionsIn: {
+    name?: string,
+    frame?: 'next' | 'prev' | 'now',
+  }) {
+    const options = joinObjects({}, optionsIn, { name: null, frame: 'next' });
+    const { name, frame } = options;
+    const frameTime = this.getFrameTime(frame);
     if (name == null) {
-      this.startAll();
+      this.startAll(frame);
     } else {
       for (let i = 0; i < this.animations.length; i += 1) {
         const animation = this.animations[i];
         if (animation.name === name) {
           if (animation.state !== 'animating') {
-            animation.start();
+            animation.start(frameTime);
             animation.finishIfZeroDuration();
             if (animation.state === 'animating') {
               this.state = 'animating';
@@ -263,11 +280,14 @@ export default class AnimationManager {
     }
   }
 
-  startAll() {
+  startAll(optionsIn: { frame?: 'next' | 'prev' | 'now' } ) {
+    const options = joinObjects({}, optionsIn, { frame: 'next' });
+    const { frame } = options;
+    const frameTime = this.getFrameTime(frame);
     for (let i = 0; i < this.animations.length; i += 1) {
       const animation = this.animations[i];
       if (animation.state !== 'animating') {
-        animation.start();
+        animation.start(frameTime);
         animation.finishIfZeroDuration();
         if (animation.state === 'animating') {
           this.state = 'animating';
