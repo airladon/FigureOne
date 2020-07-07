@@ -50,12 +50,12 @@ describe('Animate To State', () => {
     subs.subscribe('preparingToPlay', preparingToPlayCallback);
     recorder.stateTimeStep = 1;
   });
-  describe('Animate to State', () => {
+  describe('Animation', () => {
     let states;
     let callbacks;
     beforeEach(() => {
-      a.pauseSettings.animation.complete = false;
-      a.pauseSettings.animation.clear = true;
+      // a.pauseSettings.animation.complete = false;
+      // a.pauseSettings.animation.clear = true;
       const startAnimation = () => {
         a.animations.new()
           .position({ start: [0, 0], target: [1, 1], duration: 2 })
@@ -102,12 +102,73 @@ describe('Animate To State', () => {
       diagram.mock.timeStep(1);
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
     });
+    describe('Pause', () => {
+      beforeEach(() => {
+        expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 0]);
+        recorder.startPlayback(0);
+        diagram.mock.timeStep(0);
+        expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 0]);
+        diagram.mock.timeStep(1);
+        expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 2, 0]);
+        diagram.mock.timeStep(1);
+        expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 0.5]);
+      });
+      test.only('Freeze', () => {
+        recorder.settings.pause = 'freeze';
+        recorder.pausePlayback();
+        expect(states()).toEqual(['idle', 'paused', 'paused', true, 1, 0.5]);
+        diagram.mock.timeStep(1);
+        expect(states()).toEqual(['idle', 'paused', 'paused', true, 1, 0.5]);
+      });
+      test.only('Complete', () => {
+        recorder.settings.pause = 'complete';
+        recorder.pausePlayback();
+        expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+        diagram.mock.timeStep(1);
+        expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+      });
+      test.only('Complete before pause', () => {
+        recorder.settings.pause = 'completeBeforePause';
+        recorder.pausePlayback();
+        expect(states()).toEqual(['preparingToPause', 'preparingToPause', 'preparingToPause', true, 1, 0.5]);
+        diagram.mock.timeStep(0.5);
+        expect(states()).toEqual(['preparingToPause', 'preparingToPause', 'preparingToPause', true, 0.5, 0.9]);
+        diagram.mock.timeStep(0.5);
+        expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+        diagram.mock.timeStep(1);
+        expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+      });
+    });
+    describe('Resume after Freeze', () => {
+      beforeEach(() => {
+        recorder.settings.pause = { default: 'freeze' };
+        recorder.startPlayback(0);
+        diagram.mock.timeStep(0);
+        diagram.mock.timeStep(1);
+        diagram.mock.timeStep(1);
+        recorder.pausePlayback();
+        expect(states()).toEqual(['idle', 'paused', 'paused', true, 1, 0.5]);
+      });
+      describe('No State Change', () => {
+        test.only('Instant resume', () => {
+          recorder.resumePlayback();
+          expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 0.5]);
+          diagram.mock.timeStep(1);
+          expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
+          diagram.mock.timeStep(1);
+          expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+        });
+        test.only('Animate to resume', () => {});
+        test.only('Dissolve to resume', () => {});
+      });
+      describe('State Change', () => {
+        test.only('Instant resume', () => {});
+        test.only('Animate to resume', () => {});
+        test.only('Dissolve to resume', () => {});
+      });
+    });
     test('Freeze on pause, continue on next frame after unpause', () => {
-      a.pauseSettings.animation = {
-        complete: false,
-        clear: false,
-        completeBeforePause: false,
-      }
+      recorder.settings.pause = { default: 'freeze' };
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 0]);
       recorder.startPlayback(0);
       diagram.mock.timeStep(0);
@@ -130,11 +191,7 @@ describe('Animate To State', () => {
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
     });
     test('Freeze on pause, change state, instant back to unpause', () => {
-      a.pauseSettings.animation = {
-        complete: false,
-        clear: false,
-        completeBeforePause: false,
-      }
+      recorder.settings.pause = { default: 'freeze' };
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 0]);
       recorder.startPlayback(0);
       diagram.mock.timeStep(0);
@@ -159,11 +216,7 @@ describe('Animate To State', () => {
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
     });
     test('Freeze on pause, change state, animate to unpause', () => {
-      a.pauseSettings.animation = {
-        complete: false,
-        clear: false,
-        completeBeforePause: false,
-      }
+      recorder.settings.pause = { default: 'freeze' };
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 0]);
       recorder.startPlayback(0);
       diagram.mock.timeStep(0);
@@ -193,11 +246,7 @@ describe('Animate To State', () => {
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
     });
     test('Finish Animating on Pause, instant back to unpause', () => {
-      a.pauseSettings.animation = {
-        complete: false,
-        clear: false,
-        completeBeforePause: true,
-      }
+      recorder.settings.pause = { default: 'completeBeforePause' };
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 0]);
       recorder.startPlayback(0);
       diagram.mock.timeStep(0);
@@ -222,11 +271,7 @@ describe('Animate To State', () => {
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
     });
     test('Finish Animating on Pause, animate to unpause', () => {
-      a.pauseSettings.animation = {
-        complete: false,
-        clear: false,
-        completeBeforePause: true,
-      }
+      recorder.settings.pause = { default: 'completeBeforePause' };
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 0]);
       recorder.startPlayback(0);
       diagram.mock.timeStep(0);
@@ -256,11 +301,7 @@ describe('Animate To State', () => {
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
     });
     test('Finish Animating on Pause, change state, instant back to unpause', () => {
-      a.pauseSettings.animation = {
-        complete: false,
-        clear: false,
-        completeBeforePause: true,
-      }
+      recorder.settings.pause = { default: 'completeBeforePause' };
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 0]);
       recorder.startPlayback(0);
       diagram.mock.timeStep(0);
@@ -286,11 +327,7 @@ describe('Animate To State', () => {
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
     });
     test('Finish Animating on Pause, change state, animate to unpause', () => {
-      a.pauseSettings.animation = {
-        complete: false,
-        clear: false,
-        completeBeforePause: true,
-      }
+      recorder.settings.pause = { default: 'completeBeforePause' };
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 0]);
       recorder.startPlayback(0);
       diagram.mock.timeStep(0);
@@ -321,11 +358,7 @@ describe('Animate To State', () => {
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
     });
     test('Freeze on pause, no state change, dissolve set', () => {
-      a.pauseSettings.animation = {
-        complete: false,
-        clear: false,
-        completeBeforePause: false,
-      }
+      recorder.settings.pause = { default: 'freeze' };
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 0]);
       recorder.startPlayback(0);
       diagram.mock.timeStep(0);
@@ -350,11 +383,7 @@ describe('Animate To State', () => {
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
     });
     test('Freeze on pause, change state, dissolve out, then in', () => {
-      a.pauseSettings.animation = {
-        complete: false,
-        clear: false,
-        completeBeforePause: false,
-      }
+      recorder.settings.pause = { default: 'freeze' };
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 0]);
       recorder.startPlayback(0);
       diagram.mock.timeStep(0);

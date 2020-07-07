@@ -40,6 +40,7 @@ import WebGLInstance from './webgl/webgl';
 // import type Diagram from './Diagram';
 import { FunctionMap } from '../tools/FunctionMap';
 import type Diagram from './Diagram';
+import type { TypePauseSettings, TypeOnPause } from './Recorder';
 
 // eslint-disable-next-line import/no-cycle
 // import {
@@ -267,18 +268,7 @@ class DiagramElement {
 
   lastDrawTime: number;
 
-  pauseSettings: {
-    animation: {
-      completeBeforePause: boolean,
-      complete: boolean,
-      clear: boolean,
-    },
-    pulse: {
-      completeBeforePause: boolean,
-      complete: boolean,
-      clear: boolean,
-    }
-  }
+  pauseSettings: TypePauseSettings;
 
   // scenarioSet: {
   //   quiz1: [
@@ -349,23 +339,7 @@ class DiagramElement {
     this.isPaused = false;
     // this.copies = [];
 
-    this.pauseSettings = {
-      animation: {
-        completeBeforePause: false,
-        complete: false,
-        clear: true,
-      },
-      pulse: {
-        completeBeforePause: false,
-        complete: false,
-        clear: true,
-      },
-      movingFreely: {
-        completeBeforePause: false,
-        complete: false,
-        clear: true,
-      }
-    }
+    this.pauseSettings = {};
 
     // Rename to animate in future
     this.anim = {
@@ -1196,36 +1170,84 @@ class DiagramElement {
     this.undim();
   }
 
-  pause() {
-    // forcePause: boolean = false, clearAnimations: boolean = false, elementOnly: boolean = false) {
+  getPauseSettings(pauseSettingsIn: TypePauseSettings): {
+    animation: TypeOnPause,
+    pulse: TypeOnPause,
+    movingFreely: TypeOnPause,
+  } {
+    let pauseSettings;
+    let defaultPause = 'freeze'
+    if (typeof pauseSettingsIn === 'string') {
+      pauseSettings = {
+        animation: pauseSettingsIn,
+        pulse: pauseSettingsIn,
+        movingFreely: pauseSettingsIn,
+      }
+      defaultPause = pauseSettingsIn;
+    } else {
+      pauseSettings = {
+        animation: pauseSettingsIn.animation,
+        pulse: pauseSettingsIn.pulse,
+        movingFreely: pauseSettingsIn.movingFreely,
+      }
+      defaultPause = pauseSettingsIn.default;
+    };
+    if (typeof this.pauseSettings === 'string') {
+      defaultPause = this.pauseSettings;
+    }
+    if (defaultPause == null) {
+      defaultPause = 'freeze';
+    }
+    if (typeof this.pauseSettings === 'object' && this.pauseSettings.animation != null) {
+      pauseSettings.animation = this.pauseSettings.animation;
+    }
+    if (typeof this.pauseSettings === 'object' && this.pauseSettings.pulse != null) {
+      pauseSettings.pulse = this.pauseSettings.pulse;
+    }
+    if (typeof this.pauseSettings === 'object' && this.pauseSettings.movingFreely != null) {
+      pauseSettings.movingFreely = this.pauseSettings.movingFreely;
+    }
+    if (pauseSettings.animation == null) {
+      pauseSettings.animation = defaultPause;
+    }
+    if (pauseSettings.pulse == null) {
+      pauseSettings.pulse = defaultPause;
+    }
+    if (pauseSettings.movingFreely == null) {
+      pauseSettings.movingFreely = defaultPause;
+    }
+    return pauseSettings;
+  }
+
+  pause(pauseSettingsIn: TypePauseSettings = {}) {
     const pause = () => {
       this.isPaused = true;
       this.state.pause = 'paused';
       this.subscriptions.trigger('paused');
     };
     let pauseWhenFinished = false;
-    const { animation, pulse, movingFreely } = this.pauseSettings;
+    const { animation, pulse, movingFreely } = this.getPauseSettings(pauseSettingsIn);
     // if (this.name === 'a' && this.asdf) {
     //   debugger;
     // }
+
     if (this.animations.isAnimating()) {
-      if (animation.completeBeforePause) {
+      if (animation === 'completeBeforePause') {
         pauseWhenFinished = true;
-      } else if (animation.complete) {
+      } else if (animation === 'complete') {
         this.animations.cancelAll('complete');
-      } else if (animation.clear) {
-        this.animations.cancelAll('noComplete');
+      // } else {
+      //   this.animations.cancelAll('noComplete');
       }
     }
     // console.log(this.name, pauseWhenFinished)
     if (this.state.isPulsing) {
-      if (pulse.completeBeforePause) {
+      if (pulse === 'completeBeforePause') {
         pauseWhenFinished = true;
-      } else if (pulse.complete) {
+      } else if (pulse === 'complete') {
         this.stopPulsing(true, 'complete');
-        // this.pulseTransforms = [];
-      } else if (pulse.clear) {
-        this.stopPulsing(true, 'noComplete');
+      // } else {
+      //   this.stopPulsing(true, 'noComplete');
       }
     }
     // console.log(this.name, pauseWhenFinished)
@@ -4559,11 +4581,11 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  pause() {
-    super.pause();
+  pause(pauseSettingsIn: TypePauseSettings = {}) {
+    super.pause(pauseSettingsIn);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.pause();
+      element.pause(pauseSettingsIn);
     }
   }
 
