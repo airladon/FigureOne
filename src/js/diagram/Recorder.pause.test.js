@@ -352,13 +352,26 @@ describe('Animate To State', () => {
       diagram.mock.timeStep(0.5);
       expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 2.5, 2.5]);
       expect(diagram.elements.opacity).toBe(0.5005);
+      expect(a.isShown).toBe(true);
       diagram.mock.timeStep(0.5);
       expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 2, 2.5]);
       expect(diagram.elements.opacity = 1);
-      expect(diagram.elements.isShown).toBe(false);
+      expect(diagram.elements.isShown).toBe(true);
+      expect(a.isShown).toBe(false);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 1, 0.5]);
+      expect(diagram.elements.opacity = 1);
+      expect(diagram.elements.isShown).toBe(true);
+      expect(a.isShown).toBe(false);
 
+      diagram.mock.timeStep(0.5);
+      expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.5, 0.5]);
+      expect(diagram.elements.opacity = 1);
+      expect(diagram.elements.isShown).toBe(true);
+      expect(a.isShown).toBe(true);
+      expect(a.opacity).toBe(0.5005);
 
-
+      diagram.mock.timeStep(0.5);
       expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 0.5]);
       diagram.mock.timeStep(1);
       expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
