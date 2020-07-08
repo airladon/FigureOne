@@ -32,7 +32,7 @@ import type {
   TypeRotationAnimationStepInputOptions, TypeScaleAnimationStepInputOptions,
   TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
   TypeParallelAnimationStepInputOptions, TypeTriggerStepInputOptions,
-  TypeDelayStepInputOptions,
+  TypeDelayStepInputOptions, TypePulseTransformAnimationStepInputOptions,
 } from './Animation/Animation';
 // eslint-disable-next-line import/no-cycle
 import * as animations from './Animation/Animation';
@@ -182,6 +182,7 @@ class DiagramElement {
     transformMethod: string | ((number, ?Point) => Transform),
     callback: ?(string | ((mixed) => void));
     allowFreezeOnStop: boolean,
+    // clearFrozenTransforms: boolean,
   };
 
   pulseDefault: string | ((?() => void) => void) | {
@@ -378,6 +379,10 @@ class DiagramElement {
       transform: (...optionsIn: Array<TypeTransformAnimationStepInputOptions>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.TransformAnimationStep(options);
+      },
+      pulseTransform: (...optionsIn: Array<TypePulseTransformAnimationStepInputOptions>) => {
+        const options = joinObjects({}, { element: this }, ...optionsIn);
+        return new animations.PulseTransformAnimationStep(options);
       },
       pulse(...optionsIn: Array<TypePulseAnimationStepInputOptions>) {
         const options = joinObjects({}, { element: this }, ...optionsIn);
@@ -619,6 +624,7 @@ class DiagramElement {
       transformMethod: '_elementPulseSettingsTransformMethod',
       callback: () => {},
       allowFreezeOnStop: false,
+      // clearFrozenTransforms: false,
     };
 
     this.state = {
@@ -2907,6 +2913,11 @@ class DiagramElementPrimitive extends DiagramElement {
   setupDraw(parentTransform: Transform = new Transform(), now: number = 0) {
     if (this.isShown) {
       this.lastDrawTime = now;
+      // if (this.pulseSettings.clearFrozenTransforms) {
+      //   this.frozenPulseTransforms = [];
+      //   this.pulseSettings.clearFrozenTransforms = false;
+      // }
+      // this.pulseTransforms = [];
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {
           this.unrender();
@@ -3392,6 +3403,10 @@ class DiagramElementCollection extends DiagramElement {
     // console.log('draw', this.name)
     if (this.isShown) {
       this.lastDrawTime = now;
+      // if (this.pulseSettings.clearFrozenTransforms) {
+      //   this.frozenPulseTransforms = [];
+      //   this.pulseSettings.clearFrozenTransforms = false;
+      // }
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {
           this.unrender();

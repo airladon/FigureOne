@@ -102,6 +102,63 @@ describe('Animate To State', () => {
       diagram.mock.timeStep(1);
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
     });
+    test('Try to change paused diagram during recorder pause', () => {
+      expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 0]);
+      recorder.startPlayback(0);
+      diagram.mock.timeStep(0);
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 0]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 2, 0]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 0.5]);
+      recorder.settings.pause = 'freeze';
+      recorder.pausePlayback();
+
+      a.animations.new()
+        .position({ target: [4.5, 4.5], duration: 2 })
+        .start();
+      diagram.mock.timeStep(0);
+      diagram.mock.timeStep(1);
+      expect(a.getPosition().round(3).x).toBe(0.5);
+
+      // Resume
+      recorder.settings.resume = 'instant';
+      recorder.resumePlayback();
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 0.5]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+    });
+    test('Change upaused diagram during recorder pause', () => {
+      expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 0]);
+      recorder.startPlayback(0);
+      diagram.mock.timeStep(0);
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 0]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 2, 0]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 0.5]);
+      recorder.settings.pause = 'freeze';
+      recorder.pausePlayback();
+
+      diagram.unpause()
+      a.animations.new()
+        .position({ target: [4.5, 4.5], duration: 2 })
+        .start();
+      diagram.mock.timeStep(0);
+      diagram.mock.timeStep(1);
+      expect(a.getPosition().round(3).x).toBe(2.5);
+
+      // Resume
+      recorder.settings.resume = 'instant';
+      recorder.resumePlayback();
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 0.5]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+    });
     describe('Pause', () => {
       beforeEach(() => {
         expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 0]);
@@ -604,18 +661,35 @@ describe('Animate To State', () => {
           recorder.settings.resume = 'dissolve';
         });
       });
-      // describe('Pulse State Change', () => {
-      //   beforeEach(() => {
-      //     a.pulseScaleNow(2, 4);
-      //     diagram.mock
-      //   });
-      //   afterEach(() => {
-      //     expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 0.5]);
-      //     diagram.mock.timeStep(1);
-      //     expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
-      //     diagram.mock.timeStep(1);
-      //     expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
-      //   });
+      describe('Pulse State Change', () => {
+        beforeEach(() => {
+          diagram.unpause();
+          a.pulseScaleNow(2, 4);
+          diagram.mock.timeStep(0);
+          diagram.mock.timeStep(1);
+          expect(states()).toEqual(['idle', 'unpaused', 'unpaused', true, 1, 4]);
+        });
+        afterEach(() => {
+          diagram.mock.timeStep(0);
+          expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 2]);
+          diagram.mock.timeStep(1);
+          expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
+          diagram.mock.timeStep(1);
+          expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+        });
+        test('Instant resume', () => {
+          recorder.settings.resume = 'instant';
+          recorder.resumePlayback();
+        });
+        test.only('animate resume', () => {
+          recorder.settings.resume = 'animate';
+          recorder.resumePlayback();
+          diagram.mock.timeStep(0);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 1, 4]);
+          diagram.mock.timeStep(1);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 1, 2]);
+        });
+      });
     });
   });
   describe('Pulse Lines', () => {

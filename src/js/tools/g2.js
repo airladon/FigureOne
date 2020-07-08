@@ -1852,11 +1852,12 @@ class Transform {
         if (count === actualIndex) {
           this.order[i] = new Translation(x, yOrIndex, this.name);
           this.calcMatrix();
-          return;
+          return this;
         }
         count += 1;
       }
     }
+    return this;
   }
 
   s(index: number = 0): ?Point {
@@ -1917,11 +1918,12 @@ class Transform {
         if (count === actualIndex) {
           this.order[i] = new Scale(x, yOrIndex, this.name);
           this.calcMatrix();
-          return;
+          return this;
         }
         count += 1;
       }
     }
+    return this;
   }
 
   r(index: number = 0): ?number {
@@ -1946,11 +1948,12 @@ class Transform {
         if (count === index) {
           this.order[i] = new Rotation(r, this.name);
           this.calcMatrix();
-          return;
+          return this;
         }
         count += 1;
       }
     }
+    return this;
   }
 
   m(): Array<number> {

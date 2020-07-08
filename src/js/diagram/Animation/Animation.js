@@ -34,6 +34,11 @@ import type {
 import TransformAnimationStep from './AnimationStep/ElementAnimationStep/TransformAnimationStep';
 
 import type {
+  TypePulseTransformAnimationStepInputOptions,
+} from './AnimationStep/ElementAnimationStep/PulseTransformAnimationStep';
+import PulseTransformAnimationStep from './AnimationStep/ElementAnimationStep/PulseTransformAnimationStep';
+
+import type {
   TypeRotationAnimationStepInputOptions,
 } from './AnimationStep/ElementAnimationStep/RotationAnimationStep';
 import RotationAnimationStep from './AnimationStep/ElementAnimationStep/RotationAnimationStep';
@@ -110,6 +115,7 @@ export type {
   TypeAnimationManagerInputOptions, TypeRotationAnimationStepInputOptions,
   TypeScaleAnimationStepInputOptions, TypePulseAnimationStepInputOptions,
   TypeOpacityAnimationStepInputOptions, TypeScenarioAnimationStepInputOptions,
+  TypePulseTransformAnimationStepInputOptions,
 };
 export {
   PositionAnimationStep, AnimationBuilder, ParallelAnimationStep, SerialAnimationStep,
@@ -119,4 +125,5 @@ export {
   CustomAnimationStep, custom, AnimationManager, RotationAnimationStep,
   ScaleAnimationStep, PulseAnimationStep, OpacityAnimationStep,
   DimAnimationStep, dim, UndimAnimationStep, undim, ScenarioAnimationStep,
+  PulseTransformAnimationStep,
 };
