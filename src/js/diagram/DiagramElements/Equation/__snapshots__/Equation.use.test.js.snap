@@ -14,6 +14,7 @@ DiagramElementPrimitive {
     "opacity": [Function],
     "position": [Function],
     "pulse": [Function],
+    "pulseTransform": [Function],
     "rotation": [Function],
     "scale": [Function],
     "scenario": [Function],
@@ -416,23 +417,7 @@ DiagramElementPrimitive {
   "onClick": null,
   "opacity": 1,
   "parent": null,
-  "pauseSettings": Object {
-    "animation": Object {
-      "clear": true,
-      "complete": false,
-      "completeBeforePause": false,
-    },
-    "movingFreely": Object {
-      "clear": true,
-      "complete": false,
-      "completeBeforePause": false,
-    },
-    "pulse": Object {
-      "clear": true,
-      "complete": false,
-      "completeBeforePause": false,
-    },
-  },
+  "pauseSettings": Object {},
   "pointsDefinition": Object {},
   "pointsToDraw": -1,
   "pulseDefault": Object {
@@ -473,6 +458,10 @@ DiagramElementPrimitive {
     "pauseState": null,
     "precision": 4,
     "reference": "__base",
+    "settings": Object {
+      "pause": "freeze",
+      "resume": "instant",
+    },
     "state": "idle",
     "stateIndex": -1,
     "stateTimeStep": 1,

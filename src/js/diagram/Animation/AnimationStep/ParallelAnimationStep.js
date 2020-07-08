@@ -28,11 +28,18 @@ export class ParallelAnimationStep extends AnimationStep {
     }
     super(options);
     this.steps = [];
+    let steps = [];
     if (!Array.isArray(options.steps) && options.steps != null) {
-      this.steps = [options.steps];
+      steps = [options.steps];
     } else if (options.steps != null) {
-      this.steps = options.steps;
+      steps = options.steps;
     }
+    this.steps = [];
+    steps.forEach((step) => {
+      if (step != null) {
+        this.steps.push(step);
+      }
+    });
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
@@ -55,7 +62,9 @@ export class ParallelAnimationStep extends AnimationStep {
   }
 
   with(step: AnimationStep) {
-    this.steps.push(step);
+    if (step != null) {
+      this.steps.push(step);
+    }
     return this;
   }
 

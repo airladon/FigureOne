@@ -1906,17 +1906,29 @@ class Transform {
     return calcTransform;
   }
 
-  updateScale(x: number | Point, yOrIndex: number = 0, index: number = 0) {
+  updateScale(x: number | Point, yOrIndex: ?number = null, index: number = 0) {
     let count = 0;
     let actualIndex = index;
+    let scale = new Point(1, 1);
     if (x instanceof Point) {
-      actualIndex = yOrIndex;
+      if (yOrIndex == null) {
+        actualIndex = 0;
+      } else {
+        actualIndex = yOrIndex;
+      }
+      scale = x;
+    } else if (yOrIndex == null) {
+      scale.x = x;
+      scale.y = x;
+    } else {
+      scale.x = x;
+      scale.y = yOrIndex;
     }
     for (let i = 0; i < this.order.length; i += 1) {
       const t = this.order[i];
       if (t instanceof Scale) {
         if (count === actualIndex) {
-          this.order[i] = new Scale(x, yOrIndex, this.name);
+          this.order[i] = new Scale(scale.x, scale.y, this.name);
           this.calcMatrix();
           return this;
         }

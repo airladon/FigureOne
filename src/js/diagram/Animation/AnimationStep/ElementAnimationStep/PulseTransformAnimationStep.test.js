@@ -160,6 +160,21 @@ describe('Diagram Recorder', () => {
     expect(a.frozenPulseTransforms[0].s().round(3).x).toEqual(2);
     expect(a.frozenPulseTransforms.length).toBe(1);
   });
+  test('Simple Pulse with velocity', () => {
+    expect(a.frozenPulseTransforms.length).toBe(0);
+    a.animations.new()
+      .pulseTransforms({ start: [start], target: [target], velocity: { scale: 0.5 } })
+      .start();
+    diagram.mock.timeStep(0);
+    expect(a.frozenPulseTransforms[0].s().round(3).x).toEqual(1);
+    expect(a.frozenPulseTransforms.length).toBe(1);
+    diagram.mock.timeStep(1);
+    expect(a.frozenPulseTransforms[0].s().round(3).x).toEqual(1.5);
+    expect(a.frozenPulseTransforms.length).toBe(1);
+    diagram.mock.timeStep(2);
+    expect(a.frozenPulseTransforms[0].s().round(3).x).toEqual(2);
+    expect(a.frozenPulseTransforms.length).toBe(1);
+  });
   test('1 to 3', () => {
     const s1 = a.transform._dup();
     const t1 = a.transform._dup().updateScale(0.5);

@@ -1,9 +1,9 @@
 // @flow
 import {
-  Transform,
+  Transform, getScale, getTransform,
   Rotation, getDeltaAngle, getMaxTimeFromVelocity,
 } from '../../../../tools/g2';
-import type { pathOptionsType } from '../../../../tools/g2';
+import type { pathOptionsType, TypeParsablePoint, TypeParsableTransform } from '../../../../tools/g2';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
@@ -20,7 +20,13 @@ export type TypePulseTransformAnimationStepInputOptions = {
   translationOptions?: pathOptionsType;
   rotDirection: 0 | 1 | -1 | 2;
   clipRotationTo: '0to360' | '-180to180' | null;
-  velocity: ?Transform | number;
+  velocity: ?Transform | number | {
+    position?: TypeParsablePoint | number,
+    translation?: TypeParsablePoint | number,
+    rotation?: number,
+    scale?: TypeParsablePoint | number,
+    transform?: TypeParsableTransform,
+  };
   maxTime?: number;
   zeroDurationThreshold?: Number;
   minTime?: number;
@@ -44,7 +50,13 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     rotDirection: 0 | 1 | -1 | 2;
     translationStyle: 'linear' | 'curved';
     translationOptions: pathOptionsType;
-    velocity: ?Transform | number;
+    velocity: ?Transform | number | {
+      position?: TypeParsablePoint | number,
+      translation?: TypeParsablePoint | number,
+      rotation?: number,
+      scale?: TypeParsablePoint | number,
+      transform?: TypeParsableTransform,
+    };
     clipRotationTo: '0to360' | '-180to180' | null;
     maxTime: ?number;
     minTime: number;
@@ -185,6 +197,43 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     return 'transformAnimationStep';
   }
 
+  getVelocityTransform() {
+    const { element } = this;
+    if (element == null) {
+      return new Transform();
+    }
+    const { velocity } = this.transform;
+    if (velocity == null) {
+      return new Transform();
+    }
+
+    if (velocity instanceof Transform) {
+      return velocity;
+    }
+
+    if (typeof velocity === 'number') {
+      return element.transform._dup().constant(velocity);
+    }
+
+    let transformVelocity = element.transform._dup().constant(1);
+
+    if (velocity.transform != null) {
+      transformVelocity = getTransform(velocity.transform)._dup();
+    }
+    if (velocity.position != null) {
+      transformVelocity.updateTranslation(getScale(velocity.position));
+    }
+    if (velocity.translation != null) {
+      transformVelocity.updateTranslation(getScale(velocity.translation));
+    }
+    if (velocity.scale != null) {
+      transformVelocity.updateScale(getScale(velocity.scale));
+    }
+    if (velocity.rotation != null) {
+      transformVelocity.updateRotation(velocity.rotation);
+    }
+    return transformVelocity;
+  }
   // On start, calculate the duration, target and delta if not already present.
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
@@ -211,13 +260,14 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
 
     // If Velocity is defined, then use it to calculate duration
     if (this.transform.velocity != null) {
+      const velocity = this.getVelocityTransform();
       for (let i = 0; i < this.transform.start.length; i += 1) {
         const start = this.transform.start[i];
         const target = this.transform.target[i];
         const duration = getMaxTimeFromVelocity(
           start,
           target,
-          this.transform.velocity,
+          velocity,
           this.transform.rotDirection,
         );
         if (duration > this.duration) {
