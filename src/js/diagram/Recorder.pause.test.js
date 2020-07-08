@@ -769,7 +769,164 @@ describe('Animate To State', () => {
           expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 2]);
           expect(a.getPosition().round(3).x).toBe(0);
         });
-      })
+        test('Dissolve to resume', () => {
+          recorder.settings.resume = 'dissolve';
+          recorder.resumePlayback();
+          diagram.mock.timeStep(0);
+
+          // dissolve out
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 1, 2]);
+          expect(round(diagram.elements.opacity)).toBe(1);
+          expect(diagram.elements.isShown).toBe(true);
+          expect(a.getPosition().round(3).x).toBe(4);
+          diagram.mock.timeStep(0.4);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.6, 2]);
+          expect(round(diagram.elements.opacity)).toBe(0.5005);
+          expect(a.isShown).toBe(true);
+          expect(a.getPosition().round(3).x).toBe(4);
+
+          // end dissolve out, start delay
+          diagram.mock.timeStep(0.4);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.2, 2]);
+          expect(round(diagram.elements.opacity)).toBe(1);
+          expect(diagram.elements.isShown).toBe(true);
+          expect(a.isShown).toBe(false);
+          expect(a.getPosition().round(3).x).toBe(4);
+          
+          // end delay, start dissolve in
+          diagram.mock.timeStep(1);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.8, 2]);
+          expect(round(diagram.elements.opacity)).toBe(1);
+          expect(diagram.elements.isShown).toBe(true);
+          expect(a.isShown).toBe(true);
+          expect(round(a.opacity)).toBe(0.001);
+          expect(a.getPosition().round(3).x).toBe(0);
+          
+          // disolve in
+          diagram.mock.timeStep(0);
+          expect(round(diagram.elements.opacity)).toBe(0.001);
+
+          diagram.mock.timeStep(0.4);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.4, 2]);
+          expect(diagram.elements.isShown).toBe(true);
+          expect(round(diagram.elements.opacity)).toBe(0.5005);
+          expect(a.isShown).toBe(true);
+          expect(round(a.opacity)).toBe(0.5005);
+          expect(a.getPosition().round(3).x).toBe(0);
+
+          diagram.mock.timeStep(0.4);
+          expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 2]);
+          expect(a.isShown).toBe(true);
+          expect(round(a.opacity)).toBe(1);
+          expect(round(diagram.elements.opacity)).toBe(1);
+          expect(diagram.elements.isShown).toBe(true);
+          expect(a.getPosition().round(3).x).toBe(0);
+        });
+      });
+      describe('Position and Pulse State Change', () => {
+        beforeEach(() => {
+          diagram.unpause();
+          a.setPosition(4, 4);
+          a.pulseScaleNow(2, 4);
+          diagram.mock.timeStep(0);
+          diagram.mock.timeStep(1);
+          expect(states()).toEqual(['idle', 'unpaused', 'unpaused', true, 1, 4]);
+        });
+        afterEach(() => {
+          diagram.mock.timeStep(0);
+          expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 2]);
+          diagram.mock.timeStep(1);
+          expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
+          diagram.mock.timeStep(1);
+          expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+        });
+        test('Instant resume', () => {
+          recorder.settings.resume = 'instant';
+          recorder.resumePlayback();
+        });
+        test('Animate to resume with different durations', () => {
+          recorder.settings.resume = 'animate';
+          a.setPosition(2, 2);
+          recorder.resumePlayback();
+          diagram.mock.timeStep(0);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 2, 4]);
+          expect(a.getPosition().round(3).x).toBe(2);
+          diagram.mock.timeStep(0.5);
+          expect(a.getPosition().round(3).x).toBe(1);
+          diagram.mock.timeStep(0.5);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 1, 3]);
+          expect(a.getPosition().round(3).x).toBe(0);
+          diagram.mock.timeStep(1);
+          expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 2]);
+          expect(a.getPosition().round(3).x).toBe(0);
+        });
+        test('Animate to resume with same durations', () => {
+          recorder.settings.resume = 'animate';
+          recorder.resumePlayback();
+          diagram.mock.timeStep(0);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 2, 4]);
+          expect(a.getPosition().round(3).x).toBe(4);
+          diagram.mock.timeStep(1);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 1, 3]);
+          expect(a.getPosition().round(3).x).toBe(2);
+          diagram.mock.timeStep(1);
+          expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 2]);
+          expect(a.getPosition().round(3).x).toBe(0);
+        });
+        test('Dissolve to resume', () => {
+          recorder.settings.resume = 'dissolve';
+          recorder.resumePlayback();
+          diagram.mock.timeStep(0);
+
+          // dissolve out
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 1, 4]);
+          expect(round(diagram.elements.opacity)).toBe(1);
+          expect(diagram.elements.isShown).toBe(true);
+          expect(a.getPosition().round(3).x).toBe(4);
+          diagram.mock.timeStep(0.4);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.6, 4]);
+          expect(round(diagram.elements.opacity)).toBe(0.5005);
+          expect(a.isShown).toBe(true);
+          expect(a.getPosition().round(3).x).toBe(4);
+
+          // end dissolve out, start delay
+          diagram.mock.timeStep(0.4);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.2, 4]);
+          expect(round(diagram.elements.opacity)).toBe(1);
+          expect(diagram.elements.isShown).toBe(true);
+          expect(a.isShown).toBe(false);
+          expect(a.getPosition().round(3).x).toBe(4);
+          
+          // end delay, start dissolve in
+          diagram.mock.timeStep(1);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.8, 2]);
+          expect(round(diagram.elements.opacity)).toBe(1);
+          expect(diagram.elements.isShown).toBe(true);
+          expect(a.isShown).toBe(true);
+          expect(round(a.opacity)).toBe(0.001);
+          expect(a.getPosition().round(3).x).toBe(0);
+          
+          // disolve in
+          diagram.mock.timeStep(0);
+          expect(round(diagram.elements.opacity)).toBe(0.001);
+
+          diagram.mock.timeStep(0.4);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.4, 2]);
+          expect(diagram.elements.isShown).toBe(true);
+          expect(round(diagram.elements.opacity)).toBe(0.5005);
+          expect(a.isShown).toBe(true);
+          expect(round(a.opacity)).toBe(0.5005);
+          expect(a.getPosition().round(3).x).toBe(0);
+
+          diagram.mock.timeStep(0.4);
+          expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 2]);
+          expect(a.isShown).toBe(true);
+          expect(round(a.opacity)).toBe(1);
+          expect(round(diagram.elements.opacity)).toBe(1);
+          expect(diagram.elements.isShown).toBe(true);
+          expect(a.getPosition().round(3).x).toBe(0);
+        });
+      });
     });
   });
   describe('Pulse Lines', () => {
