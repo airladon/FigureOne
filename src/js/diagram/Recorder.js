@@ -1329,6 +1329,8 @@ class Recorder {
     }
     // const id = this.diagram.subscriptions.subscribe('animationsFinished', finished, 1);
     if (resumeSettings.action === 'dissolve') {
+      // debugger;
+      this.diagram.elements.freezePulseTransforms();
       this.diagram.stop();
       this.diagram.dissolveToState({
         state: this.pauseState,

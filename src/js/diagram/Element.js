@@ -925,6 +925,10 @@ class DiagramElement {
     this.frozenPulseTransforms = [];
   }
 
+  freezePulseTransforms() {
+    this.frozenPulseTransforms = this.pulseTransforms.map(t => t._dup());
+  }
+
   animateToState(
     state: Object,
     options: Object,
@@ -2112,7 +2116,7 @@ class DiagramElement {
       && this.pulseSettings.allowFreezeOnStop
       && (forceSetToEndOfPlan === false || forceSetToEndOfPlan === 'noComplete')
     ) {
-      this.frozenPulseTransforms = this.pulseTransforms.map(c => c._dup());
+      this.frozenPulseTransforms = this.pulseTransforms.map(t => t._dup());
       // this.pulseTransforms = this.pulseTransforms;
       this.pulseTransforms = [];
     }
@@ -4692,6 +4696,14 @@ class DiagramElementCollection extends DiagramElement {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       element.clearFrozenPulseTransforms();
+    }
+  }
+
+  freezePulseTransforms() {
+    super.freezePulseTransforms();
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.freezePulseTransforms();
     }
   }
 }
