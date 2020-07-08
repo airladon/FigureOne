@@ -705,6 +705,7 @@ class DiagramElement {
         'subscriptions',
         'finishAnimationOnPause',
         'pulseTransforms',
+        'frozenPulseTransforms',
         // 'lastDrawTime',
         ...this.stateProperties,
       ];
@@ -920,6 +921,10 @@ class DiagramElement {
   //   }
   // }
 
+  clearFrozenPulseTransforms() {
+    this.frozenPulseTransforms = [];
+  }
+
   animateToState(
     state: Object,
     options: Object,
@@ -954,24 +959,34 @@ class DiagramElement {
     }
     let pulseTrigger = null;
     let pulseDelay = null;
-    let delay = 0;
-    if (state.state.isPulsing && this.frozenPulseTransforms.length === 0) {
-      pulseTrigger = this.anim.trigger({
-        callback: () => {
-          this.pulseSettings = duplicate(state.pulseSettings);
-          this.state.isPulsing = true;
-          this.state.pulse.startTime = null
-        }
-      });
-      delay = lastDrawTime - state.state.pulse.startTime;
-      pulseDelay = this.anim.delay({ duration: delay });
+    // let delay = 0;
+    let pulseAnimation = null;
+
+    if (state.state.isPulsing) { // need to add: || this.state.isPulsing
+      pulseAnimation = this.anim.pulseTransform(joinObjects(options, {
+        start: this.pulseTransforms.map(t => t._dup()),
+        target: state.pulseTransforms.map(t => getTransform(t)),
+      }));
+      // pulseTrigger = this.anim.trigger({
+      //   callback: () => {
+      //     this.pulseSettings = duplicate(state.pulseSettings);
+      //     this.state.isPulsing = true;
+      //     this.state.pulse.startTime = null
+      //   }
+      // });
+      // delay = lastDrawTime - state.state.pulse.startTime;
+      // pulseDelay = this.anim.delay({ duration: delay });
     }
 
-    if (scenarioAnimation != null || pulseTrigger != null) {
+    if (scenarioAnimation != null || pulseAnimation != null) {
       this.animations.new()
-        .then(scenarioAnimation)
-        .then(pulseTrigger)
-        .then(pulseDelay)
+        .inParallel([
+          scenarioAnimation,
+          pulseAnimation,
+        ])
+        // .then(scenarioAnimation)
+        // .then(pulseTrigger)
+        // .then(pulseDelay)
         .start();
     } else {
       this.frozenPulseTransforms = [];
@@ -979,7 +994,10 @@ class DiagramElement {
     if (scenarioAnimation != null) {
       duration = scenarioAnimation.getTotalDuration();
     }
-    return duration + delay;
+    if (pulseAnimation != null) {
+      duration = pulseAnimation.getTotalDuration();
+    }
+    return duration;
   }
 
   dissolveInToState(
@@ -1019,6 +1037,14 @@ class DiagramElement {
     }
     if (!this.transform.isEqualTo(getTransform(state.transform))) {
       return false;
+    }
+    if (state.pulseTransforms.length !== this.pulseTransforms.length) {
+      return false;
+    }
+    for (let i = 0; i < this.pulseTransforms.length; i += 1) {
+      if (!this.pulseTransforms[i].isEqualTo(getTransform(state.pulseTransforms[i]))) {
+        return false;
+      }
     }
     return true;
   }
@@ -4659,6 +4685,14 @@ class DiagramElementCollection extends DiagramElement {
       }
     }
     return true;
+  }
+
+  clearFrozenPulseTransforms() {
+    super.clearFrozenPulseTransforms();
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.clearFrozenPulseTransforms();
+    }
   }
 }
 

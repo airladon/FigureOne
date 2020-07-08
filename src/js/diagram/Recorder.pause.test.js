@@ -681,13 +681,15 @@ describe('Animate To State', () => {
           recorder.settings.resume = 'instant';
           recorder.resumePlayback();
         });
-        test.only('animate resume', () => {
+        test('Animate to resume', () => {
           recorder.settings.resume = 'animate';
           recorder.resumePlayback();
           diagram.mock.timeStep(0);
-          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 1, 4]);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 2, 4]);
           diagram.mock.timeStep(1);
-          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 1, 2]);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 1, 3]);
+          diagram.mock.timeStep(1);
+          expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 2]);
         });
       });
     });
