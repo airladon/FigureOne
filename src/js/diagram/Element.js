@@ -971,15 +971,6 @@ class DiagramElement {
         start: this.pulseTransforms.map(t => t._dup()),
         target: state.pulseTransforms.map(t => getTransform(t)),
       }));
-      // pulseTrigger = this.anim.trigger({
-      //   callback: () => {
-      //     this.pulseSettings = duplicate(state.pulseSettings);
-      //     this.state.isPulsing = true;
-      //     this.state.pulse.startTime = null
-      //   }
-      // });
-      // delay = lastDrawTime - state.state.pulse.startTime;
-      // pulseDelay = this.anim.delay({ duration: delay });
     }
 
     if (scenarioAnimation != null || pulseAnimation != null) {
@@ -1691,6 +1682,45 @@ class DiagramElement {
   //     }
   //   }
   //   return Math.min(time, options.minTime);
+  // }
+
+  // getRemainingMovingFreelyDuration() {
+  //   if (!this.state.isMovingFreely) {
+  //     return 0;
+  //   }
+  //   const { velocity } = this.state.movement;
+  //   const { transform } = this;
+  //   const { deceleration } = this.move.freely;
+  //   if (this.state.movement.velocity.isZero(0.0000001)) {
+  //     return 0;
+  //   }
+  //   if (velocity.order.length !== transform.order.length) {
+  //     return 0;
+  //   }
+  //   for (let i = 0; i < velocity.order.length; i += 1) {
+  //     const v = velocity.order[0];
+  //     const t = transform.order[0];
+  //     const min = this.move.minTransform.order[i];
+  //     const max = this.move.maxTransform.order[i];
+  //     const { translation, rotation, scale } = deceleration;
+  //     if (
+  //       t instanceof Translation
+  //       && v instanceof Translation
+  //       && max instanceof Translation
+  //       && min instanceof Translation
+  //       && translation != null
+  //     ) {
+  //       const { mag, angle } = v.toPolar();
+  //       const timeToZeroV = mag / translation;
+  //       const distanceTravelled = mag * timeToZeroV - 0.5 * translation * (timeToZeroV ** 2);
+  //       const d = distanceTravelled;
+  //       const newPos = t.add(d * Math.cos(angle), d * Math.sin(angle));
+  //       if (
+  //         newPos.x > max.x || newPos.x < min.x || newPos.y > max.y || newPos.y < min.y) {
+  //           const vAtBoundary = 
+  //         }
+  //     }
+  //   }
   // }
 
   // Decelerate over some time when moving freely to get a new element
