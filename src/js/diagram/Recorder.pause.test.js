@@ -691,6 +691,53 @@ describe('Animate To State', () => {
           diagram.mock.timeStep(1);
           expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 2]);
         });
+        test('Dissolve to resume', () => {
+          recorder.settings.resume = 'dissolve';
+          recorder.resumePlayback();
+          diagram.mock.timeStep(0);
+
+          // dissolve out
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 1, 4]);
+          expect(round(diagram.elements.opacity)).toBe(1);
+          expect(diagram.elements.isShown).toBe(true);
+          diagram.mock.timeStep(0.4);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.6, 4]);
+          expect(round(diagram.elements.opacity)).toBe(0.5005);
+          expect(a.isShown).toBe(true);
+
+          // end dissolve out, start delay
+          diagram.mock.timeStep(0.4);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.2, 4]);
+          expect(round(diagram.elements.opacity)).toBe(1);
+          expect(diagram.elements.isShown).toBe(true);
+          expect(a.isShown).toBe(false);
+          
+          // end delay, start dissolve in
+          diagram.mock.timeStep(1);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.8, 2]);
+          expect(round(diagram.elements.opacity)).toBe(1);
+          expect(diagram.elements.isShown).toBe(true);
+          expect(a.isShown).toBe(true);
+          expect(round(a.opacity)).toBe(0.001);
+          
+          // disolve in
+          diagram.mock.timeStep(0);
+          expect(round(diagram.elements.opacity)).toBe(0.001);
+
+          diagram.mock.timeStep(0.4);
+          expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.4, 2]);
+          expect(diagram.elements.isShown).toBe(true);
+          expect(round(diagram.elements.opacity)).toBe(0.5005);
+          expect(a.isShown).toBe(true);
+          expect(round(a.opacity)).toBe(0.5005);
+
+          diagram.mock.timeStep(0.4);
+          expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 2]);
+          expect(a.isShown).toBe(true);
+          expect(round(a.opacity)).toBe(1);
+          expect(round(diagram.elements.opacity)).toBe(1);
+          expect(diagram.elements.isShown).toBe(true);
+        });
       });
     });
   });
