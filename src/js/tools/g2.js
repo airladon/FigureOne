@@ -82,6 +82,18 @@ class Rect {
       ],
     };
   }
+
+  isPointInside(pointIn: TypeParsablePoint, precision: number = 8) {
+    const p = getPoint(pointIn).round(precision);
+    const top = round(this.top, precision);
+    const bottom = round(this.bottom, precision);
+    const left = round(this.left, precision);
+    const right = round(this.right, precision);
+    if (p.x < left || p.x > right || p.y < bottom || p.y > top) {
+      return false;
+    }
+    return true;
+  }
 }
 
 type TypeF1DefRect = {
@@ -2218,15 +2230,15 @@ class Transform {
     return this.constant(0);
   }
 
-  isZero(): boolean {
+  isZero(zeroThreshold: number = 0): boolean {
     for (let i = 0; i < this.order.length; i += 1) {
       const t = this.order[i];
       if (t instanceof Translation || t instanceof Scale) {
-        if (t.x !== 0 || t.y !== 0) {
+        if (t.x > zeroThreshold || t.y > zeroThreshold) {
           return false;
         }
       } else if (t instanceof Rotation) {
-        if (t.r !== 0) {
+        if (clipAngle(t.r, '0to360') > zeroThreshold) {
           return false;
         }
       }
@@ -2672,6 +2684,85 @@ function quadBezierPoints(p0: Point, p1: Point, p2: Point, sides: number) {
     ));
   }
   return points;
+}
+
+function timeToStop(
+  position: Point,
+  velocity: Point,
+  deceleration: number,
+  bounceLoss: number,
+  bounds: ?Rect = null,
+) {
+  if (velocity.x === 0 && velocity.y === 0) {
+    return 0;
+  }
+  if (bounds != null && !bounds.isPointInside(position)) {
+    return 0;
+  }
+  const { mag, angle } = velocity.toPolar();
+  const timeToZeroV = Math.abs(mag / deceleration);
+  if (bounds == null) {
+    return timeToZeroV;
+  }
+
+  const distanceTravelled = mag * timeToZeroV - 0.5 * deceleration * (timeToZeroV ** 2);
+  const newPosition = polarToRect(distanceTravelled, angle).add(position);
+  if (bounds.isPointInside(newPosition)) {
+    return timeToZeroV;
+  }
+  
+  const trajectory = new Line(position, mag, angle);
+  let hBound;
+  let vBound;
+  const ang = clipAngle(angle, '0to360');
+  if (ang > 0 && ang < Math.PI) {
+    vBound = new Line([bounds.left, bounds.top], [bounds.right, bounds.top]);
+  } else if (ang > Math.PI) {
+    vBound = new Line([bounds.left, bounds.bottom], [bounds.right, bounds.bottom]);
+  }
+  if (ang > Math.PI / 2 && ang < Math.PI / 2 * 3) {
+    hBound = new Line([bounds.left, bounds.bottom], [bounds.left, bounds.top]);
+  } else if ((ang > 0 && ang < Math.PI / 2) || ang > Math.PI / 2 * 3) {
+    hBound = new Line([bounds.right, bounds.bottom], [bounds.right, bounds.top]);
+  }
+  let distanceToBound = mag;
+  let intersectPoint;
+  if (vBound != null) {
+    const result = trajectory.intersectsWith(vBound);
+    if (result.intersect != null) {
+      intersectPoint = result.intersect;
+      distanceToBound = distance(position, intersectPoint);
+    }
+  }
+  if (hBound != null) {
+    const result = trajectory.intersectsWith(hBound);
+    if (result.intersect != null) {
+      const distanceToBoundH = distance(position, result.intersect);
+      if (intersectPoint == null) {
+        intersectPoint = result.intersect;
+        distanceToBound = distanceToBoundH;
+      } else {
+        if (distanceToBoundH < distanceToBound) {
+          intersectPoint = result.intersect;
+          distanceToBound = distanceToBoundH;
+        }
+      }
+    }
+  }
+  if (intersectPoint == null) {
+    return 0;
+  }
+  const s = distanceToBound;
+  const v0 = mag;
+  const acc = -deceleration;
+  const b = v0;
+  const a = acc;
+  const c = s;
+  const t = (-b + Math.sqrt(b ** 2 - 4 * a * c)) / (2 * a);
+  const velocityAtIntersect = (s - 0.5 * a * (t ** 2)) / t;
+  const bounceVelocity = velocityAtIntersect * -1 * bounceLoss;
+  const rectBounceVelocity = new Point(bounceVelocity * Math.cos(angle), bounceVelocity * Math.sin(angle));
+  return t + timeToStop(intersectPoint, rectBounceVelocity, deceleration, bounceLoss, bounds);
 }
 
 export {
