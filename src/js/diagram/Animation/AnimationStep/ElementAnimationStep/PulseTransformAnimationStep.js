@@ -241,13 +241,21 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
   start(startTime: ?number = null) {
     super.start(startTime);
 
-    if (this.transform.start === null) {
+    if (this.transform.start == null) {
       if (this.element != null) {
-        this.transform.start = this.element.pulseTransforms.map(t => t._dup());
+        if (this.element.pulseTransforms.length > 0) {
+          this.transform.start = this.element.pulseTransforms.map(t => t._dup());
+        } else {
+          this.transform.start = [this.element.transform._dup()];
+        }
       } else {
         this.duration = 0;
         return;
       }
+    }
+
+    if (this.transform.start.length === 0 && this.element != null) {
+      this.transform.start = [this.element.transform._dup()];
     }
 
     this.setStartAndTarget();
