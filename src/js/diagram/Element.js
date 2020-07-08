@@ -966,7 +966,7 @@ class DiagramElement {
     // let delay = 0;
     let pulseAnimation = null;
 
-    if (state.state.isPulsing) { // need to add: || this.state.isPulsing
+    if (state.state.isPulsing || this.state.isPulsing) {
       pulseAnimation = this.anim.pulseTransform(joinObjects(options, {
         start: this.pulseTransforms.map(t => t._dup()),
         target: state.pulseTransforms.map(t => getTransform(t)),
@@ -996,10 +996,10 @@ class DiagramElement {
       this.frozenPulseTransforms = [];
     }
     if (scenarioAnimation != null) {
-      duration = scenarioAnimation.getTotalDuration();
+      duration = Math.max(duration, scenarioAnimation.getTotalDuration());
     }
     if (pulseAnimation != null) {
-      duration = pulseAnimation.getTotalDuration();
+      duration = Math.max(duration, pulseAnimation.getTotalDuration());
     }
     return duration;
   }
