@@ -1,5 +1,5 @@
 import {
-  Point, calculateStop, Rect,
+  Point, calculateStop, Rect, Line,
 } from './g2';
 import { round } from './math';
 
@@ -57,7 +57,7 @@ describe('calculateStop', () => {
       expect(position.round(3)).toEqual(new Point(12.5, 0)); // 12.5 rad
     });
   });
-  describe('Bounds', () => {
+  describe('Rect Bounds', () => {
     test('X single bounce, no loss', () => {
       const p = new Point(0, 0);
       const v = new Point(5, 0);
@@ -228,4 +228,65 @@ describe('calculateStop', () => {
       });
     });
   });
+  describe('Line Bounds', () => {
+    test('No bounce', () => {
+      const p = new Point(0, 0);
+      const v = new Point(5 / Math.sqrt(2), 5 / Math.sqrt(2));
+      const deceleration = 1;
+      const bounds = new Line([0, 0], 100, 0);
+      const bounceLoss = 0;
+      const { duration, position } = calculateStop(p, v, deceleration, bounds, bounceLoss);
+      // Total displacement = 12.5
+      // For v0 = 5, acc = -1, after 1s, the displaycement will be:
+      // s = v0*t + 0.5*acc*t^2 = 5 - 0.5 = 4.5
+      // Therefore end point will be 4.5 - (12.5 - 4.5) = -3.5
+      expect(duration).toBe(5);
+      expect(position.round(3)).toEqual(new Point(12.5 * Math.cos(Math.PI / 4), 12.5 * Math.sin(Math.PI / 4)).round(3));
+    });
+    test('One bounce', () => {
+      const p = new Point(0, 1);
+      const v = new Point(5, 0);
+      const deceleration = 1;
+      const bounds = new Line([-4.5, 0], 9, 0);
+      const bounceLoss = 0;
+      const { duration, position } = calculateStop(p, v, deceleration, bounds, bounceLoss);
+      expect(duration).toBe(5);
+      const shaddow = position.getShaddowOnLine(bounds);
+      expect(shaddow.round(4)).toEqual(new Point(-3.5, 0))
+    });
+    test('45º No bounce', () => {
+      const p = new Point(0, 0);
+      const v = new Point(5 / Math.sqrt(2), 5 / Math.sqrt(2));
+      const deceleration = 1;
+      const bounds = new Line([-100, 0], 200, 0);
+      const bounceLoss = 0;
+      const { duration, position } = calculateStop(p, v, deceleration, bounds, bounceLoss);
+      expect(duration).toBe(5);
+      const shaddow = position.getShaddowOnLine(bounds);
+      expect(shaddow.round(3)).toEqual(new Point(5.657 + 3.182, 0))
+    });
+    test('45º One bounce', () => {
+      const p = new Point(0, 0);
+      const v = new Point(5 / Math.sqrt(2), 5 / Math.sqrt(2));
+      const deceleration = 1;
+      const bounds = new Line([-5.6568542494, 0], 5.6568542494 * 2, 0);
+      const bounceLoss = 0;
+      const { duration, position } = calculateStop(p, v, deceleration, bounds, bounceLoss);
+      expect(duration).toBe(5);
+      const shaddow = position.getShaddowOnLine(bounds);
+      expect(shaddow.round(3)).toEqual(new Point(5.657 - 3.182, 0))
+    });
+    test('0º One bounce on 45º line', () => {
+      const p = new Point(0, 0);
+      const v = new Point(5, 0);
+      const deceleration = 1;
+      const bounds = new Line([-4.5, -4.5], 9 * Math.sqrt(2), Math.PI / 4);
+      const bounceLoss = 0;
+      const { duration, position } = calculateStop(p, v, deceleration, bounds, bounceLoss);
+      expect(duration).toBe(5);
+      
+      const xDistance = 12.5;
+      expect(position.round(3)).toEqual(new Point(4.5 * 2 - (xDistance - 4.5 * 2), 0));
+    });
+  })
 });
