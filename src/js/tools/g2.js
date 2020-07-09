@@ -2690,7 +2690,7 @@ function calculateStop(
   position: Point,
   velocity: Point,
   deceleration: number,
-  bounds: ?Rect = null,
+  bounds: ?(Rect | Line) = null,
   bounceLossIn: number = 0,
   precision: number = 8,
 ) {
@@ -2700,11 +2700,21 @@ function calculateStop(
       position,
     };
   }
-  if (bounds != null && !bounds.isPointInside(position)) {
-    return {
-      duration: 0,
-      position,
-    };
+
+  if (bounds != null) {
+    let outOfBounds = false;
+    if (bounds instanceof Line && !position.shaddowIsOnLine(bounds, precision)) {
+      outOfBounds = true;
+    }
+    if (bounds instanceof Rect && !bounds.isPointInside(position)) {
+      outOfBounds = true
+    }
+    if (outOfBounds) {
+      return {
+        duration: 0,
+        position,
+      };
+    }
   }
   const { mag, angle } = velocity.toPolar();
   const timeToZeroV = Math.abs(mag / deceleration);
@@ -2718,7 +2728,14 @@ function calculateStop(
     };
   }
 
-  if (bounds.isPointInside(newPosition)) {
+  let inBounds = false;
+  if (bounds instanceof Line && newPosition.shaddowIsOnLine(bounds, precision)) {
+    inBounds = true;
+  }
+  if (bounds instanceof Rect && bounds.isPointInside(newPosition)) {
+    inBounds = true;
+  }
+  if (inBounds) {
     return {
       duration: timeToZeroV,
       position: newPosition,
@@ -2730,47 +2747,70 @@ function calculateStop(
   let hBound;
   let vBound;
   const ang = clipAngle(angle, '0to360');
-  if (ang > 0 && ang < Math.PI) {
-    hBound = new Line([bounds.left, bounds.top], [bounds.right, bounds.top]);
-  } else if (ang > Math.PI) {
-    hBound = new Line([bounds.left, bounds.bottom], [bounds.right, bounds.bottom]);
-  }
-  if (ang > Math.PI / 2 && ang < Math.PI / 2 * 3) {
-    vBound = new Line([bounds.left, bounds.bottom], [bounds.left, bounds.top]);
-  } else if ((ang >= 0 && ang < Math.PI / 2) || ang > Math.PI / 2 * 3) {
-    vBound = new Line([bounds.right, bounds.bottom], [bounds.right, bounds.top]);
-  }
   let distanceToBound = mag;
   let intersectPoint;
   let xMirror = 1;
   let yMirror = 1;
-  if (vBound != null) {
-    const result = trajectory.intersectsWith(vBound);
-    if (result.intersect != null) {
-      intersectPoint = result.intersect;
-      distanceToBound = distance(position, intersectPoint);
-      xMirror = -1;
+  if (bounds instanceof Rect) {
+    if (ang > 0 && ang < Math.PI) {
+      hBound = new Line([bounds.left, bounds.top], [bounds.right, bounds.top]);
+    } else if (ang > Math.PI) {
+      hBound = new Line([bounds.left, bounds.bottom], [bounds.right, bounds.bottom]);
     }
-  }
-  if (hBound != null) {
-    const result = trajectory.intersectsWith(hBound);
-    if (result.intersect != null) {
-      const distanceToBoundH = distance(position, result.intersect);
-      if (intersectPoint == null) {
+    if (ang > Math.PI / 2 && ang < Math.PI / 2 * 3) {
+      vBound = new Line([bounds.left, bounds.bottom], [bounds.left, bounds.top]);
+    } else if ((ang >= 0 && ang < Math.PI / 2) || ang > Math.PI / 2 * 3) {
+      vBound = new Line([bounds.right, bounds.bottom], [bounds.right, bounds.top]);
+    }
+    if (vBound != null) {
+      const result = trajectory.intersectsWith(vBound);
+      if (result.intersect != null) {
         intersectPoint = result.intersect;
-        distanceToBound = distanceToBoundH;
-        xMirror = 1;
-        yMirror = -1;
-      } else if (distanceToBoundH < distanceToBound) {
-        intersectPoint = result.intersect;
-        distanceToBound = distanceToBoundH;
-        xMirror = 1;
-        yMirror = -1;
-      } else if (roundNum(distanceToBoundH, precision) === roundNum(distanceToBound, precision)) {
+        distanceToBound = distance(position, intersectPoint);
         xMirror = -1;
-        yMirror = -1;
       }
     }
+    if (hBound != null) {
+      const result = trajectory.intersectsWith(hBound);
+      if (result.intersect != null) {
+        const distanceToBoundH = distance(position, result.intersect);
+        if (intersectPoint == null) {
+          intersectPoint = result.intersect;
+          distanceToBound = distanceToBoundH;
+          xMirror = 1;
+          yMirror = -1;
+        } else if (distanceToBoundH < distanceToBound) {
+          intersectPoint = result.intersect;
+          distanceToBound = distanceToBoundH;
+          xMirror = 1;
+          yMirror = -1;
+        } else if (roundNum(distanceToBoundH, precision) === roundNum(distanceToBound, precision)) {
+          xMirror = -1;
+          yMirror = -1;
+        }
+      }
+    }
+  }
+  if (bounds instanceof Line) {
+    xMirror = -1;
+    yMirror = -1;
+    const distanceToP1 = distance(newPosition, bounds.p1);
+    const distanceToP2 = distance(newPosition, bounds.p2);
+    let boundPoint;
+    if (distanceToP1 > distanceToP2) {
+      boundPoint = bounds.p2._dup();
+    } else {
+      boundPoint = bounds.p1._dup();
+    }
+    // calculate distance to bound
+    const boundPerpendicular = new Line(boundPoint, 1, bounds.ang + Math.PI / 2);
+    intersectPoint = boundPerpendicular.intersectsWith(trajectory).intersect;
+    debugger;
+    if (intersectPoint != null) {
+      distanceToBound = distance(position, intersectPoint);
+    }
+
+    // distanceToBound = distance(position.getShaddowOnLine(bounds), intersectPoint);
   }
   if (intersectPoint == null) {
     return {
@@ -2790,6 +2830,7 @@ function calculateStop(
   const bounceVelocity = velocityAtIntersect * bounceScaler;
   const rectBounceVelocity = new Point(bounceVelocity * Math.cos(angle) * xMirror, bounceVelocity * Math.sin(angle) * yMirror);
   // debugger;
+  debugger;
   const newStop = calculateStop(intersectPoint, rectBounceVelocity, deceleration, bounds, bounceLossIn)
   return {
     duration: t + newStop.duration,
