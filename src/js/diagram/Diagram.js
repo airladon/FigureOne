@@ -1121,6 +1121,7 @@ class Diagram {
     const pixelPoint = this.clientToPixel(clientPoint);
     // console.log(pixelPoint)
     const glPoint = pixelPoint.transformBy(this.spaceTransforms.pixelToGL.matrix());
+    // console.log(glPoint, clientPoint)
 
     // console.log(glPoint.transformBy(this.glToDiagramSpaceTransform.matrix()))
     // const clipPoint = this.clientToClip(clientPoint);
