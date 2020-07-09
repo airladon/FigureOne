@@ -2686,7 +2686,7 @@ function quadBezierPoints(p0: Point, p1: Point, p2: Point, sides: number) {
   return points;
 }
 
-function timeToStop(
+function calculateStop(
   position: Point,
   velocity: Point,
   deceleration: number,
@@ -2694,21 +2694,34 @@ function timeToStop(
   bounds: ?Rect = null,
 ) {
   if (velocity.x === 0 && velocity.y === 0) {
-    return 0;
+    return {
+      duration: 0,
+      position,
+    };
   }
   if (bounds != null && !bounds.isPointInside(position)) {
-    return 0;
+    return {
+      duration: 0,
+      position,
+    };
   }
   const { mag, angle } = velocity.toPolar();
   const timeToZeroV = Math.abs(mag / deceleration);
-  if (bounds == null) {
-    return timeToZeroV;
-  }
-
   const distanceTravelled = mag * timeToZeroV - 0.5 * deceleration * (timeToZeroV ** 2);
   const newPosition = polarToRect(distanceTravelled, angle).add(position);
+  
+  if (bounds == null) {
+    return {
+      duration: timeToZeroV,
+      position: newPosition,
+    };
+  }
+
   if (bounds.isPointInside(newPosition)) {
-    return timeToZeroV;
+    return {
+      duration: timeToZeroV,
+      position: newPosition,
+    };
   }
   
   const trajectory = new Line(position, mag, angle);
@@ -2750,7 +2763,10 @@ function timeToStop(
     }
   }
   if (intersectPoint == null) {
-    return 0;
+    return {
+      duration: timeToZeroV,
+      position: newPosition,
+    };
   }
   const s = distanceToBound;
   const v0 = mag;
@@ -2762,7 +2778,11 @@ function timeToStop(
   const velocityAtIntersect = (s - 0.5 * a * (t ** 2)) / t;
   const bounceVelocity = velocityAtIntersect * -1 * bounceLoss;
   const rectBounceVelocity = new Point(bounceVelocity * Math.cos(angle), bounceVelocity * Math.sin(angle));
-  return t + timeToStop(intersectPoint, rectBounceVelocity, deceleration, bounceLoss, bounds);
+  const newStop = calculateStop(intersectPoint, rectBounceVelocity, deceleration, bounceLoss, bounds)
+  return {
+    duration: t + newStop.duration,
+    position: newStop.position,
+  };
 }
 
 export {
@@ -2807,5 +2827,6 @@ export {
   // getState,
   // getDef,
   getLine,
+  calculateStop,
   // setState,
 };
