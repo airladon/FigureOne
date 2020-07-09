@@ -4,7 +4,7 @@ import {
   Transform, Point, TransformLimit, Rect,
   Translation, spaceToSpaceTransform, getBoundingRect,
   Scale, Rotation, Line, getMaxTimeFromVelocity, clipAngle,
-  getPoint, getTransform, getScale,
+  getPoint, getTransform, getScale, calculateStop, calculateStopAngle,
 } from '../tools/g2';
 // import { areColorsSame } from '../tools/color';
 import { getState } from './state';
@@ -1684,44 +1684,40 @@ class DiagramElement {
   //   return Math.min(time, options.minTime);
   // }
 
-  // getRemainingMovingFreelyDuration() {
-  //   if (!this.state.isMovingFreely) {
-  //     return 0;
-  //   }
-  //   const { velocity } = this.state.movement;
-  //   const { transform } = this;
-  //   const { deceleration } = this.move.freely;
-  //   if (this.state.movement.velocity.isZero(0.0000001)) {
-  //     return 0;
-  //   }
-  //   if (velocity.order.length !== transform.order.length) {
-  //     return 0;
-  //   }
-  //   for (let i = 0; i < velocity.order.length; i += 1) {
-  //     const v = velocity.order[0];
-  //     const t = transform.order[0];
-  //     const min = this.move.minTransform.order[i];
-  //     const max = this.move.maxTransform.order[i];
-  //     const { translation, rotation, scale } = deceleration;
-  //     if (
-  //       t instanceof Translation
-  //       && v instanceof Translation
-  //       && max instanceof Translation
-  //       && min instanceof Translation
-  //       && translation != null
-  //     ) {
-  //       const { mag, angle } = v.toPolar();
-  //       const timeToZeroV = mag / translation;
-  //       const distanceTravelled = mag * timeToZeroV - 0.5 * translation * (timeToZeroV ** 2);
-  //       const d = distanceTravelled;
-  //       const newPos = t.add(d * Math.cos(angle), d * Math.sin(angle));
-  //       if (
-  //         newPos.x > max.x || newPos.x < min.x || newPos.y > max.y || newPos.y < min.y) {
-  //           const vAtBoundary = 
-  //         }
-  //     }
-  //   }
-  // }
+  getRemainingMovingFreelyDuration() {
+    if (!this.state.isMovingFreely) {
+      return 0;
+    }
+    const { velocity } = this.state.movement;
+    const { transform } = this;
+    const { deceleration } = this.move.freely;
+    if (this.state.movement.velocity.isZero(0.0000001)) {
+      return 0;
+    }
+    if (velocity.order.length !== transform.order.length) {
+      return 0;
+    }
+    let duration = 0;
+    for (let i = 0; i < velocity.order.length; i += 1) {
+      const v = velocity.order[0];
+      const t = transform.order[0];
+      const min = this.move.minTransform.order[i];
+      const max = this.move.maxTransform.order[i];
+      const { translation, rotation, scale } = deceleration;
+      let stepDuration = 0;
+      if (t instanceof Rotation) {
+        stepDuration = calculateStopAngle(t.r, v.r, d.rotation, [min.r, max.r], 0.5).duration;
+      } else if (t instanceof Translation) {
+        stepDuration = calculateStop(t, v, d.translation, [min, max], 0.5).duration;
+      } else {
+        stepDuration = calculateStop(t, v, d.scale, [min, max], 0.5).duration;
+      }
+      if (stepDuration > duration) {
+        duration = stepDuration;
+      }
+    }
+    return duration;
+  }
 
   // Decelerate over some time when moving freely to get a new element
   // transform and movement velocity
