@@ -56,6 +56,19 @@ describe('calculateStop', () => {
       const xy = round(12.5 * Math.cos(Math.PI / 4), 3)
       expect(position.round(3)).toEqual(new Point(12.5, 0)); // 12.5 rad
     });
+    test('Along x from origin with zero velocity threshold', () => {
+      const p = new Point(0, 0);
+      const v = new Point(5, 0);
+      const deceleration = 1;
+      const zeroVelocityThreshold = 0.1;
+      const { duration, position } = calculateStop(
+        p, v, deceleration, null, 0, zeroVelocityThreshold,
+      );
+      expect(duration).toBe(4.9);
+      // s = v*t + 0.5 * at^2 = 4.9
+      // s = 5 * 4.9 - 0.5 * 1 * 4.9^2 = 12.495
+      expect(position.round()).toEqual(new Point(12.495, 0));
+    });
   });
   describe('Rect Bounds', () => {
     test('X single bounce, no loss', () => {
@@ -71,6 +84,21 @@ describe('calculateStop', () => {
       // Therefore end point will be 4.5 - (12.5 - 4.5) = -3.5
       expect(duration).toBe(5);
       expect(position.round()).toEqual(new Point(-3.5, 0));
+    });
+    test('X single bounce, no loss, zero velocity threshold', () => {
+      const p = new Point(0, 0);
+      const v = new Point(5, 0);
+      const deceleration = 1;
+      const bounds = new Rect(-4.5, -1, 9, 2);
+      const bounceLoss = 0;
+      const zeroVelocityThreshold = 0.1
+      const { duration, position } = calculateStop(p, v, deceleration, bounds, bounceLoss, zeroVelocityThreshold);
+      // Total displacement = 12.495
+      // For v0 = 5, acc = -1, after 1s, the displaycement will be:
+      // s = v0*t + 0.5*acc*t^2 = 5 - 0.5 = 4.5
+      // Therefore end point will be 4.5 - (12.495 - 4.5) = -3.5
+      expect(duration).toBe(4.9);
+      expect(position.round()).toEqual(new Point(-3.495, 0));
     });
     test('X single bounce, 0.5 loss', () => {
       const p = new Point(0, 0);

@@ -2692,6 +2692,7 @@ function calculateStop(
   deceleration: number,
   bounds: ?(Rect | Line) = null,
   bounceLossIn: number = 0,
+  zeroVelocityThreshold: number = 0,
   precision: number = 8,
 ) {
   if (velocity.x === 0 && velocity.y === 0) {
@@ -2716,9 +2717,18 @@ function calculateStop(
       };
     }
   }
-  const { mag, angle } = velocity.toPolar();
-  const timeToZeroV = Math.abs(mag / deceleration);
-  const distanceTravelled = mag * timeToZeroV - 0.5 * deceleration * (timeToZeroV ** 2);
+  let { mag, angle } = velocity.toPolar();
+  if (mag <= zeroVelocityThreshold) {
+    return {
+      duration: 0,
+      position,
+    };
+  }
+  debugger;
+  const v0 = mag;
+  const deltaV = Math.abs(v0) - zeroVelocityThreshold;
+  const timeToZeroV = Math.abs(deltaV) / deceleration;
+  const distanceTravelled = v0 * timeToZeroV - 0.5 * deceleration * (timeToZeroV ** 2);
   const newPosition = polarToRect(distanceTravelled, angle).add(position);
   
   if (bounds == null) {
@@ -2743,11 +2753,11 @@ function calculateStop(
   }
 
   const bounceScaler = 1 - bounceLossIn;
-  const trajectory = new Line(position, mag, angle);
+  const trajectory = new Line(position, 1, angle);
   let hBound;
   let vBound;
   const ang = clipAngle(angle, '0to360');
-  let distanceToBound = mag;
+  let distanceToBound = distanceTravelled;
   let intersectPoint;
   let xMirror = 1;
   let yMirror = 1;
@@ -2819,7 +2829,7 @@ function calculateStop(
     };
   }
 
-  const v0 = mag;
+  // const v0 = mag;
   const acc = -v0 / Math.abs(v0) * deceleration;
   const s = distanceToBound;
   const b = v0;
@@ -2830,8 +2840,7 @@ function calculateStop(
   const bounceVelocity = velocityAtIntersect * bounceScaler;
   const rectBounceVelocity = new Point(bounceVelocity * Math.cos(angle) * xMirror, bounceVelocity * Math.sin(angle) * yMirror);
   // debugger;
-  debugger;
-  const newStop = calculateStop(intersectPoint, rectBounceVelocity, deceleration, bounds, bounceLossIn)
+  const newStop = calculateStop(intersectPoint, rectBounceVelocity, deceleration, bounds, bounceLossIn, zeroVelocityThreshold, precision);
   return {
     duration: t + newStop.duration,
     position: newStop.position,
@@ -2844,6 +2853,7 @@ function calculateStopAngle(
   deceleration: number,
   bounds: [number, number],
   bounceLossIn: number = 0,
+  zeroVelocityThreshold: number = 0,
   precision: number = 8,
 ) {
   return calculateStop(
@@ -2852,6 +2862,7 @@ function calculateStopAngle(
     deceleration,
     new Rect(bounds[0], -1, bounds[1] - bounds[0], 2),
     bounceLossIn,
+    zeroVelocityThreshold,
     precision,
   );
 }
