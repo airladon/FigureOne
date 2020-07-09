@@ -85,10 +85,10 @@ class Rect {
 
   isPointInside(pointIn: TypeParsablePoint, precision: number = 8) {
     const p = getPoint(pointIn).round(precision);
-    const top = round(this.top, precision);
-    const bottom = round(this.bottom, precision);
-    const left = round(this.left, precision);
-    const right = round(this.right, precision);
+    const top = roundNum(this.top, precision);
+    const bottom = roundNum(this.bottom, precision);
+    const left = roundNum(this.left, precision);
+    const right = roundNum(this.right, precision);
     if (p.x < left || p.x > right || p.y < bottom || p.y > top) {
       return false;
     }
@@ -2690,8 +2690,9 @@ function calculateStop(
   position: Point,
   velocity: Point,
   deceleration: number,
-  bounceLoss: number,
   bounds: ?Rect = null,
+  bounceLossIn: number = 0,
+  precision: number = 8,
 ) {
   if (velocity.x === 0 && velocity.y === 0) {
     return {
@@ -2723,28 +2724,32 @@ function calculateStop(
       position: newPosition,
     };
   }
-  
+
+  const bounceScaler = 1 - bounceLossIn;
   const trajectory = new Line(position, mag, angle);
   let hBound;
   let vBound;
   const ang = clipAngle(angle, '0to360');
   if (ang > 0 && ang < Math.PI) {
-    vBound = new Line([bounds.left, bounds.top], [bounds.right, bounds.top]);
+    hBound = new Line([bounds.left, bounds.top], [bounds.right, bounds.top]);
   } else if (ang > Math.PI) {
-    vBound = new Line([bounds.left, bounds.bottom], [bounds.right, bounds.bottom]);
+    hBound = new Line([bounds.left, bounds.bottom], [bounds.right, bounds.bottom]);
   }
   if (ang > Math.PI / 2 && ang < Math.PI / 2 * 3) {
-    hBound = new Line([bounds.left, bounds.bottom], [bounds.left, bounds.top]);
-  } else if ((ang > 0 && ang < Math.PI / 2) || ang > Math.PI / 2 * 3) {
-    hBound = new Line([bounds.right, bounds.bottom], [bounds.right, bounds.top]);
+    vBound = new Line([bounds.left, bounds.bottom], [bounds.left, bounds.top]);
+  } else if ((ang >= 0 && ang < Math.PI / 2) || ang > Math.PI / 2 * 3) {
+    vBound = new Line([bounds.right, bounds.bottom], [bounds.right, bounds.top]);
   }
   let distanceToBound = mag;
   let intersectPoint;
+  let xMirror = 1;
+  let yMirror = 1;
   if (vBound != null) {
     const result = trajectory.intersectsWith(vBound);
     if (result.intersect != null) {
       intersectPoint = result.intersect;
       distanceToBound = distance(position, intersectPoint);
+      xMirror = -1;
     }
   }
   if (hBound != null) {
@@ -2754,11 +2759,16 @@ function calculateStop(
       if (intersectPoint == null) {
         intersectPoint = result.intersect;
         distanceToBound = distanceToBoundH;
-      } else {
-        if (distanceToBoundH < distanceToBound) {
-          intersectPoint = result.intersect;
-          distanceToBound = distanceToBoundH;
-        }
+        xMirror = 1;
+        yMirror = -1;
+      } else if (distanceToBoundH < distanceToBound) {
+        intersectPoint = result.intersect;
+        distanceToBound = distanceToBoundH;
+        xMirror = 1;
+        yMirror = -1;
+      } else if (roundNum(distanceToBoundH, precision) === roundNum(distanceToBound, precision)) {
+        xMirror = -1;
+        yMirror = -1;
       }
     }
   }
@@ -2768,21 +2778,41 @@ function calculateStop(
       position: newPosition,
     };
   }
-  const s = distanceToBound;
+
   const v0 = mag;
-  const acc = -deceleration;
+  const acc = -v0 / Math.abs(v0) * deceleration;
+  const s = distanceToBound;
   const b = v0;
-  const a = acc;
-  const c = s;
+  const a = 0.5 * acc;
+  const c = -s;
   const t = (-b + Math.sqrt(b ** 2 - 4 * a * c)) / (2 * a);
-  const velocityAtIntersect = (s - 0.5 * a * (t ** 2)) / t;
-  const bounceVelocity = velocityAtIntersect * -1 * bounceLoss;
-  const rectBounceVelocity = new Point(bounceVelocity * Math.cos(angle), bounceVelocity * Math.sin(angle));
-  const newStop = calculateStop(intersectPoint, rectBounceVelocity, deceleration, bounceLoss, bounds)
+  const velocityAtIntersect = v0 + acc * t; // (s - 0.5 * a * (t ** 2)) / t;
+  const bounceVelocity = velocityAtIntersect * bounceScaler;
+  const rectBounceVelocity = new Point(bounceVelocity * Math.cos(angle) * xMirror, bounceVelocity * Math.sin(angle) * yMirror);
+  // debugger;
+  const newStop = calculateStop(intersectPoint, rectBounceVelocity, deceleration, bounds, bounceLossIn)
   return {
     duration: t + newStop.duration,
     position: newStop.position,
   };
+}
+
+function calculateStopAngle(
+  angle: number,
+  velocity: number,
+  deceleration: number,
+  bounds: [number, number],
+  bounceLossIn: number = 0,
+  precision: number = 8,
+) {
+  return calculateStop(
+    new Point(angle, 0),
+    new Point(angle, 0),
+    deceleration,
+    new Rect(bounds[0], -1, bounds[1] - bounds[0], 2),
+    bounceLossIn,
+    precision,
+  );
 }
 
 export {
@@ -2828,5 +2858,6 @@ export {
   // getDef,
   getLine,
   calculateStop,
+  calculateStopAngle,
   // setState,
 };
