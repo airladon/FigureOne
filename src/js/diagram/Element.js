@@ -1690,7 +1690,14 @@ class DiagramElement {
     }
     const { velocity } = this.state.movement;
     const { transform } = this;
-    const { deceleration } = this.move.freely;
+    const { deceleration, zeroVelocityThreshold } = this.move.freely;
+    let isZero = false;
+    // for (let i = 0; i < velocity.order.length; i += 1) {
+    //   const step = velocity.order[i];
+    //   if (step instanceof Translation) {
+    //     if
+    //   }
+    // }
     if (this.state.movement.velocity.isZero(0.0000001)) {
       return 0;
     }
@@ -1706,11 +1713,17 @@ class DiagramElement {
       const { translation, rotation, scale } = deceleration;
       let stepDuration = 0;
       if (t instanceof Rotation) {
-        stepDuration = calculateStopAngle(t.r, v.r, d.rotation, [min.r, max.r], 0.5).duration;
+        stepDuration = calculateStopAngle(
+          t.r, v.r, d.rotation, [min.r, max.r], 0.5,
+        ).duration;
       } else if (t instanceof Translation) {
-        stepDuration = calculateStop(t, v, d.translation, [min, max], 0.5).duration;
+        stepDuration = calculateStop(
+          t, v, d.translation, [min, max], 0.5,
+        ).duration;
       } else {
-        stepDuration = calculateStop(t, v, d.scale, [min, max], 0.5).duration;
+        stepDuration = calculateStop(
+          t, v, d.scale, [min, max], 0.5,
+        ).duration;
       }
       if (stepDuration > duration) {
         duration = stepDuration;

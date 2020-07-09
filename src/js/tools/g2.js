@@ -2241,7 +2241,7 @@ class Transform {
         if (clipAngle(t.r, '0to360') > zeroThreshold) {
           return false;
         }
-      }
+      } 
     }
     return true;
   }

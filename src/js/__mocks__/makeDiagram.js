@@ -5,7 +5,7 @@
 // } from '../Element';
 import Diagram from '../diagram/Diagram';
 import {
-  Rect,
+  Rect, getPoint, Point,
 } from '../tools/g2';
 import webgl from './WebGLInstanceMock';
 import DrawContext2D from './DrawContext2DMock';
@@ -101,6 +101,7 @@ export default function makeDiagram(
   diagram.mock = {
     initialTime: 0,
     duration: 0,
+    previousTouchPoint: new Point(0, 0),
     timeStep: (deltaTimeInSeconds) => {
       const { duration, initialTime } = diagram.mock;
       const newNow = (duration + deltaTimeInSeconds + initialTime) * 1000;
@@ -109,6 +110,23 @@ export default function makeDiagram(
       diagram.animateNextFrame();
       diagram.draw(newNow / 1000);
       diagram.mock.duration += deltaTimeInSeconds;
+    },
+    touchDown: (diagramPosition) => {
+      const p = getPoint(diagramPosition);
+      const pixelPoint = p.transformBy(diagram.spaceTransforms.diagramToPixel.m());
+      const clientPoint = diagram.pixelToClient(pixelPoint);
+      diagram.touchDownHandler(clientPoint);
+      diagram.mock.previousTouchPoint = clientPoint;
+    },
+    touchUp: () => {
+      diagram.touchUpHandler();
+    },
+    touchMove: (diagramPosition) => {
+      const p = getPoint(diagramPosition);
+      const pixelPoint = p.transformBy(diagram.spaceTransforms.diagramToPixel.m());
+      const clientPoint = diagram.pixelToClient(pixelPoint);
+      diagram.touchMoveHandler(diagram.mock.previousTouchPoint, clientPoint);
+      diagram.mock.previousTouchPoint = clientPoint;
     }
   }
   return diagram;
