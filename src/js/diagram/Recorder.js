@@ -6,6 +6,7 @@ import {
   duplicate, minify, unminify, joinObjects,
   ObjectTracker, download, SubscriptionManager,
 } from '../tools/tools';
+import GlobalAnimation from './webgl/GlobalAnimation';
 import type { DiagramElement } from './Element';
 import Worker from './recorder.worker.js';
 import type Diagram from './Diagram';
@@ -290,7 +291,7 @@ class Recorder {
   // ////////////////////////////////////
   // ////////////////////////////////////
   timeStamp() {   // eslint-disable-line class-methods-use-this
-    return performance.now();
+    return new GlobalAnimation().now();
   }
 
   now() {   // eslint-disable-line class-methods-use-this
@@ -900,6 +901,7 @@ class Recorder {
     payload: Array<string | number | Object>,
     time: number = this.now(),
   ) {
+    // console.log(time)
     if (this.events[eventName] == null) {
       return;
     }
@@ -941,7 +943,7 @@ class Recorder {
     // if (time < 1) {
     //   return
     // }
-    this.timeoutID = setTimeout(() => {
+    this.timeoutID = new GlobalAnimation().setTimeout(() => {
       recordAndQueue();
     }, round(time * 1000, 0));
   }
@@ -1451,7 +1453,7 @@ class Recorder {
     const delay = this.events[eventName].list[index][0] - this.getCurrentTime();
 
     if (delay > 0.0001) {
-      this.timeoutID = setTimeout(
+      this.timeoutID = new GlobalAnimation().setTimeout(
         this.playbackEvent.bind(this, eventName), round(delay * 1000, 0),
       );
       return;
@@ -1496,7 +1498,7 @@ class Recorder {
 
     const remainingTime = this.duration - this.getCurrentTime();
     if (remainingTime > 0.0001) {
-      this.timeoutID = setTimeout(() => {
+      this.timeoutID = new GlobalAnimation().setTimeout(() => {
         this.finishPlaying();
       }, round(remainingTime * 1000, 0));
       return false;
