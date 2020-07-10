@@ -244,7 +244,7 @@ export default class AnimationManager {
       return new GlobalAnimation().lastFrame;
     }
     if (frame === 'now') {
-      return performance.now();
+      return new GlobalAnimation().now();
     }
     return null;
   }
@@ -307,7 +307,7 @@ export default class AnimationManager {
     return duration; 
   }
 
-  getRemainingTime(now: number = performance.now() / 1000) {
+  getRemainingTime(now: number = new GlobalAnimation().now() / 1000) {
     let remainingTime = 0;
     this.animations.forEach((animation) => {
       const animationRemainingTime = animation.getRemainingTime(now);

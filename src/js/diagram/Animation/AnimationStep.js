@@ -14,6 +14,7 @@ import * as math from '../../tools/math';
 import { getState } from '../state';
 import type { DiagramElement } from '../Element';
 import { FunctionMap } from '../../tools/FunctionMap';
+import GlobalAnimation from '../webgl/GlobalAnimation';
 // import * as anim from './Animation';
 
 export type TypeAnimationStepInputOptions = {
@@ -242,7 +243,7 @@ export default class AnimationStep {
     return remainingTime;
   }
 
-  getRemainingTime(now: number = performance.now() / 1000) {
+  getRemainingTime(now: number = new GlobalAnimation().now() / 1000) {
     const totalDuration = this.getTotalDuration();
     if (this.startTime == null) {
       if (this.state === 'animating' || this.state === 'waitingToStart') {

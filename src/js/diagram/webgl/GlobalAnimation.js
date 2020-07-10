@@ -12,7 +12,8 @@ class GlobalAnimation {
   debug: boolean;
   simulatedFPS: number;
   debugFrameTime: ?number;
-  now: number;
+  nowTime: number;
+  now: function;
   timeoutId: ?TimeoutID;
 
 
@@ -34,6 +35,7 @@ class GlobalAnimation {
       this.simulatedFPS = 60;
       this.debugFrameTime = 0.5;
       this.timeoutId = null;
+      this.now = () => performance.now();
       // this.drawScene = this.draw.bind(this);
     }
     return GlobalAnimation.instance;
@@ -47,25 +49,26 @@ class GlobalAnimation {
     this.simulatedFPS = simulatedFPS;
     this.debugFrameTime = frameTime;
     this.debug = true;
-    this.now = performance.now();
+    this.nowTime = performance.now();
+    this.now = () => this.nowTime;
     this.queueNextDebugFrame();
   }
 
   queueNextDebugFrame() {
     if (this.debugFrameTime != null) {
       this.timeoutId = setTimeout(() => {
-        this.now += 1 / this.simulatedFPS * 1000;
+        this.nowTime += 1 / this.simulatedFPS * 1000;
         if (this.nextDrawQueue.length > 0) {
-          this.draw(this.now);
+          this.draw(this.now());
         }
-        console.log(this.now, performance.now())
+        console.log(this.now(), performance.now())
         this.queueNextDebugFrame();
       }, this.debugFrameTime * 1000);
     } else {
       // debugger;
-      this.now += 1 / this.simulatedFPS * 1000;
+      this.nowTime += 1 / this.simulatedFPS * 1000;
       if (this.nextDrawQueue.length > 0) {
-        this.draw(this.now);
+        this.draw(this.now());
       }
       this.queueNextDebugFrame();
     }
@@ -120,7 +123,6 @@ class GlobalAnimation {
     // $FlowFixMe
     const nextFrame = this.requestNextAnimationFrame.call(window, this.draw.bind(this));
     this.animationId = nextFrame;
-    console.log('here')
   }
 }
 

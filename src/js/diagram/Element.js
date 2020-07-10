@@ -22,7 +22,7 @@ import {
   duplicate,
 } from '../tools/tools';
 import { colorArrayToRGBA, areColorsSame } from '../tools/color';
-// import GlobalAnimation from './webgl/GlobalAnimation';
+import GlobalAnimation from './webgl/GlobalAnimation';
 // import DrawContext2D from './DrawContext2D';
 
 import type { TypeSpaceTransforms } from './Diagram';
@@ -271,6 +271,8 @@ class DiagramElement {
 
   pauseSettings: TypePauseSettings;
 
+  dependantTransform: boolean;
+
   // scenarioSet: {
   //   quiz1: [
   //     { element: xyz, position: (), scale: (), rotation: (), length: () }
@@ -297,7 +299,7 @@ class DiagramElement {
     this.uid = (Math.random() * 1e18).toString(36);
     this.isShown = true;
     this.transform = transform._dup();
-    this.transformUpdatesIndependantly = true;
+    this.dependantTransform = false;
     this.fnMap = new FunctionMap();
     this.subscriptions = new SubscriptionManager(this.fnMap);
     this.isMovable = false;
@@ -949,7 +951,7 @@ class DiagramElement {
     if (
       !this.transform.isEqualTo(stateTransform)
       && (
-        (independentOnly && this.transformUpdatesIndependantly)
+        this.dependantTransform === false
         || independentOnly === false
       )
     ) {
@@ -1831,7 +1833,7 @@ class DiagramElement {
     this.stopMovingFreely();
     this.state.movement.velocity = this.transform.zero();
     this.state.movement.previousTransform = this.transform._dup();
-    this.state.movement.previousTime = performance.now() / 1000;
+    this.state.movement.previousTime = new GlobalAnimation().now() / 1000;
     this.state.isBeingMoved = true;
     this.unrender();
     if (this.recorder.state === 'recording') {
@@ -1855,7 +1857,7 @@ class DiagramElement {
   }
 
   stopBeingMoved(): void {
-    const currentTime = performance.now() / 1000;
+    const currentTime = new GlobalAnimation().now() / 1000;
     // Check wether last movement was a long time ago, if it was, then make
     // velocity 0 as the user has stopped moving before releasing touch/click
     if (this.state.movement.previousTime !== null) {
@@ -1879,7 +1881,7 @@ class DiagramElement {
   }
 
   calcVelocity(newTransform: Transform): void {
-    const currentTime = performance.now() / 1000;
+    const currentTime = new GlobalAnimation().now() / 1000;
     if (this.state.movement.previousTime === null) {
       this.state.movement.previousTime = currentTime;
       return;
@@ -4613,7 +4615,7 @@ class DiagramElementCollection extends DiagramElement {
     let duration = 0;
     duration = super.animateToState(state, options, independentOnly, lastDrawTime); // , countStart, countEnd);
     if (
-      (this.transformUpdatesIndependantly && independentOnly)
+      this.dependantTransform === false
       || independentOnly === false
     ) {
       for (let i = 0; i < this.drawOrder.length; i += 1) {
