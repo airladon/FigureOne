@@ -107,7 +107,7 @@ describe('Animate To State', () => {
       diagram.animateToState(state, { duration: 1 });
       expect(p3.animations.animations).toHaveLength(1);
       diagram.draw(0);
-      expect(p1.animations.animations[0].steps[0].steps).toHaveLength(2);
+      expect(p1.animations.animations[0].steps[0].steps).toHaveLength(1);
       expect(p2.animations.animations[0].steps[0].steps).toHaveLength(1);
       expect(p3.animations.animations[0].steps[0].steps).toHaveLength(1);
       expect(c.animations.animations[0].steps[0].steps).toHaveLength(1);
