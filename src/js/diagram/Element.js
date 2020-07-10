@@ -1995,7 +1995,7 @@ class DiagramElement {
       // indefinitely.
       if (deltaTime >= this.pulseSettings.time && this.pulseSettings.time !== 0) {
         // this.state.isPulsing = false;
-        this.stopPulsing(true);
+        this.stopPulsing(false, true);
         deltaTime = this.pulseSettings.time;
       }
 
@@ -2146,13 +2146,17 @@ class DiagramElement {
   }
 
   stopPulsing(
-    result: ?mixed,
+    cancelled: ?mixed,
     forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false,
+    freeze: boolean = false,
   ) {
+    // console.log(forceSetToEndOfPlan)
     const wasPulsing = this.state.isPulsing;
     if (
-      this.state.isPulsing
-      && this.pulseSettings.allowFreezeOnStop
+      freeze
+      && this.state.isPulsing
+      // && this.pulseSettings.allowFreezeOnStop
+
       && (forceSetToEndOfPlan === false || forceSetToEndOfPlan === 'noComplete')
     ) {
       this.frozenPulseTransforms = this.pulseTransforms.map(t => t._dup());
@@ -2167,7 +2171,7 @@ class DiagramElement {
     if (this.pulseSettings.callback) {
       const { callback } = this.pulseSettings;
       this.pulseSettings.callback = null;
-      this.fnMap.exec(callback, result);
+      this.fnMap.exec(callback, cancelled);
     }
     if (wasPulsing) {
       // this.subscriptions.trigger('animationFinished', )
@@ -2178,6 +2182,7 @@ class DiagramElement {
   stop(
     cancelled?: boolean = true,
     forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false,
+    freeze: ?boolean = false,
   ) {
     if (forceSetToEndOfPlan === true || forceSetToEndOfPlan === 'complete') {
       this.animations.cancelAll('complete');
@@ -2188,7 +2193,7 @@ class DiagramElement {
     }
     this.stopMovingFreely(cancelled);
     this.stopBeingMoved();
-    this.stopPulsing(cancelled, forceSetToEndOfPlan);
+    this.stopPulsing(cancelled, forceSetToEndOfPlan, freeze);
   }
 
   cancel(forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false) {

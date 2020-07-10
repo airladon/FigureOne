@@ -1462,8 +1462,8 @@ class Diagram {
     return true;
   }
 
-  stop(cancelled: boolean = true, forceSetToEndOfPlan: boolean = false) {
-    this.elements.stop(cancelled, forceSetToEndOfPlan);
+  stop(cancelled: boolean = true, forceSetToEndOfPlan: boolean = false, freeze: boolean = false) {
+    this.elements.stop(cancelled, forceSetToEndOfPlan, freeze);
   }
 
   // To add elements to a diagram, either this method can be overridden,
