@@ -567,16 +567,13 @@ describe('Animate To State', () => {
       // console.log(a.drawTransforms[0].s().round(3).x)
       recorder.startRecording();
       diagram.mock.timeStep(1);
-      // console.log(a.drawTransforms[0].s().round(3).x)
+      console.log(a.drawTransforms[0].s().round(3).x)
       startPulse();
       recorder.recordEvent('startPulse');
-      debugger;
       diagram.mock.timeStep(0);
       diagram.mock.timeStep(1);
-      console.log(a.state.pulse.startTime);
-      // console.log(a.drawTransforms[0].s().round(3).x)
-      diagram.mock.timeStep(1);
       console.log(a.drawTransforms[0].s().round(3).x)
+      diagram.mock.timeStep(1);
       diagram.mock.timeStep(1);
       console.log(a.drawTransforms[0].s().round(3).x)
       recorder.recordEvent('touch', ['up']);
