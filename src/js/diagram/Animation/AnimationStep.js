@@ -23,6 +23,7 @@ export type TypeAnimationStepInputOptions = {
   name?: string;
   duration?: number;
   delay?: number;
+  precision?: number;
 };
 
 export default class AnimationStep {
@@ -41,6 +42,7 @@ export default class AnimationStep {
   afterFrame: ?(number) => void;
   _stepType: string;
   fnMap: FunctionMap;
+  precision: number;
 
   constructor(optionsIn: TypeAnimationStepInputOptions = {}) {
     const defaultOptions = {
@@ -52,6 +54,7 @@ export default class AnimationStep {
       delay: 0,
       beforeFrame: null,
       afterFrame: null,
+      precision: 8,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     this.onFinish = options.onFinish;
@@ -63,6 +66,7 @@ export default class AnimationStep {
     this.afterFrame = options.afterFrame;
     this.beforeFrame = options.beforeFrame;
     this.startDelay = options.delay;
+    this.precision = options.precision;
     // This is only for it this step is a primary path in an Animation Manager
     this.removeOnFinish = options.removeOnFinish;
     // Each animation frame will typically calculate a percent complete,
@@ -216,7 +220,7 @@ export default class AnimationStep {
     }
     const deltaTime = now - this.startTime;
     // console.log(now, this.startTime, deltaTime, this.startDelay);
-    let remainingTime = -(this.duration + this.startDelay - deltaTime);
+    let remainingTime = math.round(-(this.duration + this.startDelay - deltaTime), this.precision);
     if (deltaTime >= this.startDelay) {
       let deltaTimeAfterDelay = deltaTime - this.startDelay;
       if (deltaTimeAfterDelay >= this.duration) {

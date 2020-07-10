@@ -2325,6 +2325,21 @@ class Transform {
     // }
     return v.clipMag(zeroThreshold, maxTransform);
   }
+
+  identity() {
+    const order = [];
+    for (let i = 0; i < this.order.length; i += 1) {
+      const t = this.order[i];
+      if (t instanceof Translation) {
+        order.push(new Translation(0, 0, this.name));
+      } else if (t instanceof Rotation) {
+        order.push(new Rotation(0, this.name));
+      } else if (t instanceof Scale) {
+        order.push(new Scale(1, 1, this.name));
+      }
+    }
+    return new Transform(order, this.name);
+  }
 }
 
 export type TypeF1DefTransform = {
@@ -2724,7 +2739,7 @@ function calculateStop(
       position,
     };
   }
-  debugger;
+
   const v0 = mag;
   const deltaV = Math.abs(v0) - zeroVelocityThreshold;
   const timeToZeroV = Math.abs(deltaV) / deceleration;
@@ -2815,7 +2830,7 @@ function calculateStop(
     // calculate distance to bound
     const boundPerpendicular = new Line(boundPoint, 1, bounds.ang + Math.PI / 2);
     intersectPoint = boundPerpendicular.intersectsWith(trajectory).intersect;
-    debugger;
+
     if (intersectPoint != null) {
       distanceToBound = distance(position, intersectPoint);
     }
@@ -2839,7 +2854,6 @@ function calculateStop(
   const velocityAtIntersect = v0 + acc * t; // (s - 0.5 * a * (t ** 2)) / t;
   const bounceVelocity = velocityAtIntersect * bounceScaler;
   const rectBounceVelocity = new Point(bounceVelocity * Math.cos(angle) * xMirror, bounceVelocity * Math.sin(angle) * yMirror);
-  // debugger;
   const newStop = calculateStop(intersectPoint, rectBounceVelocity, deceleration, bounds, bounceLossIn, zeroVelocityThreshold, precision);
   return {
     duration: t + newStop.duration,

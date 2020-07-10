@@ -175,9 +175,6 @@ export default class AnimationManager {
     } else {
       if (this.state === 'animating') {
         this.state = 'idle';
-        if (window.asdf) {
-          // debugger;
-        }
         callback = this.finishedCallback;
         // this.fnMap.exec(this.finishedCallback);
       }

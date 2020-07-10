@@ -1519,9 +1519,6 @@ class Diagram {
 
   pause(pauseSettings: TypePauseSettings) {
     // forcePause: boolean = true, clearAnimations: boolean = false) {
-    // if (window.asdf) {
-    //   debugger;
-    // }
     this.elements.pause(pauseSettings);
     const elements = this.elements.getAllElements();
     let preparingToPauseCounter = 0;

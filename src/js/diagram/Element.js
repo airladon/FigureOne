@@ -1254,9 +1254,6 @@ class DiagramElement {
     };
     let pauseWhenFinished = false;
     const { animation, pulse, movingFreely } = this.getPauseSettings(pauseSettingsIn);
-    // if (this.name === 'a' && this.asdf) {
-    //   debugger;
-    // }
 
     if (this.animations.isAnimating()) {
       if (animation === 'completeBeforePause') {
@@ -1685,7 +1682,6 @@ class DiagramElement {
   // }
 
   getRemainingMovingFreelyDuration() {
-    debugger;
     if (!this.state.isMovingFreely) {
       return 0;
     }
@@ -2164,6 +2160,7 @@ class DiagramElement {
       this.pulseTransforms = [];
     }
     this.state.isPulsing = false;
+    this.pulseSettings.num = 1;
     if (this.pulseSettings.callback) {
       const { callback } = this.pulseSettings;
       this.pulseSettings.callback = null;
