@@ -567,15 +567,15 @@ describe('Animate To State', () => {
       // console.log(a.drawTransforms[0].s().round(3).x)
       recorder.startRecording();
       diagram.mock.timeStep(1);
-      console.log(a.drawTransforms[0].s().round(3).x)
+      // console.log(a.drawTransforms[0].s().round(3).x)
       startPulse();
       recorder.recordEvent('startPulse');
       diagram.mock.timeStep(0);
       diagram.mock.timeStep(1);
-      console.log(a.drawTransforms[0].s().round(3).x)
+      // console.log(a.drawTransforms[0].s().round(3).x)
       diagram.mock.timeStep(1);
       diagram.mock.timeStep(1);
-      console.log(a.drawTransforms[0].s().round(3).x)
+      // console.log(a.drawTransforms[0].s().round(3).x)
       recorder.recordEvent('touch', ['up']);
       recorder.stopRecording();
       recorder.seek(0);
@@ -595,7 +595,7 @@ describe('Animate To State', () => {
         playbackStoppedCallback.mock.calls.length,
       ];
     });
-    test.only('No Pausing', () => {
+    test('No Pausing', () => {
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
       recorder.startPlayback(0);
       diagram.mock.timeStep(0);
@@ -698,10 +698,10 @@ describe('Animate To State', () => {
           recorder.settings.resume = 'instant';
           recorder.resumePlayback();
         });
-        test('Animate to resume', () => {
+        test.only('Animate to resume', () => {
           recorder.settings.resume = 'animate';
           recorder.resumePlayback();
-          diagram.mock.timeStep(0);
+          // diagram.mock.timeStep(0);
           expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 2, 4]);
           diagram.mock.timeStep(1);
           expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 1, 3]);
