@@ -973,6 +973,7 @@ class DiagramElement {
         start: this.pulseTransforms.map(t => t._dup()),
         target: state.pulseTransforms.map(t => getTransform(t)),
       }));
+      console.log(pulseAnimation)
     }
 
     if (scenarioAnimation != null || pulseAnimation != null) {
@@ -2151,7 +2152,7 @@ class DiagramElement {
     const wasPulsing = this.state.isPulsing;
     if (
       this.state.isPulsing
-      && this.pulseSettings.allowFreezeOnStop
+      // && this.pulseSettings.allowFreezeOnStop
       && (forceSetToEndOfPlan === false || forceSetToEndOfPlan === 'noComplete')
     ) {
       this.frozenPulseTransforms = this.pulseTransforms.map(t => t._dup());

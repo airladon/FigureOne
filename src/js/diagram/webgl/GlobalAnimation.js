@@ -15,6 +15,7 @@ class GlobalAnimation {
   nowTime: number;
   now: function;
   timeoutId: ?TimeoutID;
+  speed: number;
 
 
   constructor() {
@@ -65,12 +66,26 @@ class GlobalAnimation {
         this.queueNextDebugFrame();
       }, this.debugFrameTime * 1000);
     } else {
-      // debugger;
       this.nowTime += 1 / this.simulatedFPS * 1000;
       if (this.nextDrawQueue.length > 0) {
         this.draw(this.now());
       }
-      this.queueNextDebugFrame();
+    }
+  }
+
+  setTimeout (f: function, time: number): TimeoutID {
+    if (this.debug) {
+      let timeScale = 0;
+      if (this.debugFrameTime != null) {
+        timeScale = (this.debugFrameTime || 0) / (1 / this.simulatedFPS);
+      }
+      // console.log('setTimeout', time, timeScale)
+      if (timeScale > 0) {
+        return setTimeout(f, time * timeScale);
+      }
+      return setTimeout(f, 0);
+    } else {
+      return setTimeout(f, time);
     }
   }
 
