@@ -1253,7 +1253,7 @@ class Recorder {
         color: 0.8,
       },
       allDurationsSame: true,
-      zeroDurationThreshold: 0.1,
+      zeroDurationThreshold: 0.00001,
       minTime: 0,
       duration: null,
     }
@@ -1329,7 +1329,6 @@ class Recorder {
     }
     // const id = this.diagram.subscriptions.subscribe('animationsFinished', finished, 1);
     if (resumeSettings.action === 'dissolve') {
-      // debugger;
       this.diagram.elements.freezePulseTransforms();
       this.diagram.stop();
       this.diagram.dissolveToState({

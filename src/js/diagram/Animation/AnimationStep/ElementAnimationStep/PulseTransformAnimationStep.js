@@ -7,6 +7,9 @@ import type { pathOptionsType, TypeParsablePoint, TypeParsableTransform } from '
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
+import {
+  round,
+} from '../../../../tools/math';
 import type {
   TypeElementAnimationStepInputOptions,
 } from '../ElementAnimationStep';
@@ -240,13 +243,12 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
   // Setting a duration to 0 will effectively skip this animation step
   start(startTime: ?number = null) {
     super.start(startTime);
-
-    if (this.transform.start == null) {
+    if (this.transform.start == null || this.transform.start.length === 0) {
       if (this.element != null) {
         if (this.element.pulseTransforms.length > 0) {
           this.transform.start = this.element.pulseTransforms.map(t => t._dup());
         } else {
-          this.transform.start = [this.element.transform._dup()];
+          this.transform.start = [this.transform.target[0].identity()];
         }
       } else {
         this.duration = 0;
@@ -282,7 +284,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
           this.duration = duration;
         }
       }
-    }
+    }    
     if (this.transform.maxTime != null) {
       if (this.duration > this.transform.maxTime) {
         this.duration = this.transform.maxTime;
@@ -294,6 +296,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     if (this.duration < this.transform.minTime) {
       this.duration = this.transform.minTime;
     }
+    this.duration = round(this.duration, this.precision);
   }
 
   setFrame(deltaTime: number) {

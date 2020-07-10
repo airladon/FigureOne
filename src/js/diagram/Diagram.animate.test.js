@@ -443,7 +443,6 @@ describe('Animate To State', () => {
 //     expect(a.state.isPulsing).toBe(true);
 //     expect(diagram.isAnimating()).toBe(true);
 
-//     // debugger;
 //     diagram.pause();
 //     expect(diagram.isPaused).toBe(true);
 //     expect(a.isPaused).toBe(true)
