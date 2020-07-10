@@ -9,6 +9,12 @@ class GlobalAnimation {
   drawQueue: Array<(number) => void>;
   nextDrawQueue: Array<(number) => void>;
   lastFrame: ?number;
+  debug: boolean;
+  simulatedFPS: number;
+  debugFrameTime: ?number;
+  now: number;
+  timeoutId: ?TimeoutID;
+
 
   constructor() {
     // If the instance alread exists, then don't create a new instance.
@@ -24,9 +30,56 @@ class GlobalAnimation {
       this.drawQueue = [];
       this.nextDrawQueue = [];
       this.lastFrame = null;
+      this.debug = false;
+      this.simulatedFPS = 60;
+      this.debugFrameTime = 0.5;
+      this.timeoutId = null;
       // this.drawScene = this.draw.bind(this);
     }
     return GlobalAnimation.instance;
+  }
+
+  setDebugFrameRate(simulatedFPS: number = 60, frameTime: ?number = 1) {
+    if (this.timeoutId != null) {
+      clearTimeout(this.timeoutId);
+    }
+    cancelAnimationFrame(this.animationId);
+    this.simulatedFPS = simulatedFPS;
+    this.debugFrameTime = frameTime;
+    this.debug = true;
+    this.now = performance.now();
+    this.queueNextDebugFrame();
+  }
+
+  queueNextDebugFrame() {
+    if (this.debugFrameTime != null) {
+      this.timeoutId = setTimeout(() => {
+        this.now += 1 / this.simulatedFPS * 1000;
+        if (this.nextDrawQueue.length > 0) {
+          this.draw(this.now);
+        }
+        console.log(this.now, performance.now())
+        this.queueNextDebugFrame();
+      }, this.debugFrameTime * 1000);
+    } else {
+      // debugger;
+      this.now += 1 / this.simulatedFPS * 1000;
+      if (this.nextDrawQueue.length > 0) {
+        this.draw(this.now);
+      }
+      this.queueNextDebugFrame();
+    }
+  }
+
+  disableDebugFrameRate() {
+    if (this.timeoutId != null) {
+      clearTimeout(this.timeoutId);
+    }
+    this.timeoutId = null;
+    this.debug = false;
+    if (this.nextDrawQueue.length > 0) {
+      this.animateNextFrame();
+    }
   }
 
   draw(now: number) {
@@ -49,9 +102,17 @@ class GlobalAnimation {
     //   this.animateNextFrame();
     // }
     if (this.nextDrawQueue.length === 1) {
-      this.animateNextFrame();
+      if (!this.debug) {
+        this.animateNextFrame();
+      }
     }
   }
+
+  // simulateNextFrame() {
+  //   if (this.timeoutId == null) {
+  //     this.queueNextDebugFrame();
+  //   }
+  // }
 
   // Queue up an animation frame
   animateNextFrame() {
@@ -59,6 +120,7 @@ class GlobalAnimation {
     // $FlowFixMe
     const nextFrame = this.requestNextAnimationFrame.call(window, this.draw.bind(this));
     this.animationId = nextFrame;
+    console.log('here')
   }
 }
 
