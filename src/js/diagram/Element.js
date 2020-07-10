@@ -1685,6 +1685,7 @@ class DiagramElement {
   // }
 
   getRemainingMovingFreelyDuration() {
+    debugger;
     if (!this.state.isMovingFreely) {
       return 0;
     }
@@ -1706,23 +1707,23 @@ class DiagramElement {
     }
     let duration = 0;
     for (let i = 0; i < velocity.order.length; i += 1) {
-      const v = velocity.order[0];
-      const t = transform.order[0];
+      const v = velocity.order[i];
+      const t = transform.order[i];
       const min = this.move.minTransform.order[i];
       const max = this.move.maxTransform.order[i];
       const { translation, rotation, scale } = deceleration;
       let stepDuration = 0;
       if (t instanceof Rotation) {
         stepDuration = calculateStopAngle(
-          t.r, v.r, d.rotation, [min.r, max.r], 0.5,
+          t.r, v.r, rotation, [min.r, max.r], 0.5,
         ).duration;
       } else if (t instanceof Translation) {
         stepDuration = calculateStop(
-          t, v, d.translation, [min, max], 0.5,
+          t, v, translation, [min, max], 0.5,
         ).duration;
       } else {
         stepDuration = calculateStop(
-          t, v, d.scale, [min, max], 0.5,
+          t, v, scale, [min, max], 0.5,
         ).duration;
       }
       if (stepDuration > duration) {
