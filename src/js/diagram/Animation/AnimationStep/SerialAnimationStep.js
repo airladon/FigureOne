@@ -4,6 +4,7 @@
 import type { TypeAnimationStepInputOptions } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
+import GlobalAnimation from '../../webgl/GlobalAnimation';
 
 export type TypeSerialAnimationStepInputOptions = {
   steps?: Array<AnimationStep>;
@@ -174,7 +175,7 @@ export class SerialAnimationStep extends AnimationStep {
     return totalDuration;
   }
 
-  getRemainingTime(now: number = performance.now() / 1000) {
+  getRemainingTime(now: number = new GlobalAnimation().now() / 1000) {
     const totalDuration = this.getTotalDuration();
     if (this.startTime == null) {
       if (this.state === 'animating' || this.state === 'waitingToStart') {

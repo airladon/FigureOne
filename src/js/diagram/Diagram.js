@@ -343,7 +343,7 @@ class Diagram {
     this.recorder = new Recorder();
     this.recorder.diagram = this;
     this.bindRecorder();
-    this.pauseTime = performance.now() / 1000;
+    this.pauseTime = this.globalAnimation.now() / 1000;
     this.shapesLow = this.getShapes();
     // this.shapesHigh = this.getShapes(true);
     this.shapes = this.shapesLow;
@@ -361,7 +361,7 @@ class Diagram {
     this.state = {
       pause: 'unpaused',
     };
-    this.stateTime = performance.now() / 1000;
+    this.stateTime = this.globalAnimation.now() / 1000;
 
     // this.updateFontSize = optionsToUse.updateFontSize;
 
@@ -529,7 +529,7 @@ class Diagram {
   }
 
   getState(options: { precision: number, ignoreShown: boolean, min: boolean }) {
-    this.stateTime = performance.now() / 1000;
+    this.stateTime = this.globalAnimation.now() / 1000;
     return getState(this, [
       'lastDrawTime',
       'elements',
@@ -542,7 +542,7 @@ class Diagram {
     const state = parseState(stateIn, this);
     // console.log(state)
     setState(this, state);
-    this.elements.setTimeDelta(performance.now() / 1000 - this.stateTime);
+    this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.stateTime);
     this.elements.setPointsFromDefinition();
     this.elements.setPrimitiveColors();
     if (this.setStateCallback != null) {
@@ -619,6 +619,14 @@ class Diagram {
     }, optionsIn);
     const { state, duration, done } = options;
     const dissolveDuration = this.elements.dissolveInToState(state.elements, duration);
+
+    const elements = this.elements.getAllElements();
+    elements.forEach((element) => {
+      if (element.isShown && element.dependantTransform === false) {
+        element.setTransform(element.transform);
+      }
+    })
+
 
     if (done != null) {
       if (dissolveDuration === 0) {
@@ -808,7 +816,7 @@ class Diagram {
     this.animateNextFrame();
   }
 
-  getRemainingAnimationTime(nowIn: number = performance.now() / 1000) {
+  getRemainingAnimationTime(nowIn: number = this.globalAnimation.now() / 1000) {
     const elements = this.elements.getAllElements();
     let now = nowIn;
 
@@ -1538,7 +1546,7 @@ class Diagram {
         element.subscriptions.subscribe('paused', checkAllPaused, 1)
       }
     });
-    this.pauseTime = performance.now() / 1000;
+    this.pauseTime = this.globalAnimation.now() / 1000;
     if (preparingToPauseCounter === 0 && this.state.pause !== 'paused') {
       checkAllPaused();
     } else if (preparingToPauseCounter > 0) {
@@ -1563,7 +1571,7 @@ class Diagram {
       if (preparingToUnpauseCounter === 0) {
         this.state.pause = 'unpaused';
         this.isPaused = false;
-        this.elements.setTimeDelta(performance.now() / 1000 - this.pauseTime);
+        this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.pauseTime);
         this.animateNextFrame();
         this.subscriptions.trigger('unpaused');
       }
