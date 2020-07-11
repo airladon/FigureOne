@@ -551,7 +551,12 @@ class Diagram {
     this.animateNextFrame();
   }
 
-  animateToState(state: Object, optionsIn: Object = {}, done: ?(string | (() => void))) {
+  animateToState(
+    state: Object,
+    optionsIn: Object = {},
+    done: ?(string | (() => void)),
+    startTime: ?number | 'now' | 'prev' | 'next' = null,
+  ) {
     // const defaultOptions = {
     //   // delay: 0,
     //   duration: 1,
@@ -562,7 +567,9 @@ class Diagram {
 
     const options = joinObjects(optionsIn, optionsIn);
     // countStart();
-    const duration = this.elements.animateToState(state.elements, options, true, state.lastDrawTime);
+    const duration = this.elements.animateToState(
+      state.elements, options, true, startTime,
+    );
     // countEnd();
     if (done != null) {
       if (duration === 0) {
@@ -573,52 +580,62 @@ class Diagram {
     }
   }
 
+
   dissolveToState(optionsIn: {
     state: Object,
     dissolveOutDuration: number,
     dissolveInDuration: number,
     delay: Number,
     done: ?(string | (() => void)),
+    startTime: ?number | 'now' | 'prev' | 'next',
   }) {
     const options = joinObjects({}, {
       dissolveOutDuration: 0.8,
       dissolveInDuration: 0.8,
       delay: 0.2,
       done: null,
+      startTime: null,
     }, optionsIn);
     this.elements.animations.new()
       .opacity({ duration: options.dissolveOutDuration, start: 1, target: 0.001 })
-      .trigger({ callback: () => {
-        this.elements.hideAll();
-        this.elements.show();
-        // this.elements.setOpacity(1);
-      }})
+      .trigger(
+        {
+          callback: () => {
+            this.elements.hideAll();
+            this.elements.show();
+            // this.elements.setOpacity(1);
+          },
+        },
+      )
       .delay({ duration: options.delay })
       .trigger({
         callback: () => {
-          this.dissolveInToState( {
+          this.dissolveInToState({
             state: options.state,
             duration: options.dissolveInDuration,
             done: options.done,
+            startTime: options.startTime,
           });
         },
         // duration: options.dissolveInDuration,
         duration: 0,
       })
-      .start();
+      .start(options.startTime);
   }
 
   dissolveInToState(optionsIn: {
     state: Object,
     duration: number,
     done: ?(string | (() => void)),
+    startTime: ?number | 'now' | 'prev' | 'next',
   }) {
     const options = joinObjects({}, {
       duration: 0.8,
       done: null,
+      startTime: null,
     }, optionsIn);
-    const { state, duration, done } = options;
-    const dissolveDuration = this.elements.dissolveInToState(state.elements, duration);
+    const { state, duration, done, startTime } = options;
+    const dissolveDuration = this.elements.dissolveInToState(state.elements, duration, startTime);
 
     const elements = this.elements.getAllElements();
     elements.forEach((element) => {

@@ -237,11 +237,12 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     }
     return transformVelocity;
   }
+
   // On start, calculate the duration, target and delta if not already present.
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime: ?number = null) {
+  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
     super.start(startTime);
     if (this.transform.start == null || this.transform.start.length === 0) {
       if (this.element != null) {
@@ -284,7 +285,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
           this.duration = duration;
         }
       }
-    }    
+    }
     if (this.transform.maxTime != null) {
       if (this.duration > this.transform.maxTime) {
         this.duration = this.transform.maxTime;
@@ -297,10 +298,12 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
       this.duration = this.transform.minTime;
     }
     this.duration = round(this.duration, this.precision);
+    if (startTime === 'now' || startTime === 'prev') {
+      this.setFrame(0);
+    }
   }
 
   setFrame(deltaTime: number) {
-    
     // const start = phase.startTransform._dup();
     // const delta = phase.deltaTransform._dup();
     const percentTime = deltaTime / this.duration;
@@ -323,7 +326,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
       if (this.transform.clipRotationTo !== null) {
         next.clipRotation(this.transform.clipRotationTo);
       }
-      element.frozenPulseTransforms.push(next);  
+      element.frozenPulseTransforms.push(next);
     }
   }
 

@@ -1326,6 +1326,8 @@ class Recorder {
     };
 
     if (resumeSettings.action === 'instant' || this.diagram.elements.isStateSame(this.pauseState.elements)) {
+      // this.diagram.stop();
+      // this.diagram.elements.clearFrozenPulseTransforms();
       finished();
       return;
     }
@@ -1339,22 +1341,15 @@ class Recorder {
         dissolveOutDuration: resumeSettings.duration.dissolveOut,
         done: finished,
         delay: resumeSettings.duration.delay,
+        startTime: 'now',
       });
     } else {
       this.diagram.stop();
       this.diagram.animateToState(
         this.pauseState,
-        // {
-        //   // delay: 1,
-        //   maxTime: resumeSettings.maxTime,
-        //   velocity: resumeSettings.velocity,
-        //   allDurationsSame: true,
-        //   zeroDurationThreshold: 0.1,
-        //   minTime: options.minTime,
-        //   duration: options.duration,
-        // },
         resumeSettings,
         finished,
+        'now',
       );
     }
 

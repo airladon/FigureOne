@@ -74,7 +74,7 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime: ?number = null) {
+  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
     super.start(startTime);
     if (this.scale.start === null) {
       if (this.element != null) {
@@ -117,6 +117,9 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
       if (this.duration > this.scale.maxTime) {
         this.duration = this.scale.maxTime;
       }
+    }
+    if (startTime === 'now' || startTime === 'prev') {
+      this.setFrame(0);
     }
   }
 
