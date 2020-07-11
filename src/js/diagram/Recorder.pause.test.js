@@ -559,12 +559,13 @@ describe('Animate To State', () => {
       recorder.seek(0);
       // console.log(a.drawTransforms[0].s().round(3).x)
 
-      // const check = (recorderState, diagramIsPaused, aIsPaused, isAnimating, remainingAnimationTime, x) => {
-      //   expect(recorderState).toEqual(recorderState)
-      // }
       states = () => {
         const scale = a.drawTransforms[0].s().round(3).x;
-        return [recorder.state, diagram.state.pause, a.state.pause, diagram.isAnimating(), round(diagram.getRemainingAnimationTime()), scale];
+        return [
+          recorder.state, diagram.state.pause, a.state.pause,
+          diagram.isAnimating(),
+          round(diagram.getRemainingAnimationTime()), scale,
+        ];
       };
       callbacks = () => [
         preparingToPlayCallback.mock.calls.length,
@@ -576,7 +577,6 @@ describe('Animate To State', () => {
     test('No Pausing', () => {
       expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
       recorder.startPlayback(0);
-      // diagram.mock.timeStep(0);
       expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
       diagram.mock.timeStep(1);
       expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 2, 1]);
@@ -627,7 +627,6 @@ describe('Animate To State', () => {
         recorder.settings.pause = 'freeze';
         expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
         recorder.startPlayback(0);
-        diagram.mock.timeStep(0);
         expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
         diagram.mock.timeStep(1);
         expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 2, 1]);
@@ -736,7 +735,6 @@ describe('Animate To State', () => {
           a.setPosition(4, 4);
         });
         afterEach(() => {
-          diagram.mock.timeStep(0);
           expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 2]);
           diagram.mock.timeStep(1);
           expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
@@ -751,7 +749,6 @@ describe('Animate To State', () => {
           recorder.settings.resume = 'animate';
           expect(a.getPosition().round(3).x).toBe(4);
           recorder.resumePlayback();
-          diagram.mock.timeStep(0);
           expect(a.getPosition().round(3).x).toBe(4);
           expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 2, 2]);
           diagram.mock.timeStep(1);
@@ -840,7 +837,6 @@ describe('Animate To State', () => {
           recorder.settings.resume = 'animate';
           a.setPosition(2, 2);
           recorder.resumePlayback();
-          diagram.mock.timeStep(0);
           expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 2, 4]);
           expect(a.getPosition().round(3).x).toBe(2);
           diagram.mock.timeStep(0.5);
@@ -855,7 +851,6 @@ describe('Animate To State', () => {
         test('Animate to resume with same durations', () => {
           recorder.settings.resume = 'animate';
           recorder.resumePlayback();
-          diagram.mock.timeStep(0);
           expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 2, 4]);
           expect(a.getPosition().round(3).x).toBe(4);
           diagram.mock.timeStep(1);
