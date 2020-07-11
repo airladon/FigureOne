@@ -277,9 +277,20 @@ export default class AnimationStep {
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  start(startTime: ?number = null) {
-    this.startTime = startTime;
+  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
     this.state = 'animating';
+    if (typeof startTime === 'number' || startTime == null) {
+      this.startTime = startTime;
+      return;
+    }
+    if (startTime === 'next') {
+      this.startTime = null;
+      return;
+    }
+    if (startTime === 'prev') {
+      this.startTime = new GlobalAnimation().lastFrame;
+    }
+    this.startTime = new GlobalAnimation().now() / 1000;
   }
 
   finishIfZeroDuration() {

@@ -56,6 +56,7 @@ DiagramElementPrimitive {
     0,
     1,
   ],
+  "dependantTransform": false,
   "diagramLimits": Rect {
     "bottom": -1,
     "height": 2,
@@ -645,7 +646,6 @@ DiagramElementPrimitive {
       },
     ],
   },
-  "transformUpdatesIndependantly": true,
   "type": "primitive",
   "uid": "0000000000",
   "unrenderNextDraw": false,

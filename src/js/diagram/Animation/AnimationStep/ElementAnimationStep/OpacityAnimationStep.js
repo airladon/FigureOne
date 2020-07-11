@@ -66,13 +66,15 @@ export class OpacityAnimationStep extends ElementAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime: ?number = null) {
+  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
     const { element } = this;
     if (element != null) {
       super.start(startTime);
       if (this.opacity.start == null) {
         // eslint-disable-next-line prefer-destructuring
         this.opacity.start = element.opacity;
+      } else if (startTime === 'now' || startTime === 'prev') {
+        element.setOpacity(this.opacity.start);
       }
       if (this.opacity.delta == null && this.opacity.target == null) {
         this.opacity.target = this.opacity.start;

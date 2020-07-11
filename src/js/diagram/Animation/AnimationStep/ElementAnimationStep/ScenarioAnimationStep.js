@@ -250,7 +250,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime: ?number = null) {
+  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
     super.start(startTime);
     const { element } = this;
     if (element == null) {
@@ -322,6 +322,9 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     }
     this.steps = steps;
     super.start(startTime);
+    // if (startTime === 'now' || startTime === 'prev') {
+    //   this.setFrame(0);
+    // }
   }
 
   _dup() {

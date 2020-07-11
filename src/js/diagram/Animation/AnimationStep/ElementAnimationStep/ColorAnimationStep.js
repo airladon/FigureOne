@@ -81,13 +81,15 @@ export class ColorAnimationStep extends ElementAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime: ?number = null) {
+  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
     const { element } = this;
     // console.log('starting', element)
     if (element != null) {
       super.start(startTime);
       if (this.color.start == null) {
         this.color.start = element.color.slice();
+      } else if (startTime === 'now' || startTime === 'prev') {
+        element.setColor(this.color.start);
       }
       if (this.color.delta == null && this.color.target == null) {
         this.color.target = this.color.start.slice();

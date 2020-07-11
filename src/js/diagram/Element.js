@@ -935,7 +935,7 @@ class DiagramElement {
     state: Object,
     options: Object,
     independentOnly: boolean = false,
-    lastDrawTime: number,
+    startTime: ?number | 'now' | 'prev' | 'next' = null,
   ) {
     const target = {};
     if (
@@ -963,8 +963,8 @@ class DiagramElement {
     if (Object.keys(target).length > 0) {
       scenarioAnimation = this.anim.scenario(joinObjects({ target }, options));
     }
-    let pulseTrigger = null;
-    let pulseDelay = null;
+    // let pulseTrigger = null;
+    // let pulseDelay = null;
     // let delay = 0;
     let pulseAnimation = null;
 
@@ -985,7 +985,7 @@ class DiagramElement {
         // .then(scenarioAnimation)
         // .then(pulseTrigger)
         // .then(pulseDelay)
-        .start();
+        .start(startTime);
     } else {
       this.frozenPulseTransforms = [];
     }
@@ -1001,6 +1001,7 @@ class DiagramElement {
   dissolveInToState(
     state: Object,
     duration: number = 0.8,
+    startTime: ?number | 'now' | 'prev' | 'next' = null,
   ) {
     if (state.isShown === false) {
       return 0;
@@ -1011,6 +1012,7 @@ class DiagramElement {
     this.frozenPulseTransforms = [];
     state.pulseTransforms.forEach((t) => this.frozenPulseTransforms.push(getTransform(t)));
     this.show();
+    window.asdf = true;
     this.animations.new()
       .opacity({
         target: state.opacity,
@@ -1022,7 +1024,7 @@ class DiagramElement {
           this.frozenPulseTransforms = [];
         },
       })
-      .start();
+      .start(startTime);
     return duration;
   }
 
@@ -4614,12 +4616,15 @@ class DiagramElementCollection extends DiagramElement {
     state: Object,
     options: Object,
     independentOnly: boolean = false,
-    lastDrawTime: number,
+    startTime: ?number | 'now' | 'prev' | 'next' = null,
+    // lastDrawTime: number,
     // countStart: () => void,
     // countEnd: () => void,
   ) {
     let duration = 0;
-    duration = super.animateToState(state, options, independentOnly, lastDrawTime); // , countStart, countEnd);
+    duration = super.animateToState(
+      state, options, independentOnly, startTime,
+    );
     if (
       this.dependantTransform === false
       || independentOnly === false
@@ -4630,7 +4635,7 @@ class DiagramElementCollection extends DiagramElement {
           const elementDuration = element.animateToState(
             state.elements[this.drawOrder[i]], options,
             independentOnly, // countStart, countEnd,
-            lastDrawTime,
+            startTime,
           );
           if (elementDuration > duration) {
             duration = elementDuration;
@@ -4644,9 +4649,10 @@ class DiagramElementCollection extends DiagramElement {
   dissolveInToState(
     state: Object,
     durationIn: number = 0.8,
+    startTime: ?number | 'now' | 'prev' | 'next' = null
   ) {
     let duration = 0;
-    duration = super.dissolveInToState(state, durationIn);
+    duration = super.dissolveInToState(state, durationIn, startTime);
     if (duration === 0) {
       return 0;
     }
@@ -4654,7 +4660,7 @@ class DiagramElementCollection extends DiagramElement {
       const element = this.elements[this.drawOrder[i]];
       if (state.elements != null && state.elements[this.drawOrder[i]] != null) {
         const elementDuration = element.dissolveInToState(
-          state.elements[this.drawOrder[i]], durationIn,
+          state.elements[this.drawOrder[i]], durationIn, startTime
         );
         if (elementDuration > duration) {
           duration = elementDuration;
