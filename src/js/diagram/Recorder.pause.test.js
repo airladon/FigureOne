@@ -20,10 +20,6 @@ describe('Animate To State', () => {
   let preparingToPlayCallback;
   let preparingToPauseCallback;
   let playbackStoppedCallback;
-  // let p1;
-  // let p2;
-  // let p3;
-  // let c;
   let a;
   beforeEach(() => {
     diagram = makeDiagram();
@@ -947,8 +943,6 @@ describe('Animate To State', () => {
       });
       describe('No State Change', () => {
         afterEach(() => {
-          // recorder.resumePlayback();
-          // diagram.mock.timeStep(0);
           expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 2]);
           diagram.mock.timeStep(1);
           expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
@@ -979,7 +973,6 @@ describe('Animate To State', () => {
         test('Dissolve to resume', () => {
           recorder.settings.resume = 'dissolve';
           recorder.resumePlayback();
-
 
           // dissolve out
           expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 1, 1]);
