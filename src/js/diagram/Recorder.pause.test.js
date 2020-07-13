@@ -772,7 +772,7 @@ describe('Animate To State', () => {
         test('Dissolve to resume', () => {
           recorder.settings.resume = 'dissolve';
           recorder.resumePlayback();
-
+          // diagram.mock.timeStep(0)
 
           // dissolve out
           expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 1, 2]);
