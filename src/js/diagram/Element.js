@@ -2171,7 +2171,7 @@ class DiagramElement {
     // }
     if (forceSetToEndOfPlan === 'complete' || forceSetToEndOfPlan === true) {
       this.pulseTransforms = [];
-      // console.log(2)
+      console.log(2)
     }
     this.state.isPulsing = false;
     this.pulseSettings.num = 1;
