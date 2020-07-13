@@ -1257,8 +1257,10 @@ class DiagramElement {
       this.state.pause = 'paused';
       this.subscriptions.trigger('paused');
     };
+    // console.log(pauseSettingsIn)
     let pauseWhenFinished = false;
     const { animation, pulse, movingFreely } = this.getPauseSettings(pauseSettingsIn);
+    // console.log(animation, pulse)
 
     if (this.animations.isAnimating()) {
       if (animation === 'completeBeforePause') {
@@ -1969,6 +1971,7 @@ class DiagramElement {
     }
     return this.pulseSettings.time - (now - this.state.pulse.startTime);
   }
+
   // Take an input transform matrix, and output a list of transform matrices
   // that have been transformed by a pulse. The first matrix in the list
   // will be the largest, so when saving lastDrawTransformMatrix it can be
@@ -2150,23 +2153,25 @@ class DiagramElement {
   stopPulsing(
     cancelled: ?mixed,
     forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false,
-    freeze: boolean = false,
+    // freeze: boolean = false,
   ) {
     // console.log(forceSetToEndOfPlan)
     const wasPulsing = this.state.isPulsing;
-    if (
-      freeze
-      && this.state.isPulsing
-      // && this.pulseSettings.allowFreezeOnStop
+    // if (
+    //   freeze
+    //   && this.state.isPulsing
+    //   // && this.pulseSettings.allowFreezeOnStop
 
-      && (forceSetToEndOfPlan === false || forceSetToEndOfPlan === 'noComplete')
-    ) {
-      this.frozenPulseTransforms = this.pulseTransforms.map(t => t._dup());
-      // this.pulseTransforms = this.pulseTransforms;
-      this.pulseTransforms = [];
-    }
+    //   && (forceSetToEndOfPlan === false || forceSetToEndOfPlan === 'noComplete')
+    // ) {
+    //   this.frozenPulseTransforms = this.pulseTransforms.map(t => t._dup());
+    //   // this.pulseTransforms = this.pulseTransforms;
+    //   this.pulseTransforms = [];
+    //   console.log(1)
+    // }
     if (forceSetToEndOfPlan === 'complete' || forceSetToEndOfPlan === true) {
       this.pulseTransforms = [];
+      // console.log(2)
     }
     this.state.isPulsing = false;
     this.pulseSettings.num = 1;
