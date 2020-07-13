@@ -64,8 +64,7 @@ describe('Animate To State', () => {
       recorder.addEventType('startAnimation', startAnimation.bind(this));
 
       // setup
-
-      diagram.mock.timeStep(0);
+      diagram.mock.timeStep(0);  // Ok
       recorder.startRecording();
       diagram.mock.timeStep(1);
       startAnimation();
@@ -541,14 +540,14 @@ describe('Animate To State', () => {
       };
       recorder.addEventType('startPulse', startPulse.bind(this));
 
-      diagram.mock.timeStep(0);
+      diagram.mock.timeStep(0);  // Ok
       // console.log(a.drawTransforms[0].s().round(3).x)
       recorder.startRecording();
       diagram.mock.timeStep(1);
       // console.log(a.drawTransforms[0].s().round(3).x)
       startPulse();
       recorder.recordEvent('startPulse');
-      diagram.mock.timeStep(0);
+      diagram.mock.timeStep(0);  // Ok
       diagram.mock.timeStep(1);
       // console.log(a.drawTransforms[0].s().round(3).x)
       diagram.mock.timeStep(1);
@@ -967,8 +966,9 @@ describe('Animate To State', () => {
         });
         test('Animate to resume', () => {
           recorder.settings.resume = 'animate';
+          expect(a.frozenPulseTransforms.map(t => t.s().round(3).x)).toEqual([]); 
           recorder.resumePlayback();
-          // diagram.mock.timeStep(0);
+          expect(a.frozenPulseTransforms.map(t => t.s().round(3).x)).toEqual([1]); 
           expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 1, 1]);
           diagram.mock.timeStep(0.5);
           expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.5, 1.5]);
@@ -1093,7 +1093,7 @@ describe('Animate To State', () => {
         diagram.mock.timeStep(1);
         expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, [1.1, 1, 0.9]]);
       });
-      test.only('Complete', () => {
+      test('Complete', () => {
         recorder.settings.pause = 'complete';
         expect(a.pulseTransforms.map(t => t.s().round(3).x)).toEqual([1.1, 1, 0.9]);
         recorder.pausePlayback();
@@ -1120,7 +1120,6 @@ describe('Animate To State', () => {
         recorder.settings.pause = 'freeze';
         expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, [1]]);
         recorder.startPlayback(0);
-        diagram.mock.timeStep(0);
         expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, [1]]);
         diagram.mock.timeStep(1);
         expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 2, [1,1, 1]]);
@@ -1152,12 +1151,12 @@ describe('Animate To State', () => {
         beforeEach(() => {
           diagram.unpause();
           a.pulseThickNow(2, 1.2, 3);
-          diagram.mock.timeStep(0);
+          // This is Ok as it kicks off pulse
+          diagram.mock.timeStep(0);  // Ok
           diagram.mock.timeStep(1);
           expect(states()).toEqual(['idle', 'unpaused', 'unpaused', true, 1, [1.2, 1, 0.8]]);
         });
         afterEach(() => {
-          diagram.mock.timeStep(0);
           expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, [1.1, 1, 0.9]]);
           diagram.mock.timeStep(1);
           expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, [1]]);
@@ -1166,12 +1165,16 @@ describe('Animate To State', () => {
         });
         test('Instant resume', () => {
           recorder.settings.resume = 'instant';
+          expect(a.pulseTransforms.map(t => t.s().round(3).x)).toEqual([1.2, 1, 0.8]);
           recorder.resumePlayback();
+          expect(a.pulseTransforms.map(t => t.s().round(3).x)).toEqual([1.1, 1, 0.9]);
+          // This is Ok as pulseTransforms is updated, and drawTransforms will
+          // be updated on the next frame
+          diagram.mock.timeStep(0);  // Ok
         });
         test('Animate to resume', () => {
           recorder.settings.resume = 'animate';
           recorder.resumePlayback();
-          diagram.mock.timeStep(0);
           expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.1, [1.2, 1, 0.8]]);
           diagram.mock.timeStep(0.05);
           expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.05, [1.15, 1, 0.85]]);
@@ -1231,18 +1234,16 @@ describe('Animate To State', () => {
       beforeEach(() => {
         recorder.settings.pause = 'complete';
         recorder.startPlayback(0);
-        diagram.mock.timeStep(0);
+        diagram.mock.timeStep(0);  // Ok
         diagram.mock.timeStep(1);
         diagram.mock.timeStep(1);
-        a.asdf = true;
         recorder.pausePlayback();
-        a.asdf = false;
-        diagram.mock.timeStep(0);
+        diagram.mock.timeStep(0);  // Ok
         expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, [1]]);
       });
       describe('No State Change', () => {
         afterEach(() => {
-          diagram.mock.timeStep(0);
+          expect(a.frozenPulseTransforms.map(t => t.s().round(3).x)).toEqual([]); 
           expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, [1.1, 1, 0.9]]);
           diagram.mock.timeStep(1);
           expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, [1]]);
@@ -1251,13 +1252,23 @@ describe('Animate To State', () => {
         });
         test('Instant resume', () => {
           recorder.settings.resume = 'instant';
+          expect(a.pulseTransforms.map(t => t.s().round(3).x)).toEqual([]);
           recorder.resumePlayback();
-          diagram.mock.timeStep(0);
+          expect(a.pulseTransforms.map(t => t.s().round(3).x)).toEqual([1.1, 1, 0.9]);
+          // This is ok as pulseTransforms is updated and drawTransforms will
+          // be updated on next frame
+          diagram.mock.timeStep(0);  // Ok
         });
         test('Animate to resume', () => {
           recorder.settings.resume = 'animate';
+          expect(a.pulseTransforms.map(t => t.s().round(3).x)).toEqual([]);
+          expect(a.frozenPulseTransforms.map(t => t.s().round(3).x)).toEqual([]); 
           recorder.resumePlayback();
-          diagram.mock.timeStep(0);
+          expect(a.pulseTransforms.map(t => t.s().round(3).x)).toEqual([]);
+          expect(a.frozenPulseTransforms.map(t => t.s().round(3).x)).toEqual([1, 1, 1]);
+          // This is ok as frozenPulseTransforms is updated and
+          // drawTransforms will be updated on next frame
+          diagram.mock.timeStep(0);  // Ok
           expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.1, [1, 1, 1]]);
           diagram.mock.timeStep(0.05);
           expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.05, [1.05, 1, 0.95]]);
