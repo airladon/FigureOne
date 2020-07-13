@@ -1502,7 +1502,7 @@ class Recorder {
     if (this.isAudioPlaying) {
       return false;
     }
-    this.pausePlayback(false);
+    this.pausePlayback();
     return true;
   }
 
@@ -1546,7 +1546,7 @@ class Recorder {
       this.audio.pause();
       this.isAudioPlaying = false;
     }
-    
+
     this.diagram.subscriptions.subscribe('paused', pause, 1);
     this.diagram.pause(this.settings.pause);
     if (this.diagram.getPauseState() === 'preparingToPause') {
