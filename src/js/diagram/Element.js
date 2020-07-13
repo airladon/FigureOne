@@ -68,7 +68,7 @@ const transformBy = (inputTransforms, copyTransforms) => {
   const newTransforms = [];
   inputTransforms.forEach((it) => {
     copyTransforms.forEach((t) => {
-      newTransforms.push(it.transform(t));
+      newTransforms.push(getTransform(it).transform(getTransform(t)));
     });
   });
   if (newTransforms.length > 0) {
@@ -940,8 +940,16 @@ class DiagramElement {
     this.frozenPulseTransforms = [];
   }
 
-  freezePulseTransforms() {
-    this.frozenPulseTransforms = this.pulseTransforms.map(t => t._dup());
+  freezePulseTransforms(forceOverwrite: boolean = true) {
+    // const freeze = () => {
+    //   this.frozenPulseTransforms = this.pulseTransforms.map(t => t._dup());
+    // };
+    if (
+      (forceOverwrite && this.pulseTransforms.length === 0)
+      || (!forceOverwrite && this.pulseTransforms.length > 0)
+    ) {
+      this.frozenPulseTransforms = this.pulseTransforms.map(t => t._dup());
+    }
   }
 
   animateToState(
@@ -987,7 +995,7 @@ class DiagramElement {
 
     if (
       (state.state.isPulsing || this.state.isPulsing)
-      && !this.arePulseTransformsSame()
+      && !this.arePulseTransformsSame(state)
     ) {
       pulseAnimation = this.anim.pulseTransform(joinObjects(options, {
         start: this.pulseTransforms.map(t => t._dup()),
@@ -1060,7 +1068,7 @@ class DiagramElement {
     }
 
     if (mergePulseTransforms) {
-      return this.arePulseTransformsSame();
+      return this.arePulseTransformsSame(state);
     }
     if (state.pulseTransforms.length !== this.pulseTransforms.length) {
       return false;
@@ -1076,8 +1084,8 @@ class DiagramElement {
   arePulseTransformsSame(state: Object) {
     let statePulseTransforms = [];
     let pulseTransforms = [];
-    statePulseTransforms = transformBy([this.transform._dup()], this.pulseTransforms);
-    statePulseTransforms = transformBy(statePulseTransforms, this.frozenPulseTransforms);
+    statePulseTransforms = transformBy([this.transform._dup()], state.pulseTransforms);
+    statePulseTransforms = transformBy(statePulseTransforms, state.frozenPulseTransforms);
 
     pulseTransforms = transformBy([this.transform._dup()], this.pulseTransforms);
     pulseTransforms = transformBy(pulseTransforms, this.frozenPulseTransforms);
@@ -4786,11 +4794,11 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  freezePulseTransforms() {
-    super.freezePulseTransforms();
+  freezePulseTransforms(forceOverwrite: boolean = true) {
+    super.freezePulseTransforms(forceOverwrite);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.freezePulseTransforms();
+      element.freezePulseTransforms(forceOverwrite);
     }
   }
 }
