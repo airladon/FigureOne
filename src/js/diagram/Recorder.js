@@ -1325,7 +1325,7 @@ class Recorder {
       this.subscriptions.trigger('playbackStarted');
     };
 
-    if (resumeSettings.action === 'instant' || this.diagram.elements.isStateSame(this.pauseState.elements)) {
+    if (resumeSettings.action === 'instant' || this.diagram.elements.isStateSame(this.pauseState.elements, true)) {
       // this.diagram.stop();
       // this.diagram.elements.clearFrozenPulseTransforms();
       finished();
@@ -1345,6 +1345,7 @@ class Recorder {
       });
     } else {
       this.diagram.stop();
+      debugger;
       this.diagram.animateToState(
         this.pauseState,
         resumeSettings,
@@ -1353,7 +1354,9 @@ class Recorder {
       );
     }
 
-    if (this.diagram.isAnimating() && !finishedFlag) {
+    // if (this.diagram.isAnimating() && !finishedFlag) {
+    // console.log(finishedFlag)
+    if (!finishedFlag) {
       this.state = 'preparingToPlay';
       this.subscriptions.trigger('preparingToPlay');
     }

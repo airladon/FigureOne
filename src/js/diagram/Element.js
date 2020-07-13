@@ -64,6 +64,19 @@ export type TypeScenario = {
   isShown?: boolean,
 };
 
+const transformBy = (inputTransforms, copyTransforms) => {
+  const newTransforms = [];
+  inputTransforms.forEach((it) => {
+    copyTransforms.forEach((t) => {
+      newTransforms.push(it.transform(t));
+    });
+  });
+  if (newTransforms.length > 0) {
+    return newTransforms;
+  }
+  return inputTransforms;
+}
+
 
 // A diagram is composed of multiple diagram elements.
 //
@@ -968,7 +981,14 @@ class DiagramElement {
     // let delay = 0;
     let pulseAnimation = null;
 
-    if (state.state.isPulsing || this.state.isPulsing) {
+    // const arePulseTransformsEqual = () => {
+      
+    // };
+
+    if (
+      (state.state.isPulsing || this.state.isPulsing)
+      && !this.arePulseTransformsSame()
+    ) {
       pulseAnimation = this.anim.pulseTransform(joinObjects(options, {
         start: this.pulseTransforms.map(t => t._dup()),
         target: state.pulseTransforms.map(t => getTransform(t)),
@@ -1028,7 +1048,7 @@ class DiagramElement {
     return duration;
   }
 
-  isStateSame(state: Object) {
+  isStateSame(state: Object, mergePulseTransforms: boolean = false) {
     if (this.isShown != state.isShown || this.opacity != state.opacity) {
       return false;
     }
@@ -1037,6 +1057,10 @@ class DiagramElement {
     }
     if (!this.transform.isEqualTo(getTransform(state.transform))) {
       return false;
+    }
+
+    if (mergePulseTransforms) {
+      return this.arePulseTransformsSame();
     }
     if (state.pulseTransforms.length !== this.pulseTransforms.length) {
       return false;
@@ -1049,21 +1073,28 @@ class DiagramElement {
     return true;
   }
 
+  arePulseTransformsSame(state: Object) {
+    let statePulseTransforms = [];
+    let pulseTransforms = [];
+    statePulseTransforms = transformBy([this.transform._dup()], this.pulseTransforms);
+    statePulseTransforms = transformBy(statePulseTransforms, this.frozenPulseTransforms);
+
+    pulseTransforms = transformBy([this.transform._dup()], this.pulseTransforms);
+    pulseTransforms = transformBy(pulseTransforms, this.frozenPulseTransforms);
+
+    if (pulseTransforms.length !== statePulseTransforms.length) {
+      return false;
+    }
+    for (let i = 0; i < pulseTransforms.length; i += 1) {
+      if (!pulseTransforms[i].isEqualTo(statePulseTransforms[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   getDrawTransforms(transform: Transform) {
     let drawTransforms = [transform];
-    const transformBy = (inputTransforms, copyTransforms) => {
-      const newTransforms = [];
-      inputTransforms.forEach((it) => {
-        copyTransforms.forEach((t) => {
-          newTransforms.push(it.transform(t));
-        });
-      });
-      if (newTransforms.length > 0) {
-        return newTransforms;
-      }
-      return inputTransforms;
-    }
-
     drawTransforms = transformBy([transform], this.copyTransforms);
     drawTransforms = transformBy(drawTransforms, this.pulseTransforms);
     drawTransforms = transformBy(drawTransforms, this.frozenPulseTransforms);
@@ -1267,8 +1298,8 @@ class DiagramElement {
         pauseWhenFinished = true;
       } else if (animation === 'complete') {
         this.animations.cancelAll('complete');
-      // } else {
-      //   this.animations.cancelAll('noComplete');
+      } else {
+        this.animations.cancelAll('noComplete');
       }
     }
     // console.log(this.name, pauseWhenFinished)
@@ -1277,8 +1308,8 @@ class DiagramElement {
         pauseWhenFinished = true;
       } else if (pulse === 'complete') {
         this.stopPulsing(true, 'complete');
-      // } else {
-      //   this.stopPulsing(true, 'noComplete');
+      } else {
+        this.stopPulsing(true, 'noComplete', true);
       }
     }
     // console.log(this.name, pauseWhenFinished)
@@ -2153,22 +2184,21 @@ class DiagramElement {
   stopPulsing(
     cancelled: ?mixed,
     forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false,
-    // freeze: boolean = false,
+    freeze: boolean = false,
   ) {
     // console.log(forceSetToEndOfPlan)
     const wasPulsing = this.state.isPulsing;
-    // if (
-    //   freeze
-    //   && this.state.isPulsing
-    //   // && this.pulseSettings.allowFreezeOnStop
+    if (
+      freeze
+      && this.state.isPulsing
+      // && this.pulseSettings.allowFreezeOnStop
 
-    //   && (forceSetToEndOfPlan === false || forceSetToEndOfPlan === 'noComplete')
-    // ) {
-    //   this.frozenPulseTransforms = this.pulseTransforms.map(t => t._dup());
-    //   // this.pulseTransforms = this.pulseTransforms;
-    //   this.pulseTransforms = [];
-    //   console.log(1)
-    // }
+      && (forceSetToEndOfPlan === false || forceSetToEndOfPlan === 'noComplete')
+    ) {
+      this.frozenPulseTransforms = this.pulseTransforms.map(t => t._dup());
+      // this.pulseTransforms = this.pulseTransforms;
+      this.pulseTransforms = [];
+    }
     if (forceSetToEndOfPlan === 'complete' || forceSetToEndOfPlan === true) {
       this.pulseTransforms = [];
     }
@@ -4729,15 +4759,17 @@ class DiagramElementCollection extends DiagramElement {
     return pause;
   }
 
-  isStateSame(state: Object) {
-    const thisElementResult = super.isStateSame(state);
+  isStateSame(state: Object, mergePulseTransforms: boolean = false) {
+    const thisElementResult = super.isStateSame(state, mergePulseTransforms);
     if (thisElementResult === false) {
       return false;
     }
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       if (state.elements != null && state.elements[this.drawOrder[i]] != null) {
-        const elementResult = element.isStateSame(state.elements[this.drawOrder[i]]);
+        const elementResult = element.isStateSame(
+          state.elements[this.drawOrder[i]], mergePulseTransforms,
+        );
         if (elementResult === false) {
           return false;
         }

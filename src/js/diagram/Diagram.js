@@ -1652,6 +1652,7 @@ class Diagram {
       return;
     }
     this.drawQueued = false;
+
     this.clearContext(canvasIndex);
     // console.log('really drawing')
     this.elements.setupDraw(
@@ -1659,6 +1660,7 @@ class Diagram {
       now,
       canvasIndex,
     );
+
     this.elements.draw(now, canvasIndex);
     // console.log('really done')
     // if (this.pauseAfterNextDrawFlag) {
@@ -1666,9 +1668,12 @@ class Diagram {
     //   this.pauseAfterNextDrawFlag = false;
     // }
 
-    if (this.isPaused) {
+    if (this.state.pause === 'paused') {
       return;
     }
+    // if (this.isPaused) {
+    //   return;
+    // }
 
     if (this.elements.isAnyElementMoving()) {
       this.animateNextFrame(true, 'is moving');
