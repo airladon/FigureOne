@@ -633,11 +633,11 @@ describe('Animate To State', () => {
         diagram.mock.timeStep(1);
         expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 2]);
         expect(a.pulseTransforms[0].s().round(3).x).toBe(2);
-        // expect(a.frozenPulseTransforms.length).toBe(0);
+        expect(a.frozenPulseTransforms.length).toBe(0);
         recorder.pausePlayback();
         // recorder.resumePlayback();
-        expect(a.pulseTransforms[0].s().round(3).x).toBe(2);
-        // expect(a.frozenPulseTransforms[0].s().round(3).x).toBe(2);
+        expect(a.pulseTransforms.length).toBe(0);
+        expect(a.frozenPulseTransforms[0].s().round(3).x).toBe(2);
         
         expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 2]);
       });
