@@ -1543,9 +1543,13 @@ class Diagram {
     return this.state.pause;
   }
 
-  pause(pauseSettings: TypePauseSettings) {
+  pause(pauseSettings: TypePauseSettings = { simplePause: true }) {
     // forcePause: boolean = true, clearAnimations: boolean = false) {
     this.elements.pause(pauseSettings);
+    if (pauseSettings.simplePause != null && pauseSettings.simplePause) {
+      return;
+    }
+
     const elements = this.elements.getAllElements();
     let preparingToPauseCounter = 0;
     const checkAllPaused = () => {

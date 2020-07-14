@@ -125,10 +125,6 @@ export default class AnimationManager {
   }
 
   isAnimating() {
-    // console.log(this.state)
-    // if (window.asdf && this.element.name === 'a') {
-    //   console.log(this.element.name, this.state, this.animations.length)
-    // }
     if (this.state === 'animating' || this.state === 'waitingToStart') {
       return true;
     }

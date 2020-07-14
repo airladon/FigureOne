@@ -815,7 +815,7 @@ class Recorder {
   addEventType(
     eventName: string,
     playbackAction: (any) => void,
-    setOnSeek: boolean = false,
+    setOnSeek: boolean = true,
   ) {
     this.events[eventName] = {
       setOnSeek,
@@ -1061,6 +1061,9 @@ class Recorder {
     const eventsToSetBeforeState = [];
     const eventsToSetAfterState = [];
     Object.keys(this.events).forEach((eventName) => {
+      // if (eventName === 'startAnimation') {
+      //   debugger;
+      // }
       const event = this.events[eventName];
       if (event.setOnSeek === false) {
         return;
@@ -1104,7 +1107,6 @@ class Recorder {
     // Sort the eventsToSet arrays in time
     sortTimes(eventsToSetBeforeState);
     sortTimes(eventsToSetAfterState);
-
     const playEvents = (events) => {
       events.forEach((event) => {
         const [eventName, index] = event;

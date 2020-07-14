@@ -1061,7 +1061,6 @@ class DiagramElement {
     this.frozenPulseTransforms = [];
     state.pulseTransforms.forEach((t) => this.frozenPulseTransforms.push(getTransform(t)));
     this.show();
-    window.asdf = true;
     this.animations.new()
       .opacity({
         target: state.opacity,
@@ -1317,6 +1316,10 @@ class DiagramElement {
       this.state.pause = 'paused';
       this.subscriptions.trigger('paused');
     };
+    if (pauseSettingsIn.simplePause != null && pauseSettingsIn.simplePause) {
+      pause();
+      return;
+    }
     // console.log(pauseSettingsIn)
     let pauseWhenFinished = false;
     const { animation, pulse, movingFreely } = this.getPauseSettings(pauseSettingsIn);
@@ -2772,9 +2775,6 @@ class DiagramElement {
   }
 
   // isAnimating(): boolean {
-  //   // if (window.asdf && this.name === 'a') {
-  //   //   console.log(this.name, this.isShown, this.animations.isAnimating())
-  //   // }
   //   // console.log(this.name, this.isShown, this.animations.isAnimating())
   //   if (this.isShown === false) {
   //     return false;
