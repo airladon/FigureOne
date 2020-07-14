@@ -28,6 +28,10 @@ describe('Animate To State', () => {
         name: 'a',
         method: 'polygon',
       },
+      // {
+      //   name: 'b',
+      //   method: 'polygon',
+      // },
     ]);
     a = diagram.elements._a;
     diagram.initialize();
@@ -1318,4 +1322,27 @@ describe('Animate To State', () => {
       });
     });
   });
+  // describe('Two Elements', () => {
+  //   const startPulse = () => {
+  //     a.pulseScaleNow(2, 2);
+  //   };
+  //   recorder.addEventType('startPulse', startPulse.bind(this));
+
+  //   diagram.mock.timeStep(0);  // Ok
+  //   // console.log(a.drawTransforms[0].s().round(3).x)
+  //   recorder.startRecording();
+  //   diagram.mock.timeStep(1);
+  //   // console.log(a.drawTransforms[0].s().round(3).x)
+  //   startPulse();
+  //   recorder.recordEvent('startPulse');
+  //   diagram.mock.timeStep(0);  // Ok
+  //   diagram.mock.timeStep(1);
+  //   // console.log(a.drawTransforms[0].s().round(3).x)
+  //   diagram.mock.timeStep(1);
+  //   diagram.mock.timeStep(1);
+  //   // console.log(a.drawTransforms[0].s().round(3).x)
+  //   recorder.recordEvent('touch', ['up']);
+  //   recorder.stopRecording();
+  //   recorder.seek(0);
+  // })
 });
