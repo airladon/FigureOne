@@ -1657,12 +1657,11 @@ class Diagram {
     this.clearContext(canvasIndex);
     // console.log('really drawing')
     this.elements.setupDraw(
-      this.spaceTransforms.diagramToGL,
       now,
       canvasIndex,
     );
 
-    this.elements.draw(now, canvasIndex);
+    this.elements.draw(now, [this.spaceTransforms.diagramToGL], canvasIndex);
     // console.log('really done')
     // if (this.pauseAfterNextDrawFlag) {
     //   this.pause();

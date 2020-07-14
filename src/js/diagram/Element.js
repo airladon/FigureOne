@@ -64,8 +64,11 @@ export type TypeScenario = {
   isShown?: boolean,
 };
 
-const transformBy = (inputTransforms, copyTransforms) => {
+const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Transform>) => {
   const newTransforms = [];
+  if (copyTransforms.length === 0) {
+    return inputTransforms.map(t => t._dup());
+  }
   inputTransforms.forEach((it) => {
     copyTransforms.forEach((t) => {
       newTransforms.push(getTransform(it).transform(getTransform(t)));
@@ -74,7 +77,7 @@ const transformBy = (inputTransforms, copyTransforms) => {
   if (newTransforms.length > 0) {
     return newTransforms;
   }
-  return inputTransforms;
+  return inputTransforms.map(t => t._dup());
 }
 
 
@@ -1108,9 +1111,9 @@ class DiagramElement {
     return true;
   }
 
-  getDrawTransforms(transform: Transform) {
-    let drawTransforms = [transform];
-    drawTransforms = transformBy([transform], this.copyTransforms);
+  getDrawTransforms(initialTransforms: Array<Transform>) {
+    // let drawTransforms = [transform];
+    let drawTransforms = transformBy(initialTransforms, this.copyTransforms);
     drawTransforms = transformBy(drawTransforms, this.pulseTransforms);
     drawTransforms = transformBy(drawTransforms, this.frozenPulseTransforms);
     return drawTransforms;
@@ -3051,7 +3054,7 @@ class DiagramElementPrimitive extends DiagramElement {
           return;
         }
       }
-      this.subscriptions.trigger('beforeDraw', [parentTransform, now]);
+      this.subscriptions.trigger('beforeDraw', [now]);
       if (this.beforeDrawCallback != null) {
         this.fnMap.exec(this.beforeDrawCallback, now);
       }
@@ -3127,7 +3130,7 @@ class DiagramElementPrimitive extends DiagramElement {
     }
   }
 
-  draw(now: number, parentTransform: Transform = new Transform(), canvasIndex: number = 0) {
+  draw(now: number, parentTransform: Array<Transform> = [new Transform()], canvasIndex: number = 0) {
     if (this.isShown) {
       let pointCount = -1;
       if (this.drawingObject instanceof VertexObject) {
@@ -3150,16 +3153,19 @@ class DiagramElementPrimitive extends DiagramElement {
       // console.log(this.getPath(), this.opacity, colorToUse);
       // colorToUse = [1, 0, 0, 1];
       // }
+      const transform = this.getTransform();
+      const newTransforms = transformBy(parentTransform, [transform]);
+
       this.lastDrawElementTransformPosition = {
-        parentCount: parentTransform.order.length,
+        parentCount: parentTransform[0].order.length,
         elementCount: this.transform.order.length,
       };
 
       // const newTransform = parentTransform.transform(this.getTransform());
       // this.parentTransform = parentTransform._dup();
-      const newTransform = parentTransform.transform(this.getTransform());
-      this.drawTransforms = this.getDrawTransforms(newTransform);
-      this.lastDrawTransform = newTransform;
+      // const newTransform = parentTransform.transform(this.getTransform());
+      this.drawTransforms = this.getDrawTransforms(newTransforms);
+      this.lastDrawTransform = parentTransform[0].transform(transform);
       this.lastDrawPulseTransform = this.drawTransforms[0];
       if (pointCount > 0) {
         // console.log(this.pulseTransforms, pointCount)
@@ -3608,21 +3614,21 @@ class DiagramElementCollection extends DiagramElement {
     if (this.isShown) {
       // for (let k = 0; k < this.pulseTransforms.length; k += 1) {
       this.lastDrawElementTransformPosition = {
-        parentCount: parentTransform.order.length,
+        parentCount: parentTransform[0].order.length,
         elementCount: this.transform.order.length,
       };
-      const newTransform = parentTransform.transform(this.getTransform());
-      this.lastDrawTransform = newTransform._dup();
+      const transform = this.getTransform();
+      const newTransforms = transformBy(parentTransform, [transform]);
+      // this.lastDrawTransform = transform._dup();
+      this.lastDrawTransform = parentTransform[0].transform(transform);
       this.pulseTransforms = this.getPulseTransforms(now);
-      this.drawTransforms = this.getDrawTransforms(newTransform);
+      this.drawTransforms = this.getDrawTransforms(newTransforms);
       // this.pulseTransforms
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.drawTransforms[0];
 
-      for (let k = 0; k < this.drawTransforms.length; k += 1) {
-        for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-          this.elements[this.drawOrder[i]].draw(now, this.drawTransforms[k], canvasIndex);
-        }
+      for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+        this.elements[this.drawOrder[i]].draw(now, this.drawTransforms, canvasIndex);
       }
       // }
       if (this.unrenderNextDraw) {
@@ -3955,6 +3961,7 @@ class DiagramElementCollection extends DiagramElement {
     if (!this.isTouchable) {
       return false;
     }
+    debugger;
     if (this.touchInBoundingRect) {
       const boundingRect = this.getGLBoundingRect();
       if (glLocation.x >= boundingRect.left

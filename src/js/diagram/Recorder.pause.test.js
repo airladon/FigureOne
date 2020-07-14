@@ -736,13 +736,7 @@ describe('Animate To State', () => {
           expect(a.isShown).toBe(true);
           expect(round(a.opacity)).toBe(0.5005);
 
-          console.log(a.pulseTransforms)
-          console.log(a.frozenPulseTransforms)
-          console.log(a.drawTransforms)
           diagram.mock.timeStep(0.4);
-          console.log(a.pulseTransforms)
-          console.log(a.frozenPulseTransforms)
-          console.log(a.drawTransforms)
           expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 2]);
           expect(a.isShown).toBe(true);
           expect(round(a.opacity)).toBe(1);
