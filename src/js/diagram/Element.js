@@ -966,6 +966,9 @@ class DiagramElement {
     // if (this.name === 'line1' && this.parent.name === 'circle') {
     //   debugger;
     // }
+    // if (this.name === 'a') {
+    //   console.log(this.frozenPulseTransforms)
+    // }
     const target = {};
     if (
       (this.isShown !== state.isShown && this.opacity === 1) 
@@ -1001,13 +1004,20 @@ class DiagramElement {
     // const arePulseTransformsEqual = () => {
       
     // };
-
+    // console.log(!this.arePulseTransformsSame(state))
     if (
       (state.state.isPulsing || this.state.isPulsing)
       && !this.arePulseTransformsSame(state)
     ) {
+      let startPulseTransforms = this.pulseTransforms.map(t => t._dup());
+      if (this.pulseTransforms.length === 0) {
+        startPulseTransforms = this.frozenPulseTransforms.map(t => t._dup());
+      }
+      // console.log(this.pulseTransforms)
+      // console.log(this.frozenPulseTransforms)
+      // console.log(startPulseTransforms)
       pulseAnimation = this.anim.pulseTransform(joinObjects({}, options, {
-        start: this.pulseTransforms.map(t => t._dup()),
+        start: startPulseTransforms,
         target: state.pulseTransforms.map(t => getTransform(t)),
       }));
       // console.log(pulseAnimation)
@@ -1023,8 +1033,6 @@ class DiagramElement {
         // .then(pulseTrigger)
         // .then(pulseDelay)
         .start(startTime);
-    } else {
-      this.frozenPulseTransforms = [];
     }
     if (scenarioAnimation != null) {
       duration = Math.max(duration, scenarioAnimation.getTotalDuration());
@@ -1032,6 +1040,9 @@ class DiagramElement {
     if (pulseAnimation != null) {
       duration = Math.max(duration, pulseAnimation.getTotalDuration());
     }
+    // if (this.name === 'a') {
+    //   console.log(this.frozenPulseTransforms)
+    // }
 
     return duration;
   }

@@ -1353,24 +1353,59 @@ describe('Animate To State', () => {
       diagram.mock.timeStep(1);
       expect(a.drawTransforms[0].s().round(3).x).toBe(2);
     });
-    test.only('Position Change', () => {
-      b.setPosition(10, 0);
+    test('Position Change', () => {
+      b.setPosition(4, 0);
       diagram.mock.timeStep(1);
       expect(a.drawTransforms[0].s().round(3).x).toBe(2);
-      expect(b.drawTransforms[0].t().round(3).x).toBe(10);
-
+      expect(b.drawTransforms[0].t().round(3).x).toBe(4);
       expect(a.pulseTransforms.length).toBe(0);
       expect(a.frozenPulseTransforms[0].s().round(3).x).toBe(2);
+
       recorder.resumePlayback();
       expect(a.pulseTransforms.length).toBe(0);
       expect(a.frozenPulseTransforms[0].s().round(3).x).toBe(2);
-      expect(b.drawTransforms[0].t().round(3).x).toBe(10);
+      expect(b.drawTransforms[0].t().round(3).x).toBe(4);
       
       diagram.mock.timeStep(0);
       expect(a.pulseTransforms.length).toBe(0);
       expect(a.frozenPulseTransforms[0].s().round(3).x).toBe(2);
       expect(a.drawTransforms[0].s().round(3).x).toBe(2);
-      expect(b.drawTransforms[0].t().round(3).x).toBe(10);
+      expect(b.drawTransforms[0].t().round(3).x).toBe(4);
+
+      diagram.mock.timeStep(1);
+      expect(recorder.state).toBe('preparingToPlay');
+      expect(a.pulseTransforms.length).toBe(0);
+      expect(a.frozenPulseTransforms[0].s().round(3).x).toBe(2);
+      expect(a.drawTransforms[0].s().round(3).x).toBe(2);
+      expect(b.drawTransforms[0].t().round(3).x).toBe(2);
+
+      diagram.mock.timeStep(1);
+      expect(recorder.state).toBe('playing');
+      expect(a.pulseTransforms[0].s().round(3).x).toBe(2);
+      expect(a.frozenPulseTransforms.length).toBe(0);
+      expect(a.drawTransforms[0].s().round(3).x).toBe(2);
+      expect(b.drawTransforms[0].t().round(3).x).toBe(0);
+
+      diagram.mock.timeStep(0.5);
+      expect(recorder.state).toBe('playing');
+      expect(a.pulseTransforms[0].s().round(3).x).toBe(1.707);
+      expect(a.frozenPulseTransforms.length).toBe(0);
+      expect(a.drawTransforms[0].s().round(3).x).toBe(1.707);
+      expect(b.drawTransforms[0].t().round(3).x).toBe(0);
+
+      diagram.mock.timeStep(0.5);
+      expect(recorder.state).toBe('playing');
+      expect(a.pulseTransforms[0].s().round(3).x).toBe(1);
+      expect(a.frozenPulseTransforms.length).toBe(0);
+      expect(a.drawTransforms[0].s().round(3).x).toBe(1);
+      expect(b.drawTransforms[0].t().round(3).x).toBe(0);
+
+      diagram.mock.timeStep(1);
+      expect(recorder.state).toBe('idle');
+      expect(a.pulseTransforms[0].s().round(3).x).toBe(1);
+      expect(a.frozenPulseTransforms.length).toBe(0);
+      expect(a.drawTransforms[0].s().round(3).x).toBe(1);
+      expect(b.drawTransforms[0].t().round(3).x).toBe(0);
     });
   });
 });
