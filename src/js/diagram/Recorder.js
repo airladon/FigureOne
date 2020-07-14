@@ -862,6 +862,9 @@ class Recorder {
 
   recordCurrentState(time: number = this.getCurrentTime()) {
     // const start = performance.now();
+    // if (window.asdf) {
+    //   console.log('recording state', time);
+    // }
     const state = this.diagram.getState({ precision: this.precision, ignoreShown: true });
     // const start1 = performance.now();
     // const str = JSON.stringify(state);
