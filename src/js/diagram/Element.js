@@ -122,6 +122,7 @@ class DiagramElement {
   // presetTransforms: Object;       // Convenience dict of transform presets
   lastDrawTransform: Transform; // Transform matrix used in last draw
   lastDrawPulseTransform: Transform; // Transform matrix used in last draw
+  parentTransform: Transform;
   // lastDrawParentTransform: Transform;
   // lastDrawElementTransform: Transform;
   // lastDrawPulseTransform: Transform;
@@ -328,6 +329,7 @@ class DiagramElement {
     this.afterDrawCallback = null;
     this.internalSetTransformCallback = null;
     this.lastDrawTransform = this.transform._dup();
+    this.parentTransform = new Transform();
     this.lastDrawPulseTransform = this.transform._dup();
     this.onClick = null;
     this.lastDrawElementTransformPosition = {
@@ -3034,7 +3036,7 @@ class DiagramElementPrimitive extends DiagramElement {
     }
   }
 
-  setupDraw(parentTransform: Transform = new Transform(), now: number = 0) {
+  setupDraw(now: number = 0) {
     if (this.isShown) {
       this.lastDrawTime = now;
       // if (this.pulseSettings.clearFrozenTransforms) {
@@ -3059,20 +3061,21 @@ class DiagramElementPrimitive extends DiagramElement {
         this.nextMovingFreelyFrame(now);
       }
 
-      this.lastDrawElementTransformPosition = {
-        parentCount: parentTransform.order.length,
-        elementCount: this.transform.order.length,
-      };
+      // this.lastDrawElementTransformPosition = {
+      //   parentCount: parentTransform.order.length,
+      //   elementCount: this.transform.order.length,
+      // };
 
-      const newTransform = parentTransform.transform(this.getTransform());
-      this.lastDrawTransform = newTransform._dup();
+      // // const newTransform = parentTransform.transform(this.getTransform());
+      // this.parentTransform = parentTransform._dup();
+      // this.lastDrawTransform = newTransform._dup();
       if (!this.isShown) {
         return;
       }
       if (this.state.pause !== 'paused') {
         this.pulseTransforms = this.getPulseTransforms(now);
       }
-      this.drawTransforms = this.getDrawTransforms(newTransform);
+      // this.drawTransforms = this.getDrawTransforms(newTransform);
       // if(now === 1 && this.name === 'p1') {
       //   console.log(this.getPosition('diagram'))
       //   console.log(this.getPosition('local'))
@@ -3080,7 +3083,7 @@ class DiagramElementPrimitive extends DiagramElement {
       // }
 
       // eslint-disable-next-line prefer-destructuring
-      this.lastDrawPulseTransform = this.drawTransforms[0];
+      // this.lastDrawPulseTransform = this.drawTransforms[0];
       // this.lastDrawTransform = pulseTransforms[0];
 
       // let pointCount = -1;
@@ -3124,7 +3127,7 @@ class DiagramElementPrimitive extends DiagramElement {
     }
   }
 
-  draw(now: number, canvasIndex: number = 0) {
+  draw(now: number, parentTransform: Transform = new Transform(), canvasIndex: number = 0) {
     if (this.isShown) {
       let pointCount = -1;
       if (this.drawingObject instanceof VertexObject) {
@@ -3147,6 +3150,17 @@ class DiagramElementPrimitive extends DiagramElement {
       // console.log(this.getPath(), this.opacity, colorToUse);
       // colorToUse = [1, 0, 0, 1];
       // }
+      this.lastDrawElementTransformPosition = {
+        parentCount: parentTransform.order.length,
+        elementCount: this.transform.order.length,
+      };
+
+      // const newTransform = parentTransform.transform(this.getTransform());
+      // this.parentTransform = parentTransform._dup();
+      const newTransform = parentTransform.transform(this.getTransform());
+      this.drawTransforms = this.getDrawTransforms(newTransform);
+      this.lastDrawTransform = newTransform;
+      this.lastDrawPulseTransform = this.drawTransforms[0];
       if (pointCount > 0) {
         // console.log(this.pulseTransforms, pointCount)
         this.drawTransforms.forEach((t) => {
@@ -3520,7 +3534,7 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   setupDraw(
-    parentTransform: Transform = new Transform(),
+    // parentTransform: Transform = new Transform(),
     now: number = 0,
     canvasIndex: number = 0,
   ) {
@@ -3552,26 +3566,26 @@ class DiagramElementCollection extends DiagramElement {
         return;
       }
 
-      this.lastDrawElementTransformPosition = {
-        parentCount: parentTransform.order.length,
-        elementCount: this.transform.order.length,
-      };
-      const newTransform = parentTransform.transform(this.getTransform());
-      this.lastDrawTransform = newTransform._dup();
-      this.pulseTransforms = this.getPulseTransforms(now);
-      this.drawTransforms = this.getDrawTransforms(newTransform);
-      // this.pulseTransforms
-      // eslint-disable-next-line prefer-destructuring
-      this.lastDrawPulseTransform = this.drawTransforms[0];
+      // this.lastDrawElementTransformPosition = {
+      //   parentCount: parentTransform.order.length,
+      //   elementCount: this.transform.order.length,
+      // };
+      // const newTransform = parentTransform.transform(this.getTransform());
+      // this.lastDrawTransform = newTransform._dup();
+      // this.pulseTransforms = this.getPulseTransforms(now);
+      // this.drawTransforms = this.getDrawTransforms(newTransform);
+      // // this.pulseTransforms
+      // // eslint-disable-next-line prefer-destructuring
+      // this.lastDrawPulseTransform = this.drawTransforms[0];
       // this.lastDrawTransform = pulseTransforms[0];
 
       // this.lastDrawPulseTransform = pulseTransforms[0]._dup();
 
-      for (let k = 0; k < this.drawTransforms.length; k += 1) {
-        for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-          this.elements[this.drawOrder[i]].setupDraw(this.drawTransforms[k], now, canvasIndex);
-        }
+      // for (let k = 0; k < this.drawTransforms.length; k += 1) {
+      for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+        this.elements[this.drawOrder[i]].setupDraw(now, canvasIndex);
       }
+      // }
       // if (this.unrenderNextDraw) {
       //   this.clearRender();
       //   this.unrenderNextDraw = false;
@@ -3590,11 +3604,25 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  draw(now: number, canvasIndex: number = 0) {
+  draw(now: number, parentTransform: Array<Transform> = [new Transform()], canvasIndex: number = 0) {
     if (this.isShown) {
       // for (let k = 0; k < this.pulseTransforms.length; k += 1) {
-      for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-        this.elements[this.drawOrder[i]].draw(now, canvasIndex);
+      this.lastDrawElementTransformPosition = {
+        parentCount: parentTransform.order.length,
+        elementCount: this.transform.order.length,
+      };
+      const newTransform = parentTransform.transform(this.getTransform());
+      this.lastDrawTransform = newTransform._dup();
+      this.pulseTransforms = this.getPulseTransforms(now);
+      this.drawTransforms = this.getDrawTransforms(newTransform);
+      // this.pulseTransforms
+      // eslint-disable-next-line prefer-destructuring
+      this.lastDrawPulseTransform = this.drawTransforms[0];
+
+      for (let k = 0; k < this.drawTransforms.length; k += 1) {
+        for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+          this.elements[this.drawOrder[i]].draw(now, this.drawTransforms[k], canvasIndex);
+        }
       }
       // }
       if (this.unrenderNextDraw) {
