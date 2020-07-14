@@ -33,7 +33,7 @@ describe('Animate To State', () => {
             name: 'p3',
             method: 'polygon',
             mods: {
-              transformUpdatesIndependantly: false,
+              dependantTransform: true,
             },
           },
         ],

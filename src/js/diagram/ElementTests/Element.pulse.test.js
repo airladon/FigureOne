@@ -13,6 +13,7 @@ import makeDiagram from '../../__mocks__/makeDiagram';
 jest.mock('../Gesture');
 jest.mock('../webgl/webgl');
 jest.mock('../DrawContext2D');
+jest.useFakeTimers();
 
 
 // import {
@@ -46,9 +47,10 @@ const makeCollection = () => {
 };
 
 describe('Pulse', () => {
+  let diagram;
   afterEach(() => {
     jest.clearAllMocks();
-    makeDiagram();
+    diagram = makeDiagram();
   });
   describe('Primitive', () => {
     test('Simple', () => {
@@ -68,17 +70,17 @@ describe('Pulse', () => {
       element.pulse(mockDone);
 
       // First time stamp
-      element.setupDraw(new Transform(), 0);
+      element.setupDraw(0);
       expect(element.state.isPulsing).toBe(true);
       expect(mockDone.mock.calls).toHaveLength(0);
 
       // After 0.5s
-      element.setupDraw(new Transform(), 0.5);
+      element.setupDraw(0.5);
       expect(element.state.isPulsing).toBe(true);
       expect(mockDone.mock.calls).toHaveLength(0);
 
       // When complete
-      element.setupDraw(new Transform(), 1.1);
+      element.setupDraw(1.1);
       expect(mockDone.mock.calls).toHaveLength(1);
       expect(element.state.isPulsing).toBe(false);
     });
@@ -87,6 +89,7 @@ describe('Pulse', () => {
     let collection;
     beforeEach(() => {
       collection = makeCollection();
+      diagram.elements.add('c', collection);
     });
     test('Simple', () => {
       expect(collection.state.isPulsing).toBe(false);
@@ -97,8 +100,8 @@ describe('Pulse', () => {
     test('Callback', () => {
       expect(mockDone.mock.calls).toHaveLength(0);
       collection.pulse(mockDone);
-      collection.setupDraw(new Transform(), 0);
-      collection.setupDraw(new Transform(), 1.1);
+      diagram.mock.timeStep(0);
+      diagram.mock.timeStep(1.1);
       expect(mockDone.mock.calls).toHaveLength(1);
     });
     test('Specific Elements', () => {
@@ -108,8 +111,8 @@ describe('Pulse', () => {
       expect(collection._s3.state.isPulsing).toBe(true);
       expect(collection._squares._s1.state.isPulsing).toBe(true);
       expect(collection._squares._s2.state.isPulsing).toBe(false);
-      collection.setupDraw(new Transform(), 0);
-      collection.setupDraw(new Transform(), 1.1);
+      collection.setupDraw(0);
+      collection.setupDraw(1.1);
       expect(mockDone.mock.calls).toHaveLength(1);
     });
   });
