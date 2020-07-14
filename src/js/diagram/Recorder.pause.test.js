@@ -21,6 +21,7 @@ describe('Animate To State', () => {
   let preparingToPauseCallback;
   let playbackStoppedCallback;
   let a;
+  let b;
   beforeEach(() => {
     diagram = makeDiagram();
     diagram.addElements([
@@ -34,6 +35,7 @@ describe('Animate To State', () => {
       },
     ]);
     a = diagram.elements._a;
+    b = diagram.elements._b;
     diagram.initialize();
     ({ recorder } = diagram);
     recorder.reset();
@@ -1321,27 +1323,54 @@ describe('Animate To State', () => {
       });
     });
   });
-  // describe('Two Elements', () => {
-  //   const startPulse = () => {
-  //     a.pulseScaleNow(2, 2);
-  //   };
-  //   recorder.addEventType('startPulse', startPulse.bind(this));
+  describe('Two Elements', () => {
+    beforeEach(() => {
+      const startPulse = () => {
+        a.pulseScaleNow(2, 2);
+      };
+      recorder.addEventType('startPulse', startPulse.bind(this));
 
-  //   diagram.mock.timeStep(0);  // Ok
-  //   // console.log(a.drawTransforms[0].s().round(3).x)
-  //   recorder.startRecording();
-  //   diagram.mock.timeStep(1);
-  //   // console.log(a.drawTransforms[0].s().round(3).x)
-  //   startPulse();
-  //   recorder.recordEvent('startPulse');
-  //   diagram.mock.timeStep(0);  // Ok
-  //   diagram.mock.timeStep(1);
-  //   // console.log(a.drawTransforms[0].s().round(3).x)
-  //   diagram.mock.timeStep(1);
-  //   diagram.mock.timeStep(1);
-  //   // console.log(a.drawTransforms[0].s().round(3).x)
-  //   recorder.recordEvent('touch', ['up']);
-  //   recorder.stopRecording();
-  //   recorder.seek(0);
-  // })
+      diagram.mock.timeStep(0);  // Ok
+      recorder.startRecording();
+      diagram.mock.timeStep(1);
+      startPulse();
+      recorder.recordEvent('startPulse');
+      diagram.mock.timeStep(0);  // Ok
+      diagram.mock.timeStep(1);
+      diagram.mock.timeStep(1);
+      diagram.mock.timeStep(1);
+      recorder.recordEvent('touch', ['up']);
+      recorder.stopRecording();
+      recorder.seek(0);
+
+      recorder.startPlayback();
+      diagram.mock.timeStep(1);
+      diagram.mock.timeStep(1);
+      expect(a.drawTransforms[0].s().round(3).x).toBe(2);
+      recorder.settings.pause = 'freeze';
+      recorder.settings.resume = 'animate';
+      recorder.pausePlayback();
+      diagram.mock.timeStep(1);
+      expect(a.drawTransforms[0].s().round(3).x).toBe(2);
+    });
+    test.only('Position Change', () => {
+      b.setPosition(10, 0);
+      diagram.mock.timeStep(1);
+      expect(a.drawTransforms[0].s().round(3).x).toBe(2);
+      expect(b.drawTransforms[0].t().round(3).x).toBe(10);
+
+      expect(a.pulseTransforms.length).toBe(0);
+      expect(a.frozenPulseTransforms[0].s().round(3).x).toBe(2);
+      recorder.resumePlayback();
+      expect(a.pulseTransforms.length).toBe(0);
+      expect(a.frozenPulseTransforms[0].s().round(3).x).toBe(2);
+      expect(b.drawTransforms[0].t().round(3).x).toBe(10);
+      
+      diagram.mock.timeStep(0);
+      expect(a.pulseTransforms.length).toBe(0);
+      expect(a.frozenPulseTransforms[0].s().round(3).x).toBe(2);
+      expect(a.drawTransforms[0].s().round(3).x).toBe(2);
+      expect(b.drawTransforms[0].t().round(3).x).toBe(10);
+    });
+  });
 });
