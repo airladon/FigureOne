@@ -3961,7 +3961,7 @@ class DiagramElementCollection extends DiagramElement {
     if (!this.isTouchable) {
       return false;
     }
-    debugger;
+    // debugger;
     if (this.touchInBoundingRect) {
       const boundingRect = this.getGLBoundingRect();
       if (glLocation.x >= boundingRect.left
