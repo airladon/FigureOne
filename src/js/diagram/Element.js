@@ -2043,7 +2043,6 @@ class DiagramElement {
   // of the element.
   getPulseTransforms(now: number): Array<Transform> {
     const pulseTransforms = [];    // To output list of transform matrices
-
     // If the diagram element is currently pulsing, the calculate the current
     // pulse magnitude, and transform the input matrix by the pulse
     if (this.state.isPulsing) {
@@ -3083,9 +3082,11 @@ class DiagramElementPrimitive extends DiagramElement {
       // // const newTransform = parentTransform.transform(this.getTransform());
       // this.parentTransform = parentTransform._dup();
       // this.lastDrawTransform = newTransform._dup();
-      if (!this.isShown) {
-        return;
-      }
+      // if (!this.isShown) {
+      //   this.pulseTransforms = [];
+      //   this.
+      //   return;
+      // }
       if (this.state.pause !== 'paused') {
         this.pulseTransforms = this.getPulseTransforms(now);
       }
