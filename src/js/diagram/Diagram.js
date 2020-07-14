@@ -565,10 +565,11 @@ class Diagram {
     //   defaultOptions.duration = null;
     // }
 
-    const options = joinObjects(optionsIn, optionsIn);
+    // const options = joinObjects(optionsIn, optionsIn);
     // countStart();
+    // debugger;
     const duration = this.elements.animateToState(
-      state.elements, options, true, startTime,
+      state.elements, optionsIn, true, startTime,
     );
     // countEnd();
     if (done != null) {
@@ -1668,9 +1669,9 @@ class Diagram {
     //   this.pauseAfterNextDrawFlag = false;
     // }
 
-    if (this.state.pause === 'paused') {
-      return;
-    }
+    // if (this.state.pause === 'paused') {
+    //   return;
+    // }
     // if (this.isPaused) {
     //   return;
     // }

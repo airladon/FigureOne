@@ -342,7 +342,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
   }
 
   _dup() {
-    const step = new PulseTransformsAnimationStep();
+    const step = new PulseTransformAnimationStep();
     duplicateFromTo(this, step, ['element']);
     step.element = this.element;
     return step;

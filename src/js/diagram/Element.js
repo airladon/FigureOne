@@ -958,6 +958,9 @@ class DiagramElement {
     independentOnly: boolean = false,
     startTime: ?number | 'now' | 'prev' | 'next' = null,
   ) {
+    // if (this.name === 'line1' && this.parent.name === 'circle') {
+    //   debugger;
+    // }
     const target = {};
     if (
       (this.isShown !== state.isShown && this.opacity === 1) 
@@ -982,7 +985,8 @@ class DiagramElement {
     let scenarioAnimation = null;
     let duration = 0;
     if (Object.keys(target).length > 0) {
-      scenarioAnimation = this.anim.scenario(joinObjects({ target }, options));
+      const scenarioOptions = joinObjects({}, options, { target });
+      scenarioAnimation = this.anim.scenario(scenarioOptions);
     }
     // let pulseTrigger = null;
     // let pulseDelay = null;
@@ -997,7 +1001,7 @@ class DiagramElement {
       (state.state.isPulsing || this.state.isPulsing)
       && !this.arePulseTransformsSame(state)
     ) {
-      pulseAnimation = this.anim.pulseTransform(joinObjects(options, {
+      pulseAnimation = this.anim.pulseTransform(joinObjects({}, options, {
         start: this.pulseTransforms.map(t => t._dup()),
         target: state.pulseTransforms.map(t => getTransform(t)),
       }));
@@ -1023,6 +1027,7 @@ class DiagramElement {
     if (pulseAnimation != null) {
       duration = Math.max(duration, pulseAnimation.getTotalDuration());
     }
+
     return duration;
   }
 
