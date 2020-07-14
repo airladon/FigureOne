@@ -38,7 +38,7 @@ describe('Seek', () => {
     recorder.reset();
     recorder.worker = new Worker();
     recorder.worker.recorder = recorder;
-    recorder.stateTimeStep = 1;
+    recorder.stateTimeStep = 0.5;
 
     const startPulse = () => {
       a.pulseScaleNow(2, 2);
@@ -54,14 +54,19 @@ describe('Seek', () => {
     // setup
     diagram.mock.timeStep(0);  // Ok
     recorder.startRecording();
-    diagram.mock.timeStep(1);
+    diagram.mock.timeStep(0.5);
+    diagram.mock.timeStep(0.5);
     startAnimation();
     recorder.recordEvent('startAnimation');
-    diagram.mock.timeStep(1);
+    diagram.mock.timeStep(0.5);
+    diagram.mock.timeStep(0.5);
     recorder.recordEvent('startPulse');
-    diagram.mock.timeStep(1);
-    diagram.mock.timeStep(1);
-    diagram.mock.timeStep(1);
+    diagram.mock.timeStep(0.5);
+    diagram.mock.timeStep(0.5);
+    diagram.mock.timeStep(0.5);
+    diagram.mock.timeStep(0.5);
+    diagram.mock.timeStep(0.5);
+    diagram.mock.timeStep(0.5);
     recorder.recordEvent('touch', ['up']);
     recorder.stopRecording();
     recorder.seek(0); 
@@ -96,6 +101,35 @@ describe('Seek', () => {
     diagram.mock.timeStep(0.5);
     expect(transforms()).toEqual(['idle', 2, [], [], [1], 0]);
   });
-  // describe('', () => {
-  // });
+  test('Seek to before animation', () => {
+    expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
+    recorder.seek(0.5);
+    expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
+    recorder.startPlayback();
+    expect(transforms()).toEqual(['playing', 0, [], [], [1], 0]);
+    diagram.mock.timeStep(0.5);
+    expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
+    diagram.mock.timeStep(0.5);
+    expect(transforms()).toEqual(['playing', 0.5, [], [], [1], 1.5]);
+  });
+  test('Seek to start of animation', () => {
+    expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
+    recorder.seek(1);
+    expect(transforms()).toEqual(['idle', 0, [], [], [1], 2]);
+    recorder.startPlayback();
+    expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
+    diagram.mock.timeStep(0);
+    diagram.mock.timeStep(0.5);
+    expect(transforms()).toEqual(['playing', 0.5, [], [], [1], 1.5]);
+  });
+  test('Seek to middle of animation', () => {
+    expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
+    recorder.seek(1.5);
+    expect(transforms()).toEqual(['idle', 0.5, [], [], [1], 1.5]);
+    recorder.startPlayback();
+    expect(transforms()).toEqual(['playing', 0.5, [], [], [1], 1.5]);
+    diagram.mock.timeStep(0);
+    diagram.mock.timeStep(0.5);
+    expect(transforms()).toEqual(['playing', 1, [], [], [1], 1]);
+  });
 });
