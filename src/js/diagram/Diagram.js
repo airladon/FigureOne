@@ -1547,6 +1547,7 @@ class Diagram {
     // forcePause: boolean = true, clearAnimations: boolean = false) {
     this.elements.pause(pauseSettings);
     if (pauseSettings.simplePause != null && pauseSettings.simplePause) {
+      this.state.pause = 'paused';
       return;
     }
 

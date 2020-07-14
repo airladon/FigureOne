@@ -11,6 +11,7 @@ import webgl from './WebGLInstanceMock';
 import DrawContext2D from './DrawContext2DMock';
 // import VertexPolygon from '../DrawingObjects/VertexObject/VertexPolygon';
 import * as tools from '../tools/tools';
+import { round } from '../tools/math';
 
 tools.isTouchDevice = jest.fn();
 
@@ -102,13 +103,38 @@ export default function makeDiagram(
     initialTime: 0,
     duration: 0,
     previousTouchPoint: new Point(0, 0),
-    timeStep: (deltaTimeInSeconds) => {
+    timeStep: (deltaTimeInSeconds, frameTimeIn = null) => {
       const { duration, initialTime } = diagram.mock;
-      const newNow = (duration + deltaTimeInSeconds + initialTime) * 1000;
-      global.performance.now = () => newNow;
-      jest.advanceTimersByTime((deltaTimeInSeconds * 1000));
-      diagram.animateNextFrame();
-      diagram.draw(newNow / 1000);
+      let frameTime = deltaTimeInSeconds;
+      // let deltaTime = 0;
+      if (frameTimeIn != null && frameTimeIn < deltaTimeInSeconds) {
+        frameTime = frameTimeIn;
+        // deltaTime = frameTime;
+      }
+      let deltaTime = frameTime;
+      
+      // let delta = Math.min(deltaTimeInSeconds, frameTime);
+      let lastTime = 0
+      deltaTime = round(deltaTime, 8);
+      while (deltaTime <= deltaTimeInSeconds) {
+        // if (window.asdf) {
+        //   console.log(duration, deltaTime + 0.00);
+        // }
+        const newNow = round((duration + deltaTime + initialTime) * 1000, 8);
+        global.performance.now = () => newNow;
+        jest.advanceTimersByTime(round((deltaTime - lastTime) * 1000, 8));
+        lastTime = deltaTime;
+        diagram.animateNextFrame();
+        diagram.draw(round(newNow / 1000, 8));
+        if (deltaTime === deltaTimeInSeconds || frameTime === 0) {
+          deltaTime += 1;
+        } else if (deltaTime + frameTime > deltaTimeInSeconds) {
+          deltaTime = deltaTimeInSeconds;
+        } else {
+          deltaTime += frameTime;
+        }
+        deltaTime = round(deltaTime, 8);
+      }
       diagram.mock.duration += deltaTimeInSeconds;
     },
     touchDown: (diagramPosition) => {
