@@ -530,7 +530,7 @@ class Recorder {
 
     this.setVideoToNowDeltaTime(fromTime);
     if (this.states.diffs.length > 0) {
-      this.setToTime(fromTime);
+      this.setToTime(fromTime, true);
     }
 
     this.states.precision = this.precision;
@@ -1034,11 +1034,7 @@ class Recorder {
     this.diagram.pause();
   }
 
-  setToTime(timeIn: number) {
-    // console.log(timeIn)
-    // if (this.states.diffs.length === 0) {
-    //   return;
-    // }
+  setToTime(timeIn: number, force: boolean = false) {
     if (timeIn === 0 && this.states.diffs.length > 0) {
       this.stateIndex = 0;
     } else {
@@ -1051,7 +1047,7 @@ class Recorder {
       [stateTime, , , stateTimeCount] = this.states.diffs[this.stateIndex];
     }
 
-    if (stateTime === this.lastSeekTime) {
+    if (stateTime === this.lastSeekTime && !force) {
       return;
     }
     const time = stateTime;
@@ -1234,7 +1230,7 @@ class Recorder {
     this.setVideoToNowDeltaTime(fromTime);
     this.currentTime = fromTime;
     this.diagram.unpause();
-    this.setToTime(fromTime);
+    this.setToTime(fromTime, true);
     this.startEventsPlayback(fromTime);
     this.startAudioPlayback(fromTime);
     this.diagram.animateNextFrame();
@@ -1571,6 +1567,9 @@ class Recorder {
 
 
   setEvent(eventName: string, index: number) {
+    // if (window.asdf) {
+      // console.log(eventName, performance.now())
+    // }
     const event = this.events[eventName];
     if (event == null) {
       return;

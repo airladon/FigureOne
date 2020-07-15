@@ -1,17 +1,17 @@
 import {
-  Point, Transform,
+  Point, // Transform,
 } from '../tools/g2';
 import {
   round,
 } from '../tools/math';
-import * as tools from '../tools/tools';
+// import * as tools from '../tools/tools';
 import makeDiagram from '../__mocks__/makeDiagram';
 import Worker from '../__mocks__/recorder.worker.mock';
 
 // tools.isTouchDevice = jest.fn();
 
 jest.mock('./recorder.worker');
-jest.useFakeTimers();
+// jest.useFakeTimers();
 
 describe('Seek', () => {
   let diagram;
@@ -22,6 +22,8 @@ describe('Seek', () => {
   let frameStep;
   beforeEach(() => {
     diagram = makeDiagram();
+    diagram.globalAnimation.reset();
+    jest.useFakeTimers();
     diagram.addElements([
       {
         name: 'a',
@@ -67,7 +69,7 @@ describe('Seek', () => {
 
     diagram.mock.timeStep(0.5, frameStep);             // 1.5
     diagram.mock.timeStep(0.5, frameStep);             // 2
-    
+
     // Start pulse at time 2
     startPulse();
     recorder.recordEvent('startPulse');
@@ -132,11 +134,10 @@ describe('Seek', () => {
     expect(transforms()).toEqual(['idle', 0, [], [], [1], 2]);
     recorder.startPlayback();
     expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
-    // diagram.mock.timeStep(0, frameStep);
     diagram.mock.timeStep(0.5, frameStep);
     expect(transforms()).toEqual(['playing', 0.4, [], [], [1], 1.6]);
   });
-  test('Seek to middle of animation', () => {
+  test('Seek to middle of animation, before pulse', () => {
     expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
     recorder.seek(1.5);
     expect(transforms()).toEqual(['idle', 0.4, [], [], [1], 1.6]);
@@ -147,20 +148,32 @@ describe('Seek', () => {
     diagram.mock.timeStep(0.5, frameStep);
     expect(transforms()).toEqual(['playing', 1.4, [1.4], [], [1.4], 1.6]);
   });
-  test.only('Seek to end of animation', () => {
+  test('Seek to end of animation, middle of pulse', () => {
     expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
     recorder.seek(3);
-    expect(transforms()).toEqual(['idle', 1.9, [1.9], [], [1.9], 1.1]);
+    expect(transforms()).toEqual(['idle', 1.9, [1.9], [], [1], 1.1]);
     recorder.startPlayback();
-    expect(transforms()).toEqual(['idle', 1.9, [1.9], [], [1.9], 1.1]);
+    expect(transforms()).toEqual(['playing', 1.9, [1.9], [], [1], 1.1]);
     diagram.mock.timeStep(0.5, frameStep);
     expect(transforms()).toEqual(['playing', 2, [1.6], [], [1.6], 0.6]);
     diagram.mock.timeStep(0.5, frameStep);
     expect(transforms()).toEqual(['playing', 2, [1.1], [], [1.1], 0.1]);
   });
-  test('Seek to before pulse', () => {});
-  test('Seek to start of pulse', () => {});
-  test('Seek to middle of pulse', () => {});
+  // test('Seek to before pulse', () => {});
+  test('Seek to start of pulse', () => {
+    expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
+    recorder.seek(2);
+    expect(transforms()).toEqual(['idle', 0.9, [], [], [1], 2]);
+    window.asdf = 1
+    recorder.startPlayback();
+    window.asdf = false;
+    expect(transforms()).toEqual(['playing', 0.9, [], [], [1], 2]);
+    diagram.mock.timeStep(0.5, frameStep);
+    expect(transforms()).toEqual(['playing', 1.4, [1.4], [], [1.4], 1.6]);
+    diagram.mock.timeStep(0.5, frameStep);
+    expect(transforms()).toEqual(['playing', 1.9, [1.9], [], [1.9], 1.1]);
+  });
+  // test('Seek to middle of pulse', () => {});
   test('Seek to end of pulse', () => {});
   test('Seek to before animation and change state', () => {});
   test('Seek to start of animation and change state', () => {});

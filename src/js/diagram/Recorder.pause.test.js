@@ -11,7 +11,6 @@ import Worker from '../__mocks__/recorder.worker.mock';
 // tools.isTouchDevice = jest.fn();
 
 jest.mock('./recorder.worker');
-jest.useFakeTimers();
 
 describe('Animate To State', () => {
   let diagram;
@@ -23,7 +22,9 @@ describe('Animate To State', () => {
   let a;
   let b;
   beforeEach(() => {
+    jest.useFakeTimers();
     diagram = makeDiagram();
+    diagram.globalAnimation.reset();
     diagram.addElements([
       {
         name: 'a',

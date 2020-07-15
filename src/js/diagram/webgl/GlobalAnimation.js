@@ -19,6 +19,7 @@ class GlobalAnimation {
   // syncNow: () => number;
   synchronizedNow: number;
   updateSyncNow: boolean;
+  timers: Array<TimeoutID>;
 
   constructor() {
     // If the instance alread exists, then don't create a new instance.
@@ -31,18 +32,38 @@ class GlobalAnimation {
         || window.msRequestAnimationFrame
       );
       GlobalAnimation.instance = this;
-      this.drawQueue = [];
-      this.nextDrawQueue = [];
-      this.lastFrame = null;
-      this.debug = false;
-      this.simulatedFPS = 60;
-      this.debugFrameTime = 0.5;
-      this.timeoutId = null;
-      this.now = () => performance.now();
-      this.updateSyncNow = false;
+      // this.drawQueue = [];
+      // this.nextDrawQueue = [];
+      // this.lastFrame = null;
+      // this.debug = false;
+      // this.simulatedFPS = 60;
+      // this.debugFrameTime = 0.5;
+      // this.timeoutId = null;
+      // this.now = () => performance.now();
+      // this.updateSyncNow = false;
       // this.drawScene = this.draw.bind(this);
+      this.reset();
     }
     return GlobalAnimation.instance;
+  }
+
+  reset() {
+    this.drawQueue = [];
+    this.nextDrawQueue = [];
+    this.lastFrame = null;
+    this.debug = false;
+    this.simulatedFPS = 60;
+    this.debugFrameTime = 0.5;
+    if (this.timers != null && this.timers.length > 0) {
+      this.timers.forEach(id => clearTimeout(id));
+    }
+    this.timers = [];
+    if (this.timeoutId != null) {
+      clearTimeout(this.timeoutId);
+    }
+    this.timeoutId = null;
+    this.now = () => performance.now();
+    this.updateSyncNow = false;
   }
 
   syncNow() {
@@ -88,7 +109,7 @@ class GlobalAnimation {
     }
   }
 
-  setTimeout (f: function, time: number): TimeoutID {
+  setTimeout(f: function, time: number): TimeoutID {
     if (this.debug) {
       let timeScale = 0;
       if (this.debugFrameTime != null) {
@@ -96,12 +117,17 @@ class GlobalAnimation {
       }
       // console.log('setTimeout', time, timeScale)
       if (timeScale > 0) {
-        return setTimeout(f, time * timeScale);
+        const id = setTimeout(f, time * timeScale);
+        this.timers.push(id);
+        return id;
       }
-      return setTimeout(f, 0);
-    } else {
-      return setTimeout(f, time);
+      const id = setTimeout(f, 0);
+      this.timers.push(id);
+      return id;
     }
+    const id = setTimeout(f, time);
+    this.timers.push(id);
+    return id;
   }
 
   disableDebugFrameRate() {
