@@ -126,12 +126,12 @@ export default function makeDiagram(
         if (diagram.mock.timersBeforeDraw) {
           jest.advanceTimersByTime(round((deltaTime - lastTime) * 1000, 8));
         }
-        lastTime = deltaTime;
         diagram.animateNextFrame();
         diagram.draw(round(newNow / 1000, 8));
         if (!diagram.mock.timersBeforeDraw) {
           jest.advanceTimersByTime(round((deltaTime - lastTime) * 1000, 8));
         }
+        lastTime = deltaTime;
         if (deltaTime === deltaTimeInSeconds || frameTime === 0) {
           deltaTime += 1;
         } else if (deltaTime + frameTime > deltaTimeInSeconds) {
