@@ -1064,12 +1064,6 @@ class Recorder {
     const eventsToSetBeforeState = [];
     const eventsToSetAfterState = [];
     Object.keys(this.events).forEach((eventName) => {
-      // if (eventName === 'startAnimation') {
-      //   debugger;
-      // }
-      // if (window.asdf && eventName === 'startAnimation') {
-      //   debugger;
-      // }
       const event = this.events[eventName];
       if (event.setOnSeek === false) {
         return;

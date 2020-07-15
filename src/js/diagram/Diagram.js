@@ -567,7 +567,6 @@ class Diagram {
 
     // const options = joinObjects(optionsIn, optionsIn);
     // countStart();
-    // debugger;
     const duration = this.elements.animateToState(
       state.elements, optionsIn, true, startTime,
     );
@@ -842,6 +841,7 @@ class Diagram {
       now = this.pauseTime;
     }
     let remainingTime = 0;
+
     elements.forEach((element) => {
       const elementRemainingTime = element.animations.getRemainingTime(now);
       if (elementRemainingTime > remainingTime) {
@@ -1548,6 +1548,7 @@ class Diagram {
     this.elements.pause(pauseSettings);
     if (pauseSettings.simplePause != null && pauseSettings.simplePause) {
       this.state.pause = 'paused';
+      this.pauseTime = this.globalAnimation.now() / 1000;
       return;
     }
 
