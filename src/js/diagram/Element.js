@@ -2023,7 +2023,7 @@ class DiagramElement {
     }
   }
 
-  getRemainingPulseTime(now: number) {
+  getRemainingPulseTime(now: number = new GlobalAnimation().now() / 1000) {
     if (this.state.isPulsing === false) {
       return 0;
     }

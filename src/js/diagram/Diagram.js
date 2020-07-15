@@ -1584,12 +1584,11 @@ class Diagram {
   // }
 
   unpause() {
-
     this.elements.unpause();
     const elements = this.elements.getAllElements();
     let preparingToUnpauseCounter = 0;
     const checkAllUnpaused = () => {
-      if(preparingToUnpauseCounter > 0) {
+      if (preparingToUnpauseCounter > 0) {
         preparingToUnpauseCounter -= 1;
       }
       if (preparingToUnpauseCounter === 0) {
@@ -1599,7 +1598,7 @@ class Diagram {
         this.animateNextFrame();
         this.subscriptions.trigger('unpaused');
       }
-    }
+    };
     elements.forEach((element) => {
       if (element.state.pause === 'preparingToUnpause') {
         preparingToUnpauseCounter += 1;
