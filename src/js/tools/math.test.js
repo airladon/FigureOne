@@ -1,7 +1,7 @@
 import {
   round, decelerate, easeinout, clipMag, clipValue, randInt, rand,
   randElement, removeRandElement, randElements, easein, easeout,
-  sinusoid, roundNum, linear, randSign, rand2D,
+  sinusoid, roundNum, linear, randSign, rand2D, triangle,
 } from './math';
 
 describe('Math tools testing', () => {
@@ -182,6 +182,33 @@ describe('Math tools testing', () => {
     test('0.5', () => { expect(round(easeout(0.8, true), 2)).toBe(0.5); });
     test('0.25', () => { expect(round(easeout(0.47, true), 2)).toBe(0.25); });
     test('0.75', () => { expect(round(easeout(0.96, true), 2)).toBe(0.75); });
+  });
+  describe('triangle', () => {
+    test('0 time, 0 mag, 0 frequency, 0 bias, 0 phase', () => {
+      expect(triangle(0, 0, 0, 0, 0)).toBe(0);
+    });
+    test('1 mag, 1 frequency, 0 bias, 0 phase', () => {
+      expect(round(triangle(0, 1, 0, 1, 0), 3)).toBe(0);
+      expect(round(triangle(0.125, 1, 0, 1, 0), 3)).toBe(0.5);
+      expect(round(triangle(0.25, 1, 0, 1, 0), 3)).toBe(1);
+      expect(round(triangle(0.375, 1, 0, 1, 0), 3)).toBe(0.5);
+      expect(round(triangle(0.5, 1, 0, 1, 0), 3)).toBe(0);
+      expect(round(triangle(0.625, 1, 0, 1, 0), 3)).toBe(-0.5);
+      expect(round(triangle(0.75, 1, 0, 1, 0), 3)).toBe(-1);
+      expect(round(triangle(0.875, 1, 0, 1, 0), 3)).toBe(-0.5);
+      expect(round(triangle(1, 1, 0, 1, 0), 3)).toBe(0);
+    });
+    test('2 mag, 0.5 frequency, 1 bias, Math.PI phase', () => {
+      expect(round(triangle(0, 0.5, 1, 2, Math.PI), 3)).toBe(1);
+      expect(round(triangle(0.25, 0.5, 1, 2, Math.PI), 3)).toBe(0);
+      expect(round(triangle(0.5, 0.5, 1, 2, Math.PI), 3)).toBe(-1);
+      expect(round(triangle(0.75, 0.5, 1, 2, Math.PI), 3)).toBe(0);
+      expect(round(triangle(1, 0.5, 1, 2, Math.PI), 3)).toBe(1);
+      expect(round(triangle(1.25, 0.5, 1, 2, Math.PI), 3)).toBe(2);
+      expect(round(triangle(1.5, 0.5, 1, 2, Math.PI), 3)).toBe(3);
+      expect(round(triangle(1.75, 0.5, 1, 2, Math.PI), 3)).toBe(2);
+      expect(round(triangle(2, 0.5, 1, 2, Math.PI), 3)).toBe(1);
+    });
   });
   describe('sinusoid', () => {
     test('0', () => {

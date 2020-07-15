@@ -228,6 +228,17 @@ const linear = (percentTime: number, invert: ?boolean = false) => {
   return percentTime;
 };
 
+function triangle(
+  deltaTime: number = 1,
+  frequency: number = 1,
+  bias: number = 0,
+  mag: number = 1,
+  phaseOffset: number = 0,
+) {
+  return bias + 2 * mag / Math.PI * Math.asin(Math.sin(2 * Math.PI * frequency * deltaTime + phaseOffset));
+  // return bias + mag * Math.sin(deltaTime * frequency * 2.0 * Math.PI + phaseOffset);
+}
+
 const easeinout = (percentTime: number, invert: ?boolean = false) => {
   if (invert) {
     if (percentTime === 0.5) {
@@ -375,6 +386,7 @@ export {
   easein,
   sinusoid,
   linear,
+  triangle,
   clipMag,
   clipValue,
   range,

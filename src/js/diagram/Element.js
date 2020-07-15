@@ -2049,6 +2049,9 @@ class DiagramElement {
     // If the diagram element is currently pulsing, the calculate the current
     // pulse magnitude, and transform the input matrix by the pulse
     if (this.state.isPulsing) {
+      if (window.asdf) {
+        debugger;
+      }
       // If this is the first pulse frame, then set the startTime
       if (this.state.pulse.startTime === null) {
         this.state.pulse.startTime = now;
