@@ -104,6 +104,7 @@ describe('Seek', () => {
     expect(transforms()).toEqual(['playing', 0.4, [], [], [1], 1.6]);
     diagram.mock.timeStep(0.5, frameStep);
     expect(transforms()).toEqual(['playing', 0.9, [], [], [1], 2]);
+    window.asdf = 1;
     diagram.mock.timeStep(1, frameStep);
     expect(transforms()).toEqual(['playing', 1.9, [1.9], [], [2], 1.1]);
     diagram.mock.timeStep(1, frameStep);
