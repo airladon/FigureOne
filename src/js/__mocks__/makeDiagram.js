@@ -103,6 +103,7 @@ export default function makeDiagram(
     initialTime: 0,
     duration: 0,
     previousTouchPoint: new Point(0, 0),
+    timersBeforeDraw: true,
     timeStep: (deltaTimeInSeconds, frameTimeIn = null) => {
       const { duration, initialTime } = diagram.mock;
       let frameTime = deltaTimeInSeconds;
@@ -122,10 +123,15 @@ export default function makeDiagram(
         // }
         const newNow = round((duration + deltaTime + initialTime) * 1000, 8);
         global.performance.now = () => newNow;
-        jest.advanceTimersByTime(round((deltaTime - lastTime) * 1000, 8));
+        if (diagram.mock.timersBeforeDraw) {
+          jest.advanceTimersByTime(round((deltaTime - lastTime) * 1000, 8));
+        }
         lastTime = deltaTime;
         diagram.animateNextFrame();
         diagram.draw(round(newNow / 1000, 8));
+        if (!diagram.mock.timersBeforeDraw) {
+          jest.advanceTimersByTime(round((deltaTime - lastTime) * 1000, 8));
+        }
         if (deltaTime === deltaTimeInSeconds || frameTime === 0) {
           deltaTime += 1;
         } else if (deltaTime + frameTime > deltaTimeInSeconds) {
