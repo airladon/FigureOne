@@ -16,7 +16,9 @@ class GlobalAnimation {
   now: function;
   timeoutId: ?TimeoutID;
   speed: number;
-
+  // syncNow: () => number;
+  synchronizedNow: number;
+  updateSyncNow: boolean;
 
   constructor() {
     // If the instance alread exists, then don't create a new instance.
@@ -37,9 +39,22 @@ class GlobalAnimation {
       this.debugFrameTime = 0.5;
       this.timeoutId = null;
       this.now = () => performance.now();
+      this.updateSyncNow = false;
       // this.drawScene = this.draw.bind(this);
     }
     return GlobalAnimation.instance;
+  }
+
+  syncNow() {
+    if (this.updateSyncNow) {
+      this.updateSyncNow = false;
+      this.synchronizedNow = performance.now();
+    }
+    return this.synchronizedNow;
+  }
+
+  now() {
+    return performance.now();
   }
 
   setDebugFrameRate(simulatedFPS: number = 60, frameTime: ?number = 1) {
@@ -101,6 +116,7 @@ class GlobalAnimation {
   }
 
   draw(now: number) {
+    this.updateSyncNow = true;
     this.drawQueue = this.nextDrawQueue;
     this.nextDrawQueue = [];
     const nowSeconds = now * 0.001;

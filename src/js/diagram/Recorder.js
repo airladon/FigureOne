@@ -1067,6 +1067,9 @@ class Recorder {
       // if (eventName === 'startAnimation') {
       //   debugger;
       // }
+      // if (window.asdf && eventName === 'startAnimation') {
+      //   debugger;
+      // }
       const event = this.events[eventName];
       if (event.setOnSeek === false) {
         return;
