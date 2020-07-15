@@ -144,8 +144,20 @@ describe('Seek', () => {
     expect(transforms()).toEqual(['playing', 0.4, [], [], [1], 1.6]);
     diagram.mock.timeStep(0.5, frameStep);
     expect(transforms()).toEqual(['playing', 0.9, [], [], [1], 2]);
+    diagram.mock.timeStep(0.5, frameStep);
+    expect(transforms()).toEqual(['playing', 1.4, [1.4], [], [1.4], 1.6]);
   });
-  test('Seek to end of animation', () => {});
+  test.only('Seek to end of animation', () => {
+    expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
+    recorder.seek(3);
+    expect(transforms()).toEqual(['idle', 1.9, [1.9], [], [1.9], 1.1]);
+    recorder.startPlayback();
+    expect(transforms()).toEqual(['idle', 1.9, [1.9], [], [1.9], 1.1]);
+    diagram.mock.timeStep(0.5, frameStep);
+    expect(transforms()).toEqual(['playing', 2, [1.6], [], [1.6], 0.6]);
+    diagram.mock.timeStep(0.5, frameStep);
+    expect(transforms()).toEqual(['playing', 2, [1.1], [], [1.1], 0.1]);
+  });
   test('Seek to before pulse', () => {});
   test('Seek to start of pulse', () => {});
   test('Seek to middle of pulse', () => {});

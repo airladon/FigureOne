@@ -197,6 +197,9 @@ DiagramElementPrimitive {
       "tools.math.sinusoid": Object {
         "fn": [Function],
       },
+      "tools.math.triangle": Object {
+        "fn": [Function],
+      },
     },
   },
   "frozenPulseTransforms": Array [],
@@ -610,6 +613,9 @@ DiagramElementPrimitive {
           "fn": [Function],
         },
         "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
           "fn": [Function],
         },
       },
