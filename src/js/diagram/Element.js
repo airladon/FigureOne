@@ -632,6 +632,7 @@ class DiagramElement {
     this.fnMap.add('tools.math.easeinout', math.easeinout);
     this.fnMap.add('tools.math.linear', math.linear);
     this.fnMap.add('tools.math.sinusoid', math.sinusoid);
+    this.fnMap.add('tools.math.triangle', math.triangle);
     this.pulseSettings = {
       time: 1,
       frequency: 0.5,
@@ -963,9 +964,6 @@ class DiagramElement {
     independentOnly: boolean = false,
     startTime: ?number | 'now' | 'prev' | 'next' = null,
   ) {
-    // if (this.name === 'line1' && this.parent.name === 'circle') {
-    //   debugger;
-    // }
     // if (this.name === 'a') {
     //   console.log(this.frozenPulseTransforms)
     // }
@@ -2049,9 +2047,6 @@ class DiagramElement {
     // If the diagram element is currently pulsing, the calculate the current
     // pulse magnitude, and transform the input matrix by the pulse
     if (this.state.isPulsing) {
-      if (window.asdf) {
-        debugger;
-      }
       // If this is the first pulse frame, then set the startTime
       if (this.state.pulse.startTime === null) {
         this.state.pulse.startTime = now;
@@ -3976,7 +3971,6 @@ class DiagramElementCollection extends DiagramElement {
     if (!this.isTouchable) {
       return false;
     }
-    // debugger;
     if (this.touchInBoundingRect) {
       const boundingRect = this.getGLBoundingRect();
       if (glLocation.x >= boundingRect.left
