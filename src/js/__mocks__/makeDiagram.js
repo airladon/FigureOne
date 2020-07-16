@@ -160,7 +160,8 @@ export default function makeDiagram(
       diagram.touchMoveHandler(diagram.mock.previousTouchPoint, clientPoint);
       diagram.mock.previousTouchPoint = clientPoint;
     }
-  }
+  };
+  diagram.globalAnimation.reset();
   return diagram;
 }
 
