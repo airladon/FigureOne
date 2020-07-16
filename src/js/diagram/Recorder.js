@@ -1215,7 +1215,11 @@ class Recorder {
   // Playback
   // ////////////////////////////////////
   // ////////////////////////////////////
-  startPlayback(fromTimeIn: number = this.lastSeekTime, events: ?Array<string> = null) {
+  startPlayback(
+    fromTimeIn: number = this.lastSeekTime || 0,
+    forceStart: boolean = true,
+    events: ?Array<string> = null,
+  ) {
     let fromTime = fromTimeIn;
     if (fromTimeIn == null || fromTimeIn >= this.duration) {
       fromTime = 0;
@@ -1226,19 +1230,69 @@ class Recorder {
       this.eventsToPlay = events;
     }
 
-    this.state = 'playing';
-    this.setVideoToNowDeltaTime(fromTime);
-    this.currentTime = fromTime;
     this.diagram.unpause();
-    this.setToTime(fromTime, true);
-    this.startEventsPlayback(fromTime);
-    this.startAudioPlayback(fromTime);
-    this.diagram.animateNextFrame();
-    if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
-      this.finishPlaying();
-      // return;
+    this.currentTime = fromTime;
+    // this.setVideoToNowDeltaTime(this.currentTime);
+
+    let stateToStartFrom = this.getStateForTime(this.currentTime);
+    if (
+      !forceStart
+      && this.pauseState != null
+    ) {
+      stateToStartFrom = this.pauseState;
     }
-    this.subscriptions.trigger('playbackStarted');
+
+    let finishedFlag = false;
+    const finished = () => {
+      finishedFlag = true;
+      if (this.pauseState == null) {
+        this.setToTime(this.currentTime, true);
+      } else {
+        this.diagram.setState(this.pauseState);
+        this.pauseState = null;
+      }
+      this.state = 'playing';
+      this.setVideoToNowDeltaTime(this.currentTime);
+      this.startEventsPlayback(this.currentTime);
+      this.startAudioPlayback(this.currentTime);
+      this.diagram.animateNextFrame();
+      if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
+        this.finishPlaying();
+      }
+      this.subscriptions.trigger('playbackStarted');
+    };
+
+    const resumeSettings = this.getResumeSettings();
+    if (
+      resumeSettings.action === 'instant'
+      || this.diagram.elements.isStateSame(stateToStartFrom.elements, true)
+    ) {
+      finished();
+    } else if (resumeSettings.action === 'dissolve') {
+      this.diagram.elements.freezePulseTransforms(false);
+      this.diagram.stop();
+      this.diagram.dissolveToState({
+        state: stateToStartFrom,
+        dissolveInDuration: resumeSettings.duration.dissolveIn,
+        dissolveOutDuration: resumeSettings.duration.dissolveOut,
+        done: finished,
+        delay: resumeSettings.duration.delay,
+        startTime: 'now',
+      });
+    } else {
+      this.diagram.stop();
+      this.diagram.animateToState(
+        stateToStartFrom,
+        resumeSettings,
+        finished,
+        'now',
+      );
+    }
+
+    if (!finishedFlag) {
+      this.state = 'preparingToPlay';
+      this.subscriptions.trigger('preparingToPlay');
+    }
   }
 
   getResumeSettings() {
@@ -1292,6 +1346,10 @@ class Recorder {
   }
 
   resumePlayback() {
+    this.startPlayback(this.currentTime, false);
+  }
+
+  resumePlaybackLegacy() {
     if (this.pauseState == null) {
       this.startPlayback(this.currentTime);
       return;
@@ -1312,6 +1370,7 @@ class Recorder {
     const finished = () => {
       finishedFlag = true;
       this.diagram.setState(this.pauseState);
+      this.pauseState = null;
       this.state = 'playing';
       this.setVideoToNowDeltaTime(this.currentTime);
       this.startEventsPlayback(this.currentTime);
@@ -1613,6 +1672,23 @@ class Recorder {
     }
     const state = this.states.getFromIndex(index);
     this.diagram.setState(state);
+  }
+
+  getState(index: number) {
+    if (index > this.states.diffs.length - 1) {
+      return {};
+    }
+    return this.states.getFromIndex(index);
+  }
+
+  getStateForTime(timeIn: number) {
+    let stateIndex;
+    if (timeIn === 0 && this.states.diffs.length > 0) {
+      stateIndex = 0;
+    } else {
+      stateIndex = getPrevIndexForTime(this.states.diffs, timeIn);
+    }
+    return this.getState(stateIndex);
   }
 }
 
