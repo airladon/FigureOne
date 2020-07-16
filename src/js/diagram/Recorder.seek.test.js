@@ -195,7 +195,12 @@ describe('Seek', () => {
     recorder.seek(0.5);
     expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
     a.setPosition(4, 0);
+    recorder.settings.play = 'animate';
     recorder.startPlayback();
+    expect(transforms()).toEqual(['preparingToPlay', 4, [], [], [1], 2]);
+    diagram.mock.timeStep(1, frameStep);
+    expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 1]);
+    diagram.mock.timeStep(1, frameStep);
     expect(transforms()).toEqual(['playing', 0, [], [], [1], 0]);
     diagram.mock.timeStep(0.5, frameStep);
     expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
