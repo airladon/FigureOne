@@ -238,10 +238,41 @@ describe('Seek', () => {
     expect(transforms()).toEqual(['playing', 0.8, [], [], [1], 1.2]);
   });
   test('Seek to end of animation and change state', () => {
-    
+    expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
+    recorder.seek(3);
+    a.setPosition(5.9, 0);
+    expect(transforms()).toEqual(['idle', 5.9, [1.9], [], [1], 1.1]);
+    recorder.settings.play = 'animate';
+    recorder.startPlayback();
+    expect(transforms()).toEqual(['preparingToPlay', 5.9, [1.9], [], [1], 2]);
+    diagram.mock.timeStep(1, frameStep);
+    expect(transforms()).toEqual(['preparingToPlay', 3.9, [], [], [1], 1]);
+    diagram.mock.timeStep(1, frameStep);
+    expect(transforms()).toEqual(['playing', 1.9, [1.9], [], [1.9], 1.1]);
+    diagram.mock.timeStep(0.5, frameStep);
+    expect(transforms()).toEqual(['playing', 2, [1.6], [], [1.6], 0.6]);
   });
-  test('Seek to before pulse and change state', () => {});
-  test('Seek to start of pulse and change state', () => {});
+  // test('Seek to before pulse and change state', () => {});
+  test('Seek to start of pulse and change state', () => {
+    expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
+    recorder.seek(2);
+    expect(transforms()).toEqual(['idle', 0.9, [], [], [1], 2]);
+    diagram.unpause();
+    a.pulseScaleNow(3, 3);
+    diagram.mock.timeStep(0);
+    diagram.mock.timeStep(1);
+    diagram.mock.timeStep(0.5);
+    expect(transforms()).toEqual(['idle', 0.9, [3], [], [1], 1.5]);
+
+    recorder.settings.play = 'animate';
+    recorder.startPlayback();
+    expect(transforms()).toEqual(['playing', 0.9, [], [], [1], 2]);
+    diagram.mock.timeStep(0.5, frameStep);
+    expect(transforms()).toEqual(['playing', 1.4, [1.4], [], [1.4], 1.6]);
+    diagram.mock.timeStep(0.5, frameStep);
+    expect(transforms()).toEqual(['playing', 1.9, [1.9], [], [1.9], 1.1]);
+  });
   test('Seek to middle of pulse and change state', () => {});
   test('Seek to end of pulse and change state', () => {});
+  test('Seek to middle of animation, touch and move diagram element, start', () => {});
 });
