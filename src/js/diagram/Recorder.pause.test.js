@@ -380,23 +380,20 @@ describe('Animate To State', () => {
 
           // end delay, start dissolve in
           diagram.mock.timeStep(1);
-          
           expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.8, 0.5]);
           // expect(round(diagram.elements.opacity)).toBe(1);
           expect(diagram.elements.isShown).toBe(true);
           expect(a.isShown).toBe(true);
           expect(round(a.opacity)).toBe(0.001);
-
           // disolve in
           expect(round(diagram.elements.opacity)).toBe(0.001);
-
           diagram.mock.timeStep(0.4);
           expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.4, 0.5]);
           expect(diagram.elements.isShown).toBe(true);
           expect(round(diagram.elements.opacity)).toBe(0.5005);
           expect(a.isShown).toBe(true);
           expect(round(a.opacity)).toBe(0.5005);
-
+          // debugger;
           diagram.mock.timeStep(0.4);
           expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 0.5]);
           expect(a.isShown).toBe(true);
@@ -966,15 +963,14 @@ describe('Animate To State', () => {
         });
         test('Animate to resume', () => {
           recorder.settings.resume = 'animate';
-          expect(a.frozenPulseTransforms.map(t => t.s().round(3).x)).toEqual([]); 
+          expect(a.frozenPulseTransforms.map(t => t.s().round(3).x)).toEqual([]);
           recorder.resumePlayback();
-          expect(a.frozenPulseTransforms.map(t => t.s().round(3).x)).toEqual([1]); 
+          expect(a.frozenPulseTransforms.map(t => t.s().round(3).x)).toEqual([1]);
           expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 1, 1]);
           diagram.mock.timeStep(0.5);
           expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.5, 1.5]);
           diagram.mock.timeStep(0.5);
           expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 2]);
-          recorder.resumePlayback();
         });
         test('Dissolve to resume', () => {
           recorder.settings.resume = 'dissolve';
@@ -995,7 +991,7 @@ describe('Animate To State', () => {
           expect(round(diagram.elements.opacity)).toBe(1);
           expect(diagram.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
-          
+
           // end delay, start dissolve in
           diagram.mock.timeStep(1);
           expect(states()).toEqual(['preparingToPlay', 'unpaused', 'unpaused', true, 0.8, 2]);
@@ -1003,7 +999,7 @@ describe('Animate To State', () => {
           expect(diagram.elements.isShown).toBe(true);
           expect(a.isShown).toBe(true);
           expect(round(a.opacity)).toBe(0.001);
-          
+
           // disolve in
 
           expect(round(diagram.elements.opacity)).toBe(0.001);
@@ -1021,7 +1017,7 @@ describe('Animate To State', () => {
           expect(round(a.opacity)).toBe(1);
           expect(round(diagram.elements.opacity)).toBe(1);
           expect(diagram.elements.isShown).toBe(true);
-          recorder.resumePlayback();
+          // recorder.resumePlayback();
         });
       });
     });
