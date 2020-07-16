@@ -207,9 +207,39 @@ describe('Seek', () => {
     diagram.mock.timeStep(0.5, frameStep);
     expect(transforms()).toEqual(['playing', 0.4, [], [], [1], 1.6]);
   });
-  test('Seek to start of animation and change state', () => {});
-  test('Seek to middle of animation and change state', () => {});
-  test('Seek to end of animation and change state', () => {});
+  test('Seek to start of animation and change state', () => {
+    expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
+    recorder.seek(1);
+    expect(transforms()).toEqual(['idle', 0, [], [], [1], 2]);
+    a.setPosition(4, 0);
+    recorder.settings.play = 'animate';
+    recorder.startPlayback();
+    expect(transforms()).toEqual(['preparingToPlay', 4, [], [], [1], 2]);
+    diagram.mock.timeStep(1, frameStep);
+    expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 1]);
+    diagram.mock.timeStep(1, frameStep);
+    expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
+    diagram.mock.timeStep(0.5, frameStep);
+    expect(transforms()).toEqual(['playing', 0.4, [], [], [1], 1.6]);
+  });
+  test('Seek to middle of animation and change state', () => {
+    expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
+    recorder.seek(1.5);
+    expect(transforms()).toEqual(['idle', 0.4, [], [], [1], 1.6]);
+    a.setPosition(4.4, 0);
+    recorder.settings.play = 'animate';
+    recorder.startPlayback();
+    expect(transforms()).toEqual(['preparingToPlay', 4.4, [], [], [1], 2]);
+    diagram.mock.timeStep(1, frameStep);
+    expect(transforms()).toEqual(['preparingToPlay', 2.4, [], [], [1], 1]);
+    diagram.mock.timeStep(1, frameStep);
+    expect(transforms()).toEqual(['playing', 0.4, [], [], [1], 1.6]);
+    diagram.mock.timeStep(0.4, frameStep);
+    expect(transforms()).toEqual(['playing', 0.8, [], [], [1], 1.2]);
+  });
+  test('Seek to end of animation and change state', () => {
+    
+  });
   test('Seek to before pulse and change state', () => {});
   test('Seek to start of pulse and change state', () => {});
   test('Seek to middle of pulse and change state', () => {});
