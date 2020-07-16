@@ -393,7 +393,6 @@ describe('Animate To State', () => {
           expect(round(diagram.elements.opacity)).toBe(0.5005);
           expect(a.isShown).toBe(true);
           expect(round(a.opacity)).toBe(0.5005);
-          // debugger;
           diagram.mock.timeStep(0.4);
           expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 0.5]);
           expect(a.isShown).toBe(true);
