@@ -32,7 +32,7 @@ export type TypePauseSettings = {
   movingFreely?: TypeOnPause;
 } | TypeOnPause;
 
-export type TypeResumeSettings = {
+export type TypePlaySettings = {
   action: 'dissolve' | 'animate' | 'instant',
   duration?: number | {
     dissovlveOut: ?number,
@@ -224,7 +224,7 @@ class Recorder {
 
   settings: {
     pause: TypePauseSettings,
-    resume: TypeResumeSettings,
+    play: TypePlaySettings,
   };
 
   static instance: Object;
@@ -1262,28 +1262,28 @@ class Recorder {
       this.subscriptions.trigger('playbackStarted');
     };
 
-    const resumeSettings = this.getResumeSettings();
+    const playSettings = this.getPlaySettings();
     if (
-      resumeSettings.action === 'instant'
+      playSettings.action === 'instant'
       || this.diagram.elements.isStateSame(stateToStartFrom.elements, true)
     ) {
       finished();
-    } else if (resumeSettings.action === 'dissolve') {
+    } else if (playSettings.action === 'dissolve') {
       this.diagram.elements.freezePulseTransforms(false);
       this.diagram.stop();
       this.diagram.dissolveToState({
         state: stateToStartFrom,
-        dissolveInDuration: resumeSettings.duration.dissolveIn,
-        dissolveOutDuration: resumeSettings.duration.dissolveOut,
+        dissolveInDuration: playSettings.duration.dissolveIn,
+        dissolveOutDuration: playSettings.duration.dissolveOut,
         done: finished,
-        delay: resumeSettings.duration.delay,
+        delay: playSettings.duration.delay,
         startTime: 'now',
       });
     } else {
       this.diagram.stop();
       this.diagram.animateToState(
         stateToStartFrom,
-        resumeSettings,
+        playSettings,
         finished,
         'now',
       );
@@ -1295,7 +1295,7 @@ class Recorder {
     }
   }
 
-  getResumeSettings() {
+  getPlaySettings() {
     let onResume = {
       action: 'instant',
       maxTime: 6,
@@ -1312,10 +1312,10 @@ class Recorder {
       duration: null,
     }
     // console.log(resumeSettings)
-    if (typeof this.settings.resume === 'string') {
-      onResume.action = this.settings.resume;
+    if (typeof this.settings.play === 'string') {
+      onResume.action = this.settings.play;
     } else {
-      onResume = joinObjects({}, onResume, this.settings.resume);
+      onResume = joinObjects({}, onResume, this.settings.play);
       // velocity trumps duration by default, but if only duration is defined by the
       // user, then remove velocity;
       // if (this.settings.resume.duration != null && this.settings.resume.velocity == null) {
@@ -1354,7 +1354,7 @@ class Recorder {
       this.startPlayback(this.currentTime);
       return;
     }
-    const resumeSettings = this.getResumeSettings();
+    const playSettings = this.getPlaySettings();
     // const defaultOptions = {
     //   maxTime: 1,
     //   minTime: 0,
@@ -1382,29 +1382,29 @@ class Recorder {
       this.subscriptions.trigger('playbackStarted');
     };
 
-    if (resumeSettings.action === 'instant' || this.diagram.elements.isStateSame(this.pauseState.elements, true)) {
+    if (playSettings.action === 'instant' || this.diagram.elements.isStateSame(this.pauseState.elements, true)) {
       // this.diagram.stop();
       // this.diagram.elements.clearFrozenPulseTransforms();
       finished();
       return;
     }
     // const id = this.diagram.subscriptions.subscribe('animationsFinished', finished, 1);
-    if (resumeSettings.action === 'dissolve') {
+    if (playSettings.action === 'dissolve') {
       this.diagram.elements.freezePulseTransforms(false);
       this.diagram.stop();
       this.diagram.dissolveToState({
         state: this.pauseState,
-        dissolveInDuration: resumeSettings.duration.dissolveIn,
-        dissolveOutDuration: resumeSettings.duration.dissolveOut,
+        dissolveInDuration: playSettings.duration.dissolveIn,
+        dissolveOutDuration: playSettings.duration.dissolveOut,
         done: finished,
-        delay: resumeSettings.duration.delay,
+        delay: playSettings.duration.delay,
         startTime: 'now',
       });
     } else {
       this.diagram.stop();
       this.diagram.animateToState(
         this.pauseState,
-        resumeSettings,
+        playSettings,
         finished,
         'now',
       );
