@@ -1,5 +1,7 @@
 // @flow
 
+export type TypeWhen = 'now' | 'nextFrame' | 'prevFrame' | 'sync';
+
 // Singleton class that contains projects global variables
 class GlobalAnimation {
   // Method for requesting the next animation frame
@@ -20,6 +22,7 @@ class GlobalAnimation {
   synchronizedNow: number;
   updateSyncNow: boolean;
   timers: Array<TimeoutID>;
+  syncNowTimer: TimeoutID;
 
   constructor() {
     // If the instance alread exists, then don't create a new instance.
@@ -63,17 +66,32 @@ class GlobalAnimation {
     }
     this.timeoutId = null;
     this.now = () => performance.now();
-    this.updateSyncNow = false;
+    this.updateSyncNow = true;
+  }
+
+  getWhen(when: 'now' | 'nextFrame' | 'prevFrame' | 'sync') {
+    if (when === 'now') {
+      return this.now();
+    }
+    if (when === 'prevFrame') {
+      return this.lastFrame;
+    }
+    if (when === 'sync') {
+      return this.syncNow();
+    }
+    return null;
   }
 
   syncNow() {
     if (this.updateSyncNow) {
       this.updateSyncNow = false;
       this.synchronizedNow = performance.now();
+      this.syncNowTimer = setTimeout(() => { this.updateSyncNow = true; }, 100);
     }
     return this.synchronizedNow;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   now() {
     return performance.now();
   }
@@ -142,6 +160,7 @@ class GlobalAnimation {
   }
 
   draw(now: number) {
+    clearTimeout(this.syncNowTimer);
     this.updateSyncNow = true;
     this.drawQueue = this.nextDrawQueue;
     this.nextDrawQueue = [];

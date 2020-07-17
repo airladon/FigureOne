@@ -235,19 +235,14 @@ export default class AnimationManager {
     this.cleanAnimations();
   }
 
-  getFrameTime(frame: 'next' | 'prev' | 'now') {
-    if (frame === 'prev') {
-      return new GlobalAnimation().lastFrame;
-    }
-    if (frame === 'now') {
-      return new GlobalAnimation().now();
-    }
-    return null;
+  // eslint-disable-next-line class-methods-use-this
+  getFrameTime(frame: 'next' | 'prev' | 'now' | 'sync') {
+    new GlobalAnimation().when(frame);
   }
 
   start(optionsIn: {
     name?: string,
-    frame?: 'next' | 'prev' | 'now',
+    frame?: 'next' | 'prev' | 'now' | 'syncNow',
   }) {
     const options = joinObjects({}, optionsIn, { name: null, frame: 'next' });
     const { name, frame } = options;

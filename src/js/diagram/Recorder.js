@@ -1246,6 +1246,7 @@ class Recorder {
 
     let finishedFlag = false;
     const finished = () => {
+      // console.log('hello')
       finishedFlag = true;
       if (this.pauseState == null) {
         this.setToTime(fromTime, true);
@@ -1354,78 +1355,78 @@ class Recorder {
     this.startPlayback(this.currentTime, false);
   }
 
-  resumePlaybackLegacy() {
-    if (this.pauseState == null) {
-      this.startPlayback(this.currentTime);
-      return;
-    }
-    const playSettings = this.getPlaySettings();
-    // const defaultOptions = {
-    //   maxTime: 1,
-    //   minTime: 0,
-    //   dissolve: false,
-    //   delay: 0.2,
-    // }
-    // const options = joinObjects({}, defaultOptions, optionsIn);
-    // if (options.dissolve && options.duration == null) {
-    //   options.duration = 0.8;
-    // }
-    this.diagram.unpause();
-    let finishedFlag = false;
-    const finished = () => {
-      finishedFlag = true;
-      this.diagram.setState(this.pauseState);
-      this.pauseState = null;
-      this.state = 'playing';
-      this.setVideoToNowDeltaTime(this.currentTime);
-      this.startEventsPlayback(this.currentTime);
-      this.startAudioPlayback(this.currentTime);
-      this.diagram.animateNextFrame();
-      if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
-        this.finishPlaying();
-      }
-      this.subscriptions.trigger('playbackStarted');
-    };
+  // resumePlaybackLegacy() {
+  //   if (this.pauseState == null) {
+  //     this.startPlayback(this.currentTime);
+  //     return;
+  //   }
+  //   const playSettings = this.getPlaySettings();
+  //   // const defaultOptions = {
+  //   //   maxTime: 1,
+  //   //   minTime: 0,
+  //   //   dissolve: false,
+  //   //   delay: 0.2,
+  //   // }
+  //   // const options = joinObjects({}, defaultOptions, optionsIn);
+  //   // if (options.dissolve && options.duration == null) {
+  //   //   options.duration = 0.8;
+  //   // }
+  //   this.diagram.unpause();
+  //   let finishedFlag = false;
+  //   const finished = () => {
+  //     finishedFlag = true;
+  //     this.diagram.setState(this.pauseState);
+  //     this.pauseState = null;
+  //     this.state = 'playing';
+  //     this.setVideoToNowDeltaTime(this.currentTime);
+  //     this.startEventsPlayback(this.currentTime);
+  //     this.startAudioPlayback(this.currentTime);
+  //     this.diagram.animateNextFrame();
+  //     if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
+  //       this.finishPlaying();
+  //     }
+  //     this.subscriptions.trigger('playbackStarted');
+  //   };
 
-    if (playSettings.action === 'instant' || this.diagram.elements.isStateSame(this.pauseState.elements, true)) {
-      // this.diagram.stop();
-      // this.diagram.elements.clearFrozenPulseTransforms();
-      finished();
-      return;
-    }
-    // const id = this.diagram.subscriptions.subscribe('animationsFinished', finished, 1);
-    if (playSettings.action === 'dissolve') {
-      this.diagram.elements.freezePulseTransforms(false);
-      this.diagram.stop();
-      this.diagram.dissolveToState({
-        state: this.pauseState,
-        dissolveInDuration: playSettings.duration.dissolveIn,
-        dissolveOutDuration: playSettings.duration.dissolveOut,
-        done: finished,
-        delay: playSettings.duration.delay,
-        startTime: 'now',
-      });
-    } else {
-      this.diagram.stop();
-      this.diagram.animateToState(
-        this.pauseState,
-        playSettings,
-        finished,
-        'now',
-      );
-    }
+  //   if (playSettings.action === 'instant' || this.diagram.elements.isStateSame(this.pauseState.elements, true)) {
+  //     // this.diagram.stop();
+  //     // this.diagram.elements.clearFrozenPulseTransforms();
+  //     finished();
+  //     return;
+  //   }
+  //   // const id = this.diagram.subscriptions.subscribe('animationsFinished', finished, 1);
+  //   if (playSettings.action === 'dissolve') {
+  //     this.diagram.elements.freezePulseTransforms(false);
+  //     this.diagram.stop();
+  //     this.diagram.dissolveToState({
+  //       state: this.pauseState,
+  //       dissolveInDuration: playSettings.duration.dissolveIn,
+  //       dissolveOutDuration: playSettings.duration.dissolveOut,
+  //       done: finished,
+  //       delay: playSettings.duration.delay,
+  //       startTime: 'now',
+  //     });
+  //   } else {
+  //     this.diagram.stop();
+  //     this.diagram.animateToState(
+  //       this.pauseState,
+  //       playSettings,
+  //       finished,
+  //       'now',
+  //     );
+  //   }
 
-    // if (this.diagram.isAnimating() && !finishedFlag) {
-    // console.log(finishedFlag)
-    if (!finishedFlag) {
-      this.state = 'preparingToPlay';
-      this.subscriptions.trigger('preparingToPlay');
-    }
-    // if (animationCount === 0) {
-    //   this.diagram.subscriptions.unsubscribe('animationsFinished', id);
-    //   finished();
-    // }
-  }
+  //   // if (this.diagram.isAnimating() && !finishedFlag) {
+  //   // console.log(finishedFlag)
+  //   if (!finishedFlag) {
+  //     this.state = 'preparingToPlay';
+  //     this.subscriptions.trigger('preparingToPlay');
+  //   }
+  //   // if (animationCount === 0) {
+  //   //   this.diagram.subscriptions.unsubscribe('animationsFinished', id);
+  //   //   finished();
+  //   // }
+  // }
 
   // initializePlayback(fromTime: number) {
   //   this.currentTime = fromTime;
