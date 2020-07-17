@@ -241,16 +241,20 @@ describe('Seek', () => {
         recorder.settings.play = 'dissolve';
         recorder.startPlayback();
         expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 1]);
+        expect(round(diagram.elements.opacity)).toBe(1);
         expect(a.opacity).toBe(1);
         expect(a.isShown).toBe(true);
 
         diagram.mock.timeStep(0.4, frameStep);
         expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 0.6]);
-        expect(round(a.opacity)).toBe(0.5005);
+        expect(round(diagram.elements.opacity)).toBe(0.5005);
+        expect(round(a.opacity)).toBe(1);
+        expect(round(a.lastDrawOpacity)).toBe(0.5005);
         expect(a.isShown).toBe(true);
 
         diagram.mock.timeStep(0.4, frameStep);
         expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 0.2]);
+        expect(round(diagram.elements.opacity)).toBe(1);
         expect(a.opacity).toBe(1);
         expect(a.isShown).toBe(false);
 

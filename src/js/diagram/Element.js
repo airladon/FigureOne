@@ -131,6 +131,8 @@ class DiagramElement {
   // lastDrawPulseTransform: Transform;
   lastDrawElementTransformPosition: {parentCount: number, elementCount: number};
 
+  lastDrawOpacity: number;
+
   parent: DiagramElement | null;
 
   isShown: boolean;                  // True if should be shown in diagram
@@ -324,6 +326,7 @@ class DiagramElement {
     this.isInteractive = undefined;
     this.hasTouchableElements = false;
     this.color = [1, 1, 1, 1];
+    this.lastDrawOpacity = 1;
     this.dimColor = [0.5, 0.5, 0.5, 1];
     this.defaultColor = this.color.slice();
     this.opacity = 1;
@@ -3145,7 +3148,12 @@ class DiagramElementPrimitive extends DiagramElement {
     }
   }
 
-  draw(now: number, parentTransform: Array<Transform> = [new Transform()], canvasIndex: number = 0) {
+  draw(
+    now: number,
+    parentTransform: Array<Transform> = [new Transform()],
+    parentOpacity: number = 1,
+    canvasIndex: number = 0,
+  ) {
     if (this.isShown) {
       let pointCount = -1;
       if (this.drawingObject instanceof VertexObject) {
@@ -3163,7 +3171,10 @@ class DiagramElementPrimitive extends DiagramElement {
         pointCount = 1;
       }
 
-      const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity];
+      const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity * parentOpacity];
+
+      // eslint-disable-next-line prefer-destructuring
+      this.lastDrawOpacity = colorToUse[3];
       // if (this.getPath().endsWith('eqn.elements._1')) {
       // console.log(this.getPath(), this.opacity, colorToUse);
       // colorToUse = [1, 0, 0, 1];
@@ -3625,7 +3636,12 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  draw(now: number, parentTransform: Array<Transform> = [new Transform()], canvasIndex: number = 0) {
+  draw(
+    now: number,
+    parentTransform: Array<Transform> = [new Transform()],
+    parentOpacity: number = 1,
+    canvasIndex: number = 0,
+  ) {
     if (this.isShown) {
       // for (let k = 0; k < this.pulseTransforms.length; k += 1) {
       this.lastDrawElementTransformPosition = {
@@ -3642,8 +3658,12 @@ class DiagramElementCollection extends DiagramElement {
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.drawTransforms[0];
 
+      const opacityToUse = this.color[3] * this.opacity * parentOpacity;
+      this.lastDrawOpacity = opacityToUse;
       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-        this.elements[this.drawOrder[i]].draw(now, this.drawTransforms, canvasIndex);
+        this.elements[this.drawOrder[i]].draw(
+          now, this.drawTransforms, opacityToUse, canvasIndex,
+        );
       }
       // }
       if (this.unrenderNextDraw) {
@@ -4367,10 +4387,10 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   setOpacity(opacity: number) {
-    for (let i = 0; i < this.drawOrder.length; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      element.setOpacity(opacity);
-    }
+    // for (let i = 0; i < this.drawOrder.length; i += 1) {
+    //   const element = this.elements[this.drawOrder[i]];
+    //   element.setOpacity(opacity);
+    // }
     // this.color[3] = opacity;
     this.opacity = opacity;
   }
