@@ -220,6 +220,7 @@ DiagramElementPrimitive {
     "elementCount": 3,
     "parentCount": 6,
   },
+  "lastDrawOpacity": 1,
   "lastDrawPulseTransform": Transform {
     "_type": "transform",
     "index": 3,
