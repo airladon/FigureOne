@@ -62,6 +62,7 @@ describe('Pulse', () => {
     });
     test('Callback', () => {
       const element = makeSquare();
+      diagram.elements.add('e', element);
 
       // Initial state
       expect(element.state.isPulsing).toBe(false);
@@ -70,17 +71,20 @@ describe('Pulse', () => {
       element.pulse(mockDone);
 
       // First time stamp
-      element.setupDraw(0);
+      // element.setupDraw(0);
+      diagram.mock.timeStep(0);
       expect(element.state.isPulsing).toBe(true);
       expect(mockDone.mock.calls).toHaveLength(0);
 
       // After 0.5s
-      element.setupDraw(0.5);
+      // element.setupDraw(0.5);
+      diagram.mock.timeStep(0.5);
       expect(element.state.isPulsing).toBe(true);
       expect(mockDone.mock.calls).toHaveLength(0);
 
       // When complete
-      element.setupDraw(1.1);
+      // element.setupDraw(1.1);
+      diagram.mock.timeStep(1.1);
       expect(mockDone.mock.calls).toHaveLength(1);
       expect(element.state.isPulsing).toBe(false);
     });
@@ -111,8 +115,10 @@ describe('Pulse', () => {
       expect(collection._s3.state.isPulsing).toBe(true);
       expect(collection._squares._s1.state.isPulsing).toBe(true);
       expect(collection._squares._s2.state.isPulsing).toBe(false);
-      collection.setupDraw(0);
-      collection.setupDraw(1.1);
+      diagram.mock.timeStep(0);
+      diagram.mock.timeStep(1.1);
+      // collection.setupDraw(0);
+      // collection.setupDraw(1.1);
       expect(mockDone.mock.calls).toHaveLength(1);
     });
   });

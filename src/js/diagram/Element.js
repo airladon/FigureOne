@@ -2227,6 +2227,43 @@ class DiagramElement {
     this.startPulsing();
   }
 
+  pulseThick(optionsIn: {
+    duration: number,
+    scale: number,
+    num: number,
+    callback: ?(string | ((?mixed) => void)),
+    when: TypeWhen,
+  }) {
+    const options = joinObjects({}, {
+      duration: 1,
+      scale: 2,
+      callback: null,
+      // delta: [0, 0],
+      when: 'sync',
+      num: 3
+    }, optionsIn);
+    let bArray = [options.scale];
+    this.pulseSettings.num = options.num;
+    if (this.pulseSettings.num > 1) {
+      const b = Math.abs(1 - options.scale);
+      const bMax = b;
+      const bMin = -b;
+      const range = bMax - bMin;
+      const bStep = range / (this.pulseSettings.num - 1);
+      bArray = [];
+      for (let i = 0; i < this.pulseSettings.num; i += 1) {
+        bArray.push(bMax - i * bStep);
+      }
+    }
+    this.pulseSettings.time = options.duration;
+    this.pulseSettings.frequency = 1 / (options.duration * 2);
+    this.pulseSettings.A = 1;
+    this.pulseSettings.B = bArray;
+    this.pulseSettings.C = 0;
+    this.pulseSettings.callback = options.callback;
+    this.startPulsing(options.when);
+  }
+
   // pulse(done: ?(mixed) => void = null) {
   //   this.pulseDefault(done);
   // }

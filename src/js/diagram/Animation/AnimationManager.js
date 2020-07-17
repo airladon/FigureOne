@@ -237,7 +237,7 @@ export default class AnimationManager {
 
   // eslint-disable-next-line class-methods-use-this
   getFrameTime(frame: 'next' | 'prev' | 'now' | 'sync') {
-    new GlobalAnimation().when(frame);
+    new GlobalAnimation().getWhen(frame);
   }
 
   start(optionsIn: {
