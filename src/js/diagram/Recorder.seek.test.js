@@ -21,6 +21,7 @@ describe('Seek', () => {
   let transforms;
   let frameStep;
   let dissolveTester;
+  let skipAfter;
   beforeEach(() => {
     diagram = makeDiagram();
     diagram.globalAnimation.reset();
@@ -143,6 +144,8 @@ describe('Seek', () => {
       expect(a.opacity).toBe(1);
       expect(round(a.lastDrawOpacity)).toBe(1);
     };
+
+    skipAfter = false;
   });
   test('Just playback', () => {
     // Note, the animation and pulse are starting on the frame after the desired
@@ -635,6 +638,74 @@ describe('Seek', () => {
         recorder.startPlayback();
         dissolveTester([2.4, [], [2], [2]], [0.4, [], [], [1]], 1.6);
         expect(transforms()).toEqual(['playing', 0.4, [], [], [1], 1.6]);
+      });
+    });
+  });
+  describe.only('Seek to start of pulse', () => {
+    beforeEach(() => {
+      expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
+      recorder.seek(2);
+    });
+    afterEach(() => {
+      // expect(transforms()).toEqual(['playing', 0.4, [], [], [1], 1.6]);
+      // diagram.mock.timeStep(0.5, frameStep);
+      // expect(transforms()).toEqual(['playing', 0.9, [], [], [1], 2]);
+      if (skipAfter) {
+        return;
+      }
+      diagram.mock.timeStep(1, frameStep);
+      expect(transforms()).toEqual(['playing', 1.9, [1.9], [], [1.9], 1.1]);
+      diagram.mock.timeStep(1, frameStep);
+      expect(transforms()).toEqual(['playing', 2, [1.1], [], [1.1], 0.1]);
+      diagram.mock.timeStep(0.5, frameStep);
+      expect(transforms()).toEqual(['playing', 2, [], [], [1], 0]);
+      diagram.mock.timeStep(0.5, frameStep);
+      expect(transforms()).toEqual(['idle', 2, [], [], [1], 0]);
+    });
+    test('No state change', () => {
+      recorder.startPlayback();
+      expect(transforms()).toEqual(['playing', 0.9, [], [], [1], 2]);
+    });
+    describe('Position Change', () => {
+      beforeEach(() => {
+        a.setPosition(2.9, 2.9);
+        diagram.mock.timeStep(1, frameStep);
+        expect(transforms()).toEqual(['idle', 2.9, [], [], [1], 0]);
+      });
+      test('Instant', () => {
+        recorder.settings.play = 'instant';
+        recorder.startPlayback();
+        expect(transforms()).toEqual(['playing', 0.9, [], [], [1], 2]);
+      });
+      test.only('Animate', () => {
+        recorder.settings.play = 'animate';
+        recorder.startPlayback();
+        expect(transforms()).toEqual(['preparingToPlay', 2.9, [], [], [1], 1]);
+        diagram.mock.timeStep(0.5, frameStep);
+        expect(transforms()).toEqual(['preparingToPlay', 1.9, [], [], [1], 0.5]);
+        diagram.mock.timeStep(0.5, frameStep);
+        expect(transforms()).toEqual(['playing', 0.9, [1], [], [1], 2]);
+        // diagram.mock.timeStep(0.5, frameStep);
+        // expect(transforms()).toEqual(['playing', 1.4, [1.5], [], [1.5], 1.5]);
+        // diagram.mock.timeStep(0.5, frameStep);
+        // diagram.mock.timeStep(1, frameStep);
+        // expect(transforms()).toEqual(['playing', 1.9, [2], [], [2], 1]);
+
+        diagram.mock.timeStep(1, frameStep);
+        expect(transforms()).toEqual(['playing', 1.9, [2], [], [2], 1]);
+        diagram.mock.timeStep(1, frameStep);
+        // expect(transforms()).toEqual(['playing', 2, [1.1], [], [1.1], 0.1]);
+        // diagram.mock.timeStep(0.5, frameStep);
+        expect(transforms()).toEqual(['playing', 2, [1], [], [1], 0]);
+        diagram.mock.timeStep(1, frameStep);
+        expect(transforms()).toEqual(['idle', 2, [], [], [1], 0]);
+        skipAfter = true;
+      });
+      test('Dissolve', () => {
+        recorder.settings.play = 'dissolve';
+        recorder.startPlayback();
+        dissolveTester([2.9, [], [], [1]], [0.9, [], [], [1]], 2);
+        expect(transforms()).toEqual(['playing', 0.9, [], [], [1], 2]);
       });
     });
   });
