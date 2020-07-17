@@ -616,6 +616,7 @@ class Diagram {
             done: options.done,
             startTime: options.startTime,
           });
+          // this.
         },
         // duration: options.dissolveInDuration,
         duration: 0,
@@ -637,12 +638,13 @@ class Diagram {
     const { state, duration, done, startTime } = options;
     const dissolveDuration = this.elements.dissolveInToState(state.elements, duration, startTime);
 
+    // force update of transforms to update any dependent transforms
     const elements = this.elements.getAllElements();
     elements.forEach((element) => {
       if (element.isShown && element.dependantTransform === false) {
         element.setTransform(element.transform);
       }
-    })
+    });
 
 
     if (done != null) {
