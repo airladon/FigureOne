@@ -95,7 +95,7 @@ describe('Seek', () => {
       round(diagram.getRemainingAnimationTime(), 3),
     ];
 
-    dissolveTester = (outState, inState) => {
+    dissolveTester = (outState, inState, remainingAnimTime) => {
       expect(transforms()).toEqual(['preparingToPlay', ...outState, 1]);
       expect(diagram.elements.isShown).toBe(true);
       expect(round(diagram.elements.opacity)).toBe(1);
@@ -136,7 +136,7 @@ describe('Seek', () => {
       expect(round(a.lastDrawOpacity)).toBe(round(0.5005 * 0.5005));
 
       diagram.mock.timeStep(0.4, frameStep);
-      expect(transforms()).toEqual(['playing', ...inState, 0]);
+      expect(transforms()).toEqual(['playing', ...inState, remainingAnimTime]);
       expect(diagram.elements.isShown).toBe(true);
       expect(round(diagram.elements.opacity)).toBe(1);
       expect(a.isShown).toBe(true);
@@ -290,7 +290,7 @@ describe('Seek', () => {
       test('Dissolve', () => {
         recorder.settings.play = 'dissolve';
         recorder.startPlayback();
-        dissolveTester([2, [], [], [1]], [0, [], [], [1]]);
+        dissolveTester([2, [], [], [1]], [0, [], [], [1]], 0);
         // First animation is dissolve out for 0.8s, and delay for 0.2s
         // expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 1]);
         // expect(diagram.elements.isShown).toBe(true);
@@ -371,7 +371,7 @@ describe('Seek', () => {
       test('Dissolve', () => {
         recorder.settings.play = 'dissolve';
         recorder.startPlayback();
-        dissolveTester([0, [], [2], [2]], [0, [], [], [1]]);
+        dissolveTester([0, [], [2], [2]], [0, [], [], [1]], 0);
       });
     });
     describe('Position and Pulse Change', () => {
@@ -404,7 +404,127 @@ describe('Seek', () => {
       test('Dissolve', () => {
         recorder.settings.play = 'dissolve';
         recorder.startPlayback();
-        dissolveTester([2, [], [2], [2]], [0, [], [], [1]]);
+        dissolveTester([2, [], [2], [2]], [0, [], [], [1]], 0);
+      });
+    });
+  });
+  describe('Seek to start of animation', () => {
+    beforeEach(() => {
+      expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
+      recorder.seek(1);
+    });
+    afterEach(() => {
+      // expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
+      diagram.mock.timeStep(0.5, frameStep);
+      expect(transforms()).toEqual(['playing', 0.4, [], [], [1], 1.6]);
+      diagram.mock.timeStep(0.5, frameStep);
+      expect(transforms()).toEqual(['playing', 0.9, [], [], [1], 2]);
+      diagram.mock.timeStep(1, frameStep);
+      expect(transforms()).toEqual(['playing', 1.9, [1.9], [], [1.9], 1.1]);
+      diagram.mock.timeStep(1, frameStep);
+      expect(transforms()).toEqual(['playing', 2, [1.1], [], [1.1], 0.1]);
+      diagram.mock.timeStep(0.5, frameStep);
+      expect(transforms()).toEqual(['playing', 2, [], [], [1], 0]);
+      diagram.mock.timeStep(0.5, frameStep);
+      expect(transforms()).toEqual(['idle', 2, [], [], [1], 0]);
+    });
+    test('No state change', () => {
+      recorder.startPlayback();
+      expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
+    });
+    describe('Position Change', () => {
+      beforeEach(() => {
+        a.setPosition(2, 2);
+        diagram.mock.timeStep(1, frameStep);
+        expect(transforms()).toEqual(['idle', 2, [], [], [1], 0]);
+      });
+      test('Instant', () => {
+        recorder.settings.play = 'instant';
+        recorder.startPlayback();
+        expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
+      });
+      test('Animate', () => {
+        recorder.settings.play = 'animate';
+        recorder.startPlayback();
+        expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 1]);
+        diagram.mock.timeStep(0.5, frameStep);
+        expect(transforms()).toEqual(['preparingToPlay', 1, [], [], [1], 0.5]);
+        diagram.mock.timeStep(0.5, frameStep);
+        expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
+      });
+      test('Dissolve', () => {
+        recorder.settings.play = 'dissolve';
+        recorder.startPlayback();
+        dissolveTester([2, [], [], [1]], [0, [], [], [1]], 2);
+        expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
+      });
+    });
+    describe('Pulse Change', () => {
+      beforeEach(() => {
+        diagram.unpause();
+        a.pulseScaleNow(2, 2);
+        diagram.mock.timeStep(0);
+        diagram.mock.timeStep(0.5, frameStep);
+        diagram.mock.timeStep(0.5, frameStep);
+        expect(transforms()).toEqual(['idle', 0, [2], [], [2], 1]);
+      });
+      test('Instant', () => {
+        recorder.settings.play = 'instant';
+        recorder.startPlayback();
+        // The old drawTransform scale will be updated on the next draw
+        expect(transforms()).toEqual(['playing', 0, [], [], [2], 2]);
+      });
+      test('Animate', () => {
+        recorder.settings.play = 'animate';
+        recorder.startPlayback();
+
+        expect(transforms()).toEqual(['preparingToPlay', 0, [], [2], [2], 1]);
+        diagram.mock.timeStep(0.5, frameStep);
+        expect(transforms()).toEqual(['preparingToPlay', 0, [], [1.5], [1.5], 0.5]);
+        diagram.mock.timeStep(0.5, frameStep);
+        expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
+      });
+      test('Dissolve', () => {
+        recorder.settings.play = 'dissolve';
+        recorder.startPlayback();
+        dissolveTester([0, [], [2], [2]], [0, [], [], [1]], 2);
+        expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
+      });
+    });
+    describe('Position and Pulse Change', () => {
+      beforeEach(() => {
+        diagram.unpause();
+        a.pulseScaleNow(2, 2);
+        a.setPosition(2, 2);
+        diagram.mock.timeStep(0);
+        diagram.mock.timeStep(0.5, frameStep);
+        diagram.mock.timeStep(0.5, frameStep);
+        expect(transforms()).toEqual(['idle', 2, [2], [], [2], 1]);
+      });
+      test('Instant', () => {
+        recorder.settings.play = 'instant';
+        recorder.startPlayback();
+        // // The old drawTransform scale is not yet updated
+        // expect(transforms()).toEqual(['playing', 0, [], [], [2], 0]);
+        // // So let's update it so the afterEach works
+        // diagram.mock.timeStep(0);
+        // expect(transforms()).toEqual(['playing', 0, [], [], [1], 0]);
+        expect(transforms()).toEqual(['playing', 0, [], [], [2], 2]);
+      });
+      test('Animate', () => {
+        recorder.settings.play = 'animate';
+        recorder.startPlayback();
+        expect(transforms()).toEqual(['preparingToPlay', 2, [], [2], [2], 1]);
+        diagram.mock.timeStep(0.5, frameStep);
+        expect(transforms()).toEqual(['preparingToPlay', 1, [], [1.5], [1.5], 0.5]);
+        diagram.mock.timeStep(0.5, frameStep);
+        expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
+      });
+      test('Dissolve', () => {
+        recorder.settings.play = 'dissolve';
+        recorder.startPlayback();
+        dissolveTester([2, [], [2], [2]], [0, [], [], [1]], 2);
+        expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
       });
     });
   });
