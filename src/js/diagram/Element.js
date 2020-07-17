@@ -23,6 +23,7 @@ import {
 } from '../tools/tools';
 import { colorArrayToRGBA, areColorsSame } from '../tools/color';
 import GlobalAnimation from './webgl/GlobalAnimation';
+import type { TypeWhen } from './webgl/GlobalAnimation';
 // import DrawContext2D from './DrawContext2D';
 
 import type { TypeSpaceTransforms } from './Diagram';
@@ -1001,14 +1002,7 @@ class DiagramElement {
     // let pulseDelay = null;
     // let delay = 0;
     let pulseAnimation = null;
-    // debugger;
-    // const arePulseTransformsEqual = () => {
-      
-    // };
-    // console.log(!this.arePulseTransformsSame(state))
-    if (this.name === 'a') {
-      debugger;
-    }
+
     if (!this.arePulseTransformsSame(state)) {
       let startPulseTransforms = this.pulseTransforms.map(t => t._dup());
       if (this.pulseTransforms.length === 0) {
@@ -2129,7 +2123,33 @@ class DiagramElement {
     this.pulseSettings.delta = getPoint(delta);
     // this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
     this.pulseSettings.callback = callback;
-    this.pulseNow();
+    this.startPulsing();
+  }
+
+  pulseScale(optionsIn: {
+    duration: number,
+    scale: number,
+    callback: ?(string | ((?mixed) => void)),
+    delta: TypeParsablePoint,
+    when: TypeWhen,
+  }) {
+    const options = joinObjects({}, {
+      duration: 1,
+      scale: 2,
+      callback: null,
+      delta: [0, 0],
+      when: 'sync',
+    }, optionsIn);
+    this.pulseSettings.time = options.duration;
+    this.pulseSettings.frequency = 1 / (options.duration * 2);
+    this.pulseSettings.A = 1;
+    this.pulseSettings.B = options.scale - 1;
+    this.pulseSettings.C = 0;
+    this.pulseSettings.num = 1;
+    this.pulseSettings.delta = getPoint(options.delta);
+    // this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
+    this.pulseSettings.callback = options.callback;
+    this.startPulsing(options.when);
   }
 
   pulseScaleRelativeToPoint(
@@ -2204,16 +2224,16 @@ class DiagramElement {
     this.pulseSettings.B = bArray;
     this.pulseSettings.C = 0;
     this.pulseSettings.callback = callback;
-    this.pulseNow();
+    this.startPulsing();
   }
 
   // pulse(done: ?(mixed) => void = null) {
   //   this.pulseDefault(done);
   // }
 
-  pulseNow() {
+  startPulsing(when: TypeWhen = 'nextFrame') {
     this.state.isPulsing = true;
-    this.state.pulse.startTime = null;
+    this.state.pulse.startTime = new GlobalAnimation().getWhen(when) / 1000;
     this.unrender();
     this.frozenPulseTransforms = [];
   }
@@ -3093,9 +3113,9 @@ class DiagramElementPrimitive extends DiagramElement {
       //   this.
       //   return;
       // }
-      if (this.state.pause !== 'paused') {
-        this.pulseTransforms = this.getPulseTransforms(now);
-      }
+      // if (this.state.pause !== 'paused') {
+      //   this.pulseTransforms = this.getPulseTransforms(now);
+      // }
       // this.drawTransforms = this.getDrawTransforms(newTransform);
       // if(now === 1 && this.name === 'p1') {
       //   console.log(this.getPosition('diagram'))
@@ -3190,6 +3210,7 @@ class DiagramElementPrimitive extends DiagramElement {
       // const newTransform = parentTransform.transform(this.getTransform());
       // this.parentTransform = parentTransform._dup();
       // const newTransform = parentTransform.transform(this.getTransform());
+      this.pulseTransforms = this.getPulseTransforms(now);
       this.drawTransforms = this.getDrawTransforms(newTransforms);
       this.lastDrawTransform = parentTransform[0].transform(transform);
       this.lastDrawPulseTransform = this.drawTransforms[0];
