@@ -375,7 +375,7 @@ describe('Seek', () => {
       });
     });
     describe('Position and Pulse Change', () => {
-      test('Instant', () => {
+      beforeEach(() => {
         diagram.unpause();
         a.pulseScaleNow(2, 2);
         a.setPosition(2, 2);
@@ -383,14 +383,28 @@ describe('Seek', () => {
         diagram.mock.timeStep(0.5, frameStep);
         diagram.mock.timeStep(0.5, frameStep);
         expect(transforms()).toEqual(['idle', 2, [2], [], [2], 1]);
+      });
+      test('Instant', () => {
         recorder.settings.play = 'instant';
         recorder.startPlayback();
-
         // The old drawTransform scale is not yet updated
         expect(transforms()).toEqual(['playing', 0, [], [], [2], 0]);
         // So let's update it so the afterEach works
         diagram.mock.timeStep(0);
         expect(transforms()).toEqual(['playing', 0, [], [], [1], 0]);
+      });
+      test('Animate', () => {
+        recorder.settings.play = 'animate';
+        recorder.startPlayback();
+        expect(transforms()).toEqual(['preparingToPlay', 2, [], [2], [2], 1]);
+        diagram.mock.timeStep(0.5, frameStep);
+        expect(transforms()).toEqual(['preparingToPlay', 1, [], [1.5], [1.5], 0.5]);
+        diagram.mock.timeStep(0.5, frameStep);
+      });
+      test('Dissolve', () => {
+        recorder.settings.play = 'dissolve';
+        recorder.startPlayback();
+        dissolveTester([2, [], [2], [2]], [0, [], [], [1]]);
       });
     });
   });
