@@ -1272,8 +1272,8 @@ class Recorder {
     ) {
       finished();
     } else if (playSettings.action === 'dissolve') {
-      this.diagram.elements.freezePulseTransforms(false);
-      this.diagram.stop();
+      // this.diagram.elements.freezePulseTransforms(false);
+      this.diagram.stop(true, false, true);
       this.diagram.dissolveToState({
         state: stateToStartFrom,
         dissolveInDuration: playSettings.duration.dissolveIn,

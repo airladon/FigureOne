@@ -20,6 +20,7 @@ describe('Seek', () => {
   let b;
   let transforms;
   let frameStep;
+  let dissolveTester;
   beforeEach(() => {
     diagram = makeDiagram();
     diagram.globalAnimation.reset();
@@ -93,6 +94,55 @@ describe('Seek', () => {
       a.drawTransforms.map(t => t.s().round(3).x),
       round(diagram.getRemainingAnimationTime(), 3),
     ];
+
+    dissolveTester = (outState, inState) => {
+      expect(transforms()).toEqual(['preparingToPlay', ...outState, 1]);
+      expect(diagram.elements.isShown).toBe(true);
+      expect(round(diagram.elements.opacity)).toBe(1);
+      expect(a.isShown).toBe(true);
+      expect(a.opacity).toBe(1);
+      expect(round(a.lastDrawOpacity)).toBe(1);
+
+      diagram.mock.timeStep(0.4, frameStep);
+      expect(transforms()).toEqual(['preparingToPlay', ...outState, 0.6]);
+      expect(diagram.elements.isShown).toBe(true);
+      expect(round(diagram.elements.opacity)).toBe(0.5005);
+      expect(a.isShown).toBe(true);
+      expect(a.opacity).toBe(1);
+      expect(round(a.lastDrawOpacity)).toBe(0.5005);
+
+      diagram.mock.timeStep(0.4, frameStep);
+      expect(transforms()).toEqual(['preparingToPlay', ...outState, 0.2]);
+      expect(diagram.elements.isShown).toBe(true);
+      expect(round(diagram.elements.opacity)).toBe(1);
+      expect(a.isShown).toBe(false);
+      expect(a.opacity).toBe(1);
+      expect(round(a.lastDrawOpacity)).toBe(0.12587);
+
+      diagram.mock.timeStep(0.2, frameStep);
+      expect(transforms()).toEqual(['preparingToPlay', ...inState, 0.8]);
+      expect(diagram.elements.isShown).toBe(true);
+      expect(round(diagram.elements.opacity)).toBe(0.001);
+      expect(a.isShown).toBe(true);
+      expect(a.opacity).toBe(0.001);
+      expect(round(a.lastDrawOpacity)).toBe(0);
+
+      diagram.mock.timeStep(0.4, frameStep);
+      expect(transforms()).toEqual(['preparingToPlay', ...inState, 0.4]);
+      expect(diagram.elements.isShown).toBe(true);
+      expect(round(diagram.elements.opacity)).toBe(0.5005);
+      expect(a.isShown).toBe(true);
+      expect(round(a.opacity)).toBe(0.5005);
+      expect(round(a.lastDrawOpacity)).toBe(round(0.5005 * 0.5005));
+
+      diagram.mock.timeStep(0.4, frameStep);
+      expect(transforms()).toEqual(['playing', ...inState, 0]);
+      expect(diagram.elements.isShown).toBe(true);
+      expect(round(diagram.elements.opacity)).toBe(1);
+      expect(a.isShown).toBe(true);
+      expect(a.opacity).toBe(1);
+      expect(round(a.lastDrawOpacity)).toBe(1);
+    };
   });
   test('Just playback', () => {
     // Note, the animation and pulse are starting on the frame after the desired
@@ -240,48 +290,66 @@ describe('Seek', () => {
       test('Dissolve', () => {
         recorder.settings.play = 'dissolve';
         recorder.startPlayback();
-        expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 1]);
-        expect(round(diagram.elements.opacity)).toBe(1);
-        expect(a.opacity).toBe(1);
-        expect(a.isShown).toBe(true);
+        dissolveTester([2, [], [], [1]], [0, [], [], [1]]);
+        // First animation is dissolve out for 0.8s, and delay for 0.2s
+        // expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 1]);
+        // expect(diagram.elements.isShown).toBe(true);
+        // expect(round(diagram.elements.opacity)).toBe(1);
+        // expect(a.isShown).toBe(true);
+        // expect(a.opacity).toBe(1);
+        // expect(round(a.lastDrawOpacity)).toBe(1);
 
-        diagram.mock.timeStep(0.4, frameStep);
-        expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 0.6]);
-        expect(round(diagram.elements.opacity)).toBe(0.5005);
-        expect(round(a.opacity)).toBe(1);
-        expect(round(a.lastDrawOpacity)).toBe(0.5005);
-        expect(a.isShown).toBe(true);
+        // diagram.mock.timeStep(0.4, frameStep);
+        // expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 0.6]);
+        // expect(diagram.elements.isShown).toBe(true);
+        // expect(round(diagram.elements.opacity)).toBe(0.5005);
+        // expect(a.isShown).toBe(true);
+        // expect(a.opacity).toBe(1);
+        // expect(round(a.lastDrawOpacity)).toBe(0.5005);
 
-        diagram.mock.timeStep(0.4, frameStep);
-        expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 0.2]);
-        expect(round(diagram.elements.opacity)).toBe(1);
-        expect(a.opacity).toBe(1);
-        expect(a.isShown).toBe(false);
+        // diagram.mock.timeStep(0.4, frameStep);
+        // expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 0.2]);
+        // expect(diagram.elements.isShown).toBe(true);
+        // expect(round(diagram.elements.opacity)).toBe(1);
+        // expect(a.isShown).toBe(false);
+        // expect(a.opacity).toBe(1);
+        // expect(round(a.lastDrawOpacity)).toBe(0.12587);
 
-        diagram.mock.timeStep(0.2, frameStep);
-        expect(transforms()).toEqual(['preparingToPlay', 0, [], [], [1], 0.8]);
-        expect(a.opacity).toBe(0.001);
-        expect(a.isShown).toBe(true);
+        // diagram.mock.timeStep(0.2, frameStep);
+        // expect(transforms()).toEqual(['preparingToPlay', 0, [], [], [1], 0.8]);
+        // expect(diagram.elements.isShown).toBe(true);
+        // expect(round(diagram.elements.opacity)).toBe(0.001);
+        // expect(a.isShown).toBe(true);
+        // expect(a.opacity).toBe(0.001);
+        // expect(round(a.lastDrawOpacity)).toBe(0);
 
-        diagram.mock.timeStep(0.4, frameStep);
-        expect(transforms()).toEqual(['preparingToPlay', 0, [], [], [1], 0.4]);
-        expect(round(a.opacity)).toBe(0.5005);
-        expect(a.isShown).toBe(true);
+        // diagram.mock.timeStep(0.4, frameStep);
+        // expect(transforms()).toEqual(['preparingToPlay', 0, [], [], [1], 0.4]);
+        // expect(diagram.elements.isShown).toBe(true);
+        // expect(round(diagram.elements.opacity)).toBe(0.5005);
+        // expect(a.isShown).toBe(true);
+        // expect(round(a.opacity)).toBe(0.5005);
+        // expect(round(a.lastDrawOpacity)).toBe(round(0.5005 * 0.5005));
 
-        diagram.mock.timeStep(0.4, frameStep);
-        expect(transforms()).toEqual(['playing', 0, [], [], [1], 0]);
-        expect(round(a.opacity)).toBe(1);
-        expect(a.isShown).toBe(true);
+        // diagram.mock.timeStep(0.4, frameStep);
+        // expect(transforms()).toEqual(['playing', 0, [], [], [1], 0]);
+        // expect(diagram.elements.isShown).toBe(true);
+        // expect(round(diagram.elements.opacity)).toBe(1);
+        // expect(a.isShown).toBe(true);
+        // expect(a.opacity).toBe(1);
+        // expect(round(a.lastDrawOpacity)).toBe(1);
       });
     });
     describe('Pulse Change', () => {
-      test('Instant', () => {
+      beforeEach(() => {
         diagram.unpause();
         a.pulseScaleNow(2, 2);
         diagram.mock.timeStep(0);
         diagram.mock.timeStep(0.5, frameStep);
         diagram.mock.timeStep(0.5, frameStep);
         expect(transforms()).toEqual(['idle', 0, [2], [], [2], 1]);
+      });
+      test('Instant', () => {
         recorder.settings.play = 'instant';
         recorder.startPlayback();
 
@@ -290,6 +358,20 @@ describe('Seek', () => {
         // So let's update it so the afterEach works
         diagram.mock.timeStep(0);
         expect(transforms()).toEqual(['playing', 0, [], [], [1], 0]);
+      });
+      test('Animate', () => {
+        recorder.settings.play = 'animate';
+        recorder.startPlayback();
+
+        expect(transforms()).toEqual(['preparingToPlay', 0, [], [2], [2], 1]);
+        diagram.mock.timeStep(0.5, frameStep);
+        expect(transforms()).toEqual(['preparingToPlay', 0, [], [1.5], [1.5], 0.5]);
+        diagram.mock.timeStep(0.5, frameStep);
+      });
+      test('Dissolve', () => {
+        recorder.settings.play = 'dissolve';
+        recorder.startPlayback();
+        dissolveTester([0, [], [2], [2]], [0, [], [], [1]]);
       });
     });
     describe('Position and Pulse Change', () => {
