@@ -1030,7 +1030,11 @@ class Recorder {
     }
     // console.log(time)
     this.setToTime(time);
-    this.diagram.pause();
+    this.diagram.pause({
+      animation: 'freeze',
+      pulse: 'freeze',
+      movingFreely: 'freeze',
+    });
   }
 
   setToTime(timeIn: number, force: boolean = false) {
@@ -1252,9 +1256,6 @@ class Recorder {
       this.state = 'playing';
       this.setVideoToNowDeltaTime(fromTime);
       this.currentTime = fromTime;
-      // if (window.asdf) {
-      //   debugger;
-      // }
       this.startEventsPlayback(fromTime);
       this.startAudioPlayback(fromTime);
       this.diagram.animateNextFrame();
@@ -1270,7 +1271,6 @@ class Recorder {
       || this.diagram.elements.isStateSame(stateToStartFrom.elements, true)
     ) {
       finished();
-      // debugger;
     } else if (playSettings.action === 'dissolve') {
       this.diagram.elements.freezePulseTransforms(false);
       this.diagram.stop();
@@ -1283,7 +1283,9 @@ class Recorder {
         startTime: 'now',
       });
     } else {
-      this.diagram.stop();
+      // console.log('asdf')
+      // debugger;
+      this.diagram.stop(true, false, true);  // This is cancelling the pulse
       this.diagram.animateToState(
         stateToStartFrom,
         playSettings,
@@ -1453,9 +1455,6 @@ class Recorder {
   }
 
   startEventsPlayback(fromTime: number) {
-    // if (window.asdf) {
-    //   debugger;
-    // }
     this.eventsToPlay.forEach((eventName) => {
       if (this.events[eventName].list.length === 0) {
         return;
@@ -1509,9 +1508,6 @@ class Recorder {
   }
 
   playbackEvent(eventName: string) {
-    // if (window.asdf) {
-    //   debugger; 
-    // }
     const index = this.eventIndex[eventName];
     const delay = round(this.events[eventName].list[index][0] - this.getCurrentTime(), 8);
 

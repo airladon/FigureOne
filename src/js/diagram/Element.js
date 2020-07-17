@@ -998,25 +998,30 @@ class DiagramElement {
     // let pulseDelay = null;
     // let delay = 0;
     let pulseAnimation = null;
-
+    // debugger;
     // const arePulseTransformsEqual = () => {
       
     // };
     // console.log(!this.arePulseTransformsSame(state))
-    if (
-      (state.state.isPulsing || this.state.isPulsing)
-      && !this.arePulseTransformsSame(state)
-    ) {
+    if (this.name === 'a') {
+      debugger;
+    }
+    if (!this.arePulseTransformsSame(state)) {
       let startPulseTransforms = this.pulseTransforms.map(t => t._dup());
       if (this.pulseTransforms.length === 0) {
         startPulseTransforms = this.frozenPulseTransforms.map(t => t._dup());
       }
-      // console.log(this.pulseTransforms)
-      // console.log(this.frozenPulseTransforms)
-      // console.log(startPulseTransforms)
+      let targetPulseTransforms = state.pulseTransforms.map(t => getTransform(t));
+      if (targetPulseTransforms.length === 0 && state.frozenPulseTransforms.length > 0) {
+        targetPulseTransforms = state.frozenPulseTransforms.map(t => getTransform(t));
+      }
+      if (targetPulseTransforms.length === 0 && startPulseTransforms.length > 0) {
+        targetPulseTransforms = [startPulseTransforms[0].identity()];
+      }
+
       pulseAnimation = this.anim.pulseTransform(joinObjects({}, options, {
         start: startPulseTransforms,
-        target: state.pulseTransforms.map(t => getTransform(t)),
+        target: targetPulseTransforms,
       }));
       // console.log(pulseAnimation)
     }
@@ -2247,7 +2252,7 @@ class DiagramElement {
   stop(
     cancelled?: boolean = true,
     forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false,
-    freeze: ?boolean = false,
+    freeze: boolean = false,
   ) {
     if (forceSetToEndOfPlan === true || forceSetToEndOfPlan === 'complete') {
       this.animations.cancelAll('complete');
@@ -4260,15 +4265,16 @@ class DiagramElementCollection extends DiagramElement {
   stop(
     cancelled: boolean = true,
     forceSetToEndOfPlan: ?boolean | 'complete' | 'noComplete' = false,
+    freeze: boolean = false,
     elementOnly: boolean = false,
   ) {
-    super.stop(cancelled, forceSetToEndOfPlan);
+    super.stop(cancelled, forceSetToEndOfPlan, freeze);
     if (elementOnly) {
       return;
     }
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.stop(cancelled, forceSetToEndOfPlan);
+      element.stop(cancelled, forceSetToEndOfPlan, freeze, elementOnly);
       // element.cancel(forceSetToEndOfPlan);
     }
   }

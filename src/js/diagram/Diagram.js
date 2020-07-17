@@ -1480,7 +1480,11 @@ class Diagram {
     return true;
   }
 
-  stop(cancelled: boolean = true, forceSetToEndOfPlan: boolean = false, freeze: boolean = false) {
+  stop(
+    cancelled: boolean = true,
+    forceSetToEndOfPlan: ?boolean | 'complete' | 'noComplete' = false,
+    freeze: boolean = false,
+  ) {
     this.elements.stop(cancelled, forceSetToEndOfPlan, freeze);
   }
 

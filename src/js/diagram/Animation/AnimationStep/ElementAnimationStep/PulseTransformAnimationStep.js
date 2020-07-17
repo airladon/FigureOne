@@ -15,6 +15,44 @@ import type {
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 
+function spread(transforms: Array<Transform>, toNum: number) {
+  if (toNum === transforms.length) {
+    return transforms;
+  }
+  if (toNum <= 1) {
+    return [transforms[0]];
+  }
+  const spreadTransforms = [];
+  if (toNum > transforms.length) {
+    const delta = toNum - transforms.length;
+    const startNum = Math.ceil(delta / 2);
+    const endNum = Math.floor(delta / 2);
+    const startTransform = transforms[0]._dup();
+    const endTransform = transforms[transforms.length - 1]._dup();
+    for (let i = 0; i < startNum; i += 1) {
+      spreadTransforms.push(startTransform._dup());
+    }
+    for (let i = 0; i < transforms.length; i += 1) {
+      spreadTransforms.push(transforms[i]._dup());
+    }
+    for (let i = 0; i < endNum; i += 1) {
+      spreadTransforms.push(endTransform._dup());
+    }
+    return spreadTransforms;
+  }
+  const delta = transforms.length - toNum;
+  const startNum = Math.ceil((transforms.length - delta) / 2);
+  const endNum = Math.floor((transforms.length - delta) / 2);
+
+  for (let i = 0; i < startNum; i += 1) {
+    spreadTransforms.push(transforms[i]._dup());
+  }
+  for (let i = transforms.length - endNum; i < transforms.length; i += 1) {
+    spreadTransforms.push(transforms[i]._dup());
+  }
+  return spreadTransforms;
+}
+
 export type TypePulseTransformAnimationStepInputOptions = {
   start?: Array<Transform>;      // default is element transform
   target?: Array<Transform>;     // Either target or delta must be defined
@@ -116,49 +154,12 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
   // If adding an odd number, more will be added to before start.
   // If spreading to less transforms, subtract transforms from middle. If all but one
   // is being subtracted, then the start transform will be retained.
-  spread(transforms: Array<Transform>, toNum: number) {
-    if (toNum === transforms.length) {
-      return transforms;
-    }
-    if (toNum <= 1) {
-      return [transforms[0]];
-    }
-    let spreadTransforms = [];
-    if (toNum > transforms.length) {
-      const delta = toNum - transforms.length;
-      const startNum = Math.ceil(delta / 2);
-      const endNum = Math.floor(delta / 2);
-      const startTransform = transforms[0]._dup();
-      const endTransform = transforms[transforms.length - 1]._dup();
-      for (let i = 0; i < startNum; i += 1) {
-        spreadTransforms.push(startTransform._dup());
-      }
-      for (let i = 0; i < transforms.length; i += 1) {
-        spreadTransforms.push(transforms[i]._dup());
-      }
-      for (let i = 0; i < endNum; i += 1) {
-        spreadTransforms.push(endTransform._dup());
-      }
-      return spreadTransforms;
-    }
-    const delta = transforms.length - toNum;
-    const startNum = Math.ceil((transforms.length - delta) / 2);
-    const endNum = Math.floor((transforms.length - delta) / 2);
-
-    for (let i = 0; i < startNum; i += 1) {
-      spreadTransforms.push(transforms[i]._dup());
-    }
-    for (let i = transforms.length - endNum; i < transforms.length; i += 1) {
-      spreadTransforms.push(transforms[i]._dup());
-    }
-    return spreadTransforms;
-  }
 
   setStartAndTarget() {
     const { start, target } = this.transform;
     const numTransforms = Math.max(start.length, target.length);
-    this.transform.start = this.spread(this.transform.start, numTransforms);
-    this.transform.target = this.spread(this.transform.target, numTransforms);
+    this.transform.start = spread(this.transform.start, numTransforms);
+    this.transform.target = spread(this.transform.target, numTransforms);
   }
 
   calculateStartTargetDelta() {
