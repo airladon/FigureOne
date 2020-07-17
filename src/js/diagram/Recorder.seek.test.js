@@ -194,6 +194,120 @@ describe('Seek', () => {
       expect(transforms()).toEqual(['idle', 2, [], [], [1], 0]);
     });
   });
+  describe('Seek to before animation', () => {
+    beforeEach(() => {
+      expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
+      recorder.seek(0.5);
+    });
+    afterEach(() => {
+      expect(transforms()).toEqual(['playing', 0, [], [], [1], 0]);
+      diagram.mock.timeStep(0.5, frameStep);
+      expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
+      diagram.mock.timeStep(0.5, frameStep);
+      expect(transforms()).toEqual(['playing', 0.4, [], [], [1], 1.6]);
+      diagram.mock.timeStep(0.5, frameStep);
+      expect(transforms()).toEqual(['playing', 0.9, [], [], [1], 2]);
+      diagram.mock.timeStep(1, frameStep);
+      expect(transforms()).toEqual(['playing', 1.9, [1.9], [], [1.9], 1.1]);
+      diagram.mock.timeStep(1, frameStep);
+      expect(transforms()).toEqual(['playing', 2, [1.1], [], [1.1], 0.1]);
+      diagram.mock.timeStep(0.5, frameStep);
+      expect(transforms()).toEqual(['playing', 2, [], [], [1], 0]);
+      diagram.mock.timeStep(0.5, frameStep);
+      expect(transforms()).toEqual(['idle', 2, [], [], [1], 0]);
+    });
+    test('No state change', () => {
+      recorder.startPlayback();
+    });
+    describe('Position Change', () => {
+      beforeEach(() => {
+        a.setPosition(2, 2);
+        diagram.mock.timeStep(1, frameStep);
+        expect(transforms()).toEqual(['idle', 2, [], [], [1], 0]);
+      });
+      test('Instant', () => {
+        recorder.settings.play = 'instant';
+        recorder.startPlayback();
+      });
+      test('Animate', () => {
+        recorder.settings.play = 'animate';
+        recorder.startPlayback();
+        expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 1]);
+        diagram.mock.timeStep(0.5, frameStep);
+        expect(transforms()).toEqual(['preparingToPlay', 1, [], [], [1], 0.5]);
+        diagram.mock.timeStep(0.5, frameStep);
+      });
+      test('Dissolve', () => {
+        recorder.settings.play = 'dissolve';
+        recorder.startPlayback();
+        expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 1]);
+        expect(a.opacity).toBe(1);
+        expect(a.isShown).toBe(true);
+
+        diagram.mock.timeStep(0.4, frameStep);
+        expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 0.6]);
+        expect(round(a.opacity)).toBe(0.5005);
+        expect(a.isShown).toBe(true);
+
+        diagram.mock.timeStep(0.4, frameStep);
+        expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 0.2]);
+        expect(a.opacity).toBe(1);
+        expect(a.isShown).toBe(false);
+
+        diagram.mock.timeStep(0.2, frameStep);
+        expect(transforms()).toEqual(['preparingToPlay', 0, [], [], [1], 0.8]);
+        expect(a.opacity).toBe(0.001);
+        expect(a.isShown).toBe(true);
+
+        diagram.mock.timeStep(0.4, frameStep);
+        expect(transforms()).toEqual(['preparingToPlay', 0, [], [], [1], 0.4]);
+        expect(round(a.opacity)).toBe(0.5005);
+        expect(a.isShown).toBe(true);
+
+        diagram.mock.timeStep(0.4, frameStep);
+        expect(transforms()).toEqual(['playing', 0, [], [], [1], 0]);
+        expect(round(a.opacity)).toBe(1);
+        expect(a.isShown).toBe(true);
+      });
+    });
+    describe('Pulse Change', () => {
+      test('Instant', () => {
+        diagram.unpause();
+        a.pulseScaleNow(2, 2);
+        diagram.mock.timeStep(0);
+        diagram.mock.timeStep(0.5, frameStep);
+        diagram.mock.timeStep(0.5, frameStep);
+        expect(transforms()).toEqual(['idle', 0, [2], [], [2], 1]);
+        recorder.settings.play = 'instant';
+        recorder.startPlayback();
+
+        // The old drawTransform scale is not yet updated
+        expect(transforms()).toEqual(['playing', 0, [], [], [2], 0]);
+        // So let's update it so the afterEach works
+        diagram.mock.timeStep(0);
+        expect(transforms()).toEqual(['playing', 0, [], [], [1], 0]);
+      });
+    });
+    describe('Position and Pulse Change', () => {
+      test('Instant', () => {
+        diagram.unpause();
+        a.pulseScaleNow(2, 2);
+        a.setPosition(2, 2);
+        diagram.mock.timeStep(0);
+        diagram.mock.timeStep(0.5, frameStep);
+        diagram.mock.timeStep(0.5, frameStep);
+        expect(transforms()).toEqual(['idle', 2, [2], [], [2], 1]);
+        recorder.settings.play = 'instant';
+        recorder.startPlayback();
+
+        // The old drawTransform scale is not yet updated
+        expect(transforms()).toEqual(['playing', 0, [], [], [2], 0]);
+        // So let's update it so the afterEach works
+        diagram.mock.timeStep(0);
+        expect(transforms()).toEqual(['playing', 0, [], [], [1], 0]);
+      });
+    });
+  });
   describe('State change then Animate', () => {
     describe('Change Position', () => {
       test('Seek to before animation and change state', () => {
