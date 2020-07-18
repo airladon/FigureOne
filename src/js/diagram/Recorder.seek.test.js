@@ -143,8 +143,6 @@ describe('Seek', () => {
       expect(a.opacity).toBe(1);
       expect(round(a.lastDrawOpacity)).toBe(1);
     };
-
-    skipAfter = false;
   });
   test('Just playback', () => {
     // Note, the animation and pulse are starting on the frame after the desired
