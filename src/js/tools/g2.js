@@ -2771,9 +2771,10 @@ function deceleratePoint(
     };
   }
 
+  let deltaV = v0 - zeroVelocityThreshold;
   let deltaTime = deltaTimeIn;
-  if (deceleration * deltaTime > v0) {
-    deltaTime = v0 / deceleration;
+  if (deceleration * deltaTime > deltaV) {
+    deltaTime = deltaV / deceleration;
   }
 
   // If the point is starting outside the bounds, then clip the point to the
