@@ -272,8 +272,15 @@ class Point {
    * d = p.distance();
    * // d = 1.4142135623730951
    */
-  distance(): number {
-    return Math.sqrt(this.x * this.x + this.y * this.y);
+  distance(toPointIn: TypeParsablePoint | null = null): number {
+    if (toPointIn == null) {
+      return Math.sqrt(this.x * this.x + this.y * this.y);
+    }
+    const toPoint = getPoint(toPointIn);
+    if (toPoint == null) {
+      return this.distance();
+    }
+    return this.sub(toPoint).distance();
   }
 
   /**
@@ -2254,6 +2261,49 @@ class Transform {
 
   decelerate(
     velocity: Transform,
+    deceleration: Transform,
+    deltaTime: number,
+    zeroThreshold: Transform,
+  ): { v: Transform, t: Transform } {
+    let nextV = new Transform();
+    let nextT = new Transform();
+    // const z = zeroThreshold;
+    // const d = deceleration;
+    const makeMag = (transformation: Translation | Scale | Rotation) => {
+      if (transformation instanceof Rotation) {
+        return transformation.r;
+      }
+      return Math.sqrt(transformation.x ** 2 + transformation.y ** 2);
+    };
+    for (let i = 0; i < this.order.length; i += 1) {
+      const t = this.order[i];
+      const v = velocity.order[i];
+      const d = deceleration.order[i];
+      const z = zeroThreshold.order[i];
+      // const z = zeroThreshold.order[i];
+      if (t instanceof Translation && v instanceof Translation) {
+        const { mag, angle } = v.toPolar();
+        const next = decelerate(0, mag, makeMag(d), deltaTime, makeMag(z));
+        nextV = nextV.translate(next.v * Math.cos(angle), next.v * Math.sin(angle));
+        nextT = nextT.translate(t.x + next.p * Math.cos(angle), t.y + next.p * Math.sin(angle));
+      } else if (t instanceof Rotation && v instanceof Rotation) {
+        const r = decelerate(t.r, v.r, makeMag(d), deltaTime, makeMag(z));
+        nextV = nextV.rotate(r.v);
+        nextT = nextT.rotate(r.p);
+      } else if (t instanceof Scale && v instanceof Scale) {
+        const { mag, angle } = v.toPolar();
+        const next = decelerate(0, mag, makeMag(d), deltaTime, makeMag(z));
+        nextV = nextV.scale(next.v * Math.cos(angle), next.v * Math.sin(angle));
+        nextT = nextT.scale(t.x + next.p * Math.cos(angle), t.y + next.p * Math.sin(angle));
+      } else {
+        return { v: new Transform(), t: new Transform() };
+      }
+    }
+    return { v: nextV, t: nextT };
+  }
+
+  decelerateLegacy(
+    velocity: Transform,
     deceleration: TransformLimit,
     deltaTime: number,
     zeroThreshold: TransformLimit,
@@ -2701,6 +2751,175 @@ function quadBezierPoints(p0: Point, p1: Point, p2: Point, sides: number) {
   return points;
 }
 
+function deceleratePoint(
+  positionIn: Point,
+  velocity: Point,
+  deceleration: number,
+  deltaTimeIn: number,
+  bounds: ?(Rect | Line) = null,
+  bounceLossIn: number = 0,
+  zeroVelocityThreshold: number = 0,
+  precision: number = 8,
+) {
+  const { mag, angle } = velocity.toPolar();
+  const v0 = mag;
+  // debugger;
+  if (v0 <= zeroVelocityThreshold) {
+    return {
+      velocity: new Point(0, 0),
+      positionIn,
+    };
+  }
+
+  let deltaTime = deltaTimeIn;
+  if (deceleration * deltaTime > v0) {
+    deltaTime = v0 / deceleration;
+  }
+
+  // If the point is starting outside the bounds, then clip the point to the
+  // bounds
+  const position = positionIn._dup();
+  if (bounds != null) {
+    if (bounds instanceof Line && !position.shaddowIsOnLine(bounds, precision)) {
+      const p1Distance = position.distance(bounds.p1);
+      const p2Distance = position.distance(bounds.p2);
+      if (p1Distance < p2Distance) {
+        position.x = bounds.p1.x;
+        position.y = bounds.p1.y;
+      } else {
+        position.x = bounds.p2.x;
+        position.y = bounds.p2.y;
+      }
+    }
+    if (bounds instanceof Rect && !bounds.isPointInside(position)) {
+      if (position.x < bounds.left) {
+        position.x = bounds.left;
+      } else if (position.x > bounds.right) {
+        position.x = bounds.right;
+      }
+      if (position.y < bounds.bottom) {
+        position.y = bounds.bottom;
+      } else if (position.y > bounds.top) {
+        position.y = bounds.top;
+      }
+    }
+  }
+
+  const distanceTravelled = v0 * deltaTime - 0.5 * deceleration * (deltaTime ** 2);
+  const newPosition = polarToRect(distanceTravelled, angle).add(position);
+  if (
+    bounds == null
+    || (bounds instanceof Rect && bounds.isPointInside(newPosition))
+    || (bounds instanceof Line && position.shaddowIsOnLine(bounds, precision))
+  ) {
+    let v1 = v0 - deceleration * deltaTime;
+    if (v1 <= zeroVelocityThreshold) {
+      v1 = 0;
+    }
+    return {
+      position: newPosition,
+      velocity: polarToRect(v1, angle),
+    };
+  }
+
+  // If we have got here, the newPosition is outside the boundary
+
+  // Calculate the intersect point with the boundary i
+  const bounceScaler = 1 - bounceLossIn;
+  const trajectory = new Line(position, 1, angle);
+  let hBound;
+  let vBound;
+  const ang = clipAngle(angle, '0to360');
+  let distanceToBound = distanceTravelled;
+  let intersectPoint;
+  let xMirror = 1;
+  let yMirror = 1;
+  if (bounds instanceof Rect) {
+    if (ang > 0 && ang < Math.PI) {
+      hBound = new Line([bounds.left, bounds.top], [bounds.right, bounds.top]);
+    } else if (ang > Math.PI) {
+      hBound = new Line([bounds.left, bounds.bottom], [bounds.right, bounds.bottom]);
+    }
+    if (ang > Math.PI / 2 && ang < Math.PI / 2 * 3) {
+      vBound = new Line([bounds.left, bounds.bottom], [bounds.left, bounds.top]);
+    } else if ((ang >= 0 && ang < Math.PI / 2) || ang > Math.PI / 2 * 3) {
+      vBound = new Line([bounds.right, bounds.bottom], [bounds.right, bounds.top]);
+    }
+    if (vBound != null) {
+      const result = trajectory.intersectsWith(vBound);
+      if (result.intersect != null) {
+        intersectPoint = result.intersect;
+        distanceToBound = distance(position, intersectPoint);
+        xMirror = -1;
+      }
+    }
+    if (hBound != null) {
+      const result = trajectory.intersectsWith(hBound);
+      if (result.intersect != null) {
+        const distanceToBoundH = distance(position, result.intersect);
+        if (intersectPoint == null) {
+          intersectPoint = result.intersect;
+          distanceToBound = distanceToBoundH;
+          xMirror = 1;
+          yMirror = -1;
+        } else if (distanceToBoundH < distanceToBound) {
+          intersectPoint = result.intersect;
+          distanceToBound = distanceToBoundH;
+          xMirror = 1;
+          yMirror = -1;
+        } else if (roundNum(distanceToBoundH, precision) === roundNum(distanceToBound, precision)) {
+          xMirror = -1;
+          yMirror = -1;
+        }
+      }
+    }
+  }
+  if (bounds instanceof Line) {
+    xMirror = -1;
+    yMirror = -1;
+    const distanceToP1 = distance(newPosition, bounds.p1);
+    const distanceToP2 = distance(newPosition, bounds.p2);
+    let boundPoint;
+    if (distanceToP1 > distanceToP2) {
+      boundPoint = bounds.p2._dup();
+    } else {
+      boundPoint = bounds.p1._dup();
+    }
+    // calculate distance to bound
+    const boundPerpendicular = new Line(boundPoint, 1, bounds.ang + Math.PI / 2);
+    intersectPoint = boundPerpendicular.intersectsWith(trajectory).intersect;
+
+    if (intersectPoint != null) {
+      distanceToBound = distance(position, intersectPoint);
+    }
+
+    // distanceToBound = distance(position.getShaddowOnLine(bounds), intersectPoint);
+  }
+  if (intersectPoint == null) {
+    return {
+      velocity: new Point(0, 0),
+      position: newPosition,
+    };
+  }
+
+  const acc = -v0 / Math.abs(v0) * deceleration;
+  const s = distanceToBound;
+  const b = v0;
+  const a = 0.5 * acc;
+  const c = -s;
+  const t = (-b + Math.sqrt(b ** 2 - 4 * a * c)) / (2 * a);
+  const velocityAtIntersect = v0 + acc * t; // (s - 0.5 * a * (t ** 2)) / t;
+  const bounceVelocity = velocityAtIntersect * bounceScaler;
+  const rectBounceVelocity = new Point(
+    bounceVelocity * Math.cos(angle) * xMirror,
+    bounceVelocity * Math.sin(angle) * yMirror,
+  );
+  return deceleratePoint(
+    intersectPoint, rectBounceVelocity, deceleration, deltaTime - t, bounds,
+    bounceLossIn, zeroVelocityThreshold, precision,
+  );
+}
+
 function calculateStop(
   position: Point,
   velocity: Point,
@@ -2723,7 +2942,7 @@ function calculateStop(
       outOfBounds = true;
     }
     if (bounds instanceof Rect && !bounds.isPointInside(position)) {
-      outOfBounds = true
+      outOfBounds = true;
     }
     if (outOfBounds) {
       return {
@@ -2732,7 +2951,7 @@ function calculateStop(
       };
     }
   }
-  let { mag, angle } = velocity.toPolar();
+  const { mag, angle } = velocity.toPolar();
   if (mag <= zeroVelocityThreshold) {
     return {
       duration: 0,
@@ -2745,7 +2964,7 @@ function calculateStop(
   const timeToZeroV = Math.abs(deltaV) / deceleration;
   const distanceTravelled = v0 * timeToZeroV - 0.5 * deceleration * (timeToZeroV ** 2);
   const newPosition = polarToRect(distanceTravelled, angle).add(position);
-  
+
   if (bounds == null) {
     return {
       duration: timeToZeroV,
@@ -2881,6 +3100,221 @@ function calculateStopAngle(
   );
 }
 
+type TypeSimpleDefinition = {
+  rotation?: number;
+  position?: number;
+  translation?: number;
+  transform?: Transform;    // mag of (x, y) is used
+  scale?: number;
+}
+
+type TypeVelocity = TypeSimpleDefinition; // where for transform mag of (x, y) is used as velocity
+
+type TypeDeceleration = TypeSimpleDefinition; // where for transform mag of (x, y) is used as velocity
+
+
+// type TypeValueDefinition = {
+//   rotation?: number;
+//   position?: TypeParsablePoint;
+//   translation?: TypeParsablePoint;
+//   transform?: TypeParsableTransform;
+//   scale?: TypeParsablePoint | number;
+//   color?: Array<number>;
+//   opacity?: number;
+// }
+
+class Limit {
+  max: TypeSimpleDefinition;
+  min: TypeSimpleDefinition;
+  boundary: Rect;
+  line: Line;
+};
+
+function simpleDefinitionToTransform(
+  transform: Transform,
+  simpleDefinition: TypeSimpleDefinition | TypeParsableTransform = {},
+  defaultSimpleDefinition: {
+    rotation: number,
+    position: TypeParsablePoint,
+    scale: number,
+  } = {
+    rotation: 0,
+    position: [0, 0],
+    scale: 1,
+  },
+) {
+  const parsedTransform = parseTransform(simpleDefinition, null);
+  if (parsedTransform != null) {
+    return parsedTransform;
+  }
+
+  if (simpleDefinition.transform != null) {
+    return simpleDefinition.transform._dup();
+  }
+
+  const values = joinObjects({}, defaultSimpleDefinition, simpleDefinition);
+
+  const newTransform = transform._dup();
+  for (let i = 0; i < transform.order.length; i += 1) {
+    const transformation = transform.order[i];
+    if (transformation instanceof Translation) {
+      transform.order[i] = new Translation(getPosition(value.position));
+      if (value.translation != null) {
+        transform.order[i] = new Translation(getPosition(value.translation));
+      }
+    } else if (transformation instanceof Scale) {
+
+    } else if (transformation instanceof Rotation) {
+      
+    }
+  }
+  return newTransform;
+}
+
+class MovingFreelyTransform {
+  // transform: Transform;
+  velocity: Transform;
+  deceleration: Transform;
+  zeroVelocityThreshold: Transform;
+  bounds: {
+    max?: Transform;
+    min?: Transform;
+    line?: Line;
+    bounce?: boolean;
+    bounceLoss?: Transform;
+  };
+
+  constructor(optionsIn: {
+    transform: TypeParsableTransform,
+    velocity?: TypeParsableTransform | TypeSimpleDefinition,
+    deceleration?: TypeParsableTransform | TypeSimpleDefinition,
+    zeroVelocityThreshold?: TypeParsableTransform | TypeSimpleDefinition,
+    bounds?: {
+      max?: TypeParsableTransform | TypeSimpleDefinition,
+      min?: TypeParsableTransform | TypeSimpleDefinition,
+      line?: TypeParsableLine,
+      bounce?: boolean,
+      bounceLoss?: TypeParsableTransform | TypeSimpleDefinition,
+    }
+  }) {
+    const transform = getTransform(optionsIn.transform);
+    this.velocity = simpleDefinitionToTransform(
+      transform,
+      optionsIn.velocity,
+      { rotation: 0, position: [0, 0], scale: 0 },
+    );
+    this.deceleration = simpleDefinitionToTransform(
+      transform,
+      optionsIn.deceleration,
+      { rotation: 1, position: [1, 0], scale: 1 },
+    );
+    this.zeroVelocityThreshold = simpleDefinitionToTransform(
+      transform,
+      optionsIn.zeroVelocityThreshold,
+      { rotation: 0.0001, position: [0.0001, 0.0001], scale: 0.0001 },
+    );
+    const { bounds } = optionsIn;
+    if (bounds != null) {
+      this.bounds = {};
+      if (bounds.max != null) {
+        this.bounds.max = simpleDefinitionToTransform(
+          transform,
+          bounds.max,
+          { position: [1000, 1000], rotation: 1000, scale: 1000 },
+        );
+      }
+      if (bounds.min != null) {
+        this.bounds.min = simpleDefinitionToTransform(
+          transform,
+          bounds.max,
+          { position: [-1000, -1000], rotation: -1000, scale: -1000 },
+        );
+      }
+      if (bounds.line != null) {
+        this.bounds.line = getLine(bounds.line);
+      }
+      if (bounds.bounce != null) {
+        this.bounds.bounce = bounds.bounce;
+      } else {
+        this.bounds.bounds = false;
+      }
+      if (bounds.bounceLoss != null) {
+        this.bounds.bounceLoss = bounds.bounceLoss;
+      } else {
+        this.bounds.bounceLoss = 0;
+      }
+    }
+  }
+
+  decelerate(transform: Transform, deltaTime: number) {
+    const next = transform.decelerate(
+      this.velocity,
+      this.deceleration,
+      deltaTime,
+      this.zeroVelocityThreshold,
+    );
+    if (deltaTime > 0) {
+      for (let i = 0; i < next.t.order.length; i += 1) {
+        const t = next.t.order[i];
+        const min = this.move.minTransform.order[i];
+        const max = this.move.maxTransform.order[i];
+        const v = next.v.order[i];
+        if ((t instanceof Translation
+            && v instanceof Translation
+            && max instanceof Translation
+            && min instanceof Translation)
+          || (t instanceof Scale
+            && v instanceof Scale
+            && max instanceof Scale
+            && min instanceof Scale)
+        ) {
+          let onLine = true;
+          if (this.move.limitLine != null) {
+            onLine = t.shaddowIsOnLine(this.move.limitLine, 4);
+          }
+          if (min.x >= t.x || max.x <= t.x || !onLine) {
+            if (this.move.bounce) {
+              v.x = -v.x * 0.5;
+            } else {
+              v.x = 0;
+            }
+          }
+          if (min.y >= t.y || max.y <= t.y || !onLine) {
+            if (this.move.bounce) {
+              v.y = -v.y * 0.5;
+            } else {
+              v.y = 0;
+            }
+          }
+          next.v.order[i] = v;
+        }
+        if (t instanceof Rotation
+            && v instanceof Rotation
+            && max instanceof Rotation
+            && min instanceof Rotation) {
+          if (min.r >= t.r || max.r <= t.r) {
+            if (this.move.bounce) {
+              v.r = -v.r * 0.5;
+            } else {
+              v.r = 0;
+            }
+          }
+          next.v.order[i] = v;
+        }
+      }
+      next.v.calcMatrix();
+    }
+    return {
+      velocity: next.v,
+      transform: next.t,
+    };
+  }
+
+  calculateEnd() {}
+
+  isStopped() {}
+}
+
 export {
   point,
   Point,
@@ -2925,5 +3359,6 @@ export {
   getLine,
   calculateStop,
   calculateStopAngle,
+  deceleratePoint,
   // setState,
 };

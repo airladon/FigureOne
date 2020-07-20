@@ -1574,7 +1574,7 @@ class Diagram {
     elements.forEach((element) => {
       if (element.state.pause === 'preparingToPause') {
         preparingToPauseCounter += 1;
-        element.subscriptions.subscribe('paused', checkAllPaused, 1)
+        element.subscriptions.subscribe('paused', checkAllPaused, 1);
       }
     });
     this.pauseTime = this.globalAnimation.now() / 1000;
