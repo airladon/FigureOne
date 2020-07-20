@@ -2751,6 +2751,158 @@ function quadBezierPoints(p0: Point, p1: Point, p2: Point, sides: number) {
   return points;
 }
 
+function clipPointToBounds(
+  p: Point,
+  bounds: Rect | Line | null,
+  precision: number = 8,
+) {
+  if (bounds == null) {
+    return point;
+  }
+  let { x, y } = p;
+  if (bounds instanceof Line && !p.shaddowIsOnLine(bounds, precision)) {
+    const p1Distance = p.distance(bounds.p1);
+    const p2Distance = p.distance(bounds.p2);
+    if (p1Distance < p2Distance) {
+      ({ x, y } = bounds.p1);
+    } else {
+      ({ x, y } = bounds.p2);
+    }
+    return new Point(x, y);
+  }
+  if (bounds instanceof Rect && !bounds.isPointInside(p)) {
+    if (p.x < bounds.left) {
+      x = bounds.left;
+    } else if (p.x > bounds.right) {
+      x = bounds.right;
+    }
+    if (p.y < bounds.bottom) {
+      y = bounds.bottom;
+    } else if (p.y > bounds.top) {
+      y = bounds.top;
+    }
+  }
+  return new Point(x, y);
+}
+
+function intersectWithBounds(
+  p: Point,
+  ang: number,
+  bounds: Rect | Line,
+  precision: number = 8,
+) {
+  const trajectory = new Line(p, 1, ang);
+  let hBound;
+  let vBound;
+  let xMirror = 1;
+  let yMirror = 1;
+  let intersectPoint;
+  let distanceToBound = 0;
+  if (bounds instanceof Rect) {
+    if (ang > 0 && ang < Math.PI) {
+      hBound = new Line([bounds.left, bounds.top], [bounds.right, bounds.top]);
+    } else if (ang > Math.PI) {
+      hBound = new Line([bounds.left, bounds.bottom], [bounds.right, bounds.bottom]);
+    }
+    if (ang > Math.PI / 2 && ang < Math.PI / 2 * 3) {
+      vBound = new Line([bounds.left, bounds.bottom], [bounds.left, bounds.top]);
+    } else if ((ang >= 0 && ang < Math.PI / 2) || ang > Math.PI / 2 * 3) {
+      vBound = new Line([bounds.right, bounds.bottom], [bounds.right, bounds.top]);
+    }
+    if (vBound != null) {
+      const result = trajectory.intersectsWith(vBound);
+      if (result.intersect != null) {
+        intersectPoint = result.intersect;
+        distanceToBound = distance(p, intersectPoint);
+        xMirror = -1;
+      }
+    }
+    if (hBound != null) {
+      const result = trajectory.intersectsWith(hBound);
+      if (result.intersect != null) {
+        const distanceToBoundH = distance(p, result.intersect);
+        if (intersectPoint == null) {
+          intersectPoint = result.intersect;
+          distanceToBound = distanceToBoundH;
+          xMirror = 1;
+          yMirror = -1;
+        } else if (distanceToBoundH < distanceToBound) {
+          intersectPoint = result.intersect;
+          distanceToBound = distanceToBoundH;
+          xMirror = 1;
+          yMirror = -1;
+        } else if (roundNum(distanceToBoundH, precision) === roundNum(distanceToBound, precision)) {
+          xMirror = -1;
+          yMirror = -1;
+        }
+      }
+    }
+  }
+  if (bounds instanceof Line) {
+    xMirror = -1;
+    yMirror = -1;
+    const distanceToP1 = distance(p, bounds.p1);
+    const distanceToP2 = distance(p, bounds.p2);
+    let boundPoint;
+    if (distanceToP1 > distanceToP2) {
+      intersectPoint = bounds.p2._dup();
+    } else {
+      intersectPoint = bounds.p1._dup();
+    }
+    if (intersectPoint != null) {
+      distanceToBound = distance(p, intersectPoint);
+    }
+  }
+  if (intersectPoint == null) {
+    return {
+      intersect: p,
+      distance: 0,
+    };
+  }
+  return {
+    intersect: intersctPoint,
+    distance: distanceToBound,
+  };
+}
+
+class Bounds {
+  boundary: Rect | Line | {
+    isInBounds: (Point) => boolean,
+    intersect: (Point, angle) => Point,
+  };
+
+  constructor(boundary: Rect | Line | {
+    isInBounds: (Point) => boolean,
+    intersect: (Point, angle) => Point,
+  }) {
+    this.boundary = boundary;
+  }
+}
+
+class Velocity {
+  mag: number;
+  angle: number;
+
+  constructor(mag: number, angle: number) {
+    this.mag = mag;
+    this.angle = angle;
+  }
+
+  decelerate(
+    initialPosition: Point | number,
+    deceleration: number,
+    deltaTime: number,
+    zeroPointThreshold: number = 0,
+    bounds: Bounds | null = null,
+  ): { position: Point | number } {}
+
+  atZero(
+    deceleration: number,
+    zeroPointThreshold: number = 0,
+  ): { duration: number, displacement: number } {}
+}
+
+// getInterceptAndMirror()
 function deceleratePoint(
   positionIn: Point,
   velocity: Point,

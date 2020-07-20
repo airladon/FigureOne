@@ -3,7 +3,7 @@ import {
 } from './g2';
 import { round } from './math';
 
-describe.only('deceleratePoint', () => {
+describe('deceleratePoint', () => {
   describe('No Bounds', () => {
     test('Along x from origin, 1s', () => {
       const p = new Point(0, 0);
