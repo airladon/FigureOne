@@ -73,12 +73,25 @@ describe.only('deceleratePoint', () => {
       const deltaTime = 1;
       const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime);
       expect(round(velocity.toPolar().mag)).toBe(4);
-      // s = vt + 0.5 * at^2
-      // s = 10 * 5 - 0.5 * 1 * 5^2 = 25 - 12.5 = 12.5
       const xy = round(4.5 * Math.cos(Math.PI / 4), 3);
       expect(position.round(3)).toEqual(new Point(xy + 1, xy + 1));
     });
-    test('Along x from origin with zero velocity threshold', () => {
+    test('Along x from origin with zero velocity threshold used', () => {
+      const p = new Point(0, 0);
+      const v = new Point(5, 0);
+      const deceleration = 1;
+      const zeroVelocityThreshold = 0.1;
+      const deltaTime = 10;
+      const { velocity, position } = deceleratePoint(
+        p, v, deceleration, deltaTime, null, 0, zeroVelocityThreshold,
+      );
+      expect(round(velocity.toPolar().mag)).toBe(0);
+      // maxDeltaTime = dV / q = 4.9
+      // s = vt + 0.5 * at^2
+      // s = 5 * 4.9 - 0.5 * 1 * 4.9^2 = 25 - 12.5 = 12.5
+      expect(position.round()).toEqual(new Point(12.495, 0));
+    });
+    test('Along x from origin with zero velocity threshold unused', () => {
       const p = new Point(0, 0);
       const v = new Point(5, 0);
       const deceleration = 1;
@@ -91,6 +104,43 @@ describe.only('deceleratePoint', () => {
       // s = v*t + 0.5 * at^2 = 4.9
       // s = 5 * 4.9 - 0.5 * 1 * 4.9^2 = 12.495
       expect(position.round()).toEqual(new Point(4.5, 0));
+    });
+    describe('Rect Bounds', () => {
+      test('X single bounce, no loss', () => {
+        const p = new Point(0, 0);
+        const v = new Point(5, 0);
+        const deceleration = 1;
+        const deltaTime = 2;
+        const bounds = new Rect(-4.5, -1, 9, 2);
+        const bounceLoss = 0;
+        const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime, bounds, bounceLoss);
+        // s = v0*t + 0.5*acc*t^2
+        //   = 5 * 2 + 0.5 * 1 * 2 * 2 = 10 - 2 = 8
+        // Total displacement = 8
+        // For v0 = 5, acc = -1, after 1s, the displaycement will be:
+        // s = v0*t + 0.5*acc*t^2 = 5 - 0.5 = 4.5
+        // Therefore end point will be 4.5 - (8 - 4.5) = 1
+        expect(round(velocity.toPolar().mag)).toBe(3);
+        expect(position.round()).toEqual(new Point(1, 0));
+      });
+      test('X single bounce, 0.5 loss', () => {
+        const p = new Point(0, 0);
+        const v = new Point(5, 0);
+        const deceleration = 1;
+        const deltaTime = 2;
+        const bounds = new Rect(-4.5, -1, 9, 2);
+        const bounceLoss = 0.5;
+        const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime, bounds, bounceLoss);
+        // After 1s, s = 4.5 and v = 4.
+        // Boundary is at 4.5
+        // So at boundary, new v will be 4 * 0.5 = 2
+        // Over the next second, s will be:
+        //    = 2 * 1 - 0.5 * 1 * 1 * 1 = 1.5
+        //    and v will reduce from 2 to 1
+        // Therefore final position will be 4.5 - 1.5 = 3
+        expect(round(velocity.toPolar().mag)).toBe(1);
+        expect(position.round()).toEqual(new Point(3, 0));
+      });
     });
   });
 });
