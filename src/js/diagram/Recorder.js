@@ -28,6 +28,48 @@ type TypeStateDiffs = Array<TypeStateDiff>;
 // freeze: cancel all animations, pulses and movement where it is
 // complete: cancel all animations, pulses and movement at their complete position
 
+// diagram Stop
+// 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete'
+//   freeze: pulses, animation and movement stops where it is
+//   cancel: animation cancels per the animations settings (complete or freeze), movement stops where it is, pulse resets
+//   forceCancel: 
+//   complete: animation and movement stop at end, pulses reset
+//   animateToComplete: animations, pulsing and movement continue till finished
+//   dissolveToComplete: freeze, dissolveOut, dissolveIn in complete state
+
+// setState
+// 'instant' | 'animate' | 'dissolve'
+
+// TypeStopOptions:
+//   'freeze' | 'cancel' | 'complete' | 'animate' | 'dissolve' | {
+//     animation: '
+//   }
+// diagram.stop()
+// diagram.stop('freeze');
+// diagram.stop('cancel');
+// diagram.stop('complete');
+// diagram.stop('animate');
+// diagram.stop('dissolve');
+// diagram.stop({
+//   animation: 'freeze' | 'cancel' | 'complete' | 'animate' | 'dissolve'
+//   pulse: 'freeze' | 'cancel' | 'complete' | 'animate' | 'dissolve'
+//   movingFreely: 'freeze' | 'cancel' | 'complete' | 'animate' | 'dissolve'
+//   
+// })
+// diagram.stop('freeze');
+// diagram.stop({
+//   complete: 'freeze' | 'instant' | 'animate' | 'dissolve' | {
+//     animation: 'freeze' | 'instant' | 'animate' | 'dissolve',
+//     pulse: 'freeze' | 'instant' | 'animate' | 'dissolve',
+//   },
+//   message: string | number | boolean,
+// });
+// element.stop({
+//   complete: 'freeze' | 'instant' | 'animate' | 'dissolve'
+// })
+
+// pause | stop
+// onStop: freeze | instantComplete | animateComplete | dissolveComplete
 // freeze
 // complete: instant | animate | dissolve | animateWithMaxDuration
 // pause

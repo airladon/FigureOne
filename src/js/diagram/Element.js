@@ -1751,6 +1751,49 @@ class DiagramElement {
   //   return Math.min(time, options.minTime);
   // }
 
+  getMovingFreelyEnd() {
+    const noChange = { duration: 0, transform: this.transform._dup() };
+    if (!this.state.isMovingFreely) {
+      return noChange;
+    }
+    const { velocity } = this.state.movement;
+    const { transform } = this;
+    const { deceleration, zeroVelocityThreshold } = this.move.freely;
+
+    if (this.state.movement.velocity.isZero(0.0000001)) {
+      return noChange;
+    }
+    if (velocity.order.length !== transform.order.length) {
+      return noChange;
+    }
+    let duration = 0;
+    for (let i = 0; i < velocity.order.length; i += 1) {
+      const v = velocity.order[i];
+      const t = transform.order[i];
+      const min = this.move.minTransform.order[i];
+      const max = this.move.maxTransform.order[i];
+      const { translation, rotation, scale } = deceleration;
+      let stepDuration = 0;
+      if (t instanceof Rotation) {
+        stepDuration = calculateStopAngle(
+          t.r, v.r, rotation, [min.r, max.r], 0.5,
+        ).duration;
+      } else if (t instanceof Translation) {
+        stepDuration = calculateStop(
+          t, v, deceleration.position, translation, [min, max], 0.5,
+        ).duration;
+      } else {
+        stepDuration = calculateStop(
+          t, v, scale, [min, max], 0.5,
+        ).duration;
+      }
+      if (stepDuration > duration) {
+        duration = stepDuration;
+      }
+    }
+    return duration;
+  }
+
   getRemainingMovingFreelyDuration() {
     if (!this.state.isMovingFreely) {
       return 0;
@@ -1759,6 +1802,54 @@ class DiagramElement {
     const { transform } = this;
     const { deceleration, zeroVelocityThreshold } = this.move.freely;
     let isZero = false;
+    // for (let i = 0; i < velocity.order.length; i += 1) {
+    //   const step = velocity.order[i];
+    //   if (step instanceof Translation) {
+    //     if
+    //   }
+    // }
+    if (this.state.movement.velocity.isZero(0.0000001)) {
+      return 0;
+    }
+    if (velocity.order.length !== transform.order.length) {
+      return 0;
+    }
+    let duration = 0;
+    for (let i = 0; i < velocity.order.length; i += 1) {
+      const v = velocity.order[i];
+      const t = transform.order[i];
+      const min = this.move.minTransform.order[i];
+      const max = this.move.maxTransform.order[i];
+      const { translation, rotation, scale } = deceleration;
+      let stepDuration = 0;
+      if (t instanceof Rotation) {
+        stepDuration = calculateStopAngle(
+          t.r, v.r, rotation, [min.r, max.r], 0.5,
+        ).duration;
+      } else if (t instanceof Translation) {
+        stepDuration = calculateStop(
+          t, v, translation, [min, max], 0.5,
+        ).duration;
+      } else {
+        stepDuration = calculateStop(
+          t, v, scale, [min, max], 0.5,
+        ).duration;
+      }
+      if (stepDuration > duration) {
+        duration = stepDuration;
+      }
+    }
+    return duration;
+  }
+
+  getMovingFreelyEndTransform() {
+    if (!this.state.isMovingFreely) {
+      return 0;
+    }
+    const { velocity } = this.state.movement;
+    const { transform } = this;
+    const { deceleration, zeroVelocityThreshold } = this.move.freely;
+    // let isZero = false;
     // for (let i = 0; i < velocity.order.length; i += 1) {
     //   const step = velocity.order[i];
     //   if (step instanceof Translation) {
@@ -2004,7 +2095,28 @@ class DiagramElement {
     }
   }
 
-  stopMovingFreely(result: boolean = true): void {
+  
+  stopMovingFreely(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel'): void {
+    
+    let wasMovingFreely = false;
+    if (this.state.isMovingFreely === true) {
+      wasMovingFreely = true;
+    }
+    this.state.isMovingFreely = false;
+    this.state.movement.previousTime = null;
+    if (this.move.freely.callback) {
+      this.fnMap.exec(this.move.freely.callback, result);
+      this.move.freely.callback = null;
+    }
+    if (wasMovingFreely) {
+      // console.log('stop moving freely callback', this.animationFinishedCallback)
+      this.fnMap.exec(this.animationFinishedCallback);
+      // this.subscriptions.trigger('animationFinished', ['movingFreely']);
+      this.animationFinished('movingFreely');
+    }
+  }
+
+  stopMovingFreelyLegacy(result: boolean = true): void {
     // console.trace()
     // console.log('was moving freely', this.name, this.state.isMovingFreely)
     let wasMovingFreely = false;
@@ -2309,7 +2421,31 @@ class DiagramElement {
     }
   }
 
-  stop(
+  stop(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel') {
+    this.stopAnimating(how);
+    // if (forceSetToEndOfPlan === true || forceSetToEndOfPlan === 'complete') {
+    //   this.animations.cancelAll('complete');
+    // } else if (forceSetToEndOfPlan === false || forceSetToEndOfPlan === 'noComplete') {
+    //   this.animations.cancelAll('noComplete');
+    // } else {
+    //   this.animations.cancelAll(null);
+    // }
+    this.stopMovingFreely(cancelled);
+    this.stopBeingMoved();
+    this.stopPulsing(cancelled, forceSetToEndOfPlan, freeze);
+  }
+
+  stopAnimating(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel') {
+    if (how === 'freeze') {
+      this.animations.cancelAll('noComplete');
+    } else if (how === 'cancel') {
+      this.animations.cancelAll(null);
+    } else if (how === 'complete') {
+      this.animations.cancelAll('complete');
+    }
+  }
+
+  stopLegacy(
     cancelled?: boolean = true,
     forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false,
     freeze: boolean = false,

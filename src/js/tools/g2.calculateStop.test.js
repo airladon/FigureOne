@@ -1,8 +1,99 @@
 import {
-  Point, calculateStop, Rect, Line,
+  Point, calculateStop, Rect, Line, deceleratePoint,
 } from './g2';
 import { round } from './math';
 
+describe.only('deceleratePoint', () => {
+  describe('No Bounds', () => {
+    test('Along x from origin, 1s', () => {
+      const p = new Point(0, 0);
+      const v = new Point(5, 0);
+      const deceleration = 1;
+      const deltaTime = 1;
+      const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime);
+      // v1 = v0 - a * t = 5 - 1 * 1 = 4
+      expect(round(velocity.toPolar().mag)).toBe(4);
+      // s = vt + 0.5 * at^2
+      // s = 5 * 1 - 0.5 * 1 * 1^2 = 5 - 0.5 = 4.5
+      expect(position.round()).toEqual(new Point(4.5, 0));
+    });
+    test('Along x from point, 1s', () => {
+      const p = new Point(1, 0);
+      const v = new Point(5, 0);
+      const deceleration = 1;
+      const deltaTime = 1;
+      const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime);
+      // v1 = v0 - a * t = 5 - 1 * 1 = 4
+      expect(round(velocity.toPolar().mag)).toBe(4);
+      // s = vt + 0.5 * at^2
+      // s = 5 * 1 - 0.5 * 1 * 1^2 = 5 - 0.5 = 4.5
+      expect(position.round()).toEqual(new Point(5.5, 0));
+    });
+    test('Along y from point, 1s', () => {
+      const p = new Point(0, 1);
+      const v = new Point(0, 5);
+      const deceleration = 1;
+      const deltaTime = 1;
+      const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime);
+      // v1 = v0 - a * t = 5 - 1 * 1 = 4
+      expect(round(velocity.toPolar().mag)).toBe(4);
+      // s = vt + 0.5 * at^2
+      // s = 5 * 1 - 0.5 * 1 * 1^2 = 5 - 0.5 = 4.5
+      expect(position.round()).toEqual(new Point(0, 5.5));
+    });
+    test('Along x from origin, till Stop', () => {
+      const p = new Point(0, 0);
+      const v = new Point(5, 0);
+      const deceleration = 1;
+      const deltaTime = 5;
+      const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime);
+      // v1 = v0 - a * t = 5 - 1 * 5 = 0
+      expect(round(velocity.toPolar().mag)).toBe(0);
+      // s = vt + 0.5 * at^2
+      // s = 5 * 5 - 0.5 * 1 * 5^2 = 25 - 12.5 = 12.5
+      expect(position.round()).toEqual(new Point(12.5, 0));
+    });
+    test('Along x from origin, till after Stop', () => {
+      const p = new Point(0, 0);
+      const v = new Point(5, 0);
+      const deceleration = 1;
+      const deltaTime = 10;
+      const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime);
+      // Max deltaTime = v0 / a = 5 / 1 = 5
+      // v1 = v0 - a * t = 5 - 1 * 5 = 0
+      expect(round(velocity.toPolar().mag)).toBe(0);
+      // s = vt + 0.5 * at^2
+      // s = 5 * 5 - 0.5 * 1 * 5^2 = 25 - 12.5 = 12.5
+      expect(position.round()).toEqual(new Point(12.5, 0));
+    });
+    test('Along 45º, 1s', () => {
+      const p = new Point(1, 1);
+      const v = new Point(5 * 0.707107, 5 * 0.707107);
+      const deceleration = 1;
+      const deltaTime = 1;
+      const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime);
+      expect(round(velocity.toPolar().mag)).toBe(4);
+      // s = vt + 0.5 * at^2
+      // s = 10 * 5 - 0.5 * 1 * 5^2 = 25 - 12.5 = 12.5
+      const xy = round(4.5 * Math.cos(Math.PI / 4), 3);
+      expect(position.round(3)).toEqual(new Point(xy + 1, xy + 1));
+    });
+    test('Along x from origin with zero velocity threshold', () => {
+      const p = new Point(0, 0);
+      const v = new Point(5, 0);
+      const deceleration = 1;
+      const zeroVelocityThreshold = 0.1;
+      const deltaTime = 1;
+      const { velocity, position } = deceleratePoint(
+        p, v, deceleration, deltaTime, null, 0, zeroVelocityThreshold,
+      );
+      expect(round(velocity.toPolar().mag)).toBe(4);
+      // s = v*t + 0.5 * at^2 = 4.9
+      // s = 5 * 4.9 - 0.5 * 1 * 4.9^2 = 12.495
+      expect(position.round()).toEqual(new Point(4.5, 0));
+    });
+  });
+});
 describe('calculateStop', () => {
   describe('No Bounds', () => {
     test('Along x from origin', () => {
@@ -53,7 +144,6 @@ describe('calculateStop', () => {
       expect(round(duration, 3)).toBe(5);
       // s = vt + 0.5 * at^2
       // s = 10 * 5 - 0.5 * 1 * 5^2 = 25 - 12.5 = 12.5
-      const xy = round(12.5 * Math.cos(Math.PI / 4), 3)
       expect(position.round(3)).toEqual(new Point(12.5, 0)); // 12.5 rad
     });
     test('Along x from origin with zero velocity threshold', () => {
