@@ -29,6 +29,11 @@ describe('Seek', () => {
       {
         name: 'a',
         method: 'polygon',
+        options: {
+          radius: 1,
+          sides: 4,
+          rotation: Math.PI / 4,
+        },
       },
       {
         name: 'b',
@@ -1079,5 +1084,32 @@ describe('Seek', () => {
       });
     });
   });
-  test('Seek to middle of animation, touch and move diagram element, start', () => {});
+  // test('Basic touch test', () => {
+
+  // });
+  test('Seek to middle of animation, touch and move diagram element', () => {
+    expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
+    recorder.seek(1.5);
+    diagram.mock.timeStep(0);
+    // diagram.unpause();
+    a.setMovable(true);
+    diagram.mock.touchDown([0.5, 0.5]);
+    diagram.mock.touchMove([4, 4]);
+    expect(a.getPosition().round().x).toBe(4);
+  });
+  test('Seek to middle of animation, start another animation', () => {
+    expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
+    recorder.seek(1.5);
+    diagram.mock.timeStep(0);
+    // diagram.unpause();
+    a.animations.new()
+      .position({ target: [1.5, 1.5], duration: 1 })
+      .start();
+    diagram.mock.timeStep(0);
+    expect(a.getPosition().round().x).toBe(0.5);
+    diagram.mock.timeStep(0.5);
+    expect(a.getPosition().round().x).toBe(1);
+    diagram.mock.timeStep(1);
+    expect(a.getPosition().round().x).toBe(1.5);
+  });
 });
