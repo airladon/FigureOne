@@ -24,12 +24,20 @@ type TypeEvent = [
 type TypeEvents = Array<TypeEvent>;
 type TypeStateDiffs = Array<TypeStateDiff>;
 
+// freeze, complete, completeBeforeFreeze, pause
+// freeze: cancel all animations, pulses and movement where it is
+// complete: cancel all animations, pulses and movement at their complete position
+
+// freeze
+// complete: instant | animate | dissolve | animateWithMaxDuration
+// pause
 export type TypeOnPause = 'freeze' | 'complete' | 'completeBeforePause';
 export type TypePauseSettings = {
   default?: TypeOnPause;
   animation?: TypeOnPause;
   pulse?: TypeOnPause;
   movingFreely?: TypeOnPause;
+  simplePause?: boolean;
 } | TypeOnPause;
 
 export type TypePlaySettings = {

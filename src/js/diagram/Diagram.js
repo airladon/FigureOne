@@ -1157,6 +1157,7 @@ class Diagram {
     // Get all the diagram elements that were touched at this point (element
     // must have isTouchable = true to be considered)
     this.beingTouchedElements = this.elements.getTouched(glPoint);
+    // console.log(this.beingTouchedElements)
     if (this.moveTopElementOnly) {
       if (this.beingTouchedElements.length > 0) {
         this.beingTouchedElements[0].click();
@@ -1561,7 +1562,7 @@ class Diagram {
     const elements = this.elements.getAllElements();
     let preparingToPauseCounter = 0;
     const checkAllPaused = () => {
-      if(preparingToPauseCounter > 0) {
+      if (preparingToPauseCounter > 0) {
         preparingToPauseCounter -= 1;
       }
       if (preparingToPauseCounter === 0) {

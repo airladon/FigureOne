@@ -1267,7 +1267,7 @@ class DiagramElement {
     movingFreely: TypeOnPause,
   } {
     let pauseSettings;
-    let defaultPause = 'freeze'
+    let defaultPause = 'freeze';
     if (typeof pauseSettingsIn === 'string') {
       pauseSettings = {
         animation: pauseSettingsIn,
@@ -2954,8 +2954,11 @@ class DiagramElementPrimitive extends DiagramElement {
     if (!this.isTouchable) {
       return false;
     }
+    // debugger;
+    
     const boundaries =
       this.drawingObject.getGLBoundaries(this.lastDrawTransform.matrix());
+    // console.log(boundaries)
     const holeBoundaries =
       this.drawingObject.getGLBoundaryHoles(this.lastDrawTransform.matrix());
     for (let i = 0; i < boundaries.length; i += 1) {
