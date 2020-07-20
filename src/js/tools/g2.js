@@ -451,6 +451,21 @@ class Point {
     return false;
   }
 
+  clipToLine(l: Line, precision: number = 8) {
+    if (line.hasPointOn(this, precision)) {
+      return this._dup();
+    }
+    if (this.shaddowIsOnLine(l, precision)) {
+      return this.getShaddowOnLine(l, precision);
+    }
+    const d1 = this.distance(l.p1);
+    const d2 = this.distance(l.p2);
+    if (d1 <= d2) {
+      return l.p1._dup();
+    }
+    return l.p2._dup();
+  }
+
   isOnUnboundLine(l: Line, precision?: number) {
     return l.hasPointAlong(this, precision);
   }
@@ -1152,6 +1167,23 @@ class Line {
       this.p2.y + space * Math.sin(offsetAngle),
     );
     return new Line(p1, p2);
+  }
+
+  reflectsOn(l: Line, precision: number = 8) {
+    const { intersect } = this.intersectsWith(l, precision);
+    if (intersect == null) {
+      return null;
+    }
+    const perpendicular = new Line(intersect, 1, l.ang + Math.PI / 2);
+    const shaddow = this.p1.getShaddowOnLine(perpendicular, precision);
+    const p1ToShaddow = new Line(p1, shaddow);
+    const distance = p1ToShaddow.distance;
+    // const distance = shaddow.distance(this.p1);
+    const projection = Point(
+      this.p1.x + distance * 2 * Math.cos(p1ToShaddow.ang),
+      this.p1.y + distance * 2 * Math.sin(p1ToShaddow.ang),
+    );
+    return new Line(intersect, project);
   }
 
   intersectsWith(line2: Line, precision: number = 8) {
@@ -2751,26 +2783,83 @@ function quadBezierPoints(p0: Point, p1: Point, p2: Point, sides: number) {
   return points;
 }
 
-function clipPointToBounds(
-  p: Point,
-  bounds: Rect | Line | null,
-  precision: number = 8,
-) {
-  if (bounds == null) {
-    return point;
+class Bounds {
+  boundary: Object;
+  precision: number;
+
+  constructor(boundary: Object, precision: number = 8) {
+    this.boundary = boundary;
+    this.precision = precision;
   }
-  let { x, y } = p;
-  if (bounds instanceof Line && !p.shaddowIsOnLine(bounds, precision)) {
-    const p1Distance = p.distance(bounds.p1);
-    const p2Distance = p.distance(bounds.p2);
-    if (p1Distance < p2Distance) {
-      ({ x, y } = bounds.p1);
-    } else {
-      ({ x, y } = bounds.p2);
+  
+  contains(position: number | Point) {
+    return true;
+  }
+
+  intersect(position: number | Point, direction: number = 0) {
+    return {
+      position,
+      distance: 0,
+      reflection: direction,
     }
-    return new Point(x, y);
   }
-  if (bounds instanceof Rect && !bounds.isPointInside(p)) {
+
+  clip(position: number | Point) {
+    return position;
+  }
+}
+
+class BoundsRange extends Bounds {
+  boundary: { min: number, max: number }
+  
+  contains(position: number) {
+    if (position >= this.boundary.min && position <= this.boundary.max) {
+      return true;
+    }
+    return false;
+  }
+
+  intersect(position: number, direction: -1 | 1) {
+    if (angle === -1 || round(angle, this.precision) === round(Math.PI, precision)) {
+      return {
+        position: this.boundary.min,
+        distance: Math.abs(position - this.boundary.min),
+        direction: 1,
+      };
+    }
+    return {
+      position: this.boundary.max,
+      distance: Math.abs(this.boundary.max, position),
+      direciton: -1,
+    };
+  }
+
+  clip(position: number) {
+    if (position < this.boundary.min) {
+      return this.boundary.min;
+    }
+    if (position > this.boundary.max) {
+      return this.boundary.max;
+    }
+    return position;
+  }
+}
+
+class BoundsRect extends Bounds {
+  boundary: Rect;
+  
+  contains(position: number | Point) {
+    if (typeof position === 'number') {
+      return false;
+    }
+    return this.boundary.isPointInside(position, precision);
+  }
+
+  clip(position: number | Point) {
+    if (typeof position === 'number') {
+      return position;
+    }
+    let x, y;
     if (p.x < bounds.left) {
       x = bounds.left;
     } else if (p.x > bounds.right) {
@@ -2781,9 +2870,191 @@ function clipPointToBounds(
     } else if (p.y > bounds.top) {
       y = bounds.top;
     }
+    return new Point(x, y);
   }
-  return new Point(x, y);
+
+  intersect(position: number | Point, direction: number = 0) {
+    const ang = direction;
+    const trajectory = new Line(p, 1, ang);
+    let hBound;
+    let vBound;
+    let xMirror = 1;
+    let yMirror = 1;
+    let intersectPoint;
+    let distanceToBound = 0;
+    const bounds = this.boundary;
+    if (ang > 0 && ang < Math.PI) {
+      hBound = new Line([bounds.left, bounds.top], [bounds.right, bounds.top]);
+    } else if (ang > Math.PI) {
+      hBound = new Line([bounds.left, bounds.bottom], [bounds.right, bounds.bottom]);
+    }
+    if (ang > Math.PI / 2 && ang < Math.PI / 2 * 3) {
+      vBound = new Line([bounds.left, bounds.bottom], [bounds.left, bounds.top]);
+    } else if ((ang >= 0 && ang < Math.PI / 2) || ang > Math.PI / 2 * 3) {
+      vBound = new Line([bounds.right, bounds.bottom], [bounds.right, bounds.top]);
+    }
+    if (vBound != null) {
+      const result = trajectory.intersectsWith(vBound);
+      if (result.intersect != null) {
+        intersectPoint = result.intersect;
+        distanceToBound = distance(p, intersectPoint);
+        xMirror = -1;
+      }
+    }
+    if (hBound != null) {
+      const result = trajectory.intersectsWith(hBound);
+      if (result.intersect != null) {
+        const distanceToBoundH = distance(p, result.intersect);
+        if (intersectPoint == null) {
+          intersectPoint = result.intersect;
+          distanceToBound = distanceToBoundH;
+          xMirror = 1;
+          yMirror = -1;
+        } else if (distanceToBoundH < distanceToBound) {
+          intersectPoint = result.intersect;
+          distanceToBound = distanceToBoundH;
+          xMirror = 1;
+          yMirror = -1;
+        } else if (roundNum(distanceToBoundH, precision) === roundNum(distanceToBound, precision)) {
+          xMirror = -1;
+          yMirror = -1;
+        }
+      }
+    }
+    if (intersectPoint == null) {
+      return {
+        position,
+        distance: 0,
+        direction: ang,
+      }
+    }
+    // let reflectionAngle = ang;
+    const reflection = polarToRect(intersectPoint, ang);
+    if (xMirror === -1) {
+      reflection.x *= -1;
+    }
+    if (xMirror === -1) {
+      reflection.y *= -1;
+    }
+
+    return {
+      position: intersectPoint,
+      distance: intersectPoint.distance(position),
+      direction: rectToPolar(reflection).ang,
+    }
+  }
 }
+
+class BoundsLine extends Bounds {
+  boundary: Line;
+  
+  contains(position: number | Point) {
+    if (typeof position === 'number') {
+      return false;
+    }
+    return position.isOnLine(position, this.precision);
+  }
+
+  clip(position: number | Point) {
+    if (typeof position === 'number') {
+      return position;
+    }
+    return p.clipToLine(this.boundary, this.precision);
+  }
+
+  intersect(position: number | Point, direction: number = 0) {
+    const bounds = this.boundary;
+    const ang = direction;
+    const trajectory = new Line(p, 1, ang);
+    let xMirror = 1;
+    let yMirror = 1;
+    let intersectPoint;
+    let distanceToBound = 0;
+
+    if (bounds instanceof Line) {
+      xMirror = -1;
+      yMirror = -1;
+      const distanceToP1 = distance(p, bounds.p1);
+      const distanceToP2 = distance(p, bounds.p2);
+      let boundPoint;
+      if (distanceToP1 > distanceToP2) {
+        intersectPoint = bounds.p2._dup();
+      } else {
+        intersectPoint = bounds.p1._dup();
+      }
+      if (intersectPoint != null) {
+        distanceToBound = distance(p, intersectPoint);
+      }
+    }
+    if (intersectPoint == null) {
+      return {
+        position,
+        distance: 0,
+        angle,
+      };
+    }
+
+    const reflection = polarToRect(intersectPoint, ang);
+    if (xMirror === -1) {
+      reflection.x *= -1;
+    }
+    if (xMirror === -1) {
+      reflection.y *= -1;
+    }
+
+    return {
+      position: intersectPoint,
+      distance: distanceToBound,
+      direction: rectToPolar(reflection).ang,
+    }
+  }
+}
+
+// class Bounds {
+//   boundary: Rect | Line | { min: number, max: number } | Object;
+
+//   constructor(boundary: Rect | Line |  { min: number, max: number } | Object) {
+//     this.boundary = boundary;
+//   }
+
+//   contains(position: number | TypeParsablePoint) {
+//     if (position )
+//   }
+// }
+
+// function clipPointToBounds(
+//   p: Point,
+//   bounds: Bounds | null,
+//   precision: number = 8,
+// ) {
+//   if (bounds == null) {
+//     return point;
+//   }
+//   let { x, y } = p;
+//   if (bounds instanceof Line && !p.shaddowIsOnLine(bounds, precision)) {
+//     const p1Distance = p.distance(bounds.p1);
+//     const p2Distance = p.distance(bounds.p2);
+//     if (p1Distance < p2Distance) {
+//       ({ x, y } = bounds.p1);
+//     } else {
+//       ({ x, y } = bounds.p2);
+//     }
+//     return new Point(x, y);
+//   }
+//   if (bounds instanceof Rect && !bounds.isPointInside(p)) {
+//     if (p.x < bounds.left) {
+//       x = bounds.left;
+//     } else if (p.x > bounds.right) {
+//       x = bounds.right;
+//     }
+//     if (p.y < bounds.bottom) {
+//       y = bounds.bottom;
+//     } else if (p.y > bounds.top) {
+//       y = bounds.top;
+//     }
+//   }
+//   return new Point(x, y);
+// }
 
 function intersectWithBounds(
   p: Point,
@@ -2863,20 +3134,6 @@ function intersectWithBounds(
     intersect: intersctPoint,
     distance: distanceToBound,
   };
-}
-
-class Bounds {
-  boundary: Rect | Line | {
-    isInBounds: (Point) => boolean,
-    intersect: (Point, angle) => Point,
-  };
-
-  constructor(boundary: Rect | Line | {
-    isInBounds: (Point) => boolean,
-    intersect: (Point, angle) => Point,
-  }) {
-    this.boundary = boundary;
-  }
 }
 
 class Velocity {
