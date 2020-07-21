@@ -2819,22 +2819,26 @@ class Bounds {
     this.precision = precision;
   }
 
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
   contains(position: number | Point) {
     return true;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   intersect(position: number | Point, direction: number = 0) {
     return {
       position,
       distance: 0,
       direction,
-    }
+    };
   }
 
+  // eslint-disable-next-line class-methods-use-this
   clip(position: number | Point) {
     return position;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   clipVelocity(velocity: Point | number) {
     return velocity;
   }
@@ -2871,11 +2875,13 @@ class BoundsValue extends Bounds {
   }
 
   intersect(positionIn: number | Point, direction: number = 1) {
-    let position = positionIn;
+    let position;
     let directionFlag = 'value';
-    if (!(typeof position === 'number')) {
+    if (!(typeof positionIn === 'number')) {
       position = positionIn.x;
       directionFlag = 'angle';
+    } else {
+      position = positionIn;
     }
     if (
       (directionFlag === 'value' && direction === -1)
@@ -2907,6 +2913,7 @@ class BoundsValue extends Bounds {
     return position;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   clipVelocity(position: number | Point) {
     return position;
   }
@@ -3040,6 +3047,7 @@ class BoundsRect extends Bounds {
     };
   }
 
+  // eslint-disable-next-line class-methods-use-this
   clipVelocity(velocity: Point | number) {
     return velocity;
   }
@@ -3063,7 +3071,7 @@ class BoundsLine extends Bounds {
       boundary = pointOrLine;
       precision = p2OrMagOrPrecision;
     }
-    super(boundary, precision);
+    super(boundary, precisionIn);
   }
 
   contains(position: number | Point) {
