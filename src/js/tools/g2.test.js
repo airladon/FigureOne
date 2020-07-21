@@ -3,7 +3,7 @@ import {
   spaceToSpaceTransform,
   getBoundingRect, polarToRect, rectToPolar, getDeltaAngle,
   normAngleTo90, deg, curvedPath, threePointAngle,
-  threePointAngleMin, Rect, Transform, Line,
+  threePointAngleMin, Rect, Transform, Line, Vector,
 } from './g2';
 import { round } from './math';
 
@@ -617,6 +617,36 @@ describe('g2 tests', () => {
       ];
       const angle = threePointAngleMin(points[0], points[1], points[2]);
       expect(round(angle)).toBe(round(-90 * Math.PI / 180));
+    });
+  });
+  describe('Vector', () => {
+    test('Dot Product 90º', () => {
+      const v1 = new Vector([0, 0], 1, 0);
+      const v2 = new Vector([0, 0], 1, Math.PI / 2);
+      expect(v1.dotProduct(v2)).toBe(0);
+    });
+    test('Dot Product 45º', () => {
+      const v1 = new Vector([0, 0], 1, 0);
+      const v2 = new Vector([1, 1], 1, Math.PI / 4);
+      expect(v1.dotProduct(v2)).toBe(round(1 / Math.sqrt(2), 8));
+    });
+    test('Dot Product -45º', () => {
+      const v1 = new Vector([0, 0], 1, 0);
+      const v2 = new Vector([1, 1], 1, 3 * Math.PI / 4);
+      expect(v1.dotProduct(v2)).toBe(round(-1 / Math.sqrt(2), 8));
+    });
+    test('Unit 0º', () => {
+      const v1 = new Vector([0, 0], 5, 0);
+      const v2 = v1.unit();
+      expect(v2.distance).toBe(1);
+      expect(v2.ang).toBe(0);
+    });
+    test('Unit', () => {
+      const v1 = new Vector([1, 1],[5, 5]);
+      const v2 = v1.unit();
+      expect(round(v2.distance)).toBe(1);
+      expect(round(v2.ang)).toBe(round(Math.PI / 4));
+      expect(v2.p1).toEqual(new Point(1, 1));
     });
   });
 });
