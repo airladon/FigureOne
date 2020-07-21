@@ -3307,51 +3307,6 @@ function decelerateValue(
   };
 }
 
-// class Position {
-//   position
-//   // type: 'value' | 'point';
-//   // mag: number;
-//   // angle: number;
-
-//   constructor(magOrValueOrPoint: TypeParsablePoint | number, angleIn: ?number = null) {
-//     if (typeof magOrValueOrPoint === 'number' && angleIn == null) {
-//       this.mag = magOrValueOrPoint;
-//       this.type = 'value';
-//       this.angle = 0;
-//     } else if (typeof magOrValueOrPoint === 'number' && angleIn != null) {
-//       this.mag = magOrValueOrPoint;
-//       this.angle = angleIn;
-//       this.type = 'point';
-//     } else {
-//       const { mag, angle } = rectToPolar(magOrValueOrPoint);
-//       this.mag = mag;
-//       this.angle = angle;
-//       this.type = 'point';
-//     }
-//   }
-
-//   polar() {
-//     return { mag: this.mag, angle: this.angle };
-//   }
-
-//   rect() {
-//     return polarToRect(this.mag, this.angle);
-//   }
-
-  
-//   decelerate(
-//     initialPosition: Point | number,
-//     deceleration: number,
-//     deltaTime: number,
-//     zeroPointThreshold: number = 0,
-//     bounds: Bounds | null = null,
-//   ): { position: Point | number } {}
-
-//   atZero(
-//     deceleration: number,
-//     zeroPointThreshold: number = 0,
-//   ): { duration: number, displacement: number } {}
-// }
 
 function deceleratePoint(
   positionIn: Point,
@@ -3363,7 +3318,6 @@ function deceleratePoint(
   zeroVelocityThreshold: number = 0,
   precision: number = 8,
 ) {
-
   // clip velocity to the dimension of interest
   let velocity = velocityIn;
   if (bounds != null) {
@@ -3492,27 +3446,6 @@ function deceleratePoint(
     bounceLossIn, zeroVelocityThreshold, precision,
   );
 }
-
-
-// function calculateStopAngle(
-//   angle: number,
-//   velocity: number,
-//   deceleration: number,
-//   bounds: [number, number],
-//   bounceLossIn: number = 0,
-//   zeroVelocityThreshold: number = 0,
-//   precision: number = 8,
-// ) {
-//   return calculateStop(
-//     new Point(angle, 0),
-//     new Point(angle, 0),
-//     deceleration,
-//     new Rect(bounds[0], -1, bounds[1] - bounds[0], 2),
-//     bounceLossIn,
-//     zeroVelocityThreshold,
-//     precision,
-//   );
-// }
 
 type TypeSimpleDefinition = {
   rotation?: number;
