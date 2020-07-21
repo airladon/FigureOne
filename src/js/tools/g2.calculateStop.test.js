@@ -1,5 +1,5 @@
 import {
-  Point, calculateStop, Rect, Line, deceleratePoint,
+  Point, calculateStop, Rect, Line, deceleratePoint, BoundsRect, BoundsLine
 } from './g2';
 import { round } from './math';
 
@@ -111,7 +111,8 @@ describe('deceleratePoint', () => {
         const v = new Point(5, 0);
         const deceleration = 1;
         const deltaTime = 2;
-        const bounds = new Rect(-4.5, -1, 9, 2);
+        // const bounds = new Rect(-4.5, -1, 9, 2);
+        const bounds = new BoundsRect(new Rect(-4.5, -1, 9, 2));
         const bounceLoss = 0;
         const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime, bounds, bounceLoss);
         // s = v0*t + 0.5*acc*t^2
@@ -128,7 +129,7 @@ describe('deceleratePoint', () => {
         const v = new Point(5, 0);
         const deceleration = 1;
         const deltaTime = 2;
-        const bounds = new Rect(-4.5, -1, 9, 2);
+        const bounds = new BoundsRect(new Rect(-4.5, -1, 9, 2));
         const bounceLoss = 0.5;
         const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime, bounds, bounceLoss);
         // After 1s, s = 4.5 and v = 4.
