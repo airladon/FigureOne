@@ -3298,7 +3298,6 @@ class Velocity {
   ): { duration: number, displacement: number } {}
 }
 
-// getInterceptAndMirror()
 function deceleratePoint(
   positionIn: Point,
   velocity: Point,
@@ -3382,68 +3381,77 @@ function deceleratePoint(
   );
 }
 
-function deceleratePoint2(
+function pointDeceleration(
   positionIn: Point,
-  velocity: Point,
+  velocityIn: Point,
   deceleration: number,
-  deltaTimeIn: number,
-  bounds: ?(Rect | Line) = null,
+  deltaTimeIn: number | null = null,
+  bounds: ?Bounds = null,  // ?(Rect | Line) = null,
   bounceLossIn: number = 0,
   zeroVelocityThreshold: number = 0,
   precision: number = 8,
 ) {
+
+  // clip velocity to the dimension of interest
+  let velocity = velocityIn;
+  if (bounds != null) {
+    velocity = bounds.clipVelocity(velocityIn);
+  }
+
+  let stopFlag = false;
+  if (deltaTimeIn == null) {
+    stopFlag = true;
+  }
+
+  // Get the mag and angle of the velocity and check if under the zero threshold
   const { mag, angle } = velocity.toPolar();
-  const v0 = mag;
-  // debugger;
-  if (v0 <= zeroVelocityThreshold) {
+  if (mag <= zeroVelocityThreshold) {
+    if (stopFlag) {
+      return {
+        duration: 0,
+        positionIn,
+      };
+    }
     return {
       velocity: new Point(0, 0),
       positionIn,
     };
   }
 
-  let deltaV = v0 - zeroVelocityThreshold;
-  let deltaTime = deltaTimeIn;
-  if (deceleration * deltaTime > deltaV) {
-    deltaTime = deltaV / deceleration;
-  }
-
-  // If the point is starting outside the bounds, then clip the point to the
-  // bounds
-  const position = positionIn._dup();
+  // Clip position in the bounds
+  let position = positionIn._dup();
   if (bounds != null) {
-    if (bounds instanceof Line && !position.shaddowIsOnLine(bounds, precision)) {
-      const p1Distance = position.distance(bounds.p1);
-      const p2Distance = position.distance(bounds.p2);
-      if (p1Distance < p2Distance) {
-        position.x = bounds.p1.x;
-        position.y = bounds.p1.y;
-      } else {
-        position.x = bounds.p2.x;
-        position.y = bounds.p2.y;
-      }
-    }
-    if (bounds instanceof Rect && !bounds.isPointInside(position)) {
-      if (position.x < bounds.left) {
-        position.x = bounds.left;
-      } else if (position.x > bounds.right) {
-        position.x = bounds.right;
-      }
-      if (position.y < bounds.bottom) {
-        position.y = bounds.bottom;
-      } else if (position.y > bounds.top) {
-        position.y = bounds.top;
-      }
-    }
+    position = bounds.clip(positionIn);
   }
 
+  // Initial Velocity
+  const v0 = mag;
+  // Total change in velocity to go to zero threshold
+  const deltaV = Math.abs(v0) - zeroVelocityThreshold;
+
+  let deltaTime = deltaTimeIn;
+  // if (deltaTimeIn == null) {
+  //   deltaTime = Math.abs(deltaV / deceleration);
+  // } else {
+  //   deltaTime = deltaTimeIn;
+  // }
+
+  if (deltaTime == null || deltaTime > Math.abs(deltaV / deceleration)) {
+    deltaTime = Math.abs(deltaV / deceleration);
+  }
+
+  // Calculate distance traveeled over time and so find the new Position
   const distanceTravelled = v0 * deltaTime - 0.5 * deceleration * (deltaTime ** 2);
   const newPosition = polarToRect(distanceTravelled, angle).add(position);
-  if (
-    bounds == null
-    || (bounds instanceof Rect && bounds.isPointInside(newPosition))
-    || (bounds instanceof Line && position.shaddowIsOnLine(bounds, precision))
-  ) {
+
+  // If the new position is within the bounds, then can return the result.
+  if (bounds == null || bounds.contains(newPosition)) {
+    if (stopFlag) {
+      return {
+        duration: deltaTime,
+        position: newPosition,
+      };
+    }
     let v1 = v0 - deceleration * deltaTime;
     if (v1 <= zeroVelocityThreshold) {
       v1 = 0;
@@ -3454,99 +3462,60 @@ function deceleratePoint2(
     };
   }
 
-  // If we have got here, the newPosition is outside the boundary
-
-  // Calculate the intersect point with the boundary i
+  // if we got here, the new position is out of bounds
   const bounceScaler = 1 - bounceLossIn;
-  const trajectory = new Line(position, 1, angle);
-  let hBound;
-  let vBound;
-  const ang = clipAngle(angle, '0to360');
-  let distanceToBound = distanceTravelled;
-  let intersectPoint;
-  let xMirror = 1;
-  let yMirror = 1;
-  if (bounds instanceof Rect) {
-    if (ang > 0 && ang < Math.PI) {
-      hBound = new Line([bounds.left, bounds.top], [bounds.right, bounds.top]);
-    } else if (ang > Math.PI) {
-      hBound = new Line([bounds.left, bounds.bottom], [bounds.right, bounds.bottom]);
-    }
-    if (ang > Math.PI / 2 && ang < Math.PI / 2 * 3) {
-      vBound = new Line([bounds.left, bounds.bottom], [bounds.left, bounds.top]);
-    } else if ((ang >= 0 && ang < Math.PI / 2) || ang > Math.PI / 2 * 3) {
-      vBound = new Line([bounds.right, bounds.bottom], [bounds.right, bounds.top]);
-    }
-    if (vBound != null) {
-      const result = trajectory.intersectsWith(vBound);
-      if (result.intersect != null) {
-        intersectPoint = result.intersect;
-        distanceToBound = distance(position, intersectPoint);
-        xMirror = -1;
-      }
-    }
-    if (hBound != null) {
-      const result = trajectory.intersectsWith(hBound);
-      if (result.intersect != null) {
-        const distanceToBoundH = distance(position, result.intersect);
-        if (intersectPoint == null) {
-          intersectPoint = result.intersect;
-          distanceToBound = distanceToBoundH;
-          xMirror = 1;
-          yMirror = -1;
-        } else if (distanceToBoundH < distanceToBound) {
-          intersectPoint = result.intersect;
-          distanceToBound = distanceToBoundH;
-          xMirror = 1;
-          yMirror = -1;
-        } else if (roundNum(distanceToBoundH, precision) === roundNum(distanceToBound, precision)) {
-          xMirror = -1;
-          yMirror = -1;
-        }
-      }
-    }
-  }
-  if (bounds instanceof Line) {
-    xMirror = -1;
-    yMirror = -1;
-    const distanceToP1 = distance(newPosition, bounds.p1);
-    const distanceToP2 = distance(newPosition, bounds.p2);
-    let boundPoint;
-    if (distanceToP1 > distanceToP2) {
-      boundPoint = bounds.p2._dup();
-    } else {
-      boundPoint = bounds.p1._dup();
-    }
-    // calculate distance to bound
-    const boundPerpendicular = new Line(boundPoint, 1, bounds.ang + Math.PI / 2);
-    intersectPoint = boundPerpendicular.intersectsWith(trajectory).intersect;
+  const result = bounds.intersect(position, clipAngle(angle, '0to360'));
+  const intersectPoint = result.position;
+  const distanceToBound = result.distance;
+  const reflectionAngle = result.direction;
 
-    if (intersectPoint != null) {
-      distanceToBound = distance(position, intersectPoint);
-    }
+  // if (intersectPoint == null) {
+  //   return {
+  //     duration: timeToZeroV,
+  //     position: newPosition,
+  //   };
+  // }
 
-    // distanceToBound = distance(position.getShaddowOnLine(bounds), intersectPoint);
-  }
-  if (intersectPoint == null) {
-    return {
-      velocity: new Point(0, 0),
-      position: newPosition,
-    };
-  }
-
+  // Calculate the time to the intersect point
   const acc = -v0 / Math.abs(v0) * deceleration;
   const s = distanceToBound;
   const b = v0;
   const a = 0.5 * acc;
   const c = -s;
   const t = (-b + Math.sqrt(b ** 2 - 4 * a * c)) / (2 * a);
+
+  // If there is no bounce (all energy is lost) then return the result
+  if (bounceLossIn === 1) {
+    if (stopFlag) {
+      return {
+        duration: t,
+        position: intersectPoint,
+      }
+    }
+    return {
+      velocity: new Point(0, 0),
+      position: intersectPoint,
+    }
+  }
+
   const velocityAtIntersect = v0 + acc * t; // (s - 0.5 * a * (t ** 2)) / t;
   const bounceVelocity = velocityAtIntersect * bounceScaler;
   const rectBounceVelocity = new Point(
-    bounceVelocity * Math.cos(angle) * xMirror,
-    bounceVelocity * Math.sin(angle) * yMirror,
+    bounceVelocity * Math.cos(reflectionAngle),
+    bounceVelocity * Math.sin(reflectionAngle),
   );
-  return deceleratePoint(
+
+  if (stopFlag) {
+    const newStop = pointDeceleration(
+      intersectPoint, rectBounceVelocity, deceleration, deltaTimeIn,
+      bounds, bounceLossIn, zeroVelocityThreshold, precision,
+    );
+    return {
+      duration: t + newStop.duration,
+      position: newStop.position,
+    };
+  }
+  return pointDeceleration(
     intersectPoint, rectBounceVelocity, deceleration, deltaTime - t, bounds,
     bounceLossIn, zeroVelocityThreshold, precision,
   );
@@ -3917,5 +3886,6 @@ export {
   BoundsRect,
   BoundsLine,
   Vector,
+  pointDeceleration,
   // setState,
 };
