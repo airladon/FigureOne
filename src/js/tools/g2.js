@@ -3275,113 +3275,85 @@ function intersectWithBounds(
   };
 }
 
-class Velocity {
-  mag: number;
-  angle: number;
-
-  constructor(mag: number, angle: number) {
-    this.mag = mag;
-    this.angle = angle;
-  }
-
-  decelerate(
-    initialPosition: Point | number,
-    deceleration: number,
-    deltaTime: number,
-    zeroPointThreshold: number = 0,
-    bounds: Bounds | null = null,
-  ): { position: Point | number } {}
-
-  atZero(
-    deceleration: number,
-    zeroPointThreshold: number = 0,
-  ): { duration: number, displacement: number } {}
-}
-
-function deceleratePoint(
-  positionIn: Point,
-  velocity: Point,
+function decelerateValue(
+  value: number,
+  velocity: number,
   deceleration: number,
-  deltaTimeIn: number,
+  deltaTime: number | null = null,
   bounds: ?Bounds = null,
-  bounceLossIn: number = 0,
+  bounceLoss: number = 0,
   zeroVelocityThreshold: number = 0,
   precision: number = 8,
 ) {
-  const { mag, angle } = velocity.toPolar();
-  const v0 = mag;
-  // debugger;
-  if (v0 <= zeroVelocityThreshold) {
-    return {
-      velocity: new Point(0, 0),
-      positionIn,
-    };
-  }
-
-  let deltaV = v0 - zeroVelocityThreshold;
-  let deltaTime = deltaTimeIn;
-  if (deceleration * deltaTime > deltaV) {
-    deltaTime = deltaV / deceleration;
-  }
-
-  // If the point is starting outside the bounds, then clip the point to the
-  // bounds
-  let position = positionIn._dup();
-  if (bounds != null) {
-    position = bounds.clip(positionIn);
-  }
-
-  const distanceTravelled = v0 * deltaTime - 0.5 * deceleration * (deltaTime ** 2);
-  const newPosition = polarToRect(distanceTravelled, angle).add(position);
-  if (
-    bounds == null
-    || bounds.contains(newPosition)
-  ) {
-    let v1 = v0 - deceleration * deltaTime;
-    if (v1 <= zeroVelocityThreshold) {
-      v1 = 0;
-    }
-    return {
-      position: newPosition,
-      velocity: polarToRect(v1, angle),
-    };
-  }
-
-  // If we have got here, the newPosition is outside the boundary
-
-  // Calculate the intersect point with the boundary i
-  const bounceScaler = 1 - bounceLossIn;
-  const result = bounds.intersect(position, clipAngle(angle, '0to360'));
-  const intersectPoint = result.position;
-  const distanceToBound = result.distance;
-  const reflectionAngle = result.direction;
-
-  if (intersectPoint == null) {
-    return {
-      velocity: new Point(0, 0),
-      position: newPosition,
-    };
-  }
-
-  const acc = -v0 / Math.abs(v0) * deceleration;
-  const s = distanceToBound;
-  const b = v0;
-  const a = 0.5 * acc;
-  const c = -s;
-  const t = (-b + Math.sqrt(b ** 2 - 4 * a * c)) / (2 * a);
-  const velocityAtIntersect = v0 + acc * t; // (s - 0.5 * a * (t ** 2)) / t;
-  const bounceVelocity = velocityAtIntersect * bounceScaler;
-  const rectBounceVelocity = new Point(
-    bounceVelocity * Math.cos(reflectionAngle),
-    bounceVelocity * Math.sin(reflectionAngle),
+  const result = deceleratePoint(
+    new Point(value, 0),
+    new Point(velocity, 0),
+    deceleration,
+    deltaTime,
+    bounds,
+    bounceLoss,
+    zeroVelocityThreshold,
+    precision,
   );
-  return deceleratePoint(
-    intersectPoint, rectBounceVelocity, deceleration, deltaTime - t, bounds,
-    bounceLossIn, zeroVelocityThreshold, precision,
-  );
+  if (result.duration != null) {
+    return {
+      duration: result.duration,
+      value: result.position.x,
+    };
+  }
+  return {
+    value: result.position.x,
+    velocity: result.velocity.x,
+  };
 }
 
-function pointDeceleration(
+// class Position {
+//   position
+//   // type: 'value' | 'point';
+//   // mag: number;
+//   // angle: number;
+
+//   constructor(magOrValueOrPoint: TypeParsablePoint | number, angleIn: ?number = null) {
+//     if (typeof magOrValueOrPoint === 'number' && angleIn == null) {
+//       this.mag = magOrValueOrPoint;
+//       this.type = 'value';
+//       this.angle = 0;
+//     } else if (typeof magOrValueOrPoint === 'number' && angleIn != null) {
+//       this.mag = magOrValueOrPoint;
+//       this.angle = angleIn;
+//       this.type = 'point';
+//     } else {
+//       const { mag, angle } = rectToPolar(magOrValueOrPoint);
+//       this.mag = mag;
+//       this.angle = angle;
+//       this.type = 'point';
+//     }
+//   }
+
+//   polar() {
+//     return { mag: this.mag, angle: this.angle };
+//   }
+
+//   rect() {
+//     return polarToRect(this.mag, this.angle);
+//   }
+
+  
+//   decelerate(
+//     initialPosition: Point | number,
+//     deceleration: number,
+//     deltaTime: number,
+//     zeroPointThreshold: number = 0,
+//     bounds: Bounds | null = null,
+//   ): { position: Point | number } {}
+
+//   atZero(
+//     deceleration: number,
+//     zeroPointThreshold: number = 0,
+//   ): { duration: number, displacement: number } {}
+// }
+
+function deceleratePoint(
   positionIn: Point,
   velocityIn: Point,
   deceleration: number,
@@ -3506,7 +3478,7 @@ function pointDeceleration(
   );
 
   if (stopFlag) {
-    const newStop = pointDeceleration(
+    const newStop = deceleratePoint(
       intersectPoint, rectBounceVelocity, deceleration, deltaTimeIn,
       bounds, bounceLossIn, zeroVelocityThreshold, precision,
     );
@@ -3515,113 +3487,32 @@ function pointDeceleration(
       position: newStop.position,
     };
   }
-  return pointDeceleration(
+  return deceleratePoint(
     intersectPoint, rectBounceVelocity, deceleration, deltaTime - t, bounds,
     bounceLossIn, zeroVelocityThreshold, precision,
   );
 }
 
-function calculateStop(
-  positionIn: Point,
-  velocityIn: Point,
-  deceleration: number,
-  bounds: ?Bounds = null,  // ?(Rect | Line) = null,
-  bounceLossIn: number = 0,
-  zeroVelocityThreshold: number = 0,
-  precision: number = 8,
-) {
-  let velocity = velocityIn;
-  if (bounds != null) {
-    velocity = bounds.clipVelocity(velocityIn);
-  }
-  const { mag, angle } = velocity.toPolar();
-  if (mag <= zeroVelocityThreshold) {
-    return {
-      duration: 0,
-      positionIn,
-    };
-  }
-  let position = positionIn._dup();
-  if (bounds != null) {
-    position = bounds.clip(positionIn);
-  }
 
-  const v0 = mag;
-  const deltaV = Math.abs(v0) - zeroVelocityThreshold;
-  const timeToZeroV = Math.abs(deltaV) / deceleration;
-  const distanceTravelled = v0 * timeToZeroV - 0.5 * deceleration * (timeToZeroV ** 2);
-  const newPosition = polarToRect(distanceTravelled, angle).add(position);
-
-  if (bounds == null) {
-    return {
-      duration: timeToZeroV,
-      position: newPosition,
-    };
-  }
-
-  if (bounds.contains(newPosition)) {
-    return {
-      duration: timeToZeroV,
-      position: newPosition,
-    };
-  }
-
-  const bounceScaler = 1 - bounceLossIn;
-  const result = bounds.intersect(position, clipAngle(angle, '0to360'));
-  const intersectPoint = result.position;
-  const distanceToBound = result.distance;
-  const reflectionAngle = result.direction;
-
-  if (intersectPoint == null) {
-    return {
-      duration: timeToZeroV,
-      position: newPosition,
-    };
-  }
-
-  // const v0 = mag;
-  const acc = -v0 / Math.abs(v0) * deceleration;
-  const s = distanceToBound;
-  const b = v0;
-  const a = 0.5 * acc;
-  const c = -s;
-  const t = (-b + Math.sqrt(b ** 2 - 4 * a * c)) / (2 * a);
-  const velocityAtIntersect = v0 + acc * t; // (s - 0.5 * a * (t ** 2)) / t;
-  const bounceVelocity = velocityAtIntersect * bounceScaler;
-  const rectBounceVelocity = new Point(
-    bounceVelocity * Math.cos(reflectionAngle),
-    bounceVelocity * Math.sin(reflectionAngle),
-  );
-
-  const newStop = calculateStop(
-    intersectPoint, rectBounceVelocity, deceleration,
-    bounds, bounceLossIn, zeroVelocityThreshold, precision,
-  );
-  return {
-    duration: t + newStop.duration,
-    position: newStop.position,
-  };
-}
-
-function calculateStopAngle(
-  angle: number,
-  velocity: number,
-  deceleration: number,
-  bounds: [number, number],
-  bounceLossIn: number = 0,
-  zeroVelocityThreshold: number = 0,
-  precision: number = 8,
-) {
-  return calculateStop(
-    new Point(angle, 0),
-    new Point(angle, 0),
-    deceleration,
-    new Rect(bounds[0], -1, bounds[1] - bounds[0], 2),
-    bounceLossIn,
-    zeroVelocityThreshold,
-    precision,
-  );
-}
+// function calculateStopAngle(
+//   angle: number,
+//   velocity: number,
+//   deceleration: number,
+//   bounds: [number, number],
+//   bounceLossIn: number = 0,
+//   zeroVelocityThreshold: number = 0,
+//   precision: number = 8,
+// ) {
+//   return calculateStop(
+//     new Point(angle, 0),
+//     new Point(angle, 0),
+//     deceleration,
+//     new Rect(bounds[0], -1, bounds[1] - bounds[0], 2),
+//     bounceLossIn,
+//     zeroVelocityThreshold,
+//     precision,
+//   );
+// }
 
 type TypeSimpleDefinition = {
   rotation?: number;
@@ -3880,12 +3771,13 @@ export {
   // getState,
   // getDef,
   getLine,
-  calculateStop,
-  calculateStopAngle,
+  // calculateStop,
+  // calculateStopAngle,
   deceleratePoint,
+  decelerateValue,
   BoundsRect,
   BoundsLine,
   Vector,
-  pointDeceleration,
+  // pointDeceleration,
   // setState,
 };

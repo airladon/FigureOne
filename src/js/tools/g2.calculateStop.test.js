@@ -1,17 +1,17 @@
 import {
   Point, Rect, Line, BoundsRect, BoundsLine,
-  pointDeceleration,
+  deceleratePoint,
 } from './g2';
 import { round } from './math';
 
-describe('deceleratePoint', () => {
+describe('Decelerate', () => {
   describe('No Bounds', () => {
     test('Along x from origin, 1s', () => {
       const p = new Point(0, 0);
       const v = new Point(5, 0);
       const deceleration = 1;
       const deltaTime = 1;
-      const { velocity, position } = pointDeceleration(p, v, deceleration, deltaTime);
+      const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime);
       // v1 = v0 - a * t = 5 - 1 * 1 = 4
       expect(round(velocity.toPolar().mag)).toBe(4);
       // s = vt + 0.5 * at^2
@@ -23,7 +23,7 @@ describe('deceleratePoint', () => {
       const v = new Point(5, 0);
       const deceleration = 1;
       const deltaTime = 1;
-      const { velocity, position } = pointDeceleration(p, v, deceleration, deltaTime);
+      const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime);
       // v1 = v0 - a * t = 5 - 1 * 1 = 4
       expect(round(velocity.toPolar().mag)).toBe(4);
       // s = vt + 0.5 * at^2
@@ -35,7 +35,7 @@ describe('deceleratePoint', () => {
       const v = new Point(0, 5);
       const deceleration = 1;
       const deltaTime = 1;
-      const { velocity, position } = pointDeceleration(p, v, deceleration, deltaTime);
+      const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime);
       // v1 = v0 - a * t = 5 - 1 * 1 = 4
       expect(round(velocity.toPolar().mag)).toBe(4);
       // s = vt + 0.5 * at^2
@@ -47,7 +47,7 @@ describe('deceleratePoint', () => {
       const v = new Point(5, 0);
       const deceleration = 1;
       const deltaTime = 5;
-      const { velocity, position } = pointDeceleration(p, v, deceleration, deltaTime);
+      const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime);
       // v1 = v0 - a * t = 5 - 1 * 5 = 0
       expect(round(velocity.toPolar().mag)).toBe(0);
       // s = vt + 0.5 * at^2
@@ -59,7 +59,7 @@ describe('deceleratePoint', () => {
       const v = new Point(5, 0);
       const deceleration = 1;
       const deltaTime = 10;
-      const { velocity, position } = pointDeceleration(p, v, deceleration, deltaTime);
+      const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime);
       // Max deltaTime = v0 / a = 5 / 1 = 5
       // v1 = v0 - a * t = 5 - 1 * 5 = 0
       expect(round(velocity.toPolar().mag)).toBe(0);
@@ -72,7 +72,7 @@ describe('deceleratePoint', () => {
       const v = new Point(5 * 0.707107, 5 * 0.707107);
       const deceleration = 1;
       const deltaTime = 1;
-      const { velocity, position } = pointDeceleration(p, v, deceleration, deltaTime);
+      const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime);
       expect(round(velocity.toPolar().mag)).toBe(4);
       const xy = round(4.5 * Math.cos(Math.PI / 4), 3);
       expect(position.round(3)).toEqual(new Point(xy + 1, xy + 1));
@@ -83,7 +83,7 @@ describe('deceleratePoint', () => {
       const deceleration = 1;
       const zeroVelocityThreshold = 0.1;
       const deltaTime = 10;
-      const { velocity, position } = pointDeceleration(
+      const { velocity, position } = deceleratePoint(
         p, v, deceleration, deltaTime, null, 0, zeroVelocityThreshold,
       );
       expect(round(velocity.toPolar().mag)).toBe(0);
@@ -98,7 +98,7 @@ describe('deceleratePoint', () => {
       const deceleration = 1;
       const zeroVelocityThreshold = 0.1;
       const deltaTime = 1;
-      const { velocity, position } = pointDeceleration(
+      const { velocity, position } = deceleratePoint(
         p, v, deceleration, deltaTime, null, 0, zeroVelocityThreshold,
       );
       expect(round(velocity.toPolar().mag)).toBe(4);
@@ -115,7 +115,7 @@ describe('deceleratePoint', () => {
         // const bounds = new BoundsRect(-4.5, -1, 9, 2);
         const bounds = new BoundsRect(new Rect(-4.5, -1, 9, 2));
         const bounceLoss = 0;
-        const { velocity, position } = pointDeceleration(p, v, deceleration, deltaTime, bounds, bounceLoss);
+        const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime, bounds, bounceLoss);
         // s = v0*t + 0.5*acc*t^2
         //   = 5 * 2 + 0.5 * 1 * 2 * 2 = 10 - 2 = 8
         // Total displacement = 8
@@ -132,7 +132,7 @@ describe('deceleratePoint', () => {
         const deltaTime = 2;
         const bounds = new BoundsRect(new Rect(-4.5, -1, 9, 2));
         const bounceLoss = 0.5;
-        const { velocity, position } = pointDeceleration(p, v, deceleration, deltaTime, bounds, bounceLoss);
+        const { velocity, position } = deceleratePoint(p, v, deceleration, deltaTime, bounds, bounceLoss);
         // After 1s, s = 4.5 and v = 4.
         // Boundary is at 4.5
         // So at boundary, new v will be 4 * 0.5 = 2
@@ -146,13 +146,13 @@ describe('deceleratePoint', () => {
     });
   });
 });
-describe('pointDeceleration', () => {
+describe('Calculate Stop', () => {
   describe('No Bounds', () => {
     test('Along x from origin', () => {
       const p = new Point(0, 0);
       const v = new Point(5, 0);
       const deceleration = 1;
-      const { duration, position } = pointDeceleration(p, v, deceleration);
+      const { duration, position } = deceleratePoint(p, v, deceleration);
       expect(duration).toBe(5);
       // s = vt + 0.5 * at^2
       // s = 5 * 5 - 0.5 * 1 * 5^2 = 25 - 12.5 = 12.5
@@ -162,7 +162,7 @@ describe('pointDeceleration', () => {
       const p = new Point(1, 1);
       const v = new Point(-5, 0);
       const deceleration = 1;
-      const { duration, position } = pointDeceleration(p, v, deceleration);
+      const { duration, position } = deceleratePoint(p, v, deceleration);
       expect(duration).toBe(5);
       expect(position.round()).toEqual(new Point(-12.5 + 1, 1));
     });
@@ -170,7 +170,7 @@ describe('pointDeceleration', () => {
       const p = new Point(1, 1);
       const v = new Point(0, -10);
       const deceleration = 2;
-      const { duration, position } = pointDeceleration(p, v, deceleration);
+      const { duration, position } = deceleratePoint(p, v, deceleration);
       expect(duration).toBe(5);
       // s = vt + 0.5 * at^2
       // s = 10 * 5 - 0.5 * 2 * 5^2 = 50 - 25 = 25
@@ -180,7 +180,7 @@ describe('pointDeceleration', () => {
       const p = new Point(1, 1);
       const v = new Point(5 * 0.707107, 5 * 0.707107);
       const deceleration = 1;
-      const { duration, position } = pointDeceleration(p, v, deceleration);
+      const { duration, position } = deceleratePoint(p, v, deceleration);
       expect(round(duration, 3)).toBe(5);
       // s = vt + 0.5 * at^2
       // s = 10 * 5 - 0.5 * 1 * 5^2 = 25 - 12.5 = 12.5
@@ -192,7 +192,7 @@ describe('pointDeceleration', () => {
       const p = new Point(0, 0);
       const v = new Point(5, 0); // 5 rad/s
       const deceleration = 1; // 1 rad/s/s
-      const { duration, position } = pointDeceleration(p, v, deceleration);
+      const { duration, position } = deceleratePoint(p, v, deceleration);
       expect(round(duration, 3)).toBe(5);
       // s = vt + 0.5 * at^2
       // s = 10 * 5 - 0.5 * 1 * 5^2 = 25 - 12.5 = 12.5
@@ -203,7 +203,7 @@ describe('pointDeceleration', () => {
       const v = new Point(5, 0);
       const deceleration = 1;
       const zeroVelocityThreshold = 0.1;
-      const { duration, position } = pointDeceleration(
+      const { duration, position } = deceleratePoint(
         p, v, deceleration, null, null, 0, zeroVelocityThreshold,
       );
       expect(duration).toBe(4.9);
@@ -219,7 +219,7 @@ describe('pointDeceleration', () => {
       const deceleration = 1;
       const bounds = new BoundsRect(-4.5, -1, 9, 2);
       const bounceLoss = 0;
-      const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+      const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       // Total displacement = 12.5
       // For v0 = 5, acc = -1, after 1s, the displaycement will be:
       // s = v0*t + 0.5*acc*t^2 = 5 - 0.5 = 4.5
@@ -234,7 +234,7 @@ describe('pointDeceleration', () => {
       const bounds = new BoundsRect(-4.5, -1, 9, 2);
       const bounceLoss = 0;
       const zeroVelocityThreshold = 0.1
-      const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss, zeroVelocityThreshold);
+      const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss, zeroVelocityThreshold);
       // Total displacement = 12.495
       // For v0 = 5, acc = -1, after 1s, the displaycement will be:
       // s = v0*t + 0.5*acc*t^2 = 5 - 0.5 = 4.5
@@ -248,7 +248,7 @@ describe('pointDeceleration', () => {
       const deceleration = 1;
       const bounds = new BoundsRect(-4.5, -1, 9, 2);
       const bounceLoss = 0.5;
-      const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+      const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       // For v0 = 5, acc = -1, after 1s, the displaycement will be:
       // s = v0*t + 0.5*acc*t^2 = 5 - 0.5 = 4.5
       // New velocity will be: v1 = v0 + acc * t = 5 - 1 = 4;
@@ -265,7 +265,7 @@ describe('pointDeceleration', () => {
       const deceleration = 1;
       const bounds = new BoundsRect(-6, -1, 12, 2);
       const bounceLoss = 0;
-      const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+      const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       // Total time:
       //  t = v0 / a = 10s
       //
@@ -285,7 +285,7 @@ describe('pointDeceleration', () => {
       const deceleration = 1;
       const bounds = new BoundsRect(-4.5, -4.5, 9, 9);
       const bounceLoss = 0;
-      const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+      const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       // Total displacement = 12.5
       // For v0 = 5, acc = -1, after 1s, the displaycement will be:
       // s = v0*t + 0.5*acc*t^2 = 5 - 0.5 = 4.5
@@ -299,7 +299,7 @@ describe('pointDeceleration', () => {
       const deceleration = 1;
       const bounds = new BoundsRect(-5.6568542494, -100, 5.6568542494 * 2, 200);
       const bounceLoss = 0;
-      const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+      const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       // Velocity mag: 5, angle 45º
       // Total duration: 5
       // Total displacement: 5 * 5 - 0.5 * 25 = 12.5
@@ -322,77 +322,77 @@ describe('pointDeceleration', () => {
       test('45º single bounce top, no loss', () => {
         const v = new Point(5 * 0.70710678, 5 * 0.70710678);
         const bounds = new BoundsRect(-100, -5.6568542494, 200, 5.6568542494 * 2);
-        const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+        const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
         expect(round(duration, 3)).toBe(5);
         expect(position.round(3)).toEqual(new Point(8.839, 5.657 - 3.182).round(3));
       });
       test('45º single bounce corner, no loss', () => {
         const v = new Point(5 * 0.70710678, 5 * 0.70710678);
         const bounds = new BoundsRect(-5.6568542494, -5.6568542494, 5.6568542494 * 2, 5.6568542494 * 2);
-        const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+        const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
         expect(round(duration, 3)).toBe(5);
         expect(position.round(3)).toEqual(new Point(5.657 - 3.182, 5.657 - 3.182).round(3));
       });
       test('135º single bounce top, no loss', () => {
         const v = new Point(-5 * 0.70710678, 5 * 0.70710678);
         const bounds = new BoundsRect(-100, -5.6568542494, 200, 5.6568542494 * 2);
-        const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+        const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
         expect(round(duration, 3)).toBe(5);
         expect(position.round(3)).toEqual(new Point(-8.839, 5.657 - 3.182).round(3));
       });
       test('135º single bounce left, no loss', () => {
         const v = new Point(-5 * 0.70710678, 5 * 0.70710678);
         const bounds = new BoundsRect(-5.6568542494, -100, 5.6568542494 * 2, 200);
-        const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+        const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
         expect(round(duration, 3)).toBe(5);
         expect(position.round(3)).toEqual(new Point(-(5.657 - 3.182), 8.839).round(3));
       });
       test('135º single bounce corner, no loss', () => {
         const v = new Point(-5 * 0.70710678, 5 * 0.70710678);
         const bounds = new BoundsRect(-5.6568542494, -5.6568542494, 5.6568542494 * 2, 5.6568542494 * 2);
-        const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+        const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
         expect(round(duration, 3)).toBe(5);
         expect(position.round(3)).toEqual(new Point(-(5.657 - 3.182), 5.657 - 3.182).round(3));
       });
       test('225º single bounce top, no loss', () => {
         const v = new Point(-5 * 0.70710678, -5 * 0.70710678);
         const bounds = new BoundsRect(-100, -5.6568542494, 200, 5.6568542494 * 2);
-        const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+        const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
         expect(round(duration, 3)).toBe(5);
         expect(position.round(3)).toEqual(new Point(-8.839, -(5.657 - 3.182)).round(3));
       });
       test('225º single bounce left, no loss', () => {
         const v = new Point(-5 * 0.70710678, -5 * 0.70710678);
         const bounds = new BoundsRect(-5.6568542494, -100, 5.6568542494 * 2, 200);
-        const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+        const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
         expect(round(duration, 3)).toBe(5);
         expect(position.round(3)).toEqual(new Point(-(5.657 - 3.182), -8.839).round(3));
       });
       test('225º single bounce corner, no loss', () => {
         const v = new Point(-5 * 0.70710678, -5 * 0.70710678);
         const bounds = new BoundsRect(-5.6568542494, -5.6568542494, 5.6568542494 * 2, 5.6568542494 * 2);
-        const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+        const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
         expect(round(duration, 3)).toBe(5);
         expect(position.round(3)).toEqual(new Point(-(5.657 - 3.182), -(5.657 - 3.182)).round(3));
       });
       test('315º single bounce top, no loss', () => {
         const v = new Point(5 * 0.70710678, -5 * 0.70710678);
         const bounds = new BoundsRect(-100, -5.6568542494, 200, 5.6568542494 * 2);
-        const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+        const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
         expect(round(duration, 3)).toBe(5);
         expect(position.round(3)).toEqual(new Point(8.839, -(5.657 - 3.182)).round(3));
       });
       test('315º single bounce left, no loss', () => {
         const v = new Point(5 * 0.70710678, -5 * 0.70710678);
         const bounds = new BoundsRect(-5.6568542494, -100, 5.6568542494 * 2, 200);
-        const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+        const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
         expect(round(duration, 3)).toBe(5);
         expect(position.round(3)).toEqual(new Point((5.657 - 3.182), -8.839).round(3));
       });
       test('315 single bounce corner, no loss', () => {
         const v = new Point(5 * 0.70710678, -5 * 0.70710678);
         const bounds = new BoundsRect(-5.6568542494, -5.6568542494, 5.6568542494 * 2, 5.6568542494 * 2);
-        const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+        const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
         expect(round(duration, 3)).toBe(5);
         expect(position.round(3)).toEqual(new Point((5.657 - 3.182), -(5.657 - 3.182)).round(3));
       });
@@ -405,7 +405,7 @@ describe('pointDeceleration', () => {
       const deceleration = 1;
       const bounds = new BoundsLine([0, 0], 100, 0);
       const bounceLoss = 0;
-      const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+      const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       // Total displacement = 12.5
       expect(duration).toBe(5);
       expect(position.round(3)).toEqual(new Point(12.5, 0));
@@ -417,7 +417,7 @@ describe('pointDeceleration', () => {
     //   const deceleration = 1;
     //   const bounds = new BoundsLine([0, 0], 100, 0);
     //   const bounceLoss = 0;
-    //   const { duration, position } = pointDeceleration(p, v, deceleration, bounds, bounceLoss);
+    //   const { duration, position } = deceleratePoint(p, v, deceleration, bounds, bounceLoss);
     //   // Total displacement = 12.5
     //   // For v0 = 5, acc = -1, after 1s, the displaycement will be:
     //   // s = v0*t + 0.5*acc*t^2 = 5 - 0.5 = 4.5
@@ -431,7 +431,7 @@ describe('pointDeceleration', () => {
       const deceleration = 1;
       const bounds = new BoundsLine([-4.5, 0], 9, 0);
       const bounceLoss = 0;
-      const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+      const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       // Total displacement = 12.5
       // For v0 = 5, acc = -1, after 1s, the displaycement will be:
       // s = v0*t + 0.5*acc*t^2 = 5 - 0.5 = 4.5
@@ -446,7 +446,7 @@ describe('pointDeceleration', () => {
       const deceleration = 1;
       const bounds = new BoundsLine([-100, 0], 200, 0);
       const bounceLoss = 0;
-      const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+      const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       expect(duration).toBe(5);
       const shaddow = position.getShaddowOnLine(bounds.boundary);
       expect(shaddow.round(3)).toEqual(new Point(12.5, 0))
@@ -457,7 +457,7 @@ describe('pointDeceleration', () => {
       const deceleration = 1;
       const bounds = new BoundsLine([-4.5, 0], 9, 0);
       const bounceLoss = 0;
-      const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+      const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       expect(duration).toBe(5);
       const shaddow = position.getShaddowOnLine(bounds.boundary);
       expect(shaddow.round(3)).toEqual(new Point(-3.5, 0))
@@ -469,7 +469,7 @@ describe('pointDeceleration', () => {
       const f = 4.5 / Math.sqrt(2);
       const bounds = new BoundsLine([-f, -f], 9, Math.PI / 4);
       const bounceLoss = 0;
-      const { duration, position } = pointDeceleration(p, v, deceleration, null, bounds, bounceLoss);
+      const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       expect(duration).toBe(5);
       
       // const xDistance = 12.5;
