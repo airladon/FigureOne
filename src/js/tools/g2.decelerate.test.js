@@ -1,10 +1,101 @@
 import {
-  Point, Rect, Line, BoundsRect, BoundsLine,
-  deceleratePoint,
+  Point, Rect, Line, BoundsRect, BoundsLine, BoundsValue,
+  deceleratePoint, decelerateValue,
 } from './g2';
 import { round } from './math';
 
-describe('Decelerate', () => {
+describe('Decelerate Value', () => {
+  describe('No Bounds', () => {
+    test('From origin', () => {
+      const p = 0;
+      const v = 5;
+      const deceleration = 1;
+      const deltaTime = 1;
+      const { velocity, value } = decelerateValue(p, v, deceleration, deltaTime);
+      // v1 = v0 - a * t = 5 - 1 * 1 = 4
+      expect(round(velocity)).toBe(4);
+      // s = vt + 0.5 * at^2
+      // s = 5 * 1 - 0.5 * 1 * 1^2 = 5 - 0.5 = 4.5
+      expect(value).toEqual(4.5, 0);
+    });
+    test('Along x from point, 1s', () => {
+      const p = 1;
+      const v = 5;
+      const deceleration = 1;
+      const deltaTime = 1;
+      const { velocity, value } = decelerateValue(p, v, deceleration, deltaTime);
+      // v1 = v0 - a * t = 5 - 1 * 1 = 4
+      expect(round(velocity)).toBe(4);
+      // s = vt + 0.5 * at^2
+      // s = 5 * 1 - 0.5 * 1 * 1^2 = 5 - 0.5 = 4.5
+      expect(round(value)).toEqual(5.5);
+    });
+    test('Till Stop', () => {
+      const p = 0;
+      const v = 5;
+      const deceleration = 1;
+      const deltaTime = 5;
+      const { velocity, value } = decelerateValue(p, v, deceleration, deltaTime);
+      // v1 = v0 - a * t = 5 - 1 * 5 = 0
+      expect(round(velocity)).toBe(0);
+      // s = vt + 0.5 * at^2
+      // s = 5 * 5 - 0.5 * 1 * 5^2 = 25 - 12.5 = 12.5
+      expect(round(value)).toEqual(12.5);
+    });
+    test('Till after Stop', () => {
+      const p = 0;
+      const v = 5;
+      const deceleration = 1;
+      const deltaTime = 10;
+      const { velocity, value } = decelerateValue(p, v, deceleration, deltaTime);
+      // Max deltaTime = v0 / a = 5 / 1 = 5
+      // v1 = v0 - a * t = 5 - 1 * 5 = 0
+      expect(round(velocity)).toBe(0);
+      // s = vt + 0.5 * at^2
+      // s = 5 * 5 - 0.5 * 1 * 5^2 = 25 - 12.5 = 12.5
+      expect(round(value)).toEqual(12.5);
+    });
+    describe('Rect Bounds', () => {
+      test('Single bounce, no loss', () => {
+        const p = 0;
+        const v = 5;
+        const deceleration = 1;
+        const deltaTime = 2;
+        // const bounds = new BoundsRect(-4.5, -1, 9, 2);
+        const bounds = new BoundsValue(-4.5, 4.5);
+        const bounceLoss = 0;
+        const { velocity, value } = decelerateValue(p, v, deceleration, deltaTime, bounds, bounceLoss);
+        // s = v0*t + 0.5*acc*t^2
+        //   = 5 * 2 + 0.5 * 1 * 2 * 2 = 10 - 2 = 8
+        // Total displacement = 8
+        // For v0 = 5, acc = -1, after 1s, the displaycement will be:
+        // s = v0*t + 0.5*acc*t^2 = 5 - 0.5 = 4.5
+        // Therefore end point will be 4.5 - (8 - 4.5) = 1
+        expect(round(velocity)).toBe(-3);
+        expect(round(value)).toEqual(1);
+      });
+      test('Single bounce, 0.5 loss', () => {
+        const p = 0;
+        const v = 5;
+        const deceleration = 1;
+        const deltaTime = 2;
+        const bounds = new BoundsValue({ min: -4.5, max: 4.5 });
+        const bounceLoss = 0.5;
+        const { velocity, value } = decelerateValue(p, v, deceleration, deltaTime, bounds, bounceLoss);
+        // After 1s, s = 4.5 and v = 4.
+        // Boundary is at 4.5
+        // So at boundary, new v will be 4 * 0.5 = 2
+        // Over the next second, s will be:
+        //    = 2 * 1 - 0.5 * 1 * 1 * 1 = 1.5
+        //    and v will reduce from 2 to 1
+        // Therefore final position will be 4.5 - 1.5 = 3
+        expect(round(velocity)).toBe(-1);
+        expect(round(value)).toEqual(3);
+      });
+    });
+  });
+});
+describe('Decelerate Point', () => {
   describe('No Bounds', () => {
     test('Along x from origin, 1s', () => {
       const p = new Point(0, 0);
