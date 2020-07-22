@@ -610,9 +610,10 @@ class DiagramElement {
       boundary: null,
       maxVelocity: new TransformLimit(5, 5, 5),
       freely: {
-        zeroVelocityThreshold: new TransformLimit(0.001, 0.001, 0.001),
-        deceleration: new TransformLimit(5, 5, 5),
+        zeroVelocityThreshold: { scale: 0.001, rotation: 0.001, translation: 0.001 },
+        deceleration: { scale: 5, rotation: 5, translation: 5 },
         callback: null,
+        bounceLoss: { scale: 0.5, rotation: 0.5, translation: 0.5 },
       },
       bounce: true,
       canBeMovedAfterLosingTouch: false,
@@ -1895,14 +1896,16 @@ class DiagramElement {
       this.state.movement.velocity,
       this.move.freely.deceleration,
       deltaTime,
+      {},
+      this.move.freely.bounceLoss,
       this.move.freely.zeroVelocityThreshold,
     );
     if (deltaTime > 0) {
-      for (let i = 0; i < next.t.order.length; i += 1) {
-        const t = next.t.order[i];
+      for (let i = 0; i < next.transform.order.length; i += 1) {
+        const t = next.transform.order[i];
         const min = this.move.minTransform.order[i];
         const max = this.move.maxTransform.order[i];
-        const v = next.v.order[i];
+        const v = next.velocity.order[i];
         if ((t instanceof Translation
             && v instanceof Translation
             && max instanceof Translation
@@ -1930,7 +1933,7 @@ class DiagramElement {
               v.y = 0;
             }
           }
-          next.v.order[i] = v;
+          next.velocity.order[i] = v;
         }
         if (t instanceof Rotation
             && v instanceof Rotation
@@ -1943,14 +1946,14 @@ class DiagramElement {
               v.r = 0;
             }
           }
-          next.v.order[i] = v;
+          next.velocity.order[i] = v;
         }
       }
-      next.v.calcMatrix();
+      next.velocity.calcMatrix();
     }
     return {
-      velocity: next.v,
-      transform: next.t,
+      velocity: next.velocity,
+      transform: next.transform,
     };
   }
 

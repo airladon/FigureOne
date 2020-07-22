@@ -106,6 +106,6 @@ describe('Move Freely', () => {
       expect(a.getPosition().round(3)).toEqual(new Point(12.5, 0));
       expect(a.getRemainingMovingFreelyDuration()).toBe(0);
       expect(a.state.isMovingFreely).toBe(false);
-    })
+    });
   });
-})
+});
