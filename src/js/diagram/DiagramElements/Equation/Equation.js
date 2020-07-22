@@ -1398,13 +1398,13 @@ export class Equation extends DiagramElementCollection {
 
     if (this.eqn.isAnimating) {
       if (options.ifAnimating.skipToTarget) {
-        this.stop(true, true);
+        this.stop('complete');
         const currentForm = this.getCurrentForm();
         if (currentForm != null) {
           this.showForm(currentForm);
         }
       } else {
-        this.stop(true, false);
+        this.stop('cancel');
       }
       this.eqn.isAnimating = false;
       if (options.ifAnimating.cancelGoTo) {
@@ -1660,7 +1660,7 @@ export class Equation extends DiagramElementCollection {
   replayCurrentForm(duration: number) {
     if (this.eqn.isAnimating) {
       // this.stop(true, true);
-      this.stop(true, true);
+      this.stop('complete');
       // this.animations.cancel('complete');
       // this.animations.cancel('complete');
       this.eqn.isAnimating = false;

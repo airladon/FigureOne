@@ -849,7 +849,11 @@ describe('Seek', () => {
     });
     describe('Position Change', () => {
       beforeEach(() => {
+        // expect(transforms()).toEqual(['idle', 2, [], [1.5], [1], 0]);
+        // diagram.mock.timeStep(0, frameStep);
+        // expect(transforms()).toEqual(['idle', 2, [], [1.5], [1.5], 0]);
         a.setPosition(4, 4);
+        expect(transforms()).toEqual(['idle', 4, [], [1.5], [1], 0]);
         diagram.mock.timeStep(1, frameStep);
         expect(transforms()).toEqual(['idle', 4, [], [1.5], [1.5], 0]);
       });

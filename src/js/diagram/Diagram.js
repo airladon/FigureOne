@@ -955,7 +955,7 @@ class Diagram {
 
     // Stop animations and render
     elementToRender.isRenderedAsImage = false;
-    elementToRender.stop(true, true);
+    elementToRender.stop('complete');
 
     this.renderToCanvas(elementToRender.tieToHTML.element);
     elementToRender.isRenderedAsImage = true;
@@ -1484,11 +1484,12 @@ class Diagram {
   }
 
   stop(
-    cancelled: boolean = true,
-    forceSetToEndOfPlan: ?boolean | 'complete' | 'noComplete' = false,
-    freeze: boolean = false,
+    // cancelled: boolean = true,
+    // forceSetToEndOfPlan: ?boolean | 'complete' | 'noComplete' = false,
+    // freeze: boolean = false,
+    how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel',
   ) {
-    this.elements.stop(cancelled, forceSetToEndOfPlan, freeze);
+    this.elements.stop(how);
   }
 
   // To add elements to a diagram, either this method can be overridden,

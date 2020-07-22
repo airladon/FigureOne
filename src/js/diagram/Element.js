@@ -175,6 +175,7 @@ class DiagramElement {
     freely: {                 // Moving Freely properties
       zeroVelocityThreshold: TransformLimit,  // Velocity considered 0
       deceleration: TransformLimit,           // Deceleration
+      bounceLoss: TransformLimit,
       callback: ?(string | ((boolean) => void)),
     };
     bounce: boolean;
@@ -951,9 +952,6 @@ class DiagramElement {
   }
 
   freezePulseTransforms(forceOverwrite: boolean = true) {
-    // const freeze = () => {
-    //   this.frozenPulseTransforms = this.pulseTransforms.map(t => t._dup());
-    // };
     if (
       (forceOverwrite && this.pulseTransforms.length === 0)
       || (!forceOverwrite && this.pulseTransforms.length > 0)
@@ -1339,9 +1337,9 @@ class DiagramElement {
       if (pulse === 'completeBeforePause') {
         pauseWhenFinished = true;
       } else if (pulse === 'complete') {
-        this.stopPulsing(true, 'complete');
+        this.stopPulsing('complete');
       } else {
-        this.stopPulsing(true, 'noComplete', true);
+        this.stopPulsing('freeze');
       }
     }
     // console.log(this.name, pauseWhenFinished)
@@ -2105,7 +2103,7 @@ class DiagramElement {
     this.state.isMovingFreely = false;
     this.state.movement.previousTime = null;
     if (this.move.freely.callback) {
-      this.fnMap.exec(this.move.freely.callback, result);
+      this.fnMap.exec(this.move.freely.callback, how);
       this.move.freely.callback = null;
     }
     if (wasMovingFreely) {
@@ -2174,7 +2172,7 @@ class DiagramElement {
       // indefinitely.
       if (deltaTime >= this.pulseSettings.time && this.pulseSettings.time !== 0) {
         // this.state.isPulsing = false;
-        this.stopPulsing(false, true);
+        this.stopPulsing('complete');
         deltaTime = this.pulseSettings.time;
       }
 
@@ -2376,10 +2374,6 @@ class DiagramElement {
     this.startPulsing(options.when);
   }
 
-  // pulse(done: ?(mixed) => void = null) {
-  //   this.pulseDefault(done);
-  // }
-
   startPulsing(when: TypeWhen = 'nextFrame') {
     this.state.isPulsing = true;
     this.state.pulse.startTime = new GlobalAnimation().getWhen(when) / 1000;
@@ -2388,24 +2382,15 @@ class DiagramElement {
   }
 
   stopPulsing(
-    cancelled: ?mixed,
-    forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false,
-    freeze: boolean = false,
+    how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete'
+         | 'dissolveToComplete' = 'cancel',
   ) {
-    // console.log(forceSetToEndOfPlan)
     const wasPulsing = this.state.isPulsing;
-    if (
-      freeze
-      && this.state.isPulsing
-      // && this.pulseSettings.allowFreezeOnStop
-
-      && (forceSetToEndOfPlan === false || forceSetToEndOfPlan === 'noComplete')
-    ) {
+    if (how === 'freeze' && this.state.isPulsing) {
       this.frozenPulseTransforms = this.pulseTransforms.map(t => t._dup());
-      // this.pulseTransforms = this.pulseTransforms;
       this.pulseTransforms = [];
     }
-    if (forceSetToEndOfPlan === 'complete' || forceSetToEndOfPlan === true) {
+    if (how === 'cancel' || how === 'complete') {
       this.pulseTransforms = [];
     }
     this.state.isPulsing = false;
@@ -2413,7 +2398,7 @@ class DiagramElement {
     if (this.pulseSettings.callback) {
       const { callback } = this.pulseSettings;
       this.pulseSettings.callback = null;
-      this.fnMap.exec(callback, cancelled);
+      this.fnMap.exec(callback, how);
     }
     if (wasPulsing) {
       // this.subscriptions.trigger('animationFinished', )
@@ -2445,26 +2430,26 @@ class DiagramElement {
     }
   }
 
-  stopLegacy(
-    cancelled?: boolean = true,
-    forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false,
-    freeze: boolean = false,
-  ) {
-    if (forceSetToEndOfPlan === true || forceSetToEndOfPlan === 'complete') {
-      this.animations.cancelAll('complete');
-    } else if (forceSetToEndOfPlan === false || forceSetToEndOfPlan === 'noComplete') {
-      this.animations.cancelAll('noComplete');
-    } else {
-      this.animations.cancelAll(null);
-    }
-    this.stopMovingFreely(cancelled);
-    this.stopBeingMoved();
-    this.stopPulsing(cancelled, forceSetToEndOfPlan, freeze);
-  }
+  // stopLegacy(
+  //   cancelled?: boolean = true,
+  //   forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false,
+  //   freeze: boolean = false,
+  // ) {
+  //   if (forceSetToEndOfPlan === true || forceSetToEndOfPlan === 'complete') {
+  //     this.animations.cancelAll('complete');
+  //   } else if (forceSetToEndOfPlan === false || forceSetToEndOfPlan === 'noComplete') {
+  //     this.animations.cancelAll('noComplete');
+  //   } else {
+  //     this.animations.cancelAll(null);
+  //   }
+  //   this.stopMovingFreely(cancelled);
+  //   this.stopBeingMoved();
+  //   this.stopPulsing(cancelled, forceSetToEndOfPlan, freeze);
+  // }
 
-  cancel(forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false) {
-    this.stop(true, forceSetToEndOfPlan);
-  }
+  // cancel(forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false) {
+  //   this.stop(true, forceSetToEndOfPlan);
+  // }
 
   updateLimits(
     limits: Rect,
@@ -4480,18 +4465,19 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   stop(
-    cancelled: boolean = true,
-    forceSetToEndOfPlan: ?boolean | 'complete' | 'noComplete' = false,
-    freeze: boolean = false,
+    // cancelled: boolean = true,
+    // forceSetToEndOfPlan: ?boolean | 'complete' | 'noComplete' = false,
+    // freeze: boolean = false,
+    how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel',
     elementOnly: boolean = false,
   ) {
-    super.stop(cancelled, forceSetToEndOfPlan, freeze);
+    super.stop(how);
     if (elementOnly) {
       return;
     }
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.stop(cancelled, forceSetToEndOfPlan, freeze, elementOnly);
+      element.stop(how, elementOnly);
       // element.cancel(forceSetToEndOfPlan);
     }
   }
