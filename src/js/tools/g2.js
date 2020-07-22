@@ -2850,7 +2850,7 @@ class BoundsValue extends Bounds {
   constructor(
     minOrObject: number | { min: number, max: number},
     maxOrPrecision: number = 8,
-    precisionIn: 8,
+    precisionIn: number = 8,
   ) {
     let boundary;
     let precision;
@@ -3071,7 +3071,7 @@ class BoundsLine extends Bounds {
       boundary = pointOrLine;
       precision = p2OrMagOrPrecision;
     }
-    super(boundary, precisionIn);
+    super(boundary, precision);
   }
 
   contains(position: number | Point) {
@@ -3393,7 +3393,7 @@ function deceleratePoint(
     return {
       duration: t + newStop.duration,
       position: newStop.position,
-      velocity: 0,
+      velocity: new Point(0, 0),
     };
   }
   return deceleratePoint(
@@ -3434,17 +3434,175 @@ function decelerateValue(
   };
 }
 
-type TypeSimpleDefinition = {
+function decelerateIndependantPoint(
+  value: Point,
+  velocity: Point,
+  deceleration: Point,
+  deltaTime: number | null = null,
+  boundsIn: ?BoundsRect = null,
+  bounceLoss: number = 0,
+  zeroVelocityThreshold: number = 0,
+  precision: number = 8,
+) {
+  let xBounds = null;
+  let yBounds = null;
+  if (boundsIn != null) {
+    xBounds = new BoundsValue(boundsIn.boundary.left, boundsIn.boundary.right);
+    yBounds = new BoundsValue(boundsIn.boundary.bottom, boundsIn.boundary.top);
+  }
+
+  const xResult = decelerateValue(
+    value.x, velocity.x, deceleration.x, deltaTime,
+    xBounds, bounceLoss, zeroVelocityThreshold, precision,
+  );
+  const yResult = decelerateValue(
+    value.y, velocity.y, deceleration.y, deltaTime,
+    yBounds, bounceLoss, zeroVelocityThreshold, precision,
+  );
+
+  return {
+    duration: new Point(xResult.duration, yResult.duration),
+    value: new Point(xResult.value, yResult.value),
+    velocity: new Point(yResult.velocity, yResult.velocity),
+  };
+}
+
+type TypeTransformationDefinition = {
   rotation?: number;
   position?: number;
   translation?: number;
-  transform?: Transform;    // mag of (x, y) is used
+  // transform?: Transform;    // mag of (x, y) is used
   scale?: number;
 }
 
-type TypeVelocity = TypeSimpleDefinition; // where for transform mag of (x, y) is used as velocity
+type TypeSimpleBoundsDefinition = {
+  rotation?: BoundsValue;
+  position?: BoundsRect;
+  translation?: BoundsRect;
+  scale?: BoundsRect;
+}
 
-type TypeDeceleration = TypeSimpleDefinition; // where for transform mag of (x, y) is used as velocity
+// type TypeVelocity = TypeSimpleDefinition; // where for transform mag of (x, y) is used as velocity
+
+// type TypeDeceleration = TypeSimpleDefinition; // where for transform mag of (x, y) is used as velocity
+
+type TypeTransformDeceleration = Array<number>;
+type TypeTransformBounds = Array<Bounds>;
+type TypeTransformZeroThreshold = Array<number>;
+type TypeTransformBounce = Array<number>;
+
+function getTransformationOrderFromTransform(
+  transformationDefinition: TypeTransformationDefinition,
+  transform: Transform,
+  defaultTransformationDefinition: TypeTransformationDefinition = {
+    position: 0,
+    scale: 0,
+    rotation: 0,
+  }
+): Array<number> {
+  const order = [];
+  for (let i = 0; i < transform.order.length; i += 1) {
+    const transformation = transform.order[i];
+    if (transformation instanceof Translation) {
+      let { position } = defaultTransformationDefinition;
+      if (transformationDefinition.position != null) {
+        ({ position } = transformationDefinition);
+      }
+      if (transformationDefinition.translation != null) {
+        position = transformationDefinition.translation;
+      }
+      order.push(position);
+    } else if (transformation instanceof Scale) {
+      let { scale } = defaultTransformationDefinition;
+      if (transformationDefinition.scale != null) {
+        ({ scale } = transformationDefinition);
+      }
+      order.push(scale);
+    } else if (transformation instanceof Rotation) {
+      let { rotation } = defaultTransformationDefinition;
+      if (transformationDefinition.rotation != null) {
+        ({ rotation } = transformationDefinition);
+      }
+      order.push(rotation);
+    }
+  }
+}
+
+function decelerateTransform(
+  transform: Transform,
+  velocity: Transform,
+  deceleration: TypeTransformDeceleration,
+  deltaTime: number | null,
+  bounds: TypeTransformBounds,
+  bounceLoss: TypeTransformBounce,
+  zeroVelocityThreshold: TypeTransformZeroThreshold,
+  precision: number = 8,
+) {
+  // let deceleration;
+  // if (decelerationIn instanceof Transform) {
+  //   deceleration = [];
+  //   for (let i = 0; i < decelerationIn.order.length; i += 1) {
+  //     const transformation = decelerationIn.order[i];
+  //     if (transformation instanceof Scale || transformation instanceof Translation) {
+  //       deceleration.push(Math.sqrt(transformation.x ** 2 + transformation.y ** 2));
+  //     } else {
+  //       deceleration.push(transformation.r);
+  //     }
+  //   }
+  // } else {
+  //   deceleration = getTransformationOrderFromTransform(decelerationIn, transform);
+  // }
+  let duration = 0;
+  const newOrder = [];
+  const newVOrder = [];
+  for (let i = 0; i < transform.order.length; i += 1) {
+    const transformation = transform.order[i];
+    let result;
+    let newTransformation;
+    let newVTransformation;
+    if (transformation instanceof Translation) {
+      result = deceleratePoint(
+        transformation, velocity.order[i], deceleration[i], deltaTime,
+        bounds[i], bounceLoss[i], zeroVelocityThreshold[i],
+        precision,
+      );
+      newTransformation = new Translation(result.position.x, result.position.y);
+      newVTransformation = new Translation(result.velocity.x, result.velocity.y);
+    } else if (transformation instanceof Scale) {
+      result = deceleratePoint(
+        transformation, velocity.order[i], deceleration[i], deltaTime,
+        bounds[i], bounceLoss[i], zeroVelocityThreshold[i],
+        precision,
+      );
+      newTransformation = new Scale(result.position.x, result.position.y);
+      newVTransformation = new Scale(result.velocity.x, result.velocity.y)
+    } else {
+      result = decelerateValue(
+        transformation.r, velocity.order[i].r, deceleration[i], deltaTime,
+        bounds[i], bounceLoss[i], zeroVelocityThreshold[i],
+        precision,
+      );
+      newTransformation = new Rotation(result.value);
+      newVTransformation = new Rotation(result.velocity);
+    }
+    if (deltaTime === null) {
+      if (result.duration > duration) {
+        ({ duration } = result);
+      }
+    }
+    newVOrder.push(newVTransformation);
+    newOrder.push(newTransformation);
+  }
+
+  if (deltaTime != null) {
+    duration = deltaTime;
+  }
+  return {
+    transform: new Transform(newOrder),
+    velocity: new Transform(newVOrder),
+    duration,
+  };
+}
 
 
 // type TypeValueDefinition = {
@@ -3699,6 +3857,7 @@ export {
   BoundsLine,
   BoundsValue,
   Vector,
+  decelerateTransform,
   // pointDeceleration,
   // setState,
 };
