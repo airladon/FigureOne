@@ -79,7 +79,7 @@ export default class PulseAnimationStep extends ElementAnimationStep {
   setToEnd() {
     if (this.element != null) {
       if (this.stopAfterDuration) {
-        this.element.stopPulsing(true);
+        this.element.stopPulsing();
       }
     }
   }

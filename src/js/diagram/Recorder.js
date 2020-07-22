@@ -1080,11 +1080,13 @@ class Recorder {
     }
     // console.log(time)
     this.setToTime(time);
-    this.diagram.pause({
-      animation: 'freeze',
-      pulse: 'freeze',
-      movingFreely: 'freeze',
-    });
+    // this.diagram.pause({
+    //   animation: 'freeze',
+    //   pulse: 'freeze',
+    //   movingFreely: 'freeze',
+    // });
+    this.diagram.stop('freeze');
+    
   }
 
   setToTime(timeIn: number, force: boolean = false) {
@@ -1324,7 +1326,7 @@ class Recorder {
       finished();
     } else if (playSettings.action === 'dissolve') {
       // this.diagram.elements.freezePulseTransforms(false);
-      this.diagram.stop(true, false, true);
+      this.diagram.stop('freeze');
       this.diagram.dissolveToState({
         state: stateToStartFrom,
         dissolveInDuration: playSettings.duration.dissolveIn,
@@ -1336,7 +1338,7 @@ class Recorder {
     } else {
       // console.log('asdf')
       // debugger;
-      this.diagram.stop(true, false, true);  // This is cancelling the pulse
+      this.diagram.stop('freeze');  // This is cancelling the pulse
       this.diagram.animateToState(
         stateToStartFrom,
         playSettings,
