@@ -3331,7 +3331,7 @@ function deceleratePoint(
       };
     }
     let v1 = v0 - deceleration * deltaTime;
-    if (v1 <= zeroVelocityThreshold) {
+    if (round(v1, precision) <= round(zeroVelocityThreshold, precision)) {
       v1 = 0;
     }
     return {

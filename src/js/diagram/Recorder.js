@@ -1080,13 +1080,12 @@ class Recorder {
     }
     // console.log(time)
     this.setToTime(time);
-    // this.diagram.pause({
-    //   animation: 'freeze',
-    //   pulse: 'freeze',
-    //   movingFreely: 'freeze',
-    // });
-    this.diagram.stop('freeze');
-    
+    this.diagram.pause({
+      animation: 'freeze',
+      pulse: 'freeze',
+      movingFreely: 'freeze',
+    });
+    // this.diagram.stop('freeze');
   }
 
   setToTime(timeIn: number, force: boolean = false) {

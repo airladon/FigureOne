@@ -329,13 +329,18 @@ DiagramElementPrimitive {
     "canBeMovedAfterLosingTouch": false,
     "element": null,
     "freely": Object {
+      "bounceLoss": Object {
+        "rotation": 0.5,
+        "scale": 0.5,
+        "translation": 0.5,
+      },
       "callback": null,
-      "deceleration": TransformLimit {
+      "deceleration": Object {
         "rotation": 5,
         "scale": 5,
         "translation": 5,
       },
-      "zeroVelocityThreshold": TransformLimit {
+      "zeroVelocityThreshold": Object {
         "rotation": 0.001,
         "scale": 0.001,
         "translation": 0.001,
