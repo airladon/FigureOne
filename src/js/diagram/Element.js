@@ -2430,9 +2430,9 @@ class DiagramElement {
     // } else {
     //   this.animations.cancelAll(null);
     // }
-    this.stopMovingFreely(cancelled);
+    this.stopMovingFreely(how);
     this.stopBeingMoved();
-    this.stopPulsing(cancelled, forceSetToEndOfPlan, freeze);
+    this.stopPulsing(how);
   }
 
   stopAnimating(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel') {

@@ -3437,7 +3437,7 @@ function decelerateValue(
 function decelerateIndependantPoint(
   value: Point,
   velocity: Point,
-  deceleration: Point,
+  deceleration: number,
   deltaTime: number | null = null,
   boundsIn: ?BoundsRect = null,
   bounceLoss: number = 0,
@@ -3452,17 +3452,17 @@ function decelerateIndependantPoint(
   }
 
   const xResult = decelerateValue(
-    value.x, velocity.x, deceleration.x, deltaTime,
+    value.x, velocity.x, deceleration, deltaTime,
     xBounds, bounceLoss, zeroVelocityThreshold, precision,
   );
   const yResult = decelerateValue(
-    value.y, velocity.y, deceleration.y, deltaTime,
+    value.y, velocity.y, deceleration, deltaTime,
     yBounds, bounceLoss, zeroVelocityThreshold, precision,
   );
 
   return {
     duration: new Point(xResult.duration, yResult.duration),
-    value: new Point(xResult.value, yResult.value),
+    point: new Point(xResult.value, yResult.value),
     velocity: new Point(yResult.velocity, yResult.velocity),
   };
 }
@@ -3569,12 +3569,12 @@ function decelerateTransform(
       newTransformation = new Translation(result.position.x, result.position.y);
       newVTransformation = new Translation(result.velocity.x, result.velocity.y);
     } else if (transformation instanceof Scale) {
-      result = deceleratePoint(
+      result = decelerateIndependantPoint(
         transformation, velocity.order[i], deceleration[i], deltaTime,
         bounds[i], bounceLoss[i], zeroVelocityThreshold[i],
         precision,
       );
-      newTransformation = new Scale(result.position.x, result.position.y);
+      newTransformation = new Scale(result.point.x, result.point.y);
       newVTransformation = new Scale(result.velocity.x, result.velocity.y)
     } else {
       result = decelerateValue(

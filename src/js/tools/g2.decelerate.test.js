@@ -661,4 +661,194 @@ describe('Decelerate Transform', () => {
     expect(result.transform.t().round()).toEqual(new Point(0.5, 0));
     expect(round(result.transform.r())).toEqual(12.5);
   });
+  test('Position and Rotation - Unequal, no bounds - 2s', () => {
+    const t = new Transform().rotate(0).translate(0, 0);
+    const v = new Transform().rotate(5).translate(3, 0);
+    const d = [1, 1];
+    const z = [0, 0];
+    const bounceLoss = [0, 0];
+    const bounds = [null, null];
+    const deltaTime = 2;
+    const result = decelerateTransform(t, v, d, deltaTime, bounds, bounceLoss, z);
+    expect(round(result.duration)).toBe(2);
+    expect(result.velocity.t().round()).toEqual(new Point(1, 0));
+    expect(round(result.velocity.r())).toEqual(3);
+    expect(result.transform.t().round()).toEqual(new Point(4, 0));
+    expect(round(result.transform.r())).toEqual(8);
+  });
+  test('Position and Rotation - Unequal, bounce', () => {
+    const t = new Transform().rotate(0).translate(0, 0);
+    const v = new Transform().rotate(10).translate(5, 0);
+    const d = [1, 1];
+    const z = [0, 0];
+    const bounceLoss = [0, 0];
+    const bounds = [new BoundsValue(-5, 5), new BoundsRect(-4.5, -1, 9, 2)];
+    const deltaTime = 2;
+    const result = decelerateTransform(t, v, d, deltaTime, bounds, bounceLoss, z);
+    // After 2s, rotation: v = 8m / s
+    //           displacement: s = 10 * 2 - 0.5 * 4 = 18
+    // After 2s, translation: v = 3m / s
+    //           displacement: s = 5 * 2 - 0.5 * 4 = 8
+    expect(round(result.duration)).toBe(2);
+    expect(result.velocity.t().round()).toEqual(new Point(-3, 0));
+    expect(round(result.velocity.r())).toEqual(8);
+    expect(result.transform.t().round()).toEqual(new Point(1, 0));
+    expect(round(result.transform.r())).toEqual(-2);
+  });
+  test('Position, Scale Rotation - no bounce', () => {
+    const t = new Transform().scale(1, 1).rotate(0).translate(0, 0);
+    const v = new Transform().scale(5, 5).rotate(5).translate(5, 5);
+    const d = [1, 1, 1];
+    const z = [0, 0, 0];
+    const bounceLoss = [0, 0, 0];
+    const bounds = [null, null, null];
+    const deltaTime = 1;
+    const result = decelerateTransform(t, v, d, deltaTime, bounds, bounceLoss, z);
+
+    expect(round(result.duration)).toBe(1);
+    expect(result.velocity.t().round(3)).toEqual(new Point(4.293, 4.293));
+    expect(result.velocity.s().round()).toEqual(new Point(4, 4));
+    expect(round(result.velocity.r())).toEqual(4);
+    expect(result.transform.t().round(3)).toEqual(new Point(4.646, 4.646));
+    // scale starts at 1
+    expect(result.transform.s().round()).toEqual(new Point(5.5, 5.5));
+    expect(round(result.transform.r())).toEqual(4.5);
+  });
+  test('Position, Scale Rotation - bounce', () => {
+    const t = new Transform().scale(1, 1).rotate(0).translate(0, 0);
+    const v = new Transform().scale(5, 5).rotate(5).translate(5, 5);
+    const d = [1, 1, 1];
+    const z = [0, 0, 0];
+    const bounceLoss = [0, 0, 0];
+    const bounds = [
+      new BoundsRect(-5.5, -5.5, 11, 11),
+      new BoundsValue(-4.5, 4.5),
+      new BoundsRect(-4.5, -4.5, 9, 9),
+    ];
+    // const bounds = [null, null, null];
+    const deltaTime = 2;
+    const result = decelerateTransform(t, v, d, deltaTime, bounds, bounceLoss, z);
+
+    expect(round(result.duration)).toBe(2);
+    expect(result.velocity.t().round(3)).toEqual(new Point(-3.586, -3.586));
+    expect(result.velocity.s().round()).toEqual(new Point(-3, -3));
+    expect(round(result.velocity.r())).toEqual(-3);
+    expect(result.transform.t().round(3)).toEqual(new Point(0.414, 0.414));
+    // scale starts at 1
+    expect(result.transform.s().round()).toEqual(new Point(2, 2));
+    expect(round(result.transform.r())).toEqual(1);
+  });
+  test('Position, Scale Rotation - bounce with loss', () => {
+    const t = new Transform().scale(1, 1).rotate(0).translate(0, 0);
+    const v = new Transform().scale(5, 5).rotate(5).translate(5 / Math.sqrt(2), 5 / Math.sqrt(2));
+    const d = [1, 1, 1];
+    const z = [0, 0, 0];
+    const bounceLoss = [0.2, 0.3, 0.4];
+    const bounds = [
+      new BoundsRect(-5.5, -5.5, 11, 11),
+      new BoundsValue(-4.5, 4.5),
+      new BoundsRect(-4.5 / Math.sqrt(2), -4.5 / Math.sqrt(2), 9 / Math.sqrt(2), 9 / Math.sqrt(2)),
+    ];
+    // const bounds = [null, null, null];
+    const deltaTime = 2;
+    const result = decelerateTransform(t, v, d, deltaTime, bounds, bounceLoss, z);
+
+    // Position - bounceLoss 0.4
+    // v0 = 5
+    // after 1s: At corner, v = 4, bounceV = 4 * 0.6 = 2.4
+    // s = 2.4 * 1 - 0.5 * 1 * 1 = 1.9
+    // From origin  = 4.5 - 1.9 = 3.1
+    //
+    // Scale - bounceLoss 0.2
+    // v0 = 5
+    // after 1s: v = 4 * 0.8 = 3.2
+    // s = 3.2 * 1 - 0.5 * 1 * 1^2 = 2.7
+    // From origin: 5.5 - 3.2 = 1.8
+    //
+    // Rotation - bounceLoss 0.3
+    // v0 = 5
+    // after 1s: v = 4 * 0.7 = 2.8
+    // s = 2.8 * 1 - 0.5 * 1 * 1^2 = 2.3
+    // From origin: 4.5 - 2.3 = 2.2
+    expect(round(result.duration)).toBe(2);
+    expect(result.velocity.t().round(3))
+      .toEqual(new Point(-1.4 / Math.sqrt(2), -1.4 / Math.sqrt(2)).round(3));
+    expect(result.velocity.s().round()).toEqual(new Point(-2.2, -2.2));
+    expect(round(result.velocity.r())).toEqual(-1.8);
+    expect(result.transform.t().round(3))
+      .toEqual(new Point(2.6 / Math.sqrt(2), 2.6 / Math.sqrt(2)).round(3));
+    expect(result.transform.s().round()).toEqual(new Point(2.8, 2.8));
+    expect(round(result.transform.r())).toEqual(2.2);
+  });
+  test('Position, Scale Rotation - Change z', () => {
+    const t = new Transform().scale(1, 1).rotate(0).translate(0, 0);
+    const v = new Transform().scale(5, 5).rotate(5).translate(5 / Math.sqrt(2), 5 / Math.sqrt(2));
+    const d = [1, 1, 1];
+    const z = [0.2, 0.1, 0.3];
+    const bounceLoss = [0, 0, 0];
+    const bounds = [null, null, null];
+    const deltaTime = null;
+    const result = decelerateTransform(t, v, d, deltaTime, bounds, bounceLoss, z);
+    // Position
+    // v0 = 5
+    // DeltaV = 4.7
+    // TimeToZero = 4.7
+    // s = 5 * 4.7 - 0.5 * 1 * 4.7**2 = 12.455
+    //
+    //
+    // Scale
+    // v0 = 5
+    // DeltaV = 4.8
+    // TimeToZero = 4.8
+    // s = 5 * 4.8 - 0.5 * 1 * 4.8**2 = 12.48 + 1
+    //
+    // Rotation
+    // v0 = 5
+    // DeltaV = 4.9
+    // TimeToZero = 4.9
+    // s = 5 * 4.9 - 0.5 * 1 * 4.9**2 = 12.495
+    expect(round(result.duration)).toBe(4.9);
+    expect(result.velocity.t().round(3))
+      .toEqual(new Point(0, 0).round(3));
+    expect(result.velocity.s().round()).toEqual(new Point(0, 0));
+    expect(round(result.velocity.r())).toEqual(0);
+    expect(result.transform.t().round(3))
+      .toEqual(new Point(12.455 / Math.sqrt(2), 12.455 / Math.sqrt(2)).round(3));
+    expect(result.transform.s().round()).toEqual(new Point(13.48, 13.48));
+    expect(round(result.transform.r())).toEqual(12.495);
+  });
+  test('Position, Scale Rotation - Change d', () => {
+    const t = new Transform().scale(1, 1).rotate(0).translate(0, 0);
+    const v = new Transform().scale(5, 5).rotate(5).translate(5 / Math.sqrt(2), 5 / Math.sqrt(2));
+    const d = [0.9, 0.8, 0.7];
+    const z = [0, 0, 0];
+    const bounceLoss = [0, 0, 0];
+    const bounds = [null, null, null];
+    const deltaTime = null;
+    const result = decelerateTransform(t, v, d, deltaTime, bounds, bounceLoss, z);
+    // Position
+    // v0 = 5
+    // TimeToZero = t = 5 / 0.7 = 7.143
+    // s = 5 * t - 0.5 * 0.7 * t**2 = 17.857
+    //
+    //
+    // Scale
+    // v0 = 5
+    // TimeToZero = t = 5 / 0.9 = 6.25
+    // s = 5 * t - 0.5 * 0.8 * t**2 = 15.625
+    //
+    // Rotation
+    // v0 = 5
+    // TimeToZero = t = 5 / 0.8 = 5.556
+    // s = 5 * t - 0.5 * 0.9 * t**2 = 13.889 + 1
+    expect(round(result.duration, 3)).toBe(7.143);
+    expect(result.velocity.t().round(3))
+      .toEqual(new Point(0, 0).round(3));
+    expect(result.velocity.s().round()).toEqual(new Point(0, 0));
+    expect(round(result.velocity.r())).toEqual(0);
+    expect(result.transform.t().round(3))
+      .toEqual(new Point(17.857 / Math.sqrt(2), 17.857 / Math.sqrt(2)).round(3));
+    expect(result.transform.s().round(3)).toEqual(new Point(14.889, 14.889));
+    expect(round(result.transform.r())).toEqual(15.625);
+  });
 });
