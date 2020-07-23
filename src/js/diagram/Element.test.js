@@ -36,7 +36,7 @@ describe('Animationa and Movement', () => {
     });
     describe('Animation', () => {
       let element;
-      let identity;
+      // let identity;
       let diagram;
       // let diagram;
       beforeEach(() => {
@@ -47,9 +47,9 @@ describe('Animationa and Movement', () => {
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
           [0, 0, 1, 1],
         );
-        identity = new Transform();
-        element.move.maxTransform = element.transform.constant(100);
-        element.move.minTransform = element.transform.constant(-100);
+        // identity = new Transform();
+        // element.move.maxTransform = element.transform.constant(100);
+        // element.move.minTransform = element.transform.constant(-100);
         diagram.elements.add('e', element);
       });
       describe('Rotation', () => {
@@ -249,8 +249,8 @@ describe('Animationa and Movement', () => {
         };
         // new TransformLimit(0.01, 0.01, 0.01);
         // identity = new Transform();
-        element.move.maxTransform = element.transform.constant(100);
-        element.move.minTransform = element.transform.constant(-100);
+        // element.move.maxTransform = element.transform.constant(100);
+        // element.move.minTransform = element.transform.constant(-100);
         diagram.elements.add('e', element);
       });
       test('Deceleration', () => {

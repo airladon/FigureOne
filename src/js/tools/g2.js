@@ -3417,7 +3417,10 @@ class TransformBounds extends Bounds {
     }
   }
 
-  updateTranslation(bound: Bounds | null, translationIndex: ?number = 0) {
+  updateTranslation(
+    bound: Bounds | Rect | Line | number | { max: number, min: number } | null,
+    translationIndex: ?number = 0,
+  ) {
     this.updateBound('t', bound, translationIndex);
   }
 
@@ -3850,156 +3853,156 @@ function decelerateTransform(
   };
 }
 
-class Limit {
-  max: TypeSimpleDefinition;
-  min: TypeSimpleDefinition;
-  boundary: Rect;
-  line: Line;
-};
+// class Limit {
+//   max: TypeSimpleDefinition;
+//   min: TypeSimpleDefinition;
+//   boundary: Rect;
+//   line: Line;
+// };
 
-class MovingFreelyTransform {
-  // transform: Transform;
-  velocity: Transform;
-  deceleration: Transform;
-  zeroVelocityThreshold: Transform;
-  bounds: {
-    max?: Transform;
-    min?: Transform;
-    line?: Line;
-    bounce?: boolean;
-    bounceLoss?: Transform;
-  };
+// class MovingFreelyTransform {
+//   // transform: Transform;
+//   velocity: Transform;
+//   deceleration: Transform;
+//   zeroVelocityThreshold: Transform;
+//   bounds: {
+//     max?: Transform;
+//     min?: Transform;
+//     line?: Line;
+//     bounce?: boolean;
+//     bounceLoss?: Transform;
+//   };
 
-  constructor(optionsIn: {
-    transform: TypeParsableTransform,
-    velocity?: TypeParsableTransform | TypeSimpleDefinition,
-    deceleration?: TypeParsableTransform | TypeSimpleDefinition,
-    zeroVelocityThreshold?: TypeParsableTransform | TypeSimpleDefinition,
-    bounds?: {
-      max?: TypeParsableTransform | TypeSimpleDefinition,
-      min?: TypeParsableTransform | TypeSimpleDefinition,
-      line?: TypeParsableLine,
-      bounce?: boolean,
-      bounceLoss?: TypeParsableTransform | TypeSimpleDefinition,
-    }
-  }) {
-    const transform = getTransform(optionsIn.transform);
-    this.velocity = simpleDefinitionToTransform(
-      transform,
-      optionsIn.velocity,
-      { rotation: 0, position: [0, 0], scale: 0 },
-    );
-    this.deceleration = simpleDefinitionToTransform(
-      transform,
-      optionsIn.deceleration,
-      { rotation: 1, position: [1, 0], scale: 1 },
-    );
-    this.zeroVelocityThreshold = simpleDefinitionToTransform(
-      transform,
-      optionsIn.zeroVelocityThreshold,
-      { rotation: 0.0001, position: [0.0001, 0.0001], scale: 0.0001 },
-    );
-    const { bounds } = optionsIn;
-    if (bounds != null) {
-      this.bounds = {};
-      if (bounds.max != null) {
-        this.bounds.max = simpleDefinitionToTransform(
-          transform,
-          bounds.max,
-          { position: [1000, 1000], rotation: 1000, scale: 1000 },
-        );
-      }
-      if (bounds.min != null) {
-        this.bounds.min = simpleDefinitionToTransform(
-          transform,
-          bounds.max,
-          { position: [-1000, -1000], rotation: -1000, scale: -1000 },
-        );
-      }
-      if (bounds.line != null) {
-        this.bounds.line = getLine(bounds.line);
-      }
-      if (bounds.bounce != null) {
-        this.bounds.bounce = bounds.bounce;
-      } else {
-        this.bounds.bounds = false;
-      }
-      if (bounds.bounceLoss != null) {
-        this.bounds.bounceLoss = bounds.bounceLoss;
-      } else {
-        this.bounds.bounceLoss = 0;
-      }
-    }
-  }
+//   constructor(optionsIn: {
+//     transform: TypeParsableTransform,
+//     velocity?: TypeParsableTransform | TypeSimpleDefinition,
+//     deceleration?: TypeParsableTransform | TypeSimpleDefinition,
+//     zeroVelocityThreshold?: TypeParsableTransform | TypeSimpleDefinition,
+//     bounds?: {
+//       max?: TypeParsableTransform | TypeSimpleDefinition,
+//       min?: TypeParsableTransform | TypeSimpleDefinition,
+//       line?: TypeParsableLine,
+//       bounce?: boolean,
+//       bounceLoss?: TypeParsableTransform | TypeSimpleDefinition,
+//     }
+//   }) {
+//     const transform = getTransform(optionsIn.transform);
+//     this.velocity = simpleDefinitionToTransform(
+//       transform,
+//       optionsIn.velocity,
+//       { rotation: 0, position: [0, 0], scale: 0 },
+//     );
+//     this.deceleration = simpleDefinitionToTransform(
+//       transform,
+//       optionsIn.deceleration,
+//       { rotation: 1, position: [1, 0], scale: 1 },
+//     );
+//     this.zeroVelocityThreshold = simpleDefinitionToTransform(
+//       transform,
+//       optionsIn.zeroVelocityThreshold,
+//       { rotation: 0.0001, position: [0.0001, 0.0001], scale: 0.0001 },
+//     );
+//     const { bounds } = optionsIn;
+//     if (bounds != null) {
+//       this.bounds = {};
+//       if (bounds.max != null) {
+//         this.bounds.max = simpleDefinitionToTransform(
+//           transform,
+//           bounds.max,
+//           { position: [1000, 1000], rotation: 1000, scale: 1000 },
+//         );
+//       }
+//       if (bounds.min != null) {
+//         this.bounds.min = simpleDefinitionToTransform(
+//           transform,
+//           bounds.max,
+//           { position: [-1000, -1000], rotation: -1000, scale: -1000 },
+//         );
+//       }
+//       if (bounds.line != null) {
+//         this.bounds.line = getLine(bounds.line);
+//       }
+//       if (bounds.bounce != null) {
+//         this.bounds.bounce = bounds.bounce;
+//       } else {
+//         this.bounds.bounds = false;
+//       }
+//       if (bounds.bounceLoss != null) {
+//         this.bounds.bounceLoss = bounds.bounceLoss;
+//       } else {
+//         this.bounds.bounceLoss = 0;
+//       }
+//     }
+//   }
 
-  decelerate(transform: Transform, deltaTime: number) {
-    const next = transform.decelerate(
-      this.velocity,
-      this.deceleration,
-      deltaTime,
-      this.zeroVelocityThreshold,
-    );
-    if (deltaTime > 0) {
-      for (let i = 0; i < next.t.order.length; i += 1) {
-        const t = next.t.order[i];
-        const min = this.move.minTransform.order[i];
-        const max = this.move.maxTransform.order[i];
-        const v = next.v.order[i];
-        if ((t instanceof Translation
-            && v instanceof Translation
-            && max instanceof Translation
-            && min instanceof Translation)
-          || (t instanceof Scale
-            && v instanceof Scale
-            && max instanceof Scale
-            && min instanceof Scale)
-        ) {
-          let onLine = true;
-          if (this.move.limitLine != null) {
-            onLine = t.shaddowIsOnLine(this.move.limitLine, 4);
-          }
-          if (min.x >= t.x || max.x <= t.x || !onLine) {
-            if (this.move.bounce) {
-              v.x = -v.x * 0.5;
-            } else {
-              v.x = 0;
-            }
-          }
-          if (min.y >= t.y || max.y <= t.y || !onLine) {
-            if (this.move.bounce) {
-              v.y = -v.y * 0.5;
-            } else {
-              v.y = 0;
-            }
-          }
-          next.v.order[i] = v;
-        }
-        if (t instanceof Rotation
-            && v instanceof Rotation
-            && max instanceof Rotation
-            && min instanceof Rotation) {
-          if (min.r >= t.r || max.r <= t.r) {
-            if (this.move.bounce) {
-              v.r = -v.r * 0.5;
-            } else {
-              v.r = 0;
-            }
-          }
-          next.v.order[i] = v;
-        }
-      }
-      next.v.calcMatrix();
-    }
-    return {
-      velocity: next.v,
-      transform: next.t,
-    };
-  }
+//   decelerate(transform: Transform, deltaTime: number) {
+//     const next = transform.decelerate(
+//       this.velocity,
+//       this.deceleration,
+//       deltaTime,
+//       this.zeroVelocityThreshold,
+//     );
+//     if (deltaTime > 0) {
+//       for (let i = 0; i < next.t.order.length; i += 1) {
+//         const t = next.t.order[i];
+//         const min = this.move.minTransform.order[i];
+//         const max = this.move.maxTransform.order[i];
+//         const v = next.v.order[i];
+//         if ((t instanceof Translation
+//             && v instanceof Translation
+//             && max instanceof Translation
+//             && min instanceof Translation)
+//           || (t instanceof Scale
+//             && v instanceof Scale
+//             && max instanceof Scale
+//             && min instanceof Scale)
+//         ) {
+//           let onLine = true;
+//           if (this.move.limitLine != null) {
+//             onLine = t.shaddowIsOnLine(this.move.limitLine, 4);
+//           }
+//           if (min.x >= t.x || max.x <= t.x || !onLine) {
+//             if (this.move.bounce) {
+//               v.x = -v.x * 0.5;
+//             } else {
+//               v.x = 0;
+//             }
+//           }
+//           if (min.y >= t.y || max.y <= t.y || !onLine) {
+//             if (this.move.bounce) {
+//               v.y = -v.y * 0.5;
+//             } else {
+//               v.y = 0;
+//             }
+//           }
+//           next.v.order[i] = v;
+//         }
+//         if (t instanceof Rotation
+//             && v instanceof Rotation
+//             && max instanceof Rotation
+//             && min instanceof Rotation) {
+//           if (min.r >= t.r || max.r <= t.r) {
+//             if (this.move.bounce) {
+//               v.r = -v.r * 0.5;
+//             } else {
+//               v.r = 0;
+//             }
+//           }
+//           next.v.order[i] = v;
+//         }
+//       }
+//       next.v.calcMatrix();
+//     }
+//     return {
+//       velocity: next.v,
+//       transform: next.t,
+//     };
+//   }
 
-  calculateEnd() {}
+//   calculateEnd() {}
 
-  isStopped() {}
-}
+//   isStopped() {}
+// }
 
 export {
   point,

@@ -3,6 +3,7 @@
 // import Diagram from '../Diagram';
 import {
   Transform, Point, Line, polarToRect, normAngle, Rect, distance, getPoint,
+  TransformBounds, BoundsRect,
 } from '../../tools/g2';
 import type { TypeParsablePoint } from '../../tools/g2';
 import {
@@ -835,14 +836,22 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     if (r != null) {
       const w = Math.abs(this.currentLength / 2 * Math.cos(r));
       const h = Math.abs(this.currentLength / 2 * Math.sin(r));
-      this.move.maxTransform.updateTranslation(
-        bounds.right - w,
-        bounds.top - h,
-      );
-      this.move.minTransform.updateTranslation(
-        bounds.left + w,
-        bounds.bottom + h,
-      );
+      if (this.move.bounds instanceof TransformBounds) {
+        this.move.bounds.updateTranslation(new BoundsRect(
+          bounds.left + w,
+          bounds.bottom + h,
+          bounds.right - w - (bounds.left + w),
+          bounds.top - h - (bounds.bottom + h),
+        ));
+      }
+      // this.move.maxTransform.updateTranslation(
+      //   bounds.right - w,
+      //   bounds.top - h,
+      // );
+      // this.move.minTransform.updateTranslation(
+      //   bounds.left + w,
+      //   bounds.bottom + h,
+      // );
       if (r > 2 * Math.PI) {
         this.transform.updateRotation(r - 2 * Math.PI);
       }

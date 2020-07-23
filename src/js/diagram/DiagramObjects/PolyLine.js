@@ -291,7 +291,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
               boundary.height + 2 * delta,
             );
           }
-          padShape.setMoveBoundaryToDiagram(boundary);
+          padShape.setMoveBounds(boundary);
           const fnName = `_polyline_pad${i}`;
           this.fnMap.add(
             fnName,
