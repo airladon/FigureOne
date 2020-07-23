@@ -4,7 +4,8 @@ import {
   Transform, Point, TransformLimit, Rect,
   Translation, spaceToSpaceTransform, getBoundingRect,
   Scale, Rotation, Line, getMaxTimeFromVelocity, clipAngle,
-  getPoint, getTransform, getScale, calculateStop, calculateStopAngle,
+  getPoint, getTransform, getScale, // calculateStop, calculateStopAngle,
+  BoundsTransform, BoundsRect, BoundsValue, BoundsLine,
 } from '../tools/g2';
 // import { areColorsSame } from '../tools/color';
 import { getState } from './state';
