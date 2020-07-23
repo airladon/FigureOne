@@ -116,10 +116,14 @@ describe('Transfrom Animation Unit', () => {
       start,
       target,
     });
+    // console.log(start)
     step.start();
+    // console.log(start)
     expect(step.startTime).toBe(null);
 
     step.nextFrame(100);
+    // console.log(start)
+    // console.log(step.element.transform)
     expect(step.startTime).toBe(100);
     expect(step.element.transform).toEqual(start);
 

@@ -7,7 +7,7 @@ import {
 import * as tools from '../tools/tools';
 import Diagram from './Diagram';
 import {
-  Point, Transform, TransformLimit, Rect,
+  Point, Transform, Rect,
 } from '../tools/g2';
 import webgl from '../__mocks__/WebGLInstanceMock';
 import DrawContext2D from '../__mocks__/DrawContext2DMock';
@@ -154,7 +154,7 @@ describe('Diagram', () => {
         );
         squareElement.isMovable = true;
         squareElement.isTouchable = true;
-        squareElement.move.boundary = 'diagram';
+        squareElement.move.bounds = 'diagram';
         squares[sKey] = squareElement;
         collection.add(sKey, squareElement);
         collection.isTouchable = true;
@@ -632,7 +632,7 @@ describe('Diagram', () => {
       const d = diagrams.landscapeCenter;
       d.initialize();
       const a = d.elements._a;
-      const decel = new TransformLimit(1, 1, 0.5);
+      const decel = [1, 1, 0.5];
       a.move.freely.deceleration = decel;
 
       // Touch A

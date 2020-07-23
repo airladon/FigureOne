@@ -1,5 +1,5 @@
 import {
-  Point, Rect, BoundsRect, BoundsLine, BoundsValue,
+  Point, Rect, BoundsRect, LineBounds, BoundsRange,
   deceleratePoint, decelerateValue, decelerateTransform, getTransformDefinition,
   Transform,
 } from './g2';
@@ -72,7 +72,7 @@ describe('Decelerate Value', () => {
         const deceleration = 1;
         const deltaTime = 2;
         // const bounds = new BoundsRect(-4.5, -1, 9, 2);
-        const bounds = new BoundsValue(-4.5, 4.5);
+        const bounds = new BoundsRange(-4.5, 4.5);
         const bounceLoss = 0;
         const { velocity, value } = decelerateValue(
           p, v, deceleration, deltaTime, bounds, bounceLoss,
@@ -91,7 +91,7 @@ describe('Decelerate Value', () => {
         const v = 5;
         const deceleration = 1;
         const deltaTime = 2;
-        const bounds = new BoundsValue({ min: -4.5, max: 4.5 });
+        const bounds = new BoundsRange({ min: -4.5, max: 4.5 });
         const bounceLoss = 0.5;
         const { velocity, value } = decelerateValue(
           p, v, deceleration, deltaTime, bounds, bounceLoss,
@@ -548,7 +548,7 @@ describe('Calculate Stop', () => {
       const p = new Point(0, 0);
       const v = new Point(5, 0);
       const deceleration = 1;
-      const bounds = new BoundsLine([0, 0], 100, 0);
+      const bounds = new LineBounds([0, 0], 100, 0);
       const bounceLoss = 0;
       const { duration, position } = deceleratePoint(
         p, v, deceleration, null, bounds, bounceLoss,
@@ -561,7 +561,7 @@ describe('Calculate Stop', () => {
       const p = new Point(0, 0);
       const v = new Point(5, 0);
       const deceleration = 1;
-      const bounds = new BoundsLine([-4.5, 0], 9, 0);
+      const bounds = new LineBounds([-4.5, 0], 9, 0);
       const bounceLoss = 0;
       const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       // Total displacement = 12.5
@@ -576,7 +576,7 @@ describe('Calculate Stop', () => {
       const p = new Point(0, 0);
       const v = new Point(5, 5);
       const deceleration = 1;
-      const bounds = new BoundsLine([-100, 0], 200, 0);
+      const bounds = new LineBounds([-100, 0], 200, 0);
       const bounceLoss = 0;
       const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       expect(duration).toBe(5);
@@ -587,7 +587,7 @@ describe('Calculate Stop', () => {
       const p = new Point(0, 0);
       const v = new Point(5, 5);
       const deceleration = 1;
-      const bounds = new BoundsLine([-4.5, 0], 9, 0);
+      const bounds = new LineBounds([-4.5, 0], 9, 0);
       const bounceLoss = 0;
       const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       expect(duration).toBe(5);
@@ -599,7 +599,7 @@ describe('Calculate Stop', () => {
       const v = new Point(5 * Math.sqrt(2), 0);
       const deceleration = 1;
       const f = 4.5 / Math.sqrt(2);
-      const bounds = new BoundsLine([-f, -f], 9, Math.PI / 4);
+      const bounds = new LineBounds([-f, -f], 9, Math.PI / 4);
       const bounceLoss = 0;
       const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       expect(duration).toBe(5);
@@ -721,7 +721,7 @@ describe('Decelerate Transform', () => {
     const d = [1, 1];
     const z = [0, 0];
     const bounceLoss = [0, 0];
-    const bounds = [new BoundsValue(-5, 5), new BoundsRect(-4.5, -1, 9, 2)];
+    const bounds = [new BoundsRange(-5, 5), new BoundsRect(-4.5, -1, 9, 2)];
     const deltaTime = 2;
     const result = decelerateTransform(t, v, d, deltaTime, bounds, bounceLoss, z);
     // After 2s, rotation: v = 8m / s
@@ -761,7 +761,7 @@ describe('Decelerate Transform', () => {
     const bounceLoss = [0, 0, 0];
     const bounds = [
       new BoundsRect(-5.5, -5.5, 11, 11),
-      new BoundsValue(-4.5, 4.5),
+      new BoundsRange(-4.5, 4.5),
       new BoundsRect(-4.5, -4.5, 9, 9),
     ];
     // const bounds = [null, null, null];
@@ -785,7 +785,7 @@ describe('Decelerate Transform', () => {
     const bounceLoss = [0.2, 0.3, 0.4];
     const bounds = [
       new BoundsRect(-5.5, -5.5, 11, 11),
-      new BoundsValue(-4.5, 4.5),
+      new BoundsRange(-4.5, 4.5),
       new BoundsRect(-4.5 / Math.sqrt(2), -4.5 / Math.sqrt(2), 9 / Math.sqrt(2), 9 / Math.sqrt(2)),
     ];
     // const bounds = [null, null, null];
@@ -919,7 +919,7 @@ describe('Decelerate Transform from Transform', () => {
     const bounceLoss = { position: 0, scale: 0, rotation: 0 };
     const bounds = {
       scale: new BoundsRect(-5.5, -5.5, 11, 11),
-      rotation: new BoundsValue(-4.5, 4.5),
+      rotation: new BoundsRange(-4.5, 4.5),
       position: new BoundsRect(-4.5, -4.5, 9, 9),
     };
     // const bounds = [null, null, null];

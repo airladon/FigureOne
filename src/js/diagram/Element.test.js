@@ -4,7 +4,7 @@ import {
 } from './Element';
 // import { AnimationPhase } from './AnimationPhase';
 import {
-  Point, Transform, TransformLimit,
+  Point, Transform,
 } from '../tools/g2';
 import webgl from '../__mocks__/WebGLInstanceMock';
 import VertexPolygon from './DrawingObjects/VertexObject/VertexPolygon';
@@ -243,7 +243,7 @@ describe('Animationa and Movement', () => {
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
           [0, 0, 1, 1],
         );
-        element.move.maxVelocity = new TransformLimit(100, 100, 100);
+        element.move.maxVelocity = 100; //new TransformLimit(100, 100, 100);
         element.move.freely.zeroVelocityThreshold = {
           scale: 0.01, rotation: 0.01, translation: 0.01,
         };
@@ -300,7 +300,7 @@ describe('Animationa and Movement', () => {
         const decel = { scale: 1, rotation: 1, translation: 1 };
         const zero = { scale: 15, rotation: 5, translation: 5 };
         // const zero = new TransformLimit(15, 5, 5);
-        const max = new TransformLimit(20, 20, 20);
+        const max = { scale: 20, position: 20, rotation: 20 };
         element.state.movement.velocity = initialV;
         element.move.freely.deceleration = decel;
         element.move.freely.zeroVelocityThreshold = zero;
@@ -312,7 +312,7 @@ describe('Animationa and Movement', () => {
         let vel = element.state.movement.velocity;
 
         expect(vel.t().round(2)).toEqual(new Point(10, -10));
-        expect(vel.s().round(2)).toEqual(new Point(14.14, -14.14));
+        expect(vel.s().round(2)).toEqual(new Point(20, -20));
         expect(vel.r()).toBe(10);
 
         // element.setupDraw(identity, 0);
@@ -325,7 +325,7 @@ describe('Animationa and Movement', () => {
         vel = element.state.movement.velocity;
 
         expect(vel.t().round(2)).toEqual(new Point(6.47, -6.47));
-        expect(vel.s().round(2)).toEqual(new Point(0, 0));
+        expect(vel.s().round(2)).toEqual(new Point(15, -15));
         expect(vel.r()).toBe(5.001);
 
         // element.setupDraw(identity, 5.001);
@@ -360,9 +360,9 @@ describe('Animationa and Movement', () => {
           [0, 0, 1, 1],
         );
         // element.move.freely.zeroVelocityThreshold =
-          // new TransformLimit(0.0001, 0.0001, 0.0001);
-        element.move.freely.zeroVelocityThreshold = { scale: 0.0001, rotation: 0.0001, translation: 0.0001 };
-        element.move.maxVelocity = new TransformLimit(100, 100, 100);
+        // new TransformLimit(0.0001, 0.0001, 0.0001);
+        element.move.freely.zeroVelocityThreshold = 0.0001;
+        element.move.maxVelocity = 100;
       });
       afterEach(() => {
         global.performance.now = RealDate;
@@ -551,7 +551,7 @@ describe('Animationa and Movement', () => {
       });
     });
     describe('Default move max/min transforms', () => {
-      test('setMoveBoundaryToDiagram no transform', () => {
+      test('setMoveBounds no transform', () => {
         const sq = new VertexPolygon(
           [webgl],
           4,
@@ -563,15 +563,33 @@ describe('Animationa and Movement', () => {
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
         );
         square.isMovable = true;
-        square.move.boundary = 'diagram';
-        square.setMoveBoundaryToDiagram();
-        expect(square.move.maxTransform.t()).toEqual(new Point(0.895, 0.895));
-        expect(square.move.minTransform.t()).toEqual(new Point(-0.895, -0.895));
-        square.setMoveBoundaryToDiagram([-2, -1, 4, 2]);
-        expect(square.move.maxTransform.t()).toEqual(new Point(1.895, 0.895));
-        expect(square.move.minTransform.t()).toEqual(new Point(-1.895, -0.895));
+        square.move.bounds = 'diagram';
+        square.setMoveBounds();
+        let boundary = square.move.bounds.getTranslation().boundary.round(3);
+        expect(boundary.left).toBe(-0.895);
+        expect(boundary.right).toBe(0.895);
+        expect(boundary.bottom).toBe(-0.895);
+        expect(boundary.top).toBe(0.895);
+        square.setMoveBounds([-2, -1, 4, 2]);
+        boundary = square.move.bounds.getTranslation().boundary.round(3);
+        expect(boundary.left).toBe(-1.895);
+        expect(boundary.right).toBe(1.895);
+        expect(boundary.bottom).toBe(-0.895);
+        expect(boundary.top).toBe(0.895);
+        square.setMoveBounds([-1, -2, 2, 4]);
+        boundary = square.move.bounds.getTranslation().boundary.round(3);
+        expect(boundary.left).toBe(-0.895);
+        expect(boundary.right).toBe(0.895);
+        expect(boundary.bottom).toBe(-1.895);
+        expect(boundary.top).toBe(1.895);
+        square.setMoveBounds([-2, -2, 4, 4]);
+        boundary = square.move.bounds.getTranslation().boundary.round(3);
+        expect(boundary.left).toBe(-1.895);
+        expect(boundary.right).toBe(1.895);
+        expect(boundary.bottom).toBe(-1.895);
+        expect(boundary.top).toBe(1.895);
       });
-      test('setMoveBoundaryToDiagram with transform', () => {
+      test('setMoveBounds with transform', () => {
         const sq = new VertexPolygon(
           [webgl],
           4,
@@ -583,18 +601,21 @@ describe('Animationa and Movement', () => {
           new Transform().scale(2, 2).rotate(0).translate(0, 0),
         );
         square.isMovable = true;
-        square.move.boundary = 'diagram';
+        square.move.bounds = 'diagram';
 
-        expect(square.move.maxTransform.t().round()).toEqual(new Point(1000, 1000));
-        expect(square.move.minTransform.t().round()).toEqual(new Point(-1000, -1000));
+        square.setMoveBounds();
+        let boundary = square.move.bounds.getTranslation().boundary.round(3);
+        expect(boundary.left).toBe(-0.79);
+        expect(boundary.right).toBe(0.79);
+        expect(boundary.bottom).toBe(-0.79);
+        expect(boundary.top).toBe(0.79);
 
-        square.setMoveBoundaryToDiagram();
-        expect(square.move.maxTransform.t().round()).toEqual(new Point(0.79, 0.79));
-        expect(square.move.minTransform.t().round()).toEqual(new Point(-0.79, -0.79));
-
-        square.setMoveBoundaryToDiagram([-1, -2, 2, 4]);
-        expect(square.move.maxTransform.t().round()).toEqual(new Point(0.79, 1.79));
-        expect(square.move.minTransform.t().round()).toEqual(new Point(-0.79, -1.79));
+        square.setMoveBounds([-1, -2, 2, 4]);
+        boundary = square.move.bounds.getTranslation().boundary.round(3);
+        expect(boundary.left).toBe(-0.79);
+        expect(boundary.right).toBe(0.79);
+        expect(boundary.bottom).toBe(-1.79);
+        expect(boundary.top).toBe(1.79);
       });
     });
     describe('Copy', () => {

@@ -1,6 +1,6 @@
 import {
   Point, Transform,
-  TransformLimit,
+  // TransformLimit,
   getTransform, Translation, Rotation, Scale,
 } from './g2';
 import { round } from './math';
@@ -409,8 +409,8 @@ describe('Transform', () => {
         .translate(0.1, 0.05)
         .translate(0, 20)
         .translate(0, 21);
-      const clipZero = new TransformLimit(0.1, 0.1, 0.1);
-      const clipMax = new TransformLimit(20, 20, 20);
+      const clipZero = 0.1;
+      const clipMax = 20;
       let tc = t1.clipMag(clipZero, clipMax, false);
       expect(tc.s(0)).toEqual(new Point(20, 20));
       expect(tc.s(1)).toEqual(new Point(0, 0));
@@ -426,9 +426,9 @@ describe('Transform', () => {
 
       // vector clipping
       tc = t1.clipMag(clipZero, clipMax);
-      expect(tc.s(0).round(2)).toEqual(new Point(14.48, 13.79));
-      expect(tc.s(1).round(2)).toEqual(new Point(0.1, 0.05));
-      expect(tc.s(2).round(2)).toEqual(new Point(20, 0));
+      expect(tc.s(0)).toEqual(new Point(20, 20));
+      expect(tc.s(1)).toEqual(new Point(0, 0));
+      expect(tc.s(2)).toEqual(new Point(20, 0));
       expect(tc.r(0)).toBe(20);
       expect(tc.r(1)).toBe(20);
       expect(tc.r(2)).toBe(0);
@@ -472,14 +472,14 @@ describe('Transform', () => {
         .translate(-1.1414, -40.1414)
         .translate(14.1422, 14.1422)
         .translate(-14.1422, -14.1422);
-      const zero = new TransformLimit(0.2, 0.2, 0.2);
-      const max = new TransformLimit(20, 20, 20);
+      const zero = 0.2;
+      const max = 20;
       const v = t1.velocity(t0, deltaTime, zero, max);
 
       expect(v.s(0).round()).toEqual(new Point(-1, 1));
       expect(v.s(1).round()).toEqual(new Point(0, 0));
-      expect(v.s(2).round(4)).toEqual(new Point(14.1421, 14.1421));
-      expect(v.s(3).round(4)).toEqual(new Point(-14.1421, -14.1421));
+      expect(v.s(2).round(4)).toEqual(new Point(14.1422, 14.1422));
+      expect(v.s(3).round(4)).toEqual(new Point(-14.1422, -14.1422));
       expect(v.r(0)).toBe(-1);
       expect(v.r(1)).toBe(0);
       expect(v.r(2)).toBe(20);
@@ -495,8 +495,8 @@ describe('Transform', () => {
       let t1;
       beforeEach(() => {
         deltaTime = 1;
-        zero = new TransformLimit(0.2, 0.2, 0.2);
-        max = new TransformLimit(20, 20, 20);
+        zero = 0.2;
+        max = 20;
         t0 = new Transform()
           .scale(0, 0)
           .rotate(0)
