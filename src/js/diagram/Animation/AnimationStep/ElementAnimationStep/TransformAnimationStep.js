@@ -158,7 +158,6 @@ export default class TransformAnimationStep extends ElementAnimationStep {
   }
 
   setFrame(deltaTime: number) {
-    
     // const start = phase.startTransform._dup();
     // const delta = phase.deltaTransform._dup();
     const percentTime = deltaTime / this.duration;
@@ -172,6 +171,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
       this.transform.translationStyle,
       this.transform.translationOptions,
     );
+
     if (this.transform.clipRotationTo !== null) {
       next.clipRotation(this.transform.clipRotationTo);
     }

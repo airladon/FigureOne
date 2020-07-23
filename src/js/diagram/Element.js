@@ -5,11 +5,13 @@ import {
   Translation, spaceToSpaceTransform, getBoundingRect,
   Scale, Rotation, Line, getMaxTimeFromVelocity, clipAngle,
   getPoint, getTransform, getScale, // calculateStop, calculateStopAngle,
-  BoundsTransform, BoundsRect, BoundsValue, BoundsLine,
+  TransformBounds, BoundsRect, BoundsRange, BoundsLine, getTransformValue,
 } from '../tools/g2';
 // import { areColorsSame } from '../tools/color';
 import { getState } from './state';
-import type { TypeParsablePoint, TypeParsableTransform } from '../tools/g2';
+import type {
+  TypeParsablePoint, TypeParsableTransform, TypeTransformationValue, TypeTransformValue,
+} from '../tools/g2';
 import { Recorder } from './Recorder';
 import * as m2 from '../tools/m2';
 // import type { pathOptionsType, TypeRotationDirection } from '../tools/g2';
@@ -165,18 +167,19 @@ class DiagramElement {
   // recorder: Recorder;
   diagram: Diagram;
   move: {
-    maxTransform: Transform,
-    minTransform: Transform,
-    boundary: ?Rect | Array<number> | 'diagram',
-    limitLine: null | Line,
+    // maxTransform: Transform,
+    bounds: TransformBounds | Rect | Array<number> | 'diagram',
+    // minTransform: Transform,
+    // boundary: ?Rect | Array<number> | 'diagram',
+    // limitLine: null | Line,
     transformClip: string | (?(Transform) => Transform);
-    maxVelocity: TransformLimit;            // Maximum velocity allowed
+    maxVelocity: TypeTransformValue;            // Maximum velocity allowed
     // When moving freely, the velocity decelerates until it reaches a threshold,
   // then it is considered 0 - at which point moving freely ends.
     freely: {                 // Moving Freely properties
-      zeroVelocityThreshold: TransformLimit,  // Velocity considered 0
-      deceleration: TransformLimit,           // Deceleration
-      bounceLoss: TransformLimit,
+      zeroVelocityThreshold: TypeTransformValue,  // Velocity considered 0
+      deceleration: TypeTransformValue,           // Deceleration
+      bounceLoss: TypeTransformValue,
       callback: ?(string | ((boolean) => void)),
     };
     bounce: boolean;
@@ -606,22 +609,24 @@ class DiagramElement {
       this.diagramLimits = this.diagram.limits._dup();
     }
     this.move = {
-      maxTransform: this.transform.constant(1000),
-      minTransform: this.transform.constant(-1000),
-      bounds: { scale: null, rotation: null, position: null },
-      boundary: null,
-      maxVelocity: new TransformLimit(5, 5, 5),
+      // maxTransform: this.transform.constant(1000),
+      // minTransform: this.transform.constant(-1000),
+      bounds: new TransformBounds(this.transform),
+      // bounds: { scale: null, rotation: null, position: null },
+      // boundary: null,
+      maxVelocity: 5,
+      // maxVelocity: new TransformLimit(5, 5, 5),
       freely: {
-        zeroVelocityThreshold: { scale: 0.001, rotation: 0.001, translation: 0.001 },
-        deceleration: { scale: 5, rotation: 5, translation: 5 },
+        zeroVelocityThreshold: 0.001,
+        deceleration: 5,
         callback: null,
-        bounceLoss: { scale: 0.5, rotation: 0.5, translation: 0.5 },
+        bounceLoss: 0.5,
       },
-      bounce: true,
+      bounce: true, // deprecate
       canBeMovedAfterLosingTouch: false,
       type: 'translation',
       element: null,
-      limitLine: null,
+      // limitLine: null,
       transformClip: null,
     };
 
@@ -1399,11 +1404,24 @@ class DiagramElement {
     if (this.move.transformClip != null) {
       this.transform = this.fnMap.exec(this.move.transformClip, transform);
     } else {
-      this.transform = transform._dup().clip(
-        this.move.minTransform,
-        this.move.maxTransform,
-        this.move.limitLine,
-      );
+      // console.log(transform)
+      // let { bounds } = this.move;
+      // if (bounds === 'diagram') {
+      //   bounds = new TransformBounds(this.transform);
+      //   bounds.updateTranslation(new BoundsRect(this.diagram.limits));
+      // }
+      if (!(this.move.bounds instanceof TransformBounds)) {
+        this.setMoveBounds();
+      }
+      if (this.move.bounds instanceof TransformBounds) {
+        this.transform = this.move.bounds.clip(transform);
+      }
+      // console.log(this.transform)
+      // this.transform = transform._dup().clip(
+      //   this.move.minTransform,
+      //   this.move.maxTransform,
+      //   this.move.limitLine,
+      // );
     }
     if (this.internalSetTransformCallback) {
       this.fnMap.exec(this.internalSetTransformCallback, this.transform);
@@ -1894,65 +1912,23 @@ class DiagramElement {
   // Decelerate over some time when moving freely to get a new element
   // transform and movement velocity
   decelerate(deltaTime: number): Object {
+    let bounds;
+    if (!this.move.bounds instanceof TransformBounds) {
+      this.setMoveBounds();
+    }
+    if (!this.move.bounds instanceof TransformBounds) {
+      bounds = new TransformBounds(this.transform);
+    } else {
+      ({ bounds } = this.move);
+    }
     const next = this.transform.decelerate(
       this.state.movement.velocity,
       this.move.freely.deceleration,
       deltaTime,
-      this.move.bounds,
+      bounds,
       this.move.freely.bounceLoss,
       this.move.freely.zeroVelocityThreshold,
     );
-    // if (deltaTime > 0) {
-    //   for (let i = 0; i < next.transform.order.length; i += 1) {
-    //     const t = next.transform.order[i];
-    //     const min = this.move.minTransform.order[i];
-    //     const max = this.move.maxTransform.order[i];
-    //     const v = next.velocity.order[i];
-    //     if ((t instanceof Translation
-    //         && v instanceof Translation
-    //         && max instanceof Translation
-    //         && min instanceof Translation)
-    //       || (t instanceof Scale
-    //         && v instanceof Scale
-    //         && max instanceof Scale
-    //         && min instanceof Scale)
-    //     ) {
-    //       let onLine = true;
-    //       if (this.move.limitLine != null) {
-    //         onLine = t.shaddowIsOnLine(this.move.limitLine, 4);
-    //       }
-    //       if (min.x >= t.x || max.x <= t.x || !onLine) {
-    //         if (this.move.bounce) {
-    //           v.x = -v.x * 0.5;
-    //         } else {
-    //           v.x = 0;
-    //         }
-    //       }
-    //       if (min.y >= t.y || max.y <= t.y || !onLine) {
-    //         if (this.move.bounce) {
-    //           v.y = -v.y * 0.5;
-    //         } else {
-    //           v.y = 0;
-    //         }
-    //       }
-    //       next.velocity.order[i] = v;
-    //     }
-    //     if (t instanceof Rotation
-    //         && v instanceof Rotation
-    //         && max instanceof Rotation
-    //         && min instanceof Rotation) {
-    //       if (min.r >= t.r || max.r <= t.r) {
-    //         if (this.move.bounce) {
-    //           v.r = -v.r * 0.5;
-    //         } else {
-    //           v.r = 0;
-    //         }
-    //       }
-    //       next.velocity.order[i] = v;
-    //     }
-    //   }
-    //   next.velocity.calcMatrix();
-    // }
     return {
       velocity: next.velocity,
       transform: next.transform,
@@ -2793,68 +2769,107 @@ class DiagramElement {
     }
   }
 
-  setMoveBoundaryToDiagram(
-    boundaryIn: ?Array<number> | Rect | 'diagram' = this.move.boundary,
-    scale: Point = new Point(1, 1),
+  setMoveBounds(
+    boundaryIn: ?Array<number> | Rect | 'diagram' = null,
+    // scale: Point = new Point(1, 1),
   ): void {
     if (!this.isMovable) {
       return;
     }
-    if (boundaryIn != null) {
-      this.move.boundary = boundaryIn;
+    let boundary = boundaryIn;
+    if (boundaryIn == null) {
+      if (this.move.bounds === 'diagram' || Array.isArray(this.move.bounds) || this.move.bounds instanceof Rect) {
+        boundary = this.move.bounds;
+        this.move.bounds = new TransformBounds(this.transform);
+      } else {
+        this.move.bounds.updateTranslation(null);
+        return;
+      }
     }
-    if (this.move.boundary == null) {
+    if (boundary == null) {
       return;
     }
-    let boundary;
-    if (Array.isArray(this.move.boundary)) {
-      const [left, bottom, width, height] = this.move.boundary;
+
+    if (Array.isArray(boundary)) {
+      const [left, bottom, width, height] = boundary;
       boundary = new Rect(left, bottom, width, height);
-    } else if (this.move.boundary === 'diagram') {
+    } else if (boundary === 'diagram') {
       boundary = this.diagramLimits;
-    } else {
-      ({ boundary } = this.move);
     }
-
-    const glSpace = {
-      x: { bottomLeft: -1, width: 2 },
-      y: { bottomLeft: -1, height: 2 },
-    };
-    const diagramSpace = {
-      x: {
-        bottomLeft: this.diagramLimits.left,
-        width: this.diagramLimits.width,
-      },
-      y: {
-        bottomLeft: this.diagramLimits.bottom,
-        height: this.diagramLimits.height,
-      },
-    };
-    const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
-    const rect = this.getRelativeGLBoundingRect();
-    const glToDiagramScaleMatrix = [
-      glToDiagramSpace.matrix()[0], 0, 0,
-      0, glToDiagramSpace.matrix()[4], 0,
-      0, 0, 1];
-    const minPoint = new Point(rect.left, rect.bottom).transformBy(glToDiagramScaleMatrix);
-    const maxPoint = new Point(rect.right, rect.top).transformBy(glToDiagramScaleMatrix);
-
-    const min = new Point(0, 0);
-    const max = new Point(0, 0);
-
-    min.x = boundary.left - minPoint.x * scale.x;
-    min.y = boundary.bottom - minPoint.y * scale.y;
-    max.x = boundary.right - maxPoint.x * scale.x;
-    max.y = boundary.top - maxPoint.y * scale.y;
-    this.move.maxTransform.updateTranslation(
-      max.x,
-      max.y,
-    );
-    this.move.minTransform.updateTranslation(
-      min.x,
-      min.y,
-    );
+    const rect = this.getBoundingRect('diagram');
+    if (this.move.bounds instanceof TransformBounds) {
+      this.move.bounds.updateTranslation(new BoundsRect(
+        boundary.left - rect.left,
+        boundary.bottom - rect.bottom,
+        boundary.right - rect.right - (boundary.left - rect.left),
+        boundary.top - rect.top - (boundary.bottom - rect.bottom),
+      ));
+    }
   }
+
+  // setMoveBoundsLegacy(
+  //   boundaryIn: ?Array<number> | Rect | 'diagram' = this.move.bounds,
+  //   scale: Point = new Point(1, 1),
+  // ): void {
+  //   if (!this.isMovable) {
+  //     return;
+  //   }
+  //   if (boundaryIn != null) {
+  //     this.move.boundary = boundaryIn;
+  //   }
+  //   if (this.move.boundary == null) {
+  //     return;
+  //   }
+  //   let boundary;
+  //   if (Array.isArray(this.move.boundary)) {
+  //     const [left, bottom, width, height] = this.move.boundary;
+  //     boundary = new Rect(left, bottom, width, height);
+  //   } else if (this.move.boundary === 'diagram') {
+  //     boundary = this.diagramLimits;
+  //   } else {
+  //     ({ boundary } = this.move);
+  //   }
+
+  //   const glSpace = {
+  //     x: { bottomLeft: -1, width: 2 },
+  //     y: { bottomLeft: -1, height: 2 },
+  //   };
+  //   const diagramSpace = {
+  //     x: {
+  //       bottomLeft: this.diagramLimits.left,
+  //       width: this.diagramLimits.width,
+  //     },
+  //     y: {
+  //       bottomLeft: this.diagramLimits.bottom,
+  //       height: this.diagramLimits.height,
+  //     },
+  //   };
+  //   const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
+  //   const rect = this.getRelativeGLBoundingRect();
+  //   const glToDiagramScaleMatrix = [
+  //     glToDiagramSpace.matrix()[0], 0, 0,
+  //     0, glToDiagramSpace.matrix()[4], 0,
+  //     0, 0, 1];
+  //   const minPoint = new Point(rect.left, rect.bottom).transformBy(glToDiagramScaleMatrix);
+  //   const maxPoint = new Point(rect.right, rect.top).transformBy(glToDiagramScaleMatrix);
+
+  //   const min = new Point(0, 0);
+  //   const max = new Point(0, 0);
+
+  //   min.x = boundary.left - minPoint.x * scale.x;
+  //   min.y = boundary.bottom - minPoint.y * scale.y;
+  //   max.x = boundary.right - maxPoint.x * scale.x;
+  //   max.y = boundary.top - maxPoint.y * scale.y;
+  //   // this.move.maxTransform.updateTranslation(
+  //   //   max.x,
+  //   //   max.y,
+  //   // );
+  //   // this.move.minTransform.updateTranslation(
+  //   //   min.x,
+  //   //   min.y,
+  //   // );
+  //   this.move.bounds.updateTranslation(new BoundsRect(min.x, min.y, max.x - min.x, max.y - min.y))
+  // }
 
   show(): void {
     this.isShown = true;
@@ -3041,7 +3056,7 @@ class DiagramElementPrimitive extends DiagramElement {
     this.type = 'primitive';
     this.pointsDefinition = {};
     this.setPointsFromDefinition = null;
-    // this.setMoveBoundaryToDiagram();
+    // this.setMoveBounds();
   }
 
   _getStateProperties(options: { ignoreShown: boolean }) {
@@ -3418,7 +3433,7 @@ class DiagramElementPrimitive extends DiagramElement {
     if (this.drawingObject instanceof HTMLObject) {
       this.drawingObject.transformHtml(firstTransform.matrix());
     }
-    this.setMoveBoundaryToDiagram();
+    this.setMoveBounds();
   }
 
   // isMoving(): boolean {
@@ -4235,7 +4250,7 @@ class DiagramElementCollection extends DiagramElement {
       const element = this.elements[this.drawOrder[i]];
       element.setFirstTransform(firstTransform);
     }
-    this.setMoveBoundaryToDiagram();
+    this.setMoveBounds();
   }
 
   getAllBoundaries(space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local') {
