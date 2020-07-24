@@ -2515,14 +2515,29 @@ class DiagramElement {
   // eslint-disable-next-line class-methods-use-this
   getDiagramBoundingRect() {
     const gl = this.getGLBoundingRect();
+    const glSpace = {
+      x: { bottomLeft: -1, width: 2 },
+      y: { bottomLeft: -1, height: 2 },
+    };
+    const diagramSpace = {
+      x: {
+        bottomLeft: this.diagramLimits.left,
+        width: this.diagramLimits.width,
+      },
+      y: {
+        bottomLeft: this.diagramLimits.bottom,
+        height: this.diagramLimits.height,
+      },
+    };
+    const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
     // const glToDiagramScale = new Point(
     //   this.diagramLimits.width / 2,
     //   this.diagramLimits.height / 2,
     // );
     const bottomLeft = new Point(gl.left, gl.bottom)
-      .transformBy(this.diagram.spaceTransforms.glToDiagram.matrix());
+      .transformBy(glToDiagramSpace.matrix());
     const topRight = new Point(gl.right, gl.top)
-      .transformBy(this.diagram.spaceTransforms.glToDiagram.matrix());
+      .transformBy(glToDiagramSpace.matrix());
     return new Rect(
       bottomLeft.x, bottomLeft.y,
       topRight.x - bottomLeft.x, topRight.y - bottomLeft.y,
@@ -2576,10 +2591,25 @@ class DiagramElement {
 
   getRelativeDiagramBoundingRect() {
     const gl = this.getRelativeGLBoundingRect();
+    const glSpace = {
+      x: { bottomLeft: -1, width: 2 },
+      y: { bottomLeft: -1, height: 2 },
+    };
+    const diagramSpace = {
+      x: {
+        bottomLeft: this.diagramLimits.left,
+        width: this.diagramLimits.width,
+      },
+      y: {
+        bottomLeft: this.diagramLimits.bottom,
+        height: this.diagramLimits.height,
+      },
+    };
+    const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
     const bottomLeft = new Point(gl.left, gl.bottom)
-      .transformBy(this.diagram.spaceTransforms.glToDiagram.matrix());
+      .transformBy(glToDiagramSpace.matrix());
     const topRight = new Point(gl.right, gl.top)
-      .transformBy(this.diagram.spaceTransforms.glToDiagram.matrix());
+      .transformBy(glToDiagramSpace.matrix());
     return new Rect(
       bottomLeft.x, bottomLeft.y,
       topRight.x - bottomLeft.x, topRight.y - bottomLeft.y,
@@ -2797,7 +2827,6 @@ class DiagramElement {
     boundaryIn: ?Array<number> | Rect | 'diagram' = null,
     // scale: Point = new Point(1, 1),
   ): void {
-    debugger;
     if (!this.isMovable) {
       return;
     }
@@ -2822,7 +2851,6 @@ class DiagramElement {
       boundary = this.diagramLimits;
     }
     const rect = this.getRelativeBoundingRect('diagram');
-
     if (this.move.bounds instanceof TransformBounds) {
       this.move.bounds.updateTranslation(new BoundsRect(
         boundary.left - rect.left,
