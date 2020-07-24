@@ -2152,6 +2152,9 @@ class DiagramElement {
          | 'dissolveToComplete' = 'cancel',
   ) {
     const wasPulsing = this.state.isPulsing;
+    if (how === 'animateToComplete') {
+      return;
+    }
     if (how === 'freeze' && this.state.isPulsing) {
       this.frozenPulseTransforms = this.pulseTransforms.map(t => t._dup());
       this.pulseTransforms = [];
