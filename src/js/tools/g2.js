@@ -2458,41 +2458,6 @@ class Transform {
     );
   }
 
-  // decelerateLegacy(
-  //   velocity: Transform,
-  //   deceleration: TransformLimit,
-  //   deltaTime: number,
-  //   zeroThreshold: TransformLimit,
-  // ): { v: Transform, t: Transform } {
-  //   let nextV = new Transform();
-  //   let nextT = new Transform();
-  //   const z = zeroThreshold;
-  //   const d = deceleration;
-  //   for (let i = 0; i < this.order.length; i += 1) {
-  //     const t = this.order[i];
-  //     const v = velocity.order[i];
-  //     // const z = zeroThreshold.order[i];
-  //     if (t instanceof Translation && v instanceof Translation) {
-  //       const { mag, angle } = v.toPolar();
-  //       const next = decelerate(0, mag, d.translation, deltaTime, z.translation);
-  //       nextV = nextV.translate(next.v * Math.cos(angle), next.v * Math.sin(angle));
-  //       nextT = nextT.translate(t.x + next.p * Math.cos(angle), t.y + next.p * Math.sin(angle));
-  //     } else if (t instanceof Rotation && v instanceof Rotation) {
-  //       const r = decelerate(t.r, v.r, d.rotation, deltaTime, z.rotation);
-  //       nextV = nextV.rotate(r.v);
-  //       nextT = nextT.rotate(r.p);
-  //     } else if (t instanceof Scale && v instanceof Scale) {
-  //       const { mag, angle } = v.toPolar();
-  //       const next = decelerate(0, mag, d.scale, deltaTime, z.scale);
-  //       nextV = nextV.scale(next.v * Math.cos(angle), next.v * Math.sin(angle));
-  //       nextT = nextT.scale(t.x + next.p * Math.cos(angle), t.y + next.p * Math.sin(angle));
-  //     } else {
-  //       return { v: new Transform(), t: new Transform() };
-  //     }
-  //   }
-  //   return { v: nextV, t: nextT };
-  // }
-
   // Return the velocity of each element in the transform
   // If the current and previous transforms are inconsistent in type order,
   // then a transform of value 0, but with the same type order as "this" will
@@ -2933,11 +2898,11 @@ class Bounds {
   }
 }
 
-class BoundsValue extends Bounds {
+class ValueBounds extends Bounds {
   boundary: ?number;
 }
 
-class BoundsRange extends Bounds {
+class RangeBounds extends Bounds {
   boundary: { min: number, max: number }
 
   constructor(
@@ -3021,7 +2986,7 @@ class BoundsRange extends Bounds {
   }
 }
 
-class BoundsRect extends Bounds {
+class RectBounds extends Bounds {
   boundary: Rect;
 
   constructor(
@@ -3235,10 +3200,10 @@ function makeBounds(bound: Bounds | Rect | Line | number | { max: number, min: n
     return null;
   }
   if (typeof bound === 'number') {
-    return new BoundsValue(bound);
+    return new ValueBounds(bound);
   }
   if (bound instanceof Rect) {
-    return new BoundsRect(bound);
+    return new RectBounds(bound);
   }
   if (bound instanceof Line) {
     return new LineBounds(bound);
@@ -3246,15 +3211,15 @@ function makeBounds(bound: Bounds | Rect | Line | number | { max: number, min: n
   if (bound instanceof Bounds) {
     return bound;
   }
-  return new BoundsRange(bound);
+  return new RangeBounds(bound);
 }
 
-// bounds = new TransformBounds(transform, [null, null, new BoundsRect()]);
+// bounds = new TransformBounds(transform, [null, null, new RectBounds()]);
 // bounds = new TransformBounds(transform, default: [null...]);
-// bounds = new TransformBounds(transform, { position: new BoundsRect() });
-// bounds.updateTranslation(new BoundsRect(), index);
-// bounds.updateScale(new BoundsRect(), index);
-// bounds.updateRotation(new BoundsRect(), index);
+// bounds = new TransformBounds(transform, { position: new RectBounds() });
+// bounds.updateTranslation(new RectBounds(), index);
+// bounds.updateScale(new RectBounds(), index);
+// bounds.updateRotation(new RectBounds(), index);
 // bounds.update(new Bounds(), index);
 // bounds.update([null, null, new Bounds()]);
 // bounds.update({ position: null, scale: null, rotation: null });
@@ -3637,7 +3602,7 @@ function decelerateValue(
   velocity: number,
   deceleration: number,
   deltaTime: number | null = null,
-  boundsIn: ?BoundsRange = null,
+  boundsIn: ?RangeBounds = null,
   bounceLoss: number = 0,
   zeroVelocityThreshold: number = 0,
   precision: number = 8,
@@ -3672,7 +3637,7 @@ function decelerateIndependantPoint(
   velocity: Point,
   deceleration: number,
   deltaTime: number | null = null,
-  boundsIn: ?BoundsRect = null,
+  boundsIn: ?RectBounds = null,
   bounceLoss: number = 0,
   zeroVelocityThreshold: number = 0,
   precision: number = 8,
@@ -3680,8 +3645,8 @@ function decelerateIndependantPoint(
   let xBounds = null;
   let yBounds = null;
   if (boundsIn != null) {
-    xBounds = new BoundsRange(boundsIn.boundary.left, boundsIn.boundary.right);
-    yBounds = new BoundsRange(boundsIn.boundary.bottom, boundsIn.boundary.top);
+    xBounds = new RangeBounds(boundsIn.boundary.left, boundsIn.boundary.right);
+    yBounds = new RangeBounds(boundsIn.boundary.bottom, boundsIn.boundary.top);
   }
 
   const xResult = decelerateValue(
@@ -3708,10 +3673,10 @@ export type TypeTransformationValue = {
 }
 
 type TypeTransformationBoundsDefinition = {
-  rotation?: BoundsRange;
-  position?: BoundsRect;
-  translation?: BoundsRect;
-  scale?: BoundsRect;
+  rotation?: RangeBounds;
+  position?: RectBounds;
+  translation?: RectBounds;
+  scale?: RectBounds;
 }
 
 type TypeTransformDeceleration = Array<number>;
@@ -3863,157 +3828,6 @@ function decelerateTransform(
   };
 }
 
-// class Limit {
-//   max: TypeSimpleDefinition;
-//   min: TypeSimpleDefinition;
-//   boundary: Rect;
-//   line: Line;
-// };
-
-// class MovingFreelyTransform {
-//   // transform: Transform;
-//   velocity: Transform;
-//   deceleration: Transform;
-//   zeroVelocityThreshold: Transform;
-//   bounds: {
-//     max?: Transform;
-//     min?: Transform;
-//     line?: Line;
-//     bounce?: boolean;
-//     bounceLoss?: Transform;
-//   };
-
-//   constructor(optionsIn: {
-//     transform: TypeParsableTransform,
-//     velocity?: TypeParsableTransform | TypeSimpleDefinition,
-//     deceleration?: TypeParsableTransform | TypeSimpleDefinition,
-//     zeroVelocityThreshold?: TypeParsableTransform | TypeSimpleDefinition,
-//     bounds?: {
-//       max?: TypeParsableTransform | TypeSimpleDefinition,
-//       min?: TypeParsableTransform | TypeSimpleDefinition,
-//       line?: TypeParsableLine,
-//       bounce?: boolean,
-//       bounceLoss?: TypeParsableTransform | TypeSimpleDefinition,
-//     }
-//   }) {
-//     const transform = getTransform(optionsIn.transform);
-//     this.velocity = simpleDefinitionToTransform(
-//       transform,
-//       optionsIn.velocity,
-//       { rotation: 0, position: [0, 0], scale: 0 },
-//     );
-//     this.deceleration = simpleDefinitionToTransform(
-//       transform,
-//       optionsIn.deceleration,
-//       { rotation: 1, position: [1, 0], scale: 1 },
-//     );
-//     this.zeroVelocityThreshold = simpleDefinitionToTransform(
-//       transform,
-//       optionsIn.zeroVelocityThreshold,
-//       { rotation: 0.0001, position: [0.0001, 0.0001], scale: 0.0001 },
-//     );
-//     const { bounds } = optionsIn;
-//     if (bounds != null) {
-//       this.bounds = {};
-//       if (bounds.max != null) {
-//         this.bounds.max = simpleDefinitionToTransform(
-//           transform,
-//           bounds.max,
-//           { position: [1000, 1000], rotation: 1000, scale: 1000 },
-//         );
-//       }
-//       if (bounds.min != null) {
-//         this.bounds.min = simpleDefinitionToTransform(
-//           transform,
-//           bounds.max,
-//           { position: [-1000, -1000], rotation: -1000, scale: -1000 },
-//         );
-//       }
-//       if (bounds.line != null) {
-//         this.bounds.line = getLine(bounds.line);
-//       }
-//       if (bounds.bounce != null) {
-//         this.bounds.bounce = bounds.bounce;
-//       } else {
-//         this.bounds.bounds = false;
-//       }
-//       if (bounds.bounceLoss != null) {
-//         this.bounds.bounceLoss = bounds.bounceLoss;
-//       } else {
-//         this.bounds.bounceLoss = 0;
-//       }
-//     }
-//   }
-
-//   decelerate(transform: Transform, deltaTime: number) {
-//     const next = transform.decelerate(
-//       this.velocity,
-//       this.deceleration,
-//       deltaTime,
-//       this.zeroVelocityThreshold,
-//     );
-//     if (deltaTime > 0) {
-//       for (let i = 0; i < next.t.order.length; i += 1) {
-//         const t = next.t.order[i];
-//         const min = this.move.minTransform.order[i];
-//         const max = this.move.maxTransform.order[i];
-//         const v = next.v.order[i];
-//         if ((t instanceof Translation
-//             && v instanceof Translation
-//             && max instanceof Translation
-//             && min instanceof Translation)
-//           || (t instanceof Scale
-//             && v instanceof Scale
-//             && max instanceof Scale
-//             && min instanceof Scale)
-//         ) {
-//           let onLine = true;
-//           if (this.move.limitLine != null) {
-//             onLine = t.shaddowIsOnLine(this.move.limitLine, 4);
-//           }
-//           if (min.x >= t.x || max.x <= t.x || !onLine) {
-//             if (this.move.bounce) {
-//               v.x = -v.x * 0.5;
-//             } else {
-//               v.x = 0;
-//             }
-//           }
-//           if (min.y >= t.y || max.y <= t.y || !onLine) {
-//             if (this.move.bounce) {
-//               v.y = -v.y * 0.5;
-//             } else {
-//               v.y = 0;
-//             }
-//           }
-//           next.v.order[i] = v;
-//         }
-//         if (t instanceof Rotation
-//             && v instanceof Rotation
-//             && max instanceof Rotation
-//             && min instanceof Rotation) {
-//           if (min.r >= t.r || max.r <= t.r) {
-//             if (this.move.bounce) {
-//               v.r = -v.r * 0.5;
-//             } else {
-//               v.r = 0;
-//             }
-//           }
-//           next.v.order[i] = v;
-//         }
-//       }
-//       next.v.calcMatrix();
-//     }
-//     return {
-//       velocity: next.v,
-//       transform: next.t,
-//     };
-//   }
-
-//   calculateEnd() {}
-
-//   isStopped() {}
-// }
-
 export {
   point,
   Point,
@@ -4024,7 +3838,6 @@ export {
   deg,
   normAngle,
   Transform,
-  // TransformLimit,
   Rect,
   Translation,
   Scale,
@@ -4053,17 +3866,13 @@ export {
   quadBezierPoints,
   getRect,
   getTransform,
-  // getState,
-  // getDef,
   getLine,
-  // calculateStop,
-  // calculateStopAngle,
   deceleratePoint,
   decelerateValue,
-  BoundsRect,
+  RectBounds,
   LineBounds,
-  BoundsRange,
-  BoundsValue,
+  RangeBounds,
+  ValueBounds,
   TransformBounds,
   Vector,
   decelerateTransform,
