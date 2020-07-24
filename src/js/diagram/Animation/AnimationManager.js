@@ -11,7 +11,7 @@ import { DiagramElement } from '../Element';
 // eslint-disable-next-line import/no-cycle
 import * as anim from './Animation';
 import GlobalAnimation from '../webgl/GlobalAnimation';
-import { joinObjects, duplicateFromTo } from '../../tools/tools';
+import { joinObjects, duplicateFromTo, SubscriptionManager } from '../../tools/tools';
 import { getState } from '../state';
 import { FunctionMap } from '../../tools/FunctionMap';
 // import type Diagram from '../Diagram';
@@ -27,6 +27,7 @@ export default class AnimationManager {
   state: 'animating' | 'idle';
   fnMap: FunctionMap;
   finishedCallback: ?(string | (() => void));
+  subscriptions: SubscriptionManager;
   options: {
     translation?: {
       style: 'curve' | 'linear',
@@ -58,6 +59,7 @@ export default class AnimationManager {
     this.options = { translation: {} };
     this.fnMap = new FunctionMap();
     this.finishedCallback = options.finishedCallback;
+    this.subscriptions = new SubscriptionManager();
     return this;
   }
 
@@ -172,6 +174,7 @@ export default class AnimationManager {
       if (this.state === 'animating') {
         this.state = 'idle';
         callback = this.finishedCallback;
+        this.subscriptions.trigger('finished');
         // this.fnMap.exec(this.finishedCallback);
       }
       this.state = 'idle';
@@ -207,6 +210,7 @@ export default class AnimationManager {
         this.state = 'idle';
         // console.log('clean finished', this.element.name, this.finishedCallback)
         this.fnMap.exec(this.finishedCallback);
+        this.subscriptions.trigger('finished');
       }
       this.state = 'idle';
     }
@@ -265,6 +269,7 @@ export default class AnimationManager {
     }
     if (this.state === 'idle') {
       this.fnMap.exec(this.finishedCallback);
+      this.subscriptions.trigger('finished');
     }
   }
 
@@ -284,6 +289,7 @@ export default class AnimationManager {
     }
     if (this.state === 'idle') {
       this.fnMap.exec(this.finishedCallback);
+      this.subscriptions.trigger('finished');
     }
   }
 

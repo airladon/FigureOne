@@ -1758,129 +1758,6 @@ class Scale extends Point {
 }
 
 
-// class TransformLimit {
-//   rotation: number | null;
-//   translation: number | null;
-//   scale: number | null;
-//   constructor(
-//     scale: number | null,
-//     rotation: number | null,
-//     translation: number | null,
-//   ) {
-//     this.scale = scale;
-//     this.rotation = rotation;
-//     this.translation = translation;
-//   }
-
-//   _dup() {
-//     return new TransformLimit(this.scale, this.rotation, this.translation);
-//   }
-// }
-
-// type TLimitDefinition = {
-//   rotation: number | null | Bounds;
-//   translation: number | null | Bounds;
-//   position: number | null | Bounds;
-//   scale: number | null | Bounds;
-// }
-
-// type SparseTLimitDefinition = {
-//   rotation?: number | null | Bounds;
-//   translation?: number | null | Bounds;
-//   position?: number | null | Bounds;
-//   scale?: number | null | Bounds;
-// }
-
-// type TLimitOrder = Array<number | null | Bounds>;
-
-// class TLimit {
-//   // rotation: number | null | Bounds;
-//   // translation: number | null | Bounds;
-//   // position: number | null | Bounds;
-//   // scale: number | null | Bounds;
-//   definition: TLimitDefinition;
-//   order: ?Array<number | null | Bounds>
-
-//   constructor(definition: SparseTLimitDefinition | Array<number | null | Bounds>) {
-//     this.definition = {
-//       rotation: null,
-//       translation: null,
-//       position: null,
-//       scale: null,
-//     };
-//     this.order = null;
-//     if (Array.isArray(definition)) {
-//       this.updateOrder(definition);
-//     } else {
-//       this.updateDefinition(definition);
-//     }
-//   }
-
-//   // updateDefinitionFromOrder() {
-//   //   const def = {};
-//   //   const i = 0;
-//   //   while (Object.keys(def) < 3 && i < this.order.length) {
-//   //     const transformation = this.order[i];
-//   //     for ()
-//   //   }
-//   // }
-
-//   updateOrder(order: Array<number | null | Bounds>) {
-//     this.order = order;
-//   }
-
-//   updateOrderFromDefinition() {
-
-//   }
-
-//   updateDefinition(definition: SparseTLimitDefinition) {
-//     Object.keys(definition).forEach((key) => {
-//       this.definition[key] = definition[key];
-//     });
-//   }
-
-//   updateRotation(r: number | null | Bounds) {
-//     this.definition.rotation = r;
-//   }
-
-//   updateTranslation(t: number | null | Bounds) {
-//     this.definition.translation = t;
-//   }
-
-//   updateScale(s: number | null | Bounds) {
-//     this.definition.scale = s;
-//   }
-
-//   setOrderFromDefinition(transform: Transform) {
-//     const order = [];
-//     for (let i = 0; i < transform.order.length; i += 1) {
-//       const transformation = transform.order[i];
-//       if (transformation instanceof Translation) {
-//         let position = null;
-//         if (this.definition.position != null) {
-//           ({ position } = this.definition);
-//         }
-//         if (this.definition.translation != null) {
-//           position = this.definition.translation;
-//         }
-//         order.push(position);
-//       } else if (transformation instanceof Scale) {
-//         let scale = null;
-//         if (this.definition.scale != null) {
-//           ({ scale } = this.definition);
-//         }
-//         order.push(scale);
-//       } else if (transformation instanceof Rotation) {
-//         let rotation = null;
-//         if (this.definition.rotation != null) {
-//           ({ rotation } = this.definition);
-//         }
-//         order.push(rotation);
-//       }
-//     }
-//   }
-// }
-
 class Transform {
   order: Array<Translation | Rotation | Scale>;
   mat: Array<number>;
@@ -3214,48 +3091,12 @@ function makeBounds(bound: Bounds | Rect | Line | number | { max: number, min: n
   return new RangeBounds(bound);
 }
 
-// bounds = new TransformBounds(transform, [null, null, new RectBounds()]);
-// bounds = new TransformBounds(transform, default: [null...]);
-// bounds = new TransformBounds(transform, { position: new RectBounds() });
-// bounds.updateTranslation(new RectBounds(), index);
-// bounds.updateScale(new RectBounds(), index);
-// bounds.updateRotation(new RectBounds(), index);
-// bounds.update(new Bounds(), index);
-// bounds.update([null, null, new Bounds()]);
-// bounds.update({ position: null, scale: null, rotation: null });
-// bounds.getTranslation(index)
-// bounds.getRotation(index)
-// bounds.getScale(index)
-
-// zeroVelocityThreshold: number | { scale: number, rotation: number translation: number } | Array<number>
-// maxVelocity: number | { scale: number, rotation: number } | Array<number>
-// bounceLoss: number | { scale: number, rotation: number } | Array<number>
-// deceleration: number | { scale: number, rotation: number } | Array<number>
-
-// TransformValues: number | { scale: number, rotation: number } | Array<number>
-// bounds: TransformBounds
-
-// getTransformValue(index)
-
 export type TypeTransformValue = number | Array<number> | {
   scale?: number,
   position?: number,
   translation?: number,
   rotation?: number,
 };
-
-// function getTransformValue(
-//   transformValues: TransformValue,
-//   type: 't' | 'r' | 's',
-//   index: number,
-// ) {
-//   if (typeof transformValues === 'number' || transformValues == null) {
-//     return transformValues;
-//   }
-//   if (Array.isArray(transformValues)) {
-//     return transformValues[index];
-//   }
-// }
 
 function transformValueToArray(
   transformValue: TypeTransformValue,
@@ -3684,51 +3525,6 @@ type TypeTransformBounds = Array<Bounds | null>;
 type TypeTransformZeroThreshold = Array<number>;
 type TypeTransformBounce = Array<number>;
 
-function getTransformLimit(
-  transformationDefinition: TypeTransformDeceleration | TypeTransformationDefinition,
-  transform: Transform,
-  defaultTransformationDefinition: TypeTransformationDefinition = {},
-): Array<number> {
-  if (Array.isArray(transformationDefinition)) {
-    return transformationDefinition;
-  }
-  const order = [];
-  for (let i = 0; i < transform.order.length; i += 1) {
-    const transformation = transform.order[i];
-    if (transformation instanceof Translation) {
-      let position = 0;
-      if (defaultTransformationDefinition.position != null) {
-        ({ position } = defaultTransformationDefinition);
-      }
-      if (transformationDefinition.position != null) {
-        ({ position } = transformationDefinition);
-      }
-      if (transformationDefinition.translation != null) {
-        position = transformationDefinition.translation;
-      }
-      order.push(position);
-    } else if (transformation instanceof Scale) {
-      let scale = 0;
-      if (defaultTransformationDefinition.scale != null) {
-        ({ scale } = defaultTransformationDefinition);
-      }
-      if (transformationDefinition.scale != null) {
-        ({ scale } = transformationDefinition);
-      }
-      order.push(scale);
-    } else if (transformation instanceof Rotation) {
-      let rotation = 0;
-      if (defaultTransformationDefinition.rotation != null) {
-        ({ rotation } = defaultTransformationDefinition);
-      }
-      if (transformationDefinition.rotation != null) {
-        ({ rotation } = transformationDefinition);
-      }
-      order.push(rotation);
-    }
-  }
-  return order;
-}
 
 function getTransformBoundsLimit(
   boundsDefinition: TypeTransformLinkBoundsDefinition | TypeTransformBounds,
@@ -3869,12 +3665,12 @@ export {
   getLine,
   deceleratePoint,
   decelerateValue,
+  decelerateTransform,
   RectBounds,
   LineBounds,
   RangeBounds,
   ValueBounds,
   TransformBounds,
   Vector,
-  decelerateTransform,
   transformValueToArray,
 };

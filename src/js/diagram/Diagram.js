@@ -185,6 +185,7 @@ class Diagram {
 
   state: {
     pause: 'paused' | 'preparingToPause' | 'preparingToUnpause' | 'unpaused';
+    preparingToStop: boolean;
   };
   // pauseAfterNextDrawFlag: boolean;
 
@@ -360,6 +361,7 @@ class Diagram {
     }
     this.state = {
       pause: 'unpaused',
+      preparingToStop: false,
     };
     this.stateTime = this.globalAnimation.now() / 1000;
 
@@ -1489,7 +1491,40 @@ class Diagram {
     // freeze: boolean = false,
     how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel',
   ) {
+    this.state.preparingToStop = false;
     this.elements.stop(how);
+
+    const stopped = () => {
+      this.subscriptions.trigger('stopped');
+      this.state.preparingToStop = false;
+    };
+    if (how === 'freeze' || how === 'cancel' || how === 'complete') {
+      stopped();
+      return;
+    }
+
+    const elements = this.elements.getAllElements();
+    let preparingToStopCounter = 0;
+    const checkAllStopped = () => {
+      if (preparingToStopCounter > 0) {
+        preparingToStopCounter -= 1;
+      }
+      if (preparingToStopCounter === 0) {
+        stopped();
+      }
+    };
+    elements.forEach((element) => {
+      if (element.state.preparingToStop) {
+        preparingToStopCounter += 1;
+        element.subscriptions.subscribe('stopped', checkAllStopped, 1);
+      }
+    });
+    if (preparingToStopCounter === 0) {
+      checkAllStopped();
+    } else if (preparingToStopCounter > 0) {
+      this.subscriptions.trigger('preparingToStop');
+      this.state.preparingToStop = true;
+    }
   }
 
   // To add elements to a diagram, either this method can be overridden,
@@ -1552,6 +1587,11 @@ class Diagram {
   }
 
   pause(pauseSettings: TypePauseSettings = { simplePause: true }) {
+    this.state.pause = 'paused';
+    this.pauseTime = this.globalAnimation.now() / 1000;
+  }
+
+  pauseLegacy(pauseSettings: TypePauseSettings = { simplePause: true }) {
     // forcePause: boolean = true, clearAnimations: boolean = false) {
     this.elements.pause(pauseSettings);
     if (pauseSettings.simplePause != null && pauseSettings.simplePause) {
@@ -1592,6 +1632,14 @@ class Diagram {
   // }
 
   unpause() {
+    this.state.pause = 'unpaused';
+    this.isPaused = false;
+    this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.pauseTime);
+    this.animateNextFrame();
+    this.subscriptions.trigger('unpaused');
+  }
+
+  unpauseLegacy() {
     this.elements.unpause();
     const elements = this.elements.getAllElements();
     let preparingToUnpauseCounter = 0;
@@ -1630,6 +1678,9 @@ class Diagram {
   }
 
   draw(nowIn: number, canvasIndex: number = 0): void {
+    if (this.state.pause === 'paused') {
+      return;
+    }
     // console.log('Draw draw drawey draw draw', nowIn, this.drawQueued)
     let now = nowIn;
     if (nowIn === -1) {
