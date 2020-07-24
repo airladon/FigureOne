@@ -1858,12 +1858,17 @@ class DiagramElement {
     }
   }
 
-  
   stopMovingFreely(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel'): void {
-    
+    if (how === 'animateToComplete') {
+      return;
+    }
     let wasMovingFreely = false;
     if (this.state.isMovingFreely === true) {
       wasMovingFreely = true;
+    }
+    if (how === 'complete' && wasMovingFreely) {
+      const result = this.getMovingFreelyEnd();
+      this.setTransform(result.transform);
     }
     this.state.isMovingFreely = false;
     this.state.movement.previousTime = null;
@@ -1872,9 +1877,7 @@ class DiagramElement {
       this.move.freely.callback = null;
     }
     if (wasMovingFreely) {
-      // console.log('stop moving freely callback', this.animationFinishedCallback)
       this.fnMap.exec(this.animationFinishedCallback);
-      // this.subscriptions.trigger('animationFinished', ['movingFreely']);
       this.animationFinished('movingFreely');
       this.subscriptions.trigger('stopMovingFreely');
     }
