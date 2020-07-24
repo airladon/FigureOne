@@ -3476,7 +3476,17 @@ class TransformBounds extends Bounds {
       const b = this.boundary[i];
       if (b != null) {
         const clipped = b.clip(transformElement);
-        clipped.name = transformElement.name;
+        let newElement;
+        if (transformElement instanceof Translation) {
+          newElement = new Translation(clipped.x, clipped.y, transformElement.name);
+        } else if (transformElement instanceof Scale) {
+          newElement = new Scale(clipped.x, clipped.y, transformElement.name);
+        } else {
+          newElement = new Rotation(clipped, transformElement.name);
+        }
+
+        // clipped.name = transformElement.name;
+        order.push(newElement);
       } else {
         order.push(transformElement);
       }
