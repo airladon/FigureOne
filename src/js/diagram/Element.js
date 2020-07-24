@@ -617,7 +617,7 @@ class DiagramElement {
       maxVelocity: 5,
       // maxVelocity: new TransformLimit(5, 5, 5),
       freely: {
-        zeroVelocityThreshold: 0.001,
+        zeroVelocityThreshold: 0.00000001,
         deceleration: 5,
         callback: null,
         bounceLoss: 0.5,
@@ -1778,148 +1778,156 @@ class DiagramElement {
   //   return Math.min(time, options.minTime);
   // }
 
-  getMovingFreelyEnd() {
-    const noChange = { duration: 0, transform: this.transform._dup() };
-    if (!this.state.isMovingFreely) {
-      return noChange;
-    }
-    const { velocity } = this.state.movement;
-    const { transform } = this;
-    const { deceleration, zeroVelocityThreshold } = this.move.freely;
+  // getMovingFreelyEnd() {
+  //   const noChange = { duration: 0, transform: this.transform._dup() };
+  //   if (!this.state.isMovingFreely) {
+  //     return noChange;
+  //   }
+  //   const { velocity } = this.state.movement;
+  //   const { transform } = this;
+  //   const { deceleration, zeroVelocityThreshold } = this.move.freely;
 
-    if (this.state.movement.velocity.isZero(0.0000001)) {
-      return noChange;
-    }
-    if (velocity.order.length !== transform.order.length) {
-      return noChange;
-    }
-    let duration = 0;
-    for (let i = 0; i < velocity.order.length; i += 1) {
-      const v = velocity.order[i];
-      const t = transform.order[i];
-      const min = this.move.minTransform.order[i];
-      const max = this.move.maxTransform.order[i];
-      const { translation, rotation, scale } = deceleration;
-      let stepDuration = 0;
-      if (t instanceof Rotation) {
-        stepDuration = calculateStopAngle(
-          t.r, v.r, rotation, [min.r, max.r], 0.5,
-        ).duration;
-      } else if (t instanceof Translation) {
-        stepDuration = calculateStop(
-          t, v, deceleration.position, translation, [min, max], 0.5,
-        ).duration;
-      } else {
-        stepDuration = calculateStop(
-          t, v, scale, [min, max], 0.5,
-        ).duration;
-      }
-      if (stepDuration > duration) {
-        duration = stepDuration;
-      }
-    }
-    return duration;
+  //   if (this.state.movement.velocity.isZero(0.0000001)) {
+  //     return noChange;
+  //   }
+  //   if (velocity.order.length !== transform.order.length) {
+  //     return noChange;
+  //   }
+  //   let duration = 0;
+  //   for (let i = 0; i < velocity.order.length; i += 1) {
+  //     const v = velocity.order[i];
+  //     const t = transform.order[i];
+  //     const min = this.move.minTransform.order[i];
+  //     const max = this.move.maxTransform.order[i];
+  //     const { translation, rotation, scale } = deceleration;
+  //     let stepDuration = 0;
+  //     if (t instanceof Rotation) {
+  //       stepDuration = calculateStopAngle(
+  //         t.r, v.r, rotation, [min.r, max.r], 0.5,
+  //       ).duration;
+  //     } else if (t instanceof Translation) {
+  //       stepDuration = calculateStop(
+  //         t, v, deceleration.position, translation, [min, max], 0.5,
+  //       ).duration;
+  //     } else {
+  //       stepDuration = calculateStop(
+  //         t, v, scale, [min, max], 0.5,
+  //       ).duration;
+  //     }
+  //     if (stepDuration > duration) {
+  //       duration = stepDuration;
+  //     }
+  //   }
+  //   return duration;
+  // }
+
+  // getRemainingMovingFreelyDuration() {
+  //   if (!this.state.isMovingFreely) {
+  //     return 0;
+  //   }
+  //   const { velocity } = this.state.movement;
+  //   const { transform } = this;
+  //   const { deceleration, zeroVelocityThreshold } = this.move.freely;
+  //   let isZero = false;
+  //   // for (let i = 0; i < velocity.order.length; i += 1) {
+  //   //   const step = velocity.order[i];
+  //   //   if (step instanceof Translation) {
+  //   //     if
+  //   //   }
+  //   // }
+  //   if (this.state.movement.velocity.isZero(0.0000001)) {
+  //     return 0;
+  //   }
+  //   if (velocity.order.length !== transform.order.length) {
+  //     return 0;
+  //   }
+  //   let duration = 0;
+  //   for (let i = 0; i < velocity.order.length; i += 1) {
+  //     const v = velocity.order[i];
+  //     const t = transform.order[i];
+  //     const min = this.move.minTransform.order[i];
+  //     const max = this.move.maxTransform.order[i];
+  //     const { translation, rotation, scale } = deceleration;
+  //     let stepDuration = 0;
+  //     if (t instanceof Rotation) {
+  //       stepDuration = calculateStopAngle(
+  //         t.r, v.r, rotation, [min.r, max.r], 0.5,
+  //       ).duration;
+  //     } else if (t instanceof Translation) {
+  //       stepDuration = calculateStop(
+  //         t, v, translation, [min, max], 0.5,
+  //       ).duration;
+  //     } else {
+  //       stepDuration = calculateStop(
+  //         t, v, scale, [min, max], 0.5,
+  //       ).duration;
+  //     }
+  //     if (stepDuration > duration) {
+  //       duration = stepDuration;
+  //     }
+  //   }
+  //   return duration;
+  // }
+
+  // getMovingFreelyEndTransform() {
+  //   if (!this.state.isMovingFreely) {
+  //     return 0;
+  //   }
+  //   const { velocity } = this.state.movement;
+  //   const { transform } = this;
+  //   const { deceleration, zeroVelocityThreshold } = this.move.freely;
+  //   // let isZero = false;
+  //   // for (let i = 0; i < velocity.order.length; i += 1) {
+  //   //   const step = velocity.order[i];
+  //   //   if (step instanceof Translation) {
+  //   //     if
+  //   //   }
+  //   // }
+  //   if (this.state.movement.velocity.isZero(0.0000001)) {
+  //     return 0;
+  //   }
+  //   if (velocity.order.length !== transform.order.length) {
+  //     return 0;
+  //   }
+  //   let duration = 0;
+  //   for (let i = 0; i < velocity.order.length; i += 1) {
+  //     const v = velocity.order[i];
+  //     const t = transform.order[i];
+  //     const min = this.move.minTransform.order[i];
+  //     const max = this.move.maxTransform.order[i];
+  //     const { translation, rotation, scale } = deceleration;
+  //     let stepDuration = 0;
+  //     if (t instanceof Rotation) {
+  //       stepDuration = calculateStopAngle(
+  //         t.r, v.r, rotation, [min.r, max.r], 0.5,
+  //       ).duration;
+  //     } else if (t instanceof Translation) {
+  //       stepDuration = calculateStop(
+  //         t, v, translation, [min, max], 0.5,
+  //       ).duration;
+  //     } else {
+  //       stepDuration = calculateStop(
+  //         t, v, scale, [min, max], 0.5,
+  //       ).duration;
+  //     }
+  //     if (stepDuration > duration) {
+  //       duration = stepDuration;
+  //     }
+  //   }
+  //   return duration;
+  // }
+
+  getMovingFreelyEnd() {
+    return this.decelerate(null);
   }
 
   getRemainingMovingFreelyDuration() {
-    if (!this.state.isMovingFreely) {
-      return 0;
-    }
-    const { velocity } = this.state.movement;
-    const { transform } = this;
-    const { deceleration, zeroVelocityThreshold } = this.move.freely;
-    let isZero = false;
-    // for (let i = 0; i < velocity.order.length; i += 1) {
-    //   const step = velocity.order[i];
-    //   if (step instanceof Translation) {
-    //     if
-    //   }
-    // }
-    if (this.state.movement.velocity.isZero(0.0000001)) {
-      return 0;
-    }
-    if (velocity.order.length !== transform.order.length) {
-      return 0;
-    }
-    let duration = 0;
-    for (let i = 0; i < velocity.order.length; i += 1) {
-      const v = velocity.order[i];
-      const t = transform.order[i];
-      const min = this.move.minTransform.order[i];
-      const max = this.move.maxTransform.order[i];
-      const { translation, rotation, scale } = deceleration;
-      let stepDuration = 0;
-      if (t instanceof Rotation) {
-        stepDuration = calculateStopAngle(
-          t.r, v.r, rotation, [min.r, max.r], 0.5,
-        ).duration;
-      } else if (t instanceof Translation) {
-        stepDuration = calculateStop(
-          t, v, translation, [min, max], 0.5,
-        ).duration;
-      } else {
-        stepDuration = calculateStop(
-          t, v, scale, [min, max], 0.5,
-        ).duration;
-      }
-      if (stepDuration > duration) {
-        duration = stepDuration;
-      }
-    }
-    return duration;
-  }
-
-  getMovingFreelyEndTransform() {
-    if (!this.state.isMovingFreely) {
-      return 0;
-    }
-    const { velocity } = this.state.movement;
-    const { transform } = this;
-    const { deceleration, zeroVelocityThreshold } = this.move.freely;
-    // let isZero = false;
-    // for (let i = 0; i < velocity.order.length; i += 1) {
-    //   const step = velocity.order[i];
-    //   if (step instanceof Translation) {
-    //     if
-    //   }
-    // }
-    if (this.state.movement.velocity.isZero(0.0000001)) {
-      return 0;
-    }
-    if (velocity.order.length !== transform.order.length) {
-      return 0;
-    }
-    let duration = 0;
-    for (let i = 0; i < velocity.order.length; i += 1) {
-      const v = velocity.order[i];
-      const t = transform.order[i];
-      const min = this.move.minTransform.order[i];
-      const max = this.move.maxTransform.order[i];
-      const { translation, rotation, scale } = deceleration;
-      let stepDuration = 0;
-      if (t instanceof Rotation) {
-        stepDuration = calculateStopAngle(
-          t.r, v.r, rotation, [min.r, max.r], 0.5,
-        ).duration;
-      } else if (t instanceof Translation) {
-        stepDuration = calculateStop(
-          t, v, translation, [min, max], 0.5,
-        ).duration;
-      } else {
-        stepDuration = calculateStop(
-          t, v, scale, [min, max], 0.5,
-        ).duration;
-      }
-      if (stepDuration > duration) {
-        duration = stepDuration;
-      }
-    }
-    return duration;
+    return this.decelerate(null).duration;
   }
 
   // Decelerate over some time when moving freely to get a new element
   // transform and movement velocity
-  decelerate(deltaTime: number): Object {
+  decelerate(deltaTime: ?number): Object {
     let bounds;
     if (!this.move.bounds instanceof TransformBounds) {
       this.setMoveBounds();
@@ -1940,6 +1948,7 @@ class DiagramElement {
     return {
       velocity: next.velocity,
       transform: next.transform,
+      duration: next.duration,
     };
   }
 
