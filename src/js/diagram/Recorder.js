@@ -603,12 +603,9 @@ class Recorder {
     }
 
     this.eventsCache = {};
-    // this.slidesCache = [];
-    // this.statesCache = new ObjectTracker(this.precision);
-    // this.statesCache.baseReference = duplicate(this.states.baseReference);  // $FlowFixMe
-    // this.statesCache.references = duplicate(this.states.references);
-    this.diagram.unpause();
-    // console.log('asdf3', this.diagram.getElement('a').animations.animations[0].steps[0].startTime)
+
+    // this.diagram.unpause();
+
 
     this.lastRecordTime = null;
     this.duration = this.calcDuration();
@@ -1080,12 +1077,12 @@ class Recorder {
     }
     // console.log(time)
     this.setToTime(time);
-    this.diagram.pause({
-      animation: 'freeze',
-      pulse: 'freeze',
-      movingFreely: 'freeze',
-    });
-    // this.diagram.stop('freeze');
+    // this.diagram.pause({
+    //   animation: 'freeze',
+    //   pulse: 'freeze',
+    //   movingFreely: 'freeze',
+    // });
+    this.diagram.stop('freeze');
   }
 
   setToTime(timeIn: number, force: boolean = false) {
@@ -1284,7 +1281,7 @@ class Recorder {
       this.eventsToPlay = events;
     }
 
-    this.diagram.unpause();
+    // this.diagram.unpause();
     // this.setVideoToNowDeltaTime(this.currentTime);
 
     let stateToStartFrom = this.getStateForTime(fromTime);
@@ -1655,7 +1652,7 @@ class Recorder {
     const pause = () => {
       this.state = 'idle';
       this.subscriptions.trigger('playbackStopped');
-      this.diagram.stop();
+      // this.diagram.stop();
     };
     this.stopTimeouts();
     if (this.audio) {
@@ -1663,9 +1660,9 @@ class Recorder {
       this.isAudioPlaying = false;
     }
 
-    this.diagram.subscriptions.subscribe('paused', pause, 1);
-    this.diagram.pause(this.settings.pause);
-    if (this.diagram.getPauseState() === 'preparingToPause') {
+    this.diagram.subscriptions.subscribe('stopped', pause, 1);
+    this.diagram.stop(this.settings.pause);
+    if (this.diagram.state.preparingToStop) {
       this.subscriptions.trigger('preparingToPause');
       this.state = 'preparingToPause';
       // console.log('recorder prep to pause')

@@ -49,6 +49,7 @@ describe('Animate To State', () => {
     const subs = recorder.subscriptions;
     subs.subscribe('playbackStarted', playbackStartedCallback);
     subs.subscribe('playbackStopped', playbackStoppedCallback);
+    // subs.subscribe('playbackStopped', () => console.log(13));
     subs.subscribe('preparingToPause', preparingToPauseCallback);
     subs.subscribe('preparingToPlay', preparingToPlayCallback);
     recorder.stateTimeStep = 1;
@@ -82,7 +83,7 @@ describe('Animate To State', () => {
       // const check = (recorderState, diagramIsPaused, aIsPaused, isAnimating, remainingAnimationTime, x) => {
       //   expect(recorderState).toEqual(recorderState)
       // }
-      states = () => [recorder.state, diagram.state.pause, a.state.pause, diagram.isAnimating(), round(diagram.getRemainingAnimationTime()), a.getPosition().round(3).x];
+      states = () => [recorder.state, diagram.state.preparingToStop, a.state.preparingToStop, diagram.isAnimating(), round(diagram.getRemainingAnimationTime()), a.getPosition().round(3).x];
       callbacks = () => [
         preparingToPlayCallback.mock.calls.length,
         playbackStartedCallback.mock.calls.length,
@@ -91,62 +92,63 @@ describe('Animate To State', () => {
       ];
     });
     test('No Pausing', () => {
-      expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 0]);
+      expect(states()).toEqual(['idle', false, false, false, 0, 0]);
       expect(callbacks()).toEqual([0, 0, 0, 0]);
       recorder.startPlayback(0);
-      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 0]);
+      expect(states()).toEqual(['playing', false, false, false, 0, 0]);
       expect(callbacks()).toEqual([0, 1, 0, 0]);
       diagram.mock.timeStep(1);
-      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 2, 0]);
+      expect(states()).toEqual(['playing', false, false, true, 2, 0]);
       expect(callbacks()).toEqual([0, 1, 0, 0]);
       diagram.mock.timeStep(1);
-      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 0.5]);
+      expect(states()).toEqual(['playing', false, false, true, 1, 0.5]);
       expect(callbacks()).toEqual([0, 1, 0, 0]);
       diagram.mock.timeStep(1);
-      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
+      expect(states()).toEqual(['playing', false, false, false, 0, 1]);
       expect(callbacks()).toEqual([0, 1, 0, 0]);
       diagram.mock.timeStep(1);
-      expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+      expect(states()).toEqual(['idle', false, false, false, 0, 1]);
       expect(callbacks()).toEqual([0, 1, 0, 1]);
     });
     test('Try to change paused diagram during recorder pause', () => {
-      expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 0]);
+      expect(states()).toEqual(['idle', false, false, false, 0, 0]);
       recorder.startPlayback(0);
-      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 0]);
+      expect(states()).toEqual(['playing', false, false, false, 0, 0]);
       diagram.mock.timeStep(1);
-      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 2, 0]);
+      expect(states()).toEqual(['playing', false, false, true, 2, 0]);
       diagram.mock.timeStep(1);
-      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 0.5]);
+      expect(states()).toEqual(['playing', false, false, true, 1, 0.5]);
       recorder.settings.pause = 'freeze';
       recorder.pausePlayback();
 
+      diagram.pause();
       a.animations.new()
         .position({ target: [4.5, 4.5], duration: 2 })
         .start('now');
       diagram.mock.timeStep(1);
       expect(a.getPosition().round(3).x).toBe(0.5);
-
+      diagram.unpause();
       // Resume
       recorder.settings.play = 'instant';
       recorder.resumePlayback();
-      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 0.5]);
+      expect(states()).toEqual(['playing', false, false, true, 1, 0.5]);
       diagram.mock.timeStep(1);
-      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
+      expect(states()).toEqual(['playing', false, false, false, 0, 1]);
       diagram.mock.timeStep(1);
-      expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+      expect(states()).toEqual(['idle', false, false, false, 0, 1]);
     });
     test('Change upaused diagram during recorder pause', () => {
-      expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 0]);
+      expect(states()).toEqual(['idle', false, false, false, 0, 0]);
       recorder.startPlayback(0);
-      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 0]);
+      expect(states()).toEqual(['playing', false, false, false, 0, 0]);
       diagram.mock.timeStep(1);
-      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 2, 0]);
+      expect(states()).toEqual(['playing', false, false, true, 2, 0]);
       diagram.mock.timeStep(1);
-      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 0.5]);
+      expect(states()).toEqual(['playing', false, false, true, 1, 0.5]);
       recorder.settings.pause = 'freeze';
       recorder.pausePlayback();
 
-      diagram.unpause();
+      // diagram.unpause();
       a.animations.new()
         .position({ target: [4.5, 4.5], duration: 2 })
         .start('now');
@@ -156,11 +158,11 @@ describe('Animate To State', () => {
       // Resume
       recorder.settings.play = 'instant';
       recorder.resumePlayback();
-      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', true, 1, 0.5]);
+      expect(states()).toEqual(['playing', false, false, true, 1, 0.5]);
       diagram.mock.timeStep(1);
-      expect(states()).toEqual(['playing', 'unpaused', 'unpaused', false, 0, 1]);
+      expect(states()).toEqual(['playing', false, false, false, 0, 1]);
       diagram.mock.timeStep(1);
-      expect(states()).toEqual(['idle', 'paused', 'paused', false, 0, 1]);
+      expect(states()).toEqual(['idle', false, false, false, 0, 1]);
     });
     describe('Pause', () => {
       beforeEach(() => {

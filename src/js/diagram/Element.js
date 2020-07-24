@@ -235,7 +235,8 @@ class DiagramElement {
     pulse: {
       startTime: ?number,
     },
-    pause: 'paused' | 'preparingToPause' | 'preparingToUnpause' | 'unpaused';
+    preparingToStop: boolean;
+    // pause: 'paused' | 'preparingToPause' | 'preparingToUnpause' | 'unpaused';
   };
 
   animations: animations.AnimationManager;
@@ -675,6 +676,7 @@ class DiagramElement {
         startTime: null,
       },
       pause: 'unpaused',
+      preparingToStop: false,
     };
     this.interactiveLocation = new Point(0, 0);
     this.animationFinishedCallback = null;
@@ -1316,7 +1318,7 @@ class DiagramElement {
     return pauseSettings;
   }
 
-  pause(pauseSettingsIn: TypePauseSettings = {}) {
+  pauseLegacy(pauseSettingsIn: TypePauseSettings = {}) {
     const pause = () => {
       this.isPaused = true;
       this.state.pause = 'paused';
@@ -1360,7 +1362,7 @@ class DiagramElement {
     }
   }
 
-  unpause() {
+  unpauseLegacy() {
     this.isPaused = false;
     if (this.state.pause !== 'unpaused') {
       this.subscriptions.trigger('unpaused');
@@ -1874,6 +1876,7 @@ class DiagramElement {
       this.fnMap.exec(this.animationFinishedCallback);
       // this.subscriptions.trigger('animationFinished', ['movingFreely']);
       this.animationFinished('movingFreely');
+      this.subscriptions.trigger('stopMovingFreely');
     }
   }
 
@@ -2166,22 +2169,46 @@ class DiagramElement {
     if (wasPulsing) {
       // this.subscriptions.trigger('animationFinished', )
       this.animationFinished('pulsing');
+      this.subscriptions.trigger('stopPulsing');
     }
   }
 
   stop(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel') {
+    let toComplete = 0;
+    const checkStop = () => {
+      toComplete -= 1;
+      if (toComplete <= 0) {
+        this.state.preparingToStop = false;
+        console.log('2342')
+        this.subscriptions.trigger('stopped');
+      }
+    };
+    if (how === 'animateToComplete' || how === 'dissolveToComplete') {
+      if (this.animations.isAnimating()) {
+        this.state.preparingToStop = true;
+        toComplete += 1;
+        this.animations.subscriptions.subscribe('finished', checkStop, 1);
+      }
+      if (this.state.isPulsing) {
+        this.state.preparingToStop = true;
+        toComplete += 1;
+        this.subscriptions.subscribe('stopPulsing', checkStop, 1);
+      }
+      if (this.state.isMovingFreely) {
+        this.state.preparingToStop = true;
+        toComplete += 1;
+        this.subscriptions.subscribe('stopMovingFreely', checkStop, 1);
+      }
+    }
+    if (this.state.preparingToStop) {
+      this.subscriptions.trigger('preparingToStop');
+    }
     this.stopAnimating(how);
-    // if (forceSetToEndOfPlan === true || forceSetToEndOfPlan === 'complete') {
-    //   this.animations.cancelAll('complete');
-    // } else if (forceSetToEndOfPlan === false || forceSetToEndOfPlan === 'noComplete') {
-    //   this.animations.cancelAll('noComplete');
-    // } else {
-    //   this.animations.cancelAll(null);
-    // }
     this.stopMovingFreely(how);
     this.stopBeingMoved();
     this.stopPulsing(how);
   }
+
 
   stopAnimating(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel') {
     if (how === 'freeze') {
@@ -4837,7 +4864,7 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  pause(pauseSettingsIn: TypePauseSettings = {}) {
+  pauseLegacy(pauseSettingsIn: TypePauseSettings = {}) {
     super.pause(pauseSettingsIn);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
@@ -4845,7 +4872,7 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  unpause() {
+  unpauseLegacy() {
     super.unpause();
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
