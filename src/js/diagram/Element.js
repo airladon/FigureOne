@@ -617,7 +617,7 @@ class DiagramElement {
       maxVelocity: 5,
       // maxVelocity: new TransformLimit(5, 5, 5),
       freely: {
-        zeroVelocityThreshold: 0.00000001,
+        zeroVelocityThreshold: 0.0001,
         deceleration: 5,
         callback: null,
         bounceLoss: 0.5,
