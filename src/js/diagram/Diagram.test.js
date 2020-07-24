@@ -170,6 +170,8 @@ describe('Diagram', () => {
           .transformBy(diagram.spaceTransforms.diagramToPixel.matrix());
         return pixel.add(new Point(diagram.canvasLow.left, diagram.canvasLow.top));
       };
+      diagram.initialize();
+      // diagram.setFirstTransform();
       diagrams[key] = diagram;
     });
   });
@@ -433,7 +435,7 @@ describe('Diagram', () => {
     test('Move just A on Landscape Center', () => {
       // canvasW=1000, canvasH=500, clipL=-1, clipW=2, clipT=1, clipH=2
       const d = diagrams.landscapeCenter;
-      d.initialize();
+      // d.initialize();
       d.draw(0);
 
       // Touch A
@@ -455,9 +457,11 @@ describe('Diagram', () => {
       expect(d.beingMovedElements[0]).toBe(d.elements._a);
 
       // Move to 0.25, 0.25
+      // console.log(d.elements._a.transform)
       d.touchMoveHandler(t1, t2);
       expect(d.beingMovedElements).toHaveLength(1);
       expect(d.beingMovedElements[0]).toBe(d.elements._a);
+      // console.log(d.elements._a.transform)
       expect(d.elements._a.transform.t().round(2)).toEqual(a2);
 
       // Move beyond border - should stop at 0.75 as side length is 0.5
@@ -469,7 +473,7 @@ describe('Diagram', () => {
     test('Move A and C on Landscape Center', () => {
       // canvasW=1000, canvasH=500, clipL=-1, clipW=2, clipT=1, clipH=2
       const d = diagrams.landscapeCenter;
-      d.initialize();
+      // d.initialize();
       d.draw(0);
 
       // Touch A and C
@@ -496,7 +500,9 @@ describe('Diagram', () => {
       d.draw(1);
 
       // Move to 0.25, 0.25
+      // console.log(d.elements._c.transform)
       d.touchMoveHandler(t1, t2);
+      // console.log(d.elements._c.transform)
       expect(d.beingMovedElements).toHaveLength(2);
       expect(d.elements._a.transform.t().round(2)).toEqual(a2);
       expect(d.elements._c.transform.t().round(2)).toEqual(c2);
@@ -511,7 +517,7 @@ describe('Diagram', () => {
     test('Move A and C on Landscape Offset', () => {
       // canvasW=1000, canvasH=500, clipL=0, clipW=4, clipT=2, clipH=2
       const d = diagrams.landscapeOffset;
-      d.initialize();
+      // d.initialize();
       d.draw(0);
 
       // Touch A and C
@@ -547,6 +553,7 @@ describe('Diagram', () => {
       expect(d.elements._c.transform.t().round(2)).toEqual(c0);
       d.draw(0.1);
 
+      // debugger;
       d.touchMoveHandler(t0, t1);
       expect(d.beingMovedElements).toHaveLength(2);
       expect(d.elements._a.transform.t().round(2)).toEqual(a1);
@@ -569,7 +576,7 @@ describe('Diagram', () => {
     test('Move A and C on Portrait Offset', () => {
       // canvasW=500, canvasH=1000, clipL=0, clipW=2, clipT=4, clipH=4
       const d = diagrams.portraitOffset;
-      d.initialize();
+      // d.initialize();
       d.draw(0);
 
       // Touch A and C
@@ -630,7 +637,7 @@ describe('Diagram', () => {
       const RealDate = global.performance.now;
       // canvasW=1000, canvasH=500, clipL=-1, clipW=2, clipT=1, clipH=2
       const d = diagrams.landscapeCenter;
-      d.initialize();
+      // d.initialize();
       const a = d.elements._a;
       const decel = [1, 1, 0.5];
       a.move.freely.deceleration = decel;

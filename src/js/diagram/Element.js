@@ -1410,11 +1410,19 @@ class DiagramElement {
       //   bounds = new TransformBounds(this.transform);
       //   bounds.updateTranslation(new BoundsRect(this.diagram.limits));
       // }
+      if (window.asdf && this.name === 'c') {
+        debugger;
+      }
       if (!(this.move.bounds instanceof TransformBounds)) {
         this.setMoveBounds();
       }
       if (this.move.bounds instanceof TransformBounds) {
         this.transform = this.move.bounds.clip(transform);
+        // if (this.name === 'c') {
+          // console.log(transform)
+          // console.log(this.transform)
+          // console.log(this.move.bounds.boundary[2])
+        // }
       }
       // console.log(this.transform)
       // this.transform = transform._dup().clip(
@@ -2507,16 +2515,24 @@ class DiagramElement {
   // eslint-disable-next-line class-methods-use-this
   getDiagramBoundingRect() {
     const gl = this.getGLBoundingRect();
-    const glToDiagramScale = new Point(
-      this.diagramLimits.width / 2,
-      this.diagramLimits.height / 2,
-    );
+    // const glToDiagramScale = new Point(
+    //   this.diagramLimits.width / 2,
+    //   this.diagramLimits.height / 2,
+    // );
+    const bottomLeft = new Point(gl.left, gl.bottom)
+      .transformBy(this.diagram.spaceTransforms.glToDiagram.matrix());
+    const topRight = new Point(gl.right, gl.top)
+      .transformBy(this.diagram.spaceTransforms.glToDiagram.matrix());
     return new Rect(
-      gl.left * glToDiagramScale.x,
-      gl.bottom * glToDiagramScale.y,
-      gl.width * glToDiagramScale.x,
-      gl.height * glToDiagramScale.y,
+      bottomLeft.x, bottomLeft.y,
+      topRight.x - bottomLeft.x, topRight.y - bottomLeft.y,
     );
+    // return new Rect(
+    //   gl.left * glToDiagramScale.x,
+    //   gl.bottom * glToDiagramScale.y,
+    //   gl.width * glToDiagramScale.x,
+    //   gl.height * glToDiagramScale.y,
+    // );
   }
 
   getBoundingRect(
@@ -2560,16 +2576,24 @@ class DiagramElement {
 
   getRelativeDiagramBoundingRect() {
     const gl = this.getRelativeGLBoundingRect();
-    const glToDiagramScale = new Point(
-      this.diagramLimits.width / 2,
-      this.diagramLimits.height / 2,
-    );
+    const bottomLeft = new Point(gl.left, gl.bottom)
+      .transformBy(this.diagram.spaceTransforms.glToDiagram.matrix());
+    const topRight = new Point(gl.right, gl.top)
+      .transformBy(this.diagram.spaceTransforms.glToDiagram.matrix());
     return new Rect(
-      gl.left * glToDiagramScale.x,
-      gl.bottom * glToDiagramScale.y,
-      gl.width * glToDiagramScale.x,
-      gl.height * glToDiagramScale.y,
+      bottomLeft.x, bottomLeft.y,
+      topRight.x - bottomLeft.x, topRight.y - bottomLeft.y,
     );
+    // const glToDiagramScale = new Point(
+    //   this.diagramLimits.width / 2,
+    //   this.diagramLimits.height / 2,
+    // );
+    // return new Rect(
+    //   gl.left * glToDiagramScale.x,
+    //   gl.bottom * glToDiagramScale.y,
+    //   gl.width * glToDiagramScale.x,
+    //   gl.height * glToDiagramScale.y,
+    // );
   }
 
   getCenterDiagramPosition() {
@@ -2773,6 +2797,7 @@ class DiagramElement {
     boundaryIn: ?Array<number> | Rect | 'diagram' = null,
     // scale: Point = new Point(1, 1),
   ): void {
+    debugger;
     if (!this.isMovable) {
       return;
     }
@@ -2796,7 +2821,8 @@ class DiagramElement {
     } else if (boundary === 'diagram') {
       boundary = this.diagramLimits;
     }
-    const rect = this.getBoundingRect('diagram');
+    const rect = this.getRelativeBoundingRect('diagram');
+
     if (this.move.bounds instanceof TransformBounds) {
       this.move.bounds.updateTranslation(new BoundsRect(
         boundary.left - rect.left,
@@ -2805,6 +2831,9 @@ class DiagramElement {
         boundary.top - rect.top - (boundary.bottom - rect.bottom),
       ));
     }
+    // if (this.name === 'c') {
+    //   console.log(this.move.bounds.boundary[2])
+    // }
   }
 
   // setMoveBoundsLegacy(
