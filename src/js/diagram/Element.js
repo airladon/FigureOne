@@ -287,7 +287,7 @@ class DiagramElement {
 
   stateProperties: Array<string>
   fnMap: FunctionMap;
-  isPaused: boolean;
+  // isPaused: boolean;
 
   finishAnimationOnPause: boolean;
 
@@ -295,7 +295,7 @@ class DiagramElement {
 
   lastDrawTime: number;
 
-  pauseSettings: TypePauseSettings;
+  // pauseSettings: TypePauseSettings;
 
   dependantTransform: boolean;
 
@@ -367,10 +367,10 @@ class DiagramElement {
       scale: 2,
       time: 1,
     };
-    this.isPaused = false;
+    // this.isPaused = false;
     // this.copies = [];
 
-    this.pauseSettings = {};
+    // this.pauseSettings = {};
 
     // Rename to animate in future
     this.anim = {
@@ -1269,106 +1269,106 @@ class DiagramElement {
     this.undim();
   }
 
-  getPauseSettings(pauseSettingsIn: TypePauseSettings): {
-    animation: TypeOnPause,
-    pulse: TypeOnPause,
-    movingFreely: TypeOnPause,
-  } {
-    let pauseSettings;
-    let defaultPause = 'freeze';
-    if (typeof pauseSettingsIn === 'string') {
-      pauseSettings = {
-        animation: pauseSettingsIn,
-        pulse: pauseSettingsIn,
-        movingFreely: pauseSettingsIn,
-      }
-      defaultPause = pauseSettingsIn;
-    } else {
-      pauseSettings = {
-        animation: pauseSettingsIn.animation,
-        pulse: pauseSettingsIn.pulse,
-        movingFreely: pauseSettingsIn.movingFreely,
-      }
-      defaultPause = pauseSettingsIn.default;
-    };
-    if (typeof this.pauseSettings === 'string') {
-      defaultPause = this.pauseSettings;
-    }
-    if (defaultPause == null) {
-      defaultPause = 'freeze';
-    }
-    if (typeof this.pauseSettings === 'object' && this.pauseSettings.animation != null) {
-      pauseSettings.animation = this.pauseSettings.animation;
-    }
-    if (typeof this.pauseSettings === 'object' && this.pauseSettings.pulse != null) {
-      pauseSettings.pulse = this.pauseSettings.pulse;
-    }
-    if (typeof this.pauseSettings === 'object' && this.pauseSettings.movingFreely != null) {
-      pauseSettings.movingFreely = this.pauseSettings.movingFreely;
-    }
-    if (pauseSettings.animation == null) {
-      pauseSettings.animation = defaultPause;
-    }
-    if (pauseSettings.pulse == null) {
-      pauseSettings.pulse = defaultPause;
-    }
-    if (pauseSettings.movingFreely == null) {
-      pauseSettings.movingFreely = defaultPause;
-    }
-    return pauseSettings;
-  }
+  // getPauseSettings(pauseSettingsIn: TypePauseSettings): {
+  //   animation: TypeOnPause,
+  //   pulse: TypeOnPause,
+  //   movingFreely: TypeOnPause,
+  // } {
+  //   let pauseSettings;
+  //   let defaultPause = 'freeze';
+  //   if (typeof pauseSettingsIn === 'string') {
+  //     pauseSettings = {
+  //       animation: pauseSettingsIn,
+  //       pulse: pauseSettingsIn,
+  //       movingFreely: pauseSettingsIn,
+  //     }
+  //     defaultPause = pauseSettingsIn;
+  //   } else {
+  //     pauseSettings = {
+  //       animation: pauseSettingsIn.animation,
+  //       pulse: pauseSettingsIn.pulse,
+  //       movingFreely: pauseSettingsIn.movingFreely,
+  //     }
+  //     defaultPause = pauseSettingsIn.default;
+  //   };
+  //   if (typeof this.pauseSettings === 'string') {
+  //     defaultPause = this.pauseSettings;
+  //   }
+  //   if (defaultPause == null) {
+  //     defaultPause = 'freeze';
+  //   }
+  //   if (typeof this.pauseSettings === 'object' && this.pauseSettings.animation != null) {
+  //     pauseSettings.animation = this.pauseSettings.animation;
+  //   }
+  //   if (typeof this.pauseSettings === 'object' && this.pauseSettings.pulse != null) {
+  //     pauseSettings.pulse = this.pauseSettings.pulse;
+  //   }
+  //   if (typeof this.pauseSettings === 'object' && this.pauseSettings.movingFreely != null) {
+  //     pauseSettings.movingFreely = this.pauseSettings.movingFreely;
+  //   }
+  //   if (pauseSettings.animation == null) {
+  //     pauseSettings.animation = defaultPause;
+  //   }
+  //   if (pauseSettings.pulse == null) {
+  //     pauseSettings.pulse = defaultPause;
+  //   }
+  //   if (pauseSettings.movingFreely == null) {
+  //     pauseSettings.movingFreely = defaultPause;
+  //   }
+  //   return pauseSettings;
+  // }
 
-  pauseLegacy(pauseSettingsIn: TypePauseSettings = {}) {
-    const pause = () => {
-      this.isPaused = true;
-      this.state.pause = 'paused';
-      this.subscriptions.trigger('paused');
-    };
-    if (pauseSettingsIn.simplePause != null && pauseSettingsIn.simplePause) {
-      pause();
-      return;
-    }
-    // console.log(pauseSettingsIn)
-    let pauseWhenFinished = false;
-    const { animation, pulse, movingFreely } = this.getPauseSettings(pauseSettingsIn);
-    // console.log(animation, pulse)
+  // pauseLegacy(pauseSettingsIn: TypePauseSettings = {}) {
+  //   const pause = () => {
+  //     this.isPaused = true;
+  //     this.state.pause = 'paused';
+  //     this.subscriptions.trigger('paused');
+  //   };
+  //   if (pauseSettingsIn.simplePause != null && pauseSettingsIn.simplePause) {
+  //     pause();
+  //     return;
+  //   }
+  //   // console.log(pauseSettingsIn)
+  //   let pauseWhenFinished = false;
+  //   const { animation, pulse, movingFreely } = this.getPauseSettings(pauseSettingsIn);
+  //   // console.log(animation, pulse)
 
-    if (this.animations.isAnimating()) {
-      if (animation === 'completeBeforePause') {
-        pauseWhenFinished = true;
-      } else if (animation === 'complete') {
-        this.animations.cancelAll('complete');
-      } else {
-        this.animations.cancelAll('noComplete');
-      }
-    }
-    // console.log(this.name, pauseWhenFinished)
-    if (this.state.isPulsing) {
-      if (pulse === 'completeBeforePause') {
-        pauseWhenFinished = true;
-      } else if (pulse === 'complete') {
-        this.stopPulsing('complete');
-      } else {
-        this.stopPulsing('freeze');
-      }
-    }
-    // console.log(this.name, pauseWhenFinished)
-    if (pauseWhenFinished) {
-      this.state.pause = 'preparingToPause';
-      this.subscriptions.trigger('preparingToPause');
-      this.subscriptions.subscribe('animationFinished', pause, 1);
-    } else {
-      pause();
-    }
-  }
+  //   if (this.animations.isAnimating()) {
+  //     if (animation === 'completeBeforePause') {
+  //       pauseWhenFinished = true;
+  //     } else if (animation === 'complete') {
+  //       this.animations.cancelAll('complete');
+  //     } else {
+  //       this.animations.cancelAll('noComplete');
+  //     }
+  //   }
+  //   // console.log(this.name, pauseWhenFinished)
+  //   if (this.state.isPulsing) {
+  //     if (pulse === 'completeBeforePause') {
+  //       pauseWhenFinished = true;
+  //     } else if (pulse === 'complete') {
+  //       this.stopPulsing('complete');
+  //     } else {
+  //       this.stopPulsing('freeze');
+  //     }
+  //   }
+  //   // console.log(this.name, pauseWhenFinished)
+  //   if (pauseWhenFinished) {
+  //     this.state.pause = 'preparingToPause';
+  //     this.subscriptions.trigger('preparingToPause');
+  //     this.subscriptions.subscribe('animationFinished', pause, 1);
+  //   } else {
+  //     pause();
+  //   }
+  // }
 
-  unpauseLegacy() {
-    this.isPaused = false;
-    if (this.state.pause !== 'unpaused') {
-      this.subscriptions.trigger('unpaused');
-    }
-    this.state.pause = 'unpaused';
-  }
+  // unpauseLegacy() {
+  //   this.isPaused = false;
+  //   if (this.state.pause !== 'unpaused') {
+  //     this.subscriptions.trigger('unpaused');
+  //   }
+  //   this.state.pause = 'unpaused';
+  // }
 
   setPosition(pointOrX: Point | number, y: number = 0) {
     let position = getPoint(pointOrX);
@@ -1521,28 +1521,28 @@ class DiagramElement {
     this.opacity = opacity;
   }
 
-  getScenarioTargetLegacy(
-    scenarioName: string,
-  ) {
-    let target = this.transform._dup();
-    if (scenarioName in this.scenarios) {
-      const scenario = this.scenarios[scenarioName];
-      if (scenario.transform != null) {
-        target = getTransform(scenario.transform);
-      }
-      if (scenario.position != null) {
-        target.updateTranslation(getPoint(scenario.position));
-      }
+  // getScenarioTargetLegacy(
+  //   scenarioName: string,
+  // ) {
+  //   let target = this.transform._dup();
+  //   if (scenarioName in this.scenarios) {
+  //     const scenario = this.scenarios[scenarioName];
+  //     if (scenario.transform != null) {
+  //       target = getTransform(scenario.transform);
+  //     }
+  //     if (scenario.position != null) {
+  //       target.updateTranslation(getPoint(scenario.position));
+  //     }
 
-      if (scenario.rotation != null) {
-        target.updateRotation(scenario.rotation);
-      }
-      if (scenario.scale != null) {
-        target.updateScale(getScale(scenario.scale));
-      }
-    }
-    return target;
-  }
+  //     if (scenario.rotation != null) {
+  //       target.updateRotation(scenario.rotation);
+  //     }
+  //     if (scenario.scale != null) {
+  //       target.updateScale(getScale(scenario.scale));
+  //     }
+  //   }
+  //   return target;
+  // }
 
   // retrieve a scenario
   getScenarioTarget(
@@ -1883,26 +1883,26 @@ class DiagramElement {
     }
   }
 
-  stopMovingFreelyLegacy(result: boolean = true): void {
-    // console.trace()
-    // console.log('was moving freely', this.name, this.state.isMovingFreely)
-    let wasMovingFreely = false;
-    if (this.state.isMovingFreely === true) {
-      wasMovingFreely = true;
-    }
-    this.state.isMovingFreely = false;
-    this.state.movement.previousTime = null;
-    if (this.move.freely.callback) {
-      this.fnMap.exec(this.move.freely.callback, result);
-      this.move.freely.callback = null;
-    }
-    if (wasMovingFreely) {
-      // console.log('stop moving freely callback', this.animationFinishedCallback)
-      this.fnMap.exec(this.animationFinishedCallback);
-      // this.subscriptions.trigger('animationFinished', ['movingFreely']);
-      this.animationFinished('movingFreely');
-    }
-  }
+  // stopMovingFreelyLegacy(result: boolean = true): void {
+  //   // console.trace()
+  //   // console.log('was moving freely', this.name, this.state.isMovingFreely)
+  //   let wasMovingFreely = false;
+  //   if (this.state.isMovingFreely === true) {
+  //     wasMovingFreely = true;
+  //   }
+  //   this.state.isMovingFreely = false;
+  //   this.state.movement.previousTime = null;
+  //   if (this.move.freely.callback) {
+  //     this.fnMap.exec(this.move.freely.callback, result);
+  //     this.move.freely.callback = null;
+  //   }
+  //   if (wasMovingFreely) {
+  //     // console.log('stop moving freely callback', this.animationFinishedCallback)
+  //     this.fnMap.exec(this.animationFinishedCallback);
+  //     // this.subscriptions.trigger('animationFinished', ['movingFreely']);
+  //     this.animationFinished('movingFreely');
+  //   }
+  // }
 
   getRemainingPulseTime(now: number = new GlobalAnimation().now() / 1000) {
     if (this.state.isPulsing === false) {
@@ -4869,44 +4869,44 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  pauseLegacy(pauseSettingsIn: TypePauseSettings = {}) {
-    super.pause(pauseSettingsIn);
-    for (let i = 0; i < this.drawOrder.length; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      element.pause(pauseSettingsIn);
-    }
-  }
+  // pauseLegacy(pauseSettingsIn: TypePauseSettings = {}) {
+  //   super.pause(pauseSettingsIn);
+  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     element.pause(pauseSettingsIn);
+  //   }
+  // }
 
-  unpauseLegacy() {
-    super.unpause();
-    for (let i = 0; i < this.drawOrder.length; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      element.unpause();
-    }
-  }
+  // unpauseLegacy() {
+  //   super.unpause();
+  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     element.unpause();
+  //   }
+  // }
 
   // Priority order:
   // unpaused,
   // preparingToPause
   // preparingToUnpause
   // paused
-  getPause() {
-    let pause = this.state.pause;
-    if (this.state.pause === 'unpaused') {
-      return 'unpaused';
-    }
-    for (let i = 0; i < this.drawOrder.length; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      const elementPauseState = element.getPause();
-      if (elementPauseState === 'unpaused') {
-        return 'unpaused';
-      }
-      if (elementPauseState === 'preparingToPause' || elementPauseState === 'preparingToUnpause') {
-        pause = elementPauseState;
-      }
-    }
-    return pause;
-  }
+  // getPause() {
+  //   let pause = this.state.pause;
+  //   if (this.state.pause === 'unpaused') {
+  //     return 'unpaused';
+  //   }
+  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     const elementPauseState = element.getPause();
+  //     if (elementPauseState === 'unpaused') {
+  //       return 'unpaused';
+  //     }
+  //     if (elementPauseState === 'preparingToPause' || elementPauseState === 'preparingToUnpause') {
+  //       pause = elementPauseState;
+  //     }
+  //   }
+  //   return pause;
+  // }
 
   isStateSame(state: Object, mergePulseTransforms: boolean = false) {
     const thisElementResult = super.isStateSame(state, mergePulseTransforms);

@@ -39,6 +39,15 @@ DiagramElementPrimitive {
       "translation": Object {},
     },
     "state": "idle",
+    "subscriptions": SubscriptionManager {
+      "fnMap": FunctionMap {
+        "global": GlobalFunctionMap {
+          "map": Object {},
+        },
+        "map": Object {},
+      },
+      "subscriptions": Object {},
+    },
   },
   "beforeDrawCallback": null,
   "cannotTouchHole": false,
@@ -212,7 +221,6 @@ DiagramElementPrimitive {
   "internalSetTransformCallback": null,
   "isInteractive": undefined,
   "isMovable": false,
-  "isPaused": false,
   "isRenderedAsImage": false,
   "isShown": true,
   "isTouchable": false,
@@ -370,7 +378,6 @@ DiagramElementPrimitive {
     "name": "",
     "order": Array [],
   },
-  "pauseSettings": Object {},
   "pointsDefinition": Object {},
   "pointsToDraw": -1,
   "pulseDefault": Object {
@@ -524,6 +531,7 @@ DiagramElementPrimitive {
       },
     },
     "pause": "unpaused",
+    "preparingToStop": false,
     "pulse": Object {
       "startTime": null,
     },

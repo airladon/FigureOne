@@ -1578,54 +1578,54 @@ class Diagram {
     this.draw(time);
   }
 
-  getPaused() {
-    return this.elements.getPaused();
-  }
+  // getPaused() {
+  //   return this.elements.getPaused();
+  // }
 
-  getPauseState() {
-    return this.state.pause;
-  }
+  // getPauseState() {
+  //   return this.state.pause;
+  // }
 
   pause(pauseSettings: TypePauseSettings = { simplePause: true }) {
     this.state.pause = 'paused';
     this.pauseTime = this.globalAnimation.now() / 1000;
   }
 
-  pauseLegacy(pauseSettings: TypePauseSettings = { simplePause: true }) {
-    // forcePause: boolean = true, clearAnimations: boolean = false) {
-    this.elements.pause(pauseSettings);
-    if (pauseSettings.simplePause != null && pauseSettings.simplePause) {
-      this.state.pause = 'paused';
-      this.pauseTime = this.globalAnimation.now() / 1000;
-      return;
-    }
+  // pauseLegacy(pauseSettings: TypePauseSettings = { simplePause: true }) {
+  //   // forcePause: boolean = true, clearAnimations: boolean = false) {
+  //   this.elements.pause(pauseSettings);
+  //   if (pauseSettings.simplePause != null && pauseSettings.simplePause) {
+  //     this.state.pause = 'paused';
+  //     this.pauseTime = this.globalAnimation.now() / 1000;
+  //     return;
+  //   }
 
-    const elements = this.elements.getAllElements();
-    let preparingToPauseCounter = 0;
-    const checkAllPaused = () => {
-      if (preparingToPauseCounter > 0) {
-        preparingToPauseCounter -= 1;
-      }
-      if (preparingToPauseCounter === 0) {
-        this.state.pause = 'paused';
-        this.isPaused = true;
-        this.subscriptions.trigger('paused');
-      }
-    }
-    elements.forEach((element) => {
-      if (element.state.pause === 'preparingToPause') {
-        preparingToPauseCounter += 1;
-        element.subscriptions.subscribe('paused', checkAllPaused, 1);
-      }
-    });
-    this.pauseTime = this.globalAnimation.now() / 1000;
-    if (preparingToPauseCounter === 0 && this.state.pause !== 'paused') {
-      checkAllPaused();
-    } else if (preparingToPauseCounter > 0) {
-      this.state.pause = 'preparingToPause';
-      this.subscriptions.trigger('preparingToPause');
-    }
-  }
+  //   const elements = this.elements.getAllElements();
+  //   let preparingToPauseCounter = 0;
+  //   const checkAllPaused = () => {
+  //     if (preparingToPauseCounter > 0) {
+  //       preparingToPauseCounter -= 1;
+  //     }
+  //     if (preparingToPauseCounter === 0) {
+  //       this.state.pause = 'paused';
+  //       this.isPaused = true;
+  //       this.subscriptions.trigger('paused');
+  //     }
+  //   }
+  //   elements.forEach((element) => {
+  //     if (element.state.pause === 'preparingToPause') {
+  //       preparingToPauseCounter += 1;
+  //       element.subscriptions.subscribe('paused', checkAllPaused, 1);
+  //     }
+  //   });
+  //   this.pauseTime = this.globalAnimation.now() / 1000;
+  //   if (preparingToPauseCounter === 0 && this.state.pause !== 'paused') {
+  //     checkAllPaused();
+  //   } else if (preparingToPauseCounter > 0) {
+  //     this.state.pause = 'preparingToPause';
+  //     this.subscriptions.trigger('preparingToPause');
+  //   }
+  // }
 
   // pauseAfterNextDraw() {
   //   this.pauseAfterNextDrawFlag = true;
@@ -1639,43 +1639,43 @@ class Diagram {
     this.subscriptions.trigger('unpaused');
   }
 
-  unpauseLegacy() {
-    this.elements.unpause();
-    const elements = this.elements.getAllElements();
-    let preparingToUnpauseCounter = 0;
-    const checkAllUnpaused = () => {
-      if (preparingToUnpauseCounter > 0) {
-        preparingToUnpauseCounter -= 1;
-      }
-      if (preparingToUnpauseCounter === 0) {
-        this.state.pause = 'unpaused';
-        this.isPaused = false;
-        this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.pauseTime);
-        this.animateNextFrame();
-        this.subscriptions.trigger('unpaused');
-      }
-    };
-    elements.forEach((element) => {
-      if (element.state.pause === 'preparingToUnpause') {
-        preparingToUnpauseCounter += 1;
-        element.subscriptions.subscribe('unpaused', checkAllUnpaused, 1)
-      }
-    });
-    if (preparingToUnpauseCounter === 0 && this.state.pause !== 'unpaused') {
-      checkAllUnpaused();
-    } else if (preparingToUnpauseCounter > 0) {
-      this.state.pause = 'preparingToUnpause';
-      this.subscriptions.trigger('preparingToUnpause');
-    }
-    // // this.state.pause = this.elements.getPause();
-    // this.pauseTime = performance.now() / 1000;
+  // unpauseLegacy() {
+  //   this.elements.unpause();
+  //   const elements = this.elements.getAllElements();
+  //   let preparingToUnpauseCounter = 0;
+  //   const checkAllUnpaused = () => {
+  //     if (preparingToUnpauseCounter > 0) {
+  //       preparingToUnpauseCounter -= 1;
+  //     }
+  //     if (preparingToUnpauseCounter === 0) {
+  //       this.state.pause = 'unpaused';
+  //       this.isPaused = false;
+  //       this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.pauseTime);
+  //       this.animateNextFrame();
+  //       this.subscriptions.trigger('unpaused');
+  //     }
+  //   };
+  //   elements.forEach((element) => {
+  //     if (element.state.pause === 'preparingToUnpause') {
+  //       preparingToUnpauseCounter += 1;
+  //       element.subscriptions.subscribe('unpaused', checkAllUnpaused, 1)
+  //     }
+  //   });
+  //   if (preparingToUnpauseCounter === 0 && this.state.pause !== 'unpaused') {
+  //     checkAllUnpaused();
+  //   } else if (preparingToUnpauseCounter > 0) {
+  //     this.state.pause = 'preparingToUnpause';
+  //     this.subscriptions.trigger('preparingToUnpause');
+  //   }
+  //   // // this.state.pause = this.elements.getPause();
+  //   // this.pauseTime = performance.now() / 1000;
 
 
-    // this.elements.unpause();
-    // this.isPaused = false;
-    // this.elements.setTimeDelta(performance.now() / 1000 - this.pauseTime);
-    this.animateNextFrame();
-  }
+  //   // this.elements.unpause();
+  //   // this.isPaused = false;
+  //   // this.elements.setTimeDelta(performance.now() / 1000 - this.pauseTime);
+  //   this.animateNextFrame();
+  // }
 
   draw(nowIn: number, canvasIndex: number = 0): void {
     if (this.state.pause === 'paused') {
