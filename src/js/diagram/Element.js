@@ -2179,7 +2179,6 @@ class DiagramElement {
       toComplete -= 1;
       if (toComplete <= 0) {
         this.state.preparingToStop = false;
-        console.log('2342')
         this.subscriptions.trigger('stopped');
       }
     };
