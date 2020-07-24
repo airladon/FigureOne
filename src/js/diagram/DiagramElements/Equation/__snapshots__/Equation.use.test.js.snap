@@ -324,7 +324,6 @@ DiagramElementPrimitive {
   },
   "lengthToDraw": -1,
   "move": Object {
-    "bounce": true,
     "bounds": TransformBounds {
       "boundary": Array [
         null,

@@ -5,7 +5,7 @@ import {
   Translation, spaceToSpaceTransform, getBoundingRect,
   Scale, Rotation, Line, getMaxTimeFromVelocity, clipAngle,
   getPoint, getTransform, getScale, // calculateStop, calculateStopAngle,
-  TransformBounds, BoundsRect, BoundsRange, BoundsLine, getTransformValue,
+  TransformBounds, RectBounds, RangeBounds, BoundsLine, getTransformValue,
 } from '../tools/g2';
 // import { areColorsSame } from '../tools/color';
 import { getState } from './state';
@@ -182,7 +182,7 @@ class DiagramElement {
       bounceLoss: TypeTransformValue,
       callback: ?(string | ((boolean) => void)),
     };
-    bounce: boolean;
+    // bounce: boolean;
     canBeMovedAfterLosingTouch: boolean;
     type: 'rotation' | 'translation' | 'scaleX' | 'scaleY' | 'scale';
     // eslint-disable-next-line no-use-before-define
@@ -622,7 +622,7 @@ class DiagramElement {
         callback: null,
         bounceLoss: 0.5,
       },
-      bounce: true, // deprecate
+      // bounce: true, // deprecate
       canBeMovedAfterLosingTouch: false,
       type: 'translation',
       element: null,
@@ -1408,7 +1408,7 @@ class DiagramElement {
       // let { bounds } = this.move;
       // if (bounds === 'diagram') {
       //   bounds = new TransformBounds(this.transform);
-      //   bounds.updateTranslation(new BoundsRect(this.diagram.limits));
+      //   bounds.updateTranslation(new RectBounds(this.diagram.limits));
       // }
       if (window.asdf && this.name === 'c') {
         debugger;
@@ -1681,241 +1681,6 @@ class DiagramElement {
     }
     return [];
   }
-
-  // // deprecate
-  // getTimeToMoveToScenarioLegacy(
-  //   scenarioName: string,
-  //   rotDirection: -1 | 1 | 0 | 2 = 0,
-  // ) {
-  //   const target = this.getScenarioTargetLegacy(scenarioName);
-  //   const velocity = this.transform.constant(0);
-  //   velocity.updateTranslation(new Point(1 / 2, 1 / 2));
-  //   velocity.updateRotation(2 * Math.PI / 6);
-  //   velocity.updateScale(1, 1);
-  //   const time = getMaxTimeFromVelocity(this.transform._dup(), target, velocity, rotDirection);
-  //   return time;
-  // }
-
-  // getTimeToMoveToScenario(
-  //   targetScenario: string | TypeScenario,
-  //   optionsIn: {
-  //     minTime?: number,
-  //     velocity?: {
-  //       translation?: TypeParsablePoint,
-  //       rotation?: number,
-  //       scale?: TypeParsablePoint,
-  //       transform?: TypeParsableTransform,
-  //       color?: number,
-  //     },
-  //     dissolveTime: number,
-  //     duration?: number,
-  //     rotDirection?: -1 | 1 | 0 | 2,
-  //   },
-  //   startScenario: string | TypeScenario = '',
-  // ) {
-  //   if (optionsIn.duration != null) {
-  //     return optionsIn.duration;
-  //   }
-  //   const defaultOptions = {
-  //     rotDirection: 0,
-  //     minTime: 0,
-  //     velocity: {
-  //       translation: new Point(1 / 2, 1 / 2),
-  //       rotation: 2 * Math.PI / 6,
-  //       scale: new Point(1, 1),
-  //       color: 1,
-  //     },
-  //   };
-  //   const options = joinObjects({}, defaultOptions, optionsIn);
-  //   const target = this.getScenarioTarget(targetScenario);
-  //   let start = this;
-  //   if (startScenario) {
-  //     start = this.getScenarioTarget(startScenario);
-  //   }
-  //   let velocity = this.transform.constant(0);
-  //   if (options.transform != null) {
-  //     velocity = options.transform;
-  //   }
-  //   if (options.velocity.translation) {
-  //     velocity.updateTranslation(options.velocity.translation);
-  //   }
-  //   if (options.velocity.rotation) {
-  //     velocity.updateRotation(options.velocity.rotation);
-  //   }
-  //   if (options.velocity.scale) {
-  //     velocity.updateScale(options.velocity.scale);
-  //   }
-  //   // const velocity = this.transform.constant(0);
-  //   // velocity.updateTranslation(new Point(1 / 2, 1 / 2));
-  //   // velocity.updateRotation(2 * Math.PI / 6);
-  //   // velocity.updateScale(1, 1);
-  //   // console.log(velocity)
-  //   // console.log(options.velocity)
-  //   const time = getMaxTimeFromVelocity(
-  //     start.transform._dup(), target.transform, velocity, options.rotDirection,
-  //   );
-  //   let colorTime = options.minTime;
-  //   if (start.isShown !== target.isShown) {
-  //     options.minTime = 0.8;
-  //   }
-  //   if (target.color != null) {
-  //     let startColor = start.color;
-  //     if (startColor == null) {
-  //       startColor = this.color.slice();
-  //     }
-  //     if (!areColorsSame(startColor, target.color)) {
-  //     // options.minTime = 0.8;
-  //       if (options.velocity.color != null) {
-  //         const v = options.velocity.color;
-  //         const r = Math.abs((target.color[0] - startColor[0]) / v);
-  //         const g = Math.abs((target.color[1] - startColor[1]) / v);
-  //         const b = Math.abs((target.color[2] - startColor[2]) / v);
-  //         const a = Math.abs((target.color[3] - startColor[3]) / v);
-  //         colorTime = Math.max(r, g, b, a);
-  //       }
-  //     }
-  //   }
-  //   return Math.min(time, options.minTime);
-  // }
-
-  // getMovingFreelyEnd() {
-  //   const noChange = { duration: 0, transform: this.transform._dup() };
-  //   if (!this.state.isMovingFreely) {
-  //     return noChange;
-  //   }
-  //   const { velocity } = this.state.movement;
-  //   const { transform } = this;
-  //   const { deceleration, zeroVelocityThreshold } = this.move.freely;
-
-  //   if (this.state.movement.velocity.isZero(0.0000001)) {
-  //     return noChange;
-  //   }
-  //   if (velocity.order.length !== transform.order.length) {
-  //     return noChange;
-  //   }
-  //   let duration = 0;
-  //   for (let i = 0; i < velocity.order.length; i += 1) {
-  //     const v = velocity.order[i];
-  //     const t = transform.order[i];
-  //     const min = this.move.minTransform.order[i];
-  //     const max = this.move.maxTransform.order[i];
-  //     const { translation, rotation, scale } = deceleration;
-  //     let stepDuration = 0;
-  //     if (t instanceof Rotation) {
-  //       stepDuration = calculateStopAngle(
-  //         t.r, v.r, rotation, [min.r, max.r], 0.5,
-  //       ).duration;
-  //     } else if (t instanceof Translation) {
-  //       stepDuration = calculateStop(
-  //         t, v, deceleration.position, translation, [min, max], 0.5,
-  //       ).duration;
-  //     } else {
-  //       stepDuration = calculateStop(
-  //         t, v, scale, [min, max], 0.5,
-  //       ).duration;
-  //     }
-  //     if (stepDuration > duration) {
-  //       duration = stepDuration;
-  //     }
-  //   }
-  //   return duration;
-  // }
-
-  // getRemainingMovingFreelyDuration() {
-  //   if (!this.state.isMovingFreely) {
-  //     return 0;
-  //   }
-  //   const { velocity } = this.state.movement;
-  //   const { transform } = this;
-  //   const { deceleration, zeroVelocityThreshold } = this.move.freely;
-  //   let isZero = false;
-  //   // for (let i = 0; i < velocity.order.length; i += 1) {
-  //   //   const step = velocity.order[i];
-  //   //   if (step instanceof Translation) {
-  //   //     if
-  //   //   }
-  //   // }
-  //   if (this.state.movement.velocity.isZero(0.0000001)) {
-  //     return 0;
-  //   }
-  //   if (velocity.order.length !== transform.order.length) {
-  //     return 0;
-  //   }
-  //   let duration = 0;
-  //   for (let i = 0; i < velocity.order.length; i += 1) {
-  //     const v = velocity.order[i];
-  //     const t = transform.order[i];
-  //     const min = this.move.minTransform.order[i];
-  //     const max = this.move.maxTransform.order[i];
-  //     const { translation, rotation, scale } = deceleration;
-  //     let stepDuration = 0;
-  //     if (t instanceof Rotation) {
-  //       stepDuration = calculateStopAngle(
-  //         t.r, v.r, rotation, [min.r, max.r], 0.5,
-  //       ).duration;
-  //     } else if (t instanceof Translation) {
-  //       stepDuration = calculateStop(
-  //         t, v, translation, [min, max], 0.5,
-  //       ).duration;
-  //     } else {
-  //       stepDuration = calculateStop(
-  //         t, v, scale, [min, max], 0.5,
-  //       ).duration;
-  //     }
-  //     if (stepDuration > duration) {
-  //       duration = stepDuration;
-  //     }
-  //   }
-  //   return duration;
-  // }
-
-  // getMovingFreelyEndTransform() {
-  //   if (!this.state.isMovingFreely) {
-  //     return 0;
-  //   }
-  //   const { velocity } = this.state.movement;
-  //   const { transform } = this;
-  //   const { deceleration, zeroVelocityThreshold } = this.move.freely;
-  //   // let isZero = false;
-  //   // for (let i = 0; i < velocity.order.length; i += 1) {
-  //   //   const step = velocity.order[i];
-  //   //   if (step instanceof Translation) {
-  //   //     if
-  //   //   }
-  //   // }
-  //   if (this.state.movement.velocity.isZero(0.0000001)) {
-  //     return 0;
-  //   }
-  //   if (velocity.order.length !== transform.order.length) {
-  //     return 0;
-  //   }
-  //   let duration = 0;
-  //   for (let i = 0; i < velocity.order.length; i += 1) {
-  //     const v = velocity.order[i];
-  //     const t = transform.order[i];
-  //     const min = this.move.minTransform.order[i];
-  //     const max = this.move.maxTransform.order[i];
-  //     const { translation, rotation, scale } = deceleration;
-  //     let stepDuration = 0;
-  //     if (t instanceof Rotation) {
-  //       stepDuration = calculateStopAngle(
-  //         t.r, v.r, rotation, [min.r, max.r], 0.5,
-  //       ).duration;
-  //     } else if (t instanceof Translation) {
-  //       stepDuration = calculateStop(
-  //         t, v, translation, [min, max], 0.5,
-  //       ).duration;
-  //     } else {
-  //       stepDuration = calculateStop(
-  //         t, v, scale, [min, max], 0.5,
-  //       ).duration;
-  //     }
-  //     if (stepDuration > duration) {
-  //       duration = stepDuration;
-  //     }
-  //   }
-  //   return duration;
-  // }
 
   getMovingFreelyEnd() {
     return this.decelerate(null);
@@ -2861,7 +2626,7 @@ class DiagramElement {
     }
     const rect = this.getRelativeBoundingRect('diagram');
     if (this.move.bounds instanceof TransformBounds) {
-      this.move.bounds.updateTranslation(new BoundsRect(
+      this.move.bounds.updateTranslation(new RectBounds(
         boundary.left - rect.left,
         boundary.bottom - rect.bottom,
         boundary.right - rect.right - (boundary.left - rect.left),
@@ -2934,7 +2699,7 @@ class DiagramElement {
   //   //   min.x,
   //   //   min.y,
   //   // );
-  //   this.move.bounds.updateTranslation(new BoundsRect(min.x, min.y, max.x - min.x, max.y - min.y))
+  //   this.move.bounds.updateTranslation(new RectBounds(min.x, min.y, max.x - min.x, max.y - min.y))
   // }
 
   show(): void {
