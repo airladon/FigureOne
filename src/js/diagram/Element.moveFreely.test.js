@@ -31,7 +31,7 @@ describe('Move Freely', () => {
       },
     ]);
     a = diagram.elements._a;
-    a.move.freely.deceleration.translation = 1;
+    a.move.freely.deceleration = { translation: 1 };
     a.setMovable(true);
     click = jest.fn();
     a.onClick = click;
@@ -88,23 +88,23 @@ describe('Move Freely', () => {
       diagram.mock.touchUp();
       expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
       diagram.mock.timeStep(0);
-      expect(a.getRemainingMovingFreelyDuration()).toBe(5);
+      expect(round(a.getRemainingMovingFreelyDuration(), 3)).toBe(5);
       diagram.mock.timeStep(1);
       expect(a.getPosition().round(3)).toEqual(new Point(4.5, 0));
-      expect(a.getRemainingMovingFreelyDuration()).toBe(4);
+      expect(round(a.getRemainingMovingFreelyDuration(), 3)).toBe(4);
       diagram.mock.timeStep(1);
       expect(a.getPosition().round(3)).toEqual(new Point(8, 0));
-      expect(a.getRemainingMovingFreelyDuration()).toBe(3);
+      expect(round(a.getRemainingMovingFreelyDuration(), 3)).toBe(3);
       diagram.mock.timeStep(1);
       expect(a.getPosition().round(3)).toEqual(new Point(10.5, 0));
-      expect(a.getRemainingMovingFreelyDuration()).toBe(2);
+      expect(round(a.getRemainingMovingFreelyDuration(), 3)).toBe(2);
       diagram.mock.timeStep(1);
       expect(a.getPosition().round(3)).toEqual(new Point(12, 0));
-      expect(a.getRemainingMovingFreelyDuration()).toBe(1);
+      expect(round(a.getRemainingMovingFreelyDuration(), 3)).toBe(1);
       expect(a.state.isMovingFreely).toBe(true);
       diagram.mock.timeStep(1);
       expect(a.getPosition().round(3)).toEqual(new Point(12.5, 0));
-      expect(a.getRemainingMovingFreelyDuration()).toBe(0);
+      expect(round(a.getRemainingMovingFreelyDuration(), 3)).toBe(0);
       expect(a.state.isMovingFreely).toBe(false);
     });
   });
