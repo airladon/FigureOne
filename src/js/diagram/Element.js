@@ -289,7 +289,7 @@ class DiagramElement {
   fnMap: FunctionMap;
   // isPaused: boolean;
 
-  finishAnimationOnPause: boolean;
+  // finishAnimationOnPause: boolean;
 
   subscriptions: SubscriptionManager;
 
@@ -356,7 +356,7 @@ class DiagramElement {
     this.parent = parent;
     this.drawPriority = 1;
     this.stateProperties = [];
-    this.finishAnimationOnPause = false;
+    // this.finishAnimationOnPause = false;
     this.lastDrawTime = 0;
     // this.noRotationFromParent = false;
     // this.pulseDefault = (callback: ?() => void = null) => {
@@ -739,7 +739,7 @@ class DiagramElement {
         'setTransformCallback',
         'move',
         'subscriptions',
-        'finishAnimationOnPause',
+        // 'finishAnimationOnPause',
         'pulseTransforms',
         'frozenPulseTransforms',
         // 'lastDrawTime',

@@ -188,7 +188,6 @@ DiagramElementPrimitive {
     ],
     "type": "drawingObject",
   },
-  "finishAnimationOnPause": false,
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
