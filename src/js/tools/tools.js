@@ -1042,11 +1042,27 @@ class Subscriber {
       // if (callback != null) {
       //   callback(payload);
       // }
-      this.fnMap.exec(callback, payload);
       if (num === 1) {
         subscribersToRemove.push(id);
-      } else if (num > 1) {
+      }
+      let triggerOk = false;
+      if (num !== 0) {
+        triggerOk = true;
+        // subscribersToRemove.push(id);
+      }
+      if (num > 0) {
         this.subscribers[`${id}`].num = num - 1;
+      }
+
+      // if (num > 0) {
+      // }
+      // else if (num > 1) {
+      //   triggerOk = true;
+      //   this.subscribers[`${id}`].num = num - 1;
+      // }
+      // if (this.subscribers[`${id}`].num > 0) {
+      if (triggerOk) {
+        this.fnMap.exec(callback, payload);
       }
     }
     subscribersToRemove.forEach((id) => { this.unsubscribe(id); });

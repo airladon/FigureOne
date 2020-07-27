@@ -186,6 +186,7 @@ class Diagram {
   state: {
     pause: 'paused' | 'preparingToPause' | 'preparingToUnpause' | 'unpaused';
     preparingToStop: boolean;
+    preparingToSetState: boolean;
   };
   // pauseAfterNextDrawFlag: boolean;
 
@@ -362,6 +363,7 @@ class Diagram {
     this.state = {
       pause: 'unpaused',
       preparingToStop: false,
+      preparingToSetState: false, 
     };
     this.stateTime = this.globalAnimation.now() / 1000;
 
@@ -539,18 +541,119 @@ class Diagram {
     ], options);
   }
 
-  setState(stateIn: Object) {
+  setState(
+    stateIn: Object,
+    optionsIn: {
+      action: 'animate' | 'dissolve' | 'instant',
+      duration?: number | {
+        dissovlveOut: ?number,
+        dissovlveIn: ?number,
+        delay: ?number,
+      },
+      velocity?: TypeScenarioVelocity,
+      maxTime?: number,
+      minTime?: number,
+      zeroDurationThreshold?: boolean,
+      allDurationsSame?: boolean,
+    } | 'dissolve' | 'animate' | 'instant' = 'instant',
+  ) {
     // console.log(stateIn)
     const state = parseState(stateIn, this);
-    // console.log(state)
-    setState(this, state);
-    this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.stateTime);
-    this.elements.setPointsFromDefinition();
-    this.elements.setPrimitiveColors();
-    if (this.setStateCallback != null) {
-      this.fnMap.exec(this.setStateCallback);
+    let finishedFlag = false;
+    this.state.preparingToSetState = false;
+    const finished = () => {
+      finishedFlag = true;
+      this.state.preparingToSetState = false;
+      setState(this, state);
+      this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.stateTime);
+      this.elements.setPointsFromDefinition();
+      this.elements.setPrimitiveColors();
+      if (this.setStateCallback != null) {
+        this.fnMap.exec(this.setStateCallback);
+      }
+      this.animateNextFrame();
+      // console.log('triggered')
+      this.subscriptions.trigger('stateSet');
+    };
+
+    let options = {
+      action: 'instant',
+      maxTime: 6,
+      velocity: {
+        position: 2,
+        rotation: Math.PI * 2 / 2,
+        scale: 1,
+        opacity: 0.8,
+        color: 0.8,
+      },
+      allDurationsSame: true,
+      zeroDurationThreshold: 0.00001,
+      minTime: 0,
+      duration: null,
+    };
+
+    // console.log(resumeSettings)
+    if (typeof optionsIn === 'string') {
+      options.action = optionsIn;
+    } else {
+      options = joinObjects({}, options, optionsIn);
+      // velocity trumps duration by default, but if only duration is defined by the
+      // user, then remove velocity;
+      // if (this.settings.resume.duration != null && this.settings.resume.velocity == null) {
+      //   options.velocity = undefined;
+      // }
     }
-    this.animateNextFrame();
+    if (options.action === 'dissolve') {
+      const defaultDuration = {
+        dissolveIn: 0.8,
+        dissolveOut: 0.8,
+        delay: 0.2,
+      }
+      if (options.duration == null) {
+        options.duration = defaultDuration;
+      } else if (typeof options.duration === 'number') {
+        options.duration = {
+          dissolveOut: options.duration / 10 * 4.5,
+          dissolveIn: options.duration / 10 * 4.5,
+          delay: options.duration / 10 * 1,
+        };
+      } else {
+        options.duration = joinObjects({}, defaultDuration, options.duration);
+      }
+    } else if (options.duration != null && typeof options.duration !== 'number') {
+      options.duration = 1;
+    }
+
+    if (
+      options.action === 'instant'
+      || this.elements.isStateSame(state.elements, true)
+    ) {
+      finished();
+    } else if (options.action === 'animate') {
+      this.stop('freeze');  // This is cancelling the pulse
+      this.animateToState(
+        state,
+        options,
+        finished,
+        'now',
+      );
+    } else {
+      // this.diagram.elements.freezePulseTransforms(false);
+      this.stop('freeze');
+      this.dissolveToState({
+        state,
+        dissolveInDuration: options.duration.dissolveIn,
+        dissolveOutDuration: options.duration.dissolveOut,
+        done: finished,
+        delay: options.duration.delay,
+        startTime: 'now',
+      });
+    }
+
+    if (!finishedFlag) {
+      this.state.preparingToSetState = true;
+      this.subscriptions.trigger('preparingToSetState');
+    }
   }
 
   animateToState(
