@@ -1988,35 +1988,45 @@ class DiagramElement {
     delta: TypeParsablePoint = new Point(0, 0),
     progression: string | (number) => number = 'tools.math.sinusoid',
   ) {
-    this.pulseSettings.time = time;
-    if (frequency === 0 && time === 0) {
-      this.pulseSettings.frequency = 1;
-    }
-    if (frequency !== 0) {
-      this.pulseSettings.frequency = frequency;
-    }
-    if (time !== 0 && frequency === 0) {
-      this.pulseSettings.frequency = 1 / (time * 2);
-    }
+    // this.pulseSettings.time = time;
+    // if (frequency === 0 && time === 0) {
+    //   this.pulseSettings.frequency = 1;
+    // }
+    // if (frequency !== 0) {
+    //   this.pulseSettings.frequency = frequency;
+    // }
+    // if (time !== 0 && frequency === 0) {
+    //   this.pulseSettings.frequency = 1 / (time * 2);
+    // }
 
-    this.pulseSettings.A = 1;
-    this.pulseSettings.B = scale - 1;
-    this.pulseSettings.C = 0;
-    this.pulseSettings.num = 1;
-    this.pulseSettings.delta = getPoint(delta);
-    // this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
-    this.pulseSettings.callback = callback;
-    this.pulseSettings.progression = progression;
-    this.startPulsing();
+    // this.pulseSettings.A = 1;
+    // this.pulseSettings.B = scale - 1;
+    // this.pulseSettings.C = 0;
+    // this.pulseSettings.num = 1;
+    // this.pulseSettings.delta = getPoint(delta);
+    // // this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
+    // this.pulseSettings.callback = callback;
+    // this.pulseSettings.progression = progression;
+    // this.startPulsing();
+
+    this.pulseScale({
+      duration: time,
+      scale,
+      frequency,
+      callback,
+      delta,
+      progression,
+      when: 'nextFrame',
+    });
   }
 
   pulseScale(optionsIn: {
-    duration: number,
-    scale: number,
-    callback: ?(string | ((?mixed) => void)),
-    delta: TypeParsablePoint,
-    when: TypeWhen,
-    progression: string | (number) => number,
+    duration?: number,
+    scale?: number,
+    callback?: ?(string | ((?mixed) => void)),
+    delta?: TypeParsablePoint,
+    when?: TypeWhen,
+    progression?: string | (number) => number,
   }) {
     const options = joinObjects({}, {
       duration: 1,
@@ -2026,8 +2036,18 @@ class DiagramElement {
       when: 'sync',
       progression: 'tools.math.sinusoid',
     }, optionsIn);
+
+    if (
+      options.frequency == null
+      || (options.frequency === 0 && options.duration !== 0)
+    ) {
+      options.frequency = 1 / (options.duration * 2);
+    }
+    if (options.frequency === 0 && options.duration === 0) {
+      options.frequency = 1;
+    }
     this.pulseSettings.time = options.duration;
-    this.pulseSettings.frequency = 1 / (options.duration * 2);
+    this.pulseSettings.frequency = options.frequency;
     this.pulseSettings.A = 1;
     this.pulseSettings.B = options.scale - 1;
     this.pulseSettings.C = 0;

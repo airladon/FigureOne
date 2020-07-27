@@ -23,14 +23,14 @@ describe('Element Drawing', () => {
   beforeEach(() => {
     diagram = makeDiagram();
     diagram.addElements([
-    {
-      name: 'a',
-      method: 'polygon',
-    }
+      {
+        name: 'a',
+        method: 'polygon',
+      }
     ]);
-  //   c = diagram.elements._c;
+    //   c = diagram.elements._c;
     a = diagram.elements._a;
-  //   b = c._b;
+    //   b = c._b;
     diagram.initialize();
     diagram.webglLow.gl.uniformMatrix3fv.mockClear();
   });
@@ -76,7 +76,7 @@ describe('Element Drawing', () => {
     const expectedDrawTransform = expectedLastDrawTransform.transform(
       new Transform().scale(1.5, 1.5)
     );
-    
+
     // LastDrawTransform
     expect(a.lastDrawTransform.order).toEqual(expectedLastDrawTransform.order);
     // Actual transform(s) drawn (in this case just one as no copies or pulse multipliers)

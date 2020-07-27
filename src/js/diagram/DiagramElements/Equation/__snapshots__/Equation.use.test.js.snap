@@ -397,7 +397,7 @@ DiagramElementPrimitive {
     },
     "frequency": 0.5,
     "num": 1,
-    "style": "tools.math.sinusoid",
+    "progression": "tools.math.sinusoid",
     "time": 1,
     "transformMethod": "_elementPulseSettingsTransformMethod",
   },
