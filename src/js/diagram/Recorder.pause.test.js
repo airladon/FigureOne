@@ -202,6 +202,24 @@ describe('Animate To State', () => {
         expect(states()).toEqual(['idle', false, false, false, 0, 1]);
         expect(callbacks()).toEqual([0, 1, 1, 1]);
       });
+      test.only('Dissolve before pause', () => {
+        recorder.settings.pause = 'dissolveToComplete';
+        recorder.pausePlayback();
+        expect(states()).toEqual(['preparingToPause', true, true, true, 1, 0.5]);
+        expect(diagram.elements.opacity).toBe(1);
+        diagram.mock.timeStep(0.4);
+        expect(diagram.elements.opacity).toBe(0.5);
+        diagram.mock.timeStep(1.4);
+
+        // expect(callbacks()).toEqual([0, 1, 1, 0]);
+        // diagram.mock.timeStep(0.5);
+        // expect(states()).toEqual(['preparingToPause', true, true, true, 0.5, 0.9]);
+        // diagram.mock.timeStep(0.5);
+        expect(states()).toEqual(['idle', false, false, false, 0, 1]);
+        diagram.mock.timeStep(1);
+        expect(states()).toEqual(['idle', false, false, false, 0, 1]);
+        expect(callbacks()).toEqual([0, 1, 1, 1]);
+      });
     });
     describe('Resume after Freeze', () => {
       beforeEach(() => {

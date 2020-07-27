@@ -2179,6 +2179,19 @@ class DiagramElement {
     }
   }
 
+  // isAnimating() {
+  //   if (this.state.isPulsing) {
+  //     return true;
+  //   }
+  //   if (this.state.isMovingFreely) {
+  //     return true;
+  //   }
+  //   if (this.animations.isAnimating()) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
   stop(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel') {
     let toComplete = 0;
     const checkStop = () => {
@@ -4941,6 +4954,21 @@ class DiagramElementCollection extends DiagramElement {
       const element = this.elements[this.drawOrder[i]];
       element.freezePulseTransforms(forceOverwrite);
     }
+  }
+
+  isAnimating(): boolean {
+    const result = super.isAnimating();
+    if (result) {
+      return true;
+    }
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      const r = element.isAnimating();
+      if (r) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 
