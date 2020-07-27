@@ -73,14 +73,14 @@ type TypeStateDiffs = Array<TypeStateDiff>;
 // freeze
 // complete: instant | animate | dissolve | animateWithMaxDuration
 // pause
-export type TypeOnPause = 'freeze' | 'complete' | 'completeBeforePause';
-export type TypePauseSettings = {
-  default?: TypeOnPause;
-  animation?: TypeOnPause;
-  pulse?: TypeOnPause;
-  movingFreely?: TypeOnPause;
-  simplePause?: boolean;
-} | TypeOnPause;
+// export type TypeOnPause = 'freeze' | 'complete' | 'completeBeforePause';
+// export type TypePauseSettings = {
+//   default?: TypeOnPause;
+//   animation?: TypeOnPause;
+//   pulse?: TypeOnPause;
+//   movingFreely?: TypeOnPause;
+//   simplePause?: boolean;
+// } | TypeOnPause;
 
 export type TypePlaySettings = {
   action: 'dissolve' | 'animate' | 'instant',
@@ -273,7 +273,7 @@ class Recorder {
   lastSeekTime: ?number;
 
   settings: {
-    pause: TypePauseSettings,
+    pause: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete',
     play: TypePlaySettings,
   };
 
@@ -1292,9 +1292,121 @@ class Recorder {
       stateToStartFrom = this.pauseState;
     }
 
+    const finished = () => {
+      if (this.pauseState == null) {
+        this.setToTime(fromTime, true);
+      } else {
+        // this.diagram.setState(this.pauseState, 'instant');
+        this.pauseState = null;
+      }
+      this.state = 'playing';
+      this.setVideoToNowDeltaTime(fromTime);
+      this.currentTime = fromTime;
+      this.startEventsPlayback(fromTime);
+      this.startAudioPlayback(fromTime);
+      this.diagram.animateNextFrame();
+      if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
+        this.finishPlaying();
+      }
+      this.subscriptions.trigger('playbackStarted');
+    };
+
+    // console.log(this.settings.play)
+    this.diagram.setState(stateToStartFrom, this.settings.play);
+    if (this.diagram.state.preparingToSetState) {
+      this.state = 'preparingToPlay';
+      this.subscriptions.trigger('preparingToPlay');
+      this.diagram.subscriptions.subscribe('stateSet', finished, 1);
+      // console.log(this.diagram.subscriptions.subscriptions.stateSet)
+    } else {
+      finished();
+    }
+
+    // let finishedFlag = false;
+    // const finished = () => {
+    //   // console.log('hello')
+    //   finishedFlag = true;
+    //   if (this.pauseState == null) {
+    //     this.setToTime(fromTime, true);
+    //   } else {
+    //     this.diagram.setState(this.pauseState);
+    //     this.pauseState = null;
+    //   }
+    //   this.state = 'playing';
+    //   this.setVideoToNowDeltaTime(fromTime);
+    //   this.currentTime = fromTime;
+    //   this.startEventsPlayback(fromTime);
+    //   this.startAudioPlayback(fromTime);
+    //   this.diagram.animateNextFrame();
+    //   if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
+    //     this.finishPlaying();
+    //   }
+    //   this.subscriptions.trigger('playbackStarted');
+    // };
+
+    // const playSettings = this.getPlaySettings();
+    // if (
+    //   playSettings.action === 'instant'
+    //   || this.diagram.elements.isStateSame(stateToStartFrom.elements, true)
+    // ) {
+    //   finished();
+    // } else if (playSettings.action === 'dissolve') {
+    //   // this.diagram.elements.freezePulseTransforms(false);
+    //   this.diagram.stop('freeze');
+    //   this.diagram.dissolveToState({
+    //     state: stateToStartFrom,
+    //     dissolveInDuration: playSettings.duration.dissolveIn,
+    //     dissolveOutDuration: playSettings.duration.dissolveOut,
+    //     done: finished,
+    //     delay: playSettings.duration.delay,
+    //     startTime: 'now',
+    //   });
+    // } else {
+    //   // console.log('asdf')
+    //   // debugger;
+    //   this.diagram.stop('freeze');  // This is cancelling the pulse
+    //   this.diagram.animateToState(
+    //     stateToStartFrom,
+    //     playSettings,
+    //     finished,
+    //     'now',
+    //   );
+    // }
+
+    // if (!finishedFlag) {
+    //   this.state = 'preparingToPlay';
+    //   this.subscriptions.trigger('preparingToPlay');
+    // }
+  }
+
+  startPlaybackLegacy(
+    fromTimeIn: number = this.lastSeekTime || 0,
+    forceStart: boolean = true,
+    events: ?Array<string> = null,
+  ) {
+    let fromTime = fromTimeIn;
+    if (fromTimeIn == null || fromTimeIn >= this.duration) {
+      fromTime = 0;
+    }
+    if (events == null) {
+      this.eventsToPlay = Object.keys(this.events);
+    } else {
+      this.eventsToPlay = events;
+    }
+
+    // this.diagram.unpause();
+    // this.setVideoToNowDeltaTime(this.currentTime);
+
+    let stateToStartFrom = this.getStateForTime(fromTime);
+    if (
+      !forceStart
+      && this.pauseState != null
+    ) {
+      stateToStartFrom = this.pauseState;
+    }
+
     let finishedFlag = false;
     const finished = () => {
-      // console.log('hello')
       finishedFlag = true;
       if (this.pauseState == null) {
         this.setToTime(fromTime, true);
@@ -1615,7 +1727,10 @@ class Recorder {
     if (this.isAudioPlaying) {
       return false;
     }
-    this.pausePlayback();
+    // this.pausePlayback('cancel');
+    this.currentTime = this.getCurrentTime();
+    // console.log(this.currentTime)
+    this.stop();
     return true;
   }
 
@@ -1626,6 +1741,16 @@ class Recorder {
   // animateToState() {
 
   // }
+
+  stop() {
+    this.stopTimeouts();
+    if (this.audio) {
+      this.audio.pause();
+      this.isAudioPlaying = false;
+    }
+    this.state = 'idle';
+    this.subscriptions.trigger('playbackStopped');
+  }
 
   // On pause, animations and pauses can complete and clear:
   // Complete  Clear
@@ -1641,7 +1766,7 @@ class Recorder {
   //                    as by completing animations they will naturally clear
   // False     True     Pulse freeze and nextFrame nothing will happen
   // False     False    Pulse freeze and nextFrame will continue
-  pausePlayback() {
+  pausePlayback(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = this.settings.pause) {
     this.currentTime = this.getCurrentTime();
 
     this.pauseState = this.diagram.getState({
@@ -1661,7 +1786,7 @@ class Recorder {
     }
 
     this.diagram.subscriptions.subscribe('stopped', pause, 1);
-    this.diagram.stop(this.settings.pause);
+    this.diagram.stop(how);
     if (this.diagram.state.preparingToStop) {
       this.subscriptions.trigger('preparingToPause');
       this.state = 'preparingToPause';
