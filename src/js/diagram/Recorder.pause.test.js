@@ -202,21 +202,39 @@ describe('Animate To State', () => {
         expect(states()).toEqual(['idle', false, false, false, 0, 1]);
         expect(callbacks()).toEqual([0, 1, 1, 1]);
       });
-      test.only('Dissolve before pause', () => {
+      test('Dissolve before pause', () => {
         recorder.settings.pause = 'dissolveToComplete';
         recorder.pausePlayback();
-        expect(states()).toEqual(['preparingToPause', true, true, true, 1, 0.5]);
+        // a animations frozen and dissolve out starting
+        expect(states()).toEqual(['preparingToPause', true, false, true, 1, 0.5]);
         expect(diagram.elements.opacity).toBe(1);
         diagram.mock.timeStep(0.4);
-        expect(diagram.elements.opacity).toBe(0.5);
-        diagram.mock.timeStep(1.4);
+        expect(states()).toEqual(['preparingToPause', true, false, true, 0.6, 0.5]);
+        expect(round(diagram.elements.opacity)).toBe(0.5005);
 
-        // expect(callbacks()).toEqual([0, 1, 1, 0]);
-        // diagram.mock.timeStep(0.5);
-        // expect(states()).toEqual(['preparingToPause', true, true, true, 0.5, 0.9]);
-        // diagram.mock.timeStep(0.5);
-        expect(states()).toEqual(['idle', false, false, false, 0, 1]);
-        diagram.mock.timeStep(1);
+        // Start delay
+        diagram.mock.timeStep(0.4);
+        expect(states()).toEqual(['preparingToPause', true, false, true, 0.2, 0.5]);
+        expect(round(diagram.elements.opacity)).toBe(1);
+        expect(a.isShown).toBe(false);
+
+        // Start dissolve in
+        diagram.mock.timeStep(0.2);
+        expect(states()).toEqual(['preparingToPause', true, false, true, 0.8, 1]);
+        expect(round(diagram.elements.opacity)).toBe(0.001);
+        expect(a.isShown).toBe(true);
+
+        diagram.mock.timeStep(0.4);
+        expect(states()).toEqual(['preparingToPause', true, false, true, 0.4, 1]);
+        expect(round(diagram.elements.opacity)).toBe(0.5005);
+        expect(a.isShown).toBe(true);
+
+        // End dissolve in
+        diagram.mock.timeStep(0.4);
+        expect(round(diagram.elements.opacity)).toBe(1);
+        expect(a.isShown).toBe(true);
+
+        diagram.mock.timeStep(0);
         expect(states()).toEqual(['idle', false, false, false, 0, 1]);
         expect(callbacks()).toEqual([0, 1, 1, 1]);
       });
