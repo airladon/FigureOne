@@ -49,7 +49,7 @@ describe('Seek', () => {
     recorder.worker = new Worker();
     recorder.worker.recorder = recorder;
     recorder.stateTimeStep = 0.5;
-    a.pulseSettings.style = 'tools.math.triangle';
+    a.pulseSettings.progression = 'tools.math.triangle';
 
     const startPulse = () => {
       a.pulseScale({ duration: 2, scale: 2, when: 'sync' });

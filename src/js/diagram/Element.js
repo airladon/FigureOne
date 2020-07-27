@@ -201,7 +201,7 @@ class DiagramElement {
     A: number | Array<number>,
     B: number | Array<number>,
     C: number | Array<number>,
-    style: string | ((number, number, number, number, number) => number),
+    progression: string | ((number, number, number, number, number) => number),
     num: number,
     delta: TypeParsablePoint,
     transformMethod: string | ((number, ?Point) => Transform),
@@ -653,7 +653,7 @@ class DiagramElement {
       A: 1,
       B: 0.5,
       C: 0,
-      style: 'tools.math.sinusoid',
+      progression: 'tools.math.sinusoid',
       num: 1,
       delta: new Point(0, 0),
       transformMethod: '_elementPulseSettingsTransformMethod',
@@ -1186,6 +1186,7 @@ class DiagramElement {
       time?: number,
       scale?: number,
       done?: ?(mixed) => void,
+      progression: string | (number) => number,
     } | ?(mixed) => void = null) {
     const defaultPulseOptions = {
       frequency: 0,
@@ -1209,6 +1210,7 @@ class DiagramElement {
       time: defaultPulseOptions.time,
       scale: defaultPulseOptions.scale,
       done: null,
+      progression: 'tools.math.sinusoid',
     };
     let done;
     let options = defaultOptions;
@@ -1240,6 +1242,7 @@ class DiagramElement {
         options.scale,
         options.frequency,
         done,
+        options.progression,
       );
     }
   }
@@ -1950,7 +1953,7 @@ class DiagramElement {
       for (let i = 0; i < this.pulseSettings.num; i += 1) {
         // Get the current pulse magnitude
         const pulseMag = this.fnMap.exec(
-          this.pulseSettings.style,
+          this.pulseSettings.progression,
           deltaTime,
           this.pulseSettings.frequency,
           this.pulseSettings.A instanceof Array ? this.pulseSettings.A[i] : this.pulseSettings.A,
@@ -1983,6 +1986,7 @@ class DiagramElement {
     time: number, scale: number,
     frequency: number = 0, callback: ?(string | ((?mixed) => void)) = null,
     delta: TypeParsablePoint = new Point(0, 0),
+    progression: string | (number) => number = 'tools.math.sinusoid',
   ) {
     this.pulseSettings.time = time;
     if (frequency === 0 && time === 0) {
@@ -2002,6 +2006,7 @@ class DiagramElement {
     this.pulseSettings.delta = getPoint(delta);
     // this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
     this.pulseSettings.callback = callback;
+    this.pulseSettings.progression = progression;
     this.startPulsing();
   }
 
@@ -2011,6 +2016,7 @@ class DiagramElement {
     callback: ?(string | ((?mixed) => void)),
     delta: TypeParsablePoint,
     when: TypeWhen,
+    progression: string | (number) => number,
   }) {
     const options = joinObjects({}, {
       duration: 1,
@@ -2018,6 +2024,7 @@ class DiagramElement {
       callback: null,
       delta: [0, 0],
       when: 'sync',
+      progression: 'tools.math.sinusoid',
     }, optionsIn);
     this.pulseSettings.time = options.duration;
     this.pulseSettings.frequency = 1 / (options.duration * 2);
@@ -2028,6 +2035,7 @@ class DiagramElement {
     this.pulseSettings.delta = getPoint(options.delta);
     // this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
     this.pulseSettings.callback = options.callback;
+    this.pulseSettings.progression = options.progression;
     this.startPulsing(options.when);
   }
 
@@ -2038,10 +2046,11 @@ class DiagramElement {
     scale: number,
     frequency: number = 0,
     callback: ?(string | ((?mixed) => void)) = null,
+    progression: string | (number) => number = 'tools.math.sinusoid',
   ) {
     const currentPosition = this.getPosition(space);
     const delta = getPoint(p).sub(currentPosition);
-    this.pulseScaleNow(time, scale, frequency, callback, delta);
+    this.pulseScaleNow(time, scale, frequency, callback, delta, progression);
   }
 
   pulseScaleRelativeToElement(
@@ -2053,6 +2062,7 @@ class DiagramElement {
     scale: number,
     frequency: number = 0,
     callback: ?(string | ((?mixed) => void)) = null,
+    progression: string | (number) => number = 'tools.math.sinusoid',
   ) {
     let p;
     if (e == null) {
@@ -2060,7 +2070,7 @@ class DiagramElement {
     } else {
       p = e.getPositionInBounds(space, x, y);
     }
-    this.pulseScaleRelativeToPoint(p, space, time, scale, frequency, callback);
+    this.pulseScaleRelativeToPoint(p, space, time, scale, frequency, callback, progression);
   }
 
   pulseScaleRelativeTo(
@@ -2072,11 +2082,12 @@ class DiagramElement {
     scale: number,
     frequency: number = 0,
     callback: ?(string | ((?mixed) => void)) = null,
+    progression: string | (number) => number = 'tools.math.sinusoid',
   ) {
     if (e == null || e instanceof DiagramElement) {
-      this.pulseScaleRelativeToElement(e, x, y, space, time, scale, frequency, callback);
+      this.pulseScaleRelativeToElement(e, x, y, space, time, scale, frequency, callback, progression);
     } else {
-      this.pulseScaleRelativeToPoint(e, space, time, scale, frequency, callback);
+      this.pulseScaleRelativeToPoint(e, space, time, scale, frequency, callback, progression);
     }
   }
 
@@ -3823,7 +3834,8 @@ class DiagramElementCollection extends DiagramElement {
       time?: number,
       scale?: number,
       done?: ?(mixed) => void,
-      elements?: Array<string | DiagramElement>
+      elements?: Array<string | DiagramElement>,
+      progression: string | (number) => number,
     } | Array<string | DiagramElement> | ((mixed) => void)) = null,
     done: ?(mixed) => void = null,
   ) {
@@ -3857,6 +3869,7 @@ class DiagramElementCollection extends DiagramElement {
       scale: defaultPulseOptions.scale,
       done: null,
       elements: null,
+      progression: 'tools.math.sinusoid',
     };
 
     let doneToUse;
