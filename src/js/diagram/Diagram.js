@@ -729,6 +729,53 @@ class Diagram {
       .start(options.startTime);
   }
 
+  // dissolveToComplete(optionsIn: {
+  //   dissolveOutDuration: number,
+  //   dissolveInDuration: number,
+  //   delay: Number,
+  //   done: ?(string | (() => void)),
+  //   startTime: ?number | 'now' | 'prev' | 'next',
+  // }) {
+  //   const options = joinObjects({}, {
+  //     dissolveOutDuration: 0.8,
+  //     dissolveInDuration: 0.8,
+  //     delay: 0.2,
+  //     done: null,
+  //     startTime: null,
+  //   }, optionsIn);
+  //   const state = this.getState({});
+  //   this.stop('complete');
+  //   const completeState = this.getState({});
+  //   this.setState(state, 'instant');
+  //   this.elements.animations.new()
+  //     .opacity({ duration: options.dissolveOutDuration, start: 1, target: 0.001 })
+  //     .trigger(
+  //       {
+  //         callback: () => {
+  //           this.elements.hideAll();
+  //           this.elements.show();
+  //           // this.elements.setOpacity(1);
+  //         },
+  //       },
+  //     )
+  //     .delay({ duration: options.delay })
+  //     .trigger({
+  //       callback: () => {
+  //         this.dissolveInToState({
+  //           state: completeState,
+  //           duration: options.dissolveInDuration,
+  //           done: options.done,
+  //           startTime: options.startTime,
+  //         });
+  //         // this.
+  //       },
+  //       // duration: options.dissolveInDuration,
+  //       duration: 0,
+  //     })
+  //     .start(options.startTime);
+  // }
+
+
   dissolveInToState(optionsIn: {
     state: Object,
     duration: number,
@@ -1593,40 +1640,63 @@ class Diagram {
     // forceSetToEndOfPlan: ?boolean | 'complete' | 'noComplete' = false,
     // freeze: boolean = false,
     how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel',
+    stopOptions: Object,
   ) {
-    this.state.preparingToStop = false;
-    this.elements.stop(how);
-
     const stopped = () => {
       this.subscriptions.trigger('stopped');
       this.state.preparingToStop = false;
     };
+    if (!this.elements.isAnimating()) {
+      stopped();
+      return;
+    }
     if (how === 'freeze' || how === 'cancel' || how === 'complete') {
+      this.elements.stop(how);
       stopped();
       return;
     }
 
-    const elements = this.elements.getAllElements();
-    let preparingToStopCounter = 0;
-    const checkAllStopped = () => {
-      if (preparingToStopCounter > 0) {
-        preparingToStopCounter -= 1;
-      }
+    this.state.preparingToStop = false;
+    if (how === 'animateToComplete') {
+      this.elements.stop(how);
+      const elements = this.elements.getAllElements();
+      let preparingToStopCounter = 0;
+      const checkAllStopped = () => {
+        if (preparingToStopCounter > 0) {
+          preparingToStopCounter -= 1;
+        }
+        if (preparingToStopCounter === 0) {
+          stopped();
+        }
+      };
+      elements.forEach((element) => {
+        if (element.state.preparingToStop) {
+          preparingToStopCounter += 1;
+          element.subscriptions.subscribe('stopped', checkAllStopped, 1);
+        }
+      });
       if (preparingToStopCounter === 0) {
-        stopped();
+        checkAllStopped();
+      } else if (preparingToStopCounter > 0) {
+        this.subscriptions.trigger('preparingToStop');
+        this.state.preparingToStop = true;
       }
-    };
-    elements.forEach((element) => {
-      if (element.state.preparingToStop) {
-        preparingToStopCounter += 1;
-        element.subscriptions.subscribe('stopped', checkAllStopped, 1);
-      }
-    });
-    if (preparingToStopCounter === 0) {
-      checkAllStopped();
-    } else if (preparingToStopCounter > 0) {
+      return;
+    }
+    console.log('asdf')
+    // Otherwise we are dissolving to complete
+    const state = this.getState({});
+    this.elements.stop('complete');
+    const completeState = this.getState({});
+    this.setState(state);
+    this.elements.stop('freeze');
+    this.setState(completeState, stopOptions);
+    if (this.state.preparingToSetState) {
+      this.subscriptions.subscribe('stateSet', stopped, 1);
       this.subscriptions.trigger('preparingToStop');
       this.state.preparingToStop = true;
+    } else {
+      stopped();
     }
   }
 
