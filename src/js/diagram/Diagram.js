@@ -1636,11 +1636,7 @@ class Diagram {
   }
 
   stop(
-    // cancelled: boolean = true,
-    // forceSetToEndOfPlan: ?boolean | 'complete' | 'noComplete' = false,
-    // freeze: boolean = false,
     how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel',
-    stopOptions: Object,
   ) {
     const stopped = () => {
       this.subscriptions.trigger('stopped');
@@ -1977,7 +1973,7 @@ class Diagram {
 
   isAnimating(): boolean {
     // console.log('asdf')
-    return this.elements.isAnyElementAnimating();
+    return this.elements.isAnimating();
   }
 
   clientToPixel(clientLocation: Point): Point {

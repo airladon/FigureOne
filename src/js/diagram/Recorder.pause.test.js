@@ -1,6 +1,6 @@
-import {
-  Point, Transform,
-} from '../tools/g2';
+// import {
+//   Point, Transform,
+// } from '../tools/g2';
 import {
   round,
 } from '../tools/math';

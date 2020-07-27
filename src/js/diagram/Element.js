@@ -2889,9 +2889,9 @@ class DiagramElement {
     return false;
   }
 
-  isAnyElementAnimating() {
-    return this.isAnimating();
-  }
+  // isAnyElementAnimating() {
+  //   return this.isAnimating();
+  // }
 
   isAnyElementMoving() {
     return this.isMoving();
@@ -3575,21 +3575,21 @@ class DiagramElementCollection extends DiagramElement {
     return false;
   }
 
-  isAnyElementAnimating(): boolean {
-    if (this.isShown === false) {
-      return false;
-    }
-    if (this.isAnimating()) {
-      return true;
-    }
-    for (let i = 0; i < this.drawOrder.length; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      if (element.isAnyElementAnimating()) {
-        return true;
-      }
-    }
-    return false;
-  }
+  // isAnyElementAnimating(): boolean {
+  //   if (this.isShown === false) {
+  //     return false;
+  //   }
+  //   if (this.isAnimating()) {
+  //     return true;
+  //   }
+  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     if (element.isAnyElementAnimating()) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
   // isAnimating(): boolean {
   //   if (this.isShown === false) {
@@ -4957,14 +4957,27 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   isAnimating(): boolean {
-    const result = super.isAnimating();
-    if (result) {
+    // const result = super.isAnimating();
+    // if (result) {
+    //   return true;
+    // }
+    // for (let i = 0; i < this.drawOrder.length; i += 1) {
+    //   const element = this.elements[this.drawOrder[i]];
+    //   const r = element.isAnimating();
+    //   if (r) {
+    //     return true;
+    //   }
+    // }
+    // return false;
+    if (this.isShown === false) {
+      return false;
+    }
+    if (super.isAnimating()) {
       return true;
     }
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      const r = element.isAnimating();
-      if (r) {
+      if (element.isAnimating()) {
         return true;
       }
     }
