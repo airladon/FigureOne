@@ -365,6 +365,15 @@ export default class AnimationStep {
     return this;
   }
 
+  ifCancelled(then: 'complete' | 'freeze' = 'freeze') {
+    if (then === 'complete') {
+      this.completeOnCancel = true;
+    } else {
+      this.completeOnCancel = false;
+    }
+    return this;
+  }
+
   ifCanceledThenStop() {
     this.completeOnCancel = false;
     return this;
