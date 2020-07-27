@@ -630,7 +630,7 @@ class Diagram {
     ) {
       finished();
     } else if (options.action === 'animate') {
-      this.stop('freeze');  // This is cancelling the pulse
+      this.elements.stop('freeze');  // This is cancelling the pulse
       this.animateToState(
         state,
         options,
@@ -639,7 +639,7 @@ class Diagram {
       );
     } else {
       // this.diagram.elements.freezePulseTransforms(false);
-      this.stop('freeze');
+      this.elements.stop('freeze');
       this.dissolveToState({
         state,
         dissolveInDuration: options.duration.dissolveIn,
@@ -1683,14 +1683,14 @@ class Diagram {
       }
       return;
     }
-    console.log('asdf')
+    // console.log('asdf')
     // Otherwise we are dissolving to complete
     const state = this.getState({});
     this.elements.stop('complete');
     const completeState = this.getState({});
     this.setState(state);
     this.elements.stop('freeze');
-    this.setState(completeState, stopOptions);
+    this.setState(completeState, 'dissolve');
     if (this.state.preparingToSetState) {
       this.subscriptions.subscribe('stateSet', stopped, 1);
       this.subscriptions.trigger('preparingToStop');
