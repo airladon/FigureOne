@@ -1,6 +1,6 @@
-import {
-  Point, // Transform,
-} from '../tools/g2';
+// import {
+//   Point, // Transform,
+// } from '../tools/g2';
 import {
   round,
 } from '../tools/math';
@@ -632,7 +632,6 @@ describe('Seek', () => {
         expect(transforms()).toEqual(['playing', 0.5, [], [], [2], 1.5]);
         diagram.mock.timeStep(0);
         expect(transforms()).toEqual(['playing', 0.5, [], [], [1], 1.5]);
-
       });
       test('Animate', () => {
         recorder.settings.play = 'animate';

@@ -4,7 +4,7 @@ import {
 import {
   round,
 } from '../tools/math';
-import * as tools from '../tools/tools';
+// import * as tools from '../tools/tools';
 import makeDiagram from '../__mocks__/makeDiagram';
 import Worker from '../__mocks__/recorder.worker.mock';
 
@@ -80,10 +80,11 @@ describe('Animate To State', () => {
       recorder.stopRecording();
       recorder.seek(0);
 
-      // const check = (recorderState, diagramIsPaused, aIsPaused, isAnimating, remainingAnimationTime, x) => {
-      //   expect(recorderState).toEqual(recorderState)
-      // }
-      states = () => [recorder.state, diagram.state.preparingToStop, a.state.preparingToStop, diagram.isAnimating(), round(diagram.getRemainingAnimationTime()), a.getPosition().round(3).x];
+      states = () => [
+        recorder.state, diagram.state.preparingToStop, a.state.preparingToStop,
+        diagram.isAnimating(), round(diagram.getRemainingAnimationTime()),
+        a.getPosition().round(3).x,
+      ];
       callbacks = () => [
         preparingToPlayCallback.mock.calls.length,
         playbackStartedCallback.mock.calls.length,
@@ -464,7 +465,7 @@ describe('Animate To State', () => {
           expect(round(diagram.elements.opacity)).toBe(1);
           expect(diagram.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
-          
+
           // end delay, start dissolve in
           diagram.mock.timeStep(1);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 1, 0.5]);
@@ -472,7 +473,7 @@ describe('Animate To State', () => {
           expect(diagram.elements.isShown).toBe(true);
           expect(a.isShown).toBe(true);
           expect(round(a.opacity)).toBe(0.001);
-          
+
           // disolve in
           expect(round(diagram.elements.opacity)).toBe(0.001);
 
@@ -539,7 +540,7 @@ describe('Animate To State', () => {
           expect(round(diagram.elements.opacity)).toBe(1);
           expect(diagram.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
-          
+
           // end delay, start dissolve in
           diagram.mock.timeStep(1);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.8, 0.5]);
@@ -547,7 +548,7 @@ describe('Animate To State', () => {
           expect(diagram.elements.isShown).toBe(true);
           expect(a.isShown).toBe(true);
           expect(round(a.opacity)).toBe(0.001);
-          
+
           // disolve in
           expect(round(diagram.elements.opacity)).toBe(0.001);
 
@@ -716,7 +717,7 @@ describe('Animate To State', () => {
         // recorder.resumePlayback();
         expect(a.pulseTransforms.length).toBe(0);
         expect(a.frozenPulseTransforms[0].s().round(3).x).toBe(2);
-        
+
         expect(states()).toEqual(['idle', false, false, false, 0, 2]);
       });
       describe('No State Change', () => {
@@ -792,7 +793,7 @@ describe('Animate To State', () => {
           expect(round(diagram.elements.opacity)).toBe(1);
           expect(diagram.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
-          
+
           // end delay, start dissolve in
           diagram.mock.timeStep(1);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.8, 2]);
@@ -800,7 +801,7 @@ describe('Animate To State', () => {
           expect(diagram.elements.isShown).toBe(true);
           expect(a.isShown).toBe(true);
           expect(round(a.opacity)).toBe(0.001);
-          
+
           // disolve in
           expect(round(diagram.elements.opacity)).toBe(0.001);
 
@@ -870,7 +871,7 @@ describe('Animate To State', () => {
           expect(diagram.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
           expect(a.getPosition().round(3).x).toBe(4);
-          
+
           // end delay, start dissolve in
           diagram.mock.timeStep(1);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.8, 2]);
@@ -879,7 +880,7 @@ describe('Animate To State', () => {
           expect(a.isShown).toBe(true);
           expect(round(a.opacity)).toBe(0.001);
           expect(a.getPosition().round(3).x).toBe(0);
-          
+
           // disolve in
           expect(round(diagram.elements.opacity)).toBe(0.001);
 
@@ -977,7 +978,7 @@ describe('Animate To State', () => {
           expect(diagram.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
           expect(a.getPosition().round(3).x).toBe(4);
-          
+
           // end delay, start dissolve in
           diagram.mock.timeStep(1);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.8, 2]);
@@ -986,7 +987,7 @@ describe('Animate To State', () => {
           expect(a.isShown).toBe(true);
           expect(round(a.opacity)).toBe(0.001);
           expect(a.getPosition().round(3).x).toBe(0);
-          
+
           // disolve in
 
           expect(round(diagram.elements.opacity)).toBe(0.001);
@@ -1122,13 +1123,13 @@ describe('Animate To State', () => {
       recorder.stopRecording();
       recorder.seek(0);
 
-      // const check = (recorderState, diagramIsPaused, aIsPaused, isAnimating, remainingAnimationTime, x) => {
-      //   expect(recorderState).toEqual(recorderState)
-      // }
       states = () => {
-
         const scale = a.drawTransforms.map(t => t.s().round(3).x);
-        return [recorder.state, diagram.state.preparingToStop, a.state.preparingToStop, diagram.isAnimating(), round(diagram.getRemainingAnimationTime()), scale];
+        return [
+          recorder.state, diagram.state.preparingToStop,
+          a.state.preparingToStop, diagram.isAnimating(),
+          round(diagram.getRemainingAnimationTime()), scale,
+        ];
       };
       callbacks = () => [
         preparingToPlayCallback.mock.calls.length,
@@ -1142,7 +1143,7 @@ describe('Animate To State', () => {
       recorder.startPlayback(0);
       expect(states()).toEqual(['playing', false, false, false, 0, [1]]);
       diagram.mock.timeStep(1);
-      expect(states()).toEqual(['playing', false, false, true, 2, [1,1, 1]]);
+      expect(states()).toEqual(['playing', false, false, true, 2, [1, 1, 1]]);
       diagram.mock.timeStep(1);
       expect(states()).toEqual(['playing', false, false, true, 1, [1.1, 1, 0.9]]);
       diagram.mock.timeStep(1);
@@ -1156,7 +1157,7 @@ describe('Animate To State', () => {
         recorder.startPlayback(0);
         expect(states()).toEqual(['playing', false, false, false, 0, [1]]);
         diagram.mock.timeStep(1);
-        expect(states()).toEqual(['playing', false, false, true, 2, [1,1, 1]]);
+        expect(states()).toEqual(['playing', false, false, true, 2, [1, 1, 1]]);
         diagram.mock.timeStep(1);
         expect(states()).toEqual(['playing', false, false, true, 1, [1.1, 1, 0.9]]);
       });
@@ -1232,7 +1233,7 @@ describe('Animate To State', () => {
         recorder.startPlayback(0);
         expect(states()).toEqual(['playing', false, false, false, 0, [1]]);
         diagram.mock.timeStep(1);
-        expect(states()).toEqual(['playing', false, false, true, 2, [1,1, 1]]);
+        expect(states()).toEqual(['playing', false, false, true, 2, [1, 1, 1]]);
         diagram.mock.timeStep(1);
         expect(states()).toEqual(['playing', false, false, true, 1, [1.1, 1, 0.9]]);
         recorder.pausePlayback();
@@ -1314,7 +1315,7 @@ describe('Animate To State', () => {
           expect(round(diagram.elements.opacity)).toBe(1);
           expect(diagram.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
-          
+
           // end delay, start dissolve in
           diagram.mock.timeStep(1);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.8, [1.1, 1, 0.9]]);
@@ -1322,7 +1323,7 @@ describe('Animate To State', () => {
           expect(diagram.elements.isShown).toBe(true);
           expect(a.isShown).toBe(true);
           expect(round(a.opacity)).toBe(0.001);
-          
+
           // disolve in
 
           expect(round(diagram.elements.opacity)).toBe(0.001);
@@ -1356,7 +1357,7 @@ describe('Animate To State', () => {
       });
       describe('No State Change', () => {
         afterEach(() => {
-          expect(a.frozenPulseTransforms.map(t => t.s().round(3).x)).toEqual([]); 
+          expect(a.frozenPulseTransforms.map(t => t.s().round(3).x)).toEqual([]);
           expect(states()).toEqual(['playing', false, false, true, 1, [1.1, 1, 0.9]]);
           diagram.mock.timeStep(1);
           expect(states()).toEqual(['playing', false, false, false, 0, [1]]);
@@ -1375,7 +1376,7 @@ describe('Animate To State', () => {
         test('Animate to resume', () => {
           recorder.settings.play = 'animate';
           expect(a.pulseTransforms.map(t => t.s().round(3).x)).toEqual([]);
-          expect(a.frozenPulseTransforms.map(t => t.s().round(3).x)).toEqual([]); 
+          expect(a.frozenPulseTransforms.map(t => t.s().round(3).x)).toEqual([]);
           recorder.resumePlayback();
           expect(a.pulseTransforms.map(t => t.s().round(3).x)).toEqual([]);
           expect(a.frozenPulseTransforms.map(t => t.s().round(3).x)).toEqual([1, 1, 1]);
@@ -1408,7 +1409,7 @@ describe('Animate To State', () => {
           expect(round(diagram.elements.opacity)).toBe(1);
           expect(diagram.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
-          
+
           // end delay, start dissolve in
           diagram.mock.timeStep(1);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.8, [1.1, 1, 0.9]]);
@@ -1416,7 +1417,7 @@ describe('Animate To State', () => {
           expect(diagram.elements.isShown).toBe(true);
           expect(a.isShown).toBe(true);
           expect(round(a.opacity)).toBe(0.001);
-          
+
           // disolve in
 
           expect(round(diagram.elements.opacity)).toBe(0.001);
@@ -1478,7 +1479,11 @@ describe('Animate To State', () => {
       recorder.stopRecording();
       recorder.seek(0);
 
-      states = () => [recorder.state, diagram.state.preparingToStop, a.state.preparingToStop, diagram.isAnimating(), round(diagram.getRemainingAnimationTime()), a.getPosition().round(3).x];
+      states = () => [
+        recorder.state, diagram.state.preparingToStop, a.state.preparingToStop,
+        diagram.isAnimating(), round(diagram.getRemainingAnimationTime()),
+        a.getPosition().round(3).x,
+      ];
       callbacks = () => [
         preparingToPlayCallback.mock.calls.length,
         playbackStartedCallback.mock.calls.length,
@@ -1841,7 +1846,7 @@ describe('Animate To State', () => {
       expect(a.pulseTransforms.length).toBe(0);
       expect(a.frozenPulseTransforms[0].s().round(3).x).toBe(2);
       expect(b.drawTransforms[0].t().round(3).x).toBe(4);
-      
+
       diagram.mock.timeStep(0);
       expect(a.pulseTransforms.length).toBe(0);
       expect(a.frozenPulseTransforms[0].s().round(3).x).toBe(2);
