@@ -1,12 +1,10 @@
 import {
-  Point, Transform,
+  Point,
 } from '../tools/g2';
 import {
   round,
 } from '../tools/math';
-import * as tools from '../tools/tools';
 import makeDiagram from '../__mocks__/makeDiagram';
-import Worker from '../__mocks__/recorder.worker.mock';
 
 // tools.isTouchDevice = jest.fn();
 
@@ -87,24 +85,24 @@ describe('Move Freely', () => {
       expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
       diagram.mock.touchUp();
       expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
-      diagram.mock.timeStep(0);
-      expect(round(a.getRemainingMovingFreelyDuration(), 3)).toBe(5);
+      // diagram.mock.timeStep(0);
+      expect(round(a.getRemainingMovingFreelyTime(), 3)).toBe(5);
       diagram.mock.timeStep(1);
       expect(a.getPosition().round(3)).toEqual(new Point(4.5, 0));
-      expect(round(a.getRemainingMovingFreelyDuration(), 3)).toBe(4);
+      expect(round(a.getRemainingMovingFreelyTime(), 3)).toBe(4);
       diagram.mock.timeStep(1);
       expect(a.getPosition().round(3)).toEqual(new Point(8, 0));
-      expect(round(a.getRemainingMovingFreelyDuration(), 3)).toBe(3);
+      expect(round(a.getRemainingMovingFreelyTime(), 3)).toBe(3);
       diagram.mock.timeStep(1);
       expect(a.getPosition().round(3)).toEqual(new Point(10.5, 0));
-      expect(round(a.getRemainingMovingFreelyDuration(), 3)).toBe(2);
+      expect(round(a.getRemainingMovingFreelyTime(), 3)).toBe(2);
       diagram.mock.timeStep(1);
       expect(a.getPosition().round(3)).toEqual(new Point(12, 0));
-      expect(round(a.getRemainingMovingFreelyDuration(), 3)).toBe(1);
+      expect(round(a.getRemainingMovingFreelyTime(), 3)).toBe(1);
       expect(a.state.isMovingFreely).toBe(true);
       diagram.mock.timeStep(1);
       expect(a.getPosition().round(3)).toEqual(new Point(12.5, 0));
-      expect(round(a.getRemainingMovingFreelyDuration(), 3)).toBe(0);
+      expect(round(a.getRemainingMovingFreelyTime(), 3)).toBe(0);
       expect(a.state.isMovingFreely).toBe(false);
     });
   });
