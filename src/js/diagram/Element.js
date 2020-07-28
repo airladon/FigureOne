@@ -44,7 +44,7 @@ import WebGLInstance from './webgl/webgl';
 // import type Diagram from './Diagram';
 import { FunctionMap } from '../tools/FunctionMap';
 import type Diagram from './Diagram';
-import type { TypePauseSettings, TypeOnPause } from './Recorder';
+// import type { TypePauseSettings, TypeOnPause } from './Recorder';
 
 // eslint-disable-next-line import/no-cycle
 // import {
@@ -236,7 +236,6 @@ class DiagramElement {
       startTime: ?number,
     },
     preparingToStop: boolean;
-    // pause: 'paused' | 'preparingToPause' | 'preparingToUnpause' | 'unpaused';
   };
 
   animations: animations.AnimationManager;
@@ -675,7 +674,6 @@ class DiagramElement {
       pulse: {
         startTime: null,
       },
-      pause: 'unpaused',
       preparingToStop: false,
     };
     this.interactiveLocation = new Point(0, 0);
@@ -1272,106 +1270,6 @@ class DiagramElement {
     this.undim();
   }
 
-  // getPauseSettings(pauseSettingsIn: TypePauseSettings): {
-  //   animation: TypeOnPause,
-  //   pulse: TypeOnPause,
-  //   movingFreely: TypeOnPause,
-  // } {
-  //   let pauseSettings;
-  //   let defaultPause = 'freeze';
-  //   if (typeof pauseSettingsIn === 'string') {
-  //     pauseSettings = {
-  //       animation: pauseSettingsIn,
-  //       pulse: pauseSettingsIn,
-  //       movingFreely: pauseSettingsIn,
-  //     }
-  //     defaultPause = pauseSettingsIn;
-  //   } else {
-  //     pauseSettings = {
-  //       animation: pauseSettingsIn.animation,
-  //       pulse: pauseSettingsIn.pulse,
-  //       movingFreely: pauseSettingsIn.movingFreely,
-  //     }
-  //     defaultPause = pauseSettingsIn.default;
-  //   };
-  //   if (typeof this.pauseSettings === 'string') {
-  //     defaultPause = this.pauseSettings;
-  //   }
-  //   if (defaultPause == null) {
-  //     defaultPause = 'freeze';
-  //   }
-  //   if (typeof this.pauseSettings === 'object' && this.pauseSettings.animation != null) {
-  //     pauseSettings.animation = this.pauseSettings.animation;
-  //   }
-  //   if (typeof this.pauseSettings === 'object' && this.pauseSettings.pulse != null) {
-  //     pauseSettings.pulse = this.pauseSettings.pulse;
-  //   }
-  //   if (typeof this.pauseSettings === 'object' && this.pauseSettings.movingFreely != null) {
-  //     pauseSettings.movingFreely = this.pauseSettings.movingFreely;
-  //   }
-  //   if (pauseSettings.animation == null) {
-  //     pauseSettings.animation = defaultPause;
-  //   }
-  //   if (pauseSettings.pulse == null) {
-  //     pauseSettings.pulse = defaultPause;
-  //   }
-  //   if (pauseSettings.movingFreely == null) {
-  //     pauseSettings.movingFreely = defaultPause;
-  //   }
-  //   return pauseSettings;
-  // }
-
-  // pauseLegacy(pauseSettingsIn: TypePauseSettings = {}) {
-  //   const pause = () => {
-  //     this.isPaused = true;
-  //     this.state.pause = 'paused';
-  //     this.subscriptions.trigger('paused');
-  //   };
-  //   if (pauseSettingsIn.simplePause != null && pauseSettingsIn.simplePause) {
-  //     pause();
-  //     return;
-  //   }
-  //   // console.log(pauseSettingsIn)
-  //   let pauseWhenFinished = false;
-  //   const { animation, pulse, movingFreely } = this.getPauseSettings(pauseSettingsIn);
-  //   // console.log(animation, pulse)
-
-  //   if (this.animations.isAnimating()) {
-  //     if (animation === 'completeBeforePause') {
-  //       pauseWhenFinished = true;
-  //     } else if (animation === 'complete') {
-  //       this.animations.cancelAll('complete');
-  //     } else {
-  //       this.animations.cancelAll('noComplete');
-  //     }
-  //   }
-  //   // console.log(this.name, pauseWhenFinished)
-  //   if (this.state.isPulsing) {
-  //     if (pulse === 'completeBeforePause') {
-  //       pauseWhenFinished = true;
-  //     } else if (pulse === 'complete') {
-  //       this.stopPulsing('complete');
-  //     } else {
-  //       this.stopPulsing('freeze');
-  //     }
-  //   }
-  //   // console.log(this.name, pauseWhenFinished)
-  //   if (pauseWhenFinished) {
-  //     this.state.pause = 'preparingToPause';
-  //     this.subscriptions.trigger('preparingToPause');
-  //     this.subscriptions.subscribe('animationFinished', pause, 1);
-  //   } else {
-  //     pause();
-  //   }
-  // }
-
-  // unpauseLegacy() {
-  //   this.isPaused = false;
-  //   if (this.state.pause !== 'unpaused') {
-  //     this.subscriptions.trigger('unpaused');
-  //   }
-  //   this.state.pause = 'unpaused';
-  // }
 
   setPosition(pointOrX: Point | number, y: number = 0) {
     let position = getPoint(pointOrX);
@@ -1750,9 +1648,9 @@ class DiagramElement {
     return `${this.parent.getPath()}.${this.name}`;
   }
   
-  getPause() {
-    return this.state.pause;
-  }
+  // getPause() {
+  //   return this.state.pause;
+  // }
 
   // Being Moved
   startBeingMoved(): void {
@@ -3175,11 +3073,6 @@ class DiagramElementPrimitive extends DiagramElement {
   setupDraw(now: number = 0) {
     if (this.isShown) {
       this.lastDrawTime = now;
-      // if (this.pulseSettings.clearFrozenTransforms) {
-      //   this.frozenPulseTransforms = [];
-      //   this.pulseSettings.clearFrozenTransforms = false;
-      // }
-      // this.pulseTransforms = [];
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {
           this.unrender();
@@ -3191,77 +3084,9 @@ class DiagramElementPrimitive extends DiagramElement {
       if (this.beforeDrawCallback != null) {
         this.fnMap.exec(this.beforeDrawCallback, now);
       }
-      // console.log(this.name, this.isShown, this.isPaused)
-      if (this.state.pause !== 'paused') {
-        this.animations.nextFrame(now);
-        this.nextMovingFreelyFrame(now);
-      }
-
-      // this.lastDrawElementTransformPosition = {
-      //   parentCount: parentTransform.order.length,
-      //   elementCount: this.transform.order.length,
-      // };
-
-      // // const newTransform = parentTransform.transform(this.getTransform());
-      // this.parentTransform = parentTransform._dup();
-      // this.lastDrawTransform = newTransform._dup();
-      // if (!this.isShown) {
-      //   this.pulseTransforms = [];
-      //   this.
-      //   return;
-      // }
-      // if (this.state.pause !== 'paused') {
-      //   this.pulseTransforms = this.getPulseTransforms(now);
-      // }
-      // this.drawTransforms = this.getDrawTransforms(newTransform);
-      // if(now === 1 && this.name === 'p1') {
-      //   console.log(this.getPosition('diagram'))
-      //   console.log(this.getPosition('local'))
-      //   // window.aaa = 1;
-      // }
-
-      // eslint-disable-next-line prefer-destructuring
-      // this.lastDrawPulseTransform = this.drawTransforms[0];
-      // this.lastDrawTransform = pulseTransforms[0];
-
-      // let pointCount = -1;
-      // if (this.drawingObject instanceof VertexObject) {
-      //   pointCount = this.drawingObject.numPoints;
-      //   if (this.angleToDraw !== -1) {
-      //     pointCount = this.drawingObject.getPointCountForAngle(this.angleToDraw);
-      //   }
-      //   if (this.lengthToDraw !== -1) {
-      //     pointCount = this.drawingObject.getPointCountForLength(this.lengthToDraw);
-      //   }
-      //   if (this.pointsToDraw !== -1) {
-      //     pointCount = this.pointsToDraw;
-      //   }
-      // } else {
-      //   pointCount = 1;
-      // }
-
-      // const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity];
-      // if (pointCount > 0) {
-      //   this.pulseTransforms.forEach((t) => {
-      //     this.drawingObject.drawWithTransformMatrix(
-      //       t.matrix(), colorToUse, canvasIndex, pointCount,
-      //     );
-      //   });
-      // }
-      // if (this.unrenderNextDraw) {
-      //   this.clearRender();
-      //   this.unrenderNextDraw = false;
-      // }
-      // if (this.renderedOnNextDraw) {
-      //   this.isRenderedAsImage = true;
-      //   this.renderedOnNextDraw = false;
-      // }
-      // // this.redrawElements.forEach((element) => {
-      // //   element.draw(element.getParentLastDrawTransform(), now);
-      // // })
-      // if (this.afterDrawCallback != null) {
-      //   this.fnMap.exec(this.afterDrawCallback, now);
-      // }
+      
+      this.animations.nextFrame(now);
+      this.nextMovingFreelyFrame(now);
     }
   }
 
@@ -3706,10 +3531,8 @@ class DiagramElementCollection extends DiagramElement {
         this.fnMap.exec(this.beforeDrawCallback, now);
       }
 
-      if (this.state.pause !== 'paused') {
-        this.animations.nextFrame(now);
-        this.nextMovingFreelyFrame(now);
-      }
+      this.animations.nextFrame(now);
+      this.nextMovingFreelyFrame(now);
 
       // set next color can end up hiding an element when disolving out
       if (!this.isShown) {
@@ -4923,45 +4746,6 @@ class DiagramElementCollection extends DiagramElement {
       element.setTimeDelta(delta);
     }
   }
-
-  // pauseLegacy(pauseSettingsIn: TypePauseSettings = {}) {
-  //   super.pause(pauseSettingsIn);
-  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
-  //     const element = this.elements[this.drawOrder[i]];
-  //     element.pause(pauseSettingsIn);
-  //   }
-  // }
-
-  // unpauseLegacy() {
-  //   super.unpause();
-  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
-  //     const element = this.elements[this.drawOrder[i]];
-  //     element.unpause();
-  //   }
-  // }
-
-  // Priority order:
-  // unpaused,
-  // preparingToPause
-  // preparingToUnpause
-  // paused
-  // getPause() {
-  //   let pause = this.state.pause;
-  //   if (this.state.pause === 'unpaused') {
-  //     return 'unpaused';
-  //   }
-  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
-  //     const element = this.elements[this.drawOrder[i]];
-  //     const elementPauseState = element.getPause();
-  //     if (elementPauseState === 'unpaused') {
-  //       return 'unpaused';
-  //     }
-  //     if (elementPauseState === 'preparingToPause' || elementPauseState === 'preparingToUnpause') {
-  //       pause = elementPauseState;
-  //     }
-  //   }
-  //   return pause;
-  // }
 
   isStateSame(state: Object, mergePulseTransforms: boolean = false) {
     const thisElementResult = super.isStateSame(state, mergePulseTransforms);
