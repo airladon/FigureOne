@@ -1482,7 +1482,7 @@ class DiagramElement {
       // transform
       if (this.state.movement.velocity.isZero()) {
         this.state.movement.velocity = this.state.movement.velocity.zero();
-        this.stopMovingFreely(false);
+        this.stopMovingFreely('complete');
       }
       this.setTransform(next.transform);
     }
@@ -1691,8 +1691,11 @@ class DiagramElement {
     return this.decelerate(null);
   }
 
-  getRemainingMovingFreelyDuration() {
-    return this.decelerate(null).duration;
+  getRemainingMovingFreelyTime() {
+    if (this.state.isMovingFreely) {
+      return this.decelerate(null).duration;
+    }
+    return 0;
   }
 
   // Decelerate over some time when moving freely to get a new element
@@ -1755,7 +1758,7 @@ class DiagramElement {
   startBeingMoved(): void {
     // this.stopAnimating();
     this.animations.cancelAll('noComplete');
-    this.stopMovingFreely();
+    this.stopMovingFreely('freeze');
     this.state.movement.velocity = this.transform.zero();
     this.state.movement.previousTransform = this.transform._dup();
     this.state.movement.previousTime = new GlobalAnimation().now() / 1000;
@@ -1782,6 +1785,9 @@ class DiagramElement {
   }
 
   stopBeingMoved(): void {
+    if (!this.state.isBeingMoved) {
+      return;
+    }
     const currentTime = new GlobalAnimation().now() / 1000;
     // Check wether last movement was a long time ago, if it was, then make
     // velocity 0 as the user has stopped moving before releasing touch/click
@@ -1843,7 +1849,8 @@ class DiagramElement {
       this.move.freely.callback = callback;
     }
     this.state.isMovingFreely = true;
-    this.state.movement.previousTime = null;
+    // this.state.movement.previousTime = null;
+    this.state.movement.previousTime = new GlobalAnimation().now() / 1000;
     this.state.movement.velocity = this.state.movement.velocity.clipMag(
       this.move.freely.zeroVelocityThreshold,
       this.move.maxVelocity,
@@ -1865,6 +1872,7 @@ class DiagramElement {
     if (how === 'animateToComplete') {
       return;
     }
+    // console.log(how)
     let wasMovingFreely = false;
     if (this.state.isMovingFreely === true) {
       wasMovingFreely = true;
@@ -1873,6 +1881,7 @@ class DiagramElement {
       const result = this.getMovingFreelyEnd();
       this.setTransform(result.transform);
     }
+
     this.state.isMovingFreely = false;
     this.state.movement.previousTime = null;
     if (this.move.freely.callback) {

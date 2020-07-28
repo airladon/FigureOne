@@ -12,7 +12,7 @@ import Worker from '../__mocks__/recorder.worker.mock';
 
 jest.mock('./recorder.worker');
 
-describe('Animate To State', () => {
+describe('Diagram Stop', () => {
   let diagram;
   let a;
   let b;
@@ -288,6 +288,131 @@ describe('Animate To State', () => {
 
         diagram.mock.timeStep(0.4);
         expect(state()).toEqual([false, 0, [], [], [1], 1, 1, false]);
+      });
+    });
+  });
+  describe('Moving Freely', () => {
+    let state;
+    beforeEach(() => {
+      a.move.freely.deceleration = { translation: 1 };
+      a.move.freely.zeroVelocityThreshold = { translation: 0.0000001 };
+      a.setMovable(true);
+      diagram.mock.touchDown([0, 0]);
+      diagram.mock.timeStep(1);
+      diagram.mock.touchMove([2, 0]);
+      diagram.mock.touchUp();
+      // diagram.mock.timeStep(0);
+      // a is now moving at v = 2/s
+      // it should come to a complete stop after 2s
+      // it should travel: s = 2 * 2 - 0.5 * 1 * 2**2 = 4 - 2 = 2
+      state = () => [
+        diagram.isAnimating(),
+        round(diagram.getRemainingAnimationTime(), 4),
+        a.getPosition().round(3).x,
+        preparingToStopCallback.mock.calls.length,
+        stoppedCallback.mock.calls.length,
+        diagram.state.preparingToStop,
+      ];
+    });
+    describe('Start', () => {
+      beforeEach(() => {
+        expect(state()).toEqual([true, 2, 2, 0, 0, false]);
+      });
+      test('No Stopping', () => {
+        expect(state()).toEqual([true, 2, 2, 0, 0, false]);
+        diagram.mock.timeStep(1);
+        expect(state()).toEqual([true, 1, 3.5, 0, 0, false]);
+        diagram.mock.timeStep(1);
+        expect(state()).toEqual([false, 0, 4, 0, 0, false]);
+      });
+      test('Freeze', () => {
+        diagram.stop('freeze');
+        expect(state()).toEqual([false, 0, 2, 0, 1, false]);
+      });
+      test('Cancel', () => {
+        diagram.stop('cancel');
+        expect(state()).toEqual([false, 0, 2, 0, 1, false]);
+      });
+      test('Complete', () => {
+        diagram.stop('complete');
+        expect(state()).toEqual([false, 0, 4, 0, 1, false]);
+      });
+      test('Animate To Complete', () => {
+        diagram.stop('animateToComplete');
+        expect(state()).toEqual([true, 2, 2, 1, 0, true]);
+        diagram.mock.timeStep(1);
+        expect(state()).toEqual([true, 1, 3.5, 1, 0, true]);
+        diagram.mock.timeStep(1);
+        expect(state()).toEqual([false, 0, 4, 1, 1, false]);
+      });
+      test('Dissolve To Complete', () => {
+        diagram.stop('dissolveToComplete');
+        expect(state()).toEqual([true, 1, 2, 1, 0, true]);
+        diagram.mock.timeStep(0.4);
+        expect(state()).toEqual([true, 0.6, 2, 1, 0, true]);
+        expect(round(diagram.elements.opacity)).toBe(0.5005);
+
+        diagram.mock.timeStep(0.4);
+        expect(state()).toEqual([true, 0.2, 2, 1, 0, true]);
+        expect(round(diagram.elements.opacity)).toBe(1);
+
+        diagram.mock.timeStep(0.2);
+        expect(state()).toEqual([true, 0.8, 4, 1, 0, true]);
+        expect(round(diagram.elements.opacity)).toBe(0.001);
+
+        diagram.mock.timeStep(0.4);
+        expect(state()).toEqual([true, 0.4, 4, 1, 0, true]);
+        expect(round(diagram.elements.opacity)).toBe(0.5005);
+
+        diagram.mock.timeStep(0.4);
+        expect(state()).toEqual([false, 0, 4, 1, 1, false]);
+      });
+    });
+    describe('Middle', () => {
+      beforeEach(() => {
+        expect(state()).toEqual([true, 2, 2, 0, 0, false]);
+        diagram.mock.timeStep(1);
+        expect(state()).toEqual([true, 1, 3.5, 0, 0, false]);
+      });
+      test('Freeze', () => {
+        diagram.stop('freeze');
+        expect(state()).toEqual([false, 0, 3.5, 0, 1, false]);
+      });
+      test('Cancel', () => {
+        diagram.stop('cancel');
+        expect(state()).toEqual([false, 0, 3.5, 0, 1, false]);
+      });
+      test('Complete', () => {
+        diagram.stop('complete');
+        expect(state()).toEqual([false, 0, 4, 0, 1, false]);
+      });
+      test('Animate To Complete', () => {
+        diagram.stop('animateToComplete');
+        expect(state()).toEqual([true, 1, 3.5, 1, 0, true]);
+        diagram.mock.timeStep(1);
+        expect(state()).toEqual([false, 0, 4, 1, 1, false]);
+      });
+      test('Dissolve To Complete', () => {
+        diagram.stop('dissolveToComplete');
+        expect(state()).toEqual([true, 1, 3.5, 1, 0, true]);
+        diagram.mock.timeStep(0.4);
+        expect(state()).toEqual([true, 0.6, 3.5, 1, 0, true]);
+        expect(round(diagram.elements.opacity)).toBe(0.5005);
+
+        diagram.mock.timeStep(0.4);
+        expect(state()).toEqual([true, 0.2, 3.5, 1, 0, true]);
+        expect(round(diagram.elements.opacity)).toBe(1);
+
+        diagram.mock.timeStep(0.2);
+        expect(state()).toEqual([true, 0.8, 4, 1, 0, true]);
+        expect(round(diagram.elements.opacity)).toBe(0.001);
+
+        diagram.mock.timeStep(0.4);
+        expect(state()).toEqual([true, 0.4, 4, 1, 0, true]);
+        expect(round(diagram.elements.opacity)).toBe(0.5005);
+
+        diagram.mock.timeStep(0.4);
+        expect(state()).toEqual([false, 0, 4, 1, 1, false]);
       });
     });
   });
