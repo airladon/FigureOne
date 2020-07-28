@@ -116,7 +116,6 @@ class GlobalAnimation {
         if (this.nextDrawQueue.length > 0) {
           this.draw(this.now());
         }
-        console.log(this.now(), performance.now())
         this.queueNextDebugFrame();
       }, this.debugFrameTime * 1000);
     } else {

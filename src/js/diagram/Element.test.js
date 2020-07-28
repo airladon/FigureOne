@@ -13,7 +13,7 @@ import {
 } from '../tools/math';
 import * as m2 from '../tools/m2';
 import makeDiagram from '../__mocks__/makeDiagram';
-import Diagram from './Diagram';
+// import Diagram from './Diagram';
 
 jest.mock('./Gesture');
 jest.mock('./webgl/webgl');
@@ -74,7 +74,7 @@ describe('Animationa and Movement', () => {
 
           // element.setupDraw(10);
           diagram.mock.timeStep(10);
-          
+
           expect(t.r()).toBe(0);
 
           // element.setupDraw(10.5);
@@ -243,7 +243,7 @@ describe('Animationa and Movement', () => {
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
           [0, 0, 1, 1],
         );
-        element.move.maxVelocity = 100; //new TransformLimit(100, 100, 100);
+        element.move.maxVelocity = 100; // new TransformLimit(100, 100, 100);
         element.move.freely.zeroVelocityThreshold = {
           scale: 0.01, rotation: 0.01, translation: 0.01,
         };
@@ -384,7 +384,7 @@ describe('Animationa and Movement', () => {
     });
     describe('Pulse', () => {
       let element;
-      let identity;
+      // let identity;
       let diagram;
       beforeEach(() => {
         diagram = makeDiagram();
@@ -394,7 +394,7 @@ describe('Animationa and Movement', () => {
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
           [0, 0, 1, 1],
         );
-        identity = new Transform();
+        // identity = new Transform();
         diagram.elements.add('e', element);
       });
       test('pulse scale now', () => {
@@ -658,11 +658,11 @@ describe('Animationa and Movement', () => {
     let triElement;
     let collection;
     const RealDate = Date.now;
-    let identity;
+    // let identity;
     let diagram;
     beforeEach(() => {
       diagram = makeDiagram();
-      identity = new Transform();
+      // identity = new Transform();
       const square = new VertexPolygon([webgl], 4, 1005, 0.01, 0, Point.zero());
       const tri = new VertexPolygon([webgl], 3, 0.1005, 0.01, 0, new Point(0.1, 0.1));
       squareElement = new DiagramElementPrimitive(
@@ -836,7 +836,7 @@ describe('Animationa and Movement', () => {
       // let squareElement3;
       // let collection2;
       beforeEach(() => {
-        identity = new Transform();
+        // identity = new Transform();
         square = new VertexPolygon(
           [webgl],
           4,
