@@ -218,7 +218,7 @@ export default class AnimationManager {
 
   // Cancel all primary animations with the name
   // animations will be cleaned up on next frame
-  cancel(name: ?string, force: ?'complete' | 'noComplete' = null) {
+  cancel(name: ?string, force: ?'complete' | 'freeze' = null) {
     if (name == null) {
       this.cancelAll(force);
     } else {
@@ -232,7 +232,7 @@ export default class AnimationManager {
     }
   }
 
-  cancelAll(force: ?'complete' | 'noComplete' = null) {
+  cancelAll(force: ?'complete' | 'freeze' = null) {
     for (let i = 0; i < this.animations.length; i += 1) {
       this.animations[i].cancel(force);
     }

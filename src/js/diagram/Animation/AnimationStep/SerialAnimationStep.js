@@ -141,7 +141,7 @@ export class SerialAnimationStep extends AnimationStep {
     return remaining;
   }
 
-  finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+  finish(cancelled: boolean = false, force: ?'complete' | 'freeze' = null) {
     if (this.state === 'idle' || this.state === 'finished') {
       return;
     }
@@ -152,7 +152,7 @@ export class SerialAnimationStep extends AnimationStep {
       forceToUse = 'complete';
     }
     if (this.completeOnCancel === false) {
-      forceToUse = 'noComplete';
+      forceToUse = 'freeze';
     }
     if (force != null) {
       forceToUse = force;

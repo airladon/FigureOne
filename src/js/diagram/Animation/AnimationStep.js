@@ -215,7 +215,7 @@ export default class AnimationStep {
   // returns remaining time if this step completes
   // Return of 0 means this step is still going
   nextFrame(now: number) {
-    if (this.startTime === null) {
+    if (this.startTime == null) {
       // console.log('new Start', this.startTime, now, this.startTimeOffset)
       this.startTime = now - this.startTimeOffset;
     }
@@ -248,9 +248,8 @@ export default class AnimationStep {
     if (this.startTime == null) {
       if (this.state === 'animating' || this.state === 'waitingToStart') {
         return totalDuration;
-      } else {
-        return 0;
       }
+      return 0;
     }
     const deltaTime = now - this.startTime;
     return this.duration + this.startDelay - deltaTime;
@@ -304,7 +303,7 @@ export default class AnimationStep {
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+  finish(cancelled: boolean = false, force: ?'complete' | 'freeze' = null) {
     // this.startTime = -2;
     // this.onFinish(false);
     if (this.state === 'idle' || this.state === 'finished') {
@@ -345,7 +344,7 @@ export default class AnimationStep {
   cancelledWithNoComplete() {
   }
 
-  cancel(force: ?'complete' | 'noComplete' = null) {
+  cancel(force: ?'complete' | 'freeze' = null) {
     this.finish(true, force);
   }
 
