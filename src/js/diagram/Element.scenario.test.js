@@ -1,9 +1,9 @@
 import {
   Point, Transform,
 } from '../tools/g2';
-import {
-  round,
-} from '../tools/math';
+// import {
+//   round,
+// } from '../tools/math';
 import * as tools from '../tools/tools';
 import makeDiagram from '../__mocks__/makeDiagram';
 
@@ -13,12 +13,12 @@ jest.mock('./recorder.worker');
 
 describe('Diagram Recorder', () => {
   let diagram;
-  let timeStep;
-  let initialTime;
-  let duration;
+  // let timeStep;
+  // let initialTime;
+  // let duration;
   let a;
   let b;
-  let c;
+  // let c;
   beforeEach(() => {
     diagram = makeDiagram();
     diagram.addElements([
@@ -50,21 +50,21 @@ describe('Diagram Recorder', () => {
     diagram.initialize();
     a = diagram.getElement('a');
     b = diagram.getElement('c.b');
-    c = diagram.getElement('c');
-    duration = 0;
-    initialTime = 1;
+    // c = diagram.getElement('c');
+    // duration = 0;
+    // initialTime = 1;
 
-    timeStep = (deltaTimeInSeconds) => {
-      const newNow = (duration + deltaTimeInSeconds + initialTime) * 1000;
-      global.performance.now = () => newNow;
-      diagram.animateNextFrame();
-      diagram.draw(newNow / 1000);
-    };
+    // timeStep = (deltaTimeInSeconds) => {
+    //   const newNow = (duration + deltaTimeInSeconds + initialTime) * 1000;
+    //   global.performance.now = () => newNow;
+    //   diagram.animateNextFrame();
+    //   diagram.draw(newNow / 1000);
+    // };
   });
   describe('Scenario', () => {
     test('Position', () => {
       expect(a.getPosition()).toEqual(new Point(0, 0));
-      a.setScenario({ position: [1, 1]});
+      a.setScenario({ position: [1, 1] });
       expect(a.getPosition()).toEqual(new Point(1, 1));
     });
     test('Rotation', () => {
@@ -74,7 +74,7 @@ describe('Diagram Recorder', () => {
     });
     test('Scale', () => {
       expect(a.getScale()).toEqual(new Point(1, 1));
-      a.setScenario({ scale: [2, 2]});
+      a.setScenario({ scale: [2, 2] });
       expect(a.getScale()).toEqual(new Point(2, 2));
     });
     test('Transform', () => {
