@@ -1005,6 +1005,10 @@ class Diagram {
       if (remainingPulseTime > remainingTime) {
         remainingTime = remainingPulseTime;
       }
+      const remainingMovingFreelyTime = element.getRemainingMovingFreelyTime(now);
+      if (remainingMovingFreelyTime > remainingTime) {
+        remainingTime = remainingMovingFreelyTime;
+      }
     });
     return remainingTime;
   }
