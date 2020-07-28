@@ -697,17 +697,19 @@ describe('Diagram', () => {
       expect(a.state.isBeingMoved).toBe(true);
 
       // Lift up touch
+      // global.performance.now = () => 1000;
       d.touchUpHandler();
       expect(a.transform.t().round(2)).toEqual(a2);
       expect(a.state.isMovingFreely).toBe(true);
       expect(a.state.isBeingMoved).toBe(false);
-      d.draw(1);   // first frame is lost in moving freely
-      d.draw(2);   // second frame is one second later
+
+      d.draw(1.101);   // first frame is one second later
       // initial velocity of 1 units/s, with deceleration of 0.5*sqrt(2)
       //   - new velocity = 0.5 units/s
       expect(a.state.movement.velocity.t().round(3)).toEqual(v3);
       expect(a.transform.t().round(3)).toEqual(a3.round(3));
 
+      // global.performance.now = () => 12000;
       d.draw(12);
       expect(a.state.movement.velocity.t()).toEqual(v4);
       expect(a.transform.t().round(3)).toEqual(a4);

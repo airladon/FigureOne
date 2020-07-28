@@ -263,10 +263,11 @@ describe('Animationa and Movement', () => {
         element.move.freely.deceleration = decel;
 
         expect(element.state.isMovingFreely).toBe(false);
+        diagram.mock.timeStep(0);
         element.startMovingFreely(callback);
         expect(element.state.isMovingFreely).toBe(true);
         // element.setupDraw(identity, 0);
-        diagram.mock.timeStep(0);
+        // diagram.mock.timeStep(0);
         expect(element.state.movement.velocity.round()).toEqual(initialV);
 
         // element.setupDraw(identity, 1);
@@ -308,6 +309,7 @@ describe('Animationa and Movement', () => {
 
         expect(element.state.isMovingFreely).toBe(false);
 
+        diagram.mock.timeStep(0);
         element.startMovingFreely();
         let vel = element.state.movement.velocity;
 
@@ -316,7 +318,7 @@ describe('Animationa and Movement', () => {
         expect(vel.r()).toBe(10);
 
         // element.setupDraw(identity, 0);
-        diagram.mock.timeStep(0);
+        // diagram.mock.timeStep(0);
 
         expect(element.state.isMovingFreely).toBe(true);
 
@@ -723,7 +725,7 @@ describe('Animationa and Movement', () => {
       expect(collection.transform.round()).toEqual(new Transform()
         .scale(1, 1).rotate(0).translate(1, 0));
 
-      global.performance.now = () => 0;
+      // global.performance.now = () => 0;
       collection.startBeingMoved();
       // expect(collection.state.isAnimating).toBe(false);
       expect(collection.animations.state).toBe('idle');
@@ -731,7 +733,8 @@ describe('Animationa and Movement', () => {
       expect(collection.state.isMovingFreely).toBe(false);
 
       // Over 1 s, rotation = 0.1;
-      global.performance.now = () => 1000;
+      // global.performance.now = () => 1000;
+      diagram.mock.timeStep(1);
       collection.moved(new Transform()
         .scale(1, 1).rotate(0.1).translate(0.5, 0));
       expect(collection.transform.round()).toEqual(new Transform()
@@ -746,6 +749,7 @@ describe('Animationa and Movement', () => {
       moveFreeProps.zeroVelocityThreshold = { scale: 0.1, rotation: 0.05, translation: 0.1 };
 
       // Now at (1, 0), 0.1 and rotating with velocity 0.1 rads/s
+      // diagram.mock.timeStep(0);
       collection.startMovingFreely(callbackMoveFree);
       // expect(collection.state.isAnimating).toBe(false);
       expect(collection.state.isBeingMoved).toBe(false);
@@ -754,7 +758,7 @@ describe('Animationa and Movement', () => {
 
       // collection.setupDraw(new Transform(), 10);
       // collection.draw(10);
-      diagram.mock.timeStep(9.5);
+      // diagram.mock.timeStep(9.5);
       expect(collection.state.movement.velocity.isEqualTo(velocity)).toEqual(true);
 
       // After one second, should have rotated to:
