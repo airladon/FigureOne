@@ -199,14 +199,14 @@ describe('Transfrom Animation Unit', () => {
       expect(element.transform.round()).toEqual(start.constant(0.5));
       expect(callbackFlag).toBe(1);
     });
-    test('CompleteOnCancel = true, Force no complete', () => {
+    test('CompleteOnCancel = true, Force freeze', () => {
       step.completeOnCancel = true;
       step.start();
       step.nextFrame(0);
       step.nextFrame(0.5);
       expect(element.transform.round()).toEqual(start.constant(0.5));
 
-      step.finish(true, 'noComplete');
+      step.finish(true, 'freeze');
       expect(element.transform.round()).toEqual(start.constant(0.5));
       expect(callbackFlag).toBe(1);
     });

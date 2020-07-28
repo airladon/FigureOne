@@ -1655,7 +1655,7 @@ class DiagramElement {
   // Being Moved
   startBeingMoved(): void {
     // this.stopAnimating();
-    this.animations.cancelAll('noComplete');
+    this.animations.cancelAll('freeze');
     this.stopMovingFreely('freeze');
     this.state.movement.velocity = this.transform.zero();
     this.state.movement.previousTransform = this.transform._dup();
@@ -1740,7 +1740,7 @@ class DiagramElement {
   // Moving Freely
   startMovingFreely(callback: ?(string | ((boolean) => void)) = null): void {
     // this.stopAnimating();
-    this.animations.cancelAll('noComplete');
+    this.animations.cancelAll('freeze');
     this.stopBeingMoved();
     if (callback) {
       // this.animate.transform.callback = callback;
@@ -2168,7 +2168,7 @@ class DiagramElement {
 
   stopAnimating(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel') {
     if (how === 'freeze') {
-      this.animations.cancelAll('noComplete');
+      this.animations.cancelAll('freeze');
     } else if (how === 'cancel') {
       this.animations.cancelAll(null);
     } else if (how === 'complete') {
@@ -2176,26 +2176,6 @@ class DiagramElement {
     }
   }
 
-  // stopLegacy(
-  //   cancelled?: boolean = true,
-  //   forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false,
-  //   freeze: boolean = false,
-  // ) {
-  //   if (forceSetToEndOfPlan === true || forceSetToEndOfPlan === 'complete') {
-  //     this.animations.cancelAll('complete');
-  //   } else if (forceSetToEndOfPlan === false || forceSetToEndOfPlan === 'noComplete') {
-  //     this.animations.cancelAll('noComplete');
-  //   } else {
-  //     this.animations.cancelAll(null);
-  //   }
-  //   this.stopMovingFreely(cancelled);
-  //   this.stopBeingMoved();
-  //   this.stopPulsing(cancelled, forceSetToEndOfPlan, freeze);
-  // }
-
-  // cancel(forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false) {
-  //   this.stop(true, forceSetToEndOfPlan);
-  // }
 
   updateLimits(
     limits: Rect,
@@ -4226,9 +4206,6 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   stop(
-    // cancelled: boolean = true,
-    // forceSetToEndOfPlan: ?boolean | 'complete' | 'noComplete' = false,
-    // freeze: boolean = false,
     how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel',
     elementOnly: boolean = false,
   ) {
