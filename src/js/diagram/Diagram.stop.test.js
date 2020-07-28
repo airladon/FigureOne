@@ -1,12 +1,7 @@
-// import {
-//   Point, Transform,
-// } from '../tools/g2';
 import {
   round,
 } from '../tools/math';
-import * as tools from '../tools/tools';
 import makeDiagram from '../__mocks__/makeDiagram';
-import Worker from '../__mocks__/recorder.worker.mock';
 
 // tools.isTouchDevice = jest.fn();
 
