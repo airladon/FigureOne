@@ -1,6 +1,6 @@
-// import {
-//   Point, Transform,
-// } from '../tools/g2';
+import {
+  Point,
+} from '../tools/g2';
 import {
   round,
 } from '../tools/math';
@@ -1436,6 +1436,80 @@ describe('Animate To State', () => {
           expect(diagram.elements.isShown).toBe(true);
         });
       });
+    });
+  });
+  describe('Moving Freely', () => {
+    let states;
+    let callbacks;
+    beforeEach(() => {
+      a.move.freely.deceleration = { translation: 1 };
+      a.move.freely.zeroVelocityThreshold = { translation: 0.0000001 };
+      a.setMovable(true);
+      // diagram.mock.touchDown([0, 0]);
+      // diagram.mock.timeStep(1);
+      // diagram.mock.touchMove([2, 0]);
+      // diagram.mock.touchUp();
+      // // a.pauseSettings.animation.complete = false;
+      // // a.pauseSettings.animation.clear = true;
+      // const startAnimation = () => {
+      //   a.animations.new()
+      //     .position({ start: [0, 0], target: [1, 1], duration: 2 })
+      //     .start();
+      // };
+      // recorder.addEventType('startAnimation', startAnimation.bind(this));
+
+      // setup
+      diagram.mock.timeStep(0);  // Ok
+      recorder.startRecording();
+      diagram.mock.timeStep(1);
+      // startAnimation();
+      // recorder.recordEvent('startAnimation');
+      recorder.recordEvent('touch', ['down', new Point(0, 0)]);
+      diagram.mock.touchDown([0, 0]);
+      diagram.mock.timeStep(1);
+      recorder.recordEvent('moved', ['a', new Point(2, 0)]);
+      recorder.recordEvent('touch', ['up']);
+      diagram.mock.touchMove([2, 0]);
+      diagram.mock.touchUp();
+      diagram.mock.timeStep(1);
+      diagram.mock.timeStep(1);
+      diagram.mock.timeStep(1);
+      recorder.recordEvent('touch', ['up']);
+      recorder.stopRecording();
+      recorder.seek(0);
+
+      // const check = (recorderState, diagramIsPaused, aIsPaused, isAnimating, remainingAnimationTime, x) => {
+      //   expect(recorderState).toEqual(recorderState)
+      // }
+      states = () => [recorder.state, diagram.state.preparingToStop, a.state.preparingToStop, diagram.isAnimating(), round(diagram.getRemainingAnimationTime()), a.getPosition().round(3).x];
+      callbacks = () => [
+        preparingToPlayCallback.mock.calls.length,
+        playbackStartedCallback.mock.calls.length,
+        preparingToPauseCallback.mock.calls.length,
+        playbackStoppedCallback.mock.calls.length,
+      ];
+    });
+    test.only('No Pausing', () => {
+      expect(states()).toEqual(['idle', false, false, false, 0, 0]);
+      expect(callbacks()).toEqual([0, 0, 0, 0]);
+      recorder.startPlayback(0);
+      expect(states()).toEqual(['playing', false, false, false, 0, 0]);
+      expect(callbacks()).toEqual([0, 1, 0, 0]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['playing', false, false, false, 0, 0]);
+      expect(callbacks()).toEqual([0, 1, 0, 0]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['playing', false, false, true, 2, 2]);
+      expect(callbacks()).toEqual([0, 1, 0, 0]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['playing', false, false, true, 1, 3.5]);
+      expect(callbacks()).toEqual([0, 1, 0, 0]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['playing', false, false, false, 0, 4]);
+      expect(callbacks()).toEqual([0, 1, 0, 0]);
+      diagram.mock.timeStep(1);
+      expect(states()).toEqual(['idle', false, false, false, 0, 4]);
+      expect(callbacks()).toEqual([0, 1, 0, 1]);
     });
   });
   describe('Two Elements', () => {
