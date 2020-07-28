@@ -15,6 +15,7 @@ import {
 
 function assignAsLinkOnly(obj: Object) {
   if (obj != null) {
+    // eslint-disable-next-line no-param-reassign
     obj._assignAsLinkOnly = true;
   }
   return obj;
