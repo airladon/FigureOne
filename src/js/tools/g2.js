@@ -2751,115 +2751,142 @@ class Bounds {
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  contains(position: number | Point) {
+  contains(position: number | TypeParsablePoint) {
     return true;
   }
 
   // eslint-disable-next-line class-methods-use-this
-  intersect(position: number | Point, direction: number = 0) {
+  intersect(position: number | TypeParsablePoint, direction: number = 0) {
+    if (typeof position === 'number') {
+      return {
+        intersect: position,
+        distance: 0,
+        reflection: direction + Math.PI,
+      };
+    }
     return {
-      position,
+      intersect: getPoint(position),
       distance: 0,
-      direction,
+      reflection: direction + Math.PI,
     };
   }
 
   // eslint-disable-next-line class-methods-use-this
-  clip(position: number | Point) {
-    return position;
+  clip(position: number | TypeParsablePoint) {
+    if (typeof position === 'number') {
+      return position;
+    }
+    return getPoint(position);
   }
 
   // eslint-disable-next-line class-methods-use-this
-  clipVelocity(velocity: Point | number) {
-    return velocity;
+  clipVelocity(velocity: TypeParsablePoint | number) {
+    if (typeof velocity === 'number') {
+      return velocity;
+    }
+    return getPoint(velocity);
   }
 }
 
-class ValueBounds extends Bounds {
-  boundary: ?number;
-}
+// class ValueBounds extends Bounds {
+//   boundary: ?number;
+// }
 
 class RangeBounds extends Bounds {
-  boundary: { min: number, max: number }
+  boundary: { min: number | null, max: number | null };
 
   constructor(
-    minOrObject: number | { min: number, max: number},
-    maxOrPrecision: number = 8,
+    minOrArray: ?number | [?number, ?number],
+    maxOrPrecision: ?number = null,
     precisionIn: number = 8,
   ) {
     let boundary;
     let precision;
-    if (typeof minOrObject === 'number') {
-      boundary = { min: minOrObject, max: maxOrPrecision };
+    if (typeof minOrArray === 'number' || minOrArray === null) {
+      boundary = { min: minOrArray, max: maxOrPrecision };
       precision = precisionIn;
     } else {
-      boundary = minOrObject;
-      precision = maxOrPrecision;
+      boundary = minOrArray;
+      precision = maxOrPrecision != null ? maxOrPrecision : 8;
     }
     super(boundary, precision);
   }
 
-  contains(position: number | Point) {
+  contains(position: number | TypeParsablePoint) {
     if (typeof position === 'number') {
       if (
-        position >= this.boundary.min && position <= this.boundary.max) {
+        (this.boundary.min == null || position >= this.boundary.min)
+        && (this.boundary.max == null || position <= this.boundary.max)
+      ) {
         return true;
       }
       return false;
     }
+    const p = getPoint(position);
     if (
-      position.x >= this.boundary.min
-      && position.y >= this.boundary.min
-      && position.x <= this.boundary.max
-      && position.y <= this.boundary.max
+      (this.boundary.min == null
+        || (p.x >= this.boundary.min && p.y >= this.boundary.min))
+      && (this.boundary.max == null
+        || (p.x <= this.boundary.max && p.y <= this.boundary.max))
     ) {
       return true;
     }
     return false;
   }
 
-  intersect(positionIn: number | Point, direction: number = 1) {
-    let position;
-    let directionFlag = 'value';
-    if (!(typeof positionIn === 'number')) {
-      position = positionIn.x;
-      directionFlag = 'angle';
-    } else {
-      position = positionIn;
-    }
-    if (
-      (directionFlag === 'value' && direction === -1)
-      || (directionFlag === 'angle' && round(direction, this.precision) === round(Math.PI, this.precision))
-    ) {
+  intersect(
+    position: number | TypeParsablePoint,
+    direction: number = 1,
+  ) {
+    const reflection = direction * -1;
+    if (typeof position === 'number') {
+      if (direction === 1) {
+        return {
+          intersect: this.boundary.max,
+          distance: this.boundary.max == null ? null : Math.abs(position - this.boundary.max),
+          reflection,
+        };
+      }
       return {
-        position: this.boundary.min,
-        distance: Math.abs(position - this.boundary.min),
-        direction: directionFlag === 'value' ? 1 : direction + Math.PI,
+        intersect: this.boundary.min,
+        distance: this.boundary.min == null ? null : Math.abs(position - this.boundary.min),
+        reflection,
       };
     }
-    return {
-      position: this.boundary.max,
-      distance: Math.abs(this.boundary.max - position),
-      direction: directionFlag === 'value' ? 1 : direction + Math.PI,
-    };
+    const p = getPoint(position);
+    let intersect = p._dup();
+    let dist = 0;
+    if (direction === 1) {
+      const { max } = this.boundary;
+      if (max != null) {
+        intersect = new Point(max, max);
+        dist = new Point(
+          Math.abs(max - p.x),
+          Math.abs(max - p.y),
+        );
+      }
+    } else {
+      const { min } = this.boundary;
+      if (min != null) {
+        intersect = new Point(min, min);
+        dist = new Point(
+          Math.abs(min - p.x),
+          Math.abs(min - p.y),
+        );
+      }
+    }
+    return { intersect, distance: dist, reflection };
   }
 
-  clip(position: number | Point) {
-    if (!(typeof position === 'number')) {
-      return position;
+  clip(position: number | TypeParsablePoint) {
+    if (typeof position === 'number') {
+      return clipValue(position, this.boundary.min, this.boundary.max);
     }
-    if (position < this.boundary.min) {
-      return this.boundary.min;
-    }
-    if (position > this.boundary.max) {
-      return this.boundary.max;
-    }
-    return position;
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  clipVelocity(position: number | Point) {
-    return position;
+    const p = getPoint(position);
+    const clipped = p._dup();
+    clipped.x = clipValue(p.x, this.boundary.min, this.boundary.max);
+    clipped.y = clipValue(p.y, this.boundary.min, this.boundary.max);
+    return clipped;
   }
 }
 
@@ -2990,11 +3017,6 @@ class RectBounds extends Bounds {
       direction: rectToPolar(reflection).angle,
     };
   }
-
-  // eslint-disable-next-line class-methods-use-this
-  clipVelocity(velocity: Point | number) {
-    return velocity;
-  }
 }
 
 class LineBounds extends Bounds {
@@ -3072,7 +3094,11 @@ class LineBounds extends Bounds {
   }
 }
 
-function makeBounds(bound: Bounds | Rect | Line | number | { max: number, min: number } | null) {
+function makeBounds(
+  bound: Bounds | number | null
+         | Point | [number, number] | { max: number, min: number } | null
+         | Rect | [number, number, number, number]
+         | Line | [[number, number], number, number] | [[number, number], [number, number]]) {
   if (bound == null) {
     return null;
   }
@@ -3143,6 +3169,15 @@ function transformValueToArray(
   return order;
 }
 
+// bounds: null
+// bounds: { translation: [-1, -1, 2, 2], scale: [-1, 1], rotation: [-1, 1] }
+// bounds: 'diagram',
+// bounds: new TransformBounds(transform, [null, null] | { translation: null })
+// bounds: [null, [-1, -1, 2, 2], null]
+// bounds: [null, [null, -1, null, 2], null]
+// bounds: TransformBounds | Rect | Array<number> | 'diagram',
+
+// type TypeBoundsDefinition = null | ;
 
 class TransformBounds extends Bounds {
   boundary: Array<Bounds | null>;
@@ -3382,13 +3417,13 @@ function deceleratePoint(
   const result = bounds.intersect(position, clipAngle(angle, '0to360'));
   let intersectPoint;
   if (typeof result.position === 'number') {
-    intersectPoint = new Point(result.position, 0);
+    intersectPoint = new Point(result.intersect, 0);
   } else {
-    intersectPoint = result.position;
+    intersectPoint = result.intersect;
   }
   // const intersectPoint = result.position;
   const distanceToBound = result.distance;
-  const reflectionAngle = result.direction;
+  const reflectionAngle = result.reflection;
 
   // if (intersectPoint == null) {
   //   return {
@@ -3669,7 +3704,7 @@ export {
   RectBounds,
   LineBounds,
   RangeBounds,
-  ValueBounds,
+  // ValueBounds,
   TransformBounds,
   Vector,
   transformValueToArray,
