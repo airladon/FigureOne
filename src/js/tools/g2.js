@@ -436,7 +436,7 @@ class Point {
   }
 
   /* eslint-disable no-use-before-define */
-  isOnLine(l: Line, precision?: number) {
+  isWithinLine(l: Line, precision?: number) {
     return l.hasPointOn(this, precision);
   }
 
@@ -444,7 +444,7 @@ class Point {
     const shaddow = new Line(this, 1, l.angle() + Math.PI / 2);
     const { intersect } = shaddow.intersectsWith(l);
     // console.log(intersect, inLine, onLine, )
-    if (intersect != null && intersect.isOnLine(l, precision)) {
+    if (intersect != null && intersect.isWithinLine(l, precision)) {
       return intersect;
     }
     return null;
@@ -542,7 +542,7 @@ class Point {
       // }
       /* eslint-disable-next-line  no-use-before-define */
       const l = line(v[i], v[i + 1]);
-      if (p.isOnLine(l)) {
+      if (p.isWithinLine(l)) {
         if (popLastPoint) {
           v.pop();
         }
@@ -1273,7 +1273,7 @@ class Line {
         intersect: i,
       };
     }
-    if (det === 0 && (l1.isWithinLine(l2, precision))) {
+    if (det === 0 && (l1.isAlongLine(l2, precision))) {
       // if the lines are colliner then:
       //   - if overlapping,
       //   - if partially overlapping: the intersect point is halfway between
@@ -1283,10 +1283,10 @@ class Line {
       //   - if not overlapping, the intersect point is halfway between the nearest ends
       // let l1 = this;
       if (
-        !l1.p1.isOnLine(l2, precision)
-        && !l1.p2.isOnLine(l2, precision)
-        && !l2.p1.isOnLine(l1, precision)
-        && !l2.p2.isOnLine(l1, precision)
+        !l1.p1.isWithinLine(l2, precision)
+        && !l1.p2.isWithinLine(l2, precision)
+        && !l2.p1.isWithinLine(l1, precision)
+        && !l2.p2.isWithinLine(l1, precision)
       ) {
         const line11 = new Line(l1.p1, l2.p1);
         const line12 = new Line(l1.p1, l2.p2);
@@ -1315,14 +1315,14 @@ class Line {
       }
       if (
         (
-          l1.p1.isOnLine(l2, precision)
-          && l1.p2.isOnLine(l2, precision)
-          && (!l2.p1.isOnLine(l1, precision) || !l2.p2.isOnLine(l1, precision))
+          l1.p1.isWithinLine(l2, precision)
+          && l1.p2.isWithinLine(l2, precision)
+          && (!l2.p1.isWithinLine(l1, precision) || !l2.p2.isWithinLine(l1, precision))
         )
         || (
-          l2.p1.isOnLine(l1, precision)
-          && l2.p2.isOnLine(l1, precision)
-          && (!l1.p1.isOnLine(l2, precision) || !l1.p2.isOnLine(l2, precision))
+          l2.p1.isWithinLine(l1, precision)
+          && l2.p2.isWithinLine(l1, precision)
+          && (!l1.p1.isWithinLine(l2, precision) || !l1.p2.isWithinLine(l2, precision))
         )
       ) {
         const midLine = new Line(l1.midPoint(), l2.midPoint());
@@ -1334,34 +1334,34 @@ class Line {
       }
       let midLine;
       if (
-        l1.p1.isOnLine(l2, precision)
-        && !l1.p2.isOnLine(l2, precision)
-        && l2.p1.isOnLine(l1, precision)
-        && !l2.p2.isOnLine(l1, precision)
+        l1.p1.isWithinLine(l2, precision)
+        && !l1.p2.isWithinLine(l2, precision)
+        && l2.p1.isWithinLine(l1, precision)
+        && !l2.p2.isWithinLine(l1, precision)
       ) {
         midLine = new Line(l1.p1, l2.p1);
       }
       if (
-        l1.p1.isOnLine(l2, precision)
-        && !l1.p2.isOnLine(l2, precision)
-        && !l2.p1.isOnLine(l1, precision)
-        && l2.p2.isOnLine(l1, precision)
+        l1.p1.isWithinLine(l2, precision)
+        && !l1.p2.isWithinLine(l2, precision)
+        && !l2.p1.isWithinLine(l1, precision)
+        && l2.p2.isWithinLine(l1, precision)
       ) {
         midLine = new Line(l1.p1, l2.p2);
       }
       if (
-        !l1.p1.isOnLine(l2, precision)
-        && l1.p2.isOnLine(l2, precision)
-        && l2.p1.isOnLine(l1, precision)
-        && !l2.p2.isOnLine(l1, precision)
+        !l1.p1.isWithinLine(l2, precision)
+        && l1.p2.isWithinLine(l2, precision)
+        && l2.p1.isWithinLine(l1, precision)
+        && !l2.p2.isWithinLine(l1, precision)
       ) {
         midLine = new Line(l1.p2, l2.p1);
       }
       if (
-        !l1.p1.isOnLine(l2, precision)
-        && l1.p2.isOnLine(l2, precision)
-        && !l2.p1.isOnLine(l1, precision)
-        && l2.p2.isOnLine(l1, precision)
+        !l1.p1.isWithinLine(l2, precision)
+        && l1.p2.isWithinLine(l2, precision)
+        && !l2.p1.isWithinLine(l1, precision)
+        && l2.p2.isWithinLine(l1, precision)
       ) {
         midLine = new Line(l1.p2, l2.p2);
       }
@@ -2254,7 +2254,7 @@ class Transform {
         const perpLine = new Line(t, 1, limitLine.angle() + Math.PI / 2);
         const { intersect } = perpLine.intersectsWith(limitLine);
         if (intersect) {
-          if (intersect.isOnLine(limitLine, 4)) {
+          if (intersect.isWithinLine(limitLine, 4)) {
             clippedTransform.updateTranslation(intersect);
           } else {
             const p1Dist = distance(intersect, limitLine.p1);
@@ -3149,7 +3149,7 @@ class LineBounds extends Bounds {
     if (typeof position === 'number') {
       return false;
     }
-    return position.isOnLine(this.boundary, this.precision);
+    return position.isWithinLine(this.boundary, this.precision);
   }
 
   // containsShaddow(position: Point) {

@@ -390,7 +390,7 @@ describe('g2 Line', () => {
       const l1 = new Line(new Point(0, 0), new Point(2, 0));
       const l2 = new Line(new Point(0, 0), new Point(2, 0));
       const res = l1.isEqualTo(l2);
-      const res1 = l1.isOnLine(l2);
+      const res1 = l1.isWithinLine(l2);
       expect(res).toEqual(true);
       expect(res1).toEqual(true);
     });
@@ -415,19 +415,20 @@ describe('g2 Line', () => {
     test('Line 1 is on the same line as Line 2', () => {
       const l1 = new Line(new Point(0, 0), new Point(2, 0));
       const l2 = new Line(new Point(0, 0), new Point(4, 0));
-      const res = l1.isOnLine(l2);
+      const res = l1.isWithinLine(l2);
       expect(res).toEqual(true);
     });
     test('Line 1 is on the same line as Line 2 - test 2', () => {
       const l1 = new Line(new Point(0, 0), new Point(1, 1));
       const l2 = new Line(new Point(2, 2), new Point(3, 3));
-      const res = l1.isOnLine(l2);
-      expect(res).toEqual(true);
+      expect(l1.isWithinLine(l2)).toBe(false);
+      expect(l2.isWithinLine(l1)).toBe(false);
+      expect(l1.isAlongLine(l2)).toBe(true);
     });
     test('Line 1 is on the same line as Line 2 - test 3', () => {
       const l1 = new Line(new Point(0, 0), new Point(1, 1));
       const l2 = new Line(new Point(0, 1), new Point(1, 2));
-      const res = l1.isOnLine(l2);
+      const res = l1.isWithinLine(l2);
       expect(res).not.toEqual(true);
     });
     test('Line1 is offset to line 2 in y', () => {
@@ -455,20 +456,20 @@ describe('g2 Line', () => {
         const l1 = new Line([0, 0], [2, 0], 0, 1);
         const l2 = new Line([0, 0], [2, 0], 0, 1);
         expect(l1.isEqualTo(l2)).toBe(true);
-        expect(l1.isOnLine(l2)).toBe(true);
+        expect(l1.isWithinLine(l2)).toBe(true);
       });
       test('Line 1 infinite, Line 2 finite, same definition', () => {
         const l1 = new Line([0, 0], [2, 0], 0, 1);
         const l2 = new Line([0, 0], [2, 0], 0, 2);
         expect(l1.isEqualTo(l2)).toBe(false);
-        expect(l1.isOnLine(l2)).toBe(true);
+        expect(l1.isWithinLine(l2)).toBe(true);
       });
       test('Line 1 infinite, Line 2 infinite, different ends', () => {
         const l1 = new Line([0, 0], [2, 0], 0, 1);
         const l2 = new Line([1, 0], [2, 0], 0, 1);
         expect(l1.isEqualTo(l2)).toBe(false);
-        expect(l1.isOnLine(l2)).toBe(true);
-        expect(l2.isOnLine(l1)).toBe(false);
+        expect(l1.isWithinLine(l2)).toBe(false);
+        expect(l2.isWithinLine(l1)).toBe(true);
       });
     });
   });
