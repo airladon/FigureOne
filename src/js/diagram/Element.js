@@ -168,6 +168,12 @@ class DiagramElement {
   diagram: Diagram;
   move: {
     // maxTransform: Transform,
+    // bounds: null
+    // bounds: { translation: [-1, -1, 2, 2], scale: [-1, 1], rotation: [-1, 1] }
+    // bounds: 'diagram',
+    // bounds: new TransformBounds(transform, [null, null] | { translation: null })
+    // bounds: [null, [-1, -1, 2, 2], null]
+    // bounds: [null, [null, -1, null, 2], null]
     bounds: TransformBounds | Rect | Array<number> | 'diagram',
     // minTransform: Transform,
     // boundary: ?Rect | Array<number> | 'diagram',
@@ -1316,9 +1322,7 @@ class DiagramElement {
       if (window.asdf && this.name === 'c') {
         debugger;
       }
-      if (!(this.move.bounds instanceof TransformBounds)) {
-        this.setMoveBounds();
-      }
+      this.checkMoveBounds();
       if (this.move.bounds instanceof TransformBounds) {
         this.transform = this.move.bounds.clip(transform);
         // if (this.name === 'c') {
@@ -1372,6 +1376,7 @@ class DiagramElement {
       // the delta time from this frame to the previous
       const deltaTime = now - this.state.movement.previousTime;
       // Calculate the new velocity and position
+      debugger;
       const next = this.decelerate(deltaTime);
       this.state.movement.velocity = next.velocity;
       this.state.movement.previousTime = now;
@@ -1599,15 +1604,17 @@ class DiagramElement {
   // Decelerate over some time when moving freely to get a new element
   // transform and movement velocity
   decelerate(deltaTime: ?number): Object {
-    let bounds;
-    if (!this.move.bounds instanceof TransformBounds) {
-      this.setMoveBounds();
-    }
-    if (!this.move.bounds instanceof TransformBounds) {
-      bounds = new TransformBounds(this.transform);
-    } else {
-      ({ bounds } = this.move);
-    }
+    // let bounds;
+    // if (!this.move.bounds instanceof TransformBounds) {
+    //   this.setMoveBounds();
+    // }
+    // if (!this.move.bounds instanceof TransformBounds) {
+    //   bounds = new TransformBounds(this.transform);
+    // } else {
+    //   ({ bounds } = this.move);
+    // }
+    this.checkMoveBounds();
+    const { bounds } = this.move;
     const next = this.transform.decelerate(
       this.state.movement.velocity,
       this.move.freely.deceleration,
@@ -2565,6 +2572,17 @@ class DiagramElement {
     }
   }
 
+  checkMoveBounds() {
+    if (!(this.move.bounds instanceof TransformBounds)) {
+      this.setMoveBounds();
+    }
+    // if (!(this.move.bounds instanceof TransformBounds)) {
+    //   bounds = new TransformBounds(this.transform);
+    // } else {
+    //   ({ bounds } = this.move);
+    // }
+  }
+
   setMoveBounds(
     boundaryIn: ?Array<number> | Rect | 'diagram' = null,
     // scale: Point = new Point(1, 1),
@@ -3159,7 +3177,8 @@ class DiagramElementPrimitive extends DiagramElement {
     if (this.drawingObject instanceof HTMLObject) {
       this.drawingObject.transformHtml(firstTransform.matrix());
     }
-    this.setMoveBounds();
+    // this.setMoveBounds();
+    this.checkMoveBounds();
   }
 
   // isMoving(): boolean {
@@ -3976,7 +3995,7 @@ class DiagramElementCollection extends DiagramElement {
       const element = this.elements[this.drawOrder[i]];
       element.setFirstTransform(firstTransform);
     }
-    this.setMoveBounds();
+    this.checkMoveBounds();
   }
 
   getAllBoundaries(space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local') {

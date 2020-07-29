@@ -2302,7 +2302,7 @@ class Transform {
     velocity: Transform,
     decelerationIn: TypeTransformValue,
     deltaTime: number | null,
-    boundsIn: TypeTransformBounds | TypeTransformationBoundsDefinition,
+    bounds: TypeTransformBounds,
     bounceLossIn: TypeTransformValue,
     zeroVelocityThresholdIn: TypeTransformValue,
     precision: number = 8,
@@ -2310,7 +2310,7 @@ class Transform {
     const deceleration = transformValueToArray(decelerationIn, this);
     const bounceLoss = transformValueToArray(bounceLossIn, this);
     const zeroVelocityThreshold = transformValueToArray(zeroVelocityThresholdIn, this);
-    const bounds = getTransformBoundsLimit(boundsIn, this);
+    // const bounds = getTransformBoundsLimit(boundsIn, this);
     const result = decelerateTransform(
       this, velocity, deceleration, deltaTime, bounds, bounceLoss, zeroVelocityThreshold, precision,
     );
@@ -3514,10 +3514,10 @@ export type TypeTransformationValue = {
 }
 
 type TypeTransformationBoundsDefinition = {
-  rotation?: RangeBounds;
-  position?: RectBounds;
-  translation?: RectBounds;
-  scale?: RectBounds;
+  rotation?: RangeBounds | TypeParsablePoint;
+  position?: RectBounds | TypeParsableRect;
+  translation?: RectBounds | TypeParsableRect;
+  scale?: RectBounds | TypeParsablePoint;
 }
 
 type TypeTransformDeceleration = Array<number>;
@@ -3567,7 +3567,7 @@ function decelerateTransform(
   velocity: Transform,
   deceleration: TypeTransformDeceleration,
   deltaTime: number | null,
-  bounds: TypeTransformBounds,
+  bounds: TransformBounds,
   bounceLoss: TypeTransformBounce,
   zeroVelocityThreshold: TypeTransformZeroThreshold,
   precision: number = 8,
@@ -3583,7 +3583,7 @@ function decelerateTransform(
     if (transformation instanceof Translation) {
       result = deceleratePoint(
         transformation, velocity.order[i], deceleration[i], deltaTime,
-        bounds[i], bounceLoss[i], zeroVelocityThreshold[i],
+        bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
         precision,
       );
       newTransformation = new Translation(result.position.x, result.position.y);
@@ -3591,7 +3591,7 @@ function decelerateTransform(
     } else if (transformation instanceof Scale) {
       result = decelerateIndependantPoint(
         transformation, velocity.order[i], deceleration[i], deltaTime,
-        bounds[i], bounceLoss[i], zeroVelocityThreshold[i],
+        bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
         precision,
       );
       newTransformation = new Scale(result.point.x, result.point.y);
@@ -3599,7 +3599,7 @@ function decelerateTransform(
     } else {
       result = decelerateValue(
         transformation.r, velocity.order[i].r, deceleration[i], deltaTime,
-        bounds[i], bounceLoss[i], zeroVelocityThreshold[i],
+        bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
         precision,
       );
       newTransformation = new Rotation(result.value);

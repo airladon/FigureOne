@@ -25,9 +25,9 @@ describe('Move Freely', () => {
         mods: {
           move: {
             // bounds: { translation: new Rect(-10, -10, 20, 20) },
-            maxVelocity: { translation: 100 },
+            maxVelocity: 100,
             freely: {
-              deceleration: { translation: 2 },
+              deceleration: 2,
               bounceLoss: 0.5,
             },
           },
@@ -36,10 +36,8 @@ describe('Move Freely', () => {
     ]);
     a = diagram.elements._a;
     a.move.bounds.updateTranslation(new Rect(-10, -10, 20, 20));
-    console.log(a.move.bounds.boundary)
     a.setMovable(true);
     diagram.initialize();
-    console.log(a.move.bounds.boundary)
   });
   test('Bounce', () => {
     diagram.mock.timeStep(0);
@@ -47,7 +45,6 @@ describe('Move Freely', () => {
     diagram.mock.timeStep(0.1);
     diagram.mock.touchMove([1, 0]);
     diagram.mock.touchUp();
-    console.log(a.move.bounds.boundary)
     // Now moving at 10 units/s
     // With a deceleration of 2 units / s / s, the moving will last 10 / 2 = 5s
     // After 1s the displacement will be:
@@ -63,9 +60,9 @@ describe('Move Freely', () => {
     //    = 8 - 4 = 4
     expect(a.getPosition().round(3).x).toEqual(1);
     expect(a.state.movement.velocity.t().round(3).x).toBe(10);
-    expect(round(a.getRemainingMovingFreelyTime(), 2)).toBe(5);
+    expect(round(a.getRemainingMovingFreelyTime(), 2)).toBe(3);
     expect(a.state.isMovingFreely).toBe(true);
-    
+
     diagram.mock.timeStep(1);
     expect(a.getPosition().round(3).x).toEqual(10);
     expect(a.state.movement.velocity.t().round(3).x).toBe(-4);
