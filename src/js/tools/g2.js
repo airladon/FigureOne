@@ -2822,16 +2822,17 @@ class RangeBounds extends Bounds {
       }
       return false;
     }
-    const p = getPoint(position);
-    if (
-      (this.boundary.min == null
-        || (p.x >= this.boundary.min && p.y >= this.boundary.min))
-      && (this.boundary.max == null
-        || (p.x <= this.boundary.max && p.y <= this.boundary.max))
-    ) {
-      return true;
-    }
     return false;
+    // const p = getPoint(position);
+    // if (
+    //   (this.boundary.min == null
+    //     || (p.x >= this.boundary.min && p.y >= this.boundary.min))
+    //   && (this.boundary.max == null
+    //     || (p.x <= this.boundary.max && p.y <= this.boundary.max))
+    // ) {
+    //   return true;
+    // }
+    // return false;
   }
 
   intersect(
@@ -2839,43 +2840,53 @@ class RangeBounds extends Bounds {
     direction: number = 1,
   ) {
     const reflection = direction * -1;
-    if (typeof position === 'number') {
+    const { min, max } = this.boundary;
+    if (!(typeof position === 'number')) {
+      return null;
+    }
+    if (this.contains(position)) {
       if (direction === 1) {
+        if (max == null) {
+          return null;
+        }
         return {
-          intersect: this.boundary.max,
-          distance: this.boundary.max == null ? null : Math.abs(position - this.boundary.max),
+          intersect: max,
+          distance: Math.abs(position - max),
           reflection,
         };
       }
+      if (min == null) {
+        return null;
+      }
       return {
-        intersect: this.boundary.min,
-        distance: this.boundary.min == null ? null : Math.abs(position - this.boundary.min),
+        intersect: min,
+        distance: Math.abs(position - min),
         reflection,
       };
     }
-    const p = getPoint(position);
-    let intersect = p._dup();
-    let dist = 0;
-    if (direction === 1) {
-      const { max } = this.boundary;
-      if (max != null) {
-        intersect = new Point(max, max);
-        dist = new Point(
-          Math.abs(max - p.x),
-          Math.abs(max - p.y),
-        );
-      }
-    } else {
-      const { min } = this.boundary;
-      if (min != null) {
-        intersect = new Point(min, min);
-        dist = new Point(
-          Math.abs(min - p.x),
-          Math.abs(min - p.y),
-        );
-      }
+    if (
+      min != null
+      && position < min
+      && direction === 1
+    ) {
+      return {
+        intersect: min,
+        distance: Math.abs(position - min),
+        reflection,
+      };
     }
-    return { intersect, distance: dist, reflection };
+    if (
+      max != null
+      && position > max
+      && direction === -1
+    ) {
+      return {
+        intersect: max,
+        distance: Math.abs(position - max),
+        reflection,
+      };
+    }
+    return null;
   }
 
   clip(position: number | TypeParsablePoint) {

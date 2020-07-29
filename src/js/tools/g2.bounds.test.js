@@ -24,14 +24,14 @@ describe('Bounds', () => {
         expect(bounds.contains(-11)).toBe(false);
         expect(bounds.contains(11)).toBe(false);
       });
-      test('Contains point', () => {
-        expect(bounds.contains([0, 0])).toBe(true);
-        expect(bounds.contains([10, 10])).toBe(true);
-        expect(bounds.contains([-10, -10])).toBe(true);
-        expect(bounds.contains([-10, 10])).toBe(true);
-        expect(bounds.contains([-11, 10])).toBe(false);
-        expect(bounds.contains([-10, 11])).toBe(false);
-        expect(bounds.contains([-11, 11])).toBe(false);
+      test('Contains point - should be false', () => {
+        expect(bounds.contains([0, 0])).toBe(false);
+        // expect(bounds.contains([10, 10])).toBe(true);
+        // expect(bounds.contains([-10, -10])).toBe(true);
+        // expect(bounds.contains([-10, 10])).toBe(true);
+        // expect(bounds.contains([-11, 10])).toBe(false);
+        // expect(bounds.contains([-10, 11])).toBe(false);
+        // expect(bounds.contains([-11, 11])).toBe(false);
       });
       test('Clip Value', () => {
         expect(bounds.clip(3)).toBe(3);
@@ -64,172 +64,117 @@ describe('Bounds', () => {
           .toEqual({ intersect: 10, reflection: -1, distance: 20 });
         expect(bounds.intersect(-10, -1))
           .toEqual({ intersect: -10, reflection: 1, distance: 0 });
-        // Outside Bounds
-        expect(bounds.intersect(-11, -1))
-          .toEqual({ intersect: -10, reflection: 1, distance: 1 });
+        // Outside Bounds, no intersection
+        expect(bounds.intersect(-11, -1)).toBe(null);
+        expect(bounds.intersect(11, 1)).toBe(null);
+        // Outside Bounds intersection
         expect(bounds.intersect(-11, 1))
-          .toEqual({ intersect: 10, reflection: -1, distance: 21 });
+          .toEqual({ intersect: -10, reflection: -1, distance: 1 });
         expect(bounds.intersect(11, -1))
-          .toEqual({ intersect: -10, reflection: 1, distance: 21 });
-        expect(bounds.intersect(11, 1))
-          .toEqual({ intersect: 10, reflection: -1, distance: 1 });
-      });
-      test('Intersect Point', () => {
-        // Inside bounds
-        expect(bounds.intersect([3, -3], 1)).toEqual({
-          intersect: new Point(10, 10),
-          reflection: -1,
-          distance: new Point(7, 13),
-        });
-        expect(bounds.intersect([3, -3], -1)).toEqual({
-          intersect: new Point(-10, -10),
-          reflection: 1,
-          distance: new Point(13, 7),
-        });
-        // Edges of bounds
-        expect(bounds.intersect([10, 10], 1)).toEqual({
-          intersect: new Point(10, 10),
-          reflection: -1,
-          distance: new Point(0, 0),
-        });
-        expect(bounds.intersect([-10, 10], 1)).toEqual({
-          intersect: new Point(10, 10),
-          reflection: -1,
-          distance: new Point(20, 0),
-        });
-        expect(bounds.intersect([10, -10], 1)).toEqual({
-          intersect: new Point(10, 10),
-          reflection: -1,
-          distance: new Point(0, 20),
-        });
-        expect(bounds.intersect([-10, -10], -1)).toEqual({
-          intersect: new Point(-10, -10),
-          reflection: 1,
-          distance: new Point(0, 0),
-        });
-        expect(bounds.intersect([-10, 10], -1)).toEqual({
-          intersect: new Point(-10, -10),
-          reflection: 1,
-          distance: new Point(0, 20),
-        });
-        expect(bounds.intersect([10, -10], -1)).toEqual({
-          intersect: new Point(-10, -10),
-          reflection: 1,
-          distance: new Point(20, 0),
-        });
-        // expect(bounds.intersect(10, 1))
-        //   .toEqual({ intersect: 10, reflection: -1, distance: 0 });
-        // expect(bounds.intersect(10, -1))
-        //   .toEqual({ intersect: -10, reflection: 1, distance: 20 });
-        // expect(bounds.intersect(-10, 1))
-        //   .toEqual({ intersect: 10, reflection: -1, distance: 20 });
-        // expect(bounds.intersect(-10, -1))
-        //   .toEqual({ intersect: -10, reflection: 1, distance: 0 });
-        // Outside Bounds
-        // expect(bounds.intersect(-11, -1))
-        //   .toEqual({ intersect: -10, reflection: 1, distance: 1 });
-        // expect(bounds.intersect(-11, 1))
-        //   .toEqual({ intersect: 10, reflection: -1, distance: 21 });
-        // expect(bounds.intersect(11, -1))
-        //   .toEqual({ intersect: -10, reflection: 1, distance: 21 });
-        // expect(bounds.intersect(11, 1))
-        //   .toEqual({ intersect: 10, reflection: -1, distance: 1 });
+          .toEqual({ intersect: 10, reflection: 1, distance: 1 });
       });
     });
     describe('Bounded max, unbounded min', () => {
       beforeEach(() => {
         bounds = new RangeBounds(null, 10);
       });
-      describe('Contains', () => {
-        test('Very low', () => {
-          expect(bounds.contains(-1000000)).toBe(true);
-        });
-        test('Low', () => {
-          expect(bounds.contains(0)).toBe(true);
-        });
-        test('Max boundary', () => {
-          expect(bounds.contains(10)).toBe(true);
-        });
-        test('Higher', () => {
-          expect(bounds.contains(11)).toBe(false);
-        });
+      test('Contains', () => {
+        expect(bounds.contains(-1000000)).toBe(true);
+        expect(bounds.contains(0)).toBe(true);
+        expect(bounds.contains(10)).toBe(true);
+        expect(bounds.contains(11)).toBe(false);
+        expect(bounds.contains([0, 0])).toBe(false);
+        expect(bounds.contains(new Point(0, 0))).toBe(false);
       });
-      describe('Clip', () => {
-        test('Inside', () => {
-          expect(bounds.clip(3)).toBe(3);
-        });
-        test('Low', () => {
-          expect(bounds.clip(-100)).toBe(-100);
-        });
-        test('Max', () => {
-          expect(bounds.clip(10)).toBe(10);
-        });
-        test('High', () => {
-          expect(bounds.clip(11)).toBe(10);
-        });
+      test('Clip Value', () => {
+        expect(bounds.clip(3)).toBe(3);
+        expect(bounds.clip(-100)).toBe(-100);
+        expect(bounds.clip(10)).toBe(10);
+        expect(bounds.clip(11)).toBe(10);
+      });
+      test('Clip Point', () => {
+        expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
+        expect(bounds.clip([-11, 10])).toEqual(new Point(-11, 10));
+        expect(bounds.clip([-10, 11])).toEqual(new Point(-10, 10));
+        expect(bounds.clip([-11, 11])).toEqual(new Point(-11, 10));
+      });
+      test('Intersect Value', () => {
+        // Inside bounds, intersect
+        expect(bounds.intersect(3, 1))
+          .toEqual({ intersect: 10, reflection: -1, distance: 7 });
+        // Inside bounds, no intersect
+        expect(bounds.intersect(3, -1)).toBe(null);
+        // Outside bounds intersect
+        expect(bounds.intersect(11, -1))
+          .toEqual({ intersect: 10, reflection: 1, distance: 1 });
+        // Outside bounds no intersect
+        expect(bounds.intersect(11, 1)).toBe(null);
       });
     });
     describe('Unbounded max, bounded min', () => {
       beforeEach(() => {
         bounds = new RangeBounds(-10, null);
       });
-      describe('Contains', () => {
-        test('Lower', () => {
-          expect(bounds.contains(-11)).toBe(false);
-        });
-        test('Min Boundary', () => {
-          expect(bounds.contains(-10)).toBe(true);
-        });
-        test('High', () => {
-          expect(bounds.contains(0)).toBe(true);
-        });
-        test('Higher', () => {
-          expect(bounds.contains(100000)).toBe(true);
-        });
+      test('Contains', () => {
+        expect(bounds.contains(-11)).toBe(false);
+        expect(bounds.contains(-10)).toBe(true);
+        expect(bounds.contains(0)).toBe(true);
+        expect(bounds.contains(100000)).toBe(true);
+        expect(bounds.contains([0, 0])).toBe(false);
+        expect(bounds.contains(new Point(0, 0))).toBe(false);
       });
-      describe('Clip', () => {
-        test('Inside', () => {
-          expect(bounds.clip(3)).toBe(3);
-        });
-        test('High', () => {
-          expect(bounds.clip(100)).toBe(100);
-        });
-        test('Min', () => {
-          expect(bounds.clip(-10)).toBe(-10);
-        });
-        test('Low', () => {
-          expect(bounds.clip(-11)).toBe(-10);
-        });
+      test('Clip', () => {
+        expect(bounds.clip(3)).toBe(3);
+        expect(bounds.clip(100)).toBe(100);
+        expect(bounds.clip(-10)).toBe(-10);
+        expect(bounds.clip(-11)).toBe(-10);
+      });
+      test('Clip Point', () => {
+        expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
+        expect(bounds.clip([-11, 10])).toEqual(new Point(-10, 10));
+        expect(bounds.clip([-10, 11])).toEqual(new Point(-10, 11));
+        expect(bounds.clip([-11, 11])).toEqual(new Point(-10, 11));
+      });
+      test('Intersect Value', () => {
+        // Inside bounds, intersect
+        expect(bounds.intersect(3, -1))
+          .toEqual({ intersect: -10, reflection: 1, distance: 13 });
+        // Inside bounds, no intersect
+        expect(bounds.intersect(3, 1)).toBe(null);
+        // Outside bounds intersect
+        expect(bounds.intersect(-11, 1))
+          .toEqual({ intersect: -10, reflection: -1, distance: 1 });
+        // Outside bounds no intersect
+        expect(bounds.intersect(-11, -1)).toBe(null);
       });
     });
     describe('Unbounded max, unbounded min', () => {
       beforeEach(() => {
         bounds = new RangeBounds(null, null);
       });
-      describe('Contains', () => {
-        test('Lower', () => {
-          expect(bounds.contains(-10000)).toBe(true);
-        });
-        test('Low', () => {
-          expect(bounds.contains(-10)).toBe(true);
-        });
-        test('High', () => {
-          expect(bounds.contains(0)).toBe(true);
-        });
-        test('Higher', () => {
-          expect(bounds.contains(100000)).toBe(true);
-        });
+      test('Contains', () => {
+        expect(bounds.contains(-10000)).toBe(true);
+        expect(bounds.contains(-10)).toBe(true);
+        expect(bounds.contains(0)).toBe(true);
+        expect(bounds.contains(100000)).toBe(true);
+        expect(bounds.contains([0, 0])).toBe(false);
+        expect(bounds.contains(new Point(0, 0))).toBe(false);
       });
-      describe('Clip', () => {
-        test('Zero', () => {
-          expect(bounds.clip(0)).toBe(0);
-        });
-        test('High', () => {
-          expect(bounds.clip(100)).toBe(100);
-        });
-        test('Min', () => {
-          expect(bounds.clip(-100)).toBe(-100);
-        });
+      test('Clip Value', () => {
+        expect(bounds.clip(0)).toBe(0);
+        expect(bounds.clip(100)).toBe(100);
+        expect(bounds.clip(-100)).toBe(-100);
+      });
+      test('Clip Point', () => {
+        expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
+        expect(bounds.clip([-11, 10])).toEqual(new Point(-11, 10));
+        expect(bounds.clip([-10, 11])).toEqual(new Point(-10, 11));
+        expect(bounds.clip([-11, 11])).toEqual(new Point(-11, 11));
+      });
+      test('Intersect Value', () => {
+        // Inside bounds, no intersect
+        expect(bounds.intersect(3, 1)).toBe(null);
+        expect(bounds.intersect(3, -1)).toBe(null);
       });
     });
   });
