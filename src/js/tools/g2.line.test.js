@@ -386,90 +386,188 @@ describe('g2 Line', () => {
     });
   });
   describe('Lines can be compared to other lines', () => {
-    test('Line 1 is same as Line 2', () => {
-      const l1 = new Line(new Point(0, 0), new Point(2, 0));
-      const l2 = new Line(new Point(0, 0), new Point(2, 0));
-      const res = l1.isEqualTo(l2);
-      const res1 = l1.isWithinLine(l2);
-      expect(res).toEqual(true);
-      expect(res1).toEqual(true);
-    });
-    test('Line 1 is not same as Line 2', () => {
-      const l1 = new Line(new Point(0, 0.01), new Point(2, 0));
-      const l2 = new Line(new Point(0, 0), new Point(2, 0));
-      const res = l1.isEqualTo(l2);
-      expect(res).not.toEqual(true);
-    });
-    test('Line 1 is same as Line 2 with 0 precision', () => {
-      const l1 = new Line(new Point(0, 0.1), new Point(2, 0));
-      const l2 = new Line(new Point(0, 0), new Point(4, 0));
-      const res = l1.isEqualTo(l2, 0);
-      expect(res).not.toEqual(true);
-    });
-    test('Line 1 is same as Line 2 with 1 precision', () => {
-      const l1 = new Line(new Point(0, 0.01), new Point(2, 0));
-      const l2 = new Line(new Point(0, 0), new Point(4, 0));
-      const res = l1.isEqualTo(l2, 1);
-      expect(res).not.toEqual(true);
-    });
-    test('Line 1 is on the same line as Line 2', () => {
-      const l1 = new Line(new Point(0, 0), new Point(2, 0));
-      const l2 = new Line(new Point(0, 0), new Point(4, 0));
-      const res = l1.isWithinLine(l2);
-      expect(res).toEqual(true);
-    });
-    test('Line 1 is on the same line as Line 2 - test 2', () => {
-      const l1 = new Line(new Point(0, 0), new Point(1, 1));
-      const l2 = new Line(new Point(2, 2), new Point(3, 3));
-      expect(l1.isWithinLine(l2)).toBe(false);
-      expect(l2.isWithinLine(l1)).toBe(false);
-      expect(l1.isAlongLine(l2)).toBe(true);
-    });
-    test('Line 1 is on the same line as Line 2 - test 3', () => {
-      const l1 = new Line(new Point(0, 0), new Point(1, 1));
-      const l2 = new Line(new Point(0, 1), new Point(1, 2));
-      const res = l1.isWithinLine(l2);
-      expect(res).not.toEqual(true);
-    });
-    test('Line1 is offset to line 2 in y', () => {
-      const l1 = new Line(new Point(0, 0), new Point(1, 1));
-      const l2 = new Line(new Point(0, 1), new Point(1, 2));
-      const res = l1.isEqualTo(l2);
-      expect(res).toEqual(false);
-    });
-    test('Line1 has different end points to line 2', () => {
-      const l1 = new Line(new Point(0, 0), new Point(1, 1));
-      const l2 = new Line(new Point(0, 0), new Point(1, 1));
-      l2.p1 = new Point(0.5, 0.5);
-      const res = l1.isEqualTo(l2);
-      expect(res).toEqual(false);
-    });
-    test('Line2 has different end points to line 1', () => {
-      const l1 = new Line(new Point(0, 0), new Point(1, 1));
-      const l2 = new Line(new Point(0, 0), new Point(1, 1));
-      l2.p2 = new Point(0.5, 0.5);
-      const res = l1.isEqualTo(l2);
-      expect(res).toEqual(false);
+    describe('Two Ends', () => {
+      test('Line 1 is same as Line 2', () => {
+        const l1 = new Line(new Point(0, 0), new Point(2, 0));
+        const l2 = new Line(new Point(0, 0), new Point(2, 0));
+        expect(l1.isEqualTo(l2)).toBe(true);
+        expect(l1.isAlongLine(l2)).toBe(true);
+        expect(l1.isWithinLine(l2)).toBe(true);
+        expect(l1.hasLineWithin(l2)).toBe(true);
+      });
+      test('Collinear Lines, with some overlap', () => {
+        const l1 = new Line(new Point(0, 0), new Point(1, 1));
+        const l2 = new Line(new Point(0.5, 0.5), new Point(2, 2));
+        expect(l1.isEqualTo(l2)).toBe(false);
+        expect(l1.isAlongLine(l2)).toBe(true);
+        expect(l1.isWithinLine(l2)).toBe(false);
+        expect(l1.hasLineWithin(l2)).toBe(false);
+      });
+      test('Collinear Lines, with no overlap', () => {
+        const l1 = new Line(new Point(0, 0), new Point(-1, -1));
+        const l2 = new Line(new Point(-2, -2), new Point(-3, -3));
+        expect(l1.isEqualTo(l2)).toBe(false);
+        expect(l1.isAlongLine(l2)).toBe(true);
+        expect(l1.isWithinLine(l2)).toBe(false);
+        expect(l1.hasLineWithin(l2)).toBe(false);
+      });
+      test('Line 1 is not same as Line 2', () => {
+        const l1 = new Line(new Point(0, 0.01), new Point(2, 0));
+        const l2 = new Line(new Point(0, 0), new Point(2, 0));
+        expect(l1.isEqualTo(l2)).toBe(false);
+        expect(l1.isAlongLine(l2)).toBe(false);
+        expect(l1.isWithinLine(l2)).toBe(false);
+        expect(l1.hasLineWithin(l2)).toBe(false);
+      });
+      test('Line 1 is same as Line 2 with 0 precision', () => {
+        const l1 = new Line(new Point(0, 0.1), new Point(2, 0));
+        const l2 = new Line(new Point(0, 0), new Point(4, 0));
+        expect(l1.isEqualTo(l2, 0)).toBe(false);
+        expect(l1.isAlongLine(l2, 0)).toBe(true);
+        expect(l1.isWithinLine(l2, 0)).toBe(true);
+        expect(l1.hasLineWithin(l2, 0)).toBe(false);
+      });
+      test('Line 1 is same as Line 2 with 1 precision', () => {
+        const l1 = new Line(new Point(0, 0.01), new Point(2, 0));
+        const l2 = new Line(new Point(0, 0), new Point(4, 0));
+        expect(l1.isEqualTo(l2, 1)).toBe(false);
+        expect(l1.isAlongLine(l2, 1)).toBe(true);
+        expect(l1.isWithinLine(l2, 1)).toBe(true);
+        expect(l1.hasLineWithin(l2, 1)).toBe(false);
+      });
+      test('Line 1 is within Line 2 with aligned ends', () => {
+        const l1 = new Line(new Point(0, 0), new Point(2, 0));
+        const l2 = new Line(new Point(0, 0), new Point(4, 0));
+        expect(l1.isEqualTo(l2)).toBe(false);
+        expect(l1.isAlongLine(l2)).toBe(true);
+        expect(l1.isWithinLine(l2)).toBe(true);
+        expect(l1.hasLineWithin(l2)).toBe(false);
+      });
+      test('Line 1 collinear with Line 2 but does not overlap', () => {
+        const l1 = new Line(new Point(0, 0), new Point(1, 1));
+        const l2 = new Line(new Point(2, 2), new Point(3, 3));
+        expect(l1.isEqualTo(l2)).toBe(false);
+        expect(l1.isAlongLine(l2)).toBe(true);
+        expect(l1.isWithinLine(l2)).toBe(false);
+        expect(l1.hasLineWithin(l2)).toBe(false);
+      });
+      test('Line 1 is parallel but not collinear', () => {
+        const l1 = new Line(new Point(0, 0), new Point(1, 1));
+        const l2 = new Line(new Point(0, 1), new Point(1, 2));
+        expect(l1.isEqualTo(l2)).toBe(false);
+        expect(l1.isAlongLine(l2)).toBe(false);
+        expect(l1.isWithinLine(l2)).toBe(false);
+        expect(l1.hasLineWithin(l2)).toBe(false);
+      });
+      test('Line1 is offset to line 2 in y', () => {
+        const l1 = new Line(new Point(0, 0), new Point(1, 1));
+        const l2 = new Line(new Point(0, 1), new Point(1, 2));
+        expect(l1.isEqualTo(l2)).toBe(false);
+        expect(l1.isAlongLine(l2)).toBe(false);
+        expect(l1.isWithinLine(l2)).toBe(false);
+        expect(l1.hasLineWithin(l2)).toBe(false);
+      });
+      test('Same lines as defined, p1 changed after', () => {
+        const l1 = new Line(new Point(0, 0), new Point(1, 1));
+        const l2 = new Line(new Point(0, 0), new Point(1, 1));
+        l2.p1 = new Point(0.5, 0.5);
+        expect(l1.isEqualTo(l2)).toBe(false);
+        expect(l1.isAlongLine(l2)).toBe(true);
+        expect(l1.isWithinLine(l2)).toBe(false);
+        expect(l1.hasLineWithin(l2)).toBe(true);
+      });
+      test('Same lines as defined, p2 changed after', () => {
+        const l1 = new Line(new Point(0, 0), new Point(1, 1));
+        const l2 = new Line(new Point(0, 0), new Point(1, 1));
+        l2.p2 = new Point(0.5, 0.5);
+        expect(l1.isEqualTo(l2)).toBe(false);
+        expect(l1.isAlongLine(l2)).toBe(true);
+        expect(l1.isWithinLine(l2)).toBe(false);
+        expect(l1.hasLineWithin(l2)).toBe(true);
+      });
     });
     describe('1 end', () => {
       test('Line 1 is same as Line 2', () => {
         const l1 = new Line([0, 0], [2, 0], 0, 1);
         const l2 = new Line([0, 0], [2, 0], 0, 1);
         expect(l1.isEqualTo(l2)).toBe(true);
+        expect(l1.isAlongLine(l2)).toBe(true);
         expect(l1.isWithinLine(l2)).toBe(true);
+        expect(l1.hasLineWithin(l2)).toBe(true);
+      });
+      test('Line 1 is same as Line 2 but with different definition', () => {
+        const l1 = new Line([0, 0], [2, 0], 0, 1);
+        const l2 = new Line([0, 0], [3, 0], 0, 1);
+        expect(l1.isEqualTo(l2)).toBe(true);
+        expect(l1.isAlongLine(l2)).toBe(true);
+        expect(l1.isWithinLine(l2)).toBe(true);
+        expect(l1.hasLineWithin(l2)).toBe(true);
       });
       test('Line 1 infinite, Line 2 finite, same definition', () => {
         const l1 = new Line([0, 0], [2, 0], 0, 1);
         const l2 = new Line([0, 0], [2, 0], 0, 2);
         expect(l1.isEqualTo(l2)).toBe(false);
-        expect(l1.isWithinLine(l2)).toBe(true);
+        expect(l1.isAlongLine(l2)).toBe(true);
+        expect(l1.isWithinLine(l2)).toBe(false);
+        expect(l1.hasLineWithin(l2)).toBe(true);
       });
       test('Line 1 infinite, Line 2 infinite, different ends', () => {
         const l1 = new Line([0, 0], [2, 0], 0, 1);
         const l2 = new Line([1, 0], [2, 0], 0, 1);
         expect(l1.isEqualTo(l2)).toBe(false);
+        expect(l1.isAlongLine(l2)).toBe(true);
         expect(l1.isWithinLine(l2)).toBe(false);
-        expect(l2.isWithinLine(l1)).toBe(true);
+        expect(l1.hasLineWithin(l2)).toBe(true);
+      });
+      test('Line 1 infinite, Line 2 infinite, same end', () => {
+        const l1 = new Line([0, 0], [2, 0], 0, 1);
+        const l2 = new Line([0, 0], [3, 0], 0, 1);
+        expect(l1.isEqualTo(l2)).toBe(true);
+        expect(l1.isAlongLine(l2)).toBe(true);
+        expect(l1.isWithinLine(l2)).toBe(true);
+        expect(l1.hasLineWithin(l2)).toBe(true);
+      });
+    });
+    describe('0 ends', () => {
+      test('Line 1 is same as Line 2', () => {
+        const l1 = new Line([0, 0], null, 0, 0);
+        const l2 = new Line([0, 0], null, 0, 0);
+        expect(l1.isEqualTo(l2)).toBe(true);
+        expect(l1.isAlongLine(l2)).toBe(true);
+        expect(l1.isWithinLine(l2)).toBe(true);
+        expect(l1.hasLineWithin(l2)).toBe(true);
+      });
+      test('Line 1 is same as Line 2 but with different definition', () => {
+        const l1 = new Line([0, 0], null, 0, 0);
+        const l2 = new Line([2, 0], null, 0, 0);
+        expect(l1.isEqualTo(l2)).toBe(true);
+        expect(l1.isAlongLine(l2)).toBe(true);
+        expect(l1.isWithinLine(l2)).toBe(true);
+        expect(l1.hasLineWithin(l2)).toBe(true);
+      });
+      test('Line 1 is different to Line 2', () => {
+        const l1 = new Line([0, 0], null, 0, 0);
+        const l2 = new Line([0, 1], null, 0, 0);
+        expect(l1.isEqualTo(l2)).toBe(false);
+        expect(l1.isAlongLine(l2)).toBe(false);
+        expect(l1.isWithinLine(l2)).toBe(false);
+        expect(l1.hasLineWithin(l2)).toBe(false);
+      });
+      test('Line 1 has 0 ends, line2 has 1 end and is within', () => {
+        const l1 = new Line([0, 0], null, 0, 0);
+        const l2 = new Line([-10, 0], null, 0, 1);
+        expect(l1.isEqualTo(l2)).toBe(false);
+        expect(l1.isAlongLine(l2)).toBe(true);
+        expect(l1.isWithinLine(l2)).toBe(false);
+        expect(l1.hasLineWithin(l2)).toBe(true);
+      });
+      test('Line 1 has 0 ends, line2 has 2 end and is within', () => {
+        const l1 = new Line([0, 0], null, 0, 0);
+        const l2 = new Line([-10, 0], [10, 0]);
+        expect(l1.isEqualTo(l2)).toBe(false);
+        expect(l1.isAlongLine(l2)).toBe(true);
+        expect(l1.isWithinLine(l2)).toBe(false);
+        expect(l1.hasLineWithin(l2)).toBe(true);
       });
     });
   });
