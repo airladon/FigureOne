@@ -890,6 +890,48 @@ function getDeltaAngle(
   // return rotDiff;
 }
 
+// Line definition: Ax + By = C
+//
+// So if we have two points: (x1, y1) and (x2, y2) on the same line, they must
+// both satisfy the same equation:
+//
+//    Ax1 + By1 = C   - 1
+//    Ax2 + By2 = C   - 2
+//
+// Both 1 and 2 equal C, so can equate left hand sides:
+//    Ax1 + By1 = Ax2 + By2
+//    A(x1 - x2) = B(y2 - y1)
+//    A / B = (y2 - y1) / (x1 - x2)
+//
+//    So A = (y2 - y1) and B = x1 - x2
+//
+//  Then C from 1 is:
+//    C = (y2 - y1)x1 + (x1 - x2)y1
+//
+//  So calculating y from x:
+//    y = (C - Ax) / B   for B != 0
+//      If B == 0, then x1 == x2, and so we have a vertical line at x1
+//      and so y is not dependent on x
+//  And calculating x from y:
+//    x = (C - By) / A    for A != 0
+//      If A == 0, then y1 == y2, and so we have a horizontal line at y1
+//      and so x is not dependent on y
+//
+//  To find the y intercept:
+//    if B != 0: y intercept = Ax + By = C => y = C / B
+//    if B == 0, there is no single y intercept
+//      - is either no intercept, or along the y axis
+//
+//  To find the x intercept:
+//    if A != 0: x intercept = Ax + By = C => x = C / A
+//    if A == 0, there is no single x intercept
+//      - is either no intercept, or along the x axis
+//
+//  Another form of the line equation is y = mx + c where:
+//   - c is the y intercept (or C / B)
+//   - m = y2 - y1 / x2 - x1 = A / (-B) = - A / B
+//
+
 class Line {
   p1: Point;
   p2: Point;
@@ -981,12 +1023,27 @@ class Line {
     return null;
   }
 
+  getYIntercept() {
+    return this.getYFromX(0);
+  }
+
+  getXIntercept() {
+    return this.getXFromY(0);
+  }
+
+  getGradient() {
+    if (this.B === 0) {
+      return null;
+    }
+    return -this.A / this.B
+  }
+
   angle() {
     return this.ang;
   }
 
   round(precision?: number = 8) {
-    const lineRounded = new Line(this.p1, this.p2, this.ends);
+    const lineRounded = new Line(this.p1, this.p2, 0, this.ends);
     lineRounded.A = roundNum(lineRounded.A, precision);
     lineRounded.B = roundNum(lineRounded.B, precision);
     lineRounded.C = roundNum(lineRounded.C, precision);
@@ -1084,32 +1141,33 @@ class Line {
   }
 
   isEqualTo(line2: Line, precision?: number = 8) {
-    let l1 = this;
-    let l2 = line2;
+    const l1 = this;
+    const l2 = line2;
     if (l1.ends !== l2.ends) {
       return false;
     }
-    if (typeof precision === 'number') {
-      l1 = l1.round(precision);
-      l2 = l2.round(precision);
-      l1.p1 = l1.p1.round(precision);
-      l1.p2 = l1.p2.round(precision);
-      l2.p1 = l2.p1.round(precision);
-      l2.p2 = l2.p2.round(precision);
+    if (l1.ends === 2) {
+      if (l1.p1.isNotEqualTo(l2.p1, precision) && l1.p1.isNotEqualTo(l2.p2, precision)) {
+        return false;
+      }
+      if (l1.p2.isNotEqualTo(l2.p1, precision) && l1.p2.isNotEqualTo(l2.p2, precision)) {
+        return false;
+      }
+      return true;
     }
-    if (l1.A !== l2.A) {
-      return false;
+
+    if (l1.ends === 1) {
+      if (l1.p1.isNotEqualTo(l2.p1, precision)) {
+        return false;
+      }
+      if (!l1.hasPointOn(l2.p2, precision)) {
+        return false;
+      }
+      return true;
     }
-    if (l1.B !== l2.B) {
-      return false;
-    }
-    if (l1.C !== l2.C) {
-      return false;
-    }
-    if (l1.p1.isNotEqualTo(l2.p1, precision) && l1.p1.isNotEqualTo(l2.p2, precision)) {
-      return false;
-    }
-    if (l1.p2.isNotEqualTo(l2.p1, precision) && l1.p2.isNotEqualTo(l2.p2, precision)) {
+
+    // otherwise ends === 0
+    if (!l1.hasPointOn(l2.p1)) {
       return false;
     }
     return true;
@@ -1187,10 +1245,20 @@ class Line {
     if (!l1.isAlongLine(l2, precision)) {
       return false;
     }
-    if (l2.hasPointOn(this.p1) && l2.hasPointOn(this.p2)) {
+    if (line2.ends === 0) {
       return true;
     }
-    return false;
+    const withinEnds = () => l2.hasPointOn(this.p1, precision) && l2.hasPointOn(this.p2, precision);
+    if (this.ends < line2.ends) {
+      return false;
+    }
+    if (this.ends === 2) {
+      return withinEnds();
+    }
+    // if (line2.ends === 1 && this.ends === 1) {
+    return withinEnds();
+    // }
+    // return false;
   }
 
   // left, right, top, bottom is relative to cartesian coordinates
