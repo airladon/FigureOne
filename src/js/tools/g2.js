@@ -1330,6 +1330,26 @@ class Line {
   }
 }
 
+class Line1End extends Line {
+  p1: Point;
+
+  constructor(
+    p1: TypeParsablePoint,
+    angle: number = 0,
+  ) {
+    this.p1 = getPoint(p1);
+    this.ang = angle;
+    this.setupLine();
+  }
+
+  setupLine() {
+    this.A = this.p2.y - this.p1.y;
+    this.B = this.p1.x - this.p2.x;
+    this.C = this.A * this.p1.x + this.B * this.p1.y;
+    this.distance = distance(this.p1, this.p2);
+  }
+}
+
 class Vector extends Line {
   i: number;
   j: number;
@@ -2796,7 +2816,7 @@ class RangeBounds extends Bounds {
   boundary: { min: number | null, max: number | null };
 
   constructor(
-    minOrArray: ?number | [?number, ?number],
+    minOrArray: null | number | [?number, ?number],
     maxOrPrecision: ?number = null,
     precisionIn: number = 8,
   ) {
@@ -2806,7 +2826,8 @@ class RangeBounds extends Bounds {
       boundary = { min: minOrArray, max: maxOrPrecision };
       precision = precisionIn;
     } else {
-      boundary = minOrArray;
+      const [min, max] = minOrArray;
+      boundary = { min, max };
       precision = maxOrPrecision != null ? maxOrPrecision : 8;
     }
     super(boundary, precision);
@@ -2902,54 +2923,82 @@ class RangeBounds extends Bounds {
 }
 
 class RectBounds extends Bounds {
-  boundary: Rect;
+  boundary: {
+    left: null | number,
+    right: null | number,
+    bottom: null | number,
+    top: null | number,
+  };
 
   constructor(
-    leftOrRect: number | Rect,
-    bottomOrPrecision: number = 8,
-    width: number = 0,
-    height: number = 0,
+    leftOrRect: number | null | [?number, ?number, ?number, ?number] = null,
+    bottomOrPrecision: ?number = null,
+    rightIn: ?number = null,
+    topIn: ?number = null,
     precisionIn: number = 8,
   ) {
     let boundary;
     let precision;
-    if (typeof leftOrRect === 'number') {
-      boundary = new Rect(leftOrRect, bottomOrPrecision, width, height);
-      precision = precisionIn;
+    if (Array.isArray(leftOrRect)) {
+      const [left, bottom, right, top] = leftOrRect;
+      boundary = {
+        left, bottom, right, top,
+      };
+      precision = bottomOrPrecision == null ? 8 : bottomOrPrecision;
     } else {
-      boundary = leftOrRect;
-      precision = bottomOrPrecision;
-    }
+      const left = leftOrRect;
+      const bottom = bottomOrPrecision;
+      const right = rightIn;
+      const top = topIn;
+      boundary = {
+        left, bottom, right, top,
+      };
+      precision = precisionIn;
+    };
     super(boundary, precision);
   }
 
-  contains(position: number | Point) {
+  contains(position: number | TypeParsablePoint) {
     if (typeof position === 'number') {
       return false;
     }
-    return this.boundary.isPointInside(position, this.precision);
+    const p = getPoint(position);
+    if (this.boundary.left != null && p.x < this.boundary.left) {
+      return false;
+    }
+    if (this.boundary.right != null && p.x > this.boundary.right) {
+      return false;
+    }
+    if (this.boundary.bottom != null && p.y < this.boundary.bottom) {
+      return false;
+    }
+    if (this.boundary.top != null && p.y > this.boundary.top) {
+      return false;
+    }
+    return true;
   }
 
-  clip(position: number | Point) {
+  clip(position: number | TypeParsablePoint) {
     if (typeof position === 'number') {
       return position;
     }
-    const bounds = this.boundary;
-    let { x, y } = position;
-    if (position.x < bounds.left) {
-      x = bounds.left;
-    } else if (position.x > bounds.right) {
-      x = bounds.right;
+    const clipped = getPoint(position);
+    if (this.boundary.left != null && clipped.x < this.boundary.left) {
+      clipped.x = this.boundary.left;
     }
-    if (position.y < bounds.bottom) {
-      y = bounds.bottom;
-    } else if (position.y > bounds.top) {
-      y = bounds.top;
+    if (this.boundary.right != null && clipped.x > this.boundary.right) {
+      clipped.x = this.boundary.right;
     }
-    return new Point(x, y);
+    if (this.boundary.bottom != null && clipped.y < this.boundary.bottom) {
+      clipped.y = this.boundary.bottom;
+    }
+    if (this.boundary.top != null && clipped.y > this.boundary.top) {
+      clipped.y = this.boundary.top;
+    }
+    return clipped;
   }
 
-  intersect(position: number | Point, direction: number = 0) {
+  intersect(position: number | TypeParsablePoint, direction: number = 0) {
     if (typeof position === 'number') {
       return {
         position,
