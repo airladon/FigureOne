@@ -2012,9 +2012,13 @@ class DiagramElement {
     progression: string | (number) => number = 'tools.math.sinusoid',
   ) {
     if (e == null || e instanceof DiagramElement) {
-      this.pulseScaleRelativeToElement(e, x, y, space, time, scale, frequency, callback, progression);
+      this.pulseScaleRelativeToElement(
+        e, x, y, space, time, scale, frequency, callback, progression,
+      );
     } else {
-      this.pulseScaleRelativeToPoint(e, space, time, scale, frequency, callback, progression);
+      this.pulseScaleRelativeToPoint(
+        e, space, time, scale, frequency, callback, progression,
+      );
     }
   }
 
@@ -2083,7 +2087,8 @@ class DiagramElement {
 
   startPulsing(when: TypeWhen = 'nextFrame') {
     this.state.isPulsing = true;
-    this.state.pulse.startTime = new GlobalAnimation().getWhen(when) / 1000;
+    const time = new GlobalAnimation().getWhen(when);
+    this.state.pulse.startTime = time == null ? time : time / 1000;
     this.unrender();
     this.frozenPulseTransforms = [];
   }
