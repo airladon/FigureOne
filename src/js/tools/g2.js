@@ -898,14 +898,19 @@ class Line {
   B: number;
   C: number;
   distance: number;
+  ends: 2 | 1 | 0;
 
   constructor(
     p1: TypeParsablePoint,
-    p2OrMag: TypeParsablePoint | number,
+    p2OrMag: TypeParsablePoint | number | null,
     angle: number = 0,
+    ends: 2 | 1 | 0 = 2,
   ) {
     this.p1 = getPoint(p1);
-    if (typeof p2OrMag === 'number') {
+    if (p2OrMag == null) {
+      this.ang = angle;
+      this.p2 = this.p1.add(1 * Math.cos(this.ang), 1 * Math.sin(this.ang));
+    } else if (typeof p2OrMag === 'number') {
       this.p2 = this.p1.add(
         p2OrMag * Math.cos(angle),
         p2OrMag * Math.sin(angle),
@@ -915,6 +920,7 @@ class Line {
       this.p2 = getPoint(p2OrMag);
       this.ang = Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
     }
+    this.ends = ends;
     this.setupLine();
   }
 
@@ -926,6 +932,7 @@ class Line {
       state: [
         [roundNum(this.p1.x, precision), roundNum(this.p1.y, precision)],
         [roundNum(this.p2.x, precision), roundNum(this.p2.y, precision)],
+        this.ends,
       ],
     };
   }
@@ -938,7 +945,7 @@ class Line {
   }
 
   _dup() {
-    return new Line(this.p1, this.p2);
+    return new Line(this.p1, this.p2, 0, this.ends);
   }
 
   setP1(p1: Point | [number, number]) {
@@ -979,7 +986,7 @@ class Line {
   }
 
   round(precision?: number = 8) {
-    const lineRounded = new Line(this.p1, this.p2);
+    const lineRounded = new Line(this.p1, this.p2, this.ends);
     lineRounded.A = roundNum(lineRounded.A, precision);
     lineRounded.B = roundNum(lineRounded.B, precision);
     lineRounded.C = roundNum(lineRounded.C, precision);
@@ -1028,7 +1035,8 @@ class Line {
   }
   /* eslint-enable comma-dangle */
 
-  hasPointAlong(p: Point, precision?: number) {
+  hasPointAlong(pIn: TypeParsablePoint, precision?: number = 8) {
+    const p = getPoint(pIn);
     if (precision === undefined || precision === null) {
       if (this.C === this.A * p.x + this.B * p.y) {
         return true;
@@ -1041,26 +1049,46 @@ class Line {
     return false;
   }
 
+
   // perpendicular distance of line to point
-  distanceToPoint(p: Point, precision?: number) {
+  distanceToPoint(pIn: TypeParsablePoint, precision?: number = 8) {
+    const p = getPoint(pIn);
     return roundNum(
       Math.abs(this.A * p.x + this.B * p.y - this.C) / Math.sqrt(this.A ** 2 + this.B ** 2),
       precision,
     );
   }
 
-  hasPointOn(p: Point, precision?: number) {
+  hasPointOn(pIn: TypeParsablePoint, precision?: number = 8) {
+    const p = getPoint(pIn);
     if (this.hasPointAlong(p, precision)) {
-      if (pointinRect(p, this.p1, this.p2, precision)) {
-        return true;
+      if (this.ends === 2) {
+        if (pointinRect(p, this.p1, this.p2, precision)) {
+          return true;
+        }
+        return false;
       }
+      if (this.ends === 1) {
+        if (this.p1.isEqualTo(p, precision)) {
+          return true;
+        }
+        const p1ToP = new Line(this.p1, p);
+        if (round(p1ToP.ang, precision) === round(this.ang, precision)) {
+          return true;
+        }
+        return false;
+      }
+      return true;  // if this.ends === 0 and point is along, then it is on.
     }
     return false;
   }
 
-  isEqualTo(line2: Line, precision?: number) {
+  isEqualTo(line2: Line, precision?: number = 8) {
     let l1 = this;
     let l2 = line2;
+    if (l1.ends !== l2.ends) {
+      return false;
+    }
     if (typeof precision === 'number') {
       l1 = l1.round(precision);
       l2 = l2.round(precision);
@@ -1078,16 +1106,30 @@ class Line {
     if (l1.C !== l2.C) {
       return false;
     }
-    if (l1.p1.isNotEqualTo(l2.p1) && l1.p1.isNotEqualTo(l2.p2)) {
+    if (l1.p1.isNotEqualTo(l2.p1, precision) && l1.p1.isNotEqualTo(l2.p2, precision)) {
       return false;
     }
-    if (l1.p2.isNotEqualTo(l2.p1) && l1.p2.isNotEqualTo(l2.p2)) {
+    if (l1.p2.isNotEqualTo(l2.p1, precision) && l1.p2.isNotEqualTo(l2.p2, precision)) {
       return false;
     }
     return true;
   }
 
-  isOnSameLineAs(line2: Line, precision: number = 8) {
+  // isWithinLine
+  // hasLineWithin
+  // isAlongLine
+  // isParrallelToLine
+  // isPerpendicularToLine
+
+  // hasLineOn(line2: Line, precision: number = 8) {
+  //   return line2.isOn(this, precision);
+  // }
+
+  hasLineWithin(line2: Line, precision: number = 8) {
+    return line2.isWithinLine(this, precision);
+  }
+
+  isAlongLine(line2: Line, precision: number = 8) {
     const l1 = this.round(precision);
     const l2 = line2.round(precision);
     // If A and B are zero, then this is not a line
@@ -1139,6 +1181,18 @@ class Line {
     return true;
   }
 
+  isWithinLine(line2: Line, precision: number = 8) {
+    const l1 = this.round(precision);
+    const l2 = line2.round(precision);
+    if (!l1.isAlongLine(l2, precision)) {
+      return false;
+    }
+    if (l2.hasPointOn(this.p1) && l2.hasPointOn(this.p2)) {
+      return true;
+    }
+    return false;
+  }
+
   // left, right, top, bottom is relative to cartesian coordinates
   // 'outside' is the outside of a polygon defined in the positive direction
   // (CCW).
@@ -1173,9 +1227,10 @@ class Line {
       this.p2.x + space * Math.cos(offsetAngle),
       this.p2.y + space * Math.sin(offsetAngle),
     );
-    return new Line(p1, p2);
+    return new Line(p1, p2, 0, this.ends);
   }
 
+  // This needs to be tested somewhere as p1ToShaddow = line was updated
   reflectsOn(l: Line, precision: number = 8) {
     const { intersect } = this.intersectsWith(l, precision);
     if (intersect == null) {
@@ -1183,7 +1238,7 @@ class Line {
     }
     const perpendicular = new Line(intersect, 1, l.ang + Math.PI / 2);
     const shaddow = this.p1.getShaddowOnLine(perpendicular, precision);
-    const p1ToShaddow = new Line(p1, shaddow);
+    const p1ToShaddow = new Line(this.p1, shaddow);
     const distance = p1ToShaddow.distance;
     // const distance = shaddow.distance(this.p1);
     const projection = Point(
@@ -1193,6 +1248,7 @@ class Line {
     return new Line(intersect, project);
   }
 
+  // To be updated
   intersectsWith(line2: Line, precision: number = 8) {
     const l2 = line2; // line2.round(precision);
     const l1 = this;  // this.round(precision);
@@ -1217,7 +1273,7 @@ class Line {
         intersect: i,
       };
     }
-    if (det === 0 && (l1.isOnSameLineAs(l2, precision))) {
+    if (det === 0 && (l1.isWithinLine(l2, precision))) {
       // if the lines are colliner then:
       //   - if overlapping,
       //   - if partially overlapping: the intersect point is halfway between
@@ -1330,26 +1386,6 @@ class Line {
   }
 }
 
-class Line1End extends Line {
-  p1: Point;
-
-  constructor(
-    p1: TypeParsablePoint,
-    angle: number = 0,
-  ) {
-    this.p1 = getPoint(p1);
-    this.ang = angle;
-    this.setupLine();
-  }
-
-  setupLine() {
-    this.A = this.p2.y - this.p1.y;
-    this.B = this.p1.x - this.p2.x;
-    this.C = this.A * this.p1.x + this.B * this.p1.y;
-    this.distance = distance(this.p1, this.p2);
-  }
-}
-
 class Vector extends Line {
   i: number;
   j: number;
@@ -1384,10 +1420,12 @@ function line(p1: Point, p2: Point) {
 
 type TypeF1DefLine = {
   f1Type: 'p',
-  state: [[number, number], [number, number]],
+  state: [[number, number], [number, number], 2 | 1 | 0],
 };
 
-export type TypeParsableLine = [TypeParsablePoint, TypeParsablePoint]
+export type TypeParsableLine = [TypeParsablePoint, TypeParsablePoint, 2 | 1 | 0]
+                                | [TypeParsablePoint, TypeParsablePoint]
+                                | [Point, number, number, 2 | 1 | 0]
                                 | [Point, number, number]
                                 | TypeF1DefLine
                                 | Line;
@@ -1418,8 +1456,14 @@ function parseLine<T>(lIn: TypeParsableLine, onFail: T): Line | T | null {
   }
 
   if (Array.isArray(l)) {
+    if (l.length === 4) {
+      return new Line(getPoint(l[0]), l[1], l[2], l[3]);
+    }
     if (l.length === 3) {
-      return new Line(getPoint(l[0]), l[1], l[2]);
+      if (typeof l[1] === 'number') {
+        return new Line(getPoint(l[0]), l[1], l[2]);
+      }
+      return new Line(getPoint(l[0]), getPoint(l[1]), 0, l[2]);
     }
     if (l.length === 2) {
       return new Line(getPoint(l[0]), getPoint(l[1]));
@@ -1431,16 +1475,17 @@ function parseLine<T>(lIn: TypeParsableLine, onFail: T): Line | T | null {
       l.f1Type === 'l'
       && l.state != null
       && Array.isArray([l.state])
-      && l.state.length === 2
+      && l.state.length === 3
     ) {
-      const [p1, p2] = l.state;
-      return new Line(getPoint(p1), getPoint(p2));
+      const [p1, p2, ends] = l.state;
+      return new Line(getPoint(p1), getPoint(p2), 0, ends);
     }
     return onFailToUse;
   }
   return onFailToUse;
 }
 
+// To Update tests
 function getLine(p: TypeParsableLine): Line {
   let parsedLine = parseLine(p);
   if (parsedLine == null) {
