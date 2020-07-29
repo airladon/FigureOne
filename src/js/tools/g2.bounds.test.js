@@ -13,6 +13,19 @@ describe('Bounds', () => {
   // });
   describe('Range Bounds', () => {
     let bounds;
+    describe('Construction', () => {
+      afterEach(() => {
+        expect(bounds.boundary.min).toBe(-10);
+        expect(bounds.boundary.max).toBe(10);
+        expect(bounds.precision).toBe(5);
+      });
+      test('Array', () => {
+        bounds = new RangeBounds([-10, 10], 5);
+      });
+      test('values', () => {
+        bounds = new RangeBounds(-10, 10, 5);
+      });
+    });
     describe('Bounded max and min', () => {
       beforeEach(() => {
         bounds = new RangeBounds(-10, 10);
