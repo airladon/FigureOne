@@ -1130,7 +1130,7 @@ class Line {
           return true;
         }
         const p1ToP = new Line(this.p1, p);
-        if (round(p1ToP.ang, precision) === round(this.ang, precision)) {
+        if (round(clipAngle(p1ToP.ang, '0to360'), precision) === round(clipAngle(this.ang, '0to360'), precision)) {
           return true;
         }
         return false;
@@ -3219,6 +3219,158 @@ class RectBounds extends Bounds {
   }
 
   intersect(position: number | TypeParsablePoint, direction: number = 0) {
+    if (typeof position === 'number') {
+      return {
+        intersect: null,
+        distance: 0,
+        reflection: direction,
+      };
+    }
+    const p = getPoint(position);
+    const {
+      top, bottom, left, right,
+    } = this.boundary;
+
+    const calcHBound = (h) => {
+      if (h != null) {
+        if (bottom != null && top != null) {
+          return new Line([h, bottom], [h, top]);
+        }
+        if (bottom == null && top != null) {
+          return new Line([h, top], null, -Math.PI / 2, 1);
+        }
+        if (bottom != null && top == null) {
+          return new Line([h, bottom], null, Math.PI / 2, 1);
+        }
+        if (bottom == null && top == null) {
+          return new Line([h, 0], null, Math.PI / 2, 0);
+        }
+      }
+      return null;
+    };
+    const calcVBound = (v) => {
+      if (v != null) {
+        if (left != null && right != null) {
+          return new Line([left, v], [right, v]);
+        }
+        if (left == null && right != null) {
+          return new Line([right, v], null, -Math.PI, 1);
+        }
+        if (left != null && right == null) {
+          return new Line([left, v], null, Math.PI, 1);
+        }
+        if (left == null && right == null) {
+          return new Line([0, v], null, Math.PI, 0);
+        }
+      }
+      return null;
+    };
+
+    // Get the lines for each bound
+    const boundBottom = calcVBound(bottom);
+    const boundTop = calcVBound(top);
+    const boundLeft = calcHBound(left);
+    const boundRight = calcHBound(right);
+
+    // Get the intersect with each bound - null is no intersect
+    const trajectory = new Line(p, null, direction, 1);
+    const checkIntersect = (boundLine: Line | null) => {
+      if (boundLine == null) {
+        return null;
+      }
+      if (boundLine.hasPointOn(p, this.precision)) {
+        return {
+          intersect: p._dup(),
+          distance: 0,
+        };
+      }
+      const result = trajectory.intersectsWith(boundLine, this.precision);
+      if (result.withinLine && result.intersect != null) {
+        return {
+          intersect: result.intersect,
+          distance: round(p.distance(result.intersect), this.precision),
+        };
+      }
+      return null;
+    };
+    const boundBottomIntersect = checkIntersect(boundBottom);
+    const boundTopIntersect = checkIntersect(boundTop);
+    const boundLeftIntersect = checkIntersect(boundLeft);
+    const boundRightIntersect = checkIntersect(boundRight);
+
+    // Get the closest H and V bound
+    const getBound = (bound1Intersect, bound2Intersect) => {
+      let boundIntersect = null;
+      if (bound1Intersect != null) {
+        boundIntersect = bound1Intersect;
+      }
+      if (bound2Intersect != null) {
+        if (boundIntersect != null) {
+          if (bound2Intersect.distance < boundIntersect.distance) {
+            boundIntersect = bound2Intersect;
+          }
+        } else {
+          boundIntersect = bound2Intersect;
+        }
+      }
+      return boundIntersect;
+    };
+
+    const boundHIntersect = getBound(boundBottomIntersect, boundTopIntersect);
+    const boundVIntersect = getBound(boundLeftIntersect, boundRightIntersect);
+
+    let d;
+    let i;
+    let xMirror = 1;
+    let yMirror = 1;
+    if (boundHIntersect != null) {
+      if (
+        boundVIntersect == null
+        || boundVIntersect.distance >= boundHIntersect.distance
+      ) {
+        d = boundHIntersect.distance;
+        i = boundHIntersect.intersect;
+        yMirror = -1;
+      }
+    }
+    if (boundVIntersect != null) {
+      if (
+        boundHIntersect == null
+        || boundHIntersect.distance >= boundVIntersect.distance
+      ) {
+        d = boundVIntersect.distance;
+        i = boundVIntersect.intersect;
+        xMirror = -1;
+      }
+    }
+
+    if (i == null) {
+      return {
+        intersect: null,
+        distance: 0,
+        reflection: direction,
+      };
+    }
+    // let reflectionAngle = ang;
+    const reflection = polarToRect(1, direction);
+    if (xMirror === -1) {
+      reflection.x *= -1;
+    }
+    if (yMirror === -1) {
+      reflection.y *= -1;
+    }
+
+    if (d === 0) {
+      i = p;
+    }
+    return {
+      intersect: i,
+      distance: d,
+      reflection: rectToPolar(reflection).angle,
+    };
+  }
+
+  intersectLegacy(position: number | TypeParsablePoint, direction: number = 0) {
     if (typeof position === 'number') {
       return {
         position,
