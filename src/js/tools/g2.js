@@ -3257,7 +3257,7 @@ class RectBounds extends Bounds {
           return new Line([right, v], null, -Math.PI, 1);
         }
         if (left != null && right == null) {
-          return new Line([left, v], null, Math.PI, 1);
+          return new Line([left, v], null, 0, 1);
         }
         if (left == null && right == null) {
           return new Line([0, v], null, Math.PI, 0);
