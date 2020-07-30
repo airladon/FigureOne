@@ -1,5 +1,5 @@
 import {
-  Point, Line, getLine,
+  Point, Line, getLine, getPoint,
 } from './g2';
 import { round } from './math';
 
@@ -572,6 +572,19 @@ describe('g2 Line', () => {
     });
   });
   describe('Lines can intersect with other lines', () => {
+    let check;
+    beforeEach(() => {
+      check = (l1, l2, onLine, inLine, intersect) => {
+        const res = l1.intersectsWith(l2);
+        expect(res.onLine).toBe(onLine);
+        expect(res.inLine).toBe(inLine);
+        if (res.intersect == null) {
+          expect(intersect == null).toBe(true);
+        } else {
+          expect(res.intersect.round()).toEqual(getPoint(intersect));
+        }
+      };
+    });
     test('Line 0, 0<>2, 0 with 1, -1<>1, 1 has intersection 1, 0', () => {
       const l1 = new Line(new Point(0, 0), new Point(2, 0));
       const l2 = new Line(new Point(1, -1), new Point(1, 1));
@@ -625,7 +638,7 @@ describe('g2 Line', () => {
       const res = l1.intersectsWith(l2);
       expect(res.onLine).toEqual(true);
       expect(res.inLine).toEqual(true);
-      expect(res.intersect).toEqual(new Point(2, 0));
+      expect(res.intersect.round()).toEqual(new Point(2, 0));
     });
     test('Line 1, 0<>2, 0 with 2, 0<>3, 0 has as intersection at 2, 0', () => {
       const l1 = new Line(new Point(1, 0), new Point(2, 0));
@@ -633,7 +646,7 @@ describe('g2 Line', () => {
       const res = l1.intersectsWith(l2);
       expect(res.onLine).toEqual(true);
       expect(res.inLine).toEqual(true);
-      expect(res.intersect).toEqual(new Point(2, 0));
+      expect(res.intersect.round()).toEqual(new Point(2, 0));
     });
     // 0.804, y: 0.04029297190976889
     test('Line 1, 0<>2, 0 with 2, 0<>3, 0 has as intersection at (2, 0) 2', () => {
@@ -649,6 +662,222 @@ describe('g2 Line', () => {
       expect(res.onLine).toEqual(true);
       expect(res.inLine).toEqual(true);
       expect(res.intersect).toEqual(new Point(0.804, 0.05036621488721111));
+    });
+    describe('Both lines have 2 ends', () => {
+      describe('Lines are parallel', () => {
+        test('horizontal', () => {
+          const l1 = new Line([0, 0], [1, 0]);
+          const l2 = new Line([0, 1], [1, 1]);
+          check(l1, l2, false, false, null);
+        });
+        test('vertical', () => {
+          const l1 = new Line([0, 0], [0, 1]);
+          const l2 = new Line([1, 0], [1, 1]);
+          check(l1, l2, false, false, null);
+        });
+        test('angled', () => {
+          const l1 = new Line([0, 0], [1, 1]);
+          const l2 = new Line([1, 0], [2, 1]);
+          check(l1, l2, false, false, null);
+        });
+      });
+      describe('Lines cross', () => {
+        test('Lines cross at origin', () => {
+          const l1 = new Line([-1, -1], [1, 1]);
+          const l2 = new Line([-1, 1], [1, -1]);
+          check(l1, l2, true, true, [0, 0]);
+        });
+        test('Lines cross at point', () => {
+          const l1 = new Line([0, 0], [2, 2]);
+          const l2 = new Line([0, 2], [2, 0]);
+          check(l1, l2, true, true, [1, 1]);
+        });
+        test('Lines cross at end of one line', () => {
+          const l1 = new Line([0, 0], [2, 2]);
+          const l2 = new Line([1, 1], [2, 0]);
+          check(l1, l2, true, true, [1, 1]);
+        });
+        test('Lines cross when vertical and horizontal', () => {
+          const l1 = new Line([0, 0], [2, 0]);
+          const l2 = new Line([1, 0], [1, 1]);
+          check(l1, l2, true, true, [1, 0]);
+        });
+      });
+      describe('Lines intersect offLine', () => {
+        test('Intersection is on line 1', () => {
+          const l1 = new Line([0, 0], [1, 1]);
+          const l2 = new Line([3, 0], [0, 3]);
+          check(l1, l2, true, false, [1.5, 1.5]);
+        });
+        test('Intersection is on line 2', () => {
+          const l1 = new Line([3, 0], [0, 3]);
+          const l2 = new Line([0, 0], [1, 1]);
+          check(l1, l2, true, false, [1.5, 1.5]);
+        });
+        test('Intersection is off both lines', () => {
+          const l1 = new Line([3, 0], [2, 1]);
+          const l2 = new Line([0, 0], [1, 1]);
+          check(l1, l2, true, false, [1.5, 1.5]);
+        });
+        test('Lines cross when vertical and horizontal', () => {
+          const l1 = new Line([0, 0], [2, 0]);
+          const l2 = new Line([1, 1], [1, 2]);
+          check(l1, l2, true, false, [1, 0]);
+        });
+        test('Lines cross when vertical and horizontal at corner', () => {
+          const l1 = new Line([0, 0], [2, 0]);
+          const l2 = new Line([2, 1], [2, 2]);
+          check(l1, l2, true, false, [2, 0]);
+        });
+      });
+      describe('Lines collinear partial overlap', () => {
+        test('Horizontal', () => {
+          const l1 = new Line([0, 0], [3, 0]);
+          const l2 = new Line([2, 0], [3.5, 0]);
+          check(l1, l2, true, true, [2.5, 0]);
+        });
+        test('Vertical', () => {
+          const l1 = new Line([0, 0], [0, 3]);
+          const l2 = new Line([0, 2], [0, 3.5]);
+          check(l1, l2, true, true, [0, 2.5]);
+        });
+        test('Angle', () => {
+          const l1 = new Line([0, 0], [3, 3]);
+          const l2 = new Line([2, 2], [3.5, 3.5]);
+          check(l1, l2, true, true, [2.5, 2.5]);
+        });
+      });
+      describe('Lines collinear no overlap', () => {
+        test('Horizontal', () => {
+          const l1 = new Line([0, 0], [1, 0]);
+          const l2 = new Line([3, 0], [4, 0]);
+          check(l1, l2, true, false, [2, 0]);
+        });
+        test('Vertical', () => {
+          const l1 = new Line([0, 0], [0, 1]);
+          const l2 = new Line([0, 3], [0, 4]);
+          check(l1, l2, true, false, [0, 2]);
+        });
+        test('Angle', () => {
+          const l1 = new Line([0, 0], [1, 1]);
+          const l2 = new Line([3, 3], [4, 4]);
+          check(l1, l2, true, false, [2, 2]);
+        });
+      });
+      describe('Lines collinear within', () => {
+        test('Horizontal fully within', () => {
+          const l1 = new Line([0, 0], [10, 0]);
+          const l2 = new Line([1, 0], [3, 0]);
+          check(l1, l2, true, true, [3.5, 0]);
+        });
+        test('Vertical fully within', () => {
+          const l1 = new Line([0, 0], [0, 10]);
+          const l2 = new Line([0, 1], [0, 3]);
+          check(l1, l2, true, true, [0, 3.5]);
+        });
+        test('Angle fully within', () => {
+          const l1 = new Line([0, 0], [10, 10]);
+          const l2 = new Line([1, 1], [3, 3]);
+          check(l1, l2, true, true, [3.5, 3.5]);
+        });
+        test('Horizontal on end', () => {
+          const l1 = new Line([0, 0], [10, 0]);
+          const l2 = new Line([2, 0], [10, 0]);
+          check(l1, l2, true, true, [5.5, 0]);
+        });
+        test('Vertical on end', () => {
+          const l1 = new Line([0, 0], [0, 10]);
+          const l2 = new Line([0, 2], [0, 10]);
+          check(l1, l2, true, true, [0, 5.5]);
+        });
+        test('Angle on end', () => {
+          const l1 = new Line([0, 0], [10, 10]);
+          const l2 = new Line([2, 2], [10, 10]);
+          check(l1, l2, true, true, [5.5, 5.5]);
+        });
+      });
+    });
+    describe('One 1 End, One 2 End', () => {
+      describe('Lines are parallel', () => {
+        test('horizontal', () => {
+          const l1 = new Line([0, 0], [1, 0], 0, 1);
+          const l2 = new Line([0, 1], [1, 1]);
+          check(l1, l2, false, false, null);
+        });
+        test('vertical', () => {
+          const l1 = new Line([0, 0], [0, 1]);
+          const l2 = new Line([1, 0], [1, 1], 0, 1);
+          check(l1, l2, false, false, null);
+        });
+        test('angled', () => {
+          const l1 = new Line([0, 0], [1, 1], 0, 1);
+          const l2 = new Line([1, 0], [2, 1]);
+          check(l1, l2, false, false, null);
+        });
+      });
+      describe('Lines Cross', () => {
+        test('Lines cross at origin', () => {
+          const l1 = new Line([-1, -1], [1, 1], 0, 1);
+          const l2 = new Line([-1, 1], [1, -1]);
+          check(l1, l2, true, true, [0, 0]);
+        });
+        test('Lines cross at point', () => {
+          const l1 = new Line([0, 0], [2, 2]);
+          const l2 = new Line([0, 2], [2, 0], 0, 1);
+          check(l1, l2, true, true, [1, 1]);
+        });
+        test('Lines cross at end of one line', () => {
+          const l1 = new Line([0, 0], [2, 2], 0, 1);
+          const l2 = new Line([1, 1], [2, 0]);
+          check(l1, l2, true, true, [1, 1]);
+        });
+        test('Lines cross when vertical and horizontal', () => {
+          const l1 = new Line([0, 0], [2, 0]);
+          const l2 = new Line([1, 0], [1, 1], 0, 1);
+          check(l1, l2, true, true, [1, 0]);
+        });
+        test('Lines cross when point definitions do not', () => {
+          const l1 = new Line([0, 0], [0.5, 0.5], 0, 1);
+          const l2 = new Line([0, 2], [2, 0]);
+          check(l1, l2, true, true, [1, 1]);
+        });
+      });
+      describe('Lines intersect offLine', () => {
+        test('Intersection is on line 1', () => {
+          const l1 = new Line([0, 0], [1, 1]);
+          const l2 = new Line([3, 0], [0, 3], 0, 1);
+          check(l1, l2, true, false, [1.5, 1.5]);
+        });
+        test('Intersection is on line 2', () => {
+          const l1 = new Line([3, 0], [0, 3]);
+          const l2 = new Line([1, 1], [0, 0], 0, 1);
+          check(l1, l2, true, false, [1.5, 1.5]);
+        });
+        test('Intersection is off both lines', () => {
+          const l1 = new Line([3, 0], [2, 1]);
+          const l2 = new Line([1, 1], [0, 0], 0, 1);
+          check(l1, l2, true, false, [1.5, 1.5]);
+        });
+        test('Lines cross when vertical and horizontal', () => {
+          const l1 = new Line([0, 0], [2, 0]);
+          const l2 = new Line([1, 1], [1, 2], 0, 1);
+          check(l1, l2, true, false, [1, 0]);
+        });
+        test('Lines cross when vertical and horizontal at corner', () => {
+          const l1 = new Line([0, 0], [2, 0], 0, 1);
+          const l2 = new Line([2, 1], [2, 2]);
+          check(l1, l2, true, false, [2, 0]);
+        });
+      });
+      describe('Lines collinear overlap', () => {
+        
+      });
+      describe('Lines collinear no overlap', () => {
+
+      });
+      describe('Lines collinear within', () => {
+
+      });
     });
   });
   describe('Lines Misc', () => {
