@@ -574,10 +574,10 @@ describe('g2 Line', () => {
   describe('Lines can intersect with other lines', () => {
     let check;
     beforeEach(() => {
-      check = (l1, l2, onLine, inLine, intersect) => {
+      check = (l1, l2, alongLine, inLine, intersect) => {
         const res = l1.intersectsWith(l2);
-        expect(res.onLine).toBe(onLine);
-        expect(res.inLine).toBe(inLine);
+        expect(res.alongLine).toBe(alongLine);
+        expect(res.withinLine).toBe(inLine);
         if (res.intersect == null) {
           expect(intersect == null).toBe(true);
         } else {
@@ -589,63 +589,63 @@ describe('g2 Line', () => {
       const l1 = new Line(new Point(0, 0), new Point(2, 0));
       const l2 = new Line(new Point(1, -1), new Point(1, 1));
       const res = l1.intersectsWith(l2);
-      expect(res.onLine).toEqual(true);
-      expect(res.inLine).toEqual(true);
+      expect(res.alongLine).toEqual(true);
+      expect(res.withinLine).toEqual(true);
       expect(res.intersect).toEqual(new Point(1, 0));
     });
     test('Line 0, 0<>2, 0 with 1, -1<>1, -0.5 has intersection 1, 0 which is outside the line definition', () => {
       const l1 = new Line(new Point(0, 0), new Point(2, 0));
       const l2 = new Line(new Point(1, -1), new Point(1, -0.5));
       const res = l1.intersectsWith(l2);
-      expect(res.onLine).toEqual(true);
-      expect(res.inLine).toEqual(false);
+      expect(res.alongLine).toEqual(true);
+      expect(res.withinLine).toEqual(false);
       expect(res.intersect).toEqual(new Point(1, 0));
     });
     test('Line 0, 0<>2, 0 with 0, 1<>2, 1 has no intersection', () => {
       const l1 = new Line(new Point(0, 0), new Point(2, 0));
       const l2 = new Line(new Point(0, 1), new Point(2, 1));
       const res = l1.intersectsWith(l2);
-      expect(res.onLine).toEqual(false);
-      expect(res.inLine).toEqual(false);
+      expect(res.alongLine).toEqual(false);
+      expect(res.withinLine).toEqual(false);
     });
     test('Line 0, 0<>2, 0 with 4, 0<>5, 0 has as intersection at 3, 0', () => {
       const l1 = new Line(new Point(0, 0), new Point(2, 0));
       const l2 = new Line(new Point(4, 0), new Point(5, 0));
       const res = l1.intersectsWith(l2);
-      expect(res.onLine).toEqual(true);
-      expect(res.inLine).toEqual(false);
+      expect(res.alongLine).toEqual(true);
+      expect(res.withinLine).toEqual(false);
       expect(res.intersect).toEqual(new Point(3, 0));
     });
     test('Line 1, 0<>2, 0 with 0, 0<>4, 0 has as intersection at 2.75, 0', () => {
       const l1 = new Line(new Point(1, 0), new Point(2, 0));
       const l2 = new Line(new Point(0, 0), new Point(4, 0));
       const res = l1.intersectsWith(l2);
-      expect(res.onLine).toEqual(true);
-      expect(res.inLine).toEqual(true);
+      expect(res.alongLine).toEqual(true);
+      expect(res.withinLine).toEqual(true);
       expect(res.intersect.round()).toEqual(new Point(1.75, 0));
     });
     test('Line 0, 0<>2, 0 with 1, 0<>4, 0 has as intersection at 1.5, 0', () => {
       const l1 = new Line(new Point(0, 0), new Point(2, 0));
       const l2 = new Line(new Point(1, 0), new Point(4, 0));
       const res = l1.intersectsWith(l2);
-      expect(res.onLine).toEqual(true);
-      expect(res.inLine).toEqual(true);
+      expect(res.alongLine).toEqual(true);
+      expect(res.withinLine).toEqual(true);
       expect(res.intersect.round()).toEqual(new Point(1.5, 0));
     });
     test('Line 1, 0<>2, 0 with 1, 0<>4, 0 has as intersection at 1.5, 0', () => {
       const l1 = new Line(new Point(1, 0), new Point(2, 0));
       const l2 = new Line(new Point(1, 0), new Point(4, 0));
       const res = l1.intersectsWith(l2);
-      expect(res.onLine).toEqual(true);
-      expect(res.inLine).toEqual(true);
+      expect(res.alongLine).toEqual(true);
+      expect(res.withinLine).toEqual(true);
       expect(res.intersect.round()).toEqual(new Point(2, 0));
     });
     test('Line 1, 0<>2, 0 with 2, 0<>3, 0 has as intersection at 2, 0', () => {
       const l1 = new Line(new Point(1, 0), new Point(2, 0));
       const l2 = new Line(new Point(2, 0), new Point(3, 0));
       const res = l1.intersectsWith(l2);
-      expect(res.onLine).toEqual(true);
-      expect(res.inLine).toEqual(true);
+      expect(res.alongLine).toEqual(true);
+      expect(res.withinLine).toEqual(true);
       expect(res.intersect.round()).toEqual(new Point(2, 0));
     });
     // 0.804, y: 0.04029297190976889
@@ -659,8 +659,8 @@ describe('g2 Line', () => {
         new Point(0.804, 0.06043945786465334),
       );
       const res = l1.intersectsWith(l2);
-      expect(res.onLine).toEqual(true);
-      expect(res.inLine).toEqual(true);
+      expect(res.alongLine).toEqual(true);
+      expect(res.withinLine).toEqual(true);
       expect(res.intersect).toEqual(new Point(0.804, 0.05036621488721111));
     });
     describe('Both lines have 2 ends', () => {
