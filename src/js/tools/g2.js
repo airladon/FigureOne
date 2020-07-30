@@ -1298,6 +1298,17 @@ class Line {
     return new Line(p1, p2, 0, this.ends);
   }
 
+  // If two lines are parallel, their determinant is 0
+  isParallelWith(line2: Line, precision: number = 8) {
+    const l2 = line2; // line2.round(precision);
+    const l1 = this;  // this.round(precision);
+    const det = l1.A * l2.B - l2.A * l1.B;
+    if (roundNum(det, precision) === 0) {
+      return true;
+    }
+    return false;
+  }
+
   // This needs to be tested somewhere as p1ToShaddow = line was updated
   reflectsOn(l: Line, precision: number = 8) {
     const { intersect } = this.intersectsWith(l, precision);
@@ -1316,18 +1327,31 @@ class Line {
     return new Line(intersect, project);
   }
 
+  // At two lines intersection, the x and y values must be equal
+  //   A1x + B1y = C1 => y = -A1/B1x + C1/B1
+  //   A2x + B2y = C2 => y = -A2/B2x + C2/B2
+  // Right hand sides are equal:
+  //   -A1/B1x + C1/B1 = -A2/B2x + C2/B2
+  //   x(-A1/B1 + A2/B2) = C2/B2 - C1/B1
+  //   x(-A1B2 + A2B1)/B1B2 = (C2B1 - C1B2)/B1B2
+  //   x = (C2B1 - C1B2) / (-A1B2 + A2B1)
+  //   y = -A1/B1x + C1/B1
   // To be updated
   intersectsWith(line2: Line, precision: number = 8) {
     const l2 = line2; // line2.round(precision);
     const l1 = this;  // this.round(precision);
-    const det = l1.A * l2.B - l2.A * l1.B;
-    if (roundNum(det, precision) !== 0) {
-      const i = point(0, 0);
-      i.x = (l2.B * l1.C - l1.B * l2.C) / det;
-      i.y = (l1.A * l2.C - l2.A * l1.C) / det;
+
+    if (!l1.isParallelWith(l2)) {
+      const x = (l2.C * l1.B - l1.C * l2.B) / (-l1.A * l2.B + l2.A * l1.B);
+      const y = -l1.A / l1.B * x + l1.C / l1.B
+      const i = new Point(x, y);
+      //   , );
+      // i.x = (l2.B * l1.C - l1.B * l2.C) / det;
+      // i.y = (l1.A * l2.C - l2.A * l1.C) / det;
       if (
-        pointinRect(i, l1.p1, l1.p2, precision)
-        && pointinRect(i, l2.p1, l2.p2, precision)
+        l1.hasPointOn(i, precision) && l2.hasPointOn(i, precision)
+        // pointinRect(i, l1.p1, l1.p2, precision)
+        // && pointinRect(i, l2.p1, l2.p2, precision)
       ) {
         return {
           onLine: true,
@@ -1341,15 +1365,111 @@ class Line {
         intersect: i,
       };
     }
-    if (det === 0 && (l1.isAlongLine(l2, precision))) {
-      // if the lines are colliner then:
-      //   - if overlapping,
-      //   - if partially overlapping: the intersect point is halfway between
-      //     overlapping ends
-      //   - if one line is within the other line, the intersect point is
-      //     halfway between the midpoints
-      //   - if not overlapping, the intersect point is halfway between the nearest ends
-      // let l1 = this;
+    if (!l1.isAlongLine(l2, precision)) {
+      return {
+        onLine: false,
+        inLine: false,
+        intersect: undefined,
+      };
+    }
+
+    // If lines are collinear they could be either:
+    //   - equal:
+    //      - 0 ends: take the yIntercept (or xIntercept if vertical)
+    //      - 1 ends: take the p1 point
+    //      - 2 ends: take the midPoint
+    //   - one within the other: take mid point between mid points
+    //      - 2 ends around 2 ends: take the midPoint of the two midPoints
+    //      - 0 ends around 2 ends: take the midPoint of the 2 ends
+    //      - 0 ends around 1 ends: take the p1 of the 1 ends
+    //      - 1 end around 1 end: take the midPoint between the p1s
+    //      - 1 end around 2 ends: take the midPoint of the two ends
+    //   - not overlapping:
+    //      - Both 2 ends - take midPoint between 2 closest ends
+    //      - Both 1 ends - take midPoint between 2 p1s
+    //      - One 1 end and 2 end - take midPoint between p1 and closest point
+    //   - partially overlapping:
+    //      - Both 2 ends - take midPoint between 2 overlapping ends
+    //      - Both 1 ends - take midPoint between both p1s
+    //      - One 1 end and 2 end - take midPoint between overlapping end and p1
+    //
+    //   - paritally overlapping: take mid point between the overlapping ends
+    //   - For infinite lines, the intersection is always at x=0, unless there
+    //     is a vertical line, in which case it is at y=0
+    // if the lines are colliner then:
+    //   - if overlapping,
+    //   - if partially overlapping: the intersect point is halfway between
+    //     overlapping ends
+    //   - if one line is within the other line, the intersect point is
+    //     halfway between the midpoints
+    //   - if not overlapping, the intersect point is halfway between the nearest ends
+    // let l1 = this;
+
+    // If Equal
+    const xIntercept = this.getXIntercept();
+    const yIntercept = this.getYIntercept();
+    const defaultIntercept = yIntercept == null ? xIntercept : yIntercept;
+
+    if (l1.isEqualTo(l2, precision)) {
+      let i;
+      if (l1.ends === 2) {
+        i = l1.midPoint();
+      } else if (l1.ends === 1) {
+        i = l1.p1._dup();
+      } else {
+        i = defaultIntercept;
+      }
+      return {
+        onLine: true,
+        inLine: true,
+        intersect: i,
+      };
+    }
+
+    // If one line is fully within the other
+    let i;
+    const lineIsWithin = (li1, li2) => {
+      // If fully overlapping
+      if (li1.hasLineWithin(li2, precision)) {
+        if (li1.ends === 2) {
+          i = new Line(li1.midPoint(), li2.midPoint()).midPoint();
+        }
+        if (li1.ends === 1 && li2.ends === 1) {
+          i = new Line(li1.p1, li2.p1);
+        }
+        if (li1.ends === 1 && li2.ends === 2) {
+          i = li2.midPoint();
+        }
+        if (li1.ends === 0 && li2.ends === 2) {
+          i = li2.midPoint();
+        }
+        if (li1.ends === 0 && li2.ends === 1) {
+          i = li2.p1._dup();
+        }
+        if (li1.ends > li2.ends) {
+          if (li1.ends === 2) {
+            i = li1.midPoint();
+          } else {
+            i = li1.p1;
+          }
+        }
+        if (li1.ends === 1 && li2.ends === 1) {
+          i = new Line(li1.p1, li2.p1).midPoint();
+        }
+        return true;
+      }
+      return false;
+    };
+    if (lineIsWithin(l1, l2)) {
+      return { onLine: true, inLine: true, intersect: i };
+    }
+    if (lineIsWithin(l2, l1)) {
+      return { onLine: true, inLine: true, intersect: i };
+    }
+
+    // Two finite lines
+    if (l1.ends === 2 && l2.ends === 2) {
+      // Not overlapping
       if (
         !l1.p1.isWithinLine(l2, precision)
         && !l1.p2.isWithinLine(l2, precision)
@@ -1381,76 +1501,196 @@ class Line {
           intersect: i,
         };
       }
-      if (
-        (
-          l1.p1.isWithinLine(l2, precision)
-          && l1.p2.isWithinLine(l2, precision)
-          && (!l2.p1.isWithinLine(l1, precision) || !l2.p2.isWithinLine(l1, precision))
-        )
-        || (
-          l2.p1.isWithinLine(l1, precision)
-          && l2.p2.isWithinLine(l1, precision)
-          && (!l1.p1.isWithinLine(l2, precision) || !l1.p2.isWithinLine(l2, precision))
-        )
-      ) {
-        const midLine = new Line(l1.midPoint(), l2.midPoint());
-        return {
-          onLine: true,
-          inLine: true,
-          intersect: midLine.midPoint(),
-        };
+      // Partial overlap
+      if (l1.p1.isWithinLine(l2, precision)) {
+        if (l2.p1.isWithinLine(l1, precision)) {
+          i = new Line(l1.p1, l2.p1).midPoint();
+        } else {
+          i = new Line(l1.p1, l2.p2).midPoint();
+        }
+      } else if (l2.p1.isWithinLine(l1, precision)) {
+        i = new Line(l1.p2, l2.p1).midPoint();
+      } else {
+        i = new Line(l1.p2, l2.p2).midPoint();
       }
-      let midLine;
-      if (
-        l1.p1.isWithinLine(l2, precision)
-        && !l1.p2.isWithinLine(l2, precision)
-        && l2.p1.isWithinLine(l1, precision)
-        && !l2.p2.isWithinLine(l1, precision)
-      ) {
-        midLine = new Line(l1.p1, l2.p1);
-      }
-      if (
-        l1.p1.isWithinLine(l2, precision)
-        && !l1.p2.isWithinLine(l2, precision)
-        && !l2.p1.isWithinLine(l1, precision)
-        && l2.p2.isWithinLine(l1, precision)
-      ) {
-        midLine = new Line(l1.p1, l2.p2);
-      }
-      if (
-        !l1.p1.isWithinLine(l2, precision)
-        && l1.p2.isWithinLine(l2, precision)
-        && l2.p1.isWithinLine(l1, precision)
-        && !l2.p2.isWithinLine(l1, precision)
-      ) {
-        midLine = new Line(l1.p2, l2.p1);
-      }
-      if (
-        !l1.p1.isWithinLine(l2, precision)
-        && l1.p2.isWithinLine(l2, precision)
-        && !l2.p1.isWithinLine(l1, precision)
-        && l2.p2.isWithinLine(l1, precision)
-      ) {
-        midLine = new Line(l1.p2, l2.p2);
-      }
-
-      let i;
-
-      if (midLine instanceof Line) {
-        i = midLine.midPoint();
-      }
-
       return {
         onLine: true,
         inLine: true,
         intersect: i,
       };
     }
+
+    // Two 1 end lines
+    if (l1.ends === 1 && l2.ends === 1) {
+      // Both not overlapping and partial overlap will have an intersect as
+      // the midPoint between the p1s
+      return {
+        onLine: true,
+        inLine: false,
+        intersect: new Line(l1.p1, l2.p1).midPoint(),
+      }
+    }
+
+    // One 1 end, one 2 end is the only remaining possibility
+    let inLine;
+    const checkOverlap = (li1: Line, li2: Line) => {
+      // partial overlap
+      if (li1.p1.isWithinLine(li2)) {
+        inLine = true;
+        if (li2.p1.isWithinLine(li1)) {
+          i = new Line(li1.p1, li2.p1).midPoint();
+        } else {
+          i = new Line(li1.p1, li2.p2).midPoint();
+        }
+      // No Overlap
+      } else {
+        inLine = false;
+        const l11 = new Line(li1.p1, li2.p1);
+        const l12 = new Line(li1.p1, li2.p2);
+        if (l11.length() < l12.length) {
+          i = l11.midPoint();
+        } else {
+          i = l12.midPoint();
+        }
+      }
+    }
+    if (l1.ends === 1 && l2.ends === 2) {
+      checkOverlap(l1, l2);
+    } else {
+      checkOverlap(l2, l1);
+    }
     return {
-      onLine: false,
-      inLine: false,
-      intersect: undefined,
+      onLine: true,
+      inLine,
+      intersect: i,
     };
+
+    // const isNotOverlapping = (li1: Line, li2: Line) {
+    //   if (li1)
+    // }
+
+    // if (
+    //   l1.ends === 1 && l2.ends === 2
+    //   && !l1.p1.isWithinLine(l2, precision)
+    //   && !l2.p1.isWithinLine(l1, precision)
+    //   && !l2.p2.isWithinLine(l1, precision)
+    // ) {
+    //   const line11 = new Line(l1.p1, l2.p1);
+    //   const line12 = new Line(l1.p1, l2.p2);
+
+    //   let i = line11.midPoint();
+    //   let len = line11.length();
+    //   if (line12.length() < len) {
+    //     i = line12.midPoint();
+    //     len = line12.length();
+    //   }
+    //   return {
+    //     onLine: true,
+    //     inLine: false,
+    //     intersect: i,
+    //   };
+    // }
+
+    // if (
+    //   l1.ends === 2 && l2.ends === 1
+    //   && !l1.p1.isWithinLine(l2, precision)
+    //   && !l1.p2.isWithinLine(l2, precision)
+    //   && !l2.p1.isWithinLine(l1, precision)
+    // ) {
+    //   const line11 = new Line(l1.p1, l2.p1);
+    //   const line21 = new Line(l1.p2, l2.p1);
+
+    //   let i = line11.midPoint();
+    //   let len = line11.length();
+    //   if (line21.length() < len) {
+    //     i = line21.midPoint();
+    //     len = line21.length();
+    //   }
+    //   return {
+    //     onLine: true,
+    //     inLine: false,
+    //     intersect: i,
+    //   };
+    // }
+
+    // if (
+    //   l1.ends === 1 && l2.ends === 1
+    //   && !l1.p1.isWithinLine(l2, precision)
+    //   && !l2.p1.isWithinLine(l1, precision)
+    // ) {
+    //   const line11 = new Line(l1.p1, l2.p1);
+    //   return {
+    //     onLine: true,
+    //     inLine: false,
+    //     intersect: line11.midPoint();,
+    //   };
+    // }
+
+    // // Partially overlapping
+    // if (
+    //   (
+    //     l1.p1.isWithinLine(l2, precision)
+    //     && l1.p2.isWithinLine(l2, precision)
+    //     && (!l2.p1.isWithinLine(l1, precision) || !l2.p2.isWithinLine(l1, precision))
+    //   )
+    //   || (
+    //     l2.p1.isWithinLine(l1, precision)
+    //     && l2.p2.isWithinLine(l1, precision)
+    //     && (!l1.p1.isWithinLine(l2, precision) || !l1.p2.isWithinLine(l2, precision))
+    //   )
+    // ) {
+    //   const midLine = new Line(l1.midPoint(), l2.midPoint());
+    //   return {
+    //     onLine: true,
+    //     inLine: true,
+    //     intersect: midLine.midPoint(),
+    //   };
+    // }
+    // let midLine;
+    // if (
+    //   l1.p1.isWithinLine(l2, precision)
+    //   && !l1.p2.isWithinLine(l2, precision)
+    //   && l2.p1.isWithinLine(l1, precision)
+    //   && !l2.p2.isWithinLine(l1, precision)
+    // ) {
+    //   midLine = new Line(l1.p1, l2.p1);
+    // }
+    // if (
+    //   l1.p1.isWithinLine(l2, precision)
+    //   && !l1.p2.isWithinLine(l2, precision)
+    //   && !l2.p1.isWithinLine(l1, precision)
+    //   && l2.p2.isWithinLine(l1, precision)
+    // ) {
+    //   midLine = new Line(l1.p1, l2.p2);
+    // }
+    // if (
+    //   !l1.p1.isWithinLine(l2, precision)
+    //   && l1.p2.isWithinLine(l2, precision)
+    //   && l2.p1.isWithinLine(l1, precision)
+    //   && !l2.p2.isWithinLine(l1, precision)
+    // ) {
+    //   midLine = new Line(l1.p2, l2.p1);
+    // }
+    // if (
+    //   !l1.p1.isWithinLine(l2, precision)
+    //   && l1.p2.isWithinLine(l2, precision)
+    //   && !l2.p1.isWithinLine(l1, precision)
+    //   && l2.p2.isWithinLine(l1, precision)
+    // ) {
+    //   midLine = new Line(l1.p2, l2.p2);
+    // }
+
+    // let i;
+
+    // if (midLine instanceof Line) {
+    //   i = midLine.midPoint();
+    // }
+
+    // return {
+    //   onLine: true,
+    //   inLine: true,
+    //   intersect: i,
+    // };
   }
 }
 
