@@ -1481,7 +1481,7 @@ class Line {
         const line21 = new Line(l1.p2, l2.p1);
         const line22 = new Line(l1.p2, l2.p2);
 
-        let i = line11.midPoint();
+        i = line11.midPoint();
         let len = line11.length();
         if (line12.length() < len) {
           i = line12.midPoint();
@@ -1528,7 +1528,7 @@ class Line {
         onLine: true,
         inLine: false,
         intersect: new Line(l1.p1, l2.p1).midPoint(),
-      }
+      };
     }
 
     // One 1 end, one 2 end is the only remaining possibility
@@ -1547,13 +1547,14 @@ class Line {
         inLine = false;
         const l11 = new Line(li1.p1, li2.p1);
         const l12 = new Line(li1.p1, li2.p2);
-        if (l11.length() < l12.length) {
+
+        if (l11.length() < l12.length()) {
           i = l11.midPoint();
         } else {
           i = l12.midPoint();
         }
       }
-    }
+    };
     if (l1.ends === 1 && l2.ends === 2) {
       checkOverlap(l1, l2);
     } else {
