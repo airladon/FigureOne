@@ -1328,30 +1328,38 @@ class Line {
   }
 
   // At two lines intersection, the x and y values must be equal
-  //   A1x + B1y = C1 => y = -A1/B1x + C1/B1
-  //   A2x + B2y = C2 => y = -A2/B2x + C2/B2
+  //   A1x + B1y = C1 => y = -A1/B1x + C1/B1      - Eq 1
+  //   A2x + B2y = C2 => y = -A2/B2x + C2/B2      - Eq 2
   // Right hand sides are equal:
   //   -A1/B1x + C1/B1 = -A2/B2x + C2/B2
   //   x(-A1/B1 + A2/B2) = C2/B2 - C1/B1
   //   x(-A1B2 + A2B1)/B1B2 = (C2B1 - C1B2)/B1B2
   //   x = (C2B1 - C1B2) / (-A1B2 + A2B1)
   //   y = -A1/B1x + C1/B1
-  // To be updated
+  // If however B1 is 0, then y can be found from eqn 2
+  //   y = -A2/B2x + C2/B2
   intersectsWith(line2: Line, precision: number = 8) {
     const l2 = line2; // line2.round(precision);
     const l1 = this;  // this.round(precision);
 
     if (!l1.isParallelWith(l2)) {
-      const x = (l2.C * l1.B - l1.C * l2.B) / (-l1.A * l2.B + l2.A * l1.B);
-      const y = -l1.A / l1.B * x + l1.C / l1.B
-      const i = new Point(x, y);
-      //   , );
-      // i.x = (l2.B * l1.C - l1.B * l2.C) / det;
-      // i.y = (l1.A * l2.C - l2.A * l1.C) / det;
+      let i;
+      if (l1.A === 0 && l2.B === 0) {
+        i = new Point(l2.p1.x, l1.p1.y);
+      } else if (l1.B === 0 && l2.A === 0) {
+        i = new Point(l1.p1.x, l2.p1.y);
+      // if l1.B is 0, then l1 has constant x
+      } else if (l1.B === 0) {
+        const x = (l2.C * l1.B - l1.C * l2.B) / (-l1.A * l2.B + l2.A * l1.B);
+        const y = -l2.A / l2.B * x + l2.C / l2.B;
+        i = new Point(x, y);
+      } else {
+        const x = (l2.C * l1.B - l1.C * l2.B) / (-l1.A * l2.B + l2.A * l1.B);
+        const y = -l1.A / l1.B * x + l1.C / l1.B;
+        i = new Point(x, y);
+      }
       if (
         l1.hasPointOn(i, precision) && l2.hasPointOn(i, precision)
-        // pointinRect(i, l1.p1, l1.p2, precision)
-        // && pointinRect(i, l2.p1, l2.p2, precision)
       ) {
         return {
           onLine: true,
@@ -1408,7 +1416,7 @@ class Line {
     // If Equal
     const xIntercept = this.getXIntercept();
     const yIntercept = this.getYIntercept();
-    const defaultIntercept = yIntercept == null ? xIntercept : yIntercept;
+    const defaultIntercept = yIntercept == null ? new Point(xIntercept, 0) : new Point(0, yIntercept);
 
     if (l1.isEqualTo(l2, precision)) {
       let i;
