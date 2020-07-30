@@ -869,15 +869,63 @@ describe('g2 Line', () => {
           check(l1, l2, true, false, [2, 0]);
         });
       });
-      describe('Lines collinear overlap', () => {
-        
+      describe('Lines collinear partial overlap', () => {
+        test('Horizontal', () => {
+          const l1 = new Line([0, 0], [3, 0]);
+          const l2 = new Line([2, 0], [3.5, 0], 0, 1);
+          check(l1, l2, true, true, [2.5, 0]);
+        });
+        test('Vertical', () => {
+          const l1 = new Line([0, 3], [0, 0], 0, 1);
+          const l2 = new Line([0, 2], [0, 3.5]);
+          check(l1, l2, true, true, [0, 2.5]);
+        });
+        test('Angle', () => {
+          const l1 = new Line([0, 0], [3, 3]);
+          const l2 = new Line([2, 2], [3.5, 3.5], 0, 1);
+          check(l1, l2, true, true, [2.5, 2.5]);
+        });
       });
       describe('Lines collinear no overlap', () => {
-
+        test('Horizontal', () => {
+          const l1 = new Line([0, 0], [1, 0]);
+          const l2 = new Line([3, 0], [4, 0], 0, 1);
+          check(l1, l2, true, false, [2, 0]);
+        });
+        test('Vertical', () => {
+          const l1 = new Line([0, 1], [0, 0], 0, 1);
+          const l2 = new Line([0, 3], [0, 4]);
+          check(l1, l2, true, false, [0, 2]);
+        });
+        test('Angle', () => {
+          const l1 = new Line([0, 0], [1, 1]);
+          const l2 = new Line([3, 3], [4, 4], 0, 1);
+          check(l1, l2, true, false, [2, 2]);
+        });
       });
       describe('Lines collinear within', () => {
 
       });
+    });
+    describe('Two 1 Ends', () => {
+      describe('Lines are Parallel', () => {});
+      describe('Lines are Equal', () => {});
+      describe('Lines Cross', () => {});
+      describe('Lines intersect offline', () => {});
+      describe('Lines collinear partial overlap', () => {});
+      describe('Lines collinear no overlap', () => {});
+      describe('Lines collinear within', () => {});
+    });
+    describe('One 0 End, One 1 End', () => {
+      describe('Lines are Parallel', () => {});
+      describe('Lines Cross', () => {});
+      describe('Lines intersect offline', () => {});
+      describe('Lines collinear within', () => {});
+    });
+    describe('Both 0 ends', () => {
+      describe('Lines Parallel', () => {});
+      describe('Lines Equal', () => {});
+      describe('Lines Cross', () => {});
     });
   });
   describe('Lines Misc', () => {
