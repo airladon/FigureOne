@@ -3,7 +3,7 @@
 import {
   roundNum, decelerate, clipMag, clipValue, rand2D, round,
 } from './math';
-// import { Console } from '../../tools/tools';
+import { joinObjects } from './tools';
 import * as m2 from './m2';
 // import { joinObjects } from './tools';
 
@@ -2985,9 +2985,15 @@ function quadBezierPoints(p0: Point, p1: Point, p2: Point, sides: number) {
 class Bounds {
   boundary: Object;
   precision: number;
+  bounds: 'inside' | 'outside';
 
-  constructor(boundary: Object, precision: number = 8) {
+  constructor(
+    boundary: Object,
+    bounds: 'inside' | 'outside' = 'inside',
+    precision: number = 8
+  ) {
     this.boundary = boundary;
+    this.bounds = bounds;
     this.precision = precision;
   }
 
@@ -3036,29 +3042,38 @@ class Bounds {
 class RangeBounds extends Bounds {
   boundary: { min: number | null, max: number | null };
 
-  constructor(
-    minOrArray: null | number | [?number, ?number],
-    maxOrPrecision: ?number = null,
-    precisionIn: number = 8,
-  ) {
-    let boundary;
-    let precision;
-    if (typeof minOrArray === 'number' || minOrArray === null) {
-      boundary = { min: minOrArray, max: maxOrPrecision };
-      precision = precisionIn;
-    } else {
-      const [min, max] = minOrArray;
-      boundary = { min, max };
-      precision = maxOrPrecision != null ? maxOrPrecision : 8;
-    }
-    super(boundary, precision);
+  constructor(optionsIn: {
+    min?: number,
+    max?: number,
+    precision?: number,
+    bounds?: 'inside' | 'outside',
+  }) {
+    const defaultOptions = {
+      bounds: 'inside',
+      precision: 8,
+      min: null,
+      max: null,
+    };
+    const options = joinObjects({}, defaultOptions, optionsIn);
+    const boundary = {
+      min: options.min,
+      max: options.max,
+    };
+    super(boundary, options.bounds, options.precision);
   }
 
   contains(position: number | TypeParsablePoint) {
     if (typeof position === 'number') {
+      const p = roundNum(position, this.precision);
       if (
-        (this.boundary.min == null || position >= this.boundary.min)
-        && (this.boundary.max == null || position <= this.boundary.max)
+        (
+          this.boundary.min == null
+          || p >= roundNum(this.boundary.min, this.precision)
+        )
+        && (
+          this.boundary.max == null
+          || p <= roundNum(this.boundary.max, this.precision)
+        )
       ) {
         return true;
       }
@@ -3084,26 +3099,51 @@ class RangeBounds extends Bounds {
     const reflection = direction * -1;
     const { min, max } = this.boundary;
     if (!(typeof position === 'number')) {
-      return null;
+      return {
+        intersect: null,
+        distance: 0,
+        reflection: direction,
+      };
     }
+
     if (this.contains(position)) {
+      if (
+        max != null
+        && round(position, this.precision) === round(max, this.precision)
+        && this.bounds === 'outside'
+      ) {
+        if (direction === -1) {
+          return { intersect: max, distance: 0, reflection: 1 };
+        }
+        return { intersect: null, distance: 0, reflection: 1 };
+      }
+      if (
+        min != null
+        && round(position, this.precision) === round(min, this.precision)
+        && this.bounds === 'outside'
+      ) {
+        if (direction === 1) {
+          return { intersect: min, distance: 0, reflection: -1 };
+        }
+        return { intersect: null, distance: 0, reflection: -1 };
+      }
       if (direction === 1) {
         if (max == null) {
-          return null;
+          return { intersect: null, distance: 0, reflection: direction };
         }
         return {
           intersect: max,
           distance: Math.abs(position - max),
-          reflection,
+          reflection: -1,
         };
       }
       if (min == null) {
-        return null;
+        return { intersect: null, distance: 0, reflection: direction };
       }
       return {
         intersect: min,
         distance: Math.abs(position - min),
-        reflection,
+        reflection: 1,
       };
     }
     if (
@@ -3128,7 +3168,11 @@ class RangeBounds extends Bounds {
         reflection,
       };
     }
-    return null;
+    return {
+      intersect: null,
+      distance: 0,
+      reflection: direction,
+    };
   }
 
   clip(position: number | TypeParsablePoint) {
@@ -3151,32 +3195,32 @@ class RectBounds extends Bounds {
     top: null | number,
   };
 
-  constructor(
-    leftOrRect: number | null | [?number, ?number, ?number, ?number] = null,
-    bottomOrPrecision: ?number = null,
-    rightIn: ?number = null,
-    topIn: ?number = null,
-    precisionIn: number = 8,
-  ) {
-    let boundary;
-    let precision;
-    if (Array.isArray(leftOrRect)) {
-      const [left, bottom, right, top] = leftOrRect;
-      boundary = {
-        left, bottom, right, top,
-      };
-      precision = bottomOrPrecision == null ? 8 : bottomOrPrecision;
-    } else {
-      const left = leftOrRect;
-      const bottom = bottomOrPrecision;
-      const right = rightIn;
-      const top = topIn;
-      boundary = {
-        left, bottom, right, top,
-      };
-      precision = precisionIn;
+  constructor(optionsIn: {
+    left?: number | null,
+    bottom?: number | null,
+    right?: number | null,
+    top?: number | null,
+    bounds?: 'inside' | 'outside',
+    precision?: number,
+  }) {
+    const defaultOptions = {
+      left: null,
+      right: null,
+      top: null,
+      bottom: null,
+      bounds: 'inside',
+      precision: 8,
     };
-    super(boundary, precision);
+
+    const options = joinObjects({}, defaultOptions, optionsIn);
+
+    const boundary = {
+      left: options.left,
+      right: options.right,
+      top: options.top,
+      bottom: options.bottom,
+    };
+    super(boundary, options.bounds, options.precision);
   }
 
   contains(position: number | TypeParsablePoint) {
@@ -3301,6 +3345,7 @@ class RectBounds extends Bounds {
 
     // Get the closest H and V bound
     const getBound = (bound1Intersect, bound2Intersect) => {
+      let insideDirection = 1;
       let boundIntersect = null;
       if (bound1Intersect != null) {
         boundIntersect = bound1Intersect;
@@ -3309,16 +3354,27 @@ class RectBounds extends Bounds {
         if (boundIntersect != null) {
           if (bound2Intersect.distance < boundIntersect.distance) {
             boundIntersect = bound2Intersect;
+            insideDirection = -1;
           }
         } else {
           boundIntersect = bound2Intersect;
+          insideDirection = -1;
         }
       }
-      return boundIntersect;
+      return {
+        intersect: boundIntersect,
+        insideDirection,
+      };
     };
 
-    const boundHIntersect = getBound(boundBottomIntersect, boundTopIntersect);
-    const boundVIntersect = getBound(boundLeftIntersect, boundRightIntersect);
+    const hResult = getBound(boundBottomIntersect, boundTopIntersect);
+    const vResult = getBound(boundLeftIntersect, boundRightIntersect);
+
+    const boundHIntersect = hResult.intersect;
+    const boundHInsideDirection = hResult.insideDirection;
+    const boundVIntersect = hResult.intersect;
+    const boundVInsideDirection = vResult.insideDirection;
+    // const boundVIntersect = getBound(boundLeftIntersect, boundRightIntersect);
 
     let d;
     let i;
@@ -3363,6 +3419,7 @@ class RectBounds extends Bounds {
 
     if (d === 0) {
       i = p;
+      if (xMirror === -1)
     }
     return {
       intersect: i,
@@ -3375,23 +3432,33 @@ class RectBounds extends Bounds {
 class LineBounds extends Bounds {
   boundary: Line;
 
-  constructor(
-    pointOrLine: TypeParsablePoint | Line,
-    p2OrMagOrPrecision: TypeParsablePoint | number = 8,
-    angle: number = 0,
-    ends: 2 | 1 | 0 = 2,
-    precisionIn: number = 8,
-  ) {
+  constructor(optionsIn: {
+      p1?: TypeParsablePoint,
+      p2?: TypeParsablePoint,
+      line?: TypeParsableLine,
+      mag?: number,
+      angle?: number,
+      bounds?: 'inside' | 'outside',
+      ends?: 2 | 1 | 0,
+      precision: number,
+    }) {
     let boundary;
-    let precision;
-    if (!(pointOrLine instanceof Line)) {
-      boundary = new Line(pointOrLine, p2OrMagOrPrecision, angle, ends);
-      precision = precisionIn;
-    } else {
-      boundary = pointOrLine;
-      precision = typeof p2OrMagOrPrecision === 'number' ? p2OrMagOrPrecision : 8;
+    const defaultOptions = {
+      angle: 0,
+      mag: 1,
+      bounds: 'inside',
+      precision: 8,
+      ends: 2,
+    };
+    const options = joinObjects({}, defaultOptions, optionsIn);
+    if (options.line != null) {
+      boundary = getLine(options.line);
+    } else if (options.p1 != null && options.p2 != null) {
+      boundary = new Line(options.p1, options.p2, 0, options.ends);
+    } else if (options.p1 != null) {
+      boundary = new Line(options.p1, options.mag, options.angle, options.ends);
     }
-    super(boundary, precision);
+    super(boundary, options.bounds, options.precision);
   }
 
   contains(position: number | TypeParsablePoint) {
@@ -3424,6 +3491,8 @@ class LineBounds extends Bounds {
         reflection: direction,
       };
     }
+
+    // If the point is not along the line, then it is invalid
     const p = getPoint(position);
     if (!this.boundary.hasPointAlong(p, this.precision)) {
       return {
@@ -3438,19 +3507,30 @@ class LineBounds extends Bounds {
       onLine = true;
     }
 
-    const bounds = this.boundary;
+    const b = this.boundary;
     const p1 = this.boundary.p1._dup();
     const p2 = this.boundary.p2._dup();
-    const angleDelta = round(Math.abs(clipAngle(direction, '0to360') - clipAngle(bounds.ang, '0to360')), this.precision);
+    const angleDelta = round(Math.abs(clipAngle(direction, '0to360') - clipAngle(b.ang, '0to360')), this.precision);
 
     const d1 = p.distance(p1);
     const d2 = p.distance(p2);
 
+    // If the point is on p1, unless it is inside and going towards p2 the
+    // result can be given immediately
     if (p.isEqualTo(p1, this.precision)) {
-      return { intersect: p1, distance: 0, reflection: direction + Math.PI };
+      if (this.bounds === 'inside' && angleDelta !== 0) {
+        return { intersect: p1, distance: 0, reflection: b.ang };
+      }
+      if (this.bounds === 'outside' && angleDelta !== 0) {
+        return { intersect: null, distance: 0, reflection: direction };
+      }
+      if (this.bounds === 'outside' && angleDelta === 0) {
+        return { intersect: p1, distance: 0, reflection: b.ang + Math.PI };
+      }
     }
 
-    if (bounds.ends === 1) {
+    // If it is a one ended line, then only p1 is an intersect
+    if (b.ends === 1) {
       if (
         (onLine === true && angleDelta === 0)
         || (onLine === false && angleDelta !== 0)
@@ -3460,9 +3540,20 @@ class LineBounds extends Bounds {
       return { intersect: p1, distance: d1, reflection: direction + Math.PI };
     }
 
-    // We now have a 2 ended line
+    // We are now left with a two ended line
+    // So if the point is on p2, then unless it is inside and going toward
+    // p1, the answer can be given now
     if (p.isEqualTo(p2, this.precision)) {
-      return { intersect: p2, distance: 0, reflection: direction + Math.PI };
+      if (this.bounds === 'inside' && angleDelta === 0) {
+        return { intersect: p2, distance: 0, reflection: b.ang + Math.PI };
+      }
+      if (this.bounds === 'outside' && angleDelta === 0) {
+        return { intersect: null, distance: 0, reflection: direction };
+      }
+      if (this.bounds === 'outside' && angleDelta !== 0) {
+        return { intersect: p2, distance: 0, reflection: b.ang };
+      }
+      // return { intersect: p2, distance: 0, reflection };
     }
 
     if (onLine && angleDelta === 0) {

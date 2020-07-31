@@ -33,17 +33,18 @@ describe('Bounds', () => {
         expect(bounds.boundary.min).toBe(-10);
         expect(bounds.boundary.max).toBe(10);
         expect(bounds.precision).toBe(5);
+        expect(bounds.bounds).toBe('inside');
       });
       test('Array', () => {
-        bounds = new RangeBounds([-10, 10], 5);
+        bounds = new RangeBounds({ min: -10, max: 10, precision: 5 });
       });
-      test('values', () => {
-        bounds = new RangeBounds(-10, 10, 5);
-      });
+      // test('values', () => {
+      //   bounds = new RangeBounds(-10, 10, 5);
+      // });
     });
-    describe('Bounded max and min', () => {
+    describe('Bounded max and min - Inside Bounds', () => {
       beforeEach(() => {
-        bounds = new RangeBounds(-10, 10);
+        bounds = new RangeBounds({ min: -10, max: 10 });
       });
       test('Contains value', () => {
         expect(bounds.contains(3)).toBe(true);
@@ -77,6 +78,7 @@ describe('Bounds', () => {
           .toEqual({ intersect: 10, reflection: -1, distance: 7 });
         expect(bounds.intersect(3, -1))
           .toEqual({ intersect: -10, reflection: 1, distance: 13 });
+
         // Edges of bounds
         expect(bounds.intersect(10, 1))
           .toEqual({ intersect: 10, reflection: -1, distance: 0 });
@@ -87,8 +89,10 @@ describe('Bounds', () => {
         expect(bounds.intersect(-10, -1))
           .toEqual({ intersect: -10, reflection: 1, distance: 0 });
         // Outside Bounds, no intersection
-        expect(bounds.intersect(-11, -1)).toBe(null);
-        expect(bounds.intersect(11, 1)).toBe(null);
+        expect(bounds.intersect(-11, -1))
+          .toEqual({ intersect: null, reflection: -1, distance: 0 });
+        expect(bounds.intersect(11, 1))
+          .toEqual({ intersect: null, reflection: 1, distance: 0 });
         // Outside Bounds intersection
         expect(bounds.intersect(-11, 1))
           .toEqual({ intersect: -10, reflection: -1, distance: 1 });
@@ -96,9 +100,25 @@ describe('Bounds', () => {
           .toEqual({ intersect: 10, reflection: 1, distance: 1 });
       });
     });
+    describe('Bounded max and min - Outside Bounds', () => {
+      beforeEach(() => {
+        bounds = new RangeBounds({ min: -10, max: 10, bounds: 'outside' });
+      });
+      test('Intersect Value', () => {
+        // Edges of bounds
+        expect(bounds.intersect(10, 1))
+          .toEqual({ intersect: null, reflection: 1, distance: 0 });
+        expect(bounds.intersect(10, -1))
+          .toEqual({ intersect: 10, reflection: 1, distance: 0 });
+        expect(bounds.intersect(-10, 1))
+          .toEqual({ intersect: -10, reflection: -1, distance: 0 });
+        expect(bounds.intersect(-10, -1))
+          .toEqual({ intersect: null, reflection: -1, distance: 0 });
+      });
+    });
     describe('Bounded max, unbounded min', () => {
       beforeEach(() => {
-        bounds = new RangeBounds(null, 10);
+        bounds = new RangeBounds({ min: null, max: 10 });
       });
       test('Contains', () => {
         expect(bounds.contains(-1000000)).toBe(true);
@@ -125,17 +145,19 @@ describe('Bounds', () => {
         expect(bounds.intersect(3, 1))
           .toEqual({ intersect: 10, reflection: -1, distance: 7 });
         // Inside bounds, no intersect
-        expect(bounds.intersect(3, -1)).toBe(null);
+        expect(bounds.intersect(3, -1))
+          .toEqual({ intersect: null, reflection: -1, distance: 0 });
         // Outside bounds intersect
         expect(bounds.intersect(11, -1))
           .toEqual({ intersect: 10, reflection: 1, distance: 1 });
         // Outside bounds no intersect
-        expect(bounds.intersect(11, 1)).toBe(null);
+        expect(bounds.intersect(11, 1))
+          .toEqual({ intersect: null, reflection: 1, distance: 0 });
       });
     });
     describe('Unbounded max, bounded min', () => {
       beforeEach(() => {
-        bounds = new RangeBounds(-10, null);
+        bounds = new RangeBounds({ min: -10, max: null });
       });
       test('Contains', () => {
         expect(bounds.contains(-11)).toBe(false);
@@ -162,17 +184,19 @@ describe('Bounds', () => {
         expect(bounds.intersect(3, -1))
           .toEqual({ intersect: -10, reflection: 1, distance: 13 });
         // Inside bounds, no intersect
-        expect(bounds.intersect(3, 1)).toBe(null);
+        expect(bounds.intersect(3, 1))
+          .toEqual({ intersect: null, reflection: 1, distance: 0 });
         // Outside bounds intersect
         expect(bounds.intersect(-11, 1))
           .toEqual({ intersect: -10, reflection: -1, distance: 1 });
         // Outside bounds no intersect
-        expect(bounds.intersect(-11, -1)).toBe(null);
+        expect(bounds.intersect(-11, -1))
+          .toEqual({ intersect: null, reflection: -1, distance: 0 });
       });
     });
     describe('Unbounded max, unbounded min', () => {
       beforeEach(() => {
-        bounds = new RangeBounds(null, null);
+        bounds = new RangeBounds({ min: null, max: null });
       });
       test('Contains', () => {
         expect(bounds.contains(-10000)).toBe(true);
@@ -195,8 +219,10 @@ describe('Bounds', () => {
       });
       test('Intersect Value', () => {
         // Inside bounds, no intersect
-        expect(bounds.intersect(3, 1)).toBe(null);
-        expect(bounds.intersect(3, -1)).toBe(null);
+        expect(bounds.intersect(3, 1))
+          .toEqual({ intersect: null, reflection: 1, distance: 0 });
+        expect(bounds.intersect(3, -1))
+          .toEqual({ intersect: null, reflection: -1, distance: 0 });
       });
     });
   });
@@ -209,13 +235,17 @@ describe('Bounds', () => {
           expect(bounds.boundary.right).toBe(8);
           expect(bounds.boundary.top).toBe(7);
           expect(bounds.precision).toBe(5);
+          expect(bounds.bounds).toBe('outside');
         });
         test('Array', () => {
-          bounds = new RectBounds([-10, -9, 8, 7], 5);
+          // bounds = new RectBounds([-10, -9, 8, 7], 5);
+          bounds = new RectBounds({
+            left: -10, bottom: -9, right: 8, top: 7, bounds: 'outside', precision: 5,
+          });
         });
-        test('values', () => {
-          bounds = new RectBounds(-10, -9, 8, 7, 5);
-        });
+        // test('values', () => {
+        //   bounds = new RectBounds(-10, -9, 8, 7, 5);
+        // });
       });
       describe('Infinite Right', () => {
         afterEach(() => {
@@ -226,11 +256,14 @@ describe('Bounds', () => {
           expect(bounds.precision).toBe(5);
         });
         test('Array', () => {
-          bounds = new RectBounds([-10, -9, null, 7], 5);
+          // bounds = new RectBounds([-10, -9, null, 7], 5);
+          bounds = new RectBounds({
+            left: -10, bottom: -9, right: null, top: 7, precision: 5,
+          });
         });
-        test('values', () => {
-          bounds = new RectBounds(-10, -9, null, 7, 5);
-        });
+        // test('values', () => {
+        //   bounds = new RectBounds(-10, -9, null, 7, 5);
+        // });
       });
       describe('Infinite Left and Right', () => {
         afterEach(() => {
@@ -241,16 +274,21 @@ describe('Bounds', () => {
           expect(bounds.precision).toBe(5);
         });
         test('Array', () => {
-          bounds = new RectBounds([null, -9, null, 7], 5);
+          // bounds = new RectBounds([null, -9, null, 7], 5);
+          bounds = new RectBounds({
+            left: null, bottom: -9, right: null, top: 7, precision: 5,
+          });
         });
-        test('values', () => {
-          bounds = new RectBounds(null, -9, null, 7, 5);
-        });
+        // test('values', () => {
+        //   bounds = new RectBounds(null, -9, null, 7, 5);
+        // });
       });
     });
     describe('Bounded Left, Right, Bottom, Top', () => {
       beforeEach(() => {
-        bounds = new RectBounds(-10, -10, 10, 10);
+        bounds = new RectBounds({
+          left: -10, bottom: -10, right: 10, top: 10,
+        });
       });
       test('Contains value', () => {
         expect(bounds.contains([0, 0])).toBe(true);
@@ -313,6 +351,7 @@ describe('Bounds', () => {
           );
         });
         test('Edges of bounds', () => {
+          
           // Trajectory going out
           check([10, 0], 0, [10, 0], Math.PI, 0);
           check([-10, 3], Math.PI / 4 * 3, [-10, 3], Math.PI / 4, 0);
@@ -343,7 +382,9 @@ describe('Bounds', () => {
     });
     describe('Bounded Left, Right, Bottom, Unbounded Top', () => {
       beforeEach(() => {
-        bounds = new RectBounds(-10, -10, 10, null);
+        bounds = new RectBounds({
+          left: -10, bottom: -10, right: 10, top: null,
+        });
       });
       test('Contains value', () => {
         expect(bounds.contains([0, 0])).toBe(true);
@@ -414,7 +455,9 @@ describe('Bounds', () => {
     });
     describe('Bounded Left, Right, Top, Unbounded Bottom', () => {
       beforeEach(() => {
-        bounds = new RectBounds(-10, null, 10, 10);
+        bounds = new RectBounds({
+          left: -10, bottom: null, right: 10, top: 10,
+        });
       });
       test('Contains value', () => {
         expect(bounds.contains([0, 0])).toBe(true);
@@ -485,7 +528,9 @@ describe('Bounds', () => {
     });
     describe('Bounded Right, Top, Bottom, Unbounded Left', () => {
       beforeEach(() => {
-        bounds = new RectBounds(null, -10, 10, 10);
+        bounds = new RectBounds({
+          left: null, bottom: -10, right: 10, top: 10,
+        });
       });
       test('Contains value', () => {
         expect(bounds.contains([0, 0])).toBe(true);
@@ -551,7 +596,9 @@ describe('Bounds', () => {
     });
     describe('Bounded Left, Top, Bottom, Unbounded Right', () => {
       beforeEach(() => {
-        bounds = new RectBounds(-10, -10, null, 10);
+        bounds = new RectBounds({
+          left: -10, bottom: -10, right: null, top: 10,
+        });
       });
       test('Contains value', () => {
         expect(bounds.contains([0, 0])).toBe(true);
@@ -584,7 +631,9 @@ describe('Bounds', () => {
     });
     describe('Bounded Left, Right, Unbounded Bottom Top', () => {
       beforeEach(() => {
-        bounds = new RectBounds(-10, null, 10, null);
+        bounds = new RectBounds({
+          left: -10, bottom: null, right: 10, top: null,
+        });
       });
       test('Contains value', () => {
         expect(bounds.contains([0, 0])).toBe(true);
@@ -617,7 +666,9 @@ describe('Bounds', () => {
     });
     describe('Bounded Top, Bottom, Unbounded Left Right', () => {
       beforeEach(() => {
-        bounds = new RectBounds(null, -10, null, 10);
+        bounds = new RectBounds({
+          left: null, bottom: -10, right: null, top: 10,
+        });
       });
       test('Contains value', () => {
         expect(bounds.contains([0, 0])).toBe(true);
@@ -650,7 +701,9 @@ describe('Bounds', () => {
     });
     describe('Bounded Bottom, Left, Unbounded Top Right', () => {
       beforeEach(() => {
-        bounds = new RectBounds(-10, -10, null, null);
+        bounds = new RectBounds({
+          left: -10, bottom: -10, right: null, top: null,
+        });
       });
       test('Contains value', () => {
         expect(bounds.contains([0, 0])).toBe(true);
@@ -683,7 +736,9 @@ describe('Bounds', () => {
     });
     describe('Bounded Top, Right, Unbounded Bottom Left', () => {
       beforeEach(() => {
-        bounds = new RectBounds(null, null, 10, 10);
+        bounds = new RectBounds({
+          left: null, bottom: null, right: 10, top: 10,
+        });
       });
       test('Contains value', () => {
         expect(bounds.contains([0, 0])).toBe(true);
@@ -720,49 +775,89 @@ describe('Bounds', () => {
       describe('Finite', () => {
         afterEach(() => {
           expect(bounds.boundary.p1).toEqual(new Point(0, 0));
-          expect(bounds.boundary.p2).toEqual(new Point(1, 0));
+          expect(bounds.boundary.p2).toEqual(new Point(2, 0));
           expect(bounds.boundary.ends).toBe(2);
           expect(bounds.boundary.round(3).ang).toBe(0);
           expect(bounds.precision).toBe(5);
         });
         test('2 Points Extended', () => {
-          bounds = new LineBounds([0, 0], [1, 0], 0, 2, 5);
+          bounds = new LineBounds({
+            p1: [0, 0],
+            p2: [2, 0],
+            ends: 2,
+            precision: 5,
+          });
         });
         test('2 Points Default', () => {
-          bounds = new LineBounds([0, 0], [1, 0], 0, 2, 5);
+          bounds = new LineBounds({
+            p1: [0, 0],
+            p2: [2, 0],
+            precision: 5,
+          });
         });
         test('1 Point', () => {
-          bounds = new LineBounds([0, 0], 1, 0, 2, 5);
+          bounds = new LineBounds({
+            p1: [0, 0],
+            mag: 2,
+            angle: 0,
+            precision: 5,
+          });
         });
         test('From Line', () => {
-          bounds = new LineBounds(new Line([0, 0], [1, 0]), 5);
+          bounds = new LineBounds({
+            line: new Line([0, 0], [2, 0]),
+            precision: 5,
+          });
+        });
+        test('From Line deinition', () => {
+          bounds = new LineBounds({
+            line: [[0, 0], [2, 0]],
+            precision: 5,
+          });
         });
       });
       describe('1 End', () => {
         afterEach(() => {
           expect(bounds.boundary.p1).toEqual(new Point(0, 0));
-          expect(bounds.boundary.p2).toEqual(new Point(1, 0));
+          expect(bounds.boundary.p2).toEqual(new Point(2, 0));
           expect(bounds.boundary.ends).toBe(1);
           expect(bounds.boundary.round(3).ang).toBe(0);
           expect(bounds.precision).toBe(5);
         });
         test('2 Points Extended', () => {
-          bounds = new LineBounds([0, 0], [1, 0], 0, 1, 5);
-        });
-        test('2 Points Default', () => {
-          bounds = new LineBounds([0, 0], [1, 0], 0, 1, 5);
+          bounds = new LineBounds({
+            p1: [0, 0],
+            p2: [2, 0],
+            ends: 1,
+            precision: 5,
+          });
         });
         test('1 Point', () => {
-          bounds = new LineBounds([0, 0], 1, 0, 1, 5);
+          bounds = new LineBounds({
+            p1: [0, 0],
+            mag: 2,
+            angle: 0,
+            ends: 1,
+            precision: 5,
+          });
         });
         test('From Line', () => {
-          bounds = new LineBounds(new Line([0, 0], [1, 0], 0, 1), 5);
+          bounds = new LineBounds({
+            line: new Line([0, 0], [2, 0], 0, 1),
+            precision: 5,
+          });
+        });
+        test('From Line Definition', () => {
+          bounds = new LineBounds({
+            line: [[0, 0], [2, 0], 1],
+            precision: 5,
+          });
         });
       });
     });
-    describe('2 Ends horizontal', () => {
+    describe('2 Ends horizontal - Inside Bounds', () => {
       beforeEach(() => {
-        bounds = new LineBounds([0, 0], [10, 0]);
+        bounds = new LineBounds({ p1: [0, 0], p2: [10, 0] });
       });
       test('Contains value', () => {
         expect(bounds.contains([0, 0])).toBe(true);
@@ -794,21 +889,28 @@ describe('Bounds', () => {
           check([1, 0], Math.PI, [0, 0], 0, 1);
         });
         test('Edges of bounds', () => {
-          // Trajectory going out
+          check([0, 0], 0, [10, 0], Math.PI, 10);
           check([0, 0], Math.PI, [0, 0], 0, 0);
           check([10, 0], 0, [10, 0], Math.PI, 0);
-
-          // Trajectory going in
-          check([0, 0], 0, [0, 0], Math.PI, 0);
-          check([10, 0], Math.PI, [10, 0], 0, 0);
+          check([10, 0], Math.PI, [0, 0], 0, 10);
         });
         test('Outside bounds', () => {
           check([-1, 0], 0, [0, 0], Math.PI, 1);
-          debugger;
           check([-1, 0], Math.PI, null, Math.PI, 0);
           check([11, 0], Math.PI, [10, 0], 0, 1);
           check([11, 0], 0, null, 0, 0);
         });
+      });
+    });
+    describe('2 Ends horizontal - Outside Bounds', () => {
+      beforeEach(() => {
+        bounds = new LineBounds({ p1: [0, 0], p2: [10, 0], bounds: 'outside' });
+      });
+      test('Intersect Edges of bounds', () => {
+        check([0, 0], 0, [0, 0], Math.PI, 0);
+        check([0, 0], Math.PI, null, Math.PI, 0);
+        check([10, 0], 0, null, 0, 0);
+        check([10, 0], Math.PI, [10, 0], 0, 0);
       });
     });
   });
