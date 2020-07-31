@@ -3418,24 +3418,43 @@ class RectBounds extends Bounds {
     }
 
     let r = rectToPolar(reflection).angle;
+    let noIntersect = false;
+
+    // Test for if the point is on the border, trajectory is along the border
+    // and the cross bound is null
+    if (d === 0 && this.bounds === 'inside' && intersects.length === 1) {
+      if (
+        (intersects[0].id === 'bottom' || intersects[0].id === 'top')
+        && (this.boundary.left == null || this.boundary.right == null)
+        && (a === 0 || a === pi)
+      ) {
+        noIntersect = true;
+      }
+      if (
+        (intersects[0].id === 'right' || intersects[0].id === 'left')
+        && (this.boundary.top == null || this.boundary.bottom == null)
+        && (a === piOnTwo || a === threePiOnTwo)
+      ) {
+        noIntersect = true;
+      }
+    }
 
     // Test for if the point is on the border, bounds is outside, and the
     // trajectory is away from the border
-    let outsideStayingOutside = false;
     if (d === 0 && this.bounds === 'outside' && intersects.length === 2) {
       if (
         intersects[0].id === 'bottom'
         && intersects[1].id === 'left'
         && (a >= piOnTwo || a === 0)
       ) {
-        outsideStayingOutside = true;
+        noIntersect = true;
       }
       if (
         intersects[0].id === 'top'
         && intersects[1].id === 'left'
         && a >= 0 && a <= threePiOnTwo
       ) {
-        outsideStayingOutside = true;
+        noIntersect = true;
       }
 
       if (
@@ -3443,14 +3462,14 @@ class RectBounds extends Bounds {
         && intersects[1].id === 'right'
         && (a <= pi || a >= threePiOnTwo)
       ) {
-        outsideStayingOutside = true;
+        noIntersect = true;
       }
       if (
         intersects[0].id === 'bottom'
         && intersects[1].id === 'right'
         && (a <= piOnTwo || a >= pi)
       ) {
-        outsideStayingOutside = true;
+        noIntersect = true;
       }
     }
     if (d === 0 && this.bounds === 'outside' && intersects.length === 1) {
@@ -3459,28 +3478,28 @@ class RectBounds extends Bounds {
         intersect.id === 'left'
         && a >= piOnTwo && a <= threePiOnTwo
       ) {
-        outsideStayingOutside = true;
+        noIntersect = true;
       }
       if (
         intersect.id === 'right'
         && (a <= piOnTwo || a >= threePiOnTwo)
       ) {
-        outsideStayingOutside = true;
+        noIntersect = true;
       }
       if (
         intersect.id === 'bottom'
         && (a >= pi || a === 0)
       ) {
-        outsideStayingOutside = true;
+        noIntersect = true;
       }
       if (
         intersect.id === 'top'
         && a <= pi
       ) {
-        outsideStayingOutside = true;
+        noIntersect = true;
       }
     }
-    if (outsideStayingOutside) {
+    if (noIntersect) {
       i = null;
       r = direction;
     }
