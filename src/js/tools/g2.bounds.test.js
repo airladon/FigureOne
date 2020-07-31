@@ -1,5 +1,5 @@
 import {
-  Point, Rect, Transform, getPoint,
+  Point, Rect, Transform, getPoint, Line,
   RectBounds, LineBounds, RangeBounds, TransformBounds, ValueBounds,
   clipAngle,
 } from './g2';
@@ -13,6 +13,20 @@ describe('Bounds', () => {
   //   });
   // });
   let bounds;
+  let check;
+  beforeEach(() => {
+    check = (p, dir, i, r, d) => {
+      const result = bounds.intersect(p, dir);
+      if (i == null) {
+        expect(result.intersect).toBe(null);
+        // return;
+      } else {
+        expect(result.intersect.round(3)).toEqual(getPoint(i).round(3));
+      }
+      expect(round(clipAngle(result.reflection, '-180to180'), 3)).toBe(round(clipAngle(r, '-180to180'), 3));
+      expect(round(result.distance, 3)).toBe(round(d, 3));
+    };
+  });
   describe('Range Bounds', () => {
     describe('Construction', () => {
       afterEach(() => {
@@ -187,20 +201,6 @@ describe('Bounds', () => {
     });
   });
   describe('Rect Bounds', () => {
-    let check;
-    beforeEach(() => {
-      check = (p, dir, i, r, d) => {
-        const result = bounds.intersect(p, dir);
-        if (i == null) {
-          expect(result.intersect).toBe(null);
-          // return;
-        } else {
-          expect(result.intersect.round(3)).toEqual(getPoint(i).round(3));
-        }
-        expect(round(clipAngle(result.reflection, '-180to180'), 3)).toBe(round(clipAngle(r, '-180to180'), 3));
-        expect(round(result.distance, 3)).toBe(round(d, 3));
-      };
-    });
     describe('Construction', () => {
       describe('Finite', () => {
         afterEach(() => {
@@ -711,6 +711,103 @@ describe('Bounds', () => {
         test('Outside bounds intersection', () => {
           check([0, 100], -Math.PI / 2, [0, 10], Math.PI / 2, 90);
           check([100, 0], Math.PI, [10, 0], 0, 90);
+        });
+      });
+    });
+  });
+  describe('Line Bounds', () => {
+    describe('Construction', () => {
+      describe('Finite', () => {
+        afterEach(() => {
+          expect(bounds.boundary.p1).toEqual(new Point(0, 0));
+          expect(bounds.boundary.p2).toEqual(new Point(1, 0));
+          expect(bounds.boundary.ends).toBe(2);
+          expect(bounds.boundary.round(3).ang).toBe(0);
+          expect(bounds.precision).toBe(5);
+        });
+        test('2 Points Extended', () => {
+          bounds = new LineBounds([0, 0], [1, 0], 0, 2, 5);
+        });
+        test('2 Points Default', () => {
+          bounds = new LineBounds([0, 0], [1, 0], 0, 2, 5);
+        });
+        test('1 Point', () => {
+          bounds = new LineBounds([0, 0], 1, 0, 2, 5);
+        });
+        test('From Line', () => {
+          bounds = new LineBounds(new Line([0, 0], [1, 0]), 5);
+        });
+      });
+      describe('1 End', () => {
+        afterEach(() => {
+          expect(bounds.boundary.p1).toEqual(new Point(0, 0));
+          expect(bounds.boundary.p2).toEqual(new Point(1, 0));
+          expect(bounds.boundary.ends).toBe(1);
+          expect(bounds.boundary.round(3).ang).toBe(0);
+          expect(bounds.precision).toBe(5);
+        });
+        test('2 Points Extended', () => {
+          bounds = new LineBounds([0, 0], [1, 0], 0, 1, 5);
+        });
+        test('2 Points Default', () => {
+          bounds = new LineBounds([0, 0], [1, 0], 0, 1, 5);
+        });
+        test('1 Point', () => {
+          bounds = new LineBounds([0, 0], 1, 0, 1, 5);
+        });
+        test('From Line', () => {
+          bounds = new LineBounds(new Line([0, 0], [1, 0], 0, 1), 5);
+        });
+      });
+    });
+    describe('2 Ends horizontal', () => {
+      beforeEach(() => {
+        bounds = new LineBounds([0, 0], [10, 0]);
+      });
+      test('Contains value', () => {
+        expect(bounds.contains([0, 0])).toBe(true);
+        expect(bounds.contains([0.1, 0])).toBe(true);
+        expect(bounds.contains([5, 0])).toBe(true);
+        expect(bounds.contains([9.9, 0])).toBe(true);
+        expect(bounds.contains([10, 0])).toBe(true);
+        expect(bounds.contains([11, 0])).toBe(false);
+        expect(bounds.contains([10, 11])).toBe(false);
+      });
+      test('Contains number - should be false', () => {
+        expect(bounds.contains(0)).toBe(false);
+      });
+      test('Clip Point', () => {
+        expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
+        expect(bounds.clip([5, 0])).toEqual(new Point(5, 0));
+        expect(bounds.clip([10, 0])).toEqual(new Point(10, 0));
+        expect(bounds.clip([11, 0])).toEqual(new Point(10, 0));
+        expect(bounds.clip([5, 2])).toEqual(new Point(5, 0));
+        expect(bounds.clip([-10, -10])).toEqual(new Point(0, 0));
+      });
+      test('Clip Value', () => {
+        expect(bounds.clip(100)).toBe(100);
+      });
+      describe('Intersect', () => {
+        test('Inside Bounds', () => {
+          // check([0, 0], 0, [10, 0], Math.PI, 10);
+          check([1, 0], 0, [10, 0], Math.PI, 9);
+          check([1, 0], Math.PI, [0, 0], 0, 1);
+        });
+        test('Edges of bounds', () => {
+          // Trajectory going out
+          check([0, 0], Math.PI, [0, 0], 0, 0);
+          check([10, 0], 0, [10, 0], Math.PI, 0);
+
+          // Trajectory going in
+          check([0, 0], 0, [0, 0], Math.PI, 0);
+          check([10, 0], Math.PI, [10, 0], 0, 0);
+        });
+        test('Outside bounds', () => {
+          check([-1, 0], 0, [0, 0], Math.PI, 1);
+          debugger;
+          check([-1, 0], Math.PI, null, Math.PI, 0);
+          check([11, 0], Math.PI, [10, 0], 0, 1);
+          check([11, 0], 0, null, 0, 0);
         });
       });
     });
