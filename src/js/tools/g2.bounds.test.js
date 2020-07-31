@@ -514,31 +514,66 @@ describe('Bounds', () => {
             Math.PI / 6 * -1, 9 / Math.cos(Math.PI / 6),
           );
         });
-        test.only('Edges of bounds', () => {
-          // Trajectory going out
-          check([10, 0], 0, [10, 0], Math.PI, 0);
-          check([-10, 100], Math.PI / 4 * 3, [-10, 100], Math.PI / 4, 0);
-          check([-10, -10], Math.PI / 6 * 7, [-10, -10], Math.PI / 6, 0);
+        describe('Edges of bounds', () => {
+          test('Trajectory going out', () => {
+            check([10, 0], 0, [10, 0], Math.PI, 0);
+            check([-10, 100], Math.PI / 4 * 3, [-10, 100], Math.PI / 4, 0);
+            check([-10, -10], Math.PI / 6 * 7, [-10, -10], Math.PI / 6, 0);
+          });
 
-          // Trajectory along
-          check([10, 0], Math.PI / 2, null, Math.PI / 2, 0);
-          check([10, 0], -Math.PI / 2, [10, -10], Math.PI / 2, 10);
-          check([-10, 0], Math.PI / 2, null, Math.PI / 2, 0);
-          check([-10, 0], -Math.PI / 2, [-10, -10], Math.PI / 2, 10);
-          // check([-10, 0], -Math.PI / 2, [-10, 0], -Math.PI / 2, 0);
-          check([0, 10], Math.PI, [-10, 10], 0, 10);
-          check([0, -10], Math.PI, [-10, -10], 0, 10);
+          test('Trajectory along', () => {
+            check([10, 0], Math.PI / 2, null, Math.PI / 2, 0);
+            check([10, 0], -Math.PI / 2, [10, -10], Math.PI / 2, 10);
+            check([-10, 0], Math.PI / 2, null, Math.PI / 2, 0);
+            check([-10, 0], -Math.PI / 2, [-10, -10], Math.PI / 2, 10);
+            check([0, 10], Math.PI, [-10, 10], 0, 10);
+            check([0, -10], Math.PI, [-10, -10], 0, 10);
+          });
 
-          // Trajectory going in
-          check([10, 0], Math.PI, [-10, 0], 0, 20);
-          check([-10, 100], Math.PI / 4, [10, 120], Math.PI / 4 * 3, 20 * Math.sqrt(2));
-          check([-10, -10], Math.PI / 4, [10, 10], Math.PI / 4 * 3, 20 * Math.sqrt(2));
+          test('Trajectory along corners', () => {
+            check([-10, -10], Math.PI / 2, null, Math.PI / 2, 0);
+            check([-10, -10], 0, [10, -10], Math.PI, 20);
+            check([10, -10], Math.PI / 2, null, Math.PI / 2, 0);
+            check([10, -10], Math.PI, [-10, -10], 0, 20);
+          });
+
+          test('Trajectory going in', () => {
+            check([10, 0], Math.PI, [-10, 0], 0, 20);
+            check([-10, 100], Math.PI / 4, [10, 120], Math.PI / 4 * 3, 20 * Math.sqrt(2));
+            check([-10, -10], Math.PI / 4, [10, 10], Math.PI / 4 * 3, 20 * Math.sqrt(2));
+          });
         });
-        test.only('Edges outside', () => {
-          bounds.bounds = 'outside';
-          // Trajectory along
-          check([10, 0], Math.PI / 2, null, Math.PI / 2, 0);
-          check([10, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
+        describe('Edges outside', () => {
+          beforeEach(() => {
+            bounds.bounds = 'outside';
+          });
+          test('Trajectory along', () => {
+            check([10, 0], Math.PI / 2, null, Math.PI / 2, 0);
+            check([10, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
+            check([-10, 0], Math.PI / 2, null, Math.PI / 2, 0);
+            check([-10, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
+            check([0, -10], Math.PI, null, Math.PI, 0);
+            check([0, -10], 0, null, 0, 0);
+          });
+
+          test('Trajectory along corners', () => {
+            check([-10, -10], Math.PI / 2, null, Math.PI / 2, 0);
+            check([-10, -10], 0, null, 0, 0);
+            check([10, -10], Math.PI / 2, null, Math.PI / 2, 0);
+            check([10, -10], Math.PI, null, Math.PI, 0);
+          });
+
+          test('Trajectory inside', () => {
+            check([10, 0], Math.PI, [10, 0], 0, 0);
+            check([-10, 0], 0, [-10, 0], Math.PI, 0);
+            check([0, -10], Math.PI / 2, [0, -10], -Math.PI / 2, 0);
+          });
+
+          test('Trajectory outside', () => {
+            check([10, 0], 0, null, 0, 0);
+            check([-10, 0], Math.PI, null, Math.PI, 0);
+            check([0, -10], -Math.PI / 2, null, -Math.PI / 2, 0);
+          });
         });
         test('Outside bounds no intersection', () => {
           check([11, 0], 0, null, 0, 0);
@@ -596,22 +631,34 @@ describe('Bounds', () => {
             Math.PI / 6 * -1, 9 / Math.cos(Math.PI / 6),
           );
         });
-        test('Edges of bounds', () => {
-          // Trajectory going out
-          check([10, 0], 0, [10, 0], Math.PI, 0);
-          check([-10, 10], Math.PI / 4 * 3, [-10, 10], Math.PI / 4 * 7, 0);
-          check([-10, -100], Math.PI / 6 * 7, [-10, -100], Math.PI / 6 * 11, 0);
+        describe('Edges of bounds', () => {
+          test('Trajectory going out', () => {
+            check([10, 0], 0, [10, 0], Math.PI, 0);
+            check([-10, 10], Math.PI / 4 * 3, [-10, 10], Math.PI / 4 * 7, 0);
+            check([-10, -100], Math.PI / 6 * 7, [-10, -100], Math.PI / 6 * 11, 0);
+          });
 
-          // Trajectory along
-          check([10, 0], Math.PI / 2, [10, 0], Math.PI / 2, 0);
-          check([-10, 0], -Math.PI / 2, [-10, 0], -Math.PI / 2, 0);
-          check([0, 10], Math.PI, [0, 10], Math.PI, 0);
-          check([0, -10], Math.PI, [-10, -10], 0, 10);
+          test('Trajectory along', () => {
+            check([10, 0], Math.PI / 2, [10, 10], -Math.PI / 2, 10);
+            check([10, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
+            check([-10, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
+            check([-10, 0], Math.PI / 2, [-10, 10], -Math.PI / 2, 10);
+            check([0, 10], 0, [10, 10], Math.PI, 10);
+            check([0, 10], Math.PI, [-10, 10], 0, 10);
+          });
 
-          // Trajectory going in
-          check([10, 0], Math.PI, [10, 0], 0, 0);
-          check([-10, 10], Math.PI / 4, [-10, 10], Math.PI / 4 * 5, 0);
-          check([-10, -100], Math.PI / 6, [-10, -100], Math.PI / 6 * 5, 0);
+          test('Trajectory along corners', () => {
+            check([-10, 10], -Math.PI / 2, null, -Math.PI / 2, 0);
+            check([-10, 10], 0, [10, 10], Math.PI, 20);
+            check([10, 10], -Math.PI / 2, null, -Math.PI / 2, 0);
+            check([10, 10], Math.PI, [-10, 10], 0, 20);
+          });
+
+          test('Trajectory going in', () => {
+            check([10, 0], Math.PI, [-10, 0], 0, 20);
+            check([-10, -100], Math.PI / 4, [10, -80], Math.PI / 4 * 3, 20 * Math.sqrt(2));
+            check([-10, 10], -Math.PI / 4, [10, -10], Math.PI / 4 * 5, 20 * Math.sqrt(2));
+          });
         });
         test('Outside bounds no intersection', () => {
           check([11, 0], 0, null, 0, 0);
@@ -670,18 +717,34 @@ describe('Bounds', () => {
             Math.PI / 6 * 5, 9 / Math.sin(Math.PI / 6),
           );
         });
-        test('Edges of bounds', () => {
-          // Trajectory going out
-          check([-100, -10], -Math.PI / 2, [-100, -10], Math.PI / 2, 0);
-          check([-100, 10], Math.PI / 2, [-100, 10], -Math.PI / 2, 0);
+        describe('Edges of bounds', () => {
+          test('Trajectory going out', () => {
+            check([0, 10], Math.PI / 2, [0, 10], -Math.PI / 2, 0);
+            check([0, -10], -Math.PI / 2, [0, -10], Math.PI / 2, 0);
+            check([10, 0], 0, [10, 0], Math.PI, 0);
+          });
 
-          // Trajectory along
-          check([-100, -10], 0, [-100, -10], 0, 0);
-          check([-100, 10], Math.PI, [-100, 10], Math.PI, 0);
+          test('Trajectory along', () => {
+            check([10, 0], Math.PI / 2, [10, 10], -Math.PI / 2, 10);
+            check([10, 0], -Math.PI / 2, [10, -10], Math.PI / 2, 10);
+            check([0, 10], 0, [10, 10], Math.PI, 10);
+            check([0, 10], Math.PI, null, Math.PI, 0);
+            check([0, -10], Math.PI, null, Math.PI, 0);
+            check([0, -10], 0, [10, -10], Math.PI, 10);
+          });
 
-          // Trajectory going in
-          check([-100, -10], Math.PI / 2, [-100, -10], -Math.PI / 2, 0);
-          check([-100, 10], -Math.PI / 2, [-100, 10], Math.PI / 2, 0);
+          test('Trajectory along corners', () => {
+            check([10, 10], -Math.PI / 2, [10, -10], Math.PI / 2, 20);
+            check([10, 10], Math.PI, null, Math.PI, 0);
+            check([10, -10], Math.PI / 2, [10, 10], -Math.PI / 2, 20);
+            check([10, -10], Math.PI, null, Math.PI, 0);
+          });
+
+          test('Trajectory going in', () => {
+            check([10, 0], Math.PI, null, Math.PI, 0);
+            check([0, 10], -Math.PI / 2, [0, -10], Math.PI / 2, 20);
+            check([0, -10], Math.PI / 2, [0, 10], -Math.PI / 2, 20);
+          });
         });
         test('Outside bounds no intersection', () => {
           check([-100, -11], 0, null, 0, 0);

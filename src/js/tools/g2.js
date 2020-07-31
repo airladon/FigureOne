@@ -3437,6 +3437,101 @@ class RectBounds extends Bounds {
       ) {
         noIntersect = true;
       }
+      if (
+        intersects[0].id === 'right'
+        && (this.boundary.left == null)
+        && (a === pi)
+      ) {
+        noIntersect = true;
+      }
+      if (
+        intersects[0].id === 'left'
+        && (this.boundary.right == null)
+        && (a === 0)
+      ) {
+        noIntersect = true;
+      }
+      if (
+        intersects[0].id === 'top'
+        && (this.boundary.bottom == null)
+        && (a === threePiOnTwo)
+      ) {
+        noIntersect = true;
+      }
+      if (
+        intersects[0].id === 'bottom'
+        && (this.boundary.top == null)
+        && (a === piOnTwo)
+      ) {
+        noIntersect = true;
+      }
+    }
+
+    if (d === 0 && this.bounds === 'inside' && intersects.length === 2) {
+      if (
+        intersects[0].id === 'bottom'
+        && intersects[1].id === 'left'
+        && this.boundary.right == null
+        && a === 0
+      ) {
+        noIntersect = true;
+      }
+      if (
+        intersects[0].id === 'bottom'
+        && intersects[1].id === 'left'
+        && this.boundary.top == null
+        && a === piOnTwo
+      ) {
+        noIntersect = true;
+      }
+      if (
+        intersects[0].id === 'top'
+        && intersects[1].id === 'left'
+        && this.boundary.right == null
+        && a === 0
+      ) {
+        noIntersect = true;
+      }
+      if (
+        intersects[0].id === 'top'
+        && intersects[1].id === 'left'
+        && this.boundary.bottom == null
+        && a === threePiOnTwo
+      ) {
+        noIntersect = true;
+      }
+      if (
+        intersects[0].id === 'top'
+        && intersects[1].id === 'right'
+        && this.boundary.left == null
+        && a === pi
+      ) {
+        noIntersect = true;
+      }
+      if (
+        intersects[0].id === 'top'
+        && intersects[1].id === 'right'
+        && this.boundary.bottom == null
+        && a === threePiOnTwo
+      ) {
+        noIntersect = true;
+      }
+      if (
+        intersects[0].id === 'bottom'
+        && intersects[1].id === 'right'
+        && this.boundary.left == null
+        && a === pi
+      ) {
+        noIntersect = true;
+      }
+      if (
+        intersects[0].id === 'bottom'
+        && intersects[1].id === 'right'
+        && this.boundary.top == null
+        && a === piOnTwo
+      ) {
+        noIntersect = true;
+      }
     }
 
     // Test for if the point is on the border, bounds is outside, and the
