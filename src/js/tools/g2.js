@@ -3271,6 +3271,235 @@ class RectBounds extends Bounds {
         reflection: direction,
       };
     }
+    const a = roundNum(clipAngle(direction, '0to360'), this.precision);
+    const pi = roundNum(Math.PI, this.precision);
+    const threePiOnTwo = roundNum(3 * Math.PI / 2, this.precision);
+    const piOnTwo = roundNum(Math.PI / 2, this.precision);
+    const p = getPoint(position);
+    const {
+      top, bottom, left, right,
+    } = this.boundary;
+
+    const calcHBound = (h) => {
+      if (h != null) {
+        if (bottom != null && top != null) {
+          return new Line([h, bottom], [h, top]);
+        }
+        if (bottom == null && top != null) {
+          return new Line([h, top], null, -Math.PI / 2, 1);
+        }
+        if (bottom != null && top == null) {
+          return new Line([h, bottom], null, Math.PI / 2, 1);
+        }
+        if (bottom == null && top == null) {
+          return new Line([h, 0], null, Math.PI / 2, 0);
+        }
+      }
+      return null;
+    };
+    const calcVBound = (v) => {
+      if (v != null) {
+        if (left != null && right != null) {
+          return new Line([left, v], [right, v]);
+        }
+        if (left == null && right != null) {
+          return new Line([right, v], null, -Math.PI, 1);
+        }
+        if (left != null && right == null) {
+          return new Line([left, v], null, 0, 1);
+        }
+        if (left == null && right == null) {
+          return new Line([0, v], null, Math.PI, 0);
+        }
+      }
+      return null;
+    };
+
+    // Get the lines for each bound
+    const boundBottom = calcVBound(bottom);
+    const boundTop = calcVBound(top);
+    const boundLeft = calcHBound(left);
+    const boundRight = calcHBound(right);
+
+    // Get the closest boundary intersect
+    const trajectory = new Line(p, null, direction, 1);
+    const getIntersect = (boundLine: Line | null, id) => {
+      if (boundLine == null) {
+        return null;
+      }
+      if (boundLine.hasPointOn(p, this.precision)) {
+        return {
+          intersect: p._dup(),
+          distance: 0,
+          id,
+        };
+      }
+      const result = trajectory.intersectsWith(boundLine, this.precision);
+      if (result.withinLine && result.intersect != null) {
+        return {
+          intersect: result.intersect,
+          distance: round(p.distance(result.intersect), this.precision),
+          id,
+        };
+      }
+      return null;
+    };
+
+    const bottomIntersect = getIntersect(boundBottom, 'bottom');
+    const topIntersect = getIntersect(boundTop, 'top');
+    const leftIntersect = getIntersect(boundLeft, 'left');
+    const rightIntersect = getIntersect(boundRight, 'right');
+
+    const getClosestIntersect = (intersect1, intersect2) => {
+
+      let closestIntersect = null;
+      if (intersect1 != null && intersect2 != null) {
+        if (intersect1.distance === 0 && this.bounds === 'inside') {
+          closestIntersect = intersect2;
+        } else if (intersect2.distance === 0 && this.bounds === 'inside') {
+          closestIntersect = intersect1;
+        } else if (intersect1.distance < intersect2.distance) {
+          closestIntersect = intersect1;
+        } else {
+          closestIntersect = intersect2;
+        }
+      } else if (intersect1 != null) {
+        closestIntersect = intersect1;
+      } else if (intersect2 != null) {
+        closestIntersect = intersect2;
+      }
+      return closestIntersect;
+    };
+
+    const vIntersect = getClosestIntersect(bottomIntersect, topIntersect);
+    const hIntersect = getClosestIntersect(leftIntersect, rightIntersect);
+
+    let intersects = [];
+    if (
+      vIntersect != null
+      && hIntersect != null
+      && vIntersect.distance === hIntersect.distance
+    ) {
+      intersects = [vIntersect, hIntersect];
+    } else {
+      const result = getClosestIntersect(vIntersect, hIntersect);
+      if (result != null) {
+        intersects = [result];
+      }
+    }
+
+    if (intersects.length === 0) {
+      return { intersect: null, distance: 0, reflection: direction };
+    }
+
+    let i;
+    let d;
+    let xMirror = 1;
+    let yMirror = 1;
+    intersects.forEach((intersect) => {
+      if (intersect.id === 'left' || intersect.id === 'right') {
+        xMirror = -1;
+      } else {
+        yMirror = -1;
+      }
+      i = intersect.intersect;
+      d = intersect.distance;
+    });
+    const reflection = polarToRect(1, direction);
+    if (xMirror === -1) {
+      reflection.x *= -1;
+    }
+    if (yMirror === -1) {
+      reflection.y *= -1;
+    }
+
+    if (d === 0) {
+      i = p;
+    }
+
+    let r = rectToPolar(reflection).angle;
+
+    // Test for if the point is on the border, bounds is outside, and the
+    // trajectory is away from the border
+    let outsideStayingOutside = false;
+    if (d === 0 && this.bounds === 'outside' && intersects.length === 2) {
+      if (
+        intersects[0].id === 'bottom'
+        && intersects[1].id === 'left'
+        && (a >= piOnTwo || a === 0)
+      ) {
+        outsideStayingOutside = true;
+      }
+      if (
+        intersects[0].id === 'top'
+        && intersects[1].id === 'left'
+        && a >= 0 && a <= threePiOnTwo
+      ) {
+        outsideStayingOutside = true;
+      }
+
+      if (
+        intersects[0].id === 'top'
+        && intersects[1].id === 'right'
+        && (a <= pi || a >= threePiOnTwo)
+      ) {
+        outsideStayingOutside = true;
+      }
+      if (
+        intersects[0].id === 'bottom'
+        && intersects[1].id === 'right'
+        && (a <= piOnTwo || a >= pi)
+      ) {
+        outsideStayingOutside = true;
+      }
+    }
+    if (d === 0 && this.bounds === 'outside' && intersects.length === 1) {
+      const [intersect] = intersects;
+      if (
+        intersect.id === 'left'
+        && a >= piOnTwo && a <= threePiOnTwo
+      ) {
+        outsideStayingOutside = true;
+      }
+      if (
+        intersect.id === 'right'
+        && (a <= piOnTwo || a >= threePiOnTwo)
+      ) {
+        outsideStayingOutside = true;
+      }
+      if (
+        intersect.id === 'bottom'
+        && (a >= pi || a === 0)
+      ) {
+        outsideStayingOutside = true;
+      }
+      if (
+        intersect.id === 'top'
+        && a <= pi
+      ) {
+        outsideStayingOutside = true;
+      }
+    }
+    if (outsideStayingOutside) {
+      i = null;
+      r = direction;
+    }
+
+    return {
+      intersect: i,
+      distance: d,
+      reflection: r,
+    };
+  }
+
+  intersectLegacy(position: number | TypeParsablePoint, direction: number = 0) {
+    if (typeof position === 'number') {
+      return {
+        intersect: null,
+        distance: 0,
+        reflection: direction,
+      };
+    }
     const p = getPoint(position);
     const {
       top, bottom, left, right,
@@ -3419,7 +3648,7 @@ class RectBounds extends Bounds {
 
     if (d === 0) {
       i = p;
-      if (xMirror === -1)
+      // if (xMirror === -1)
     }
     return {
       intersect: i,
