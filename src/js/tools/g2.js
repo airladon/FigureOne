@@ -462,8 +462,9 @@ class Point {
     if (l.hasPointOn(this, precision)) {
       return this._dup();
     }
-    if (this.shaddowIsOnLine(l, precision)) {
-      return this.getShaddowOnLine(l, precision);
+    const shaddow = this.getShaddowOnLine(l, precision);
+    if (shaddow != null) {
+      return shaddow;
     }
     const d1 = this.distance(l.p1);
     const d2 = this.distance(l.p2);
@@ -3369,86 +3370,6 @@ class RectBounds extends Bounds {
       reflection: rectToPolar(reflection).angle,
     };
   }
-
-  intersectLegacy(position: number | TypeParsablePoint, direction: number = 0) {
-    if (typeof position === 'number') {
-      return {
-        position,
-        distance: 0,
-        direction,
-      };
-    }
-    const ang = direction;
-    const trajectory = new Line(position, 1, ang);
-    let hBound;
-    let vBound;
-    let xMirror = 1;
-    let yMirror = 1;
-    let intersectPoint;
-    let distanceToBound = 0;
-    const bounds = this.boundary;
-    if (ang > 0 && ang < Math.PI) {
-      hBound = new Line([bounds.left, bounds.top], [bounds.right, bounds.top]);
-    } else if (ang > Math.PI) {
-      hBound = new Line([bounds.left, bounds.bottom], [bounds.right, bounds.bottom]);
-    }
-    if (ang > Math.PI / 2 && ang < Math.PI / 2 * 3) {
-      vBound = new Line([bounds.left, bounds.bottom], [bounds.left, bounds.top]);
-    } else if ((ang >= 0 && ang < Math.PI / 2) || ang > Math.PI / 2 * 3) {
-      vBound = new Line([bounds.right, bounds.bottom], [bounds.right, bounds.top]);
-    }
-    if (vBound != null) {
-      const result = trajectory.intersectsWith(vBound);
-      if (result.intersect != null) {
-        intersectPoint = result.intersect;
-        distanceToBound = distance(position, intersectPoint);
-        xMirror = -1;
-      }
-    }
-    if (hBound != null) {
-      const result = trajectory.intersectsWith(hBound);
-      if (result.intersect != null) {
-        const distanceToBoundH = distance(position, result.intersect);
-        if (intersectPoint == null) {
-          intersectPoint = result.intersect;
-          distanceToBound = distanceToBoundH;
-          xMirror = 1;
-          yMirror = -1;
-        } else if (distanceToBoundH < distanceToBound) {
-          intersectPoint = result.intersect;
-          distanceToBound = distanceToBoundH;
-          xMirror = 1;
-          yMirror = -1;
-        } else if (
-          roundNum(distanceToBoundH, this.precision) === roundNum(distanceToBound, this.precision)
-        ) {
-          xMirror = -1;
-          yMirror = -1;
-        }
-      }
-    }
-    if (intersectPoint == null) {
-      return {
-        position,
-        distance: 0,
-        direction: ang,
-      };
-    }
-    // let reflectionAngle = ang;
-    const reflection = polarToRect(1, ang);
-    if (xMirror === -1) {
-      reflection.x *= -1;
-    }
-    if (yMirror === -1) {
-      reflection.y *= -1;
-    }
-
-    return {
-      position: intersectPoint,
-      distance: intersectPoint.distance(position),
-      direction: rectToPolar(reflection).angle,
-    };
-  }
 }
 
 class LineBounds extends Bounds {
@@ -3458,72 +3379,129 @@ class LineBounds extends Bounds {
     pointOrLine: TypeParsablePoint | Line,
     p2OrMagOrPrecision: TypeParsablePoint | number = 8,
     angle: number = 0,
+    ends: 2 | 1 | 0 = 2,
     precisionIn: number = 8,
   ) {
     let boundary;
     let precision;
     if (!(pointOrLine instanceof Line)) {
-      boundary = new Line(pointOrLine, p2OrMagOrPrecision, angle);
+      boundary = new Line(pointOrLine, p2OrMagOrPrecision, angle, ends);
       precision = precisionIn;
     } else {
       boundary = pointOrLine;
-      precision = p2OrMagOrPrecision;
+      precision = typeof p2OrMagOrPrecision === 'number' ? p2OrMagOrPrecision : 8;
     }
     super(boundary, precision);
   }
 
-  contains(position: number | Point) {
+  contains(position: number | TypeParsablePoint) {
     if (typeof position === 'number') {
       return false;
     }
-    return position.isWithinLine(this.boundary, this.precision);
+    const p = getPoint(position);
+    return p.isWithinLine(this.boundary, this.precision);
   }
 
-  // containsShaddow(position: Point) {
-  //   return position.shaddowIsOnLine(this.boundary, this.precision);
-  // }
-
-  clip(position: number | Point) {
+  clip(position: number | TypeParsablePoint) {
     if (typeof position === 'number') {
       return position;
     }
-    return position.clipToLine(this.boundary, this.precision);
+    const p = getPoint(position);
+    return p.clipToLine(this.boundary, this.precision);
   }
 
-  intersect(p: number | Point, direction: number = 0) {
-    if (typeof p === 'number') {
-      return { p, distance: 0, direction };
-    }
-    const bounds = this.boundary;
-    const v1 = new Line(p, bounds.p1);
-    const v2 = new Line(p, bounds.p2);
-    if (Math.abs(v1.ang - direction) < Math.abs(v2.ang - direction)) {
+  // The intersect of a Line Boundary can be its finite end points
+  //  - p1 only if 1 ended
+  //  - p1 or p2 if 2 ended
+  intersect(position: number | TypeParsablePoint, direction: number = 0) {
+    if (
+      typeof position === 'number'
+      || this.boundary.ends === 0   // Unbounded line will have no intersect
+    ) {
       return {
-        position: bounds.p1._dup(),
-        direction: direction + Math.PI,
-        distance: p.distance(bounds.p1),
+        intersect: null,
+        distance: 0,
+        reflection: direction,
       };
     }
-    return {
-      position: bounds.p2._dup(),
-      direction: direction + Math.PI,
-      distance: p.distance(bounds.p2),
-    };
+    const p = getPoint(position);
+    if (!this.boundary.hasPointAlong(p, this.precision)) {
+      return {
+        intersect: null,
+        distance: 0,
+        reflection: direction,
+      };
+    }
+
+    let onLine = false;
+    if (this.boundary.hasPointOn(p, this.precision)) {
+      onLine = true;
+    }
+
+    const bounds = this.boundary;
+    const p1 = this.boundary.p1._dup();
+    const p2 = this.boundary.p2._dup();
+    const angleDelta = round(Math.abs(clipAngle(direction, '0to360') - clipAngle(bounds.ang, '0to360')), this.precision);
+
+    const d1 = p.distance(p1);
+    const d2 = p.distance(p2);
+
+    if (p.isEqualTo(p1, this.precision)) {
+      return { intersect: p1, distance: 0, reflection: direction + Math.PI };
+    }
+
+    if (bounds.ends === 1) {
+      if (
+        (onLine === true && angleDelta === 0)
+        || (onLine === false && angleDelta !== 0)
+      ) {
+        return { intersect: null, distance: 0, reflection: direction };
+      }
+      return { intersect: p1, distance: d1, reflection: direction + Math.PI };
+    }
+
+    // We now have a 2 ended line
+    if (p.isEqualTo(p2, this.precision)) {
+      return { intersect: p2, distance: 0, reflection: direction + Math.PI };
+    }
+
+    if (onLine && angleDelta === 0) {
+      return { intersect: p2, distance: d2, reflection: direction + Math.PI };
+    }
+
+    if (onLine) {
+      return { intersect: p1, distance: d1, reflection: direction + Math.PI };
+    }
+
+    // We now know the point is off a 2 ended line
+    let i;
+    let d;
+    if (d1 < d2 && angleDelta === 0) {
+      i = p1;
+      d = d1;
+    } else if (d2 < d1 && angleDelta !== 0 ) {
+      i = p2;
+      d = d2;
+    } else {
+      return { intersect: null, distance: 0, reflection: direction };
+    }
+    return { intersect: i, distance: d, reflection: direction + Math.PI };
   }
 
-  clipVelocity(velocity: number | Point) {
-    if (typeof velocity === 'number') {
-      return velocity;
-    }
-    const unitVector = new Vector(this.boundary).unit();
-    let projection = unitVector.dotProduct(new Vector([0, 0], velocity));
-    let { ang } = this.boundary;
-    if (projection < -1) {
-      ang += Math.PI;
-      projection = -projection;
-    }
-    return polarToRect(projection, ang);
-  }
+  // clipVelocity(velocity: number | TypeParsablePoint) {
+  //   if (typeof velocity === 'number') {
+  //     return velocity;
+  //   }
+  //   const v = getPoint(velocity);
+  //   const unitVector = new Vector(this.boundary).unit();
+  //   let projection = unitVector.dotProduct(new Vector([0, 0], v));
+  //   let { ang } = this.boundary;
+  //   if (projection < -1) {
+  //     ang += Math.PI;
+  //     projection = -projection;
+  //   }
+  //   return polarToRect(projection, ang);
+  // }
 }
 
 function makeBounds(
