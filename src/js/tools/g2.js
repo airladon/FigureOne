@@ -3080,6 +3080,10 @@ class RangeBounds extends Bounds {
       }
       return false;
     }
+    const p = getPoint(position);
+    if (this.contains(p.x) && this.contains(p.y)) {
+      return true;
+    }
     return false;
     // const p = getPoint(position);
     // if (
@@ -4037,10 +4041,8 @@ class TransformBounds extends Bounds {
         if (b != null && !b.contains(transformElement.r)) {
           return false;
         }
-      } else {
-        if (b != null && !b.contains(new Point(transformElement.x, transformElement.y))) {
-          return false;
-        }
+      } else if (b != null && !b.contains(new Point(transformElement.x, transformElement.y))) {
+        return false;
       }
     }
     return true;

@@ -47,8 +47,14 @@ describe('Bounds', () => {
         expect(bounds.contains(-11)).toBe(false);
         expect(bounds.contains(11)).toBe(false);
       });
-      test('Contains point - should be false', () => {
-        expect(bounds.contains([0, 0])).toBe(false);
+      test('Contains point', () => {
+        expect(bounds.contains([0, 0])).toBe(true);
+        expect(bounds.contains([10, 10])).toBe(true);
+        expect(bounds.contains([-10, -10])).toBe(true);
+        expect(bounds.contains([-10, 10])).toBe(true);
+        expect(bounds.contains([-11, 10])).toBe(false);
+        expect(bounds.contains([-10, 11])).toBe(false);
+        expect(bounds.contains([-11, 11])).toBe(false);
       });
       test('Clip Value', () => {
         expect(bounds.clip(3)).toBe(3);
@@ -119,8 +125,17 @@ describe('Bounds', () => {
         expect(bounds.contains(0)).toBe(true);
         expect(bounds.contains(10)).toBe(true);
         expect(bounds.contains(11)).toBe(false);
-        expect(bounds.contains([0, 0])).toBe(false);
-        expect(bounds.contains(new Point(0, 0))).toBe(false);
+        // expect(bounds.contains([0, 0])).toBe(false);
+        // expect(bounds.contains(new Point(0, 0))).toBe(false);
+      });
+      test('Contains Point', () => {
+        expect(bounds.contains([0, 0])).toBe(true);
+        expect(bounds.contains([10, 10])).toBe(true);
+        expect(bounds.contains([-10, -10])).toBe(true);
+        expect(bounds.contains([-10, 10])).toBe(true);
+        expect(bounds.contains([-11, 10])).toBe(true);
+        expect(bounds.contains([-10, 11])).toBe(false);
+        expect(bounds.contains([-11, 11])).toBe(false);
       });
       test('Clip Value', () => {
         expect(bounds.clip(3)).toBe(3);
@@ -158,8 +173,17 @@ describe('Bounds', () => {
         expect(bounds.contains(-10)).toBe(true);
         expect(bounds.contains(0)).toBe(true);
         expect(bounds.contains(100000)).toBe(true);
-        expect(bounds.contains([0, 0])).toBe(false);
-        expect(bounds.contains(new Point(0, 0))).toBe(false);
+        // expect(bounds.contains([0, 0])).toBe(false);
+        // expect(bounds.contains(new Point(0, 0))).toBe(false);
+      });
+      test('Contains Point', () => {
+        expect(bounds.contains([0, 0])).toBe(true);
+        expect(bounds.contains([10, 10])).toBe(true);
+        expect(bounds.contains([-10, -10])).toBe(true);
+        expect(bounds.contains([-10, 10])).toBe(true);
+        expect(bounds.contains([-11, 10])).toBe(false);
+        expect(bounds.contains([-10, 11])).toBe(true);
+        expect(bounds.contains([-11, 11])).toBe(false);
       });
       test('Clip', () => {
         expect(bounds.clip(3)).toBe(3);
@@ -197,8 +221,17 @@ describe('Bounds', () => {
         expect(bounds.contains(-10)).toBe(true);
         expect(bounds.contains(0)).toBe(true);
         expect(bounds.contains(100000)).toBe(true);
-        expect(bounds.contains([0, 0])).toBe(false);
-        expect(bounds.contains(new Point(0, 0))).toBe(false);
+        // expect(bounds.contains([0, 0])).toBe(false);
+        // expect(bounds.contains(new Point(0, 0))).toBe(false);
+      });
+      test('Contains Point', () => {
+        expect(bounds.contains([0, 0])).toBe(true);
+        expect(bounds.contains([10, 10])).toBe(true);
+        expect(bounds.contains([-10, -10])).toBe(true);
+        expect(bounds.contains([-10, 10])).toBe(true);
+        expect(bounds.contains([-11, 10])).toBe(true);
+        expect(bounds.contains([-10, 11])).toBe(true);
+        expect(bounds.contains([-11, 11])).toBe(true);
       });
       test('Clip Value', () => {
         expect(bounds.clip(0)).toBe(0);
@@ -1202,10 +1235,29 @@ describe('Bounds', () => {
       test('Nulls in bounds', () => {
         const t = new Transform().scale(1, 1).rotate(0).translate(0, 0);
         bounds = new TransformBounds(t, {
-          translation: { left: -2, bottom: -1, right: 1, top: 2 },
+          translation: null,
           scale: null,
           rotation: { min: -4, max: 4 },
         });
+        const above = t.constant(5);
+        const c = bounds.clip(above);
+        expect(c.t()).toEqual(new Point(5, 5));
+        expect(c.s()).toEqual(new Point(5, 5));
+        expect(c.r()).toBe(4);
+      });
+    });
+    describe('Contains', () => {
+      test('Simple', () => {
+        const t = new Transform().scale(1, 1).rotate(0).translate(0, 0);
+        bounds = new TransformBounds(t, {
+          translation: { left: -2, bottom: -1, right: 1, top: 2 },
+          scale: { min: -3, max: 3 },
+          rotation: { min: -4, max: 4 },
+        });
+
+        expect(bounds.contains(
+          new Transform().scale(-3, 1).rotate(3).translate(1, 1),
+        )).toBe(true);
       });
     });
   });
