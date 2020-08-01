@@ -3925,10 +3925,10 @@ class TransformBounds extends Bounds {
     }
     super([], precision);
     this.order = order;
-    this.update(bounds);
+    this.createBounds(bounds);
   }
 
-  update(
+  createBounds(
     bounds: TypeTransformBoundsDefinition | Bounds | null,
     index: number = 0,
   ) {
@@ -3960,7 +3960,7 @@ class TransformBounds extends Bounds {
     this.boundary = boundary;
   }
 
-  updateBound(
+  update(
     type: 'r' | 's' | 't',
     bound: TypeBoundsDefinition,
     typeIndex: ?number = 0,
@@ -3968,10 +3968,16 @@ class TransformBounds extends Bounds {
     let index = 0;
     for (let i = 0; i < this.order.length; i += 1) {
       const o = this.order[i];
-      if (o === type && (typeIndex == null || typeIndex === index)) {
-        this.boundary[i] = makeBounds(bound);
+      if (o === type) {
+        if (typeIndex == null || typeIndex === index) {
+          this.boundary[i] = makeBounds(bound);
+        }
         index += 1;
       }
+      // if (o === type && (typeIndex == null || typeIndex === index)) {
+      //   this.boundary[i] = makeBounds(bound);
+      //   index += 1;
+      // }
     }
   }
 
@@ -3979,21 +3985,21 @@ class TransformBounds extends Bounds {
     bound: Bounds | TypeTranslationBoundsDefinition,
     translationIndex: ?number = 0,
   ) {
-    this.updateBound('t', bound, translationIndex);
+    this.update('t', bound, translationIndex);
   }
 
   updateRotation(
     bound: Bounds | TypeRotationBoundsDefinition,
     translationIndex: ?number = 0,
   ) {
-    this.updateBound('r', bound, translationIndex);
+    this.update('r', bound, translationIndex);
   }
 
   updateScale(
     bound: Bounds | TypeScaleBoundsDefinition,
     translationIndex: ?number = 0,
   ) {
-    this.updateBound('s', bound, translationIndex);
+    this.update('s', bound, translationIndex);
   }
 
   getBound(type: 'r' | 's' | 't', index: number = 0) {

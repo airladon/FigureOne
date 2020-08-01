@@ -1068,10 +1068,34 @@ describe('Bounds', () => {
     });
   });
   describe('Transform Bounds', () => {
-    describe('Construction', () => {
+    describe('Construction, GetBound and UpdateBound', () => {
       let t;
       beforeEach(() => {
         t = new Transform().scale(1, 1).rotate(0).translate(0, 0);
+      });
+      test('Update with Bound Definitions', () => {
+        bounds = new TransformBounds(t);
+        bounds.updateScale({ min: 0.5, max: 1.5 });
+        bounds.updateRotation({ min: -2, max: 2 });
+        bounds.updateTranslation({
+          left: -1, right: 1, bottom: -1, top: 1,
+        });
+      });
+      test('Update with Bounds', () => {
+        bounds = new TransformBounds(t);
+        bounds.updateScale(new RangeBounds({ min: 0.5, max: 1.5 }));
+        bounds.updateRotation(new RangeBounds({ min: -2, max: 2 }));
+        bounds.updateTranslation(new RectBounds({
+          left: -1, right: 1, bottom: -1, top: 1,
+        }));
+      });
+      test('Update with Indeces', () => {
+        bounds = new TransformBounds(t);
+        bounds.update('r', { min: -2, max: 2 });
+        bounds.update('s', { min: 0.5, max: 1.5 });
+        bounds.update('t', {
+          left: -1, right: 1, bottom: -1, top: 1,
+        });
       });
       test('Implicit transform definitions', () => {
         bounds = new TransformBounds(t, {
@@ -1118,22 +1142,6 @@ describe('Bounds', () => {
           }),
         ]);
       });
-      test('Update with Bounds', () => {
-        bounds = new TransformBounds(t);
-        bounds.updateScale(new RangeBounds({ min: 0.5, max: 1.5 }));
-        bounds.updateRotation(new RangeBounds({ min: -2, max: 2 }));
-        bounds.updateTranslation(new RectBounds({
-          left: -1, right: 1, bottom: -1, top: 1,
-        }));
-      });
-      test('Update with Bound Definitions', () => {
-        bounds = new TransformBounds(t);
-        bounds.updateScale({ min: 0.5, max: 1.5 });
-        bounds.updateRotation({ min: -2, max: 2 });
-        bounds.updateTranslation({
-          left: -1, right: 1, bottom: -1, top: 1,
-        });
-      });
       afterEach(() => {
         const tb = bounds.getTranslation();
         const rb = bounds.getRotation();
@@ -1144,6 +1152,37 @@ describe('Bounds', () => {
         expect(tb.boundary).toEqual({ left: -1, bottom: -1, top: 1, right: 1 });
         expect(sb.boundary).toEqual({ min: 0.5, max: 1.5 });
         expect(rb.boundary).toEqual({ min: -2, max: 2 });
+      });
+    });
+    describe('Long Transform', () => {
+      let t;
+      beforeEach(() => {
+        t = new Transform()
+          .translate(0, 0)
+          .scale(1, 1)
+          .rotate(0)
+          .translate(1, 1);
+        bounds = new TransformBounds(t);
+      });
+      test('Two Translations widh two DIFFERENT updates', () => {
+        bounds.updateTranslation({ left: -1, right: 1 });
+        bounds.updateTranslation({ left: -2, right: 2 }, 1);
+        expect(bounds.getTranslation().boundary).toEqual({
+          left: -1, right: 1, bottom: null, top: null,
+        });
+        expect(bounds.getTranslation(1).boundary).toEqual({
+          left: -2, right: 2, bottom: null, top: null,
+        });
+      });
+      test('Two Translations widh two SAME updates', () => {
+        bounds.updateTranslation({ left: -1, right: 1 }, null);
+
+        expect(bounds.getTranslation().boundary).toEqual({
+          left: -1, right: 1, bottom: null, top: null,
+        });
+        expect(bounds.getTranslation(1).boundary).toEqual({
+          left: -1, right: 1, bottom: null, top: null,
+        });
       });
     });
   });
