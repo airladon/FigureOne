@@ -4033,8 +4033,14 @@ class TransformBounds extends Bounds {
     for (let i = 0; i < t.order.length; i += 1) {
       const transformElement = t.order[i];
       const b = this.boundary[i];                       // $FlowFixMe
-      if (b != null && !b.contains(transformElement)) {
-        return false;
+      if (transformElement instanceof Rotation) {
+        if (b != null && !b.contains(transformElement.r)) {
+          return false;
+        }
+      } else {
+        if (b != null && !b.contains(new Point(transformElement.x, transformElement.y))) {
+          return false;
+        }
       }
     }
     return true;
@@ -4047,7 +4053,12 @@ class TransformBounds extends Bounds {
       const transformElement = t.order[i];
       const b = this.boundary[i];
       if (b != null) {
-        const clipped = b.clip(transformElement);
+        let clipped;
+        if (transformElement instanceof Rotation) {
+          clipped = b.clip(transformElement.r);
+        } else {
+          clipped = b.clip(new Point(transformElement.x, transformElement.y));
+        }
         let newElement;
         if (transformElement instanceof Translation) {
           newElement = new Translation(clipped.x, clipped.y, transformElement.name);
@@ -4060,7 +4071,7 @@ class TransformBounds extends Bounds {
         // clipped.name = transformElement.name;
         order.push(newElement);
       } else {
-        order.push(transformElement);
+        order.push(transformElement._dup());
       }
     }
     return new Transform(order, t.name);

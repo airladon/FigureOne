@@ -1154,7 +1154,7 @@ describe('Bounds', () => {
         expect(rb.boundary).toEqual({ min: -2, max: 2 });
       });
     });
-    describe('Long Transform', () => {
+    describe('Long Transforms', () => {
       let t;
       beforeEach(() => {
         t = new Transform()
@@ -1182,6 +1182,29 @@ describe('Bounds', () => {
         });
         expect(bounds.getTranslation(1).boundary).toEqual({
           left: -1, right: 1, bottom: null, top: null,
+        });
+      });
+    });
+    describe('Clip', () => {
+      test('Simple', () => {
+        const t = new Transform().scale(1, 1).rotate(0).translate(0, 0);
+        bounds = new TransformBounds(t, {
+          translation: { left: -2, bottom: -1, right: 1, top: 2 },
+          scale: { min: -3, max: 3 },
+          rotation: { min: -4, max: 4 },
+        });
+        const above = t.constant(5);
+        const c = bounds.clip(above);
+        expect(c.t()).toEqual(new Point(1, 2));
+        expect(c.s()).toEqual(new Point(3, 3));
+        expect(c.r()).toBe(4);
+      });
+      test('Nulls in bounds', () => {
+        const t = new Transform().scale(1, 1).rotate(0).translate(0, 0);
+        bounds = new TransformBounds(t, {
+          translation: { left: -2, bottom: -1, right: 1, top: 2 },
+          scale: null,
+          rotation: { min: -4, max: 4 },
         });
       });
     });
