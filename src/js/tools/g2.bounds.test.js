@@ -6,12 +6,6 @@ import {
 import { round } from './math';
 
 describe('Bounds', () => {
-  // describe('Value Bounds', () => {
-  //   test('Simple', () => {
-  //     const bounds = new ValueBounds(4);
-  //     expect(bounds.boundary).toBe(4);
-  //   });
-  // });
   let bounds;
   let check;
   beforeEach(() => {
@@ -454,10 +448,6 @@ describe('Bounds', () => {
             check([10, 10], Math.PI / 6, null, Math.PI / 6, 0);
             check([10, -10], -Math.PI / 6, null, -Math.PI / 6, 0);
           });
-
-          // check([10, 0], Math.PI, [-10, 0], 0, 20);
-          // check([0, -10], Math.PI / 2, [0, 10], -Math.PI / 2, 20);
-          // check([0, 10], -Math.PI / 2, [0, -10], Math.PI / 2, 20);
         });
         test('Outside bounds no intersection', () => {
           check([11, 0], 0, null, 0, 0);
@@ -1074,6 +1064,86 @@ describe('Bounds', () => {
         check([0, 0], Math.PI, null, Math.PI, 0);
         check([10, 0], 0, null, 0, 0);
         check([10, 0], Math.PI, [10, 0], 0, 0);
+      });
+    });
+  });
+  describe('Transform Bounds', () => {
+    describe('Construction', () => {
+      let t;
+      beforeEach(() => {
+        t = new Transform().scale(1, 1).rotate(0).translate(0, 0);
+      });
+      test('Implicit transform definitions', () => {
+        bounds = new TransformBounds(t, {
+          translation: {
+            left: -1, right: 1, bottom: -1, top: 1,
+          },
+          rotation: { min: -2, max: 2 },
+          scale: { min: 0.5, max: 1.5 },
+        });
+      });
+      test('Explicit transform definitions', () => {
+        bounds = new TransformBounds(t, {
+          translation: {
+            type: 'rect',
+            bounds: {
+              left: -1, right: 1, bottom: -1, top: 1,
+            },
+          },
+          rotation: {
+            type: 'range',
+            bounds: { min: -2, max: 2 },
+          },
+          scale: {
+            type: 'range',
+            bounds: { min: 0.5, max: 1.5 },
+          },
+        });
+      });
+      test('Bounds transform definitions', () => {
+        bounds = new TransformBounds(t, {
+          translation: new RectBounds({
+            left: -1, right: 1, bottom: -1, top: 1,
+          }),
+          rotation: new RangeBounds({ min: -2, max: 2 }),
+          scale: new RangeBounds({ min: 0.5, max: 1.5 }),
+        });
+      });
+      test('Bounds Array definitions', () => {
+        bounds = new TransformBounds(t, [
+          new RangeBounds({ min: 0.5, max: 1.5 }),
+          new RangeBounds({ min: -2, max: 2 }),
+          new RectBounds({
+            left: -1, right: 1, bottom: -1, top: 1,
+          }),
+        ]);
+      });
+      test('Update with Bounds', () => {
+        bounds = new TransformBounds(t);
+        bounds.updateScale(new RangeBounds({ min: 0.5, max: 1.5 }));
+        bounds.updateRotation(new RangeBounds({ min: -2, max: 2 }));
+        bounds.updateTranslation(new RectBounds({
+          left: -1, right: 1, bottom: -1, top: 1,
+        }));
+      });
+      test('Update with Bound Definitions', () => {
+        bounds = new TransformBounds(t);
+        bounds.updateScale({ min: 0.5, max: 1.5 });
+        bounds.updateRotation({ min: -2, max: 2 });
+        bounds.updateTranslation({
+          left: -1, right: 1, bottom: -1, top: 1,
+        });
+      });
+      afterEach(() => {
+        const tb = bounds.getTranslation();
+        const rb = bounds.getRotation();
+        const sb = bounds.getScale();
+        expect(tb).toBeInstanceOf(RectBounds);
+        expect(rb).toBeInstanceOf(RangeBounds);
+        expect(sb).toBeInstanceOf(RangeBounds);
+        expect(tb.boundary).toEqual({ left: -1, bottom: -1, top: 1, right: 1 });
+        expect(sb.boundary).toEqual({ min: 0.5, max: 1.5 });
+        expect(rb.boundary).toEqual({ min: -2, max: 2 });
       });
     });
   });

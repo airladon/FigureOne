@@ -2990,7 +2990,7 @@ class Bounds {
   constructor(
     boundary: Object,
     bounds: 'inside' | 'outside' = 'inside',
-    precision: number = 8
+    precision: number = 8,
   ) {
     this.boundary = boundary;
     this.bounds = bounds;
@@ -3027,27 +3027,28 @@ class Bounds {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  clipVelocity(velocity: TypeParsablePoint | number) {
-    if (typeof velocity === 'number') {
-      return velocity;
-    }
-    return getPoint(velocity);
-  }
+  // clipVelocity(velocity: TypeParsablePoint | number) {
+  //   if (typeof velocity === 'number') {
+  //     return velocity;
+  //   }
+  //   return getPoint(velocity);
+  // }
 }
 
 // class ValueBounds extends Bounds {
 //   boundary: ?number;
 // }
+type TypeRangeBoundsDefinition = {
+  min?: number,
+  max?: number,
+  precision?: number,
+  bounds?: 'inside' | 'outside',
+};
 
 class RangeBounds extends Bounds {
   boundary: { min: number | null, max: number | null };
 
-  constructor(optionsIn: {
-    min?: number,
-    max?: number,
-    precision?: number,
-    bounds?: 'inside' | 'outside',
-  }) {
+  constructor(optionsIn: TypeRangeBoundsDefinition) {
     const defaultOptions = {
       bounds: 'inside',
       precision: 8,
@@ -3187,6 +3188,15 @@ class RangeBounds extends Bounds {
   }
 }
 
+type TypeRectBoundsDefinition = {
+  left?: number | null,
+  bottom?: number | null,
+  right?: number | null,
+  top?: number | null,
+  bounds?: 'inside' | 'outside',
+  precision?: number,
+};
+
 class RectBounds extends Bounds {
   boundary: {
     left: null | number,
@@ -3195,14 +3205,7 @@ class RectBounds extends Bounds {
     top: null | number,
   };
 
-  constructor(optionsIn: {
-    left?: number | null,
-    bottom?: number | null,
-    right?: number | null,
-    top?: number | null,
-    bounds?: 'inside' | 'outside',
-    precision?: number,
-  }) {
+  constructor(optionsIn: TypeRectBoundsDefinition) {
     const defaultOptions = {
       left: null,
       right: null,
@@ -3605,186 +3608,23 @@ class RectBounds extends Bounds {
       reflection: r,
     };
   }
-
-  intersectLegacy(position: number | TypeParsablePoint, direction: number = 0) {
-    if (typeof position === 'number') {
-      return {
-        intersect: null,
-        distance: 0,
-        reflection: direction,
-      };
-    }
-    const p = getPoint(position);
-    const {
-      top, bottom, left, right,
-    } = this.boundary;
-
-    const calcHBound = (h) => {
-      if (h != null) {
-        if (bottom != null && top != null) {
-          return new Line([h, bottom], [h, top]);
-        }
-        if (bottom == null && top != null) {
-          return new Line([h, top], null, -Math.PI / 2, 1);
-        }
-        if (bottom != null && top == null) {
-          return new Line([h, bottom], null, Math.PI / 2, 1);
-        }
-        if (bottom == null && top == null) {
-          return new Line([h, 0], null, Math.PI / 2, 0);
-        }
-      }
-      return null;
-    };
-    const calcVBound = (v) => {
-      if (v != null) {
-        if (left != null && right != null) {
-          return new Line([left, v], [right, v]);
-        }
-        if (left == null && right != null) {
-          return new Line([right, v], null, -Math.PI, 1);
-        }
-        if (left != null && right == null) {
-          return new Line([left, v], null, 0, 1);
-        }
-        if (left == null && right == null) {
-          return new Line([0, v], null, Math.PI, 0);
-        }
-      }
-      return null;
-    };
-
-    // Get the lines for each bound
-    const boundBottom = calcVBound(bottom);
-    const boundTop = calcVBound(top);
-    const boundLeft = calcHBound(left);
-    const boundRight = calcHBound(right);
-
-    // Get the intersect with each bound - null is no intersect
-    const trajectory = new Line(p, null, direction, 1);
-    const checkIntersect = (boundLine: Line | null) => {
-      if (boundLine == null) {
-        return null;
-      }
-      if (boundLine.hasPointOn(p, this.precision)) {
-        return {
-          intersect: p._dup(),
-          distance: 0,
-        };
-      }
-      const result = trajectory.intersectsWith(boundLine, this.precision);
-      if (result.withinLine && result.intersect != null) {
-        return {
-          intersect: result.intersect,
-          distance: round(p.distance(result.intersect), this.precision),
-        };
-      }
-      return null;
-    };
-    const boundBottomIntersect = checkIntersect(boundBottom);
-    const boundTopIntersect = checkIntersect(boundTop);
-    const boundLeftIntersect = checkIntersect(boundLeft);
-    const boundRightIntersect = checkIntersect(boundRight);
-
-    // Get the closest H and V bound
-    const getBound = (bound1Intersect, bound2Intersect) => {
-      let insideDirection = 1;
-      let boundIntersect = null;
-      if (bound1Intersect != null) {
-        boundIntersect = bound1Intersect;
-      }
-      if (bound2Intersect != null) {
-        if (boundIntersect != null) {
-          if (bound2Intersect.distance < boundIntersect.distance) {
-            boundIntersect = bound2Intersect;
-            insideDirection = -1;
-          }
-        } else {
-          boundIntersect = bound2Intersect;
-          insideDirection = -1;
-        }
-      }
-      return {
-        intersect: boundIntersect,
-        insideDirection,
-      };
-    };
-
-    const hResult = getBound(boundBottomIntersect, boundTopIntersect);
-    const vResult = getBound(boundLeftIntersect, boundRightIntersect);
-
-    const boundHIntersect = hResult.intersect;
-    const boundHInsideDirection = hResult.insideDirection;
-    const boundVIntersect = hResult.intersect;
-    const boundVInsideDirection = vResult.insideDirection;
-    // const boundVIntersect = getBound(boundLeftIntersect, boundRightIntersect);
-
-    let d;
-    let i;
-    let xMirror = 1;
-    let yMirror = 1;
-    if (boundHIntersect != null) {
-      if (
-        boundVIntersect == null
-        || boundVIntersect.distance >= boundHIntersect.distance
-      ) {
-        d = boundHIntersect.distance;
-        i = boundHIntersect.intersect;
-        yMirror = -1;
-      }
-    }
-    if (boundVIntersect != null) {
-      if (
-        boundHIntersect == null
-        || boundHIntersect.distance >= boundVIntersect.distance
-      ) {
-        d = boundVIntersect.distance;
-        i = boundVIntersect.intersect;
-        xMirror = -1;
-      }
-    }
-
-    if (i == null) {
-      return {
-        intersect: null,
-        distance: 0,
-        reflection: direction,
-      };
-    }
-    // let reflectionAngle = ang;
-    const reflection = polarToRect(1, direction);
-    if (xMirror === -1) {
-      reflection.x *= -1;
-    }
-    if (yMirror === -1) {
-      reflection.y *= -1;
-    }
-
-    if (d === 0) {
-      i = p;
-      // if (xMirror === -1)
-    }
-    return {
-      intersect: i,
-      distance: d,
-      reflection: rectToPolar(reflection).angle,
-    };
-  }
 }
+
+type TypeLineBoundsDefinition = {
+  p1?: TypeParsablePoint,
+  p2?: TypeParsablePoint,
+  line?: TypeParsableLine,
+  mag?: number,
+  angle?: number,
+  bounds?: 'inside' | 'outside',
+  ends?: 2 | 1 | 0,
+  precision: number,
+};
 
 class LineBounds extends Bounds {
   boundary: Line;
 
-  constructor(optionsIn: {
-      p1?: TypeParsablePoint,
-      p2?: TypeParsablePoint,
-      line?: TypeParsableLine,
-      mag?: number,
-      angle?: number,
-      bounds?: 'inside' | 'outside',
-      ends?: 2 | 1 | 0,
-      precision: number,
-    }) {
+  constructor(optionsIn: TypeLineBoundsDefinition) {
     let boundary;
     const defaultOptions = {
       angle: 0,
@@ -3938,27 +3778,56 @@ class LineBounds extends Bounds {
   // }
 }
 
+type TypeBoundsDefinition = Bounds | null | TypeRectBoundsDefinition
+  | TypeLineBoundsDefinition | TypeRangeBoundsDefinition
+  | { type: 'rect', bounds: TypeRectBoundsDefinition }
+  | { type: 'range', bounds: TypeRangeBoundsDefinition }
+  | { type: 'line', bounds: TypeLineBoundsDefinition };
+
 function makeBounds(
-  bound: Bounds | number | null
-         | Point | [number, number] | { max: number, min: number } | null
-         | Rect | [number, number, number, number]
-         | Line | [[number, number], number, number] | [[number, number], [number, number]]) {
-  if (bound == null) {
-    return null;
+  bounds: TypeBoundsDefinition,
+  type: 'rect' | 'range' | 'line' | null = null,
+) {
+  if (bounds == null) {
+    return new Bounds();
   }
-  if (typeof bound === 'number') {
-    return new ValueBounds(bound);
+  if (bounds instanceof Bounds) {
+    return bounds;
   }
-  if (bound instanceof Rect) {
-    return new RectBounds(bound);
+  if (bounds.type != null) {
+    return makeBounds(bounds.bounds, bounds.type);
   }
-  if (bound instanceof Line) {
-    return new LineBounds(bound);
+  if (type === 'rect') {
+    return new RectBounds(bounds);
   }
-  if (bound instanceof Bounds) {
-    return bound;
+  if (type === 'range') {
+    return new RangeBounds(bounds);
   }
-  return new RangeBounds(bound);
+  if (type === 'line') {
+    return new RectBounds(bounds);
+  }
+  if (bounds.min !== undefined || bounds.max !== undefined) {
+    return makeBounds(bounds, 'range');
+  }
+  if (
+    bounds.left !== undefined
+    || bounds.right !== undefined
+    || bounds.top !== undefined
+    || bounds.bottom !== undefined
+  ) {
+    return makeBounds(bounds, 'rect');
+  }
+  if (
+    bounds.line !== undefined
+    || bounds.p1 !== undefined
+    || bounds.p2 !== undefined
+    || bounds.angle !== undefined
+    || bounds.mag !== undefined
+    || bounds.ends !== undefined
+  ) {
+    return makeBounds(bounds, 'line');
+  }
+  return null;
 }
 
 export type TypeTransformValue = number | Array<number> | {
@@ -4023,18 +3892,23 @@ function transformValueToArray(
 
 // type TypeBoundsDefinition = null | ;
 
+type TypeTranslationBoundsDefinition = Bounds | TypeRectBoundsDefinition | TypeLineBoundsDefinition;
+type TypeRotationBoundsDefinition = Bounds | TypeRangeBoundsDefinition;
+type TypeScaleBoundsDefinition = Bounds | TypeRangeBoundsDefinition | TypeRectBoundsDefinition;
+
+type TypeTransformBoundsDefinition = Array<Bounds | null> | {
+  position?: TypeTranslationBoundsDefinition;
+  translation?: TypeTranslationBoundsDefinition;
+  rotation?: TypeRotationBoundsDefinition;
+  scale?: TypeScaleBoundsDefinition;
+};
 class TransformBounds extends Bounds {
   boundary: Array<Bounds | null>;
   order: Array<'t' | 'r' | 's'>;
 
   constructor(
     transform: Transform,
-    bounds: Array<Bounds | null> | {
-      position: Bounds | number | Rect | Line,
-      translation: Bounds | number | Rect | Line,
-      rotation: Bounds | number | { max: number, min: number },
-      scale: Bounds | number | Rect | Line,
-    } = {},
+    bounds: TypeTransformBoundsDefinition = {},
     precision: number = 8,
   ) {
     // let boundary = [];
@@ -4055,43 +3929,42 @@ class TransformBounds extends Bounds {
   }
 
   update(
-    boundOrBounds: Bounds | null | Array<Bounds | null> | {
-      position: Bounds | number | Rect | Line,
-      translation: Bounds | number | Rect | Line,
-      rotation: Bounds | number | { max: number, min: number },
-      scale: Bounds | number | Rect | Line,
-    },
+    bounds: TypeTransformBoundsDefinition | Bounds | null,
     index: number = 0,
   ) {
-    if (boundOrBounds == null || boundOrBounds instanceof Bounds) {
-      this.boundary[index] = boundOrBounds;
+    if (bounds == null || bounds instanceof Bounds) {
+      this.boundary[index] = bounds;
       return;
     }
-    if (Array.isArray(boundOrBounds)) {
-      this.boundary = boundOrBounds;
+    if (Array.isArray(bounds)) {
+      this.boundary = bounds;
       return;
     }
     const boundary = [];
     this.order.forEach((o) => {
       let bound = null;
-      if (o === 't' && boundOrBounds.position != null) {
-        bound = makeBounds(boundOrBounds.position);
+      if (o === 't' && bounds.position != null) {
+        bound = makeBounds(bounds.position);
       }
-      if (o === 't' && boundOrBounds.translation != null) {
-        bound = makeBounds(boundOrBounds.translation);
+      if (o === 't' && bounds.translation != null) {
+        bound = makeBounds(bounds.translation);
       }
-      if (o === 'r' && boundOrBounds.rotation != null) {
-        bound = makeBounds(boundOrBounds.rotation);
+      if (o === 'r' && bounds.rotation != null) {
+        bound = makeBounds(bounds.rotation);
       }
-      if (o === 's' && boundOrBounds.scale != null) {
-        bound = makeBounds(boundOrBounds.scale);
+      if (o === 's' && bounds.scale != null) {
+        bound = makeBounds(bounds.scale);
       }
       boundary.push(bound);
     });
     this.boundary = boundary;
   }
 
-  updateBound(type: 'r' | 's' | 't', bound: Bounds | null | Rect | number | Line | { max: number, min: number }, typeIndex: ?number = 0) {
+  updateBound(
+    type: 'r' | 's' | 't',
+    bound: TypeBoundsDefinition,
+    typeIndex: ?number = 0,
+  ) {
     let index = 0;
     for (let i = 0; i < this.order.length; i += 1) {
       const o = this.order[i];
@@ -4103,17 +3976,23 @@ class TransformBounds extends Bounds {
   }
 
   updateTranslation(
-    bound: Bounds | Rect | Line | number | { max: number, min: number } | null,
+    bound: Bounds | TypeTranslationBoundsDefinition,
     translationIndex: ?number = 0,
   ) {
     this.updateBound('t', bound, translationIndex);
   }
 
-  updateRotation(bound: Bounds | null, translationIndex: ?number = 0) {
+  updateRotation(
+    bound: Bounds | TypeRotationBoundsDefinition,
+    translationIndex: ?number = 0,
+  ) {
     this.updateBound('r', bound, translationIndex);
   }
 
-  updateScale(bound: Bounds | null, translationIndex: ?number = 0) {
+  updateScale(
+    bound: Bounds | TypeScaleBoundsDefinition,
+    translationIndex: ?number = 0,
+  ) {
     this.updateBound('s', bound, translationIndex);
   }
 
@@ -4143,10 +4022,11 @@ class TransformBounds extends Bounds {
     return this.getBound('r', index);
   }
 
+  // $FlowFixMe
   contains(t: Transform) {
     for (let i = 0; i < t.order.length; i += 1) {
       const transformElement = t.order[i];
-      const b = this.boundary[i];
+      const b = this.boundary[i];                       // $FlowFixMe
       if (b != null && !b.contains(transformElement)) {
         return false;
       }
@@ -4154,6 +4034,7 @@ class TransformBounds extends Bounds {
     return true;
   }
 
+  // $FlowFixMe
   clip(t: Transform) {
     const order = [];
     for (let i = 0; i < t.order.length; i += 1) {
