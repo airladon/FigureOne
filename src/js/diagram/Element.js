@@ -721,7 +721,7 @@ class DiagramElement {
   setProperties(properties: Object, exceptIn: Array<string> | string = []) {
     let except = exceptIn;
     if (properties.move != null) {
-      if (properties.move.bounds != null) {
+      if (properties.move.bounds != null && properties.move.bounds != 'diagram') {
         if (typeof except === 'string') {
           except = [except, 'move.bounds'];
         } else {
@@ -2590,6 +2590,10 @@ class DiagramElement {
   }
 
   checkMoveBounds() {
+    if (this.move.bounds === 'diagram') {
+      this.setMoveBounds('diagram');
+      return;
+    }
     if (!(this.move.bounds instanceof TransformBounds)) {
       this.setMoveBounds();
     }
