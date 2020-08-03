@@ -837,12 +837,12 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       const w = Math.abs(this.currentLength / 2 * Math.cos(r));
       const h = Math.abs(this.currentLength / 2 * Math.sin(r));
       if (this.move.bounds instanceof TransformBounds) {
-        this.move.bounds.updateTranslation(new RectBounds(
-          bounds.left + w,
-          bounds.bottom + h,
-          bounds.right - w - (bounds.left + w),
-          bounds.top - h - (bounds.bottom + h),
-        ));
+        this.move.bounds.updateTranslation(new RectBounds({
+          left: bounds.left + w,
+          bottom: bounds.bottom + h,
+          right: bounds.right - w - (bounds.left + w),
+          top: bounds.top - h - (bounds.bottom + h),
+        }));
       }
       // this.move.maxTransform.updateTranslation(
       //   bounds.right - w,
