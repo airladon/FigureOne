@@ -39,10 +39,6 @@ describe('Move Freely', () => {
       },
     ]);
     a = diagram.elements._a;
-    // debugger;
-    // a.move.bounds.updateTranslation({
-    //   left: -10, bottom: -10, right: 10, top: 10,
-    // });
     a.setMovable(true);
     window.asdf = true;
     diagram.initialize();
