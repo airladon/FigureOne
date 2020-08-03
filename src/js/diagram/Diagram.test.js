@@ -437,7 +437,6 @@ describe('Diagram', () => {
       const d = diagrams.landscapeCenter;
       // d.initialize();
       d.draw(0);
-      debugger;
       // Touch A
       const t1 = d.dToP(new Point(-0.001, -0.001));
       // console.log(new Point(-0.001, -0.001).transformBy(d.diagramToPixelSpaceTransform.matrix()))
@@ -641,6 +640,7 @@ describe('Diagram', () => {
       const a = d.elements._a;
       const decel = [1, 1, 0.5];
       a.move.freely.deceleration = decel;
+      a.move.freely.bounceLoss = 1;
 
       // Touch A
       const t0 = d.dToP(new Point(-0.001, -0.001));

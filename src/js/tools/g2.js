@@ -1342,12 +1342,12 @@ class Line {
 
     if (!l1.isParallelWith(l2)) {
       let i;
-      if (l1.A === 0 && l2.B === 0) {
+      if (roundNum(l1.A, precision) === 0 && roundNum(l2.B, precision) === 0) {
         i = new Point(l2.p1.x, l1.p1.y);
-      } else if (l1.B === 0 && l2.A === 0) {
+      } else if (roundNum(l1.B, precision) === 0 && roundNum(l2.A, precision) === 0) {
         i = new Point(l1.p1.x, l2.p1.y);
       // if l1.B is 0, then l1 has constant x
-      } else if (l1.B === 0) {
+      } else if (roundNum(l1.B, precision) === 0) {
         const x = (l2.C * l1.B - l1.C * l2.B) / (-l1.A * l2.B + l2.A * l1.B);
         const y = -l2.A / l2.B * x + l2.C / l2.B;
         i = new Point(x, y);
@@ -2552,7 +2552,7 @@ class Transform {
     const bounceLoss = transformValueToArray(bounceLossIn, this);
     const zeroVelocityThreshold = transformValueToArray(zeroVelocityThresholdIn, this);
     let bounds;
-    if (bounds instanceof TransformBounds) {
+    if (boundsIn instanceof TransformBounds) {
       bounds = boundsIn;
     } else {
       bounds = new TransformBounds(this, boundsIn);

@@ -233,31 +233,31 @@ describe('Diagram Objects PolyLine', () => {
     test('Boundary', () => {
       const poly = ways.PadBoundary();
       expect(poly).toHaveProperty('_pad0');
-      const boundary = poly._pad0.move.bounds.getTranslation().boundary.round(3);
-      expect(boundary.left).toBe(-2.8);
-      expect(boundary.right).toBe(2.8);
-      expect(boundary.bottom).toBe(-1.8);
-      expect(boundary.top).toBe(1.8);
+      const { boundary } = poly._pad0.move.bounds.getTranslation();
+      expect(round(boundary.left, 3)).toBe(-2.8);
+      expect(round(boundary.right, 3)).toBe(2.8);
+      expect(round(boundary.bottom, 3)).toBe(-1.8);
+      expect(round(boundary.top, 3)).toBe(1.8);
     });
     test('Boundary not including touch radius', () => {
       const poly = ways.PadBoundaryWithoutTouchRadius();
       expect(poly).toHaveProperty('_pad0');
-      const boundary = poly._pad0.move.bounds.getTranslation().boundary.round(3);
-      expect(boundary.left).toBe(-2.8);
-      expect(boundary.right).toBe(2.8);
-      expect(boundary.bottom).toBe(-1.8);
-      expect(boundary.top).toBe(1.8);
+      const { boundary } = poly._pad0.move.bounds.getTranslation();
+      expect(round(boundary.left, 3)).toBe(-2.8);
+      expect(round(boundary.right, 3)).toBe(2.8);
+      expect(round(boundary.bottom, 3)).toBe(-1.8);
+      expect(round(boundary.top, 3)).toBe(1.8);
       // expect(poly._pad0.move.maxTransform.t().round()).toEqual(new Point(2.8, 1.8));
       // expect(poly._pad0.move.minTransform.t().round()).toEqual(new Point(-2.8, -1.8));
     });
     test('Boundary including touch radius', () => {
       const poly = ways.PadBoundaryWithTouchRadius();
       expect(poly).toHaveProperty('_pad0');
-      const boundary = poly._pad0.move.bounds.getTranslation().boundary.round(3);
-      expect(boundary.left).toBe(-2.6);
-      expect(boundary.right).toBe(2.6);
-      expect(boundary.bottom).toBe(-1.6);
-      expect(boundary.top).toBe(1.6);
+      const { boundary } = poly._pad0.move.bounds.getTranslation();
+      expect(round(boundary.left, 3)).toBe(-2.6);
+      expect(round(boundary.right, 3)).toBe(2.6);
+      expect(round(boundary.bottom, 3)).toBe(-1.6);
+      expect(round(boundary.top, 3)).toBe(1.6);
       // expect(poly._pad0.move.maxTransform.t().round()).toEqual(new Point(2.6, 1.6));
       // expect(poly._pad0.move.minTransform.t().round()).toEqual(new Point(-2.6, -1.6));
     });

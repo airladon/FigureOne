@@ -1376,7 +1376,6 @@ class DiagramElement {
       // the delta time from this frame to the previous
       const deltaTime = now - this.state.movement.previousTime;
       // Calculate the new velocity and position
-      debugger;
       const next = this.decelerate(deltaTime);
       this.state.movement.velocity = next.velocity;
       this.state.movement.previousTime = now;
@@ -1603,7 +1602,7 @@ class DiagramElement {
 
   // Decelerate over some time when moving freely to get a new element
   // transform and movement velocity
-  decelerate(deltaTime: ?number): Object {
+  decelerate(deltaTime: number | null = null): Object {
     // let bounds;
     // if (!this.move.bounds instanceof TransformBounds) {
     //   this.setMoveBounds();
@@ -1615,6 +1614,7 @@ class DiagramElement {
     // }
     this.checkMoveBounds();
     const { bounds } = this.move;
+
     const next = this.transform.decelerate(
       this.state.movement.velocity,
       this.move.freely.deceleration,
