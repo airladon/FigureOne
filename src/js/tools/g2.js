@@ -3792,11 +3792,14 @@ type TypeBoundsDefinition = Bounds | null | TypeRectBoundsDefinition
   | TypeLineBoundsDefinition | TypeRangeBoundsDefinition
   | { type: 'rect', bounds: TypeRectBoundsDefinition }
   | { type: 'range', bounds: TypeRangeBoundsDefinition }
-  | { type: 'line', bounds: TypeLineBoundsDefinition };
+  | { type: 'line', bounds: TypeLineBoundsDefinition }
+  | TypeTransformBoundsDefinition
+  | { type: 'transform', bounds: TypeTransformBoundsDefinition };
 
-function makeBounds(
+function getBounds(
   bounds: TypeBoundsDefinition,
-  type: 'rect' | 'range' | 'line' | null = null,
+  type: 'rect' | 'range' | 'line' | 'transform' | null = null,
+  transform: Transform = new Transform(),
 ) {
   if (bounds == null) {
     return new Bounds();
@@ -3805,7 +3808,7 @@ function makeBounds(
     return bounds;
   }
   if (bounds.type != null) {
-    return makeBounds(bounds.bounds, bounds.type);
+    return getBounds(bounds.bounds, bounds.type);
   }
   if (type === 'rect') {
     return new RectBounds(bounds);
@@ -3816,8 +3819,11 @@ function makeBounds(
   if (type === 'line') {
     return new RectBounds(bounds);
   }
+  if (type === 'transform') {
+    return new TransformBounds(transform, bounds);
+  }
   if (bounds.min !== undefined || bounds.max !== undefined) {
-    return makeBounds(bounds, 'range');
+    return getBounds(bounds, 'range');
   }
   if (
     bounds.left !== undefined
@@ -3825,7 +3831,7 @@ function makeBounds(
     || bounds.top !== undefined
     || bounds.bottom !== undefined
   ) {
-    return makeBounds(bounds, 'rect');
+    return getBounds(bounds, 'rect');
   }
   if (
     bounds.line !== undefined
@@ -3835,7 +3841,14 @@ function makeBounds(
     || bounds.mag !== undefined
     || bounds.ends !== undefined
   ) {
-    return makeBounds(bounds, 'line');
+    return getBounds(bounds, 'line');
+  }
+  if (
+    bounds.translation !== undefined
+    || bounds.scale !== undefined
+    || bounds.rotation !== undefined
+  ) {
+    return getBounds(bounds, 'transform', transform);
   }
   return null;
 }
@@ -3954,16 +3967,16 @@ class TransformBounds extends Bounds {
     this.order.forEach((o) => {
       let bound = null;
       if (o === 't' && bounds.position != null) {
-        bound = makeBounds(bounds.position);
+        bound = getBounds(bounds.position);
       }
       if (o === 't' && bounds.translation != null) {
-        bound = makeBounds(bounds.translation);
+        bound = getBounds(bounds.translation);
       }
       if (o === 'r' && bounds.rotation != null) {
-        bound = makeBounds(bounds.rotation);
+        bound = getBounds(bounds.rotation);
       }
       if (o === 's' && bounds.scale != null) {
-        bound = makeBounds(bounds.scale);
+        bound = getBounds(bounds.scale);
       }
       boundary.push(bound);
     });
@@ -3980,12 +3993,12 @@ class TransformBounds extends Bounds {
       const o = this.order[i];
       if (o === type) {
         if (typeIndex == null || typeIndex === index) {
-          this.boundary[i] = makeBounds(bound);
+          this.boundary[i] = getBounds(bound);
         }
         index += 1;
       }
       // if (o === type && (typeIndex == null || typeIndex === index)) {
-      //   this.boundary[i] = makeBounds(bound);
+      //   this.boundary[i] = getBounds(bound);
       //   index += 1;
       // }
     }
@@ -4175,9 +4188,16 @@ function deceleratePoint(
   // if we got here, the new position is out of bounds
   const bounceScaler = 1 - bounceLossIn;
   const result = bounds.intersect(position, clipAngle(angle, '0to360'));
+  debugger;
   let intersectPoint;
-  if (typeof result.position === 'number') {
+  if (typeof result.intersect === 'number') {
     intersectPoint = new Point(result.intersect, 0);
+  } else if (result.intersect == null) {
+    return {
+      position: newPosition,
+      velocity: new Point(0, 0),
+      duration: deltaTime,
+    };
   } else {
     intersectPoint = result.intersect;
   }
@@ -4482,4 +4502,5 @@ export {
   TransformBounds,
   Vector,
   transformValueToArray,
+  getBounds,
 };
