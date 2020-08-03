@@ -138,7 +138,7 @@ describe('Diagram Objects PolyLine', () => {
         close: true,
         pad: {
           radius: 0.2,
-          boundary: [-3, -2, 6, 4],
+          boundary: [-3, -2, 3, 2],
           isMovable: true,
         },
       }),
@@ -147,7 +147,7 @@ describe('Diagram Objects PolyLine', () => {
         close: true,
         pad: {
           radius: 0.2,
-          boundary: [-3, -2, 6, 4],
+          boundary: [-3, -2, 3, 2],
           isMovable: true,
           touchRadius: 0.4,
         },
@@ -157,7 +157,7 @@ describe('Diagram Objects PolyLine', () => {
         close: true,
         pad: {
           radius: 0.2,
-          boundary: [-3, -2, 6, 4],
+          boundary: [-3, -2, 3, 2],
           isMovable: true,
           touchRadius: 0.4,
           touchRadiusInBoundary: true,

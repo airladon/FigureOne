@@ -3044,7 +3044,7 @@ class Bounds {
 // class ValueBounds extends Bounds {
 //   boundary: ?number;
 // }
-type TypeRangeBoundsDefinition = {
+export type TypeRangeBoundsDefinition = {
   min?: number,
   max?: number,
   precision?: number,
@@ -3198,7 +3198,7 @@ class RangeBounds extends Bounds {
   }
 }
 
-type TypeRectBoundsDefinition = {
+export type TypeRectBoundsDefinition = {
   left?: number | null,
   bottom?: number | null,
   right?: number | null,
@@ -3620,7 +3620,7 @@ class RectBounds extends Bounds {
   }
 }
 
-type TypeLineBoundsDefinition = {
+export type TypeLineBoundsDefinition = {
   p1?: TypeParsablePoint,
   p2?: TypeParsablePoint,
   line?: TypeParsableLine,
@@ -3788,7 +3788,7 @@ class LineBounds extends Bounds {
   }
 }
 
-type TypeBoundsDefinition = Bounds | null | TypeRectBoundsDefinition
+export type TypeBoundsDefinition = Bounds | null | TypeRectBoundsDefinition
   | TypeLineBoundsDefinition | TypeRangeBoundsDefinition
   | { type: 'rect', bounds: TypeRectBoundsDefinition }
   | { type: 'range', bounds: TypeRangeBoundsDefinition }
@@ -3919,7 +3919,7 @@ type TypeTranslationBoundsDefinition = Bounds | TypeRectBoundsDefinition | TypeL
 type TypeRotationBoundsDefinition = Bounds | TypeRangeBoundsDefinition;
 type TypeScaleBoundsDefinition = Bounds | TypeRangeBoundsDefinition | TypeRectBoundsDefinition;
 
-type TypeTransformBoundsDefinition = Array<Bounds | null> | {
+export type TypeTransformBoundsDefinition = Array<Bounds | null> | {
   position?: TypeTranslationBoundsDefinition;
   translation?: TypeTranslationBoundsDefinition;
   rotation?: TypeRotationBoundsDefinition;
@@ -4188,7 +4188,7 @@ function deceleratePoint(
   // if we got here, the new position is out of bounds
   const bounceScaler = 1 - bounceLossIn;
   const result = bounds.intersect(position, clipAngle(angle, '0to360'));
-  debugger;
+
   let intersectPoint;
   if (typeof result.intersect === 'number') {
     intersectPoint = new Point(result.intersect, 0);
@@ -4503,4 +4503,5 @@ export {
   Vector,
   transformValueToArray,
   getBounds,
+  Bounds,
 };
