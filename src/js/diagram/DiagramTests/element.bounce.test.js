@@ -1,6 +1,6 @@
-import {
-  Point, Rect,
-} from '../../tools/g2';
+// import {
+//   Point, Rect,
+// } from '../../tools/g2';
 import {
   round,
 } from '../../tools/math';
@@ -43,12 +43,9 @@ describe('Move Freely', () => {
     // a.move.bounds.updateTranslation({
     //   left: -10, bottom: -10, right: 10, top: 10,
     // });
-    
     a.setMovable(true);
     window.asdf = true;
     diagram.initialize();
-    console.log(a.move.bounds)
-    console.log(a.move.bounds.getTranslation());
   });
   test('Bounce', () => {
     diagram.mock.timeStep(0);
