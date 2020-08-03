@@ -491,7 +491,6 @@ describe('Diagram', () => {
       const a3 = new Point(-0.75, -0.75);
       // C will get stuck at -0.5, -0.5
       const c3 = new Point(-0.5, -0.5);
-
       d.touchDownHandler(t1);          // Touch -0.01, -0.01
       expect(d.beingMovedElements).toHaveLength(2);
       expect(d.beingMovedElements[1]).toBe(d.elements._a);
