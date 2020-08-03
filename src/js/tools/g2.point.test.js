@@ -252,22 +252,22 @@ describe('g2 Point', () => {
     test('(0, 0) is within the line <(-1, 0) (1, 0)>', () => {
       const l = new Line(new Point(-1, 0), new Point(1, 0));
       const p = new Point(0, 0);
-      expect(p.isOnLine(l)).toEqual(true);
+      expect(p.isWithinLine(l)).toEqual(true);
     });
     test('(1, 0) is within the line <(-1, 0) (1, 0)>', () => {
       const l = new Line(new Point(-1, 0), new Point(1, 0));
       const p = new Point(1, 0);
-      expect(p.isOnLine(l)).toEqual(true);
+      expect(p.isWithinLine(l)).toEqual(true);
     });
     test('(0, 1) is not within the line <(-1, 0) (1, 0)>', () => {
       const l = new Line(new Point(-1, 0), new Point(1, 0));
       const p = new Point(0, 1);
-      expect(p.isOnLine(l)).toEqual(false);
+      expect(p.isWithinLine(l)).toEqual(false);
     });
     test('(2, 0) is not within the line <(-1, 0) (1, 0)>', () => {
       const l = new Line(new Point(-1, 0), new Point(1, 0));
       const p = new Point(2, 0);
-      expect(p.isOnLine(l)).toEqual(false);
+      expect(p.isWithinLine(l)).toEqual(false);
     });
     test('(2, 0) is on the unbound line <(-1, 0) (1, 0)>', () => {
       const l = new Line(new Point(-1, 0), new Point(1, 0));
