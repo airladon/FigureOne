@@ -2,6 +2,10 @@
 
 import {
   Transform, Point, getPoint, Rect, clipAngle,
+  RangeBounds, RectBounds, getBounds, Bounds,
+} from '../../tools/g2';
+import type {
+  TypeRangeBoundDefinition, TypeRectBoundDefinition,
 } from '../../tools/g2';
 import { joinObjects } from '../../tools/tools';
 import { round } from '../../tools/math';
@@ -31,7 +35,7 @@ export type TypePadOptions = {
   fill?: boolean,
   isMovable?: boolean,
   touchRadius?: number,
-  boundary?: Rect | Array<number> | 'diagram',
+  boundary?: TypeRangeBoundDefinition | TypeRectBoundDefinition | RangeBounds | RectBounds | 'diagram',
   touchRadiusInBoundary?: boolean,
 };
 export type TypePolyLineOptions = {
@@ -274,24 +278,70 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
             const multiplier = padArray[i].touchRadius / padArray[i].radius;
             padShape.increaseBorderSize(multiplier);
           }
+          let delta = 0;
+          if (padArray[i].touchRadiusInBoundary === true && padArray[i].touchRadius != null) {
+            delta = padArray[i].touchRadius - padArray[i].radius;
+          }
+          const { radius } = padArray[i];
           let { boundary } = padArray[i];
           // console.log(boundary, padArray[i])
           if (boundary === 'diagram') {
             boundary = shapes.limits._dup();
-          } else if (Array.isArray(boundary)) {
-            const [left, bottom, width, height] = boundary;
-            boundary = new Rect(left, bottom, width, height);
+            boundary = new RectBounds({
+              left: shapes.limits.left + radius + delta,
+              bottom: shapes.limits.bottom + radius + delta,
+              right: shapes.limits.right - radius - delta,
+              top: shapes.limits.top - radius - delta,
+            });
+          } else if (Array.isArray(boundary) && boundary.length === 4) {
+            boundary = new RectBounds({
+              left: boundary[0] + radius + delta,
+              bottom: boundary[1] + radius + delta,
+              right: boundary[2] - radius - delta,
+              top: boundary[3] - radius - delta,
+            });
+          } else if (!(boundary instanceof Bounds)) {
+            boundary = getBounds(boundary);
+            if (boundary instanceof RangeBounds) {
+              boundary = new RectBounds({
+                left: boundary.boundary.min + radius + delta,
+                right: boundary.boundary.max - radius - delta,
+                bottom: boundary.boundary.min + radius + delta,
+                top: boundary.boundary.max - radius - delta,
+              });
+            } else if (!(boundary instanceof RectBounds)) {
+              boundary = null;
+            }
           }
-          if (padArray[i].touchRadiusInBoundary === false && padArray[i].touchRadius != null) {
-            const delta = padArray[i].touchRadius - padArray[i].radius;
-            boundary = new Rect(
-              boundary.left - delta,
-              boundary.bottom - delta,
-              boundary.width + 2 * delta,
-              boundary.height + 2 * delta,
-            );
-          }
-          padShape.setMoveBounds(boundary);
+          // } Array.isArray(boundary)) {
+          //   const [left, bottom, width, height] = boundary;
+          //   boundary = new Rect(left, bottom, width, height);
+          // }
+          // debugger;
+          // if (padArray[i].touchRadiusInBoundary === false && padArray[i].touchRadius != null) {
+          //   const delta = padArray[i].touchRadius - padArray[i].radius;
+          //   if (boundary instanceof RectBounds) {
+          //     if (boundary.boundary.left != null) {
+          //       boundary.boundary.left -= delta;
+          //     }
+          //     if (boundary.boundary.bottom != null) {
+          //       boundary.boundary.bottom -= delta;
+          //     }
+          //     if (boundary.boundary.right != null) {
+          //       boundary.boundary.right += delta;
+          //     }
+          //     if (boundary.boundary.top != null) {
+          //       boundary.boundary.top += delta;
+          //     }
+          //   }
+            // boundary = new Rect(
+            //   boundary.left - delta,
+            //   boundary.bottom - delta,
+            //   boundary.width + 2 * delta,
+            //   boundary.height + 2 * delta,
+            // );
+          // }
+          padShape.setMoveBounds({ translation: boundary });
           const fnName = `_polyline_pad${i}`;
           this.fnMap.add(
             fnName,
