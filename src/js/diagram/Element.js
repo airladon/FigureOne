@@ -6,11 +6,13 @@ import {
   Scale, Rotation, Line, getMaxTimeFromVelocity, clipAngle,
   getPoint, getTransform, getScale, // calculateStop, calculateStopAngle,
   TransformBounds, RectBounds, RangeBounds, BoundsLine, getTransformValue,
+  getBounds,
 } from '../tools/g2';
 // import { areColorsSame } from '../tools/color';
 import { getState } from './state';
 import type {
-  TypeParsablePoint, TypeParsableTransform, TypeTransformationValue, TypeTransformValue,
+  TypeParsablePoint, TypeParsableTransform,
+  TypeTransformationValue, TypeTransformValue, TypeTransformBoundsDefinition,
 } from '../tools/g2';
 import { Recorder } from './Recorder';
 import * as m2 from '../tools/m2';
@@ -174,7 +176,8 @@ class DiagramElement {
     // bounds: new TransformBounds(transform, [null, null] | { translation: null })
     // bounds: [null, [-1, -1, 2, 2], null]
     // bounds: [null, [null, -1, null, 2], null]
-    bounds: TransformBounds | Rect | Array<number> | 'diagram',
+    // bounds: TransformBounds | Rect | Array<number> | 'diagram',
+    bounds: TransformBounds,
     // minTransform: Transform,
     // boundary: ?Rect | Array<number> | 'diagram',
     // limitLine: null | Line,
@@ -715,7 +718,21 @@ class DiagramElement {
   //   }
   // }
 
-  setProperties(properties: Object, except: Array<string> | string = []) {
+  setProperties(properties: Object, exceptIn: Array<string> | string = []) {
+    let except = exceptIn;
+    if (properties.move != null) {
+      if (properties.move.bounds != null) {
+        if (typeof except === 'string') {
+          except = [except, 'move.bounds'];
+        } else {
+          except.push('move.bounds');
+        }
+        const bounds = getBounds(properties.move.bounds, 'transform', this.transform);
+        if (bounds instanceof TransformBounds) {
+          this.move.bounds = bounds;
+        }
+      }
+    }
     joinObjectsWithOptions({
       except,
     }, this, properties);
@@ -2584,44 +2601,76 @@ class DiagramElement {
   }
 
   setMoveBounds(
-    boundaryIn: ?Array<number> | Rect | 'diagram' = null,
+    boundaryIn: TransformBounds | TypeTransformBoundsDefinition | 'diagram' | null = null,
     // scale: Point = new Point(1, 1),
   ): void {
     if (!this.isMovable) {
       return;
     }
-    let boundary = boundaryIn;
-    if (boundaryIn == null) {
-      if (this.move.bounds === 'diagram' || Array.isArray(this.move.bounds) || this.move.bounds instanceof Rect) {
-        boundary = this.move.bounds;
-        this.move.bounds = new TransformBounds(this.transform);
-      } else {
-        this.move.bounds.updateTranslation(null);
-        return;
-      }
-    }
-    if (boundary == null) {
+    if (boundaryIn instanceof TransformBounds) {
+      this.move.bounds = boundaryIn;
       return;
     }
-
-    if (Array.isArray(boundary)) {
-      const [left, bottom, width, height] = boundary;
-      boundary = new Rect(left, bottom, width, height);
-    } else if (boundary === 'diagram') {
-      boundary = this.diagramLimits;
+    if (boundaryIn === null) {
+      this.move.bounds = new TransformBounds(this.transform);
+      return;
     }
-    const rect = this.getRelativeBoundingRect('diagram');
-    if (this.move.bounds instanceof TransformBounds) {
+    if (boundaryIn === 'diagram') {
+      if (!(this.move.bounds instanceof TransformBounds)) {
+        this.move.bounds = new TransformBounds(this.transform);
+      }
+      const rect = this.getRelativeBoundingRect('diagram');
       this.move.bounds.updateTranslation(new RectBounds({
-        left: boundary.left - rect.left,
-        bottom: boundary.bottom - rect.bottom,
-        right: boundary.right - rect.right,
-        top: boundary.top - rect.top,
+        left: this.diagramLimits.left - rect.left,
+        bottom: this.diagramLimits.bottom - rect.bottom,
+        right: this.diagramLimits.right - rect.right,
+        top: this.diagramLimits.top - rect.top,
       }));
+      return;
     }
-    // if (this.name === 'c') {
-    //   console.log(this.move.bounds.boundary[2])
+    const bounds = getBounds(boundaryIn, 'transform', this.transform);
+    if (bounds instanceof TransformBounds) {
+      this.move.bounds = bounds;
+    }
+    // if (window.asdf) {
+    //   debugger;
     // }
+    // let boundary = boundaryIn;
+    // if (boundaryIn == null) {
+    //   if (
+    //     this.move.bounds === 'diagram'
+    //     || Array.isArray(this.move.bounds)
+    //     || (this.move.bounds instanceof Bounds && !(this.move.bounds instanceof TransformBounds))
+    //     // || this.move.bounds instanceof Rect,
+    //   ) {
+    //   // if (boundaryIn !== null) {
+    //     boundary = this.move.bounds;
+    //     this.move.bounds = new TransformBounds(this.transform);
+    //   } else {
+    //     this.move.bounds.updateTranslation(null);
+    //     return;
+    //   }
+    // }
+    // if (boundary == null) {
+    //   return;
+    // }
+
+    // if (Array.isArray(boundary)) {
+    //   const [left, bottom, width, height] = boundary;
+    //   boundary = new Rect(left, bottom, width, height);
+    // } else if (boundary === 'diagram') {
+    //   boundary = this.diagramLimits;
+    // }
+    // const rect = this.getRelativeBoundingRect('diagram');
+    // if (this.move.bounds instanceof TransformBounds) {
+    //   this.move.bounds.updateTranslation(new RectBounds({
+    //     left: boundary.left - rect.left,
+    //     bottom: boundary.bottom - rect.bottom,
+    //     right: boundary.right - rect.right,
+    //     top: boundary.top - rect.top,
+    //   }));
+    // }
+
   }
 
   // setMoveBoundsLegacy(

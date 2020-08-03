@@ -24,7 +24,11 @@ describe('Move Freely', () => {
         },
         mods: {
           move: {
-            // bounds: { translation: new Rect(-10, -10, 20, 20) },
+            bounds: {
+              translation: {
+                left: -10, bottom: -10, right: 10, top: 10,
+              },
+            },
             maxVelocity: 100,
             freely: {
               deceleration: 2,
@@ -35,9 +39,16 @@ describe('Move Freely', () => {
       },
     ]);
     a = diagram.elements._a;
-    a.move.bounds.updateTranslation(new Rect(-10, -10, 20, 20));
+    // debugger;
+    // a.move.bounds.updateTranslation({
+    //   left: -10, bottom: -10, right: 10, top: 10,
+    // });
+    
     a.setMovable(true);
+    window.asdf = true;
     diagram.initialize();
+    console.log(a.move.bounds)
+    console.log(a.move.bounds.getTranslation());
   });
   test('Bounce', () => {
     diagram.mock.timeStep(0);
@@ -60,12 +71,13 @@ describe('Move Freely', () => {
     //    = 8 - 4 = 4
     expect(a.getPosition().round(3).x).toEqual(1);
     expect(a.state.movement.velocity.t().round(3).x).toBe(10);
+    // debugger;
     expect(round(a.getRemainingMovingFreelyTime(), 2)).toBe(3);
     expect(a.state.isMovingFreely).toBe(true);
-
+    // debugger;
     diagram.mock.timeStep(1);
     expect(a.getPosition().round(3).x).toEqual(10);
-    expect(a.state.movement.velocity.t().round(3).x).toBe(-4);
+    expect(a.state.movement.velocity.t().round(3).x).toBe(8);
     expect(round(a.getRemainingMovingFreelyTime(), 2)).toBe(2);
     expect(a.state.isMovingFreely).toBe(true);
 

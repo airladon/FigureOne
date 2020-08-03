@@ -7,9 +7,9 @@
 import {
   Point,
 } from '../../tools/g2';
-// import {
-//   round,
-// } from '../../tools/math';
+import {
+  round,
+} from '../../tools/math';
 import * as tools from '../../tools/tools';
 // import webgl from '../../__mocks__/WebGLInstanceMock';
 // import DrawContext2D from '../../__mocks__/DrawContext2DMock';
