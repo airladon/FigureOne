@@ -71,8 +71,8 @@ describe('Decelerate Value', () => {
         const v = 5;
         const deceleration = 1;
         const deltaTime = 2;
-        // const bounds = new RectBounds(-4.5, -1, 9, 2);
-        const bounds = new RangeBounds(-4.5, 4.5);
+        // const bounds = new RectBounds({ left: { left: -4.5, bottom: bottom: -1, right: right: 9, top: top: 2 } });
+        const bounds = new RangeBounds({ min: -4.5, max: 4.5 });
         const bounceLoss = 0;
         const { velocity, value } = decelerateValue(
           p, v, deceleration, deltaTime, bounds, bounceLoss,
@@ -217,8 +217,10 @@ describe('Decelerate Point', () => {
         const v = new Point(5, 0);
         const deceleration = 1;
         const deltaTime = 2;
-        // const bounds = new RectBounds(-4.5, -1, 9, 2);
-        const bounds = new RectBounds(new Rect(-4.5, -1, 9, 2));
+        // const bounds = new RectBounds({ left: -4.5, bottom: -1, right: 4.5, top: 1 });
+        const bounds = new RectBounds({
+          left: -4.5, bottom: -1, right: 4.5, top: 1,
+        });
         const bounceLoss = 0;
         const { velocity, position } = deceleratePoint(
           p, v, deceleration, deltaTime, bounds, bounceLoss,
@@ -237,7 +239,9 @@ describe('Decelerate Point', () => {
         const v = new Point(5, 0);
         const deceleration = 1;
         const deltaTime = 2;
-        const bounds = new RectBounds(new Rect(-4.5, -1, 9, 2));
+        const bounds = new RectBounds({
+          left: -4.5, bottom: -1, right: 4.5, top: 1,
+        });
         const bounceLoss = 0.5;
         const { velocity, position } = deceleratePoint(
           p, v, deceleration, deltaTime, bounds, bounceLoss,
@@ -326,7 +330,9 @@ describe('Calculate Stop', () => {
       const p = new Point(0, 0);
       const v = new Point(5, 0);
       const deceleration = 1;
-      const bounds = new RectBounds(-4.5, -1, 9, 2);
+      const bounds = new RectBounds({
+        left: -4.5, bottom: -1, right: 4.5, top: 1,
+      });
       const bounceLoss = 0;
       const { duration, position } = deceleratePoint(
         p, v, deceleration, null, bounds, bounceLoss,
@@ -342,7 +348,9 @@ describe('Calculate Stop', () => {
       const p = new Point(0, 0);
       const v = new Point(5, 0);
       const deceleration = 1;
-      const bounds = new RectBounds(-4.5, -1, 9, 2);
+      const bounds = new RectBounds({
+        left: -4.5, bottom: -1, right: 4.5, top: 1,
+      });
       const bounceLoss = 0;
       const zeroVelocityThreshold = 0.1;
       const { duration, position } = deceleratePoint(
@@ -359,7 +367,9 @@ describe('Calculate Stop', () => {
       const p = new Point(0, 0);
       const v = new Point(5, 0);
       const deceleration = 1;
-      const bounds = new RectBounds(-4.5, -1, 9, 2);
+      const bounds = new RectBounds({
+        left: -4.5, bottom: -1, right: 4.5, top: 1,
+      });
       const bounceLoss = 0.5;
       const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       // For v0 = 5, acc = -1, after 1s, the displaycement will be:
@@ -376,7 +386,9 @@ describe('Calculate Stop', () => {
       const p = new Point(0, 0);
       const v = new Point(10, 0);
       const deceleration = 1;
-      const bounds = new RectBounds(-6, -1, 12, 2);
+      const bounds = new RectBounds({
+        left: -6, bottom: -1, right: 6, top: 1,
+      });
       const bounceLoss = 0;
       const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       // Total time:
@@ -396,7 +408,9 @@ describe('Calculate Stop', () => {
       const p = new Point(0, 0);
       const v = new Point(0, 5);
       const deceleration = 1;
-      const bounds = new RectBounds(-4.5, -4.5, 9, 9);
+      const bounds = new RectBounds({
+        left: -4.5, bottom: -4.5, right: 4.5, top: 4.5,
+      });
       const bounceLoss = 0;
       const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       // Total displacement = 12.5
@@ -410,7 +424,8 @@ describe('Calculate Stop', () => {
       const p = new Point(0, 0);
       const v = new Point(5 * 0.70710678, 5 * 0.70710678);
       const deceleration = 1;
-      const bounds = new RectBounds(-5.6568542494, -100, 5.6568542494 * 2, 200);
+      const bounds = new RectBounds({
+        left: -5.6568542494, bottom: -100, right: 5.6568542494, top: 100 });
       const bounceLoss = 0;
       const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       // Velocity mag: 5, angle 45º
@@ -434,7 +449,9 @@ describe('Calculate Stop', () => {
       });
       test('45º single bounce top, no loss', () => {
         const v = new Point(5 * 0.70710678, 5 * 0.70710678);
-        const bounds = new RectBounds(-100, -5.6568542494, 200, 5.6568542494 * 2);
+        const bounds = new RectBounds({
+          left: -100, bottom: -5.6568542494, right: 100, top: 5.6568542494,
+        });
         const { duration, position } = deceleratePoint(
           p, v, deceleration, null, bounds, bounceLoss,
         );
@@ -443,9 +460,9 @@ describe('Calculate Stop', () => {
       });
       test('45º single bounce corner, no loss', () => {
         const v = new Point(5 * 0.70710678, 5 * 0.70710678);
-        const bounds = new RectBounds(
-          -5.6568542494, -5.6568542494, 5.6568542494 * 2, 5.6568542494 * 2,
-        );
+        const bounds = new RectBounds({
+          left: -5.6568542494, bottom: -5.6568542494, right: 5.6568542494, top: 5.6568542494,
+        });
         const { duration, position } = deceleratePoint(
           p, v, deceleration, null, bounds, bounceLoss,
         );
@@ -454,7 +471,9 @@ describe('Calculate Stop', () => {
       });
       test('135º single bounce top, no loss', () => {
         const v = new Point(-5 * 0.70710678, 5 * 0.70710678);
-        const bounds = new RectBounds(-100, -5.6568542494, 200, 5.6568542494 * 2);
+        const bounds = new RectBounds({
+          left: -100, bottom: -5.6568542494, right: 100, top: 5.6568542494,
+        });
         const { duration, position } = deceleratePoint(
           p, v, deceleration, null, bounds, bounceLoss,
         );
@@ -463,9 +482,9 @@ describe('Calculate Stop', () => {
       });
       test('135º single bounce left, no loss', () => {
         const v = new Point(-5 * 0.70710678, 5 * 0.70710678);
-        const bounds = new RectBounds(
-          -5.6568542494, -100, 5.6568542494 * 2, 200,
-        );
+        const bounds = new RectBounds({
+          left: -5.6568542494, bottom: -100, right: 5.6568542494, top: 100,
+        });
         const { duration, position } = deceleratePoint(
           p, v, deceleration, null, bounds, bounceLoss,
         );
@@ -474,9 +493,9 @@ describe('Calculate Stop', () => {
       });
       test('135º single bounce corner, no loss', () => {
         const v = new Point(-5 * 0.70710678, 5 * 0.70710678);
-        const bounds = new RectBounds(
-          -5.6568542494, -5.6568542494, 5.6568542494 * 2, 5.6568542494 * 2,
-        );
+        const bounds = new RectBounds({
+          left: -5.6568542494, bottom: -5.6568542494, right: 5.6568542494, top: 5.6568542494,
+        });
         const { duration, position } = deceleratePoint(
           p, v, deceleration, null, bounds, bounceLoss,
         );
@@ -485,7 +504,9 @@ describe('Calculate Stop', () => {
       });
       test('225º single bounce top, no loss', () => {
         const v = new Point(-5 * 0.70710678, -5 * 0.70710678);
-        const bounds = new RectBounds(-100, -5.6568542494, 200, 5.6568542494 * 2);
+        const bounds = new RectBounds({
+          left: -100, bottom: -5.6568542494, right: 100, top: 5.6568542494,
+        });
         const { duration, position } = deceleratePoint(
           p, v, deceleration, null, bounds, bounceLoss,
         );
@@ -494,7 +515,9 @@ describe('Calculate Stop', () => {
       });
       test('225º single bounce left, no loss', () => {
         const v = new Point(-5 * 0.70710678, -5 * 0.70710678);
-        const bounds = new RectBounds(-5.6568542494, -100, 5.6568542494 * 2, 200);
+        const bounds = new RectBounds({
+          left: -5.6568542494, bottom: -100, right: 5.6568542494, top: 100,
+        });
         const { duration, position } = deceleratePoint(
           p, v, deceleration, null, bounds, bounceLoss,
         );
@@ -503,9 +526,9 @@ describe('Calculate Stop', () => {
       });
       test('225º single bounce corner, no loss', () => {
         const v = new Point(-5 * 0.70710678, -5 * 0.70710678);
-        const bounds = new RectBounds(
-          -5.6568542494, -5.6568542494, 5.6568542494 * 2, 5.6568542494 * 2,
-        );
+        const bounds = new RectBounds({
+          left: -5.6568542494, bottom: -5.6568542494, right: 5.6568542494, top: 5.6568542494,
+        });
         const { duration, position } = deceleratePoint(
           p, v, deceleration, null, bounds, bounceLoss,
         );
@@ -514,7 +537,9 @@ describe('Calculate Stop', () => {
       });
       test('315º single bounce top, no loss', () => {
         const v = new Point(5 * 0.70710678, -5 * 0.70710678);
-        const bounds = new RectBounds(-100, -5.6568542494, 200, 5.6568542494 * 2);
+        const bounds = new RectBounds({
+          left: -100, bottom: -5.6568542494, right: 100, top: 5.6568542494,
+        });
         const { duration, position } = deceleratePoint(
           p, v, deceleration, null, bounds, bounceLoss,
         );
@@ -523,7 +548,9 @@ describe('Calculate Stop', () => {
       });
       test('315º single bounce left, no loss', () => {
         const v = new Point(5 * 0.70710678, -5 * 0.70710678);
-        const bounds = new RectBounds(-5.6568542494, -100, 5.6568542494 * 2, 200);
+        const bounds = new RectBounds({
+          left: -5.6568542494, bottom: -100, right: 5.6568542494, top: 100,
+        });
         const { duration, position } = deceleratePoint(
           p, v, deceleration, null, bounds, bounceLoss,
         );
@@ -532,9 +559,9 @@ describe('Calculate Stop', () => {
       });
       test('315 single bounce corner, no loss', () => {
         const v = new Point(5 * 0.70710678, -5 * 0.70710678);
-        const bounds = new RectBounds(
-          -5.6568542494, -5.6568542494, 5.6568542494 * 2, 5.6568542494 * 2,
-        );
+        const bounds = new RectBounds({
+          left: -5.6568542494, bottom: -5.6568542494, right: 5.6568542494, top: 5.6568542494,
+        });
         const { duration, position } = deceleratePoint(
           p, v, deceleration, null, bounds, bounceLoss,
         );
@@ -548,7 +575,11 @@ describe('Calculate Stop', () => {
       const p = new Point(0, 0);
       const v = new Point(5, 0);
       const deceleration = 1;
-      const bounds = new LineBounds([0, 0], 100, 0);
+      const bounds = new LineBounds({
+        p1: [0, 0],
+        mag: 100,
+        angle: 0,
+      });
       const bounceLoss = 0;
       const { duration, position } = deceleratePoint(
         p, v, deceleration, null, bounds, bounceLoss,
@@ -561,7 +592,11 @@ describe('Calculate Stop', () => {
       const p = new Point(0, 0);
       const v = new Point(5, 0);
       const deceleration = 1;
-      const bounds = new LineBounds([-4.5, 0], 9, 0);
+      const bounds = new LineBounds({
+        p1: [-4.5, 0],
+        mag: 9,
+        angle: 0,
+      });
       const bounceLoss = 0;
       const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       // Total displacement = 12.5
@@ -576,8 +611,13 @@ describe('Calculate Stop', () => {
       const p = new Point(0, 0);
       const v = new Point(5, 5);
       const deceleration = 1;
-      const bounds = new LineBounds([-100, 0], 200, 0);
+      const bounds = new LineBounds({
+        p1: [-100, 0],
+        mag: 200,
+        angle: 0,
+      });
       const bounceLoss = 0;
+      debugger;
       const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       expect(duration).toBe(5);
       const shaddow = position.getShaddowOnLine(bounds.boundary);
@@ -587,7 +627,11 @@ describe('Calculate Stop', () => {
       const p = new Point(0, 0);
       const v = new Point(5, 5);
       const deceleration = 1;
-      const bounds = new LineBounds([-4.5, 0], 9, 0);
+      const bounds = new LineBounds({
+        p1: [-4.5, 0],
+        mag: 9,
+        angle: 0,
+      });
       const bounceLoss = 0;
       const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       expect(duration).toBe(5);
@@ -599,7 +643,11 @@ describe('Calculate Stop', () => {
       const v = new Point(5 * Math.sqrt(2), 0);
       const deceleration = 1;
       const f = 4.5 / Math.sqrt(2);
-      const bounds = new LineBounds([-f, -f], 9, Math.PI / 4);
+      const bounds = new LineBounds({
+        p1: [-f, -f],
+        mag: 9,
+        angle: Math.PI / 4,
+      });
       const bounceLoss = 0;
       const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       expect(duration).toBe(5);
@@ -620,7 +668,7 @@ describe('Decelerate Transform', () => {
     const d = [1];
     const z = [0];
     const bounceLoss = [0];
-    // const bounds = [new RectBounds(-4.5, -1, 9, 2)];
+    // const bounds = [new RectBounds({ left: -4.5, bottom: -1, right: 4.5, top: 1 })];
     const bounds = [null];
     const deltaTime = 1;
     const result = decelerateTransform(t, v, d, deltaTime, bounds, bounceLoss, z);
@@ -634,7 +682,7 @@ describe('Decelerate Transform', () => {
     const d = [1];
     const z = [0];
     const bounceLoss = [0];
-    // const bounds = [new RectBounds(-4.5, -1, 9, 2)];
+    // const bounds = [new RectBounds({ left: -4.5, bottom: -1, right: 4.5, top: 1 })];
     const bounds = [null];
     const deltaTime = null;
     const result = decelerateTransform(t, v, d, deltaTime, bounds, bounceLoss, z);
@@ -648,7 +696,9 @@ describe('Decelerate Transform', () => {
     const d = [1];
     const z = [0];
     const bounceLoss = [0.5];
-    const bounds = [new RectBounds(-4.5, -1, 9, 2)];
+    const bounds = [new RectBounds({
+      left: -4.5, bottom: -1, right: 4.5, top: 1,
+    })];
     // const bounds = [null];
     const deltaTime = null;
     const result = decelerateTransform(t, v, d, deltaTime, bounds, bounceLoss, z);
@@ -662,7 +712,9 @@ describe('Decelerate Transform', () => {
     const d = [1];
     const z = [0];
     const bounceLoss = [0.5];
-    const bounds = [new RectBounds(-4.5, -1, 9, 2)];
+    const bounds = [new RectBounds({
+      left: -4.5, bottom: -1, right: 4.5, top: 1,
+    })];
     // const bounds = [null];
     const deltaTime = 2;
     const result = decelerateTransform(t, v, d, deltaTime, bounds, bounceLoss, z);
@@ -721,7 +773,11 @@ describe('Decelerate Transform', () => {
     const d = [1, 1];
     const z = [0, 0];
     const bounceLoss = [0, 0];
-    const bounds = [new RangeBounds(-5, 5), new RectBounds(-4.5, -1, 9, 2)];
+    const bounds = [
+      new RangeBounds({ min: -5, max: 5 }),
+      new RectBounds({
+        left: -4.5, bottom: -1, right: 4.5, top: 1,
+      })];
     const deltaTime = 2;
     const result = decelerateTransform(t, v, d, deltaTime, bounds, bounceLoss, z);
     // After 2s, rotation: v = 8m / s
@@ -760,9 +816,13 @@ describe('Decelerate Transform', () => {
     const z = [0, 0, 0];
     const bounceLoss = [0, 0, 0];
     const bounds = [
-      new RectBounds(-5.5, -5.5, 11, 11),
-      new RangeBounds(-4.5, 4.5),
-      new RectBounds(-4.5, -4.5, 9, 9),
+      new RectBounds({
+        left: -5.5, bottom: -5.5, right: 5.5, top: 5.5,
+      }),
+      new RangeBounds({ min: -4.5, max: 4.5 }),
+      new RectBounds({
+        left: -4.5, bottom: -4.5, right: 4.5, top: 4.5,
+      }),
     ];
     // const bounds = [null, null, null];
     const deltaTime = 2;
@@ -784,9 +844,16 @@ describe('Decelerate Transform', () => {
     const z = [0, 0, 0];
     const bounceLoss = [0.2, 0.3, 0.4];
     const bounds = [
-      new RectBounds(-5.5, -5.5, 11, 11),
-      new RangeBounds(-4.5, 4.5),
-      new RectBounds(-4.5 / Math.sqrt(2), -4.5 / Math.sqrt(2), 9 / Math.sqrt(2), 9 / Math.sqrt(2)),
+      new RectBounds({
+        left: -5.5, bottom: -5.5, right: 5.5, top: 5.5,
+      }),
+      new RangeBounds({ min: -4.5, max: 4.5 }),
+      new RectBounds({
+        left: -4.5 / Math.sqrt(2),
+        bottom: -4.5 / Math.sqrt(2),
+        right: 4.5 / Math.sqrt(2),
+        top: 4.5 / Math.sqrt(2)
+        }),
     ];
     // const bounds = [null, null, null];
     const deltaTime = 2;
@@ -918,9 +985,13 @@ describe('Decelerate Transform from Transform', () => {
     const z = { position: 0, scale: 0, rotation: 0 };
     const bounceLoss = { position: 0, scale: 0, rotation: 0 };
     const bounds = {
-      scale: new RectBounds(-5.5, -5.5, 11, 11),
-      rotation: new RangeBounds(-4.5, 4.5),
-      position: new RectBounds(-4.5, -4.5, 9, 9),
+      scale: new RectBounds({
+        left: -5.5, bottom: -5.5, right: 5.5, top: 5.5,
+      }),
+      rotation: new RangeBounds({ min: -4.5, max: 4.5 }),
+      position: new RectBounds({
+        left: -4.5, bottom: -4.5, right: 4.5, top: 4.5,
+      }),
     };
     // const bounds = [null, null, null];
     const deltaTime = 2;

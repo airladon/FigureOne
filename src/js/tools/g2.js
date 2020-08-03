@@ -2543,7 +2543,7 @@ class Transform {
     velocity: Transform,
     decelerationIn: TypeTransformValue,
     deltaTime: number | null,
-    bounds: TypeTransformBounds,
+    boundsIn: TypeTransformBounds | TypeTransformBoundsDefinition,
     bounceLossIn: TypeTransformValue,
     zeroVelocityThresholdIn: TypeTransformValue,
     precision: number = 8,
@@ -2551,6 +2551,12 @@ class Transform {
     const deceleration = transformValueToArray(decelerationIn, this);
     const bounceLoss = transformValueToArray(bounceLossIn, this);
     const zeroVelocityThreshold = transformValueToArray(zeroVelocityThresholdIn, this);
+    let bounds;
+    if (bounds instanceof TransformBounds) {
+      bounds = boundsIn;
+    } else {
+      bounds = new TransformBounds(this, boundsIn);
+    }
     // const bounds = getTransformBoundsLimit(boundsIn, this);
     const result = decelerateTransform(
       this, velocity, deceleration, deltaTime, bounds, bounceLoss, zeroVelocityThreshold, precision,
@@ -3766,20 +3772,20 @@ class LineBounds extends Bounds {
     return { intersect: i, distance: d, reflection: direction + Math.PI };
   }
 
-  // clipVelocity(velocity: number | TypeParsablePoint) {
-  //   if (typeof velocity === 'number') {
-  //     return velocity;
-  //   }
-  //   const v = getPoint(velocity);
-  //   const unitVector = new Vector(this.boundary).unit();
-  //   let projection = unitVector.dotProduct(new Vector([0, 0], v));
-  //   let { ang } = this.boundary;
-  //   if (projection < -1) {
-  //     ang += Math.PI;
-  //     projection = -projection;
-  //   }
-  //   return polarToRect(projection, ang);
-  // }
+  clipVelocity(velocity: number | TypeParsablePoint) {
+    if (typeof velocity === 'number') {
+      return velocity;
+    }
+    const v = getPoint(velocity);
+    const unitVector = new Vector(this.boundary).unit();
+    let projection = unitVector.dotProduct(new Vector([0, 0], v));
+    let { ang } = this.boundary;
+    if (projection < -1) {
+      ang += Math.PI;
+      projection = -projection;
+    }
+    return polarToRect(projection, ang);
+  }
 }
 
 type TypeBoundsDefinition = Bounds | null | TypeRectBoundsDefinition
@@ -4085,7 +4091,7 @@ function deceleratePoint(
   velocityIn: Point,
   deceleration: number,
   deltaTimeIn: number | null = null,
-  bounds: ?Bounds = null,  // ?(Rect | Line) = null,
+  boundsIn: ?Bounds = null,  // ?(Rect | Line) = null,
   bounceLossIn: number = 0,
   zeroVelocityThreshold: number = 0,
   precision: number = 8,
@@ -4094,11 +4100,21 @@ function deceleratePoint(
   duration: number,
   position: Point,
 } {
+  let bounds;
+  if (boundsIn instanceof RangeBounds) {
+    bounds = new RectBounds({
+      left: boundsIn.min, right: boundsIn.max,
+      bottom: boundsIn.min, top: boundsIn.max,
+    });
+  } else {
+    bounds = boundsIn;
+  }
   // clip velocity to the dimension of interest
   let velocity = velocityIn;
-  if (bounds != null) {
+  if (bounds != null && bounds.clipVelocity != null) {
     velocity = bounds.clipVelocity(velocityIn);
   }
+  // const velocity = velocityIn;
 
   let stopFlag = false;
   if (deltaTimeIn == null) {
@@ -4232,7 +4248,10 @@ function decelerateValue(
     // let { min, max } = boundsIn.boundary;
     // if (min == null) {
     // }
-    bounds = new LineBounds([boundsIn.boundary.min, 0], [boundsIn.boundary.max, 0]);
+    bounds = new LineBounds({
+      p1: [boundsIn.boundary.min, 0],
+      p2: [boundsIn.boundary.max, 0],
+    });
   }
   const result = deceleratePoint(
     new Point(value, 0),
@@ -4265,8 +4284,12 @@ function decelerateIndependantPoint(
   let xBounds = null;
   let yBounds = null;
   if (boundsIn != null) {
-    xBounds = new RangeBounds(boundsIn.boundary.left, boundsIn.boundary.right);
-    yBounds = new RangeBounds(boundsIn.boundary.bottom, boundsIn.boundary.top);
+    xBounds = new RangeBounds({
+      min: boundsIn.boundary.left, max: boundsIn.boundary.right
+    });
+    yBounds = new RangeBounds({
+      min: boundsIn.boundary.bottom, max: boundsIn.boundary.top
+    });
   }
 
   const xResult = decelerateValue(
@@ -4346,7 +4369,7 @@ function decelerateTransform(
   velocity: Transform,
   deceleration: TypeTransformDeceleration,
   deltaTime: number | null,
-  bounds: TransformBounds,
+  boundsIn: TransformBounds | TypeTransformBoundsDefinition,
   bounceLoss: TypeTransformBounce,
   zeroVelocityThreshold: TypeTransformZeroThreshold,
   precision: number = 8,
@@ -4354,6 +4377,13 @@ function decelerateTransform(
   let duration = 0;
   const newOrder = [];
   const newVOrder = [];
+
+  let bounds;
+  if (boundsIn instanceof TransformBounds) {
+    bounds = boundsIn;
+  } else {
+    bounds = new TransformBounds(transform, boundsIn);
+  }
   for (let i = 0; i < transform.order.length; i += 1) {
     const transformation = transform.order[i];
     let result;

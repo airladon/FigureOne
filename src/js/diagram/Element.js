@@ -2612,12 +2612,12 @@ class DiagramElement {
     }
     const rect = this.getRelativeBoundingRect('diagram');
     if (this.move.bounds instanceof TransformBounds) {
-      this.move.bounds.updateTranslation(new RectBounds(
-        boundary.left - rect.left,
-        boundary.bottom - rect.bottom,
-        boundary.right - rect.right - (boundary.left - rect.left),
-        boundary.top - rect.top - (boundary.bottom - rect.bottom),
-      ));
+      this.move.bounds.updateTranslation(new RectBounds({
+        left: boundary.left - rect.left,
+        bottom: boundary.bottom - rect.bottom,
+        right: boundary.right - rect.right - (boundary.left - rect.left),
+        top: boundary.top - rect.top - (boundary.bottom - rect.bottom),
+      }));
     }
     // if (this.name === 'c') {
     //   console.log(this.move.bounds.boundary[2])
