@@ -2615,8 +2615,8 @@ class DiagramElement {
       this.move.bounds.updateTranslation(new RectBounds({
         left: boundary.left - rect.left,
         bottom: boundary.bottom - rect.bottom,
-        right: boundary.right - rect.right - (boundary.left - rect.left),
-        top: boundary.top - rect.top - (boundary.bottom - rect.bottom),
+        right: boundary.right - rect.right,
+        top: boundary.top - rect.top,
       }));
     }
     // if (this.name === 'c') {
