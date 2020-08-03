@@ -253,7 +253,7 @@ describe('Animationa and Movement', () => {
         // element.move.minTransform = element.transform.constant(-100);
         diagram.elements.add('e', element);
       });
-      test.only('Deceleration', () => {
+      test('Deceleration', () => {
         const callback = jest.fn();
         const initialV = new Transform().scale(-2, 1).rotate(0).translate(10, 20);
         // const decel = new TransformLimit(1, 2, 1);
@@ -564,27 +564,41 @@ describe('Animationa and Movement', () => {
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
         );
         square.isMovable = true;
-        square.move.bounds = 'diagram';
-        square.setMoveBounds();
-        let { boundary } = square.move.bounds.getTranslation().boundary;
+        // square.move.bounds = 'diagram';
+        square.setMoveBounds('diagram', true);
+        let { boundary } = square.move.bounds.getTranslation();
         expect(round(boundary.left, 3)).toBe(-0.895);
         expect(round(boundary.right, 3)).toBe(0.895);
         expect(round(boundary.bottom, 3)).toBe(-0.895);
         expect(round(boundary.top, 3)).toBe(0.895);
-        square.setMoveBounds([-2, -1, 4, 2]);
-        ({ boundary } = square.move.bounds.getTranslation().boundary);
+        square.setMoveBounds({
+          translation: {
+            left: -2, bottom: -1, right: 2, top: 1,
+          },
+        }, true);
+        ({ boundary } = square.move.bounds.getTranslation());
         expect(round(boundary.left, 3)).toBe(-1.895);
         expect(round(boundary.right, 3)).toBe(1.895);
         expect(round(boundary.bottom, 3)).toBe(-0.895);
         expect(round(boundary.top, 3)).toBe(0.895);
-        square.setMoveBounds([-1, -2, 2, 4]);
-        ({ boundary } = square.move.bounds.getTranslation().boundary);
+        // square.setMoveBounds([-1, -2, 2, 4]);
+        square.setMoveBounds({
+          translation: {
+            left: -1, bottom: -2, right: 1, top: 2,
+          },
+        }, true);
+        ({ boundary } = square.move.bounds.getTranslation());
         expect(round(boundary.left, 3)).toBe(-0.895);
         expect(round(boundary.right, 3)).toBe(0.895);
         expect(round(boundary.bottom, 3)).toBe(-1.895);
         expect(round(boundary.top, 3)).toBe(1.895);
-        square.setMoveBounds([-2, -2, 4, 4]);
-        ({ boundary } = square.move.bounds.getTranslation().boundary);
+        // square.setMoveBounds([-2, -2, 4, 4]);
+        square.setMoveBounds({
+          translation: {
+            left: -2, bottom: -2, right: 2, top: 2,
+          },
+        }, true);
+        ({ boundary } = square.move.bounds.getTranslation());
         expect(round(boundary.left, 3)).toBe(-1.895);
         expect(round(boundary.right, 3)).toBe(1.895);
         expect(round(boundary.bottom, 3)).toBe(-1.895);
@@ -602,16 +616,20 @@ describe('Animationa and Movement', () => {
           new Transform().scale(2, 2).rotate(0).translate(0, 0),
         );
         square.isMovable = true;
-        square.move.bounds = 'diagram';
+        // square.move.bounds = 'diagram';
 
-        square.setMoveBounds();
+        square.setMoveBounds('diagram', true);
         let { boundary } = square.move.bounds.getTranslation();
         expect(round(boundary.left, 3)).toBe(-0.79);
         expect(round(boundary.right, 3)).toBe(0.79);
         expect(round(boundary.bottom, 3)).toBe(-0.79);
         expect(round(boundary.top, 3)).toBe(0.79);
 
-        square.setMoveBounds([-1, -2, 2, 4]);
+        square.setMoveBounds({
+          translation: {
+            left: -1, bottom: -2, right: 1, top: 2,
+          },
+        }, true);
         ({ boundary } = square.move.bounds.getTranslation());
         expect(round(boundary.left, 3)).toBe(-0.79);
         expect(round(boundary.right, 3)).toBe(0.79);

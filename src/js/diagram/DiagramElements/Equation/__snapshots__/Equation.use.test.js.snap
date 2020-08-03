@@ -337,6 +337,7 @@ DiagramElementPrimitive {
         null,
         null,
       ],
+      "bounds": 8,
       "order": Array [
         "s",
         "r",
