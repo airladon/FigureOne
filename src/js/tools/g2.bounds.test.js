@@ -1,7 +1,7 @@
 import {
   Point, Rect, Transform, getPoint, Line,
-  RectBounds, LineBounds, RangeBounds, TransformBounds, ValueBounds,
-  clipAngle,
+  RectBounds, LineBounds, RangeBounds, TransformBounds,
+  clipAngle, getBounds,
 } from './g2';
 import { round } from './math';
 
@@ -35,6 +35,35 @@ describe('Bounds', () => {
       // test('values', () => {
       //   bounds = new RangeBounds(-10, 10, 5);
       // });
+    });
+    describe('Duplication', () => {
+      test('All Values', () => {
+        bounds = new RangeBounds({
+          min: -10, max: 10, precision: 5, bounds: 'outside',
+        });
+        const d = bounds._dup();
+        expect(d).toEqual(bounds);
+        expect(d).not.toBe(bounds);
+      });
+      test('min null', () => {
+        bounds = new RangeBounds({
+          min: null, max: 10, precision: 5, bounds: 'outside',
+        });
+        const d = bounds._dup();
+        expect(d).toEqual(bounds);
+        expect(d).not.toBe(bounds);
+      });
+    });
+    describe('State', () => {
+      test('All Values', () => {
+        bounds = new RangeBounds({
+          min: -10, max: 10, precision: 5, bounds: 'outside',
+        });
+        const state = bounds._state();
+        const d = getBounds(state);
+        expect(d).toEqual(bounds);
+        expect(d).not.toBe(bounds);
+      });
     });
     describe('Bounded max and min - Inside Bounds', () => {
       beforeEach(() => {
@@ -1182,7 +1211,9 @@ describe('Bounds', () => {
         expect(tb).toBeInstanceOf(RectBounds);
         expect(rb).toBeInstanceOf(RangeBounds);
         expect(sb).toBeInstanceOf(RangeBounds);
-        expect(tb.boundary).toEqual({ left: -1, bottom: -1, top: 1, right: 1 });
+        expect(tb.boundary).toEqual({
+          left: -1, bottom: -1, top: 1, right: 1,
+        });
         expect(sb.boundary).toEqual({ min: 0.5, max: 1.5 });
         expect(rb.boundary).toEqual({ min: -2, max: 2 });
       });

@@ -1,5 +1,5 @@
 import {
-  Point, Rect, Transform, Line,
+  Point, Rect, Transform, Line, RangeBounds,
 } from '../tools/g2';
 import {
   getState, setState,
@@ -68,6 +68,14 @@ describe('state', () => {
       expect(obj.obj.r).toEqual(new Rect(0, 0, 3, 3));
       expect(obj.ar[0]).toBe(1);
       expect(obj.ar[1]).toEqual(new Point(1, 1));
+    });
+    test('RangeBounds', () => {
+      const bounds = new RangeBounds({
+        min: -10, max: 10, precision: 5, bounds: 'outside',
+      });
+      const b = parseState(bounds._state());
+      expect(b).toEqual(bounds);
+      expect(b).not.toBe(bounds);
     });
     test('def to undef', () => {
       const objIn = {

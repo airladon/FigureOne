@@ -3045,10 +3045,15 @@ class Bounds {
 //   boundary: ?number;
 // }
 export type TypeRangeBoundsDefinition = {
-  min?: number,
-  max?: number,
+  min?: number | null,
+  max?: number | null,
   precision?: number,
   bounds?: 'inside' | 'outside',
+};
+
+type TypeF1DefRangeBounds = {
+  f1Type: 'rangeBounds',
+  state: ['outside' | 'inside', number, number | null, number | null],
 };
 
 class RangeBounds extends Bounds {
@@ -3067,6 +3072,29 @@ class RangeBounds extends Bounds {
       max: options.max,
     };
     super(boundary, options.bounds, options.precision);
+  }
+
+  _dup() {
+    return new RangeBounds({
+      bounds: this.bounds,
+      precision: this.precision,
+      min: this.boundary.min,
+      max: this.boundary.max,
+    });
+  }
+
+  _state(options: { precision: number }) {
+    // const { precision } = options;
+    const precision = getPrecision(options);
+    return {
+      f1Type: 'rangeBounds',
+      state: [
+        this.bounds,
+        this.precision,
+        this.boundary.min != null ? roundNum(this.boundary.min, precision) : null,
+        this.boundary.max != null ? roundNum(this.boundary.max, precision) : null,
+      ],
+    };
   }
 
   contains(position: number | TypeParsablePoint) {
@@ -3794,7 +3822,8 @@ export type TypeBoundsDefinition = Bounds | null | TypeRectBoundsDefinition
   | { type: 'range', bounds: TypeRangeBoundsDefinition }
   | { type: 'line', bounds: TypeLineBoundsDefinition }
   | TypeTransformBoundsDefinition
-  | { type: 'transform', bounds: TypeTransformBoundsDefinition };
+  | { type: 'transform', bounds: TypeTransformBoundsDefinition }
+  | TypeF1DefRangeBounds;
 
 function getBounds(
   bounds: TypeBoundsDefinition,
@@ -3858,6 +3887,21 @@ function getBounds(
     || bounds.rotation !== undefined
   ) {
     return getBounds(bounds, 'transform', transform);
+  }
+
+  if (bounds.f1Type != undefined && bounds.state != null) {
+    const { f1Type, state } = bounds;
+    if (f1Type != null
+        && f1Type === 'rangeBounds'
+        && state != null
+        && Array.isArray([state])
+        && state.length === 4
+    ) {
+      const [b, precision, min, max] = state;
+      return new RangeBounds({
+        bounds: b, precision, min, max,
+      });
+    }
   }
   return null;
 }
@@ -4040,16 +4084,7 @@ class TransformBounds extends Bounds {
     bound: Bounds | TypeScaleBoundsDefinition,
     translationIndex: ?number = 0,
   ) {
-    let b = getBounds(bound);
-    if (b instanceof RangeBounds) {
-      b = new RectBounds({
-        left: b.boundary.min,
-        bottom: b.boundary.min,
-        top: b.boundary.max,
-        right: b.boundary.max,
-      });
-    }
-    this.update('s', b, translationIndex);
+    this.update('s', bound, translationIndex);
   }
 
   getBound(type: 'r' | 's' | 't', index: number = 0) {
