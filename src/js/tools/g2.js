@@ -3703,7 +3703,7 @@ export type TypeLineBoundsDefinition = {
   angle?: number,
   bounds?: 'inside' | 'outside',
   ends?: 2 | 1 | 0,
-  precision: number,
+  precision?: number,
 };
 
 export type TypeF1DefLineBounds = {
@@ -3927,7 +3927,7 @@ function getBounds(
     return new RangeBounds(bounds);
   }
   if (type === 'line') {
-    return new RectBounds(bounds);
+    return new LineBounds(bounds);
   }
   if (type === 'transform') {
     return new TransformBounds(transform, bounds);
@@ -3937,6 +3937,9 @@ function getBounds(
   }
   if (bounds instanceof Rect) {
     return new RectBounds(bounds);
+  }
+  if (bounds instanceof Line) {
+    return new LineBounds({ line: bounds });
   }
   if (
     bounds.left !== undefined

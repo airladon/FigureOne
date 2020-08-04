@@ -1406,4 +1406,23 @@ describe('Bounds', () => {
       });
     });
   });
+  describe('Get Bounds', () => {
+    describe('Line Bounds', () => {
+      afterEach(() => {
+        expect(bounds).toBeInstanceOf(LineBounds);
+        expect(bounds.boundary.p1).toEqual(new Point(0, 0));
+        expect(bounds.boundary.p2).toEqual(new Point(1, 1));
+        expect(bounds.boundary.ends).toEqual(2);
+      });
+      test('From Line', () => {
+        bounds = getBounds(new Line([0, 0], [1, 1]));
+      });
+      test('From Line Definition', () => {
+        bounds = getBounds({ p1: [0, 0], p2: [1, 1]});
+      });
+      test('From Line Definition 1', () => {
+        bounds = getBounds({ line: new Line([0, 0], [1, 1]) });
+      });
+    });
+  });
 });
