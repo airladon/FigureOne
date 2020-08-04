@@ -11,6 +11,7 @@ import type Diagram from './Diagram';
 
 import {
   getPoint, getTransform, getRect, getLine, Translation, Rotation, Scale,
+  getBounds,
 } from '../tools/g2';
 
 function assignAsLinkOnly(obj: Object) {
@@ -63,6 +64,9 @@ function parseState(state: Object, diagram: Diagram) {
     }
     if (state.f1Type === 'l') {
       return getLine(state);
+    }
+    if (state.f1Type === 'rangeBounds') {
+      return getBounds(state);
     }
     if (state.f1Type === 'de') {
       return assignAsLinkOnly(diagram.getElement(state.state));
