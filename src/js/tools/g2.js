@@ -3251,7 +3251,7 @@ export type TypeRectBoundsDefinition = {
 
 
 export type TypeF1DefRectBounds = {
-  f1Type: 'rangeBounds',
+  f1Type: 'rectBounds',
   state: ['outside' | 'inside', number, number | null, number | null, number | null, number | null],
 };
 
@@ -3707,7 +3707,7 @@ export type TypeLineBoundsDefinition = {
 };
 
 export type TypeF1DefLineBounds = {
-  f1Type: 'rangeBounds',
+  f1Type: 'lineBounds',
   state: ['outside' | 'inside', number, number, number , number, number, 2 | 1 | 0],
 };
 
