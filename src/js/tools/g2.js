@@ -3264,6 +3264,33 @@ class RectBounds extends Bounds {
     super(boundary, options.bounds, options.precision);
   }
 
+  _dup() {
+    return new RectBounds({
+      bounds: this.bounds,
+      precision: this.precision,
+      left: this.boundary.left,
+      right: this.boundary.right,
+      top: this.boundary.top,
+      bottom: this.boundary.bottom,
+    });
+  }
+
+  _state(options: { precision: number }) {
+    // const { precision } = options;
+    const precision = getPrecision(options);
+    return {
+      f1Type: 'rectBounds',
+      state: [
+        this.bounds,
+        this.precision,
+        this.boundary.left != null ? roundNum(this.boundary.left, precision) : null,
+        this.boundary.bottom != null ? roundNum(this.boundary.bottom, precision) : null,
+        this.boundary.right != null ? roundNum(this.boundary.right, precision) : null,
+        this.boundary.top != null ? roundNum(this.boundary.top, precision) : null,
+      ],
+    };
+  }
+
   contains(position: number | TypeParsablePoint) {
     if (typeof position === 'number') {
       return false;
@@ -3856,12 +3883,6 @@ function getBounds(
   }
   if (bounds instanceof Rect) {
     return new RectBounds(bounds);
-    // return new RectBounds({
-    //   left: bounds.left,
-    //   right: bounds.right,
-    //   bottom: bounds.bottom,
-    //   top: bounds.top,
-    // });
   }
   if (
     bounds.left !== undefined
@@ -3892,14 +3913,25 @@ function getBounds(
   if (bounds.f1Type != undefined && bounds.state != null) {
     const { f1Type, state } = bounds;
     if (f1Type != null
-        && f1Type === 'rangeBounds'
-        && state != null
-        && Array.isArray([state])
-        && state.length === 4
+      && f1Type === 'rangeBounds'
+      && state != null
+      && Array.isArray([state])
+      && state.length === 4
     ) {
       const [b, precision, min, max] = state;
       return new RangeBounds({
         bounds: b, precision, min, max,
+      });
+    }
+    if (f1Type != null
+      && f1Type === 'rectBounds'
+      && state != null
+      && Array.isArray([state])
+      && state.length === 6
+    ) {
+      const [b, precision, left, bottom, right, top] = state;
+      return new RectBounds({
+        bounds: b, precision, left, bottom, right, top,
       });
     }
   }
