@@ -334,7 +334,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
 
   animateLengthToOptions: {
     initialLength: number,
-    delaLength: number,
+    deltaLength: number,
     callback: ?(string | (() => void)),
     onStepCallback: ?(string | ((number, number) => void)),
     finishOnCancel: boolean,
@@ -1152,9 +1152,9 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     if (stop) {
       this.stop();
     }
-    this.animateToOptions = {
+    this.animateLengthToOptions = {
       initialLength: this.currentLength,
-      delaLength: toLength - this.currentLength,
+      deltaLength: toLength - this.currentLength,
       callback,
       onStepCallback,
       finishOnCancel,
