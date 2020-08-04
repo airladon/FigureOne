@@ -729,6 +729,22 @@ class DiagramElement {
         }
         const bounds = getBounds(properties.move.bounds, 'transform', this.transform);
         if (bounds instanceof TransformBounds) {
+          for (let i = 0; i < bounds.boundary.length; i += 1) {
+            const bound = bounds.boundary[i];
+            const order = bounds.order[i];
+            if (
+              bounds.boundary[i] != null
+              && bound instanceof RangeBounds
+              && (order === 't' || order === 's')
+            ) {
+              bounds.boundary[i] = new RectBounds({
+                left: bound.boundary.min,
+                bottom: bound.boundary.min,
+                right: bound.boundary.max,
+                top: bound.boundary.max,
+              });
+            }
+          }
           this.move.bounds = bounds;
         }
       }
