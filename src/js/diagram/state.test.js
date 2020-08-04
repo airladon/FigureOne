@@ -91,6 +91,30 @@ describe('state', () => {
       expect(b).toEqual(bounds);
       expect(b).not.toBe(bounds);
     });
+    test('LineBounds', () => {
+      const bounds = new LineBounds({
+        p1: [1, 1],
+        p2: [3, 3],
+        ends: 1,
+        precision: 5,
+        bounds: 'outside',
+      });
+      const b = parseState(bounds._state());
+      expect(b).toEqual(bounds);
+      expect(b).not.toBe(bounds);
+    });
+    test('TransformBounds', () => {
+      const t = new Transform().scale(1, 1).rotate(0).translate(0, 0);
+      const bounds = new TransformBounds(t);
+      bounds.updateScale(new RangeBounds({ min: 0.5, max: 1.5 }));
+      bounds.updateRotation(new RangeBounds({ min: -2, max: 2 }));
+      bounds.updateTranslation(new RectBounds({
+        left: -1, right: 1, bottom: -1, top: 1,
+      }));
+      const b = parseState(bounds._state());
+      expect(b).toEqual(bounds);
+      expect(b).not.toBe(bounds);
+    });
     test('def to undef', () => {
       const objIn = {
         num: 1,

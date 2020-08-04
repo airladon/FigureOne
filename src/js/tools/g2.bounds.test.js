@@ -1114,6 +1114,47 @@ describe('Bounds', () => {
         });
       });
     });
+    describe('Duplication', () => {
+      test('2 Ends', () => {
+        bounds = new LineBounds({
+          p1: [1, 1],
+          p2: [3, 3],
+          ends: 2,
+          precision: 5,
+          bounds: 'outside',
+        });
+        const d = bounds._dup();
+        expect(d).toEqual(bounds);
+        expect(d).not.toBe(bounds);
+      });
+      test('1 End', () => {
+        bounds = new LineBounds({
+          p1: [1, 1],
+          p2: [3, 3],
+          ends: 1,
+          precision: 5,
+          bounds: 'outside',
+        });
+        const d = bounds._dup();
+        expect(d).toEqual(bounds);
+        expect(d).not.toBe(bounds);
+      });
+    });
+    describe('State', () => {
+      test('All Values', () => {
+        bounds = new LineBounds({
+          p1: [1, 1],
+          p2: [3, 3],
+          ends: 2,
+          precision: 5,
+          bounds: 'outside',
+        });
+        const state = bounds._state();
+        const d = getBounds(state);
+        expect(d).toEqual(bounds);
+        expect(d).not.toBe(bounds);
+      });
+    });
     describe('2 Ends horizontal - Inside Bounds', () => {
       beforeEach(() => {
         bounds = new LineBounds({ p1: [0, 0], p2: [10, 0] });
@@ -1260,6 +1301,35 @@ describe('Bounds', () => {
         });
         expect(sb.boundary).toEqual({ min: 0.5, max: 1.5 });
         expect(rb.boundary).toEqual({ min: -2, max: 2 });
+      });
+    });
+    describe('Duplication', () => {
+      test('Simple', () => {
+        const t = new Transform().scale(1, 1).rotate(0).translate(0, 0);
+        bounds = new TransformBounds(t);
+        bounds.updateScale(new RangeBounds({ min: 0.5, max: 1.5 }));
+        bounds.updateRotation(new RangeBounds({ min: -2, max: 2 }));
+        bounds.updateTranslation(new RectBounds({
+          left: -1, right: 1, bottom: -1, top: 1,
+        }));
+        const d = bounds._dup();
+        expect(d).toEqual(bounds);
+        expect(d).not.toBe(bounds);
+      });
+    });
+    describe('State', () => {
+      test('All Values', () => {
+        const t = new Transform().scale(1, 1).rotate(0).translate(0, 0);
+        bounds = new TransformBounds(t);
+        bounds.updateScale(new RangeBounds({ min: 0.5, max: 1.5 }));
+        bounds.updateRotation(new RangeBounds({ min: -2, max: 2 }));
+        bounds.updateTranslation(new RectBounds({
+          left: -1, right: 1, bottom: -1, top: 1,
+        }));
+        const state = bounds._state();
+        const d = getBounds(state);
+        expect(d).toEqual(bounds);
+        expect(d).not.toBe(bounds);
       });
     });
     describe('Long Transforms', () => {

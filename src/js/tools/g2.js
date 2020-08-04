@@ -3,7 +3,7 @@
 import {
   roundNum, decelerate, clipMag, clipValue, rand2D, round,
 } from './math';
-import { joinObjects } from './tools';
+import { joinObjects, duplicate } from './tools';
 import * as m2 from './m2';
 // import { joinObjects } from './tools';
 
@@ -3003,6 +3003,20 @@ class Bounds {
     this.precision = precision;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  _dup() {
+    return new Bounds();
+  }
+
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  _state(options: { precision: number }) {
+    return {
+      f1Type: 'bounds',
+      state: [
+      ],
+    };
+  }
+
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
   contains(position: number | TypeParsablePoint) {
     return true;
@@ -3234,6 +3248,12 @@ export type TypeRectBoundsDefinition = {
   bounds?: 'inside' | 'outside',
   precision?: number,
 } | Rect;
+
+
+export type TypeF1DefRectBounds = {
+  f1Type: 'rangeBounds',
+  state: ['outside' | 'inside', number, number | null, number | null, number | null, number | null],
+};
 
 class RectBounds extends Bounds {
   boundary: {
@@ -3686,6 +3706,11 @@ export type TypeLineBoundsDefinition = {
   precision: number,
 };
 
+export type TypeF1DefLineBounds = {
+  f1Type: 'rangeBounds',
+  state: ['outside' | 'inside', number, number, number , number, number, 2 | 1 | 0],
+};
+
 class LineBounds extends Bounds {
   boundary: Line;
 
@@ -3707,6 +3732,35 @@ class LineBounds extends Bounds {
       boundary = new Line(options.p1, options.mag, options.angle, options.ends);
     }
     super(boundary, options.bounds, options.precision);
+  }
+
+  _dup() {
+    return new LineBounds({
+      bounds: this.bounds,
+      precision: this.precision,
+      p1: this.boundary.p1._dup(),
+      p2: this.boundary.p2._dup(),
+      mag: this.boundary.distance,
+      angle: this.boundary.ang,
+      ends: this.boundary.ends,
+    });
+  }
+
+  _state(options: { precision: number }) {
+    // const { precision } = options;
+    const precision = getPrecision(options);
+    return {
+      f1Type: 'lineBounds',
+      state: [
+        this.bounds,
+        this.precision,
+        roundNum(this.boundary.p1.x, precision),
+        roundNum(this.boundary.p1.y, precision),
+        roundNum(this.boundary.p2.x, precision),
+        roundNum(this.boundary.p2.y, precision),
+        this.boundary.ends,
+      ],
+    };
   }
 
   contains(position: number | TypeParsablePoint) {
@@ -3850,7 +3904,7 @@ export type TypeBoundsDefinition = Bounds | null | TypeRectBoundsDefinition
   | { type: 'line', bounds: TypeLineBoundsDefinition }
   | TypeTransformBoundsDefinition
   | { type: 'transform', bounds: TypeTransformBoundsDefinition }
-  | TypeF1DefRangeBounds;
+  | TypeF1DefRangeBounds | TypeF1DefRectBounds | TypeF1DefLineBounds;
 
 function getBounds(
   bounds: TypeBoundsDefinition,
@@ -3917,7 +3971,7 @@ function getBounds(
       && state != null
       && Array.isArray([state])
       && state.length === 4
-    ) {
+    ) { // $FlowFixMe
       const [b, precision, min, max] = state;
       return new RangeBounds({
         bounds: b, precision, min, max,
@@ -3928,11 +3982,47 @@ function getBounds(
       && state != null
       && Array.isArray([state])
       && state.length === 6
-    ) {
+    ) { // $FlowFixMe
       const [b, precision, left, bottom, right, top] = state;
       return new RectBounds({
         bounds: b, precision, left, bottom, right, top,
       });
+    }
+    if (f1Type != null
+      && f1Type === 'lineBounds'
+      && state != null
+      && Array.isArray([state])
+      && state.length === 7
+    ) { // $FlowFixMe
+      const [b, precision, x, y, x2, y2, ends] = state;
+      return new LineBounds({
+        bounds: b,
+        precision,
+        p1: new Point(x, y),
+        p2: new Point(x2, y2),
+        ends,
+      });
+    }
+
+    if (f1Type != null
+      && f1Type === 'transformBounds'
+      && state != null
+      && Array.isArray([state])
+      && state.length === 3
+    ) { // $FlowFixMe
+      const [precision, order, boundsArray] = state;
+      const t = new TransformBounds(new Transform(), {}, precision);
+      t.order = order.slice();
+      const boundary = [];
+      boundsArray.forEach((b) => {
+        if (b == null) {
+          boundary.push(null)
+        } else {
+          boundary.push(getBounds(b));
+        }
+      });
+      t.boundary = boundary;
+      return t;
     }
   }
   return null;
@@ -4010,6 +4100,12 @@ export type TypeTransformBoundsDefinition = Array<Bounds | null> | {
   rotation?: TypeRotationBoundsDefinition;
   scale?: TypeScaleBoundsDefinition;
 };
+
+export type TypeF1DefTransformBounds = {
+  f1Type: 'transformBounds',
+  state: [number, Array<'s' | 'r' | 'r'>, Array<TypeF1DefLineBounds | TypeF1DefRectBounds | TypeF1DefRangeBounds>],
+};
+
 class TransformBounds extends Bounds {
   boundary: Array<Bounds | null>;
   order: Array<'t' | 'r' | 's'>;
@@ -4034,6 +4130,41 @@ class TransformBounds extends Bounds {
     super([], precision);
     this.order = order;
     this.createBounds(bounds);
+  }
+
+  _dup() {
+    const t = new TransformBounds(new Transform(), {}, this.precision);
+    t.order = this.order.slice();
+    t.boundary = [];
+    this.boundary.forEach((b) => {
+      if (b == null) {
+        t.boundary.push(null);
+      } else {
+        t.boundary.push(b._dup());
+      }
+    });
+    return t;
+  }
+
+  _state(options: { precision: number }) {
+    // const { precision } = options;
+    const precision = getPrecision(options);
+    const bounds = [];
+    this.boundary.forEach((b) => {
+      if (b == null) {
+        bounds.push(null);
+      } else {
+        bounds.push(b._state({ precision }));
+      }
+    });
+    return {
+      f1Type: 'transformBounds',
+      state: [
+        this.precision,
+        this.order.slice(),
+        bounds,
+      ],
+    };
   }
 
   createBounds(
