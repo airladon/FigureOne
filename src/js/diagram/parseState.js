@@ -68,6 +68,15 @@ function parseState(state: Object, diagram: Diagram) {
     if (state.f1Type === 'rangeBounds') {
       return getBounds(state);
     }
+    if (state.f1Type === 'rectBounds') {
+      return getBounds(state);
+    }
+    if (state.f1Type === 'lineBounds') {
+      return getBounds(state);
+    }
+    if (state.f1Type === 'transformBounds') {
+      return getBounds(state);
+    }
     if (state.f1Type === 'de') {
       return assignAsLinkOnly(diagram.getElement(state.state));
     }

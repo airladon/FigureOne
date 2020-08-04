@@ -340,6 +340,50 @@ describe('Bounds', () => {
         // });
       });
     });
+    describe('Duplication', () => {
+      test('All Values', () => {
+        bounds = new RectBounds({
+          left: -10,
+          bottom: -11,
+          right: 8,
+          top: 9,
+          precision: 5,
+          bounds: 'outside',
+        });
+        const d = bounds._dup();
+        expect(d).toEqual(bounds);
+        expect(d).not.toBe(bounds);
+      });
+      test('min null', () => {
+        bounds = new RectBounds({
+          left: null,
+          bottom: -11,
+          right: 8,
+          top: null,
+          precision: 5,
+          bounds: 'outside',
+        });
+        const d = bounds._dup();
+        expect(d).toEqual(bounds);
+        expect(d).not.toBe(bounds);
+      });
+    });
+    describe('State', () => {
+      test('All Values', () => {
+        bounds = new RangeBounds({
+          left: -10,
+          bottom: -11,
+          right: 8,
+          top: 9,
+          precision: 5,
+          bounds: 'outside',
+        });
+        const state = bounds._state();
+        const d = getBounds(state);
+        expect(d).toEqual(bounds);
+        expect(d).not.toBe(bounds);
+      });
+    });
     describe('Bounded Left, Right, Bottom, Top', () => {
       beforeEach(() => {
         bounds = new RectBounds({
