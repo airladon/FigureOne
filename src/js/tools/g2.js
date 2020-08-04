@@ -3205,7 +3205,7 @@ export type TypeRectBoundsDefinition = {
   top?: number | null,
   bounds?: 'inside' | 'outside',
   precision?: number,
-};
+} | Rect;
 
 class RectBounds extends Bounds {
   boundary: {
@@ -3215,7 +3215,7 @@ class RectBounds extends Bounds {
     top: null | number,
   };
 
-  constructor(optionsIn: TypeRectBoundsDefinition) {
+  constructor(optionsOrRect: TypeRectBoundsDefinition) {
     const defaultOptions = {
       left: null,
       right: null,
@@ -3225,7 +3225,7 @@ class RectBounds extends Bounds {
       precision: 8,
     };
 
-    const options = joinObjects({}, defaultOptions, optionsIn);
+    const options = joinObjects({}, defaultOptions, optionsOrRect);
 
     const boundary = {
       left: options.left,
@@ -3825,6 +3825,15 @@ function getBounds(
   if (bounds.min !== undefined || bounds.max !== undefined) {
     return getBounds(bounds, 'range');
   }
+  if (bounds instanceof Rect) {
+    return new RectBounds(bounds);
+    // return new RectBounds({
+    //   left: bounds.left,
+    //   right: bounds.right,
+    //   bottom: bounds.bottom,
+    //   top: bounds.top,
+    // });
+  }
   if (
     bounds.left !== undefined
     || bounds.right !== undefined
@@ -3915,7 +3924,7 @@ function transformValueToArray(
 
 // type TypeBoundsDefinition = null | ;
 
-type TypeTranslationBoundsDefinition = Bounds | TypeRectBoundsDefinition | TypeLineBoundsDefinition;
+type TypeTranslationBoundsDefinition = Bounds | TypeRectBoundsDefinition | TypeLineBoundsDefinition | TypeRangeBoundsDefinition;
 type TypeRotationBoundsDefinition = Bounds | TypeRangeBoundsDefinition;
 type TypeScaleBoundsDefinition = Bounds | TypeRangeBoundsDefinition | TypeRectBoundsDefinition;
 
@@ -4008,7 +4017,16 @@ class TransformBounds extends Bounds {
     bound: Bounds | TypeTranslationBoundsDefinition,
     translationIndex: ?number = 0,
   ) {
-    this.update('t', bound, translationIndex);
+    let b = getBounds(bound);
+    if (b instanceof RangeBounds) {
+      b = new RectBounds({
+        left: b.boundary.min,
+        bottom: b.boundary.min,
+        top: b.boundary.max,
+        right: b.boundary.max,
+      });
+    }
+    this.update('t', b, translationIndex);
   }
 
   updateRotation(
@@ -4022,7 +4040,16 @@ class TransformBounds extends Bounds {
     bound: Bounds | TypeScaleBoundsDefinition,
     translationIndex: ?number = 0,
   ) {
-    this.update('s', bound, translationIndex);
+    let b = getBounds(bound);
+    if (b instanceof RangeBounds) {
+      b = new RectBounds({
+        left: b.boundary.min,
+        bottom: b.boundary.min,
+        top: b.boundary.max,
+        right: b.boundary.max,
+      });
+    }
+    this.update('s', b, translationIndex);
   }
 
   getBound(type: 'r' | 's' | 't', index: number = 0) {
