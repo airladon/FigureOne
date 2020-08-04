@@ -104,8 +104,9 @@ export default function makeDiagram(
     duration: 0,
     previousTouchPoint: new Point(0, 0),
     timersBeforeDraw: true,
-    timeStep: (deltaTimeInSeconds, frameTimeIn = null) => {
+    timeStep: (deltaTimeInSecondsIn, frameTimeIn = null) => {
       const { duration, initialTime } = diagram.mock;
+      const deltaTimeInSeconds = round(deltaTimeInSecondsIn, 8);
       let frameTime = deltaTimeInSeconds;
       // let deltaTime = 0;
       if (frameTimeIn != null && frameTimeIn < deltaTimeInSeconds) {
@@ -113,11 +114,11 @@ export default function makeDiagram(
         // deltaTime = frameTime;
       }
       let deltaTime = frameTime;
-      
+
       // let delta = Math.min(deltaTimeInSeconds, frameTime);
       let lastTime = 0
       deltaTime = round(deltaTime, 8);
-      while (deltaTime <= deltaTimeInSeconds) {
+      while (deltaTime <= round(deltaTimeInSeconds, 8)) {
         // if (window.asdf) {
         //   console.log(duration, deltaTime + 0.00);
         // }

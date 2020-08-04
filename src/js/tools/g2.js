@@ -2521,7 +2521,7 @@ class Transform {
     for (let i = 0; i < this.order.length; i += 1) {
       const t = this.order[i];
       if (t instanceof Translation || t instanceof Scale) {
-        if (t.x > zeroThreshold || t.y > zeroThreshold) {
+        if (Math.abs(t.x) > zeroThreshold || Math.abs(t.y) > zeroThreshold) {
           return false;
         }
       } else if (t instanceof Rotation) {

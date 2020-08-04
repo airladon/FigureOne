@@ -115,7 +115,7 @@ const Fig = {
   Line: g2.Line,
   Rect: g2.Rect,
   Transform: g2.Transform,
-  TransformLimit: g2.TransformLimit,
+  // TransformLimit: g2.TransformLimit,
   Translation: g2.Translation,
   Scale: g2.Scale,
   Rotation: g2.Rotation,
