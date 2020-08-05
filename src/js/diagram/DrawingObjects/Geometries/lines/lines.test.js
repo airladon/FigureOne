@@ -166,6 +166,7 @@ describe('Tools Lines', () => {
       });
       test('dash', () => {
         const out = makePolyLine(points, 0.1, true, 'negative', 'auto', 0.015, 10, Math.PI / 7, [0.2, 0.08]);
+        // const r = round(out);
         expect(round(out)).toMatchSnapshot();
       });
     });

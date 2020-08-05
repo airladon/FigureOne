@@ -3820,7 +3820,7 @@ class LineBounds extends Bounds {
     if (typeof position === 'number') {
       return false;
     }
-    const p = getPoint(position).round(precision);
+    const p = getPoint(position).round(this.precision);
     return p.isWithinLine(this.boundary, this.precision);
   }
 
