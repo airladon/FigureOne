@@ -1,6 +1,6 @@
-// import {
-//   Point,
-// } from '../../tools/g2';
+import {
+  Line, rectToPolar,
+} from '../../tools/g2';
 import {
   round,
 } from '../../tools/math';
@@ -69,5 +69,41 @@ describe('Move Freely', () => {
     expect(a.getPosition().round(3).x).toEqual(26);
     expect(round(a.getRemainingMovingFreelyTime(), 3)).toBe(0);
     expect(a.state.isMovingFreely).toBe(false);
+  });
+  test('Move freely along a line', () => {
+    a.move.bounds.updateTranslation(new Line([0, 0], [50, 50]));
+    a.move.freely.deceleration = 1;
+    diagram.mock.timeStep(0);
+    diagram.mock.touchDown([0, 0]);
+    diagram.mock.timeStep(0.1);
+    diagram.mock.touchMove([0.5 * Math.sqrt(2), 0]);
+    diagram.mock.touchUp();
+
+    // Moving at 5 units/s
+    // Total time = 5s
+    // Distance: s = v0t - 0.5*1*t^2 = 25 - 12.5 = 12.5;
+    const x = 0.5 / Math.sqrt(2);
+    expect(round(rectToPolar(a.state.movement.velocity.t()).mag, 3)).toBe(5);
+    expect(a.getPosition().round(3).x).toEqual(round(x, 3));
+    expect(round(a.getRemainingMovingFreelyTime(), 2)).toBe(5);
+    expect(a.state.isMovingFreely).toBe(true);
+
+    // After 1s:
+    //  v1 = v0 - at = 5 - 1 = 4
+    //  s  = 5 - 0.5 = 4.5
+    diagram.mock.timeStep(1);
+    expect(round(rectToPolar(a.state.movement.velocity.t()).mag, 3)).toBe(4);
+    expect(a.getPosition().round(3).x).toEqual(round(x + 4.5 / Math.sqrt(2), 3));
+    expect(round(a.getRemainingMovingFreelyTime(), 2)).toBe(4);
+    expect(a.state.isMovingFreely).toBe(true);
+
+    // After 2s:
+    //  v2 = v1 - at = 4 - 1 = 3
+    //  s  = 4 - 0.5 = 3.5 (+4.5)
+    diagram.mock.timeStep(1);
+    expect(round(rectToPolar(a.state.movement.velocity.t()).mag, 3)).toBe(3);
+    expect(a.getPosition().round(3).x).toEqual(round(x + (4.5 + 3.5) / Math.sqrt(2), 3));
+    expect(round(a.getRemainingMovingFreelyTime(), 2)).toBe(3);
+    expect(a.state.isMovingFreely).toBe(true);
   });
 });
