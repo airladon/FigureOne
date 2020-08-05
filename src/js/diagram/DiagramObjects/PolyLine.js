@@ -334,18 +334,19 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
           //       boundary.boundary.top += delta;
           //     }
           //   }
-            // boundary = new Rect(
-            //   boundary.left - delta,
-            //   boundary.bottom - delta,
-            //   boundary.width + 2 * delta,
-            //   boundary.height + 2 * delta,
-            // );
+          // boundary = new Rect(
+          //   boundary.left - delta,
+          //   boundary.bottom - delta,
+          //   boundary.width + 2 * delta,
+          //   boundary.height + 2 * delta,
+          // );
           // }
           padShape.setMoveBounds({ translation: boundary });
           const fnName = `_polyline_pad${i}`;
-          this.fnMap.add(
+          padShape.fnMap.add(
             fnName,
             (transform) => {
+              // console.log('asdfasdfasdf')
               const index = parseInt(padShape.name.slice(3), 10);
               const translation = transform.t();
               if (translation != null) {

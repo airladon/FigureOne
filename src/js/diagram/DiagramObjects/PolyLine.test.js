@@ -366,4 +366,31 @@ describe('Diagram Objects PolyLine', () => {
       expect(base20.drawingObject.text[0].text).toBe('315º');
     });
   });
+  describe('Diagram Level', () => {
+    test('Pad change shape', () => {
+      diagram.addElement({
+        method: 'polyline',
+        name: 'a',
+        options: {
+          points,
+          close: true,
+          pad: {
+            radius: 0.2,
+            boundary: [-3, -2, 3, 2],
+            isMovable: true,
+          },
+        },
+      });
+      diagram.initialize();
+      const a = diagram.elements._a;
+      expect(a.points[0]).toEqual(new Point(0, 0));
+      expect(a.points[1]).toEqual(new Point(1, 0));
+      expect(a.points[2]).toEqual(new Point(1, 1));
+      const p0 = a._pad0;
+      p0.setPosition(0, 0.5);
+      expect(a.points[0]).toEqual(new Point(0, 0.5));
+      expect(a.points[1]).toEqual(new Point(1, 0));
+      expect(a.points[2]).toEqual(new Point(1, 1));
+    });
+  });
 });
