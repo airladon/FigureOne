@@ -530,6 +530,7 @@ function makePolyLine(
   lineNum: number = 2,
   borderIs: 'positive' | 'negative' | 'line' | Array<Array<Point>>,
   holeIs: 'positive' | 'negative' | 'none' | Array<Array<Point>>,
+  precision: number = 8,
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   let points = [];
   let cornerStyleToUse;
@@ -551,7 +552,7 @@ function makePolyLine(
 
   // Convert line to dashed line
   if (dash.length > 1) {
-    const dashes = lineToDash(points, dash, close, 0);
+    const dashes = lineToDash(points, dash, close, 0, precision);
     let closeDashes = false;
     if (dashes.length === 1) {
       closeDashes = close;

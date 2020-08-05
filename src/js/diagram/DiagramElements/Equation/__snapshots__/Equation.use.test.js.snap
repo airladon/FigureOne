@@ -345,7 +345,7 @@ DiagramElementPrimitive {
       ],
       "precision": 8,
     },
-    "canBeMovedAfterLosingTouch": false,
+    "canBeMovedAfterLosingTouch": true,
     "element": null,
     "freely": Object {
       "bounceLoss": 0.5,

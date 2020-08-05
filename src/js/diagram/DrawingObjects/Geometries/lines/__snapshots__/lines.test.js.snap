@@ -646,36 +646,6 @@ Array [
     Point {
       "_type": "point",
       "x": 0.05,
-      "y": 1,
-    },
-    Point {
-      "_type": "point",
-      "x": 0.05,
-      "y": 1,
-    },
-    Point {
-      "_type": "point",
-      "x": -0.05,
-      "y": 1,
-    },
-    Point {
-      "_type": "point",
-      "x": -0.05,
-      "y": 1,
-    },
-    Point {
-      "_type": "point",
-      "x": 0.05,
-      "y": 1,
-    },
-    Point {
-      "_type": "point",
-      "x": -0.05,
-      "y": 1,
-    },
-    Point {
-      "_type": "point",
-      "x": 0.05,
       "y": 0.92,
     },
     Point {
@@ -4011,36 +3981,6 @@ Array [
       "_type": "point",
       "x": 0,
       "y": 1.1,
-    },
-    Point {
-      "_type": "point",
-      "x": 0,
-      "y": 1,
-    },
-    Point {
-      "_type": "point",
-      "x": 0,
-      "y": 1,
-    },
-    Point {
-      "_type": "point",
-      "x": -0.1,
-      "y": 1,
-    },
-    Point {
-      "_type": "point",
-      "x": -0.1,
-      "y": 1,
-    },
-    Point {
-      "_type": "point",
-      "x": 0,
-      "y": 1,
-    },
-    Point {
-      "_type": "point",
-      "x": -0.1,
-      "y": 1,
     },
     Point {
       "_type": "point",
@@ -8350,36 +8290,6 @@ Array [
       "_type": "point",
       "x": 0,
       "y": 0.9,
-    },
-    Point {
-      "_type": "point",
-      "x": 0,
-      "y": 1,
-    },
-    Point {
-      "_type": "point",
-      "x": 0.1,
-      "y": 1,
-    },
-    Point {
-      "_type": "point",
-      "x": 0.1,
-      "y": 1,
-    },
-    Point {
-      "_type": "point",
-      "x": 0,
-      "y": 1,
-    },
-    Point {
-      "_type": "point",
-      "x": 0,
-      "y": 1,
-    },
-    Point {
-      "_type": "point",
-      "x": 0.1,
-      "y": 1,
     },
     Point {
       "_type": "point",
