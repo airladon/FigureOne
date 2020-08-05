@@ -1685,8 +1685,9 @@ class DiagramElement {
   }
 
   moved(newTransform: Transform): void {
-    this.calcVelocity(newTransform);
+    const prevTransform = this.transform._dup();
     this.setTransform(newTransform._dup());
+    this.calcVelocity(prevTransform);
     if (this.recorder.state === 'recording') {
       this.recorder.recordEvent(
         'moved',
@@ -1726,7 +1727,7 @@ class DiagramElement {
     this.state.movement.previousTime = null;
   }
 
-  calcVelocity(newTransform: Transform): void {
+  calcVelocity(prevTransform: Transform): void {
     const currentTime = new GlobalAnimation().now() / 1000;
     if (this.state.movement.previousTime === null) {
       this.state.movement.previousTime = currentTime;
@@ -1739,8 +1740,8 @@ class DiagramElement {
     if (deltaTime < 0.0001) {
       return;
     }
-    this.state.movement.velocity = newTransform.velocity(
-      this.transform,
+    this.state.movement.velocity = this.transform.velocity(
+      prevTransform,
       deltaTime,
       this.move.freely.zeroVelocityThreshold,
       this.move.maxVelocity,
