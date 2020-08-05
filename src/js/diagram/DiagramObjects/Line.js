@@ -292,6 +292,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   largerTouchBorder: boolean | number;
   dashStyle: { style: Array<number>, maxLength: number } | null;
 
+  scaleTransformMethodName: string;
+
   // line methods
   setLength: (number) => void;
   setEndPoints: (TypeParsablePoint, TypeParsablePoint, ?number) => void;
@@ -426,6 +428,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       initialLength: 0,
       deltaLength: 1,
       finishOnCancel: true,
+      callback: null,
+      onStepCallback: null,
     };
 
     this.pulseWidthOptions = {
