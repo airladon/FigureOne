@@ -476,6 +476,9 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     // touched then the line collection is rotated.
     this.multiMove = {
       vertexSpaceMidLength: 0,
+      // bounds: new RectBounds({
+      //   left: -1, bottom: -1, top: 1, right: 1
+      // }),
       bounds: new Rect(-1, -1, 2, 2),
     };
     this._midLine = null;
@@ -764,7 +767,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     movable: boolean = true,
     moveType: 'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale' = this.move.type,
     middleLengthPercent: number = 0.333,
-    translationBounds: Rect = this.diagramLimits,
+    translationBounds: Rect = this.diagramLimits._dup(),
   ) {
     if (movable) {
       if (moveType === 'translation' || moveType === 'rotation'
@@ -833,6 +836,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   updateMoveTransform(t: Transform = this.transform._dup()) {
     const r = t.r();
     const { bounds } = this.multiMove;
+    // console.log('qqwer')
     if (r != null) {
       const w = Math.abs(this.currentLength / 2 * Math.cos(r));
       const h = Math.abs(this.currentLength / 2 * Math.sin(r));
@@ -840,8 +844,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         this.move.bounds.updateTranslation(new RectBounds({
           left: bounds.left + w,
           bottom: bounds.bottom + h,
-          right: bounds.right - w - (bounds.left + w),
-          top: bounds.top - h - (bounds.bottom + h),
+          right: bounds.right - w,
+          top: bounds.top - h,
         }));
       }
       // this.move.maxTransform.updateTranslation(

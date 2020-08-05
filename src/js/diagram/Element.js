@@ -1346,39 +1346,16 @@ class DiagramElement {
     if (this.move.transformClip != null) {
       this.transform = this.fnMap.exec(this.move.transformClip, transform);
     } else {
-      // console.log(transform)
-      // let { bounds } = this.move;
-      // if (bounds === 'diagram') {
-      //   bounds = new TransformBounds(this.transform);
-      //   bounds.updateTranslation(new RectBounds(this.diagram.limits));
-      // }
-      if (window.asdf && this.name === 'c') {
-        debugger;
-      }
       this.checkMoveBounds();
       if (this.move.bounds instanceof TransformBounds) {
         this.transform = this.move.bounds.clip(transform);
-        // if (this.name === 'c') {
-          // console.log(transform)
-          // console.log(this.transform)
-          // console.log(this.move.bounds.boundary[2])
-        // }
       }
-      // console.log(this.transform)
-      // this.transform = transform._dup().clip(
-      //   this.move.minTransform,
-      //   this.move.maxTransform,
-      //   this.move.limitLine,
-      // );
     }
     if (this.internalSetTransformCallback) {
       this.fnMap.exec(this.internalSetTransformCallback, this.transform);
     }
     this.fnMap.exec(this.setTransformCallback, this.transform);
     this.subscriptions.trigger('setTransform', [this.transform]);
-    // if (this.setTransformCallback) {
-    //   this.setTransformCallback(this.transform);
-    // }
   }
 
   // Set the next transform (and velocity if moving freely) for the next
