@@ -4404,10 +4404,10 @@ function deceleratePoint(
     bounds = boundsIn;
   }
   // clip velocity to the dimension of interest
-  let velocity = velocityIn;
-  if (bounds != null && bounds.clipVelocity != null) {
-    velocity = bounds.clipVelocity(velocityIn);
-  }
+  const velocity = velocityIn;
+  // if (bounds != null && bounds.clipVelocity != null) {
+  //   velocity = bounds.clipVelocity(velocityIn);
+  // }
   // const velocity = velocityIn;
 
   let stopFlag = false;
