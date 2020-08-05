@@ -122,6 +122,49 @@ describe('Move Freely', () => {
     diagram.mock.timeStep(6);
     expect(a.getPosition().round()).toEqual(new Point(9, 0));
   });
+  test('Bounce in 0 height Rect with initial angle', () => {
+    a.move.freely.deceleration = 1;
+    a.move.freely.bounceLoss = 0;
+    a.move.freely.zeroVelocityThreshold = 0.0000001;
+    a.setMoveBounds({
+      translation: {
+        left: -10, bottom: 0, right: 10, top: 0,
+      },
+    });
+    a.setPosition([0, 0]);
+    diagram.mock.timeStep(0);
+    expect(a.getPosition()).toEqual(new Point(0, 0));
+    diagram.mock.timeStep(0);
+    diagram.mock.touchDown([0, 0]);
+    diagram.mock.timeStep(0.1);
+    diagram.mock.touchMove([1, 1]);
+    diagram.mock.touchUp();
+
+    expect(a.getPosition()).toEqual(new Point(1, 0));
+    expect(round(rectToPolar(a.state.movement.velocity.t()).mag, 3)).toEqual(10);
+    expect(a.state.isMovingFreely).toBe(true);
+    expect(round(a.getRemainingMovingFreelyTime(), 2)).toBe(10);
+
+    // Total travel time: 10s
+    // Total travel distance:
+    //   s = v0t - 0.5t^2 = 100 - 50 = 50
+    // Therefore there will be 3 Bounces (50 - 9 - 20 - 20 = 49) and final position will be at 1
+
+    // After 1s, distance will be: 10 - 0.5 = 9.5
+    diagram.mock.timeStep(1);
+    expect(a.getPosition().round()).toEqual(new Point(9.5, 0));
+
+    // After 2s, distance will be: 20 - 2 = 18
+    diagram.mock.timeStep(1);
+    expect(a.getPosition().round()).toEqual(new Point(1, 0));
+
+    // After 4s, distance will be: 40 - 8 = 32
+    diagram.mock.timeStep(2);
+    expect(a.getPosition().round()).toEqual(new Point(-7, 0));
+
+    diagram.mock.timeStep(6);
+    expect(a.getPosition().round()).toEqual(new Point(9, 0));
+  });
   test('Bounce in 0 width Rect', () => {
     a.move.freely.deceleration = 1;
     a.move.freely.bounceLoss = 0;
