@@ -120,6 +120,10 @@ const Fig = {
   Scale: g2.Scale,
   Rotation: g2.Rotation,
   parsePoint: g2.getPoint,
+  LineBounds: g2.LineBounds,
+  TransformBounds: g2.TransformBounds,
+  RectBounds: g2.RectBounds,
+  RangeBounds: g2.RangeBounds,
 };
 
 export default Fig;
