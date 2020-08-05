@@ -1216,4 +1216,151 @@ describe('g2 Line', () => {
       expect(getLine('asdf')).toEqual(l);
     });
   });
+  describe('Zero Length Lines', () => {
+    test('Construction', () => {
+      const l = new Line([0, 0], [0, 0]);
+      expect(l.distance).toBe(0);
+      expect(l.ang).toBe(0);
+    });
+    test('Has Point On - True', () => {
+      const l = new Line([1, 0], [1, 0]);
+      const p = new Point(1, 0);
+      expect(l.hasPointOn(p)).toBe(true);
+    });
+    test('Has Point On - False', () => {
+      const l = new Line([1, 0], [1, 0]);
+      const p = new Point(1, 1);
+      expect(l.hasPointOn(p)).toBe(false);
+    });
+    describe('Intersection', () => {
+      test('Horiztontal, along, not within', () => {
+        const l = new Line([1, 0], [1, 0]);
+        const l2 = new Line([0, 0], [0.5, 0]);
+        const result = l.intersectsWith(l2);
+        expect(result.intersect).toEqual(new Point(1, 0));
+        expect(result.alongLine).toBe(true);
+        expect(result.withinLine).toBe(false);
+      });
+      test('Horiztontal, along, not within - Reverse', () => {
+        const l = new Line([1, 0], [1, 0]);
+        const l2 = new Line([0, 0], [0.5, 0]);
+        const result = l2.intersectsWith(l);
+        expect(result.intersect).toEqual(new Point(1, 0));
+        expect(result.alongLine).toBe(true);
+        expect(result.withinLine).toBe(false);
+      });
+      test('Horiztontal, within (end)', () => {
+        const l = new Line([1, 0], [1, 0]);
+        const l2 = new Line([0, 0], [1, 0]);
+        const result = l.intersectsWith(l2);
+        expect(result.intersect).toEqual(new Point(1, 0));
+        expect(result.alongLine).toBe(true);
+        expect(result.withinLine).toBe(true);
+      });
+      test('Horiztontal, within (end) - Reverse', () => {
+        const l = new Line([1, 0], [1, 0]);
+        const l2 = new Line([0, 0], [1, 0]);
+        const result = l2.intersectsWith(l);
+        expect(result.intersect).toEqual(new Point(1, 0));
+        expect(result.alongLine).toBe(true);
+        expect(result.withinLine).toBe(true);
+      });
+      test('Horiztontal, within (beyond end)', () => {
+        const l = new Line([1, 0], [1, 0]);
+        const l2 = new Line([0, 0], [2, 0]);
+        const result = l.intersectsWith(l2);
+        expect(result.intersect).toEqual(new Point(1, 0));
+        expect(result.alongLine).toBe(true);
+        expect(result.withinLine).toBe(true);
+      });
+      test('Horiztontal, within (beyond end) - Reverse', () => {
+        const l = new Line([1, 0], [1, 0]);
+        const l2 = new Line([0, 0], [2, 0]);
+        const result = l2.intersectsWith(l);
+        expect(result.intersect).toEqual(new Point(1, 0));
+        expect(result.alongLine).toBe(true);
+        expect(result.withinLine).toBe(true);
+      });
+      test('Vertical, along, not within', () => {
+        const l = new Line([0, 1], [0, 1]);
+        const l2 = new Line([0, 0], [0, 0.5]);
+        const result = l.intersectsWith(l2);
+        expect(result.intersect).toEqual(new Point(0, 1));
+        expect(result.alongLine).toBe(true);
+        expect(result.withinLine).toBe(false);
+      });
+      test('Vertical, along, not within - Reverse', () => {
+        const l = new Line([0, 1], [0, 1]);
+        const l2 = new Line([0, 0], [0, 0.5]);
+        const result = l2.intersectsWith(l);
+        expect(result.intersect).toEqual(new Point(0, 1));
+        expect(result.alongLine).toBe(true);
+        expect(result.withinLine).toBe(false);
+      });
+      test('Vertical, within (end)', () => {
+        const l = new Line([0, 1], [0, 1]);
+        const l2 = new Line([0, 0], [0, 1]);
+        const result = l.intersectsWith(l2);
+        expect(result.intersect).toEqual(new Point(0, 1));
+        expect(result.alongLine).toBe(true);
+        expect(result.withinLine).toBe(true);
+      });
+      test('Vertical, within (end) - Reverse', () => {
+        const l = new Line([0, 1], [0, 1]);
+        const l2 = new Line([0, 0], [0, 1]);
+        const result = l2.intersectsWith(l);
+        expect(result.intersect).toEqual(new Point(0, 1));
+        expect(result.alongLine).toBe(true);
+        expect(result.withinLine).toBe(true);
+      });
+      test('Vertical, within (beyond end)', () => {
+        const l = new Line([0, 1], [0, 1]);
+        const l2 = new Line([0, 0], [0, 2]);
+        const result = l.intersectsWith(l2);
+        expect(result.intersect).toEqual(new Point(0, 1));
+        expect(result.alongLine).toBe(true);
+        expect(result.withinLine).toBe(true);
+      });
+      test('Vertical, within (beyond end) - Reverse', () => {
+        const l = new Line([0, 1], [0, 1]);
+        const l2 = new Line([0, 0], [0, 2]);
+        const result = l2.intersectsWith(l);
+        expect(result.intersect).toEqual(new Point(0, 1));
+        expect(result.alongLine).toBe(true);
+        expect(result.withinLine).toBe(true);
+      });
+      test('Diagonal, along, not within', () => {
+        const l = new Line([1, 1], [1, 1]);
+        const l2 = new Line([0, 0], [0.5, 0.5]);
+        const result = l.intersectsWith(l2);
+        expect(result.intersect).toEqual(new Point(1, 1));
+        expect(result.alongLine).toBe(true);
+        expect(result.withinLine).toBe(false);
+      });
+      test('No Intersect', () => {
+        const l = new Line([1.1, 1], [1.1, 1]);
+        const l2 = new Line([0, 0], [0.5, 0.5]);
+        const result = l.intersectsWith(l2);
+        expect(result.intersect).toBe(undefined);
+        expect(result.alongLine).toBe(false);
+        expect(result.withinLine).toBe(false);
+      });
+      test('Both Zero - Same', () => {
+        const l = new Line([1, 1], [1, 1]);
+        const l2 = new Line([1, 1], [1, 1]);
+        const result = l.intersectsWith(l2);
+        expect(result.intersect).toEqual(new Point(1, 1));
+        expect(result.alongLine).toBe(true);
+        expect(result.withinLine).toBe(true);
+      });
+      test('Both Zero - Different', () => {
+        const l = new Line([1, 1], [1, 1]);
+        const l2 = new Line([0, 0], [0, 0]);
+        const result = l.intersectsWith(l2);
+        expect(result.intersect).toBe(undefined);
+        expect(result.alongLine).toBe(false);
+        expect(result.withinLine).toBe(false);
+      });
+    });
+  });
 });

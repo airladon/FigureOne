@@ -79,6 +79,30 @@ describe('Move Freely', () => {
     expect(round(a.getRemainingMovingFreelyTime(), 3)).toBe(0);
     expect(a.state.isMovingFreely).toBe(false);
   });
+  test.only('Bounce in 0 height Rect', () => {
+    a.move.freely.deceleration = 1;
+    a.move.freely.bounceLoss = 0;
+    a.move.freely.zeroVelocityThreshold = 0.0000001;
+    a.setMoveBounds({
+      translation: {
+        left: -10, bottom: 0, right: 10, top: 0,
+      },
+    });
+    a.setPosition([0, 0]);
+    diagram.mock.timeStep(0);
+    expect(a.getPosition()).toEqual(new Point(0, 0));
+
+    diagram.mock.timeStep(0);
+    diagram.mock.touchDown([0, 0]);
+    diagram.mock.timeStep(0.1);
+    diagram.mock.touchMove([1, 0]);
+    diagram.mock.touchUp();
+
+    expect(a.getPosition()).toEqual(new Point(1, 0));
+    expect(round(rectToPolar(a.state.movement.velocity.t()).mag, 3)).toEqual(10);
+    expect(a.state.isMovingFreely).toBe(true);
+    expect(round(a.getRemainingMovingFreelyTime(), 2)).toBe(10);
+  });
   test('Bounce of two walls at an angle', () => {
     a.move.freely.deceleration = 1;
     a.move.freely.bounceLoss = 0;
@@ -144,7 +168,6 @@ describe('Move Freely', () => {
     A = -0.5;
     C = -d;
     const t2 = Math.abs(-B - Math.sqrt(B ** 2 - 4 * A * C) / (2 * A));
-    console.log(t2)
     const v2 = v1 - 1 * t2;
     diagram.mock.timeStep(t2);
     expect(round(rectToPolar(a.state.movement.velocity.t()).mag, 3)).toEqual(round(v2, 3));
