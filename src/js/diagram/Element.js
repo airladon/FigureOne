@@ -632,7 +632,7 @@ class DiagramElement {
         bounceLoss: 0.5,
       },
       // bounce: true, // deprecate
-      canBeMovedAfterLosingTouch: false,
+      canBeMovedAfterLosingTouch: true,
       type: 'translation',
       element: null,
       // limitLine: null,
