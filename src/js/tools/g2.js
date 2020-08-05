@@ -3355,17 +3355,17 @@ class RectBounds extends Bounds {
     if (typeof position === 'number') {
       return false;
     }
-    const p = getPoint(position);
-    if (this.boundary.left != null && p.x < this.boundary.left) {
+    const p = getPoint(position).round(this.precision);
+    if (this.boundary.left != null && p.x < roundNum(this.boundary.left, this.precision)) {
       return false;
     }
-    if (this.boundary.right != null && p.x > this.boundary.right) {
+    if (this.boundary.right != null && p.x > roundNum(this.boundary.right, this.precision)) {
       return false;
     }
-    if (this.boundary.bottom != null && p.y < this.boundary.bottom) {
+    if (this.boundary.bottom != null && p.y < roundNum(this.boundary.bottom, this.precision)) {
       return false;
     }
-    if (this.boundary.top != null && p.y > this.boundary.top) {
+    if (this.boundary.top != null && p.y > roundNum(this.boundary.top, this.precision)) {
       return false;
     }
     return true;
@@ -3408,6 +3408,20 @@ class RectBounds extends Bounds {
       top, bottom, left, right,
     } = this.boundary;
 
+    let zeroHeight = false;
+    if (
+      top != null && bottom != null
+      && roundNum(top, this.precision) === roundNum(bottom, this.precision)
+    ) {
+      zeroHeight = true;
+    }
+    let zeroWdith = false;
+    if (
+      left != null && right != null
+      && roundNum(left, this.precision) === roundNum(right, this.precision)
+    ) {
+      zeroWdith = true;
+    }
     const calcHBound = (h) => {
       if (h != null) {
         if (bottom != null && top != null) {
@@ -3479,7 +3493,6 @@ class RectBounds extends Bounds {
     const rightIntersect = getIntersect(boundRight, 'right');
 
     const getClosestIntersect = (intersect1, intersect2) => {
-
       let closestIntersect = null;
       if (intersect1 != null && intersect2 != null) {
         if (intersect1.distance === 0 && this.bounds === 'inside') {
@@ -3807,7 +3820,7 @@ class LineBounds extends Bounds {
     if (typeof position === 'number') {
       return false;
     }
-    const p = getPoint(position);
+    const p = getPoint(position).round(precision);
     return p.isWithinLine(this.boundary, this.precision);
   }
 
