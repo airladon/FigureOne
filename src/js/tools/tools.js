@@ -441,8 +441,10 @@ function generateRandomString() {
 
 class UniqueMap {
   map: Object;
+  inverseMap: Object;
   index: number;
   letters: string;
+  undefinedCode: string;
 
   constructor() {
     this.map = {};
@@ -601,7 +603,12 @@ function unminify(minObjectOrArray: {
   return uncompressObject(minObjectOrArray.minified, map, true, true);
 }
 
-function objectToPaths(obj: any, path: string = '', pathObj = {}, precision: ?number = null) {
+function objectToPaths(
+  obj: any,
+  path: string = '',
+  pathObj: Object = {},
+  precision: ?number = null,
+) {
   if (
     typeof obj === 'string'
     // || typeof obj === 'number'
