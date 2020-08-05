@@ -1340,6 +1340,46 @@ class Line {
     const l2 = line2; // line2.round(precision);
     const l1 = this;  // this.round(precision);
 
+    const d1 = roundNum(this.distance, precision);
+    const d2 = roundNum(l2.distance, precision);
+    if (d1 === 0 || d2 === 0) {
+      let i;
+      let alongLine = false;
+      let withinLine = false;
+      if (d1 === 0 && d2 === 0) {
+        if (l1.p1.isEqualTo(l2.p1, precision)) {
+          i = l1.p1._dup();
+          alongLine = true;
+          withinLine = true;
+        }
+      }
+      if (d1 > 0) {
+        if (l1.hasPointOn(l2.p1, precision)) {
+          i = l2.p1._dup();
+          withinLine = true;
+          alongLine = true;
+        } else if (l1.hasPointAlong(l2.p1), precision) {
+          i = l2.p1._dup();
+          alongLine = true;
+        }
+      }
+      if (d2 > 0) {
+        if (l2.hasPointOn(l1.p1, precision)) {
+          i = l1.p1._dup();
+          withinLine = true;
+          alongLine = true;
+        } else if (l2.hasPointAlong(l1.p1, precision)) {
+          i = l1.p1._dup();
+          alongLine = true;
+        }
+      }
+      return {
+        intersect: i,
+        alongLine,
+        withinLine,
+      };
+    }
+
     if (!l1.isParallelWith(l2)) {
       let i;
       if (roundNum(l1.A, precision) === 0 && roundNum(l2.B, precision) === 0) {
