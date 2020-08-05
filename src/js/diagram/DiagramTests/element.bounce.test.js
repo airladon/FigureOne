@@ -187,7 +187,8 @@ describe('Move Freely', () => {
     //
     // v0 = 10
     // s0 = (1, -8)
-    expect(a.getPosition().round(3)).toEqual(new Point(1 / Math.sqrt(2), -9 + 1 / Math.sqrt(2)).round(3));
+    expect(a.getPosition().round(3))
+      .toEqual(new Point(1 / Math.sqrt(2), -9 + 1 / Math.sqrt(2)).round(3));
     expect(round(rectToPolar(a.state.movement.velocity.t()).mag, 3)).toEqual(10);
     expect(a.state.isMovingFreely).toBe(true);
     expect(round(a.getRemainingMovingFreelyTime(), 2)).toBe(10);
@@ -203,7 +204,7 @@ describe('Move Freely', () => {
     const v0 = 10;
     const d = Math.sqrt(9 * 9 + 9 * 9);
     // Therefore there are 4 full bounces with 0.088311 left over
-    const remaining = 50 - (d - 1) - 3 * d;
+    // const remaining = 50 - (d - 1) - 3 * d;
     // Bounces will happen at (9, 0), (0, 9), (-9, 0), (0, -9)
     // First bounce will happen after:
     // s = v0 * t - 0.5 * 1 * t^2

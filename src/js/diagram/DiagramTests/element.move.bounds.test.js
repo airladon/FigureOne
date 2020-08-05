@@ -1,9 +1,9 @@
 import {
   Point, Line,
 } from '../../tools/g2';
-import {
-  round,
-} from '../../tools/math';
+// import {
+//   round,
+// } from '../../tools/math';
 import makeDiagram from '../../__mocks__/makeDiagram';
 
 jest.useFakeTimers();
