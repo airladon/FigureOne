@@ -888,7 +888,14 @@ export default class DiagramPrimitives {
         border: [[...fan.slice(1, -1)]],
       });
       element.update = (updateOptions) => {
-        element.drawingObject.update(updateOptions);
+        const o = joinObjects({}, options, updateOptions);
+        const points = getFanTrisPolygon(
+          o.radius, o.rotation, o.offset,
+          o.sides, o.sidesToDraw, o.direction,
+        );
+        element.drawingObject.change(
+          points, [[...points.slice(1, -1)]], [],
+        );
       };
     } else {
       const polygonPoints = getPolygonPoints(
@@ -905,12 +912,22 @@ export default class DiagramPrimitives {
         border = 'positive';
         hole = 'negative';
       }
+      // console.log(polygonPoints)
       element = this.polyline(options, options.line, {
         points: polygonPoints,
         close: options.sides === options.sidesToDraw,
         border,
         hole,
       });
+      const simplifyBorder = (e) => {
+        const simpleBorder = [];
+        for (let i = 0; i < e.drawingObject.border[0].length; i += 2) {
+          simpleBorder.push(e.drawingObject.border[0][i]._dup());
+        }
+        e.drawingObject.border = [simpleBorder];
+      };
+      simplifyBorder(element);
+      // element.drawingObject.border = [simpleBorder];
       element.update = (updateOptions) => {
         const o = joinObjects({}, options, updateOptions);
         const points = getPolygonPoints(
@@ -918,6 +935,8 @@ export default class DiagramPrimitives {
           o.sides, o.sidesToDraw, o.direction,
         );
         element.custom.updatePoints(points);
+        // element.border = [points];
+        simplifyBorder(element);
       };
     }
     return element;
