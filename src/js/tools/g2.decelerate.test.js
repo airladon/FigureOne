@@ -617,7 +617,6 @@ describe('Calculate Stop', () => {
         angle: 0,
       });
       const bounceLoss = 0;
-      debugger;
       const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       expect(duration).toBe(5);
       const shaddow = position.getShaddowOnLine(bounds.boundary);

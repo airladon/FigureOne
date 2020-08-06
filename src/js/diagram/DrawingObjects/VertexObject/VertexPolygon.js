@@ -89,6 +89,7 @@ class VertexPolygon extends VertexObject {
     triangles?: boolean,
   }) {
     this.options = joinObjects({}, this.options, options);
+    console.log(options)
     this.makePolygon();
     this.resetBuffer();
   }
