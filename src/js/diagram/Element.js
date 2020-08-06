@@ -3186,9 +3186,6 @@ class DiagramElementPrimitive extends DiagramElement {
       }
 
       const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity * parentOpacity];
-      // if (this.name === 'base' && this.parent.name === 'lablel' ) {
-      //   console.log(this.name, this.parent.name, this.drawingObject.text, parentOpacity, colorToUse)
-      // }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawOpacity = colorToUse[3];
       // if (this.getPath().endsWith('eqn.elements._1')) {

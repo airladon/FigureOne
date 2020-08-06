@@ -234,7 +234,6 @@ class TextObject extends DrawingObject {
     color: Array<number> = [1, 1, 1, 1],
     contextIndex: number = 0,
   ) {
-    console.log('text draw', this.text[0].text, color)
     const drawContext2D = this.drawContext2D[contextIndex];
     const { ctx } = this.drawContext2D[contextIndex];
     // Arbitrary scaling factor used to ensure font size is >> 1 pixel
