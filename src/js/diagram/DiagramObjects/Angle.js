@@ -704,7 +704,11 @@ class DiagramObjectAngle extends DiagramElementCollection {
     curveOffset?: number,
   }) {
     if (this._curve != null && options.radius != null) {
-      this._curve.drawingObject.update({ radius: options.radius });
+      // ToDo add update method to polygon primitive
+      // This no longer works as polygon in DiagramPrimitives is now a polyline
+      // for non-filled polygons
+      // this._curve.drawingObject.update({ radius: options.radius });
+      this._curve.update({ radius: options.radius });
     }
     if (this.label != null) {
       if (options.curveRadius != null) {

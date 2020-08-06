@@ -887,6 +887,9 @@ export default class DiagramPrimitives {
         points: fan, // $FlowFixMe
         border: [[...fan.slice(1, -1)]],
       });
+      element.update = (updateOptions) => {
+        element.drawingObject.update(updateOptions);
+      };
     } else {
       const polygonPoints = getPolygonPoints(
         options.radius, options.rotation, options.offset,
@@ -908,6 +911,14 @@ export default class DiagramPrimitives {
         border,
         hole,
       });
+      element.update = (updateOptions) => {
+        const o = joinObjects({}, options, updateOptions);
+        const points = getPolygonPoints(
+          o.radius, o.rotation, o.offset,
+          o.sides, o.sidesToDraw, o.direction,
+        );
+        element.custom.updatePoints(points);
+      };
     }
     return element;
   }
