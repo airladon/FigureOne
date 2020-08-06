@@ -234,6 +234,7 @@ class TextObject extends DrawingObject {
     color: Array<number> = [1, 1, 1, 1],
     contextIndex: number = 0,
   ) {
+    console.log('text draw', this.text[0].text, color)
     const drawContext2D = this.drawContext2D[contextIndex];
     const { ctx } = this.drawContext2D[contextIndex];
     // Arbitrary scaling factor used to ensure font size is >> 1 pixel
@@ -284,7 +285,7 @@ class TextObject extends DrawingObject {
       if (diagramText.font.color != null) {
         const c = [
           ...diagramText.font.color.slice(0, 3),  // $FlowFixMe
-          diagramText.font.color[3] * diagramText.font.opacity,
+          diagramText.font.color[3] * diagramText.font.opacity * color[3],
         ];
         ctx.fillStyle = colorArrayToString(c);
       } else {
