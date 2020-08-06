@@ -3820,7 +3820,7 @@ class LineBounds extends Bounds {
     if (typeof position === 'number') {
       return false;
     }
-    const p = getPoint(position).round(this.precision);
+    const p = getPoint(position);
     return p.isWithinLine(this.boundary, this.precision);
   }
 
@@ -3829,6 +3829,9 @@ class LineBounds extends Bounds {
       return position;
     }
     const p = getPoint(position);
+    // if (window.asdf) {
+    //   console.log(position, p)
+    // }
     return p.clipToLine(this.boundary, this.precision);
   }
 
@@ -3849,6 +3852,7 @@ class LineBounds extends Bounds {
 
     // If the point is not along the line, then it is invalid
     const p = getPoint(position);
+
     if (!this.boundary.hasPointAlong(p, this.precision)) {
       return {
         intersect: null,
@@ -4394,6 +4398,7 @@ function deceleratePoint(
   duration: number,
   position: Point,
 } {
+  // console.log(positionIn._dup(), velocityIn._dup(), boundsIn._dup(), deceleration, deltaTimeIn, bounceLossIn, zeroVelocityThreshold, precision);
   let bounds;
   if (boundsIn instanceof RangeBounds) {
     bounds = new RectBounds({
@@ -4429,6 +4434,14 @@ function deceleratePoint(
   let position = positionIn._dup();
   if (bounds != null) {
     position = bounds.clip(positionIn);
+    // try {
+    //   position = bounds.clip(positionIn);
+    // } catch(error) {
+    //   console.log('error', error)
+    //   console.log('error - data', positionIn)
+    //   console.log('error - data', bounds)
+    //   debugger;
+    // }
   }
 
   // Initial Velocity
@@ -4468,7 +4481,21 @@ function deceleratePoint(
 
   // if we got here, the new position is out of bounds
   const bounceScaler = 1 - bounceLossIn;
+  // let result;
+  // try {
+  //   result = bounds.intersect(position, clipAngle(angle, '0to360'));
+  // } catch(error) {
+  //   console.log(error)
+  //   debugger;
+  // }
   const result = bounds.intersect(position, clipAngle(angle, '0to360'));
+
+  // if newPosition is not contained within bounds, but the intersect distance
+  // is larger than the distance travelled in deltaTime, then there is likely a
+  // rounding error...
+  if (result.distance != null && result.distance > distanceTravelled) {
+    throw 'Error in calculating intersect';
+  }
 
   let intersectPoint;
   if (typeof result.intersect === 'number') {
