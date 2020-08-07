@@ -877,7 +877,9 @@ export default class DiagramPrimitives {
         options.line = {};
       }
       options.line.widthIs = 'mid';
-      radiusMod = options.width / 2;
+      const sideAngle = Math.PI * 2 / options.sides;
+      const theta = (Math.PI - sideAngle) / 2;
+      radiusMod = options.width / 2 / Math.sin(theta);
     }
 
     parsePoints(options, ['offset']);
