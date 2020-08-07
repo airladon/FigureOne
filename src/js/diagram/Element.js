@@ -2605,6 +2605,7 @@ class DiagramElement {
     if (!this.isMovable) {
       return;
     }
+
     if (boundaryIn instanceof TransformBounds) {
       this.move.bounds = boundaryIn;
       // return;

@@ -79,7 +79,7 @@ describe('Move Freely', () => {
       expect(round(b.bottom)).toBe(round(bottom));
       expect(round(b.right)).toBe(round(right));
       expect(round(b.top)).toBe(round(top));
-    }
+    };
   });
   test('RectBoundsDefinition Object', () => {
     add('rectBoundsDefinition');
