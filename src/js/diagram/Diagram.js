@@ -6,7 +6,7 @@ import {
   Rect, Point, Transform,
   spaceToSpaceTransform, minAngleDiff, getTransform,
 } from '../tools/g2';
-import * as math from '../tools/math';
+// import * as math from '../tools/math';
 import { FunctionMap } from '../tools/FunctionMap';
 import { setState, getState } from './state';
 import parseState from './parseState';
@@ -363,7 +363,7 @@ class Diagram {
     this.state = {
       pause: 'unpaused',
       preparingToStop: false,
-      preparingToSetState: false, 
+      preparingToSetState: false,
     };
     this.stateTime = this.globalAnimation.now() / 1000;
 
@@ -608,7 +608,7 @@ class Diagram {
         dissolveIn: 0.8,
         dissolveOut: 0.8,
         delay: 0.2,
-      }
+      };
       if (options.duration == null) {
         options.duration = defaultDuration;
       } else if (typeof options.duration === 'number') {

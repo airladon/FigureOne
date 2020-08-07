@@ -24,7 +24,7 @@ export type TypeAnimationManagerInputOptions = {
 export default class AnimationManager {
   element: ?DiagramElement;
   animations: Array<anim.AnimationStep>;
-  state: 'animating' | 'idle';
+  state: 'animating' | 'idle' | 'waitingToStart';
   fnMap: FunctionMap;
   finishedCallback: ?(string | (() => void));
   subscriptions: SubscriptionManager;
@@ -273,7 +273,7 @@ export default class AnimationManager {
     }
   }
 
-  startAll(optionsIn: { frame?: 'next' | 'prev' | 'now' } ) {
+  startAll(optionsIn: { frame?: 'next' | 'prev' | 'now' }) {
     const options = joinObjects({}, optionsIn, { frame: 'next' });
     const { frame } = options;
     const frameTime = this.getFrameTime(frame);
@@ -301,7 +301,7 @@ export default class AnimationManager {
         duration = animationDuration;
       }
     });
-    return duration; 
+    return duration;
   }
 
   getRemainingTime(now: number = new GlobalAnimation().now() / 1000) {

@@ -80,7 +80,7 @@ export default function Box(
     };
   };
   // $FlowFixMe
-  element.setSize = (widthIn: number, heightIn: number) => {
+  element.custom.setSize = (widthIn: number, heightIn: number) => {
     // $FlowFixMe
     element.drawingObject.updateBox(widthIn, heightIn);
     element.pointsDefinition = {
@@ -90,11 +90,13 @@ export default function Box(
   };
 
   element.setPointsFromDefinition = () => {
-    const { width, height } = element.pointsDefinition;
-    if (width == null || height == null) {
+    const w = element.pointsDefinition.width;
+    // const { width, height } = element.pointsDefinition;
+    const h = element.pointsDefinition.height;
+    if (w == null || h == null) {
       return;
     }
-    element.setSize(width, height);
+    element.custom.setSize(w, h);
   };
   return element;
 }

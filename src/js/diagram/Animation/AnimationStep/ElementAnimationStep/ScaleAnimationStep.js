@@ -137,7 +137,7 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
   }
 
   setToEnd() {
-    if (this.element != null) {
+    if (this.element != null && this.scale.target != null) {
       this.element.setScale(this.scale.target);
     }
   }

@@ -4,6 +4,7 @@ import type {
   TypeAnimationStepInputOptions,
 } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
+import type { DiagramElement } from '../../Element';
 
 export type TypeTriggerStepInputOptions = {
   callback?: Function;      // default is element transform

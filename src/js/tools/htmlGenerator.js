@@ -443,7 +443,7 @@ function applyModifiers(
 function setOnClicks(
   modifiers: Object,
   additionalClassesToAdd: string = '',
-  recorder: Recorder,
+  recorder: Recorder = new Recorder(),
 ) {
   Object.keys(modifiers).forEach((key) => {
     const mod = modifiers[key];

@@ -19,6 +19,7 @@ export default class Worker {
     if (message === 'reset') {
       this.cache = new ObjectTracker();
       this.cache.baseReference = duplicate(payload.baseReference);
+      // $FlowFixMe
       this.cache.references = duplicate(payload.references);
     } else if (message === 'get') {
       this.recorder.parseMessage({
@@ -32,8 +33,6 @@ export default class Worker {
         },
       });
     } else if (message === 'add') {
-      // console.log(payload.now, this.cache.baseReference.elements.elements.a.transform.state[2].state[1], payload.state.elements.elements.a.transform.state[2].state[1])
-      // console.log(payload.now, payload.reference, payload.state.stateTime)
       this.cache.add(payload.now, payload.state, payload.reference, payload.lastRecordTimeCount);
       // console.log(this.cache.diffs.slice(-1)[0][2])
     } else if (message === 'addReference') {
