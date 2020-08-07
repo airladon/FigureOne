@@ -669,6 +669,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
         width: optionsToUse.width,
         color: this.color,
         fill: false,
+        // line: {
+        //   widthIs: 'mid',
+        // },
         transform: new Transform('AngleCurve').rotate(0),
       });
       this.curve = optionsToUse;
@@ -704,10 +707,6 @@ class DiagramObjectAngle extends DiagramElementCollection {
     curveOffset?: number,
   }) {
     if (this._curve != null && options.radius != null) {
-      // ToDo add update method to polygon primitive
-      // This no longer works as polygon in DiagramPrimitives is now a polyline
-      // for non-filled polygons
-      // this._curve.drawingObject.update({ radius: options.radius });
       this._curve.update({ radius: options.radius });
     }
     if (this.label != null) {
@@ -721,47 +720,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
         this.label.curveOffset = options.curveOffset;
       }
     }
-
-    // // this._curve.drawingObject.radius = radius;
-    // // this._curve.drawingObject.makePolygon();
-    // // this._curve.drawingObject.change();
-    // if (curveRadius != null && this.label != null) {
-    //   this.label.radius = curveRadius;
-    // }
-    // if (curvePosition != null && this.label != null) {
-    //   this.label.curvePosition = curvePosition;
-    // }
   }
 
-  // pulseWidth() {
-  //   const line = this._line;
-  //   if (line != null) {
-  //     line.stopPulsing();
-  //     const oldTransformMethod = line.pulse.transformMethod;
-  //     const oldPulseCallback = line.pulse.callback;
-  //     const finishPulsing = () => {
-  //       line.pulse.transformMethod = oldTransformMethod;
-  //       line.pulse.callback = oldPulseCallback;
-  //     };
-  //     line.pulse.callback = finishPulsing;
-  //     line.pulse.transformMethod = s => new Transform().scale(1, s);
-  //     line.pulseScaleNow(1, 3);
-  //   }
-  //   const arrow1 = this._arrow1;
-  //   const arrow2 = this._arrow2;
-  //   if (arrow1 != null) {
-  //     arrow1.pulseScaleNow(1, 2);
-  //   }
-  //   if (arrow2 != null) {
-  //     arrow2.pulseScaleNow(1, 2);
-  //   }
-
-  //   const label = this._label;
-  //   if (label != null) {
-  //     label.pulseScaleNow(1, 1.5);
-  //   }
-  //   this.animateNextFrame();
-  // }
 
   addArrow(
     index: 1 | 2,
@@ -810,6 +770,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
   }
 
   updateCurve(primaryCurveAngle: number, angle: number, rotation: number, show: boolean) {
+
     const { curve } = this;
     if (curve) {
       for (let i = 0; i < curve.num; i += 1) {
@@ -826,7 +787,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
             if (i === 0) {
               let delta = 0;
               if (this.curve) {
-                delta = primaryCurveAngle % (2 * Math.PI / this.curve.sides);
+                const sideAngle = 2 * Math.PI / this.curve.sides;
+                const numSides = Math.floor(roundNum(primaryCurveAngle / sideAngle));
+                delta = primaryCurveAngle - numSides * sideAngle;
               }
               element.angleToDraw = primaryCurveAngle;
               element.transform.updateRotation(rotation + delta / 2);
