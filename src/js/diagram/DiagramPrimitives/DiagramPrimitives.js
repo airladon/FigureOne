@@ -858,15 +858,28 @@ export default class DiagramPrimitives {
       // sidesToDraw: 4,
       rotation: 0,
       width: 0.01,
-      line: {
-        widthIs: 'inside',
-      },
+      // line: {
+      //   widthIs: 'mid',
+      // },
       // angle: Math.PI * 2,
       offset: new Point(0, 0),
       transform: new Transform('polygon').standard(),
       touchableLineOnly: false,
     };
+    let radiusMod = 0;
     const options = processOptions(defaultOptions, ...optionsIn);
+
+    if (
+      options.line == null
+      || (options.line != null && options.line.widthIs == null)
+    ) {
+      if (options.line == null) {
+        options.line = {};
+      }
+      options.line.widthIs = 'mid';
+      radiusMod = options.width / 2;
+    }
+
     parsePoints(options, ['offset']);
     let element;
     if (options.angleToDraw != null) {
@@ -899,7 +912,7 @@ export default class DiagramPrimitives {
       };
     } else {
       const polygonPoints = getPolygonPoints(
-        options.radius, options.rotation, options.offset,
+        options.radius - radiusMod, options.rotation, options.offset,
         options.sides, options.sidesToDraw, options.direction,
       );
       let border = 'line';
@@ -931,7 +944,7 @@ export default class DiagramPrimitives {
       element.update = (updateOptions) => {
         const o = joinObjects({}, options, updateOptions);
         const points = getPolygonPoints(
-          o.radius, o.rotation, o.offset,
+          o.radius - radiusMod, o.rotation, o.offset,
           o.sides, o.sidesToDraw, o.direction,
         );
         element.custom.updatePoints(points);
@@ -1084,7 +1097,7 @@ export default class DiagramPrimitives {
     const element = this.polygon(options);
     // $FlowFixMe
     element.drawingObject.getPointCountForAngle = (angle: number) => {
-      const sidesToDraw = Math.floor(tools.round(angle) / tools.round(Math.PI * 2) * options.sides);
+      const sidesToDraw = Math.floor(tools.round(angle, 8) / tools.round(Math.PI * 2, 8) * options.sides);
       if (options.fill) {
         return sidesToDraw + 2;
       }

@@ -3870,35 +3870,6 @@ class DiagramElementCollection extends DiagramElement {
     // }
   }
 
-  // pulseLegacy(
-  //   elementsOrDone: ?(Array<string | DiagramElement> | (mixed) => void),
-  //   // elementsToPulse: Array<string | DiagramElement>,
-  //   done: ?(mixed) => void = null,
-  // ) {
-  //   if (elementsOrDone == null || typeof elementsOrDone === 'function') {
-  //     super.pulse(elementsOrDone);
-  //     return;
-  //   }
-
-  //   let doneToUse = done;
-  //   elementsOrDone.forEach((elementToPulse) => {
-  //     let element: ?DiagramElement;
-  //     if (typeof elementToPulse === 'string') {
-  //       element = this.getElement(elementToPulse);
-  //     } else {
-  //       element = elementToPulse;
-  //     }
-  //     if (element != null) {
-  //       // element.pulseDefault(doneToUse);
-  //       element.pulse(doneToUse);
-  //       doneToUse = null;
-  //     }
-  //   });
-  //   if (doneToUse != null) {
-  //     doneToUse();
-  //   }
-  // }
-
   getElement(elementPath: ?(string | DiagramElement) = null) {
     if (elementPath == null) {
       return this;
