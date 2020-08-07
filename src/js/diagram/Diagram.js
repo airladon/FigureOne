@@ -24,7 +24,6 @@ import DiagramEquation from './DiagramEquation/DiagramEquation';
 import DiagramObjects from './DiagramObjects/DiagramObjects';
 import addElements from './DiagramAddElements/addElements';
 import type { TypeAddElementObject } from './DiagramAddElements/addElements';
-import type { TypePauseSettings } from './Recorder';
 /**
   * Diagram Input Options
   * @property {string} [htmlId] HTML div tag id - default: 'figureOneId'
@@ -125,6 +124,7 @@ class Diagram {
                         DiagramElementCollection>;
 
   moveTopElementOnly: boolean;
+  previousCursorPoint: Point;
 
   limits: Rect;
   stateTime: DOMHighResTimeStamp;
@@ -492,7 +492,7 @@ class Diagram {
         element.clickNext();
       }
       if (direction === 'prev') {
-        element.clickPrevt();
+        element.clickPrev();
       }
       if (direction === 'refresh') {
         element.clickRefresh();
@@ -1759,7 +1759,7 @@ class Diagram {
   //   return this.state.pause;
   // }
 
-  pause(pauseSettings: TypePauseSettings = { simplePause: true }) {
+  pause() {
     this.state.pause = 'paused';
     this.pauseTime = this.globalAnimation.now() / 1000;
   }
