@@ -99,7 +99,7 @@ export type TypeAngleOptions = {
     width?: number,
     color?: Array<number>,
   },
-  corner: {
+  corner?: {
     length?: number,
     width?: number,
     color?: Array<number>,
