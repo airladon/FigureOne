@@ -33,7 +33,7 @@ export class ParallelAnimationStep extends AnimationStep {
     if (!Array.isArray(options.steps) && options.steps != null) {
       steps = [options.steps];
     } else if (options.steps != null) {
-      steps = options.steps;
+      ({ steps } = options);
     }
     this.steps = [];
     steps.forEach((step) => {
@@ -74,7 +74,7 @@ export class ParallelAnimationStep extends AnimationStep {
       this.startTime = now - this.startTimeOffset;
     }
     let remaining = null;
-    if (this.beforeFrame != null) {
+    if (this.beforeFrame != null) { // $FlowFixMe - as this has been confirmed
       this.beforeFrame(now - this.startTime);
     }
     this.steps.forEach((step) => {
@@ -90,7 +90,7 @@ export class ParallelAnimationStep extends AnimationStep {
         }
       }
     });
-    if (this.afterFrame != null) {
+    if (this.afterFrame != null) { // $FlowFixMe - as this has been confirmed
       this.afterFrame(now - this.startTime);
     }
     if (remaining === null) {
@@ -163,7 +163,7 @@ export class ParallelAnimationStep extends AnimationStep {
       if (stepDuration > totalDuration) {
         totalDuration = stepDuration;
       }
-    })
+    });
     return totalDuration;
   }
 
@@ -172,9 +172,8 @@ export class ParallelAnimationStep extends AnimationStep {
     if (this.startTime == null) {
       if (this.state === 'animating' || this.state === 'waitingToStart') {
         return totalDuration;
-      } else {
-        return 0;
       }
+      return 0;
     }
     const deltaTime = now - this.startTime;
     return totalDuration - deltaTime;

@@ -153,7 +153,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   }
 
   translation(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
-    return this.position(optionsIn);
+    return this.position(...optionsIn);
   }
 
   scale(...optionsIn: Array<TypeScaleAnimationStepInputOptions>) {

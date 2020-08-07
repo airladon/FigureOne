@@ -163,7 +163,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
   }
 
   setToEnd() {
-    if (this.element != null) {
+    if (this.element != null && this.position.target != null) {
       this.element.setPosition(this.position.target);
     }
   }

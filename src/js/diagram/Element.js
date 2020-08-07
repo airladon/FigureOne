@@ -1461,12 +1461,15 @@ class DiagramElement {
 
   // retrieve a scenario
   getScenarioTarget(
-    scenarioIn: string | TypeScenario,
+    scenarioIn: ?string | TypeScenario,
   ): { transform?: Transform, color?: Array<number>, isShown?: boolean } {
     let transform;
     let color;
     let isShown;
     let scenario;
+    if (scenarioIn == null) {
+      return {};
+    }
     if (typeof scenarioIn === 'string') {
       if (scenarioIn in this.scenarios) {
         scenario = this.scenarios[scenarioIn];

@@ -119,12 +119,12 @@ export class SerialAnimationStep extends AnimationStep {
       this.startTime = now - this.startTimeOffset;
     }
     let remaining = -1;
-    if (this.beforeFrame != null) {
+    if (this.beforeFrame != null) { // $FlowFixMe - as this has been confirmed
       this.beforeFrame(now - this.startTime);
     }
     if (this.index <= this.steps.length - 1) {
       remaining = this.steps[this.index].nextFrame(now);
-      if (this.afterFrame != null) {
+      if (this.afterFrame != null) { // $FlowFixMe - as this has been confirmed
         this.afterFrame(now - this.startTime);
       }
       // console.log('serial', now, this.index, remaining)
@@ -180,9 +180,8 @@ export class SerialAnimationStep extends AnimationStep {
     if (this.startTime == null) {
       if (this.state === 'animating' || this.state === 'waitingToStart') {
         return totalDuration;
-      } else {
-        return 0;
       }
+      return 0;
     }
     const deltaTime = now - this.startTime;
     return totalDuration - deltaTime;

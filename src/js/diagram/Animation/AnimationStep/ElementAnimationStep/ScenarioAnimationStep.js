@@ -1,6 +1,6 @@
 // @flow
 import {
-  Transform, Point, getMaxTimeFromVelocity, getPoint, getScale, getTransform,
+  Transform, getMaxTimeFromVelocity, getScale, getTransform,
 } from '../../../../tools/g2';
 import type {
   pathOptionsType, TypeParsableTransform, TypeParsablePoint,
@@ -13,10 +13,10 @@ import {
 import type {
   TypeElementAnimationStepInputOptions,
 } from '../ElementAnimationStep';
-import ElementAnimationStep from '../ElementAnimationStep';
+// import ElementAnimationStep from '../ElementAnimationStep';
 // import type { DiagramElement } from '../../../Element';
 import { areColorsSame } from '../../../../tools/color';
-import { ParallelAnimationStep } from  '../ParallelAnimationStep';
+import { ParallelAnimationStep } from '../ParallelAnimationStep';
 import type { DiagramElement } from '../../../Element';
 
 export type TypeScenario = {
@@ -172,9 +172,11 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     // }
 
     let transformDuration = 0;
-    if (start.transform != null && target.transform != null) {
+    const startTransform = start.transform;
+    const targetTransform = target.transform;
+    if (startTransform != null && targetTransform != null) {
       transformDuration = getMaxTimeFromVelocity(
-        start.transform._dup(), target.transform._dup(),
+        startTransform._dup(), targetTransform._dup(),
         transformVelocity, this.scenario.rotDirection,
       );
     }
@@ -186,9 +188,9 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       && !areColorsSame(target.color, start.color)
     ) {
       const deltaColor = Math.max(
-        Math.abs(target.color[0] - start.color[0]),
-        Math.abs(target.color[1] - start.color[1]),
-        Math.abs(target.color[2] - start.color[2]),
+        Math.abs(target.color[0] - start.color[0]),  // $FlowFixMe
+        Math.abs(target.color[1] - start.color[1]),  // $FlowFixMe
+        Math.abs(target.color[2] - start.color[2]),  // $FlowFixMe
         Math.abs(target.color[3] - start.color[3]),
       );
       // const deltaColor = Math.abs(target.color - start.color);
@@ -201,15 +203,16 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
         opacityDuration = opacityDelta / opacityVelocity;
       } else if (start.opacity != null && target.isShown === false) {
         opacityDuration = start.opacity / opacityVelocity;
-      } else if (start.isShown != target.isShown) {
+      } else if (start.isShown !== target.isShown) {
         opacityDuration = 1 / opacityVelocity;
       }
     }
 
-    if (this.scenario.maxTime != null) {
-      colorDuration = Math.min(colorDuration, this.scenario.maxTime);
-      opacityDuration = Math.min(opacityDuration, this.scenario.maxTime);
-      transformDuration = Math.min(transformDuration, this.scenario.maxTime);
+    const scenarioMaxTime = this.scenario.maxTime;
+    if (scenarioMaxTime != null) {
+      colorDuration = Math.min(colorDuration, scenarioMaxTime);
+      opacityDuration = Math.min(opacityDuration, scenarioMaxTime);
+      transformDuration = Math.min(transformDuration, scenarioMaxTime);
     }
 
     if (colorDuration <= this.scenario.zeroDurationThreshold) {
@@ -287,6 +290,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       dissolveFromCurrent = true;
     }
 
+    // $FlowFixMe
     const [transformDuration, colorDuration, opacityDuration] = this.getDuration(start, target);
     // console.log(transformDuration, colorDuration, opacityDuration);
     const steps = [];
