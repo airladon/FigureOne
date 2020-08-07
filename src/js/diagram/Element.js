@@ -1667,7 +1667,7 @@ class DiagramElement {
     }
     return `${this.parent.getPath()}.${this.name}`;
   }
-  
+
   // getPause() {
   //   return this.state.pause;
   // }
@@ -1690,7 +1690,27 @@ class DiagramElement {
   moved(newTransform: Transform): void {
     const prevTransform = this.transform._dup();
     this.setTransform(newTransform._dup());
-    this.calcVelocity(prevTransform);
+    const tBounds = this.move.bounds.getTranslation();
+    // In a finite rect bounds, if we calculate the velocity from the clipped
+    // transform, the object will skip along the wall if the user lets the
+    // object go after intersecting with the wall
+    if (
+      tBounds instanceof RectBounds
+      && tBounds.boundary.right > tBounds.boundary.left
+      && tBounds.boundary.top > tBounds.boundary.bottom
+    ) {
+      this.calcVelocity(prevTransform, newTransform);
+    } else {
+      this.calcVelocity(prevTransform, this.transform);
+    }
+    // if (
+    //   this.move.bounds.getTranslation instanceof LineBounds
+    //   || this.move.bounds.getTranslation()
+    // ) {
+    //   this.calcVelocity(prevTransform, this.transform);
+    // } else {
+    //   this.calcVelocity(prevTransform, newTransform);
+    // }
     if (this.recorder.state === 'recording') {
       this.recorder.recordEvent(
         'moved',
@@ -1730,7 +1750,7 @@ class DiagramElement {
     this.state.movement.previousTime = null;
   }
 
-  calcVelocity(prevTransform: Transform): void {
+  calcVelocity(prevTransform: Transform, nextTransform: Transform): void {
     const currentTime = new GlobalAnimation().now() / 1000;
     if (this.state.movement.previousTime === null) {
       this.state.movement.previousTime = currentTime;
@@ -1743,7 +1763,7 @@ class DiagramElement {
     if (deltaTime < 0.0001) {
       return;
     }
-    this.state.movement.velocity = this.transform.velocity(
+    this.state.movement.velocity = nextTransform.velocity(
       prevTransform,
       deltaTime,
       this.move.freely.zeroVelocityThreshold,
