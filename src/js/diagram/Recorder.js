@@ -82,6 +82,8 @@ type TypeStateDiffs = Array<TypeStateDiff>;
 //   simplePause?: boolean;
 // } | TypeOnPause;
 
+export type TypePauseSettings = 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete';
+
 export type TypePlaySettings = {
   action: 'dissolve' | 'animate' | 'instant',
   duration?: number | {
