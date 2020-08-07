@@ -99,6 +99,11 @@ export type TypeAngleOptions = {
     width?: number,
     color?: Array<number>,
   },
+  corner: {
+    length?: number,
+    width?: number,
+    color?: Array<number>,
+  },
   pulse?: number | {
     curve?: number | {
       width?: number,
@@ -182,6 +187,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
   _arrow2: ?DiagramElementPrimitive;
   _side1: ?DiagramElementPrimitive;
   _side2: ?DiagramElementPrimitive;
+  _corner: ?DiagramElementPrimitive;
   _label: null | {
     _base: DiagramElementPrimitive;
   } & DiagramElementCollection;
@@ -204,6 +210,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     curveOverlap: number,
   };
 
+  corner: ?{ width: number, length: number, color: Array<number> };
   side1: ?{ width: number, length: number };
   side2: ?{ width: number, length: number };
   curve: ?{
@@ -307,6 +314,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       autoRightAngle: false,
       rightAngleRange: 0.001,
       curve: null,
+      corner: null,
       sides: null,
       sideStart: null,
       sideStop: null,
@@ -424,6 +432,11 @@ class DiagramObjectAngle extends DiagramElementCollection {
     if (optionsToUse.side2) {
       const sideOptions = joinObjects({}, defaultSideOptions, optionsToUse.side2);
       this.addSide(2, sideOptions.length, sideOptions.width, sideOptions.color);
+    }
+
+    if (optionsToUse.corner != null) {
+      const cornerOptions = joinObjects({}, defaultSideOptions, optionsToUse.corner);
+      this.addCorner(cornerOptions);
     }
 
     // Sides overrides side1 and side2
@@ -568,11 +581,38 @@ class DiagramObjectAngle extends DiagramElementCollection {
       this.nextRotation = rotation;
       this.nextPosition = getPoint(position);
     }
+    if (this.corner != null && this._corner != null) {
+      const points = this.getCornerPoints(this.corner.length);
+      this._corner.custom.updatePoints(points);
+    }
     if (options.rotationOffset != null) {
       this.update(options.rotationOffset);
     } else {
       this.update();
     }
+  }
+
+  getCornerPoints(length: number) {
+    return [
+      new Point(length, 0),
+      new Point(0, 0),
+      new Point(length * Math.cos(this.angle), length * Math.sin(this.angle)),
+    ];
+  }
+
+  addCorner(options: {
+    length: number,
+    width: number,
+    color: Array<number>,
+  }) {
+    const { width, color, length } = options;
+    const corner = this.shapes.polyline({
+      width,
+      color,
+      points: this.getCornerPoints(length),
+    });
+    this.corner = { length, width, color };
+    this.add('corner', corner);
   }
 
   addSide(

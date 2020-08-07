@@ -15,20 +15,6 @@ diagram.addElements([
     },
   },
   {
-    name: 'p',
-    method: 'polyline',
-    options: {
-      points: [
-        [0, 0],
-        [0.5, 0.5],
-        [0, 0.5],
-      ],
-      width: 0.1,
-      // widthIs: 'inside',
-      color: [1, 0, 0, 0.5],
-    },
-  },
-  {
     name: 'angle',
     method: 'angle',
     options: {
@@ -39,11 +25,15 @@ diagram.addElements([
         sides: 20,
       },
       color: [0, 1, 1, 0.5],
-      sides: {
-        width: 0.01,
+      // sides: {
+      //   width: 0.1,
+      //   length: 1,
+      //   color: [0.2, 0.5, 1, 1],
+      // }
+      corner: {
+        width: 0.1,
         length: 1,
-        color: [0.2, 0.5, 1, 1],
-      }
+      },
     },
   },
   {
@@ -64,3 +54,4 @@ line.subscriptions.subscribe('setTransform', () => {
   const r = line.getRotation();
   diagram.elements._angle.setAngle({ angle: r });
 });
+
