@@ -87,5 +87,5 @@ describe('Angle', () => {
       const a = diagram.elements._a;
       expect(round(a._curve.getRotation())).toBe(round(Math.PI / 50 / 2));
     });
-  })
+  });
 });

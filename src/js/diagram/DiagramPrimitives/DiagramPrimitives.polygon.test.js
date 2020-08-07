@@ -85,7 +85,7 @@ describe('Polygon', () => {
   });
   test('Line Update', () => {
     const line = diagram.elements._line;
-    line.update({ radius: 2 * Math.sqrt(2) });
+    line.custom.update({ radius: 2 * Math.sqrt(2) });
     expect(round(line.drawingObject.points)).toEqual([
       1.95, 1.95,
       -1.95, 1.95,
@@ -143,7 +143,7 @@ describe('Polygon', () => {
   });
   test('Update Fill', () => {
     const fill = diagram.elements._fill;
-    fill.update({ radius: 2 * Math.sqrt(2) });
+    fill.custom.update({ radius: 2 * Math.sqrt(2) });
     expect(round(fill.drawingObject.points)).toEqual([
       0, 0,
       2, 2,
