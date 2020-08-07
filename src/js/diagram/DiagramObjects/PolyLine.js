@@ -5,7 +5,7 @@ import {
   RangeBounds, RectBounds, getBounds, Bounds,
 } from '../../tools/g2';
 import type {
-  TypeRangeBoundDefinition, TypeRectBoundDefinition,
+  TypeRangeBoundsDefinition, TypeRectBoundsDefinition,
 } from '../../tools/g2';
 import { joinObjects } from '../../tools/tools';
 import { round } from '../../tools/math';
@@ -35,7 +35,7 @@ export type TypePadOptions = {
   fill?: boolean,
   isMovable?: boolean,
   touchRadius?: number,
-  boundary?: TypeRangeBoundDefinition | TypeRectBoundDefinition | RangeBounds | RectBounds | 'diagram',
+  boundary?: TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | 'diagram',
   touchRadiusInBoundary?: boolean,
 };
 export type TypePolyLineOptions = {
@@ -303,11 +303,19 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
           } else if (!(boundary instanceof Bounds)) {
             boundary = getBounds(boundary);
             if (boundary instanceof RangeBounds) {
+              let maxBounds = boundary.boundary.max;
+              let minBounds = boundary.boundary.min;
+              if (maxBounds != null) {
+                maxBounds += -radius - delta;
+              }
+              if (minBounds != null) {
+                minBounds += radius + delta;
+              }
               boundary = new RectBounds({
-                left: boundary.boundary.min + radius + delta,
-                right: boundary.boundary.max - radius - delta,
-                bottom: boundary.boundary.min + radius + delta,
-                top: boundary.boundary.max - radius - delta,
+                left: minBounds,
+                right: maxBounds,
+                bottom: minBounds,
+                top: maxBounds,
               });
             } else if (!(boundary instanceof RectBounds)) {
               boundary = null;
