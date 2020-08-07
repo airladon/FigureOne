@@ -33,6 +33,7 @@ diagram.addElements([
       corner: {
         width: 0.1,
         length: 1,
+        style: 'auto',
       },
     },
   },

@@ -902,7 +902,7 @@ export default class DiagramPrimitives {
         points: fan, // $FlowFixMe
         border: [[...fan.slice(1, -1)]],
       });
-      element.update = (updateOptions) => {
+      element.custom.update = (updateOptions) => {
         const o = joinObjects({}, options, updateOptions);
         const points = getFanTrisPolygon(
           o.radius, o.rotation, o.offset,
@@ -943,7 +943,7 @@ export default class DiagramPrimitives {
       };
       simplifyBorder(element);
       // element.drawingObject.border = [simpleBorder];
-      element.update = (updateOptions) => {
+      element.custom.update = (updateOptions) => {
         const o = joinObjects({}, options, updateOptions);
         const points = getPolygonPoints(
           o.radius - radiusMod, o.rotation, o.offset,
@@ -1099,7 +1099,9 @@ export default class DiagramPrimitives {
     const element = this.polygon(options);
     // $FlowFixMe
     element.drawingObject.getPointCountForAngle = (angle: number) => {
-      const sidesToDraw = Math.floor(tools.round(angle, 8) / tools.round(Math.PI * 2, 8) * options.sides);
+      const sidesToDraw = Math.floor(
+        tools.round(angle, 8) / tools.round(Math.PI * 2, 8) * options.sides,
+      );
       if (options.fill) {
         return sidesToDraw + 2;
       }

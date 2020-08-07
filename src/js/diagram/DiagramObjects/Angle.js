@@ -103,6 +103,7 @@ export type TypeAngleOptions = {
     length?: number,
     width?: number,
     color?: Array<number>,
+    style?: 'fill' | 'auto' | 'none',
   },
   pulse?: number | {
     curve?: number | {
@@ -210,7 +211,13 @@ class DiagramObjectAngle extends DiagramElementCollection {
     curveOverlap: number,
   };
 
-  corner: ?{ width: number, length: number, color: Array<number> };
+  corner: ?{
+    width: number,
+    length: number,
+    color: Array<number>,
+    style: 'fill' | 'auto' | 'none',
+  };
+
   side1: ?{ width: number, length: number };
   side2: ?{ width: number, length: number };
   curve: ?{
@@ -435,7 +442,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
     }
 
     if (optionsToUse.corner != null) {
-      const cornerOptions = joinObjects({}, defaultSideOptions, optionsToUse.corner);
+      const cornerOptions = joinObjects(
+        {}, defaultSideOptions, { style: 'fill' }, optionsToUse.corner,
+      );
       this.addCorner(cornerOptions);
     }
 
@@ -581,9 +590,10 @@ class DiagramObjectAngle extends DiagramElementCollection {
       this.nextRotation = rotation;
       this.nextPosition = getPoint(position);
     }
-    if (this.corner != null && this._corner != null) {
-      const points = this.getCornerPoints(this.corner.length);
-      this._corner.custom.updatePoints(points);
+    const { corner, _corner } = this;
+    if (corner != null && _corner != null) {
+      const points = this.getCornerPoints(corner.length);
+      _corner.custom.updatePoints(points);
     }
     if (options.rotationOffset != null) {
       this.update(options.rotationOffset);
@@ -604,14 +614,20 @@ class DiagramObjectAngle extends DiagramElementCollection {
     length: number,
     width: number,
     color: Array<number>,
+    style: 'fill' | 'auto' | 'none',
   }) {
-    const { width, color, length } = options;
+    const {
+      width, color, length, style,
+    } = options;
     const corner = this.shapes.polyline({
       width,
       color,
       points: this.getCornerPoints(length),
+      cornerStyle: style,
     });
-    this.corner = { length, width, color };
+    this.corner = {
+      length, width, color, style,
+    };
     this.add('corner', corner);
   }
 
@@ -747,7 +763,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     curveOffset?: number,
   }) {
     if (this._curve != null && options.radius != null) {
-      this._curve.update({ radius: options.radius });
+      this._curve.custom.update({ radius: options.radius });
     }
     if (this.label != null) {
       if (options.curveRadius != null) {
@@ -810,7 +826,6 @@ class DiagramObjectAngle extends DiagramElementCollection {
   }
 
   updateCurve(primaryCurveAngle: number, angle: number, rotation: number, show: boolean) {
-
     const { curve } = this;
     if (curve) {
       for (let i = 0; i < curve.num; i += 1) {
