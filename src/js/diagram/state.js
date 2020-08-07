@@ -23,6 +23,7 @@ function getState(
   optionsIn: {
     precision?: number,
     ignoreShown?: boolean,
+    min?: boolean,
   },
   // precision: number = 5,
   // payload: any,
@@ -32,6 +33,7 @@ function getState(
   const defaultOptions = {
     precision: 5,
     ignoreShown: false,
+    min: false,
   };
   const options = joinObjects({}, defaultOptions, optionsIn)
   const { precision } = options;

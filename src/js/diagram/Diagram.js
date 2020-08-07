@@ -532,7 +532,7 @@ class Diagram {
     );
   }
 
-  getState(options: { precision: number, ignoreShown: boolean, min: boolean }) {
+  getState(options: { precision?: number, ignoreShown?: boolean, min?: boolean }) {
     this.stateTime = this.globalAnimation.now() / 1000;
     return getState(this, [
       'lastDrawTime',

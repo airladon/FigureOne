@@ -802,9 +802,9 @@ class DiagramElement {
     ];
   }
 
-  _state(options: { precision: number, ignoreShown: boolean, min?: boolean }) {
+  _state(options: { precision?: number, ignoreShown?: boolean, min?: boolean }) {
     if (options.min) {
-      return getState(this, this._getStatePropertiesMin(options), options);
+      return getState(this, this._getStatePropertiesMin(), options);
     }
     return getState(this, this._getStateProperties(options), options);
   }
