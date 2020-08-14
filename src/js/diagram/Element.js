@@ -1070,7 +1070,6 @@ class DiagramElement {
     }
 
     if (scenarioAnimation != null || pulseAnimation != null) {
-      console.log('shown animation', target, this.getPath(), scenarioAnimation, pulseAnimation)
       this.animations.new()
         .inParallel([
           scenarioAnimation,
@@ -4758,9 +4757,6 @@ class DiagramElementCollection extends DiagramElement {
     // countStart: () => void,
     // countEnd: () => void,
   ) {
-    if (this.name === 'lim') {
-      console.log(state)
-    }
     let duration = 0;
     duration = super.animateToState(
       state, options, independentOnly, startTime,
