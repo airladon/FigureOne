@@ -1,11 +1,11 @@
 // @flow
 
 import {
-  Transform, Point, getPoint, Rect, clipAngle,
+  Transform, Point, getPoint, clipAngle,
   RangeBounds, RectBounds, getBounds, Bounds,
 } from '../../tools/g2';
 import type {
-  TypeRangeBoundsDefinition, TypeRectBoundsDefinition,
+  TypeRangeBoundsDefinition, TypeRectBoundsDefinition, TypeParsablePoint,
 } from '../../tools/g2';
 import { joinObjects } from '../../tools/tools';
 import { round } from '../../tools/math';
@@ -15,7 +15,7 @@ import {
 // import type {
 //   TypePolyLineBorderToPoint,
 // } from '../DiagramElements/PolyLine';
-import type { TypeParsablePoint } from '../../tools/g2';
+// import type { TypeParsablePoint } from '../../tools/g2';
 import type {
   TypeLineLabelOptions, TypeLineOptions,
 } from './Line';
@@ -897,5 +897,9 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     side12.setLabel(`${s12.toFixed(sidePrecision)}`);
     side20.setLabel(`${s20.toFixed(sidePrecision)}`);
     // }
+  }
+
+  _dup(exceptions: Array<string> = []) {
+    return super._dup([...exceptions, ...['shapes', 'objects', 'equation']]);
   }
 }
