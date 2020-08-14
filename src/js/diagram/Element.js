@@ -1122,7 +1122,7 @@ class DiagramElement {
   }
 
   isStateSame(state: Object, mergePulseTransforms: boolean = false) {
-    if (this.isShown != state.isShown || this.opacity != state.opacity) {
+    if (this.isShown !== state.isShown || this.opacity !== state.opacity) {
       return false;
     }
     if (!areColorsWithinDelta(this.color, state.color, 0.001)) {
@@ -1132,9 +1132,11 @@ class DiagramElement {
       return false;
     }
 
-    if (mergePulseTransforms && !this.arePulseTransformsSame(state, 0.001)) {
-      // return this.arePulseTransformsSame(state);
-      return false;
+    if (mergePulseTransforms) {
+      if (!this.arePulseTransformsSame(state, 0.001)) {
+        return false;
+      }
+      return true;
     }
     if (state.pulseTransforms.length !== this.pulseTransforms.length) {
       return false;
