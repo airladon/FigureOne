@@ -551,8 +551,8 @@ class Diagram {
         delay: ?number,
       },
       velocity?: TypeScenarioVelocity,
-      maxTime?: number,
-      minTime?: number,
+      maxDuration?: number,
+      minDuration?: number,
       zeroDurationThreshold?: boolean,
       allDurationsSame?: boolean,
     } | 'dissolve' | 'animate' | 'instant' = 'instant',
@@ -578,7 +578,7 @@ class Diagram {
 
     let options = {
       action: 'instant',
-      maxTime: 6,
+      maxDuration: 6,
       velocity: {
         position: 2,
         rotation: Math.PI * 2 / 2,
@@ -588,7 +588,7 @@ class Diagram {
       },
       allDurationsSame: true,
       zeroDurationThreshold: 0.00001,
-      minTime: 0,
+      minDuration: 0,
       duration: null,
     };
 
@@ -621,7 +621,7 @@ class Diagram {
         options.duration = joinObjects({}, defaultDuration, options.duration);
       }
     } else if (options.duration != null && typeof options.duration !== 'number') {
-      options.duration = 1;
+      options.duration = null;
     }
 
     // console.log(this.elements.isStateSame(state.elements, true));

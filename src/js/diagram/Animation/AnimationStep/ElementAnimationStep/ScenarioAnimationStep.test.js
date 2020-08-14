@@ -400,12 +400,12 @@ describe('Diagram Recorder', () => {
     expect(a.getPosition()).toEqual(new Point(1, 1));
     expect(diagram.isAnimating()).toBe(false);
   });
-  test('Velocity maxTime', () => {
+  test('Velocity maxDuration', () => {
     a.animations.new()
       .scenario({
         target: { position: [1, 1] },
         velocity: { translation: 0.1 },
-        maxTime: 2,
+        maxDuration: 2,
       })
       .start();
     diagram.mock.timeStep(0);
@@ -416,12 +416,12 @@ describe('Diagram Recorder', () => {
     expect(a.getPosition()).toEqual(new Point(1, 1));
     expect(diagram.isAnimating()).toBe(false);
   });
-  test('Velocity minTime', () => {
+  test('Velocity minDuration', () => {
     a.animations.new()
       .scenario({
         target: { position: [1, 1] },
         velocity: { translation: 10 },
-        minTime: 1,
+        minDuration: 1,
       })
       .start();
     diagram.mock.timeStep(0);
