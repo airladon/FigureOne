@@ -263,6 +263,7 @@ class Recorder {
   diagram: Diagram;
 
   timeoutID: ?TimeoutID;
+  timeUpdatesTimeoutID: ?TimeoutID;
 
   // playbackStoppedCallback: ?() =>void;
 
@@ -297,14 +298,14 @@ class Recorder {
   }
 
   initialize() {
+    this.subscriptions = new SubscriptionManager();
     this.events = {};
     this.eventsCache = {};
     this.reset();
-
     // default recording values
     this.precision = 4;
     this.stateTimeStep = 1;
-    this.subscriptions = new SubscriptionManager();
+    
 
     // this.diagram = {
     //   animateNextFrame: () => {},
@@ -355,6 +356,11 @@ class Recorder {
       return this.now();
     }
     return this.currentTime;
+  }
+
+  setCurrentTime(time: number) {
+    this.currentTime = time;
+    this.subscriptions.trigger('timeUpdate', [time]);
   }
 
   setVideoToNowDeltaTime(videoSeekTime: number = 0) {
@@ -414,7 +420,8 @@ class Recorder {
     this.videoToNowDelta = 0;
     this.state = 'idle';
     this.isAudioPlaying = false;
-    this.currentTime = 0;
+    // this.currentTime = 0;
+    this.setCurrentTime(0);
     this.duration = 0;
     this.reference = '__base';
     this.lastRecordTimeCount = 0;
@@ -620,6 +627,7 @@ class Recorder {
     this.startAudioPlayback(fromTime);
     this.subscriptions.trigger('startRecording');
     this.startRecordingTime = fromTime;
+    this.startTimeUpdates();
     // console.log('recorder is', this.state);
   }
 
@@ -830,14 +838,23 @@ class Recorder {
   }
 
   stopTimeouts() {
-    if (this.timeoutID != null) {
-      clearTimeout(this.timeoutID);
-      this.timeoutID = null;
-    }
+    // if (this.timeoutID != null) {
+    //   clearTimeout(this.timeoutID);
+    //   this.timeoutID = null;
+    // }
+    new GlobalAnimation().clearTimeout(this.timeoutID);
+    new GlobalAnimation().clearTimeout(this.timeUpdatesTimeoutID);
+    this.timeoutID = null;
+    this.timeUpdatesTimeoutID = null;
+    // if (this.timeUpdatesTimeoutID != null) {
+    //   clearTimeout(this.timeUpdatesTimeoutID);
+    //   this.timeUpdatesTimeoutID = null;
+    // }
   }
 
   stopRecording() {
-    this.currentTime = this.getCurrentTime();
+    // this.currentTime = this.getCurrentTime();
+    this.setCurrentTime(this.getCurrentTime());
     this.state = 'idle';
     this.stopTimeouts();
 
@@ -1171,7 +1188,8 @@ class Recorder {
     if (this.audio) {
       this.audio.currentTime = time;
     }
-    this.currentTime = time;
+    this.setCurrentTime(time);
+    // this.currentTime = time;
 
     this.setCursor(time);
     this.diagram.animateNextFrame();
@@ -1303,7 +1321,9 @@ class Recorder {
       }
       this.state = 'playing';
       this.setVideoToNowDeltaTime(fromTime);
-      this.currentTime = fromTime;
+      // this.currentTime = fromTime;
+      this.setCurrentTime(fromTime);
+      this.startTimeUpdates();
       this.startEventsPlayback(fromTime);
       this.startAudioPlayback(fromTime);
       this.diagram.animateNextFrame();
@@ -1381,87 +1401,88 @@ class Recorder {
     // }
   }
 
-  startPlaybackLegacy(
-    fromTimeIn: number = this.lastSeekTime || 0,
-    forceStart: boolean = true,
-    events: ?Array<string> = null,
-  ) {
-    let fromTime = fromTimeIn;
-    if (fromTimeIn == null || fromTimeIn >= this.duration) {
-      fromTime = 0;
-    }
-    if (events == null) {
-      this.eventsToPlay = Object.keys(this.events);
-    } else {
-      this.eventsToPlay = events;
-    }
+  // startPlaybackLegacy(
+  //   fromTimeIn: number = this.lastSeekTime || 0,
+  //   forceStart: boolean = true,
+  //   events: ?Array<string> = null,
+  // ) {
+  //   let fromTime = fromTimeIn;
+  //   if (fromTimeIn == null || fromTimeIn >= this.duration) {
+  //     fromTime = 0;
+  //   }
+  //   if (events == null) {
+  //     this.eventsToPlay = Object.keys(this.events);
+  //   } else {
+  //     this.eventsToPlay = events;
+  //   }
 
-    // this.diagram.unpause();
-    // this.setVideoToNowDeltaTime(this.currentTime);
+  //   // this.diagram.unpause();
+  //   // this.setVideoToNowDeltaTime(this.currentTime);
 
-    let stateToStartFrom = this.getStateForTime(fromTime);
-    if (
-      !forceStart
-      && this.pauseState != null
-    ) {
-      stateToStartFrom = this.pauseState;
-    }
+  //   let stateToStartFrom = this.getStateForTime(fromTime);
+  //   if (
+  //     !forceStart
+  //     && this.pauseState != null
+  //   ) {
+  //     stateToStartFrom = this.pauseState;
+  //   }
 
-    let finishedFlag = false;
-    const finished = () => {
-      finishedFlag = true;
-      if (this.pauseState == null) {
-        this.setToTime(fromTime, true);
-      } else {
-        this.diagram.setState(this.pauseState);
-        this.pauseState = null;
-      }
-      this.state = 'playing';
-      this.setVideoToNowDeltaTime(fromTime);
-      this.currentTime = fromTime;
-      this.startEventsPlayback(fromTime);
-      this.startAudioPlayback(fromTime);
-      this.diagram.animateNextFrame();
-      if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
-        this.finishPlaying();
-      }
-      this.subscriptions.trigger('playbackStarted');
-    };
+  //   let finishedFlag = false;
+  //   const finished = () => {
+  //     finishedFlag = true;
+  //     if (this.pauseState == null) {
+  //       this.setToTime(fromTime, true);
+  //     } else {
+  //       this.diagram.setState(this.pauseState);
+  //       this.pauseState = null;
+  //     }
+  //     this.state = 'playing';
+  //     this.setVideoToNowDeltaTime(fromTime);
+  //     // this.currentTime = fromTime;
+  //     this.setCurrentTime(fromTime);
+  //     this.startEventsPlayback(fromTime);
+  //     this.startAudioPlayback(fromTime);
+  //     this.diagram.animateNextFrame();
+  //     if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
+  //       this.finishPlaying();
+  //     }
+  //     this.subscriptions.trigger('playbackStarted');
+  //   };
 
-    const playSettings = this.getPlaySettings();
-    if (
-      playSettings.action === 'instant'
-      || this.diagram.elements.isStateSame(stateToStartFrom.elements, true)
-    ) {
-      finished();
-    } else if (playSettings.action === 'dissolve') {
-      // this.diagram.elements.freezePulseTransforms(false);
-      this.diagram.stop('freeze');
-      this.diagram.dissolveToState({
-        state: stateToStartFrom,
-        dissolveInDuration: playSettings.duration.dissolveIn,
-        dissolveOutDuration: playSettings.duration.dissolveOut,
-        done: finished,
-        delay: playSettings.duration.delay,
-        startTime: 'now',
-      });
-    } else {
-      // console.log('asdf')
-      // debugger;
-      this.diagram.stop('freeze');  // This is cancelling the pulse
-      this.diagram.animateToState(
-        stateToStartFrom,
-        playSettings,
-        finished,
-        'now',
-      );
-    }
+  //   const playSettings = this.getPlaySettings();
+  //   if (
+  //     playSettings.action === 'instant'
+  //     || this.diagram.elements.isStateSame(stateToStartFrom.elements, true)
+  //   ) {
+  //     finished();
+  //   } else if (playSettings.action === 'dissolve') {
+  //     // this.diagram.elements.freezePulseTransforms(false);
+  //     this.diagram.stop('freeze');
+  //     this.diagram.dissolveToState({
+  //       state: stateToStartFrom,
+  //       dissolveInDuration: playSettings.duration.dissolveIn,
+  //       dissolveOutDuration: playSettings.duration.dissolveOut,
+  //       done: finished,
+  //       delay: playSettings.duration.delay,
+  //       startTime: 'now',
+  //     });
+  //   } else {
+  //     // console.log('asdf')
+  //     // debugger;
+  //     this.diagram.stop('freeze');  // This is cancelling the pulse
+  //     this.diagram.animateToState(
+  //       stateToStartFrom,
+  //       playSettings,
+  //       finished,
+  //       'now',
+  //     );
+  //   }
 
-    if (!finishedFlag) {
-      this.state = 'preparingToPlay';
-      this.subscriptions.trigger('preparingToPlay');
-    }
-  }
+  //   if (!finishedFlag) {
+  //     this.state = 'preparingToPlay';
+  //     this.subscriptions.trigger('preparingToPlay');
+  //   }
+  // }
 
   getPlaySettings() {
     let onResume = {
@@ -1617,6 +1638,17 @@ class Recorder {
     }
   }
 
+  startTimeUpdates() {
+    this.timeUpdatesTimeoutID = new GlobalAnimation().setTimeout(
+      () => {
+        this.setCurrentTime(this.getCurrentTime());
+        this.subscriptions.trigger('timeUpdate', [this.getCurrentTime()]);
+        this.startTimeUpdates();
+      },
+      100,
+    );
+  }
+
   startEventsPlayback(fromTime: number) {
     this.eventsToPlay.forEach((eventName) => {
       if (this.events[eventName].list.length === 0) {
@@ -1730,7 +1762,8 @@ class Recorder {
       return false;
     }
     // this.pausePlayback('cancel');
-    this.currentTime = this.getCurrentTime();
+    // this.currentTime = this.getCurrentTime();
+    this.setCurrentTime(this.getCurrentTime());
     // console.log(this.currentTime)
     this.stop();
     return true;
@@ -1769,7 +1802,8 @@ class Recorder {
   // False     True     Pulse freeze and nextFrame nothing will happen
   // False     False    Pulse freeze and nextFrame will continue
   pausePlayback(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = this.settings.pause) {
-    this.currentTime = this.getCurrentTime();
+    // this.currentTime = this.getCurrentTime();
+    this.setCurrentTime(this.getCurrentTime());
 
     this.pauseState = this.diagram.getState({
       precision: this.precision,
