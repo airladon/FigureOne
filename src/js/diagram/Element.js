@@ -91,7 +91,7 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
 //
 // A diagram element can either be a:
 //  - Primitive: a basic element that has the webGL vertices, color
-//  - Collection: a group of elements (either primatives or collections)
+//  - Collection: a group of elements (either primitives or collections)
 //
 // A diagram element can be:
 //  - transformed (resized, offset, rotated)
@@ -839,7 +839,7 @@ class DiagramElement {
   //   * Element space: Combination of element transform and its
   //     parent transform's
 
-  // A diagram element primative vertex object lives in GL SPACE.
+  // A diagram element primitive vertex object lives in GL SPACE.
   //
   // A diagram element has its own DIAGRAM ELEMENT SPACE, which is
   // the GL space transformed by `this.transform`.
@@ -3044,21 +3044,22 @@ class DiagramElementPrimitive extends DiagramElement {
 
   _dup(transform: Transform | null = null) {
     // const vertices = this.drawingObject._dup();
-    const primative = new DiagramElementPrimitive(this.drawingObject._dup());
-    // const primative = new DiagramElementPrimitive(
+    const primitive = new DiagramElementPrimitive(this.drawingObject._dup());
+    // const primitive = new DiagramElementPrimitive(
     //   vertices,
     //   transform,
     //   color,
     //   this.diagramLimits._dup(),
     // );
-    // primative.pointsToDraw = this.pointsToDraw;
-    // primative.angleToDraw = this.angleToDraw;
-    // primative.copyFrom(this);
-    duplicateFromTo(this, primative, ['parent', 'diagram']);
+    // primitive.pointsToDraw = this.pointsToDraw;
+    // primitive.angleToDraw = this.angleToDraw;
+    // primitive.copyFrom(this);
+    duplicateFromTo(this, primitive, ['parent', 'diagram', 'recorder']);
     if (transform != null) {
-      primative.transform = transform._dup();
+      primitive.transform = transform._dup();
     }
-    return primative;
+    primitive.recorder = this.recorder;
+    return primitive;
   }
 
   clear(canvasIndex: number = 0) {
@@ -3453,11 +3454,12 @@ class DiagramElementCollection extends DiagramElement {
     // collection.touchInBoundingRect = this.touchInBoundingRect;
     // collection.copyFrom(this);
     const doNotDuplicate = this.drawOrder.map(e => `_${e}`);
-    duplicateFromTo(this, collection, ['elements', 'drawOrder', 'parent', ...doNotDuplicate]);
+    duplicateFromTo(this, collection, ['elements', 'drawOrder', 'parent', 'recorder', ...doNotDuplicate]);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const name = this.drawOrder[i];
       collection.add(name, this.elements[name]._dup());
     }
+    collection.recorder = this.recorder;
 
     return collection;
   }

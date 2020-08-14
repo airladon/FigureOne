@@ -2098,6 +2098,17 @@ class Transform {
       this.order = [];
       this.name = orderOrName;
     } else {
+      // for (let i = 0; i < orderOrName.length; i += 1 ) {
+      //   const t = orderOrName[i];
+      //   if (
+      //     !(t instanceof Translation)
+      //     && !(t instanceof Scale)
+      //     && !(t instanceof Rotation)
+      //   ) {
+      //     debugger;
+      //   }
+      // }
+      // debugger;
       this.order = orderOrName.map(t => t._dup());
       this.name = name;
     }
