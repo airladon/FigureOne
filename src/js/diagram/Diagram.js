@@ -624,6 +624,7 @@ class Diagram {
       options.duration = 1;
     }
 
+    // console.log(this.elements.isStateSame(state.elements, true));
     if (
       options.action === 'instant'
       || this.elements.isStateSame(state.elements, true)
