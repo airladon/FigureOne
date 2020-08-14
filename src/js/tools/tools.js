@@ -208,6 +208,7 @@ function assignObjectFromTo(
 ) {
   const except = typeof exceptIn === 'string' ? [exceptIn] : exceptIn;
   Object.keys(fromObject).forEach((key) => {
+    // debugger;
     const keyPath = parentPath !== '' ? `${parentPath}.${key}` : key;
     if (except.indexOf(keyPath) !== -1) {
       return;
