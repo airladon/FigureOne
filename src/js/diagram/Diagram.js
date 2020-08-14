@@ -624,10 +624,10 @@ class Diagram {
       options.duration = null;
     }
 
-    // console.log(this.elements.isStateSame(state.elements, true));
+    console.log(this.elements.isStateSame(state.elements, true, ['cursor']));
     if (
       options.action === 'instant'
-      || this.elements.isStateSame(state.elements, true)
+      || this.elements.isStateSame(state.elements, true, ['cursor'])
     ) {
       finished();
     } else if (options.action === 'animate') {
