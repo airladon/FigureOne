@@ -420,6 +420,15 @@ class Point {
     return false;
   }
 
+  isWithinDelta(p: Point, delta: number = 0.0000001) {
+    const dX = Math.abs(this.x - p.x);
+    const dY = Math.abs(this.y - p.y);
+    if (dX > delta || dY > delta) {
+      return false;
+    }
+    return true;
+  }
+
   /**
    * Compare two points for unequality to some precision
    * @example
@@ -433,6 +442,10 @@ class Point {
    */
   isNotEqualTo(p: Point, precision?: number) {
     return !this.isEqualTo(p, precision);
+  }
+
+  isNotWithinDelta(p: Point, delta: number = 0.0000001) {
+    return !this.isWithinDelta(p, delta);
   }
 
   /* eslint-disable no-use-before-define */
@@ -1159,6 +1172,39 @@ class Line {
 
     if (l1.ends === 1) {
       if (l1.p1.isNotEqualTo(l2.p1, precision)) {
+        return false;
+      }
+      if (!l1.hasPointOn(l2.p2, precision)) {
+        return false;
+      }
+      return true;
+    }
+
+    // otherwise ends === 0
+    if (!l1.hasPointOn(l2.p1)) {
+      return false;
+    }
+    return true;
+  }
+
+  isWithinDelta(line2: Line, delta: number = 0.00000001) {
+    const l1 = this;
+    const l2 = line2;
+    if (l1.ends !== l2.ends) {
+      return false;
+    }
+    if (l1.ends === 2) {
+      if (l1.p1.isNotWithinDelta(l2.p1, delta) && l1.p1.isNotWithinDelta(l2.p2, delta)) {
+        return false;
+      }
+      if (l1.p2.isNotWithinDelta(l2.p1, delta) && l1.p2.isNotWithinDelta(l2.p2, delta)) {
+        return false;
+      }
+      return true;
+    }
+
+    if (l1.ends === 1) {
+      if (l1.p1.isNotWithinDelta(l2.p1, precision)) {
         return false;
       }
       if (!l1.hasPointOn(l2.p2, precision)) {
@@ -2358,7 +2404,35 @@ class Transform {
         }
       }
       if (thisTrans instanceof Rotation) {
-        if (compare.r !== thisTrans.r) {
+        if (roundNum(compare.r, precision) !== roundNum(thisTrans.r, precision)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  isWithinDelta(transformToCompare: Transform, delta: number = 0.00000001) {
+    if (!this.isSimilarTo(transformToCompare)) {
+      return false;
+    }
+    for (let i = 0; i < this.order.length; i += 1) {
+      const compare = transformToCompare.order[i];
+      const thisTrans = this.order[i];
+      if (thisTrans.constructor.name !== compare.constructor.name) {
+        return false;
+      }
+      if ((thisTrans instanceof Translation && compare instanceof Translation
+      ) || (
+        thisTrans instanceof Scale && compare instanceof Scale
+      )) {
+        if (compare.isNotWithinDelta(thisTrans, delta)) {
+          return false;
+        }
+      }
+      if (thisTrans instanceof Rotation) {
+        const dR = Math.abs(compare.r - thisTrans.r);
+        if (dR > delta) {
           return false;
         }
       }

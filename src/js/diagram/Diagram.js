@@ -654,6 +654,7 @@ class Diagram {
       this.state.preparingToSetState = true;
       this.subscriptions.trigger('preparingToSetState');
     }
+    this.animateNextFrame();
   }
 
   animateToState(
@@ -727,6 +728,8 @@ class Diagram {
         duration: 0,
       })
       .start(options.startTime);
+    // console.log(this.elements)
+    // console.log(this.globalAnimation.now())
   }
 
   // dissolveToComplete(optionsIn: {

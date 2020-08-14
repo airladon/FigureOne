@@ -26,7 +26,7 @@ import {
   duplicateFromTo, joinObjects, joinObjectsWithOptions, SubscriptionManager,
   duplicate,
 } from '../tools/tools';
-import { colorArrayToRGBA, areColorsSame } from '../tools/color';
+import { colorArrayToRGBA, areColorsWithinDelta } from '../tools/color';
 import GlobalAnimation from './webgl/GlobalAnimation';
 import type { TypeWhen } from './webgl/GlobalAnimation';
 // import DrawContext2D from './DrawContext2D';
@@ -1023,7 +1023,7 @@ class DiagramElement {
     ) {
       target.isShown = state.isShown;
     }
-    if (!areColorsSame(this.color, state.color)) {
+    if (!areColorsWithinDelta(this.color, state.color, 0.001)) {
       target.color = state.color;
     }
     const stateTransform = getTransform(state.transform);
@@ -1125,28 +1125,29 @@ class DiagramElement {
     if (this.isShown != state.isShown || this.opacity != state.opacity) {
       return false;
     }
-    if (!areColorsSame(this.color, state.color)) {
+    if (!areColorsWithinDelta(this.color, state.color, 0.001)) {
       return false;
     }
-    if (!this.transform.isEqualTo(getTransform(state.transform))) {
+    if (!this.transform.isWithinDelta(getTransform(state.transform), 0.001)) {
       return false;
     }
 
-    if (mergePulseTransforms) {
-      return this.arePulseTransformsSame(state);
+    if (mergePulseTransforms && !this.arePulseTransformsSame(state, 0.001)) {
+      // return this.arePulseTransformsSame(state);
+      return false;
     }
     if (state.pulseTransforms.length !== this.pulseTransforms.length) {
       return false;
     }
     for (let i = 0; i < this.pulseTransforms.length; i += 1) {
-      if (!this.pulseTransforms[i].isEqualTo(getTransform(state.pulseTransforms[i]))) {
+      if (!this.pulseTransforms[i].isWithinDelta(getTransform(state.pulseTransforms[i]), 0.001)) {
         return false;
       }
     }
     return true;
   }
 
-  arePulseTransformsSame(state: Object) {
+  arePulseTransformsSame(state: Object, delta: number = 0.001) {
     let statePulseTransforms = [];
     let pulseTransforms = [];
     statePulseTransforms = transformBy([this.transform._dup()], state.pulseTransforms);
@@ -1159,7 +1160,7 @@ class DiagramElement {
       return false;
     }
     for (let i = 0; i < pulseTransforms.length; i += 1) {
-      if (!pulseTransforms[i].isEqualTo(statePulseTransforms[i])) {
+      if (!pulseTransforms[i].isWithinDelta(statePulseTransforms[i], delta)) {
         return false;
       }
     }
@@ -3627,6 +3628,7 @@ class DiagramElementCollection extends DiagramElement {
         this.fnMap.exec(this.beforeDrawCallback, now);
       }
 
+      // console.log(this.name, now);
       this.animations.nextFrame(now);
       this.nextMovingFreelyFrame(now);
 
