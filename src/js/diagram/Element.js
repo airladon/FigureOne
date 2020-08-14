@@ -3456,7 +3456,7 @@ class DiagramElementCollection extends DiagramElement {
     // collection.touchInBoundingRect = this.touchInBoundingRect;
     // collection.copyFrom(this);
     const doNotDuplicate = this.drawOrder.map(e => `_${e}`);
-    duplicateFromTo(this, collection, ['elements', 'drawOrder', 'parent', 'recorder', ...doNotDuplicate]);
+    duplicateFromTo(this, collection, ['elements', 'drawOrder', 'parent', 'recorder', 'diagram', ...doNotDuplicate]);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const name = this.drawOrder[i];
       collection.add(name, this.elements[name]._dup());

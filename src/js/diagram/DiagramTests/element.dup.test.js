@@ -28,6 +28,9 @@ describe('Move Freely', () => {
   test('Primitive', () => {
     const dup = diagram.elements._a._dup();
     expect(dup).not.toEqual(null);
-    // console.log(Object.keys(diagram.elements._a))
+  });
+  test('Collection', () => {
+    const dup = diagram.elements._dup();
+    expect(dup).not.toEqual(null);
   });
 });
