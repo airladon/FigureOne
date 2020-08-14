@@ -147,6 +147,18 @@ class GlobalAnimation {
     return id;
   }
 
+  clearTimeout(id: TimeoutID | null) {
+    if (id == null) {
+      return;
+    }
+    clearTimeout(id);
+
+    const index = this.timers.indexOf(id);
+    if (index > -1) {
+      this.timers.splice(index, 1);
+    }
+  }
+
   disableDebugFrameRate() {
     if (this.timeoutId != null) {
       clearTimeout(this.timeoutId);
