@@ -3628,7 +3628,7 @@ class DiagramElementCollection extends DiagramElement {
         this.fnMap.exec(this.beforeDrawCallback, now);
       }
 
-      // console.log(this.name, now);
+      // console.l^ *consoleog(this.name, now);
       this.animations.nextFrame(now);
       this.nextMovingFreelyFrame(now);
 
