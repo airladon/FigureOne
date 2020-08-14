@@ -1122,8 +1122,16 @@ class DiagramElement {
     return duration;
   }
 
-  isStateSame(state: Object, mergePulseTransforms: boolean = false) {
-    if (this.isShown !== state.isShown || this.opacity !== state.opacity) {
+  isStateSame(
+    state: Object,
+    mergePulseTransforms: boolean = false,
+    exceptions: Array<string> = [],
+  ) {
+    const p = this.getPath();
+    if (exceptions.indexOf(p) > -1) {
+      return true;
+    }
+    if (this.isShown !== state.isShown || Math.abs(this.opacity - state.opacity) > 0.001) {
       return false;
     }
     if (!areColorsWithinDelta(this.color, state.color, 0.001)) {
@@ -4822,8 +4830,12 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  isStateSame(state: Object, mergePulseTransforms: boolean = false) {
-    const thisElementResult = super.isStateSame(state, mergePulseTransforms);
+  isStateSame(
+    state: Object,
+    mergePulseTransforms: boolean = false,
+    exceptions: Array<string> = [],
+  ) {
+    const thisElementResult = super.isStateSame(state, mergePulseTransforms, exceptions);
     if (thisElementResult === false) {
       return false;
     }
@@ -4831,7 +4843,7 @@ class DiagramElementCollection extends DiagramElement {
       const element = this.elements[this.drawOrder[i]];
       if (state.elements != null && state.elements[this.drawOrder[i]] != null) {
         const elementResult = element.isStateSame(
-          state.elements[this.drawOrder[i]], mergePulseTransforms,
+          state.elements[this.drawOrder[i]], mergePulseTransforms, exceptions,
         );
         if (elementResult === false) {
           return false;

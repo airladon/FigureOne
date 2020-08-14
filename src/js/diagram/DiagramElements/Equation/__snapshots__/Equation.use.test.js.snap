@@ -448,6 +448,8 @@ DiagramElementPrimitive {
       },
       "subscriptions": Object {},
     },
+    "timeUpdatesTimeoutID": null,
+    "timeoutID": null,
     "videoToNowDelta": 0,
     "worker": null,
   },
