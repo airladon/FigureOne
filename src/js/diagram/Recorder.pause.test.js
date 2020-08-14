@@ -62,7 +62,7 @@ describe('Animate To State', () => {
       // a.pauseSettings.animation.clear = true;
       const startAnimation = () => {
         a.animations.new()
-          .position({ start: [0, 0], target: [1, 1], duration: 2 })
+          .position({ start: [0, 0], target: [1, 1], duration: 2, progression: 'linear' })
           .start();
       };
       recorder.addEventType('startAnimation', startAnimation.bind(this));
@@ -196,7 +196,7 @@ describe('Animate To State', () => {
         expect(states()).toEqual(['preparingToPause', true, true, true, 1, 0.5]);
         expect(callbacks()).toEqual([0, 1, 1, 0]);
         diagram.mock.timeStep(0.5);
-        expect(states()).toEqual(['preparingToPause', true, true, true, 0.5, 0.9]);
+        expect(states()).toEqual(['preparingToPause', true, true, true, 0.5, 0.75]);
         diagram.mock.timeStep(0.5);
         expect(states()).toEqual(['idle', false, false, false, 0, 1]);
         diagram.mock.timeStep(1);
@@ -238,6 +238,25 @@ describe('Animate To State', () => {
         diagram.mock.timeStep(0);
         expect(states()).toEqual(['idle', false, false, false, 0, 1]);
         expect(callbacks()).toEqual([0, 1, 1, 1]);
+      });
+    });
+    describe('Resume after freeze not on a state time', () => {
+      beforeEach(() => {
+        recorder.settings.pause = 'freeze';
+        recorder.startPlayback(0);
+        diagram.mock.timeStep(1);
+        diagram.mock.timeStep(0.2);
+        recorder.pausePlayback();
+        expect(states()).toEqual(['idle', false, false, false, 0, 0.1]);
+        expect(callbacks()).toEqual([0, 1, 0, 1]);
+      });
+      test('Simple', () => {
+        expect(states()).toEqual(['idle', false, false, false, 0, 0.1]);
+        expect(callbacks()).toEqual([0, 1, 0, 1]);
+        recorder.resumePlayback();
+        expect(states()).toEqual(['playing', false, false, true, 1.8, 0.1]);
+        diagram.mock.timeStep(0.2);
+        expect(states()).toEqual(['playing', false, false, true, 1.6, 0.2]);
       });
     });
     describe('Resume after Freeze', () => {

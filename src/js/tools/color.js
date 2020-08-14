@@ -102,7 +102,20 @@ function areColorsSame(color1: Array<number>, color2: Array<number>, precision: 
   return true;
 }
 
+function areColorsWithinDelta(color1: Array<number>, color2: Array<number>, delta: number = 0.001) {
+  if (color1.length !== color2.length) {
+    return false;
+  }
+  for (let i = 0; i < color1.length; i += 1) {
+    const dC = Math.abs(color1[i] - color2[i]);
+    if (dC > delta) {
+      return false;
+    }
+  }
+  return true;
+}
+
 export {
   RGBToArray, HexToArray, cssColorToArray, colorArrayToRGB,
-  colorArrayToRGBA, getCSSColors, areColorsSame,
+  colorArrayToRGBA, getCSSColors, areColorsSame, areColorsWithinDelta,
 };
