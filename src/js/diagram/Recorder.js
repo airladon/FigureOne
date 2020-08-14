@@ -92,8 +92,8 @@ export type TypePlaySettings = {
     delay: ?number,
   },
   velocity?: TypeScenarioVelocity,
-  maxTime?: number,
-  minTime?: number,
+  maxDuration?: number,
+  minDuration?: number,
   zeroDurationThreshold?: boolean,
   allDurationsSame?: boolean,
 } | 'dissolve' | 'animate' | 'instant';
@@ -1487,7 +1487,7 @@ class Recorder {
   getPlaySettings() {
     let onResume = {
       action: 'instant',
-      maxTime: 6,
+      maxDuration: 6,
       velocity: {
         position: 2,
         rotation: Math.PI * 2 / 2,
@@ -1497,7 +1497,7 @@ class Recorder {
       },
       allDurationsSame: true,
       zeroDurationThreshold: 0.00001,
-      minTime: 0,
+      minDuration: 0,
       duration: null,
     }
     // console.log(resumeSettings)
@@ -1545,8 +1545,8 @@ class Recorder {
   //   }
   //   const playSettings = this.getPlaySettings();
   //   // const defaultOptions = {
-  //   //   maxTime: 1,
-  //   //   minTime: 0,
+  //   //   maxDuration: 1,
+  //   //   minDuration: 0,
   //   //   dissolve: false,
   //   //   delay: 0.2,
   //   // }

@@ -43,8 +43,8 @@ export type TypeScenarioAnimationStepInputOptions = {
   start?: string | TypeScenario;
   target?: string | TypeScenario;
   velocity?: TypeScenarioVelocity;
-  // minTime?: number,
-  maxTime?: number,
+  // minDuration?: number,
+  maxDuration?: number,
   zeroDurationThreshold?: number,
   allDurationsSame?: boolean,
   translationStyle?: 'linear' | 'curved'; // default is linear
@@ -63,12 +63,12 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     translationStyle: 'linear' | 'curved';
     translationOptions: pathOptionsType;
     velocity: ?TypeScenarioVelocity;
-    maxTime: ?number;
+    maxDuration: ?number;
     allDurationsSame: boolean;
     zeroDurationThreshold: number;
     clipRotationTo: '0to360' | '-180to180' | null;
     progression: ((number, ?boolean) => number) | string;
-    minTime: number;
+    minDuration: number;
   };
 
   constructor(...optionsIn: Array<TypeScenarioAnimationStepInputOptions>) {
@@ -76,8 +76,8 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       joinObjects({}, { type: 'scenario' }, ...optionsIn);
     deleteKeys(AnimationStepOptionsIn, [
       'start', 'target', 'translationStyle', 'translationOptions',
-      'velocity', 'maxTime', 'allDurationsSame', 'rotDirection',
-      'clipRotationTo', 'element', 'progression', 'minTime',
+      'velocity', 'maxDuration', 'allDurationsSame', 'rotDirection',
+      'clipRotationTo', 'element', 'progression', 'minDuration',
     ]);
     super(AnimationStepOptionsIn);
     this._stepType = 'position';
@@ -97,11 +97,11 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       rotDirection: 0,
       clipRotationTo: null,
       velocity: null,
-      maxTime: null,
+      maxDuration: null,
       allDurationsSame: true,
       zeroDurationThreshold: 0,
       progression: 'tools.math.easeinout',
-      minTime: 0,
+      minDuration: 0,
     };
     if (this.element && this.element.animations.options.translation) {
       const translationOptions = this.element.animations.options.translation;
@@ -118,8 +118,8 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     this.scenario = { translationOptions: {} };
     copyKeysFromTo(options, this.scenario, [
       'start', 'target', 'translationStyle',
-      'velocity', 'maxTime', 'allDurationsSame', 'zeroDurationThreshold',
-      'rotDirection', 'clipRotationTo', 'progression', 'minTime',
+      'velocity', 'maxDuration', 'allDurationsSame', 'zeroDurationThreshold',
+      'rotDirection', 'clipRotationTo', 'progression', 'minDuration',
     ]);
     duplicateFromTo(options.translationOptions, this.scenario.translationOptions);
   }
@@ -140,6 +140,9 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
   ) {
     const { element } = this;
     const { velocity } = this.scenario;
+    // console.log(velocity)
+    // console.log(this.duration)
+    // console.log(element)
     if (velocity == null || element == null || this.duration > 0) {
       return [this.duration, this.duration, this.duration];
     }
@@ -208,7 +211,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       }
     }
 
-    const scenarioMaxTime = this.scenario.maxTime;
+    const scenarioMaxTime = this.scenario.maxDuration;
     if (scenarioMaxTime != null) {
       colorDuration = Math.min(colorDuration, scenarioMaxTime);
       opacityDuration = Math.min(opacityDuration, scenarioMaxTime);
@@ -219,24 +222,24 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       colorDuration = 0;
     }
 
-    if (colorDuration < this.scenario.minTime) {
-      colorDuration = this.scenario.minTime;
+    if (colorDuration < this.scenario.minDuration) {
+      colorDuration = this.scenario.minDuration;
     }
 
     if (opacityDuration <= this.scenario.zeroDurationThreshold) {
       opacityDuration = 0;
     }
 
-    if (opacityDuration < this.scenario.minTime) {
-      opacityDuration = this.scenario.minTime;
+    if (opacityDuration < this.scenario.minDuration) {
+      opacityDuration = this.scenario.minDuration;
     }
 
     if (transformDuration <= this.scenario.zeroDurationThreshold) {
       transformDuration = 0;
     }
 
-    if (transformDuration < this.scenario.minTime) {
-      transformDuration = this.scenario.minTime;
+    if (transformDuration < this.scenario.minDuration) {
+      transformDuration = this.scenario.minDuration;
     }
 
     if (this.scenario.allDurationsSame) {
@@ -245,7 +248,6 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       opacityDuration = maxDuration;
       transformDuration = maxDuration;
     }
-
     return [transformDuration, colorDuration, opacityDuration];
   }
 

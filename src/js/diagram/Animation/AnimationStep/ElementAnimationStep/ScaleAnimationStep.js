@@ -15,7 +15,7 @@ export type TypeScaleAnimationStepInputOptions = {
   target?: Point | number;     // Either target or delta must be defined
   delta?: Point | number;      // delta overrides target if both are defined
   velocity?: Point | number;
-  maxTime: ?number;
+  maxDuration: ?number;
 } & TypeElementAnimationStepInputOptions;
 
 export default class ScaleAnimationStep extends ElementAnimationStep {
@@ -24,14 +24,14 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
     delta: ?Point;
     target: ?Point;
     velocity: ?Point;
-    maxTime: ?number;
+    maxDuration: ?number;
   };
 
   constructor(...optionsIn: Array<TypeScaleAnimationStepInputOptions>) {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, { type: 'position' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
-      'start', 'delta', 'target', 'velocity', 'maxTime',
+      'start', 'delta', 'target', 'velocity', 'maxDuration',
     ]);
     super(ElementAnimationStepOptionsIn);
     const defaultPositionOptions = {
@@ -39,7 +39,7 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
       target: null,
       delta: null,
       velocity: null,
-      maxTime: null,
+      maxDuration: null,
     };
     const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
     // $FlowFixMe
@@ -56,7 +56,7 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
 
     copyKeysFromTo(options, this.scale, [
       'start', 'delta', 'target', 'translationStyle',
-      'velocity', 'maxTime',
+      'velocity', 'maxDuration',
     ]);
   }
 
@@ -113,9 +113,9 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
         new Transform().scale(velocityToUse),
       );
     }
-    if (this.scale.maxTime != null) {
-      if (this.duration > this.scale.maxTime) {
-        this.duration = this.scale.maxTime;
+    if (this.scale.maxDuration != null) {
+      if (this.duration > this.scale.maxDuration) {
+        this.duration = this.scale.maxDuration;
       }
     }
     if (startTime === 'now' || startTime === 'prev') {

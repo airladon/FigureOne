@@ -20,7 +20,7 @@ export type TypePositionAnimationStepInputOptions = {
   translationStyle?: 'linear' | 'curved'; // default is linear
   translationOptions?: pathOptionsType;
   velocity?: Point;
-  maxTime?: number;
+  maxDuration?: number;
 } & TypeElementAnimationStepInputOptions;
 
 export default class PositionAnimationStep extends ElementAnimationStep {
@@ -32,7 +32,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     translationStyle: 'linear' | 'curved';
     translationOptions: pathOptionsType;
     velocity: ?Point;
-    maxTime: ?number;
+    maxDuration: ?number;
   };
 
   constructor(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
@@ -40,7 +40,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       joinObjects({}, { type: 'position' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
       'start', 'delta', 'target', 'translationStyle', 'translationOptions',
-      'velocity', 'maxTime',
+      'velocity', 'maxDuration',
     ]);
     super(ElementAnimationStepOptionsIn);
     this._stepType = 'position';
@@ -55,7 +55,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
         offset: 0.5,
         controlPoint: null,
         direction: '',
-        maxTime: null,
+        maxDuration: null,
       },
       velocity: null,
     };
@@ -81,7 +81,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     this.position = { translationOptions: {} };
     copyKeysFromTo(options, this.position, [
       'start', 'delta', 'target', 'translationStyle',
-      'velocity', 'maxTime',
+      'velocity', 'maxDuration',
     ]);
     duplicateFromTo(options.translationOptions, this.position.translationOptions);
   }
@@ -137,9 +137,9 @@ export default class PositionAnimationStep extends ElementAnimationStep {
         new Transform().translate(velocityToUse),
       );
     }
-    if (this.position.maxTime != null) {
-      if (this.duration > this.position.maxTime) {
-        this.duration = this.position.maxTime;
+    if (this.position.maxDuration != null) {
+      if (this.duration > this.position.maxDuration) {
+        this.duration = this.position.maxDuration;
       }
     }
   }

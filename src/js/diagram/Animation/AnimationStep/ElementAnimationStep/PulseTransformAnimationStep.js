@@ -30,9 +30,9 @@ export type TypePulseTransformAnimationStepInputOptions = {
     scale?: TypeParsablePoint | number,
     transform?: TypeParsableTransform,
   };
-  maxTime?: number;
+  maxDuration?: number;
   zeroDurationThreshold?: Number;
-  minTime?: number;
+  minDuration?: number;
 } & TypeElementAnimationStepInputOptions;
 
 // A transform animation unit manages a transform animation on an element.
@@ -61,8 +61,8 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
       transform?: TypeParsableTransform,
     };
     clipRotationTo: '0to360' | '-180to180' | null;
-    maxTime: ?number;
-    minTime: number;
+    maxDuration: ?number;
+    minDuration: number;
     zeroDurationThreshold: number;
   };
 
@@ -71,8 +71,8 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
       joinObjects({}, { type: 'transform' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
       'start', 'delta', 'target', 'rotDirection', 'translationStyle',
-      'translationOptions', 'velocity', 'clipRotationTo', 'maxTime',
-      'minTime', 'zeroDurationThreshold',
+      'translationOptions', 'velocity', 'clipRotationTo', 'maxDuration',
+      'minDuration', 'zeroDurationThreshold',
     ]);
     super(ElementAnimationStepOptionsIn);
     const defaultTransformOptions = {
@@ -90,8 +90,8 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
       },
       velocity: null,
       clipRotationTo: null,
-      maxTime: null,
-      minTime: 0,
+      maxDuration: null,
+      minDuration: 0,
       zeroDurationThreshold: 0,
     };
     if (this.element && this.element.animations.options.translation) {
@@ -106,8 +106,8 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     this.transform = { translationOptions: {} };
     copyKeysFromTo(options, this.transform, [
       'start', 'delta', 'target', 'translationStyle',
-      'velocity', 'rotDirection', 'clipRotationTo', 'maxTime',
-      'minTime', 'zeroDurationThreshold',
+      'velocity', 'rotDirection', 'clipRotationTo', 'maxDuration',
+      'minDuration', 'zeroDurationThreshold',
     ]);
     duplicateFromTo(options.translationOptions, this.transform.translationOptions);
   }
@@ -288,16 +288,16 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
         }
       }
     }
-    if (this.transform.maxTime != null) {
-      if (this.duration > this.transform.maxTime) {
-        this.duration = this.transform.maxTime;
+    if (this.transform.maxDuration != null) {
+      if (this.duration > this.transform.maxDuration) {
+        this.duration = this.transform.maxDuration;
       }
     }
     if (this.duration <= this.transform.zeroDurationThreshold) {
       this.duration = 0;
     }
-    if (this.duration < this.transform.minTime) {
-      this.duration = this.transform.minTime;
+    if (this.duration < this.transform.minDuration) {
+      this.duration = this.transform.minDuration;
     }
     this.duration = round(this.duration, this.precision);
     if (startTime === 'now' || startTime === 'prev') {

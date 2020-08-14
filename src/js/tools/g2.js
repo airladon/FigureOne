@@ -3070,7 +3070,7 @@ function getMoveTime(
   if (stopTransforms.length !== startTransforms.length) {
     return 0;
   }
-  let maxTime = 0;
+  let maxDuration = 0;
   startTransforms.forEach((startT, index) => {
     const stopT = stopTransforms[index];
     const velocity = startT._dup();
@@ -3089,11 +3089,11 @@ function getMoveTime(
     const time = getMaxTimeFromVelocity(
       startT, stopT, velocity, rotDirection,
     );
-    if (time > maxTime) {
-      maxTime = time;
+    if (time > maxDuration) {
+      maxDuration = time;
     }
   });
-  return maxTime;
+  return maxDuration;
 }
 
 

@@ -338,10 +338,10 @@ describe('Animate To State', () => {
           expect(states()).toEqual(['preparingToPlay', false, false, true, 1, 1.5]);
           diagram.mock.timeStep(1);
         });
-        test('Animate to resume with velocity and maxTime', () => {
+        test('Animate to resume with velocity and maxDuration', () => {
           recorder.settings.play = {
             action: 'animate',
-            maxTime: 0.5, // default velocity of position: 2 will result in time of 1
+            maxDuration: 0.5, // default velocity of position: 2 will result in time of 1
           };
           recorder.resumePlayback();
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.5, 2.5]);
@@ -349,10 +349,10 @@ describe('Animate To State', () => {
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.25, 1.5]);
           diagram.mock.timeStep(0.25);
         });
-        test('Animate to resume with velocity and minTime', () => {
+        test('Animate to resume with velocity and minDuration', () => {
           recorder.settings.play = {
             action: 'animate',
-            minTime: 2, // default velocity of position: 2 will result in time of 1
+            minDuration: 2, // default velocity of position: 2 will result in time of 1
           };
           recorder.resumePlayback();
           expect(states()).toEqual(['preparingToPlay', false, false, true, 2, 2.5]);
