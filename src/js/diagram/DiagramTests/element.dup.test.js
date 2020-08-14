@@ -15,18 +15,38 @@ describe('Move Freely', () => {
     diagram = makeDiagram();
     diagram.addElements([
       {
-        name: 'a',
+        name: 'primitive',
         method: 'polygon',
-        options: {
-          radius: 1,
-          sides: 4,
-        },
+      },
+      {
+        name: 'polyline',
+        method: 'polyline',
+      },
+      {
+        name: 'line',
+        method: 'line',
+      },
+      {
+        name: 'angle',
+        method: 'angle',
       },
     ]);
     diagram.initialize();
   });
   test('Primitive', () => {
-    const dup = diagram.elements._a._dup();
+    const dup = diagram.elements._primitive._dup();
+    expect(dup).not.toEqual(null);
+  });
+  test('Polyline', () => {
+    const dup = diagram.elements._polyline._dup();
+    expect(dup).not.toEqual(null);
+  });
+  test('line', () => {
+    const dup = diagram.elements._line._dup();
+    expect(dup).not.toEqual(null);
+  });
+  test('angle', () => {
+    const dup = diagram.elements._angle._dup();
     expect(dup).not.toEqual(null);
   });
   test('Collection', () => {

@@ -5,54 +5,36 @@ const angle = Math.PI / 5 + Math.PI / 25;
 diagram.addElements([
   // Add equation element
   {
-    name: 'background',
+    name: 'primitive',
     method: 'polygon',
-    options: {
-      radius: 0.5,
-      width: 0.1,
-      sides: 10,
-      color: [1, 0, 0, 0.5],
-    },
   },
   {
-    name: 'angle',
-    method: 'angle',
+    name: 'polyline',
+    method: 'polyline',
     options: {
-      angle,
-      curve: {
-        radius: 1,
-        width: 0.2,
-        sides: 20,
-      },
-      color: [0, 1, 1, 0.5],
-      // sides: {
-      //   width: 0.1,
-      //   length: 1,
-      //   color: [0.2, 0.5, 1, 1],
-      // }
-      corner: {
-        width: 0.1,
-        length: 1,
-        style: 'auto',
-      },
+      points: [
+        [0, 0],
+        [0.5, 0.5],
+        [0, 0.5],
+      ],
     },
   },
   {
     name: 'line',
     method: 'line',
-    options: {
-      length: 0.5,
-      angle,
-      color: [0, 1, 0, 1],
-    },
+  },
+  {
+    name: 'angle',
+    method: 'angle',
   },
 ]);
 
 diagram.initialize();
-const line = diagram.elements._line;
-line.setMovable(true, 'rotation');
-line.subscriptions.subscribe('setTransform', () => {
-  const r = line.getRotation();
-  diagram.elements._angle.setAngle({ angle: r });
-});
+console.log(diagram.elements._dup());
+// const line = diagram.elements._line;
+// line.setMovable(true, 'rotation');
+// line.subscriptions.subscribe('setTransform', () => {
+//   const r = line.getRotation();
+//   diagram.elements._angle.setAngle({ angle: r });
+// });
 
