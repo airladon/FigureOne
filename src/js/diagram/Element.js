@@ -1021,6 +1021,7 @@ class DiagramElement {
       (this.isShown !== state.isShown && this.opacity === 1) 
       || this.opacity !== 1
     ) {
+      // console.log('shown animation', this.getPath(), this.isShown, state.isShown)
       target.isShown = state.isShown;
     }
     if (!areColorsWithinDelta(this.color, state.color, 0.001)) {
@@ -1028,7 +1029,7 @@ class DiagramElement {
     }
     const stateTransform = getTransform(state.transform);
     if (
-      !this.transform.isEqualTo(stateTransform)
+      !this.transform.isWithinDelta(stateTransform, 0.001)
       && (
         this.dependantTransform === false
         || independentOnly === false
@@ -1048,7 +1049,7 @@ class DiagramElement {
     // let delay = 0;
     let pulseAnimation = null;
 
-    if (!this.arePulseTransformsSame(state)) {
+    if (!this.arePulseTransformsSame(state, 0.001)) {
       let startPulseTransforms = this.pulseTransforms.map(t => t._dup());
       if (this.pulseTransforms.length === 0) {
         startPulseTransforms = this.frozenPulseTransforms.map(t => t._dup());
@@ -1069,6 +1070,7 @@ class DiagramElement {
     }
 
     if (scenarioAnimation != null || pulseAnimation != null) {
+      console.log('shown animation', target, this.getPath(), scenarioAnimation, pulseAnimation)
       this.animations.new()
         .inParallel([
           scenarioAnimation,
@@ -4756,6 +4758,9 @@ class DiagramElementCollection extends DiagramElement {
     // countStart: () => void,
     // countEnd: () => void,
   ) {
+    if (this.name === 'lim') {
+      console.log(state)
+    }
     let duration = 0;
     duration = super.animateToState(
       state, options, independentOnly, startTime,
