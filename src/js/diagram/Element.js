@@ -81,7 +81,9 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
     });
   });
   if (newTransforms.length > 0) {
-    return newTransforms;
+    // TODO Test without duping this
+    return newTransforms.map(t => t._dup());
+    // return newTransforms;
   }
   return inputTransforms.map(t => t._dup());
 }
@@ -1066,7 +1068,6 @@ class DiagramElement {
         start: startPulseTransforms,
         target: targetPulseTransforms,
       }));
-      // console.log(pulseAnimation)
     }
 
     if (scenarioAnimation != null || pulseAnimation != null) {
@@ -1080,6 +1081,9 @@ class DiagramElement {
         // .then(pulseDelay)
         .start(startTime);
     }
+    // if (this.animations.animations.length > 0) {
+    //   console.log(this.getPath(), this.animations.animations[0]._dup());
+    // }
     if (scenarioAnimation != null) {
       duration = Math.max(duration, scenarioAnimation.getTotalDuration());
     }
@@ -3247,10 +3251,20 @@ class DiagramElementPrimitive extends DiagramElement {
       if (pointCount > 0) {
         // console.log(this.pulseTransforms, pointCount)
         this.drawTransforms.forEach((t) => {
+          // let t = t2;
+          // console.log(t.matrix().slice(), t._dup().matrix().slice())
+          // const m = t._dup().matrix();
+          // if (this.getPath() === 'circle.line1.line') {
+          //   // colorToUse = [1, 0, 0, 1];
+          //   // t = t2._dup();
+          //   console.log(t.matrix().slice(), t._dup().matrix().slice())
+          // }
           // console.log(t.matrix(), colorToUse, canvasIndex, pointCount)
           this.drawingObject.drawWithTransformMatrix(
+            // m, colorToUse, canvasIndex, pointCount,
             t.matrix(), colorToUse, canvasIndex, pointCount,
           );
+          // window.asdf = false;
         });
       }
       if (this.unrenderNextDraw) {

@@ -564,6 +564,9 @@ class Diagram {
     const finished = () => {
       finishedFlag = true;
       this.state.preparingToSetState = false;
+      // if (window.asdf) {
+      //   debugger;
+      // }
       setState(this, state);
       this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.stateTime);
       this.elements.setPointsFromDefinition();
