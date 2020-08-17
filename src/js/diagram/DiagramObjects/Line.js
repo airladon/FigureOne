@@ -16,6 +16,7 @@ import EquationLabel from './EquationLabel';
 import type { TypeLabelEquationOptions } from './EquationLabel';
 import { joinObjects } from '../../tools/tools';
 import { Equation } from '../DiagramElements/Equation/Equation';
+import type { TypeWhen } from '../webgl/GlobalAnimation';
 
 // top - text is on top of line (except when line is vertical)
 // bottom - text is on bottom of line (except when line is vertical)
@@ -648,12 +649,16 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       label?: number,
       arrow?: number,
       done?: ?() => void,
+      duration?: number,
+      when?: TypeWhen,
     } = {}) {
     const defaultOptions = {
       line: 3,
       label: 1.5,
       arrow: 2,
       done: null,
+      duration: 1,
+      when: 'nextFrame',
     };
     const options = joinObjects(defaultOptions, optionsIn);
     let { done } = options;
@@ -677,23 +682,50 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       // const scaleTransformMethodName = `${this.getPath()}_transformMethod`;
       // this.fnMap.add(scaleTransformMethodName, scaleTransformMethod);
       line.pulseSettings.transformMethod = this.scaleTransformMethodName;
-      line.pulseScaleNow(1, options.line, 0, done);
+      line.pulseScale({
+        duration: options.duration,
+        scale: options.line,
+        frequency: 0,
+        callback: done,
+        when: options.when,
+      });
       done = null;
     }
     const arrow1 = this._arrow1;
     const arrow2 = this._arrow2;
     if (arrow1 != null) {
-      arrow1.pulseScaleNow(1, options.arrow, 0, done);
+      arrow1.pulseScale({
+        duration: options.duration,
+        scale: options.arrow,
+        frequency: 0,
+        callback: done,
+        when: options.when,
+      });
+      // arrow1.pulseScaleNow(options.duration, options.arrow, 0, done);
       done = null;
     }
     if (arrow2 != null) {
-      arrow2.pulseScaleNow(1, options.arrow, 0, done);
+      // arrow2.pulseScaleNow(options.duration, options.arrow, 0, done);
+      arrow2.pulseScale({
+        duration: options.duration,
+        scale: options.arrow,
+        frequency: 0,
+        callback: done,
+        when: options.when,
+      });
       done = null;
     }
 
     const label = this._label;
     if (label != null) {
-      label.pulseScaleNow(1, options.label, 0, done);
+      // label.pulseScaleNow(options.duration, options.label, 0, done);
+      label.pulseScale({
+        duration: options.duration,
+        scale: options.label,
+        frequency: 0,
+        callback: done,
+        when: options.when,
+      });
       done = null;
     }
     if (done != null) {

@@ -329,6 +329,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
         next.clipRotation(this.transform.clipRotationTo);
       }
       element.frozenPulseTransforms.push(next);
+      // console.log(element.getPath(), deltaTime, next.s(), element.frozenPulseTransforms[0]._dup())
     }
   }
 
