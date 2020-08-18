@@ -1,18 +1,16 @@
 // @flow
 
 import {
-  Transform, Point, TransformLimit, Rect,
-  Translation, spaceToSpaceTransform, getBoundingRect,
-  Scale, Rotation, Line, getMaxTimeFromVelocity, clipAngle,
-  getPoint, getTransform, getScale, // calculateStop, calculateStopAngle,
-  TransformBounds, RectBounds, RangeBounds, BoundsLine, getTransformValue,
-  getBounds,
+  Transform, Point, Rect,
+  spaceToSpaceTransform, getBoundingRect,
+  clipAngle, getPoint, getTransform, getScale,
+  TransformBounds, RectBounds, RangeBounds, getBounds,
 } from '../tools/g2';
 // import { areColorsSame } from '../tools/color';
 import { getState } from './state';
 import type {
   TypeParsablePoint, TypeParsableTransform,
-  TypeTransformationValue, TypeTransformValue, TypeTransformBoundsDefinition,
+  TypeTransformValue, TypeTransformBoundsDefinition,
 } from '../tools/g2';
 import { Recorder } from './Recorder';
 import * as m2 from '../tools/m2';
@@ -24,14 +22,13 @@ import VertexObject from './DrawingObjects/VertexObject/VertexObject';
 import { TextObject } from './DrawingObjects/TextObject/TextObject';
 import {
   duplicateFromTo, joinObjects, joinObjectsWithOptions, SubscriptionManager,
-  duplicate,
 } from '../tools/tools';
 import { colorArrayToRGBA, areColorsWithinDelta } from '../tools/color';
 import GlobalAnimation from './webgl/GlobalAnimation';
 import type { TypeWhen } from './webgl/GlobalAnimation';
 // import DrawContext2D from './DrawContext2D';
 
-import type { TypeSpaceTransforms } from './Diagram';
+import type Diagram, { TypeSpaceTransforms } from './Diagram';
 import type {
   TypePositionAnimationStepInputOptions, TypeAnimationBuilderInputOptions,
   TypeColorAnimationStepInputOptions, TypeTransformAnimationStepInputOptions,
@@ -39,13 +36,14 @@ import type {
   TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
   TypeParallelAnimationStepInputOptions, TypeTriggerStepInputOptions,
   TypeDelayStepInputOptions, TypePulseTransformAnimationStepInputOptions,
+  TypeScenarioAnimationStepInputOptions,
 } from './Animation/Animation';
 // eslint-disable-next-line import/no-cycle
 import * as animations from './Animation/Animation';
 import WebGLInstance from './webgl/webgl';
 // import type Diagram from './Diagram';
 import { FunctionMap } from '../tools/FunctionMap';
-import type Diagram from './Diagram';
+// import type Diagram from './Diagram';
 // import type { TypePauseSettings, TypeOnPause } from './Recorder';
 
 // eslint-disable-next-line import/no-cycle
@@ -86,7 +84,7 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
     // return newTransforms;
   }
   return inputTransforms.map(t => t._dup());
-}
+};
 
 
 // A diagram is composed of multiple diagram elements.
@@ -308,6 +306,8 @@ class DiagramElement {
   // pauseSettings: TypePauseSettings;
 
   dependantTransform: boolean;
+
+  recorder: Recorder;
 
   // scenarioSet: {
   //   quiz1: [
@@ -757,7 +757,7 @@ class DiagramElement {
   }
 
 
-  _getStateProperties(options: { ignoreShown: boolean }) {
+  _getStateProperties(options: { ignoreShown?: boolean }) {
     let { ignoreShown } = options;
     if (ignoreShown == null) {
       ignoreShown = false;
@@ -804,7 +804,7 @@ class DiagramElement {
     ];
   }
 
-  _state(options: { precision?: number, ignoreShown?: boolean, min?: boolean }) {
+  _state(options: { precision?: number, ignoreShown?: boolean, min?: boolean } = {}) {
     if (options.min) {
       return getState(this, this._getStatePropertiesMin(), options);
     }
@@ -833,7 +833,7 @@ class DiagramElement {
     }
   }
 
- 
+
   // Space definition:
   //   * Pixel space: css pixels
   //   * GL Space: x,y = -1 to 1
@@ -1020,7 +1020,7 @@ class DiagramElement {
     // }
     const target = {};
     if (
-      (this.isShown !== state.isShown && this.opacity === 1) 
+      (this.isShown !== state.isShown && this.opacity === 1)
       || this.opacity !== 1
     ) {
       // console.log('shown animation', this.getPath(), this.isShown, state.isShown)
@@ -1105,11 +1105,11 @@ class DiagramElement {
     if (state.isShown === false) {
       return 0;
     }
-    const target = {};
+    // const target = {};
     this.transform = getTransform(state.transform);
     this.color = state.color.slice();
     this.frozenPulseTransforms = [];
-    state.pulseTransforms.forEach((t) => this.frozenPulseTransforms.push(getTransform(t)));
+    state.pulseTransforms.forEach(t => this.frozenPulseTransforms.push(getTransform(t)));
     this.show();
     this.animations.new()
       .opacity({
@@ -1327,10 +1327,16 @@ class DiagramElement {
 
 
   setPosition(pointOrX: Point | number, y: number = 0) {
-    let position = getPoint(pointOrX);
+    let position;
     if (typeof pointOrX === 'number') {
       position = new Point(pointOrX, y);
+    } else {
+      position = getPoint(pointOrX);
     }
+    // let position = getPoint(pointOrX);
+    // if (typeof pointOrX === 'number') {
+    //   position = new Point(pointOrX, y);
+    // }
     const currentTransform = this.transform._dup();
     currentTransform.updateTranslation(position);
     this.setTransform(currentTransform);
@@ -1343,14 +1349,24 @@ class DiagramElement {
   }
 
   setScale(scaleOrX: Point | number, y: ?number = null) {
-    let scale = getPoint(scaleOrX);
+    let scale;
     if (typeof scaleOrX === 'number') {
-      if (y == null) {
-        scale = new Point(scaleOrX, scaleOrX);
-      } else {
+      if (typeof y === 'number') {
         scale = new Point(scaleOrX, y);
+      } else {
+        scale = new Point(scaleOrX, scaleOrX);
       }
+    } else {
+      scale = getPoint(scaleOrX);
     }
+    // let scale = getPoint(scaleOrX);
+    // if (typeof scaleOrX === 'number') {
+    //   if (y == null) {
+    //     scale = new Point(scaleOrX, scaleOrX);
+    //   } else {
+    //     scale = new Point(scaleOrX, y);
+    //   }
+    // }
     const currentTransform = this.transform._dup();
     currentTransform.updateScale(scale);
     this.setTransform(currentTransform);
@@ -1360,7 +1376,10 @@ class DiagramElement {
   // connected that is tied to an update of the transform.
   setTransform(transform: Transform): void {
     if (this.move.transformClip != null) {
-      this.transform = this.fnMap.exec(this.move.transformClip, transform);
+      const clip = this.fnMap.exec(this.move.transformClip, transform);
+      if (clip instanceof Transform) {
+        this.transform = clip;
+      }
     } else {
       this.checkMoveBounds();
       if (this.move.bounds instanceof TransformBounds) {
@@ -1394,7 +1413,7 @@ class DiagramElement {
     if (this.state.isMovingFreely) {
       // If this is the first frame of moving freely, then record the current
       // time so can calculate velocity on next frame
-      if (this.state.movement.previousTime === null) {
+      if (this.state.movement.previousTime == null) {
         this.state.movement.previousTime = now;
         return;
       }
@@ -1746,7 +1765,7 @@ class DiagramElement {
     const currentTime = new GlobalAnimation().now() / 1000;
     // Check wether last movement was a long time ago, if it was, then make
     // velocity 0 as the user has stopped moving before releasing touch/click
-    if (this.state.movement.previousTime !== null) {
+    if (this.state.movement.previousTime != null) {
       if ((currentTime - this.state.movement.previousTime) > 0.05) {
         this.state.movement.velocity = this.transform.zero();
       }
@@ -1768,7 +1787,7 @@ class DiagramElement {
 
   calcVelocity(prevTransform: Transform, nextTransform: Transform): void {
     const currentTime = new GlobalAnimation().now() / 1000;
-    if (this.state.movement.previousTime === null) {
+    if (this.state.movement.previousTime == null) {
       this.state.movement.previousTime = currentTime;
       return;
     }
@@ -1896,7 +1915,7 @@ class DiagramElement {
     // pulse magnitude, and transform the input matrix by the pulse
     if (this.state.isPulsing) {
       // If this is the first pulse frame, then set the startTime
-      if (this.state.pulse.startTime === null) {
+      if (this.state.pulse.startTime == null) {
         this.state.pulse.startTime = now;
       }
       // Calculate how much time has elapsed between this frame and the first
@@ -2118,7 +2137,7 @@ class DiagramElement {
       callback: null,
       // delta: [0, 0],
       when: 'sync',
-      num: 3
+      num: 3,
     }, optionsIn);
     let bArray = [options.scale];
     this.pulseSettings.num = options.num;
@@ -2174,7 +2193,7 @@ class DiagramElement {
     }
     if (wasPulsing) {
       // this.subscriptions.trigger('animationFinished', )
-      this.animationFinished('pulsing');
+      this.animationFinished('pulse');
       this.subscriptions.trigger('stopPulsing');
     }
   }
@@ -2730,72 +2749,7 @@ class DiagramElement {
     //     top: boundary.top - rect.top,
     //   }));
     // }
-
   }
-
-  // setMoveBoundsLegacy(
-  //   boundaryIn: ?Array<number> | Rect | 'diagram' = this.move.bounds,
-  //   scale: Point = new Point(1, 1),
-  // ): void {
-  //   if (!this.isMovable) {
-  //     return;
-  //   }
-  //   if (boundaryIn != null) {
-  //     this.move.boundary = boundaryIn;
-  //   }
-  //   if (this.move.boundary == null) {
-  //     return;
-  //   }
-  //   let boundary;
-  //   if (Array.isArray(this.move.boundary)) {
-  //     const [left, bottom, width, height] = this.move.boundary;
-  //     boundary = new Rect(left, bottom, width, height);
-  //   } else if (this.move.boundary === 'diagram') {
-  //     boundary = this.diagramLimits;
-  //   } else {
-  //     ({ boundary } = this.move);
-  //   }
-
-  //   const glSpace = {
-  //     x: { bottomLeft: -1, width: 2 },
-  //     y: { bottomLeft: -1, height: 2 },
-  //   };
-  //   const diagramSpace = {
-  //     x: {
-  //       bottomLeft: this.diagramLimits.left,
-  //       width: this.diagramLimits.width,
-  //     },
-  //     y: {
-  //       bottomLeft: this.diagramLimits.bottom,
-  //       height: this.diagramLimits.height,
-  //     },
-  //   };
-  //   const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
-  //   const rect = this.getRelativeGLBoundingRect();
-  //   const glToDiagramScaleMatrix = [
-  //     glToDiagramSpace.matrix()[0], 0, 0,
-  //     0, glToDiagramSpace.matrix()[4], 0,
-  //     0, 0, 1];
-  //   const minPoint = new Point(rect.left, rect.bottom).transformBy(glToDiagramScaleMatrix);
-  //   const maxPoint = new Point(rect.right, rect.top).transformBy(glToDiagramScaleMatrix);
-
-  //   const min = new Point(0, 0);
-  //   const max = new Point(0, 0);
-
-  //   min.x = boundary.left - minPoint.x * scale.x;
-  //   min.y = boundary.bottom - minPoint.y * scale.y;
-  //   max.x = boundary.right - maxPoint.x * scale.x;
-  //   max.y = boundary.top - maxPoint.y * scale.y;
-  //   // this.move.maxTransform.updateTranslation(
-  //   //   max.x,
-  //   //   max.y,
-  //   // );
-  //   // this.move.minTransform.updateTranslation(
-  //   //   min.x,
-  //   //   min.y,
-  //   // );
-  //   this.move.bounds.updateTranslation(new RectBounds(min.x, min.y, max.x - min.x, max.y - min.y))
-  // }
 
   show(): void {
     this.isShown = true;
@@ -2985,7 +2939,7 @@ class DiagramElementPrimitive extends DiagramElement {
     // this.setMoveBounds();
   }
 
-  _getStateProperties(options: { ignoreShown: boolean }) {
+  _getStateProperties(options: { ignoreShown?: boolean }) {
     let { ignoreShown } = options;
     if (ignoreShown == null) {
       ignoreShown = false;
@@ -3022,7 +2976,7 @@ class DiagramElementPrimitive extends DiagramElement {
       return false;
     }
     // debugger;
-    
+
     const boundaries =
       this.drawingObject.getGLBoundaries(this.lastDrawTransform.matrix());
     // console.log(boundaries)
@@ -3197,7 +3151,7 @@ class DiagramElementPrimitive extends DiagramElement {
       if (this.beforeDrawCallback != null) {
         this.fnMap.exec(this.beforeDrawCallback, now);
       }
-      
+
       this.animations.nextFrame(now);
       this.nextMovingFreelyFrame(now);
     }
@@ -3247,6 +3201,7 @@ class DiagramElementPrimitive extends DiagramElement {
       this.pulseTransforms = this.getPulseTransforms(now);
       this.drawTransforms = this.getDrawTransforms(newTransforms);
       this.lastDrawTransform = parentTransform[0].transform(transform);
+      // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.drawTransforms[0];
       if (pointCount > 0) {
         // console.log(this.pulseTransforms, pointCount)
@@ -3446,7 +3401,7 @@ class DiagramElementCollection extends DiagramElement {
     this.type = 'collection';
   }
 
-  _getStateProperties(options: { ignoreShown: boolean }) {
+  _getStateProperties(options: { ignoreShown?: boolean }) {
     let { ignoreShown } = options;
     if (ignoreShown == null) {
       ignoreShown = false;
@@ -4567,7 +4522,7 @@ class DiagramElementCollection extends DiagramElement {
     return elements;
   }
 
-  getChildren(directChildrenOnly: boolean = true) {
+  getChildren() {
     const elements = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
@@ -4807,7 +4762,7 @@ class DiagramElementCollection extends DiagramElement {
   dissolveInToState(
     state: Object,
     durationIn: number = 0.8,
-    startTime: ?number | 'now' | 'prev' | 'next' = null
+    startTime: ?number | 'now' | 'prev' | 'next' = null,
   ) {
     let duration = 0;
     duration = super.dissolveInToState(state, durationIn, startTime);
@@ -4818,7 +4773,7 @@ class DiagramElementCollection extends DiagramElement {
       const element = this.elements[this.drawOrder[i]];
       if (state.elements != null && state.elements[this.drawOrder[i]] != null) {
         const elementDuration = element.dissolveInToState(
-          state.elements[this.drawOrder[i]], durationIn, startTime
+          state.elements[this.drawOrder[i]], durationIn, startTime,
         );
         if (elementDuration > duration) {
           duration = elementDuration;
