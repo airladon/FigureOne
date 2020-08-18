@@ -2129,7 +2129,7 @@ class Transform {
     this.calcMatrix();
   }
 
-  _state(options: { precision: number }) {
+  _state(options: { precision: number } = { precision: 8 }) {
     // const { precision } = options;
     const out = [];
     this.order.forEach((transformElement) => {
