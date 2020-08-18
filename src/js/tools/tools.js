@@ -176,7 +176,7 @@ function duplicate(value: ?(number | boolean | string | Object)) {
       || typeof value === 'boolean'
       || typeof value === 'string'
       || value == null
-      || value === NaN
+      || value === NaN  // eslint-disable-line
       || typeof value === 'function') {
     return value;
   }
@@ -868,6 +868,7 @@ class ObjectTracker {
   };
 
   precision: number;
+  worker: typeof Worker;
 
   //             time   refName  diff
   diffs: Array<[number, string, Object, number]>
@@ -887,6 +888,7 @@ class ObjectTracker {
         diff: diffPathsToObj(this.references[refName].diff),
       };
     });
+    // $FlowFixMe
     const diffs = this.diffs.map(d => [d[0], d[1], diffPathsToObj(d[2]), d[3]]);
     return {
       baseReference: duplicate(this.baseReference),
@@ -962,10 +964,10 @@ class ObjectTracker {
     obj: Object,
     refName: string,
   ) {
-    const s1 = performance.now()
+    // const s1 = performance.now()
     const referenceChain = this.getReferenceChain(refName, []);
     // console.log('ref Chain', performance.now() - s1);
-    const s2 = performance.now()
+    // const s2 = performance.now()
     const diff = getObjectDiff(this.baseReference, referenceChain, obj, this.precision);
     // console.log('s2', performance.now() - s2);
     return diff;
@@ -988,12 +990,17 @@ class ObjectTracker {
     this.diffs.push([time, refName, diff, timeCount]);
   }
 
-  addWithWorker(time: number, obj: Object, refName: string = this.lastReferenceName, timeCount: number = 0) {
+  addWithWorker(
+    time: number,
+    obj: Object,
+    refName: string = this.lastReferenceName,
+    timeCount: number = 0,
+  ) {
     if (this.baseReference == null) {
       this.setBaseReference(obj);
     }
     this.startWorker();
-    if (this.worker != null) {
+    if (this.worker != null) {  // $FlowFixMe
       this.worker.postMessage([time, refName, obj, timeCount]);
     }
   }
@@ -1002,11 +1009,13 @@ class ObjectTracker {
     if (this.worker != null) {
       return;
     }
+    // $FlowFixMe
     this.worker = new Worker();
 
-    this.worker.addEventListener("message", function (event) {
-      console.log(event.data)
-    });
+    // // $FlowFixMe
+    // this.worker.addEventListener('message', function (event) {
+    //   console.log(event.data)
+    // });
   }
 
   getFromIndex(index: number) {
@@ -1027,7 +1036,7 @@ class Subscriber {
     }
   };
 
-  order: Array<number>;
+  order: Array<string>;
 
   nextId: number;
 
@@ -1052,7 +1061,7 @@ class Subscriber {
     const subscribersToRemove = [];
     for (let i = 0; i < this.order.length; i += 1) {
       const id = this.order[i];
-      const { callback, num } = this.subscribers[`${id}`];
+      const { callback, num } = this.subscribers[id];
       // if (callback != null) {
       //   callback(payload);
       // }
