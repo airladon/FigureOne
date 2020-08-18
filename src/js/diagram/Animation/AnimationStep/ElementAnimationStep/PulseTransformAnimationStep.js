@@ -164,7 +164,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
   }
 
   calculateStartTargetDelta() {
-    if (this.transform.start.length != this.transform.target.length) {
+    if (this.transform.start.length !== this.transform.target.length) {
       this.transform.delta = [];
       return;
     }
@@ -332,7 +332,6 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
         next.clipRotation(this.transform.clipRotationTo);
       }
       element.frozenPulseTransforms.push(next);
-      // console.log(element.getPath(), deltaTime, next.s(), element.frozenPulseTransforms[0]._dup())
     }
   }
 

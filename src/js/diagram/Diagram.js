@@ -633,6 +633,7 @@ class Diagram {
         options.duration = joinObjects({}, defaultDuration, options.duration);
       }
     } else if (options.duration != null && typeof options.duration !== 'number') {
+      // $FlowFixMe
       options.duration = {
         dissolveOut: 0,
         dissolveIn: 0,

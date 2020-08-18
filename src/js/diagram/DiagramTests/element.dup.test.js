@@ -1,16 +1,16 @@
-import {
-  Point, rectToPolar,
-} from '../../tools/g2';
-import {
-  round,
-} from '../../tools/math';
+// import {
+//   Point, rectToPolar,
+// } from '../../tools/g2';
+// import {
+//   round,
+// } from '../../tools/math';
 import makeDiagram from '../../__mocks__/makeDiagram';
 
 jest.useFakeTimers();
 
 describe('Move Freely', () => {
   let diagram;
-  let a;
+  // let a;
   beforeEach(() => {
     diagram = makeDiagram();
     diagram.addElements([

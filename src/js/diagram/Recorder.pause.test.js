@@ -62,7 +62,9 @@ describe('Animate To State', () => {
       // a.pauseSettings.animation.clear = true;
       const startAnimation = () => {
         a.animations.new()
-          .position({ start: [0, 0], target: [1, 1], duration: 2, progression: 'linear' })
+          .position({
+            start: [0, 0], target: [1, 1], duration: 2, progression: 'linear',
+          })
           .start();
       };
       recorder.addEventType('startAnimation', startAnimation.bind(this));
@@ -2337,7 +2339,7 @@ describe('Animate To State', () => {
           a.setPosition(4, 4);
           // a.pulseScaleNow(2, 4);
           // a.pulseScale({ duration: 2, scale: 4, when: 'sync' });
-          diagram.elements._l.pulseWidth({ duration: 2, line: 4, when: 'sync' })
+          diagram.elements._l.pulseWidth({ duration: 2, line: 4, when: 'sync' });
           // This is ok as it kicks off the pulse
           diagram.mock.timeStep(0);  // Ok
           diagram.mock.timeStep(1);

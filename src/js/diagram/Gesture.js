@@ -13,7 +13,8 @@ class Gesture {
   end: void => void;
   move: (Point, Point) => boolean;
   free: (Point) => void;
-  cursor: () => void;
+  // cursor: () => void;
+  toggleCursor: () => void;
 
   constructor(diagram: Diagram) {
     this.diagram = diagram;
@@ -126,7 +127,7 @@ class Gesture {
     this.endHandler();
   }
 
-  keypressHandler(event: KepressEvent) {
+  keypressHandler(event: KeyboardEvent) {
     // console.log(event.code, event.keyCode, String.fromCharCode(event.keyCode))
     // console.log(this.toggleCursor)
     if (String.fromCharCode(event.keyCode) === 'n' && this.toggleCursor) {
@@ -143,7 +144,10 @@ class Gesture {
     this.removeEvent('touchend', this.touchEndHandler, false);
     this.removeEvent('touchmove', this.touchMoveHandler, false);
     // this.removeEvent('keypress', this.keypressHandler, false);
-    document.removeEvent('keypress', this.keypressHandler, false);
+    // $FlowFixMe
+    if (document.removeEvent != null) {
+      document.removeEvent('keypress', this.keypressHandler, false);
+    }
   }
 }
 
