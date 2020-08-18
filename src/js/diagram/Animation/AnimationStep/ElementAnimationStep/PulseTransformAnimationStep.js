@@ -32,7 +32,7 @@ export type TypePulseTransformAnimationStepInputOptions = {
   };
   maxDuration?: number;
   zeroDurationThreshold?: Number;
-  minDuration?: number;
+  // minDuration?: number;
 } & TypeElementAnimationStepInputOptions;
 
 // A transform animation unit manages a transform animation on an element.
@@ -62,7 +62,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     };
     clipRotationTo: '0to360' | '-180to180' | null;
     maxDuration: ?number;
-    minDuration: number;
+    // minDuration: number;
     zeroDurationThreshold: number;
   };
 
@@ -72,7 +72,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     deleteKeys(ElementAnimationStepOptionsIn, [
       'start', 'delta', 'target', 'rotDirection', 'translationStyle',
       'translationOptions', 'velocity', 'clipRotationTo', 'maxDuration',
-      'minDuration', 'zeroDurationThreshold',
+      'zeroDurationThreshold', // 'minDuration',
     ]);
     super(ElementAnimationStepOptionsIn);
     const defaultTransformOptions = {
@@ -91,7 +91,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
       velocity: null,
       clipRotationTo: null,
       maxDuration: null,
-      minDuration: 0,
+      // minDuration: 0,
       zeroDurationThreshold: 0,
     };
     if (this.element && this.element.animations.options.translation) {
@@ -107,7 +107,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     copyKeysFromTo(options, this.transform, [
       'start', 'delta', 'target', 'translationStyle',
       'velocity', 'rotDirection', 'clipRotationTo', 'maxDuration',
-      'minDuration', 'zeroDurationThreshold',
+      'zeroDurationThreshold',  // 'minDuration',
     ]);
     duplicateFromTo(options.translationOptions, this.transform.translationOptions);
   }
@@ -270,7 +270,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     if (this.transform.delta.length === 0) {
       this.duration = 0;
     }
-
+    // console.log(this.transform)
     // If Velocity is defined, then use it to calculate duration
     if (this.transform.velocity != null) {
       const velocity = this.getVelocityTransform();
@@ -286,6 +286,9 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
         if (duration > this.duration) {
           this.duration = duration;
         }
+        // if (duration > 0) {
+        //   this.duration = duration;
+        // }
       }
     }
     if (this.transform.maxDuration != null) {
@@ -296,9 +299,9 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     if (this.duration <= this.transform.zeroDurationThreshold) {
       this.duration = 0;
     }
-    if (this.duration < this.transform.minDuration) {
-      this.duration = this.transform.minDuration;
-    }
+    // if (this.duration < this.transform.minDuration) {
+    //   this.duration = this.transform.minDuration;
+    // }
     this.duration = round(this.duration, this.precision);
     if (startTime === 'now' || startTime === 'prev') {
       this.setFrame(0);

@@ -68,7 +68,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     zeroDurationThreshold: number;
     clipRotationTo: '0to360' | '-180to180' | null;
     progression: ((number, ?boolean) => number) | string;
-    minDuration: number;
+    // minDuration: number;
   };
 
   constructor(...optionsIn: Array<TypeScenarioAnimationStepInputOptions>) {
@@ -77,7 +77,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     deleteKeys(AnimationStepOptionsIn, [
       'start', 'target', 'translationStyle', 'translationOptions',
       'velocity', 'maxDuration', 'allDurationsSame', 'rotDirection',
-      'clipRotationTo', 'element', 'progression', 'minDuration',
+      'clipRotationTo', 'element', 'progression', // 'minDuration',
     ]);
     super(AnimationStepOptionsIn);
     this._stepType = 'position';
@@ -101,7 +101,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       allDurationsSame: true,
       zeroDurationThreshold: 0,
       progression: 'tools.math.easeinout',
-      minDuration: 0,
+      // minDuration: 0,
     };
     if (this.element && this.element.animations.options.translation) {
       const translationOptions = this.element.animations.options.translation;
@@ -119,7 +119,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     copyKeysFromTo(options, this.scenario, [
       'start', 'target', 'translationStyle',
       'velocity', 'maxDuration', 'allDurationsSame', 'zeroDurationThreshold',
-      'rotDirection', 'clipRotationTo', 'progression', 'minDuration',
+      'rotDirection', 'clipRotationTo', 'progression', // 'minDuration',
     ]);
     duplicateFromTo(options.translationOptions, this.scenario.translationOptions);
   }
@@ -143,7 +143,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     // console.log(velocity)
     // console.log(this.duration)
     // console.log(element)
-    if (velocity == null || element == null || this.duration > 0) {
+    if (velocity == null || element == null) {
       return [this.duration, this.duration, this.duration];
     }
 
@@ -222,24 +222,24 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       colorDuration = 0;
     }
 
-    if (colorDuration < this.scenario.minDuration) {
-      colorDuration = this.scenario.minDuration;
+    if (colorDuration < this.duration) {
+      colorDuration = this.duration;
     }
 
     if (opacityDuration <= this.scenario.zeroDurationThreshold) {
       opacityDuration = 0;
     }
 
-    if (opacityDuration < this.scenario.minDuration) {
-      opacityDuration = this.scenario.minDuration;
+    if (opacityDuration < this.duration) {
+      opacityDuration = this.duration;
     }
 
     if (transformDuration <= this.scenario.zeroDurationThreshold) {
       transformDuration = 0;
     }
 
-    if (transformDuration < this.scenario.minDuration) {
-      transformDuration = this.scenario.minDuration;
+    if (transformDuration < this.duration) {
+      transformDuration = this.duration;
     }
 
     if (this.scenario.allDurationsSame) {

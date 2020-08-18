@@ -287,7 +287,10 @@ describe('Seek', () => {
         recorder.startPlayback();
       });
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
         recorder.startPlayback();
         expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 1]);
         diagram.mock.timeStep(0.5, frameStep);
@@ -373,7 +376,10 @@ describe('Seek', () => {
         expect(transforms()).toEqual(['playing', 0, [], [], [1], 0]);
       });
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
         recorder.startPlayback();
 
         expect(transforms()).toEqual(['preparingToPlay', 0, [], [2], [2], 1]);
@@ -413,7 +419,10 @@ describe('Seek', () => {
         expect(transforms()).toEqual(['playing', 0, [], [], [1], 0]);
       });
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
         recorder.startPlayback();
         expect(transforms()).toEqual(['preparingToPlay', 2, [], [2], [2], 1]);
         diagram.mock.timeStep(0.5, frameStep);
@@ -467,7 +476,10 @@ describe('Seek', () => {
         recorder.startPlayback();
       });
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
         recorder.startPlayback();
         expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 1]);
         diagram.mock.timeStep(0.5, frameStep);
@@ -504,7 +516,10 @@ describe('Seek', () => {
         // expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
       });
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
         recorder.startPlayback();
 
         expect(transforms()).toEqual(['preparingToPlay', 0, [], [2], [2], 1]);
@@ -545,7 +560,10 @@ describe('Seek', () => {
         expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
       });
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
         recorder.startPlayback();
         expect(transforms()).toEqual(['preparingToPlay', 2, [], [2], [2], 1]);
         diagram.mock.timeStep(0.5, frameStep);
@@ -599,7 +617,10 @@ describe('Seek', () => {
         recorder.startPlayback();
       });
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
         recorder.startPlayback();
         expect(transforms()).toEqual(['preparingToPlay', 2.5, [], [], [1], 1]);
         diagram.mock.timeStep(0.5, frameStep);
@@ -634,7 +655,10 @@ describe('Seek', () => {
         expect(transforms()).toEqual(['playing', 0.5, [], [], [1], 1.5]);
       });
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
         recorder.startPlayback();
 
         expect(transforms()).toEqual(['preparingToPlay', 0.5, [], [2], [2], 1]);
@@ -674,7 +698,10 @@ describe('Seek', () => {
         expect(transforms()).toEqual(['playing', 0.5, [], [], [1], 1.5]);
       });
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
         recorder.startPlayback();
         expect(transforms()).toEqual(['preparingToPlay', 2.5, [], [2], [2], 1]);
         diagram.mock.timeStep(0.5, frameStep);
@@ -728,7 +755,10 @@ describe('Seek', () => {
       });
       // only next
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
         // debugger;
         recorder.startPlayback();
         expect(transforms()).toEqual(['preparingToPlay', 3, [], [], [1], 1]);
@@ -766,7 +796,10 @@ describe('Seek', () => {
         expect(transforms()).toEqual(['playing', 1, [1], [], [1], 2]);
       });
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
         recorder.startPlayback();
 
         expect(transforms()).toEqual(['preparingToPlay', 1, [], [2], [2], 1]);
@@ -806,7 +839,10 @@ describe('Seek', () => {
         expect(transforms()).toEqual(['playing', 1, [1], [], [1], 2]);
       });
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
         recorder.startPlayback();
         expect(transforms()).toEqual(['preparingToPlay', 3, [], [2], [2], 1]);
         diagram.mock.timeStep(0.5, frameStep);
@@ -864,7 +900,10 @@ describe('Seek', () => {
       });
       // only next
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
         // debugger;
         recorder.startPlayback();
         expect(transforms()).toEqual(['preparingToPlay', 4, [], [1.5], [1.5], 1]);
@@ -899,7 +938,10 @@ describe('Seek', () => {
         diagram.mock.timeStep(0);
       });
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
         recorder.startPlayback();
 
         expect(transforms()).toEqual(['preparingToPlay', 2, [], [2.5], [2.5], 1]);
@@ -936,7 +978,10 @@ describe('Seek', () => {
         diagram.mock.timeStep(0);
       });
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
         recorder.startPlayback();
         expect(transforms()).toEqual(['preparingToPlay', 4, [], [2.5], [2.5], 1]);
         diagram.mock.timeStep(0.5, frameStep);
@@ -979,7 +1024,10 @@ describe('Seek', () => {
         recorder.settings.play = 'instant';
       });
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
       });
       test('Dissolve', () => {
         recorder.settings.play = 'dissolve';
@@ -1000,7 +1048,10 @@ describe('Seek', () => {
       });
       // only next
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
         // debugger;
         recorder.startPlayback();
         expect(transforms()).toEqual(['preparingToPlay', 4, [], [1], [1], 1]);
@@ -1034,7 +1085,10 @@ describe('Seek', () => {
         diagram.mock.timeStep(0);
       });
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
         recorder.startPlayback();
 
         expect(transforms()).toEqual(['preparingToPlay', 2, [], [2], [2], 1]);
@@ -1070,7 +1124,10 @@ describe('Seek', () => {
         diagram.mock.timeStep(0);
       });
       test('Animate', () => {
-        recorder.settings.play = 'animate';
+        recorder.settings.play = {
+          how: 'animate',
+          velocity: {},
+        };
         recorder.startPlayback();
         expect(transforms()).toEqual(['preparingToPlay', 4, [], [2], [2], 1]);
         diagram.mock.timeStep(0.5, frameStep);

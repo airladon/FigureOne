@@ -544,7 +544,7 @@ class Diagram {
   setState(
     stateIn: Object,
     optionsIn: {
-      action: 'animate' | 'dissolve' | 'instant',
+      how: 'animate' | 'dissolve' | 'instant',
       duration?: number | {
         dissovlveOut: ?number,
         dissovlveIn: ?number,
@@ -552,7 +552,7 @@ class Diagram {
       },
       velocity?: TypeScenarioVelocity,
       maxDuration?: number,
-      minDuration?: number,
+      // minDuration?: number,
       zeroDurationThreshold?: boolean,
       allDurationsSame?: boolean,
     } | 'dissolve' | 'animate' | 'instant' = 'instant',
@@ -580,24 +580,33 @@ class Diagram {
     };
 
     let options = {
-      action: 'instant',
+      how: 'instant',
       maxDuration: 6,
-      velocity: {
+      // velocity: {
+      //   position: 2,
+      //   rotation: Math.PI * 2 / 2,
+      //   scale: 1,
+      //   opacity: 0.8,
+      //   color: 0.8,
+      // },
+      allDurationsSame: true,
+      zeroDurationThreshold: 0.00001,
+      // minDuration: 0,
+      duration: 0,
+    };
+    if (optionsIn.velocity != null) {
+      options.velocity = {
         position: 2,
         rotation: Math.PI * 2 / 2,
         scale: 1,
         opacity: 0.8,
         color: 0.8,
-      },
-      allDurationsSame: true,
-      zeroDurationThreshold: 0.00001,
-      minDuration: 0,
-      duration: null,
-    };
+      };
+    }
 
     // console.log(resumeSettings)
     if (typeof optionsIn === 'string') {
-      options.action = optionsIn;
+      options.how = optionsIn;
     } else {
       options = joinObjects({}, options, optionsIn);
       // velocity trumps duration by default, but if only duration is defined by the
@@ -606,13 +615,13 @@ class Diagram {
       //   options.velocity = undefined;
       // }
     }
-    if (options.action === 'dissolve') {
+    if (options.how === 'dissolve') {
       const defaultDuration = {
         dissolveIn: 0.8,
         dissolveOut: 0.8,
         delay: 0.2,
       };
-      if (options.duration == null) {
+      if (options.duration === 0) {
         options.duration = defaultDuration;
       } else if (typeof options.duration === 'number') {
         options.duration = {
@@ -624,15 +633,19 @@ class Diagram {
         options.duration = joinObjects({}, defaultDuration, options.duration);
       }
     } else if (options.duration != null && typeof options.duration !== 'number') {
-      options.duration = null;
+      options.duration = {
+        dissolveOut: 0,
+        dissolveIn: 0,
+        delay: 0,
+      };
     }
 
     if (
-      options.action === 'instant'
+      options.how === 'instant'
       || this.elements.isStateSame(state.elements, true, ['cursor'])
     ) {
       finished();
-    } else if (options.action === 'animate') {
+    } else if (options.how === 'animate') {
       this.elements.stop('freeze');  // This is cancelling the pulse
       this.animateToState(
         state,

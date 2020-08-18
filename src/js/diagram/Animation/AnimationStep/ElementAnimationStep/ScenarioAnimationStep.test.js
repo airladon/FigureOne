@@ -421,7 +421,7 @@ describe('Diagram Recorder', () => {
       .scenario({
         target: { position: [1, 1] },
         velocity: { translation: 10 },
-        minDuration: 1,
+        duration: 1,
       })
       .start();
     diagram.mock.timeStep(0);
