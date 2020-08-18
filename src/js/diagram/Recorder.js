@@ -250,29 +250,6 @@ class Recorder {
     // default recording values
     this.precision = 4;
     this.stateTimeStep = 1;
-
-
-    // this.diagram = {
-    //   animateNextFrame: () => {},
-    //   getElement: () => null,
-    //   getState: () => {},
-    //   setState: () => {},
-    //   pause: () => {},
-    //   unpause: () => {},
-    //   showCursor: () => {},
-    //   animateNextFrame: () => void,
-    //   setState: (Object) => void,
-    //   getState: ({ precision: number, ignoreShown: boolean }) => Object,
-    //   getElement: (string) => ?DiagramElement,
-    //   showCursor: ('up' | 'down' | 'hide', ?Point) => void,
-    //   pause: () => void,
-    //   unpause: () => void,
-    //   getIsInTransition: () => boolean,
-    //   animateToState: (Object, Object, ?(string | (() => void))) => void,
-    //   isAnimating: () => boolean,
-    //   setAnimationFinishedCallback: ?(string | (() => void)) => void,
-    //   subscriptions: SubscriptionManager
-    // };
     this.audio = null;
     // this.playbackStoppedCallback = null;
     this.worker = null;
@@ -389,10 +366,12 @@ class Recorder {
   ) { // $FlowFixMe
     const lists = this.decodeEvents(encodedEventsList, isMinified);
 
+    // Loading, Decoding, Enconding events and states is a flow mess
+    // $FlowFixMe
     Object.keys(lists).forEach((eventName) => {
       if (this.events[eventName] == null) {
         return;
-      }
+      }  // $FlowFixMe
       this.events[eventName].list = lists[eventName];
     });
     this.duration = this.calcDuration();
@@ -414,7 +393,8 @@ class Recorder {
   ) {
     const lists = {};
     const events = duplicate(this.events);
-    Object.keys(events).forEach((eventName) => {
+    // $FlowFixMe
+    Object.keys(events).forEach((eventName) => {  // $FlowFixMe
       lists[eventName] = events[eventName].list;
     });
     if (minifyEvents) {
@@ -491,7 +471,7 @@ class Recorder {
     const startIndex = getNextIndexForTime(listOrDiffs, startTime);
     const stopIndex = getPrevIndexForTime(listOrDiffs, stopTime);
     let newListOrDiffs = [];
-    if (startIndex > 0) {
+    if (startIndex > 0) { // $FlowFixMe
       newListOrDiffs = listOrDiffs.slice(0, startIndex);
     }
     if (stopIndex > -1 && stopIndex + 1 <= listOrDiffs.length - 1) {
@@ -502,25 +482,11 @@ class Recorder {
 
   clear(startTime: number, stopTime: number) {
     Object.keys(this.events).forEach((eventName) => {
-      const event = this.events[eventName];
+      const event = this.events[eventName]; // $FlowFixMe
       event.list = this.clearListOrDiffs(event.list, startTime, stopTime);
-    });
+    }); // $FlowFixMe
     this.states.diffs = this.clearListOrDiffs(this.states.diffs, startTime, stopTime);
-    // const copyStateIndex = getPrevIndexForTime(this.states.diffs, startTime);
-    // const replaceStartIndex = getNextIndexForTime(this.states.diffs, startTime);
-    // const replaceStopIndex = getPrevIndexForTime(this.states.diffs, startTime);
-    // if (copyStateIndex === -1 || replaceStartIndex === -1 || replaceStopIndex === -1) {
-    //   return;
-    // }
-    // const copy = duplicate(this.states.diffs[copyStateIndex]);
-    // for (let i = replaceStartIndex; i <= replaceStopIndex; i += 1) {
-    //   const [time] = this.states.diffs[i];
-    //   this.states.diffs[i] = duplicate(copy);
-    //   this.states.diffs[i][0] = time;
-    // }
   }
-  // deleteFromTime(time: number) {
-  // }
 
   // ////////////////////////////////////
   // ////////////////////////////////////
@@ -579,31 +545,11 @@ class Recorder {
   startWorker() {
     if (this.worker == null) {
       this.worker = new Worker();
-      // this.worker.onmessage(event => console.log('from Worker: ', event.data))
-      // this.worker.addEventListener("message", event => {
-      //   const { message, payload } = event.data;
-      //   // if (message === 'duration')
-      //   if (message === 'cache') {
-      //     this.statesCache.diffs = payload.diffs;
-      //     this.statesCache.baseReference = payload.baseReference;
-      //     this.statesCache.references = payload.references;
-      //     this.mergeEventsCache();
-      //     this.mergeStatesCache();
-      //     this.duration = this.calcDuration();
-      //     if (this.duration % 1 > 0) {
-      //       const lastIndex = this.states.diffs.length - 1;
-      //       const [, ref, diff] = this.states.diffs[lastIndex];
-      //       this.states.diffs.push([Math.ceil(this.duration), ref, duplicate(diff), 0]);
-      //     }
-      //     this.duration = this.calcDuration();
-      //     console.log(this)
-      //   }
-      // });
       this.worker.addEventListener('message', this.parseMessage.bind(this));
     }
-    // this.worker = new Worker();
   }
 
+  // $FlowFixMe
   parseMessage(event) {
     const { message, payload } = event.data;
     // if (message === 'duration')
@@ -624,30 +570,6 @@ class Recorder {
       // console.log(this)
     }
   }
-
-  // startWorker() {
-  //   // if (this.worker != null) {
-  //   //   return;
-  //   // }
-  //   // this.worker = new Worker('./worker.js');
-  //   // this.worker.addEventListener("message", event => {
-  //   //   console.log(event.data);
-  //   // });
-  //   // this.worker.postMessage([40, 2]);
-  //   if (this.worker != null) {
-  //     return;
-  //   }
-  //   this.worker = new Worker();
-
-  //   // this.worker.postMessage([4, 5]);
-  //   // this.worker.onmessage = function (event) {
-  //   //   console.log('asdfasdf')
-  //   // };
-
-  //   this.worker.addEventListener("message", function (event) {
-  //     console.log(event.data)
-  //   });
-  // }
 
   addCurrentStateAsReference() {
     this.referenceIndex += 1;
@@ -676,7 +598,7 @@ class Recorder {
   getCacheStartTime() {
     let time = null;
     if (this.statesCache.diffs.length > 0) {
-      time = this.statesCache.diffs[0][0];
+      time = this.statesCache.diffs[0][0];  // eslint-disable-line prefer-destructuring
     }
     Object.keys(this.eventsCache).forEach((eventName) => {
       const event = this.eventsCache[eventName];
@@ -760,25 +682,27 @@ class Recorder {
         eventsList = this.events[eventName].list;
       }
       // console.log(eventName)
-      const merged = this.getMergedCacheArray(
+      const merged = this.getMergedCacheArray(  // $FlowFixMe
         eventsList, eventsCacheList,
       );
       if (merged.length === 0) {
         return;
       }
+      // $FlowFixMe
       this.events[eventName].list = merged;
     });
   }
 
   mergeStatesCache() {
-    const merged = this.getMergedCacheArray(
+    const merged = this.getMergedCacheArray(    // $FlowFixMe
       this.states.diffs, this.statesCache.diffs,
     );
     if (merged.length === 0) {
       return;
-    }
+    }   // $FlowFixMe
     this.states.diffs = merged;
     // this.states.baseReference = duplicate(this.statesCache.baseReference);
+    // $FlowFixMe
     this.states.references = duplicate(this.statesCache.references);
   }
 
@@ -803,6 +727,7 @@ class Recorder {
     this.state = 'idle';
     this.stopTimeouts();
 
+    // $FlowFixMe
     this.worker.postMessage({ message: 'get' });
     if (this.audio) {
       this.audio.pause();
@@ -945,7 +870,6 @@ class Recorder {
         if (this.diagram.getIsInTransition() === false) {
           this.recordCurrentState();
         }
-        // console.log('recording', time, this.stateTimeStep - this.getCurrentTime() % this.stateTimeStep)
         this.queueRecordState(this.stateTimeStep - this.getCurrentTime() % this.stateTimeStep);
       }
     };
@@ -1037,7 +961,7 @@ class Recorder {
     if (this.state === 'recording') {
       this.stopRecording();
     } else if (this.state === 'playing') {
-      this.pausePlayback(false);
+      this.pausePlayback('freeze');
     }
     // console.log(time)
     this.setToTime(time);
@@ -1052,7 +976,7 @@ class Recorder {
   setToTime(timeIn: number, force: boolean = false) {
     if (timeIn === 0 && this.states.diffs.length > 0) {
       this.stateIndex = 0;
-    } else {
+    } else {  // $FlowFixMe
       this.stateIndex = getPrevIndexForTime(this.states.diffs, timeIn);
     }
     // console.log(this.stateIndex)
@@ -1175,12 +1099,12 @@ class Recorder {
     let cursorTime = null;
     let cursorTimeCount = null;
     if (touchIndex !== -1) {
-      const event = this.events.touch.list[touchIndex];
+      const event = this.events.touch.list[touchIndex]; // $FlowFixMe
       const [time, [upOrDown, x, y], timeCount] = event;
       if (upOrDown === 'down') {
         touchUp = false;
         cursorTime = time;
-        cursorTimeCount = timeCount;
+        cursorTimeCount = timeCount; // $FlowFixMe
         cursorPosition = new Point(x, y);
       } else {
         touchUp = true;
@@ -1188,17 +1112,17 @@ class Recorder {
     }
 
     if (cursorIndex !== -1) {
-      const event = this.events.cursor.list[cursorIndex];
+      const event = this.events.cursor.list[cursorIndex]; // $FlowFixMe
       const [time, [showOrHide, x, y], timeCount] = event;
       if (showOrHide === 'show') {
         showCursor = true;
         if (
           cursorTime == null
-          || time > cursorTime
+          || time > cursorTime // $FlowFixMe
           || (time === cursorTime && timeCount > cursorTimeCount)
         ) {
           cursorTime = time;
-          cursorTimeCount = timeCount;
+          cursorTimeCount = timeCount; // $FlowFixMe
           cursorPosition = new Point(x, y);
         }
       } else {
@@ -1207,13 +1131,13 @@ class Recorder {
     }
 
     if (cursorMoveIndex !== -1) {
-      const event = this.events.cursorMove.list[cursorMoveIndex];
+      const event = this.events.cursorMove.list[cursorMoveIndex]; // $FlowFixMe
       const [time, [x, y], timeCount] = event;
       if (
         cursorTime == null
-        || time > cursorTime
+        || time > cursorTime // $FlowFixMe
         || (time === cursorTime && timeCount > cursorTimeCount)
-      ) {
+      ) { // $FlowFixMe
         cursorPosition = new Point(x, y);
       }
     }
@@ -1288,146 +1212,8 @@ class Recorder {
     } else {
       finished();
     }
-
-    // let finishedFlag = false;
-    // const finished = () => {
-    //   // console.log('hello')
-    //   finishedFlag = true;
-    //   if (this.pauseState == null) {
-    //     this.setToTime(fromTime, true);
-    //   } else {
-    //     this.diagram.setState(this.pauseState);
-    //     this.pauseState = null;
-    //   }
-    //   this.state = 'playing';
-    //   this.setVideoToNowDeltaTime(fromTime);
-    //   this.currentTime = fromTime;
-    //   this.startEventsPlayback(fromTime);
-    //   this.startAudioPlayback(fromTime);
-    //   this.diagram.animateNextFrame();
-    //   if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
-    //     this.finishPlaying();
-    //   }
-    //   this.subscriptions.trigger('playbackStarted');
-    // };
-
-    // const playSettings = this.getPlaySettings();
-    // if (
-    //   playSettings.action === 'instant'
-    //   || this.diagram.elements.isStateSame(stateToStartFrom.elements, true)
-    // ) {
-    //   finished();
-    // } else if (playSettings.action === 'dissolve') {
-    //   // this.diagram.elements.freezePulseTransforms(false);
-    //   this.diagram.stop('freeze');
-    //   this.diagram.dissolveToState({
-    //     state: stateToStartFrom,
-    //     dissolveInDuration: playSettings.duration.dissolveIn,
-    //     dissolveOutDuration: playSettings.duration.dissolveOut,
-    //     done: finished,
-    //     delay: playSettings.duration.delay,
-    //     startTime: 'now',
-    //   });
-    // } else {
-    //   // console.log('asdf')
-    //   // debugger;
-    //   this.diagram.stop('freeze');  // This is cancelling the pulse
-    //   this.diagram.animateToState(
-    //     stateToStartFrom,
-    //     playSettings,
-    //     finished,
-    //     'now',
-    //   );
-    // }
-
-    // if (!finishedFlag) {
-    //   this.state = 'preparingToPlay';
-    //   this.subscriptions.trigger('preparingToPlay');
-    // }
   }
 
-  // startPlaybackLegacy(
-  //   fromTimeIn: number = this.lastSeekTime || 0,
-  //   forceStart: boolean = true,
-  //   events: ?Array<string> = null,
-  // ) {
-  //   let fromTime = fromTimeIn;
-  //   if (fromTimeIn == null || fromTimeIn >= this.duration) {
-  //     fromTime = 0;
-  //   }
-  //   if (events == null) {
-  //     this.eventsToPlay = Object.keys(this.events);
-  //   } else {
-  //     this.eventsToPlay = events;
-  //   }
-
-  //   // this.diagram.unpause();
-  //   // this.setVideoToNowDeltaTime(this.currentTime);
-
-  //   let stateToStartFrom = this.getStateForTime(fromTime);
-  //   if (
-  //     !forceStart
-  //     && this.pauseState != null
-  //   ) {
-  //     stateToStartFrom = this.pauseState;
-  //   }
-
-  //   let finishedFlag = false;
-  //   const finished = () => {
-  //     finishedFlag = true;
-  //     if (this.pauseState == null) {
-  //       this.setToTime(fromTime, true);
-  //     } else {
-  //       this.diagram.setState(this.pauseState);
-  //       this.pauseState = null;
-  //     }
-  //     this.state = 'playing';
-  //     this.setVideoToNowDeltaTime(fromTime);
-  //     // this.currentTime = fromTime;
-  //     this.setCurrentTime(fromTime);
-  //     this.startEventsPlayback(fromTime);
-  //     this.startAudioPlayback(fromTime);
-  //     this.diagram.animateNextFrame();
-  //     if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
-  //       this.finishPlaying();
-  //     }
-  //     this.subscriptions.trigger('playbackStarted');
-  //   };
-
-  //   const playSettings = this.getPlaySettings();
-  //   if (
-  //     playSettings.action === 'instant'
-  //     || this.diagram.elements.isStateSame(stateToStartFrom.elements, true)
-  //   ) {
-  //     finished();
-  //   } else if (playSettings.action === 'dissolve') {
-  //     // this.diagram.elements.freezePulseTransforms(false);
-  //     this.diagram.stop('freeze');
-  //     this.diagram.dissolveToState({
-  //       state: stateToStartFrom,
-  //       dissolveInDuration: playSettings.duration.dissolveIn,
-  //       dissolveOutDuration: playSettings.duration.dissolveOut,
-  //       done: finished,
-  //       delay: playSettings.duration.delay,
-  //       startTime: 'now',
-  //     });
-  //   } else {
-  //     // console.log('asdf')
-  //     // debugger;
-  //     this.diagram.stop('freeze');  // This is cancelling the pulse
-  //     this.diagram.animateToState(
-  //       stateToStartFrom,
-  //       playSettings,
-  //       finished,
-  //       'now',
-  //     );
-  //   }
-
-  //   if (!finishedFlag) {
-  //     this.state = 'preparingToPlay';
-  //     this.subscriptions.trigger('preparingToPlay');
-  //   }
-  // }
 
   getPlaySettings() {
     let onResume = {
@@ -1444,7 +1230,7 @@ class Recorder {
       zeroDurationThreshold: 0.00001,
       // minDuration: 0,
       duration: 0,
-    }
+    };
     // console.log(resumeSettings)
     if (typeof this.settings.play === 'string') {
       onResume.how = this.settings.play;
@@ -1461,7 +1247,7 @@ class Recorder {
         dissolveIn: 0.8,
         dissolveOut: 0.8,
         delay: 0.2,
-      }
+      };
       if (onResume.duration === 0) {
         onResume.duration = defaultDuration;
       } else if (typeof onResume.duration === 'number') {
@@ -1469,7 +1255,7 @@ class Recorder {
           dissolveOut: onResume.duration / 10 * 4.5,
           dissolveIn: onResume.duration / 10 * 4.5,
           delay: onResume.duration / 10 * 1,
-        }
+        };
       } else {
         onResume.duration = joinObjects({}, defaultDuration, onResume.duration);
       }
@@ -1482,87 +1268,6 @@ class Recorder {
   resumePlayback() {
     this.startPlayback(this.currentTime, false);
   }
-
-  // resumePlaybackLegacy() {
-  //   if (this.pauseState == null) {
-  //     this.startPlayback(this.currentTime);
-  //     return;
-  //   }
-  //   const playSettings = this.getPlaySettings();
-  //   // const defaultOptions = {
-  //   //   maxDuration: 1,
-  //   //   minDuration: 0,
-  //   //   dissolve: false,
-  //   //   delay: 0.2,
-  //   // }
-  //   // const options = joinObjects({}, defaultOptions, optionsIn);
-  //   // if (options.dissolve && options.duration == null) {
-  //   //   options.duration = 0.8;
-  //   // }
-  //   this.diagram.unpause();
-  //   let finishedFlag = false;
-  //   const finished = () => {
-  //     finishedFlag = true;
-  //     this.diagram.setState(this.pauseState);
-  //     this.pauseState = null;
-  //     this.state = 'playing';
-  //     this.setVideoToNowDeltaTime(this.currentTime);
-  //     this.startEventsPlayback(this.currentTime);
-  //     this.startAudioPlayback(this.currentTime);
-  //     this.diagram.animateNextFrame();
-  //     if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
-  //       this.finishPlaying();
-  //     }
-  //     this.subscriptions.trigger('playbackStarted');
-  //   };
-
-  //   if (playSettings.action === 'instant' || this.diagram.elements.isStateSame(this.pauseState.elements, true)) {
-  //     // this.diagram.stop();
-  //     // this.diagram.elements.clearFrozenPulseTransforms();
-  //     finished();
-  //     return;
-  //   }
-  //   // const id = this.diagram.subscriptions.subscribe('animationsFinished', finished, 1);
-  //   if (playSettings.action === 'dissolve') {
-  //     this.diagram.elements.freezePulseTransforms(false);
-  //     this.diagram.stop();
-  //     this.diagram.dissolveToState({
-  //       state: this.pauseState,
-  //       dissolveInDuration: playSettings.duration.dissolveIn,
-  //       dissolveOutDuration: playSettings.duration.dissolveOut,
-  //       done: finished,
-  //       delay: playSettings.duration.delay,
-  //       startTime: 'now',
-  //     });
-  //   } else {
-  //     this.diagram.stop();
-  //     this.diagram.animateToState(
-  //       this.pauseState,
-  //       playSettings,
-  //       finished,
-  //       'now',
-  //     );
-  //   }
-
-  //   // if (this.diagram.isAnimating() && !finishedFlag) {
-  //   // console.log(finishedFlag)
-  //   if (!finishedFlag) {
-  //     this.state = 'preparingToPlay';
-  //     this.subscriptions.trigger('preparingToPlay');
-  //   }
-  //   // if (animationCount === 0) {
-  //   //   this.diagram.subscriptions.unsubscribe('animationsFinished', id);
-  //   //   finished();
-  //   // }
-  // }
-
-  // initializePlayback(fromTime: number) {
-  //   this.currentTime = fromTime;
-  //   this.diagram.unpause();
-  //   this.setToTime(fromTime);
-  //   this.startEventsPlayback(fromTime);
-  //   this.startAudioPlayback(fromTime);
-  // }
 
   startAudioPlayback(fromTime: number) {
     if (this.audio) {
@@ -1636,7 +1341,7 @@ class Recorder {
       const [time, , timeCount] = this.events[eventName].list[this.eventIndex[eventName]];
       if (
         nextTime == null
-        || time < nextTime
+        || time < nextTime // $FlowFixMe
         || (time === nextTime && timeCount < nextTimeCount)
       ) {
         nextTime = time;
@@ -1786,13 +1491,11 @@ class Recorder {
 
 
   setEvent(eventName: string, index: number) {
-    // if (window.asdf) {
-      // console.log(eventName, performance.now())
-    // }
     const event = this.events[eventName];
     if (event == null) {
       return;
     }
+    // $FlowFixMe
     event.playbackAction(event.list[index][1], event.list[index][0]);
   }
 
@@ -1845,7 +1548,7 @@ class Recorder {
     let stateIndex;
     if (timeIn === 0 && this.states.diffs.length > 0) {
       stateIndex = 0;
-    } else {
+    } else {  // $FlowFixMe
       stateIndex = getPrevIndexForTime(this.states.diffs, timeIn);
     }
     return this.getState(stateIndex);
