@@ -2356,7 +2356,7 @@ class Transform {
     return null;
   }
 
-  updateRotation(r: number, index: number = 0): void {
+  updateRotation(r: number, index: number = 0) {
     let count = 0;
     for (let i = 0; i < this.order.length; i += 1) {
       const t = this.order[i];

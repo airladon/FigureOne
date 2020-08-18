@@ -3,6 +3,9 @@ import { DiagramElementPrimitive, DiagramElement, DiagramElementCollection } fro
 import {
   Point, getPoint,
 } from '../../../../tools/g2';
+import type {
+  TypeParsablePoint,
+} from '../../../../tools/g2';
 import Symbol from './SymbolNew';
 import Bounds from '../Elements/Bounds';
 // import WebGLInstance from '../../../webgl/webgl';
@@ -158,7 +161,7 @@ export default class Box extends Symbol {
   surround(
     parent: DiagramElement,
     children: ?Array<string | DiagramElement>,
-    spaceIn: number = 0,
+    spaceIn: TypeParsablePoint | number = 0,
     drawingSpace: 'diagram' | 'local' | 'gl' | 'vertex' = 'local',
   ) {
     let elements = [parent];
@@ -168,7 +171,7 @@ export default class Box extends Symbol {
     if (elements.length === 0) {
       return;
     }
-    const space = getPoint(spaceIn);
+    const space = (typeof spaceIn === 'number') ? getPoint([spaceIn, spaceIn]) : getPoint(spaceIn);
     let maxBounds;
     if (parent instanceof DiagramElementCollection) {
       maxBounds = parent.getBoundingRect(drawingSpace, children);
