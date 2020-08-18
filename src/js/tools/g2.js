@@ -1,5 +1,5 @@
 // @flow
-
+/* eslint-disable no-use-before-define */
 import {
   roundNum, clipMag, clipValue, rand2D, round,
 } from './math';
@@ -57,7 +57,7 @@ type TypeF1DefPoint = {
 };
 
 export type TypeParsablePoint = [number, number]
-                                | Point   // eslint-disable-line no-use-before-define
+                                | Point
                                 // | { x: number, y: number}
                                 | string
                                 | TypeF1DefPoint;
@@ -65,9 +65,7 @@ export type TypeParsablePoint = [number, number]
 //    - Point instance
 //    - [1, 1]
 //    - { f1Type: 'p', def: [1, 1]}
-// eslint-disable-next-line no-use-before-define
 function parsePoint<T>(pIn: TypeParsablePoint, onFail: T): Point | T | null {
-  // eslint-disable-next-line no-use-before-define
   if (pIn instanceof Point) {
     return pIn;
   }
@@ -90,7 +88,7 @@ function parsePoint<T>(pIn: TypeParsablePoint, onFail: T): Point | T | null {
 
   if (Array.isArray(p)) {
     if (p.length === 2) {
-      return new Point(p[0], p[1]);  // eslint-disable-line no-use-before-define
+      return new Point(p[0], p[1]);
     }
     return onFailToUse;
   }
@@ -103,12 +101,12 @@ function parsePoint<T>(pIn: TypeParsablePoint, onFail: T): Point | T | null {
       && p.state.length === 2
     ) {
       const [x, y] = p.state;
-      return new Point(x, y);  // eslint-disable-line no-use-before-define
+      return new Point(x, y);
     }
     return onFailToUse;
   }
   if (typeof p === 'number') {
-    return new Point(p, p);  // eslint-disable-line no-use-before-define
+    return new Point(p, p);
   }
   // if (typeof (p) === 'object') {
   //   const keys = Object.keys(p);
@@ -119,16 +117,16 @@ function parsePoint<T>(pIn: TypeParsablePoint, onFail: T): Point | T | null {
   return onFailToUse;
 }
 
-// eslint-disable-next-line no-use-before-define
+
 function getPoint(p: TypeParsablePoint): Point {
   let parsedPoint = parsePoint(p);
   if (parsedPoint == null) {
-    parsedPoint = new Point(0, 0);  // eslint-disable-line no-use-before-define
+    parsedPoint = new Point(0, 0);
   }
   return parsedPoint;
 }
 
-// eslint-disable-next-line no-use-before-define
+
 function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<Point> {
   if (Array.isArray(points)) {
     if (points.length === 2 && typeof points[0] === 'number') { // $FlowFixMe
@@ -142,7 +140,7 @@ function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<
 function getScale(s: TypeParsablePoint | number) {
   let parsedPoint;
   if (typeof s === 'number') {
-    parsedPoint = new Point(s, s);    // eslint-disable-line no-use-before-define
+    parsedPoint = new Point(s, s);
   } else {
     parsedPoint = getPoint(s);
   }
@@ -561,7 +559,6 @@ class Point {
     return !this.isWithinDelta(p, delta);
   }
 
-  /* eslint-disable no-use-before-define */
   isWithinLine(l: Line, precision?: number) {
     return l.hasPointOn(this, precision);
   }
@@ -604,10 +601,6 @@ class Point {
     return l.hasPointAlong(this, precision);
   }
 
-  /* eslint-enable no-use-before-define */
-  // console(text?: string) {
-  //   Console(`${text || ''} + ${this.x}, ${this.y}`);
-  // }
 
   static isLeft(p0: Point, p1: Point, p2: Point) {
     return (
@@ -667,7 +660,6 @@ class Point {
       // if(p.isEqualTo(v[i])) {
       //   return true;
       // }
-      /* eslint-disable-next-line  no-use-before-define */
       const l = line(v[i], v[i + 1]);
       if (p.isWithinLine(l)) {
         if (popLastPoint) {
@@ -700,7 +692,6 @@ class Point {
     delta: Point,
     percent: number,
     translationStyle: 'linear' | 'curved' = 'linear',
-    // eslint-disable-next-line no-use-before-define
     translationOptions: pathOptionsType = {
       rot: 1,
       magnitude: 0.5,
@@ -708,7 +699,7 @@ class Point {
       controlPoint: null,
       direction: '',
     },
-  ) {                 // eslint-disable-next-line no-use-before-define
+  ) {
     const pathPoint = translationPath(
       translationStyle,
       this._dup(), delta, percent,
@@ -717,7 +708,6 @@ class Point {
     return pathPoint;
   }
 }
-
 
 
 function linearPath(
@@ -1715,8 +1705,8 @@ type TypeF1DefLine = {
 
 export type TypeParsableLine = [TypeParsablePoint, TypeParsablePoint, 2 | 1 | 0]
                                 | [TypeParsablePoint, TypeParsablePoint]
-                                | [Point, number, number, 2 | 1 | 0]
-                                | [Point, number, number]
+                                | [TypeParsablePoint, number, number, 2 | 1 | 0]
+                                | [TypeParsablePoint, number, number]
                                 | TypeF1DefLine
                                 | Line;
 // line can be defined as:
@@ -1752,7 +1742,7 @@ function parseLine<T>(lIn: TypeParsableLine, onFail: T): Line | T | null {
     if (l.length === 3) {
       if (typeof l[1] === 'number') {
         return new Line(getPoint(l[0]), l[1], l[2]);
-      }
+      } // $FlowFixMe
       return new Line(getPoint(l[0]), getPoint(l[1]), 0, l[2]);
     }
     if (l.length === 2) {
@@ -2672,7 +2662,7 @@ class Transform {
         if (clipAngle(t.r, '0to360') > zeroThreshold) {
           return false;
         }
-      } 
+      }
     }
     return true;
   }
@@ -3512,20 +3502,20 @@ class RectBounds extends Bounds {
       top, bottom, left, right,
     } = this.boundary;
 
-    let zeroHeight = false;
-    if (
-      top != null && bottom != null
-      && roundNum(top, this.precision) === roundNum(bottom, this.precision)
-    ) {
-      zeroHeight = true;
-    }
-    let zeroWdith = false;
-    if (
-      left != null && right != null
-      && roundNum(left, this.precision) === roundNum(right, this.precision)
-    ) {
-      zeroWdith = true;
-    }
+    // let zeroHeight = false;
+    // if (
+    //   top != null && bottom != null
+    //   && roundNum(top, this.precision) === roundNum(bottom, this.precision)
+    // ) {
+    //   zeroHeight = true;
+    // }
+    // let zeroWdith = false;
+    // if (
+    //   left != null && right != null
+    //   && roundNum(left, this.precision) === roundNum(right, this.precision)
+    // ) {
+    //   zeroWdith = true;
+    // }
     const calcHBound = (h) => {
       if (h != null) {
         if (bottom != null && top != null) {
@@ -3638,7 +3628,7 @@ class RectBounds extends Bounds {
     }
 
     let i;
-    let d;
+    let d = 0;
     let xMirror = 1;
     let yMirror = 1;
     intersects.forEach((intersect) => {
@@ -3865,7 +3855,7 @@ export type TypeLineBoundsDefinition = {
 
 export type TypeF1DefLineBounds = {
   f1Type: 'lineBounds',
-  state: ['outside' | 'inside', number, number, number , number, number, 2 | 1 | 0],
+  state: ['outside' | 'inside', number, number, number, number, number, 2 | 1 | 0],
 };
 
 class LineBounds extends Bounds {
