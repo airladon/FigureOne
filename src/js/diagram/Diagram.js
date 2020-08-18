@@ -488,13 +488,13 @@ class Diagram {
         // element.click();
         return;
       }
-      if (direction === 'next') {
+      if (direction === 'next') { // $FlowFixMe
         element.clickNext();
       }
-      if (direction === 'prev') {
+      if (direction === 'prev') { // $FlowFixMe
         element.clickPrev();
       }
-      if (direction === 'refresh') {
+      if (direction === 'refresh') { // $FlowFixMe
         element.clickRefresh();
       }
     };

@@ -1506,7 +1506,8 @@ class Line {
     } else {
       defaultIntercept = new Point(0, 0);
     }
-    // const defaultIntercept = yIntercept == null ? new Point(xIntercept == null ? 0 : xIntercept, 0) : new Point(0, yIntercept);
+    // const defaultIntercept = yIntercept == null ? new Point(
+    // xIntercept == null ? 0 : xIntercept, 0) : new Point(0, yIntercept);
 
     if (l1.isEqualTo(l2, precision)) {
       let i;
@@ -2705,7 +2706,7 @@ class Transform {
   timeToZeroV(
     velocity: Transform,
     deceleration: TypeTransformValue,
-    bounds: TypeTransformBounds | TypeTransformationBoundsDefinition,
+    bounds: TypeTransformBounds | TypeTransformBoundsDefinition,
     bounceLoss: TypeTransformValue,
     zeroVelocityThreshold: TypeTransformValue,
     precision: number = 8,
@@ -4023,7 +4024,7 @@ class LineBounds extends Bounds {
     if (d1 < d2 && angleDelta === 0) {
       i = p1;
       d = d1;
-    } else if (d2 < d1 && angleDelta !== 0 ) {
+    } else if (d2 < d1 && angleDelta !== 0) {
       i = p2;
       d = d2;
     } else {
@@ -4036,7 +4037,10 @@ class LineBounds extends Bounds {
     if (typeof velocity === 'number') {
       return velocity;
     }
-    const v = getPoint(velocity);
+    if (this.boundary == null) {
+      return velocity;
+    }
+    const v = getPoint(velocity); // $FlowFixMe
     const unitVector = new Vector(this.boundary).unit();
     let projection = unitVector.dotProduct(new Vector([0, 0], v));
     let { ang } = this.boundary;
@@ -4068,19 +4072,19 @@ function getBounds(
   if (bounds instanceof Bounds) {
     return bounds;
   }
-  if (bounds.type != null) {
+  if (bounds.type != null) {  // $FlowFixMe
     return getBounds(bounds.bounds, bounds.type);
   }
-  if (type === 'rect') {
+  if (type === 'rect') {  // $FlowFixMe
     return new RectBounds(bounds);
   }
-  if (type === 'range') {
+  if (type === 'range') {  // $FlowFixMe
     return new RangeBounds(bounds);
   }
-  if (type === 'line') {
+  if (type === 'line') {  // $FlowFixMe
     return new LineBounds(bounds);
   }
-  if (type === 'transform') {
+  if (type === 'transform') {  // $FlowFixMe
     return new TransformBounds(transform, bounds);
   }
   if (bounds.min !== undefined || bounds.max !== undefined) {
@@ -4118,7 +4122,7 @@ function getBounds(
     return getBounds(bounds, 'transform', transform);
   }
 
-  if (bounds.f1Type != undefined && bounds.state != null) {
+  if (bounds.f1Type !== undefined && bounds.state != null) {
     const { f1Type, state } = bounds;
     if (f1Type != null
       && f1Type === 'rangeBounds'
@@ -4170,7 +4174,7 @@ function getBounds(
       const boundary = [];
       boundsArray.forEach((b) => {
         if (b == null) {
-          boundary.push(null)
+          boundary.push(null);
         } else {
           boundary.push(getBounds(b));
         }
@@ -4238,7 +4242,10 @@ function transformValueToArray(
 
 // type TypeBoundsDefinition = null | ;
 
-type TypeTranslationBoundsDefinition = Bounds | TypeRectBoundsDefinition | TypeLineBoundsDefinition | TypeRangeBoundsDefinition;
+type TypeTranslationBoundsDefinition = Bounds
+                                       | TypeRectBoundsDefinition
+                                       | TypeLineBoundsDefinition
+                                       | TypeRangeBoundsDefinition;
 type TypeRotationBoundsDefinition = Bounds | TypeRangeBoundsDefinition;
 type TypeScaleBoundsDefinition = Bounds | TypeRangeBoundsDefinition | TypeRectBoundsDefinition;
 
@@ -4275,7 +4282,7 @@ class TransformBounds extends Bounds {
         order.push('r');
       }
     }
-    super([], precision);
+    super([], 'inside', precision);
     this.order = order;
     this.createBounds(bounds);
   }
@@ -4486,19 +4493,20 @@ function deceleratePoint(
   duration: number,
   position: Point,
 } {
-  // console.log(positionIn._dup(), velocityIn._dup(), boundsIn._dup(), deceleration, deltaTimeIn, bounceLossIn, zeroVelocityThreshold, precision);
   let bounds;
   if (boundsIn instanceof RangeBounds) {
     bounds = new RectBounds({
-      left: boundsIn.min, right: boundsIn.max,
-      bottom: boundsIn.min, top: boundsIn.max,
+      left: boundsIn.boundary.min,
+      right: boundsIn.boundary.max,
+      bottom: boundsIn.boundary.min,
+      top: boundsIn.boundary.max,
     });
   } else {
     bounds = boundsIn;
   }
   // clip velocity to the dimension of interest
-  let velocity = velocityIn;
-  if (bounds != null && bounds.clipVelocity != null) {
+  let velocity = velocityIn;    // $FlowFixMe
+  if (bounds != null && bounds.clipVelocity != null) {  // $FlowFixMe
     velocity = bounds.clipVelocity(velocityIn);
   }
   // const velocity = velocityIn;
@@ -4582,7 +4590,7 @@ function deceleratePoint(
   // is larger than the distance travelled in deltaTime, then there is likely a
   // rounding error...
   if (result.distance != null && result.distance > distanceTravelled) {
-    throw 'Error in calculating intersect';
+    throw new Error('Error in calculating intersect');
   }
 
   let intersectPoint;
@@ -4665,8 +4673,8 @@ function decelerateValue(
     // if (min == null) {
     // }
     bounds = new LineBounds({
-      p1: [boundsIn.boundary.min, 0],
-      p2: [boundsIn.boundary.max, 0],
+      p1: [boundsIn.boundary.min != null ? boundsIn.boundary.min : 0, 0],
+      p2: [boundsIn.boundary.max != null ? boundsIn.boundary.max : 0, 0],
     });
   }
   const result = deceleratePoint(
@@ -4701,10 +4709,10 @@ function decelerateIndependantPoint(
   let yBounds = null;
   if (boundsIn != null) {
     xBounds = new RangeBounds({
-      min: boundsIn.boundary.left, max: boundsIn.boundary.right
+      min: boundsIn.boundary.left, max: boundsIn.boundary.right,
     });
     yBounds = new RangeBounds({
-      min: boundsIn.boundary.bottom, max: boundsIn.boundary.top
+      min: boundsIn.boundary.bottom, max: boundsIn.boundary.top,
     });
   }
 
@@ -4731,12 +4739,12 @@ export type TypeTransformationValue = {
   scale?: number;
 }
 
-type TypeTransformationBoundsDefinition = {
-  rotation?: RangeBounds | TypeParsablePoint;
-  position?: RectBounds | TypeParsableRect;
-  translation?: RectBounds | TypeParsableRect;
-  scale?: RectBounds | TypeParsablePoint;
-}
+// type TypeTransformationBoundsDefinition = {
+//   rotation?: RangeBounds | TypeParsablePoint;
+//   position?: RectBounds | TypeParsableRect;
+//   translation?: RectBounds | TypeParsableRect;
+//   scale?: RectBounds | TypeParsablePoint;
+// }
 
 type TypeTransformDeceleration = Array<number>;
 type TypeTransformBounds = Array<Bounds | null>;
@@ -4744,41 +4752,41 @@ type TypeTransformZeroThreshold = Array<number>;
 type TypeTransformBounce = Array<number>;
 
 
-function getTransformBoundsLimit(
-  boundsDefinition: TypeTransformLinkBoundsDefinition | TypeTransformBounds,
-  transform: Transform,
-): TypeTransformBounds {
-  if (Array.isArray(boundsDefinition)) {
-    return boundsDefinition;
-  }
-  const order = [];
-  for (let i = 0; i < transform.order.length; i += 1) {
-    const transformation = transform.order[i];
-    if (transformation instanceof Translation) {
-      let position = null;
-      if (boundsDefinition.position != null) {
-        ({ position } = boundsDefinition);
-      }
-      if (boundsDefinition.translation != null) {
-        position = boundsDefinition.translation;
-      }
-      order.push(position);
-    } else if (transformation instanceof Scale) {
-      let scale = null;
-      if (boundsDefinition.scale != null) {
-        ({ scale } = boundsDefinition);
-      }
-      order.push(scale);
-    } else if (transformation instanceof Rotation) {
-      let rotation = null;
-      if (boundsDefinition.rotation != null) {
-        ({ rotation } = boundsDefinition);
-      }
-      order.push(rotation);
-    }
-  }
-  return order;
-}
+// function getTransformBoundsLimit(
+//   boundsDefinition: TypeTransformLinkBoundsDefinition | TypeTransformBounds,
+//   transform: Transform,
+// ): TypeTransformBounds {
+//   if (Array.isArray(boundsDefinition)) {
+//     return boundsDefinition;
+//   }
+//   const order = [];
+//   for (let i = 0; i < transform.order.length; i += 1) {
+//     const transformation = transform.order[i];
+//     if (transformation instanceof Translation) {
+//       let position = null;
+//       if (boundsDefinition.position != null) {
+//         ({ position } = boundsDefinition);
+//       }
+//       if (boundsDefinition.translation != null) {
+//         position = boundsDefinition.translation;
+//       }
+//       order.push(position);
+//     } else if (transformation instanceof Scale) {
+//       let scale = null;
+//       if (boundsDefinition.scale != null) {
+//         ({ scale } = boundsDefinition);
+//       }
+//       order.push(scale);
+//     } else if (transformation instanceof Rotation) {
+//       let rotation = null;
+//       if (boundsDefinition.rotation != null) {
+//         ({ rotation } = boundsDefinition);
+//       }
+//       order.push(rotation);
+//     }
+//   }
+//   return order;
+// }
 
 function decelerateTransform(
   transform: Transform,
@@ -4806,7 +4814,7 @@ function decelerateTransform(
     let newTransformation;
     let newVTransformation;
     if (transformation instanceof Translation) {
-      result = deceleratePoint(
+      result = deceleratePoint( // $FlowFixMe
         transformation, velocity.order[i], deceleration[i], deltaTime,
         bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
         precision,
@@ -4814,16 +4822,16 @@ function decelerateTransform(
       newTransformation = new Translation(result.position.x, result.position.y);
       newVTransformation = new Translation(result.velocity.x, result.velocity.y);
     } else if (transformation instanceof Scale) {
-      result = decelerateIndependantPoint(
-        transformation, velocity.order[i], deceleration[i], deltaTime,
+      result = decelerateIndependantPoint( // $FlowFixMe
+        transformation, velocity.order[i], deceleration[i], deltaTime, // $FlowFixMe
         bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
         precision,
       );
       newTransformation = new Scale(result.point.x, result.point.y);
-      newVTransformation = new Scale(result.velocity.x, result.velocity.y)
+      newVTransformation = new Scale(result.velocity.x, result.velocity.y);
     } else {
-      result = decelerateValue(
-        transformation.r, velocity.order[i].r, deceleration[i], deltaTime,
+      result = decelerateValue( // $FlowFixMe
+        transformation.r, velocity.order[i].r, deceleration[i], deltaTime,   // $FlowFixMe
         bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
         precision,
       );
