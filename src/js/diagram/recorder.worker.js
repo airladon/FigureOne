@@ -1,4 +1,3 @@
-// @flow
 import {
   ObjectTracker,
 } from '../tools/tools';
@@ -8,7 +7,8 @@ import {
 let cache = new ObjectTracker();
 
 // onmessage = (event: MessageEvent) => {
-addEventListener("message", (event) => {
+// eslint-disable-next-line no-restricted-globals
+addEventListener('message', (event) => {
   const { message, payload } = event.data;
   if (message === 'reset') {
     // resetCache(payload.baseReference, payload.references)
