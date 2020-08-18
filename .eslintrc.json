@@ -11,9 +11,9 @@
           "before",
           {
             "overrides": {
-              "=": "off",
-              "!==": "off",
-              "===": "off"
+              "=": "ignore",
+              "!==": "ignore",
+              "===": "ignore"
             }
           }
         ],
