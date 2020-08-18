@@ -1,5 +1,5 @@
 import * as tools from './tools';
-import { Transform } from './g2';
+// import { Transform } from './g2';
 
 describe('Test Classify method', () => {
   // CLassify method tests
