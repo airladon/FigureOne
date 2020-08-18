@@ -544,6 +544,7 @@ function compressObject(
 
   if (Array.isArray(obj)) {
     for (let i = 0; i < obj.length; i += 1) {
+      // eslint-disable-next-line no-param-reassign
       obj[i] = compressObject(obj[i], map, keys, strValues, precision, uncompress);
     }
     return obj;
@@ -554,9 +555,13 @@ function compressObject(
     const obj2 = {};
     for (let i = 0; i < objKeys.length; i += 1) {
       const k = objKeys[i];
+      // eslint-disable-next-line no-param-reassign
       obj[k] = compressObject(obj[k], map, keys, strValues, precision, uncompress);
       if (keys && uncompress) {
-        obj2[map.get(k)] = obj[k];
+        const value = map.get(k);
+        if (value != null) {
+          obj2[value] = obj[k];
+        }
       } else if (keys) {
         obj2[map.add(k)] = obj[k];
       } else {
@@ -705,10 +710,11 @@ function updateObjFromPath(
   const fullP = remainingPath[0];
   if (fullP.length === 0) {
     return;
-  } 
+  }
   const arrayStringIndeces = fullP.match(/\[[^\]]*\]/g);
   const p = fullP.replace(/\[.*/, '');
   if (remainingPath.length === 1 && remove && !arrayStringIndeces) {
+    // eslint-disable-next-line no-param-reassign
     delete obj[p];
     return;
   }
@@ -717,7 +723,7 @@ function updateObjFromPath(
     // console.log(arrayIndeces)
     // return;
     if (obj[p] == null || !Array.isArray(obj[p])) {
-      obj[p] = [];
+      obj[p] = [];  // eslint-disable-line no-param-reassign
     }
     // console.log(obj)
     // return
@@ -758,11 +764,11 @@ function updateObjFromPath(
   //   obj[p] = undefined;
   // }
   if (remainingPath.length === 1) {
-    obj[p] = value;
+    obj[p] = value;  // eslint-disable-line no-param-reassign
     return;
   }
   if (obj[p] == null) {
-    obj[p] = {};
+    obj[p] = {};  // eslint-disable-line no-param-reassign
   }
   updateObjFromPath(remainingPath.slice(1), obj[p], value, remove);
 }

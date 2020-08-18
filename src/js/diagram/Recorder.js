@@ -7,8 +7,8 @@ import {
   ObjectTracker, download, SubscriptionManager,
 } from '../tools/tools';
 import GlobalAnimation from './webgl/GlobalAnimation';
-import type { DiagramElement } from './Element';
-import Worker from './recorder.worker.js';
+// import type { DiagramElement } from './Element';
+import Worker from './recorder.worker';
 import type Diagram from './Diagram';
 import type { TypeScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 // import GlobalAnimation from './webgl/GlobalAnimation';
@@ -24,63 +24,6 @@ type TypeEvent = [
 type TypeEvents = Array<TypeEvent>;
 type TypeStateDiffs = Array<TypeStateDiff>;
 
-// freeze, complete, completeBeforeFreeze, pause
-// freeze: cancel all animations, pulses and movement where it is
-// complete: cancel all animations, pulses and movement at their complete position
-
-// diagram Stop
-// 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete'
-//   freeze: pulses, animation and movement stops where it is
-//   cancel: animation cancels per the animations settings (complete or freeze), movement stops where it is, pulse resets
-//   forceCancel: 
-//   complete: animation and movement stop at end, pulses reset
-//   animateToComplete: animations, pulsing and movement continue till finished
-//   dissolveToComplete: freeze, dissolveOut, dissolveIn in complete state
-
-// setState
-// 'instant' | 'animate' | 'dissolve'
-
-// TypeStopOptions:
-//   'freeze' | 'cancel' | 'complete' | 'animate' | 'dissolve' | {
-//     animation: '
-//   }
-// diagram.stop()
-// diagram.stop('freeze');
-// diagram.stop('cancel');
-// diagram.stop('complete');
-// diagram.stop('animate');
-// diagram.stop('dissolve');
-// diagram.stop({
-//   animation: 'freeze' | 'cancel' | 'complete' | 'animate' | 'dissolve'
-//   pulse: 'freeze' | 'cancel' | 'complete' | 'animate' | 'dissolve'
-//   movingFreely: 'freeze' | 'cancel' | 'complete' | 'animate' | 'dissolve'
-//   
-// })
-// diagram.stop('freeze');
-// diagram.stop({
-//   complete: 'freeze' | 'instant' | 'animate' | 'dissolve' | {
-//     animation: 'freeze' | 'instant' | 'animate' | 'dissolve',
-//     pulse: 'freeze' | 'instant' | 'animate' | 'dissolve',
-//   },
-//   message: string | number | boolean,
-// });
-// element.stop({
-//   complete: 'freeze' | 'instant' | 'animate' | 'dissolve'
-// })
-
-// pause | stop
-// onStop: freeze | instantComplete | animateComplete | dissolveComplete
-// freeze
-// complete: instant | animate | dissolve | animateWithMaxDuration
-// pause
-// export type TypeOnPause = 'freeze' | 'complete' | 'completeBeforePause';
-// export type TypePauseSettings = {
-//   default?: TypeOnPause;
-//   animation?: TypeOnPause;
-//   pulse?: TypeOnPause;
-//   movingFreely?: TypeOnPause;
-//   simplePause?: boolean;
-// } | TypeOnPause;
 
 export type TypePauseSettings = 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete';
 
@@ -280,6 +223,8 @@ class Recorder {
     play: TypePlaySettings,
   };
 
+  worker: ?(typeof Worker);
+
   static instance: Object;
 
   // All slides, events and states are relative to 0, where 0 is the start of a recording.
@@ -305,7 +250,7 @@ class Recorder {
     // default recording values
     this.precision = 4;
     this.stateTimeStep = 1;
-    
+
 
     // this.diagram = {
     //   animateNextFrame: () => {},
@@ -334,8 +279,8 @@ class Recorder {
     this.pauseState = null;
     this.settings = {
       pause: 'freeze',
-      resume: 'instant',
-    }
+      play: 'instant',
+    };
   }
 
   // ////////////////////////////////////

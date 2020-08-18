@@ -337,7 +337,7 @@ DiagramElementPrimitive {
         null,
         null,
       ],
-      "bounds": 8,
+      "bounds": "inside",
       "order": Array [
         "s",
         "r",
@@ -420,7 +420,7 @@ DiagramElementPrimitive {
     "reference": "__base",
     "settings": Object {
       "pause": "freeze",
-      "resume": "instant",
+      "play": "instant",
     },
     "state": "idle",
     "stateIndex": -1,
