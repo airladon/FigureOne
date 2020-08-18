@@ -47,11 +47,11 @@ describe('Animate To State', () => {
     preparingToPauseCallback = jest.fn();
     playbackStoppedCallback = jest.fn();
     const subs = recorder.subscriptions;
-    subs.subscribe('playbackStarted', playbackStartedCallback);
-    subs.subscribe('playbackStopped', playbackStoppedCallback);
-    // subs.subscribe('playbackStopped', () => console.log(13));
-    subs.subscribe('preparingToPause', preparingToPauseCallback);
-    subs.subscribe('preparingToPlay', preparingToPlayCallback);
+    subs.add('playbackStarted', playbackStartedCallback);
+    subs.add('playbackStopped', playbackStoppedCallback);
+    // subs.add('playbackStopped', () => console.log(13));
+    subs.add('preparingToPause', preparingToPauseCallback);
+    subs.add('preparingToPlay', preparingToPlayCallback);
     recorder.stateTimeStep = 1;
   });
   describe('Animation', () => {

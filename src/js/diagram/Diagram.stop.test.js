@@ -31,8 +31,8 @@ describe('Diagram Stop', () => {
     b = diagram.elements._b;
     stoppedCallback = jest.fn();
     preparingToStopCallback = jest.fn();
-    diagram.subscriptions.subscribe('stopped', stoppedCallback);
-    diagram.subscriptions.subscribe('preparingToStop', preparingToStopCallback);
+    diagram.subscriptions.add('stopped', stoppedCallback);
+    diagram.subscriptions.add('preparingToStop', preparingToStopCallback);
     diagram.initialize();
     diagram.mock.timeStep(0);
   });

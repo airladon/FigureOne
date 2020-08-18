@@ -31,10 +31,3 @@ diagram.addElements([
 
 diagram.initialize();
 console.log(diagram.elements._dup());
-// const line = diagram.elements._line;
-// line.setMovable(true, 'rotation');
-// line.subscriptions.subscribe('setTransform', () => {
-//   const r = line.getRotation();
-//   diagram.elements._angle.setAngle({ angle: r });
-// });
-

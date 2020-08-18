@@ -1207,7 +1207,7 @@ class Recorder {
     if (this.diagram.state.preparingToSetState) {
       this.state = 'preparingToPlay';
       this.subscriptions.trigger('preparingToPlay');
-      this.diagram.subscriptions.subscribe('stateSet', finished, 1);
+      this.diagram.subscriptions.add('stateSet', finished, 1);
       // console.log(this.diagram.subscriptions.subscriptions.stateSet)
     } else {
       finished();
@@ -1471,19 +1471,19 @@ class Recorder {
       this.isAudioPlaying = false;
     }
 
-    this.diagram.subscriptions.subscribe('stopped', pause, 1);
+    this.diagram.subscriptions.add('stopped', pause, 1);
     this.diagram.stop(how);
     if (this.diagram.state.preparingToStop) {
       this.subscriptions.trigger('preparingToPause');
       this.state = 'preparingToPause';
       // console.log('recorder prep to pause')
-      // this.diagram.subscriptions.subscribe('animationsFinished', pause, 1);
+      // this.diagram.subscriptions.add('animationsFinished', pause, 1);
     }
     // if (this.diagram.isAnimating()) {
     //   this.subscriptions.trigger('preparingToPause');
     //   this.state = 'preparingToPause';
     //   // console.log('recorder prep to pause')
-    //   this.diagram.subscriptions.subscribe('animationsFinished', pause, 1);
+    //   this.diagram.subscriptions.add('animationsFinished', pause, 1);
     // } else {
     //   pause();
     // }

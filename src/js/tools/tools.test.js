@@ -1148,8 +1148,8 @@ describe('ObjectTracker', () => {
         const sub = new tools.Subscriber();
         const callback1 = jest.fn();
         const callback2 = jest.fn();
-        sub.subscribe(callback1);
-        sub.subscribe(callback2);
+        sub.add(callback1);
+        sub.add(callback2);
         expect(sub.order).toEqual(['0', '1']);
         expect(callback1.mock.calls.length).toBe(0);
         expect(callback2.mock.calls.length).toBe(0);
@@ -1161,15 +1161,15 @@ describe('ObjectTracker', () => {
         const sub = new tools.Subscriber();
         const callback1 = jest.fn();
         const callback2 = jest.fn();
-        const id1 = sub.subscribe(callback1);
-        sub.subscribe(callback2);
+        const id1 = sub.add(callback1);
+        sub.add(callback2);
         expect(sub.order).toEqual(['0', '1']);
         expect(callback1.mock.calls.length).toBe(0);
         expect(callback2.mock.calls.length).toBe(0);
         sub.trigger();
         expect(callback1.mock.calls.length).toBe(1);
         expect(callback2.mock.calls.length).toBe(1);
-        sub.unsubscribe(id1);
+        sub.remove(id1);
         expect(sub.order).toEqual(['1']);
         sub.trigger();
         expect(callback1.mock.calls.length).toBe(1);
@@ -1179,8 +1179,8 @@ describe('ObjectTracker', () => {
         const sub = new tools.Subscriber();
         const callback1 = jest.fn();
         const callback2 = jest.fn();
-        sub.subscribe(callback1);
-        sub.subscribe(callback2);
+        sub.add(callback1);
+        sub.add(callback2);
         sub.trigger(24);
         expect(callback1.mock.calls.length).toBe(1);
         expect(callback2.mock.calls.length).toBe(1);
@@ -1190,7 +1190,7 @@ describe('ObjectTracker', () => {
       test('subscribe once', () => {
         const sub = new tools.Subscriber();
         const callback = jest.fn();
-        sub.subscribe(callback, 1);
+        sub.add(callback, 1);
         expect(callback.mock.calls.length).toBe(0);
         sub.trigger(24);
         expect(callback.mock.calls.length).toBe(1);
@@ -1203,7 +1203,7 @@ describe('ObjectTracker', () => {
       test('subscribe twice', () => {
         const sub = new tools.Subscriber();
         const callback = jest.fn();
-        sub.subscribe(callback, 2);
+        sub.add(callback, 2);
         expect(callback.mock.calls.length).toBe(0);
         sub.trigger(41);
         sub.trigger(42);
@@ -1219,8 +1219,8 @@ describe('ObjectTracker', () => {
         const subs = new tools.SubscriptionManager();
         const mouseCallback = jest.fn();
         const touchCallback = jest.fn();
-        subs.subscribe('mouseClick', mouseCallback);
-        subs.subscribe('touchClick', touchCallback);
+        subs.add('mouseClick', mouseCallback);
+        subs.add('touchClick', touchCallback);
         expect(mouseCallback.mock.calls.length).toBe(0);
         expect(touchCallback.mock.calls.length).toBe(0);
         subs.trigger('mouseClick', 21);
@@ -1236,10 +1236,10 @@ describe('ObjectTracker', () => {
         const subs = new tools.SubscriptionManager();
         const mouseCallback = jest.fn();
         const touchCallback = jest.fn();
-        const id = subs.subscribe('mouseClick', mouseCallback);
-        subs.subscribe('touchClick', touchCallback);
+        const id = subs.add('mouseClick', mouseCallback);
+        subs.add('touchClick', touchCallback);
         expect(Object.keys(subs.subscriptions)).toEqual(['mouseClick', 'touchClick']);
-        subs.unsubscribe('mouseClick', id);
+        subs.remove('mouseClick', id);
         expect(Object.keys(subs.subscriptions)).toEqual(['touchClick']);
       });
     });

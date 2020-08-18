@@ -2224,17 +2224,17 @@ class DiagramElement {
       if (this.animations.isAnimating()) {
         this.state.preparingToStop = true;
         toComplete += 1;
-        this.animations.subscriptions.subscribe('finished', checkStop, 1);
+        this.animations.subscriptions.add('finished', checkStop, 1);
       }
       if (this.state.isPulsing) {
         this.state.preparingToStop = true;
         toComplete += 1;
-        this.subscriptions.subscribe('stopPulsing', checkStop, 1);
+        this.subscriptions.add('stopPulsing', checkStop, 1);
       }
       if (this.state.isMovingFreely) {
         this.state.preparingToStop = true;
         toComplete += 1;
-        this.subscriptions.subscribe('stopMovingFreely', checkStop, 1);
+        this.subscriptions.add('stopMovingFreely', checkStop, 1);
       }
     }
     if (this.state.preparingToStop) {
