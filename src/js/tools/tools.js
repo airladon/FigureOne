@@ -1031,7 +1031,7 @@ class Subscriber {
   fnMap: FunctionMap;
   subscribers: {
     [id: string]: {
-      callback: () => void;
+      callback: string | () => void;
       num: number;
     }
   };
@@ -1047,7 +1047,7 @@ class Subscriber {
     this.order = [];
   }
 
-  subscribe(callback: () => void, numberOfSubscriptions: number = -1) {
+  subscribe(callback: string | () => void, numberOfSubscriptions: number = -1) {
     this.subscribers[`${this.nextId}`] = {
       callback,
       num: numberOfSubscriptions,
@@ -1121,7 +1121,7 @@ class SubscriptionManager {
 
   subscribe(
     subscriptionName: string,
-    callback: () => void,
+    callback: string | () => void,
     numberOfSubscriptions: number = -1,
   ) {
     if (this.subscriptions[subscriptionName] == null) {

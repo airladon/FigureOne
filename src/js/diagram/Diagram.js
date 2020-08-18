@@ -24,6 +24,7 @@ import DiagramEquation from './DiagramEquation/DiagramEquation';
 import DiagramObjects from './DiagramObjects/DiagramObjects';
 import addElements from './DiagramAddElements/addElements';
 import type { TypeAddElementObject } from './DiagramAddElements/addElements';
+import type { TypeScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 /**
   * Diagram Input Options
   * @property {string} [htmlId] HTML div tag id - default: 'figureOneId'
@@ -312,7 +313,7 @@ class Diagram {
       this.gestureCanvas = this.htmlCanvas;
     }
 
-    if (this instanceof Diagram) {
+    if (this instanceof Diagram) {  // $FlowFixMe
       this.gesture = new Gesture(this);
     }
 
@@ -558,6 +559,7 @@ class Diagram {
     } | 'dissolve' | 'animate' | 'instant' = 'instant',
   ) {
     // console.log(stateIn)
+    // $FlowFixMe
     const state = parseState(stateIn, this);
     let finishedFlag = false;
     this.state.preparingToSetState = false;
@@ -594,7 +596,7 @@ class Diagram {
       // minDuration: 0,
       duration: 0,
     };
-    if (optionsIn.velocity != null) {
+    if (optionsIn.velocity != null) { // $FlowFixMe
       options.velocity = {
         position: 2,
         rotation: Math.PI * 2 / 2,
@@ -642,7 +644,7 @@ class Diagram {
     }
 
     if (
-      options.how === 'instant'
+      options.how === 'instant' // $FlowFixMe
       || this.elements.isStateSame(state.elements, true, ['cursor'])
     ) {
       finished();
@@ -807,7 +809,9 @@ class Diagram {
       done: null,
       startTime: null,
     }, optionsIn);
-    const { state, duration, done, startTime } = options;
+    const {
+      state, duration, done, startTime,
+    } = options;
     const dissolveDuration = this.elements.dissolveInToState(state.elements, duration, startTime);
 
     // force update of transforms to update any dependent transforms
@@ -998,11 +1002,13 @@ class Diagram {
 
   initialize() {
     const elements = this.elements.getAllElements();
+    /* eslint-disable no-param-reassign */
     elements.forEach((element) => {
       element.diagram = this;
       element.recorder = this.recorder;
       element.animationFinishedCallback = this.animationFinished.bind(this, element);
     });
+    /* eslint-enable no-param-reassign */
     this.setFirstTransform();
     this.animateNextFrame();
   }
@@ -1037,14 +1043,10 @@ class Diagram {
     this.animationFinishedCallback = callback;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  animationFinished(element: DiagramElementPrimitive | DiagramElementCollection) {
-    // console.log('diagram finished', this.isAnimating(), element.name)
+  animationFinished() {
     if (this.isAnimating()) {
-      // console.log('animation finished but still animating')
       return;
     }
-    // console.log('animation finished')
     this.fnMap.exec(this.animationFinishedCallback);
     this.subscriptions.trigger('animationsFinished');
   }
@@ -1081,9 +1083,6 @@ class Diagram {
       this.clearContext();
       this.draw2DLow.ctx.clearRect(0, 0, this.textCanvasLow.width, this.textCanvasLow.height);
       this.draw(-1);
-      // this.animateNextFrame(true, 'clear frame');
-      // this.draw(-1);
-      // this.clickearContext();
     }
   }
 
@@ -1290,7 +1289,7 @@ class Diagram {
   isCursorShown() {
     const cursor = this.getElement(this.cursorElementName);
     if (cursor == null) {
-      return;
+      return false;
     }
     return cursor.isShown;
   }
