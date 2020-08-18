@@ -17,6 +17,10 @@
             }
           }
         ],
+        "jest/no-standalone-expect": "off",
+        "jest/expect-expect": "off",
+        "max-classes-per-file": "off",
+        "arrow-parens": ["error", "as-needed", { "requireForBlockBody": true }],
         "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1 }],
         "lines-between-class-members": [
           "error",

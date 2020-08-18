@@ -1,5 +1,5 @@
 import {
-  Point, Rect, Transform, getPoint, Line,
+  Point, Transform, getPoint, Line,
   RectBounds, LineBounds, RangeBounds, TransformBounds,
   clipAngle, getBounds,
 } from './g2';
