@@ -304,7 +304,10 @@ describe('Animate To State', () => {
           recorder.resumePlayback();
         });
         test('Animate to resume (default velocity)', () => {
-          recorder.settings.play = 'animate';
+          recorder.settings.play = {
+            how: 'animate',
+            velocity: {},
+          };
           recorder.resumePlayback();
           expect(states()).toEqual(['preparingToPlay', false, false, true, 1, 2.5]);
           expect(callbacks()).toEqual([1, 1, 0, 1]);
@@ -315,7 +318,7 @@ describe('Animate To State', () => {
         test('Animate to resume with velocity and duration', () => {
           // duration should trump
           recorder.settings.play = {
-            action: 'animate',
+            how: 'animate',
             duration: 2,
             velocity: {
               position: 2,
@@ -329,7 +332,7 @@ describe('Animate To State', () => {
         });
         test('Animate to resume with custom velocity', () => {
           recorder.settings.play = {
-            action: 'animate',
+            how: 'animate',
             velocity: { position: 1 },
           };
           recorder.resumePlayback();
@@ -340,7 +343,8 @@ describe('Animate To State', () => {
         });
         test('Animate to resume with velocity and maxDuration', () => {
           recorder.settings.play = {
-            action: 'animate',
+            how: 'animate',
+            velocity: {},
             maxDuration: 0.5, // default velocity of position: 2 will result in time of 1
           };
           recorder.resumePlayback();
@@ -351,8 +355,8 @@ describe('Animate To State', () => {
         });
         test('Animate to resume with velocity and minDuration', () => {
           recorder.settings.play = {
-            action: 'animate',
-            minDuration: 2, // default velocity of position: 2 will result in time of 1
+            how: 'animate',
+            duration: 2, // default velocity of position: 2 will result in time of 1
           };
           recorder.resumePlayback();
           expect(states()).toEqual(['preparingToPlay', false, false, true, 2, 2.5]);
@@ -362,7 +366,7 @@ describe('Animate To State', () => {
         });
         test('Animate to resume with velocity and zeroThreshold', () => {
           recorder.settings.play = {
-            action: 'animate',
+            how: 'animate',
             zeroDurationThreshold: 1, // default velocity of position: 2 will result in time of 1
           };
           recorder.resumePlayback();
@@ -370,7 +374,7 @@ describe('Animate To State', () => {
         test('Animate to resume with velocity and allDurationsSame', () => {
           a.setColor([0.9, 0, 0, 1]);
           recorder.settings.play = {
-            action: 'animate',
+            how: 'animate',
             allDurationsSame: true, // default velocity of position: 2 will result in time of 1
             velocity: {
               position: 2,
@@ -388,7 +392,7 @@ describe('Animate To State', () => {
         test('Animate to resume with velocity and NOT allDurationsSame', () => {
           a.setColor([0.9, 0, 0, 1]);
           recorder.settings.play = {
-            action: 'animate',
+            how: 'animate',
             allDurationsSame: false, // default velocity of position: 2 will result in time of 1
             velocity: {
               position: 2,
@@ -407,7 +411,7 @@ describe('Animate To State', () => {
         });
         test('Animate to resume with duration', () => {
           recorder.settings.play = {
-            action: 'animate',
+            how: 'animate',
             duration: 2,
           };
           recorder.resumePlayback();
@@ -460,7 +464,7 @@ describe('Animate To State', () => {
         });
         test('Dissolve to resume with duration', () => {
           recorder.settings.play = {
-            action: 'dissolve',
+            how: 'dissolve',
             duration: {
               dissolveIn: 1,
               dissolveOut: 1,
@@ -533,7 +537,10 @@ describe('Animate To State', () => {
           expect(states()).toEqual(['idle', false, false, false, 0, 1]);
         });
         test('Animate to resume', () => {
-          recorder.settings.play = 'animate';
+          recorder.settings.play = {
+            how: 'animate',
+            velocity: {},
+          };
           recorder.resumePlayback();
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.25, 1]);
           diagram.mock.timeStep(0.125);
@@ -785,12 +792,52 @@ describe('Animate To State', () => {
           diagram.mock.timeStep(0); // Ok
         });
         test('Animate to resume', () => {
-          recorder.settings.play = 'animate';
+          recorder.settings.play = {
+            how: 'animate',
+            velocity: {},
+          };
           recorder.resumePlayback();
           expect(states()).toEqual(['preparingToPlay', false, false, true, 2, 4]);
           diagram.mock.timeStep(1);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 1, 3]);
           diagram.mock.timeStep(1);
+          expect(states()).toEqual(['playing', false, false, true, 1, 2]);
+        });
+        test('Animate to resume with Duration', () => {
+          recorder.settings.play = {
+            how: 'animate',
+            duration: 3,
+          };
+          recorder.resumePlayback();
+          expect(states()).toEqual(['preparingToPlay', false, false, true, 3, 4]);
+          diagram.mock.timeStep(1.5);
+          expect(states()).toEqual(['preparingToPlay', false, false, true, 1.5, 3]);
+          diagram.mock.timeStep(1.5);
+          expect(states()).toEqual(['playing', false, false, true, 1, 2]);
+        });
+        test('Animate to resume with Velocity', () => {
+          recorder.settings.play = {
+            how: 'animate',
+            velocity: { scale: 0.5 },
+          };
+          recorder.resumePlayback();
+          expect(states()).toEqual(['preparingToPlay', false, false, true, 4, 4]);
+          diagram.mock.timeStep(2);
+          expect(states()).toEqual(['preparingToPlay', false, false, true, 2, 3]);
+          diagram.mock.timeStep(2);
+          expect(states()).toEqual(['playing', false, false, true, 1, 2]);
+        });
+        test('Animate to resume with Velocity and Duration', () => {
+          recorder.settings.play = {
+            how: 'animate',
+            duration: 1,
+            velocity: { scale: 0.5 },
+          };
+          recorder.resumePlayback();
+          expect(states()).toEqual(['preparingToPlay', false, false, true, 4, 4]);
+          diagram.mock.timeStep(2);
+          expect(states()).toEqual(['preparingToPlay', false, false, true, 2, 3]);
+          diagram.mock.timeStep(2);
           expect(states()).toEqual(['playing', false, false, true, 1, 2]);
         });
         test('Dissolve to resume', () => {
@@ -855,7 +902,10 @@ describe('Animate To State', () => {
           recorder.resumePlayback();
         });
         test('Animate to resume', () => {
-          recorder.settings.play = 'animate';
+          recorder.settings.play = {
+            how: 'animate',
+            velocity: {},
+          };
           expect(a.getPosition().round(3).x).toBe(4);
           recorder.resumePlayback();
           expect(a.getPosition().round(3).x).toBe(4);
@@ -948,7 +998,10 @@ describe('Animate To State', () => {
           diagram.mock.timeStep(0);  // Ok
         });
         test('Animate to resume with different durations', () => {
-          recorder.settings.play = 'animate';
+          recorder.settings.play = {
+            how: 'animate',
+            velocity: {},
+          };
           a.setPosition(2, 2);
           recorder.resumePlayback();
           expect(states()).toEqual(['preparingToPlay', false, false, true, 2, 4]);
@@ -963,7 +1016,10 @@ describe('Animate To State', () => {
           expect(a.getPosition().round(3).x).toBe(0);
         });
         test('Animate to resume with same durations', () => {
-          recorder.settings.play = 'animate';
+          recorder.settings.play = {
+            how: 'animate',
+            velocity: {},
+          };
           recorder.resumePlayback();
           expect(states()).toEqual(['preparingToPlay', false, false, true, 2, 4]);
           expect(a.getPosition().round(3).x).toBe(4);
@@ -1058,7 +1114,10 @@ describe('Animate To State', () => {
           diagram.mock.timeStep(0);  // Ok
         });
         test('Animate to resume', () => {
-          recorder.settings.play = 'animate';
+          recorder.settings.play = {
+            how: 'animate',
+            velocity: {},
+          };
           expect(a.frozenPulseTransforms.map(t => t.s().round(3).x)).toEqual([]);
           recorder.resumePlayback();
           expect(a.frozenPulseTransforms.map(t => t.s().round(3).x)).toEqual([1]);
@@ -1306,7 +1365,10 @@ describe('Animate To State', () => {
           diagram.mock.timeStep(0);  // Ok
         });
         test('Animate to resume', () => {
-          recorder.settings.play = 'animate';
+          recorder.settings.play = {
+            how: 'animate',
+            velocity: {},
+          };
           recorder.resumePlayback();
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.1, [1.2, 1, 0.8]]);
           diagram.mock.timeStep(0.05);
@@ -1393,7 +1455,10 @@ describe('Animate To State', () => {
           diagram.mock.timeStep(0);  // Ok
         });
         test('Animate to resume', () => {
-          recorder.settings.play = 'animate';
+          recorder.settings.play = {
+            how: 'animate',
+            velocity: {},
+          };
           expect(a.pulseTransforms.map(t => t.s().round(3).x)).toEqual([]);
           expect(a.frozenPulseTransforms.map(t => t.s().round(3).x)).toEqual([]);
           recorder.resumePlayback();
@@ -1673,7 +1738,10 @@ describe('Animate To State', () => {
           expect(callbacks()).toEqual([0, 2, 0, 1]);
         });
         test('Animate to resume', () => {
-          recorder.settings.play = 'animate';
+          recorder.settings.play = {
+            how: 'animate',
+            velocity: {},
+          };
           recorder.resumePlayback();
           expect(states()).toEqual(['preparingToPlay', false, false, true, 1, 1.5]);
           diagram.mock.timeStep(0.5);
@@ -1764,7 +1832,10 @@ describe('Animate To State', () => {
           recorder.resumePlayback();
         });
         test('Animate to resume', () => {
-          recorder.settings.play = 'animate';
+          recorder.settings.play = {
+            how: 'animate',
+            velocity: {},
+          };
           recorder.resumePlayback();
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.25, 4]);
           diagram.mock.timeStep(0.125);
@@ -1848,7 +1919,10 @@ describe('Animate To State', () => {
       diagram.mock.timeStep(1);
       expect(a.drawTransforms[0].s().round(3).x).toBe(2);
       recorder.settings.pause = 'freeze';
-      recorder.settings.play = 'animate';
+      recorder.settings.play = {
+        how: 'animate',
+        velocity: {},
+      };
       recorder.pausePlayback();
       diagram.mock.timeStep(1);
       expect(a.drawTransforms[0].s().round(3).x).toBe(2);
@@ -2116,7 +2190,10 @@ describe('Animate To State', () => {
           diagram.mock.timeStep(0); // Ok
         });
         test('Animate to resume', () => {
-          recorder.settings.play = 'animate';
+          recorder.settings.play = {
+            how: 'animate',
+            velocity: {},
+          };
           recorder.resumePlayback();
           expect(states()).toEqual(['preparingToPlay', false, false, true, 2, 4]);
           diagram.mock.timeStep(1);
@@ -2186,7 +2263,10 @@ describe('Animate To State', () => {
           recorder.resumePlayback();
         });
         test('Animate to resume', () => {
-          recorder.settings.play = 'animate';
+          recorder.settings.play = {
+            how: 'animate',
+            velocity: {},
+          };
           expect(a.getPosition().round(3).x).toBe(4);
           recorder.resumePlayback();
           expect(a.getPosition().round(3).x).toBe(4);
@@ -2280,7 +2360,10 @@ describe('Animate To State', () => {
           diagram.mock.timeStep(0);  // Ok
         });
         test('Animate to resume with different durations', () => {
-          recorder.settings.play = 'animate';
+          recorder.settings.play = {
+            how: 'animate',
+            velocity: {},
+          };
           a.setPosition(2, 2);
           recorder.resumePlayback();
           expect(states()).toEqual(['preparingToPlay', false, false, true, 2, 4]);
@@ -2295,7 +2378,10 @@ describe('Animate To State', () => {
           expect(a.getPosition().round(3).x).toBe(0);
         });
         test('Animate to resume with same durations', () => {
-          recorder.settings.play = 'animate';
+          recorder.settings.play = {
+            how: 'animate',
+            velocity: {},
+          };
           recorder.resumePlayback();
           expect(states()).toEqual(['preparingToPlay', false, false, true, 2, 4]);
           expect(a.getPosition().round(3).x).toBe(4);

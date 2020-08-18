@@ -85,7 +85,7 @@ type TypeStateDiffs = Array<TypeStateDiff>;
 export type TypePauseSettings = 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete';
 
 export type TypePlaySettings = {
-  action: 'dissolve' | 'animate' | 'instant',
+  how: 'dissolve' | 'animate' | 'instant',
   duration?: number | {
     dissovlveOut: ?number,
     dissovlveIn: ?number,
@@ -93,7 +93,7 @@ export type TypePlaySettings = {
   },
   velocity?: TypeScenarioVelocity,
   maxDuration?: number,
-  minDuration?: number,
+  // minDuration?: number,
   zeroDurationThreshold?: boolean,
   allDurationsSame?: boolean,
 } | 'dissolve' | 'animate' | 'instant';
@@ -1486,7 +1486,7 @@ class Recorder {
 
   getPlaySettings() {
     let onResume = {
-      action: 'instant',
+      how: 'instant',
       maxDuration: 6,
       velocity: {
         position: 2,
@@ -1497,12 +1497,12 @@ class Recorder {
       },
       allDurationsSame: true,
       zeroDurationThreshold: 0.00001,
-      minDuration: 0,
-      duration: null,
+      // minDuration: 0,
+      duration: 0,
     }
     // console.log(resumeSettings)
     if (typeof this.settings.play === 'string') {
-      onResume.action = this.settings.play;
+      onResume.how = this.settings.play;
     } else {
       onResume = joinObjects({}, onResume, this.settings.play);
       // velocity trumps duration by default, but if only duration is defined by the
@@ -1511,13 +1511,13 @@ class Recorder {
       //   onResume.velocity = undefined;
       // }
     }
-    if (onResume.action === 'dissolve') {
+    if (onResume.how === 'dissolve') {
       const defaultDuration = {
         dissolveIn: 0.8,
         dissolveOut: 0.8,
         delay: 0.2,
       }
-      if (onResume.duration == null) {
+      if (onResume.duration === 0) {
         onResume.duration = defaultDuration;
       } else if (typeof onResume.duration === 'number') {
         onResume.duration = {
