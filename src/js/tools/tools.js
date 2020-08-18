@@ -1047,7 +1047,7 @@ class Subscriber {
     this.order = [];
   }
 
-  subscribe(callback: string | () => void, numberOfSubscriptions: number = -1) {
+  add(callback: string | () => void, numberOfSubscriptions: number = -1) {
     this.subscribers[`${this.nextId}`] = {
       callback,
       num: numberOfSubscriptions,
@@ -1088,10 +1088,10 @@ class Subscriber {
         this.fnMap.exec(callback, payload);
       }
     }
-    subscribersToRemove.forEach((id) => { this.unsubscribe(id); });
+    subscribersToRemove.forEach((id) => { this.remove(id); });
   }
 
-  unsubscribe(idIn: string | number) {
+  remove(idIn: string | number) {
     const id = `${idIn}`;
     if (this.subscribers[id] != null) {
       delete this.subscribers[id];
@@ -1119,7 +1119,7 @@ class SubscriptionManager {
     this.fnMap = fnMap;
   }
 
-  subscribe(
+  add(
     subscriptionName: string,
     callback: string | () => void,
     numberOfSubscriptions: number = -1,
@@ -1127,7 +1127,7 @@ class SubscriptionManager {
     if (this.subscriptions[subscriptionName] == null) {
       this.subscriptions[subscriptionName] = new Subscriber(this.fnMap);
     }
-    return this.subscriptions[subscriptionName].subscribe(callback, numberOfSubscriptions);
+    return this.subscriptions[subscriptionName].add(callback, numberOfSubscriptions);
   }
 
   trigger(subscriptionName: string, payload: any) {
@@ -1136,10 +1136,10 @@ class SubscriptionManager {
     }
   }
 
-  unsubscribe(subscriptionName: string, id: string | number) {
+  remove(subscriptionName: string, id: string | number) {
     if (this.subscriptions[subscriptionName] != null) {
       const subscription = this.subscriptions[subscriptionName];
-      subscription.unsubscribe(id);
+      subscription.remove(id);
       if (subscription.order.length === 0) {
         delete this.subscriptions[subscriptionName];
       }

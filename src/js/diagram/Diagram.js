@@ -700,7 +700,7 @@ class Diagram {
       if (duration === 0) {
         this.fnMap.exec(done);
       } else if (done != null) {
-        this.subscriptions.subscribe('animationsFinished', done, 1);
+        this.subscriptions.add('animationsFinished', done, 1);
       }
     }
   }
@@ -827,7 +827,7 @@ class Diagram {
       if (dissolveDuration === 0) {
         this.fnMap.exec(done);
       } else if (done != null) {
-        this.subscriptions.subscribe('animationsFinished', done, 1);
+        this.subscriptions.add('animationsFinished', done, 1);
       }
     }
   }
@@ -1691,7 +1691,7 @@ class Diagram {
       elements.forEach((element) => {
         if (element.state.preparingToStop) {
           preparingToStopCounter += 1;
-          element.subscriptions.subscribe('stopped', checkAllStopped, 1);
+          element.subscriptions.add('stopped', checkAllStopped, 1);
         }
       });
       if (preparingToStopCounter === 0) {
@@ -1711,7 +1711,7 @@ class Diagram {
     this.elements.stop('freeze');
     this.setState(completeState, 'dissolve');
     if (this.state.preparingToSetState) {
-      this.subscriptions.subscribe('stateSet', stopped, 1);
+      this.subscriptions.add('stateSet', stopped, 1);
       this.subscriptions.trigger('preparingToStop');
       this.state.preparingToStop = true;
     } else {
@@ -1807,7 +1807,7 @@ class Diagram {
   //   elements.forEach((element) => {
   //     if (element.state.pause === 'preparingToPause') {
   //       preparingToPauseCounter += 1;
-  //       element.subscriptions.subscribe('paused', checkAllPaused, 1);
+  //       element.subscriptions.add('paused', checkAllPaused, 1);
   //     }
   //   });
   //   this.pauseTime = this.globalAnimation.now() / 1000;
@@ -1850,7 +1850,7 @@ class Diagram {
   //   elements.forEach((element) => {
   //     if (element.state.pause === 'preparingToUnpause') {
   //       preparingToUnpauseCounter += 1;
-  //       element.subscriptions.subscribe('unpaused', checkAllUnpaused, 1)
+  //       element.subscriptions.add('unpaused', checkAllUnpaused, 1)
   //     }
   //   });
   //   if (preparingToUnpauseCounter === 0 && this.state.pause !== 'unpaused') {
