@@ -1,9 +1,9 @@
 // @flow
 
 import {
-  roundNum, decelerate, clipMag, clipValue, rand2D, round,
+  roundNum, clipMag, clipValue, rand2D, round,
 } from './math';
-import { joinObjects, duplicate } from './tools';
+import { joinObjects } from './tools';
 import * as m2 from './m2';
 // import { joinObjects } from './tools';
 
@@ -34,6 +34,119 @@ function clipAngle(
     }
   }
   return angle;
+}
+
+function getPrecision(
+  options?: { precision: number },
+  defaultPrecision: number = 8,
+) {
+  let precision;
+  if (options) {
+    ({ precision } = options);
+  }
+  let precisionToUse = defaultPrecision;
+  if (precision != null) {
+    precisionToUse = precision;
+  }
+  return precisionToUse;
+}
+
+type TypeF1DefPoint = {
+  f1Type: 'p',
+  state: [number, number],
+};
+
+export type TypeParsablePoint = [number, number]
+                                | Point   // eslint-disable-line no-use-before-define
+                                // | { x: number, y: number}
+                                | string
+                                | TypeF1DefPoint;
+// point can be defined as:
+//    - Point instance
+//    - [1, 1]
+//    - { f1Type: 'p', def: [1, 1]}
+// eslint-disable-next-line no-use-before-define
+function parsePoint<T>(pIn: TypeParsablePoint, onFail: T): Point | T | null {
+  // eslint-disable-next-line no-use-before-define
+  if (pIn instanceof Point) {
+    return pIn;
+  }
+  let onFailToUse = onFail;
+  if (onFailToUse == null) {
+    onFailToUse = null;
+  }
+  if (pIn == null) {
+    return onFailToUse;
+  }
+
+  let p = pIn;
+  if (typeof p === 'string') {
+    try {
+      p = JSON.parse(p);
+    } catch {
+      return onFailToUse;
+    }
+  }
+
+  if (Array.isArray(p)) {
+    if (p.length === 2) {
+      return new Point(p[0], p[1]);  // eslint-disable-line no-use-before-define
+    }
+    return onFailToUse;
+  }
+
+  if (p.f1Type != null) {
+    if (
+      p.f1Type === 'p'
+      && p.state != null
+      && Array.isArray([p.state])
+      && p.state.length === 2
+    ) {
+      const [x, y] = p.state;
+      return new Point(x, y);  // eslint-disable-line no-use-before-define
+    }
+    return onFailToUse;
+  }
+  if (typeof p === 'number') {
+    return new Point(p, p);  // eslint-disable-line no-use-before-define
+  }
+  // if (typeof (p) === 'object') {
+  //   const keys = Object.keys(p);
+  //   if (keys.indexOf('x') > -1 && keys.indexOf('y') > -1) {
+  //     return new Point(p.x, p.y);
+  //   }
+  // }
+  return onFailToUse;
+}
+
+// eslint-disable-next-line no-use-before-define
+function getPoint(p: TypeParsablePoint): Point {
+  let parsedPoint = parsePoint(p);
+  if (parsedPoint == null) {
+    parsedPoint = new Point(0, 0);  // eslint-disable-line no-use-before-define
+  }
+  return parsedPoint;
+}
+
+// eslint-disable-next-line no-use-before-define
+function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<Point> {
+  if (Array.isArray(points)) {
+    if (points.length === 2 && typeof points[0] === 'number') { // $FlowFixMe
+      return [getPoint(points)];
+    } // $FlowFixMe
+    return points.map(p => getPoint(p));
+  }
+  return [getPoint(points)];
+}
+
+function getScale(s: TypeParsablePoint | number) {
+  let parsedPoint;
+  if (typeof s === 'number') {
+    parsedPoint = new Point(s, s);    // eslint-disable-line no-use-before-define
+  } else {
+    parsedPoint = getPoint(s);
+  }
+  return parsedPoint;
 }
 
 /**
@@ -605,100 +718,7 @@ class Point {
   }
 }
 
-type TypeF1DefPoint = {
-  f1Type: 'p',
-  state: [number, number],
-};
 
-export type TypeParsablePoint = [number, number]
-                                | Point
-                                // | { x: number, y: number}
-                                | string
-                                | TypeF1DefPoint;
-// point can be defined as:
-//    - Point instance
-//    - [1, 1]
-//    - { f1Type: 'p', def: [1, 1]}
-
-function parsePoint<T>(pIn: TypeParsablePoint, onFail: T): Point | T | null {
-  if (pIn instanceof Point) {
-    return pIn;
-  }
-  let onFailToUse = onFail;
-  if (onFailToUse == null) {
-    onFailToUse = null;
-  }
-  if (pIn == null) {
-    return onFailToUse;
-  }
-
-  let p = pIn;
-  if (typeof p === 'string') {
-    try {
-      p = JSON.parse(p);
-    } catch {
-      return onFailToUse;
-    }
-  }
-
-  if (Array.isArray(p)) {
-    if (p.length === 2) {
-      return new Point(p[0], p[1]);
-    }
-    return onFailToUse;
-  }
-
-  if (p.f1Type != null) {
-    if (
-      p.f1Type === 'p'
-      && p.state != null
-      && Array.isArray([p.state])
-      && p.state.length === 2
-    ) {
-      const [x, y] = p.state;
-      return new Point(x, y);
-    }
-    return onFailToUse;
-  }
-  if (typeof p === 'number') {
-    return new Point(p, p);
-  }
-  // if (typeof (p) === 'object') {
-  //   const keys = Object.keys(p);
-  //   if (keys.indexOf('x') > -1 && keys.indexOf('y') > -1) {
-  //     return new Point(p.x, p.y);
-  //   }
-  // }
-  return onFailToUse;
-}
-
-function getPoint(p: TypeParsablePoint): Point {
-  let parsedPoint = parsePoint(p);
-  if (parsedPoint == null) {
-    parsedPoint = new Point(0, 0);
-  }
-  return parsedPoint;
-}
-
-function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<Point> {
-  if (Array.isArray(points)) {
-    if (points.length === 2 && typeof points[0] === 'number') { // $FlowFixMe
-      return [getPoint(points)];
-    } // $FlowFixMe
-    return points.map(p => getPoint(p));
-  }
-  return [getPoint(points)];
-}
-
-function getScale(s: TypeParsablePoint | number) {
-  let parsedPoint;
-  if (typeof s === 'number') {
-    parsedPoint = new Point(s, s);
-  } else {
-    parsedPoint = getPoint(s);
-  }
-  return parsedPoint;
-}
 
 function linearPath(
   start: Point,
@@ -1049,7 +1069,7 @@ class Line {
     if (this.B === 0) {
       return null;
     }
-    return -this.A / this.B
+    return -this.A / this.B;
   }
 
   angle() {
@@ -1204,10 +1224,10 @@ class Line {
     }
 
     if (l1.ends === 1) {
-      if (l1.p1.isNotWithinDelta(l2.p1, precision)) {
+      if (l1.p1.isNotWithinDelta(l2.p1, delta)) {
         return false;
       }
-      if (!l1.hasPointOn(l2.p2, precision)) {
+      if (!l1.hasPointOn(l2.p2, delta)) {
         return false;
       }
       return true;
@@ -1362,13 +1382,13 @@ class Line {
     const perpendicular = new Line(intersect, 1, l.ang + Math.PI / 2);
     const shaddow = this.p1.getShaddowOnLine(perpendicular, precision);
     const p1ToShaddow = new Line(this.p1, shaddow);
-    const distance = p1ToShaddow.distance;
+    const dist = p1ToShaddow.distance;
     // const distance = shaddow.distance(this.p1);
-    const projection = Point(
-      this.p1.x + distance * 2 * Math.cos(p1ToShaddow.ang),
-      this.p1.y + distance * 2 * Math.sin(p1ToShaddow.ang),
+    const projection = new Point(
+      this.p1.x + dist * 2 * Math.cos(p1ToShaddow.ang),
+      this.p1.y + dist * 2 * Math.sin(p1ToShaddow.ang),
     );
-    return new Line(intersect, project);
+    return new Line(intersect, projection);
   }
 
   // At two lines intersection, the x and y values must be equal
@@ -1404,7 +1424,7 @@ class Line {
           i = l2.p1._dup();
           withinLine = true;
           alongLine = true;
-        } else if (l1.hasPointAlong(l2.p1), precision) {
+        } else if (l1.hasPointAlong(l2.p1, precision)) {
           i = l2.p1._dup();
           alongLine = true;
         }
@@ -1488,7 +1508,15 @@ class Line {
     // If Equal
     const xIntercept = this.getXIntercept();
     const yIntercept = this.getYIntercept();
-    const defaultIntercept = yIntercept == null ? new Point(xIntercept, 0) : new Point(0, yIntercept);
+    let defaultIntercept;
+    if (yIntercept != null) {
+      defaultIntercept = new Point(0, yIntercept);
+    } else if (xIntercept != null) {
+      defaultIntercept = new Point(xIntercept, 0);
+    } else {
+      defaultIntercept = new Point(0, 0);
+    }
+    // const defaultIntercept = yIntercept == null ? new Point(xIntercept == null ? 0 : xIntercept, 0) : new Point(0, yIntercept);
 
     if (l1.isEqualTo(l2, precision)) {
       let i;
@@ -1826,20 +1854,6 @@ class Rotation {
   }
 }
 
-function getPrecision(
-  options?: { precision: number },
-  defaultPrecision: number = 8,
-) {
-  let precision;
-  if (options) {
-    ({ precision } = options);
-  }
-  let precisionToUse = defaultPrecision;
-  if (precision != null) {
-    precisionToUse = precision;
-  }
-  return precisionToUse;
-}
 
 type TypeF1DefTranslation = {
   f1Type: 't',
@@ -2084,6 +2098,12 @@ class Scale extends Point {
   }
 }
 
+export type TypeTransformValue = number | Array<number> | {
+  scale?: number,
+  position?: number,
+  translation?: number,
+  rotation?: number,
+};
 
 class Transform {
   order: Array<Translation | Rotation | Scale>;
@@ -2414,7 +2434,7 @@ class Transform {
           return false;
         }
       }
-      if (thisTrans instanceof Rotation) {
+      if (thisTrans instanceof Rotation) {  // $FlowFixMe
         if (roundNum(compare.r, precision) !== roundNum(thisTrans.r, precision)) {
           return false;
         }
@@ -2441,7 +2461,7 @@ class Transform {
           return false;
         }
       }
-      if (thisTrans instanceof Rotation) {
+      if (thisTrans instanceof Rotation) {  // $FlowFixMe
         const dR = Math.abs(compare.r - thisTrans.r);
         if (dR > delta) {
           return false;
@@ -2577,7 +2597,6 @@ class Transform {
     maxTransform: TypeTransformValue,
     vector: boolean = true,
   ): Transform {
-    
     // const min = 0.00001;
     // const max = 1 / min;
     // const zeroS = zeroThresholdTransform.s() || new Point(min, min);
@@ -4173,12 +4192,6 @@ function getBounds(
   return null;
 }
 
-export type TypeTransformValue = number | Array<number> | {
-  scale?: number,
-  position?: number,
-  translation?: number,
-  rotation?: number,
-};
 
 function transformValueToArray(
   transformValue: TypeTransformValue,
