@@ -1,6 +1,6 @@
-import { Point, Transform } from '../../../../tools/g2';
-import { round } from '../../../../tools/math';
-import * as tools from '../../../../tools/tools';
+// import { Point, Transform } from '../../../../tools/g2';
+// import { round } from '../../../../tools/math';
+// import * as tools from '../../../../tools/tools';
 import makeDiagram from '../../../../__mocks__/makeDiagram';
 // import timeStep from '../../../../__mocks__/timeStep';
 
@@ -31,20 +31,20 @@ describe('Diagram Recorder', () => {
     target.updateScale(2);
   });
   test('Spread 1 to 1', () => {
-    const step = a.anim.pulseTransform({ start, target, duration: 1 })
+    const step = a.anim.pulseTransform({ start, target, duration: 1 });
     const spread = step.spread([start], 1);
     expect(spread).toHaveLength(1);
     expect(spread[0].isEqualTo(start)).toBe(true);
   });
   test('Spread 1 to 2', () => {
-    const step = a.anim.pulseTransform({ start, target, duration: 1 })
+    const step = a.anim.pulseTransform({ start, target, duration: 1 });
     const spread = step.spread([start], 2);
     expect(spread).toHaveLength(2);
     expect(spread[0].isEqualTo(start)).toBe(true);
     expect(spread[1].isEqualTo(start)).toBe(true);
   });
   test('Spread 1 to 3', () => {
-    const step = a.anim.pulseTransform({ start, target, duration: 1 })
+    const step = a.anim.pulseTransform({ start, target, duration: 1 });
     const spread = step.spread([start], 3);
     expect(spread).toHaveLength(3);
     expect(spread[0].isEqualTo(start)).toBe(true);
@@ -52,7 +52,7 @@ describe('Diagram Recorder', () => {
     expect(spread[2].isEqualTo(start)).toBe(true);
   });
   test('Spread 2 to 3', () => {
-    const step = a.anim.pulseTransform({ start, target, duration: 1 })
+    const step = a.anim.pulseTransform({ start, target, duration: 1 });
     const t1 = start._dup();
     const t2 = start._dup();
     t2.updateScale(10);
@@ -63,7 +63,7 @@ describe('Diagram Recorder', () => {
     expect(spread[2].isEqualTo(t2)).toBe(true);
   });
   test('Spread 2 to 4', () => {
-    const step = a.anim.pulseTransform({ start, target, duration: 1 })
+    const step = a.anim.pulseTransform({ start, target, duration: 1 });
     const t1 = start._dup();
     const t2 = start._dup();
     t2.updateScale(10);
@@ -75,7 +75,7 @@ describe('Diagram Recorder', () => {
     expect(spread[2].isEqualTo(t2)).toBe(true);
   });
   test('Spread 3 to 4', () => {
-    const step = a.anim.pulseTransform({ start, target, duration: 1 })
+    const step = a.anim.pulseTransform({ start, target, duration: 1 });
     const t1 = start._dup();
     const t2 = start._dup();
     t2.updateScale(10);
@@ -92,7 +92,7 @@ describe('Diagram Recorder', () => {
     expect(spread[3].isEqualTo(t1)).toBe(false);
   });
   test('Spread 4 to 3', () => {
-    const step = a.anim.pulseTransform({ start, target, duration: 1 })
+    const step = a.anim.pulseTransform({ start, target, duration: 1 });
     const t1 = start._dup();
     const t2 = start._dup();
     t2.updateScale(10);
@@ -107,7 +107,7 @@ describe('Diagram Recorder', () => {
     expect(spread[2].isEqualTo(t4)).toBe(true);
   });
   test('Spread 4 to 2', () => {
-    const step = a.anim.pulseTransform({ start, target, duration: 1 })
+    const step = a.anim.pulseTransform({ start, target, duration: 1 });
     const t1 = start._dup();
     const t2 = start._dup();
     t2.updateScale(10);
@@ -121,7 +121,7 @@ describe('Diagram Recorder', () => {
     expect(spread[1].isEqualTo(t4)).toBe(true);
   });
   test('Spread 4 to 1', () => {
-    const step = a.anim.pulseTransform({ start, target, duration: 1 })
+    const step = a.anim.pulseTransform({ start, target, duration: 1 });
     const t1 = start._dup();
     const t2 = start._dup();
     t2.updateScale(10);
@@ -134,7 +134,7 @@ describe('Diagram Recorder', () => {
     expect(spread[0].isEqualTo(t1)).toBe(true);
   });
   test('Spread 3 to 2', () => {
-    const step = a.anim.pulseTransform({ start, target, duration: 1 })
+    const step = a.anim.pulseTransform({ start, target, duration: 1 });
     const t1 = start._dup();
     const t2 = start._dup();
     t2.updateScale(10);
@@ -176,7 +176,7 @@ describe('Diagram Recorder', () => {
     expect(a.frozenPulseTransforms.length).toBe(1);
   });
   test('1 to 3', () => {
-    const s1 = a.transform._dup();
+    // const s1 = a.transform._dup();
     const t1 = a.transform._dup().updateScale(0.5);
     const t2 = a.transform._dup().updateScale(1);
     const t3 = a.transform._dup().updateScale(2);

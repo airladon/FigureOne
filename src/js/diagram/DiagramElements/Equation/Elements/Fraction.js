@@ -104,7 +104,10 @@ export default class Fraction extends BaseEquationFunction {
     //               + numeratorBounds.descent;
     this.height = this.descent + this.ascent;
 
-    this.glyphLocations[0] = new Point(this.location.x, this.location.y + lineVAboveBaseline + baselineOffset);
+    this.glyphLocations[0] = new Point(
+      this.location.x,
+      this.location.y + lineVAboveBaseline + baselineOffset,
+    );
     this.glyphWidths[0] = vinculumBounds.width;
     this.glyphHeights[0] = vinculumBounds.height;
 

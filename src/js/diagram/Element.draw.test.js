@@ -1,12 +1,12 @@
 import {
-  Point, Transform,
+  Transform,
 } from '../tools/g2';
 import {
   t,
 } from '../tools/m2';
-import {
-  round,
-} from '../tools/math';
+// import {
+//   round,
+// } from '../tools/math';
 import * as tools from '../tools/tools';
 import makeDiagram from '../__mocks__/makeDiagram';
 
@@ -17,16 +17,16 @@ jest.useFakeTimers();
 
 describe('Element Drawing', () => {
   let diagram;
-  let a
-  let b;
-  let c;
+  let a;
+  // let b;
+  // let c;
   beforeEach(() => {
     diagram = makeDiagram();
     diagram.addElements([
       {
         name: 'a',
         method: 'polygon',
-      }
+      },
     ]);
     //   c = diagram.elements._c;
     a = diagram.elements._a;
@@ -55,7 +55,7 @@ describe('Element Drawing', () => {
     // Transform matrix sent to gl
     expect(diagram.webglLow.gl.uniformMatrix3fv.mock.calls).toHaveLength(1);
     expect(diagram.webglLow.gl.uniformMatrix3fv.mock.calls[0][2])
-      .toEqual(t(expectedDrawTransform.matrix()))
+      .toEqual(t(expectedDrawTransform.matrix()));
   });
   test('Pulse', () => {
     a.setPosition(1, 1);
@@ -74,7 +74,7 @@ describe('Element Drawing', () => {
       .scale(1, 1, 'Diagram')
       .translate(0, 0, 'Diagram');
     const expectedDrawTransform = expectedLastDrawTransform.transform(
-      new Transform().scale(1.5, 1.5)
+      new Transform().scale(1.5, 1.5),
     );
 
     // LastDrawTransform
@@ -84,7 +84,7 @@ describe('Element Drawing', () => {
     // Transform matrix sent to gl
     expect(diagram.webglLow.gl.uniformMatrix3fv.mock.calls).toHaveLength(2);
     expect(diagram.webglLow.gl.uniformMatrix3fv.mock.calls[1][2])
-      .toEqual(t(expectedDrawTransform.matrix()))
+      .toEqual(t(expectedDrawTransform.matrix()));
   });
   test('Copies', () => {
     const t1 = new Transform().translate(1, 1);
@@ -108,8 +108,8 @@ describe('Element Drawing', () => {
     const expectedDrawTransforms = [
       expectedLastDrawTransform.transform(t1),
       expectedLastDrawTransform.transform(t2),
-    ]
-    
+    ];
+
     // LastDrawTransform
     expect(a.lastDrawTransform.order).toEqual(expectedLastDrawTransform.order);
     // Actual transform(s) drawn (in this case just one as no copies or pulse multipliers)
@@ -118,8 +118,8 @@ describe('Element Drawing', () => {
     // Transform matrix sent to gl
     expect(diagram.webglLow.gl.uniformMatrix3fv.mock.calls).toHaveLength(2);
     expect(diagram.webglLow.gl.uniformMatrix3fv.mock.calls[0][2])
-      .toEqual(t(expectedDrawTransforms[0].matrix()))
-      expect(diagram.webglLow.gl.uniformMatrix3fv.mock.calls[1][2])
-      .toEqual(t(expectedDrawTransforms[1].matrix()))
+      .toEqual(t(expectedDrawTransforms[0].matrix()));
+    expect(diagram.webglLow.gl.uniformMatrix3fv.mock.calls[1][2])
+      .toEqual(t(expectedDrawTransforms[1].matrix()));
   });
 });

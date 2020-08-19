@@ -57,7 +57,7 @@ export default class EquationLabel {
       xAlign: 'center',
       yAlign: 'middle',
     };
-    const optionsToUse = Object.assign({}, defaultOptions, options);
+    const optionsToUse = joinObjects({}, defaultOptions, options);
     const labelTextOrEquation = optionsToUse.label;
     const { color, scale, position } = optionsToUse;
     const { form, formType } = optionsToUse;

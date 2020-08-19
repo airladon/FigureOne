@@ -116,7 +116,7 @@ export default function makeDiagram(
       let deltaTime = frameTime;
 
       // let delta = Math.min(deltaTimeInSeconds, frameTime);
-      let lastTime = 0
+      let lastTime = 0;
       deltaTime = round(deltaTime, 8);
       while (deltaTime <= round(deltaTimeInSeconds, 8)) {
         // if (window.asdf) {
@@ -160,7 +160,7 @@ export default function makeDiagram(
       const clientPoint = diagram.pixelToClient(pixelPoint);
       diagram.touchMoveHandler(diagram.mock.previousTouchPoint, clientPoint);
       diagram.mock.previousTouchPoint = clientPoint;
-    }
+    },
   };
   diagram.globalAnimation.reset();
   return diagram;
