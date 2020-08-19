@@ -398,7 +398,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         collection: 1,
       },
     };
-    const optionsToUse = Object.assign({}, defaultOptions, options);
+    const optionsToUse = joinObjects({}, defaultOptions, options);
     let { dashStyle } = optionsToUse;
     if (dashStyle) {
       let defaultMaxLength = optionsToUse.length;
@@ -407,7 +407,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         optionsToUse.p2 = getPoint(optionsToUse.p2);
         defaultMaxLength = distance(optionsToUse.p1, optionsToUse.p2);
       }
-      dashStyle = Object.assign({}, {
+      dashStyle = joinObjects({}, {
         maxLength: defaultMaxLength,
         dashStyle: [0.1],
       }, options.dashStyle);
@@ -528,12 +528,12 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       height: this.width * 4,
     };
     if (optionsToUse.arrowStart) {
-      const arrowOptions = Object.assign({}, defaultArrowOptions, optionsToUse.arrowStart);
+      const arrowOptions = joinObjects({}, defaultArrowOptions, optionsToUse.arrowStart);
       this.addArrowStart(arrowOptions.height, arrowOptions.width);
     }
 
     if (optionsToUse.arrowEnd) {
-      const arrowOptions = Object.assign({}, defaultArrowOptions, optionsToUse.arrowEnd);
+      const arrowOptions = joinObjects({}, defaultArrowOptions, optionsToUse.arrowEnd);
       this.addArrowEnd(arrowOptions.height, arrowOptions.width);
     }
 
@@ -543,7 +543,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       if (typeof optionsToUse.arrows === 'object') {
         ({ arrows } = optionsToUse);
       }
-      const arrowOptions = Object.assign({}, defaultArrowOptions, arrows);
+      const arrowOptions = joinObjects({}, defaultArrowOptions, arrows);
       this.addArrows(arrowOptions.height, arrowOptions.width);
     }
 
@@ -559,7 +559,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       precision: 1,
     };
     if (optionsToUse.label) {
-      const labelOptions = Object.assign({}, defaultLabelOptions, optionsToUse.label);
+      const labelOptions = joinObjects({}, defaultLabelOptions, optionsToUse.label);
       if (labelOptions.text === null) {
         labelOptions.text = '';
         this.showRealLength = true;

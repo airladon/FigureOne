@@ -715,7 +715,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       autoHideMin: null,
       autoHideMax: null,
     };
-    const optionsToUse = Object.assign(
+    const optionsToUse = joinObjects(
       {}, defaultCurveOptions, curveOptions,
     );
     for (let i = 0; i < optionsToUse.num; i += 1) {
