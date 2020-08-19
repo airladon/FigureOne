@@ -6,13 +6,13 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 // eslint-disable-next-line import/no-unresolved
 // const webpack = require('webpack');
 // eslint-disable-next-line import/no-unresolved
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies
-const Autoprefixer = require('autoprefixer');
+// const Autoprefixer = require('autoprefixer');
 // eslint-disable-next-line import/no-unresolved
 // const CopyWebpackPlugin = require('copy-webpack-plugin');
 // eslint-disable-next-line import/no-unresolved
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+// const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const buildPath = path.resolve(__dirname, 'package');
 
@@ -93,12 +93,12 @@ module.exports = (env) => {
     clean = new CleanWebpackPlugin();
   }
 
-  const extract = new MiniCssExtractPlugin({
-    // Options similar to the same options in webpackOptions.output
-    // both options are optional
-    filename: '[name].css',
-    chunkFilename: '[id].css',
-  });
+  // const extract = new MiniCssExtractPlugin({
+  //   // Options similar to the same options in webpackOptions.output
+  //   // both options are optional
+  //   filename: '[name].css',
+  //   chunkFilename: '[id].css',
+  // });
 
   // const copy = new CopyWebpackPlugin({
   //   patterns: [
@@ -110,24 +110,23 @@ module.exports = (env) => {
   //   ],
   // });
 
-  let cssMini = '';
-  if (e.uglify) {
-    cssMini = new OptimizeCssAssetsPlugin({
-      assetNameRegExp: /\.css$/g,
-      // cssProcessor: require('cssnano'),
-      cssProcessorPluginOptions: {
-        preset: ['default', { discardComments: { removeAll: true } }],
-      },
-      canPrint: true,
-    });
-  }
+  // let cssMini = '';
+  // if (e.uglify) {
+  //   cssMini = new OptimizeCssAssetsPlugin({
+  //     assetNameRegExp: /\.css$/g,
+  //     // cssProcessor: require('cssnano'),
+  //     cssProcessorPluginOptions: {
+  //       preset: ['default', { discardComments: { removeAll: true } }],
+  //     },
+  //     canPrint: true,
+  //   });
+  // }
   // Make the plugin array filtering out those plugins that are null
   const pluginArray = [
     uglify,
-    extract,
+    // extract,
     // copy,
-    clean,
-    cssMini].filter(elem => elem !== '');
+    clean].filter(elem => elem !== '');
 
   let externals = {};
   if (e.shortName === 'prod' || e.shortName === 'stage') {
@@ -162,32 +161,32 @@ module.exports = (env) => {
             options: { publicPath: '/static/workers/' },
           },
         },
-        {
-          test: /\.(css|sass|scss)$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            {
-              loader: 'css-loader',
-              options: {
-                importLoaders: 2,
-                sourceMap: envConfig.uglifySourceMap,
-              },
-            },
-            {
-              loader: 'postcss-loader',
-              options: {
-                plugins: [Autoprefixer],
-                sourceMap: envConfig.uglifySourceMap,
-              },
-            },
-            {
-              loader: 'sass-loader',
-              options: {
-                sourceMap: envConfig.uglifySourceMap,
-              },
-            },
-          ],
-        },
+        // {
+        //   test: /\.(css|sass|scss)$/,
+        //   use: [
+        //     MiniCssExtractPlugin.loader,
+        //     {
+        //       loader: 'css-loader',
+        //       options: {
+        //         importLoaders: 2,
+        //         sourceMap: envConfig.uglifySourceMap,
+        //       },
+        //     },
+        //     {
+        //       loader: 'postcss-loader',
+        //       options: {
+        //         plugins: [Autoprefixer],
+        //         sourceMap: envConfig.uglifySourceMap,
+        //       },
+        //     },
+        //     {
+        //       loader: 'sass-loader',
+        //       options: {
+        //         sourceMap: envConfig.uglifySourceMap,
+        //       },
+        //     },
+        //   ],
+        // },
         {
           test: /\.(png|jpg|gif)$/,
           use: [
@@ -235,14 +234,14 @@ module.exports = (env) => {
             test: /js\/(diagram|Lesson|tools|components)/,
             name: 'tools',
           },
-          commoncss: {
-            minSize: 10,
-            minChunks: 2,
-            priority: -10,
-            reuseExistingChunk: true,
-            test: /css\/*\.(css|scss|sass)$/,
-            name: 'commoncss',
-          },
+          // commoncss: {
+          //   minSize: 10,
+          //   minChunks: 2,
+          //   priority: -10,
+          //   reuseExistingChunk: true,
+          //   test: /css\/*\.(css|scss|sass)$/,
+          //   name: 'commoncss',
+          // },
           vendors: {
             test: /[\\/]node_modules[\\/]/,
             priority: -10,
