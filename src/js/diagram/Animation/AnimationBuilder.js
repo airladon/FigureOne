@@ -321,7 +321,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   }
 
   inParallel(
-    stepsOrOptionsIn: Array<animation.AnimationStep | null> | TypeParallelAnimationStepInputOptions = {},
+    stepsOrOptionsIn: Array<animation.AnimationStep | null>
+                      | TypeParallelAnimationStepInputOptions = {},
     ...optionsIn: Array<TypeParallelAnimationStepInputOptions>
   ) {
     this.then(animation.inParallel(stepsOrOptionsIn, ...optionsIn));
