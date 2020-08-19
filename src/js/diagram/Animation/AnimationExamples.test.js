@@ -61,7 +61,7 @@ describe('Animation Examples', () => {
             .start();
         },
         element: () => {
-          elem1.animations.new(
+          elem1.animations.newFromStep(
             elem1.anim.position({ target: p1, duration: 1 }),
           ).start();
         },

@@ -326,22 +326,21 @@ export default class AnimationManager {
     return this.new(name);
   }
 
-  new(nameOrStep: ?string | anim.AnimationStep) {
-    if (typeof nameOrStep === 'string' || nameOrStep == null) {
-      const options = {};
-      if (this.element != null) {
-        options.element = this.element;
-      }
-      if (nameOrStep != null) {
-        options.name = nameOrStep;
-      }
-      const animation = new anim.AnimationBuilder(options);
-      this.animations.push(animation);
-      return animation;
+  new(nameOrStep: ?string) {
+    const options = {};
+    if (this.element != null) {
+      options.element = this.element;
     }
     if (nameOrStep != null) {
-      this.animations.push(nameOrStep);
+      options.name = nameOrStep;
     }
+    const animation = new anim.AnimationBuilder(options);
+    this.animations.push(animation);
+    return animation;
+  }
+
+  newFromStep(nameOrStep: anim.AnimationStep) {
+    this.animations.push(nameOrStep);
     return nameOrStep;
   }
 

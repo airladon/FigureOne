@@ -16,7 +16,7 @@ export class ParallelAnimationStep extends AnimationStep {
   steps: Array<AnimationStep>;
 
   constructor(
-    stepsOrOptionsIn: Array<AnimationStep> | TypeParallelAnimationStepInputOptions = {},
+    stepsOrOptionsIn: Array<AnimationStep | null> | TypeParallelAnimationStepInputOptions = {},
     ...optionsIn: Array<TypeParallelAnimationStepInputOptions>
   ) {
     const defaultOptions = { steps: [] };
@@ -187,7 +187,7 @@ export class ParallelAnimationStep extends AnimationStep {
 }
 
 export function inParallel(
-  stepsOrOptionsIn: Array<AnimationStep> | TypeParallelAnimationStepInputOptions = {},
+  stepsOrOptionsIn: Array<AnimationStep | null> | TypeParallelAnimationStepInputOptions = {},
   ...optionsIn: Array<TypeParallelAnimationStepInputOptions>
 ) {
   return new ParallelAnimationStep(stepsOrOptionsIn, ...optionsIn);
