@@ -402,23 +402,6 @@ describe('Diagram Recorder', () => {
         expect(index).toBe(3);
       });
     });
-    // describe('Get last unique indeces', () => {
-    //   test('simple', () => {
-    //     events = [[0, ['a']], [1, ['a']], [1, ['b']], [2, ['a']]];
-    //     const indeces = getLastUniqueIndeces(events, 1, 2);
-    //     expect(indeces).toEqual([1, 2]);
-    //   });
-    //   test('entire array', () => {
-    //     events = [[0, ['a']], [1, ['a']], [1, ['b']], [2, ['a']]];
-    //     const indeces = getLastUniqueIndeces(events, 0, 3);
-    //     expect(indeces.sort()).toEqual([2, 3]);
-    //   });
-    //   test('three', () => {
-    //     events = [[0, ['a']], [1, ['b']], [1, ['b']], [2, ['c']]];
-    //     const indeces = getLastUniqueIndeces(events, 0, 3);
-    //     expect(indeces.sort()).toEqual([0, 2, 3]);
-    //   });
-    // });
   });
   describe('Cache', () => {
     describe('Cache recording', () => {

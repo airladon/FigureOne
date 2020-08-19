@@ -7,15 +7,6 @@ import {
 } from './lines';
 
 describe('Tools Lines', () => {
-  // describe('two points', () => {
-  //   test.only('two points', () => {
-  //     const [tris] = makePolyLine(
-  //       [new Point(0, 0), new Point(1, 0)],
-  //       0.1, false, 'mid', 'auto',
-  //     );
-  //     console.log(tris)
-  //   });
-  // });
   describe('makePolyLine Corners', () => {
     test('simple negative 90º', () => {
       const [tris] = makePolyLine(

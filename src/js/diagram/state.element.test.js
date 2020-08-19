@@ -1,5 +1,5 @@
 import * as tools from '../tools/tools';
-import { Transform } from '../tools/g2';
+// import { Transform } from '../tools/g2';
 import makeDiagram from '../__mocks__/makeDiagram';
 import * as math from '../tools/math';
 

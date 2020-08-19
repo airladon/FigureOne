@@ -6,7 +6,7 @@ import {
   getState, setState,
 } from './state';
 import parseState from './parseState';
-import makeDiagram from '../__mocks__/makeDiagram';
+// import makeDiagram from '../__mocks__/makeDiagram';
 // import { round } from '../tools/math';
 
 
