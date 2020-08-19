@@ -73,7 +73,16 @@ export default class Bar extends Bracket {
   //   - Calculate Tip Width = w - Dh
 
   // eslint-disable-next-line class-methods-use-this
-  getLeftPoints(options: Object, widthIn: number, height: number) {
+  getLeftPoints(
+    options: Object,
+    widthIn: number,
+    height: number,
+  ): [
+    Array<Point>,
+    Array<Point>,
+    number,
+    number,
+  ] {
     // const { side } = options;
     const { lineWidth, width } = this.getVerticalDefaultValues(height, widthIn, options);
     const line = new Line(new Point(0, 0), new Point(width, height / 2));
@@ -105,7 +114,10 @@ export default class Bar extends Bracket {
   getVerticalDefaultValues(height: number, width: ?number, options: {
       lineWidth?: number,
       width?: number,
-    }) {
+    }): {
+      width: number,
+      lineWidth: number,
+    } {
     const out = {};
     if (width == null && options.width == null) {
       out.width = 97570.78 + (0.004958708 - 97570.78)

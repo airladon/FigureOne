@@ -186,10 +186,18 @@ export default class Symbol extends DiagramElementPrimitive {
     return height;
   }
 
-  // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  getBounds(options: Object, contentX: number, contentY: number, widthIn: number, heightIn: number, side?: 'left' | 'right' | 'bottom' | 'top') {
+  getBounds(
+    options: Object,
+    contentX: number,
+    contentY: number,
+    contentWidth: number,
+    contentHeight: number,
+    side?: 'left' | 'right' | 'bottom' | 'top',
+  ) {
+    // const contentWidth = contentWidthIn == null ? 0 : contentWidthIn;
+    // const contentHeight = contentHeightIn == null ? 0 : contentHeightIn;
     const { width, height } = this.getDefaultValues(
-      heightIn, widthIn, options,
+      contentHeight, contentWidth, options,
     );
     const bounds = new Bounds();
     if (side === 'left') {
@@ -205,12 +213,12 @@ export default class Symbol extends DiagramElementPrimitive {
     } else if (side === 'top') {
       bounds.bottom = contentY;
       bounds.top = contentY + height;
-      bounds.left = contentX + widthIn / 2 - width / 2;
+      bounds.left = contentX + contentWidth / 2 - width / 2;
       bounds.right = bounds.left + width;
     } else {
       bounds.top = contentY;
       bounds.bottom = contentY - height;
-      bounds.left = contentX + widthIn / 2 - width / 2;
+      bounds.left = contentX + contentWidth / 2 - width / 2;
       bounds.right = bounds.left + width;
     }
     bounds.width = width;
@@ -233,7 +241,7 @@ export default class Symbol extends DiagramElementPrimitive {
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  getDefaultValues(height: ?number, width: ?number, options: {}) {
+  getDefaultValues(height: number, width: number, options: Object) {
     // const out: {
     //   height?: number,
     //   width?: number,
