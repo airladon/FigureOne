@@ -1367,7 +1367,9 @@ describe('Bounds', () => {
       test('Simple', () => {
         const t = new Transform().scale(1, 1).rotate(0).translate(0, 0);
         bounds = new TransformBounds(t, {
-          translation: { left: -2, bottom: -1, right: 1, top: 2 },
+          translation: {
+            left: -2, bottom: -1, right: 1, top: 2,
+          },
           scale: { min: -3, max: 3 },
           rotation: { min: -4, max: 4 },
         });
@@ -1395,7 +1397,9 @@ describe('Bounds', () => {
       test('Simple', () => {
         const t = new Transform().scale(1, 1).rotate(0).translate(0, 0);
         bounds = new TransformBounds(t, {
-          translation: { left: -2, bottom: -1, right: 1, top: 2 },
+          translation: {
+            left: -2, bottom: -1, right: 1, top: 2,
+          },
           scale: { min: -3, max: 3 },
           rotation: { min: -4, max: 4 },
         });
@@ -1418,7 +1422,7 @@ describe('Bounds', () => {
         bounds = getBounds(new Line([0, 0], [1, 1]));
       });
       test('From Line Definition', () => {
-        bounds = getBounds({ p1: [0, 0], p2: [1, 1]});
+        bounds = getBounds({ p1: [0, 0], p2: [1, 1] });
       });
       test('From Line Definition 1', () => {
         bounds = getBounds({ line: new Line([0, 0], [1, 1]) });

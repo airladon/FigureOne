@@ -393,9 +393,6 @@ describe('g2 Point', () => {
       const json = '[1, 1]';
       expect(getPoint(json)).toEqual(new Point(1, 1));
     });
-    // test('Fail', () => {
-    //   expect(getPoint(1)).toEqual(new Point(0, 0));
-    // });
     test('Fail nothing', () => {
       expect(getPoint()).toEqual(new Point(0, 0));
     });

@@ -35,7 +35,7 @@ function getState(
     ignoreShown: false,
     min: false,
   };
-  const options = joinObjects({}, defaultOptions, optionsIn)
+  const options = joinObjects({}, defaultOptions, optionsIn);
   const { precision } = options;
   const state: Object = {};
   const processValue = (value) => {
@@ -73,7 +73,7 @@ function getState(
       return value._dup();
     }
     const out = {};
-    let keys = Object.keys(value)
+    let keys = Object.keys(value);
     if (value._stateKeys) {
       keys = value._stateKeys();
     }

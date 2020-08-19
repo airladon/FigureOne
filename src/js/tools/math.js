@@ -235,14 +235,15 @@ function triangle(
   mag: number = 1,
   phaseOffset: number = 0,
 ) {
-  return bias + 2 * mag / Math.PI * Math.asin(Math.sin(2 * Math.PI * frequency * deltaTime + phaseOffset));
+  return bias + 2 * mag / Math.PI
+    * Math.asin(Math.sin(2 * Math.PI * frequency * deltaTime + phaseOffset));
   // return bias + mag * Math.sin(deltaTime * frequency * 2.0 * Math.PI + phaseOffset);
 }
 
 const easeinout = (percentTime: number, invert: ?boolean = false) => {
   if (invert) {
     if (percentTime === 0.5) {
-      return  0.5;
+      return 0.5;
     }
     const a = percentTime;
     return (2 * a - Math.sqrt(-4 * a * a + 4 * a)) / (4 * a - 2);

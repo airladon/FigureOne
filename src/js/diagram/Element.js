@@ -825,10 +825,10 @@ class DiagramElement {
     if (this.animations.state === 'animating') {
       this.animations.setTimeDelta(delta);
     }
-    if (this.state.isPulsing) {
+    if (this.state.isPulsing && this.state.pulse.startTime != null) {
       this.state.pulse.startTime += delta;
     }
-    if (this.state.movement.previousTime !== null) {
+    if (this.state.movement.previousTime != null) {
       this.state.movement.previousTime += delta;
     }
   }

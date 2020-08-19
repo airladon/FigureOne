@@ -1,9 +1,6 @@
 import {
-  Point, Transform,
+  Point,
 } from '../tools/g2';
-import {
-  round,
-} from '../tools/math';
 import * as tools from '../tools/tools';
 import makeDiagram from '../__mocks__/makeDiagram';
 
@@ -41,7 +38,7 @@ describe('Animate To State', () => {
       {
         name: 'p1',
         method: 'polygon',
-      }
+      },
     ]);
     c = diagram.elements._c;
     p1 = diagram.elements._p1;
@@ -167,13 +164,13 @@ describe('Animate To State', () => {
       diagram.draw(2.1);
       expect(diagram.getRemainingAnimationTime(1.1)).toBe(0);
     });
-  })
+  });
   describe('Animation Finished Callback', () => {
     let callback;
     beforeEach(() => {
       callback = jest.fn(() => {});
       diagram.animationFinishedCallback = callback;
-    })
+    });
     test('Simple', () => {
       p1.animations.new()
         .position({ target: [1, 1], duration: 1 })
@@ -194,12 +191,11 @@ describe('Animate To State', () => {
         .position({ target: [1, 1], duration: 1 })
         .start();
       expect(diagram.isAnimating()).toBe(true);
-      
       diagram.draw(0);
       diagram.draw(0.5);
       expect(diagram.isAnimating()).toBe(true);
-      expect(callback.mock.calls).toHaveLength(0);
-      
+      expect(callback.mock.calls).toHaveLength(0)
+
       diagram.draw(1);
       expect(diagram.isAnimating()).toBe(false);
       expect(callback.mock.calls).toHaveLength(1);
@@ -212,346 +208,22 @@ describe('Animate To State', () => {
         .position({ target: [1, 1], duration: 2 })
         .start();
       expect(diagram.isAnimating()).toBe(true);
-      
+
       diagram.draw(0);
       diagram.draw(0.5);
       expect(diagram.isAnimating()).toBe(true);
       expect(callback.mock.calls).toHaveLength(0);
-      
+
       diagram.draw(1);
       expect(diagram.isAnimating()).toBe(true);
       expect(callback.mock.calls).toHaveLength(0);
-      
+
       diagram.draw(1.5);
       expect(diagram.isAnimating()).toBe(true);
       expect(callback.mock.calls).toHaveLength(0);
-      
+
       diagram.draw(2);
       expect(callback.mock.calls).toHaveLength(1);
     });
   });
 });
-// describe('Animate To State with pulse', () => {
-//   let diagram;
-//   let a;
-//   beforeEach(() => {
-//     diagram = makeDiagram();
-//     diagram.addElements([
-//       {
-//         name: 'a',
-//         method: 'polygon',
-//       }
-//     ]);
-//     a = diagram.elements._a;
-//     diagram.initialize();
-//   });
-//   test('Simple', () => {
-//     diagram.setFirstTransform();
-//     a.setPosition(1, 1);
-//     a.pulseScaleNow(1, 1.5);
-
-//     diagram.mock.timeStep(0);
-//     diagram.mock.timeStep(0.5);
-//     expect(a.getPosition()).toEqual(new Point(1, 1));
-//     expect(a.drawTransforms[0].order[0].x).toEqual(1.5);
-//     expect(a.drawTransforms[0].order[0].y).toEqual(1.5);
-//     const state = diagram.getState();
-//     diagram.stop();
-//     diagram.mock.timeStep(1);
-//     a.setPosition(0, 0);
-//     diagram.mock.timeStep(2);
-//     diagram.animateToState(state);
-//     diagram.mock.timeStep(0);
-//     expect(a.getPosition()).toEqual(new Point(0, 0));
-//     expect(a.drawTransforms[0].order[0].x).toEqual(1);
-//     expect(a.drawTransforms[0].order[0].y).toEqual(1);
-
-//     diagram.mock.timeStep(0.5);
-//     expect(diagram.isAnimating()).toBe(true);
-//     expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
-//     expect(a.drawTransforms[0].order[0].x).toEqual(1);
-//     expect(a.drawTransforms[0].order[0].y).toEqual(1);
-
-//     diagram.mock.timeStep(1);
-//     expect(diagram.isAnimating()).toBe(true);
-//     expect(a.getPosition()).toEqual(new Point(1, 1));
-//     expect(a.drawTransforms[0].order[0].x).toEqual(1);
-//     expect(a.drawTransforms[0].order[0].y).toEqual(1);
-
-//     diagram.mock.timeStep(0.25);
-//     expect(a.getPosition()).toEqual(new Point(1, 1));
-//     expect(round(a.drawTransforms[0].order[0].x, 3)).toEqual(1.354);
-//     expect(round(a.drawTransforms[0].order[0].y, 3)).toEqual(1.354);
-
-//     diagram.mock.timeStep(0.25);
-//     expect(a.getPosition()).toEqual(new Point(1, 1));
-//     expect(round(a.drawTransforms[0].order[0].x, 3)).toEqual(1.5);
-//     expect(round(a.drawTransforms[0].order[0].y, 3)).toEqual(1.5);
-//     expect(diagram.isAnimating()).toBe(true);
-//   })
-// });
-// describe('Pause Animations', () => {
-//   let diagram;
-//   let a;
-//   beforeEach(() => {
-//     diagram = makeDiagram();
-//     diagram.addElements([
-//       {
-//         name: 'a',
-//         method: 'polygon',
-//       }
-//     ]);
-//     a = diagram.elements._a;
-//     diagram.initialize();
-
-//   });
-//   test('Animation - Freeze on Pause, continue on next unpaused frame', () => {
-//     a.animations.new()
-//       .position({ target: [1, 0], duration: 1 })
-//       .start();
-//     a.pauseSettings.animation = {
-//       animation: {
-//         complete: false,
-//         clear: false,
-//         completeBeforePause: false,
-//       }
-//     };
-//     diagram.mock.timeStep(0);
-//     diagram.mock.timeStep(0.5);
-//     expect(a.getPosition().x).toEqual(0.5);
-//     expect(diagram.isAnimating()).toBe(true);
-
-//     diagram.pause();
-//     expect(diagram.isPaused).toBe(true);
-//     expect(a.isPaused).toBe(true)
-//     expect(a.getPosition().x).toEqual(0.5);
-//     expect(diagram.isAnimating()).toBe(true);
-
-//     diagram.mock.timeStep(0.5);
-//     expect(a.getPosition().x).toEqual(0.5);
-//     expect(diagram.isAnimating()).toBe(true);
-
-//     diagram.unpause();
-//     diagram.mock.timeStep(0.5);
-//     expect(a.getPosition().x).toEqual(1);
-//     expect(diagram.isAnimating()).toBe(false);
-//   });
-//   test('Animation - Freeze on Pause', () => {
-//     a.animations.new()
-//       .position({ target: [1, 0], duration: 1 })
-//       .start();
-//     a.pauseSettings.animation = {
-//       complete: false,
-//       clear: true,
-//       completeBeforePause: false,
-//     };
-//     diagram.mock.timeStep(0);
-//     diagram.mock.timeStep(0.5);
-//     expect(a.getPosition().x).toEqual(0.5);
-//     expect(diagram.isAnimating()).toBe(true);
-
-//     diagram.pause();
-//     expect(diagram.isPaused).toBe(true);
-//     expect(a.isPaused).toBe(true)
-//     expect(a.getPosition().x).toEqual(0.5);
-//     expect(diagram.isAnimating()).toBe(false);
-
-//     diagram.mock.timeStep(0.5);
-//     expect(a.getPosition().x).toEqual(0.5);
-//     expect(diagram.isAnimating()).toBe(false);
-
-//     diagram.unpause();
-//     diagram.mock.timeStep(0.5);
-//     expect(a.getPosition().x).toEqual(0.5);
-//     expect(diagram.isAnimating()).toBe(false);
-//   });
-//   test('Animation - Complete before pause', () => {
-//     a.animations.new()
-//       .position({ target: [1, 0], duration: 1 })
-//       .start();
-//     a.pauseSettings.animation = {
-//       complete: false,
-//       clear: false,
-//       completeBeforePause: true,
-//     };
-//     diagram.mock.timeStep(0);
-//     diagram.mock.timeStep(0.5);
-//     expect(a.getPosition().x).toEqual(0.5);
-//     expect(diagram.isAnimating()).toBe(true);
-
-//     diagram.pause();
-//     // expect(diagram.isPaused).toBe(true);
-//     // expect(a.isPaused).toBe(false)
-//     expect(diagram.state.pause).toBe('preparingToPause');
-//     expect(a.state.pause).toBe('preparingToPause');
-//     expect(a.getPosition().x).toEqual(0.5);
-//     expect(diagram.isAnimating()).toBe(true);
-
-//     diagram.mock.timeStep(0.5);
-//     expect(a.getPosition().x).toEqual(1);
-//     expect(diagram.isAnimating()).toBe(false);
-//     // expect(a.isPaused).toBe(true);
-//     expect(diagram.state.pause).toBe('paused');
-//     expect(a.state.pause).toBe('paused');
-
-//     diagram.unpause();
-//     diagram.mock.timeStep(0.5);
-//     expect(a.getPosition().x).toEqual(1);
-//     expect(diagram.isAnimating()).toBe(false);
-//   });
-//   test('Animation - Complete on pause', () => {
-//     a.animations.new()
-//       .position({ target: [1, 0], duration: 1 })
-//       .start();
-//     a.pauseSettings.animation = {
-//       complete: true,
-//       clear: false,
-//       completeBeforePause: false,
-//     };
-//     diagram.mock.timeStep(0);
-//     diagram.mock.timeStep(0.5);
-//     expect(a.getPosition().x).toEqual(0.5);
-//     expect(diagram.isAnimating()).toBe(true);
-
-//     diagram.pause();
-//     expect(diagram.isPaused).toBe(true);
-//     expect(a.isPaused).toBe(true)
-//     expect(a.getPosition().x).toEqual(1);
-//     expect(diagram.isAnimating()).toBe(false);
-
-//     diagram.mock.timeStep(0.5);
-//     expect(a.getPosition().x).toEqual(1);
-//     expect(diagram.isAnimating()).toBe(false);
-//     expect(a.isPaused).toBe(true);
-
-//     diagram.unpause();
-//     diagram.mock.timeStep(0.5);
-//     expect(a.getPosition().x).toEqual(1);
-//     expect(diagram.isAnimating()).toBe(false);
-//   });
-//   test('Pulse - Freeze on Pause, continue on next unpaused frame', () => {
-//     a.pulseScaleNow(2, 2);
-//     a.pauseSettings.pulse = {
-//       complete: false,
-//       clear: false,
-//       completeBeforePause: false,
-//     };
-//     diagram.mock.timeStep(0);
-//     diagram.mock.timeStep(0.5);
-//     expect(a.pulseTransforms[0].s().round(3).x).toEqual(1.707);
-//     expect(a.frozenPulseTransforms.length).toEqual(0);
-//     expect(a.state.isPulsing).toBe(true);
-//     expect(diagram.isAnimating()).toBe(true);
-
-//     diagram.pause();
-//     expect(diagram.isPaused).toBe(true);
-//     expect(a.isPaused).toBe(true)
-//     expect(a.pulseTransforms[0].s().round(3).x).toEqual(1.707);
-//     expect(diagram.isAnimating()).toBe(true);
-
-//     diagram.mock.timeStep(0.5);
-//     expect(a.pulseTransforms[0].s().round(3).x).toEqual(1.707);
-//     expect(diagram.isAnimating()).toBe(true);
-
-//     diagram.unpause();
-//     diagram.mock.timeStep(0.5);
-//     expect(a.pulseTransforms[0].s().round(3).x).toEqual(2);
-//     expect(diagram.isAnimating()).toBe(true);
-//   });
-//   test('Pulse - Freeze on Pause', () => {
-//     a.pulseScaleNow(2, 2);
-//     a.pauseSettings.pulse = {
-//       complete: false,
-//       clear: true,
-//       completeBeforePause: false,
-//     };
-//     a.pulseSettings.allowFreezeOnStop = true;
-//     diagram.mock.timeStep(0);
-//     diagram.mock.timeStep(0.5);
-//     expect(a.pulseTransforms[0].s().round(3).x).toEqual(1.707);
-//     expect(a.frozenPulseTransforms.length).toEqual(0);
-//     expect(a.state.isPulsing).toBe(true);
-//     expect(diagram.isAnimating()).toBe(true);
-
-//     diagram.pause();
-
-//     expect(diagram.isPaused).toBe(true);
-//     expect(a.isPaused).toBe(true)
-//     expect(diagram.isAnimating()).toBe(false);
-//     diagram.mock.timeStep(0);
-//     expect(a.pulseTransforms.length).toEqual(0);
-//     expect(a.frozenPulseTransforms[0].s().round(3).x).toEqual(1.707);
-
-//     diagram.mock.timeStep(0.5);
-//     expect(a.pulseTransforms.length).toEqual(0);
-//     expect(a.frozenPulseTransforms[0].s().round(3).x).toEqual(1.707);
-//     expect(diagram.isAnimating()).toBe(false);
-
-//     diagram.unpause();
-//     diagram.mock.timeStep(0.5);
-//     expect(a.pulseTransforms.length).toEqual(0);
-//     expect(a.frozenPulseTransforms[0].s().round(3).x).toEqual(1.707);
-//     expect(diagram.isAnimating()).toBe(false);
-//   });
-//   test('Pulse - Complete before Pause', () => {
-//     a.pulseScaleNow(2, 2);
-//     a.pauseSettings.pulse = {
-//       complete: false,
-//       clear: false,
-//       completeBeforePause: true,
-//     };
-//     a.pulseSettings.allowFreezeOnStop = true;
-//     diagram.mock.timeStep(0);
-//     diagram.mock.timeStep(0.5);
-//     expect(a.pulseTransforms[0].s().round(3).x).toEqual(1.707);
-//     expect(a.frozenPulseTransforms.length).toEqual(0);
-//     expect(a.state.isPulsing).toBe(true);
-//     expect(diagram.isAnimating()).toBe(true);
-
-//     diagram.pause();
-
-//     diagram.mock.timeStep(0.5);
-//     expect(a.pulseTransforms[0].s().round(3).x).toEqual(2);
-//     expect(a.state.isPulsing).toBe(true);
-//     expect(diagram.isAnimating()).toBe(true);
-
-//     diagram.mock.timeStep(0.5);
-//     expect(a.pulseTransforms[0].s().round(3).x).toEqual(1.707);
-//     expect(a.state.isPulsing).toBe(true);
-//     expect(diagram.isAnimating()).toBe(true);
-//     expect(a.isPaused).toBe(false);
-//     // expect(diagram.isPaused).toBe(true);
-//     expect(diagram.state.pause).toBe('preparingToPause')
-
-//     diagram.mock.timeStep(0.5);
-//     expect(a.pulseTransforms[0].s().round(3).x).toEqual(1);
-//     expect(a.state.isPulsing).toBe(false);
-//     expect(diagram.isAnimating()).toBe(false);
-//     expect(a.isPaused).toBe(true);
-//     expect(diagram.isPaused).toBe(true);
-//   });
-//   test('Pulse - Complete on Pause', () => {
-//     a.pulseScaleNow(2, 2);
-//     a.pauseSettings.pulse = {
-//       complete: true,
-//       clear: false,
-//       completeBeforePause: false,
-//     };
-//     a.pulseSettings.allowFreezeOnStop = true;
-//     diagram.mock.timeStep(0);
-//     diagram.mock.timeStep(0.5);
-//     expect(a.pulseTransforms[0].s().round(3).x).toEqual(1.707);
-//     expect(a.frozenPulseTransforms.length).toEqual(0);
-//     expect(a.state.isPulsing).toBe(true);
-//     expect(diagram.isAnimating()).toBe(true);
-
-//     diagram.pause();
-
-//     diagram.mock.timeStep(0);
-//     expect(a.pulseTransforms.length).toEqual(0);
-//     expect(a.state.isPulsing).toBe(false);
-//     expect(diagram.isAnimating()).toBe(false);
-//     expect(a.isPaused).toBe(true);
-//     expect(diagram.isPaused).toBe(true);
-//   });
-// });

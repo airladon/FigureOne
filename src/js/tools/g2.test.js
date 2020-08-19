@@ -3,7 +3,7 @@ import {
   spaceToSpaceTransform,
   getBoundingRect, polarToRect, rectToPolar, getDeltaAngle,
   normAngleTo90, deg, curvedPath, threePointAngle,
-  threePointAngleMin, Rect, Transform, Line, Vector,
+  threePointAngleMin, Vector,
 } from './g2';
 import { round } from './math';
 
@@ -642,7 +642,7 @@ describe('g2 tests', () => {
       expect(v2.ang).toBe(0);
     });
     test('Unit', () => {
-      const v1 = new Vector([1, 1],[5, 5]);
+      const v1 = new Vector([1, 1], [5, 5]);
       const v2 = v1.unit();
       expect(round(v2.distance)).toBe(1);
       expect(round(v2.ang)).toBe(round(Math.PI / 4));

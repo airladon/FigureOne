@@ -2940,7 +2940,7 @@ function rectToPolar(x: number | Point, y: number = 0) {
     angle,
   };
 }
-// $FlowFixMe
+
 function getBoundingRect(pointArrays: Array<Point> | Array<Array<Point>>) {
   let firstPoint = true;
   let result = { min: new Point(0, 0), max: new Point(0, 0) };

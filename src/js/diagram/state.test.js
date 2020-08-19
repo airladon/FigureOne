@@ -180,27 +180,4 @@ describe('state', () => {
       expect(objIn.b.d.f).toBe(5);
     });
   });
-  // describe('In Diagram', () => {
-  //   let diagram;
-  //   beforeEach(() => {
-  //     diagram = makeDiagram();
-  //     diagram.addElement({
-  //       name: 'line',
-  //       method: 'line',
-  //     });
-  //   });
-  //   test('', () => {
-  //     let state = diagram.getState();
-  //     diagram.setState(state);
-  //     //  state = diagram.getState();
-  //     // diagram.setState(state);
-  //     //  state = diagram.getState();
-  //     // diagram.setState(state);
-  //     // console.log(state.elements.elements.line.animations)
-  //   });
-  //   test('', () => {
-  //     let state = diagram.getState();
-  //     diagram.setState(state);
-  //   });
-  // })
 });
