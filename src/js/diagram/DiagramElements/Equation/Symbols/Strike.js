@@ -180,6 +180,8 @@ export default class Strike extends Symbol {
   // $FlowFixMe
   getDefaultValues(height: number, width: ?number, options: {
       lineWidth?: number,
+      height?: number,
+      width?: number,
     }): {
       height: number,
       width: number,

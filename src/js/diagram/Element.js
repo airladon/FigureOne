@@ -4050,7 +4050,7 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   getAllBoundaries(space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local') {
-    let boundaries = [];
+    let boundaries: Array<Array<Point>> = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       if (element.isShown) {
@@ -4065,7 +4065,7 @@ class DiagramElementCollection extends DiagramElement {
     space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
     children: ?Array<string | DiagramElement> = null,
   ) {
-    let boundaries = [];
+    let boundaries: Array<Array<Point>> = [];
     if (children == null) {
       return this.getAllBoundaries(space);
     }
@@ -4082,7 +4082,7 @@ class DiagramElementCollection extends DiagramElement {
 
   // deprecated
   getGLBoundaries() {
-    let boundaries = [];
+    let boundaries: Array<Array<Point>> = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       if (element.isShown) {
@@ -4095,7 +4095,7 @@ class DiagramElementCollection extends DiagramElement {
 
   // deprecated
   getVertexSpaceBoundaries() {
-    let boundaries = [];
+    let boundaries: Array<Array<Point>> = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       if (element.isShown) {
@@ -4156,7 +4156,7 @@ class DiagramElementCollection extends DiagramElement {
       return getBoundingRect(boundaries);
     }
 
-    const points = [];
+    const points: Array<Point> = [];
     children.forEach((child) => {
       const e = this.getElement(child);
       if (e == null) {
@@ -4180,7 +4180,7 @@ class DiagramElementCollection extends DiagramElement {
       const boundaries = this.getVertexSpaceBoundaries();
       return getBoundingRect(boundaries);
     }
-    const points = [];
+    const points: Array<Point> = [];
     elementsToBound.forEach((element) => {
       const e = this.getElement(element);
       if (e == null) {
@@ -4364,7 +4364,7 @@ class DiagramElementCollection extends DiagramElement {
     if (elementsToBound == null) {
       return super.getDiagramBoundingRect();
     }
-    const points = [];
+    const points: Array<Point> = [];
     elementsToBound.forEach((element) => {
       let e;
       if (typeof element === 'string') {
