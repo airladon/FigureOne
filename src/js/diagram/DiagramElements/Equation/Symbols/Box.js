@@ -72,7 +72,13 @@ export default class Box extends Symbol {
   /* eslint-disable class-methods-use-this */
   getBounds(
     options: {
-      lineWidth?: number, staticWidth?: number, staticHeight?: number, draw: 'dynamic' | 'static',
+      lineWidth?: number,
+      height?: number,
+      width?: number,
+      draw?: 'dynamic' | 'static',
+      staticWidth?: number | 'first',
+      staticHeight?: number | 'first',
+      fill?: boolean,
     },
     leftIn: number,
     bottomIn: number,
@@ -124,8 +130,11 @@ export default class Box extends Symbol {
 
   /* eslint-disable class-methods-use-this */
   // $FlowFixMe
-  getDefaultValues(height: number, width: ?number, options: {
+  getDefaultValues(height: number, width: number, options: {
       lineWidth?: number,
+      fill?: boolean,
+      height?: number,
+      width?: number,
     }): {
       height: number,
       width: number,
