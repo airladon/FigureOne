@@ -32,9 +32,6 @@ describe('Bounds', () => {
       test('Array', () => {
         bounds = new RangeBounds({ min: -10, max: 10, precision: 5 });
       });
-      // test('values', () => {
-      //   bounds = new RangeBounds(-10, 10, 5);
-      // });
     });
     describe('Duplication', () => {
       test('All Values', () => {
@@ -299,9 +296,6 @@ describe('Bounds', () => {
             left: -10, bottom: -9, right: 8, top: 7, bounds: 'outside', precision: 5,
           });
         });
-        // test('values', () => {
-        //   bounds = new RectBounds(-10, -9, 8, 7, 5);
-        // });
       });
       describe('Infinite Right', () => {
         afterEach(() => {
@@ -317,9 +311,6 @@ describe('Bounds', () => {
             left: -10, bottom: -9, right: null, top: 7, precision: 5,
           });
         });
-        // test('values', () => {
-        //   bounds = new RectBounds(-10, -9, null, 7, 5);
-        // });
       });
       describe('Infinite Left and Right', () => {
         afterEach(() => {
@@ -335,9 +326,6 @@ describe('Bounds', () => {
             left: null, bottom: -9, right: null, top: 7, precision: 5,
           });
         });
-        // test('values', () => {
-        //   bounds = new RectBounds(null, -9, null, 7, 5);
-        // });
       });
     });
     describe('Duplication', () => {

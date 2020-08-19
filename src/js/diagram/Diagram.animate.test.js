@@ -194,7 +194,7 @@ describe('Animate To State', () => {
       diagram.draw(0);
       diagram.draw(0.5);
       expect(diagram.isAnimating()).toBe(true);
-      expect(callback.mock.calls).toHaveLength(0)
+      expect(callback.mock.calls).toHaveLength(0);
 
       diagram.draw(1);
       expect(diagram.isAnimating()).toBe(false);

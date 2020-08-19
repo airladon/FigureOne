@@ -219,7 +219,6 @@ describe('Seek', () => {
       diagram.mock.timeStep(0.5, frameStep);
       expect(transforms()).toEqual(['playing', 2, [1], [], [1], 0]);
     });
-    // test('Seek to before pulse', () => {});
     test('Seek to start of pulse', () => {
       expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
       recorder.seek(2);
@@ -231,7 +230,6 @@ describe('Seek', () => {
       diagram.mock.timeStep(0.5, frameStep);
       expect(transforms()).toEqual(['playing', 2, [2], [], [2], 1]);
     });
-    // test('Seek to middle of pulse', () => {});
     test('Seek to end of pulse', () => {
       expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
       recorder.seek(4);
@@ -1146,9 +1144,6 @@ describe('Seek', () => {
       });
     });
   });
-  // test('Basic touch test', () => {
-
-  // });
   test('Seek to middle of animation, touch and move diagram element', () => {
     expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
     recorder.seek(1.5);

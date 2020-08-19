@@ -1078,44 +1078,5 @@ describe('Animationa and Movement', () => {
       expect(round(box.right, 3)).toEqual((0.105 + 0.5) * 2 + 0.5);
       expect(round(box.top, 3)).toEqual(0.105 * 2 + 0.5);
     });
-    // test('square vertices offset to origin with scale 1', () => {
-    //   const sq = new VertexPolygon(
-    //     webgl,
-    //     Math.sqrt(2) * 0.1, 4, 4, Math.sqrt(2) * 0.01,
-    //     Math.PI / 4, new Point(0.5, 0),
-    //   );
-    //   const square = new DiagramElementPrimitive(sq);
-    //   const box = square.getGLBoundingRect();
-    //   expect(box.max.round()).toEqual(new Point(0.105 + 0.5, 0.105));
-    //   expect(box.min.round()).toEqual(new Point(-0.105 + 0.5, -0.105));
-    // });
-    // test('square element offset to origin with scale 1', () => {
-    //   const sq = new VertexPolygon(
-    //     webgl,
-    //     Math.sqrt(2) * 0.1, 4, 4, Math.sqrt(2) * 0.01,
-    //     Math.PI / 4, new Point(0, 0),
-    //   );
-    //   const square = new DiagramElementPrimitive(
-    //     sq,
-    //     new Transform().scale(1, 1).rotate(0).translate(0.5, 0),
-    //   );
-    //   const box = square.getGLBoundingRect();
-    //   expect(box.max.round()).toEqual(new Point(0.105 + 0.5, 0.105));
-    //   expect(box.min.round()).toEqual(new Point(-0.105 + 0.5, -0.105));
-    // });
-    // test('square element offset to origin with scale 2', () => {
-    //   const sq = new VertexPolygon(
-    //     webgl,
-    //     Math.sqrt(2) * 0.1, 4, 4, Math.sqrt(2) * 0.01,
-    //     Math.PI / 4, new Point(0.5, 0),
-    //   );
-    //   const square = new DiagramElementPrimitive(
-    //     sq,
-    //     new Transform().scale(2, 2).rotate(0).translate(0, 0),
-    //   );
-    //   const box = square.getGLBoundingRect();
-    //   expect(box.max.round()).toEqual(new Point(0.105 * 2 + 0.5 * 2, 0.105 * 2));
-    //   expect(box.min.round()).toEqual(new Point(-0.105 * 2 + 0.5 * 2, -0.105 * 2));
-    // });
   });
 });

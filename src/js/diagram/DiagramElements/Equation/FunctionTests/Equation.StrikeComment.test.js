@@ -370,46 +370,4 @@ describe('Equation Functions - Bar', () => {
       expect(round(newB.left)).toBe(round(newA.left + newA.width / 2 - newB.width / 2));
     });
   });
-  // test('Top Strike Parameters', () => {
-  //   functions.topStrikeParameterSteps();
-  //   const elems = [eqn._a, eqn._b, eqn._x];
-  //   const withFormsToTest = ['1', '2'];
-
-  //   // get without positions
-  //   eqn.showForm('without');
-  //   const withoutPos = elems.map(elem => round(elem.transform.mat).slice());
-
-  //   // with reference positions
-  //   eqn.showForm('0');
-  //   const withPos = elems.map(elem => round(elem.transform.mat).slice());
-
-  //   expect(withoutPos).not.toEqual(withPos);
-
-  //   withFormsToTest.forEach((f) => {
-  //     eqn.showForm(f);
-  //     const positions = elems.map(elem => round(elem.transform.mat).slice());
-  //     expect(withPos).toEqual(positions);
-  //   });
-  // });
-  // test('Bottom Strike Parameters', () => {
-  //   functions.bottomStrike();
-  //   const elems = [eqn._a, eqn._b, eqn._x];
-  //   const withFormsToTest = ['1', '2'];
-
-  //   // get without positions
-  //   eqn.showForm('without');
-  //   const withoutPos = elems.map(elem => round(elem.transform.mat).slice());
-
-  //   // with reference positions
-  //   eqn.showForm('0');
-  //   const withPos = elems.map(elem => round(elem.transform.mat).slice());
-
-  //   expect(withoutPos).not.toEqual(withPos);
-
-  //   withFormsToTest.forEach((f) => {
-  //     eqn.showForm(f);
-  //     const positions = elems.map(elem => round(elem.transform.mat).slice());
-  //     expect(withPos).toEqual(positions);
-  //   });
-  // });
 });
