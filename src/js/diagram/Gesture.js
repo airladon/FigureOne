@@ -144,7 +144,7 @@ class Gesture {
     this.removeEvent('touchmove', this.touchMoveHandler, false);
     // this.removeEvent('keypress', this.keypressHandler, false);
     // $FlowFixMe
-    if (document.removeEvent != null) {
+    if (document.removeEvent != null) { // $FlowFixMe
       document.removeEvent('keypress', this.keypressHandler, false);
     }
   }

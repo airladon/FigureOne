@@ -513,38 +513,6 @@ describe('Transform', () => {
         expect(v.r()).toEqual(0);
         expect(v.t()).toEqual(new Point(0, 0));
       });
-      // // If a transform element is missing from the zero transform, then no
-      // // minimum will be applied
-      // test('zero missing a transform element', () => {
-      //   zero = new Transform().rotate(0.2).scale(0.2, 0.2);
-      //   t1 = new Transform()
-      //     .scale(0.2, -0.00001)
-      //     .rotate(0.00001)
-      //     .translate(0.2, 0.00001);
-      //   const v = t1.velocity(t0, deltaTime, zero, max);
-      //   expect(v).toEqual(t1);
-      // });
-      // // If a transform element is missing from the max transform, then
-      // // no maximum will be applied.
-      // test('max missing a transform element', () => {
-      //   max = new Transform().rotate(20).scale(20, 20);
-      //   t1 = new Transform()
-      //     .scale(30, -100001)
-      //     .rotate(100001)
-      //     .translate(30, 100001);
-      //   let v = t1.velocity(t0, deltaTime, zero, max);
-      //   expect(v).toEqual(t1);
-
-      //   // Test missing max when zero threshold is enforced.
-      //   t1 = new Transform()
-      //     .scale(30, -100001)
-      //     .rotate(100001)
-      //     .translate(0.1, 100001);
-      //   v = t1.velocity(t0, deltaTime, zero, max);
-      //   const vExpected = t1._dup();
-      //   vExpected.updateTranslation(0, 100001);
-      //   expect(v).toEqual(vExpected);
-      // });
     });
     // Calculation for deceleration:
     // s = function(sx, sy, vx, vy, d, t) {

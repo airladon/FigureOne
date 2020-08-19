@@ -41,7 +41,12 @@ export default function Box(
     if (elements.length === 0) {
       return;
     }
-    const space = getPoint(spaceIn);
+    let space;
+    if (typeof spaceIn === 'number') {
+      space = new Point(spaceIn, spaceIn);
+    } else {
+      space = getPoint(spaceIn);
+    }
     const maxBounds = elements[0].getBoundingRect(drawingSpace);
     for (let i = 1; i < elements.length; i += 1) {
       const bounds = elements[i].getBoundingRect(drawingSpace);

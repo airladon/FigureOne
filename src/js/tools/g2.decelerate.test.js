@@ -1,19 +1,10 @@
 import {
-  Point, Rect, RectBounds, LineBounds, RangeBounds,
-  deceleratePoint, decelerateValue, decelerateTransform, getTransformDefinition,
+  Point, RectBounds, LineBounds, RangeBounds,
+  deceleratePoint, decelerateValue, decelerateTransform,
   Transform,
 } from './g2';
 import { round } from './math';
 
-// describe('getTransformDefinition', () => {
-//   test('Simple', () => {
-//     const transform = new Transform().translate(0, 0);
-//     const transformDefinition = {
-//       translate: 1,
-//     };
-//     getTransformDefinition
-//   })
-// });
 describe('Decelerate Value', () => {
   describe('No Bounds', () => {
     test('From origin', () => {
@@ -71,7 +62,6 @@ describe('Decelerate Value', () => {
         const v = 5;
         const deceleration = 1;
         const deltaTime = 2;
-        // const bounds = new RectBounds({ left: { left: -4.5, bottom: bottom: -1, right: right: 9, top: top: 2 } });
         const bounds = new RangeBounds({ min: -4.5, max: 4.5 });
         const bounceLoss = 0;
         const { velocity, value } = decelerateValue(
@@ -425,7 +415,8 @@ describe('Calculate Stop', () => {
       const v = new Point(5 * 0.70710678, 5 * 0.70710678);
       const deceleration = 1;
       const bounds = new RectBounds({
-        left: -5.6568542494, bottom: -100, right: 5.6568542494, top: 100 });
+        left: -5.6568542494, bottom: -100, right: 5.6568542494, top: 100,
+      });
       const bounceLoss = 0;
       const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       // Velocity mag: 5, angle 45º
@@ -851,8 +842,8 @@ describe('Decelerate Transform', () => {
         left: -4.5 / Math.sqrt(2),
         bottom: -4.5 / Math.sqrt(2),
         right: 4.5 / Math.sqrt(2),
-        top: 4.5 / Math.sqrt(2)
-        }),
+        top: 4.5 / Math.sqrt(2),
+      }),
     ];
     // const bounds = [null, null, null];
     const deltaTime = 2;
