@@ -1057,7 +1057,7 @@ class Subscriber {
     return this.nextId - 1;
   }
 
-  trigger(payload: any) {
+  publish(payload: any) {
     const subscribersToRemove = [];
     for (let i = 0; i < this.order.length; i += 1) {
       const id = this.order[i];
@@ -1068,9 +1068,9 @@ class Subscriber {
       if (num === 1) {
         subscribersToRemove.push(id);
       }
-      let triggerOk = false;
+      let publishOk = false;
       if (num !== 0) {
-        triggerOk = true;
+        publishOk = true;
         // subscribersToRemove.push(id);
       }
       if (num > 0) {
@@ -1080,11 +1080,11 @@ class Subscriber {
       // if (num > 0) {
       // }
       // else if (num > 1) {
-      //   triggerOk = true;
+      //   publishOk = true;
       //   this.subscribers[`${id}`].num = num - 1;
       // }
       // if (this.subscribers[`${id}`].num > 0) {
-      if (triggerOk) {
+      if (publishOk) {
         this.fnMap.exec(callback, payload);
       }
     }
@@ -1130,9 +1130,9 @@ class SubscriptionManager {
     return this.subscriptions[subscriptionName].add(callback, numberOfSubscriptions);
   }
 
-  trigger(subscriptionName: string, payload: any) {
+  publish(subscriptionName: string, payload: any) {
     if (this.subscriptions[subscriptionName] != null) {
-      this.subscriptions[subscriptionName].trigger(payload);
+      this.subscriptions[subscriptionName].publish(payload);
     }
   }
 
