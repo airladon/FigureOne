@@ -17,8 +17,7 @@ diagram.addElement(
       isTouchable: true,
       isMovable: true,
       move: {
-        canBeMovedAfterLosingTouch: true,
-        boundary: 'diagram',
+        bounds: 'diagram',
       },
     },
   },
