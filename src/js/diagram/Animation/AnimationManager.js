@@ -174,7 +174,7 @@ export default class AnimationManager {
       if (this.state === 'animating') {
         this.state = 'idle';
         callback = this.finishedCallback;
-        this.subscriptions.trigger('finished');
+        this.subscriptions.publish('finished');
         // this.fnMap.exec(this.finishedCallback);
       }
       this.state = 'idle';
@@ -210,7 +210,7 @@ export default class AnimationManager {
         this.state = 'idle';
         // console.log('clean finished', this.element.name, this.finishedCallback)
         this.fnMap.exec(this.finishedCallback);
-        this.subscriptions.trigger('finished');
+        this.subscriptions.publish('finished');
       }
       this.state = 'idle';
     }
@@ -269,7 +269,7 @@ export default class AnimationManager {
     }
     if (this.state === 'idle') {
       this.fnMap.exec(this.finishedCallback);
-      this.subscriptions.trigger('finished');
+      this.subscriptions.publish('finished');
     }
   }
 
@@ -289,7 +289,7 @@ export default class AnimationManager {
     }
     if (this.state === 'idle') {
       this.fnMap.exec(this.finishedCallback);
-      this.subscriptions.trigger('finished');
+      this.subscriptions.publish('finished');
     }
   }
 

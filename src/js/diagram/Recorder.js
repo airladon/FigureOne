@@ -282,7 +282,7 @@ class Recorder {
 
   setCurrentTime(time: number) {
     this.currentTime = time;
-    this.subscriptions.trigger('timeUpdate', [time]);
+    this.subscriptions.publish('timeUpdate', [time]);
   }
 
   setVideoToNowDeltaTime(videoSeekTime: number = 0) {
@@ -357,7 +357,7 @@ class Recorder {
     this.audio.onloadedmetadata = () => {
       this.duration = this.calcDuration();
     };
-    this.subscriptions.trigger('audioLoaded');
+    this.subscriptions.publish('audioLoaded');
   }
 
   loadEvents(
@@ -375,7 +375,7 @@ class Recorder {
       this.events[eventName].list = lists[eventName];
     });
     this.duration = this.calcDuration();
-    this.subscriptions.trigger('eventsLoaded');
+    this.subscriptions.publish('eventsLoaded');
   }
 
   loadStates(
@@ -385,7 +385,7 @@ class Recorder {
   ) {
     this.states = this.decodeStates(statesIn, isMinified, isObjectForm);
     this.duration = this.calcDuration();
-    this.subscriptions.trigger('statesLoaded');
+    this.subscriptions.publish('statesLoaded');
   }
 
   encodeEvents(
@@ -536,7 +536,7 @@ class Recorder {
     // this.initializePlayback(fromTime);
     this.startEventsPlayback(fromTime);
     this.startAudioPlayback(fromTime);
-    this.subscriptions.trigger('startRecording');
+    this.subscriptions.publish('startRecording');
     this.startRecordingTime = fromTime;
     this.startTimeUpdates();
     // console.log('recorder is', this.state);
@@ -734,7 +734,7 @@ class Recorder {
       this.isAudioPlaying = false;
     }
     this.lastSeekTime = null;
-    this.subscriptions.trigger('stopRecording');
+    this.subscriptions.publish('stopRecording');
     // this.mergeEventsCache();
     // this.mergeStatesCache();
     // this.duration = this.calcDuration();
@@ -1199,14 +1199,14 @@ class Recorder {
       if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
         this.finishPlaying();
       }
-      this.subscriptions.trigger('playbackStarted');
+      this.subscriptions.publish('playbackStarted');
     };
 
     // console.log(this.settings.play)
     this.diagram.setState(stateToStartFrom, this.settings.play);
     if (this.diagram.state.preparingToSetState) {
       this.state = 'preparingToPlay';
-      this.subscriptions.trigger('preparingToPlay');
+      this.subscriptions.publish('preparingToPlay');
       this.diagram.subscriptions.add('stateSet', finished, 1);
       // console.log(this.diagram.subscriptions.subscriptions.stateSet)
     } else {
@@ -1292,7 +1292,7 @@ class Recorder {
     this.timeUpdatesTimeoutID = new GlobalAnimation().setTimeout(
       () => {
         this.setCurrentTime(this.getCurrentTime());
-        this.subscriptions.trigger('timeUpdate', [this.getCurrentTime()]);
+        this.subscriptions.publish('timeUpdate', [this.getCurrentTime()]);
         this.startTimeUpdates();
       },
       100,
@@ -1434,7 +1434,7 @@ class Recorder {
       this.isAudioPlaying = false;
     }
     this.state = 'idle';
-    this.subscriptions.trigger('playbackStopped');
+    this.subscriptions.publish('playbackStopped');
   }
 
   // On pause, animations and pauses can complete and clear:
@@ -1462,7 +1462,7 @@ class Recorder {
 
     const pause = () => {
       this.state = 'idle';
-      this.subscriptions.trigger('playbackStopped');
+      this.subscriptions.publish('playbackStopped');
       // this.diagram.stop();
     };
     this.stopTimeouts();
@@ -1474,13 +1474,13 @@ class Recorder {
     this.diagram.subscriptions.add('stopped', pause, 1);
     this.diagram.stop(how);
     if (this.diagram.state.preparingToStop) {
-      this.subscriptions.trigger('preparingToPause');
+      this.subscriptions.publish('preparingToPause');
       this.state = 'preparingToPause';
       // console.log('recorder prep to pause')
       // this.diagram.subscriptions.add('animationsFinished', pause, 1);
     }
     // if (this.diagram.isAnimating()) {
-    //   this.subscriptions.trigger('preparingToPause');
+    //   this.subscriptions.publish('preparingToPause');
     //   this.state = 'preparingToPause';
     //   // console.log('recorder prep to pause')
     //   this.diagram.subscriptions.add('animationsFinished', pause, 1);

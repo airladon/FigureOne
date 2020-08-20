@@ -578,7 +578,7 @@ class Diagram {
       }
       this.animateNextFrame();
       // console.log('triggered')
-      this.subscriptions.trigger('stateSet');
+      this.subscriptions.publish('stateSet');
     };
 
     let options = {
@@ -671,7 +671,7 @@ class Diagram {
 
     if (!finishedFlag) {
       this.state.preparingToSetState = true;
-      this.subscriptions.trigger('preparingToSetState');
+      this.subscriptions.publish('preparingToSetState');
     }
     this.animateNextFrame();
   }
@@ -1048,7 +1048,7 @@ class Diagram {
       return;
     }
     this.fnMap.exec(this.animationFinishedCallback);
-    this.subscriptions.trigger('animationsFinished');
+    this.subscriptions.publish('animationsFinished');
   }
 
   setFirstTransform() {
@@ -1662,7 +1662,7 @@ class Diagram {
     how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel',
   ) {
     const stopped = () => {
-      this.subscriptions.trigger('stopped');
+      this.subscriptions.publish('stopped');
       this.state.preparingToStop = false;
     };
     if (!this.elements.isAnimating()) {
@@ -1697,7 +1697,7 @@ class Diagram {
       if (preparingToStopCounter === 0) {
         checkAllStopped();
       } else if (preparingToStopCounter > 0) {
-        this.subscriptions.trigger('preparingToStop');
+        this.subscriptions.publish('preparingToStop');
         this.state.preparingToStop = true;
       }
       return;
@@ -1712,7 +1712,7 @@ class Diagram {
     this.setState(completeState, 'dissolve');
     if (this.state.preparingToSetState) {
       this.subscriptions.add('stateSet', stopped, 1);
-      this.subscriptions.trigger('preparingToStop');
+      this.subscriptions.publish('preparingToStop');
       this.state.preparingToStop = true;
     } else {
       stopped();
@@ -1801,7 +1801,7 @@ class Diagram {
   //     if (preparingToPauseCounter === 0) {
   //       this.state.pause = 'paused';
   //       this.isPaused = true;
-  //       this.subscriptions.trigger('paused');
+  //       this.subscriptions.publish('paused');
   //     }
   //   }
   //   elements.forEach((element) => {
@@ -1815,7 +1815,7 @@ class Diagram {
   //     checkAllPaused();
   //   } else if (preparingToPauseCounter > 0) {
   //     this.state.pause = 'preparingToPause';
-  //     this.subscriptions.trigger('preparingToPause');
+  //     this.subscriptions.publish('preparingToPause');
   //   }
   // }
 
@@ -1828,7 +1828,7 @@ class Diagram {
     this.isPaused = false;
     this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.pauseTime);
     this.animateNextFrame();
-    this.subscriptions.trigger('unpaused');
+    this.subscriptions.publish('unpaused');
   }
 
   // unpauseLegacy() {
@@ -1844,7 +1844,7 @@ class Diagram {
   //       this.isPaused = false;
   //       this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.pauseTime);
   //       this.animateNextFrame();
-  //       this.subscriptions.trigger('unpaused');
+  //       this.subscriptions.publish('unpaused');
   //     }
   //   };
   //   elements.forEach((element) => {
@@ -1857,7 +1857,7 @@ class Diagram {
   //     checkAllUnpaused();
   //   } else if (preparingToUnpauseCounter > 0) {
   //     this.state.pause = 'preparingToUnpause';
-  //     this.subscriptions.trigger('preparingToUnpause');
+  //     this.subscriptions.publish('preparingToUnpause');
   //   }
   //   // // this.state.pause = this.elements.getPause();
   //   // this.pauseTime = performance.now() / 1000;
