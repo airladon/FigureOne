@@ -3,16 +3,7 @@ const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 // eslint-disable-next-line import/no-unresolved
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-// eslint-disable-next-line import/no-unresolved
-// const webpack = require('webpack');
-// eslint-disable-next-line import/no-unresolved
-// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies
-// const Autoprefixer = require('autoprefixer');
-// eslint-disable-next-line import/no-unresolved
-// const CopyWebpackPlugin = require('copy-webpack-plugin');
-// eslint-disable-next-line import/no-unresolved
-// const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
 
 const buildPath = path.resolve(__dirname, 'package');
 
@@ -22,8 +13,6 @@ const envConfig = {
     shortName: 'prod',
     uglify: true,
     webpackMode: 'production',
-    // devtool: 'source-map',
-    // uglifySourceMap: true,
     devtool: false,
     uglifySourceMap: false,
     output: 'figureone.min.js',
@@ -73,6 +62,9 @@ module.exports = (env) => {
           beautify: false,
           // ...options
         },
+        compress: {
+          passes: 3,
+        },
         toplevel: false,
         nameCache: null,
         ie8: false,
@@ -93,39 +85,9 @@ module.exports = (env) => {
     clean = new CleanWebpackPlugin();
   }
 
-  // const extract = new MiniCssExtractPlugin({
-  //   // Options similar to the same options in webpackOptions.output
-  //   // both options are optional
-  //   filename: '[name].css',
-  //   chunkFilename: '[id].css',
-  // });
-
-  // const copy = new CopyWebpackPlugin({
-  //   patterns: [
-  //     {
-  //       from: '/opt/app/src/Lessons/*/*/topic.png',
-  //       to: '/opt/app/app/app/static/dist/[1][name].[ext]',
-  //       // test: /\/opt\/app\/src\/(.*)topic\.png$/,
-  //     },
-  //   ],
-  // });
-
-  // let cssMini = '';
-  // if (e.uglify) {
-  //   cssMini = new OptimizeCssAssetsPlugin({
-  //     assetNameRegExp: /\.css$/g,
-  //     // cssProcessor: require('cssnano'),
-  //     cssProcessorPluginOptions: {
-  //       preset: ['default', { discardComments: { removeAll: true } }],
-  //     },
-  //     canPrint: true,
-  //   });
-  // }
   // Make the plugin array filtering out those plugins that are null
   const pluginArray = [
     uglify,
-    // extract,
-    // copy,
     clean].filter(elem => elem !== '');
 
   let externals = {};
@@ -141,7 +103,6 @@ module.exports = (env) => {
       path: buildPath,
       filename: e.output,
       library: 'Fig',
-      // libraryTarget: 'var',
       libraryExport: 'default',
       libraryTarget: 'umd',
       umdNamedDefine: true,
@@ -185,13 +146,8 @@ module.exports = (env) => {
               // }
               options: {
                 name(file) {
-                  // if (env === 'development') {
-                  //   return '[path][name].[ext]'
-                  // }
                   let newPath = file.replace('/opt/app/src/', '');
-                  // newPath = newPath.replace('/tile.png', '');
                   newPath = newPath.replace(/\/[^/]*$/, '');
-                  // console.log(newPath)
                   return `${newPath}/[name].[ext]`;
                 },
               },
@@ -203,40 +159,6 @@ module.exports = (env) => {
     plugins: pluginArray,
     mode: e.webpackMode,
     devtool: e.devtool,
-    optimization: {
-      // SplitChunks docs at https://gist.github.com/sokra/1522d586b8e5c0f5072d7565c2bee693
-      splitChunks: {
-        chunks: 'all',
-        minSize: 30000,
-        cacheGroups: {
-          default: {
-            minChunks: 2000,
-            priority: -20,
-            reuseExistingChunk: true,
-          },
-          tools: {
-            minSize: 10,
-            minChunks: 2,
-            priority: -10,
-            reuseExistingChunk: true,
-            test: /js\/(diagram|Lesson|tools|components)/,
-            name: 'tools',
-          },
-          // commoncss: {
-          //   minSize: 10,
-          //   minChunks: 2,
-          //   priority: -10,
-          //   reuseExistingChunk: true,
-          //   test: /css\/*\.(css|scss|sass)$/,
-          //   name: 'commoncss',
-          // },
-          vendors: {
-            test: /[\\/]node_modules[\\/]/,
-            priority: -10,
-            name: 'vendors',
-          },
-        },
-      },
-    },
+    // optimization: {},
   };
 };
