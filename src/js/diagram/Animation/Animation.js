@@ -5,6 +5,12 @@ import type {
 import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
 
 import type {
+  TypeScenarioAnimationStepInputOptions,
+} from './AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
+import ScenarioAnimationStep from './AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
+
+
+import type {
   TypeColorAnimationStepInputOptions,
 } from './AnimationStep/ElementAnimationStep/ColorAnimationStep';
 import {
@@ -26,6 +32,11 @@ import type {
   TypeTransformAnimationStepInputOptions,
 } from './AnimationStep/ElementAnimationStep/TransformAnimationStep';
 import TransformAnimationStep from './AnimationStep/ElementAnimationStep/TransformAnimationStep';
+
+import type {
+  TypePulseTransformAnimationStepInputOptions,
+} from './AnimationStep/ElementAnimationStep/PulseTransformAnimationStep';
+import PulseTransformAnimationStep from './AnimationStep/ElementAnimationStep/PulseTransformAnimationStep';
 
 import type {
   TypeRotationAnimationStepInputOptions,
@@ -103,7 +114,8 @@ export type {
   TypeColorAnimationStepInputOptions, TypeCustomAnimationStepInputOptions,
   TypeAnimationManagerInputOptions, TypeRotationAnimationStepInputOptions,
   TypeScaleAnimationStepInputOptions, TypePulseAnimationStepInputOptions,
-  TypeOpacityAnimationStepInputOptions,
+  TypeOpacityAnimationStepInputOptions, TypeScenarioAnimationStepInputOptions,
+  TypePulseTransformAnimationStepInputOptions,
 };
 export {
   PositionAnimationStep, AnimationBuilder, ParallelAnimationStep, SerialAnimationStep,
@@ -112,5 +124,6 @@ export {
   DissolveInAnimationStep, dissolveIn, DissolveOutAnimationStep, dissolveOut,
   CustomAnimationStep, custom, AnimationManager, RotationAnimationStep,
   ScaleAnimationStep, PulseAnimationStep, OpacityAnimationStep,
-  DimAnimationStep, dim, UndimAnimationStep, undim,
+  DimAnimationStep, dim, UndimAnimationStep, undim, ScenarioAnimationStep,
+  PulseTransformAnimationStep,
 };

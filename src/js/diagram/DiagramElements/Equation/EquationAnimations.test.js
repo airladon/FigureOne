@@ -117,14 +117,14 @@ describe('Equation Animation', () => {
     diagram.drawNow(2.4);
     expect(a.isShown).toBe(true);
     expect(b.isShown).toBe(true);
-    expect(c.isShown).toBe(true);
+    expect(c.isShown).toBe(false);
     expect(round(a.opacity)).toEqual(0.001);
     expect(b.opacity).toEqual(1);
-    expect(round(c.opacity, 3)).toEqual(0.001);
+    expect(round(c.opacity, 3)).toEqual(1);
     expect(b.getPosition()).toEqual(new Point(0, 0));
     expect(a.animations.animations).toHaveLength(1);
     expect(b.animations.animations).toHaveLength(1);
-    expect(c.animations.animations).toHaveLength(1);
+    expect(c.animations.animations).toHaveLength(0);
 
     // 'c' is now hidden, 'b' starts to move, a' is still waiting
     diagram.drawNow(2.41);

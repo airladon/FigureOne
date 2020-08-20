@@ -63,12 +63,4 @@ describe('Get colors from scss', () => {
       expect(cols).toEqual([0, 0, 0.50196, 1]);
     });
   });
-
-  // describe('Non color css variable', () => {
-  //   test('dimHeight', () => {
-  //     cssColors.mockReturnValue({ dimHeight: '34' });
-  //     const cols = getColors();
-  //     expect(Object.keys(cols)).toHaveLength(0);
-  //   });
-  // });
 });

@@ -3,6 +3,9 @@ import { DiagramElementPrimitive } from '../../../Element';
 import {
   Point, Transform, Rect,
 } from '../../../../tools/g2';
+import {
+  duplicate,
+} from '../../../../tools/tools';
 import VertexSymbol from './VertexSymbol';
 import WebGLInstance from '../../../webgl/webgl';
 import Bounds from '../Elements/Bounds';
@@ -35,6 +38,11 @@ export default class Symbol extends DiagramElementPrimitive {
           const [
             pointsNew, widthNew, heightNew,
           ] = this.getPoints(this.custom.options, s.x, s.y);
+          this.pointsDefinition = {
+            points: duplicate(pointsNew),
+            width: widthNew,
+            height: heightNew,
+          };
           // $FlowFixMe
           this.drawingObject.updatePoints(
             pointsNew,
@@ -69,15 +77,26 @@ export default class Symbol extends DiagramElementPrimitive {
             this.custom.options.staticHeight,
           ));
         }
+        this.pointsDefinition = {
+          points: duplicate(points),
+          width,
+          height,
+        };
         // $FlowFixMe
         this.drawingObject.updatePoints(points, width, height);
         this.custom.options.staticHeight = height;
         this.custom.options.staticWidth = width;
+        // console.log('a', width, height)
         t.updateScale(width, height);
       } else {
         const [
           pointsNew, widthNew, heightNew,
         ] = this.getPoints(this.custom.options, widthIn, heightIn);
+        this.pointsDefinition = {
+          points: duplicate(pointsNew),
+          width: widthNew,
+          height: heightNew,
+        };
         // $FlowFixMe
         this.drawingObject.updatePoints(
           pointsNew,
@@ -85,12 +104,30 @@ export default class Symbol extends DiagramElementPrimitive {
           heightNew,
         );
         this.custom.scale = new Point(widthIn, heightIn);
+        // console.log('b', widthIn, heightIn, this.getPath())
         t.updateScale(widthIn, heightIn);
       }
       t.updateTranslation(location.x, location.y);
       this.setTransform(t);
     };
+
+    this.setPointsFromDefinition = () => {
+      if (Object.keys(this.pointsDefinition).length === 0) {
+        return;
+      }
+      const { points, width, height } = this.pointsDefinition;
+      // $FlowFixMe
+      this.drawingObject.updatePoints(points, width, height);
+      // // if (width == null || height == null || location == null) {
+      // //   return;
+      // // }
+      // this.custom.setSize(this.getPosition(), width, height);
+    };
   }
+
+  // // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  // updatePoints(points: Array<Point>, width: Number, height: number) {
+  // }
 
   getTransform() {
     if (this.custom.options.draw === 'static') {
@@ -149,10 +186,18 @@ export default class Symbol extends DiagramElementPrimitive {
     return height;
   }
 
-  // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  getBounds(options: Object, contentX: number, contentY: number, widthIn: number, heightIn: number, side?: 'left' | 'right' | 'bottom' | 'top') {
+  getBounds(
+    options: Object,
+    contentX: number,
+    contentY: number,
+    contentWidth: number,
+    contentHeight: number,
+    side?: 'left' | 'right' | 'bottom' | 'top',
+  ) {
+    // const contentWidth = contentWidthIn == null ? 0 : contentWidthIn;
+    // const contentHeight = contentHeightIn == null ? 0 : contentHeightIn;
     const { width, height } = this.getDefaultValues(
-      heightIn, widthIn, options,
+      contentHeight, contentWidth, options,
     );
     const bounds = new Bounds();
     if (side === 'left') {
@@ -168,12 +213,12 @@ export default class Symbol extends DiagramElementPrimitive {
     } else if (side === 'top') {
       bounds.bottom = contentY;
       bounds.top = contentY + height;
-      bounds.left = contentX + widthIn / 2 - width / 2;
+      bounds.left = contentX + contentWidth / 2 - width / 2;
       bounds.right = bounds.left + width;
     } else {
       bounds.top = contentY;
       bounds.bottom = contentY - height;
-      bounds.left = contentX + widthIn / 2 - width / 2;
+      bounds.left = contentX + contentWidth / 2 - width / 2;
       bounds.right = bounds.left + width;
     }
     bounds.width = width;
@@ -196,7 +241,7 @@ export default class Symbol extends DiagramElementPrimitive {
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  getDefaultValues(height: ?number, width: ?number, options: {}) {
+  getDefaultValues(height: number, width: number, options: Object) {
     // const out: {
     //   height?: number,
     //   width?: number,

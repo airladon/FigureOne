@@ -15,7 +15,7 @@ export type TypeScaleAnimationStepInputOptions = {
   target?: Point | number;     // Either target or delta must be defined
   delta?: Point | number;      // delta overrides target if both are defined
   velocity?: Point | number;
-  maxTime: ?number;
+  maxDuration: ?number;
 } & TypeElementAnimationStepInputOptions;
 
 export default class ScaleAnimationStep extends ElementAnimationStep {
@@ -24,14 +24,14 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
     delta: ?Point;
     target: ?Point;
     velocity: ?Point;
-    maxTime: ?number;
+    maxDuration: ?number;
   };
 
   constructor(...optionsIn: Array<TypeScaleAnimationStepInputOptions>) {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, { type: 'position' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
-      'start', 'delta', 'target', 'velocity', 'maxTime',
+      'start', 'delta', 'target', 'velocity', 'maxDuration',
     ]);
     super(ElementAnimationStepOptionsIn);
     const defaultPositionOptions = {
@@ -39,7 +39,7 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
       target: null,
       delta: null,
       velocity: null,
-      maxTime: null,
+      maxDuration: null,
     };
     const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
     // $FlowFixMe
@@ -56,15 +56,25 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
 
     copyKeysFromTo(options, this.scale, [
       'start', 'delta', 'target', 'translationStyle',
-      'velocity', 'maxTime',
+      'velocity', 'maxDuration',
     ]);
+  }
+
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'scale',
+    ];
+  }
+
+  _getStateName() {  // eslint-disable-line class-methods-use-this
+    return 'scaleAnimationStep';
   }
 
   // On start, calculate the duration, target and delta if not already present.
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime?: number) {
+  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
     super.start(startTime);
     if (this.scale.start === null) {
       if (this.element != null) {
@@ -103,16 +113,19 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
         new Transform().scale(velocityToUse),
       );
     }
-    if (this.scale.maxTime != null) {
-      if (this.duration > this.scale.maxTime) {
-        this.duration = this.scale.maxTime;
+    if (this.scale.maxDuration != null) {
+      if (this.duration > this.scale.maxDuration) {
+        this.duration = this.scale.maxDuration;
       }
+    }
+    if (startTime === 'now' || startTime === 'prev') {
+      this.setFrame(0);
     }
   }
 
   setFrame(deltaTime: number) {
     const percentTime = deltaTime / this.duration;
-    const percentComplete = this.progression(percentTime);
+    const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;
 
     if (this.scale.start != null && this.scale.delta != null) {
@@ -124,7 +137,7 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
   }
 
   setToEnd() {
-    if (this.element != null) {
+    if (this.element != null && this.scale.target != null) {
       this.element.setScale(this.scale.target);
     }
   }

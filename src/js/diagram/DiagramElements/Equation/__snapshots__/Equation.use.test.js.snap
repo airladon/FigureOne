@@ -7,27 +7,47 @@ DiagramElementPrimitive {
   "anim": Object {
     "builder": [Function],
     "color": [Function],
+    "delay": [Function],
     "dim": [Function],
     "dissolveIn": [Function],
     "dissolveOut": [Function],
     "opacity": [Function],
     "position": [Function],
     "pulse": [Function],
+    "pulseTransform": [Function],
     "rotation": [Function],
     "scale": [Function],
     "scenario": [Function],
     "scenarios": [Function],
     "transform": [Function],
+    "translation": [Function],
     "trigger": [Function],
     "undim": [Function],
   },
+  "animationFinishedCallback": null,
   "animations": AnimationManager {
     "animations": Array [],
     "element": [Circular],
+    "finishedCallback": [Function],
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {},
+    },
     "options": Object {
       "translation": Object {},
     },
     "state": "idle",
+    "subscriptions": SubscriptionManager {
+      "fnMap": FunctionMap {
+        "global": GlobalFunctionMap {
+          "map": Object {},
+        },
+        "map": Object {},
+      },
+      "subscriptions": Object {},
+    },
   },
   "beforeDrawCallback": null,
   "cannotTouchHole": false,
@@ -37,6 +57,7 @@ DiagramElementPrimitive {
     0,
     1,
   ],
+  "copyTransforms": Array [],
   "custom": Object {},
   "defaultColor": Array [
     0.95,
@@ -44,6 +65,7 @@ DiagramElementPrimitive {
     0,
     1,
   ],
+  "dependantTransform": false,
   "diagramLimits": Rect {
     "bottom": -1,
     "height": 2,
@@ -59,6 +81,7 @@ DiagramElementPrimitive {
     1,
   ],
   "drawPriority": 1,
+  "drawTransforms": Array [],
   "drawingObject": TextObject {
     "border": Array [
       Array [
@@ -165,13 +188,36 @@ DiagramElementPrimitive {
     ],
     "type": "drawingObject",
   },
+  "fnMap": FunctionMap {
+    "global": GlobalFunctionMap {
+      "map": Object {},
+    },
+    "map": Object {
+      "_elementPulseSettingsTransformMethod": Object {
+        "fn": [Function],
+      },
+      "tools.math.easeinout": Object {
+        "fn": [Function],
+      },
+      "tools.math.linear": Object {
+        "fn": [Function],
+      },
+      "tools.math.sinusoid": Object {
+        "fn": [Function],
+      },
+      "tools.math.triangle": Object {
+        "fn": [Function],
+      },
+    },
+  },
+  "frozenPulseTransforms": Array [],
   "hasTouchableElements": false,
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
     "y": 0,
   },
-  "internalSetTransformCallback": [Function],
+  "internalSetTransformCallback": null,
   "isInteractive": undefined,
   "isMovable": false,
   "isRenderedAsImage": false,
@@ -181,6 +227,7 @@ DiagramElementPrimitive {
     "elementCount": 3,
     "parentCount": 6,
   },
+  "lastDrawOpacity": 1,
   "lastDrawPulseTransform": Transform {
     "_type": "transform",
     "index": 3,
@@ -215,6 +262,7 @@ DiagramElementPrimitive {
       },
     ],
   },
+  "lastDrawTime": 0,
   "lastDrawTransform": Transform {
     "_type": "transform",
     "index": 0,
@@ -283,105 +331,54 @@ DiagramElementPrimitive {
   },
   "lengthToDraw": -1,
   "move": Object {
-    "bounce": true,
-    "boundary": null,
-    "canBeMovedAfterLosingTouch": false,
+    "bounds": TransformBounds {
+      "boundary": Array [
+        null,
+        null,
+        null,
+      ],
+      "bounds": "inside",
+      "order": Array [
+        "s",
+        "r",
+        "t",
+      ],
+      "precision": 8,
+    },
+    "canBeMovedAfterLosingTouch": true,
     "element": null,
     "freely": Object {
+      "bounceLoss": 0.5,
       "callback": null,
-      "deceleration": TransformLimit {
-        "rotation": 5,
-        "scale": 5,
-        "translation": 5,
-      },
-      "zeroVelocityThreshold": TransformLimit {
-        "rotation": 0.001,
-        "scale": 0.001,
-        "translation": 0.001,
-      },
+      "deceleration": 5,
+      "zeroVelocityThreshold": 0.0001,
     },
-    "limitLine": null,
-    "maxTransform": Transform {
-      "_type": "transform",
-      "index": 3,
-      "mat": Array [
-        562.3790762907031,
-        -826.8795405320025,
-        1000,
-        826.8795405320025,
-        562.3790762907031,
-        1000,
-        0,
-        0,
-        1,
-      ],
-      "name": "text",
-      "order": Array [
-        Scale {
-          "_type": "point",
-          "name": "text",
-          "x": 1000,
-          "y": 1000,
-        },
-        Rotation {
-          "name": "text",
-          "r": 1000,
-        },
-        Translation {
-          "_type": "point",
-          "name": "text",
-          "x": 1000,
-          "y": 1000,
-        },
-      ],
-    },
-    "maxVelocity": TransformLimit {
-      "rotation": 5,
-      "scale": 5,
-      "translation": 5,
-    },
-    "minTransform": Transform {
-      "_type": "transform",
-      "index": 3,
-      "mat": Array [
-        -562.3790762907031,
-        -826.8795405320025,
-        -1000,
-        826.8795405320025,
-        -562.3790762907031,
-        -1000,
-        0,
-        0,
-        1,
-      ],
-      "name": "text",
-      "order": Array [
-        Scale {
-          "_type": "point",
-          "name": "text",
-          "x": -1000,
-          "y": -1000,
-        },
-        Rotation {
-          "name": "text",
-          "r": -1000,
-        },
-        Translation {
-          "_type": "point",
-          "name": "text",
-          "x": -1000,
-          "y": -1000,
-        },
-      ],
-    },
+    "maxVelocity": 5,
     "transformClip": null,
     "type": "translation",
   },
   "name": "a",
-  "noRotationFromParent": false,
   "onClick": null,
   "opacity": 1,
   "parent": null,
+  "parentTransform": Transform {
+    "_type": "transform",
+    "index": 0,
+    "mat": Array [
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+    ],
+    "name": "",
+    "order": Array [],
+  },
+  "pointsDefinition": Object {},
   "pointsToDraw": -1,
   "pulseDefault": Object {
     "frequency": 0,
@@ -392,6 +389,7 @@ DiagramElementPrimitive {
     "A": 1,
     "B": 0.5,
     "C": 0,
+    "allowFreezeOnStop": false,
     "callback": [Function],
     "delta": Point {
       "_type": "point",
@@ -400,19 +398,71 @@ DiagramElementPrimitive {
     },
     "frequency": 0.5,
     "num": 1,
-    "style": [Function],
+    "progression": "tools.math.sinusoid",
     "time": 1,
-    "transformMethod": [Function],
+    "transformMethod": "_elementPulseSettingsTransformMethod",
+  },
+  "pulseTransforms": Array [],
+  "recorder": Recorder {
+    "audio": null,
+    "currentTime": 0,
+    "duration": 0,
+    "eventIndex": Object {},
+    "events": Object {},
+    "eventsCache": Object {},
+    "eventsToPlay": Array [],
+    "isAudioPlaying": false,
+    "lastRecordTime": null,
+    "lastRecordTimeCount": 0,
+    "lastSeekTime": null,
+    "pauseState": null,
+    "precision": 4,
+    "reference": "__base",
+    "settings": Object {
+      "pause": "freeze",
+      "play": "instant",
+    },
+    "state": "idle",
+    "stateIndex": -1,
+    "stateTimeStep": 1,
+    "states": ObjectTracker {
+      "baseReference": null,
+      "diffs": Array [],
+      "lastReferenceName": "__base",
+      "precision": 8,
+      "references": Object {},
+    },
+    "statesCache": ObjectTracker {
+      "baseReference": null,
+      "diffs": Array [],
+      "lastReferenceName": "__base",
+      "precision": 8,
+      "references": Object {},
+    },
+    "subscriptions": SubscriptionManager {
+      "fnMap": FunctionMap {
+        "global": GlobalFunctionMap {
+          "map": Object {},
+        },
+        "map": Object {},
+      },
+      "subscriptions": Object {},
+    },
+    "timeUpdatesTimeoutID": null,
+    "timeoutID": null,
+    "videoToNowDelta": 0,
+    "worker": null,
   },
   "renderedOnNextDraw": false,
   "scenarios": Object {},
-  "setTransformCallback": [Function],
+  "setPointsFromDefinition": null,
+  "setTransformCallback": null,
   "state": Object {
     "isBeingMoved": false,
     "isMovingFreely": false,
     "isPulsing": false,
     "movement": Object {
-      "previousTime": -1,
+      "previousTime": null,
       "previousTransform": Transform {
         "_type": "transform",
         "index": 3,
@@ -482,9 +532,36 @@ DiagramElementPrimitive {
         ],
       },
     },
+    "preparingToStop": false,
     "pulse": Object {
-      "startTime": -1,
+      "startTime": null,
     },
+  },
+  "stateProperties": Array [],
+  "subscriptions": SubscriptionManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "subscriptions": Object {},
   },
   "tieToHTML": Object {
     "element": null,

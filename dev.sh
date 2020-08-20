@@ -26,17 +26,17 @@ docker_run() {
     docker run -it --rm \
       -v $HOST_PATH/src:/opt/app/src \
       -v $HOST_PATH/package:/opt/app/package \
-      --name figureone_dev \
+      --name figureone-dev \
       --entrypoint $2 \
-      figureone_dev \
+      figureone-dev \
       -c $3 $4 $5 $6
     else
     docker run -it --rm \
       -v $HOST_PATH/package:/opt/app/package \
       -v $HOST_PATH/src:/opt/app/src \
-      --name figureone_dev \
+      --name figureone-dev \
       --entrypoint $2 \
-      figureone_dev
+      figureone-dev
   fi
 
   if [ $? != 0 ];
@@ -63,7 +63,7 @@ check_status() {
 # Build docker image
 echo "${bold}${cyan}================= Building Image ===================${reset}"
 cp containers/figureone/Dockerfile Dockerfile
-docker build -t figureone_dev .
+docker build -t figureone-dev .
 rm Dockerfile
 
 FAIL=0
@@ -74,6 +74,7 @@ FAIL=0
 DEV_PATH=../thisiget
 DEV_FIGUREONE=$DEV_PATH/src/figureone
 DEV_STATIC=$DEV_PATH/app/app/static
+DEV_WORKER=$DEV_PATH/app/app/static/workers
 docker_run "Dev Packaging" npm run webpack
 docker_run "Dev Flow Packaging" npm run flowcopysource
 
@@ -82,3 +83,7 @@ rm -rf $DEV_FIGUREONE/*
 cp -r package $DEV_FIGUREONE/
 cp package/index.js $DEV_STATIC/
 cp package/index.js.map $DEV_STATIC/
+
+rm -rf $DEV_WORKER/*
+cp package/*worker.js $DEV_WORKER/
+cp package/*worker.js.map $DEV_WORKER/

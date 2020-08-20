@@ -84,11 +84,6 @@ describe('Diagram Text Object', () => {
         new DiagramText(new Point(1, 1), 'test2', font),
       ];
     });
-    // test('Instantiation Default', () => {
-    //   const to = new TextObject();
-    //   expect(to.drawContext2D).toBe([undefined]);
-    //   expect(to.text).toEqual([]);
-    // });
     describe('Scaling factor', () => {
       test('Greater than 20', () => {
         textArray[0].font.size = 30;

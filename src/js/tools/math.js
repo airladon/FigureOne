@@ -228,8 +228,23 @@ const linear = (percentTime: number, invert: ?boolean = false) => {
   return percentTime;
 };
 
+function triangle(
+  deltaTime: number = 1,
+  frequency: number = 1,
+  bias: number = 0,
+  mag: number = 1,
+  phaseOffset: number = 0,
+) {
+  return bias + 2 * mag / Math.PI
+    * Math.asin(Math.sin(2 * Math.PI * frequency * deltaTime + phaseOffset));
+  // return bias + mag * Math.sin(deltaTime * frequency * 2.0 * Math.PI + phaseOffset);
+}
+
 const easeinout = (percentTime: number, invert: ?boolean = false) => {
   if (invert) {
+    if (percentTime === 0.5) {
+      return 0.5;
+    }
     const a = percentTime;
     return (2 * a - Math.sqrt(-4 * a * a + 4 * a)) / (4 * a - 2);
   }
@@ -238,13 +253,14 @@ const easeinout = (percentTime: number, invert: ?boolean = false) => {
   return percentDistance;
 };
 
-// TODO fix invert
 function easeout(percentTime: number, invert: ?boolean = false) {
   if (invert) {
-    const a = percentTime;
+    if (percentTime === 0) {
+      return 0;
+    }
+    const a = percentTime / 2 + 0.5;
     const b = (2 * a - Math.sqrt(-4 * a * a + 4 * a)) / (4 * a - 2);
-    // return (b - 0.5) * 2;
-    return b;
+    return (b - 0.5) * 2;
   }
   const x = 0.5 + percentTime / 2;
   const power = 2;
@@ -252,13 +268,14 @@ function easeout(percentTime: number, invert: ?boolean = false) {
   return (percentDistance - 0.5) * 2;
 }
 
-// TODO fix invert
 function easein(percentTime: number, invert: ?boolean = false) {
   if (invert) {
-    const a = percentTime;
+    if (percentTime === 1) {
+      return 1;
+    }
+    const a = percentTime / 2;
     const b = (2 * a - Math.sqrt(-4 * a * a + 4 * a)) / (4 * a - 2);
-    // return (b - 0.5) * 2;
-    return b;
+    return b * 2;
   }
   const x = percentTime / 2;
   const power = 2;
@@ -370,6 +387,7 @@ export {
   easein,
   sinusoid,
   linear,
+  triangle,
   clipMag,
   clipValue,
   range,

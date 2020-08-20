@@ -17,6 +17,7 @@ import { duplicateFromTo } from '../../../../tools/tools';
 import type { ElementInterface } from './Element';
 // import Symbol from '../Symbols/Symbol';
 import SymbolNew from '../Symbols/SymbolNew';
+import { FunctionMap } from '../../../../tools/FunctionMap';
 // eslint-disable-next-line import/no-cycle
 // import type { TypeEquationPhrase } from '../EquationFunctions';
 
@@ -226,6 +227,8 @@ export default class BaseAnnotationFunction implements ElementInterface {
     height: number,
   };
 
+  fnMap: FunctionMap;
+
   content: ElementInterface;
   annotations: Array<EQN_Annotation>;
   glyphs: EQN_Glyphs;
@@ -241,6 +244,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     this.content = content;
     this.annotations = annotations;
     this.options = options;
+    this.fnMap = new FunctionMap();
   }
 
   _dup(namedCollection?: Object) {

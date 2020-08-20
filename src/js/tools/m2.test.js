@@ -84,15 +84,6 @@ describe('m2', () => {
     const result = m2.transform(transformMatrix, 2, 0);
     expect(round(result)).toEqual([2, 4]);
   });
-  // test('Rotate 2, 0 by 90 deg around 0, 0 then move 1, 0,
-  // then scale by 2 using a point instead of an array', () => {
-  //   let transformMatrix = m2.identity();
-  //   transformMatrix = m2.scale(transformMatrix, 2, 2);
-  //   transformMatrix = m2.translate(transformMatrix, 1, 0);
-  //   transformMatrix = m2.rotate(transformMatrix, Math.PI / 2);
-  //   const result = m2.pointTransform(transformMatrix, d2.point(2, 0));
-  //   expect(d2.point(round(result.x), round(result.y))).toEqualPoint(d2.point(2, 4));
-  // });
 
   // Matrix inversion
   test('Inverse I', () => {

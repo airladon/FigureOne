@@ -3,6 +3,7 @@
 // import Diagram from '../Diagram';
 import {
   Transform, Point, Line, polarToRect, normAngle, Rect, distance, getPoint,
+  TransformBounds, RectBounds,
 } from '../../tools/g2';
 import type { TypeParsablePoint } from '../../tools/g2';
 import {
@@ -15,6 +16,7 @@ import EquationLabel from './EquationLabel';
 import type { TypeLabelEquationOptions } from './EquationLabel';
 import { joinObjects } from '../../tools/tools';
 import { Equation } from '../DiagramElements/Equation/Equation';
+import type { TypeWhen } from '../webgl/GlobalAnimation';
 
 // top - text is on top of line (except when line is vertical)
 // bottom - text is on bottom of line (except when line is vertical)
@@ -291,12 +293,17 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   largerTouchBorder: boolean | number;
   dashStyle: { style: Array<number>, maxLength: number } | null;
 
+  scaleTransformMethodName: string;
+
   // line methods
   setLength: (number) => void;
   setEndPoints: (TypeParsablePoint, TypeParsablePoint, ?number) => void;
   // eslint-disable-next-line max-len
-  animateLengthTo: (?number, ?number, ?boolean, ?() => void, ?(number, number) => void, ?boolean) => void;
-  grow: (?number, ?number, ?boolean, ?() => void) => void;
+  animateLengthTo: (?number, ?number, ?boolean, ?(string | (() => void)), ?(string | ((number, number) => void)), ?boolean) => void;
+  animateLengthToStepFunctionName: string;
+  animateLengthToDoneFunctionName: string;
+  pulseWidthDoneCallbackName: string;
+  grow: (?number, ?number, ?boolean, ?(string | (() => void))) => void;
   setMovable: (?boolean, ?('translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale'), ?number, ?Rect) => void;
   addArrow1: (?number, ?number) => void;
   addArrow2: (?number, ?number) => void;
@@ -326,6 +333,19 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   multiMove: {
     vertexSpaceMidLength: number;
     bounds: Rect,
+  };
+
+  animateLengthToOptions: {
+    initialLength: number,
+    deltaLength: number,
+    callback: ?(string | (() => void)),
+    onStepCallback: ?(string | ((number, number) => void)),
+    finishOnCancel: boolean,
+  };
+
+  pulseWidthOptions: {
+    oldCallback: ?(string | (() => void)),
+    oldTransformMethod: ?(string | ((number, ?Point) => Transform)),
   };
 
   calculateFromP1LengthAngle(
@@ -378,7 +398,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         collection: 1,
       },
     };
-    const optionsToUse = Object.assign({}, defaultOptions, options);
+    const optionsToUse = joinObjects({}, defaultOptions, options);
     let { dashStyle } = optionsToUse;
     if (dashStyle) {
       let defaultMaxLength = optionsToUse.length;
@@ -387,7 +407,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         optionsToUse.p2 = getPoint(optionsToUse.p2);
         defaultMaxLength = distance(optionsToUse.p1, optionsToUse.p2);
       }
-      dashStyle = Object.assign({}, {
+      dashStyle = joinObjects({}, {
         maxLength: defaultMaxLength,
         dashStyle: [0.1],
       }, options.dashStyle);
@@ -405,6 +425,25 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.animateNextFrame = animateNextFrame;
     this.dashStyle = dashStyle;
 
+    this.animateLengthToOptions = {
+      initialLength: 0,
+      deltaLength: 1,
+      finishOnCancel: true,
+      callback: null,
+      onStepCallback: null,
+    };
+
+    this.pulseWidthOptions = {
+      oldCallback: null,
+      oldTransformMethod: null,
+    };
+
+    this.animateLengthToStepFunctionName = '_animateToLengthStep';
+    this.fnMap.add(this.animateLengthToStepFunctionName, this.animateLengthToStep.bind(this));
+    this.animateLengthToDoneFunctionName = '_animateToLengthDone';
+    this.fnMap.add(this.animateLengthToDoneFunctionName, this.animateLengthToDone.bind(this));
+    this.pulseWidthDoneCallbackName = '_pulseWidthDone';
+    this.fnMap.add(this.pulseWidthDoneCallbackName, this.pulseWidthDone.bind(this));
     // Calculate and store the line geometry
     //    The length, angle, p1 and p2 properties also exist in this.line,
     //    but are at this level for convenience
@@ -442,10 +481,14 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     // touched then the line collection is rotated.
     this.multiMove = {
       vertexSpaceMidLength: 0,
+      // bounds: new RectBounds({
+      //   left: -1, bottom: -1, top: 1, right: 1
+      // }),
       bounds: new Rect(-1, -1, 2, 2),
     };
     this._midLine = null;
 
+    this.scaleTransformMethodName = '_transformMethod';
     // If the line is to be shown (and not just a label) then make it
     this._line = null;
     if (optionsToUse.showLine) {
@@ -459,6 +502,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         optionsToUse.color, this.dashStyle,
         optionsToUse.largerTouchBorder, isTouchDevice,
       );
+      const scaleTransformMethod = s => new Transform().scale(1, s);
+      straightLine.fnMap.add(this.scaleTransformMethodName, scaleTransformMethod);
       this.add('line', straightLine);
     }
 
@@ -483,12 +528,12 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       height: this.width * 4,
     };
     if (optionsToUse.arrowStart) {
-      const arrowOptions = Object.assign({}, defaultArrowOptions, optionsToUse.arrowStart);
+      const arrowOptions = joinObjects({}, defaultArrowOptions, optionsToUse.arrowStart);
       this.addArrowStart(arrowOptions.height, arrowOptions.width);
     }
 
     if (optionsToUse.arrowEnd) {
-      const arrowOptions = Object.assign({}, defaultArrowOptions, optionsToUse.arrowEnd);
+      const arrowOptions = joinObjects({}, defaultArrowOptions, optionsToUse.arrowEnd);
       this.addArrowEnd(arrowOptions.height, arrowOptions.width);
     }
 
@@ -498,7 +543,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       if (typeof optionsToUse.arrows === 'object') {
         ({ arrows } = optionsToUse);
       }
-      const arrowOptions = Object.assign({}, defaultArrowOptions, arrows);
+      const arrowOptions = joinObjects({}, defaultArrowOptions, arrows);
       this.addArrows(arrowOptions.height, arrowOptions.width);
     }
 
@@ -514,7 +559,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       precision: 1,
     };
     if (optionsToUse.label) {
-      const labelOptions = Object.assign({}, defaultLabelOptions, optionsToUse.label);
+      const labelOptions = joinObjects({}, defaultLabelOptions, optionsToUse.label);
       if (labelOptions.text === null) {
         labelOptions.text = '';
         this.showRealLength = true;
@@ -571,48 +616,116 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     }
   }
 
+  _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(options),
+      'offset',
+      'angle',
+      'length',
+      'position',
+      'animateLengthToOptions',
+      'pulseWidthOptions',
+    ];
+  }
+
+  _fromState(state: Object) {
+    joinObjects(this, state);
+    this.setLineDimensions();
+    return this;
+  }
+
+  pulseWidthDone() {
+    const line = this._line;
+    if (line == null) {
+      return;
+    }
+    if (this.pulseWidthOptions.oldTransformMethod) {
+      line.pulseSettings.transformMethod = this.pulseWidthOptions.oldTransformMethod;
+    }
+    line.pulseSettings.callback = this.pulseWidthOptions.oldCallback;
+  }
+
   pulseWidth(optionsIn?: {
       line?: number,
       label?: number,
       arrow?: number,
       done?: ?() => void,
+      duration?: number,
+      when?: TypeWhen,
     } = {}) {
     const defaultOptions = {
       line: 3,
       label: 1.5,
       arrow: 2,
       done: null,
+      duration: 1,
+      when: 'nextFrame',
     };
     const options = joinObjects(defaultOptions, optionsIn);
     let { done } = options;
     const line = this._line;
     if (line != null) {
       line.stopPulsing();
-      const oldTransformMethod = line.pulseSettings.transformMethod;
-      const oldPulseCallback = line.pulseSettings.callback;
-      const finishPulsing = () => {
-        line.pulseSettings.transformMethod = oldTransformMethod;
-        line.pulseSettings.callback = oldPulseCallback;
+      this.pulseWidthOptions = {
+        oldTransformMethod: line.pulseSettings.transformMethod,
+        oldCallback: line.pulseSettings.callback,
       };
-      line.pulseSettings.callback = finishPulsing;
-      line.pulseSettings.transformMethod = s => new Transform().scale(1, s);
-      line.pulseScaleNow(1, options.line, 0, done);
+      // const oldTransformMethod = line.pulseSettings.transformMethod;
+      // const oldPulseCallback = line.pulseSettings.callback;
+      // const finishPulsing = () => {
+      //   line.pulseSettings.transformMethod = oldTransformMethod;
+      //   line.pulseSettings.callback = oldPulseCallback;
+      // };
+      // const finishPulsingName = `${this.getPath()}_finishPulsing`;
+      // this.fnMap.add(finishPulsingName, finishPulsing);
+      line.pulseSettings.callback = this.pulseWidthDoneCallbackName;
+      // const scaleTransformMethod = s => new Transform().scale(1, s);
+      // const scaleTransformMethodName = `${this.getPath()}_transformMethod`;
+      // this.fnMap.add(scaleTransformMethodName, scaleTransformMethod);
+      line.pulseSettings.transformMethod = this.scaleTransformMethodName;
+      line.pulseScale({
+        duration: options.duration,
+        scale: options.line,
+        frequency: 0,
+        callback: done,
+        when: options.when,
+      });
       done = null;
     }
     const arrow1 = this._arrow1;
     const arrow2 = this._arrow2;
     if (arrow1 != null) {
-      arrow1.pulseScaleNow(1, options.arrow, 0, done);
+      arrow1.pulseScale({
+        duration: options.duration,
+        scale: options.arrow,
+        frequency: 0,
+        callback: done,
+        when: options.when,
+      });
+      // arrow1.pulseScaleNow(options.duration, options.arrow, 0, done);
       done = null;
     }
     if (arrow2 != null) {
-      arrow2.pulseScaleNow(1, options.arrow, 0, done);
+      // arrow2.pulseScaleNow(options.duration, options.arrow, 0, done);
+      arrow2.pulseScale({
+        duration: options.duration,
+        scale: options.arrow,
+        frequency: 0,
+        callback: done,
+        when: options.when,
+      });
       done = null;
     }
 
     const label = this._label;
     if (label != null) {
-      label.pulseScaleNow(1, options.label, 0, done);
+      // label.pulseScaleNow(options.duration, options.label, 0, done);
+      label.pulseScale({
+        duration: options.duration,
+        scale: options.label,
+        frequency: 0,
+        callback: done,
+        when: options.when,
+      });
       done = null;
     }
     if (done != null) {
@@ -690,7 +803,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     movable: boolean = true,
     moveType: 'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale' = this.move.type,
     middleLengthPercent: number = 0.333,
-    translationBounds: Rect = this.diagramLimits,
+    translationBounds: Rect = this.diagramLimits._dup(),
   ) {
     if (movable) {
       if (moveType === 'translation' || moveType === 'rotation'
@@ -759,17 +872,26 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   updateMoveTransform(t: Transform = this.transform._dup()) {
     const r = t.r();
     const { bounds } = this.multiMove;
+    // console.log('qqwer')
     if (r != null) {
       const w = Math.abs(this.currentLength / 2 * Math.cos(r));
       const h = Math.abs(this.currentLength / 2 * Math.sin(r));
-      this.move.maxTransform.updateTranslation(
-        bounds.right - w,
-        bounds.top - h,
-      );
-      this.move.minTransform.updateTranslation(
-        bounds.left + w,
-        bounds.bottom + h,
-      );
+      if (this.move.bounds instanceof TransformBounds) {
+        this.move.bounds.updateTranslation(new RectBounds({
+          left: bounds.left + w,
+          bottom: bounds.bottom + h,
+          right: bounds.right - w,
+          top: bounds.top - h,
+        }));
+      }
+      // this.move.maxTransform.updateTranslation(
+      //   bounds.right - w,
+      //   bounds.top - h,
+      // );
+      // this.move.minTransform.updateTranslation(
+      //   bounds.left + w,
+      //   bounds.bottom + h,
+      // );
       if (r > 2 * Math.PI) {
         this.transform.updateRotation(r - 2 * Math.PI);
       }
@@ -1037,36 +1159,72 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     // this.updateLabel();
   }
 
+  animateLengthToStep(percent: number) {
+    const { initialLength, deltaLength, onStepCallback } = this.animateLengthToOptions;
+    this.setLength(initialLength + deltaLength * percent);
+    if (onStepCallback != null) {
+      this.fnMap.exec(onStepCallback, percent, initialLength + deltaLength * percent);
+      // onStepCallback(percent, initialLength + deltaLength * percent);
+    }
+  }
+
+  animateLengthToDone() {
+    const {
+      initialLength, callback, deltaLength, finishOnCancel,
+    } = this.animateLengthToOptions;
+    if (finishOnCancel) {
+      this.setLength(initialLength + deltaLength);
+    }
+    this.fnMap.exec(callback);
+    // if (typeof callback === 'function' && callback) {
+    //   callback();
+    // }
+  }
+
   animateLengthTo(
     toLength: number = 1,
     time: number = 1,
     finishOnCancel: boolean = true,
-    callback: ?() => void = null,
-    onStepCallback: ?(number, number) => void = null,
+    callback: ?(string | (() => void)) = null,
+    onStepCallback: ?(string | ((number, number) => void)) = null,
     stop: ?boolean = true,
   ) {
     if (stop) {
       this.stop();
     }
-    const initialLength = this.currentLength;
-    const deltaLength = toLength - this.currentLength;
-    const func = (percent) => {
-      this.setLength(initialLength + deltaLength * percent);
-      if (onStepCallback != null) {
-        onStepCallback(percent, initialLength + deltaLength * percent);
-      }
+    this.animateLengthToOptions = {
+      initialLength: this.currentLength,
+      deltaLength: toLength - this.currentLength,
+      callback,
+      onStepCallback,
+      finishOnCancel,
     };
-    const done = () => {
-      if (finishOnCancel) {
-        this.setLength(initialLength + deltaLength);
-      }
-      if (typeof callback === 'function' && callback) {
-        callback();
-      }
-    };
+    // const initialLength = this.currentLength;
+    // const deltaLength = toLength - this.currentLength;
+    // const func = (percent) => {
+    //   this.setLength(initialLength + deltaLength * percent);
+    //   if (onStepCallback != null) {
+    //     this.execFn(onStepCallback, percent, initialLength + deltaLength * percent);
+    //     // onStepCallback(percent, initialLength + deltaLength * percent);
+    //   }
+    // };
+    // this.fnMap.add('_DiagramObjectsLineAnimateLengthToFunc', func);
+    // const done = () => {
+    //   if (finishOnCancel) {
+    //     this.setLength(initialLength + deltaLength);
+    //   }
+    //   this.execFn(callback);
+    //   // if (typeof callback === 'function' && callback) {
+    //   //   callback();
+    //   // }
+    // };
+    // this.fnMap.add('_DiagramObjectsLineAnimateLengthToCallback', done);
     this.animations.new('Line Length')
-      .custom({ callback: func, duration: time })
-      .whenFinished(done)
+      .custom({
+        callback: this.animateLengthToStepFunctionName,
+        duration: time,
+      })
+      .whenFinished(this.animateLengthToDoneFunctionName)
       .start();
     // this.animations.start();
     this.animateNextFrame();
@@ -1078,7 +1236,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     fromLength: number = 0,
     time: number = 1,
     finishOnCancel: boolean = true,
-    callback: ?() => void = null,
+    callback: ?(string | (() => void)) = null,
     onStepCallback: ?(number, number) => void = null,
   ) {
     this.stop();

@@ -5,22 +5,23 @@
 // } from '../Element';
 // import Diagram from '../Diagram';
 import {
-  Point,
+  Point, rectToPolar,
 } from '../../tools/g2';
-// import {
-//   round,
-// } from '../../tools/math';
+import {
+  round,
+} from '../../tools/math';
 import * as tools from '../../tools/tools';
 // import webgl from '../../__mocks__/WebGLInstanceMock';
 // import DrawContext2D from '../../__mocks__/DrawContext2DMock';
 // import VertexPolygon from '../DrawingObjects/VertexObject/VertexPolygon';
 import makeDiagram from '../../__mocks__/makeDiagram';
 
-tools.isTouchDevice = jest.fn();
+// tools.isTouchDevice = jest.fn();
+jest.useFakeTimers();
 
-jest.mock('../Gesture');
-jest.mock('../webgl/webgl');
-jest.mock('../DrawContext2D');
+// jest.mock('../Gesture');
+// jest.mock('../webgl/webgl');
+// jest.mock('../DrawContext2D');
 // jest.mock('../../tools/tools');
 
 describe('Diagram Objects PolyLine', () => {
@@ -138,7 +139,7 @@ describe('Diagram Objects PolyLine', () => {
         close: true,
         pad: {
           radius: 0.2,
-          boundary: [-3, -2, 6, 4],
+          boundary: [-3, -2, 3, 2],
           isMovable: true,
         },
       }),
@@ -147,7 +148,7 @@ describe('Diagram Objects PolyLine', () => {
         close: true,
         pad: {
           radius: 0.2,
-          boundary: [-3, -2, 6, 4],
+          boundary: [-3, -2, 3, 2],
           isMovable: true,
           touchRadius: 0.4,
         },
@@ -157,7 +158,7 @@ describe('Diagram Objects PolyLine', () => {
         close: true,
         pad: {
           radius: 0.2,
-          boundary: [-3, -2, 6, 4],
+          boundary: [-3, -2, 3, 2],
           isMovable: true,
           touchRadius: 0.4,
           touchRadiusInBoundary: true,
@@ -233,20 +234,33 @@ describe('Diagram Objects PolyLine', () => {
     test('Boundary', () => {
       const poly = ways.PadBoundary();
       expect(poly).toHaveProperty('_pad0');
-      expect(poly._pad0.move.maxTransform.t()).toEqual(new Point(2.8, 1.8));
-      expect(poly._pad0.move.minTransform.t()).toEqual(new Point(-2.8, -1.8));
+      const { boundary } = poly._pad0.move.bounds.getTranslation();
+      expect(round(boundary.left, 3)).toBe(-2.8);
+      expect(round(boundary.right, 3)).toBe(2.8);
+      expect(round(boundary.bottom, 3)).toBe(-1.8);
+      expect(round(boundary.top, 3)).toBe(1.8);
     });
     test('Boundary not including touch radius', () => {
       const poly = ways.PadBoundaryWithoutTouchRadius();
       expect(poly).toHaveProperty('_pad0');
-      expect(poly._pad0.move.maxTransform.t().round()).toEqual(new Point(2.8, 1.8));
-      expect(poly._pad0.move.minTransform.t().round()).toEqual(new Point(-2.8, -1.8));
+      const { boundary } = poly._pad0.move.bounds.getTranslation();
+      expect(round(boundary.left, 3)).toBe(-2.8);
+      expect(round(boundary.right, 3)).toBe(2.8);
+      expect(round(boundary.bottom, 3)).toBe(-1.8);
+      expect(round(boundary.top, 3)).toBe(1.8);
+      // expect(poly._pad0.move.maxTransform.t().round()).toEqual(new Point(2.8, 1.8));
+      // expect(poly._pad0.move.minTransform.t().round()).toEqual(new Point(-2.8, -1.8));
     });
     test('Boundary including touch radius', () => {
       const poly = ways.PadBoundaryWithTouchRadius();
       expect(poly).toHaveProperty('_pad0');
-      expect(poly._pad0.move.maxTransform.t().round()).toEqual(new Point(2.6, 1.6));
-      expect(poly._pad0.move.minTransform.t().round()).toEqual(new Point(-2.6, -1.6));
+      const { boundary } = poly._pad0.move.bounds.getTranslation();
+      expect(round(boundary.left, 3)).toBe(-2.6);
+      expect(round(boundary.right, 3)).toBe(2.6);
+      expect(round(boundary.bottom, 3)).toBe(-1.6);
+      expect(round(boundary.top, 3)).toBe(1.6);
+      // expect(poly._pad0.move.maxTransform.t().round()).toEqual(new Point(2.6, 1.6));
+      // expect(poly._pad0.move.minTransform.t().round()).toEqual(new Point(-2.6, -1.6));
     });
   });
   describe('Side Labels', () => {
@@ -351,6 +365,116 @@ describe('Diagram Objects PolyLine', () => {
       expect(base01.drawingObject.text[0].text).toBe('a');
       expect(base12.drawingObject.text[0].text).toBe('b');
       expect(base20.drawingObject.text[0].text).toBe('315º');
+    });
+  });
+  describe('Diagram Level', () => {
+    test('Pad change shape', () => {
+      diagram.addElement({
+        method: 'polyline',
+        name: 'a',
+        options: {
+          points,
+          close: true,
+          pad: {
+            radius: 0.2,
+            boundary: [-3, -2, 3, 2],
+            isMovable: true,
+          },
+        },
+      });
+      diagram.initialize();
+      const a = diagram.elements._a;
+      expect(a.points[0]).toEqual(new Point(0, 0));
+      expect(a.points[1]).toEqual(new Point(1, 0));
+      expect(a.points[2]).toEqual(new Point(1, 1));
+      const p0 = a._pad0;
+      p0.setPosition(0, 0.5);
+      expect(a.points[0]).toEqual(new Point(0, 0.5));
+      expect(a.points[1]).toEqual(new Point(1, 0));
+      expect(a.points[2]).toEqual(new Point(1, 1));
+    });
+    test('Pad Move freely along line shape', () => {
+      diagram.addElement({
+        method: 'polyline',
+        name: 'a',
+        options: {
+          points: [
+            [0, 0],
+            [10, 0],
+            [10, 10],
+          ],
+          close: true,
+          pad: {
+            radius: 0.2,
+            boundary: [-3, -2, 3, 2],
+            isMovable: true,
+            // move: {
+            //   bounds: {
+            //     translation: { line: [[0, 0], [9, 9]] },
+            //   },
+            // },
+          },
+        },
+      });
+      diagram.initialize();
+      const a = diagram.elements._a;
+      // a.move.freely.bounceLoss = 0;
+      // a.move.freely.deceleration = 1;
+      expect(a.points[0]).toEqual(new Point(0, 0));
+      expect(a.points[1]).toEqual(new Point(10, 0));
+      expect(a.points[2]).toEqual(new Point(10, 10));
+      const p0 = a._pad0;
+      p0.move.bounds.updateTranslation({ line: [[0, 0], [9, 9]] });
+      p0.makeTouchable();
+      p0.move.freely.bounceLoss = 0;
+      p0.move.freely.deceleration = 1;
+      diagram.mock.timeStep(0);
+      diagram.mock.touchDown([0, 0]);
+      diagram.mock.timeStep(0.1);
+      diagram.mock.touchMove([0.5 * Math.sqrt(2), 0]);
+      diagram.mock.touchUp();
+
+      // Moving at 5 units/s
+      // Total time = 5s
+      // Distance: s = v0t - 0.5*1*t^2 = 25 - 12.5 = 12.5;
+      const x = 0.5 / Math.sqrt(2);
+      expect(round(rectToPolar(p0.state.movement.velocity.t()).mag, 3)).toBe(5);
+      expect(p0.getPosition().round(3).x).toEqual(round(x, 3));
+      expect(round(p0.getRemainingMovingFreelyTime(), 2)).toBe(5);
+      expect(p0.state.isMovingFreely).toBe(true);
+      expect(a.points[0].round(3)).toEqual(new Point(x, x).round(3));
+      expect(a.points[1]).toEqual(new Point(10, 0));
+      expect(a.points[2]).toEqual(new Point(10, 10));
+
+      // After 1s:
+      //  v1 = v0 - at = 5 - 1 = 4
+      //  s  = 5 - 0.5 = 4.5
+      diagram.mock.timeStep(1);
+      expect(round(rectToPolar(p0.state.movement.velocity.t()).mag, 3)).toBe(4);
+      expect(p0.getPosition().round(3).x).toEqual(round(x + 4.5 / Math.sqrt(2), 3));
+      expect(round(p0.getRemainingMovingFreelyTime(), 2)).toBe(4);
+      expect(p0.state.isMovingFreely).toBe(true);
+      expect(a.points[0].round(3)).toEqual(new Point(
+        x + 4.5 / Math.sqrt(2),
+        x + 4.5 / Math.sqrt(2),
+      ).round(3));
+      expect(a.points[1]).toEqual(new Point(10, 0));
+      expect(a.points[2]).toEqual(new Point(10, 10));
+
+      // After 2s:
+      //  v2 = v1 - at = 4 - 1 = 3
+      //  s  = 4 - 0.5 = 3.5 (+4.5)
+      diagram.mock.timeStep(1);
+      expect(round(rectToPolar(p0.state.movement.velocity.t()).mag, 3)).toBe(3);
+      expect(p0.getPosition().round(3).x).toEqual(round(x + (4.5 + 3.5) / Math.sqrt(2), 3));
+      expect(round(p0.getRemainingMovingFreelyTime(), 2)).toBe(3);
+      expect(p0.state.isMovingFreely).toBe(true);
+      expect(a.points[0].round(3)).toEqual(new Point(
+        x + 8 / Math.sqrt(2),
+        x + 8 / Math.sqrt(2),
+      ).round(3));
+      expect(a.points[1]).toEqual(new Point(10, 0));
+      expect(a.points[2]).toEqual(new Point(10, 10));
     });
   });
 });

@@ -1,6 +1,7 @@
 // @flow
 import { colorArrayToRGBA } from './color';
 import { generateUniqueId, joinObjects } from './tools';
+import { Recorder } from '../diagram/Recorder';
 
 function convertTextArrayToParagraphs(
   text: string | Array<string>,
@@ -66,6 +67,7 @@ function style(
     centerH?: boolean,
     list?: ?'ordered' | 'unordered',
     listStyleType?: string,  // css styes
+    id?: string,
   } = 0,
   text: string | Array<string> = '',
 ) {
@@ -77,6 +79,7 @@ function style(
   let className = '';
   let color = '';
   let listStyleType = '';
+  let id = '';
   if (typeof options === 'number') {
     marginTop = `margin-top:${options}%`;
   } else {
@@ -107,14 +110,17 @@ function style(
     if (options.listStyleType) {
       listStyleType = `list-style-type:${options.listStyleType};`;
     }
+    if (options.id) {
+      id = `id="${options.id}"`;
+    }
   }
 
   const p = `<p style="${marginLeft}${marginRight}${marginLine}${size}${color}"${className}>`;
-  const pFirst = `<p style="${marginLeft}${marginRight}${marginTop}${size}${color}"${className}>`;
+  const pFirst = `<p style="${marginLeft}${marginRight}${marginTop}${size}${color}"${className}${id}>`;
 
   const li = `<li style="${marginLeft}${marginRight}${marginLine}${size}${color}${listStyleType}"${className}>`;
-  const ul = `<ul style="${marginLeft}${marginRight}${marginTop}${size}${color}"${className}>`;
-  const ol = `<ol style="${marginLeft}${marginRight}${marginTop}${size}${color}"${className}>`;
+  const ul = `<ul style="${marginLeft}${marginRight}${marginTop}${size}${color}"${className}${id}>`;
+  const ol = `<ol style="${marginLeft}${marginRight}${marginTop}${size}${color}"${className}${id}>`;
 
   let textToUse;
   if (options.list != null) {
@@ -385,6 +391,7 @@ function onClickId(
   actionMethod: Function,
   bind: Array<mixed>,
   additionalClassesToAdd: string = '',
+  recorder: Recorder = new Recorder(),
 ) {
   const element = document.getElementById(id);
   if (element) {
@@ -394,42 +401,14 @@ function onClickId(
         element.classList.add(classString);
       }
     });
-    if (bind.length === 1) {
-      element.onclick = actionMethod.bind(bind[0]);
-    }
-    if (bind.length === 2) {
-      element.onclick = actionMethod.bind(bind[0], bind[1]);
-    }
-    if (bind.length === 3) {
-      element.onclick = actionMethod.bind(bind[0], bind[1], bind[2]);
-    }
-    if (bind.length === 4) {
-      element.onclick = actionMethod.bind(bind[0], bind[1], bind[2], bind[3]);
-    }
-    if (bind.length === 5) {
-      element.onclick = actionMethod.bind(bind[0], bind[1], bind[2], bind[3], bind[4]);
-    }
-    if (bind.length === 6) {
-      element.onclick = actionMethod.bind(bind[0], bind[1], bind[2], bind[3], bind[4], bind[5]);
-    }
-    if (bind.length === 7) {
-      element.onclick = actionMethod.bind(
-        bind[0], bind[1], bind[2], bind[3], bind[4],
-        bind[5], bind[6],
-      );
-    }
-    if (bind.length === 8) {
-      element.onclick = actionMethod.bind(
-        bind[0], bind[1], bind[2], bind[3], bind[4],
-        bind[5], bind[6], bind[7],
-      );
-    }
-    if (bind.length === 9) {
-      element.onclick = actionMethod.bind(
-        bind[0], bind[1], bind[2], bind[3], bind[4],
-        bind[5], bind[6], bind[7], bind[8],
-      );
-    }
+    const onClickFn = () => {
+      // const recorder = new Recorder();
+      if (recorder.state === 'recording') {
+        recorder.recordEvent('click', [id]);
+      }
+      actionMethod.bind(...bind)();
+    };
+    element.onclick = onClickFn;
   }
 }
 
@@ -461,11 +440,21 @@ function applyModifiers(
   return outText;
 }
 
-function setOnClicks(modifiers: Object, additionalClassesToAdd: string = '') {
+function setOnClicks(
+  modifiers: Object,
+  additionalClassesToAdd: string = '',
+  recorder: Recorder = new Recorder(),
+) {
   Object.keys(modifiers).forEach((key) => {
     const mod = modifiers[key];
     if (typeof mod !== 'string' && 'actionMethod' in mod) {
-      onClickId(mod.id(key), mod.actionMethod, mod.bind, additionalClassesToAdd);
+      onClickId(
+        typeof mod.id === 'string' ? mod.id : mod.id(key),
+        mod.actionMethod,
+        mod.bind,
+        additionalClassesToAdd,
+        recorder,
+      );
     }
   });
 }

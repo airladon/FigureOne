@@ -2,6 +2,9 @@
 import {
   Point, Line, distance,
 } from '../../../../tools/g2';
+import {
+  roundNum,
+} from '../../../../tools/math';
 
 
 function makeDashDefinition(dashes: Array<number>) {
@@ -24,17 +27,24 @@ function getDashElementAndRemainder(
     sum: number,
   },
   offset: number,
+  precision: number = 8,
 ) {
   let singleCycleOffset;
   if (offset > dash.sum) {
-    singleCycleOffset = offset % dash.sum;
+    singleCycleOffset = roundNum(offset % dash.sum, precision);
   } else {
     singleCycleOffset = offset;
   }
 
   for (let i = 0; i < dash.definition.length; i += 1) {
-    if (singleCycleOffset <= dash.cum[i]) {
-      return [i, dash.cum[i] - singleCycleOffset];
+    if (singleCycleOffset < dash.cum[i]) {
+      return [i, roundNum(dash.cum[i] - singleCycleOffset, precision)];
+    }
+    if (singleCycleOffset === dash.cum[i]) {
+      if (i + 1 < dash.definition.length) {
+        return [i + 1, roundNum(dash.cum[i + 1] - singleCycleOffset, precision)];
+      }
+      return [0, roundNum(dash.cum[0], precision)];
     }
   }
   return [0, 0];
@@ -49,22 +59,23 @@ function makeDashes(
   p1: Point,
   p2: Point,
   offset: number,
+  precision: number = 8,
 ) {
   const points = [];
   let cumDistance = 0;
   // eslint-disable-next-line prefer-const
-  let [index, remainder] = getDashElementAndRemainder(dash, offset);
+  let [index, remainder] = getDashElementAndRemainder(dash, offset, precision);
 
   const line12 = new Line(p1, p2);
-  const totLength = line12.length();
-  let dashLength = remainder;
+  const totLength = roundNum(line12.length(), precision);
+  let dashLength = roundNum(remainder, precision);
   let lastIndex = index;
   while (cumDistance < totLength) {
     const isOnLine = index % 2 === 0;
     if (isOnLine) {
       const q1 = line12.pointAtPercent(cumDistance / totLength);
       let q2;
-      if (cumDistance + dashLength <= totLength) {
+      if (roundNum(cumDistance + dashLength, precision) <= totLength) {
         q2 = line12.pointAtPercent((cumDistance + dashLength) / totLength);
         cumDistance += dashLength;
       } else {
@@ -75,9 +86,10 @@ function makeDashes(
     } else {
       cumDistance += dashLength;
     }
+    cumDistance = roundNum(cumDistance, precision);
     lastIndex = index;
     index = (index + 1) % dash.definition.length;
-    dashLength = dash.definition[index];
+    dashLength = roundNum(dash.definition[index], precision);
   }
 
   return {
@@ -91,6 +103,7 @@ function lineToDash(
   dash: Array<number>,
   close: boolean = false,
   offset: number = 0,
+  precision: number = 8,
 ) {
   let out = [];
   const dd = makeDashDefinition(dash);
@@ -98,7 +111,7 @@ function lineToDash(
   let lastContinue = false;
 
   const processLine = (p1, p2) => {
-    const dashes = makeDashes(dd, p1, p2, cumLength);
+    const dashes = makeDashes(dd, p1, p2, cumLength, precision);
     const dashLines = dashes.points;
     const dashContinues = dashes.continues;
     if (lastContinue && dashLines[0] != null) {
@@ -108,7 +121,7 @@ function lineToDash(
       out = [...out, ...dashLines];
     }
     lastContinue = dashContinues;
-    cumLength += distance(p1, p2);
+    cumLength = roundNum(cumLength + distance(p1, p2), precision);
   };
 
   for (let i = 0; i < points.length - 1; i += 1) {

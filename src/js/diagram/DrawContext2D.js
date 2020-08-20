@@ -25,7 +25,11 @@ class DrawContext2D {
       dpr = 2;
     }
 
-    this.ratio = dpr / bsr;
+    if (typeof bsr === 'number') {
+      this.ratio = dpr / bsr;
+    } else {
+      this.ratio = 1;
+    }
     this.resize();
   }
 

@@ -335,26 +335,4 @@ describe('Diagram', () => {
       expect(line._line.transform.s().isEqualTo(new Point(1.6, 1), 6)).toBe(true);
     });
   });
-  // describe('MultiMove', () => {
-  //   let line;
-  //   let makeLine;
-  //   beforeEach(() => {
-  //     const position = new Point(0, 0);
-  //     const length = 1;
-  //     const angle = 0;
-  //     const width = 0.2;
-  //     makeLine = (vertexOrigin) => {
-  //       line = diagram.objects.lineNew(
-  //         position, length, angle, width, [1, 0, 0, 1],
-  //         vertexOrigin, true, true,
-  //       );
-  //       line.setMultiMovable(0.5, new Rect(-1, -1, 2, 2));
-  //     };
-  //   });
-  //   test('0,0 -> 1,0 start', () => {
-  //     makeLine('start');
-  //     expect(line._line.transform.t().isEqualTo(new Point(0.2, 0), 6)).toBe(true);
-  //     expect(line._line.transform.s().isEqualTo(new Point(0.6, 1), 6)).toBe(true);
-  //   });
-  // });
 });

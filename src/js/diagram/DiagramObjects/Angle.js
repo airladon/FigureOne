@@ -99,6 +99,12 @@ export type TypeAngleOptions = {
     width?: number,
     color?: Array<number>,
   },
+  corner?: {
+    length?: number,
+    width?: number,
+    color?: Array<number>,
+    style?: 'fill' | 'auto' | 'none',
+  },
   pulse?: number | {
     curve?: number | {
       width?: number,
@@ -182,6 +188,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
   _arrow2: ?DiagramElementPrimitive;
   _side1: ?DiagramElementPrimitive;
   _side2: ?DiagramElementPrimitive;
+  _corner: ?DiagramElementPrimitive;
   _label: null | {
     _base: DiagramElementPrimitive;
   } & DiagramElementCollection;
@@ -202,6 +209,13 @@ class DiagramObjectAngle extends DiagramElementCollection {
     radius: number,
     autoHide: boolean,
     curveOverlap: number,
+  };
+
+  corner: ?{
+    width: number,
+    length: number,
+    color: Array<number>,
+    style: 'fill' | 'auto' | 'none',
   };
 
   side1: ?{ width: number, length: number };
@@ -307,6 +321,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       autoRightAngle: false,
       rightAngleRange: 0.001,
       curve: null,
+      corner: null,
       sides: null,
       sideStart: null,
       sideStop: null,
@@ -426,6 +441,13 @@ class DiagramObjectAngle extends DiagramElementCollection {
       this.addSide(2, sideOptions.length, sideOptions.width, sideOptions.color);
     }
 
+    if (optionsToUse.corner != null) {
+      const cornerOptions = joinObjects(
+        {}, defaultSideOptions, { style: 'fill' }, optionsToUse.corner,
+      );
+      this.addCorner(cornerOptions);
+    }
+
     // Sides overrides side1 and side2
     if (optionsToUse.sides) {
       let sides = {};
@@ -508,6 +530,22 @@ class DiagramObjectAngle extends DiagramElementCollection {
     }
   }
 
+  _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(options),
+      'angle',
+      'lastLabelRotationOffset',
+    ];
+  }
+
+  _fromState(state: Object) {
+    joinObjects(this, state);
+    this.setAngle({
+      angle: this.angle,
+      rotationOffset: this.lastLabelRotationOffset,
+    });
+    return this;
+  }
+
   setNextPositionAndRotation() {
     if (this.nextPosition != null) {
       this.transform.updateTranslation(this.nextPosition);
@@ -552,11 +590,45 @@ class DiagramObjectAngle extends DiagramElementCollection {
       this.nextRotation = rotation;
       this.nextPosition = getPoint(position);
     }
+    const { corner, _corner } = this;
+    if (corner != null && _corner != null) {
+      const points = this.getCornerPoints(corner.length);
+      _corner.custom.updatePoints(points);
+    }
     if (options.rotationOffset != null) {
       this.update(options.rotationOffset);
     } else {
       this.update();
     }
+  }
+
+  getCornerPoints(length: number) {
+    return [
+      new Point(length, 0),
+      new Point(0, 0),
+      new Point(length * Math.cos(this.angle), length * Math.sin(this.angle)),
+    ];
+  }
+
+  addCorner(options: {
+    length: number,
+    width: number,
+    color: Array<number>,
+    style: 'fill' | 'auto' | 'none',
+  }) {
+    const {
+      width, color, length, style,
+    } = options;
+    const corner = this.shapes.polyline({
+      width,
+      color,
+      points: this.getCornerPoints(length),
+      cornerStyle: style,
+    });
+    this.corner = {
+      length, width, color, style,
+    };
+    this.add('corner', corner);
   }
 
   addSide(
@@ -643,7 +715,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       autoHideMin: null,
       autoHideMax: null,
     };
-    const optionsToUse = Object.assign(
+    const optionsToUse = joinObjects(
       {}, defaultCurveOptions, curveOptions,
     );
     for (let i = 0; i < optionsToUse.num; i += 1) {
@@ -653,6 +725,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
         width: optionsToUse.width,
         color: this.color,
         fill: false,
+        // line: {
+        //   widthIs: 'mid',
+        // },
         transform: new Transform('AngleCurve').rotate(0),
       });
       this.curve = optionsToUse;
@@ -688,7 +763,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     curveOffset?: number,
   }) {
     if (this._curve != null && options.radius != null) {
-      this._curve.drawingObject.update({ radius: options.radius });
+      this._curve.custom.update({ radius: options.radius });
     }
     if (this.label != null) {
       if (options.curveRadius != null) {
@@ -701,47 +776,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
         this.label.curveOffset = options.curveOffset;
       }
     }
-
-    // // this._curve.drawingObject.radius = radius;
-    // // this._curve.drawingObject.makePolygon();
-    // // this._curve.drawingObject.change();
-    // if (curveRadius != null && this.label != null) {
-    //   this.label.radius = curveRadius;
-    // }
-    // if (curvePosition != null && this.label != null) {
-    //   this.label.curvePosition = curvePosition;
-    // }
   }
 
-  // pulseWidth() {
-  //   const line = this._line;
-  //   if (line != null) {
-  //     line.stopPulsing();
-  //     const oldTransformMethod = line.pulse.transformMethod;
-  //     const oldPulseCallback = line.pulse.callback;
-  //     const finishPulsing = () => {
-  //       line.pulse.transformMethod = oldTransformMethod;
-  //       line.pulse.callback = oldPulseCallback;
-  //     };
-  //     line.pulse.callback = finishPulsing;
-  //     line.pulse.transformMethod = s => new Transform().scale(1, s);
-  //     line.pulseScaleNow(1, 3);
-  //   }
-  //   const arrow1 = this._arrow1;
-  //   const arrow2 = this._arrow2;
-  //   if (arrow1 != null) {
-  //     arrow1.pulseScaleNow(1, 2);
-  //   }
-  //   if (arrow2 != null) {
-  //     arrow2.pulseScaleNow(1, 2);
-  //   }
-
-  //   const label = this._label;
-  //   if (label != null) {
-  //     label.pulseScaleNow(1, 1.5);
-  //   }
-  //   this.animateNextFrame();
-  // }
 
   addArrow(
     index: 1 | 2,
@@ -806,7 +842,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
             if (i === 0) {
               let delta = 0;
               if (this.curve) {
-                delta = primaryCurveAngle % (2 * Math.PI / this.curve.sides);
+                const sideAngle = 2 * Math.PI / this.curve.sides;
+                const numSides = Math.floor(roundNum(primaryCurveAngle / sideAngle));
+                delta = primaryCurveAngle - numSides * sideAngle;
               }
               element.angleToDraw = primaryCurveAngle;
               element.transform.updateRotation(rotation + delta / 2);

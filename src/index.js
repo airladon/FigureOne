@@ -3,6 +3,8 @@
 import * as g2 from './js/tools/g2';
 import * as math from './js/tools/math';
 import Diagram from './js/diagram/Diagram';
+import { Recorder } from './js/diagram/Recorder';
+import { FunctionMap, GlobalFunctionMap } from './js/tools/FunctionMap';
 import * as color from './js/tools/color';
 import * as html from './js/tools/htmlGenerator';
 import * as misc from './js/tools/tools';
@@ -81,6 +83,9 @@ const tools = {
 const Fig = {
   tools,
   Diagram,
+  Recorder,
+  FunctionMap,
+  GlobalFunctionMap,
   //
   DiagramElement,
   DiagramElementCollection,
@@ -110,11 +115,15 @@ const Fig = {
   Line: g2.Line,
   Rect: g2.Rect,
   Transform: g2.Transform,
-  TransformLimit: g2.TransformLimit,
+  // TransformLimit: g2.TransformLimit,
   Translation: g2.Translation,
   Scale: g2.Scale,
   Rotation: g2.Rotation,
   parsePoint: g2.getPoint,
+  LineBounds: g2.LineBounds,
+  TransformBounds: g2.TransformBounds,
+  RectBounds: g2.RectBounds,
+  RangeBounds: g2.RangeBounds,
 };
 
 export default Fig;

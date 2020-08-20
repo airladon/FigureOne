@@ -16,7 +16,7 @@ export default class Fraction extends BaseEquationFunction {
     const [numerator, denominator] = this.contents;
     const {
       scaleModifier, numeratorSpace, denominatorSpace, overhang,
-      offsetY, fullContentBounds,
+      offsetY, fullContentBounds, baseline,
     } = this.options;
     const scale = incomingScale * scaleModifier;
     const vinculumBounds = new Bounds();
@@ -72,12 +72,22 @@ export default class Fraction extends BaseEquationFunction {
     // const yDenominator = denominatorBounds.ascent
     //                      + vSpaceDenom - lineVAboveBaseline;
 
+    let baselineOffset = 0;
+    if (baseline === 'numerator' && numerator != null) {
+      baselineOffset = loc.y - numeratorLoc.y;
+    } else if (baseline === 'denominator' && denominator != null) {
+      baselineOffset = loc.y - denominatorLoc.y;
+    }
 
     if (numerator != null) {
-      numerator.offsetLocation(numeratorLoc.sub(numerator.location));
+      numerator.offsetLocation(
+        numeratorLoc.sub(numerator.location.x, numerator.location.y - baselineOffset),
+      );
     }
     if (denominator != null) {
-      denominator.offsetLocation(denominatorLoc.sub(denominator.location));
+      denominator.offsetLocation(
+        denominatorLoc.sub(denominator.location.x, denominator.location.y - baselineOffset),
+      );
     }
 
     this.width = vinculumBounds.width;
@@ -94,7 +104,10 @@ export default class Fraction extends BaseEquationFunction {
     //               + numeratorBounds.descent;
     this.height = this.descent + this.ascent;
 
-    this.glyphLocations[0] = new Point(this.location.x, this.location.y + lineVAboveBaseline);
+    this.glyphLocations[0] = new Point(
+      this.location.x,
+      this.location.y + lineVAboveBaseline + baselineOffset,
+    );
     this.glyphWidths[0] = vinculumBounds.width;
     this.glyphHeights[0] = vinculumBounds.height;
 

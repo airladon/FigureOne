@@ -122,18 +122,6 @@ describe('Diagram Primitive Generic Copy', () => {
       expect(points[4]).toEqual(new Point(2, 0));
       expect(points[5]).toEqual(new Point(2.1, 0.1));
     });
-    //   test('Move Offset', () => {
-    //     addElement(copy.moveOffset);
-    //     expect(points[0]).toEqual(new Point(1, 0));
-    //     expect(points[1]).toEqual(new Point(1.1, 0.1));
-    //     expect(points).toHaveLength(2);
-    //   });
-    //   test('Move Transform', () => {
-    //     addElement(copy.moveTransform);
-    //     expect(points[0]).toEqual(new Point(1, 0));
-    //     expect(points[1]).toEqual(new Point(1.1, 0.1));
-    //     expect(points).toHaveLength(2);
-    //   });
     test('x Axis', () => {
       addElement(copy.xAxis);
       expect(points[0]).toEqual(new Point(0, 0));
@@ -184,13 +172,6 @@ describe('Diagram Primitive Generic Copy', () => {
       expect(points[6]).toEqual(new Point(1, 1));
       expect(points[7]).toEqual(new Point(1.1, 1.1));
     });
-    //   test('Offset then Polar', () => {
-    //     addElement(null, copyChain.offsetPolar);
-    //     expect(round(points[0])).toEqual(new Point(0, 1));
-    //     expect(round(points[1])).toEqual(new Point(0.1, 1.1));
-    //     expect(round(points[2])).toEqual(new Point(-1, 0));
-    //     expect(round(points[3])).toEqual(new Point(-1.1, 0.1));
-    //   });
     test('Radial Line', () => {
       addElement(copyChain.radialLine);
       expect(round(points[0])).toEqual(new Point(0, 0));

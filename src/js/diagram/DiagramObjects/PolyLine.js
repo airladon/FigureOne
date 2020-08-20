@@ -1,7 +1,11 @@
 // @flow
 
 import {
-  Transform, Point, getPoint, Rect, clipAngle,
+  Transform, Point, getPoint, clipAngle,
+  RangeBounds, RectBounds, getBounds, Bounds,
+} from '../../tools/g2';
+import type {
+  TypeRangeBoundsDefinition, TypeRectBoundsDefinition, TypeParsablePoint,
 } from '../../tools/g2';
 import { joinObjects } from '../../tools/tools';
 import { round } from '../../tools/math';
@@ -11,7 +15,7 @@ import {
 // import type {
 //   TypePolyLineBorderToPoint,
 // } from '../DiagramElements/PolyLine';
-import type { TypeParsablePoint } from '../../tools/g2';
+// import type { TypeParsablePoint } from '../../tools/g2';
 import type {
   TypeLineLabelOptions, TypeLineOptions,
 } from './Line';
@@ -31,7 +35,7 @@ export type TypePadOptions = {
   fill?: boolean,
   isMovable?: boolean,
   touchRadius?: number,
-  boundary?: Rect | Array<number> | 'diagram',
+  boundary?: TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | 'diagram',
   touchRadiusInBoundary?: boolean,
 };
 export type TypePolyLineOptions = {
@@ -130,7 +134,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
   close: boolean;
   _line: ?DiagramElementPrimitive;
   options: TypePolyLineOptions;
-  updatePointsCallback: ?() => void;
+  updatePointsCallback: ?(string | (() => void));
   reverse: boolean;
   makeValid: ?{
     shape: 'triangle';
@@ -274,32 +278,92 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
             const multiplier = padArray[i].touchRadius / padArray[i].radius;
             padShape.increaseBorderSize(multiplier);
           }
+          let delta = 0;
+          if (padArray[i].touchRadiusInBoundary === true && padArray[i].touchRadius != null) {
+            delta = padArray[i].touchRadius - padArray[i].radius;
+          }
+          const { radius } = padArray[i];
           let { boundary } = padArray[i];
           // console.log(boundary, padArray[i])
           if (boundary === 'diagram') {
             boundary = shapes.limits._dup();
-          } else if (Array.isArray(boundary)) {
-            const [left, bottom, width, height] = boundary;
-            boundary = new Rect(left, bottom, width, height);
-          }
-          if (padArray[i].touchRadiusInBoundary === false && padArray[i].touchRadius != null) {
-            const delta = padArray[i].touchRadius - padArray[i].radius;
-            boundary = new Rect(
-              boundary.left - delta,
-              boundary.bottom - delta,
-              boundary.width + 2 * delta,
-              boundary.height + 2 * delta,
-            );
-          }
-          padShape.setMoveBoundaryToDiagram(boundary);
-          padShape.setTransformCallback = (transform) => {
-            const index = parseInt(padShape.name.slice(3), 10);
-            const translation = transform.t();
-            if (translation != null) {
-              this.points[index] = translation._dup();
-              this.updatePoints(this.points);
+            boundary = new RectBounds({
+              left: shapes.limits.left + radius + delta,
+              bottom: shapes.limits.bottom + radius + delta,
+              right: shapes.limits.right - radius - delta,
+              top: shapes.limits.top - radius - delta,
+            });
+          } else if (Array.isArray(boundary) && boundary.length === 4) {
+            boundary = new RectBounds({
+              left: boundary[0] + radius + delta,
+              bottom: boundary[1] + radius + delta,
+              right: boundary[2] - radius - delta,
+              top: boundary[3] - radius - delta,
+            });
+          } else if (!(boundary instanceof Bounds)) {
+            boundary = getBounds(boundary);
+            if (boundary instanceof RangeBounds) {
+              let maxBounds = boundary.boundary.max;
+              let minBounds = boundary.boundary.min;
+              if (maxBounds != null) {
+                maxBounds += -radius - delta;
+              }
+              if (minBounds != null) {
+                minBounds += radius + delta;
+              }
+              boundary = new RectBounds({
+                left: minBounds,
+                right: maxBounds,
+                bottom: minBounds,
+                top: maxBounds,
+              });
+            } else if (!(boundary instanceof RectBounds)) {
+              boundary = null;
             }
-          };
+          }
+          // } Array.isArray(boundary)) {
+          //   const [left, bottom, width, height] = boundary;
+          //   boundary = new Rect(left, bottom, width, height);
+          // }
+          // debugger;
+          // if (padArray[i].touchRadiusInBoundary === false && padArray[i].touchRadius != null) {
+          //   const delta = padArray[i].touchRadius - padArray[i].radius;
+          //   if (boundary instanceof RectBounds) {
+          //     if (boundary.boundary.left != null) {
+          //       boundary.boundary.left -= delta;
+          //     }
+          //     if (boundary.boundary.bottom != null) {
+          //       boundary.boundary.bottom -= delta;
+          //     }
+          //     if (boundary.boundary.right != null) {
+          //       boundary.boundary.right += delta;
+          //     }
+          //     if (boundary.boundary.top != null) {
+          //       boundary.boundary.top += delta;
+          //     }
+          //   }
+          // boundary = new Rect(
+          //   boundary.left - delta,
+          //   boundary.bottom - delta,
+          //   boundary.width + 2 * delta,
+          //   boundary.height + 2 * delta,
+          // );
+          // }
+          padShape.setMoveBounds({ translation: boundary });
+          const fnName = `_polyline_pad${i}`;
+          padShape.fnMap.add(
+            fnName,
+            (transform) => {
+              // console.log('asdfasdfasdf')
+              const index = parseInt(padShape.name.slice(3), 10);
+              const translation = transform.t();
+              if (translation != null) {
+                this.points[index] = translation._dup();
+                this.updatePoints(this.points);
+              }
+            },
+          );
+          padShape.setTransformCallback = fnName;
         }
         this.add(name, padShape);
       }
@@ -392,6 +456,18 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         this.add(name, sideLine);
       }
     }
+  }
+
+  _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(options),
+      'points',
+    ];
+  }
+
+  _fromState(state: Object) {
+    joinObjects(this, state);
+    this.updatePoints(this.points);
+    return this;
   }
 
   updateSideLabels(rotationOffset: number = 0) {
@@ -525,7 +601,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       this.makeValidTriangle();
     }
     if (this.updatePointsCallback != null && !skipCallback) {
-      this.updatePointsCallback();
+      this.fnMap.exec(this.updatePointsCallback);
     }
   }
 
@@ -821,5 +897,9 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     side12.setLabel(`${s12.toFixed(sidePrecision)}`);
     side20.setLabel(`${s20.toFixed(sidePrecision)}`);
     // }
+  }
+
+  _dup(exceptions: Array<string> = []) {
+    return super._dup([...exceptions, ...['shapes', 'objects', 'equation']]);
   }
 }

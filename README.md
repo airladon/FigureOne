@@ -16,7 +16,7 @@ One API creates and operates on WebGL shapes, Canvas 2D text, and custom HTML el
 Load the Figureone library into your HTML:
 
 ```html
-<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.1.22/figureone.min.js'></script>
+<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.2.0/figureone.min.js'></script>
 ```
 
 Create a `div` element to attach the diagram to:
@@ -116,3 +116,29 @@ When it is time to deploy the build to NPM, exit the container and from the repo
 `./build.sh deploy`
 
 This will start a container, run all linting and tests, and then build and deploy the package.
+
+## Update Packages
+
+To update all packages
+
+```
+npx npm-check-updates -u
+npm install
+```
+
+## Jest debugger
+
+```
+npm run jest-debug <jest options>
+```
+
+In chrome go to:
+```
+chrome://inspect
+```
+
+and click on link
+```
+Open dedicated DevTools for Node
+```
+

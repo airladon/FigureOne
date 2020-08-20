@@ -5,6 +5,7 @@
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
+// import * as tools from '../../../../tools/math';
 import type { TypeElementAnimationStepInputOptions } from '../ElementAnimationStep';
 import type { TypeOpacityAnimationStepInputOptions } from './OpacityAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
@@ -65,16 +66,30 @@ export class ColorAnimationStep extends ElementAnimationStep {
     }
   }
 
+
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'color',
+    ];
+  }
+
+  _getStateName() {  // eslint-disable-line class-methods-use-this
+    return 'colorAnimationStep';
+  }
+
   // On start, calculate the duration, target and delta if not already present.
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime?: number) {
+  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
     const { element } = this;
+    // console.log('starting', element)
     if (element != null) {
       super.start(startTime);
       if (this.color.start == null) {
         this.color.start = element.color.slice();
+      } else if (startTime === 'now' || startTime === 'prev') {
+        element.setColor(this.color.start);
       }
       if (this.color.delta == null && this.color.target == null) {
         this.color.target = this.color.start.slice();
@@ -99,7 +114,7 @@ export class ColorAnimationStep extends ElementAnimationStep {
 
   setFrame(deltaTime: number) {
     const percentTime = deltaTime / this.duration;
-    const percentComplete = this.progression(percentTime);
+    const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;
     const next = this.color.start.map((c, index) => {
       let newColor = c + this.color.delta[index] * p;
@@ -112,6 +127,7 @@ export class ColorAnimationStep extends ElementAnimationStep {
       return newColor;
     });
     if (this.element != null) {
+      // console.log(this.element.name, next)
       this.element.setColor(next, this.color.setDefault);
     }
   }
@@ -126,35 +142,6 @@ export class ColorAnimationStep extends ElementAnimationStep {
       }
     }
   }
-
-  // finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
-  //   if (this.state === 'idle') {
-  //     return;
-  //   }
-  //   super.finish(cancelled, force);
-  //   const setToEnd = () => {
-  //     const { element } = this;
-  //     if (element != null) {
-  //       element.setColor(this.color.whenComplete);
-  //       if (this.color.dissolve === 'out') {
-  //         element.hide();
-  //       }
-  //     }
-  //   };
-  //   if (cancelled && force === 'complete') {
-  //     setToEnd();
-  //   }
-  //   if (cancelled && force == null && this.completeOnCancel === true) {
-  //     setToEnd();
-  //   }
-  //   if (cancelled === false) {
-  //     setToEnd();
-  //   }
-
-  //   if (this.onFinish != null) {
-  //     this.onFinish(cancelled);
-  //   }
-  // }
 
   _dup() {
     const step = new ColorAnimationStep();

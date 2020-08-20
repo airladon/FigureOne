@@ -37,7 +37,7 @@ describe('Position Animation', () => {
     });
     expect(step.onFinish).toBe(onFinish);
     expect(step.type).toBe('position');
-    expect(step.progression).toBe(math.easeinout);
+    expect(step.progression).toBe('tools.math.easeinout');
     expect(step.position.start).toBe(start);
     expect(step.position.target).toBe(target);
     expect(step.position.delta).toBe(null);
@@ -56,7 +56,7 @@ describe('Position Animation', () => {
     step.start();
     expect(step.state).toBe('animating');
     expect(step.position.delta).toEqual(target);
-    expect(step.startTime).toBe(-1);
+    expect(step.startTime).toBe(null);
   });
   test('Target calculation with start transform not defined', () => {
     const delta = new Point(1, 1);
@@ -97,7 +97,7 @@ describe('Position Animation', () => {
       target,
     });
     step.start();
-    expect(step.startTime).toBe(-1);
+    expect(step.startTime).toBe(null);
 
     step.nextFrame(100);
     expect(step.startTime).toBe(100);
@@ -176,14 +176,14 @@ describe('Position Animation', () => {
       expect(element.getPosition().round()).toEqual(point(0.5));
       expect(callbackFlag).toBe(1);
     });
-    test('CompleteOnCancel = true, Force no complete', () => {
+    test('CompleteOnCancel = true, Force freeze', () => {
       step.completeOnCancel = true;
       step.start();
       step.nextFrame(0);
       step.nextFrame(0.5);
       expect(element.getPosition().round()).toEqual(point(0.5));
 
-      step.finish(true, 'noComplete');
+      step.finish(true, 'freeze');
       expect(element.getPosition().round()).toEqual(point(0.5));
       expect(callbackFlag).toBe(1);
     });

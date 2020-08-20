@@ -21,7 +21,7 @@ export type TypeTransformAnimationStepInputOptions = {
   rotDirection: 0 | 1 | -1 | 2;
   clipRotationTo: '0to360' | '-180to180' | null;
   velocity: ?Transform | number;
-  maxTime?: number;
+  maxDuration?: number;
 } & TypeElementAnimationStepInputOptions;
 
 // A transform animation unit manages a transform animation on an element.
@@ -44,7 +44,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     translationOptions: pathOptionsType;
     velocity: ?Transform | number;
     clipRotationTo: '0to360' | '-180to180' | null;
-    maxTime: ?number;
+    maxDuration: ?number;
   };
 
   constructor(...optionsIn: Array<TypeTransformAnimationStepInputOptions>) {
@@ -52,7 +52,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
       joinObjects({}, { type: 'transform' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
       'start', 'delta', 'target', 'rotDirection', 'translationStyle',
-      'translationOptions', 'velocity', 'clipRotationTo', 'maxTime',
+      'translationOptions', 'velocity', 'clipRotationTo', 'maxDuration',
     ]);
     super(ElementAnimationStepOptionsIn);
     const defaultTransformOptions = {
@@ -70,7 +70,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
       },
       velocity: null,
       clipRotationTo: null,
-      maxTime: null,
+      maxDuration: null,
     };
     if (this.element && this.element.animations.options.translation) {
       const translationOptions = this.element.animations.options.translation;
@@ -84,16 +84,26 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     this.transform = { translationOptions: {} };
     copyKeysFromTo(options, this.transform, [
       'start', 'delta', 'target', 'translationStyle',
-      'velocity', 'rotDirection', 'clipRotationTo', 'maxTime',
+      'velocity', 'rotDirection', 'clipRotationTo', 'maxDuration',
     ]);
     duplicateFromTo(options.translationOptions, this.transform.translationOptions);
+  }
+
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'transform',
+    ];
+  }
+
+  _getStateName() {  // eslint-disable-line class-methods-use-this
+    return 'transformAnimationStep';
   }
 
   // On start, calculate the duration, target and delta if not already present.
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime?: number) {
+  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
     super.start(startTime);
     if (this.transform.start === null) {
       if (this.element != null) {
@@ -137,10 +147,13 @@ export default class TransformAnimationStep extends ElementAnimationStep {
         this.transform.rotDirection,
       );
     }
-    if (this.transform.maxTime != null) {
-      if (this.duration > this.transform.maxTime) {
-        this.duration = this.transform.maxTime;
+    if (this.transform.maxDuration != null) {
+      if (this.duration > this.transform.maxDuration) {
+        this.duration = this.transform.maxDuration;
       }
+    }
+    if (startTime === 'now' || startTime === 'prev') {
+      this.setFrame(0);
     }
   }
 
@@ -148,7 +161,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     // const start = phase.startTransform._dup();
     // const delta = phase.deltaTransform._dup();
     const percentTime = deltaTime / this.duration;
-    const percentComplete = this.progression(percentTime);
+    const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;
     // let next = delta._dup().constant(p);
 
@@ -158,6 +171,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
       this.transform.translationStyle,
       this.transform.translationOptions,
     );
+
     if (this.transform.clipRotationTo !== null) {
       next.clipRotation(this.transform.clipRotationTo);
     }
@@ -171,30 +185,6 @@ export default class TransformAnimationStep extends ElementAnimationStep {
       this.element.setTransform(this.transform.target);
     }
   }
-  // finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
-  //   if (this.state === 'idle') {
-  //     return;
-  //   }
-  //   super.finish(cancelled, force);
-  //   const setToEnd = () => {
-  //     if (this.element != null) {
-  //       this.element.setTransform(this.transform.target);
-  //     }
-  //   };
-  //   if (cancelled && force === 'complete') {
-  //     setToEnd();
-  //   }
-  //   if (cancelled && force == null && this.completeOnCancel === true) {
-  //     setToEnd();
-  //   }
-  //   if (cancelled === false) {
-  //     setToEnd();
-  //   }
-
-  //   if (this.onFinish != null) {
-  //     this.onFinish(cancelled);
-  //   }
-  // }
 
   _dup() {
     const step = new TransformAnimationStep();

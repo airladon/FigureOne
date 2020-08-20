@@ -7,7 +7,7 @@ import {
 import * as tools from '../tools/tools';
 import Diagram from './Diagram';
 import {
-  Point, Transform, TransformLimit, Rect,
+  Point, Transform, Rect,
 } from '../tools/g2';
 import webgl from '../__mocks__/WebGLInstanceMock';
 import DrawContext2D from '../__mocks__/DrawContext2DMock';
@@ -154,7 +154,7 @@ describe('Diagram', () => {
         );
         squareElement.isMovable = true;
         squareElement.isTouchable = true;
-        squareElement.move.boundary = 'diagram';
+        squareElement.move.bounds = 'diagram';
         squares[sKey] = squareElement;
         collection.add(sKey, squareElement);
         collection.isTouchable = true;
@@ -170,6 +170,8 @@ describe('Diagram', () => {
           .transformBy(diagram.spaceTransforms.diagramToPixel.matrix());
         return pixel.add(new Point(diagram.canvasLow.left, diagram.canvasLow.top));
       };
+      diagram.initialize();
+      // diagram.setFirstTransform();
       diagrams[key] = diagram;
     });
   });
@@ -194,88 +196,6 @@ describe('Diagram', () => {
     d.add('square', square);
     expect(d.elements.drawOrder).toHaveLength(1);
   });
-  // describe('pageToClip', () => {
-  //   test.only('Landscape center at origin', () => {
-  //     const d = diagrams.landscapeCenter;
-  //     // top left of canvas of diagram1 should be -1, 1
-  //     expect(d.pageToClip(new Point(100, 200))).toEqual(new Point(-1, 1));
-  //     // bottom right
-  //     expect(d.pageToClip(new Point(1100, 700))).toEqual(new Point(1, -1));
-  //     // middle
-  //     expect(d.pageToClip((new Point(600, 450))).round()).toEqual(new Point(0, 0));
-  //   });
-  //   test('Landscape all positive', () => {
-  //     const d = diagrams.landscapeOffset;
-  //     expect(d.pageToClip(new Point(100, 200))).toEqual(new Point(0, 2));
-  //     expect(d.pageToClip(new Point(1100, 700))).toEqual(new Point(4, 0));
-  //     expect(d.pageToClip((new Point(600, 450))).round()).toEqual(new Point(2, 1));
-  //   });
-  //   test('Portrait center at origin', () => {
-  //     const d = diagrams.portraitCenter;
-  //     expect(d.pageToClip(new Point(100, 200))).toEqual(new Point(-1, 1));
-  //     expect(d.pageToClip(new Point(600, 1200))).toEqual(new Point(1, -1));
-  //     expect(d.pageToClip((new Point(350, 700))).round()).toEqual(new Point(0, 0));
-  //   });
-  //   test('Landscape center at positive', () => {
-  //     const d = diagrams.portraitOffset;
-  //     expect(d.pageToClip(new Point(100, 200))).toEqual(new Point(0, 4));
-  //     expect(d.pageToClip(new Point(600, 1200))).toEqual(new Point(2, 0));
-  //     expect(d.pageToClip((new Point(350, 700))).round()).toEqual(new Point(1, 2));
-  //   });
-  //   test('Square center at origin', () => {
-  //     const d = diagrams.squareCenter;
-  //     expect(d.pageToClip(new Point(100, 200))).toEqual(new Point(-1, 1));
-  //     expect(d.pageToClip(new Point(1100, 1200))).toEqual(new Point(1, -1));
-  //     expect(d.pageToClip((new Point(600, 700))).round()).toEqual(new Point(0, 0));
-  //   });
-  //   test('Square center at positive', () => {
-  //     const d = diagrams.squareOffset;
-  //     expect(d.pageToClip(new Point(100, 200))).toEqual(new Point(0, 4));
-  //     expect(d.pageToClip(new Point(1100, 1200))).toEqual(new Point(4, 0));
-  //     expect(d.pageToClip((new Point(600, 700))).round()).toEqual(new Point(2, 2));
-  //   });
-  // });
-  // describe('clipToPage', () => {
-  //   test('Landscape center at origin', () => {
-  //     const d = diagrams.landscapeCenter;
-  //     // top left of canvas of diagram1 should be -1, 1
-  //     expect(d.clipToPage(new Point(-1, 1))).toEqual(new Point(100, 200));
-  //     // bottom right
-  //     expect(d.clipToPage(new Point(1, -1))).toEqual(new Point(1100, 700));
-  //     // middle
-  //     expect(d.clipToPage((new Point(0, 0))).round()).toEqual(new Point(600, 450));
-  //   });
-  //   test('Landscape all positive', () => {
-  //     const d = diagrams.landscapeOffset;
-  //     expect(d.clipToPage(new Point(0, 2))).toEqual(new Point(100, 200));
-  //     expect(d.clipToPage(new Point(4, 0))).toEqual(new Point(1100, 700));
-  //     expect(d.clipToPage((new Point(2, 1))).round()).toEqual(new Point(600, 450));
-  //   });
-  //   test('Portrait center at origin', () => {
-  //     const d = diagrams.portraitCenter;
-  //     expect(d.clipToPage(new Point(-1, 1))).toEqual(new Point(100, 200));
-  //     expect(d.clipToPage(new Point(1, -1))).toEqual(new Point(600, 1200));
-  //     expect(d.clipToPage((new Point(0, 0))).round()).toEqual(new Point(350, 700));
-  //   });
-  //   test('Landscape center at positive', () => {
-  //     const d = diagrams.portraitOffset;
-  //     expect(d.clipToPage(new Point(0, 4))).toEqual(new Point(100, 200));
-  //     expect(d.clipToPage(new Point(2, 0))).toEqual(new Point(600, 1200));
-  //     expect(d.clipToPage((new Point(1, 2))).round()).toEqual(new Point(350, 700));
-  //   });
-  //   test('Square center at origin', () => {
-  //     const d = diagrams.squareCenter;
-  //     expect(d.clipToPage(new Point(-1, 1))).toEqual(new Point(100, 200));
-  //     expect(d.clipToPage(new Point(1, -1))).toEqual(new Point(1100, 1200));
-  //     expect(d.clipToPage((new Point(0, 0))).round()).toEqual(new Point(600, 700));
-  //   });
-  //   test('Square center at positive', () => {
-  //     const d = diagrams.squareOffset;
-  //     expect(d.clipToPage(new Point(0, 4))).toEqual(new Point(100, 200));
-  //     expect(d.clipToPage(new Point(4, 0))).toEqual(new Point(1100, 1200));
-  //     expect(d.clipToPage((new Point(2, 2))).round()).toEqual(new Point(600, 700));
-  //   });
-  // });
   describe('Test square locations', () => {
     // Show all squares are at the same clip location independent of canvas
     // and diagram offsets
@@ -433,9 +353,8 @@ describe('Diagram', () => {
     test('Move just A on Landscape Center', () => {
       // canvasW=1000, canvasH=500, clipL=-1, clipW=2, clipT=1, clipH=2
       const d = diagrams.landscapeCenter;
-      d.initialize();
+      // d.initialize();
       d.draw(0);
-
       // Touch A
       const t1 = d.dToP(new Point(-0.001, -0.001));
       // console.log(new Point(-0.001, -0.001).transformBy(d.diagramToPixelSpaceTransform.matrix()))
@@ -455,9 +374,11 @@ describe('Diagram', () => {
       expect(d.beingMovedElements[0]).toBe(d.elements._a);
 
       // Move to 0.25, 0.25
+      // console.log(d.elements._a.transform)
       d.touchMoveHandler(t1, t2);
       expect(d.beingMovedElements).toHaveLength(1);
       expect(d.beingMovedElements[0]).toBe(d.elements._a);
+      // console.log(d.elements._a.transform)
       expect(d.elements._a.transform.t().round(2)).toEqual(a2);
 
       // Move beyond border - should stop at 0.75 as side length is 0.5
@@ -469,7 +390,7 @@ describe('Diagram', () => {
     test('Move A and C on Landscape Center', () => {
       // canvasW=1000, canvasH=500, clipL=-1, clipW=2, clipT=1, clipH=2
       const d = diagrams.landscapeCenter;
-      d.initialize();
+      // d.initialize();
       d.draw(0);
 
       // Touch A and C
@@ -488,7 +409,6 @@ describe('Diagram', () => {
       const a3 = new Point(-0.75, -0.75);
       // C will get stuck at -0.5, -0.5
       const c3 = new Point(-0.5, -0.5);
-
       d.touchDownHandler(t1);          // Touch -0.01, -0.01
       expect(d.beingMovedElements).toHaveLength(2);
       expect(d.beingMovedElements[1]).toBe(d.elements._a);
@@ -496,7 +416,9 @@ describe('Diagram', () => {
       d.draw(1);
 
       // Move to 0.25, 0.25
+      // console.log(d.elements._c.transform)
       d.touchMoveHandler(t1, t2);
+      // console.log(d.elements._c.transform)
       expect(d.beingMovedElements).toHaveLength(2);
       expect(d.elements._a.transform.t().round(2)).toEqual(a2);
       expect(d.elements._c.transform.t().round(2)).toEqual(c2);
@@ -511,7 +433,7 @@ describe('Diagram', () => {
     test('Move A and C on Landscape Offset', () => {
       // canvasW=1000, canvasH=500, clipL=0, clipW=4, clipT=2, clipH=2
       const d = diagrams.landscapeOffset;
-      d.initialize();
+      // d.initialize();
       d.draw(0);
 
       // Touch A and C
@@ -547,6 +469,7 @@ describe('Diagram', () => {
       expect(d.elements._c.transform.t().round(2)).toEqual(c0);
       d.draw(0.1);
 
+      // debugger;
       d.touchMoveHandler(t0, t1);
       expect(d.beingMovedElements).toHaveLength(2);
       expect(d.elements._a.transform.t().round(2)).toEqual(a1);
@@ -569,7 +492,7 @@ describe('Diagram', () => {
     test('Move A and C on Portrait Offset', () => {
       // canvasW=500, canvasH=1000, clipL=0, clipW=2, clipT=4, clipH=4
       const d = diagrams.portraitOffset;
-      d.initialize();
+      // d.initialize();
       d.draw(0);
 
       // Touch A and C
@@ -627,13 +550,14 @@ describe('Diagram', () => {
   });
   describe('Touch move freely', () => {
     test('Move A and let go', () => {
-      const RealDate = Date.now;
+      const RealDate = global.performance.now;
       // canvasW=1000, canvasH=500, clipL=-1, clipW=2, clipT=1, clipH=2
       const d = diagrams.landscapeCenter;
-      d.initialize();
+      // d.initialize();
       const a = d.elements._a;
-      const decel = new TransformLimit(1, 1, 0.5);
+      const decel = [1, 1, 0.5];
       a.move.freely.deceleration = decel;
+      a.move.freely.bounceLoss = 1;
 
       // Touch A
       const t0 = d.dToP(new Point(-0.001, -0.001));
@@ -665,19 +589,19 @@ describe('Diagram', () => {
       const a4 = new Point(0.75, 0.75);
 
       // Start at time 0
-      Date.now = () => 0;
+      global.performance.now = () => 0;
       d.draw(0);
       d.touchDownHandler(t0);
 
       // Initial small movement to get center at 0,0 for easier math
-      Date.now = () => 1;
+      global.performance.now = () => 1;
       d.touchMoveHandler(t0, t1);
       expect(d.beingMovedElements).toHaveLength(1);
       expect(d.beingMovedElements[0]).toBe(a);
       d.draw(0.001);
 
       // Move to (0.1, 0.1) in 0.1s, velocity should be approx 1
-      Date.now = () => 101;
+      global.performance.now = () => 101;
       d.touchMoveHandler(t1, t2);
       expect(d.beingMovedElements).toHaveLength(1);
       expect(d.beingMovedElements[0]).toBe(a);
@@ -690,23 +614,25 @@ describe('Diagram', () => {
       expect(a.state.isBeingMoved).toBe(true);
 
       // Lift up touch
+      // global.performance.now = () => 1000;
       d.touchUpHandler();
       expect(a.transform.t().round(2)).toEqual(a2);
       expect(a.state.isMovingFreely).toBe(true);
       expect(a.state.isBeingMoved).toBe(false);
-      d.draw(1);   // first frame is lost in moving freely
-      d.draw(2);   // second frame is one second later
+
+      d.draw(1.101);   // first frame is one second later
       // initial velocity of 1 units/s, with deceleration of 0.5*sqrt(2)
       //   - new velocity = 0.5 units/s
       expect(a.state.movement.velocity.t().round(3)).toEqual(v3);
       expect(a.transform.t().round(3)).toEqual(a3.round(3));
 
+      // global.performance.now = () => 12000;
       d.draw(12);
       expect(a.state.movement.velocity.t()).toEqual(v4);
       expect(a.transform.t().round(3)).toEqual(a4);
       expect(a.state.isMovingFreely).toBe(false);
 
-      Date.now = RealDate;
+      global.performance.now = RealDate;
     });
   });
 });

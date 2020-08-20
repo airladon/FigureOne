@@ -1,35 +1,50 @@
 // @flow
 
 import {
-  Transform, Point, TransformLimit, Rect,
-  Translation, spaceToSpaceTransform, getBoundingRect,
-  Scale, Rotation, Line, getMaxTimeFromVelocity, clipAngle,
-  getPoint,
+  Transform, Point, Rect,
+  spaceToSpaceTransform, getBoundingRect,
+  clipAngle, getPoint, getTransform, getScale,
+  TransformBounds, RectBounds, RangeBounds, getBounds,
 } from '../tools/g2';
-import type { TypeParsablePoint } from '../tools/g2';
+// import { areColorsSame } from '../tools/color';
+import { getState } from './state';
+import type {
+  TypeParsablePoint, TypeParsableTransform,
+  TypeTransformValue, TypeTransformBoundsDefinition,
+} from '../tools/g2';
+import { Recorder } from './Recorder';
 import * as m2 from '../tools/m2';
 // import type { pathOptionsType, TypeRotationDirection } from '../tools/g2';
-import * as tools from '../tools/math';
+import * as math from '../tools/math';
 import HTMLObject from './DrawingObjects/HTMLObject/HTMLObject';
 import DrawingObject from './DrawingObjects/DrawingObject';
 import VertexObject from './DrawingObjects/VertexObject/VertexObject';
 import { TextObject } from './DrawingObjects/TextObject/TextObject';
-import { duplicateFromTo, joinObjects, joinObjectsWithOptions } from '../tools/tools';
-import { colorArrayToRGBA } from '../tools/color';
-// import GlobalAnimation from './webgl/GlobalAnimation';
+import {
+  duplicateFromTo, joinObjects, joinObjectsWithOptions, SubscriptionManager,
+} from '../tools/tools';
+import { colorArrayToRGBA, areColorsWithinDelta } from '../tools/color';
+import GlobalAnimation from './webgl/GlobalAnimation';
+import type { TypeWhen } from './webgl/GlobalAnimation';
 // import DrawContext2D from './DrawContext2D';
 
-import type { TypeSpaceTransforms } from './Diagram';
+import type Diagram, { TypeSpaceTransforms } from './Diagram';
 import type {
   TypePositionAnimationStepInputOptions, TypeAnimationBuilderInputOptions,
   TypeColorAnimationStepInputOptions, TypeTransformAnimationStepInputOptions,
   TypeRotationAnimationStepInputOptions, TypeScaleAnimationStepInputOptions,
   TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
   TypeParallelAnimationStepInputOptions, TypeTriggerStepInputOptions,
+  TypeDelayStepInputOptions, TypePulseTransformAnimationStepInputOptions,
+  TypeScenarioAnimationStepInputOptions,
 } from './Animation/Animation';
 // eslint-disable-next-line import/no-cycle
 import * as animations from './Animation/Animation';
 import WebGLInstance from './webgl/webgl';
+// import type Diagram from './Diagram';
+import { FunctionMap } from '../tools/FunctionMap';
+// import type Diagram from './Diagram';
+// import type { TypePauseSettings, TypeOnPause } from './Recorder';
 
 // eslint-disable-next-line import/no-cycle
 // import {
@@ -47,7 +62,28 @@ import WebGLInstance from './webgl/webgl';
 export type TypeScenario = {
   position?: TypeParsablePoint,
   rotation?: number,
-  scale?: TypeParsablePoint,
+  scale?: TypeParsablePoint | number,
+  transform?: TypeParsableTransform,
+  color?: Array<number>,
+  isShown?: boolean,
+};
+
+const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Transform>) => {
+  const newTransforms = [];
+  if (copyTransforms.length === 0) {
+    return inputTransforms.map(t => t._dup());
+  }
+  inputTransforms.forEach((it) => {
+    copyTransforms.forEach((t) => {
+      newTransforms.push(getTransform(it).transform(getTransform(t)));
+    });
+  });
+  if (newTransforms.length > 0) {
+    // TODO Test without duping this
+    return newTransforms.map(t => t._dup());
+    // return newTransforms;
+  }
+  return inputTransforms.map(t => t._dup());
 };
 
 
@@ -55,7 +91,7 @@ export type TypeScenario = {
 //
 // A diagram element can either be a:
 //  - Primitive: a basic element that has the webGL vertices, color
-//  - Collection: a group of elements (either primatives or collections)
+//  - Collection: a group of elements (either primitives or collections)
 //
 // A diagram element can be:
 //  - transformed (resized, offset, rotated)
@@ -87,13 +123,21 @@ export type TypeScenario = {
 //
 class DiagramElement {
   transform: Transform;        // Transform of diagram element
+  pulseTransforms: Array<Transform>;
+  frozenPulseTransforms: Array<Transform>;
+  copyTransforms: Array<Transform>;
+  drawTransforms: Array<Transform>;
+
   // presetTransforms: Object;       // Convenience dict of transform presets
   lastDrawTransform: Transform; // Transform matrix used in last draw
   lastDrawPulseTransform: Transform; // Transform matrix used in last draw
+  parentTransform: Transform;
   // lastDrawParentTransform: Transform;
   // lastDrawElementTransform: Transform;
   // lastDrawPulseTransform: Transform;
   lastDrawElementTransformPosition: {parentCount: number, elementCount: number};
+
+  lastDrawOpacity: number;
 
   parent: DiagramElement | null;
 
@@ -108,35 +152,46 @@ class DiagramElement {
   drawPriority: number;
 
   // Callbacks
-  onClick: ?(?mixed) => void;
-  setTransformCallback: (Transform) => void; // element.transform is updated
-  internalSetTransformCallback: (Transform) => void;
-  beforeDrawCallback: ?(number) => void;
-  afterDrawCallback: ?(number) => void;
+  onClick: string | (?(?mixed) => void);
+  setTransformCallback: ?(string | ((Transform) => void)); // element.transform is updated
+  internalSetTransformCallback: ?(string | ((Transform) => void));
+  beforeDrawCallback: string | (?(number) => void);
+  afterDrawCallback: string | (?(number) => void);
+  // redrawElements: Array<DiagramElement>;
 
   color: Array<number>;           // For the future when collections use color
   defaultColor: Array<number>;
   dimColor: Array<number>;
   opacity: number;
-  noRotationFromParent: boolean;
+  // noRotationFromParent: boolean;
 
   interactiveLocation: Point;   // this is in vertex space
-
+  // recorder: Recorder;
+  diagram: Diagram;
   move: {
-    maxTransform: Transform,
-    minTransform: Transform,
-    boundary: ?Rect | Array<number> | 'diagram',
-    limitLine: null | Line,
-    transformClip: ?(Transform) => Transform;
-    maxVelocity: TransformLimit;            // Maximum velocity allowed
+    // maxTransform: Transform,
+    // bounds: null
+    // bounds: { translation: [-1, -1, 2, 2], scale: [-1, 1], rotation: [-1, 1] }
+    // bounds: 'diagram',
+    // bounds: new TransformBounds(transform, [null, null] | { translation: null })
+    // bounds: [null, [-1, -1, 2, 2], null]
+    // bounds: [null, [null, -1, null, 2], null]
+    // bounds: TransformBounds | Rect | Array<number> | 'diagram',
+    bounds: TransformBounds,
+    // minTransform: Transform,
+    // boundary: ?Rect | Array<number> | 'diagram',
+    // limitLine: null | Line,
+    transformClip: string | (?(Transform) => Transform);
+    maxVelocity: TypeTransformValue;            // Maximum velocity allowed
     // When moving freely, the velocity decelerates until it reaches a threshold,
   // then it is considered 0 - at which point moving freely ends.
     freely: {                 // Moving Freely properties
-      zeroVelocityThreshold: TransformLimit,  // Velocity considered 0
-      deceleration: TransformLimit,           // Deceleration
-      callback: ?(boolean) => void,
+      zeroVelocityThreshold: TypeTransformValue,  // Velocity considered 0
+      deceleration: TypeTransformValue,           // Deceleration
+      bounceLoss: TypeTransformValue,
+      callback: ?(string | ((boolean) => void)),
     };
-    bounce: boolean;
+    // bounce: boolean;
     canBeMovedAfterLosingTouch: boolean;
     type: 'rotation' | 'translation' | 'scaleX' | 'scaleY' | 'scale';
     // eslint-disable-next-line no-use-before-define
@@ -155,14 +210,16 @@ class DiagramElement {
     A: number | Array<number>,
     B: number | Array<number>,
     C: number | Array<number>,
-    style: (number, number, number, number, number) => number,
+    progression: string | ((number, number, number, number, number) => number),
     num: number,
     delta: TypeParsablePoint,
-    transformMethod: (number, ?Point) => Transform,
-    callback: ?(mixed) => void;
+    transformMethod: string | ((number, ?Point) => Transform),
+    callback: ?(string | ((mixed) => void));
+    allowFreezeOnStop: boolean,
+    // clearFrozenTransforms: boolean,
   };
 
-  pulseDefault: ((?() => void) => void) | {
+  pulseDefault: string | ((?() => void) => void) | {
     scale: number,
     time: number,
     frequency: number,
@@ -177,7 +234,7 @@ class DiagramElement {
     isBeingMoved: boolean,
     isMovingFreely: boolean,
     movement: {
-      previousTime: number,
+      previousTime: ?number,
       previousTransform: Transform,
       velocity: Transform,           // current velocity - will be clipped
                                         // at max if element is being moved
@@ -185,11 +242,13 @@ class DiagramElement {
     },
     isPulsing: boolean,
     pulse: {
-      startTime: number,
+      startTime: ?number,
     },
+    preparingToStop: boolean;
   };
 
   animations: animations.AnimationManager;
+  animationFinishedCallback: ?(string | (() => void));
 
   // pulse: Object;                  // Pulse animation state
 
@@ -233,6 +292,23 @@ class DiagramElement {
   unrenderNextDraw: boolean;
 
   custom: { [string]: any };
+
+  stateProperties: Array<string>
+  fnMap: FunctionMap;
+  // isPaused: boolean;
+
+  // finishAnimationOnPause: boolean;
+
+  subscriptions: SubscriptionManager;
+
+  lastDrawTime: number;
+
+  // pauseSettings: TypePauseSettings;
+
+  dependantTransform: boolean;
+
+  recorder: Recorder;
+
   // scenarioSet: {
   //   quiz1: [
   //     { element: xyz, position: (), scale: (), rotation: (), length: () }
@@ -252,36 +328,47 @@ class DiagramElement {
 
   constructor(
     transform: Transform = new Transform(),
-    diagramLimits: Rect = new Rect(-1, -1, 2, 2),
+    diagramLimitsOrDiagram: Diagram | Rect = new Rect(-1, -1, 2, 2),
     parent: DiagramElement | null = null,
   ) {
     this.name = ''; // This is updated when an element is added to a collection
     this.uid = (Math.random() * 1e18).toString(36);
     this.isShown = true;
     this.transform = transform._dup();
+    this.dependantTransform = false;
+    this.fnMap = new FunctionMap();
+    this.subscriptions = new SubscriptionManager(this.fnMap);
     this.isMovable = false;
     this.isTouchable = false;
     this.isInteractive = undefined;
     this.hasTouchableElements = false;
     this.color = [1, 1, 1, 1];
+    this.lastDrawOpacity = 1;
     this.dimColor = [0.5, 0.5, 0.5, 1];
     this.defaultColor = this.color.slice();
     this.opacity = 1;
-    this.setTransformCallback = () => {};
+    this.setTransformCallback = null;
     this.beforeDrawCallback = null;
     this.afterDrawCallback = null;
-    this.internalSetTransformCallback = () => {};
+    this.internalSetTransformCallback = null;
     this.lastDrawTransform = this.transform._dup();
+    this.parentTransform = new Transform();
     this.lastDrawPulseTransform = this.transform._dup();
     this.onClick = null;
     this.lastDrawElementTransformPosition = {
       parentCount: 0,
       elementCount: 0,
     };
+    // this.redrawElements = [];
+    // this.diagram = null;
+    this.recorder = new Recorder(true);
     this.custom = {};
     this.parent = parent;
     this.drawPriority = 1;
-    this.noRotationFromParent = false;
+    this.stateProperties = [];
+    // this.finishAnimationOnPause = false;
+    this.lastDrawTime = 0;
+    // this.noRotationFromParent = false;
     // this.pulseDefault = (callback: ?() => void = null) => {
     //   this.pulseScaleNow(1, 2, 0, callback);
     // };
@@ -290,6 +377,10 @@ class DiagramElement {
       scale: 2,
       time: 1,
     };
+    // this.isPaused = false;
+    // this.copies = [];
+
+    // this.pauseSettings = {};
 
     // Rename to animate in future
     this.anim = {
@@ -305,21 +396,33 @@ class DiagramElement {
         const options = joinObjects({}, ...optionsIn);
         return new animations.TriggerStep(options);
       },
+      delay: (...optionsIn: Array<TypeDelayStepInputOptions>) => {
+        const options = joinObjects({}, ...optionsIn);
+        return new animations.DelayStep(options);
+      },
+      translation: (...optionsIn: Array<TypePositionAnimationStepInputOptions>) => {
+        const options = joinObjects({}, { element: this }, ...optionsIn);
+        return new animations.PositionAnimationStep(options);
+      },
       position: (...optionsIn: Array<TypePositionAnimationStepInputOptions>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.PositionAnimationStep(options);
       },
       color: (...optionsIn: Array<TypeColorAnimationStepInputOptions>) => {
-        const options = joinObjects({}, { elements: this }, ...optionsIn);
+        const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.ColorAnimationStep(options);
       },
       opacity: (...optionsIn: Array<TypeOpacityAnimationStepInputOptions>) => {
-        const options = joinObjects({}, { elements: this }, ...optionsIn);
+        const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.OpacityAnimationStep(options);
       },
       transform: (...optionsIn: Array<TypeTransformAnimationStepInputOptions>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.TransformAnimationStep(options);
+      },
+      pulseTransform: (...optionsIn: Array<TypePulseTransformAnimationStepInputOptions>) => {
+        const options = joinObjects({}, { element: this }, ...optionsIn);
+        return new animations.PulseTransformAnimationStep(options);
       },
       pulse(...optionsIn: Array<TypePulseAnimationStepInputOptions>) {
         const options = joinObjects({}, { element: this }, ...optionsIn);
@@ -371,30 +474,132 @@ class DiagramElement {
       },
       // eslint-disable-next-line max-len
       builder: (...optionsIn: Array<TypeAnimationBuilderInputOptions>) => new animations.AnimationBuilder(this, ...optionsIn),
-      // eslint-disable-next-line max-len
-      scenario: (...optionsIn: Array<TypeTransformAnimationStepInputOptions & { scenario: string }>) => {
-        const defaultOptions = { element: this };
-        const options = joinObjects({}, defaultOptions, ...optionsIn);
-        if (options.target != null
-          && options.target in options.element.scenarios
-        ) {
-          const target = options.element.getScenarioTarget(options.target);
-          options.target = target;
-        }
-        if (options.start != null
-          && options.start in options.element.scenarios
-        ) {
-          const start = options.element.getScenarioTarget(options.start);
-          options.start = start;
-        }
-        if (options.delta != null
-          && options.delta in options.element.scenarios
-        ) {
-          const delta = options.element.getScenarioTarget(options.delta);
-          options.delta = delta;
-        }
-        return new animations.TransformAnimationStep(options);
+      scenario: (...optionsIn: Array<TypeScenarioAnimationStepInputOptions>) => {
+        const options = joinObjects({}, { element: this }, ...optionsIn);
+        return new animations.ScenarioAnimationStep(options);
       },
+      // eslint-disable-next-line max-len
+      // scenario: (...optionsIn: Array<TypeTransformAnimationStepInputOptions
+      //                             & {
+      //                                 start?: TypeScenario,
+      //                                 target: TypeScenario,
+      //                                }>) => {
+      //   const defaultOptions = { element: this, delay: 0 };
+      //   const options = joinObjects({}, defaultOptions, ...optionsIn);
+
+      //   // Retrieve the target scenario
+      //   if (options.target != null) {
+      //     const target = options.element.getScenarioTarget(options.target);
+      //     if (Object.keys(target).length > 0) {
+      //       options.target = target;
+      //     }
+      //   }
+      //   // Retrieve the start scenario (if it doesn't exist, then the element's values
+      //   // at the time the animation starts will be used).
+      //   if (options.start != null) {
+      //     const start = options.element.getScenarioTarget(options.start);
+      //     if (Object.keys(start).length > 0) {
+      //       options.start = start;
+      //     }
+      //   }
+
+      //   const { start, target, element } = options;
+      //   const steps = [];
+      //   const duration = this.getTimeToMoveToScenario(target, options, start || '');
+      //   options.duration = duration;
+      //   const timeOptions = { delay: options.delay, duration: options.duration };
+      //   options.delay = 0;
+      //   options.velocity = undefined;
+      //   let startColor;
+      //   let startTransform;
+      //   let startIsShown;
+
+      //   if (start != null) {
+      //     if (start.color != null) {
+      //       startColor = start.color.slice();
+      //     }
+      //     if (start.transform != null) {
+      //       startTransform = start.transform._dup();
+      //     }
+      //     if (start.isShown != null) {
+      //       startIsShown = start.isShown;
+      //     }
+      //   }
+
+      //   if (target.color != null) {
+      //     steps.push(element.anim.color({
+      //       start: startColor,
+      //       target: target.color,
+      //       duration: options.duration,
+      //     }));
+      //   }
+
+      //   if (target.transform != null) {
+      //     steps.push(element.anim.transform(options, {
+      //       start: startTransform,
+      //       target: target.transform,
+      //     }));
+      //   }
+      //   if (target.isShown != null) {
+      //     if (startIsShown != null) {
+      //       if (target.isShown === true && startIsShown === true) {
+      //         steps.push(element.anim.dissolveIn({ duration: 0 }));
+      //       }
+      //       if (target.isShown === false && startIsShown === false) {
+      //         steps.push(element.anim.dissolveOut({ duration: 0 }));
+      //       }
+      //       if (target.isShown === false && startIsShown === true) {
+      //         steps.push(element.anim.dissolveOut({ duration: options.duration }));
+      //       }
+      //       if (target.isShown === true && startIsShown === false) {
+      //         steps.push(element.anim.dissolveIn({ duration: options.duration }));
+      //       }
+      //     } else {
+      //       let dissolveFromCurrent = true;
+      //       if (options.dissolveFromCurrent != null && options.dissolveFromCurrent === false) {
+      //         dissolveFromCurrent = false;
+      //       }
+      //       if (target.isShown) {
+      //         steps.push(element.anim.opacity({
+      //           duration: options.duration,
+      //           dissolve: 'in',
+      //           dissolveFromCurrent,
+      //         }));
+      //       } else {
+      //         steps.push(element.anim.opacity({
+      //           duration: options.duration,
+      //           dissolve: 'out',
+      //           dissolveFromCurrent,
+      //         }));
+      //       }
+      //     }
+      //   }
+      //   return new animations.ParallelAnimationStep(timeOptions, { steps });
+      // },
+      // scenarioLegacy: (...optionsIn: Array<TypeTransformAnimationStepInputOptions
+      //                          & { scenario: string }>) => {
+      //   const defaultOptions = { element: this };
+      //   const options = joinObjects({}, defaultOptions, ...optionsIn);
+      //   if (options.target != null
+      //     && options.target in options.element.scenarios
+      //   ) {
+      //     const target = options.element.getScenarioTargetLegacy(options.target);
+      //     options.target = target;
+      //   }
+      //   if (options.start != null
+      //     && options.start in options.element.scenarios
+      //   ) {
+      //     const start = options.element.getScenarioTargetLegacy(options.start);
+      //     options.start = start;
+      //   }
+      //   if (options.delta != null
+      //     && options.delta in options.element.scenarios
+      //   ) {
+      //     const delta = options.element.getScenarioTargetLegacy(options.delta);
+      //     options.delta = delta;
+      //   }
+      //   return new animations.TransformAnimationStep(options);
+      // },
       // eslint-disable-next-line max-len
       scenarios: (...optionsIn: Array<TypeParallelAnimationStepInputOptions & TypeTransformAnimationStepInputOptions>) => {
         const defaultOptions = {};
@@ -409,64 +614,85 @@ class DiagramElement {
         return new animations.ParallelAnimationStep(simpleOptions, { steps });
       },
     };
-    this.diagramLimits = diagramLimits;
+    if (diagramLimitsOrDiagram instanceof Rect) {
+      this.diagramLimits = diagramLimitsOrDiagram;
+    } else if (diagramLimitsOrDiagram != null) {
+      this.diagramLimits = this.diagram.limits._dup();
+    }
     this.move = {
-      maxTransform: this.transform.constant(1000),
-      minTransform: this.transform.constant(-1000),
-      boundary: null,
-      maxVelocity: new TransformLimit(5, 5, 5),
+      // maxTransform: this.transform.constant(1000),
+      // minTransform: this.transform.constant(-1000),
+      bounds: new TransformBounds(this.transform),
+      // bounds: { scale: null, rotation: null, position: null },
+      // boundary: null,
+      maxVelocity: 5,
+      // maxVelocity: new TransformLimit(5, 5, 5),
       freely: {
-        zeroVelocityThreshold: new TransformLimit(0.001, 0.001, 0.001),
-        deceleration: new TransformLimit(5, 5, 5),
+        zeroVelocityThreshold: 0.0001,
+        deceleration: 5,
         callback: null,
+        bounceLoss: 0.5,
       },
-      bounce: true,
-      canBeMovedAfterLosingTouch: false,
+      // bounce: true, // deprecate
+      canBeMovedAfterLosingTouch: true,
       type: 'translation',
       element: null,
-      limitLine: null,
+      // limitLine: null,
       transformClip: null,
     };
 
     this.scenarios = {};
 
+    const pulseTransformMethod = (s, d) => {
+      if (d == null || (d.x === 0 && d.y === 0)) {
+        return new Transform().scale(s, s);
+      }
+      return new Transform()
+        .translate(-d.x, -d.y)
+        .scale(s, s)
+        .translate(d.x, d.y);
+    };
+    this.fnMap.add('_elementPulseSettingsTransformMethod', pulseTransformMethod);
+    this.fnMap.add('tools.math.easeinout', math.easeinout);
+    this.fnMap.add('tools.math.linear', math.linear);
+    this.fnMap.add('tools.math.sinusoid', math.sinusoid);
+    this.fnMap.add('tools.math.triangle', math.triangle);
     this.pulseSettings = {
       time: 1,
       frequency: 0.5,
       A: 1,
       B: 0.5,
       C: 0,
-      style: tools.sinusoid,
+      progression: 'tools.math.sinusoid',
       num: 1,
       delta: new Point(0, 0),
-      transformMethod: (s, d) => {
-        if (d == null || (d.x === 0 && d.y === 0)) {
-          return new Transform().scale(s, s);
-        }
-        return new Transform()
-          .translate(-d.x, -d.y)
-          .scale(s, s)
-          .translate(d.x, d.y);
-      },
+      transformMethod: '_elementPulseSettingsTransformMethod',
       callback: () => {},
+      allowFreezeOnStop: false,
+      // clearFrozenTransforms: false,
     };
 
     this.state = {
       isBeingMoved: false,
       isMovingFreely: false,
       movement: {
-        previousTime: -1,
+        previousTime: null,
         previousTransform: this.transform._dup(),
         velocity: this.transform.zero(),
       },
 
       isPulsing: false,
       pulse: {
-        startTime: -1,
+        startTime: null,
       },
+      preparingToStop: false,
     };
     this.interactiveLocation = new Point(0, 0);
-    this.animations = new animations.AnimationManager(this);
+    this.animationFinishedCallback = null;
+    this.animations = new animations.AnimationManager({
+      element: this,
+      finishedCallback: this.animationFinished.bind(this),
+    });
     this.tieToHTML = {
       element: null,
       scale: 'fit',
@@ -476,13 +702,137 @@ class DiagramElement {
     this.isRenderedAsImage = false;
     this.unrenderNextDraw = false;
     this.renderedOnNextDraw = false;
+    this.pulseTransforms = [];
+    this.frozenPulseTransforms = [];
+    this.copyTransforms = [];
+    this.drawTransforms = [];
   }
 
-  setProperties(properties: Object, except: Array<string> | string = []) {
+  animationFinished(typeOfAnimation: 'pulse' | 'movingFreely' | 'animation' = 'animation') {
+    // console.log('element', this.name, this.animationFinishedCallback)
+    this.fnMap.exec(this.animationFinishedCallback);
+    this.subscriptions.trigger('animationFinished', typeOfAnimation);
+  }
+
+  // animationsFinishedCallback(element: DiagramElement) {
+  //   if (this.parent != null) {
+  //     this.parent.animationsFinishedCallback(element);
+  //   }
+  // }
+
+  setProperties(properties: Object, exceptIn: Array<string> | string = []) {
+    let except = exceptIn;
+    if (properties.move != null) {
+      if (properties.move.bounds != null && properties.move.bounds !== 'diagram') {
+        if (typeof except === 'string') {
+          except = [except, 'move.bounds'];
+        } else {
+          except.push('move.bounds');
+        }
+        const bounds = getBounds(properties.move.bounds, 'transform', this.transform);
+        if (bounds instanceof TransformBounds) {
+          for (let i = 0; i < bounds.boundary.length; i += 1) {
+            const bound = bounds.boundary[i];
+            const order = bounds.order[i];
+            if (
+              bounds.boundary[i] != null
+              && bound instanceof RangeBounds
+              && (order === 't' || order === 's')
+            ) {
+              bounds.boundary[i] = new RectBounds({
+                left: bound.boundary.min,
+                bottom: bound.boundary.min,
+                right: bound.boundary.max,
+                top: bound.boundary.max,
+              });
+            }
+          }
+          this.move.bounds = bounds;
+        }
+      }
+    }
     joinObjectsWithOptions({
       except,
     }, this, properties);
   }
+
+
+  _getStateProperties(options: { ignoreShown?: boolean }) {
+    let { ignoreShown } = options;
+    if (ignoreShown == null) {
+      ignoreShown = false;
+    }
+    if (this.isShown || ignoreShown) {
+      return [
+        'animations',
+        'color',
+        'opacity',
+        'dimColor',
+        'defaultColor',
+        'transform',
+        'isShown',
+        'isMovable',
+        'isTouchable',
+        'state',
+        'pulseSettings',
+        'setTransformCallback',
+        'move',
+        'subscriptions',
+        // 'finishAnimationOnPause',
+        'pulseTransforms',
+        'frozenPulseTransforms',
+        // 'lastDrawTime',
+        ...this.stateProperties,
+      ];
+    }
+    return [
+      'isShown',
+      'transform',
+    ];
+  }
+
+  _getStatePropertiesMin() {
+    if (this.isShown) {
+      return [
+        'color',
+        'transform',
+        'isShown',
+      ];
+    }
+    return [
+      'isShown',
+    ];
+  }
+
+  _state(options: { precision?: number, ignoreShown?: boolean, min?: boolean } = {}) {
+    if (options.min) {
+      return getState(this, this._getStatePropertiesMin(), options);
+    }
+    return getState(this, this._getStateProperties(options), options);
+  }
+
+  // execFn(fn: string | Function | null, ...args: Array<any>) {
+  //   if (fn == null) {
+  //     return null;
+  //   }
+  //   if (typeof fn === 'string') {
+  //     return this.fnMap.exec(fn, ...args);
+  //   }
+  //   return fn(...args);
+  // }
+
+  setTimeDelta(delta: number) {
+    if (this.animations.state === 'animating') {
+      this.animations.setTimeDelta(delta);
+    }
+    if (this.state.isPulsing && this.state.pulse.startTime != null) {
+      this.state.pulse.startTime += delta;
+    }
+    if (this.state.movement.previousTime != null) {
+      this.state.movement.previousTime += delta;
+    }
+  }
+
 
   // Space definition:
   //   * Pixel space: css pixels
@@ -491,7 +841,7 @@ class DiagramElement {
   //   * Element space: Combination of element transform and its
   //     parent transform's
 
-  // A diagram element primative vertex object lives in GL SPACE.
+  // A diagram element primitive vertex object lives in GL SPACE.
   //
   // A diagram element has its own DIAGRAM ELEMENT SPACE, which is
   // the GL space transformed by `this.transform`.
@@ -636,6 +986,210 @@ class DiagramElement {
   setFirstTransform(parentTransform: Transform) {
   }
 
+  // animateToPulseTransforms(pulseTranforms: Array<Transform>) {
+  //   let startTransforms = this.pulseTransforms;
+  //   if (pulseTransforms.length != this.startTransforms.length) {
+  //     startTransforms = [];
+  //     for (let i = 0; i < pulseTranforms.length; i += 1) {
+  //       startTransforms.push(this.transform._dup());
+  //     }
+  //   }
+  // }
+
+  clearFrozenPulseTransforms() {
+    this.frozenPulseTransforms = [];
+  }
+
+  freezePulseTransforms(forceOverwrite: boolean = true) {
+    if (
+      (forceOverwrite && this.pulseTransforms.length === 0)
+      || (!forceOverwrite && this.pulseTransforms.length > 0)
+    ) {
+      this.frozenPulseTransforms = this.pulseTransforms.map(t => t._dup());
+    }
+  }
+
+  animateToState(
+    state: Object,
+    options: Object,
+    independentOnly: boolean = false,
+    startTime: ?number | 'now' | 'prev' | 'next' = null,
+  ) {
+    // if (this.name === 'a') {
+    //   console.log(this.frozenPulseTransforms)
+    // }
+    const target = {};
+    if (
+      (this.isShown !== state.isShown && this.opacity === 1)
+      || this.opacity !== 1
+    ) {
+      // console.log('shown animation', this.getPath(), this.isShown, state.isShown)
+      target.isShown = state.isShown;
+    }
+    if (!areColorsWithinDelta(this.color, state.color, 0.001)) {
+      target.color = state.color;
+    }
+    const stateTransform = getTransform(state.transform);
+    if (
+      !this.transform.isWithinDelta(stateTransform, 0.001)
+      && (
+        this.dependantTransform === false
+        || independentOnly === false
+      )
+    ) {
+      target.transform = stateTransform;
+    }
+
+    let scenarioAnimation = null;
+    let duration = 0;
+    if (Object.keys(target).length > 0) {
+      const scenarioOptions = joinObjects({}, options, { target });
+      scenarioAnimation = this.anim.scenario(scenarioOptions);
+    }
+    // let pulseTrigger = null;
+    // let pulseDelay = null;
+    // let delay = 0;
+    let pulseAnimation = null;
+
+    if (!this.arePulseTransformsSame(state, 0.001)) {
+      let startPulseTransforms = this.pulseTransforms.map(t => t._dup());
+      if (this.pulseTransforms.length === 0) {
+        startPulseTransforms = this.frozenPulseTransforms.map(t => t._dup());
+      }
+      let targetPulseTransforms = state.pulseTransforms.map(t => getTransform(t));
+      if (targetPulseTransforms.length === 0 && state.frozenPulseTransforms.length > 0) {
+        targetPulseTransforms = state.frozenPulseTransforms.map(t => getTransform(t));
+      }
+      if (targetPulseTransforms.length === 0 && startPulseTransforms.length > 0) {
+        targetPulseTransforms = [startPulseTransforms[0].identity()];
+      }
+
+      pulseAnimation = this.anim.pulseTransform(joinObjects({}, options, {
+        start: startPulseTransforms,
+        target: targetPulseTransforms,
+      }));
+    }
+
+    if (scenarioAnimation != null || pulseAnimation != null) {
+      this.animations.new()
+        .inParallel([
+          scenarioAnimation,
+          pulseAnimation,
+        ])
+        // .then(scenarioAnimation)
+        // .then(pulseTrigger)
+        // .then(pulseDelay)
+        .start(startTime);
+    }
+    // if (this.animations.animations.length > 0) {
+    //   console.log(this.getPath(), this.animations.animations[0]._dup());
+    // }
+    if (scenarioAnimation != null) {
+      duration = Math.max(duration, scenarioAnimation.getTotalDuration());
+    }
+    if (pulseAnimation != null) {
+      duration = Math.max(duration, pulseAnimation.getTotalDuration());
+    }
+    // if (this.name === 'a') {
+    //   console.log(this.frozenPulseTransforms)
+    // }
+
+    return duration;
+  }
+
+  dissolveInToState(
+    state: Object,
+    duration: number = 0.8,
+    startTime: ?number | 'now' | 'prev' | 'next' = null,
+  ) {
+    if (state.isShown === false) {
+      return 0;
+    }
+    // const target = {};
+    this.transform = getTransform(state.transform);
+    this.color = state.color.slice();
+    this.frozenPulseTransforms = [];
+    state.pulseTransforms.forEach(t => this.frozenPulseTransforms.push(getTransform(t)));
+    this.show();
+    this.animations.new()
+      .opacity({
+        target: state.opacity,
+        start: 0.001,
+        duration,
+      })
+      .trigger({
+        callback: () => {
+          this.frozenPulseTransforms = [];
+        },
+      })
+      .start(startTime);
+    return duration;
+  }
+
+  isStateSame(
+    state: Object,
+    mergePulseTransforms: boolean = false,
+    exceptions: Array<string> = [],
+  ) {
+    const p = this.getPath();
+    if (exceptions.indexOf(p) > -1) {
+      return true;
+    }
+    if (this.isShown !== state.isShown || Math.abs(this.opacity - state.opacity) > 0.001) {
+      return false;
+    }
+    if (!areColorsWithinDelta(this.color, state.color, 0.001)) {
+      return false;
+    }
+    if (!this.transform.isWithinDelta(getTransform(state.transform), 0.001)) {
+      return false;
+    }
+
+    if (mergePulseTransforms) {
+      if (!this.arePulseTransformsSame(state, 0.001)) {
+        return false;
+      }
+      return true;
+    }
+    if (state.pulseTransforms.length !== this.pulseTransforms.length) {
+      return false;
+    }
+    for (let i = 0; i < this.pulseTransforms.length; i += 1) {
+      if (!this.pulseTransforms[i].isWithinDelta(getTransform(state.pulseTransforms[i]), 0.001)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  arePulseTransformsSame(state: Object, delta: number = 0.001) {
+    let statePulseTransforms = [];
+    let pulseTransforms = [];
+    statePulseTransforms = transformBy([this.transform._dup()], state.pulseTransforms);
+    statePulseTransforms = transformBy(statePulseTransforms, state.frozenPulseTransforms);
+
+    pulseTransforms = transformBy([this.transform._dup()], this.pulseTransforms);
+    pulseTransforms = transformBy(pulseTransforms, this.frozenPulseTransforms);
+
+    if (pulseTransforms.length !== statePulseTransforms.length) {
+      return false;
+    }
+    for (let i = 0; i < pulseTransforms.length; i += 1) {
+      if (!pulseTransforms[i].isWithinDelta(statePulseTransforms[i], delta)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  getDrawTransforms(initialTransforms: Array<Transform>) {
+    // let drawTransforms = [transform];
+    let drawTransforms = transformBy(initialTransforms, this.copyTransforms);
+    drawTransforms = transformBy(drawTransforms, this.pulseTransforms);
+    drawTransforms = transformBy(drawTransforms, this.frozenPulseTransforms);
+    return drawTransforms;
+  }
+
   exec(
     execFunctionAndArgs: string | Array<string | Object>,
   ) {
@@ -685,13 +1239,17 @@ class DiagramElement {
       time?: number,
       scale?: number,
       done?: ?(mixed) => void,
+      progression: string | (number) => number,
     } | ?(mixed) => void = null) {
     const defaultPulseOptions = {
       frequency: 0,
       time: 1,
       scale: 2,
     };
-    if (typeof this.pulseDefault !== 'function') {
+    if (
+      typeof this.pulseDefault !== 'function'
+      && typeof this.pulseDefault !== 'string'
+    ) {
       defaultPulseOptions.frequency = this.pulseDefault.frequency;
       defaultPulseOptions.time = this.pulseDefault.time;
       defaultPulseOptions.scale = this.pulseDefault.scale;
@@ -705,10 +1263,12 @@ class DiagramElement {
       time: defaultPulseOptions.time,
       scale: defaultPulseOptions.scale,
       done: null,
+      progression: 'tools.math.sinusoid',
     };
     let done;
     let options = defaultOptions;
-    if (typeof optionsOrDone === 'function') {
+
+    if (typeof optionsOrDone === 'function' || typeof optionsOrDone === 'string') {
       options = defaultOptions;
       done = optionsOrDone;
     } else if (optionsOrDone == null) {
@@ -718,8 +1278,11 @@ class DiagramElement {
       options = joinObjects({}, defaultOptions, optionsOrDone);
       ({ done } = options);
     }
-    if (typeof this.pulseDefault === 'function') {
-      this.pulseDefault(done);
+    if (
+      typeof this.pulseDefault === 'function'
+      || typeof this.pulseDefault === 'string'
+    ) {
+      this.fnMap.exec(this.pulseDefault, done);
     } else {
       // const { frequency, time, scale } = this.pulseDefault;
       // this.pulseScaleNow(time, scale, frequency, done);
@@ -732,18 +1295,22 @@ class DiagramElement {
         options.scale,
         options.frequency,
         done,
+        options.progression,
       );
     }
   }
 
-  pulseLegacy(done: ?(mixed) => void = null) {
-    if (typeof this.pulseDefault === 'function') {
-      this.pulseDefault(done);
-    } else {
-      const { frequency, time, scale } = this.pulseDefault;
-      this.pulseScaleNow(time, scale, frequency, done);
-    }
-  }
+  // pulseLegacy(done: ?(mixed) => void = null) {
+  //   if (
+  //     typeof this.pulseDefault === 'function'
+  //     || typeof this.pulseDefault === 'string'
+  //   ) {
+  //     this.execFn(this.pulseDefault, done);
+  //   } else {
+  //     const { frequency, time, scale } = this.pulseDefault;
+  //     this.pulseScaleNow(time, scale, frequency, done);
+  //   }
+  // }
 
   getElement() {
     return this;
@@ -758,11 +1325,18 @@ class DiagramElement {
     this.undim();
   }
 
+
   setPosition(pointOrX: Point | number, y: number = 0) {
-    let position = getPoint(pointOrX);
+    let position;
     if (typeof pointOrX === 'number') {
       position = new Point(pointOrX, y);
+    } else {
+      position = getPoint(pointOrX);
     }
+    // let position = getPoint(pointOrX);
+    // if (typeof pointOrX === 'number') {
+    //   position = new Point(pointOrX, y);
+    // }
     const currentTransform = this.transform._dup();
     currentTransform.updateTranslation(position);
     this.setTransform(currentTransform);
@@ -775,14 +1349,24 @@ class DiagramElement {
   }
 
   setScale(scaleOrX: Point | number, y: ?number = null) {
-    let scale = getPoint(scaleOrX);
+    let scale;
     if (typeof scaleOrX === 'number') {
-      if (y == null) {
-        scale = new Point(scaleOrX, scaleOrX);
-      } else {
+      if (typeof y === 'number') {
         scale = new Point(scaleOrX, y);
+      } else {
+        scale = new Point(scaleOrX, scaleOrX);
       }
+    } else {
+      scale = getPoint(scaleOrX);
     }
+    // let scale = getPoint(scaleOrX);
+    // if (typeof scaleOrX === 'number') {
+    //   if (y == null) {
+    //     scale = new Point(scaleOrX, scaleOrX);
+    //   } else {
+    //     scale = new Point(scaleOrX, y);
+    //   }
+    // }
     const currentTransform = this.transform._dup();
     currentTransform.updateScale(scale);
     this.setTransform(currentTransform);
@@ -792,20 +1376,21 @@ class DiagramElement {
   // connected that is tied to an update of the transform.
   setTransform(transform: Transform): void {
     if (this.move.transformClip != null) {
-      this.transform = this.move.transformClip(transform);
+      const clip = this.fnMap.exec(this.move.transformClip, transform);
+      if (clip instanceof Transform) {
+        this.transform = clip;
+      }
     } else {
-      this.transform = transform._dup().clip(
-        this.move.minTransform,
-        this.move.maxTransform,
-        this.move.limitLine,
-      );
+      this.checkMoveBounds();
+      if (this.move.bounds instanceof TransformBounds) {
+        this.transform = this.move.bounds.clip(transform);
+      }
     }
     if (this.internalSetTransformCallback) {
-      this.internalSetTransformCallback(this.transform);
+      this.fnMap.exec(this.internalSetTransformCallback, this.transform);
     }
-    if (this.setTransformCallback) {
-      this.setTransformCallback(this.transform);
-    }
+    this.fnMap.exec(this.setTransformCallback, this.transform);
+    this.subscriptions.trigger('setTransform', [this.transform]);
   }
 
   // Set the next transform (and velocity if moving freely) for the next
@@ -828,7 +1413,7 @@ class DiagramElement {
     if (this.state.isMovingFreely) {
       // If this is the first frame of moving freely, then record the current
       // time so can calculate velocity on next frame
-      if (this.state.movement.previousTime < 0) {
+      if (this.state.movement.previousTime == null) {
         this.state.movement.previousTime = now;
         return;
       }
@@ -844,7 +1429,7 @@ class DiagramElement {
       // transform
       if (this.state.movement.velocity.isZero()) {
         this.state.movement.velocity = this.state.movement.velocity.zero();
-        this.stopMovingFreely(false);
+        this.stopMovingFreely('complete');
       }
       this.setTransform(next.transform);
     }
@@ -886,30 +1471,100 @@ class DiagramElement {
     this.opacity = opacity;
   }
 
-  getScenarioTarget(
-    scenarioName: string,
-  ) {
-    const target = this.transform._dup();
-    if (scenarioName in this.scenarios) {
-      const scenario = this.scenarios[scenarioName];
-      if (scenario.position != null) {
-        target.updateTranslation(getPoint(scenario.position));
-      }
+  // getScenarioTargetLegacy(
+  //   scenarioName: string,
+  // ) {
+  //   let target = this.transform._dup();
+  //   if (scenarioName in this.scenarios) {
+  //     const scenario = this.scenarios[scenarioName];
+  //     if (scenario.transform != null) {
+  //       target = getTransform(scenario.transform);
+  //     }
+  //     if (scenario.position != null) {
+  //       target.updateTranslation(getPoint(scenario.position));
+  //     }
 
-      if (scenario.rotation != null) {
-        target.updateRotation(scenario.rotation);
-      }
-      if (scenario.scale != null) {
-        target.updateScale(getPoint(scenario.scale));
-      }
+  //     if (scenario.rotation != null) {
+  //       target.updateRotation(scenario.rotation);
+  //     }
+  //     if (scenario.scale != null) {
+  //       target.updateScale(getScale(scenario.scale));
+  //     }
+  //   }
+  //   return target;
+  // }
+
+  // retrieve a scenario
+  getScenarioTarget(
+    scenarioIn: ?string | TypeScenario,
+  ): { transform?: Transform, color?: Array<number>, isShown?: boolean } {
+    let transform;
+    let color;
+    let isShown;
+    let scenario;
+    if (scenarioIn == null) {
+      return {};
     }
-    return target;
+    if (typeof scenarioIn === 'string') {
+      if (scenarioIn in this.scenarios) {
+        scenario = this.scenarios[scenarioIn];
+      } else {
+        scenario = {};
+      }
+    } else {
+      scenario = scenarioIn;
+    }
+
+    if (scenario.transform != null) {
+      transform = getTransform(scenario.transform);
+    }
+    if (scenario.position != null) {
+      if (transform == null) {
+        transform = this.transform._dup();
+      }
+      transform.updateTranslation(getPoint(scenario.position));
+    }
+
+    if (scenario.rotation != null) {
+      if (transform == null) {
+        transform = this.transform._dup();
+      }
+      transform.updateRotation(scenario.rotation);
+    }
+    if (scenario.scale != null) {
+      if (transform == null) {
+        transform = this.transform._dup();
+      }
+      transform.updateScale(getScale(scenario.scale));
+    }
+    if (scenario.color) {
+      color = scenario.color.slice();
+    }
+    if (scenario.isShown != null) {
+      ({ isShown } = scenario);
+    }
+    return {
+      transform,
+      color,
+      isShown,
+    };
   }
 
-  setScenario(scenarioName: string) {
-    if (this.scenarios[scenarioName] != null) {
-      const target = this.getScenarioTarget(scenarioName);
-      this.setTransform(target._dup());
+  setScenario(scenario: string | TypeScenario) {
+    const target = this.getScenarioTarget(scenario);
+    if (target.transform != null) {
+      this.setTransform(target.transform._dup());
+    }
+    // this.setColor(target.color.slice());
+    if (target.isShown != null) {
+      if (target.isShown) {
+        this.show();
+      } else {
+        this.hide();
+      }
+    }
+    if (target.color != null) {
+      this.setColor(target.color);
     }
   }
 
@@ -919,6 +1574,62 @@ class DiagramElement {
     }
   }
 
+  saveScenario(
+    scenarioName: string,
+    keys: Array<string> = ['transform', 'color', 'isShown'],
+  ) {
+    // const scenario = {};
+    // keys.forEach((key) => {
+    //   if (key === 'transform') {
+    //     scenario.transform = this.transform._dup();
+    //   } else if (key === 'position') {
+    //     scenario.position = this.getPosition();
+    //   } else if (key === 'rotation') {
+    //     scenario.rotation = this.getRotation();
+    //   } else if (key === 'scale') {
+    //     scenario.scale = this.getScale();
+    //   } else if (key === 'color') {
+    //     scenario.color = this.color.slice();
+    //   } else if (key === 'isShown') {
+    //     scenario.isShown = this.isShown;
+    //   }
+    // });
+    const scenario = this.getCurrentScenario(keys);
+    if (Object.keys(scenario).length > 0) {
+      this.scenarios[scenarioName] = scenario;
+    }
+  }
+
+  getCurrentScenario(
+    keys: Array<string> = ['transform', 'color', 'isShown'],
+  ) {
+    const scenario = {};
+    keys.forEach((key) => {
+      if (key === 'transform') {
+        scenario.transform = this.transform._dup();
+      } else if (key === 'position') {
+        scenario.position = this.getPosition();
+      } else if (key === 'rotation') {
+        scenario.rotation = this.getRotation();
+      } else if (key === 'scale') {
+        scenario.scale = this.getScale();
+      } else if (key === 'color') {
+        scenario.color = this.color.slice();
+      } else if (key === 'isShown') {
+        scenario.isShown = this.isShown;
+      }
+    });
+    return scenario;
+  }
+
+  saveScenarios(scenarioName: string, keys: Array<string>) {
+    this.saveScenario(scenarioName, keys);
+  }
+
+  // animateToScenario() {
+
+  // }
+
   getAllElementsWithScenario(scenarioName: string) {
     if (this.scenarios[scenarioName] != null) {
       return [this];
@@ -926,82 +1637,44 @@ class DiagramElement {
     return [];
   }
 
-  getTimeToMoveToScenario(
-    scenarioName: string,
-    rotDirection: -1 | 1 | 0 | 2 = 0,
-  ) {
-    const target = this.getScenarioTarget(scenarioName);
-    const velocity = this.transform.constant(0);
-    velocity.updateTranslation(new Point(1 / 2, 1 / 2));
-    velocity.updateRotation(2 * Math.PI / 6);
-    velocity.updateScale(1, 1);
-    const time = getMaxTimeFromVelocity(this.transform._dup(), target, velocity, rotDirection);
-    return time;
+  getMovingFreelyEnd() {
+    return this.decelerate(null);
+  }
+
+  getRemainingMovingFreelyTime() {
+    if (this.state.isMovingFreely) {
+      return this.decelerate(null).duration;
+    }
+    return 0;
   }
 
   // Decelerate over some time when moving freely to get a new element
   // transform and movement velocity
-  decelerate(deltaTime: number): Object {
+  decelerate(deltaTime: number | null = null): Object {
+    // let bounds;
+    // if (!this.move.bounds instanceof TransformBounds) {
+    //   this.setMoveBounds();
+    // }
+    // if (!this.move.bounds instanceof TransformBounds) {
+    //   bounds = new TransformBounds(this.transform);
+    // } else {
+    //   ({ bounds } = this.move);
+    // }
+    this.checkMoveBounds();
+    const { bounds } = this.move;
+
     const next = this.transform.decelerate(
       this.state.movement.velocity,
       this.move.freely.deceleration,
       deltaTime,
+      bounds,
+      this.move.freely.bounceLoss,
       this.move.freely.zeroVelocityThreshold,
     );
-    if (deltaTime > 0) {
-      for (let i = 0; i < next.t.order.length; i += 1) {
-        const t = next.t.order[i];
-        const min = this.move.minTransform.order[i];
-        const max = this.move.maxTransform.order[i];
-        const v = next.v.order[i];
-        if ((t instanceof Translation
-            && v instanceof Translation
-            && max instanceof Translation
-            && min instanceof Translation)
-          || (t instanceof Scale
-            && v instanceof Scale
-            && max instanceof Scale
-            && min instanceof Scale)
-        ) {
-          let onLine = true;
-          if (this.move.limitLine != null) {
-            onLine = t.shaddowIsOnLine(this.move.limitLine, 4);
-          }
-          if (min.x >= t.x || max.x <= t.x || !onLine) {
-            if (this.move.bounce) {
-              v.x = -v.x * 0.5;
-            } else {
-              v.x = 0;
-            }
-          }
-          if (min.y >= t.y || max.y <= t.y || !onLine) {
-            if (this.move.bounce) {
-              v.y = -v.y * 0.5;
-            } else {
-              v.y = 0;
-            }
-          }
-          next.v.order[i] = v;
-        }
-        if (t instanceof Rotation
-            && v instanceof Rotation
-            && max instanceof Rotation
-            && min instanceof Rotation) {
-          if (min.r >= t.r || max.r <= t.r) {
-            if (this.move.bounce) {
-              v.r = -v.r * 0.5;
-            } else {
-              v.r = 0;
-            }
-          }
-          next.v.order[i] = v;
-        }
-      }
-      next.v.calcMatrix();
-    }
     return {
-      velocity: next.v,
-      transform: next.t,
+      velocity: next.velocity,
+      transform: next.transform,
+      duration: next.duration,
     };
   }
 
@@ -1020,50 +1693,113 @@ class DiagramElement {
     return new Transform(this.lastDrawTransform.order.slice(-parentCount));
   }
 
+  getPath() {
+    if (this.parent == null) {
+      return this.name;
+    }
+    if (this.parent.name === 'diagramRoot' || this.parent.parent == null) {
+      return this.name;
+    }
+    return `${this.parent.getPath()}.${this.name}`;
+  }
+
+  // getPause() {
+  //   return this.state.pause;
+  // }
+
   // Being Moved
   startBeingMoved(): void {
     // this.stopAnimating();
-    this.animations.cancelAll('noComplete');
-    this.stopMovingFreely();
+    this.animations.cancelAll('freeze');
+    this.stopMovingFreely('freeze');
     this.state.movement.velocity = this.transform.zero();
     this.state.movement.previousTransform = this.transform._dup();
-    this.state.movement.previousTime = Date.now() / 1000;
+    this.state.movement.previousTime = new GlobalAnimation().now() / 1000;
     this.state.isBeingMoved = true;
     this.unrender();
+    if (this.recorder.state === 'recording') {
+      this.recorder.recordEvent('startBeingMoved', [this.getPath()]);
+    }
   }
 
   moved(newTransform: Transform): void {
-    this.calcVelocity(newTransform);
+    const prevTransform = this.transform._dup();
     this.setTransform(newTransform._dup());
+    const tBounds = this.move.bounds.getTranslation();
+    // In a finite rect bounds, if we calculate the velocity from the clipped
+    // transform, the object will skip along the wall if the user lets the
+    // object go after intersecting with the wall
+    if (
+      tBounds instanceof RectBounds
+      && tBounds.boundary.right > tBounds.boundary.left
+      && tBounds.boundary.top > tBounds.boundary.bottom
+    ) {
+      this.calcVelocity(prevTransform, newTransform);
+    } else {
+      this.calcVelocity(prevTransform, this.transform);
+    }
+    // if (
+    //   this.move.bounds.getTranslation instanceof LineBounds
+    //   || this.move.bounds.getTranslation()
+    // ) {
+    //   this.calcVelocity(prevTransform, this.transform);
+    // } else {
+    //   this.calcVelocity(prevTransform, newTransform);
+    // }
+    if (this.recorder.state === 'recording') {
+      this.recorder.recordEvent(
+        'moved',
+        [
+          this.getPath(),
+          this.transform.round(this.recorder.precision)._state(),
+        ],
+        // this.state.movement.velocity.toString(),
+      );
+    }
   }
 
   stopBeingMoved(): void {
-    const currentTime = Date.now() / 1000;
+    if (!this.state.isBeingMoved) {
+      return;
+    }
+    const currentTime = new GlobalAnimation().now() / 1000;
     // Check wether last movement was a long time ago, if it was, then make
     // velocity 0 as the user has stopped moving before releasing touch/click
-    if (this.state.movement.previousTime !== -1) {
+    if (this.state.movement.previousTime != null) {
       if ((currentTime - this.state.movement.previousTime) > 0.05) {
         this.state.movement.velocity = this.transform.zero();
       }
     }
+    if (this.recorder.state === 'recording' && this.state.isBeingMoved) {
+      this.recorder.recordEvent(
+        'stopBeingMoved',
+        [
+          this.getPath(),
+          this.transform._state(),
+          this.state.movement.velocity._state(),
+        ],
+        // this.state.movement.velocity.toString(),
+      );
+    }
     this.state.isBeingMoved = false;
-    this.state.movement.previousTime = -1;
+    this.state.movement.previousTime = null;
   }
 
-  calcVelocity(newTransform: Transform): void {
-    const currentTime = Date.now() / 1000;
-    if (this.state.movement.previousTime < 0) {
+  calcVelocity(prevTransform: Transform, nextTransform: Transform): void {
+    const currentTime = new GlobalAnimation().now() / 1000;
+    if (this.state.movement.previousTime == null) {
       this.state.movement.previousTime = currentTime;
       return;
     }
+    // console.log(currentTime, this.state.movement.previousTime)
     const deltaTime = currentTime - this.state.movement.previousTime;
 
     // If the time is too small, weird calculations may happen
     if (deltaTime < 0.0001) {
       return;
     }
-    this.state.movement.velocity = newTransform.velocity(
-      this.transform,
+    this.state.movement.velocity = nextTransform.velocity(
+      prevTransform,
       deltaTime,
       this.move.freely.zeroVelocityThreshold,
       this.move.maxVelocity,
@@ -1071,35 +1807,97 @@ class DiagramElement {
     this.state.movement.previousTime = currentTime;
   }
 
+  simulateStartMovingFreely(transform: Transform, velocity: Transform) {
+    this.transform = transform;
+    this.state.movement.velocity = velocity;
+    this.startMovingFreely();
+  }
+
   // Moving Freely
-  startMovingFreely(callback: ?(boolean) => void = null): void {
+  startMovingFreely(callback: ?(string | ((boolean) => void)) = null): void {
     // this.stopAnimating();
-    this.animations.cancelAll('noComplete');
+    this.animations.cancelAll('freeze');
     this.stopBeingMoved();
     if (callback) {
       // this.animate.transform.callback = callback;
       this.move.freely.callback = callback;
     }
     this.state.isMovingFreely = true;
-    this.state.movement.previousTime = -1;
+    // this.state.movement.previousTime = null;
+    this.state.movement.previousTime = new GlobalAnimation().now() / 1000;
     this.state.movement.velocity = this.state.movement.velocity.clipMag(
       this.move.freely.zeroVelocityThreshold,
       this.move.maxVelocity,
     );
+    if (this.recorder.state === 'recording') {
+      this.recorder.recordEvent(
+        'startMovingFreely',
+        [
+          this.getPath(),
+          this.transform._state(),
+          this.state.movement.velocity._state(),
+        ],
+        // this.state.movement.velocity.toString(),
+      );
+    }
   }
 
-  stopMovingFreely(result: boolean = true): void {
+  stopMovingFreely(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel'): void {
+    if (how === 'animateToComplete') {
+      return;
+    }
+    // console.log(how)
+    let wasMovingFreely = false;
+    if (this.state.isMovingFreely === true) {
+      wasMovingFreely = true;
+    }
+    if (how === 'complete' && wasMovingFreely) {
+      const result = this.getMovingFreelyEnd();
+      this.setTransform(result.transform);
+    }
+
     this.state.isMovingFreely = false;
-    this.state.movement.previousTime = -1;
+    this.state.movement.previousTime = null;
     if (this.move.freely.callback) {
-      this.move.freely.callback(result);
-      // if (result !== null && result !== undefined) {
-      //   this.animate.transform.callback(result);
-      // } else {
-      //   this.animate.transform.callback();
-      // }
+      this.fnMap.exec(this.move.freely.callback, how);
       this.move.freely.callback = null;
     }
+    if (wasMovingFreely) {
+      this.fnMap.exec(this.animationFinishedCallback);
+      this.animationFinished('movingFreely');
+      this.subscriptions.trigger('stopMovingFreely');
+    }
+  }
+
+  // stopMovingFreelyLegacy(result: boolean = true): void {
+  //   // console.trace()
+  //   // console.log('was moving freely', this.name, this.state.isMovingFreely)
+  //   let wasMovingFreely = false;
+  //   if (this.state.isMovingFreely === true) {
+  //     wasMovingFreely = true;
+  //   }
+  //   this.state.isMovingFreely = false;
+  //   this.state.movement.previousTime = null;
+  //   if (this.move.freely.callback) {
+  //     this.fnMap.exec(this.move.freely.callback, result);
+  //     this.move.freely.callback = null;
+  //   }
+  //   if (wasMovingFreely) {
+  //     // console.log('stop moving freely callback', this.animationFinishedCallback)
+  //     this.fnMap.exec(this.animationFinishedCallback);
+  //     // this.subscriptions.trigger('animationFinished', ['movingFreely']);
+  //     this.animationFinished('movingFreely');
+  //   }
+  // }
+
+  getRemainingPulseTime(now: number = new GlobalAnimation().now() / 1000) {
+    if (this.state.isPulsing === false) {
+      return 0;
+    }
+    if (this.state.pulse.startTime == null) {
+      return this.pulseSettings.time;
+    }
+    return this.pulseSettings.time - (now - this.state.pulse.startTime);
   }
 
   // Take an input transform matrix, and output a list of transform matrices
@@ -1111,14 +1909,13 @@ class DiagramElement {
   // new transform of the object. In contrast, pulsing is not saved as the
   // current transform of the object, and is used only in the current draw
   // of the element.
-  transformWithPulse(now: number, transform: Transform): Array<Transform> {
+  getPulseTransforms(now: number): Array<Transform> {
     const pulseTransforms = [];    // To output list of transform matrices
-
     // If the diagram element is currently pulsing, the calculate the current
     // pulse magnitude, and transform the input matrix by the pulse
     if (this.state.isPulsing) {
       // If this is the first pulse frame, then set the startTime
-      if (this.state.pulse.startTime === -1) {
+      if (this.state.pulse.startTime == null) {
         this.state.pulse.startTime = now;
       }
       // Calculate how much time has elapsed between this frame and the first
@@ -1128,9 +1925,9 @@ class DiagramElement {
       // clip the elapsed time to the pulse time, and end pulsing (after this
       // draw). If the pulse time is 0, that means pulsing will loop
       // indefinitely.
-      if (deltaTime > this.pulseSettings.time && this.pulseSettings.time !== 0) {
+      if (deltaTime >= this.pulseSettings.time && this.pulseSettings.time !== 0) {
         // this.state.isPulsing = false;
-        this.stopPulsing(true);
+        this.stopPulsing('complete');
         deltaTime = this.pulseSettings.time;
       }
 
@@ -1138,7 +1935,8 @@ class DiagramElement {
       // with the pulse.
       for (let i = 0; i < this.pulseSettings.num; i += 1) {
         // Get the current pulse magnitude
-        const pulseMag = this.pulseSettings.style(
+        const pulseMag = this.fnMap.exec(
+          this.pulseSettings.progression,
           deltaTime,
           this.pulseSettings.frequency,
           this.pulseSettings.A instanceof Array ? this.pulseSettings.A[i] : this.pulseSettings.A,
@@ -1147,7 +1945,8 @@ class DiagramElement {
         );
 
         // Use the pulse magnitude to get the current pulse transform
-        const pTransform = this.pulseSettings.transformMethod(
+        const pTransform = this.fnMap.exec(
+          this.pulseSettings.transformMethod,
           pulseMag,
           getPoint(this.pulseSettings.delta),
         );
@@ -1156,40 +1955,91 @@ class DiagramElement {
         // Transform the current transformMatrix by the pulse transform matrix
         // const pMatrix = m2.mul(m2.copy(transform), pTransform.matrix());
 
-        // Push the pulse transformed matrix to the array of pulse matrices
-        pulseTransforms.push(transform.transform(pTransform));
+        // Push the pulse transformed matrix to the array of pulse matrices\
+        if (pTransform != null) {
+          pulseTransforms.push(pTransform);
+        }
       }
     // If not pulsing, then make no changes to the transformMatrix.
-    } else {
-      pulseTransforms.push(transform._dup());
     }
     return pulseTransforms;
   }
 
   pulseScaleNow(
     time: number, scale: number,
-    frequency: number = 0, callback: ?(?mixed) => void = null,
+    frequency: number = 0, callback: ?(string | ((?mixed) => void)) = null,
     delta: TypeParsablePoint = new Point(0, 0),
+    progression: string | (number) => number = 'tools.math.sinusoid',
   ) {
-    this.pulseSettings.time = time;
-    if (frequency === 0 && time === 0) {
-      this.pulseSettings.frequency = 1;
-    }
-    if (frequency !== 0) {
-      this.pulseSettings.frequency = frequency;
-    }
-    if (time !== 0 && frequency === 0) {
-      this.pulseSettings.frequency = 1 / (time * 2);
-    }
+    // this.pulseSettings.time = time;
+    // if (frequency === 0 && time === 0) {
+    //   this.pulseSettings.frequency = 1;
+    // }
+    // if (frequency !== 0) {
+    //   this.pulseSettings.frequency = frequency;
+    // }
+    // if (time !== 0 && frequency === 0) {
+    //   this.pulseSettings.frequency = 1 / (time * 2);
+    // }
 
+    // this.pulseSettings.A = 1;
+    // this.pulseSettings.B = scale - 1;
+    // this.pulseSettings.C = 0;
+    // this.pulseSettings.num = 1;
+    // this.pulseSettings.delta = getPoint(delta);
+    // // this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
+    // this.pulseSettings.callback = callback;
+    // this.pulseSettings.progression = progression;
+    // this.startPulsing();
+
+    this.pulseScale({
+      duration: time,
+      scale,
+      frequency,
+      callback,
+      delta,
+      progression,
+      when: 'nextFrame',
+    });
+  }
+
+  pulseScale(optionsIn: {
+    duration?: number,
+    scale?: number,
+    callback?: ?(string | ((?mixed) => void)),
+    delta?: TypeParsablePoint,
+    when?: TypeWhen,
+    progression?: string | (number) => number,
+  }) {
+    const options = joinObjects({}, {
+      duration: 1,
+      scale: 2,
+      callback: null,
+      delta: [0, 0],
+      when: 'sync',
+      progression: 'tools.math.sinusoid',
+    }, optionsIn);
+
+    if (
+      options.frequency == null
+      || (options.frequency === 0 && options.duration !== 0)
+    ) {
+      options.frequency = 1 / (options.duration * 2);
+    }
+    if (options.frequency === 0 && options.duration === 0) {
+      options.frequency = 1;
+    }
+    this.pulseSettings.time = options.duration;
+    this.pulseSettings.frequency = options.frequency;
     this.pulseSettings.A = 1;
-    this.pulseSettings.B = scale - 1;
+    this.pulseSettings.B = options.scale - 1;
     this.pulseSettings.C = 0;
     this.pulseSettings.num = 1;
-    this.pulseSettings.delta = getPoint(delta);
+    this.pulseSettings.delta = getPoint(options.delta);
     // this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
-    this.pulseSettings.callback = callback;
-    this.pulseNow();
+    this.pulseSettings.callback = options.callback;
+    this.pulseSettings.progression = options.progression;
+    this.startPulsing(options.when);
   }
 
   pulseScaleRelativeToPoint(
@@ -1198,11 +2048,12 @@ class DiagramElement {
     time: number,
     scale: number,
     frequency: number = 0,
-    callback: ?(?mixed) => void = null,
+    callback: ?(string | ((?mixed) => void)) = null,
+    progression: string | (number) => number = 'tools.math.sinusoid',
   ) {
     const currentPosition = this.getPosition(space);
     const delta = getPoint(p).sub(currentPosition);
-    this.pulseScaleNow(time, scale, frequency, callback, delta);
+    this.pulseScaleNow(time, scale, frequency, callback, delta, progression);
   }
 
   pulseScaleRelativeToElement(
@@ -1213,7 +2064,8 @@ class DiagramElement {
     time: number,
     scale: number,
     frequency: number = 0,
-    callback: ?(?mixed) => void = null,
+    callback: ?(string | ((?mixed) => void)) = null,
+    progression: string | (number) => number = 'tools.math.sinusoid',
   ) {
     let p;
     if (e == null) {
@@ -1221,7 +2073,7 @@ class DiagramElement {
     } else {
       p = e.getPositionInBounds(space, x, y);
     }
-    this.pulseScaleRelativeToPoint(p, space, time, scale, frequency, callback);
+    this.pulseScaleRelativeToPoint(p, space, time, scale, frequency, callback, progression);
   }
 
   pulseScaleRelativeTo(
@@ -1232,18 +2084,23 @@ class DiagramElement {
     time: number,
     scale: number,
     frequency: number = 0,
-    callback: ?(?mixed) => void = null,
+    callback: ?(string | ((?mixed) => void)) = null,
+    progression: string | (number) => number = 'tools.math.sinusoid',
   ) {
     if (e == null || e instanceof DiagramElement) {
-      this.pulseScaleRelativeToElement(e, x, y, space, time, scale, frequency, callback);
+      this.pulseScaleRelativeToElement(
+        e, x, y, space, time, scale, frequency, callback, progression,
+      );
     } else {
-      this.pulseScaleRelativeToPoint(e, space, time, scale, frequency, callback);
+      this.pulseScaleRelativeToPoint(
+        e, space, time, scale, frequency, callback, progression,
+      );
     }
   }
 
   pulseThickNow(
     time: number, scale: number,
-    num: number = 3, callback: ?(?mixed) => void = null,
+    num: number = 3, callback: ?(string | ((?mixed) => void)) = null,
   ) {
     let bArray = [scale];
     this.pulseSettings.num = num;
@@ -1264,47 +2121,142 @@ class DiagramElement {
     this.pulseSettings.B = bArray;
     this.pulseSettings.C = 0;
     this.pulseSettings.callback = callback;
-    this.pulseNow();
+    this.startPulsing();
   }
 
-  // pulse(done: ?(mixed) => void = null) {
-  //   this.pulseDefault(done);
-  // }
+  pulseThick(optionsIn: {
+    duration: number,
+    scale: number,
+    num: number,
+    callback: ?(string | ((?mixed) => void)),
+    when: TypeWhen,
+  }) {
+    const options = joinObjects({}, {
+      duration: 1,
+      scale: 2,
+      callback: null,
+      // delta: [0, 0],
+      when: 'sync',
+      num: 3,
+    }, optionsIn);
+    let bArray = [options.scale];
+    this.pulseSettings.num = options.num;
+    if (this.pulseSettings.num > 1) {
+      const b = Math.abs(1 - options.scale);
+      const bMax = b;
+      const bMin = -b;
+      const range = bMax - bMin;
+      const bStep = range / (this.pulseSettings.num - 1);
+      bArray = [];
+      for (let i = 0; i < this.pulseSettings.num; i += 1) {
+        bArray.push(bMax - i * bStep);
+      }
+    }
+    this.pulseSettings.time = options.duration;
+    this.pulseSettings.frequency = 1 / (options.duration * 2);
+    this.pulseSettings.A = 1;
+    this.pulseSettings.B = bArray;
+    this.pulseSettings.C = 0;
+    this.pulseSettings.callback = options.callback;
+    this.startPulsing(options.when);
+  }
 
-  pulseNow() {
+  startPulsing(when: TypeWhen = 'nextFrame') {
     this.state.isPulsing = true;
-    this.state.pulse.startTime = -1;
+    const time = new GlobalAnimation().getWhen(when);
+    this.state.pulse.startTime = time == null ? time : time / 1000;
     this.unrender();
+    this.frozenPulseTransforms = [];
   }
 
-  stopPulsing(result: ?mixed) {
+  stopPulsing(
+    how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete'
+         | 'dissolveToComplete' = 'cancel',
+  ) {
+    const wasPulsing = this.state.isPulsing;
+    if (how === 'animateToComplete') {
+      return;
+    }
+    if (how === 'freeze' && this.state.isPulsing) {
+      this.frozenPulseTransforms = this.pulseTransforms.map(t => t._dup());
+      this.pulseTransforms = [];
+    }
+    if (how === 'cancel' || how === 'complete') {
+      this.pulseTransforms = [];
+    }
     this.state.isPulsing = false;
+    this.pulseSettings.num = 1;
     if (this.pulseSettings.callback) {
       const { callback } = this.pulseSettings;
       this.pulseSettings.callback = null;
-      callback(result);
+      this.fnMap.exec(callback, how);
+    }
+    if (wasPulsing) {
+      // this.subscriptions.trigger('animationFinished', )
+      this.animationFinished('pulse');
+      this.subscriptions.trigger('stopPulsing');
     }
   }
 
-  stop(
-    cancelled?: boolean = true,
-    forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false,
-  ) {
-    if (forceSetToEndOfPlan === true || forceSetToEndOfPlan === 'complete') {
-      this.animations.cancelAll('complete');
-    } else if (forceSetToEndOfPlan === false || forceSetToEndOfPlan === 'noComplete') {
-      this.animations.cancelAll('noComplete');
-    } else {
-      this.animations.cancelAll(null);
+  // isAnimating() {
+  //   if (this.state.isPulsing) {
+  //     return true;
+  //   }
+  //   if (this.state.isMovingFreely) {
+  //     return true;
+  //   }
+  //   if (this.animations.isAnimating()) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
+  stop(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel') {
+    let toComplete = 0;
+    const checkStop = () => {
+      toComplete -= 1;
+      if (toComplete <= 0) {
+        this.state.preparingToStop = false;
+        this.subscriptions.trigger('stopped');
+      }
+    };
+    if (how === 'animateToComplete' || how === 'dissolveToComplete') {
+      if (this.animations.isAnimating()) {
+        this.state.preparingToStop = true;
+        toComplete += 1;
+        this.animations.subscriptions.add('finished', checkStop, 1);
+      }
+      if (this.state.isPulsing) {
+        this.state.preparingToStop = true;
+        toComplete += 1;
+        this.subscriptions.add('stopPulsing', checkStop, 1);
+      }
+      if (this.state.isMovingFreely) {
+        this.state.preparingToStop = true;
+        toComplete += 1;
+        this.subscriptions.add('stopMovingFreely', checkStop, 1);
+      }
     }
-    this.stopMovingFreely(cancelled);
+    if (this.state.preparingToStop) {
+      this.subscriptions.trigger('preparingToStop');
+    }
+    this.stopAnimating(how);
+    this.stopMovingFreely(how);
     this.stopBeingMoved();
-    this.stopPulsing(cancelled);
+    this.stopPulsing(how);
   }
 
-  cancel(forceSetToEndOfPlan?: ?boolean | 'complete' | 'noComplete' = false) {
-    this.stop(true, forceSetToEndOfPlan);
+
+  stopAnimating(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel') {
+    if (how === 'freeze') {
+      this.animations.cancelAll('freeze');
+    } else if (how === 'cancel') {
+      this.animations.cancelAll(null);
+    } else if (how === 'complete') {
+      this.animations.cancelAll('complete');
+    }
   }
+
 
   updateLimits(
     limits: Rect,
@@ -1381,16 +2333,39 @@ class DiagramElement {
   // eslint-disable-next-line class-methods-use-this
   getDiagramBoundingRect() {
     const gl = this.getGLBoundingRect();
-    const glToDiagramScale = new Point(
-      this.diagramLimits.width / 2,
-      this.diagramLimits.height / 2,
-    );
+    const glSpace = {
+      x: { bottomLeft: -1, width: 2 },
+      y: { bottomLeft: -1, height: 2 },
+    };
+    const diagramSpace = {
+      x: {
+        bottomLeft: this.diagramLimits.left,
+        width: this.diagramLimits.width,
+      },
+      y: {
+        bottomLeft: this.diagramLimits.bottom,
+        height: this.diagramLimits.height,
+      },
+    };
+    const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
+    // const glToDiagramScale = new Point(
+    //   this.diagramLimits.width / 2,
+    //   this.diagramLimits.height / 2,
+    // );
+    const bottomLeft = new Point(gl.left, gl.bottom)
+      .transformBy(glToDiagramSpace.matrix());
+    const topRight = new Point(gl.right, gl.top)
+      .transformBy(glToDiagramSpace.matrix());
     return new Rect(
-      gl.left * glToDiagramScale.x,
-      gl.bottom * glToDiagramScale.y,
-      gl.width * glToDiagramScale.x,
-      gl.height * glToDiagramScale.y,
+      bottomLeft.x, bottomLeft.y,
+      topRight.x - bottomLeft.x, topRight.y - bottomLeft.y,
     );
+    // return new Rect(
+    //   gl.left * glToDiagramScale.x,
+    //   gl.bottom * glToDiagramScale.y,
+    //   gl.width * glToDiagramScale.x,
+    //   gl.height * glToDiagramScale.y,
+    // );
   }
 
   getBoundingRect(
@@ -1434,16 +2409,39 @@ class DiagramElement {
 
   getRelativeDiagramBoundingRect() {
     const gl = this.getRelativeGLBoundingRect();
-    const glToDiagramScale = new Point(
-      this.diagramLimits.width / 2,
-      this.diagramLimits.height / 2,
-    );
+    const glSpace = {
+      x: { bottomLeft: -1, width: 2 },
+      y: { bottomLeft: -1, height: 2 },
+    };
+    const diagramSpace = {
+      x: {
+        bottomLeft: this.diagramLimits.left,
+        width: this.diagramLimits.width,
+      },
+      y: {
+        bottomLeft: this.diagramLimits.bottom,
+        height: this.diagramLimits.height,
+      },
+    };
+    const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
+    const bottomLeft = new Point(gl.left, gl.bottom)
+      .transformBy(glToDiagramSpace.matrix());
+    const topRight = new Point(gl.right, gl.top)
+      .transformBy(glToDiagramSpace.matrix());
     return new Rect(
-      gl.left * glToDiagramScale.x,
-      gl.bottom * glToDiagramScale.y,
-      gl.width * glToDiagramScale.x,
-      gl.height * glToDiagramScale.y,
+      bottomLeft.x, bottomLeft.y,
+      topRight.x - bottomLeft.x, topRight.y - bottomLeft.y,
     );
+    // const glToDiagramScale = new Point(
+    //   this.diagramLimits.width / 2,
+    //   this.diagramLimits.height / 2,
+    // );
+    // return new Rect(
+    //   gl.left * glToDiagramScale.x,
+    //   gl.bottom * glToDiagramScale.y,
+    //   gl.width * glToDiagramScale.x,
+    //   gl.height * glToDiagramScale.y,
+    // );
   }
 
   getCenterDiagramPosition() {
@@ -1643,67 +2641,114 @@ class DiagramElement {
     }
   }
 
-  setMoveBoundaryToDiagram(
-    boundaryIn: ?Array<number> | Rect | 'diagram' = this.move.boundary,
-    scale: Point = new Point(1, 1),
+  checkMoveBounds() {
+    if (this.move.bounds === 'diagram') {
+      this.setMoveBounds('diagram', true);
+      return;
+    }
+    if (!(this.move.bounds instanceof TransformBounds)) {
+      this.setMoveBounds();
+    }
+    // if (!(this.move.bounds instanceof TransformBounds)) {
+    //   bounds = new TransformBounds(this.transform);
+    // } else {
+    //   ({ bounds } = this.move);
+    // }
+  }
+
+  setMoveBounds(
+    boundaryIn: TransformBounds | TypeTransformBoundsDefinition | 'diagram' | null = null,
+    includeSize: boolean = false,
   ): void {
     if (!this.isMovable) {
       return;
     }
-    if (boundaryIn != null) {
-      this.move.boundary = boundaryIn;
-    }
-    if (this.move.boundary == null) {
-      return;
-    }
-    let boundary;
-    if (Array.isArray(this.move.boundary)) {
-      const [left, bottom, width, height] = this.move.boundary;
-      boundary = new Rect(left, bottom, width, height);
-    } else if (this.move.boundary === 'diagram') {
-      boundary = this.diagramLimits;
+
+    if (boundaryIn instanceof TransformBounds) {
+      this.move.bounds = boundaryIn;
+      // return;
+    } else if (boundaryIn === null) {
+      this.move.bounds = new TransformBounds(this.transform);
+      // return;
+    } else if (boundaryIn === 'diagram') {
+      if (!(this.move.bounds instanceof TransformBounds)) {
+        this.move.bounds = new TransformBounds(this.transform);
+      }
+      this.move.bounds.updateTranslation(new RectBounds({
+        left: this.diagramLimits.left,
+        bottom: this.diagramLimits.bottom,
+        right: this.diagramLimits.right,
+        top: this.diagramLimits.top,
+      }));
+      // const rect = this.getRelativeBoundingRect('diagram');
+      // this.move.bounds.updateTranslation(new RectBounds({
+      //   left: this.diagramLimits.left - rect.left,
+      //   bottom: this.diagramLimits.bottom - rect.bottom,
+      //   right: this.diagramLimits.right - rect.right,
+      //   top: this.diagramLimits.top - rect.top,
+      // }));
+      // return;
     } else {
-      ({ boundary } = this.move);
+      const bounds = getBounds(boundaryIn, 'transform', this.transform);
+      if (bounds instanceof TransformBounds) {
+        this.move.bounds = bounds;
+      }
     }
+    if (includeSize) {
+      const rect = this.getRelativeBoundingRect('diagram');
+      const b = this.move.bounds.getTranslation();
+      if (b != null) {
+        b.boundary.left -= rect.left;
+        b.boundary.bottom -= rect.bottom;
+        b.boundary.right -= rect.right;
+        b.boundary.top -= rect.top;
+        this.move.bounds.updateTranslation(b);
+      }
+      // this.move.bounds.updateTranslation(new RectBounds({
+      //   left: this.diagramLimits.left - rect.left,
+      //   bottom: this.diagramLimits.bottom - rect.bottom,
+      //   right: this.diagramLimits.right - rect.right,
+      //   top: this.diagramLimits.top - rect.top,
+      // }));
+    }
+    // if (window.asdf) {
+    //   debugger;
+    // }
+    // let boundary = boundaryIn;
+    // if (boundaryIn == null) {
+    //   if (
+    //     this.move.bounds === 'diagram'
+    //     || Array.isArray(this.move.bounds)
+    //     || (this.move.bounds instanceof Bounds && !(this.move.bounds instanceof TransformBounds))
+    //     // || this.move.bounds instanceof Rect,
+    //   ) {
+    //   // if (boundaryIn !== null) {
+    //     boundary = this.move.bounds;
+    //     this.move.bounds = new TransformBounds(this.transform);
+    //   } else {
+    //     this.move.bounds.updateTranslation(null);
+    //     return;
+    //   }
+    // }
+    // if (boundary == null) {
+    //   return;
+    // }
 
-    const glSpace = {
-      x: { bottomLeft: -1, width: 2 },
-      y: { bottomLeft: -1, height: 2 },
-    };
-    const diagramSpace = {
-      x: {
-        bottomLeft: this.diagramLimits.left,
-        width: this.diagramLimits.width,
-      },
-      y: {
-        bottomLeft: this.diagramLimits.bottom,
-        height: this.diagramLimits.height,
-      },
-    };
-    const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
-    const rect = this.getRelativeGLBoundingRect();
-    const glToDiagramScaleMatrix = [
-      glToDiagramSpace.matrix()[0], 0, 0,
-      0, glToDiagramSpace.matrix()[4], 0,
-      0, 0, 1];
-    const minPoint = new Point(rect.left, rect.bottom).transformBy(glToDiagramScaleMatrix);
-    const maxPoint = new Point(rect.right, rect.top).transformBy(glToDiagramScaleMatrix);
-
-    const min = new Point(0, 0);
-    const max = new Point(0, 0);
-
-    min.x = boundary.left - minPoint.x * scale.x;
-    min.y = boundary.bottom - minPoint.y * scale.y;
-    max.x = boundary.right - maxPoint.x * scale.x;
-    max.y = boundary.top - maxPoint.y * scale.y;
-    this.move.maxTransform.updateTranslation(
-      max.x,
-      max.y,
-    );
-    this.move.minTransform.updateTranslation(
-      min.x,
-      min.y,
-    );
+    // if (Array.isArray(boundary)) {
+    //   const [left, bottom, width, height] = boundary;
+    //   boundary = new Rect(left, bottom, width, height);
+    // } else if (boundary === 'diagram') {
+    //   boundary = this.diagramLimits;
+    // }
+    // const rect = this.getRelativeBoundingRect('diagram');
+    // if (this.move.bounds instanceof TransformBounds) {
+    //   this.move.bounds.updateTranslation(new RectBounds({
+    //     left: boundary.left - rect.left,
+    //     bottom: boundary.bottom - rect.bottom,
+    //     right: boundary.right - rect.right,
+    //     top: boundary.top - rect.top,
+    //   }));
+    // }
   }
 
   show(): void {
@@ -1795,7 +2840,10 @@ class DiagramElement {
 
   click(): void {
     if (this.onClick !== null && this.onClick !== undefined) {
-      this.onClick(this);
+      if (this.recorder.state === 'recording') {
+        this.recorder.recordEvent('elementClick', [this.getPath()]);
+      }
+      this.fnMap.exec(this.onClick, this);
     }
   }
 
@@ -1809,6 +2857,49 @@ class DiagramElement {
   getTransform() {
     return this.transform;
   }
+
+  // isAnimating(): boolean {
+  //   // console.log(this.name, this.isShown, this.animations.isAnimating())
+  //   if (this.isShown === false) {
+  //     return false;
+  //   }
+  //   return this.animations.isAnimating();
+  // }
+
+  isMoving(): boolean {
+    if (this.isShown === false) {
+      return false;
+    }
+    if (this.isAnimating()) {
+      return true;
+    }
+    if (this.state.isBeingMoved) {
+      return true;
+    }
+    return false;
+  }
+
+  isAnimating(): boolean {
+    if (this.isShown === false) {
+      return false;
+    }
+    if (
+      this.state.isMovingFreely
+      || this.state.isPulsing
+      || this.animations.isAnimating()
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  // isAnyElementAnimating() {
+  //   return this.isAnimating();
+  // }
+
+  isAnyElementMoving() {
+    return this.isMoving();
+  }
 }
 
 // ***************************************************************
@@ -1816,12 +2907,14 @@ class DiagramElement {
 // ***************************************************************
 class DiagramElementPrimitive extends DiagramElement {
   drawingObject: DrawingObject;
-  color: Array<number>;
-  opacity: number;
+  // color: Array<number>;
+  // opacity: number;
   pointsToDraw: number;
   angleToDraw: number;
   lengthToDraw: number;
   cannotTouchHole: boolean;
+  pointsDefinition: Object;
+  setPointsFromDefinition: ?(() => void);
   +pulse: (?(mixed) => void) => void;
 
   constructor(
@@ -1841,19 +2934,52 @@ class DiagramElementPrimitive extends DiagramElement {
     this.lengthToDraw = -1;
     this.cannotTouchHole = false;
     this.type = 'primitive';
-    // this.setMoveBoundaryToDiagram();
+    this.pointsDefinition = {};
+    this.setPointsFromDefinition = null;
+    // this.setMoveBounds();
+  }
+
+  _getStateProperties(options: { ignoreShown?: boolean }) {
+    let { ignoreShown } = options;
+    if (ignoreShown == null) {
+      ignoreShown = false;
+    }
+    if (this.isShown || ignoreShown) {
+      return [...super._getStateProperties(options),
+        'pointsToDraw',
+        'angleToDraw',
+        'lengthToDraw',
+        'cannotTouchHole',
+        'drawingObject',
+        'pointsDefinition',
+      ];
+    }
+    return super._getStateProperties(options);
   }
 
   setAngleToDraw(intputAngle: number = -1) {
     this.angleToDraw = intputAngle;
   }
 
+  // setScenario(scenarioName: string) {
+  //   super.setScenario(scenarioName);
+  //   if (this.scenarios[scenarioName] != null) {
+  //     const target = this.getScenarioTarget(scenarioName);
+  //     if (target.color != null) {
+  //       this.setColor(target.color.slice());
+  //     }
+  //   }
+  // }
+
   isBeingTouched(glLocation: Point): boolean {
     if (!this.isTouchable) {
       return false;
     }
+    // debugger;
+
     const boundaries =
       this.drawingObject.getGLBoundaries(this.lastDrawTransform.matrix());
+    // console.log(boundaries)
     const holeBoundaries =
       this.drawingObject.getGLBoundaryHoles(this.lastDrawTransform.matrix());
     for (let i = 0; i < boundaries.length; i += 1) {
@@ -1887,21 +3013,22 @@ class DiagramElementPrimitive extends DiagramElement {
 
   _dup(transform: Transform | null = null) {
     // const vertices = this.drawingObject._dup();
-    const primative = new DiagramElementPrimitive(this.drawingObject._dup());
-    // const primative = new DiagramElementPrimitive(
+    const primitive = new DiagramElementPrimitive(this.drawingObject._dup());
+    // const primitive = new DiagramElementPrimitive(
     //   vertices,
     //   transform,
     //   color,
     //   this.diagramLimits._dup(),
     // );
-    // primative.pointsToDraw = this.pointsToDraw;
-    // primative.angleToDraw = this.angleToDraw;
-    // primative.copyFrom(this);
-    duplicateFromTo(this, primative, ['parent']);
+    // primitive.pointsToDraw = this.pointsToDraw;
+    // primitive.angleToDraw = this.angleToDraw;
+    // primitive.copyFrom(this);
+    duplicateFromTo(this, primitive, ['parent', 'diagram', 'recorder']);
     if (transform != null) {
-      primative.transform = transform._dup();
+      primitive.transform = transform._dup();
     }
-    return primative;
+    primitive.recorder = this.recorder;
+    return primitive;
   }
 
   clear(canvasIndex: number = 0) {
@@ -2010,8 +3137,9 @@ class DiagramElementPrimitive extends DiagramElement {
     }
   }
 
-  draw(parentTransform: Transform = new Transform(), now: number = 0, canvasIndex: number = 0) {
+  setupDraw(now: number = 0) {
     if (this.isShown) {
+      this.lastDrawTime = now;
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {
           this.unrender();
@@ -2019,28 +3147,23 @@ class DiagramElementPrimitive extends DiagramElement {
           return;
         }
       }
+      this.subscriptions.trigger('beforeDraw', [now]);
       if (this.beforeDrawCallback != null) {
-        this.beforeDrawCallback(now);
+        this.fnMap.exec(this.beforeDrawCallback, now);
       }
+
       this.animations.nextFrame(now);
       this.nextMovingFreelyFrame(now);
+    }
+  }
 
-      if (!this.isShown) {
-        return;
-      }
-      this.lastDrawElementTransformPosition = {
-        parentCount: parentTransform.order.length,
-        elementCount: this.transform.order.length,
-      };
-
-      const newTransform = parentTransform.transform(this.getTransform());
-      this.lastDrawTransform = newTransform._dup();
-      const pulseTransforms = this.transformWithPulse(now, newTransform);
-
-      // eslint-disable-next-line prefer-destructuring
-      this.lastDrawPulseTransform = pulseTransforms[0];
-      // this.lastDrawTransform = pulseTransforms[0];
-
+  draw(
+    now: number,
+    parentTransform: Array<Transform> = [new Transform()],
+    parentOpacity: number = 1,
+    canvasIndex: number = 0,
+  ) {
+    if (this.isShown) {
       let pointCount = -1;
       if (this.drawingObject instanceof VertexObject) {
         pointCount = this.drawingObject.numPoints;
@@ -2057,12 +3180,46 @@ class DiagramElementPrimitive extends DiagramElement {
         pointCount = 1;
       }
 
-      const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity];
+      const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity * parentOpacity];
+      // eslint-disable-next-line prefer-destructuring
+      this.lastDrawOpacity = colorToUse[3];
+      // if (this.getPath().endsWith('eqn.elements._1')) {
+      // console.log(this.getPath(), this.opacity, colorToUse);
+      // colorToUse = [1, 0, 0, 1];
+      // }
+      const transform = this.getTransform();
+      const newTransforms = transformBy(parentTransform, [transform]);
+
+      this.lastDrawElementTransformPosition = {
+        parentCount: parentTransform[0].order.length,
+        elementCount: this.transform.order.length,
+      };
+
+      // const newTransform = parentTransform.transform(this.getTransform());
+      // this.parentTransform = parentTransform._dup();
+      // const newTransform = parentTransform.transform(this.getTransform());
+      this.pulseTransforms = this.getPulseTransforms(now);
+      this.drawTransforms = this.getDrawTransforms(newTransforms);
+      this.lastDrawTransform = parentTransform[0].transform(transform);
+      // eslint-disable-next-line prefer-destructuring
+      this.lastDrawPulseTransform = this.drawTransforms[0];
       if (pointCount > 0) {
-        pulseTransforms.forEach((t) => {
+        // console.log(this.pulseTransforms, pointCount)
+        this.drawTransforms.forEach((t) => {
+          // let t = t2;
+          // console.log(t.matrix().slice(), t._dup().matrix().slice())
+          // const m = t._dup().matrix();
+          // if (this.getPath() === 'circle.line1.line') {
+          //   // colorToUse = [1, 0, 0, 1];
+          //   // t = t2._dup();
+          //   console.log(t.matrix().slice(), t._dup().matrix().slice())
+          // }
+          // console.log(t.matrix(), colorToUse, canvasIndex, pointCount)
           this.drawingObject.drawWithTransformMatrix(
+            // m, colorToUse, canvasIndex, pointCount,
             t.matrix(), colorToUse, canvasIndex, pointCount,
           );
+          // window.asdf = false;
         });
       }
       if (this.unrenderNextDraw) {
@@ -2073,8 +3230,12 @@ class DiagramElementPrimitive extends DiagramElement {
         this.isRenderedAsImage = true;
         this.renderedOnNextDraw = false;
       }
+      // this.redrawElements.forEach((element) => {
+      //   element.draw(element.getParentLastDrawTransform(), now);
+      // })
+      this.subscriptions.trigger('afterDrawDraw', [now]);
       if (this.afterDrawCallback != null) {
-        this.afterDrawCallback(now);
+        this.fnMap.exec(this.afterDrawCallback, now);
       }
     }
   }
@@ -2090,23 +3251,24 @@ class DiagramElementPrimitive extends DiagramElement {
     if (this.drawingObject instanceof HTMLObject) {
       this.drawingObject.transformHtml(firstTransform.matrix());
     }
-    this.setMoveBoundaryToDiagram();
+    // this.setMoveBounds();
+    this.checkMoveBounds();
   }
 
-  isMoving(): boolean {
-    if (
-      // this.state.isAnimating
-      this.state.isMovingFreely
-      || this.state.isBeingMoved
-      || this.state.isPulsing
-      // || this.state.isAnimatingColor
-      // || this.state.isAnimatingCustom
-      || this.animations.willStartAnimating()
-    ) {
-      return true;
-    }
-    return false;
-  }
+  // isMoving(): boolean {
+  //   if (
+  //     // this.state.isAnimating
+  //     this.state.isMovingFreely
+  //     || this.state.isBeingMoved
+  //     || this.state.isPulsing
+  //     // || this.state.isAnimatingColor
+  //     // || this.state.isAnimatingCustom
+  //     || this.animations.willStartAnimating()
+  //   ) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   // setupWebGLBuffers(newWebgl: WebGLInstance) {
   //   const { drawingObject } = this;
@@ -2239,7 +3401,32 @@ class DiagramElementCollection extends DiagramElement {
     this.type = 'collection';
   }
 
-  _dup() {
+  _getStateProperties(options: { ignoreShown?: boolean }) {
+    let { ignoreShown } = options;
+    if (ignoreShown == null) {
+      ignoreShown = false;
+    }
+    if (this.isShown || ignoreShown) {
+      return [...super._getStateProperties(options),
+        'touchInBoundingRect',
+        'elements',
+        'hasTouchableElements',
+      ];
+    }
+    return [
+      ...super._getStateProperties(options),
+      'elements',
+    ];
+  }
+
+  _getStatePropertiesMin() {
+    return [
+      ...super._getStatePropertiesMin(),
+      'elements',
+    ];
+  }
+
+  _dup(exceptions: Array<string> = []) {
     const collection = new DiagramElementCollection(
       // transform,
       // diagramLimits,
@@ -2247,11 +3434,16 @@ class DiagramElementCollection extends DiagramElement {
     // collection.touchInBoundingRect = this.touchInBoundingRect;
     // collection.copyFrom(this);
     const doNotDuplicate = this.drawOrder.map(e => `_${e}`);
-    duplicateFromTo(this, collection, ['elements', 'drawOrder', 'parent', ...doNotDuplicate]);
+    duplicateFromTo(this, collection, [
+      'elements', 'drawOrder', 'parent', 'recorder', 'diagram',
+      'shapes', 'objects', 'equation',
+      ...doNotDuplicate, ...exceptions,
+    ]);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const name = this.drawOrder[i];
       collection.add(name, this.elements[name]._dup());
     }
+    collection.recorder = this.recorder;
 
     return collection;
   }
@@ -2292,28 +3484,77 @@ class DiagramElementCollection extends DiagramElement {
     this.drawOrder = [...names.reverse(), ...newOrder];
   }
 
-  isMoving(): boolean {
+  // isChildMoving(): boolean {
+  //   if (this.isShown === false) {
+  //     return false;
+  //   }
+  //   if (this.state.isMovingFreely
+  //       || this.state.isBeingMoved
+  //       || this.state.isPulsing
+  //       || this.animations.state === 'animating') {
+  //     return true;
+  //   }
+  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     if (element instanceof DiagramElementCollection) {
+  //       if (element.isMoving()) {
+  //         return true;
+  //       }
+  //     } else if (element.isShown && element.color[3] > 0 && element.isMoving()) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
+
+  isAnyElementMoving(): boolean {
     if (this.isShown === false) {
       return false;
     }
-    if (this.state.isMovingFreely
-        || this.state.isBeingMoved
-        || this.state.isPulsing
-        || this.animations.state === 'animating') {
+    if (this.isMoving()) {
       return true;
     }
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      if (element instanceof DiagramElementCollection) {
-        if (element.isMoving()) {
-          return true;
-        }
-      } else if (element.isShown && element.color[3] > 0 && element.isMoving()) {
+      if (element.isAnyElementMoving()) {
         return true;
       }
     }
     return false;
   }
+
+  // isAnyElementAnimating(): boolean {
+  //   if (this.isShown === false) {
+  //     return false;
+  //   }
+  //   if (this.isAnimating()) {
+  //     return true;
+  //   }
+  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     if (element.isAnyElementAnimating()) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
+
+  // isAnimating(): boolean {
+  //   if (this.isShown === false) {
+  //     return false;
+  //   }
+  //   const isThisAnimating = super.isAnimating();
+  //   if (isThisAnimating) {
+  //     return true;
+  //   }
+  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     if (element.isAnimating()) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
   add(
     name: string,
@@ -2350,8 +3591,18 @@ class DiagramElementCollection extends DiagramElement {
     return false;
   }
 
-  draw(parentTransform: Transform = new Transform(), now: number = 0, canvasIndex: number = 0) {
+  setupDraw(
+    // parentTransform: Transform = new Transform(),
+    now: number = 0,
+    canvasIndex: number = 0,
+  ) {
+    // console.log('draw', this.name)
     if (this.isShown) {
+      this.lastDrawTime = now;
+      // if (this.pulseSettings.clearFrozenTransforms) {
+      //   this.frozenPulseTransforms = [];
+      //   this.pulseSettings.clearFrozenTransforms = false;
+      // }
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {
           this.unrender();
@@ -2360,8 +3611,10 @@ class DiagramElementCollection extends DiagramElement {
         }
       }
       if (this.beforeDrawCallback != null) {
-        this.beforeDrawCallback(now);
+        this.fnMap.exec(this.beforeDrawCallback, now);
       }
+
+      // console.l^ *consoleog(this.name, now);
       this.animations.nextFrame(now);
       this.nextMovingFreelyFrame(now);
 
@@ -2370,25 +3623,74 @@ class DiagramElementCollection extends DiagramElement {
         return;
       }
 
-      this.lastDrawElementTransformPosition = {
-        parentCount: parentTransform.order.length,
-        elementCount: this.transform.order.length,
-      };
-      const newTransform = parentTransform.transform(this.getTransform());
-      this.lastDrawTransform = newTransform._dup();
-      const pulseTransforms = this.transformWithPulse(now, newTransform);
-
-      // eslint-disable-next-line prefer-destructuring
-      this.lastDrawPulseTransform = pulseTransforms[0];
+      // this.lastDrawElementTransformPosition = {
+      //   parentCount: parentTransform.order.length,
+      //   elementCount: this.transform.order.length,
+      // };
+      // const newTransform = parentTransform.transform(this.getTransform());
+      // this.lastDrawTransform = newTransform._dup();
+      // this.pulseTransforms = this.getPulseTransforms(now);
+      // this.drawTransforms = this.getDrawTransforms(newTransform);
+      // // this.pulseTransforms
+      // // eslint-disable-next-line prefer-destructuring
+      // this.lastDrawPulseTransform = this.drawTransforms[0];
       // this.lastDrawTransform = pulseTransforms[0];
 
       // this.lastDrawPulseTransform = pulseTransforms[0]._dup();
 
-      for (let k = 0; k < pulseTransforms.length; k += 1) {
-        for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-          this.elements[this.drawOrder[i]].draw(pulseTransforms[k], now, canvasIndex);
-        }
+      // for (let k = 0; k < this.drawTransforms.length; k += 1) {
+      for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+        this.elements[this.drawOrder[i]].setupDraw(now, canvasIndex);
       }
+      // }
+      // if (this.unrenderNextDraw) {
+      //   this.clearRender();
+      //   this.unrenderNextDraw = false;
+      // }
+      // if (this.renderedOnNextDraw) {
+      //   this.isRenderedAsImage = true;
+      //   this.renderedOnNextDraw = false;
+      // }
+      // // this.redrawElements.forEach((element) => {
+      // //   element.draw(element.getParentLastDrawTransform(), now);
+      // // })
+      // if (this.afterDrawCallback != null) {
+      //   // this.afterDrawCallback(now);
+      //   this.fnMap.exec(this.afterDrawCallback, now);
+      // }
+    }
+  }
+
+  draw(
+    now: number,
+    parentTransform: Array<Transform> = [new Transform()],
+    parentOpacity: number = 1,
+    canvasIndex: number = 0,
+  ) {
+    if (this.isShown) {
+      // for (let k = 0; k < this.pulseTransforms.length; k += 1) {
+      this.lastDrawElementTransformPosition = {
+        parentCount: parentTransform[0].order.length,
+        elementCount: this.transform.order.length,
+      };
+      const transform = this.getTransform();
+      const newTransforms = transformBy(parentTransform, [transform]);
+      // this.lastDrawTransform = transform._dup();
+      this.lastDrawTransform = parentTransform[0].transform(transform);
+      this.pulseTransforms = this.getPulseTransforms(now);
+      this.drawTransforms = this.getDrawTransforms(newTransforms);
+      // this.pulseTransforms
+      // eslint-disable-next-line prefer-destructuring
+      this.lastDrawPulseTransform = this.drawTransforms[0];
+
+      const opacityToUse = this.color[3] * this.opacity * parentOpacity;
+      this.lastDrawOpacity = opacityToUse;
+      for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+        this.elements[this.drawOrder[i]].draw(
+          now, this.drawTransforms, opacityToUse, canvasIndex,
+        );
+      }
+      // }
       if (this.unrenderNextDraw) {
         this.clearRender();
         this.unrenderNextDraw = false;
@@ -2397,11 +3699,40 @@ class DiagramElementCollection extends DiagramElement {
         this.isRenderedAsImage = true;
         this.renderedOnNextDraw = false;
       }
+      // this.redrawElements.forEach((element) => {
+      //   element.draw(element.getParentLastDrawTransform(), now);
+      // })
       if (this.afterDrawCallback != null) {
-        this.afterDrawCallback(now);
+        // this.afterDrawCallback(now);
+        this.fnMap.exec(this.afterDrawCallback, now);
       }
     }
   }
+
+  // drawNew() {
+  //   if (this.isShown) {
+  //     for (let k = 0; k < this.pulseTransforms.length; k += 1) {
+  //       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+  //         this.elements[this.drawOrder[i]].draw(this.pulseTransforms[k], now, canvasIndex);
+  //       }
+  //     }
+  //     if (this.unrenderNextDraw) {
+  //       this.clearRender();
+  //       this.unrenderNextDraw = false;
+  //     }
+  //     if (this.renderedOnNextDraw) {
+  //       this.isRenderedAsImage = true;
+  //       this.renderedOnNextDraw = false;
+  //     }
+  //     // this.redrawElements.forEach((element) => {
+  //     //   element.draw(element.getParentLastDrawTransform(), now);
+  //     // })
+  //     if (this.afterDrawCallback != null) {
+  //       // this.afterDrawCallback(now);
+  //       this.fnMap.exec(this.afterDrawCallback, now);
+  //     }
+  //   }
+  // }
 
   exec(
     execFunctionAndArgs: string | Array<string | Object>,
@@ -2439,12 +3770,14 @@ class DiagramElementCollection extends DiagramElement {
       time?: number,
       scale?: number,
       done?: ?(mixed) => void,
-      elements?: Array<string | DiagramElement>
+      elements?: Array<string | DiagramElement>,
+      progression: string | (number) => number,
     } | Array<string | DiagramElement> | ((mixed) => void)) = null,
     done: ?(mixed) => void = null,
   ) {
     if (optionsOrElementsOrDone == null
       || typeof optionsOrElementsOrDone === 'function'
+      || typeof optionsOrElementsOrDone === 'string'
     ) {
       super.pulse(optionsOrElementsOrDone);
       return;
@@ -2454,7 +3787,10 @@ class DiagramElementCollection extends DiagramElement {
       time: 1,
       scale: 2,
     };
-    if (typeof this.pulseDefault !== 'function') {
+    if (
+      typeof this.pulseDefault !== 'function'
+      && typeof this.pulseDefault !== 'string'
+    ) {
       defaultPulseOptions.frequency = this.pulseDefault.frequency;
       defaultPulseOptions.time = this.pulseDefault.time;
       defaultPulseOptions.scale = this.pulseDefault.scale;
@@ -2469,6 +3805,7 @@ class DiagramElementCollection extends DiagramElement {
       scale: defaultPulseOptions.scale,
       done: null,
       elements: null,
+      progression: 'tools.math.sinusoid',
     };
 
     let doneToUse;
@@ -2543,35 +3880,6 @@ class DiagramElementCollection extends DiagramElement {
     //     done,
     //   );
     // }
-  }
-
-  pulseLegacy(
-    elementsOrDone: ?(Array<string | DiagramElement> | (mixed) => void),
-    // elementsToPulse: Array<string | DiagramElement>,
-    done: ?(mixed) => void = null,
-  ) {
-    if (elementsOrDone == null || typeof elementsOrDone === 'function') {
-      super.pulse(elementsOrDone);
-      return;
-    }
-
-    let doneToUse = done;
-    elementsOrDone.forEach((elementToPulse) => {
-      let element: ?DiagramElement;
-      if (typeof elementToPulse === 'string') {
-        element = this.getElement(elementToPulse);
-      } else {
-        element = elementToPulse;
-      }
-      if (element != null) {
-        // element.pulseDefault(doneToUse);
-        element.pulse(doneToUse);
-        doneToUse = null;
-      }
-    });
-    if (doneToUse != null) {
-      doneToUse();
-    }
   }
 
   getElement(elementPath: ?(string | DiagramElement) = null) {
@@ -2738,11 +4046,11 @@ class DiagramElementCollection extends DiagramElement {
       const element = this.elements[this.drawOrder[i]];
       element.setFirstTransform(firstTransform);
     }
-    this.setMoveBoundaryToDiagram();
+    this.checkMoveBounds();
   }
 
   getAllBoundaries(space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local') {
-    let boundaries = [];
+    let boundaries: Array<Array<Point>> = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       if (element.isShown) {
@@ -2757,7 +4065,7 @@ class DiagramElementCollection extends DiagramElement {
     space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
     children: ?Array<string | DiagramElement> = null,
   ) {
-    let boundaries = [];
+    let boundaries: Array<Array<Point>> = [];
     if (children == null) {
       return this.getAllBoundaries(space);
     }
@@ -2774,7 +4082,7 @@ class DiagramElementCollection extends DiagramElement {
 
   // deprecated
   getGLBoundaries() {
-    let boundaries = [];
+    let boundaries: Array<Array<Point>> = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       if (element.isShown) {
@@ -2787,7 +4095,7 @@ class DiagramElementCollection extends DiagramElement {
 
   // deprecated
   getVertexSpaceBoundaries() {
-    let boundaries = [];
+    let boundaries: Array<Array<Point>> = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       if (element.isShown) {
@@ -2848,7 +4156,7 @@ class DiagramElementCollection extends DiagramElement {
       return getBoundingRect(boundaries);
     }
 
-    const points = [];
+    const points: Array<Point> = [];
     children.forEach((child) => {
       const e = this.getElement(child);
       if (e == null) {
@@ -2872,7 +4180,7 @@ class DiagramElementCollection extends DiagramElement {
       const boundaries = this.getVertexSpaceBoundaries();
       return getBoundingRect(boundaries);
     }
-    const points = [];
+    const points: Array<Point> = [];
     elementsToBound.forEach((element) => {
       const e = this.getElement(element);
       if (e == null) {
@@ -2972,11 +4280,17 @@ class DiagramElementCollection extends DiagramElement {
     return touched;
   }
 
-  stop(cancelled: boolean = true, forceSetToEndOfPlan: ?boolean | 'complete' | 'noComplete' = false) {
-    super.stop(cancelled, forceSetToEndOfPlan);
+  stop(
+    how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel',
+    elementOnly: boolean = false,
+  ) {
+    super.stop(how);
+    if (elementOnly) {
+      return;
+    }
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.stop(cancelled, forceSetToEndOfPlan);
+      element.stop(how, elementOnly);
       // element.cancel(forceSetToEndOfPlan);
     }
   }
@@ -3050,7 +4364,7 @@ class DiagramElementCollection extends DiagramElement {
     if (elementsToBound == null) {
       return super.getDiagramBoundingRect();
     }
-    const points = [];
+    const points: Array<Point> = [];
     elementsToBound.forEach((element) => {
       let e;
       if (typeof element === 'string') {
@@ -3069,10 +4383,10 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   setOpacity(opacity: number) {
-    for (let i = 0; i < this.drawOrder.length; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      element.setOpacity(opacity);
-    }
+    // for (let i = 0; i < this.drawOrder.length; i += 1) {
+    //   const element = this.elements[this.drawOrder[i]];
+    //   element.setOpacity(opacity);
+    // }
     // this.color[3] = opacity;
     this.opacity = opacity;
   }
@@ -3092,7 +4406,7 @@ class DiagramElementCollection extends DiagramElement {
       if (element.name in elementTransforms) {
         element.transform = elementTransforms[element.name];
         if (element.internalSetTransformCallback) {
-          element.internalSetTransformCallback(element.transform);
+          this.fnMap.exec(element.internalSetTransformCallback, element.transform);
         }
       }
     }
@@ -3115,13 +4429,34 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
+  // animateTo(
+  //   elements: {
+  //     transform?: Transform,
+  //     color?: Array<number>,
+  //     show?: boolean,
+  //   },
+  //   options: {
+  //     delay?: number,
+  //     time?: {
+  //       fadeIn?: number,
+  //       move?: number,
+  //       fadeOut?: number,
+  //     },
+  //     order: Array<Array<'fadeIn' | 'fadeOut' | 'move'>>,
+  //     rotDirection?: number,
+  //     callback?: ?(string | ((?mixed) => void)),
+  //     easeFunction: string | ((number) => number),
+  //   }
+  // ) {
+
+  // }
   animateToTransforms(
     elementTransforms: Object,
     time: number = 1,
     delay: number = 0,
     rotDirection: number = 0,
-    callback: ?(?mixed) => void = null,
-    easeFunction: (number) => number = tools.easeinout,
+    callback: ?(string | ((?mixed) => void)) = null,
+    easeFunction: string | ((number) => number) = 'tools.math.easeinout',
     // translationPath: (Point, Point, number) => Point = linearPath,
   ) {
     let callbackMethod = callback;
@@ -3148,13 +4483,14 @@ class DiagramElementCollection extends DiagramElement {
         } else {
           element.transform = elementTransforms[element.name]._dup();
           if (element.internalSetTransformCallback) {
-            element.internalSetTransformCallback(element.transform);
+            this.fnMap.exec(element.internalSetTransformCallback, element.transform);
           }
         }
       }
     }
     if (timeToAnimate === 0 && callbackMethod != null) {
-      callbackMethod(true);
+      this.fnMap.exec(callbackMethod, true);
+      // callbackMethod(true);
     }
     return timeToAnimate;
   }
@@ -3164,7 +4500,7 @@ class DiagramElementCollection extends DiagramElement {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       if (element instanceof DiagramElementCollection) {
-        elements = [...elements, ...element.getAllElements()];
+        elements = [...elements, ...element.getAllPrimitives()];
       } else {
         elements.push(element);
       }
@@ -3173,6 +4509,20 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   getAllElements() {
+    const elements = [this];
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      // elements.push(element);
+      if (element instanceof DiagramElementCollection) {
+        elements.push(...element.getAllElements());
+      } else {
+        elements.push(element);
+      }
+    }
+    return elements;
+  }
+
+  getChildren() {
     const elements = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
@@ -3313,6 +4663,30 @@ class DiagramElementCollection extends DiagramElement {
     return elems;
   }
 
+  setPointsFromDefinition() {
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element.setPointsFromDefinition != null) {
+        element.setPointsFromDefinition();
+      }
+    }
+  }
+
+  setPrimitiveColors() {
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element instanceof DiagramElementPrimitive) {
+        element.setColor(element.color);
+        element.setOpacity(element.opacity);
+      } else {
+        element.setPrimitiveColors();
+      }
+      // if (element.setPointsFromDefinition != null) {
+      //   element.setPointsFromDefinition();
+      // }
+    }
+  }
+
   unrenderAll() {
     this.unrender();
     for (let i = 0; i < this.drawOrder.length; i += 1) {
@@ -3325,6 +4699,14 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
+  // setScenario(scenarioName: string) {
+  //   super.setScenario(scenarioName);
+  //   if (this.scenarios[scenarioName] != null) {
+  //     const target = this.getScenarioTarget(scenarioName);
+  //     this.color = target.color.slice();
+  //   }
+  // }
+
   setScenarios(scenarioName: string, onlyIfVisible: boolean = false) {
     super.setScenarios(scenarioName);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
@@ -3333,6 +4715,155 @@ class DiagramElementCollection extends DiagramElement {
         element.setScenarios(scenarioName, onlyIfVisible);
       }
     }
+  }
+
+  saveScenarios(scenarioName: string, keys: Array<string>) {
+    super.saveScenarios(scenarioName, keys);
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.saveScenarios(scenarioName, keys);
+    }
+  }
+
+  animateToState(
+    state: Object,
+    options: Object,
+    independentOnly: boolean = false,
+    startTime: ?number | 'now' | 'prev' | 'next' = null,
+    // lastDrawTime: number,
+    // countStart: () => void,
+    // countEnd: () => void,
+  ) {
+    let duration = 0;
+    duration = super.animateToState(
+      state, options, independentOnly, startTime,
+    );
+    if (
+      this.dependantTransform === false
+      || independentOnly === false
+    ) {
+      for (let i = 0; i < this.drawOrder.length; i += 1) {
+        const element = this.elements[this.drawOrder[i]];
+        if (state.elements != null && state.elements[this.drawOrder[i]] != null) {
+          const elementDuration = element.animateToState(
+            state.elements[this.drawOrder[i]], options,
+            independentOnly, // countStart, countEnd,
+            startTime,
+          );
+          if (elementDuration > duration) {
+            duration = elementDuration;
+          }
+        }
+      }
+    }
+    return duration;
+  }
+
+  dissolveInToState(
+    state: Object,
+    durationIn: number = 0.8,
+    startTime: ?number | 'now' | 'prev' | 'next' = null,
+  ) {
+    let duration = 0;
+    duration = super.dissolveInToState(state, durationIn, startTime);
+    if (duration === 0) {
+      return 0;
+    }
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (state.elements != null && state.elements[this.drawOrder[i]] != null) {
+        const elementDuration = element.dissolveInToState(
+          state.elements[this.drawOrder[i]], durationIn, startTime,
+        );
+        if (elementDuration > duration) {
+          duration = elementDuration;
+        }
+      }
+    }
+    return duration;
+  }
+
+  // _finishSetState(diagram: Diagram) {
+  //   super._finishSetState(diagram);
+  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     element._finishSetState(diagram);
+  //   }
+  // }
+
+  setTimeDelta(delta: number) {
+    super.setTimeDelta(delta);
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.setTimeDelta(delta);
+    }
+  }
+
+  isStateSame(
+    state: Object,
+    mergePulseTransforms: boolean = false,
+    exceptions: Array<string> = [],
+  ) {
+    const thisElementResult = super.isStateSame(state, mergePulseTransforms, exceptions);
+    if (thisElementResult === false) {
+      return false;
+    }
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (state.elements != null && state.elements[this.drawOrder[i]] != null) {
+        const elementResult = element.isStateSame(
+          state.elements[this.drawOrder[i]], mergePulseTransforms, exceptions,
+        );
+        if (elementResult === false) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  clearFrozenPulseTransforms() {
+    super.clearFrozenPulseTransforms();
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.clearFrozenPulseTransforms();
+    }
+  }
+
+  freezePulseTransforms(forceOverwrite: boolean = true) {
+    super.freezePulseTransforms(forceOverwrite);
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.freezePulseTransforms(forceOverwrite);
+    }
+  }
+
+  isAnimating(): boolean {
+    // const result = super.isAnimating();
+    // if (result) {
+    //   return true;
+    // }
+    // for (let i = 0; i < this.drawOrder.length; i += 1) {
+    //   const element = this.elements[this.drawOrder[i]];
+    //   const r = element.isAnimating();
+    //   if (r) {
+    //     return true;
+    //   }
+    // }
+    // return false;
+    if (this.isShown === false) {
+      return false;
+    }
+    if (super.isAnimating()) {
+      return true;
+    }
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element.isAnimating()) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 

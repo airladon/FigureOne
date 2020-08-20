@@ -32,6 +32,18 @@ export class DelayStep extends AnimationStep {
     duplicateFromTo(this, dup);
     return dup;
   }
+
+  // _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  //   return [...super._getStateProperties(),
+  //     'callback',
+  //     'startPercent',
+  //     'progression',
+  //   ];
+  // }
+
+  _getStateName() {  // eslint-disable-line class-methods-use-this
+    return 'delayAnimationStep';
+  }
 }
 
 export function delay(

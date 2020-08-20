@@ -7,15 +7,6 @@ import {
 } from './lines';
 
 describe('Tools Lines', () => {
-  // describe('two points', () => {
-  //   test.only('two points', () => {
-  //     const [tris] = makePolyLine(
-  //       [new Point(0, 0), new Point(1, 0)],
-  //       0.1, false, 'mid', 'auto',
-  //     );
-  //     console.log(tris)
-  //   });
-  // });
   describe('makePolyLine Corners', () => {
     test('simple negative 90º', () => {
       const [tris] = makePolyLine(
@@ -154,19 +145,20 @@ describe('Tools Lines', () => {
       });
       test('radius', () => {
         const out = makePolyLine(points, 0.1, true, 'negative', 'radius', 0.015, 10);
-        expect(out).toMatchSnapshot();
+        expect(round(out)).toMatchSnapshot();
       });
       test('fill', () => {
         const out = makePolyLine(points, 0.1, true, 'negative', 'fill');
-        expect(out).toMatchSnapshot();
+        expect(round(out)).toMatchSnapshot();
       });
       test('auto', () => {
         const out = makePolyLine(points, 0.1, true, 'negative', 'auto');
-        expect(out).toMatchSnapshot();
+        expect(round(out)).toMatchSnapshot();
       });
       test('dash', () => {
         const out = makePolyLine(points, 0.1, true, 'negative', 'auto', 0.015, 10, Math.PI / 7, [0.2, 0.08]);
-        expect(out).toMatchSnapshot();
+        // const r = round(out);
+        expect(round(out)).toMatchSnapshot();
       });
     });
     describe('Positive', () => {
@@ -218,19 +210,19 @@ describe('Tools Lines', () => {
       });
       test('radius', () => {
         const out = makePolyLine(points, 0.1, true, 'positive', 'radius', 0.015, 10);
-        expect(out).toMatchSnapshot();
+        expect(round(out)).toMatchSnapshot();
       });
       test('fill', () => {
         const out = makePolyLine(points, 0.1, true, 'positive', 'fill');
-        expect(out).toMatchSnapshot();
+        expect(round(out)).toMatchSnapshot();
       });
       test('auto', () => {
         const out = makePolyLine(points, 0.1, true, 'positive', 'auto');
-        expect(out).toMatchSnapshot();
+        expect(round(out)).toMatchSnapshot();
       });
       test('dash', () => {
         const out = makePolyLine(points, 0.1, true, 'positive', 'auto', 0.015, 10, Math.PI / 7, [0.2, 0.08]);
-        expect(out).toMatchSnapshot();
+        expect(round(out)).toMatchSnapshot();
       });
     });
     describe('Mid', () => {
@@ -282,19 +274,19 @@ describe('Tools Lines', () => {
       });
       test('radius', () => {
         const [out] = makePolyLine(points, 0.1, true, 'mid', 'radius', 0.015, 10);
-        expect(out).toMatchSnapshot();
+        expect(round(out)).toMatchSnapshot();
       });
       test('fill', () => {
         const out = makePolyLine(points, 0.1, true, 'mid', 'fill');
-        expect(out).toMatchSnapshot();
+        expect(round(out)).toMatchSnapshot();
       });
       test('auto', () => {
         const out = makePolyLine(points, 0.1, true, 'mid', 'auto');
-        expect(out).toMatchSnapshot();
+        expect(round(out)).toMatchSnapshot();
       });
       test('dash', () => {
         const out = makePolyLine(points, 0.1, true, 'mid', 'auto', 0.015, 10, Math.PI / 7, [0.2, 0.08]);
-        expect(out).toMatchSnapshot();
+        expect(round(out)).toMatchSnapshot();
       });
     });
   });
