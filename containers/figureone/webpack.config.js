@@ -151,42 +151,30 @@ module.exports = (env) => {
       rules: [
         {
           test: /\.js$/,
-          exclude: /(node_modules)/,
+          exclude: [
+            /(node_modules)/,
+            /\.worker\.js$/,
+          ],
           use: 'babel-loader',
         },
         {
           test: /\.worker\.js$/,
-          use: {
-            loader: 'worker-loader',
-            options: { publicPath: '/static/workers/' },
-          },
+          use: [
+            {
+              loader: 'worker-loader',
+              options: {
+                publicPath: '/static/workers/',
+                // filename: '[contenthash].worker.js',
+              },
+            },
+            {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env'],
+              },
+            },
+          ],
         },
-        // {
-        //   test: /\.(css|sass|scss)$/,
-        //   use: [
-        //     MiniCssExtractPlugin.loader,
-        //     {
-        //       loader: 'css-loader',
-        //       options: {
-        //         importLoaders: 2,
-        //         sourceMap: envConfig.uglifySourceMap,
-        //       },
-        //     },
-        //     {
-        //       loader: 'postcss-loader',
-        //       options: {
-        //         plugins: [Autoprefixer],
-        //         sourceMap: envConfig.uglifySourceMap,
-        //       },
-        //     },
-        //     {
-        //       loader: 'sass-loader',
-        //       options: {
-        //         sourceMap: envConfig.uglifySourceMap,
-        //       },
-        //     },
-        //   ],
-        // },
         {
           test: /\.(png|jpg|gif)$/,
           use: [
