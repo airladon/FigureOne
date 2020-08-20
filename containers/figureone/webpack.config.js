@@ -2,17 +2,17 @@ const path = require('path');
 // eslint-disable-next-line import/no-unresolved
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 // eslint-disable-next-line import/no-unresolved
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 // eslint-disable-next-line import/no-unresolved
 // const webpack = require('webpack');
 // eslint-disable-next-line import/no-unresolved
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies
-const Autoprefixer = require('autoprefixer');
+// const Autoprefixer = require('autoprefixer');
 // eslint-disable-next-line import/no-unresolved
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+// const CopyWebpackPlugin = require('copy-webpack-plugin');
 // eslint-disable-next-line import/no-unresolved
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+// const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const buildPath = path.resolve(__dirname, 'package');
 
@@ -90,44 +90,43 @@ module.exports = (env) => {
     toClean = false;
   }
   if (toClean) {
-    clean = new CleanWebpackPlugin([buildPath]);
+    clean = new CleanWebpackPlugin();
   }
 
-  const extract = new MiniCssExtractPlugin({
-    // Options similar to the same options in webpackOptions.output
-    // both options are optional
-    filename: '[name].css',
-    chunkFilename: '[id].css',
-  });
+  // const extract = new MiniCssExtractPlugin({
+  //   // Options similar to the same options in webpackOptions.output
+  //   // both options are optional
+  //   filename: '[name].css',
+  //   chunkFilename: '[id].css',
+  // });
 
-  const copy = new CopyWebpackPlugin(
-    [
-      {
-        from: '/opt/app/src/Lessons/*/*/topic.png',
-        to: '/opt/app/app/app/static/dist/[1][name].[ext]',
-        test: /\/opt\/app\/src\/(.*)topic\.png$/,
-      },
-    ],
-  );
+  // const copy = new CopyWebpackPlugin({
+  //   patterns: [
+  //     {
+  //       from: '/opt/app/src/Lessons/*/*/topic.png',
+  //       to: '/opt/app/app/app/static/dist/[1][name].[ext]',
+  //       // test: /\/opt\/app\/src\/(.*)topic\.png$/,
+  //     },
+  //   ],
+  // });
 
-  let cssMini = '';
-  if (e.uglify) {
-    cssMini = new OptimizeCssAssetsPlugin({
-      assetNameRegExp: /\.css$/g,
-      // cssProcessor: require('cssnano'),
-      cssProcessorPluginOptions: {
-        preset: ['default', { discardComments: { removeAll: true } }],
-      },
-      canPrint: true,
-    });
-  }
+  // let cssMini = '';
+  // if (e.uglify) {
+  //   cssMini = new OptimizeCssAssetsPlugin({
+  //     assetNameRegExp: /\.css$/g,
+  //     // cssProcessor: require('cssnano'),
+  //     cssProcessorPluginOptions: {
+  //       preset: ['default', { discardComments: { removeAll: true } }],
+  //     },
+  //     canPrint: true,
+  //   });
+  // }
   // Make the plugin array filtering out those plugins that are null
   const pluginArray = [
     uglify,
-    extract,
-    copy,
-    clean,
-    cssMini].filter(elem => elem !== '');
+    // extract,
+    // copy,
+    clean].filter(elem => elem !== '');
 
   let externals = {};
   if (e.shortName === 'prod' || e.shortName === 'stage') {
@@ -152,31 +151,26 @@ module.exports = (env) => {
       rules: [
         {
           test: /\.js$/,
-          exclude: /(node_modules)/,
+          exclude: [
+            /(node_modules)/,
+            /\.worker\.js$/,
+          ],
           use: 'babel-loader',
         },
         {
-          test: /\.(css|sass|scss)$/,
+          test: /\.worker\.js$/,
           use: [
-            MiniCssExtractPlugin.loader,
             {
-              loader: 'css-loader',
+              loader: 'worker-loader',
               options: {
-                importLoaders: 2,
-                sourceMap: envConfig.uglifySourceMap,
+                publicPath: '/static/workers/',
+                // filename: '[contenthash].worker.js',
               },
             },
             {
-              loader: 'postcss-loader',
+              loader: 'babel-loader',
               options: {
-                plugins: [Autoprefixer],
-                sourceMap: envConfig.uglifySourceMap,
-              },
-            },
-            {
-              loader: 'sass-loader',
-              options: {
-                sourceMap: envConfig.uglifySourceMap,
+                presets: ['@babel/preset-env'],
               },
             },
           ],
@@ -228,14 +222,14 @@ module.exports = (env) => {
             test: /js\/(diagram|Lesson|tools|components)/,
             name: 'tools',
           },
-          commoncss: {
-            minSize: 10,
-            minChunks: 2,
-            priority: -10,
-            reuseExistingChunk: true,
-            test: /css\/*\.(css|scss|sass)$/,
-            name: 'commoncss',
-          },
+          // commoncss: {
+          //   minSize: 10,
+          //   minChunks: 2,
+          //   priority: -10,
+          //   reuseExistingChunk: true,
+          //   test: /css\/*\.(css|scss|sass)$/,
+          //   name: 'commoncss',
+          // },
           vendors: {
             test: /[\\/]node_modules[\\/]/,
             priority: -10,

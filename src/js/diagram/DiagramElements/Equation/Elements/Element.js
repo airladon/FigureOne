@@ -7,6 +7,7 @@ import Bounds from './Bounds';
 import {
   DiagramElementPrimitive, DiagramElementCollection,
 } from '../../../Element';
+import { FunctionMap } from '../../../../tools/FunctionMap';
 
 export interface ElementInterface {
   ascent: number;
@@ -21,6 +22,7 @@ export interface ElementInterface {
     ascent: number,
     height: number,
   };
+  fnMap: FunctionMap,
 
   calcSize(location: Point, scale: number): void;
   _dup(namedCollection?: Object): ElementInterface;
@@ -59,13 +61,14 @@ class Element implements ElementInterface {
   location: Point;
   height: number;
   scale: number;
+  fnMap: FunctionMap;
   fullSize: {
     leftOffset: number,
     width: number,
     height: number,
     ascent: number,
     descent: number,
-  }
+  };
 
   constructor(content: DiagramElementPrimitive | DiagramElementCollection | BlankElement) {
     this.content = content;
@@ -81,7 +84,19 @@ class Element implements ElementInterface {
       ascent: this.ascent,
       descent: this.descent,
     };
+    this.fnMap = new FunctionMap();
   }
+
+  // execFn(fn: string | Function | null, ...args: Array<any>) {
+  //   // if (fn == null) {
+  //   //   return null;
+  //   // }
+  //   // if (typeof fn === 'string') {
+  //   //   return this.fnMap.exec(fn, ...args);
+  //   // }
+  //   // return fn(...args);
+  //   return this.fnMap.exec(fn, ...args);
+  // }
 
   calcSize(location: Point, scale: number) {
     const { content } = this;
@@ -100,7 +115,7 @@ class Element implements ElementInterface {
       content.transform.updateScale(scale, scale);
       content.updateLastDrawTransform();
       if (content.internalSetTransformCallback != null) {
-        content.internalSetTransformCallback(content.transform);
+        this.fnMap.exec(content.internalSetTransformCallback, content.transform);
       }
 
       // Get the boundaries of element
@@ -210,6 +225,7 @@ class Elements implements ElementInterface {
   width: number;
   location: Point;
   height: number;
+  fnMap: FunctionMap;
   fullSize: {
     leftOffset: number,
     width: number,
@@ -231,7 +247,19 @@ class Elements implements ElementInterface {
     this.width = 0;
     this.location = new Point(0, 0);
     this.height = 0;
+    this.fnMap = new FunctionMap();
   }
+
+  // execFn(fn: string | Function | null, ...args: Array<any>) {
+  //   // if (fn == null) {
+  //   //   return null;
+  //   // }
+  //   // if (typeof fn === 'string') {
+  //   //   return this.fnMap.exec(fn, ...args);
+  //   // }
+  //   // return fn(...args);
+  //   return this.fnMap.exec(fn, ...args);
+  // }
 
   _dup(namedCollection?: Object) {
     const contentCopy = [];

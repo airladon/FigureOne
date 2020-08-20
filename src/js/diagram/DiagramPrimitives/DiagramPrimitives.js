@@ -10,7 +10,7 @@ import type {
 } from '../../tools/g2';
 import { setHTML } from '../../tools/htmlGenerator';
 import {
-  DiagramElementCollection, DiagramElementPrimitive,
+  DiagramElementCollection, DiagramElementPrimitive, DiagramElement,
 } from '../Element';
 import WebGLInstance from '../webgl/webgl';
 import DrawContext2D from '../DrawContext2D';
@@ -607,6 +607,18 @@ function processOptions(...optionsIn: Array<Object>) {
   return options;
 }
 
+function setupPulse(element: DiagramElement, options: Object) {
+  if (options.pulse != null) {
+    if (
+      typeof element.pulseDefault !== 'function'
+      && typeof element.pulseDefault !== 'string'
+    ) {
+      // eslint-disable-next-line no-param-reassign
+      element.pulseDefault.scale = options.pulse;
+    }
+  }
+}
+
 export default class DiagramPrimitives {
   webgl: Array<WebGLInstance>;
   draw2D: Array<DrawContext2D>;
@@ -723,11 +735,7 @@ export default class DiagramPrimitives {
       copyToUse,
     );
 
-    if (options.pulse != null) {
-      if (typeof element.pulseDefault !== 'function') {
-        element.pulseDefault.scale = options.pulse;
-      }
-    }
+    setupPulse(element, options);
 
     return element;
   }
@@ -805,11 +813,12 @@ export default class DiagramPrimitives {
       element.drawingObject.change(...getTris(points));
     };
 
-    if (options.pulse != null) {
-      if (typeof element.pulseDefault !== 'function') {
-        element.pulseDefault.scale = options.pulse;
-      }
-    }
+    // if (options.pulse != null) {
+    //   if (typeof element.pulseDefault !== 'function') {
+    //     element.pulseDefault.scale = options.pulse;
+    //   }
+    // }
+    setupPulse(element, options);
 
     return element;
   }
@@ -849,15 +858,30 @@ export default class DiagramPrimitives {
       // sidesToDraw: 4,
       rotation: 0,
       width: 0.01,
-      line: {
-        widthIs: 'inside',
-      },
+      // line: {
+      //   widthIs: 'mid',
+      // },
       // angle: Math.PI * 2,
       offset: new Point(0, 0),
       transform: new Transform('polygon').standard(),
       touchableLineOnly: false,
     };
+    let radiusMod = 0;
     const options = processOptions(defaultOptions, ...optionsIn);
+
+    if (
+      options.line == null
+      || (options.line != null && options.line.widthIs == null)
+    ) {
+      if (options.line == null) {
+        options.line = {};
+      }
+      options.line.widthIs = 'mid';
+      const sideAngle = Math.PI * 2 / options.sides;
+      const theta = (Math.PI - sideAngle) / 2;
+      radiusMod = options.width / 2 / Math.sin(theta);
+    }
+
     parsePoints(options, ['offset']);
     let element;
     if (options.angleToDraw != null) {
@@ -878,9 +902,19 @@ export default class DiagramPrimitives {
         points: fan, // $FlowFixMe
         border: [[...fan.slice(1, -1)]],
       });
+      element.custom.update = (updateOptions) => {
+        const o = joinObjects({}, options, updateOptions);
+        const points = getFanTrisPolygon(
+          o.radius, o.rotation, o.offset,
+          o.sides, o.sidesToDraw, o.direction,
+        );
+        element.drawingObject.change(
+          points, [[...points.slice(1, -1)]], [],
+        );
+      };
     } else {
       const polygonPoints = getPolygonPoints(
-        options.radius, options.rotation, options.offset,
+        options.radius - radiusMod, options.rotation, options.offset,
         options.sides, options.sidesToDraw, options.direction,
       );
       let border = 'line';
@@ -893,12 +927,32 @@ export default class DiagramPrimitives {
         border = 'positive';
         hole = 'negative';
       }
+      // console.log(polygonPoints)
       element = this.polyline(options, options.line, {
         points: polygonPoints,
         close: options.sides === options.sidesToDraw,
         border,
         hole,
       });
+      const simplifyBorder = (e) => {
+        const simpleBorder = [];
+        for (let i = 0; i < e.drawingObject.border[0].length; i += 2) {
+          simpleBorder.push(e.drawingObject.border[0][i]._dup());
+        }
+        e.drawingObject.border = [simpleBorder];
+      };
+      simplifyBorder(element);
+      // element.drawingObject.border = [simpleBorder];
+      element.custom.update = (updateOptions) => {
+        const o = joinObjects({}, options, updateOptions);
+        const points = getPolygonPoints(
+          o.radius - radiusMod, o.rotation, o.offset,
+          o.sides, o.sidesToDraw, o.direction,
+        );
+        element.custom.updatePoints(points);
+        // element.border = [points];
+        simplifyBorder(element);
+      };
     }
     return element;
   }
@@ -1045,7 +1099,9 @@ export default class DiagramPrimitives {
     const element = this.polygon(options);
     // $FlowFixMe
     element.drawingObject.getPointCountForAngle = (angle: number) => {
-      const sidesToDraw = Math.floor(tools.round(angle) / tools.round(Math.PI * 2) * options.sides);
+      const sidesToDraw = Math.floor(
+        tools.round(angle, 8) / tools.round(Math.PI * 2, 8) * options.sides,
+      );
       if (options.fill) {
         return sidesToDraw + 2;
       }
@@ -1086,11 +1142,12 @@ export default class DiagramPrimitives {
       this.limits,
     );
 
-    if (options.pulse != null) {
-      if (typeof element.pulseDefault !== 'function') {
-        element.pulseDefault.scale = options.pulse;
-      }
-    }
+    // if (options.pulse != null) {
+    //   if (typeof element.pulseDefault !== 'function') {
+    //     element.pulseDefault.scale = options.pulse;
+    //   }
+    // }
+    setupPulse(element, options);
 
     if (options.mods != null && options.mods !== {}) {
       element.setProperties(options.mods);
@@ -1154,11 +1211,12 @@ export default class DiagramPrimitives {
       this.limits,
     );
 
-    if (options.pulse != null) {
-      if (typeof element.pulseDefault !== 'function') {
-        element.pulseDefault.scale = options.pulse;
-      }
-    }
+    // if (options.pulse != null) {
+    //   if (typeof element.pulseDefault !== 'function') {
+    //     element.pulseDefault.scale = options.pulse;
+    //   }
+    // }
+    setupPulse(element, options);
 
     if (options.mods != null && options.mods !== {}) {
       element.setProperties(options.mods);
@@ -1209,11 +1267,12 @@ export default class DiagramPrimitives {
       this.limits,
     );
 
-    if (options.pulse != null) {
-      if (typeof element.pulseDefault !== 'function') {
-        element.pulseDefault.scale = options.pulse;
-      }
-    }
+    // if (options.pulse != null) {
+    //   if (typeof element.pulseDefault !== 'function') {
+    //     element.pulseDefault.scale = options.pulse;
+    //   }
+    // }
+    setupPulse(element, options);
 
     if (options.mods != null && options.mods !== {}) {
       element.setProperties(options.mods);
@@ -1344,11 +1403,12 @@ export default class DiagramPrimitives {
     if (options.color != null) {
       element.setColor(options.color);
     }
-    if (options.pulse != null) {
-      if (typeof element.pulseDefault !== 'function') {
-        element.pulseDefault.scale = options.pulse;
-      }
-    }
+    // if (options.pulse != null) {
+    //   if (typeof element.pulseDefault !== 'function') {
+    //     element.pulseDefault.scale = options.pulse;
+    //   }
+    // }
+    setupPulse(element, options);
     return element;
   }
 
@@ -1384,11 +1444,7 @@ export default class DiagramPrimitives {
     if (options.color != null) {
       element.setColor(options.color);
     }
-    if (options.pulse != null) {
-      if (typeof element.pulseDefault !== 'function') {
-        element.pulseDefault.scale = options.pulse;
-      }
-    }
+    setupPulse(element, options);
     return element;
   }
 
@@ -1483,9 +1539,7 @@ export default class DiagramPrimitives {
       options.rotation, options.dashStyle, options.color,
       options.transform, this.limits,
     );
-    if (options.pulse != null && typeof element.pulseDefault !== 'function') {
-      element.pulseDefault.scale = options.pulse;
-    }
+    setupPulse(element, options);
     return element;
   }
 
@@ -1541,9 +1595,8 @@ export default class DiagramPrimitives {
       );
     }
 
-    if (options.pulse != null && typeof element.pulseDefault !== 'function') {
-      element.pulseDefault.scale = options.pulse;
-    }
+    setupPulse(element, options);
+
     return element;
   }
 
@@ -1577,9 +1630,8 @@ export default class DiagramPrimitives {
       this.webgl, options.width, options.height, options.lineWidth,
       options.fill, options.color, options.transform, this.limits,
     );
-    if (options.pulse != null && typeof element.pulseDefault !== 'function') {
-      element.pulseDefault.scale = options.pulse;
-    }
+    setupPulse(element, options);
+
     return element;
   }
 
@@ -1612,9 +1664,8 @@ export default class DiagramPrimitives {
       options.transform, this.limits,
     );
 
-    if (options.pulse != null && typeof element.pulseDefault !== 'function') {
-      element.pulseDefault.scale = options.pulse;
-    }
+    setupPulse(element, options);
+
 
     return element;
   }
@@ -1665,6 +1716,33 @@ export default class DiagramPrimitives {
     return copy;
   }
 
+  cursor(
+    optionsIn: {
+      color: Array<number>,
+      width: number,
+      radius: number,
+    },
+  ) {
+    const defaultOptions = {
+      color: [1, 1, 0, 0.5],
+      width: 0.01,
+      radius: 0.05,
+    };
+    const options = joinObjects(defaultOptions, optionsIn);
+    const cursor = this.collection();
+    const polygon = {
+      width: options.width,
+      color: options.color,
+      radius: options.radius,
+      sides: 50,
+    };
+    const up = this.polygon(polygon);
+    const down = this.polygon(joinObjects({}, polygon, { fill: true }));
+    cursor.add('up', up);
+    cursor.add('down', down);
+    return cursor;
+  }
+
   collection(
     transformOrPointOrOptions: Transform | Point | {
       transform?: Transform,
@@ -1703,7 +1781,11 @@ export default class DiagramPrimitives {
     }
     const element = new DiagramElementCollection(transform, this.limits);
     element.setColor(color);
-    if (pulse != null && typeof element.pulseDefault !== 'function') {
+    if (
+      pulse != null
+      && typeof element.pulseDefault !== 'function'
+      && typeof element.pulseDefault !== 'string'
+    ) {
       element.pulseDefault.scale = pulse;
     }
     return element;
@@ -1942,7 +2024,11 @@ export default class DiagramPrimitives {
     }
     xy.add('y', yAxis);
     xy.add('x', xAxis);
-    if (options.pulse != null && typeof xy.pulseDefault !== 'function') {
+    if (
+      options.pulse != null
+      && typeof xy.pulseDefault !== 'function'
+      && typeof xy.pulseDefault !== 'string'
+    ) {
       xy.pulseDefault.scale = options.pulse;
     }
     return xy;
@@ -1993,7 +2079,11 @@ export default class DiagramPrimitives {
       options.transform,
     );
     collection.setColor(options.color);
-    if (options.pulse != null && typeof collection.pulseDefault !== 'function') {
+    if (
+      options.pulse != null
+      && typeof collection.pulseDefault !== 'function'
+      && typeof collection.pulseDefault !== 'string'
+    ) {
       collection.pulseDefault.scale = options.pulse;
     }
 
@@ -2049,7 +2139,11 @@ export default class DiagramPrimitives {
       options.transform,
     );
     collection.setColor(options.color);
-    if (options.pulse != null && typeof collection.pulseDefault !== 'function') {
+    if (
+      options.pulse != null
+      && typeof collection.pulseDefault !== 'function'
+      && typeof collection.pulseDefault !== 'string'
+    ) {
       collection.pulseDefault.scale = options.pulse;
     }
 

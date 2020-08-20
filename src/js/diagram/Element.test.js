@@ -4,7 +4,7 @@ import {
 } from './Element';
 // import { AnimationPhase } from './AnimationPhase';
 import {
-  Point, Transform, TransformLimit,
+  Point, Transform,
 } from '../tools/g2';
 import webgl from '../__mocks__/WebGLInstanceMock';
 import VertexPolygon from './DrawingObjects/VertexObject/VertexPolygon';
@@ -12,6 +12,14 @@ import {
   linear, round,
 } from '../tools/math';
 import * as m2 from '../tools/m2';
+import makeDiagram from '../__mocks__/makeDiagram';
+// import Diagram from './Diagram';
+
+jest.mock('./Gesture');
+jest.mock('./webgl/webgl');
+jest.mock('./DrawContext2D');
+jest.useFakeTimers();
+
 
 describe('Animationa and Movement', () => {
   describe('DiagramElementPrimitive', () => {
@@ -28,17 +36,21 @@ describe('Animationa and Movement', () => {
     });
     describe('Animation', () => {
       let element;
-      let identity;
+      // let identity;
+      let diagram;
+      // let diagram;
       beforeEach(() => {
+        diagram = makeDiagram();  // this is just initializing the global functions
         const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
         element = new DiagramElementPrimitive(
           square,
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
           [0, 0, 1, 1],
         );
-        identity = new Transform();
-        element.move.maxTransform = element.transform.constant(100);
-        element.move.minTransform = element.transform.constant(-100);
+        // identity = new Transform();
+        // element.move.maxTransform = element.transform.constant(100);
+        // element.move.minTransform = element.transform.constant(-100);
+        diagram.elements.add('e', element);
       });
       describe('Rotation', () => {
         test('Rotate 1 radian, for 1 second, with linear movement', () => {
@@ -58,23 +70,27 @@ describe('Animationa and Movement', () => {
           expect(t).toEqual(new Transform().scale(1, 1).rotate(0).translate(0, 0));
 
           expect(element.animations.state).toBe('idle');
-          expect(element.isMoving()).toBe(true);
+          expect(element.isAnimating()).toBe(true);
 
-          element.draw(new Transform(), 10);
+          // element.setupDraw(10);
+          diagram.mock.timeStep(10);
+
           expect(t.r()).toBe(0);
 
-          element.draw(new Transform(), 10.5);
+          // element.setupDraw(10.5);
+          diagram.mock.timeStep(0.5);
           expect(element.transform.r()).toBe(0.5);
           expect(element.animations.state).toBe('animating');
-          expect(element.isMoving()).toBe(true);
+          expect(element.isAnimating()).toBe(true);
 
-          element.draw(new Transform(), 11);
+          // element.setupDraw(11);
+          diagram.mock.timeStep(1);
           expect(element.transform.r()).toBe(1);
           expect(element.animations.state).toBe('idle');
-          expect(element.isMoving()).toBe(false);
+          expect(element.isAnimating()).toBe(false);
         });
         test('translate (0, 0) to (1, 0), 1 second, linear movement', () => {
-          expect(element.isMoving()).toBe(false);
+          expect(element.isAnimating()).toBe(false);
 
           // Setup the animation
           element.animations.new()
@@ -84,23 +100,26 @@ describe('Animationa and Movement', () => {
           expect(t).toEqual(new Transform().scale(1, 1).rotate(0).translate(0, 0));
 
           expect(element.animations.state).toBe('idle');
-          expect(element.isMoving()).toBe(true);
+          expect(element.isAnimating()).toBe(true);
 
           // Initial draw setting start time
-          element.draw(new Transform(), 0);
+          // element.setupDraw(new Transform(), 0);
+          diagram.mock.timeStep(0);
           expect(t.r()).toBe(0);
 
           // Draw half way through
-          element.draw(new Transform(), 0.5);
+          // element.setupDraw(new Transform(), 0.5);
+          diagram.mock.timeStep(0.5);
           expect(element.transform.t()).toEqual(new Point(0.5, 0));
           expect(element.animations.state).toBe('animating');
-          expect(element.isMoving()).toBe(true);
+          expect(element.isAnimating()).toBe(true);
 
           // Draw at last time
-          element.draw(new Transform(), 1);
+          // element.setupDraw(new Transform(), 1);
+          diagram.mock.timeStep(0.5);
           expect(element.transform.t()).toEqual(new Point(1.0, 0));
           expect(element.animations.state).toBe('idle');
-          expect(element.isMoving()).toBe(false);
+          expect(element.isAnimating()).toBe(false);
         });
         test('Callback', () => {
           const callback = jest.fn();         // Callback mock
@@ -115,8 +134,10 @@ describe('Animationa and Movement', () => {
             })
             .start();
           // element.animateRotationTo(1, 1, 1, callback, linear);
-          element.draw(new Transform(), 0);     // Initial draw setting start time
-          element.draw(new Transform(), 2);   // Draw half way through
+          // element.setupDraw(new Transform(), 0);     // Initial draw setting start time
+          diagram.mock.timeStep(0);
+          diagram.mock.timeStep(2);
+          // element.setupDraw(new Transform(), 2);   // Draw half way through
           element.animations.cancelAll();            // Stop animating
 
           // expect(element.state.isAnimating).toBe(false);
@@ -134,8 +155,10 @@ describe('Animationa and Movement', () => {
               progression: linear,
             })
             .start();
-          element.draw(new Transform(), 0);     // Initial draw setting start time
-          element.draw(new Transform(), 0.5);   // Draw half way through
+          diagram.mock.timeStep(0);
+          // element.setupDraw(new Transform(), 0);     // Initial draw setting start time
+          diagram.mock.timeStep(0.5);
+          // element.setupDraw(new Transform(), 0.5);   // Draw half way through
           element.animations.cancelAll();            // Stop animating
 
           // expect(element.state.isAnimating).toBe(false);
@@ -169,87 +192,103 @@ describe('Animationa and Movement', () => {
             .start();
 
           expect(callback.mock.calls).toHaveLength(0);
-          element.draw(identity, 0);          // Give animation an initial time
+          diagram.mock.timeStep(0);
+          // element.setupDraw(identity, 0);          // Give animation an initial time
 
           // Check initial values
-          expect(element.isMoving()).toBe(true);
+          expect(element.isAnimating()).toBe(true);
 
           // Half way through first phase
-          element.draw(identity, 0.5);
+          // element.setupDraw(identity, 0.5);
+          diagram.mock.timeStep(0.5);
           expect(element.transform.r()).toBe(0.5);
           expect(callback.mock.calls).toHaveLength(0);
 
           // End of first phase
-          element.draw(identity, 1.0);
+          // element.setupDraw(identity, 1.0);
+          diagram.mock.timeStep(0.5);
           expect(element.transform.r()).toBe(1.0);
           expect(callback.mock.calls).toHaveLength(0);
 
           // Start of next phase
-          element.draw(identity, 1.1);
+          // element.setupDraw(identity, 1.1);
+          diagram.mock.timeStep(0.1);
           expect(round(element.transform.r())).toBe(0.9);
           expect(callback.mock.calls).toHaveLength(0);
 
           // Skip to into third phase
-          element.draw(identity, 2.1);
+          // element.setupDraw(identity, 2.1);
+          diagram.mock.timeStep(1);
           expect(round(element.transform.r())).toBe(-0.1);
           expect(callback.mock.calls).toHaveLength(0);
 
           // Time after End
-          element.draw(identity, 3.1);
+          // element.setupDraw(identity, 3.1);
+          diagram.mock.timeStep(1);
           expect(round(element.transform.r())).toBe(-1);
           expect(callback.mock.calls).toHaveLength(1);
-          expect(element.isMoving()).toBe(false);
+          expect(element.isAnimating()).toBe(false);
         });
       });
     });
     describe('Moving Freely', () => {
       let element;
-      let identity;
+      // let identity;
+      let diagram;
       beforeEach(() => {
+        diagram = makeDiagram();
         const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
         element = new DiagramElementPrimitive(
           square,
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
           [0, 0, 1, 1],
         );
-        element.move.maxVelocity = new TransformLimit(100, 100, 100);
-        element.move.freely.zeroVelocityThreshold =
-          new TransformLimit(0.01, 0.01, 0.01);
-        identity = new Transform();
-        element.move.maxTransform = element.transform.constant(100);
-        element.move.minTransform = element.transform.constant(-100);
+        element.move.maxVelocity = 100; // new TransformLimit(100, 100, 100);
+        element.move.freely.zeroVelocityThreshold = {
+          scale: 0.01, rotation: 0.01, translation: 0.01,
+        };
+        // new TransformLimit(0.01, 0.01, 0.01);
+        // identity = new Transform();
+        // element.move.maxTransform = element.transform.constant(100);
+        // element.move.minTransform = element.transform.constant(-100);
+        diagram.elements.add('e', element);
       });
       test('Deceleration', () => {
         const callback = jest.fn();
         const initialV = new Transform().scale(-2, 1).rotate(0).translate(10, 20);
-        const decel = new TransformLimit(1, 2, 1);
+        // const decel = new TransformLimit(1, 2, 1);
+        const decel = { scale: 1, rotation: 2, translation: 1 };
 
         element.state.movement.velocity = initialV;
         element.move.freely.deceleration = decel;
 
         expect(element.state.isMovingFreely).toBe(false);
+        diagram.mock.timeStep(0);
         element.startMovingFreely(callback);
         expect(element.state.isMovingFreely).toBe(true);
-        element.draw(identity, 0);
+        // element.setupDraw(identity, 0);
+        // diagram.mock.timeStep(0);
         expect(element.state.movement.velocity.round()).toEqual(initialV);
-
-        element.draw(identity, 1);
+        // element.setupDraw(identity, 1);
+        diagram.mock.timeStep(1);
         expect(element.state.isMovingFreely).toBe(true);
         let vel = element.state.movement.velocity;
         expect(vel.t().round(2)).toEqual(new Point(9.55, 19.11));
-        expect(vel.s().round(2)).toEqual(new Point(-1.11, 0.55));
+        expect(vel.s().round(2)).toEqual(new Point(-1, 0));
         expect(vel.r()).toBe(0);
         expect(element.transform.round(2)).toEqual(new Transform()
-          .scale(-0.55, 1.78).rotate(0).translate(9.78, 19.55));
+          .scale(-0.5, 1.5).rotate(0).translate(9.78, 19.55));
 
-        element.draw(identity, 2);
+        // element.setupDraw(identity, 2);
+        diagram.mock.timeStep(1);
         vel = element.state.movement.velocity;
         expect(vel.t().round(2)).toEqual(new Point(9.11, 18.21));
-        expect(vel.s().round(2)).toEqual(new Point(-0.21, 0.11));
+        expect(vel.s().round(2)).toEqual(new Point(0, 0));
         expect(vel.r()).toBe(0);
         expect(callback.mock.calls).toHaveLength(0);
 
-        element.draw(identity, 23);
+        // element.setupDraw(identity, 23);
+        diagram.mock.timeStep(21);
         vel = element.state.movement.velocity;
         expect(vel).toEqual(vel.zero());
         expect(callback.mock.calls).toHaveLength(1);
@@ -257,9 +296,11 @@ describe('Animationa and Movement', () => {
       test('Zero and Max Threshold', () => {
         const initialV = new Transform()
           .scale(30, -30).rotate(10).translate(10, -10);
-        const decel = new TransformLimit(1, 1, 1);
-        const zero = new TransformLimit(15, 5, 5);
-        const max = new TransformLimit(20, 20, 20);
+        // const decel = new TransformLimit(1, 1, 1);
+        const decel = { scale: 1, rotation: 1, translation: 1 };
+        const zero = { scale: 15, rotation: 5, translation: 5 };
+        // const zero = new TransformLimit(15, 5, 5);
+        const max = { scale: 20, position: 20, rotation: 20 };
         element.state.movement.velocity = initialV;
         element.move.freely.deceleration = decel;
         element.move.freely.zeroVelocityThreshold = zero;
@@ -267,36 +308,42 @@ describe('Animationa and Movement', () => {
 
         expect(element.state.isMovingFreely).toBe(false);
 
+        diagram.mock.timeStep(0);
         element.startMovingFreely();
         let vel = element.state.movement.velocity;
 
         expect(vel.t().round(2)).toEqual(new Point(10, -10));
-        expect(vel.s().round(2)).toEqual(new Point(14.14, -14.14));
+        expect(vel.s().round(2)).toEqual(new Point(20, -20));
         expect(vel.r()).toBe(10);
 
-        element.draw(identity, 0);
+        // element.setupDraw(identity, 0);
+        // diagram.mock.timeStep(0);
 
         expect(element.state.isMovingFreely).toBe(true);
 
-        element.draw(identity, 4.999);
+        // element.setupDraw(identity, 4.999);
+        diagram.mock.timeStep(4.999);
         vel = element.state.movement.velocity;
 
         expect(vel.t().round(2)).toEqual(new Point(6.47, -6.47));
-        expect(vel.s().round(2)).toEqual(new Point(10.61, -10.61));
+        expect(vel.s().round(2)).toEqual(new Point(15, -15));
         expect(vel.r()).toBe(5.001);
 
-        element.draw(identity, 5.001);
+        // element.setupDraw(identity, 5.001);
+        diagram.mock.timeStep(0.002);
         vel = element.state.movement.velocity;
 
         expect(vel.t().round(2)).toEqual(new Point(6.46, -6.46));
         expect(vel.s().round(2)).toEqual(new Point(0, 0));
         expect(vel.r()).toBe(0);
 
-        element.draw(identity, 9.13);
+        // element.setupDraw(identity, 9.13);
+        diagram.mock.timeStep(4.129);
         vel = element.state.movement.velocity;
         expect(vel.t().round(2)).toEqual(new Point(3.54, -3.54));
 
-        element.draw(identity, 9.15);
+        // element.setupDraw(identity, 9.15);
+        diagram.mock.timeStep(0.02);
         vel = element.state.movement.velocity;
         expect(vel.t().round(2)).toEqual(new Point(0, 0));
 
@@ -305,7 +352,7 @@ describe('Animationa and Movement', () => {
     });
     describe('Being Moved', () => {
       let element;
-      const RealDate = Date.now;
+      const RealDate = global.performance.now;
       beforeEach(() => {
         const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
         element = new DiagramElementPrimitive(
@@ -313,19 +360,20 @@ describe('Animationa and Movement', () => {
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
           [0, 0, 1, 1],
         );
-        element.move.freely.zeroVelocityThreshold =
-          new TransformLimit(0.0001, 0.0001, 0.0001);
-        element.move.maxVelocity = new TransformLimit(100, 100, 100);
+        // element.move.freely.zeroVelocityThreshold =
+        // new TransformLimit(0.0001, 0.0001, 0.0001);
+        element.move.freely.zeroVelocityThreshold = 0.0001;
+        element.move.maxVelocity = 100;
       });
       afterEach(() => {
-        Date.now = RealDate;
+        global.performance.now = RealDate;
       });
       describe('Move', () => {
         test('Move', () => {
-          Date.now = () => 0;
+          global.performance.now = () => 0;
           element.startBeingMoved();
           expect(element.state.isBeingMoved).toBe(true);
-          Date.now = () => 1000;
+          global.performance.now = () => 1000;
           element.moved(new Transform()
             .scale(1, 1).rotate(1).translate(1, -1));
           expect(element.state.movement.velocity.round()).toEqual(new Transform()
@@ -335,38 +383,45 @@ describe('Animationa and Movement', () => {
     });
     describe('Pulse', () => {
       let element;
-      let identity;
+      // let identity;
+      let diagram;
       beforeEach(() => {
+        diagram = makeDiagram();
         const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
         element = new DiagramElementPrimitive(
           square,
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
           [0, 0, 1, 1],
         );
-        identity = new Transform();
+        // identity = new Transform();
+        diagram.elements.add('e', element);
       });
       test('pulse scale now', () => {
         let pulseTransform;
         let expectM;
         element.pulseScaleNow(1, 1.1);
-        element.draw(identity, 0);
+        // element.setupDraw(identity, 0);
+        diagram.mock.timeStep(0);
         expect(element.state.pulse.startTime).toBe(0);
         expect(element.lastDrawTransform.matrix()).toEqual(element.transform.matrix());
 
-        element.draw(identity, 0.5);
+        // element.setupDraw(identity, 0.5);
+        diagram.mock.timeStep(0.5);
         pulseTransform = new Transform()
           .scale(1.1, 1.1).rotate(0).translate(0, 0);
         expectM = m2.mul(element.transform.matrix(), pulseTransform.matrix());
         expect(element.lastDrawPulseTransform.matrix()).toEqual(expectM);
 
-        element.draw(identity, 1.0);
+        // element.setupDraw(identity, 1);
+        diagram.mock.timeStep(0.5);
         pulseTransform = new Transform()
           .scale(1, 1).rotate(0).translate(0, 0);
         expectM = m2.mul(element.transform.matrix(), pulseTransform.matrix());
         expect(element.lastDrawPulseTransform.matrix()).toEqual(expectM);
-        expect(element.state.isPulsing).toBe(true);
+        expect(element.state.isPulsing).toBe(false);
 
-        element.draw(identity, 1.1);
+        // element.setupDraw(identity, 1.1);
+        diagram.mock.timeStep(0.1);
         expect(element.lastDrawPulseTransform.matrix()).toEqual(expectM);
         expect(element.state.isPulsing).toBe(false);
       });
@@ -374,8 +429,12 @@ describe('Animationa and Movement', () => {
         const draw = jest.fn();
         element.drawingObject.drawWithTransformMatrix = draw;
         element.pulseThickNow(1, 1.2, 5);
-        element.draw(identity, 0.0);
-        element.draw(identity, 0.5);
+        // element.setupDraw(identity, 0.0);
+        diagram.mock.timeStep(0);
+        // element.draw(0.0);
+        // element.setupDraw(identity, 0.5);
+        diagram.mock.timeStep(0.5);
+        // element.draw(0.5);
         expect(draw.mock.calls).toHaveLength(10);
 
         const maxPulseTransform = new Transform()
@@ -493,7 +552,7 @@ describe('Animationa and Movement', () => {
       });
     });
     describe('Default move max/min transforms', () => {
-      test('setMoveBoundaryToDiagram no transform', () => {
+      test('setMoveBounds no transform', () => {
         const sq = new VertexPolygon(
           [webgl],
           4,
@@ -505,15 +564,47 @@ describe('Animationa and Movement', () => {
           new Transform().scale(1, 1).rotate(0).translate(0, 0),
         );
         square.isMovable = true;
-        square.move.boundary = 'diagram';
-        square.setMoveBoundaryToDiagram();
-        expect(square.move.maxTransform.t()).toEqual(new Point(0.895, 0.895));
-        expect(square.move.minTransform.t()).toEqual(new Point(-0.895, -0.895));
-        square.setMoveBoundaryToDiagram([-2, -1, 4, 2]);
-        expect(square.move.maxTransform.t()).toEqual(new Point(1.895, 0.895));
-        expect(square.move.minTransform.t()).toEqual(new Point(-1.895, -0.895));
+        // square.move.bounds = 'diagram';
+        square.setMoveBounds('diagram', true);
+        let { boundary } = square.move.bounds.getTranslation();
+        expect(round(boundary.left, 3)).toBe(-0.895);
+        expect(round(boundary.right, 3)).toBe(0.895);
+        expect(round(boundary.bottom, 3)).toBe(-0.895);
+        expect(round(boundary.top, 3)).toBe(0.895);
+        square.setMoveBounds({
+          translation: {
+            left: -2, bottom: -1, right: 2, top: 1,
+          },
+        }, true);
+        ({ boundary } = square.move.bounds.getTranslation());
+        expect(round(boundary.left, 3)).toBe(-1.895);
+        expect(round(boundary.right, 3)).toBe(1.895);
+        expect(round(boundary.bottom, 3)).toBe(-0.895);
+        expect(round(boundary.top, 3)).toBe(0.895);
+        // square.setMoveBounds([-1, -2, 2, 4]);
+        square.setMoveBounds({
+          translation: {
+            left: -1, bottom: -2, right: 1, top: 2,
+          },
+        }, true);
+        ({ boundary } = square.move.bounds.getTranslation());
+        expect(round(boundary.left, 3)).toBe(-0.895);
+        expect(round(boundary.right, 3)).toBe(0.895);
+        expect(round(boundary.bottom, 3)).toBe(-1.895);
+        expect(round(boundary.top, 3)).toBe(1.895);
+        // square.setMoveBounds([-2, -2, 4, 4]);
+        square.setMoveBounds({
+          translation: {
+            left: -2, bottom: -2, right: 2, top: 2,
+          },
+        }, true);
+        ({ boundary } = square.move.bounds.getTranslation());
+        expect(round(boundary.left, 3)).toBe(-1.895);
+        expect(round(boundary.right, 3)).toBe(1.895);
+        expect(round(boundary.bottom, 3)).toBe(-1.895);
+        expect(round(boundary.top, 3)).toBe(1.895);
       });
-      test('setMoveBoundaryToDiagram with transform', () => {
+      test('setMoveBounds with transform', () => {
         const sq = new VertexPolygon(
           [webgl],
           4,
@@ -525,18 +616,25 @@ describe('Animationa and Movement', () => {
           new Transform().scale(2, 2).rotate(0).translate(0, 0),
         );
         square.isMovable = true;
-        square.move.boundary = 'diagram';
+        // square.move.bounds = 'diagram';
 
-        expect(square.move.maxTransform.t().round()).toEqual(new Point(1000, 1000));
-        expect(square.move.minTransform.t().round()).toEqual(new Point(-1000, -1000));
+        square.setMoveBounds('diagram', true);
+        let { boundary } = square.move.bounds.getTranslation();
+        expect(round(boundary.left, 3)).toBe(-0.79);
+        expect(round(boundary.right, 3)).toBe(0.79);
+        expect(round(boundary.bottom, 3)).toBe(-0.79);
+        expect(round(boundary.top, 3)).toBe(0.79);
 
-        square.setMoveBoundaryToDiagram();
-        expect(square.move.maxTransform.t().round()).toEqual(new Point(0.79, 0.79));
-        expect(square.move.minTransform.t().round()).toEqual(new Point(-0.79, -0.79));
-
-        square.setMoveBoundaryToDiagram([-1, -2, 2, 4]);
-        expect(square.move.maxTransform.t().round()).toEqual(new Point(0.79, 1.79));
-        expect(square.move.minTransform.t().round()).toEqual(new Point(-0.79, -1.79));
+        square.setMoveBounds({
+          translation: {
+            left: -1, bottom: -2, right: 1, top: 2,
+          },
+        }, true);
+        ({ boundary } = square.move.bounds.getTranslation());
+        expect(round(boundary.left, 3)).toBe(-0.79);
+        expect(round(boundary.right, 3)).toBe(0.79);
+        expect(round(boundary.bottom, 3)).toBe(-1.79);
+        expect(round(boundary.top, 3)).toBe(1.79);
       });
     });
     describe('Copy', () => {
@@ -577,9 +675,11 @@ describe('Animationa and Movement', () => {
     let triElement;
     let collection;
     const RealDate = Date.now;
-    let identity;
+    // let identity;
+    let diagram;
     beforeEach(() => {
-      identity = new Transform();
+      diagram = makeDiagram();
+      // identity = new Transform();
       const square = new VertexPolygon([webgl], 4, 1005, 0.01, 0, Point.zero());
       const tri = new VertexPolygon([webgl], 3, 0.1005, 0.01, 0, new Point(0.1, 0.1));
       squareElement = new DiagramElementPrimitive(
@@ -601,16 +701,19 @@ describe('Animationa and Movement', () => {
         .scale(1, 1).rotate(0).translate(0, 0));
       collection.add('square', squareElement);
       collection.add('tri', triElement);
+      diagram.elements.add('c', collection);
     });
     afterEach(() => {
-      Date.now = RealDate;
+      global.performance.now = RealDate;
     });
     test('Combination of animation and movement with a collection', () => {
       const callbackAnim = jest.fn();
       const callbackMoveFree = jest.fn();
       const draw = jest.fn();
       webgl.gl.drawArrays = draw;
-      collection.draw(identity, 0);
+      // collection.setupDraw(identity, 0);
+      // collection.draw(0);
+      diagram.mock.timeStep(0);
       expect(draw.mock.instances).toHaveLength(2);
       expect(collection.state.isBeingMoved).toBe(false);
       expect(collection.state.isMovingFreely).toBe(false);
@@ -629,13 +732,17 @@ describe('Animationa and Movement', () => {
       expect(collection.animations.state).toBe('idle');
       expect(collection.state.isBeingMoved).toBe(false);
       expect(collection.state.isMovingFreely).toBe(false);
-      collection.draw(new Transform(), 0);
-      collection.draw(new Transform(), 0.5);
+      // collection.setupDraw(new Transform(), 0);
+      // collection.draw(0);
+      diagram.mock.timeStep(0);
+      // collection.setupDraw(new Transform(), 0.5);
+      // collection.draw(0.5);
+      diagram.mock.timeStep(0.5);
       expect(collection.animations.state).toBe('animating');
       expect(collection.transform.round()).toEqual(new Transform()
         .scale(1, 1).rotate(0).translate(1, 0));
 
-      Date.now = () => 0;
+      // global.performance.now = () => 0;
       collection.startBeingMoved();
       // expect(collection.state.isAnimating).toBe(false);
       expect(collection.animations.state).toBe('idle');
@@ -643,7 +750,8 @@ describe('Animationa and Movement', () => {
       expect(collection.state.isMovingFreely).toBe(false);
 
       // Over 1 s, rotation = 0.1;
-      Date.now = () => 1000;
+      // global.performance.now = () => 1000;
+      diagram.mock.timeStep(1);
       collection.moved(new Transform()
         .scale(1, 1).rotate(0.1).translate(0.5, 0));
       expect(collection.transform.round()).toEqual(new Transform()
@@ -652,23 +760,30 @@ describe('Animationa and Movement', () => {
       expect(collection.state.movement.velocity.isEqualTo(velocity)).toBe(true);
 
       const moveFreeProps = collection.move.freely;
-      moveFreeProps.deceleration = new TransformLimit(1, 0.01, 1);
-      moveFreeProps.zeroVelocityThreshold = new TransformLimit(0.1, 0.05, 0.1);
+      // moveFreeProps.deceleration = new TransformLimit(1, 0.01, 1);
+      // moveFreeProps.zeroVelocityThreshold = new TransformLimit(0.1, 0.05, 0.1);
+      moveFreeProps.deceleration = { scale: 1, rotation: 0.01, translation: 1 };
+      moveFreeProps.zeroVelocityThreshold = { scale: 0.1, rotation: 0.05, translation: 0.1 };
 
       // Now at (1, 0), 0.1 and rotating with velocity 0.1 rads/s
+      // diagram.mock.timeStep(0);
       collection.startMovingFreely(callbackMoveFree);
       // expect(collection.state.isAnimating).toBe(false);
       expect(collection.state.isBeingMoved).toBe(false);
       expect(collection.state.isMovingFreely).toBe(true);
 
 
-      collection.draw(new Transform(), 10);
+      // collection.setupDraw(new Transform(), 10);
+      // collection.draw(10);
+      // diagram.mock.timeStep(9.5);
       expect(collection.state.movement.velocity.isEqualTo(velocity)).toEqual(true);
 
       // After one second, should have rotated to:
       //  rotation: 0.1 + 0.1*1 - 0.5*0.01*1*1
       //  with velocity: 0.1 - 0.01*1*1
-      collection.draw(new Transform(), 11);
+      // collection.setupDraw(new Transform(), 11);
+      // collection.draw(11);
+      diagram.mock.timeStep(1);
       expect(collection.state.movement.velocity.round()).toEqual(new Transform()
         .scale(0, 0).rotate(0.09).translate(0, 0));
       expect(collection.transform.round()).toEqual(new Transform()
@@ -677,7 +792,9 @@ describe('Animationa and Movement', () => {
       // At 5 seconds, velocity becomes 0, so rotation is
       //  rotation: 0.1 + 0.1*5 - 0.5*0.01*5*5
       //  with velocity: 0.1 - 0.01*1*1
-      collection.draw(new Transform(), 15.1);
+      // collection.setupDraw(new Transform(), 15.1);
+      // collection.draw(15.1);
+      diagram.mock.timeStep(4.1);
       // expect(collection.state.isAnimating).toBe(false);
       expect(collection.state.isBeingMoved).toBe(false);
       expect(collection.state.isMovingFreely).toBe(false);
@@ -736,7 +853,7 @@ describe('Animationa and Movement', () => {
       // let squareElement3;
       // let collection2;
       beforeEach(() => {
-        identity = new Transform();
+        // identity = new Transform();
         square = new VertexPolygon(
           [webgl],
           4,
@@ -750,6 +867,8 @@ describe('Animationa and Movement', () => {
         collection.add('square', squareElement);
         collection.isTouchable = true;
         squareElement.isTouchable = true;
+        diagram.elements.add('f', collection);
+        diagram.initialize();
       });
       test('Simple', () => {
         expect(squareElement.isBeingTouched(new Point(0, 0))).toBe(true);
@@ -758,10 +877,15 @@ describe('Animationa and Movement', () => {
         expect(collection.isBeingTouched(new Point(1.049, 1.049))).toBe(true);
       });
       test('Collection Transform', () => {
+        // diagram.initialize();
         collection.setTransform(new Transform()
           .translate(new Point(10, 0))
           .rotate(Math.PI / 2));
-        collection.draw(identity, 0);
+        diagram.mock.timeStep(0);
+        collection.makeTouchable();
+        // collection.setupDraw(0);
+        // collection.draw(0, [identity]);
+        // diagram.mock.timeStep(0);
         expect(collection.isBeingTouched(new Point(0, 10))).toBe(true);
         expect(collection.isBeingTouched(new Point(1.049, 11.049))).toBe(true);
         expect(collection.isBeingTouched(new Point(1.051, 11.049))).toBe(false);
@@ -798,6 +922,7 @@ describe('Animationa and Movement', () => {
     });
     describe('Copy', () => {
       test('Vertex Objects', () => {
+        collection.parent = null;
         const copy = collection._dup();
         expect(collection).toEqual(copy);
         expect(collection).not.toBe(copy);
@@ -953,44 +1078,5 @@ describe('Animationa and Movement', () => {
       expect(round(box.right, 3)).toEqual((0.105 + 0.5) * 2 + 0.5);
       expect(round(box.top, 3)).toEqual(0.105 * 2 + 0.5);
     });
-    // test('square vertices offset to origin with scale 1', () => {
-    //   const sq = new VertexPolygon(
-    //     webgl,
-    //     Math.sqrt(2) * 0.1, 4, 4, Math.sqrt(2) * 0.01,
-    //     Math.PI / 4, new Point(0.5, 0),
-    //   );
-    //   const square = new DiagramElementPrimitive(sq);
-    //   const box = square.getGLBoundingRect();
-    //   expect(box.max.round()).toEqual(new Point(0.105 + 0.5, 0.105));
-    //   expect(box.min.round()).toEqual(new Point(-0.105 + 0.5, -0.105));
-    // });
-    // test('square element offset to origin with scale 1', () => {
-    //   const sq = new VertexPolygon(
-    //     webgl,
-    //     Math.sqrt(2) * 0.1, 4, 4, Math.sqrt(2) * 0.01,
-    //     Math.PI / 4, new Point(0, 0),
-    //   );
-    //   const square = new DiagramElementPrimitive(
-    //     sq,
-    //     new Transform().scale(1, 1).rotate(0).translate(0.5, 0),
-    //   );
-    //   const box = square.getGLBoundingRect();
-    //   expect(box.max.round()).toEqual(new Point(0.105 + 0.5, 0.105));
-    //   expect(box.min.round()).toEqual(new Point(-0.105 + 0.5, -0.105));
-    // });
-    // test('square element offset to origin with scale 2', () => {
-    //   const sq = new VertexPolygon(
-    //     webgl,
-    //     Math.sqrt(2) * 0.1, 4, 4, Math.sqrt(2) * 0.01,
-    //     Math.PI / 4, new Point(0.5, 0),
-    //   );
-    //   const square = new DiagramElementPrimitive(
-    //     sq,
-    //     new Transform().scale(2, 2).rotate(0).translate(0, 0),
-    //   );
-    //   const box = square.getGLBoundingRect();
-    //   expect(box.max.round()).toEqual(new Point(0.105 * 2 + 0.5 * 2, 0.105 * 2));
-    //   expect(box.min.round()).toEqual(new Point(-0.105 * 2 + 0.5 * 2, -0.105 * 2));
-    // });
   });
 });

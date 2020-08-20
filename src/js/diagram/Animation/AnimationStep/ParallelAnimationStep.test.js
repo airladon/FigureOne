@@ -165,7 +165,7 @@ describe('Parallel Animation', () => {
         expect(element2.transform.round()).toEqual(target2.constant(0.1));
         expect(element3.transform.round()).toEqual(target3.constant(0.1));
       });
-      test('Parallel complete on cancel = true with force noComplete', () => {
+      test('Parallel complete on cancel = true with force freeze', () => {
         step1.completeOnCancel = true;
         step2.completeOnCancel = true;
         step3.completeOnCancel = false;
@@ -173,7 +173,7 @@ describe('Parallel Animation', () => {
         parallel.start();
         parallel.nextFrame(100);
         parallel.nextFrame(100.1);
-        parallel.cancel('noComplete');
+        parallel.cancel('freeze');
         expect(step1CallbackFlag).toBe(1);
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);
@@ -263,14 +263,14 @@ describe('Parallel Animation', () => {
         expect(element2.transform.round()).toEqual(target2);
         expect(element3.transform.round()).toEqual(target3);
       });
-      test('Complete on cancel = true, force no complete', () => {
+      test('Complete on cancel = true, force freeze', () => {
         step1.completeOnCancel = true;
         step2.completeOnCancel = true;
         step3.completeOnCancel = true;
         parallel.start();
         parallel.nextFrame(100);
         parallel.nextFrame(100.1);
-        parallel.finish(true, 'noComplete');
+        parallel.finish(true, 'freeze');
         expect(step1CallbackFlag).toBe(1);
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);

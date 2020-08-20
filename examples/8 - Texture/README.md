@@ -4,7 +4,7 @@ Shapes can either be filled with colors or textures where textures come from an 
 
 As loading images into local html can be inhibited by web browser security settings, this example needs to be loaded from a web server.
 
-You can create a local web server and hosting the example by navigating to the examples folder then either use python or node to start a server:
+You can create a local web server and host the example by navigating to the examples folder then either use python or node to start a server:
 
 This can all be done after cloning this repository:
 
@@ -25,7 +25,7 @@ python -m http.server 8080
 
 Alternately, a node server can also be used from the initial path
 ```
-http-server examples/8 - Texture
+http-server examples/8\ -\ Texture
 ```
 
 You can then open a browser and go to http://localhost:8080.

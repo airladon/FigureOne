@@ -142,6 +142,32 @@ describe('Dash tests', () => {
       expect(round(d[3][0])).toEqual(new Point(1, 0.8));
       expect(round(d[3][1])).toEqual(new Point(1, 1));
     });
+    test('Three Points - dash ends on corner', () => {
+      const d = lineToDash(
+        [new Point(0, 0), new Point(1, 0), new Point(1, 1)],
+        [0.2, 0.2], false, 0,
+      );
+      expect(round(d[0][0])).toEqual(new Point(0, 0));
+      expect(round(d[0][1])).toEqual(new Point(0.2, 0));
+      expect(round(d[1][0])).toEqual(new Point(0.4, 0));
+      expect(round(d[1][1])).toEqual(new Point(0.6, 0));
+      expect(round(d[2][0])).toEqual(new Point(0.8, 0));
+      expect(round(d[2][1])).toEqual(new Point(1.0, 0));
+      expect(round(d[3][0])).toEqual(new Point(1, 0.2));
+      expect(round(d[3][1])).toEqual(new Point(1, 0.4));
+      expect(round(d[4][0])).toEqual(new Point(1, 0.6));
+      expect(round(d[4][1])).toEqual(new Point(1, 0.8));
+    });
+    test('Three Points - dash starts on corner', () => {
+      const d = lineToDash(
+        [new Point(0, 0), new Point(1, 0), new Point(1, 1)],
+        [0.5, 0.5], false, 0,
+      );
+      expect(round(d[0][0])).toEqual(new Point(0, 0));
+      expect(round(d[0][1])).toEqual(new Point(0.5, 0));
+      expect(round(d[1][0])).toEqual(new Point(1, 0));
+      expect(round(d[1][1])).toEqual(new Point(1, 0.5));
+    });
     test('Three Points Angle Join', () => {
       const d = lineToDash(
         [new Point(0, 0), new Point(1, 0), new Point(1, 1)],

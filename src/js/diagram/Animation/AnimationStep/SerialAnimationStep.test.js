@@ -176,7 +176,7 @@ describe('Serial Animation', () => {
         serial.start();
         serial.nextFrame(100);
         serial.nextFrame(100.1);
-        serial.cancel('noComplete');
+        serial.cancel('freeze');
         expect(element.transform.round()).toEqual(target1.constant(0.1));
       });
       test('Complete on cancel = true, no forcing', () => {
@@ -239,14 +239,14 @@ describe('Serial Animation', () => {
         expect(element.transform.round()).toEqual(target3);
       });
       // Testing to make target remains at current
-      test('Complete on cancel = true, force noComplete', () => {
+      test('Complete on cancel = true, force freeze', () => {
         step1.completeOnCancel = true;
         step2.completeOnCancel = true;
         step3.completeOnCancel = true;
         serial.start();
         serial.nextFrame(100);
         serial.nextFrame(101.1);
-        serial.finish(true, 'noComplete');
+        serial.finish(true, 'freeze');
         expect(step1CallbackFlag).toBe(1);
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);

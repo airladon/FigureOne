@@ -154,7 +154,9 @@ export default class Strike extends Symbol {
   /* eslint-disable class-methods-use-this */
   getBounds(
     options: {
-      lineWidth?: number, staticWidth?: number, staticHeight?: number, draw: 'dynamic' | 'static',
+      lineWidth?: number,
+      height?: number,
+      width?: number,
     },
     leftIn: number,
     bottomIn: number,
@@ -180,6 +182,8 @@ export default class Strike extends Symbol {
   // $FlowFixMe
   getDefaultValues(height: number, width: ?number, options: {
       lineWidth?: number,
+      height?: number,
+      width?: number,
     }): {
       height: number,
       width: number,

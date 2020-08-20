@@ -1,7 +1,7 @@
 import {
   round, decelerate, easeinout, clipMag, clipValue, randInt, rand,
   randElement, removeRandElement, randElements, easein, easeout,
-  sinusoid, roundNum, linear,
+  sinusoid, roundNum, linear, randSign, rand2D, triangle,
 } from './math';
 
 describe('Math tools testing', () => {
@@ -148,6 +148,13 @@ describe('Math tools testing', () => {
     test('0.25', () => { expect(easeinout(0.25)).toBe(0.1); });
     test('0.75', () => { expect(easeinout(0.75)).toBe(0.9); });
   });
+  describe('invert easeinout', () => {
+    test('0', () => { expect(round(easeinout(0, true))).toBe(0); });
+    test('1', () => { expect(round(easeinout(1, true))).toBe(1); });
+    test('0.5', () => { expect(round(easeinout(0.5, true))).toBe(0.5); });
+    test('0.25', () => { expect(round(easeinout(0.1, true))).toBe(0.25); });
+    test('0.75', () => { expect(round(easeinout(0.9, true))).toBe(0.75); });
+  });
   describe('easein', () => {
     test('0', () => { expect(easein(0)).toBe(0); });
     test('1', () => { expect(easein(1)).toBe(1); });
@@ -155,12 +162,53 @@ describe('Math tools testing', () => {
     test('0.25', () => { expect(round(easein(0.25), 2)).toBe(0.04); });
     test('0.75', () => { expect(round(easein(0.75), 2)).toBe(0.53); });
   });
+  describe('easein Invert', () => {
+    test('1', () => { expect(round(easein(1, true))).toBe(1); });
+    test('0', () => { expect(round(easein(0, true))).toBe(0); });
+    test('0.5', () => { expect(round(easein(0.2, true), 2)).toBe(0.5); });
+    test('0.25', () => { expect(round(easein(0.04, true), 2)).toBe(0.25); });
+    test('0.75', () => { expect(round(easein(0.53, true), 2)).toBe(0.75); });
+  });
   describe('easeout', () => {
     test('0', () => { expect(easeout(0)).toBe(0); });
     test('1', () => { expect(easeout(1)).toBe(1); });
     test('0.5', () => { expect(round(easeout(0.5), 2)).toBe(0.8); });
     test('0.25', () => { expect(round(easeout(0.25), 2)).toBe(0.47); });
     test('0.75', () => { expect(round(easeout(0.75), 2)).toBe(0.96); });
+  });
+  describe('easeout Invert', () => {
+    test('0', () => { expect(round(easeout(0, true))).toBe(0); });
+    test('1', () => { expect(round(easeout(1, true))).toBe(1); });
+    test('0.5', () => { expect(round(easeout(0.8, true), 2)).toBe(0.5); });
+    test('0.25', () => { expect(round(easeout(0.47, true), 2)).toBe(0.25); });
+    test('0.75', () => { expect(round(easeout(0.96, true), 2)).toBe(0.75); });
+  });
+  describe('triangle', () => {
+    test('0 time, 0 mag, 0 frequency, 0 bias, 0 phase', () => {
+      expect(triangle(0, 0, 0, 0, 0)).toBe(0);
+    });
+    test('1 mag, 1 frequency, 0 bias, 0 phase', () => {
+      expect(round(triangle(0, 1, 0, 1, 0), 3)).toBe(0);
+      expect(round(triangle(0.125, 1, 0, 1, 0), 3)).toBe(0.5);
+      expect(round(triangle(0.25, 1, 0, 1, 0), 3)).toBe(1);
+      expect(round(triangle(0.375, 1, 0, 1, 0), 3)).toBe(0.5);
+      expect(round(triangle(0.5, 1, 0, 1, 0), 3)).toBe(0);
+      expect(round(triangle(0.625, 1, 0, 1, 0), 3)).toBe(-0.5);
+      expect(round(triangle(0.75, 1, 0, 1, 0), 3)).toBe(-1);
+      expect(round(triangle(0.875, 1, 0, 1, 0), 3)).toBe(-0.5);
+      expect(round(triangle(1, 1, 0, 1, 0), 3)).toBe(0);
+    });
+    test('2 mag, 0.5 frequency, 1 bias, Math.PI phase', () => {
+      expect(round(triangle(0, 0.5, 1, 2, Math.PI), 3)).toBe(1);
+      expect(round(triangle(0.25, 0.5, 1, 2, Math.PI), 3)).toBe(0);
+      expect(round(triangle(0.5, 0.5, 1, 2, Math.PI), 3)).toBe(-1);
+      expect(round(triangle(0.75, 0.5, 1, 2, Math.PI), 3)).toBe(0);
+      expect(round(triangle(1, 0.5, 1, 2, Math.PI), 3)).toBe(1);
+      expect(round(triangle(1.25, 0.5, 1, 2, Math.PI), 3)).toBe(2);
+      expect(round(triangle(1.5, 0.5, 1, 2, Math.PI), 3)).toBe(3);
+      expect(round(triangle(1.75, 0.5, 1, 2, Math.PI), 3)).toBe(2);
+      expect(round(triangle(2, 0.5, 1, 2, Math.PI), 3)).toBe(1);
+    });
   });
   describe('sinusoid', () => {
     test('0', () => {
@@ -276,6 +324,41 @@ describe('Math tools testing', () => {
       }
       expect(expected).toBe(true);
     });
+    test('Random Sign', () => {
+      let gotValidValues = true;
+      for (let i = 0; i < 50; i += 1) {
+        const result = randSign();
+        if (result !== 1 && result !== -1) {
+          gotValidValues = false;
+        }
+      }
+      expect(gotValidValues).toBe(true);
+    });
+    test('Random Int with Sign', () => {
+      let gotNegative = false;
+      let gotPositive = false;
+      let inRange = true;
+      let isInt = true;
+      for (let i = 0; i < 100; i += 1) {
+        const result = randInt(0, 10, true);
+        if (result < 0) {
+          gotNegative = true;
+        }
+        if (result > 0) {
+          gotPositive = true;
+        }
+        if (result < -10 || result > 10) {
+          inRange = false;
+        }
+        if (result % 1 !== 0) {
+          isInt = false;
+        }
+      }
+      expect(gotNegative).toBe(true);
+      expect(gotPositive).toBe(true);
+      expect(inRange).toBe(true);
+      expect(isInt).toBe(true);
+    });
   });
   describe('Random Float', () => {
     test('0 to max', () => {
@@ -301,6 +384,26 @@ describe('Math tools testing', () => {
         }
       }
       expect(expected).toBe(true);
+    });
+    test('Random Float with Sign', () => {
+      let gotNegative = false;
+      let gotPositive = false;
+      let inRange = true;
+      for (let i = 0; i < 100; i += 1) {
+        const result = rand(0, 10, true);
+        if (result < 0) {
+          gotNegative = true;
+        }
+        if (result > 0) {
+          gotPositive = true;
+        }
+        if (result < -10 || result > 10) {
+          inRange = false;
+        }
+      }
+      expect(gotNegative).toBe(true);
+      expect(gotPositive).toBe(true);
+      expect(inRange).toBe(true);
     });
   });
   describe('Random Element in Array', () => {
@@ -371,6 +474,18 @@ describe('Math tools testing', () => {
         expected = false;
       }
       expect(expected).toBe(true);
+    });
+  });
+  describe('Random 2D', () => {
+    test('Simple', () => {
+      let isValidResult = true;
+      for (let i = 0; i < 100; i += 1) {
+        const result = rand2D(-10, -1, 10, 1);
+        if (result.x < -10 || result.x > 10 || result.y < -1 || result.y > 1) {
+          isValidResult = false;
+        }
+      }
+      expect(isValidResult).toBe(true);
     });
   });
 });

@@ -1,4 +1,5 @@
 import * as tools from './tools';
+// import { Transform } from './g2';
 
 describe('Test Classify method', () => {
   // CLassify method tests
@@ -245,10 +246,46 @@ describe('Extract From Collection', () => {
     });
   });
 });
+describe('Generate Unique ID', () => {
+  test('With seed', () => {
+    const s = tools.generateUniqueId('test');
+    expect(s.startsWith('test')).toBe(true);
+    expect(s.length > 4).toBe(true);
+    expect(s.length < 11).toBe(true);
+  });
+  test('Without seed', () => {
+    const s = tools.generateUniqueId();
+    expect(s.startsWith('id_random_')).toBe(true);
+    expect(s.length > 10).toBe(true);
+    expect(s.length < 17).toBe(true);
+  });
+});
+describe('Is Touch Device', () => {
+  test('Simple', () => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation(query => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(), // deprecated
+        removeListener: jest.fn(), // deprecated
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })),
+    });
+    expect(tools.isTouchDevice()).toBe(false);
+  });
+});
 describe('Duplicate Values', () => {
   test('number', () => {
     const dup = tools.duplicate(3);
     expect(dup).toBe(3);
+  });
+  test('NaN', () => {
+    const dup = tools.duplicate(NaN);
+    expect(dup).toBe(NaN);
   });
   test('string', () => {
     const dup = tools.duplicate('test');
@@ -533,3 +570,679 @@ describe('Join Objects', () => {
     expect(result).toEqual({ a: 2, b: { x: 2, y: undefined, z: 1 } });
   });
 });
+describe('Get Object Paths', () => {
+  test('Simple', () => {
+    const obj = { a: 1, b: 2 };
+    const paths = tools.objectToPaths(obj);
+    expect(Object.keys(paths)).toEqual(['.a', '.b']);
+    expect(Object.values(paths)).toEqual([1, 2]);
+  });
+  test('different types', () => {
+    const obj = {
+      a: 1, b: 'h', c: false, d: null, e: undefined, f: () => {}, g: [1, 2],
+    };
+    const paths = tools.objectToPaths(obj);
+    expect(Object.keys(paths)).toEqual([
+      '.a', '.b', '.c', '.d', '.f', '.g[0]', '.g[1]',
+    ]);
+    expect(paths['.a']).toBe(1);
+    expect(paths['.b']).toBe('h');
+    expect(paths['.c']).toBe(false);
+    expect(paths['.d']).toBe(null);
+    // expect(paths['.e']).toBe(undefined);
+    expect(paths['.g[0]']).toBe(1);
+    expect(paths['.g[1]']).toBe(2);
+    // expect(Object.values(paths)).toEqual([
+    //   1, 'h', false, null, undefined, function f() {}, 1, 2,
+    // ]);
+  });
+  test('Nested', () => {
+    const obj = {
+      a: 1,
+      b: {
+        c: 1,
+        d: [
+          {
+            e: 1,
+            f: 2,
+          },
+          2,
+          [3, 4],
+        ],
+      },
+    };
+    const paths = tools.objectToPaths(obj);
+    expect(Object.keys(paths)).toEqual([
+      '.a',
+      '.b.c',
+      '.b.d[0].e',
+      '.b.d[0].f',
+      '.b.d[1]',
+      '.b.d[2][0]',
+      '.b.d[2][1]',
+    ]);
+    expect(paths['.a']).toBe(1);
+    expect(paths['.b.c']).toBe(1);
+    expect(paths['.b.d[0].e']).toBe(1);
+    expect(paths['.b.d[0].f']).toBe(2);
+    expect(paths['.b.d[1]']).toBe(2);
+    expect(paths['.b.d[2][0]']).toBe(3);
+    expect(paths['.b.d[2][1]']).toBe(4);
+  });
+});
+describe('Get Object Diff', () => {
+  test('No diff', () => {
+    const o1 = { a: 1, b: { c: 1, d: 1 } };
+    const o2 = { a: 1, b: { c: 1, d: 1 } };
+    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, 5, true);
+    // expect(diff).toEqual();
+    // expect(removed).toEqual({});
+    // expect(added).toEqual({});
+    expect(diff == null).toBe(true);
+    expect(removed == null).toBe(true);
+    expect(added == null).toBe(true);
+  });
+  test('Diff', () => {
+    const o1 = { a: 1, b: { c: 1, d: 1 } };
+    const o2 = { a: 2, b: { c: 1, d: 2 } };
+    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, 5, true);
+    expect(diff).toEqual({
+      '.a': [1, 2],
+      '.b.d': [1, 2],
+    });
+    expect(removed == null).toBe(true);
+    expect(added == null).toBe(true);
+    // expect(removed).toEqual({});
+    // expect(added).toEqual({});
+  });
+  test('Added', () => {
+    const o1 = { a: 1, b: { c: 1, d: 1 } };
+    const o2 = { a: 1, b: { c: 1, d: 1, e: 1 } };
+    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, 5, true);
+    expect(added).toEqual({
+      '.b.e': 1,
+    });
+    expect(removed == null).toBe(true);
+    expect(diff == null).toBe(true);
+    // expect(removed).toEqual({});
+    // expect(diff).toEqual({});
+  });
+  test('Removed', () => {
+    const o1 = { a: 1, b: { c: 1, d: 1 } };
+    const o2 = { a: 1, b: { c: 1 } };
+    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, 5, true);
+    expect(removed).toEqual({
+      '.b.d': 1,
+    });
+    expect(diff == null).toBe(true);
+    expect(added == null).toBe(true);
+    // expect(added).toEqual({});
+    // expect(diff).toEqual({});
+  });
+  test('Nested', () => {
+    const o1 = { a: 1, b: { c: 1, d: 1, e: [{ f: 1 }, 2, [3, 4]] } };
+    const o2 = { a: 1, b: { c: 2, d: 1, e: [{ f: 1, g: 2 }, 2, [3, 4, 5]] } };
+    const { diff, removed, added } = tools.getObjectDiff(o1, [], o2, 5, true);
+    expect(diff).toEqual({
+      '.b.c': [1, 2],
+    });
+    expect(added).toEqual({
+      '.b.e[0].g': 2,
+      '.b.e[2][2]': 5,
+    });
+    expect(removed == null).toBe(true);
+    // expect(removed).toEqual({});
+  });
+});
+describe('diffToObj', () => {
+  test('Simple', () => {
+    const diff = { '.a': [1, 2] };
+    const obj = tools.pathsToObj(diff);
+    expect(Object.keys(obj)).toHaveLength(1);
+    expect(obj.a).toBe(2);
+  });
+  test('Simple Array', () => {
+    const diff = {
+      '.a[0]': [1, 2],
+      '.a[2]': [3, 4],
+    };
+    const obj = tools.pathsToObj(diff);
+    expect(Object.keys(obj)).toHaveLength(1);
+    expect(Array.isArray(obj.a)).toBe(true);
+    expect(obj.a).toHaveLength(3);
+    expect(obj.a[0]).toBe(2);
+    expect(obj.a[1]).toBe(undefined);
+    expect(obj.a[2]).toBe(4);
+  });
+  test('Simple Array and values', () => {
+    const diff = {
+      '.a[0]': [1, 2],
+      '.a[1]': [3, 4],
+      '.b': [1, 9],
+    };
+    const obj = tools.pathsToObj(diff);
+    expect(Object.keys(obj)).toHaveLength(2);
+    expect(Array.isArray(obj.a)).toBe(true);
+    expect(obj.a).toHaveLength(2);
+    expect(obj.a[0]).toBe(2);
+    expect(obj.a[1]).toBe(4);
+    expect(obj.b).toBe(9);
+  });
+  test('Nesting', () => {
+    const diff = {
+      '.a.b[0][1].c[0].d': [1, 2],
+    };
+    const obj = tools.pathsToObj(diff);
+    expect(Object.keys(obj)).toHaveLength(1);
+    expect(obj.a.b[0][1].c[0].d).toBe(2);
+    expect(obj.a.b[0][0]).toBe(undefined);
+  });
+});
+describe('addedOrRemovedToObj', () => {
+  test('Simple', () => {
+    const aOrR = { '.a': 2 };
+    const obj = tools.pathsToObj(aOrR);
+    expect(Object.keys(obj)).toHaveLength(1);
+    expect(obj.a).toBe(2);
+  });
+  test('Simple Array', () => {
+    const aOrR = {
+      '.a[0]': 2,
+      '.a[2]': 4,
+    };
+    const obj = tools.pathsToObj(aOrR);
+    expect(Object.keys(obj)).toHaveLength(1);
+    expect(Array.isArray(obj.a)).toBe(true);
+    expect(obj.a).toHaveLength(3);
+    expect(obj.a[0]).toBe(2);
+    expect(obj.a[1]).toBe(undefined);
+    expect(obj.a[2]).toBe(4);
+  });
+  test('Simple Array and values', () => {
+    const aOrR = {
+      '.a[0]': 2,
+      '.a[1]': 4,
+      '.b': 9,
+    };
+    const obj = tools.pathsToObj(aOrR);
+    expect(Object.keys(obj)).toHaveLength(2);
+    expect(Array.isArray(obj.a)).toBe(true);
+    expect(obj.a).toHaveLength(2);
+    expect(obj.a[0]).toBe(2);
+    expect(obj.a[1]).toBe(4);
+    expect(obj.b).toBe(9);
+  });
+  test('Nesting', () => {
+    const aOrR = {
+      '.a.b[0][1].c[0].d': 2,
+    };
+    const obj = tools.pathsToObj(aOrR);
+    expect(Object.keys(obj)).toHaveLength(1);
+    expect(obj.a.b[0][1].c[0].d).toBe(2);
+    expect(obj.a.b[0][0]).toBe(undefined);
+  });
+});
+describe('UniqueMap', () => {
+  let tester;
+  beforeEach(() => {
+    tester = (map, inStr) => {
+      map.add(inStr);
+      expect(map.map[inStr]).toBe(inStr);
+    };
+  });
+  test('Simple', () => {
+    const map = new tools.UniqueMap();
+    tester(map, 'a');
+    tester(map, 'b');
+    // map.add('hello');
+    // map.add('there');
+    // expect(map.map['hello']).toBe('a');
+    // expect(map.map['there']).toBe('b');
+  });
+  test('ends', () => {
+    const map = new tools.UniqueMap();
+    tester(map, 'a');
+    tester(map, 'b');
+    map.index = 25;
+    tester(map, 'z');
+    tester(map, 'a0');
+    tester(map, 'aa');
+
+    map.index = 675;
+    tester(map, 'zz');
+    tester(map, 'a00');
+    tester(map, 'a0a');
+
+    map.index = 17575;
+    tester(map, 'zzz');
+    tester(map, 'a000');
+    tester(map, 'a00a');
+  });
+});
+describe('compress object', () => {
+  test('Simple Compress', () => {
+    const o = { key1: 1, key2: 'x' };
+    const map = new tools.UniqueMap();
+    const c = tools.compressObject(o, map, true, false, null, false);
+    expect(c.a).toBe(1);
+    expect(c.b).toBe('x');
+    expect(map.map.key1).toBe('a');
+    expect(map.map.key2).toBe('b');
+  });
+  test('Simple Decompress', () => {
+    const o = { key1: 1, key2: 'x' };
+    const map = new tools.UniqueMap();
+    const c = tools.compressObject(o, map, true, false, null, false);
+    map.makeInverseMap();
+    const d = tools.compressObject(c, map, true, false, null, true);
+    expect(d.key1).toBe(1);
+    expect(d.key2).toBe('x');
+    expect(map.inverseMap.a).toBe('key1');
+    expect(map.inverseMap.b).toBe('key2');
+  });
+  test('Compress Strings as well', () => {
+    const o = { key1: 1, key2: 'x' };
+    const map = new tools.UniqueMap();
+    const c = tools.compressObject(o, map, true, true, null, false);
+    expect(c.a).toBe(1);
+    expect(c.c).toBe('b');
+    expect(map.map.key1).toBe('a');
+    expect(map.map.key2).toBe('c');
+    expect(map.map.x).toBe('b');
+
+    map.makeInverseMap();
+    const d = tools.compressObject(c, map, true, true, null, true);
+    expect(d.key1).toBe(1);
+    expect(d.key2).toBe('x');
+    expect(map.inverseMap.a).toBe('key1');
+    expect(map.inverseMap.b).toBe('x');
+    expect(map.inverseMap.c).toBe('key2');
+  });
+  test('Array', () => {
+    const o = { key1: 1, key2: [1, 2, 'x'] };
+    const map = new tools.UniqueMap();
+    const c = tools.compressObject(o, map, true, true, null, false);
+    expect(c.a).toBe(1);
+    expect(c.c).toEqual([1, 2, 'b']);
+    expect(map.map.key1).toBe('a');
+    expect(map.map.key2).toBe('c');
+    expect(map.map.x).toBe('b');
+
+    map.makeInverseMap();
+    const d = tools.compressObject(c, map, true, true, null, true);
+    expect(d.key1).toBe(1);
+    expect(d.key2).toEqual([1, 2, 'x']);
+    expect(map.inverseMap.a).toBe('key1');
+    expect(map.inverseMap.b).toBe('x');
+    expect(map.inverseMap.c).toBe('key2');
+  });
+  test('Nested', () => {
+    const o = {
+      key1: 1,
+      key2: [
+        1,
+        'x',
+        {
+          key21: 1,
+          key22: [1, 'x'],
+          key23: 'asdf',
+        },
+      ],
+      key3: {
+        key31: [
+          1,
+          [
+            1,
+            {
+              key21: 2,
+              key312: [1, 'qwerty'],
+              key313: 'x',
+            },
+            false,
+          ],
+        ],
+      },
+    };
+    const map = new tools.UniqueMap();
+    const c = tools.compressObject(o, map, true, true, null, false);
+    expect(c.a).toBe(1);
+    expect(map.map.key1).toBe('a');
+    expect(map.map.x).toBe('b');
+    expect(map.map.key21).toBe('c');
+    expect(map.map.key22).toBe('d');
+    expect(map.map.asdf).toBe('e');
+    expect(map.map.key23).toBe('f');
+    expect(map.map.key2).toBe('g');
+    expect(map.map.qwerty).toBe('h');
+    expect(map.map.key312).toBe('i');
+    expect(map.map.key313).toBe('j');
+    expect(map.map.key31).toBe('k');
+    expect(map.map.key3).toBe('l');
+
+    expect(c.a).toBe(1);
+    expect(c.g[0]).toBe(1);
+    expect(c.g[1]).toBe('b');
+    expect(c.g[2].c).toBe(1);
+    expect(c.g[2].d).toEqual([1, 'b']);
+    expect(c.g[2].f).toBe('e');
+
+    map.makeInverseMap();
+    const d = tools.compressObject(c, map, true, true, null, true);
+    expect(d.key1).toBe(1);
+    expect(d.key2[0]).toEqual(1);
+    expect(d.key2[1]).toEqual('x');
+    expect(d.key2[2].key21).toBe(1);
+    expect(d.key2[2].key22).toEqual([1, 'x']);
+    expect(d.key2[2].key23).toBe('asdf');
+    expect(d.key3.key31[1][1].key21).toBe(2);
+    expect(d.key3.key31[1][1].key312).toEqual([1, 'qwerty']);
+  });
+});
+describe('Ref and Diff to object', () => {
+  test('Simple', () => {
+    const o1 = { a: 1, b: 2 };
+    const o2 = { a: 1, b: 3 };
+    const d = tools.getObjectDiff(o1, [], o2);
+    expect(d.diff['.b']).toBe(3);
+    const o3 = tools.refAndDiffToObject(o1, d);
+    expect(o3.a).toBe(1);
+    expect(o3.b).toBe(3);
+  });
+  test('Simple Array', () => {
+    const o1 = { a: [1, 2] };
+    const o2 = { a: [1, 3] };
+    const d = tools.getObjectDiff(o1, [], o2);
+    expect(d.diff['.a[1]']).toBe(3);
+    const o3 = tools.refAndDiffToObject(o1, d);
+    expect(o3.a[0]).toBe(1);
+    expect(o3.a[1]).toBe(3);
+  });
+  test('Simple Nested Array', () => {
+    const o1 = { a: [1, [2, 3]] };
+    const o2 = { a: [1, [2, 4]] };
+    const d = tools.getObjectDiff(o1, [], o2);
+    expect(d.diff['.a[1][1]']).toBe(4);
+    const o3 = tools.refAndDiffToObject(o1, d);
+    expect(o3.a[0]).toBe(1);
+    expect(o3.a[1]).toEqual([2, 4]);
+  });
+  test('RemoveArray', () => {
+    const o1 = { a: [2, 3] };
+    const o2 = { a: 1 };
+    const d = tools.getObjectDiff(o1, [], o2);
+    expect(d.removed['.a[0]']).toBe(2);
+    expect(d.removed['.a[1]']).toBe(3);
+    expect(d.added['.a']).toBe(1);
+    const o3 = tools.refAndDiffToObject(o1, d);
+    expect(o3.a).toBe(1);
+  });
+  test('MultiDiff Simple', () => {
+    const o1 = { a: 1 };
+    const o2 = { a: 2 };
+    const o3 = { a: 3 };
+    const d2 = tools.getObjectDiff(o1, [], o2);
+    const d3 = tools.getObjectDiff(o1, [d2], o3);
+    expect(d3.diff['.a']).toBe(3);
+    const o4 = tools.refAndDiffToObject(o1, d2, d3);
+    expect(o4.a).toBe(3);
+  });
+  test('Nested Array', () => {
+    const o1 = { a: [1, 2] };
+    const o2 = { a: [1, [3, 4]] };
+    const d = tools.getObjectDiff(o1, [], o2);
+    const o3 = tools.refAndDiffToObject(o1, d);
+    expect(o3.a).toEqual([1, [3, 4]]);
+  });
+  test('MultiDiff Complex', () => {
+    const o1 = { a: 1, b: [1, 2], c: { d: 1, e: [1, 2] } };
+    const o2 = { a: 1, b: [1, 3], c: { d: 1, e: [1, 2], f: 4 } };
+    const o3 = { b: [1, 3], c: { d: 1, e: [1, [3, 4]] } };
+    const d2 = tools.getObjectDiff(o1, [], o2);
+    const d3 = tools.getObjectDiff(o1, [d2], o3);
+    // expect(d3.diff['.a']).toBe(3);
+    const o4 = tools.refAndDiffToObject(o1, d2, d3);
+    expect(o4.a).toBe(undefined);
+    expect(o4.b).toEqual([1, 3]);
+    expect(o4.c).toEqual({ d: 1, e: [1, [3, 4]] });
+  });
+  test('Nested', () => {
+    const o1 = {
+      a: 1,
+      b: [
+        {
+          c: 1,
+          e: 1,
+        },
+        2,
+        [1, 2],
+      ],
+    };
+    const o2 = {
+      a: 1,
+      b: [
+        {
+          c: 3,
+          d: 1,
+        },
+        4,
+        [1, 5],
+      ],
+    };
+    const d = tools.getObjectDiff(o1, [], o2);
+    expect(d.diff['.b[0].c']).toBe(3);
+    expect(d.added['.b[0].d']).toBe(1);
+    expect(d.diff['.b[1]']).toBe(4);
+    expect(d.diff['.b[2][1]']).toBe(5);
+    expect(d.removed['.b[0].e']).toBe(1);
+    const o3 = tools.refAndDiffToObject(o1, d);
+    expect(o3.a).toBe(1);
+    expect(o3.b).toEqual([{ c: 3, d: 1 }, 4, [1, 5]]);
+  });
+});
+describe('ObjectTracker', () => {
+  test('Add Reference', () => {
+    const tracker = new tools.ObjectTracker();
+    const obj = { a: 1 };
+    tracker.addReference(obj);
+    expect(tracker.baseReference).toEqual({ a: 1 });
+  });
+  test('Add Reference Chain', () => {
+    const tracker = new tools.ObjectTracker();
+    const obj = { a: 1, b: 2 };
+    const obj1 = { a: 1, b: 3 };
+    tracker.setBaseReference(obj);
+    tracker.addReference(obj1, 'ref1');
+    expect(tracker.baseReference).toEqual({ a: 1, b: 2 });
+    expect(tracker.references.ref1).toEqual({
+      diff: { diff: { '.b': 3 } },
+      basedOn: '__base',
+    });
+    const getRef = tracker.getReference('ref1');
+    expect(getRef).toEqual({ a: 1, b: 3 });
+  });
+  test('Add Reference Chain - 3 Links', () => {
+    const tracker = new tools.ObjectTracker();
+    const obj = { a: 1, b: 2 };
+    const obj1 = { a: 1, b: 3, c: 1 };
+    const obj2 = { a: 2, b: 3, c: 1 };
+    tracker.setBaseReference(obj);
+    tracker.addReference(obj1, 'ref1');
+    tracker.addReference(obj2, 'ref2', 'ref1');
+    expect(tracker.baseReference).toEqual({ a: 1, b: 2 });
+    expect(tracker.references.ref1).toEqual({
+      diff: {
+        diff: { '.b': 3 },
+        added: { '.c': 1 },
+      },
+      basedOn: '__base',
+    });
+    expect(tracker.references.ref2).toEqual({
+      diff: { diff: { '.a': 2 } },
+      basedOn: 'ref1',
+    });
+
+    const getRef = tracker.getReference('ref2');
+    expect(getRef).toEqual({ a: 2, b: 3, c: 1 });
+  });
+  test('Add Object', () => {
+    const tracker = new tools.ObjectTracker();
+    const obj = { a: 1, b: 1 };
+    tracker.addReference(obj, 'ref');
+
+    const obj1 = { a: 1, b: 2 };
+    tracker.add(1, obj1);
+    expect(tracker.diffs[0]).toEqual([1, 'ref', { diff: { '.b': 2 } }, 0]);
+
+    const getObj = tracker.getFromIndex(0);
+    expect(getObj).toEqual({ a: 1, b: 2 });
+  });
+  test('Add Object based on secondary ref', () => {
+    const tracker = new tools.ObjectTracker();
+    const ref = { a: 1, b: 1 };
+    tracker.addReference(ref);
+
+    const ref1 = { a: 1, b: 2, c: 1 };
+    tracker.addReference(ref1, 'ref1', '__base');
+
+    const obj1 = { a: 1, b: 3, c: 1 };
+    tracker.add(1, obj1, 'ref1');
+    expect(tracker.diffs[0]).toEqual([1, 'ref1', { diff: { '.b': 3 } }, 0]);
+
+    const getObj = tracker.getFromIndex(0);
+    expect(getObj).toEqual({ a: 1, b: 3, c: 1 });
+  });
+  test('Create Object', () => {
+    const tracker = new tools.ObjectTracker();
+    const ref = { a: 1, b: 1 };
+    tracker.addReference(ref);
+    const ref1 = { a: 1, b: 1, c: 2 };
+    tracker.addReference(ref1, 'ref1', '__base');
+    expect(tracker.references.ref1).toEqual({
+      basedOn: '__base',
+      diff: { added: { '.c': 2 } },
+    });
+
+    const obj1 = { a: 1, b: 2, c: 2 };
+    tracker.add(1, obj1, 'ref1');
+    expect(tracker.diffs[0]).toEqual([1, 'ref1', { diff: { '.b': 2 } }, 0]);
+
+    const asObj = tracker.toObj();
+    expect(asObj.references.ref1).toEqual({
+      basedOn: '__base',
+      diff: { added: { c: 2 } },
+    });
+    expect(asObj.diffs[0]).toEqual([1, 'ref1', { diff: { b: 2 } }, 0]);
+
+    const tracker1 = new tools.ObjectTracker();
+    tracker1.setFromObj(asObj);
+    expect(tracker1.references.ref1).toEqual({
+      basedOn: '__base',
+      diff: { added: { '.c': 2 } },
+    });
+    expect(tracker1.diffs[0]).toEqual([1, 'ref1', { diff: { '.b': 2 } }, 0]);
+    expect(tracker1).toEqual(tracker);
+  });
+  describe('Subscriptions', () => {
+    describe('Subscriber', () => {
+      test('Simple', () => {
+        const sub = new tools.Subscriber();
+        const callback1 = jest.fn();
+        const callback2 = jest.fn();
+        sub.add(callback1);
+        sub.add(callback2);
+        expect(sub.order).toEqual(['0', '1']);
+        expect(callback1.mock.calls.length).toBe(0);
+        expect(callback2.mock.calls.length).toBe(0);
+        sub.trigger();
+        expect(callback1.mock.calls.length).toBe(1);
+        expect(callback2.mock.calls.length).toBe(1);
+      });
+      test('Unsubscribe', () => {
+        const sub = new tools.Subscriber();
+        const callback1 = jest.fn();
+        const callback2 = jest.fn();
+        const id1 = sub.add(callback1);
+        sub.add(callback2);
+        expect(sub.order).toEqual(['0', '1']);
+        expect(callback1.mock.calls.length).toBe(0);
+        expect(callback2.mock.calls.length).toBe(0);
+        sub.trigger();
+        expect(callback1.mock.calls.length).toBe(1);
+        expect(callback2.mock.calls.length).toBe(1);
+        sub.remove(id1);
+        expect(sub.order).toEqual(['1']);
+        sub.trigger();
+        expect(callback1.mock.calls.length).toBe(1);
+        expect(callback2.mock.calls.length).toBe(2);
+      });
+      test('payload', () => {
+        const sub = new tools.Subscriber();
+        const callback1 = jest.fn();
+        const callback2 = jest.fn();
+        sub.add(callback1);
+        sub.add(callback2);
+        sub.trigger(24);
+        expect(callback1.mock.calls.length).toBe(1);
+        expect(callback2.mock.calls.length).toBe(1);
+        expect(callback1.mock.calls[0][0]).toBe(24);
+        expect(callback2.mock.calls[0][0]).toBe(24);
+      });
+      test('subscribe once', () => {
+        const sub = new tools.Subscriber();
+        const callback = jest.fn();
+        sub.add(callback, 1);
+        expect(callback.mock.calls.length).toBe(0);
+        sub.trigger(24);
+        expect(callback.mock.calls.length).toBe(1);
+        expect(callback.mock.calls[0][0]).toBe(24);
+        expect(sub.order.length).toBe(0);
+        sub.trigger(24);
+        expect(callback.mock.calls.length).toBe(1);
+        expect(callback.mock.calls[0][0]).toBe(24);
+      });
+      test('subscribe twice', () => {
+        const sub = new tools.Subscriber();
+        const callback = jest.fn();
+        sub.add(callback, 2);
+        expect(callback.mock.calls.length).toBe(0);
+        sub.trigger(41);
+        sub.trigger(42);
+        sub.trigger(43);
+        expect(callback.mock.calls.length).toBe(2);
+        expect(callback.mock.calls[0][0]).toBe(41);
+        expect(callback.mock.calls[1][0]).toBe(42);
+        expect(sub.order.length).toBe(0);
+      });
+    });
+    describe('Subscriptions', () => {
+      test('Simple', () => {
+        const subs = new tools.SubscriptionManager();
+        const mouseCallback = jest.fn();
+        const touchCallback = jest.fn();
+        subs.add('mouseClick', mouseCallback);
+        subs.add('touchClick', touchCallback);
+        expect(mouseCallback.mock.calls.length).toBe(0);
+        expect(touchCallback.mock.calls.length).toBe(0);
+        subs.trigger('mouseClick', 21);
+        expect(mouseCallback.mock.calls.length).toBe(1);
+        expect(mouseCallback.mock.calls[0][0]).toBe(21);
+        expect(touchCallback.mock.calls.length).toBe(0);
+        subs.trigger('touchClick', 42);
+        expect(mouseCallback.mock.calls.length).toBe(1);
+        expect(touchCallback.mock.calls.length).toBe(1);
+        expect(touchCallback.mock.calls[0][0]).toBe(42);
+      });
+      test('Unsubscribe', () => {
+        const subs = new tools.SubscriptionManager();
+        const mouseCallback = jest.fn();
+        const touchCallback = jest.fn();
+        const id = subs.add('mouseClick', mouseCallback);
+        subs.add('touchClick', touchCallback);
+        expect(Object.keys(subs.subscriptions)).toEqual(['mouseClick', 'touchClick']);
+        subs.remove('mouseClick', id);
+        expect(Object.keys(subs.subscriptions)).toEqual(['touchClick']);
+      });
+    });
+  });
+});
+

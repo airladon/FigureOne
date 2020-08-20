@@ -2,6 +2,7 @@
 // import {
 //   Transform, Point, getMaxTimeFromVelocity,
 // } from '../../../../tools/g2';
+// import * as tools from '../../../../tools/math';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
@@ -14,7 +15,8 @@ export type TypeOpacityAnimationStepInputOptions = {
   start?: number;      // default is element transform
   target?: number;     // Either target or delta must be defined
   delta?: number;      // delta overrides target if both are defined
-  dissolve?: 'in' | 'out' | null
+  dissolve?: 'in' | 'out' | null,
+  dissolveFromCurrent?: boolean,
 } & TypeElementAnimationStepInputOptions;
 
 
@@ -25,13 +27,14 @@ export class OpacityAnimationStep extends ElementAnimationStep {
     target: number;
     whenComplete: number;  // Color after dissolving
     dissolve?: 'in' | 'out' | null;
+    dissolveFromCurrent: boolean,
   };
 
   constructor(...optionsIn: Array<TypeOpacityAnimationStepInputOptions>) {
     const ElementAnimationStepOptionsIn =
-      joinObjects({}, ...optionsIn, { type: 'color' });
+      joinObjects({}, ...optionsIn, { type: 'opacity' });
     deleteKeys(ElementAnimationStepOptionsIn, [
-      'start', 'delta', 'target', 'dissolve',
+      'start', 'delta', 'target', 'dissolve', 'dissolveFromCurrent',
     ]);
     super(ElementAnimationStepOptionsIn);
     const defaultPositionOptions = {
@@ -39,26 +42,39 @@ export class OpacityAnimationStep extends ElementAnimationStep {
       target: null,
       delta: null,
       dissolve: null,
+      dissolveFromCurrent: false,
     };
     const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
     // $FlowFixMe
     this.opacity = {};
     copyKeysFromTo(options, this.opacity, [
-      'start', 'delta', 'target', 'dissolve',
+      'start', 'delta', 'target', 'dissolve', 'dissolveFromCurrent',
     ]);
+  }
+
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'opacity',
+    ];
+  }
+
+  _getStateName() {  // eslint-disable-line class-methods-use-this
+    return 'opacityAnimationStep';
   }
 
   // On start, calculate the duration, target and delta if not already present.
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime?: number) {
+  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
     const { element } = this;
     if (element != null) {
       super.start(startTime);
       if (this.opacity.start == null) {
         // eslint-disable-next-line prefer-destructuring
         this.opacity.start = element.opacity;
+      } else if (startTime === 'now' || startTime === 'prev') {
+        element.setOpacity(this.opacity.start);
       }
       if (this.opacity.delta == null && this.opacity.target == null) {
         this.opacity.target = this.opacity.start;
@@ -68,14 +84,30 @@ export class OpacityAnimationStep extends ElementAnimationStep {
       this.opacity.whenComplete = this.opacity.target;
 
       if (this.opacity.dissolve === 'out') {
-        // this.opacity.start = 1;
+        if (this.opacity.dissolveFromCurrent) {
+          if (element.isShown) {
+            this.opacity.start = element.opacity;
+          } else {
+            this.opacity.start = 1;
+          }
+        } else {
+          this.opacity.start = 1;
+        }
         this.opacity.target = 0.001;
         this.opacity.whenComplete = 1;
         element.setOpacity(this.opacity.start);
-        // this.opacity.target = 0.001;
       }
       if (this.opacity.dissolve === 'in') {
-        this.opacity.start = 0.001;
+        if (this.opacity.dissolveFromCurrent) {
+          if (element.isShown) {
+            this.opacity.start = element.opacity;
+          } else {
+            this.opacity.start = 0.001;
+          }
+        } else {
+          this.opacity.start = 0.001;
+        }
+        // this.opacity.start = 0.001;
         this.opacity.target = 1;
         this.opacity.whenComplete = 1;
         element.showAll();
@@ -99,7 +131,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
 
   setFrame(deltaTime: number) {
     const percentTime = deltaTime / this.duration;
-    const percentComplete = this.progression(percentTime);
+    const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;
     let next = this.opacity.start + this.opacity.delta * p;
     if (next > 1) {

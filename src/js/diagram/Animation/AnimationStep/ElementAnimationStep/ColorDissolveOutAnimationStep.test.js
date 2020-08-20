@@ -82,13 +82,13 @@ describe('Dissolve Out Aniamtion', () => {
     expect(callback.mock.calls.length).toBe(1);
     expect(elem1.isShown).toBe(false);
   });
-  test('Cancel dissolve: completeOnCancel = false, force = noComplete', () => {
+  test('Cancel dissolve: completeOnCancel = false, force = freeze', () => {
     elem1.animations.new()
       .dissolveOut(1).whenFinished(callback).ifCanceledThenStop()
       .start();
     elem1.animations.nextFrame(0);
     elem1.animations.nextFrame(0.5);
-    elem1.animations.cancelAll('noComplete');
+    elem1.animations.cancelAll('freeze');
     expect(math.round(elem1.opacity, 2)).toEqual(0.5);
     expect(callback.mock.calls.length).toBe(1);
     expect(elem1.isShown).toBe(true);
@@ -104,13 +104,13 @@ describe('Dissolve Out Aniamtion', () => {
     expect(callback.mock.calls.length).toBe(1);
     expect(elem1.isShown).toBe(false);
   });
-  test('Cancel dissolve: completeOnCancel = true, force = noComplete', () => {
+  test('Cancel dissolve: completeOnCancel = true, force = freeze', () => {
     elem1.animations.new()
       .dissolveOut(1).whenFinished(callback).ifCanceledThenComplete()
       .start();
     elem1.animations.nextFrame(0);
     elem1.animations.nextFrame(0.5);
-    elem1.animations.cancelAll('noComplete');
+    elem1.animations.cancelAll('freeze');
     expect(math.round(elem1.opacity, 2)).toEqual(0.5);
     expect(callback.mock.calls.length).toBe(1);
     expect(elem1.isShown).toBe(true);

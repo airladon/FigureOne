@@ -36,7 +36,7 @@ describe('Transfrom Animation Unit', () => {
     });
     expect(step.onFinish).toBe(onFinish);
     expect(step.type).toBe(type);
-    expect(step.progression).toBe(math.easeinout);
+    expect(step.progression).toBe('tools.math.easeinout');
     expect(step.transform.start).toBe(start);
     expect(step.transform.target).toBe(target);
     expect(step.transform.delta).toBe(null);
@@ -55,7 +55,7 @@ describe('Transfrom Animation Unit', () => {
     step.start();
     expect(step.state).toBe('animating');
     expect(step.transform.delta).toEqual(target);
-    expect(step.startTime).toBe(-1);
+    expect(step.startTime).toBe(null);
   });
   test('Target calculation with start transform not defined', () => {
     const delta = element.transform.constant(1);
@@ -116,10 +116,14 @@ describe('Transfrom Animation Unit', () => {
       start,
       target,
     });
+    // console.log(start)
     step.start();
-    expect(step.startTime).toBe(-1);
+    // console.log(start)
+    expect(step.startTime).toBe(null);
 
     step.nextFrame(100);
+    // console.log(start)
+    // console.log(step.element.transform)
     expect(step.startTime).toBe(100);
     expect(step.element.transform).toEqual(start);
 
@@ -195,14 +199,14 @@ describe('Transfrom Animation Unit', () => {
       expect(element.transform.round()).toEqual(start.constant(0.5));
       expect(callbackFlag).toBe(1);
     });
-    test('CompleteOnCancel = true, Force no complete', () => {
+    test('CompleteOnCancel = true, Force freeze', () => {
       step.completeOnCancel = true;
       step.start();
       step.nextFrame(0);
       step.nextFrame(0.5);
       expect(element.transform.round()).toEqual(start.constant(0.5));
 
-      step.finish(true, 'noComplete');
+      step.finish(true, 'freeze');
       expect(element.transform.round()).toEqual(start.constant(0.5));
       expect(callbackFlag).toBe(1);
     });

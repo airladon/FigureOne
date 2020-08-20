@@ -4,13 +4,18 @@ import WebGLInstance from './webgl/webgl';
 
 import {
   Rect, Point, Transform,
-  spaceToSpaceTransform, minAngleDiff,
+  spaceToSpaceTransform, minAngleDiff, getTransform,
 } from '../tools/g2';
-import { isTouchDevice, joinObjects } from '../tools/tools';
+// import * as math from '../tools/math';
+import { FunctionMap } from '../tools/FunctionMap';
+import { setState, getState } from './state';
+import parseState from './parseState';
+import { isTouchDevice, joinObjects, SubscriptionManager } from '../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
+import { Recorder } from './Recorder';
 // eslint-disable-next-line import/no-cycle
 import Gesture from './Gesture';
 import DrawContext2D from './DrawContext2D';
@@ -19,7 +24,7 @@ import DiagramEquation from './DiagramEquation/DiagramEquation';
 import DiagramObjects from './DiagramObjects/DiagramObjects';
 import addElements from './DiagramAddElements/addElements';
 import type { TypeAddElementObject } from './DiagramAddElements/addElements';
-
+import type { TypeScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 /**
   * Diagram Input Options
   * @property {string} [htmlId] HTML div tag id - default: 'figureOneId'
@@ -110,6 +115,7 @@ class Diagram {
 
   elements: DiagramElementCollection;
   globalAnimation: GlobalAnimation;
+  recorder: Recorder;
   gesture: Gesture;
   inTransition: boolean;
   beingMovedElements: Array<DiagramElementPrimitive |
@@ -119,8 +125,10 @@ class Diagram {
                         DiagramElementCollection>;
 
   moveTopElementOnly: boolean;
+  previousCursorPoint: Point;
 
   limits: Rect;
+  stateTime: DOMHighResTimeStamp;
 
   // gestureElement: HTMLElement;
   shapes: Object;
@@ -161,9 +169,27 @@ class Diagram {
   oldWidth: number;
 
   drawAnimationFrames: number;
+
+  animationFinishedCallback: ?(string | (() => void));
   // updateFontSize: string;
 
   isTouchDevice: boolean;
+  fnMap: FunctionMap;
+
+  isPaused: boolean;
+  pauseTime: number;
+  cursorShown: boolean;
+  cursorElementName: string;
+  isTouchDown: boolean;
+  setStateCallback: ?(string | (() => void));
+  subscriptions: SubscriptionManager;
+
+  state: {
+    pause: 'paused' | 'preparingToPause' | 'preparingToUnpause' | 'unpaused';
+    preparingToStop: boolean;
+    preparingToSetState: boolean;
+  };
+  // pauseAfterNextDrawFlag: boolean;
 
   constructor(options: TypeDiagramOptions) {
     const defaultOptions = {
@@ -173,13 +199,24 @@ class Diagram {
       fontScale: 1,
       // updateFontSize: '',
     };
+    this.fnMap = new FunctionMap();
+    // this.fnMap.global.add('tools.math.easein', math.easein);
+    // this.fnMap.global.add('tools.math.easeout', math.easeout);
+    // this.fnMap.global.add('tools.math.easeinout', math.easeinout);
+    // this.fnMap.global.add('tools.math.linear', math.linear);
+    // this.fnMap.global.add('tools.math.sinusoid', math.sinusoid);
+    // this.fnMap.add('doNothing', () => {});
+    this.isPaused = false;
     this.scrolled = false;
+    this.cursorElementName = 'cursor';
+    this.setStateCallback = null;
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
       htmlId, limits,
     } = optionsToUse;
     this.htmlId = htmlId;
+    this.animationFinishedCallback = null;
     // this.layout = layout;
     if (typeof htmlId === 'string') {
       const container = document.getElementById(htmlId);
@@ -276,10 +313,13 @@ class Diagram {
       this.gestureCanvas = this.htmlCanvas;
     }
 
-    if (this instanceof Diagram) {
+    if (this instanceof Diagram) {  // $FlowFixMe
       this.gesture = new Gesture(this);
     }
 
+    this.previousCursorPoint = new Point(0, 0);
+    this.isTouchDown = false;
+    // this.pauseAfterNextDrawFlag = false;
     this.fontScale = optionsToUse.fontScale;
     this.updateLimits(limits);
     this.drawQueued = false;
@@ -289,6 +329,24 @@ class Diagram {
     this.beingTouchedElements = [];
     this.moveTopElementOnly = true;
     this.globalAnimation = new GlobalAnimation();
+    this.subscriptions = new SubscriptionManager(this.fnMap);
+    // this.recorder = new Recorder(
+    //   this.simulateTouchDown.bind(this),
+    //   this.simulateTouchUp.bind(this),
+    //   // this.simulateTouchMove.bind(this),
+    //   this.simulateCursorMove.bind(this),
+    //   this.animateNextFrame.bind(this),
+    //   this.getElement.bind(this),
+    //   this.getState.bind(this),
+    //   this.setState.bind(this),
+    //   // this.pauseAfterNextDraw.bind(this),
+    //   this.pause.bind(this),
+    //   this.unpause.bind(this),
+    // );
+    this.recorder = new Recorder();
+    this.recorder.diagram = this;
+    this.bindRecorder();
+    this.pauseTime = this.globalAnimation.now() / 1000;
     this.shapesLow = this.getShapes();
     // this.shapesHigh = this.getShapes(true);
     this.shapes = this.shapesLow;
@@ -303,6 +361,12 @@ class Diagram {
     if (this.elements.name === '') {
       this.elements.name = 'diagramRoot';
     }
+    this.state = {
+      pause: 'unpaused',
+      preparingToStop: false,
+      preparingToSetState: false,
+    };
+    this.stateTime = this.globalAnimation.now() / 1000;
 
     // this.updateFontSize = optionsToUse.updateFontSize;
 
@@ -322,6 +386,130 @@ class Diagram {
     this.drawTimeoutId = null;
     this.oldScroll = window.pageYOffset;
     this.drawAnimationFrames = 0;
+    this.cursorShown = false;
+  }
+
+  bindRecorder() {
+    // this.recorder.diagram = {
+    //   animateNextFrame: this.animateNextFrame.bind(this),
+    //   setState: this.setState.bind(this),
+    //   getState: this.getState.bind(this),
+    //   getElement: this.getElement.bind(this),
+    //   showCursor: this.showCursor.bind(this),
+    //   pause: this.pause.bind(this),
+    //   unpause: this.unpause.bind(this),
+    //   getIsInTransition: this.getIsInTransition.bind(this),
+    //   animateToState: this.animateToState.bind(this),
+    //   isAnimating: this.isAnimating.bind(this),
+    //   setAnimationFinishedCallback: this.setAnimationFinishedCallback.bind(this),
+    //   subscriptions: this.subscriptions,
+    //   getPauseState: this.getPauseState.bind(this),
+    //   dissolveToState: this.dissolveToState.bind(this),
+    // };
+    const onCursor = (payload) => {
+      const [action, x, y] = payload;
+      if (action === 'show') {
+        this.showCursor('up', new Point(x, y));
+      } else {
+        this.showCursor('hide');
+      }
+    };
+    const onTouch = (payload) => {
+      const [action, x, y] = payload;
+      if (!this.isCursorShown()) {
+        return;
+      }
+      if (action === 'down') {
+        this.showCursor('down', new Point(x, y));
+      } else {
+        this.showCursor('up');
+      }
+    };
+    const onCursorMove = (payload) => {
+      const [x, y] = payload;
+      this.setCursor(new Point(x, y));
+    };
+    const moved = (payload) => {
+      const [elementPath, transform] = payload;
+      const element = this.getElement(elementPath);
+      if (element == null) {
+        return;
+      }
+      element.moved(getTransform(transform));
+    };
+
+    const startBeingMoved = (payload) => {
+      const [elementPath] = payload;
+      const element = this.getElement(elementPath);
+      if (element == null) {
+        return;
+      }
+      element.startBeingMoved();
+    };
+
+    const stopBeingMoved = (payload) => {
+      const [elementPath, transform, velocity] = payload;
+      const element = this.getElement(elementPath);
+      if (element == null) {
+        return;
+      }
+      element.stopBeingMoved();
+      element.state.movement.velocity = getTransform(velocity);
+      element.transform = getTransform(transform);
+    };
+
+    const startMovingFreely = (payload) => {
+      const [elementPath, transform, velocity] = payload;
+      const element = this.getElement(elementPath);
+      if (element == null) {
+        return;
+      }
+      element.transform = getTransform(transform);
+      element.state.movement.velocity = getTransform(velocity);
+      element.startMovingFreely();
+    };
+    const click = (payload) => {
+      const [id] = payload;
+      const element = document.getElementById(id);
+      if (element != null) {
+        element.click();
+      }
+    };
+    const elementClick = (payload) => {
+      const [elementPath] = payload;
+      const element = this.getElement(elementPath);
+      if (element != null) {
+        element.click();
+      }
+    };
+    const eqnNavClick = (payload) => {
+      const [direction, elementPath] = payload;
+      const element = this.getElement(elementPath);
+      if (element == null) {
+        // element.click();
+        return;
+      }
+      if (direction === 'next') { // $FlowFixMe
+        element.clickNext();
+      }
+      if (direction === 'prev') { // $FlowFixMe
+        element.clickPrev();
+      }
+      if (direction === 'refresh') { // $FlowFixMe
+        element.clickRefresh();
+      }
+    };
+
+    this.recorder.addEventType('cursor', onCursor);
+    this.recorder.addEventType('cursorMove', onCursorMove);
+    this.recorder.addEventType('touch', onTouch);
+    this.recorder.addEventType('moved', moved);
+    this.recorder.addEventType('stopBeingMoved', stopBeingMoved);
+    this.recorder.addEventType('startMovingFreely', startMovingFreely);
+    this.recorder.addEventType('startBeingMoved', startBeingMoved);
+    this.recorder.addEventType('click', click);
+    this.recorder.addEventType('elementClick', elementClick);
+    this.recorder.addEventType('eqnNavClick', eqnNavClick);
   }
 
   scrollEvent() {
@@ -343,6 +531,305 @@ class Diagram {
       this.scrollEvent.bind(this),
       false,
     );
+  }
+
+  getState(options: { precision?: number, ignoreShown?: boolean, min?: boolean }) {
+    this.stateTime = this.globalAnimation.now() / 1000;
+    return getState(this, [
+      'lastDrawTime',
+      'elements',
+      'stateTime',
+    ], options);
+  }
+
+  setState(
+    stateIn: Object,
+    optionsIn: {
+      how: 'animate' | 'dissolve' | 'instant',
+      duration?: number | {
+        dissovlveOut: ?number,
+        dissovlveIn: ?number,
+        delay: ?number,
+      },
+      velocity?: TypeScenarioVelocity,
+      maxDuration?: number,
+      // minDuration?: number,
+      zeroDurationThreshold?: boolean,
+      allDurationsSame?: boolean,
+    } | 'dissolve' | 'animate' | 'instant' = 'instant',
+  ) {
+    // console.log(stateIn)
+    // $FlowFixMe
+    const state = parseState(stateIn, this);
+    let finishedFlag = false;
+    this.state.preparingToSetState = false;
+    const finished = () => {
+      finishedFlag = true;
+      this.state.preparingToSetState = false;
+      // if (window.asdf) {
+      //   debugger;
+      // }
+      setState(this, state);
+      this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.stateTime);
+      this.elements.setPointsFromDefinition();
+      this.elements.setPrimitiveColors();
+      if (this.setStateCallback != null) {
+        this.fnMap.exec(this.setStateCallback);
+      }
+      this.animateNextFrame();
+      // console.log('triggered')
+      this.subscriptions.trigger('stateSet');
+    };
+
+    let options = {
+      how: 'instant',
+      maxDuration: 6,
+      // velocity: {
+      //   position: 2,
+      //   rotation: Math.PI * 2 / 2,
+      //   scale: 1,
+      //   opacity: 0.8,
+      //   color: 0.8,
+      // },
+      allDurationsSame: true,
+      zeroDurationThreshold: 0.00001,
+      // minDuration: 0,
+      duration: 0,
+    };
+    if (optionsIn.velocity != null) { // $FlowFixMe
+      options.velocity = {
+        position: 2,
+        rotation: Math.PI * 2 / 2,
+        scale: 1,
+        opacity: 0.8,
+        color: 0.8,
+      };
+    }
+
+    // console.log(resumeSettings)
+    if (typeof optionsIn === 'string') {
+      options.how = optionsIn;
+    } else {
+      options = joinObjects({}, options, optionsIn);
+      // velocity trumps duration by default, but if only duration is defined by the
+      // user, then remove velocity;
+      // if (this.settings.resume.duration != null && this.settings.resume.velocity == null) {
+      //   options.velocity = undefined;
+      // }
+    }
+    if (options.how === 'dissolve') {
+      const defaultDuration = {
+        dissolveIn: 0.8,
+        dissolveOut: 0.8,
+        delay: 0.2,
+      };
+      if (options.duration === 0) {
+        options.duration = defaultDuration;
+      } else if (typeof options.duration === 'number') {
+        options.duration = {
+          dissolveOut: options.duration / 10 * 4.5,
+          dissolveIn: options.duration / 10 * 4.5,
+          delay: options.duration / 10 * 1,
+        };
+      } else {
+        options.duration = joinObjects({}, defaultDuration, options.duration);
+      }
+    } else if (options.duration != null && typeof options.duration !== 'number') {
+      // $FlowFixMe
+      options.duration = {
+        dissolveOut: 0,
+        dissolveIn: 0,
+        delay: 0,
+      };
+    }
+
+    if (
+      options.how === 'instant' // $FlowFixMe
+      || this.elements.isStateSame(state.elements, true, ['cursor'])
+    ) {
+      finished();
+    } else if (options.how === 'animate') {
+      this.elements.stop('freeze');  // This is cancelling the pulse
+      this.animateToState(
+        state,
+        options,
+        finished,
+        'now',
+      );
+    } else {
+      // this.diagram.elements.freezePulseTransforms(false);
+      this.elements.stop('freeze');
+      this.dissolveToState({
+        state,
+        dissolveInDuration: options.duration.dissolveIn,
+        dissolveOutDuration: options.duration.dissolveOut,
+        done: finished,
+        delay: options.duration.delay,
+        startTime: 'now',
+      });
+    }
+
+    if (!finishedFlag) {
+      this.state.preparingToSetState = true;
+      this.subscriptions.trigger('preparingToSetState');
+    }
+    this.animateNextFrame();
+  }
+
+  animateToState(
+    state: Object,
+    optionsIn: Object = {},
+    done: ?(string | (() => void)),
+    startTime: ?number | 'now' | 'prev' | 'next' = null,
+  ) {
+    // const defaultOptions = {
+    //   // delay: 0,
+    //   duration: 1,
+    // };
+    // if (optionsIn.velocity != null) {
+    //   defaultOptions.duration = null;
+    // }
+
+    // const options = joinObjects(optionsIn, optionsIn);
+    // countStart();
+    const duration = this.elements.animateToState(
+      state.elements, optionsIn, true, startTime,
+    );
+    // countEnd();
+    if (done != null) {
+      if (duration === 0) {
+        this.fnMap.exec(done);
+      } else if (done != null) {
+        this.subscriptions.add('animationsFinished', done, 1);
+      }
+    }
+  }
+
+
+  dissolveToState(optionsIn: {
+    state: Object,
+    dissolveOutDuration: number,
+    dissolveInDuration: number,
+    delay: Number,
+    done: ?(string | (() => void)),
+    startTime: ?number | 'now' | 'prev' | 'next',
+  }) {
+    const options = joinObjects({}, {
+      dissolveOutDuration: 0.8,
+      dissolveInDuration: 0.8,
+      delay: 0.2,
+      done: null,
+      startTime: null,
+    }, optionsIn);
+    this.elements.animations.new()
+      .opacity({ duration: options.dissolveOutDuration, start: 1, target: 0.001 })
+      .trigger(
+        {
+          callback: () => {
+            this.elements.hideAll();
+            this.elements.show();
+            // this.elements.setOpacity(1);
+          },
+        },
+      )
+      .delay({ duration: options.delay })
+      .trigger({
+        callback: () => {
+          this.dissolveInToState({
+            state: options.state,
+            duration: options.dissolveInDuration,
+            done: options.done,
+            startTime: options.startTime,
+          });
+          // this.
+        },
+        // duration: options.dissolveInDuration,
+        duration: 0,
+      })
+      .start(options.startTime);
+    // console.log(this.elements)
+    // console.log(this.globalAnimation.now())
+  }
+
+  // dissolveToComplete(optionsIn: {
+  //   dissolveOutDuration: number,
+  //   dissolveInDuration: number,
+  //   delay: Number,
+  //   done: ?(string | (() => void)),
+  //   startTime: ?number | 'now' | 'prev' | 'next',
+  // }) {
+  //   const options = joinObjects({}, {
+  //     dissolveOutDuration: 0.8,
+  //     dissolveInDuration: 0.8,
+  //     delay: 0.2,
+  //     done: null,
+  //     startTime: null,
+  //   }, optionsIn);
+  //   const state = this.getState({});
+  //   this.stop('complete');
+  //   const completeState = this.getState({});
+  //   this.setState(state, 'instant');
+  //   this.elements.animations.new()
+  //     .opacity({ duration: options.dissolveOutDuration, start: 1, target: 0.001 })
+  //     .trigger(
+  //       {
+  //         callback: () => {
+  //           this.elements.hideAll();
+  //           this.elements.show();
+  //           // this.elements.setOpacity(1);
+  //         },
+  //       },
+  //     )
+  //     .delay({ duration: options.delay })
+  //     .trigger({
+  //       callback: () => {
+  //         this.dissolveInToState({
+  //           state: completeState,
+  //           duration: options.dissolveInDuration,
+  //           done: options.done,
+  //           startTime: options.startTime,
+  //         });
+  //         // this.
+  //       },
+  //       // duration: options.dissolveInDuration,
+  //       duration: 0,
+  //     })
+  //     .start(options.startTime);
+  // }
+
+
+  dissolveInToState(optionsIn: {
+    state: Object,
+    duration: number,
+    done: ?(string | (() => void)),
+    startTime: ?number | 'now' | 'prev' | 'next',
+  }) {
+    const options = joinObjects({}, {
+      duration: 0.8,
+      done: null,
+      startTime: null,
+    }, optionsIn);
+    const {
+      state, duration, done, startTime,
+    } = options;
+    const dissolveDuration = this.elements.dissolveInToState(state.elements, duration, startTime);
+
+    // force update of transforms to update any dependent transforms
+    const elements = this.elements.getAllElements();
+    elements.forEach((element) => {
+      if (element.isShown && element.dependantTransform === false) {
+        element.setTransform(element.transform);
+      }
+    });
+
+
+    if (done != null) {
+      if (dissolveDuration === 0) {
+        this.fnMap.exec(done);
+      } else if (done != null) {
+        this.subscriptions.add('animationsFinished', done, 1);
+      }
+    }
   }
 
   /**
@@ -389,6 +876,9 @@ class Diagram {
   }
 
   getElement(elementName: string) {
+    if (elementName === this.elements.name) {
+      return this.elements;
+    }
     return this.elements.getElement(elementName);
   }
 
@@ -502,9 +992,63 @@ class Diagram {
     };
   }
 
+  // startRecording() {
+  //   this.isRecording = true;
+  // }
+
+  // stopRecording() {
+  //   this.isRecording = false;
+  // }
+
   initialize() {
+    const elements = this.elements.getAllElements();
+    /* eslint-disable no-param-reassign */
+    elements.forEach((element) => {
+      element.diagram = this;
+      element.recorder = this.recorder;
+      element.animationFinishedCallback = this.animationFinished.bind(this, element);
+    });
+    /* eslint-enable no-param-reassign */
     this.setFirstTransform();
     this.animateNextFrame();
+  }
+
+  getRemainingAnimationTime(nowIn: number = this.globalAnimation.now() / 1000) {
+    const elements = this.elements.getAllElements();
+    let now = nowIn;
+
+    if (this.state.pause === 'paused') {
+      now = this.pauseTime;
+    }
+    let remainingTime = 0;
+
+    elements.forEach((element) => {
+      const elementRemainingTime = element.animations.getRemainingTime(now);
+      if (elementRemainingTime > remainingTime) {
+        remainingTime = elementRemainingTime;
+      }
+      const remainingPulseTime = element.getRemainingPulseTime(now);
+      if (remainingPulseTime > remainingTime) {
+        remainingTime = remainingPulseTime;
+      }
+      const remainingMovingFreelyTime = element.getRemainingMovingFreelyTime(now);
+      if (remainingMovingFreelyTime > remainingTime) {
+        remainingTime = remainingMovingFreelyTime;
+      }
+    });
+    return remainingTime;
+  }
+
+  setAnimationFinishedCallback(callback: ?(string | (() => void))) {
+    this.animationFinishedCallback = callback;
+  }
+
+  animationFinished() {
+    if (this.isAnimating()) {
+      return;
+    }
+    this.fnMap.exec(this.animationFinishedCallback);
+    this.subscriptions.trigger('animationsFinished');
   }
 
   setFirstTransform() {
@@ -539,9 +1083,6 @@ class Diagram {
       this.clearContext();
       this.draw2DLow.ctx.clearRect(0, 0, this.textCanvasLow.width, this.textCanvasLow.height);
       this.draw(-1);
-      // this.animateNextFrame(true, 'clear frame');
-      // this.draw(-1);
-      // this.clickearContext();
     }
   }
 
@@ -589,7 +1130,7 @@ class Diagram {
 
     // Stop animations and render
     elementToRender.isRenderedAsImage = false;
-    elementToRender.stop(true, true);
+    elementToRender.stop('complete');
 
     this.renderToCanvas(elementToRender.tieToHTML.element);
     elementToRender.isRenderedAsImage = true;
@@ -683,19 +1224,107 @@ class Diagram {
     }
   }
 
+  // simulateTouchDown(diagramPoint: Point) {
+  //   // const pixelPoint = diagramPoint.transformBy(this.spaceTransforms.diagramToPixel.matrix());
+  //   // const clientPoint = this.pixelToClient(pixelPoint);
+  //   // this.touchDownHandler(clientPoint);
+
+  //   const pointer = this.getElement(this.cursorElementName);
+  //   if (pointer == null) {
+  //     return;
+  //   }
+  //   const up = pointer.getElement('up');
+  //   const down = pointer.getElement('down');
+  //   if (up == null || down == null) {
+  //     return;
+  //   }
+  //   up.hide();
+  //   down.show();
+  //   pointer.setPosition(diagramPoint);
+  // }
+
+  toggleCursor() {
+    this.cursorShown = !this.cursorShown;
+    if (this.recorder.state === 'recording') {
+      if (this.cursorShown) {
+        this.recorder.recordEvent('cursor', ['show', this.previousCursorPoint.x, this.previousCursorPoint.y]);
+        if (this.isTouchDown) {
+          this.showCursor('down');
+        } else {
+          this.showCursor('up');
+        }
+        this.setCursor(this.previousCursorPoint);
+      } else {
+        this.recorder.recordEvent('cursor', ['hide']);
+        this.showCursor('hide');
+      }
+    }
+  }
+
+  showCursor(show: 'up' | 'down' | 'hide', position: ?Point = null) {
+    const cursor = this.getElement(this.cursorElementName);
+    if (cursor == null) {
+      return;
+    }
+    const up = cursor.getElement('up');
+    const down = cursor.getElement('down');
+    if (up == null || down == null) {
+      return;
+    }
+    if (show === 'up') {
+      up.showAll();
+      down.hide();
+    } else if (show === 'down') {
+      up.hide();
+      down.showAll();
+    } else {
+      cursor.hide();
+    }
+    if (position != null) {
+      this.setCursor(position);
+    }
+    this.animateNextFrame();
+  }
+
+  isCursorShown() {
+    const cursor = this.getElement(this.cursorElementName);
+    if (cursor == null) {
+      return false;
+    }
+    return cursor.isShown;
+  }
+
   // Handle touch down, or mouse click events within the canvas.
   // The default behavior is to be able to move objects that are touched
   // and dragged, then when they are released, for them to move freely before
   // coming to a stop.
   touchDownHandler(clientPoint: Point) {
+    if (this.recorder.state === 'recording') {
+      const pixelP = this.clientToPixel(clientPoint);
+      const diagramPoint = pixelP.transformBy(this.spaceTransforms.pixelToDiagram.matrix());
+      this.recorder.recordEvent('touch', ['down', diagramPoint.x, diagramPoint.y]);
+      if (this.cursorShown) {
+        this.showCursor('down');
+      }
+    }
+
+    if (this.isPaused) {
+      this.unpause();
+    }
+    if (this.recorder.state === 'playing') {
+      this.recorder.pausePlayback();
+      this.showCursor('hide');
+    }
     if (this.inTransition) {
       return false;
     }
+    this.isTouchDown = true;
 
     // Get the touched point in clip space
     const pixelPoint = this.clientToPixel(clientPoint);
     // console.log(pixelPoint)
     const glPoint = pixelPoint.transformBy(this.spaceTransforms.pixelToGL.matrix());
+    // console.log(glPoint, clientPoint)
 
     // console.log(glPoint.transformBy(this.glToDiagramSpaceTransform.matrix()))
     // const clipPoint = this.clientToClip(clientPoint);
@@ -703,6 +1332,7 @@ class Diagram {
     // Get all the diagram elements that were touched at this point (element
     // must have isTouchable = true to be considered)
     this.beingTouchedElements = this.elements.getTouched(glPoint);
+    // console.log(this.beingTouchedElements)
     if (this.moveTopElementOnly) {
       if (this.beingTouchedElements.length > 0) {
         this.beingTouchedElements[0].click();
@@ -730,10 +1360,31 @@ class Diagram {
     return false;
   }
 
+  // simulateTouchUp() {
+  //   // this.touchUpHandler();
+  //   const pointer = this.getElement(this.cursorElementName);
+  //   if (pointer == null) {
+  //     return;
+  //   }
+  //   const up = pointer.getElement('up');
+  //   const down = pointer.getElement('down');
+  //   if (up == null || down == null) {
+  //     return;
+  //   }
+  //   up.show();
+  //   down.hide();
+  // }
+
   // Handle touch up, or mouse click up events in the canvas. When an UP even
   // happens, the default behavior is to let any elements being moved to move
   // freely until they decelerate to 0.
   touchUpHandler() {
+    if (this.recorder.state === 'recording') {
+      this.recorder.recordEvent('touch', ['up']);
+      if (this.cursorShown) {
+        this.showCursor('up');
+      }
+    }
     // console.log("before", this.elements._circle.transform.t())
     // console.log(this.beingMovedElements)
     for (let i = 0; i < this.beingMovedElements.length; i += 1) {
@@ -743,9 +1394,40 @@ class Diagram {
         element.startMovingFreely();
       }
     }
+    this.isTouchDown = false;
     this.beingMovedElements = [];
     this.beingTouchedElements = [];
     // console.log("after", this.elements._circle.transform.t())
+  }
+
+  // simulateCursorMove(diagramPoint: Point) {
+  //   const pointer = this.getElement(this.cursorElementName);
+  //   if (pointer == null) {
+  //     return;
+  //   }
+  //   pointer.setPosition(diagramPoint);
+  // }
+
+  setCursor(p: Point) {
+    const pointer = this.getElement(this.cursorElementName);
+    if (pointer == null) {
+      return;
+    }
+    pointer.setPosition(p);
+    // console.log(p, pointer.isShown, pointer._up.isShown, pointer);
+    this.animateNextFrame();
+  }
+
+  touchFreeHandler(clientPoint: Point) {
+    if (this.recorder.state === 'recording') {
+      const pixelP = this.clientToPixel(clientPoint);
+      const diagramPoint = pixelP.transformBy(this.spaceTransforms.pixelToDiagram.matrix());
+      this.previousCursorPoint = diagramPoint;
+      if (this.cursorShown) {
+        this.recorder.recordEvent('cursorMove', [diagramPoint.x, diagramPoint.y]);
+        this.setCursor(diagramPoint);
+      }
+    }
   }
 
   rotateElement(
@@ -865,6 +1547,30 @@ class Diagram {
     }
   }
 
+  getIsInTransition() {
+    return this.inTransition;
+  }
+
+  // simulateTouchMove(
+  //   previousDiagramPoint: Point,
+  //   currentDiagramPoint: Point,
+  //   pointerElement: string = 'pointer',
+  // ) {
+  //   // const previousPixelPoint = previousDiagramPoint
+  //   //   .transformBy(this.spaceTransforms.diagramToPixel.matrix());
+  //   // const previousClientPoint = this.pixelToClient(previousPixelPoint);
+  //   // const currentPixelPoint = currentDiagramPoint
+  //   //   .transformBy(this.spaceTransforms.diagramToPixel.matrix());
+  //   // const currentClientPoint = this.pixelToClient(currentPixelPoint);
+  //   // this.touchMoveHandler(previousClientPoint, currentClientPoint);
+
+  //   const pointer = this.getElement(pointerElement);
+  //   if (pointer == null) {
+  //     return;
+  //   }
+  //   pointer.setPosition(currentDiagramPoint);
+  // }
+
   // Handle touch/mouse move events in the canvas. These events will only be
   // sent if the initial touch down happened in the canvas.
   // The default behavior is to drag (move) any objects that were touched in
@@ -874,6 +1580,16 @@ class Diagram {
   // normally scroll the screen. Typically, you would want to move the diagram
   // element and not the screen, so a true would be returned.
   touchMoveHandler(previousClientPoint: Point, currentClientPoint: Point): boolean {
+    if (this.recorder.state === 'recording') {
+      const currentPixelPoint = this.clientToPixel(currentClientPoint);
+      const diagramPoint = currentPixelPoint
+        .transformBy(this.spaceTransforms.pixelToDiagram.matrix());
+      this.recorder.recordEvent('cursorMove', [diagramPoint.x, diagramPoint.y]);
+      if (this.cursorShown) {
+        this.setCursor(diagramPoint);
+      }
+    }
+
     if (this.inTransition) {
       return false;
     }
@@ -885,6 +1601,7 @@ class Diagram {
 
     const previousGLPoint =
       previousPixelPoint.transformBy(this.spaceTransforms.pixelToGL.matrix());
+
     // Go through each element being moved, get the current translation
     for (let i = 0; i < this.beingMovedElements.length; i += 1) {
       const element = this.beingMovedElements[i];
@@ -941,8 +1658,65 @@ class Diagram {
     return true;
   }
 
-  stop(cancelled: boolean = true, forceSetToEndOfPlan: boolean = false) {
-    this.elements.stop(cancelled, forceSetToEndOfPlan);
+  stop(
+    how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel',
+  ) {
+    const stopped = () => {
+      this.subscriptions.trigger('stopped');
+      this.state.preparingToStop = false;
+    };
+    if (!this.elements.isAnimating()) {
+      stopped();
+      return;
+    }
+    if (how === 'freeze' || how === 'cancel' || how === 'complete') {
+      this.elements.stop(how);
+      stopped();
+      return;
+    }
+
+    this.state.preparingToStop = false;
+    if (how === 'animateToComplete') {
+      this.elements.stop(how);
+      const elements = this.elements.getAllElements();
+      let preparingToStopCounter = 0;
+      const checkAllStopped = () => {
+        if (preparingToStopCounter > 0) {
+          preparingToStopCounter -= 1;
+        }
+        if (preparingToStopCounter === 0) {
+          stopped();
+        }
+      };
+      elements.forEach((element) => {
+        if (element.state.preparingToStop) {
+          preparingToStopCounter += 1;
+          element.subscriptions.add('stopped', checkAllStopped, 1);
+        }
+      });
+      if (preparingToStopCounter === 0) {
+        checkAllStopped();
+      } else if (preparingToStopCounter > 0) {
+        this.subscriptions.trigger('preparingToStop');
+        this.state.preparingToStop = true;
+      }
+      return;
+    }
+    // console.log('asdf')
+    // Otherwise we are dissolving to complete
+    const state = this.getState({});
+    this.elements.stop('complete');
+    const completeState = this.getState({});
+    this.setState(state);
+    this.elements.stop('freeze');
+    this.setState(completeState, 'dissolve');
+    if (this.state.preparingToSetState) {
+      this.subscriptions.add('stateSet', stopped, 1);
+      this.subscriptions.trigger('preparingToStop');
+      this.state.preparingToStop = true;
+    } else {
+      stopped();
+    }
   }
 
   // To add elements to a diagram, either this method can be overridden,
@@ -996,7 +1770,110 @@ class Diagram {
     this.draw(time);
   }
 
+  // getPaused() {
+  //   return this.elements.getPaused();
+  // }
+
+  // getPauseState() {
+  //   return this.state.pause;
+  // }
+
+  pause() {
+    this.state.pause = 'paused';
+    this.pauseTime = this.globalAnimation.now() / 1000;
+  }
+
+  // pauseLegacy(pauseSettings: TypePauseSettings = { simplePause: true }) {
+  //   // forcePause: boolean = true, clearAnimations: boolean = false) {
+  //   this.elements.pause(pauseSettings);
+  //   if (pauseSettings.simplePause != null && pauseSettings.simplePause) {
+  //     this.state.pause = 'paused';
+  //     this.pauseTime = this.globalAnimation.now() / 1000;
+  //     return;
+  //   }
+
+  //   const elements = this.elements.getAllElements();
+  //   let preparingToPauseCounter = 0;
+  //   const checkAllPaused = () => {
+  //     if (preparingToPauseCounter > 0) {
+  //       preparingToPauseCounter -= 1;
+  //     }
+  //     if (preparingToPauseCounter === 0) {
+  //       this.state.pause = 'paused';
+  //       this.isPaused = true;
+  //       this.subscriptions.trigger('paused');
+  //     }
+  //   }
+  //   elements.forEach((element) => {
+  //     if (element.state.pause === 'preparingToPause') {
+  //       preparingToPauseCounter += 1;
+  //       element.subscriptions.add('paused', checkAllPaused, 1);
+  //     }
+  //   });
+  //   this.pauseTime = this.globalAnimation.now() / 1000;
+  //   if (preparingToPauseCounter === 0 && this.state.pause !== 'paused') {
+  //     checkAllPaused();
+  //   } else if (preparingToPauseCounter > 0) {
+  //     this.state.pause = 'preparingToPause';
+  //     this.subscriptions.trigger('preparingToPause');
+  //   }
+  // }
+
+  // pauseAfterNextDraw() {
+  //   this.pauseAfterNextDrawFlag = true;
+  // }
+
+  unpause() {
+    this.state.pause = 'unpaused';
+    this.isPaused = false;
+    this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.pauseTime);
+    this.animateNextFrame();
+    this.subscriptions.trigger('unpaused');
+  }
+
+  // unpauseLegacy() {
+  //   this.elements.unpause();
+  //   const elements = this.elements.getAllElements();
+  //   let preparingToUnpauseCounter = 0;
+  //   const checkAllUnpaused = () => {
+  //     if (preparingToUnpauseCounter > 0) {
+  //       preparingToUnpauseCounter -= 1;
+  //     }
+  //     if (preparingToUnpauseCounter === 0) {
+  //       this.state.pause = 'unpaused';
+  //       this.isPaused = false;
+  //       this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.pauseTime);
+  //       this.animateNextFrame();
+  //       this.subscriptions.trigger('unpaused');
+  //     }
+  //   };
+  //   elements.forEach((element) => {
+  //     if (element.state.pause === 'preparingToUnpause') {
+  //       preparingToUnpauseCounter += 1;
+  //       element.subscriptions.add('unpaused', checkAllUnpaused, 1)
+  //     }
+  //   });
+  //   if (preparingToUnpauseCounter === 0 && this.state.pause !== 'unpaused') {
+  //     checkAllUnpaused();
+  //   } else if (preparingToUnpauseCounter > 0) {
+  //     this.state.pause = 'preparingToUnpause';
+  //     this.subscriptions.trigger('preparingToUnpause');
+  //   }
+  //   // // this.state.pause = this.elements.getPause();
+  //   // this.pauseTime = performance.now() / 1000;
+
+
+  //   // this.elements.unpause();
+  //   // this.isPaused = false;
+  //   // this.elements.setTimeDelta(performance.now() / 1000 - this.pauseTime);
+  //   this.animateNextFrame();
+  // }
+
   draw(nowIn: number, canvasIndex: number = 0): void {
+    if (this.state.pause === 'paused') {
+      return;
+    }
+    // console.log('Draw draw drawey draw draw', nowIn, this.drawQueued)
     let now = nowIn;
     if (nowIn === -1) {
       now = this.lastDrawTime;
@@ -1032,18 +1909,29 @@ class Diagram {
       return;
     }
     this.drawQueued = false;
-    this.clearContext(canvasIndex);
 
+    this.clearContext(canvasIndex);
     // console.log('really drawing')
-    this.elements.draw(
-      this.spaceTransforms.diagramToGL,
+    this.elements.setupDraw(
       now,
       canvasIndex,
     );
+
+    this.elements.draw(now, [this.spaceTransforms.diagramToGL], 1, canvasIndex);
     // console.log('really done')
+    // if (this.pauseAfterNextDrawFlag) {
+    //   this.pause();
+    //   this.pauseAfterNextDrawFlag = false;
+    // }
 
+    // if (this.state.pause === 'paused') {
+    //   return;
+    // }
+    // if (this.isPaused) {
+    //   return;
+    // }
 
-    if (this.elements.isMoving()) {
+    if (this.elements.isAnyElementMoving()) {
       this.animateNextFrame(true, 'is moving');
     }
 
@@ -1107,7 +1995,8 @@ class Diagram {
   }
 
   isAnimating(): boolean {
-    return this.elements.isMoving();
+    // console.log('asdf')
+    return this.elements.isAnimating();
   }
 
   clientToPixel(clientLocation: Point): Point {
@@ -1115,6 +2004,14 @@ class Diagram {
     return new Point(
       clientLocation.x - canvas.left,
       clientLocation.y - canvas.top,
+    );
+  }
+
+  pixelToClient(pixelLocation: Point): Point {
+    const canvas = this.canvasLow.getBoundingClientRect();
+    return new Point(
+      pixelLocation.x + canvas.left,
+      pixelLocation.y + canvas.top,
     );
   }
 }

@@ -246,6 +246,11 @@ class VertexObject extends DrawingObject {
     this.resetBuffer();
   }
 
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+    ];
+  }
+
   changeVertices(coords: Array<g2.Point>, border: Array<Array<g2.Point>> = []) {
     this.points = [];
     this.border = [];
@@ -358,6 +363,9 @@ class VertexObject extends DrawingObject {
     count: number,
     // webglInstance: WebGLInstance = this.webgl,
   ) {
+    // if (window.asdf) {
+    //   console.log(transformMatrix, color, glIndex, count);
+    // }
     const gl = this.gl[glIndex];
     const webglInstance = this.webgl[glIndex];
 

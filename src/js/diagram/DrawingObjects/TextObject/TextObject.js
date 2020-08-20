@@ -284,7 +284,7 @@ class TextObject extends DrawingObject {
       if (diagramText.font.color != null) {
         const c = [
           ...diagramText.font.color.slice(0, 3),  // $FlowFixMe
-          diagramText.font.color[3] * diagramText.font.opacity,
+          diagramText.font.color[3] * diagramText.font.opacity * color[3],
         ];
         ctx.fillStyle = colorArrayToString(c);
       } else {
@@ -552,6 +552,12 @@ class TextObject extends DrawingObject {
       glBoundary.push(p.transformBy(lastDrawTransformMatrix));
     });
     return glBoundary;
+  }
+
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [
+      ...super._getStateProperties(),
+    ];
   }
 }
 

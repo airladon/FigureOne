@@ -4,6 +4,7 @@
 import type { TypeAnimationStepInputOptions } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
+import GlobalAnimation from '../../webgl/GlobalAnimation';
 
 
 export type TypeParallelAnimationStepInputOptions = {
@@ -15,7 +16,7 @@ export class ParallelAnimationStep extends AnimationStep {
   steps: Array<AnimationStep>;
 
   constructor(
-    stepsOrOptionsIn: Array<AnimationStep> | TypeParallelAnimationStepInputOptions = {},
+    stepsOrOptionsIn: Array<AnimationStep | null> | TypeParallelAnimationStepInputOptions = {},
     ...optionsIn: Array<TypeParallelAnimationStepInputOptions>
   ) {
     const defaultOptions = { steps: [] };
@@ -28,24 +29,56 @@ export class ParallelAnimationStep extends AnimationStep {
     }
     super(options);
     this.steps = [];
+    let steps = [];
     if (!Array.isArray(options.steps) && options.steps != null) {
-      this.steps = [options.steps];
+      steps = [options.steps];
     } else if (options.steps != null) {
-      this.steps = options.steps;
+      ({ steps } = options);
+    }
+    this.steps = [];
+    steps.forEach((step) => {
+      if (step != null) {
+        this.steps.push(step);
+      }
+    });
+  }
+
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'steps',
+    ];
+  }
+
+  _getStateName() {  // eslint-disable-line class-methods-use-this
+    return 'parallelAnimationStep';
+  }
+
+  setTimeDelta(delta: number) {
+    super.setTimeDelta(delta);
+    if (this.steps != null) {
+      this.steps.forEach((step) => {
+        step.setTimeDelta(delta);
+      });
     }
   }
 
   with(step: AnimationStep) {
-    this.steps.push(step);
+    if (step != null) {
+      this.steps.push(step);
+    }
     return this;
   }
 
   nextFrame(now: number) {
+    if (this.startTime === null) {
+      this.startTime = now - this.startTimeOffset;
+    }
     let remaining = null;
-    if (this.beforeFrame != null) {
+    if (this.beforeFrame != null) { // $FlowFixMe - as this has been confirmed
       this.beforeFrame(now - this.startTime);
     }
     this.steps.forEach((step) => {
+      // console.log(step.state, step)
       if (step.state === 'animating' || step.state === 'waitingToStart') {
         const stepRemaining = step.nextFrame(now);
         // console.log(step.element.uid, stepRemaining)
@@ -57,7 +90,7 @@ export class ParallelAnimationStep extends AnimationStep {
         }
       }
     });
-    if (this.afterFrame != null) {
+    if (this.afterFrame != null) { // $FlowFixMe - as this has been confirmed
       this.afterFrame(now - this.startTime);
     }
     if (remaining === null) {
@@ -88,7 +121,7 @@ export class ParallelAnimationStep extends AnimationStep {
     });
   }
 
-  start(startTime?: number) {
+  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
     this.startWaiting();
     super.start(startTime);
     this.steps.forEach((step) => {
@@ -97,7 +130,7 @@ export class ParallelAnimationStep extends AnimationStep {
     });
   }
 
-  finish(cancelled: boolean = false, force: ?'complete' | 'noComplete' = null) {
+  finish(cancelled: boolean = false, force: ?'complete' | 'freeze' = null) {
     if (this.state === 'idle' || this.state === 'finished') {
       return;
     }
@@ -108,7 +141,7 @@ export class ParallelAnimationStep extends AnimationStep {
       forceToUse = 'complete';
     }
     if (this.completeOnCancel === false) {
-      forceToUse = 'noComplete';
+      forceToUse = 'freeze';
     }
     if (force != null) {
       forceToUse = force;
@@ -119,8 +152,31 @@ export class ParallelAnimationStep extends AnimationStep {
       }
     });
     if (this.onFinish != null) {
-      this.onFinish(cancelled);
+      this.fnExec(this.onFinish, cancelled);
     }
+  }
+
+  getTotalDuration() {
+    let totalDuration = 0;
+    this.steps.forEach((step) => {
+      const stepDuration = step.getTotalDuration();
+      if (stepDuration > totalDuration) {
+        totalDuration = stepDuration;
+      }
+    });
+    return totalDuration;
+  }
+
+  getRemainingTime(now: number = new GlobalAnimation().now() / 1000) {
+    const totalDuration = this.getTotalDuration();
+    if (this.startTime == null) {
+      if (this.state === 'animating' || this.state === 'waitingToStart') {
+        return totalDuration;
+      }
+      return 0;
+    }
+    const deltaTime = now - this.startTime;
+    return totalDuration - deltaTime;
   }
 
   _dup() {
@@ -131,7 +187,7 @@ export class ParallelAnimationStep extends AnimationStep {
 }
 
 export function inParallel(
-  stepsOrOptionsIn: Array<AnimationStep> | TypeParallelAnimationStepInputOptions = {},
+  stepsOrOptionsIn: Array<AnimationStep | null> | TypeParallelAnimationStepInputOptions = {},
   ...optionsIn: Array<TypeParallelAnimationStepInputOptions>
 ) {
   return new ParallelAnimationStep(stepsOrOptionsIn, ...optionsIn);

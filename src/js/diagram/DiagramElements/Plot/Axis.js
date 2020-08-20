@@ -4,7 +4,7 @@ import {
   DiagramElementPrimitive, DiagramElementCollection,
 } from '../../Element';
 import {
-  Rect, Transform, Point,
+  Rect, Transform, Point, getPoint,
 } from '../../../tools/g2';
 import WebGLInstance from '../../webgl/webgl';
 
@@ -128,12 +128,12 @@ class Axis extends DiagramElementCollection {
     this.addTickLabels(
       'major', this.drawContext2D[0], majorTicks,
       this.props.generateMajorLabels.bind(this.props), this.diagramLimits,
-      this.props.majorTicks.labelOffset,
+      getPoint(this.props.majorTicks.labelOffset),
     );
     this.addTickLabels(
       'minor', this.drawContext2D[0], minorTicks,
       this.props.generateMinorLabels.bind(this.props), this.diagramLimits,
-      this.props.minorTicks.labelOffset,
+      getPoint(this.props.minorTicks.labelOffset),
     );
   }
 

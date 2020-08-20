@@ -41,20 +41,20 @@ class TickMarks extends DiagramElementPrimitive {
     this.start = start;
   }
 
-  draw(
-    transform: g2.Transform = new g2.Transform(),
-    now: number = 0,
-  ) {
-    for (let i = 0; i < this.num; i += 1) {
-      const tickTransform = new g2.Transform()
-        .translate(this.spacing * i, 0)
-        .rotate(this.rotation)
-        .translate(this.start.x, this.start.y);
-      const t = transform.transform(tickTransform);
-      // const t = m2.mul(transform.matrix(), tickTransform.matrix());
-      super.draw(t, now);
-    }
-  }
+  // draw(
+  //   now: number = 0,
+  //   transform: g2.Transform = new g2.Transform(),
+  // ) {
+  //   for (let i = 0; i < this.num; i += 1) {
+  //     const tickTransform = new g2.Transform()
+  //       .translate(this.spacing * i, 0)
+  //       .rotate(this.rotation)
+  //       .translate(this.start.x, this.start.y);
+  //     const t = transform.transform(tickTransform);
+  //     // const t = m2.mul(transform.matrix(), tickTransform.matrix());
+  //     super.draw(t, now);
+  //   }
+  // }
 }
 
 export default TickMarks;

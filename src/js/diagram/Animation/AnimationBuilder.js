@@ -10,12 +10,15 @@ import type {
   TypeTransformAnimationStepInputOptions,
   TypeRotationAnimationStepInputOptions, TypeScaleAnimationStepInputOptions,
   TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
+  TypePulseTransformAnimationStepInputOptions,
 } from './Animation';
 // import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
 // import SerialAnimationStep from './AnimationStep/SerialAnimationStep';
 // eslint-disable-next-line import/no-cycle
 import * as animation from './Animation';
 import { joinObjects, duplicateFromTo } from '../../tools/tools';
+// import { getState, setState } from '../state';
+// import type Diagram from '../Diagram';
 
 export type TypeAnimationBuilderInputOptions = {
   element?: DiagramElement;
@@ -38,11 +41,96 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     }
     super(options);
     this.element = options.element;
+    this._stepType = 'builder';
     return this;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  // _finishSetState(diagram: Diagram) {
+  //   if (this.element != null && typeof this.element === 'string') {
+  //     const element = diagram.getElement(this.element);
+  //     if (element != null) {
+  //       this.element = element;
+  //     }
+  //   }
+  // }
+
+  // _getState() {
+  //   const state = super._getState();
+
+  //   // const state = getState(this, keys);
+  //   if (this.element != null) {
+  //     state.element = this.element.getPath();
+  //   }
+  //   return state;
+  // }
+
+  // fnExec(idOrFn: string | Function | null, ...args: any) {
+  //   const result = this.fnMap.exec(idOrFn, ...args);
+  //   if (result == null && this.element != null) {
+  //     return this.element.fnMap.exec(idOrFn, ...args);
+  //   }
+  //   return result;
+  // }
+  fnExec(idOrFn: string | Function | null, ...args: any) {
+    // const result = this.fnMap.exec(idOrFn, ...args);
+    // if (result == null && this.element != null) {
+    //   return this.element.fnMap.exec(idOrFn, ...args);
+    // }
+    // return result;
+    if (this.element != null) {
+      return this.fnMap.execOnMaps(
+        idOrFn, [this.element.fnMap.map], ...args,
+      );
+    }
+    return this.fnMap.exec(idOrFn, ...args);
+  }
+
+  _fromState(state: Object, getElement: ?(string) => DiagramElement) {
+    // const obj = new this.constructor();
+    joinObjects(this, state);
+    if (this.element != null && typeof this.element === 'string' && getElement != null) {
+      this.element = getElement(this.element);
+    }
+    return this;
+  }
+
+  // _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  //   return [...super._getStateProperties(),
+  //     'steps',
+  //   ];
+  // }
+
+  _getStateName() {  // eslint-disable-line class-methods-use-this
+    return 'animationBuilder';
+  }
+
+  _state(options: Object) {
+    const state = super._state(options);
+    // definition.f1Type = 'animationBuilder';
+    // if (this.element != null) {
+    //   definition.state.element = this.element.getPath();
+    // }
+    if (this.element != null) {
+      state.state.element = {
+        f1Type: 'de',
+        state: this.element.getPath(),
+      };
+    }
+    // if (this.steps.length > 0) {
+    //   definition.def.steps = getState()
+    // }
+    return state;
+  }
+
   custom(...optionsIn: Array<TypeCustomAnimationStepInputOptions>) {
-    this.then(new animation.CustomAnimationStep(...optionsIn));
+    if (this.element != null) {
+      const defaultOptions = { element: this.element };
+      const options = joinObjects({}, defaultOptions, ...optionsIn);
+      this.then(new animation.CustomAnimationStep(options));
+    } else {
+      this.then(new animation.CustomAnimationStep(...optionsIn));
+    }
     return this;
   }
 
@@ -62,6 +150,10 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
       this.then(new animation.PositionAnimationStep(options));
     }
     return this;
+  }
+
+  translation(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
+    return this.position(...optionsIn);
   }
 
   scale(...optionsIn: Array<TypeScaleAnimationStepInputOptions>) {
@@ -90,13 +182,28 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  scenario(
-    ...optionsIn: Array<TypeTransformAnimationStepInputOptions & { scenario: string }>
-  ) {
+  pulseTransforms(...optionsIn: Array<TypePulseTransformAnimationStepInputOptions>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
-      this.then(options.element.anim.scenario(options));
+      this.then(new animation.PulseTransformAnimationStep(options));
+    }
+    return this;
+  }
+
+  scenario(
+    ...optionsIn: Array<TypeTransformAnimationStepInputOptions & { scenario: string }>
+  ) {
+    // if (this.element != null) {
+    //   const defaultOptions = { element: this.element };
+    //   const options = joinObjects({}, defaultOptions, ...optionsIn);
+    //   this.then(options.element.anim.scenario(options));
+    // }
+    // return this;
+    if (this.element != null) {
+      const defaultOptions = { element: this.element };
+      const options = joinObjects({}, defaultOptions, ...optionsIn);
+      this.then(new animation.ScenarioAnimationStep(options));
     }
     return this;
   }
@@ -202,12 +309,20 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     triggerOrOptionsIn: Function | TypeTriggerStepInputOptions = {},
     ...optionsIn: Array<TypeTriggerStepInputOptions>
   ) {
-    this.then(animation.trigger(triggerOrOptionsIn, ...optionsIn));
+    if (this.element != null) {
+      const defaultOptions = { element: this.element };
+      const options = joinObjects({}, defaultOptions, ...optionsIn);
+      this.then(animation.trigger(triggerOrOptionsIn, options));
+    } else {
+      this.then(animation.trigger(triggerOrOptionsIn, ...optionsIn));
+    }
+    // this.then(animation.trigger(triggerOrOptionsIn, ...optionsIn));
     return this;
   }
 
   inParallel(
-    stepsOrOptionsIn: Array<animation.AnimationStep> | TypeParallelAnimationStepInputOptions = {},
+    stepsOrOptionsIn: Array<animation.AnimationStep | null>
+                      | TypeParallelAnimationStepInputOptions = {},
     ...optionsIn: Array<TypeParallelAnimationStepInputOptions>
   ) {
     this.then(animation.inParallel(stepsOrOptionsIn, ...optionsIn));

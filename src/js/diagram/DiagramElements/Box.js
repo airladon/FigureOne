@@ -41,7 +41,12 @@ export default function Box(
     if (elements.length === 0) {
       return;
     }
-    const space = getPoint(spaceIn);
+    let space;
+    if (typeof spaceIn === 'number') {
+      space = new Point(spaceIn, spaceIn);
+    } else {
+      space = getPoint(spaceIn);
+    }
     const maxBounds = elements[0].getBoundingRect(drawingSpace);
     for (let i = 1; i < elements.length; i += 1) {
       const bounds = elements[i].getBoundingRect(drawingSpace);
@@ -74,6 +79,29 @@ export default function Box(
       maxBounds.left + maxBounds.width / 2,
       maxBounds.bottom + maxBounds.height / 2,
     );
+    element.pointsDefinition = {
+      width: maxBounds.width,
+      height: maxBounds.height,
+    };
+  };
+  // $FlowFixMe
+  element.custom.setSize = (widthIn: number, heightIn: number) => {
+    // $FlowFixMe
+    element.drawingObject.updateBox(widthIn, heightIn);
+    element.pointsDefinition = {
+      width: widthIn,
+      height: heightIn,
+    };
+  };
+
+  element.setPointsFromDefinition = () => {
+    const w = element.pointsDefinition.width;
+    // const { width, height } = element.pointsDefinition;
+    const h = element.pointsDefinition.height;
+    if (w == null || h == null) {
+      return;
+    }
+    element.custom.setSize(w, h);
   };
   return element;
 }

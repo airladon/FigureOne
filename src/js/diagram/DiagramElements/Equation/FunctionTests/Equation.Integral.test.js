@@ -386,12 +386,6 @@ describe('Equation Functions - Integral', () => {
     // height: 0.10300000000000001,
     // descent: -0.008,
     // ascent: top: 0.095,
-    // test.only('base', () => {
-    //   console.log(baseB)
-    //   console.log(baseC)
-    //   console.log(baseS)
-    //   expect(round(baseS.left)).toBe(0);
-    // });
     test('space', () => {
       eqn.showForm('space');
       diagram.setFirstTransform();
@@ -496,28 +490,6 @@ describe('Equation Functions - Integral', () => {
       expect(round(newC.bottom)).toBe(round(baseC.bottom));
       expect(round(newC.top)).toBe(round(baseC.bottom + baseC.height * scale));
     });
-    // test('fromSpace', () => {
-    //   eqn.showForm('fromSpace');
-    //   diagram.setFirstTransform();
-    //   const newS = eqn._s.getBoundingRect('diagram');
-    //   const newB = eqn._b.getBoundingRect('diagram');
-    //   expect(round(newS.height)).toBe(round(baseS.height));
-    //   expect(round(newS.bottom)).toBe(round(baseS.bottom));
-    //   expect(round(newB.height)).toBe(round(baseB.height));
-    //   expect(round(newB.top)).toBe(round(baseB.top - spaceDelta));
-    //   expect(round(newB.bottom)).toBe(round(baseB.bottom - spaceDelta));
-    // });
-    // test('toSpace', () => {
-    //   eqn.showForm('toSpace');
-    //   diagram.setFirstTransform();
-    //   const newS = eqn._s.getBoundingRect('diagram');
-    //   const newC = eqn._c.getBoundingRect('diagram');
-    //   expect(round(newS.height)).toBe(round(baseS.height));
-    //   expect(round(newS.bottom)).toBe(round(baseS.bottom));
-    //   expect(round(newC.height)).toBe(round(baseC.height));
-    //   expect(round(newC.bottom)).toBe(round(baseC.bottom + spaceDelta));
-    //   expect(round(newC.top)).toBe(round(baseC.top + spaceDelta));
-    // });
     test('fromOffset', () => {
       eqn.showForm('fromOffset');
       diagram.setFirstTransform();
