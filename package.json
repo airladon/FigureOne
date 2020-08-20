@@ -56,5 +56,8 @@
     "webpack-cli": "^3.3.12",
     "whatwg-fetch": "^3.4.0",
     "worker-loader": "^2.0.0"
+  },
+  "devDependenciesComments": {
+    "worker-loader": "Do not upgrade to 3.0.0 as the publicPath options seems to be broken. This means instead of workers being searched for at /static/workers, they are searched for at the location of the file calling them"
   }
 }
