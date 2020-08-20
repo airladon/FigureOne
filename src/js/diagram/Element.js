@@ -711,7 +711,7 @@ class DiagramElement {
   animationFinished(typeOfAnimation: 'pulse' | 'movingFreely' | 'animation' = 'animation') {
     // console.log('element', this.name, this.animationFinishedCallback)
     this.fnMap.exec(this.animationFinishedCallback);
-    this.subscriptions.trigger('animationFinished', typeOfAnimation);
+    this.subscriptions.publish('animationFinished', typeOfAnimation);
   }
 
   // animationsFinishedCallback(element: DiagramElement) {
@@ -1390,7 +1390,7 @@ class DiagramElement {
       this.fnMap.exec(this.internalSetTransformCallback, this.transform);
     }
     this.fnMap.exec(this.setTransformCallback, this.transform);
-    this.subscriptions.trigger('setTransform', [this.transform]);
+    this.subscriptions.publish('setTransform', [this.transform]);
   }
 
   // Set the next transform (and velocity if moving freely) for the next
@@ -1865,7 +1865,7 @@ class DiagramElement {
     if (wasMovingFreely) {
       this.fnMap.exec(this.animationFinishedCallback);
       this.animationFinished('movingFreely');
-      this.subscriptions.trigger('stopMovingFreely');
+      this.subscriptions.publish('stopMovingFreely');
     }
   }
 
@@ -1885,7 +1885,7 @@ class DiagramElement {
   //   if (wasMovingFreely) {
   //     // console.log('stop moving freely callback', this.animationFinishedCallback)
   //     this.fnMap.exec(this.animationFinishedCallback);
-  //     // this.subscriptions.trigger('animationFinished', ['movingFreely']);
+  //     // this.subscriptions.publish('animationFinished', ['movingFreely']);
   //     this.animationFinished('movingFreely');
   //   }
   // }
@@ -2192,9 +2192,9 @@ class DiagramElement {
       this.fnMap.exec(callback, how);
     }
     if (wasPulsing) {
-      // this.subscriptions.trigger('animationFinished', )
+      // this.subscriptions.publish('animationFinished', )
       this.animationFinished('pulse');
-      this.subscriptions.trigger('stopPulsing');
+      this.subscriptions.publish('stopPulsing');
     }
   }
 
@@ -2217,7 +2217,7 @@ class DiagramElement {
       toComplete -= 1;
       if (toComplete <= 0) {
         this.state.preparingToStop = false;
-        this.subscriptions.trigger('stopped');
+        this.subscriptions.publish('stopped');
       }
     };
     if (how === 'animateToComplete' || how === 'dissolveToComplete') {
@@ -2238,7 +2238,7 @@ class DiagramElement {
       }
     }
     if (this.state.preparingToStop) {
-      this.subscriptions.trigger('preparingToStop');
+      this.subscriptions.publish('preparingToStop');
     }
     this.stopAnimating(how);
     this.stopMovingFreely(how);
@@ -3147,7 +3147,7 @@ class DiagramElementPrimitive extends DiagramElement {
           return;
         }
       }
-      this.subscriptions.trigger('beforeDraw', [now]);
+      this.subscriptions.publish('beforeDraw', [now]);
       if (this.beforeDrawCallback != null) {
         this.fnMap.exec(this.beforeDrawCallback, now);
       }
@@ -3233,7 +3233,7 @@ class DiagramElementPrimitive extends DiagramElement {
       // this.redrawElements.forEach((element) => {
       //   element.draw(element.getParentLastDrawTransform(), now);
       // })
-      this.subscriptions.trigger('afterDrawDraw', [now]);
+      this.subscriptions.publish('afterDrawDraw', [now]);
       if (this.afterDrawCallback != null) {
         this.fnMap.exec(this.afterDrawCallback, now);
       }
