@@ -2634,11 +2634,22 @@ class DiagramElement {
     this.setDiagramPosition(p._dup());
   }
 
-  setPositionToElement(element: DiagramElement) {
-    const p = element.transform.t();
-    if (p != null) {
-      this.setPosition(p._dup());
+  setPositionToElement(
+    element: DiagramElement,
+    space: 'local' | 'diagram' = 'local',
+  ) {
+    if (space === 'local') {
+      const p = element.transform.t();
+      if (p != null) {
+        this.setPosition(p._dup());
+      }
+      return;
     }
+    const diagram = this.getPosition('diagram');
+    const local = this.getPosition('local');
+    const p = element.getPosition('diagram');
+    const deltaDiagram = p.sub(diagram);
+    this.setPosition(local.add(deltaDiagram));
   }
 
   checkMoveBounds() {
