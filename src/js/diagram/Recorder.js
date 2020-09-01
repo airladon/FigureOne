@@ -280,6 +280,18 @@ class Recorder {
     return this.currentTime;
   }
 
+  getDeltaTime(delta: number = 0) {
+    const currentTime = this.getCurrentTime();
+    const newTime = currentTime + delta;
+    if (newTime > this.duration) {
+      return this.duration;
+    }
+    if (newTime < 0) {
+      return 0;
+    }
+    return newTime;
+  }
+
   setCurrentTime(time: number) {
     this.currentTime = time;
     this.subscriptions.publish('timeUpdate', [time]);
@@ -947,9 +959,11 @@ class Recorder {
   seekToPercent(percentTime: number) {
     const duration = this.calcDuration();
     this.seek(duration * percentTime);
+    console.log('seekedToPercent')
   }
 
   seek(timeIn: number) {
+    // console.log('called seek', timeIn)
     this.pauseState = null;
     let time = timeIn;
     if (time < 0) {
@@ -971,6 +985,7 @@ class Recorder {
     //   movingFreely: 'freeze',
     // });
     this.diagram.stop('freeze');
+    // console.log('last seek time', this.lastSeekTime)
   }
 
   setToTime(timeIn: number, force: boolean = false) {
@@ -987,12 +1002,13 @@ class Recorder {
     }
 
     if (stateTime === this.lastSeekTime && !force) {
+      // console.log('setting to time - no change');
       return;
     }
     const time = stateTime;
 
     this.lastSeekTime = stateTime;
-
+    // console.log('setting to time', timeIn, stateTime);
     // For each eventName, if it is to be set on seek, then get the previous
     // index (or multiple indexes if multiple are set for the same time)
     // and add them to an eventsToExecuteArray
@@ -1038,22 +1054,29 @@ class Recorder {
       }
       return 0;
     });
-
+    // console.log(eventsToSetBeforeState);
     // Sort the eventsToSet arrays in time
     sortTimes(eventsToSetBeforeState);
     sortTimes(eventsToSetAfterState);
     const playEvents = (events) => {
       events.forEach((event) => {
         const [eventName, index] = event;
+        // if (eventName === 'slide') {
+        //   debugger;
+        // }
         this.setEvent(eventName, index);
       });
     };
+    // console.log('before')
     playEvents(eventsToSetBeforeState);
+    // console.log('state')
     // console.log(this.stateIndex)
     if (this.stateIndex !== -1) {
       this.setState(this.stateIndex);
     }
+    // console.log('after')
     playEvents(eventsToSetAfterState);
+    // console.log('done')
     if (this.audio) {
       this.audio.currentTime = time;
     }
@@ -1268,6 +1291,16 @@ class Recorder {
   resumePlayback() {
     this.startPlayback(this.currentTime, false);
   }
+  // resumePlayback(delta: number = 0) {
+  //   if (delta > 0) {
+  //     this.pauseState = null;
+  //   }
+  //   const resumeTime = Math.min(
+  //     Math.max(this.currentTime + delta, 0),
+  //     this.duration,
+  //   );
+  //   this.startPlayback(resumeTime, false);
+  // }
 
   startAudioPlayback(fromTime: number) {
     if (this.audio) {

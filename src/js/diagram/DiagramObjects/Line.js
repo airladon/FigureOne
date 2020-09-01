@@ -173,7 +173,7 @@ function makeStraightLine(
   dashStyle: {
     style: Array<number>,
     maxLength: number } | null,
-  largerTouchBorder: boolean | number,
+  largerTouchBorder: boolean | number | { width: number, start: number, end: number },
   isTouchDevice: boolean,
 ) {
   let straightLine = shapes.horizontalLine(
@@ -202,17 +202,41 @@ function makeStraightLine(
     // );
   }
   if (largerTouchBorder) {
-    let multiplier = isTouchDevice ? 16 : 8;
+    const multiplier = isTouchDevice ? 16 : 8;
+    let end = 0;
+    let start = 0;
+    let padding = multiplier * width;
+    // let width = null;
+    // const lineWidth = Math.abs(element.drawingObject.border[0][i].y) * 2;
     if (typeof largerTouchBorder === 'number') {
-      multiplier = largerTouchBorder;
+      // multiplier = largerTouchBorder;
+      padding = largerTouchBorder;
     }
-    const increaseBorderSize = (element: DiagramElementPrimitive) => {
-      for (let i = 0; i < element.drawingObject.border[0].length; i += 1) {
-        // eslint-disable-next-line no-param-reassign
-        element.drawingObject.border[0][i].y *= multiplier;
+    if (typeof largerTouchBorder === 'object') {
+      if (largerTouchBorder.width != null) {
+        padding = largerTouchBorder.width;
       }
-    };
-    increaseBorderSize(straightLine);
+      if (largerTouchBorder.end != null) {
+        end = largerTouchBorder.end;
+      }
+      if (largerTouchBorder.start != null) {
+        start = largerTouchBorder.start;
+      }
+    }
+    // console.log(padding, end, start)
+    straightLine.drawingObject.border[0] = [
+      straightLine.drawingObject.border[0][0].add(-start, -padding),
+      straightLine.drawingObject.border[0][1].add(-start, padding),
+      straightLine.drawingObject.border[0][2].add(end, padding),
+      straightLine.drawingObject.border[0][3].add(end, -padding),
+    ];
+    // const increaseBorderSize = (element: DiagramElementPrimitive) => {
+    //   for (let i = 0; i < element.drawingObject.border[0].length; i += 1) {
+    //     // eslint-disable-next-line no-param-reassign
+    //     element.drawingObject.border[0][i].y *= multiplier;
+    //   }
+    // };
+    // increaseBorderSize(straightLine);
   }
   return straightLine;
 }
@@ -290,7 +314,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   vertexSpaceStart: Point;
   offset: number;
   isTouchDevice: boolean;
-  largerTouchBorder: boolean | number;
+  largerTouchBorder: boolean | number | { width: number, start: number, end: number };
   dashStyle: { style: Array<number>, maxLength: number } | null;
 
   scaleTransformMethodName: string;
@@ -388,6 +412,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       color: [0, 0, 1, 1],
       showLine: true,
       largerTouchBorder: true,
+      touchBorder: null,
       offset: 0,
       dashStyle: null,
       mods: {},

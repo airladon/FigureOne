@@ -1325,6 +1325,68 @@ export default class DiagramPrimitives {
   //   );
   // }
 
+  html(optionsIn: {
+    element: HTMLElement | Array<HTMLElement>,
+    classes?: string,
+    position?: TypeParsablePoint,
+    xAlign?: 'left' | 'right' | 'center',
+    yAlign?: 'top' | 'bottom' | 'middle',
+    wrap?: boolean,
+    id?: string,
+  }) {
+    const defaultOptions = {
+      classes: '',
+      position: [0, 0],
+      xAlign: 'center',
+      yAlign: 'middle',
+      wrap: true,
+      id: `id__temp_${Math.round(Math.random() * 10000)}`,
+    };
+    const options = joinObjects({}, defaultOptions, optionsIn);
+    options.element = optionsIn.element;
+    let element;
+    let parent;
+    if (options.wrap || Array.isArray(options.element)) {
+      element = document.createElement('div');
+      element.setAttribute('id', options.id);
+      if (Array.isArray(options.element)) {
+        options.element.forEach(e => element.appendChild(e));
+      } else {
+        element.appendChild(options.element);
+      }
+      this.htmlCanvas.appendChild(element);
+      parent = this.htmlCanvas;
+    } else {
+      element = options.element;
+      const id = element.getAttribute('id');
+      if (id === '') {
+        element.setAttribute('id', options.id);
+      } else {
+        options.id = id;
+      }
+      parent = element.parentElement;
+    }
+    if (parent == null) {
+      parent = this.htmlCanvas;
+    }
+
+    const hT = new HTMLObject(
+      parent,
+      options.id,
+      new Point(0, 0),
+      options.yAlign,
+      options.xAlign,
+    );
+    const p = getPoint(options.position);
+    const diagramElement = new DiagramElementPrimitive(
+      hT,
+      new Transform().scale(1, 1).translate(p.x, p.y),
+      [1, 1, 1, 1],
+      this.limits,
+    );
+    return diagramElement;
+  }
+
   htmlElement(
     elementToAdd: HTMLElement | Array<HTMLElement>,
     id: string = `id__temp_${Math.round(Math.random() * 10000)}`,

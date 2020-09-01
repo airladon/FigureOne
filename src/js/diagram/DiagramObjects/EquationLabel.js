@@ -103,7 +103,17 @@ export default class EquationLabel {
       });
       eqn.setCurrentForm(form, formType);
     } else {
-      const defaultEqnOptions = { color };
+      const defaultEqnOptions = {
+        color,
+        defaultFormAlignment: {
+          fixTo: new Point(0, 0),
+          xAlign,
+          yAlign,
+        },
+        scale,
+        form,
+        formType,
+      };
       eqn = equations.equation(joinObjects(
         defaultEqnOptions, labelTextOrEquation,
       ));
