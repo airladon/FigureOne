@@ -14,6 +14,7 @@ class Gesture {
   free: (Point) => void;
   // cursor: () => void;
   toggleCursor: () => void;
+  // keyCommands: boolean;
 
   constructor(diagram: Diagram) {
     this.diagram = diagram;
@@ -34,8 +35,8 @@ class Gesture {
     this.addEvent('touchstart', this.touchStartHandler, false);
     this.addEvent('touchend', this.touchEndHandler, false);
     this.addEvent('touchmove', this.touchMoveHandler, false);
+    // this.keyCommands = false;
     // this.addEvent('keypress', this.keypressHandler, false);
-    document.addEventListener('keypress', this.toggleCursor, false);
     // this.diagram.canvas.addEventListener(
     //   'touchstart',
     //   this.touchStartHandler.bind(this), false,
@@ -50,6 +51,14 @@ class Gesture {
     // );
     this.enable = true;
   }
+
+  // enableKeyCommands() {
+  //   if (this.keyCommands) {
+  //     return;
+  //   }
+  //   document.addEventListener('keypress', this.toggleCursor, false);
+  //   this.keyCommands = true;
+  // }
 
   addEvent(event: string, method: Object, flag: boolean) {
     this.diagram.gestureCanvas.addEventListener(
@@ -126,14 +135,17 @@ class Gesture {
     this.endHandler();
   }
 
-  keypressHandler(event: KeyboardEvent) {
-    // console.log(event.code, event.keyCode, String.fromCharCode(event.keyCode))
-    // console.log(this.toggleCursor)
-    if (String.fromCharCode(event.keyCode) === 'n' && this.toggleCursor) {
-      // console.log('toggling')
-      this.toggleCursor();
-    }
-  }
+  // keypressHandler(event: KeyboardEvent) {
+  //   // console.log(event.code, event.keyCode, String.fromCharCode(event.keyCode))
+  //   // console.log(this.toggleCursor)
+  //   if (String.fromCharCode(event.keyCode) === 'n' && this.toggleCursor) {
+  //     this.toggleCursor();
+  //   }
+  //   if (String.fromCharCode(event.keyCode) === 'f') {
+  //     const element = document.getElementById('topic__button-next');
+  //     element.click();
+  //   }
+  // }
 
   destroy() {
     this.removeEvent('mousedown', this.mouseDownHandler, false);
@@ -144,9 +156,9 @@ class Gesture {
     this.removeEvent('touchmove', this.touchMoveHandler, false);
     // this.removeEvent('keypress', this.keypressHandler, false);
     // $FlowFixMe
-    if (document.removeEvent != null) { // $FlowFixMe
-      document.removeEvent('keypress', this.keypressHandler, false);
-    }
+    // if (document.removeEvent != null && this.keyCommands) { // $FlowFixMe
+    //   document.removeEvent('keypress', this.keypressHandler, false);
+    // }
   }
 }
 

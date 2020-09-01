@@ -4,6 +4,7 @@
 import {
   Point, spaceToSpaceTransform,
 } from '../../../tools/g2';
+import { round } from '../../../tools/math';
 import DrawingObject from '../DrawingObject';
 
 
@@ -17,6 +18,8 @@ class HTMLObject extends DrawingObject {
   xAlign: 'left' | 'right' | 'center';
   yAlign: 'top' | 'bottom' | 'middle';
   show: boolean;
+  lastMatrix: Array<number>;
+  lastColor: Array<number>;
 
   copy: () => HTMLObject;
   +change: (string | HTMLElement, Array<number>) => void;
@@ -40,6 +43,8 @@ class HTMLObject extends DrawingObject {
     this.parentDiv = parentDiv;
     this.show = true;
     this.setBorder();
+    this.lastMatrix = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    this.lastColor = [-1, -1, -1, -1];
   }
 
   _dup() {
@@ -115,7 +120,7 @@ class HTMLObject extends DrawingObject {
     }
   }
 
-  transformHtml(transformMatrix: Array<number>) {
+  transformHtml(transformMatrix: Array<number>, opacity: number = 1) {
     if (this.show) {
       // this.element.style.visibility = 'visible';
       const glLocation = this.location.transformBy(transformMatrix);
@@ -138,24 +143,44 @@ class HTMLObject extends DrawingObject {
       }
       const x = pixelLocation.x + left;
       const y = pixelLocation.y + top;
-      this.element.style.position = 'absolute';
-      this.element.style.left = `${x}px`;
-      this.element.style.top = `${y}px`;
-      this.element.style.visibility = 'visible';
+      // this.element.style.position = 'absolute';
+      // this.element.style.left = `${x}px`;
+      // this.element.style.top = `${y}px`;
+      // this.element.style.visibility = 'visible';
+      // this.element.style.opacity = opacity;
+      const style = `position: absolute; left: ${x}px; top: ${y}px; visibility: visible; opacity: ${opacity};`;
+      const currentStyle = this.element.getAttribute('style');
+      if (style !== currentStyle) {
+        this.element.setAttribute('style', style);
+      }
       // this.element.classList.remove('diagram__hidden');
     } else {
-      this.element.style.position = 'absolute';
-      this.element.style.left = '-10000px';
-      this.element.style.top = '-10000px';
-      // this.element.classList.add('diagram__hidden');
-      this.element.style.visibility = 'hidden';
+      this.element.setAttribute(
+        'style',
+        `position: absolute; left: -10000px; top: -10000px; visibility: hidden; opacity: ${opacity};`,
+      );
+      // this.element.style.position = 'absolute';
+      // this.element.style.left = '-10000px';
+      // this.element.style.top = '-10000px';
+      // // this.element.classList.add('diagram__hidden');
       // this.element.style.visibility = 'hidden';
-      // console.trace()
+      // // this.element.style.visibility = 'hidden';
+      // // console.trace()
     }
   }
 
-  drawWithTransformMatrix(transformMatrix: Array<number>) {
-    this.transformHtml(transformMatrix);
+  drawWithTransformMatrix(transformMatrix: Array<number>, color: Array<number>) {
+    let isDifferent = false;
+    for (let i = 0; i < transformMatrix.length; i += 1) {
+      if (round(transformMatrix[i], 8) !== this.lastMatrix[i]) {
+        isDifferent = true;
+      }
+    }
+    if (isDifferent || this.lastColor[3] !== round(color[3], 8)) {
+      this.transformHtml(transformMatrix, color[3]);
+      this.lastMatrix = round(transformMatrix, 8);
+      this.lastColor = round(color, 8);
+    }
   }
 }
 
