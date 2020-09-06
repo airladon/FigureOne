@@ -3,9 +3,10 @@ import WebGLInstance from './webgl/webgl';
 // import getShaders from './webgl/shaders';
 
 import {
-  Rect, Point, Transform,
+  Rect, Point, Transform, getRect,
   spaceToSpaceTransform, minAngleDiff, getTransform,
 } from '../tools/g2';
+import type { TypeParsableRect } from '../tools/g2';
 // import * as math from '../tools/math';
 import { FunctionMap } from '../tools/FunctionMap';
 import { setState, getState } from './state';
@@ -28,12 +29,12 @@ import type { TypeScenarioVelocity } from './Animation/AnimationStep/ElementAnim
 /**
   * Diagram Input Options
   * @property {string} [htmlId] HTML div tag id - default: 'figureOneId'
-  * @property {Rect} limits - Diagram coordinate limits - default: bottom left
+  * @property {TypeParsableRect} limits - Diagram coordinate limits - default: bottom left
   *  corner at (-1, -1), width 1, height 1
  */
 export type TypeDiagramOptions = {
   htmlId?: string,
-  limits?: Rect,
+  limits?: TypeParsableRect,
   // backgroundColor?: Array<number>,
   // fontScale?: number,
   // elements?: DiagramElementCollection;
@@ -1055,8 +1056,9 @@ class Diagram {
     this.elements.setFirstTransform(this.spaceTransforms.diagramToGL);
   }
 
-  updateLimits(limits: Rect) {
-    this.limits = limits._dup();
+  updateLimits(limits: TypeParsableRect) {
+    const l = getRect(limits);
+    this.limits = l._dup();
     this.setSpaceTransforms();
   }
 

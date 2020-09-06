@@ -123,6 +123,7 @@ class HTMLObject extends DrawingObject {
   transformHtml(transformMatrix: Array<number>, opacity: number = 1) {
     if (this.show) {
       // this.element.style.visibility = 'visible';
+      debugger;
       const glLocation = this.location.transformBy(transformMatrix);
       const pixelLocation = this.glToPixelSpace(glLocation);
 
