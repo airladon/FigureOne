@@ -959,7 +959,6 @@ class Recorder {
   seekToPercent(percentTime: number) {
     const duration = this.calcDuration();
     this.seek(duration * percentTime);
-    console.log('seekedToPercent')
   }
 
   seek(timeIn: number) {

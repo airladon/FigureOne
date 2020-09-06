@@ -1,5 +1,5 @@
 import {
-  Point, Transform,
+  Point,
 } from '../tools/g2';
 import * as tools from '../tools/tools';
 import makeDiagram from '../__mocks__/makeDiagram';
