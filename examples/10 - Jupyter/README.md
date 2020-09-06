@@ -1,103 +1,186 @@
-# Example 5 - Simple Equation
+# Example 10 - Integration in Jupyter Notebooks
 
-A simple equation including a fraction.
+FigureOne can be loaded into a Jupyter Notebook to show a animated and interactive equation.
 
-Open `index.html` in a browser to view example.
+This example will create a simple notebook, and show how to load and use Figureone within it.
 
-![](example.png)
+## Install Jupyter and Load Notebook
 
-## Code
-`index.js`
+First create a virtual environment, initialize it, then install `jupyter`.
+```
+python3 -m venv env
+source env/bin/activate
+pip3 install jupyter
+```
+
+Start Jupyter server and load example notebook.
+```
+jupyter notebook example.ipynb
+```
+
+The browser should open the notebook automatically.
+
+![](ex.png)
+
+If it doesn't, try opening a new browser window and going to:
+```
+http://localhost:8888/notebooks/example.ipynb#
+```
+
+## Code And Explanation
+### Cell 1
+Use **Setup** as a title for all the setup code cells.
+```md
+# Setup
+```
+
+### Cell 2
+The javascript code to generate a dynamic figure or equation may take away from the readability of the notebook. 
+
+Therefore, a convenience function `addToggleLink` is first defined to allow javascript cells to be hidden in the notebook. It is also called at the end of the cell to hide this setup code and keep the notebook clean.
+
 ```js
-const diagram = new Fig.Diagram();
+%%javascript
+function toggler(output_area, forceHide = false) {
+  var cell_element = output_area.element.parents('.cell');
+  var cell_idx = Jupyter.notebook.get_cell_elements().index(cell_element);
+  var cell = Jupyter.notebook.get_cell(cell_idx);
+  var input = cell.input[0];
+  if (input.style.display === 'none' && forceHide === false) {
+    cell.input[0].setAttribute("style", "");
+  } else {
+    cell.input[0].setAttribute("style", "display:none");            
+  }
+}
 
-diagram.addElement(
-  // Add equation element
-  {
-    name: 'eqn',
-    method: 'equation',
-    options: {
-      color: [0.95, 0.95, 0.6, 1],
-      position: [-0.2, 0],
-      // Equation elements are the individual terms in the equation
-      elements: {
-        a: 'a',
-        b: 'b',
-        c: 'c',
-        v: { symbol: 'vinculum'},
-        equals: ' = ',
-      },
-      // An equation form is how those terms are arranged
-      forms: {
-        base: ['a', 'equals', { frac: ['b', 'vinculum', 'c'] }],
-      },
-    },
+function addToggleLink(elem, output_area, label = '', hideOnRun = true) {
+  // Create a <a></a> link element that will show/hide the cell
+  var a = document.createElement('a');  
+  var link = document.createTextNode(`Show/Hide: ${label}`); 
+  a.appendChild(link);  
+  a.href = '#';
+  a.onclick = toggler.bind(this, output_area, false);
+  elem[0].appendChild(a)
+  if (hideOnRun) {
+    toggler(output_area, true)
+  }
+}
+
+// Attach `addToggleLink` to `window`
+window.addToggleLink = addToggleLink;
+
+// Call `addToggleLink` to hide this setup code and keep the notebook clean
+window.addToggleLink(element, this, 'Helper functions');
+```
+
+
+### Cell 3
+This cell will load `FigureOne`, and then hide this setup code as well.
+```js
+%%javascript
+require.config({ 
+  paths: { 
+    Fig: 'https://cdn.jsdelivr.net/npm/figureone@0.2.3/figureone.min'
   },
-);
-// Show the equation form
-diagram.getElement('eqn').showForm('base');
-diagram.initialize();
+  scriptType: 'text/javascript'
+});
+window.addToggleLink(element, this, 'Load FigureOne');
 ```
 
-## Explanation
+### Cell 4
 
-Consider the equation:
+Create a `div` element with id `dynamic_equation_1` that we will attach a FigureOne diagram to.
 
+```md
+# Dynamic Equation
+
+Press on the elements of the equation to rearrange its form.
+
+<div id="dynamic_equation_1" style="width: 400px; height: 200px; background-color: #eee; margin-top: 1em">
+    </div>
 ```
-a = b + c
+
+
+
+
+### Cell 5
+Now we create a `Diagram`, and define the equation to be shown.
+
+```js
+%%javascript
+require(['Fig'], function(Fig) {  
+    // Create a diagram with limits that are proportional to the html div style size 
+    const diagram = new Fig.Diagram({
+      limits: new Fig.Rect(-2, -1, 4, 2),
+      htmlId: 'dynamic_equation_1',
+    });
+
+    diagram.addElement({
+      name: 'eqn',
+      method: 'equation',
+      options: {
+        position: [-0.4, -0.1],
+        scale: 2,
+        color: [0, 0, 0, 1],
+        elements: {
+          equals: ' = ',
+          times: ' \u00D7 ',
+          c: { color: [1, 0, 0, 1] },
+          a: { color: [0, 0.5, 0, 1] },
+          b: { color: [0, 0, 1, 1] },
+        },
+        defaultFormAlignment: { fixTo: 'equals' },
+
+        // Define each equation form, and how the elements should move
+        forms: {
+          'a': {
+            content: ['a', 'equals', { frac: ['b', 'vinculum', 'c'] }],
+            translation: {
+              a: { style: 'curved', direction: 'down', mag: 0.8 },
+              b: { style: 'curved', direction: 'up', mag: 0.5 },
+              c: { style: 'curved', direction: 'down', mag: 0.5 },
+            },
+          },
+          'b': {
+            content: ['b', 'equals', 'c', 'times', 'a'],
+            translation: {
+              a: { style: 'curved', direction: 'down', mag: 0.8 },
+              b: { style: 'curved', direction: 'up', mag: 0.5 },
+              c: { style: 'curved', direction: 'down', mag: 0.5 },
+            },
+          },
+          'c': {
+            content: ['c', 'equals', { frac: ['b', 'vinculum', 'a'] }],
+            translation: {
+              a: { style: 'curved', direction: 'down', mag: 0.8 },
+              b: { style: 'curved', direction: 'up', mag: 0.5 },
+              c: { style: 'curved', direction: 'down', mag: 0.5 },
+            },
+          },
+        },
+      },
+    });
+    diagram.initialize();
+
+    const eqn = diagram.getElement('eqn');
+    const a = diagram.getElement('eqn.a');
+    const b = diagram.getElement('eqn.b');
+    const c = diagram.getElement('eqn.c');
+    function goto(form) {
+      eqn.goToForm({
+        name: form, delay: 0, duration: 1.5, animate: 'move',
+      });
+      diagram.animateNextFrame();
+    }
+    a.onClick = goto.bind(this, 'a');
+    b.onClick = goto.bind(this, 'b');
+    c.onClick = goto.bind(this, 'c');
+    a.makeTouchable();
+    b.makeTouchable();
+    c.makeTouchable();
+    eqn.showForm('a');
+    diagram.animateNextFrame();
+});
+// Hide the javascript code
+window.addToggleLink(element, this, 'Dynamic Equation');
 ```
-
-We could also rearrange it to a different FORM:
-
-```
-a - b = c
-```
-
-These equations have a number of TERMS (a, b, c), an OPERATOR (+) and an equals sign (which we will call an OPERATOR).
-
-Each of these TERMS and OPERATORS are diagram elements - specifically `DiagramElementPrimitive` objects that can behave in any way a normal `DiagramElement` can.
-
-An `Equation` object is a `DiagramElementCollection` that groups all the equation's elements and can arrange them into different equation FORMS.
-
-In this example, the *equation elements* (TERMS and OPERATORS) are first defined in `options.elements`, then a *form* is defined in `options.forms.base` .
-
-Some operators are either not in unicode, or are more convient to draw directly. In this example the *vinculum* of the fraction is a *symbol*.
-
-Available *symbols* are:
-
-* [Vinculum](../../docs/README.md#EQN_VinculumSymbol)
-* [Radical](../../docs/README.md#EQN_RadicalSymbol)
-* [Integral](../../docs/README.md#EQN_IntegralSymbol)
-* [Sum](../../docs/README.md#EQN_SumSymbol)
-* [Product](../../docs/README.md#EQN_ProdSymbol)
-* [Bracket](../../docs/README.md#EQN_BracketSymbol)
-* [Square bracket](../../docs/README.md#EQN_SquareBracketSymbol)
-* [Angle bracket](../../docs/README.md#EQN_AngleBracketSymbol)
-* [Brace](../../docs/README.md#EQN_BraceSymbol)
-* [Bar](../../docs/README.md#EQN_BarSymbol)
-* [Arrow](../../docs/README.md#EQN_ArrowSymbol)
-* [Box](../../docs/README.md#EQN_BoxSymbol)
-* [Strike](../../docs/README.md#EQN_StrikeSymbol)
-
-The fraction is a layout function. The available layout functions are:
-
-* [Container](../../docs/README.md#EQN_Container)
-* [Fraction](../../docs/README.md#EQN_Fraction)
-* [Scale](../../docs/README.md#EQN_Scale)
-* [Bracket](../../docs/README.md#EQN_Bracket)
-* [Root](../../docs/README.md#EQN_Root)
-* [Strike](../../docs/README.md#EQN_Strike)
-* [Box](../../docs/README.md#EQN_Box)
-* [Bar](../../docs/README.md#EQN_Bar)
-* [Integral](../../docs/README.md#EQN_Integral)
-* [SumOf](../../docs/README.md#EQN_SumOf)
-* [ProdOf](../../docs/README.md#EQN_ProdOf)
-* [Subcript](../../docs/README.md#EQN_Subcript)
-* [Superscript](../../docs/README.md#EQN_Superscript)
-* [SuperscriptSubscript](../../docs/README.md#EQN_SuperscriptSubscript)
-* [Comment](../../docs/README.md#EQN_Comment)
-* [StrikeComment](../../docs/README.md#EQN_StrikeComment)
-* [Pad](../../docs/README.md#EQN_Pad)
-* [Matrix](../../docs/README.md#EQN_Matrix)
-* [Annotate](../../docs/README.md#EQN_Annotate)
-
