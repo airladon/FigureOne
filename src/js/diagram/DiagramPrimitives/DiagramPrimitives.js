@@ -1370,7 +1370,7 @@ export default class DiagramPrimitives {
       parent = this.htmlCanvas;
     }
 
-    const hT = new HTMLObject(
+    const hT = new HTMLObject(  // $FlowFixMe
       parent,
       options.id,
       new Point(0, 0),
