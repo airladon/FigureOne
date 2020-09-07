@@ -15,6 +15,14 @@ class Gesture {
   // cursor: () => void;
   toggleCursor: () => void;
   // keyCommands: boolean;
+  binds: {
+    mouseDownHandler: (MouseEvent) => void,
+    mouseUpHandler: (MouseEvent) => void,
+    mouseMoveHandler: (MouseEvent) => void,
+    touchStartHandler: (TouchEvent) => void,
+    touchEndHandler: (TouchEvent) => void,
+    touchMoveHandler: (TouchEvent) => void,
+  };
 
   constructor(diagram: Diagram) {
     this.diagram = diagram;
@@ -29,12 +37,21 @@ class Gesture {
     this.free = this.diagram.touchFreeHandler.bind(this.diagram);
     this.toggleCursor = this.diagram.toggleCursor.bind(this.diagram);
 
-    this.addEvent('mousedown', this.mouseDownHandler, false);
-    this.addEvent('mouseup', this.mouseUpHandler, false);
-    this.addEvent('mousemove', this.mouseMoveHandler, false);
-    this.addEvent('touchstart', this.touchStartHandler, false);
-    this.addEvent('touchend', this.touchEndHandler, false);
-    this.addEvent('touchmove', this.touchMoveHandler, false);
+    this.binds = {
+      mouseDownHandler: this.mouseDownHandler.bind(this),
+      mouseUpHandler: this.mouseUpHandler.bind(this),
+      mouseMoveHandler: this.mouseMoveHandler.bind(this),
+      touchStartHandler: this.touchStartHandler.bind(this),
+      touchEndHandler: this.touchEndHandler.bind(this),
+      touchMoveHandler: this.touchMoveHandler.bind(this),
+    };
+
+    this.addEvent('mousedown', this.binds.mouseDownHandler, false);
+    this.addEvent('mouseup', this.binds.mouseUpHandler, false);
+    this.addEvent('mousemove', this.binds.mouseMoveHandler, false);
+    this.addEvent('touchstart', this.binds.touchStartHandler, false);
+    this.addEvent('touchend', this.binds.touchEndHandler, false);
+    this.addEvent('touchmove', this.binds.touchMoveHandler, false);
     // this.keyCommands = false;
     // this.addEvent('keypress', this.keypressHandler, false);
     // this.diagram.canvas.addEventListener(
@@ -148,12 +165,12 @@ class Gesture {
   // }
 
   destroy() {
-    this.removeEvent('mousedown', this.mouseDownHandler, false);
-    this.removeEvent('mouseup', this.mouseUpHandler, false);
-    this.removeEvent('mousemove', this.mouseMoveHandler, false);
-    this.removeEvent('touchstart', this.touchStartHandler, false);
-    this.removeEvent('touchend', this.touchEndHandler, false);
-    this.removeEvent('touchmove', this.touchMoveHandler, false);
+    this.removeEvent('mousedown', this.binds.mouseDownHandler, false);
+    this.removeEvent('mouseup', this.binds.mouseUpHandler, false);
+    this.removeEvent('mousemove', this.binds.mouseMoveHandler, false);
+    this.removeEvent('touchstart', this.binds.touchStartHandler, false);
+    this.removeEvent('touchend', this.binds.touchEndHandler, false);
+    this.removeEvent('touchmove', this.binds.touchMoveHandler, false);
     // this.removeEvent('keypress', this.keypressHandler, false);
     // $FlowFixMe
     // if (document.removeEvent != null && this.keyCommands) { // $FlowFixMe
