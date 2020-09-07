@@ -2,7 +2,7 @@
 import {
   Point, Transform, parsePoint, getPoint,
 } from '../../../tools/g2';
-import { joinObjects } from '../../../tools/tools';
+import { joinObjects, addToObject, getFromObject } from '../../../tools/tools';
 // import { RGBToArray } from '../../../tools/color';
 import {
   DiagramElementPrimitive, DiagramElementCollection, DiagramElement,
@@ -1205,82 +1205,87 @@ export class Equation extends DiagramElementCollection {
       }
       return null;
     };
-    // Populate translation mods
-    form[subForm].translation = {};
-    Object.keys(optionsToUse.translation).forEach((elementName) => {
-      const translation = getTranslation(elementName, optionsToUse.translation);
-      if (translation != null) {
-        form[subForm].translation[elementName] = translation;
-      }
-    });
 
-    // Populate translation mods
-    const { fromPrev } = optionsToUse;
-    if (fromPrev != null) {
-      form[subForm].fromPrev = {};
-      if (fromPrev.duration !== undefined) {
-        form[subForm].fromPrev.duration = fromPrev.duration;
+    const setFormAnimationOptions = (optionsPath) => {
+      const animationOptions = getFromObject(optionsToUse, optionsPath, '.');
+      if (animationOptions === undefined) {
+        return;
       }
-      form[subForm].fromPrev.translation = {};
-      if (fromPrev.translation != null) {
-        Object.keys(fromPrev.translation).forEach((elementName) => {
-          // const mods = fromPrev.translation[elementName];
-          // const diagramElement = getDiagramElement(this, elementName);
-          // let direction;
-          // let style;
-          // let mag;
-          // if (Array.isArray(mods)) {
-          //   [style, direction, mag] = mods;
-          // } else {
-          //   ({ style, direction, mag } = mods);
-          // }
-          // if (diagramElement != null) {
-          //   // $FlowFixMe
-          //   form[subForm].fromPrev.translation[elementName] = {
-          //     element: diagramElement, style, direction, mag,
-          //   };
-          // }
-          const translation = getTranslation(elementName, fromPrev.translation);
+      if (animationOptions.duration !== undefined) {
+        addToObject(
+          form[subForm], `${optionsPath}.duration`, animationOptions.duration,
+        );
+      }
+      if (animationOptions.translation != null) {
+        Object.keys(animationOptions.translation).forEach((elementName) => {
+          const translation = getTranslation(elementName, animationOptions.translation);
           if (translation != null) {
-            form[subForm].fromPrev.translation[elementName] = translation;
+            if (translation == null) {
+              addToObject(
+                form[subForm], `${optionsPath}.translation`, {},
+              );
+            } else {
+              addToObject(
+                form[subForm], `${optionsPath}.translation.${elementName}`, translation,
+              );
+            }
           }
         });
       }
+    };
+    setFormAnimationOptions('');
+    setFormAnimationOptions('fromPrev');
+    setFormAnimationOptions('fromNext');
+    if (optionsToUse.fromForm != null) {
+      Object.keys(optionsToUse.fromForm).forEach((formName) => {
+        setFormAnimationOptions(`fromForm.${formName}`);
+      });
     }
+    // setFormAnimationOptions('fromForm');
+    // // Populate translation mods
+    // form[subForm].translation = {};
+    // Object.keys(optionsToUse.translation).forEach((elementName) => {
+    //   const translation = getTranslation(elementName, optionsToUse.translation);
+    //   if (translation != null) {
+    //     form[subForm].translation[elementName] = translation;
+    //   }
+    // });
 
-    // Populate translation mods
-    const { fromNext } = optionsToUse;
-    if (fromNext != null) {
-      form[subForm].fromNext = {};
-      if (fromNext.duration !== undefined) {
-        form[subForm].fromNext.duration = fromNext.duration;
-      }
-      form[subForm].fromNext.translation = {};
-      if (fromNext.translation != null) {
-        Object.keys(fromNext.translation).forEach((elementName) => {
-          // const mods = fromNext.translation[elementName];
-          // const diagramElement = getDiagramElement(this, elementName);
-          // let direction;
-          // let style;
-          // let mag;
-          // if (Array.isArray(mods)) {
-          //   [style, direction, mag] = mods;
-          // } else {
-          //   ({ style, direction, mag } = mods);
-          // }
-          // if (diagramElement != null) {
-          //   // $FlowFixMe
-          //   form[subForm].fromNext.translation[elementName] = {
-          //     element: diagramElement, style, direction, mag,
-          //   };
-          // }
-          const translation = getTranslation(elementName, fromNext.translation);
-          if (translation != null) {
-            form[subForm].fromNext.translation[elementName] = translation;
-          }
-        });
-      }
-    }
+    // // Populate translation mods
+    // const { fromPrev } = optionsToUse;
+    // if (fromPrev != null) {
+    //   form[subForm].fromPrev = {};
+    //   if (fromPrev.duration !== undefined) {
+    //     form[subForm].fromPrev.duration = fromPrev.duration;
+    //   }
+    //   form[subForm].fromPrev.translation = {};
+    //   if (fromPrev.translation != null) {
+    //     Object.keys(fromPrev.translation).forEach((elementName) => {
+    //       const translation = getTranslation(elementName, fromPrev.translation);
+    //       if (translation != null) {
+    //         form[subForm].fromPrev.translation[elementName] = translation;
+    //       }
+    //     });
+    //   }
+    // }
+
+    // // Populate translation mods
+    // const { fromNext } = optionsToUse;
+    // if (fromNext != null) {
+    //   form[subForm].fromNext = {};
+    //   if (fromNext.duration !== undefined) {
+    //     form[subForm].fromNext.duration = fromNext.duration;
+    //   }
+    //   form[subForm].fromNext.translation = {};
+    //   if (fromNext.translation != null) {
+    //     Object.keys(fromNext.translation).forEach((elementName) => {
+    //       const translation = getTranslation(elementName, fromNext.translation);
+    //       if (translation != null) {
+    //         form[subForm].fromNext.translation[elementName] = translation;
+    //       }
+    //     });
+    //   }
+    // }
 
     optionsToUse.alignment.fixTo = this.checkFixTo(optionsToUse.alignment.fixTo);
     form[subForm].content = content;

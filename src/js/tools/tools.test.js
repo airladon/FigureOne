@@ -180,6 +180,7 @@ describe('Extract From Object', () => {
 });
 describe('Extract From Collection', () => {
   let o;
+  let simple;
   beforeEach(() => {
     o = {
       _a: 1,
@@ -196,10 +197,33 @@ describe('Extract From Collection', () => {
       _d: (i, j) => i + j,  // eslint-disable-next-line camelcase
       _e_1: 6,
     };
+    simple = {
+      a: 1,
+      b: {
+        b1: 2,
+        b2: 3,
+        b3: {
+          b31: 4,
+          b32: (i, j) => i + j,  // eslint-disable-next-line camelcase
+          b_33: 5,
+        },
+      },
+      c: i => i + 1,
+      d: (i, j) => i + j,  // eslint-disable-next-line camelcase
+      e_1: 6,
+    };
   });
   test('string', () => {
     const p = tools.getElement(o, '_a');
     expect(p.value()).toBe(1);
+  });
+  test('string from simple', () => {
+    const p = tools.extractFrom(simple, 'a');
+    expect(p.value()).toBe(1);
+  });
+  test('fail from simple', () => {
+    const p = tools.extractFrom(simple, 'x');
+    expect(p).toBe(undefined);
   });
   test('string without dunder', () => {
     const p = tools.getElement(o, 'a');
@@ -207,6 +231,10 @@ describe('Extract From Collection', () => {
   });
   test('3 level string', () => {
     const p = tools.getElement(o, '_b_b3_b_33');
+    expect(p.value()).toBe(5);
+  });
+  test('3 level string from simple', () => {
+    const p = tools.extractFrom(simple, 'b_b3_b_33');
     expect(p.value()).toBe(5);
   });
   test('3 level string without dunder', () => {
@@ -228,6 +256,21 @@ describe('Extract From Collection', () => {
     expect(p[2].value()).toBe(6);
     expect(p[3].value()).toBe(3);
   });
+  test('list extract from simple', () => {
+    const p = tools.extractFrom(
+      simple,
+      [
+        'a',
+        'b',
+        'e_1',
+        'b_b2',
+      ],
+    );
+    expect(p[0].value()).toBe(1);
+    expect(p[1].value().b1).toBe(2);
+    expect(p[2].value()).toBe(6);
+    expect(p[3].value()).toBe(3);
+  });
   describe('add to object', () => {
     test('simple from scrach', () => {
       const obj = {};
@@ -244,6 +287,23 @@ describe('Extract From Collection', () => {
       tools.addToObject(obj, 'a-b-c', 1, '-');
       expect(obj.a.b.c).toBe(1);
     });
+  });
+});
+describe('Get Object Value From Path', () => {
+  test('Simple', () => {
+    const o = { a: 1, b: { c: 2, d: { e: 3, f: 4 } } };
+    const v = tools.getFromObject(o, 'a');
+    expect(v).toBe(1);
+  });
+  test('nested - 2 levels', () => {
+    const o = { a: 1, b: { c: 2, d: { e: 3, f: 4 } } };
+    const v = tools.getFromObject(o, 'b.c');
+    expect(v).toBe(2);
+  });
+  test('nested 3 levels', () => {
+    const o = { a: 1, b: { c: 2, d: { e: 3, f: 4 } } };
+    const v = tools.getFromObject(o, 'b.d.e');
+    expect(v).toBe(3);
   });
 });
 describe('Generate Unique ID', () => {

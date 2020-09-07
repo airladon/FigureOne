@@ -25,6 +25,47 @@ const classify = (key: string, value: string) => {
   return `${withKey.split(' -').join(joinStr)}`;
 };
 
+// function getObjectValueFromPath(
+//   obj: Object,
+//   path: string,
+//   createIfUndefined: boolean = false,
+//   levelSeparator: string = '.',
+// ) {
+//   if (path.length === 0 || (path.length === 1 && path[0] === levelSeparator)) {
+//     return obj;
+//   }
+//   if (createIfUndefined) {
+//     obj[path[0]] = {};
+//   }
+
+//   if (obj[path[0]] === undefined) {
+//     return undefined;
+//   }
+
+//   if (typeof obj[path[0]] === 'object') {
+//     return getObjectValueFromPath(obj[path[0]], path.slice(1), createIfUndefined, levelSeparator);
+//   }
+//   if (path.length === 1) {
+//     return obj[path[0]];
+//   }
+//   return undefined;
+// }
+
+// function setObjectValueWithPath(
+//   obj: Object,
+//   path: string,
+//   value: any,
+//   levelSeparator: string = '.',
+// ) {
+//   if (path.length === 0 || (path.length === 1 && path[0] === levelSeparator)) {
+//     return;
+//   }
+//   if (path.length === 1) {
+//     obj[path[0]] = value;
+//     return;
+//   }
+//   if(obj[path[0]])
+// }
 
 class ObjectKeyPointer {
   object: Object;
@@ -62,21 +103,28 @@ function extractFrom(
   objectToExtractFrom: Object,
   keyValues: Object | Array<any> | string,
   keyPrefix: string = '',
+  keySeparator: string = '_',
 ) {
   const out = [];
   if (typeof keyValues === 'string') {
     if (keyPrefix + keyValues in objectToExtractFrom) {
       return new ObjectKeyPointer(objectToExtractFrom, keyPrefix + keyValues);
     }
-    const keyHeirarchy = keyValues.split('_');
+    const keyHeirarchy = keyValues.split(keySeparator);
     const keys = keyHeirarchy.filter(k => k.length > 0);
+    const prefixAndKey = `${keyPrefix}${keys[0]}`;
     if (keys.length > 1) {
-      if (keyPrefix + keys[0] in objectToExtractFrom) {
-        return extractFrom(objectToExtractFrom[keyPrefix + keys[0]], keys.slice(1).join('_'), keyPrefix);
+      if (prefixAndKey in objectToExtractFrom) {
+        return extractFrom(
+          objectToExtractFrom[prefixAndKey],
+          keys.slice(1).join(keySeparator),
+          keyPrefix,
+          keySeparator,
+        );
       }
     } else if (keys.length === 1) {
-      if (keyPrefix + keys[0] in objectToExtractFrom) {
-        return new ObjectKeyPointer(objectToExtractFrom, keyPrefix + keys[0]);
+      if (prefixAndKey in objectToExtractFrom) {
+        return new ObjectKeyPointer(objectToExtractFrom, prefixAndKey);
       }
     }
     return undefined;
@@ -84,7 +132,7 @@ function extractFrom(
 
   if (Array.isArray(keyValues)) {
     keyValues.forEach((kv) => {
-      const result = extractFrom(objectToExtractFrom, kv, keyPrefix);
+      const result = extractFrom(objectToExtractFrom, kv, keyPrefix, keySeparator);
       if (result !== undefined) {
         out.push(result);
       }
@@ -103,21 +151,51 @@ function extractFrom(
   return out;
 }
 
+function getFromObject(
+  objectToGetFrom: Object,
+  keyPath: string,
+  levelSeparator: string = '.',
+) {
+  if (keyPath.length === 0 || keyPath === levelSeparator) {
+    return objectToGetFrom;
+  }
+  const result = extractFrom(objectToGetFrom, keyPath, '', levelSeparator);
+  if (result === undefined) {
+    return undefined;
+  }
+  return result.value();
+}
+
+// function getObjectValueFromPath(
+//   objectToExtractFrom: Object,
+//   path: string,
+//   pathSeparator: string = '.',
+// ) {
+//   const result = extractFrom(objectToExtractFrom, path, '', pathSeparator);
+//   if (result === undefined) {
+//     return undefined;
+//   }
+//   if (Array.isArray(result)) {
+//     return result[0].value();
+//   }
+//   return result.value();
+// }
+
 function getElement(
   collection: Object,
   keyValues: Object | Array<any> | string,
 ) {
-  return extractFrom(collection, keyValues, '_');
+  return extractFrom(collection, keyValues, '_', '_');
 }
 
 
 function addToObject(
   obj: Object,
-  nameToAdd: string,
+  keyPath: string,
   valueToAdd: mixed,
-  splitStr: string = '-',
+  levelSeparator: string = '.',
 ) {
-  const levels = nameToAdd.split(splitStr);
+  const levels = keyPath.split(levelSeparator).filter(a => a.length > 0);
   let currentLevel: Object = obj;
   levels.forEach((level, index) => {
     if (index === levels.length - 1) {
@@ -1182,5 +1260,6 @@ export {
   download,
   Subscriber,
   SubscriptionManager,
+  getFromObject,
 };
 

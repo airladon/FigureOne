@@ -449,7 +449,6 @@ describe('Diagram Equations From Object', () => {
   test('All form options', () => {
     expect(eqn._a.getPosition().round(3)).toEqual(new Point(0, 0));
     expect(eqn._a.getScale().round(3)).toEqual(new Point(1, 1));
-
     eqn.addForms(addForms.allFormOptions);
     expect(forms['0'].deg.description).toBe('|Form| 1 |description|');
     expect(eqn.getDescription('0', 'deg')).toBe('<span class="highlight_word"" style="color:rgba(255,0,0,0);">Form</span> 1 <span class="highlight_word">description</span>');
