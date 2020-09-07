@@ -1001,6 +1001,7 @@ export class Equation extends DiagramElementCollection {
       const {   // $FlowFixMe
         subForm, elementMods, duration, alignment, scale, // $FlowFixMe
         description, modifiers, fromPrev, fromNext, translation, // $FlowFixMe
+        fromForm,
       } = form;
       const options = {
         subForm,
@@ -1014,6 +1015,7 @@ export class Equation extends DiagramElementCollection {
         modifiers,
         fromPrev,
         fromNext,
+        fromForm,
       };
       // $FlowFixMe
       this.addForm(name, formContent, options);
@@ -1095,6 +1097,18 @@ export class Equation extends DiagramElementCollection {
       description?: string,
       modifiers?: Object,
       // First Priority
+      fromForm?: {
+        [formName: string]: {
+          duration?: ?number,
+          translation?: {
+            [elementName: string]: {
+              direction?: 'up' | 'down',
+              style: 'curved' | 'linear',
+              mag: number,
+            } | ['curved' | 'linear', 'up' | 'down', number],
+          },
+        },
+      },
       fromPrev?: {
         duration?: ?number,
         translation?: {
@@ -1145,6 +1159,7 @@ export class Equation extends DiagramElementCollection {
       translation: {},
       fromNext: undefined,
       fromPrev: undefined,
+      fromForm: {},
     };
     let optionsToUse = defaultOptions;
     if (options) {
@@ -1172,11 +1187,9 @@ export class Equation extends DiagramElementCollection {
       }
     });
 
-    // Populate translation mods
-    form[subForm].translation = {};
-    Object.keys(optionsToUse.translation).forEach((elementName) => {
-      const mods = optionsToUse.translation[elementName];
+    const getTranslation = (elementName, modOptions) => {
       const diagramElement = getDiagramElement(this, elementName);
+      const mods = modOptions[elementName];
       let direction;
       let style;
       let mag;
@@ -1186,9 +1199,18 @@ export class Equation extends DiagramElementCollection {
         ({ style, direction, mag } = mods);
       }
       if (diagramElement != null) {
-        form[subForm].translation[elementName] = {
+        return {
           element: diagramElement, style, direction, mag,
         };
+      }
+      return null;
+    };
+    // Populate translation mods
+    form[subForm].translation = {};
+    Object.keys(optionsToUse.translation).forEach((elementName) => {
+      const translation = getTranslation(elementName, optionsToUse.translation);
+      if (translation != null) {
+        form[subForm].translation[elementName] = translation;
       }
     });
 
@@ -1202,21 +1224,25 @@ export class Equation extends DiagramElementCollection {
       form[subForm].fromPrev.translation = {};
       if (fromPrev.translation != null) {
         Object.keys(fromPrev.translation).forEach((elementName) => {
-          const mods = fromPrev.translation[elementName];
-          const diagramElement = getDiagramElement(this, elementName);
-          let direction;
-          let style;
-          let mag;
-          if (Array.isArray(mods)) {
-            [style, direction, mag] = mods;
-          } else {
-            ({ style, direction, mag } = mods);
-          }
-          if (diagramElement != null) {
-            // $FlowFixMe
-            form[subForm].fromPrev.translation[elementName] = {
-              element: diagramElement, style, direction, mag,
-            };
+          // const mods = fromPrev.translation[elementName];
+          // const diagramElement = getDiagramElement(this, elementName);
+          // let direction;
+          // let style;
+          // let mag;
+          // if (Array.isArray(mods)) {
+          //   [style, direction, mag] = mods;
+          // } else {
+          //   ({ style, direction, mag } = mods);
+          // }
+          // if (diagramElement != null) {
+          //   // $FlowFixMe
+          //   form[subForm].fromPrev.translation[elementName] = {
+          //     element: diagramElement, style, direction, mag,
+          //   };
+          // }
+          const translation = getTranslation(elementName, fromPrev.translation);
+          if (translation != null) {
+            form[subForm].fromPrev.translation[elementName] = translation;
           }
         });
       }
@@ -1232,21 +1258,25 @@ export class Equation extends DiagramElementCollection {
       form[subForm].fromNext.translation = {};
       if (fromNext.translation != null) {
         Object.keys(fromNext.translation).forEach((elementName) => {
-          const mods = fromNext.translation[elementName];
-          const diagramElement = getDiagramElement(this, elementName);
-          let direction;
-          let style;
-          let mag;
-          if (Array.isArray(mods)) {
-            [style, direction, mag] = mods;
-          } else {
-            ({ style, direction, mag } = mods);
-          }
-          if (diagramElement != null) {
-            // $FlowFixMe
-            form[subForm].fromNext.translation[elementName] = {
-              element: diagramElement, style, direction, mag,
-            };
+          // const mods = fromNext.translation[elementName];
+          // const diagramElement = getDiagramElement(this, elementName);
+          // let direction;
+          // let style;
+          // let mag;
+          // if (Array.isArray(mods)) {
+          //   [style, direction, mag] = mods;
+          // } else {
+          //   ({ style, direction, mag } = mods);
+          // }
+          // if (diagramElement != null) {
+          //   // $FlowFixMe
+          //   form[subForm].fromNext.translation[elementName] = {
+          //     element: diagramElement, style, direction, mag,
+          //   };
+          // }
+          const translation = getTranslation(elementName, fromNext.translation);
+          if (translation != null) {
+            form[subForm].fromNext.translation[elementName] = translation;
           }
         });
       }
@@ -1388,7 +1418,6 @@ export class Equation extends DiagramElementCollection {
       fromWhere: null,
       animate: 'dissolve',
       callback: null,
-      // finishAnimatingAndCancelGoTo: false,
       ifAnimating: {
         skipToTarget: true,
         cancelGoTo: true,

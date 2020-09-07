@@ -66,6 +66,14 @@ export type TypeElements = {
   [string: string]: DiagramElementCollection | DiagramElementPrimitive;
 };
 
+export type TypeElementTranslationOptions = {
+  [elementName: string]: {
+    element: DiagramElementPrimitive | DiagramElementCollection;
+    direction?: 'up' | 'down',
+    style: 'curved' | 'linear',
+    mag: number,
+  },
+};
 export default class EquationForm extends Elements {
   elements: { [string: string]: DiagramElementCollection | DiagramElementPrimitive };
   collectionMethods: TypeCollectionMethods;
@@ -83,37 +91,23 @@ export default class EquationForm extends Elements {
   modifiers: Object;
   subForm: string;
   duration: ?number;
-  translation: {
-    [elementName: string]: {
-      element: DiagramElementPrimitive | DiagramElementCollection;
-      direction?: 'up' | 'down',
-      style: 'curved' | 'linear',
-      mag: number,
-    },
-  };
+  translation: TypeElementTranslationOptions;
 
   fromNext: {
-    translation?: {
-      [elementName: string]: {
-        element: DiagramElementPrimitive | DiagramElementCollection;
-        direction?: 'up' | 'down',
-        style: 'curved' | 'linear',
-        mag: number,
-      },
-    },
-    duration: ?number;
+    translation?: TypeElementTranslationOptions;
+    duration?: ?number;
   };
 
   fromPrev: {
-    translation?: {
-      [elementName: string]: {
-        element: DiagramElementPrimitive | DiagramElementCollection;
-        direction?: 'up' | 'down',
-        style: 'curved' | 'linear',
-        mag: number,
-      },
+    translation?: TypeElementTranslationOptions;
+    duration?: ?number;
+  };
+
+  fromForm: {
+    [formName: string]: {
+      translation?: TypeElementTranslationOptions;
+      duration?: ?number;
     },
-    duration: ?number;
   };
 
 
