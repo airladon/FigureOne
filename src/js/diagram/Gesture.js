@@ -12,9 +12,7 @@ class Gesture {
   end: void => void;
   move: (Point, Point) => boolean;
   free: (Point) => void;
-  // cursor: () => void;
   toggleCursor: () => void;
-  // keyCommands: boolean;
   binds: {
     mouseDownHandler: (MouseEvent) => void,
     mouseUpHandler: (MouseEvent) => void,
@@ -26,10 +24,7 @@ class Gesture {
 
   constructor(diagram: Diagram) {
     this.diagram = diagram;
-    // console.log(diagram.canvas.offsetWidth)
-    // this.diagram.canvas.onmousedown = this.mouseDownHandler.bind(this);
-    // this.diagram.canvas.onmouseup = this.mouseUpHandler.bind(this);
-    // this.diagram.canvas.onmousemove = this.mouseMoveHandler.bind(this);
+
     // Override these if you want to use your own touch handlers
     this.start = this.diagram.touchDownHandler.bind(this.diagram);
     this.end = this.diagram.touchUpHandler.bind(this.diagram);
@@ -52,30 +47,8 @@ class Gesture {
     this.addEvent('touchstart', this.binds.touchStartHandler, false);
     this.addEvent('touchend', this.binds.touchEndHandler, false);
     this.addEvent('touchmove', this.binds.touchMoveHandler, false);
-    // this.keyCommands = false;
-    // this.addEvent('keypress', this.keypressHandler, false);
-    // this.diagram.canvas.addEventListener(
-    //   'touchstart',
-    //   this.touchStartHandler.bind(this), false,
-    // );
-    // this.diagram.canvas.addEventListener(
-    //   'touchend',
-    //   this.touchEndHandler.bind(this), false,
-    // );
-    // this.diagram.canvas.addEventListener(
-    //   'touchmove',
-    //   this.touchMoveHandler.bind(this), false,
-    // );
     this.enable = true;
   }
-
-  // enableKeyCommands() {
-  //   if (this.keyCommands) {
-  //     return;
-  //   }
-  //   document.addEventListener('keypress', this.toggleCursor, false);
-  //   this.keyCommands = true;
-  // }
 
   addEvent(event: string, method: Object, flag: boolean) {
     this.diagram.gestureCanvas.addEventListener(
@@ -117,7 +90,6 @@ class Gesture {
     } else {
       this.free(point);
     }
-    // event.preventDefault();
   }
 
   touchStartHandler(event: TouchEvent) {
@@ -152,18 +124,6 @@ class Gesture {
     this.endHandler();
   }
 
-  // keypressHandler(event: KeyboardEvent) {
-  //   // console.log(event.code, event.keyCode, String.fromCharCode(event.keyCode))
-  //   // console.log(this.toggleCursor)
-  //   if (String.fromCharCode(event.keyCode) === 'n' && this.toggleCursor) {
-  //     this.toggleCursor();
-  //   }
-  //   if (String.fromCharCode(event.keyCode) === 'f') {
-  //     const element = document.getElementById('topic__button-next');
-  //     element.click();
-  //   }
-  // }
-
   destroy() {
     this.removeEvent('mousedown', this.binds.mouseDownHandler, false);
     this.removeEvent('mouseup', this.binds.mouseUpHandler, false);
@@ -171,11 +131,6 @@ class Gesture {
     this.removeEvent('touchstart', this.binds.touchStartHandler, false);
     this.removeEvent('touchend', this.binds.touchEndHandler, false);
     this.removeEvent('touchmove', this.binds.touchMoveHandler, false);
-    // this.removeEvent('keypress', this.keypressHandler, false);
-    // $FlowFixMe
-    // if (document.removeEvent != null && this.keyCommands) { // $FlowFixMe
-    //   document.removeEvent('keypress', this.keypressHandler, false);
-    // }
   }
 }
 
