@@ -60,7 +60,7 @@ describe('Diagram Equations From Object', () => {
       allFormOptions: {
         0: {
           content: ['a', 'b', 'c'],
-          subForm: 'deg',
+          // subForm: 'deg',
           scale: 1.2,
           alignment: {
             fixTo: 'b',
@@ -91,29 +91,31 @@ describe('Diagram Equations From Object', () => {
 
           //   },
           // }
-          duration: 1,
-          translation: {
-            a: {
-              style: 'curved',
-              direction: 'up',
-              mag: 0.95,
-            },
-            b: ['curved', 'down', 0.45],
-          },
-          fromPrev: {
-            duration: null,
+          animation: {
+            duration: 1,
             translation: {
-              a: ['curved', 'down', 0.2],
-              b: ['curved', 'down', 0.2],
+              a: {
+                style: 'curved',
+                direction: 'up',
+                mag: 0.95,
+              },
+              b: ['curved', 'down', 0.45],
             },
           },
-          fromNext: {
-            duration: 2,
-            translation: {
-              a: ['curved', 'down', 0.2],
-              b: ['curved', 'down', 0.2],
-            },
-          },
+          // fromPrev: {
+          //   duration: null,
+          //   translation: {
+          //     a: ['curved', 'down', 0.2],
+          //     b: ['curved', 'down', 0.2],
+          //   },
+          // },
+          // fromNext: {
+          //   duration: 2,
+          //   translation: {
+          //     a: ['curved', 'down', 0.2],
+          //     b: ['curved', 'down', 0.2],
+          //   },
+          // },
         },
       },
       // A form can be defined just as the text element
@@ -187,33 +189,33 @@ describe('Diagram Equations From Object', () => {
               color: color1,
             },
           },
-          subForm: 'deg',
+          // subForm: 'deg',
         },
       },
-      // If multiple sub forms exist, and all being defined at once, then need
-      // to split the form object into subForm objects, where each subform
-      // object can be defined as any form above
-      subFormObject: {
-        0: {
-          deg: ['b', 'a', 'c'],
-          rad: {
-            content: ['b', 'a', 'c'],
-            elementMods: {
-              b: {
-                color: color1,
-              },
-            },
-          },
-          method: {
-            frac: {
-              numerator: 'a',
-              denominator: 'b',
-              symbol: 'v',
-              scale: 0.5,
-            },
-          },
-        },
-      },
+      // // If multiple sub forms exist, and all being defined at once, then need
+      // // to split the form object into subForm objects, where each subform
+      // // object can be defined as any form above
+      // subFormObject: {
+      //   0: {
+      //     deg: ['b', 'a', 'c'],
+      //     rad: {
+      //       content: ['b', 'a', 'c'],
+      //       elementMods: {
+      //         b: {
+      //           color: color1,
+      //         },
+      //       },
+      //     },
+      //     method: {
+      //       frac: {
+      //         numerator: 'a',
+      //         denominator: 'b',
+      //         symbol: 'v',
+      //         scale: 0.5,
+      //       },
+      //     },
+      //   },
+      // },
       // addForms can be called multiple times
       addFormsMultipleTimes: {
         first: {
@@ -231,23 +233,21 @@ describe('Diagram Equations From Object', () => {
         },
         1: {
           content: ['b', 'a', 'c'],
-          duration: 10,
+          animation: { duration: 10 },
         },
         2: {
           content: ['b', 'a', 'c'],
-          duration: 40,
-          fromPrev: {
-            duration: 20,
-          },
-          fromNext: {
-            duration: 30,
+          animation: { duration: 10 },
+          fromForm: {
+            prev: { animation: { duration: 20 } },
+            next: { animation: { duration: 30 } },
           },
           // time: { fromPrev: 20, fromNext: 30, fromAny: 40 },
         },
         3: {
           content: ['b', 'a', 'c'],
-          fromPrev: {
-            duration: 20,
+          fromForm: {
+            prev: { animation: { duration: 20 } }
           },
         },
       },
@@ -304,14 +304,14 @@ describe('Diagram Equations From Object', () => {
   });
   test('Text only', () => {
     eqn.addForms(addForms.textOnly);
-    const { content } = forms['0'].base.content[0];
+    const { content } = forms['0'].content[0];
     expect(content[0].content.drawingObject.text[0].text).toBe('a');
   });
   test('Array Single Form', () => {
     eqn.addForms(addForms.arraySingleForm);
     expect(forms).toHaveProperty('0');
-    expect(forms['0']).toHaveProperty('base');
-    const { content } = forms['0'].base.content[0];
+    // expect(forms['0']).toHaveProperty('base');
+    const { content } = forms['0'].content[0];
     expect(content[0].content.drawingObject.text[0].text).toBe('a');
     expect(content[1].content.drawingObject.text[0].text).toBe('b');
     expect(content[2].content.drawingObject.text[0].text).toBe('c');
@@ -320,34 +320,34 @@ describe('Diagram Equations From Object', () => {
     eqn.addForms(addForms.arrayTwoForms);
     expect(forms).toHaveProperty('0');
     expect(forms).toHaveProperty('1');
-    expect(forms['0']).toHaveProperty('base');
-    expect(forms['1']).toHaveProperty('base');
-    expect(forms['0'].base.content[0].content[0].content).toBe(eqn._a);
-    expect(forms['1'].base.content[0].content[0].content).toBe(eqn._b);
+    // expect(forms['0']).toHaveProperty('base');
+    // expect(forms['1']).toHaveProperty('base');
+    expect(forms['0'].content[0].content[0].content).toBe(eqn._a);
+    expect(forms['1'].content[0].content[0].content).toBe(eqn._b);
   });
   test('Nested Arrays', () => {
     eqn.addForms(addForms.nestedArrays);
-    expect(forms['0'].base.content[0].content[0].content).toBe(eqn._a);
-    expect(forms['0'].base.content[0].content[1].content).toBe(eqn._b);
-    expect(forms['0'].base.content[0].content[2].content).toBe(eqn._c);
+    expect(forms['0'].content[0].content[0].content).toBe(eqn._a);
+    expect(forms['0'].content[0].content[1].content).toBe(eqn._b);
+    expect(forms['0'].content[0].content[2].content).toBe(eqn._c);
   });
   test('Methods', () => {
     eqn.addForms(addForms.methods);
-    const content0 = forms['0'].base.content[0].content;
+    const content0 = forms['0'].content[0].content;
     expect(content0[0]).toBeInstanceOf(Fraction);
     expect(content0[0].content[1].content[0].content).toBe(eqn._a);
     expect(content0[0].content[2].content[0].content).toBe(eqn._b);
     expect(content0[0].content[0].content).toBe(eqn._v);
-    const content1 = forms['1'].base.content[0].content;
+    const content1 = forms['1'].content[0].content;
     expect(content1).toEqual(content0);
-    const content2 = forms['2'].base.content[0].content;
+    const content2 = forms['2'].content[0].content;
     expect(content2).toEqual(content0);
-    const content3 = forms['3'].base.content[0].content;
+    const content3 = forms['3'].content[0].content;
     expect(content3).toEqual(content0);
   });
   test('Multi Method', () => {
     eqn.addForms(addForms.multiMethod);
-    const { content } = forms['0'].base.content[0];
+    const { content } = forms['0'].content[0];
     expect(content[0]).toBeInstanceOf(Fraction);
     expect(content[0].content[1].content[0].content).toBe(eqn._a);
     expect(content[0].content[2].content[0].content).toBe(eqn._b);
@@ -360,7 +360,7 @@ describe('Diagram Equations From Object', () => {
   });
   test('Nested Method', () => {
     eqn.addForms(addForms.nestedMethod);
-    const { content } = forms['0'].base.content[0];
+    const { content } = forms['0'].content[0];
     expect(content[0]).toBeInstanceOf(Fraction);
     expect(content[0].content[2].content[0].content).toBe(eqn._b);
     expect(content[0].content[0].content).toBe(eqn._v);
@@ -369,81 +369,85 @@ describe('Diagram Equations From Object', () => {
   });
   test('Frac with scale', () => {
     eqn.addForms(addForms.fracWithScale);
-    const content0 = forms['0'].base.content[0].content;
+    const content0 = forms['0'].content[0].content;
     expect(content0[0]).toBeInstanceOf(Fraction);
     // expect(content0[0].scaleModifier).toBe(0.5);
-    const content1 = forms['1'].base.content[0].content;
+    const content1 = forms['1'].content[0].content;
     expect(content1).toEqual(content0);
   });
   test('Full Object', () => {
     eqn.addForms(addForms.fullObject);
-    const { content } = forms['0'].base.content[0];
+    const { content } = forms['0'].content[0];
     expect(content[0].content.drawingObject.text[0].text).toBe('b');
     expect(content[1].content.drawingObject.text[0].text).toBe('a');
     expect(content[2].content.drawingObject.text[0].text).toBe('c');
-
-    const deg = forms['0'].deg.content[0].content;
-    expect(deg[0].content.drawingObject.text[0].text).toBe('b');
-    expect(deg[1].content.drawingObject.text[0].text).toBe('a');
-    expect(deg[2].content.drawingObject.text[0].text).toBe('c');
-    expect(forms['0'].deg.elementMods.b.mods.color).toEqual(color1);
+    expect(forms['0'].elementMods.b.mods.color).toEqual(color1);
     expect(eqn._b.color).toEqual([0.5, 0.5, 0.5, 1]);
     eqn.showForm('0');
     expect(eqn._b.color).toEqual([0.95, 0, 0, 1]);
+    // const deg = forms['0'].deg.content[0].content;
+    // expect(deg[0].content.drawingObject.text[0].text).toBe('b');
+    // expect(deg[1].content.drawingObject.text[0].text).toBe('a');
+    // expect(deg[2].content.drawingObject.text[0].text).toBe('c');
+    // expect(forms['0'].deg.elementMods.b.mods.color).toEqual(color1);
+    // expect(eqn._b.color).toEqual([0.5, 0.5, 0.5, 1]);
+    // eqn.showForm('0');
+    // expect(eqn._b.color).toEqual([0.95, 0, 0, 1]);
   });
-  test('Sub form Object', () => {
-    eqn.addForms(addForms.subFormObject);
-    const { content } = forms['0'].base.content[0];
-    expect(content[0].content.drawingObject.text[0].text).toBe('b');
-    expect(content[1].content.drawingObject.text[0].text).toBe('a');
-    expect(content[2].content.drawingObject.text[0].text).toBe('c');
+  // test('Sub form Object', () => {
+  //   eqn.addForms(addForms.subFormObject);
+  //   const { content } = forms['0'].content[0];
+  //   expect(content[0].content.drawingObject.text[0].text).toBe('b');
+  //   expect(content[1].content.drawingObject.text[0].text).toBe('a');
+  //   expect(content[2].content.drawingObject.text[0].text).toBe('c');
 
-    const deg = forms['0'].deg.content[0].content;
-    expect(deg[0].content.drawingObject.text[0].text).toBe('b');
-    expect(deg[1].content.drawingObject.text[0].text).toBe('a');
-    expect(deg[2].content.drawingObject.text[0].text).toBe('c');
+  //   const deg = forms['0'].deg.content[0].content;
+  //   expect(deg[0].content.drawingObject.text[0].text).toBe('b');
+  //   expect(deg[1].content.drawingObject.text[0].text).toBe('a');
+  //   expect(deg[2].content.drawingObject.text[0].text).toBe('c');
 
-    const rad = forms['0'].rad.content[0].content;
-    expect(rad[0].content.drawingObject.text[0].text).toBe('b');
-    expect(rad[1].content.drawingObject.text[0].text).toBe('a');
-    expect(rad[2].content.drawingObject.text[0].text).toBe('c');
-    expect(forms['0'].rad.elementMods.b.mods.color).toEqual(color1);
+  //   const rad = forms['0'].rad.content[0].content;
+  //   expect(rad[0].content.drawingObject.text[0].text).toBe('b');
+  //   expect(rad[1].content.drawingObject.text[0].text).toBe('a');
+  //   expect(rad[2].content.drawingObject.text[0].text).toBe('c');
+  //   expect(forms['0'].rad.elementMods.b.mods.color).toEqual(color1);
 
-    const method = forms['0'].method.content[0].content[0];
-    expect(method).toBeInstanceOf(Fraction);
-  });
+  //   const method = forms['0'].method.content[0].content[0];
+  //   expect(method).toBeInstanceOf(Fraction);
+  // });
   test('AddForms called multiple times', () => {
     eqn.addForms(addForms.addFormsMultipleTimes.first);
     eqn.addForms(addForms.addFormsMultipleTimes.second);
-    expect(forms['0'].base.content[0].content[0].content).toBe(eqn._a);
-    expect(forms['1'].base.content[0].content[0].content).toBe(eqn._b);
+    expect(forms['0'].content[0].content[0].content).toBe(eqn._a);
+    expect(forms['1'].content[0].content[0].content).toBe(eqn._b);
   });
   test('Create forms as part of initial euation creation', () => {
     const eqn1 = new Equation(diagram.shapes, equationOptions);
     const forms1 = eqn1.eqn.forms;
-    expect(forms1['0'].base.content[0].content[0].content).toBe(eqn1._a);
-    expect(forms1['1'].base.content[0].content[0].content).toBe(eqn1._b);
-    expect(eqn1.eqn.formSeries.base).toEqual(['0', '1']);
+    expect(forms1['0'].content[0].content[0].content).toBe(eqn1._a);
+    expect(forms1['1'].content[0].content[0].content).toBe(eqn1._b);
+    expect(eqn1.eqn.formSeries).toEqual({ base: ['0', '1'] });
   });
   test('Time', () => {
     eqn.addForms(addForms.time);
-    expect(forms['0'].base.duration).toBe(undefined);
-    expect(forms['0'].base.fromPrev).toBe(undefined);
-    expect(forms['0'].base.fromNext).toBe(undefined);
-    expect(forms['1'].base.duration).toBe(10);
-    expect(forms['1'].base.fromPrev).toBe(undefined);
-    expect(forms['1'].base.fromNext).toBe(undefined);
-    expect(forms['2'].base.duration).toBe(40);
-    expect(forms['2'].base.fromPrev.duration).toBe(20);
-    expect(forms['2'].base.fromNext.duration).toBe(30);
-    expect(forms['3'].base.duration).toBe(undefined);
-    expect(forms['3'].base.fromPrev.duration).toBe(20);
-    expect(forms['3'].base.fromNext).toBe(undefined);
+    expect(forms['0'].animation.duration).toBe(undefined);
+    expect(forms['0'].fromForm).toEqual({});
+    // expect(forms['0'].fromNext).toBe(undefined);
+    expect(forms['1'].animation.duration).toBe(10);
+    // expect(forms['1'].fromPrev).toBe(undefined);
+    // expect(forms['1'].fromNext).toBe(undefined);
+    expect(forms['1'].fromForm).toEqual({});
+    expect(forms['2'].animation.duration).toBe(10);
+    expect(forms['2'].fromForm.prev.animation.duration).toBe(20);
+    expect(forms['2'].fromForm.next.animation.duration).toBe(30);
+    expect(forms['3'].duration).toBe(undefined);
+    expect(forms['2'].fromForm.prev.animation.duration).toBe(20);
+    // expect(forms['3'].fromNext).toBe(undefined);
   });
   test('Element Modifications', () => {
     eqn.addForms(addForms.elementMods);
-    expect(forms['0'].base.elementMods).toEqual({});
-    expect(forms['1'].base.elementMods).toEqual({
+    expect(forms['0'].elementMods).toEqual({});
+    expect(forms['1'].elementMods).toEqual({
       b: {
         element: eqn._b,
         mods: {
@@ -456,37 +460,27 @@ describe('Diagram Equations From Object', () => {
   });
   test('Descriptions', () => {
     eqn.addForms(addForms.descriptions);
-    expect(forms['0'].base.description).toBe('Form 0 description');
-    expect(forms['1'].base.description).toBe('|Form| 1 |description|');
+    expect(forms['0'].description).toBe('Form 0 description');
+    expect(forms['1'].description).toBe('|Form| 1 |description|');
     expect(eqn.getDescription('1')).toBe('<span class="highlight_word"" style="color:rgba(255,0,0,0);">Form</span> 1 <span class="highlight_word">description</span>');
   });
   test('All form options', () => {
     expect(eqn._a.getPosition().round(3)).toEqual(new Point(0, 0));
     expect(eqn._a.getScale().round(3)).toEqual(new Point(1, 1));
+    // debugger;
     eqn.addForms(addForms.allFormOptions);
-    expect(forms['0'].deg.description).toBe('|Form| 1 |description|');
+    expect(forms['0'].description).toBe('|Form| 1 |description|');
     expect(eqn.getDescription('0', 'deg')).toBe('<span class="highlight_word"" style="color:rgba(255,0,0,0);">Form</span> 1 <span class="highlight_word">description</span>');
-    const form = forms['0'].deg;
+    const form = forms['0'];
     expect(form.elementMods.a.mods.color).toEqual(color1);
     expect(form.elementMods.a.mods.isTouchable).toEqual(true);
-    expect(form.duration).toEqual(1);
-    // console.log(form.translation)
-    expect(form.translation.a.style).toBe('curved');
-    expect(form.translation.a.direction).toBe('up');
-    expect(form.translation.a.mag).toBe(0.95);
-    expect(form.translation.b.style).toBe('curved');
-    expect(form.translation.b.direction).toBe('down');
-    expect(form.translation.b.mag).toBe(0.45);
-
-    expect(form.fromPrev.duration).toBe(null);
-    expect(form.fromPrev.translation.a.style).toBe('curved');
-    expect(form.fromPrev.translation.a.direction).toBe('down');
-    expect(form.fromPrev.translation.a.mag).toBe(0.2);
-
-    expect(form.fromNext.duration).toBe(2);
-    expect(form.fromNext.translation.a.style).toBe('curved');
-    expect(form.fromNext.translation.a.direction).toBe('down');
-    expect(form.fromNext.translation.a.mag).toBe(0.2);
+    expect(form.animation.duration).toEqual(1);
+    expect(form.animation.translation.a.style).toBe('curved');
+    expect(form.animation.translation.a.direction).toBe('up');
+    expect(form.animation.translation.a.mag).toBe(0.95);
+    expect(form.animation.translation.b.style).toBe('curved');
+    expect(form.animation.translation.b.direction).toBe('down');
+    expect(form.animation.translation.b.mag).toBe(0.45);
 
     eqn.showForm('0');
     expect(eqn._a.getPosition().round(3)).toEqual(new Point(-0.072, 0.01));

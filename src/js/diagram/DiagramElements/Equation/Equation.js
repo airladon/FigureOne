@@ -607,6 +607,7 @@ export class Equation extends DiagramElementCollection {
     };
 
     const optionsToUse = joinObjects({}, defaultOptions, options);
+    // debugger;
     optionsToUse.position = parsePoint(
       optionsToUse.position, new Point(0, 0),
     );
