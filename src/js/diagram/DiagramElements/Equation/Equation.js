@@ -282,11 +282,13 @@ type TypeEquationFormObject = {
   description?: string,           // For equation navigation
   modifiers?: {},                 // Modifiers for description
   // First Priority
-  fromPrev?: TypeFormAnimationProperties,
-  fromNext?: TypeFormAnimationProperties,
+  // fromPrev?: TypeFormAnimationProperties,
+  // fromNext?: TypeFormAnimationProperties,
   // Last Priority
-  duration?: ?number,               // null means to use velocity
-  translation?: TypeFormTranslationProperties,
+  animation?: {
+    duration?: ?number,               // null means to use velocity
+    translation?: TypeFormTranslationProperties,
+  },
   elementMods?: {
     [elementName: string]: Object
   },
@@ -373,7 +375,11 @@ export type EQN_Equation = {
   defaultFormAlignment?: TypeFormAlignment;
   formDefaults: {
     alignment?: TypeFormAlignment,
-  } & TypeFormAnimationProperties;
+    elementMods: {
+      [elementName: string]: Object,
+    },
+    animation: TypeFormAnimationProperties;
+  };
   forms?: TypeEquationForms;
   formSeries?: Array<string> | {};
   defaultFormSeries?: string;
@@ -1428,7 +1434,7 @@ export class Equation extends DiagramElementCollection {
       duration: null,
       prioritizeFormDuration: true,
       delay: 0,
-      fromWhere: null,
+      fromWhere: '_current',
       animate: 'dissolve',
       callback: null,
       ifAnimating: {
@@ -1458,8 +1464,8 @@ export class Equation extends DiagramElementCollection {
     // Get the desired form - preference is name, then series index,
     // then next form in the current series
     let form;
-    if (options.name != null) {
-      form = this.eqn.forms[options.name];
+    if (options.form != null) {
+      form = this.eqn.forms[options.form];
     } else if (options.index != null) {
       form = this.eqn.forms[this.eqn.currentFormSeries[options.index]];
     } else if (this.eqn.currentFormSeries.length > 0) {
@@ -1480,6 +1486,10 @@ export class Equation extends DiagramElementCollection {
 
     if (form == null) {
       return;
+    }
+
+    if (options.fromWhere === '_current') {
+      options.fromWhere = this.eqn.currentForm;
     }
 
     let { duration } = options;

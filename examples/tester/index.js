@@ -21,21 +21,48 @@ diagram.addElement(
           translation: {
             c: { style: 'curved', direction: 'up', mag: 0.5 },
           },
-          duration: 4,
-        }
+        },
+        elementMods: {
+          b: { color: [1, 0, 0, 1] }
+        },
       },
 
       // Define two different forms of the equation
       forms: {
-        '1': ['a', 'equals', { frac: ['b', 'v', 'c'] }],
-        '2': {
+        'a': ['a', 'equals', { frac: ['b', 'v', 'c'] }],
+        'b': {
+          content: ['b', 'equals', 'a', 'times', 'c'],
+          elementMods: {
+            b: { color: [0.5, 1, 0.5, 1] },
+          },
+          // Define how the 'c' element will move to this form
+          animation: {
+            translation: {
+              c: { style: 'curved', direction: 'up', mag: 1 },
+            },
+            // duration: 0.5,
+          },
+        },
+        'c': {
           content: ['c', 'times', 'a', 'equals', 'b'],
+          elementMods: {
+            b: { color: [0, 1, 1, 1] },
+          },
           // Define how the 'c' element will move to this form
           animation: {
             translation: {
               c: { style: 'curved', direction: 'down', mag: 0.5 },
             },
-            duration: 0.5,
+            // duration: 0.5,
+          },
+          fromForm: {
+            a: {
+              animation: {
+                translation: {
+                  c: { style: 'curved', direction: 'down', mag: 5 },
+                },
+              },
+            },
           },
         },
       },
@@ -47,15 +74,25 @@ diagram.initialize();
 const eqn = diagram.getElement('eqn');
 
 // Show the equation form
-eqn.showForm('1');
+eqn.showForm('b');
 
+const a = diagram.getElement('eqn.a');
+const b = diagram.getElement('eqn.b');
+const c = diagram.getElement('eqn.c');
 // Animate to the next form
-eqn.goToForm({
-  name: '2',
-  delay: 1,
-  duration: 1.5,
-  animate: 'move',
-});
+const goTo = (form) => {
+  eqn.goToForm({
+    name: form, delay: 0.2, duration: 1.5, animate: 'move',
+  });
+  diagram.animateNextFrame();
+}
 
+a.makeTouchable();
+b.makeTouchable();
+c.makeTouchable();
+
+a.onClick = goTo.bind(eqn, 'a');
+b.onClick = goTo.bind(eqn, 'b');
+c.onClick = goTo.bind(eqn, 'c');
 // Queue drawing on the next animation frame
 diagram.animateNextFrame();
