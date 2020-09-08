@@ -129,7 +129,7 @@ require(['Fig'], function(Fig) {
           a: { color: [0, 0.5, 0, 1] },
           b: { color: [0, 0, 1, 1] },
         },
-        defaultFormAlignment: { fixTo: 'equals' },
+        formDefaults: { alignment: { fixTo: 'equals' } },
 
         // Define each equation form, and how the elements should move
         forms: {

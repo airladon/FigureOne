@@ -64,10 +64,12 @@ describe('Diagram Equations From Object', () => {
             _2: '2',
             v: { symbol: 'vinculum' },
           },
-          defaultFormAlignment: {
-            fixTo: { x: 2, y: 2 },    // Points can also be defined as objects
-            xAlign: 'right',
-            yAlign: 'top',
+          formDefaults: {
+            alignment: {
+              fixTo: { x: 2, y: 2 },    // Points can also be defined as objects
+              xAlign: 'right',
+              yAlign: 'top',
+            },
           },
           forms: {
             0: ['a', 'b', 'c'],

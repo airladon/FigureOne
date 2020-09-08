@@ -124,10 +124,12 @@ describe('Different ways to make an equation', () => {
             _2: '2',
             v: { symbol: 'vinculum' },
           },
-          defaultFormAlignment: {
-            fixTo: { x: 2, y: 2 },    // Points can also be defined as objects
-            xAlign: 'right',
-            yAlign: 'top',
+          formDefaults: {
+            alignment: {
+              fixTo: { x: 2, y: 2 },    // Points can also be defined as objects
+              xAlign: 'right',
+              yAlign: 'top',
+            },
           },
           scale: 0.45,
           forms: {
@@ -233,10 +235,12 @@ describe('Different ways to make an equation', () => {
       equationFormAlignment: () => {
         eqn = new Equation(diagram.shapes, {
           color: color1,
-          defaultFormAlignment: {
-            fixTo: 'a',
-            yAlign: 'top',
-            xAlign: 'center',
+          formDefaults: {
+            alignment: {
+              fixTo: 'a',
+              yAlign: 'top',
+              xAlign: 'center',
+            },
           },
         });
         eqn.addElements({
@@ -349,9 +353,9 @@ describe('Different ways to make an equation', () => {
     expect(eqn.transform.t()).toEqual(new Point(1, 1));
 
     // Check default form alignment
-    expect(eqn.eqn.defaultFormAlignment.fixTo).toEqual(new Point(2, 2));
-    expect(eqn.eqn.defaultFormAlignment.xAlign).toEqual('right');
-    expect(eqn.eqn.defaultFormAlignment.yAlign).toEqual('top');
+    expect(eqn.eqn.formDefaults.alignment.fixTo).toEqual(new Point(2, 2));
+    expect(eqn.eqn.formDefaults.alignment.xAlign).toEqual('right');
+    expect(eqn.eqn.formDefaults.alignment.yAlign).toEqual('top');
     expect(eqn.eqn.scale).toEqual(0.45);
     tools.cleanUIDs(eqn);
     eqn._a.parent = null;

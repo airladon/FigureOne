@@ -67,10 +67,12 @@ export default class EquationLabel {
       eqn = equations.equation({
         elements: { base: labelTextOrEquation },
         color,
-        defaultFormAlignment: {
-          fixTo: new Point(0, 0),
-          xAlign,
-          yAlign,
+        formDefaults: {
+          alignment: {
+            fixTo: new Point(0, 0),
+            xAlign,
+            yAlign,
+          },
         },
         scale,
         forms: {
@@ -94,10 +96,12 @@ export default class EquationLabel {
         forms,
         color,
         position,
-        defaultFormAlignment: {
-          fixTo: new Point(0, 0),
-          xAlign,
-          yAlign,
+        formDefaults: {
+          alignment: {
+            fixTo: new Point(0, 0),
+            xAlign,
+            yAlign,
+          },
         },
         scale,
       });
@@ -105,10 +109,12 @@ export default class EquationLabel {
     } else {
       const defaultEqnOptions = {
         color,
-        defaultFormAlignment: {
-          fixTo: new Point(0, 0),
-          xAlign,
-          yAlign,
+        formDefaults: {
+          alignment: {
+            fixTo: new Point(0, 0),
+            xAlign,
+            yAlign,
+          },
         },
         scale,
         form,
@@ -138,9 +144,9 @@ export default class EquationLabel {
       }
       form.arrange(
         this.eqn.eqn.scale,
-        this.eqn.eqn.defaultFormAlignment.xAlign,
-        this.eqn.eqn.defaultFormAlignment.yAlign,
-        this.eqn.eqn.defaultFormAlignment.fixTo,
+        this.eqn.eqn.formDefaults.alignment.xAlign,
+        this.eqn.eqn.formDefaults.alignment.yAlign,
+        this.eqn.eqn.formDefaults.alignment.fixTo,
       );
     }
   }

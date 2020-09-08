@@ -15,7 +15,7 @@ diagram.addElement(
       },
 
       // Align all forms to the 'equals' diagram element
-      defaultFormAlignment: { fixTo: 'equals' },
+      formDefaults: { alignment: { fixTo: 'equals' } },
 
       // Define two different forms of the equation
       forms: {

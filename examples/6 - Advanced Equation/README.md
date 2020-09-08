@@ -38,7 +38,7 @@ diagram.addElement(
         x_1: { text: 'x', color: [1, 0, 0, 1]},
       },
       // An equation form is how those terms are arranged
-      defaultFormAlignment: { xAlign: 'center', yAlign: 'center' },
+      formDefaults: { alignment: { xAlign: 'center', yAlign: 'center' } },
       forms: {
         base: [
           {

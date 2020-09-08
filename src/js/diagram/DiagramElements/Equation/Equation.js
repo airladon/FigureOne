@@ -371,6 +371,9 @@ export type EQN_Equation = {
   scale?: number,
   elements?: TypeEquationElements;
   defaultFormAlignment?: TypeFormAlignment;
+  formDefaults: {
+    alignment?: TypeFormAlignment,
+  } & TypeFormAnimationProperties;
   forms?: TypeEquationForms;
   formSeries?: Array<string> | {};
   defaultFormSeries?: string;
@@ -521,11 +524,15 @@ export class Equation extends DiagramElementCollection {
     currentFormSeriesName: string;
 
     //
-    defaultFormAlignment: {
-      fixTo: DiagramElementPrimitive | DiagramElementCollection | Point;
-      xAlign: TypeHAlign;
-      yAlign: TypeVAlign;
-    };
+    // defaultFormAlignment: {
+    //   fixTo: DiagramElementPrimitive | DiagramElementCollection | Point;
+    //   xAlign: TypeHAlign;
+    //   yAlign: TypeVAlign;
+    // };
+
+    formDefaults: {
+      alignment?: TypeFormAlignment,
+    } & TypeFormAnimationProperties;
 
     isAnimating: boolean;
 
@@ -567,10 +574,17 @@ export class Equation extends DiagramElementCollection {
       ),
       position: new Point(0, 0),
       scale: 0.7,
-      defaultFormAlignment: {
-        fixTo: new Point(0, 0),
-        xAlign: 'left',
-        yAlign: 'baseline',
+      // defaultFormAlignment: {
+      //   fixTo: new Point(0, 0),
+      //   xAlign: 'left',
+      //   yAlign: 'baseline',
+      // },
+      formDefaults: {
+        alignment: {
+          fixTo: new Point(0, 0),
+          xAlign: 'left',
+          yAlign: 'baseline',
+        },
       },
       elements: {},
       forms: {},
@@ -582,10 +596,14 @@ export class Equation extends DiagramElementCollection {
     optionsToUse.position = parsePoint(
       optionsToUse.position, new Point(0, 0),
     );
-    optionsToUse.defaultFormAlignment.fixTo = parsePoint(
-      optionsToUse.defaultFormAlignment.fixTo,
-      optionsToUse.defaultFormAlignment.fixTo,
+    optionsToUse.formDefaults.alignment.fixTo = parsePoint(
+      optionsToUse.formDefaults.alignment.fixTo,
+      optionsToUse.formDefaults.alignment.fixTo,
     );
+    // optionsToUse.defaultFormAlignment.fixTo = parsePoint(
+    //   optionsToUse.defaultFormAlignment.fixTo,
+    //   optionsToUse.defaultFormAlignment.fixTo,
+    // );
     if (optionsToUse.formRestart != null
       && optionsToUse.formRestart.pulse != null) {
       optionsToUse.formRestart.pulse = joinObjects({}, {
@@ -613,7 +631,10 @@ export class Equation extends DiagramElementCollection {
       currentFormSeries: [],
       currentFormSeriesName: '',
       scale: optionsToUse.scale,
-      defaultFormAlignment: optionsToUse.defaultFormAlignment,
+      // defaultFormAlignment: optionsToUse.defaultFormAlignment,
+      formDefaults: {
+        alignment: optionsToUse.formDefaults.alignment,
+      },
       functions: new EquationFunctions(
         this.elements,
         this.addElementFromKey.bind(this),
@@ -1155,8 +1176,8 @@ export class Equation extends DiagramElementCollection {
       description: '',
       modifiers: {},
       scale: this.eqn.scale,
-      alignment: this.eqn.defaultFormAlignment,
-      translation: {},
+      alignment: this.eqn.formDefaults.alignment,
+      translation: this.eqn.formDefaults.translation,
       fromNext: undefined,
       fromPrev: undefined,
       fromForm: {},
@@ -1241,51 +1262,6 @@ export class Equation extends DiagramElementCollection {
         setFormAnimationOptions(`fromForm.${formName}`);
       });
     }
-    // setFormAnimationOptions('fromForm');
-    // // Populate translation mods
-    // form[subForm].translation = {};
-    // Object.keys(optionsToUse.translation).forEach((elementName) => {
-    //   const translation = getTranslation(elementName, optionsToUse.translation);
-    //   if (translation != null) {
-    //     form[subForm].translation[elementName] = translation;
-    //   }
-    // });
-
-    // // Populate translation mods
-    // const { fromPrev } = optionsToUse;
-    // if (fromPrev != null) {
-    //   form[subForm].fromPrev = {};
-    //   if (fromPrev.duration !== undefined) {
-    //     form[subForm].fromPrev.duration = fromPrev.duration;
-    //   }
-    //   form[subForm].fromPrev.translation = {};
-    //   if (fromPrev.translation != null) {
-    //     Object.keys(fromPrev.translation).forEach((elementName) => {
-    //       const translation = getTranslation(elementName, fromPrev.translation);
-    //       if (translation != null) {
-    //         form[subForm].fromPrev.translation[elementName] = translation;
-    //       }
-    //     });
-    //   }
-    // }
-
-    // // Populate translation mods
-    // const { fromNext } = optionsToUse;
-    // if (fromNext != null) {
-    //   form[subForm].fromNext = {};
-    //   if (fromNext.duration !== undefined) {
-    //     form[subForm].fromNext.duration = fromNext.duration;
-    //   }
-    //   form[subForm].fromNext.translation = {};
-    //   if (fromNext.translation != null) {
-    //     Object.keys(fromNext.translation).forEach((elementName) => {
-    //       const translation = getTranslation(elementName, fromNext.translation);
-    //       if (translation != null) {
-    //         form[subForm].fromNext.translation[elementName] = translation;
-    //       }
-    //     });
-    //   }
-    // }
 
     optionsToUse.alignment.fixTo = this.checkFixTo(optionsToUse.alignment.fixTo);
     form[subForm].content = content;
@@ -1295,14 +1271,7 @@ export class Equation extends DiagramElementCollection {
       optionsToUse.alignment.yAlign,
       optionsToUse.alignment.fixTo,
     );
-    // const { addToSeries } = optionsToUse;
-    // console.log(addToSeries)
-    // if (addToSeries != null && addToSeries !== '' && typeof addToSeries === 'string') {
-    //   if (this.eqn.formSeries[addToSeries] == null) {
-    //     this.eqn.formSeries[addToSeries] = [];
-    //   }
-    //   this.eqn.formSeries[addToSeries].push(form);
-    // }
+
     // make the first form added also equal to the base form as always
     // need a base form for some functions
     if (this.eqn.forms[name].base === undefined) {
@@ -1489,8 +1458,19 @@ export class Equation extends DiagramElementCollection {
       if (options.prioritizeFormDuration) {
         if (options.fromWhere === 'fromPrev' && subForm.fromPrev != null && subForm.fromPrev.duration !== undefined) {
           ({ duration } = subForm.fromPrev);
-        } else if (options.fromWhere === 'fromNext' && subForm.fromNext != null && subForm.fromNext.duration !== undefined) {
+        } else if (
+          options.fromWhere === 'fromNext'
+          && subForm.fromNext != null
+          && subForm.fromNext.duration !== undefined
+        ) {
           ({ duration } = subForm.fromNext);
+        } else if (
+          options.fromWhere.length !== 0
+          && subForm.fromForm != null
+          && subForm.fromForm[options.fromWhere] != null
+          && subForm.fromForm[options.fromWhere].duration !== undefined
+        ) {
+          ({ duration } = subForm.fromForm[options.fromWhere]);
         } else if (subForm.duration !== undefined) {
           ({ duration } = subForm);
         }
