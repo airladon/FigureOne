@@ -16,7 +16,7 @@ import { Recorder } from '../Recorder';
 
 function updateDescription(
   eqn: Equation,
-  subForm: string,
+  // subForm: string,
   descriptionElement: ?HTMLElement,
   index: number,
   setClicks: boolean = false,
@@ -127,7 +127,7 @@ function updateButtons(
       }
     } else {
       updateDescription(
-        nav.eqn, currentForm.subForm, nav.nextDescription,
+        nav.eqn, nav.nextDescription,
         nextIndex, false, nextPrefix,
       );
       if (nav.navType === '1Button' && nav.eqn.eqn.currentFormSeries.length > 1) {
@@ -138,12 +138,12 @@ function updateButtons(
         }
       }
     }
-    updateDescription(nav.eqn, currentForm.subForm, nav.description, index, true);
+    updateDescription(nav.eqn, nav.description, index, true);
     // nav.eqn.updateDescription(currentForm);
     const prevIndex = index - 1;
     if (prevIndex >= 0) {
       updateDescription(
-        nav.eqn, currentForm.subForm, nav.prevDescription,
+        nav.eqn, nav.prevDescription,
         prevIndex, false, prevPrefix,
       );
     } else if (nav.prevDescription) {
@@ -159,7 +159,7 @@ function updateButtonsDescriptionOnly(nav: EqnNavigator) {
   if (currentForm != null) {
     const index = nav.eqn.getFormIndex(currentForm);
     enableTouch(nav.description);
-    updateDescription(nav.eqn, currentForm.subForm, nav.description, index, true);
+    updateDescription(nav.eqn, nav.description, index, true);
   }
 }
 
@@ -668,9 +668,9 @@ export default class EqnNavigator extends DiagramElementCollection {
     }
   }
 
-  showForm(formOrName: EquationForm | string, formType: ?string = null) {
+  showForm(formOrName: EquationForm | string) {
     this.show();
-    this.eqn.showForm(formOrName, formType);
+    this.eqn.showForm(formOrName);
     // this.showForm(formOrName, formType);
     if (this._table) {
       this._table.show();

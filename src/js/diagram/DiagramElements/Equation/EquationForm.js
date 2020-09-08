@@ -89,27 +89,26 @@ export default class EquationForm extends Elements {
   // They are used by external classes using this form
   description: string | null;
   modifiers: Object;
-  subForm: string;
-  duration: ?number;
-  translation: TypeElementTranslationOptions;
-
-  fromNext: {
-    translation?: TypeElementTranslationOptions;
-    duration?: ?number;
-  };
-
-  fromPrev: {
-    translation?: TypeElementTranslationOptions;
-    duration?: ?number;
+  // subForm: string;
+  animation: {
+    duration: ?number;
+    translation: TypeElementTranslationOptions;
   };
 
   fromForm: {
     [formName: string]: {
-      translation?: TypeElementTranslationOptions;
-      duration?: ?number;
+      animation?: {
+        duration?: number,
+        translation?: TypeElementTranslationOptions,
+      },
+      elementMods: {
+        [elementName: string]: {
+          element: DiagramElementPrimitive | DiagramElementCollection;
+          mods: Object;
+        }
+      },
     },
   };
-
 
   constructor(
     elements: TypeElements,
@@ -122,8 +121,10 @@ export default class EquationForm extends Elements {
     this.modifiers = {};
     this.elementMods = {};
     // this.duration = null;
-    this.translation = {};
-    this.subForm = '';
+    // this.translation = {};
+    this.animation = {};
+    this.fromForm = {};
+    // this.subForm = '';
   }
 
   getNamedElements() {
@@ -483,19 +484,30 @@ export default class EquationForm extends Elements {
     });
   }
 
-  applyElementMods() {
-    Object.keys(this.elementMods).forEach((elementName) => {
-      const { element, mods } = this.elementMods[elementName];
-      if (element != null && mods != null) {
-        element.setProperties(mods);
-        if (mods.color != null) {
-          element.setColor(mods.color);
+  applyElementMods(fromWhere: null | string = null) {
+    const setProps = (elementMods) => {
+      Object.keys(elementMods).forEach((elementName) => {
+        const { element, mods } = elementMods[elementName];
+        if (element != null && mods != null) {
+          element.setProperties(mods);
+          if (mods.color != null) {
+            element.setColor(mods.color);
+          }
+          if (mods.opacity != null) {
+            element.setOpacity(mods.opacity);
+          }
         }
-        if (mods.opacity != null) {
-          element.setOpacity(mods.opacity);
-        }
-      }
-    });
+      });
+    };
+    setProps(this.elementMods);
+    if (
+      fromWhere != null
+      && fromWhere.length > 0
+      && this.fromForm[fromWhere] != null
+      && this.fromForm[fromWhere].elementMods != null
+    ) {
+      setProps(this.fromForm[fromWhere].elementMods);
+    }
   }
 
   // Check callback is being called
@@ -505,7 +517,7 @@ export default class EquationForm extends Elements {
     moveTime: number | null,
     dissolveInTime: number,
     callback: ?(string | ((?mixed) => void)) = null,
-    fromWhere: ?'fromPrev' | 'fromNext' = null,
+    fromWhere: ?string = null,
     dissolveInBeforeMove: boolean = false,
   ) {
     const allElements = this.collectionMethods.getAllElements();
@@ -591,23 +603,24 @@ export default class EquationForm extends Elements {
       this.fnMap.exec(dissolveOutCallback);
     }
 
-    this.applyElementMods();
+    this.applyElementMods(fromWhere);
 
     let translationToUse = {};
-    if (fromWhere === 'fromPrev' && this.fromPrev != null) {
-      translationToUse = joinObjects({}, this.translation, this.fromPrev);
-    } else if (fromWhere === 'fromNext' && this.fromNext != null) {
-      translationToUse = joinObjects({}, this.translation, this.fromNext);
-    } else if (
+    if (
       typeof fromWhere === 'string'
       && fromWhere.length !== 0
       && this.fromForm != null
       && this.fromForm[fromWhere] != null
-      && this.fromForm[fromWhere].translation !== undefined
+      && this.fromForm[fromWhere].animation != null
+      && this.fromForm[fromWhere].animation.translation !== undefined
     ) {
-      translationToUse = joinObjects({}, this.translation, this.fromForm[fromWhere]);
+      translationToUse = joinObjects(
+        {},
+        this.animation.translation,
+        this.fromForm[fromWhere].animation.translation,
+      );
     } else {
-      translationToUse = joinObjects({}, this.translation);
+      translationToUse = joinObjects({}, this.animation.translation);
     }
 
     Object.keys(translationToUse).forEach((key) => {

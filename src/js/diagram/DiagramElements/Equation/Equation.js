@@ -2,7 +2,7 @@
 import {
   Point, Transform, parsePoint, getPoint,
 } from '../../../tools/g2';
-import { joinObjects, addToObject, getFromObject } from '../../../tools/tools';
+import { joinObjects } from '../../../tools/tools';
 // import { RGBToArray } from '../../../tools/color';
 import {
   DiagramElementPrimitive, DiagramElementCollection, DiagramElement,
@@ -450,7 +450,7 @@ type TypeEquationGoToFormOptions = {
   dissolveInTime?: number,
   blankTime?: number,
   prioritizeFormDuration?: boolean,
-  fromWhere?: ?'fromPrev' | 'fromNext',
+  fromWhere?: string | null,
   ifAnimating?: {
     cancelGoTo?: boolean;
     skipToTarget?: boolean;
@@ -502,21 +502,25 @@ export class Equation extends DiagramElementCollection {
    * @property {EquationFunctions} functions - equation functions
    */
   eqn: {
-    forms: { [formName: string]: {
-        base: EquationForm;                   // There is always a base form
-        [subFormName: string]: EquationForm;  // Sub forms may differ in units
-        name: string;                         // Name of form
-      }
+    // forms: { [formName: string]: {
+    //     base: EquationForm;                   // There is always a base form
+    //     [subFormName: string]: EquationForm;  // Sub forms may differ in units
+    //     name: string;                         // Name of form
+    //   }
+    // };
+    forms: {
+      [formName: string]: EquationForm;
     };
+
     functions: EquationFunctions;
     symbols: EquationSymbols;
     currentForm: string;
-    currentSubForm: string;
+    // currentSubForm: string;
     fontMath: DiagramFont;
     // fontText: DiagramFont;
     scale: number;
 
-    subFormPriority: Array<string>,
+    // subFormPriority: Array<string>,
 
     // formSeries: { [seriesName: String]: Array<EquationForm> };
     formSeries: { [string]: Array<string> };
@@ -531,7 +535,10 @@ export class Equation extends DiagramElementCollection {
     // };
 
     formDefaults: {
-      alignment?: TypeFormAlignment,
+      alignment: TypeFormAlignment,
+      elementMods: {
+        [elementName: string]: Object,
+      },
     } & TypeFormAnimationProperties;
 
     isAnimating: boolean;
@@ -585,6 +592,7 @@ export class Equation extends DiagramElementCollection {
           xAlign: 'left',
           yAlign: 'baseline',
         },
+        elementMods: {},
       },
       elements: {},
       forms: {},
@@ -625,8 +633,8 @@ export class Equation extends DiagramElementCollection {
     this.eqn = {
       forms: {},
       currentForm: '',
-      currentSubForm: '',
-      subFormPriority: ['base'],
+      // currentSubForm: '',
+      // subFormPriority: ['base'],
       formSeries: { base: [] },
       currentFormSeries: [],
       currentFormSeriesName: '',
@@ -634,6 +642,8 @@ export class Equation extends DiagramElementCollection {
       // defaultFormAlignment: optionsToUse.defaultFormAlignment,
       formDefaults: {
         alignment: optionsToUse.formDefaults.alignment,
+        elementMods: optionsToUse.formDefaults.elementMods,
+        animation: optionsToUse.formDefaults.animation,
       },
       functions: new EquationFunctions(
         this.elements,
@@ -678,7 +688,7 @@ export class Equation extends DiagramElementCollection {
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(options),
       'eqn.currentForm',
-      'eqn.currentSubForm',
+      // 'eqn.currentSubForm',
       'eqn.isAnimating',
       'eqn.currentFormSeries',
       'eqn.currentFormSeriesName',
@@ -689,7 +699,7 @@ export class Equation extends DiagramElementCollection {
     return [
       ...super._getStatePropertiesMin(),
       'eqn.currentForm',
-      'eqn.currentSubForm',
+      // 'eqn.currentSubForm',
     ];
   }
 
@@ -1000,17 +1010,17 @@ export class Equation extends DiagramElementCollection {
     };
     // eslint-disable-next-line max-len
     const isFormElements = form => (form instanceof Elements || form instanceof BaseAnnotationFunction);
-    const isFormFullObject = (form) => {
-      if (isFormString(form) || isFormArray(form)
-        || isFormMethodDefinition(form) || isFormElements(form)
-      ) {
-        return false;
-      }
-      if (form != null && typeof form === 'object' && form.content != null) {
-        return true;
-      }
-      return false;
-    };
+    // const isFormFullObject = (form) => {
+    //   if (isFormString(form) || isFormArray(form)
+    //     || isFormMethodDefinition(form) || isFormElements(form)
+    //   ) {
+    //     return false;
+    //   }
+    //   if (form != null && typeof form === 'object' && form.content != null) {
+    //     return true;
+    //   }
+    //   return false;
+    // };
     const addFormNormal = (name: string, form: TypeEquationForm) => {
       // $FlowFixMe
       const formContent = [this.eqn.functions.contentToElement(form)];
@@ -1020,22 +1030,22 @@ export class Equation extends DiagramElementCollection {
       // $FlowFixMe
       const formContent = [this.eqn.functions.contentToElement(form.content)];
       const {   // $FlowFixMe
-        subForm, elementMods, duration, alignment, scale, // $FlowFixMe
-        description, modifiers, fromPrev, fromNext, translation, // $FlowFixMe
+        elementMods, duration, alignment, scale, // $FlowFixMe
+        description, modifiers, animation, // $FlowFixMe
         fromForm,
       } = form;
       const options = {
-        subForm,
+        // subForm,
         // addToSeries,
         elementMods,
         duration,
-        translation,
+        animation,
         alignment,
         scale,
         description,
         modifiers,
-        fromPrev,
-        fromNext,
+        // fromPrev,
+        // fromNext,
         fromForm,
       };
       // $FlowFixMe
@@ -1048,22 +1058,25 @@ export class Equation extends DiagramElementCollection {
         || isFormMethodDefinition(form) || isFormElements(form)
       ) {
         addFormNormal(name, form);
-      } else if (isFormFullObject(form)) {
-        addFormFullObject(name, form);
       } else {
-        Object.entries(form).forEach((subFormEntry) => {
-          const [subFormName: string, subFormValue] = subFormEntry;
-          // const subFormOption = { subForm: subFormName };
-          if (isFormString(subFormValue) || isFormArray(subFormValue)
-            || isFormMethodDefinition(subFormValue) || isFormElements(subFormValue)
-          ) { // $FlowFixMe
-            addFormFullObject(name, { content: subFormValue, subForm: subFormName });
-          } else {
-            // $FlowFixMe
-            addFormFullObject(name, joinObjects(subFormValue, { subForm: subFormName }));
-          }
-        });
+        addFormFullObject(name, form);
       }
+      // } else if (isFormFullObject(form)) {
+      //   addFormFullObject(name, form);
+      // } else {
+      //   Object.entries(form).forEach((subFormEntry) => {
+      //     const [subFormName: string, subFormValue] = subFormEntry;
+      //     // const subFormOption = { subForm: subFormName };
+      //     if (isFormString(subFormValue) || isFormArray(subFormValue)
+      //       || isFormMethodDefinition(subFormValue) || isFormElements(subFormValue)
+      //     ) { // $FlowFixMe
+      //       addFormFullObject(name, { content: subFormValue, subForm: subFormName });
+      //     } else {
+      //       // $FlowFixMe
+      //       addFormFullObject(name, joinObjects(subFormValue, { subForm: subFormName }));
+      //     }
+      //   });
+      // }
     });
   }
 
@@ -1112,74 +1125,43 @@ export class Equation extends DiagramElementCollection {
     name: string,
     content: Array<ElementInterface>,
     options: {
-      subForm?: string,
+      // subForm?: string,
       scale?: number,
       alignment?: TypeFormAlignment,
       description?: string,
       modifiers?: Object,
-      // First Priority
-      fromForm?: {
+      elementMods?: {
+        [elementName: string]: Object,
+      },
+      animation?: {
+        duration?: number,
+        translation?: { [elementName: string]: TypeFormTranslationProperties },
+      },
+      fromForm: {
         [formName: string]: {
-          duration?: ?number,
-          translation?: {
-            [elementName: string]: {
-              direction?: 'up' | 'down',
-              style: 'curved' | 'linear',
-              mag: number,
-            } | ['curved' | 'linear', 'up' | 'down', number],
+          animation?: {
+            duration?: number,
+            translation?: { [elementName: string]: TypeFormTranslationProperties },
+          },
+          elementMods?: {
+            [elementName: string]: Object,
           },
         },
       },
-      fromPrev?: {
-        duration?: ?number,
-        translation?: {
-          [elementName: string]: {
-            direction?: 'up' | 'down',
-            style: 'curved' | 'linear',
-            mag: number,
-          } | ['curved' | 'linear', 'up' | 'down', number],
-        },
-      },
-      fromNext?: {
-        duration?: ?number,
-        translation?: {
-          [elementName: string]: {
-            direction?: 'up' | 'down',
-            style: 'curved' | 'linear',
-            mag: number,
-          } | ['curved' | 'linear', 'up' | 'down', number],
-        },
-      },
-      // Last Priority
-      duration?: ?number,               // null means to use velocity
-      translation?: {
-        [elementName: string]: {
-          direction?: 'up' | 'down',
-          style: 'curved' | 'linear',
-          mag: number,
-        } | ['curved' | 'linear', 'up' | 'down', number],
-      },
-      elementMods?: {
-        [elementName: string]: Object
-      },
     } = {},
   ) {
-    if (!(name in this.eqn.forms)) {
-      // $FlowFixMe   - its ok for this to start undefined, it will be filled.
-      this.eqn.forms[name] = {};
-    }
+    // if (!(name in this.eqn.forms)) {
+    //   // $FlowFixMe   - its ok for this to start undefined, it will be filled.
+    //   this.eqn.forms[name] = {};
+    // }
     const defaultOptions = joinObjects({}, {
-      subForm: 'base',
       elementMods: {},
-      duration: undefined,
-      // duration: null,                // use velocities instead of time
       description: '',
       modifiers: {},
       scale: this.eqn.scale,
-      // alignment: this.eqn.formDefaults.alignment,
-      // translation: this.eqn.formDefaults.translation,
-      fromNext: undefined,
-      fromPrev: undefined,
+      animation: {
+        duration: undefined,    // use null for velocities
+      },
       fromForm: {},
     }, this.eqn.formDefaults);
     let optionsToUse = defaultOptions;
@@ -1187,105 +1169,161 @@ export class Equation extends DiagramElementCollection {
       optionsToUse = joinObjects({}, defaultOptions, options);
     }
     const {
-      subForm, description, modifiers, duration,
+      description, modifiers, animation, fromForm,
     } = optionsToUse;
-    this.eqn.forms[name].name = name;
-    const form = this.eqn.forms[name];
-    form[subForm] = this.createForm();
-    form[subForm].description = description;
-    form[subForm].modifiers = modifiers;
-    form[subForm].name = name;
-    form[subForm].subForm = subForm;
-    form[subForm].duration = duration;
+    // this.eqn.forms[name].name = name;
+    // const form = this.eqn.forms[name];
+    // form[subForm] = this.createForm();
+    const form = this.createForm();
+    this.eqn.forms[name] = form;
+    form.description = description;
+    form.modifiers = modifiers;
+    form.name = name;
+    form.animation = animation;
+    form.fromForm = fromForm;
 
     // Populate element mods
-    form[subForm].elementMods = {};
-    Object.keys(optionsToUse.elementMods).forEach((elementName) => {
-      const mods = optionsToUse.elementMods[elementName];
-      const diagramElement = getDiagramElement(this, elementName);
-      if (diagramElement != null) {
-        form[subForm].elementMods[elementName] = { element: diagramElement, mods };
-      }
-    });
+    form.elementMods = {};
 
-    const getTranslation = (elementName, modOptions) => {
-      const diagramElement = getDiagramElement(this, elementName);
-      const mods = modOptions[elementName];
-      let direction;
-      let style;
-      let mag;
-      if (Array.isArray(mods)) {
-        [style, direction, mag] = mods;
-      } else {
-        ({ style, direction, mag } = mods);
-      }
-      if (diagramElement != null) {
-        return {
-          element: diagramElement, style, direction, mag,
-        };
-      }
-      return null;
-    };
-
-    const setFormAnimationOptions = (optionsPath) => {
-      const animationOptions = getFromObject(optionsToUse, optionsPath, '.');
-      if (animationOptions === undefined) {
-        return;
-      }
-      if (animationOptions.duration !== undefined) {
-        addToObject(
-          form[subForm], `${optionsPath}.duration`, animationOptions.duration,
-        );
-      }
-      if (animationOptions.translation != null) {
-        Object.keys(animationOptions.translation).forEach((elementName) => {
-          const translation = getTranslation(elementName, animationOptions.translation);
-          if (translation != null) {
-            if (translation == null) {
-              addToObject(
-                form[subForm], `${optionsPath}.translation`, {},
-              );
-            } else {
-              addToObject(
-                form[subForm], `${optionsPath}.translation.${elementName}`, translation,
-              );
-            }
-          }
-        });
-      }
-    };
-    setFormAnimationOptions('');
-    setFormAnimationOptions('fromPrev');
-    setFormAnimationOptions('fromNext');
-    if (optionsToUse.fromForm != null) {
-      Object.keys(optionsToUse.fromForm).forEach((formName) => {
-        setFormAnimationOptions(`fromForm.${formName}`);
+    const transformElementMods = (elementMods) => {
+      const newMods = {};
+      Object.keys(elementMods).forEach((elementName) => {
+        const mods = elementMods[elementName];
+        const diagramElement = getDiagramElement(this, elementName);
+        if (diagramElement != null) {
+          newMods[elementName] = { element: diagramElement, mods };
+        }
       });
+      return newMods;
+    };
+
+    const transformTranslation = (translation) => {
+      const newTranslation = {};
+      Object.keys(translation).forEach((elementName) => {
+        const diagramElement = getDiagramElement(this, elementName);
+        const mods = translation[elementName];
+        let direction;
+        let style;
+        let mag;
+        if (Array.isArray(mods)) {
+          [style, direction, mag] = mods;
+        } else {
+          ({ style, direction, mag } = mods);
+        }
+        if (diagramElement != null) {
+          newTranslation[elementName] = {
+            element: diagramElement, style, direction, mag,
+          };
+        }
+      });
+      return newTranslation;
+    };
+
+    form.elementMods = transformElementMods(optionsToUse.elementMods);
+    if (form.animation.translation != null) {
+      form.animation.translation = transformTranslation(form.animation.translation);
     }
+    // // form.fromForm = {};
+    // Object.keys(form.fromForm).forEach((formName) => {
+    //   if (fromForm.elementMods != null) {
+    //     form.fromForm[formName].elementMods = transformElementMods(
+    //       form.fromForm[formName].elementMods,
+    //     );
+    //   }
+    //   if (
+    //     form.fromForm[formName].animation != null
+    //     && form.fromForm[formName].animation.translation != null
+    //   ) {
+    //     form.fromForm[formName].animation.translation = transformTranslation(
+    //       form.fromForm[formName].animation.translation,
+    //     );
+    //   }
+    // });
+
+    // Object.keys(optionsToUse.elementMods).forEach((elementName) => {
+    //   const mods = optionsToUse.elementMods[elementName];
+    //   const diagramElement = getDiagramElement(this, elementName);
+    //   if (diagramElement != null) {
+    //     form.elementMods[elementName] = { element: diagramElement, mods };
+    //   }
+    // });
+
+    // const getTranslation = (elementName, modOptions) => {
+    //   const diagramElement = getDiagramElement(this, elementName);
+    //   const mods = modOptions[elementName];
+    //   let direction;
+    //   let style;
+    //   let mag;
+    //   if (Array.isArray(mods)) {
+    //     [style, direction, mag] = mods;
+    //   } else {
+    //     ({ style, direction, mag } = mods);
+    //   }
+    //   if (diagramElement != null) {
+    //     return {
+    //       element: diagramElement, style, direction, mag,
+    //     };
+    //   }
+    //   return null;
+    // };
+
+    // const setFormAnimationOptions = (optionsPath) => {
+    //   const animationOptions = getFromObject(optionsToUse, optionsPath, '.');
+    //   if (animationOptions === undefined) {
+    //     return;
+    //   }
+    //   if (animationOptions.duration !== undefined) {
+    //     addToObject(
+    //       form, `${optionsPath}.duration`, animationOptions.duration,
+    //     );
+    //   }
+    //   if (animationOptions.translation != null) {
+    //     Object.keys(animationOptions.translation).forEach((elementName) => {
+    //       const translation = getTranslation(elementName, animationOptions.translation);
+    //       if (translation != null) {
+    //         if (translation == null) {
+    //           addToObject(
+    //             form, `${optionsPath}.translation`, {},
+    //           );
+    //         } else {
+    //           addToObject(
+    //             form, `${optionsPath}.translation.${elementName}`, translation,
+    //           );
+    //         }
+    //       }
+    //     });
+    //   }
+    // };
+    // setFormAnimationOptions('');
+    // if (optionsToUse.fromForm != null) {
+    //   Object.keys(optionsToUse.fromForm).forEach((formName) => {
+    //     setFormAnimationOptions(`fromForm.${formName}`);
+    //   });
+    // }
 
     optionsToUse.alignment.fixTo = this.checkFixTo(optionsToUse.alignment.fixTo);
-    form[subForm].content = content;
-    form[subForm].arrange(
+    form.content = content;
+    form.arrange(
       optionsToUse.scale,
       optionsToUse.alignment.xAlign,
       optionsToUse.alignment.yAlign,
       optionsToUse.alignment.fixTo,
     );
 
-    // make the first form added also equal to the base form as always
-    // need a base form for some functions
-    if (this.eqn.forms[name].base === undefined) {
-      const baseOptions = joinObjects({}, optionsToUse);
-      baseOptions.subForm = 'base';
-      this.addForm(name, content, baseOptions);
-    }
+    // // make the first form added also equal to the base form as always
+    // // need a base form for some functions
+    // if (this.eqn.forms[name].base === undefined) {
+    //   const baseOptions = joinObjects({}, optionsToUse);
+    //   baseOptions.subForm = 'base';
+    //   this.addForm(name, content, baseOptions);
+    // }
 
     if (this.eqn.currentForm === '') {
       this.eqn.currentForm = name;
     }
-    if (this.eqn.currentSubForm === '') {
-      this.eqn.currentSubForm = 'base';
-    }
+    // if (this.eqn.currentSubForm === '') {
+    //   this.eqn.currentSubForm = 'base';
+    // }
   }
 
   /**
@@ -1295,10 +1333,10 @@ export class Equation extends DiagramElementCollection {
     if (this.eqn.forms[this.eqn.currentForm] == null) {
       return null;
     }
-    if (this.eqn.forms[this.eqn.currentForm][this.eqn.currentSubForm] == null) {
-      return null;
-    }
-    return this.eqn.forms[this.eqn.currentForm][this.eqn.currentSubForm];
+    // if (this.eqn.forms[this.eqn.currentForm][this.eqn.currentSubForm] == null) {
+    //   return null;
+    // }
+    return this.eqn.forms[this.eqn.currentForm];
   }
 
   render(animationStop: boolean = true) {
@@ -1318,20 +1356,20 @@ export class Equation extends DiagramElementCollection {
    */
   setCurrentForm(
     formOrName: EquationForm | string,
-    subForm: string = 'base',
+    // subForm: string = 'base',
   ) {
     if (typeof formOrName === 'string') {
       this.eqn.currentForm = '';
-      this.eqn.currentSubForm = '';
+      // this.eqn.currentSubForm = '';
       if (formOrName in this.eqn.forms) {
         this.eqn.currentForm = formOrName;
-        if (subForm in this.eqn.forms[formOrName]) {
-          this.eqn.currentSubForm = subForm;
-        }
+        // if (subForm in this.eqn.forms[formOrName]) {
+        //   this.eqn.currentSubForm = subForm;
+        // }
       }
     } else {
       this.eqn.currentForm = formOrName.name;
-      this.eqn.currentSubForm = formOrName.subForm;
+      // this.eqn.currentSubForm = formOrName.subForm;
     }
   }
 
@@ -1340,13 +1378,13 @@ export class Equation extends DiagramElementCollection {
    */
   showForm(
     formOrName: EquationForm | string,
-    subForm: ?string = null,
+    // subForm: ?string = null,
     animationStop: boolean = true,
   ) {
     this.show();
     let form = formOrName;
     if (typeof formOrName === 'string') {
-      form = this.getForm(formOrName, subForm);
+      form = this.getForm(formOrName);
     }
     if (form) {
       this.setCurrentForm(form);
@@ -1359,24 +1397,25 @@ export class Equation extends DiagramElementCollection {
    */
   getForm(
     formOrName: string | EquationForm,
-    subForm: ?string,
+    // subForm: ?string,
   ): null | EquationForm {
     if (formOrName instanceof EquationForm) {
       return formOrName;
     }
     if (formOrName in this.eqn.forms) {
-      let formTypeToUse = subForm;
-      if (formTypeToUse == null) {
-        const possibleFormTypes     // $FlowFixMe
-          = this.eqn.subFormPriority.filter(fType => fType in this.eqn.forms[formOrName]);
-        if (possibleFormTypes.length) {
-          // eslint-disable-next-line prefer-destructuring
-          formTypeToUse = possibleFormTypes[0];
-        }
-      }
-      if (formTypeToUse != null) {
-        return this.eqn.forms[formOrName][formTypeToUse];
-      }
+      // let formTypeToUse = subForm;
+      // if (formTypeToUse == null) {
+      //   const possibleFormTypes     // $FlowFixMe
+      //     = this.eqn.subFormPriority.filter(fType => fType in this.eqn.forms[formOrName]);
+      //   if (possibleFormTypes.length) {
+      //     // eslint-disable-next-line prefer-destructuring
+      //     formTypeToUse = possibleFormTypes[0];
+      //   }
+      // }
+      // if (formTypeToUse != null) {
+      //   return this.eqn.forms[formOrName][formTypeToUse];
+      // }
+      return this.eqn.forms[formOrName];
     }
     return null;
   }
@@ -1443,164 +1482,145 @@ export class Equation extends DiagramElementCollection {
       return;
     }
 
-    // const nextForm = this.eqn.forms[this.eqn.currentFormSeries[formIndex]];
-    let subForm = null;
-    let subFormToUse = null;
-    const possibleSubForms        // $FlowFixMe - this is already checked above
-          = this.eqn.subFormPriority.filter(sf => sf in form);
-    if (possibleSubForms.length) {
-      // eslint-disable-next-line prefer-destructuring
-      subFormToUse = possibleSubForms[0];
+    let { duration } = options;
+    // console.log(options)
+    if (options.prioritizeFormDuration) {
+      if (form.animation.duration !== undefined) {
+        duration = form.animation.duration;
+      }
+      if (
+        options.fromWhere != null
+        && form.fromForm[options.fromWhere] != null
+        && form.fromForm[options.fromWhere].animation !== undefined
+        && form.fromForm[options.fromWhere].animation.duration !== undefined
+      ) {
+        duration = form.fromForm[options.fromWhere].animation.duration;
+      }
     }
-    if (subFormToUse != null) {
-      subForm = form[subFormToUse];
-      let { duration } = options;
-      if (options.prioritizeFormDuration) {
-        if (options.fromWhere === 'fromPrev' && subForm.fromPrev != null && subForm.fromPrev.duration !== undefined) {
-          ({ duration } = subForm.fromPrev);
-        } else if (
-          options.fromWhere === 'fromNext'
-          && subForm.fromNext != null
-          && subForm.fromNext.duration !== undefined
-        ) {
-          ({ duration } = subForm.fromNext);
-        } else if (
-          options.fromWhere.length !== 0
-          && subForm.fromForm != null
-          && subForm.fromForm[options.fromWhere] != null
-          && subForm.fromForm[options.fromWhere].duration !== undefined
-        ) {
-          ({ duration } = subForm.fromForm[options.fromWhere]);
-        } else if (subForm.duration !== undefined) {
-          ({ duration } = subForm);
-        }
-      }
 
-      if (duration != null && duration > 0 && options.animate === 'dissolve') {
-        if (options.dissolveOutTime == null) {
-          options.dissolveOutTime = duration * 0.4;
-        }
-        if (options.dissolveInTime == null) {
-          options.dissolveInTime = duration * 0.4;
-        }
-        if (options.blankTime == null) {
-          options.blankTime = duration * 0.2;
-        }
-      } else {
-        if (options.dissolveOutTime == null) {
-          options.dissolveOutTime = 0.4;
-        }
-        if (options.dissolveInTime == null) {
-          options.dissolveInTime = 0.4;
-        }
-        if (options.blankTime == null) {
-          options.blankTime = 0.2;
-        }
+    if (duration != null && duration > 0 && options.animate === 'dissolve') {
+      if (options.dissolveOutTime == null) {
+        options.dissolveOutTime = duration * 0.4;
       }
-      if (duration === 0) {
-        this.showForm(subForm);
+      if (options.dissolveInTime == null) {
+        options.dissolveInTime = duration * 0.4;
+      }
+      if (options.blankTime == null) {
+        options.blankTime = duration * 0.2;
+      }
+    } else {
+      if (options.dissolveOutTime == null) {
+        options.dissolveOutTime = 0.4;
+      }
+      if (options.dissolveInTime == null) {
+        options.dissolveInTime = 0.4;
+      }
+      if (options.blankTime == null) {
+        options.blankTime = 0.2;
+      }
+    }
+    if (duration === 0) {
+      this.showForm(form);
+      this.fnMap.exec(options.callback);
+      // if (options.callback != null) {
+      //   options.callback();
+      // }
+    } else {
+      this.eqn.isAnimating = true;
+      const end = () => {
+        this.eqn.isAnimating = false;
         this.fnMap.exec(options.callback);
         // if (options.callback != null) {
         //   options.callback();
         // }
-      } else {
-        this.eqn.isAnimating = true;
-        const end = () => {
-          this.eqn.isAnimating = false;
-          this.fnMap.exec(options.callback);
-          // if (options.callback != null) {
-          //   options.callback();
-          // }
-        };
-        if (options.animate === 'move') {
-          // console.log('move', duration, options, subForm.duration)
-          // console.log('******************* animate')
-          subForm.animatePositionsTo(
-            options.delay,
-            options.dissolveOutTime,
-            duration,
-            options.dissolveInTime,
-            end,
-            options.fromWhere,
-            false,
-          );
-        } else if (options.animate === 'dissolveInThenMove') {
-          // console.log('move', duration, options, subForm.duration)
-          // console.log('******************* animate')
-          subForm.animatePositionsTo(
-            options.delay,
-            options.dissolveOutTime,
-            duration,
-            options.dissolveInTime,
-            end,
-            options.fromWhere,
-            true,
-          );
-        } else if (
-          options.animate === 'moveFrom'
-          && this.eqn.formRestart != null
-          && this.eqn.formRestart.moveFrom != null
-        ) {
-          const { moveFrom } = this.eqn.formRestart;
-          const target = this.getPosition();
-          let start = this.getPosition();
-          if (moveFrom instanceof Equation) {
-            moveFrom.showForm(subForm.name);
-          }
-          if (moveFrom instanceof DiagramElementCollection) {
-            start = moveFrom.getPosition();
-          } else {  // $FlowFixMe
-            start = getPoint(this.eqn.formRestart.moveFrom);
-          }
-          const showFormCallback = () => {  // $FlowFixMe
-            this.showForm(subForm.name, subFormToUse, false);
-          };
-          this.fnMap.add('_equationShowFormCallback', showFormCallback);
-          this.animations.new()
-            .dissolveOut({ duration: options.dissolveOutTime })
-            .position({ target: start, duration: 0 })
-            .trigger({
-              callback: 'showFormCallback',
-              duration: 0.01,
-            })
-            .position({ target, duration })
-            .whenFinished(end)
-            .start();
-        } else if (
-          options.animate === 'pulse'
-          && this.eqn.formRestart != null
-          && this.eqn.formRestart.pulse != null
-        ) {
-          const { pulse } = this.eqn.formRestart;
-          const newEnd = () => {
-            this.pulseScaleNow(pulse.duration, pulse.scale, 0, end);
-            if (pulse.element != null
-              && pulse.element instanceof Equation  // $FlowFixMe
-              && pulse.element.getCurrentForm().name === subForm.name
-            ) {
-              pulse.element.pulseScaleNow(pulse.duration, pulse.scale);
-            }
-          };
-          subForm.allHideShow(
-            options.delay,
-            options.dissolveOutTime,
-            options.blankTime,
-            options.dissolveInTime,
-            newEnd,
-          );
-        } else {
-          // console.log('******************* hideshow')
-          subForm.allHideShow(
-            options.delay,
-            options.dissolveOutTime,
-            options.blankTime,
-            options.dissolveInTime,
-            end,
-          );
+      };
+      if (options.animate === 'move') {
+        // console.log('move', duration, options, subForm.duration)
+        // console.log('******************* animate')
+        form.animatePositionsTo(
+          options.delay,
+          options.dissolveOutTime,
+          duration,
+          options.dissolveInTime,
+          end,
+          options.fromWhere,
+          false,
+        );
+      } else if (options.animate === 'dissolveInThenMove') {
+        // console.log('move', duration, options, subForm.duration)
+        // console.log('******************* animate')
+        form.animatePositionsTo(
+          options.delay,
+          options.dissolveOutTime,
+          duration,
+          options.dissolveInTime,
+          end,
+          options.fromWhere,
+          true,
+        );
+      } else if (
+        options.animate === 'moveFrom'
+        && this.eqn.formRestart != null
+        && this.eqn.formRestart.moveFrom != null
+      ) {
+        const { moveFrom } = this.eqn.formRestart;
+        const target = this.getPosition();
+        let start = this.getPosition();
+        if (moveFrom instanceof Equation) {
+          moveFrom.showForm(form.name);
         }
-        this.setCurrentForm(subForm);
+        if (moveFrom instanceof DiagramElementCollection) {
+          start = moveFrom.getPosition();
+        } else {  // $FlowFixMe
+          start = getPoint(this.eqn.formRestart.moveFrom);
+        }
+        const showFormCallback = () => {  // $FlowFixMe
+          this.showForm(form.name, false);
+        };
+        this.fnMap.add('_equationShowFormCallback', showFormCallback);
+        this.animations.new()
+          .dissolveOut({ duration: options.dissolveOutTime })
+          .position({ target: start, duration: 0 })
+          .trigger({
+            callback: 'showFormCallback',
+            duration: 0.01,
+          })
+          .position({ target, duration })
+          .whenFinished(end)
+          .start();
+      } else if (
+        options.animate === 'pulse'
+        && this.eqn.formRestart != null
+        && this.eqn.formRestart.pulse != null
+      ) {
+        const { pulse } = this.eqn.formRestart;
+        const newEnd = () => {
+          this.pulseScaleNow(pulse.duration, pulse.scale, 0, end);
+          if (pulse.element != null
+            && pulse.element instanceof Equation  // $FlowFixMe
+            && pulse.element.getCurrentForm().name === form.name
+          ) {
+            pulse.element.pulseScaleNow(pulse.duration, pulse.scale);
+          }
+        };
+        form.allHideShow(
+          options.delay,
+          options.dissolveOutTime,
+          options.blankTime,
+          options.dissolveInTime,
+          newEnd,
+        );
+      } else {
+        // console.log('******************* hideshow')
+        form.allHideShow(
+          options.delay,
+          options.dissolveOutTime,
+          options.blankTime,
+          options.dissolveInTime,
+          end,
+        );
       }
-      // this.updateDescription();
+      this.setCurrentForm(form);
     }
   }
 
@@ -1628,7 +1648,7 @@ export class Equation extends DiagramElementCollection {
         index = this.eqn.currentFormSeries.length - 1;
       }
       this.goToForm({
-        index, duration, delay, fromWhere: 'fromNext',
+        index, duration, delay, fromWhere: currentForm.name,
       });
     }
   }
@@ -1662,7 +1682,7 @@ export class Equation extends DiagramElementCollection {
         index,
         duration,
         delay,
-        fromWhere: 'fromPrev',
+        fromWhere: currentForm.name,
         animate,
       });
     }
@@ -1717,9 +1737,9 @@ export class Equation extends DiagramElementCollection {
     formOrName: EquationForm | string,
     description: string = '',
     modifiers: Object = {},
-    subForm: string = 'base',
+    // subForm: string = 'base',
   ) {
-    const form = this.getForm(formOrName, subForm);
+    const form = this.getForm(formOrName);
     if (form != null) {
       form.description = `${description}`;
       form.modifiers = modifiers;
@@ -1728,9 +1748,9 @@ export class Equation extends DiagramElementCollection {
 
   getDescription(
     formOrName: EquationForm | string,
-    subForm: string = 'base',
+    // subForm: string = 'base',
   ) {
-    const form = this.getForm(formOrName, subForm);
+    const form = this.getForm(formOrName);
     if (form != null && form.description != null) {
       return html.applyModifiers(form.description, form.modifiers);
     }
