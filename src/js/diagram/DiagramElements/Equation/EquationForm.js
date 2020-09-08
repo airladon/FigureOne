@@ -598,6 +598,14 @@ export default class EquationForm extends Elements {
       translationToUse = joinObjects({}, this.translation, this.fromPrev);
     } else if (fromWhere === 'fromNext' && this.fromNext != null) {
       translationToUse = joinObjects({}, this.translation, this.fromNext);
+    } else if (
+      typeof fromWhere === 'string'
+      && fromWhere.length !== 0
+      && this.fromForm != null
+      && this.fromForm[fromWhere] != null
+      && this.fromForm[fromWhere].translation !== undefined
+    ) {
+      translationToUse = joinObjects({}, this.translation, this.fromForm[fromWhere]);
     } else {
       translationToUse = joinObjects({}, this.translation);
     }

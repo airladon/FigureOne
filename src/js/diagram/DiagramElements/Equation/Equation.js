@@ -1168,7 +1168,7 @@ export class Equation extends DiagramElementCollection {
       // $FlowFixMe   - its ok for this to start undefined, it will be filled.
       this.eqn.forms[name] = {};
     }
-    const defaultOptions = {
+    const defaultOptions = joinObjects({}, {
       subForm: 'base',
       elementMods: {},
       duration: undefined,
@@ -1176,12 +1176,12 @@ export class Equation extends DiagramElementCollection {
       description: '',
       modifiers: {},
       scale: this.eqn.scale,
-      alignment: this.eqn.formDefaults.alignment,
-      translation: this.eqn.formDefaults.translation,
+      // alignment: this.eqn.formDefaults.alignment,
+      // translation: this.eqn.formDefaults.translation,
       fromNext: undefined,
       fromPrev: undefined,
       fromForm: {},
-    };
+    }, this.eqn.formDefaults);
     let optionsToUse = defaultOptions;
     if (options) {
       optionsToUse = joinObjects({}, defaultOptions, options);
