@@ -77,6 +77,20 @@ describe('Diagram Equations From Object', () => {
               isTouchable: true,
             },
           },
+          // animationOptions: {
+          //   default: {
+          //     translation: {},
+          //     duration: 1
+          //   }
+          //   fromNext: {
+
+          //   }
+          //   fromPrev: {
+          //   }
+          //   fromForm: {
+
+          //   },
+          // }
           duration: 1,
           translation: {
             a: {
