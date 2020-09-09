@@ -14,17 +14,17 @@ const f2 = {
   weight: 'bold',
 }
 diagram.addElements([
-  {
-    name: 'tester',
-    method: 'shapes.textNew',
-    options: {
-      text: ['hello', ' MM', 'M', 'd'],
-      font: [f1, f2, f1, f2],
-      offset: [[0, 0], null, null, [-0.4, 0]],
-      position: [0, 0],
-      xAlign: 'center',
-    },
-  },
+  // {
+  //   name: 'tester',
+  //   method: 'shapes.textNew',
+  //   options: {
+  //     text: ['hello', ' MM', 'M', 'd'],
+  //     font: [f1, f2, f1, f2],
+  //     offset: [[0, 0], null, null, [-0.4, 0]],
+  //     position: [0, 0],
+  //     xAlign: 'center',
+  //   },
+  // },
   {
     name: 'eqn',
     method: 'equation',
@@ -103,7 +103,7 @@ diagram.initialize();
 const eqn = diagram.getElement('eqn');
 
 // Show the equation form
-eqn.showForm('t');
+eqn.showForm('a');
 
 const a = diagram.getElement('eqn.a');
 const b = diagram.getElement('eqn.b');

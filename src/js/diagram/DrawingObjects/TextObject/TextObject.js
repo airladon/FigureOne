@@ -76,7 +76,7 @@ class DiagramFont {
     this.color = color;
   }
 
-  set(ctx: CanvasRenderingContext2D, scalingFactor: number = 1) {
+  setFontInContext(ctx: CanvasRenderingContext2D, scalingFactor: number = 1) {
     ctx.font = `${this.style} ${this.weight} ${this.size * scalingFactor}px ${this.family}`;
     // ctx.textAlign = this.xAlign;
     // if (this.yAlign === 'baseline') {
@@ -84,6 +84,23 @@ class DiagramFont {
     // } else {
     //   ctx.textBaseline = this.yAlign;
     // }
+  }
+
+  setColorInContext(ctx: CanvasRenderingContext2D, color: Array<number> | null) {
+    const thisColor = this.color;
+    let { opacity } = this;
+    if (color != null) {
+      opacity *= color[3];
+    }
+    if (thisColor != null) {
+      const c = [
+        ...thisColor.slice(0, 3),
+        thisColor[3] * opacity,
+      ];
+      ctx.fillStyle = colorArrayToString(c);
+    } else if (color != null) {
+      ctx.fillStyle = colorArrayToString(color);
+    }
   }
 
   _dup() {
@@ -109,6 +126,13 @@ class DiagramText {
   xAlign: 'left' | 'center' | 'right';
   yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
   scalingFactor: number;
+  lastMeasure: {
+    ascent: number,
+    descent: number,
+    width: number,
+    left: number,
+    right: number,
+  }
 
   constructor(
     location: ?TypeParsablePoint = new Point(0, 0),
@@ -131,12 +155,11 @@ class DiagramText {
     this.xAlign = xAlign;
     this.yAlign = yAlign;
 
-    const minSize = this.font.size;
-    if (minSize < 20) {
-      this.scalingFactor = minSize * 50;
+    if (this.font.size < 20) {
+      this.scalingFactor = this.font.size * 50;
     }
-    if (minSize < 1) {
-      const power = -Math.log(minSize) / Math.LN10 + 2;
+    if (this.font.size < 1) {
+      const power = -Math.log(this.font.size) / Math.LN10 + 2;
       this.scalingFactor = 10 ** power;
     }
     // this.font = font._dup();
@@ -152,10 +175,10 @@ class DiagramText {
   // eslint-disable-next-line class-methods-use-this
   measureText(
     ctx: CanvasRenderingContext2D,
-    locationIn: TypeParsablePoint = new Point(0, 0),
+    scalingFactor: number = this.scalingFactor,
   ) {
-    const location = getPoint(locationIn);
-    this.font.set(ctx, this.scalingFactor);
+    // const location = getPoint(locationIn);
+    this.font.setFontInContext(ctx, scalingFactor);
 
     const fontHeight = ctx.font.match(/[^ ]*px/);
     let aWidth;
@@ -238,12 +261,23 @@ class DiagramText {
     asc /= this.scalingFactor;
     des /= this.scalingFactor;
 
-    return new Rect(
-      location.x - left,
-      location.y - des,
-      left + right,
-      des + asc,
-    );
+    // return new Rect(
+    //   location.x - left,
+    //   location.y - des,
+    //   left + right,
+    //   des + asc,
+    // );
+
+    this.lastMeasure = {
+      left,
+      right,
+      ascent: asc,
+      descent: des,
+      width: right + left,
+      height: asc + des,
+    };
+
+    return this.lastMeasure;
 
     // return {
     //   actualBoundingBoxLeft: left / this.scalingFactor,
@@ -354,7 +388,7 @@ class TextObject extends DrawingObject {
   // Text is drawn in pixel space which is 0, 0 in the left hand top corner on
   // a canvas of size canvas.offsetWidth x canvas.offsetHeight.
   //
-  // Font size and text location is therefore defined in pixels.
+  // Font size and text location is therefore defined in pixels in Context2D.
   //
   // However, in a Diagram, the text canvas is overlaid on the diagram GL
   // canvas and we want to think about the size and location of text in
@@ -379,12 +413,18 @@ class TextObject extends DrawingObject {
   // still in pixels (just now it's super scaled up). Therefore, a scaling
   // factor is needed to make sure the font size can stay well above 1. This
   // scaling factor scales the final space, so a larger font size can be used.
-  // Then all locations definted in Element Space also need to be scaled by
+  // Then all locations defined in Element Space also need to be scaled by
   // this scaling factor.
   //
   // The scaling factor can be number that is large enough to make it so the
   // font size is >>1. In the TextObject constructor, the scaling factor is
   // designed to ensure drawn text always is >20px.
+  //
+  // Therefore the different spaces are:
+  //   - pixelSpace - original space of the 2D canvas
+  //   - elementSpace - space of the DiagramElementPrimitive that holds text
+  //   - scaledPixelSpace
+  //
   drawWithTransformMatrix(
     transformMatrix: Array<number>,
     color: Array<number> = [1, 1, 1, 1],
@@ -392,19 +432,10 @@ class TextObject extends DrawingObject {
   ) {
     const drawContext2D = this.drawContext2D[contextIndex];
     const { ctx } = this.drawContext2D[contextIndex];
-    // Arbitrary scaling factor used to ensure font size is >> 1 pixel
-    // const scalingFactor = this.drawContext2D.canvas.offsetHeight /
-    //                       (this.diagramLimits.height / 1000);
-
-    const { scalingFactor } = this;
-
-    // Color used if color is not defined in each DiagramText element
-    const parentColor = `rgba(
-      ${Math.floor(color[0] * 255)},
-      ${Math.floor(color[1] * 255)},
-      ${Math.floor(color[2] * 255)},
-      ${Math.floor(color[3] * 255)})`;
     ctx.save();
+
+    // Scaling factor used to ensure font size is >> 1 pixel
+    const { scalingFactor } = this;
 
     // First convert pixel space to a zoomed in pixel space with the same
     // dimensions as gl clip space (-1 to 1 for x, y), but inverted y
@@ -417,9 +448,17 @@ class TextObject extends DrawingObject {
     const tx = drawContext2D.canvas.offsetWidth / 2;
     const ty = drawContext2D.canvas.offsetHeight / 2;
 
+    // Translate pixel space so 0,0 is in center of canvas, then scale it up
+    // by the scalingFactor
+    // const pixelToGLSpaceMatrix = [
+    //   sx, 0, tx,
+    //   0, sy, ty,
+    //   0, 0, 1,
+    // ];
+
     // Modify the incoming transformMatrix to be compatible with zoomed
     // pixel space
-    //   - Scale by the scaling factor
+    //   - Scale translation by the scaling factor
     //   - Flip the y translation
     //   - Reverse rotation
     const tm = transformMatrix;
@@ -434,18 +473,40 @@ class TextObject extends DrawingObject {
     const totalT = m2.mul([sx, 0, tx, 0, sy, ty, 0, 0, 1], t);
     ctx.transform(totalT[0], totalT[3], totalT[1], totalT[4], totalT[2], totalT[5]);
     this.lastDrawTransform = totalT.slice();
+
+    // // Calculate the size of all the text
+    // const textBounds = [];
+    // let currentX;
+    // let currentY;
+    // this.text.forEach((text, index) => {
+    //   let { location } = text;
+    //   let locationPixelSpace;
+    //   if (index === 0 && location == null) {
+    //     locationPixelSpace = new Point(0, 0);
+    //   } else if (location == null) {
+    //     locationPixelSpace = new Point(currentX, currentY);
+    //   } else {
+    //     locationPixelSpace = new Point(
+    //       location.x * scalingFactor,
+    //       -location.y * scalingFactor,
+    //     )
+    //   }
+    //   // Measure the text in scaled pixel space
+    //   const measure = text.measureText(ctx, scalingFactor);
+    // });
     // Fill in all the text
     this.text.forEach((diagramText) => {
-      diagramText.font.set(ctx, scalingFactor);
-      if (diagramText.font.color != null) {
-        const c = [
-          ...diagramText.font.color.slice(0, 3),  // $FlowFixMe
-          diagramText.font.color[3] * diagramText.font.opacity * color[3],
-        ];
-        ctx.fillStyle = colorArrayToString(c);
-      } else {
-        ctx.fillStyle = parentColor;
-      }
+      diagramText.font.setFontInContext(ctx, scalingFactor);
+      diagramText.font.setColorInContext(ctx, color);
+      // if (diagramText.font.color != null) {
+      //   const c = [
+      //     ...diagramText.font.color.slice(0, 3),  // $FlowFixMe
+      //     diagramText.font.color[3] * diagramText.font.opacity * color[3],
+      //   ];
+      //   ctx.fillStyle = colorArrayToString(c);
+      // } else {
+      //   ctx.fillStyle = parentColor;
+      // }
       // const w = ctx.measureText(diagramText.text).width;
       // this.lastDraw.push({
       //   width: w * 2,
@@ -568,129 +629,129 @@ class TextObject extends DrawingObject {
   // Firefox and Chrome don't yet support it's advanced features.
   // Estimates are made for height based on width.
   // eslint-disable-next-line class-methods-use-this
-  // measureText(ctx: CanvasRenderingContext2D, text: DiagramText) {
-  //   // const aWidth = ctx.measureText('a').width;
-  //   const fontHeight = ctx.font.match(/[^ ]*px/);
-  //   let aWidth;
-  //   if (fontHeight != null) {
-  //     aWidth = parseFloat(fontHeight[0]) / 2;
-  //   } else {
-  //     aWidth = ctx.measureText('a').width;
-  //   }
-  //   // const aWidth = parseFloat(ctx.font.match(/[^ ]*px/)[0]) / 2;
+  measureText(ctx: CanvasRenderingContext2D, text: DiagramText) {
+    // const aWidth = ctx.measureText('a').width;
+    const fontHeight = ctx.font.match(/[^ ]*px/);
+    let aWidth;
+    if (fontHeight != null) {
+      aWidth = parseFloat(fontHeight[0]) / 2;
+    } else {
+      aWidth = ctx.measureText('a').width;
+    }
+    // const aWidth = parseFloat(ctx.font.match(/[^ ]*px/)[0]) / 2;
 
-  //   // Estimations of FONT ascent and descent for a baseline of "alphabetic"
-  //   let ascent = aWidth * 1.4;
-  //   let descent = aWidth * 0.08;
+    // Estimations of FONT ascent and descent for a baseline of "alphabetic"
+    let ascent = aWidth * 1.4;
+    let descent = aWidth * 0.08;
 
-  //   // Uncomment below and change above consts to lets if more resolution on
-  //   // actual text boundaries is needed
+    // Uncomment below and change above consts to lets if more resolution on
+    // actual text boundaries is needed
 
-  //   // const maxAscentRe =
-  //   //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
-  //   const midAscentRe = /[acemnorsuvwxz*gyqp]/g;
-  //   const midDecentRe = /[;,$]/g;
-  //   const maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
+    // const maxAscentRe =
+    //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
+    const midAscentRe = /[acemnorsuvwxz*gyqp]/g;
+    const midDecentRe = /[;,$]/g;
+    const maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
 
-  //   const midAscentMatches = text.text.match(midAscentRe);
-  //   if (Array.isArray(midAscentMatches)) {
-  //     if (midAscentMatches.length === text.text.length) {
-  //       ascent = aWidth * 0.95;
-  //     }
-  //   }
+    const midAscentMatches = text.text.match(midAscentRe);
+    if (Array.isArray(midAscentMatches)) {
+      if (midAscentMatches.length === text.text.length) {
+        ascent = aWidth * 0.95;
+      }
+    }
 
-  //   const midDescentMatches = text.text.match(midDecentRe);
-  //   if (Array.isArray(midDescentMatches)) {
-  //     if (midDescentMatches.length > 0) {
-  //       descent = aWidth * 0.2;
-  //     }
-  //   }
+    const midDescentMatches = text.text.match(midDecentRe);
+    if (Array.isArray(midDescentMatches)) {
+      if (midDescentMatches.length > 0) {
+        descent = aWidth * 0.2;
+      }
+    }
 
-  //   const maxDescentMatches = text.text.match(maxDescentRe);
-  //   if (Array.isArray(maxDescentMatches)) {
-  //     if (maxDescentMatches.length > 0) {
-  //       descent = aWidth * 0.5;
-  //     }
-  //   }
+    const maxDescentMatches = text.text.match(maxDescentRe);
+    if (Array.isArray(maxDescentMatches)) {
+      if (maxDescentMatches.length > 0) {
+        descent = aWidth * 0.5;
+      }
+    }
 
-  //   const height = ascent + descent;
+    const height = ascent + descent;
 
-  //   const { width } = ctx.measureText(text.text);
-  //   let asc = 0;
-  //   let des = 0;
-  //   let left = 0;
-  //   let right = 0;
+    const { width } = ctx.measureText(text.text);
+    let asc = 0;
+    let des = 0;
+    let left = 0;
+    let right = 0;
 
-  //   if (text.font.xAlign === 'left') {
-  //     right = width;
-  //   }
-  //   if (text.font.xAlign === 'center') {
-  //     left = width / 2;
-  //     right = width / 2;
-  //   }
-  //   if (text.font.xAlign === 'right') {
-  //     left = width;
-  //   }
-  //   if (text.font.yAlign === 'alphabetic' || text.font.yAlign === 'baseline') {
-  //     asc = ascent;
-  //     des = descent;
-  //   }
-  //   if (text.font.yAlign === 'top') {
-  //     asc = 0;
-  //     des = height;
-  //   }
-  //   if (text.font.yAlign === 'bottom') {
-  //     asc = height;
-  //     des = 0;
-  //   }
-  //   if (text.font.yAlign === 'middle') {
-  //     asc = height / 2;
-  //     des = height / 2;
-  //   }
-  //   return {
-  //     actualBoundingBoxLeft: left,
-  //     actualBoundingBoxRight: right,
-  //     fontBoundingBoxAscent: asc,
-  //     fontBoundingBoxDescent: des,
-  //   };
-  // }
+    if (text.xAlign === 'left') {
+      right = width;
+    }
+    if (text.xAlign === 'center') {
+      left = width / 2;
+      right = width / 2;
+    }
+    if (text.xAlign === 'right') {
+      left = width;
+    }
+    if (text.yAlign === 'alphabetic' || text.yAlign === 'baseline') {
+      asc = ascent;
+      des = descent;
+    }
+    if (text.yAlign === 'top') {
+      asc = 0;
+      des = height;
+    }
+    if (text.yAlign === 'bottom') {
+      asc = height;
+      des = 0;
+    }
+    if (text.yAlign === 'middle') {
+      asc = height / 2;
+      des = height / 2;
+    }
+    return {
+      actualBoundingBoxLeft: left,
+      actualBoundingBoxRight: right,
+      fontBoundingBoxAscent: asc,
+      fontBoundingBoxDescent: des,
+    };
+  }
 
   getBoundaryOfText(text: DiagramText, contextIndex: number = 0): Array<Point> {
     const boundary = [];
 
-    // const { scalingFactor } = this;
+    const { scalingFactor } = this;
 
-    // // Measure the text
-    // text.font.set(this.drawContext2D[contextIndex].ctx, scalingFactor);
-    // // const textMetrics = this.drawContext2D.ctx.measureText(text.text);
-    // const textMetrics = this.measureText(this.drawContext2D[contextIndex].ctx, text);
-    // // Create a box around the text
+    // Measure the text
+    text.font.setFontInContext(this.drawContext2D[contextIndex].ctx, scalingFactor);
+    // const textMetrics = this.drawContext2D.ctx.measureText(text.text);
+    const textMetrics = this.measureText(this.drawContext2D[contextIndex].ctx, text);
+    // Create a box around the text
     const { location } = text;
-    // const box = [
-    //   new Point(
-    //     -textMetrics.actualBoundingBoxLeft / scalingFactor,
-    //     textMetrics.fontBoundingBoxAscent / scalingFactor,
-    //   ).add(location),
-    //   new Point(
-    //     textMetrics.actualBoundingBoxRight / scalingFactor,
-    //     textMetrics.fontBoundingBoxAscent / scalingFactor,
-    //   ).add(location),
-    //   new Point(
-    //     textMetrics.actualBoundingBoxRight / scalingFactor,
-    //     -textMetrics.fontBoundingBoxDescent / scalingFactor,
-    //   ).add(location),
-    //   new Point(
-    //     -textMetrics.actualBoundingBoxLeft / scalingFactor,
-    //     -textMetrics.fontBoundingBoxDescent / scalingFactor,
-    //   ).add(location),
-    // ];
-    const textRect = text.measureText(this.drawContext2D[contextIndex].ctx, location);
     const box = [
-      new Point(textRect.left, textRect.top),
-      new Point(textRect.right, textRect.top),
-      new Point(textRect.right, textRect.bottom),
-      new Point(textRect.left, textRect.bottom),
+      new Point(
+        -textMetrics.actualBoundingBoxLeft / scalingFactor,
+        textMetrics.fontBoundingBoxAscent / scalingFactor,
+      ).add(location),
+      new Point(
+        textMetrics.actualBoundingBoxRight / scalingFactor,
+        textMetrics.fontBoundingBoxAscent / scalingFactor,
+      ).add(location),
+      new Point(
+        textMetrics.actualBoundingBoxRight / scalingFactor,
+        -textMetrics.fontBoundingBoxDescent / scalingFactor,
+      ).add(location),
+      new Point(
+        -textMetrics.actualBoundingBoxLeft / scalingFactor,
+        -textMetrics.fontBoundingBoxDescent / scalingFactor,
+      ).add(location),
     ];
+    // const textRect = text.measureText(this.drawContext2D[contextIndex].ctx, location);
+    // const box = [
+    //   new Point(textRect.left, textRect.top),
+    //   new Point(textRect.right, textRect.top),
+    //   new Point(textRect.right, textRect.bottom),
+    //   new Point(textRect.left, textRect.bottom),
+    // ];
     box.forEach((p) => {
       boundary.push(p);
     });
