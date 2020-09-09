@@ -27,8 +27,12 @@ diagram.addElement(
         },
       },
 
+      phrases: {
+        'abc': ['a', 'b', 'c', '  ', '=', '  ', 'hello'],
+      },
       // Define two different forms of the equation
       forms: {
+        't': ['abc', 'equals'],
         'a': ['a', 'equals', { frac: ['b', 'v', 'c'] }],
         'b': {
           content: ['b', 'equals', 'a', 'times', 'c'],
@@ -42,6 +46,7 @@ diagram.addElement(
             },
             // duration: 0.5,
           },
+          scale: 2,
         },
         'c': {
           content: ['c', 'times', 'a', 'equals', 'b'],
@@ -74,15 +79,16 @@ diagram.initialize();
 const eqn = diagram.getElement('eqn');
 
 // Show the equation form
-eqn.showForm('b');
+eqn.showForm('t');
 
 const a = diagram.getElement('eqn.a');
 const b = diagram.getElement('eqn.b');
 const c = diagram.getElement('eqn.c');
 // Animate to the next form
 const goTo = (form) => {
+  console.log(form)
   eqn.goToForm({
-    name: form, delay: 0.2, duration: 1.5, animate: 'move',
+    form, delay: 0.2, duration: 1.5, animate: 'move',
   });
   diagram.animateNextFrame();
 }

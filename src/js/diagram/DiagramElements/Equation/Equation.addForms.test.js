@@ -247,7 +247,7 @@ describe('Diagram Equations From Object', () => {
         3: {
           content: ['b', 'a', 'c'],
           fromForm: {
-            prev: { animation: { duration: 20 } }
+            prev: { animation: { duration: 20 } },
           },
         },
       },
@@ -385,36 +385,7 @@ describe('Diagram Equations From Object', () => {
     expect(eqn._b.color).toEqual([0.5, 0.5, 0.5, 1]);
     eqn.showForm('0');
     expect(eqn._b.color).toEqual([0.95, 0, 0, 1]);
-    // const deg = forms['0'].deg.content[0].content;
-    // expect(deg[0].content.drawingObject.text[0].text).toBe('b');
-    // expect(deg[1].content.drawingObject.text[0].text).toBe('a');
-    // expect(deg[2].content.drawingObject.text[0].text).toBe('c');
-    // expect(forms['0'].deg.elementMods.b.mods.color).toEqual(color1);
-    // expect(eqn._b.color).toEqual([0.5, 0.5, 0.5, 1]);
-    // eqn.showForm('0');
-    // expect(eqn._b.color).toEqual([0.95, 0, 0, 1]);
   });
-  // test('Sub form Object', () => {
-  //   eqn.addForms(addForms.subFormObject);
-  //   const { content } = forms['0'].content[0];
-  //   expect(content[0].content.drawingObject.text[0].text).toBe('b');
-  //   expect(content[1].content.drawingObject.text[0].text).toBe('a');
-  //   expect(content[2].content.drawingObject.text[0].text).toBe('c');
-
-  //   const deg = forms['0'].deg.content[0].content;
-  //   expect(deg[0].content.drawingObject.text[0].text).toBe('b');
-  //   expect(deg[1].content.drawingObject.text[0].text).toBe('a');
-  //   expect(deg[2].content.drawingObject.text[0].text).toBe('c');
-
-  //   const rad = forms['0'].rad.content[0].content;
-  //   expect(rad[0].content.drawingObject.text[0].text).toBe('b');
-  //   expect(rad[1].content.drawingObject.text[0].text).toBe('a');
-  //   expect(rad[2].content.drawingObject.text[0].text).toBe('c');
-  //   expect(forms['0'].rad.elementMods.b.mods.color).toEqual(color1);
-
-  //   const method = forms['0'].method.content[0].content[0];
-  //   expect(method).toBeInstanceOf(Fraction);
-  // });
   test('AddForms called multiple times', () => {
     eqn.addForms(addForms.addFormsMultipleTimes.first);
     eqn.addForms(addForms.addFormsMultipleTimes.second);

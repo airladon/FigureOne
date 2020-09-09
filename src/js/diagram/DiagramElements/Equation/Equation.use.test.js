@@ -10,6 +10,7 @@ import makeDiagram from '../../../__mocks__/makeDiagram';
 import { Equation } from './Equation';
 // import EquationForm from './EquationForm';
 import { Elements } from './Elements/Element';
+import * as html from '../../../tools/htmlGenerator';
 // import Fraction from './Elements/Fraction';
 
 tools.isTouchDevice = jest.fn();
@@ -89,8 +90,8 @@ describe('Different ways to make an equation', () => {
   let clean;
   beforeEach(() => {
     clean = (formName) => {
-      cleanForm(eqn.eqn.forms[formName].base);
-      return eqn.eqn.forms[formName].base;
+      cleanForm(eqn.eqn.forms[formName]);
+      return eqn.eqn.forms[formName];
     };
     diagram = makeDiagram();
     color1 = [0.95, 0, 0, 1];
@@ -111,6 +112,88 @@ describe('Different ways to make an equation', () => {
             1: [{ frac: ['a', 'v', '_2'] }, 'c'],
           },
           formSeries: ['0', '1'],
+        });
+      },
+      allTextInConstructorAllOptionsNew__TO_TEST__TODO: () => {
+        eqn = new Equation(diagram.shapes, {
+          color: color1,
+          position: [1, 1],           // Points can be defined as arrays
+          elements: {
+            a: 'a',
+            b: { color: [1, 1, 0, 1] }, // Element text same as key name
+            c: 'c',
+            _2: '2',
+            v: { symbol: 'vinculum' },
+          },
+          scale: 0.45,
+          formDefaults: {
+            alignment: {
+              fixTo: { x: 2, y: 2 },    // Points can also be defined as objects
+              xAlign: 'right',
+              yAlign: 'top',
+            },
+            animation: {
+              duration: 1,
+              translation: {
+                c: { style: 'curved', direction: 'up', mag: 0.5 },
+              },
+            },
+            elementMods: {
+              b: { color: [1, 0, 0, 1] },
+            },
+          },
+          // Phrases are combinations of elements that can be used in forms to
+          // make the forms simpler
+          phrases: {
+            ab: ['a', 'b'],
+          },
+          forms: {
+            0: ['a', 'b', 'c'],
+            1: [{ frac: ['a', 'v', '_2'] }, 'c'],
+            // Equals can be used as an object key, so it is a valid inline definition
+            2: ['ab', '=', 'c'],
+            // Full form definition
+            3: {
+              content: ['c', 'b', 'd'],       // New elements can be defined (d)
+              scale: 1.2,
+              elementMods: {
+                b: { color: [0, 1, 0, 1] },
+              },
+              description: '|Form| 2 |description|',
+              modifiers: {
+                Form: html.highlight([1, 0, 0, 0]),
+              },
+              animation: {
+                duration: null,
+                translation: {
+                  c: { style: 'curved', direction: 'down', mag: 0.5 },
+                },
+              },
+              alignment: {
+                fixTo: 'b',
+                xAlign: 'center',
+                yAlign: 'baseline',
+              },
+              fromForm: {
+                2: {
+                  animation: {
+                    duration: 2,
+                    translation: {
+                      c: { style: 'linear' },
+                    },
+                  },
+                  elementMods: {
+                    b: { color: [0, 0, 1, 1] },
+                  },
+                },
+              },
+            },
+          },
+          // Either a single or multiple form series can be defined
+          formSeries: {
+            a: ['0', '1'],
+            b: ['1', '2'],
+          },
         });
       },
       allTextInConstructorAllOptions: () => {
@@ -384,8 +467,8 @@ describe('Different ways to make an equation', () => {
   test('Equation Scale', () => {
     ways.equationScale();
     expect(eqn.eqn.scale).toBe(0.95);
-    const h1 = eqn.eqn.forms['0'].base.content[0].height;
-    const h2 = eqn.eqn.forms['1'].base.content[0].height;
+    const h1 = eqn.eqn.forms['0'].content[0].height;
+    const h2 = eqn.eqn.forms['1'].content[0].height;
     expect(round(h1 / h2)).toBe(round(0.95 / 0.85));
   });
   test('Equation Form Alignment', () => {

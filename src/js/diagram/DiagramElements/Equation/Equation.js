@@ -672,6 +672,10 @@ export class Equation extends DiagramElementCollection {
       this.addElements(optionsToUse.elements);
     }
 
+    if (optionsToUse.phrases != null) {
+      this.addPhrases(optionsToUse.phrases);
+    }
+
     if (optionsToUse.forms != null) {
       this.addForms(optionsToUse.forms);
     }
