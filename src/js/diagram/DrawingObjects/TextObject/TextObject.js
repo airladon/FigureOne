@@ -325,13 +325,14 @@ class TextObject extends DrawingObject {
           minSize = t.font.size;
         }
       });
-      if (minSize < 20) {
-        this.scalingFactor = minSize * 50;
-      }
-      if (minSize < 1) {
-        const power = -Math.log(minSize) / Math.LN10 + 2;
-        this.scalingFactor = 10 ** power;
-      }
+      // if (minSize < 20) {
+      //   this.scalingFactor = minSize * 50;
+      // }
+      // if (minSize < 1) {
+      //   const power = -Math.log(minSize) / Math.LN10 + 2;
+      //   this.scalingFactor = 10 ** power;
+      // }
+      this.scalingFactor = 20 / minSize;
     }
     this.setBorder();
     this.state = 'loaded';
@@ -437,6 +438,67 @@ class TextObject extends DrawingObject {
     // Scaling factor used to ensure font size is >> 1 pixel
     const { scalingFactor } = this;
 
+    // We want to define everything, including font size and text location,
+    // in elementSpace (the DiagramElementPrimitive space)
+    //
+    // So let's say our diagram is a square with bottom left corner (-1, -1)
+    // and width 2, height 2. We want an equivalent font size of 0.1.
+    //
+    // If our canvas is 800 x 800 pixels, then we could scale evenything up by
+    // 400. So our font size to draw in the cavnas will be 0.1 * 400 = 40px.
+    //
+    // This is great, except how do we now apply a transform? The parent
+    // transform converts element space to GL space, so we will want to add
+    // an extra conversion of pixel space. But the way we draw text in a canvas
+    // is by applying a transform to the canvas, then drawing text to it.
+    //
+    // So the way we will do it, is transform the canvas to the element space
+    // and then place the text there.
+    //
+    // * Assume a canvas of 800 x 800
+    // * If you plot text with a fontSize of 80px, at a location of
+    //   400, 400 then the font will be in the middle of the canvas and
+    //   approximately 1/10 of the canvas height
+    // * Zoom the canvas by a factor of 2
+    //   ctx.scale(2, 2)
+    // * Now to achieve the same font size and position relative to the canvas
+    //   you will need to use a fontSize of 40px and location of 200, 200
+    //
+    // * Assume a canvas of 800 x 800
+    // * To get text ~1/10th height of canvas and in the middle, plot with
+    //   fontSize: 80px at 400, 400.
+    //
+    // * If you translate the canvas by 400, 400, then you can now plot at 0, 0
+    //   for the center of the screen
+    //
+    // * To plot on the left side of the screen, use location -400, 0.
+    //
+    // * Now scale the screen by 2: `ctx.scale(2, 2)`
+    //
+    // * Now to plot same size text (relative to canvas) at same left edge
+    //   need to use a font size of 40px, and a location of -200, 0.
+    //
+    // * So if we want to convert the pixel space to GL space, which is 
+    //   width 2, height 2, left -1, bottom -1, then we need scale by:
+    //      800 / 2 = 400
+    // * So if we ctx.scale(400, 400), then to get text in the equivalent size
+    //   and position we need to use a fontSize of 80/400 = 0.2, and a location
+    //   of -1, 0
+    //
+    // * In this case, the context manager will try use a font size of 0.2px and
+    //   then it will get scaled up with the ctx transform - however, a font
+    //   size of 0.2px doesn't make much sense. Infact, small font sizes like
+    //   event 5px might be dodgey, so we will try to always use a font size of
+    //   around 20 or larger.
+    //
+    // * Therefore, if we want a font size of 20px, we need to scale 0.2 by 100
+    // * This means instead of originally scaling by (400, 400), we should just
+    //   just scale by (4, 4). Now we can use a fontSize of 20px, but we will
+    //   also have to scale the location (-1 * 100, 0 * 100) = (-100, 0);
+    
+    // If you zoom in by a factor of 2, 2, then the equivalent pixels
+    // will be 
+    // First lets zoom in to make 
     // First convert pixel space to a zoomed in pixel space with the same
     // dimensions as gl clip space (-1 to 1 for x, y), but inverted y
     // like to pixel space.
@@ -450,11 +512,11 @@ class TextObject extends DrawingObject {
 
     // Translate pixel space so 0,0 is in center of canvas, then scale it up
     // by the scalingFactor
-    // const pixelToGLSpaceMatrix = [
-    //   sx, 0, tx,
-    //   0, sy, ty,
-    //   0, 0, 1,
-    // ];
+    const pixelToGLSpaceMatrix = [
+      sx, 0, tx,
+      0, sy, ty,
+      0, 0, 1,
+    ];
 
     // Modify the incoming transformMatrix to be compatible with zoomed
     // pixel space
@@ -470,7 +532,7 @@ class TextObject extends DrawingObject {
 
     // Combine the zoomed pixel space with the incoming transform matrix
     // and apply it to the drawing context.
-    const totalT = m2.mul([sx, 0, tx, 0, sy, ty, 0, 0, 1], t);
+    const totalT = m2.mul(pixelToGLSpaceMatrix, t);
     ctx.transform(totalT[0], totalT[3], totalT[1], totalT[4], totalT[2], totalT[5]);
     this.lastDrawTransform = totalT.slice();
 

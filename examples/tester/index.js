@@ -13,6 +13,8 @@ const f2 = {
   size: 0.2,
   weight: 'bold',
 }
+console.log(new Fig.Transform().scale(2, 2).translate(0.5, 0).matrix())
+console.log(new Fig.Transform().translate(0.5, 0).scale(2, 2).matrix())
 diagram.addElements([
   // {
   //   name: 'tester',
@@ -25,6 +27,14 @@ diagram.addElements([
   //     xAlign: 'center',
   //   },
   // },
+  {
+    name: 'a',
+    method: 'polygon',
+    options: {
+      radius: 0.2,
+      transform: new Fig.Transform().scale(2, 2).translate(0.5, 0),
+    },
+  },
   {
     name: 'eqn',
     method: 'equation',
@@ -126,3 +136,42 @@ b.onClick = goTo.bind(eqn, 'b');
 c.onClick = goTo.bind(eqn, 'c');
 // Queue drawing on the next animation frame
 diagram.animateNextFrame();
+
+ctx = diagram.draw2DLow.ctx
+// ctx.save()
+// ctx.font = 'italic 80px "Times New Roman"'
+// ctx.textBaseline = 'middle'
+// ctx.fillStyle = "#FF0000FF"
+// ctx.fillText('A',400, 400)
+// ctx.scale(2, 2);
+// ctx.font = 'italic 40px "Times New Roman"'
+// ctx.fillText('y',200, 200)
+// ctx.restore();
+// ctx.save();
+// ctx.fillStyle = "#FFFF00FF"
+// ctx.textBaseline = 'middle'
+// ctx.translate(400, 400)
+// ctx.scale(800 / 100, 800 / 100)
+// ctx.font = 'italic 10px "Times New Roman"'
+// ctx.fillText('y', 10, 0)
+// ctx.restore();
+
+ctx.save()
+ctx.font = 'italic 100.5px "Times New Roman"'
+ctx.textBaseline = 'middle'
+ctx.fillStyle = "#FF0000FF"
+ctx.translate(400, 400);
+ctx.fillText('A', -300, 0)
+ctx.scale(2, 2);
+ctx.fillStyle = "#FF00FFFF"
+ctx.font = 'italic 50.25px "Times New Roman"'
+ctx.fillText('A', -150, 0)
+// ctx.restore();
+// ctx.save();
+// ctx.fillStyle = "#FFFF00FF"
+// ctx.textBaseline = 'middle'
+// ctx.translate(400, 400)
+// ctx.scale(800 / 100, 800 / 100)
+// ctx.font = 'italic 10px "Times New Roman"'
+// ctx.fillText('y', 10, 0)
+ctx.restore();
