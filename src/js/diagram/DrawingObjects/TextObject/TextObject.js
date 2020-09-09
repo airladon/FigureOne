@@ -1,7 +1,8 @@
 // @flow
 
 import * as m2 from '../../../tools/m2';
-import { Point, getPoint } from '../../../tools/g2';
+import { Point, getPoint, Rect } from '../../../tools/g2';
+import type { TypeParsablePoint } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
 import DrawContext2D from '../../DrawContext2D';
 import { duplicateFromTo, joinObjects } from '../../../tools/tools';
@@ -19,8 +20,8 @@ type TypeDiagramFontOptions = {
   style?: 'normal' | 'italic',
   size?: number,
   weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
-  xAlign?: 'left' | 'center' | 'right',
-  yAlign?: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline',
+  // xAlign?: 'left' | 'center' | 'right',
+  // yAlign?: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline',
   color?: Array<number> | null,
   opacity?: number,
 };
@@ -31,8 +32,8 @@ class DiagramFont {
   weight: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
   style: 'normal' | 'italic';
   family: string;
-  xAlign: 'left' | 'center' | 'right';
-  yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
+  // xAlign: 'left' | 'center' | 'right';
+  // yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
   color: Array<number> | null;
   opacity: number;
 
@@ -50,8 +51,8 @@ class DiagramFont {
       style: '',
       size: 1,
       weight: '200',
-      xAlign: 'center',
-      yAlign: 'middle',
+      // xAlign: 'center',
+      // yAlign: 'middle',
       color: null,
       opacity: 1,
     };
@@ -60,8 +61,8 @@ class DiagramFont {
     this.style = options.style;
     this.size = options.size;
     this.weight = options.weight;
-    this.xAlign = options.xAlign;
-    this.yAlign = options.yAlign;
+    // this.xAlign = options.xAlign;
+    // this.yAlign = options.yAlign;
     this.opacity = options.opacity;
     this.setColor(options.color);
   }
@@ -77,12 +78,12 @@ class DiagramFont {
 
   set(ctx: CanvasRenderingContext2D, scalingFactor: number = 1) {
     ctx.font = `${this.style} ${this.weight} ${this.size * scalingFactor}px ${this.family}`;
-    ctx.textAlign = this.xAlign;
-    if (this.yAlign === 'baseline') {
-      ctx.textBaseline = 'alphabetic';
-    } else {
-      ctx.textBaseline = this.yAlign;
-    }
+    // ctx.textAlign = this.xAlign;
+    // if (this.yAlign === 'baseline') {
+    //   ctx.textBaseline = 'alphabetic';
+    // } else {
+    //   ctx.textBaseline = this.yAlign;
+    // }
   }
 
   _dup() {
@@ -91,8 +92,8 @@ class DiagramFont {
       style: this.style,
       size: this.size,
       weight: this.weight,
-      xAlign: this.xAlign,
-      yAlign: this.yAlign,
+      // xAlign: this.xAlign,
+      // yAlign: this.yAlign,
       color: this.color,
       opacity: this.opacity,
     });
@@ -105,11 +106,16 @@ class DiagramText {
   location: ?Point;
   text: string;
   font: DiagramFont;
+  xAlign: 'left' | 'center' | 'right';
+  yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
+  scalingFactor: number;
 
   constructor(
     location: ?TypeParsablePoint = new Point(0, 0),
     text: string = '',
     font: DiagramFont | TypeDiagramFontOptions = new DiagramFont(),
+    xAlign: 'left' | 'center' | 'right' = 'left',
+    yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline' = 'baseline',
   ) {
     this.location = null;
     if (location != null) {
@@ -122,11 +128,129 @@ class DiagramText {
     } else {
       this.font = new DiagramFont(font);
     }
+    this.xAlign = xAlign;
+    this.yAlign = yAlign;
+
+    const minSize = this.font.size;
+    if (minSize < 20) {
+      this.scalingFactor = minSize * 50;
+    }
+    if (minSize < 1) {
+      const power = -Math.log(minSize) / Math.LN10 + 2;
+      this.scalingFactor = 10 ** power;
+    }
     // this.font = font._dup();
   }
 
   _dup() {
-    return new DiagramText(this.location, this.text, this.font._dup());
+    return new DiagramText(this.location, this.text, this.font._dup(), this.xAlign, this.yAlign);
+  }
+
+  // This method is used instead of the actual ctx.measureText because
+  // Firefox and Chrome don't yet support it's advanced features.
+  // Estimates are made for height based on width.
+  // eslint-disable-next-line class-methods-use-this
+  measureText(
+    ctx: CanvasRenderingContext2D,
+    locationIn: TypeParsablePoint = new Point(0, 0),
+  ) {
+    const location = getPoint(locationIn);
+    this.font.set(ctx, this.scalingFactor);
+
+    const fontHeight = ctx.font.match(/[^ ]*px/);
+    let aWidth;
+    if (fontHeight != null) {
+      aWidth = parseFloat(fontHeight[0]) / 2;
+    } else {
+      aWidth = ctx.measureText('a').width;
+    }
+
+    // Estimations of FONT ascent and descent for a baseline of "alphabetic"
+    let ascent = aWidth * 1.4;
+    let descent = aWidth * 0.08;
+
+    // Uncomment below and change above consts to lets if more resolution on
+    // actual text boundaries is needed
+
+    // const maxAscentRe =
+    //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
+    const midAscentRe = /[acemnorsuvwxz*gyqp]/g;
+    const midDecentRe = /[;,$]/g;
+    const maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
+
+    const midAscentMatches = this.text.match(midAscentRe);
+    if (Array.isArray(midAscentMatches)) {
+      if (midAscentMatches.length === this.text.length) {
+        ascent = aWidth * 0.95;
+      }
+    }
+
+    const midDescentMatches = this.text.match(midDecentRe);
+    if (Array.isArray(midDescentMatches)) {
+      if (midDescentMatches.length > 0) {
+        descent = aWidth * 0.2;
+      }
+    }
+
+    const maxDescentMatches = this.text.match(maxDescentRe);
+    if (Array.isArray(maxDescentMatches)) {
+      if (maxDescentMatches.length > 0) {
+        descent = aWidth * 0.5;
+      }
+    }
+
+    const height = ascent + descent;
+
+    const { width } = ctx.measureText(this.text);
+    let asc = 0;
+    let des = 0;
+    let left = 0;
+    let right = 0;
+
+    if (this.xAlign === 'left') {
+      right = width;
+    }
+    if (this.xAlign === 'center') {
+      left = width / 2;
+      right = width / 2;
+    }
+    if (this.xAlign === 'right') {
+      left = width;
+    }
+    if (this.yAlign === 'alphabetic' || this.yAlign === 'baseline') {
+      asc = ascent;
+      des = descent;
+    }
+    if (this.yAlign === 'top') {
+      asc = 0;
+      des = height;
+    }
+    if (this.yAlign === 'bottom') {
+      asc = height;
+      des = 0;
+    }
+    if (this.yAlign === 'middle') {
+      asc = height / 2;
+      des = height / 2;
+    }
+    left /= this.scalingFactor;
+    right /= this.scalingFactor;
+    asc /= this.scalingFactor;
+    des /= this.scalingFactor;
+
+    return new Rect(
+      location.x - left,
+      location.y - des,
+      left + right,
+      des + asc,
+    );
+
+    // return {
+    //   actualBoundingBoxLeft: left / this.scalingFactor,
+    //   actualBoundingBoxRight: right / this.scalingFactor,
+    //   fontBoundingBoxAscent: asc / this.scalingFactor,
+    //   fontBoundingBoxDescent: des / this.scalingFactor,
+    // };
   }
 }
 
@@ -444,121 +568,128 @@ class TextObject extends DrawingObject {
   // Firefox and Chrome don't yet support it's advanced features.
   // Estimates are made for height based on width.
   // eslint-disable-next-line class-methods-use-this
-  measureText(ctx: CanvasRenderingContext2D, text: DiagramText) {
-    // const aWidth = ctx.measureText('a').width;
-    const fontHeight = ctx.font.match(/[^ ]*px/);
-    let aWidth;
-    if (fontHeight != null) {
-      aWidth = parseFloat(fontHeight[0]) / 2;
-    } else {
-      aWidth = ctx.measureText('a').width;
-    }
-    // const aWidth = parseFloat(ctx.font.match(/[^ ]*px/)[0]) / 2;
+  // measureText(ctx: CanvasRenderingContext2D, text: DiagramText) {
+  //   // const aWidth = ctx.measureText('a').width;
+  //   const fontHeight = ctx.font.match(/[^ ]*px/);
+  //   let aWidth;
+  //   if (fontHeight != null) {
+  //     aWidth = parseFloat(fontHeight[0]) / 2;
+  //   } else {
+  //     aWidth = ctx.measureText('a').width;
+  //   }
+  //   // const aWidth = parseFloat(ctx.font.match(/[^ ]*px/)[0]) / 2;
 
-    // Estimations of FONT ascent and descent for a baseline of "alphabetic"
-    let ascent = aWidth * 1.4;
-    let descent = aWidth * 0.08;
+  //   // Estimations of FONT ascent and descent for a baseline of "alphabetic"
+  //   let ascent = aWidth * 1.4;
+  //   let descent = aWidth * 0.08;
 
-    // Uncomment below and change above consts to lets if more resolution on
-    // actual text boundaries is needed
+  //   // Uncomment below and change above consts to lets if more resolution on
+  //   // actual text boundaries is needed
 
-    // const maxAscentRe =
-    //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
-    const midAscentRe = /[acemnorsuvwxz*gyqp]/g;
-    const midDecentRe = /[;,$]/g;
-    const maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
+  //   // const maxAscentRe =
+  //   //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
+  //   const midAscentRe = /[acemnorsuvwxz*gyqp]/g;
+  //   const midDecentRe = /[;,$]/g;
+  //   const maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
 
-    const midAscentMatches = text.text.match(midAscentRe);
-    if (Array.isArray(midAscentMatches)) {
-      if (midAscentMatches.length === text.text.length) {
-        ascent = aWidth * 0.95;
-      }
-    }
+  //   const midAscentMatches = text.text.match(midAscentRe);
+  //   if (Array.isArray(midAscentMatches)) {
+  //     if (midAscentMatches.length === text.text.length) {
+  //       ascent = aWidth * 0.95;
+  //     }
+  //   }
 
-    const midDescentMatches = text.text.match(midDecentRe);
-    if (Array.isArray(midDescentMatches)) {
-      if (midDescentMatches.length > 0) {
-        descent = aWidth * 0.2;
-      }
-    }
+  //   const midDescentMatches = text.text.match(midDecentRe);
+  //   if (Array.isArray(midDescentMatches)) {
+  //     if (midDescentMatches.length > 0) {
+  //       descent = aWidth * 0.2;
+  //     }
+  //   }
 
-    const maxDescentMatches = text.text.match(maxDescentRe);
-    if (Array.isArray(maxDescentMatches)) {
-      if (maxDescentMatches.length > 0) {
-        descent = aWidth * 0.5;
-      }
-    }
+  //   const maxDescentMatches = text.text.match(maxDescentRe);
+  //   if (Array.isArray(maxDescentMatches)) {
+  //     if (maxDescentMatches.length > 0) {
+  //       descent = aWidth * 0.5;
+  //     }
+  //   }
 
-    const height = ascent + descent;
+  //   const height = ascent + descent;
 
-    const { width } = ctx.measureText(text.text);
-    let asc = 0;
-    let des = 0;
-    let left = 0;
-    let right = 0;
+  //   const { width } = ctx.measureText(text.text);
+  //   let asc = 0;
+  //   let des = 0;
+  //   let left = 0;
+  //   let right = 0;
 
-    if (text.font.xAlign === 'left') {
-      right = width;
-    }
-    if (text.font.xAlign === 'center') {
-      left = width / 2;
-      right = width / 2;
-    }
-    if (text.font.xAlign === 'right') {
-      left = width;
-    }
-    if (text.font.yAlign === 'alphabetic' || text.font.yAlign === 'baseline') {
-      asc = ascent;
-      des = descent;
-    }
-    if (text.font.yAlign === 'top') {
-      asc = 0;
-      des = height;
-    }
-    if (text.font.yAlign === 'bottom') {
-      asc = height;
-      des = 0;
-    }
-    if (text.font.yAlign === 'middle') {
-      asc = height / 2;
-      des = height / 2;
-    }
-    return {
-      actualBoundingBoxLeft: left,
-      actualBoundingBoxRight: right,
-      fontBoundingBoxAscent: asc,
-      fontBoundingBoxDescent: des,
-    };
-  }
+  //   if (text.font.xAlign === 'left') {
+  //     right = width;
+  //   }
+  //   if (text.font.xAlign === 'center') {
+  //     left = width / 2;
+  //     right = width / 2;
+  //   }
+  //   if (text.font.xAlign === 'right') {
+  //     left = width;
+  //   }
+  //   if (text.font.yAlign === 'alphabetic' || text.font.yAlign === 'baseline') {
+  //     asc = ascent;
+  //     des = descent;
+  //   }
+  //   if (text.font.yAlign === 'top') {
+  //     asc = 0;
+  //     des = height;
+  //   }
+  //   if (text.font.yAlign === 'bottom') {
+  //     asc = height;
+  //     des = 0;
+  //   }
+  //   if (text.font.yAlign === 'middle') {
+  //     asc = height / 2;
+  //     des = height / 2;
+  //   }
+  //   return {
+  //     actualBoundingBoxLeft: left,
+  //     actualBoundingBoxRight: right,
+  //     fontBoundingBoxAscent: asc,
+  //     fontBoundingBoxDescent: des,
+  //   };
+  // }
 
   getBoundaryOfText(text: DiagramText, contextIndex: number = 0): Array<Point> {
     const boundary = [];
 
-    const { scalingFactor } = this;
+    // const { scalingFactor } = this;
 
-    // Measure the text
-    text.font.set(this.drawContext2D[contextIndex].ctx, scalingFactor);
-    // const textMetrics = this.drawContext2D.ctx.measureText(text.text);
-    const textMetrics = this.measureText(this.drawContext2D[contextIndex].ctx, text);
-    // Create a box around the text
+    // // Measure the text
+    // text.font.set(this.drawContext2D[contextIndex].ctx, scalingFactor);
+    // // const textMetrics = this.drawContext2D.ctx.measureText(text.text);
+    // const textMetrics = this.measureText(this.drawContext2D[contextIndex].ctx, text);
+    // // Create a box around the text
     const { location } = text;
+    // const box = [
+    //   new Point(
+    //     -textMetrics.actualBoundingBoxLeft / scalingFactor,
+    //     textMetrics.fontBoundingBoxAscent / scalingFactor,
+    //   ).add(location),
+    //   new Point(
+    //     textMetrics.actualBoundingBoxRight / scalingFactor,
+    //     textMetrics.fontBoundingBoxAscent / scalingFactor,
+    //   ).add(location),
+    //   new Point(
+    //     textMetrics.actualBoundingBoxRight / scalingFactor,
+    //     -textMetrics.fontBoundingBoxDescent / scalingFactor,
+    //   ).add(location),
+    //   new Point(
+    //     -textMetrics.actualBoundingBoxLeft / scalingFactor,
+    //     -textMetrics.fontBoundingBoxDescent / scalingFactor,
+    //   ).add(location),
+    // ];
+    const textRect = text.measureText(this.drawContext2D[contextIndex].ctx, location);
     const box = [
-      new Point(
-        -textMetrics.actualBoundingBoxLeft / scalingFactor,
-        textMetrics.fontBoundingBoxAscent / scalingFactor,
-      ).add(location),
-      new Point(
-        textMetrics.actualBoundingBoxRight / scalingFactor,
-        textMetrics.fontBoundingBoxAscent / scalingFactor,
-      ).add(location),
-      new Point(
-        textMetrics.actualBoundingBoxRight / scalingFactor,
-        -textMetrics.fontBoundingBoxDescent / scalingFactor,
-      ).add(location),
-      new Point(
-        -textMetrics.actualBoundingBoxLeft / scalingFactor,
-        -textMetrics.fontBoundingBoxDescent / scalingFactor,
-      ).add(location),
+      new Point(textRect.left, textRect.top),
+      new Point(textRect.right, textRect.top),
+      new Point(textRect.right, textRect.bottom),
+      new Point(textRect.left, textRect.bottom),
     ];
     box.forEach((p) => {
       boundary.push(p);

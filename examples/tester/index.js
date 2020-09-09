@@ -11,13 +11,14 @@ const f2 = {
   color: [0, 1, 0, 1],
   style: 'italic',
   size: 0.2,
+  weight: 'bold',
 }
 diagram.addElements([
   {
     name: 'tester',
     method: 'shapes.textNew',
     options: {
-      text: ['hello', ' b ', 'c', 'd'],
+      text: ['hello', ' MM', 'M', 'd'],
       font: [f1, f2, f1, f2],
       offset: [[0, 0], null, null, [-0.4, 0]],
       position: [0, 0],
