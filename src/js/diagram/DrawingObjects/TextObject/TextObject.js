@@ -1,10 +1,10 @@
 // @flow
 
 import * as m2 from '../../../tools/m2';
-import { Point } from '../../../tools/g2';
+import { Point, getPoint } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
 import DrawContext2D from '../../DrawContext2D';
-import { duplicateFromTo } from '../../../tools/tools';
+import { duplicateFromTo, joinObjects } from '../../../tools/tools';
 
 function colorArrayToString(color: Array<number>) {
   return `rgba(${
@@ -13,39 +13,57 @@ function colorArrayToString(color: Array<number>) {
     Math.floor(color[2] * 255)},${
     color[3]})`;
 }
+
+type TypeDiagramFontOptions = {
+  family?: string,
+  style?: 'normal' | 'italic',
+  size?: number,
+  weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
+  xAlign?: 'left' | 'center' | 'right',
+  yAlign?: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline',
+  color?: Array<number> | null,
+  opacity?: number,
+};
+
 // DiagramFont defines the font properties to be used in a TextObject
 class DiagramFont {
   size: number;
-  weight: string;
-  style: string;
+  weight: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
+  style: 'normal' | 'italic';
   family: string;
   xAlign: 'left' | 'center' | 'right';
-  yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic';
+  yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
   color: Array<number> | null;
   opacity: number;
 
-  constructor(
-    family: string = 'Helvetica Neue',
-    style: string = '',
-    size: number = 1,
-    weight: string = '200',
-    xAlign: 'left' | 'center' | 'right' = 'center',
-    yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' = 'middle',
-    color: Array<number> | null = null,
-  ) {
-    this.family = family;
-    this.style = style;
-    this.size = size;
-    this.weight = weight;
-    this.xAlign = xAlign;
-    this.yAlign = yAlign;
-    this.opacity = 1;
-    this.setColor(color);
-    // if (Array.isArray(color)) {
-    //   this.color = colorArrayToString(color);
-    // } else {
-    //   this.color = color;
-    // }
+  constructor(optionsIn: TypeDiagramFontOptions = {}) {
+  //   family: string = 'Helvetica Neue',
+  //   style: string = '',
+  //   size: number = 1,
+  //   weight: string = '200',
+  //   xAlign: 'left' | 'center' | 'right' = 'center',
+  //   yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' = 'middle',
+  //   color: Array<number> | null = null,
+  // ) {
+    const defaultOptions = {
+      family: 'Helvetica Neue',
+      style: '',
+      size: 1,
+      weight: '200',
+      xAlign: 'center',
+      yAlign: 'middle',
+      color: null,
+      opacity: 1,
+    };
+    const options = joinObjects({}, defaultOptions, optionsIn);
+    this.family = options.family;
+    this.style = options.style;
+    this.size = options.size;
+    this.weight = options.weight;
+    this.xAlign = options.xAlign;
+    this.yAlign = options.yAlign;
+    this.opacity = options.opacity;
+    this.setColor(options.color);
   }
 
   setColor(color: Array<number> | null = null) {
@@ -60,41 +78,55 @@ class DiagramFont {
   set(ctx: CanvasRenderingContext2D, scalingFactor: number = 1) {
     ctx.font = `${this.style} ${this.weight} ${this.size * scalingFactor}px ${this.family}`;
     ctx.textAlign = this.xAlign;
-    ctx.textBaseline = this.yAlign;
+    if (this.yAlign === 'baseline') {
+      ctx.textBaseline = 'alphabetic';
+    } else {
+      ctx.textBaseline = this.yAlign;
+    }
   }
 
   _dup() {
-    return new DiagramFont(
-      this.family,
-      this.style,
-      this.size,
-      this.weight,
-      this.xAlign,
-      this.yAlign,
-      this.color,
-    );
+    return new DiagramFont({
+      family: this.family,
+      style: this.style,
+      size: this.size,
+      weight: this.weight,
+      xAlign: this.xAlign,
+      yAlign: this.yAlign,
+      color: this.color,
+      opacity: this.opacity,
+    });
   }
 }
 
 // DiagramText is a single text element of the diagram that is drawn at
 // once and referenced to the same location
 class DiagramText {
-  location: Point;
+  location: ?Point;
   text: string;
   font: DiagramFont;
 
   constructor(
-    location: Point = new Point(0, 0),
+    location: ?TypeParsablePoint = new Point(0, 0),
     text: string = '',
-    font: DiagramFont = new DiagramFont(),
+    font: DiagramFont | TypeDiagramFontOptions = new DiagramFont(),
   ) {
-    this.location = location._dup();
+    this.location = null;
+    if (location != null) {
+      this.location = getPoint(location)._dup();
+    }
+    // this.location = location._dup();
     this.text = text.slice();
-    this.font = font._dup();
+    if (font instanceof DiagramFont) {
+      this.font = font._dup();
+    } else {
+      this.font = new DiagramFont(font);
+    }
+    // this.font = font._dup();
   }
 
   _dup() {
-    return new DiagramText(this.location._dup(), this.text, this.font._dup());
+    return new DiagramText(this.location, this.text, this.font._dup());
   }
 }
 
@@ -297,17 +329,35 @@ class TextObject extends DrawingObject {
       //   x: diagramText.location.x * scalingFactor - w,
       //   y: diagramText.location.y * -scalingFactor - w,
       // });
+      let { location } = diagramText;
+      if (location == null && this.lastDraw.length === 0) {
+        location = new Point(0, 0);
+      } else if (location == null && this.lastDraw.length > 0) {
+        const lastIndex = this.lastDraw.length - 1;
+        const lastDraw = this.lastDraw[lastIndex];
+        location = new Point(lastDraw.xActual + lastDraw.widthActual, lastDraw.yActual);
+        console.log(lastDraw)
+      } else {
+      // if (location != null) {
+        location.x *= scalingFactor;
+        location.y *= -scalingFactor;
+      }
+      console.log(diagramText, location)
       this.recordLastDraw(
         ctx,
         diagramText,
         scalingFactor,
-        diagramText.location.x * scalingFactor,
-        diagramText.location.y * -scalingFactor,
+        location.x,
+        location.y,
+        // diagramText.location.x * scalingFactor,
+        // diagramText.location.y * -scalingFactor,
       );
       ctx.fillText(
         diagramText.text,
-        diagramText.location.x * scalingFactor,
-        diagramText.location.y * -scalingFactor,
+        location.x,
+        location.y,
+        // diagramText.location.x * scalingFactor,
+        // diagramText.location.y * -scalingFactor,
       );
     });
     ctx.restore();
@@ -324,7 +374,7 @@ class TextObject extends DrawingObject {
     const height = diagramText.font.size * scalingFactor * 1.2;
     let bottom = y + height * 0.1;
     let left = x - width * 0.1;
-    if (diagramText.font.yAlign === 'baseline') {
+    if (diagramText.font.yAlign === 'baseline' || diagramText.font.yAlign === 'alphabetic') {
       bottom = y + height * 0.2;
     } else if (diagramText.font.yAlign === 'top') {
       bottom = y + height;
@@ -343,6 +393,9 @@ class TextObject extends DrawingObject {
       height: -height,
       x: left,
       y: bottom,
+      xActual: x,
+      yActual: y,
+      widthActual: width / 1.2,
     });
     // console.log(this.lastDraw)
   }

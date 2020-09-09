@@ -580,11 +580,19 @@ export class Equation extends DiagramElementCollection {
     }
     const defaultOptions = {
       color,
-      fontMath: new DiagramFont(
-        'Times New Roman',
-        'normal',
-        0.2, '200', 'left', 'alphabetic', color,
-      ),
+      fontMath: new DiagramFont({
+        family: 'Times New Roman',
+        style: 'normal',
+        size: 0.2,
+        weidht: '200',
+        xAlign: 'left',
+        yAlign: 'alphabetic',
+        color,
+      }),
+      //   'Times New Roman',
+      //   'normal',
+      //   0.2, '200', 'left', 'alphabetic', color,
+      // ),
       position: new Point(0, 0),
       scale: 0.7,
       // defaultFormAlignment: {
@@ -785,13 +793,21 @@ export class Equation extends DiagramElementCollection {
       ({ size } = options);
     }
     if (style != null || weight != null || size != null) {
-      fontToUse = new DiagramFont(
-        'Times New Roman',
-        style || 'normal',
-        size || 0.2,
-        weight || '200',
-        'left', 'alphabetic', this.color,
-      );
+      fontToUse = new DiagramFont({
+        family: 'Times New Roman',
+        style: style || 'normal',
+        size: size || 0.2,
+        weidht: weight || '200',
+        xAlign: 'left',
+        yAlign: 'alphabetic',
+        color: this.color,
+      });
+      //   'Times New Roman',
+      //   style || 'normal',
+      //   size || 0.2,
+      //   weight || '200',
+      //   'left', 'alphabetic', this.color,
+      // );
     }
     if (options.font != null) {
       fontToUse = options.font;

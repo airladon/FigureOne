@@ -1,6 +1,29 @@
 const diagram = new Fig.Diagram();
 
-diagram.addElement(
+const f1 = {
+  family: 'Times New Roman',
+  color: [1, 0, 0, 1],
+  style: 'normal',
+  size: 0.2,
+};
+const f2 = {
+  family: 'Times New Roman',
+  color: [0, 1, 0, 1],
+  style: 'italic',
+  size: 0.2,
+}
+diagram.addElements([
+  {
+    name: 'tester',
+    method: 'shapes.textNew',
+    options: {
+      text: ['hello', ' b ', 'c', 'd'],
+      font: [f1, f2, f1, f2],
+      offset: [[0, 0], null, null, [-0.4, 0]],
+      position: [0, 0],
+      xAlign: 'center',
+    },
+  },
   {
     name: 'eqn',
     method: 'equation',
@@ -73,7 +96,7 @@ diagram.addElement(
       },
     },
   },
-);
+]);
 diagram.initialize();
 
 const eqn = diagram.getElement('eqn');

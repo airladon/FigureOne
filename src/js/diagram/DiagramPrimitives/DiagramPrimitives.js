@@ -1164,6 +1164,91 @@ export default class DiagramPrimitives {
     );
   }
 
+  textNew(...optionsIn: Array<{
+    text: string | Array<string>,
+    font: TypeDiagramFontOptions | Array<TypeDiagramFontOptions>,
+    // textPosition: null | TypeParsablePoint | Array<null | TypeParsablePoint>,
+    position: TypeParsablePoint,
+    offset: null | TypeParsablePoint | Array<null | TypeParsablePoint>,    // vertex space offset
+    transform: TypeParsableTransform,
+    xAlign: 'left' | 'right' | 'center',
+    yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
+  }>) {
+    const defaultOptions = {
+      text: '',
+      font: {
+        family: 'Times New Roman',
+        style: 'italic',
+        size: 0.2,
+        weight: '200',
+        // xAlign: 'left',
+        // yAlign: 'baseline'
+      },
+      // position: [0, 0],
+      xAlign: 'center',
+      yAlign: 'middle',
+      offset: null,    // vertex space offset
+      color: [1, 0, 0, 1],
+      transform: new Transform('text').standard(),
+      // draw2D: this.draw2D,
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+
+    if (options.position != null) {
+      const p = getPoint(options.position);
+      options.transform.updateTranslation(p);
+    }
+
+    if (typeof options.text === 'string') {
+      options.text = [options.text];
+    }
+    if (!Array.isArray(options.font)) {
+      options.font = [options.font];
+    }
+    if (!Array.isArray(options.offset)) {
+      options.offset = [options.offset];
+    }
+    const dText = [];
+    let fontIndex = 0;
+    let offsetIndex = 0;
+    for (let i = 0; i < options.text.length; i += 1) {
+      if (fontIndex > options.font.length - 1) {
+        fontIndex = 0;
+      }
+      if (offsetIndex > options.offset.length - 1) {
+        offsetIndex = 0;
+      }
+      const dFont = new DiagramFont(joinObjects({}, options.font[fontIndex], {
+        xAlign: 'left',
+        yAlign: 'baseline',
+      }));
+      dText.push(new DiagramText(options.offset[offsetIndex], options.text[i], dFont));
+      offsetIndex += 1;
+      fontIndex += 1;
+    }
+    // const dT = new DiagramText(o.offset, text, fontToUse);
+    const to = new TextObject(this.draw2D, dText);
+    const element = new DiagramElementPrimitive(
+      to,
+      options.transform,
+      options.color,
+      this.limits,
+    );
+
+    // if (options.pulse != null) {
+    //   if (typeof element.pulseDefault !== 'function') {
+    //     element.pulseDefault.scale = options.pulse;
+    //   }
+    // }
+    setupPulse(element, options);
+
+    if (options.mods != null && options.mods !== {}) {
+      element.setProperties(options.mods);
+    }
+
+    return element;
+  }
+
   text(textOrOptions: string | TypeTextOptions, ...optionsIn: Array<TypeTextOptions>) {
     const defaultOptions = {
       text: '',
@@ -1198,9 +1283,18 @@ export default class DiagramPrimitives {
     const { text } = o;
     let fontToUse = o.font;
     if (fontToUse === null) {
-      fontToUse = new DiagramFont(
-        o.family, o.style, o.size, o.weight, o.xAlign, o.yAlign, o.color,
-      );
+      fontToUse = new DiagramFont({
+        family: o.family,
+        style: o.style,
+        size: o.size,
+        weight: o.weight,
+        xAlign: o.xAlign,
+        yAlign: o.yAlign,
+        color: o.color,
+        opacity: 1,
+      });
+      // o.family, o.style, o.size, o.weight, o.xAlign, o.yAlign, o.color,
+      // );
     }
     const dT = new DiagramText(o.offset, text, fontToUse);
     const to = new TextObject(this.draw2D, [dT]);

@@ -95,15 +95,23 @@ class Axis extends DiagramElementCollection {
       this.diagramLimits,
     ));
 
-    const font = new DiagramFont(
-      this.props.titleFontFamily,
-      'normal',
-      this.props.titleFontSize,
-      this.props.titleFontWeight,
-      'center',
-      'middle',
-      this.props.titleFontColor,
-    );
+    const font = new DiagramFont({
+      family: this.props.titleFontFamily,
+      style: 'normal',
+      size: this.props.titleFontSize,
+      weidht: this.props.titleFontWeight,
+      xAlign: 'center',
+      yAlign: 'middle',
+      color: this.props.titleFontColor,
+    });
+    //   this.props.titleFontFamily,
+    //   'normal',
+    //   this.props.titleFontSize,
+    //   this.props.titleFontWeight,
+    //   'center',
+    //   'middle',
+    //   this.props.titleFontColor,
+    // );
     const titleText = [new DiagramText(
       new Point(0, 0).transformBy(new Transform()
         .rotate(this.props.rotation).matrix()),
@@ -193,15 +201,23 @@ class Axis extends DiagramElementCollection {
     if (ticks.labelMode === 'auto') {
       labelGenerator();
     }
-    const font = new DiagramFont(
-      ticks.fontFamily,
-      'normal',
-      ticks.fontSize,
-      ticks.fontWeight,
-      ticks.labelsHAlign,
-      ticks.labelsVAlign,
-      ticks.fontColor,
-    );
+    const font = new DiagramFont({
+      family: ticks.fontFamily,
+      style: 'normal',
+      size: ticks.fontSize,
+      weidht: ticks.fontWeight,
+      xAlign: ticks.labelsHAlign,
+      yAlign: ticks.labelsVAlign,
+      color: ticks.fontColor,
+    });
+    //   ticks.fontFamily,
+    //   'normal',
+    //   ticks.fontSize,
+    //   ticks.fontWeight,
+    //   ticks.labelsHAlign,
+    //   ticks.labelsVAlign,
+    //   ticks.fontColor,
+    // );
 
     if (this.props.rotation > Math.PI / 2 * 0.95) {
       font.yAlign = 'middle';

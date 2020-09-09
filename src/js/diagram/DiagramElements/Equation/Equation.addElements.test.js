@@ -70,19 +70,29 @@ describe('Diagram Equations From Object', () => {
         },
         c: {
           text: 'c',
-          font: new DiagramFont(
-            'Helvetica', 'normal',
-            0.3, '300', 'right', 'alphabetic', color1,
-          ),
+          font: new DiagramFont({
+            family: 'Helvetica',
+            style: 'normal',
+            size: 0.3,
+            weidht: '300',
+            xAlign: 'right',
+            yAlign: 'alphabetic',
+            color: color1,
+          }),
         },
         d: {         // font overrides style, color overrides font
           text: 'd',
           style: 'normal',
           color: color2,
-          font: new DiagramFont(
-            'Helvetica', 'italic',
-            0.3, '300', 'right', 'alphabetic', color1,
-          ),
+          font: new DiagramFont({
+            family: 'Helvetica',
+            style: 'italic',
+            size: 0.3,
+            weidht: '300',
+            xAlign: 'right',
+            yAlign: 'alphabetic',
+            color: color1,
+          }),
         },
       },
       // Equation symbols are DiagramElementPrimitives or Collections
