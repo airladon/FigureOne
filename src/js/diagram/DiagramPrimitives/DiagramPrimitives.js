@@ -1258,6 +1258,94 @@ export default class DiagramPrimitives {
     return element;
   }
 
+  textPhrase(...optionsIn: Array<{
+    text: string | Array<string | {
+      font?: TypeDiagramFontOptions | Array<TypeDiagramFontOptions>,
+      location?: TypeParsablePoint | null,
+      offset?: TypeParsablePoint,
+      xAlign?: 'left' | 'right' | 'center',
+      yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
+    }>;
+    font: TypeDiagramFontOptions | Array<TypeDiagramFontOptions>,
+    position: TypeParsablePoint,
+    transform: TypeParsableTransform,
+    xAlign: 'left' | 'right' | 'center',
+    yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
+    color: Array<number>
+  }>) {
+    const defaultOptions = {
+      text: '',
+      font: {
+        family: 'Times New Roman',
+        style: 'normal',
+        size: 0.2,
+        weight: '200',
+      },
+      xAlign: 'left',
+      yAlign: 'baseline',
+      color: [1, 0, 0, 1],
+      transform: new Transform('text').standard(),
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    if (options.font.color == null && options.color != null) {
+      options.font.color = options.color;
+    }
+
+    if (options.position != null) {
+      const p = getPoint(options.position);
+      options.transform.updateTranslation(p);
+    }
+
+    if (typeof options.text === 'string') {
+      options.text = [options.text];
+    }
+    const dText = [];
+    for (let i = 0; i < options.text.length; i += 1) {
+      const text = options.text[i];
+      let font;
+      let offset;
+      let location;
+      let xAlign;
+      let yAlign;
+      let textToUse;
+      if (Array.isArray(text) && text.length === 2) {
+        [textToUse, {
+          font, offset, location, xAlign, yAlign,
+        }] = text;
+      } else {
+        textToUse = text;
+      }
+      let fontToUse = options.font;
+      if (font != null) {
+        fontToUse = font;
+      }
+      const dFont = new DiagramFont(joinObjects({}, options.font, fontToUse));
+      dText.push(new DiagramText(
+        location || null,
+        textToUse,
+        dFont,
+        xAlign || 'left',
+        yAlign || 'baseline',
+        offset || [0, 0],
+      ));
+    }
+    const to = new TextObject(this.draw2D, dText, options.xAlign, options.yAlign);
+    const element = new DiagramElementPrimitive(
+      to,
+      options.transform,
+      options.color,
+      this.limits,
+    );
+
+    setupPulse(element, options);
+
+    if (options.mods != null && options.mods !== {}) {
+      element.setProperties(options.mods);
+    }
+
+    return element;
+  }
+
   text(textOrOptions: string | TypeTextOptions, ...optionsIn: Array<TypeTextOptions>) {
     const defaultOptions = {
       text: '',

@@ -25,42 +25,44 @@ console.log(new Fig.Transform().translate(0.5, 0).scale(2, 2).matrix())
 diagram.addElements([
   {
     name: 'tester',
-    method: 'shapes.textNew',
+    method: 'shapes.textPhrase',
     options: {
-      text: ['hello', 'MM', '2', '2', 'M', 'dg'],
-      font: [f1, f2, f3, f3, f1, f2],
-      location: [null, null, null, null, null, [-0.1, -0.5]],
-      offset: [[0, 0], [0, 0], [0, -0.02], [-0.02, 0.1], [0, 0], [0, 0]],
+      text: [
+        'hello ',
+        ['MM', { font: f2 }],
+        ['2', { offset: [0, -0.02], font: f3 }],
+        ['2', { offset: [-0.02, 0.1], font: f3 }],
+        ' M',
+        ['dg', { font: { weight: 'bolder' }, location: [0, -0.2] }],
+      ],
+      font: f1,
       position: [-0, -0.5],
       xAlign: 'center',
       yAlign: 'baseline',
+      color: [0, 0, 1, 1],
     },
-    // options1: {
-    //   text: 'Hello there how are you\nI\'m fine thanks',
-    //   font: 
-    // }
   },
-  // {
-  //   name: 'angle',
-  //   method: 'angle',
-  //   options: {
-  //     angle: 1,
-  //     curve: {
-  //       width: 0.01,
-  //       radius: 0.5,
-  //       sides: 400,
-  //     },
-  //     label: {
-  //       // text: '60º'
-  //       text: null,
-  //       radius: 0.45,
-  //     },
-  //     sides: {
-  //       length: 1,
-  //     },
-  //     color: [0, 1, 0, 1],
-  //   },
-  // },
+  {
+    name: 'angle',
+    method: 'angle',
+    options: {
+      angle: 1,
+      curve: {
+        width: 0.01,
+        radius: 0.5,
+        sides: 400,
+      },
+      label: {
+        // text: '60º'
+        text: null,
+        radius: 0.45,
+      },
+      sides: {
+        length: 1,
+      },
+      color: [0, 1, 0, 1],
+    },
+  },
   {
     name: 'a',
     method: 'polygon',
@@ -182,6 +184,7 @@ diagram.animateNextFrame();
 
 diagram.elements._tester.onClick = () => { console.log(1) };
 diagram.elements._tester.makeTouchable();
+// diagram.elements._tester.setColor([0, 1, 1, 1]);
 
 console.log(diagram.elements._a)
 // ctx = diagram.draw2DLow.ctx

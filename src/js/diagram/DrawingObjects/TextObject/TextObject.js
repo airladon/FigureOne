@@ -47,12 +47,10 @@ class DiagramFont {
   //   color: Array<number> | null = null,
   // ) {
     const defaultOptions = {
-      family: 'Helvetica Neue',
+      family: 'Times New Roman',
       style: '',
       size: 1,
       weight: '200',
-      // xAlign: 'center',
-      // yAlign: 'middle',
       color: null,
       opacity: 1,
     };
