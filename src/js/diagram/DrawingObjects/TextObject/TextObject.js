@@ -669,49 +669,15 @@ class TextObject extends DrawingObject {
     this.text.forEach((diagramText) => {
       diagramText.font.setFontInContext(ctx, scalingFactor);
       diagramText.font.setColorInContext(ctx, color);
-      // if (diagramText.font.color != null) {
-      //   const c = [
-      //     ...diagramText.font.color.slice(0, 3),  // $FlowFixMe
-      //     diagramText.font.color[3] * diagramText.font.opacity * color[3],
-      //   ];
-      //   ctx.fillStyle = colorArrayToString(c);
-      // } else {
-      //   ctx.fillStyle = parentColor;
-      // }
-      // const w = ctx.measureText(diagramText.text).width;
-      // this.lastDraw.push({
-      //   width: w * 2,
-      //   height: w * 2,
-      //   x: diagramText.location.x * scalingFactor - w,
-      //   y: diagramText.location.y * -scalingFactor - w,
-      // });
-      // let { location } = diagramText;
-      // if (location == null && this.lastDraw.length === 0) {
-      //   location = new Point(0, 0);
-      // } else if (location == null && this.lastDraw.length > 0) {
-      //   const lastIndex = this.lastDraw.length - 1;
-      //   const lastDraw = this.lastDraw[lastIndex];
-      //   location = new Point(lastDraw.xActual + lastDraw.widthActual, lastDraw.yActual);
-      //   console.log(lastDraw)
-      // } else {
-      // // if (location != null) {
-      //   location.x *= scalingFactor;
-      //   location.y *= -scalingFactor;
-      // }
-      // console.log(diagramText, location)
       this.recordLastDraw(
         ctx,
         diagramText,
         scalingFactor,
-        // location.x,
-        // location.y,
         diagramText.location.x * scalingFactor,
         diagramText.location.y * -scalingFactor,
       );
       ctx.fillText(
         diagramText.text,
-        // location.x,
-        // location.y,
         diagramText.location.x * scalingFactor,
         diagramText.location.y * -scalingFactor,
       );
@@ -937,33 +903,6 @@ class TextObject extends DrawingObject {
     contextIndex: number = 0,
   ): Array<Point> {
     const glBoundary = [];
-
-    // const { scalingFactor } = this;
-
-    // // Measure the text
-    // text.font.set(this.drawContext2D.ctx, scalingFactor);
-    // // const textMetrics = this.drawContext2D.ctx.measureText(text.text);
-    // const textMetrics = this.measureText(this.drawContext2D.ctx, text);
-    // // Create a box around the text
-    // const { location } = text;
-    // const box = [
-    //   new Point(
-    //     -textMetrics.actualBoundingBoxLeft / scalingFactor,
-    //     textMetrics.fontBoundingBoxAscent / scalingFactor,
-    //   ).add(location),
-    //   new Point(
-    //     textMetrics.actualBoundingBoxRight / scalingFactor,
-    //     textMetrics.fontBoundingBoxAscent / scalingFactor,
-    //   ).add(location),
-    //   new Point(
-    //     textMetrics.actualBoundingBoxRight / scalingFactor,
-    //     -textMetrics.fontBoundingBoxDescent / scalingFactor,
-    //   ).add(location),
-    //   new Point(
-    //     -textMetrics.actualBoundingBoxLeft / scalingFactor,
-    //     -textMetrics.fontBoundingBoxDescent / scalingFactor,
-    //   ).add(location),
-    // ];
     const box = this.getBoundaryOfText(text, contextIndex);
     box.forEach((p) => {
       glBoundary.push(p.transformBy(lastDrawTransformMatrix));

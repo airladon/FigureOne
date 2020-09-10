@@ -22,10 +22,10 @@ diagram.addElements([
     options: {
       text: ['hello', 'MM', 'M', 'dg'],
       font: [f1, f2, f1, f2],
-      offset: [[0, 0], null, null, [-0.1, -0.2]],
-      position: [0.5, 0.5],
-      xAlign: 'center',
-      yAlign: 'middle',
+      offset: [[0, 0], null, null, [-0.1, -0.5]],
+      position: [-0.5, -0.5],
+      xAlign: 'left',
+      yAlign: 'baseline',
     },
   },
   {
@@ -138,9 +138,12 @@ c.onClick = goTo.bind(eqn, 'c');
 // Queue drawing on the next animation frame
 diagram.animateNextFrame();
 
-diagram.elements._tester.animations.new()
-  .translation({ target: [-0.5, -0.5 ], duration: 2 })
-  .start();
+// diagram.elements._tester.animations.new()
+//   .translation({ target: [-0.5, -0.5 ], duration: 2 })
+//   .start();
+
+diagram.elements._tester.onClick = () => { console.log(1) };
+diagram.elements._tester.makeTouchable();
 
 // ctx = diagram.draw2DLow.ctx
 // // ctx.save()
