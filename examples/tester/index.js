@@ -23,9 +23,9 @@ diagram.addElements([
       text: ['hello', 'MM', 'M', 'dg'],
       font: [f1, f2, f1, f2],
       offset: [[0, 0], null, null, [-0.1, -0.2]],
-      position: [0, 0],
+      position: [0.5, 0.5],
       xAlign: 'center',
-      yAlign: 'baseline',
+      yAlign: 'middle',
     },
   },
   {
@@ -138,41 +138,45 @@ c.onClick = goTo.bind(eqn, 'c');
 // Queue drawing on the next animation frame
 diagram.animateNextFrame();
 
-ctx = diagram.draw2DLow.ctx
+diagram.elements._tester.animations.new()
+  .translation({ target: [-0.5, -0.5 ], duration: 2 })
+  .start();
+
+// ctx = diagram.draw2DLow.ctx
+// // ctx.save()
+// // ctx.font = 'italic 80px "Times New Roman"'
+// // ctx.textBaseline = 'middle'
+// // ctx.fillStyle = "#FF0000FF"
+// // ctx.fillText('A',400, 400)
+// // ctx.scale(2, 2);
+// // ctx.font = 'italic 40px "Times New Roman"'
+// // ctx.fillText('y',200, 200)
+// // ctx.restore();
+// // ctx.save();
+// // ctx.fillStyle = "#FFFF00FF"
+// // ctx.textBaseline = 'middle'
+// // ctx.translate(400, 400)
+// // ctx.scale(800 / 100, 800 / 100)
+// // ctx.font = 'italic 10px "Times New Roman"'
+// // ctx.fillText('y', 10, 0)
+// // ctx.restore();
+
 // ctx.save()
-// ctx.font = 'italic 80px "Times New Roman"'
+// ctx.font = 'italic 100.5px "Times New Roman"'
 // ctx.textBaseline = 'middle'
 // ctx.fillStyle = "#FF0000FF"
-// ctx.fillText('A',400, 400)
+// ctx.translate(400, 400);
+// ctx.fillText('A', -300, 0)
 // ctx.scale(2, 2);
-// ctx.font = 'italic 40px "Times New Roman"'
-// ctx.fillText('y',200, 200)
+// ctx.fillStyle = "#FF00FFFF"
+// ctx.font = 'italic 50.25px "Times New Roman"'
+// ctx.fillText('A', -150, 0)
+// // ctx.restore();
+// // ctx.save();
+// // ctx.fillStyle = "#FFFF00FF"
+// // ctx.textBaseline = 'middle'
+// // ctx.translate(400, 400)
+// // ctx.scale(800 / 100, 800 / 100)
+// // ctx.font = 'italic 10px "Times New Roman"'
+// // ctx.fillText('y', 10, 0)
 // ctx.restore();
-// ctx.save();
-// ctx.fillStyle = "#FFFF00FF"
-// ctx.textBaseline = 'middle'
-// ctx.translate(400, 400)
-// ctx.scale(800 / 100, 800 / 100)
-// ctx.font = 'italic 10px "Times New Roman"'
-// ctx.fillText('y', 10, 0)
-// ctx.restore();
-
-ctx.save()
-ctx.font = 'italic 100.5px "Times New Roman"'
-ctx.textBaseline = 'middle'
-ctx.fillStyle = "#FF0000FF"
-ctx.translate(400, 400);
-ctx.fillText('A', -300, 0)
-ctx.scale(2, 2);
-ctx.fillStyle = "#FF00FFFF"
-ctx.font = 'italic 50.25px "Times New Roman"'
-ctx.fillText('A', -150, 0)
-// ctx.restore();
-// ctx.save();
-// ctx.fillStyle = "#FFFF00FF"
-// ctx.textBaseline = 'middle'
-// ctx.translate(400, 400)
-// ctx.scale(800 / 100, 800 / 100)
-// ctx.font = 'italic 10px "Times New Roman"'
-// ctx.fillText('y', 10, 0)
-ctx.restore();
