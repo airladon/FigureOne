@@ -120,7 +120,8 @@ class DiagramFont {
 // DiagramText is a single text element of the diagram that is drawn at
 // once and referenced to the same location
 class DiagramText {
-  location: ?Point;
+  location: Point;
+  relativeLocation: boolean;
   text: string;
   font: DiagramFont;
   xAlign: 'left' | 'center' | 'right';
@@ -141,10 +142,17 @@ class DiagramText {
     xAlign: 'left' | 'center' | 'right' = 'left',
     yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline' = 'baseline',
   ) {
-    this.location = null;
-    if (location != null) {
+    if (location == null) {
+      this.location = new Point(0, 0);
+      this.relativeLocation = true;
+    } else {
       this.location = getPoint(location)._dup();
+      this.relativeLocation = false;
     }
+    // this.location = null;
+    // if (location != null) {
+    //   this.location = getPoint(location)._dup();
+    // }
     // this.location = location._dup();
     this.text = text.slice();
     if (font instanceof DiagramFont) {
@@ -230,6 +238,7 @@ class DiagramText {
     let left = 0;
     let right = 0;
 
+    // console.log(scalingFactor, width, this.xAlign)
     if (this.xAlign === 'left') {
       right = width;
     }
@@ -256,10 +265,10 @@ class DiagramText {
       asc = height / 2;
       des = height / 2;
     }
-    left /= this.scalingFactor;
-    right /= this.scalingFactor;
-    asc /= this.scalingFactor;
-    des /= this.scalingFactor;
+    left /= scalingFactor;
+    right /= scalingFactor;
+    asc /= scalingFactor;
+    des /= scalingFactor;
 
     // return new Rect(
     //   location.x - left,
@@ -575,29 +584,31 @@ class TextObject extends DrawingObject {
     // transform, we need to similarly scale our locations and
     // font sizes
 
+    // Text objects can either have absolute or relative locations.
+    // If text.location is null, then the location is calculated relative to
+    // the previous text where it will be placed immediately to the right,
+    // sharing the same baseline. If the text alignment is left, baseline, then
+    // the words will follow each other naturally.
+    const textBounds = [];
+    let lastRight = new Point(0, 0);
+    this.text.forEach((diagramText) => {
+      const { relativeLocation } = diagramText;
+      let location;
+      if (relativeLocation) {
+        location = lastRight._dup();
+        diagramText.location = location;
+      } else {
+        ({ location } = diagramText);
+      }
+      // Measure the text in scaled space
+      const measure = diagramText.measureText(ctx, scalingFactor);
+      console.log(diagramText.text, measure)
+      lastRight = new Point(
+        location.x + measure.right,
+        location.y,
+      );
+    });
 
-    // and font sizes need to
-
-    // // Calculate the size of all the text
-    // const textBounds = [];
-    // let currentX;
-    // let currentY;
-    // this.text.forEach((text, index) => {
-    //   let { location } = text;
-    //   let locationPixelSpace;
-    //   if (index === 0 && location == null) {
-    //     locationPixelSpace = new Point(0, 0);
-    //   } else if (location == null) {
-    //     locationPixelSpace = new Point(currentX, currentY);
-    //   } else {
-    //     locationPixelSpace = new Point(
-    //       location.x * scalingFactor,
-    //       -location.y * scalingFactor,
-    //     )
-    //   }
-    //   // Measure the text in scaled pixel space
-    //   const measure = text.measureText(ctx, scalingFactor);
-    // });
     // Fill in all the text
     this.text.forEach((diagramText) => {
       diagramText.font.setFontInContext(ctx, scalingFactor);
@@ -618,35 +629,35 @@ class TextObject extends DrawingObject {
       //   x: diagramText.location.x * scalingFactor - w,
       //   y: diagramText.location.y * -scalingFactor - w,
       // });
-      let { location } = diagramText;
-      if (location == null && this.lastDraw.length === 0) {
-        location = new Point(0, 0);
-      } else if (location == null && this.lastDraw.length > 0) {
-        const lastIndex = this.lastDraw.length - 1;
-        const lastDraw = this.lastDraw[lastIndex];
-        location = new Point(lastDraw.xActual + lastDraw.widthActual, lastDraw.yActual);
-        console.log(lastDraw)
-      } else {
-      // if (location != null) {
-        location.x *= scalingFactor;
-        location.y *= -scalingFactor;
-      }
-      console.log(diagramText, location)
+      // let { location } = diagramText;
+      // if (location == null && this.lastDraw.length === 0) {
+      //   location = new Point(0, 0);
+      // } else if (location == null && this.lastDraw.length > 0) {
+      //   const lastIndex = this.lastDraw.length - 1;
+      //   const lastDraw = this.lastDraw[lastIndex];
+      //   location = new Point(lastDraw.xActual + lastDraw.widthActual, lastDraw.yActual);
+      //   console.log(lastDraw)
+      // } else {
+      // // if (location != null) {
+      //   location.x *= scalingFactor;
+      //   location.y *= -scalingFactor;
+      // }
+      // console.log(diagramText, location)
       this.recordLastDraw(
         ctx,
         diagramText,
         scalingFactor,
-        location.x,
-        location.y,
-        // diagramText.location.x * scalingFactor,
-        // diagramText.location.y * -scalingFactor,
+        // location.x,
+        // location.y,
+        diagramText.location.x * scalingFactor,
+        diagramText.location.y * -scalingFactor,
       );
       ctx.fillText(
         diagramText.text,
-        location.x,
-        location.y,
-        // diagramText.location.x * scalingFactor,
-        // diagramText.location.y * -scalingFactor,
+        // location.x,
+        // location.y,
+        diagramText.location.x * scalingFactor,
+        diagramText.location.y * -scalingFactor,
       );
     });
     ctx.restore();
@@ -682,9 +693,9 @@ class TextObject extends DrawingObject {
       height: -height,
       x: left,
       y: bottom,
-      xActual: x,
-      yActual: y,
-      widthActual: width / 1.2,
+      // xActual: x,
+      // yActual: y,
+      // widthActual: width / 1.2,
     });
     // console.log(this.lastDraw)
   }

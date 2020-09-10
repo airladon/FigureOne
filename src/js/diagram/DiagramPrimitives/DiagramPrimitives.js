@@ -1218,11 +1218,14 @@ export default class DiagramPrimitives {
       if (offsetIndex > options.offset.length - 1) {
         offsetIndex = 0;
       }
-      const dFont = new DiagramFont(joinObjects({}, options.font[fontIndex], {
-        xAlign: 'left',
-        yAlign: 'baseline',
-      }));
-      dText.push(new DiagramText(options.offset[offsetIndex], options.text[i], dFont));
+      const dFont = new DiagramFont(joinObjects({}, options.font[fontIndex]));
+      dText.push(new DiagramText(
+        options.offset[offsetIndex],
+        options.text[i],
+        dFont,
+        'left',
+        'baseline',
+      ));
       offsetIndex += 1;
       fontIndex += 1;
     }

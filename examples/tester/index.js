@@ -16,17 +16,17 @@ const f2 = {
 console.log(new Fig.Transform().scale(2, 2).translate(0.5, 0).matrix())
 console.log(new Fig.Transform().translate(0.5, 0).scale(2, 2).matrix())
 diagram.addElements([
-  // {
-  //   name: 'tester',
-  //   method: 'shapes.textNew',
-  //   options: {
-  //     text: ['hello', ' MM', 'M', 'd'],
-  //     font: [f1, f2, f1, f2],
-  //     offset: [[0, 0], null, null, [-0.4, 0]],
-  //     position: [0, 0],
-  //     xAlign: 'center',
-  //   },
-  // },
+  {
+    name: 'tester',
+    method: 'shapes.textNew',
+    options: {
+      text: ['hello', 'MM', 'M', 'd'],
+      font: [f1, f2, f1, f2],
+      offset: [[0, -0.4], null, null, null],
+      position: [0, 0],
+      xAlign: 'left',
+    },
+  },
   {
     name: 'a',
     method: 'polygon',
