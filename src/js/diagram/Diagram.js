@@ -1872,6 +1872,7 @@ class Diagram {
   // }
 
   draw(nowIn: number, canvasIndex: number = 0): void {
+    const start = new Date().getTime();
     if (this.state.pause === 'paused') {
       return;
     }
@@ -1947,6 +1948,8 @@ class Diagram {
     //   this.drawTimeoutId = null;
     // }
     // this.drawTimeoutId = setTimeout(this.renderToImages.bind(this), 100);
+    const end = new Date().getTime();
+    console.log(end - start);
   }
 
   // renderToImages() {
