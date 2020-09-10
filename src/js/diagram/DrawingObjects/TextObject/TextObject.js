@@ -856,44 +856,18 @@ class TextObject extends DrawingObject {
 
   getBoundaryOfText(text: DiagramText, contextIndex: number = 0): Array<Point> {
     const boundary = [];
-
     const { scalingFactor } = this;
-
-    // Measure the text
-    text.font.setFontInContext(this.drawContext2D[contextIndex].ctx, scalingFactor);
-    // const textMetrics = this.drawContext2D.ctx.measureText(text.text);
-    const textMetrics = this.measureText(this.drawContext2D[contextIndex].ctx, text);
-    // Create a box around the text
     const { location } = text;
+    const meas = text.measureText(this.drawContext2D[contextIndex].ctx, scalingFactor);
     const box = [
-      new Point(
-        -textMetrics.actualBoundingBoxLeft / scalingFactor,
-        textMetrics.fontBoundingBoxAscent / scalingFactor,
-      ).add(location),
-      new Point(
-        textMetrics.actualBoundingBoxRight / scalingFactor,
-        textMetrics.fontBoundingBoxAscent / scalingFactor,
-      ).add(location),
-      new Point(
-        textMetrics.actualBoundingBoxRight / scalingFactor,
-        -textMetrics.fontBoundingBoxDescent / scalingFactor,
-      ).add(location),
-      new Point(
-        -textMetrics.actualBoundingBoxLeft / scalingFactor,
-        -textMetrics.fontBoundingBoxDescent / scalingFactor,
-      ).add(location),
+      new Point(-meas.left, meas.ascent).add(location),
+      new Point(meas.right, meas.ascent).add(location),
+      new Point(meas.right, -meas.descent).add(location),
+      new Point(-meas.left, -meas.descent).add(location),
     ];
-    // const textRect = text.measureText(this.drawContext2D[contextIndex].ctx, location);
-    // const box = [
-    //   new Point(textRect.left, textRect.top),
-    //   new Point(textRect.right, textRect.top),
-    //   new Point(textRect.right, textRect.bottom),
-    //   new Point(textRect.left, textRect.bottom),
-    // ];
     box.forEach((p) => {
       boundary.push(p);
     });
-    // console.log('boundary', boundary.width, text.text)
     return boundary;
   }
 
