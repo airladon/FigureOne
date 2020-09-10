@@ -20,11 +20,12 @@ diagram.addElements([
     name: 'tester',
     method: 'shapes.textNew',
     options: {
-      text: ['hello', 'MM', 'M', 'd'],
+      text: ['hello', 'MM', 'M', 'dg'],
       font: [f1, f2, f1, f2],
-      offset: [[0, -0.4], null, null, null],
+      offset: [[0, 0], null, null, [-0.1, -0.2]],
       position: [0, 0],
-      xAlign: 'left',
+      xAlign: 'center',
+      yAlign: 'baseline',
     },
   },
   {

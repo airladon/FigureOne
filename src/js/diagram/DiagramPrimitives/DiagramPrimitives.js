@@ -1230,7 +1230,7 @@ export default class DiagramPrimitives {
       fontIndex += 1;
     }
     // const dT = new DiagramText(o.offset, text, fontToUse);
-    const to = new TextObject(this.draw2D, dText);
+    const to = new TextObject(this.draw2D, dText, options.xAlign, options.yAlign);
     const element = new DiagramElementPrimitive(
       to,
       options.transform,

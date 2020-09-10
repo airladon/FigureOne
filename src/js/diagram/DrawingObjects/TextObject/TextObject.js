@@ -304,6 +304,8 @@ class TextObject extends DrawingObject {
   border: Array<Array<Point>>;
   text: Array<DiagramText>;
   scalingFactor: number;
+  xAlign: 'left' | 'center' | 'right';
+  yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
   lastDrawTransform: Array<number>;
   lastDraw: Array<{
     x: number,
@@ -315,6 +317,8 @@ class TextObject extends DrawingObject {
   constructor(
     drawContext2D: Array<DrawContext2D> | DrawContext2D,
     text: Array<DiagramText> = [],
+    xAlign: 'left' | 'center' | 'right' = 'left',
+    yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline' = 'baseline',
   ) {
     super();
     if (Array.isArray(drawContext2D)) {
@@ -343,6 +347,8 @@ class TextObject extends DrawingObject {
       // }
       this.scalingFactor = 20 / minSize;
     }
+    this.xAlign = xAlign;
+    this.yAlign = yAlign;
     this.setBorder();
     this.state = 'loaded';
   }
@@ -589,7 +595,7 @@ class TextObject extends DrawingObject {
     // the previous text where it will be placed immediately to the right,
     // sharing the same baseline. If the text alignment is left, baseline, then
     // the words will follow each other naturally.
-    const textBounds = [];
+    //
     let lastRight = new Point(0, 0);
     this.text.forEach((diagramText) => {
       const { relativeLocation } = diagramText;
@@ -602,12 +608,62 @@ class TextObject extends DrawingObject {
       }
       // Measure the text in scaled space
       const measure = diagramText.measureText(ctx, scalingFactor);
-      console.log(diagramText.text, measure)
       lastRight = new Point(
         location.x + measure.right,
         location.y,
       );
     });
+
+    // We now have calculated all the locations of the text, now let's calculate
+    // the total bounds, so the locations can be scaled by xAlign and yAlign.
+    // Note, if yAlign === 'baseline', then the block of text will be aligned
+    // around the y coordinate of the first text element.
+    let xMin = null;
+    let xMax = null;
+    let yMin = null;
+    let yMax = null;
+    this.text.forEach((diagramText) => {
+      const { location, lastMeasure } = diagramText;
+      const xMinText = location.x - lastMeasure.left;
+      const xMaxText = location.x + lastMeasure.right;
+      const yMaxText = location.y + lastMeasure.ascent;
+      const yMinText = location.y - lastMeasure.descent;
+      if (xMin == null || xMinText < xMin) {
+        xMin = xMinText;
+      }
+      if (xMax == null || xMaxText > xMax) {
+        xMax = xMaxText;
+      }
+      if (yMin == null || yMinText < yMin) {
+        yMin = yMinText;
+      }
+      if (yMax == null || yMaxText > yMax) {
+        yMax = yMaxText;
+      }
+    });
+    const locationOffset = new Point(0, 0);
+    if (xMin != null && yMin != null && xMax != null && yMax != null) {
+      if (this.xAlign === 'left') {
+        locationOffset.x = -xMin;
+      } else if (this.xAlign === 'right') {
+        locationOffset.x = -xMax;
+      } else if (this.xAlign === 'center') {
+        locationOffset.x = -xMin - (xMax - xMin) / 2;
+      }
+      if (this.yAlign === 'bottom') {
+        locationOffset.y = -yMin;
+      } else if (this.yAlign === 'top') {
+        locationOffset.y = -yMax;
+      } else if (this.yAlign === 'middle') {
+        locationOffset.y = -yMin - (yMax - yMin) / 2;
+      }
+    }
+
+    if (locationOffset.x !== 0 || locationOffset.y !== 0) {
+      this.text.forEach((diagramText) => {
+        diagramText.location = diagramText.location.add(locationOffset);
+      });
+    }
 
     // Fill in all the text
     this.text.forEach((diagramText) => {
@@ -670,21 +726,22 @@ class TextObject extends DrawingObject {
     x: number,
     y: number,
   ) {
-    const width = ctx.measureText(diagramText.text).width * 1.2;
+    // const width = ctx.measureText(diagramText.text).width * 1.2;
+    const width = diagramText.lastMeasure.width * scalingFactor * 1.2;
     const height = diagramText.font.size * scalingFactor * 1.2;
     let bottom = y + height * 0.1;
     let left = x - width * 0.1;
-    if (diagramText.font.yAlign === 'baseline' || diagramText.font.yAlign === 'alphabetic') {
+    if (diagramText.yAlign === 'baseline' || diagramText.yAlign === 'alphabetic') {
       bottom = y + height * 0.2;
-    } else if (diagramText.font.yAlign === 'top') {
+    } else if (diagramText.yAlign === 'top') {
       bottom = y + height;
-    } else if (diagramText.font.yAlign === 'middle') {
+    } else if (diagramText.yAlign === 'middle') {
       bottom = y + height / 2;
     }
 
-    if (diagramText.font.xAlign === 'center') {
+    if (diagramText.xAlign === 'center') {
       left -= width / 2;
-    } else if (diagramText.font.xAlign === 'right') {
+    } else if (diagramText.xAlign === 'right') {
       left -= width;
     }
 
