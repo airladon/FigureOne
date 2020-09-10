@@ -858,7 +858,12 @@ class TextObject extends DrawingObject {
     const boundary = [];
     const { scalingFactor } = this;
     const { location } = text;
-    const meas = text.measureText(this.drawContext2D[contextIndex].ctx, scalingFactor);
+    let meas;
+    if (text.lastMeasure != null) {
+      meas = text.lastMeasure;
+    } else {
+      meas = text.measureText(this.drawContext2D[contextIndex].ctx, scalingFactor);
+    }
     const box = [
       new Point(-meas.left, meas.ascent).add(location),
       new Point(meas.right, meas.ascent).add(location),
