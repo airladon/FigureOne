@@ -1,7 +1,7 @@
 // @flow
 
 import * as m2 from '../../../tools/m2';
-import { Point, getPoint, Rect } from '../../../tools/g2';
+import { Point, getPoint, Rect, spaceToSpaceTransform } from '../../../tools/g2';
 import type { TypeParsablePoint } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
 import DrawContext2D from '../../DrawContext2D';
@@ -495,46 +495,88 @@ class TextObject extends DrawingObject {
     // * This means instead of originally scaling by (400, 400), we should just
     //   just scale by (4, 4). Now we can use a fontSize of 20px, but we will
     //   also have to scale the location (-1 * 100, 0 * 100) = (-100, 0);
-    
-    // If you zoom in by a factor of 2, 2, then the equivalent pixels
-    // will be 
-    // First lets zoom in to make 
-    // First convert pixel space to a zoomed in pixel space with the same
-    // dimensions as gl clip space (-1 to 1 for x, y), but inverted y
-    // like to pixel space.
-    // When zoomed: 1 pixel = 1 GL unit.
-    // Zoom in so limits betcome 0 to 2:
-    const sx = drawContext2D.canvas.offsetWidth / 2 / scalingFactor;
-    const sy = drawContext2D.canvas.offsetHeight / 2 / scalingFactor;
-    // Translate so limits become -1 to 1
+
+    // const glSpace = {
+    //   x: { bottomLeft: -1, width: 2 },
+    //   y: { bottomLeft: -1, height: 2 },
+    // };
+    // const pixelSpace = {
+    //   x: { bottomLeft: 0, width: drawContext2D.canvas.offsetWidth },
+    //   y: { bottomLeft: drawContext2D.canvas.offsetHeight, height: -drawContext2D.canvas.offsetHeight },
+    // };
+
+    // const glToPixelSpaceMatrix1 = spaceToSpaceTransform(glSpace, pixelSpace);
+    // console.log(glToPixelSpaceMatrix1)
+
+    // Find the scaling factor between GL space (width 2, height 2) and canvas
+    // pixel space (width offsetWidth, height offsetHeight)
+    // This is how much we will zoom in on our ctx so one GL unit is
+    // one pixel unit
+    const sx = drawContext2D.canvas.offsetWidth / 2;
+    const sy = drawContext2D.canvas.offsetHeight / 2;
+
+    // GL space (0, 0) is the center of the canvas, and Pixel Space (0, 0)
+    // is the top left of the canvas. Therefore, translate pixel space so
+    // if we put in (0, 0) we actually draw to the center of the canvas
     const tx = drawContext2D.canvas.offsetWidth / 2;
     const ty = drawContext2D.canvas.offsetHeight / 2;
 
-    // Translate pixel space so 0,0 is in center of canvas, then scale it up
-    // by the scalingFactor
-    const pixelToGLSpaceMatrix = [
+    // So our GL to Pixel Space matrix is now:
+    const glToPixelSpaceMatrix = [
       sx, 0, tx,
       0, sy, ty,
       0, 0, 1,
     ];
 
-    // Modify the incoming transformMatrix to be compatible with zoomed
+    // The incoming transform matrix transforms elementSpace to glSpace.
+    // Modify the incoming transformMatrix to be compatible with
     // pixel space
-    //   - Scale translation by the scaling factor
     //   - Flip the y translation
     //   - Reverse rotation
     const tm = transformMatrix;
-    const t = [
-      tm[0], -tm[1], tm[2] * scalingFactor,
-      -tm[3], tm[4], tm[5] * -scalingFactor,
+    const elementToGLMatrix = [
+      tm[0], -tm[1], tm[2],
+      -tm[3], tm[4], tm[5] * -1,
       0, 0, 1,
     ];
 
-    // Combine the zoomed pixel space with the incoming transform matrix
-    // and apply it to the drawing context.
-    const totalT = m2.mul(pixelToGLSpaceMatrix, t);
-    ctx.transform(totalT[0], totalT[3], totalT[1], totalT[4], totalT[2], totalT[5]);
-    this.lastDrawTransform = totalT.slice();
+    // Combine the elementToGL transform and glToPixel transforms
+    // A X B is apply B then apply A, so apply element to GL, then GL to Pixel
+    const elementToPixelMatrix = m2.mul(glToPixelSpaceMatrix, elementToGLMatrix);
+
+    // At this point in time the ctx will be zoomed in such that every 1 unit
+    // of element space is 1 pixel/unit in ctx space. But because font sizes
+    // need to be >1px, we are going to scale out so we can use a font size of
+    // ~20px.
+    const pixelToScaledPixelMatrix = [
+      1 / scalingFactor, 0, 0,
+      0, 1 / scalingFactor, 0,
+      0, 0, 1,
+    ];
+
+    const elementToScaledPixelMatrix = m2.mul(
+      elementToPixelMatrix, pixelToScaledPixelMatrix,
+    );
+
+    // The ctx transform is defined in a different order:
+    const cA = elementToScaledPixelMatrix[0];
+    const cB = elementToScaledPixelMatrix[3];
+    const cC = elementToScaledPixelMatrix[1];
+    const cD = elementToScaledPixelMatrix[4];
+    const cE = elementToScaledPixelMatrix[2];
+    const cF = elementToScaledPixelMatrix[5];
+
+    // Apply the transform to the ctx. We are now in Scaled
+    ctx.transform(cA, cB, cC, cD, cE, cF);
+    this.lastDrawTransform = elementToScaledPixelMatrix.slice();
+
+    // Applying this transform to the context, will make anything
+    // we draw now similarly transformed. As this is now a scaled
+    // transform, we need to similarly scale our locations and
+    // font sizes
+
+
+    // and font sizes need to
 
     // // Calculate the size of all the text
     // const textBounds = [];
