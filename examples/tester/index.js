@@ -1,4 +1,4 @@
-const diagram = new Fig.Diagram();
+const diagram = new Fig.Diagram({ limits: [-2, -2, 4, 4 ]});
 
 const f1 = {
   family: 'Times New Roman',
@@ -26,6 +26,27 @@ diagram.addElements([
       position: [-0.5, -0.5],
       xAlign: 'left',
       yAlign: 'baseline',
+    },
+  },
+  {
+    name: 'angle',
+    method: 'angle',
+    options: {
+      angle: 1,
+      curve: {
+        width: 0.01,
+        radius: 0.5,
+        sides: 400,
+      },
+      label: {
+        // text: '60º'
+        text: null,
+        radius: 0.45,
+      },
+      sides: {
+        length: 1,
+      },
+      color: [0, 1, 0, 1],
     },
   },
   {
@@ -145,6 +166,7 @@ diagram.animateNextFrame();
 diagram.elements._tester.onClick = () => { console.log(1) };
 diagram.elements._tester.makeTouchable();
 
+console.log(diagram.elements._a)
 // ctx = diagram.draw2DLow.ctx
 // // ctx.save()
 // // ctx.font = 'italic 80px "Times New Roman"'
