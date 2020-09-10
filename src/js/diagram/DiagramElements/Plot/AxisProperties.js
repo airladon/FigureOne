@@ -43,7 +43,7 @@ class TickProperties extends GridProperties {
   mode: 'on' | 'off' | 'auto';
 
   fontFamily: string;
-  fontWeight: string;
+  fontWeight: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
   fontSize: number;
   fontColor: Array<number>
 
@@ -88,7 +88,7 @@ class AxisProperties {
   minorGrid: GridProperties;
 
   titleFontFamily: string;
-  titleFontWeight: string;
+  titleFontWeight: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
   titleFontSize: number;
   titleFontColor: Array<number>;
 

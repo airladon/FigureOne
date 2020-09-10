@@ -1164,101 +1164,101 @@ export default class DiagramPrimitives {
     );
   }
 
-  textNew(...optionsIn: Array<{
-    text: string | Array<string>,
-    font: TypeDiagramFontOptions | Array<TypeDiagramFontOptions>,
-    // textPosition: null | TypeParsablePoint | Array<null | TypeParsablePoint>,
-    position: TypeParsablePoint,
-    offset: null | TypeParsablePoint | Array<null | TypeParsablePoint>,    // vertex space offset
-    transform: TypeParsableTransform,
-    xAlign: 'left' | 'right' | 'center',
-    yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
-  }>) {
-    const defaultOptions = {
-      text: '',
-      font: {
-        family: 'Times New Roman',
-        style: 'italic',
-        size: 0.2,
-        weight: '200',
-        // xAlign: 'left',
-        // yAlign: 'baseline'
-      },
-      // position: [0, 0],
-      xAlign: 'center',
-      yAlign: 'middle',
-      offset: null,    // vertex space offset
-      color: [1, 0, 0, 1],
-      transform: new Transform('text').standard(),
-      // draw2D: this.draw2D,
-    };
-    const options = joinObjects({}, defaultOptions, ...optionsIn);
+  // textNew(...optionsIn: Array<{
+  //   text: string | Array<string>,
+  //   font: TypeDiagramFontOptions | Array<TypeDiagramFontOptions>,
+  //   // textPosition: null | TypeParsablePoint | Array<null | TypeParsablePoint>,
+  //   position: TypeParsablePoint,
+  //   offset: null | TypeParsablePoint | Array<null | TypeParsablePoint>,    // vertex space offset
+  //   transform: TypeParsableTransform,
+  //   xAlign: 'left' | 'right' | 'center',
+  //   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
+  // }>) {
+  //   const defaultOptions = {
+  //     text: '',
+  //     font: {
+  //       family: 'Times New Roman',
+  //       style: 'italic',
+  //       size: 0.2,
+  //       weight: '200',
+  //       // xAlign: 'left',
+  //       // yAlign: 'baseline'
+  //     },
+  //     // position: [0, 0],
+  //     xAlign: 'center',
+  //     yAlign: 'middle',
+  //     offset: null,    // vertex space offset
+  //     color: [1, 0, 0, 1],
+  //     transform: new Transform('text').standard(),
+  //     // draw2D: this.draw2D,
+  //   };
+  //   const options = joinObjects({}, defaultOptions, ...optionsIn);
 
-    if (options.position != null) {
-      const p = getPoint(options.position);
-      options.transform.updateTranslation(p);
-    }
+  //   if (options.position != null) {
+  //     const p = getPoint(options.position);
+  //     options.transform.updateTranslation(p);
+  //   }
 
-    if (typeof options.text === 'string') {
-      options.text = [options.text];
-    }
-    if (!Array.isArray(options.font)) {
-      options.font = [options.font];
-    }
-    if (!Array.isArray(options.offset)) {
-      options.offset = [options.offset];
-    }
-    const dText = [];
-    let fontIndex = 0;
-    let offsetIndex = 0;
-    let locationIndex = 0;
-    for (let i = 0; i < options.text.length; i += 1) {
-      if (fontIndex > options.font.length - 1) {
-        fontIndex = 0;
-      }
-      if (offsetIndex > options.offset.length - 1) {
-        offsetIndex = 0;
-      }
-      if (locationIndex > options.location.length - 1) {
-        locationIndex = 0;
-      }
-      const dFont = new DiagramFont(joinObjects({}, options.font[fontIndex]));
-      dText.push(new DiagramText(
-        options.location[locationIndex],
-        options.text[i],
-        dFont,
-        'left',
-        'baseline',
-        options.offset[offsetIndex],
-      ));
-      offsetIndex += 1;
-      fontIndex += 1;
-      locationIndex += 1;
-    }
-    // const dT = new DiagramText(o.offset, text, fontToUse);
-    const to = new TextObject(this.draw2D, dText, options.xAlign, options.yAlign);
-    const element = new DiagramElementPrimitive(
-      to,
-      options.transform,
-      options.color,
-      this.limits,
-    );
+  //   if (typeof options.text === 'string') {
+  //     options.text = [options.text];
+  //   }
+  //   if (!Array.isArray(options.font)) {
+  //     options.font = [options.font];
+  //   }
+  //   if (!Array.isArray(options.offset)) {
+  //     options.offset = [options.offset];
+  //   }
+  //   const dText = [];
+  //   let fontIndex = 0;
+  //   let offsetIndex = 0;
+  //   let locationIndex = 0;
+  //   for (let i = 0; i < options.text.length; i += 1) {
+  //     if (fontIndex > options.font.length - 1) {
+  //       fontIndex = 0;
+  //     }
+  //     if (offsetIndex > options.offset.length - 1) {
+  //       offsetIndex = 0;
+  //     }
+  //     if (locationIndex > options.location.length - 1) {
+  //       locationIndex = 0;
+  //     }
+  //     const dFont = new DiagramFont(joinObjects({}, options.font[fontIndex]));
+  //     dText.push(new DiagramText(
+  //       options.location[locationIndex],
+  //       options.text[i],
+  //       dFont,
+  //       'left',
+  //       'baseline',
+  //       options.offset[offsetIndex],
+  //     ));
+  //     offsetIndex += 1;
+  //     fontIndex += 1;
+  //     locationIndex += 1;
+  //   }
+  //   // const dT = new DiagramText(o.offset, text, fontToUse);
+  //   const to = new TextObject(this.draw2D, dText, options.xAlign, options.yAlign);
+  //   const element = new DiagramElementPrimitive(
+  //     to,
+  //     options.transform,
+  //     options.color,
+  //     this.limits,
+  //   );
 
-    // if (options.pulse != null) {
-    //   if (typeof element.pulseDefault !== 'function') {
-    //     element.pulseDefault.scale = options.pulse;
-    //   }
-    // }
-    setupPulse(element, options);
+  //   // if (options.pulse != null) {
+  //   //   if (typeof element.pulseDefault !== 'function') {
+  //   //     element.pulseDefault.scale = options.pulse;
+  //   //   }
+  //   // }
+  //   setupPulse(element, options);
 
-    if (options.mods != null && options.mods !== {}) {
-      element.setProperties(options.mods);
-    }
+  //   if (options.mods != null && options.mods !== {}) {
+  //     element.setProperties(options.mods);
+  //   }
 
-    return element;
-  }
+  //   return element;
+  // }
 
-  textPhrase(...optionsIn: Array<{
+  text(...optionsIn: Array<{
     text: string | Array<string | {
       font?: TypeDiagramFontOptions | Array<TypeDiagramFontOptions>,
       location?: TypeParsablePoint | null,
@@ -1346,7 +1346,7 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  text(textOrOptions: string | TypeTextOptions, ...optionsIn: Array<TypeTextOptions>) {
+  textLegacy(textOrOptions: string | TypeTextOptions, ...optionsIn: Array<TypeTextOptions>) {
     const defaultOptions = {
       text: '',
       // position: new Point(0, 0),

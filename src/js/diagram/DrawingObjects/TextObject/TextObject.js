@@ -1,7 +1,7 @@
 // @flow
 
 import * as m2 from '../../../tools/m2';
-import { Point, getPoint, Rect, spaceToSpaceTransform } from '../../../tools/g2';
+import { Point, getPoint } from '../../../tools/g2';
 import type { TypeParsablePoint } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
 import DrawContext2D from '../../DrawContext2D';
@@ -15,7 +15,7 @@ function colorArrayToString(color: Array<number>) {
     color[3]})`;
 }
 
-type TypeDiagramFontOptions = {
+export type TypeDiagramFontDefinition = {
   family?: string,
   style?: 'normal' | 'italic',
   size?: number,
@@ -37,7 +37,7 @@ class DiagramFont {
   color: Array<number> | null;
   opacity: number;
 
-  constructor(optionsIn: TypeDiagramFontOptions = {}) {
+  constructor(optionsIn: TypeDiagramFontDefinition = {}) {
   //   family: string = 'Helvetica Neue',
   //   style: string = '',
   //   size: number = 1,
@@ -71,7 +71,29 @@ class DiagramFont {
     // } else {
     //   this.color = color;
     // }
-    this.color = color;
+    if (color == null) {
+      this.color = color;
+    } else {
+      this.color = color.slice();
+    }
+  }
+
+  definition() {
+    const { color } = this;
+    let colorToUse;
+    if (color == null) {
+      colorToUse = color;
+    } else {
+      colorToUse = color.slice();
+    }
+    return {
+      family: this.family,
+      style: this.style,
+      size: this.size,
+      weight: this.weight,
+      color: colorToUse,
+      opacity: this.opacity,
+    };
   }
 
   setFontInContext(ctx: CanvasRenderingContext2D, scalingFactor: number = 1) {
@@ -137,7 +159,7 @@ class DiagramText {
   constructor(
     location: ?TypeParsablePoint = new Point(0, 0),
     text: string = '',
-    font: DiagramFont | TypeDiagramFontOptions = new DiagramFont(),
+    font: DiagramFont | TypeDiagramFontDefinition = new DiagramFont(),
     xAlign: 'left' | 'center' | 'right' = 'left',
     yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline' = 'baseline',
     offset: TypeParsablePoint = new Point(0, 0),
@@ -494,7 +516,7 @@ class TextObject extends DrawingObject {
     // * Now to plot same size text (relative to canvas) at same left edge
     //   need to use a font size of 40px, and a location of -200, 0.
     //
-    // * So if we want to convert the pixel space to GL space, which is 
+    // * So if we want to convert the pixel space to GL space, which is
     //   width 2, height 2, left -1, bottom -1, then we need scale by:
     //      800 / 2 = 400
     // * So if we ctx.scale(400, 400), then to get text in the equivalent size

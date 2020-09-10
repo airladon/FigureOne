@@ -19,36 +19,7 @@ jest.mock('../../Gesture');
 jest.mock('../../webgl/webgl');
 jest.mock('../../DrawContext2D');
 
-// const cleanUIDs = (objectToClean: {}) => {
-//   const genericUID = '0000000000';
-//   if (objectToClean == null) {
-//     return;
-//   }
-//   if (objectToClean.uid != null) {
-//     if (objectToClean.uid === genericUID) {
-//       return;
-//     }
-//     objectToClean.uid = genericUID;
-//   }
-//   const keys = Object.keys(objectToClean);
-//   for (let i = 0; i < keys.length; i += 1) {
-//     const key = keys[i];
-//     const value = objectToClean[key];
-//     if (
-//       typeof value === 'object'
-//       && !Array.isArray(value)
-//       && value != null
-//       && typeof value !== 'function'
-//       && typeof value !== 'number'
-//       && typeof value !== 'boolean'
-//       && typeof value !== 'string'
-//       ) {
-//         cleanUIDs(value);
-//     }
-//   };
-// }
-
-/* eslint-disable no-param-reassign */
+/* eslint-disable no-param-reassign, camelcase */
 const cleanElements = (elements) => {
   const r = 8;
   elements.ascent = round(elements.ascent, r);
@@ -116,64 +87,203 @@ describe('Different ways to make an equation', () => {
       },
       allTextInConstructorAllOptionsNew__TO_TEST__TODO: () => {
         eqn = new Equation(diagram.shapes, {
-          color: color1,
-          position: [1, 1],           // Points can be defined as arrays
-          elements: {
-            a: 'a',
-            b: { color: [1, 1, 0, 1] }, // Element text same as key name
-            c: 'c',
-            _2: '2',
-            v: { symbol: 'vinculum' },
+          color: [ 0.95, 0, 0, 1],            // default color of the equation
+          // Default font for the equation. Note, there is no `style` option for
+          // setting `italic` or `normal`. This can be set on an individual
+          // element basis, otherwise it will automatically choose:
+          //    italics: if the element text has any letters in it
+          //    normal: if not (just numbers or symbols like '=')
+          // None, some or all of the options can be used
+          font: {
+            family: 'Times New Roman',
+            weight: '200',      // Use CSS weight definition strings
+            size: 0.2,
           },
+          position: [1, 1],
+          // Elements can be defined inline in `forms` or defined here. Define
+          // here is there are lots of customizations to the element that will
+          // make the form definition cluttered
+          elements: {
+            // Needed if no options change, but better off just doing an inline
+            // defintion in the form
+            a: 'a',
+            // If using fancy characters or want to embed space in the element,
+            // then can define key/text map directly,
+            equals: ' = ',
+            b: {                       // Full element definition
+              text: ' b ',             // Text to show
+              font: {                  // Customize the font
+                style: 'normal',
+                family: 'Helvetica',
+                weight: 'bold',         // Use CSS weight definitions
+                size: '0.2',            // Size is in element space units
+              },
+              color: [1, 0, 0, 1],      // Element color
+              style: 'normal',          // `style`, `weight` and `size` can
+              weight: 'bold',           //   also be defined outside of the
+              size: '0.2',              //   font obj definition for cleanliness
+              mods: {                   // Element mods
+                isTouchable: true,
+              },
+            },
+            // By default, element text is the same as key text
+            c: { style: 'normal', color: [0, 1, 0, 1] },
+            // Underscores can be used to define the same text with different
+            // keys, so they can be moved independently. When keys are converted
+            // to text, only the string after a leading underscore, and before
+            // the first underscore (that's not a leading underscore) is used.
+            // The next six elements will all have the same text, but will be
+            // independant elements
+            d: { color: [1, 0, 0, 1] },
+            _d: { color: [1, 0, 0, 1] },
+            d_: { color: [1, 0, 0, 1] },
+            d_1: { color: [1, 0, 0, 1] },
+            d_2: { color: [1, 0, 0, 1] },
+            d_1_1: { color: [1, 0, 0, 1] },
+            // Symbols can be defined
+            v: { symbol: 'vinculum' },
+            leftB: {
+              symbol: 'brace',
+              side: 'left',
+              lineWidth: 0.01,
+              sides: 10,
+              width: 0.04,
+              tipWidth: 0.01,
+              draw: 'dynamic',
+            },
+            rightB: { symbol: 'brace', side: 'right' },
+          },
+          // Scale of the equation
           scale: 0.45,
+          // Default form attributes
           formDefaults: {
             alignment: {
-              fixTo: { x: 2, y: 2 },    // Points can also be defined as objects
-              xAlign: 'right',
-              yAlign: 'top',
+              // fixtTo a point in elementSpace, or an equation element.
+              // The equation will then be aligned around this point or element.
+              // In this case, we want the different forms to be alighned around
+              // the `equals` element - so as we animate between forms the
+              // `equals` element will stay in place.
+              fixTo: ['equals'],
+              xAlign: 'center',
+              yAlign: 'middle',
             },
+            // Default way to animate between forms
             animation: {
-              duration: 1,
-              translation: {
+              duration: 1,      // Use `null` for velocity
+              translation: {    // How elements translate during animation
                 c: { style: 'curved', direction: 'up', mag: 0.5 },
               },
             },
+            // What mods to apply to the individual elements
+            // These mods will be set every time the form is shown (as
+            // opposed to element definition mods above which are set
+            // only on element creation).
+            // Element mods can also be set on each form individually.
             elementMods: {
-              b: { color: [1, 0, 0, 1] },
+              b: { color: [1, 0, 0, 1] },   // define each element
+              c: {
+                isTouchable: true,
+                color: [0, 1, 0, 1],
+              },
             },
           },
           // Phrases are combinations of elements that can be used in forms to
-          // make the forms simpler
+          // make the forms simpler. This is especially useful for frequently
+          // reused phrases within a form.
+          // Each phrase must have a unique key compared to all the equation
+          // elements
           phrases: {
             ab: ['a', 'b'],
+            f: { frac: ['a', 'v', 'b'] },
+            cf: ['c', 'f'],                // Phrases can use other phrases
+            // Similar to forms, phrases can incorporate inline element
+            // definitions
+            '2x': ['_2', 'x'],
           },
+
+          // An equation form defines how a collection of elements is laid out
           forms: {
-            0: ['a', 'b', 'c'],
-            1: [{ frac: ['a', 'v', '_2'] }, 'c'],
+            // A form can be just a single element
+            simpleElement: 'a',
+            // A form can be just a single phrase
+            simplePhrase: '2x',
+            // Three elements in a line
+            simpleSequency: ['a', 'b', 'c'],
+            // An array entry can be an object definition
+            inlineFrac: [{ frac: ['a', 'v', '_2'] }, 'c'],
+            // Simple elements that require few mods can be defined inline. In
+            // this case `hello` is an element not defined in `addElements`, and
+            // will be added as an element here, with text `hello` and all other
+            // properties as default. Note, the unique id of this inline
+            // definition is `hello`, and so it will be the same element in
+            // other forms that use `hello`.
+            inlineElementDefinition: ['a', 'equals', 'hello'],
+            // If need multiple different elements with the same text as
+            // an inline definition, then use underscores. This will produce
+            // and equation `2a2` where the first and last `2` are unique
+            // elements that can be animated independently
+            inlineMultiDefinition: ['_2_1', 'a', '_2_2'],
             // Equals can be used as an object key, so it is a valid inline definition
-            2: ['ab', '=', 'c'],
-            // Full form definition
-            3: {
-              content: ['c', 'b', 'd'],       // New elements can be defined (d)
+            inlineEqualsElement: ['ab', '=', 'c'],
+            // Elements can be fully defined inline as well, but be careful with
+            // this as if just `m` is used in another form definition, only the
+            // first forms definition will be stored in the `m` identifier.
+            inlineFullDefinition: ['_a', { m: { style: 'normal' } }],
+            // Symbols can be defined inline. `vinculum` is a special word and
+            // cannot be used as keys for any elements. Use this for forms where
+            // only one vinculum is required.
+            inlineSymbol: { frac: ['a', 'vinculum', 'b'] },
+            // Symbols can be defined inline with unique identifiers. In this
+            // case we can refer to this vinculum as v1 in other locations.
+            // Be careful to make sure this form is defined before other forms
+            // that just use `v1`. Use this when more than one vinculum is in a
+            // form, and/or you want to animate to another form and insure the
+            // correct vinculum changes size to become the vinculum of the next
+            // form
+            inlineSymbolWithId: { frac: ['a', 'v1_vinculum', 'b'] },
+            // Symbols can also be defined fully inline as objects, including
+            // any additional properties. Usually would make sense to define
+            // this in `addElements` to make forms less cluttered.
+            inlineSymbolObject: {
+              frac: [
+                'a',
+                { v1: { symbol: 'vinculum', color: [0, 0, 1, 1] } },
+                'b',
+              ],
+            },
+            // Spaces can be used directly - these are not elements and do not
+            // need to be unique. Use singular or multiple spaces in a string.
+            spaces: ['a', ' ', 'b', '   ', 'c'],
+            // Full form object definition - the content key is required, but
+            // all other keys are optional.
+            fullObject: {
+              content: ['c', 'b', 'd'],
               scale: 1.2,
+              // Element mods specific to this form
               elementMods: {
                 b: { color: [0, 1, 0, 1] },
               },
+              // Descriptions are used in equation navigators
               description: '|Form| 2 |description|',
+              // Text modifiers of the description
               modifiers: {
                 Form: html.highlight([1, 0, 0, 0]),
               },
+              // A form can have its own animation definition
               animation: {
                 duration: null,
                 translation: {
                   c: { style: 'curved', direction: 'down', mag: 0.5 },
                 },
               },
+              // A form can have it's own alignment definition
               alignment: {
                 fixTo: 'b',
                 xAlign: 'center',
                 yAlign: 'baseline',
               },
+              // The animation attributes and elementMods may be different if
+              // animating from specific forms.
               fromForm: {
                 2: {
                   animation: {
@@ -189,7 +299,11 @@ describe('Different ways to make an equation', () => {
               },
             },
           },
-          // Either a single or multiple form series can be defined
+          // Form Series are used by equation navigators to know the order of
+          // forms to progress through. If only a single series is needed,
+          // then simply define an array of strings, where each string is the
+          // form name. If more than one series are needed, then use an object
+          // where each key will identify a particular series
           formSeries: {
             a: ['0', '1'],
             b: ['1', '2'],

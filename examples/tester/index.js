@@ -25,7 +25,7 @@ console.log(new Fig.Transform().translate(0.5, 0).scale(2, 2).matrix())
 diagram.addElements([
   {
     name: 'tester',
-    method: 'shapes.textPhrase',
+    method: 'shapes.text',
     options: {
       text: [
         'hello ',
@@ -42,27 +42,27 @@ diagram.addElements([
       color: [0, 0, 1, 1],
     },
   },
-  {
-    name: 'angle',
-    method: 'angle',
-    options: {
-      angle: 1,
-      curve: {
-        width: 0.01,
-        radius: 0.5,
-        sides: 400,
-      },
-      label: {
-        // text: '60º'
-        text: null,
-        radius: 0.45,
-      },
-      sides: {
-        length: 1,
-      },
-      color: [0, 1, 0, 1],
-    },
-  },
+  // {
+  //   name: 'angle',
+  //   method: 'angle',
+  //   options: {
+  //     angle: 1,
+  //     curve: {
+  //       width: 0.01,
+  //       radius: 0.5,
+  //       sides: 400,
+  //     },
+  //     label: {
+  //       // text: '60º'
+  //       text: null,
+  //       radius: 0.45,
+  //     },
+  //     sides: {
+  //       length: 1,
+  //     },
+  //     color: [0, 1, 0, 1],
+  //   },
+  // },
   {
     name: 'a',
     method: 'polygon',
@@ -78,11 +78,19 @@ diagram.addElements([
     options: {
       color: [0.95, 0.95, 0.6, 1],
       position: [0, 0],
+      // font: { family: 'Arial', style: 'normal', color: [0, 1, 1, 1] },
       elements: {
-        v: { symbol: 'vinculum'},
+        v: { symbol: 'vinculum', color: [1, 0, 0, 1] },
+        arrow: {
+          symbol: 'bar',
+          lineWidth: 0.01,
+          draw: 'static',
+          side: 'top',
+        },
         equals: ' = ',
-        times: ' \u00D7 ',
-        c: { color: [1, 0, 0, 1] },
+        times: ' \u00D7 ', 
+        c: { color: [1, 0, 0, 1], font: { style: 'normal', size: 0.3 } },
+        _2_: { color: [0, 1, 0, 1] },
       },
 
       // Align all forms to the 'equals' diagram element
@@ -104,6 +112,8 @@ diagram.addElements([
 
       phrases: {
         'abc': ['a', 'b', 'c', '  ', '=', '  ', 'hello'],
+        p1: ['a', 'b'],
+        p2: { frac: ['p1', 'v', 'c'] }
       },
       // Define two different forms of the equation
       forms: {
@@ -145,6 +155,11 @@ diagram.addElements([
             },
           },
         },
+        d: [{ bar: ['abc', 'arrow', 'top']}],
+        e: [{ bar: [['_2', 'a', '3_4_3'], 'arrow', 'top']}],
+        f: { frac: ['a', 'v', 'b'] },
+        g: ['_2', 'x'],
+        h: { frac: ['a', { v2: { symbol: 'vinculum', color: [0, 0, 1, 1] }}, '_2'] },
       },
     },
   },
@@ -154,7 +169,8 @@ diagram.initialize();
 const eqn = diagram.getElement('eqn');
 
 // Show the equation form
-eqn.showForm('a');
+eqn.showForm('h');
+// eqn.goToForm({ form: 'e', duration: 2, animate: 'move', delay: 1, });
 
 const a = diagram.getElement('eqn.a');
 const b = diagram.getElement('eqn.b');

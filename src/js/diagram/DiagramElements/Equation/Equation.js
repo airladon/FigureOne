@@ -2,7 +2,7 @@
 import {
   Point, Transform, parsePoint, getPoint,
 } from '../../../tools/g2';
-import { joinObjects } from '../../../tools/tools';
+import { joinObjects, joinObjectsWithOptions } from '../../../tools/tools';
 // import { RGBToArray } from '../../../tools/color';
 import {
   DiagramElementPrimitive, DiagramElementCollection, DiagramElement,
@@ -10,6 +10,7 @@ import {
 import {
   DiagramFont,
 } from '../../DrawingObjects/TextObject/TextObject';
+import type { TypeDiagramFontDefinition } from '../../DrawingObjects/TextObject/TextObject';
 import type { ElementInterface } from './Elements/Element';
 import { Elements } from './Elements/Element';
 import BaseAnnotationFunction from './Elements/BaseAnnotationFunction';
@@ -23,6 +24,8 @@ import EquationSymbols from './EquationSymbols';
 import type { TypeSymbolOptions } from './EquationSymbols';
 import { getDiagramElement, EquationFunctions } from './EquationFunctions';
 import type { TypeEquationPhrase } from './EquationFunctions';
+import type { TypeEquationSymbolAngleBracket } from './Symbols/AngleBracket';
+import type { TypeEquationSymbolArrowBracket } from './Symbols/Arrow';
 
 
 // Priority:
@@ -41,19 +44,40 @@ import type { TypeEquationPhrase } from './EquationFunctions';
  * @property {object} [mods] - Properties to set on instantiated element
  * @property {Array<number>} [color] - Color to set the element
  */
-type TypeEquationElement = string | {
-    // Text only
+// type TypeEquationElement = string | {
+//     // Text only
+//     text?: string;
+//     font?: DiagramFont | TypeDiagramFontDefinition;
+//     style?: 'italic' | 'normal' | null;
+//     weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
+//     size?: number,
+//     // Symbol Only
+//     symbol?: string;
+//     // Added Symbol Related Options
+//     // numLines?: number;
+//     // side?: 'top' | 'left' | 'bottom' | 'right';
+//     // Both Text and Symbol
+//     color?: Array<number>;
+//     mods?: Object;
+//   } | DiagramElementPrimitive | DiagramElementCollection;
+
+export type TypeEquationTextElement = string | {
     text?: string;
-    font?: DiagramFont;
+    font?: DiagramFont | TypeDiagramFontDefinition;
     style?: 'italic' | 'normal' | null;
-    // Symbol Only
-    symbol?: string;
-    numLines?: number;
-    side?: 'top' | 'left' | 'bottom' | 'right';
-    // Both Text and Symbol
+    weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
+    size?: number,
     color?: Array<number>;
-    mods?: {};
+    mods?: Object;
   } | DiagramElementPrimitive | DiagramElementCollection;
+
+export type TypeEquationElement = string
+  | DiagramElementPrimitive
+  | DiagramElementCollection
+  | TypeEquationTextElement
+  | TypeEquationSymbolAngleBracket
+  | TypeEquationSymbolArrowBracket;
+
 
 /**
  * Object with multiple equation elements.
@@ -364,7 +388,7 @@ type TypeFormRestart = {
  * defined, then a default must be chosen to be the first current one. Default:
  * first form defined
  * @property {TypeFormRestart} [formRestart] - default: null
- * @property {DiagramFont} [fontMath] - default {@link DiagramFont}('Times
+ * @property {DiagramFont} [font] - default {@link DiagramFont}('Times
  * New Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)
  * @property {Point} [position] - default: new {@link Point}(0, 0)
  */
@@ -372,7 +396,7 @@ export type EQN_Equation = {
   color?: Array<number>;
   scale?: number,
   elements?: TypeEquationElements;
-  defaultFormAlignment?: TypeFormAlignment;
+  // defaultFormAlignment?: TypeFormAlignment;
   formDefaults: {
     alignment?: TypeFormAlignment,
     elementMods: {
@@ -384,8 +408,9 @@ export type EQN_Equation = {
   formSeries?: Array<string> | {};
   defaultFormSeries?: string;
   formRestart?: TypeFormRestart;
-  fontMath?: DiagramFont;
+  font?: DiagramFont | TypeDiagramFontDefinition;
   position?: Point;
+  transform?: Transform;
 };
 
 /**
@@ -522,7 +547,7 @@ export class Equation extends DiagramElementCollection {
     symbols: EquationSymbols;
     currentForm: string;
     // currentSubForm: string;
-    fontMath: DiagramFont;
+    font: DiagramFont;
     // fontText: DiagramFont;
     scale: number;
 
@@ -578,28 +603,17 @@ export class Equation extends DiagramElementCollection {
     if (color == null) {
       color = [0.5, 0.5, 0.5, 1];
     }
+    const defaultFont = {
+      family: 'Times New Roman',
+      style: 'normal',
+      size: 0.2,
+      weight: '200',
+      color,
+    };
     const defaultOptions = {
       color,
-      fontMath: new DiagramFont({
-        family: 'Times New Roman',
-        style: 'normal',
-        size: 0.2,
-        weidht: '200',
-        xAlign: 'left',
-        yAlign: 'alphabetic',
-        color,
-      }),
-      //   'Times New Roman',
-      //   'normal',
-      //   0.2, '200', 'left', 'alphabetic', color,
-      // ),
       position: new Point(0, 0),
       scale: 0.7,
-      // defaultFormAlignment: {
-      //   fixTo: new Point(0, 0),
-      //   xAlign: 'left',
-      //   yAlign: 'baseline',
-      // },
       formDefaults: {
         alignment: {
           fixTo: new Point(0, 0),
@@ -614,7 +628,16 @@ export class Equation extends DiagramElementCollection {
       formRestart: null,
     };
 
-    const optionsToUse = joinObjects({}, defaultOptions, options);
+    const optionsToUse = joinObjectsWithOptions({ except: ['font'] }, {}, defaultOptions, options);
+    if (options.font instanceof DiagramFont) {
+      optionsToUse.font = options.font;
+    } else if (options.font != null) {
+      optionsToUse.font = new DiagramFont(
+        joinObjects({}, defaultFont, options.font),
+      );
+    } else {
+      optionsToUse.font = new DiagramFont(defaultFont);
+    }
     // debugger;
     optionsToUse.position = parsePoint(
       optionsToUse.position, new Point(0, 0),
@@ -666,7 +689,7 @@ export class Equation extends DiagramElementCollection {
         this.getExistingOrAddSymbol.bind(this),
       ),
       symbols: new EquationSymbols(this.shapes, this.color),
-      fontMath: optionsToUse.fontMath,
+      font: optionsToUse.font,
       // fontText: optionsToUse.fontText,
       isAnimating: false,
       descriptionElement: null,
@@ -756,10 +779,10 @@ export class Equation extends DiagramElementCollection {
   makeTextElem(
     options: {
       text?: string,
-      font?: DiagramFont,
+      font?: DiagramFont | TypeDiagramFontDefinition,
       style?: 'italic' | 'normal',
       weight?: 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
-      scale?: number,
+      // scale?: number,
       size?: number,
       color?: Array<number>
     },
@@ -769,58 +792,75 @@ export class Equation extends DiagramElementCollection {
     if (options.text != null) {
       textToUse = options.text;
     }
-    let fontToUse: DiagramFont = this.eqn.fontMath;
+    const defaultFontDefinition = this.eqn.font.definition();
+    let fontDefinition = defaultFontDefinition;
+    if (options.font != null && options.font instanceof DiagramFont) {
+      fontDefinition = options.font.definition();
+    } else if (options.font != null) {
+      fontDefinition = joinObjects({}, defaultFontDefinition, options.font);
+    }
+
+    // let fontToUse: DiagramFont = this.eqn.fontMath;
     // if (textToUse.match(/[A-Z,a-z,\u03B8]/)) {
     //   fontToUse = this.eqn.fontText;
     // }
-    let style;
-    let weight;
-    let scale;
-    let size;
+    // let style;
+    // const { weight, size } = fontDefinition;
     if (options.style != null) {
-      ({ style } = options);
+      fontDefinition.style = options.style;
     } else if (textToUse.match(/[A-Z,a-z,\u03B8]/)) {
-      style = 'italic';
+      fontDefinition.style = 'italic';
+    } else {
+      fontDefinition.style = 'normal';
     }
+
     if (options.weight != null) {
-      ({ weight } = options);
-    }
-    if (options.scale != null) {
-      ({ scale } = options);
-      size = scale * 0.2;
+      fontDefinition.weight = options.weight;
     }
     if (options.size != null) {
-      ({ size } = options);
+      fontDefinition.size = options.size;
     }
-    if (style != null || weight != null || size != null) {
-      fontToUse = new DiagramFont({
-        family: 'Times New Roman',
-        style: style || 'normal',
-        size: size || 0.2,
-        weidht: weight || '200',
-        xAlign: 'left',
-        yAlign: 'alphabetic',
-        color: this.color,
-      });
-      //   'Times New Roman',
-      //   style || 'normal',
-      //   size || 0.2,
-      //   weight || '200',
-      //   'left', 'alphabetic', this.color,
-      // );
-    }
-    if (options.font != null) {
-      fontToUse = options.font;
-    }
-    const p = this.shapes.text(
-      textToUse,
-      { position: new Point(0, 0), font: fontToUse },
-    );
     if (options.color != null) {
-      p.setColor(options.color);
-    } else {
-      p.setColor(p.drawingObject.text[0].font.color);
+      fontDefinition.color = options.color;
     }
+    if (fontDefinition.color == null) {
+      fontDefinition.color = this.color;
+    }
+
+    // if (options.font != null && options.font instanceof DiagramFont) {
+    //   fontDefinition = options.font.definition();
+    // } else if (options.font != null) {
+    //   fontDefinition = joinObjects({}, fontDefinition, options.font);
+    // }
+
+
+    // if (style != null || weight != null || size != null) {
+    const font = new DiagramFont(fontDefinition);
+    //   'Times New Roman',
+    //   style || 'normal',
+    //   size || 0.2,
+    //   weight || '200',
+    //   'left', 'alphabetic', this.color,
+    // );
+    // }
+    // if (options.font != null) {
+    //   fontToUse = joinObjects({}, fontToUse, options.font);
+    // }
+    const p = this.shapes.text(
+      // textToUse,
+      {
+        text: textToUse,
+        position: new Point(0, 0),
+        font,
+        xAlign: 'left',
+        yAlign: 'baseline',
+      },
+    );
+    // if (options.color != null) {
+    //   p.setColor(options.color);
+    // } else {
+    //   p.setColor(p.drawingObject.text[0].font.color);
+    // }
     return p;
   }
 
@@ -846,6 +886,16 @@ export class Equation extends DiagramElementCollection {
     const existingElement = this.getElement(key);
     if (existingElement != null) {
       return existingElement;
+    }
+
+    // Check if the options has a symbol definition
+    if (options.symbol != null && typeof options.symbol === 'string') {
+      // debugger;
+      const symbol = this.makeSymbolElem(options);
+      if (symbol != null) {
+        this.add(key, symbol);
+        return symbol;
+      }
     }
 
     // Check the key is a symbol

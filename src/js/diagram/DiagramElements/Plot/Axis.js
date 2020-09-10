@@ -99,9 +99,9 @@ class Axis extends DiagramElementCollection {
       family: this.props.titleFontFamily,
       style: 'normal',
       size: this.props.titleFontSize,
-      weidht: this.props.titleFontWeight,
-      xAlign: 'center',
-      yAlign: 'middle',
+      weight: this.props.titleFontWeight,
+      // xAlign: 'center',
+      // yAlign: 'middle',
       color: this.props.titleFontColor,
     });
     //   this.props.titleFontFamily,
@@ -117,6 +117,8 @@ class Axis extends DiagramElementCollection {
         .rotate(this.props.rotation).matrix()),
       this.props.title,
       font,
+      'center',
+      'middle',
     )];
     const title = new TextObject(
       this.drawContext2D[0],
@@ -205,9 +207,9 @@ class Axis extends DiagramElementCollection {
       family: ticks.fontFamily,
       style: 'normal',
       size: ticks.fontSize,
-      weidht: ticks.fontWeight,
-      xAlign: ticks.labelsHAlign,
-      yAlign: ticks.labelsVAlign,
+      weight: ticks.fontWeight,
+      // xAlign: ticks.labelsHAlign,
+      // yAlign: ticks.labelsVAlign,
       color: ticks.fontColor,
     });
     //   ticks.fontFamily,
@@ -219,10 +221,10 @@ class Axis extends DiagramElementCollection {
     //   ticks.fontColor,
     // );
 
-    if (this.props.rotation > Math.PI / 2 * 0.95) {
-      font.yAlign = 'middle';
-      font.xAlign = 'right';
-    }
+    // if (this.props.rotation > Math.PI / 2 * 0.95) {
+    //   font.yAlign = 'middle';
+    //   font.xAlign = 'right';
+    // }
     const dText = [];
     for (let i = 0; i < ticks.labels.length; i += 1) {
       dText.push(new DiagramText(

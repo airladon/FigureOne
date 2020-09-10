@@ -5,6 +5,16 @@ import {
 } from '../../../../tools/g2';
 import Bracket from './Bracket';
 
+export type TypeEquationSymbolArrowBracket = {
+  symbol: 'arrow',
+  direction?: 'down' | 'left' | 'up' | 'right',
+  lineWidth?: number,
+  arrowWidth?: number,
+  arrowHeight?: number,
+  draw?: 'static' | 'dynamic',
+  color?: Array<number>;
+  mods?: Object;
+};
 
 export default class Arrow extends Bracket {
   // eslint-disable-next-line class-methods-use-this

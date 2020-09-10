@@ -4,6 +4,16 @@ import {
 } from '../../../../tools/g2';
 import Bracket from './Bracket';
 
+export type TypeEquationSymbolAngleBracket = {
+  symbol: 'angleBracket',
+  side?: 'left' | 'right' | 'top' | 'bottom',
+  lineWidth?: number,
+  width?: number,
+  draw?: 'static' | 'dynamic',
+  staticHeight?: 'first' | number,
+  color?: Array<number>;
+  mods?: {};
+};
 export default class Bar extends Bracket {
   // eslint-disable-next-line class-methods-use-this
 
