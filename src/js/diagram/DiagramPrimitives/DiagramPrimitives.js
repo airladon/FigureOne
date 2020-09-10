@@ -1211,6 +1211,7 @@ export default class DiagramPrimitives {
     const dText = [];
     let fontIndex = 0;
     let offsetIndex = 0;
+    let locationIndex = 0;
     for (let i = 0; i < options.text.length; i += 1) {
       if (fontIndex > options.font.length - 1) {
         fontIndex = 0;
@@ -1218,16 +1219,21 @@ export default class DiagramPrimitives {
       if (offsetIndex > options.offset.length - 1) {
         offsetIndex = 0;
       }
+      if (locationIndex > options.location.length - 1) {
+        locationIndex = 0;
+      }
       const dFont = new DiagramFont(joinObjects({}, options.font[fontIndex]));
       dText.push(new DiagramText(
-        options.offset[offsetIndex],
+        options.location[locationIndex],
         options.text[i],
         dFont,
         'left',
         'baseline',
+        options.offset[offsetIndex],
       ));
       offsetIndex += 1;
       fontIndex += 1;
+      locationIndex += 1;
     }
     // const dT = new DiagramText(o.offset, text, fontToUse);
     const to = new TextObject(this.draw2D, dText, options.xAlign, options.yAlign);

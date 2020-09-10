@@ -122,6 +122,7 @@ class DiagramFont {
 class DiagramText {
   location: Point;
   relativeLocation: boolean;
+  offset: Point;
   text: string;
   font: DiagramFont;
   xAlign: 'left' | 'center' | 'right';
@@ -141,7 +142,9 @@ class DiagramText {
     font: DiagramFont | TypeDiagramFontOptions = new DiagramFont(),
     xAlign: 'left' | 'center' | 'right' = 'left',
     yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline' = 'baseline',
+    offset: TypeParsablePoint = new Point(0, 0),
   ) {
+    this.offset = getPoint(offset);
     if (location == null) {
       this.location = new Point(0, 0);
       this.relativeLocation = true;
@@ -598,7 +601,7 @@ class TextObject extends DrawingObject {
     //
     let lastRight = new Point(0, 0);
     this.text.forEach((diagramText) => {
-      const { relativeLocation } = diagramText;
+      const { relativeLocation, offset } = diagramText;
       let location;
       if (relativeLocation) {
         location = lastRight._dup();
@@ -609,7 +612,7 @@ class TextObject extends DrawingObject {
       // Measure the text in scaled space
       const measure = diagramText.measureText(ctx, scalingFactor);
       lastRight = new Point(
-        location.x + measure.right,
+        location.x + measure.right + offset.x,
         location.y,
       );
     });
@@ -623,9 +626,9 @@ class TextObject extends DrawingObject {
     let yMin = null;
     let yMax = null;
     this.text.forEach((diagramText) => {
-      const { location, lastMeasure } = diagramText;
-      const xMinText = location.x - lastMeasure.left;
-      const xMaxText = location.x + lastMeasure.right;
+      const { location, lastMeasure, offset } = diagramText;
+      const xMinText = location.x - lastMeasure.left + offset.x;
+      const xMaxText = location.x + lastMeasure.right + offset.x;
       const yMaxText = location.y + lastMeasure.ascent;
       const yMinText = location.y - lastMeasure.descent;
       if (xMin == null || xMinText < xMin) {
@@ -673,13 +676,13 @@ class TextObject extends DrawingObject {
         ctx,
         diagramText,
         scalingFactor,
-        diagramText.location.x * scalingFactor,
-        diagramText.location.y * -scalingFactor,
+        (diagramText.location.x + diagramText.offset.x) * scalingFactor,
+        (diagramText.location.y + diagramText.offset.y) * -scalingFactor,
       );
       ctx.fillText(
         diagramText.text,
-        diagramText.location.x * scalingFactor,
-        diagramText.location.y * -scalingFactor,
+        (diagramText.location.x + diagramText.offset.x) * scalingFactor,
+        (diagramText.location.y + diagramText.offset.y) * -scalingFactor,
       );
     });
     ctx.restore();
@@ -767,92 +770,92 @@ class TextObject extends DrawingObject {
   // Firefox and Chrome don't yet support it's advanced features.
   // Estimates are made for height based on width.
   // eslint-disable-next-line class-methods-use-this
-  measureText(ctx: CanvasRenderingContext2D, text: DiagramText) {
-    // const aWidth = ctx.measureText('a').width;
-    const fontHeight = ctx.font.match(/[^ ]*px/);
-    let aWidth;
-    if (fontHeight != null) {
-      aWidth = parseFloat(fontHeight[0]) / 2;
-    } else {
-      aWidth = ctx.measureText('a').width;
-    }
-    // const aWidth = parseFloat(ctx.font.match(/[^ ]*px/)[0]) / 2;
+  // measureText(ctx: CanvasRenderingContext2D, text: DiagramText) {
+  //   // const aWidth = ctx.measureText('a').width;
+  //   const fontHeight = ctx.font.match(/[^ ]*px/);
+  //   let aWidth;
+  //   if (fontHeight != null) {
+  //     aWidth = parseFloat(fontHeight[0]) / 2;
+  //   } else {
+  //     aWidth = ctx.measureText('a').width;
+  //   }
+  //   // const aWidth = parseFloat(ctx.font.match(/[^ ]*px/)[0]) / 2;
 
-    // Estimations of FONT ascent and descent for a baseline of "alphabetic"
-    let ascent = aWidth * 1.4;
-    let descent = aWidth * 0.08;
+  //   // Estimations of FONT ascent and descent for a baseline of "alphabetic"
+  //   let ascent = aWidth * 1.4;
+  //   let descent = aWidth * 0.08;
 
-    // Uncomment below and change above consts to lets if more resolution on
-    // actual text boundaries is needed
+  //   // Uncomment below and change above consts to lets if more resolution on
+  //   // actual text boundaries is needed
 
-    // const maxAscentRe =
-    //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
-    const midAscentRe = /[acemnorsuvwxz*gyqp]/g;
-    const midDecentRe = /[;,$]/g;
-    const maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
+  //   // const maxAscentRe =
+  //   //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
+  //   const midAscentRe = /[acemnorsuvwxz*gyqp]/g;
+  //   const midDecentRe = /[;,$]/g;
+  //   const maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
 
-    const midAscentMatches = text.text.match(midAscentRe);
-    if (Array.isArray(midAscentMatches)) {
-      if (midAscentMatches.length === text.text.length) {
-        ascent = aWidth * 0.95;
-      }
-    }
+  //   const midAscentMatches = text.text.match(midAscentRe);
+  //   if (Array.isArray(midAscentMatches)) {
+  //     if (midAscentMatches.length === text.text.length) {
+  //       ascent = aWidth * 0.95;
+  //     }
+  //   }
 
-    const midDescentMatches = text.text.match(midDecentRe);
-    if (Array.isArray(midDescentMatches)) {
-      if (midDescentMatches.length > 0) {
-        descent = aWidth * 0.2;
-      }
-    }
+  //   const midDescentMatches = text.text.match(midDecentRe);
+  //   if (Array.isArray(midDescentMatches)) {
+  //     if (midDescentMatches.length > 0) {
+  //       descent = aWidth * 0.2;
+  //     }
+  //   }
 
-    const maxDescentMatches = text.text.match(maxDescentRe);
-    if (Array.isArray(maxDescentMatches)) {
-      if (maxDescentMatches.length > 0) {
-        descent = aWidth * 0.5;
-      }
-    }
+  //   const maxDescentMatches = text.text.match(maxDescentRe);
+  //   if (Array.isArray(maxDescentMatches)) {
+  //     if (maxDescentMatches.length > 0) {
+  //       descent = aWidth * 0.5;
+  //     }
+  //   }
 
-    const height = ascent + descent;
+  //   const height = ascent + descent;
 
-    const { width } = ctx.measureText(text.text);
-    let asc = 0;
-    let des = 0;
-    let left = 0;
-    let right = 0;
+  //   const { width } = ctx.measureText(text.text);
+  //   let asc = 0;
+  //   let des = 0;
+  //   let left = 0;
+  //   let right = 0;
 
-    if (text.xAlign === 'left') {
-      right = width;
-    }
-    if (text.xAlign === 'center') {
-      left = width / 2;
-      right = width / 2;
-    }
-    if (text.xAlign === 'right') {
-      left = width;
-    }
-    if (text.yAlign === 'alphabetic' || text.yAlign === 'baseline') {
-      asc = ascent;
-      des = descent;
-    }
-    if (text.yAlign === 'top') {
-      asc = 0;
-      des = height;
-    }
-    if (text.yAlign === 'bottom') {
-      asc = height;
-      des = 0;
-    }
-    if (text.yAlign === 'middle') {
-      asc = height / 2;
-      des = height / 2;
-    }
-    return {
-      actualBoundingBoxLeft: left,
-      actualBoundingBoxRight: right,
-      fontBoundingBoxAscent: asc,
-      fontBoundingBoxDescent: des,
-    };
-  }
+  //   if (text.xAlign === 'left') {
+  //     right = width;
+  //   }
+  //   if (text.xAlign === 'center') {
+  //     left = width / 2;
+  //     right = width / 2;
+  //   }
+  //   if (text.xAlign === 'right') {
+  //     left = width;
+  //   }
+  //   if (text.yAlign === 'alphabetic' || text.yAlign === 'baseline') {
+  //     asc = ascent;
+  //     des = descent;
+  //   }
+  //   if (text.yAlign === 'top') {
+  //     asc = 0;
+  //     des = height;
+  //   }
+  //   if (text.yAlign === 'bottom') {
+  //     asc = height;
+  //     des = 0;
+  //   }
+  //   if (text.yAlign === 'middle') {
+  //     asc = height / 2;
+  //     des = height / 2;
+  //   }
+  //   return {
+  //     actualBoundingBoxLeft: left,
+  //     actualBoundingBoxRight: right,
+  //     fontBoundingBoxAscent: asc,
+  //     fontBoundingBoxDescent: des,
+  //   };
+  // }
 
   getBoundaryOfText(text: DiagramText, contextIndex: number = 0): Array<Point> {
     const boundary = [];

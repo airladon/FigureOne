@@ -13,6 +13,13 @@ const f2 = {
   size: 0.2,
   weight: 'bold',
 }
+const f3 = {
+  family: 'Times New Roman',
+  color: [0, 1, 0, 1],
+  style: 'italic',
+  size: 0.08,
+  weight: 'bold',
+}
 console.log(new Fig.Transform().scale(2, 2).translate(0.5, 0).matrix())
 console.log(new Fig.Transform().translate(0.5, 0).scale(2, 2).matrix())
 diagram.addElements([
@@ -20,13 +27,18 @@ diagram.addElements([
     name: 'tester',
     method: 'shapes.textNew',
     options: {
-      text: ['hello', 'MM', 'M', 'dg'],
-      font: [f1, f2, f1, f2],
-      offset: [[0, 0], null, null, [-0.1, -0.5]],
-      position: [-0.5, -0.5],
-      xAlign: 'left',
+      text: ['hello', 'MM', '2', '2', 'M', 'dg'],
+      font: [f1, f2, f3, f3, f1, f2],
+      location: [null, null, null, null, null, [-0.1, -0.5]],
+      offset: [[0, 0], [0, 0], [0, -0.02], [-0.02, 0.1], [0, 0], [0, 0]],
+      position: [-0, -0.5],
+      xAlign: 'center',
       yAlign: 'baseline',
     },
+    // options1: {
+    //   text: 'Hello there how are you\nI\'m fine thanks',
+    //   font: 
+    // }
   },
   // {
   //   name: 'angle',
