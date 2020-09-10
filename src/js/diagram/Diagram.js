@@ -1872,16 +1872,15 @@ class Diagram {
   // }
 
   draw(nowIn: number, canvasIndex: number = 0): void {
-    const start = new Date().getTime();
+    // const start = new Date().getTime();
     if (this.state.pause === 'paused') {
       return;
     }
-    // console.log('Draw draw drawey draw draw', nowIn, this.drawQueued)
     let now = nowIn;
     if (nowIn === -1) {
       now = this.lastDrawTime;
     }
-    // console.log((now - this.lastDrawTime) * 1000);
+
     this.lastDrawTime = now;
 
     if (this.scrolled === true) {
@@ -1889,13 +1888,6 @@ class Diagram {
       if (Math.abs(window.pageYOffset - this.oldScroll)
           > this.webglLow.gl.canvas.clientHeight / 4
       ) {
-        // if (this.webglLow.gl.canvas.style.top !== '-10000px') {
-        //   this.webglLow.gl.canvas.style.top = '-10000px';
-        //   this.waitForFrames = 1;
-        // }
-        // if (this.waitForFrames > 0) {
-        //   this.waitForFrames -= 1;
-        // } else {
         this.renderAllElementsToTiedCanvases();
         // }
         this.scrollingFast = true;
@@ -1915,24 +1907,15 @@ class Diagram {
 
     this.clearContext(canvasIndex);
     // console.log('really drawing')
+    // const startSetup = new Date().getTime();
     this.elements.setupDraw(
       now,
       canvasIndex,
     );
-
+    // const endSetup = new Date().getTime();
+    // const startDraw = endSetup;
     this.elements.draw(now, [this.spaceTransforms.diagramToGL], 1, canvasIndex);
-    // console.log('really done')
-    // if (this.pauseAfterNextDrawFlag) {
-    //   this.pause();
-    //   this.pauseAfterNextDrawFlag = false;
-    // }
-
-    // if (this.state.pause === 'paused') {
-    //   return;
-    // }
-    // if (this.isPaused) {
-    //   return;
-    // }
+    // const endDraw = new Date().getTime();
 
     if (this.elements.isAnyElementMoving()) {
       this.animateNextFrame(true, 'is moving');
@@ -1943,13 +1926,11 @@ class Diagram {
       this.animateNextFrame(true, 'queued frames');
     }
 
-    // if (this.drawTimeoutId) {
-    //   clearTimeout(this.drawTimeoutId);
-    //   this.drawTimeoutId = null;
-    // }
-    // this.drawTimeoutId = setTimeout(this.renderToImages.bind(this), 100);
-    const end = new Date().getTime();
-    console.log(end - start);
+    // const end = new Date().getTime();
+    // const total = end - start;
+    // const setup = endSetup - startSetup;
+    // const draw = endDraw - startDraw;
+    // console.log(total, setup, draw, total - setup - draw);
   }
 
   // renderToImages() {

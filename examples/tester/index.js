@@ -1,4 +1,4 @@
-const diagram = new Fig.Diagram({ limits: [-2, -2, 4, 4 ]});
+const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});
 
 const f1 = {
   family: 'Times New Roman',
@@ -28,33 +28,34 @@ diagram.addElements([
       yAlign: 'baseline',
     },
   },
-  {
-    name: 'angle',
-    method: 'angle',
-    options: {
-      angle: 1,
-      curve: {
-        width: 0.01,
-        radius: 0.5,
-        sides: 400,
-      },
-      label: {
-        // text: '60º'
-        text: null,
-        radius: 0.45,
-      },
-      sides: {
-        length: 1,
-      },
-      color: [0, 1, 0, 1],
-    },
-  },
+  // {
+  //   name: 'angle',
+  //   method: 'angle',
+  //   options: {
+  //     angle: 1,
+  //     curve: {
+  //       width: 0.01,
+  //       radius: 0.5,
+  //       sides: 400,
+  //     },
+  //     label: {
+  //       // text: '60º'
+  //       text: null,
+  //       radius: 0.45,
+  //     },
+  //     sides: {
+  //       length: 1,
+  //     },
+  //     color: [0, 1, 0, 1],
+  //   },
+  // },
   {
     name: 'a',
     method: 'polygon',
     options: {
-      radius: 0.2,
-      transform: new Fig.Transform().scale(2, 2).translate(0.5, 0),
+      radius: 0.01,
+      width: 0.01,
+      // transform: new Fig.Transform().scale(2, 2).translate(0.5, 0),
     },
   },
   {
@@ -72,7 +73,11 @@ diagram.addElements([
 
       // Align all forms to the 'equals' diagram element
       formDefaults: {
-        alignment: { fixTo: 'equals' },
+        alignment: {
+          fixTo: 'equals',
+          xAlign: 'center',
+          yAlign: 'middle',
+        },
         animation: {
           translation: {
             c: { style: 'curved', direction: 'up', mag: 0.5 },
