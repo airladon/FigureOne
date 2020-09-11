@@ -127,6 +127,7 @@ describe('Different ways to make an equation', () => {
                 weight: 'bold',         // Use CSS weight definitions
                 size: '0.2',            // Size is in element space units
               },
+              family: 'Helvetica',
               color: [1, 0, 0, 1],      // Element color
               style: 'normal',          // `style`, `weight` and `size` can
               weight: 'bold',           //   also be defined outside of the

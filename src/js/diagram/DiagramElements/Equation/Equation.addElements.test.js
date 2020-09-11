@@ -70,28 +70,25 @@ describe('Diagram Equations From Object', () => {
         },
         c: {
           text: 'c',
-          font: new DiagramFont({
+          font: {
             family: 'Helvetica',
             style: 'normal',
             size: 0.3,
             weight: '300',
-            // xAlign: 'right',
-            // yAlign: 'alphabetic',
             color: color1,
-          }),
+          },
+          // style: 'normal',
         },
-        d: {         // font overrides style, color overrides font
+        d: {         // font definition overrides root definitions
           text: 'd',
           style: 'normal',
-          color: color2,
+          color: color1,
           font: new DiagramFont({
             family: 'Helvetica',
             style: 'italic',
             size: 0.3,
             weight: '300',
-            // xAlign: 'right',
-            // yAlign: 'alphabetic',
-            color: color1,
+            color: color2,
           }),
         },
       },

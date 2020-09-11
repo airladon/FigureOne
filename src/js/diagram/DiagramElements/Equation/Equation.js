@@ -785,13 +785,12 @@ export class Equation extends DiagramElementCollection {
       font?: DiagramFont | TypeDiagramFontDefinition,
       style?: 'italic' | 'normal',
       weight?: 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
-      // scale?: number,
       size?: number,
+      family?: string,
       color?: Array<number>
     },
     defaultText: string = '',
   ) {
-
     let textToUse = defaultText;
     if (options.text != null) {
       textToUse = options.text;
@@ -800,70 +799,49 @@ export class Equation extends DiagramElementCollection {
     let fontDefinition = defaultFontDefinition;
     if (options.font != null && options.font instanceof DiagramFont) {
       fontDefinition = options.font.definition();
-    } else if (options.font != null) {
-      fontDefinition = joinObjects({}, defaultFontDefinition, options.font);
-    }
-    // let fontToUse: DiagramFont = this.eqn.fontMath;
-    // if (textToUse.match(/[A-Z,a-z,\u03B8]/)) {
-    //   fontToUse = this.eqn.fontText;
-    // }
-    // let style;
-    // const { weight, size } = fontDefinition;
-    if (options.style != null) {
-      fontDefinition.style = options.style;
-    } else if (textToUse.match(/[A-Z,a-z,\u03B8]/)) {
-      fontDefinition.style = 'italic';
     } else {
-      fontDefinition.style = 'normal';
+      fontDefinition = joinObjects(
+        {},
+        defaultFontDefinition,
+        {
+          style: options.style,
+          weight: options.weight,
+          family: options.family,
+          size: options.size,
+          color: options.color,
+        },
+        options.font,
+      );
     }
 
-    if (options.weight != null) {
-      fontDefinition.weight = options.weight;
-    }
-    if (options.size != null) {
-      fontDefinition.size = options.size;
-    }
-    if (options.color != null) {
-      fontDefinition.color = options.color;
+    if (
+      options.style == null
+      && (
+        (options.font != null && options.font.style == null)
+        || options.font == null
+      )
+    ) {
+      if (textToUse.match(/[A-Z,a-z,\u03B8]/)) {
+        fontDefinition.style = 'italic';
+      } else {
+        fontDefinition.style = 'normal';
+      }
     }
     if (fontDefinition.color == null) {
       fontDefinition.color = this.color;
     }
 
-    // if (options.font != null && options.font instanceof DiagramFont) {
-    //   fontDefinition = options.font.definition();
-    // } else if (options.font != null) {
-    //   fontDefinition = joinObjects({}, fontDefinition, options.font);
-    // }
-
-    // if (style != null || weight != null || size != null) {
-    const font = new DiagramFont(fontDefinition);
-    //   'Times New Roman',
-    //   style || 'normal',
-    //   size || 0.2,
-    //   weight || '200',
-    //   'left', 'alphabetic', this.color,
-    // );
-    // }
-    // if (options.font != null) {
-    //   fontToUse = joinObjects({}, fontToUse, options.font);
-    // }
+    // const font = new DiagramFont(fontDefinition);
     const p = this.shapes.text(
-      // textToUse,
       {
         text: textToUse,
         position: new Point(0, 0),
-        font,
+        font: fontDefinition,
         xAlign: 'left',
         yAlign: 'baseline',
-        // color: font.color,
       },
     );
-    // if (options.color != null) {
-    //   p.setColor(options.color);
-    // } else {
-    //   p.setColor(p.drawingObject.text[0].font.color);
-    // }
+
     return p;
   }
 

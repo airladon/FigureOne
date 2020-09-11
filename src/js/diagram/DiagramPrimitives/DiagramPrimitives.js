@@ -1309,7 +1309,7 @@ export default class DiagramPrimitives {
       transform: new Transform('text').standard(),
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
-
+    // debugger;
     if (options.color == null && options.font.color != null) {
       options.color = options.font.color;
     }
