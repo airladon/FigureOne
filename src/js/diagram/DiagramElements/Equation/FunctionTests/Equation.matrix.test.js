@@ -154,6 +154,15 @@ describe('Equation Functions - Matrix', () => {
         const e = eqn.eqn.functions;
         const matrix = e.matrix.bind(e);
         eqn.addElements(elements);
+        // eqn._a.drawingObject.scalingFactor = 1;
+        // eqn._b.drawingObject.scalingFactor = 1;
+        // eqn._c.drawingObject.scalingFactor = 1;
+        // eqn._d.drawingObject.scalingFactor = 1;
+        // eqn._a.drawingObject.setBorder();
+        // eqn._b.drawingObject.setBorder();
+        // eqn._c.drawingObject.setBorder();
+        // eqn._d.drawingObject.setBorder();
+        // console.log(eqn._a.drawingObject.border)
         eqn.addForms({
           base: {
             content: {
@@ -195,7 +204,7 @@ describe('Equation Functions - Matrix', () => {
           fit: {
             content: matrix([
               [2, 2], 'left', ['a', 'b', 'c', 'd'], 'right',
-              1, 'max', [0.1, 0.1], 'baseline', { insideSpace: 0.1 },
+              1, 'max', [0.1, 0.1], 'middle', { insideSpace: 0.1 },
             ]),
             scale: 1,
           },
@@ -285,18 +294,18 @@ describe('Equation Functions - Matrix', () => {
       expect(round(newC.height)).toBe(round(baseC.height * scale));
       expect(round(newD.height)).toBe(round(baseD.height * scale));
     });
-    test.only('max', () => {
+    test('max', () => {
       eqn.showForm('fit');
       diagram.setFirstTransform();
       // in this case the height of the b or d is the max dimension so the width
       // of all columns becomes it.
       const newA = eqn._a.getBoundingRect('diagram');
       const newB = eqn._b.getBoundingRect('diagram');
-      console.log(eqn._a.drawingObject.border);
-      console.log(baseLeft)
+      // console.log(eqn._a.drawingObject.border);
+      // console.log(baseLeft)
       // console.log(initialSpace)
-      console.log(newA)
-      console.log(newB)
+      // console.log(newA)
+      // console.log(newB)
       expect(round(newA.left))
         .toBe(round(baseLeft.right + initialSpace + (newB.height - newA.width) / 2));
     });

@@ -39,12 +39,17 @@ class DrawContext2D {
       },
       transformMatrix: [0],
       measureText: () => {    // eslint-disable-line arrow-body-style
+        let w = 20;
+        if (this.ctx.font != null) {
+          const fontHeight = this.ctx.font.match(/[^ ]*px/);
+          w = parseFloat(fontHeight[0]) / 2;
+        }
         return {
-          actualBoundingBoxLeft: 10,
-          actualBoundingBoxAscent: 10,
-          actualBoundingBoxRight: 10,
-          actualBoundingBoxDescent: 10,
-          width: 20,
+          actualBoundingBoxLeft: w / 2,
+          actualBoundingBoxAscent: w / 2,
+          actualBoundingBoxRight: w / 2,
+          actualBoundingBoxDescent: w / 2,
+          width: w,
         };
       },
       transform: (a, b, c, d, e, f) => {

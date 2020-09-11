@@ -183,7 +183,9 @@ class DiagramText {
   ) {
     // const location = getPoint(locationIn);
     this.font.setFontInContext(ctx, scalingFactor);
-
+    // if (this.text === 'b') {
+    //   debugger;
+    // }
     const fontHeight = ctx.font.match(/[^ ]*px/);
     let aWidth;
     if (fontHeight != null) {
@@ -274,7 +276,6 @@ class DiagramText {
       width: right + left,
       height: asc + des,
     };
-
     return this.lastMeasure;
   }
 }
@@ -686,6 +687,9 @@ class TextObject extends DrawingObject {
       // Measure the text in scaled space
       let scalingFactor = 1;
       if (diagramText.font.size < 20) {
+        // BEWARE: because of poorly designed mock 2D context, it is important
+        // this scaling factor be at least 30 - this can be fixed by changing
+        // the default return value width of 
         scalingFactor = 20 / diagramText.font.size;
       }
       const measure = diagramText.measureText(
@@ -854,6 +858,7 @@ class TextObject extends DrawingObject {
     } else {
       meas = text.measureText(this.drawContext2D[contextIndex].ctx, scalingFactor);
     }
+    // console.log(text.text, meas)
     const box = [
       new Point(-meas.left, meas.ascent).add(location),
       new Point(meas.right, meas.ascent).add(location),

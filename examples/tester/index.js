@@ -293,64 +293,67 @@ const elements = {
 eqn.addElements(elements);
 eqn.addForms({
   base: {
-    content: {
+    content: ['m = ', {
       matrix: {
-        content: ['a', 'b', 'c', { frac: ['d', 'vinculum', 'e'] }],
+        content: ['asdf', 'b', 'c', { frac: ['d', 'vinculum', { frac: ['e', 'v1_vinculum', 'f', 1.2] } ] }],
         left: 'left',
         right: 'right',
         order: [2, 2],
         scale: 1,
-        fit: [0.4, 0.4],
+        fit: 'max',
         space: [0.1, 0.1],
-        yAlign: 'baseline',
+        yAlign: 'middle',
         brac: { insideSpace: 0.1 },
         scale: 0.7,
       },
+    }],
+    scale: 1,
+    alignment: {
+      xAlign: 'center',
     },
-    scale: 1,
   },
-  rowVector: {
-    content: matrix([
-      [1, 4], 'left', ['a', 'b', 'c', 'd'], 'right',
-      1, 'min', [0.1, 0.1], 'baseline', { insideSpace: 0.1 },
-    ]),
-    scale: 1,
-  },
-  columnVector: {
-    content: matrix([
-      [4, 1], 'left', ['a', 'b', 'c', 'd'], 'right',
-      1, 'min', [0.1, 0.1], 'baseline', { insideSpace: 0.1 },
-    ]),
-    scale: 1,
-  },
-  scale: {
-    content: matrix([
-      [2, 2], 'left', ['a', 'b', 'c', 'd'], 'right',
-      0.5, 'min', [0.1, 0.1], 'baseline', { insideSpace: 0.1 },
-    ]),
-    scale: 1,
-  },
-  fit: {
-    content: matrix([
-      [2, 2], 'left', ['a', 'b', 'c', { frac: ['d', 'vinculum', 'e'] }], 'right',
-      1, 'max', [0.1, 0.1], 'baseline', { insideSpace: 0.1 },
-    ]),
-    scale: 1,
-  },
-  space: {
-    content: matrix([
-      [2, 2], 'left', ['a', 'b', 'c', 'd'], 'right',
-      1, 'min', [0.2, 0.3], 'baseline', { insideSpace: 0.1 },
-    ]),
-    scale: 1,
-  },
-  yAlign: {
-    content: matrix([
-      [2, 2], 'left', ['a', 'b', 'c', 'd'], 'right',
-      1, 'min', [0.1, 0.1], 'middle', { insideSpace: 0.1 },
-    ]),
-    scale: 1,
-  },
+  // rowVector: {
+  //   content: matrix([
+  //     [1, 4], 'left', ['a', 'b', 'c', 'd'], 'right',
+  //     1, 'min', [0.1, 0.1], 'baseline', { insideSpace: 0.1 },
+  //   ]),
+  //   scale: 1,
+  // },
+  // columnVector: {
+  //   content: matrix([
+  //     [4, 1], 'left', ['a', 'b', 'c', 'd'], 'right',
+  //     1, 'min', [0.1, 0.1], 'baseline', { insideSpace: 0.1 },
+  //   ]),
+  //   scale: 1,
+  // },
+  // scale: {
+  //   content: matrix([
+  //     [2, 2], 'left', ['a', 'b', 'c', 'd'], 'right',
+  //     0.5, 'min', [0.1, 0.1], 'baseline', { insideSpace: 0.1 },
+  //   ]),
+  //   scale: 1,
+  // },
+  // fit: {
+  //   content: matrix([
+  //     [2, 2], 'left', ['a', 'b', 'c', { frac: ['d', 'vinculum', 'e'] }], 'right',
+  //     1, 'max', [0.1, 0.1], 'baseline', { insideSpace: 0.1 },
+  //   ]),
+  //   scale: 1,
+  // },
+  // space: {
+  //   content: matrix([
+  //     [2, 2], 'left', ['a', 'b', 'c', 'd'], 'right',
+  //     1, 'min', [0.2, 0.3], 'baseline', { insideSpace: 0.1 },
+  //   ]),
+  //   scale: 1,
+  // },
+  // yAlign: {
+  //   content: matrix([
+  //     [2, 2], 'left', ['a', 'b', 'c', 'd'], 'right',
+  //     1, 'min', [0.1, 0.1], 'middle', { insideSpace: 0.1 },
+  //   ]),
+  //   scale: 1,
+  // },
 });
 eqn.showForm('base')
 diagram.elements = eqn;
