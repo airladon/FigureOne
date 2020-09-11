@@ -435,6 +435,16 @@ describe('Diagram Equations From Object', () => {
     expect(forms['1'].description).toBe('|Form| 1 |description|');
     expect(eqn.getDescription('1')).toBe('<span class="highlight_word"" style="color:rgba(255,0,0,0);">Form</span> 1 <span class="highlight_word">description</span>');
   });
+  // Note, the letter a has the following bounds:
+  //   width: 0.1,
+  //   height: 0.103,
+  //   descent: -0.008,
+  //   ascent: top: 0.095,
+  // The letter b has the following bounds:
+  //   width: 0.1,
+  //   height: 0.148,
+  //   descent: -0.008,
+  //   ascent: top: 0.14,
   test('All form options', () => {
     expect(eqn._a.getPosition().round(3)).toEqual(new Point(0, 0));
     expect(eqn._a.getScale().round(3)).toEqual(new Point(1, 1));
@@ -454,7 +464,9 @@ describe('Diagram Equations From Object', () => {
     expect(form.animation.translation.b.mag).toBe(0.45);
 
     eqn.showForm('0');
-    expect(eqn._a.getPosition().round(3)).toEqual(new Point(-0.072, 0.01));
+    // FixTo is b, 'center'. As 'a' and 'b' are both 0.1 width, and the scale
+    // is 1.2, then the left position of a must be: 0.15 * 1.2 = -0.18
+    expect(eqn._a.getPosition().round(3)).toEqual(new Point(-0.18, 0.01));
     expect(eqn._a.getScale().round(3)).toEqual(new Point(1.2, 1.2));
   });
 });

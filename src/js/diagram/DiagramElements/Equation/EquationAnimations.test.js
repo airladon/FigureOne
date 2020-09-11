@@ -134,7 +134,7 @@ describe('Equation Animation', () => {
     expect(round(a.opacity)).toEqual(0.001);
     expect(b.opacity).toEqual(1);
     expect(round(c.opacity)).toEqual(1);
-    expect(b.getPosition().round(8)).toEqual(new Point(0.00000286, 0));
+    expect(b.getPosition().round(8)).toEqual(new Point(0.00000714, 0));
     expect(a.animations.animations).toHaveLength(1);
     expect(b.animations.animations).toHaveLength(1);
     expect(c.animations.animations).toHaveLength(0);
@@ -147,7 +147,7 @@ describe('Equation Animation', () => {
     expect(round(a.opacity)).toEqual(0.001);
     expect(b.opacity).toEqual(1);
     expect(round(c.opacity)).toEqual(1);
-    expect(b.getPosition().round()).toEqual(new Point(0.014, 0));
+    expect(b.getPosition().round()).toEqual(new Point(0.035, 0));
     expect(a.animations.animations).toHaveLength(1);
     expect(b.animations.animations).toHaveLength(1);
     expect(c.animations.animations).toHaveLength(0);
@@ -160,7 +160,7 @@ describe('Equation Animation', () => {
     expect(round(a.opacity)).toEqual(0.001);
     expect(b.opacity).toEqual(1);
     expect(round(c.opacity)).toEqual(1);
-    expect(b.getPosition().round()).toEqual(new Point(0.028, 0));
+    expect(b.getPosition().round()).toEqual(new Point(0.07, 0));
     expect(a.animations.animations).toHaveLength(1);
     expect(b.animations.animations).toHaveLength(0);
     expect(c.animations.animations).toHaveLength(0);
@@ -173,7 +173,7 @@ describe('Equation Animation', () => {
     expect(round(a.opacity, 2)).toEqual(0.5);
     expect(b.opacity).toEqual(1);
     expect(round(c.opacity)).toEqual(1);
-    expect(b.getPosition().round()).toEqual(new Point(0.028, 0));
+    expect(b.getPosition().round()).toEqual(new Point(0.07, 0));
     expect(a.animations.animations).toHaveLength(1);
     expect(b.animations.animations).toHaveLength(0);
     expect(c.animations.animations).toHaveLength(0);
@@ -186,7 +186,7 @@ describe('Equation Animation', () => {
     expect(round(a.opacity, 2)).toEqual(1);
     expect(b.opacity).toEqual(1);
     expect(round(c.opacity)).toEqual(1);
-    expect(b.getPosition().round()).toEqual(new Point(0.028, 0));
+    expect(b.getPosition().round()).toEqual(new Point(0.07, 0));
     expect(a.animations.animations).toHaveLength(0);
     expect(b.animations.animations).toHaveLength(0);
     expect(c.animations.animations).toHaveLength(0);
@@ -199,7 +199,7 @@ describe('Equation Animation', () => {
     expect(a.opacity).toEqual(1);
     expect(b.opacity).toEqual(1);
     expect(c.opacity).toEqual(1);
-    expect(b.getPosition().round()).toEqual(new Point(0.028, 0));
+    expect(b.getPosition().round()).toEqual(new Point(0.07, 0));
     expect(a.animations.animations).toHaveLength(0);
     expect(b.animations.animations).toHaveLength(0);
     expect(c.animations.animations).toHaveLength(0);
@@ -295,7 +295,7 @@ describe('Equation Animation', () => {
     expect(a.opacity).toEqual(1);
     expect(b.opacity).toEqual(1);
     expect(c.opacity).toEqual(1);
-    expect(b.getPosition().round()).toEqual(new Point(0.028, 0));
+    expect(b.getPosition().round()).toEqual(new Point(0.07, 0));
     expect(a.animations.animations).toHaveLength(0);
     expect(b.animations.animations).toHaveLength(0);
     expect(c.animations.animations).toHaveLength(0);
