@@ -319,19 +319,18 @@ class TextObject extends DrawingObject {
           minSize = t.font.size;
         }
       });
-      if (minSize < 20) {
-        this.scalingFactor = minSize * 50;
-      }
-      if (minSize < 1) {
-        const power = -Math.log(minSize) / Math.LN10 + 2;
-        this.scalingFactor = 10 ** power;
-      }
-      // this.scalingFactor = 20 / minSize;
+      // if (minSize < 20) {
+      //   this.scalingFactor = minSize * 50;
+      // }
+      // if (minSize < 1) {
+      //   const power = -Math.log(minSize) / Math.LN10 + 2;
+      //   this.scalingFactor = 10 ** power;
+      // }
+      this.scalingFactor = 20 / minSize;
       // console.log(this.scalingFactor)
     }
     this.xAlign = xAlign;
     this.yAlign = yAlign;
-    console.log(this.text[0].text, this.text[0].measureText(this.drawContext2D[0].ctx, 2));
     this.setBorder();
     this.state = 'loaded';
   }

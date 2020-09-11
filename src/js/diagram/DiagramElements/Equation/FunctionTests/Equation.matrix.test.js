@@ -293,10 +293,10 @@ describe('Equation Functions - Matrix', () => {
       const newA = eqn._a.getBoundingRect('diagram');
       const newB = eqn._b.getBoundingRect('diagram');
       console.log(eqn._a.drawingObject.border);
-      // console.log(baseLeft)
+      console.log(baseLeft)
       // console.log(initialSpace)
-      // console.log(newA)
-      // console.log(newB)
+      console.log(newA)
+      console.log(newB)
       expect(round(newA.left))
         .toBe(round(baseLeft.right + initialSpace + (newB.height - newA.width) / 2));
     });
