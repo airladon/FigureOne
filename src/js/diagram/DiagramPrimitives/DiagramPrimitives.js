@@ -1258,6 +1258,26 @@ export default class DiagramPrimitives {
   //   return element;
   // }
 
+  // Example of text phrase
+  // {
+  //   name: 'tester',
+  //   method: 'text',
+  //   options: {
+  //     text: [
+  //       'hello ',
+  //       ['MM', { font: f2 }],
+  //       ['2', { offset: [0, -0.02], font: f3 }],
+  //       ['2', { offset: [-0.02, 0.1], font: f3 }],
+  //       ' M',
+  //       ['dg', { font: { weight: 'bolder' }, location: [0, -0.2] }],
+  //     ],
+  //     font: f1,
+  //     position: [-0, -0.5],
+  //     xAlign: 'center',
+  //     yAlign: 'baseline',
+  //     color: [0, 0, 1, 1],
+  //   },
+  // },
   text(...optionsIn: Array<{
     text: string | Array<string | {
       font?: TypeDiagramFontOptions | Array<TypeDiagramFontOptions>,

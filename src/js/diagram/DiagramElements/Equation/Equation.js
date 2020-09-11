@@ -1,6 +1,6 @@
 // @flow
 import {
-  Point, Transform, parsePoint, getPoint,
+  Point, Transform, parsePoint, getPoint, getTransform,
 } from '../../../tools/g2';
 import { joinObjects, joinObjectsWithOptions } from '../../../tools/tools';
 // import { RGBToArray } from '../../../tools/color';
@@ -662,6 +662,9 @@ export class Equation extends DiagramElementCollection {
       .scale(1, 1)
       .rotate(0)
       .translate(0, 0), shapes.limits);
+    if (optionsToUse.transform != null) {
+      this.setTransform(getTransform(optionsToUse.transform));
+    }
     this.shapes = shapes;
     this.setColor(optionsToUse.color);
     // this.isTouchDevice = isTouchDevice;

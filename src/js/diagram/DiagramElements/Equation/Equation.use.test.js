@@ -105,6 +105,9 @@ describe('Different ways to make an equation', () => {
           // to be particular with the font size, and then scale for layout.
           // Note, scale will not impact dynamic symbol line widths.
           scale: 0.45,
+          // equation transform
+          transform: [['s', 2], ['r', 1], ['t', [0, 0]]],
+          // equation position - will override translation in transform
           position: [1, 1],
           // Elements can be defined inline in `forms` or defined here. Define
           // here is there are lots of customizations to the element that will

@@ -25,7 +25,7 @@ console.log(new Fig.Transform().translate(0.5, 0).scale(2, 2).matrix())
 diagram.addElements([
   {
     name: 'tester',
-    method: 'shapes.text',
+    method: 'text',
     options: {
       text: [
         'hello ',
@@ -77,8 +77,9 @@ diagram.addElements([
     method: 'equation',
     options: {
       color: [0.95, 0.95, 0.6, 1],
-      position: [0, 0],
+      position: [0.2, 0.2],
       font: { size: 0.8 },
+      transform: [['s', 2], ['r', 1], ['t', [0, 0]]],
       // scale: 2,
       elements: {
         v: { symbol: 'vinculum', color: [1, 0, 0, 1] },
