@@ -12,28 +12,28 @@ import DrawContext2D from '../../../__mocks__/DrawContext2DMock';
 describe('Diagram Text Object', () => {
   let font;
   beforeEach(() => {
-    font = new DiagramFont(
-      'Helvetica Neue',
-      '',
-      1,
-      '200',
-      'center',
-      'middle',
-      [1, 0, 0, 1],
-    );
+    font = new DiagramFont({
+      family: 'Helvetica Neue',
+      style: '',
+      size: 1,
+      weight: '200',
+      // xAlign'center',
+      // 'middle',
+      color: [1, 0, 0, 1],
+    });
   });
   describe('DiagramFont', () => {
     test('Instantiate default', () => {
       const df = new DiagramFont();
-      const expected = new DiagramFont(
-        'Helvetica Neue',
-        '',
-        1,
-        '200',
-        'center',
-        'middle',
-        null,
-      );
+      const expected = new DiagramFont({
+        family: 'Times New Roman',
+        style: '',
+        size: 1,
+        weight: '200',
+        // 'center',
+        // 'middle',
+        color: null,
+      });
       expect(df).toEqual(expected);
     });
     test('Color', () => {
@@ -41,10 +41,10 @@ describe('Diagram Text Object', () => {
     });
     test('Set', () => {
       const ctx = {};
-      font.set(ctx, 2);
+      font.setFontInContext(ctx, 2);
       expect(ctx.font).toBe(' 200 2px Helvetica Neue');
-      expect(ctx.textAlign).toBe('center');
-      expect(ctx.textBaseline).toBe('middle');
+      // expect(ctx.textAlign).toBe('center');
+      // expect(ctx.textBaseline).toBe('middle');
     });
     test('Copy', () => {
       const f2 = font._dup();
@@ -89,7 +89,7 @@ describe('Diagram Text Object', () => {
         textArray[0].font.size = 30;
         textArray[1].font.size = 30;
         const to = new TextObject(draw2D, textArray);
-        expect(to.scalingFactor).toBe(1);
+        expect(round(to.scalingFactor, 3)).toBe(round(20 / 30, 3));
       });
       test('At threshold (20)', () => {
         textArray[0].font.size = 20;
@@ -101,26 +101,30 @@ describe('Diagram Text Object', () => {
         textArray[0].font.size = 19;
         textArray[1].font.size = 19;
         const to = new TextObject(draw2D, textArray);
-        expect(to.scalingFactor).toBe(19 * 50);
+        // expect(to.scalingFactor).toBe(19 * 50);
+        expect(round(to.scalingFactor, 3)).toBe(round(20 / 19, 3));
       });
       test('1', () => {
         textArray[0].font.size = 1;
         textArray[1].font.size = 1;
         const to = new TextObject(draw2D, textArray);
-        expect(to.scalingFactor).toBe(1 * 50);
+        // expect(to.scalingFactor).toBe(1 * 50);
+        expect(round(to.scalingFactor, 3)).toBe(round(20 / 1, 3));
       });
 
       test('<1', () => {
         textArray[0].font.size = 0.1;
         textArray[1].font.size = 0.1;
         const to = new TextObject(draw2D, textArray);
-        expect(round(to.scalingFactor, 5)).toBe(round(10 ** (1 + 2), 5));
+        // expect(round(to.scalingFactor, 5)).toBe(round(10 ** (1 + 2), 5));
+        expect(round(to.scalingFactor, 3)).toBe(round(20 / 0.1, 3));
       });
       test('variable sizes - but min < 1', () => {
         textArray[0].font.size = 10;
         textArray[1].font.size = 0.1;
         const to = new TextObject(draw2D, textArray);
-        expect(round(to.scalingFactor, 5)).toBe(round(10 ** (1 + 2), 5));
+        // expect(round(to.scalingFactor, 5)).toBe(round(10 ** (1 + 2), 5));
+        expect(round(to.scalingFactor, 3)).toBe(round(20 / 0.1, 3));
       });
     });
     describe('GL Boundaries', () => {
