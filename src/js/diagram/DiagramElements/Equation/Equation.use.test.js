@@ -87,18 +87,24 @@ describe('Different ways to make an equation', () => {
       },
       allTextInConstructorAllOptionsNew__TO_TEST__TODO: () => {
         eqn = new Equation(diagram.shapes, {
-          color: [ 0.95, 0, 0, 1],            // default color of the equation
+          color: [0.95, 0, 0, 1],            // default color of the equation
           // Default font for the equation. Note, there is no `style` option for
           // setting `italic` or `normal`. This can be set on an individual
           // element basis, otherwise it will automatically choose:
-          //    italics: if the element text has any letters in it
-          //    normal: if not (just numbers or symbols like '=')
+          //   - `italics`: if the element text has any letters in it
+          //   - `normal`: if not (just numbers or symbols like '=')
           // None, some or all of the options can be used
           font: {
             family: 'Times New Roman',
             weight: '200',      // Use CSS weight definition strings
-            size: 0.2,
+            size: 0.2,          // element space font height
           },
+          // Scale of the equation - scale scales the sizes of the text as well
+          // as the spaces between them in the layout. In comparison,
+          // `font.size` will only change the size of the font. Set `font.size`
+          // to be particular with the font size, and then scale for layout.
+          // Note, scale will not impact dynamic symbol line widths.
+          scale: 0.45,
           position: [1, 1],
           // Elements can be defined inline in `forms` or defined here. Define
           // here is there are lots of customizations to the element that will
@@ -153,8 +159,6 @@ describe('Different ways to make an equation', () => {
             },
             rightB: { symbol: 'brace', side: 'right' },
           },
-          // Scale of the equation
-          scale: 0.45,
           // Default form attributes
           formDefaults: {
             alignment: {

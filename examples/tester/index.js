@@ -78,7 +78,8 @@ diagram.addElements([
     options: {
       color: [0.95, 0.95, 0.6, 1],
       position: [0, 0],
-      // font: { family: 'Arial', style: 'normal', color: [0, 1, 1, 1] },
+      font: { size: 0.8 },
+      // scale: 2,
       elements: {
         v: { symbol: 'vinculum', color: [1, 0, 0, 1] },
         arrow: {
