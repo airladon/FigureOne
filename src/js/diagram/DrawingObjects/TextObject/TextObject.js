@@ -117,6 +117,7 @@ class DiagramFont {
 class DiagramText {
   location: Point;
   relativeLocation: boolean;
+  locationAligned: Point;
   offset: Point;
   text: string;
   font: DiagramFont;
@@ -147,6 +148,7 @@ class DiagramText {
       this.location = getPoint(location)._dup();
       this.relativeLocation = false;
     }
+    this.locationAligned = this.location._dup();
 
     this.text = text.slice();
     if (font instanceof DiagramFont) {
@@ -329,6 +331,7 @@ class TextObject extends DrawingObject {
     }
     this.xAlign = xAlign;
     this.yAlign = yAlign;
+    console.log(this.text[0].text, this.text[0].measureText(this.drawContext2D[0].ctx, 2));
     this.setBorder();
     this.state = 'loaded';
   }
@@ -502,12 +505,175 @@ class TextObject extends DrawingObject {
     // transform, we need to similarly scale our locations and
     // font sizes
 
-    // Text objects can either have absolute or relative locations.
-    // If text.location is null, then the location is calculated relative to
-    // the previous text where it will be placed immediately to the right,
-    // sharing the same baseline. If the text alignment is left, baseline, then
-    // the words will follow each other naturally.
-    //
+    // // Text objects can either have absolute or relative locations.
+    // // If text.location is null, then the location is calculated relative to
+    // // the previous text where it will be placed immediately to the right,
+    // // sharing the same baseline. If the text alignment is left, baseline, then
+    // // the words will follow each other naturally.
+    // //
+    // let lastRight = new Point(0, 0);
+    // this.text.forEach((diagramText) => {
+    //   const { relativeLocation, offset } = diagramText;
+    //   let location;
+    //   if (relativeLocation) {
+    //     location = lastRight._dup();
+    //     diagramText.location = location;
+    //   } else {
+    //     ({ location } = diagramText);
+    //   }
+    //   // Measure the text in scaled space
+    //   const measure = diagramText.measureText(ctx, scalingFactor);
+    //   lastRight = new Point(
+    //     location.x + measure.right + offset.x,
+    //     location.y,
+    //   );
+    // });
+
+    // // We now have calculated all the locations of the text, now let's calculate
+    // // the total bounds, so the locations can be scaled by xAlign and yAlign.
+    // // Note, if yAlign === 'baseline', then the block of text will be aligned
+    // // around the y coordinate of the first text element.
+    // let xMin = null;
+    // let xMax = null;
+    // let yMin = null;
+    // let yMax = null;
+    // this.text.forEach((diagramText) => {
+    //   const { location, lastMeasure, offset } = diagramText;
+    //   const xMinText = location.x - lastMeasure.left + offset.x;
+    //   const xMaxText = location.x + lastMeasure.right + offset.x;
+    //   const yMaxText = location.y + lastMeasure.ascent;
+    //   const yMinText = location.y - lastMeasure.descent;
+    //   if (xMin == null || xMinText < xMin) {
+    //     xMin = xMinText;
+    //   }
+    //   if (xMax == null || xMaxText > xMax) {
+    //     xMax = xMaxText;
+    //   }
+    //   if (yMin == null || yMinText < yMin) {
+    //     yMin = yMinText;
+    //   }
+    //   if (yMax == null || yMaxText > yMax) {
+    //     yMax = yMaxText;
+    //   }
+    // });
+    // const locationOffset = new Point(0, 0);
+    // if (xMin != null && yMin != null && xMax != null && yMax != null) {
+    //   if (this.xAlign === 'left') {
+    //     locationOffset.x = -xMin;
+    //   } else if (this.xAlign === 'right') {
+    //     locationOffset.x = -xMax;
+    //   } else if (this.xAlign === 'center') {
+    //     locationOffset.x = -xMin - (xMax - xMin) / 2;
+    //   }
+    //   if (this.yAlign === 'bottom') {
+    //     locationOffset.y = -yMin;
+    //   } else if (this.yAlign === 'top') {
+    //     locationOffset.y = -yMax;
+    //   } else if (this.yAlign === 'middle') {
+    //     locationOffset.y = -yMin - (yMax - yMin) / 2;
+    //   }
+    // }
+
+    // if (locationOffset.x !== 0 || locationOffset.y !== 0) {
+    //   this.text.forEach((diagramText) => {
+    //     diagramText.location = diagramText.location.add(locationOffset);
+    //   });
+    // }
+
+    // Fill in all the text
+    this.text.forEach((diagramText) => {
+      diagramText.font.setFontInContext(ctx, scalingFactor);
+      diagramText.font.setColorInContext(ctx, color);
+      this.recordLastDraw(
+        ctx,
+        diagramText,
+        scalingFactor,
+        // (diagramText.location.x + diagramText.offset.x) * scalingFactor,
+        // (diagramText.location.y + diagramText.offset.y) * -scalingFactor,
+      );
+      ctx.fillText(
+        diagramText.text,
+        (diagramText.locationAligned.x) * scalingFactor,
+        (diagramText.locationAligned.y) * -scalingFactor,
+      );
+    });
+    ctx.restore();
+  }
+
+  recordLastDraw(
+    ctx: CanvasRenderingContext2D,
+    diagramText: DiagramText,
+    scalingFactor: number,
+    // x: number,
+    // y: number,
+  ) {
+    const { x, y } = diagramText.locationAligned;
+    const { width } = diagramText.lastMeasure;
+    // const width = ctx.measureText(diagramText.text).width * 1.2;
+    // const width = diagramText.lastMeasure.width * scalingFactor * 1.2;
+    const height = diagramText.font.size * 1.2;
+    let bottom = y + height * 0.1;
+    let left = x - width * 0.1;
+    if (diagramText.yAlign === 'baseline' || diagramText.yAlign === 'alphabetic') {
+      bottom = y + height * 0.2;
+    } else if (diagramText.yAlign === 'top') {
+      bottom = y + height;
+    } else if (diagramText.yAlign === 'middle') {
+      bottom = y + height / 2;
+    }
+
+    if (diagramText.xAlign === 'center') {
+      left -= width / 2;
+    } else if (diagramText.xAlign === 'right') {
+      left -= width;
+    }
+
+    this.lastDraw.push({
+      width: width * scalingFactor,
+      height: -height * scalingFactor,
+      x: left * scalingFactor,
+      y: bottom * scalingFactor,
+      // xActual: x,
+      // yActual: y,
+      // widthActual: width / 1.2,
+    });
+    // console.log(this.lastDraw)
+  }
+
+  clear(contextIndex: number = 0) {
+    const { lastDraw } = this;
+    if (lastDraw.length > 0) {
+      const { ctx } = this.drawContext2D[contextIndex];
+      const t = this.lastDrawTransform;
+      ctx.save();
+      ctx.transform(t[0], t[3], t[1], t[4], t[2], t[5]);
+      lastDraw.forEach((draw) => {
+        // const x = Math.max(0, draw.x - draw.width * 0.5);
+        // const y = Math.max(0, draw.y - draw.height * 0.5);
+        const x = draw.x - draw.width;
+        const y = draw.y - draw.height;
+        ctx.clearRect(
+          x,
+          y,
+          draw.width * 3,
+          draw.height * 3,
+        );
+      });
+      ctx.restore();
+    }
+    this.lastDraw = [];
+  }
+
+  getGLBoundaries(lastDrawTransformMatrix: Array<number>): Array<Array<Point>> {
+    const glBoundaries = [];
+    this.text.forEach((t) => {
+      glBoundaries.push(this.getGLBoundaryOfText(t, lastDrawTransformMatrix));
+    });
+    return glBoundaries;
+  }
+
+  setBorder() {
+    this.border = [];
     let lastRight = new Point(0, 0);
     this.text.forEach((diagramText) => {
       const { relativeLocation, offset } = diagramText;
@@ -519,13 +685,19 @@ class TextObject extends DrawingObject {
         ({ location } = diagramText);
       }
       // Measure the text in scaled space
-      const measure = diagramText.measureText(ctx, scalingFactor);
+      let scalingFactor = 1;
+      if (diagramText.font.size < 20) {
+        scalingFactor = 20 / diagramText.font.size;
+      }
+      const measure = diagramText.measureText(
+        this.drawContext2D[0].ctx, scalingFactor,
+      );
+      diagramText.lastMeasure = measure;
       lastRight = new Point(
         location.x + measure.right + offset.x,
         location.y,
       );
     });
-
     // We now have calculated all the locations of the text, now let's calculate
     // the total bounds, so the locations can be scaled by xAlign and yAlign.
     // Note, if yAlign === 'baseline', then the block of text will be aligned
@@ -571,104 +743,11 @@ class TextObject extends DrawingObject {
       }
     }
 
-    if (locationOffset.x !== 0 || locationOffset.y !== 0) {
-      this.text.forEach((diagramText) => {
-        diagramText.location = diagramText.location.add(locationOffset);
-      });
-    }
-
-    // Fill in all the text
+    // if (locationOffset.x !== 0 || locationOffset.y !== 0) {
     this.text.forEach((diagramText) => {
-      diagramText.font.setFontInContext(ctx, scalingFactor);
-      diagramText.font.setColorInContext(ctx, color);
-      this.recordLastDraw(
-        ctx,
-        diagramText,
-        scalingFactor,
-        (diagramText.location.x + diagramText.offset.x) * scalingFactor,
-        (diagramText.location.y + diagramText.offset.y) * -scalingFactor,
-      );
-      ctx.fillText(
-        diagramText.text,
-        (diagramText.location.x + diagramText.offset.x) * scalingFactor,
-        (diagramText.location.y + diagramText.offset.y) * -scalingFactor,
-      );
+      diagramText.locationAligned = diagramText.location.add(locationOffset);
     });
-    ctx.restore();
-  }
-
-  recordLastDraw(
-    ctx: CanvasRenderingContext2D,
-    diagramText: DiagramText,
-    scalingFactor: number,
-    x: number,
-    y: number,
-  ) {
-    // const width = ctx.measureText(diagramText.text).width * 1.2;
-    const width = diagramText.lastMeasure.width * scalingFactor * 1.2;
-    const height = diagramText.font.size * scalingFactor * 1.2;
-    let bottom = y + height * 0.1;
-    let left = x - width * 0.1;
-    if (diagramText.yAlign === 'baseline' || diagramText.yAlign === 'alphabetic') {
-      bottom = y + height * 0.2;
-    } else if (diagramText.yAlign === 'top') {
-      bottom = y + height;
-    } else if (diagramText.yAlign === 'middle') {
-      bottom = y + height / 2;
-    }
-
-    if (diagramText.xAlign === 'center') {
-      left -= width / 2;
-    } else if (diagramText.xAlign === 'right') {
-      left -= width;
-    }
-
-    this.lastDraw.push({
-      width,
-      height: -height,
-      x: left,
-      y: bottom,
-      // xActual: x,
-      // yActual: y,
-      // widthActual: width / 1.2,
-    });
-    // console.log(this.lastDraw)
-  }
-
-  clear(contextIndex: number = 0) {
-    const { lastDraw } = this;
-    if (lastDraw.length > 0) {
-      const { ctx } = this.drawContext2D[contextIndex];
-      const t = this.lastDrawTransform;
-      ctx.save();
-      ctx.transform(t[0], t[3], t[1], t[4], t[2], t[5]);
-      lastDraw.forEach((draw) => {
-        // const x = Math.max(0, draw.x - draw.width * 0.5);
-        // const y = Math.max(0, draw.y - draw.height * 0.5);
-        const x = draw.x - draw.width;
-        const y = draw.y - draw.height;
-        ctx.clearRect(
-          x,
-          y,
-          draw.width * 3,
-          draw.height * 3,
-        );
-      });
-      ctx.restore();
-    }
-    this.lastDraw = [];
-  }
-
-  getGLBoundaries(lastDrawTransformMatrix: Array<number>): Array<Array<Point>> {
-    const glBoundaries = [];
-    this.text.forEach((t) => {
-      glBoundaries.push(this.getGLBoundaryOfText(t, lastDrawTransformMatrix));
-    });
-    return glBoundaries;
-  }
-
-  setBorder() {
-    this.border = [];
+    // }
     this.text.forEach((t) => {
       this.border.push(this.getBoundaryOfText(t));
     });
