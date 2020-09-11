@@ -567,7 +567,7 @@ describe('Different ways to make an equation', () => {
     // console.log(eqn._a)
     expect(eqn._a).toMatchSnapshot();
   });
-  test.only('Separate All Text', () => {
+  test('Separate All Text', () => {
     ways.separateAllText();
     expect(eqn).toHaveProperty('_a');
     expect(eqn).toHaveProperty('_b');
@@ -662,29 +662,29 @@ describe('Different ways to make an equation', () => {
     expect(eqn._b).not.toBe(undefined);
     expect(eqn._a.drawingObject.text[0].text).toBe('a');
     expect(eqn._b.drawingObject.text[0].text).toBe('b');
-    expect(eqn._vinculum.drawingObject.points).toEqual([
-      0, 0, 0, 0.01, 0.133, 0, 0.133, 0.01,
+    expect(round(eqn._vinculum.drawingObject.points, 3)).toEqual([
+      0, 0, 0, 0.01, 0.285, 0, 0.285, 0.01,
     ]);
     expect(eqn._vinculum.color).toEqual(color1);
   });
   test('Auto Symbols ID', () => {
     ways.autoSymbolsID();
-    expect(eqn._v.drawingObject.points).toEqual([
-      0, 0, 0, 0.01, 0.133, 0, 0.133, 0.01,
+    expect(round(eqn._v.drawingObject.points, 3)).toEqual([
+      0, 0, 0, 0.01, 0.285, 0, 0.285, 0.01,
     ]);
     expect(eqn._v.color).toEqual(color1);
   });
   test('Auto Symbols Object Name', () => {
     ways.autoSymbolsObjectName();
-    expect(eqn._vinculum.drawingObject.points).toEqual([
-      0, 0, 0, 0.01, 0.133, 0, 0.133, 0.01,
+    expect(round(eqn._vinculum.drawingObject.points, 3)).toEqual([
+      0, 0, 0, 0.01, 0.285, 0, 0.285, 0.01,
     ]);
     expect(eqn._vinculum.color).toEqual(color1);
   });
   test('Auto Symbols Object ID', () => {
     ways.autoSymbolsObjectID();
-    expect(eqn._v.drawingObject.points).toEqual([
-      0, 0, 0, 0.01, 0.133, 0, 0.133, 0.01,
+    expect(round(eqn._v.drawingObject.points, 3)).toEqual([
+      0, 0, 0, 0.01, 0.285, 0, 0.285, 0.01,
     ]);
     expect(eqn._v.color).toEqual(color1);
   });

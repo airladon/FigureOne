@@ -88,16 +88,16 @@ DiagramElementPrimitive {
         Point {
           "_type": "point",
           "x": 0,
-          "y": 0.09500000000000001,
+          "y": 0.095,
         },
         Point {
           "_type": "point",
-          "x": 0.04000000000000001,
-          "y": 0.09500000000000001,
+          "x": 0.2,
+          "y": 0.095,
         },
         Point {
           "_type": "point",
-          "x": 0.04000000000000001,
+          "x": 0.2,
           "y": -0.008,
         },
         Point {
@@ -132,13 +132,13 @@ DiagramElementPrimitive {
             "x": null,
             "y": null,
           },
-          "font": "italic 200 100px Times New Roman",
+          "font": "italic 200 20px Times New Roman",
           "measureText": [Function],
           "restore": [Function],
           "save": [Function],
           "scale": [Function],
-          "textAlign": "left",
-          "textBaseline": "alphabetic",
+          "textAlign": [Function],
+          "textBaseline": [Function],
           "transform": [Function],
           "transformMatrix": Array [
             0,
@@ -159,7 +159,7 @@ DiagramElementPrimitive {
       "y": 0,
     },
     "onLoad": null,
-    "scalingFactor": 499.99999999999994,
+    "scalingFactor": 100,
     "state": "loaded",
     "text": Array [
       DiagramText {
@@ -175,18 +175,34 @@ DiagramElementPrimitive {
           "size": 0.2,
           "style": "italic",
           "weight": "200",
-          "xAlign": "left",
-          "yAlign": "alphabetic",
+        },
+        "lastMeasure": Object {
+          "ascent": 0.095,
+          "descent": 0.008,
+          "height": 0.10300000000000001,
+          "left": 0,
+          "right": 0.2,
+          "width": 0.2,
         },
         "location": Point {
           "_type": "point",
           "x": 0,
           "y": 0,
         },
+        "offset": Point {
+          "_type": "point",
+          "x": 0,
+          "y": 0,
+        },
+        "relativeLocation": true,
         "text": "a",
+        "xAlign": "left",
+        "yAlign": "baseline",
       },
     ],
     "type": "drawingObject",
+    "xAlign": "left",
+    "yAlign": "baseline",
   },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
@@ -269,7 +285,7 @@ DiagramElementPrimitive {
     "mat": Array [
       0.45,
       0,
-      2.873675,
+      2.808875,
       0,
       0.45,
       2.8807625000000003,
@@ -282,7 +298,7 @@ DiagramElementPrimitive {
       Translation {
         "_type": "point",
         "name": "text",
-        "x": 1.9415,
+        "x": 1.7974999999999999,
         "y": 1.9572500000000002,
       },
       Rotation {
@@ -582,7 +598,7 @@ DiagramElementPrimitive {
     "mat": Array [
       0.45,
       0,
-      1.9415,
+      1.7974999999999999,
       0,
       0.45,
       1.9572500000000002,
@@ -605,7 +621,7 @@ DiagramElementPrimitive {
       Translation {
         "_type": "point",
         "name": "text",
-        "x": 1.9415,
+        "x": 1.7974999999999999,
         "y": 1.9572500000000002,
       },
     ],
@@ -646,7 +662,7 @@ Array [
 
 exports[`Different ways to make an equation Separate All Text 3`] = `
 Array [
-  0.098,
+  0.21,
   0,
   0,
   0,
@@ -662,7 +678,7 @@ exports[`Different ways to make an equation Separate All Text 4`] = `
 Array [
   0.7,
   0,
-  0.098,
+  0.21,
   0,
   0.7,
   0,

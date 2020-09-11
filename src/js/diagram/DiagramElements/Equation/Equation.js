@@ -791,6 +791,7 @@ export class Equation extends DiagramElementCollection {
     },
     defaultText: string = '',
   ) {
+
     let textToUse = defaultText;
     if (options.text != null) {
       textToUse = options.text;
@@ -802,7 +803,6 @@ export class Equation extends DiagramElementCollection {
     } else if (options.font != null) {
       fontDefinition = joinObjects({}, defaultFontDefinition, options.font);
     }
-
     // let fontToUse: DiagramFont = this.eqn.fontMath;
     // if (textToUse.match(/[A-Z,a-z,\u03B8]/)) {
     //   fontToUse = this.eqn.fontText;
@@ -836,7 +836,6 @@ export class Equation extends DiagramElementCollection {
     //   fontDefinition = joinObjects({}, fontDefinition, options.font);
     // }
 
-
     // if (style != null || weight != null || size != null) {
     const font = new DiagramFont(fontDefinition);
     //   'Times New Roman',
@@ -857,6 +856,7 @@ export class Equation extends DiagramElementCollection {
         font,
         xAlign: 'left',
         yAlign: 'baseline',
+        // color: font.color,
       },
     );
     // if (options.color != null) {

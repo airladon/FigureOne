@@ -6,7 +6,7 @@ import {
 //   round
 // } from '../../tools/math';
 import type {
-  TypeParsablePoint, TypeParsableRect,
+  TypeParsablePoint, TypeParsableRect, TypeParsableTransform,
 } from '../../tools/g2';
 import { setHTML } from '../../tools/htmlGenerator';
 import {
@@ -15,7 +15,7 @@ import {
 import WebGLInstance from '../webgl/webgl';
 import DrawContext2D from '../DrawContext2D';
 import * as tools from '../../tools/math';
-import { generateUniqueId, joinObjects } from '../../tools/tools';
+import { generateUniqueId, joinObjects, joinObjectsWithOptions } from '../../tools/tools';
 import VertexObject from '../DrawingObjects/VertexObject/VertexObject';
 // import {
 //   PolyLine, PolyLineCorners,
@@ -39,6 +39,9 @@ import Axis from '../DiagramElements/Plot/Axis';
 import Text from '../DiagramElements/Text';
 import {
   DiagramText, DiagramFont, TextObject,
+} from '../DrawingObjects/TextObject/TextObject';
+import type {
+  TypeDiagramFontDefinition,
 } from '../DrawingObjects/TextObject/TextObject';
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { TypeSpaceTransforms } from '../Diagram';
@@ -1280,13 +1283,13 @@ export default class DiagramPrimitives {
   // },
   text(...optionsIn: Array<{
     text: string | Array<string | {
-      font?: TypeDiagramFontOptions | Array<TypeDiagramFontOptions>,
+      font?: TypeDiagramFontDefinition,
       location?: TypeParsablePoint | null,
       offset?: TypeParsablePoint,
       xAlign?: 'left' | 'right' | 'center',
       yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
     }>;
-    font: TypeDiagramFontOptions | Array<TypeDiagramFontOptions>,
+    font: TypeDiagramFontDefinition,
     position: TypeParsablePoint,
     transform: TypeParsableTransform,
     xAlign: 'left' | 'right' | 'center',
@@ -1303,12 +1306,18 @@ export default class DiagramPrimitives {
       },
       xAlign: 'left',
       yAlign: 'baseline',
-      color: [1, 0, 0, 1],
       transform: new Transform('text').standard(),
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
+
+    if (options.color == null && options.font.color != null) {
+      options.color = options.font.color;
+    }
     if (options.font.color == null && options.color != null) {
       options.font.color = options.color;
+    }
+    if (options.color == null) {
+      options.color = [1, 0, 0, 1];
     }
 
     if (options.position != null) {
