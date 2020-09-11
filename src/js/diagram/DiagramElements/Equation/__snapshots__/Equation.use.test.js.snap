@@ -92,12 +92,12 @@ DiagramElementPrimitive {
         },
         Point {
           "_type": "point",
-          "x": 0.2,
+          "x": 0.1,
           "y": 0.095,
         },
         Point {
           "_type": "point",
-          "x": 0.2,
+          "x": 0.1,
           "y": -0.008,
         },
         Point {
@@ -181,10 +181,15 @@ DiagramElementPrimitive {
           "descent": 0.008,
           "height": 0.10300000000000001,
           "left": 0,
-          "right": 0.2,
-          "width": 0.2,
+          "right": 0.1,
+          "width": 0.1,
         },
         "location": Point {
+          "_type": "point",
+          "x": 0,
+          "y": 0,
+        },
+        "locationAligned": Point {
           "_type": "point",
           "x": 0,
           "y": 0,
@@ -285,7 +290,7 @@ DiagramElementPrimitive {
     "mat": Array [
       0.45,
       0,
-      2.808875,
+      2.849375,
       0,
       0.45,
       2.8807625000000003,
@@ -298,7 +303,7 @@ DiagramElementPrimitive {
       Translation {
         "_type": "point",
         "name": "text",
-        "x": 1.7974999999999999,
+        "x": 1.8875,
         "y": 1.9572500000000002,
       },
       Rotation {
@@ -598,7 +603,7 @@ DiagramElementPrimitive {
     "mat": Array [
       0.45,
       0,
-      1.7974999999999999,
+      1.8875,
       0,
       0.45,
       1.9572500000000002,
@@ -621,7 +626,7 @@ DiagramElementPrimitive {
       Translation {
         "_type": "point",
         "name": "text",
-        "x": 1.7974999999999999,
+        "x": 1.8875,
         "y": 1.9572500000000002,
       },
     ],
@@ -662,7 +667,7 @@ Array [
 
 exports[`Different ways to make an equation Separate All Text 3`] = `
 Array [
-  0.21,
+  0.14,
   0,
   0,
   0,
@@ -678,7 +683,7 @@ exports[`Different ways to make an equation Separate All Text 4`] = `
 Array [
   0.7,
   0,
-  0.21,
+  0.14,
   0,
   0.7,
   0,

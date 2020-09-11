@@ -664,28 +664,28 @@ describe('Different ways to make an equation', () => {
     expect(eqn._a.drawingObject.text[0].text).toBe('a');
     expect(eqn._b.drawingObject.text[0].text).toBe('b');
     expect(round(eqn._vinculum.drawingObject.points, 3)).toEqual([
-      0, 0, 0, 0.01, 0.285, 0, 0.285, 0.01,
+      0, 0, 0, 0.01, 0.19, 0, 0.19, 0.01,
     ]);
     expect(eqn._vinculum.color).toEqual(color1);
   });
   test('Auto Symbols ID', () => {
     ways.autoSymbolsID();
     expect(round(eqn._v.drawingObject.points, 3)).toEqual([
-      0, 0, 0, 0.01, 0.285, 0, 0.285, 0.01,
+      0, 0, 0, 0.01, 0.19, 0, 0.19, 0.01,
     ]);
     expect(eqn._v.color).toEqual(color1);
   });
   test('Auto Symbols Object Name', () => {
     ways.autoSymbolsObjectName();
     expect(round(eqn._vinculum.drawingObject.points, 3)).toEqual([
-      0, 0, 0, 0.01, 0.285, 0, 0.285, 0.01,
+      0, 0, 0, 0.01, 0.19, 0, 0.19, 0.01,
     ]);
     expect(eqn._vinculum.color).toEqual(color1);
   });
   test('Auto Symbols Object ID', () => {
     ways.autoSymbolsObjectID();
     expect(round(eqn._v.drawingObject.points, 3)).toEqual([
-      0, 0, 0, 0.01, 0.285, 0, 0.285, 0.01,
+      0, 0, 0, 0.01, 0.19, 0, 0.19, 0.01,
     ]);
     expect(eqn._v.color).toEqual(color1);
   });

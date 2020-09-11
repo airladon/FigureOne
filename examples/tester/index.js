@@ -284,29 +284,33 @@ const elements = {
   c: 'c',
   d: 'd',
   left: {
-    symbol: 'bracket', side: 'left', lineWidth: 0.012, width: 0.03,
+    symbol: 'squareBracket', side: 'left', lineWidth: 0.012, width: 0.03,
   },
   right: {
-    symbol: 'bracket', side: 'right', lineWidth: 0.012, width: 0.03,
+    symbol: 'squareBracket', side: 'right', lineWidth: 0.012, width: 0.03,
   },
+  root3: {
+        symbol: 'radical',
+      },
 };
 eqn.addElements(elements);
 eqn.addForms({
   base: {
-    content: ['m = ', {
-      matrix: {
-        content: ['asdf', 'b', 'c', { frac: ['d', 'vinculum', { frac: ['e', 'v1_vinculum', 'f', 1.2] } ] }],
-        left: 'left',
-        right: 'right',
-        order: [2, 2],
-        scale: 1,
-        fit: 'max',
-        space: [0.1, 0.1],
-        yAlign: 'middle',
-        brac: { insideSpace: 0.1 },
-        scale: 0.7,
+    content: {
+      root: {
+        content: 'a',
+        symbol: 'root3',
+        inSize: true,
+        space: 0.1,
+        topSpace: 0.1,
+        rightSpace: 0.1,
+        bottomSpace: 0.1,
+        leftSpace: 0.1,
+        root: 'b',
+        rootOffset: [-0.1, -0.1],
+        rootScale: 1,
       },
-    }],
+    },
     scale: 1,
     alignment: {
       xAlign: 'center',

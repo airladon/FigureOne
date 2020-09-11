@@ -36,7 +36,9 @@ describe('Equation Functions - Brackets', () => {
     };
     functions = {
       single: () => {
-        eqn = new Equation(diagram.shapes, { color: color1 });
+        eqn = new Equation(diagram.shapes, {
+          color: color1,
+        });
         const e = eqn.eqn.functions;
         const brac = e.brac.bind(e);
         eqn.addElements(elements);
@@ -226,17 +228,22 @@ describe('Equation Functions - Brackets', () => {
       baseLScale = eqn._lb.custom.scale._dup();
     });
     // Note, the letter a has the following bounds:
-    // width: 0.04000000000000001,
-    // height: 0.10300000000000001,
-    // descent: -0.008,
-    // ascent: top: 0.095,
+    //   width: 0.1,
+    //   height: 0.103,
+    //   descent: -0.008,
+    //   ascent: top: 0.095,
+    // The letter b has the following bounds:
+    //   width: 0.1,
+    //   height: 0.148,
+    //   descent: -0.008,
+    //   ascent: top: 0.14,
     test('noLeftBracket', () => {
       eqn.showForm('noLeftBracket');
-      const newA = eqn._a.getPosition();
-      const newR = eqn._rb.getPosition();
-      // 0.04 + 0.1 = 0.14
-      expect(round(newA.x)).toBe(0.1);
-      expect(round(newR.x)).toBe(0.24);
+      diagram.setFirstTransform();
+      const newA = eqn._a.getBoundingRect('diagram');
+      const newR = eqn._rb.getBoundingRect('diagram');
+      expect(round(newA.left)).toBe(0.1);
+      expect(round(newR.left)).toBe(round(newA.right + 0.1));
     });
     test('notInSize', () => {
       eqn.showForm('notInSize');
@@ -248,7 +255,7 @@ describe('Equation Functions - Brackets', () => {
       expect(round(newL.y)).toBe(-0.108);
       // 0 - 0.1 - 0.04 = -0.14
       expect(round(newL.x)).toBe(round(-0.1 - eqn._lb.getBoundingRect('diagram').width));
-      expect(round(newB.x)).toBe(0.04);
+      expect(round(newB.x)).toBe(0.1);
     });
     test('forceHeightGreaterThanActualHeight', () => {
       eqn.showForm('forceHeightGreaterThanActualHeight');

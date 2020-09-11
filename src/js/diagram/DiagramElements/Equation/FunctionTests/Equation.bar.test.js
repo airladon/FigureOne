@@ -449,7 +449,7 @@ describe('Equation Functions - Bar', () => {
       const newBar = eqn._hBar2.getBoundingRect();
       expect(round(newBar.left)).toBe(-offset);
       expect(round(newBar.bottom)).toBe(round(newA.bottom - space - newBar.height));
-      expect(round(newBar.width)).toBe(round(newA.width) + offset * 2);
+      expect(round(newBar.width)).toBe(round(newA.width + offset * 2));
       expect(round(newA.left)).toBe(0);
       expect(round(newB.left)).toBe(round(newA.width));
     });

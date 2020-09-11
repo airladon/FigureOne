@@ -4,7 +4,7 @@ exports[`Equation Functions - Root Root 1`] = `
 Array [
   0.7,
   0,
-  0.27441,
+  0.20441,
   0,
   0.7,
   0,
@@ -16,9 +16,9 @@ Array [
 
 exports[`Equation Functions - Root Root 2`] = `
 Array [
-  0.39105,
+  0.32105,
   0,
-  0.09336,
+  0.02336,
   0,
   0.2221,
   -0.0756,

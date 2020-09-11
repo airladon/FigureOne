@@ -306,7 +306,7 @@ describe('Equation Functions - Root', () => {
       diagram.setFirstTransform();
       const newB = eqn._b.getBoundingRect('diagram');
       expect(round(newB.bottom)).toBe(round(baseB.bottom + offset.y));
-      expect(round(newB.left)).toBe(round(baseB.left + offset.x));
+      expect(round(newB.left)).toBe(round(offset.x - (baseR.left - baseB.left)));
     });
     test('rootScale', () => {
       eqn.showForm('rootScale');

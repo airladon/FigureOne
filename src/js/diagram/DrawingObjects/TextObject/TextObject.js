@@ -687,9 +687,6 @@ class TextObject extends DrawingObject {
       // Measure the text in scaled space
       let scalingFactor = 1;
       if (diagramText.font.size < 20) {
-        // BEWARE: because of poorly designed mock 2D context, it is important
-        // this scaling factor be at least 30 - this can be fixed by changing
-        // the default return value width of 
         scalingFactor = 20 / diagramText.font.size;
       }
       const measure = diagramText.measureText(
