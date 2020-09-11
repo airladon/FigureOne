@@ -20,8 +20,6 @@ export type TypeDiagramFontDefinition = {
   style?: 'normal' | 'italic',
   size?: number,
   weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
-  // xAlign?: 'left' | 'center' | 'right',
-  // yAlign?: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline',
   color?: Array<number> | null,
   opacity?: number,
 };
@@ -32,20 +30,10 @@ class DiagramFont {
   weight: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
   style: 'normal' | 'italic';
   family: string;
-  // xAlign: 'left' | 'center' | 'right';
-  // yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
   color: Array<number> | null;
   opacity: number;
 
   constructor(optionsIn: TypeDiagramFontDefinition = {}) {
-  //   family: string = 'Helvetica Neue',
-  //   style: string = '',
-  //   size: number = 1,
-  //   weight: string = '200',
-  //   xAlign: 'left' | 'center' | 'right' = 'center',
-  //   yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' = 'middle',
-  //   color: Array<number> | null = null,
-  // ) {
     const defaultOptions = {
       family: 'Times New Roman',
       style: '',
@@ -59,18 +47,11 @@ class DiagramFont {
     this.style = options.style;
     this.size = options.size;
     this.weight = options.weight;
-    // this.xAlign = options.xAlign;
-    // this.yAlign = options.yAlign;
     this.opacity = options.opacity;
     this.setColor(options.color);
   }
 
   setColor(color: Array<number> | null = null) {
-    // if (Array.isArray(color)) {
-    //   this.color = colorArrayToString(color);
-    // } else {
-    //   this.color = color;
-    // }
     if (color == null) {
       this.color = color;
     } else {
@@ -98,12 +79,6 @@ class DiagramFont {
 
   setFontInContext(ctx: CanvasRenderingContext2D, scalingFactor: number = 1) {
     ctx.font = `${this.style} ${this.weight} ${this.size * scalingFactor}px ${this.family}`;
-    // ctx.textAlign = this.xAlign;
-    // if (this.yAlign === 'baseline') {
-    //   ctx.textBaseline = 'alphabetic';
-    // } else {
-    //   ctx.textBaseline = this.yAlign;
-    // }
   }
 
   setColorInContext(ctx: CanvasRenderingContext2D, color: Array<number> | null) {
@@ -147,7 +122,7 @@ class DiagramText {
   font: DiagramFont;
   xAlign: 'left' | 'center' | 'right';
   yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
-  scalingFactor: number;
+  // scalingFactor: number;
   lastMeasure: {
     ascent: number,
     descent: number,
@@ -172,11 +147,7 @@ class DiagramText {
       this.location = getPoint(location)._dup();
       this.relativeLocation = false;
     }
-    // this.location = null;
-    // if (location != null) {
-    //   this.location = getPoint(location)._dup();
-    // }
-    // this.location = location._dup();
+
     this.text = text.slice();
     if (font instanceof DiagramFont) {
       this.font = font._dup();
@@ -186,13 +157,13 @@ class DiagramText {
     this.xAlign = xAlign;
     this.yAlign = yAlign;
 
-    if (this.font.size < 20) {
-      this.scalingFactor = this.font.size * 50;
-    }
-    if (this.font.size < 1) {
-      const power = -Math.log(this.font.size) / Math.LN10 + 2;
-      this.scalingFactor = 10 ** power;
-    }
+    // if (this.font.size < 20) {
+    //   this.scalingFactor = this.font.size * 50;
+    // }
+    // if (this.font.size < 1) {
+    //   const power = -Math.log(this.font.size) / Math.LN10 + 2;
+    //   this.scalingFactor = 10 ** power;
+    // }
     // this.font = font._dup();
   }
 
@@ -206,7 +177,7 @@ class DiagramText {
   // eslint-disable-next-line class-methods-use-this
   measureText(
     ctx: CanvasRenderingContext2D,
-    scalingFactor: number = this.scalingFactor,
+    scalingFactor: number = 20,
   ) {
     // const location = getPoint(locationIn);
     this.font.setFontInContext(ctx, scalingFactor);
@@ -293,13 +264,6 @@ class DiagramText {
     asc /= scalingFactor;
     des /= scalingFactor;
 
-    // return new Rect(
-    //   location.x - left,
-    //   location.y - des,
-    //   left + right,
-    //   des + asc,
-    // );
-
     this.lastMeasure = {
       left,
       right,
@@ -310,13 +274,6 @@ class DiagramText {
     };
 
     return this.lastMeasure;
-
-    // return {
-    //   actualBoundingBoxLeft: left / this.scalingFactor,
-    //   actualBoundingBoxRight: right / this.scalingFactor,
-    //   fontBoundingBoxAscent: asc / this.scalingFactor,
-    //   fontBoundingBoxDescent: des / this.scalingFactor,
-    // };
   }
 }
 
@@ -353,7 +310,6 @@ class TextObject extends DrawingObject {
     this.scalingFactor = 1;
     this.lastDraw = [];
     this.lastDrawTransform = [];
-    // this.glRect = new Rect(-1, -1, 2, 2);
     if (text.length > 0) {
       let minSize = this.text[0].font.size;
       this.text.forEach((t) => {
@@ -403,8 +359,6 @@ class TextObject extends DrawingObject {
   }
 
   setColor(color: Array<number>) {
-    // const c = colorArrayToString(color);
-
     for (let i = 0; i < this.text.length; i += 1) {
       this.text[i].font.color = color;
     }
@@ -464,6 +418,10 @@ class TextObject extends DrawingObject {
   //   - elementSpace - space of the DiagramElementPrimitive that holds text
   //   - scaledPixelSpace
   //
+
+
+  // const glToPixelSpaceMatrix1 = spaceToSpaceTransform(glSpace, pixelSpace);
+  // console.log(glToPixelSpaceMatrix1)
   drawWithTransformMatrix(
     transformMatrix: Array<number>,
     color: Array<number> = [1, 1, 1, 1],
@@ -475,76 +433,6 @@ class TextObject extends DrawingObject {
 
     // Scaling factor used to ensure font size is >> 1 pixel
     const { scalingFactor } = this;
-
-    // We want to define everything, including font size and text location,
-    // in elementSpace (the DiagramElementPrimitive space)
-    //
-    // So let's say our diagram is a square with bottom left corner (-1, -1)
-    // and width 2, height 2. We want an equivalent font size of 0.1.
-    //
-    // If our canvas is 800 x 800 pixels, then we could scale evenything up by
-    // 400. So our font size to draw in the cavnas will be 0.1 * 400 = 40px.
-    //
-    // This is great, except how do we now apply a transform? The parent
-    // transform converts element space to GL space, so we will want to add
-    // an extra conversion of pixel space. But the way we draw text in a canvas
-    // is by applying a transform to the canvas, then drawing text to it.
-    //
-    // So the way we will do it, is transform the canvas to the element space
-    // and then place the text there.
-    //
-    // * Assume a canvas of 800 x 800
-    // * If you plot text with a fontSize of 80px, at a location of
-    //   400, 400 then the font will be in the middle of the canvas and
-    //   approximately 1/10 of the canvas height
-    // * Zoom the canvas by a factor of 2
-    //   ctx.scale(2, 2)
-    // * Now to achieve the same font size and position relative to the canvas
-    //   you will need to use a fontSize of 40px and location of 200, 200
-    //
-    // * Assume a canvas of 800 x 800
-    // * To get text ~1/10th height of canvas and in the middle, plot with
-    //   fontSize: 80px at 400, 400.
-    //
-    // * If you translate the canvas by 400, 400, then you can now plot at 0, 0
-    //   for the center of the screen
-    //
-    // * To plot on the left side of the screen, use location -400, 0.
-    //
-    // * Now scale the screen by 2: `ctx.scale(2, 2)`
-    //
-    // * Now to plot same size text (relative to canvas) at same left edge
-    //   need to use a font size of 40px, and a location of -200, 0.
-    //
-    // * So if we want to convert the pixel space to GL space, which is
-    //   width 2, height 2, left -1, bottom -1, then we need scale by:
-    //      800 / 2 = 400
-    // * So if we ctx.scale(400, 400), then to get text in the equivalent size
-    //   and position we need to use a fontSize of 80/400 = 0.2, and a location
-    //   of -1, 0
-    //
-    // * In this case, the context manager will try use a font size of 0.2px and
-    //   then it will get scaled up with the ctx transform - however, a font
-    //   size of 0.2px doesn't make much sense. Infact, small font sizes like
-    //   event 5px might be dodgey, so we will try to always use a font size of
-    //   around 20 or larger.
-    //
-    // * Therefore, if we want a font size of 20px, we need to scale 0.2 by 100
-    // * This means instead of originally scaling by (400, 400), we should just
-    //   just scale by (4, 4). Now we can use a fontSize of 20px, but we will
-    //   also have to scale the location (-1 * 100, 0 * 100) = (-100, 0);
-
-    // const glSpace = {
-    //   x: { bottomLeft: -1, width: 2 },
-    //   y: { bottomLeft: -1, height: 2 },
-    // };
-    // const pixelSpace = {
-    //   x: { bottomLeft: 0, width: drawContext2D.canvas.offsetWidth },
-    //   y: { bottomLeft: drawContext2D.canvas.offsetHeight, height: -drawContext2D.canvas.offsetHeight },
-    // };
-
-    // const glToPixelSpaceMatrix1 = spaceToSpaceTransform(glSpace, pixelSpace);
-    // console.log(glToPixelSpaceMatrix1)
 
     // Find the scaling factor between GL space (width 2, height 2) and canvas
     // pixel space (width offsetWidth, height offsetHeight)
@@ -920,3 +808,70 @@ class TextObject extends DrawingObject {
 }
 
 export { TextObject, DiagramText, DiagramFont };
+
+
+// Some notes about using context2D:
+//
+// Let's say our diagram is a square with bottom left corner (-1, -1)
+// and width 2, height 2. We want an equivalent font size of 0.1.
+//
+// If our canvas is 800 x 800 pixels, then we could scale evenything up by
+// 400. So our font size to draw in the cavnas will be 0.1 * 400 = 40px.
+//
+// This is great, except how do we now apply a transform? The parent
+// transform converts element space to GL space, so we will want to add
+// an extra conversion of pixel space. But the way we draw text in a canvas
+// is by applying a transform to the canvas, then drawing text to it.
+//
+// So the way we will do it, is transform the canvas to the element space
+// and then place the text there.
+//
+// * Assume a canvas of 800 x 800
+// * If you plot text with a fontSize of 80px, at a location of
+//   400, 400 then the font will be in the middle of the canvas and
+//   approximately 1/10 of the canvas height
+// * Zoom the canvas by a factor of 2
+//   ctx.scale(2, 2)
+// * Now to achieve the same font size and position relative to the canvas
+//   you will need to use a fontSize of 40px and location of 200, 200
+//
+// * Assume a canvas of 800 x 800
+// * To get text ~1/10th height of canvas and in the middle, plot with
+//   fontSize: 80px at 400, 400.
+//
+// * If you translate the canvas by 400, 400, then you can now plot at 0, 0
+//   for the center of the screen
+//
+// * To plot on the left side of the screen, use location -400, 0.
+//
+// * Now scale the screen by 2: `ctx.scale(2, 2)`
+//
+// * Now to plot same size text (relative to canvas) at same left edge
+//   need to use a font size of 40px, and a location of -200, 0.
+//
+// * So if we want to convert the pixel space to GL space, which is
+//   width 2, height 2, left -1, bottom -1, then we need scale by:
+//      800 / 2 = 400
+// * So if we ctx.scale(400, 400), then to get text in the equivalent size
+//   and position we need to use a fontSize of 80/400 = 0.2, and a location
+//   of -1, 0
+//
+// * In this case, the context manager will try use a font size of 0.2px and
+//   then it will get scaled up with the ctx transform - however, a font
+//   size of 0.2px doesn't make much sense. Infact, small font sizes like
+//   event 5px might be dodgey, so we will try to always use a font size of
+//   around 20 or larger.
+//
+// * Therefore, if we want a font size of 20px, we need to scale 0.2 by 100
+// * This means instead of originally scaling by (400, 400), we should just
+//   just scale by (4, 4). Now we can use a fontSize of 20px, but we will
+//   also have to scale the location (-1 * 100, 0 * 100) = (-100, 0);
+
+// const glSpace = {
+//   x: { bottomLeft: -1, width: 2 },
+//   y: { bottomLeft: -1, height: 2 },
+// };
+// const pixelSpace = {
+//   x: { bottomLeft: 0, width: drawContext2D.canvas.offsetWidth },
+//   y: { bottomLeft: drawContext2D.canvas.offsetHeight, height: -drawContext2D.canvas.offsetHeight },
+// };

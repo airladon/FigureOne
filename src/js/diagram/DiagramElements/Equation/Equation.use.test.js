@@ -215,7 +215,7 @@ describe('Different ways to make an equation', () => {
             // A form can be just a single phrase
             simplePhrase: '2x',
             // Three elements in a line
-            simpleSequency: ['a', 'b', 'c'],
+            simpleSequence: ['a', 'b', 'c'],
             // An array entry can be an object definition
             inlineFrac: [{ frac: ['a', 'v', '_2'] }, 'c'],
             // Simple elements that require few mods can be defined inline. In
@@ -280,6 +280,7 @@ describe('Different ways to make an equation', () => {
               animation: {
                 duration: null,
                 translation: {
+                  a: ['curved', 'up', 0.3],
                   c: { style: 'curved', direction: 'down', mag: 0.5 },
                 },
               },
@@ -312,8 +313,8 @@ describe('Different ways to make an equation', () => {
           // form name. If more than one series are needed, then use an object
           // where each key will identify a particular series
           formSeries: {
-            a: ['0', '1'],
-            b: ['1', '2'],
+            a: ['simpleElement', 'simplePhrase', 'inlineSymbolWithId'],
+            b: ['inlineEqualsElement', 'simpleSequence'],
           },
         });
       },
@@ -566,7 +567,7 @@ describe('Different ways to make an equation', () => {
     // console.log(eqn._a)
     expect(eqn._a).toMatchSnapshot();
   });
-  test('Separate All Text', () => {
+  test.only('Separate All Text', () => {
     ways.separateAllText();
     expect(eqn).toHaveProperty('_a');
     expect(eqn).toHaveProperty('_b');
