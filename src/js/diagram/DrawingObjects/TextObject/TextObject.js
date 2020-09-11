@@ -317,14 +317,14 @@ class TextObject extends DrawingObject {
           minSize = t.font.size;
         }
       });
-      if (minSize < 20) {
-        this.scalingFactor = minSize * 50;
-      }
-      if (minSize < 1) {
-        const power = -Math.log(minSize) / Math.LN10 + 2;
-        this.scalingFactor = 10 ** power;
-      }
-      // this.scalingFactor = 20 / minSize;
+      // if (minSize < 20) {
+      //   this.scalingFactor = minSize * 50;
+      // }
+      // if (minSize < 1) {
+      //   const power = -Math.log(minSize) / Math.LN10 + 2;
+      //   this.scalingFactor = 10 ** power;
+      // }
+      this.scalingFactor = 20 / minSize;
     }
     this.xAlign = xAlign;
     this.yAlign = yAlign;

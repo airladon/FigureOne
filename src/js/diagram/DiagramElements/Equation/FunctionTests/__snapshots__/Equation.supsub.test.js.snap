@@ -18,7 +18,7 @@ exports[`Equation Functions - Superscript and Subscript Nested SupSub 2`] = `
 Array [
   0.35,
   0,
-  0.028,
+  0.14,
   0,
   0.35,
   0.04655,
@@ -32,7 +32,7 @@ exports[`Equation Functions - Superscript and Subscript Nested SupSub 3`] = `
 Array [
   0.175,
   0,
-  0.042,
+  0.21,
   0,
   0.175,
   0.08085,
@@ -46,7 +46,7 @@ exports[`Equation Functions - Superscript and Subscript Nested SupSub 4`] = `
 Array [
   0.0875,
   0,
-  0.049,
+  0.245,
   0,
   0.0875,
   0.09249,
@@ -60,7 +60,7 @@ exports[`Equation Functions - Superscript and Subscript Nested SupSub 5`] = `
 Array [
   0.0875,
   0,
-  0.049,
+  0.245,
   0,
   0.0875,
   0.07503,
@@ -74,7 +74,7 @@ exports[`Equation Functions - Superscript and Subscript Nested SupSub 6`] = `
 Array [
   0.175,
   0,
-  0.042,
+  0.21,
   0,
   0.175,
   0.0294,
@@ -88,7 +88,7 @@ exports[`Equation Functions - Superscript and Subscript Nested SupSub 7`] = `
 Array [
   0.35,
   0,
-  0.028,
+  0.14,
   0,
   0.35,
   -0.02327,
@@ -116,7 +116,7 @@ exports[`Equation Functions - Superscript and Subscript Single SupSub 2`] = `
 Array [
   0.35,
   0,
-  0.028,
+  0.14,
   0,
   0.35,
   0.04655,
@@ -130,7 +130,7 @@ exports[`Equation Functions - Superscript and Subscript Single SupSub 3`] = `
 Array [
   0.35,
   0,
-  0.028,
+  0.14,
   0,
   0.35,
   -0.02327,
