@@ -285,13 +285,18 @@ describe('Equation Functions - Matrix', () => {
       expect(round(newC.height)).toBe(round(baseC.height * scale));
       expect(round(newD.height)).toBe(round(baseD.height * scale));
     });
-    test('max', () => {
+    test.only('max', () => {
       eqn.showForm('fit');
       diagram.setFirstTransform();
       // in this case the height of the b or d is the max dimension so the width
       // of all columns becomes it.
       const newA = eqn._a.getBoundingRect('diagram');
       const newB = eqn._b.getBoundingRect('diagram');
+      console.log(eqn._a.drawingObject.border);
+      // console.log(baseLeft)
+      // console.log(initialSpace)
+      // console.log(newA)
+      // console.log(newB)
       expect(round(newA.left))
         .toBe(round(baseLeft.right + initialSpace + (newB.height - newA.width) / 2));
     });
