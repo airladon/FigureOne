@@ -23,24 +23,88 @@ const f3 = {
 console.log(new Fig.Transform().scale(2, 2).translate(0.5, 0).matrix())
 console.log(new Fig.Transform().translate(0.5, 0).scale(2, 2).matrix())
 diagram.addElements([
+  // {
+  //   name: 'tester',
+  //   method: 'shapes.lines',
+  //   // options: {
+  //   //   text: [
+  //   //     'hello',
+  //   //     ['MM', { font: f2 }],
+  //   //     ['2', { offset: [0, -0.02], font: f3 }],
+  //   //     ['2', { offset: [-0.02, 0.1], font: f3 }],
+  //   //     ' M',
+  //   //     ['dg', { font: { weight: 'bolder' }, location: [0, -0.2] }],
+  //   //   ],
+  //   //   font: f1,
+  //   //   position: [-0.5, -0.5],
+  //   //   xAlign: 'left',
+  //   //   yAlign: 'baseline',
+  //   //   color: [0, 0, 1, 1],
+  //   // },
+  //   options: {
+  //     font: {
+  //       family: 'Times New Roman',
+  //       color: [1, 0, 0, 1],
+  //       style: 'normal',
+  //       size: 0.1,
+  //       weight: '200',
+  //     },
+  //     // justification: 'center',
+  //     lines: [
+  //       'This is a |formatted| string',
+  //       [
+  //         {
+  //           font: {},
+  //           justification: 'left',
+  //           location: [],
+  //           lineSpace: 0.2,
+  //         },
+  //         'This is a |sup| string',
+  //       ],
+  //       'This is a simple string'
+  //     ],
+  //     modifiers: {
+  //       formatted: {
+  //         text: 'asdfasdf',
+  //         location: [0, 0],
+  //         offset: [0, 0],
+  //         // font: {},
+  //       },
+  //     },
+  //     // lines: [
+  //     //   {
+  //     //     text: 'asdf',
+  //     //     justification: 'right'
+  //     //   },
+  //     //   'this is standard',
+  //     //   ['This is a ', { location: [0, -0.2] }],
+  //     //   [
+  //     //     'This is a ',
+  //     //     ['formated', { font: { style: 'italic', color: [1, 0, 1, 1], weight: 'bolder' } }],
+  //     //     ' string.',
+  //     //   ],
+  //     // ],
+  //     // lineSpace: 0.2,
+  //     // justification: 'left',
+  //     // text: [
+  //     //   'This is a ',
+  //     //   ['formated', { font: { style: 'italic', color: [1, 0, 1, 1], weight: 'bolder' } }],
+  //     //   ' string.',
+  //     //   ['This is a ', { location: [0, -0.2] }],
+  //     //   ['superscript', { offset: [0, 0.05], font: { size: 0.05 } }],
+  //     //   'and',
+  //     //   ['below string', { offset: [-0.02, -0.06], font: { size: 0.05 } }],
+  //     //   [' example on a new line.', { location: -2 }],
+  //     // ],
+  //     position: [-0.8, 0],
+  //     xAlign: 'left',
+  //     yAlign: 'middle',
+  //     color: [0.5, 0.5, 1, 1],
+  //   },
+  // },
   {
     name: 'tester',
-    method: 'text',
-    // options: {
-    //   text: [
-    //     'hello',
-    //     ['MM', { font: f2 }],
-    //     ['2', { offset: [0, -0.02], font: f3 }],
-    //     ['2', { offset: [-0.02, 0.1], font: f3 }],
-    //     ' M',
-    //     ['dg', { font: { weight: 'bolder' }, location: [0, -0.2] }],
-    //   ],
-    //   font: f1,
-    //   position: [-0.5, -0.5],
-    //   xAlign: 'left',
-    //   yAlign: 'baseline',
-    //   color: [0, 0, 1, 1],
-    // },
+    method: 'shapes.textLines',
     options: {
       font: {
         family: 'Times New Roman',
@@ -49,53 +113,27 @@ diagram.addElements([
         size: 0.1,
         weight: '200',
       },
-      justification: 'center',
-      lines: [
+      text: [
         'This is a |formatted| string',
         [
           {
             font: {},
-            justification: 'left',
-            location: [],
             lineSpace: 0.2,
+            justification: 'left',
           },
           'This is a |sup| string',
         ],
-        'This is a simple string'
+        'This is a simple string also |formatted|.'
       ],
+      lineSpace: 0.4,
       modifiers: {
         formatted: {
           text: 'asdfasdf',
-          location: [0, 0],
-          offset: [0, 0],
-          font: {},
+          // location: [0, 0],
+          offset: [-0.1, 0.1],
+          font: { color: [1, 1, 0, 1], style: 'italic' },
         },
       },
-      lines: [
-        {
-          text: 'asdf',
-          justification: 'right'
-        },
-        'this is standard',
-        ['This is a ', { location: [0, -0.2] }],
-        [
-          'This is a ',
-          ['formated', { font: { style: 'italic', color: [1, 0, 1, 1], weight: 'bolder' } }],
-          ' string.',
-        ],
-      ],
-      lineSpace: 0.2,
-      justification: 'left',
-      text: [
-        'This is a ',
-        ['formated', { font: { style: 'italic', color: [1, 0, 1, 1], weight: 'bolder' } }],
-        ' string.',
-        ['This is a ', { location: [0, -0.2] }],
-        ['superscript', { offset: [0, 0.05], font: { size: 0.05 } }],
-        'and',
-        ['below string', { offset: [-0.02, -0.06], font: { size: 0.05 } }],
-        [' example on a new line.', { location: -2 }],
-      ],
       position: [-0.8, 0],
       xAlign: 'left',
       yAlign: 'middle',
@@ -147,5 +185,6 @@ diagram.initialize();
 
 diagram.elements._tester.onClick = () => { console.log(1) };
 diagram.elements._tester.makeTouchable();
+console.log(diagram.elements)
 // diagram.elements._tester.setColor([0, 1, 1, 1]);
 

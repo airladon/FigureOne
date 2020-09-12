@@ -1304,7 +1304,7 @@ describe('ObjectTracker', () => {
       });
     });
   });
-  describe.only('Split String', () => {
+  describe('Split String', () => {
     test('single letter without escape', () => {
       const s = 'This is |a| test';
       const split = tools.splitString(s, '|')

@@ -38,7 +38,7 @@ import { AxisProperties } from '../DiagramElements/Plot/AxisProperties';
 import Axis from '../DiagramElements/Plot/Axis';
 import Text from '../DiagramElements/Text';
 import {
-  DiagramText, DiagramFont, TextObject,
+  DiagramText, DiagramFont, TextObject, LinesObject,
 } from '../DrawingObjects/TextObject/TextObject';
 import type {
   TypeDiagramFontDefinition,
@@ -1167,8 +1167,8 @@ export default class DiagramPrimitives {
     );
   }
 
-  lines(...optionsIn: Array<{
-    lines: Array<string | [{
+  textLines(...optionsIn: Array<{
+    text: string | Array<string | [{
       font?: TypeDiagramFontDefinition,
       justification?: 'left' | 'center' | 'right',
       location?: TypeParsablePoint | number,
@@ -1180,6 +1180,7 @@ export default class DiagramPrimitives {
         location?: TypeParsablePoint | number,
         offset?: TypeParsablePoint,
         font?: TypeDiagramFontDefinition,
+        onClick?: () => {},
       },
     },
     font?: TypeDiagramFontDefinition,
@@ -1191,6 +1192,7 @@ export default class DiagramPrimitives {
     yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
     color: Array<number>
   }>) {
+    const defaultColor = [1, 0, 0, 1];
     const defaultOptions = {
       text: '',
       font: {
@@ -1201,6 +1203,8 @@ export default class DiagramPrimitives {
       },
       xAlign: 'left',
       yAlign: 'baseline',
+      lineSpace: 0.2,     // Remove and put in logic for font size
+      justification: 'left',
       transform: new Transform('text').standard(),
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -1212,7 +1216,7 @@ export default class DiagramPrimitives {
       options.font.color = options.color;
     }
     if (options.color == null) {
-      options.color = [1, 0, 0, 1];
+      options.color = defaultColor;
     }
 
     if (options.position != null) {
@@ -1223,38 +1227,42 @@ export default class DiagramPrimitives {
     if (typeof options.text === 'string') {
       options.text = [options.text];
     }
-    const dText = [];
-    for (let i = 0; i < options.text.length; i += 1) {
-      const text = options.text[i];
-      let font;
-      let offset;
-      let location;
-      let xAlign;
-      let yAlign;
-      let textToUse;
-      if (Array.isArray(text) && text.length === 2) {
-        [textToUse, {
-          font, offset, location, xAlign, yAlign,
-        }] = text;
-      } else {
-        textToUse = text;
-      }
-      let fontToUse = options.font;
-      if (font != null) {
-        fontToUse = font;
-      }
-      const dFont = new DiagramFont(joinObjects({}, options.font, fontToUse));
 
-      dText.push(new DiagramText(
-        location || -1,
-        textToUse,
-        dFont,
-        xAlign || 'left',
-        yAlign || 'baseline',
-        offset || [0, 0],
-      ));
-    }
-    const to = new TextObject(this.draw2D, dText, options.xAlign, options.yAlign);
+    // const dText = [];
+    // for (let i = 0; i < options.text.length; i += 1) {
+    //   const text = options.text[i];
+    //   let font;
+    //   let offset;
+    //   let location;
+    //   let xAlign;
+    //   let yAlign;
+    //   let textToUse;
+    //   if (Array.isArray(text) && text.length === 2) {
+    //     [textToUse, {
+    //       font, offset, location, xAlign, yAlign,
+    //     }] = text;
+    //   } else {
+    //     textToUse = text;
+    //   }
+    //   let fontToUse = options.font;
+    //   if (font != null) {
+    //     fontToUse = font;
+    //   }
+    //   const dFont = new DiagramFont(joinObjects({}, options.font, fontToUse));
+
+    //   dText.push(new DiagramText(
+    //     location || -1,
+    //     textToUse,
+    //     dFont,
+    //     xAlign || 'left',
+    //     yAlign || 'baseline',
+    //     offset || [0, 0],
+    //   ));
+    // }
+    const to = new LinesObject(
+      this.draw2D, options,
+    );
+    // console.log(to)
     const element = new DiagramElementPrimitive(
       to,
       options.transform,
