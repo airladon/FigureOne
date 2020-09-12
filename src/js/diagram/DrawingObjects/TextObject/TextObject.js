@@ -132,6 +132,7 @@ class DiagramText {
     left: number,
     right: number,
   }
+  line: number;
 
   constructor(
     location: ?TypeParsablePoint | number = new Point(0, 0),
@@ -140,9 +141,11 @@ class DiagramText {
     xAlign: 'left' | 'center' | 'right' = 'left',
     yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline' = 'baseline',
     offset: TypeParsablePoint = new Point(0, 0),
+    line: number = 0,
   ) {
     this.offset = getPoint(offset);
     this.lastRight = new Point(0, 0);
+    this.line = line;
     if (typeof location === 'number') {
       this.location = new Point(0, 0);
       this.relativeLocationIndex = location;
@@ -995,7 +998,7 @@ class LinesObject extends DrawingObject {
   setTextObjs() {
     this.text = [];
     let lastLineY = 0;
-    this.rawText.forEach((line, index) => {
+    this.rawText.forEach((line, lineIndex) => {
       // debugger;
       const [options, rawText] = line;
       const defaultFont = joinObjects({}, this.font.definition(), options.font || {});
@@ -1008,7 +1011,7 @@ class LinesObject extends DrawingObject {
           location = getPoint(options.location);
         }
       }
-      if (index > 0 && typeof location !== 'number') {
+      if (lineIndex > 0 && typeof location !== 'number') {
         if (options.lineSpace != null) {
           location = location.add(0, lastLineY - options.lineSpace);
         } else {
@@ -1045,6 +1048,7 @@ class LinesObject extends DrawingObject {
           'left',
           'baseline',
           offset,
+          lineIndex,
         ));
         location = -1;
         font = defaultFont;
