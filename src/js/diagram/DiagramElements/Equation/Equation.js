@@ -1281,83 +1281,17 @@ export class Equation extends DiagramElementCollection {
     if (form.animation.translation != null) {
       form.animation.translation = transformTranslation(form.animation.translation);
     }
-    // // form.fromForm = {};
-    // Object.keys(form.fromForm).forEach((formName) => {
-    //   if (fromForm.elementMods != null) {
-    //     form.fromForm[formName].elementMods = transformElementMods(
-    //       form.fromForm[formName].elementMods,
-    //     );
-    //   }
-    //   if (
-    //     form.fromForm[formName].animation != null
-    //     && form.fromForm[formName].animation.translation != null
-    //   ) {
-    //     form.fromForm[formName].animation.translation = transformTranslation(
-    //       form.fromForm[formName].animation.translation,
-    //     );
-    //   }
-    // });
-
-    // Object.keys(optionsToUse.elementMods).forEach((elementName) => {
-    //   const mods = optionsToUse.elementMods[elementName];
-    //   const diagramElement = getDiagramElement(this, elementName);
-    //   if (diagramElement != null) {
-    //     form.elementMods[elementName] = { element: diagramElement, mods };
-    //   }
-    // });
-
-    // const getTranslation = (elementName, modOptions) => {
-    //   const diagramElement = getDiagramElement(this, elementName);
-    //   const mods = modOptions[elementName];
-    //   let direction;
-    //   let style;
-    //   let mag;
-    //   if (Array.isArray(mods)) {
-    //     [style, direction, mag] = mods;
-    //   } else {
-    //     ({ style, direction, mag } = mods);
-    //   }
-    //   if (diagramElement != null) {
-    //     return {
-    //       element: diagramElement, style, direction, mag,
-    //     };
-    //   }
-    //   return null;
-    // };
-
-    // const setFormAnimationOptions = (optionsPath) => {
-    //   const animationOptions = getFromObject(optionsToUse, optionsPath, '.');
-    //   if (animationOptions === undefined) {
-    //     return;
-    //   }
-    //   if (animationOptions.duration !== undefined) {
-    //     addToObject(
-    //       form, `${optionsPath}.duration`, animationOptions.duration,
-    //     );
-    //   }
-    //   if (animationOptions.translation != null) {
-    //     Object.keys(animationOptions.translation).forEach((elementName) => {
-    //       const translation = getTranslation(elementName, animationOptions.translation);
-    //       if (translation != null) {
-    //         if (translation == null) {
-    //           addToObject(
-    //             form, `${optionsPath}.translation`, {},
-    //           );
-    //         } else {
-    //           addToObject(
-    //             form, `${optionsPath}.translation.${elementName}`, translation,
-    //           );
-    //         }
-    //       }
-    //     });
-    //   }
-    // };
-    // setFormAnimationOptions('');
-    // if (optionsToUse.fromForm != null) {
-    //   Object.keys(optionsToUse.fromForm).forEach((formName) => {
-    //     setFormAnimationOptions(`fromForm.${formName}`);
-    //   });
-    // }
+    if (form.fromForm != null) {
+      Object.keys(form.fromForm).forEach((fromFormKey) => {
+        const f = form.fromForm[fromFormKey];
+        if (f.elementMods != null) {
+          f.elementMods = transformElementMods(f.elementMods);
+        }
+        if (f.animation != null && f.animation.translation != null) {
+          f.animation.translation = transformTranslation(f.animation.translation);
+        }
+      });
+    }
 
     optionsToUse.alignment.fixTo = this.checkFixTo(optionsToUse.alignment.fixTo);
     form.content = content;

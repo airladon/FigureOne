@@ -460,13 +460,8 @@ eqn = new Fig.Equation(diagram.shapes, {
     // Another example
     objectDef2: {
       content: 'c',
-      scale: 1.2,
       elementMods: {
         c: { color: [0.5, 1, 0, 1] },
-      },
-      alignment: {
-        xAlign: 'right',
-        yAlign: 'baseline',
       },
     },
     // Full form object definition - the content key is required, but
@@ -486,7 +481,7 @@ eqn = new Fig.Equation(diagram.shapes, {
       },
       // A form can have its own animation definition
       animation: {
-        duration: null,
+        duration: 4,     // use null for velocity
         translation: {
           b: ['curved', 'up', 0.3],
           c: { style: 'curved', direction: 'down', mag: 1 },
@@ -509,7 +504,8 @@ eqn = new Fig.Equation(diagram.shapes, {
             },
           },
           elementMods: {
-            b: { color: [0, 0, 1, 1] },
+            b: { color: [0.5, 0, 1, 1] },
+            c: { color: [0.5, 0.5, 1, 1] },
           },
         },
       },
@@ -530,7 +526,7 @@ diagram.elements.add('eqn', eqn);
 // eqn.showForm('fullObject')
 // console.log(diagram.elements._eqn)
 // diagram.setFirstTransform();
-eqn.showForm('objectDefinition');
+eqn.showForm('objectDef2');
 diagram.setFirstTransform();
 console.log(eqn._c.getPosition());
 eqn.goToForm({ form: 'fullObject', duration: 4, animate: 'move' });

@@ -121,7 +121,7 @@ describe('Different ways to make an equation', () => {
               },
             },
             // By default, element text is the same as key text
-            c: { style: 'normal', color: [0, 0.5, 0.5, 1] },
+            c: { style: 'normal', color: [0, 1, 0, 1] },
             // Underscores can be used to define the same text with different
             // keys, so they can be moved independently. When keys are converted
             // to text, only the string after a leading underscore, and before
@@ -255,17 +255,14 @@ describe('Different ways to make an equation', () => {
                 yAlign: 'baseline',
               },
             },
-            // Another example
+            // Another example which will be used to test fullObject fromForm
+            // override
             objectDef2: {
               content: 'c',
-              scale: 1.2,
               elementMods: {
                 c: { color: [0.5, 1, 0, 1] },
               },
-              alignment: {
-                xAlign: 'right',
-                yAlign: 'baseline',
-              },
+              alignment: { xAlign: 'right', yAlign: 'baseline' },
             },
             // Full form object definition - the content key is required, but
             // all other keys are optional.
@@ -284,10 +281,10 @@ describe('Different ways to make an equation', () => {
               },
               // A form can have its own animation definition
               animation: {
-                duration: null,
+                duration: 4,     // use null for velocity
                 translation: {
                   b: ['curved', 'up', 0.3],
-                  c: { style: 'curved', direction: 'down', mag: 0.5 },
+                  c: { style: 'curved', direction: 'down', mag: 1 },
                 },
               },
               // A form can have it's own alignment definition
@@ -307,7 +304,8 @@ describe('Different ways to make an equation', () => {
                     },
                   },
                   elementMods: {
-                    b: { color: [0, 0, 1, 1] },
+                    b: { color: [0.5, 0, 1, 1] },
+                    c: { color: [0.5, 0.5, 1, 1] },
                   },
                 },
               },
@@ -548,31 +546,6 @@ describe('Different ways to make an equation', () => {
       },
     };
   });
-  // test('tester', () => {
-  //   diagram.addElement({
-  //     name: 'eqn1',
-  //     method: 'equation',
-  //     options: {
-  //       elements: {
-  //         v: { symbol: 'vinculum' },
-  //       },
-  //       formDefaults: {
-  //         alignment: {
-  //           xAlign: 'center',
-  //           yAlign: 'middle',
-  //         },
-  //       },
-  //       forms: {
-  //         inlineFrac: [{ frac: [['a', 'b'], 'v', '_2'] }, 'c'],
-  //       },
-  //     },
-  //   });
-  //   diagram.elements._eqn1.showForm('inlineFrac');
-  //   diagram.setFirstTransform();
-  //   const a = diagram.elements._eqn1._a.getBoundingRect('diagram');
-  //   const v = diagram.elements._eqn1._v.getBoundingRect('diagram');
-  //   const c = diagram.elements._eqn1._c.getBoundingRect('diagram');
-  // });
   /*
   ....................................................##......##..
   ..................................................####....####..
@@ -596,10 +569,10 @@ describe('Different ways to make an equation', () => {
   // the same dimensions
   describe('All Options', () => {
     let aWidth;
-    let aAsc;
-    let aDes;
+    // let aAsc;
+    // let aDes;
     let aHeight;
-    let bAsc;
+    // let bAsc;
     let bDes;
     let bHeight;
     beforeEach(() => {
@@ -608,9 +581,9 @@ describe('Different ways to make an equation', () => {
       diagram.initialize();
       aWidth = 0.1;
       aHeight = 0.103;
-      aAsc = 0.095;
-      aDes = 0.008;
-      bAsc = 0.14;
+      // aAsc = 0.095;
+      // aDes = 0.008;
+      // bAsc = 0.14;
       bDes = 0.008;
       bHeight = 0.148;
     });
@@ -789,18 +762,66 @@ describe('Different ways to make an equation', () => {
         expect(round(eqn._b.color, 4)).toEqual([0, 1, 0, 1]);
         expect(round(eqn._c.color, 4)).toEqual([0, 0, 1, 1]);
       });
-      test('animation', () => {
+      test('animation - form duration and curve', () => {
         eqn.showForm('objectDefinition');
         diagram.setFirstTransform();
-        console.log(eqn._c.getPosition());
-        eqn.goToForm({ form: 'fullObject', duration: 4, animate: 'move' });
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.1, 0));
+        // Duration will be ignored as it is defined in the form
+        eqn.goToForm({ form: 'fullObject', duration: 10, animate: 'move' });
         diagram.mock.timeStep(0);
-        console.log(eqn._c.getPosition());
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.1, 0));
         diagram.mock.timeStep(1);
-        console.log(eqn._c.getPosition());
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.084, -0.029));
         diagram.mock.timeStep(1);
-        console.log(eqn._c.getPosition());
-      })
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.02, -0.08));
+        diagram.mock.timeStep(1);
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.044, -0.029));
+        diagram.mock.timeStep(1);
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.06, 0));
+      });
+      test('animation - form duration override from goTo', () => {
+        eqn.showForm('objectDefinition');
+        diagram.setFirstTransform();
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.1, 0));
+        eqn.goToForm({
+          form: 'fullObject',
+          duration: 1,
+          animate: 'move',
+          prioritizeFormDuration: false,
+        });
+        diagram.mock.timeStep(0);
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.1, 0));
+        diagram.mock.timeStep(0.25);
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.084, -0.029));
+        diagram.mock.timeStep(0.25);
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.02, -0.08));
+        diagram.mock.timeStep(0.25);
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.044, -0.029));
+        diagram.mock.timeStep(0.25);
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.06, 0));
+      });
+      test('animation - fromForm override animation and color', () => {
+        eqn.showForm('objectDef2');
+        diagram.setFirstTransform();
+        expect(round(eqn._c.color, 3)).toEqual(round([0.5, 1, 0, 1], 3));
+        expect(round(eqn._b.color, 3)).toEqual(round([1, 0, 0, 1], 3));
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.1, 0));
+        // Duration will be ignored as it is defined in the form
+        eqn.goToForm({ form: 'fullObject', duration: 10, animate: 'move' });
+        diagram.mock.timeStep(0);
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.1, 0));
+        diagram.mock.timeStep(0.5);
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.084, 0));
+        diagram.mock.timeStep(0.5);
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.02, 0));
+        diagram.mock.timeStep(0.5);
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.044, 0));
+        diagram.mock.timeStep(0.5);
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.06, 0));
+        diagram.mock.timeStep(1);
+        expect(round(eqn._c.color, 3)).toEqual(round([0.5, 0.5, 1, 1], 3));
+        expect(round(eqn._b.color, 3)).toEqual(round([0.5, 0, 1, 1], 3));
+      });
     });
   });
   test('All Text in constructor', () => {
