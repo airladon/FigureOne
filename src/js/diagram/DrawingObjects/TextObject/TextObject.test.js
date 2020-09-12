@@ -80,8 +80,8 @@ describe('Diagram Text Object', () => {
       font.size = 20;
       draw2D = new DrawContext2D(1000, 500);
       textArray = [
-        new DiagramText(new Point(0, 0), 'test1', font),
-        new DiagramText(new Point(1, 1), 'test2', font),
+        new DiagramText(new Point(0, 0), 'test1', font, 'center', 'middle'),
+        new DiagramText(new Point(1, 1), 'test2', font, 'center', 'middle'),
       ];
     });
     describe('Scaling factor', () => {
@@ -132,10 +132,10 @@ describe('Diagram Text Object', () => {
         const to = new TextObject(draw2D, textArray);
         const b = to.getGLBoundaryOfText(textArray[0], m2.identity());
         expect(b).toEqual([
-          new Point(-10, 7.4),
-          new Point(10, 7.4),
-          new Point(10, -7.4),
-          new Point(-10, -7.4),
+          new Point(-5, 7.4),
+          new Point(5, 7.4),
+          new Point(5, -7.4),
+          new Point(-5, -7.4),
         ]);
       });
       test('Text Boundary for 1, 1 location, no scaling, 0.5 transformation sacle', () => {
@@ -145,10 +145,10 @@ describe('Diagram Text Object', () => {
           new Transform().scale(0.5, 0.5).matrix(),
         );
         expect(b).toEqual([
-          new Point(-4.5, 4.2),
-          new Point(5.5, 4.2),
-          new Point(5.5, -3.2),
-          new Point(-4.5, -3.2),
+          new Point(-2, 4.2),
+          new Point(3, 4.2),
+          new Point(3, -3.2),
+          new Point(-2, -3.2),
         ]);
       });
       test('All Text Boundaries', () => {
@@ -156,16 +156,16 @@ describe('Diagram Text Object', () => {
         const b = to.getGLBoundaries(new Transform().scale(0.5, 0.5).translate(1, 1).matrix());
         expect(b).toEqual([
           [
-            new Point(-4, 4.7),
-            new Point(6, 4.7),
-            new Point(6, -2.7),
-            new Point(-4, -2.7),
+            new Point(-1.5, 4.7),
+            new Point(3.5, 4.7),
+            new Point(3.5, -2.7),
+            new Point(-1.5, -2.7),
           ],
           [
-            new Point(-3.5, 5.2),
-            new Point(6.5, 5.2),
-            new Point(6.5, -2.2),
-            new Point(-3.5, -2.2),
+            new Point(-1, 5.2),
+            new Point(4, 5.2),
+            new Point(4, -2.2),
+            new Point(-1, -2.2),
           ],
         ]);
       });
@@ -180,7 +180,7 @@ describe('Diagram Text Object', () => {
         expect(draw2D.ctx.filledText)
           .toEqual({
             text: 'test2',
-            x: 1,
+            x: 6,
             y: -1,
             count: 2,
           });
@@ -197,11 +197,11 @@ describe('Diagram Text Object', () => {
           .matrix());
         expect(draw2D.ctx.filledText.count).toBe(2);
         expect(round(draw2D.ctx.transformMatrix, 2))
-          .toEqual([0.68, -0.53, 1.05, 0.34, 1000, 750]);
+          .toEqual([3.38, -2.63, 5.26, 1.69, 1000, 750]);
         expect(draw2D.ctx.fillStyle).toBe('rgba(255,0,0,1)');
         expect(draw2D.ctx.filledText.text).toBe('test2');
-        expect(round(draw2D.ctx.filledText.x, 2)).toBe(-600);
-        expect(round(draw2D.ctx.filledText.y, 2)).toBe(-200);
+        expect(round(draw2D.ctx.filledText.x, 2)).toBe(5);
+        expect(round(draw2D.ctx.filledText.y, 2)).toBe(-40);
       });
     });
   });
