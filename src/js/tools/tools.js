@@ -1246,6 +1246,40 @@ function download(filename: string, text: string) {
   }
 }
 
+function splitString(str: string, token: string = '|', escape: string = '') {
+  const letters = str.split('');
+  const split = [];
+  let lastSplit = 0;
+  // let lastLetter = '';
+  let escaped = false;
+  // let tokenString = '';
+  let tokenStringIndex = 0;
+  letters.forEach((letter, index) => {
+    if (tokenStringIndex === 0 && letter === escape) {
+      escaped = true;
+    } else if (letter === token[tokenStringIndex]) {
+      tokenStringIndex += 1;
+    } else {
+      tokenStringIndex = 0;
+      escaped = false;
+    }
+    if (tokenStringIndex === token.length) {
+      if (!escaped) {
+        if (index - token.length > 0) {
+          let newSplit = letters.slice(lastSplit, index - token.length + 1).join('');
+          newSplit = newSplit.replace(`${escape}${token}`, token);
+          split.push(newSplit);
+        }
+        lastSplit = index + 1;
+      }
+    }
+  });
+  if (lastSplit < letters.length) {
+    split.push(letters.slice(lastSplit).join(''));
+  }
+  return split;
+}
+
 export {
   diffPathsToObj, diffObjToPaths,
   Console,
@@ -1261,5 +1295,6 @@ export {
   Subscriber,
   SubscriptionManager,
   getFromObject,
+  splitString,
 };
 

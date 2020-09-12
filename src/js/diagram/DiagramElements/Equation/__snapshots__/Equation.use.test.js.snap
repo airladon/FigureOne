@@ -184,6 +184,11 @@ DiagramElementPrimitive {
           "right": 0.1,
           "width": 0.1,
         },
+        "lastRight": Point {
+          "_type": "point",
+          "x": 0.1,
+          "y": 0,
+        },
         "location": Point {
           "_type": "point",
           "x": 0,
@@ -199,7 +204,7 @@ DiagramElementPrimitive {
           "x": 0,
           "y": 0,
         },
-        "relativeLocation": true,
+        "relativeLocationIndex": -1,
         "text": "a",
         "xAlign": "left",
         "yAlign": "baseline",

@@ -1304,5 +1304,49 @@ describe('ObjectTracker', () => {
       });
     });
   });
+  describe('Split String', () => {
+    test('single letter without escape', () => {
+      const s = 'This is |a| test';
+      const split = tools.splitString(s, '|')
+      expect(split).toEqual([
+        'This is ', 'a', ' test',
+      ]);
+    });
+    test('Multi word without escape, start', () => {
+      const s = '|This| is |a| test';
+      const split = tools.splitString(s, '|')
+      expect(split).toEqual([
+        'This', ' is ', 'a', ' test',
+      ]);
+    });
+    test('Multi letter without escape, end', () => {
+      const s = 'This is a |test|';
+      const split = tools.splitString(s, '|');
+      expect(split).toEqual([
+        'This is a ', 'test',
+      ]);
+    });
+    test('Single letter with escape', () => {
+      const s = 'This /|is |a| test';
+      const split = tools.splitString(s, '|', '/');
+      expect(split).toEqual([
+        'This |is ', 'a', ' test',
+      ]);
+    });
+    test('Single letter with escape 2', () => {
+      const s = 'This /|/|is |a| test';
+      const split = tools.splitString(s, '|', '/');
+      console.log(split)
+      expect(split).toEqual([
+        'This ||is ', 'a', ' test',
+      ]);
+    });
+    // 'This is |a| test'
+    // 'This \|is |a| test'
+    // 'This is ||a|| test'
+    // 'This \||is ||a|| test'
+    // 'This \||is ||a big|| test'
+    // 'This is |a| test'
+  });
 });
 

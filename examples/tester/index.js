@@ -49,6 +49,43 @@ diagram.addElements([
         size: 0.1,
         weight: '200',
       },
+      justification: 'center',
+      lines: [
+        'This is a |formatted| string',
+        [
+          {
+            font: {},
+            justification: 'left',
+            location: [],
+            lineSpace: 0.2,
+          },
+          'This is a |sup| string',
+        ],
+        'This is a simple string'
+      ],
+      modifiers: {
+        formatted: {
+          text: 'asdfasdf',
+          location: [0, 0],
+          offset: [0, 0],
+          font: {},
+        },
+      },
+      lines: [
+        {
+          text: 'asdf',
+          justification: 'right'
+        },
+        'this is standard',
+        ['This is a ', { location: [0, -0.2] }],
+        [
+          'This is a ',
+          ['formated', { font: { style: 'italic', color: [1, 0, 1, 1], weight: 'bolder' } }],
+          ' string.',
+        ],
+      ],
+      lineSpace: 0.2,
+      justification: 'left',
       text: [
         'This is a ',
         ['formated', { font: { style: 'italic', color: [1, 0, 1, 1], weight: 'bolder' } }],

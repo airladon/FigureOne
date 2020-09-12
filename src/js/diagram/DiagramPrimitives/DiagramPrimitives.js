@@ -1167,120 +1167,110 @@ export default class DiagramPrimitives {
     );
   }
 
-  // textNew(...optionsIn: Array<{
-  //   text: string | Array<string>,
-  //   font: TypeDiagramFontOptions | Array<TypeDiagramFontOptions>,
-  //   // textPosition: null | TypeParsablePoint | Array<null | TypeParsablePoint>,
-  //   position: TypeParsablePoint,
-  //   offset: null | TypeParsablePoint | Array<null | TypeParsablePoint>,    // vertex space offset
-  //   transform: TypeParsableTransform,
-  //   xAlign: 'left' | 'right' | 'center',
-  //   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
-  // }>) {
-  //   const defaultOptions = {
-  //     text: '',
-  //     font: {
-  //       family: 'Times New Roman',
-  //       style: 'italic',
-  //       size: 0.2,
-  //       weight: '200',
-  //       // xAlign: 'left',
-  //       // yAlign: 'baseline'
-  //     },
-  //     // position: [0, 0],
-  //     xAlign: 'center',
-  //     yAlign: 'middle',
-  //     offset: null,    // vertex space offset
-  //     color: [1, 0, 0, 1],
-  //     transform: new Transform('text').standard(),
-  //     // draw2D: this.draw2D,
-  //   };
-  //   const options = joinObjects({}, defaultOptions, ...optionsIn);
+  lines(...optionsIn: Array<{
+    lines: Array<string | [{
+      font?: TypeDiagramFontDefinition,
+      justification?: 'left' | 'center' | 'right',
+      location?: TypeParsablePoint | number,
+      lineSpace?: number
+    }, string]>,
+    modifiers: {
+      [modifierName: string]: {
+        text?: string,
+        location?: TypeParsablePoint | number,
+        offset?: TypeParsablePoint,
+        font?: TypeDiagramFontDefinition,
+      },
+    },
+    font?: TypeDiagramFontDefinition,
+    justification?: 'left' | 'center' | 'right',
+    lineSpace?: number,
+    position: TypeParsablePoint,
+    transform: TypeParsableTransform,
+    xAlign: 'left' | 'right' | 'center',
+    yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
+    color: Array<number>
+  }>) {
+    const defaultOptions = {
+      text: '',
+      font: {
+        family: 'Times New Roman',
+        style: 'normal',
+        size: 0.2,
+        weight: '200',
+      },
+      xAlign: 'left',
+      yAlign: 'baseline',
+      transform: new Transform('text').standard(),
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
 
-  //   if (options.position != null) {
-  //     const p = getPoint(options.position);
-  //     options.transform.updateTranslation(p);
-  //   }
+    if (options.color == null && options.font.color != null) {
+      options.color = options.font.color;
+    }
+    if (options.font.color == null && options.color != null) {
+      options.font.color = options.color;
+    }
+    if (options.color == null) {
+      options.color = [1, 0, 0, 1];
+    }
 
-  //   if (typeof options.text === 'string') {
-  //     options.text = [options.text];
-  //   }
-  //   if (!Array.isArray(options.font)) {
-  //     options.font = [options.font];
-  //   }
-  //   if (!Array.isArray(options.offset)) {
-  //     options.offset = [options.offset];
-  //   }
-  //   const dText = [];
-  //   let fontIndex = 0;
-  //   let offsetIndex = 0;
-  //   let locationIndex = 0;
-  //   for (let i = 0; i < options.text.length; i += 1) {
-  //     if (fontIndex > options.font.length - 1) {
-  //       fontIndex = 0;
-  //     }
-  //     if (offsetIndex > options.offset.length - 1) {
-  //       offsetIndex = 0;
-  //     }
-  //     if (locationIndex > options.location.length - 1) {
-  //       locationIndex = 0;
-  //     }
-  //     const dFont = new DiagramFont(joinObjects({}, options.font[fontIndex]));
-  //     dText.push(new DiagramText(
-  //       options.location[locationIndex],
-  //       options.text[i],
-  //       dFont,
-  //       'left',
-  //       'baseline',
-  //       options.offset[offsetIndex],
-  //     ));
-  //     offsetIndex += 1;
-  //     fontIndex += 1;
-  //     locationIndex += 1;
-  //   }
-  //   // const dT = new DiagramText(o.offset, text, fontToUse);
-  //   const to = new TextObject(this.draw2D, dText, options.xAlign, options.yAlign);
-  //   const element = new DiagramElementPrimitive(
-  //     to,
-  //     options.transform,
-  //     options.color,
-  //     this.limits,
-  //   );
+    if (options.position != null) {
+      const p = getPoint(options.position);
+      options.transform.updateTranslation(p);
+    }
 
-  //   // if (options.pulse != null) {
-  //   //   if (typeof element.pulseDefault !== 'function') {
-  //   //     element.pulseDefault.scale = options.pulse;
-  //   //   }
-  //   // }
-  //   setupPulse(element, options);
+    if (typeof options.text === 'string') {
+      options.text = [options.text];
+    }
+    const dText = [];
+    for (let i = 0; i < options.text.length; i += 1) {
+      const text = options.text[i];
+      let font;
+      let offset;
+      let location;
+      let xAlign;
+      let yAlign;
+      let textToUse;
+      if (Array.isArray(text) && text.length === 2) {
+        [textToUse, {
+          font, offset, location, xAlign, yAlign,
+        }] = text;
+      } else {
+        textToUse = text;
+      }
+      let fontToUse = options.font;
+      if (font != null) {
+        fontToUse = font;
+      }
+      const dFont = new DiagramFont(joinObjects({}, options.font, fontToUse));
 
-  //   if (options.mods != null && options.mods !== {}) {
-  //     element.setProperties(options.mods);
-  //   }
+      dText.push(new DiagramText(
+        location || -1,
+        textToUse,
+        dFont,
+        xAlign || 'left',
+        yAlign || 'baseline',
+        offset || [0, 0],
+      ));
+    }
+    const to = new TextObject(this.draw2D, dText, options.xAlign, options.yAlign);
+    const element = new DiagramElementPrimitive(
+      to,
+      options.transform,
+      options.color,
+      this.limits,
+    );
 
-  //   return element;
-  // }
+    setupPulse(element, options);
 
-  // Example of text phrase
-  // {
-  //   name: 'tester',
-  //   method: 'text',
-  //   options: {
-  //     text: [
-  //       'hello ',
-  //       ['MM', { font: f2 }],
-  //       ['2', { offset: [0, -0.02], font: f3 }],
-  //       ['2', { offset: [-0.02, 0.1], font: f3 }],
-  //       ' M',
-  //       ['dg', { font: { weight: 'bolder' }, location: [0, -0.2] }],
-  //     ],
-  //     font: f1,
-  //     position: [-0, -0.5],
-  //     xAlign: 'center',
-  //     yAlign: 'baseline',
-  //     color: [0, 0, 1, 1],
-  //   },
-  // },
+    if (options.mods != null && options.mods !== {}) {
+      element.setProperties(options.mods);
+    }
+
+    return element;
+  }
+
   text(...optionsIn: Array<{
     text: string | Array<string | {
       font?: TypeDiagramFontDefinition,
