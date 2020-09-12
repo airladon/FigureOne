@@ -1284,7 +1284,7 @@ export default class DiagramPrimitives {
   text(...optionsIn: Array<{
     text: string | Array<string | {
       font?: TypeDiagramFontDefinition,
-      location?: TypeParsablePoint | null,
+      location?: TypeParsablePoint | number,
       offset?: TypeParsablePoint,
       xAlign?: 'left' | 'right' | 'center',
       yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
@@ -1351,7 +1351,7 @@ export default class DiagramPrimitives {
       const dFont = new DiagramFont(joinObjects({}, options.font, fontToUse));
 
       dText.push(new DiagramText(
-        location || null,
+        location || -1,
         textToUse,
         dFont,
         xAlign || 'left',

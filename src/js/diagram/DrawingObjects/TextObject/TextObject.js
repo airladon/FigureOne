@@ -116,7 +116,7 @@ class DiagramFont {
 // once and referenced to the same location
 class DiagramText {
   location: Point;
-  relativeLocation: boolean;
+  relativeLocationIndex: number;
   locationAligned: Point;
   offset: Point;
   text: string;
@@ -124,6 +124,7 @@ class DiagramText {
   xAlign: 'left' | 'center' | 'right';
   yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
   // scalingFactor: number;
+  lastRight: Point;
   lastMeasure: {
     ascent: number,
     descent: number,
@@ -133,7 +134,7 @@ class DiagramText {
   }
 
   constructor(
-    location: ?TypeParsablePoint = new Point(0, 0),
+    location: ?TypeParsablePoint | number = new Point(0, 0),
     text: string = '',
     font: DiagramFont | TypeDiagramFontDefinition = new DiagramFont(),
     xAlign: 'left' | 'center' | 'right' = 'left',
@@ -141,12 +142,13 @@ class DiagramText {
     offset: TypeParsablePoint = new Point(0, 0),
   ) {
     this.offset = getPoint(offset);
-    if (location == null) {
+    this.lastRight = new Point(0, 0);
+    if (typeof location === 'number') {
       this.location = new Point(0, 0);
-      this.relativeLocation = true;
+      this.relativeLocationIndex = location;
     } else {
       this.location = getPoint(location)._dup();
-      this.relativeLocation = false;
+      this.relativeLocationIndex = 0;
     }
     this.locationAligned = this.location._dup();
 
@@ -674,12 +676,12 @@ class TextObject extends DrawingObject {
 
   setBorder() {
     this.border = [];
-    let lastRight = new Point(0, 0);
-    this.text.forEach((diagramText) => {
-      const { relativeLocation, offset } = diagramText;
+    // let lastRight = new Point(0, 0);
+    this.text.forEach((diagramText, index) => {
+      const { relativeLocationIndex, offset } = diagramText;
       let location;
-      if (relativeLocation) {
-        location = lastRight._dup();
+      if (relativeLocationIndex < 0 && index + relativeLocationIndex >= 0) {
+        location = this.text[index + relativeLocationIndex].lastRight;
         diagramText.location = location;
       } else {
         ({ location } = diagramText);
@@ -693,7 +695,7 @@ class TextObject extends DrawingObject {
         this.drawContext2D[0].ctx, scalingFactor,
       );
       diagramText.lastMeasure = measure;
-      lastRight = new Point(
+      diagramText.lastRight = new Point(
         location.x + measure.right + offset.x,
         location.y,
       );
@@ -743,7 +745,7 @@ class TextObject extends DrawingObject {
         locationOffset.y = -yMin - (yMax - yMin) / 2;
       }
     }
-    
+
     // if (locationOffset.x !== 0 || locationOffset.y !== 0) {
     this.text.forEach((diagramText) => {
       const { offset } = diagramText;
