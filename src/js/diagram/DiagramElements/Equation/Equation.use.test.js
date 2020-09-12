@@ -14,6 +14,7 @@ import * as html from '../../../tools/htmlGenerator';
 // import Fraction from './Elements/Fraction';
 
 tools.isTouchDevice = jest.fn();
+jest.useFakeTimers();
 
 jest.mock('../../Gesture');
 jest.mock('../../webgl/webgl');
@@ -68,24 +69,7 @@ describe('Different ways to make an equation', () => {
     color1 = [0.95, 0, 0, 1];
     color2 = [0, 0.95, 0, 1];
     ways = {
-      allTextInConstructor: () => {
-        eqn = new Equation(diagram.shapes, {
-          color: color1,
-          elements: {
-            a: 'a',
-            b: 'b',
-            c: 'c',
-            _2: '2',
-            v: { symbol: 'vinculum' },
-          },
-          forms: {
-            0: ['a', 'b', 'c'],
-            1: [{ frac: ['a', 'v', '_2'] }, 'c'],
-          },
-          formSeries: ['0', '1'],
-        });
-      },
-      allTextInConstructorAllOptionsNew__TO_TEST__TODO: () => {
+      allOptions: () => {
         eqn = new Equation(diagram.shapes, {
           color: [0.95, 0, 0, 1],            // default color of the equation
           // Default font for the equation. Note, there is no `style` option for
@@ -104,11 +88,11 @@ describe('Different ways to make an equation', () => {
           // `font.size` will only change the size of the font. Set `font.size`
           // to be particular with the font size, and then scale for layout.
           // Note, scale will not impact dynamic symbol line widths.
-          scale: 0.45,
+          scale: 1,
           // equation transform
-          transform: [['s', 2], ['r', 1], ['t', [0, 0]]],
+          transform: [['s', 1], ['r', 0], ['t', [0, 0]]],
           // equation position - will override translation in transform
-          position: [1, 1],
+          position: [0, 0],
           // Elements can be defined inline in `forms` or defined here. Define
           // here is there are lots of customizations to the element that will
           // make the form definition cluttered
@@ -137,7 +121,7 @@ describe('Different ways to make an equation', () => {
               },
             },
             // By default, element text is the same as key text
-            c: { style: 'normal', color: [0, 1, 0, 1] },
+            c: { style: 'normal', color: [0, 0.5, 0.5, 1] },
             // Underscores can be used to define the same text with different
             // keys, so they can be moved independently. When keys are converted
             // to text, only the string after a leading underscore, and before
@@ -191,7 +175,7 @@ describe('Different ways to make an equation', () => {
               b: { color: [1, 0, 0, 1] },   // define each element
               c: {
                 isTouchable: true,
-                color: [0, 1, 0, 1],
+                color: [0, 0, 1, 1],
               },
             },
           },
@@ -255,17 +239,38 @@ describe('Different ways to make an equation', () => {
             inlineSymbolObject: {
               frac: [
                 'a',
-                { v1: { symbol: 'vinculum', color: [0, 0, 1, 1] } },
+                { v2: { symbol: 'vinculum', color: [0, 0, 1, 1] } },
                 'b',
               ],
             },
             // Spaces can be used directly - these are not elements and do not
             // need to be unique. Use singular or multiple spaces in a string.
             spaces: ['a', ' ', 'b', '   ', 'c'],
+            // Forms can be defined as objects where the content key is the form
+            // definition, and other keys are options
+            objectDefinition: {
+              content: 'c',
+              alignment: {
+                xAlign: 'right',
+                yAlign: 'baseline',
+              },
+            },
+            // Another example
+            objectDef2: {
+              content: 'c',
+              scale: 1.2,
+              elementMods: {
+                c: { color: [0.5, 1, 0, 1] },
+              },
+              alignment: {
+                xAlign: 'right',
+                yAlign: 'baseline',
+              },
+            },
             // Full form object definition - the content key is required, but
             // all other keys are optional.
             fullObject: {
-              content: ['c', 'b', 'd'],
+              content: ['b', 'c', 'd'],
               scale: 1.2,
               // Element mods specific to this form
               elementMods: {
@@ -281,7 +286,7 @@ describe('Different ways to make an equation', () => {
               animation: {
                 duration: null,
                 translation: {
-                  a: ['curved', 'up', 0.3],
+                  b: ['curved', 'up', 0.3],
                   c: { style: 'curved', direction: 'down', mag: 0.5 },
                 },
               },
@@ -294,7 +299,7 @@ describe('Different ways to make an equation', () => {
               // The animation attributes and elementMods may be different if
               // animating from specific forms.
               fromForm: {
-                2: {
+                objectDef2: {
                   animation: {
                     duration: 2,
                     translation: {
@@ -317,6 +322,23 @@ describe('Different ways to make an equation', () => {
             a: ['simpleElement', 'simplePhrase', 'inlineSymbolWithId'],
             b: ['inlineEqualsElement', 'simpleSequence'],
           },
+        });
+      },
+      allTextInConstructor: () => {
+        eqn = new Equation(diagram.shapes, {
+          color: color1,
+          elements: {
+            a: 'a',
+            b: 'b',
+            c: 'c',
+            _2: '2',
+            v: { symbol: 'vinculum' },
+          },
+          forms: {
+            0: ['a', 'b', 'c'],
+            1: [{ frac: ['a', 'v', '_2'] }, 'c'],
+          },
+          formSeries: ['0', '1'],
         });
       },
       allTextInConstructorAllOptions: () => {
@@ -525,6 +547,261 @@ describe('Different ways to make an equation', () => {
         });
       },
     };
+  });
+  // test('tester', () => {
+  //   diagram.addElement({
+  //     name: 'eqn1',
+  //     method: 'equation',
+  //     options: {
+  //       elements: {
+  //         v: { symbol: 'vinculum' },
+  //       },
+  //       formDefaults: {
+  //         alignment: {
+  //           xAlign: 'center',
+  //           yAlign: 'middle',
+  //         },
+  //       },
+  //       forms: {
+  //         inlineFrac: [{ frac: [['a', 'b'], 'v', '_2'] }, 'c'],
+  //       },
+  //     },
+  //   });
+  //   diagram.elements._eqn1.showForm('inlineFrac');
+  //   diagram.setFirstTransform();
+  //   const a = diagram.elements._eqn1._a.getBoundingRect('diagram');
+  //   const v = diagram.elements._eqn1._v.getBoundingRect('diagram');
+  //   const c = diagram.elements._eqn1._c.getBoundingRect('diagram');
+  // });
+  /*
+  ....................................................##......##..
+  ..................................................####....####..
+  ....................................................##......##..
+  ....................................................##......##..
+  ....................................................##......##..
+  ....................................................##......##..
+  ..................................................######..######
+  */
+  // Note, the letter a has the following bounds:
+  //   width: 0.1,
+  //   height: 0.103,
+  //   descent: -0.008,
+  //   ascent: top: 0.095,
+  // The letter b has the following bounds:
+  //   width: 0.1,
+  //   height: 0.148,
+  //   descent: -0.008,
+  //   ascent: top: 0.14,
+  // Note, no matter the length of the text, the test mock will always return
+  // the same dimensions
+  describe('All Options', () => {
+    let aWidth;
+    let aAsc;
+    let aDes;
+    let aHeight;
+    let bAsc;
+    let bDes;
+    let bHeight;
+    beforeEach(() => {
+      ways.allOptions();
+      diagram.elements.add('eqn', eqn);
+      diagram.initialize();
+      aWidth = 0.1;
+      aHeight = 0.103;
+      aAsc = 0.095;
+      aDes = 0.008;
+      bAsc = 0.14;
+      bDes = 0.008;
+      bHeight = 0.148;
+    });
+    test('simpleElement', () => {
+      eqn.showForm('simpleElement');
+      diagram.setFirstTransform();
+      const a = eqn._a;
+      const rect = a.getBoundingRect('diagram');
+      expect(round(rect.left, 4)).toBe(round(-aWidth / 2, 4));
+      expect(round(rect.right, 4)).toBe(round(aWidth / 2, 4));
+      expect(round(rect.bottom, 4)).toBe(round(-aHeight / 2, 4));
+      expect(round(rect.top, 4)).toBe(round(aHeight / 2, 4));
+    });
+    test('simplePhrase', () => {
+      eqn.showForm('simplePhrase');
+      diagram.setFirstTransform();
+      const _2 = eqn.__2.getBoundingRect('diagram');
+      const _x = eqn._x.getBoundingRect('diagram');
+      const w = _2.width + _x.width;
+      expect(round(_2.left, 4)).toBe(round(-w / 2, 4));
+      expect(round(_x.right, 4)).toBe(round(w / 2, 4));
+      expect(round(_2.bottom, 4)).toBe(round(-bHeight / 2, 4));
+      expect(round(_2.top, 4)).toBe(round(bHeight / 2, 4));
+    });
+    test('simpleSequence', () => {
+      eqn.showForm('simpleSequence');
+      diagram.setFirstTransform();
+      const a = eqn._a.getBoundingRect('diagram');
+      const b = eqn._b.getBoundingRect('diagram');
+      const c = eqn._c.getBoundingRect('diagram');
+      const w = a.width + b.width + c.width;
+      expect(round(a.left, 4)).toBe(round(-w / 2, 4));
+      expect(round(c.right, 4)).toBe(round(w / 2, 4));
+      expect(round(b.bottom, 4)).toBe(round(-bHeight / 2, 4));
+      expect(round(b.top, 4)).toBe(round(bHeight / 2, 4));
+    });
+    test('inlineFrac', () => {
+      eqn.showForm('inlineFrac');
+      diagram.setFirstTransform();
+      const a = eqn._a.getBoundingRect('diagram');
+      const v = eqn._v.getBoundingRect('diagram');
+      const _2 = eqn.__2.getBoundingRect('diagram');
+      const c = eqn._c.getBoundingRect('diagram');
+      const w = v.width + c.width;
+      const h = a.top - _2.bottom;
+      expect(round(v.left, 4)).toBe(round(-w / 2, 4));
+      expect(round(c.right, 4)).toBe(round(w / 2, 4));
+      expect(round(_2.bottom, 4)).toBe(round(-h / 2, 4));
+      expect(round(a.top, 4)).toBe(round(h / 2, 4));
+    });
+    test('inlineElementDefinition', () => {
+      eqn.showForm('inlineElementDefinition');
+      diagram.setFirstTransform();
+      const a = eqn._a.getBoundingRect('diagram');
+      const equals = eqn._equals.getBoundingRect('diagram');
+      const hello = eqn._hello.getBoundingRect('diagram');
+      const w = a.width + equals.width + hello.width;
+      expect(round(a.left, 4)).toBe(round(-w / 2, 4));
+      expect(round(equals.left, 4)).toBe(round(a.right, 4));
+      expect(round(hello.right, 4)).toBe(round(w / 2, 4));
+    });
+    test('inlineMultiDefinition', () => {
+      eqn.showForm('inlineMultiDefinition');
+      diagram.setFirstTransform();
+      const a = eqn._a.getBoundingRect('diagram');
+      const _2_1 = eqn.__2_1.getBoundingRect('diagram');
+      const _2_2 = eqn.__2_2.getBoundingRect('diagram');
+      const w = a.width + _2_1.width + _2_2.width;
+      expect(round(_2_1.left, 4)).toBe(round(-w / 2, 4));
+      expect(round(_2_2.right, 4)).toBe(round(w / 2, 4));
+      expect(eqn.__2_1.drawingObject.text[0].text).toBe('2');
+      expect(eqn.__2_2.drawingObject.text[0].text).toBe('2');
+    });
+    test('inlineEqualsElement', () => {
+      eqn.showForm('inlineEqualsElement');
+      diagram.setFirstTransform();
+      const a = eqn._a.getBoundingRect('diagram');
+      const b = eqn._b.getBoundingRect('diagram');
+      const equals = eqn['_='].getBoundingRect('diagram');
+      const c = eqn._c.getBoundingRect('diagram');
+      const w = a.width + b.width + equals.width + c.width;
+      expect(round(a.left, 4)).toBe(round(-w / 2, 4));
+      expect(round(a.right, 4)).toBe(round(b.left, 4));
+      expect(round(b.right, 4)).toBe(round(equals.left, 4));
+      expect(round(equals.right, 4)).toBe(round(c.left, 4));
+      expect(round(c.right, 4)).toBe(round(w / 2, 4));
+      expect(eqn['_='].drawingObject.text[0].text).toBe('=');
+    });
+    test('inlineFullDefinition', () => {
+      eqn.showForm('inlineFullDefinition');
+      diagram.setFirstTransform();
+      const a = eqn._a.getBoundingRect('diagram');
+      const m = eqn._m.getBoundingRect('diagram');
+      const w = [a, m].reduce((sum, e) => sum + e.width, 0);
+      expect(round(a.left, 4)).toBe(round(-w / 2, 4));
+      expect(round(a.right, 4)).toBe(round(m.left, 4));
+      expect(round(m.right, 4)).toBe(round(w / 2, 4));
+      expect(eqn._m.drawingObject.text[0].font.style).toBe('normal');
+    });
+    test('inlineSymbol', () => {
+      eqn.showForm('inlineSymbol');
+      diagram.setFirstTransform();
+      const a = eqn._a.getBoundingRect('diagram');
+      const v = eqn._vinculum.getBoundingRect('diagram');
+      const b = eqn._b.getBoundingRect('diagram');
+      const h = a.top - b.bottom;
+      expect(round(v.left, 4)).toBe(round(-v.width / 2, 4));
+      expect(round(v.right, 4)).toBe(round(v.width / 2, 4));
+      expect(round(b.bottom, 4)).toBe(round(-h / 2, 4));
+      expect(round(a.top, 4)).toBe(round(h / 2, 4));
+      expect(round(a.bottom, 4)).toBe(round(v.top + 0.05, 4));
+      expect(round(b.top, 4)).toBe(round(v.bottom - 0.05, 4));
+    });
+    test('inlineSymbolWithId', () => {
+      eqn.showForm('inlineSymbolWithId');
+      diagram.setFirstTransform();
+      const a = eqn._a.getBoundingRect('diagram');
+      const v = eqn._v1.getBoundingRect('diagram');
+      const b = eqn._b.getBoundingRect('diagram');
+      const h = a.top - b.bottom;
+      expect(round(v.left, 4)).toBe(round(-v.width / 2, 4));
+      expect(round(v.right, 4)).toBe(round(v.width / 2, 4));
+      expect(round(b.bottom, 4)).toBe(round(-h / 2, 4));
+      expect(round(a.top, 4)).toBe(round(h / 2, 4));
+      expect(round(a.bottom, 4)).toBe(round(v.top + 0.05, 4));
+      expect(round(b.top, 4)).toBe(round(v.bottom - 0.05, 4));
+    });
+    test('inlineSymbolObject', () => {
+      eqn.showForm('inlineSymbolObject');
+      diagram.setFirstTransform();
+      const a = eqn._a.getBoundingRect('diagram');
+      const v = eqn._v2.getBoundingRect('diagram');
+      const b = eqn._b.getBoundingRect('diagram');
+      const h = a.top - b.bottom;
+      expect(round(v.left, 4)).toBe(round(-v.width / 2, 4));
+      expect(round(v.right, 4)).toBe(round(v.width / 2, 4));
+      expect(round(b.bottom, 4)).toBe(round(-h / 2, 4));
+      expect(round(a.top, 4)).toBe(round(h / 2, 4));
+      expect(round(a.bottom, 4)).toBe(round(v.top + 0.05, 4));
+      expect(round(b.top, 4)).toBe(round(v.bottom - 0.05, 4));
+    });
+    test('spaces', () => {
+      eqn.showForm('spaces');
+      diagram.setFirstTransform();
+      const a = eqn._a.getBoundingRect('diagram');
+      const b = eqn._b.getBoundingRect('diagram');
+      const c = eqn._c.getBoundingRect('diagram');
+      const w = c.right - a.left;
+      expect(round(a.left, 4)).toBe(round(-w / 2, 4));
+      expect(round(c.right, 4)).toBe(round(w / 2, 4));
+      expect(round(a.right, 4)).toBe(round(b.left - 0.03, 4));
+      expect(round(b.right, 4)).toBe(round(c.left - 0.03 * 3, 4));
+    });
+    describe('fullObject', () => {
+      let b;
+      let c;
+      let d;
+      let w;
+      beforeEach(() => {
+        eqn.showForm('fullObject');
+        diagram.setFirstTransform();
+        b = eqn._b.getBoundingRect('diagram');
+        c = eqn._c.getBoundingRect('diagram');
+        d = eqn._d.getBoundingRect('diagram');
+        w = [b, c, d].reduce((sum, e) => sum + e.width, 0);
+      });
+      test('alignment', () => {
+        expect(round(b.left, 4)).toBe(round(-b.width / 2, 4));
+        expect(round(d.right, 4)).toBe(round(w - b.width / 2, 4));
+        expect(round(b.bottom, 4)).toBe(round(-bDes * 1.2, 4));
+      });
+      test('scale', () => {
+        expect(round(b.width, 4)).toBe(0.1 * 1.2);
+      });
+      test('elementMods', () => {
+        expect(round(eqn._b.color, 4)).toEqual([0, 1, 0, 1]);
+        expect(round(eqn._c.color, 4)).toEqual([0, 0, 1, 1]);
+      });
+      test('animation', () => {
+        eqn.showForm('objectDefinition');
+        diagram.setFirstTransform();
+        console.log(eqn._c.getPosition());
+        eqn.goToForm({ form: 'fullObject', duration: 4, animate: 'move' });
+        diagram.mock.timeStep(0);
+        console.log(eqn._c.getPosition());
+        diagram.mock.timeStep(1);
+        console.log(eqn._c.getPosition());
+        diagram.mock.timeStep(1);
+        console.log(eqn._c.getPosition());
+      })
+    });
   });
   test('All Text in constructor', () => {
     ways.allTextInConstructor();
