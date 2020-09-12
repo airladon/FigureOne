@@ -1249,12 +1249,11 @@ function download(filename: string, text: string) {
 function splitString(str: string, token: string = '|', escape: string = '') {
   const letters = str.split('');
   const split = [];
-  let lastSplit = 0;
-  // let lastLetter = '';
+  let currentSplit = [];
   let escaped = false;
-  // let tokenString = '';
   let tokenStringIndex = 0;
   letters.forEach((letter, index) => {
+    currentSplit.push(letter);
     if (tokenStringIndex === 0 && letter === escape) {
       escaped = true;
     } else if (letter === token[tokenStringIndex]) {
@@ -1265,17 +1264,22 @@ function splitString(str: string, token: string = '|', escape: string = '') {
     }
     if (tokenStringIndex === token.length) {
       if (!escaped) {
-        if (index - token.length > 0) {
-          let newSplit = letters.slice(lastSplit, index - token.length + 1).join('');
-          newSplit = newSplit.replace(`${escape}${token}`, token);
-          split.push(newSplit);
+        const newSplitString = currentSplit.slice(0, -token.length).join('');
+        if (newSplitString.length > 0) {
+          split.push(newSplitString);
         }
-        lastSplit = index + 1;
+        currentSplit = [];
+      } else {
+        const preEscape = currentSplit.slice(0, -token.length - escape.length);
+        const postEscape = currentSplit.slice(-token.length);
+        currentSplit = [...preEscape, ...postEscape];
       }
+      escaped = false;
+      tokenStringIndex = 0;
     }
   });
-  if (lastSplit < letters.length) {
-    split.push(letters.slice(lastSplit).join(''));
+  if (currentSplit.length > 0) {
+    split.push(currentSplit.join(''));
   }
   return split;
 }
