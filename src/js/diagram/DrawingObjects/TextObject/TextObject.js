@@ -1008,7 +1008,6 @@ class LinesObject extends DrawingObject {
           location = getPoint(options.location);
         }
       }
-      // let lineSpace = 0;
       if (index > 0 && typeof location !== 'number') {
         if (options.lineSpace != null) {
           location = location.add(0, lastLineY - options.lineSpace);
@@ -1016,14 +1015,6 @@ class LinesObject extends DrawingObject {
           location = location.add(0, lastLineY - this.lineSpace);
         }
       }
-      console.log(location)
-      // if (typeof location !== 'number') {
-      //   if (options.lineSpace != null) {
-      //     location = location.add(0, lastLineY - options.lineSpace);
-      //   } else {
-      //     location = location.add(0, lastLineY - this.lineSpace);
-      //   }
-      // }
       if (typeof location !== 'number') {
         lastLineY = location.y;
       }

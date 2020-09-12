@@ -125,12 +125,12 @@ diagram.addElements([
         ],
         'This is a simple string also |formatted|.'
       ],
-      lineSpace: 0.4,
+      lineSpace: 0.1,
       modifiers: {
         formatted: {
-          text: 'asdfasdf',
-          location: [0, 0.1],
-          // offset: [-0.1, 0.1],
+          // text: 'asdfasdf',
+          // location: [0, 0.1],
+          offset: [0.01, 0],
           font: { color: [1, 1, 0, 1], style: 'italic' },
         },
       },
