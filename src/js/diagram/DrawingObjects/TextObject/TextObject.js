@@ -724,6 +724,7 @@ class TextObject extends DrawingObject {
       if (yMax == null || yMaxText > yMax) {
         yMax = yMaxText;
       }
+      console.log('offset', offset)
     });
     const locationOffset = new Point(0, 0);
     if (xMin != null && yMin != null && xMax != null && yMax != null) {
@@ -742,10 +743,11 @@ class TextObject extends DrawingObject {
         locationOffset.y = -yMin - (yMax - yMin) / 2;
       }
     }
-
+    
     // if (locationOffset.x !== 0 || locationOffset.y !== 0) {
     this.text.forEach((diagramText) => {
-      diagramText.locationAligned = diagramText.location.add(locationOffset);
+      const { offset } = diagramText;
+      diagramText.locationAligned = diagramText.location.add(offset).add(locationOffset);
     });
     // }
     this.text.forEach((t) => {

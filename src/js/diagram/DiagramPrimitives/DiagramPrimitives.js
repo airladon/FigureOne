@@ -1349,6 +1349,7 @@ export default class DiagramPrimitives {
         fontToUse = font;
       }
       const dFont = new DiagramFont(joinObjects({}, options.font, fontToUse));
+
       dText.push(new DiagramText(
         location || null,
         textToUse,
