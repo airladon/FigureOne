@@ -129,8 +129,8 @@ diagram.addElements([
       modifiers: {
         formatted: {
           text: 'asdfasdf',
-          // location: [0, 0],
-          offset: [-0.1, 0.1],
+          location: [0, 0.1],
+          // offset: [-0.1, 0.1],
           font: { color: [1, 1, 0, 1], style: 'italic' },
         },
       },

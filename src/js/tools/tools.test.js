@@ -1354,6 +1354,13 @@ describe('ObjectTracker', () => {
         'This is ', 'a', ' test',
       ]);
     });
+    test('Side by side', () => {
+      const s = 'This is |a|| test| for this';
+      const split = tools.splitString(s, '|');
+      expect(split).toEqual([
+        'This is ', 'a', ' test', ' for this',
+      ]);
+    });
     // 'This is |a| test'
     // 'This \|is |a| test'
     // 'This is ||a|| test'

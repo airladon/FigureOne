@@ -1008,13 +1008,22 @@ class LinesObject extends DrawingObject {
           location = getPoint(options.location);
         }
       }
-      if (typeof location !== 'number') {
+      // let lineSpace = 0;
+      if (index > 0 && typeof location !== 'number') {
         if (options.lineSpace != null) {
           location = location.add(0, lastLineY - options.lineSpace);
         } else {
           location = location.add(0, lastLineY - this.lineSpace);
         }
       }
+      console.log(location)
+      // if (typeof location !== 'number') {
+      //   if (options.lineSpace != null) {
+      //     location = location.add(0, lastLineY - options.lineSpace);
+      //   } else {
+      //     location = location.add(0, lastLineY - this.lineSpace);
+      //   }
+      // }
       if (typeof location !== 'number') {
         lastLineY = location.y;
       }
@@ -1060,28 +1069,6 @@ class LinesObject extends DrawingObject {
         minSize = text.font.size;
       }
     });
-    //   if (typeof t === 'string') {
-    //     return;
-    //   }
-    //   const [options] = t;
-    //   if (
-    //     options.font != null
-    //     && options.font.size != null
-    //     && options.font.size < minSize
-    //   ) {
-    //     minSize = options.font.size;
-    //   }
-    // });
-    // Object.keys(this.modifiers).forEach((key) => {
-    //   const m = this.modifiers[key];
-    //   if (
-    //     m.font != null
-    //     && m.font.size != null
-    //     && m.font.size < minSize
-    //   ) {
-    //     minSize = m.font.size;
-    //   }
-    // });
     this.scalingFactor = 20 / minSize;
   }
 
@@ -1370,7 +1357,7 @@ class LinesObject extends DrawingObject {
       if (yMax == null || yMaxText > yMax) {
         yMax = yMaxText;
       }
-      console.log('offset', offset)
+      // console.log('offset', offset)
     });
     const locationOffset = new Point(0, 0);
     if (xMin != null && yMin != null && xMax != null && yMax != null) {
