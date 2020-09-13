@@ -124,6 +124,9 @@ class DiagramText {
   xAlign: 'left' | 'center' | 'right';
   yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
   // scalingFactor: number;
+  justificationOffset: Point;
+  justification: 'left' | 'center' | 'right';
+  line: number;
   lastRight: Point;
   lastMeasure: {
     ascent: number,
@@ -131,7 +134,8 @@ class DiagramText {
     width: number,
     left: number,
     right: number,
-  }
+  };
+
   line: number;
 
   constructor(
@@ -142,10 +146,13 @@ class DiagramText {
     yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline' = 'baseline',
     offset: TypeParsablePoint = new Point(0, 0),
     line: number = 0,
+    justification: 'left' | 'center' | 'right' = 'left',
   ) {
     this.offset = getPoint(offset);
     this.lastRight = new Point(0, 0);
     this.line = line;
+    this.justificationOffset = new Point(0, 0);
+    this.justification = justification;
     if (typeof location === 'number') {
       this.location = new Point(0, 0);
       this.relativeLocationIndex = location;
@@ -1021,6 +1028,10 @@ class LinesObject extends DrawingObject {
       if (typeof location !== 'number') {
         lastLineY = location.y;
       }
+      let justification = this.justification;
+      if (options.justification != null) {
+        justification = options.justification;
+      }
       const split = splitString(rawText, '|', '/');
       split.forEach((s) => {
         let text = s;
@@ -1040,6 +1051,9 @@ class LinesObject extends DrawingObject {
           if (mod.offset != null) {
             offset = mod.offset;
           }
+          // if (mod.justification != null) {
+          //   justification = mod.justification;
+          // } 
         }
         this.text.push(new DiagramText(
           location,
@@ -1049,6 +1063,7 @@ class LinesObject extends DrawingObject {
           'baseline',
           offset,
           lineIndex,
+          justification,
         ));
         location = -1;
         font = defaultFont;
@@ -1334,6 +1349,7 @@ class LinesObject extends DrawingObject {
     let xMax = null;
     let yMin = null;
     let yMax = null;
+    const lineWidths = {};
     this.text.forEach((diagramText) => {
       const { location, lastMeasure, offset } = diagramText;
       const xMinText = location.x - lastMeasure.left + offset.x;
@@ -1353,7 +1369,38 @@ class LinesObject extends DrawingObject {
         yMax = yMaxText;
       }
       // console.log('offset', offset)
+      if (lineWidths[diagramText.line] == null) {
+        lineWidths[diagramText.line] = { min: xMinText, max: xMaxText };
+      } else {
+        if (xMinText < lineWidths[diagramText.line].min) {
+          lineWidths[diagramText.line].min = xMinText;
+        }
+        if (xMaxText > lineWidths[diagramText.line].max) {
+          lineWidths[diagramText.line].max = xMaxText;
+        }
+      }
+      lineWidths[diagramText.line].width =
+        lineWidths[diagramText.line].max - lineWidths[diagramText.line].min;
     });
+
+    // do line justification
+    // console.log(lineWidths)
+    // console.log(this.text)
+    const maxWidth = xMax - xMin;
+    // console.log(maxWidth)
+    this.text.forEach((diagramText, index) => {
+      console.log(diagramText.justification)
+      if (diagramText.justification === 'center') {
+        diagramText.justificationOffset = new Point(
+          (maxWidth - lineWidths[diagramText.line].width) / 2, 0,
+        );
+      } else if (diagramText.justification === 'right') {
+        diagramText.justificationOffset = new Point(
+          maxWidth - lineWidths[diagramText.line].width, 0,
+        );
+      }
+    });
+
     const locationOffset = new Point(0, 0);
     if (xMin != null && yMin != null && xMax != null && yMax != null) {
       if (this.xAlign === 'left') {
@@ -1374,7 +1421,7 @@ class LinesObject extends DrawingObject {
 
     this.text.forEach((diagramText) => {
       const { offset } = diagramText;
-      diagramText.locationAligned = diagramText.location.add(offset).add(locationOffset);
+      diagramText.locationAligned = diagramText.location.add(offset).add(locationOffset).add(diagramText.justificationOffset);
     });
     // }
     this.text.forEach((t) => {

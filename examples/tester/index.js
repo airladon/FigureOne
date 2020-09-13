@@ -119,7 +119,7 @@ diagram.addElements([
           {
             font: {},
             lineSpace: 0.2,
-            justification: 'left',
+            justification: 'center',
           },
           'This is a |sup| string',
         ],
@@ -138,6 +138,7 @@ diagram.addElements([
       xAlign: 'left',
       yAlign: 'middle',
       color: [0.5, 0.5, 1, 1],
+      justification: 'right',
     },
   },
   {
