@@ -1167,6 +1167,24 @@ export default class DiagramPrimitives {
     );
   }
 
+  textNew(...optionsIn: Array<{
+    text: string | Array<string | {
+      font?: TypeDiagramFontDefinition,
+      location?: TypeParsablePoint | number,
+      xAlign?: 'left' | 'right' | 'center',
+      yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
+    }>;
+    font: TypeDiagramFontDefinition,
+    position: TypeParsablePoint,
+    transform: TypeParsableTransform,
+    xAlign: 'left' | 'right' | 'center',
+    yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
+    color: Array<number>
+  }>) {
+    const b = this.draw2D;
+    return optionsIn;
+  }
+
   textLines(...optionsIn: Array<{
     text: string | Array<string | [{
       font?: TypeDiagramFontDefinition,

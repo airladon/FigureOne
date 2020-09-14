@@ -118,14 +118,16 @@ diagram.addElements([
         [
           {
             font: {},
-            lineSpace: 0.2,
-            justification: 'center',
+            lineSpace: 0.4,
+            justification: 'left',
+            location: [-0.2, 0.3]
           },
           'This is a |sup| string',
         ],
         'This is a simple string also |formatted|.'
       ],
-      lineSpace: 0.1,
+      // text: 'Hello |formatted|',
+      lineSpace: 0.2,
       modifiers: {
         formatted: {
           // text: 'asdfasdf',
@@ -138,7 +140,7 @@ diagram.addElements([
       xAlign: 'left',
       yAlign: 'middle',
       color: [0.5, 0.5, 1, 1],
-      justification: 'right',
+      justification: 'left',
     },
   },
   {

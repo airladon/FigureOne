@@ -176,6 +176,12 @@ DiagramElementPrimitive {
           "style": "italic",
           "weight": "200",
         },
+        "justification": "left",
+        "justificationOffset": Point {
+          "_type": "point",
+          "x": 0,
+          "y": 0,
+        },
         "lastMeasure": Object {
           "ascent": 0.095,
           "descent": 0.008,
@@ -189,6 +195,7 @@ DiagramElementPrimitive {
           "x": 0.1,
           "y": 0,
         },
+        "line": 0,
         "location": Point {
           "_type": "point",
           "x": 0,

@@ -736,7 +736,6 @@ class TextObject extends DrawingObject {
       if (yMax == null || yMaxText > yMax) {
         yMax = yMaxText;
       }
-      console.log('offset', offset)
     });
     const locationOffset = new Point(0, 0);
     if (xMin != null && yMin != null && xMax != null && yMax != null) {
@@ -1389,7 +1388,6 @@ class LinesObject extends DrawingObject {
     const maxWidth = xMax - xMin;
     // console.log(maxWidth)
     this.text.forEach((diagramText, index) => {
-      console.log(diagramText.justification)
       if (diagramText.justification === 'center') {
         diagramText.justificationOffset = new Point(
           (maxWidth - lineWidths[diagramText.line].width) / 2, 0,
