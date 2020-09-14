@@ -292,6 +292,202 @@ class DiagramText {
   }
 }
 
+// DiagramText: {
+//   location,         // assigned location in vertex space
+//   locationDrawn,    // location drawn after line or paragraph justification
+//   text,
+//   font,
+//   xAlign,
+//   yAlign,
+//   onClick,
+//   lastDrawRect,
+
+//   getBounds () => Rect, // drawn location, xAlign, yAlign in vertexSpace
+//   getBorder () => Rect, // click border including any expansion
+
+//   measureText () => { left, right, asc, des, height, width },
+// }
+
+// LineText extends DiagramText: {
+//   offset, // offset to automatically calculated location
+//   inSize, // Included in line layout calculations or not
+//   line,   // line text belongs to
+// }
+
+
+// TextObject: {
+//   drawContext2D: Array<DrawContext2D>;
+//   text: Array<DiagramText>;
+//   scalingFactor: number;
+//   lastDrawTransform: Array<number>;
+// }
+
+// LineObject extends TextObject {
+//   xAlign,
+//   yAlign,
+// }
+
+// TextLinesObject extends LineObject {
+//   lines: [
+//     { justification, width, lastRight, nextLineSpace },
+//   ],
+// }
+
+// DiagramText is a single text element of the diagram that is drawn at
+// once and referenced to the same location
+// class DiagramText {
+//   location: Point;
+//   // relativeLocationIndex: number;
+//   // locationAligned: Point;
+//   // offset: Point;
+//   text: string;
+//   font: DiagramFont;
+//   xAlign: 'left' | 'center' | 'right';
+//   yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
+//   // scalingFactor: number;
+//   // justificationOffset: Point;
+//   // justification: 'left' | 'center' | 'right';
+//   // line: number;
+//   // lastRight: Point;
+//   lastMeasure: {
+//     ascent: number,
+//     descent: number,
+//     width: number,
+//     left: number,
+//     right: number,
+//   };
+
+//   line: number;
+
+//   constructor(
+//     location: TypeParsablePoint = new Point(0, 0),
+//     text: string = '',
+//     font: DiagramFont | TypeDiagramFontDefinition = new DiagramFont(),
+//     xAlign: 'left' | 'center' | 'right' = 'left',
+//     yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline' = 'baseline',
+//   ) {
+//     this.location = getPoint(location)._dup();
+//     this.text = text.slice();
+//     if (font instanceof DiagramFont) {
+//       this.font = font._dup();
+//     } else {
+//       this.font = new DiagramFont(font);
+//     }
+//     this.xAlign = xAlign;
+//     this.yAlign = yAlign;
+//   }
+
+//   _dup() {
+//     return new DiagramText(this.location, this.text, this.font.definition());
+//   }
+
+//   // This method is used instead of the actual ctx.measureText because
+//   // Firefox and Chrome don't yet support it's advanced features.
+//   // Estimates are made for height based on width.
+//   // eslint-disable-next-line class-methods-use-this
+//   measureText(
+//     ctx: CanvasRenderingContext2D,
+//     scalingFactor: number = 20,
+//   ) {
+//     // const location = getPoint(locationIn);
+//     this.font.setFontInContext(ctx, scalingFactor);
+//     // if (this.text === 'b') {
+//     //   debugger;
+//     // }
+//     const fontHeight = ctx.font.match(/[^ ]*px/);
+//     let aWidth;
+//     if (fontHeight != null) {
+//       aWidth = parseFloat(fontHeight[0]) / 2;
+//     } else {
+//       aWidth = ctx.measureText('a').width;
+//     }
+
+//     // Estimations of FONT ascent and descent for a baseline of "alphabetic"
+//     let ascent = aWidth * 1.4;
+//     let descent = aWidth * 0.08;
+
+//     // Uncomment below and change above consts to lets if more resolution on
+//     // actual text boundaries is needed
+
+//     // const maxAscentRe =
+//     //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
+//     const midAscentRe = /[acemnorsuvwxz*gyqp]/g;
+//     const midDecentRe = /[;,$]/g;
+//     const maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
+
+//     const midAscentMatches = this.text.match(midAscentRe);
+//     if (Array.isArray(midAscentMatches)) {
+//       if (midAscentMatches.length === this.text.length) {
+//         ascent = aWidth * 0.95;
+//       }
+//     }
+
+//     const midDescentMatches = this.text.match(midDecentRe);
+//     if (Array.isArray(midDescentMatches)) {
+//       if (midDescentMatches.length > 0) {
+//         descent = aWidth * 0.2;
+//       }
+//     }
+
+//     const maxDescentMatches = this.text.match(maxDescentRe);
+//     if (Array.isArray(maxDescentMatches)) {
+//       if (maxDescentMatches.length > 0) {
+//         descent = aWidth * 0.5;
+//       }
+//     }
+
+//     const height = ascent + descent;
+
+//     const { width } = ctx.measureText(this.text);
+//     let asc = 0;
+//     let des = 0;
+//     let left = 0;
+//     let right = 0;
+
+//     // console.log(scalingFactor, width, this.xAlign)
+//     if (this.xAlign === 'left') {
+//       right = width;
+//     }
+//     if (this.xAlign === 'center') {
+//       left = width / 2;
+//       right = width / 2;
+//     }
+//     if (this.xAlign === 'right') {
+//       left = width;
+//     }
+//     if (this.yAlign === 'alphabetic' || this.yAlign === 'baseline') {
+//       asc = ascent;
+//       des = descent;
+//     }
+//     if (this.yAlign === 'top') {
+//       asc = 0;
+//       des = height;
+//     }
+//     if (this.yAlign === 'bottom') {
+//       asc = height;
+//       des = 0;
+//     }
+//     if (this.yAlign === 'middle') {
+//       asc = height / 2;
+//       des = height / 2;
+//     }
+//     left /= scalingFactor;
+//     right /= scalingFactor;
+//     asc /= scalingFactor;
+//     des /= scalingFactor;
+
+//     this.lastMeasure = {
+//       left,
+//       right,
+//       ascent: asc,
+//       descent: des,
+//       width: right + left,
+//       height: asc + des,
+//     };
+//     return this.lastMeasure;
+//   }
+// }
+
 // TextObject is the DrawingObject used in the DiagramElementPrimitive.
 // TextObject will draw an array of DiagramText objects.
 class TextObject extends DrawingObject {
