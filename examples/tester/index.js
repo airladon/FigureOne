@@ -148,8 +148,13 @@ diagram.addElements([
     method: 'shapes.textNew',
     options: {
       text: 'hello',
-      xAlign: 'center',
-      yAlign: 'middle',
+      xAlign: 'right',
+      yAlign: 'top',
+      color: [0, 1, 0, 1],
+      font: {
+        family: 'Helvetica',
+        color: [0, 1, 1, 1],
+      }
     },
   },
   {

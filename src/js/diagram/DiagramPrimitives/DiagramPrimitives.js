@@ -16,6 +16,7 @@ import WebGLInstance from '../webgl/webgl';
 import DrawContext2D from '../DrawContext2D';
 import * as tools from '../../tools/math';
 import { generateUniqueId, joinObjects, joinObjectsWithOptions } from '../../tools/tools';
+import DrawingObject from '../DrawingObjects/DrawingObject';
 import VertexObject from '../DrawingObjects/VertexObject/VertexObject';
 // import {
 //   PolyLine, PolyLineCorners,
@@ -42,7 +43,7 @@ import {
 } from '../DrawingObjects/TextObject/TextObject';
 
 import {
-  DiagramTextAF, TextObjectAF,
+  TextObjectAF, TextLineObjectAF,
 } from '../DrawingObjects/TextObject/TextObjectAF';
 import type {
   TypeDiagramFontDefinition,
@@ -1171,21 +1172,8 @@ export default class DiagramPrimitives {
     );
   }
 
-  textNew(...optionsIn: Array<{
-    text: string | Array<string | [{
-      font?: TypeDiagramFontDefinition,
-      location?: TypeParsablePoint | number,
-      xAlign?: 'left' | 'right' | 'center',
-      yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
-      onClick?: () => void,
-    }, string]>;
-    position: TypeParsablePoint,
-    transform: TypeParsableTransform,
-    font: TypeDiagramFontDefinition,                    // default font
-    xAlign: 'left' | 'right' | 'center',                // default xAlign
-    yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
-    color: Array<number>
-  }>) {
+  // eslint-disable-next-line class-methods-use-this
+  parseTextOptions(...optionsIn) {
     const defaultOptions = {
       text: '',
       font: {
@@ -1225,39 +1213,14 @@ export default class DiagramPrimitives {
       options.text = [options.text];
     }
 
-    const dText = [];
-    // for (let i = 0; i < options.text.length; i += 1) {
-    options.text.forEach((textDefinition) => {
-      let font;
-      let location;
-      let xAlign;
-      let yAlign;
-      let textToUse;
-      if (Array.isArray(textDefinition) && textDefinition.length === 2) {
-        [{
-          font, location, xAlign, yAlign,
-        }, textToUse] = textDefinition;
-      } else {
-        textToUse = textDefinition;
-      }
-      let fontToUse = options.font;
-      if (font != null) {
-        fontToUse = font;
-      }
-      const dFont = joinObjects({}, options.font, fontToUse);
+    return options;
+  }
 
-      dText.push(new DiagramTextAF(
-        this.draw2D,
-        location || new Point(0, 0),
-        textToUse,
-        dFont,
-        xAlign || options.xAlign,
-        yAlign || options.yAlign,
-      ));
-    });
-    const to = new TextObjectAF(this.draw2D, dText);
+  createPrimitive(
+    drawingObject: DrawingObject, options: Object,
+  ) {
     const element = new DiagramElementPrimitive(
-      to,
+      drawingObject,
       options.transform,
       options.color,
       this.limits,
@@ -1270,6 +1233,52 @@ export default class DiagramPrimitives {
     }
 
     return element;
+  }
+
+  textLine(...optionsIn: {
+    text: string | Array<string | [{
+      font?: TypeDiagramFontDefinition,
+      offset?: TypeParsablePoint,
+      inLine?: boolean,
+      onClick?: () => void,
+    }, string]>;
+    position: TypeParsablePoint,
+    transform: TypeParsableTransform,
+    font: TypeDiagramFontDefinition,                    // default font
+    // How the line aligns with the position
+    xAlign: 'left' | 'right' | 'center',
+    yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
+    color: Array<number>
+  }) {
+    const options = this.parseTextOptions(...optionsIn);
+    const to = new TextLineObjectAF(
+      this.draw2D,
+      options,
+    );
+    return this.createPrimitive(to, options);
+  }
+
+  textNew(...optionsIn: Array<{
+    text: string | Array<string | [{
+      font?: TypeDiagramFontDefinition,
+      location?: TypeParsablePoint | number,
+      xAlign?: 'left' | 'right' | 'center',
+      yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
+      onClick?: () => void,
+    }, string]>;
+    position?: TypeParsablePoint,
+    transform?: TypeParsableTransform,
+    font?: TypeDiagramFontDefinition,                    // default font
+    xAlign?: 'left' | 'right' | 'center',                // default xAlign
+    yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
+    color?: Array<number>
+  }>) {
+    const options = this.parseTextOptions(...optionsIn);
+    const to = new TextObjectAF(
+      this.draw2D,
+      options,
+    );
+    return this.createPrimitive(to, options);
   }
 
   textLines(...optionsIn: Array<{
