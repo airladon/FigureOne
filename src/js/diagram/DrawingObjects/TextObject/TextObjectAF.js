@@ -203,7 +203,7 @@ class DiagramTextAF {
   // eslint-disable-next-line class-methods-use-this
   measureText(
     ctx: CanvasRenderingContext2D = this.drawContext2D[0].ctx,
-    scalingFactor: number = this.font.size / 20,
+    scalingFactor: number = 20 / this.font.size,
   ) {
     this.font.setFontInContext(ctx, scalingFactor);
     const fontHeight = ctx.font.match(/[^ ]*px/);
@@ -251,56 +251,10 @@ class DiagramTextAF {
     // const height = ascent + descent;
 
     const { width } = ctx.measureText(this.text);
-    // let asc = 0;
-    // let des = 0;
-    // let left = 0;
-    // let right = 0;
-
-    // // console.log(scalingFactor, width, this.xAlign)
-    // if (this.xAlign === 'left') {
-    //   right = width;
-    // }
-    // if (this.xAlign === 'center') {
-    //   left = width / 2;
-    //   right = width / 2;
-    // }
-    // if (this.xAlign === 'right') {
-    //   left = width;
-    // }
-    // if (this.yAlign === 'alphabetic' || this.yAlign === 'baseline') {
-    //   asc = ascent;
-    //   des = descent;
-    // }
-    // if (this.yAlign === 'top') {
-    //   asc = 0;
-    //   des = height;
-    // }
-    // if (this.yAlign === 'bottom') {
-    //   asc = height;
-    //   des = 0;
-    // }
-    // if (this.yAlign === 'middle') {
-    //   asc = height / 2;
-    //   des = height / 2;
-    // }
-    // left /= scalingFactor;
-    // right /= scalingFactor;
-    // asc /= scalingFactor;
-    // des /= scalingFactor;
-
-    // this.measure = {
-    //   left,
-    //   right,
-    //   ascent: asc,
-    //   descent: des,
-    //   width: right + left,
-    //   height: asc + des,
-    // };
-    // return this.measure;
     this.measure = {
-      ascent,
-      descent,
-      width,
+      ascent: ascent / scalingFactor,
+      descent: descent / scalingFactor,
+      width: width / scalingFactor,
     };
     return this.measure;
   }

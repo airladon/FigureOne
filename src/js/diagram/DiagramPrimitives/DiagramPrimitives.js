@@ -40,6 +40,10 @@ import Text from '../DiagramElements/Text';
 import {
   DiagramText, DiagramFont, TextObject, LinesObject,
 } from '../DrawingObjects/TextObject/TextObject';
+
+import {
+  DiagramTextAF, TextObjectAF,
+} from '../DrawingObjects/TextObject/TextObjectAF';
 import type {
   TypeDiagramFontDefinition,
 } from '../DrawingObjects/TextObject/TextObject';
@@ -1229,12 +1233,12 @@ export default class DiagramPrimitives {
       let xAlign;
       let yAlign;
       let textToUse;
-      if (Array.isArray(textDefinition) && text.length === 2) {
+      if (Array.isArray(textDefinition) && textDefinition.length === 2) {
         [{
           font, location, xAlign, yAlign,
-        }, textToUse] = text;
+        }, textToUse] = textDefinition;
       } else {
-        textToUse = text;
+        textToUse = textDefinition;
       }
       let fontToUse = options.font;
       if (font != null) {
@@ -1243,6 +1247,7 @@ export default class DiagramPrimitives {
       const dFont = joinObjects({}, options.font, fontToUse);
 
       dText.push(new DiagramTextAF(
+        this.draw2D,
         location || new Point(0, 0),
         textToUse,
         dFont,

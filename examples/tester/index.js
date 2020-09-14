@@ -102,45 +102,54 @@ diagram.addElements([
   //     color: [0.5, 0.5, 1, 1],
   //   },
   // },
+  // {
+  //   name: 'tester',
+  //   method: 'shapes.textLines',
+  //   options: {
+  //     font: {
+  //       family: 'Times New Roman',
+  //       color: [1, 0, 0, 1],
+  //       style: 'normal',
+  //       size: 0.1,
+  //       weight: '200',
+  //     },
+  //     text: [
+  //       'This is a |formatted| string',
+  //       [
+  //         {
+  //           font: {},
+  //           lineSpace: 0.4,
+  //           justification: 'left',
+  //           location: [-0.2, 0.3]
+  //         },
+  //         'This is a |sup| string',
+  //       ],
+  //       'This is a simple string also |formatted|.'
+  //     ],
+  //     // text: 'Hello |formatted|',
+  //     lineSpace: 0.2,
+  //     modifiers: {
+  //       formatted: {
+  //         // text: 'asdfasdf',
+  //         // location: [0, 0.1],
+  //         offset: [0.01, 0],
+  //         font: { color: [1, 1, 0, 1], style: 'italic' },
+  //       },
+  //     },
+  //     position: [-0.8, 0],
+  //     xAlign: 'left',
+  //     yAlign: 'middle',
+  //     color: [0.5, 0.5, 1, 1],
+  //     justification: 'left',
+  //   },
+  // },
   {
     name: 'tester',
-    method: 'shapes.textLines',
+    method: 'shapes.textNew',
     options: {
-      font: {
-        family: 'Times New Roman',
-        color: [1, 0, 0, 1],
-        style: 'normal',
-        size: 0.1,
-        weight: '200',
-      },
-      text: [
-        'This is a |formatted| string',
-        [
-          {
-            font: {},
-            lineSpace: 0.4,
-            justification: 'left',
-            location: [-0.2, 0.3]
-          },
-          'This is a |sup| string',
-        ],
-        'This is a simple string also |formatted|.'
-      ],
-      // text: 'Hello |formatted|',
-      lineSpace: 0.2,
-      modifiers: {
-        formatted: {
-          // text: 'asdfasdf',
-          // location: [0, 0.1],
-          offset: [0.01, 0],
-          font: { color: [1, 1, 0, 1], style: 'italic' },
-        },
-      },
-      position: [-0.8, 0],
-      xAlign: 'left',
+      text: 'hello',
+      xAlign: 'center',
       yAlign: 'middle',
-      color: [0.5, 0.5, 1, 1],
-      justification: 'left',
     },
   },
   {
@@ -188,6 +197,6 @@ diagram.initialize();
 
 diagram.elements._tester.onClick = () => { console.log(1) };
 diagram.elements._tester.makeTouchable();
-console.log(diagram.elements)
+console.log(diagram.elements._tester.drawingObject)
 // diagram.elements._tester.setColor([0, 1, 1, 1]);
 
