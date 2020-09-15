@@ -1276,8 +1276,8 @@ export default class DiagramPrimitives {
     const options = this.parseTextOptions(...optionsIn);
     const to = new TextObjectAF(
       this.draw2D,
-      options,
     );
+    to.loadText(options);
     return this.createPrimitive(to, options);
   }
 

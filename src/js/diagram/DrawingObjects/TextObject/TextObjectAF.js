@@ -328,91 +328,13 @@ class DiagramTextLineAF extends DiagramTextAF {
   }
 }
 
-function loadTextFromOptions(
-  drawContext2D: Array<DrawContext2D>,
-  options: {
-    text: string | Array<string | [{
-      font?: TypeDiagramFontDefinition,
-      location?: TypeParsablePoint,
-      xAlign?: 'left' | 'right' | 'center',
-      yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
-      onClick?: () => void,
-    }, string]>;
-    font: TypeDiagramFontDefinition,                    // default font
-    xAlign: 'left' | 'right' | 'center',                // default xAlign
-    yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
-    color: Array<number>
-  } | Array<DiagramTextAF>,
-) {
-  if (!Array.isArray(options)) {
-    let textArray = options.text;
-    if (typeof textArray === 'string') {
-      textArray = [textArray];
-    }
-    const diagramTextArray = [];
-    textArray.forEach((textDefinition) => {
-      let font;
-      let location;
-      let xAlign;
-      let yAlign;
-      let textToUse;
-      if (Array.isArray(textDefinition) && textDefinition.length === 2) {
-        [{
-          font, location, xAlign, yAlign,
-        }, textToUse] = textDefinition;
-      } else {
-        textToUse = textDefinition;
-      }
-      let locationToUse;
-      if (location == null) {
-        locationToUse = new Point(0, 0);
-      } else {
-        locationToUse = getPoint(location);
-      }
-      let fontToUse = options.font;
-      if (font != null) {
-        fontToUse = font;
-      }
-      const fontDefinition = joinObjects({}, options.font, fontToUse);
-
-      diagramTextArray.push(new DiagramTextAF(
-        drawContext2D,
-        locationToUse,
-        textToUse,
-        fontDefinition,
-        xAlign || options.xAlign,
-        yAlign || options.yAlign,
-      ));
-    });
-    return diagramTextArray;
-  }
-  return options;
-}
-
-// TextObject is the DrawingObject used in the DiagramElementPrimitive.
-// TextObject will draw an array of DiagramText objects.
-class TextObjectAF extends DrawingObject {
+class TextObjectBase extends DrawingObject {
   drawContext2D: Array<DrawContext2D>
   text: Array<DiagramTextAF>;
   scalingFactor: number;
   lastDrawTransform: Array<number>;
-
   constructor(
     drawContext2D: Array<DrawContext2D> | DrawContext2D,
-    // text: Array<DiagramTextAF> = [],
-    options: {
-      text: string | Array<string | [{
-        font?: TypeDiagramFontDefinition,
-        location?: TypeParsablePoint,
-        xAlign?: 'left' | 'right' | 'center',
-        yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
-        onClick?: () => void,
-      }, string]>;
-      font: TypeDiagramFontDefinition,                    // default font
-      xAlign: 'left' | 'right' | 'center',                // default xAlign
-      yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
-      color: Array<number>
-    } | Array<DiagramTextAF>,
   ) {
     super();
 
@@ -422,78 +344,23 @@ class TextObjectAF extends DrawingObject {
       this.drawContext2D = [drawContext2D];
     }
     this.lastDrawTransform = [];
-    this.text = loadTextFromOptions(this.drawContext2D, options);
-    this.setTextLocations();
-    this.calcScalingFactor();
+    this.text = [];
     this.layoutText();
     this.state = 'loaded';
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  loadText(options: Object) {
+    this.calcScalingFactor();
+    this.layoutText();
   }
 
   // eslint-disable-next-line class-methods-use-this
   setTextLocations() {
   }
 
-  loadOptions(options: {
-      text: string | Array<string | [{
-        font?: TypeDiagramFontDefinition,
-        location?: TypeParsablePoint,
-        xAlign?: 'left' | 'right' | 'center',
-        yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
-        onClick?: () => void,
-      }, string]>;
-      font: TypeDiagramFontDefinition,                    // default font
-      xAlign: 'left' | 'right' | 'center',                // default xAlign
-      yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
-      color: Array<number>
-    } | Array<DiagramTextAF>) {
-    if (!Array.isArray(options)) {
-      let textArray = options.text;
-      if (typeof textArray === 'string') {
-        textArray = [textArray];
-      }
-      const diagramTextArray = [];
-      textArray.forEach((textDefinition) => {
-        let font;
-        let location;
-        let xAlign;
-        let yAlign;
-        let textToUse;
-        if (Array.isArray(textDefinition) && textDefinition.length === 2) {
-          [{
-            font, location, xAlign, yAlign,
-          }, textToUse] = textDefinition;
-        } else {
-          textToUse = textDefinition;
-        }
-        let locationToUse;
-        if (location == null) {
-          locationToUse = new Point(0, 0);
-        } else {
-          locationToUse = getPoint(location);
-        }
-        let fontToUse = options.font;
-        if (font != null) {
-          fontToUse = font;
-        }
-        const fontDefinition = joinObjects({}, options.font, fontToUse);
-
-        diagramTextArray.push(new DiagramTextAF(
-          this.drawContext2D,
-          locationToUse,
-          textToUse,
-          fontDefinition,
-          xAlign || options.xAlign,
-          yAlign || options.yAlign,
-        ));
-      });
-      this.text = diagramTextArray;
-    } else {
-      this.text = options;
-    }
-  }
-
   calcScalingFactor() {
-    this.scalingFactor = 1;
+    let scalingFactor = 1;
     if (this.text.length > 0) {
       let minSize = this.text[0].font.size;
       this.text.forEach((t) => {
@@ -501,8 +368,9 @@ class TextObjectAF extends DrawingObject {
           minSize = t.font.size;
         }
       });
-      this.scalingFactor = 20 / minSize;
+      scalingFactor = 20 / minSize;
     }
+    this.scalingFactor = scalingFactor;
   }
 
   setText(text: string, index: number = 0) {
@@ -510,11 +378,7 @@ class TextObjectAF extends DrawingObject {
   }
 
   _dup() {
-    const c = new TextObjectAF(this.drawContext2D, this.text);
-
-    // duplicateFromTo(this, c);
-    // c.scalingFactor = this.scalingFactor;
-    // c.border = this.border.map(b => b.map(p => p._dup()));
+    const c = new TextObjectBase(this.drawContext2D);
     return c;
   }
 
@@ -526,6 +390,7 @@ class TextObjectAF extends DrawingObject {
     } else {
       this.text[index].setFont(font);
     }
+    this.layoutText();
   }
 
   setOpacity(opacity: number, index: null | number = 0) {
@@ -549,10 +414,7 @@ class TextObjectAF extends DrawingObject {
   }
 
   layoutText() {
-    // Align text here if needed
-    // this.text.forEach((text) => {
-    //   text.locationAligned =
-    // });
+    this.setTextLocations();
     this.setBorder();
   }
 
@@ -565,8 +427,10 @@ class TextObjectAF extends DrawingObject {
     });
   }
 
-  getGLBoundaries(lastDrawTransformMatrix: Array<number>): Array<Array<Point>> {
-    const glBoundaries = [];
+  getGLBoundaries(
+    lastDrawTransformMatrix: Array<number>,
+  ): Array<Array<Point>> {
+    const glBoundaries: Array<Array<Point>> = [];
     this.text.forEach((t) => {
       glBoundaries.push(t.getGLBoundary(lastDrawTransformMatrix));
     });
@@ -722,6 +586,76 @@ class TextObjectAF extends DrawingObject {
     return [
       ...super._getStateProperties(),
     ];
+  }
+}
+
+// TextObject is the DrawingObject used in the DiagramElementPrimitive.
+// TextObject will draw an array of DiagramText objects.
+class TextObjectAF extends TextObjectBase {
+  loadText(
+    options: {
+      text: string | Array<string | [{
+        font?: TypeDiagramFontDefinition,
+        location?: TypeParsablePoint,
+        xAlign?: 'left' | 'right' | 'center',
+        yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
+        onClick?: () => void,
+      }, string]>;
+      font: TypeDiagramFontDefinition,                    // default font
+      xAlign: 'left' | 'right' | 'center',                // default xAlign
+      yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
+      color: Array<number>
+    },
+  ) {
+    let textArray = options.text;
+    if (typeof textArray === 'string') {
+      textArray = [textArray];
+    }
+    const diagramTextArray = [];
+    textArray.forEach((textDefinition) => {
+      let font;
+      let location;
+      let xAlign;
+      let yAlign;
+      let textToUse;
+      if (Array.isArray(textDefinition) && textDefinition.length === 2) {
+        [{
+          font, location, xAlign, yAlign,
+        }, textToUse] = textDefinition;
+      } else {
+        textToUse = textDefinition;
+      }
+      let locationToUse;
+      if (location == null) {
+        locationToUse = new Point(0, 0);
+      } else {
+        locationToUse = getPoint(location);
+      }
+      let fontToUse = options.font;
+      if (font != null) {
+        fontToUse = font;
+      }
+      const fontDefinition = joinObjects({}, options.font, fontToUse);
+
+      diagramTextArray.push(new DiagramTextAF(
+        this.drawContext2D,
+        locationToUse,
+        textToUse,
+        fontDefinition,
+        xAlign || options.xAlign,
+        yAlign || options.yAlign,
+      ));
+    });
+    this.text = diagramTextArray;
+    super.loadText();
+  }
+
+  _dup() {
+    const c = new TextObjectAF(this.drawContext2D);
+    c.text = this.text.map((t) => t._dup());
+    c.scalingFactor = this.scalingFactor;
+    c.layoutText();
+    return c;
   }
 }
 
