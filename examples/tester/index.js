@@ -145,11 +145,11 @@ diagram.addElements([
   // },
   {
     name: 'tester',
-    method: 'shapes.textNew',
+    method: 'shapes.textLine',
     options: {
-      text: 'hello',
-      xAlign: 'right',
-      yAlign: 'top',
+      text: 'hellog',
+      xAlign: 'center',
+      yAlign: 'middle',
       color: [0, 1, 0, 1],
       font: {
         family: 'Helvetica',

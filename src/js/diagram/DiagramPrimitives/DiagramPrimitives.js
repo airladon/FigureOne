@@ -1255,6 +1255,7 @@ export default class DiagramPrimitives {
       this.draw2D,
       options,
     );
+    to.loadText(options);
     return this.createPrimitive(to, options);
   }
 

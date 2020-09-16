@@ -326,6 +326,17 @@ class DiagramTextLineAF extends DiagramTextAF {
     const location = this.location._dup();
     this.locationAligned = location.add(this.offset);
   }
+
+  _dup() {
+    return new DiagramTextLineAF(
+      this.drawContext2D,
+      this.location,
+      this.text,
+      this.font.definition(),
+      this.offset,
+      this.inLine,
+    );
+  }
 }
 
 class TextObjectBase extends DrawingObject {
@@ -659,12 +670,14 @@ class TextObjectAF extends TextObjectBase {
   }
 }
 
-class TextLineObjectAF extends TextObjectAF {
+class TextLineObjectAF extends TextObjectBase {
+  text: Array<DiagramTextLineAF>;
   xAlign: 'left' | 'right' | 'center';                // default xAlign
   yAlign: 'bottom' | 'baseline' | 'middle' | 'top';   // default yAlign
 
   // $FlowFixMe
-  loadOptions(options: {
+  loadText(
+    options: {
       text: string | Array<string | [{
         font?: TypeDiagramFontDefinition,
         offset?: TypeParsablePoint,
@@ -675,52 +688,50 @@ class TextLineObjectAF extends TextObjectAF {
       xAlign: 'left' | 'right' | 'center',                // default xAlign
       yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
       color: Array<number>
-    } | Array<DiagramTextAF>) {
-    if (!Array.isArray(options)) {
-      let textArray = options.text;
-      if (typeof textArray === 'string') {
-        textArray = [textArray];
-      }
-      const diagramTextArray = [];
-      textArray.forEach((textDefinition) => {
-        let font;
-        let offset;
-        let inLine;
-        let textToUse;
-        if (Array.isArray(textDefinition) && textDefinition.length === 2) {
-          [{
-            font, offset, inLine,
-          }, textToUse] = textDefinition;
-        } else {
-          textToUse = textDefinition;
-        }
-        let offsetToUse;
-        if (offset == null) {
-          offsetToUse = new Point(0, 0);
-        } else {
-          offsetToUse = getPoint(offset);
-        }
-        let fontToUse = options.font;
-        if (font != null) {
-          fontToUse = font;
-        }
-        const fontDefinition = joinObjects({}, options.font, fontToUse);
-
-        diagramTextArray.push(new DiagramTextLineAF(
-          this.drawContext2D,
-          new Point(0, 0),
-          textToUse,
-          fontDefinition,
-          offsetToUse,
-          inLine,
-        ));
-      });
-      this.text = diagramTextArray;
-      this.xAlign = options.xAlign;
-      this.yAlign = options.yAlign;
-    } else {
-      this.text = options;
+    },
+  ) {
+    let textArray = options.text;
+    if (typeof textArray === 'string') {
+      textArray = [textArray];
     }
+    const diagramTextArray = [];
+    textArray.forEach((textDefinition) => {
+      let font;
+      let offset;
+      let inLine;
+      let textToUse;
+      if (Array.isArray(textDefinition) && textDefinition.length === 2) {
+        [{
+          font, offset, inLine,
+        }, textToUse] = textDefinition;
+      } else {
+        textToUse = textDefinition;
+      }
+      let offsetToUse;
+      if (offset == null) {
+        offsetToUse = new Point(0, 0);
+      } else {
+        offsetToUse = getPoint(offset);
+      }
+      let fontToUse = options.font;
+      if (font != null) {
+        fontToUse = font;
+      }
+      const fontDefinition = joinObjects({}, options.font, fontToUse);
+
+      diagramTextArray.push(new DiagramTextLineAF(
+        this.drawContext2D,
+        new Point(0, 0),
+        textToUse,
+        fontDefinition,
+        offsetToUse,
+        inLine,
+      ));
+    });
+    this.text = diagramTextArray;
+    this.xAlign = options.xAlign;
+    this.yAlign = options.yAlign;
+    super.loadText();
   }
 
   setTextLocations() {
@@ -730,7 +741,7 @@ class TextLineObjectAF extends TextObjectAF {
     this.text.forEach((text) => {
       text.location = lastRight.add(text.offset);
       if (text.inLine) {
-        lastRight = text.location.add(text.width, 0);
+        lastRight = text.location.add(text.measure.width, 0);
         const textMaxY = text.location.y + text.measure.ascent;
         const textMinY = text.location.y - text.measure.descent;
         if (textMaxY > maxY) {
@@ -751,13 +762,23 @@ class TextLineObjectAF extends TextObjectAF {
     if (this.yAlign === 'bottom') {
       locationAlignOffset.y -= minY;
     } else if (this.yAlign === 'middle') {
-      locationAlignOffset.y += -minY - (maxY - minY);
+      locationAlignOffset.y += -minY - (maxY - minY) / 2;
     } else if (this.yAlign === 'top') {
-      locationAlignOffset.y += maxY;
+      locationAlignOffset.y -= maxY;
     }
     this.text.forEach((text) => {
-      text.location = text.location.add(locationAlignOffset);
+      text.locationAligned = text.location.add(locationAlignOffset);
     });
+  }
+
+  _dup() {
+    const c = new TextLineObjectAF(this.drawContext2D);
+    c.text = this.text.map((t) => t._dup());
+    c.scalingFactor = this.scalingFactor;
+    c.xAlign = this.xAlign;
+    c.yAlign = this.yAlign;
+    c.layoutText();
+    return c;
   }
 }
 
