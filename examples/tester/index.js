@@ -147,7 +147,9 @@ diagram.addElements([
     name: 'tester',
     method: 'shapes.textLine',
     options: {
-      text: 'hellog',
+      text: [
+        'hello', [{ font: { size: 0.1 }, offset: [-0.3, 0.1], inLine: false }, ' there'], 'great',
+      ],
       xAlign: 'center',
       yAlign: 'middle',
       color: [0, 1, 0, 1],
