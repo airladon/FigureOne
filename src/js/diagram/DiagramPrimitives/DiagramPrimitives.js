@@ -38,13 +38,13 @@ import Arrow from '../DiagramElements/Arrow';
 import { AxisProperties } from '../DiagramElements/Plot/AxisProperties';
 import Axis from '../DiagramElements/Plot/Axis';
 import Text from '../DiagramElements/Text';
-import {
-  DiagramText, DiagramFont, TextObject, LinesObject,
-} from '../DrawingObjects/TextObject/TextObject';
+// import {
+//   DiagramText, DiagramFont, TextObject, LinesObject,
+// } from '../DrawingObjects/TextObject/TextObject';
 
 import {
-  TextObjectAF, TextLineObjectAF, TextLinesObjectAF,
-} from '../DrawingObjects/TextObject/TextObjectAF';
+  TextObject, TextLineObject, TextLinesObject,
+} from '../DrawingObjects/TextObject/TextObject';
 import type {
   TypeDiagramFontDefinition,
 } from '../DrawingObjects/TextObject/TextObject';
@@ -1251,7 +1251,7 @@ export default class DiagramPrimitives {
     color: Array<number>
   }) {
     const options = this.parseTextOptions(...optionsIn);
-    const to = new TextLineObjectAF(
+    const to = new TextLineObject(
       this.draw2D,
       options,
     );
@@ -1291,7 +1291,7 @@ export default class DiagramPrimitives {
       options.lineSpace = options.font.size;
     }
     // console.log('qwerty')
-    const to = new TextLinesObjectAF(
+    const to = new TextLinesObject(
       this.draw2D,
       options,
     );
@@ -1299,7 +1299,7 @@ export default class DiagramPrimitives {
     return this.createPrimitive(to, options);
   }
 
-  textNew(...optionsIn: Array<{
+  text(...optionsIn: Array<{
     text: string | Array<string | [{
       font?: TypeDiagramFontDefinition,
       location?: TypeParsablePoint | number,
@@ -1315,289 +1315,289 @@ export default class DiagramPrimitives {
     color?: Array<number>
   }>) {
     const options = this.parseTextOptions(...optionsIn);
-    const to = new TextObjectAF(
+    const to = new TextObject(
       this.draw2D,
     );
     to.loadText(options);
     return this.createPrimitive(to, options);
   }
 
-  textLinesLegacy(...optionsIn: Array<{
-    text: string | Array<string | [{
-      font?: TypeDiagramFontDefinition,
-      justification?: 'left' | 'center' | 'right',
-      location?: TypeParsablePoint | number,
-      lineSpace?: number
-    }, string]>,
-    modifiers: {
-      [modifierName: string]: {
-        text?: string,
-        location?: TypeParsablePoint | number,
-        offset?: TypeParsablePoint,
-        font?: TypeDiagramFontDefinition,
-        onClick?: () => {},
-      },
-    },
-    font?: TypeDiagramFontDefinition,
-    justification?: 'left' | 'center' | 'right',
-    lineSpace?: number,
-    position: TypeParsablePoint,
-    transform: TypeParsableTransform,
-    xAlign: 'left' | 'right' | 'center',
-    yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
-    color: Array<number>
-  }>) {
-    const defaultColor = [1, 0, 0, 1];
-    const defaultOptions = {
-      text: '',
-      font: {
-        family: 'Times New Roman',
-        style: 'normal',
-        size: 0.2,
-        weight: '200',
-      },
-      xAlign: 'left',
-      yAlign: 'baseline',
-      lineSpace: 0.2,     // Remove and put in logic for font size
-      justification: 'left',
-      transform: new Transform('text').standard(),
-    };
-    const options = joinObjects({}, defaultOptions, ...optionsIn);
+  // textLinesLegacy(...optionsIn: Array<{
+  //   text: string | Array<string | [{
+  //     font?: TypeDiagramFontDefinition,
+  //     justification?: 'left' | 'center' | 'right',
+  //     location?: TypeParsablePoint | number,
+  //     lineSpace?: number
+  //   }, string]>,
+  //   modifiers: {
+  //     [modifierName: string]: {
+  //       text?: string,
+  //       location?: TypeParsablePoint | number,
+  //       offset?: TypeParsablePoint,
+  //       font?: TypeDiagramFontDefinition,
+  //       onClick?: () => {},
+  //     },
+  //   },
+  //   font?: TypeDiagramFontDefinition,
+  //   justification?: 'left' | 'center' | 'right',
+  //   lineSpace?: number,
+  //   position: TypeParsablePoint,
+  //   transform: TypeParsableTransform,
+  //   xAlign: 'left' | 'right' | 'center',
+  //   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
+  //   color: Array<number>
+  // }>) {
+  //   const defaultColor = [1, 0, 0, 1];
+  //   const defaultOptions = {
+  //     text: '',
+  //     font: {
+  //       family: 'Times New Roman',
+  //       style: 'normal',
+  //       size: 0.2,
+  //       weight: '200',
+  //     },
+  //     xAlign: 'left',
+  //     yAlign: 'baseline',
+  //     lineSpace: 0.2,     // Remove and put in logic for font size
+  //     justification: 'left',
+  //     transform: new Transform('text').standard(),
+  //   };
+  //   const options = joinObjects({}, defaultOptions, ...optionsIn);
 
-    if (options.color == null && options.font.color != null) {
-      options.color = options.font.color;
-    }
-    if (options.font.color == null && options.color != null) {
-      options.font.color = options.color;
-    }
-    if (options.color == null) {
-      options.color = defaultColor;
-    }
+  //   if (options.color == null && options.font.color != null) {
+  //     options.color = options.font.color;
+  //   }
+  //   if (options.font.color == null && options.color != null) {
+  //     options.font.color = options.color;
+  //   }
+  //   if (options.color == null) {
+  //     options.color = defaultColor;
+  //   }
 
-    if (options.position != null) {
-      const p = getPoint(options.position);
-      options.transform.updateTranslation(p);
-    }
+  //   if (options.position != null) {
+  //     const p = getPoint(options.position);
+  //     options.transform.updateTranslation(p);
+  //   }
 
-    if (typeof options.text === 'string') {
-      options.text = [options.text];
-    }
+  //   if (typeof options.text === 'string') {
+  //     options.text = [options.text];
+  //   }
 
-    // const dText = [];
-    // for (let i = 0; i < options.text.length; i += 1) {
-    //   const text = options.text[i];
-    //   let font;
-    //   let offset;
-    //   let location;
-    //   let xAlign;
-    //   let yAlign;
-    //   let textToUse;
-    //   if (Array.isArray(text) && text.length === 2) {
-    //     [textToUse, {
-    //       font, offset, location, xAlign, yAlign,
-    //     }] = text;
-    //   } else {
-    //     textToUse = text;
-    //   }
-    //   let fontToUse = options.font;
-    //   if (font != null) {
-    //     fontToUse = font;
-    //   }
-    //   const dFont = new DiagramFont(joinObjects({}, options.font, fontToUse));
+  //   // const dText = [];
+  //   // for (let i = 0; i < options.text.length; i += 1) {
+  //   //   const text = options.text[i];
+  //   //   let font;
+  //   //   let offset;
+  //   //   let location;
+  //   //   let xAlign;
+  //   //   let yAlign;
+  //   //   let textToUse;
+  //   //   if (Array.isArray(text) && text.length === 2) {
+  //   //     [textToUse, {
+  //   //       font, offset, location, xAlign, yAlign,
+  //   //     }] = text;
+  //   //   } else {
+  //   //     textToUse = text;
+  //   //   }
+  //   //   let fontToUse = options.font;
+  //   //   if (font != null) {
+  //   //     fontToUse = font;
+  //   //   }
+  //   //   const dFont = new DiagramFont(joinObjects({}, options.font, fontToUse));
 
-    //   dText.push(new DiagramText(
-    //     location || -1,
-    //     textToUse,
-    //     dFont,
-    //     xAlign || 'left',
-    //     yAlign || 'baseline',
-    //     offset || [0, 0],
-    //   ));
-    // }
-    const to = new LinesObject(
-      this.draw2D, options,
-    );
-    // console.log(to)
-    const element = new DiagramElementPrimitive(
-      to,
-      options.transform,
-      options.color,
-      this.limits,
-    );
+  //   //   dText.push(new DiagramText(
+  //   //     location || -1,
+  //   //     textToUse,
+  //   //     dFont,
+  //   //     xAlign || 'left',
+  //   //     yAlign || 'baseline',
+  //   //     offset || [0, 0],
+  //   //   ));
+  //   // }
+  //   const to = new LinesObject(
+  //     this.draw2D, options,
+  //   );
+  //   // console.log(to)
+  //   const element = new DiagramElementPrimitive(
+  //     to,
+  //     options.transform,
+  //     options.color,
+  //     this.limits,
+  //   );
 
-    setupPulse(element, options);
+  //   setupPulse(element, options);
 
-    if (options.mods != null && options.mods !== {}) {
-      element.setProperties(options.mods);
-    }
+  //   if (options.mods != null && options.mods !== {}) {
+  //     element.setProperties(options.mods);
+  //   }
 
-    return element;
-  }
+  //   return element;
+  // }
 
-  text(...optionsIn: Array<{
-    text: string | Array<string | {
-      font?: TypeDiagramFontDefinition,
-      location?: TypeParsablePoint | number,
-      offset?: TypeParsablePoint,
-      xAlign?: 'left' | 'right' | 'center',
-      yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
-    }>;
-    font: TypeDiagramFontDefinition,
-    position: TypeParsablePoint,
-    transform: TypeParsableTransform,
-    xAlign: 'left' | 'right' | 'center',
-    yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
-    color: Array<number>
-  }>) {
-    const defaultOptions = {
-      text: '',
-      font: {
-        family: 'Times New Roman',
-        style: 'normal',
-        size: 0.2,
-        weight: '200',
-      },
-      xAlign: 'left',
-      yAlign: 'baseline',
-      transform: new Transform('text').standard(),
-    };
-    const options = joinObjects({}, defaultOptions, ...optionsIn);
+  // text(...optionsIn: Array<{
+  //   text: string | Array<string | {
+  //     font?: TypeDiagramFontDefinition,
+  //     location?: TypeParsablePoint | number,
+  //     offset?: TypeParsablePoint,
+  //     xAlign?: 'left' | 'right' | 'center',
+  //     yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
+  //   }>;
+  //   font: TypeDiagramFontDefinition,
+  //   position: TypeParsablePoint,
+  //   transform: TypeParsableTransform,
+  //   xAlign: 'left' | 'right' | 'center',
+  //   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
+  //   color: Array<number>
+  // }>) {
+  //   const defaultOptions = {
+  //     text: '',
+  //     font: {
+  //       family: 'Times New Roman',
+  //       style: 'normal',
+  //       size: 0.2,
+  //       weight: '200',
+  //     },
+  //     xAlign: 'left',
+  //     yAlign: 'baseline',
+  //     transform: new Transform('text').standard(),
+  //   };
+  //   const options = joinObjects({}, defaultOptions, ...optionsIn);
 
-    if (options.color == null && options.font.color != null) {
-      options.color = options.font.color;
-    }
-    if (options.font.color == null && options.color != null) {
-      options.font.color = options.color;
-    }
-    if (options.color == null) {
-      options.color = [1, 0, 0, 1];
-    }
+  //   if (options.color == null && options.font.color != null) {
+  //     options.color = options.font.color;
+  //   }
+  //   if (options.font.color == null && options.color != null) {
+  //     options.font.color = options.color;
+  //   }
+  //   if (options.color == null) {
+  //     options.color = [1, 0, 0, 1];
+  //   }
 
-    if (options.position != null) {
-      const p = getPoint(options.position);
-      options.transform.updateTranslation(p);
-    }
+  //   if (options.position != null) {
+  //     const p = getPoint(options.position);
+  //     options.transform.updateTranslation(p);
+  //   }
 
-    if (typeof options.text === 'string') {
-      options.text = [options.text];
-    }
-    const dText = [];
-    for (let i = 0; i < options.text.length; i += 1) {
-      const text = options.text[i];
-      let font;
-      let offset;
-      let location;
-      let xAlign;
-      let yAlign;
-      let textToUse;
-      if (Array.isArray(text) && text.length === 2) {
-        [textToUse, {
-          font, offset, location, xAlign, yAlign,
-        }] = text;
-      } else {
-        textToUse = text;
-      }
-      let fontToUse = options.font;
-      if (font != null) {
-        fontToUse = font;
-      }
-      const dFont = new DiagramFont(joinObjects({}, options.font, fontToUse));
+  //   if (typeof options.text === 'string') {
+  //     options.text = [options.text];
+  //   }
+  //   const dText = [];
+  //   for (let i = 0; i < options.text.length; i += 1) {
+  //     const text = options.text[i];
+  //     let font;
+  //     let offset;
+  //     let location;
+  //     let xAlign;
+  //     let yAlign;
+  //     let textToUse;
+  //     if (Array.isArray(text) && text.length === 2) {
+  //       [textToUse, {
+  //         font, offset, location, xAlign, yAlign,
+  //       }] = text;
+  //     } else {
+  //       textToUse = text;
+  //     }
+  //     let fontToUse = options.font;
+  //     if (font != null) {
+  //       fontToUse = font;
+  //     }
+  //     const dFont = new DiagramFont(joinObjects({}, options.font, fontToUse));
 
-      dText.push(new DiagramText(
-        location || -1,
-        textToUse,
-        dFont,
-        xAlign || 'left',
-        yAlign || 'baseline',
-        offset || [0, 0],
-      ));
-    }
-    const to = new TextObject(this.draw2D, dText, options.xAlign, options.yAlign);
-    const element = new DiagramElementPrimitive(
-      to,
-      options.transform,
-      options.color,
-      this.limits,
-    );
+  //     dText.push(new DiagramText(
+  //       location || -1,
+  //       textToUse,
+  //       dFont,
+  //       xAlign || 'left',
+  //       yAlign || 'baseline',
+  //       offset || [0, 0],
+  //     ));
+  //   }
+  //   const to = new TextObject(this.draw2D, dText, options.xAlign, options.yAlign);
+  //   const element = new DiagramElementPrimitive(
+  //     to,
+  //     options.transform,
+  //     options.color,
+  //     this.limits,
+  //   );
 
-    setupPulse(element, options);
+  //   setupPulse(element, options);
 
-    if (options.mods != null && options.mods !== {}) {
-      element.setProperties(options.mods);
-    }
+  //   if (options.mods != null && options.mods !== {}) {
+  //     element.setProperties(options.mods);
+  //   }
 
-    return element;
-  }
+  //   return element;
+  // }
 
-  textLegacy(textOrOptions: string | TypeTextOptions, ...optionsIn: Array<TypeTextOptions>) {
-    const defaultOptions = {
-      text: '',
-      // position: new Point(0, 0),
-      font: null,
-      family: 'Times New Roman',
-      style: 'italic',
-      size: 0.2,
-      weight: '200',
-      xAlign: 'center',
-      yAlign: 'middle',
-      offset: new Point(0, 0),    // vertex space offset
-      color: [1, 0, 0, 1],
-      transform: new Transform('text').standard(),
-      // draw2D: this.draw2D,
-    };
-    let options;
-    if (typeof textOrOptions === 'string') {
-      options = joinObjects(
-        {}, defaultOptions, { text: textOrOptions }, ...optionsIn,
-      );
-    } else {
-      options = joinObjects({}, defaultOptions, textOrOptions, ...optionsIn);
-    }
+  // textLegacy(textOrOptions: string | TypeTextOptions, ...optionsIn: Array<TypeTextOptions>) {
+  //   const defaultOptions = {
+  //     text: '',
+  //     // position: new Point(0, 0),
+  //     font: null,
+  //     family: 'Times New Roman',
+  //     style: 'italic',
+  //     size: 0.2,
+  //     weight: '200',
+  //     xAlign: 'center',
+  //     yAlign: 'middle',
+  //     offset: new Point(0, 0),    // vertex space offset
+  //     color: [1, 0, 0, 1],
+  //     transform: new Transform('text').standard(),
+  //     // draw2D: this.draw2D,
+  //   };
+  //   let options;
+  //   if (typeof textOrOptions === 'string') {
+  //     options = joinObjects(
+  //       {}, defaultOptions, { text: textOrOptions }, ...optionsIn,
+  //     );
+  //   } else {
+  //     options = joinObjects({}, defaultOptions, textOrOptions, ...optionsIn);
+  //   }
 
-    if (options.position != null) {
-      const p = getPoint(options.position);
-      options.transform.updateTranslation(p);
-    }
+  //   if (options.position != null) {
+  //     const p = getPoint(options.position);
+  //     options.transform.updateTranslation(p);
+  //   }
 
-    const o = options;
-    const { text } = o;
-    let fontToUse = o.font;
-    if (fontToUse === null) {
-      fontToUse = new DiagramFont({
-        family: o.family,
-        style: o.style,
-        size: o.size,
-        weight: o.weight,
-        xAlign: o.xAlign,
-        yAlign: o.yAlign,
-        color: o.color,
-        opacity: 1,
-      });
-      // o.family, o.style, o.size, o.weight, o.xAlign, o.yAlign, o.color,
-      // );
-    }
-    const dT = new DiagramText(o.offset, text, fontToUse);
-    const to = new TextObject(this.draw2D, [dT]);
-    const element = new DiagramElementPrimitive(
-      to,
-      o.transform,
-      o.color,
-      this.limits,
-    );
+  //   const o = options;
+  //   const { text } = o;
+  //   let fontToUse = o.font;
+  //   if (fontToUse === null) {
+  //     fontToUse = new DiagramFont({
+  //       family: o.family,
+  //       style: o.style,
+  //       size: o.size,
+  //       weight: o.weight,
+  //       xAlign: o.xAlign,
+  //       yAlign: o.yAlign,
+  //       color: o.color,
+  //       opacity: 1,
+  //     });
+  //     // o.family, o.style, o.size, o.weight, o.xAlign, o.yAlign, o.color,
+  //     // );
+  //   }
+  //   const dT = new DiagramText(o.offset, text, fontToUse);
+  //   const to = new TextObject(this.draw2D, [dT]);
+  //   const element = new DiagramElementPrimitive(
+  //     to,
+  //     o.transform,
+  //     o.color,
+  //     this.limits,
+  //   );
 
-    // if (options.pulse != null) {
-    //   if (typeof element.pulseDefault !== 'function') {
-    //     element.pulseDefault.scale = options.pulse;
-    //   }
-    // }
-    setupPulse(element, options);
+  //   // if (options.pulse != null) {
+  //   //   if (typeof element.pulseDefault !== 'function') {
+  //   //     element.pulseDefault.scale = options.pulse;
+  //   //   }
+  //   // }
+  //   setupPulse(element, options);
 
-    if (options.mods != null && options.mods !== {}) {
-      element.setProperties(options.mods);
-    }
+  //   if (options.mods != null && options.mods !== {}) {
+  //     element.setProperties(options.mods);
+  //   }
 
-    return element;
-  }
+  //   return element;
+  // }
 
   arrow(...optionsIn: Array<{
     width?: number;

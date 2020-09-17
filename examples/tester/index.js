@@ -126,12 +126,9 @@ diagram.addElements([
         ],
         'This is a simple string also |formatted|.'
       ],
-      // text: 'Hello |formatted|',
       lineSpace: 0.2,
       modifiers: {
         formatted: {
-          // text: 'asdfasdf',
-          // location: [0, 0.1],
           offset: [0.01, 0],
           font: { color: [1, 1, 0, 1], style: 'italic' },
         },
