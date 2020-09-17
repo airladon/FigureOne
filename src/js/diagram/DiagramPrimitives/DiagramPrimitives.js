@@ -43,7 +43,7 @@ import Text from '../DiagramElements/Text';
 // } from '../DrawingObjects/TextObject/TextObject';
 
 import {
-  TextObject, TextLineObject, TextLinesObject,
+  TextObject, TextLineObject, TextLinesObject, DiagramFont,
 } from '../DrawingObjects/TextObject/TextObject';
 import type {
   TypeDiagramFontDefinition,
@@ -1173,7 +1173,7 @@ export default class DiagramPrimitives {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  parseTextOptions(...optionsIn) {
+  parseTextOptions(...optionsIn: Object) {
     const defaultOptions = {
       text: '',
       font: {
@@ -1235,7 +1235,7 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  textLine(...optionsIn: {
+  textLine(...optionsIn: Array<{
     text: string | Array<string | [{
       font?: TypeDiagramFontDefinition,
       offset?: TypeParsablePoint,
@@ -1249,12 +1249,9 @@ export default class DiagramPrimitives {
     xAlign: 'left' | 'right' | 'center',
     yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
     color: Array<number>
-  }) {
+  }>) {
     const options = this.parseTextOptions(...optionsIn);
-    const to = new TextLineObject(
-      this.draw2D,
-      options,
-    );
+    const to = new TextLineObject(this.draw2D);
     to.loadText(options);
     return this.createPrimitive(to, options);
   }
@@ -1291,10 +1288,7 @@ export default class DiagramPrimitives {
       options.lineSpace = options.font.size;
     }
     // console.log('qwerty')
-    const to = new TextLinesObject(
-      this.draw2D,
-      options,
-    );
+    const to = new TextLinesObject(this.draw2D);
     to.loadText(options);
     return this.createPrimitive(to, options);
   }

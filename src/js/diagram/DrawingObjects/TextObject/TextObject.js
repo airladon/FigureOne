@@ -390,8 +390,7 @@ class TextObjectBase extends DrawingObject {
     }
     this.lastDrawTransform = [];
     this.text = [];
-    // this.layoutText();
-    this.state = 'loaded';
+    // this.state = 'loaded';
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -707,7 +706,7 @@ class TextObject extends TextObjectBase {
 }
 
 function createLine(
-  textArray: Array<DiagramTextLine | DiagramTextLines>,
+  textArray: Array<DiagramTextLine> | Array<DiagramTextLines>,
   initialLocation = new Point(0, 0),
 ) {
   let lastRight = initialLocation;
@@ -732,7 +731,7 @@ function createLine(
 }
 
 function align(
-  textArray: Array<DiagramTextLine | DiagramTextLines>,
+  textArray: Array<DiagramTextLine> | Array<DiagramTextLines>,
   xAlign: 'left' | 'center' | 'right',
   yAlign: 'bottom' | 'baseline' | 'alphabetic' | 'middle' | 'top',
   width: number,
@@ -753,17 +752,13 @@ function align(
   } else if (yAlign === 'top') {
     locationAlignOffset.y -= maxY;
   }
-  // console.log('lao', locationAlignOffset)
-  textArray.forEach((text) => {
-    // if (useLocation) {
-    //   text.location = text.location.add(locationAlignOffset);
-    // } else {
+  textArray.forEach((text) => {  // eslint-disable-next-line no-param-reassign
     text.locationAligned = text.location.add(locationAlignOffset);
-    // }
   });
 }
 
 class TextLineObject extends TextObjectBase {
+  // $FlowFixMe
   text: Array<DiagramTextLine>;
   xAlign: 'left' | 'right' | 'center';                // default xAlign
   yAlign: 'bottom' | 'baseline' | 'middle' | 'top';   // default yAlign
@@ -855,7 +850,7 @@ class TextLineObject extends TextObjectBase {
 
   _dup() {
     const c = new TextLineObject(this.drawContext2D);
-    c.text = this.text.map((t) => t._dup());
+    c.text = this.text.map(t => t._dup());
     c.scalingFactor = this.scalingFactor;
     c.xAlign = this.xAlign;
     c.yAlign = this.yAlign;
@@ -865,6 +860,7 @@ class TextLineObject extends TextObjectBase {
 }
 
 class TextLinesObject extends TextObjectBase {
+  // $FlowFixMe
   text: Array<DiagramTextLines>;
   xAlign: 'left' | 'right' | 'center';                // default xAlign
   yAlign: 'bottom' | 'baseline' | 'middle' | 'top';   // default yAlign
@@ -872,6 +868,7 @@ class TextLinesObject extends TextObjectBase {
     justification: 'left' | 'right' | 'center',
     space: number,
     text: Array<DiagramTextLines>;
+    width: number,
   }>;
 
   modifiers: {
@@ -942,7 +939,6 @@ class TextLinesObject extends TextObjectBase {
       }
       const line = [];
       const split = splitString(lineToUse, '|', '/');
-      console.log(split)
       split.forEach((s) => {
         let text = s;
         let textFont = lineFont;
@@ -1006,7 +1002,7 @@ class TextLinesObject extends TextObjectBase {
       minLinesY = minY < minLinesY ? minY : minLinesY;
       maxLinesY = maxY > maxLinesY ? maxY : maxLinesY;
       maxLinesWidth = width > maxLinesWidth ? width : maxLinesWidth;
-      line.width = width;
+      line.width = width;   // eslint-disable-line no-param-reassign
     });
     // justify lines
     this.lines.forEach((line) => {
@@ -1017,6 +1013,7 @@ class TextLinesObject extends TextObjectBase {
         locationAlignOffset.x += maxLinesWidth - line.width;
       }
       line.text.forEach((text) => {
+        // eslint-disable-next-line no-param-reassign
         text.location = text.location.add(locationAlignOffset);
       });
     });
@@ -1048,7 +1045,7 @@ class TextLinesObject extends TextObjectBase {
 
   _dup() {
     const c = new TextLineObject(this.drawContext2D);
-    c.text = this.text.map((t) => t._dup());
+    c.text = this.text.map(t => t._dup());
     c.scalingFactor = this.scalingFactor;
     c.xAlign = this.xAlign;
     c.yAlign = this.yAlign;
