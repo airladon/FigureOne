@@ -339,6 +339,40 @@ class DiagramTextLineAF extends DiagramTextAF {
   }
 }
 
+class DiagramTextLinesAF extends DiagramTextLineAF {
+  line: number;
+
+  constructor(
+    drawContext2D: Array<DrawContext2D> | DrawContext2D,
+    location: TypeParsablePoint = new Point(0, 0),
+    text: string = '',
+    font: TypeDiagramFontDefinition = new DiagramFontAF().definition(),
+    offset: TypeParsablePoint = new Point(0, 0),
+    inLine: boolean = true,
+    line: number,
+  ) {
+    super(drawContext2D, location, text, font, offset, inLine);
+    this.line = line;
+  }
+
+  alignText() {
+    const location = this.location._dup();
+    this.locationAligned = location.add(this.offset);
+  }
+
+  _dup() {
+    return new DiagramTextLinesAF(
+      this.drawContext2D,
+      this.location,
+      this.text,
+      this.font.definition(),
+      this.offset,
+      this.inLine,
+      this.line,
+    );
+  }
+}
+
 class TextObjectBase extends DrawingObject {
   drawContext2D: Array<DrawContext2D>
   text: Array<DiagramTextAF>;
@@ -356,7 +390,7 @@ class TextObjectBase extends DrawingObject {
     }
     this.lastDrawTransform = [];
     this.text = [];
-    this.layoutText();
+    // this.layoutText();
     this.state = 'loaded';
   }
 
@@ -658,7 +692,9 @@ class TextObjectAF extends TextObjectBase {
       ));
     });
     this.text = diagramTextArray;
-    super.loadText();
+    // super.loadText();
+    this.calcScalingFactor();
+    this.layoutText();
   }
 
   _dup() {
@@ -668,6 +704,63 @@ class TextObjectAF extends TextObjectBase {
     c.layoutText();
     return c;
   }
+}
+
+function createLine(
+  textArray: Array<DiagramTextLineAF | DiagramTextLinesAF>,
+  initialLocation = new Point(0, 0),
+) {
+  let lastRight = initialLocation;
+  let maxY = 0;
+  let minY = 0;
+  textArray.forEach((text) => {
+    text.location = lastRight.add(text.offset);
+    if (text.inLine) {
+      lastRight = text.location.add(text.measure.width, 0);
+      const textMaxY = text.location.y + text.measure.ascent;
+      const textMinY = text.location.y - text.measure.descent;
+      if (textMaxY > maxY) {
+        maxY = textMaxY;
+      }
+      if (textMinY < minY) {
+        minY = textMinY;
+      }
+    }
+  });
+  const width = lastRight.x - 0;
+  return { width, minY, maxY };
+}
+
+function align(
+  textArray: Array<DiagramTextLineAF | DiagramTextLinesAF>,
+  xAlign: 'left' | 'center' | 'right',
+  yAlign: 'bottom' | 'baseline' | 'alphabetic' | 'middle' | 'top',
+  width: number,
+  minY: number,
+  maxY: number,
+  // useLocation: boolean = false,
+) {
+  const locationAlignOffset = new Point(0, 0);
+  if (xAlign === 'center') {
+    locationAlignOffset.x -= width / 2;
+  } else if (xAlign === 'right') {
+    locationAlignOffset.x -= width;
+  }
+  if (yAlign === 'bottom') {
+    locationAlignOffset.y -= minY;
+  } else if (yAlign === 'middle') {
+    locationAlignOffset.y += -minY - (maxY - minY) / 2;
+  } else if (yAlign === 'top') {
+    locationAlignOffset.y -= maxY;
+  }
+  // console.log('lao', locationAlignOffset)
+  textArray.forEach((text) => {
+    // if (useLocation) {
+    //   text.location = text.location.add(locationAlignOffset);
+    // } else {
+    text.locationAligned = text.location.add(locationAlignOffset);
+    // }
+  });
 }
 
 class TextLineObjectAF extends TextObjectBase {
@@ -731,45 +824,234 @@ class TextLineObjectAF extends TextObjectBase {
     this.text = diagramTextArray;
     this.xAlign = options.xAlign;
     this.yAlign = options.yAlign;
-    super.loadText();
+    // super.loadText();
+    this.calcScalingFactor();
+    this.layoutText();
   }
 
   setTextLocations() {
-    let lastRight = new Point(0, 0);
-    let maxY = 0;
-    let minY = 0;
-    this.text.forEach((text) => {
-      text.location = lastRight.add(text.offset);
-      if (text.inLine) {
-        lastRight = text.location.add(text.measure.width, 0);
-        const textMaxY = text.location.y + text.measure.ascent;
-        const textMinY = text.location.y - text.measure.descent;
-        if (textMaxY > maxY) {
-          maxY = textMaxY;
-        }
-        if (textMinY < minY) {
-          minY = textMinY;
-        }
-      }
-    });
-    const width = lastRight.x - 0;
-    const locationAlignOffset = new Point(0, 0);
-    if (this.xAlign === 'center') {
-      locationAlignOffset.x -= width / 2;
-    } else if (this.xAlign === 'right') {
-      locationAlignOffset.x -= width;
-    }
-    if (this.yAlign === 'bottom') {
-      locationAlignOffset.y -= minY;
-    } else if (this.yAlign === 'middle') {
-      locationAlignOffset.y += -minY - (maxY - minY) / 2;
-    } else if (this.yAlign === 'top') {
-      locationAlignOffset.y -= maxY;
-    }
-    this.text.forEach((text) => {
-      text.locationAligned = text.location.add(locationAlignOffset);
-    });
+    const { width, minY, maxY } = createLine(this.text);
+    align(this.text, this.xAlign, this.yAlign, width, minY, maxY);
   }
+
+  // align(width: number, minY: number, maxY: number) {
+  //   const locationAlignOffset = new Point(0, 0);
+  //   if (this.xAlign === 'center') {
+  //     locationAlignOffset.x -= width / 2;
+  //   } else if (this.xAlign === 'right') {
+  //     locationAlignOffset.x -= width;
+  //   }
+  //   if (this.yAlign === 'bottom') {
+  //     locationAlignOffset.y -= minY;
+  //   } else if (this.yAlign === 'middle') {
+  //     locationAlignOffset.y += -minY - (maxY - minY) / 2;
+  //   } else if (this.yAlign === 'top') {
+  //     locationAlignOffset.y -= maxY;
+  //   }
+  //   this.text.forEach((text) => {
+  //     text.locationAligned = text.location.add(locationAlignOffset);
+  //   });
+  // }
+
+  _dup() {
+    const c = new TextLineObjectAF(this.drawContext2D);
+    c.text = this.text.map((t) => t._dup());
+    c.scalingFactor = this.scalingFactor;
+    c.xAlign = this.xAlign;
+    c.yAlign = this.yAlign;
+    c.layoutText();
+    return c;
+  }
+}
+
+class TextLinesObjectAF extends TextObjectBase {
+  text: Array<DiagramTextLinesAF>;
+  xAlign: 'left' | 'right' | 'center';                // default xAlign
+  yAlign: 'bottom' | 'baseline' | 'middle' | 'top';   // default yAlign
+  lines: Array<{
+    justification: 'left' | 'right' | 'center',
+    space: number,
+    text: Array<DiagramTextLinesAF>;
+  }>;
+
+  modifiers: {
+    [modifierName: string]: {
+      text?: string,
+      offset?: TypeParsablePoint,
+      inLine?: boolean,
+      font?: TypeDiagramFontDefinition,
+      onClick?: () => {},
+    },
+  };
+
+  // $FlowFixMe
+  loadText(
+    options: {
+    text: string | Array<string | [{
+      font?: TypeDiagramFontDefinition,
+      justification?: 'left' | 'center' | 'right',
+      lineSpace?: number
+    }, string]>,
+    modifiers: {
+      [modifierName: string]: {
+        text?: string,
+        offset?: TypeParsablePoint,
+        inLine?: boolean,
+        font?: TypeDiagramFontDefinition,
+        onClick?: () => {},
+      },
+    },
+    font: TypeDiagramFontDefinition,
+    justification: 'left' | 'center' | 'right',
+    lineSpace: number,
+    xAlign: 'left' | 'right' | 'center',
+    yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
+    color: Array<number>
+  },
+  ) {
+    // console.log('asdfasdf')
+    let lines = options.text;
+    if (typeof lines === 'string') {
+      lines = [lines];
+    }
+    this.modifiers = options.modifiers;
+    this.lines = [];
+    const diagramTextArray = [];
+
+    lines.forEach((lineDefinition, lineIndex) => {
+      let lineJustification = options.justification;
+      let lineLineSpace = options.lineSpace;
+      let lineToUse;
+      let lineFont = options.font;
+      if (Array.isArray(lineDefinition) && lineDefinition.length === 2) {
+        const [{
+          font, justification, lineSpace,
+        }, lineText] = lineDefinition;
+        lineToUse = lineText;
+        if (font != null) {
+          lineFont = joinObjects({}, options.font, font);
+        }
+        if (lineSpace != null) {
+          lineLineSpace = lineSpace;
+        }
+        if (justification != null) {
+          lineJustification = justification;
+        }
+      } else {
+        lineToUse = lineDefinition;
+      }
+      const line = [];
+      const split = splitString(lineToUse, '|', '/');
+      console.log(split)
+      split.forEach((s) => {
+        let text = s;
+        let textFont = lineFont;
+        let offset = new Point(0, 0);
+        let inLine = true;
+        if (this.modifiers[s] != null) {
+          const mod = this.modifiers[s];
+          if (mod.text != null) {
+            ({ text } = mod);
+          }
+          if (mod.font != null) {
+            textFont = joinObjects({}, lineFont, mod.font);
+          }
+          if (mod.inLine != null) {
+            inLine = mod.inLine;
+          }
+          if (mod.offset != null) {
+            offset = mod.offset;
+          }
+        }
+        const t = new DiagramTextLinesAF(
+          this.drawContext2D,
+          new Point(0, 0),
+          text,
+          textFont,
+          offset,
+          inLine,
+          lineIndex,
+        );
+        diagramTextArray.push(t);
+        line.push(t);
+      });
+      this.lines.push({
+        justification: lineJustification,
+        space: lineLineSpace,
+        text: line,
+        width: 0,
+      });
+    });
+    this.text = diagramTextArray;
+    this.xAlign = options.xAlign;
+    this.yAlign = options.yAlign;
+    // super.super.loadText();
+    this.calcScalingFactor();
+    this.layoutText();
+  }
+
+  setTextLocations() {
+    const { width, minY, maxY } = this.createLines();
+    console.log(width, minY, maxY, this.xAlign, this.yAlign)
+    align(this.text, this.xAlign, this.yAlign, width, minY, maxY);
+
+    // const { width, minY, maxY } = createLine(this.text);
+    // align(this.text, this.xAlign, this.yAlign, width, minY, maxY);
+  }
+  
+  createLines() {
+    let maxLinesY = 0;
+    let minLinesY = 0;
+    let maxLinesWidth = 0;
+    let y = 0;
+    this.lines.forEach((line) => {
+      const { width, minY, maxY } = createLine(line.text, new Point(0, y));
+      y += line.space;
+      minLinesY = minY < minLinesY ? minY : minLinesY;
+      maxLinesY = maxY > maxLinesY ? maxY : maxLinesY;
+      maxLinesWidth = width > maxLinesWidth ? width : maxLinesWidth;
+      line.width = width;
+    });
+    // justify lines
+    this.lines.forEach((line) => {
+      // console.log(line.text, line.justification, maxLinesWidth)
+      // align(line.text, line.justification, 'baseline', maxLinesWidth, 0, 0, true);
+      const locationAlignOffset = new Point(0, 0);
+      if (line.justification === 'center') {
+        locationAlignOffset.x += maxLinesWidth / 2 - line.width / 2;
+      } else if (line.justification === 'right') {
+        locationAlignOffset.x += maxLinesWidth - line.width;
+      }
+      console.log(locationAlignOffset)
+      line.text.forEach((text) => {
+        text.location = text.location.add(locationAlignOffset);
+      });
+    });
+    return {
+      width: maxLinesWidth,
+      minY: minLinesY,
+      maxY: maxLinesY,
+    };
+  }
+
+  // align(width: number, minY: number, maxY: number) {
+  //   const locationAlignOffset = new Point(0, 0);
+  //   if (this.xAlign === 'center') {
+  //     locationAlignOffset.x -= width / 2;
+  //   } else if (this.xAlign === 'right') {
+  //     locationAlignOffset.x -= width;
+  //   }
+  //   if (this.yAlign === 'bottom') {
+  //     locationAlignOffset.y -= minY;
+  //   } else if (this.yAlign === 'middle') {
+  //     locationAlignOffset.y += -minY - (maxY - minY) / 2;
+  //   } else if (this.yAlign === 'top') {
+  //     locationAlignOffset.y -= maxY;
+  //   }
+  //   this.text.forEach((text) => {
+  //     text.locationAligned = text.location.add(locationAlignOffset);
+  //   });
+  // }
 
   _dup() {
     const c = new TextLineObjectAF(this.drawContext2D);
@@ -784,4 +1066,5 @@ class TextLineObjectAF extends TextObjectBase {
 
 export {
   DiagramFontAF, DiagramTextAF, TextObjectAF, TextLineObjectAF,
+  TextLinesObjectAF,
 };

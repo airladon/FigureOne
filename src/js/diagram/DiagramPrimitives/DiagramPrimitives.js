@@ -15,7 +15,7 @@ import {
 import WebGLInstance from '../webgl/webgl';
 import DrawContext2D from '../DrawContext2D';
 import * as tools from '../../tools/math';
-import { generateUniqueId, joinObjects, joinObjectsWithOptions } from '../../tools/tools';
+import { generateUniqueId, joinObjects } from '../../tools/tools';
 import DrawingObject from '../DrawingObjects/DrawingObject';
 import VertexObject from '../DrawingObjects/VertexObject/VertexObject';
 // import {
@@ -43,7 +43,7 @@ import {
 } from '../DrawingObjects/TextObject/TextObject';
 
 import {
-  TextObjectAF, TextLineObjectAF,
+  TextObjectAF, TextLineObjectAF, TextLinesObjectAF,
 } from '../DrawingObjects/TextObject/TextObjectAF';
 import type {
   TypeDiagramFontDefinition,
@@ -1259,6 +1259,46 @@ export default class DiagramPrimitives {
     return this.createPrimitive(to, options);
   }
 
+  textLines(...optionsIn: Array<{
+    text: string | Array<string | [{
+      font?: TypeDiagramFontDefinition,
+      justification?: 'left' | 'center' | 'right',
+      lineSpace?: number
+    }, string]>,
+    modifiers: {
+      [modifierName: string]: {
+        text?: string,
+        offset?: TypeParsablePoint,
+        inLine?: boolean,
+        font?: TypeDiagramFontDefinition,
+        onClick?: () => {},
+      },
+    },
+    font?: TypeDiagramFontDefinition,
+    justification?: 'left' | 'center' | 'right',
+    lineSpace?: number,
+    position: TypeParsablePoint,
+    transform: TypeParsableTransform,
+    xAlign: 'left' | 'right' | 'center',
+    yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
+    color: Array<number>
+  }>) {
+    const options = this.parseTextOptions(...optionsIn);
+    if (options.justification == null) {
+      options.justification = 'left';
+    }
+    if (options.lineSpace == null) {
+      options.lineSpace = options.font.size;
+    }
+    // console.log('qwerty')
+    const to = new TextLinesObjectAF(
+      this.draw2D,
+      options,
+    );
+    to.loadText(options);
+    return this.createPrimitive(to, options);
+  }
+
   textNew(...optionsIn: Array<{
     text: string | Array<string | [{
       font?: TypeDiagramFontDefinition,
@@ -1282,7 +1322,7 @@ export default class DiagramPrimitives {
     return this.createPrimitive(to, options);
   }
 
-  textLines(...optionsIn: Array<{
+  textLinesLegacy(...optionsIn: Array<{
     text: string | Array<string | [{
       font?: TypeDiagramFontDefinition,
       justification?: 'left' | 'center' | 'right',
