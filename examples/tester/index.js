@@ -117,8 +117,8 @@ diagram.addElements([
         'This is a |formatted| string',
         [
           {
-            font: {},
-            lineSpace: 0.4,
+            font: { size: 0.05},
+            lineSpace: 0.1,
             justification: 'right',
             location: [-0.2, 0.3]
           },

@@ -5,7 +5,7 @@ import { Point, getPoint, Rect } from '../../../tools/g2';
 import type { TypeParsablePoint } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
 import DrawContext2D from '../../DrawContext2D';
-import { duplicateFromTo, joinObjects, splitString } from '../../../tools/tools';
+import { joinObjects, splitString } from '../../../tools/tools';
 import { colorArrayToRGBA } from '../../../tools/color';
 
 export type TypeDiagramFontDefinition = {
@@ -26,7 +26,7 @@ class DiagramFontAF {
   color: Array<number> | null;
   opacity: number;
 
-  constructor(optionsIn: TypeDiagramFontDefinition  | DiagramFontAF = {}) {
+  constructor(optionsIn: TypeDiagramFontDefinition | DiagramFontAF = {}) {
     if (optionsIn instanceof DiagramFontAF) {
       this.family = optionsIn.family;
       this.style = optionsIn.style;
@@ -288,7 +288,7 @@ class DiagramTextAF {
   getGLBoundary(
     lastDrawTransformMatrix: Array<number>,
   ): Array<Point> {
-    const glBoundary = []; 
+    const glBoundary = [];
     this.border.forEach((p) => {
       glBoundary.push(p.transformBy(lastDrawTransformMatrix));
     });
@@ -466,7 +466,7 @@ class TextObjectBase extends DrawingObject {
   setBorder() {
     this.border = [];
     this.text.forEach((text) => {
-      this.border.push(
+      this.border.push(   // $FlowFixMe
         text.border,
       );
     });
@@ -699,7 +699,7 @@ class TextObjectAF extends TextObjectBase {
 
   _dup() {
     const c = new TextObjectAF(this.drawContext2D);
-    c.text = this.text.map((t) => t._dup());
+    c.text = this.text.map(t => t._dup());
     c.scalingFactor = this.scalingFactor;
     c.layoutText();
     return c;
@@ -713,7 +713,7 @@ function createLine(
   let lastRight = initialLocation;
   let maxY = 0;
   let minY = 0;
-  textArray.forEach((text) => {
+  textArray.forEach((text) => {  // eslint-disable-next-line no-param-reassign
     text.location = lastRight.add(text.offset);
     if (text.inLine) {
       lastRight = text.location.add(text.measure.width, 0);
@@ -992,13 +992,9 @@ class TextLinesObjectAF extends TextObjectBase {
 
   setTextLocations() {
     const { width, minY, maxY } = this.createLines();
-    console.log(width, minY, maxY, this.xAlign, this.yAlign)
     align(this.text, this.xAlign, this.yAlign, width, minY, maxY);
-
-    // const { width, minY, maxY } = createLine(this.text);
-    // align(this.text, this.xAlign, this.yAlign, width, minY, maxY);
   }
-  
+
   createLines() {
     let maxLinesY = 0;
     let minLinesY = 0;
@@ -1014,15 +1010,12 @@ class TextLinesObjectAF extends TextObjectBase {
     });
     // justify lines
     this.lines.forEach((line) => {
-      // console.log(line.text, line.justification, maxLinesWidth)
-      // align(line.text, line.justification, 'baseline', maxLinesWidth, 0, 0, true);
       const locationAlignOffset = new Point(0, 0);
       if (line.justification === 'center') {
         locationAlignOffset.x += maxLinesWidth / 2 - line.width / 2;
       } else if (line.justification === 'right') {
         locationAlignOffset.x += maxLinesWidth - line.width;
       }
-      console.log(locationAlignOffset)
       line.text.forEach((text) => {
         text.location = text.location.add(locationAlignOffset);
       });
