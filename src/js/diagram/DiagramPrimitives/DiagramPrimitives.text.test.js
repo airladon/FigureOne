@@ -69,10 +69,10 @@ describe('Equation Functions - Box', () => {
           },
           text: [
             'This is the ',
-            ['first', { font: { style: 'italic', color: [0, 0, 1] } }],
+            [{ font: { style: 'italic', color: [0, 0, 1] } }, 'first'],
             ' line',
-            ['This is a ', { location: [0, -0.2] }],
-            ['superscript', { size: 0.1, offset: [0, 0.1] }],
+            [{ location: [0, -0.2] }, 'This is a '],
+            [{ size: 0.1, offset: [0, 0.1] }, 'superscript'],
             'example on a new line.',
           ],
           xAlign: 'left',
