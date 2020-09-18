@@ -56,6 +56,7 @@ describe('Diagram Text Object', () => {
       const location = new Point(1, 1);
       const text = 'test text';
       const dt = new DiagramText(
+        new DrawContext2D(1000, 500),
         location,
         text,
         font,
@@ -74,58 +75,80 @@ describe('Diagram Text Object', () => {
     beforeEach(() => {
       font.size = 20;
       draw2D = new DrawContext2D(1000, 500);
+      // textArray = [
+      //   new DiagramText(draw2D, new Point(0, 0), 'test1', font, 'center', 'middle'),
+      //   new DiagramText(draw2D, new Point(1, 1), 'test2', font, 'center', 'middle'),
+      // ];
       textArray = [
-        new DiagramText(new Point(0, 0), 'test1', font, 'center', 'middle'),
-        new DiagramText(new Point(1, 1), 'test2', font, 'center', 'middle'),
+        [{
+          font,
+          xAlign: 'center',
+          yAlign: 'middle',
+          location: new Point(0, 0),
+        }, 'test1'],
+        [{
+          font,
+          xAlign: 'center',
+          yAlign: 'middle',
+          location: new Point(0, 0),
+        }, 'test2'],
       ];
     });
     describe('Scaling factor', () => {
       test('Greater than 20', () => {
-        textArray[0].font.size = 30;
-        textArray[1].font.size = 30;
-        const to = new TextObject(draw2D, textArray);
+        textArray[0][0].font.size = 30;
+        textArray[1][0].font.size = 30;
+        const to = new TextObject(draw2D);
+        to.loadText({ text: textArray });
         expect(round(to.scalingFactor, 3)).toBe(round(20 / 30, 3));
       });
       test('At threshold (20)', () => {
-        textArray[0].font.size = 20;
-        textArray[1].font.size = 20;
-        const to = new TextObject(draw2D, textArray);
+        textArray[0][0].font.size = 20;
+        textArray[1][0].font.size = 20;
+        const to = new TextObject(draw2D);
+        to.loadText({ text: textArray });
         expect(to.scalingFactor).toBe(1);
       });
       test('< 20', () => {
-        textArray[0].font.size = 19;
-        textArray[1].font.size = 19;
-        const to = new TextObject(draw2D, textArray);
+        textArray[0][0].font.size = 19;
+        textArray[1][0].font.size = 19;
+        const to = new TextObject(draw2D);
+        to.loadText({ text: textArray });
         // expect(to.scalingFactor).toBe(19 * 50);
         expect(round(to.scalingFactor, 3)).toBe(round(20 / 19, 3));
       });
       test('1', () => {
-        textArray[0].font.size = 1;
-        textArray[1].font.size = 1;
-        const to = new TextObject(draw2D, textArray);
+        textArray[0][0].font.size = 1;
+        textArray[1][0].font.size = 1;
+        const to = new TextObject(draw2D);
+        to.loadText({ text: textArray });
         // expect(to.scalingFactor).toBe(1 * 50);
         expect(round(to.scalingFactor, 3)).toBe(round(20 / 1, 3));
       });
 
       test('<1', () => {
-        textArray[0].font.size = 0.1;
-        textArray[1].font.size = 0.1;
-        const to = new TextObject(draw2D, textArray);
+        textArray[0][0].font.size = 0.1;
+        textArray[1][0].font.size = 0.1;
+        const to = new TextObject(draw2D);
+        to.loadText({ text: textArray });
         // expect(round(to.scalingFactor, 5)).toBe(round(10 ** (1 + 2), 5));
         expect(round(to.scalingFactor, 3)).toBe(round(20 / 0.1, 3));
       });
       test('variable sizes - but min < 1', () => {
-        textArray[0].font.size = 10;
-        textArray[1].font.size = 0.1;
-        const to = new TextObject(draw2D, textArray);
+        textArray[0][0].font.size = 10;
+        textArray[1][0].font.size = 0.1;
+        const to = new TextObject(draw2D);
+        to.loadText({ text: textArray });
         // expect(round(to.scalingFactor, 5)).toBe(round(10 ** (1 + 2), 5));
         expect(round(to.scalingFactor, 3)).toBe(round(20 / 0.1, 3));
       });
     });
     describe('GL Boundaries', () => {
       test('Text Boundary for 0,0 location, no scaling, no transformation', () => {
-        const to = new TextObject(draw2D, textArray);
-        const b = to.getGLBoundaryOfText(textArray[0], m2.identity());
+        // const to = new TextObject(draw2D, textArray);
+        const to = new TextObject(draw2D);
+        to.loadText({ text: textArray });
+        const b = to.getGLBoundaryOfText(to.text[0], m2.identity());
         expect(b).toEqual([
           new Point(-5, 7.4),
           new Point(5, 7.4),
