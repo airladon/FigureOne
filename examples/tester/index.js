@@ -235,39 +235,30 @@ diagram.addElements([
       color: [0, 0.95, 0, 1],
       elements: {
         a: 'a',
-        s1: {
-          symbol: 'int',
-          color: [0.95, 0, 0, 1], // override default equation color
-          lineWidth: 0.01,        // lineWidth
-          sides: 20,              // sides in integral s-curve
-          width: null,            // symbol width
-          tipWidth: null,         // s-curve tip width
-          draw: 'static',         // or 'dynamic'
-          staticHeight: 'first',  // or number (only use if draw = static)
-          serif: true,            // serifs on s-curve
-          num: 2,                 // number of s-curves
-          type: 'generic',        // or 'line' for line integral symbol
-          serifSides: 10,         // sides on serifs
-          lineIntegralSides: 20,  // sides on line integral symbol
+        b: 'b',
+        lb: {
+          symbol: 'bracket', side: 'left', lineWidth: 0.01, endLength: 0.03,
         },
-        s2: {
-          symbol: 'int',
-          color: [0.95, 0, 0, 1], // override default equation color
-          lineWidth: 0.01,        // lineWidth
-          sides: 20,              // sides in integral s-curve
-          width: null,            // symbol width
-          tipWidth: null,         // s-curve tip width
-          draw: 'dynamic',        // or 'dynamic'
-          serif: false,           // serifs on s-curve
-          num: 1,                 // number of s-curves
-          type: 'line',           // or 'line' for line integral symbol
-          serifSides: 10,         // sides on serifs
-          lineIntegralSides: 20,  // sides on line integral symbol
+        rb: {
+          symbol: 'bracket', side: 'right', lineWidth: 0.01, endLength: 0.03,
         },
       },
       forms: {
-        s1: { content: { int: ['s1', 'a'] } },
-        s2: { content: { int: ['s2', 'a'] } },
+        // Full Object
+        0: {
+          content: {
+            brac: {
+              left: 'lb',
+              content: 'a',
+              right: 'rb',
+              inSize: true,
+              insideSpace: 0.05,
+              outsideSpace: 0.1,
+              topSpace: 0.1,
+              bottomSpace: 0.1,
+            },
+          },
+        },
       },
     },
   }
@@ -310,7 +301,7 @@ diagram.initialize();
 // diagram.elements._tester.onClick = () => { console.log(1) };
 // diagram.elements._tester.makeTouchable();
 // console.log(diagram.elements._tester.drawingObject)
-diagram.elements._eqn.showForm('s2')
+diagram.elements._eqn.showForm('0')
 
 diagram.animateNextFrame();
 console.log(diagram.elements._eqn)

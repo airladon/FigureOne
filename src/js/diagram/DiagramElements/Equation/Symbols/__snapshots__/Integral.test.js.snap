@@ -4,7 +4,7 @@ exports[`Equation Functions - Integral Symbol 1 1`] = `
 Array [
   0.7,
   0,
-  0.13999,
+  0.1444,
   0,
   0.7,
   0,
@@ -16,11 +16,11 @@ Array [
 
 exports[`Equation Functions - Integral Symbol 1 2`] = `
 Array [
-  0.13299,
+  0.1374,
   0,
   0,
   0,
-  0.2009,
+  0.2121,
   -0.0756,
   0,
   0,
@@ -32,7 +32,7 @@ exports[`Equation Functions - Integral Symbol 2 1`] = `
 Array [
   0.7,
   0,
-  0.10487,
+  0.10809,
   0,
   0.7,
   0,
@@ -44,11 +44,11 @@ Array [
 
 exports[`Equation Functions - Integral Symbol 2 2`] = `
 Array [
-  0.09787,
+  0.10109,
   0,
   0,
   0,
-  0.2009,
+  0.2121,
   -0.0756,
   0,
   0,

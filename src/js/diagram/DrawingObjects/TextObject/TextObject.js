@@ -213,7 +213,7 @@ class DiagramText {
     } else {
       aWidth = ctx.measureText('a').width;
     }
-
+    // console.log(aWidth)
     // Estimations of FONT ascent and descent for a baseline of "alphabetic"
     let ascent = aWidth * 1.4;
     let descent = aWidth * 0.08;
@@ -247,7 +247,6 @@ class DiagramText {
         descent = aWidth * 0.5;
       }
     }
-
     // const height = ascent + descent;
 
     const { width } = ctx.measureText(this.text);
@@ -281,7 +280,7 @@ class DiagramText {
       this.locationAligned.x,
       this.locationAligned.y - this.measure.descent,
       this.measure.width,
-      this.measure.ascent - this.measure.descent,
+      this.measure.ascent + this.measure.descent,
     );
   }
 
