@@ -88,21 +88,21 @@ DiagramElementPrimitive {
         Point {
           "_type": "point",
           "x": 0,
-          "y": 0.095,
-        },
-        Point {
-          "_type": "point",
-          "x": 0.1,
-          "y": 0.095,
-        },
-        Point {
-          "_type": "point",
-          "x": 0.1,
           "y": -0.008,
         },
         Point {
           "_type": "point",
           "x": 0,
+          "y": 0.095,
+        },
+        Point {
+          "_type": "point",
+          "x": 0.1,
+          "y": 0.095,
+        },
+        Point {
+          "_type": "point",
+          "x": 0.1,
           "y": -0.008,
         },
       ],
@@ -132,7 +132,7 @@ DiagramElementPrimitive {
             "x": null,
             "y": null,
           },
-          "font": "italic 200 20px Times New Roman",
+          "font": "normal 200 20px Times New Roman",
           "measureText": [Function],
           "restore": [Function],
           "save": [Function],
@@ -151,7 +151,6 @@ DiagramElementPrimitive {
     "holeBorder": Array [
       Array [],
     ],
-    "lastDraw": Array [],
     "lastDrawTransform": Array [],
     "location": Point {
       "_type": "point",
@@ -160,9 +159,80 @@ DiagramElementPrimitive {
     },
     "onLoad": null,
     "scalingFactor": 100,
-    "state": "loaded",
+    "state": "loading",
     "text": Array [
       DiagramText {
+        "border": Array [
+          Point {
+            "_type": "point",
+            "x": 0,
+            "y": -0.008,
+          },
+          Point {
+            "_type": "point",
+            "x": 0,
+            "y": 0.095,
+          },
+          Point {
+            "_type": "point",
+            "x": 0.1,
+            "y": 0.095,
+          },
+          Point {
+            "_type": "point",
+            "x": 0.1,
+            "y": -0.008,
+          },
+        ],
+        "bounds": Rect {
+          "bottom": -0.008,
+          "height": 0.10300000000000001,
+          "left": 0,
+          "right": 0.1,
+          "top": 0.095,
+          "width": 0.1,
+        },
+        "drawContext2D": Array [
+          DrawContext2D {
+            "canvas": Object {
+              "height": 1000,
+              "offsetHeight": 500,
+              "offsetWidth": 1000,
+              "style": Object {
+                "height": "500px",
+                "width": "1000px",
+              },
+              "width": 2000,
+            },
+            "ctx": Object {
+              "canvas": Object {
+                "height": 500,
+                "width": 1000,
+              },
+              "clearRect": [Function],
+              "fillText": [Function],
+              "filledText": Object {
+                "count": 0,
+                "text": "",
+                "x": null,
+                "y": null,
+              },
+              "font": "normal 200 20px Times New Roman",
+              "measureText": [Function],
+              "restore": [Function],
+              "save": [Function],
+              "scale": [Function],
+              "textAlign": [Function],
+              "textBaseline": [Function],
+              "transform": [Function],
+              "transformMatrix": Array [
+                0,
+              ],
+            },
+            "ratio": 2,
+            "resize": [Function],
+          },
+        ],
         "font": DiagramFont {
           "color": Array [
             0.95,
@@ -176,26 +246,14 @@ DiagramElementPrimitive {
           "style": "italic",
           "weight": "200",
         },
-        "justification": "left",
-        "justificationOffset": Point {
-          "_type": "point",
-          "x": 0,
-          "y": 0,
-        },
-        "lastMeasure": Object {
-          "ascent": 0.095,
-          "descent": 0.008,
-          "height": 0.10300000000000001,
+        "lastDrawRect": Rect {
+          "bottom": 0,
+          "height": 1,
           "left": 0,
-          "right": 0.1,
-          "width": 0.1,
+          "right": 1,
+          "top": 1,
+          "width": 1,
         },
-        "lastRight": Point {
-          "_type": "point",
-          "x": 0.1,
-          "y": 0,
-        },
-        "line": 0,
         "location": Point {
           "_type": "point",
           "x": 0,
@@ -206,20 +264,17 @@ DiagramElementPrimitive {
           "x": 0,
           "y": 0,
         },
-        "offset": Point {
-          "_type": "point",
-          "x": 0,
-          "y": 0,
+        "measure": Object {
+          "ascent": 0.095,
+          "descent": 0.008,
+          "width": 0.1,
         },
-        "relativeLocationIndex": -1,
         "text": "a",
         "xAlign": "left",
         "yAlign": "baseline",
       },
     ],
     "type": "drawingObject",
-    "xAlign": "left",
-    "yAlign": "baseline",
   },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {

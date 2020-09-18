@@ -560,8 +560,8 @@ describe('Different ways to make an equation', () => {
   //   height: 0.103,
   //   descent: -0.008,
   //   ascent: top: 0.095,
-  // The letter b has the following bounds:
-  //   width: 0.1,
+  // The string ' b ' has the following bounds:
+  //   width: 0.3,
   //   height: 0.148,
   //   descent: -0.008,
   //   ascent: top: 0.14,
@@ -756,7 +756,7 @@ describe('Different ways to make an equation', () => {
         expect(round(b.bottom, 4)).toBe(round(-bDes * 1.2, 4));
       });
       test('scale', () => {
-        expect(round(b.width, 4)).toBe(0.1 * 1.2);
+        expect(round(b.width, 4)).toBe(0.3 * 1.2);
       });
       test('elementMods', () => {
         expect(round(eqn._b.color, 4)).toEqual([0, 1, 0, 1]);
@@ -771,13 +771,13 @@ describe('Different ways to make an equation', () => {
         diagram.mock.timeStep(0);
         expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.1, 0));
         diagram.mock.timeStep(1);
-        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.084, -0.029));
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.072, -0.05));
         diagram.mock.timeStep(1);
-        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.02, -0.08));
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.04, -0.14));
         diagram.mock.timeStep(1);
-        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.044, -0.029));
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.152, -0.05));
         diagram.mock.timeStep(1);
-        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.06, 0));
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.18, 0));
       });
       test('animation - form duration override from goTo', () => {
         eqn.showForm('objectDefinition');

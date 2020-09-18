@@ -232,35 +232,29 @@ diagram.addElements([
     name: 'eqn',
     method: 'equation',
     options: {
-      color: [0, 0.95, 0, 1],
+      color: [1, 1, 0, 1],
+      // position: [1, 1],           // Points can be defined as arrays
       elements: {
         a: 'a',
         b: 'b',
-        lb: {
-          symbol: 'bracket', side: 'left', lineWidth: 0.01, endLength: 0.03,
-        },
-        rb: {
-          symbol: 'bracket', side: 'right', lineWidth: 0.01, endLength: 0.03,
+        c: 'c',
+        _2: '2',
+        v: { symbol: 'vinculum' },
+      },
+      formDefaults: {
+        alignment: {
+          // fixTo: { x: 0.2, y: 0.2 },    // Points can also be defined as objects
+          xAlign: 'right',
+          yAlign: 'top',
         },
       },
+      scale: 0.45,
       forms: {
-        // Full Object
-        0: {
-          content: {
-            brac: {
-              left: 'lb',
-              content: 'a',
-              right: 'rb',
-              inSize: true,
-              insideSpace: 0.05,
-              outsideSpace: 0.1,
-              topSpace: 0.1,
-              bottomSpace: 0.1,
-            },
-          },
-        },
+        0: ['a', 'b', 'c'],
+        1: [{ frac: ['a', 'v', '_2'] }, 'c'],
       },
-    },
+      formSeries: ['0', '1'],
+    }
   }
   // {
   //   name: 'eqn',
@@ -301,7 +295,7 @@ diagram.initialize();
 // diagram.elements._tester.onClick = () => { console.log(1) };
 // diagram.elements._tester.makeTouchable();
 // console.log(diagram.elements._tester.drawingObject)
-diagram.elements._eqn.showForm('0')
+diagram.elements._eqn.showForm('1')
 
 diagram.animateNextFrame();
 console.log(diagram.elements._eqn)
