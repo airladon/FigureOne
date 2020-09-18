@@ -792,13 +792,13 @@ describe('Different ways to make an equation', () => {
         diagram.mock.timeStep(0);
         expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.1, 0));
         diagram.mock.timeStep(0.25);
-        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.084, -0.029));
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.072, -0.05));;
         diagram.mock.timeStep(0.25);
-        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.02, -0.08));
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.04, -0.14));
         diagram.mock.timeStep(0.25);
-        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.044, -0.029));
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.152, -0.05));
         diagram.mock.timeStep(0.25);
-        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.06, 0));
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.18, 0));
       });
       test('animation - fromForm override animation and color', () => {
         eqn.showForm('objectDef2');
@@ -811,13 +811,13 @@ describe('Different ways to make an equation', () => {
         diagram.mock.timeStep(0);
         expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.1, 0));
         diagram.mock.timeStep(0.5);
-        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.084, 0));
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.072, 0));
         diagram.mock.timeStep(0.5);
-        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.02, 0));
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.04, 0));
         diagram.mock.timeStep(0.5);
-        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.044, 0));
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.152, 0));
         diagram.mock.timeStep(0.5);
-        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.06, 0));
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.18, 0));
         diagram.mock.timeStep(1);
         expect(round(eqn._c.color, 3)).toEqual(round([0.5, 0.5, 1, 1], 3));
         expect(round(eqn._b.color, 3)).toEqual(round([0.5, 0, 1, 1], 3));
