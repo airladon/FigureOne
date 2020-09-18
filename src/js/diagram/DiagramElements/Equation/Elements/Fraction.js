@@ -23,6 +23,8 @@ export default class Fraction extends BaseEquationFunction {
     const numeratorBounds = new Bounds();
     const denominatorBounds = new Bounds();
     const fullBounds = new Bounds();
+    // console.log(numeratorBounds)
+    // console.log(denominatorBounds)
     if (numerator != null) {
       numerator.calcSize(loc._dup(), scale);
       numeratorBounds.copyFrom(numerator.getBounds(fullContentBounds));
@@ -34,6 +36,7 @@ export default class Fraction extends BaseEquationFunction {
     }
 
     this.location = location._dup();
+
     // numerator.calcSize(location, scale);
     // denominator.calcSize(location, scale);
 

@@ -8,12 +8,6 @@ import * as tools from '../../../../tools/tools';
 import makeDiagram from '../../../../__mocks__/makeDiagram';
 import { Equation } from '../Equation';
 
-tools.isTouchDevice = jest.fn();
-
-jest.mock('../../../Gesture');
-jest.mock('../../../webgl/webgl');
-jest.mock('../../../DrawContext2D');
-
 describe('Equation Functions - Integral', () => {
   let diagram;
   let eqn;
@@ -54,10 +48,10 @@ describe('Equation Functions - Integral', () => {
                 height: null,
                 yOffset: 0,
                 scale: 1,
-                fromScale: 1,
-                toScale: 1,
-                fromOffset: [0.1, 0.1],
-                toOffset: [-0.1, -0.1],
+                fromScale: 0.6,
+                toScale: 0.4,
+                fromOffset: [0.05, 0.02],
+                toOffset: [-0.04, -0.03],
                 limitsPosition: 'topBottom',
                 limitsAroundContent: true,
                 fromXPosition: 'center',
@@ -85,10 +79,10 @@ describe('Equation Functions - Integral', () => {
               height: null,
               yOffset: 0,
               scale: 1,
-              fromScale: 1,
-              toScale: 1,
-              fromOffset: [0.1, 0.1],
-              toOffset: [-0.1, -0.1],
+              fromScale: 0.6,
+              toScale: 0.4,
+              fromOffset: [0.05, 0.02],
+              toOffset: [-0.04, -0.03],
               limitsPosition: 'topBottom',
               limitsAroundContent: true,
               fromXPosition: 'center',
@@ -102,9 +96,9 @@ describe('Equation Functions - Integral', () => {
             },
           },
           // Method Array
-          2: { int: ['s', 'a', 'b', 'c', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, [0.1, 0.1], [-0.1, -0.1], 'topBottom', true, 'center', 'bottom', 'center', 'top', 'center', 'top', 'center', 'bottom'] },
+          2: { int: ['s', 'a', 'b', 'c', true, 0, 0.1, 0.1, null, 0, 1, 0.6, 0.4, [0.05, 0.02], [-0.04, -0.03], 'topBottom', true, 'center', 'bottom', 'center', 'top', 'center', 'top', 'center', 'bottom'] },
           // Function with Method Array
-          3: e.int(['s', 'a', 'b', 'c', true, 0, 0.1, 0.1, null, 0, 1, 1, 1, [0.1, 0.1], [-0.1, -0.1], 'topBottom', true, 'center', 'bottom', 'center', 'top', 'center', 'top', 'center', 'bottom']),
+          3: e.int(['s', 'a', 'b', 'c', true, 0, 0.1, 0.1, null, 0, 1, 0.6, 0.4, [0.05, 0.02], [-0.04, -0.03], 'topBottom', true, 'center', 'bottom', 'center', 'top', 'center', 'top', 'center', 'bottom']),
           // Bound Function with Object
           4: int({
             symbol: 's',
@@ -118,10 +112,10 @@ describe('Equation Functions - Integral', () => {
             height: null,
             yOffset: 0,
             scale: 1,
-            fromScale: 1,
-            toScale: 1,
-            fromOffset: [0.1, 0.1],
-            toOffset: [-0.1, -0.1],
+            fromScale: 0.6,
+            toScale: 0.4,
+            fromOffset: [0.05, 0.02],
+            toOffset: [-0.04, -0.03],
             limitsPosition: 'topBottom',
             limitsAroundContent: true,
             fromXPosition: 'center',

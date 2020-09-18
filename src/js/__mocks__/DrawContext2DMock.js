@@ -38,18 +38,19 @@ class DrawContext2D {
         this.ctx.filledText.count += 1;
       },
       transformMatrix: [0],
-      measureText: () => {    // eslint-disable-line arrow-body-style
+      measureText: (text) => {    // eslint-disable-line arrow-body-style
         let w = 20;
+        const len = text.length;
         if (this.ctx.font != null) {
           const fontHeight = this.ctx.font.match(/[^ ]*px/);
           w = parseFloat(fontHeight[0]) / 2;
         }
         return {
-          actualBoundingBoxLeft: w / 2,
+          actualBoundingBoxLeft: 0,
           actualBoundingBoxAscent: w / 2,
           actualBoundingBoxRight: w / 2,
           actualBoundingBoxDescent: w / 2,
-          width: w,
+          width: w * len,
         };
       },
       transform: (a, b, c, d, e, f) => {

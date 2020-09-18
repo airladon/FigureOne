@@ -2920,7 +2920,7 @@ export class EquationFunctions {
     let useFullBounds;
     const defaultOptions = {
       inSize: true,
-      space: 0.05,
+      space: 0.01,
       topSpace: 0.1,
       bottomSpace: 0.1,
       height: null,

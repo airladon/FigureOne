@@ -102,44 +102,44 @@ diagram.addElements([
   //     color: [0.5, 0.5, 1, 1],
   //   },
   // },
-  {
-    name: 'tester',
-    method: 'shapes.textLines',
-    options: {
-      font: {
-        family: 'Times New Roman',
-        color: [1, 0, 0, 1],
-        style: 'normal',
-        size: 0.1,
-        weight: '200',
-      },
-      text: [
-        'This is a |formatted| string',
-        [
-          {
-            font: { size: 0.05},
-            lineSpace: 0.1,
-            justification: 'right',
-            location: [-0.2, 0.3]
-          },
-          'This is a |sup| string',
-        ],
-        'This is a simple string also |formatted|.'
-      ],
-      lineSpace: 0.2,
-      modifiers: {
-        formatted: {
-          offset: [0.01, 0],
-          font: { color: [1, 1, 0, 1], style: 'italic' },
-        },
-      },
-      position: [0, 0],
-      xAlign: 'center',
-      yAlign: 'bottom',
-      color: [0.5, 0.5, 1, 1],
-      justification: 'left',
-    },
-  },
+  // {
+  //   name: 'tester',
+  //   method: 'shapes.textLines',
+  //   options: {
+  //     font: {
+  //       family: 'Times New Roman',
+  //       color: [1, 0, 0, 1],
+  //       style: 'normal',
+  //       size: 0.1,
+  //       weight: '200',
+  //     },
+  //     text: [
+  //       'This is a |formatted| string',
+  //       [
+  //         {
+  //           font: { size: 0.05},
+  //           lineSpace: 0.1,
+  //           justification: 'right',
+  //           location: [-0.2, 0.3]
+  //         },
+  //         'This is a |sup| string',
+  //       ],
+  //       'This is a simple string also |formatted|.'
+  //     ],
+  //     lineSpace: 0.2,
+  //     modifiers: {
+  //       formatted: {
+  //         offset: [0.01, 0],
+  //         font: { color: [1, 1, 0, 1], style: 'italic' },
+  //       },
+  //     },
+  //     position: [0, 0],
+  //     xAlign: 'center',
+  //     yAlign: 'bottom',
+  //     color: [0.5, 0.5, 1, 1],
+  //     justification: 'left',
+  //   },
+  // },
   // {
   //   name: 'tester',
   //   method: 'shapes.textLine',
@@ -156,20 +156,44 @@ diagram.addElements([
   //     }
   //   },
   // },
+  // {
+  //   name: 't',
+  //   method: 'text',
+  //   options: {
+  //     text: 'asdf',
+  //     font: { 
+  //       size: 0.1,
+  //       family: 'Helvetica',
+  //       style: 'italic',
+  //     },
+  //     position: [0, -0.5],
+  //     xAlign: 'center',
+  //     // size: 0.2,
+  //     // color: [1, 0, 1, 1],
+  //   },
+  // },
   {
-    name: 't',
-    method: 'text',
+    name: 'allOptions',
+    method: 'shapes.textLine',
     options: {
-      text: 'asdf',
-      font: { 
+      font: {
+        family: 'Times New Roman',
+        color: [1, 0, 0, 1],
+        style: 'normal',
         size: 0.1,
-        family: 'Helvetica',
-        style: 'italic',
+        weight: '200',
       },
-      position: [0, -0.5],
+      text: [
+        // 'This is the ',
+        // [{ font: { style: 'italic', color: [0, 0, 1] } }, 'first'],
+        // ' line',
+        'This is a ',
+        [{ font: { size: 0.05 }, offset: [0, 0.1], inLine: false }, 'superscript'],
+        'example on a new line.',
+      ],
       xAlign: 'center',
-      // size: 0.2,
-      // color: [1, 0, 1, 1],
+      yAlign: 'middle',
+      color: [0.5, 0.5, 1, 1],
     },
   },
   {
@@ -208,20 +232,70 @@ diagram.addElements([
     name: 'eqn',
     method: 'equation',
     options: {
-      font: {
-        size: 0.1,
-        color: [1, 1, 0, 1],
-        family: 'Helvetica',
-      },
+      color: [0, 0.95, 0, 1],
       elements: {
-        equals: { text: ' = ', color: [1, 1, 0, 1], },
-        v: { symbol: 'vinculum', color: [1, 1, 0, 1], },
+        a: 'a',
+        s1: {
+          symbol: 'int',
+          color: [0.95, 0, 0, 1], // override default equation color
+          lineWidth: 0.01,        // lineWidth
+          sides: 20,              // sides in integral s-curve
+          width: null,            // symbol width
+          tipWidth: null,         // s-curve tip width
+          draw: 'static',         // or 'dynamic'
+          staticHeight: 'first',  // or number (only use if draw = static)
+          serif: true,            // serifs on s-curve
+          num: 2,                 // number of s-curves
+          type: 'generic',        // or 'line' for line integral symbol
+          serifSides: 10,         // sides on serifs
+          lineIntegralSides: 20,  // sides on line integral symbol
+        },
+        s2: {
+          symbol: 'int',
+          color: [0.95, 0, 0, 1], // override default equation color
+          lineWidth: 0.01,        // lineWidth
+          sides: 20,              // sides in integral s-curve
+          width: null,            // symbol width
+          tipWidth: null,         // s-curve tip width
+          draw: 'dynamic',        // or 'dynamic'
+          serif: false,           // serifs on s-curve
+          num: 1,                 // number of s-curves
+          type: 'line',           // or 'line' for line integral symbol
+          serifSides: 10,         // sides on serifs
+          lineIntegralSides: 20,  // sides on line integral symbol
+        },
       },
       forms: {
-        0: ['a', 'equals', { frac: ['b', 'v', 'c'] }],
+        s1: { content: { int: ['s1', 'a'] } },
+        s2: { content: { int: ['s2', 'a'] } },
       },
     },
-  },
+  }
+  // {
+  //   name: 'eqn',
+  //   method: 'equation',
+  //   options: {
+  //     font: {
+  //       size: 0.2,
+  //       color: [1, 1, 0, 1],
+  //       family: 'Helvetica',
+  //     },
+  //     elements: {
+  //       equals: { text: ' = ', color: [1, 1, 0, 1], },
+  //       v: { symbol: 'vinculum', color: [1, 1, 0, 1], },
+  //     },
+  //     forms: {
+  //       0: ['a', 'equals', { frac: {
+  //         numerator: 'b',
+  //         symbol: 'v',
+  //         denominator: 'c',
+  //         offsetY: 0.05,
+  //         denominatorSpace: 0.08,
+  //        } }],
+  //     },
+  //     // position: [0, -0.5],
+  //   },
+  // },
 ]);
 diagram.initialize();
 
@@ -233,12 +307,15 @@ diagram.initialize();
 //   .translation({ target: [-0.5, -0.5 ], duration: 2 })
 //   .start();
 // console.log(diagram.elements._eqn._a.drawingObject.text[0].font.definition());
-diagram.elements._tester.onClick = () => { console.log(1) };
-diagram.elements._tester.makeTouchable();
+// diagram.elements._tester.onClick = () => { console.log(1) };
+// diagram.elements._tester.makeTouchable();
 // console.log(diagram.elements._tester.drawingObject)
-diagram.elements._eqn.showForm('0')
+diagram.elements._eqn.showForm('s2')
 
 diagram.animateNextFrame();
 console.log(diagram.elements._eqn)
 // diagram.elements._tester.setColor([0, 1, 1, 1]);
-
+// console.log(diagram.elements._eqn._a.drawingObject.border)
+// console.log(diagram.elements._eqn._equals.drawingObject.border)
+// console.log(diagram.elements._eqn._b.drawingObject.border)
+// console.log(diagram.elements._eqn._c.drawingObject.border)
