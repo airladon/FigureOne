@@ -830,7 +830,7 @@ export class Equation extends DiagramElementCollection {
     if (fontDefinition.color == null) {
       fontDefinition.color = this.color;
     }
-
+    // console.log(textToUse, fontDefinition)
     // const font = new DiagramFont(fontDefinition);
     const p = this.shapes.text(
       {
@@ -841,7 +841,6 @@ export class Equation extends DiagramElementCollection {
         yAlign: 'baseline',
       },
     );
-
     return p;
   }
 

@@ -20,8 +20,8 @@ const f3 = {
   size: 0.08,
   weight: 'bold',
 }
-console.log(new Fig.Transform().scale(2, 2).translate(0.5, 0).matrix())
-console.log(new Fig.Transform().translate(0.5, 0).scale(2, 2).matrix())
+// console.log(new Fig.Transform().scale(2, 2).translate(0.5, 0).matrix())
+// console.log(new Fig.Transform().translate(0.5, 0).scale(2, 2).matrix())
 diagram.addElements([
   // {
   //   name: 'tester',
@@ -157,6 +157,22 @@ diagram.addElements([
   //   },
   // },
   {
+    name: 't',
+    method: 'text',
+    options: {
+      text: 'asdf',
+      font: { 
+        size: 0.1,
+        family: 'Helvetica',
+        style: 'italic',
+      },
+      position: [0, -0.5],
+      xAlign: 'center',
+      // size: 0.2,
+      // color: [1, 0, 1, 1],
+    },
+  },
+  {
     name: 'a',
     method: 'polygon',
     options: {
@@ -188,6 +204,24 @@ diagram.addElements([
       width: 0.002,
     },
   },
+  {
+    name: 'eqn',
+    method: 'equation',
+    options: {
+      font: {
+        size: 0.1,
+        color: [1, 1, 0, 1],
+        family: 'Helvetica',
+      },
+      elements: {
+        equals: { text: ' = ', color: [1, 1, 0, 1], },
+        v: { symbol: 'vinculum', color: [1, 1, 0, 1], },
+      },
+      forms: {
+        0: ['a', 'equals', { frac: ['b', 'v', 'c'] }],
+      },
+    },
+  },
 ]);
 diagram.initialize();
 
@@ -198,9 +232,13 @@ diagram.initialize();
 // diagram.elements._tester.animations.new()
 //   .translation({ target: [-0.5, -0.5 ], duration: 2 })
 //   .start();
-
+// console.log(diagram.elements._eqn._a.drawingObject.text[0].font.definition());
 diagram.elements._tester.onClick = () => { console.log(1) };
 diagram.elements._tester.makeTouchable();
-console.log(diagram.elements._tester.drawingObject)
+// console.log(diagram.elements._tester.drawingObject)
+diagram.elements._eqn.showForm('0')
+
+diagram.animateNextFrame();
+console.log(diagram.elements._eqn)
 // diagram.elements._tester.setColor([0, 1, 1, 1]);
 

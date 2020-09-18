@@ -18,8 +18,6 @@ describe('Diagram Text Object', () => {
       style: '',
       size: 1,
       weight: '200',
-      // xAlign'center',
-      // 'middle',
       color: [1, 0, 0, 1],
     });
   });
@@ -31,8 +29,6 @@ describe('Diagram Text Object', () => {
         style: '',
         size: 1,
         weight: '200',
-        // 'center',
-        // 'middle',
         color: null,
       });
       expect(df).toEqual(expected);
@@ -44,8 +40,6 @@ describe('Diagram Text Object', () => {
       const ctx = {};
       font.setFontInContext(ctx, 2);
       expect(ctx.font).toBe(' 200 2px Helvetica Neue');
-      // expect(ctx.textAlign).toBe('center');
-      // expect(ctx.textBaseline).toBe('middle');
     });
     test('Copy', () => {
       const f2 = font._dup();
@@ -206,7 +200,7 @@ describe('Diagram Text Object', () => {
       });
     });
   });
-  describe.only('Text', () => {
+  describe('Text', () => {
     let diagram;
     let addText;
     let t;

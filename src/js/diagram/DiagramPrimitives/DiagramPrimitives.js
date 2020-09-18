@@ -1227,7 +1227,6 @@ export default class DiagramPrimitives {
     );
 
     setupPulse(element, options);
-
     if (options.mods != null && options.mods !== {}) {
       element.setProperties(options.mods);
     }
@@ -1313,6 +1312,7 @@ export default class DiagramPrimitives {
       this.draw2D,
     );
     to.loadText(options);
+    // console.log(to.text[0].font)
     return this.createPrimitive(to, options);
   }
 

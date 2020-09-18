@@ -167,7 +167,7 @@ class DiagramText {
   }
 
   setFont(font: TypeDiagramFontDefinition) {
-    const newFont = joinObjects({}, this.font.definition, font);
+    const newFont = joinObjects({}, this.font.definition(), font);
     this.font = new DiagramFont(newFont);
     this.update();
   }
