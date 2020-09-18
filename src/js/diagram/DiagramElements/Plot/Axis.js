@@ -113,6 +113,7 @@ class Axis extends DiagramElementCollection {
     //   this.props.titleFontColor,
     // );
     const titleText = [new DiagramText(
+      this.drawContext2D[0],
       new Point(0, 0).transformBy(new Transform()
         .rotate(this.props.rotation).matrix()),
       this.props.title,
@@ -122,8 +123,8 @@ class Axis extends DiagramElementCollection {
     )];
     const title = new TextObject(
       this.drawContext2D[0],
-      titleText,
     );
+    title.text = titleText;
 
     this.add('title', new DiagramElementPrimitive(
       title,
@@ -228,6 +229,7 @@ class Axis extends DiagramElementCollection {
     const dText = [];
     for (let i = 0; i < ticks.labels.length; i += 1) {
       dText.push(new DiagramText(
+        drawContext2D,
         new Point(
           this.valueToClip(ticks.start + i * ticks.step),
           0,
@@ -238,8 +240,8 @@ class Axis extends DiagramElementCollection {
     }
     const axisLabels = new TextObject(
       drawContext2D,
-      dText,
     );
+    axisLabels.text = dText;
 
     this.add(`label_${name}`, new DiagramElementPrimitive(
       axisLabels,
