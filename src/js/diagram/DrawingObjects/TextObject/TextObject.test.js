@@ -148,6 +148,8 @@ describe('Diagram Text Object', () => {
         // const to = new TextObject(draw2D, textArray);
         const to = new TextObject(draw2D);
         to.loadText({ text: textArray });
+        console.log(to.text[0].bounds);
+        console.log(to.text[0].getGLBoundary(m2.identity()));
         const b = to.getGLBoundaryOfText(to.text[0], m2.identity());
         expect(b).toEqual([
           new Point(-5, 7.4),
