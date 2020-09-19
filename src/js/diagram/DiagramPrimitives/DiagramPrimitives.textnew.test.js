@@ -1,12 +1,12 @@
-import {
-  Rect,
-} from '../../tools/g2';
+// import {
+//   Rect,
+// } from '../../tools/g2';
 import {
   round,
 } from '../../tools/math';
 import makeDiagram from '../../__mocks__/makeDiagram';
 
-describe('Equation Functions - Box', () => {
+describe('Diagram Primitives Text', () => {
   let diagram;
   let textOptions;
   let loadText;
@@ -41,6 +41,8 @@ describe('Equation Functions - Box', () => {
           size: 0.2,
         },
         color: [1, 0, 0, 1],
+        position: [0, 0],
+        // transform: [['s', [1, 1]], ['r', 0], ['t', [0, 0]]],
       },
       aLeftBaseline: {
         text: 'a',
@@ -206,9 +208,11 @@ describe('Equation Functions - Box', () => {
   describe('All options', () => {
     let tb;
     let tg;
+    let t;
     beforeEach(() => {
       loadText('allOptions');
       [tb, tg] = diagram.elements._t.drawingObject.text;
+      t = diagram.elements._t.getBoundingRect('diagram');
     });
     test('color', () => {
       expect(tb.font.color).toEqual([1, 0, 0, 1]);
@@ -244,6 +248,14 @@ describe('Equation Functions - Box', () => {
       expect(round(tg.bounds.height)).toBe(round(g.height * 0.5 / 0.2));
       expect(round(tg.bounds.top)).toBe(round(-0.1 + g.height * 0.5 / 0.2));
       expect(round(tg.bounds.right)).toBe(round(-0.1 + g.width * 0.5 / 0.2));
+    });
+    test('Bounding Rect', () => {
+      expect(round(t.left)).toBe(-0.1);
+      expect(round(t.bottom)).toBe(-0.1);
+      expect(round(t.width)).toBe(round(tg.bounds.width));
+      expect(round(t.height)).toBe(round(tg.bounds.height));
+      expect(round(t.top)).toBe(round(tg.bounds.top));
+      expect(round(t.right)).toBe(round(tg.bounds.right));
     });
   });
 });

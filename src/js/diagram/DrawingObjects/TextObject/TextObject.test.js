@@ -146,6 +146,9 @@ describe('Diagram Text Object', () => {
     describe('GL Boundaries', () => {
       test('Text Boundary for 0,0 location, no scaling, no transformation', () => {
         // const to = new TextObject(draw2D, textArray);
+        // String 'test1' has:
+        //  width: 50
+        //  ascent: 10.
         const to = new TextObject(draw2D);
         to.loadText({ text: textArray });
         console.log(to.text[0].bounds);

@@ -44,6 +44,8 @@ function addElements(
       arrow: shapes.arrow.bind(shapes),
       fan: shapes.fan.bind(shapes),
       text: shapes.text.bind(shapes),
+      textLine: shapes.textLine.bind(shapes),
+      textLines: shapes.textLines.bind(shapes),
       textGL: shapes.textGL.bind(shapes),
       textHTML: shapes.htmlText.bind(shapes),
       htmlImage: shapes.htmlImage.bind(shapes),
