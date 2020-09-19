@@ -268,7 +268,7 @@ class DiagramText {
     if (this.yAlign === 'bottom') {
       location.y += this.measure.descent;
     } else if (this.yAlign === 'middle') {
-      location.y += this.measure.descent - (this.measure.ascent - this.measure.descent) / 2;
+      location.y += this.measure.descent - (this.measure.ascent + this.measure.descent) / 2;
     } else if (this.yAlign === 'top') {
       location.y -= this.measure.ascent;
     }
@@ -637,7 +637,15 @@ class TextObjectBase extends DrawingObject {
 class TextObject extends TextObjectBase {
   loadText(
     options: {
-      text: string | Array<string | [{
+      text: string
+        | [{
+            font?: TypeDiagramFontDefinition,
+            location?: TypeParsablePoint,
+            xAlign?: 'left' | 'right' | 'center',
+            yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
+            onClick?: () => void,
+          }, string]
+        | Array<string | [{
         font?: TypeDiagramFontDefinition,
         location?: TypeParsablePoint,
         xAlign?: 'left' | 'right' | 'center',
@@ -651,7 +659,14 @@ class TextObject extends TextObjectBase {
     },
   ) {
     let textArray = options.text;
-    if (typeof textArray === 'string') {
+    if (
+      typeof textArray === 'string'
+      || (
+        Array.isArray(textArray)
+        && textArray.length === 2
+        && typeof textArray[0] === 'object'
+      )
+    ) {
       textArray = [textArray];
     }
     const diagramTextArray = [];

@@ -30,15 +30,30 @@ describe('Equation Functions - Box', () => {
         xAlign: 'center',
         yAlign: 'middle',
       },
-      // twoChar: {
-      //   text: 'ab',
-      // },
+      aCenterMiddleFromText: {
+        text: [{ xAlign: 'center', yAlign: 'middle' }, 'a'],
+      },
+      gTopRight: {
+        text: 'g',
+        xAlign: 'right',
+        yAlign: 'top',
+      },
+      gBottomLeft: {
+        text: 'g',
+        xAlign: 'left',
+        yAlign: 'bottom',
+      },
+      threeCharString: {
+        text: 'abg',
+        xAlign: 'center',
+        yAlign: 'middle',
+      },
     };
     loadText = (option) => {
       diagram.addElement({
         name: 't',
         method: 'text',
-        options: textOptions[option]
+        options: textOptions[option],
       });
       diagram.initialize();
       diagram.setFirstTransform();
@@ -107,7 +122,7 @@ describe('Equation Functions - Box', () => {
     expect(round(t.top)).toBe(g.ascent);
     expect(round(t.right)).toBe(g.width);
   });
-  test('one character a, center, middle', () => {
+  test('one character a, center, middle defined as default', () => {
     loadText('aCenterMiddle');
     const t = diagram.elements._t.getBoundingRect('diagram');
     expect(round(t.left)).toBe(-a.width / 2);
@@ -116,5 +131,50 @@ describe('Equation Functions - Box', () => {
     expect(round(t.height)).toBe(a.height);
     expect(round(t.top)).toBe(a.height / 2);
     expect(round(t.right)).toBe(a.width / 2);
+  });
+  test('one character a, center, middle defined in text', () => {
+    loadText('aCenterMiddleFromText');
+    const t = diagram.elements._t.getBoundingRect('diagram');
+    expect(round(t.left)).toBe(-a.width / 2);
+    expect(round(t.bottom)).toBe(-a.height / 2);
+    expect(round(t.width)).toBe(a.width);
+    expect(round(t.height)).toBe(a.height);
+    expect(round(t.top)).toBe(a.height / 2);
+    expect(round(t.right)).toBe(a.width / 2);
+  });
+  test('one character g, top, right', () => {
+    loadText('gTopRight');
+    const t = diagram.elements._t.getBoundingRect('diagram');
+    expect(round(t.left)).toBe(-g.width);
+    expect(round(t.bottom)).toBe(-g.height);
+    expect(round(t.width)).toBe(g.width);
+    expect(round(t.height)).toBe(g.height);
+    expect(round(t.top)).toBe(0);
+    expect(round(t.right)).toBe(0);
+  });
+  test('one character g, bottom, left', () => {
+    loadText('gBottomLeft');
+    const t = diagram.elements._t.getBoundingRect('diagram');
+    expect(round(t.left)).toBe(0);
+    expect(round(t.bottom)).toBe(0);
+    expect(round(t.width)).toBe(g.width);
+    expect(round(t.height)).toBe(g.height);
+    expect(round(t.top)).toBe(g.height);
+    expect(round(t.right)).toBe(g.width);
+  });
+  test('three char string, abg, center, middle', () => {
+    loadText('threeCharString');
+    const t = diagram.elements._t.getBoundingRect('diagram');
+    const w = round(a.width + b.width + g.width);
+    const h = round(
+      Math.max(a.ascent, b.ascent, g.ascent)
+      + Math.max(a.descent, b.descent, g.descent),
+    );
+    expect(round(t.left)).toBe(-w / 2);
+    expect(round(t.bottom)).toBe(-h / 2);
+    expect(round(t.width)).toBe(w);
+    expect(round(t.height)).toBe(h);
+    expect(round(t.top)).toBe(h / 2);
+    expect(round(t.right)).toBe(w / 2);
   });
 });
