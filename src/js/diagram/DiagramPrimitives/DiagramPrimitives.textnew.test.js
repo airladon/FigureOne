@@ -1,6 +1,6 @@
-// import {
-//   Point,
-// } from '../../tools/g2';
+import {
+  Rect,
+} from '../../tools/g2';
 import {
   round,
 } from '../../tools/math';
@@ -16,6 +16,32 @@ describe('Equation Functions - Box', () => {
   beforeEach(() => {
     diagram = makeDiagram();
     textOptions = {
+      allOptions: {
+        text: [
+          'b',
+          [{
+            xAlign: 'left',
+            yAlign: 'bottom',
+            location: [-0.1, -0.1],
+            font: {
+              family: 'Helvetica',
+              weight: 'bold',
+              style: 'italic',
+              size: 0.5,
+              color: [1, 1, 0, 1],
+            },
+          }, 'g'],
+        ],
+        xAlign: 'center',
+        yAlign: 'middle',
+        font: {
+          family: 'Helvetica Neue',
+          weight: '300',
+          style: 'normal',
+          size: 0.2,
+        },
+        color: [1, 0, 0, 1],
+      },
       aLeftBaseline: {
         text: 'a',
       },
@@ -176,5 +202,48 @@ describe('Equation Functions - Box', () => {
     expect(round(t.height)).toBe(h);
     expect(round(t.top)).toBe(h / 2);
     expect(round(t.right)).toBe(w / 2);
+  });
+  describe('All options', () => {
+    let tb;
+    let tg;
+    beforeEach(() => {
+      loadText('allOptions');
+      [tb, tg] = diagram.elements._t.drawingObject.text;
+    });
+    test('color', () => {
+      expect(tb.font.color).toEqual([1, 0, 0, 1]);
+      expect(tg.font.color).toEqual([1, 1, 0, 1]);
+    });
+    test('style', () => {
+      expect(tb.font.style).toBe('normal');
+      expect(tg.font.style).toBe('italic');
+    });
+    test('family', () => {
+      expect(tb.font.family).toBe('Helvetica Neue');
+      expect(tg.font.family).toBe('Helvetica');
+    });
+    test('weight', () => {
+      expect(tb.font.weight).toBe('300');
+      expect(tg.font.weight).toBe('bold');
+    });
+    test('size', () => {
+      expect(tb.font.size).toBe(0.2);
+      expect(tg.font.size).toBe(0.5);
+    });
+    test('bounds', () => {
+      expect(round(tb.bounds.left)).toBe(-b.width / 2);
+      expect(round(tb.bounds.bottom)).toBe(-b.height / 2);
+      expect(round(tb.bounds.width)).toBe(b.width);
+      expect(round(tb.bounds.height)).toBe(b.height);
+      expect(round(tb.bounds.top)).toBe(b.height / 2);
+      expect(round(tb.bounds.right)).toBe(b.width / 2);
+
+      expect(round(tg.bounds.left)).toBe(round(-0.1));
+      expect(round(tg.bounds.bottom)).toBe(round(-0.1));
+      expect(round(tg.bounds.width)).toBe(round(g.width * 0.5 / 0.2));
+      expect(round(tg.bounds.height)).toBe(round(g.height * 0.5 / 0.2));
+      expect(round(tg.bounds.top)).toBe(round(-0.1 + g.height * 0.5 / 0.2));
+      expect(round(tg.bounds.right)).toBe(round(-0.1 + g.width * 0.5 / 0.2));
+    });
   });
 });
