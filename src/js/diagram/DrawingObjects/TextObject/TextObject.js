@@ -114,7 +114,7 @@ class DiagramFont {
 
 // DiagramText is a single text element of the diagram that is drawn at
 // once and referenced to the same location
-class DiagramText {
+class DiagramTextBase {
   drawContext2D: Array<DrawContext2D>
   location: Point;
   locationAligned: Point;
@@ -138,6 +138,7 @@ class DiagramText {
     font: TypeDiagramFontDefinition = new DiagramFont().definition(),
     xAlign: 'left' | 'center' | 'right' = 'left',
     yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline' = 'baseline',
+    // runUpdate: boolean = true,
   ) {
     this.location = getPoint(location)._dup();
     this.locationAligned = this.location._dup();
@@ -151,25 +152,27 @@ class DiagramText {
     } else {
       this.drawContext2D = [drawContext2D];
     }
-    this.update();
   }
 
-  update() {
+  measureAndAlignText() {
     this.measureText();
     this.alignText();
+  }
+
+  calcBorderAndBounds() {
     this.calcBounds();
     this.calcBorder();
   }
 
   setText(text: string) {
     this.text = text.slice();
-    this.update();
+    this.measureAndAlignText();
   }
 
   setFont(font: TypeDiagramFontDefinition) {
     const newFont = joinObjects({}, this.font.definition(), font);
     this.font = new DiagramFont(newFont);
-    this.update();
+    this.measureAndAlignText();
   }
 
   setXAlign(xAlign: 'left' | 'center' | 'right') {
@@ -304,7 +307,25 @@ class DiagramText {
   }
 }
 
-class DiagramTextLine extends DiagramText {
+// DiagramText is a single text element of the diagram that is drawn at
+// once and referenced to the same location
+class DiagramText extends DiagramTextBase {
+  constructor(
+    drawContext2D: Array<DrawContext2D> | DrawContext2D,
+    location: TypeParsablePoint = new Point(0, 0),
+    text: string = '',
+    font: TypeDiagramFontDefinition = new DiagramFont().definition(),
+    xAlign: 'left' | 'center' | 'right' = 'left',
+    yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline' = 'baseline',
+    // runUpdate: boolean = true,
+  ) {
+    super(drawContext2D, location, text, font, xAlign, yAlign);
+    this.measureAndAlignText();
+    this.calcBorderAndBounds();
+  }
+}
+
+class DiagramTextLine extends DiagramTextBase {
   offset: Point;
   inLine: boolean;
 
@@ -319,6 +340,7 @@ class DiagramTextLine extends DiagramText {
     super(drawContext2D, location, text, font, 'left', 'baseline');
     this.offset = getPoint(offset);
     this.inLine = inLine;
+    this.measureAndAlignText();
   }
 
   alignText() {
@@ -352,11 +374,7 @@ class DiagramTextLines extends DiagramTextLine {
   ) {
     super(drawContext2D, location, text, font, offset, inLine);
     this.line = line;
-  }
-
-  alignText() {
-    const location = this.location._dup();
-    this.locationAligned = location.add(this.offset);
+    // this.update();
   }
 
   _dup() {
@@ -372,6 +390,12 @@ class DiagramTextLines extends DiagramTextLine {
   }
 }
 
+// Order of definition:
+// * Constructor - setup empty structures
+// * loadText
+//    - calculateScalingFactor
+//    - setTextLocations - lays out text from location property or in line
+//    - calcBoundsAndBorder
 class TextObjectBase extends DrawingObject {
   drawContext2D: Array<DrawContext2D>
   text: Array<DiagramText>;
@@ -394,9 +418,19 @@ class TextObjectBase extends DrawingObject {
 
   // eslint-disable-next-line no-unused-vars
   loadText(options: Object) {
+    // Assign text to this.text here
+    // this.text = options.text
+    // Calculate Scaling Factor
     this.calcScalingFactor();
+    // Layout text and calculat boundaries
     this.layoutText();
   }
+
+  // calcTextBounds() {
+  //   this.text.forEach((t) => {
+  //     t.calcBorderAndBounds();
+  //   });
+  // }
 
   // eslint-disable-next-line class-methods-use-this
   setTextLocations() {
@@ -458,6 +492,9 @@ class TextObjectBase extends DrawingObject {
 
   layoutText() {
     this.setTextLocations();
+    this.text.forEach((t) => {
+      t.calcBorderAndBounds();
+    });
     this.setBorder();
   }
 
@@ -833,7 +870,6 @@ class TextLineObject extends TextObjectBase {
     this.text = diagramTextArray;
     this.xAlign = options.xAlign;
     this.yAlign = options.yAlign;
-    // super.loadText();
     this.calcScalingFactor();
     this.layoutText();
   }
@@ -842,25 +878,6 @@ class TextLineObject extends TextObjectBase {
     const { width, minY, maxY } = createLine(this.text);
     align(this.text, this.xAlign, this.yAlign, width, minY, maxY);
   }
-
-  // align(width: number, minY: number, maxY: number) {
-  //   const locationAlignOffset = new Point(0, 0);
-  //   if (this.xAlign === 'center') {
-  //     locationAlignOffset.x -= width / 2;
-  //   } else if (this.xAlign === 'right') {
-  //     locationAlignOffset.x -= width;
-  //   }
-  //   if (this.yAlign === 'bottom') {
-  //     locationAlignOffset.y -= minY;
-  //   } else if (this.yAlign === 'middle') {
-  //     locationAlignOffset.y += -minY - (maxY - minY) / 2;
-  //   } else if (this.yAlign === 'top') {
-  //     locationAlignOffset.y -= maxY;
-  //   }
-  //   this.text.forEach((text) => {
-  //     text.locationAligned = text.location.add(locationAlignOffset);
-  //   });
-  // }
 
   _dup() {
     const c = new TextLineObject(this.drawContext2D);
@@ -1037,25 +1054,6 @@ class TextLinesObject extends TextObjectBase {
       maxY: maxLinesY,
     };
   }
-
-  // align(width: number, minY: number, maxY: number) {
-  //   const locationAlignOffset = new Point(0, 0);
-  //   if (this.xAlign === 'center') {
-  //     locationAlignOffset.x -= width / 2;
-  //   } else if (this.xAlign === 'right') {
-  //     locationAlignOffset.x -= width;
-  //   }
-  //   if (this.yAlign === 'bottom') {
-  //     locationAlignOffset.y -= minY;
-  //   } else if (this.yAlign === 'middle') {
-  //     locationAlignOffset.y += -minY - (maxY - minY) / 2;
-  //   } else if (this.yAlign === 'top') {
-  //     locationAlignOffset.y -= maxY;
-  //   }
-  //   this.text.forEach((text) => {
-  //     text.locationAligned = text.location.add(locationAlignOffset);
-  //   });
-  // }
 
   _dup() {
     const c = new TextLineObject(this.drawContext2D);

@@ -1,6 +1,6 @@
 // @flow
 import {
-  Rect, Point, Transform, getPoint, getRect,
+  Rect, Point, Transform, getPoint, getRect, getTransform,
 } from '../../tools/g2';
 // import {
 //   round
@@ -1201,6 +1201,8 @@ export default class DiagramPrimitives {
     // Define standard transform if no transform was input
     if (options.transform == null) {
       options.transform = new Transform('text').standard();
+    } else {
+      options.transform = getTransform(options.transform);
     }
 
     // Override transform if position is defined

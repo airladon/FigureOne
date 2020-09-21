@@ -172,28 +172,60 @@ diagram.addElements([
   //     // color: [1, 0, 1, 1],
   //   },
   // },
+  // {
+  //   name: 'allOptions',
+  //   method: 'shapes.textLine',
+  //   options: {
+  //     font: {
+  //       family: 'Times New Roman',
+  //       color: [1, 0, 0, 1],
+  //       style: 'normal',
+  //       size: 0.1,
+  //       weight: '200',
+  //     },
+  //     text: [
+  //       // 'This is the ',
+  //       // [{ font: { style: 'italic', color: [0, 0, 1] } }, 'first'],
+  //       // ' line',
+  //       'This is a ',
+  //       [{ font: { size: 0.05 }, offset: [0, 0.1], inLine: false }, 'superscript'],
+  //       'example on a new line.',
+  //     ],
+  //     xAlign: 'center',
+  //     yAlign: 'middle',
+  //     color: [0.5, 0.5, 1, 1],
+  //   },
+  // },
   {
-    name: 'allOptions',
-    method: 'shapes.textLine',
+    name: 'tester',
+    method: 'textLine',
     options: {
-      font: {
-        family: 'Times New Roman',
-        color: [1, 0, 0, 1],
-        style: 'normal',
-        size: 0.1,
-        weight: '200',
-      },
       text: [
-        // 'This is the ',
-        // [{ font: { style: 'italic', color: [0, 0, 1] } }, 'first'],
-        // ' line',
-        'This is a ',
-        [{ font: { size: 0.05 }, offset: [0, 0.1], inLine: false }, 'superscript'],
-        'example on a new line.',
+        'b',
+        [{
+          offset: [0.1, 0.1],
+          inLine: false,
+          font: {
+            family: 'Helvetica',
+            weight: 'bold',
+            style: 'italic',
+            size: 0.5,
+            color: [1, 1, 0, 1],
+          },
+        }, 'g'],
+        'a',
       ],
-      xAlign: 'center',
-      yAlign: 'middle',
-      color: [0.5, 0.5, 1, 1],
+      xAlign: 'left',
+      yAlign: 'bottom',
+      font: {
+        family: 'Helvetica Neue',
+        weight: '300',
+        style: 'normal',
+        size: 0.2,
+      },
+      color: [1, 0, 0, 1],
+      position: [0, 0],
+      transform: [['s', [1, 1]], ['r', 0], ['t', [0, 0]]],
     },
   },
   {
@@ -228,34 +260,34 @@ diagram.addElements([
       width: 0.002,
     },
   },
-  {
-    name: 'eqn',
-    method: 'equation',
-    options: {
-      color: [1, 1, 0, 1],
-      // position: [1, 1],           // Points can be defined as arrays
-      elements: {
-        a: 'a',
-        b: 'b',
-        c: 'c',
-        _2: '2',
-        v: { symbol: 'vinculum' },
-      },
-      formDefaults: {
-        alignment: {
-          // fixTo: { x: 0.2, y: 0.2 },    // Points can also be defined as objects
-          xAlign: 'right',
-          yAlign: 'top',
-        },
-      },
-      scale: 0.45,
-      forms: {
-        0: ['a', 'b', 'c'],
-        1: [{ frac: ['a', 'v', '_2'] }, 'c'],
-      },
-      formSeries: ['0', '1'],
-    }
-  }
+  // {
+  //   name: 'eqn',
+  //   method: 'equation',
+  //   options: {
+  //     color: [1, 1, 0, 1],
+  //     // position: [1, 1],           // Points can be defined as arrays
+  //     elements: {
+  //       a: 'a',
+  //       b: 'b',
+  //       c: 'c',
+  //       _2: '2',
+  //       v: { symbol: 'vinculum' },
+  //     },
+  //     formDefaults: {
+  //       alignment: {
+  //         // fixTo: { x: 0.2, y: 0.2 },    // Points can also be defined as objects
+  //         xAlign: 'right',
+  //         yAlign: 'top',
+  //       },
+  //     },
+  //     scale: 0.45,
+  //     forms: {
+  //       0: ['a', 'b', 'c'],
+  //       1: [{ frac: ['a', 'v', '_2'] }, 'c'],
+  //     },
+  //     formSeries: ['0', '1'],
+  //   }
+  // }
   // {
   //   name: 'eqn',
   //   method: 'equation',
@@ -295,10 +327,10 @@ diagram.initialize();
 // diagram.elements._tester.onClick = () => { console.log(1) };
 // diagram.elements._tester.makeTouchable();
 // console.log(diagram.elements._tester.drawingObject)
-diagram.elements._eqn.showForm('1')
+// diagram.elements._eqn.showForm('1')
 
 diagram.animateNextFrame();
-console.log(diagram.elements._eqn)
+console.log(diagram.elements._tester)
 // diagram.elements._tester.setColor([0, 1, 1, 1]);
 // console.log(diagram.elements._eqn._a.drawingObject.border)
 // console.log(diagram.elements._eqn._equals.drawingObject.border)

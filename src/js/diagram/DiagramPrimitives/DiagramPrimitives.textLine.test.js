@@ -83,7 +83,7 @@ describe('Diagram Primitives TextLine', () => {
     expect(round(t.bottom)).toBe(-a.descent);
     expect(round(t.width)).toBe(a.width + b.width);
     expect(round(t.height)).toBe(b.height);
-    expect(round(t.top)).toBe(a.ascent);
+    expect(round(t.top)).toBe(b.ascent);
     expect(round(t.right)).toBe(a.width + b.width);
   });
   // describe('All options', () => {
