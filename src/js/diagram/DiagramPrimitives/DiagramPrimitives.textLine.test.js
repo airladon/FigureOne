@@ -47,6 +47,16 @@ describe('Diagram Primitives TextLine', () => {
       abLeftBaseline: {
         text: ['a', 'b'],
       },
+      abCenterMiddle: {
+        text: ['a', 'b'],
+        xAlign: 'center',
+        yAlign: 'middle',
+      },
+      abRightTop: {
+        text: ['a', 'b'],
+        xAlign: 'right',
+        yAlign: 'top',
+      },
     };
     loadText = (option) => {
       diagram.addElement({
@@ -76,15 +86,60 @@ describe('Diagram Primitives TextLine', () => {
       height: 0.145,
     };
   });
-  test('one character a, left, baseline', () => {
+  test('ab, left, baseline', () => {
     loadText('abLeftBaseline');
     const t = diagram.elements._t.getBoundingRect('diagram');
+    const ta = diagram.elements._t.drawingObject.text[0].bounds;
+    const tb = diagram.elements._t.drawingObject.text[1].bounds;
     expect(round(t.left)).toBe(0);
     expect(round(t.bottom)).toBe(-a.descent);
     expect(round(t.width)).toBe(a.width + b.width);
     expect(round(t.height)).toBe(b.height);
     expect(round(t.top)).toBe(b.ascent);
     expect(round(t.right)).toBe(a.width + b.width);
+    expect(ta.left).toBe(0);
+    expect(ta.right).toBe(ta.left + a.width);
+    expect(tb.left).toBe(ta.right);
+    expect(tb.right).toBe(ta.right + b.width);
+    expect(ta.bottom).toBe(tb.bottom);
+  });
+  test('ab, center, middle', () => {
+    loadText('abCenterMiddle');
+    const t = diagram.elements._t.getBoundingRect('diagram');
+    const ta = diagram.elements._t.drawingObject.text[0].bounds;
+    const tb = diagram.elements._t.drawingObject.text[1].bounds;
+    const w = a.width + b.width;
+    const h = b.height;
+    expect(round(t.left)).toBe(-w / 2);
+    expect(round(t.bottom)).toBe(-h / 2);
+    expect(round(t.width)).toBe(w);
+    expect(round(t.height)).toBe(h);
+    expect(round(t.top)).toBe(h / 2);
+    expect(round(t.right)).toBe(w / 2);
+    expect(ta.left).toBe(-w / 2);
+    expect(ta.right).toBe(ta.left + a.width);
+    expect(tb.left).toBe(ta.right);
+    expect(tb.right).toBe(ta.right + b.width);
+    expect(ta.bottom).toBe(tb.bottom);
+  });
+  test('ab, right, top', () => {
+    loadText('abRightTop');
+    const t = diagram.elements._t.getBoundingRect('diagram');
+    const ta = diagram.elements._t.drawingObject.text[0].bounds;
+    const tb = diagram.elements._t.drawingObject.text[1].bounds;
+    const w = a.width + b.width;
+    const h = b.height;
+    expect(round(t.left)).toBe(-w);
+    expect(round(t.bottom)).toBe(-h);
+    expect(round(t.width)).toBe(w);
+    expect(round(t.height)).toBe(h);
+    expect(round(t.top)).toBe(0);
+    expect(round(t.right)).toBe(0);
+    expect(ta.left).toBe(-w);
+    expect(ta.right).toBe(ta.left + a.width);
+    expect(tb.left).toBe(ta.right);
+    expect(tb.right).toBe(ta.right + b.width);
+    expect(ta.bottom).toBe(tb.bottom);
   });
   // describe('All options', () => {
   //   let tb;
