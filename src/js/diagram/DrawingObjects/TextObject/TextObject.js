@@ -857,6 +857,9 @@ class TextLineObject extends TextObjectBase {
         fontToUse = font;
       }
       const fontDefinition = joinObjects({}, options.font, fontToUse);
+      if (fontDefinition.color == null && options.color != null) {
+        fontDefinition.color = options.color;
+      }
 
       diagramTextArray.push(new DiagramTextLine(
         this.drawContext2D,

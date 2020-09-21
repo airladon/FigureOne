@@ -20,7 +20,7 @@ describe('Diagram Primitives TextLine', () => {
         text: [
           'b',
           [{
-            offset: [0.1, 0.1],
+            offset: [0.2, 0.2],
             inLine: false,
             font: {
               family: 'Helvetica',
@@ -36,7 +36,7 @@ describe('Diagram Primitives TextLine', () => {
         yAlign: 'bottom',
         font: {
           family: 'Helvetica Neue',
-          weight: '300',
+          weight: '200',
           style: 'normal',
           size: 0.2,
         },
@@ -141,47 +141,61 @@ describe('Diagram Primitives TextLine', () => {
     expect(tb.right).toBe(ta.right + b.width);
     expect(ta.bottom).toBe(tb.bottom);
   });
-  // describe('All options', () => {
-  //   let tb;
-  //   let tg;
-  //   beforeEach(() => {
-  //     loadText('allOptions');
-  //     [tb, tg] = diagram.elements._t.drawingObject.text;
-  //   });
-  //   test('color', () => {
-  //     expect(tb.font.color).toEqual([1, 0, 0, 1]);
-  //     expect(tg.font.color).toEqual([1, 1, 0, 1]);
-  //   });
-  //   test('style', () => {
-  //     expect(tb.font.style).toBe('normal');
-  //     expect(tg.font.style).toBe('italic');
-  //   });
-  //   test('family', () => {
-  //     expect(tb.font.family).toBe('Helvetica Neue');
-  //     expect(tg.font.family).toBe('Helvetica');
-  //   });
-  //   test('weight', () => {
-  //     expect(tb.font.weight).toBe('300');
-  //     expect(tg.font.weight).toBe('bold');
-  //   });
-  //   test('size', () => {
-  //     expect(tb.font.size).toBe(0.2);
-  //     expect(tg.font.size).toBe(0.5);
-  //   });
-  //   test('bounds', () => {
-  //     expect(round(tb.bounds.left)).toBe(-b.width / 2);
-  //     expect(round(tb.bounds.bottom)).toBe(-b.height / 2);
-  //     expect(round(tb.bounds.width)).toBe(b.width);
-  //     expect(round(tb.bounds.height)).toBe(b.height);
-  //     expect(round(tb.bounds.top)).toBe(b.height / 2);
-  //     expect(round(tb.bounds.right)).toBe(b.width / 2);
+  describe('All Options', () => {
+    let tb;
+    let tg;
+    let ta;
+    beforeEach(() => {
+      loadText('allOptions');
+      [tb, tg, ta] = diagram.elements._t.drawingObject.text;
+    });
+    test('color', () => {
+      expect(tb.font.color).toEqual([1, 0, 0, 1]);
+      expect(tg.font.color).toEqual([1, 1, 0, 1]);
+      expect(ta.font.color).toEqual([1, 0, 0, 1]);
+    });
+    test('style', () => {
+      expect(tb.font.style).toEqual('normal');
+      expect(tg.font.style).toEqual('italic');
+      expect(ta.font.style).toEqual('normal');
+    });
+    test('size', () => {
+      expect(tb.font.size).toEqual(0.2);
+      expect(tg.font.size).toEqual(0.5);
+      expect(ta.font.size).toEqual(0.2);
+    });
+    test('family', () => {
+      expect(tb.font.family).toEqual('Helvetica Neue');
+      expect(tg.font.family).toEqual('Helvetica');
+      expect(ta.font.family).toEqual('Helvetica Neue');
+    });
+    test('weight', () => {
+      expect(tb.font.weight).toEqual('200');
+      expect(tg.font.weight).toEqual('bold');
+      expect(ta.font.weight).toEqual('200');
+    });
+    test('bounds', () => {
+      const _b = tb.bounds;
+      const _g = tg.bounds;
+      const _a = ta.bounds;
+      expect(round(_b.left)).toBe(0);
+      expect(round(_b.bottom)).toBe(0);
+      expect(round(_b.right)).toBe(round(_b.left + _b.width));
+      expect(round(_b.width)).toBe(0.1);
+      expect(round(_a.width)).toBe(0.1);
+      expect(round(_g.width)).toBe(0.1 * 0.5 / 0.2);
+      expect(round(_a.left)).toBe(round(_b.right));
+      expect(round(_a.right)).toBe(round(_a.left + _a.width));
+      expect(round(_g.left)).toBe(round(_b.right + 0.2));
+      expect(round(_g.bottom))
+        .toBe(round(tb.measure.descent + _b.bottom + 0.2 - tg.measure.descent));
+      expect(round(_g.top)).toBe(round(_g.bottom + tg.measure.ascent + tg.measure.descent));
 
-  //     expect(round(tg.bounds.left)).toBe(round(-0.1));
-  //     expect(round(tg.bounds.bottom)).toBe(round(-0.1));
-  //     expect(round(tg.bounds.width)).toBe(round(g.width * 0.5 / 0.2));
-  //     expect(round(tg.bounds.height)).toBe(round(g.height * 0.5 / 0.2));
-  //     expect(round(tg.bounds.top)).toBe(round(-0.1 + g.height * 0.5 / 0.2));
-  //     expect(round(tg.bounds.right)).toBe(round(-0.1 + g.width * 0.5 / 0.2));
-  //   });
-  // });
+      const t = diagram.elements._t.getBoundingRect('diagram');
+      expect(t.left).toBe(_b.left);
+      expect(t.right).toBe(_g.right);
+      expect(t.bottom).toBe(_b.bottom);
+      expect(t.top).toBe(_g.top);
+    });
+  });
 });
