@@ -1,6 +1,6 @@
-// import {
-//   Rect,
-// } from '../../tools/g2';
+import {
+  Point,
+} from '../../tools/g2';
 import {
   round,
 } from '../../tools/math';
@@ -42,7 +42,7 @@ describe('Diagram Primitives TextLine', () => {
         },
         color: [1, 0, 0, 1],
         position: [0, 0],
-        transform: [['s', [1, 1]], ['r', 0], ['t', [0, 0]]],
+        transform: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
       },
       abLeftBaseline: {
         text: ['a', 'b'],
@@ -56,6 +56,15 @@ describe('Diagram Primitives TextLine', () => {
         text: ['a', 'b'],
         xAlign: 'right',
         yAlign: 'top',
+      },
+      transform: {
+        text: ['a', 'b'],
+        transform: [['s', 2, 3], ['r', 4], ['t', 5, 6]],
+      },
+      positionOverride: {
+        text: ['a', 'b'],
+        position: [9, 10],
+        transform: [['s', 1, 1], ['r', 0], ['t', 5, 6]],
       },
     };
     loadText = (option) => {
@@ -140,6 +149,20 @@ describe('Diagram Primitives TextLine', () => {
     expect(tb.left).toBe(ta.right);
     expect(tb.right).toBe(ta.right + b.width);
     expect(ta.bottom).toBe(tb.bottom);
+  });
+  test('Transform', () => {
+    loadText('transform');
+    const p = diagram.elements._t.getPosition();
+    const s = diagram.elements._t.getScale();
+    const r = diagram.elements._t.getRotation();
+    expect(s).toEqual(new Point(2, 3));
+    expect(r).toEqual(4);
+    expect(p).toEqual(new Point(5, 6));
+  });
+  test('Position override', () => {
+    loadText('positionOverride');
+    const p = diagram.elements._t.getPosition();
+    expect(p).toEqual(new Point(9, 10));
   });
   describe('All Options', () => {
     let tb;
