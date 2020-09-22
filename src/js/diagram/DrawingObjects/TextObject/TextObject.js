@@ -945,7 +945,7 @@ class TextLinesObject extends TextObjectBase {
     if (typeof lines === 'string') {
       lines = [lines];
     }
-    this.modifiers = options.modifiers;
+    this.modifiers = options.modifiers || {};
     this.lines = [];
     const diagramTextArray = [];
 

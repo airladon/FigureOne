@@ -12,7 +12,7 @@ describe('Diagram Primitives TextLine', () => {
   let loadText;
   let a;
   let b;
-  let g;
+  // let g;
   beforeEach(() => {
     diagram = makeDiagram();
     textOptions = {
@@ -88,12 +88,12 @@ describe('Diagram Primitives TextLine', () => {
       width: 0.1,
       height: 0.148,
     };
-    g = {
-      ascent: 0.095,
-      descent: 0.05,
-      width: 0.1,
-      height: 0.145,
-    };
+    // g = {
+    //   ascent: 0.095,
+    //   descent: 0.05,
+    //   width: 0.1,
+    //   height: 0.145,
+    // };
   });
   test('ab, left, baseline', () => {
     loadText('abLeftBaseline');

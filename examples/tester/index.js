@@ -198,34 +198,61 @@ diagram.addElements([
   // },
   {
     name: 'tester',
-    method: 'textLine',
+    method: 'textLines',
     options: {
       text: [
-        'b',
-        [{
-          offset: [0.1, 0.1],
+        'This is the first line',
+        'Second line has a |superscript| modifier that isn\'t inline',
+        [
+          {
+            font: {
+              family: 'Times New Roman',
+              weight: 'bold',
+              style: 'italic',
+              size: 0.1,
+              color: [1, 1, 0, 1],
+            },
+            lineSpace: -0.3,
+            justification: 'center',
+          },
+          'A line with new defaults',
+        ],
+        'A spaced |line| with two |line| mods',
+        'An escaped special char: /|',
+      ],
+      modifiers: {
+        superscript: {
+          text: 'superscript!!',
+          offset: [-0.1, 0.1],
           inLine: false,
           font: {
-            family: 'Helvetica',
+            family: 'Times New Roman',
             weight: 'bold',
             style: 'italic',
-            size: 0.5,
-            color: [1, 1, 0, 1],
+            size: 0.05,
+            color: [1, 0, 1, 1],
           },
-        }, 'g'],
-        'a',
-      ],
+        },
+        line: {
+          font: {
+            color: [0, 1, 1, 1],
+            style: 'italic',
+          },
+        },
+      },
       xAlign: 'left',
-      yAlign: 'bottom',
+      yAlign: 'baseline',
       font: {
         family: 'Helvetica Neue',
-        weight: '300',
+        weight: '200',
         style: 'normal',
-        size: 0.2,
+        size: 0.1,
       },
+      justification: 'left',
+      lineSpace: -0.2,
       color: [1, 0, 0, 1],
-      position: [0, 0],
-      transform: [['s', [1, 1]], ['r', 0], ['t', [0, 0]]],
+      position: [-0.8, 0],
+      transform: [['s', 1, 1], ['r', 1], ['t', 0, 0]],
     },
   },
   {
