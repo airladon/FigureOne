@@ -1286,7 +1286,7 @@ export default class DiagramPrimitives {
       options.justification = 'left';
     }
     if (options.lineSpace == null) {
-      options.lineSpace = options.font.size;
+      options.lineSpace = -options.font.size * 1.2;
     }
     // console.log('qwerty')
     const to = new TextLinesObject(this.draw2D);

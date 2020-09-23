@@ -26,7 +26,7 @@ describe('Diagram Primitives TextLine', () => {
                 family: 'Times New Roman',
                 weight: 'bold',
                 style: 'italic',
-                size: 0.1,
+                size: 0.15,
                 color: [1, 1, 0, 1],
               },
               lineSpace: -0.3,
@@ -71,6 +71,12 @@ describe('Diagram Primitives TextLine', () => {
         position: [-0.8, 0],
         transform: [['s', 1, 1], ['r', 1], ['t', 0, 0]],
       },
+      defaultLineSpace: {
+        text: ['a', 'b'],
+        font: {
+          size: 0.5,
+        },
+      },
       abLeftBaseline: {
         text: ['a', 'b'],
         lineSpace: -0.2,
@@ -99,16 +105,14 @@ describe('Diagram Primitives TextLine', () => {
         xAlign: 'right',
         yAlign: 'top',
       },
-      // abCenterMiddle: {
-      //   text: ['a', 'b'],
-      //   xAlign: 'center',
-      //   yAlign: 'middle',
-      // },
-      // abRightTop: {
-      //   text: ['a', 'b'],
-      //   xAlign: 'right',
-      //   yAlign: 'top',
-      // },
+      basicModifier: {
+        text: ['a |b|'],
+        modifiers: {
+          b: {
+            text: 'gg',
+          },
+        },
+      },
       transform: {
         text: ['a', 'b'],
         transform: [['s', 2, 3], ['r', 4], ['t', 5, 6]],
@@ -146,6 +150,13 @@ describe('Diagram Primitives TextLine', () => {
     //   width: 0.1,
     //   height: 0.145,
     // };
+  });
+  test('default line space', () => {
+    loadText('defaultLineSpace');
+    const ta = diagram.elements._t.drawingObject.text[0].bounds;
+    const tb = diagram.elements._t.drawingObject.text[1].bounds;
+    expect(round(ta.bottom)).toBe(round(-a.descent * 0.5 / 0.2));
+    expect(round(tb.bottom)).toBe(round(-0.5 * 1.2 - b.descent * 0.5 / 0.2));
   });
   test('ab, left, baseline', () => {
     loadText('abLeftBaseline');
@@ -241,45 +252,16 @@ describe('Diagram Primitives TextLine', () => {
     expect(round(ta.top)).toBe(round(0));
     expect(round(tb.bottom)).toBe(round(-h));
   });
-  
-  // test('ab, center, middle', () => {
-  //   loadText('abCenterMiddle');
-  //   const t = diagram.elements._t.getBoundingRect('diagram');
-  //   const ta = diagram.elements._t.drawingObject.text[0].bounds;
-  //   const tb = diagram.elements._t.drawingObject.text[1].bounds;
-  //   const w = a.width + b.width;
-  //   const h = b.height;
-  //   expect(round(t.left)).toBe(-w / 2);
-  //   expect(round(t.bottom)).toBe(-h / 2);
-  //   expect(round(t.width)).toBe(w);
-  //   expect(round(t.height)).toBe(h);
-  //   expect(round(t.top)).toBe(h / 2);
-  //   expect(round(t.right)).toBe(w / 2);
-  //   expect(ta.left).toBe(-w / 2);
-  //   expect(ta.right).toBe(ta.left + a.width);
-  //   expect(tb.left).toBe(ta.right);
-  //   expect(tb.right).toBe(ta.right + b.width);
-  //   expect(ta.bottom).toBe(tb.bottom);
-  // });
-  // test('ab, right, top', () => {
-  //   loadText('abRightTop');
-  //   const t = diagram.elements._t.getBoundingRect('diagram');
-  //   const ta = diagram.elements._t.drawingObject.text[0].bounds;
-  //   const tb = diagram.elements._t.drawingObject.text[1].bounds;
-  //   const w = a.width + b.width;
-  //   const h = b.height;
-  //   expect(round(t.left)).toBe(-w);
-  //   expect(round(t.bottom)).toBe(-h);
-  //   expect(round(t.width)).toBe(w);
-  //   expect(round(t.height)).toBe(h);
-  //   expect(round(t.top)).toBe(0);
-  //   expect(round(t.right)).toBe(0);
-  //   expect(ta.left).toBe(-w);
-  //   expect(ta.right).toBe(ta.left + a.width);
-  //   expect(tb.left).toBe(ta.right);
-  //   expect(tb.right).toBe(ta.right + b.width);
-  //   expect(ta.bottom).toBe(tb.bottom);
-  // });
+  test('basic modifier', () => {
+    loadText('basicModifier');
+    const t = diagram.elements._t.drawingObject;
+    expect(t.text.length).toBe(2);
+    expect(t.text[0].text).toBe('a ');
+    expect(t.text[1].text).toBe('gg');
+    const tr = diagram.elements._t.getBoundingRect('diagram');
+    expect(round(tr.left)).toBe(round(0));
+    expect(round(tr.right)).toBe(round(a.width * 4));
+  });
   test('Transform', () => {
     loadText('transform');
     const p = diagram.elements._t.getPosition();
@@ -294,39 +276,79 @@ describe('Diagram Primitives TextLine', () => {
     const p = diagram.elements._t.getPosition();
     expect(p).toEqual(new Point(9, 10));
   });
-  // describe('All Options', () => {
-  //   let tb;
-  //   let tg;
-  //   let ta;
-  //   beforeEach(() => {
-  //     loadText('allOptions');
-  //     [tb, tg, ta] = diagram.elements._t.drawingObject.text;
-  //   });
-  //   test('color', () => {
-  //     expect(tb.font.color).toEqual([1, 0, 0, 1]);
-  //     expect(tg.font.color).toEqual([1, 1, 0, 1]);
-  //     expect(ta.font.color).toEqual([1, 0, 0, 1]);
-  //   });
-  //   test('style', () => {
-  //     expect(tb.font.style).toEqual('normal');
-  //     expect(tg.font.style).toEqual('italic');
-  //     expect(ta.font.style).toEqual('normal');
-  //   });
-  //   test('size', () => {
-  //     expect(tb.font.size).toEqual(0.2);
-  //     expect(tg.font.size).toEqual(0.5);
-  //     expect(ta.font.size).toEqual(0.2);
-  //   });
-  //   test('family', () => {
-  //     expect(tb.font.family).toEqual('Helvetica Neue');
-  //     expect(tg.font.family).toEqual('Helvetica');
-  //     expect(ta.font.family).toEqual('Helvetica Neue');
-  //   });
-  //   test('weight', () => {
-  //     expect(tb.font.weight).toEqual('200');
-  //     expect(tg.font.weight).toEqual('bold');
-  //     expect(ta.font.weight).toEqual('200');
-  //   });
+  describe('All Options', () => {
+    let text;
+    // let tg;
+    // let ta;
+    beforeEach(() => {
+      loadText('allOptions');
+      ({ text } = diagram.elements._t.drawingObject);
+    });
+    test('color', () => {
+      expect(text[0].font.color).toEqual([1, 0, 0, 1]);
+      expect(text[1].font.color).toEqual([1, 0, 0, 1]);
+      expect(text[2].font.color).toEqual([1, 0, 1, 1]);
+      expect(text[3].font.color).toEqual([1, 0, 0, 1]);
+      expect(text[4].font.color).toEqual([1, 1, 0, 1]);
+      expect(text[5].font.color).toEqual([1, 0, 0, 1]);
+      expect(text[6].font.color).toEqual([0, 1, 1, 1]);
+      expect(text[7].font.color).toEqual([1, 0, 0, 1]);
+      expect(text[8].font.color).toEqual([0, 1, 1, 1]);
+      expect(text[9].font.color).toEqual([1, 0, 0, 1]);
+      expect(text[10].font.color).toEqual([1, 0, 0, 1]);
+    });
+    test('style', () => {
+      expect(text[0].font.style).toEqual('normal');
+      expect(text[1].font.style).toEqual('normal');
+      expect(text[2].font.style).toEqual('italic');
+      expect(text[3].font.style).toEqual('normal');
+      expect(text[4].font.style).toEqual('italic');
+      expect(text[5].font.style).toEqual('normal');
+      expect(text[6].font.style).toEqual('italic');
+      expect(text[7].font.style).toEqual('normal');
+      expect(text[8].font.style).toEqual('italic');
+      expect(text[9].font.style).toEqual('normal');
+      expect(text[10].font.style).toEqual('normal');
+    });
+    test('size', () => {
+      expect(text[0].font.size).toEqual(0.1);
+      expect(text[1].font.size).toEqual(0.1);
+      expect(text[2].font.size).toEqual(0.05);
+      expect(text[3].font.size).toEqual(0.1);
+      expect(text[4].font.size).toEqual(0.15);
+      expect(text[5].font.size).toEqual(0.1);
+      expect(text[6].font.size).toEqual(0.1);
+      expect(text[7].font.size).toEqual(0.1);
+      expect(text[8].font.size).toEqual(0.1);
+      expect(text[9].font.size).toEqual(0.1);
+      expect(text[10].font.size).toEqual(0.1);
+    });
+    test('family', () => {
+      expect(text[0].font.family).toEqual('Helvetica Neue');
+      expect(text[1].font.family).toEqual('Helvetica Neue');
+      expect(text[2].font.family).toEqual('Times New Roman');
+      expect(text[3].font.family).toEqual('Helvetica Neue');
+      expect(text[4].font.family).toEqual('Times New Roman');
+      expect(text[5].font.family).toEqual('Helvetica Neue');
+      expect(text[6].font.family).toEqual('Helvetica Neue');
+      expect(text[7].font.family).toEqual('Helvetica Neue');
+      expect(text[8].font.family).toEqual('Helvetica Neue');
+      expect(text[9].font.family).toEqual('Helvetica Neue');
+      expect(text[10].font.family).toEqual('Helvetica Neue');
+    });
+    test('weight', () => {
+      expect(text[0].font.weight).toEqual('200');
+      expect(text[1].font.weight).toEqual('200');
+      expect(text[2].font.weight).toEqual('bold');
+      expect(text[3].font.weight).toEqual('200');
+      expect(text[4].font.weight).toEqual('bold');
+      expect(text[5].font.weight).toEqual('200');
+      expect(text[6].font.weight).toEqual('200');
+      expect(text[7].font.weight).toEqual('200');
+      expect(text[8].font.weight).toEqual('200');
+      expect(text[9].font.weight).toEqual('200');
+      expect(text[10].font.weight).toEqual('200');
+    });
   //   test('bounds', () => {
   //     const _b = tb.bounds;
   //     const _g = tg.bounds;
@@ -350,5 +372,5 @@ describe('Diagram Primitives TextLine', () => {
   //     expect(t.bottom).toBe(_b.bottom);
   //     expect(t.top).toBe(_g.top);
   //   });
-  // });
+  });
 });
