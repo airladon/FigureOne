@@ -12,7 +12,7 @@ describe('Diagram Primitives TextLine', () => {
   let loadText;
   let a;
   let b;
-  // let g;
+  let g;
   beforeEach(() => {
     diagram = makeDiagram();
     textOptions = {
@@ -69,7 +69,7 @@ describe('Diagram Primitives TextLine', () => {
         lineSpace: -0.2,
         color: [1, 0, 0, 1],
         position: [-0.8, 0],
-        transform: [['s', 1, 1], ['r', 1], ['t', 0, 0]],
+        transform: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
       },
       defaultLineSpace: {
         text: ['a', 'b'],
@@ -132,6 +132,7 @@ describe('Diagram Primitives TextLine', () => {
       diagram.initialize();
       diagram.setFirstTransform();
     };
+    // Dimensions for a, b when fontSize = 0.2
     a = {
       ascent: 0.095,
       descent: 0.008,
@@ -144,12 +145,12 @@ describe('Diagram Primitives TextLine', () => {
       width: 0.1,
       height: 0.148,
     };
-    // g = {
-    //   ascent: 0.095,
-    //   descent: 0.05,
-    //   width: 0.1,
-    //   height: 0.145,
-    // };
+    g = {
+      ascent: 0.095,
+      descent: 0.05,
+      width: 0.1,
+      height: 0.145,
+    };
   });
   test('default line space', () => {
     loadText('defaultLineSpace');
@@ -280,9 +281,11 @@ describe('Diagram Primitives TextLine', () => {
     let text;
     // let tg;
     // let ta;
+    let lineSpace;
     beforeEach(() => {
       loadText('allOptions');
       ({ text } = diagram.elements._t.drawingObject);
+      lineSpace = -0.2;
     });
     test('color', () => {
       expect(text[0].font.color).toEqual([1, 0, 0, 1]);
@@ -348,6 +351,66 @@ describe('Diagram Primitives TextLine', () => {
       expect(text[8].font.weight).toEqual('200');
       expect(text[9].font.weight).toEqual('200');
       expect(text[10].font.weight).toEqual('200');
+    });
+    test('bounds line 1', () => {
+      const line = text[0].bounds;
+      expect(round(line.width)).toBe(0.1 * text[0].text.length / 2);
+      expect(line.left).toBe(0);
+      expect(line.bottom).toBe(-a.descent / 2);
+      expect(line.top).toBe(b.ascent / 2);
+      expect(line.right).toBe(line.width);
+    });
+    test('bounds line 2', () => {
+      const w0 = text[1].bounds;
+      const w1 = text[2].bounds;
+      const w2 = text[3].bounds;
+      expect(w0.width).toBe(text[1].text.length * a.width * 0.1 / 0.2);
+      expect(w1.width).toBe(text[2].text.length * a.width * 0.05 / 0.2);
+      expect(w2.width).toBe(text[3].text.length * a.width * 0.1 / 0.2);
+      const w = w0 + w2;
+      expect(round(w0.left)).toBe(0);
+      expect(round(w0.right)).toBe(round(w0.width));
+      expect(round(w2.left)).toBe(round(w0.right));
+      expect(round(w2.right)).toBe(round(w0.right + w2.width));
+      expect(round(w1.left)).toBe(round(w0.right - 0.1));
+      expect(round(w1.bottom)).toBe(round(lineSpace + 0.1 - g.descent * 0.05 / 0.2));
+    });
+    test('bounds line 3', () => {
+      const line = text[4].bounds;
+      const totalW = text[1].bounds.width + text[3].bounds.width;
+      expect(round(line.width))
+        .toBe(round(text[4].text.length * a.width * 0.15 / 0.2));
+      expect(round(line.left)).toBe(round(totalW / 2 - line.width / 2));
+      expect(round(line.bottom)).toBe(round(lineSpace * 2 - g.descent * 0.15 / 0.2));
+      expect(round(line.top)).toBe(round(line.bottom + (g.descent + b.ascent) * 0.15 / 0.2));
+    });
+    test('bounds line 4', () => {
+      const w0 = text[5].bounds;
+      const w1 = text[6].bounds;
+      const w2 = text[7].bounds;
+      const w3 = text[8].bounds;
+      const w4 = text[9].bounds;
+      expect(round(w0.width))
+        .toBe(round(text[5].text.length * a.width * 0.1 / 0.2));
+      expect(round(w0.left)).toBe(round(0));
+      expect(round(w0.right)).toBe(round(w0.width));
+      expect(round(w1.left)).toBe(round(w0.right));
+      expect(round(w1.right)).toBe(round(w1.left + w1.width));
+      expect(round(w2.left)).toBe(round(w1.right));
+      expect(round(w2.right)).toBe(round(w2.left + w2.width));
+      expect(round(w3.left)).toBe(round(w2.right));
+      expect(round(w3.right)).toBe(round(w3.left + w3.width));
+      expect(round(w4.left)).toBe(round(w3.right));
+      expect(round(w4.right)).toBe(round(w4.left + w4.width));
+      expect(round(w0.bottom)).toBe(round(lineSpace * 2 - 0.3 - g.descent * 0.1 / 0.2));
+    });
+    test('bounds line 5', () => {
+      const line = text[10].bounds;
+      expect(round(line.width))
+        .toBe(round(text[10].text.length * a.width * 0.1 / 0.2));
+      expect(round(line.left)).toBe(round(0));
+      expect(round(line.bottom)).toBe(round(lineSpace * 3 - 0.3 - g.descent * 0.1 / 0.2));
+      expect(round(line.top)).toBe(round(line.bottom + (g.descent + b.ascent) * 0.1 / 0.2));
     });
   //   test('bounds', () => {
   //     const _b = tb.bounds;

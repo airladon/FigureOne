@@ -228,7 +228,12 @@ class DiagramTextBase {
     //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
     const midAscentRe = /[acemnorsuvwxz*gyqp]/g;
     const midDecentRe = /[;,$]/g;
-    const maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
+    let maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
+    if (this.font.family === 'Times New Roman') {
+      if (this.font.style === 'italic') {
+        maxDescentRe = /[gjyqp@Q(){}[\]|f]/g;
+      }
+    }
 
     const midAscentMatches = this.text.match(midAscentRe);
     if (Array.isArray(midAscentMatches)) {
